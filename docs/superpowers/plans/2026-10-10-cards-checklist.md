@@ -410,31 +410,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 21 — Warlock (25 cards, 1 keyword-only)
 
-- [ ] `VAN_NEW1_003` Sacrificial Pact — spell 0 — Destroy a Demon. Restore #5 Health to your hero.
-- [ ] `VAN_EX1_308` Soulfire — spell 0 — Deal $4 damage. Discard a random card.
-- [ ] `VAN_CS2_059` Blood Imp — minion 1 0/1 [DEMON] — Stealth. At the end of your turn, give another random friendly minion +1 Health.
-- [ ] `VAN_CS2_063` Corruption — spell 1 — Choose an enemy minion. At the start of your turn, destroy it.
-- [ ] `VAN_EX1_319` Flame Imp — minion 1 3/2 [DEMON] — Battlecry: Deal 3 damage to your hero.
-- [ ] `VAN_EX1_302` Mortal Coil — spell 1 — Deal $1 damage to a minion. If it dies, draw a card.
-- [ ] `VAN_EX1_316` Power Overwhelming — spell 1 — Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.
-- [ ] `VAN_CS2_065` Voidwalker — minion 1 1/3 [DEMON] — Taunt *(keyword only — no hook)*
-- [ ] `VAN_EX1_596` Demonfire — spell 2 — Deal $2 damage to a minion. If it’s a friendly Demon, give it +2/+2 instead.
-- [ ] `VAN_EX1_306` Felstalker — minion 2 4/3 [DEMON] — Battlecry: Discard a random card.
-- [ ] `VAN_CS2_061` Drain Life — spell 3 — Deal $2 damage. Restore #2 Health to your hero.
-- [ ] `VAN_EX1_301` Felguard — minion 3 3/5 [DEMON] — Taunt Battlecry: Destroy one of your Mana Crystals.
-- [ ] `VAN_EX1_317` Sense Demons — spell 3 — Draw 2 Demons from your deck.
-- [ ] `VAN_CS2_057` Shadow Bolt — spell 3 — Deal $4 damage to a minion.
-- [ ] `VAN_EX1_304` Void Terror — minion 3 3/3 [DEMON] — Battlecry: Destroy both adjacent minions and gain their Attack and Health.
-- [ ] `VAN_CS2_062` Hellfire — spell 4 — Deal $3 damage to ALL characters.
-- [ ] `VAN_EX1_313` Pit Lord — minion 4 5/6 [DEMON] — Battlecry: Deal 5 damage to your hero.
-- [ ] `VAN_EX1_303` Shadowflame — spell 4 — Destroy a friendly minion and deal its Attack damage to all enemy minions.
-- [ ] `VAN_EX1_315` Summoning Portal — minion 4 0/4 — Your minions cost (2) less, but not less than (1).
-- [ ] `VAN_EX1_320` Bane of Doom — spell 5 — Deal $3 damage to a character. If it dies, summon a random Demon.
-- [ ] `VAN_EX1_310` Doomguard — minion 5 5/7 [DEMON] — Charge. Battlecry: Discard two random cards.
-- [ ] `VAN_CS2_064` Dread Infernal — minion 6 6/6 [DEMON] — Battlecry: Deal 1 damage to ALL other characters.
-- [ ] `VAN_EX1_309` Siphon Soul — spell 6 — Destroy a minion. Restore #3 Health to your hero.
-- [ ] `VAN_EX1_312` Twisting Nether — spell 8 — Destroy all minions.
-- [ ] `VAN_EX1_323` Lord Jaraxxus — minion 9 3/15 [DEMON] — Battlecry: Destroy your hero and replace it with Lord Jaraxxus.
+- [x] `VAN_NEW1_003` Sacrificial Pact — spell 0 — Destroy a Demon. Restore #5 Health to your hero.
+- [x] `VAN_EX1_308` Soulfire — spell 0 — Deal $4 damage. Discard a random card.
+- [x] `VAN_CS2_059` Blood Imp — minion 1 0/1 [DEMON] — Stealth. At the end of your turn, give another random friendly minion +1 Health.
+- [x] `VAN_CS2_063` Corruption — spell 1 — Choose an enemy minion. At the start of your turn, destroy it.
+- [x] `VAN_EX1_319` Flame Imp — minion 1 3/2 [DEMON] — Battlecry: Deal 3 damage to your hero.
+- [x] `VAN_EX1_302` Mortal Coil — spell 1 — Deal $1 damage to a minion. If it dies, draw a card.
+- [x] `VAN_EX1_316` Power Overwhelming — spell 1 — Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.
+- [x] `VAN_CS2_065` Voidwalker — minion 1 1/3 [DEMON] — Taunt *(keyword only — no hook)*
+- [x] `VAN_EX1_596` Demonfire — spell 2 — Deal $2 damage to a minion. If it’s a friendly Demon, give it +2/+2 instead.
+- [x] `VAN_EX1_306` Felstalker — minion 2 4/3 [DEMON] — Battlecry: Discard a random card.
+- [x] `VAN_CS2_061` Drain Life — spell 3 — Deal $2 damage. Restore #2 Health to your hero.
+- [x] `VAN_EX1_301` Felguard — minion 3 3/5 [DEMON] — Taunt Battlecry: Destroy one of your Mana Crystals.
+- [x] `VAN_EX1_317` Sense Demons — spell 3 — Draw 2 Demons from your deck.
+- [x] `VAN_CS2_057` Shadow Bolt — spell 3 — Deal $4 damage to a minion.
+- [x] `VAN_EX1_304` Void Terror — minion 3 3/3 [DEMON] — Battlecry: Destroy both adjacent minions and gain their Attack and Health.
+- [x] `VAN_CS2_062` Hellfire — spell 4 — Deal $3 damage to ALL characters.
+- [x] `VAN_EX1_313` Pit Lord — minion 4 5/6 [DEMON] — Battlecry: Deal 5 damage to your hero.
+- [x] `VAN_EX1_303` Shadowflame — spell 4 — Destroy a friendly minion and deal its Attack damage to all enemy minions.
+- [x] `VAN_EX1_315` Summoning Portal — minion 4 0/4 — Your minions cost (2) less, but not less than (1).
+- [x] `VAN_EX1_320` Bane of Doom — spell 5 — Deal $3 damage to a character. If it dies, summon a random Demon.
+- [x] `VAN_EX1_310` Doomguard — minion 5 5/7 [DEMON] — Charge. Battlecry: Discard two random cards.
+- [x] `VAN_CS2_064` Dread Infernal — minion 6 6/6 [DEMON] — Battlecry: Deal 1 damage to ALL other characters.
+- [x] `VAN_EX1_309` Siphon Soul — spell 6 — Destroy a minion. Restore #3 Health to your hero.
+- [x] `VAN_EX1_312` Twisting Nether — spell 8 — Destroy all minions.
+- [x] `VAN_EX1_323` Lord Jaraxxus — minion 9 3/15 [DEMON] — Battlecry: Destroy your hero and replace it with Lord Jaraxxus.
 
 ## Task 22 — Warrior (25 cards, 3 keyword-only)
 
@@ -507,7 +507,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `ds1_whelptoken` Whelp — minion 1 1/1 [DRAGON] — (no text) *(keyword only — no hook)*
 - [x] `EX1_116t` Whelp — minion 1 1/1 [DRAGON] — (no text) *(keyword only — no hook)*
 - [x] `VAN_CS2_082` Wicked Knife — weapon 1 1/0 — (no text) *(keyword only — no hook)*
-- [ ] `EX1_317t` Worthless Imp — minion 1 1/1 [DEMON] — You are out of demons! At least there are always imps...
+- [x] `EX1_317t` Worthless Imp — minion 1 1/1 [DEMON] — You are out of demons! At least there are always imps...
 - [x] `VAN_CS2_052` Wrath of Air Totem — minion 1 0/2 [TOTEM] — Spell Damage +1 *(keyword only — no hook)*
 - [ ] `VAN_CS2_073_puzzle` Cold Blood — spell 2 — Give a minion +2 Attack. Combo: +4 Attack instead.
 - [x] `NEW1_040t` Gnoll — minion 2 2/2 — Taunt *(keyword only — no hook)*
@@ -520,7 +520,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_EX1_tk11` Spirit Wolf — minion 2 2/3 — Taunt *(keyword only — no hook)*
 - [x] `VAN_EX1_160a` Summon a Panther — spell 2 — Summon a 3/2 Panther.
 - [x] `VAN_DREAM_02` Ysera Awakens — spell 2 — Deal $5 damage to all characters except Ysera.
-- [ ] `EX1_323w` Blood Fury — weapon 3 3/0 — (no text) *(keyword only — no hook)*
+- [x] `EX1_323w` Blood Fury — weapon 3 3/0 — (no text) *(keyword only — no hook)*
 - [x] `VAN_NEW1_034` Huffer — minion 3 4/2 [BEAST] — Charge *(keyword only — no hook)*
 - [x] `VAN_NEW1_033` Leokk — minion 3 2/4 [BEAST] — Your other minions have +1 Attack.
 - [x] `VAN_NEW1_032` Misha — minion 3 4/4 [BEAST] — Taunt *(keyword only — no hook)*

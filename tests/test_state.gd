@@ -202,3 +202,11 @@ func test_return_to_hand_gives_new_card() -> void:
 	var m := g.summon(0, "VAN_CS2_182")
 	var n := g.return_to_hand(m)
 	eq([n.card_id, n.zone], ["VAN_CS2_182", "HAND"], "new card in hand")
+
+
+func test_destroyed_hero_dies() -> void:
+	var g := H.state()
+	g.destroy(g.hero(1))
+	g.resolve()
+	check(g.game_over, "over")
+	eq(g.winner, 0, "player 0 wins")

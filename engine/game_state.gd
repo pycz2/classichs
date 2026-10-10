@@ -227,7 +227,7 @@ func _death_phase() -> bool:
 			"minion": e.is_minion()})
 	var heroes_dead: Array[int] = []
 	for p in players:
-		if p.hero.health() <= 0:
+		if p.hero.health() <= 0 or p.hero.tags.get("TO_DESTROY", false):
 			heroes_dead.append(p.index)
 	if not heroes_dead.is_empty():
 		game_over = true
@@ -511,6 +511,17 @@ func hp_dmg(me: Entity, n: int) -> int:
 
 func heal_amt(me: Entity, n: int) -> int:
 	return n * _velen(me)
+
+
+## Replaces p's hero with a fresh hero entity (full health, no armor or Frozen).
+func replace_hero(p: int, card_id: String) -> Entity:
+	var old := players[p].hero
+	old.zone = "SETASIDE"
+	var h := new_entity(card_id, p)
+	_enter_play(h)
+	players[p].hero = h
+	log_event({"type": "hero_replaced", "player": p, "entity": h.id, "card": card_id})
+	return h
 
 
 ## Replaces p's hero power with a fresh, unused one.

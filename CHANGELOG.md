@@ -24,3 +24,4 @@
 - Карты: Priest (25).
 - Карты: Rogue (25), Combo.
 - Карты: Shaman (25), Overload.
+- Карты: Warlock (25), Lord Jaraxxus.
