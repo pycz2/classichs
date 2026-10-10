@@ -41,6 +41,7 @@ func _init() -> void:
 			var before := errors.count
 			var t: TestCase = script.new()
 			t.call(name)
+			H.cleanup()
 			if errors.count > before:
 				t.failures.append("script error: " + errors.last)
 			if t.failures.is_empty():
@@ -50,4 +51,5 @@ func _init() -> void:
 			for msg in t.failures:
 				print("    " + msg)
 	print("%d tests, %d failed" % [total, failed])
+	OS.remove_logger(errors)
 	quit(1 if failed > 0 or total == 0 else 0)

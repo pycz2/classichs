@@ -47,6 +47,10 @@ static func collectible() -> Array[String]:
 	return out
 
 
+static func undefine(id: String) -> void:
+	_cards.erase(id)
+
+
 static func define(id: String, c: Dictionary) -> void:
 	_ensure_loaded()
 	c["id"] = id

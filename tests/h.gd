@@ -4,6 +4,8 @@ extends RefCounted
 
 const WISP := "VAN_CS2_231"
 
+static var _defined: Array[String] = []
+
 
 ## A bare GameState with Jaina (player 0) and Garrosh (player 1) in play.
 static func state(seed := 1) -> GameState:
@@ -34,6 +36,15 @@ static func card(id: String, c: Dictionary, hooks := {}) -> void:
 	full.merge(c, true)
 	CardDb.define(id, full)
 	Cards.add(id, hooks)
+	_defined.append(id)
+
+
+## Removes test cards. Their hook lambdas must not outlive the test script.
+static func cleanup() -> void:
+	for id in _defined:
+		Cards.remove(id)
+		CardDb.undefine(id)
+	_defined.clear()
 
 
 static func types(events: Array) -> Array:

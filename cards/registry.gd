@@ -25,6 +25,10 @@ static func add(card_id: String, hooks: Dictionary) -> void:
 	_hooks[card_id] = hooks
 
 
+static func remove(card_id: String) -> void:
+	_hooks.erase(card_id)
+
+
 static func all_ids() -> Array:
 	_ensure_loaded()
 	return _hooks.keys()
