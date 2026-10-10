@@ -24,7 +24,13 @@ func _init() -> void:
 	var total := 0
 	var failed := 0
 	for f in files:
+		var load_errors := errors.count
 		var script: GDScript = load("res://tests/" + f)
+		if script == null or errors.count > load_errors or not script.can_instantiate():
+			total += 1
+			failed += 1
+			print("FAIL %s: cannot load (%s)" % [f, errors.last])
+			continue
 		for m in script.get_script_method_list():
 			var name: String = m.name
 			if not name.begins_with("test_"):
