@@ -225,14 +225,18 @@ func _combo_active(e: Entity) -> bool:
 ## Target ids for playing e with the given choice. [-1] means "no target".
 ## An empty array means e cannot be played.
 func _play_targets(e: Entity, choice: int) -> Array:
-	var h := Cards.of(e.card_id)
-	var spec: Variant = h.get("target")
-	if choice >= 0:
-		spec = Cards.of(h.choose_one[choice]).get("target")
-	if h.has("combo_target"):
-		spec = h.combo_target if _combo_active(e) else null
 	var is_spell := e.type() == "SPELL"
-	return _spec_targets(e, spec, is_spell, not is_spell)
+	return _spec_targets(e, _target_spec(e, choice, _combo_active(e)), is_spell, not is_spell)
+
+
+## The target spec that applies when e is played with this choice and combo state.
+func _target_spec(e: Entity, choice: int, combo: bool) -> Variant:
+	var h := Cards.of(e.card_id)
+	if h.has("combo_target"):
+		return h.combo_target if combo else null
+	if choice >= 0:
+		return Cards.of(h.choose_one[choice]).get("target")
+	return h.get("target")
 
 
 func _spec_targets(e: Entity, spec: Variant, is_spell: bool, optional: bool) -> Array:
@@ -292,6 +296,8 @@ func _do_play(e: Entity, t: Entity, pos: int, choice: int) -> void:
 
 func _run_effect(e: Entity, key: String, t: Entity, choice: int, combo: bool) -> void:
 	var h := Cards.of(e.card_id)
+	if t == null and _target_spec(e, choice, combo) != null:
+		return  # targeted effect with no target (none was valid, or it left play)
 	if choice >= 0:
 		Cards.of(h.choose_one[choice]).effect.call(self, e, t)
 	elif combo and h.has("combo"):

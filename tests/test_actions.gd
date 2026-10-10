@@ -237,3 +237,12 @@ func test_pending_choice_blocks_other_actions() -> void:
 	check(g.apply(acts[0]).ok, "choose ok")
 	eq(g.players[0].hand.size(), 1, "picked card in hand")
 	check(g.pending.is_empty(), "pending cleared")
+
+
+func test_targeted_battlecry_without_target_does_nothing() -> void:
+	H.card("TEST_BUFF_BC", {"type": "MINION", "cost": 0, "attack": 1, "health": 1},
+		{"target": T.FRIENDLY_MINION, "battlecry": func(g, _me, t): g.buff(t, 1, 1)})
+	var g := H.game()
+	var m := H.hand(g, 0, "TEST_BUFF_BC")
+	check(H.play(g, m).ok, "played with no friendly minion to target")
+	eq(m.atk(), 1, "no effect")
