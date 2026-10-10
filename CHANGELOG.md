@@ -14,3 +14,4 @@
 - Карты: силы героев всех 9 классов, INFERNO!, Mind Spike, Mind Shatter, The Coin.
 - Карты: нейтральные Basic (43).
 - Карты: нейтральные Classic COMMON (40).
+- Карты: нейтральные Classic RARE (36).

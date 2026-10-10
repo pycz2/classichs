@@ -313,11 +313,17 @@ func destroy(e: Entity) -> void:
 func summon(p: int, card_id: String, pos := -1) -> Entity:
 	if players[p].board.size() >= MAX_BOARD:
 		return null
-	var e := new_entity(card_id, p)
+	return summon_entity(new_entity(card_id, p), pos)
+
+
+## Puts an existing entity (for example a card from the hand) onto the board as a summon.
+func summon_entity(e: Entity, pos := -1) -> Entity:
+	if players[e.controller].board.size() >= MAX_BOARD:
+		return null
 	place_on_board(e, pos)
 	e.give_tag("EXHAUSTED")
-	emit({"type": "summon", "entity": e.id, "player": p, "card": card_id})
-	emit({"type": "after_summon", "entity": e.id, "player": p, "card": card_id})
+	emit({"type": "summon", "entity": e.id, "player": e.controller, "card": e.card_id})
+	emit({"type": "after_summon", "entity": e.id, "player": e.controller, "card": e.card_id})
 	return e
 
 
@@ -486,6 +492,11 @@ func random_choice(arr: Array) -> Variant:
 	if arr.is_empty():
 		return null
 	return arr[rng.randi_range(0, arr.size() - 1)]
+
+
+## Random entity from arr that is in play and not already dying (health > 0).
+func random_alive(arr: Array) -> Entity:
+	return random_choice(arr.filter(func(e: Entity) -> bool: return e.zone == "PLAY" and e.health() > 0))
 
 
 func shuffle(arr: Array) -> void:

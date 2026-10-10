@@ -5,6 +5,7 @@ extends RefCounted
 static func register(r: Dictionary) -> void:
 	_basic(r)
 	_common(r)
+	_rare(r)
 
 
 static func _not_me(_g, me, t) -> bool:
@@ -199,4 +200,169 @@ static func _common(r: Dictionary) -> void:
 	}
 	r["VAN_EX1_583"] = {  # Priestess of Elune
 		"battlecry": func(g, me, _t): g.heal(me, g.hero(me.controller), g.heal_amt(me, 4)),
+	}
+
+
+static func _rare(r: Dictionary) -> void:
+	r["VAN_EX1_009"] = {"aura": _enrage(5)}  # Angry Chicken
+	r["VAN_NEW1_025"] = {  # Bloodsail Corsair
+		"battlecry": func(g, me, _t):
+			var w: Entity = _weapon(g, g.opponent(me.controller))
+			if w:
+				w.tags.DURABILITY = int(w.tags.DURABILITY) - 1,
+	}
+	r["VAN_EX1_001"] = {  # Lightwarden
+		"on": {"heal": func(g, me, _ev): g.buff(me, 2, 0)},
+	}
+	r["VAN_EX1_509"] = {  # Murloc Tidecaller
+		"on": {"summon": func(g, me, ev):
+			if ev.entity != me.id and g.ent(ev.entity).race() == "MURLOC":
+				g.buff(me, 1, 0)},
+	}
+	r["VAN_EX1_080"] = {  # Secretkeeper
+		"on": {"play": func(g, me, ev):
+			if ev.kind == "secret":
+				g.buff(me, 1, 1)},
+	}
+	r["VAN_EX1_004"] = {  # Young Priestess
+		"on": {"turn_end": func(g, me, ev):
+			if ev.player == me.controller:
+				var t: Entity = g.random_alive(g.others(me))
+				if t:
+					g.buff(t, 0, 1)},
+	}
+	r["VAN_EX1_059"] = {  # Crazed Alchemist
+		"target": T.MINION,
+		"battlecry": func(g, _me, t): g.set_stats(t, t.health(), t.atk()),
+	}
+	r["VAN_NEW1_019"] = {  # Knife Juggler
+		"on": {"after_summon": func(g, me, ev):
+			if ev.player == me.controller and ev.entity != me.id:
+				g.damage(me, g.random_alive(g.chars(g.opponent(me.controller))), 1)},
+	}
+	r["VAN_EX1_055"] = {  # Mana Addict
+		"on": {"play": func(g, me, ev):
+			if ev.kind == "spell" and ev.player == me.controller:
+				g.buff(me, 2, 0, true)},
+	}
+	r["VAN_EX1_616"] = {  # Mana Wraith
+		"cost_aura": func(_g, _me, card, c): return c + 1 if card.is_minion() and card.zone == "HAND" else c,
+	}
+	r["VAN_NEW1_037"] = {  # Master Swordsmith
+		"on": {"turn_end": func(g, me, ev):
+			if ev.player == me.controller:
+				var t: Entity = g.random_alive(g.others(me))
+				if t:
+					g.buff(t, 1, 0)},
+	}
+	r["VAN_EX1_076"] = {  # Pint-Sized Summoner
+		"cost_aura": func(g, me, card, c):
+			var first: bool = g.players[me.controller].minions_played_this_turn == 0
+			return c - 1 if first and card.controller == me.controller and card.is_minion() and card.zone == "HAND" else c,
+	}
+	r["VAN_EX1_058"] = {  # Sunfury Protector
+		"battlecry": func(g, me, _t):
+			for m in g.adjacent(me):
+				m.give_tag("TAUNT"),
+	}
+	r["VAN_NEW1_020"] = {  # Wild Pyromancer
+		"on": {"after_spell": func(g, me, ev):
+			if ev.player == me.controller:
+				for m in g.all_minions():
+					g.damage(me, m, 1)},
+	}
+	r["VAN_EX1_006"] = {  # Alarm-o-Bot
+		"on": {"turn_start": func(g, me, ev):
+			if ev.player != me.controller:
+				return
+			var p: Player = g.players[me.controller]
+			var m: Entity = g.random_choice(p.hand.filter(func(e): return e.is_minion()))
+			if m == null:
+				return
+			var pos := p.board.find(me)
+			p.hand.erase(m)
+			g.return_to_hand(me)
+			g.summon_entity(m, pos)},
+	}
+	r["VAN_EX1_089"] = {  # Arcane Golem
+		"battlecry": func(g, me, _t): g.gain_mana(g.opponent(me.controller), 1),
+	}
+	r["VAN_EX1_050"] = {  # Coldlight Oracle
+		"battlecry": func(g, me, _t):
+			g.draw(me.controller, 2)
+			g.draw(g.opponent(me.controller), 2),
+	}
+	r["VAN_EX1_103"] = {  # Coldlight Seer
+		"battlecry": func(g, me, _t):
+			for m in g.all_minions():
+				if m != me and m.race() == "MURLOC":
+					g.buff(m, 0, 2),
+	}
+	r["VAN_EX1_102"] = {  # Demolisher
+		"on": {"turn_start": func(g, me, ev):
+			if ev.player == me.controller:
+				g.damage(me, g.random_alive(g.chars(g.opponent(me.controller))), 2)},
+	}
+	r["VAN_EX1_170"] = {  # Emperor Cobra
+		"on": {"damage": func(g, me, ev):
+			var t: Entity = g.ent(ev.target)
+			if ev.source == me.id and t.is_minion():
+				g.destroy(t)},
+	}
+	r["VAN_EX1_597"] = {  # Imp Master
+		"on": {"turn_end": func(g, me, ev):
+			if ev.player == me.controller:
+				g.damage(me, me, 1)
+				g.summon_right(me, "VAN_EX1_598")},
+	}
+	r["VAN_CS2_181"] = {  # Injured Blademaster
+		"battlecry": func(g, me, _t): g.damage(me, me, 4),
+	}
+	r["VAN_EX1_085"] = {  # Mind Control Tech
+		"battlecry": func(g, me, _t):
+			var enemy: Array = g.minions(g.opponent(me.controller))
+			if enemy.size() >= 4:
+				g.take_control(g.random_choice(enemy), me.controller),
+	}
+	r["VAN_EX1_044"] = {  # Questing Adventurer
+		"on": {"play": func(g, me, ev):
+			if ev.player == me.controller and ev.entity != me.id:
+				g.buff(me, 1, 1)},
+	}
+	r["VAN_EX1_584"] = {  # Ancient Mage
+		"battlecry": func(g, me, _t):
+			for m in g.adjacent(me):
+				m.tags["SPELLPOWER"] = int(m.tags.get("SPELLPOWER", 0)) + 1,
+	}
+	r["VAN_EX1_093"] = {  # Defender of Argus
+		"battlecry": func(g, me, _t):
+			for m in g.adjacent(me):
+				g.buff(m, 1, 1)
+				m.give_tag("TAUNT"),
+	}
+	r["VAN_EX1_043"] = {  # Twilight Drake
+		"battlecry": func(g, me, _t): g.buff(me, 0, g.players[me.controller].hand.size()),
+	}
+	r["VAN_NEW1_026"] = {  # Violet Teacher
+		"on": {"play": func(g, me, ev):
+			if ev.kind == "spell" and ev.player == me.controller:
+				g.summon_right(me, "VAN_NEW1_026t")},
+	}
+	r["VAN_EX1_097"] = {  # Abomination
+		"deathrattle": func(g, me, _ev):
+			for c in g.all_chars():
+				g.damage(me, c, 2),
+	}
+	r["VAN_EX1_284"] = {  # Azure Drake
+		"battlecry": func(g, me, _t): g.draw(me.controller),
+	}
+	r["VAN_EX1_095"] = {  # Gadgetzan Auctioneer
+		"on": {"play": func(g, me, ev):
+			if ev.kind == "spell" and ev.player == me.controller:
+				g.draw(me.controller)},
+	}
+	r["VAN_NEW1_041"] = {  # Stampeding Kodo
+		"battlecry": func(g, me, _t):
+			var small: Array = g.minions(g.opponent(me.controller)).filter(func(m): return m.atk() <= 2)
+			g.destroy(g.random_alive(small)),
 	}

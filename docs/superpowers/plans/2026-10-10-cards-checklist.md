@@ -131,42 +131,42 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 11 — Neutral Classic RARE (36 cards, 1 keyword-only)
 
-- [ ] `VAN_EX1_009` Angry Chicken — minion 1 1/1 [BEAST] — Enrage: +5 Attack.
-- [ ] `VAN_NEW1_025` Bloodsail Corsair — minion 1 1/2 [PIRATE] — Battlecry: Remove 1 Durability from your opponent's weapon.
-- [ ] `VAN_EX1_001` Lightwarden — minion 1 1/2 — Whenever a character is healed, gain +2 Attack.
-- [ ] `VAN_EX1_509` Murloc Tidecaller — minion 1 1/2 [MURLOC] — Whenever a Murloc is summoned, gain +1 Attack.
-- [ ] `VAN_EX1_080` Secretkeeper — minion 1 1/2 — Whenever a Secret is played, gain +1/+1.
-- [ ] `VAN_EX1_004` Young Priestess — minion 1 2/1 — At the end of your turn, give another random friendly minion +1 Health.
-- [ ] `VAN_EX1_045` Ancient Watcher — minion 2 4/5 — Can't attack.
-- [ ] `VAN_EX1_059` Crazed Alchemist — minion 2 2/2 — Battlecry: Swap the Attack and Health of a minion.
-- [ ] `VAN_NEW1_019` Knife Juggler — minion 2 3/2 — After you summon a minion, deal 1 damage to a random enemy.
-- [ ] `VAN_EX1_055` Mana Addict — minion 2 1/3 — Whenever you cast a spell, gain +2 Attack this turn.
-- [ ] `VAN_EX1_616` Mana Wraith — minion 2 2/2 — ALL minions cost (1) more.
-- [ ] `VAN_NEW1_037` Master Swordsmith — minion 2 1/3 — At the end of your turn, give another random friendly minion +1 Attack.
-- [ ] `VAN_EX1_076` Pint-Sized Summoner — minion 2 2/2 — The first minion you play each turn costs (1) less.
-- [ ] `VAN_EX1_058` Sunfury Protector — minion 2 2/3 — Battlecry: Give adjacent minions Taunt.
-- [ ] `VAN_NEW1_020` Wild Pyromancer — minion 2 3/2 — After you cast a spell, deal 1 damage to ALL minions.
-- [ ] `VAN_EX1_006` Alarm-o-Bot — minion 3 0/3 [MECHANICAL] — At the start of your turn, swap this minion with a random one in your hand.
-- [ ] `VAN_EX1_089` Arcane Golem — minion 3 4/2 — Charge. Battlecry: Give your opponent a Mana Crystal.
-- [ ] `VAN_EX1_050` Coldlight Oracle — minion 3 2/2 [MURLOC] — Battlecry: Each player draws 2 cards.
-- [ ] `VAN_EX1_103` Coldlight Seer — minion 3 2/3 [MURLOC] — Battlecry: Give ALL other Murlocs +2 Health.
-- [ ] `VAN_EX1_102` Demolisher — minion 3 1/4 [MECHANICAL] — At the start of your turn, deal 2 damage to a random enemy.
-- [ ] `VAN_EX1_170` Emperor Cobra — minion 3 2/3 [BEAST] — Destroy any minion damaged by this minion.
-- [ ] `VAN_EX1_597` Imp Master — minion 3 1/5 — At the end of your turn, deal 1 damage to this minion and summon a 1/1 Imp.
-- [ ] `VAN_CS2_181` Injured Blademaster — minion 3 4/7 — Battlecry: Deal 4 damage to HIMSELF.
-- [ ] `VAN_EX1_085` Mind Control Tech — minion 3 3/3 — Battlecry: If your opponent has 4 or more minions, take control of one at random.
-- [ ] `VAN_EX1_044` Questing Adventurer — minion 3 2/2 — Whenever you play a card, gain +1/+1.
-- [ ] `VAN_EX1_584` Ancient Mage — minion 4 2/5 — Battlecry: Give adjacent minions Spell Damage +1.
-- [ ] `VAN_EX1_093` Defender of Argus — minion 4 2/3 — Battlecry: Give adjacent minions +1/+1 and Taunt.
-- [ ] `VAN_EX1_043` Twilight Drake — minion 4 4/1 [DRAGON] — Battlecry: Gain +1 Health for each card in your hand.
-- [ ] `VAN_NEW1_026` Violet Teacher — minion 4 3/5 — Whenever you cast a spell, summon a 1/1 Violet Apprentice.
-- [ ] `VAN_EX1_097` Abomination — minion 5 4/4 — Taunt. Deathrattle: Deal 2 damage to ALL characters.
-- [ ] `VAN_EX1_284` Azure Drake — minion 5 4/4 [DRAGON] — Spell Damage +1 Battlecry: Draw a card.
-- [ ] `VAN_EX1_095` Gadgetzan Auctioneer — minion 5 4/4 — Whenever you cast a spell, draw a card.
-- [ ] `VAN_NEW1_041` Stampeding Kodo — minion 5 3/5 [BEAST] — Battlecry: Destroy a random enemy minion with 2 or less Attack.
-- [ ] `VAN_EX1_067` Argent Commander — minion 6 4/2 — Charge Divine Shield
-- [ ] `VAN_EX1_032` Sunwalker — minion 6 4/5 — Taunt Divine Shield
-- [ ] `VAN_CS2_161` Ravenholdt Assassin — minion 7 7/5 — Stealth *(keyword only — no hook)*
+- [x] `VAN_EX1_009` Angry Chicken — minion 1 1/1 [BEAST] — Enrage: +5 Attack.
+- [x] `VAN_NEW1_025` Bloodsail Corsair — minion 1 1/2 [PIRATE] — Battlecry: Remove 1 Durability from your opponent's weapon.
+- [x] `VAN_EX1_001` Lightwarden — minion 1 1/2 — Whenever a character is healed, gain +2 Attack.
+- [x] `VAN_EX1_509` Murloc Tidecaller — minion 1 1/2 [MURLOC] — Whenever a Murloc is summoned, gain +1 Attack.
+- [x] `VAN_EX1_080` Secretkeeper — minion 1 1/2 — Whenever a Secret is played, gain +1/+1.
+- [x] `VAN_EX1_004` Young Priestess — minion 1 2/1 — At the end of your turn, give another random friendly minion +1 Health.
+- [x] `VAN_EX1_045` Ancient Watcher — minion 2 4/5 — Can't attack. — **ключевые слова или CANT_ATTACK из mechanics, хук не нужен**
+- [x] `VAN_EX1_059` Crazed Alchemist — minion 2 2/2 — Battlecry: Swap the Attack and Health of a minion.
+- [x] `VAN_NEW1_019` Knife Juggler — minion 2 3/2 — After you summon a minion, deal 1 damage to a random enemy.
+- [x] `VAN_EX1_055` Mana Addict — minion 2 1/3 — Whenever you cast a spell, gain +2 Attack this turn.
+- [x] `VAN_EX1_616` Mana Wraith — minion 2 2/2 — ALL minions cost (1) more.
+- [x] `VAN_NEW1_037` Master Swordsmith — minion 2 1/3 — At the end of your turn, give another random friendly minion +1 Attack.
+- [x] `VAN_EX1_076` Pint-Sized Summoner — minion 2 2/2 — The first minion you play each turn costs (1) less.
+- [x] `VAN_EX1_058` Sunfury Protector — minion 2 2/3 — Battlecry: Give adjacent minions Taunt.
+- [x] `VAN_NEW1_020` Wild Pyromancer — minion 2 3/2 — After you cast a spell, deal 1 damage to ALL minions.
+- [x] `VAN_EX1_006` Alarm-o-Bot — minion 3 0/3 [MECHANICAL] — At the start of your turn, swap this minion with a random one in your hand.
+- [x] `VAN_EX1_089` Arcane Golem — minion 3 4/2 — Charge. Battlecry: Give your opponent a Mana Crystal.
+- [x] `VAN_EX1_050` Coldlight Oracle — minion 3 2/2 [MURLOC] — Battlecry: Each player draws 2 cards.
+- [x] `VAN_EX1_103` Coldlight Seer — minion 3 2/3 [MURLOC] — Battlecry: Give ALL other Murlocs +2 Health.
+- [x] `VAN_EX1_102` Demolisher — minion 3 1/4 [MECHANICAL] — At the start of your turn, deal 2 damage to a random enemy.
+- [x] `VAN_EX1_170` Emperor Cobra — minion 3 2/3 [BEAST] — Destroy any minion damaged by this minion.
+- [x] `VAN_EX1_597` Imp Master — minion 3 1/5 — At the end of your turn, deal 1 damage to this minion and summon a 1/1 Imp.
+- [x] `VAN_CS2_181` Injured Blademaster — minion 3 4/7 — Battlecry: Deal 4 damage to HIMSELF.
+- [x] `VAN_EX1_085` Mind Control Tech — minion 3 3/3 — Battlecry: If your opponent has 4 or more minions, take control of one at random.
+- [x] `VAN_EX1_044` Questing Adventurer — minion 3 2/2 — Whenever you play a card, gain +1/+1.
+- [x] `VAN_EX1_584` Ancient Mage — minion 4 2/5 — Battlecry: Give adjacent minions Spell Damage +1.
+- [x] `VAN_EX1_093` Defender of Argus — minion 4 2/3 — Battlecry: Give adjacent minions +1/+1 and Taunt.
+- [x] `VAN_EX1_043` Twilight Drake — minion 4 4/1 [DRAGON] — Battlecry: Gain +1 Health for each card in your hand.
+- [x] `VAN_NEW1_026` Violet Teacher — minion 4 3/5 — Whenever you cast a spell, summon a 1/1 Violet Apprentice.
+- [x] `VAN_EX1_097` Abomination — minion 5 4/4 — Taunt. Deathrattle: Deal 2 damage to ALL characters.
+- [x] `VAN_EX1_284` Azure Drake — minion 5 4/4 [DRAGON] — Spell Damage +1 Battlecry: Draw a card.
+- [x] `VAN_EX1_095` Gadgetzan Auctioneer — minion 5 4/4 — Whenever you cast a spell, draw a card.
+- [x] `VAN_NEW1_041` Stampeding Kodo — minion 5 3/5 [BEAST] — Battlecry: Destroy a random enemy minion with 2 or less Attack.
+- [x] `VAN_EX1_067` Argent Commander — minion 6 4/2 — Charge Divine Shield — **ключевые слова или CANT_ATTACK из mechanics, хук не нужен**
+- [x] `VAN_EX1_032` Sunwalker — minion 6 4/5 — Taunt Divine Shield — **ключевые слова или CANT_ATTACK из mechanics, хук не нужен**
+- [x] `VAN_CS2_161` Ravenholdt Assassin — minion 7 7/5 — Stealth *(keyword only — no hook)*
 
 ## Task 12 — Neutral Classic EPIC (11 cards, 0 keyword-only)
 
