@@ -12,14 +12,6 @@ static func _has_enemy_minions(n: int) -> Callable:
 	return func(g, me): return g.minions(g.opponent(me.controller)).size() >= n
 
 
-## Secret triggered by `event` on the opponent's turn when cond(g, me, ev) holds.
-static func secret(event: String, cond: Callable, effect: Callable) -> Dictionary:
-	return {"on": {event: func(g, me, ev):
-		if g.secret_ready(me) and cond.call(g, me, ev):
-			g.reveal(me)
-			effect.call(g, me, ev)}}
-
-
 static func _attacks_my_hero(g, me, ev) -> bool:
 	return ev.defender == g.hero(me.controller).id
 
@@ -72,16 +64,16 @@ static func register(r: Dictionary) -> void:
 				e.zone = "GRAVEYARD"
 				g.log_event({"type": "discard", "player": me.controller, "entity": e.id, "card": e.card_id}),
 	}
-	r["VAN_EX1_610"] = secret("attack", _attacks_my_hero, func(g, me, _ev):  # Explosive Trap
+	r["VAN_EX1_610"] = Cards.secret("attack", _attacks_my_hero, func(g, me, _ev):  # Explosive Trap
 		for c in g.chars(g.opponent(me.controller)):
 			g.damage(me, c, g.spell_dmg(me, 2)))
-	r["VAN_EX1_611"] = secret("attack",  # Freezing Trap
+	r["VAN_EX1_611"] = Cards.secret("attack",  # Freezing Trap
 		func(g, me, ev): return g.ent(ev.attacker).is_minion() and ev.player != me.controller,
 		func(g, _me, ev):
 			var n: Entity = g.return_to_hand(g.ent(ev.attacker))
 			if n:
 				n.add_enchant({"cost": 2}))
-	r["VAN_EX1_533"] = secret("attack", _attacks_my_hero, func(g, me, ev):  # Misdirection
+	r["VAN_EX1_533"] = Cards.secret("attack", _attacks_my_hero, func(g, me, ev):  # Misdirection
 		var pool: Array = g.all_chars().filter(func(c): return c.id != ev.attacker and c != g.hero(me.controller))
 		var t: Entity = g.random_alive(pool)
 		if t:
@@ -91,14 +83,14 @@ static func register(r: Dictionary) -> void:
 			if ev.minion and ev.player == me.controller and CardDb.card(ev.card).get("race", "") == "BEAST":
 				g.buff(me, 2, 1)},
 	}
-	r["VAN_EX1_554"] = secret("attack",  # Snake Trap
+	r["VAN_EX1_554"] = Cards.secret("attack",  # Snake Trap
 		func(g, me, ev):
 			var d: Entity = g.ent(ev.defender)
 			return d.is_minion() and d.controller == me.controller,
 		func(g, me, _ev):
 			for i in 3:
 				g.summon(me.controller, "VAN_EX1_554t"))
-	r["VAN_EX1_609"] = secret("after_summon",  # Snipe
+	r["VAN_EX1_609"] = Cards.secret("after_summon",  # Snipe
 		func(_g, me, ev): return ev.get("played", false) and ev.player != me.controller,
 		func(g, me, ev): g.damage(me, g.ent(ev.entity), g.spell_dmg(me, 4)))
 	r["VAN_CS2_237"] = {  # Starving Buzzard

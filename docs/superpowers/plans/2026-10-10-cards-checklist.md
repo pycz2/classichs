@@ -270,31 +270,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 16 — Mage (25 cards, 0 keyword-only)
 
-- [ ] `VAN_EX1_277` Arcane Missiles — spell 1 — Deal $3 damage randomly split among all enemy characters.
-- [ ] `VAN_CS2_031` Ice Lance — spell 1 — Freeze a character. If it was already Frozen, deal $4 damage instead.
-- [ ] `VAN_NEW1_012` Mana Wyrm — minion 1 1/3 — Whenever you cast a spell, gain +1 Attack.
-- [ ] `VAN_CS2_027` Mirror Image — spell 1 — Summon two 0/2 minions with Taunt.
-- [ ] `VAN_CS2_025` Arcane Explosion — spell 2 — Deal $1 damage to all enemy minions.
-- [ ] `VAN_CS2_024` Frostbolt — spell 2 — Deal $3 damage to a character and Freeze it.
-- [ ] `VAN_EX1_608` Sorcerer's Apprentice — minion 2 3/2 — Your spells cost (1) less.
-- [ ] `VAN_CS2_023` Arcane Intellect — spell 3 — Draw 2 cards.
-- [ ] `VAN_EX1_287` Counterspell — spell 3 — Secret: When your opponent casts a spell, Counter it.
-- [ ] `VAN_CS2_026` Frost Nova — spell 3 — Freeze all enemy minions.
-- [ ] `VAN_EX1_289` Ice Barrier — spell 3 — Secret: As soon as your hero is attacked, gain 8 Armor.
-- [ ] `VAN_EX1_295` Ice Block — spell 3 — Secret: When your hero takes fatal damage, prevent it and become Immune this turn.
-- [ ] `VAN_EX1_612` Kirin Tor Mage — minion 3 4/3 — Battlecry: The next Secret you play this turn costs (0).
-- [ ] `VAN_EX1_294` Mirror Entity — spell 3 — Secret: When your opponent plays a minion, summon a copy of it.
-- [ ] `VAN_tt_010` Spellbender — spell 3 — Secret: When an enemy casts a spell on a minion, summon a 1/3 as the new target.
-- [ ] `VAN_EX1_594` Vaporize — spell 3 — Secret: When a minion attacks your hero, destroy it.
-- [ ] `VAN_EX1_275` Cone of Cold — spell 4 — Freeze a minion and the minions next to it, and deal $1 damage to them.
-- [ ] `VAN_EX1_274` Ethereal Arcanist — minion 4 3/3 — If you control a Secret at the end of your turn, gain +2/+2.
-- [ ] `VAN_CS2_029` Fireball — spell 4 — Deal $6 damage.
-- [ ] `VAN_CS2_022` Polymorph — spell 4 — Transform a minion into a 1/1 Sheep.
-- [ ] `VAN_CS2_033` Water Elemental — minion 4 3/6 — Freeze any character damaged by this minion.
-- [ ] `VAN_CS2_028` Blizzard — spell 6 — Deal $2 damage to all enemy minions and Freeze them.
-- [ ] `VAN_EX1_559` Archmage Antonidas — minion 7 5/7 — Whenever you cast a spell, add a 'Fireball' spell to your hand.
-- [ ] `VAN_CS2_032` Flamestrike — spell 7 — Deal $4 damage to all enemy minions.
-- [ ] `VAN_EX1_279` Pyroblast — spell 10 — Deal $10 damage.
+- [x] `VAN_EX1_277` Arcane Missiles — spell 1 — Deal $3 damage randomly split among all enemy characters.
+- [x] `VAN_CS2_031` Ice Lance — spell 1 — Freeze a character. If it was already Frozen, deal $4 damage instead.
+- [x] `VAN_NEW1_012` Mana Wyrm — minion 1 1/3 — Whenever you cast a spell, gain +1 Attack.
+- [x] `VAN_CS2_027` Mirror Image — spell 1 — Summon two 0/2 minions with Taunt.
+- [x] `VAN_CS2_025` Arcane Explosion — spell 2 — Deal $1 damage to all enemy minions.
+- [x] `VAN_CS2_024` Frostbolt — spell 2 — Deal $3 damage to a character and Freeze it.
+- [x] `VAN_EX1_608` Sorcerer's Apprentice — minion 2 3/2 — Your spells cost (1) less.
+- [x] `VAN_CS2_023` Arcane Intellect — spell 3 — Draw 2 cards.
+- [x] `VAN_EX1_287` Counterspell — spell 3 — Secret: When your opponent casts a spell, Counter it.
+- [x] `VAN_CS2_026` Frost Nova — spell 3 — Freeze all enemy minions.
+- [x] `VAN_EX1_289` Ice Barrier — spell 3 — Secret: As soon as your hero is attacked, gain 8 Armor.
+- [x] `VAN_EX1_295` Ice Block — spell 3 — Secret: When your hero takes fatal damage, prevent it and become Immune this turn.
+- [x] `VAN_EX1_612` Kirin Tor Mage — minion 3 4/3 — Battlecry: The next Secret you play this turn costs (0).
+- [x] `VAN_EX1_294` Mirror Entity — spell 3 — Secret: When your opponent plays a minion, summon a copy of it.
+- [x] `VAN_tt_010` Spellbender — spell 3 — Secret: When an enemy casts a spell on a minion, summon a 1/3 as the new target.
+- [x] `VAN_EX1_594` Vaporize — spell 3 — Secret: When a minion attacks your hero, destroy it.
+- [x] `VAN_EX1_275` Cone of Cold — spell 4 — Freeze a minion and the minions next to it, and deal $1 damage to them.
+- [x] `VAN_EX1_274` Ethereal Arcanist — minion 4 3/3 — If you control a Secret at the end of your turn, gain +2/+2.
+- [x] `VAN_CS2_029` Fireball — spell 4 — Deal $6 damage.
+- [x] `VAN_CS2_022` Polymorph — spell 4 — Transform a minion into a 1/1 Sheep.
+- [x] `VAN_CS2_033` Water Elemental — minion 4 3/6 — Freeze any character damaged by this minion.
+- [x] `VAN_CS2_028` Blizzard — spell 6 — Deal $2 damage to all enemy minions and Freeze them.
+- [x] `VAN_EX1_559` Archmage Antonidas — minion 7 5/7 — Whenever you cast a spell, add a 'Fireball' spell to your hand.
+- [x] `VAN_CS2_032` Flamestrike — spell 7 — Deal $4 damage to all enemy minions.
+- [x] `VAN_EX1_279` Pyroblast — spell 10 — Deal $10 damage.
 
 ## Task 17 — Paladin (25 cards, 1 keyword-only)
 
@@ -472,14 +472,14 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_DREAM_04` Dream — spell 0 — Return a minion to its owner's hand.
 - [x] `CS2_013t` Excess Mana — spell 0 — Draw a card. (You can only have 10 Mana in your tray.)
 - [ ] `hexfrog` Frog — minion 0 0/1 [BEAST] — Taunt *(keyword only — no hook)*
-- [ ] `VAN_CS2_mirror` Mirror Image — minion 0 0/2 — Taunt *(keyword only — no hook)*
+- [x] `VAN_CS2_mirror` Mirror Image — minion 0 0/2 — Taunt *(keyword only — no hook)*
 - [x] `PRO_001at` Murloc — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_506a` Murloc Scout — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
 - [x] `VAN_DREAM_05` Nightmare — spell 0 — Give a minion +5/+5. At the start of your next turn, destroy it.
 - [ ] `VAN_EX1_345t` Shadow of Nothing — minion 0 0/1 — Mindgames whiffed! Your opponent had no minions!
-- [ ] `VAN_CS2_tk1` Sheep — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_tk1` Sheep — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_554t` Snake — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_tt_010a` Spellbender — minion 0 1/3 — (no text) *(keyword only — no hook)*
+- [x] `VAN_tt_010a` Spellbender — minion 0 1/3 — (no text) *(keyword only — no hook)*
 - [x] `VAN_NEW1_026t` Violet Apprentice — minion 0 1/1 — (no text) *(keyword only — no hook)*
 - [x] `EX1_014t` Bananas — spell 1 — Give a minion +1/+1.
 - [x] `VAN_CS2_boar` Boar — minion 1 1/1 [BEAST] — (no text) *(keyword only — no hook)*

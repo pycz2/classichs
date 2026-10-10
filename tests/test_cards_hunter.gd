@@ -41,7 +41,7 @@ func test_bestial_wrath() -> void:
 
 
 func test_flare() -> void:
-	var g := H.scene({"hero": "HERO_05", "deck": _deck(2)}, {"hero": "HERO_08", "secrets": ["VAN_EX1_287"]})
+	var g := H.scene({"hero": "HERO_05", "deck": _deck(2)}, {"hero": "HERO_08", "secrets": ["VAN_EX1_289"]})
 	var s := H.board(g, 1, "VAN_EX1_010")
 	H.play(g, H.hand(g, 0, "VAN_EX1_544"))
 	check(not s.has("STEALTH"), "stealth removed")

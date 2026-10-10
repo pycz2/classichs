@@ -35,6 +35,15 @@ static func remove(card_id: String) -> void:
 	_hooks.erase(card_id)
 
 
+## Secret hooks: fires on `event` during the opponent's turn when cond(g, me, ev) holds;
+## the secret is revealed, then effect(g, me, ev) runs.
+static func secret(event: String, cond: Callable, effect: Callable) -> Dictionary:
+	return {"on": {event: func(g, me, ev):
+		if g.secret_ready(me) and cond.call(g, me, ev):
+			g.reveal(me)
+			effect.call(g, me, ev)}}
+
+
 static func all_ids() -> Array:
 	_ensure_loaded()
 	return _hooks.keys()
