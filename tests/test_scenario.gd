@@ -109,3 +109,19 @@ func test_hand_entry_dict_and_bad_zone() -> void:
 	eq(r.game.cost(r.game.players[0].hand[0]), 3, "enchantment applied")
 	r = Scenario.build({"players": [{"hero": "HERO_08", "hand": "VAN_CS2_182"}, {"hero": "HERO_01"}]})
 	eq(r.error, "players[0].hand: must be a list", "bad zone type")
+
+
+func test_type_broken_scenarios_rejected() -> void:
+	var p1 := {"hero": "HERO_01"}
+	for bad in [
+		{"current": 3, "players": [{"hero": "HERO_08"}, p1]},
+		{"players": [{"hero": "HERO_08", "weapon": 5}, p1]},
+		{"players": [{"hero": "HERO_08", "hero_state": 5}, p1]},
+		{"players": [{"hero": "HERO_08", "cost_mods": 5}, p1]},
+		{"players": [{"hero": "HERO_08", "board": [{"card": "VAN_CS2_231", "tags": 5}]}, p1]},
+		{"players": [{"hero": "HERO_08", "board": [{"card": "VAN_CS2_231", "enchantments": 5}]}, p1]},
+		{"players": [{"hero": "HERO_08", "mana": "x"}, p1]},
+		{"players": [5, p1]},
+	]:
+		var r := Scenario.build(bad)
+		check(r.game == null and r.error != "", "rejected: %s" % str(bad))

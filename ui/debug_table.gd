@@ -119,8 +119,12 @@ func add_card(p: int, zone: String, id := "") -> void:
 	var sc = _parse()
 	if sc == null:
 		return
-	if not sc.get("players") is Array or sc.players.size() != 2:
-		sc["players"] = [{"hero": "HERO_08"}, {"hero": "HERO_01"}]
+	if not sc.get("players") is Array or sc.players.size() != 2 or not sc.players[p] is Dictionary:
+		error.text = tr("The scenario needs \"players\": a list of two objects")
+		return
+	if not sc.players[p].get(zone, []) is Array:
+		error.text = tr("players[%d].%s must be a list") % [p, zone]
+		return
 	var list: Array = sc.players[p].get(zone, [])
 	list.append(id)
 	sc.players[p][zone] = list

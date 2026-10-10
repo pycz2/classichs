@@ -58,3 +58,12 @@ func test_turn_header() -> void:
 	var g := H.game()
 	H.end_turn(g)
 	check("\n".join(_all_lines(g, 0)).contains("Turn 2: Opponent"), "header")
+
+
+func test_tracking_discards_hidden_from_opponent() -> void:
+	var g := H.scene({"hero": "HERO_05", "hand": ["VAN_DS1_184"], "deck": [H.WISP, "VAN_CS2_182", "VAN_CS2_120"]})
+	H.play(g, g.players[0].hand[0])
+	g.apply(g.legal_actions().filter(func(a): return a.type == "choose")[0])
+	var theirs := "\n".join(_all_lines(g, 1))
+	check(not theirs.contains("Chillwind Yeti") and not theirs.contains("River Crocolisk") and not theirs.contains("Wisp"), theirs)
+	check(theirs.contains("Opponent discards a card"), "hidden discard")

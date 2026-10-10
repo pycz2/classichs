@@ -69,6 +69,8 @@ func _after() -> void:
 			_bot_step()
 		_after()
 		return
+	if not is_inside_tree():
+		return  # the screen was left; nobody plays this match any more
 	_bot_scheduled = true
 	get_tree().create_timer(bot_delay).timeout.connect(func():
 		_bot_scheduled = false

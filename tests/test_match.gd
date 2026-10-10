@@ -64,3 +64,12 @@ func test_viewer_is_human_against_bot() -> void:
 	m.start()
 	eq(m.viewer(), 1, "the human side")
 	m.free()
+
+
+func test_bot_with_delay_outside_tree_does_not_crash() -> void:
+	var m := Match.new()
+	m.bot_delay = 0.6
+	m.setup(_game(), [true, false])
+	m.start()  # the bot acts first, but the node is not in a tree (left the screen)
+	check(not m.game.players[0].mulliganed, "nothing scheduled")
+	m.free()

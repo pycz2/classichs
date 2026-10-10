@@ -39,7 +39,10 @@ static func choose(g: Game, p: int) -> Dictionary:
 		return _mulligan(g, p, legal)
 	var best: Dictionary = {}
 	var best_score := -INF
+	var last := g.players[p].board.size()
 	for a in legal:
+		if a.type == "play" and a.pos >= 0 and a.pos != last:
+			continue  # ponytail: rightmost slot only; adjacency-aware placement if the bot needs it
 		if a.type == "end_turn":
 			if value(g, p) > best_score:
 				best = a

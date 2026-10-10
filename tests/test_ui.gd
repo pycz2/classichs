@@ -161,3 +161,41 @@ func test_debug_table_flow() -> void:
 	check(JSON.parse_string(d.editor.text).players[1].board.has("VAN_CS2_182"), "card added")
 	eq(started.size(), 1, "errors did not start a game")
 	d.free()
+
+
+func test_place_minion_by_clicking_an_existing_minion() -> void:
+	var g := H.scene({"hero": "HERO_08", "hand": [H.WISP], "board": ["VAN_CS2_120", "VAN_CS2_120"]})
+	var v := _view(g, [false, true])
+	var w: Entity = g.players[0].hand[0]
+	v.click_entity(w.id)
+	v.click_entity(g.players[0].board[1].id)  # a click on the minion picks a slot next to it
+	eq(w.zone, "PLAY", "placed, not switched to an attack")
+	v.free()
+
+
+func test_invalid_click_mid_selection_clears_highlights() -> void:
+	var g := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029", "VAN_EX1_279"], "mana": 4, "max_mana": 4})
+	var v := _view(g, [false, true])
+	v.click_entity(g.players[0].hand[0].id)  # Fireball: targeting
+	v.click_entity(g.players[0].hand[1].id)  # Pyroblast: too expensive
+	eq(v._views[g.hero(1).id].glow, Color.TRANSPARENT, "target glow cleared")
+	v.free()
+
+
+func test_concede_asks_for_confirmation() -> void:
+	var g := H.scene({"hero": "HERO_08"})
+	var v := _view(g, [false, true])
+	(v.find_child("Concede", true, false) as Button).pressed.emit()
+	check(not g.game_over, "not conceded on the first click")
+	(v.find_child("ConfirmConcede", true, false) as Button).pressed.emit()
+	check(g.game_over and g.winner == 1, "conceded after confirmation")
+	v.free()
+
+
+func test_debug_add_card_with_broken_players() -> void:
+	var d := DebugTable.new()
+	root().add_child(d)
+	d.editor.text = '{"players": [1, 2]}'
+	d.add_card(0, "hand", H.WISP)
+	check(d.error.text != "", "message shown")
+	d.free()

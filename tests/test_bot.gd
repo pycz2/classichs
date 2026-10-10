@@ -52,7 +52,7 @@ func test_actions_are_always_legal() -> void:
 
 
 func test_bot_vs_bot_finishes() -> void:
-	var n := int(OS.get_environment("BOT_GAMES")) if OS.has_environment("BOT_GAMES") else 2
+	var n := int(OS.get_environment("BOT_GAMES")) if OS.has_environment("BOT_GAMES") else 20
 	for seed in n:
 		var g := bot_game(seed + 1, ["MAGE", "PRIEST", "ROGUE"][seed % 3], ["WARRIOR", "HUNTER", "DRUID"][seed % 3])
 		var steps := 0
@@ -68,3 +68,11 @@ func test_bot_vs_bot_finishes() -> void:
 				break
 			steps += 1
 		check(g.game_over, "seed %d finished in %d steps" % [seed, steps])
+
+
+func test_bot_tries_only_the_last_board_position() -> void:
+	var tired := {"card": "VAN_CS2_120", "exhausted": true}
+	var g := H.scene({"hero": "HERO_08", "hand": [H.WISP], "board": [tired, tired.duplicate()]})
+	g.players[0].hero_power.give_tag("USED")
+	var a := Bot.choose(g, 0)
+	eq([a.type, a.pos], ["play", 2], "rightmost slot")

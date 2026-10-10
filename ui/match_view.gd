@@ -154,6 +154,9 @@ func refresh() -> void:
 		_names[i].text = "%s · %s %d · %s %d" % [_side_name(p.index), tr("Hand"), p.hand.size(), tr("Deck"), p.deck.size()]
 	_end_turn.disabled = not (my_action() and g.phase == "PLAY" and g.pending.is_empty())
 	_end_turn.text = tr("End Turn") if my_action() or g.game_over else tr("Enemy Turn")
+	var concede := find_child("Concede", false, false) as Button
+	if concede:
+		concede.text = tr("Menu") if g.game_over else tr("Concede")
 	_apply_glows()
 	_history.update_from(g, me)
 	_refresh_overlay()
@@ -250,6 +253,14 @@ func cancel() -> void:
 func click_entity(id: int) -> void:
 	if not my_action() or _overlay != null:
 		return
+	var board := g.players[viewer()].board
+	var e := g.ent(id)
+	if _sel.get("stage", "") == "position" and board.has(e):
+		# A click on one of your minions picks the slot on that side of it.
+		var i := board.find(e)
+		var right: bool = get_global_mouse_position().x > _views[id].global_position.x + _views[id].size.x / 2.0
+		click_board(i + 1 if right else i)
+		return
 	if _sel.is_empty():
 		_select(id)
 	elif _sel.get("stage", "") == "target" and _targets(_sel.actions).has(id):
@@ -259,7 +270,7 @@ func click_entity(id: int) -> void:
 	elif id == _sel.id:
 		cancel()
 	else:
-		_sel = {}
+		cancel()
 		_select(id)
 
 
@@ -346,8 +357,13 @@ func _on_concede() -> void:
 	if g.game_over:
 		leave.emit()
 		return
+	var box := _open_overlay(tr("Concede the match?"))
+	_overlay.name = "ConcedeConfirm"
 	var p := viewer() if not controller.bots[viewer()] else controller.actor()
-	controller.submit({"type": "concede", "player": p})
+	_centered_button(box, tr("Concede"), "ConfirmConcede", func():
+		_close_overlay()
+		controller.submit({"type": "concede", "player": p}))
+	_centered_button(box, tr("Keep playing"), "KeepPlaying", _close_overlay)
 
 
 func _on_hover(v: EntityView, on: bool) -> void:

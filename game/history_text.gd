@@ -33,10 +33,14 @@ static func _name(g: GameState, id: int, loc: String) -> String:
 static func lines(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Array[String]:
 	var out: Array[String] = []
 	var played := {}
+	var chosen: bool = entry.action.get("type", "") == "choose"
 	for ev: Dictionary in entry.events:
 		if ev.type == "play":
 			played[ev.entity] = true
 		if ev.type == "summon" and played.has(ev.entity):
+			continue
+		if chosen and ev.type == "discard" and ev.player != viewer:
+			out.append(_t("Opponent discards a card"))  # unchosen options stay secret (Tracking)
 			continue
 		out.append_array(event_lines(ev, g, viewer, loc))
 	return out

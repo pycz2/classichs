@@ -114,10 +114,42 @@ static func _ints(v: Variant) -> Variant:
 	return v
 
 
+const NUMBER_FIELDS := ["damage", "armor", "hero_attacks", "mana", "max_mana", "overload_owed",
+	"overload_locked", "fatigue", "cards_played", "minions_played"]
+const SPEC_LISTS := ["tags", "eot_tags", "enchantments"]
+
+
+static func _is_number(v: Variant) -> bool:
+	return v is int or v is float
+
+
+## Type errors in an entity spec (board item, weapon, hero_state, hand/deck item).
+static func _check_spec(at: String, item: Variant) -> String:
+	if not item is Dictionary:
+		return ""
+	for k in SPEC_LISTS:
+		if item.has(k) and not item[k] is Array:
+			return "%s.%s: must be a list" % [at, k]
+	for e in item.get("enchantments", []):
+		if not e is Dictionary:
+			return at + ".enchantments: items must be objects"
+	if item.has("tags_exact") and not item.tags_exact is Dictionary:
+		return at + ".tags_exact: must be an object"
+	for k in ["damage", "durability", "attacks"]:
+		if item.has(k) and not _is_number(item[k]):
+			return "%s.%s: must be a number" % [at, k]
+	return ""
+
+
 static func _validate(sc: Dictionary) -> String:
 	var ps = sc.get("players")
 	if not ps is Array or ps.size() != 2:
 		return "players: need exactly 2"
+	for k in ["seed", "current", "turn"]:
+		if sc.has(k) and not _is_number(sc[k]):
+			return k + ": must be a number"
+	if int(sc.get("current", 0)) not in [0, 1]:
+		return "current: must be 0 or 1"
 	for i in 2:
 		var d = ps[i]
 		var at := "players[%d]" % i
@@ -126,6 +158,17 @@ static func _validate(sc: Dictionary) -> String:
 		var e := _check_card(at + ".hero", d.hero, "HERO")
 		if e != "":
 			return e
+		for k in NUMBER_FIELDS:
+			if d.has(k) and not _is_number(d[k]):
+				return "%s.%s: must be a number" % [at, k]
+		if d.has("cost_mods") and not d.cost_mods is Array:
+			return at + ".cost_mods: must be a list"
+		if d.has("hero_state"):
+			if not d.hero_state is Dictionary:
+				return at + ".hero_state: must be an object"
+			e = _check_spec(at + ".hero_state", d.hero_state)
+			if e != "":
+				return e
 		if not d.has("hero_power") and not GameState.HERO_POWERS.has(d.hero):
 			return at + ".hero_power: required for hero " + str(d.hero)
 		if d.has("hero_power"):
@@ -140,6 +183,8 @@ static func _validate(sc: Dictionary) -> String:
 				var item = list[j]
 				var id = item if item is String else (item.get("card") if item is Dictionary else null)
 				e = _check_card("%s.%s[%d]" % [at, zone[0], j], id, zone[1])
+				if e == "":
+					e = _check_spec("%s.%s[%d]" % [at, zone[0], j], item)
 				if e != "":
 					return e
 		if d.get("board", []).size() > GameState.MAX_BOARD:
@@ -148,7 +193,11 @@ static func _validate(sc: Dictionary) -> String:
 			return at + ".hand: more than 10 cards"
 		if d.get("weapon") != null:
 			var w = d.weapon
+			if not (w is String or w is Dictionary):
+				return at + ".weapon: must be a card id or an object"
 			e = _check_card(at + ".weapon", w if w is String else w.get("card"), "WEAPON")
+			if e == "":
+				e = _check_spec(at + ".weapon", w)
 			if e != "":
 				return e
 		if int(d.get("max_mana", 0)) > GameState.MAX_MANA or int(d.get("mana", 0)) < 0:
