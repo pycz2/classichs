@@ -354,31 +354,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 19 — Rogue (25 cards, 1 keyword-only)
 
-- [ ] `VAN_CS2_072` Backstab — spell 0 — Deal $2 damage to an undamaged minion.
-- [ ] `VAN_EX1_145` Preparation — spell 0 — The next spell you cast this turn costs (3) less.
-- [ ] `VAN_EX1_144` Shadowstep — spell 0 — Return a friendly minion to your hand. It costs (2) less.
-- [ ] `VAN_CS2_073` Cold Blood — spell 1 — Give a minion +2 Attack. Combo: +4 Attack instead.
-- [ ] `VAN_EX1_128` Conceal — spell 1 — Give your minions Stealth until your next turn.
-- [ ] `VAN_CS2_074` Deadly Poison — spell 1 — Give your weapon +2 Attack.
-- [ ] `VAN_CS2_075` Sinister Strike — spell 1 — Deal $3 damage to the enemy hero.
-- [ ] `VAN_EX1_126` Betrayal — spell 2 — Force an enemy minion to deal its damage to the minions next to it.
-- [ ] `VAN_CS2_233` Blade Flurry — spell 2 — Destroy your weapon and deal its damage to all enemies.
-- [ ] `VAN_EX1_131` Defias Ringleader — minion 2 3/2 — Combo: Summon a 2/1 Defias Bandit.
-- [ ] `VAN_EX1_124` Eviscerate — spell 2 — Deal $2 damage. Combo: Deal $4 damage instead.
-- [ ] `VAN_EX1_522` Patient Assassin — minion 2 1/1 — Stealth. Destroy any minion damaged by this minion.
-- [ ] `VAN_EX1_581` Sap — spell 2 — Return an enemy minion to your opponent's hand.
-- [ ] `VAN_EX1_278` Shiv — spell 2 — Deal $1 damage. Draw a card.
-- [ ] `VAN_EX1_613` Edwin VanCleef — minion 3 2/2 — Combo: Gain +2/+2 for each card played earlier this turn.
-- [ ] `VAN_EX1_129` Fan of Knives — spell 3 — Deal $1 damage to all enemy minions. Draw a card.
-- [ ] `VAN_EX1_137` Headcrack — spell 3 — Deal $2 damage to the enemy hero. Combo: Return this to your hand next turn.
-- [ ] `VAN_EX1_133` Perdition's Blade — weapon 3 2/0 — Battlecry: Deal 1 damage. Combo: Deal 2 instead.
-- [ ] `VAN_EX1_134` SI:7 Agent — minion 3 3/3 — Combo: Deal 2 damage.
-- [ ] `VAN_NEW1_014` Master of Disguise — minion 4 4/4 — Battlecry: Give a friendly minion Stealth.
-- [ ] `VAN_CS2_080` Assassin's Blade — weapon 5 3/0 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_076` Assassinate — spell 5 — Destroy an enemy minion.
-- [ ] `VAN_NEW1_005` Kidnapper — minion 6 5/3 [UNDEAD] — Combo: Return a minion to its owner's hand.
-- [ ] `VAN_NEW1_004` Vanish — spell 6 — Return all minions to their owner's hand.
-- [ ] `VAN_CS2_077` Sprint — spell 7 — Draw 4 cards.
+- [x] `VAN_CS2_072` Backstab — spell 0 — Deal $2 damage to an undamaged minion.
+- [x] `VAN_EX1_145` Preparation — spell 0 — The next spell you cast this turn costs (3) less.
+- [x] `VAN_EX1_144` Shadowstep — spell 0 — Return a friendly minion to your hand. It costs (2) less.
+- [x] `VAN_CS2_073` Cold Blood — spell 1 — Give a minion +2 Attack. Combo: +4 Attack instead.
+- [x] `VAN_EX1_128` Conceal — spell 1 — Give your minions Stealth until your next turn.
+- [x] `VAN_CS2_074` Deadly Poison — spell 1 — Give your weapon +2 Attack.
+- [x] `VAN_CS2_075` Sinister Strike — spell 1 — Deal $3 damage to the enemy hero.
+- [x] `VAN_EX1_126` Betrayal — spell 2 — Force an enemy minion to deal its damage to the minions next to it.
+- [x] `VAN_CS2_233` Blade Flurry — spell 2 — Destroy your weapon and deal its damage to all enemies.
+- [x] `VAN_EX1_131` Defias Ringleader — minion 2 3/2 — Combo: Summon a 2/1 Defias Bandit.
+- [x] `VAN_EX1_124` Eviscerate — spell 2 — Deal $2 damage. Combo: Deal $4 damage instead.
+- [x] `VAN_EX1_522` Patient Assassin — minion 2 1/1 — Stealth. Destroy any minion damaged by this minion.
+- [x] `VAN_EX1_581` Sap — spell 2 — Return an enemy minion to your opponent's hand.
+- [x] `VAN_EX1_278` Shiv — spell 2 — Deal $1 damage. Draw a card.
+- [x] `VAN_EX1_613` Edwin VanCleef — minion 3 2/2 — Combo: Gain +2/+2 for each card played earlier this turn.
+- [x] `VAN_EX1_129` Fan of Knives — spell 3 — Deal $1 damage to all enemy minions. Draw a card.
+- [x] `VAN_EX1_137` Headcrack — spell 3 — Deal $2 damage to the enemy hero. Combo: Return this to your hand next turn.
+- [x] `VAN_EX1_133` Perdition's Blade — weapon 3 2/0 — Battlecry: Deal 1 damage. Combo: Deal 2 instead.
+- [x] `VAN_EX1_134` SI:7 Agent — minion 3 3/3 — Combo: Deal 2 damage.
+- [x] `VAN_NEW1_014` Master of Disguise — minion 4 4/4 — Battlecry: Give a friendly minion Stealth.
+- [x] `VAN_CS2_080` Assassin's Blade — weapon 5 3/0 — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_076` Assassinate — spell 5 — Destroy an enemy minion.
+- [x] `VAN_NEW1_005` Kidnapper — minion 6 5/3 [UNDEAD] — Combo: Return a minion to its owner's hand.
+- [x] `VAN_NEW1_004` Vanish — spell 6 — Return all minions to their owner's hand.
+- [x] `VAN_CS2_077` Sprint — spell 7 — Draw 4 cards.
 
 ## Task 20 — Shaman (25 cards, 5 keyword-only)
 
@@ -486,7 +486,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [ ] `VAN_CS2_103_Puzzle` Charge — spell 1 — Give a friendly minion Charge. It can't attack heroes this turn.
 - [x] `VAN_skele21` Damaged Golem — minion 1 2/1 [MECHANICAL] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_130a` Defender — minion 1 2/1 — (no text) *(keyword only — no hook)*
-- [ ] `EX1_131t` Defias Bandit — minion 1 2/1 — (no text) *(keyword only — no hook)*
+- [x] `EX1_131t` Defias Bandit — minion 1 2/1 — (no text) *(keyword only — no hook)*
 - [x] `Mekka3` Emboldener 3000 — minion 1 0/4 [MECHANICAL] — At the end of your turn, give a random minion +1/+1.
 - [x] `VAN_TU4e_002t` Flame of Azzinoth — minion 1 2/1 — (no text) *(keyword only — no hook)*
 - [x] `VAN_NEW1_009` Healing Totem — minion 1 0/2 [TOTEM] — At the end of your turn, restore #1 Health to all friendly minions.
