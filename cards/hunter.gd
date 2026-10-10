@@ -55,9 +55,9 @@ static func register(r: Dictionary) -> void:
 				opts.append(e.id)
 			if not opts.is_empty():
 				g.request_choice(me, opts),
-		"on_choose": func(g, me, opt):
+		"on_choose": func(g, me, opt, still: Array):
 			var deck: Array = g.players[me.controller].deck
-			var rest: Array = deck.slice(-3).filter(func(e): return e != opt)
+			var rest: Array = still.filter(func(id): return id != opt.id).map(func(id): return g.ent(id))
 			g.draw_entity(me.controller, opt)
 			for e in rest:
 				deck.erase(e)
@@ -86,7 +86,7 @@ static func register(r: Dictionary) -> void:
 	r["VAN_EX1_554"] = Cards.secret("attack",  # Snake Trap
 		func(g, me, ev):
 			var d: Entity = g.ent(ev.defender)
-			return d.is_minion() and d.controller == me.controller,
+			return d.is_minion() and d.controller == me.controller and g.minions(me.controller).size() < GameState.MAX_BOARD,
 		func(g, me, _ev):
 			for i in 3:
 				g.summon(me.controller, "VAN_EX1_554t"))

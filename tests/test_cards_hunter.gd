@@ -61,7 +61,7 @@ func test_timber_wolf() -> void:
 func test_tracking() -> void:
 	var g := H.scene({"hero": "HERO_05", "deck": ["VAN_CS2_120", "VAN_CS2_182", "VAN_CS2_029", "VAN_CS2_231"]})
 	H.play(g, H.hand(g, 0, "VAN_DS1_184"))
-	var acts := g.legal_actions()
+	var acts := g.legal_actions().filter(func(a): return a.type == "choose")
 	eq(acts.size(), 3, "3 options")
 	var top3: Array = g.players[0].deck.slice(-3).map(func(e): return e.id)
 	eq(acts.map(func(a): return a.option), top3, "top 3 cards")
@@ -251,3 +251,26 @@ func test_gladiators_longbow() -> void:
 	H.attack(g, g.hero(0), y)
 	eq(g.hero(0).health(), 30, "immune while attacking")
 	eq(y.zone, "GRAVEYARD", "5 damage")
+
+
+func test_tracking_keeps_shown_options() -> void:
+	# Top 3: Yeti, Croc, Wisp (top). Wild Pyromancer hits Acolyte, which draws the Wisp first.
+	var g := H.scene({"hero": "HERO_05", "deck": ["VAN_CS2_122", "VAN_CS2_182", "VAN_CS2_120", H.WISP],
+		"board": ["VAN_NEW1_020", "VAN_EX1_007"]})
+	H.play(g, H.hand(g, 0, "VAN_DS1_184"))
+	var acts := g.legal_actions().filter(func(a): return a.type == "choose")
+	eq(acts.map(func(a): return g.ent(a.option).card_id), ["VAN_CS2_182", "VAN_CS2_120"], "drawn option no longer offered")
+	g.apply(acts[0])
+	var deck := g.players[0].deck.map(func(e): return e.card_id)
+	eq(deck, ["VAN_CS2_122"], "unseen Raid Leader stays in deck")
+	check(g.players[0].hand.any(func(e): return e.card_id == "VAN_CS2_182"), "chosen card drawn")
+
+
+func test_snake_trap_needs_room() -> void:
+	var g := H.game()
+	var mine := H.board(g, 0, "VAN_CS2_182")
+	for i in 6:
+		H.board(g, 0, H.WISP)
+	_secret_then_pass(g, "VAN_EX1_554")
+	H.attack(g, H.board(g, 1, "VAN_CS2_120"), mine)
+	eq(g.players[0].secrets.size(), 1, "not wasted on a full board")

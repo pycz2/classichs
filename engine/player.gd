@@ -20,6 +20,7 @@ var minions_played_this_turn := 0
 ## "set": int or "delta": int, "until": "use"|"turn_end", "turn": int}
 var cost_mods: Array = []
 var mulliganed := false
+var mulligan_replace: Array = []
 
 
 func _init(p_index: int) -> void:
@@ -38,4 +39,4 @@ func snapshot() -> Dictionary:
 		"hand": ids(hand), "deck": ids(deck), "board": ids(board), "secrets": ids(secrets),
 		"mana": mana, "max_mana": max_mana, "ol_owed": overload_owed, "ol_locked": overload_locked,
 		"fatigue": fatigue, "played": cards_played_this_turn, "minions_played": minions_played_this_turn,
-		"cost_mods": cost_mods, "mulliganed": mulliganed}
+		"cost_mods": cost_mods, "mulliganed": mulliganed, "mulligan_replace": mulligan_replace}

@@ -87,3 +87,25 @@ func test_json_text_roundtrip() -> void:
 func test_example_file_loads() -> void:
 	var sc = JSON.parse_string(FileAccess.get_file_as_string("res://tests/scenarios/example.json"))
 	eq(Scenario.build(sc).error, "", "example scenario")
+
+
+func test_roundtrip_keeps_hand_costs_and_hero_state() -> void:
+	var g := H.game()
+	var y := H.board(g, 0, "VAN_CS2_182")
+	H.play(g, H.hand(g, 0, "VAN_EX1_144"), y)  # Shadowstep: cost -2
+	H.play(g, H.hand(g, 0, "VAN_CS2_105"))  # Heroic Strike: hero +4 this turn
+	g.freeze(g.hero(0))
+	g.players[0].minions_played_this_turn = 1
+	var g2: Game = Scenario.build(Scenario.dump(g)).game
+	eq(g2.cost(g2.players[0].hand[0]), 2, "hand cost enchantment kept")
+	eq(g2.hero(0).atk(), 4, "hero attack kept")
+	check(g2.hero(0).has("FROZEN"), "hero frozen kept")
+	eq(g2.players[0].minions_played_this_turn, 1, "minions played kept")
+
+
+func test_hand_entry_dict_and_bad_zone() -> void:
+	var r := Scenario.build({"players": [{"hero": "HERO_08", "hand": [{"card": "VAN_CS2_182", "enchantments": [{"cost": -1}]}]}, {"hero": "HERO_01"}]})
+	eq(r.error, "", "dict hand entry")
+	eq(r.game.cost(r.game.players[0].hand[0]), 3, "enchantment applied")
+	r = Scenario.build({"players": [{"hero": "HERO_08", "hand": "VAN_CS2_182"}, {"hero": "HERO_01"}]})
+	eq(r.error, "players[0].hand: must be a list", "bad zone type")

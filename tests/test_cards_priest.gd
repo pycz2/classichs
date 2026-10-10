@@ -216,3 +216,21 @@ func test_mind_control() -> void:
 	for i in 7:
 		H.board(g2, 0, H.WISP)
 	check(not H.play(g2, H.hand(g2, 0, "VAN_CS1_113"), H.board(g2, 1, H.WISP)).ok, "needs room")
+
+
+func test_shadow_madness_on_minion_that_attacked() -> void:
+	var g := H.game()
+	H.end_turn(g)
+	var t := H.board(g, 1, "VAN_CS2_120")
+	H.attack(g, t, g.hero(0))
+	H.end_turn(g)
+	H.play(g, H.hand(g, 0, "VAN_EX1_334"), t)
+	check(H.attack(g, t, g.hero(1)).ok, "can attack after it attacked for its owner")
+
+
+func test_lightspawn_ignores_later_auras() -> void:
+	var g := H.game()
+	var l := H.board(g, 0, "VAN_EX1_335")
+	H.board(g, 0, "VAN_CS2_122")  # Raid Leader after Lightspawn
+	g.update_auras()
+	eq(l.atk(), 5, "still equal to health")

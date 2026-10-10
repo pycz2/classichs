@@ -250,10 +250,11 @@ func update_auras() -> void:
 	for e in all:
 		before[e.id] = [e.max_health(), e.health()]
 		e.aura = {"atk": 0, "hp": 0, "tags": {}}
-	for e in all:
-		var h := hooks_of(e)
-		if h.has("aura") and e.zone == "PLAY":
-			h.aura.call(self, e)
+	for key in ["aura", "aura_final"]:  # aura_final sees every normal aura (Lightspawn)
+		for e in all:
+			var h := hooks_of(e)
+			if h.has(key) and e.zone == "PLAY":
+				h[key].call(self, e)
 	for e in all:
 		e.fix_health(before[e.id][0], before[e.id][1])
 
@@ -461,6 +462,7 @@ func take_control(e: Entity, p: int) -> void:
 	e.controller = p
 	players[p].board.append(e)
 	e.give_tag("EXHAUSTED")
+	e.tags["ATTACKS"] = 0
 	log_event({"type": "take_control", "target": e.id, "player": p})
 
 
@@ -605,7 +607,10 @@ func reveal(me: Entity) -> void:
 
 
 func request_choice(me: Entity, options: Array[int]) -> void:
-	pending = {"player": me.controller, "source": me.id, "options": options}
+	var zones := {}
+	for id in options:
+		zones[str(id)] = ent(id).zone
+	pending = {"player": me.controller, "source": me.id, "options": options, "zones": zones}
 	log_event({"type": "choice", "player": me.controller, "options": options})
 
 

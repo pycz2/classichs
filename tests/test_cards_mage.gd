@@ -224,3 +224,18 @@ func test_archmage_antonidas() -> void:
 	H.board(g, 0, "VAN_EX1_559")
 	H.play(g, H.hand(g, 0, "GAME_005"))
 	eq(g.players[0].hand.map(func(e): return e.card_id), ["VAN_CS2_029"], "fireball")
+
+
+func test_mana_wyrm_counts_a_secret() -> void:
+	var g := H.game()
+	var w := H.board(g, 0, "VAN_NEW1_012")
+	H.play(g, H.hand(g, 0, "VAN_EX1_289"))
+	eq(w.atk(), 2, "secret is a spell")
+
+
+func test_counterspell_counters_a_secret() -> void:
+	var g := H.game()
+	_secret_then_pass(g, "VAN_EX1_287")
+	H.play(g, H.hand(g, 1, "VAN_EX1_289"))
+	eq(g.players[1].secrets.size(), 0, "enemy secret countered")
+	eq(g.players[0].secrets.size(), 0, "counterspell used")

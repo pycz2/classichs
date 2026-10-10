@@ -225,14 +225,14 @@ func test_pending_choice_blocks_other_actions() -> void:
 			for e in g.players[me.controller].deck.slice(-2):
 				opts.append(e.id)
 			g.request_choice(me, opts),
-		"on_choose": func(g, me, opt):
+		"on_choose": func(g, me, opt, _still):
 			g.players[me.controller].deck.erase(opt)
 			opt.zone = "HAND"
 			g.players[me.controller].hand.append(opt)})
 	var g := H.game()
 	H.play(g, H.hand(g, 0, "TEST_PICK"))
-	var acts := g.legal_actions()
-	eq(acts.size(), 2, "only choices")
+	var acts := g.legal_actions().filter(func(a): return a.type != "concede")
+	eq(acts.size(), 2, "only choices (and concede)")
 	eq(acts[0].type, "choose", "choose action")
 	check(g.apply(acts[0]).ok, "choose ok")
 	eq(g.players[0].hand.size(), 1, "picked card in hand")
@@ -267,3 +267,24 @@ func test_after_summon_marks_played_minions() -> void:
 	g.summon(0, H.WISP)
 	ev = g.event_log.filter(func(e): return e.type == "after_summon")[0]
 	check(not ev.get("played", false), "token summon is not played")
+
+
+func test_concede_any_time() -> void:
+	var g := H.game()
+	check(g.apply({"type": "concede", "player": 1}).ok, "on the opponent's turn")
+	eq(g.winner, 0, "player 0 wins")
+	var deck: Array = []
+	for i in 30:
+		deck.append(H.WISP)
+	var m := Game.new({"hero": "HERO_08", "deck": deck}, {"hero": "HERO_01", "deck": deck}, 1, 0)
+	check(m.apply({"type": "concede", "player": 1}).ok, "during mulligan")
+
+
+func test_malformed_actions_rejected() -> void:
+	var g := H.game()
+	var before := g.state_hash()
+	for bad in [{"type": "end_turn", "player": 0.5}, {"type": "mulligan", "player": 0, "replace": null},
+			{"player": 0}, {"type": 5, "player": 0}, {1: "x", "type": "end_turn", "player": 0}]:
+		var r := g.apply(bad)
+		check(not r.ok, "rejected: %s" % str(bad))
+	eq(g.state_hash(), before, "state unchanged")

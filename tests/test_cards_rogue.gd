@@ -203,3 +203,12 @@ func test_sprint() -> void:
 	var g := H.scene({"hero": "HERO_03", "deck": _deck(5)})
 	H.play(g, H.hand(g, 0, "VAN_CS2_077"))
 	eq(g.players[0].hand.size(), 4, "draw 4")
+
+
+func test_conceal_keeps_natural_stealth() -> void:
+	var g := H.game()
+	var w := H.board(g, 0, "VAN_EX1_010")  # Worgen Infiltrator
+	H.play(g, H.hand(g, 0, "VAN_EX1_128"))
+	H.end_turn(g)
+	H.end_turn(g)
+	check(w.has("STEALTH"), "own stealth kept")

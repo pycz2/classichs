@@ -224,7 +224,7 @@ static func _rare(r: Dictionary) -> void:
 	}
 	r["VAN_EX1_080"] = {  # Secretkeeper
 		"on": {"play": func(g, me, ev):
-			if ev.kind == "secret":
+			if ev.get("secret", false):
 				g.buff(me, 1, 1)},
 	}
 	r["VAN_EX1_004"] = {  # Young Priestess
@@ -473,7 +473,7 @@ static func _legendary(r: Dictionary) -> void:
 	}
 	r["VAN_EX1_100"] = {  # Lorewalker Cho
 		"on": {"play": func(g, _me, ev):
-			if ev.kind == "spell" or ev.kind == "secret":
+			if ev.kind == "spell":
 				g.add_to_hand(g.opponent(ev.player), ev.card)},
 	}
 	r["VAN_NEW1_029"] = {  # Millhouse Manastorm: enemy spells cost (0) next turn.

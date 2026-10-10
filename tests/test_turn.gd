@@ -28,9 +28,10 @@ func test_mulligan_replaces_with_other_cards() -> void:
 	ids.sort()
 	var r := g.apply({"type": "mulligan", "player": 0, "replace": ids})
 	check(r.ok, "ok")
-	eq(g.players[0].hand.size(), 3, "same size")
-	check(not g.players[0].hand.has(old[0]), "replaced card left the hand")
-	eq(g.players[0].deck.size(), 27, "deck size kept")
+	g.apply({"type": "mulligan", "player": 1, "replace": []})  # replacement happens once both chose
+	eq(g.players[0].hand.size(), 4, "3 after mulligan + turn draw")
+	check(not g.players[0].hand.has(old[0]) or g.players[0].hand.back() == old[0], "replaced card left the hand")
+	eq(g.players[0].deck.size(), 26, "30 - 3 - 1")
 
 
 func test_first_player_by_rng_is_deterministic() -> void:
@@ -161,3 +162,16 @@ func test_wrong_player_rejected() -> void:
 	var r := g.apply({"type": "end_turn", "player": 1})
 	check(not r.ok, "rejected")
 	eq(g.current, 0, "turn kept")
+
+
+func test_mulligan_order_does_not_matter() -> void:
+	var a := _new_game(21)
+	var b := _new_game(21)
+	var r0: Array = [a.players[0].hand[0].id]
+	var r1: Array = [a.players[1].hand[1].id, a.players[1].hand[2].id]
+	r1.sort()
+	a.apply({"type": "mulligan", "player": 0, "replace": r0})
+	a.apply({"type": "mulligan", "player": 1, "replace": r1})
+	b.apply({"type": "mulligan", "player": 1, "replace": r1})
+	b.apply({"type": "mulligan", "player": 0, "replace": r0})
+	eq(a.state_hash(), b.state_hash(), "same state in both orders")

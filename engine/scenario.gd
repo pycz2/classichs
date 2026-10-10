@@ -39,16 +39,21 @@ static func _fill_player(g: Game, i: int, d: Dictionary) -> void:
 	p.overload_locked = int(d.get("overload_locked", 0))
 	p.fatigue = int(d.get("fatigue", 0))
 	p.cards_played_this_turn = int(d.get("cards_played", 0))
+	p.minions_played_this_turn = int(d.get("minions_played", 0))
 	p.cost_mods = _ints(d.get("cost_mods", []))
 	if d.get("hero_power_used", false):
 		p.hero_power.give_tag("USED")
-	for id: String in d.get("deck", []):
-		var e := g.new_entity(id, i)
+	for item in d.get("deck", []):
+		var spec := _spec(item)
+		var e := g.new_entity(spec.card, i)
 		e.zone = "DECK"
+		_apply_spec(e, spec)
 		p.deck.append(e)
-	for id: String in d.get("hand", []):
-		var e := g.new_entity(id, i)
+	for item in d.get("hand", []):
+		var spec := _spec(item)
+		var e := g.new_entity(spec.card, i)
 		e.zone = "HAND"
+		_apply_spec(e, spec)
 		p.hand.append(e)
 	for m in d.get("board", []):
 		var spec := _spec(m)
@@ -66,8 +71,10 @@ static func _fill_player(g: Game, i: int, d: Dictionary) -> void:
 		if spec.has("durability"):
 			e.tags.DURABILITY = int(spec.durability)
 		_apply_spec(e, spec)
-	for id: String in d.get("secrets", []):
-		var e := g.new_entity(id, i)
+	if d.has("hero_state"):
+		_apply_spec(p.hero, d.hero_state)
+	for item in d.get("secrets", []):
+		var e := g.new_entity(_spec(item).card, i)
 		g._enter_play(e)
 		e.zone = "SECRET"
 		p.secrets.append(e)
@@ -127,6 +134,8 @@ static func _validate(sc: Dictionary) -> String:
 				return e
 		for zone in [["hand", ""], ["deck", ""], ["board", "MINION"], ["secrets", "SPELL"]]:
 			var list = d.get(zone[0], [])
+			if not list is Array:
+				return "%s.%s: must be a list" % [at, zone[0]]
 			for j in list.size():
 				var item = list[j]
 				var id = item if item is String else (item.get("card") if item is Dictionary else null)
@@ -170,7 +179,9 @@ static func dump(g: GameState) -> Dictionary:
 			"fatigue": p.fatigue, "cards_played": p.cards_played_this_turn,
 			"hero_power_used": p.hero_power.has("USED"),
 			"cost_mods": p.cost_mods.duplicate(true),
-			"hand": p.hand.map(func(e: Entity) -> String: return e.card_id),
+			"minions_played": p.minions_played_this_turn,
+			"hero_state": _dump_entity(p.hero),
+			"hand": p.hand.map(func(e: Entity): return _dump_entity(e)),
 			"deck": p.deck.map(func(e: Entity) -> String: return e.card_id),
 			"board": board,
 			"weapon": _dump_entity(p.weapon) if p.weapon else null,

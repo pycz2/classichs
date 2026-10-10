@@ -71,8 +71,8 @@ static func register(r: Dictionary) -> void:
 	r["VAN_EX1_591"] = {  # Auchenai Soulpriest
 		"aura": func(g, me): g.aura_add(g.hero(me.controller), 0, 0, {"HEAL_IS_DAMAGE": true}),
 	}
-	r["VAN_EX1_335"] = {  # Lightspawn: attack always equals health (attack buffs are overridden).
-		"aura": func(g, me): g.aura_add(me, me.health() - me.atk() + me.aura.atk, 0),
+	r["VAN_EX1_335"] = {  # Lightspawn: attack always equals health; runs after all other auras.
+		"aura_final": func(g, me): g.aura_add(me, me.health() - me.atk(), 0),
 	}
 	r["VAN_EX1_626"] = {  # Mass Dispel
 		"spell": func(g, me, _t):

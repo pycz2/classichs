@@ -37,7 +37,7 @@ func to_scenario() -> Dictionary:
 ## Applies one action. Illegal actions change nothing.
 func apply(action: Dictionary) -> Dictionary:
 	var a := _normalize(action)
-	if not legal_actions().has(a):
+	if a.is_empty() or not legal_actions().has(a):
 		return {"ok": false, "error": "illegal action %s" % JSON.stringify(a), "events": []}
 	event_log = []
 	var who := current
@@ -47,25 +47,48 @@ func apply(action: Dictionary) -> Dictionary:
 		"concede": _concede(a.player)
 		_: _apply_play_action(a)
 	resolve()
+	_prune_pending()
 	history.append({"turn": turn, "player": a.get("player", who), "action": a, "events": event_log})
 	return {"ok": true, "error": "", "events": event_log}
 
 
 ## Converts JSON floats to ints and sorts mulligan ids, so equality checks work.
+## Returns {} for malformed input (it comes from the network: never trust it).
 func _normalize(action: Dictionary) -> Dictionary:
 	var a := {}
-	for k: String in action:
+	for k in action:
+		if not k is String:
+			return {}
 		var v = action[k]
-		if v is float:
-			v = int(v)
+		if k == "type":
+			if not v is String:
+				return {}
 		elif k == "replace":
+			if not v is Array:
+				return {}
 			var ids: Array = []
 			for x in v:
-				ids.append(int(x))
+				var n = _as_int(x)
+				if n == null:
+					return {}
+				ids.append(n)
 			ids.sort()
 			v = ids
+		else:
+			v = _as_int(v)
+			if v == null:
+				return {}
 		a[k] = v
-	return a
+	return a if a.has("type") and a.has("player") else {}
+
+
+## int for whole numbers (JSON gives floats), null otherwise.
+func _as_int(v: Variant) -> Variant:
+	if v is int:
+		return v
+	if v is float and v == floorf(v):
+		return int(v)
+	return null
 
 
 func legal_actions() -> Array:
@@ -77,10 +100,11 @@ func legal_actions() -> Array:
 			if not p.mulliganed:
 				for ids in _subsets(p.ids(p.hand)):
 					out.append({"type": "mulligan", "player": p.index, "replace": ids})
-		return out
-	out.append({"type": "end_turn", "player": current})
-	out.append({"type": "concede", "player": current})
-	_legal_play_actions(out)
+	else:
+		out.append({"type": "end_turn", "player": current})
+		_legal_play_actions(out)
+	for p in 2:
+		out.append({"type": "concede", "player": p})  # either player, any time
 	return out
 
 
@@ -98,7 +122,19 @@ func _subsets(ids: Array[int]) -> Array:
 
 # --- mulligan and turns -----------------------------------------------------
 
+## Records p's choice; both mulligans run in a fixed order (0, then 1) once both
+## have arrived, so the arrival order of the two actions cannot change the game.
 func _do_mulligan(p: int, replace: Array) -> void:
+	players[p].mulliganed = true
+	players[p].mulligan_replace = replace
+	log_event({"type": "mulligan_chosen", "player": p})
+	if players[0].mulliganed and players[1].mulliganed:
+		for i in 2:
+			_run_mulligan(i, players[i].mulligan_replace)
+		_finish_mulligan()
+
+
+func _run_mulligan(p: int, replace: Array) -> void:
 	var pl := players[p]
 	var old: Array[Entity] = []
 	for id: int in replace:
@@ -110,10 +146,7 @@ func _do_mulligan(p: int, replace: Array) -> void:
 		e.zone = "DECK"
 		pl.deck.append(e)
 	shuffle(pl.deck)
-	pl.mulliganed = true
 	log_event({"type": "mulligan", "player": p, "count": old.size()})
-	if players[0].mulliganed and players[1].mulliganed:
-		_finish_mulligan()
 
 
 func _finish_mulligan() -> void:
@@ -178,7 +211,7 @@ func _apply_play_action(a: Dictionary) -> void:
 func _legal_play_actions(out: Array) -> void:
 	if not pending.is_empty():
 		out.clear()
-		for id: int in pending.options:
+		for id: int in _pending_options():
 			out.append({"type": "choose", "player": pending.player, "option": id})
 		return
 	var p := players[current]
@@ -327,19 +360,22 @@ func _play_minion(e: Entity, t: Entity, pos: int, choice: int, combo: bool) -> v
 
 
 func _play_spell(e: Entity, t: Entity, choice: int, combo: bool) -> void:
-	if e.card().get("mechanics", []).has("SECRET"):
-		players[e.controller].secrets.append(e)
-		_enter_play(e)
-		e.zone = "SECRET"
-		emit({"type": "play", "entity": e.id, "player": e.controller, "kind": "secret",
-			"target": -1, "card": e.card_id})
-		return
+	var is_secret: bool = e.card().get("mechanics", []).has("SECRET")
 	e.zone = "SETASIDE"
 	var ev := {"type": "play", "entity": e.id, "player": e.controller, "kind": "spell",
-		"target": t.id if t else -1, "card": e.card_id, "countered": false}
+		"secret": is_secret, "target": t.id if t else -1, "card": e.card_id, "countered": false}
 	emit(ev)
 	resolve()
 	if game_over:
+		return
+	if is_secret:
+		if ev.countered:
+			e.zone = "GRAVEYARD"
+		else:
+			players[e.controller].secrets.append(e)
+			_enter_play(e)
+			e.zone = "SECRET"
+		emit({"type": "after_spell", "entity": e.id, "player": e.controller, "card": e.card_id})
 		return
 	if not ev.countered:
 		var nt: Entity = ent(ev.target) if ev.target >= 0 else null
@@ -404,7 +440,20 @@ func _do_hero_power(t: Entity) -> void:
 	emit({"type": "hero_power", "player": current, "entity": hp.id, "target": t.id if t else -1})
 
 
+## Offered options that are still in the zone they were offered from.
+func _pending_options() -> Array:
+	return pending.options.filter(func(id: int) -> bool: return ent(id).zone == pending.zones[str(id)])
+
+
 func _do_choose(option: Entity) -> void:
 	var src := ent(pending.source)
+	var still := _pending_options()
 	pending = {}
-	Cards.of(src.card_id).on_choose.call(self, src, option)
+	Cards.of(src.card_id).on_choose.call(self, src, option, still)
+
+
+## A choice whose options all left their zone (drawn by a trigger, say) is dropped.
+func _prune_pending() -> void:
+	if not pending.is_empty() and _pending_options().is_empty():
+		log_event({"type": "choice_cancelled", "player": pending.player})
+		pending = {}

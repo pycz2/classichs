@@ -329,3 +329,11 @@ func test_stampeding_kodo() -> void:
 	var big := H.board(g, 1, "VAN_CS2_182")
 	H.play(g, H.hand(g, 0, "VAN_NEW1_041"))
 	eq([small.zone, big.zone], ["GRAVEYARD", "PLAY"], "only attack <= 2")
+
+
+func test_wild_pyromancer_after_secret() -> void:
+	var g := H.game()
+	var w := H.board(g, 1, H.WISP)
+	H.board(g, 0, "VAN_NEW1_020")
+	H.play(g, H.hand(g, 0, "VAN_EX1_289"))
+	eq(w.zone, "GRAVEYARD", "secret triggers pyromancer")

@@ -33,8 +33,9 @@ static func register(r: Dictionary) -> void:
 	r["VAN_EX1_128"] = {  # Conceal: Stealth until your next turn.
 		"spell": func(g, me, _t):
 			for m in g.minions(me.controller):
-				m.give_tag("STEALTH")
-				m.add_enchant({"hooks": "ench:conceal", "player": me.controller}),
+				if not m.has("STEALTH"):  # natural Stealth is not Conceal's to remove
+					m.give_tag("STEALTH")
+					m.add_enchant({"hooks": "ench:conceal", "player": me.controller}),
 	}
 	r["ench:conceal"] = {
 		"on": {"turn_start": func(_g, me, ev):
