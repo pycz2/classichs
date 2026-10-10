@@ -1,0 +1,11 @@
+{
+  "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10,
+     "hand": ["VAN_CS2_029", "VAN_CS2_024"],
+     "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+     "board": ["VAN_CS2_033"]},
+    {"hero": "HERO_01", "damage": 10, "armor": 2,
+     "deck": ["VAN_CS2_231", "VAN_CS2_231"],
+     "board": ["VAN_CS1_042", {"card": "VAN_CS2_182", "damage": 2}]}
+  ]
+}

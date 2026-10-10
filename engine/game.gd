@@ -24,6 +24,14 @@ func _init(p0: Dictionary, p1: Dictionary, p_seed: int, first := -1, deal := tru
 	event_log = []
 
 
+static func from_scenario(sc: Dictionary) -> Dictionary:
+	return Scenario.build(sc)
+
+
+func to_scenario() -> Dictionary:
+	return Scenario.dump(self)
+
+
 # --- apply ------------------------------------------------------------------
 
 ## Applies one action. Illegal actions change nothing.
