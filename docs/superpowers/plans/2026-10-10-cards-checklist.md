@@ -326,31 +326,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 18 — Priest (25 cards, 0 keyword-only)
 
-- [ ] `VAN_EX1_621` Circle of Healing — spell 0 — Restore #4 Health to ALL minions.
-- [ ] `VAN_EX1_332` Silence — spell 0 — Silence a minion.
-- [ ] `VAN_CS1_130` Holy Smite — spell 1 — Deal $2 damage.
-- [ ] `VAN_CS1_129` Inner Fire — spell 1 — Change a minion's Attack to be equal to its Health.
-- [ ] `VAN_CS2_003` Mind Vision — spell 1 — Put a copy of a random card in your opponent's hand into your hand.
-- [ ] `VAN_CS2_235` Northshire Cleric — minion 1 1/3 — Whenever a minion is healed, draw a card.
-- [ ] `VAN_CS2_004` Power Word: Shield — spell 1 — Give a minion +2 Health. Draw a card.
-- [ ] `VAN_CS2_236` Divine Spirit — spell 2 — Double a minion's Health.
-- [ ] `VAN_EX1_341` Lightwell — minion 2 0/5 — At the start of your turn, restore #3 Health to a damaged friendly character.
-- [ ] `VAN_DS1_233` Mind Blast — spell 2 — Deal $5 damage to the enemy hero.
-- [ ] `VAN_CS2_234` Shadow Word: Pain — spell 2 — Destroy a minion with 3 or less Attack.
-- [ ] `VAN_EX1_622` Shadow Word: Death — spell 3 — Destroy a minion with 5 or more Attack.
-- [ ] `VAN_EX1_625` Shadowform — spell 3 — Your Hero Power becomes 'Deal 2 damage.' If already in Shadowform: 3 damage.
-- [ ] `VAN_EX1_339` Thoughtsteal — spell 3 — Copy 2 cards in your opponent's deck and add them to your hand.
-- [ ] `VAN_EX1_591` Auchenai Soulpriest — minion 4 3/5 — Your cards and powers that restore Health now deal damage instead.
-- [ ] `VAN_EX1_335` Lightspawn — minion 4 0/5 — This minion's Attack is always equal to its Health.
-- [ ] `VAN_EX1_626` Mass Dispel — spell 4 — Silence all enemy minions. Draw a card.
-- [ ] `VAN_EX1_345` Mindgames — spell 4 — Put a copy of a random minion from your opponent's deck into the battlefield.
-- [ ] `VAN_EX1_334` Shadow Madness — spell 4 — Gain control of an enemy minion with 3 or less Attack until end of turn.
-- [ ] `VAN_CS1_112` Holy Nova — spell 5 — Deal $2 damage to all enemies. Restore #2 Health to all friendly characters.
-- [ ] `VAN_EX1_091` Cabal Shadow Priest — minion 6 4/5 — Battlecry: Take control of an enemy minion that has 2 or less Attack.
-- [ ] `VAN_EX1_624` Holy Fire — spell 6 — Deal $5 damage. Restore #5 Health to your hero.
-- [ ] `VAN_EX1_623` Temple Enforcer — minion 6 6/6 — Battlecry: Give a friendly minion +3 Health.
-- [ ] `VAN_EX1_350` Prophet Velen — minion 7 7/7 — Double the damage and healing of your spells and Hero Power.
-- [ ] `VAN_CS1_113` Mind Control — spell 10 — Take control of an enemy minion.
+- [x] `VAN_EX1_621` Circle of Healing — spell 0 — Restore #4 Health to ALL minions.
+- [x] `VAN_EX1_332` Silence — spell 0 — Silence a minion.
+- [x] `VAN_CS1_130` Holy Smite — spell 1 — Deal $2 damage.
+- [x] `VAN_CS1_129` Inner Fire — spell 1 — Change a minion's Attack to be equal to its Health.
+- [x] `VAN_CS2_003` Mind Vision — spell 1 — Put a copy of a random card in your opponent's hand into your hand.
+- [x] `VAN_CS2_235` Northshire Cleric — minion 1 1/3 — Whenever a minion is healed, draw a card.
+- [x] `VAN_CS2_004` Power Word: Shield — spell 1 — Give a minion +2 Health. Draw a card.
+- [x] `VAN_CS2_236` Divine Spirit — spell 2 — Double a minion's Health.
+- [x] `VAN_EX1_341` Lightwell — minion 2 0/5 — At the start of your turn, restore #3 Health to a damaged friendly character.
+- [x] `VAN_DS1_233` Mind Blast — spell 2 — Deal $5 damage to the enemy hero.
+- [x] `VAN_CS2_234` Shadow Word: Pain — spell 2 — Destroy a minion with 3 or less Attack.
+- [x] `VAN_EX1_622` Shadow Word: Death — spell 3 — Destroy a minion with 5 or more Attack.
+- [x] `VAN_EX1_625` Shadowform — spell 3 — Your Hero Power becomes 'Deal 2 damage.' If already in Shadowform: 3 damage.
+- [x] `VAN_EX1_339` Thoughtsteal — spell 3 — Copy 2 cards in your opponent's deck and add them to your hand.
+- [x] `VAN_EX1_591` Auchenai Soulpriest — minion 4 3/5 — Your cards and powers that restore Health now deal damage instead.
+- [x] `VAN_EX1_335` Lightspawn — minion 4 0/5 — This minion's Attack is always equal to its Health.
+- [x] `VAN_EX1_626` Mass Dispel — spell 4 — Silence all enemy minions. Draw a card.
+- [x] `VAN_EX1_345` Mindgames — spell 4 — Put a copy of a random minion from your opponent's deck into the battlefield.
+- [x] `VAN_EX1_334` Shadow Madness — spell 4 — Gain control of an enemy minion with 3 or less Attack until end of turn.
+- [x] `VAN_CS1_112` Holy Nova — spell 5 — Deal $2 damage to all enemies. Restore #2 Health to all friendly characters.
+- [x] `VAN_EX1_091` Cabal Shadow Priest — minion 6 4/5 — Battlecry: Take control of an enemy minion that has 2 or less Attack.
+- [x] `VAN_EX1_624` Holy Fire — spell 6 — Deal $5 damage. Restore #5 Health to your hero.
+- [x] `VAN_EX1_623` Temple Enforcer — minion 6 6/6 — Battlecry: Give a friendly minion +3 Health.
+- [x] `VAN_EX1_350` Prophet Velen — minion 7 7/7 — Double the damage and healing of your spells and Hero Power.
+- [x] `VAN_CS1_113` Mind Control — spell 10 — Take control of an enemy minion.
 
 ## Task 19 — Rogue (25 cards, 1 keyword-only)
 
@@ -476,7 +476,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `PRO_001at` Murloc — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_506a` Murloc Scout — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
 - [x] `VAN_DREAM_05` Nightmare — spell 0 — Give a minion +5/+5. At the start of your next turn, destroy it.
-- [ ] `VAN_EX1_345t` Shadow of Nothing — minion 0 0/1 — Mindgames whiffed! Your opponent had no minions!
+- [x] `VAN_EX1_345t` Shadow of Nothing — minion 0 0/1 — Mindgames whiffed! Your opponent had no minions!
 - [x] `VAN_CS2_tk1` Sheep — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_554t` Snake — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_tt_010a` Spellbender — minion 0 1/3 — (no text) *(keyword only — no hook)*

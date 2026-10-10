@@ -257,7 +257,7 @@ func aura_add(t: Entity, atk: int, hp: int, tags := {}) -> void:
 	t.aura.atk += atk
 	t.aura.hp += hp
 	for k in tags:
-		if k == "SPELLPOWER":
+		if k == "SPELLPOWER" or k == "DOUBLE_HEAL_DAMAGE":
 			t.aura.tags[k] = int(t.aura.tags.get(k, 0)) + int(tags[k])
 		else:
 			t.aura.tags[k] = tags[k]
@@ -490,23 +490,38 @@ func gain_mana(p: int, n: int, empty := false) -> void:
 	log_event({"type": "mana", "player": p, "max": pl.max_mana, "mana": pl.mana})
 
 
-func _velen(p: int) -> int:
-	return 2 if players[p].hero.has("DOUBLE_HEAL_DAMAGE") else 1
+## Prophet Velen doubles damage and healing of spells and hero powers only;
+## each Velen doubles again (counter tag on the hero).
+func _velen(me: Entity) -> int:
+	if me.type() != "SPELL" and me.type() != "HERO_POWER":
+		return 1
+	return 1 << int(players[me.controller].hero.aura.tags.get("DOUBLE_HEAL_DAMAGE", 0))
 
 
 func spell_dmg(me: Entity, n: int) -> int:
 	var sp := 0
 	for m in players[me.controller].board:
 		sp += m.spellpower()
-	return (n + sp) * _velen(me.controller)
+	return (n + sp) * _velen(me)
 
 
 func hp_dmg(me: Entity, n: int) -> int:
-	return n * _velen(me.controller)
+	return n * _velen(me)
 
 
 func heal_amt(me: Entity, n: int) -> int:
-	return n * _velen(me.controller)
+	return n * _velen(me)
+
+
+## Replaces p's hero power with a fresh, unused one.
+func set_hero_power(p: int, card_id: String) -> Entity:
+	var old := players[p].hero_power
+	old.zone = "SETASIDE"
+	var hp := new_entity(card_id, p)
+	_enter_play(hp)
+	players[p].hero_power = hp
+	log_event({"type": "hero_power_changed", "player": p, "entity": hp.id, "card": card_id})
+	return hp
 
 
 func random_choice(arr: Array) -> Variant:
