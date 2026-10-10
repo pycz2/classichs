@@ -438,31 +438,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 22 — Warrior (25 cards, 3 keyword-only)
 
-- [ ] `VAN_EX1_607` Inner Rage — spell 0 — Deal $1 damage to a minion and give it +2 Attack.
-- [ ] `VAN_CS2_108` Execute — spell 1 — Destroy a damaged enemy minion.
-- [ ] `VAN_EX1_410` Shield Slam — spell 1 — Deal 1 damage to a minion for each Armor you have.
-- [ ] `VAN_EX1_409` Upgrade! — spell 1 — If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.
-- [ ] `VAN_EX1_400` Whirlwind — spell 1 — Deal $1 damage to ALL minions.
-- [ ] `VAN_EX1_402` Armorsmith — minion 2 1/4 — Whenever a friendly minion takes damage, gain 1 Armor.
-- [ ] `VAN_EX1_392` Battle Rage — spell 2 — Draw a card for each damaged friendly character.
-- [ ] `VAN_CS2_114` Cleave — spell 2 — Deal $2 damage to two random enemy minions.
-- [ ] `VAN_NEW1_036` Commanding Shout — spell 2 — Your minions can't be reduced below 1 Health this turn. Draw a card.
-- [ ] `VAN_EX1_603` Cruel Taskmaster — minion 2 2/2 — Battlecry: Deal 1 damage to a minion and give it +2 Attack.
-- [ ] `VAN_CS2_106` Fiery War Axe — weapon 2 3/0 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_105` Heroic Strike — spell 2 — Give your hero +4 Attack this turn.
-- [ ] `VAN_CS2_104` Rampage — spell 2 — Give a damaged minion +3/+3.
-- [ ] `VAN_EX1_391` Slam — spell 2 — Deal $2 damage to a minion. If it survives, draw a card.
-- [ ] `VAN_CS2_103` Charge — spell 3 — Give a friendly minion +2 Attack and Charge.
-- [ ] `VAN_EX1_604` Frothing Berserker — minion 3 2/4 — Whenever a minion takes damage, gain +1 Attack.
-- [ ] `VAN_EX1_606` Shield Block — spell 3 — Gain 5 Armor. Draw a card.
-- [ ] `VAN_EX1_084` Warsong Commander — minion 3 2/3 — Whenever you summon a minion with 3 or less Attack, give it Charge.
-- [ ] `VAN_EX1_398` Arathi Weaponsmith — minion 4 3/3 — Battlecry: Equip a 2/2 weapon.
-- [ ] `VAN_NEW1_011` Kor'kron Elite — minion 4 4/3 — Charge *(keyword only — no hook)*
-- [ ] `VAN_EX1_408` Mortal Strike — spell 4 — Deal $4 damage. If you have 12 or less Health, deal $6 instead.
-- [ ] `VAN_CS2_112` Arcanite Reaper — weapon 5 5/0 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_407` Brawl — spell 5 — Destroy all minions except one. (chosen randomly)
-- [ ] `VAN_EX1_411` Gorehowl — weapon 7 7/0 — Attacking a minion costs 1 Attack instead of 1 Durability.
-- [ ] `VAN_EX1_414` Grommash Hellscream — minion 8 4/9 — Charge Enrage: +6 Attack
+- [x] `VAN_EX1_607` Inner Rage — spell 0 — Deal $1 damage to a minion and give it +2 Attack.
+- [x] `VAN_CS2_108` Execute — spell 1 — Destroy a damaged enemy minion.
+- [x] `VAN_EX1_410` Shield Slam — spell 1 — Deal 1 damage to a minion for each Armor you have.
+- [x] `VAN_EX1_409` Upgrade! — spell 1 — If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.
+- [x] `VAN_EX1_400` Whirlwind — spell 1 — Deal $1 damage to ALL minions.
+- [x] `VAN_EX1_402` Armorsmith — minion 2 1/4 — Whenever a friendly minion takes damage, gain 1 Armor.
+- [x] `VAN_EX1_392` Battle Rage — spell 2 — Draw a card for each damaged friendly character.
+- [x] `VAN_CS2_114` Cleave — spell 2 — Deal $2 damage to two random enemy minions.
+- [x] `VAN_NEW1_036` Commanding Shout — spell 2 — Your minions can't be reduced below 1 Health this turn. Draw a card.
+- [x] `VAN_EX1_603` Cruel Taskmaster — minion 2 2/2 — Battlecry: Deal 1 damage to a minion and give it +2 Attack.
+- [x] `VAN_CS2_106` Fiery War Axe — weapon 2 3/0 — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_105` Heroic Strike — spell 2 — Give your hero +4 Attack this turn.
+- [x] `VAN_CS2_104` Rampage — spell 2 — Give a damaged minion +3/+3.
+- [x] `VAN_EX1_391` Slam — spell 2 — Deal $2 damage to a minion. If it survives, draw a card.
+- [x] `VAN_CS2_103` Charge — spell 3 — Give a friendly minion +2 Attack and Charge.
+- [x] `VAN_EX1_604` Frothing Berserker — minion 3 2/4 — Whenever a minion takes damage, gain +1 Attack.
+- [x] `VAN_EX1_606` Shield Block — spell 3 — Gain 5 Armor. Draw a card.
+- [x] `VAN_EX1_084` Warsong Commander — minion 3 2/3 — Whenever you summon a minion with 3 or less Attack, give it Charge.
+- [x] `VAN_EX1_398` Arathi Weaponsmith — minion 4 3/3 — Battlecry: Equip a 2/2 weapon.
+- [x] `VAN_NEW1_011` Kor'kron Elite — minion 4 4/3 — Charge *(keyword only — no hook)*
+- [x] `VAN_EX1_408` Mortal Strike — spell 4 — Deal $4 damage. If you have 12 or less Health, deal $6 instead.
+- [x] `VAN_CS2_112` Arcanite Reaper — weapon 5 5/0 — (no text) *(keyword only — no hook)*
+- [x] `VAN_EX1_407` Brawl — spell 5 — Destroy all minions except one. (chosen randomly)
+- [x] `VAN_EX1_411` Gorehowl — weapon 7 7/0 — Attacking a minion costs 1 Attack instead of 1 Durability.
+- [x] `VAN_EX1_414` Grommash Hellscream — minion 8 4/9 — Charge Enrage: +6 Attack
 
 ## Tokens (implement in the task of the card that creates them) (83 cards, 43 keyword-only)
 
@@ -483,7 +483,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_NEW1_026t` Violet Apprentice — minion 0 1/1 — (no text) *(keyword only — no hook)*
 - [x] `EX1_014t` Bananas — spell 1 — Give a minion +1/+1.
 - [x] `VAN_CS2_boar` Boar — minion 1 1/1 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_103_Puzzle` Charge — spell 1 — Give a friendly minion Charge. It can't attack heroes this turn.
+- [x] `VAN_CS2_103_Puzzle` Charge — spell 1 — Give a friendly minion Charge. It can't attack heroes this turn. — **пазловая копия, недостижима в Classic**
 - [x] `VAN_skele21` Damaged Golem — minion 1 2/1 [MECHANICAL] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_130a` Defender — minion 1 2/1 — (no text) *(keyword only — no hook)*
 - [x] `EX1_131t` Defias Bandit — minion 1 2/1 — (no text) *(keyword only — no hook)*
@@ -498,7 +498,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `Mekka2` Repair Bot — minion 1 0/3 [MECHANICAL] — At the end of your turn, restore #6 Health to a damaged character.
 - [x] `VAN_CS2_050` Searing Totem — minion 1 1/1 [TOTEM] — (no text) *(keyword only — no hook)*
 - [x] `VAN_CS2_101t` Silver Hand Recruit — minion 1 1/1 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_skele11` Skeleton — minion 1 1/1 — (no text) *(keyword only — no hook)*
+- [x] `VAN_skele11` Skeleton — minion 1 1/1 — (no text) *(keyword only — no hook)*
 - [x] `VAN_CS2_152` Squire — minion 1 2/2 — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_tk28` Squirrel — minion 1 1/1 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_CS2_051` Stoneclaw Totem — minion 1 0/2 [TOTEM] — Taunt *(keyword only — no hook)*
@@ -509,7 +509,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_CS2_082` Wicked Knife — weapon 1 1/0 — (no text) *(keyword only — no hook)*
 - [x] `EX1_317t` Worthless Imp — minion 1 1/1 [DEMON] — You are out of demons! At least there are always imps...
 - [x] `VAN_CS2_052` Wrath of Air Totem — minion 1 0/2 [TOTEM] — Spell Damage +1 *(keyword only — no hook)*
-- [ ] `VAN_CS2_073_puzzle` Cold Blood — spell 2 — Give a minion +2 Attack. Combo: +4 Attack instead.
+- [x] `VAN_CS2_073_puzzle` Cold Blood — spell 2 — Give a minion +2 Attack. Combo: +4 Attack instead. — **пазловая копия, недостижима в Classic**
 - [x] `NEW1_040t` Gnoll — minion 2 2/2 — Taunt *(keyword only — no hook)*
 - [x] `EX1_534t` Hyena — minion 2 2/2 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_DREAM_01` Laughing Sister — minion 2 3/5 — Elusive
@@ -549,3 +549,5 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_EX1_178b` Uproot — spell 7 — +5 Attack.
 - [x] `VAN_EX1_573a` Demigod's Favor — spell 9 — Give your other minions +2/+2.
 - [x] `VAN_EX1_573b` Shan'do's Lesson — spell 9 — Summon two 2/2 Treants with Taunt.
+- [x] `EX1_409t` Heavy Axe — weapon 1 1/3 — (no text) — **токен Upgrade!, добавлен в задаче 22**
+- [x] `EX1_398t` Battle Axe — weapon 1 2/2 — (no text) — **токен Arathi Weaponsmith, добавлен в задаче 22**

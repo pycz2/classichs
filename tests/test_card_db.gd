@@ -28,7 +28,7 @@ func test_dbf_lookup() -> void:
 
 
 func test_extra_ids_present() -> void:
-	for id in ["HERO_01", "HERO_09", "GAME_005", "EX1_323h", "hexfrog", "Mekka4t", "TU4a_001"]:
+	for id in ["HERO_01", "HERO_09", "GAME_005", "EX1_323h", "hexfrog", "Mekka4t", "TU4a_001", "EX1_409t", "EX1_398t"]:
 		check(CardDb.has(id), "missing " + id)
 
 

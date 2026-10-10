@@ -25,3 +25,4 @@
 - Карты: Rogue (25), Combo.
 - Карты: Shaman (25), Overload.
 - Карты: Warlock (25), Lord Jaraxxus.
+- Карты: Warrior (25). Все 382 коллекционные карты формата Classic реализованы.

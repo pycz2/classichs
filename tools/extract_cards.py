@@ -18,7 +18,7 @@ FIELDS = ["id", "dbfId", "set", "type", "cardClass", "rarity", "cost", "attack",
 EXTRA = [f"HERO_0{i}" for i in range(1, 10)] + """
 EX1_323h EX1_323w EX1_383t GAME_005 CS2_013t EX1_317t EX1_131t EX1_625t EX1_625t2 EX1_014t
 NEW1_040t ds1_whelptoken EX1_116t hexfrog EX1_025t EX1_534t EX1_538t EX1_160t
-Mekka1 Mekka2 Mekka3 Mekka4 Mekka4t PRO_001a PRO_001b PRO_001at
+Mekka1 Mekka2 Mekka3 Mekka4 Mekka4t PRO_001a PRO_001b PRO_001at EX1_409t EX1_398t
 """.split()
 JUNK_PREFIXES = ("Story_", "VAN_DFX_", "VAN_GAME_")
 

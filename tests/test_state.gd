@@ -210,3 +210,13 @@ func test_destroyed_hero_dies() -> void:
 	g.resolve()
 	check(g.game_over, "over")
 	eq(g.winner, 0, "player 0 wins")
+
+
+func test_emit_now_reads_enchantment_hooks() -> void:
+	var g := H.state()
+	Cards.add("ench:test_now", {"now": {"predamage": func(_g, _me, ev): ev.amount = 0}})
+	g.hero(0).add_enchant({"hooks": "ench:test_now"})
+	var w := g.summon(0, H.WISP)
+	g.damage(g.hero(1), w, 5)
+	Cards.remove("ench:test_now")
+	eq(w.health(), 1, "prevented by enchantment hook")

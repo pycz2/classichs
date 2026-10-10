@@ -169,12 +169,17 @@ func emit(ev: Dictionary) -> void:
 					queue.append([eh[ev.type], e, ev, true])
 
 
-## Calls matching "now" hooks at once. Used for replacement effects (Ice Block).
+## Calls matching "now" hooks (card and enchantment) at once. Used for
+## replacement effects (Ice Block, Commanding Shout).
 func emit_now(ev: Dictionary) -> void:
 	for e in in_play():
 		var h: Dictionary = hooks_of(e).get("now", {})
 		if h.has(ev.type):
 			h[ev.type].call(self, e, ev)
+		for ench: Dictionary in e.enchantments:
+			var eh: Dictionary = Cards.of(ench.get("hooks", "")).get("now", {})
+			if eh.has(ev.type):
+				eh[ev.type].call(self, e, ev)
 
 
 ## Runs queued triggers, then the death phase, until nothing is left.
