@@ -1,0 +1,139 @@
+class_name HistoryText
+extends RefCounted
+## Human-readable lines for match history entries. Cards the viewer may not
+## see (the opponent's draws and hand additions, the opponent's Secrets) stay hidden.
+
+## Event types that produce no line (they repeat other events).
+const SILENT := ["after_summon", "after_spell", "after_attack", "turn_end", "mulligan_chosen"]
+
+
+static func _t(s: String) -> String:
+	return TranslationServer.translate(s)
+
+
+static func _you(p: int, viewer: int) -> bool:
+	return p == viewer
+
+
+static func _who(p: int, viewer: int) -> String:
+	return _t("You") if _you(p, viewer) else _t("Opponent")
+
+
+## "You play X" / "Opponent plays X": separate keys keep translations natural.
+static func _say(p: int, viewer: int, mine: String, theirs: String, args: Array) -> String:
+	return (_t(mine) if _you(p, viewer) else _t(theirs)) % args
+
+
+static func _name(g: GameState, id: int, loc: String) -> String:
+	var e := g.ent(id)
+	return CardText.name(e.card_id, loc) if e else "?"
+
+
+## Lines for one history entry ({"turn", "player", "action", "events"}).
+static func lines(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Array[String]:
+	var out: Array[String] = []
+	var played := {}
+	for ev: Dictionary in entry.events:
+		if ev.type == "play":
+			played[ev.entity] = true
+		if ev.type == "summon" and played.has(ev.entity):
+			continue
+		out.append_array(event_lines(ev, g, viewer, loc))
+	return out
+
+
+static func event_lines(ev: Dictionary, g: GameState, viewer: int, loc := "") -> Array[String]:
+	var out: Array[String] = []
+	if SILENT.has(ev.type):
+		return out
+	var n := func(id: int) -> String: return _name(g, id, loc)
+	var p: int = ev.get("player", -1)
+	var s := ""
+	match ev.type:
+		"turn_start":
+			s = _t("Turn %d: %s") % [ev.turn, _who(p, viewer)] if ev.has("turn") else ""
+		"mulligan":
+			s = _say(p, viewer, "You replace %d cards", "Opponent replaces %d cards", [ev.count])
+		"draw":
+			s = _t("You draw %s") % n.call(ev.entity) if _you(p, viewer) else _t("Opponent draws a card")
+		"burn":
+			s = _say(p, viewer, "You burn %s", "Opponent burns %s", [CardText.name(ev.card, loc)])
+		"fatigue":
+			s = _say(p, viewer, "You take %d fatigue damage", "Opponent takes %d fatigue damage", [ev.amount])
+		"play":
+			if ev.get("secret", false) and not _you(p, viewer):
+				s = _t("Opponent plays a Secret")
+			else:
+				s = _say(p, viewer, "You play %s", "Opponent plays %s", [n.call(ev.entity)])
+				if ev.get("target", -1) >= 0:
+					s += " " + _t("on %s") % n.call(ev.target)
+		"summon":
+			s = _t("%s is summoned") % n.call(ev.entity)
+		"attack":
+			s = _t("%s attacks %s") % [n.call(ev.attacker), n.call(ev.defender)]
+		"damage":
+			if ev.source >= 0:
+				s = _t("%s deals %d damage to %s") % [n.call(ev.source), ev.amount, n.call(ev.target)]
+			else:
+				s = _t("%s takes %d damage") % [n.call(ev.target), ev.amount]
+		"heal":
+			s = _t("%s restores %d Health to %s") % [n.call(ev.source), ev.amount, n.call(ev.target)] \
+				if ev.source >= 0 else _t("%s is healed for %d") % [n.call(ev.target), ev.amount]
+		"death":
+			s = _t("%s dies") % n.call(ev.entity) if ev.minion else _t("%s is destroyed") % n.call(ev.entity)
+		"divine_shield_lost":
+			s = _t("%s loses Divine Shield") % n.call(ev.target)
+		"armor":
+			s = _say(p, viewer, "You gain %d Armor", "Opponent gains %d Armor", [ev.amount])
+		"armor_lost":
+			s = _t("Armor absorbs %d damage to %s") % [ev.amount, n.call(ev.target)]
+		"equip":
+			s = _say(p, viewer, "You equip %s", "Opponent equips %s", [n.call(ev.entity)])
+		"destroy":
+			s = _t("%s is destroyed") % n.call(ev.target)
+		"transform":
+			s = _t("%s becomes %s") % [n.call(ev.from), CardText.name(ev.card, loc)]
+		"return_to_hand":
+			s = _t("%s returns to its owner's hand") % n.call(ev.entity)
+		"take_control":
+			s = _say(ev.player, viewer, "You take control of %s", "Opponent takes control of %s", [n.call(ev.target)])
+		"freeze":
+			s = _t("%s is frozen") % n.call(ev.target)
+		"silence":
+			s = _t("%s is silenced") % n.call(ev.target)
+		"buff":
+			if ev.has("atk"):
+				s = _t("%s gets %+d/%+d") % [n.call(ev.target), ev.atk, ev.hp]
+			else:
+				s = _t("%s changes to %s/%s") % [n.call(ev.target),
+					str(ev.set_atk) if ev.set_atk >= 0 else "-", str(ev.set_hp) if ev.set_hp >= 0 else "-"]
+		"secret_revealed":
+			s = _t("Secret revealed: %s") % CardText.name(ev.card, loc)
+		"add_to_hand":
+			s = _t("%s is added to your hand") % CardText.name(ev.card, loc) if _you(p, viewer) \
+				else _t("A card is added to Opponent's hand")
+		"discard":
+			s = _say(p, viewer, "You discard %s", "Opponent discards %s", [CardText.name(ev.card, loc)])
+		"hero_power":
+			s = _say(p, viewer, "You use %s", "Opponent uses %s", [n.call(ev.entity)])
+			if ev.get("target", -1) >= 0:
+				s += " " + _t("on %s") % n.call(ev.target)
+		"game_over":
+			s = _t("Draw") if ev.winner == -1 else _say(ev.winner, viewer, "You win", "Opponent wins", [])
+		"choice":
+			s = _say(p, viewer, "You choose a card", "Opponent chooses a card", [])
+		"choice_cancelled":
+			s = _t("The choice is cancelled: no options left")
+		"mana":
+			s = _say(p, viewer, "You now have %d/%d mana", "Opponent now has %d/%d mana", [ev.mana, ev.max])
+		"set_health":
+			s = _t("%s Health is set to %d") % [n.call(ev.target), ev.health]
+		"hero_power_changed":
+			s = _say(p, viewer, "Your Hero Power becomes %s", "Opponent's Hero Power becomes %s", [CardText.name(ev.card, loc)])
+		"hero_replaced":
+			s = _say(p, viewer, "Your hero becomes %s", "Opponent's hero becomes %s", [CardText.name(ev.card, loc)])
+		_:
+			s = ev.type
+	if s != "":
+		out.append(s)
+	return out

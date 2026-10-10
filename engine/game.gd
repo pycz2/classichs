@@ -172,8 +172,7 @@ func _start_turn() -> void:
 	for c in chars(current):
 		c.tags.erase("EXHAUSTED")
 		c.tags["ATTACKS"] = 0
-	log_event({"type": "turn_start", "player": current, "turn": turn})
-	emit({"type": "turn_start", "player": current})
+	emit({"type": "turn_start", "player": current, "turn": turn})
 	resolve()
 	if not game_over:
 		draw(current)
