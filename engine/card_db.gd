@@ -51,6 +51,11 @@ static func undefine(id: String) -> void:
 	_cards.erase(id)
 
 
+static func all_ids() -> Array:
+	_ensure_loaded()
+	return _cards.keys()
+
+
 static func define(id: String, c: Dictionary) -> void:
 	_ensure_loaded()
 	c["id"] = id

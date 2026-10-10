@@ -5,6 +5,9 @@ extends Node
 signal changed(events: Array)
 signal finished(winner: int)
 
+## Screen shake on heavy damage; the settings screen (subproject 6) toggles it.
+static var shake_enabled := true
+
 var game: Game
 var bots: Array = [false, true]
 ## Seconds between bot actions; 0 = the bot moves at once (tests).

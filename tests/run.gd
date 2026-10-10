@@ -13,7 +13,19 @@ class ErrorCounter extends Logger:
 		last = "%s (%s:%d) %s" % [rationale if rationale != "" else code, file, line, function]
 
 
-func _init() -> void:
+var _started := false
+
+
+## Tests run in the first frame: only then is root inside the tree, so UI tests
+## can add nodes and get _ready() calls.
+func _process(_delta: float) -> bool:
+	if not _started:
+		_started = true
+		_run_all()
+	return false
+
+
+func _run_all() -> void:
 	var args := OS.get_cmdline_user_args()
 	var filter: String = args[0] if args.size() > 0 else ""
 	var errors := ErrorCounter.new()
