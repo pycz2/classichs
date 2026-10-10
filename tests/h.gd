@@ -86,3 +86,14 @@ static func power(g: Game, t: Entity = null) -> Dictionary:
 
 static func end_turn(g: Game) -> Dictionary:
 	return g.apply({"type": "end_turn", "player": g.current})
+
+
+## A Game built from a scenario. Mana defaults to 10/10 for both players.
+static func scene(p0: Dictionary, p1: Dictionary = {"hero": "HERO_01"}, current := 0) -> Game:
+	for p in [p0, p1]:
+		if not p.has("mana"):
+			p["mana"] = 10
+			p["max_mana"] = 10
+	var r := Scenario.build({"current": current, "players": [p0, p1]})
+	assert(r.error == "", r.error)
+	return r.game

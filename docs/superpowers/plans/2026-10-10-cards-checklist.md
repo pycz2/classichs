@@ -4,41 +4,41 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 8 — Hero powers, heroes, The Coin (35 cards, 10 keyword-only)
 
-- [ ] `HERO_09` Anduin Wrynn — hero - — (no text) *(keyword only — no hook)*
-- [ ] `HERO_01` Garrosh Hellscream — hero - — (no text) *(keyword only — no hook)*
-- [ ] `HERO_07` Gul'dan — hero - — (no text) *(keyword only — no hook)*
-- [ ] `HERO_08` Jaina Proudmoore — hero - — (no text) *(keyword only — no hook)*
-- [ ] `EX1_323h` Lord Jaraxxus — hero - [DEMON] — (no text) *(keyword only — no hook)*
-- [ ] `HERO_06` Malfurion Stormrage — hero - — (no text) *(keyword only — no hook)*
-- [ ] `HERO_05` Rexxar — hero - — (no text) *(keyword only — no hook)*
-- [ ] `GAME_005` The Coin — spell 0 — Gain 1 Mana Crystal this turn only.
-- [ ] `HERO_02` Thrall — hero - — (no text) *(keyword only — no hook)*
-- [ ] `HERO_04` Uther Lightbringer — hero - — (no text) *(keyword only — no hook)*
-- [ ] `HERO_03` Valeera Sanguinar — hero - — (no text) *(keyword only — no hook)*
-- [ ] `VAN_HERO_10bp` Demon Claws — hero_power 1 — Hero Power +1 Attack this turn.
-- [ ] `VAN_HERO_10bp2` Demon's Bite — hero_power 1 — Hero Power +2 Attack this turn.
-- [ ] `VAN_CS2_102_H3` Armor Up! — hero_power 2 — Hero Power Gain 2 Armor.
-- [ ] `VAN_HERO_01bp` Armor Up! — hero_power 2 — Hero Power Gain 2 Armor.
-- [ ] `VAN_HERO_05bp2` Ballista Shot — hero_power 2 — Hero Power Deal $3 damage to the enemy hero.
-- [ ] `VAN_HERO_03bp` Dagger Mastery — hero_power 2 — Hero Power Equip a 1/2 Dagger.
-- [ ] `VAN_HERO_06bp2` Dire Shapeshift — hero_power 2 — Hero Power +2 Attack this turn. +2 Armor.
-- [ ] `VAN_HERO_08bp` Fireblast — hero_power 2 — Hero Power Deal $1 damage.
-- [ ] `VAN_HERO_08bp2` Fireblast Rank 2 — hero_power 2 — Hero Power Deal $2 damage.
-- [ ] `VAN_HERO_09bp2` Heal — hero_power 2 — Hero Power Restore #4 Health.
-- [ ] `VAN_EX1_tk33` INFERNO! — hero_power 2 — Hero Power Summon a 6/6 Infernal.
-- [ ] `VAN_HERO_09bp` Lesser Heal — hero_power 2 — Hero Power Restore #2 Health.
-- [ ] `VAN_HERO_07bp` Life Tap — hero_power 2 — Hero Power Draw a card and take $2 damage.
-- [ ] `EX1_625t2` Mind Shatter — hero_power 2 — Deal $3 damage.
-- [ ] `EX1_625t` Mind Spike — hero_power 2 — Deal $2 damage.
-- [ ] `VAN_HERO_03bp2` Poisoned Daggers — hero_power 2 — Hero Power Equip a 2/2 Weapon.
-- [ ] `VAN_HERO_04bp` Reinforce — hero_power 2 — Hero Power Summon a {0} Silver Hand Recruit.
-- [ ] `VAN_HERO_06bp` Shapeshift — hero_power 2 — Hero Power +1 Attack this turn. +1 Armor.
-- [ ] `VAN_HERO_07bp2` Soul Tap — hero_power 2 — Hero Power Draw a card.
-- [ ] `VAN_HERO_05bp` Steady Shot — hero_power 2 — Hero Power Deal $2 damage to the enemy hero.
-- [ ] `VAN_HERO_01bp2` Tank Up! — hero_power 2 — Hero Power Gain 4 Armor.
-- [ ] `VAN_HERO_04bp2` The Silver Hand — hero_power 2 — Hero Power Summon two {0} Recruits.
-- [ ] `VAN_HERO_02bp` Totemic Call — hero_power 2 — Hero Power Summon a random basic Totem.
-- [ ] `VAN_HERO_02bp2` Totemic Slam — hero_power 2 — Hero Power Summon a Totem of your choice.
+- [x] `HERO_09` Anduin Wrynn — hero - — (no text) *(keyword only — no hook)*
+- [x] `HERO_01` Garrosh Hellscream — hero - — (no text) *(keyword only — no hook)*
+- [x] `HERO_07` Gul'dan — hero - — (no text) *(keyword only — no hook)*
+- [x] `HERO_08` Jaina Proudmoore — hero - — (no text) *(keyword only — no hook)*
+- [x] `EX1_323h` Lord Jaraxxus — hero - [DEMON] — (no text) *(keyword only — no hook)*
+- [x] `HERO_06` Malfurion Stormrage — hero - — (no text) *(keyword only — no hook)*
+- [x] `HERO_05` Rexxar — hero - — (no text) *(keyword only — no hook)*
+- [x] `GAME_005` The Coin — spell 0 — Gain 1 Mana Crystal this turn only.
+- [x] `HERO_02` Thrall — hero - — (no text) *(keyword only — no hook)*
+- [x] `HERO_04` Uther Lightbringer — hero - — (no text) *(keyword only — no hook)*
+- [x] `HERO_03` Valeera Sanguinar — hero - — (no text) *(keyword only — no hook)*
+- [x] `VAN_HERO_10bp` Demon Claws — hero_power 1 — Hero Power +1 Attack this turn. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_10bp2` Demon's Bite — hero_power 1 — Hero Power +2 Attack this turn. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_CS2_102_H3` Armor Up! — hero_power 2 — Hero Power Gain 2 Armor. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_01bp` Armor Up! — hero_power 2 — Hero Power Gain 2 Armor.
+- [x] `VAN_HERO_05bp2` Ballista Shot — hero_power 2 — Hero Power Deal $3 damage to the enemy hero. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_03bp` Dagger Mastery — hero_power 2 — Hero Power Equip a 1/2 Dagger.
+- [x] `VAN_HERO_06bp2` Dire Shapeshift — hero_power 2 — Hero Power +2 Attack this turn. +2 Armor. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_08bp` Fireblast — hero_power 2 — Hero Power Deal $1 damage.
+- [x] `VAN_HERO_08bp2` Fireblast Rank 2 — hero_power 2 — Hero Power Deal $2 damage. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_09bp2` Heal — hero_power 2 — Hero Power Restore #4 Health. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_EX1_tk33` INFERNO! — hero_power 2 — Hero Power Summon a 6/6 Infernal.
+- [x] `VAN_HERO_09bp` Lesser Heal — hero_power 2 — Hero Power Restore #2 Health.
+- [x] `VAN_HERO_07bp` Life Tap — hero_power 2 — Hero Power Draw a card and take $2 damage.
+- [x] `EX1_625t2` Mind Shatter — hero_power 2 — Deal $3 damage.
+- [x] `EX1_625t` Mind Spike — hero_power 2 — Deal $2 damage.
+- [x] `VAN_HERO_03bp2` Poisoned Daggers — hero_power 2 — Hero Power Equip a 2/2 Weapon. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_04bp` Reinforce — hero_power 2 — Hero Power Summon a {0} Silver Hand Recruit.
+- [x] `VAN_HERO_06bp` Shapeshift — hero_power 2 — Hero Power +1 Attack this turn. +1 Armor.
+- [x] `VAN_HERO_07bp2` Soul Tap — hero_power 2 — Hero Power Draw a card. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_05bp` Steady Shot — hero_power 2 — Hero Power Deal $2 damage to the enemy hero.
+- [x] `VAN_HERO_01bp2` Tank Up! — hero_power 2 — Hero Power Gain 4 Armor. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_04bp2` The Silver Hand — hero_power 2 — Hero Power Summon two {0} Recruits. — **недостижимо в Classic, хук не нужен**
+- [x] `VAN_HERO_02bp` Totemic Call — hero_power 2 — Hero Power Summon a random basic Totem.
+- [x] `VAN_HERO_02bp2` Totemic Slam — hero_power 2 — Hero Power Summon a Totem of your choice. — **недостижимо в Classic, хук не нужен**
 
 ## Task 9 — Neutral Basic (rarity FREE) (43 cards, 25 keyword-only)
 
