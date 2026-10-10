@@ -88,46 +88,46 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 10 — Neutral Classic COMMON (40 cards, 13 keyword-only)
 
-- [ ] `VAN_CS2_231` Wisp — minion 0 1/1 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_188` Abusive Sergeant — minion 1 2/1 — Battlecry: Give a minion +2 Attack this turn.
-- [ ] `VAN_EX1_008` Argent Squire — minion 1 1/1 — Divine Shield *(keyword only — no hook)*
-- [ ] `VAN_EX1_029` Leper Gnome — minion 1 2/1 — Deathrattle: Deal 2 damage to the enemy hero.
-- [ ] `VAN_EX1_405` Shieldbearer — minion 1 0/4 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_CS2_146` Southsea Deckhand — minion 1 2/1 [PIRATE] — Has Charge while you have a weapon equipped.
-- [ ] `VAN_EX1_010` Worgen Infiltrator — minion 1 2/1 — Stealth *(keyword only — no hook)*
-- [ ] `VAN_CS2_169` Young Dragonhawk — minion 1 1/1 [BEAST] — Windfury *(keyword only — no hook)*
-- [ ] `VAN_EX1_393` Amani Berserker — minion 2 2/3 — Enrage: +3 Attack
-- [ ] `VAN_NEW1_018` Bloodsail Raider — minion 2 2/3 [PIRATE] — Battlecry: Gain Attack equal to the Attack of your weapon.
-- [ ] `VAN_EX1_162` Dire Wolf Alpha — minion 2 2/2 [BEAST] — Adjacent minions have +1 Attack.
-- [ ] `VAN_NEW1_023` Faerie Dragon — minion 2 3/2 [DRAGON] — Elusive
-- [ ] `VAN_CS2_203` Ironbeak Owl — minion 2 2/1 [BEAST] — Battlecry: Silence a minion.
-- [ ] `VAN_EX1_096` Loot Hoarder — minion 2 2/1 — Deathrattle: Draw a card.
-- [ ] `VAN_EX1_082` Mad Bomber — minion 2 3/2 — Battlecry: Deal 3 damage randomly split between all other characters.
-- [ ] `VAN_EX1_049` Youthful Brewmaster — minion 2 3/2 — Battlecry: Return a friendly minion from the battlefield to your hand.
-- [ ] `VAN_EX1_007` Acolyte of Pain — minion 3 1/3 — Whenever this minion takes damage, draw a card.
-- [ ] `VAN_CS2_117` Earthen Ring Farseer — minion 3 3/3 — Battlecry: Restore #3 Health.
-- [ ] `VAN_tt_004` Flesheating Ghoul — minion 3 2/3 — Whenever a minion dies, gain +1 Attack.
-- [ ] `VAN_EX1_556` Harvest Golem — minion 3 2/3 [MECHANICAL] — Deathrattle: Summon a 2/1 Damaged Golem.
-- [ ] `VAN_EX1_017` Jungle Panther — minion 3 4/2 [BEAST] — Stealth *(keyword only — no hook)*
-- [ ] `VAN_EX1_412` Raging Worgen — minion 3 3/3 — Enrage: Windfury and +1 Attack
-- [ ] `VAN_EX1_020` Scarlet Crusader — minion 3 3/1 — Divine Shield *(keyword only — no hook)*
-- [ ] `VAN_EX1_390` Tauren Warrior — minion 3 2/3 — Taunt. Enrage: +3 Attack
-- [ ] `VAN_EX1_021` Thrallmar Farseer — minion 3 2/3 — Windfury *(keyword only — no hook)*
-- [ ] `VAN_EX1_057` Ancient Brewmaster — minion 4 5/4 — Battlecry: Return a friendly minion from the battlefield to your hand.
-- [ ] `VAN_EX1_595` Cult Master — minion 4 4/2 — After a friendly minion dies, draw a card.
-- [ ] `VAN_EX1_046` Dark Iron Dwarf — minion 4 4/4 — Battlecry: Give a minion +2 Attack this turn.
-- [ ] `VAN_NEW1_022` Dread Corsair — minion 4 3/3 [PIRATE] — Taunt Costs (1) less per Attack of your weapon.
-- [ ] `VAN_EX1_396` Mogu'shan Warden — minion 4 1/7 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_EX1_023` Silvermoon Guardian — minion 4 3/3 — Divine Shield *(keyword only — no hook)*
-- [ ] `VAN_EX1_048` Spellbreaker — minion 4 4/3 — Battlecry: Silence a minion.
-- [ ] `VAN_CS1_069` Fen Creeper — minion 5 3/6 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_CS2_151` Silver Hand Knight — minion 5 4/4 — Battlecry: Summon a 2/2 Squire.
-- [ ] `VAN_CS2_221` Spiteful Smith — minion 5 4/6 [UNDEAD] — Enrage: Your weapon has +2 Attack.
-- [ ] `VAN_EX1_028` Stranglethorn Tiger — minion 5 5/5 [BEAST] — Stealth *(keyword only — no hook)*
-- [ ] `VAN_CS2_227` Venture Co. Mercenary — minion 5 7/6 — Your minions cost (3) more.
-- [ ] `VAN_EX1_283` Frost Elemental — minion 6 5/5 — Battlecry: Freeze a character.
-- [ ] `VAN_EX1_583` Priestess of Elune — minion 6 5/4 — Battlecry: Restore #4 Health to your hero.
-- [ ] `VAN_EX1_033` Windfury Harpy — minion 6 4/5 — Windfury *(keyword only — no hook)*
+- [x] `VAN_CS2_231` Wisp — minion 0 1/1 — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_188` Abusive Sergeant — minion 1 2/1 — Battlecry: Give a minion +2 Attack this turn.
+- [x] `VAN_EX1_008` Argent Squire — minion 1 1/1 — Divine Shield *(keyword only — no hook)*
+- [x] `VAN_EX1_029` Leper Gnome — minion 1 2/1 — Deathrattle: Deal 2 damage to the enemy hero.
+- [x] `VAN_EX1_405` Shieldbearer — minion 1 0/4 — Taunt *(keyword only — no hook)*
+- [x] `VAN_CS2_146` Southsea Deckhand — minion 1 2/1 [PIRATE] — Has Charge while you have a weapon equipped.
+- [x] `VAN_EX1_010` Worgen Infiltrator — minion 1 2/1 — Stealth *(keyword only — no hook)*
+- [x] `VAN_CS2_169` Young Dragonhawk — minion 1 1/1 [BEAST] — Windfury *(keyword only — no hook)*
+- [x] `VAN_EX1_393` Amani Berserker — minion 2 2/3 — Enrage: +3 Attack
+- [x] `VAN_NEW1_018` Bloodsail Raider — minion 2 2/3 [PIRATE] — Battlecry: Gain Attack equal to the Attack of your weapon.
+- [x] `VAN_EX1_162` Dire Wolf Alpha — minion 2 2/2 [BEAST] — Adjacent minions have +1 Attack.
+- [x] `VAN_NEW1_023` Faerie Dragon — minion 2 3/2 [DRAGON] — Elusive — **Elusive из mechanics, хук не нужен**
+- [x] `VAN_CS2_203` Ironbeak Owl — minion 2 2/1 [BEAST] — Battlecry: Silence a minion.
+- [x] `VAN_EX1_096` Loot Hoarder — minion 2 2/1 — Deathrattle: Draw a card.
+- [x] `VAN_EX1_082` Mad Bomber — minion 2 3/2 — Battlecry: Deal 3 damage randomly split between all other characters.
+- [x] `VAN_EX1_049` Youthful Brewmaster — minion 2 3/2 — Battlecry: Return a friendly minion from the battlefield to your hand.
+- [x] `VAN_EX1_007` Acolyte of Pain — minion 3 1/3 — Whenever this minion takes damage, draw a card.
+- [x] `VAN_CS2_117` Earthen Ring Farseer — minion 3 3/3 — Battlecry: Restore #3 Health.
+- [x] `VAN_tt_004` Flesheating Ghoul — minion 3 2/3 — Whenever a minion dies, gain +1 Attack.
+- [x] `VAN_EX1_556` Harvest Golem — minion 3 2/3 [MECHANICAL] — Deathrattle: Summon a 2/1 Damaged Golem.
+- [x] `VAN_EX1_017` Jungle Panther — minion 3 4/2 [BEAST] — Stealth *(keyword only — no hook)*
+- [x] `VAN_EX1_412` Raging Worgen — minion 3 3/3 — Enrage: Windfury and +1 Attack
+- [x] `VAN_EX1_020` Scarlet Crusader — minion 3 3/1 — Divine Shield *(keyword only — no hook)*
+- [x] `VAN_EX1_390` Tauren Warrior — minion 3 2/3 — Taunt. Enrage: +3 Attack
+- [x] `VAN_EX1_021` Thrallmar Farseer — minion 3 2/3 — Windfury *(keyword only — no hook)*
+- [x] `VAN_EX1_057` Ancient Brewmaster — minion 4 5/4 — Battlecry: Return a friendly minion from the battlefield to your hand.
+- [x] `VAN_EX1_595` Cult Master — minion 4 4/2 — After a friendly minion dies, draw a card.
+- [x] `VAN_EX1_046` Dark Iron Dwarf — minion 4 4/4 — Battlecry: Give a minion +2 Attack this turn.
+- [x] `VAN_NEW1_022` Dread Corsair — minion 4 3/3 [PIRATE] — Taunt Costs (1) less per Attack of your weapon.
+- [x] `VAN_EX1_396` Mogu'shan Warden — minion 4 1/7 — Taunt *(keyword only — no hook)*
+- [x] `VAN_EX1_023` Silvermoon Guardian — minion 4 3/3 — Divine Shield *(keyword only — no hook)*
+- [x] `VAN_EX1_048` Spellbreaker — minion 4 4/3 — Battlecry: Silence a minion.
+- [x] `VAN_CS1_069` Fen Creeper — minion 5 3/6 — Taunt *(keyword only — no hook)*
+- [x] `VAN_CS2_151` Silver Hand Knight — minion 5 4/4 — Battlecry: Summon a 2/2 Squire.
+- [x] `VAN_CS2_221` Spiteful Smith — minion 5 4/6 [UNDEAD] — Enrage: Your weapon has +2 Attack.
+- [x] `VAN_EX1_028` Stranglethorn Tiger — minion 5 5/5 [BEAST] — Stealth *(keyword only — no hook)*
+- [x] `VAN_CS2_227` Venture Co. Mercenary — minion 5 7/6 — Your minions cost (3) more.
+- [x] `VAN_EX1_283` Frost Elemental — minion 6 5/5 — Battlecry: Freeze a character.
+- [x] `VAN_EX1_583` Priestess of Elune — minion 6 5/4 — Battlecry: Restore #4 Health to your hero.
+- [x] `VAN_EX1_033` Windfury Harpy — minion 6 4/5 — Windfury *(keyword only — no hook)*
 
 ## Task 11 — Neutral Classic RARE (36 cards, 1 keyword-only)
 
