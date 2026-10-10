@@ -1,0 +1,551 @@
+# Card checklist
+
+Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card when its hook and its test pass.
+
+## Task 8 — Hero powers, heroes, The Coin (35 cards, 10 keyword-only)
+
+- [ ] `HERO_09` Anduin Wrynn — hero - — (no text) *(keyword only — no hook)*
+- [ ] `HERO_01` Garrosh Hellscream — hero - — (no text) *(keyword only — no hook)*
+- [ ] `HERO_07` Gul'dan — hero - — (no text) *(keyword only — no hook)*
+- [ ] `HERO_08` Jaina Proudmoore — hero - — (no text) *(keyword only — no hook)*
+- [ ] `EX1_323h` Lord Jaraxxus — hero - [DEMON] — (no text) *(keyword only — no hook)*
+- [ ] `HERO_06` Malfurion Stormrage — hero - — (no text) *(keyword only — no hook)*
+- [ ] `HERO_05` Rexxar — hero - — (no text) *(keyword only — no hook)*
+- [ ] `GAME_005` The Coin — spell 0 — Gain 1 Mana Crystal this turn only.
+- [ ] `HERO_02` Thrall — hero - — (no text) *(keyword only — no hook)*
+- [ ] `HERO_04` Uther Lightbringer — hero - — (no text) *(keyword only — no hook)*
+- [ ] `HERO_03` Valeera Sanguinar — hero - — (no text) *(keyword only — no hook)*
+- [ ] `VAN_HERO_10bp` Demon Claws — hero_power 1 — Hero Power +1 Attack this turn.
+- [ ] `VAN_HERO_10bp2` Demon's Bite — hero_power 1 — Hero Power +2 Attack this turn.
+- [ ] `VAN_CS2_102_H3` Armor Up! — hero_power 2 — Hero Power Gain 2 Armor.
+- [ ] `VAN_HERO_01bp` Armor Up! — hero_power 2 — Hero Power Gain 2 Armor.
+- [ ] `VAN_HERO_05bp2` Ballista Shot — hero_power 2 — Hero Power Deal $3 damage to the enemy hero.
+- [ ] `VAN_HERO_03bp` Dagger Mastery — hero_power 2 — Hero Power Equip a 1/2 Dagger.
+- [ ] `VAN_HERO_06bp2` Dire Shapeshift — hero_power 2 — Hero Power +2 Attack this turn. +2 Armor.
+- [ ] `VAN_HERO_08bp` Fireblast — hero_power 2 — Hero Power Deal $1 damage.
+- [ ] `VAN_HERO_08bp2` Fireblast Rank 2 — hero_power 2 — Hero Power Deal $2 damage.
+- [ ] `VAN_HERO_09bp2` Heal — hero_power 2 — Hero Power Restore #4 Health.
+- [ ] `VAN_EX1_tk33` INFERNO! — hero_power 2 — Hero Power Summon a 6/6 Infernal.
+- [ ] `VAN_HERO_09bp` Lesser Heal — hero_power 2 — Hero Power Restore #2 Health.
+- [ ] `VAN_HERO_07bp` Life Tap — hero_power 2 — Hero Power Draw a card and take $2 damage.
+- [ ] `EX1_625t2` Mind Shatter — hero_power 2 — Deal $3 damage.
+- [ ] `EX1_625t` Mind Spike — hero_power 2 — Deal $2 damage.
+- [ ] `VAN_HERO_03bp2` Poisoned Daggers — hero_power 2 — Hero Power Equip a 2/2 Weapon.
+- [ ] `VAN_HERO_04bp` Reinforce — hero_power 2 — Hero Power Summon a {0} Silver Hand Recruit.
+- [ ] `VAN_HERO_06bp` Shapeshift — hero_power 2 — Hero Power +1 Attack this turn. +1 Armor.
+- [ ] `VAN_HERO_07bp2` Soul Tap — hero_power 2 — Hero Power Draw a card.
+- [ ] `VAN_HERO_05bp` Steady Shot — hero_power 2 — Hero Power Deal $2 damage to the enemy hero.
+- [ ] `VAN_HERO_01bp2` Tank Up! — hero_power 2 — Hero Power Gain 4 Armor.
+- [ ] `VAN_HERO_04bp2` The Silver Hand — hero_power 2 — Hero Power Summon two {0} Recruits.
+- [ ] `VAN_HERO_02bp` Totemic Call — hero_power 2 — Hero Power Summon a random basic Totem.
+- [ ] `VAN_HERO_02bp2` Totemic Slam — hero_power 2 — Hero Power Summon a Totem of your choice.
+
+## Task 9 — Neutral Basic (rarity FREE) (43 cards, 25 keyword-only)
+
+- [ ] `VAN_CS2_189` Elven Archer — minion 1 1/1 — Battlecry: Deal 1 damage.
+- [ ] `VAN_CS1_042` Goldshire Footman — minion 1 1/2 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_EX1_508` Grimscale Oracle — minion 1 1/1 [MURLOC] — ALL other Murlocs have +1 Attack.
+- [ ] `VAN_CS2_168` Murloc Raider — minion 1 2/1 [MURLOC] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_171` Stonetusk Boar — minion 1 1/1 [BEAST] — Charge *(keyword only — no hook)*
+- [ ] `VAN_EX1_011` Voodoo Doctor — minion 1 2/1 — Battlecry: Restore #2 Health.
+- [ ] `VAN_EX1_066` Acidic Swamp Ooze — minion 2 3/2 — Battlecry: Destroy your opponent's weapon.
+- [ ] `VAN_CS2_172` Bloodfen Raptor — minion 2 3/2 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_173` Bluegill Warrior — minion 2 2/1 [MURLOC] — Charge *(keyword only — no hook)*
+- [ ] `VAN_CS2_121` Frostwolf Grunt — minion 2 2/2 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_CS2_142` Kobold Geomancer — minion 2 2/2 — Spell Damage +1 *(keyword only — no hook)*
+- [ ] `VAN_EX1_506` Murloc Tidehunter — minion 2 2/1 [MURLOC] — Battlecry: Summon a 1/1 Murloc Scout.
+- [ ] `VAN_EX1_015` Novice Engineer — minion 2 1/1 — Battlecry: Draw a card.
+- [ ] `VAN_CS2_120` River Crocolisk — minion 2 2/3 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_582` Dalaran Mage — minion 3 1/4 — Spell Damage +1 *(keyword only — no hook)*
+- [ ] `VAN_CS2_141` Ironforge Rifleman — minion 3 2/2 — Battlecry: Deal 1 damage.
+- [ ] `VAN_CS2_125` Ironfur Grizzly — minion 3 3/3 [BEAST] — Taunt *(keyword only — no hook)*
+- [ ] `VAN_CS2_118` Magma Rager — minion 3 5/1 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_122` Raid Leader — minion 3 2/2 — Your other minions have +1 Attack.
+- [ ] `VAN_CS2_196` Razorfen Hunter — minion 3 2/3 — Battlecry: Summon a 1/1 Boar.
+- [ ] `VAN_EX1_019` Shattered Sun Cleric — minion 3 3/2 — Battlecry: Give a friendly minion +1/+1.
+- [ ] `VAN_CS2_127` Silverback Patriarch — minion 3 1/4 [BEAST] — Taunt *(keyword only — no hook)*
+- [ ] `VAN_CS2_124` Wolfrider — minion 3 3/1 — Charge *(keyword only — no hook)*
+- [ ] `VAN_CS2_182` Chillwind Yeti — minion 4 4/5 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_025` Dragonling Mechanic — minion 4 2/4 — Battlecry: Summon a 2/1 Mechanical Dragonling.
+- [ ] `VAN_CS2_147` Gnomish Inventor — minion 4 2/4 — Battlecry: Draw a card.
+- [ ] `VAN_CS2_119` Oasis Snapjaw — minion 4 2/7 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_197` Ogre Magi — minion 4 4/4 — Spell Damage +1 *(keyword only — no hook)*
+- [ ] `VAN_CS2_179` Sen'jin Shieldmasta — minion 4 3/5 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_CS2_131` Stormwind Knight — minion 4 2/5 — Charge *(keyword only — no hook)*
+- [ ] `VAN_CS2_187` Booty Bay Bodyguard — minion 5 5/4 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_DS1_055` Darkscale Healer — minion 5 4/5 — Battlecry: Restore #2 Health to all friendly characters.
+- [ ] `VAN_CS2_226` Frostwolf Warlord — minion 5 4/4 — Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.
+- [ ] `VAN_EX1_399` Gurubashi Berserker — minion 5 2/7 — Whenever this minion takes damage, gain +3 Attack.
+- [ ] `VAN_EX1_593` Nightblade — minion 5 4/4 — Battlecry: Deal 3 damage to the enemy hero.
+- [ ] `VAN_CS2_150` Stormpike Commando — minion 5 4/2 — Battlecry: Deal 2 damage.
+- [ ] `VAN_CS2_155` Archmage — minion 6 4/7 — Spell Damage +1 *(keyword only — no hook)*
+- [ ] `VAN_CS2_200` Boulderfist Ogre — minion 6 6/7 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_162` Lord of the Arena — minion 6 6/5 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_CS2_213` Reckless Rocketeer — minion 6 5/2 — Charge *(keyword only — no hook)*
+- [ ] `VAN_CS2_201` Core Hound — minion 7 9/5 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_222` Stormwind Champion — minion 7 6/6 — Your other minions have +1/+1.
+- [ ] `VAN_CS2_186` War Golem — minion 7 7/7 — (no text) *(keyword only — no hook)*
+
+## Task 10 — Neutral Classic COMMON (40 cards, 13 keyword-only)
+
+- [ ] `VAN_CS2_231` Wisp — minion 0 1/1 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_188` Abusive Sergeant — minion 1 2/1 — Battlecry: Give a minion +2 Attack this turn.
+- [ ] `VAN_EX1_008` Argent Squire — minion 1 1/1 — Divine Shield *(keyword only — no hook)*
+- [ ] `VAN_EX1_029` Leper Gnome — minion 1 2/1 — Deathrattle: Deal 2 damage to the enemy hero.
+- [ ] `VAN_EX1_405` Shieldbearer — minion 1 0/4 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_CS2_146` Southsea Deckhand — minion 1 2/1 [PIRATE] — Has Charge while you have a weapon equipped.
+- [ ] `VAN_EX1_010` Worgen Infiltrator — minion 1 2/1 — Stealth *(keyword only — no hook)*
+- [ ] `VAN_CS2_169` Young Dragonhawk — minion 1 1/1 [BEAST] — Windfury *(keyword only — no hook)*
+- [ ] `VAN_EX1_393` Amani Berserker — minion 2 2/3 — Enrage: +3 Attack
+- [ ] `VAN_NEW1_018` Bloodsail Raider — minion 2 2/3 [PIRATE] — Battlecry: Gain Attack equal to the Attack of your weapon.
+- [ ] `VAN_EX1_162` Dire Wolf Alpha — minion 2 2/2 [BEAST] — Adjacent minions have +1 Attack.
+- [ ] `VAN_NEW1_023` Faerie Dragon — minion 2 3/2 [DRAGON] — Elusive
+- [ ] `VAN_CS2_203` Ironbeak Owl — minion 2 2/1 [BEAST] — Battlecry: Silence a minion.
+- [ ] `VAN_EX1_096` Loot Hoarder — minion 2 2/1 — Deathrattle: Draw a card.
+- [ ] `VAN_EX1_082` Mad Bomber — minion 2 3/2 — Battlecry: Deal 3 damage randomly split between all other characters.
+- [ ] `VAN_EX1_049` Youthful Brewmaster — minion 2 3/2 — Battlecry: Return a friendly minion from the battlefield to your hand.
+- [ ] `VAN_EX1_007` Acolyte of Pain — minion 3 1/3 — Whenever this minion takes damage, draw a card.
+- [ ] `VAN_CS2_117` Earthen Ring Farseer — minion 3 3/3 — Battlecry: Restore #3 Health.
+- [ ] `VAN_tt_004` Flesheating Ghoul — minion 3 2/3 — Whenever a minion dies, gain +1 Attack.
+- [ ] `VAN_EX1_556` Harvest Golem — minion 3 2/3 [MECHANICAL] — Deathrattle: Summon a 2/1 Damaged Golem.
+- [ ] `VAN_EX1_017` Jungle Panther — minion 3 4/2 [BEAST] — Stealth *(keyword only — no hook)*
+- [ ] `VAN_EX1_412` Raging Worgen — minion 3 3/3 — Enrage: Windfury and +1 Attack
+- [ ] `VAN_EX1_020` Scarlet Crusader — minion 3 3/1 — Divine Shield *(keyword only — no hook)*
+- [ ] `VAN_EX1_390` Tauren Warrior — minion 3 2/3 — Taunt. Enrage: +3 Attack
+- [ ] `VAN_EX1_021` Thrallmar Farseer — minion 3 2/3 — Windfury *(keyword only — no hook)*
+- [ ] `VAN_EX1_057` Ancient Brewmaster — minion 4 5/4 — Battlecry: Return a friendly minion from the battlefield to your hand.
+- [ ] `VAN_EX1_595` Cult Master — minion 4 4/2 — After a friendly minion dies, draw a card.
+- [ ] `VAN_EX1_046` Dark Iron Dwarf — minion 4 4/4 — Battlecry: Give a minion +2 Attack this turn.
+- [ ] `VAN_NEW1_022` Dread Corsair — minion 4 3/3 [PIRATE] — Taunt Costs (1) less per Attack of your weapon.
+- [ ] `VAN_EX1_396` Mogu'shan Warden — minion 4 1/7 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_EX1_023` Silvermoon Guardian — minion 4 3/3 — Divine Shield *(keyword only — no hook)*
+- [ ] `VAN_EX1_048` Spellbreaker — minion 4 4/3 — Battlecry: Silence a minion.
+- [ ] `VAN_CS1_069` Fen Creeper — minion 5 3/6 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_CS2_151` Silver Hand Knight — minion 5 4/4 — Battlecry: Summon a 2/2 Squire.
+- [ ] `VAN_CS2_221` Spiteful Smith — minion 5 4/6 [UNDEAD] — Enrage: Your weapon has +2 Attack.
+- [ ] `VAN_EX1_028` Stranglethorn Tiger — minion 5 5/5 [BEAST] — Stealth *(keyword only — no hook)*
+- [ ] `VAN_CS2_227` Venture Co. Mercenary — minion 5 7/6 — Your minions cost (3) more.
+- [ ] `VAN_EX1_283` Frost Elemental — minion 6 5/5 — Battlecry: Freeze a character.
+- [ ] `VAN_EX1_583` Priestess of Elune — minion 6 5/4 — Battlecry: Restore #4 Health to your hero.
+- [ ] `VAN_EX1_033` Windfury Harpy — minion 6 4/5 — Windfury *(keyword only — no hook)*
+
+## Task 11 — Neutral Classic RARE (36 cards, 1 keyword-only)
+
+- [ ] `VAN_EX1_009` Angry Chicken — minion 1 1/1 [BEAST] — Enrage: +5 Attack.
+- [ ] `VAN_NEW1_025` Bloodsail Corsair — minion 1 1/2 [PIRATE] — Battlecry: Remove 1 Durability from your opponent's weapon.
+- [ ] `VAN_EX1_001` Lightwarden — minion 1 1/2 — Whenever a character is healed, gain +2 Attack.
+- [ ] `VAN_EX1_509` Murloc Tidecaller — minion 1 1/2 [MURLOC] — Whenever a Murloc is summoned, gain +1 Attack.
+- [ ] `VAN_EX1_080` Secretkeeper — minion 1 1/2 — Whenever a Secret is played, gain +1/+1.
+- [ ] `VAN_EX1_004` Young Priestess — minion 1 2/1 — At the end of your turn, give another random friendly minion +1 Health.
+- [ ] `VAN_EX1_045` Ancient Watcher — minion 2 4/5 — Can't attack.
+- [ ] `VAN_EX1_059` Crazed Alchemist — minion 2 2/2 — Battlecry: Swap the Attack and Health of a minion.
+- [ ] `VAN_NEW1_019` Knife Juggler — minion 2 3/2 — After you summon a minion, deal 1 damage to a random enemy.
+- [ ] `VAN_EX1_055` Mana Addict — minion 2 1/3 — Whenever you cast a spell, gain +2 Attack this turn.
+- [ ] `VAN_EX1_616` Mana Wraith — minion 2 2/2 — ALL minions cost (1) more.
+- [ ] `VAN_NEW1_037` Master Swordsmith — minion 2 1/3 — At the end of your turn, give another random friendly minion +1 Attack.
+- [ ] `VAN_EX1_076` Pint-Sized Summoner — minion 2 2/2 — The first minion you play each turn costs (1) less.
+- [ ] `VAN_EX1_058` Sunfury Protector — minion 2 2/3 — Battlecry: Give adjacent minions Taunt.
+- [ ] `VAN_NEW1_020` Wild Pyromancer — minion 2 3/2 — After you cast a spell, deal 1 damage to ALL minions.
+- [ ] `VAN_EX1_006` Alarm-o-Bot — minion 3 0/3 [MECHANICAL] — At the start of your turn, swap this minion with a random one in your hand.
+- [ ] `VAN_EX1_089` Arcane Golem — minion 3 4/2 — Charge. Battlecry: Give your opponent a Mana Crystal.
+- [ ] `VAN_EX1_050` Coldlight Oracle — minion 3 2/2 [MURLOC] — Battlecry: Each player draws 2 cards.
+- [ ] `VAN_EX1_103` Coldlight Seer — minion 3 2/3 [MURLOC] — Battlecry: Give ALL other Murlocs +2 Health.
+- [ ] `VAN_EX1_102` Demolisher — minion 3 1/4 [MECHANICAL] — At the start of your turn, deal 2 damage to a random enemy.
+- [ ] `VAN_EX1_170` Emperor Cobra — minion 3 2/3 [BEAST] — Destroy any minion damaged by this minion.
+- [ ] `VAN_EX1_597` Imp Master — minion 3 1/5 — At the end of your turn, deal 1 damage to this minion and summon a 1/1 Imp.
+- [ ] `VAN_CS2_181` Injured Blademaster — minion 3 4/7 — Battlecry: Deal 4 damage to HIMSELF.
+- [ ] `VAN_EX1_085` Mind Control Tech — minion 3 3/3 — Battlecry: If your opponent has 4 or more minions, take control of one at random.
+- [ ] `VAN_EX1_044` Questing Adventurer — minion 3 2/2 — Whenever you play a card, gain +1/+1.
+- [ ] `VAN_EX1_584` Ancient Mage — minion 4 2/5 — Battlecry: Give adjacent minions Spell Damage +1.
+- [ ] `VAN_EX1_093` Defender of Argus — minion 4 2/3 — Battlecry: Give adjacent minions +1/+1 and Taunt.
+- [ ] `VAN_EX1_043` Twilight Drake — minion 4 4/1 [DRAGON] — Battlecry: Gain +1 Health for each card in your hand.
+- [ ] `VAN_NEW1_026` Violet Teacher — minion 4 3/5 — Whenever you cast a spell, summon a 1/1 Violet Apprentice.
+- [ ] `VAN_EX1_097` Abomination — minion 5 4/4 — Taunt. Deathrattle: Deal 2 damage to ALL characters.
+- [ ] `VAN_EX1_284` Azure Drake — minion 5 4/4 [DRAGON] — Spell Damage +1 Battlecry: Draw a card.
+- [ ] `VAN_EX1_095` Gadgetzan Auctioneer — minion 5 4/4 — Whenever you cast a spell, draw a card.
+- [ ] `VAN_NEW1_041` Stampeding Kodo — minion 5 3/5 [BEAST] — Battlecry: Destroy a random enemy minion with 2 or less Attack.
+- [ ] `VAN_EX1_067` Argent Commander — minion 6 4/2 — Charge Divine Shield
+- [ ] `VAN_EX1_032` Sunwalker — minion 6 4/5 — Taunt Divine Shield
+- [ ] `VAN_CS2_161` Ravenholdt Assassin — minion 7 7/5 — Stealth *(keyword only — no hook)*
+
+## Task 12 — Neutral Classic EPIC (11 cards, 0 keyword-only)
+
+- [ ] `VAN_NEW1_017` Hungry Crab — minion 1 1/2 [BEAST] — Battlecry: Destroy a Murloc and gain +2/+2.
+- [ ] `VAN_NEW1_016` Captain's Parrot — minion 2 1/1 [BEAST] — Battlecry: Draw a Pirate from your deck.
+- [ ] `VAN_NEW1_021` Doomsayer — minion 2 0/7 — At the start of your turn, destroy ALL minions.
+- [ ] `VAN_EX1_005` Big Game Hunter — minion 3 4/2 — Battlecry: Destroy a minion with 7 or more Attack.
+- [ ] `VAN_EX1_590` Blood Knight — minion 3 3/3 — Battlecry: All minions lose Divine Shield. Gain +3/+3 for each Shield lost.
+- [ ] `VAN_EX1_507` Murloc Warleader — minion 3 3/3 [MURLOC] — ALL other murlocs have +2/+1.
+- [ ] `VAN_NEW1_027` Southsea Captain — minion 3 3/3 [PIRATE] — Your other Pirates have +1/+1.
+- [ ] `VAN_EX1_564` Faceless Manipulator — minion 5 3/3 — Battlecry: Choose a minion and become a copy of it.
+- [ ] `VAN_EX1_586` Sea Giant — minion 10 8/8 — Costs (1) less for each other minion on the battlefield.
+- [ ] `VAN_EX1_105` Mountain Giant — minion 12 8/8 — Costs (1) less for each other card in your hand.
+- [ ] `VAN_EX1_620` Molten Giant — minion 20 8/8 — Costs (1) less for each damage your hero has taken.
+
+## Task 13 — Neutral Classic LEGENDARY (27 cards, 1 keyword-only)
+
+- [ ] `VAN_EX1_012` Bloodmage Thalnos — minion 2 1/1 — Spell Damage +1 Deathrattle: Draw a card.
+- [ ] `VAN_EX1_100` Lorewalker Cho — minion 2 0/4 — Whenever a player casts a spell, put a copy into the other player’s hand.
+- [ ] `VAN_NEW1_029` Millhouse Manastorm — minion 2 4/4 — Battlecry: Enemy spells cost (0) next turn.
+- [ ] `VAN_EX1_557` Nat Pagle — minion 2 0/4 — At the start of your turn, you have a 50% chance to draw an extra card.
+- [ ] `VAN_EX1_014` King Mukla — minion 3 5/5 [BEAST] — Battlecry: Give your opponent 2 Bananas.
+- [ ] `VAN_EX1_083` Tinkmaster Overspark — minion 3 3/3 — Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.
+- [ ] `VAN_EX1_116` Leeroy Jenkins — minion 4 6/2 — Charge. Battlecry: Summon two 1/1 Whelps for your opponent.
+- [ ] `VAN_EX1_062` Old Murk-Eye — minion 4 2/4 [MURLOC] — Charge. Has +1 Attack for each other Murloc on the battlefield.
+- [ ] `VAN_NEW1_024` Captain Greenskin — minion 5 5/4 [PIRATE] — Battlecry: Give your weapon +1/+1.
+- [ ] `VAN_PRO_001` Elite Tauren Chieftain — minion 5 5/5 — Battlecry: Give both players the power to ROCK! (with a Power Chord card)
+- [ ] `VAN_EX1_558` Harrison Jones — minion 5 5/4 — Battlecry: Destroy your opponent's weapon and draw cards equal to its Durability.
+- [ ] `VAN_EX1_110` Cairne Bloodhoof — minion 6 4/5 — Deathrattle: Summon a 4/5 Baine Bloodhoof.
+- [ ] `VAN_EX1_112` Gelbin Mekkatorque — minion 6 6/6 — Battlecry: Summon an AWESOME invention.
+- [ ] `VAN_NEW1_040` Hogger — minion 6 4/4 — At the end of your turn, summon a 2/2 Gnoll with Taunt.
+- [ ] `VAN_EX1_614` Illidan Stormrage — minion 6 7/5 [DEMON] — Whenever you play a card, summon a 2/1 Flame of Azzinoth.
+- [ ] `VAN_EX1_016` Sylvanas Windrunner — minion 6 5/5 — Deathrattle: Take control of a random enemy minion.
+- [ ] `VAN_EX1_577` The Beast — minion 6 9/7 [BEAST] — Deathrattle: Summon a 3/3 Pip Quickwit for your opponent.
+- [ ] `VAN_EX1_002` The Black Knight — minion 6 4/5 — Battlecry: Destroy an enemy minion with Taunt.
+- [ ] `VAN_EX1_249` Baron Geddon — minion 7 7/5 — At the end of your turn, deal 2 damage to ALL other characters.
+- [ ] `VAN_NEW1_038` Gruul — minion 8 7/7 — At the end of each turn, gain +1/+1 .
+- [ ] `VAN_EX1_298` Ragnaros the Firelord — minion 8 8/8 — Can't attack. At the end of your turn, deal 8 damage to a random enemy.
+- [ ] `VAN_EX1_561` Alexstrasza — minion 9 8/8 [DRAGON] — Battlecry: Set a hero's remaining Health to 15.
+- [ ] `VAN_EX1_563` Malygos — minion 9 4/12 [DRAGON] — Spell Damage +5 *(keyword only — no hook)*
+- [ ] `VAN_EX1_560` Nozdormu — minion 9 8/8 [DRAGON] — Players only have 15 seconds to take their turns.
+- [ ] `VAN_EX1_562` Onyxia — minion 9 8/8 [DRAGON] — Battlecry: Summon 1/1 Whelps until your side of the battlefield is full.
+- [ ] `VAN_EX1_572` Ysera — minion 9 4/12 [DRAGON] — At the end of your turn, add a Dream Card to your hand.
+- [ ] `VAN_NEW1_030` Deathwing — minion 10 12/12 [DRAGON] — Battlecry: Destroy all other minions and discard your hand.
+
+## Task 14 — Druid (25 cards, 1 keyword-only)
+
+- [ ] `VAN_EX1_169` Innervate — spell 0 — Gain 2 Mana Crystals this turn only.
+- [ ] `VAN_CS2_008` Moonfire — spell 0 — Deal $1 damage.
+- [ ] `VAN_CS2_005` Claw — spell 1 — Give your hero +2 Attack this turn. Gain 2 Armor.
+- [ ] `VAN_EX1_161` Naturalize — spell 1 — Destroy a minion. Your opponent draws 2 cards.
+- [ ] `VAN_EX1_578` Savagery — spell 1 — Deal damage equal to your hero's Attack to a minion.
+- [ ] `VAN_CS2_009` Mark of the Wild — spell 2 — Give a minion Taunt and +2/+2. (+2 Attack/+2 Health)
+- [ ] `VAN_EX1_160` Power of the Wild — spell 2 — Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.
+- [ ] `VAN_CS2_013` Wild Growth — spell 2 — Gain an empty Mana Crystal.
+- [ ] `VAN_EX1_154` Wrath — spell 2 — Choose One - Deal $3 damage to a minion; or $1 damage and draw a card.
+- [ ] `VAN_CS2_007` Healing Touch — spell 3 — Restore #8 Health.
+- [ ] `VAN_EX1_155` Mark of Nature — spell 3 — Choose One - Give a minion +4 Attack; or +4 Health and Taunt.
+- [ ] `VAN_CS2_011` Savage Roar — spell 3 — Give your characters +2 Attack this turn.
+- [ ] `VAN_EX1_570` Bite — spell 4 — Give your hero +4 Attack this turn. Gain 4 Armor.
+- [ ] `VAN_EX1_166` Keeper of the Grove — minion 4 2/4 — Choose One - Deal 2 damage; or Silence a minion.
+- [ ] `VAN_EX1_158` Soul of the Forest — spell 4 — Give your minions "Deathrattle: Summon a 2/2 Treant."
+- [ ] `VAN_CS2_012` Swipe — spell 4 — Deal $4 damage to an enemy and $1 damage to all other enemies.
+- [ ] `VAN_EX1_165` Druid of the Claw — minion 5 4/4 — Choose One - Charge; or +2 Health and Taunt.
+- [ ] `VAN_EX1_164` Nourish — spell 5 — Choose One - Gain 2 Mana Crystals; or Draw 3 cards.
+- [ ] `VAN_NEW1_007` Starfall — spell 5 — Choose One - Deal $5 damage to a minion; or $2 damage to all enemy minions.
+- [ ] `VAN_EX1_571` Force of Nature — spell 6 — Summon three 2/2 Treants with Charge that die at the end of the turn.
+- [ ] `VAN_EX1_173` Starfire — spell 6 — Deal $5 damage. Draw a card.
+- [ ] `VAN_NEW1_008` Ancient of Lore — minion 7 5/5 — Choose One - Draw 2 cards; or Restore #5 Health.
+- [ ] `VAN_EX1_178` Ancient of War — minion 7 5/5 — Choose One - +5 Attack; or +5 Health and Taunt.
+- [ ] `VAN_CS2_232` Ironbark Protector — minion 8 8/8 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_EX1_573` Cenarius — minion 9 5/8 — Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.
+
+## Task 15 — Hunter (25 cards, 1 keyword-only)
+
+- [ ] `VAN_CS2_084` Hunter's Mark — spell 0 — Change a minion's Health to 1.
+- [ ] `VAN_DS1_185` Arcane Shot — spell 1 — Deal $2 damage.
+- [ ] `VAN_EX1_549` Bestial Wrath — spell 1 — Give a Beast +2 Attack and Immune this turn.
+- [ ] `VAN_EX1_544` Flare — spell 1 — All minions lose Stealth. Destroy all enemy Secrets. Draw a card.
+- [ ] `VAN_DS1_175` Timber Wolf — minion 1 1/1 [BEAST] — Your other Beasts have +1 Attack.
+- [ ] `VAN_DS1_184` Tracking — spell 1 — Look at the top 3 cards of your deck. Draw one and discard the others.
+- [ ] `VAN_EX1_610` Explosive Trap — spell 2 — Secret: When your hero is attacked, deal $2 damage to all enemies.
+- [ ] `VAN_EX1_611` Freezing Trap — spell 2 — Secret: When an enemy minion attacks, return it to its owner's hand. It costs (2) more.
+- [ ] `VAN_EX1_533` Misdirection — spell 2 — Secret: When an enemy attacks your hero, instead it attacks another random character.
+- [ ] `VAN_EX1_531` Scavenging Hyena — minion 2 2/2 [BEAST] — Whenever a friendly Beast dies, gain +2/+1.
+- [ ] `VAN_EX1_554` Snake Trap — spell 2 — Secret: When one of your minions is attacked, summon three 1/1 Snakes.
+- [ ] `VAN_EX1_609` Snipe — spell 2 — Secret: After your opponent plays a minion, deal $4 damage to it.
+- [ ] `VAN_CS2_237` Starving Buzzard — minion 2 2/1 [BEAST] — Whenever you summon a Beast, draw a card.
+- [ ] `VAN_NEW1_031` Animal Companion — spell 3 — Summon a random Beast Companion.
+- [ ] `VAN_EX1_617` Deadly Shot — spell 3 — Destroy a random enemy minion.
+- [ ] `VAN_EX1_536` Eaglehorn Bow — weapon 3 3/0 — Whenever a Secret is revealed, gain +1 Durability.
+- [ ] `VAN_EX1_539` Kill Command — spell 3 — Deal $3 damage. If you control a Beast, deal $5 damage instead.
+- [ ] `VAN_EX1_538` Unleash the Hounds — spell 3 — For each enemy minion, summon a 1/1 Hound with Charge.
+- [ ] `VAN_DS1_070` Houndmaster — minion 4 4/3 — Battlecry: Give a friendly Beast +2/+2 and Taunt.
+- [ ] `VAN_DS1_183` Multi-Shot — spell 4 — Deal $3 damage to two random enemy minions.
+- [ ] `VAN_EX1_537` Explosive Shot — spell 5 — Deal $5 damage to a minion and $2 damage to adjacent ones.
+- [ ] `VAN_DS1_178` Tundra Rhino — minion 5 2/5 [BEAST] — Your Beasts have Charge.
+- [ ] `VAN_EX1_534` Savannah Highmane — minion 6 6/5 [BEAST] — Deathrattle: Summon two 2/2 Hyenas.
+- [ ] `VAN_DS1_188` Gladiator's Longbow — weapon 7 5/0 — Your hero is Immune while attacking.
+- [ ] `VAN_EX1_543` King Krush — minion 9 8/8 [BEAST] — Charge *(keyword only — no hook)*
+
+## Task 16 — Mage (25 cards, 0 keyword-only)
+
+- [ ] `VAN_EX1_277` Arcane Missiles — spell 1 — Deal $3 damage randomly split among all enemy characters.
+- [ ] `VAN_CS2_031` Ice Lance — spell 1 — Freeze a character. If it was already Frozen, deal $4 damage instead.
+- [ ] `VAN_NEW1_012` Mana Wyrm — minion 1 1/3 — Whenever you cast a spell, gain +1 Attack.
+- [ ] `VAN_CS2_027` Mirror Image — spell 1 — Summon two 0/2 minions with Taunt.
+- [ ] `VAN_CS2_025` Arcane Explosion — spell 2 — Deal $1 damage to all enemy minions.
+- [ ] `VAN_CS2_024` Frostbolt — spell 2 — Deal $3 damage to a character and Freeze it.
+- [ ] `VAN_EX1_608` Sorcerer's Apprentice — minion 2 3/2 — Your spells cost (1) less.
+- [ ] `VAN_CS2_023` Arcane Intellect — spell 3 — Draw 2 cards.
+- [ ] `VAN_EX1_287` Counterspell — spell 3 — Secret: When your opponent casts a spell, Counter it.
+- [ ] `VAN_CS2_026` Frost Nova — spell 3 — Freeze all enemy minions.
+- [ ] `VAN_EX1_289` Ice Barrier — spell 3 — Secret: As soon as your hero is attacked, gain 8 Armor.
+- [ ] `VAN_EX1_295` Ice Block — spell 3 — Secret: When your hero takes fatal damage, prevent it and become Immune this turn.
+- [ ] `VAN_EX1_612` Kirin Tor Mage — minion 3 4/3 — Battlecry: The next Secret you play this turn costs (0).
+- [ ] `VAN_EX1_294` Mirror Entity — spell 3 — Secret: When your opponent plays a minion, summon a copy of it.
+- [ ] `VAN_tt_010` Spellbender — spell 3 — Secret: When an enemy casts a spell on a minion, summon a 1/3 as the new target.
+- [ ] `VAN_EX1_594` Vaporize — spell 3 — Secret: When a minion attacks your hero, destroy it.
+- [ ] `VAN_EX1_275` Cone of Cold — spell 4 — Freeze a minion and the minions next to it, and deal $1 damage to them.
+- [ ] `VAN_EX1_274` Ethereal Arcanist — minion 4 3/3 — If you control a Secret at the end of your turn, gain +2/+2.
+- [ ] `VAN_CS2_029` Fireball — spell 4 — Deal $6 damage.
+- [ ] `VAN_CS2_022` Polymorph — spell 4 — Transform a minion into a 1/1 Sheep.
+- [ ] `VAN_CS2_033` Water Elemental — minion 4 3/6 — Freeze any character damaged by this minion.
+- [ ] `VAN_CS2_028` Blizzard — spell 6 — Deal $2 damage to all enemy minions and Freeze them.
+- [ ] `VAN_EX1_559` Archmage Antonidas — minion 7 5/7 — Whenever you cast a spell, add a 'Fireball' spell to your hand.
+- [ ] `VAN_CS2_032` Flamestrike — spell 7 — Deal $4 damage to all enemy minions.
+- [ ] `VAN_EX1_279` Pyroblast — spell 10 — Deal $10 damage.
+
+## Task 17 — Paladin (25 cards, 1 keyword-only)
+
+- [ ] `VAN_CS2_087` Blessing of Might — spell 1 — Give a minion +3 Attack.
+- [ ] `VAN_EX1_363` Blessing of Wisdom — spell 1 — Choose a minion. Whenever it attacks, draw a card.
+- [ ] `VAN_EX1_132` Eye for an Eye — spell 1 — Secret: When your hero takes damage, deal that much damage to the enemy hero.
+- [ ] `VAN_EX1_371` Hand of Protection — spell 1 — Give a minion Divine Shield.
+- [ ] `VAN_EX1_360` Humility — spell 1 — Change a minion's Attack to 1.
+- [ ] `VAN_CS2_091` Light's Justice — weapon 1 1/0 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_130` Noble Sacrifice — spell 1 — Secret: When an enemy attacks, summon a 2/1 Defender as the new target.
+- [ ] `VAN_EX1_136` Redemption — spell 1 — Secret: When a friendly minion dies, return it to life with 1 Health.
+- [ ] `VAN_EX1_379` Repentance — spell 1 — Secret: After your opponent plays a minion, reduce its Health to 1.
+- [ ] `VAN_EX1_362` Argent Protector — minion 2 2/2 — Battlecry: Give a friendly minion Divine Shield.
+- [ ] `VAN_EX1_619` Equality — spell 2 — Change the Health of ALL minions to 1.
+- [ ] `VAN_CS2_089` Holy Light — spell 2 — Restore #6 Health.
+- [ ] `VAN_EX1_382` Aldor Peacekeeper — minion 3 3/3 — Battlecry: Change an enemy minion's Attack to 1.
+- [ ] `VAN_EX1_349` Divine Favor — spell 3 — Draw cards until you have as many in hand as your opponent.
+- [ ] `VAN_EX1_366` Sword of Justice — weapon 3 1/0 — After you summon a minion, give it +1/+1 and this loses 1 Durability.
+- [ ] `VAN_CS2_092` Blessing of Kings — spell 4 — Give a minion +4/+4. (+4 Attack/+4 Health)
+- [ ] `VAN_CS2_093` Consecration — spell 4 — Deal $2 damage to all enemies.
+- [ ] `VAN_CS2_094` Hammer of Wrath — spell 4 — Deal $3 damage. Draw a card.
+- [ ] `VAN_CS2_097` Truesilver Champion — weapon 4 4/0 — Whenever your hero attacks, restore #2 Health to it.
+- [ ] `VAN_EX1_355` Blessed Champion — spell 5 — Double a minion's Attack.
+- [ ] `VAN_EX1_365` Holy Wrath — spell 5 — Draw a card and deal damage equal to its Cost.
+- [ ] `VAN_EX1_384` Avenging Wrath — spell 6 — Deal $8 damage randomly split among all enemy characters.
+- [ ] `VAN_CS2_088` Guardian of Kings — minion 7 5/6 — Battlecry: Restore #6 Health to your hero.
+- [ ] `VAN_EX1_354` Lay on Hands — spell 8 — Restore #8 Health. Draw 3 cards.
+- [ ] `VAN_EX1_383` Tirion Fordring — minion 8 6/6 — Divine Shield, Taunt Deathrattle: Equip a 5/3 Ashbringer.
+
+## Task 18 — Priest (25 cards, 0 keyword-only)
+
+- [ ] `VAN_EX1_621` Circle of Healing — spell 0 — Restore #4 Health to ALL minions.
+- [ ] `VAN_EX1_332` Silence — spell 0 — Silence a minion.
+- [ ] `VAN_CS1_130` Holy Smite — spell 1 — Deal $2 damage.
+- [ ] `VAN_CS1_129` Inner Fire — spell 1 — Change a minion's Attack to be equal to its Health.
+- [ ] `VAN_CS2_003` Mind Vision — spell 1 — Put a copy of a random card in your opponent's hand into your hand.
+- [ ] `VAN_CS2_235` Northshire Cleric — minion 1 1/3 — Whenever a minion is healed, draw a card.
+- [ ] `VAN_CS2_004` Power Word: Shield — spell 1 — Give a minion +2 Health. Draw a card.
+- [ ] `VAN_CS2_236` Divine Spirit — spell 2 — Double a minion's Health.
+- [ ] `VAN_EX1_341` Lightwell — minion 2 0/5 — At the start of your turn, restore #3 Health to a damaged friendly character.
+- [ ] `VAN_DS1_233` Mind Blast — spell 2 — Deal $5 damage to the enemy hero.
+- [ ] `VAN_CS2_234` Shadow Word: Pain — spell 2 — Destroy a minion with 3 or less Attack.
+- [ ] `VAN_EX1_622` Shadow Word: Death — spell 3 — Destroy a minion with 5 or more Attack.
+- [ ] `VAN_EX1_625` Shadowform — spell 3 — Your Hero Power becomes 'Deal 2 damage.' If already in Shadowform: 3 damage.
+- [ ] `VAN_EX1_339` Thoughtsteal — spell 3 — Copy 2 cards in your opponent's deck and add them to your hand.
+- [ ] `VAN_EX1_591` Auchenai Soulpriest — minion 4 3/5 — Your cards and powers that restore Health now deal damage instead.
+- [ ] `VAN_EX1_335` Lightspawn — minion 4 0/5 — This minion's Attack is always equal to its Health.
+- [ ] `VAN_EX1_626` Mass Dispel — spell 4 — Silence all enemy minions. Draw a card.
+- [ ] `VAN_EX1_345` Mindgames — spell 4 — Put a copy of a random minion from your opponent's deck into the battlefield.
+- [ ] `VAN_EX1_334` Shadow Madness — spell 4 — Gain control of an enemy minion with 3 or less Attack until end of turn.
+- [ ] `VAN_CS1_112` Holy Nova — spell 5 — Deal $2 damage to all enemies. Restore #2 Health to all friendly characters.
+- [ ] `VAN_EX1_091` Cabal Shadow Priest — minion 6 4/5 — Battlecry: Take control of an enemy minion that has 2 or less Attack.
+- [ ] `VAN_EX1_624` Holy Fire — spell 6 — Deal $5 damage. Restore #5 Health to your hero.
+- [ ] `VAN_EX1_623` Temple Enforcer — minion 6 6/6 — Battlecry: Give a friendly minion +3 Health.
+- [ ] `VAN_EX1_350` Prophet Velen — minion 7 7/7 — Double the damage and healing of your spells and Hero Power.
+- [ ] `VAN_CS1_113` Mind Control — spell 10 — Take control of an enemy minion.
+
+## Task 19 — Rogue (25 cards, 1 keyword-only)
+
+- [ ] `VAN_CS2_072` Backstab — spell 0 — Deal $2 damage to an undamaged minion.
+- [ ] `VAN_EX1_145` Preparation — spell 0 — The next spell you cast this turn costs (3) less.
+- [ ] `VAN_EX1_144` Shadowstep — spell 0 — Return a friendly minion to your hand. It costs (2) less.
+- [ ] `VAN_CS2_073` Cold Blood — spell 1 — Give a minion +2 Attack. Combo: +4 Attack instead.
+- [ ] `VAN_EX1_128` Conceal — spell 1 — Give your minions Stealth until your next turn.
+- [ ] `VAN_CS2_074` Deadly Poison — spell 1 — Give your weapon +2 Attack.
+- [ ] `VAN_CS2_075` Sinister Strike — spell 1 — Deal $3 damage to the enemy hero.
+- [ ] `VAN_EX1_126` Betrayal — spell 2 — Force an enemy minion to deal its damage to the minions next to it.
+- [ ] `VAN_CS2_233` Blade Flurry — spell 2 — Destroy your weapon and deal its damage to all enemies.
+- [ ] `VAN_EX1_131` Defias Ringleader — minion 2 3/2 — Combo: Summon a 2/1 Defias Bandit.
+- [ ] `VAN_EX1_124` Eviscerate — spell 2 — Deal $2 damage. Combo: Deal $4 damage instead.
+- [ ] `VAN_EX1_522` Patient Assassin — minion 2 1/1 — Stealth. Destroy any minion damaged by this minion.
+- [ ] `VAN_EX1_581` Sap — spell 2 — Return an enemy minion to your opponent's hand.
+- [ ] `VAN_EX1_278` Shiv — spell 2 — Deal $1 damage. Draw a card.
+- [ ] `VAN_EX1_613` Edwin VanCleef — minion 3 2/2 — Combo: Gain +2/+2 for each card played earlier this turn.
+- [ ] `VAN_EX1_129` Fan of Knives — spell 3 — Deal $1 damage to all enemy minions. Draw a card.
+- [ ] `VAN_EX1_137` Headcrack — spell 3 — Deal $2 damage to the enemy hero. Combo: Return this to your hand next turn.
+- [ ] `VAN_EX1_133` Perdition's Blade — weapon 3 2/0 — Battlecry: Deal 1 damage. Combo: Deal 2 instead.
+- [ ] `VAN_EX1_134` SI:7 Agent — minion 3 3/3 — Combo: Deal 2 damage.
+- [ ] `VAN_NEW1_014` Master of Disguise — minion 4 4/4 — Battlecry: Give a friendly minion Stealth.
+- [ ] `VAN_CS2_080` Assassin's Blade — weapon 5 3/0 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_076` Assassinate — spell 5 — Destroy an enemy minion.
+- [ ] `VAN_NEW1_005` Kidnapper — minion 6 5/3 [UNDEAD] — Combo: Return a minion to its owner's hand.
+- [ ] `VAN_NEW1_004` Vanish — spell 6 — Return all minions to their owner's hand.
+- [ ] `VAN_CS2_077` Sprint — spell 7 — Draw 4 cards.
+
+## Task 20 — Shaman (25 cards, 5 keyword-only)
+
+- [ ] `VAN_CS2_041` Ancestral Healing — spell 0 — Restore a minion to full Health and give it Taunt.
+- [ ] `VAN_EX1_244` Totemic Might — spell 0 — Give your Totems +2 Health.
+- [ ] `VAN_EX1_243` Dust Devil — minion 1 3/1 — Windfury. Overload: (2) *(keyword only — no hook)*
+- [ ] `VAN_EX1_245` Earth Shock — spell 1 — Silence a minion, then deal $1 damage to it.
+- [ ] `VAN_EX1_251` Forked Lightning — spell 1 — Deal $2 damage to 2 random enemy minions. Overload: (2)
+- [ ] `VAN_CS2_037` Frost Shock — spell 1 — Deal $1 damage to an enemy character and Freeze it.
+- [ ] `VAN_EX1_238` Lightning Bolt — spell 1 — Deal $3 damage. Overload: (1)
+- [ ] `VAN_CS2_045` Rockbiter Weapon — spell 1 — Give a friendly character +3 Attack this turn.
+- [ ] `VAN_CS2_038` Ancestral Spirit — spell 2 — Choose a minion. When that minion is destroyed, return it to the battlefield.
+- [ ] `VAN_EX1_565` Flametongue Totem — minion 2 0/3 [TOTEM] — Adjacent minions have +2 Attack.
+- [ ] `VAN_EX1_247` Stormforged Axe — weapon 2 2/0 — Overload: (1) *(keyword only — no hook)*
+- [ ] `VAN_CS2_039` Windfury — spell 2 — Give a minion Windfury.
+- [ ] `VAN_CS2_053` Far Sight — spell 3 — Draw a card. That card costs (3) less.
+- [ ] `VAN_EX1_248` Feral Spirit — spell 3 — Summon two 2/3 Spirit Wolves with Taunt. Overload: (2)
+- [ ] `VAN_EX1_246` Hex — spell 3 — Transform a minion into a 0/1 Frog with Taunt.
+- [ ] `VAN_EX1_241` Lava Burst — spell 3 — Deal $5 damage. Overload: (2)
+- [ ] `VAN_EX1_259` Lightning Storm — spell 3 — Deal $2-$3 damage to all enemy minions. Overload: (2)
+- [ ] `VAN_EX1_575` Mana Tide Totem — minion 3 0/3 [TOTEM] — At the end of your turn, draw a card.
+- [ ] `VAN_EX1_258` Unbound Elemental — minion 3 2/4 — Whenever you play a card with Overload, gain +1/+1.
+- [ ] `VAN_EX1_587` Windspeaker — minion 4 3/3 — Battlecry: Give a friendly minion Windfury.
+- [ ] `VAN_CS2_046` Bloodlust — spell 5 — Give your minions +3 Attack this turn.
+- [ ] `VAN_EX1_567` Doomhammer — weapon 5 2/0 — Windfury, Overload: (2) *(keyword only — no hook)*
+- [ ] `VAN_EX1_250` Earth Elemental — minion 5 7/8 — Taunt. Overload: (3) *(keyword only — no hook)*
+- [ ] `VAN_CS2_042` Fire Elemental — minion 6 6/5 — Battlecry: Deal 3 damage.
+- [ ] `VAN_NEW1_010` Al'Akir the Windlord — minion 8 3/5 — Charge, Divine Shield, Taunt, Windfury *(keyword only — no hook)*
+
+## Task 21 — Warlock (25 cards, 1 keyword-only)
+
+- [ ] `VAN_NEW1_003` Sacrificial Pact — spell 0 — Destroy a Demon. Restore #5 Health to your hero.
+- [ ] `VAN_EX1_308` Soulfire — spell 0 — Deal $4 damage. Discard a random card.
+- [ ] `VAN_CS2_059` Blood Imp — minion 1 0/1 [DEMON] — Stealth. At the end of your turn, give another random friendly minion +1 Health.
+- [ ] `VAN_CS2_063` Corruption — spell 1 — Choose an enemy minion. At the start of your turn, destroy it.
+- [ ] `VAN_EX1_319` Flame Imp — minion 1 3/2 [DEMON] — Battlecry: Deal 3 damage to your hero.
+- [ ] `VAN_EX1_302` Mortal Coil — spell 1 — Deal $1 damage to a minion. If it dies, draw a card.
+- [ ] `VAN_EX1_316` Power Overwhelming — spell 1 — Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.
+- [ ] `VAN_CS2_065` Voidwalker — minion 1 1/3 [DEMON] — Taunt *(keyword only — no hook)*
+- [ ] `VAN_EX1_596` Demonfire — spell 2 — Deal $2 damage to a minion. If it’s a friendly Demon, give it +2/+2 instead.
+- [ ] `VAN_EX1_306` Felstalker — minion 2 4/3 [DEMON] — Battlecry: Discard a random card.
+- [ ] `VAN_CS2_061` Drain Life — spell 3 — Deal $2 damage. Restore #2 Health to your hero.
+- [ ] `VAN_EX1_301` Felguard — minion 3 3/5 [DEMON] — Taunt Battlecry: Destroy one of your Mana Crystals.
+- [ ] `VAN_EX1_317` Sense Demons — spell 3 — Draw 2 Demons from your deck.
+- [ ] `VAN_CS2_057` Shadow Bolt — spell 3 — Deal $4 damage to a minion.
+- [ ] `VAN_EX1_304` Void Terror — minion 3 3/3 [DEMON] — Battlecry: Destroy both adjacent minions and gain their Attack and Health.
+- [ ] `VAN_CS2_062` Hellfire — spell 4 — Deal $3 damage to ALL characters.
+- [ ] `VAN_EX1_313` Pit Lord — minion 4 5/6 [DEMON] — Battlecry: Deal 5 damage to your hero.
+- [ ] `VAN_EX1_303` Shadowflame — spell 4 — Destroy a friendly minion and deal its Attack damage to all enemy minions.
+- [ ] `VAN_EX1_315` Summoning Portal — minion 4 0/4 — Your minions cost (2) less, but not less than (1).
+- [ ] `VAN_EX1_320` Bane of Doom — spell 5 — Deal $3 damage to a character. If it dies, summon a random Demon.
+- [ ] `VAN_EX1_310` Doomguard — minion 5 5/7 [DEMON] — Charge. Battlecry: Discard two random cards.
+- [ ] `VAN_CS2_064` Dread Infernal — minion 6 6/6 [DEMON] — Battlecry: Deal 1 damage to ALL other characters.
+- [ ] `VAN_EX1_309` Siphon Soul — spell 6 — Destroy a minion. Restore #3 Health to your hero.
+- [ ] `VAN_EX1_312` Twisting Nether — spell 8 — Destroy all minions.
+- [ ] `VAN_EX1_323` Lord Jaraxxus — minion 9 3/15 [DEMON] — Battlecry: Destroy your hero and replace it with Lord Jaraxxus.
+
+## Task 22 — Warrior (25 cards, 3 keyword-only)
+
+- [ ] `VAN_EX1_607` Inner Rage — spell 0 — Deal $1 damage to a minion and give it +2 Attack.
+- [ ] `VAN_CS2_108` Execute — spell 1 — Destroy a damaged enemy minion.
+- [ ] `VAN_EX1_410` Shield Slam — spell 1 — Deal 1 damage to a minion for each Armor you have.
+- [ ] `VAN_EX1_409` Upgrade! — spell 1 — If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.
+- [ ] `VAN_EX1_400` Whirlwind — spell 1 — Deal $1 damage to ALL minions.
+- [ ] `VAN_EX1_402` Armorsmith — minion 2 1/4 — Whenever a friendly minion takes damage, gain 1 Armor.
+- [ ] `VAN_EX1_392` Battle Rage — spell 2 — Draw a card for each damaged friendly character.
+- [ ] `VAN_CS2_114` Cleave — spell 2 — Deal $2 damage to two random enemy minions.
+- [ ] `VAN_NEW1_036` Commanding Shout — spell 2 — Your minions can't be reduced below 1 Health this turn. Draw a card.
+- [ ] `VAN_EX1_603` Cruel Taskmaster — minion 2 2/2 — Battlecry: Deal 1 damage to a minion and give it +2 Attack.
+- [ ] `VAN_CS2_106` Fiery War Axe — weapon 2 3/0 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_105` Heroic Strike — spell 2 — Give your hero +4 Attack this turn.
+- [ ] `VAN_CS2_104` Rampage — spell 2 — Give a damaged minion +3/+3.
+- [ ] `VAN_EX1_391` Slam — spell 2 — Deal $2 damage to a minion. If it survives, draw a card.
+- [ ] `VAN_CS2_103` Charge — spell 3 — Give a friendly minion +2 Attack and Charge.
+- [ ] `VAN_EX1_604` Frothing Berserker — minion 3 2/4 — Whenever a minion takes damage, gain +1 Attack.
+- [ ] `VAN_EX1_606` Shield Block — spell 3 — Gain 5 Armor. Draw a card.
+- [ ] `VAN_EX1_084` Warsong Commander — minion 3 2/3 — Whenever you summon a minion with 3 or less Attack, give it Charge.
+- [ ] `VAN_EX1_398` Arathi Weaponsmith — minion 4 3/3 — Battlecry: Equip a 2/2 weapon.
+- [ ] `VAN_NEW1_011` Kor'kron Elite — minion 4 4/3 — Charge *(keyword only — no hook)*
+- [ ] `VAN_EX1_408` Mortal Strike — spell 4 — Deal $4 damage. If you have 12 or less Health, deal $6 instead.
+- [ ] `VAN_CS2_112` Arcanite Reaper — weapon 5 5/0 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_407` Brawl — spell 5 — Destroy all minions except one. (chosen randomly)
+- [ ] `VAN_EX1_411` Gorehowl — weapon 7 7/0 — Attacking a minion costs 1 Attack instead of 1 Durability.
+- [ ] `VAN_EX1_414` Grommash Hellscream — minion 8 4/9 — Charge Enrage: +6 Attack
+
+## Tokens (implement in the task of the card that creates them) (83 cards, 43 keyword-only)
+
+- [ ] `VAN_EX1_165b` Bear Form — spell 0 — +2 Health and Taunt
+- [ ] `VAN_EX1_165a` Cat Form — spell 0 — Charge *(keyword only — no hook)*
+- [ ] `Mekka4t` Chicken — minion 0 1/1 [BEAST] — Hey Chicken!
+- [ ] `VAN_DREAM_04` Dream — spell 0 — Return a minion to its owner's hand.
+- [ ] `CS2_013t` Excess Mana — spell 0 — Draw a card. (You can only have 10 Mana in your tray.)
+- [ ] `hexfrog` Frog — minion 0 0/1 [BEAST] — Taunt *(keyword only — no hook)*
+- [ ] `VAN_CS2_mirror` Mirror Image — minion 0 0/2 — Taunt *(keyword only — no hook)*
+- [ ] `PRO_001at` Murloc — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_506a` Murloc Scout — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_DREAM_05` Nightmare — spell 0 — Give a minion +5/+5. At the start of your next turn, destroy it.
+- [ ] `VAN_EX1_345t` Shadow of Nothing — minion 0 0/1 — Mindgames whiffed! Your opponent had no minions!
+- [ ] `VAN_CS2_tk1` Sheep — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_554t` Snake — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_tt_010a` Spellbender — minion 0 1/3 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_NEW1_026t` Violet Apprentice — minion 0 1/1 — (no text) *(keyword only — no hook)*
+- [ ] `EX1_014t` Bananas — spell 1 — Give a minion +1/+1.
+- [ ] `VAN_CS2_boar` Boar — minion 1 1/1 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_103_Puzzle` Charge — spell 1 — Give a friendly minion Charge. It can't attack heroes this turn.
+- [ ] `VAN_skele21` Damaged Golem — minion 1 2/1 [MECHANICAL] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_130a` Defender — minion 1 2/1 — (no text) *(keyword only — no hook)*
+- [ ] `EX1_131t` Defias Bandit — minion 1 2/1 — (no text) *(keyword only — no hook)*
+- [ ] `Mekka3` Emboldener 3000 — minion 1 0/4 [MECHANICAL] — At the end of your turn, give a random minion +1/+1.
+- [ ] `VAN_TU4e_002t` Flame of Azzinoth — minion 1 2/1 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_NEW1_009` Healing Totem — minion 1 0/2 [TOTEM] — At the end of your turn, restore #1 Health to all friendly minions.
+- [ ] `Mekka1` Homing Chicken — minion 1 0/1 [MECHANICAL] — At the start of your turn, destroy this minion and draw 3 cards.
+- [ ] `EX1_538t` Hound — minion 1 1/1 [BEAST] — Charge *(keyword only — no hook)*
+- [ ] `VAN_EX1_598` Imp — minion 1 1/1 [DEMON] — (no text) *(keyword only — no hook)*
+- [ ] `EX1_025t` Mechanical Dragonling — minion 1 2/1 [MECHANICAL] — (no text) *(keyword only — no hook)*
+- [ ] `Mekka4` Poultryizer — minion 1 0/3 [MECHANICAL] — At the start of your turn, transform a random minion into a 1/1 Chicken.
+- [ ] `Mekka2` Repair Bot — minion 1 0/3 [MECHANICAL] — At the end of your turn, restore #6 Health to a damaged character.
+- [ ] `VAN_CS2_050` Searing Totem — minion 1 1/1 [TOTEM] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_101t` Silver Hand Recruit — minion 1 1/1 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_skele11` Skeleton — minion 1 1/1 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_152` Squire — minion 1 2/2 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_tk28` Squirrel — minion 1 1/1 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_051` Stoneclaw Totem — minion 1 0/2 [TOTEM] — Taunt *(keyword only — no hook)*
+- [ ] `VAN_EX1_tk9` Treant — minion 1 2/2 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_tk9b` Treant — minion 1 2/2 — Charge. At the end of the turn, destroy this minion.
+- [ ] `ds1_whelptoken` Whelp — minion 1 1/1 [DRAGON] — (no text) *(keyword only — no hook)*
+- [ ] `EX1_116t` Whelp — minion 1 1/1 [DRAGON] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_CS2_082` Wicked Knife — weapon 1 1/0 — (no text) *(keyword only — no hook)*
+- [ ] `EX1_317t` Worthless Imp — minion 1 1/1 [DEMON] — You are out of demons! At least there are always imps...
+- [ ] `VAN_CS2_052` Wrath of Air Totem — minion 1 0/2 [TOTEM] — Spell Damage +1 *(keyword only — no hook)*
+- [ ] `VAN_CS2_073_puzzle` Cold Blood — spell 2 — Give a minion +2 Attack. Combo: +4 Attack instead.
+- [ ] `NEW1_040t` Gnoll — minion 2 2/2 — Taunt *(keyword only — no hook)*
+- [ ] `EX1_534t` Hyena — minion 2 2/2 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_DREAM_01` Laughing Sister — minion 2 3/5 — Elusive
+- [ ] `VAN_EX1_160b` Leader of the Pack — spell 2 — Give your minions +1/+1.
+- [ ] `VAN_EX1_154b` Nature's Wrath — spell 2 — Deal $1 damage to a minion. Draw a card.
+- [ ] `EX1_160t` Panther — minion 2 3/2 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_154a` Solar Wrath — spell 2 — Deal $3 damage to a minion.
+- [ ] `VAN_EX1_tk11` Spirit Wolf — minion 2 2/3 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_EX1_160a` Summon a Panther — spell 2 — Summon a 3/2 Panther.
+- [ ] `VAN_DREAM_02` Ysera Awakens — spell 2 — Deal $5 damage to all characters except Ysera.
+- [ ] `EX1_323w` Blood Fury — weapon 3 3/0 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_NEW1_034` Huffer — minion 3 4/2 [BEAST] — Charge *(keyword only — no hook)*
+- [ ] `VAN_NEW1_033` Leokk — minion 3 2/4 [BEAST] — Your other minions have +1 Attack.
+- [ ] `VAN_NEW1_032` Misha — minion 3 4/4 [BEAST] — Taunt *(keyword only — no hook)*
+- [ ] `VAN_EX1_finkle` Pip Quickwit — minion 3 3/3 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_155b` Thick Hide — spell 3 — +4 Health and Taunt.
+- [ ] `VAN_EX1_155a` Tiger's Fury — spell 3 — +4 Attack.
+- [ ] `VAN_EX1_110t` Baine Bloodhoof — minion 4 4/5 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_166b` Dispel — spell 4 — Silence a minion.
+- [ ] `VAN_DREAM_03` Emerald Drake — minion 4 7/6 [DRAGON] — (no text) *(keyword only — no hook)*
+- [ ] `PRO_001a` I Am Murloc — spell 4 — Summon three, four, or five 1/1 Murlocs.
+- [ ] `VAN_EX1_166a` Moonfire — spell 4 — Deal 2 damage.
+- [ ] `VAN_PRO_001c` Power of the Horde — spell 4 — Summon a random Horde Warrior.
+- [ ] `PRO_001b` Rogues Do It... — spell 4 — Deal $4 damage. Draw a card.
+- [ ] `EX1_383t` Ashbringer — weapon 5 5/0 — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_tk29` Devilsaur — minion 5 5/5 [BEAST] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_EX1_165t1` Druid of the Claw — minion 5 4/4 — Charge *(keyword only — no hook)*
+- [ ] `VAN_EX1_165t2` Druid of the Claw — minion 5 4/6 — Taunt *(keyword only — no hook)*
+- [ ] `VAN_EX1_164b` Enrich — spell 5 — Draw 3 cards.
+- [ ] `VAN_EX1_164a` Rampant Growth — spell 5 — Gain 2 Mana Crystals.
+- [ ] `VAN_NEW1_007b` Starlord — spell 5 — Deal $5 damage to a minion.
+- [ ] `VAN_NEW1_007a` Stellar Drift — spell 5 — Deal $2 damage to all enemy minions.
+- [ ] `VAN_EX1_tk34` Infernal — minion 6 6/6 [DEMON] — (no text) *(keyword only — no hook)*
+- [ ] `VAN_NEW1_008b` Ancient Secrets — spell 7 — Restore 5 Health.
+- [ ] `VAN_NEW1_008a` Ancient Teachings — spell 7 — Draw 2 cards.
+- [ ] `VAN_EX1_178a` Rooted — spell 7 — +5 Health and Taunt.
+- [ ] `VAN_EX1_178b` Uproot — spell 7 — +5 Attack.
+- [ ] `VAN_EX1_573a` Demigod's Favor — spell 9 — Give your other minions +2/+2.
+- [ ] `VAN_EX1_573b` Shan'do's Lesson — spell 9 — Summon two 2/2 Treants with Taunt.
