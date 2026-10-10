@@ -162,3 +162,28 @@ func test_shuffle_is_deterministic() -> void:
 	b.shuffle(arr2)
 	eq(arr1, arr2, "same seed same order")
 	check(arr1 != range(30), "order changed")
+
+
+func test_deathrattle_from_enchantment() -> void:
+	var g := H.state()
+	var seen := []
+	Cards.add("ench:test_dr", {"deathrattle": func(_g, me, _ev): seen.append(me.id)})
+	var w := g.summon(0, H.WISP)
+	w.add_enchant({"hooks": "ench:test_dr"})
+	g.destroy(w)
+	g.resolve()
+	Cards.remove("ench:test_dr")
+	eq(seen, [w.id], "enchantment deathrattle fired")
+
+
+func test_silence_removes_enchantment_deathrattle() -> void:
+	var g := H.state()
+	var seen := []
+	Cards.add("ench:test_dr2", {"deathrattle": func(_g, me, _ev): seen.append(me.id)})
+	var w := g.summon(0, H.WISP)
+	w.add_enchant({"hooks": "ench:test_dr2"})
+	g.silence(w)
+	g.destroy(w)
+	g.resolve()
+	Cards.remove("ench:test_dr2")
+	eq(seen, [], "silenced")

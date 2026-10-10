@@ -214,31 +214,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 14 — Druid (25 cards, 1 keyword-only)
 
-- [ ] `VAN_EX1_169` Innervate — spell 0 — Gain 2 Mana Crystals this turn only.
-- [ ] `VAN_CS2_008` Moonfire — spell 0 — Deal $1 damage.
-- [ ] `VAN_CS2_005` Claw — spell 1 — Give your hero +2 Attack this turn. Gain 2 Armor.
-- [ ] `VAN_EX1_161` Naturalize — spell 1 — Destroy a minion. Your opponent draws 2 cards.
-- [ ] `VAN_EX1_578` Savagery — spell 1 — Deal damage equal to your hero's Attack to a minion.
-- [ ] `VAN_CS2_009` Mark of the Wild — spell 2 — Give a minion Taunt and +2/+2. (+2 Attack/+2 Health)
-- [ ] `VAN_EX1_160` Power of the Wild — spell 2 — Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.
-- [ ] `VAN_CS2_013` Wild Growth — spell 2 — Gain an empty Mana Crystal.
-- [ ] `VAN_EX1_154` Wrath — spell 2 — Choose One - Deal $3 damage to a minion; or $1 damage and draw a card.
-- [ ] `VAN_CS2_007` Healing Touch — spell 3 — Restore #8 Health.
-- [ ] `VAN_EX1_155` Mark of Nature — spell 3 — Choose One - Give a minion +4 Attack; or +4 Health and Taunt.
-- [ ] `VAN_CS2_011` Savage Roar — spell 3 — Give your characters +2 Attack this turn.
-- [ ] `VAN_EX1_570` Bite — spell 4 — Give your hero +4 Attack this turn. Gain 4 Armor.
-- [ ] `VAN_EX1_166` Keeper of the Grove — minion 4 2/4 — Choose One - Deal 2 damage; or Silence a minion.
-- [ ] `VAN_EX1_158` Soul of the Forest — spell 4 — Give your minions "Deathrattle: Summon a 2/2 Treant."
-- [ ] `VAN_CS2_012` Swipe — spell 4 — Deal $4 damage to an enemy and $1 damage to all other enemies.
-- [ ] `VAN_EX1_165` Druid of the Claw — minion 5 4/4 — Choose One - Charge; or +2 Health and Taunt.
-- [ ] `VAN_EX1_164` Nourish — spell 5 — Choose One - Gain 2 Mana Crystals; or Draw 3 cards.
-- [ ] `VAN_NEW1_007` Starfall — spell 5 — Choose One - Deal $5 damage to a minion; or $2 damage to all enemy minions.
-- [ ] `VAN_EX1_571` Force of Nature — spell 6 — Summon three 2/2 Treants with Charge that die at the end of the turn.
-- [ ] `VAN_EX1_173` Starfire — spell 6 — Deal $5 damage. Draw a card.
-- [ ] `VAN_NEW1_008` Ancient of Lore — minion 7 5/5 — Choose One - Draw 2 cards; or Restore #5 Health.
-- [ ] `VAN_EX1_178` Ancient of War — minion 7 5/5 — Choose One - +5 Attack; or +5 Health and Taunt.
-- [ ] `VAN_CS2_232` Ironbark Protector — minion 8 8/8 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_EX1_573` Cenarius — minion 9 5/8 — Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.
+- [x] `VAN_EX1_169` Innervate — spell 0 — Gain 2 Mana Crystals this turn only.
+- [x] `VAN_CS2_008` Moonfire — spell 0 — Deal $1 damage.
+- [x] `VAN_CS2_005` Claw — spell 1 — Give your hero +2 Attack this turn. Gain 2 Armor.
+- [x] `VAN_EX1_161` Naturalize — spell 1 — Destroy a minion. Your opponent draws 2 cards.
+- [x] `VAN_EX1_578` Savagery — spell 1 — Deal damage equal to your hero's Attack to a minion.
+- [x] `VAN_CS2_009` Mark of the Wild — spell 2 — Give a minion Taunt and +2/+2. (+2 Attack/+2 Health)
+- [x] `VAN_EX1_160` Power of the Wild — spell 2 — Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.
+- [x] `VAN_CS2_013` Wild Growth — spell 2 — Gain an empty Mana Crystal.
+- [x] `VAN_EX1_154` Wrath — spell 2 — Choose One - Deal $3 damage to a minion; or $1 damage and draw a card.
+- [x] `VAN_CS2_007` Healing Touch — spell 3 — Restore #8 Health.
+- [x] `VAN_EX1_155` Mark of Nature — spell 3 — Choose One - Give a minion +4 Attack; or +4 Health and Taunt.
+- [x] `VAN_CS2_011` Savage Roar — spell 3 — Give your characters +2 Attack this turn.
+- [x] `VAN_EX1_570` Bite — spell 4 — Give your hero +4 Attack this turn. Gain 4 Armor.
+- [x] `VAN_EX1_166` Keeper of the Grove — minion 4 2/4 — Choose One - Deal 2 damage; or Silence a minion.
+- [x] `VAN_EX1_158` Soul of the Forest — spell 4 — Give your minions "Deathrattle: Summon a 2/2 Treant."
+- [x] `VAN_CS2_012` Swipe — spell 4 — Deal $4 damage to an enemy and $1 damage to all other enemies.
+- [x] `VAN_EX1_165` Druid of the Claw — minion 5 4/4 — Choose One - Charge; or +2 Health and Taunt.
+- [x] `VAN_EX1_164` Nourish — spell 5 — Choose One - Gain 2 Mana Crystals; or Draw 3 cards.
+- [x] `VAN_NEW1_007` Starfall — spell 5 — Choose One - Deal $5 damage to a minion; or $2 damage to all enemy minions.
+- [x] `VAN_EX1_571` Force of Nature — spell 6 — Summon three 2/2 Treants with Charge that die at the end of the turn.
+- [x] `VAN_EX1_173` Starfire — spell 6 — Deal $5 damage. Draw a card.
+- [x] `VAN_NEW1_008` Ancient of Lore — minion 7 5/5 — Choose One - Draw 2 cards; or Restore #5 Health.
+- [x] `VAN_EX1_178` Ancient of War — minion 7 5/5 — Choose One - +5 Attack; or +5 Health and Taunt.
+- [x] `VAN_CS2_232` Ironbark Protector — minion 8 8/8 — Taunt *(keyword only — no hook)*
+- [x] `VAN_EX1_573` Cenarius — minion 9 5/8 — Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.
 
 ## Task 15 — Hunter (25 cards, 1 keyword-only)
 
@@ -466,11 +466,11 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Tokens (implement in the task of the card that creates them) (83 cards, 43 keyword-only)
 
-- [ ] `VAN_EX1_165b` Bear Form — spell 0 — +2 Health and Taunt
-- [ ] `VAN_EX1_165a` Cat Form — spell 0 — Charge *(keyword only — no hook)*
+- [x] `VAN_EX1_165b` Bear Form — spell 0 — +2 Health and Taunt
+- [x] `VAN_EX1_165a` Cat Form — spell 0 — Charge *(keyword only — no hook)*
 - [x] `Mekka4t` Chicken — minion 0 1/1 [BEAST] — Hey Chicken!
 - [x] `VAN_DREAM_04` Dream — spell 0 — Return a minion to its owner's hand.
-- [ ] `CS2_013t` Excess Mana — spell 0 — Draw a card. (You can only have 10 Mana in your tray.)
+- [x] `CS2_013t` Excess Mana — spell 0 — Draw a card. (You can only have 10 Mana in your tray.)
 - [ ] `hexfrog` Frog — minion 0 0/1 [BEAST] — Taunt *(keyword only — no hook)*
 - [ ] `VAN_CS2_mirror` Mirror Image — minion 0 0/2 — Taunt *(keyword only — no hook)*
 - [x] `PRO_001at` Murloc — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
@@ -502,8 +502,8 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_CS2_152` Squire — minion 1 2/2 — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_tk28` Squirrel — minion 1 1/1 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_CS2_051` Stoneclaw Totem — minion 1 0/2 [TOTEM] — Taunt *(keyword only — no hook)*
-- [ ] `VAN_EX1_tk9` Treant — minion 1 2/2 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_tk9b` Treant — minion 1 2/2 — Charge. At the end of the turn, destroy this minion.
+- [x] `VAN_EX1_tk9` Treant — minion 1 2/2 — (no text) *(keyword only — no hook)*
+- [x] `VAN_EX1_tk9b` Treant — minion 1 2/2 — Charge. At the end of the turn, destroy this minion.
 - [x] `ds1_whelptoken` Whelp — minion 1 1/1 [DRAGON] — (no text) *(keyword only — no hook)*
 - [x] `EX1_116t` Whelp — minion 1 1/1 [DRAGON] — (no text) *(keyword only — no hook)*
 - [x] `VAN_CS2_082` Wicked Knife — weapon 1 1/0 — (no text) *(keyword only — no hook)*
@@ -513,39 +513,39 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `NEW1_040t` Gnoll — minion 2 2/2 — Taunt *(keyword only — no hook)*
 - [ ] `EX1_534t` Hyena — minion 2 2/2 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_DREAM_01` Laughing Sister — minion 2 3/5 — Elusive
-- [ ] `VAN_EX1_160b` Leader of the Pack — spell 2 — Give your minions +1/+1.
-- [ ] `VAN_EX1_154b` Nature's Wrath — spell 2 — Deal $1 damage to a minion. Draw a card.
-- [ ] `EX1_160t` Panther — minion 2 3/2 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_154a` Solar Wrath — spell 2 — Deal $3 damage to a minion.
+- [x] `VAN_EX1_160b` Leader of the Pack — spell 2 — Give your minions +1/+1.
+- [x] `VAN_EX1_154b` Nature's Wrath — spell 2 — Deal $1 damage to a minion. Draw a card.
+- [x] `EX1_160t` Panther — minion 2 3/2 [BEAST] — (no text) *(keyword only — no hook)*
+- [x] `VAN_EX1_154a` Solar Wrath — spell 2 — Deal $3 damage to a minion.
 - [ ] `VAN_EX1_tk11` Spirit Wolf — minion 2 2/3 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_EX1_160a` Summon a Panther — spell 2 — Summon a 3/2 Panther.
+- [x] `VAN_EX1_160a` Summon a Panther — spell 2 — Summon a 3/2 Panther.
 - [x] `VAN_DREAM_02` Ysera Awakens — spell 2 — Deal $5 damage to all characters except Ysera.
 - [ ] `EX1_323w` Blood Fury — weapon 3 3/0 — (no text) *(keyword only — no hook)*
 - [ ] `VAN_NEW1_034` Huffer — minion 3 4/2 [BEAST] — Charge *(keyword only — no hook)*
 - [ ] `VAN_NEW1_033` Leokk — minion 3 2/4 [BEAST] — Your other minions have +1 Attack.
 - [ ] `VAN_NEW1_032` Misha — minion 3 4/4 [BEAST] — Taunt *(keyword only — no hook)*
 - [x] `VAN_EX1_finkle` Pip Quickwit — minion 3 3/3 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_155b` Thick Hide — spell 3 — +4 Health and Taunt.
-- [ ] `VAN_EX1_155a` Tiger's Fury — spell 3 — +4 Attack.
+- [x] `VAN_EX1_155b` Thick Hide — spell 3 — +4 Health and Taunt.
+- [x] `VAN_EX1_155a` Tiger's Fury — spell 3 — +4 Attack.
 - [x] `VAN_EX1_110t` Baine Bloodhoof — minion 4 4/5 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_166b` Dispel — spell 4 — Silence a minion.
+- [x] `VAN_EX1_166b` Dispel — spell 4 — Silence a minion.
 - [x] `VAN_DREAM_03` Emerald Drake — minion 4 7/6 [DRAGON] — (no text) *(keyword only — no hook)*
 - [x] `PRO_001a` I Am Murloc — spell 4 — Summon three, four, or five 1/1 Murlocs.
-- [ ] `VAN_EX1_166a` Moonfire — spell 4 — Deal 2 damage.
+- [x] `VAN_EX1_166a` Moonfire — spell 4 — Deal 2 damage.
 - [x] `VAN_PRO_001c` Power of the Horde — spell 4 — Summon a random Horde Warrior.
 - [x] `PRO_001b` Rogues Do It... — spell 4 — Deal $4 damage. Draw a card.
 - [ ] `EX1_383t` Ashbringer — weapon 5 5/0 — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_tk29` Devilsaur — minion 5 5/5 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_165t1` Druid of the Claw — minion 5 4/4 — Charge *(keyword only — no hook)*
-- [ ] `VAN_EX1_165t2` Druid of the Claw — minion 5 4/6 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_EX1_164b` Enrich — spell 5 — Draw 3 cards.
-- [ ] `VAN_EX1_164a` Rampant Growth — spell 5 — Gain 2 Mana Crystals.
-- [ ] `VAN_NEW1_007b` Starlord — spell 5 — Deal $5 damage to a minion.
-- [ ] `VAN_NEW1_007a` Stellar Drift — spell 5 — Deal $2 damage to all enemy minions.
+- [x] `VAN_EX1_165t1` Druid of the Claw — minion 5 4/4 — Charge *(keyword only — no hook)*
+- [x] `VAN_EX1_165t2` Druid of the Claw — minion 5 4/6 — Taunt *(keyword only — no hook)*
+- [x] `VAN_EX1_164b` Enrich — spell 5 — Draw 3 cards.
+- [x] `VAN_EX1_164a` Rampant Growth — spell 5 — Gain 2 Mana Crystals.
+- [x] `VAN_NEW1_007b` Starlord — spell 5 — Deal $5 damage to a minion.
+- [x] `VAN_NEW1_007a` Stellar Drift — spell 5 — Deal $2 damage to all enemy minions.
 - [x] `VAN_EX1_tk34` Infernal — minion 6 6/6 [DEMON] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_NEW1_008b` Ancient Secrets — spell 7 — Restore 5 Health.
-- [ ] `VAN_NEW1_008a` Ancient Teachings — spell 7 — Draw 2 cards.
-- [ ] `VAN_EX1_178a` Rooted — spell 7 — +5 Health and Taunt.
-- [ ] `VAN_EX1_178b` Uproot — spell 7 — +5 Attack.
-- [ ] `VAN_EX1_573a` Demigod's Favor — spell 9 — Give your other minions +2/+2.
-- [ ] `VAN_EX1_573b` Shan'do's Lesson — spell 9 — Summon two 2/2 Treants with Taunt.
+- [x] `VAN_NEW1_008b` Ancient Secrets — spell 7 — Restore 5 Health.
+- [x] `VAN_NEW1_008a` Ancient Teachings — spell 7 — Draw 2 cards.
+- [x] `VAN_EX1_178a` Rooted — spell 7 — +5 Health and Taunt.
+- [x] `VAN_EX1_178b` Uproot — spell 7 — +5 Attack.
+- [x] `VAN_EX1_573a` Demigod's Favor — spell 9 — Give your other minions +2/+2.
+- [x] `VAN_EX1_573b` Shan'do's Lesson — spell 9 — Summon two 2/2 Treants with Taunt.

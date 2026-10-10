@@ -219,6 +219,10 @@ func _death_phase() -> bool:
 		var h := hooks_of(e)
 		if h.has("deathrattle"):
 			queue.append([h.deathrattle, e, {}, false])
+		for ench: Dictionary in e.enchantments:
+			var eh := Cards.of(ench.get("hooks", ""))
+			if eh.has("deathrattle"):
+				queue.append([eh.deathrattle, e, {}, false])
 		emit({"type": "death", "entity": e.id, "player": e.controller, "card": e.card_id,
 			"minion": e.is_minion()})
 	var heroes_dead: Array[int] = []
