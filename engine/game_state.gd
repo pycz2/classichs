@@ -95,6 +95,25 @@ func all_chars() -> Array[Entity]:
 	return _by_order(chars(0) + chars(1))
 
 
+func hero(p: int) -> Entity:
+	return players[p].hero
+
+
+## Friendly minions of me, without me.
+func others(me: Entity) -> Array[Entity]:
+	var out: Array[Entity] = []
+	for m in players[me.controller].board:
+		if m != me:
+			out.append(m)
+	return out
+
+
+## Summons for me's controller right of me (left-to-right board order).
+func summon_right(me: Entity, card_id: String) -> Entity:
+	var i := players[me.controller].board.find(me)
+	return summon(me.controller, card_id, i + 1 if i >= 0 else -1)
+
+
 func adjacent(m: Entity) -> Array[Entity]:
 	var out: Array[Entity] = []
 	var board := players[m.controller].board

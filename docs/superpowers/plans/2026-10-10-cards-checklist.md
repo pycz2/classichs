@@ -42,49 +42,49 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 9 — Neutral Basic (rarity FREE) (43 cards, 25 keyword-only)
 
-- [ ] `VAN_CS2_189` Elven Archer — minion 1 1/1 — Battlecry: Deal 1 damage.
-- [ ] `VAN_CS1_042` Goldshire Footman — minion 1 1/2 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_EX1_508` Grimscale Oracle — minion 1 1/1 [MURLOC] — ALL other Murlocs have +1 Attack.
-- [ ] `VAN_CS2_168` Murloc Raider — minion 1 2/1 [MURLOC] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_171` Stonetusk Boar — minion 1 1/1 [BEAST] — Charge *(keyword only — no hook)*
-- [ ] `VAN_EX1_011` Voodoo Doctor — minion 1 2/1 — Battlecry: Restore #2 Health.
-- [ ] `VAN_EX1_066` Acidic Swamp Ooze — minion 2 3/2 — Battlecry: Destroy your opponent's weapon.
-- [ ] `VAN_CS2_172` Bloodfen Raptor — minion 2 3/2 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_173` Bluegill Warrior — minion 2 2/1 [MURLOC] — Charge *(keyword only — no hook)*
-- [ ] `VAN_CS2_121` Frostwolf Grunt — minion 2 2/2 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_CS2_142` Kobold Geomancer — minion 2 2/2 — Spell Damage +1 *(keyword only — no hook)*
-- [ ] `VAN_EX1_506` Murloc Tidehunter — minion 2 2/1 [MURLOC] — Battlecry: Summon a 1/1 Murloc Scout.
-- [ ] `VAN_EX1_015` Novice Engineer — minion 2 1/1 — Battlecry: Draw a card.
-- [ ] `VAN_CS2_120` River Crocolisk — minion 2 2/3 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_582` Dalaran Mage — minion 3 1/4 — Spell Damage +1 *(keyword only — no hook)*
-- [ ] `VAN_CS2_141` Ironforge Rifleman — minion 3 2/2 — Battlecry: Deal 1 damage.
-- [ ] `VAN_CS2_125` Ironfur Grizzly — minion 3 3/3 [BEAST] — Taunt *(keyword only — no hook)*
-- [ ] `VAN_CS2_118` Magma Rager — minion 3 5/1 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_122` Raid Leader — minion 3 2/2 — Your other minions have +1 Attack.
-- [ ] `VAN_CS2_196` Razorfen Hunter — minion 3 2/3 — Battlecry: Summon a 1/1 Boar.
-- [ ] `VAN_EX1_019` Shattered Sun Cleric — minion 3 3/2 — Battlecry: Give a friendly minion +1/+1.
-- [ ] `VAN_CS2_127` Silverback Patriarch — minion 3 1/4 [BEAST] — Taunt *(keyword only — no hook)*
-- [ ] `VAN_CS2_124` Wolfrider — minion 3 3/1 — Charge *(keyword only — no hook)*
-- [ ] `VAN_CS2_182` Chillwind Yeti — minion 4 4/5 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_025` Dragonling Mechanic — minion 4 2/4 — Battlecry: Summon a 2/1 Mechanical Dragonling.
-- [ ] `VAN_CS2_147` Gnomish Inventor — minion 4 2/4 — Battlecry: Draw a card.
-- [ ] `VAN_CS2_119` Oasis Snapjaw — minion 4 2/7 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_197` Ogre Magi — minion 4 4/4 — Spell Damage +1 *(keyword only — no hook)*
-- [ ] `VAN_CS2_179` Sen'jin Shieldmasta — minion 4 3/5 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_CS2_131` Stormwind Knight — minion 4 2/5 — Charge *(keyword only — no hook)*
-- [ ] `VAN_CS2_187` Booty Bay Bodyguard — minion 5 5/4 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_DS1_055` Darkscale Healer — minion 5 4/5 — Battlecry: Restore #2 Health to all friendly characters.
-- [ ] `VAN_CS2_226` Frostwolf Warlord — minion 5 4/4 — Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.
-- [ ] `VAN_EX1_399` Gurubashi Berserker — minion 5 2/7 — Whenever this minion takes damage, gain +3 Attack.
-- [ ] `VAN_EX1_593` Nightblade — minion 5 4/4 — Battlecry: Deal 3 damage to the enemy hero.
-- [ ] `VAN_CS2_150` Stormpike Commando — minion 5 4/2 — Battlecry: Deal 2 damage.
-- [ ] `VAN_CS2_155` Archmage — minion 6 4/7 — Spell Damage +1 *(keyword only — no hook)*
-- [ ] `VAN_CS2_200` Boulderfist Ogre — minion 6 6/7 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_162` Lord of the Arena — minion 6 6/5 — Taunt *(keyword only — no hook)*
-- [ ] `VAN_CS2_213` Reckless Rocketeer — minion 6 5/2 — Charge *(keyword only — no hook)*
-- [ ] `VAN_CS2_201` Core Hound — minion 7 9/5 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_CS2_222` Stormwind Champion — minion 7 6/6 — Your other minions have +1/+1.
-- [ ] `VAN_CS2_186` War Golem — minion 7 7/7 — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_189` Elven Archer — minion 1 1/1 — Battlecry: Deal 1 damage.
+- [x] `VAN_CS1_042` Goldshire Footman — minion 1 1/2 — Taunt *(keyword only — no hook)*
+- [x] `VAN_EX1_508` Grimscale Oracle — minion 1 1/1 [MURLOC] — ALL other Murlocs have +1 Attack.
+- [x] `VAN_CS2_168` Murloc Raider — minion 1 2/1 [MURLOC] — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_171` Stonetusk Boar — minion 1 1/1 [BEAST] — Charge *(keyword only — no hook)*
+- [x] `VAN_EX1_011` Voodoo Doctor — minion 1 2/1 — Battlecry: Restore #2 Health.
+- [x] `VAN_EX1_066` Acidic Swamp Ooze — minion 2 3/2 — Battlecry: Destroy your opponent's weapon.
+- [x] `VAN_CS2_172` Bloodfen Raptor — minion 2 3/2 [BEAST] — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_173` Bluegill Warrior — minion 2 2/1 [MURLOC] — Charge *(keyword only — no hook)*
+- [x] `VAN_CS2_121` Frostwolf Grunt — minion 2 2/2 — Taunt *(keyword only — no hook)*
+- [x] `VAN_CS2_142` Kobold Geomancer — minion 2 2/2 — Spell Damage +1 *(keyword only — no hook)*
+- [x] `VAN_EX1_506` Murloc Tidehunter — minion 2 2/1 [MURLOC] — Battlecry: Summon a 1/1 Murloc Scout.
+- [x] `VAN_EX1_015` Novice Engineer — minion 2 1/1 — Battlecry: Draw a card.
+- [x] `VAN_CS2_120` River Crocolisk — minion 2 2/3 [BEAST] — (no text) *(keyword only — no hook)*
+- [x] `VAN_EX1_582` Dalaran Mage — minion 3 1/4 — Spell Damage +1 *(keyword only — no hook)*
+- [x] `VAN_CS2_141` Ironforge Rifleman — minion 3 2/2 — Battlecry: Deal 1 damage.
+- [x] `VAN_CS2_125` Ironfur Grizzly — minion 3 3/3 [BEAST] — Taunt *(keyword only — no hook)*
+- [x] `VAN_CS2_118` Magma Rager — minion 3 5/1 — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_122` Raid Leader — minion 3 2/2 — Your other minions have +1 Attack.
+- [x] `VAN_CS2_196` Razorfen Hunter — minion 3 2/3 — Battlecry: Summon a 1/1 Boar.
+- [x] `VAN_EX1_019` Shattered Sun Cleric — minion 3 3/2 — Battlecry: Give a friendly minion +1/+1.
+- [x] `VAN_CS2_127` Silverback Patriarch — minion 3 1/4 [BEAST] — Taunt *(keyword only — no hook)*
+- [x] `VAN_CS2_124` Wolfrider — minion 3 3/1 — Charge *(keyword only — no hook)*
+- [x] `VAN_CS2_182` Chillwind Yeti — minion 4 4/5 — (no text) *(keyword only — no hook)*
+- [x] `VAN_EX1_025` Dragonling Mechanic — minion 4 2/4 — Battlecry: Summon a 2/1 Mechanical Dragonling.
+- [x] `VAN_CS2_147` Gnomish Inventor — minion 4 2/4 — Battlecry: Draw a card.
+- [x] `VAN_CS2_119` Oasis Snapjaw — minion 4 2/7 [BEAST] — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_197` Ogre Magi — minion 4 4/4 — Spell Damage +1 *(keyword only — no hook)*
+- [x] `VAN_CS2_179` Sen'jin Shieldmasta — minion 4 3/5 — Taunt *(keyword only — no hook)*
+- [x] `VAN_CS2_131` Stormwind Knight — minion 4 2/5 — Charge *(keyword only — no hook)*
+- [x] `VAN_CS2_187` Booty Bay Bodyguard — minion 5 5/4 — Taunt *(keyword only — no hook)*
+- [x] `VAN_DS1_055` Darkscale Healer — minion 5 4/5 — Battlecry: Restore #2 Health to all friendly characters.
+- [x] `VAN_CS2_226` Frostwolf Warlord — minion 5 4/4 — Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.
+- [x] `VAN_EX1_399` Gurubashi Berserker — minion 5 2/7 — Whenever this minion takes damage, gain +3 Attack.
+- [x] `VAN_EX1_593` Nightblade — minion 5 4/4 — Battlecry: Deal 3 damage to the enemy hero.
+- [x] `VAN_CS2_150` Stormpike Commando — minion 5 4/2 — Battlecry: Deal 2 damage.
+- [x] `VAN_CS2_155` Archmage — minion 6 4/7 — Spell Damage +1 *(keyword only — no hook)*
+- [x] `VAN_CS2_200` Boulderfist Ogre — minion 6 6/7 — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_162` Lord of the Arena — minion 6 6/5 — Taunt *(keyword only — no hook)*
+- [x] `VAN_CS2_213` Reckless Rocketeer — minion 6 5/2 — Charge *(keyword only — no hook)*
+- [x] `VAN_CS2_201` Core Hound — minion 7 9/5 [BEAST] — (no text) *(keyword only — no hook)*
+- [x] `VAN_CS2_222` Stormwind Champion — minion 7 6/6 — Your other minions have +1/+1.
+- [x] `VAN_CS2_186` War Golem — minion 7 7/7 — (no text) *(keyword only — no hook)*
 
 ## Task 10 — Neutral Classic COMMON (40 cards, 13 keyword-only)
 
