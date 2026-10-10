@@ -665,6 +665,36 @@ func attack_value(e: Entity) -> int:
 	return hero_atk(e) if e.is_hero() else e.atk()
 
 
+# --- look-ahead -------------------------------------------------------------
+
+## Deep copy for look-ahead (the bot). Same entity ids and RNG state; history
+## and event log are not copied. Call only between actions (empty queue).
+func clone() -> GameState:
+	var c := _blank()
+	c.rng.seed = rng.seed
+	c.rng.state = rng.state
+	c.entities = {}
+	for id: int in entities:
+		c.entities[id] = entities[id].copy()
+	c.players.clear()
+	for p in players:
+		c.players.append(p.copy(c.entities))
+	c.turn = turn
+	c.current = current
+	c.phase = phase
+	c.pending = pending.duplicate(true)
+	c.game_over = game_over
+	c.winner = winner
+	c._next_id = _next_id
+	c._next_order = _next_order
+	return c
+
+
+## An empty instance of the same class; Game overrides this.
+func _blank() -> GameState:
+	return GameState.new(0)
+
+
 # --- serialization ----------------------------------------------------------
 
 func to_dict() -> Dictionary:

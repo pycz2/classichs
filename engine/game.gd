@@ -24,6 +24,10 @@ func _init(p0: Dictionary, p1: Dictionary, p_seed: int, first := -1, deal := tru
 	event_log = []
 
 
+func _blank() -> GameState:
+	return Game.new({"hero": "HERO_01", "deck": []}, {"hero": "HERO_01", "deck": []}, 0, 0, false)
+
+
 static func from_scenario(sc: Dictionary) -> Dictionary:
 	return Scenario.build(sc)
 

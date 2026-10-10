@@ -128,6 +128,19 @@ func fix_health(old_max: int, old_health: int) -> void:
 		damage = maxi(0, new_max - mini(old_health, new_max))
 
 
+func copy() -> Entity:
+	var e := Entity.new(id, card_id, controller)
+	e.zone = zone
+	e.play_order = play_order
+	e.damage = damage
+	e.tags = tags.duplicate(true)
+	e.enchantments = enchantments.duplicate(true)
+	e.eot_tags = eot_tags.duplicate()
+	e.aura = aura.duplicate(true)
+	e.silenced = silenced
+	return e
+
+
 func snapshot() -> Dictionary:
 	return {"card": card_id, "ctrl": controller, "zone": zone, "order": play_order,
 		"dmg": damage, "tags": tags, "ench": enchantments, "eot": eot_tags, "sil": silenced}
