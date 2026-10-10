@@ -298,31 +298,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 17 — Paladin (25 cards, 1 keyword-only)
 
-- [ ] `VAN_CS2_087` Blessing of Might — spell 1 — Give a minion +3 Attack.
-- [ ] `VAN_EX1_363` Blessing of Wisdom — spell 1 — Choose a minion. Whenever it attacks, draw a card.
-- [ ] `VAN_EX1_132` Eye for an Eye — spell 1 — Secret: When your hero takes damage, deal that much damage to the enemy hero.
-- [ ] `VAN_EX1_371` Hand of Protection — spell 1 — Give a minion Divine Shield.
-- [ ] `VAN_EX1_360` Humility — spell 1 — Change a minion's Attack to 1.
-- [ ] `VAN_CS2_091` Light's Justice — weapon 1 1/0 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_130` Noble Sacrifice — spell 1 — Secret: When an enemy attacks, summon a 2/1 Defender as the new target.
-- [ ] `VAN_EX1_136` Redemption — spell 1 — Secret: When a friendly minion dies, return it to life with 1 Health.
-- [ ] `VAN_EX1_379` Repentance — spell 1 — Secret: After your opponent plays a minion, reduce its Health to 1.
-- [ ] `VAN_EX1_362` Argent Protector — minion 2 2/2 — Battlecry: Give a friendly minion Divine Shield.
-- [ ] `VAN_EX1_619` Equality — spell 2 — Change the Health of ALL minions to 1.
-- [ ] `VAN_CS2_089` Holy Light — spell 2 — Restore #6 Health.
-- [ ] `VAN_EX1_382` Aldor Peacekeeper — minion 3 3/3 — Battlecry: Change an enemy minion's Attack to 1.
-- [ ] `VAN_EX1_349` Divine Favor — spell 3 — Draw cards until you have as many in hand as your opponent.
-- [ ] `VAN_EX1_366` Sword of Justice — weapon 3 1/0 — After you summon a minion, give it +1/+1 and this loses 1 Durability.
-- [ ] `VAN_CS2_092` Blessing of Kings — spell 4 — Give a minion +4/+4. (+4 Attack/+4 Health)
-- [ ] `VAN_CS2_093` Consecration — spell 4 — Deal $2 damage to all enemies.
-- [ ] `VAN_CS2_094` Hammer of Wrath — spell 4 — Deal $3 damage. Draw a card.
-- [ ] `VAN_CS2_097` Truesilver Champion — weapon 4 4/0 — Whenever your hero attacks, restore #2 Health to it.
-- [ ] `VAN_EX1_355` Blessed Champion — spell 5 — Double a minion's Attack.
-- [ ] `VAN_EX1_365` Holy Wrath — spell 5 — Draw a card and deal damage equal to its Cost.
-- [ ] `VAN_EX1_384` Avenging Wrath — spell 6 — Deal $8 damage randomly split among all enemy characters.
-- [ ] `VAN_CS2_088` Guardian of Kings — minion 7 5/6 — Battlecry: Restore #6 Health to your hero.
-- [ ] `VAN_EX1_354` Lay on Hands — spell 8 — Restore #8 Health. Draw 3 cards.
-- [ ] `VAN_EX1_383` Tirion Fordring — minion 8 6/6 — Divine Shield, Taunt Deathrattle: Equip a 5/3 Ashbringer.
+- [x] `VAN_CS2_087` Blessing of Might — spell 1 — Give a minion +3 Attack.
+- [x] `VAN_EX1_363` Blessing of Wisdom — spell 1 — Choose a minion. Whenever it attacks, draw a card.
+- [x] `VAN_EX1_132` Eye for an Eye — spell 1 — Secret: When your hero takes damage, deal that much damage to the enemy hero.
+- [x] `VAN_EX1_371` Hand of Protection — spell 1 — Give a minion Divine Shield.
+- [x] `VAN_EX1_360` Humility — spell 1 — Change a minion's Attack to 1.
+- [x] `VAN_CS2_091` Light's Justice — weapon 1 1/0 — (no text) *(keyword only — no hook)*
+- [x] `VAN_EX1_130` Noble Sacrifice — spell 1 — Secret: When an enemy attacks, summon a 2/1 Defender as the new target.
+- [x] `VAN_EX1_136` Redemption — spell 1 — Secret: When a friendly minion dies, return it to life with 1 Health.
+- [x] `VAN_EX1_379` Repentance — spell 1 — Secret: After your opponent plays a minion, reduce its Health to 1.
+- [x] `VAN_EX1_362` Argent Protector — minion 2 2/2 — Battlecry: Give a friendly minion Divine Shield.
+- [x] `VAN_EX1_619` Equality — spell 2 — Change the Health of ALL minions to 1.
+- [x] `VAN_CS2_089` Holy Light — spell 2 — Restore #6 Health.
+- [x] `VAN_EX1_382` Aldor Peacekeeper — minion 3 3/3 — Battlecry: Change an enemy minion's Attack to 1.
+- [x] `VAN_EX1_349` Divine Favor — spell 3 — Draw cards until you have as many in hand as your opponent.
+- [x] `VAN_EX1_366` Sword of Justice — weapon 3 1/0 — After you summon a minion, give it +1/+1 and this loses 1 Durability.
+- [x] `VAN_CS2_092` Blessing of Kings — spell 4 — Give a minion +4/+4. (+4 Attack/+4 Health)
+- [x] `VAN_CS2_093` Consecration — spell 4 — Deal $2 damage to all enemies.
+- [x] `VAN_CS2_094` Hammer of Wrath — spell 4 — Deal $3 damage. Draw a card.
+- [x] `VAN_CS2_097` Truesilver Champion — weapon 4 4/0 — Whenever your hero attacks, restore #2 Health to it.
+- [x] `VAN_EX1_355` Blessed Champion — spell 5 — Double a minion's Attack.
+- [x] `VAN_EX1_365` Holy Wrath — spell 5 — Draw a card and deal damage equal to its Cost.
+- [x] `VAN_EX1_384` Avenging Wrath — spell 6 — Deal $8 damage randomly split among all enemy characters.
+- [x] `VAN_CS2_088` Guardian of Kings — minion 7 5/6 — Battlecry: Restore #6 Health to your hero.
+- [x] `VAN_EX1_354` Lay on Hands — spell 8 — Restore #8 Health. Draw 3 cards.
+- [x] `VAN_EX1_383` Tirion Fordring — minion 8 6/6 — Divine Shield, Taunt Deathrattle: Equip a 5/3 Ashbringer.
 
 ## Task 18 — Priest (25 cards, 0 keyword-only)
 
@@ -485,7 +485,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_CS2_boar` Boar — minion 1 1/1 [BEAST] — (no text) *(keyword only — no hook)*
 - [ ] `VAN_CS2_103_Puzzle` Charge — spell 1 — Give a friendly minion Charge. It can't attack heroes this turn.
 - [x] `VAN_skele21` Damaged Golem — minion 1 2/1 [MECHANICAL] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_130a` Defender — minion 1 2/1 — (no text) *(keyword only — no hook)*
+- [x] `VAN_EX1_130a` Defender — minion 1 2/1 — (no text) *(keyword only — no hook)*
 - [ ] `EX1_131t` Defias Bandit — minion 1 2/1 — (no text) *(keyword only — no hook)*
 - [x] `Mekka3` Emboldener 3000 — minion 1 0/4 [MECHANICAL] — At the end of your turn, give a random minion +1/+1.
 - [x] `VAN_TU4e_002t` Flame of Azzinoth — minion 1 2/1 — (no text) *(keyword only — no hook)*
@@ -534,7 +534,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_EX1_166a` Moonfire — spell 4 — Deal 2 damage.
 - [x] `VAN_PRO_001c` Power of the Horde — spell 4 — Summon a random Horde Warrior.
 - [x] `PRO_001b` Rogues Do It... — spell 4 — Deal $4 damage. Draw a card.
-- [ ] `EX1_383t` Ashbringer — weapon 5 5/0 — (no text) *(keyword only — no hook)*
+- [x] `EX1_383t` Ashbringer — weapon 5 5/0 — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_tk29` Devilsaur — minion 5 5/5 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_165t1` Druid of the Claw — minion 5 4/4 — Charge *(keyword only — no hook)*
 - [x] `VAN_EX1_165t2` Druid of the Claw — minion 5 4/6 — Taunt *(keyword only — no hook)*
