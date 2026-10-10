@@ -348,6 +348,21 @@ func draw(p: int, count := 1) -> Array[Entity]:
 	return out
 
 
+## Draws a specific card from p's deck (burns it if the hand is full).
+func draw_entity(p: int, e: Entity) -> void:
+	var pl := players[p]
+	if not pl.deck.has(e):
+		return
+	pl.deck.erase(e)
+	if pl.hand.size() >= MAX_HAND:
+		e.zone = "GRAVEYARD"
+		log_event({"type": "burn", "player": p, "entity": e.id, "card": e.card_id})
+		return
+	e.zone = "HAND"
+	pl.hand.append(e)
+	emit({"type": "draw", "player": p, "entity": e.id, "card": e.card_id})
+
+
 func add_to_hand(p: int, card_id: String) -> Entity:
 	if players[p].hand.size() >= MAX_HAND:
 		return null

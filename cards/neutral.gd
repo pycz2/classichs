@@ -6,6 +6,7 @@ static func register(r: Dictionary) -> void:
 	_basic(r)
 	_common(r)
 	_rare(r)
+	_epic(r)
 
 
 static func _not_me(_g, me, t) -> bool:
@@ -365,4 +366,82 @@ static func _rare(r: Dictionary) -> void:
 		"battlecry": func(g, me, _t):
 			var small: Array = g.minions(g.opponent(me.controller)).filter(func(m): return m.atk() <= 2)
 			g.destroy(g.random_alive(small)),
+	}
+
+
+## Faceless Manipulator: transforms me into a copy of t, with t's damage,
+## enchantments, keywords and Silence. Auras are not copied; the copy is a new
+## minion (summoning sickness, not Frozen).
+static func copy_minion(g, me: Entity, t: Entity) -> Entity:
+	var n: Entity = g.transform(me, t.card_id)
+	if n == null:
+		return null
+	if t.silenced:
+		n.silence()
+	n.tags = t.tags.duplicate()
+	for k in ["FROZEN", "FROZEN_THIS_TURN", "ATTACKS", "TO_DESTROY", "DIED_POS"]:
+		n.tags.erase(k)
+	n.give_tag("EXHAUSTED")
+	n.enchantments = t.enchantments.duplicate(true)
+	n.damage = t.damage
+	return n
+
+
+static func _epic(r: Dictionary) -> void:
+	r["VAN_NEW1_017"] = {  # Hungry Crab
+		"target": [T.MINION, func(_g, _me, t): return t.race() == "MURLOC"],
+		"battlecry": func(g, me, t):
+			g.destroy(t)
+			g.buff(me, 2, 2),
+	}
+	r["VAN_NEW1_016"] = {  # Captain's Parrot
+		"battlecry": func(g, me, _t):
+			var pirates: Array = g.players[me.controller].deck.filter(func(e): return e.race() == "PIRATE")
+			var e: Entity = g.random_choice(pirates)
+			if e:
+				g.draw_entity(me.controller, e),
+	}
+	r["VAN_NEW1_021"] = {  # Doomsayer
+		"on": {"turn_start": func(g, me, ev):
+			if ev.player == me.controller:
+				for m in g.all_minions():
+					g.destroy(m)},
+	}
+	r["VAN_EX1_005"] = {  # Big Game Hunter
+		"target": [T.MINION, func(_g, _me, t): return t.atk() >= 7],
+		"battlecry": func(g, _me, t): g.destroy(t),
+	}
+	r["VAN_EX1_590"] = {  # Blood Knight
+		"battlecry": func(g, me, _t):
+			var n := 0
+			for m in g.all_minions():
+				if m.has("DIVINE_SHIELD"):
+					m.tags.erase("DIVINE_SHIELD")
+					n += 1
+			g.buff(me, 3 * n, 3 * n),
+	}
+	r["VAN_EX1_507"] = {  # Murloc Warleader
+		"aura": func(g, me):
+			for m in g.all_minions():
+				if m != me and m.race() == "MURLOC":
+					g.aura_add(m, 2, 1),
+	}
+	r["VAN_NEW1_027"] = {  # Southsea Captain
+		"aura": func(g, me):
+			for m in g.others(me):
+				if m.race() == "PIRATE":
+					g.aura_add(m, 1, 1),
+	}
+	r["VAN_EX1_564"] = {  # Faceless Manipulator
+		"target": [T.MINION, _not_me],
+		"battlecry": func(g, me, t): copy_minion(g, me, t),
+	}
+	r["VAN_EX1_586"] = {  # Sea Giant
+		"cost_mod": func(g, _me): return -g.all_minions().size(),
+	}
+	r["VAN_EX1_105"] = {  # Mountain Giant
+		"cost_mod": func(g, me): return -(g.players[me.controller].hand.size() - 1),
+	}
+	r["VAN_EX1_620"] = {  # Molten Giant
+		"cost_mod": func(g, me): return -g.hero(me.controller).damage,
 	}

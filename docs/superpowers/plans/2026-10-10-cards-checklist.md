@@ -170,17 +170,17 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 12 — Neutral Classic EPIC (11 cards, 0 keyword-only)
 
-- [ ] `VAN_NEW1_017` Hungry Crab — minion 1 1/2 [BEAST] — Battlecry: Destroy a Murloc and gain +2/+2.
-- [ ] `VAN_NEW1_016` Captain's Parrot — minion 2 1/1 [BEAST] — Battlecry: Draw a Pirate from your deck.
-- [ ] `VAN_NEW1_021` Doomsayer — minion 2 0/7 — At the start of your turn, destroy ALL minions.
-- [ ] `VAN_EX1_005` Big Game Hunter — minion 3 4/2 — Battlecry: Destroy a minion with 7 or more Attack.
-- [ ] `VAN_EX1_590` Blood Knight — minion 3 3/3 — Battlecry: All minions lose Divine Shield. Gain +3/+3 for each Shield lost.
-- [ ] `VAN_EX1_507` Murloc Warleader — minion 3 3/3 [MURLOC] — ALL other murlocs have +2/+1.
-- [ ] `VAN_NEW1_027` Southsea Captain — minion 3 3/3 [PIRATE] — Your other Pirates have +1/+1.
-- [ ] `VAN_EX1_564` Faceless Manipulator — minion 5 3/3 — Battlecry: Choose a minion and become a copy of it.
-- [ ] `VAN_EX1_586` Sea Giant — minion 10 8/8 — Costs (1) less for each other minion on the battlefield.
-- [ ] `VAN_EX1_105` Mountain Giant — minion 12 8/8 — Costs (1) less for each other card in your hand.
-- [ ] `VAN_EX1_620` Molten Giant — minion 20 8/8 — Costs (1) less for each damage your hero has taken.
+- [x] `VAN_NEW1_017` Hungry Crab — minion 1 1/2 [BEAST] — Battlecry: Destroy a Murloc and gain +2/+2.
+- [x] `VAN_NEW1_016` Captain's Parrot — minion 2 1/1 [BEAST] — Battlecry: Draw a Pirate from your deck.
+- [x] `VAN_NEW1_021` Doomsayer — minion 2 0/7 — At the start of your turn, destroy ALL minions.
+- [x] `VAN_EX1_005` Big Game Hunter — minion 3 4/2 — Battlecry: Destroy a minion with 7 or more Attack.
+- [x] `VAN_EX1_590` Blood Knight — minion 3 3/3 — Battlecry: All minions lose Divine Shield. Gain +3/+3 for each Shield lost.
+- [x] `VAN_EX1_507` Murloc Warleader — minion 3 3/3 [MURLOC] — ALL other murlocs have +2/+1.
+- [x] `VAN_NEW1_027` Southsea Captain — minion 3 3/3 [PIRATE] — Your other Pirates have +1/+1.
+- [x] `VAN_EX1_564` Faceless Manipulator — minion 5 3/3 — Battlecry: Choose a minion and become a copy of it.
+- [x] `VAN_EX1_586` Sea Giant — minion 10 8/8 — Costs (1) less for each other minion on the battlefield.
+- [x] `VAN_EX1_105` Mountain Giant — minion 12 8/8 — Costs (1) less for each other card in your hand.
+- [x] `VAN_EX1_620` Molten Giant — minion 20 8/8 — Costs (1) less for each damage your hero has taken.
 
 ## Task 13 — Neutral Classic LEGENDARY (27 cards, 1 keyword-only)
 
