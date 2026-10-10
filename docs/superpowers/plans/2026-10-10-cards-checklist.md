@@ -382,31 +382,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 20 — Shaman (25 cards, 5 keyword-only)
 
-- [ ] `VAN_CS2_041` Ancestral Healing — spell 0 — Restore a minion to full Health and give it Taunt.
-- [ ] `VAN_EX1_244` Totemic Might — spell 0 — Give your Totems +2 Health.
-- [ ] `VAN_EX1_243` Dust Devil — minion 1 3/1 — Windfury. Overload: (2) *(keyword only — no hook)*
-- [ ] `VAN_EX1_245` Earth Shock — spell 1 — Silence a minion, then deal $1 damage to it.
-- [ ] `VAN_EX1_251` Forked Lightning — spell 1 — Deal $2 damage to 2 random enemy minions. Overload: (2)
-- [ ] `VAN_CS2_037` Frost Shock — spell 1 — Deal $1 damage to an enemy character and Freeze it.
-- [ ] `VAN_EX1_238` Lightning Bolt — spell 1 — Deal $3 damage. Overload: (1)
-- [ ] `VAN_CS2_045` Rockbiter Weapon — spell 1 — Give a friendly character +3 Attack this turn.
-- [ ] `VAN_CS2_038` Ancestral Spirit — spell 2 — Choose a minion. When that minion is destroyed, return it to the battlefield.
-- [ ] `VAN_EX1_565` Flametongue Totem — minion 2 0/3 [TOTEM] — Adjacent minions have +2 Attack.
-- [ ] `VAN_EX1_247` Stormforged Axe — weapon 2 2/0 — Overload: (1) *(keyword only — no hook)*
-- [ ] `VAN_CS2_039` Windfury — spell 2 — Give a minion Windfury.
-- [ ] `VAN_CS2_053` Far Sight — spell 3 — Draw a card. That card costs (3) less.
-- [ ] `VAN_EX1_248` Feral Spirit — spell 3 — Summon two 2/3 Spirit Wolves with Taunt. Overload: (2)
-- [ ] `VAN_EX1_246` Hex — spell 3 — Transform a minion into a 0/1 Frog with Taunt.
-- [ ] `VAN_EX1_241` Lava Burst — spell 3 — Deal $5 damage. Overload: (2)
-- [ ] `VAN_EX1_259` Lightning Storm — spell 3 — Deal $2-$3 damage to all enemy minions. Overload: (2)
-- [ ] `VAN_EX1_575` Mana Tide Totem — minion 3 0/3 [TOTEM] — At the end of your turn, draw a card.
-- [ ] `VAN_EX1_258` Unbound Elemental — minion 3 2/4 — Whenever you play a card with Overload, gain +1/+1.
-- [ ] `VAN_EX1_587` Windspeaker — minion 4 3/3 — Battlecry: Give a friendly minion Windfury.
-- [ ] `VAN_CS2_046` Bloodlust — spell 5 — Give your minions +3 Attack this turn.
-- [ ] `VAN_EX1_567` Doomhammer — weapon 5 2/0 — Windfury, Overload: (2) *(keyword only — no hook)*
-- [ ] `VAN_EX1_250` Earth Elemental — minion 5 7/8 — Taunt. Overload: (3) *(keyword only — no hook)*
-- [ ] `VAN_CS2_042` Fire Elemental — minion 6 6/5 — Battlecry: Deal 3 damage.
-- [ ] `VAN_NEW1_010` Al'Akir the Windlord — minion 8 3/5 — Charge, Divine Shield, Taunt, Windfury *(keyword only — no hook)*
+- [x] `VAN_CS2_041` Ancestral Healing — spell 0 — Restore a minion to full Health and give it Taunt.
+- [x] `VAN_EX1_244` Totemic Might — spell 0 — Give your Totems +2 Health.
+- [x] `VAN_EX1_243` Dust Devil — minion 1 3/1 — Windfury. Overload: (2) *(keyword only — no hook)*
+- [x] `VAN_EX1_245` Earth Shock — spell 1 — Silence a minion, then deal $1 damage to it.
+- [x] `VAN_EX1_251` Forked Lightning — spell 1 — Deal $2 damage to 2 random enemy minions. Overload: (2)
+- [x] `VAN_CS2_037` Frost Shock — spell 1 — Deal $1 damage to an enemy character and Freeze it.
+- [x] `VAN_EX1_238` Lightning Bolt — spell 1 — Deal $3 damage. Overload: (1)
+- [x] `VAN_CS2_045` Rockbiter Weapon — spell 1 — Give a friendly character +3 Attack this turn.
+- [x] `VAN_CS2_038` Ancestral Spirit — spell 2 — Choose a minion. When that minion is destroyed, return it to the battlefield.
+- [x] `VAN_EX1_565` Flametongue Totem — minion 2 0/3 [TOTEM] — Adjacent minions have +2 Attack.
+- [x] `VAN_EX1_247` Stormforged Axe — weapon 2 2/0 — Overload: (1) *(keyword only — no hook)*
+- [x] `VAN_CS2_039` Windfury — spell 2 — Give a minion Windfury.
+- [x] `VAN_CS2_053` Far Sight — spell 3 — Draw a card. That card costs (3) less.
+- [x] `VAN_EX1_248` Feral Spirit — spell 3 — Summon two 2/3 Spirit Wolves with Taunt. Overload: (2)
+- [x] `VAN_EX1_246` Hex — spell 3 — Transform a minion into a 0/1 Frog with Taunt.
+- [x] `VAN_EX1_241` Lava Burst — spell 3 — Deal $5 damage. Overload: (2)
+- [x] `VAN_EX1_259` Lightning Storm — spell 3 — Deal $2-$3 damage to all enemy minions. Overload: (2)
+- [x] `VAN_EX1_575` Mana Tide Totem — minion 3 0/3 [TOTEM] — At the end of your turn, draw a card.
+- [x] `VAN_EX1_258` Unbound Elemental — minion 3 2/4 — Whenever you play a card with Overload, gain +1/+1.
+- [x] `VAN_EX1_587` Windspeaker — minion 4 3/3 — Battlecry: Give a friendly minion Windfury.
+- [x] `VAN_CS2_046` Bloodlust — spell 5 — Give your minions +3 Attack this turn.
+- [x] `VAN_EX1_567` Doomhammer — weapon 5 2/0 — Windfury, Overload: (2) *(keyword only — no hook)*
+- [x] `VAN_EX1_250` Earth Elemental — minion 5 7/8 — Taunt. Overload: (3) *(keyword only — no hook)*
+- [x] `VAN_CS2_042` Fire Elemental — minion 6 6/5 — Battlecry: Deal 3 damage.
+- [x] `VAN_NEW1_010` Al'Akir the Windlord — minion 8 3/5 — Charge, Divine Shield, Taunt, Windfury *(keyword only — no hook)*
 
 ## Task 21 — Warlock (25 cards, 1 keyword-only)
 
@@ -471,7 +471,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `Mekka4t` Chicken — minion 0 1/1 [BEAST] — Hey Chicken!
 - [x] `VAN_DREAM_04` Dream — spell 0 — Return a minion to its owner's hand.
 - [x] `CS2_013t` Excess Mana — spell 0 — Draw a card. (You can only have 10 Mana in your tray.)
-- [ ] `hexfrog` Frog — minion 0 0/1 [BEAST] — Taunt *(keyword only — no hook)*
+- [x] `hexfrog` Frog — minion 0 0/1 [BEAST] — Taunt *(keyword only — no hook)*
 - [x] `VAN_CS2_mirror` Mirror Image — minion 0 0/2 — Taunt *(keyword only — no hook)*
 - [x] `PRO_001at` Murloc — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_506a` Murloc Scout — minion 0 1/1 [MURLOC] — (no text) *(keyword only — no hook)*
@@ -517,7 +517,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_EX1_154b` Nature's Wrath — spell 2 — Deal $1 damage to a minion. Draw a card.
 - [x] `EX1_160t` Panther — minion 2 3/2 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_154a` Solar Wrath — spell 2 — Deal $3 damage to a minion.
-- [ ] `VAN_EX1_tk11` Spirit Wolf — minion 2 2/3 — Taunt *(keyword only — no hook)*
+- [x] `VAN_EX1_tk11` Spirit Wolf — minion 2 2/3 — Taunt *(keyword only — no hook)*
 - [x] `VAN_EX1_160a` Summon a Panther — spell 2 — Summon a 3/2 Panther.
 - [x] `VAN_DREAM_02` Ysera Awakens — spell 2 — Deal $5 damage to all characters except Ysera.
 - [ ] `EX1_323w` Blood Fury — weapon 3 3/0 — (no text) *(keyword only — no hook)*
