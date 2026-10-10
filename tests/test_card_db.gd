@@ -42,3 +42,8 @@ func test_weapon_durability_field() -> void:
 	eq(c.attack, 3, "attack")
 	eq(c.durability, 2, "durability")
 	check(not c.has("health"), "weapons carry no health")
+
+
+func test_spell_damage_matches_text() -> void:
+	eq(CardDb.card("VAN_EX1_563").spellDamage, 5, "Malygos +5")
+	eq(CardDb.card("VAN_CS2_142").spellDamage, 1, "Kobold Geomancer +1")

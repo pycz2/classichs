@@ -27,6 +27,12 @@ static func register(r: Dictionary) -> void:
 		"can_play": func(g, me): return _board_has_room(g, me) and not _missing_totems(g, me).is_empty(),
 		"hero_power": func(g, me, _t): g.summon(me.controller, g.random_choice(_missing_totems(g, me))),
 	}
+	r["VAN_NEW1_009"] = {  # Healing Totem (from Totemic Call)
+		"on": {"turn_end": func(g, me, ev):
+			if ev.player == me.controller:
+				for m in g.minions(me.controller):
+					g.heal(me, m, g.heal_amt(me, 1))},
+	}
 	r["VAN_HERO_03bp"] = {  # Dagger Mastery
 		"hero_power": func(g, me, _t): g.equip(me.controller, "VAN_CS2_082"),
 	}

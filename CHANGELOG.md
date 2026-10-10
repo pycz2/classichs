@@ -16,3 +16,4 @@
 - Карты: нейтральные Classic COMMON (40).
 - Карты: нейтральные Classic RARE (36).
 - Карты: нейтральные Classic EPIC (11).
+- Карты: нейтральные легендарные, наградные и промо (27) и их токены: Bananas, карты Dream, Power Chord, изобретения Gelbin, Healing Totem.

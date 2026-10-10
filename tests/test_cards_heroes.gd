@@ -114,3 +114,12 @@ func test_mind_spike_and_shatter() -> void:
 	var g2 := H.scene({"hero": "HERO_09", "hero_power": "EX1_625t2"})
 	H.power(g2, g2.players[1].hero)
 	eq(g2.players[1].hero.health(), 27, "3 damage")
+
+
+func test_healing_totem() -> void:
+	var g := H.scene({"hero": "HERO_02", "damage": 5,
+		"board": ["VAN_NEW1_009", {"card": "VAN_CS2_182", "damage": 3}]}, {"hero": "HERO_01", "board": [{"card": "VAN_CS2_182", "damage": 3}]})
+	H.end_turn(g)
+	eq(g.players[0].board[1].health(), 3, "friendly minion +1")
+	eq(g.hero(0).health(), 25, "hero not healed")
+	eq(g.players[1].board[0].health(), 2, "enemy not healed")

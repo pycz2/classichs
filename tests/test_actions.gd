@@ -246,3 +246,13 @@ func test_targeted_battlecry_without_target_does_nothing() -> void:
 	var m := H.hand(g, 0, "TEST_BUFF_BC")
 	check(H.play(g, m).ok, "played with no friendly minion to target")
 	eq(m.atk(), 1, "no effect")
+
+
+func test_cost_mod_applies_only_in_its_turn() -> void:
+	var g := H.game()
+	var fb := H.hand(g, 0, "VAN_CS2_029")
+	g.players[0].cost_mods.append({"kind": "spell", "set": 0, "until": "turn_end", "turn": g.turn + 2})
+	eq(g.cost(fb), 4, "not yet")
+	H.end_turn(g)
+	H.end_turn(g)
+	eq(g.cost(fb), 0, "in its turn")

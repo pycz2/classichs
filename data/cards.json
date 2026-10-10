@@ -17400,7 +17400,7 @@
 "race": "DRAGON",
 "rarity": "LEGENDARY",
 "set": "VANILLA",
-"spellDamage": 1,
+"spellDamage": 5,
 "text": {
 "deDE": "<b>Zauberschaden +5</b>",
 "enUS": "<b>Spell Damage +5</b>",

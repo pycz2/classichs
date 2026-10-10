@@ -596,7 +596,7 @@ func cost(e: Entity) -> int:
 		if sh.has("cost_aura") and src.zone == "PLAY":
 			c = sh.cost_aura.call(self, src, e, c)
 	for mod: Dictionary in players[e.controller].cost_mods:
-		if _mod_applies(mod, e):
+		if mod.turn == turn and _mod_applies(mod, e):
 			c = mod.set if mod.has("set") else c + mod.delta
 	return maxi(0, c)
 
@@ -605,7 +605,7 @@ func cost(e: Entity) -> int:
 func consume_cost_mods(e: Entity) -> void:
 	var pl := players[e.controller]
 	pl.cost_mods = pl.cost_mods.filter(
-		func(m: Dictionary) -> bool: return not (m.until == "use" and _mod_applies(m, e)))
+		func(m: Dictionary) -> bool: return not (m.until == "use" and m.turn == turn and _mod_applies(m, e)))
 
 
 ## Hero attack: weapon attack counts only on the controller's own turn.

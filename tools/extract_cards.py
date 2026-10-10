@@ -6,6 +6,7 @@ cards, and EXTRA ids (heroes, The Coin, tokens that VANILLA references by their
 original ids). Run from the repo root: python3 tools/extract_cards.py
 """
 import json
+import re
 import pathlib
 import urllib.request
 
@@ -40,6 +41,10 @@ def main():
         # HearthstoneJSON stores weapon durability in "health"; the engine reads "durability".
         if c["type"] == "WEAPON" and "health" in c:
             c["durability"] = c.pop("health")
+        # Some entries carry a wrong spellDamage (Malygos: 1); the card text is authoritative.
+        m = re.search(r"Spell Damage \+(\d+)", c.get("text", {}).get("enUS", ""))
+        if m:
+            c["spellDamage"] = int(m.group(1))
     out.sort(key=lambda c: c["id"])
     missing = sorted(set(EXTRA) - {c["id"] for c in out})
     if missing:
