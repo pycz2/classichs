@@ -6,10 +6,11 @@ extends Control
 
 signal leave
 
-const ENEMY_HERO := Vector2(575, 50)
-const OWN_HERO := Vector2(575, 492)
-const ENEMY_BOARD_Y := 196.0
-const OWN_BOARD_Y := 356.0
+const ENEMY_HERO := Vector2(575, 40)
+const OWN_HERO := Vector2(575, 466)
+const ENEMY_BOARD_Y := 188.0
+const OWN_BOARD_Y := 336.0
+const HAND_Y := 604.0
 const SLOT := 104.0
 const TOOLTIP_POS := Vector2(1035, 160)
 
@@ -34,26 +35,26 @@ var _hint_timer := 0.0
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
 	var board := Panel.new()
 	board.add_theme_stylebox_override("panel", Palette.box(Palette.BOARD, 24, Color("2a2118"), 4))
-	board.position = Vector2(150, 186)
-	board.size = Vector2(980, 300)
+	board.position = Vector2(150, 176)
+	board.size = Vector2(980, 294)
 	board.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(board)
 	var mid := ColorRect.new()
 	mid.color = Color(0, 0, 0, 0.25)
-	mid.position = Vector2(170, 335)
+	mid.position = Vector2(170, 322)
 	mid.size = Vector2(940, 2)
 	mid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(mid)
 	for c in [_layer, _fx]:
-		c.set_anchors_preset(Control.PRESET_FULL_RECT)
+		c.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(c)
 	_end_turn = Palette.button(tr("End Turn"), "EndTurn")
@@ -63,11 +64,11 @@ func _ready() -> void:
 	add_child(_end_turn)
 	for i in 2:
 		var l := Palette.label("", 20, Palette.MANA.lightened(0.4))
-		l.position = Vector2(1128, 600 if i == 0 else 100)
+		l.position = Vector2(1128, 560 if i == 0 else 120)
 		_mana.append(l)
 		add_child(l)
-		var n := Palette.label("", 18)
-		n.position = Vector2(760, 640 if i == 0 else 20)
+		var n := Palette.label("", 16)
+		n.position = Vector2(12, 690 if i == 0 else 8)
 		_names.append(n)
 		add_child(n)
 	var left := VBoxContainer.new()
@@ -88,7 +89,7 @@ func _ready() -> void:
 	concede.pressed.connect(_on_concede)
 	left.add_child(concede)
 	_hint = Palette.label("", 20, Palette.SELECTED)
-	_hint.position = Vector2(170, 296)
+	_hint.position = Vector2(170, 306)
 	_hint.size = Vector2(940, 30)
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -194,7 +195,7 @@ func _add_side(p: int, own: bool) -> void:
 		var cv := CardView.make(hand[i].card_id, k)
 		cv.face_up = own
 		cv.show_entity(hand[i], g)
-		_add_view(cv, Vector2(start + step * i, 600.0 if own else -48.0))
+		_add_view(cv, Vector2(start + step * i, HAND_Y if own else -48.0))
 
 
 func _slot_x(i: int, n: int) -> float:
@@ -444,15 +445,15 @@ func _close_overlay() -> void:
 func _open_overlay(title: String) -> VBoxContainer:
 	_close_overlay()
 	_overlay = Control.new()
-	_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var dim := ColorRect.new()
 	dim.color = Color(0, 0, 0, 0.6)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_overlay.add_child(dim)
 	var box := VBoxContainer.new()
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_theme_constant_override("separation", 18)
-	box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_overlay.add_child(box)
 	var t := Palette.label(title, 34, Palette.ATTACK)
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

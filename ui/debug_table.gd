@@ -16,10 +16,10 @@ var _ids: Array = []
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	var title := Palette.label(tr("Debug Table"), 30, Palette.ATTACK)
 	title.position = Vector2(20, 14)

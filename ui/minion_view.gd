@@ -25,8 +25,9 @@ func _draw() -> void:
 		draw_style_box(Palette.box(Color("8a8a8a"), 14, Color("3a3a3a"), 3), r.grow(5))
 	var c := e.card()
 	var frame := Palette.of_class(c.get("cardClass", "NEUTRAL"))
-	draw_style_box(Palette.box(Color("2a2118"), 40, frame, 4), r)
-	_draw_art(r.grow(-8), e.card_id)
+	draw_style_box(Palette.box(Color("2a2118"), 40), r)
+	_draw_art(Rect2(r.position + Vector2(10, 12), r.size - Vector2(20, 24)), e.card_id)
+	draw_style_box(Palette.box(Color.TRANSPARENT, 40, frame, 5), r)
 	if e.has("DIVINE_SHIELD"):
 		draw_style_box(Palette.box(Color(1, 0.85, 0.2, 0.25), 44, Color(1, 0.9, 0.3, 0.9), 3), r.grow(3))
 	if e.has("FROZEN"):

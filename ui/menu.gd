@@ -8,16 +8,17 @@ signal quit
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(center)
 	var box := VBoxContainer.new()
-	box.set_anchors_preset(Control.PRESET_CENTER)
 	box.add_theme_constant_override("separation", 12)
-	box.alignment = BoxContainer.ALIGNMENT_CENTER
-	add_child(box)
+	center.add_child(box)
 	var title := Palette.label("Classic HS", 56, Palette.ATTACK)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
@@ -32,4 +33,3 @@ func _ready() -> void:
 			var sig: Signal = it[1]
 			b.pressed.connect(func(): sig.emit())
 		box.add_child(b)
-	box.position = -box.get_combined_minimum_size() / 2
