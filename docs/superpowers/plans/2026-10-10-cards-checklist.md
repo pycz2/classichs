@@ -242,31 +242,31 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 
 ## Task 15 — Hunter (25 cards, 1 keyword-only)
 
-- [ ] `VAN_CS2_084` Hunter's Mark — spell 0 — Change a minion's Health to 1.
-- [ ] `VAN_DS1_185` Arcane Shot — spell 1 — Deal $2 damage.
-- [ ] `VAN_EX1_549` Bestial Wrath — spell 1 — Give a Beast +2 Attack and Immune this turn.
-- [ ] `VAN_EX1_544` Flare — spell 1 — All minions lose Stealth. Destroy all enemy Secrets. Draw a card.
-- [ ] `VAN_DS1_175` Timber Wolf — minion 1 1/1 [BEAST] — Your other Beasts have +1 Attack.
-- [ ] `VAN_DS1_184` Tracking — spell 1 — Look at the top 3 cards of your deck. Draw one and discard the others.
-- [ ] `VAN_EX1_610` Explosive Trap — spell 2 — Secret: When your hero is attacked, deal $2 damage to all enemies.
-- [ ] `VAN_EX1_611` Freezing Trap — spell 2 — Secret: When an enemy minion attacks, return it to its owner's hand. It costs (2) more.
-- [ ] `VAN_EX1_533` Misdirection — spell 2 — Secret: When an enemy attacks your hero, instead it attacks another random character.
-- [ ] `VAN_EX1_531` Scavenging Hyena — minion 2 2/2 [BEAST] — Whenever a friendly Beast dies, gain +2/+1.
-- [ ] `VAN_EX1_554` Snake Trap — spell 2 — Secret: When one of your minions is attacked, summon three 1/1 Snakes.
-- [ ] `VAN_EX1_609` Snipe — spell 2 — Secret: After your opponent plays a minion, deal $4 damage to it.
-- [ ] `VAN_CS2_237` Starving Buzzard — minion 2 2/1 [BEAST] — Whenever you summon a Beast, draw a card.
-- [ ] `VAN_NEW1_031` Animal Companion — spell 3 — Summon a random Beast Companion.
-- [ ] `VAN_EX1_617` Deadly Shot — spell 3 — Destroy a random enemy minion.
-- [ ] `VAN_EX1_536` Eaglehorn Bow — weapon 3 3/0 — Whenever a Secret is revealed, gain +1 Durability.
-- [ ] `VAN_EX1_539` Kill Command — spell 3 — Deal $3 damage. If you control a Beast, deal $5 damage instead.
-- [ ] `VAN_EX1_538` Unleash the Hounds — spell 3 — For each enemy minion, summon a 1/1 Hound with Charge.
-- [ ] `VAN_DS1_070` Houndmaster — minion 4 4/3 — Battlecry: Give a friendly Beast +2/+2 and Taunt.
-- [ ] `VAN_DS1_183` Multi-Shot — spell 4 — Deal $3 damage to two random enemy minions.
-- [ ] `VAN_EX1_537` Explosive Shot — spell 5 — Deal $5 damage to a minion and $2 damage to adjacent ones.
-- [ ] `VAN_DS1_178` Tundra Rhino — minion 5 2/5 [BEAST] — Your Beasts have Charge.
-- [ ] `VAN_EX1_534` Savannah Highmane — minion 6 6/5 [BEAST] — Deathrattle: Summon two 2/2 Hyenas.
-- [ ] `VAN_DS1_188` Gladiator's Longbow — weapon 7 5/0 — Your hero is Immune while attacking.
-- [ ] `VAN_EX1_543` King Krush — minion 9 8/8 [BEAST] — Charge *(keyword only — no hook)*
+- [x] `VAN_CS2_084` Hunter's Mark — spell 0 — Change a minion's Health to 1.
+- [x] `VAN_DS1_185` Arcane Shot — spell 1 — Deal $2 damage.
+- [x] `VAN_EX1_549` Bestial Wrath — spell 1 — Give a Beast +2 Attack and Immune this turn.
+- [x] `VAN_EX1_544` Flare — spell 1 — All minions lose Stealth. Destroy all enemy Secrets. Draw a card.
+- [x] `VAN_DS1_175` Timber Wolf — minion 1 1/1 [BEAST] — Your other Beasts have +1 Attack.
+- [x] `VAN_DS1_184` Tracking — spell 1 — Look at the top 3 cards of your deck. Draw one and discard the others.
+- [x] `VAN_EX1_610` Explosive Trap — spell 2 — Secret: When your hero is attacked, deal $2 damage to all enemies.
+- [x] `VAN_EX1_611` Freezing Trap — spell 2 — Secret: When an enemy minion attacks, return it to its owner's hand. It costs (2) more.
+- [x] `VAN_EX1_533` Misdirection — spell 2 — Secret: When an enemy attacks your hero, instead it attacks another random character.
+- [x] `VAN_EX1_531` Scavenging Hyena — minion 2 2/2 [BEAST] — Whenever a friendly Beast dies, gain +2/+1.
+- [x] `VAN_EX1_554` Snake Trap — spell 2 — Secret: When one of your minions is attacked, summon three 1/1 Snakes.
+- [x] `VAN_EX1_609` Snipe — spell 2 — Secret: After your opponent plays a minion, deal $4 damage to it.
+- [x] `VAN_CS2_237` Starving Buzzard — minion 2 2/1 [BEAST] — Whenever you summon a Beast, draw a card.
+- [x] `VAN_NEW1_031` Animal Companion — spell 3 — Summon a random Beast Companion.
+- [x] `VAN_EX1_617` Deadly Shot — spell 3 — Destroy a random enemy minion.
+- [x] `VAN_EX1_536` Eaglehorn Bow — weapon 3 3/0 — Whenever a Secret is revealed, gain +1 Durability.
+- [x] `VAN_EX1_539` Kill Command — spell 3 — Deal $3 damage. If you control a Beast, deal $5 damage instead.
+- [x] `VAN_EX1_538` Unleash the Hounds — spell 3 — For each enemy minion, summon a 1/1 Hound with Charge.
+- [x] `VAN_DS1_070` Houndmaster — minion 4 4/3 — Battlecry: Give a friendly Beast +2/+2 and Taunt.
+- [x] `VAN_DS1_183` Multi-Shot — spell 4 — Deal $3 damage to two random enemy minions.
+- [x] `VAN_EX1_537` Explosive Shot — spell 5 — Deal $5 damage to a minion and $2 damage to adjacent ones.
+- [x] `VAN_DS1_178` Tundra Rhino — minion 5 2/5 [BEAST] — Your Beasts have Charge.
+- [x] `VAN_EX1_534` Savannah Highmane — minion 6 6/5 [BEAST] — Deathrattle: Summon two 2/2 Hyenas.
+- [x] `VAN_DS1_188` Gladiator's Longbow — weapon 7 5/0 — Your hero is Immune while attacking.
+- [x] `VAN_EX1_543` King Krush — minion 9 8/8 [BEAST] — Charge *(keyword only — no hook)*
 
 ## Task 16 — Mage (25 cards, 0 keyword-only)
 
@@ -478,7 +478,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_DREAM_05` Nightmare — spell 0 — Give a minion +5/+5. At the start of your next turn, destroy it.
 - [ ] `VAN_EX1_345t` Shadow of Nothing — minion 0 0/1 — Mindgames whiffed! Your opponent had no minions!
 - [ ] `VAN_CS2_tk1` Sheep — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
-- [ ] `VAN_EX1_554t` Snake — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
+- [x] `VAN_EX1_554t` Snake — minion 0 1/1 [BEAST] — (no text) *(keyword only — no hook)*
 - [ ] `VAN_tt_010a` Spellbender — minion 0 1/3 — (no text) *(keyword only — no hook)*
 - [x] `VAN_NEW1_026t` Violet Apprentice — minion 0 1/1 — (no text) *(keyword only — no hook)*
 - [x] `EX1_014t` Bananas — spell 1 — Give a minion +1/+1.
@@ -491,7 +491,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_TU4e_002t` Flame of Azzinoth — minion 1 2/1 — (no text) *(keyword only — no hook)*
 - [x] `VAN_NEW1_009` Healing Totem — minion 1 0/2 [TOTEM] — At the end of your turn, restore #1 Health to all friendly minions.
 - [x] `Mekka1` Homing Chicken — minion 1 0/1 [MECHANICAL] — At the start of your turn, destroy this minion and draw 3 cards.
-- [ ] `EX1_538t` Hound — minion 1 1/1 [BEAST] — Charge *(keyword only — no hook)*
+- [x] `EX1_538t` Hound — minion 1 1/1 [BEAST] — Charge *(keyword only — no hook)*
 - [x] `VAN_EX1_598` Imp — minion 1 1/1 [DEMON] — (no text) *(keyword only — no hook)*
 - [x] `EX1_025t` Mechanical Dragonling — minion 1 2/1 [MECHANICAL] — (no text) *(keyword only — no hook)*
 - [x] `Mekka4` Poultryizer — minion 1 0/3 [MECHANICAL] — At the start of your turn, transform a random minion into a 1/1 Chicken.
@@ -511,7 +511,7 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_CS2_052` Wrath of Air Totem — minion 1 0/2 [TOTEM] — Spell Damage +1 *(keyword only — no hook)*
 - [ ] `VAN_CS2_073_puzzle` Cold Blood — spell 2 — Give a minion +2 Attack. Combo: +4 Attack instead.
 - [x] `NEW1_040t` Gnoll — minion 2 2/2 — Taunt *(keyword only — no hook)*
-- [ ] `EX1_534t` Hyena — minion 2 2/2 [BEAST] — (no text) *(keyword only — no hook)*
+- [x] `EX1_534t` Hyena — minion 2 2/2 [BEAST] — (no text) *(keyword only — no hook)*
 - [x] `VAN_DREAM_01` Laughing Sister — minion 2 3/5 — Elusive
 - [x] `VAN_EX1_160b` Leader of the Pack — spell 2 — Give your minions +1/+1.
 - [x] `VAN_EX1_154b` Nature's Wrath — spell 2 — Deal $1 damage to a minion. Draw a card.
@@ -521,9 +521,9 @@ Generated from HearthstoneJSON (`set == VANILLA` plus extra IDs). Tick a card wh
 - [x] `VAN_EX1_160a` Summon a Panther — spell 2 — Summon a 3/2 Panther.
 - [x] `VAN_DREAM_02` Ysera Awakens — spell 2 — Deal $5 damage to all characters except Ysera.
 - [ ] `EX1_323w` Blood Fury — weapon 3 3/0 — (no text) *(keyword only — no hook)*
-- [ ] `VAN_NEW1_034` Huffer — minion 3 4/2 [BEAST] — Charge *(keyword only — no hook)*
-- [ ] `VAN_NEW1_033` Leokk — minion 3 2/4 [BEAST] — Your other minions have +1 Attack.
-- [ ] `VAN_NEW1_032` Misha — minion 3 4/4 [BEAST] — Taunt *(keyword only — no hook)*
+- [x] `VAN_NEW1_034` Huffer — minion 3 4/2 [BEAST] — Charge *(keyword only — no hook)*
+- [x] `VAN_NEW1_033` Leokk — minion 3 2/4 [BEAST] — Your other minions have +1 Attack.
+- [x] `VAN_NEW1_032` Misha — minion 3 4/4 [BEAST] — Taunt *(keyword only — no hook)*
 - [x] `VAN_EX1_finkle` Pip Quickwit — minion 3 3/3 — (no text) *(keyword only — no hook)*
 - [x] `VAN_EX1_155b` Thick Hide — spell 3 — +4 Health and Taunt.
 - [x] `VAN_EX1_155a` Tiger's Fury — spell 3 — +4 Attack.

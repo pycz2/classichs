@@ -256,3 +256,14 @@ func test_cost_mod_applies_only_in_its_turn() -> void:
 	H.end_turn(g)
 	H.end_turn(g)
 	eq(g.cost(fb), 0, "in its turn")
+
+
+func test_after_summon_marks_played_minions() -> void:
+	var g := H.game()
+	H.play(g, H.hand(g, 0, H.WISP))
+	var ev: Dictionary = g.event_log.filter(func(e): return e.type == "after_summon")[0]
+	check(ev.get("played", false), "played flag")
+	g.event_log.clear()
+	g.summon(0, H.WISP)
+	ev = g.event_log.filter(func(e): return e.type == "after_summon")[0]
+	check(not ev.get("played", false), "token summon is not played")

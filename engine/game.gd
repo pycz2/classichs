@@ -322,7 +322,8 @@ func _play_minion(e: Entity, t: Entity, pos: int, choice: int, combo: bool) -> v
 	resolve()
 	if game_over or e.zone != "PLAY":
 		return
-	emit({"type": "after_summon", "entity": e.id, "player": e.controller, "card": e.card_id})
+	emit({"type": "after_summon", "entity": e.id, "player": e.controller, "card": e.card_id,
+		"played": true})
 
 
 func _play_spell(e: Entity, t: Entity, choice: int, combo: bool) -> void:

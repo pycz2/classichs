@@ -18,3 +18,4 @@
 - Карты: нейтральные Classic EPIC (11).
 - Карты: нейтральные легендарные, наградные и промо (27) и их токены: Bananas, карты Dream, Power Chord, изобретения Gelbin, Healing Totem.
 - Карты: Druid (25) и варианты Choose One.
+- Карты: Hunter (25), секреты охотника, Tracking.

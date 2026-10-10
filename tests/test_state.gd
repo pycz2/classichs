@@ -187,3 +187,18 @@ func test_silence_removes_enchantment_deathrattle() -> void:
 	g.resolve()
 	Cards.remove("ench:test_dr2")
 	eq(seen, [], "silenced")
+
+
+func test_cost_from_enchantment() -> void:
+	var g := H.state()
+	var e := g.new_entity("VAN_CS2_182", 0)
+	e.zone = "HAND"
+	e.add_enchant({"cost": 2})
+	eq(g.cost(e), 6, "4 + 2")
+
+
+func test_return_to_hand_gives_new_card() -> void:
+	var g := H.state()
+	var m := g.summon(0, "VAN_CS2_182")
+	var n := g.return_to_hand(m)
+	eq([n.card_id, n.zone], ["VAN_CS2_182", "HAND"], "new card in hand")

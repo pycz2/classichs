@@ -433,14 +433,16 @@ func transform(e: Entity, card_id: String) -> Entity:
 	return n
 
 
-func return_to_hand(e: Entity) -> void:
+## Returns a minion to its owner's hand as a fresh card (null if the hand is full).
+func return_to_hand(e: Entity) -> Entity:
 	var p := players[e.controller]
 	if not p.board.has(e):
-		return
+		return null
 	p.board.erase(e)
 	e.zone = "SETASIDE"
 	var n := add_to_hand(e.controller, e.card_id)
 	log_event({"type": "return_to_hand", "entity": e.id, "new": _id(n)})
+	return n
 
 
 func take_control(e: Entity, p: int) -> void:
@@ -595,6 +597,8 @@ func cost(e: Entity) -> int:
 	var h := Cards.of(e.card_id)
 	if h.has("cost_mod"):
 		c += h.cost_mod.call(self, e)
+	for ench: Dictionary in e.enchantments:
+		c += int(ench.get("cost", 0))
 	for src in in_play():
 		var sh := hooks_of(src)
 		if sh.has("cost_aura") and src.zone == "PLAY":
