@@ -51,5 +51,6 @@ func _init() -> void:
 			for msg in t.failures:
 				print("    " + msg)
 	print("%d tests, %d failed" % [total, failed])
+	Cards.unload()
 	OS.remove_logger(errors)
 	quit(1 if failed > 0 or total == 0 else 0)

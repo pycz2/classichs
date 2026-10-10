@@ -36,6 +36,10 @@ def main():
     with urllib.request.urlopen(req) as r:
         cards = json.load(r)
     out = [{k: c[k] for k in FIELDS if k in c} for c in cards if keep(c)]
+    for c in out:
+        # HearthstoneJSON stores weapon durability in "health"; the engine reads "durability".
+        if c["type"] == "WEAPON" and "health" in c:
+            c["durability"] = c.pop("health")
     out.sort(key=lambda c: c["id"])
     missing = sorted(set(EXTRA) - {c["id"] for c in out})
     if missing:

@@ -25,6 +25,12 @@ static func add(card_id: String, hooks: Dictionary) -> void:
 	_hooks[card_id] = hooks
 
 
+## Drops all hooks. Call before the engine quits: hook lambdas held in a
+## static Dictionary crash Godot at shutdown otherwise.
+static func unload() -> void:
+	_hooks.clear()
+
+
 static func remove(card_id: String) -> void:
 	_hooks.erase(card_id)
 

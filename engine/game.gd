@@ -60,11 +60,6 @@ func _normalize(action: Dictionary) -> Dictionary:
 	return a
 
 
-## Hook point for task 6 (play, attack, hero_power, choose).
-func _apply_play_action(_a: Dictionary) -> void:
-	pass
-
-
 func legal_actions() -> Array:
 	var out := []
 	if game_over:
@@ -79,11 +74,6 @@ func legal_actions() -> Array:
 	out.append({"type": "concede", "player": current})
 	_legal_play_actions(out)
 	return out
-
-
-## Hook point for task 6.
-func _legal_play_actions(_out: Array) -> void:
-	pass
 
 
 func _subsets(ids: Array[int]) -> Array:
@@ -167,3 +157,239 @@ func _concede(p: int) -> void:
 	phase = "OVER"
 	winner = opponent(p)
 	log_event({"type": "game_over", "winner": winner})
+
+
+func _apply_play_action(a: Dictionary) -> void:
+	match a.type:
+		"play": _do_play(ent(a.entity), ent(a.target) if a.target >= 0 else null, a.pos, a.choice)
+		"attack": _do_attack(ent(a.attacker), ent(a.defender))
+		"hero_power": _do_hero_power(ent(a.target) if a.target >= 0 else null)
+		"choose": _do_choose(ent(a.option))
+
+
+func _legal_play_actions(out: Array) -> void:
+	if not pending.is_empty():
+		out.clear()
+		for id: int in pending.options:
+			out.append({"type": "choose", "player": pending.player, "option": id})
+		return
+	var p := players[current]
+	for e in p.hand:
+		if cost(e) > p.mana or not _can_play(e):
+			continue
+		var choices: Array = [-1]
+		var h := Cards.of(e.card_id)
+		if h.has("choose_one"):
+			choices = [0, 1]
+		for choice: int in choices:
+			for t: int in _play_targets(e, choice):
+				for pos: int in _positions(e):
+					out.append({"type": "play", "player": current, "entity": e.id, "target": t,
+						"pos": pos, "choice": choice})
+	var hp := p.hero_power
+	if not hp.has("USED") and cost(hp) <= p.mana:
+		var hh := Cards.of(hp.card_id)
+		if hh.has("hero_power") and (not hh.has("can_play") or hh.can_play.call(self, hp)):
+			for t: int in _spec_targets(hp, hh.get("target"), true, false):
+				out.append({"type": "hero_power", "player": current, "target": t})
+	for a in chars(current):
+		if _can_attack(a):
+			for d in _defenders(a):
+				out.append({"type": "attack", "player": current, "attacker": a.id, "defender": d.id})
+
+
+func _can_play(e: Entity) -> bool:
+	var p := players[e.controller]
+	if e.is_minion() and p.board.size() >= MAX_BOARD:
+		return false
+	if e.card().get("mechanics", []).has("SECRET"):
+		for s in p.secrets:
+			if s.card_id == e.card_id:
+				return false
+	var h := Cards.of(e.card_id)
+	return not h.has("can_play") or h.can_play.call(self, e)
+
+
+func _combo_active(e: Entity) -> bool:
+	return players[e.controller].cards_played_this_turn > 0
+
+
+## Target ids for playing e with the given choice. [-1] means "no target".
+## An empty array means e cannot be played.
+func _play_targets(e: Entity, choice: int) -> Array:
+	var h := Cards.of(e.card_id)
+	var spec: Variant = h.get("target")
+	if choice >= 0:
+		spec = Cards.of(h.choose_one[choice]).get("target")
+	if h.has("combo_target"):
+		spec = h.combo_target if _combo_active(e) else null
+	var is_spell := e.type() == "SPELL"
+	return _spec_targets(e, spec, is_spell, not is_spell)
+
+
+func _spec_targets(e: Entity, spec: Variant, is_spell: bool, optional: bool) -> Array:
+	if spec == null:
+		return [-1]
+	var ids: Array = []
+	for t in targets(e, spec, is_spell):
+		ids.append(t.id)
+	if ids.is_empty() and optional:
+		return [-1]
+	return ids
+
+
+func _positions(e: Entity) -> Array:
+	if not e.is_minion():
+		return [-1]
+	return range(players[e.controller].board.size() + 1)
+
+
+func _can_attack(a: Entity) -> bool:
+	if attack_value(a) <= 0 or a.has("FROZEN") or a.has("CANT_ATTACK"):
+		return false
+	if a.is_minion() and a.has("EXHAUSTED") and not a.has("CHARGE"):
+		return false
+	var limit := 2 if a.has("WINDFURY") or (a.is_hero() and players[a.controller].weapon
+		and players[a.controller].weapon.has("WINDFURY")) else 1
+	return int(a.tags.get("ATTACKS", 0)) < limit
+
+
+func _defenders(a: Entity) -> Array[Entity]:
+	var all: Array[Entity] = []
+	var taunts: Array[Entity] = []
+	for t in chars(opponent(a.controller)):
+		if t.has("STEALTH"):
+			continue
+		all.append(t)
+		if t.is_minion() and t.has("TAUNT"):
+			taunts.append(t)
+	return taunts if not taunts.is_empty() else all
+
+
+# --- play -------------------------------------------------------------------
+
+func _do_play(e: Entity, t: Entity, pos: int, choice: int) -> void:
+	var p := players[e.controller]
+	p.mana -= cost(e)
+	consume_cost_mods(e)
+	p.hand.erase(e)
+	var combo := _combo_active(e)
+	p.cards_played_this_turn += 1
+	p.overload_owed += int(e.card().get("overload", 0))
+	match e.type():
+		"MINION": _play_minion(e, t, pos, choice, combo)
+		"SPELL": _play_spell(e, t, choice, combo)
+		"WEAPON": _play_weapon(e, t, combo)
+
+
+func _run_effect(e: Entity, key: String, t: Entity, choice: int, combo: bool) -> void:
+	var h := Cards.of(e.card_id)
+	if choice >= 0:
+		Cards.of(h.choose_one[choice]).effect.call(self, e, t)
+	elif combo and h.has("combo"):
+		h.combo.call(self, e, t)
+	elif h.has(key):
+		h[key].call(self, e, t)
+
+
+func _play_minion(e: Entity, t: Entity, pos: int, choice: int, combo: bool) -> void:
+	players[e.controller].minions_played_this_turn += 1
+	place_on_board(e, pos)
+	e.give_tag("EXHAUSTED")
+	emit({"type": "play", "entity": e.id, "player": e.controller, "kind": "minion",
+		"target": t.id if t else -1, "card": e.card_id})
+	emit({"type": "summon", "entity": e.id, "player": e.controller, "card": e.card_id})
+	resolve()
+	if game_over or e.zone != "PLAY":
+		return
+	if t and t.zone != "PLAY":
+		t = null
+	_run_effect(e, "battlecry", t, choice, combo)
+	resolve()
+	if game_over or e.zone != "PLAY":
+		return
+	emit({"type": "after_summon", "entity": e.id, "player": e.controller, "card": e.card_id})
+
+
+func _play_spell(e: Entity, t: Entity, choice: int, combo: bool) -> void:
+	if e.card().get("mechanics", []).has("SECRET"):
+		players[e.controller].secrets.append(e)
+		_enter_play(e)
+		e.zone = "SECRET"
+		emit({"type": "play", "entity": e.id, "player": e.controller, "kind": "secret",
+			"target": -1, "card": e.card_id})
+		return
+	e.zone = "SETASIDE"
+	var ev := {"type": "play", "entity": e.id, "player": e.controller, "kind": "spell",
+		"target": t.id if t else -1, "card": e.card_id, "countered": false}
+	emit(ev)
+	resolve()
+	if game_over:
+		return
+	if not ev.countered:
+		var nt: Entity = ent(ev.target) if ev.target >= 0 else null
+		if nt == null or nt.zone == "PLAY":
+			_run_effect(e, "spell", nt, choice, combo)
+			resolve()
+	e.zone = "GRAVEYARD"
+	if not game_over:
+		emit({"type": "after_spell", "entity": e.id, "player": e.controller, "card": e.card_id})
+
+
+func _play_weapon(e: Entity, t: Entity, combo: bool) -> void:
+	emit({"type": "play", "entity": e.id, "player": e.controller, "kind": "weapon",
+		"target": t.id if t else -1, "card": e.card_id})
+	resolve()
+	if game_over:
+		return
+	_run_effect(e, "battlecry", t, -1, combo)
+	resolve()
+	if not game_over:
+		equip_entity(e)
+
+
+# --- attack -----------------------------------------------------------------
+
+func _do_attack(a: Entity, d: Entity) -> void:
+	a.tags["ATTACKS"] = int(a.tags.get("ATTACKS", 0)) + 1
+	a.tags.erase("STEALTH")
+	var ev := {"type": "attack", "attacker": a.id, "defender": d.id, "player": a.controller}
+	emit(ev)
+	resolve()
+	if game_over or a.zone != "PLAY" or a.controller != current:
+		return
+	d = ent(ev.defender)
+	if d == null or d.zone != "PLAY":
+		return
+	var weapon := players[a.controller].weapon if a.is_hero() else null
+	var immune: bool = weapon != null and Cards.of(weapon.card_id).get("immune_while_attacking", false)
+	if immune:
+		a.give_tag("IMMUNE")
+	var a_dmg := attack_value(a)
+	var d_dmg := attack_value(d)
+	damage(a, d, a_dmg)
+	damage(d, a, d_dmg)
+	if immune:
+		a.tags.erase("IMMUNE")
+	if weapon and weapon.zone == "PLAY":
+		var wh := Cards.of(weapon.card_id)
+		if not wh.has("durability_on_attack") or wh.durability_on_attack.call(self, weapon, d):
+			weapon.tags.DURABILITY = int(weapon.tags.DURABILITY) - 1
+	emit({"type": "after_attack", "attacker": a.id, "defender": d.id, "player": a.controller})
+
+
+# --- hero power and choice --------------------------------------------------
+
+func _do_hero_power(t: Entity) -> void:
+	var p := players[current]
+	var hp := p.hero_power
+	p.mana -= cost(hp)
+	hp.give_tag("USED")
+	Cards.of(hp.card_id).hero_power.call(self, hp, t)
+	emit({"type": "hero_power", "player": current, "entity": hp.id, "target": t.id if t else -1})
+
+
+func _do_choose(option: Entity) -> void:
+	var src := ent(pending.source)
+	pending = {}
+	Cards.of(src.card_id).on_choose.call(self, src, option)

@@ -35,3 +35,10 @@ func test_extra_ids_present() -> void:
 func test_junk_excluded() -> void:
 	check(not CardDb.has("VAN_DFX_001"), "FX dummy must be excluded")
 	check(not CardDb.has("Story_09_Shadowbolt"), "puzzle card must be excluded")
+
+
+func test_weapon_durability_field() -> void:
+	var c := CardDb.card("VAN_CS2_106")  # Fiery War Axe 3/2
+	eq(c.attack, 3, "attack")
+	eq(c.durability, 2, "durability")
+	check(not c.has("health"), "weapons carry no health")

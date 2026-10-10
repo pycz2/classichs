@@ -260,9 +260,8 @@
 "cardClass": "WARLOCK",
 "cost": 3,
 "dbfId": 1660,
-"durability": 0,
+"durability": 8,
 "elite": true,
-"health": 8,
 "id": "EX1_323w",
 "name": {
 "deDE": "Kochendes Blut",
@@ -288,9 +287,8 @@
 "cardClass": "PALADIN",
 "cost": 5,
 "dbfId": 1730,
-"durability": 0,
+"durability": 3,
 "elite": true,
-"health": 3,
 "id": "EX1_383t",
 "name": {
 "deDE": "Aschenbringer",
@@ -1867,8 +1865,7 @@
 "cardClass": "NEUTRAL",
 "cost": 2,
 "dbfId": 1639,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "TU4e_004",
 "name": {
 "deDE": "Kriegsgleve von Azzinoth",
@@ -1936,8 +1933,7 @@
 "cardClass": "NEUTRAL",
 "cost": 6,
 "dbfId": 1642,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "TU4e_007",
 "name": {
 "deDE": "Doppelkriegsgleven",
@@ -4411,8 +4407,7 @@
 "collectible": true,
 "cost": 5,
 "dbfId": 68354,
-"durability": 0,
-"health": 4,
+"durability": 4,
 "id": "VAN_CS2_080",
 "name": {
 "deDE": "Klinge des Assassinen",
@@ -4439,8 +4434,7 @@
 "cardClass": "ROGUE",
 "cost": 1,
 "dbfId": 68355,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "VAN_CS2_082",
 "name": {
 "deDE": "Tückisches Messer",
@@ -4641,8 +4635,7 @@
 "collectible": true,
 "cost": 1,
 "dbfId": 68363,
-"durability": 0,
-"health": 4,
+"durability": 4,
 "id": "VAN_CS2_091",
 "name": {
 "deDE": "Gerechtigkeit des Lichts",
@@ -4796,8 +4789,7 @@
 "collectible": true,
 "cost": 4,
 "dbfId": 68368,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "VAN_CS2_097",
 "mechanics": [
 "TRIGGER_VISUAL"
@@ -5085,8 +5077,7 @@
 "collectible": true,
 "cost": 2,
 "dbfId": 68375,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "VAN_CS2_106",
 "name": {
 "deDE": "Feurige Kriegsaxt",
@@ -5156,8 +5147,7 @@
 "collectible": true,
 "cost": 5,
 "dbfId": 68377,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "VAN_CS2_112",
 "name": {
 "deDE": "Arkanitschnitter",
@@ -7943,8 +7933,7 @@
 "collectible": true,
 "cost": 7,
 "dbfId": 69803,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "VAN_DS1_188",
 "name": {
 "deDE": "Langbogen des Gladiators",
@@ -11118,8 +11107,7 @@
 "collectible": true,
 "cost": 3,
 "dbfId": 69859,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "VAN_EX1_133",
 "mechanics": [
 "BATTLECRY",
@@ -12929,8 +12917,7 @@
 "collectible": true,
 "cost": 2,
 "dbfId": 69896,
-"durability": 0,
-"health": 3,
+"durability": 3,
 "id": "VAN_EX1_247",
 "mechanics": [
 "OVERLOAD"
@@ -15202,8 +15189,7 @@
 "collectible": true,
 "cost": 3,
 "dbfId": 69939,
-"durability": 0,
-"health": 5,
+"durability": 5,
 "id": "VAN_EX1_366",
 "mechanics": [
 "TRIGGER_VISUAL"
@@ -16111,8 +16097,7 @@
 "collectible": true,
 "cost": 7,
 "dbfId": 69956,
-"durability": 0,
-"health": 1,
+"durability": 1,
 "id": "VAN_EX1_411",
 "name": {
 "deDE": "Blutschrei",
@@ -16663,8 +16648,7 @@
 "collectible": true,
 "cost": 3,
 "dbfId": 69965,
-"durability": 0,
-"health": 2,
+"durability": 2,
 "id": "VAN_EX1_536",
 "mechanics": [
 "TRIGGER_VISUAL"
@@ -17537,8 +17521,7 @@
 "collectible": true,
 "cost": 5,
 "dbfId": 69981,
-"durability": 0,
-"health": 8,
+"durability": 8,
 "id": "VAN_EX1_567",
 "mechanics": [
 "OVERLOAD",
