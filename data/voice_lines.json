@@ -1,0 +1,1652 @@
+{
+  "EX1_131t": {
+    "attack": {
+      "en": "Heh-heh-heh-heh!"
+    },
+    "play": {
+      "en": "Yeah, beat it!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Defias_Bandit"
+  },
+  "EX1_323h": {
+    "attack": {
+      "en": "MUAHAHAHAHAHA!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Lord_Jaraxxus"
+  },
+  "EX1_383t": {
+    "play": {
+      "en": "In its wake, it will leave only ashes..."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Ashbringer"
+  },
+  "HERO_01": {
+    "attack": {
+      "en": "Lok'tar ogar!"
+    },
+    "greetings": {
+      "en": "Heh, Greetings."
+    },
+    "oops": {
+      "en": "That was an error."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Garrosh_Hellscream",
+    "start": {
+      "en": "Victory or Death!"
+    },
+    "thanks": {
+      "en": "My thanks."
+    },
+    "threaten": {
+      "en": "I will crush you!"
+    },
+    "well_played": {
+      "en": "Well played."
+    },
+    "wow": {
+      "en": "Astonishing!"
+    }
+  },
+  "HERO_02": {
+    "attack": {
+      "en": "Elements guide me!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Thrall",
+    "wow": {
+      "en": "That's incredible!"
+    }
+  },
+  "HERO_03": {
+    "attack": {
+      "en": "Here we go."
+    },
+    "greetings": {
+      "en": "The pleasure is mine."
+    },
+    "oops": {
+      "en": "Mistakes were made."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Valeera_Sanguinar",
+    "start": {
+      "en": "Watch your back."
+    },
+    "thanks": {
+      "en": "Thank you."
+    },
+    "threaten": {
+      "en": "I will be your death!"
+    },
+    "well_played": {
+      "en": "Well played."
+    },
+    "wow": {
+      "en": "Incredible."
+    }
+  },
+  "HERO_04": {
+    "attack": {
+      "en": "For justice!"
+    },
+    "greetings": {
+      "en": "Well met!"
+    },
+    "oops": {
+      "en": "That was a mistake."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Uther_Lightbringer",
+    "start": {
+      "en": "I will fight with honor!"
+    },
+    "thanks": {
+      "en": "Thank you."
+    },
+    "threaten": {
+      "en": "Justice demands retribution!"
+    },
+    "well_played": {
+      "en": "Well played."
+    },
+    "wow": {
+      "en": "By the Holy Light!"
+    }
+  },
+  "HERO_05": {
+    "attack": {
+      "en": "I hunt alone."
+    },
+    "greetings": {
+      "en": "Greetings, traveler."
+    },
+    "oops": {
+      "en": "That didn't quite hit the mark."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Rexxar",
+    "start": {
+      "en": "Let the hunt begin!"
+    },
+    "thanks": {
+      "en": "Thanks."
+    },
+    "threaten": {
+      "en": "I will hunt you down!"
+    },
+    "well_played": {
+      "en": "Well played."
+    },
+    "wow": {
+      "en": "Astounding!"
+    }
+  },
+  "HERO_06": {
+    "attack": {
+      "en": "For the wilds!"
+    },
+    "greetings": {
+      "en": "My greetings."
+    },
+    "oops": {
+      "en": "A natural mistake."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Malfurion_Stormrage",
+    "start": {
+      "en": "I must protect the wild!"
+    },
+    "thanks": {
+      "en": "My thanks to you."
+    },
+    "threaten": {
+      "en": "Nature will rise against you!"
+    },
+    "well_played": {
+      "en": "Hmm, Well played."
+    },
+    "wow": {
+      "en": "Spectacular!"
+    }
+  },
+  "HERO_07": {
+    "attack": {
+      "en": "Suffer!"
+    },
+    "greetings": {
+      "en": "I greet you."
+    },
+    "oops": {
+      "en": "That was a mistake."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Gul%27dan",
+    "start": {
+      "en": "Your soul shall be mine!"
+    },
+    "thanks": {
+      "en": "Thank you."
+    },
+    "threaten": {
+      "en": "Your soul shall suffer!"
+    },
+    "well_played": {
+      "en": "Well played."
+    },
+    "wow": {
+      "en": "Extraordinary."
+    }
+  },
+  "HERO_08": {
+    "attack": {
+      "en": "I'm ready."
+    },
+    "greetings": {
+      "en": "Hello."
+    },
+    "oops": {
+      "en": "Whoops."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Jaina_Proudmoore",
+    "start": {
+      "en": "You asked for it!"
+    },
+    "thanks": {
+      "en": "Thank you."
+    },
+    "threaten": {
+      "en": "My magic will tear you apart!"
+    },
+    "well_played": {
+      "en": "Well played."
+    },
+    "wow": {
+      "en": "Amazing."
+    }
+  },
+  "HERO_09": {
+    "attack": {
+      "en": "By the Light!"
+    },
+    "greetings": {
+      "en": "Greetings."
+    },
+    "oops": {
+      "en": "Not quite what was planned."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Anduin_Wrynn",
+    "start": {
+      "en": "The Light shall bring victory!"
+    },
+    "thanks": {
+      "en": "Thank you."
+    },
+    "threaten": {
+      "en": "The Light shall burn you!"
+    },
+    "well_played": {
+      "en": "Well played."
+    },
+    "wow": {
+      "en": "Wow...."
+    }
+  },
+  "TU4a_006": {
+    "attack": {
+      "en": "I'm ready."
+    },
+    "greetings": {
+      "en": "Hello."
+    },
+    "oops": {
+      "en": "Whoops."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Jaina_Proudmoore",
+    "start": {
+      "en": "You asked for it!"
+    },
+    "thanks": {
+      "en": "Thank you."
+    },
+    "threaten": {
+      "en": "My magic will tear you apart!"
+    },
+    "well_played": {
+      "en": "Well played."
+    }
+  },
+  "VAN_CS1_042": {
+    "attack": {
+      "en": "To arms!"
+    },
+    "play": {
+      "en": "Ready for action!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Goldshire_Footman"
+  },
+  "VAN_CS2_059": {
+    "attack": {
+      "en": "Sure, send the little guy!"
+    },
+    "play": {
+      "en": "Do I have to?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Blood_Imp"
+  },
+  "VAN_CS2_065": {
+    "attack": {
+      "en": "As you command."
+    },
+    "play": {
+      "en": "Why do you call?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Voidwalker"
+  },
+  "VAN_CS2_088": {
+    "attack": {
+      "en": "Vengeance."
+    },
+    "play": {
+      "en": "Justice."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Guardian_of_Kings"
+  },
+  "VAN_CS2_097": {
+    "play": {
+      "en": "Strike true!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Truesilver_Champion"
+  },
+  "VAN_CS2_101t": {
+    "attack": {
+      "en": "To battle!"
+    },
+    "play": {
+      "en": "To me, paladin!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Silver_Hand_Recruit"
+  },
+  "VAN_CS2_106": {
+    "play": {
+      "en": "There is no such thing as a righteous war axe."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Fiery_War_Axe"
+  },
+  "VAN_CS2_117": {
+    "attack": {
+      "en": "Of course..."
+    },
+    "play": {
+      "en": "My eyes are open."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Earthen_Ring_Farseer"
+  },
+  "VAN_CS2_121": {
+    "attack": {
+      "en": "Time for killing!"
+    },
+    "play": {
+      "en": "What you want?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Frostwolf_Grunt"
+  },
+  "VAN_CS2_122": {
+    "attack": {
+      "en": "Hit it very hard."
+    },
+    "play": {
+      "en": "Handle it!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Raid_Leader"
+  },
+  "VAN_CS2_124": {
+    "attack": {
+      "en": "Taste my steel!"
+    },
+    "play": {
+      "en": "Ready to ride."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Wolfrider"
+  },
+  "VAN_CS2_131": {
+    "attack": {
+      "en": "For honor."
+    },
+    "death": {
+      "en": "Oh dear."
+    },
+    "play": {
+      "en": "For the King!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Stormwind_Knight"
+  },
+  "VAN_CS2_141": {
+    "attack": {
+      "en": "Fire!"
+    },
+    "play": {
+      "en": "Locked and loaded."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Ironforge_Rifleman"
+  },
+  "VAN_CS2_142": {
+    "attack": {
+      "en": "Mine!"
+    },
+    "play": {
+      "en": "You no take candle!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Kobold_Geomancer"
+  },
+  "VAN_CS2_147": {
+    "attack": {
+      "en": "Hey, gimme a minute!"
+    },
+    "play": {
+      "en": "Pass me that arclight spanner!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Gnomish_Inventor"
+  },
+  "VAN_CS2_150": {
+    "attack": {
+      "en": "I'm ready!"
+    },
+    "play": {
+      "en": "I've got a huge gun!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Stormpike_Commando"
+  },
+  "VAN_CS2_151": {
+    "attack": {
+      "en": "To battle!"
+    },
+    "play": {
+      "en": "Squire! Attend me!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Silver_Hand_Knight"
+  },
+  "VAN_CS2_152": {
+    "attack": {
+      "en": "Ah...if you insist."
+    },
+    "play": {
+      "en": "Ready, sir."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Squire"
+  },
+  "VAN_CS2_155": {
+    "attack": {
+      "en": "Don't blink."
+    },
+    "play": {
+      "en": "Are you ready for this?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Archmage"
+  },
+  "VAN_CS2_161": {
+    "attack": {
+      "en": "Heh. Problem solved."
+    },
+    "play": {
+      "en": "I hear you got a problem."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Ravenholdt_Assassin"
+  },
+  "VAN_CS2_162": {
+    "attack": {
+      "en": "Farewell."
+    },
+    "play": {
+      "en": "The gates are open!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Lord_of_the_Arena"
+  },
+  "VAN_CS2_179": {
+    "attack": {
+      "en": "Ja-ha-ha-ha mon!"
+    },
+    "play": {
+      "en": "Taz'dingo! Ye-e-es!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Sen%27jin_Shieldmasta"
+  },
+  "VAN_CS2_181": {
+    "attack": {
+      "en": "Your turn to bleed!"
+    },
+    "play": {
+      "en": "Grr... Medic!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Injured_Blademaster"
+  },
+  "VAN_CS2_187": {
+    "attack": {
+      "en": "I'll take him out."
+    },
+    "play": {
+      "en": "Get behind me."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Booty_Bay_Bodyguard"
+  },
+  "VAN_CS2_188": {
+    "attack": {
+      "en": "Suffer my wrath!"
+    },
+    "play": {
+      "en": "Get in there and fight, maggot!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Abusive_Sergeant"
+  },
+  "VAN_CS2_189": {
+    "attack": {
+      "en": "I'll give it a shot."
+    },
+    "play": {
+      "en": "One shot, one kill."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Elven_Archer"
+  },
+  "VAN_CS2_196": {
+    "attack": {
+      "en": "Suck steel, swine."
+    },
+    "play": {
+      "en": "Don't mess with Tuskerr!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Razorfen_Hunter"
+  },
+  "VAN_CS2_197": {
+    "attack": {
+      "en": "Crush! (No, smash!)"
+    },
+    "play": {
+      "en": "I'm ready! (I'm not ready.)"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Ogre_Magi"
+  },
+  "VAN_CS2_200": {
+    "attack": {
+      "en": "Me smash."
+    },
+    "play": {
+      "en": "What you lookin' at?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Boulderfist_Ogre"
+  },
+  "VAN_CS2_213": {
+    "attack": {
+      "en": "Ahhhh-hahahaha!"
+    },
+    "play": {
+      "en": "I'm flying!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Reckless_Rocketeer"
+  },
+  "VAN_CS2_221": {
+    "attack": {
+      "en": "Suffer!"
+    },
+    "play": {
+      "en": "They all bend to my command!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Spiteful_Smith"
+  },
+  "VAN_CS2_222": {
+    "attack": {
+      "en": "For the ALLIANCE!"
+    },
+    "play": {
+      "en": "Behold, the might of Stormwind!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Stormwind_Champion"
+  },
+  "VAN_CS2_226": {
+    "attack": {
+      "en": "For the Horde!"
+    },
+    "play": {
+      "en": "The Frostwolves stand ready!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Frostwolf_Warlord"
+  },
+  "VAN_CS2_227": {
+    "attack": {
+      "en": "Heh, how 'you doin'?!"
+    },
+    "death": {
+      "en": "Not good! Not good! Agony..."
+    },
+    "play": {
+      "en": "Y-y-you gotta be kiddin' me!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Venture_Co._Mercenary"
+  },
+  "VAN_CS2_235": {
+    "attack": {
+      "en": "Right away!"
+    },
+    "play": {
+      "en": "Is someone injured?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Northshire_Cleric"
+  },
+  "VAN_DREAM_01": {
+    "attack": {
+      "en": "I'm game!"
+    },
+    "play": {
+      "en": "Is there trouble?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Laughing_Sister"
+  },
+  "VAN_DS1_055": {
+    "attack": {
+      "en": "Where shall I strike?"
+    },
+    "play": {
+      "en": "For Nazjatar."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Darkscale_Healer"
+  },
+  "VAN_DS1_070": {
+    "attack": {
+      "en": "Arrr!"
+    },
+    "play": {
+      "en": "I let the dogs out."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Houndmaster"
+  },
+  "VAN_EX1_001": {
+    "attack": {
+      "en": "Face the light!"
+    },
+    "play": {
+      "en": "In the Light's name!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Lightwarden"
+  },
+  "VAN_EX1_002": {
+    "attack": {
+      "en": "I'm invincible!"
+    },
+    "play": {
+      "en": "None shall pass."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/The_Black_Knight"
+  },
+  "VAN_EX1_004": {
+    "attack": {
+      "en": "More training?"
+    },
+    "play": {
+      "en": "Do you need a blessing?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Young_Priestess"
+  },
+  "VAN_EX1_005": {
+    "attack": {
+      "en": "Gotcha!"
+    },
+    "play": {
+      "en": "I've got the beast in my sights!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Big_Game_Hunter"
+  },
+  "VAN_EX1_007": {
+    "attack": {
+      "en": "Bring the pain!"
+    },
+    "death": {
+      "en": "Yesssss..."
+    },
+    "play": {
+      "en": "Let the pain speak to me."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Acolyte_of_Pain"
+  },
+  "VAN_EX1_008": {
+    "attack": {
+      "en": "I fight!"
+    },
+    "play": {
+      "en": "The Light protects me."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Argent_Squire"
+  },
+  "VAN_EX1_010": {
+    "attack": {
+      "en": "First kill."
+    },
+    "play": {
+      "en": "I smell blood."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Worgen_Infiltrator"
+  },
+  "VAN_EX1_011": {
+    "attack": {
+      "en": "Ahh..."
+    },
+    "play": {
+      "en": "Someone call for de doctor?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Voodoo_Doctor"
+  },
+  "VAN_EX1_012": {
+    "attack": {
+      "en": "More! More souls!"
+    },
+    "play": {
+      "en": "We hunger for vengeance."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Bloodmage_Thalnos"
+  },
+  "VAN_EX1_015": {
+    "attack": {
+      "en": "Hoh, if you're sure!"
+    },
+    "play": {
+      "en": "I hope you like my invention."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Novice_Engineer"
+  },
+  "VAN_EX1_016": {
+    "attack": {
+      "en": "Let none survive!"
+    },
+    "play": {
+      "en": "I have no time for games!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Sylvanas_Windrunner"
+  },
+  "VAN_EX1_019": {
+    "attack": {
+      "en": "Push forward."
+    },
+    "play": {
+      "en": "We must cleanse the Sunwell."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Shattered_Sun_Cleric"
+  },
+  "VAN_EX1_020": {
+    "attack": {
+      "en": "Join, or die."
+    },
+    "play": {
+      "en": "For the crusade!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Scarlet_Crusader"
+  },
+  "VAN_EX1_021": {
+    "attack": {
+      "en": "I see your end!"
+    },
+    "play": {
+      "en": "What does the future hold?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Thrallmar_Farseer"
+  },
+  "VAN_EX1_023": {
+    "attack": {
+      "en": "Remember Quel'Thalas!"
+    },
+    "death": {
+      "en": "Owie!"
+    },
+    "play": {
+      "en": "Silvermoon shall not fall!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Silvermoon_Guardian"
+  },
+  "VAN_EX1_025": {
+    "attack": {
+      "en": "Yuh!"
+    },
+    "play": {
+      "en": "Just me and Mr. Bitey!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Dragonling_Mechanic"
+  },
+  "VAN_EX1_029": {
+    "attack": {
+      "en": "GIMME A BIG HUG!"
+    },
+    "play": {
+      "en": "I feel icky!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Leper_Gnome"
+  },
+  "VAN_EX1_032": {
+    "attack": {
+      "en": "Justice shall prevail."
+    },
+    "play": {
+      "en": "Truth is my shield."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Sunwalker"
+  },
+  "VAN_EX1_044": {
+    "attack": {
+      "en": "Quest accepted!"
+    },
+    "death": {
+      "en": "Quest...failed..."
+    },
+    "play": {
+      "en": "Give me a quest."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Questing_Adventurer"
+  },
+  "VAN_EX1_046": {
+    "attack": {
+      "en": "Done."
+    },
+    "play": {
+      "en": "Do you call that a weapon? Hah!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Dark_Iron_Dwarf"
+  },
+  "VAN_EX1_048": {
+    "attack": {
+      "en": "Die, mage!"
+    },
+    "play": {
+      "en": "Your magic shall not save you."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Spellbreaker"
+  },
+  "VAN_EX1_049": {
+    "attack": {
+      "en": "Challenge accepted!"
+    },
+    "play": {
+      "en": "Drink with me, friend!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Youthful_Brewmaster"
+  },
+  "VAN_EX1_055": {
+    "attack": {
+      "en": "What a rush!"
+    },
+    "play": {
+      "en": "I can taste the mana!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Mana_Addict"
+  },
+  "VAN_EX1_057": {
+    "attack": {
+      "en": "Another round?"
+    },
+    "play": {
+      "en": "I'll put it on your tab!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Ancient_Brewmaster"
+  },
+  "VAN_EX1_058": {
+    "attack": {
+      "en": "I got this."
+    },
+    "play": {
+      "en": "Shields up!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Sunfury_Protector"
+  },
+  "VAN_EX1_059": {
+    "attack": {
+      "en": "Don't rush me!"
+    },
+    "play": {
+      "en": "You'll love my new recipe."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Crazed_Alchemist"
+  },
+  "VAN_EX1_067": {
+    "attack": {
+      "en": "Victory or death!"
+    },
+    "play": {
+      "en": "To Northrend!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Argent_Commander"
+  },
+  "VAN_EX1_076": {
+    "attack": {
+      "en": "Comin' through!"
+    },
+    "play": {
+      "en": "Summoning portal open."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Pint-Sized_Summoner"
+  },
+  "VAN_EX1_080": {
+    "attack": {
+      "en": "Ahahahahaha."
+    },
+    "play": {
+      "en": "I know what you did."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Secretkeeper"
+  },
+  "VAN_EX1_082": {
+    "attack": {
+      "en": "Oo-oo-yeah you got it!"
+    },
+    "death": {
+      "en": "Yoooow!"
+    },
+    "play": {
+      "en": "Wanna blow somethin' up? Ha-ha!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Mad_Bomber"
+  },
+  "VAN_EX1_083": {
+    "attack": {
+      "en": "For Gnomeregan!"
+    },
+    "play": {
+      "en": "This time for sure!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Tinkmaster_Overspark"
+  },
+  "VAN_EX1_084": {
+    "attack": {
+      "en": "For the Warsong!"
+    },
+    "play": {
+      "en": "Charge forward!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Warsong_Commander"
+  },
+  "VAN_EX1_085": {
+    "attack": {
+      "en": "Who are you?!"
+    },
+    "play": {
+      "en": "Engaging TC-130 Mental Dislocator!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Mind_Control_Tech"
+  },
+  "VAN_EX1_091": {
+    "attack": {
+      "en": "Obey!"
+    },
+    "death": {
+      "en": "Nooooo!"
+    },
+    "play": {
+      "en": "Let me change your mind!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Cabal_Shadow_Priest"
+  },
+  "VAN_EX1_093": {
+    "attack": {
+      "en": "Into the breach!"
+    },
+    "play": {
+      "en": "My shield, for Argus!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Defender_of_Argus"
+  },
+  "VAN_EX1_095": {
+    "attack": {
+      "en": "Heh-heh-heh-heh-heh, time to pay!"
+    },
+    "play": {
+      "en": "I got the best deals anywhere."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Gadgetzan_Auctioneer"
+  },
+  "VAN_EX1_096": {
+    "attack": {
+      "en": "Hey, gimme that!"
+    },
+    "play": {
+      "en": "Mind if I roll need?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Loot_Hoarder"
+  },
+  "VAN_EX1_097": {
+    "attack": {
+      "en": "Rend and tear!"
+    },
+    "play": {
+      "en": "What we do?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Abomination"
+  },
+  "VAN_EX1_100": {
+    "attack": {
+      "en": "Hmm?"
+    },
+    "play": {
+      "en": "Jade Serpent guide you."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Lorewalker_Cho"
+  },
+  "VAN_EX1_110": {
+    "attack": {
+      "en": "For honor!"
+    },
+    "play": {
+      "en": "Take heart, young one. The Earthmother is near."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Cairne_Bloodhoof"
+  },
+  "VAN_EX1_110t": {
+    "attack": {
+      "en": "Ish-ne-alo por-ah!"
+    },
+    "play": {
+      "en": "The eyes of the Earth Mother are upon us."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Baine_Bloodhoof"
+  },
+  "VAN_EX1_112": {
+    "attack": {
+      "en": "I won't stand for that!"
+    },
+    "play": {
+      "en": "Behold, my mighty invention!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Gelbin_Mekkatorque"
+  },
+  "VAN_EX1_116": {
+    "attack": {
+      "en": "Time's up! Let's do this."
+    },
+    "death": {
+      "en": "At least I have chicken!"
+    },
+    "play": {
+      "en": "Leeroooooy Jeeeenkiiiiins!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Leeroy_Jenkins"
+  },
+  "VAN_EX1_130a": {
+    "attack": {
+      "en": "Ahaha! I lived!"
+    },
+    "play": {
+      "en": "Get down!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Defender"
+  },
+  "VAN_EX1_131": {
+    "attack": {
+      "en": "You lookin' at me?"
+    },
+    "play": {
+      "en": "This is our town, scrub."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Defias_Ringleader"
+  },
+  "VAN_EX1_134": {
+    "attack": {
+      "en": "Hey, lights out."
+    },
+    "play": {
+      "en": "Hah, this guy's toast."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/SI%3A7_Agent"
+  },
+  "VAN_EX1_165": {
+    "attack": {
+      "en": "My strength is yours."
+    },
+    "play": {
+      "en": "Where shall I strike?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Druid_of_the_Claw"
+  },
+  "VAN_EX1_166": {
+    "attack": {
+      "en": "Feel nature's wrath!"
+    },
+    "play": {
+      "en": "I must safeguard the land."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Keeper_of_the_Grove"
+  },
+  "VAN_EX1_249": {
+    "play": {
+      "en": "You will BURN!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Baron_Geddon"
+  },
+  "VAN_EX1_298": {
+    "attack": {
+      "en": "Too soon."
+    },
+    "play": {
+      "en": "By fire be purged."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Ragnaros_the_Firelord"
+  },
+  "VAN_EX1_301": {
+    "attack": {
+      "en": "Too pathetic to fight your own battles?"
+    },
+    "play": {
+      "en": "I will enjoy watching you die."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Felguard"
+  },
+  "VAN_EX1_310": {
+    "attack": {
+      "en": "A paltry task."
+    },
+    "play": {
+      "en": "Who dares summon me?!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Doomguard"
+  },
+  "VAN_EX1_313": {
+    "attack": {
+      "en": "Perish, insect."
+    },
+    "play": {
+      "en": "To the slaughter."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Pit_Lord"
+  },
+  "VAN_EX1_319": {
+    "attack": {
+      "en": "Is this really necessary?"
+    },
+    "play": {
+      "en": "Yeah, I'll get right on it."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Flame_Imp"
+  },
+  "VAN_EX1_323": {
+    "attack": {
+      "en": "MUAHAHAHAHAHA!"
+    },
+    "play": {
+      "en": "You face Jaraxxus, Eredar Lord of the Burning Legion!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Lord_Jaraxxus"
+  },
+  "VAN_EX1_350": {
+    "attack": {
+      "en": "I foresaw this."
+    },
+    "play": {
+      "en": "Not all who wander are lost."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Prophet_Velen"
+  },
+  "VAN_EX1_362": {
+    "attack": {
+      "en": "This is my responsibility."
+    },
+    "play": {
+      "en": "Not on my watch."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Argent_Protector"
+  },
+  "VAN_EX1_382": {
+    "attack": {
+      "en": "Last warning!"
+    },
+    "play": {
+      "en": "Follow the rules."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Aldor_Peacekeeper"
+  },
+  "VAN_EX1_383": {
+    "attack": {
+      "en": "Don't test me, child!"
+    },
+    "play": {
+      "en": "Put your faith in the Light!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Tirion_Fordring"
+  },
+  "VAN_EX1_390": {
+    "attack": {
+      "en": "Bring it on."
+    },
+    "play": {
+      "en": "May my ancestors watch over me."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Tauren_Warrior"
+  },
+  "VAN_EX1_393": {
+    "attack": {
+      "en": "Who you wan' me kill?! Heh-heh."
+    },
+    "play": {
+      "en": "Heh-heh-heh, iz time for a little blood."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Amani_Berserker"
+  },
+  "VAN_EX1_396": {
+    "attack": {
+      "en": "Hrrrrm, payback!"
+    },
+    "play": {
+      "en": "Pandaria will be ours!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Mogu%27shan_Warden"
+  },
+  "VAN_EX1_398": {
+    "attack": {
+      "en": "Watch this."
+    },
+    "play": {
+      "en": "Try this!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Arathi_Weaponsmith"
+  },
+  "VAN_EX1_402": {
+    "attack": {
+      "en": "Strike!"
+    },
+    "play": {
+      "en": "Armor, made to fit."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Armorsmith"
+  },
+  "VAN_EX1_405": {
+    "attack": {
+      "en": "Payback time."
+    },
+    "play": {
+      "en": "You shall not pass!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Shieldbearer"
+  },
+  "VAN_EX1_411": {
+    "play": {
+      "en": "Aww, yeah!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Gorehowl"
+  },
+  "VAN_EX1_414": {
+    "attack": {
+      "en": "Taste my blade."
+    },
+    "play": {
+      "en": "I can wait no longer."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Grommash_Hellscream"
+  },
+  "VAN_EX1_522": {
+    "attack": {
+      "en": "Goodbye."
+    },
+    "play": {
+      "en": "Go ahead... make my day."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Patient_Assassin"
+  },
+  "VAN_EX1_557": {
+    "attack": {
+      "en": "Howdy!"
+    },
+    "play": {
+      "en": "I can wait and fish all day!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Nat_Pagle"
+  },
+  "VAN_EX1_558": {
+    "play": {
+      "en": "That belongs in a museum!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Harrison_Jones"
+  },
+  "VAN_EX1_559": {
+    "attack": {
+      "en": "To battle!"
+    },
+    "play": {
+      "en": "You require my assistance?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Archmage_Antonidas"
+  },
+  "VAN_EX1_560": {
+    "attack": {
+      "en": "Your time is up!"
+    },
+    "play": {
+      "en": "Just in time."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Nozdormu"
+  },
+  "VAN_EX1_561": {
+    "attack": {
+      "en": "I will mourn your death."
+    },
+    "play": {
+      "en": "I bring life and hope."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Alexstrasza"
+  },
+  "VAN_EX1_562": {
+    "attack": {
+      "en": "You shall pay for your insolence!"
+    },
+    "play": {
+      "en": "You dare challenge the daughter of Deathwing?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Onyxia"
+  },
+  "VAN_EX1_563": {
+    "attack": {
+      "en": "You are finished!"
+    },
+    "play": {
+      "en": "I am the essence of magic!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Malygos"
+  },
+  "VAN_EX1_572": {
+    "attack": {
+      "en": "I shall bring you rest!"
+    },
+    "play": {
+      "en": "I dream and the world trembles."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Ysera"
+  },
+  "VAN_EX1_573": {
+    "attack": {
+      "en": "Naturally..."
+    },
+    "play": {
+      "en": "Who dares defile this ancient land?"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Cenarius"
+  },
+  "VAN_EX1_582": {
+    "attack": {
+      "en": "Vaporization commencing!"
+    },
+    "play": {
+      "en": "I am a master of magics!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Dalaran_Mage"
+  },
+  "VAN_EX1_583": {
+    "attack": {
+      "en": "Anu'denah'thelore!"
+    },
+    "play": {
+      "en": "I am the blade of the Goddess."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Priestess_of_Elune"
+  },
+  "VAN_EX1_584": {
+    "attack": {
+      "en": "Where am I?"
+    },
+    "play": {
+      "en": "Sometimes, I forget things."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Ancient_Mage"
+  },
+  "VAN_EX1_587": {
+    "attack": {
+      "en": "To war!"
+    },
+    "play": {
+      "en": "Feel the power of the winds."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Windspeaker"
+  },
+  "VAN_EX1_590": {
+    "attack": {
+      "en": "For Lor'themar!"
+    },
+    "play": {
+      "en": "Glory to the Sin'dorei!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Blood_Knight"
+  },
+  "VAN_EX1_591": {
+    "attack": {
+      "en": "Feel my pain!"
+    },
+    "play": {
+      "en": "Embrace the void."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Auchenai_Soulpriest"
+  },
+  "VAN_EX1_593": {
+    "attack": {
+      "en": "This one's mine."
+    },
+    "play": {
+      "en": "They'll never know what hit 'em."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Nightblade"
+  },
+  "VAN_EX1_595": {
+    "attack": {
+      "en": "Mwahaha, who's next?!"
+    },
+    "death": {
+      "en": "Aaaaaaa, death again!"
+    },
+    "play": {
+      "en": "Join, or die! Or both."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Cult_Master"
+  },
+  "VAN_EX1_597": {
+    "attack": {
+      "en": "Heheheh, let the dark in."
+    },
+    "play": {
+      "en": "I am not a morning person..."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Imp_Master"
+  },
+  "VAN_EX1_603": {
+    "attack": {
+      "en": "No problem."
+    },
+    "play": {
+      "en": "Back to work!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Cruel_Taskmaster"
+  },
+  "VAN_EX1_604": {
+    "attack": {
+      "en": "I strike."
+    },
+    "play": {
+      "en": "My blade be thirsty."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Frothing_Berserker"
+  },
+  "VAN_EX1_608": {
+    "attack": {
+      "en": "Me?!"
+    },
+    "play": {
+      "en": "Some day I'll be just like you!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Sorcerer%27s_Apprentice"
+  },
+  "VAN_EX1_612": {
+    "attack": {
+      "en": "For Dalaran."
+    },
+    "play": {
+      "en": "We have many secrets."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Kirin_Tor_Mage"
+  },
+  "VAN_EX1_613": {
+    "attack": {
+      "en": "Lapdogs, all of you!"
+    },
+    "play": {
+      "en": "The Brotherhood shall prevail."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Edwin_VanCleef"
+  },
+  "VAN_EX1_614": {
+    "attack": {
+      "en": "Serve the master!"
+    },
+    "play": {
+      "en": "The master gave me many gifts."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Illidan_Stormrage"
+  },
+  "VAN_EX1_finkle": {
+    "attack": {
+      "en": "Finkle... strike!"
+    },
+    "play": {
+      "en": "Uhhh... Uhhh... I've been inside that thing for months."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Pip_Quickwit"
+  },
+  "VAN_NEW1_005": {
+    "attack": {
+      "en": "Come here."
+    },
+    "play": {
+      "en": "I usually work alone."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Kidnapper"
+  },
+  "VAN_NEW1_010": {
+    "attack": {
+      "en": "Like swatting insects!"
+    },
+    "play": {
+      "en": "Winds! Obey my command!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Al%27Akir_the_Windlord"
+  },
+  "VAN_NEW1_011": {
+    "attack": {
+      "en": "For Hellscream!"
+    },
+    "play": {
+      "en": "For the Warchief!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Kor%27kron_Elite"
+  },
+  "VAN_NEW1_014": {
+    "attack": {
+      "en": "Blades ready!"
+    },
+    "play": {
+      "en": "Enter the shadows!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Master_of_Disguise"
+  },
+  "VAN_NEW1_016": {
+    "play": {
+      "en": "Squawk! Pieces of 8!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Captain%27s_Parrot"
+  },
+  "VAN_NEW1_018": {
+    "attack": {
+      "en": "Die, landlubber!"
+    },
+    "play": {
+      "en": "X marks the spot!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Bloodsail_Raider"
+  },
+  "VAN_NEW1_019": {
+    "attack": {
+      "en": "Hey, catch!"
+    },
+    "death": {
+      "en": "Aaaaah… oh, no."
+    },
+    "play": {
+      "en": "Put this apple on your head."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Knife_Juggler"
+  },
+  "VAN_NEW1_020": {
+    "attack": {
+      "en": "Burn!"
+    },
+    "play": {
+      "en": "Do you like to play with fire?!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Wild_Pyromancer"
+  },
+  "VAN_NEW1_021": {
+    "attack": {
+      "en": "Did I miss it?"
+    },
+    "death": {
+      "en": "I knew it!"
+    },
+    "play": {
+      "en": "The end is coming!!!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Doomsayer"
+  },
+  "VAN_NEW1_022": {
+    "attack": {
+      "en": "No quarter!"
+    },
+    "death": {
+      "en": "Ha-ha!"
+    },
+    "play": {
+      "en": "Blood and plunder!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Dread_Corsair"
+  },
+  "VAN_NEW1_024": {
+    "attack": {
+      "en": "Yo Ho!"
+    },
+    "play": {
+      "en": "Drink up me hearties!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Captain_Greenskin"
+  },
+  "VAN_NEW1_025": {
+    "attack": {
+      "en": "Yarr!"
+    },
+    "play": {
+      "en": "Avast, matey!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Bloodsail_Corsair"
+  },
+  "VAN_NEW1_026": {
+    "attack": {
+      "en": "Instruction begins!"
+    },
+    "play": {
+      "en": "Pay attention, class!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Violet_Teacher"
+  },
+  "VAN_NEW1_026t": {
+    "attack": {
+      "en": "I shall do as you say."
+    },
+    "play": {
+      "en": "I'm ready to learn."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Violet_Apprentice"
+  },
+  "VAN_NEW1_027": {
+    "attack": {
+      "en": "Scurvy dog!"
+    },
+    "play": {
+      "en": "Trust the Pirate's Code."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Southsea_Captain"
+  },
+  "VAN_NEW1_029": {
+    "attack": {
+      "en": "Here it comes!"
+    },
+    "play": {
+      "en": "Prepare to face the mighty Millhouse Manastorm!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Millhouse_Manastorm"
+  },
+  "VAN_NEW1_030": {
+    "attack": {
+      "en": "All will burn!"
+    },
+    "death": {
+      "en": "Rawrrawrrgh!"
+    },
+    "play": {
+      "en": "I am power incarnate!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Deathwing"
+  },
+  "VAN_NEW1_037": {
+    "attack": {
+      "en": "It's time."
+    },
+    "play": {
+      "en": "Bring me steel!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Master_Swordsmith"
+  },
+  "VAN_NEW1_038": {
+    "attack": {
+      "en": "No escape!"
+    },
+    "play": {
+      "en": "Unworthy."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Gruul"
+  },
+  "VAN_tt_010a": {
+    "attack": {
+      "en": "As you wish."
+    },
+    "play": {
+      "en": "I'll take that."
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Spellbender"
+  }
+}
