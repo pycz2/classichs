@@ -34,6 +34,7 @@ func _use_test_files() -> void:
 
 
 func _run_all() -> void:
+	Anim.instant = true  # tests never wait for animations
 	# Tests never read the player's real settings and always run in English.
 	Settings.path = "user://test_runner_settings.json"
 	var sf := FileAccess.open(Settings.path, FileAccess.WRITE)

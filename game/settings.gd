@@ -4,7 +4,7 @@ extends RefCounted
 
 const DEFAULT_PATH := "user://settings.json"
 const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "voice": 0.8, "tts": true, "shake": true, "fullscreen": false,
-	"tracker": false, "tracker_deck": true, "tracker_left": true, "tracker_opp": true}
+	"tracker": false, "anim_speed": 1, "tracker_deck": true, "tracker_left": true, "tracker_opp": true}
 const BUSES := ["Music", "SFX"]
 
 static var path := DEFAULT_PATH
@@ -25,6 +25,9 @@ static func load_settings() -> void:
 			TYPE_BOOL:
 				if v is bool:
 					data[k] = v
+			TYPE_INT:
+				if v is float or v is int:
+					data[k] = clampi(int(v), 1, 4)
 			TYPE_STRING:
 				if v is String and (v == "" or Locale.LANGS.has(v)):
 					data[k] = v
