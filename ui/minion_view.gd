@@ -62,7 +62,7 @@ func _draw() -> void:
 	var oval := Art.outline("oval", OVAL)
 	var center := OVAL.get_center()
 	if glow.a > 0.0:
-		draw_colored_polygon(Art.outline("oval", OVAL.grow(6)), Color(glow, 0.9))
+		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("oval", OVAL.grow(gr)), glow)
 	if s.has("TAUNT"):  # a stone shield hugging the portrait, pointed at the bottom
 		var shield := taunt_shield()
 		draw_colored_polygon(shield, Color("7d7f7d"))

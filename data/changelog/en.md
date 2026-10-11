@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.12.2] - 2026-10-11
+
+### Changed
+- Playable cards, minions, the hero power and the End Turn button have a soft pulsing glow instead of an outline.
+
 ## [0.12.1] - 2026-10-11
 
 ### Added

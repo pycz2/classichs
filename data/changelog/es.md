@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.12.2] - 2026-10-11
+
+### Cambiado
+- Las cartas jugables, los esbirros, el poder de héroe y el botón «Fin de turno» tienen un brillo suave y pulsante en lugar de un contorno.
+
 ## [0.12.1] - 2026-10-11
 
 ### Añadido

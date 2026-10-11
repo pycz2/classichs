@@ -42,7 +42,7 @@ func _draw() -> void:
 	var cls: String = Decks.card_class(s.card_id) if Decks.HEROES.values().has(s.card_id) else s.card().get("cardClass", "NEUTRAL")
 	var outline := Art.outline("arch", r)
 	if glow.a > 0.0:
-		draw_colored_polygon(Art.outline("arch", r.grow(6)), Color(glow, 0.9))
+		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("arch", r.grow(gr)), glow)
 	draw_colored_polygon(Art.outline("arch", r.grow(5)), Frames.GOLD.darkened(0.3))
 	draw_colored_polygon(Art.outline("arch", r.grow(2)), Palette.of_class(cls).darkened(0.3))
 	Art.paint_in(self, r, s.card_id, "arch")

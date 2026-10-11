@@ -36,7 +36,7 @@ func _draw() -> void:
 	var c := size / 2
 	var r := size.x / 2 - 4
 	if glow.a > 0:
-		draw_circle(c, r + 6, glow)
+		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("circle", Rect2(c - Vector2(r, r) - Vector2(gr, gr), Vector2(r, r) * 2 + Vector2(gr, gr) * 2)), glow)
 	var cls: String = s.card().get("cardClass", "NEUTRAL")
 	var art := Rect2(c - Vector2(r, r) * 0.86, Vector2(r, r) * 1.72)
 	match kind:
