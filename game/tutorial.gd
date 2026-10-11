@@ -11,7 +11,9 @@ const HINTS := {
 	"trade": "Kill enemy minions before they become a problem!",
 	"battlecry": "A Battlecry happens when you play the card from your hand.",
 	"tooltip": "Hover over any card to read it.",
-	"taunt": "Minions with Taunt must be attacked first.",
+	"taunt": "Minions with Taunt must be attacked first. Play one to protect your hero!",
+	"heal": "Some cards restore Health. Use them on a damaged hero or minion.",
+	"buff": "Some cards make your minions stronger.",
 	"charge": "Minions with Charge can attack right away.",
 	"hero_power": "Your Hero Power deals 1 damage. You can use it once per turn.",
 	"weapon": "Weapons let heroes attack. Each attack costs 1 Durability.",
@@ -72,7 +74,10 @@ func _holds(key: String, g: Game, p: int) -> bool:
 		"trade": return not enemy.is_empty()
 		"battlecry": return hand.any(func(e): return e.card().get("mechanics", []).has("BATTLECRY"))
 		"tooltip": return true
-		"taunt": return enemy.any(func(m): return m.has("TAUNT"))
+		"taunt": return hand.any(func(e): return e.card().get("mechanics", []).has("TAUNT")) \
+			or g.all_minions().any(func(m): return m.has("TAUNT"))
+		"heal": return hand.any(func(e): return e.card_id in ["VAN_EX1_011", "VAN_DS1_055", "VAN_CS2_117", "VAN_EX1_583"])
+		"buff": return hand.any(func(e): return e.card_id in ["VAN_EX1_019", "VAN_CS2_122", "VAN_CS2_222"])
 		"charge": return hand.any(func(e): return e.card().get("mechanics", []).has("CHARGE"))
 		"hero_power": return legal.any(func(a): return a.type == "hero_power")
 		"weapon": return g.players[1 - p].weapon != null

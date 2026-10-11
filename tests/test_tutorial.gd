@@ -68,15 +68,42 @@ func test_boss_lines() -> void:
 	eq(t.boss_line(g), Missions.get_mission(1).lines.hurt, "hurt line at half health")
 
 
-func test_bot_wins_every_mission() -> void:
+## Plays a mission with the bot as Jaina under the real tutorial rules
+## (end of turn refused while the block applies). Returns [game, tutorial].
+func _play_by_the_rules(n: int) -> Array:
+	var s := _start(n)
+	var g: Game = s[0]
+	var t: Tutorial = s[1]
+	var steps := 0
+	while not g.game_over and steps < 600:
+		var p: int = g.current if g.pending.is_empty() else g.pending.player
+		var a := Bot.choose(g, p)
+		if p == 0:
+			t.next_hint(g, 0)
+			if a.type == "end_turn" and t.end_turn_block(g, 0) != "":
+				var other: Array = g.legal_actions().filter(func(x): return x.player == 0 and x.type in ["play", "attack"])
+				a = other[0]
+		var r := g.apply(a)
+		if not r.ok:
+			failures.append("mission %d: %s" % [n, r.error])
+			break
+		steps += 1
+	return [g, t]
+
+
+func test_bot_wins_every_mission_under_the_rules() -> void:
 	for n in range(1, 7):
-		var g: Game = _start(n)[0]
-		var steps := 0
-		while not g.game_over and steps < 500:
-			var p: int = g.current if g.pending.is_empty() else g.pending.player
-			var r := g.apply(Bot.choose(g, p))
-			if not r.ok:
-				failures.append("mission %d: %s" % [n, r.error])
-				break
-			steps += 1
-		eq([g.game_over, g.winner], [true, 0], "mission %d won by Jaina (%d steps)" % [n, steps])
+		var g: Game = _play_by_the_rules(n)[0]
+		eq([g.game_over, g.winner], [true, 0], "mission %d won by Jaina" % n)
+
+
+func test_every_hint_can_appear() -> void:
+	for n in range(1, 7):
+		var t: Tutorial = _play_by_the_rules(n)[1]
+		for key in Missions.get_mission(n).hints:
+			check(t._shown.has(key), "mission %d: hint '%s' never appeared" % [n, key])
+
+
+func test_transcendence_needs_minions() -> void:
+	var g := H.scene({"hero": "HERO_08"}, {"hero": "TU4f_001", "hero_power": "VAN_HERO_08bp", "hand": ["TU4f_006"]}, 1)
+	check(not g.legal_actions().any(func(a): return a.type == "play"), "not playable without minions")

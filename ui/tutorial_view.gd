@@ -24,7 +24,7 @@ func _ready() -> void:
 	var done := Progress.completed()
 	for n in range(1, Missions.count() + 1):
 		var m := Missions.get_mission(n)
-		var b := Palette.button("%d. %s%s" % [n, CardText.name(m.boss), "  ✓" if done.has(n) else ""], "Mission%d" % n)
+		var b := Palette.button("%d. %s%s" % [n, CardText.name(m.boss), "  — " + tr("done") if done.has(n) else ""], "Mission%d" % n)
 		b.custom_minimum_size = Vector2(420, 50)
 		b.disabled = not Progress.unlocked(n)
 		var num: int = n

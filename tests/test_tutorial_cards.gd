@@ -76,3 +76,10 @@ func test_transcendence() -> void:
 	check(not g.targets(g.hero(0), T.ENEMY_CHAR, true).has(g.hero(1)), "Cho can't be targeted")
 	H.attack(g, w, g.players[1].board[0])
 	check(not g.hero(1).has("STEALTH"), "minions dead: Cho can be attacked again")
+
+
+
+func test_flame_burst_spell_damage_boosts_each_missile() -> void:
+	var g := _boss("TU4e_001", "TU4e_002", ["VAN_CS2_142"], ["TU4e_005"])  # Kobold Geomancer: +1
+	H.play(g, g.players[1].hand[0])
+	eq(g.hero(0).health(), 20, "5 missiles of 2 damage")

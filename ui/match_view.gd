@@ -137,6 +137,7 @@ func _ready() -> void:
 	add_child(_history)
 	if tutorial:
 		emote.visible = false
+		mute.visible = false
 
 
 func bind(m: Match) -> void:
@@ -252,6 +253,17 @@ func _process(delta: float) -> void:
 		_hint_timer -= delta
 		if _hint_timer <= 0.0:
 			_hint.text = ""
+			_try_tutorial_hint()
+
+
+## Shows the next tutorial hint only when nothing else is on the banner (an
+## unread hint or a "Choose a target" prompt), so hints never overwrite each other.
+func _try_tutorial_hint() -> void:
+	if tutorial == null or _hint_timer > 0.0 or not _sel.is_empty() or g.game_over:
+		return
+	var hint := tutorial.next_hint(g, viewer())
+	if hint != "":
+		show_hint(hint, 7.0)
 
 
 # --- state helpers ----------------------------------------------------------
@@ -303,9 +315,7 @@ func refresh() -> void:
 		var line := tutorial.boss_line(g)
 		if line != "":
 			show_line(g.opponent(me), line)
-		var hint := tutorial.next_hint(g, me)
-		if hint != "":
-			show_hint(hint, 7.0)
+		_try_tutorial_hint()
 
 
 func _side_name(p: int) -> String:

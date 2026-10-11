@@ -40,10 +40,10 @@ static func register(r: Dictionary) -> void:
 			for i in 2:
 				g.summon(me.controller, "TU4e_002t"),
 	}
-	r["TU4e_005"] = {  # Flame Burst: 5 missiles of 1 damage at random enemies
+	r["TU4e_005"] = {  # Flame Burst: 5 missiles; spell damage boosts each one ($1 each)
 		"spell": func(g, me, _t):
-			for i in g.spell_dmg(me, 5):
-				g.damage(me, g.random_alive(g.chars(g.opponent(me.controller))), 1),
+			for i in 5:
+				g.damage(me, g.random_alive(g.chars(g.opponent(me.controller))), g.spell_dmg(me, 1)),
 	}
 	r["TU4f_004"] = {  # Legacy of the Emperor
 		"spell": func(g, me, _t):
@@ -51,6 +51,7 @@ static func register(r: Dictionary) -> void:
 				g.buff(m, 2, 2),
 	}
 	r["TU4f_006"] = {  # Transcendence: Cho can't be attacked or targeted until his minions are dead.
+		"can_play": func(g, me): return not g.minions(me.controller).is_empty(),
 		"spell": func(g, me, _t):
 			var hero: Entity = g.hero(me.controller)
 			if not g.minions(me.controller).is_empty():

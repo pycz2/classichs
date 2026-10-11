@@ -90,3 +90,40 @@ func test_boss_bubble_is_wide_and_boss_is_named() -> void:
 	check(bubble.get_combined_minimum_size().x > 150, "readable width: %s" % str(bubble.get_combined_minimum_size()))
 	check(v._names[1].text.begins_with("Hogger"), v._names[1].text)
 	v.free()
+
+
+
+func test_hints_wait_their_turn() -> void:
+	var v := _view(4)
+	eq(v._hint.text, Missions.get_mission(4).intro, "intro first")
+	v._process(8.0)  # the intro has been read
+	var tooltip := str(TranslationServer.translate(Tutorial.HINTS.tooltip))
+	eq(v._hint.text, tooltip, "next hint after the intro")
+	v.click_entity(v.g.players[0].hand[0].id)  # Goldshire Footman
+	v.click_board(0)
+	eq(v._hint.text, tooltip, "not overwritten by the next hint at once")
+	v.free()
+
+
+func test_tutorial_hint_does_not_replace_target_prompt() -> void:
+	var v := _view(3)
+	v._process(8.0)
+	v._process(8.0)
+	v.click_entity(v.g.players[0].hand[0].id)  # Voodoo Doctor: battlecry with a target
+	if v._sel.get("stage", "") == "position":
+		v.click_board(0)
+	check(v._hint.text == str(TranslationServer.translate("Choose a target")) or v._sel.is_empty(), "prompt kept: " + v._hint.text)
+	v.free()
+
+
+func test_no_mute_in_tutorial_and_done_marker_is_text() -> void:
+	var v := _view(1)
+	check(not (v.find_child("MuteButton", true, false) as Button).visible, "no mute")
+	v.free()
+	_store()
+	Progress.complete(1)
+	var t := TutorialView.new()
+	root().add_child(t)
+	check(not (t.find_child("Mission1", true, false) as Button).text.contains("✓"), "no special glyph")
+	t.free()
+	_restore()
