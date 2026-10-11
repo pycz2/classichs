@@ -32,4 +32,13 @@
     "shot.menu.tab": "Menú", "shot.menu.cap": "Menú principal",
     "shot.settings.tab": "Ajustes", "shot.settings.cap": "Ajustes: idioma, sonido, voz, sacudida de pantalla",
     "shot.changelog.tab": "Cambios", "shot.changelog.cap": "Todo el historial de cambios, a un clic de la versión",
-  };
+    "nav.heroes": "Héroes",
+    "stats.cards": "Cartas",
+    "stats.classes": "Clases",
+    "stats.languages": "Idiomas",
+    "stats.servers": "Servidores necesarios",
+    "heroes.title": "Nueve héroes",
+    "heroes.sub": "Cada clase con su poder de héroe. Elige a tu campeón.",
+    "cards.title": "Cada carta, redibujada",
+    "cards.sub": "Pasa el cursor por el abanico. Haz clic en una carta para darle la vuelta.",
+};

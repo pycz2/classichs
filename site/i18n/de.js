@@ -32,4 +32,13 @@
     "shot.menu.tab": "Menü", "shot.menu.cap": "Hauptmenü",
     "shot.settings.tab": "Einstellungen", "shot.settings.cap": "Einstellungen: Sprache, Sound, Stimme, Bildschirmwackeln",
     "shot.changelog.tab": "Änderungen", "shot.changelog.cap": "Die gesamte Änderungshistorie, ein Klick auf die Version",
-  };
+    "nav.heroes": "Helden",
+    "stats.cards": "Karten",
+    "stats.classes": "Klassen",
+    "stats.languages": "Sprachen",
+    "stats.servers": "Server nötig",
+    "heroes.title": "Neun Helden",
+    "heroes.sub": "Jede Klasse mit ihrer Heldenfähigkeit. Wählt euren Champion.",
+    "cards.title": "Jede Karte neu gezeichnet",
+    "cards.sub": "Fahrt über den Fächer. Klickt auf eine Karte, um sie umzudrehen.",
+};

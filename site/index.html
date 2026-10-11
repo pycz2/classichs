@@ -7,34 +7,29 @@
 <meta name="description" content="A fan remake of Hearthstone Classic (June 2014): all 382 cards, bot, tutorial, peer-to-peer online play. Free, in the browser.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
+<canvas id="embers" aria-hidden="true"></canvas>
 <header class="top">
   <a class="brand" href="#">Classic&nbsp;HS</a>
   <nav>
+    <a href="#heroes" data-i18n="nav.heroes">Heroes</a>
     <a href="#features" data-i18n="nav.features">Features</a>
     <a href="#screens" data-i18n="nav.screens">Screenshots</a>
-    <a href="#play" data-i18n="nav.play">Play</a>
+    <a href="#play" class="nav-play" data-i18n="nav.play">Play</a>
     <a href="https://github.com/pycz2/classichs" target="_blank" rel="noopener">GitHub</a>
     <select id="lang" class="lang" aria-label="Language / Язык"></select>
   </nav>
 </header>
 
 <section class="hero">
-  <div class="hero-cards" aria-hidden="true">
-    <div class="fcard c1" data-depth="18"><svg viewBox="0 0 100 100"><path d="M50 6 68 34 80 28 82 60 70 86 50 94 30 86 18 60 24 36 36 46Z" fill="#e2541b"/><path d="M50 36 64 62 60 84 50 88 40 84 36 62Z" fill="#ffd23f"/></svg><span>4</span></div>
-    <div class="fcard c2" data-depth="30"><svg viewBox="0 0 100 100"><g stroke="#bfe9ff" stroke-width="6" stroke-linecap="round"><path d="M50 8V92M14 29 86 71M14 71 86 29"/><path d="M50 22 40 12M50 22 60 12M50 78 40 88M50 78 60 88" stroke-width="4"/></g><circle cx="50" cy="50" r="8" fill="#fff"/></svg><span>2</span></div>
-    <div class="fcard c3" data-depth="12"><svg viewBox="0 0 100 100"><path d="M50 6 60 40 94 50 60 60 50 94 40 60 6 50 40 40Z" fill="#c77dff"/><circle cx="50" cy="50" r="10" fill="#f3d9ff"/></svg><span>1</span></div>
-    <div class="fcard c4" data-depth="24"><svg viewBox="0 0 100 100"><path d="M18 12H82L80 52 50 92 20 52Z" fill="#adb5bd"/><path d="M26 20H74L72 50 50 82 28 50Z" fill="#9d0208"/><path d="M46 24h8v50h-8zM32 38h36v8H32z" fill="#ffd43b"/></svg><span>3</span></div>
-    <div class="fcard c5" data-depth="36"><svg viewBox="0 0 100 100"><circle cx="36" cy="46" r="16" fill="#f8f9fa"/><circle cx="52" cy="40" r="16" fill="#f8f9fa"/><circle cx="66" cy="48" r="16" fill="#f8f9fa"/><circle cx="44" cy="60" r="16" fill="#f8f9fa"/><circle cx="60" cy="62" r="16" fill="#f8f9fa"/><circle cx="22" cy="42" r="11" fill="#343a40"/><path d="M38 74v16M50 74v16M62 74v16M72 74v16" stroke="#343a40" stroke-width="4"/></svg><span>4</span></div>
-    <div class="fcard c6" data-depth="20"><svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="40" fill="#f8f9fa"/><circle cx="50" cy="58" r="24" fill="#a5d8ff"/><circle cx="42" cy="52" r="4.5" fill="#212529"/><circle cx="58" cy="52" r="4.5" fill="#212529"/><path d="M40 68h20l-10 6Z" fill="#212529"/><path d="M20 30 10 6 32 22ZM80 30 90 6 68 22Z" fill="#dee2e6"/></svg><span>4</span></div>
-  </div>
+  <div class="hero-cards" id="heroCards" aria-hidden="true"></div>
   <div class="hero-text reveal">
     <p class="eyebrow" data-i18n="hero.eyebrow">Fan remake · June 2014 · Classic</p>
-    <h1>Classic&nbsp;HS</h1>
+    <h1 class="shine">Classic&nbsp;HS</h1>
     <p class="lead" data-i18n="hero.lead">Hearthstone as it was before Naxxramas: all 382 cards, nine classes, the original tutorial — and online play with a friend straight from the browser, no servers.</p>
     <div class="cta">
       <a class="btn gold" href="#play" data-i18n="hero.play">Play now</a>
@@ -42,19 +37,45 @@
     </div>
     <p class="note" data-i18n="hero.note">Free. Works offline against the bot. No account.</p>
   </div>
+  <a class="scroll-hint" href="#stats" aria-label="Scroll"><span></span></a>
 </section>
+
+<section id="stats" class="stats">
+  <div class="stat reveal"><b data-count="382">0</b><span data-i18n="stats.cards">Cards</span></div>
+  <div class="stat reveal"><b data-count="9">0</b><span data-i18n="stats.classes">Classes</span></div>
+  <div class="stat reveal"><b data-count="8">0</b><span data-i18n="stats.languages">Languages</span></div>
+  <div class="stat reveal"><b data-count="0">0</b><span data-i18n="stats.servers">Servers needed</span></div>
+</section>
+
+<div class="divider" aria-hidden="true"><span></span></div>
+
+<section id="heroes" class="heroes">
+  <h2 class="reveal" data-i18n="heroes.title">Nine heroes</h2>
+  <p class="sub reveal" data-i18n="heroes.sub">Every class with its Hero Power. Pick your champion.</p>
+  <div class="hero-row" id="heroRow"></div>
+</section>
+
+<div class="divider" aria-hidden="true"><span></span></div>
+
+<section id="cards" class="fan-section">
+  <h2 class="reveal" data-i18n="cards.title">Every card, redrawn</h2>
+  <p class="sub reveal" data-i18n="cards.sub">Hover the fan. Click a card to turn it over.</p>
+  <div class="fan reveal" id="fan"></div>
+</section>
+
+<div class="divider" aria-hidden="true"><span></span></div>
 
 <section id="features" class="features">
   <h2 class="reveal" data-i18n="features.title">Everything from the original</h2>
   <div class="grid">
-    <article class="feature reveal"><div class="ico">🃏</div><h3 data-i18n="f1.t">All 382 cards</h3><p data-i18n="f1.d">Every Basic and Classic card with its original values and mechanics: Secrets, Choose One, Overload, Combo, Enrage, Deathrattle.</p></article>
-    <article class="feature reveal"><div class="ico">🤖</div><h3 data-i18n="f2.t">Training with a bot</h3><p data-i18n="f2.d">Practise any deck against a simple bot of any class. Works without the internet.</p></article>
-    <article class="feature reveal"><div class="ico">🔗</div><h3 data-i18n="f3.t">Online without servers</h3><p data-i18n="f3.d">WebRTC connects two browsers directly. Exchange a text code in any messenger — and play.</p></article>
-    <article class="feature reveal"><div class="ico">🎓</div><h3 data-i18n="f4.t">The original tutorial</h3><p data-i18n="f4.d">Six missions as Jaina: Hogger, Millhouse, Lorewalker Cho, King Mukla, Hemet and Illidan.</p></article>
-    <article class="feature reveal"><div class="ico">📚</div><h3 data-i18n="f5.t">Collection and decks</h3><p data-i18n="f5.d">All cards unlocked, unlimited decks saved in the browser, deck codes compatible with Hearthstone.</p></article>
-    <article class="feature reveal"><div class="ico">📊</div><h3 data-i18n="f6.t">Deck tracker and history</h3><p data-i18n="f6.d">Cards left in your deck with the chance to draw each one, what the opponent played, and the full move log.</p></article>
-    <article class="feature reveal"><div class="ico">🧪</div><h3 data-i18n="f7.t">Debug table</h3><p data-i18n="f7.d">Set up any position and test any card or combo against the bot or for both sides.</p></article>
-    <article class="feature reveal"><div class="ico">🌍</div><h3 data-i18n="f8.t">8 languages, sound, voice</h3><p data-i18n="f8.d">English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Legendary minions say their names.</p></article>
+    <article class="feature reveal"><div class="ico">🃏</div><h3 data-i18n="f1.t">All 382 cards</h3><p data-i18n="f1.d"></p></article>
+    <article class="feature reveal"><div class="ico">🤖</div><h3 data-i18n="f2.t">Training with a bot</h3><p data-i18n="f2.d"></p></article>
+    <article class="feature reveal"><div class="ico">🔗</div><h3 data-i18n="f3.t">Online without servers</h3><p data-i18n="f3.d"></p></article>
+    <article class="feature reveal"><div class="ico">🎓</div><h3 data-i18n="f4.t">The original tutorial</h3><p data-i18n="f4.d"></p></article>
+    <article class="feature reveal"><div class="ico">📚</div><h3 data-i18n="f5.t">Collection and decks</h3><p data-i18n="f5.d"></p></article>
+    <article class="feature reveal"><div class="ico">📊</div><h3 data-i18n="f6.t">Deck tracker and history</h3><p data-i18n="f6.d"></p></article>
+    <article class="feature reveal"><div class="ico">🧪</div><h3 data-i18n="f7.t">Debug table</h3><p data-i18n="f7.d"></p></article>
+    <article class="feature reveal"><div class="ico">🌍</div><h3 data-i18n="f8.t">8 languages, sound, voice</h3><p data-i18n="f8.d"></p></article>
   </div>
 </section>
 
@@ -71,9 +92,9 @@
 <section id="online" class="online">
   <h2 class="reveal" data-i18n="online.title">Play with a friend in three steps</h2>
   <ol class="steps">
-    <li class="reveal"><b>1</b><span data-i18n="online.s1">Press “Create Game” and send the invite code to a friend.</span></li>
-    <li class="reveal"><b>2</b><span data-i18n="online.s2">The friend presses “Join Game” and sends back the answer code.</span></li>
-    <li class="reveal"><b>3</b><span data-i18n="online.s3">Paste the answer and press “Connect”. The browsers talk directly.</span></li>
+    <li class="reveal"><b>1</b><span data-i18n="online.s1"></span></li>
+    <li class="reveal"><b>2</b><span data-i18n="online.s2"></span></li>
+    <li class="reveal"><b>3</b><span data-i18n="online.s3"></span></li>
   </ol>
 </section>
 
@@ -90,7 +111,7 @@
 </section>
 
 <footer>
-  <p data-i18n="footer.legal">Classic HS is a non-commercial fan project and is not affiliated with Blizzard Entertainment. Hearthstone, card names and texts are trademarks and property of Blizzard Entertainment. All art in the game is drawn by code.</p>
+  <p data-i18n="footer.legal"></p>
   <p><a href="https://github.com/pycz2/classichs">GitHub</a> · <a href="https://github.com/pycz2/classichs/blob/main/CHANGELOG.md" data-i18n="footer.changes">Changelog</a> · MIT</p>
 </footer>
 

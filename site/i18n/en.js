@@ -32,4 +32,13 @@
     "shot.menu.tab": "Menu", "shot.menu.cap": "Main menu",
     "shot.settings.tab": "Settings", "shot.settings.cap": "Settings: language, sound, voice, screen shake",
     "shot.changelog.tab": "Changelog", "shot.changelog.cap": "The whole change history, one click on the version",
-  };
+    "nav.heroes": "Heroes",
+    "stats.cards": "Cards",
+    "stats.classes": "Classes",
+    "stats.languages": "Languages",
+    "stats.servers": "Servers needed",
+    "heroes.title": "Nine heroes",
+    "heroes.sub": "Every class with its Hero Power. Pick your champion.",
+    "cards.title": "Every card, redrawn",
+    "cards.sub": "Hover the fan. Click a card to turn it over.",
+};

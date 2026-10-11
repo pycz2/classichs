@@ -12,6 +12,7 @@ mkdir -p "$OUT/play" "$OUT/screens"
 godot --headless --path . --export-release "Web" "$OUT/play/index.html"
 cp -R site/index.html site/style.css site/main.js site/favicon.svg site/i18n "$OUT/"
 cp -R media/screens/. "$OUT/screens/"
+python3 tools/site_data.py "$OUT"
 touch "$OUT/.nojekyll"
 echo "Site built in $OUT"
 [ "$1" = "--publish" ] || exit 0

@@ -32,4 +32,13 @@
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu główne",
     "shot.settings.tab": "Ustawienia", "shot.settings.cap": "Ustawienia: język, dźwięk, głos, drżenie ekranu",
     "shot.changelog.tab": "Zmiany", "shot.changelog.cap": "Cała historia zmian, jedno kliknięcie na wersję",
-  };
+    "nav.heroes": "Bohaterowie",
+    "stats.cards": "Kart",
+    "stats.classes": "Klas",
+    "stats.languages": "Języków",
+    "stats.servers": "Potrzebnych serwerów",
+    "heroes.title": "Dziewięciu bohaterów",
+    "heroes.sub": "Każda klasa ze swoją mocą specjalną. Wybierz swojego bohatera.",
+    "cards.title": "Każda karta narysowana od nowa",
+    "cards.sub": "Najedź na wachlarz. Kliknij kartę, aby ją odwrócić.",
+};

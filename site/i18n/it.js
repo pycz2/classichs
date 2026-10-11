@@ -32,4 +32,13 @@
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu principale",
     "shot.settings.tab": "Impostazioni", "shot.settings.cap": "Impostazioni: lingua, suoni, voci, scuotimento dello schermo",
     "shot.changelog.tab": "Modifiche", "shot.changelog.cap": "Tutta la cronologia delle modifiche, un clic sulla versione",
-  };
+    "nav.heroes": "Eroi",
+    "stats.cards": "Carte",
+    "stats.classes": "Classi",
+    "stats.languages": "Lingue",
+    "stats.servers": "Server necessari",
+    "heroes.title": "Nove eroi",
+    "heroes.sub": "Ogni classe con il suo Potere Eroe. Scegli il tuo campione.",
+    "cards.title": "Ogni carta, ridisegnata",
+    "cards.sub": "Passa sopra il ventaglio. Clicca su una carta per girarla.",
+};

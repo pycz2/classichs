@@ -26,7 +26,73 @@ function applyLang() {
   document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
   $("#lang").value = lang;
   buildGallery();
+  buildCards();
 }
+
+// --- cards drawn like the game's (pictures from art/, names in the page language) ---
+const CLASS_COLORS = {WARRIOR: "#8e1002", SHAMAN: "#0070de", ROGUE: "#4c4d48", PALADIN: "#aa8f00", HUNTER: "#016e01",
+  DRUID: "#703606", WARLOCK: "#7624ad", MAGE: "#0092ab", PRIEST: "#b8b090", NEUTRAL: "#6b6b6b"};
+const RARITY = {COMMON: "#f8f9fa", RARE: "#339af0", EPIC: "#ae3ec9", LEGENDARY: "#fd7e14"};
+const CREST = '<svg class="crest" viewBox="0 0 100 40"><path d="M50 4 58 14 60 26 54 36 46 36 40 26 42 14Z M44 16 18 2 6 10 20 14 4 22 22 22 12 32 30 26 40 30Z M56 16 82 2 94 10 80 14 96 22 78 22 88 32 70 26 60 30Z" fill="#d9b44a" stroke="#3a2a08" stroke-width="1.5"/><circle cx="46" cy="20" r="2" fill="#e03131"/><circle cx="54" cy="20" r="2" fill="#e03131"/></svg>';
+let DATA = {heroes: [], cards: []};
+
+function cardEl(c, withBack) {
+  const el = document.createElement("div");
+  el.className = `card ${c.type.toLowerCase()}${c.rarity === "LEGENDARY" ? " legendary" : ""}`;
+  el.style.setProperty("--cls", CLASS_COLORS[c.cls] || CLASS_COLORS.NEUTRAL);
+  const name = c.name[lang] || c.name.en, text = c.text[lang] || c.text.en || "";
+  const stats = c.type === "MINION" || c.type === "WEAPON";
+  el.innerHTML = `<div class="face">
+      <div class="art"><img src="art/${c.id}.jpg" alt="" loading="lazy"></div>
+      <div class="banner"></div>
+      ${c.type !== "HERO" ? '<div class="textbox"></div>' : ""}
+      ${RARITY[c.rarity] ? `<span class="rar" style="background:${RARITY[c.rarity]}"></span>` : ""}
+      <div class="shine-sweep"></div>
+    </div>${withBack ? '<div class="back"></div>' : ""}
+    ${c.rarity === "LEGENDARY" ? CREST : ""}
+    ${c.cost != null ? `<i class="gem mana">${c.cost}</i>` : ""}
+    ${stats ? `<i class="gem atk">${c.atk}</i><i class="gem hp">${c.hp}</i>` : ""}`;
+  el.querySelector(".banner").textContent = name;
+  const tb = el.querySelector(".textbox");
+  if (tb) tb.textContent = text;
+  el.title = name;
+  return el;
+}
+
+function buildCards() {
+  if (!DATA.cards.length) return;
+  const hc = $("#heroCards");
+  hc.innerHTML = "";
+  DATA.cards.slice(0, 6).forEach((c, i) => {
+    const el = cardEl(c);
+    el.dataset.depth = [18, 30, 12, 24, 36, 20][i];
+    hc.append(el);
+  });
+  const fan = $("#fan");
+  fan.innerHTML = "";
+  const list = DATA.cards.slice(0, 9);
+  list.forEach((c, i) => {
+    const el = cardEl(c, true);
+    const k = i - (list.length - 1) / 2;
+    el.style.transform = `rotate(${k * 6}deg) translateY(${Math.abs(k) * Math.abs(k) * 4}px)`;
+    el.onclick = () => el.classList.toggle("flipped");
+    fan.append(el);
+  });
+  const row = $("#heroRow");
+  row.innerHTML = "";
+  DATA.heroes.forEach((h) => {
+    const tile = document.createElement("div");
+    tile.className = "hero-tile";
+    tile.style.setProperty("--cls", CLASS_COLORS[h.cls]);
+    tile.innerHTML = `<div class="portrait"><img src="art/${h.id}.jpg" alt="" loading="lazy"></div><div class="name"></div><div class="power"></div>`;
+    tile.querySelector(".name").textContent = h.name[lang] || h.name.en;
+    tile.querySelector(".power").textContent = h.power ? (h.power[lang] || h.power.en) : "";
+    tile.querySelector("img").alt = tile.querySelector(".name").textContent;
+    row.append(tile);
+  });
+}
+
+fetch("data.json").then((r) => r.json()).then((d) => { DATA = d; buildCards(); }).catch(() => {});
 
 function src(name) { return `screens/${lang}/${name}.png`; }
 
@@ -87,12 +153,59 @@ $(".stage").addEventListener("mouseleave", () => { $("#shot").style.transform = 
 if (!reduced) {
   document.addEventListener("mousemove", (e) => {
     const x = e.clientX / innerWidth - 0.5, y = e.clientY / innerHeight - 0.5;
-    document.querySelectorAll(".fcard").forEach((c) => {
+    document.querySelectorAll("#heroCards .card").forEach((c) => {
       const d = Number(c.dataset.depth);
       c.style.transform = `translate(${-x * d}px, ${-y * d}px)`;
     });
   });
 }
+
+// Feature panels glow where the mouse is.
+document.querySelectorAll(".feature").forEach((f) => f.addEventListener("mousemove", (e) => {
+  const r = f.getBoundingClientRect();
+  f.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  f.style.setProperty("--my", `${e.clientY - r.top}px`);
+}));
+
+// Numbers count up when they come into view.
+const counted = new IntersectionObserver((list) => list.forEach((en) => {
+  if (!en.isIntersecting) return;
+  counted.unobserve(en.target);
+  const end = Number(en.target.dataset.count), t0 = performance.now(), dur = reduced ? 0 : 1400;
+  const step = (now) => {
+    const p = dur ? Math.min(1, (now - t0) / dur) : 1;
+    en.target.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}), { threshold: 0.5 });
+document.querySelectorAll("[data-count]").forEach((el) => counted.observe(el));
+
+// Embers drift up behind the page.
+(function embers() {
+  const cv = $("#embers"), ctx = cv.getContext("2d");
+  if (!ctx || reduced) return;
+  let w, h, parts = [];
+  const resize = () => { w = cv.width = innerWidth; h = cv.height = innerHeight; };
+  resize();
+  addEventListener("resize", resize);
+  for (let i = 0; i < 70; i++) parts.push({x: Math.random() * w, y: Math.random() * h, r: 0.6 + Math.random() * 2.2, v: 0.2 + Math.random() * 0.7, s: Math.random() * 6});
+  const tick = () => {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of parts) {
+      p.y -= p.v; p.s += 0.02; p.x += Math.sin(p.s) * 0.4;
+      if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+      const a = 0.35 + 0.35 * Math.sin(p.s * 1.7);
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255, ${150 + (p.r * 30) | 0}, 60, ${a})`;
+      ctx.shadowColor = "rgba(255,170,60,.8)"; ctx.shadowBlur = 8;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  };
+  tick();
+})();
 
 // Sections appear when they scroll into view.
 const io = new IntersectionObserver((list) => list.forEach((en) => {

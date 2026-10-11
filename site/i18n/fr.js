@@ -32,4 +32,13 @@
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu principal",
     "shot.settings.tab": "Options", "shot.settings.cap": "Options : langue, sons, voix, tremblement de l'écran",
     "shot.changelog.tab": "Versions", "shot.changelog.cap": "Tout l'historique des changements, un clic sur la version",
-  };
+    "nav.heroes": "Héros",
+    "stats.cards": "Cartes",
+    "stats.classes": "Classes",
+    "stats.languages": "Langues",
+    "stats.servers": "Serveurs requis",
+    "heroes.title": "Neuf héros",
+    "heroes.sub": "Chaque classe avec son pouvoir héroïque. Choisissez votre champion.",
+    "cards.title": "Chaque carte, redessinée",
+    "cards.sub": "Survolez l’éventail. Cliquez sur une carte pour la retourner.",
+};

@@ -32,4 +32,13 @@
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu principal",
     "shot.settings.tab": "Configurações", "shot.settings.cap": "Configurações: idioma, som, voz, tremor de tela",
     "shot.changelog.tab": "Mudanças", "shot.changelog.cap": "Todo o histórico de mudanças, a um clique da versão",
-  };
+    "nav.heroes": "Heróis",
+    "stats.cards": "Cartas",
+    "stats.classes": "Classes",
+    "stats.languages": "Idiomas",
+    "stats.servers": "Servidores necessários",
+    "heroes.title": "Nove heróis",
+    "heroes.sub": "Cada classe com seu Poder Heroico. Escolha seu campeão.",
+    "cards.title": "Cada carta, redesenhada",
+    "cards.sub": "Passe o mouse no leque. Clique numa carta para virá-la.",
+};
