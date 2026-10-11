@@ -42,6 +42,7 @@ func test_full_code_exchange_starts_both_games() -> void:
 
 
 func test_answer_pasted_as_invite_is_refused() -> void:
+	Profile.path = "user://test_profile_ui2.json"
 	var pair := FakeRtc.fake_pair()
 	var g := OnlineView.new()
 	g.transport_factory = func(): return pair[1]
@@ -51,6 +52,8 @@ func test_answer_pasted_as_invite_is_refused() -> void:
 	check(g.status.text.contains("answer"), g.status.text)
 	g.free()
 	pair[0].free()
+	DirAccess.remove_absolute(Profile.path)
+	Profile.path = Profile.DEFAULT_PATH
 
 
 func _deck(cls: String) -> Deck:
@@ -144,4 +147,89 @@ func test_training_emote_shows_locally() -> void:
 	v.bind(m)
 	v.send_emote("thanks")
 	check(v.bubble_text(0).contains("Thanks"), "bubble")
+	v.free()
+
+
+
+func test_connect_timeout() -> void:
+	Profile.path = "user://test_profile_ui3.json"
+	var pair := FakeRtc.fake_pair()
+	pair[0].never_open = true
+	var h := OnlineView.new()
+	h.transport_factory = func(): return pair[0]
+	root().add_child(h)
+	h.host_game()
+	h.finish(SignalCode.pack("answer", "x", []))
+	h._process(OnlineView.CONNECT_TIMEOUT + 1.0)
+	eq(h.state, "failed", "gave up")
+	check(h.status.text != "" and not h.status.text.ends_with("…"), h.status.text)
+	h.free()
+	pair[1].free()
+	DirAccess.remove_absolute(Profile.path)
+	Profile.path = Profile.DEFAULT_PATH
+
+
+func _bound_pair() -> Array:
+	var tr := LoopbackTransport.pair()
+	var v := [MatchView.new(), MatchView.new()]
+	var s := [NetSession.new(), NetSession.new()]
+	for side in 2:
+		root().add_child(v[side])
+		s[side].setup(tr[side], side == 0, ["Alice", "Bob"][side], _deck("MAGE"))
+		var view: MatchView = v[side]
+		var sess: NetSession = s[side]
+		sess.started.connect(func(m): view.bind_online(m, sess))
+	s[0].say_hello()
+	s[1].say_hello()
+	LoopbackTransport.pump(tr)
+	return [tr, v, s]
+
+
+func _free_bound(b: Array) -> void:
+	for view in b[1]:
+		view.free()
+	for t in b[0]:
+		if is_instance_valid(t):
+			t.free()
+
+
+func test_guest_mulligans_without_waiting_for_host() -> void:
+	var b := _bound_pair()
+	var guest: MatchView = b[1][1]
+	check(guest.find_child("Mulligan", true, false) != null, "guest sees its mulligan at once")
+	_free_bound(b)
+
+
+func test_desync_overlay_title() -> void:
+	var b := _bound_pair()
+	b[0][0].send({"t": "action", "n": 0, "action": {"type": "end_turn", "player": 0}, "hash": "zzz"})
+	LoopbackTransport.pump(b[0])
+	var ov = b[1][1].find_child("ConnectionLost", true, false)
+	check(ov != null, "overlay")
+	var labels: Array = ov.find_children("*", "Label", true, false).map(func(l): return l.text)
+	check(labels.has("Out of sync"), str(labels))
+	_free_bound(b)
+
+
+func test_emote_cooldown_and_mute_hides_bubble() -> void:
+	var b := _bound_pair()
+	var host: MatchView = b[1][0]
+	var guest: MatchView = b[1][1]
+	host.send_emote("greetings")
+	host.send_emote("wow")
+	LoopbackTransport.pump(b[0])
+	check(guest.bubble_text(0).contains("Greetings"), "second emote dropped by the cooldown")
+	guest.set_muted(true)
+	eq(guest.bubble_text(0), "", "mute hides the shown bubble")
+	_free_bound(b)
+
+
+func test_hot_seat_names() -> void:
+	var g := H.scene({"hero": "HERO_08"})
+	var v := MatchView.new()
+	root().add_child(v)
+	var m := Match.new()
+	m.setup(g, [false, false])
+	v.bind(m)
+	check(v._names[0].text.begins_with("Player 1"), v._names[0].text)
 	v.free()

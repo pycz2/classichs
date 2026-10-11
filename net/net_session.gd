@@ -22,6 +22,11 @@ var _remote: Dictionary = {}
 var _sent := 0
 var _received := 0
 var _done := false
+## Why the session ended: "left", "connection", "version", "desync" or "protocol".
+var failure_kind := ""
+
+const BYE_TEXT := {"left": "The opponent left the game", "version": "The opponent has a different version of the game",
+	"desync": "Out of sync with the opponent", "protocol": "The opponent's game sent something unexpected"}
 
 
 func setup(t: Transport, is_host: bool, p_name: String, d: Deck) -> void:
@@ -51,17 +56,27 @@ func send_emote(id: String) -> void:
 func leave() -> void:
 	if not _done:
 		_done = true
-		transport.send({"t": "bye", "reason": "left"})
-		transport.close("left")
+		failure_kind = "left"
+		transport.send({"t": "bye", "code": "left"})
+		_close_soon()
 
 
-func _fail(reason: String, tell_peer := true) -> void:
+## Closes on the next frame so the last message (bye) gets out first.
+func _close_soon() -> void:
+	if is_inside_tree():
+		transport.call_deferred("close", failure_kind)
+	else:
+		transport.close(failure_kind)
+
+
+func _fail(reason: String, kind: String, tell_peer := true) -> void:
 	if _done:
 		return
 	_done = true
+	failure_kind = kind
 	if tell_peer:
-		transport.send({"t": "bye", "reason": reason})
-		transport.close(reason)
+		transport.send({"t": "bye", "code": kind})
+	_close_soon()
 	failed.emit(reason)
 
 
@@ -73,7 +88,7 @@ func _on_message(msg: Variant) -> void:
 	if _done:
 		return
 	if not msg is Dictionary or not msg.get("t") is String:
-		_fail(_tr("The opponent sent a broken message"))
+		_fail(_tr("The opponent sent a broken message"), "protocol")
 		return
 	match msg.t:
 		"hello": _on_hello(msg)
@@ -83,18 +98,25 @@ func _on_message(msg: Variant) -> void:
 			if match_ and EMOTES.has(msg.get("id")):
 				emote_received.emit(match_.remote, msg.id)
 		"bye":
-			_fail(_tr("The opponent left: %s") % str(msg.get("reason", "")), false)
+			var code := str(msg.get("code", "left"))
+			_fail(_tr(BYE_TEXT.get(code, BYE_TEXT.left)), "left" if code == "left" else code, false)
 		_:
-			_fail(_tr("The opponent sent an unknown message"))
+			_fail(_tr("The opponent sent an unknown message"), "protocol")
 
 
 func _on_hello(msg: Dictionary) -> void:
-	if msg.get("protocol") != float(PROTOCOL) or msg.get("version") != version or msg.get("data") != CardDb.data_hash():
-		_fail(_tr("Different game versions: yours %s, the opponent's %s") % [version, str(msg.get("version", "?"))])
+	if not _remote.is_empty():
+		_fail(_tr("The opponent sent an unexpected message"), "protocol")
+		return
+	if msg.get("protocol") != float(PROTOCOL) or msg.get("version") != version:
+		_fail(_tr("Different game versions: yours %s, the opponent's %s") % [version, str(msg.get("version", "?")).left(20)], "version")
+		return
+	if msg.get("data") != CardDb.data_hash():
+		_fail(_tr("Your card data differs from the opponent's: update the game on both sides"), "version")
 		return
 	var d := Deck.from_dict({"name": "", "hero": msg.get("hero"), "cards": msg.get("cards")})
 	if d == null or d.validate() != "":
-		_fail(_tr("The opponent's deck is not valid"))
+		_fail(_tr("The opponent's deck is not valid"), "protocol")
 		return
 	_remote = msg
 	remote_name = Profile.clean(str(msg.get("name", "")))
@@ -107,13 +129,14 @@ func _on_hello(msg: Dictionary) -> void:
 
 func _on_start(msg: Dictionary) -> void:
 	if host or match_ != null or _remote.is_empty():
-		_fail(_tr("The opponent sent an unexpected message"))
+		_fail(_tr("The opponent sent an unexpected message"), "protocol")
 		return
 	var decks = msg.get("decks")
-	if not decks is Array or decks.size() != 2 or not decks[1] is Array or decks[1].size() != 2 \
+	if not decks is Array or decks.size() != 2 or not decks[0] is Array or decks[0].size() != 2 \
+			or not decks[1] is Array or decks[1].size() != 2 \
 			or decks[1][0] != deck.hero or decks[1][1] != Array(deck.cards) \
 			or decks[0][0] != _remote.hero or decks[0][1] != _remote.cards or not msg.get("seed") is float:
-		_fail(_tr("The opponent started a different game"))
+		_fail(_tr("The opponent started a different game"), "protocol")
 		return
 	var g := Game.new({"hero": _remote.hero, "deck": _remote.cards.duplicate()}, {"hero": deck.hero, "deck": deck.cards.duplicate()}, int(msg.seed))
 	_begin(g)
@@ -135,21 +158,25 @@ func _on_local_action(action: Dictionary, state_hash: String) -> void:
 
 func _on_action(msg: Dictionary) -> void:
 	if match_ == null:
-		_fail(_tr("The opponent sent a move before the game started"))
+		_fail(_tr("The opponent sent a move before the game started"), "protocol")
 		return
 	if msg.get("n") != float(_received):
-		_fail(_tr("Out of sync: a move was lost"))
+		_fail(_tr("Out of sync: a move was lost"), "desync")
 		return
 	_received += 1
 	var a = msg.get("action")
 	var simultaneous: bool = a is Dictionary and a.get("type") in ["mulligan", "concede"]
-	var why := match_.submit_remote(a, "" if simultaneous else str(msg.get("hash", "")))
+	var expected := "" if simultaneous else str(msg.get("hash", ""))
+	if not simultaneous and expected == "":
+		_fail(_tr("Out of sync: a move came without a state check"), "desync")
+		return
+	var why := match_.submit_remote(a, expected)
 	if why != "":
-		_fail(_tr("Out of sync: %s") % why)
+		_fail(_tr("Out of sync: %s") % why, "desync")
 
 
 func _on_closed(_reason: String) -> void:
 	if match_ and match_.game.game_over:
 		_done = true
 		return
-	_fail(_tr("Connection lost"), false)
+	_fail(_tr("Connection lost"), "connection", false)

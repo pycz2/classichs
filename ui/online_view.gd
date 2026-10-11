@@ -6,6 +6,9 @@ extends Control
 signal back
 signal play(session: NetSession, m: Match)
 
+## Seconds to wait for the connection after the codes are exchanged.
+const CONNECT_TIMEOUT := 25.0
+
 ## Makes the transport; tests replace it with an in-memory fake.
 var transport_factory: Callable = func() -> Transport: return WebRtcTransport.new()
 var name_edit := LineEdit.new()
@@ -18,6 +21,7 @@ var transport: Transport
 var session: NetSession
 var _decks: Array[Deck] = []
 var _js_refs: Array = []
+var _connect_wait := -1.0
 
 
 func _ready() -> void:
@@ -137,6 +141,7 @@ func finish(answer: String) -> void:
 		status.text = tr("Create a game first")
 		return
 	status.text = tr("Connecting…")
+	_connect_wait = 0.0
 	transport.finish(answer)
 
 
@@ -145,6 +150,7 @@ func _on_code(code: String) -> void:
 	state = "code"
 	status.text = tr("Send this invite code to your friend, then paste their answer code and press \"Connect\".") if session.host \
 		else tr("Send this answer code back to your friend and wait for the game to start.")
+	_connect_wait = -1.0 if session.host else 0.0
 
 
 func _on_back() -> void:
@@ -153,7 +159,13 @@ func _on_back() -> void:
 	back.emit()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if _connect_wait >= 0.0 and state != "playing" and state != "failed":
+		_connect_wait += delta
+		if _connect_wait >= CONNECT_TIMEOUT:
+			_connect_wait = -1.0
+			state = "failed"
+			status.text = tr("Could not connect. Create a new invite and try again (the networks may block direct connections).")
 	_sync_js()
 
 

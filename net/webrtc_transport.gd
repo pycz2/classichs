@@ -31,7 +31,8 @@ static func available() -> bool:
 static func with_candidates(sdp: String, ice: Array) -> String:
 	var out := sdp.strip_edges() + "\r\n"
 	for c in ice:
-		out += "a=" + str(c[2]) + "\r\n"
+		if str(c[2]) != "":  # Firefox signals the end of gathering with an empty candidate
+			out += "a=" + str(c[2]) + "\r\n"
 	return out + "a=end-of-candidates\r\n"
 
 
@@ -85,9 +86,16 @@ func _process(delta: float) -> void:
 	if _gather_quiet >= 0.0:
 		_gather_quiet += delta
 		_gather_total += delta
-		if (_gather_quiet >= GATHER_QUIET and not _ice.is_empty()) or _gather_total >= GATHER_MAX:
+		# Wait for the browser to finish gathering: the STUN (srflx) candidate can come
+		# seconds after the local ones, and it is the one that works across networks.
+		var complete: bool = pc.has_method("get_gathering_state") and pc.call("get_gathering_state") == 2
+		var quiet_fallback: bool = not pc.has_method("get_gathering_state") and _gather_quiet >= GATHER_QUIET and not _ice.is_empty()
+		if complete or quiet_fallback or _gather_total >= GATHER_MAX:
 			_gather_quiet = -1.0
-			code_ready.emit(SignalCode.pack(_sdp.type, with_candidates(_sdp.sdp, _ice), []))
+			if _ice.is_empty():
+				error.emit(tr("Could not find a network address: check the internet connection"))
+			else:
+				code_ready.emit(SignalCode.pack(_sdp.type, with_candidates(_sdp.sdp, _ice), []))
 	var ready := channel.get_ready_state()
 	if ready == WebRTCDataChannel.STATE_OPEN and not _open:
 		_open = true

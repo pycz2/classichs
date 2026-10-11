@@ -58,3 +58,9 @@ func test_candidates_are_embedded_in_sdp() -> void:
 	var full := WebRtcTransport.with_candidates(sdp, [["0", 0, "candidate:1 1 udp 2113937151 192.168.1.3 52789 typ host"]])
 	check(full.contains("\r\na=candidate:1 1 udp 2113937151 192.168.1.3 52789 typ host\r\n"), full)
 	check(full.ends_with("a=end-of-candidates\r\n"), "end marker")
+
+
+
+func test_empty_candidates_skipped() -> void:
+	var full := WebRtcTransport.with_candidates("v=0\r\n", [["0", 0, ""], ["0", 0, "candidate:1 1 udp 1 1.2.3.4 5 typ host"]])
+	check(not full.contains("\r\na=\r\n"), "no empty candidate line")

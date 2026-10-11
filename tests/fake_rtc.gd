@@ -6,6 +6,8 @@ signal code_ready(code: String)
 signal error(text: String)
 
 var _open := false
+## Simulates a connection that never opens (bad answer, blocked network).
+var never_open := false
 
 
 ## Like a real data channel: nothing is sent before the connection opens.
@@ -37,6 +39,8 @@ func finish(answer: String) -> void:
 	var r := SignalCode.unpack(answer, "answer")
 	if r.error != "":
 		error.emit(r.error)
+		return
+	if never_open:
 		return
 	_open = true
 	peer._open = true

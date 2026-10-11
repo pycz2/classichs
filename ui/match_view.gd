@@ -102,7 +102,7 @@ func _ready() -> void:
 	mute.custom_minimum_size = Vector2(130, 40)
 	mute.toggle_mode = true
 	mute.visible = false
-	mute.toggled.connect(func(on): muted = on)
+	mute.toggled.connect(set_muted)
 	left.add_child(mute)
 	var concede := Palette.button(tr("Concede"), "Concede")
 	concede.custom_minimum_size = Vector2(130, 40)
@@ -138,7 +138,7 @@ func bind(m: Match) -> void:
 	add_child(m)
 	m.changed.connect(_on_changed)
 	m.finished.connect(func(_w): refresh())
-	if player_names == ["", ""] and not (m.bots[0] and m.bots[1]):
+	if player_names == ["", ""] and m.bots[0] != m.bots[1]:
 		var me := m.viewer()
 		player_names[me] = Profile.load_name()
 		player_names[1 - me] = tr("Bot") if m.bots[1 - me] else ""
@@ -166,9 +166,22 @@ func bind_online(m: Match, s: NetSession) -> void:
 	bind(m)
 
 
+func set_muted(on: bool) -> void:
+	muted = on
+	if on and controller and _bubbles.has(1 - viewer()) and is_instance_valid(_bubbles[1 - viewer()]):
+		_bubbles[1 - viewer()].queue_free()
+
+
+const EMOTE_COOLDOWN_MS := 1500
+var _last_emote_ms := -100000
+
+
 func send_emote(id: String) -> void:
 	if not EMOTES.has(id) or controller == null:
 		return
+	if Time.get_ticks_msec() - _last_emote_ms < EMOTE_COOLDOWN_MS:
+		return  # no emote spam
+	_last_emote_ms = Time.get_ticks_msec()
 	show_emote(viewer(), id)
 	if session:
 		session.send_emote(id)
@@ -204,7 +217,7 @@ func bubble_text(p: int) -> String:
 func _on_connection_lost(reason: String) -> void:
 	if g.game_over:
 		return
-	var box := _open_overlay(tr("Connection lost"))
+	var box := _open_overlay(tr("Out of sync") if session and session.failure_kind == "desync" else tr("Connection lost"))
 	_overlay.name = "ConnectionLost"
 	var why := Palette.label(reason, 20)
 	why.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

@@ -169,3 +169,86 @@ func test_emotes_reach_the_other_side() -> void:
 	LoopbackTransport.pump(p[2])
 	eq(got, [[0, "well_played"]], "valid emote only")
 	_free(p)
+
+
+
+func test_typed_garbage_action_fails_cleanly() -> void:
+	var p := _pair()
+	p[2][1].send({"t": "action", "n": 0, "action": {"type": "end_turn", "player": [1]}, "hash": "x"})
+	LoopbackTransport.pump(p[2])
+	check(not p[4][0].is_empty(), "host reports it: %s" % str(p[4][0]))
+	_free(p)
+
+
+func test_garbage_start_fails_cleanly() -> void:
+	var tr := LoopbackTransport.pair()
+	var g := NetSession.new()
+	g.setup(tr[1], false, "Guest", _deck("MAGE"))
+	var fails := []
+	g.failed.connect(func(r): fails.append(r))
+	var hello := {"t": "hello", "protocol": 1, "version": g.version, "data": CardDb.data_hash(), "name": "H", "hero": "HERO_08", "cards": Decks.basic("MAGE")}
+	tr[0].send(hello)
+	tr[0].send({"t": "start", "seed": 1.0, "decks": [5, ["HERO_08", Decks.basic("MAGE")]]})
+	LoopbackTransport.pump(tr)
+	check(not fails.is_empty(), "guest reports a broken start")
+	for t in tr:
+		t.free()
+	g.free()
+
+
+func test_second_hello_is_refused() -> void:
+	var p := _pair()
+	var starts := [0]
+	p[0].started.connect(func(_m): starts[0] += 1)
+	p[1].say_hello()
+	LoopbackTransport.pump(p[2])
+	eq(starts[0], 0, "no second game")
+	check(not p[4][0].is_empty(), "host refuses")
+	_free(p)
+
+
+func test_wrong_sequence_number_fails() -> void:
+	var p := _pair()
+	p[2][1].send({"t": "action", "n": 5, "action": {"type": "concede", "player": 1}, "hash": ""})
+	LoopbackTransport.pump(p[2])
+	check(not p[4][0].is_empty(), "lost move detected")
+	_free(p)
+
+
+func test_empty_hash_only_for_mulligan_and_concede() -> void:
+	var p := _pair()
+	var m: Array = p[3]
+	for side in 2:
+		m[side].submit({"type": "mulligan", "player": side, "replace": []})
+	LoopbackTransport.pump(p[2])
+	var actor: int = m[0].game.current
+	p[2][actor].send({"t": "action", "n": 1, "action": {"type": "end_turn", "player": actor}, "hash": ""})
+	LoopbackTransport.pump(p[2])
+	check(not p[4][1 - actor].is_empty(), "an end_turn without a hash is refused")
+	_free(p)
+
+
+func test_card_data_mismatch_message() -> void:
+	var tr := LoopbackTransport.pair()
+	var h := NetSession.new()
+	h.setup(tr[0], true, "Host", _deck("MAGE"))
+	var fails := []
+	h.failed.connect(func(r): fails.append(r))
+	tr[1].send({"t": "hello", "protocol": 1, "version": h.version, "data": "other", "name": "G", "hero": "HERO_08", "cards": Decks.basic("MAGE")})
+	LoopbackTransport.pump(tr)
+	check(not fails.is_empty() and not fails[0].contains(h.version + ", the opponent's " + h.version), str(fails))
+	check(fails[0].to_lower().contains("card"), "names the card data: " + str(fails))
+	for t in tr:
+		t.free()
+	h.free()
+
+
+func test_leave_shows_left_and_closes_transport() -> void:
+	var p := _pair()
+	p[0].leave()
+	LoopbackTransport.pump(p[2])
+	eq(p[4][1].size(), 1, "guest told once")
+	check(p[4][1][0] == str(TranslationServer.translate("The opponent left the game")), str(p[4][1]))
+	check(p[2][1]._closed, "guest transport closed")
+	eq(p[1].failure_kind, "left", "kind")
+	_free(p)

@@ -32,6 +32,8 @@ func start() -> void:
 ## The player who must act now.
 func actor() -> int:
 	if game.phase == "MULLIGAN":
+		if remote >= 0 and not game.players[1 - remote].mulliganed:
+			return 1 - remote  # online mulligans are simultaneous: the local player chooses now
 		for p in 2:
 			if not game.players[p].mulliganed and bots[p]:
 				return p
@@ -69,7 +71,10 @@ func submit(action: Dictionary) -> Dictionary:
 ## Applies the online opponent's action. "" on success, else the reason it was refused.
 ## expected_hash "" skips the state check (moves both players may make at once: mulligan, concede).
 func submit_remote(action: Variant, expected_hash: String) -> String:
-	if not action is Dictionary or int(action.get("player", -1)) != remote:
+	if not action is Dictionary:
+		return "a broken action"
+	var pl = action.get("player")
+	if not (pl is int or pl is float) or int(pl) != remote:
 		return "an action for the wrong player"
 	if game.game_over:
 		return ""  # e.g. a move that crossed a concede: the game is already decided
