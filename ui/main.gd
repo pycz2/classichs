@@ -21,6 +21,7 @@ func show_menu() -> void:
 	var m := MainMenu.new()
 	m.training.connect(show_training_setup)
 	m.collection.connect(show_collection)
+	m.online.connect(show_online)
 	m.debug_table.connect(show_debug_table)
 	m.quit.connect(func(): get_tree().quit())
 	_set_screen(m)
@@ -34,6 +35,23 @@ func show_training_setup() -> void:
 			{"hero": Decks.hero(bot), "deck": Decks.basic(bot)}, randi())
 		start_match(g, [false, true], false))
 	_set_screen(t)
+
+
+func show_online() -> void:
+	var o := OnlineView.new()
+	o.back.connect(show_menu)
+	o.play.connect(start_online_match)
+	_set_screen(o)
+
+
+func start_online_match(session: NetSession, m: Match) -> MatchView:
+	var v := MatchView.new()
+	v.leave.connect(show_menu)
+	session.reparent(v)  # keep the session and its transport alive across the screen change
+	session.transport.reparent(v)
+	_set_screen(v)
+	v.bind_online(m, session)
+	return v
 
 
 func show_collection() -> void:

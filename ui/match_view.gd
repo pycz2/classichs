@@ -14,7 +14,15 @@ const HAND_Y := 604.0
 const SLOT := 104.0
 const TOOLTIP_POS := Vector2(1035, 160)
 
+const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "thanks": "Thanks.",
+	"wow": "Wow!", "oops": "Oops.", "threaten": "I will destroy you!"}
+
 var debug_mode := false
+## Names shown next to the heroes ("" = You/Opponent).
+var player_names: Array = ["", ""]
+## Online opponent's emotes are hidden.
+var muted := false
+var session: NetSession
 var controller: Match
 var g: Game:
 	get:
@@ -32,6 +40,8 @@ var _mana: Array[Label] = []
 var _names: Array[Label] = []
 var _hint: Label
 var _hint_timer := 0.0
+var _bubbles := {}
+var _emote_panel: VBoxContainer
 
 
 func _ready() -> void:
@@ -84,10 +94,34 @@ func _ready() -> void:
 		js.custom_minimum_size = Vector2(130, 40)
 		js.pressed.connect(show_json)
 		left.add_child(js)
+	var emote := Palette.button(tr("Emote"), "EmoteButton")
+	emote.custom_minimum_size = Vector2(130, 40)
+	emote.pressed.connect(func(): _emote_panel.visible = not _emote_panel.visible)
+	left.add_child(emote)
+	var mute := Palette.button(tr("Mute"), "MuteButton")
+	mute.custom_minimum_size = Vector2(130, 40)
+	mute.toggle_mode = true
+	mute.visible = false
+	mute.toggled.connect(func(on): muted = on)
+	left.add_child(mute)
 	var concede := Palette.button(tr("Concede"), "Concede")
 	concede.custom_minimum_size = Vector2(130, 40)
 	concede.pressed.connect(_on_concede)
 	left.add_child(concede)
+	_emote_panel = VBoxContainer.new()
+	_emote_panel.position = Vector2(150, 420)
+	_emote_panel.visible = false
+	for id in EMOTES:
+		var b := Button.new()
+		b.name = "Emote_" + id
+		b.text = tr(EMOTES[id])
+		b.custom_minimum_size = Vector2(200, 34)
+		var e: String = id
+		b.pressed.connect(func():
+			_emote_panel.visible = false
+			send_emote(e))
+		_emote_panel.add_child(b)
+	add_child(_emote_panel)
 	_hint = Palette.label("", 20, Palette.SELECTED)
 	_hint.position = Vector2(170, 306)
 	_hint.size = Vector2(940, 30)
@@ -104,8 +138,84 @@ func bind(m: Match) -> void:
 	add_child(m)
 	m.changed.connect(_on_changed)
 	m.finished.connect(func(_w): refresh())
+	if player_names == ["", ""] and not (m.bots[0] and m.bots[1]):
+		var me := m.viewer()
+		player_names[me] = Profile.load_name()
+		player_names[1 - me] = tr("Bot") if m.bots[1 - me] else ""
 	m.start()
 	refresh()
+
+
+## An online match: the session (and its transport) now live under this view.
+func bind_online(m: Match, s: NetSession) -> void:
+	session = s
+	for n in [s, s.transport]:
+		if n.get_parent() and n.get_parent() != self:
+			n.reparent(self)
+		elif n.get_parent() == null:
+			add_child(n)
+	player_names[m.viewer()] = s.player_name
+	player_names[m.remote] = s.remote_name
+	s.emote_received.connect(func(p, id):
+		if not muted:
+			show_emote(p, id))
+	s.failed.connect(_on_connection_lost)
+	var mute := find_child("MuteButton", true, false) as Button
+	if mute:
+		mute.visible = true
+	bind(m)
+
+
+func send_emote(id: String) -> void:
+	if not EMOTES.has(id) or controller == null:
+		return
+	show_emote(viewer(), id)
+	if session:
+		session.send_emote(id)
+
+
+func show_emote(p: int, id: String) -> void:
+	if _bubbles.has(p) and is_instance_valid(_bubbles[p]):
+		_bubbles[p].queue_free()
+	var own := p == viewer()
+	var bubble := PanelContainer.new()
+	bubble.add_theme_stylebox_override("panel", Palette.box(Color("f4ead5"), 14, Color("2a2118"), 3))
+	var l := Palette.label(tr(EMOTES[id]), 20, Color("2a2118"))
+	l.add_theme_constant_override("outline_size", 0)
+	bubble.add_child(l)
+	bubble.position = (OWN_HERO + Vector2(-210, 20)) if own else (ENEMY_HERO + Vector2(-210, 40))
+	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(bubble)
+	_bubbles[p] = bubble
+	if is_inside_tree():
+		var tw := create_tween()
+		tw.tween_interval(2.5)
+		tw.tween_property(bubble, "modulate:a", 0.0, 0.5)
+		tw.tween_callback(bubble.queue_free)
+
+
+## Text of the emote bubble currently shown for player p ("" = none).
+func bubble_text(p: int) -> String:
+	if not _bubbles.has(p) or not is_instance_valid(_bubbles[p]) or _bubbles[p].is_queued_for_deletion():
+		return ""
+	return (_bubbles[p].get_child(0) as Label).text
+
+
+func _on_connection_lost(reason: String) -> void:
+	if g.game_over:
+		return
+	var box := _open_overlay(tr("Connection lost"))
+	_overlay.name = "ConnectionLost"
+	var why := Palette.label(reason, 20)
+	why.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(why)
+	_centered_button(box, tr("Back to Menu"), "BackToMenuLost", _leave)
+
+
+func _leave() -> void:
+	if session:
+		session.leave()
+	leave.emit()
 
 
 func _process(delta: float) -> void:
@@ -163,6 +273,8 @@ func refresh() -> void:
 
 
 func _side_name(p: int) -> String:
+	if player_names[p] != "":
+		return player_names[p]
 	if controller.bots[0] == controller.bots[1]:
 		return tr("Player %d") % (p + 1)
 	return tr("You") if p == viewer() else tr("Opponent")
@@ -355,7 +467,7 @@ func _on_end_turn() -> void:
 
 func _on_concede() -> void:
 	if g.game_over:
-		leave.emit()
+		_leave()
 		return
 	var box := _open_overlay(tr("Concede the match?"))
 	_overlay.name = "ConcedeConfirm"
@@ -496,6 +608,8 @@ func _centered_button(box: VBoxContainer, text: String, name: String, fn: Callab
 
 
 func _refresh_overlay() -> void:
+	if _overlay and _overlay.name == "ConnectionLost":
+		return
 	if g.game_over:
 		if _overlay == null or _overlay.name != "GameOver":
 			var text := tr("Draw")
@@ -506,7 +620,7 @@ func _refresh_overlay() -> void:
 					text = tr("Victory!") if g.winner == viewer() else tr("Defeat")
 			var box := _open_overlay(text)
 			_overlay.name = "GameOver"
-			_centered_button(box, tr("Back to Menu"), "BackToMenu", func(): leave.emit())
+			_centered_button(box, tr("Back to Menu"), "BackToMenu", _leave)
 		return
 	if g.phase == "MULLIGAN" and my_action():
 		if _overlay == null or _overlay.name != "Mulligan":
@@ -515,6 +629,8 @@ func _refresh_overlay() -> void:
 	if not g.pending.is_empty() and my_action():
 		if _overlay == null or _overlay.name != "Choice":
 			_show_choice()
+		return
+	if _overlay and _overlay.name == "ConnectionLost":
 		return
 	if _overlay and _overlay.name in ["Mulligan", "Choice", "GameOver"]:
 		_close_overlay()

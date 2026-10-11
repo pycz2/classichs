@@ -4,6 +4,7 @@ extends Control
 
 signal training
 signal collection
+signal online
 signal debug_table
 signal quit
 
@@ -23,13 +24,15 @@ func _ready() -> void:
 	var title := Palette.label("Classic HS", 56, Palette.ATTACK)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
-	var items := [["Training", training, true], ["Online Game", null, false], ["Tutorial", null, false],
+	var items := [["Training", training, true], ["Online Game", online, WebRtcTransport.available()], ["Tutorial", null, false],
 		["Collection", collection, true], ["Debug Table", debug_table, true]]
 	if not OS.has_feature("web"):
 		items.append(["Exit", quit, true])
 	for it in items:
 		var b := Palette.button(tr(it[0]), it[0].replace(" ", ""))
 		b.disabled = not it[2]
+		if it[0] == "Online Game" and b.disabled:
+			b.tooltip_text = tr("Online play works in the browser version of the game")
 		if it[1] != null:
 			var sig: Signal = it[1]
 			b.pressed.connect(func(): sig.emit())
