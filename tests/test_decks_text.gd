@@ -38,3 +38,9 @@ func test_hs_locale_mapping() -> void:
 	eq(CardText.hs_locale("zh_TW"), "zhTW", "zh_TW")
 	eq(CardText.hs_locale("pt"), "ptBR", "pt")
 	eq(CardText.hs_locale("en_US"), "enUS", "en")
+
+
+func test_plural_forms_follow_their_number() -> void:
+	eq(CardText.text("VAN_CS2_012", "frFR"), "Inflige 4 points de dégâts à un adversaire et 1 point de dégâts à tous les autres adversaires.", "Swipe: 1 point")
+	check(CardText.rich("VAN_CS2_061", "frFR").contains("Rend 2 points de vie"), CardText.rich("VAN_CS2_061", "frFR"))
+	check(CardText.text("VAN_CS2_061", "frFR", 1).contains("*3* points"), "with spell damage: " + CardText.text("VAN_CS2_061", "frFR", 1))
