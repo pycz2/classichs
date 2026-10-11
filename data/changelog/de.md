@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-10-12
+
+### Hinzugefügt
+- Der Zugverlauf links ist nach Zügen getrennt („Zug N“ in der Farbe des Spielers); beim Zeigen auf einen Zug sieht man, was er bewirkte und bei wem: Schaden, Heilung, Stärkungen, Einfrieren, Stille, Tode, Herbeirufungen, angelegte Waffen sowie ausgelöste Kampfschreie und Todesröcheln. Verdeckte Karten des Gegners bleiben verdeckt.
+- Der Decktracker hat einen eigenen Knopf neben dem Menü: „Dein Deck“ mit Kartenbildern, ×2, abgedunkelten verbrauchten Karten und der Ziehchance jeder Karte; „Vom Gegner gespielt“, eine wachsende Liste mit ×2.
+
 ## [0.16.2] - 2026-10-12
 
 ### Behoben

@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-10-12
+
+### Dodano
+- Historia ruchów po lewej jest podzielona na tury („Tura N” w kolorze gracza); po najechaniu na ruch widać, co zrobił i komu: obrażenia, leczenie, wzmocnienia, zamrożenie, wyciszenie, śmierci, przyzwania, założoną broń oraz wywołane okrzyki bojowe i ostatnie tchnienia. Ukryte karty przeciwnika pozostają ukryte.
+- Śledzenie talii ma własny przycisk obok menu: „Twoja talia” z obrazkami, ×2, przyciemnionymi zużytymi kartami i szansą dobrania każdej karty; „Zagrane przez przeciwnika”, rosnąca lista z ×2.
+
 ## [0.16.2] - 2026-10-12
 
 ### Naprawiono

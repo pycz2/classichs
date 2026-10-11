@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-10-12
+
+### Added
+- The move history on the left is split by turns ("Turn N" in the player's colour); hovering a move shows what it did and to whom: damage, healing, buffs, freezing, silencing, deaths, summons, weapon equips, plus the Battlecries and Deathrattles it set off. The opponent's hidden cards stay hidden.
+- The deck tracker has its own button next to the menu: "Your deck" with card pictures, ×2, dimmed cards that are gone and each card's chance to be drawn; "Opponent played", a growing list with ×2.
+
 ## [0.16.2] - 2026-10-12
 
 ### Fixed
