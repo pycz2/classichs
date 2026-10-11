@@ -2248,6 +2248,7 @@
 "dbfId": 68298,
 "health": 2,
 "id": "VAN_CS1_042",
+"legacyDbfId": 922,
 "mechanics": [
 "TAUNT"
 ],
@@ -2295,6 +2296,7 @@
 "dbfId": 69745,
 "health": 6,
 "id": "VAN_CS1_069",
+"legacyDbfId": 602,
 "mechanics": [
 "TAUNT"
 ],
@@ -2340,6 +2342,7 @@
 "cost": 5,
 "dbfId": 68299,
 "id": "VAN_CS1_112",
+"legacyDbfId": 841,
 "name": {
 "deDE": "Heilige Nova",
 "enUS": "Holy Nova",
@@ -2382,6 +2385,7 @@
 "cost": 10,
 "dbfId": 68300,
 "id": "VAN_CS1_113",
+"legacyDbfId": 8,
 "name": {
 "deDE": "Gedankenkontrolle",
 "enUS": "Mind Control",
@@ -2424,6 +2428,7 @@
 "cost": 1,
 "dbfId": 69746,
 "id": "VAN_CS1_129",
+"legacyDbfId": 376,
 "name": {
 "deDE": "Inneres Feuer",
 "enUS": "Inner Fire",
@@ -2466,6 +2471,7 @@
 "cost": 1,
 "dbfId": 68301,
 "id": "VAN_CS1_130",
+"legacyDbfId": 279,
 "name": {
 "deDE": "Heilige Pein",
 "enUS": "Holy Smite",
@@ -2508,6 +2514,7 @@
 "cost": 1,
 "dbfId": 68303,
 "id": "VAN_CS2_003",
+"legacyDbfId": 1099,
 "name": {
 "deDE": "Gedankensicht",
 "enUS": "Mind Vision",
@@ -2550,6 +2557,7 @@
 "cost": 1,
 "dbfId": 68304,
 "id": "VAN_CS2_004",
+"legacyDbfId": 613,
 "name": {
 "deDE": "Machtwort: Schild",
 "enUS": "Power Word: Shield",
@@ -2592,6 +2600,7 @@
 "cost": 1,
 "dbfId": 68307,
 "id": "VAN_CS2_005",
+"legacyDbfId": 1050,
 "name": {
 "deDE": "Klaue",
 "enUS": "Claw",
@@ -2634,6 +2643,7 @@
 "cost": 3,
 "dbfId": 68309,
 "id": "VAN_CS2_007",
+"legacyDbfId": 773,
 "name": {
 "deDE": "Heilende Berührung",
 "enUS": "Healing Touch",
@@ -2676,6 +2686,7 @@
 "cost": 0,
 "dbfId": 68310,
 "id": "VAN_CS2_008",
+"legacyDbfId": 467,
 "name": {
 "deDE": "Mondfeuer",
 "enUS": "Moonfire",
@@ -2718,6 +2729,7 @@
 "cost": 2,
 "dbfId": 68311,
 "id": "VAN_CS2_009",
+"legacyDbfId": 213,
 "name": {
 "deDE": "Mal der Wildnis",
 "enUS": "Mark of the Wild",
@@ -2763,6 +2775,7 @@
 "cost": 3,
 "dbfId": 68313,
 "id": "VAN_CS2_011",
+"legacyDbfId": 742,
 "name": {
 "deDE": "Wildes Brüllen",
 "enUS": "Savage Roar",
@@ -2805,6 +2818,7 @@
 "cost": 4,
 "dbfId": 68315,
 "id": "VAN_CS2_012",
+"legacyDbfId": 64,
 "name": {
 "deDE": "Prankenhieb",
 "enUS": "Swipe",
@@ -2847,6 +2861,7 @@
 "cost": 2,
 "dbfId": 68316,
 "id": "VAN_CS2_013",
+"legacyDbfId": 1124,
 "name": {
 "deDE": "Wildwuchs",
 "enUS": "Wild Growth",
@@ -2889,6 +2904,7 @@
 "cost": 4,
 "dbfId": 68319,
 "id": "VAN_CS2_022",
+"legacyDbfId": 77,
 "name": {
 "deDE": "Verwandlung",
 "enUS": "Polymorph",
@@ -2931,6 +2947,7 @@
 "cost": 3,
 "dbfId": 68321,
 "id": "VAN_CS2_023",
+"legacyDbfId": 555,
 "name": {
 "deDE": "Arkane Intelligenz",
 "enUS": "Arcane Intellect",
@@ -2973,6 +2990,7 @@
 "cost": 2,
 "dbfId": 68322,
 "id": "VAN_CS2_024",
+"legacyDbfId": 662,
 "mechanics": [
 "FREEZE"
 ],
@@ -3018,6 +3036,7 @@
 "cost": 2,
 "dbfId": 68323,
 "id": "VAN_CS2_025",
+"legacyDbfId": 447,
 "name": {
 "deDE": "Arkane Explosion",
 "enUS": "Arcane Explosion",
@@ -3060,6 +3079,7 @@
 "cost": 3,
 "dbfId": 68324,
 "id": "VAN_CS2_026",
+"legacyDbfId": 587,
 "mechanics": [
 "FREEZE"
 ],
@@ -3105,6 +3125,7 @@
 "cost": 1,
 "dbfId": 68325,
 "id": "VAN_CS2_027",
+"legacyDbfId": 1084,
 "name": {
 "deDE": "Spiegelbild",
 "enUS": "Mirror Image",
@@ -3150,6 +3171,7 @@
 "cost": 6,
 "dbfId": 69747,
 "id": "VAN_CS2_028",
+"legacyDbfId": 457,
 "mechanics": [
 "FREEZE"
 ],
@@ -3195,6 +3217,7 @@
 "cost": 4,
 "dbfId": 68326,
 "id": "VAN_CS2_029",
+"legacyDbfId": 315,
 "name": {
 "deDE": "Feuerball",
 "enUS": "Fireball",
@@ -3237,6 +3260,7 @@
 "cost": 1,
 "dbfId": 69748,
 "id": "VAN_CS2_031",
+"legacyDbfId": 172,
 "mechanics": [
 "FREEZE"
 ],
@@ -3282,6 +3306,7 @@
 "cost": 7,
 "dbfId": 68327,
 "id": "VAN_CS2_032",
+"legacyDbfId": 1004,
 "name": {
 "deDE": "Flammenstoß",
 "enUS": "Flamestrike",
@@ -3326,6 +3351,7 @@
 "dbfId": 68328,
 "health": 6,
 "id": "VAN_CS2_033",
+"legacyDbfId": 395,
 "mechanics": [
 "FREEZE"
 ],
@@ -3371,6 +3397,7 @@
 "cost": 1,
 "dbfId": 68329,
 "id": "VAN_CS2_037",
+"legacyDbfId": 971,
 "mechanics": [
 "FREEZE"
 ],
@@ -3416,6 +3443,7 @@
 "cost": 2,
 "dbfId": 69749,
 "id": "VAN_CS2_038",
+"legacyDbfId": 404,
 "name": {
 "deDE": "Geist der Ahnen",
 "enUS": "Ancestral Spirit",
@@ -3461,6 +3489,7 @@
 "cost": 2,
 "dbfId": 68330,
 "id": "VAN_CS2_039",
+"legacyDbfId": 51,
 "name": {
 "deDE": "Windzorn",
 "enUS": "Windfury",
@@ -3506,6 +3535,7 @@
 "cost": 0,
 "dbfId": 68331,
 "id": "VAN_CS2_041",
+"legacyDbfId": 149,
 "name": {
 "deDE": "Heilung der Ahnen",
 "enUS": "Ancestral Healing",
@@ -3553,6 +3583,7 @@
 "dbfId": 68333,
 "health": 5,
 "id": "VAN_CS2_042",
+"legacyDbfId": 189,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -3598,6 +3629,7 @@
 "cost": 1,
 "dbfId": 68334,
 "id": "VAN_CS2_045",
+"legacyDbfId": 239,
 "name": {
 "deDE": "Waffe des Felsbeißers",
 "enUS": "Rockbiter Weapon",
@@ -3640,6 +3672,7 @@
 "cost": 5,
 "dbfId": 68336,
 "id": "VAN_CS2_046",
+"legacyDbfId": 1171,
 "name": {
 "deDE": "Kampfrausch",
 "enUS": "Bloodlust",
@@ -3683,6 +3716,7 @@
 "dbfId": 68338,
 "health": 1,
 "id": "VAN_CS2_050",
+"legacyDbfId": 537,
 "name": {
 "deDE": "Verbrennungstotem",
 "enUS": "Searing Totem",
@@ -3711,6 +3745,7 @@
 "dbfId": 68339,
 "health": 2,
 "id": "VAN_CS2_051",
+"legacyDbfId": 850,
 "mechanics": [
 "TAUNT"
 ],
@@ -3758,6 +3793,7 @@
 "dbfId": 68340,
 "health": 2,
 "id": "VAN_CS2_052",
+"legacyDbfId": 458,
 "mechanics": [
 "SPELLPOWER"
 ],
@@ -3805,6 +3841,7 @@
 "cost": 3,
 "dbfId": 69750,
 "id": "VAN_CS2_053",
+"legacyDbfId": 818,
 "name": {
 "deDE": "Fernsicht",
 "enUS": "Far Sight",
@@ -3847,6 +3884,7 @@
 "cost": 3,
 "dbfId": 68341,
 "id": "VAN_CS2_057",
+"legacyDbfId": 914,
 "name": {
 "deDE": "Schattenblitz",
 "enUS": "Shadow Bolt",
@@ -3891,6 +3929,7 @@
 "dbfId": 69751,
 "health": 1,
 "id": "VAN_CS2_059",
+"legacyDbfId": 469,
 "mechanics": [
 "STEALTH",
 "TRIGGER_VISUAL"
@@ -3938,6 +3977,7 @@
 "cost": 3,
 "dbfId": 68342,
 "id": "VAN_CS2_061",
+"legacyDbfId": 919,
 "name": {
 "deDE": "Blutsauger",
 "enUS": "Drain Life",
@@ -3980,6 +4020,7 @@
 "cost": 4,
 "dbfId": 68343,
 "id": "VAN_CS2_062",
+"legacyDbfId": 950,
 "name": {
 "deDE": "Höllenfeuer",
 "enUS": "Hellfire",
@@ -4022,6 +4063,7 @@
 "cost": 1,
 "dbfId": 68344,
 "id": "VAN_CS2_063",
+"legacyDbfId": 982,
 "name": {
 "deDE": "Verderbnis",
 "enUS": "Corruption",
@@ -4066,6 +4108,7 @@
 "dbfId": 68346,
 "health": 6,
 "id": "VAN_CS2_064",
+"legacyDbfId": 1019,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -4114,6 +4157,7 @@
 "dbfId": 68347,
 "health": 3,
 "id": "VAN_CS2_065",
+"legacyDbfId": 48,
 "mechanics": [
 "TAUNT"
 ],
@@ -4160,6 +4204,7 @@
 "cost": 0,
 "dbfId": 68348,
 "id": "VAN_CS2_072",
+"legacyDbfId": 180,
 "name": {
 "deDE": "Meucheln",
 "enUS": "Backstab",
@@ -4202,6 +4247,7 @@
 "cost": 1,
 "dbfId": 69752,
 "id": "VAN_CS2_073",
+"legacyDbfId": 268,
 "mechanics": [
 "COMBO"
 ],
@@ -4291,6 +4337,7 @@
 "cost": 1,
 "dbfId": 68349,
 "id": "VAN_CS2_074",
+"legacyDbfId": 459,
 "name": {
 "deDE": "Tödliches Gift",
 "enUS": "Deadly Poison",
@@ -4333,6 +4380,7 @@
 "cost": 1,
 "dbfId": 68351,
 "id": "VAN_CS2_075",
+"legacyDbfId": 710,
 "name": {
 "deDE": "Finsterer Stoß",
 "enUS": "Sinister Strike",
@@ -4375,6 +4423,7 @@
 "cost": 5,
 "dbfId": 68352,
 "id": "VAN_CS2_076",
+"legacyDbfId": 345,
 "name": {
 "deDE": "Attentat",
 "enUS": "Assassinate",
@@ -4417,6 +4466,7 @@
 "cost": 7,
 "dbfId": 68353,
 "id": "VAN_CS2_077",
+"legacyDbfId": 630,
 "name": {
 "deDE": "Sprinten",
 "enUS": "Sprint",
@@ -4461,6 +4511,7 @@
 "dbfId": 68354,
 "durability": 4,
 "id": "VAN_CS2_080",
+"legacyDbfId": 421,
 "name": {
 "deDE": "Klinge des Assassinen",
 "enUS": "Assassin's Blade",
@@ -4488,6 +4539,7 @@
 "dbfId": 68355,
 "durability": 2,
 "id": "VAN_CS2_082",
+"legacyDbfId": 485,
 "name": {
 "deDE": "Tückisches Messer",
 "enUS": "Wicked Knife",
@@ -4514,6 +4566,7 @@
 "cost": 0,
 "dbfId": 68357,
 "id": "VAN_CS2_084",
+"legacyDbfId": 141,
 "name": {
 "deDE": "Mal des Jägers",
 "enUS": "Hunter's Mark",
@@ -4556,6 +4609,7 @@
 "cost": 1,
 "dbfId": 68359,
 "id": "VAN_CS2_087",
+"legacyDbfId": 70,
 "name": {
 "deDE": "Segen der Macht",
 "enUS": "Blessing of Might",
@@ -4600,6 +4654,7 @@
 "dbfId": 68361,
 "health": 6,
 "id": "VAN_CS2_088",
+"legacyDbfId": 1068,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -4645,6 +4700,7 @@
 "cost": 2,
 "dbfId": 68362,
 "id": "VAN_CS2_089",
+"legacyDbfId": 291,
 "name": {
 "deDE": "Heiliges Licht",
 "enUS": "Holy Light",
@@ -4689,6 +4745,7 @@
 "dbfId": 68363,
 "durability": 4,
 "id": "VAN_CS2_091",
+"legacyDbfId": 383,
 "name": {
 "deDE": "Gerechtigkeit des Lichts",
 "enUS": "Light's Justice",
@@ -4715,6 +4772,7 @@
 "cost": 4,
 "dbfId": 68364,
 "id": "VAN_CS2_092",
+"legacyDbfId": 943,
 "name": {
 "deDE": "Segen der Könige",
 "enUS": "Blessing of Kings",
@@ -4757,6 +4815,7 @@
 "cost": 4,
 "dbfId": 68366,
 "id": "VAN_CS2_093",
+"legacyDbfId": 476,
 "name": {
 "deDE": "Weihe",
 "enUS": "Consecration",
@@ -4799,6 +4858,7 @@
 "cost": 4,
 "dbfId": 68367,
 "id": "VAN_CS2_094",
+"legacyDbfId": 250,
 "name": {
 "deDE": "Hammer des Zorns",
 "enUS": "Hammer of Wrath",
@@ -4843,6 +4903,7 @@
 "dbfId": 68368,
 "durability": 2,
 "id": "VAN_CS2_097",
+"legacyDbfId": 847,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -4889,6 +4950,7 @@
 "dbfId": 71409,
 "health": 1,
 "id": "VAN_CS2_101t",
+"legacyDbfId": 1652,
 "name": {
 "deDE": "Rekrut der Silbernen Hand",
 "enUS": "Silver Hand Recruit",
@@ -4914,6 +4976,7 @@
 "cost": 2,
 "dbfId": 68370,
 "id": "VAN_CS2_102_H3",
+"legacyDbfId": 58799,
 "name": {
 "deDE": "Aufrüsten!",
 "enUS": "Armor Up!",
@@ -4956,6 +5019,7 @@
 "cost": 3,
 "dbfId": 68371,
 "id": "VAN_CS2_103",
+"legacyDbfId": 344,
 "name": {
 "deDE": "Sturmangriff",
 "enUS": "Charge",
@@ -5045,6 +5109,7 @@
 "cost": 2,
 "dbfId": 69753,
 "id": "VAN_CS2_104",
+"legacyDbfId": 1108,
 "name": {
 "deDE": "Toben",
 "enUS": "Rampage",
@@ -5087,6 +5152,7 @@
 "cost": 2,
 "dbfId": 68373,
 "id": "VAN_CS2_105",
+"legacyDbfId": 1007,
 "name": {
 "deDE": "Heldenhafter Stoß",
 "enUS": "Heroic Strike",
@@ -5131,6 +5197,7 @@
 "dbfId": 68375,
 "durability": 2,
 "id": "VAN_CS2_106",
+"legacyDbfId": 401,
 "name": {
 "deDE": "Feurige Kriegsaxt",
 "enUS": "Fiery War Axe",
@@ -5157,6 +5224,7 @@
 "cost": 1,
 "dbfId": 68376,
 "id": "VAN_CS2_108",
+"legacyDbfId": 785,
 "name": {
 "deDE": "Hinrichten",
 "enUS": "Execute",
@@ -5201,6 +5269,7 @@
 "dbfId": 68377,
 "durability": 2,
 "id": "VAN_CS2_112",
+"legacyDbfId": 304,
 "name": {
 "deDE": "Arkanitschnitter",
 "enUS": "Arcanite Reaper",
@@ -5227,6 +5296,7 @@
 "cost": 2,
 "dbfId": 68378,
 "id": "VAN_CS2_114",
+"legacyDbfId": 940,
 "name": {
 "deDE": "Spalten",
 "enUS": "Cleave",
@@ -5271,6 +5341,7 @@
 "dbfId": 69754,
 "health": 3,
 "id": "VAN_CS2_117",
+"legacyDbfId": 1651,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -5318,6 +5389,7 @@
 "dbfId": 68379,
 "health": 1,
 "id": "VAN_CS2_118",
+"legacyDbfId": 1653,
 "name": {
 "deDE": "Magmawüter",
 "enUS": "Magma Rager",
@@ -5346,6 +5418,7 @@
 "dbfId": 68380,
 "health": 7,
 "id": "VAN_CS2_119",
+"legacyDbfId": 1370,
 "name": {
 "deDE": "Oasenschnappkiefer",
 "enUS": "Oasis Snapjaw",
@@ -5375,6 +5448,7 @@
 "dbfId": 68381,
 "health": 3,
 "id": "VAN_CS2_120",
+"legacyDbfId": 1369,
 "name": {
 "deDE": "Flusskrokilisk",
 "enUS": "River Crocolisk",
@@ -5404,6 +5478,7 @@
 "dbfId": 68382,
 "health": 2,
 "id": "VAN_CS2_121",
+"legacyDbfId": 41,
 "mechanics": [
 "TAUNT"
 ],
@@ -5451,6 +5526,7 @@
 "dbfId": 68383,
 "health": 2,
 "id": "VAN_CS2_122",
+"legacyDbfId": 1401,
 "mechanics": [
 "AURA"
 ],
@@ -5498,6 +5574,7 @@
 "dbfId": 68385,
 "health": 1,
 "id": "VAN_CS2_124",
+"legacyDbfId": 289,
 "mechanics": [
 "CHARGE"
 ],
@@ -5545,6 +5622,7 @@
 "dbfId": 68386,
 "health": 3,
 "id": "VAN_CS2_125",
+"legacyDbfId": 1182,
 "mechanics": [
 "TAUNT"
 ],
@@ -5593,6 +5671,7 @@
 "dbfId": 68387,
 "health": 4,
 "id": "VAN_CS2_127",
+"legacyDbfId": 67,
 "mechanics": [
 "TAUNT"
 ],
@@ -5641,6 +5720,7 @@
 "dbfId": 68388,
 "health": 5,
 "id": "VAN_CS2_131",
+"legacyDbfId": 622,
 "mechanics": [
 "CHARGE"
 ],
@@ -5688,6 +5768,7 @@
 "dbfId": 68389,
 "health": 2,
 "id": "VAN_CS2_141",
+"legacyDbfId": 339,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -5735,6 +5816,7 @@
 "dbfId": 68390,
 "health": 2,
 "id": "VAN_CS2_142",
+"legacyDbfId": 672,
 "mechanics": [
 "SPELLPOWER"
 ],
@@ -5783,6 +5865,7 @@
 "dbfId": 69755,
 "health": 1,
 "id": "VAN_CS2_146",
+"legacyDbfId": 724,
 "name": {
 "deDE": "Südmeerdeckmatrose",
 "enUS": "Southsea Deckhand",
@@ -5831,6 +5914,7 @@
 "dbfId": 68391,
 "health": 4,
 "id": "VAN_CS2_147",
+"legacyDbfId": 308,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -5878,6 +5962,7 @@
 "dbfId": 68392,
 "health": 2,
 "id": "VAN_CS2_150",
+"legacyDbfId": 413,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -5925,6 +6010,7 @@
 "dbfId": 69756,
 "health": 4,
 "id": "VAN_CS2_151",
+"legacyDbfId": 69,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -5971,6 +6057,7 @@
 "dbfId": 69757,
 "health": 2,
 "id": "VAN_CS2_152",
+"legacyDbfId": 482,
 "name": {
 "deDE": "Knappe",
 "enUS": "Squire",
@@ -5998,6 +6085,7 @@
 "dbfId": 68393,
 "health": 7,
 "id": "VAN_CS2_155",
+"legacyDbfId": 525,
 "mechanics": [
 "SPELLPOWER"
 ],
@@ -6046,6 +6134,7 @@
 "dbfId": 69758,
 "health": 5,
 "id": "VAN_CS2_161",
+"legacyDbfId": 134,
 "mechanics": [
 "STEALTH"
 ],
@@ -6093,6 +6182,7 @@
 "dbfId": 68394,
 "health": 5,
 "id": "VAN_CS2_162",
+"legacyDbfId": 157,
 "mechanics": [
 "TAUNT"
 ],
@@ -6140,6 +6230,7 @@
 "dbfId": 68395,
 "health": 1,
 "id": "VAN_CS2_168",
+"legacyDbfId": 191,
 "name": {
 "deDE": "Murlocräuber",
 "enUS": "Murloc Raider",
@@ -6169,6 +6260,7 @@
 "dbfId": 69759,
 "health": 1,
 "id": "VAN_CS2_169",
+"legacyDbfId": 641,
 "mechanics": [
 "WINDFURY"
 ],
@@ -6217,6 +6309,7 @@
 "dbfId": 68396,
 "health": 1,
 "id": "VAN_CS2_171",
+"legacyDbfId": 648,
 "mechanics": [
 "CHARGE"
 ],
@@ -6265,6 +6358,7 @@
 "dbfId": 68397,
 "health": 2,
 "id": "VAN_CS2_172",
+"legacyDbfId": 216,
 "name": {
 "deDE": "Blutsumpfraptor",
 "enUS": "Bloodfen Raptor",
@@ -6294,6 +6388,7 @@
 "dbfId": 68398,
 "health": 1,
 "id": "VAN_CS2_173",
+"legacyDbfId": 739,
 "mechanics": [
 "CHARGE"
 ],
@@ -6342,6 +6437,7 @@
 "dbfId": 68399,
 "health": 5,
 "id": "VAN_CS2_179",
+"legacyDbfId": 635,
 "mechanics": [
 "TAUNT"
 ],
@@ -6389,6 +6485,7 @@
 "dbfId": 69760,
 "health": 7,
 "id": "VAN_CS2_181",
+"legacyDbfId": 1109,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -6436,6 +6533,7 @@
 "dbfId": 68400,
 "health": 5,
 "id": "VAN_CS2_182",
+"legacyDbfId": 90,
 "name": {
 "deDE": "Eiswindyeti",
 "enUS": "Chillwind Yeti",
@@ -6464,6 +6562,7 @@
 "dbfId": 68401,
 "health": 7,
 "id": "VAN_CS2_186",
+"legacyDbfId": 712,
 "name": {
 "deDE": "Kriegsgolem",
 "enUS": "War Golem",
@@ -6492,6 +6591,7 @@
 "dbfId": 68402,
 "health": 4,
 "id": "VAN_CS2_187",
+"legacyDbfId": 1140,
 "mechanics": [
 "TAUNT"
 ],
@@ -6539,6 +6639,7 @@
 "dbfId": 69761,
 "health": 1,
 "id": "VAN_CS2_188",
+"legacyDbfId": 242,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -6586,6 +6687,7 @@
 "dbfId": 68403,
 "health": 1,
 "id": "VAN_CS2_189",
+"legacyDbfId": 389,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -6633,6 +6735,7 @@
 "dbfId": 68404,
 "health": 3,
 "id": "VAN_CS2_196",
+"legacyDbfId": 257,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -6680,6 +6783,7 @@
 "dbfId": 68405,
 "health": 4,
 "id": "VAN_CS2_197",
+"legacyDbfId": 995,
 "mechanics": [
 "SPELLPOWER"
 ],
@@ -6728,6 +6832,7 @@
 "dbfId": 68406,
 "health": 7,
 "id": "VAN_CS2_200",
+"legacyDbfId": 1686,
 "name": {
 "deDE": "Oger der Felsfäuste",
 "enUS": "Boulderfist Ogre",
@@ -6756,6 +6861,7 @@
 "dbfId": 68407,
 "health": 5,
 "id": "VAN_CS2_201",
+"legacyDbfId": 1687,
 "name": {
 "deDE": "Kernhund",
 "enUS": "Core Hound",
@@ -6785,6 +6891,7 @@
 "dbfId": 69762,
 "health": 1,
 "id": "VAN_CS2_203",
+"legacyDbfId": 290,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -6836,6 +6943,7 @@
 "dbfId": 68408,
 "health": 2,
 "id": "VAN_CS2_213",
+"legacyDbfId": 445,
 "mechanics": [
 "CHARGE"
 ],
@@ -6883,6 +6991,7 @@
 "dbfId": 69763,
 "health": 6,
 "id": "VAN_CS2_221",
+"legacyDbfId": 61,
 "name": {
 "deDE": "Hasserfüllte Schmiedin",
 "enUS": "Spiteful Smith",
@@ -6931,6 +7040,7 @@
 "dbfId": 68409,
 "health": 6,
 "id": "VAN_CS2_222",
+"legacyDbfId": 753,
 "mechanics": [
 "AURA"
 ],
@@ -6978,6 +7088,7 @@
 "dbfId": 68411,
 "health": 4,
 "id": "VAN_CS2_226",
+"legacyDbfId": 496,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -7025,6 +7136,7 @@
 "dbfId": 69764,
 "health": 6,
 "id": "VAN_CS2_227",
+"legacyDbfId": 1122,
 "mechanics": [
 "AURA"
 ],
@@ -7072,6 +7184,7 @@
 "dbfId": 69765,
 "health": 1,
 "id": "VAN_CS2_231",
+"legacyDbfId": 179,
 "name": {
 "deDE": "Irrwisch",
 "enUS": "Wisp",
@@ -7100,6 +7213,7 @@
 "dbfId": 68413,
 "health": 8,
 "id": "VAN_CS2_232",
+"legacyDbfId": 205,
 "mechanics": [
 "TAUNT"
 ],
@@ -7145,6 +7259,7 @@
 "cost": 2,
 "dbfId": 69766,
 "id": "VAN_CS2_233",
+"legacyDbfId": 1064,
 "mechanics": [
 "AFFECTED_BY_SPELL_POWER"
 ],
@@ -7190,6 +7305,7 @@
 "cost": 2,
 "dbfId": 68414,
 "id": "VAN_CS2_234",
+"legacyDbfId": 1367,
 "name": {
 "deDE": "Schattenwort: Schmerz",
 "enUS": "Shadow Word: Pain",
@@ -7234,6 +7350,7 @@
 "dbfId": 68535,
 "health": 3,
 "id": "VAN_CS2_235",
+"legacyDbfId": 1650,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -7279,6 +7396,7 @@
 "cost": 2,
 "dbfId": 68536,
 "id": "VAN_CS2_236",
+"legacyDbfId": 1361,
 "name": {
 "deDE": "Göttlicher Wille",
 "enUS": "Divine Spirit",
@@ -7323,6 +7441,7 @@
 "dbfId": 68416,
 "health": 1,
 "id": "VAN_CS2_237",
+"legacyDbfId": 1241,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -7370,6 +7489,7 @@
 "dbfId": 68417,
 "health": 1,
 "id": "VAN_CS2_boar",
+"legacyDbfId": 298,
 "name": {
 "deDE": "Eber",
 "enUS": "Boar",
@@ -7398,6 +7518,7 @@
 "dbfId": 68418,
 "health": 2,
 "id": "VAN_CS2_mirror",
+"legacyDbfId": 968,
 "mechanics": [
 "TAUNT"
 ],
@@ -7444,6 +7565,7 @@
 "dbfId": 68419,
 "health": 1,
 "id": "VAN_CS2_tk1",
+"legacyDbfId": 796,
 "name": {
 "deDE": "Schaf",
 "enUS": "Sheep",
@@ -7472,6 +7594,7 @@
 "dbfId": 70474,
 "health": 5,
 "id": "VAN_DREAM_01",
+"legacyDbfId": 340,
 "mechanics": [
 "ELUSIVE"
 ],
@@ -7515,6 +7638,7 @@
 "cost": 2,
 "dbfId": 70475,
 "id": "VAN_DREAM_02",
+"legacyDbfId": 301,
 "name": {
 "deDE": "Ysera erwacht",
 "enUS": "Ysera Awakens",
@@ -7557,6 +7681,7 @@
 "dbfId": 71422,
 "health": 6,
 "id": "VAN_DREAM_03",
+"legacyDbfId": 489,
 "name": {
 "deDE": "Smaragddrache",
 "enUS": "Emerald Drake",
@@ -7582,6 +7707,7 @@
 "cost": 0,
 "dbfId": 70484,
 "id": "VAN_DREAM_04",
+"legacyDbfId": 808,
 "name": {
 "deDE": "Traum",
 "enUS": "Dream",
@@ -7622,6 +7748,7 @@
 "cost": 0,
 "dbfId": 70485,
 "id": "VAN_DREAM_05",
+"legacyDbfId": 217,
 "name": {
 "deDE": "Alptraum",
 "enUS": "Nightmare",
@@ -7665,6 +7792,7 @@
 "dbfId": 68425,
 "health": 5,
 "id": "VAN_DS1_055",
+"legacyDbfId": 582,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -7712,6 +7840,7 @@
 "dbfId": 68426,
 "health": 3,
 "id": "VAN_DS1_070",
+"legacyDbfId": 1003,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -7762,6 +7891,7 @@
 "dbfId": 68428,
 "health": 1,
 "id": "VAN_DS1_175",
+"legacyDbfId": 606,
 "mechanics": [
 "AURA"
 ],
@@ -7810,6 +7940,7 @@
 "dbfId": 68430,
 "health": 5,
 "id": "VAN_DS1_178",
+"legacyDbfId": 699,
 "mechanics": [
 "AURA"
 ],
@@ -7859,6 +7990,7 @@
 "cost": 4,
 "dbfId": 68432,
 "id": "VAN_DS1_183",
+"legacyDbfId": 292,
 "name": {
 "deDE": "Mehrfachschuss",
 "enUS": "Multi-Shot",
@@ -7901,6 +8033,7 @@
 "cost": 1,
 "dbfId": 68433,
 "id": "VAN_DS1_184",
+"legacyDbfId": 1047,
 "name": {
 "deDE": "Fährtenlesen",
 "enUS": "Tracking",
@@ -7943,6 +8076,7 @@
 "cost": 1,
 "dbfId": 68434,
 "id": "VAN_DS1_185",
+"legacyDbfId": 877,
 "name": {
 "deDE": "Arkaner Schuss",
 "enUS": "Arcane Shot",
@@ -7987,6 +8121,7 @@
 "dbfId": 69803,
 "durability": 2,
 "id": "VAN_DS1_188",
+"legacyDbfId": 311,
 "name": {
 "deDE": "Langbogen des Gladiators",
 "enUS": "Gladiator's Longbow",
@@ -8032,6 +8167,7 @@
 "cost": 2,
 "dbfId": 68537,
 "id": "VAN_DS1_233",
+"legacyDbfId": 545,
 "name": {
 "deDE": "Gedankenschlag",
 "enUS": "Mind Blast",
@@ -8076,6 +8212,7 @@
 "dbfId": 69804,
 "health": 2,
 "id": "VAN_EX1_001",
+"legacyDbfId": 1655,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -8124,6 +8261,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_EX1_002",
+"legacyDbfId": 1656,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -8174,6 +8312,7 @@
 "dbfId": 69806,
 "health": 1,
 "id": "VAN_EX1_004",
+"legacyDbfId": 1634,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -8221,6 +8360,7 @@
 "dbfId": 69807,
 "health": 2,
 "id": "VAN_EX1_005",
+"legacyDbfId": 1657,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -8268,6 +8408,7 @@
 "dbfId": 69808,
 "health": 3,
 "id": "VAN_EX1_006",
+"legacyDbfId": 1658,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -8316,6 +8457,7 @@
 "dbfId": 69809,
 "health": 3,
 "id": "VAN_EX1_007",
+"legacyDbfId": 1659,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -8363,6 +8505,7 @@
 "dbfId": 69810,
 "health": 1,
 "id": "VAN_EX1_008",
+"legacyDbfId": 757,
 "mechanics": [
 "DIVINE_SHIELD"
 ],
@@ -8410,6 +8553,7 @@
 "dbfId": 69811,
 "health": 1,
 "id": "VAN_EX1_009",
+"legacyDbfId": 1688,
 "name": {
 "deDE": "Wütendes Huhn",
 "enUS": "Angry Chicken",
@@ -8458,6 +8602,7 @@
 "dbfId": 69812,
 "health": 1,
 "id": "VAN_EX1_010",
+"legacyDbfId": 994,
 "mechanics": [
 "STEALTH"
 ],
@@ -8505,6 +8650,7 @@
 "dbfId": 68435,
 "health": 1,
 "id": "VAN_EX1_011",
+"legacyDbfId": 132,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -8553,6 +8699,7 @@
 "elite": true,
 "health": 1,
 "id": "VAN_EX1_012",
+"legacyDbfId": 749,
 "mechanics": [
 "DEATHRATTLE",
 "SPELLPOWER"
@@ -8603,6 +8750,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_EX1_014",
+"legacyDbfId": 1693,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -8651,6 +8799,7 @@
 "dbfId": 68436,
 "health": 1,
 "id": "VAN_EX1_015",
+"legacyDbfId": 284,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -8699,6 +8848,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_EX1_016",
+"legacyDbfId": 1721,
 "mechanics": [
 "DEATHRATTLE"
 ],
@@ -8746,6 +8896,7 @@
 "dbfId": 69816,
 "health": 2,
 "id": "VAN_EX1_017",
+"legacyDbfId": 921,
 "mechanics": [
 "STEALTH"
 ],
@@ -8794,6 +8945,7 @@
 "dbfId": 68437,
 "health": 2,
 "id": "VAN_EX1_019",
+"legacyDbfId": 608,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -8841,6 +8993,7 @@
 "dbfId": 69817,
 "health": 1,
 "id": "VAN_EX1_020",
+"legacyDbfId": 642,
 "mechanics": [
 "DIVINE_SHIELD"
 ],
@@ -8888,6 +9041,7 @@
 "dbfId": 69818,
 "health": 3,
 "id": "VAN_EX1_021",
+"legacyDbfId": 765,
 "mechanics": [
 "WINDFURY"
 ],
@@ -8935,6 +9089,7 @@
 "dbfId": 69819,
 "health": 3,
 "id": "VAN_EX1_023",
+"legacyDbfId": 34,
 "mechanics": [
 "DIVINE_SHIELD"
 ],
@@ -8982,6 +9137,7 @@
 "dbfId": 68439,
 "health": 4,
 "id": "VAN_EX1_025",
+"legacyDbfId": 523,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9029,6 +9185,7 @@
 "dbfId": 69820,
 "health": 5,
 "id": "VAN_EX1_028",
+"legacyDbfId": 68,
 "mechanics": [
 "STEALTH"
 ],
@@ -9077,6 +9234,7 @@
 "dbfId": 69821,
 "health": 1,
 "id": "VAN_EX1_029",
+"legacyDbfId": 658,
 "mechanics": [
 "DEATHRATTLE"
 ],
@@ -9124,6 +9282,7 @@
 "dbfId": 69822,
 "health": 5,
 "id": "VAN_EX1_032",
+"legacyDbfId": 759,
 "mechanics": [
 "DIVINE_SHIELD",
 "TAUNT"
@@ -9172,6 +9331,7 @@
 "dbfId": 69823,
 "health": 5,
 "id": "VAN_EX1_033",
+"legacyDbfId": 567,
 "mechanics": [
 "WINDFURY"
 ],
@@ -9219,6 +9379,7 @@
 "dbfId": 69824,
 "health": 1,
 "id": "VAN_EX1_043",
+"legacyDbfId": 1037,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9267,6 +9428,7 @@
 "dbfId": 69825,
 "health": 2,
 "id": "VAN_EX1_044",
+"legacyDbfId": 791,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -9314,6 +9476,7 @@
 "dbfId": 69826,
 "health": 5,
 "id": "VAN_EX1_045",
+"legacyDbfId": 605,
 "mechanics": [
 "CANT_ATTACK"
 ],
@@ -9361,6 +9524,7 @@
 "dbfId": 69827,
 "health": 4,
 "id": "VAN_EX1_046",
+"legacyDbfId": 348,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9408,6 +9572,7 @@
 "dbfId": 69828,
 "health": 3,
 "id": "VAN_EX1_048",
+"legacyDbfId": 754,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9458,6 +9623,7 @@
 "dbfId": 69829,
 "health": 2,
 "id": "VAN_EX1_049",
+"legacyDbfId": 415,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9505,6 +9671,7 @@
 "dbfId": 69830,
 "health": 2,
 "id": "VAN_EX1_050",
+"legacyDbfId": 1016,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9553,6 +9720,7 @@
 "dbfId": 69831,
 "health": 3,
 "id": "VAN_EX1_055",
+"legacyDbfId": 12,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -9600,6 +9768,7 @@
 "dbfId": 69832,
 "health": 4,
 "id": "VAN_EX1_057",
+"legacyDbfId": 186,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9647,6 +9816,7 @@
 "dbfId": 69833,
 "health": 3,
 "id": "VAN_EX1_058",
+"legacyDbfId": 891,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9697,6 +9867,7 @@
 "dbfId": 69834,
 "health": 2,
 "id": "VAN_EX1_059",
+"legacyDbfId": 801,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9745,6 +9916,7 @@
 "elite": true,
 "health": 4,
 "id": "VAN_EX1_062",
+"legacyDbfId": 736,
 "mechanics": [
 "CHARGE"
 ],
@@ -9793,6 +9965,7 @@
 "dbfId": 68441,
 "health": 2,
 "id": "VAN_EX1_066",
+"legacyDbfId": 906,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -9840,6 +10013,7 @@
 "dbfId": 69835,
 "health": 2,
 "id": "VAN_EX1_067",
+"legacyDbfId": 281,
 "mechanics": [
 "CHARGE",
 "DIVINE_SHIELD"
@@ -9888,6 +10062,7 @@
 "dbfId": 69836,
 "health": 2,
 "id": "VAN_EX1_076",
+"legacyDbfId": 37,
 "mechanics": [
 "AURA"
 ],
@@ -9935,6 +10110,7 @@
 "dbfId": 69837,
 "health": 2,
 "id": "VAN_EX1_080",
+"legacyDbfId": 158,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -9985,6 +10161,7 @@
 "dbfId": 69838,
 "health": 2,
 "id": "VAN_EX1_082",
+"legacyDbfId": 762,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -10033,6 +10210,7 @@
 "elite": true,
 "health": 3,
 "id": "VAN_EX1_083",
+"legacyDbfId": 570,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -10080,6 +10258,7 @@
 "dbfId": 68442,
 "health": 3,
 "id": "VAN_EX1_084",
+"legacyDbfId": 1009,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -10130,6 +10309,7 @@
 "dbfId": 69840,
 "health": 3,
 "id": "VAN_EX1_085",
+"legacyDbfId": 734,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -10177,6 +10357,7 @@
 "dbfId": 69841,
 "health": 2,
 "id": "VAN_EX1_089",
+"legacyDbfId": 466,
 "mechanics": [
 "BATTLECRY",
 "CHARGE"
@@ -10225,6 +10406,7 @@
 "dbfId": 69842,
 "health": 5,
 "id": "VAN_EX1_091",
+"legacyDbfId": 272,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -10272,6 +10454,7 @@
 "dbfId": 69843,
 "health": 3,
 "id": "VAN_EX1_093",
+"legacyDbfId": 763,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -10322,6 +10505,7 @@
 "dbfId": 69844,
 "health": 4,
 "id": "VAN_EX1_095",
+"legacyDbfId": 932,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -10369,6 +10553,7 @@
 "dbfId": 69845,
 "health": 1,
 "id": "VAN_EX1_096",
+"legacyDbfId": 251,
 "mechanics": [
 "DEATHRATTLE"
 ],
@@ -10416,6 +10601,7 @@
 "dbfId": 69846,
 "health": 4,
 "id": "VAN_EX1_097",
+"legacyDbfId": 440,
 "mechanics": [
 "DEATHRATTLE",
 "TAUNT"
@@ -10465,6 +10651,7 @@
 "elite": true,
 "health": 4,
 "id": "VAN_EX1_100",
+"legacyDbfId": 1135,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -10512,6 +10699,7 @@
 "dbfId": 69848,
 "health": 4,
 "id": "VAN_EX1_102",
+"legacyDbfId": 979,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -10560,6 +10748,7 @@
 "dbfId": 69849,
 "health": 3,
 "id": "VAN_EX1_103",
+"legacyDbfId": 453,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -10608,6 +10797,7 @@
 "dbfId": 69850,
 "health": 8,
 "id": "VAN_EX1_105",
+"legacyDbfId": 993,
 "name": {
 "deDE": "Bergriese",
 "enUS": "Mountain Giant",
@@ -10653,6 +10843,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_EX1_110",
+"legacyDbfId": 420,
 "mechanics": [
 "DEATHRATTLE"
 ],
@@ -10700,6 +10891,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_EX1_110t",
+"legacyDbfId": 318,
 "name": {
 "deDE": "Baine Bluthuf",
 "enUS": "Baine Bloodhoof",
@@ -10728,6 +10920,7 @@
 "elite": true,
 "health": 6,
 "id": "VAN_EX1_112",
+"legacyDbfId": 858,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -10776,6 +10969,7 @@
 "elite": true,
 "health": 2,
 "id": "VAN_EX1_116",
+"legacyDbfId": 559,
 "mechanics": [
 "BATTLECRY",
 "CHARGE"
@@ -10822,6 +11016,7 @@
 "cost": 2,
 "dbfId": 69853,
 "id": "VAN_EX1_124",
+"legacyDbfId": 904,
 "mechanics": [
 "COMBO"
 ],
@@ -10867,6 +11062,7 @@
 "cost": 2,
 "dbfId": 69854,
 "id": "VAN_EX1_126",
+"legacyDbfId": 282,
 "name": {
 "deDE": "Verrat",
 "enUS": "Betrayal",
@@ -10909,6 +11105,7 @@
 "cost": 1,
 "dbfId": 69855,
 "id": "VAN_EX1_128",
+"legacyDbfId": 990,
 "name": {
 "deDE": "Verhüllen",
 "enUS": "Conceal",
@@ -10954,6 +11151,7 @@
 "cost": 3,
 "dbfId": 68444,
 "id": "VAN_EX1_129",
+"legacyDbfId": 667,
 "name": {
 "deDE": "Dolchfächer",
 "enUS": "Fan of Knives",
@@ -10996,6 +11194,7 @@
 "cost": 1,
 "dbfId": 69856,
 "id": "VAN_EX1_130",
+"legacyDbfId": 584,
 "mechanics": [
 "SECRET"
 ],
@@ -11042,6 +11241,7 @@
 "dbfId": 71411,
 "health": 1,
 "id": "VAN_EX1_130a",
+"legacyDbfId": 102,
 "name": {
 "deDE": "Verteidiger",
 "enUS": "Defender",
@@ -11069,6 +11269,7 @@
 "dbfId": 69857,
 "health": 2,
 "id": "VAN_EX1_131",
+"legacyDbfId": 201,
 "mechanics": [
 "COMBO"
 ],
@@ -11114,6 +11315,7 @@
 "cost": 1,
 "dbfId": 69858,
 "id": "VAN_EX1_132",
+"legacyDbfId": 462,
 "mechanics": [
 "SECRET"
 ],
@@ -11161,6 +11363,7 @@
 "dbfId": 69859,
 "durability": 2,
 "id": "VAN_EX1_133",
+"legacyDbfId": 391,
 "mechanics": [
 "BATTLECRY",
 "COMBO"
@@ -11209,6 +11412,7 @@
 "dbfId": 69860,
 "health": 3,
 "id": "VAN_EX1_134",
+"legacyDbfId": 1117,
 "mechanics": [
 "COMBO"
 ],
@@ -11254,6 +11458,7 @@
 "cost": 1,
 "dbfId": 69861,
 "id": "VAN_EX1_136",
+"legacyDbfId": 140,
 "mechanics": [
 "SECRET"
 ],
@@ -11299,6 +11504,7 @@
 "cost": 3,
 "dbfId": 69862,
 "id": "VAN_EX1_137",
+"legacyDbfId": 708,
 "mechanics": [
 "COMBO"
 ],
@@ -11344,6 +11550,7 @@
 "cost": 0,
 "dbfId": 69863,
 "id": "VAN_EX1_144",
+"legacyDbfId": 365,
 "name": {
 "deDE": "Schattenschritt",
 "enUS": "Shadowstep",
@@ -11386,6 +11593,7 @@
 "cost": 0,
 "dbfId": 69864,
 "id": "VAN_EX1_145",
+"legacyDbfId": 1158,
 "name": {
 "deDE": "Vorbereitung",
 "enUS": "Preparation",
@@ -11428,6 +11636,7 @@
 "cost": 2,
 "dbfId": 69865,
 "id": "VAN_EX1_154",
+"legacyDbfId": 836,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -11472,6 +11681,7 @@
 "cost": 2,
 "dbfId": 70451,
 "id": "VAN_EX1_154a",
+"legacyDbfId": 253,
 "name": {
 "deDE": "Solarzorn",
 "enUS": "Solar Wrath",
@@ -11512,6 +11722,7 @@
 "cost": 2,
 "dbfId": 70452,
 "id": "VAN_EX1_154b",
+"legacyDbfId": 137,
 "name": {
 "deDE": "Zorn der Natur",
 "enUS": "Nature's Wrath",
@@ -11553,6 +11764,7 @@
 "cost": 3,
 "dbfId": 69866,
 "id": "VAN_EX1_155",
+"legacyDbfId": 151,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -11600,6 +11812,7 @@
 "cost": 3,
 "dbfId": 71494,
 "id": "VAN_EX1_155a",
+"legacyDbfId": 468,
 "name": {
 "deDE": "Tigerfuror",
 "enUS": "Tiger's Fury",
@@ -11640,6 +11853,7 @@
 "cost": 3,
 "dbfId": 71495,
 "id": "VAN_EX1_155b",
+"legacyDbfId": 690,
 "name": {
 "deDE": "Dickes Fell",
 "enUS": "Thick Hide",
@@ -11684,6 +11898,7 @@
 "cost": 4,
 "dbfId": 69867,
 "id": "VAN_EX1_158",
+"legacyDbfId": 381,
 "name": {
 "deDE": "Seele des Waldes",
 "enUS": "Soul of the Forest",
@@ -11729,6 +11944,7 @@
 "cost": 2,
 "dbfId": 69868,
 "id": "VAN_EX1_160",
+"legacyDbfId": 503,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -11773,6 +11989,7 @@
 "cost": 2,
 "dbfId": 71496,
 "id": "VAN_EX1_160a",
+"legacyDbfId": 60,
 "name": {
 "deDE": "Panther herbeirufen",
 "enUS": "Summon a Panther",
@@ -11813,6 +12030,7 @@
 "cost": 2,
 "dbfId": 71497,
 "id": "VAN_EX1_160b",
+"legacyDbfId": 835,
 "name": {
 "deDE": "Rudelführer",
 "enUS": "Leader of the Pack",
@@ -11854,6 +12072,7 @@
 "cost": 1,
 "dbfId": 69869,
 "id": "VAN_EX1_161",
+"legacyDbfId": 233,
 "name": {
 "deDE": "Kreislauf der Natur",
 "enUS": "Naturalize",
@@ -11898,6 +12117,7 @@
 "dbfId": 69870,
 "health": 2,
 "id": "VAN_EX1_162",
+"legacyDbfId": 985,
 "mechanics": [
 "ADJACENT_BUFF",
 "AURA"
@@ -11945,6 +12165,7 @@
 "cost": 5,
 "dbfId": 69871,
 "id": "VAN_EX1_164",
+"legacyDbfId": 95,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -11989,6 +12210,7 @@
 "cost": 5,
 "dbfId": 70414,
 "id": "VAN_EX1_164a",
+"legacyDbfId": 451,
 "name": {
 "deDE": "Rasantes Wachstum",
 "enUS": "Rampant Growth",
@@ -12029,6 +12251,7 @@
 "cost": 5,
 "dbfId": 70413,
 "id": "VAN_EX1_164b",
+"legacyDbfId": 325,
 "name": {
 "deDE": "Fülle",
 "enUS": "Enrich",
@@ -12072,6 +12295,7 @@
 "dbfId": 69872,
 "health": 4,
 "id": "VAN_EX1_165",
+"legacyDbfId": 692,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -12120,6 +12344,7 @@
 "cost": 0,
 "dbfId": 70463,
 "id": "VAN_EX1_165a",
+"legacyDbfId": 63,
 "mechanics": [
 "CHARGE"
 ],
@@ -12164,6 +12389,7 @@
 "cost": 0,
 "dbfId": 70465,
 "id": "VAN_EX1_165b",
+"legacyDbfId": 99,
 "name": {
 "deDE": "Bärengestalt",
 "enUS": "Bear Form",
@@ -12210,6 +12436,7 @@
 "dbfId": 70464,
 "health": 4,
 "id": "VAN_EX1_165t1",
+"legacyDbfId": 1681,
 "mechanics": [
 "CHARGE"
 ],
@@ -12256,6 +12483,7 @@
 "dbfId": 70466,
 "health": 6,
 "id": "VAN_EX1_165t2",
+"legacyDbfId": 1682,
 "mechanics": [
 "TAUNT"
 ],
@@ -12303,6 +12531,7 @@
 "dbfId": 69873,
 "health": 4,
 "id": "VAN_EX1_166",
+"legacyDbfId": 601,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -12350,6 +12579,7 @@
 "cost": 4,
 "dbfId": 71499,
 "id": "VAN_EX1_166a",
+"legacyDbfId": 987,
 "name": {
 "deDE": "Mondfeuer",
 "enUS": "Moonfire",
@@ -12390,6 +12620,7 @@
 "cost": 4,
 "dbfId": 71498,
 "id": "VAN_EX1_166b",
+"legacyDbfId": 321,
 "mechanics": [
 "SILENCE"
 ],
@@ -12434,6 +12665,7 @@
 "cost": 0,
 "dbfId": 68445,
 "id": "VAN_EX1_169",
+"legacyDbfId": 254,
 "name": {
 "deDE": "Anregen",
 "enUS": "Innervate",
@@ -12478,6 +12710,7 @@
 "dbfId": 69874,
 "health": 3,
 "id": "VAN_EX1_170",
+"legacyDbfId": 1098,
 "name": {
 "deDE": "Kaiserkobra",
 "enUS": "Emperor Cobra",
@@ -12521,6 +12754,7 @@
 "cost": 6,
 "dbfId": 68446,
 "id": "VAN_EX1_173",
+"legacyDbfId": 823,
 "name": {
 "deDE": "Sternenfeuer",
 "enUS": "Starfire",
@@ -12565,6 +12799,7 @@
 "dbfId": 69875,
 "health": 5,
 "id": "VAN_EX1_178",
+"legacyDbfId": 1035,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -12612,6 +12847,7 @@
 "cost": 7,
 "dbfId": 71502,
 "id": "VAN_EX1_178a",
+"legacyDbfId": 578,
 "name": {
 "deDE": "Verwurzelt",
 "enUS": "Rooted",
@@ -12655,6 +12891,7 @@
 "cost": 7,
 "dbfId": 71501,
 "id": "VAN_EX1_178b",
+"legacyDbfId": 182,
 "name": {
 "deDE": "Entwurzeln",
 "enUS": "Uproot",
@@ -12696,6 +12933,7 @@
 "cost": 1,
 "dbfId": 69892,
 "id": "VAN_EX1_238",
+"legacyDbfId": 505,
 "mechanics": [
 "OVERLOAD"
 ],
@@ -12742,6 +12980,7 @@
 "cost": 3,
 "dbfId": 69893,
 "id": "VAN_EX1_241",
+"legacyDbfId": 864,
 "mechanics": [
 "OVERLOAD"
 ],
@@ -12790,6 +13029,7 @@
 "dbfId": 69894,
 "health": 1,
 "id": "VAN_EX1_243",
+"legacyDbfId": 618,
 "mechanics": [
 "OVERLOAD",
 "WINDFURY"
@@ -12837,6 +13077,7 @@
 "cost": 0,
 "dbfId": 68453,
 "id": "VAN_EX1_244",
+"legacyDbfId": 830,
 "name": {
 "deDE": "Macht der Totems",
 "enUS": "Totemic Might",
@@ -12879,6 +13120,7 @@
 "cost": 1,
 "dbfId": 69895,
 "id": "VAN_EX1_245",
+"legacyDbfId": 767,
 "mechanics": [
 "SILENCE"
 ],
@@ -12924,6 +13166,7 @@
 "cost": 3,
 "dbfId": 68455,
 "id": "VAN_EX1_246",
+"legacyDbfId": 766,
 "name": {
 "deDE": "Verhexung",
 "enUS": "Hex",
@@ -12971,6 +13214,7 @@
 "dbfId": 69896,
 "durability": 3,
 "id": "VAN_EX1_247",
+"legacyDbfId": 960,
 "mechanics": [
 "OVERLOAD"
 ],
@@ -13017,6 +13261,7 @@
 "cost": 3,
 "dbfId": 69897,
 "id": "VAN_EX1_248",
+"legacyDbfId": 238,
 "mechanics": [
 "OVERLOAD"
 ],
@@ -13069,6 +13314,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_EX1_249",
+"legacyDbfId": 336,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -13116,6 +13362,7 @@
 "dbfId": 69899,
 "health": 8,
 "id": "VAN_EX1_250",
+"legacyDbfId": 1141,
 "mechanics": [
 "OVERLOAD",
 "TAUNT"
@@ -13163,6 +13410,7 @@
 "cost": 1,
 "dbfId": 69900,
 "id": "VAN_EX1_251",
+"legacyDbfId": 299,
 "mechanics": [
 "OVERLOAD"
 ],
@@ -13211,6 +13459,7 @@
 "dbfId": 69901,
 "health": 4,
 "id": "VAN_EX1_258",
+"legacyDbfId": 774,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -13259,6 +13508,7 @@
 "cost": 3,
 "dbfId": 69902,
 "id": "VAN_EX1_259",
+"legacyDbfId": 629,
 "mechanics": [
 "OVERLOAD"
 ],
@@ -13307,6 +13557,7 @@
 "dbfId": 69903,
 "health": 3,
 "id": "VAN_EX1_274",
+"legacyDbfId": 1737,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -13355,6 +13606,7 @@
 "cost": 4,
 "dbfId": 69904,
 "id": "VAN_EX1_275",
+"legacyDbfId": 430,
 "mechanics": [
 "FREEZE"
 ],
@@ -13400,6 +13652,7 @@
 "cost": 1,
 "dbfId": 68457,
 "id": "VAN_EX1_277",
+"legacyDbfId": 564,
 "mechanics": [
 "ImmuneToSpellpower"
 ],
@@ -13445,6 +13698,7 @@
 "cost": 2,
 "dbfId": 68458,
 "id": "VAN_EX1_278",
+"legacyDbfId": 573,
 "name": {
 "deDE": "Tückische Klinge",
 "enUS": "Shiv",
@@ -13487,6 +13741,7 @@
 "cost": 10,
 "dbfId": 69905,
 "id": "VAN_EX1_279",
+"legacyDbfId": 1087,
 "name": {
 "deDE": "Pyroschlag",
 "enUS": "Pyroblast",
@@ -13531,6 +13786,7 @@
 "dbfId": 69906,
 "health": 5,
 "id": "VAN_EX1_283",
+"legacyDbfId": 512,
 "mechanics": [
 "BATTLECRY",
 "FREEZE"
@@ -13579,6 +13835,7 @@
 "dbfId": 69907,
 "health": 4,
 "id": "VAN_EX1_284",
+"legacyDbfId": 825,
 "mechanics": [
 "BATTLECRY",
 "SPELLPOWER"
@@ -13627,6 +13884,7 @@
 "cost": 3,
 "dbfId": 69908,
 "id": "VAN_EX1_287",
+"legacyDbfId": 113,
 "mechanics": [
 "SECRET"
 ],
@@ -13675,6 +13933,7 @@
 "cost": 3,
 "dbfId": 69909,
 "id": "VAN_EX1_289",
+"legacyDbfId": 621,
 "mechanics": [
 "SECRET"
 ],
@@ -13720,6 +13979,7 @@
 "cost": 3,
 "dbfId": 69910,
 "id": "VAN_EX1_294",
+"legacyDbfId": 195,
 "mechanics": [
 "SECRET"
 ],
@@ -13765,6 +14025,7 @@
 "cost": 3,
 "dbfId": 69911,
 "id": "VAN_EX1_295",
+"legacyDbfId": 192,
 "mechanics": [
 "SECRET"
 ],
@@ -13816,6 +14077,7 @@
 "elite": true,
 "health": 8,
 "id": "VAN_EX1_298",
+"legacyDbfId": 374,
 "mechanics": [
 "CANT_ATTACK",
 "TRIGGER_VISUAL"
@@ -13864,6 +14126,7 @@
 "dbfId": 69913,
 "health": 5,
 "id": "VAN_EX1_301",
+"legacyDbfId": 517,
 "mechanics": [
 "BATTLECRY",
 "TAUNT"
@@ -13911,6 +14174,7 @@
 "cost": 1,
 "dbfId": 68459,
 "id": "VAN_EX1_302",
+"legacyDbfId": 1092,
 "name": {
 "deDE": "Weltliche Ängste",
 "enUS": "Mortal Coil",
@@ -13953,6 +14217,7 @@
 "cost": 4,
 "dbfId": 69914,
 "id": "VAN_EX1_303",
+"legacyDbfId": 147,
 "mechanics": [
 "AFFECTED_BY_SPELL_POWER"
 ],
@@ -14000,6 +14265,7 @@
 "dbfId": 69915,
 "health": 3,
 "id": "VAN_EX1_304",
+"legacyDbfId": 1221,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -14048,6 +14314,7 @@
 "dbfId": 68460,
 "health": 3,
 "id": "VAN_EX1_306",
+"legacyDbfId": 592,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -14094,6 +14361,7 @@
 "cost": 0,
 "dbfId": 68461,
 "id": "VAN_EX1_308",
+"legacyDbfId": 974,
 "name": {
 "deDE": "Seelenfeuer",
 "enUS": "Soulfire",
@@ -14136,6 +14404,7 @@
 "cost": 6,
 "dbfId": 69916,
 "id": "VAN_EX1_309",
+"legacyDbfId": 1100,
 "name": {
 "deDE": "Seele entziehen",
 "enUS": "Siphon Soul",
@@ -14180,6 +14449,7 @@
 "dbfId": 69917,
 "health": 7,
 "id": "VAN_EX1_310",
+"legacyDbfId": 631,
 "mechanics": [
 "BATTLECRY",
 "CHARGE"
@@ -14227,6 +14497,7 @@
 "cost": 8,
 "dbfId": 69918,
 "id": "VAN_EX1_312",
+"legacyDbfId": 859,
 "name": {
 "deDE": "Wirbelnder Nether",
 "enUS": "Twisting Nether",
@@ -14271,6 +14542,7 @@
 "dbfId": 69919,
 "health": 6,
 "id": "VAN_EX1_313",
+"legacyDbfId": 783,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -14319,6 +14591,7 @@
 "dbfId": 69920,
 "health": 4,
 "id": "VAN_EX1_315",
+"legacyDbfId": 969,
 "mechanics": [
 "AURA"
 ],
@@ -14364,6 +14637,7 @@
 "cost": 1,
 "dbfId": 69921,
 "id": "VAN_EX1_316",
+"legacyDbfId": 846,
 "name": {
 "deDE": "Überwältigende Macht",
 "enUS": "Power Overwhelming",
@@ -14406,6 +14680,7 @@
 "cost": 3,
 "dbfId": 69922,
 "id": "VAN_EX1_317",
+"legacyDbfId": 860,
 "name": {
 "deDE": "Dämonen wahrnehmen",
 "enUS": "Sense Demons",
@@ -14450,6 +14725,7 @@
 "dbfId": 69923,
 "health": 2,
 "id": "VAN_EX1_319",
+"legacyDbfId": 1090,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -14496,6 +14772,7 @@
 "cost": 5,
 "dbfId": 69924,
 "id": "VAN_EX1_320",
+"legacyDbfId": 23,
 "name": {
 "deDE": "Omen der Verdammnis",
 "enUS": "Bane of Doom",
@@ -14541,6 +14818,7 @@
 "elite": true,
 "health": 15,
 "id": "VAN_EX1_323",
+"legacyDbfId": 777,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -14587,6 +14865,7 @@
 "cost": 0,
 "dbfId": 69926,
 "id": "VAN_EX1_332",
+"legacyDbfId": 1189,
 "mechanics": [
 "SILENCE"
 ],
@@ -14632,6 +14911,7 @@
 "cost": 4,
 "dbfId": 69927,
 "id": "VAN_EX1_334",
+"legacyDbfId": 220,
 "name": {
 "deDE": "Dunkler Wahnsinn",
 "enUS": "Shadow Madness",
@@ -14676,6 +14956,7 @@
 "dbfId": 69928,
 "health": 5,
 "id": "VAN_EX1_335",
+"legacyDbfId": 886,
 "name": {
 "deDE": "Lichtbrut",
 "enUS": "Lightspawn",
@@ -14718,6 +14999,7 @@
 "cost": 3,
 "dbfId": 69929,
 "id": "VAN_EX1_339",
+"legacyDbfId": 30,
 "name": {
 "deDE": "Gedankenraub",
 "enUS": "Thoughtsteal",
@@ -14762,6 +15044,7 @@
 "dbfId": 69930,
 "health": 5,
 "id": "VAN_EX1_341",
+"legacyDbfId": 797,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -14807,6 +15090,7 @@
 "cost": 4,
 "dbfId": 69931,
 "id": "VAN_EX1_345",
+"legacyDbfId": 145,
 "name": {
 "deDE": "Gedankenspiele",
 "enUS": "Mindgames",
@@ -14850,6 +15134,7 @@
 "dbfId": 70461,
 "health": 1,
 "id": "VAN_EX1_345t",
+"legacyDbfId": 1720,
 "name": {
 "deDE": "Schatten des Nichts",
 "enUS": "Shadow of Nothing",
@@ -14891,6 +15176,7 @@
 "cost": 3,
 "dbfId": 69932,
 "id": "VAN_EX1_349",
+"legacyDbfId": 679,
 "name": {
 "deDE": "Göttliche Gunst",
 "enUS": "Divine Favor",
@@ -14936,6 +15222,7 @@
 "elite": true,
 "health": 7,
 "id": "VAN_EX1_350",
+"legacyDbfId": 9,
 "name": {
 "deDE": "Prophet Velen",
 "enUS": "Prophet Velen",
@@ -14978,6 +15265,7 @@
 "cost": 8,
 "dbfId": 69934,
 "id": "VAN_EX1_354",
+"legacyDbfId": 594,
 "name": {
 "deDE": "Handauflegung",
 "enUS": "Lay on Hands",
@@ -15020,6 +15308,7 @@
 "cost": 5,
 "dbfId": 69935,
 "id": "VAN_EX1_355",
+"legacyDbfId": 1522,
 "name": {
 "deDE": "Gesegneter Champion",
 "enUS": "Blessed Champion",
@@ -15062,6 +15351,7 @@
 "cost": 1,
 "dbfId": 68462,
 "id": "VAN_EX1_360",
+"legacyDbfId": 854,
 "name": {
 "deDE": "Demut",
 "enUS": "Humility",
@@ -15106,6 +15396,7 @@
 "dbfId": 69936,
 "health": 2,
 "id": "VAN_EX1_362",
+"legacyDbfId": 1022,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -15154,6 +15445,7 @@
 "cost": 1,
 "dbfId": 69937,
 "id": "VAN_EX1_363",
+"legacyDbfId": 1373,
 "name": {
 "deDE": "Segen der Weisheit",
 "enUS": "Blessing of Wisdom",
@@ -15196,6 +15488,7 @@
 "cost": 5,
 "dbfId": 69938,
 "id": "VAN_EX1_365",
+"legacyDbfId": 435,
 "mechanics": [
 "AFFECTED_BY_SPELL_POWER"
 ],
@@ -15243,6 +15536,7 @@
 "dbfId": 69939,
 "durability": 5,
 "id": "VAN_EX1_366",
+"legacyDbfId": 643,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -15288,6 +15582,7 @@
 "cost": 1,
 "dbfId": 68464,
 "id": "VAN_EX1_371",
+"legacyDbfId": 727,
 "name": {
 "deDE": "Hand des Schutzes",
 "enUS": "Hand of Protection",
@@ -15333,6 +15628,7 @@
 "cost": 1,
 "dbfId": 69940,
 "id": "VAN_EX1_379",
+"legacyDbfId": 232,
 "mechanics": [
 "SECRET"
 ],
@@ -15380,6 +15676,7 @@
 "dbfId": 69941,
 "health": 3,
 "id": "VAN_EX1_382",
+"legacyDbfId": 1167,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -15428,6 +15725,7 @@
 "elite": true,
 "health": 6,
 "id": "VAN_EX1_383",
+"legacyDbfId": 890,
 "mechanics": [
 "DEATHRATTLE",
 "DIVINE_SHIELD",
@@ -15475,6 +15773,7 @@
 "cost": 6,
 "dbfId": 69943,
 "id": "VAN_EX1_384",
+"legacyDbfId": 1174,
 "mechanics": [
 "ImmuneToSpellpower"
 ],
@@ -15522,6 +15821,7 @@
 "dbfId": 69944,
 "health": 3,
 "id": "VAN_EX1_390",
+"legacyDbfId": 45,
 "mechanics": [
 "TAUNT"
 ],
@@ -15570,6 +15870,7 @@
 "cost": 2,
 "dbfId": 69945,
 "id": "VAN_EX1_391",
+"legacyDbfId": 1074,
 "name": {
 "deDE": "Zerschmettern",
 "enUS": "Slam",
@@ -15612,6 +15913,7 @@
 "cost": 2,
 "dbfId": 69946,
 "id": "VAN_EX1_392",
+"legacyDbfId": 400,
 "name": {
 "deDE": "Kampfeswut",
 "enUS": "Battle Rage",
@@ -15656,6 +15958,7 @@
 "dbfId": 69947,
 "health": 3,
 "id": "VAN_EX1_393",
+"legacyDbfId": 790,
 "name": {
 "deDE": "Amaniberserker",
 "enUS": "Amani Berserker",
@@ -15703,6 +16006,7 @@
 "dbfId": 69948,
 "health": 7,
 "id": "VAN_EX1_396",
+"legacyDbfId": 700,
 "mechanics": [
 "TAUNT"
 ],
@@ -15750,6 +16054,7 @@
 "dbfId": 69949,
 "health": 3,
 "id": "VAN_EX1_398",
+"legacyDbfId": 538,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -15797,6 +16102,7 @@
 "dbfId": 68465,
 "health": 7,
 "id": "VAN_EX1_399",
+"legacyDbfId": 768,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -15842,6 +16148,7 @@
 "cost": 1,
 "dbfId": 68467,
 "id": "VAN_EX1_400",
+"legacyDbfId": 636,
 "name": {
 "deDE": "Wirbelwind",
 "enUS": "Whirlwind",
@@ -15886,6 +16193,7 @@
 "dbfId": 69950,
 "health": 4,
 "id": "VAN_EX1_402",
+"legacyDbfId": 596,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -15933,6 +16241,7 @@
 "dbfId": 69951,
 "health": 4,
 "id": "VAN_EX1_405",
+"legacyDbfId": 866,
 "mechanics": [
 "TAUNT"
 ],
@@ -15978,6 +16287,7 @@
 "cost": 5,
 "dbfId": 69952,
 "id": "VAN_EX1_407",
+"legacyDbfId": 75,
 "name": {
 "deDE": "Scharmützel",
 "enUS": "Brawl",
@@ -16020,6 +16330,7 @@
 "cost": 4,
 "dbfId": 69953,
 "id": "VAN_EX1_408",
+"legacyDbfId": 804,
 "name": {
 "deDE": "Tödlicher Stoß",
 "enUS": "Mortal Strike",
@@ -16062,6 +16373,7 @@
 "cost": 1,
 "dbfId": 69954,
 "id": "VAN_EX1_409",
+"legacyDbfId": 511,
 "name": {
 "deDE": "Aufwertung!",
 "enUS": "Upgrade!",
@@ -16104,6 +16416,7 @@
 "cost": 1,
 "dbfId": 69955,
 "id": "VAN_EX1_410",
+"legacyDbfId": 546,
 "mechanics": [
 "AFFECTED_BY_SPELL_POWER"
 ],
@@ -16151,6 +16464,7 @@
 "dbfId": 69956,
 "durability": 1,
 "id": "VAN_EX1_411",
+"legacyDbfId": 810,
 "name": {
 "deDE": "Blutschrei",
 "enUS": "Gorehowl",
@@ -16195,6 +16509,7 @@
 "dbfId": 69957,
 "health": 3,
 "id": "VAN_EX1_412",
+"legacyDbfId": 1155,
 "name": {
 "deDE": "Tobender Worgen",
 "enUS": "Raging Worgen",
@@ -16244,6 +16559,7 @@
 "elite": true,
 "health": 9,
 "id": "VAN_EX1_414",
+"legacyDbfId": 338,
 "mechanics": [
 "CHARGE"
 ],
@@ -16294,6 +16610,7 @@
 "dbfId": 68468,
 "health": 1,
 "id": "VAN_EX1_506",
+"legacyDbfId": 976,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -16341,6 +16658,7 @@
 "dbfId": 68469,
 "health": 1,
 "id": "VAN_EX1_506a",
+"legacyDbfId": 1078,
 "name": {
 "deDE": "Murlocspäher",
 "enUS": "Murloc Scout",
@@ -16370,6 +16688,7 @@
 "dbfId": 69959,
 "health": 3,
 "id": "VAN_EX1_507",
+"legacyDbfId": 1063,
 "mechanics": [
 "AURA"
 ],
@@ -16418,6 +16737,7 @@
 "dbfId": 68470,
 "health": 1,
 "id": "VAN_EX1_508",
+"legacyDbfId": 510,
 "mechanics": [
 "AURA"
 ],
@@ -16466,6 +16786,7 @@
 "dbfId": 69960,
 "health": 2,
 "id": "VAN_EX1_509",
+"legacyDbfId": 475,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -16514,6 +16835,7 @@
 "dbfId": 69961,
 "health": 1,
 "id": "VAN_EX1_522",
+"legacyDbfId": 1133,
 "mechanics": [
 "STEALTH"
 ],
@@ -16561,6 +16883,7 @@
 "dbfId": 69962,
 "health": 2,
 "id": "VAN_EX1_531",
+"legacyDbfId": 1281,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -16607,6 +16930,7 @@
 "cost": 2,
 "dbfId": 69963,
 "id": "VAN_EX1_533",
+"legacyDbfId": 1091,
 "mechanics": [
 "SECRET"
 ],
@@ -16654,6 +16978,7 @@
 "dbfId": 69964,
 "health": 5,
 "id": "VAN_EX1_534",
+"legacyDbfId": 1261,
 "mechanics": [
 "DEATHRATTLE"
 ],
@@ -16702,6 +17027,7 @@
 "dbfId": 69965,
 "durability": 2,
 "id": "VAN_EX1_536",
+"legacyDbfId": 1662,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -16750,6 +17076,7 @@
 "cost": 5,
 "dbfId": 69966,
 "id": "VAN_EX1_537",
+"legacyDbfId": 394,
 "name": {
 "deDE": "Explosivschuss",
 "enUS": "Explosive Shot",
@@ -16792,6 +17119,7 @@
 "cost": 3,
 "dbfId": 69967,
 "id": "VAN_EX1_538",
+"legacyDbfId": 1243,
 "name": {
 "deDE": "Lasst die Hunde los!",
 "enUS": "Unleash the Hounds",
@@ -16837,6 +17165,7 @@
 "cost": 3,
 "dbfId": 68472,
 "id": "VAN_EX1_539",
+"legacyDbfId": 296,
 "name": {
 "deDE": "Fass!",
 "enUS": "Kill Command",
@@ -16882,6 +17211,7 @@
 "elite": true,
 "health": 8,
 "id": "VAN_EX1_543",
+"legacyDbfId": 1144,
 "mechanics": [
 "CHARGE"
 ],
@@ -16928,6 +17258,7 @@
 "cost": 1,
 "dbfId": 69969,
 "id": "VAN_EX1_544",
+"legacyDbfId": 896,
 "name": {
 "deDE": "Leuchtfeuer",
 "enUS": "Flare",
@@ -16974,6 +17305,7 @@
 "cost": 1,
 "dbfId": 69970,
 "id": "VAN_EX1_549",
+"legacyDbfId": 903,
 "name": {
 "deDE": "Zorn des Wildtiers",
 "enUS": "Bestial Wrath",
@@ -17019,6 +17351,7 @@
 "cost": 2,
 "dbfId": 69971,
 "id": "VAN_EX1_554",
+"legacyDbfId": 455,
 "mechanics": [
 "SECRET"
 ],
@@ -17065,6 +17398,7 @@
 "dbfId": 71306,
 "health": 1,
 "id": "VAN_EX1_554t",
+"legacyDbfId": 204,
 "name": {
 "deDE": "Schlange",
 "enUS": "Snake",
@@ -17093,6 +17427,7 @@
 "dbfId": 69972,
 "health": 3,
 "id": "VAN_EX1_556",
+"legacyDbfId": 778,
 "mechanics": [
 "DEATHRATTLE"
 ],
@@ -17142,6 +17477,7 @@
 "elite": true,
 "health": 4,
 "id": "VAN_EX1_557",
+"legacyDbfId": 1147,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -17190,6 +17526,7 @@
 "elite": true,
 "health": 4,
 "id": "VAN_EX1_558",
+"legacyDbfId": 912,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -17238,6 +17575,7 @@
 "elite": true,
 "health": 7,
 "id": "VAN_EX1_559",
+"legacyDbfId": 1080,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -17286,6 +17624,7 @@
 "elite": true,
 "health": 8,
 "id": "VAN_EX1_560",
+"legacyDbfId": 411,
 "name": {
 "deDE": "Nozdormu",
 "enUS": "Nozdormu",
@@ -17332,6 +17671,7 @@
 "elite": true,
 "health": 8,
 "id": "VAN_EX1_561",
+"legacyDbfId": 581,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -17381,6 +17721,7 @@
 "elite": true,
 "health": 8,
 "id": "VAN_EX1_562",
+"legacyDbfId": 363,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -17430,6 +17771,7 @@
 "elite": true,
 "health": 12,
 "id": "VAN_EX1_563",
+"legacyDbfId": 436,
 "mechanics": [
 "SPELLPOWER"
 ],
@@ -17479,6 +17821,7 @@
 "dbfId": 69980,
 "health": 3,
 "id": "VAN_EX1_564",
+"legacyDbfId": 531,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -17526,6 +17869,7 @@
 "dbfId": 68473,
 "health": 3,
 "id": "VAN_EX1_565",
+"legacyDbfId": 1008,
 "mechanics": [
 "ADJACENT_BUFF",
 "AURA"
@@ -17575,6 +17919,7 @@
 "dbfId": 69981,
 "durability": 8,
 "id": "VAN_EX1_567",
+"legacyDbfId": 352,
 "mechanics": [
 "OVERLOAD",
 "WINDFURY"
@@ -17622,6 +17967,7 @@
 "cost": 4,
 "dbfId": 69982,
 "id": "VAN_EX1_570",
+"legacyDbfId": 577,
 "name": {
 "deDE": "Biss",
 "enUS": "Bite",
@@ -17664,6 +18010,7 @@
 "cost": 6,
 "dbfId": 70981,
 "id": "VAN_EX1_571",
+"legacyDbfId": 493,
 "name": {
 "deDE": "Naturgewalt",
 "enUS": "Force of Nature",
@@ -17712,6 +18059,7 @@
 "elite": true,
 "health": 12,
 "id": "VAN_EX1_572",
+"legacyDbfId": 1186,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -17761,6 +18109,7 @@
 "elite": true,
 "health": 8,
 "id": "VAN_EX1_573",
+"legacyDbfId": 36,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -17808,6 +18157,7 @@
 "cost": 9,
 "dbfId": 71504,
 "id": "VAN_EX1_573a",
+"legacyDbfId": 1145,
 "name": {
 "deDE": "Gunst des Halbgotts",
 "enUS": "Demigod's Favor",
@@ -17848,6 +18198,7 @@
 "cost": 9,
 "dbfId": 71503,
 "id": "VAN_EX1_573b",
+"legacyDbfId": 364,
 "name": {
 "deDE": "Lektion des Shan’do",
 "enUS": "Shan'do's Lesson",
@@ -17894,6 +18245,7 @@
 "dbfId": 70032,
 "health": 3,
 "id": "VAN_EX1_575",
+"legacyDbfId": 513,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -17943,6 +18295,7 @@
 "elite": true,
 "health": 7,
 "id": "VAN_EX1_577",
+"legacyDbfId": 962,
 "mechanics": [
 "DEATHRATTLE"
 ],
@@ -17989,6 +18342,7 @@
 "cost": 1,
 "dbfId": 70034,
 "id": "VAN_EX1_578",
+"legacyDbfId": 481,
 "mechanics": [
 "AFFECTED_BY_SPELL_POWER"
 ],
@@ -18034,6 +18388,7 @@
 "cost": 2,
 "dbfId": 68475,
 "id": "VAN_EX1_581",
+"legacyDbfId": 461,
 "name": {
 "deDE": "Kopfnuss",
 "enUS": "Sap",
@@ -18078,6 +18433,7 @@
 "dbfId": 68476,
 "health": 4,
 "id": "VAN_EX1_582",
+"legacyDbfId": 175,
 "mechanics": [
 "SPELLPOWER"
 ],
@@ -18126,6 +18482,7 @@
 "dbfId": 70035,
 "health": 4,
 "id": "VAN_EX1_583",
+"legacyDbfId": 424,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -18173,6 +18530,7 @@
 "dbfId": 70036,
 "health": 5,
 "id": "VAN_EX1_584",
+"legacyDbfId": 915,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -18223,6 +18581,7 @@
 "dbfId": 70037,
 "health": 8,
 "id": "VAN_EX1_586",
+"legacyDbfId": 211,
 "name": {
 "deDE": "Meeresriese",
 "enUS": "Sea Giant",
@@ -18267,6 +18626,7 @@
 "dbfId": 68477,
 "health": 3,
 "id": "VAN_EX1_587",
+"legacyDbfId": 178,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -18317,6 +18677,7 @@
 "dbfId": 70038,
 "health": 3,
 "id": "VAN_EX1_590",
+"legacyDbfId": 755,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -18367,6 +18728,7 @@
 "dbfId": 70039,
 "health": 5,
 "id": "VAN_EX1_591",
+"legacyDbfId": 237,
 "name": {
 "deDE": "Auchenaiseelenpriesterin",
 "enUS": "Auchenai Soulpriest",
@@ -18411,6 +18773,7 @@
 "dbfId": 68478,
 "health": 4,
 "id": "VAN_EX1_593",
+"legacyDbfId": 670,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -18456,6 +18819,7 @@
 "cost": 3,
 "dbfId": 70040,
 "id": "VAN_EX1_594",
+"legacyDbfId": 286,
 "mechanics": [
 "SECRET"
 ],
@@ -18503,6 +18867,7 @@
 "dbfId": 70041,
 "health": 2,
 "id": "VAN_EX1_595",
+"legacyDbfId": 811,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -18548,6 +18913,7 @@
 "cost": 2,
 "dbfId": 70042,
 "id": "VAN_EX1_596",
+"legacyDbfId": 1142,
 "name": {
 "deDE": "Dämonenfeuer",
 "enUS": "Demonfire",
@@ -18592,6 +18958,7 @@
 "dbfId": 70043,
 "health": 5,
 "id": "VAN_EX1_597",
+"legacyDbfId": 926,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -18638,6 +19005,7 @@
 "dbfId": 70044,
 "health": 1,
 "id": "VAN_EX1_598",
+"legacyDbfId": 76,
 "name": {
 "deDE": "Wichtel",
 "enUS": "Imp",
@@ -18666,6 +19034,7 @@
 "dbfId": 70045,
 "health": 2,
 "id": "VAN_EX1_603",
+"legacyDbfId": 285,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -18713,6 +19082,7 @@
 "dbfId": 70046,
 "health": 4,
 "id": "VAN_EX1_604",
+"legacyDbfId": 654,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -18758,6 +19128,7 @@
 "cost": 3,
 "dbfId": 68479,
 "id": "VAN_EX1_606",
+"legacyDbfId": 1023,
 "name": {
 "deDE": "Schildblock",
 "enUS": "Shield Block",
@@ -18800,6 +19171,7 @@
 "cost": 0,
 "dbfId": 70047,
 "id": "VAN_EX1_607",
+"legacyDbfId": 22,
 "name": {
 "deDE": "Innere Wut",
 "enUS": "Inner Rage",
@@ -18844,6 +19216,7 @@
 "dbfId": 70048,
 "health": 2,
 "id": "VAN_EX1_608",
+"legacyDbfId": 614,
 "mechanics": [
 "AURA"
 ],
@@ -18889,6 +19262,7 @@
 "cost": 2,
 "dbfId": 70049,
 "id": "VAN_EX1_609",
+"legacyDbfId": 814,
 "mechanics": [
 "SECRET"
 ],
@@ -18934,6 +19308,7 @@
 "cost": 2,
 "dbfId": 70050,
 "id": "VAN_EX1_610",
+"legacyDbfId": 585,
 "mechanics": [
 "SECRET"
 ],
@@ -18979,6 +19354,7 @@
 "cost": 2,
 "dbfId": 70051,
 "id": "VAN_EX1_611",
+"legacyDbfId": 519,
 "mechanics": [
 "SECRET"
 ],
@@ -19026,6 +19402,7 @@
 "dbfId": 70052,
 "health": 3,
 "id": "VAN_EX1_612",
+"legacyDbfId": 748,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -19077,6 +19454,7 @@
 "elite": true,
 "health": 2,
 "id": "VAN_EX1_613",
+"legacyDbfId": 306,
 "mechanics": [
 "COMBO"
 ],
@@ -19125,6 +19503,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_EX1_614",
+"legacyDbfId": 556,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -19173,6 +19552,7 @@
 "dbfId": 70055,
 "health": 2,
 "id": "VAN_EX1_616",
+"legacyDbfId": 715,
 "mechanics": [
 "AURA"
 ],
@@ -19218,6 +19598,7 @@
 "cost": 3,
 "dbfId": 70056,
 "id": "VAN_EX1_617",
+"legacyDbfId": 1093,
 "name": {
 "deDE": "Tödlicher Schuss",
 "enUS": "Deadly Shot",
@@ -19260,6 +19641,7 @@
 "cost": 2,
 "dbfId": 70057,
 "id": "VAN_EX1_619",
+"legacyDbfId": 756,
 "name": {
 "deDE": "Gleichheit",
 "enUS": "Equality",
@@ -19304,6 +19686,7 @@
 "dbfId": 70058,
 "health": 8,
 "id": "VAN_EX1_620",
+"legacyDbfId": 1372,
 "name": {
 "deDE": "Geschmolzener Riese",
 "enUS": "Molten Giant",
@@ -19346,6 +19729,7 @@
 "cost": 0,
 "dbfId": 70059,
 "id": "VAN_EX1_621",
+"legacyDbfId": 1362,
 "name": {
 "deDE": "Kreis der Heilung",
 "enUS": "Circle of Healing",
@@ -19388,6 +19772,7 @@
 "cost": 3,
 "dbfId": 68480,
 "id": "VAN_EX1_622",
+"legacyDbfId": 1363,
 "name": {
 "deDE": "Schattenwort: Tod",
 "enUS": "Shadow Word: Death",
@@ -19432,6 +19817,7 @@
 "dbfId": 70060,
 "health": 6,
 "id": "VAN_EX1_623",
+"legacyDbfId": 1364,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -19477,6 +19863,7 @@
 "cost": 6,
 "dbfId": 70061,
 "id": "VAN_EX1_624",
+"legacyDbfId": 1365,
 "name": {
 "deDE": "Heiliges Feuer",
 "enUS": "Holy Fire",
@@ -19519,6 +19906,7 @@
 "cost": 3,
 "dbfId": 70062,
 "id": "VAN_EX1_625",
+"legacyDbfId": 1368,
 "name": {
 "deDE": "Schattengestalt",
 "enUS": "Shadowform",
@@ -19561,6 +19949,7 @@
 "cost": 4,
 "dbfId": 70063,
 "id": "VAN_EX1_626",
+"legacyDbfId": 1366,
 "mechanics": [
 "SILENCE"
 ],
@@ -19608,6 +19997,7 @@
 "elite": true,
 "health": 3,
 "id": "VAN_EX1_finkle",
+"legacyDbfId": 1006,
 "name": {
 "deDE": "Pip Flitzwitz",
 "enUS": "Pip Quickwit",
@@ -19634,6 +20024,7 @@
 "dbfId": 70065,
 "health": 3,
 "id": "VAN_EX1_tk11",
+"legacyDbfId": 533,
 "mechanics": [
 "TAUNT"
 ],
@@ -19679,6 +20070,7 @@
 "dbfId": 70066,
 "health": 1,
 "id": "VAN_EX1_tk28",
+"legacyDbfId": 1190,
 "name": {
 "deDE": "Eichhörnchen",
 "enUS": "Squirrel",
@@ -19706,6 +20098,7 @@
 "dbfId": 70067,
 "health": 5,
 "id": "VAN_EX1_tk29",
+"legacyDbfId": 332,
 "name": {
 "deDE": "Teufelssaurier",
 "enUS": "Devilsaur",
@@ -19731,6 +20124,7 @@
 "cost": 2,
 "dbfId": 70069,
 "id": "VAN_EX1_tk33",
+"legacyDbfId": 1178,
 "name": {
 "deDE": "INFERNO!",
 "enUS": "INFERNO!",
@@ -19773,6 +20167,7 @@
 "dbfId": 70070,
 "health": 6,
 "id": "VAN_EX1_tk34",
+"legacyDbfId": 1143,
 "name": {
 "deDE": "Höllenbestie",
 "enUS": "Infernal",
@@ -19800,6 +20195,7 @@
 "dbfId": 70071,
 "health": 2,
 "id": "VAN_EX1_tk9",
+"legacyDbfId": 358,
 "name": {
 "deDE": "Treant",
 "enUS": "Treant",
@@ -19870,6 +20266,7 @@
 "cost": 2,
 "dbfId": 68500,
 "id": "VAN_HERO_01bp",
+"legacyDbfId": 725,
 "name": {
 "deDE": "Aufrüsten!",
 "enUS": "Armor Up!",
@@ -19911,6 +20308,7 @@
 "cost": 2,
 "dbfId": 68501,
 "id": "VAN_HERO_01bp2",
+"legacyDbfId": 2745,
 "name": {
 "deDE": "Aufpanzern!",
 "enUS": "Tank Up!",
@@ -19951,6 +20349,7 @@
 "cost": 2,
 "dbfId": 68502,
 "id": "VAN_HERO_02bp",
+"legacyDbfId": 687,
 "name": {
 "deDE": "Totem beschwören",
 "enUS": "Totemic Call",
@@ -19992,6 +20391,7 @@
 "cost": 2,
 "dbfId": 68503,
 "id": "VAN_HERO_02bp2",
+"legacyDbfId": 2742,
 "name": {
 "deDE": "Totem aufstellen",
 "enUS": "Totemic Slam",
@@ -20032,6 +20432,7 @@
 "cost": 2,
 "dbfId": 68506,
 "id": "VAN_HERO_03bp",
+"legacyDbfId": 730,
 "name": {
 "deDE": "Dolchbeherrschung",
 "enUS": "Dagger Mastery",
@@ -20073,6 +20474,7 @@
 "cost": 2,
 "dbfId": 68507,
 "id": "VAN_HERO_03bp2",
+"legacyDbfId": 2743,
 "name": {
 "deDE": "Vergiftete Dolche",
 "enUS": "Poisoned Daggers",
@@ -20113,6 +20515,7 @@
 "cost": 2,
 "dbfId": 68508,
 "id": "VAN_HERO_04bp",
+"legacyDbfId": 472,
 "name": {
 "deDE": "Verstärkung",
 "enUS": "Reinforce",
@@ -20154,6 +20557,7 @@
 "cost": 2,
 "dbfId": 68509,
 "id": "VAN_HERO_04bp2",
+"legacyDbfId": 2740,
 "name": {
 "deDE": "Die Silberne Hand",
 "enUS": "The Silver Hand",
@@ -20194,6 +20598,7 @@
 "cost": 2,
 "dbfId": 68510,
 "id": "VAN_HERO_05bp",
+"legacyDbfId": 229,
 "name": {
 "deDE": "Zuverlässiger Schuss",
 "enUS": "Steady Shot",
@@ -20235,6 +20640,7 @@
 "cost": 2,
 "dbfId": 68511,
 "id": "VAN_HERO_05bp2",
+"legacyDbfId": 2738,
 "name": {
 "deDE": "Ballistenschuss",
 "enUS": "Ballista Shot",
@@ -20275,6 +20681,7 @@
 "cost": 2,
 "dbfId": 68512,
 "id": "VAN_HERO_06bp",
+"legacyDbfId": 1123,
 "name": {
 "deDE": "Gestaltwandel",
 "enUS": "Shapeshift",
@@ -20316,6 +20723,7 @@
 "cost": 2,
 "dbfId": 68513,
 "id": "VAN_HERO_06bp2",
+"legacyDbfId": 2737,
 "name": {
 "deDE": "Terrorgestaltwandel",
 "enUS": "Dire Shapeshift",
@@ -20356,6 +20764,7 @@
 "cost": 2,
 "dbfId": 68514,
 "id": "VAN_HERO_07bp",
+"legacyDbfId": 300,
 "name": {
 "deDE": "Aderlass",
 "enUS": "Life Tap",
@@ -20397,6 +20806,7 @@
 "cost": 2,
 "dbfId": 68515,
 "id": "VAN_HERO_07bp2",
+"legacyDbfId": 2744,
 "name": {
 "deDE": "Seelenentzug",
 "enUS": "Soul Tap",
@@ -20437,6 +20847,7 @@
 "cost": 2,
 "dbfId": 68516,
 "id": "VAN_HERO_08bp",
+"legacyDbfId": 807,
 "name": {
 "deDE": "Feuerschlag",
 "enUS": "Fireblast",
@@ -20478,6 +20889,7 @@
 "cost": 2,
 "dbfId": 68517,
 "id": "VAN_HERO_08bp2",
+"legacyDbfId": 2739,
 "name": {
 "deDE": "Feuerschlag (Rang 2)",
 "enUS": "Fireblast Rank 2",
@@ -20518,6 +20930,7 @@
 "cost": 2,
 "dbfId": 68518,
 "id": "VAN_HERO_09bp",
+"legacyDbfId": 479,
 "name": {
 "deDE": "Geringe Heilung",
 "enUS": "Lesser Heal",
@@ -20559,6 +20972,7 @@
 "cost": 2,
 "dbfId": 68519,
 "id": "VAN_HERO_09bp2",
+"legacyDbfId": 2741,
 "name": {
 "deDE": "Heilung",
 "enUS": "Heal",
@@ -20599,6 +21013,7 @@
 "cost": 1,
 "dbfId": 68521,
 "id": "VAN_HERO_10bp",
+"legacyDbfId": 60224,
 "name": {
 "deDE": "Dämonenklauen",
 "enUS": "Demon Claws",
@@ -20639,6 +21054,7 @@
 "cost": 1,
 "dbfId": 68522,
 "id": "VAN_HERO_10bp2",
+"legacyDbfId": 60483,
 "name": {
 "deDE": "Dämonenbiss",
 "enUS": "Demon's Bite",
@@ -20680,6 +21096,7 @@
 "cost": 0,
 "dbfId": 68526,
 "id": "VAN_NEW1_003",
+"legacyDbfId": 163,
 "name": {
 "deDE": "Opferpakt",
 "enUS": "Sacrificial Pact",
@@ -20722,6 +21139,7 @@
 "cost": 6,
 "dbfId": 68548,
 "id": "VAN_NEW1_004",
+"legacyDbfId": 196,
 "name": {
 "deDE": "Verschwinden",
 "enUS": "Vanish",
@@ -20766,6 +21184,7 @@
 "dbfId": 70075,
 "health": 3,
 "id": "VAN_NEW1_005",
+"legacyDbfId": 287,
 "mechanics": [
 "COMBO"
 ],
@@ -20812,6 +21231,7 @@
 "cost": 5,
 "dbfId": 70076,
 "id": "VAN_NEW1_007",
+"legacyDbfId": 86,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -20856,6 +21276,7 @@
 "cost": 5,
 "dbfId": 71367,
 "id": "VAN_NEW1_007a",
+"legacyDbfId": 1161,
 "name": {
 "deDE": "Stellarverschiebung",
 "enUS": "Stellar Drift",
@@ -20896,6 +21317,7 @@
 "cost": 5,
 "dbfId": 71365,
 "id": "VAN_NEW1_007b",
+"legacyDbfId": 928,
 "name": {
 "deDE": "Sternenlord",
 "enUS": "Starlord",
@@ -20939,6 +21361,7 @@
 "dbfId": 70077,
 "health": 5,
 "id": "VAN_NEW1_008",
+"legacyDbfId": 920,
 "mechanics": [
 "CHOOSE_ONE"
 ],
@@ -20983,6 +21406,7 @@
 "cost": 7,
 "dbfId": 70407,
 "id": "VAN_NEW1_008a",
+"legacyDbfId": 313,
 "name": {
 "deDE": "Uralte Lehren",
 "enUS": "Ancient Teachings",
@@ -21023,6 +21447,7 @@
 "cost": 7,
 "dbfId": 71500,
 "id": "VAN_NEW1_008b",
+"legacyDbfId": 209,
 "name": {
 "deDE": "Uralte Geheimnisse",
 "enUS": "Ancient Secrets",
@@ -21065,6 +21490,7 @@
 "dbfId": 68527,
 "health": 2,
 "id": "VAN_NEW1_009",
+"legacyDbfId": 764,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -21114,6 +21540,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_NEW1_010",
+"legacyDbfId": 32,
 "mechanics": [
 "CHARGE",
 "DIVINE_SHIELD",
@@ -21164,6 +21591,7 @@
 "dbfId": 68528,
 "health": 3,
 "id": "VAN_NEW1_011",
+"legacyDbfId": 28,
 "mechanics": [
 "CHARGE"
 ],
@@ -21211,6 +21639,7 @@
 "dbfId": 70079,
 "health": 3,
 "id": "VAN_NEW1_012",
+"legacyDbfId": 405,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -21258,6 +21687,7 @@
 "dbfId": 70080,
 "health": 4,
 "id": "VAN_NEW1_014",
+"legacyDbfId": 887,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -21308,6 +21738,7 @@
 "dbfId": 68549,
 "health": 1,
 "id": "VAN_NEW1_016",
+"legacyDbfId": 530,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -21356,6 +21787,7 @@
 "dbfId": 70081,
 "health": 2,
 "id": "VAN_NEW1_017",
+"legacyDbfId": 443,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -21404,6 +21836,7 @@
 "dbfId": 70082,
 "health": 3,
 "id": "VAN_NEW1_018",
+"legacyDbfId": 999,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -21452,6 +21885,7 @@
 "dbfId": 70083,
 "health": 2,
 "id": "VAN_NEW1_019",
+"legacyDbfId": 1073,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -21499,6 +21933,7 @@
 "dbfId": 70084,
 "health": 2,
 "id": "VAN_NEW1_020",
+"legacyDbfId": 1014,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -21546,6 +21981,7 @@
 "dbfId": 70085,
 "health": 7,
 "id": "VAN_NEW1_021",
+"legacyDbfId": 138,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -21593,6 +22029,7 @@
 "dbfId": 70086,
 "health": 3,
 "id": "VAN_NEW1_022",
+"legacyDbfId": 878,
 "mechanics": [
 "TAUNT"
 ],
@@ -21641,6 +22078,7 @@
 "dbfId": 70087,
 "health": 2,
 "id": "VAN_NEW1_023",
+"legacyDbfId": 609,
 "mechanics": [
 "ELUSIVE"
 ],
@@ -21690,6 +22128,7 @@
 "elite": true,
 "health": 4,
 "id": "VAN_NEW1_024",
+"legacyDbfId": 456,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -21738,6 +22177,7 @@
 "dbfId": 70089,
 "health": 2,
 "id": "VAN_NEW1_025",
+"legacyDbfId": 997,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -21786,6 +22226,7 @@
 "dbfId": 70090,
 "health": 5,
 "id": "VAN_NEW1_026",
+"legacyDbfId": 1029,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -21832,6 +22273,7 @@
 "dbfId": 71308,
 "health": 1,
 "id": "VAN_NEW1_026t",
+"legacyDbfId": 378,
 "name": {
 "deDE": "Violetter Lehrling",
 "enUS": "Violet Apprentice",
@@ -21859,6 +22301,7 @@
 "dbfId": 70091,
 "health": 3,
 "id": "VAN_NEW1_027",
+"legacyDbfId": 680,
 "mechanics": [
 "AURA"
 ],
@@ -21908,6 +22351,7 @@
 "elite": true,
 "health": 4,
 "id": "VAN_NEW1_029",
+"legacyDbfId": 855,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -21956,6 +22400,7 @@
 "elite": true,
 "health": 12,
 "id": "VAN_NEW1_030",
+"legacyDbfId": 834,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -22002,6 +22447,7 @@
 "cost": 3,
 "dbfId": 68529,
 "id": "VAN_NEW1_031",
+"legacyDbfId": 437,
 "name": {
 "deDE": "Tierbegleiter",
 "enUS": "Animal Companion",
@@ -22045,6 +22491,7 @@
 "dbfId": 68530,
 "health": 4,
 "id": "VAN_NEW1_032",
+"legacyDbfId": 959,
 "mechanics": [
 "TAUNT"
 ],
@@ -22092,6 +22539,7 @@
 "dbfId": 68531,
 "health": 4,
 "id": "VAN_NEW1_033",
+"legacyDbfId": 226,
 "mechanics": [
 "AURA"
 ],
@@ -22139,6 +22587,7 @@
 "dbfId": 68533,
 "health": 2,
 "id": "VAN_NEW1_034",
+"legacyDbfId": 100,
 "mechanics": [
 "CHARGE"
 ],
@@ -22185,6 +22634,7 @@
 "cost": 2,
 "dbfId": 70094,
 "id": "VAN_NEW1_036",
+"legacyDbfId": 1026,
 "name": {
 "deDE": "Befehlsruf",
 "enUS": "Commanding Shout",
@@ -22229,6 +22679,7 @@
 "dbfId": 70095,
 "health": 3,
 "id": "VAN_NEW1_037",
+"legacyDbfId": 351,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -22277,6 +22728,7 @@
 "elite": true,
 "health": 7,
 "id": "VAN_NEW1_038",
+"legacyDbfId": 526,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -22325,6 +22777,7 @@
 "elite": true,
 "health": 4,
 "id": "VAN_NEW1_040",
+"legacyDbfId": 640,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -22375,6 +22828,7 @@
 "dbfId": 70098,
 "health": 5,
 "id": "VAN_NEW1_041",
+"legacyDbfId": 1371,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -22424,6 +22878,7 @@
 "elite": true,
 "health": 5,
 "id": "VAN_PRO_001",
+"legacyDbfId": 1754,
 "mechanics": [
 "BATTLECRY"
 ],
@@ -22468,6 +22923,7 @@
 "cost": 4,
 "dbfId": 74754,
 "id": "VAN_PRO_001c",
+"legacyDbfId": 1846,
 "name": {
 "deDE": "Macht der Horde",
 "enUS": "Power of the Horde",
@@ -22510,6 +22966,7 @@
 "dbfId": 70500,
 "health": 1,
 "id": "VAN_TU4e_002t",
+"legacyDbfId": 1643,
 "name": {
 "deDE": "Flamme von Azzinoth",
 "enUS": "Flame of Azzinoth",
@@ -22536,6 +22993,7 @@
 "dbfId": 68534,
 "health": 1,
 "id": "VAN_skele11",
+"legacyDbfId": 1077,
 "name": {
 "deDE": "Skelett",
 "enUS": "Skeleton",
@@ -22579,6 +23037,7 @@
 "dbfId": 70099,
 "health": 1,
 "id": "VAN_skele21",
+"legacyDbfId": 471,
 "name": {
 "deDE": "Beschädigter Golem",
 "enUS": "Damaged Golem",
@@ -22607,6 +23066,7 @@
 "dbfId": 70101,
 "health": 3,
 "id": "VAN_tt_004",
+"legacyDbfId": 397,
 "mechanics": [
 "TRIGGER_VISUAL"
 ],
@@ -22652,6 +23112,7 @@
 "cost": 3,
 "dbfId": 70102,
 "id": "VAN_tt_010",
+"legacyDbfId": 366,
 "mechanics": [
 "SECRET"
 ],
@@ -22698,6 +23159,7 @@
 "dbfId": 71307,
 "health": 3,
 "id": "VAN_tt_010a",
+"legacyDbfId": 1086,
 "name": {
 "deDE": "Zauberformerin",
 "enUS": "Spellbender",

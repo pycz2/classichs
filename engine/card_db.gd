@@ -1,7 +1,7 @@
 class_name CardDb
 extends RefCounted
 
-const INT_FIELDS := ["dbfId", "cost", "attack", "health", "durability", "overload", "spellDamage"]
+const INT_FIELDS := ["dbfId", "legacyDbfId", "cost", "attack", "health", "durability", "overload", "spellDamage"]
 
 static var _cards: Dictionary = {}
 static var _by_dbf: Dictionary = {}
@@ -18,6 +18,8 @@ static func _ensure_loaded() -> void:
 				c[k] = int(c[k])
 		_cards[c.id] = c
 		_by_dbf[c.dbfId] = c.id
+		if c.has("legacyDbfId") and not _by_dbf.has(c.legacyDbfId):
+			_by_dbf[c.legacyDbfId] = c.id
 
 
 static func card(id: String) -> Dictionary:

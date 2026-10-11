@@ -1,0 +1,123 @@
+extends TestCase
+
+const HEARTHSIM := "AAECAR8GxwPJBLsFmQfZB/gIDI0B2AGoArUDhwSSBe0G6wfbCe0JgQr+DAA="
+
+
+func _mage_deck() -> Deck:
+	var d := Deck.new()
+	d.name = "Test"
+	d.hero = "HERO_08"
+	for id in Decks.basic("MAGE"):
+		d.cards.append(id)
+	return d
+
+
+func test_limits() -> void:
+	var d := Deck.new()
+	d.hero = "HERO_08"
+	eq(d.add("VAN_CS2_029"), "", "fireball 1")
+	eq(d.add("VAN_CS2_029"), "", "fireball 2")
+	check(d.add("VAN_CS2_029") != "", "no third copy")
+	eq(d.add("VAN_EX1_559"), "", "Antonidas")
+	check(d.add("VAN_EX1_559") != "", "one legendary copy")
+	check(d.add("VAN_CS2_108") != "", "no warrior cards in a mage deck")
+	check(d.add("VAN_CS2_101t") != "", "no tokens")
+	check(d.add("NOPE") != "", "unknown card")
+
+
+func test_thirty_cards() -> void:
+	var d := _mage_deck()
+	eq(d.validate(), "", "basic deck is valid")
+	check(d.add("VAN_CS2_231") != "", "no 31st card")
+	d.cards.pop_back()
+	check(d.validate() != "", "29 cards is not complete")
+
+
+func test_dict_roundtrip_with_odd_name() -> void:
+	var d := _mage_deck()
+	d.name = "Огонь \"и\" лёд ✨ " + "x".repeat(200)
+	var d2 := Deck.from_dict(d.to_dict())
+	eq([d2.name, d2.hero, d2.cards], [d.name, d.hero, d.cards], "same deck")
+
+
+func test_code_roundtrip() -> void:
+	var d := _mage_deck()
+	var code := DeckCode.encode(d)
+	var r := DeckCode.decode(code)
+	eq(r.error, "", "decoded")
+	var a: Array = r.deck.cards.duplicate()
+	var b: Array = d.cards.duplicate()
+	a.sort()
+	b.sort()
+	eq([r.deck.hero, a], [d.hero, b], "same cards and hero")
+
+
+func test_code_header_is_classic_format() -> void:
+	var raw := Marshalls.base64_to_raw(DeckCode.encode(_mage_deck()))
+	eq([raw[0], raw[1], raw[2], raw[3]], [0, 1, 3, 1], "reserved, version, format Classic, one hero")
+
+
+func test_decode_reference_structure() -> void:
+	var p := DeckCode.parse(HEARTHSIM)
+	eq(p.error, "", "parsed")
+	eq([p.format, p.heroes, p.singles.size(), p.doubles.size()], [2, [31], 6, 12], "HearthSim example")
+
+
+func test_decode_reference_deck_imports() -> void:
+	var r := DeckCode.decode(HEARTHSIM)  # a real 2016 Hunter deck of Basic/Classic cards
+	eq(r.error, "", "imported")
+	eq([r.deck.hero, r.deck.cards.size()], ["HERO_05", 30], "Rexxar, 30 cards")
+
+
+func test_decode_rejects_non_classic_cards() -> void:
+	var d := DeckCode.pack(2, [31], [99999], [])
+	var r := DeckCode.decode(d)
+	eq(r.deck, null, "no deck")
+	check(r.error.contains("Classic"), r.error)
+
+
+func test_decode_legacy_dbf_ids() -> void:
+	var d := _mage_deck()
+	var singles := []
+	var doubles := []
+	var counts := {}
+	for id in d.cards:
+		counts[id] = counts.get(id, 0) + 1
+	for id in counts:
+		(doubles if counts[id] == 2 else singles).append(CardDb.card(id).legacyDbfId)
+	var code := DeckCode.pack(1, [637], singles, doubles)  # Wild format, original ids
+	var r := DeckCode.decode(code)
+	eq(r.error, "", "legacy code imported")
+	eq(r.deck.cards.size(), 30, "30 cards")
+
+
+func test_decode_client_text() -> void:
+	var text := "### My Mage\n# Class: Mage\n# Format: Classic\n#\n# 2x (4) Fireball\n#\n%s\n#\n# To use this deck, copy it to your clipboard.\n" % DeckCode.encode(_mage_deck())
+	var r := DeckCode.decode(text)
+	eq(r.error, "", "client text")
+	eq(r.deck.name, "My Mage", "name from ###")
+
+
+func test_decode_garbage() -> void:
+	for bad in ["", "   ", "hello world!", "AAAA", "AAECAQcAAAA=", "%%%%"]:
+		var r := DeckCode.decode(bad)
+		check(r.deck == null and r.error != "", "rejected: '%s'" % bad)
+
+
+func test_store_roundtrip_and_broken_file() -> void:
+	var path := "user://test_decks.json"
+	DeckStore.path = path
+	var d := _mage_deck()
+	DeckStore.save_all([d])
+	var back := DeckStore.load_all()
+	eq(back.size(), 1, "one deck")
+	eq(back[0].cards, d.cards, "same cards")
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	f.store_string("{ not json")
+	f.close()
+	eq(DeckStore.load_all().size(), 0, "broken file gives no decks")
+	check(FileAccess.file_exists("user://test_decks.bad.json"), "broken file kept aside")
+	DirAccess.remove_absolute(path)
+	DirAccess.remove_absolute("user://test_decks.bad.json")
+	DeckStore.path = DeckStore.DEFAULT_PATH
+	eq(DeckStore.load_all().size() >= 0, true, "default path still loads")

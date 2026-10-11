@@ -47,3 +47,10 @@ func test_weapon_durability_field() -> void:
 func test_spell_damage_matches_text() -> void:
 	eq(CardDb.card("VAN_EX1_563").spellDamage, 5, "Malygos +5")
 	eq(CardDb.card("VAN_CS2_142").spellDamage, 1, "Kobold Geomancer +1")
+
+
+func test_legacy_dbf_ids() -> void:
+	eq(CardDb.card("VAN_CS2_029").get("legacyDbfId", -1), 315, "Fireball original dbfId")
+	eq(CardDb.by_dbf(315), "VAN_CS2_029", "legacy id maps to the Classic card")
+	eq(CardDb.by_dbf(68326), "VAN_CS2_029", "Classic id still works")
+	eq(CardDb.by_dbf(7), "HERO_01", "hero dbfId")

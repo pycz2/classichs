@@ -36,7 +36,13 @@ def main():
     req = urllib.request.Request(URL, headers={"User-Agent": "classic-hs-extract/1.0"})
     with urllib.request.urlopen(req) as r:
         cards = json.load(r)
+    by_id = {c["id"]: c for c in cards}
     out = [{k: c[k] for k in FIELDS if k in c} for c in cards if keep(c)]
+    for c in out:
+        # Deck codes from 2014-era decks use the original cards' dbfIds (CS2_029, not VAN_CS2_029).
+        orig = by_id.get(c["id"][4:]) if c["id"].startswith("VAN_") else None
+        if orig:
+            c["legacyDbfId"] = orig["dbfId"]
     for c in out:
         # HearthstoneJSON stores weapon durability in "health"; the engine reads "durability".
         if c["type"] == "WEAPON" and "health" in c:
