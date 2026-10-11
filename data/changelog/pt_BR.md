@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-11
+
+### Adicionado
+- Passar o mouse sobre uma carta na mão faz piscar os cristais de mana que ela gastaria, se puder ser jogada.
+
 ## [0.12.0] - 2026-10-11
 
 ### Adicionado

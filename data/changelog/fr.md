@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-11
+
+### Ajouté
+- Survoler une carte en main fait clignoter les cristaux de mana qu'elle coûterait, si elle peut être jouée.
+
 ## [0.12.0] - 2026-10-11
 
 ### Ajouté

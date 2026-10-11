@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-11
+
+### Hinzugefügt
+- Zeigt die Maus auf eine Handkarte, blinken die Manakristalle, die sie kosten würde, wenn sie spielbar ist.
+
 ## [0.12.0] - 2026-10-11
 
 ### Hinzugefügt

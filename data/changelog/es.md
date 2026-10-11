@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-11
+
+### Añadido
+- Al pasar el ratón sobre una carta de la mano parpadean los cristales de maná que gastaría, si se puede jugar.
+
 ## [0.12.0] - 2026-10-11
 
 ### Añadido

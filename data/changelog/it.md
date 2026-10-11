@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-11
+
+### Aggiunto
+- Passando il mouse su una carta in mano lampeggiano i cristalli di mana che spenderebbe, se si può giocare.
+
 ## [0.12.0] - 2026-10-11
 
 ### Aggiunto

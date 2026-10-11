@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-11
+
+### Dodano
+- Po najechaniu na kartę w ręce migają kryształy many, które by zużyła, jeśli można ją zagrać.
+
 ## [0.12.0] - 2026-10-11
 
 ### Dodano
