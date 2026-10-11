@@ -4,6 +4,17 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-10-11
+
+### Modificato
+- Gli emblemi di classe sono semplici e piatti; la spada della gemma d'attacco è più corta, punta in alto a destra, con l'impugnatura visibile in basso a sinistra; il fulmine sotto il ritratto è grande la metà; la boccetta di veleno è verde, più piccola e ferma.
+- Silenzio: nastri rosa luminosi avvolgono il ritratto.
+- Rantolo di morte: il teschio cresce dal servitore e sale.
+- Un servitore con grido di battaglia prima prende il suo posto, poi la freccia verso il bersaglio parte da lui; il clic destro o la freccia riportata nella mano annulla, e la carta torna in mano.
+
+### Corretto
+- Le scintille di danno magico a volte si fermavano.
+
 ## [0.15.1] - 2026-10-11
 
 ### Modificato

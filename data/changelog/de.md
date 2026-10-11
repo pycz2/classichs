@@ -4,6 +4,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-10-11
+
+### Geändert
+- Klassenembleme sind schlicht und flach; das Schwert am Angriffsstein ist kürzer, zeigt nach rechts oben, der Griff ist links unten zu sehen; der Blitz unter dem Porträt ist halb so groß; die Giftflasche ist grün, kleiner und ruhig.
+- Stille: leuchtende rosa Bänder winden sich um das Porträt.
+- Todesröcheln: das Schädelzeichen wächst aus dem Diener und steigt auf.
+- Ein Diener mit Kampfschrei nimmt erst seinen Platz ein, dann geht der Pfeil zum Ziel von ihm aus; Rechtsklick oder der Pfeil zurück in die Hand bricht ab, die Karte kehrt auf die Hand zurück.
+
+### Behoben
+- Die Funken von Zauberschaden blieben manchmal stehen.
+
 ## [0.15.1] - 2026-10-11
 
 ### Geändert

@@ -6,7 +6,7 @@ extends Control
 ## summon, a skull for a Deathrattle, a flare for a Battlecry and so on.
 
 const LIFE := {"hurt": 0.55, "heal": 0.8, "buff": 0.8, "debuff": 0.7, "gain": 0.6, "freeze": 0.8,
-	"silence": 0.7, "smoke": 0.8, "destroy": 0.7, "portal": 0.8, "skull": 1.0, "battlecry": 0.6,
+	"silence": 0.7, "smoke": 0.8, "destroy": 0.7, "portal": 0.8, "skull": 1.1, "battlecry": 0.6,
 	"whoosh": 0.6, "control": 0.8, "armor": 0.7}
 ## The colour of an effect when its card has no element of its own.
 const COLORS := {"hurt": Color("ff7b2e"), "heal": Color("8ce99a"), "buff": Color("ffd43b"), "debuff": Color("b197fc"),
@@ -90,7 +90,14 @@ func _draw() -> void:
 			for i in 6:
 				var a := t * 6.0 + i * TAU / 6.0
 				_star(Vector2(cos(a) * 44, sin(a) * 54), 4, Color(color.lightened(0.4), fade))
-		"skull":  # a Deathrattle: a skull rising
+		"skull":  # a Deathrattle: the minion's skull mark grows and rises out of it, then fades
+			var tex := Sprites.get_tex("deathrattle")
+			if tex:
+				var w := 16.0 + 70.0 * sin(t * PI / 2.0)
+				var h := w * tex.get_height() / float(tex.get_width())
+				var at := Vector2(0, 40 - 70 * t)
+				draw_texture_rect(tex, Rect2(at - Vector2(w, h) / 2.0, Vector2(w, h)), false, Color(1, 1, 1, minf(1.0, fade * 1.6)))
+				return
 			var p := Vector2(0, -20 * t)
 			draw_circle(p, 14, Color(0, 0, 0, fade))
 			draw_circle(p, 12, Color(color, fade))

@@ -4,6 +4,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-10-11
+
+### Changed
+- Class emblems are simple and flat; the sword at the attack gem is shorter, points up to the right, with the hilt showing at the bottom left; the lightning under the portrait is half as big; the poison bottle is green, smaller and still.
+- Silence: glowing pink ribbons wind around the portrait.
+- Deathrattle: the skull mark grows out of the minion and rises.
+- A Battlecry minion first takes its place, then the arrow to the target starts from it; right-click or leading the arrow back into the hand cancels, and the card goes back to the hand.
+
+### Fixed
+- The Spell Damage sparks sometimes stopped moving.
+
 ## [0.15.1] - 2026-10-11
 
 ### Changed

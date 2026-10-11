@@ -345,3 +345,25 @@ func test_overload_shows_at_once() -> void:
 	v.controller.submit({"type": "play", "player": 0, "entity": bolt.id, "target": v.g.players[1].hero.id, "pos": -1, "choice": -1})
 	eq(v._mana[0].owed, 1, "the crystal locked next turn shows now")
 	v.free()
+
+
+func test_spell_damage_sparks_keep_moving() -> void:
+	var g := H.scene({"hero": "HERO_08", "board": ["VAN_CS2_142"]})  # Kobold Geomancer: Spell Damage +1
+	var mv := MinionView.make(g.players[0].board[0], g)
+	check(mv._animated(), "a Spell Damage minion is redrawn every frame")
+	mv.free()
+
+
+func test_battlecry_minion_stands_on_the_board_while_aiming() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_189"], "board": ["VAN_CS2_182"]})  # Elven Archer: Battlecry, 1 damage
+	var archer := v.g.players[0].hand[0]
+	v._press = {"id": archer.id, "at": Vector2(640, 650)}
+	v._start_drag()
+	v._drop_at(Vector2(700, TableLayout.HAND_Y - 260), archer.id)
+	eq(v._sel.get("stage", ""), "target", "now choosing the Battlecry's target")
+	check(v._views[archer.id] is MinionView, "the minion stands on the board")
+	check(archer.zone == "HAND", "not played yet")
+	v.cancel()
+	check(v._views[archer.id] is CardView, "cancelled: the card is back in the hand")
+	eq(archer.zone, "HAND", "and was not played")
+	v.free()
