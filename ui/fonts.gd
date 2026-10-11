@@ -1,0 +1,76 @@
+class_name Fonts
+extends RefCounted
+## The game's look: Alegreya (OFL; Latin, Cyrillic, Greek) for the interface with
+## lining figures, Cinzel Decorative (OFL) for the title, and tavern-style wooden
+## buttons with a gold frame. main.gd puts theme() on the root window.
+
+static var _ui: Font
+static var _title: Font
+static var _theme: Theme
+
+
+static func _tag(t: String) -> int:
+	return TextServerManager.get_primary_interface().name_to_tag(t)
+
+
+## The interface font (a weight for buttons, lining figures).
+static func ui(weight := 600) -> Font:
+	var f := FontVariation.new()
+	f.base_font = load("res://fonts/Alegreya.ttf")
+	f.variation_opentype = {_tag("wght"): weight}
+	f.opentype_features = {_tag("lnum"): 1}
+	return f
+
+
+static func title() -> Font:
+	if _title == null:
+		_title = load("res://fonts/CinzelDecorative-Black.ttf")
+	return _title
+
+
+## A wooden plank with grain, a dark seam and a gold frame (tint: hover/pressed).
+static func plank(tint := Color.WHITE) -> StyleBoxTexture:
+	var w := 96
+	var h := 40
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 2014
+	var phase := []
+	for i in 6:
+		phase.append(rng.randf() * TAU)
+	for y in h:
+		for x in w:
+			var grain := sin(x * 0.11 + sin(y * 0.6 + phase[y % 6]) * 2.2) * 0.5 + 0.5
+			var c := Color("6b4428").lerp(Color("4a2c18"), grain * 0.55 + (0.12 if y % 9 == 0 else 0.0))
+			var edge := mini(mini(x, w - 1 - x), mini(y, h - 1 - y))
+			if edge < 2:
+				c = Color("d9b44a").lerp(Color("8a6d2a"), float(y) / h)
+			elif edge < 3:
+				c = Color("2a170b")
+			elif edge < 5:
+				c = c.lightened(0.12) if y < h / 2 else c.darkened(0.15)
+			img.set_pixel(x, y, c * tint)
+	var sb := StyleBoxTexture.new()
+	sb.texture = ImageTexture.create_from_image(img)
+	sb.set_texture_margin_all(6)
+	sb.set_content_margin_all(10)
+	return sb
+
+
+static func theme() -> Theme:
+	if _theme == null:
+		var t := Theme.new()
+		t.default_font = ui()
+		t.set_font("font", "Button", ui(700))
+		t.set_stylebox("normal", "Button", plank())
+		t.set_stylebox("hover", "Button", plank(Color(1.18, 1.12, 1.05)))
+		t.set_stylebox("pressed", "Button", plank(Color(0.8, 0.78, 0.75)))
+		t.set_stylebox("disabled", "Button", plank(Color(0.55, 0.55, 0.55)))
+		t.set_stylebox("focus", "Button", StyleBoxEmpty.new())
+		t.set_color("font_color", "Button", Color("f4ead5"))
+		t.set_color("font_hover_color", "Button", Color("fff3c4"))
+		t.set_color("font_pressed_color", "Button", Color("e0c890"))
+		t.set_color("font_outline_color", "Button", Color("1b0f06"))
+		t.set_constant("outline_size", "Button", 4)
+		_theme = t
+	return _theme

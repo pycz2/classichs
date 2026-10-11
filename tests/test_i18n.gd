@@ -59,3 +59,16 @@ func test_font_has_every_character_the_interface_uses() -> void:
 			if ch.unicode_at(0) > 127 and not font.has_char(ch.unicode_at(0)):
 				missing[ch] = t[0]
 	eq(missing, {}, "characters the font lacks (shown as boxes)")
+
+
+func test_interface_font_has_every_character_of_every_language() -> void:
+	var font := Fonts.ui()
+	var missing := {}
+	for code in Locale.LANGS:
+		if code == "en":
+			continue
+		for ch in FileAccess.get_file_as_string("%s/%s.json" % [Locale.DEFAULT_DIR, code]):
+			if ch.unicode_at(0) > 127 and not font.has_char(ch.unicode_at(0)):
+				missing[ch] = code
+	eq(missing, {}, "characters Alegreya lacks")
+	check(Fonts.title().has_char("C".unicode_at(0)), "title font loads")
