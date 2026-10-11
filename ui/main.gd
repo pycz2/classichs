@@ -43,7 +43,6 @@ func show_menu(play := false) -> void:
 	m.collection.connect(show_collection)
 	m.online.connect(show_online)
 	m.tutorial.connect(show_tutorial)
-	m.debug_table.connect(show_debug_table)
 	m.settings.connect(show_settings)
 	m.quit.connect(func(): get_tree().quit())
 	_set_screen(m)
@@ -54,6 +53,7 @@ func show_menu(play := false) -> void:
 func show_settings() -> void:
 	var s := SettingsView.new()
 	s.back.connect(show_menu)
+	s.debug.connect(show_debug_table)
 	_set_screen(s)
 
 
@@ -121,22 +121,31 @@ func show_collection() -> void:
 	_set_screen(c)
 
 
-func show_debug_table() -> void:
+## The debug tools (opened from the settings), at a tab: DebugTable.SCENE, TESTS...
+func show_debug_table(tab := DebugTable.SCENE) -> void:
 	var d := DebugTable.new()
-	d.back.connect(show_menu)
+	d.tab = tab
+	d.back.connect(show_settings)
 	d.start.connect(func(g, bots): start_match(g, bots, true))
-	d.card_lab.connect(show_card_lab)
-	d.effects_lab.connect(func():
-		var l := EffectsLab.new()
-		l.back.connect(show_debug_table)
-		_set_screen(l))
+	d.run_test.connect(start_card_test)
 	_set_screen(d)
 
 
-func show_card_lab() -> void:
-	var l := CardLab.new()
-	l.back.connect(show_debug_table)
-	_set_screen(l)
+## A card test (CardTests format) played in a hot-seat match: its steps go through
+## the controller one by one; leaving comes back to the Interaction test tab.
+func start_card_test(test: Dictionary) -> MatchView:
+	var m := Match.new()
+	m.setup(Scenario.build(test.scene).game, [false, false])
+	var v := MatchView.new()
+	v.debug_mode = true
+	v.leave.connect(show_debug_table.bind(DebugTable.TESTS))
+	_set_screen(v)
+	v.bind(m)
+	var run := DebugTable.Run.new(test, v)
+	run.again.connect(start_card_test.bind(test))
+	v.add_child(run)
+	run.play()
+	return v
 
 
 func start_match(g: Game, bots: Array, debug := false) -> MatchView:
@@ -144,7 +153,7 @@ func start_match(g: Game, bots: Array, debug := false) -> MatchView:
 	m.setup(g, bots)
 	var v := MatchView.new()
 	v.debug_mode = debug
-	v.leave.connect(show_menu)
+	v.leave.connect(show_debug_table if debug else show_menu)
 	_set_screen(v)
 	v.bind(m)
 	return v

@@ -1,18 +1,17 @@
 class_name MainMenu
 extends Control
 ## Main menu: Play (a submenu with online play, training and the tutorial),
-## Collection, Debug Table, Settings, Exit.
+## Collection, Settings (with the debug tools), Exit.
 
 signal training
 signal collection
 signal online
 signal tutorial
-signal debug_table
 signal settings
 signal quit
 
 ## Button labels (English keys); the translation tool reads this list.
-const ITEMS := ["Play", "Online Game", "Training", "Tutorial", "Back", "Collection", "Debug Table", "Settings", "Exit"]
+const ITEMS := ["Play", "Online Game", "Training", "Tutorial", "Back", "Collection", "Settings", "Exit"]
 
 var _box: VBoxContainer
 
@@ -63,9 +62,9 @@ func _ready() -> void:
 	add_child(version)
 
 
-## The first level: Play, Collection, Debug Table, Settings, Exit.
+## The first level: Play, Collection, Settings, Exit.
 func show_main() -> void:
-	var items := [["Play", show_play, true], ["Collection", collection, true], ["Debug Table", debug_table, true], ["Settings", settings, true]]
+	var items := [["Play", show_play, true], ["Collection", collection, true], ["Settings", settings, true]]
 	if not OS.has_feature("web"):
 		items.append(["Exit", quit, true])
 	_fill(items)
