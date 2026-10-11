@@ -1,6 +1,6 @@
 extends SceneTree
 ## Renders the boot splash (icons/splash.png) from the real menu look: the tavern
-## background, darkened, and the gold title logo. Needs a window (no --headless).
+## background, darkened, the gold title logo and the game's version. Needs a window (no --headless).
 ## Usage: godot --path . --script res://tools/make_splash.gd
 
 var _frames := 0
@@ -25,6 +25,17 @@ func _initialize() -> void:
 	root.add_child(center)
 	var logo := TitleLogo.new()
 	center.add_child(logo)
+	var version := Label.new()  # the game's version under the title (tools/build_site.sh redraws the splash)
+	version.text = "v" + str(ProjectSettings.get_setting("application/config/version"))
+	version.add_theme_font_override("font", Fonts.ui(700))
+	version.add_theme_font_size_override("font_size", 26)
+	version.add_theme_color_override("font_color", Color("f2dca0"))
+	version.add_theme_color_override("font_outline_color", Color("1b0f06"))
+	version.add_theme_constant_override("outline_size", 6)
+	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	version.position = Vector2(0, 470)
+	version.size = Vector2(1280, 40)
+	root.add_child(version)
 
 
 func _process(_d: float) -> bool:
