@@ -5,6 +5,8 @@ extends RefCounted
 
 const DIRS := ["res://engine", "res://cards", "res://game", "res://net", "res://ui"]
 static var _call := RegEx.create_from_string("(?:\\btr|TranslationServer\\.translate|\\b_t|\\b_tr)\\(\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
+## HistoryText._say(p, viewer, "You …", "Opponent …", args)
+static var _say := RegEx.create_from_string("_say\\([^,]+,\\s*[^,]+,\\s*\"((?:[^\"\\\\]|\\\\.)*)\",\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
 
 
 static func collect() -> Array:
@@ -13,8 +15,12 @@ static func collect() -> Array:
 		for f in DirAccess.get_files_at(dir):
 			if not f.ends_with(".gd"):
 				continue
-			for m in _call.search_all(FileAccess.get_file_as_string(dir + "/" + f)):
+			var src := FileAccess.get_file_as_string(dir + "/" + f)
+			for m in _call.search_all(src):
 				keys[m.get_string(1).c_unescape()] = true
+			for m in _say.search_all(src):
+				keys[m.get_string(1).c_unescape()] = true
+				keys[m.get_string(2).c_unescape()] = true
 	var tables: Array = []
 	tables.append_array(MainMenu.ITEMS)
 	tables.append_array(DeckListView.BUTTONS)

@@ -62,7 +62,7 @@ func validate() -> String:
 		if why != "":
 			return why
 	if cards.size() != SIZE:
-		return TranslationServer.translate("A deck needs exactly 30 cards (now %d)") % cards.size()
+		return TranslationServer.translate("A deck needs exactly 30 cards. Cards now: %d") % cards.size()
 	return ""
 
 

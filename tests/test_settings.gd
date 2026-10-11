@@ -69,3 +69,23 @@ func test_key_collector_finds_literals_and_tables() -> void:
 	for k in ["Training", "End Turn", "You draw %s", "Greetings!", "Not yet! You have more cards to play!",
 			"Play minions and use them to attack Hogger. Deal enough damage and you win!", "Oh yeah!", "Hand", "New Deck"]:
 		check(keys.has(k), "collected: " + k)
+
+
+func test_collector_finds_paired_history_strings() -> void:
+	var keys := I18nKeys.collect()
+	for k in ["You play %s", "Opponent plays %s", "You win", "Opponent wins"]:
+		check(keys.has(k), "collected: " + k)
+
+
+func test_history_turn_lines_marked_by_event() -> void:
+	var g := H.game()
+	H.end_turn(g)
+	var rows := HistoryText.rows(g.history.back(), g, 0, "en")
+	check(rows.any(func(r): return r.turn and r.text.begins_with("Turn")), "turn row marked")
+	check(rows.any(func(r): return not r.turn), "other rows not marked")
+
+
+func test_remote_refusal_reasons_are_translatable() -> void:
+	var keys := I18nKeys.collect()
+	for k in ["an action for the wrong player", "an illegal action", "the game states differ", "a broken action"]:
+		check(keys.has(k), "collected: " + k)

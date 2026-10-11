@@ -72,17 +72,18 @@ func submit(action: Dictionary) -> Dictionary:
 ## expected_hash "" skips the state check (moves both players may make at once: mulligan, concede).
 func submit_remote(action: Variant, expected_hash: String) -> String:
 	if not action is Dictionary:
-		return "a broken action"
+		return TranslationServer.translate("a broken action")
 	var pl = action.get("player")
 	if not (pl is int or pl is float) or int(pl) != remote:
-		return "an action for the wrong player"
+		return TranslationServer.translate("an action for the wrong player")
 	if game.game_over:
 		return ""  # e.g. a move that crossed a concede: the game is already decided
 	var r := game.apply(action)
 	if not r.ok:
-		return "an illegal action (" + r.error + ")"
+		push_warning("illegal remote action: " + r.error)
+		return TranslationServer.translate("an illegal action")
 	if expected_hash != "" and expected_hash != game.state_hash():
-		return "the game states differ"
+		return TranslationServer.translate("the game states differ")
 	changed.emit(r.events)
 	_after()
 	return ""

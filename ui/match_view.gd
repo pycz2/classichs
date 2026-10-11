@@ -319,6 +319,8 @@ func refresh() -> void:
 
 
 func _side_name(p: int) -> String:
+	if player_names[p] == Profile.DEFAULT_NAME:
+		return tr("Player")
 	if player_names[p] != "":
 		return player_names[p]
 	if controller.bots[0] == controller.bots[1]:

@@ -36,16 +36,18 @@ func update_from(g: GameState, viewer: int) -> void:
 		_shown = 0
 		_viewer = viewer
 	var added := false
+	var bar := _scroll.get_v_scroll_bar()
+	var at_bottom := _scroll.scroll_vertical >= int(bar.max_value - bar.page) - 8
 	while _shown < g.history.size():
-		for text in HistoryText.lines(g.history[_shown], g, viewer):
-			var l := Palette.label(text, 14)
+		for r in HistoryText.rows(g.history[_shown], g, viewer):
+			var l := Palette.label(r.text, 14)
 			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			l.custom_minimum_size.x = _list.custom_minimum_size.x
-			if text.begins_with(tr("Turn").left(4)):
+			if r.turn:
 				l.add_theme_color_override("font_color", Palette.ATTACK)
 			_list.add_child(l)
 			added = true
 		_shown += 1
-	if added and is_inside_tree():
+	if added and at_bottom and is_inside_tree():  # don't yank a reader away from older lines
 		await get_tree().process_frame
-		_scroll.scroll_vertical = int(_scroll.get_v_scroll_bar().max_value)
+		_scroll.scroll_vertical = int(bar.max_value)
