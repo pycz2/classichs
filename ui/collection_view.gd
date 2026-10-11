@@ -40,9 +40,10 @@ func _ready() -> void:
 	for cls in tabs():
 		var b := Button.new()
 		b.name = "Tab" + cls
-		b.text = tr("Neutral") if cls == "NEUTRAL" else CardText.name(Decks.hero(cls))
-		b.custom_minimum_size = Vector2(0, 34)
-		b.add_theme_stylebox_override("normal", Palette.box(Palette.of_class(cls).darkened(0.35), 6))
+		b.tooltip_text = tr("Neutral") if cls == "NEUTRAL" else CardText.name(Decks.hero(cls))
+		b.custom_minimum_size = Vector2(52, 40)
+		b.add_theme_stylebox_override("normal", Palette.box(Palette.of_class(cls).darkened(0.35), 8))
+		Icons.attach(b, cls, 34)
 		var c: String = cls
 		b.pressed.connect(func(): set_tab(c))
 		_tabs.add_child(b)

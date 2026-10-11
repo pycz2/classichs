@@ -54,8 +54,10 @@ func _ready() -> void:
 		b.name = "bot_" + cls
 		b.text = CardText.name(Decks.hero(cls))
 		b.custom_minimum_size = Vector2(190, 44)
-		b.add_theme_stylebox_override("normal", Palette.box(Palette.of_class(cls).darkened(0.3)))
-		b.add_theme_stylebox_override("pressed", Palette.box(Palette.of_class(cls), 8, Palette.SELECTED, 3))
+		for st in [["normal", Palette.box(Palette.of_class(cls).darkened(0.3))], ["pressed", Palette.box(Palette.of_class(cls), 8, Palette.SELECTED, 3)]]:
+			st[1].content_margin_left = 44
+			b.add_theme_stylebox_override(st[0], st[1])
+		Icons.attach(b, cls, 32)
 		b.button_pressed = cls == bot_class
 		b.toggled.connect(func(on):
 			if on:
