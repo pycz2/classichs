@@ -16,6 +16,8 @@ var bots: Array = [false, true]
 var remote := -1
 ## Seconds between bot actions; 0 = the bot moves at once (tests).
 var bot_delay := 0.6
+## The table may still be animating: the bot waits until this returns false.
+var busy: Callable = func() -> bool: return false
 var _bot_scheduled := false
 var _finished := false
 
@@ -129,6 +131,9 @@ func _after() -> void:
 	_bot_scheduled = true
 	get_tree().create_timer(bot_delay).timeout.connect(func():
 		_bot_scheduled = false
+		if busy.call():
+			_after()  # look again a moment later
+			return
 		if is_bot_turn():
 			_bot_step()
 			_after())

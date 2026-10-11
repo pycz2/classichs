@@ -38,6 +38,14 @@ tools/build_site.sh --publish  # ... and publish to the gh-pages branch
 
 Other tools: `tools/extract_cards.py` rebuilds `data/cards.json` from HearthstoneJSON; `tools/gen_audio.py` synthesizes `audio/*.wav`.
 
+## Card art sets
+
+Every folder in `art/` is a picture set, selectable in Settings → Card art:
+
+- `art/cards/` — illustrations generated with the local Codex CLI (`tools/gen_card_art.py`).
+- `art/original/` — the original art from [HearthstoneJSON](https://hearthstonejson.com/docs/images.html) (`tools/fetch_original_art.py`). It belongs to Blizzard, so it stays out of git and out of the published web build: local play only.
+- Your own set: create `art/<any name>/` and put pictures named by card id (`CS2_029.jpg`, `VAN_EX1_298.png`, `HERO_08.webp`…). The next build picks the folder up and the set appears in the settings. Cards without a picture in the set use the drawn art.
+
 ## How it is built
 
 | Folder | What is there |

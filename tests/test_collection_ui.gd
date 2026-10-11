@@ -11,6 +11,7 @@ func _store_reset() -> void:
 	DeckStore.path = TEST_STORE
 	if FileAccess.file_exists(TEST_STORE):
 		DirAccess.remove_absolute(TEST_STORE)
+	DeckStore.save_all([])  # an empty list (a missing file means the first run with starter decks)
 
 
 func _store_restore() -> void:
@@ -107,11 +108,11 @@ func test_training_with_saved_deck_and_incomplete_deck() -> void:
 	root().add_child(t)
 	var started := []
 	t.start.connect(func(deck, bot): started.append(deck))
-	t.select_deck(10)  # the incomplete one (after 9 basic decks and "Priest")
+	t.select_deck(1)  # the incomplete one (saved decks come first)
 	t.play()
 	eq(started.size(), 0, "incomplete deck refused")
 	check(t.error.text != "", "reason shown")
-	t.select_deck(9)
+	t.select_deck(0)
 	t.play()
 	eq(started.size(), 1, "saved deck starts")
 	eq(started[0].name, "Priest", "the saved deck")

@@ -8,6 +8,8 @@ const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "d
 	"hero_power": "hero_power", "turn_start": "turn_start", "heal": "heal", "armor": "armor",
 	"equip": "equip", "secret_revealed": "secret", "freeze": "freeze", "divine_shield_lost": "shield"}
 const POOL := 6
+## Sound.music("battle") plays these as a shuffled playlist.
+const BATTLE_TRACKS := ["battle_1", "battle_2", "battle_3"]
 
 static var instance: Sound
 static var default_speaker := func(text: String, voice: String, volume: int) -> void:
@@ -20,6 +22,9 @@ static var voices: Callable = default_voices
 
 var _music := AudioStreamPlayer.new()
 var _track := ""
+## The music file playing now (a battle track while _track is "battle").
+var music_file := ""
+var _last_battle := ""
 var _pool: Array[AudioStreamPlayer] = []
 var _next := 0
 var _streams := {}
@@ -29,7 +34,7 @@ func _ready() -> void:
 	instance = self
 	Settings.apply()  # makes sure the Music and SFX buses exist
 	_music.bus = "Music"
-	_music.finished.connect(_music.play)  # loop
+	_music.finished.connect(_on_music_finished)
 	add_child(_music)
 	for i in POOL:
 		var p := AudioStreamPlayer.new()
@@ -67,13 +72,33 @@ func last_player() -> AudioStreamPlayer:
 	return _pool[(_next - 1 + POOL) % POOL]
 
 
+## Loops track; "battle" starts a battle track other than the last one (a new one
+## every match) and moves on to another when it ends.
 static func music(track: String) -> void:
-	if instance == null or instance._track == track:
+	if instance == null or (instance._track == track and track != "battle"):
 		return
 	instance._track = track
-	instance._music.stream = instance._stream(track)
-	if instance._music.stream:
-		instance._music.play()
+	instance._start(instance._next_battle() if track == "battle" else track)
+
+
+func _next_battle() -> String:
+	var others := BATTLE_TRACKS.filter(func(f): return f != _last_battle)
+	_last_battle = others.pick_random()
+	return _last_battle
+
+
+func _start(file: String) -> void:
+	music_file = file
+	_music.stream = _stream(file)
+	if _music.stream:
+		_music.play()
+
+
+func _on_music_finished() -> void:
+	if _track == "battle":
+		_start(_next_battle())
+	else:
+		_music.play()
 
 
 ## Speaks text with a voice of the interface language; silent when speech is off,

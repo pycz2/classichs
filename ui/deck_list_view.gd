@@ -185,7 +185,10 @@ func _choose_hero() -> void:
 		b.name = "Hero" + cls
 		b.text = CardText.name(Decks.hero(cls))
 		b.custom_minimum_size = Vector2(220, 48)
-		b.add_theme_stylebox_override("normal", Palette.box(Palette.of_class(cls), 8))
+		var st := Palette.box(Palette.of_class(cls), 8)
+		st.content_margin_left = 46
+		b.add_theme_stylebox_override("normal", st)
+		Icons.attach(b, cls, 34)
 		var hero := Decks.hero(cls)
 		b.pressed.connect(func():
 			_close()

@@ -7,6 +7,8 @@ extends Node
 signal started(m: Match)
 signal failed(reason: String)
 signal emote_received(player: int, id: String)
+## The opponent hovers, aims or looks at something (not part of the game state).
+signal intent_received(intent: Dictionary)
 
 const PROTOCOL := 1
 const EMOTES := ["greetings", "well_played", "thanks", "wow", "oops", "threaten"]
@@ -53,6 +55,35 @@ func send_emote(id: String) -> void:
 		transport.send({"t": "emote", "id": id})
 
 
+## What the local player points at: {"k": "hover", "i"}, {"k": "aim", "from", "to", "x", "y"},
+## {"k": "look", "id"} or {"k": "none"}. Outside the lockstep: never changes the game.
+func send_intent(intent: Dictionary) -> void:
+	if not _done:
+		transport.send({"t": "intent", "i": intent})
+
+
+## A clean copy of an intent, or {} when it is malformed (then it is dropped).
+static func clean_intent(i: Variant) -> Dictionary:
+	if not i is Dictionary:
+		return {}
+	var num := func(v) -> bool: return v is int or v is float
+	match i.get("k"):
+		"none":
+			return {"k": "none"}
+		"hover":
+			if num.call(i.get("i")) and int(i.i) >= 0 and int(i.i) < 10:
+				return {"k": "hover", "i": int(i.i)}
+		"look":
+			if num.call(i.get("id")):
+				return {"k": "look", "id": int(i.id)}
+		"aim":
+			if num.call(i.get("from")) and num.call(i.get("to")):
+				return {"k": "aim", "from": int(i.from), "to": int(i.to),
+					"x": clampf(float(i.get("x", 640)), 0, 1280) if num.call(i.get("x", 0)) else 640.0,
+					"y": clampf(float(i.get("y", 360)), 0, 720) if num.call(i.get("y", 0)) else 360.0}
+	return {}
+
+
 func leave() -> void:
 	if not _done:
 		_done = true
@@ -97,6 +128,10 @@ func _on_message(msg: Variant) -> void:
 		"emote":
 			if match_ and EMOTES.has(msg.get("id")):
 				emote_received.emit(match_.remote, msg.id)
+		"intent":
+			var i := clean_intent(msg.get("i"))
+			if match_ and not i.is_empty():
+				intent_received.emit(i)
 		"bye":
 			var code := str(msg.get("code", "left"))
 			_fail(_tr(BYE_TEXT.get(code, BYE_TEXT.left)), "left" if code == "left" else code, false)
