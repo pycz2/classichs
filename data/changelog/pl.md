@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-10-12
+
+### Zmieniono
+- Narzędzia debugowania przeniesiono do ustawień; to jeden ekran z zakładkami: „Scena” (budowanie sceny myszą: bohaterowie, mana, obrażenia, pancerz, ręka, stół, talia; obok JSON; tryb jako przyciski opcji), „Test interakcji” (gotowe scenariusze dla każdej z 534 kart, razem 1108: wybierz kartę i scenariusz, a rozegra się w prawdziwej grze ze wszystkimi efektami i dźwiękami), „Test kart” i „Test efektów”.
+
 ## [0.17.1] - 2026-10-12
 
 ### Dodano
