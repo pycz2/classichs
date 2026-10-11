@@ -39,8 +39,9 @@ nav a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 
 nav a:hover { color: var(--gold); }
 .lang {
   font: 700 13px "Open Sans", sans-serif; color: var(--bg); background: var(--gold);
-  border: 0; border-radius: 999px; padding: 5px 12px; cursor: pointer;
+  border: 0; border-radius: 999px; padding: 5px 10px; cursor: pointer;
 }
+.lang option { color: #000; background: #fff; }
 
 /* hero */
 .hero {
