@@ -63,7 +63,7 @@ func test_four_tabs_switch_in_place() -> void:
 func test_scene_editor_adds_and_removes_cards_and_the_json_follows() -> void:
 	var d := _debug()
 	var p1 := d.find_child("Player1", true, false)
-	(p1.find_child("Zone_board", true, false) as CheckBox).pressed.emit()
+	(p1.find_child("Zone_board", true, false) as Button).pressed.emit()
 	eq(d.target, [1, "board"], "the board of player 2 is marked")
 	(d.find_child("SceneCards", true, false) as CollectionView).click_card("VAN_CS2_182")
 	check((_json(d).players[1].board as Array).has("VAN_CS2_182"), "the JSON has the Yeti")

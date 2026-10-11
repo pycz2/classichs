@@ -36,8 +36,8 @@ var scene := {}
 var target := [0, "hand"]
 var editor := TextEdit.new()
 var error: Label
-var bot_mode := CheckBox.new()
-var hot_seat := CheckBox.new()
+var bot_mode: Button
+var hot_seat: Button
 ## card id -> its tests (CardTests.load_all()).
 var tests := {}
 var test_card := ""
@@ -124,17 +124,15 @@ func _build_scene(page: Control) -> void:
 	var hint := Palette.label(tr("Click a card to add it to the zone marked on the right; click a card there to remove it."), 15, Palette.SELECTED)
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	col.add_child(hint)
-	var modes := HFlowContainer.new()
-	modes.add_theme_constant_override("h_separation", 18)
+	var modes := HFlowContainer.new()  # radio buttons: one is lit
+	modes.add_theme_constant_override("h_separation", 8)
+	modes.add_theme_constant_override("v_separation", 6)
 	col.add_child(modes)
 	var group := ButtonGroup.new()
-	for spec in [[bot_mode, "ModeBot", tr("Against the bot (you are player 1)")], [hot_seat, "ModeHotSeat", tr("Hot seat")]]:
-		var r: CheckBox = spec[0]
-		r.name = spec[1]
-		r.text = spec[2]
-		r.button_group = group
-		_plain(r)
-		modes.add_child(r)
+	bot_mode = _radio("ModeBot", tr("Against the bot (you are player 1)"), group)
+	hot_seat = _radio("ModeHotSeat", tr("Hot seat"), group)
+	modes.add_child(bot_mode)
+	modes.add_child(hot_seat)
 	bot_mode.button_pressed = true
 	var buttons := HFlowContainer.new()
 	buttons.add_theme_constant_override("h_separation", 10)
@@ -184,11 +182,12 @@ func _build_scene(page: Control) -> void:
 		load_example()
 
 
-## A radio or check box without the button plank behind it.
-static func _plain(b: Button) -> void:
-	for st in ["normal", "hover", "pressed", "hover_pressed", "focus"]:
-		b.add_theme_stylebox_override(st, StyleBoxEmpty.new())
-	b.add_theme_font_size_override("font_size", 17)
+## A filter-style button that stays lit while on; with a group, one of the group is on.
+static func _radio(id: String, text: String, group: ButtonGroup = null) -> Button:
+	var b := CollectionView.chip(id, Vector2(0, 34))
+	b.text = text
+	b.button_group = group
+	return b
 
 
 func load_example() -> void:
@@ -218,7 +217,7 @@ func _player(p: int) -> Variant:
 
 ## The visual editor changed the scene: the JSON follows.
 func _changed() -> void:
-	editor.text = JSON.stringify(scene, "  ")
+	editor.text = JSON.stringify(Scenario._ints(scene), "  ")
 	error.text = Scenario.build(scene).error
 
 
@@ -304,6 +303,7 @@ func _show_players() -> void:
 			var spin := SpinBox.new()
 			spin.name = "Stat_" + s[1]
 			spin.max_value = s[2]
+			spin.get_line_edit().add_theme_constant_override("minimum_character_width", 2)
 			spin.value = int(pl.get(s[1], 0)) if pl.get(s[1], 0) is float or pl.get(s[1], 0) is int else 0
 			var key: String = s[1]
 			spin.value_changed.connect(func(v): _set_value(pp, key, int(v)))
@@ -312,13 +312,9 @@ func _show_players() -> void:
 			var items = pl.get(z[1], [])
 			if not items is Array:
 				items = []
-			var radio := CheckBox.new()
-			radio.name = "Zone_" + z[1]
-			radio.text = "%s (%d)" % [tr(z[0]), items.size()]
-			radio.button_group = group
+			var radio := _radio("Zone_" + z[1], "%s (%d)" % [tr(z[0]), items.size()], group)
+			radio.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 			radio.button_pressed = target == [p, z[1]]
-			_plain(radio)
-			radio.add_theme_color_override("font_pressed_color", Palette.SELECTED)
 			var where := [p, z[1]]
 			radio.pressed.connect(func(): target = where)
 			col.add_child(radio)
@@ -364,12 +360,9 @@ func _build_tests(page: Control) -> void:
 	list.only = tests
 	list.picked.connect(pick_test_card)
 	page.add_child(list)
-	var only := CheckBox.new()
-	only.name = "OnlyTested"
-	only.text = tr("Only cards with tests") + " (%d)" % tests.size()
+	var only := _radio("OnlyTested", tr("Only cards with tests") + " (%d)" % tests.size())
 	only.button_pressed = true
 	only.position = Vector2(12, 516)
-	_plain(only)
 	only.toggled.connect(func(on):
 		list.only = tests if on else null
 		list.set_tab(list.tab))
@@ -514,7 +507,9 @@ class Run:
 		position = Vector2(84, 50)
 		custom_minimum_size = Vector2(340, 0)
 		z_index = 80
-		add_theme_stylebox_override("panel", Palette.box(Color(0.08, 0.05, 0.03, 0.88), 10, Color("c9a74a"), 2))
+		var st := Palette.box(Color(0.08, 0.05, 0.03, 0.88), 10, Color("c9a74a"), 2)
+		st.set_content_margin_all(10)
+		add_theme_stylebox_override("panel", st)
 		_timer.one_shot = true
 		add_child(_timer)  # freed with the panel: a step left waiting never comes back
 		var box := VBoxContainer.new()
