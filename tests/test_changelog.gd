@@ -44,3 +44,11 @@ func test_changelog_opens_in_the_game_language() -> void:
 			var other := re.search_all(FileAccess.get_file_as_string("res://data/changelog/%s.md" % code)).map(func(m): return m.get_string())
 			eq(other, versions, code + ": every version translated")
 	check(FileAccess.get_file_as_string("res://export_presets.cfg").contains("data/changelog/*.md"), "translations in the web build")
+
+
+func test_web_build_is_an_installable_app() -> void:
+	var cfg := FileAccess.get_file_as_string("res://export_presets.cfg")
+	check(cfg.contains("progressive_web_app/enabled=true"), "PWA on")
+	for s in [144, 180, 512]:
+		check(FileAccess.file_exists("res://icons/icon_%d.png" % s), "icon %d" % s)
+		check(cfg.contains("icon_%dx%d=\"res://icons/icon_%d.png\"" % [s, s, s]), "manifest icon %d" % s)
