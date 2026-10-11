@@ -4,6 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-10-12
+
+### Aggiunto
+- Sotto il pulsante "Fine turno": la durata della partita e, online, il tempo rimasto del turno.
+- Tutto sul tavolo si illumina sotto il mouse; un'arma si gira quando non è il turno del suo eroe.
+- Servitori ed eroi dicono le loro battute (in gioco, in attacco, alla morte, emote, inizio partita, resa) quando c'è una registrazione; le emote degli eroi con parole proprie.
+
+### Modificato
+- La miccia del timer è una corda ritorta con una brace, scintille e fumo.
+- Una carta bruciata si consuma dai bordi con un orlo incandescente.
+- Un colpo all'eroe: numero del danno più grande; oltre 5 danni scuote di più con un suono pesante.
+- Un eroe che può attaccare brilla di più.
+
 ## [0.16.0] - 2026-10-11
 
 ### Aggiunto

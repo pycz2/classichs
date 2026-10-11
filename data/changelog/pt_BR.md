@@ -4,6 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-10-12
+
+### Adicionado
+- Abaixo do botão "Encerrar turno": o tempo da partida e, online, o tempo restante do turno.
+- Tudo na mesa se ilumina sob o mouse; uma arma vira quando não é o turno do seu herói.
+- Lacaios e heróis dizem suas falas (ao entrar, atacar, morrer, emotes, início da partida, desistência) quando há gravação; os emotes dos heróis com suas próprias palavras.
+
+### Alterado
+- O pavio do cronômetro é um cordão trançado com uma brasa, faíscas e fumaça.
+- Uma carta queimada se consome a partir das bordas com uma borda incandescente.
+- Golpe no herói: número de dano maior; mais de 5 de dano treme mais forte com um som pesado.
+- Um herói que pode atacar brilha mais.
+
 ## [0.16.0] - 2026-10-11
 
 ### Adicionado

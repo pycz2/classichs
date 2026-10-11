@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-10-12
+
+### Added
+- Under the End Turn button: the match time and, in online games, the time left in the turn.
+- Everything on the table lights up under the mouse; a weapon turns over when it is not its hero's turn.
+- Minions and heroes speak their lines (when played, attacking, dying, emotes, the opening line, conceding) when a recording exists; heroes' emotes are in their own words.
+
+### Changed
+- The timer's fuse is a twisted cord with a glowing ember, sparks and smoke.
+- A burnt card burns away from its edges with a glowing rim.
+- A hit on a hero: a bigger damage number; more than 5 damage shakes harder with a heavy sound.
+- A hero that can attack glows brighter.
+
 ## [0.16.0] - 2026-10-11
 
 ### Added

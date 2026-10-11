@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-10-12
+
+### Hinzugefügt
+- Unter „Zug beenden“: die Spielzeit und, im Online-Spiel, die verbleibende Zugzeit.
+- Alles auf dem Tisch leuchtet unter der Maus; eine Waffe dreht sich um, wenn ihr Held nicht am Zug ist.
+- Diener und Helden sprechen ihre Sätze (beim Ausspielen, Angriff, Tod, Emotes, zu Spielbeginn, beim Aufgeben), wenn es eine Aufnahme gibt; Helden-Emotes in eigenen Worten.
+
+### Geändert
+- Die Zündschnur des Timers ist eine gedrehte Schnur mit glühender Glut, Funken und Rauch.
+- Eine verbrannte Karte brennt von den Rändern her mit glühender Kante weg.
+- Ein Treffer am Helden: größere Schadenszahl; über 5 Schaden wackelt es stärker mit schwerem Klang.
+- Ein Held, der angreifen kann, leuchtet heller.
+
 ## [0.16.0] - 2026-10-11
 
 ### Hinzugefügt

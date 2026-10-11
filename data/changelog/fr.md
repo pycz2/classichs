@@ -4,6 +4,19 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-10-12
+
+### Ajouté
+- Sous le bouton « Fin du tour » : la durée de la partie et, en ligne, le temps restant du tour.
+- Tout ce qui est sur la table s'éclaire sous la souris ; une arme se retourne quand ce n'est pas le tour de son héros.
+- Serviteurs et héros disent leurs répliques (en jeu, en attaque, à la mort, emotes, début de partie, abandon) quand un enregistrement existe ; les emotes des héros sont dites avec leurs propres mots.
+
+### Modifié
+- La mèche du minuteur est une corde torsadée avec une braise, des étincelles et de la fumée.
+- Une carte brûlée se consume depuis les bords avec un liseré incandescent.
+- Un coup sur un héros : un nombre de dégâts plus grand ; plus de 5 dégâts secouent plus fort avec un son lourd.
+- Un héros qui peut attaquer brille davantage.
+
 ## [0.16.0] - 2026-10-11
 
 ### Ajouté

@@ -559,6 +559,9 @@ def build():
     save("play_card", mix(noise(0.12, 0.05, 0.3, 0.6), tone(220, 0.2, "sine", 110, release=0.08, vol=0.5)))
     save("attack", mix(noise(0.25, 0.08, 0.5, 0.3), tone(160, 0.25, "saw", 60, release=0.1, vol=0.35)))
     save("damage", mix(noise(0.18, 0.06, 0.5, 0.5), tone(300, 0.15, "square", 90, release=0.05, vol=0.25)))
+    # a heavy blow on a hero (more than 5 damage): a deep thud under a crunch
+    save("hit_big", mix(tone(90, 0.6, "sine", 38, release=0.35, vol=0.7), tone(180, 0.3, "saw", 60, release=0.12, vol=0.3),
+                        noise(0.4, 0.15, 0.6, 0.35), noise(0.12, 0.04, 0.4, 0.8), offsets=[0, 0, 0, 0.01]))
     save("death", mix(tone(330, 0.5, "saw", 80, release=0.25, vol=0.3), noise(0.5, 0.2, 0.25, 0.85)))
     save("spell", mix(*[tone(f, 0.45, "sine", f * 1.5, attack=0.02, release=0.2, vol=0.2) for f in (440, 554, 659, 880)],
                       offsets=[0, 0.04, 0.08, 0.12]))
