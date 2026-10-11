@@ -4,12 +4,16 @@ extends Node
 
 signal changed(events: Array)
 signal finished(winner: int)
+## A local action in an online match: NetSession sends it with the state hash.
+signal local_action(action: Dictionary, state_hash: String)
 
 ## Screen shake on heavy damage; the settings screen (subproject 6) toggles it.
 static var shake_enabled := true
 
 var game: Game
 var bots: Array = [false, true]
+## The player whose moves come from the network (-1 = no online opponent).
+var remote := -1
 ## Seconds between bot actions; 0 = the bot moves at once (tests).
 var bot_delay := 0.6
 var _bot_scheduled := false
@@ -39,6 +43,8 @@ func actor() -> int:
 
 ## The side shown face up: the human player, or whoever acts in hot-seat.
 func viewer() -> int:
+	if remote >= 0:
+		return 1 - remote
 	if bots[0] != bots[1]:
 		return 0 if not bots[0] else 1
 	return actor()
@@ -49,11 +55,32 @@ func is_bot_turn() -> bool:
 
 
 func submit(action: Dictionary) -> Dictionary:
+	if remote >= 0 and int(action.get("player", -1)) == remote:
+		return {"ok": false, "error": "the online opponent moves for this player", "events": []}
 	var r := game.apply(action)
 	if r.ok:
+		if remote >= 0:
+			local_action.emit(action, game.state_hash())
 		changed.emit(r.events)
 		_after()
 	return r
+
+
+## Applies the online opponent's action. "" on success, else the reason it was refused.
+## expected_hash "" skips the state check (moves both players may make at once: mulligan, concede).
+func submit_remote(action: Variant, expected_hash: String) -> String:
+	if not action is Dictionary or int(action.get("player", -1)) != remote:
+		return "an action for the wrong player"
+	if game.game_over:
+		return ""  # e.g. a move that crossed a concede: the game is already decided
+	var r := game.apply(action)
+	if not r.ok:
+		return "an illegal action (" + r.error + ")"
+	if expected_hash != "" and expected_hash != game.state_hash():
+		return "the game states differ"
+	changed.emit(r.events)
+	_after()
+	return ""
 
 
 func _after() -> void:

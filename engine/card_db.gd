@@ -4,6 +4,7 @@ extends RefCounted
 const INT_FIELDS := ["dbfId", "legacyDbfId", "cost", "attack", "health", "durability", "overload", "spellDamage"]
 
 static var _cards: Dictionary = {}
+static var _hash := ""
 static var _by_dbf: Dictionary = {}
 
 
@@ -51,6 +52,16 @@ static func collectible() -> Array[String]:
 
 static func undefine(id: String) -> void:
 	_cards.erase(id)
+
+
+## SHA-256 of cards.json: both online players must have the same card data.
+static func data_hash() -> String:
+	if _hash == "":
+		var h := HashingContext.new()
+		h.start(HashingContext.HASH_SHA256)
+		h.update(FileAccess.get_file_as_bytes("res://data/cards.json"))
+		_hash = h.finish().hex_encode()
+	return _hash
 
 
 static func all_ids() -> Array:
