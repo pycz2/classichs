@@ -509,6 +509,9 @@ func _aim_click_mode() -> void:
 		return
 	var stage: String = _sel.get("stage", "")
 	var m := get_local_mouse_position()
+	if stage == "target" and _placing() >= 0 and m.y > TableLayout.HAND_Y + 30:
+		cancel()  # the arrow led back into the hand: the minion goes back, not played
+		return
 	if stage == "target" and _views.has(_sel.id):
 		var src: EntityView = _views[_sel.id]
 		var over := _view_at(m)
@@ -824,24 +827,41 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 		want[pl.weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
 	for i in pl.secrets.size():
 		want[pl.secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6 if own else 120), "hide": not own}
-	var n := pl.board.size()
-	var gap := _gap if own else -1
+	var board: Array = pl.board.duplicate()
+	var placing := _placing() if own else -1
+	if placing >= 0:  # a minion waiting for its Battlecry target already stands in its place
+		board.insert(clampi(_placing_pos(), 0, board.size()), g.ent(placing))
+	var n := board.size()
+	var gap := _gap if own and placing < 0 else -1
 	for i in n:
-		want[pl.board[i].id] = {"kind": "minion", "pos": Vector2(TableLayout.board_x(i, n, gap), OWN_BOARD_Y if own else ENEMY_BOARD_Y)}
+		want[board[i].id] = {"kind": "minion", "pos": Vector2(TableLayout.board_x(i, n, gap), OWN_BOARD_Y if own else ENEMY_BOARD_Y)}
+	var hand: Array = pl.hand.filter(func(e): return e.id != placing)
 	var hover := -1
 	if own:
-		for i in pl.hand.size():
-			if pl.hand[i].id == _hover_hand:
+		for i in hand.size():
+			if hand[i].id == _hover_hand:
 				hover = i
-	var fan := TableLayout.hand(pl.hand.size(), own, hover)
-	for i in pl.hand.size():
+	var fan := TableLayout.hand(hand.size(), own, hover)
+	for i in hand.size():
 		var f: Dictionary = fan[i]
 		if not own and i == _opp_hover:  # the card the opponent is looking at
 			f = f.duplicate()
 			f.pos += Vector2(-6, 46)
 			f.scale = 0.62
 			f.z = 20
-		want[pl.hand[i].id] = {"kind": "hand", "pos": f.pos, "scale": f.scale, "rot": f.rot, "z": f.z, "own": own}
+		want[hand[i].id] = {"kind": "hand", "pos": f.pos, "scale": f.scale, "rot": f.rot, "z": f.z, "own": own}
+
+
+## The minion card waiting for its Battlecry target (it stands on the board), or -1.
+func _placing() -> int:
+	if _sel.get("stage", "") != "target":
+		return -1
+	var e := g.ent(_sel.get("id", -1))
+	return e.id if e and e.zone == "HAND" and e.is_minion() and e.controller == viewer() else -1
+
+
+func _placing_pos() -> int:
+	return _sel.get("pos", _sel.actions[0].get("pos", 0) if not _sel.actions.is_empty() else 0)
 
 
 func _make_view(e: Entity, spec: Dictionary) -> EntityView:

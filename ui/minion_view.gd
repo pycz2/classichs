@@ -41,7 +41,7 @@ func sync() -> void:
 
 func _animated() -> bool:
 	var h := Cards.of(s.card_id)
-	return glow.a > 0.0 or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
+	return glow.a > 0.0 or s.silenced or s.spellpower() > 0 or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
 		or (not s.silenced and (h.has("on") or h.has("aura")))
 
 
@@ -76,7 +76,7 @@ func _draw() -> void:
 	draw_colored_polygon(Art.outline("oval", OVAL.grow(3)), Color("2a2118"))
 	Art.paint_in(self, OVAL, s.card_id, "oval")
 	if s.silenced:
-		draw_colored_polygon(oval, Color(0.5, 0.5, 0.55, 0.45))
+		draw_colored_polygon(oval, Color(0.45, 0.35, 0.5, 0.18))
 	if s.has("STEALTH"):  # drifting smoke: two layers of noise moving apart; the portrait shows faintly
 		var uv := _oval_uv(oval)
 		draw_colored_polygon(oval, Color(0.1, 0.09, 0.16, 0.3))
@@ -92,6 +92,8 @@ func _draw() -> void:
 		Frames.ring(self, Art.outline("oval", OVAL.grow(1)), Color(0.85, 0.96, 1.0, 0.95), 4)
 	var edge := Frames.GOLD if c.get("rarity", "") == "LEGENDARY" else Color("8a7a5c")
 	Frames.ring(self, oval, edge, 3)
+	if s.silenced:
+		_silence_ribbons()
 	if c.get("rarity", "") == "LEGENDARY":
 		Frames.crest_around(self, OVAL.grow(2), 15, PI + PI / 6.0, TAU - PI / 6.0)  # around the top quarter of the oval
 	if s.has("IMMUNE"):  # a white light around it with sparks turning (not the golden bubble)
@@ -184,6 +186,27 @@ func _reach() -> float:
 	return 3.0
 
 
+## Silence: glowing magenta ribbons wound around the portrait, slowly turning.
+func _silence_ribbons() -> void:
+	var c := OVAL.get_center()
+	for k in 3:  # three soft wisps sweeping across the portrait at different slants
+		var tilt := Transform2D(-0.6 + k * 0.55 + 0.12 * sin(_t * 0.8 + k * 2.0), Vector2.ZERO)
+		var rx := 46.0 - k * 4.0
+		var ry := 20.0 + k * 6.0
+		var start := _t * (0.7 + 0.15 * k) + k * 2.1
+		var pts := PackedVector2Array()
+		var n := 22
+		for i in n:  # about half an ellipse, wavering a little
+			var a := start + i * 0.15
+			var wob := 1.0 + 0.06 * sin(a * 3.0 + _t * 2.0)
+			pts.append(c + tilt * Vector2(cos(a) * rx * wob, sin(a) * ry * wob))
+		for i in n - 1:  # thin at both ends, widest in the middle
+			var f := sin(PI * i / float(n - 1))
+			draw_line(pts[i], pts[i + 1], Color(1.0, 0.2, 0.7, 0.25 * f), 10.0 * f + 1.0, true)
+			draw_line(pts[i], pts[i + 1], Color(1.0, 0.45, 0.85, 0.65 * f), 4.0 * f + 0.5, true)
+			draw_line(pts[i], pts[i + 1], Color(1.0, 0.9, 0.98, 0.95 * f), 1.5 * f + 0.3, true)
+
+
 ## Windfury: two gusts on a tilted orbit (like a planet's, at 45 degrees), passing
 ## behind the card and in front of it.
 func _wind(front: bool) -> void:
@@ -236,7 +259,10 @@ static func _smoke() -> Texture2D:
 
 ## Small status marks under the portrait (vector: the font has no symbol glyphs).
 func _draw_icon(kind: String, at: Vector2) -> void:
-	if Sprites.draw(self, kind, at + Vector2(0, -1), 16.0 * (1.0 + 0.08 * sin(_t * 4.0))):
+	var w: float = {"trigger": 9.0, "poison": 12.0}.get(kind, 16.0)
+	var bob := 1.0 if kind == "poison" else 1.0 + 0.08 * sin(_t * 4.0)  # the poison bottle stays still
+	var tint := Color(0.5, 1.0, 0.35) if kind == "poison" else Color.WHITE  # (green can't survive the green-screen cut)
+	if Sprites.draw(self, kind, at + Vector2(0, -1), w * bob, 0.0, tint):
 		return
 	var pulse := 1.0 + 0.12 * sin(_t * 4.0)
 	draw_set_transform(at, 0.0, Vector2(1.4, 1.4) * pulse)

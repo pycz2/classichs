@@ -4,6 +4,17 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-10-11
+
+### Modifié
+- Les emblèmes de classe sont simples et plats ; l'épée de la pierre d'attaque est plus courte, pointe en haut à droite, la poignée visible en bas à gauche ; l'éclair sous le portrait est deux fois plus petit ; la fiole de poison est verte, plus petite et immobile.
+- Silence : des rubans roses lumineux s'enroulent autour du portrait.
+- Râle d'agonie : le crâne grandit hors du serviteur et s'élève.
+- Un serviteur avec cri de guerre prend d'abord sa place, puis la flèche vers la cible part de lui ; le clic droit ou la flèche ramenée dans la main annule, la carte revient en main.
+
+### Corrigé
+- Les étincelles de dégâts des sorts s'arrêtaient parfois.
+
 ## [0.15.1] - 2026-10-11
 
 ### Modifié

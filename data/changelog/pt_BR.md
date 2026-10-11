@@ -4,6 +4,17 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-10-11
+
+### Alterado
+- Os emblemas de classe são simples e planos; a espada da gema de ataque é mais curta, aponta para cima à direita, com o cabo visível embaixo à esquerda; o raio sob o retrato tem metade do tamanho; o frasco de veneno é verde, menor e parado.
+- Silêncio: fitas rosas brilhantes envolvem o retrato.
+- Último Suspiro: a caveira cresce do lacaio e sobe.
+- Um lacaio com grito de guerra primeiro ocupa seu lugar, e então a seta para o alvo sai dele; o clique direito ou levar a seta de volta à mão cancela, e a carta volta para a mão.
+
+### Corrigido
+- As faíscas de Dano Mágico às vezes paravam.
+
 ## [0.15.1] - 2026-10-11
 
 ### Alterado

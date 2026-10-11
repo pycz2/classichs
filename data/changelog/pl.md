@@ -4,6 +4,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-10-11
+
+### Zmieniono
+- Emblematy klas są proste i płaskie; miecz przy kamieniu ataku jest krótszy, wskazuje w prawo w górę, rękojeść widać w lewym dole; błyskawica pod portretem jest o połowę mniejsza; fiolka trucizny jest zielona, mniejsza i nieruchoma.
+- Wyciszenie: świecące różowe wstęgi owijają portret.
+- Ostatnie tchnienie: znaczek czaszki rośnie ze stronnika i unosi się.
+- Stronnik z okrzykiem bojowym najpierw zajmuje swoje miejsce, potem strzałka do celu wychodzi od niego; prawy przycisk myszy lub strzałka z powrotem do ręki anuluje, a karta wraca do ręki.
+
+### Naprawiono
+- Iskry obrażeń od zaklęć czasem się zatrzymywały.
+
 ## [0.15.1] - 2026-10-11
 
 ### Zmieniono

@@ -4,6 +4,17 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-10-11
+
+### Cambiado
+- Los emblemas de clase son simples y planos; la espada de la gema de ataque es más corta, apunta arriba a la derecha y se ve la empuñadura abajo a la izquierda; el rayo bajo el retrato es la mitad de grande; el frasco de veneno es verde, más pequeño y quieto.
+- Silencio: cintas rosas brillantes rodean el retrato.
+- Último aliento: la calavera crece desde el esbirro y sube.
+- Un esbirro con grito de batalla primero ocupa su sitio y luego la flecha al objetivo sale de él; el clic derecho o llevar la flecha de vuelta a la mano cancela, y la carta vuelve a la mano.
+
+### Corregido
+- Las chispas de daño con hechizos a veces se detenían.
+
 ## [0.15.1] - 2026-10-11
 
 ### Cambiado
