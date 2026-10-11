@@ -2,7 +2,15 @@ class_name ChangelogView
 extends Control
 ## The game's whole change history (CHANGELOG.md) in a scrollable window.
 
-const PATH := "res://CHANGELOG.md"
+const PATH := "res://CHANGELOG.md"  # the original (Russian)
+const TRANSLATED := "res://data/changelog/%s.md"
+
+
+## The change history in the interface language (the original if there is no translation).
+static func path_for_language() -> String:
+	var code := TranslationServer.get_locale()
+	var path := TRANSLATED % code
+	return path if code != "ru" and FileAccess.file_exists(path) else PATH
 const HEADING_SIZES := [30, 24, 20]
 
 
@@ -30,7 +38,7 @@ func _ready() -> void:
 	text.bbcode_enabled = true
 	text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	text.add_theme_font_size_override("normal_font_size", 17)
-	text.text = to_bbcode(FileAccess.get_file_as_string(PATH))
+	text.text = to_bbcode(FileAccess.get_file_as_string(path_for_language()))
 	box.add_child(text)
 	var close := Palette.button(tr("Close"), "Close")
 	close.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
