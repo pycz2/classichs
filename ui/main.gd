@@ -100,6 +100,10 @@ func show_debug_table() -> void:
 	d.back.connect(show_menu)
 	d.start.connect(func(g, bots): start_match(g, bots, true))
 	d.card_lab.connect(show_card_lab)
+	d.effects_lab.connect(func():
+		var l := EffectsLab.new()
+		l.back.connect(show_debug_table)
+		_set_screen(l))
 	_set_screen(d)
 
 

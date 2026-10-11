@@ -78,6 +78,7 @@ var end_turn_ready := false
 var _queue: Array = []
 var _busy := false
 var _final_refresh := false
+var _hold := {}  # id -> true: views an animation moves (the layout leaves them alone)
 ## A card that changed its id in place (bounced, transformed): new id -> where it stood.
 var _moved := {}
 var _quiet := {}
@@ -722,9 +723,11 @@ func open_settings() -> void:
 	s.z_index = 100
 	s.back.connect(s.queue_free)
 	s.language_changed.connect(relabel)
-	s.art_changed.connect(func():
+	s.art_changed.connect(func():  # card art or card back
 		for v in _views.values():
-			v.queue_redraw())
+			v.queue_redraw()
+		for p in _piles:
+			p.queue_redraw())
 	add_child(s)
 
 
@@ -869,6 +872,8 @@ func _reconcile(want: Dictionary) -> void:
 			from[id] = v.position + v.size * v.scale / 2.0
 			_drop(v, false)
 		else:
+			if v.has_method("sync"):
+				v.sync()  # a dying minion fades out with its last numbers
 			_drop(v, not _quiet.has(id))
 	for id in want:
 		var spec: Dictionary = want[id]
@@ -897,11 +902,10 @@ func _reconcile(want: Dictionary) -> void:
 			v.face_up = spec.own
 			if spec.own:
 				v.show_entity(e, g)
-		elif v is MinionView or v is HeroView:
-			v.queue_redraw()
-		elif v is PowerView:
+		elif v is MinionView or v is HeroView or v is PowerView:
 			v.sync()
-			v.queue_redraw()
+		if _hold.has(id):
+			continue  # an attacker in mid-leap
 		if not (_dragging and id == _press.get("id", -1)):
 			v.z_index = spec.get("z", 0)
 		var sc: float = spec.get("scale", 1.0)
@@ -1195,26 +1199,34 @@ func _play_queue() -> void:
 	refresh()
 
 
-## Plays one batch: what happens before the layout changes (cards shown,
-## attacks, spells flying), then the layout, then numbers and sounds.
+## Plays one batch: what happens before the change (cards shown, attacks,
+## spells flying), then the change itself — the layout, numbers and sounds — at
+## the moment of the hit (the attacker touches its target, the bolt arrives), or
+## at the end when nothing hits.
 func _animate(events: Array) -> void:
 	var me := viewer()
+	var hit := {"done": false}
+	var land := func() -> void:
+		if hit.done:
+			return
+		hit.done = true
+		_final_refresh = true
+		_effects_now(events)
+		_final_refresh = false
 	for ev in events:
 		match ev.type:
 			"play":
-				await _show_played(ev)
+				await _show_played(ev, land)
 			"attack":
-				await _lunge(ev.attacker, ev.defender)
+				await _lunge(ev.attacker, ev.defender, land)
 			"hero_power":
-				await _pulse(ev.entity, ev.get("target", -1))
+				await _pulse(ev.entity, ev.get("target", -1), land)
 			"secret_revealed":
 				await _reveal(ev.card)
 			"turn_start":
 				if ev.get("player", -1) == me and ev.has("turn"):
 					_banner(tr("Your Turn"))
-	_final_refresh = true
-	_effects_now(events)
-	_final_refresh = false
+	land.call()
 	await _wait(0.32)
 
 
@@ -1230,7 +1242,7 @@ func _center_of(id: int) -> Vector2:
 
 ## A card is played: the opponent's card turns over in the middle of the table;
 ## your spells fly up and glow; a spell with a target sends its bolt.
-func _show_played(ev: Dictionary) -> void:
+func _show_played(ev: Dictionary, land: Callable) -> void:
 	var e := g.ent(ev.entity)
 	var v: EntityView = _views.get(ev.entity)
 	if e == null or not v is CardView:
@@ -1249,11 +1261,12 @@ func _show_played(ev: Dictionary) -> void:
 		await _wait(0.35)
 	if not e.is_minion() and ev.get("target", -1) >= 0:
 		await _bolt(_center_of(ev.entity), _center_of(ev.target), _element_color(e.card_id))
+		land.call()  # the spell touches its target
 	if not e.is_minion() and not e.is_weapon():
 		var tw := cv.create_tween().set_parallel()
 		tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
 		tw.tween_property(cv, "scale", cv.scale * 1.3, Anim.d(0.25))
-		await tw.finished
+		await _wait(0.25)  # not tw.finished: the card's view may be gone by then
 
 
 func _element_color(card_id: String) -> Color:
@@ -1275,8 +1288,8 @@ func _bolt(a: Vector2, b: Vector2, col: Color) -> void:
 	orb.burst()
 
 
-## The attacker leaps at its target and back.
-func _lunge(attacker: int, defender: int) -> void:
+## The attacker leaps at its target and back; the hit lands when it touches.
+func _lunge(attacker: int, defender: int, land: Callable) -> void:
 	var v: EntityView = _views.get(attacker)
 	if v == null:
 		return
@@ -1289,14 +1302,20 @@ func _lunge(attacker: int, defender: int) -> void:
 	Sound.play("attack")
 	if Match.shake_enabled:
 		_shake()
+	_hold[attacker] = true  # the layout leaves it to the leap back
+	land.call()
+	if _views.get(attacker) != v:  # killed by the hit: it fades out where it is
+		_hold.erase(attacker)
+		return
 	var back := v.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	back.tween_property(v, "position", home, Anim.d(0.24))
 	await back.finished
+	_hold.erase(attacker)
 	v.z_index = 0
 
 
 ## The hero power button flashes; a targeted power sends its bolt.
-func _pulse(id: int, target: int) -> void:
+func _pulse(id: int, target: int, land: Callable) -> void:
 	var v: EntityView = _views.get(id)
 	if v == null:
 		return
@@ -1307,6 +1326,7 @@ func _pulse(id: int, target: int) -> void:
 	await tw.finished
 	if target >= 0:
 		await _bolt(_center_of(id), _center_of(target), _element_color(g.ent(id).card_id))
+		land.call()
 
 
 ## A revealed Secret shows big in the middle for a moment.

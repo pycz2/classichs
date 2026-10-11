@@ -4,6 +4,19 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-11
+
+### Ajouté
+- Six dos de carte au choix dans les paramètres : Classique, Horde, Druide, Arcanes, Or, Nuit.
+- Labo des effets dans la table de débogage : n'importe quelle carte sur la table et en main avec ses petites fenêtres ; mots-clés, bonus, malus, auras, dégâts, silence, sommeil, changements de coût et lueurs s'activent et se désactivent dans chacune des 8 langues.
+
+### Modifié
+- La table change au moment de l'impact : nombres, boucliers et morts apparaissent quand l'attaquant touche sa cible ou que le projectile du sort arrive, pas avant. Un serviteur qui meurt disparaît avec ses derniers nombres.
+
+### Corrigé
+- Dans la version web, un rectangle blanc remplaçait le dragon au-dessus du titre du menu.
+- Les cartes de la page du jeu sont dessinées par le jeu lui-même et ressemblent à celles du jeu.
+
 ## [0.10.0] - 2026-10-11
 
 ### Ajouté

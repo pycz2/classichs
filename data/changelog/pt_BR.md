@@ -4,6 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-11
+
+### Adicionado
+- Seis versos de carta para escolher nas configurações: Clássico, Horda, Druida, Arcano, Ouro, Noite.
+- Laboratório de efeitos na mesa de depuração: qualquer carta na mesa e na mão com suas janelinhas; palavras-chave, bônus, penalidades, auras, dano, silêncio, sono, mudanças de custo e brilhos podem ser ligados e desligados em qualquer um dos 8 idiomas.
+
+### Alterado
+- A mesa muda no momento do golpe: números, escudos e mortes aparecem quando o atacante toca o alvo ou o projétil do feitiço chega, não antes. Um lacaio que morre desaparece com seus últimos números.
+
+### Corrigido
+- Na versão web havia um retângulo branco no lugar do dragão acima do título do menu.
+- As cartas da página do jogo são desenhadas pelo próprio jogo e ficam iguais às do jogo.
+
 ## [0.10.0] - 2026-10-11
 
 ### Adicionado

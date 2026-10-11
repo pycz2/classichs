@@ -228,3 +228,22 @@ func test_used_hero_power_turns_face_down() -> void:
 	v.controller.submit({"type": "hero_power", "player": 0, "target": -1})
 	eq((v._views[power.id] as PowerView).face_down_used, true, "used: turned over")
 	v.free()
+
+
+func test_board_views_show_the_state_of_the_last_refresh() -> void:
+	# The engine changes the state at once; the table shows it when the animation
+	# reaches that moment (the hit), not before.
+	var v := _view({"hero": "HERO_08", "board": ["VAN_CS2_182"]})
+	var yeti := v.g.players[0].board[0]
+	var hero := v.g.hero(0)
+	yeti.damage = 2
+	yeti.give_tag("DIVINE_SHIELD")
+	hero.damage = 5
+	eq((v._views[yeti.id] as MinionView).s.health(), 5, "minion: old health shown")
+	eq((v._views[yeti.id] as MinionView).s.has("DIVINE_SHIELD"), false, "minion: no shield yet")
+	eq((v._views[hero.id] as HeroView).s.health(), 30, "hero: old health shown")
+	v.refresh()
+	eq((v._views[yeti.id] as MinionView).s.health(), 3, "minion: new health after refresh")
+	eq((v._views[yeti.id] as MinionView).s.has("DIVINE_SHIELD"), true, "minion: shield after refresh")
+	eq((v._views[hero.id] as HeroView).s.health(), 25, "hero: new health after refresh")
+	v.free()

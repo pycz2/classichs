@@ -27,12 +27,7 @@ func top() -> Vector2:
 
 
 static func draw_back(ci: CanvasItem, r: Rect2) -> void:
-	ci.draw_style_box(Palette.box(Color("2b4a8b"), 8, Color("c9a74a"), 3), r)
-	ci.draw_style_box(Palette.box(Color("1f3a68"), 6, Color("7a5c1e"), 2), r.grow(-8))
-	var c := r.get_center()
-	ci.draw_circle(c, r.size.x * 0.2, Color("c9a74a"))
-	ci.draw_circle(c, r.size.x * 0.14, Color("1f3a68"))
-	ci.draw_colored_polygon(PackedVector2Array([c + Vector2(0, -9), c + Vector2(7, 0), c + Vector2(0, 9), c + Vector2(-7, 0)]), Color("f2c94c"))
+	CardBacks.draw(ci, r)
 
 
 func _draw() -> void:

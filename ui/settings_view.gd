@@ -78,6 +78,25 @@ func _build() -> void:
 		art_changed.emit())
 	_row(grid, tr("Card art"), art)
 
+	var backs := HBoxContainer.new()
+	backs.add_theme_constant_override("separation", 10)
+	var back_pick := OptionButton.new()
+	back_pick.name = "CardBack"
+	back_pick.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var preview := CardBacks.Preview.new()
+	for n in CardBacks.NAMES:
+		back_pick.add_item(tr(CardBacks.LABELS[n]))
+	back_pick.select(maxi(0, CardBacks.NAMES.find(Settings.data.card_back)))
+	preview.back = Settings.data.card_back
+	back_pick.item_selected.connect(func(i):
+		_store("card_back", CardBacks.NAMES[i])
+		preview.back = CardBacks.NAMES[i]
+		preview.queue_redraw()
+		art_changed.emit())
+	backs.add_child(back_pick)
+	backs.add_child(preview)
+	_row(grid, tr("Card back"), backs)
+
 	var speed := HSlider.new()
 	speed.name = "AnimSpeed"
 	speed.min_value = 1

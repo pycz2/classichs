@@ -4,6 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-11
+
+### Añadido
+- Seis reversos de carta para elegir en los ajustes: Clásico, Horda, Druida, Arcano, Oro, Noche.
+- Laboratorio de efectos en la mesa de depuración: cualquier carta en la mesa y en la mano con sus ventanitas; palabras clave, mejoras, penalizaciones, auras, daño, silencio, sueño, cambios de coste y brillos se activan y desactivan en cualquiera de los 8 idiomas.
+
+### Cambiado
+- La mesa cambia en el momento del golpe: los números, los escudos y las muertes se ven cuando el atacante toca su objetivo o llega el proyectil del hechizo, no antes. Un esbirro que muere se desvanece con sus últimos números.
+
+### Corregido
+- En la versión web había un rectángulo blanco en lugar del dragón sobre el título del menú.
+- Las cartas de la página del juego las dibuja el propio juego y se ven como en el juego.
+
 ## [0.10.0] - 2026-10-11
 
 ### Añadido

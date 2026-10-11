@@ -114,3 +114,26 @@ func test_settings_screen_offers_art_sets() -> void:
 	Art.reset()
 	for d in ["/cards", "/original", ""]:
 		DirAccess.remove_absolute(root + d)
+
+
+func test_card_backs_are_chosen_in_the_settings() -> void:
+	eq(Settings.data.card_back, "classic", "default back")
+	var s := SettingsView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(s)
+	var pick := s.find_child("CardBack", true, false) as OptionButton
+	eq(pick.item_count, CardBacks.NAMES.size(), "every back offered")
+	check(CardBacks.NAMES.size() >= 5, "several backs")
+	pick.item_selected.emit(2)
+	eq(Settings.data.card_back, CardBacks.NAMES[2], "stored")
+	Settings.load_settings()
+	eq(Settings.data.card_back, CardBacks.NAMES[2], "kept after loading")
+	pick.item_selected.emit(0)
+	s.free()
+
+
+func test_unknown_card_back_falls_back_to_classic() -> void:
+	var f := FileAccess.open(Settings.path, FileAccess.WRITE)
+	f.store_string('{"card_back": "no_such_back"}')
+	f.close()
+	Settings.load_settings()
+	eq(Settings.data.card_back, "classic", "unknown back ignored")
