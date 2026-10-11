@@ -22,7 +22,14 @@ const LABELS := {"HistoryButton": "History", "JsonButton": "Position → JSON", 
 const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "thanks": "Thanks.",
 	"wow": "Wow!", "oops": "Oops.", "threaten": "I will destroy you!"}
 
+## Online turn timer (seconds), as in the original game: the rope burns in the last seconds.
+const TURN_SECONDS := 75.0
+const ROPE_SECONDS := 15.0
+const MULLIGAN_SECONDS := 45.0
+
 var debug_mode := false
+## The turn timer runs only in online games against a person.
+var timer_enabled := false
 ## Names shown next to the heroes ("" = You/Opponent).
 var player_names: Array = ["", ""]
 ## Online opponent's emotes are hidden.
@@ -50,6 +57,11 @@ var _hint: Label
 var _hint_timer := 0.0
 var _bubbles := {}
 var _emote_panel: VBoxContainer
+var _rope := Control.new()
+var _rope_line := ColorRect.new()
+var _rope_spark := ColorRect.new()
+var _turn_key := ""
+var _time_left := 0.0
 
 
 func _ready() -> void:
@@ -72,6 +84,18 @@ func _ready() -> void:
 	mid.size = Vector2(940, 2)
 	mid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(mid)
+	_rope.name = "Rope"
+	_rope.visible = false
+	_rope.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_rope_line.color = Color("c8a165")
+	_rope_line.position = Vector2(170, 319)
+	_rope_line.size = Vector2(940, 6)
+	_rope_spark.color = Color("ffb703")
+	_rope_spark.size = Vector2(12, 12)
+	for r in [_rope_line, _rope_spark]:
+		r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_rope.add_child(r)
+	add_child(_rope)
 	for c in [_layer, _fx]:
 		c.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -178,6 +202,7 @@ func bind(m: Match) -> void:
 ## An online match: the session (and its transport) now live under this view.
 func bind_online(m: Match, s: NetSession) -> void:
 	session = s
+	timer_enabled = true
 	for n in [s, s.transport]:
 		if n.get_parent() and n.get_parent() != self:
 			n.reparent(self)
@@ -270,11 +295,39 @@ func _leave() -> void:
 
 
 func _process(delta: float) -> void:
+	tick(delta)
 	if _hint_timer > 0.0:
 		_hint_timer -= delta
 		if _hint_timer <= 0.0:
 			_hint.text = ""
 			_try_tutorial_hint()
+
+
+## Runs the online turn timer: the rope in the last seconds, then the local
+## player's turn ends by itself (Match.timeout).
+func tick(delta: float) -> void:
+	if not timer_enabled or controller == null or g.game_over:
+		_rope.visible = false
+		return
+	_time_left -= delta
+	_rope.visible = _time_left <= ROPE_SECONDS
+	var w := 940.0 * clampf(_time_left / ROPE_SECONDS, 0.0, 1.0)
+	_rope_line.size.x = w
+	_rope_spark.position = Vector2(164 + w, 316)
+	_rope_spark.color.a = 0.6 + 0.4 * absf(sin(_time_left * 9.0))
+	if _time_left > 0.0:
+		return
+	var me := viewer()
+	if (g.phase == "MULLIGAN" and not g.players[me].mulliganed) or (g.phase != "MULLIGAN" and g.current == me):
+		_sel = {}
+		controller.timeout(me)
+
+
+func _reset_timer() -> void:
+	var key := "M" if g.phase == "MULLIGAN" else "%d:%d" % [g.turn, g.current]
+	if key != _turn_key:
+		_turn_key = key
+		_time_left = MULLIGAN_SECONDS if g.phase == "MULLIGAN" else TURN_SECONDS
 
 
 ## Shows the next tutorial hint only when nothing else is on the banner (an
@@ -349,6 +402,7 @@ func refresh() -> void:
 		concede.text = tr("Menu") if g.game_over else tr("Concede")
 	_apply_glows()
 	_history.update_from(g, me)
+	_reset_timer()
 	if _tracker.visible:
 		_tracker.update_from(g, me)
 	_refresh_overlay()

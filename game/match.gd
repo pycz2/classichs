@@ -68,6 +68,28 @@ func submit(action: Dictionary) -> Dictionary:
 	return r
 
 
+## The online turn timer ran out for player p: keep the mulligan hand, take the
+## first option of an open choice, end the turn. These are normal moves, sent to the peer as usual.
+func timeout(p: int) -> void:
+	for i in 3:
+		if game.game_over:
+			return
+		var pick := {}
+		for a in game.legal_actions():
+			if a.player != p:
+				continue
+			if (a.type == "mulligan" and a.replace.is_empty()) or a.type == "choose":
+				pick = a
+				break
+			if a.type == "end_turn" and game.pending.is_empty():
+				pick = a
+		if pick.is_empty():
+			return
+		submit(pick)
+		if pick.type != "choose":
+			return
+
+
 ## Applies the online opponent's action. "" on success, else the reason it was refused.
 ## expected_hash "" skips the state check (moves both players may make at once: mulligan, concede).
 func submit_remote(action: Variant, expected_hash: String) -> String:
