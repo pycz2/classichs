@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-11
+
+### Adicionado
+- Cada carta agora tem sua própria imagem gerada.
+- O texto das cartas foi diagramado à mão para cada carta em cada idioma: as linhas, o tamanho da fonte e a posição. Uma verificação garante que nenhum texto passe da moldura nem invada as gemas; as linhas são equilibradas, os números ficam com sua palavra e as palavras-chave não são quebradas.
+- Laboratório de cartas (na mesa de depuração): uma carta nos 8 idiomas ao mesmo tempo, com suas molduras e uma lista de problemas; tamanhos, posição e linhas podem ser alterados e salvos.
+- Os lacaios mostram suas mudanças em janelinhas: bônus com a carta que os deu, auras, valores definidos, palavras-chave ganhas, Congelado, Silenciado. Janelinhas de palavras-chave também na coleção e na montagem de decks.
+- Cartas lendárias: um friso dourado e reto com um dragão ao longo da borda superior da carta.
+- A tela de carregamento com a aparência atual do menu.
+
+### Alterado
+- A espada atrás da gema de ataque sai pelo canto superior esquerdo, além da borda da carta, longe do texto.
+- Mais contraste nos números das cartas, principalmente em valores aumentados e danificados.
+
+### Corrigido
+- O texto em francês de algumas cartas mostrava "|4(point,points)" em vez de "point" ou "points".
+- Na página do jogo, a última letra do título não é mais cortada.
+
 ## [0.9.0] - 2026-10-12
 
 ### Adicionado

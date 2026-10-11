@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-11
+
+### Aggiunto
+- Ogni carta ora ha la sua immagine generata.
+- Il testo delle carte è impaginato a mano per ogni carta in ogni lingua: le righe, la dimensione del carattere e la posizione. Un controllo assicura che nessun testo esca dalla cornice o finisca sulle gemme; le righe sono equilibrate, i numeri restano con la loro parola, le parole chiave non vengono spezzate.
+- Laboratorio carte (nel tavolo di debug): una carta in tutte le 8 lingue insieme, con le sue cornici e un elenco dei problemi; dimensioni, posizione e righe si possono cambiare e salvare.
+- I servitori mostrano i loro cambiamenti in piccole finestre: potenziamenti con la carta che li ha dati, aure, valori impostati, parole chiave ottenute, Congelato, Silenziato. Finestre delle parole chiave anche nella collezione e nella creazione dei mazzi.
+- Carte leggendarie: un fregio dorato e dritto con un drago lungo il bordo superiore della carta.
+- La schermata di caricamento con l'aspetto attuale del menu.
+
+### Modificato
+- La spada dietro la gemma d'attacco sporge in alto a sinistra, oltre il bordo della carta, lontano dal testo.
+- Contrasto più forte dei numeri sulle carte, soprattutto per i valori potenziati e danneggiati.
+
+### Corretto
+- Il testo francese di alcune carte mostrava "|4(point,points)" invece di "point" o "points".
+- Nella pagina del gioco l'ultima lettera del titolo non è più tagliata.
+
 ## [0.9.0] - 2026-10-12
 
 ### Aggiunto

@@ -4,6 +4,24 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-11
+
+### Ajouté
+- Chaque carte a maintenant sa propre image générée.
+- Le texte des cartes est mis en page à la main pour chaque carte dans chaque langue : les lignes, la taille de police et la position. Une vérification garantit qu'aucun texte ne dépasse du cadre ni ne touche les pierres ; les lignes sont équilibrées, les nombres restent avec leur mot, les mots-clés ne sont pas coupés.
+- Labo des cartes (dans la table de débogage) : une carte dans les 8 langues à la fois, avec ses cadres et la liste des problèmes ; tailles, position et lignes se modifient et s'enregistrent.
+- Les serviteurs montrent leurs changements dans de petites fenêtres : bonus avec la carte qui les a donnés, auras, valeurs fixées, mots-clés gagnés, Gelé, Réduit au silence. Fenêtres de mots-clés aussi dans la collection et la création de deck.
+- Cartes légendaires : une frise de dragon dorée et droite le long du bord supérieur de la carte.
+- L'écran de chargement à l'image du menu actuel.
+
+### Modifié
+- L'épée derrière la pierre d'attaque dépasse en haut à gauche, hors du bord de la carte, loin du texte.
+- Meilleur contraste des nombres sur les cartes, surtout pour les valeurs augmentées et blessées.
+
+### Corrigé
+- Le texte français de certaines cartes affichait « |4(point,points) » au lieu de « point » ou « points ».
+- Sur la page du jeu, la dernière lettre du titre n'est plus coupée.
+
 ## [0.9.0] - 2026-10-12
 
 ### Ajouté

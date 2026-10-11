@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-11
+
+### Added
+- Every card now has its own generated picture.
+- Card text is laid out by hand for every card in every language: the lines, the font size and the position. A check makes sure no text goes past the frame or onto the stones; lines are even, numbers stay with their words, keywords are not split.
+- Card Lab (in the Debug Table): one card in all 8 languages at once with its frames and a list of problems; sizes, position and lines can be changed and saved.
+- Minions show their changes in pop-up boxes: buffs with the card that gave them, auras, set values, gained keywords, Frozen, Silenced. Keyword boxes also in the collection and in deck building.
+- Legendary cards: a straight gold dragon frieze along the card's top edge.
+- The loading splash in the current menu look.
+
+### Changed
+- The sword behind the attack stone sticks out to the top left, past the card's edge, away from the text.
+- Stronger contrast of the numbers on cards, above all buffed and damaged values.
+
+### Fixed
+- The French text of some cards showed "|4(point,points)" instead of "point" or "points".
+- On the game's page the title's last letter is no longer cut.
+
 ## [0.9.0] - 2026-10-12
 
 ### Added

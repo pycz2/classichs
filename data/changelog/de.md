@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-11
+
+### Hinzugefügt
+- Jede Karte hat jetzt ihr eigenes generiertes Bild.
+- Der Kartentext ist für jede Karte in jeder Sprache von Hand gesetzt: Zeilen, Schriftgröße und Position. Eine Prüfung stellt sicher, dass kein Text über den Rahmen oder auf die Steine ragt; die Zeilen sind ausgewogen, Zahlen bleiben bei ihrem Wort, Schlüsselwörter werden nicht getrennt.
+- Kartenlabor (im Debug-Tisch): eine Karte in allen 8 Sprachen zugleich mit ihren Rahmen und einer Liste der Probleme; Größen, Position und Zeilen lassen sich ändern und speichern.
+- Diener zeigen ihre Änderungen in kleinen Fenstern: Stärkungen mit der Karte, die sie gab, Auren, gesetzte Werte, erhaltene Schlüsselwörter, Eingefroren, Zum Schweigen gebracht. Schlüsselwort-Fenster auch in der Sammlung und beim Deckbau.
+- Legendäre Karten: ein gerader goldener Drachenfries entlang der Oberkante der Karte.
+- Der Ladebildschirm im aktuellen Menü-Aussehen.
+
+### Geändert
+- Das Schwert hinter dem Angriffsstein ragt nach oben links über den Kartenrand hinaus, weg vom Text.
+- Stärkerer Kontrast der Zahlen auf den Karten, vor allem bei gestärkten und beschädigten Werten.
+
+### Behoben
+- Der französische Text einiger Karten zeigte „|4(point,points)“ statt „point“ oder „points“.
+- Auf der Seite des Spiels ist der letzte Buchstabe des Titels nicht mehr abgeschnitten.
+
 ## [0.9.0] - 2026-10-12
 
 ### Hinzugefügt

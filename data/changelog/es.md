@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-11
+
+### Añadido
+- Cada carta tiene ahora su propia imagen generada.
+- El texto de las cartas está maquetado a mano para cada carta en cada idioma: las líneas, el tamaño de letra y la posición. Una comprobación asegura que ningún texto se sale del marco ni pisa las gemas; las líneas son equilibradas, los números van con su palabra y las palabras clave no se cortan.
+- Laboratorio de cartas (en la mesa de depuración): una carta en los 8 idiomas a la vez con sus marcos y una lista de problemas; los tamaños, la posición y las líneas se pueden cambiar y guardar.
+- Los esbirros muestran sus cambios en ventanitas: mejoras con la carta que las dio, auras, valores fijados, palabras clave obtenidas, Congelado, Silenciado. Ventanitas de palabras clave también en la colección y al crear mazos.
+- Cartas legendarias: un friso dorado y recto con un dragón a lo largo del borde superior de la carta.
+- La pantalla de carga con el aspecto actual del menú.
+
+### Cambiado
+- La espada detrás de la gema de ataque sobresale arriba a la izquierda, fuera del borde de la carta, lejos del texto.
+- Más contraste en los números de las cartas, sobre todo en valores mejorados y dañados.
+
+### Corregido
+- El texto francés de algunas cartas mostraba «|4(point,points)» en lugar de «point» o «points».
+- En la página del juego, la última letra del título ya no se corta.
+
 ## [0.9.0] - 2026-10-12
 
 ### Añadido
