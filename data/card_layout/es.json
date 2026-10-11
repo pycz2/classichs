@@ -34,14 +34,13 @@
 	},
 	"EX1_317t": {
 		"lines": [
-			"¡Se te han acabado los",
-			"demonios! Al menos",
-			"siempre quedarán los",
-			"diablillos..."
+			"¡Se te han acabado",
+			"los demonios! Al menos",
+			"siempre quedarán",
+			"los diablillos..."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"EX1_323h": {
 		"name": 12,
@@ -136,21 +135,22 @@
 	"Mekka1": {
 		"lines": [
 			"Al comienzo de tu turno,",
-			"destruye a este esbirro y",
-			"roba 3 cartas."
+			"destruye a este esbirro",
+			"y roba 3 cartas."
 		],
 		"name": 12,
-		"text": 9
+		"text": 9,
+		"valign": "top"
 	},
 	"Mekka2": {
 		"lines": [
 			"Al final de tu turno,",
 			"restaura 6 p. de salud",
-			"a un personaje",
-			"dañado."
+			"a un personaje dañado."
 		],
 		"name": 11,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"Mekka3": {
 		"lines": [
@@ -163,13 +163,13 @@
 	},
 	"Mekka4": {
 		"lines": [
-			"Al comienzo de tu",
-			"turno, transforma a",
-			"un esbirro aleatorio",
-			"en un pollo 1/1."
+			"Al comienzo de tu turno,",
+			"transforma a un esbirro",
+			"aleatorio en un pollo 1/1."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"Mekka4t": {
 		"lines": [
@@ -199,9 +199,8 @@
 	},
 	"PRO_001b": {
 		"lines": [
-			"Inflige 4 p. de",
-			"daño. Roba",
-			"una carta."
+			"Inflige 4 p. de daño.",
+			"Roba una carta."
 		],
 		"name": 12,
 		"text": 11
@@ -250,26 +249,24 @@
 	},
 	"TU4c_003": {
 		"lines": [
-			"¿Hay algo",
-			"dentro de",
-			"este barril?"
+			"¿Hay algo dentro",
+			"de este barril?"
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"TU4c_004": {
 		"lines": [
-			"Inflige 2 p. de",
-			"daño a todos",
-			"los enemigos."
+			"Inflige 2 p. de daño",
+			"a todos los enemigos."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"TU4c_005": {
 		"lines": [
-			"¡Estaba",
-			"escondido",
+			"¡Estaba escondido",
 			"en el barril!"
 		],
 		"name": 12,
@@ -277,12 +274,13 @@
 	},
 	"TU4c_006": {
 		"lines": [
-			"Otorga +1/+1 a un",
-			"esbirro amistoso. (+1 p.",
-			"de ataque/+1 p. de salud)"
+			"Otorga +1/+1",
+			"a un esbirro amistoso.",
+			"(+1 p. de ataque/+1",
+			"p. de salud)"
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"TU4c_007": {
 		"lines": [
@@ -295,11 +293,10 @@
 	},
 	"TU4c_008": {
 		"lines": [
-			"Restaura 8",
-			"p. de salud."
+			"Restaura 8 p. de salud."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"TU4d_001": {
 		"name": 12,
@@ -342,8 +339,8 @@
 	},
 	"TU4e_005": {
 		"lines": [
-			"Dispara 5 misiles a",
-			"enemigos aleatorios.",
+			"Dispara 5 misiles",
+			"a enemigos aleatorios.",
 			"Cada uno inflige",
 			"1 p. de daño."
 		],
@@ -368,8 +365,8 @@
 	},
 	"TU4f_004": {
 		"lines": [
-			"Otorga +2/+2 a",
-			"tus esbirros.",
+			"Otorga +2/+2",
+			"a tus esbirros.",
 			"(+2 p. de ataque/",
 			"+2 p. de salud)."
 		],
@@ -391,12 +388,12 @@
 	},
 	"TU4f_007": {
 		"lines": [
-			"[b]Grito de[/b]",
-			"[b]batalla:[/b] Lanza",
-			"plátanos."
+			"[b]Grito de batalla:[/b]",
+			"Lanza plátanos."
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_CS1_042": {
 		"lines": [
@@ -414,27 +411,26 @@
 	},
 	"VAN_CS1_112": {
 		"lines": [
-			"Inflige 2 p. de daño",
-			"a todos los enemigos.",
-			"Restaura 2 p. de salud a todos",
+			"Inflige 2 p. de daño a todos",
+			"los enemigos. Restaura",
+			"2 p. de salud a todos",
 			"los personajes amistosos."
 		],
 		"name": 12,
-		"text": 7
+		"text": 8
 	},
 	"VAN_CS1_113": {
 		"lines": [
-			"Se hace con el",
-			"control de un",
-			"esbirro enemigo."
+			"Se hace con el control",
+			"de un esbirro enemigo."
 		],
 		"name": 12,
-		"text": 11
+		"text": 9
 	},
 	"VAN_CS1_129": {
 		"lines": [
-			"Cambia el ataque de",
-			"un esbirro para que",
+			"Cambia el ataque",
+			"de un esbirro para que",
 			"sea igual a su salud."
 		],
 		"name": 12,
@@ -449,9 +445,10 @@
 	},
 	"VAN_CS2_003": {
 		"lines": [
-			"Coloca una copia de una",
-			"carta aleatoria de la mano",
-			"de tu oponente en tu mano."
+			"Coloca una copia",
+			"de una carta aleatoria",
+			"de la mano de tu oponente",
+			"en tu mano."
 		],
 		"name": 12,
 		"text": 8
@@ -477,11 +474,10 @@
 	},
 	"VAN_CS2_007": {
 		"lines": [
-			"Restaura 8",
-			"p. de salud."
+			"Restaura 8 p. de salud."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_CS2_008": {
 		"lines": [
@@ -511,17 +507,17 @@
 	},
 	"VAN_CS2_012": {
 		"lines": [
-			"Inflige 4 p. de daño a un",
-			"enemigo y 1 p. de daño a",
-			"todos los demás enemigos."
+			"Inflige 4 p. de daño",
+			"a un enemigo",
+			"y 1 p. de daño a todos",
+			"los demás enemigos."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_CS2_013": {
 		"lines": [
-			"Obtienes un",
-			"cristal",
+			"Obtienes un cristal",
 			"de maná vacío."
 		],
 		"name": 12,
@@ -529,8 +525,8 @@
 	},
 	"VAN_CS2_022": {
 		"lines": [
-			"Transforma a",
-			"un esbirro",
+			"Transforma",
+			"a un esbirro",
 			"en una oveja 1/1."
 		],
 		"name": 12,
@@ -580,8 +576,8 @@
 	},
 	"VAN_CS2_028": {
 		"lines": [
-			"Inflige 2 p. de daño a",
-			"todos los esbirros",
+			"Inflige 2 p. de daño",
+			"a todos los esbirros",
 			"enemigos y los [b]congela[/b]."
 		],
 		"name": 12,
@@ -596,10 +592,10 @@
 	},
 	"VAN_CS2_031": {
 		"lines": [
-			"[b]Congela[/b] a un",
-			"personaje. Si ya estaba",
-			"[b]congelado[/b], en su lugar",
-			"inflige 4 p. de daño."
+			"[b]Congela[/b] a un personaje.",
+			"Si ya estaba [b]congelado[/b],",
+			"en su lugar inflige",
+			"4 p. de daño."
 		],
 		"name": 12,
 		"text": 8
@@ -624,8 +620,8 @@
 	},
 	"VAN_CS2_037": {
 		"lines": [
-			"Inflige 1 p. de daño a",
-			"un personaje",
+			"Inflige 1 p. de daño",
+			"a un personaje",
 			"enemigo y lo [b]congela[/b]."
 		],
 		"name": 12,
@@ -633,40 +629,38 @@
 	},
 	"VAN_CS2_038": {
 		"lines": [
-			"Elige a un esbirro.",
-			"Cuando lo destruyen,",
-			"lo devuelve al campo",
-			"de batalla."
+			"Elige a un esbirro. Cuando",
+			"lo destruyen, lo devuelve",
+			"al campo de batalla."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_CS2_039": {
 		"lines": [
-			"Otorga [b]Viento[/b]",
-			"[b]furioso[/b] a un",
-			"esbirro."
-		],
-		"name": 12,
-		"text": 11
-	},
-	"VAN_CS2_041": {
-		"lines": [
-			"Restaura toda la salud",
-			"de un esbirro y le otorga",
-			"[b]Provocar[/b]."
-		],
-		"name": 12,
-		"text": 9
-	},
-	"VAN_CS2_042": {
-		"lines": [
-			"[b]Grito de[/b]",
-			"[b]batalla:[/b] Inflige",
-			"3 p. de daño."
+			"Otorga [b]Viento furioso[/b]",
+			"a un esbirro."
 		],
 		"name": 12,
 		"text": 10
+	},
+	"VAN_CS2_041": {
+		"lines": [
+			"Restaura toda",
+			"la salud de un esbirro",
+			"y le otorga [b]Provocar[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_042": {
+		"lines": [
+			"[b]Grito de batalla:[/b]",
+			"Inflige 3 p. de daño."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_CS2_045": {
 		"lines": [
@@ -675,7 +669,7 @@
 			"amistoso este turno."
 		],
 		"name": 11,
-		"text": 9
+		"text": 10
 	},
 	"VAN_CS2_046": {
 		"lines": [
@@ -708,16 +702,15 @@
 	"VAN_CS2_053": {
 		"lines": [
 			"Roba una carta.",
-			"Esa carta cuesta (3)",
-			"cristales menos."
+			"Esa carta cuesta",
+			"(3) cristales menos."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"VAN_CS2_057": {
 		"lines": [
-			"Inflige 4 p.",
-			"de daño",
+			"Inflige 4 p. de daño",
 			"a un esbirro."
 		],
 		"name": 9,
@@ -726,31 +719,30 @@
 	"VAN_CS2_059": {
 		"lines": [
 			"[b]Sigilo[/b]",
-			"Al final de tu turno,",
-			"otorga +1 p. de salud",
-			"a otro esbirro amistoso",
-			"aleatorio."
+			"Al final de tu turno, otorga",
+			"+1 p. de salud a otro esbirro",
+			"amistoso aleatorio."
 		],
 		"name": 12,
-		"text": 6
+		"text": 7,
+		"valign": "top"
 	},
 	"VAN_CS2_061": {
 		"lines": [
-			"Inflige 2 p. de",
-			"daño. Restaura 2 p.",
-			"de salud a tu héroe."
+			"Inflige 2 p. de daño.",
+			"Restaura 2 p. de salud",
+			"a tu héroe."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_CS2_062": {
 		"lines": [
 			"Inflige 3 p. de daño",
-			"a todos los",
-			"personajes."
+			"a todos los personajes."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_CS2_063": {
 		"lines": [
@@ -763,9 +755,9 @@
 	},
 	"VAN_CS2_064": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Inflige",
-			"1 p. de daño a todos los",
-			"demás personajes."
+			"[b]Grito de batalla:[/b]",
+			"Inflige 1 p. de daño a todos",
+			"los demás personajes."
 		],
 		"name": 12,
 		"text": 8,
@@ -807,12 +799,11 @@
 	},
 	"VAN_CS2_074": {
 		"lines": [
-			"Otorga +2 p.",
-			"de ataque",
+			"Otorga +2 p. de ataque",
 			"a tu arma equipada."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_CS2_075": {
 		"lines": [
@@ -872,11 +863,10 @@
 	},
 	"VAN_CS2_089": {
 		"lines": [
-			"Restaura 6",
-			"p. de salud."
+			"Restaura 6 p. de salud."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_CS2_091": {
 		"name": 12,
@@ -884,27 +874,25 @@
 	},
 	"VAN_CS2_092": {
 		"lines": [
-			"Otorga +4/+4 a un",
-			"esbirro. (+4 p. de",
-			"ataque/+4 p. de salud)"
+			"Otorga +4/+4 a un esbirro.",
+			"(+4 p. de ataque/+4",
+			"p. de salud)"
 		],
 		"name": 12,
-		"text": 10
+		"text": 8
 	},
 	"VAN_CS2_093": {
 		"lines": [
 			"Inflige 2 p. de daño",
-			"a todos los",
-			"enemigos."
+			"a todos los enemigos."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_CS2_094": {
 		"lines": [
-			"Inflige 3 p. de",
-			"daño. Roba",
-			"una carta."
+			"Inflige 3 p. de daño.",
+			"Roba una carta."
 		],
 		"name": 12,
 		"text": 11
@@ -926,8 +914,8 @@
 	"VAN_CS2_102_H3": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"Obtienes 2 p. de",
-			"armadura."
+			"Obtienes",
+			"2 p. de armadura."
 		],
 		"name": 12,
 		"text": 11
@@ -935,8 +923,8 @@
 	"VAN_CS2_103": {
 		"lines": [
 			"Otorga +2 p. de ataque",
-			"y [b]Cargar[/b] a un",
-			"esbirro amistoso."
+			"y [b]Cargar[/b]",
+			"a un esbirro amistoso."
 		],
 		"name": 12,
 		"text": 10
@@ -972,12 +960,11 @@
 	},
 	"VAN_CS2_108": {
 		"lines": [
-			"Destruye a un",
-			"esbirro enemigo",
-			"dañado."
+			"Destruye a un esbirro",
+			"enemigo dañado."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_CS2_112": {
 		"name": 11,
@@ -986,20 +973,20 @@
 	"VAN_CS2_114": {
 		"lines": [
 			"Inflige 2 p. de daño",
-			"a dos esbirros enemigos",
-			"aleatorios."
+			"a dos esbirros",
+			"enemigos aleatorios."
 		],
 		"name": 12,
-		"text": 9
+		"text": 10
 	},
 	"VAN_CS2_117": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Restaura 3 p.",
-			"de salud."
+			"Restaura 3 p. de salud."
 		],
 		"name": 11,
-		"text": 11
+		"text": 10,
+		"valign": "top"
 	},
 	"VAN_CS2_118": {
 		"name": 11,
@@ -1023,11 +1010,11 @@
 	"VAN_CS2_122": {
 		"lines": [
 			"Tus demás esbirros",
-			"tienen +1 p.",
-			"de ataque."
+			"tienen +1 p. de ataque."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10,
+		"valign": "top"
 	},
 	"VAN_CS2_124": {
 		"lines": [
@@ -1077,38 +1064,37 @@
 	"VAN_CS2_146": {
 		"lines": [
 			"Tiene [b]Cargar[/b] mientras",
-			"tengas un arma",
-			"equipada."
+			"tengas un arma equipada."
 		],
 		"name": 9,
-		"text": 9
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_CS2_147": {
 		"lines": [
-			"[b]Grito de[/b]",
-			"[b]batalla:[/b] Roba",
-			"una carta."
+			"[b]Grito de batalla:[/b]",
+			"Roba una carta."
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_CS2_150": {
 		"lines": [
-			"[b]Grito de[/b]",
-			"[b]batalla:[/b] Inflige",
-			"2 p. de daño."
+			"[b]Grito de batalla:[/b]",
+			"Inflige 2 p. de daño."
 		],
 		"name": 9,
-		"text": 10
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_CS2_151": {
 		"lines": [
-			"[b]Grito de batalla:[/b]",
-			"Invoca a un",
-			"escudero 2/2."
+			"[b]Grito de batalla:[/b] Invoca",
+			"a un escudero 2/2."
 		],
 		"name": 9,
-		"text": 10,
+		"text": 9,
 		"valign": "top"
 	},
 	"VAN_CS2_152": {
@@ -1175,12 +1161,12 @@
 	},
 	"VAN_CS2_181": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Se",
-			"inflige 4 p. de daño",
+			"[b]Grito de batalla:[/b]",
+			"Se inflige 4 p. de daño",
 			"a sí mismo."
 		],
 		"name": 9,
-		"text": 11
+		"text": 10
 	},
 	"VAN_CS2_182": {
 		"name": 12,
@@ -1199,12 +1185,13 @@
 	},
 	"VAN_CS2_188": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Otorga",
-			"+2 p. de ataque a un esbirro",
-			"este turno."
+			"[b]Grito de batalla:[/b]",
+			"Otorga +2 p. de ataque",
+			"a un esbirro este turno."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_CS2_189": {
 		"lines": [
@@ -1218,11 +1205,11 @@
 	"VAN_CS2_196": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Invoca un",
-			"jabalí 1/1."
+			"Invoca un jabalí 1/1."
 		],
 		"name": 10,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_CS2_197": {
 		"lines": [
@@ -1243,11 +1230,11 @@
 	"VAN_CS2_203": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"[b]Silencia[/b] a un",
-			"esbirro."
+			"[b]Silencia[/b] a un esbirro."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10,
+		"valign": "top"
 	},
 	"VAN_CS2_213": {
 		"lines": [
@@ -1258,12 +1245,12 @@
 	},
 	"VAN_CS2_221": {
 		"lines": [
-			"[b]Enfurecer:[/b] Tu",
-			"arma tiene+2 p.",
-			"de ataque."
+			"[b]Enfurecer:[/b] Tu arma",
+			"tiene+2 p. de ataque."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10,
+		"valign": "top"
 	},
 	"VAN_CS2_222": {
 		"lines": [
@@ -1275,14 +1262,13 @@
 	},
 	"VAN_CS2_226": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Obtiene",
-			"+1/+1 por cada esbirro",
-			"amistoso adicional en",
-			"el campo de batalla."
+			"[b]Grito de batalla:[/b]",
+			"Obtiene +1/+1 por cada esbirro",
+			"amistoso adicional en el",
+			"campo de batalla."
 		],
 		"name": 12,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_CS2_227": {
 		"lines": [
@@ -1306,8 +1292,8 @@
 	},
 	"VAN_CS2_233": {
 		"lines": [
-			"Destruye tu arma e",
-			"inflige su daño a",
+			"Destruye tu arma",
+			"e inflige su daño a",
 			"todos los enemigos."
 		],
 		"name": 12,
@@ -1316,16 +1302,16 @@
 	"VAN_CS2_234": {
 		"lines": [
 			"Destruye a un esbirro",
-			"con 3 p. de",
-			"ataque o menos."
+			"con 3 p. de ataque",
+			"o menos."
 		],
 		"name": 9,
 		"text": 10
 	},
 	"VAN_CS2_235": {
 		"lines": [
-			"Cuando se sana a",
-			"un esbirro, roba",
+			"Cuando se sana",
+			"a un esbirro, roba",
 			"una carta."
 		],
 		"name": 11,
@@ -1333,9 +1319,8 @@
 	},
 	"VAN_CS2_236": {
 		"lines": [
-			"Duplica la",
-			"salud de",
-			"un esbirro."
+			"Duplica la salud",
+			"de un esbirro."
 		],
 		"name": 12,
 		"text": 11
@@ -1373,8 +1358,8 @@
 	},
 	"VAN_DREAM_02": {
 		"lines": [
-			"Inflige 5 p. de daño a",
-			"todos los personajes",
+			"Inflige 5 p. de daño",
+			"a todos los personajes",
 			"menos a Ysera."
 		],
 		"name": 12,
@@ -1395,20 +1380,18 @@
 	},
 	"VAN_DREAM_05": {
 		"lines": [
-			"Otorga +5/+5 a un",
-			"esbirro. Al comienzo de",
-			"tu siguiente turno, lo",
-			"destruyes."
+			"Otorga +5/+5 a un esbirro.",
+			"Al comienzo de tu siguiente",
+			"turno, lo destruyes."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_DS1_055": {
 		"lines": [
-			"[b]Grito de batalla:[/b]",
-			"Restaura 2 p. de salud",
-			"a todos los personajes",
-			"amistosos."
+			"[b]Grito de batalla:[/b] Restaura",
+			"2 p. de salud a todos",
+			"los personajes amistosos."
 		],
 		"name": 9,
 		"text": 8,
@@ -1416,22 +1399,21 @@
 	},
 	"VAN_DS1_070": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Otorga",
-			"+2/+2 y [b]Provocar[/b] a una",
-			"bestia amistosa."
+			"[b]Grito de batalla:[/b]",
+			"Otorga +2/+2 y [b]Provocar[/b]",
+			"a una bestia amistosa."
 		],
 		"name": 12,
-		"text": 9,
+		"text": 8,
 		"valign": "top"
 	},
 	"VAN_DS1_175": {
 		"lines": [
-			"Tus demás",
-			"bestias tienen",
-			"+1 p. de ataque."
+			"Tus demás bestias",
+			"tienen +1 p. de ataque."
 		],
 		"name": 12,
-		"text": 9,
+		"text": 10,
 		"valign": "top"
 	},
 	"VAN_DS1_178": {
@@ -1445,8 +1427,8 @@
 	},
 	"VAN_DS1_183": {
 		"lines": [
-			"Inflige 3 p. de daño a",
-			"dos esbirros",
+			"Inflige 3 p. de daño",
+			"a dos esbirros",
 			"enemigos aleatorios."
 		],
 		"name": 12,
@@ -1455,9 +1437,9 @@
 	"VAN_DS1_184": {
 		"lines": [
 			"Mira las 3 cartas",
-			"superiores",
-			"de tu mazo. Roba una",
-			"y descarta las demás."
+			"superiores de tu mazo.",
+			"Roba una y descarta",
+			"las demás."
 		],
 		"name": 12,
 		"text": 8
@@ -1489,27 +1471,28 @@
 	"VAN_EX1_001": {
 		"lines": [
 			"Obtiene +2 p. de ataque",
-			"cada vez que se sana a",
-			"un personaje."
+			"cada vez que se sana",
+			"a un personaje."
 		],
 		"name": 12,
-		"text": 9
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_EX1_002": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Destruye a un",
-			"esbirro enemigo",
-			"con [b]Provocar[/b]."
+			"Destruye a un esbirro",
+			"enemigo con [b]Provocar[/b]."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_004": {
 		"lines": [
 			"Al final de tu turno, otorga",
-			"+1 p. de salud a otro",
-			"esbirro amistoso aleatorio."
+			"+1 p. de salud a otro esbirro",
+			"amistoso aleatorio."
 		],
 		"name": 12,
 		"text": 8,
@@ -1519,21 +1502,21 @@
 		"lines": [
 			"[b]Grito de batalla:[/b]",
 			"Destruye a un esbirro",
-			"con 7 p. de ataque",
-			"o más."
+			"con 7 p. de ataque o más."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_006": {
 		"lines": [
 			"Al comienzo de tu turno,",
 			"cambia a este esbirro",
-			"por otro al azar que",
-			"tengas en tu mano."
+			"por otro al azar que tengas",
+			"en tu mano."
 		],
 		"name": 12,
-		"text": 7,
+		"text": 8,
 		"valign": "top"
 	},
 	"VAN_EX1_007": {
@@ -1555,11 +1538,11 @@
 	"VAN_EX1_009": {
 		"lines": [
 			"[b]Enfurecer:[/b]Otorga",
-			"+5 p. de",
-			"ataque."
+			"+5 p. de ataque."
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_010": {
 		"lines": [
@@ -1571,16 +1554,15 @@
 	"VAN_EX1_011": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Restaura 2 p.",
-			"de salud."
+			"Restaura 2 p. de salud."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10,
+		"valign": "top"
 	},
 	"VAN_EX1_012": {
 		"lines": [
-			"[b]+1 p. de daño[/b]",
-			"[b]con hechizos[/b].",
+			"[b]+1 p. de daño con hechizos[/b].",
 			"[b]Último aliento:[/b]",
 			"Roba una carta."
 		],
@@ -1590,31 +1572,30 @@
 	"VAN_EX1_014": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Da 2 plátanos a tu",
-			"oponente."
+			"Da 2 plátanos",
+			"a tu oponente."
 		],
 		"name": 12,
-		"text": 11
+		"text": 9
 	},
 	"VAN_EX1_015": {
 		"lines": [
-			"[b]Grito de[/b]",
-			"[b]batalla:[/b] Roba",
-			"una carta."
+			"[b]Grito de batalla:[/b]",
+			"Roba una carta."
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_016": {
 		"lines": [
-			"[b]Último aliento:[/b]",
-			"Toma el control",
-			"de un esbirro",
-			"enemigo",
-			"aleatorio."
+			"[b]Último aliento:[/b] Toma",
+			"el control de un esbirro",
+			"enemigo aleatorio."
 		],
 		"name": 12,
-		"text": 7
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_017": {
 		"lines": [
@@ -1626,11 +1607,11 @@
 	"VAN_EX1_019": {
 		"lines": [
 			"[b]Grito de batalla:[/b] Otorga",
-			"+1/+1 a un esbirro",
-			"amistoso."
+			"+1/+1 a un esbirro amistoso."
 		],
 		"name": 11,
-		"text": 9
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_020": {
 		"lines": [
@@ -1683,11 +1664,11 @@
 	"VAN_EX1_032": {
 		"lines": [
 			"[b]Provocar[/b]",
-			"[b]Escudo[/b]",
-			"[b]divino[/b]"
+			"[b]Escudo divino[/b]"
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_033": {
 		"lines": [
@@ -1698,9 +1679,10 @@
 	},
 	"VAN_EX1_043": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Obtiene",
-			"+1 p. de salud por cada carta",
-			"que tengas en tu mano."
+			"[b]Grito de batalla:[/b]",
+			"Obtiene +1 p. de salud",
+			"por cada carta que tengas",
+			"en tu mano."
 		],
 		"name": 12,
 		"text": 8,
@@ -1708,8 +1690,8 @@
 	},
 	"VAN_EX1_044": {
 		"lines": [
-			"Obtiene +1/+1 cada",
-			"vez que juegas",
+			"Obtiene +1/+1",
+			"cada vez que juegas",
 			"una carta."
 		],
 		"name": 11,
@@ -1735,21 +1717,21 @@
 	"VAN_EX1_048": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"[b]Silencia[/b] a un",
-			"esbirro."
+			"[b]Silencia[/b] a un esbirro."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10,
+		"valign": "top"
 	},
 	"VAN_EX1_049": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Devuelve a",
-			"tu mano a un esbirro",
-			"amistoso del campo",
-			"de batalla."
+			"[b]Grito de batalla:[/b]",
+			"Devuelve a tu mano a un esbirro",
+			"amistoso del campo de batalla."
 		],
 		"name": 9,
-		"text": 8
+		"text": 7,
+		"valign": "top"
 	},
 	"VAN_EX1_050": {
 		"lines": [
@@ -1762,129 +1744,130 @@
 	},
 	"VAN_EX1_055": {
 		"lines": [
-			"Cada vez que lanzas un",
-			"hechizo, obtiene +2 p.",
-			"de ataque este turno."
+			"Cada vez que lanzas",
+			"un hechizo, obtiene",
+			"+2 p. de ataque",
+			"este turno."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_057": {
+		"lines": [
+			"[b]Grito de batalla:[/b]",
+			"Devuelve a tu mano a un esbirro",
+			"amistoso del campo de batalla."
+		],
+		"name": 8,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_058": {
+		"lines": [
+			"[b]Grito de batalla:[/b]",
+			"Otorga [b]Provocar[/b]",
+			"a los esbirros adyacentes."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_059": {
+		"lines": [
+			"[b]Grito de batalla:[/b]",
+			"Intercambia el ataque",
+			"y la salud de un esbirro."
 		],
 		"name": 12,
 		"text": 8,
 		"valign": "top"
 	},
-	"VAN_EX1_057": {
-		"lines": [
-			"[b]Grito de batalla:[/b] Devuelve a",
-			"tu mano a un esbirro",
-			"amistoso del campo",
-			"de batalla."
-		],
-		"name": 8,
-		"text": 8
-	},
-	"VAN_EX1_058": {
-		"lines": [
-			"[b]Grito de batalla:[/b] Otorga",
-			"[b]Provocar[/b] a los esbirros",
-			"adyacentes."
-		],
-		"name": 10,
-		"text": 9
-	},
-	"VAN_EX1_059": {
-		"lines": [
-			"[b]Grito de batalla:[/b]",
-			"Intercambia el",
-			"ataque y la salud",
-			"de un esbirro."
-		],
-		"name": 12,
-		"text": 8
-	},
 	"VAN_EX1_062": {
 		"lines": [
-			"[b]Cargar[/b]. Tiene +1 p. de",
-			"ataque por cada múrloc",
-			"adicional en el campo",
-			"de batalla."
+			"[b]Cargar[/b]. Tiene +1 p. de ataque",
+			"por cada múrloc adicional",
+			"en el campo de batalla."
 		],
 		"name": 12,
-		"text": 8,
+		"text": 7,
 		"valign": "top"
 	},
 	"VAN_EX1_066": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Destruye el arma de",
-			"tu oponente."
+			"Destruye el arma",
+			"de tu oponente."
 		],
 		"name": 10,
-		"text": 10
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_EX1_067": {
 		"lines": [
 			"[b]Cargar[/b]",
-			"[b]Escudo[/b]",
-			"[b]divino[/b]"
+			"[b]Escudo divino[/b]"
 		],
 		"name": 11,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_076": {
 		"lines": [
 			"El primer esbirro",
-			"que juegues cada",
-			"turno cuesta (1)",
-			"cristal menos."
-		],
-		"name": 8,
-		"text": 8
-	},
-	"VAN_EX1_080": {
-		"lines": [
-			"Cada vez que se",
-			"juega un [b]secreto[/b],",
-			"obtiene +1/+1."
-		],
-		"name": 12,
-		"text": 10,
-		"valign": "top"
-	},
-	"VAN_EX1_082": {
-		"lines": [
-			"[b]Grito de batalla:[/b] Inflige 3",
-			"p. de daño que se dividen",
-			"aleatoriamente entre",
-			"todos los demás",
-			"personajes."
-		],
-		"name": 12,
-		"text": 7
-	},
-	"VAN_EX1_083": {
-		"lines": [
-			"[b]Grito de batalla:[/b]",
-			"Transforma a otro",
-			"esbirro aleatorio",
-			"en un demosaurio 5/5",
-			"o en una ardilla 1/1."
-		],
-		"name": 8,
-		"text": 6
-	},
-	"VAN_EX1_084": {
-		"lines": [
-			"Cada vez que invocas a un",
-			"esbirro con 3 p. de ataque o",
-			"menos, este recibe [b]Cargar[/b]."
+			"que juegues cada turno",
+			"cuesta (1) cristal menos."
 		],
 		"name": 8,
 		"text": 8,
 		"valign": "top"
 	},
+	"VAN_EX1_080": {
+		"lines": [
+			"Cada vez que",
+			"se juega un [b]secreto[/b],",
+			"obtiene +1/+1."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_082": {
+		"lines": [
+			"[b]Grito de batalla:[/b] Inflige",
+			"3 p. de daño que se dividen",
+			"aleatoriamente entre todos los",
+			"demás personajes."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_083": {
+		"lines": [
+			"[b]Grito de batalla:[/b]",
+			"Transforma a otro esbirro",
+			"aleatorio en un demosaurio 5/5",
+			"o en una ardilla 1/1."
+		],
+		"name": 8,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_084": {
+		"lines": [
+			"Cada vez que invocas",
+			"a un esbirro con 3 p. de ataque",
+			"o menos, este recibe [b]Cargar[/b]."
+		],
+		"name": 8,
+		"text": 7,
+		"valign": "top"
+	},
 	"VAN_EX1_085": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Si tu oponente tiene 4 esbirros",
-			"o más, tomas el control",
+			"Si tu oponente tiene",
+			"4 esbirros o más,",
+			"tomas el control",
 			"de uno aleatorio."
 		],
 		"name": 9,
@@ -1892,20 +1875,19 @@
 	},
 	"VAN_EX1_089": {
 		"lines": [
-			"[b]Cargar[/b]",
-			"[b]Grito de batalla:[/b] Da",
-			"un cristal de maná",
+			"[b]Cargar Grito de batalla:[/b]",
+			"Da un cristal de maná",
 			"a tu oponente."
 		],
 		"name": 12,
-		"text": 8
+		"text": 9
 	},
 	"VAN_EX1_091": {
 		"lines": [
 			"[b]Grito de batalla:[/b] Toma",
 			"el control de un esbirro",
-			"enemigo con 2 p. de",
-			"ataque o menos."
+			"enemigo con 2 p. de ataque",
+			"o menos."
 		],
 		"name": 10,
 		"text": 8,
@@ -1913,9 +1895,9 @@
 	},
 	"VAN_EX1_093": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Otorga",
-			"+1/+1 y [b]Provocar[/b] a los",
-			"esbirros adyacentes."
+			"[b]Grito de batalla:[/b]",
+			"Otorga +1/+1 y [b]Provocar[/b]",
+			"a los esbirros adyacentes."
 		],
 		"name": 12,
 		"text": 8,
@@ -1923,21 +1905,21 @@
 	},
 	"VAN_EX1_095": {
 		"lines": [
-			"Cuando",
-			"lanzas un hechizo, roba",
+			"Cuando lanzas",
+			"un hechizo, roba",
 			"una carta."
 		],
 		"name": 9,
-		"text": 9
+		"text": 11
 	},
 	"VAN_EX1_096": {
 		"lines": [
-			"[b]Último[/b]",
-			"[b]aliento:[/b] Roba",
-			"una carta."
+			"[b]Último aliento:[/b]",
+			"Roba una carta."
 		],
 		"name": 11,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_097": {
 		"lines": [
@@ -1961,29 +1943,29 @@
 	},
 	"VAN_EX1_102": {
 		"lines": [
-			"Al comienzo de tu",
-			"turno, inflige 2 p. de",
-			"daño a un enemigo",
-			"aleatorio."
+			"Al comienzo de tu turno,",
+			"inflige 2 p. de daño",
+			"a un enemigo aleatorio."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_103": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Otorga",
-			"+2 p. de salud a todos los",
-			"demás múrlocs."
+			"[b]Grito de batalla:[/b]",
+			"Otorga +2 p. de salud",
+			"a todos los demás múrlocs."
 		],
 		"name": 12,
-		"text": 9,
+		"text": 8,
 		"valign": "top"
 	},
 	"VAN_EX1_105": {
 		"lines": [
-			"Cuesta (1) cristal menos por",
-			"cada carta adicional que",
-			"tengas en tu mano."
+			"Cuesta (1) cristal menos",
+			"por cada carta adicional",
+			"que tengas en tu mano."
 		],
 		"name": 12,
 		"text": 8,
@@ -1991,12 +1973,13 @@
 	},
 	"VAN_EX1_110": {
 		"lines": [
-			"[b]Último aliento:[/b] Invoca",
-			"a Baine Pezuña de",
-			"Sangre (4/5)."
+			"[b]Último aliento:[/b]",
+			"Invoca a Baine Pezuña",
+			"de Sangre (4/5)."
 		],
 		"name": 9,
-		"text": 9
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_EX1_110t": {
 		"name": 10,
@@ -2013,18 +1996,17 @@
 	},
 	"VAN_EX1_116": {
 		"lines": [
-			"[b]Cargar[/b]. [b]Grito de[/b]",
-			"[b]batalla:[/b] Invoca",
-			"dos crías 1/1 para",
+			"[b]Cargar[/b]. [b]Grito de batalla:[/b]",
+			"Invoca dos crías 1/1 para",
 			"tu oponente."
 		],
 		"name": 12,
-		"text": 8
+		"text": 9
 	},
 	"VAN_EX1_124": {
 		"lines": [
-			"Inflige 2 p. de",
-			"daño. [b]Combo:[/b]",
+			"Inflige 2 p. de daño.",
+			"[b]Combo:[/b]",
 			"Inflige 4 p. de daño."
 		],
 		"name": 12,
@@ -2033,9 +2015,8 @@
 	"VAN_EX1_126": {
 		"lines": [
 			"Obliga a un esbirro",
-			"enemigo a infligir su",
-			"daño a los esbirros",
-			"adyacentes."
+			"enemigo a infligir su daño",
+			"a los esbirros adyacentes."
 		],
 		"name": 12,
 		"text": 8
@@ -2043,17 +2024,16 @@
 	"VAN_EX1_128": {
 		"lines": [
 			"Otorga [b]Sigilo[/b]",
-			"a tus esbirros",
-			"hasta tu siguiente turno."
+			"a tus esbirros hasta",
+			"tu siguiente turno."
 		],
 		"name": 12,
-		"text": 9
+		"text": 11
 	},
 	"VAN_EX1_129": {
 		"lines": [
-			"Inflige 1 p. de daño",
-			"a todos los esbirros",
-			"enemigos.",
+			"Inflige 1 p. de daño a todos",
+			"los esbirros enemigos.",
 			"Roba una carta."
 		],
 		"name": 11,
@@ -2061,9 +2041,9 @@
 	},
 	"VAN_EX1_130": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando un",
-			"enemigo ataca, invoca",
-			"a un defensor 2/1",
+			"[b]Secreto:[/b]",
+			"Cuando un enemigo ataca,",
+			"invoca a un defensor 2/1",
 			"como nuevo objetivo."
 		],
 		"name": 12,
@@ -2075,8 +2055,8 @@
 	},
 	"VAN_EX1_131": {
 		"lines": [
-			"[b]Combo:[/b] Invoca",
-			"a un bandido",
+			"[b]Combo:[/b]",
+			"Invoca a un bandido",
 			"Defias 2/1."
 		],
 		"name": 12,
@@ -2096,37 +2076,35 @@
 		"lines": [
 			"[b]Grito de batalla:[/b]",
 			"Inflige 1 p. de daño.",
-			"[b]Combo:[/b] Inflige 2 p.",
-			"de daño."
+			"[b]Combo:[/b] Inflige",
+			"2 p. de daño."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_134": {
 		"lines": [
-			"[b]Combo:[/b]",
-			"Inflige 2",
-			"p. de daño."
+			"[b]Combo:[/b] Inflige",
+			"2 p. de daño."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"VAN_EX1_136": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando",
-			"un esbirro amistoso",
-			"muere, vuelve a la",
-			"vida con 1 p. de salud."
+			"[b]Secreto:[/b] Cuando un esbirro",
+			"amistoso muere, vuelve",
+			"a la vida con 1 p. de salud."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_137": {
 		"lines": [
-			"Inflige 2 p. de daño al",
-			"héroe enemigo. [b]Combo:[/b]",
-			"Devuelve esta carta a tu",
-			"mano el siguiente turno."
+			"Inflige 2 p. de daño al héroe",
+			"enemigo. [b]Combo:[/b] Devuelve",
+			"esta carta a tu mano",
+			"el siguiente turno."
 		],
 		"name": 12,
 		"text": 8
@@ -2135,26 +2113,24 @@
 		"lines": [
 			"Devuelve a un esbirro",
 			"amistoso a tu mano.",
-			"Cuesta (2) cristales",
-			"menos."
+			"Cuesta (2) cristales menos."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_145": {
 		"lines": [
-			"El próximo hechizo",
-			"que lances este turno",
-			"costará (3) cristales",
-			"menos."
+			"El próximo hechizo que",
+			"lances este turno costará",
+			"(3) cristales menos."
 		],
 		"name": 12,
-		"text": 8
+		"text": 9
 	},
 	"VAN_EX1_154": {
 		"lines": [
-			"[b]Elige una:[/b] Inflige 3 p.",
-			"de daño a un esbirro,",
+			"[b]Elige una:[/b] Inflige",
+			"3 p. de daño a un esbirro,",
 			"o bien inflige 1 p. de daño",
 			"y roba una carta."
 		],
@@ -2163,16 +2139,16 @@
 	},
 	"VAN_EX1_154a": {
 		"lines": [
-			"Inflige 3 p. de",
-			"daño a un esbirro."
+			"Inflige 3 p. de daño",
+			"a un esbirro."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"VAN_EX1_154b": {
 		"lines": [
-			"Inflige 1 p. de",
-			"daño a un esbirro.",
+			"Inflige 1 p. de daño",
+			"a un esbirro.",
 			"Roba una carta."
 		],
 		"name": 10,
@@ -2180,10 +2156,10 @@
 	},
 	"VAN_EX1_155": {
 		"lines": [
-			"[b]Elige una:[/b] Otorga",
-			"+4 p. de ataque a un",
-			"esbirro, o bien +4 p.",
-			"de salud y [b]Provocar[/b]."
+			"[b]Elige una:[/b]",
+			"Otorga +4 p. de ataque",
+			"a un esbirro, o bien",
+			"+4 p. de salud y [b]Provocar[/b]."
 		],
 		"name": 10,
 		"text": 8
@@ -2197,9 +2173,8 @@
 	},
 	"VAN_EX1_155b": {
 		"lines": [
-			"+4 p. de",
-			"salud y",
-			"[b]Provocar[/b]."
+			"+4 p. de salud",
+			"y [b]Provocar[/b]."
 		],
 		"name": 12,
 		"text": 11
@@ -2215,13 +2190,12 @@
 	},
 	"VAN_EX1_160": {
 		"lines": [
-			"[b]Elige una:[/b]",
-			"Otorga +1/+1 a tus esbirros,",
-			"o bien invoca una",
-			"pantera 3/2."
+			"[b]Elige una:[/b] Otorga +1/+1",
+			"a tus esbirros, o bien",
+			"invoca una pantera 3/2."
 		],
 		"name": 12,
-		"text": 8
+		"text": 9
 	},
 	"VAN_EX1_160a": {
 		"lines": [
@@ -2242,8 +2216,8 @@
 	"VAN_EX1_161": {
 		"lines": [
 			"Destruye a un esbirro.",
-			"Tu oponente roba",
-			"2 cartas."
+			"Tu oponente",
+			"roba 2 cartas."
 		],
 		"name": 12,
 		"text": 10
@@ -2259,21 +2233,20 @@
 	},
 	"VAN_EX1_164": {
 		"lines": [
-			"[b]Elige una:[/b]",
-			"Obtienes (2) cristales",
-			"de maná,",
+			"[b]Elige una:[/b] Obtienes",
+			"(2) cristales de maná,",
 			"o bien robas 3 cartas."
 		],
 		"name": 12,
-		"text": 8
+		"text": 10
 	},
 	"VAN_EX1_164a": {
 		"lines": [
-			"Obtienes (2)",
-			"cristales de maná."
+			"Obtienes (2) cristales",
+			"de maná."
 		],
 		"name": 9,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_164b": {
 		"lines": [
@@ -2284,12 +2257,13 @@
 	},
 	"VAN_EX1_165": {
 		"lines": [
-			"[b]Elige una:[/b] [b]Cargar[/b],",
+			"[b]Elige una: Cargar[/b],",
 			"o bien +2 p. de salud",
 			"y [b]Provocar[/b]."
 		],
 		"name": 12,
-		"text": 10
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_165a": {
 		"lines": [
@@ -2300,8 +2274,7 @@
 	},
 	"VAN_EX1_165b": {
 		"lines": [
-			"+2 p. de",
-			"salud",
+			"+2 p. de salud",
 			"y [b]Provocar[/b]."
 		],
 		"name": 12,
@@ -2325,8 +2298,8 @@
 		"lines": [
 			"[b]Elige una:[/b]",
 			"Inflige 2 p. de daño,",
-			"o bien [b]Silencia[/b] a un",
-			"esbirro."
+			"o bien [b]Silencia[/b]",
+			"a un esbirro."
 		],
 		"name": 10,
 		"text": 8
@@ -2340,20 +2313,20 @@
 	},
 	"VAN_EX1_166b": {
 		"lines": [
-			"[b]Silencia[/b] a",
-			"un esbirro."
+			"[b]Silencia[/b]",
+			"a un esbirro."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"VAN_EX1_169": {
 		"lines": [
-			"Obtienes (2)",
-			"cristales de maná",
-			"solo para este turno."
+			"Obtienes (2) cristales",
+			"de maná solo",
+			"para este turno."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_170": {
 		"lines": [
@@ -2366,9 +2339,8 @@
 	},
 	"VAN_EX1_173": {
 		"lines": [
-			"Inflige 5 p. de",
-			"daño. Roba",
-			"una carta."
+			"Inflige 5 p. de daño.",
+			"Roba una carta."
 		],
 		"name": 12,
 		"text": 11
@@ -2376,18 +2348,17 @@
 	"VAN_EX1_178": {
 		"lines": [
 			"[b]Elige una:[/b]",
-			"+5 p. de ataque, o bien",
-			"+5 p. de salud y",
-			"[b]Provocar[/b]."
+			"+5 p. de ataque,",
+			"o bien +5 p. de salud",
+			"y [b]Provocar[/b]."
 		],
 		"name": 11,
 		"text": 8
 	},
 	"VAN_EX1_178a": {
 		"lines": [
-			"+5 p. de",
-			"salud y",
-			"[b]Provocar[/b]."
+			"+5 p. de salud",
+			"y [b]Provocar[/b]."
 		],
 		"name": 12,
 		"text": 11
@@ -2401,8 +2372,7 @@
 	},
 	"VAN_EX1_238": {
 		"lines": [
-			"Inflige 3 p. de",
-			"daño.",
+			"Inflige 3 p. de daño.",
 			"[b]Sobrecarga:[/b] (1)"
 		],
 		"name": 9,
@@ -2419,38 +2389,37 @@
 	"VAN_EX1_243": {
 		"lines": [
 			"[b]Viento furioso[/b]",
-			"[b]Sobrecarga:[/b]",
-			"(2)"
+			"[b]Sobrecarga:[/b] (2)"
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_244": {
 		"lines": [
-			"Otorga +2 p.",
-			"de salud",
+			"Otorga +2 p. de salud",
 			"a tus tótems."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_245": {
 		"lines": [
-			"[b]Silencia[/b] a un",
-			"esbirro y luego le",
-			"inflige 1 p. de daño."
+			"[b]Silencia[/b] a un esbirro",
+			"y luego le inflige",
+			"1 p. de daño."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_246": {
 		"lines": [
-			"Transforma a un esbirro",
-			"en una rana 0/1 con",
-			"[b]Provocar[/b]."
+			"Transforma a un",
+			"esbirro en una rana",
+			"0/1 con [b]Provocar[/b]."
 		],
 		"name": 12,
-		"text": 9
+		"text": 11
 	},
 	"VAN_EX1_247": {
 		"lines": [
@@ -2461,31 +2430,31 @@
 	},
 	"VAN_EX1_248": {
 		"lines": [
-			"Invoca dos espíritus de",
-			"lobo 2/3 con [b]Provocar[/b].",
+			"Invoca dos espíritus",
+			"de lobo 2/3 con [b]Provocar[/b].",
 			"[b]Sobrecarga:[/b] (2)"
-		],
-		"name": 12,
-		"text": 9
-	},
-	"VAN_EX1_249": {
-		"lines": [
-			"Al final de tu turno,",
-			"inflige 2 p. de daño",
-			"a todos los demás",
-			"personajes."
 		],
 		"name": 12,
 		"text": 8
 	},
+	"VAN_EX1_249": {
+		"lines": [
+			"Al final de tu turno,",
+			"inflige 2 p. de daño a todos",
+			"los demás personajes."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
 	"VAN_EX1_250": {
 		"lines": [
 			"[b]Provocar[/b]",
-			"[b]Sobrecarga:[/b]",
-			"(3)"
+			"[b]Sobrecarga:[/b] (3)"
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_251": {
 		"lines": [
@@ -2509,8 +2478,8 @@
 	"VAN_EX1_259": {
 		"lines": [
 			"Inflige 2-3 p. de daño",
-			"a todos los esbirros",
-			"enemigos.",
+			"a todos",
+			"los esbirros enemigos.",
 			"[b]Sobrecarga:[/b] (2)"
 		],
 		"name": 9,
@@ -2527,54 +2496,50 @@
 	},
 	"VAN_EX1_275": {
 		"lines": [
-			"[b]Congela[/b] a un esbirro y",
-			"a los esbirros",
-			"adyacentes al mismo y",
-			"les inflige 1 p. de daño."
+			"[b]Congela[/b] a un esbirro",
+			"y a los esbirros adyacentes",
+			"al mismo y les inflige",
+			"1 p. de daño."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_277": {
 		"lines": [
-			"Inflige 3 p. de daño que se",
-			"dividen aleatoriamente",
-			"entre todos los",
-			"personajes enemigos."
+			"Inflige 3 p. de daño",
+			"que se dividen",
+			"aleatoriamente entre todos",
+			"los personajes enemigos."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_278": {
 		"lines": [
-			"Inflige 1 p. de",
-			"daño. Roba",
-			"una carta."
+			"Inflige 1 p. de daño.",
+			"Roba una carta."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"VAN_EX1_279": {
 		"lines": [
-			"Inflige 10",
-			"p. de daño."
+			"Inflige 10 p. de daño."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_283": {
 		"lines": [
-			"[b]Grito de batalla:[/b]",
-			"[b]Congela[/b] a un",
-			"personaje."
+			"[b]Grito de batalla: Congela[/b]",
+			"a un personaje."
 		],
 		"name": 10,
-		"text": 11
+		"text": 8
 	},
 	"VAN_EX1_284": {
 		"lines": [
-			"[b]+1 p. de daño[/b]",
-			"[b]con hechizos[/b].",
+			"[b]+1 p. de daño con hechizos[/b].",
 			"[b]Grito de batalla:[/b]",
 			"Roba una carta."
 		],
@@ -2583,9 +2548,10 @@
 	},
 	"VAN_EX1_287": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando tu",
-			"oponente lanza un",
-			"hechizo, lo [b]contrarrestas[/b]."
+			"[b]Secreto:[/b]",
+			"Cuando tu oponente",
+			"lanza un hechizo,",
+			"lo [b]contrarrestas[/b]."
 		],
 		"name": 12,
 		"text": 8
@@ -2593,28 +2559,27 @@
 	"VAN_EX1_289": {
 		"lines": [
 			"[b]Secreto:[/b] Obtienes",
-			"8 p. de armadura",
-			"cuando vayas a",
-			"recibir un ataque."
+			"8 p. de armadura cuando",
+			"vayas a recibir un ataque."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_294": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando tu",
-			"oponente juega un",
-			"esbirro, invocas una",
-			"copia de ese esbirro."
+			"[b]Secreto:[/b]",
+			"Cuando tu oponente",
+			"juega un esbirro, invocas",
+			"una copia de ese esbirro."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_295": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando tu",
-			"héroe vaya a recibir daño",
-			"letal, lo evita y se vuelve",
+			"[b]Secreto:[/b] Cuando tu héroe",
+			"vaya a recibir daño letal,",
+			"lo evita y se vuelve",
 			"[b]inmune[/b] ese turno."
 		],
 		"name": 12,
@@ -2622,19 +2587,19 @@
 	},
 	"VAN_EX1_298": {
 		"lines": [
-			"No puede atacar. Al final de",
-			"tu turno, inflige 8 p. de",
-			"daño a un enemigo",
-			"aleatorio."
+			"No puede atacar. Al final",
+			"de tu turno, inflige 8 p. de daño",
+			"a un enemigo aleatorio."
 		],
 		"name": 9,
-		"text": 8
+		"text": 7,
+		"valign": "top"
 	},
 	"VAN_EX1_301": {
 		"lines": [
 			"[b]Provocar[/b]. [b]Grito de batalla:[/b]",
-			"Destruye uno de tus",
-			"cristales de maná."
+			"Destruye uno",
+			"de tus cristales de maná."
 		],
 		"name": 12,
 		"text": 8,
@@ -2642,33 +2607,33 @@
 	},
 	"VAN_EX1_302": {
 		"lines": [
-			"Inflige 1 p. de daño a",
-			"un esbirro. Si muere,",
+			"Inflige 1 p. de daño",
+			"a un esbirro. Si muere,",
 			"roba una carta."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9
 	},
 	"VAN_EX1_303": {
 		"lines": [
 			"Destruye a un esbirro",
 			"amistoso e inflige un daño",
-			"equivalente a su ataque a",
-			"todos los esbirros enemigos."
+			"equivalente a su ataque a todos",
+			"los esbirros enemigos."
 		],
 		"name": 11,
 		"text": 7
 	},
 	"VAN_EX1_304": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Destruye",
-			"a los dos esbirros",
-			"adyacentes",
-			"y obtiene su ataque",
-			"y salud."
+			"[b]Grito de batalla:[/b]",
+			"Destruye a los dos esbirros",
+			"adyacentes y obtiene su",
+			"ataque y salud."
 		],
 		"name": 12,
-		"text": 7
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_306": {
 		"lines": [
@@ -2681,9 +2646,9 @@
 	},
 	"VAN_EX1_308": {
 		"lines": [
-			"Inflige 4 p. de",
-			"daño. Descarta",
-			"una carta aleatoria."
+			"Inflige 4 p. de daño.",
+			"Descarta una",
+			"carta aleatoria."
 		],
 		"name": 12,
 		"text": 11
@@ -2700,44 +2665,45 @@
 	"VAN_EX1_310": {
 		"lines": [
 			"[b]Cargar[/b]. [b]Grito de batalla:[/b]",
-			"Descarta dos cartas",
-			"aleatorias."
+			"Descarta dos",
+			"cartas aleatorias."
 		],
 		"name": 11,
-		"text": 9
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_312": {
 		"lines": [
-			"Destruye",
-			"a todos los",
-			"esbirros."
+			"Destruye a todos",
+			"los esbirros."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"VAN_EX1_313": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Inflige",
-			"5 p. de daño a tu héroe."
+			"[b]Grito de batalla:[/b]",
+			"Inflige 5 p. de daño",
+			"a tu héroe."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_315": {
 		"lines": [
-			"Tus esbirros cuestan (2)",
-			"cristales menos, pero no",
-			"menos de (1)."
+			"Tus esbirros cuestan",
+			"(2) cristales menos, pero",
+			"no menos de (1)."
 		],
 		"name": 11,
-		"text": 9
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_EX1_316": {
 		"lines": [
 			"Otorga +4/+4 a un esbirro",
-			"amistoso hasta el final del",
-			"turno. Luego, el esbirro",
+			"amistoso hasta el final",
+			"del turno. Luego, el esbirro",
 			"muere. De forma horrible."
 		],
 		"name": 12,
@@ -2745,8 +2711,7 @@
 	},
 	"VAN_EX1_317": {
 		"lines": [
-			"Roba 2",
-			"demonios",
+			"Roba 2 demonios",
 			"de tu mazo."
 		],
 		"name": 12,
@@ -2754,19 +2719,19 @@
 	},
 	"VAN_EX1_319": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Inflige",
-			"3 p. de daño a tu héroe."
+			"[b]Grito de batalla:[/b]",
+			"Inflige 3 p. de daño",
+			"a tu héroe."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_320": {
 		"lines": [
 			"Inflige 3 p. de daño",
 			"a un personaje.",
-			"Si muere, invoca un",
-			"demonio aleatorio."
+			"Si muere, invoca",
+			"un demonio aleatorio."
 		],
 		"name": 12,
 		"text": 8
@@ -2783,17 +2748,17 @@
 	},
 	"VAN_EX1_332": {
 		"lines": [
-			"[b]Silencia[/b] a",
-			"un esbirro."
+			"[b]Silencia[/b]",
+			"a un esbirro."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"VAN_EX1_334": {
 		"lines": [
-			"Toma el control de un",
-			"esbirro enemigo con",
-			"3 p. de ataque o menos",
+			"Toma el control",
+			"de un esbirro enemigo",
+			"con 3 p. de ataque o menos",
 			"hasta el final del turno."
 		],
 		"name": 12,
@@ -2801,8 +2766,8 @@
 	},
 	"VAN_EX1_335": {
 		"lines": [
-			"El ataque de este",
-			"esbirro siempre es igual",
+			"El ataque de este esbirro",
+			"siempre es igual",
 			"a su salud."
 		],
 		"name": 12,
@@ -2810,41 +2775,38 @@
 	},
 	"VAN_EX1_339": {
 		"lines": [
-			"Copia 2 cartas del mazo",
-			"de tu oponente y las añade",
-			"a tu mano."
+			"Copia 2 cartas del",
+			"mazo de tu oponente",
+			"y las añade a tu mano."
 		],
 		"name": 12,
-		"text": 8
+		"text": 10
 	},
 	"VAN_EX1_341": {
 		"lines": [
 			"Al comienzo de tu turno,",
 			"restaura 3 p. de salud",
-			"a un personaje amistoso",
-			"dañado."
-		],
-		"name": 12,
-		"text": 8,
-		"valign": "top"
-	},
-	"VAN_EX1_345": {
-		"lines": [
-			"Coloca una copia de",
-			"un esbirro aleatorio",
-			"del mazo",
-			"de tu oponente en",
-			"el campo de batalla."
+			"a un personaje",
+			"amistoso dañado."
 		],
 		"name": 12,
 		"text": 7
 	},
+	"VAN_EX1_345": {
+		"lines": [
+			"Coloca una copia",
+			"de un esbirro aleatorio",
+			"del mazo de tu oponente",
+			"en el campo de batalla."
+		],
+		"name": 12,
+		"text": 8
+	},
 	"VAN_EX1_345t": {
 		"lines": [
-			"¡Los Juegos mentales",
-			"han fracasado! ¡Tu",
-			"oponente no tenía",
-			"esbirros!"
+			"¡Los Juegos mentales han",
+			"fracasado! ¡Tu oponente no",
+			"tenía esbirros!"
 		],
 		"name": 12,
 		"text": 8
@@ -2861,28 +2823,26 @@
 	},
 	"VAN_EX1_350": {
 		"lines": [
-			"Duplica el daño y",
-			"la sanación de tus",
-			"hechizos y de tu",
-			"poder de héroe."
+			"Duplica el daño y la",
+			"sanación de tus hechizos",
+			"y de tu poder de héroe."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_354": {
 		"lines": [
-			"Restaura 8 p.",
-			"de salud.",
+			"Restaura 8 p. de salud.",
 			"Roba 3 cartas."
 		],
 		"name": 11,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_355": {
 		"lines": [
-			"Duplica el",
-			"ataque de",
-			"un esbirro."
+			"Duplica el ataque",
+			"de un esbirro."
 		],
 		"name": 12,
 		"text": 11
@@ -2898,12 +2858,12 @@
 	"VAN_EX1_362": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Otorga [b]Escudo[/b]",
-			"[b]divino[/b] a un esbirro",
-			"amistoso."
+			"Otorga [b]Escudo divino[/b]",
+			"a un esbirro amistoso."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_363": {
 		"lines": [
@@ -2916,12 +2876,12 @@
 	},
 	"VAN_EX1_365": {
 		"lines": [
-			"Roba una carta e inflige",
-			"un daño equivalente",
-			"a su coste."
+			"Roba una carta",
+			"e inflige un daño",
+			"equivalente a su coste."
 		],
 		"name": 12,
-		"text": 9
+		"text": 10
 	},
 	"VAN_EX1_366": {
 		"lines": [
@@ -2936,47 +2896,47 @@
 	},
 	"VAN_EX1_371": {
 		"lines": [
-			"Otorga [b]Escudo[/b]",
-			"[b]divino[/b] a un esbirro."
+			"Otorga [b]Escudo divino[/b]",
+			"a un esbirro."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_379": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando tu",
-			"oponente juega un",
-			"esbirro, reduce su salud",
-			"a 1 p."
+			"[b]Secreto:[/b]",
+			"Cuando tu oponente",
+			"juega un esbirro,",
+			"reduce su salud a 1 p."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_382": {
 		"lines": [
-			"[b]Grito de batalla:[/b]",
-			"Cambia el ataque de",
-			"un esbirro enemigo",
-			"a 1 p."
+			"[b]Grito de batalla:[/b] Cambia",
+			"el ataque de un esbirro",
+			"enemigo a 1 p."
 		],
 		"name": 12,
-		"text": 8
+		"text": 9
 	},
 	"VAN_EX1_383": {
 		"lines": [
 			"[b]Escudo divino[/b]. [b]Provocar[/b]",
-			"[b]Último aliento:[/b] Equipa una",
-			"Crematoria 5/3."
+			"[b]Último aliento:[/b]",
+			"Equipa una Crematoria 5/3."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_384": {
 		"lines": [
-			"Inflige 8 p. de daño que se",
-			"dividen aleatoriamente",
-			"entre todos los",
-			"personajes enemigos."
+			"Inflige 8 p. de daño",
+			"que se dividen",
+			"aleatoriamente entre todos",
+			"los personajes enemigos."
 		],
 		"name": 12,
 		"text": 8
@@ -2984,25 +2944,26 @@
 	"VAN_EX1_390": {
 		"lines": [
 			"[b]Provocar[/b]",
-			"[b]Enfurecer:[/b]Otorga +3",
-			"p. de ataque."
+			"[b]Enfurecer:[/b]Otorga",
+			"+3 p. de ataque."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_EX1_391": {
 		"lines": [
-			"Inflige 2 p. de daño a un",
-			"esbirro. Si sobrevive,",
+			"Inflige 2 p. de daño",
+			"a un esbirro. Si sobrevive,",
 			"roba una carta."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_392": {
 		"lines": [
-			"Roba una carta por",
-			"cada personaje",
+			"Roba una carta",
+			"por cada personaje",
 			"amistoso dañado."
 		],
 		"name": 12,
@@ -3010,12 +2971,12 @@
 	},
 	"VAN_EX1_393": {
 		"lines": [
-			"[b]Enfurecer:[/b]",
-			"Otorga +3 p.",
-			"de ataque."
+			"[b]Enfurecer:[/b] Otorga",
+			"+3 p. de ataque."
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_396": {
 		"lines": [
@@ -3027,11 +2988,11 @@
 	"VAN_EX1_398": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Equipa un",
-			"arma 2/2."
+			"Equipa un arma 2/2."
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_399": {
 		"lines": [
@@ -3070,9 +3031,9 @@
 	},
 	"VAN_EX1_407": {
 		"lines": [
-			"Destruye a todos los",
-			"esbirros menos a",
-			"uno (elegido al azar)."
+			"Destruye a todos",
+			"los esbirros menos",
+			"a uno (elegido al azar)."
 		],
 		"name": 12,
 		"text": 10
@@ -3080,8 +3041,8 @@
 	"VAN_EX1_408": {
 		"lines": [
 			"Inflige 4 p. de daño.",
-			"Si tienes 12 p. de",
-			"salud o menos, inflige",
+			"Si tienes 12 p. de salud",
+			"o menos, inflige",
 			"6 p. de daño."
 		],
 		"name": 12,
@@ -3089,8 +3050,8 @@
 	},
 	"VAN_EX1_409": {
 		"lines": [
-			"Si tienes un arma, le",
-			"otorga +1/+1. Si no,",
+			"Si tienes un arma,",
+			"le otorga +1/+1. Si no,",
 			"equipa un arma 1/3."
 		],
 		"name": 12,
@@ -3098,22 +3059,22 @@
 	},
 	"VAN_EX1_410": {
 		"lines": [
-			"Inflige 1 p. de daño a",
-			"un esbirro por cada punto",
+			"Inflige 1 p. de daño a un",
+			"esbirro por cada punto",
 			"de armadura que tengas."
 		],
 		"name": 12,
-		"text": 8
+		"text": 9
 	},
 	"VAN_EX1_411": {
 		"lines": [
-			"Atacar a un esbirro",
-			"cuesta 1 p. de ataque",
-			"en vez de 1 p. de",
-			"durabilidad."
+			"Atacar a un esbirro cuesta",
+			"1 p. de ataque en vez",
+			"de 1 p. de durabilidad."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_412": {
 		"lines": [
@@ -3127,12 +3088,12 @@
 	},
 	"VAN_EX1_414": {
 		"lines": [
-			"[b]Cargar[/b]",
-			"[b]Enfurecer:[/b] +6 p.",
-			"de ataque."
+			"[b]Cargar Enfurecer:[/b]",
+			"+6 p. de ataque."
 		],
 		"name": 9,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_506": {
 		"lines": [
@@ -3159,11 +3120,12 @@
 	"VAN_EX1_508": {
 		"lines": [
 			"Todos los demás",
-			"múrlocs tienen +1",
-			"p. de ataque."
+			"múrlocs tienen",
+			"+1 p. de ataque."
 		],
 		"name": 11,
-		"text": 10
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_EX1_509": {
 		"lines": [
@@ -3178,27 +3140,29 @@
 		"lines": [
 			"[b]Sigilo[/b]",
 			"Destruye a cualquier",
-			"esbirro dañado por",
-			"este esbirro."
+			"esbirro dañado",
+			"por este esbirro."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_531": {
 		"lines": [
-			"Obtiene +2/+1 cada vez",
-			"que muere una bestia",
-			"amistosa."
+			"Obtiene +2/+1",
+			"cada vez que muere",
+			"una bestia amistosa."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_533": {
 		"lines": [
 			"[b]Secreto:[/b] Cuando un enemigo",
 			"vaya a atacar a tu héroe,",
-			"en su lugar atacará a otro",
-			"personaje aleatorio."
+			"en su lugar atacará",
+			"a otro personaje aleatorio."
 		],
 		"name": 12,
 		"text": 7
@@ -3214,9 +3178,8 @@
 	},
 	"VAN_EX1_536": {
 		"lines": [
-			"Obtiene +1 p. de",
-			"durabilidad cada",
-			"vez que se revela",
+			"Obtiene +1 p. de durabilidad",
+			"cada vez que se revela",
 			"un [b]secreto[/b]."
 		],
 		"name": 9,
@@ -3224,10 +3187,9 @@
 	},
 	"VAN_EX1_537": {
 		"lines": [
-			"Inflige 5 p. de",
-			"daño a un esbirro y",
-			"2 p. de daño a los",
-			"esbirros adyacentes."
+			"Inflige 5 p. de daño",
+			"a un esbirro y 2 p. de daño",
+			"a los esbirros adyacentes."
 		],
 		"name": 12,
 		"text": 8
@@ -3239,16 +3201,16 @@
 			"esbirro enemigo."
 		],
 		"name": 12,
-		"text": 10
+		"text": 11
 	},
 	"VAN_EX1_539": {
 		"lines": [
-			"Inflige 3 p. de daño.",
-			"Si controlas una bestia,",
+			"Inflige 3 p. de daño. Si",
+			"controlas una bestia,",
 			"inflige 5 p. de daño."
 		],
 		"name": 12,
-		"text": 9
+		"text": 10
 	},
 	"VAN_EX1_543": {
 		"lines": [
@@ -3259,19 +3221,19 @@
 	},
 	"VAN_EX1_544": {
 		"lines": [
-			"Todos los esbirros",
-			"pierden [b]Sigilo[/b]. Destruye",
-			"todos los [b]secretos[/b] del",
-			"enemigo. Roba una carta."
+			"Todos los esbirros pierden",
+			"[b]Sigilo[/b]. Destruye todos",
+			"los [b]secretos[/b] del enemigo.",
+			"Roba una carta."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_549": {
 		"lines": [
-			"Otorga +2 p.",
-			"de ataque e [b]Inmune[/b] a",
-			"una bestia este turno."
+			"Otorga +2 p. de ataque",
+			"e [b]Inmune[/b] a una bestia",
+			"este turno."
 		],
 		"name": 12,
 		"text": 10
@@ -3301,9 +3263,9 @@
 	},
 	"VAN_EX1_557": {
 		"lines": [
-			"Al comienzo de tu",
-			"turno, tienes un 50% de",
-			"probabilidad de robar",
+			"Al comienzo de tu turno,",
+			"tienes un 50%",
+			"de probabilidad de robar",
 			"una carta más."
 		],
 		"name": 12,
@@ -3312,21 +3274,20 @@
 	},
 	"VAN_EX1_558": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Destruye el",
-			"arma de tu oponente y roba una",
-			"cantidad de cartas equivalente",
+			"[b]Grito de batalla:[/b] Destruye",
+			"el arma de tu oponente",
+			"y roba una cantidad de",
+			"cartas equivalente",
 			"a su durabilidad."
 		],
 		"name": 12,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_559": {
 		"lines": [
-			"Cada vez que",
-			"lanzas un hechizo, añade",
-			"un hechizo «Bola de Fuego»",
-			"a tu mano."
+			"Cada vez que lanzas un",
+			"hechizo, añade un hechizo",
+			"«Bola de Fuego» a tu mano."
 		],
 		"name": 11,
 		"text": 8,
@@ -3334,26 +3295,28 @@
 	},
 	"VAN_EX1_560": {
 		"lines": [
-			"Los jugadores solo tienen",
-			"15 s para sus turnos."
+			"Los jugadores solo",
+			"tienen 15 s para",
+			"sus turnos."
 		],
 		"name": 12,
-		"text": 8
+		"text": 11
 	},
 	"VAN_EX1_561": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Fija",
-			"la salud restante de un",
-			"héroe en 15 p."
+			"[b]Grito de batalla:[/b]",
+			"Fija la salud restante",
+			"de un héroe en 15 p."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_562": {
 		"lines": [
 			"[b]Grito de batalla:[/b] Invoca",
-			"crías 1/1 hasta que tu",
-			"lado del campo de batalla",
+			"crías 1/1 hasta que tu lado",
+			"del campo de batalla",
 			"esté lleno."
 		],
 		"name": 12,
@@ -3370,13 +3333,13 @@
 	},
 	"VAN_EX1_564": {
 		"lines": [
-			"[b]Grito de batalla:[/b]",
-			"Elige a un esbirro y",
-			"se convierte en una",
-			"copia de este."
+			"[b]Grito de batalla:[/b] Elige",
+			"a un esbirro y se convierte",
+			"en una copia de este."
 		],
 		"name": 11,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_565": {
 		"lines": [
@@ -3390,11 +3353,11 @@
 	"VAN_EX1_567": {
 		"lines": [
 			"[b]Viento furioso[/b]",
-			"[b]Sobrecarga:[/b]",
-			"(2)"
+			"[b]Sobrecarga:[/b] (2)"
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_570": {
 		"lines": [
@@ -3408,9 +3371,8 @@
 	},
 	"VAN_EX1_571": {
 		"lines": [
-			"Invoca tres",
-			"antárboles 2/2 con",
-			"[b]Cargar[/b] que mueren",
+			"Invoca tres antárboles 2/2",
+			"con [b]Cargar[/b] que mueren",
 			"al final del turno."
 		],
 		"name": 10,
@@ -3419,26 +3381,28 @@
 	"VAN_EX1_572": {
 		"lines": [
 			"Al final de tu turno,",
-			"añade una carta de sueño",
-			"a tu mano."
+			"añade una carta",
+			"de sueño a tu mano."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_573": {
 		"lines": [
-			"[b]Elige una:[/b] Otorga +2/+2 a tus",
-			"otros esbirros, o bien invoca",
-			"dos antárboles 2/2",
+			"[b]Elige una:[/b] Otorga +2/+2",
+			"a tus otros esbirros, o bien",
+			"invoca dos antárboles 2/2",
 			"con [b]Provocar[/b]."
 		],
 		"name": 12,
-		"text": 7
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_573a": {
 		"lines": [
-			"Otorga +2/+2 a",
-			"tus otros esbirros."
+			"Otorga +2/+2",
+			"a tus otros esbirros."
 		],
 		"name": 12,
 		"text": 11
@@ -3454,18 +3418,18 @@
 	},
 	"VAN_EX1_575": {
 		"lines": [
-			"Al final de tu",
-			"turno, roba",
-			"una carta."
+			"Al final de tu turno,",
+			"roba una carta."
 		],
 		"name": 10,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_EX1_577": {
 		"lines": [
-			"[b]Último aliento:[/b] Invoca",
-			"un Pip Perspicaz 3/3",
-			"para tu oponente."
+			"[b]Último aliento:[/b]",
+			"Invoca un Pip Perspicaz",
+			"3/3 para tu oponente."
 		],
 		"name": 12,
 		"text": 8,
@@ -3482,9 +3446,9 @@
 	},
 	"VAN_EX1_581": {
 		"lines": [
-			"Devuelve a un",
-			"esbirro enemigo a la",
-			"mano de tu oponente."
+			"Devuelve a un esbirro",
+			"enemigo a la mano",
+			"de tu oponente."
 		],
 		"name": 12,
 		"text": 10
@@ -3510,17 +3474,17 @@
 		"lines": [
 			"[b]Grito de batalla:[/b] Otorga",
 			"[b]+1 p. de daño con hechizos[/b]",
-			"a los esbirros",
-			"adyacentes."
+			"a los esbirros adyacentes."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_586": {
 		"lines": [
-			"Cuesta (1) cristal menos por",
-			"cada esbirro adicional en el",
-			"campo de batalla."
+			"Cuesta (1) cristal menos",
+			"por cada esbirro adicional",
+			"en el campo de batalla."
 		],
 		"name": 12,
 		"text": 8,
@@ -3529,23 +3493,23 @@
 	"VAN_EX1_587": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Otorga [b]Viento[/b]",
-			"[b]furioso[/b] a un esbirro",
-			"amistoso."
+			"Otorga [b]Viento furioso[/b]",
+			"a un esbirro amistoso."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_590": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Todos los",
-			"esbirros pierden [b]Escudo divino[/b].",
-			"Obtiene +3/+3 por cada escudo",
-			"perdido."
+			"[b]Grito de batalla:[/b]",
+			"Todos los esbirros pierden",
+			"[b]Escudo divino[/b]. Obtiene",
+			"+3/+3 por cada",
+			"escudo perdido."
 		],
 		"name": 12,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_591": {
 		"lines": [
@@ -3558,47 +3522,48 @@
 	},
 	"VAN_EX1_593": {
 		"lines": [
-			"[b]Grito de batalla: [/b]Inflige",
-			"3 p. de daño al héroe",
-			"enemigo."
+			"[b]Grito de batalla:[/b]",
+			"Inflige 3 p. de daño",
+			"al héroe enemigo."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_594": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando un",
-			"esbirro va a atacar a",
-			"tu héroe, es destruido."
-		],
-		"name": 12,
-		"text": 10
-	},
-	"VAN_EX1_595": {
-		"lines": [
-			"Cuando muere un",
-			"esbirro amistoso, roba",
-			"una carta."
+			"[b]Secreto:[/b] Cuando",
+			"un esbirro va a atacar",
+			"a tu héroe, es destruido."
 		],
 		"name": 12,
 		"text": 9
 	},
+	"VAN_EX1_595": {
+		"lines": [
+			"Cuando muere",
+			"un esbirro amistoso,",
+			"roba una carta."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
 	"VAN_EX1_596": {
 		"lines": [
-			"Inflige 2 p. de daño a un",
-			"esbirro. Si el objetivo es un",
-			"demonio amistoso, en lugar",
-			"de dañarlo le otorga +2/+2."
+			"Inflige 2 p. de daño a un esbirro.",
+			"Si el objetivo es un demonio",
+			"amistoso, en lugar de dañarlo",
+			"le otorga +2/+2."
 		],
 		"name": 12,
 		"text": 7
 	},
 	"VAN_EX1_597": {
 		"lines": [
-			"Al final de tu turno,",
-			"inflige 1 p. de daño",
-			"a este esbirro e invoca a",
-			"un diablillo 1/1."
+			"Al final de tu turno, inflige",
+			"1 p. de daño a este esbirro",
+			"e invoca a un diablillo 1/1."
 		],
 		"name": 11,
 		"text": 8,
@@ -3622,16 +3587,16 @@
 	"VAN_EX1_604": {
 		"lines": [
 			"Cada vez que un esbirro",
-			"recibe daño, obtiene 1 p.",
-			"de ataque."
+			"recibe daño, obtiene",
+			"1 p. de ataque."
 		],
 		"name": 12,
 		"text": 9
 	},
 	"VAN_EX1_606": {
 		"lines": [
-			"Otorga 5 p. de",
-			"armadura.",
+			"Otorga",
+			"5 p. de armadura.",
 			"Roba una carta."
 		],
 		"name": 11,
@@ -3648,17 +3613,18 @@
 	},
 	"VAN_EX1_608": {
 		"lines": [
-			"Tus hechizos",
-			"cuestan (1) cristal",
-			"menos."
+			"Tus hechizos cuestan",
+			"(1) cristal menos."
 		],
 		"name": 10,
-		"text": 11
+		"text": 10,
+		"valign": "top"
 	},
 	"VAN_EX1_609": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando tu",
-			"oponente juega un esbirro,",
+			"[b]Secreto:[/b]",
+			"Cuando tu oponente",
+			"juega un esbirro,",
 			"le inflige 4 p. de daño."
 		],
 		"name": 9,
@@ -3668,17 +3634,18 @@
 		"lines": [
 			"[b]Secreto:[/b] Cuando vayan",
 			"a atacar a tu héroe,",
-			"inflige 2 p. de daño a",
-			"todos los enemigos."
+			"inflige 2 p. de daño",
+			"a todos los enemigos."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_611": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando un esbirro",
-			"enemigo vaya a atacar, lo",
-			"devuelve a la mano de su dueño.",
+			"[b]Secreto:[/b]",
+			"Cuando un esbirro enemigo",
+			"vaya a atacar, lo devuelve",
+			"a la mano de su dueño.",
 			"Cuesta (2) cristales más."
 		],
 		"name": 12,
@@ -3687,42 +3654,41 @@
 	"VAN_EX1_612": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"El siguiente [b]Secreto[/b]",
-			"que juegues este turno",
-			"costará (0) cristales."
+			"El siguiente [b]Secreto[/b] que",
+			"juegues este turno costará",
+			"(0) cristales."
 		],
 		"name": 12,
-		"text": 7,
+		"text": 8,
 		"valign": "top"
 	},
 	"VAN_EX1_613": {
 		"lines": [
-			"[b]Combo:[/b] Obtiene",
-			"+2/+2 por cada carta",
-			"que hayas jugado",
-			"este turno."
+			"[b]Combo:[/b] Obtiene +2/+2",
+			"por cada carta que hayas",
+			"jugado este turno."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_614": {
 		"lines": [
 			"Cada vez que juegas",
-			"una carta, invoca una",
-			"llama de Azzinoth",
-			"2/1."
+			"una carta, invoca",
+			"una llama de Azzinoth 2/1."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_616": {
 		"lines": [
 			"Todos los esbirros",
-			"cuestan (1)",
-			"cristal más."
+			"cuestan (1) cristal más."
 		],
 		"name": 12,
-		"text": 11,
+		"text": 9,
 		"valign": "top"
 	},
 	"VAN_EX1_617": {
@@ -3735,8 +3701,8 @@
 	},
 	"VAN_EX1_619": {
 		"lines": [
-			"Cambia la salud de",
-			"todos los esbirros",
+			"Cambia la salud",
+			"de todos los esbirros",
 			"a 1 p."
 		],
 		"name": 12,
@@ -3744,9 +3710,9 @@
 	},
 	"VAN_EX1_620": {
 		"lines": [
-			"Cuesta (1) cristal menos por",
-			"cada punto de daño que",
-			"haya recibido tu héroe."
+			"Cuesta (1) cristal menos",
+			"por cada punto de daño",
+			"que haya recibido tu héroe."
 		],
 		"name": 12,
 		"text": 8,
@@ -3754,27 +3720,25 @@
 	},
 	"VAN_EX1_621": {
 		"lines": [
-			"Restaura 4 p.",
-			"de salud",
+			"Restaura 4 p. de salud",
 			"a todos los esbirros."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_622": {
 		"lines": [
 			"Destruye a un esbirro",
-			"con 5 p. de ataque",
-			"o más."
+			"con 5 p. de ataque o más."
 		],
 		"name": 8,
-		"text": 10
+		"text": 9
 	},
 	"VAN_EX1_623": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Otorga",
-			"+3 p. de salud a un",
-			"esbirro amistoso."
+			"[b]Grito de batalla:[/b]",
+			"Otorga +3 p. de salud",
+			"a un esbirro amistoso."
 		],
 		"name": 12,
 		"text": 8,
@@ -3782,18 +3746,18 @@
 	},
 	"VAN_EX1_624": {
 		"lines": [
-			"Inflige 5 p. de",
-			"daño. Restaura 5 p.",
-			"de salud a tu héroe."
+			"Inflige 5 p. de daño.",
+			"Restaura 5 p. de salud",
+			"a tu héroe."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_625": {
 		"lines": [
-			"Tu poder de héroe se",
-			"convierte en «Inflige 2 p. de",
-			"daño». Si ya estás en Forma",
+			"Tu poder de héroe se convierte",
+			"en «Inflige 2 p. de daño».",
+			"Si ya estás en Forma",
 			"de las Sombras: 3 p. de daño."
 		],
 		"name": 11,
@@ -3830,8 +3794,8 @@
 	"VAN_EX1_tk33": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"Invoca un",
-			"infernal 6/6."
+			"Invoca",
+			"un infernal 6/6."
 		],
 		"name": 12,
 		"text": 11
@@ -3847,8 +3811,7 @@
 	"VAN_EX1_tk9b": {
 		"lines": [
 			"[b]Cargar[/b]",
-			"Al final del",
-			"turno, destruye",
+			"Al final del turno, destruye",
 			"a este esbirro."
 		],
 		"name": 12,
@@ -3857,8 +3820,8 @@
 	"VAN_HERO_01bp": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"Obtienes 2 p. de",
-			"armadura."
+			"Obtienes",
+			"2 p. de armadura."
 		],
 		"name": 12,
 		"text": 11
@@ -3866,8 +3829,8 @@
 	"VAN_HERO_01bp2": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"Obtiene 4 p. de",
-			"armadura."
+			"Obtiene",
+			"4 p. de armadura."
 		],
 		"name": 12,
 		"text": 11
@@ -3893,11 +3856,10 @@
 	"VAN_HERO_03bp": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"Equipa una",
-			"daga 1/2."
+			"Equipa una daga 1/2."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_HERO_03bp2": {
 		"lines": [
@@ -3946,8 +3908,7 @@
 	"VAN_HERO_06bp": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"+1 p. de ataque",
-			"este turno.",
+			"+1 p. de ataque este turno.",
 			"+1 p. de armadura."
 		],
 		"name": 12,
@@ -3956,8 +3917,7 @@
 	"VAN_HERO_06bp2": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"+2 p. de ataque",
-			"este turno.",
+			"+2 p. de ataque este turno.",
 			"+2 p. de armadura."
 		],
 		"name": 9,
@@ -3999,20 +3959,18 @@
 	"VAN_HERO_09bp": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"Restaura 2 p.",
-			"de salud."
+			"Restaura 2 p. de salud."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_HERO_09bp2": {
 		"lines": [
 			"[b]Poder de héroe[/b]",
-			"Restaura 4 p.",
-			"de salud."
+			"Restaura 4 p. de salud."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_HERO_10bp": {
 		"lines": [
@@ -4035,8 +3993,8 @@
 	"VAN_NEW1_003": {
 		"lines": [
 			"Destruye a un demonio.",
-			"Restaura 5 p. de salud a",
-			"tu héroe."
+			"Restaura 5 p. de salud",
+			"a tu héroe."
 		],
 		"name": 12,
 		"text": 9
@@ -4052,27 +4010,27 @@
 	},
 	"VAN_NEW1_005": {
 		"lines": [
-			"[b]Combo:[/b] Devuelve a",
-			"un esbirro a la mano de",
-			"su dueño."
+			"[b]Combo:[/b] Devuelve",
+			"a un esbirro a la mano",
+			"de su dueño."
 		],
 		"name": 12,
-		"text": 9
+		"text": 10
 	},
 	"VAN_NEW1_007": {
 		"lines": [
-			"[b]Elige una:[/b] Inflige 5 p.",
-			"de daño a un esbirro, o bien",
-			"inflige 2 p. de daño a todos",
-			"los esbirros enemigos."
+			"[b]Elige una:[/b]",
+			"Inflige 5 p. de daño a un esbirro,",
+			"o bien inflige 2 p. de daño",
+			"a todos los esbirros enemigos."
 		],
 		"name": 12,
-		"text": 8
+		"text": 7
 	},
 	"VAN_NEW1_007a": {
 		"lines": [
-			"Inflige 2 p. de",
-			"daño a todos los",
+			"Inflige 2 p. de daño",
+			"a todos los",
 			"esbirros enemigos."
 		],
 		"name": 12,
@@ -4080,8 +4038,8 @@
 	},
 	"VAN_NEW1_007b": {
 		"lines": [
-			"Inflige 5 p. de",
-			"daño a un esbirro."
+			"Inflige 5 p. de daño",
+			"a un esbirro."
 		],
 		"name": 12,
 		"text": 11
@@ -4104,22 +4062,20 @@
 	},
 	"VAN_NEW1_008b": {
 		"lines": [
-			"Restaura 5",
-			"p. de salud."
+			"Restaura 5 p. de salud."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_NEW1_009": {
 		"lines": [
-			"Al final de tu turno,",
-			"restaura",
+			"Al final de tu turno, restaura",
 			"1 p. de salud a todos",
-			"los esbirros",
-			"amistosos."
+			"los esbirros amistosos."
 		],
 		"name": 12,
-		"text": 7
+		"text": 7,
+		"valign": "top"
 	},
 	"VAN_NEW1_010": {
 		"lines": [
@@ -4149,8 +4105,8 @@
 	"VAN_NEW1_014": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Otorga [b]Sigilo[/b] a un",
-			"esbirro amistoso."
+			"Otorga [b]Sigilo[/b]",
+			"a un esbirro amistoso."
 		],
 		"name": 12,
 		"text": 8,
@@ -4159,27 +4115,29 @@
 	"VAN_NEW1_016": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Roba un pirata de",
-			"tu mazo."
+			"Roba un pirata",
+			"de tu mazo."
 		],
 		"name": 12,
-		"text": 11
+		"text": 11,
+		"valign": "top"
 	},
 	"VAN_NEW1_017": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Destruye a un múrloc y",
-			"obtiene +2/+2."
+			"Destruye a un múrloc",
+			"y obtiene +2/+2."
 		],
 		"name": 11,
-		"text": 9
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_NEW1_018": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Obtiene una cantidad de",
-			"puntos de ataque equivalente al",
-			"ataque de tu arma."
+			"Obtiene una cantidad de puntos",
+			"de ataque equivalente al ataque",
+			"de tu arma."
 		],
 		"name": 11,
 		"text": 7,
@@ -4187,29 +4145,28 @@
 	},
 	"VAN_NEW1_019": {
 		"lines": [
-			"Cuando invocas a",
-			"un esbirro,",
-			"inflige 1 p. de daño a",
-			"un enemigo",
-			"aleatorio."
+			"Cuando invocas a un",
+			"esbirro, inflige 1 p. de daño",
+			"a un enemigo aleatorio."
 		],
 		"name": 9,
-		"text": 7
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_NEW1_020": {
 		"lines": [
 			"Después de que lances",
-			"un hechizo, inflige 1 p. de",
-			"daño a todos los esbirros."
+			"un hechizo, inflige",
+			"1 p. de daño a todos",
+			"los esbirros."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_NEW1_021": {
 		"lines": [
-			"Al comienzo de tu",
-			"turno, destruye a todos",
+			"Al comienzo de tu turno,",
+			"destruye a todos",
 			"los esbirros."
 		],
 		"name": 12,
@@ -4236,8 +4193,8 @@
 	"VAN_NEW1_024": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Otorga +1/+1 a",
-			"tu arma."
+			"Otorga +1/+1",
+			"a tu arma."
 		],
 		"name": 12,
 		"text": 11
@@ -4245,19 +4202,18 @@
 	"VAN_NEW1_025": {
 		"lines": [
 			"[b]Grito de batalla:[/b]",
-			"Elimina 1 p. de",
-			"durabilidad del",
-			"arma de tu",
-			"oponente."
+			"Elimina 1 p. de durabilidad",
+			"del arma de tu oponente."
 		],
 		"name": 11,
-		"text": 7
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_NEW1_026": {
 		"lines": [
-			"Cada vez que lanzas un",
-			"hechizo, invoca a un",
-			"aprendiz violeta 1/1."
+			"Cada vez que lanzas",
+			"un hechizo, invoca",
+			"a un aprendiz violeta 1/1."
 		],
 		"name": 12,
 		"text": 8,
@@ -4277,8 +4233,8 @@
 	},
 	"VAN_NEW1_029": {
 		"lines": [
-			"[b]Grito de batalla:[/b] Los",
-			"hechizos enemigos",
+			"[b]Grito de batalla:[/b]",
+			"Los hechizos enemigos",
 			"cuestan (0) cristales el",
 			"próximo turno."
 		],
@@ -4288,23 +4244,21 @@
 	},
 	"VAN_NEW1_030": {
 		"lines": [
-			"[b]Grito de batalla:[/b]",
-			"Destruye a todos",
-			"los demás",
-			"esbirros y",
-			"descarta tu mano."
+			"[b]Grito de batalla:[/b] Destruye",
+			"a todos los demás esbirros",
+			"y descarta tu mano."
 		],
 		"name": 12,
-		"text": 7
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_NEW1_031": {
 		"lines": [
-			"Invoca a una",
-			"bestia compañera",
-			"aleatoria."
+			"Invoca a una bestia",
+			"compañera aleatoria."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_NEW1_032": {
 		"lines": [
@@ -4316,11 +4270,11 @@
 	"VAN_NEW1_033": {
 		"lines": [
 			"Tus demás esbirros",
-			"tienen +1 p.",
-			"de ataque."
+			"tienen +1 p. de ataque."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10,
+		"valign": "top"
 	},
 	"VAN_NEW1_034": {
 		"lines": [
@@ -4331,10 +4285,10 @@
 	},
 	"VAN_NEW1_036": {
 		"lines": [
-			"La salud de tus",
-			"esbirros no puede",
-			"bajar de 1 p. este",
-			"turno. Roba una carta."
+			"La salud de tus esbirros",
+			"no puede bajar",
+			"de 1 p. este turno.",
+			"Roba una carta."
 		],
 		"name": 12,
 		"text": 8
@@ -4351,12 +4305,11 @@
 	},
 	"VAN_NEW1_038": {
 		"lines": [
-			"Al final de cada",
-			"turno, obtiene +1/+1."
+			"Al final de cada turno,",
+			"obtiene +1/+1."
 		],
 		"name": 12,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_NEW1_040": {
 		"lines": [
@@ -4371,8 +4324,8 @@
 		"lines": [
 			"[b]Grito de batalla:[/b] Destruye",
 			"a un esbirro enemigo",
-			"aleatorio con 2 p. de",
-			"ataque o menos."
+			"aleatorio con 2 p. de ataque",
+			"o menos."
 		],
 		"name": 12,
 		"text": 8,
@@ -4380,8 +4333,8 @@
 	},
 	"VAN_PRO_001": {
 		"lines": [
-			"[b]Grito de batalla:[/b] ¡Otorga a",
-			"ambos jugadores el poder",
+			"[b]Grito de batalla:[/b] ¡Otorga",
+			"a ambos jugadores el poder",
 			"del ROCK! (Con una carta",
 			"de acorde)."
 		],
@@ -4391,12 +4344,11 @@
 	},
 	"VAN_PRO_001c": {
 		"lines": [
-			"Invoca a un",
-			"guerrero de la",
-			"Horda aleatorio."
+			"Invoca a un guerrero",
+			"de la Horda aleatorio."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_TU4e_002t": {
 		"name": 12,
@@ -4412,8 +4364,8 @@
 	},
 	"VAN_tt_004": {
 		"lines": [
-			"Cada vez que un",
-			"esbirro muere, obtiene",
+			"Cada vez que un esbirro",
+			"muere, obtiene",
 			"+1 p. de ataque."
 		],
 		"name": 11,
@@ -4422,9 +4374,9 @@
 	},
 	"VAN_tt_010": {
 		"lines": [
-			"[b]Secreto:[/b] Cuando un",
-			"enemigo lanza un",
-			"hechizo sobre un esbirro,",
+			"[b]Secreto:[/b]",
+			"Cuando un enemigo lanza",
+			"un hechizo sobre un esbirro,",
 			"invoca a un esbirro 1/3",
 			"como nuevo objetivo."
 		],
