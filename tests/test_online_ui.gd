@@ -233,3 +233,23 @@ func test_hot_seat_names() -> void:
 	v.bind(m)
 	check(v._names[0].text.begins_with("Player 1"), v._names[0].text)
 	v.free()
+
+
+func test_turn_timer_moves_reach_the_opponent() -> void:
+	var b := _bound_pair()
+	var v: Array = b[1]
+	for side in 2:
+		check(v[side].timer_enabled, "timer on in online games")
+		v[side].tick(MatchView.MULLIGAN_SECONDS + 1)
+		LoopbackTransport.pump(b[0])
+	var g0: Game = v[0].g
+	var g1: Game = v[1].g
+	eq([g0.phase, g1.phase], ["PLAY", "PLAY"], "both mulligans kept on time out")
+	var active: int = g0.current
+	var turn := g0.turn
+	v[active].tick(MatchView.TURN_SECONDS + 1)
+	LoopbackTransport.pump(b[0])
+	eq([g0.turn, g1.turn], [turn + 1, turn + 1], "turn ended on both sides")
+	eq(g0.state_hash(), g1.state_hash(), "still in sync")
+	check(v[0].find_child("ConnectionLost", true, false) == null and v[1].find_child("ConnectionLost", true, false) == null, "no desync")
+	_free_bound(b)

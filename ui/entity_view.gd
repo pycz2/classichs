@@ -43,15 +43,6 @@ func _draw_stat(center: Vector2, value: int, color: Color, text_color := Color.W
 	draw_string(font, center + Vector2(-w / 2, size * 0.36), s, HORIZONTAL_ALIGNMENT_LEFT, -1, size, text_color)
 
 
-## Placeholder art: a class-coloured field with a large initial (real art comes in subproject 6).
+## Card art (procedural, see Art).
 func _draw_art(rect: Rect2, card_id: String) -> void:
-	var c := CardDb.card(card_id)
-	var base := Palette.of_class(c.get("cardClass", "NEUTRAL"))
-	var tint := Color.from_hsv(float(hash(card_id) % 360) / 360.0, 0.35, 0.55)
-	draw_rect(rect, base.lerp(tint, 0.5))
-	var font := ThemeDB.fallback_font
-	var initial := CardText.name(card_id).left(1)
-	var size := int(rect.size.y * 0.6)
-	var w := font.get_string_size(initial, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
-	draw_string(font, rect.position + Vector2((rect.size.x - w) / 2, rect.size.y * 0.75), initial,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, size, Color(1, 1, 1, 0.35))
+	Art.paint(self, rect, card_id)

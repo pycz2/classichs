@@ -32,6 +32,14 @@ static func _name(g: GameState, id: int, loc: String) -> String:
 ## Lines for one history entry ({"turn", "player", "action", "events"}).
 static func lines(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Array[String]:
 	var out: Array[String] = []
+	for r in rows(entry, g, viewer, loc):
+		out.append(r.text)
+	return out
+
+
+## Rows {"text", "turn": bool} — "turn" marks the turn header line (for styling).
+static func rows(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Array:
+	var out: Array = []
 	var played := {}
 	var chosen: bool = entry.action.get("type", "") == "choose"
 	for ev: Dictionary in entry.events:
@@ -40,9 +48,10 @@ static func lines(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Ar
 		if ev.type == "summon" and played.has(ev.entity):
 			continue
 		if chosen and ev.type == "discard" and ev.player != viewer:
-			out.append(_t("Opponent discards a card"))  # unchosen options stay secret (Tracking)
+			out.append({"text": _t("Opponent discards a card"), "turn": false})  # unchosen options stay secret (Tracking)
 			continue
-		out.append_array(event_lines(ev, g, viewer, loc))
+		for text in event_lines(ev, g, viewer, loc):
+			out.append({"text": text, "turn": ev.type == "turn_start"})
 	return out
 
 

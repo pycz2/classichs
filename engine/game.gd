@@ -5,9 +5,14 @@ extends GameState
 const COIN := "GAME_005"
 
 
+## The deck lists the match started with (the deck tracker shows them).
+var start_decks: Array = [[], []]
+
+
 ## deal=false skips the opening draws (used by Scenario.build).
 func _init(p0: Dictionary, p1: Dictionary, p_seed: int, first := -1, deal := true) -> void:
 	super(p_seed)
+	start_decks = [p0.deck.duplicate(), p1.deck.duplicate()]
 	setup_players(p0.hero, p1.hero)
 	for i in 2:
 		var deck: Array = [p0, p1][i].deck

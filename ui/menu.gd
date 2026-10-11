@@ -7,11 +7,16 @@ signal collection
 signal online
 signal tutorial
 signal debug_table
+signal settings
 signal quit
+
+## Button labels (English keys); the translation tool reads this list.
+const ITEMS := ["Training", "Online Game", "Tutorial", "Collection", "Debug Table", "Settings", "Exit"]
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	Sound.music("menu")
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -26,7 +31,7 @@ func _ready() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 	var items := [["Training", training, true], ["Online Game", online, WebRtcTransport.available()], ["Tutorial", tutorial, true],
-		["Collection", collection, true], ["Debug Table", debug_table, true]]
+		["Collection", collection, true], ["Debug Table", debug_table, true], ["Settings", settings, true]]
 	if not OS.has_feature("web"):
 		items.append(["Exit", quit, true])
 	for it in items:
@@ -38,3 +43,12 @@ func _ready() -> void:
 			var sig: Signal = it[1]
 			b.pressed.connect(func(): sig.emit())
 		box.add_child(b)
+	var version := Button.new()
+	version.name = "Version"
+	version.text = "v" + str(ProjectSettings.get_setting("application/config/version"))
+	version.flat = true
+	version.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	version.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	version.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	version.pressed.connect(func(): add_child(ChangelogView.new()))
+	add_child(version)

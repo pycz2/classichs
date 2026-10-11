@@ -6,6 +6,12 @@ var screen: Control
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	Locale.load_all()
+	Settings.load_settings()
+	Settings.apply()
+	add_child(Sound.new())
+	if Settings.data.fullscreen and not OS.has_feature("web"):  # the browser needs a click first
+		Settings.set_fullscreen(true)
 	show_menu()
 
 
@@ -24,8 +30,15 @@ func show_menu() -> void:
 	m.online.connect(show_online)
 	m.tutorial.connect(show_tutorial)
 	m.debug_table.connect(show_debug_table)
+	m.settings.connect(show_settings)
 	m.quit.connect(func(): get_tree().quit())
 	_set_screen(m)
+
+
+func show_settings() -> void:
+	var s := SettingsView.new()
+	s.back.connect(show_menu)
+	_set_screen(s)
 
 
 func show_training_setup() -> void:

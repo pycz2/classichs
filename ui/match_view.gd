@@ -16,10 +16,20 @@ const HAND_Y := 604.0
 const SLOT := 104.0
 const TOOLTIP_POS := Vector2(1035, 160)
 
+## Fixed button texts by node name, set again when the language changes.
+const LABELS := {"HistoryButton": "History", "JsonButton": "Position → JSON", "EmoteButton": "Emote",
+	"MuteButton": "Mute", "SettingsButton": "Settings", "TrackerButton": "Deck Tracker"}
 const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "thanks": "Thanks.",
 	"wow": "Wow!", "oops": "Oops.", "threaten": "I will destroy you!"}
 
+## Online turn timer (seconds), as in the original game: the rope burns in the last seconds.
+const TURN_SECONDS := 75.0
+const ROPE_SECONDS := 15.0
+const MULLIGAN_SECONDS := 45.0
+
 var debug_mode := false
+## The turn timer runs only in online games against a person.
+var timer_enabled := false
 ## Names shown next to the heroes ("" = You/Opponent).
 var player_names: Array = ["", ""]
 ## Online opponent's emotes are hidden.
@@ -39,6 +49,7 @@ var _sel := {}
 var _overlay: Control
 var _tooltip: CardView
 var _history: HistoryPanel
+var _tracker: DeckTrackerPanel
 var _end_turn: Button
 var _mana: Array[Label] = []
 var _names: Array[Label] = []
@@ -46,10 +57,17 @@ var _hint: Label
 var _hint_timer := 0.0
 var _bubbles := {}
 var _emote_panel: VBoxContainer
+var _rope := Control.new()
+var _rope_line := ColorRect.new()
+var _rope_spark := ColorRect.new()
+var _turn_key := ""
+var _bot_side := -1
+var _time_left := 0.0
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	Sound.music("battle")
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -67,6 +85,18 @@ func _ready() -> void:
 	mid.size = Vector2(940, 2)
 	mid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(mid)
+	_rope.name = "Rope"
+	_rope.visible = false
+	_rope.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_rope_line.color = Color("c8a165")
+	_rope_line.position = Vector2(170, 319)
+	_rope_line.size = Vector2(940, 6)
+	_rope_spark.color = Color("ffb703")
+	_rope_spark.size = Vector2(12, 12)
+	for r in [_rope_line, _rope_spark]:
+		r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_rope.add_child(r)
+	add_child(_rope)
 	for c in [_layer, _fx]:
 		c.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -98,6 +128,14 @@ func _ready() -> void:
 		js.custom_minimum_size = Vector2(130, 40)
 		js.pressed.connect(show_json)
 		left.add_child(js)
+	var tracker := Palette.button(tr("Deck Tracker"), "TrackerButton")
+	tracker.custom_minimum_size = Vector2(130, 40)
+	tracker.pressed.connect(func():
+		_tracker.visible = not _tracker.visible
+		Settings.data.tracker = _tracker.visible
+		Settings.save()
+		refresh())
+	left.add_child(tracker)
 	var emote := Palette.button(tr("Emote"), "EmoteButton")
 	emote.custom_minimum_size = Vector2(130, 40)
 	emote.pressed.connect(func(): _emote_panel.visible = not _emote_panel.visible)
@@ -108,6 +146,10 @@ func _ready() -> void:
 	mute.visible = false
 	mute.toggled.connect(set_muted)
 	left.add_child(mute)
+	var settings := Palette.button(tr("Settings"), "SettingsButton")
+	settings.custom_minimum_size = Vector2(130, 40)
+	settings.pressed.connect(open_settings)
+	left.add_child(settings)
 	var concede := Palette.button(tr("Concede"), "Concede")
 	concede.custom_minimum_size = Vector2(130, 40)
 	concede.pressed.connect(_on_concede)
@@ -132,6 +174,9 @@ func _ready() -> void:
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_hint)
+	_tracker = DeckTrackerPanel.new()
+	_tracker.visible = Settings.data.tracker
+	add_child(_tracker)
 	_history = HistoryPanel.new()
 	_history.visible = false
 	add_child(_history)
@@ -148,9 +193,8 @@ func bind(m: Match) -> void:
 	if player_names == ["", ""] and m.bots[0] != m.bots[1]:
 		var me := m.viewer()
 		player_names[me] = Profile.load_name()
-		player_names[1 - me] = tr("Bot") if m.bots[1 - me] else ""
-		if tutorial:
-			player_names[1 - me] = CardText.name(tutorial.mission.boss)
+		if m.bots[1 - me]:
+			_bot_side = 1 - me  # named in _side_name, so the name follows the language
 	m.start()
 	refresh()
 
@@ -158,6 +202,7 @@ func bind(m: Match) -> void:
 ## An online match: the session (and its transport) now live under this view.
 func bind_online(m: Match, s: NetSession) -> void:
 	session = s
+	timer_enabled = true
 	for n in [s, s.transport]:
 		if n.get_parent() and n.get_parent() != self:
 			n.reparent(self)
@@ -217,6 +262,7 @@ func show_line(p: int, text: String) -> void:
 	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bubble)
 	_bubbles[p] = bubble
+	Sound.speak(text)
 	if is_inside_tree():
 		var tw := create_tween()
 		tw.tween_interval(2.5 if tutorial == null else 4.5)
@@ -249,11 +295,39 @@ func _leave() -> void:
 
 
 func _process(delta: float) -> void:
+	tick(delta)
 	if _hint_timer > 0.0:
 		_hint_timer -= delta
 		if _hint_timer <= 0.0:
 			_hint.text = ""
 			_try_tutorial_hint()
+
+
+## Runs the online turn timer: the rope in the last seconds, then the local
+## player's turn ends by itself (Match.timeout).
+func tick(delta: float) -> void:
+	if not timer_enabled or controller == null or g.game_over:
+		_rope.visible = false
+		return
+	_time_left -= delta
+	_rope.visible = _time_left <= ROPE_SECONDS
+	var w := 940.0 * clampf(_time_left / ROPE_SECONDS, 0.0, 1.0)
+	_rope_line.size.x = w
+	_rope_spark.position = Vector2(164 + w, 316)
+	_rope_spark.color.a = 0.6 + 0.4 * absf(sin(_time_left * 9.0))
+	if _time_left > 0.0:
+		return
+	var me := viewer()
+	if (g.phase == "MULLIGAN" and not g.players[me].mulliganed) or (g.phase != "MULLIGAN" and g.current == me):
+		_sel = {}
+		controller.timeout(me)
+
+
+func _reset_timer() -> void:
+	var key := "M" if g.phase == "MULLIGAN" else "%d:%d" % [g.turn, g.current]
+	if key != _turn_key:
+		_turn_key = key
+		_time_left = MULLIGAN_SECONDS if g.phase == "MULLIGAN" else TURN_SECONDS
 
 
 ## Shows the next tutorial hint only when nothing else is on the banner (an
@@ -288,6 +362,28 @@ func show_hint(text: String, seconds := 2.0) -> void:
 
 # --- rendering ----------------------------------------------------------------
 
+func open_settings() -> void:
+	var s := SettingsView.new()
+	s.back.connect(s.queue_free)
+	s.language_changed.connect(relabel)
+	add_child(s)
+
+
+## Sets the fixed texts again in the current language.
+func relabel() -> void:
+	for n in LABELS:
+		var b := find_child(n, true, false) as Button
+		if b:
+			b.text = tr(LABELS[n])
+	for id in EMOTES:
+		(_emote_panel.get_node("Emote_" + id) as Button).text = tr(EMOTES[id])
+	_history.relabel()
+	_tracker.relabel()
+	if _overlay and _overlay.name != "ConnectionLost":
+		_close_overlay()  # refresh() builds it again in the new language
+	refresh()
+
+
 func refresh() -> void:
 	for c in _layer.get_children():
 		_layer.remove_child(c)
@@ -305,11 +401,14 @@ func refresh() -> void:
 		_names[i].text = "%s · %s %d · %s %d" % [_side_name(p.index), tr("Hand"), p.hand.size(), tr("Deck"), p.deck.size()]
 	_end_turn.disabled = not (my_action() and g.phase == "PLAY" and g.pending.is_empty())
 	_end_turn.text = tr("End Turn") if my_action() or g.game_over else tr("Enemy Turn")
-	var concede := find_child("Concede", false, false) as Button
+	var concede := find_child("Concede", true, false) as Button
 	if concede:
 		concede.text = tr("Menu") if g.game_over else tr("Concede")
 	_apply_glows()
 	_history.update_from(g, me)
+	_reset_timer()
+	if _tracker.visible:
+		_tracker.update_from(g, me)
 	_refresh_overlay()
 	if tutorial:
 		var line := tutorial.boss_line(g)
@@ -319,6 +418,10 @@ func refresh() -> void:
 
 
 func _side_name(p: int) -> String:
+	if p == _bot_side and player_names[p] == "":
+		return CardText.name(tutorial.mission.boss) if tutorial else tr("Bot")
+	if player_names[p] == Profile.DEFAULT_NAME:
+		return tr("Player")
 	if player_names[p] != "":
 		return player_names[p]
 	if controller.bots[0] == controller.bots[1]:
@@ -555,7 +658,13 @@ func _on_changed(events: Array) -> void:
 		old[id] = _views[id].position + _views[id].size / 2.0
 	refresh()
 	var big := false
+	var heard := {}
 	for ev in events:
+		var sfx := Sound.sound_for(ev, g, viewer())
+		if not heard.has(sfx):  # one copy of each sound per action
+			heard[sfx] = true
+			Sound.play(sfx)
+		_speak_event(ev, heard)
 		match ev.type:
 			"damage":
 				_float_text(ev.target, "-%d" % ev.amount, Palette.HEALTH, old)
@@ -572,6 +681,20 @@ func _on_changed(events: Array) -> void:
 				show_hint(tr("Secret: %s") % CardText.name(ev.card), 2.5)
 	if big and Match.shake_enabled:
 		_shake()
+
+
+## Legendary minions and new heroes say their name when they enter the board.
+func _speak_event(ev: Dictionary, heard: Dictionary) -> void:
+	var card := ""
+	if ev.type in ["play", "summon"]:
+		var e := g.ent(ev.entity)
+		if e and e.is_minion() and CardDb.card(e.card_id).get("rarity") == "LEGENDARY":
+			card = e.card_id
+	elif ev.type == "hero_replaced":
+		card = ev.card
+	if card != "" and not heard.has(card):
+		heard[card] = true
+		Sound.speak(CardText.name(card))
 
 
 func _float_text(id: int, text: String, color: Color, old: Dictionary) -> void:

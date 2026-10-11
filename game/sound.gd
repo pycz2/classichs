@@ -1,0 +1,101 @@
+class_name Sound
+extends Node
+## Music, event sounds and speech. Main adds one instance; without it every call
+## is silent (tests, tools). Sounds come from audio/*.wav (tools/gen_audio.py).
+
+## Event type → sound file.
+const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "death": "death",
+	"hero_power": "hero_power", "turn_start": "turn_start", "heal": "heal", "armor": "armor",
+	"equip": "equip", "secret_revealed": "secret", "freeze": "freeze", "divine_shield_lost": "shield"}
+const POOL := 6
+
+static var instance: Sound
+static var default_speaker := func(text: String, voice: String, volume: int) -> void:
+	DisplayServer.tts_speak(text, voice, volume, 1.0, 1.0, 0, true)
+static var default_voices := func(lang: String) -> PackedStringArray:
+	return DisplayServer.tts_get_voices_for_language(lang)
+## Replaceable in tests.
+static var speaker: Callable = default_speaker
+static var voices: Callable = default_voices
+
+var _music := AudioStreamPlayer.new()
+var _track := ""
+var _pool: Array[AudioStreamPlayer] = []
+var _next := 0
+var _streams := {}
+
+
+func _ready() -> void:
+	instance = self
+	Settings.apply()  # makes sure the Music and SFX buses exist
+	_music.bus = "Music"
+	_music.finished.connect(_music.play)  # loop
+	add_child(_music)
+	for i in POOL:
+		var p := AudioStreamPlayer.new()
+		p.bus = "SFX"
+		_pool.append(p)
+		add_child(p)
+
+
+func _exit_tree() -> void:
+	if instance == self:
+		instance = null
+
+
+func _stream(file: String) -> AudioStream:
+	if not _streams.has(file):
+		var path := "res://audio/%s.wav" % file
+		_streams[file] = load(path) if ResourceLoader.exists(path) else null
+	return _streams[file]
+
+
+static func play(file: String) -> void:
+	if instance == null or file == "":
+		return
+	var s := instance._stream(file)
+	if s == null:
+		return
+	var p := instance._pool[instance._next]
+	instance._next = (instance._next + 1) % POOL
+	p.stream = s
+	p.play()
+
+
+## The player that started the last sound (tests).
+func last_player() -> AudioStreamPlayer:
+	return _pool[(_next - 1 + POOL) % POOL]
+
+
+static func music(track: String) -> void:
+	if instance == null or instance._track == track:
+		return
+	instance._track = track
+	instance._music.stream = instance._stream(track)
+	if instance._music.stream:
+		instance._music.play()
+
+
+## Speaks text with a voice of the interface language; silent when speech is off,
+## the voice volume is 0 or the system has no voice for the language.
+static func speak(text: String) -> void:
+	if instance == null or text == "" or not Settings.data.tts or Settings.data.voice <= 0.0:
+		return
+	var list: PackedStringArray = voices.call(Settings.language().get_slice("_", 0))
+	if list.is_empty():
+		return
+	speaker.call(text, list[0], int(round(Settings.data.voice * 100)))
+
+
+## The sound for an engine event as seen by viewer ("" = none).
+static func sound_for(ev: Dictionary, g: Game, viewer: int) -> String:
+	match ev.type:
+		"play":
+			var e := g.ent(ev.entity)
+			if e and CardDb.card(e.card_id).get("type") == "SPELL":
+				return "spell"
+		"game_over":
+			if ev.winner == viewer:
+				return "victory"
+			return "defeat"
+	return EVENTS.get(ev.type, "")
