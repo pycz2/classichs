@@ -64,3 +64,12 @@ func test_candidates_are_embedded_in_sdp() -> void:
 func test_empty_candidates_skipped() -> void:
 	var full := WebRtcTransport.with_candidates("v=0\r\n", [["0", 0, ""], ["0", 0, "candidate:1 1 udp 1 1.2.3.4 5 typ host"]])
 	check(not full.contains("\r\na=\r\n"), "no empty candidate line")
+
+
+func test_clean_intent_rejects_malformed_data() -> void:
+	eq(NetSession.clean_intent({"k": "hover", "i": 2.0}), {"k": "hover", "i": 2}, "JSON numbers become ints")
+	eq(NetSession.clean_intent({"k": "look", "id": 7}), {"k": "look", "id": 7}, "look")
+	eq(NetSession.clean_intent({"k": "aim", "from": 3, "to": -1, "x": 5000, "y": -3}).x, 1280.0, "point clamped to the table")
+	for bad in [null, "x", [], {}, {"k": "hover"}, {"k": "hover", "i": 12}, {"k": "hover", "i": "1"}, {"k": "look", "id": "a"},
+			{"k": "aim", "from": 1}, {"k": "teleport"}]:
+		eq(NetSession.clean_intent(bad), {}, "dropped: %s" % [bad])

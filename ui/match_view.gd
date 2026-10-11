@@ -12,8 +12,6 @@ const ENEMY_HERO := Vector2(575, 40)
 const OWN_HERO := Vector2(575, 466)
 const ENEMY_BOARD_Y := 188.0
 const OWN_BOARD_Y := 336.0
-const HAND_Y := 604.0
-const SLOT := 104.0
 const TOOLTIP_POS := Vector2(1035, 160)
 
 ## Fixed button texts by node name, set again when the language changes.
@@ -70,6 +68,9 @@ var _opp_hover := -1
 var _opp_look := -1
 var _last_intent := {}
 var _intent_ms := 0
+var _applied_intent := {}
+## Full table layouts done (tests check that repeated intents cause none).
+var _layouts := 0
 ## Event batches waiting for their animation; while one plays the table is busy.
 var _queue: Array = []
 var _busy := false
@@ -330,6 +331,9 @@ func _send_intent() -> void:
 ## Shows what the opponent points at: a raised card in their hand, their arrow,
 ## a highlighted minion.
 func apply_intent(i: Dictionary) -> void:
+	if i == _applied_intent:
+		return  # nothing new: a stuck or flooding peer costs nothing
+	_applied_intent = i
 	var hover := -1
 	var look := -1
 	_opp_arrow.visible = false
@@ -727,6 +731,7 @@ func refresh() -> void:
 	_layout_side(opp, false, want)
 	_layout_side(me, true, want)
 	_reconcile(want)
+	_layouts += 1
 	_laid_out = true
 	for i in 2:
 		var p := g.players[[me, opp][i]]
@@ -868,7 +873,8 @@ func _reconcile(want: Dictionary) -> void:
 				v.show_entity(e, g)
 		elif v is MinionView or v is HeroView:
 			v.queue_redraw()
-		v.z_index = spec.get("z", 0)
+		if not (_dragging and id == _press.get("id", -1)):
+			v.z_index = spec.get("z", 0)
 		var sc: float = spec.get("scale", 1.0)
 		var pos: Vector2 = spec.pos
 		if spec.kind == "hand":  # fan cards turn around their bottom centre
@@ -1524,6 +1530,8 @@ func _show_mulligan() -> void:
 					tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.35))
 					tw.tween_property(cv, "global_position", TableLayout.OWN_DECK, Anim.d(0.35))
 			await _wait(0.4)
+			if _overlay == null or _overlay.name != "Mulligan" or g.players[p].mulliganed:
+				return  # the timer or a lost connection got there first
 		_close_overlay()
 		controller.submit({"type": "mulligan", "player": p, "replace": ids}))
 

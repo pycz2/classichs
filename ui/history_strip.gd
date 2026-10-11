@@ -12,6 +12,7 @@ const TILE := 46.0
 const MAX := 11
 
 var _items: Array = []  # [card_id, mine]
+var _shown := ""
 
 
 func _ready() -> void:
@@ -48,7 +49,9 @@ func card_at(y: float) -> String:
 func _gui_input(ev: InputEvent) -> void:
 	if ev is InputEventMouseMotion:
 		var c := card_at(ev.position.y)
-		show_card.emit(c, c != "")
+		if c != _shown:  # one pop-up per card, not one per mouse move
+			_shown = c
+			show_card.emit(c, c != "")
 	elif ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
 		open_history.emit()
 		accept_event()
@@ -56,6 +59,7 @@ func _gui_input(ev: InputEvent) -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_MOUSE_EXIT:
+		_shown = ""
 		show_card.emit("", false)
 
 
