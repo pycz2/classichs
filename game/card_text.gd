@@ -44,6 +44,28 @@ static var _spaces := RegEx.create_from_string("[ \\t]+")
 static var _bb := RegEx.create_from_string("\\[/?(b|i|center|color[^\\]]*)\\]")
 
 
+## Race names as the game shows them under the card (by Hearthstone locale).
+const RACES := {
+	"BEAST": {"enUS": "Beast", "ruRU": "Зверь", "deDE": "Wildtier", "frFR": "Bête", "esES": "Bestia", "ptBR": "Fera", "itIT": "Bestia", "plPL": "Bestia"},
+	"DEMON": {"enUS": "Demon", "ruRU": "Демон", "deDE": "Dämon", "frFR": "Démon", "esES": "Demonio", "ptBR": "Demônio", "itIT": "Demone", "plPL": "Demon"},
+	"DRAGON": {"enUS": "Dragon", "ruRU": "Дракон", "deDE": "Drache", "frFR": "Dragon", "esES": "Dragón", "ptBR": "Dragão", "itIT": "Drago", "plPL": "Smok"},
+	"MURLOC": {"enUS": "Murloc", "ruRU": "Мурлок", "deDE": "Murloc", "frFR": "Murloc", "esES": "Múrloc", "ptBR": "Murloc", "itIT": "Murloc", "plPL": "Murlok"},
+	"MECHANICAL": {"enUS": "Mech", "ruRU": "Механизм", "deDE": "Mech", "frFR": "Méca", "esES": "Robot", "ptBR": "Mecanoide", "itIT": "Robot", "plPL": "Mech"},
+	"TOTEM": {"enUS": "Totem", "ruRU": "Тотем", "deDE": "Totem", "frFR": "Totem", "esES": "Tótem", "ptBR": "Totem", "itIT": "Totem", "plPL": "Totem"},
+	"PIRATE": {"enUS": "Pirate", "ruRU": "Пират", "deDE": "Pirat", "frFR": "Pirate", "esES": "Pirata", "ptBR": "Pirata", "itIT": "Pirata", "plPL": "Pirat"},
+	"UNDEAD": {"enUS": "Undead", "ruRU": "Нежить", "deDE": "Untoter", "frFR": "Mort-vivant", "esES": "No-muerto", "ptBR": "Morto-vivo", "itIT": "Non Morto", "plPL": "Nieumarły"},
+}
+
+
+## The card's race in a language ("" for none).
+static func race(id: String, locale := "") -> String:
+	var r: String = CardDb.card(id).get("race", "")
+	if r == "":
+		return ""
+	var names: Dictionary = RACES.get(r, {})
+	return names.get(_loc(locale), names.get("enUS", r.capitalize()))
+
+
 ## Card text as BBCode: keywords (<b>) bold, <i> italic, spaces collapsed.
 static func rich(id: String, locale := "", spellpower := 0) -> String:
 	var t: Dictionary = CardDb.card(id).get("text", {})

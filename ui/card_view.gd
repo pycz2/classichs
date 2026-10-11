@@ -100,6 +100,14 @@ func _draw() -> void:
 	Frames.ring(self, banner, Color("2a2118"), 1.5 * k)
 	Frames.rarity(self, Vector2(60, 101) * k, c.get("rarity", ""), 5 * k)
 	_draw_words(k)
+	var race := CardText.race(card_id, CardText.hs_locale(lang()))
+	if race != "":  # the race on a plate across the bottom edge, between the gems
+		var rf := CardLayout.name_font()
+		var rs := int(8 * k)
+		var rw := rf.get_string_size(race, HORIZONTAL_ALIGNMENT_LEFT, -1, rs).x
+		var plate := Rect2(Vector2(60 * k - rw / 2.0 - 5 * k, 158 * k), Vector2(rw + 10 * k, 11 * k))
+		draw_style_box(Palette.box(Color("2a2118"), int(4 * k), Frames.GOLD.darkened(0.25), maxi(1, int(1.5 * k))), plate)
+		draw_string(rf, Vector2(plate.position.x + 5 * k, plate.position.y + 8.6 * k), race, HORIZONTAL_ALIGNMENT_LEFT, -1, rs, Color("f4ead5"))
 	var base_cost := int(c.get("cost", 0))
 	var shown_cost := cost if cost >= 0 else base_cost
 	var cost_color := Color.WHITE if shown_cost == base_cost else (Frames.BUFFED if shown_cost < base_cost else Frames.DAMAGED)
