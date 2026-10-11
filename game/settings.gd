@@ -3,7 +3,8 @@ extends RefCounted
 ## Player settings (user://settings.json). Bad or missing values fall back to defaults.
 
 const DEFAULT_PATH := "user://settings.json"
-const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "voice": 0.8, "tts": true, "shake": true, "fullscreen": false}
+const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "voice": 0.8, "tts": true, "shake": true, "fullscreen": false,
+	"tracker": false, "tracker_deck": true, "tracker_left": true, "tracker_opp": true}
 const BUSES := ["Music", "SFX"]
 
 static var path := DEFAULT_PATH

@@ -18,7 +18,7 @@ const TOOLTIP_POS := Vector2(1035, 160)
 
 ## Fixed button texts by node name, set again when the language changes.
 const LABELS := {"HistoryButton": "History", "JsonButton": "Position → JSON", "EmoteButton": "Emote",
-	"MuteButton": "Mute", "SettingsButton": "Settings"}
+	"MuteButton": "Mute", "SettingsButton": "Settings", "TrackerButton": "Deck Tracker"}
 const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "thanks": "Thanks.",
 	"wow": "Wow!", "oops": "Oops.", "threaten": "I will destroy you!"}
 
@@ -42,6 +42,7 @@ var _sel := {}
 var _overlay: Control
 var _tooltip: CardView
 var _history: HistoryPanel
+var _tracker: DeckTrackerPanel
 var _end_turn: Button
 var _mana: Array[Label] = []
 var _names: Array[Label] = []
@@ -102,6 +103,14 @@ func _ready() -> void:
 		js.custom_minimum_size = Vector2(130, 40)
 		js.pressed.connect(show_json)
 		left.add_child(js)
+	var tracker := Palette.button(tr("Deck Tracker"), "TrackerButton")
+	tracker.custom_minimum_size = Vector2(130, 40)
+	tracker.pressed.connect(func():
+		_tracker.visible = not _tracker.visible
+		Settings.data.tracker = _tracker.visible
+		Settings.save()
+		refresh())
+	left.add_child(tracker)
 	var emote := Palette.button(tr("Emote"), "EmoteButton")
 	emote.custom_minimum_size = Vector2(130, 40)
 	emote.pressed.connect(func(): _emote_panel.visible = not _emote_panel.visible)
@@ -140,6 +149,9 @@ func _ready() -> void:
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_hint)
+	_tracker = DeckTrackerPanel.new()
+	_tracker.visible = Settings.data.tracker
+	add_child(_tracker)
 	_history = HistoryPanel.new()
 	_history.visible = false
 	add_child(_history)
@@ -337,6 +349,8 @@ func refresh() -> void:
 		concede.text = tr("Menu") if g.game_over else tr("Concede")
 	_apply_glows()
 	_history.update_from(g, me)
+	if _tracker.visible:
+		_tracker.update_from(g, me)
 	_refresh_overlay()
 	if tutorial:
 		var line := tutorial.boss_line(g)
