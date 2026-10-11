@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-10-12
+
+### Adicionado
+- Na derrota, o retrato do herói explode em estilhaços.
+- Os símbolos de raio e veneno ficam parados e pulsam com um som leve quando o efeito dispara.
+
+### Corrigido
+- Tutorial: "Próxima missão" abre as explicações numa tela própria; a tela de recompensa não bloqueia mais.
+
 ## [0.17.0] - 2026-10-12
 
 ### Adicionado

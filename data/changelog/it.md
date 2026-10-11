@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-10-12
+
+### Aggiunto
+- In caso di sconfitta il ritratto dell'eroe va in frantumi.
+- I simboli di fulmine e veleno restano fermi e pulsano con un suono leggero quando l'effetto si attiva.
+
+### Corretto
+- Tutorial: "Missione successiva" apre le spiegazioni in una schermata a sé; la schermata della ricompensa non blocca più.
+
 ## [0.17.0] - 2026-10-12
 
 ### Aggiunto

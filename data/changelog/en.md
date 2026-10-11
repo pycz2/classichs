@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-10-12
+
+### Added
+- On defeat the hero's portrait bursts into shards.
+- The lightning and poison marks stand still and pop with a light sound when their effect goes off.
+
+### Fixed
+- Tutorial: "Next Mission" opens the notes as a screen of their own; the reward screen no longer blocks going on.
+
 ## [0.17.0] - 2026-10-12
 
 ### Added

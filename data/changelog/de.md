@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-10-12
+
+### Hinzugefügt
+- Bei einer Niederlage zerspringt das Heldenporträt in Splitter.
+- Blitz- und Giftzeichen stehen still und blitzen mit leisem Klang auf, wenn ihr Effekt auslöst.
+
+### Behoben
+- Tutorial: „Nächste Mission“ öffnet die Erklärungen als eigenen Bildschirm; der Belohnungsbildschirm blockiert nicht mehr.
+
 ## [0.17.0] - 2026-10-12
 
 ### Hinzugefügt
