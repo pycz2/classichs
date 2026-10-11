@@ -1,1652 +1,6038 @@
 {
   "EX1_131t": {
     "attack": {
-      "en": "Heh-heh-heh-heh!"
+      "de": "Heh-heh-heh-heh!",
+      "en": "Heh-heh-heh-heh!",
+      "es": "¡Je-je-je-je!",
+      "fr": "Hé hé hé hé !",
+      "it": "Eh-eh-eh-eh!",
+      "pl": "He-he-he-he!",
+      "pt_BR": "He-he-he-he-he!",
+      "ru": "Хе-хе-хе-хе!"
     },
     "play": {
-      "en": "Yeah, beat it!"
+      "de": "Jo, verzieh dich!",
+      "en": "Yeah, beat it!",
+      "es": "¡Eso, largo de aquí!",
+      "fr": "Ouais, du vent !",
+      "it": "Sì, sparisci!",
+      "pl": "No już, spadaj!",
+      "pt_BR": "É isso aí, some daqui!",
+      "ru": "Ага, вали отсюда!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Defias_Bandit"
+    "source": "https://hearthstone.wiki.gg/wiki/Defias_Bandit",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "EX1_323h": {
     "attack": {
-      "en": "MUAHAHAHAHAHA!"
+      "de": "MUAHAHAHAHAHA!",
+      "en": "MUAHAHAHAHAHA!",
+      "es": "¡MUAJAJAJAJAJA!",
+      "fr": "MOUAHAHAHAHAHA !",
+      "it": "MUAHAHAHAHAHA!",
+      "pl": "MUAHAHAHAHAHA!",
+      "pt_BR": "MUAHAHAHAHAHA!",
+      "ru": "МУА-ХА-ХА-ХА-ХА-ХА!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Lord_Jaraxxus"
+    "concede": {
+      "de": "Ihr habt gewonnen... ABER EURE WELT IST DENNOCH VERLOREN!",
+      "en": "You win... BUT YOUR WORLD IS STILL DOOMED!",
+      "es": "Has ganado... ¡PERO TU MUNDO SIGUE CONDENADO!",
+      "fr": "Vous avez gagné... MAIS VOTRE MONDE RESTE CONDAMNÉ !",
+      "it": "Hai vinto... MA IL TUO MONDO È COMUNQUE CONDANNATO!",
+      "pl": "Wygrałeś... ALE TWÓJ ŚWIAT I TAK JEST SKAZANY!",
+      "pt_BR": "Você venceu... MAS SEU MUNDO CONTINUA CONDENADO!",
+      "ru": "Ты победил... НО ТВОЙ МИР ВСЁ РАВНО ОБРЕЧЁН!"
+    },
+    "greetings": {
+      "de": "Ihr steht Jaraxxus gegenüber, Eredarlord der Brennenden Legion!",
+      "en": "You face Jaraxxus, Eredar Lord of the Burning Legion!",
+      "es": "¡Te enfrentas a Jaraxxus, señor eredar de la Legión Ardiente!",
+      "fr": "Vous faites face à Jaraxxus, seigneur érédar de la Légion ardente !",
+      "it": "Affronti Jaraxxus, signore eredar della Legione Infuocata!",
+      "pl": "Stajesz przed Jaraxxusem, eredarskim lordem Płonącego Legionu!",
+      "pt_BR": "Você enfrenta Jaraxxus, Lorde Eredar da Legião Ardente!",
+      "ru": "Перед тобой Джараксус, эредарский владыка Пылающего Легиона!"
+    },
+    "oops": {
+      "de": "FEHLER!",
+      "en": "MISTAKE!",
+      "es": "¡ERROR!",
+      "fr": "ERREUR !",
+      "it": "ERRORE!",
+      "pl": "BŁĄD!",
+      "pt_BR": "ERRO!",
+      "ru": "ОШИБКА!"
+    },
+    "source": "https://hearthstone.wiki.gg/wiki/Lord_Jaraxxus",
+    "thanks": {
+      "de": "DANKE.",
+      "en": "THANK YOU.",
+      "es": "GRACIAS.",
+      "fr": "MERCI.",
+      "it": "GRAZIE.",
+      "pl": "DZIĘKUJĘ.",
+      "pt_BR": "OBRIGADO.",
+      "ru": "БЛАГОДАРЮ."
+    },
+    "threaten": {
+      "de": "VERGESSENHEIT!!!",
+      "en": "OBLIVION!!!",
+      "es": "¡¡¡OLVIDO!!!",
+      "fr": "L'OUBLI !!!",
+      "it": "OBLIO!!!",
+      "pl": "ZAPOMNIENIE!!!",
+      "pt_BR": "ESQUECIMENTO!!!",
+      "ru": "ЗАБВЕНИЕ!!!"
+    },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
+    "well_played": {
+      "de": "GUT GESPIELT!",
+      "en": "WELL PLAYED!",
+      "es": "¡BIEN JUGADO!",
+      "fr": "BIEN JOUÉ !",
+      "it": "BEN GIOCATO!",
+      "pl": "DOBRA ROZGRYWKA!",
+      "pt_BR": "BELA JOGADA!",
+      "ru": "ХОРОШО СЫГРАНО!"
+    },
+    "wow": {
+      "de": "UNGLAUBLICH!",
+      "en": "UNBELIEVABLE!",
+      "es": "¡INCREÍBLE!",
+      "fr": "INCROYABLE !",
+      "it": "INCREDIBILE!",
+      "pl": "NIEWIARYGODNE!",
+      "pt_BR": "INACREDITÁVEL!",
+      "ru": "НЕВЕРОЯТНО!"
+    }
   },
   "EX1_383t": {
     "play": {
-      "en": "In its wake, it will leave only ashes..."
+      "de": "Wo er wütet, bleibt nur Asche zurück...",
+      "en": "In its wake, it will leave only ashes...",
+      "es": "A su paso, solo dejará cenizas...",
+      "fr": "Sur son passage, il ne laissera que des cendres...",
+      "it": "Al suo passaggio, lascerà solo cenere...",
+      "pl": "Za sobą zostawi tylko popiół...",
+      "pt_BR": "Por onde passar, só deixará cinzas...",
+      "ru": "Он не оставит за собой ничего, кроме пепла..."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Ashbringer"
+    "source": "https://hearthstone.wiki.gg/wiki/Ashbringer",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "HERO_01": {
     "attack": {
-      "en": "Lok'tar ogar!"
+      "de": "Lok'tar ogar!",
+      "en": "Lok'tar ogar!",
+      "es": "¡Lok'tar ogar!",
+      "fr": "Lok'tar ogar !",
+      "it": "Lok'tar ogar!",
+      "pl": "Lok'tar ogar!",
+      "pt_BR": "Lok'tar ogar!",
+      "ru": "Лок'тар огар!"
+    },
+    "concede": {
+      "de": "Ich wähle den Tod!",
+      "en": "I choose death!",
+      "es": "¡Elijo la muerte!",
+      "fr": "Je choisis la mort !",
+      "it": "Scelgo la morte!",
+      "pl": "Wybieram śmierć!",
+      "pt_BR": "Eu escolho a morte!",
+      "ru": "Я выбираю смерть!"
     },
     "greetings": {
-      "en": "Heh, Greetings."
+      "de": "Heh, seid gegrüßt.",
+      "en": "Heh, Greetings.",
+      "es": "Je, saludos.",
+      "fr": "Heh, salutations.",
+      "it": "Eh, saluti.",
+      "pl": "Heh, witaj.",
+      "pt_BR": "Heh, saudações.",
+      "ru": "Хех, приветствую."
     },
     "oops": {
-      "en": "That was an error."
+      "de": "Das war ein Fehler.",
+      "en": "That was an error.",
+      "es": "Eso ha sido un error.",
+      "fr": "C'était une erreur.",
+      "it": "È stato un errore.",
+      "pl": "To był błąd.",
+      "pt_BR": "Isso foi um erro.",
+      "ru": "Это была ошибка."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Garrosh_Hellscream",
     "start": {
-      "en": "Victory or Death!"
+      "de": "Sieg oder Tod!",
+      "en": "Victory or Death!",
+      "es": "¡Victoria o muerte!",
+      "fr": "La victoire ou la mort !",
+      "it": "Vittoria o morte!",
+      "pl": "Zwycięstwo albo śmierć!",
+      "pt_BR": "Vitória ou morte!",
+      "ru": "Победа или смерть!"
     },
     "thanks": {
-      "en": "My thanks."
+      "de": "Ich danke Euch.",
+      "en": "My thanks.",
+      "es": "Te lo agradezco.",
+      "fr": "Mes remerciements.",
+      "it": "Ti ringrazio.",
+      "pl": "Dziękuję.",
+      "pt_BR": "Meus agradecimentos.",
+      "ru": "Благодарю."
     },
     "threaten": {
-      "en": "I will crush you!"
+      "de": "Ich werde Euch zermalmen!",
+      "en": "I will crush you!",
+      "es": "¡Te aplastaré!",
+      "fr": "Je vais vous écraser !",
+      "it": "Ti schiaccerò!",
+      "pl": "Zmiażdżę cię!",
+      "pt_BR": "Eu vou esmagar você!",
+      "ru": "Я раздавлю тебя!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Well played."
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobre zagranie.",
+      "pt_BR": "Bem jogado.",
+      "ru": "Хорошо сыграно."
     },
     "wow": {
-      "en": "Astonishing!"
+      "de": "Erstaunlich!",
+      "en": "Astonishing!",
+      "es": "¡Asombroso!",
+      "fr": "Stupéfiant !",
+      "it": "Sbalorditivo!",
+      "pl": "Zdumiewające!",
+      "pt_BR": "Impressionante!",
+      "ru": "Поразительно!"
     }
   },
   "HERO_02": {
     "attack": {
-      "en": "Elements guide me!"
+      "de": "Elemente, leitet mich!",
+      "en": "Elements guide me!",
+      "es": "¡Que los elementos me guíen!",
+      "fr": "Que les éléments me guident !",
+      "it": "Che gli elementi mi guidino!",
+      "pl": "Żywiołów, prowadźcie mnie!",
+      "pt_BR": "Que os elementos me guiem!",
+      "ru": "Духи стихий, ведите меня!"
+    },
+    "concede": {
+      "de": "Diese Runde geht an Euch, Freund.",
+      "en": "You win this one, friend.",
+      "es": "Esta la ganas tú, amigo.",
+      "fr": "Celle-ci est pour vous, mon ami.",
+      "it": "Questa è tua, amico.",
+      "pl": "Tę wygrywasz, przyjacielu.",
+      "pt_BR": "Esta é sua, amigo.",
+      "ru": "Эта победа твоя, друг."
+    },
+    "greetings": {
+      "de": "Seid gegrüßt, Freund.",
+      "en": "Greetings, friend.",
+      "es": "Saludos, amigo.",
+      "fr": "Salutations, mon ami.",
+      "it": "Saluti, amico.",
+      "pl": "Witaj, przyjacielu.",
+      "pt_BR": "Saudações, amigo.",
+      "ru": "Приветствую, друг."
+    },
+    "oops": {
+      "de": "Das war ein Fehler.",
+      "en": "That was a mistake.",
+      "es": "Eso fue un error.",
+      "fr": "C'était une erreur.",
+      "it": "È stato un errore.",
+      "pl": "To był błąd.",
+      "pt_BR": "Isso foi um erro.",
+      "ru": "Это была ошибка."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Thrall",
+    "start": {
+      "de": "Für Schicksalshammer!",
+      "en": "For Doomhammer!",
+      "es": "¡Por Martillo Maldito!",
+      "fr": "Pour Marteau-du-Destin !",
+      "it": "Per Martelfato!",
+      "pl": "Za Młot Zagłady!",
+      "pt_BR": "Por Malhado Destino!",
+      "ru": "За Молот Рока!"
+    },
+    "thanks": {
+      "de": "Ich danke Euch.",
+      "en": "I thank you.",
+      "es": "Te lo agradezco.",
+      "fr": "Je vous remercie.",
+      "it": "Ti ringrazio.",
+      "pl": "Dziękuję ci.",
+      "pt_BR": "Eu agradeço.",
+      "ru": "Благодарю тебя."
+    },
+    "threaten": {
+      "de": "Die Elemente werden Euch vernichten!",
+      "en": "The Elements will destroy you!",
+      "es": "¡Los elementos te destruirán!",
+      "fr": "Les éléments vont vous détruire !",
+      "it": "Gli elementi ti distruggeranno!",
+      "pl": "Żywioły cię zniszczą!",
+      "pt_BR": "Os elementos vão destruir você!",
+      "ru": "Стихии уничтожат тебя!"
+    },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
+    "well_played": {
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobra rozgrywka.",
+      "pt_BR": "Bela jogada.",
+      "ru": "Хорошо сыграно."
+    },
     "wow": {
-      "en": "That's incredible!"
+      "de": "Das ist unglaublich!",
+      "en": "That's incredible!",
+      "es": "¡Es increíble!",
+      "fr": "C'est incroyable !",
+      "it": "Incredibile!",
+      "pl": "To niewiarygodne!",
+      "pt_BR": "Isso é incrível!",
+      "ru": "Невероятно!"
     }
   },
   "HERO_03": {
     "attack": {
-      "en": "Here we go."
+      "de": "Los geht's.",
+      "en": "Here we go.",
+      "es": "Allá vamos.",
+      "fr": "C'est parti.",
+      "it": "Si comincia.",
+      "pl": "No to zaczynamy.",
+      "pt_BR": "Lá vamos nós.",
+      "ru": "Начнем."
+    },
+    "concede": {
+      "de": "Ich gebe auf.",
+      "en": "I give up.",
+      "es": "Me rindo.",
+      "fr": "J'abandonne.",
+      "it": "Mi arrendo.",
+      "pl": "Poddaję się.",
+      "pt_BR": "Eu desisto.",
+      "ru": "Я сдаюсь."
     },
     "greetings": {
-      "en": "The pleasure is mine."
+      "de": "Das Vergnügen ist ganz meinerseits.",
+      "en": "The pleasure is mine.",
+      "es": "El placer es mío.",
+      "fr": "Tout le plaisir est pour moi.",
+      "it": "Il piacere è mio.",
+      "pl": "Cała przyjemność po mojej stronie.",
+      "pt_BR": "O prazer é meu.",
+      "ru": "Взаимно рада."
     },
     "oops": {
-      "en": "Mistakes were made."
+      "de": "Da sind Fehler passiert.",
+      "en": "Mistakes were made.",
+      "es": "Se han cometido errores.",
+      "fr": "Des erreurs ont été commises.",
+      "it": "Sono stati commessi errori.",
+      "pl": "Popełniono błędy.",
+      "pt_BR": "Erros foram cometidos.",
+      "ru": "Ошибочка вышла."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Valeera_Sanguinar",
     "start": {
-      "en": "Watch your back."
+      "de": "Pass auf deinen Rücken auf.",
+      "en": "Watch your back.",
+      "es": "Cuidado con tu espalda.",
+      "fr": "Surveillez vos arrières.",
+      "it": "Guardati le spalle.",
+      "pl": "Uważaj na plecy.",
+      "pt_BR": "Cuidado com as costas.",
+      "ru": "Береги спину."
     },
     "thanks": {
-      "en": "Thank you."
+      "de": "Danke.",
+      "en": "Thank you.",
+      "es": "Gracias.",
+      "fr": "Merci.",
+      "it": "Grazie.",
+      "pl": "Dziękuję.",
+      "pt_BR": "Obrigada.",
+      "ru": "Спасибо."
     },
     "threaten": {
-      "en": "I will be your death!"
+      "de": "Ich werde dein Tod sein!",
+      "en": "I will be your death!",
+      "es": "¡Seré tu muerte!",
+      "fr": "Je serai votre mort !",
+      "it": "Sarò la tua morte!",
+      "pl": "Będę twoją śmiercią!",
+      "pt_BR": "Eu serei a sua morte!",
+      "ru": "Я стану твоей смертью!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Well played."
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobre zagranie.",
+      "pt_BR": "Bem jogado.",
+      "ru": "Хорошо сыграно."
     },
     "wow": {
-      "en": "Incredible."
+      "de": "Unglaublich.",
+      "en": "Incredible.",
+      "es": "Increíble.",
+      "fr": "Incroyable.",
+      "it": "Incredibile.",
+      "pl": "Niesamowite.",
+      "pt_BR": "Incrível.",
+      "ru": "Невероятно."
     }
   },
   "HERO_04": {
     "attack": {
-      "en": "For justice!"
+      "de": "Für Gerechtigkeit!",
+      "en": "For justice!",
+      "es": "¡Por la justicia!",
+      "fr": "Pour la justice !",
+      "it": "Per la giustizia!",
+      "pl": "Za sprawiedliwość!",
+      "pt_BR": "Pela justiça!",
+      "ru": "За справедливость!"
+    },
+    "concede": {
+      "de": "Der Sieg ist Euer.",
+      "en": "The victory is yours.",
+      "es": "La victoria es tuya.",
+      "fr": "La victoire est vôtre.",
+      "it": "La vittoria è tua.",
+      "pl": "Zwycięstwo należy do ciebie.",
+      "pt_BR": "A vitória é sua.",
+      "ru": "Победа за тобой."
     },
     "greetings": {
-      "en": "Well met!"
+      "de": "Seid gegrüßt!",
+      "en": "Well met!",
+      "es": "¡Bien hallado!",
+      "fr": "Heureux de vous rencontrer !",
+      "it": "Ben trovato!",
+      "pl": "Witaj!",
+      "pt_BR": "Saudações!",
+      "ru": "Рад встрече!"
     },
     "oops": {
-      "en": "That was a mistake."
+      "de": "Das war ein Fehler.",
+      "en": "That was a mistake.",
+      "es": "Eso ha sido un error.",
+      "fr": "C'était une erreur.",
+      "it": "È stato un errore.",
+      "pl": "To był błąd.",
+      "pt_BR": "Isso foi um engano.",
+      "ru": "Это была ошибка."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Uther_Lightbringer",
     "start": {
-      "en": "I will fight with honor!"
+      "de": "Ich kämpfe mit Ehre!",
+      "en": "I will fight with honor!",
+      "es": "¡Lucharé con honor!",
+      "fr": "Je combattrai avec honneur !",
+      "it": "Combatterò con onore!",
+      "pl": "Będę walczył z honorem!",
+      "pt_BR": "Lutarei com honra!",
+      "ru": "Я буду сражаться с честью!"
     },
     "thanks": {
-      "en": "Thank you."
+      "de": "Ich danke Euch.",
+      "en": "Thank you.",
+      "es": "Gracias.",
+      "fr": "Merci.",
+      "it": "Grazie.",
+      "pl": "Dziękuję.",
+      "pt_BR": "Obrigado.",
+      "ru": "Благодарю."
     },
     "threaten": {
-      "en": "Justice demands retribution!"
+      "de": "Gerechtigkeit verlangt Vergeltung!",
+      "en": "Justice demands retribution!",
+      "es": "¡La justicia exige castigo!",
+      "fr": "La justice exige un châtiment !",
+      "it": "La giustizia esige vendetta!",
+      "pl": "Sprawiedliwość żąda odwetu!",
+      "pt_BR": "A justiça exige retribuição!",
+      "ru": "Справедливость требует возмездия!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Well played."
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobre zagranie.",
+      "pt_BR": "Bem jogado.",
+      "ru": "Хорошо сыграно."
     },
     "wow": {
-      "en": "By the Holy Light!"
+      "de": "Beim Heiligen Licht!",
+      "en": "By the Holy Light!",
+      "es": "¡Por la Luz Sagrada!",
+      "fr": "Par la sainte Lumière !",
+      "it": "Per la Sacra Luce!",
+      "pl": "Na Świętą Światłość!",
+      "pt_BR": "Pela Sagrada Luz!",
+      "ru": "Святой Свет!"
     }
   },
   "HERO_05": {
     "attack": {
-      "en": "I hunt alone."
+      "de": "Ich jage allein.",
+      "en": "I hunt alone.",
+      "es": "Cazo solo.",
+      "fr": "Je chasse seul.",
+      "it": "Io caccio da solo.",
+      "pl": "Poluję sam.",
+      "pt_BR": "Eu caço sozinho.",
+      "ru": "Я охочусь один."
+    },
+    "concede": {
+      "de": "Gut gekämpft. Ich gebe auf.",
+      "en": "Well fought.  I concede.",
+      "es": "Buen combate. Me rindo.",
+      "fr": "Bien combattu. J'abandonne.",
+      "it": "Ben combattuto. Mi arrendo.",
+      "pl": "Dobra walka. Poddaję się.",
+      "pt_BR": "Boa luta. Eu desisto.",
+      "ru": "Хороший бой. Я сдаюсь."
     },
     "greetings": {
-      "en": "Greetings, traveler."
+      "de": "Sei gegrüßt, Reisender.",
+      "en": "Greetings, traveler.",
+      "es": "Saludos, viajero.",
+      "fr": "Salutations, voyageur.",
+      "it": "Saluti, viandante.",
+      "pl": "Witaj, wędrowcze.",
+      "pt_BR": "Saudações, viajante.",
+      "ru": "Приветствую, путник."
     },
     "oops": {
-      "en": "That didn't quite hit the mark."
+      "de": "Das hat nicht ganz getroffen.",
+      "en": "That didn't quite hit the mark.",
+      "es": "No ha dado del todo en el blanco.",
+      "fr": "Pas tout à fait dans le mille.",
+      "it": "Non ho proprio fatto centro.",
+      "pl": "Nie do końca trafiłem.",
+      "pt_BR": "Não foi bem no alvo.",
+      "ru": "Не совсем в цель."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Rexxar",
     "start": {
-      "en": "Let the hunt begin!"
+      "de": "Die Jagd beginnt!",
+      "en": "Let the hunt begin!",
+      "es": "¡Que empiece la caza!",
+      "fr": "Que la chasse commence !",
+      "it": "Che la caccia abbia inizio!",
+      "pl": "Niech zacznie się polowanie!",
+      "pt_BR": "Que comece a caçada!",
+      "ru": "Да начнется охота!"
     },
     "thanks": {
-      "en": "Thanks."
+      "de": "Danke.",
+      "en": "Thanks.",
+      "es": "Gracias.",
+      "fr": "Merci.",
+      "it": "Grazie.",
+      "pl": "Dzięki.",
+      "pt_BR": "Valeu.",
+      "ru": "Спасибо."
     },
     "threaten": {
-      "en": "I will hunt you down!"
+      "de": "Ich werde dich zur Strecke bringen!",
+      "en": "I will hunt you down!",
+      "es": "¡Te daré caza!",
+      "fr": "Je vais vous traquer !",
+      "it": "Ti darò la caccia!",
+      "pl": "Wytropię cię!",
+      "pt_BR": "Vou caçar você!",
+      "ru": "Я выслежу тебя!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Well played."
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobre zagranie.",
+      "pt_BR": "Bem jogado.",
+      "ru": "Хорошо сыграно."
     },
     "wow": {
-      "en": "Astounding!"
+      "de": "Verblüffend!",
+      "en": "Astounding!",
+      "es": "¡Asombroso!",
+      "fr": "Stupéfiant !",
+      "it": "Stupefacente!",
+      "pl": "Zdumiewające!",
+      "pt_BR": "Assombroso!",
+      "ru": "Потрясающе!"
     }
   },
   "HERO_06": {
     "attack": {
-      "en": "For the wilds!"
+      "de": "Für die Wildnis!",
+      "en": "For the wilds!",
+      "es": "¡Por la naturaleza!",
+      "fr": "Pour la nature sauvage !",
+      "it": "Per la natura selvaggia!",
+      "pl": "Za dzicz!",
+      "pt_BR": "Pela natureza!",
+      "ru": "За дикую природу!"
+    },
+    "concede": {
+      "de": "Ich ergebe mich Euch.",
+      "en": "I concede to you.",
+      "es": "Me rindo ante ti.",
+      "fr": "Je m'incline devant vous.",
+      "it": "Mi arrendo a te.",
+      "pl": "Ustępuję ci.",
+      "pt_BR": "Eu me rendo a você.",
+      "ru": "Я уступаю тебе."
     },
     "greetings": {
-      "en": "My greetings."
+      "de": "Seid mir gegrüßt.",
+      "en": "My greetings.",
+      "es": "Mis saludos.",
+      "fr": "Mes salutations.",
+      "it": "I miei saluti.",
+      "pl": "Pozdrawiam cię.",
+      "pt_BR": "Minhas saudações.",
+      "ru": "Приветствую тебя."
     },
     "oops": {
-      "en": "A natural mistake."
+      "de": "Ein natürlicher Fehler.",
+      "en": "A natural mistake.",
+      "es": "Un error natural.",
+      "fr": "Une erreur bien naturelle.",
+      "it": "Un errore naturale.",
+      "pl": "Naturalny błąd.",
+      "pt_BR": "Um erro natural.",
+      "ru": "Естественная ошибка."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Malfurion_Stormrage",
     "start": {
-      "en": "I must protect the wild!"
+      "de": "Ich muss die Wildnis schützen!",
+      "en": "I must protect the wild!",
+      "es": "¡Debo proteger la naturaleza!",
+      "fr": "Je dois protéger la nature !",
+      "it": "Devo proteggere la natura!",
+      "pl": "Muszę chronić dzicz!",
+      "pt_BR": "Preciso proteger a natureza!",
+      "ru": "Я должен защитить природу!"
     },
     "thanks": {
-      "en": "My thanks to you."
+      "de": "Ich danke Euch.",
+      "en": "My thanks to you.",
+      "es": "Te doy las gracias.",
+      "fr": "Je vous remercie.",
+      "it": "Ti ringrazio.",
+      "pl": "Dziękuję ci.",
+      "pt_BR": "Meus agradecimentos a você.",
+      "ru": "Благодарю тебя."
     },
     "threaten": {
-      "en": "Nature will rise against you!"
+      "de": "Die Natur wird sich gegen Euch erheben!",
+      "en": "Nature will rise against you!",
+      "es": "¡La naturaleza se alzará contra ti!",
+      "fr": "La nature se dressera contre vous !",
+      "it": "La natura si ribellerà contro di te!",
+      "pl": "Natura powstanie przeciw tobie!",
+      "pt_BR": "A natureza se erguerá contra você!",
+      "ru": "Природа восстанет против тебя!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Hmm, Well played."
+      "de": "Hmm, gut gespielt.",
+      "en": "Hmm, Well played.",
+      "es": "Mmm, bien jugado.",
+      "fr": "Hmm, bien joué.",
+      "it": "Mmh, ben giocato.",
+      "pl": "Hmm, dobre zagranie.",
+      "pt_BR": "Hmm, bem jogado.",
+      "ru": "Хм, хорошо сыграно."
     },
     "wow": {
-      "en": "Spectacular!"
+      "de": "Spektakulär!",
+      "en": "Spectacular!",
+      "es": "¡Espectacular!",
+      "fr": "Spectaculaire !",
+      "it": "Spettacolare!",
+      "pl": "Wspaniale!",
+      "pt_BR": "Espetacular!",
+      "ru": "Великолепно!"
     }
   },
   "HERO_07": {
     "attack": {
-      "en": "Suffer!"
+      "de": "Leide!",
+      "en": "Suffer!",
+      "es": "¡Sufre!",
+      "fr": "Souffrez !",
+      "it": "Soffri!",
+      "pl": "Cierp!",
+      "pt_BR": "Sofra!",
+      "ru": "Страдай!"
+    },
+    "concede": {
+      "de": "Ihr habt gewonnen... dieses Mal.",
+      "en": "You win... this time.",
+      "es": "Has ganado... esta vez.",
+      "fr": "Vous avez gagné... cette fois.",
+      "it": "Hai vinto... per questa volta.",
+      "pl": "Wygrałeś... tym razem.",
+      "pt_BR": "Você venceu... desta vez.",
+      "ru": "Ты победил... на этот раз."
     },
     "greetings": {
-      "en": "I greet you."
+      "de": "Ich grüße dich.",
+      "en": "I greet you.",
+      "es": "Te saludo.",
+      "fr": "Je vous salue.",
+      "it": "Ti saluto.",
+      "pl": "Witam cię.",
+      "pt_BR": "Eu o saúdo.",
+      "ru": "Приветствую."
     },
     "oops": {
-      "en": "That was a mistake."
+      "de": "Das war ein Fehler.",
+      "en": "That was a mistake.",
+      "es": "Eso ha sido un error.",
+      "fr": "C'était une erreur.",
+      "it": "È stato un errore.",
+      "pl": "To był błąd.",
+      "pt_BR": "Isso foi um erro.",
+      "ru": "Это была ошибка."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Gul%27dan",
     "start": {
-      "en": "Your soul shall be mine!"
+      "de": "Deine Seele wird mein sein!",
+      "en": "Your soul shall be mine!",
+      "es": "¡Tu alma será mía!",
+      "fr": "Votre âme m'appartiendra !",
+      "it": "La tua anima sarà mia!",
+      "pl": "Twoja dusza będzie moja!",
+      "pt_BR": "Sua alma será minha!",
+      "ru": "Твоя душа будет моей!"
     },
     "thanks": {
-      "en": "Thank you."
+      "de": "Danke.",
+      "en": "Thank you.",
+      "es": "Gracias.",
+      "fr": "Merci.",
+      "it": "Grazie.",
+      "pl": "Dziękuję.",
+      "pt_BR": "Obrigado.",
+      "ru": "Благодарю."
     },
     "threaten": {
-      "en": "Your soul shall suffer!"
+      "de": "Deine Seele wird leiden!",
+      "en": "Your soul shall suffer!",
+      "es": "¡Tu alma sufrirá!",
+      "fr": "Votre âme souffrira !",
+      "it": "La tua anima soffrirà!",
+      "pl": "Twoja dusza będzie cierpieć!",
+      "pt_BR": "Sua alma vai sofrer!",
+      "ru": "Твоя душа будет страдать!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Well played."
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobre zagranie.",
+      "pt_BR": "Bem jogado.",
+      "ru": "Хорошо сыграно."
     },
     "wow": {
-      "en": "Extraordinary."
+      "de": "Außergewöhnlich.",
+      "en": "Extraordinary.",
+      "es": "Extraordinario.",
+      "fr": "Extraordinaire.",
+      "it": "Straordinario.",
+      "pl": "Nadzwyczajne.",
+      "pt_BR": "Extraordinário.",
+      "ru": "Неслыханно."
     }
   },
   "HERO_08": {
     "attack": {
-      "en": "I'm ready."
+      "de": "Ich bin bereit.",
+      "en": "I'm ready.",
+      "es": "Estoy lista.",
+      "fr": "Je suis prête.",
+      "it": "Sono pronta.",
+      "pl": "Jestem gotowa.",
+      "pt_BR": "Estou pronta.",
+      "ru": "Я готова."
+    },
+    "concede": {
+      "de": "Diese Runde geht an Euch.",
+      "en": "You win this one.",
+      "es": "Esta la ganas tú.",
+      "fr": "Celle-ci est pour vous.",
+      "it": "Questa è tua.",
+      "pl": "Tę wygrywasz.",
+      "pt_BR": "Esta é sua.",
+      "ru": "Эта победа твоя."
     },
     "greetings": {
-      "en": "Hello."
+      "de": "Hallo.",
+      "en": "Hello.",
+      "es": "Hola.",
+      "fr": "Bonjour.",
+      "it": "Salve.",
+      "pl": "Witaj.",
+      "pt_BR": "Olá.",
+      "ru": "Привет."
     },
     "oops": {
-      "en": "Whoops."
+      "de": "Hoppla.",
+      "en": "Whoops.",
+      "es": "Ups.",
+      "fr": "Oups.",
+      "it": "Ops.",
+      "pl": "Ups.",
+      "pt_BR": "Opa.",
+      "ru": "Ой."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Jaina_Proudmoore",
     "start": {
-      "en": "You asked for it!"
+      "de": "Du hast es so gewollt!",
+      "en": "You asked for it!",
+      "es": "¡Tú te lo has buscado!",
+      "fr": "Vous l'aurez voulu !",
+      "it": "Te la sei cercata!",
+      "pl": "Sam się o to prosiłeś!",
+      "pt_BR": "Você pediu por isso!",
+      "ru": "Ты сам напросился!"
     },
     "thanks": {
-      "en": "Thank you."
+      "de": "Danke.",
+      "en": "Thank you.",
+      "es": "Gracias.",
+      "fr": "Merci.",
+      "it": "Grazie.",
+      "pl": "Dziękuję.",
+      "pt_BR": "Obrigada.",
+      "ru": "Спасибо."
     },
     "threaten": {
-      "en": "My magic will tear you apart!"
+      "de": "Meine Magie wird dich zerreißen!",
+      "en": "My magic will tear you apart!",
+      "es": "¡Mi magia te hará pedazos!",
+      "fr": "Ma magie va vous réduire en pièces !",
+      "it": "La mia magia ti farà a pezzi!",
+      "pl": "Moja magia rozerwie cię na strzępy!",
+      "pt_BR": "Minha magia vai despedaçar você!",
+      "ru": "Моя магия разорвет тебя на части!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Well played."
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobre zagranie.",
+      "pt_BR": "Bem jogado.",
+      "ru": "Хорошо сыграно."
     },
     "wow": {
-      "en": "Amazing."
+      "de": "Fantastisch.",
+      "en": "Amazing.",
+      "es": "Impresionante.",
+      "fr": "Fantastique.",
+      "it": "Fantastico.",
+      "pl": "Niesamowite.",
+      "pt_BR": "Fantástico.",
+      "ru": "Изумительно."
     }
   },
   "HERO_09": {
     "attack": {
-      "en": "By the Light!"
+      "de": "Beim Licht!",
+      "en": "By the Light!",
+      "es": "¡Por la Luz!",
+      "fr": "Par la Lumière !",
+      "it": "Per la Luce!",
+      "pl": "Na Światłość!",
+      "pt_BR": "Pela Luz!",
+      "ru": "Во имя Света!"
+    },
+    "concede": {
+      "de": "Ihr habt mich besiegt.",
+      "en": "You have bested me.",
+      "es": "Me has vencido.",
+      "fr": "Vous m'avez vaincu.",
+      "it": "Mi hai sconfitto.",
+      "pl": "Pokonałeś mnie.",
+      "pt_BR": "Você me derrotou.",
+      "ru": "Ты одолел меня."
     },
     "greetings": {
-      "en": "Greetings."
+      "de": "Seid gegrüßt.",
+      "en": "Greetings.",
+      "es": "Saludos.",
+      "fr": "Salutations.",
+      "it": "Saluti.",
+      "pl": "Pozdrawiam.",
+      "pt_BR": "Saudações.",
+      "ru": "Приветствую."
     },
     "oops": {
-      "en": "Not quite what was planned."
+      "de": "So war das nicht geplant.",
+      "en": "Not quite what was planned.",
+      "es": "No era exactamente lo planeado.",
+      "fr": "Ce n'était pas tout à fait prévu.",
+      "it": "Non era proprio quello che avevo in mente.",
+      "pl": "Nie tak to miało wyglądać.",
+      "pt_BR": "Não era bem esse o plano.",
+      "ru": "Не совсем то, что я задумывал."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Anduin_Wrynn",
     "start": {
-      "en": "The Light shall bring victory!"
+      "de": "Das Licht wird uns den Sieg bringen!",
+      "en": "The Light shall bring victory!",
+      "es": "¡La Luz nos dará la victoria!",
+      "fr": "La Lumière nous mènera à la victoire !",
+      "it": "La Luce ci porterà alla vittoria!",
+      "pl": "Światłość przyniesie zwycięstwo!",
+      "pt_BR": "A Luz trará a vitória!",
+      "ru": "Свет принесет нам победу!"
     },
     "thanks": {
-      "en": "Thank you."
+      "de": "Danke.",
+      "en": "Thank you.",
+      "es": "Gracias.",
+      "fr": "Merci.",
+      "it": "Grazie.",
+      "pl": "Dziękuję.",
+      "pt_BR": "Obrigado.",
+      "ru": "Спасибо."
     },
     "threaten": {
-      "en": "The Light shall burn you!"
+      "de": "Das Licht wird Euch verbrennen!",
+      "en": "The Light shall burn you!",
+      "es": "¡La Luz te abrasará!",
+      "fr": "La Lumière va vous consumer !",
+      "it": "La Luce ti brucerà!",
+      "pl": "Światłość cię spali!",
+      "pt_BR": "A Luz vai queimar você!",
+      "ru": "Свет испепелит тебя!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Well played."
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobre zagranie.",
+      "pt_BR": "Bem jogado.",
+      "ru": "Хорошо сыграно."
     },
     "wow": {
-      "en": "Wow...."
+      "de": "Wow....",
+      "en": "Wow....",
+      "es": "Vaya....",
+      "fr": "Waouh....",
+      "it": "Wow....",
+      "pl": "Łał...",
+      "pt_BR": "Uau....",
+      "ru": "Ого...."
     }
   },
   "TU4a_006": {
     "attack": {
-      "en": "I'm ready."
+      "de": "Ich bin bereit.",
+      "en": "I'm ready.",
+      "es": "Estoy lista.",
+      "fr": "Je suis prête.",
+      "it": "Sono pronta.",
+      "pl": "Jestem gotowa.",
+      "pt_BR": "Estou pronta.",
+      "ru": "Я готова."
+    },
+    "concede": {
+      "de": "Diese Runde geht an Euch.",
+      "en": "You win this one.",
+      "es": "Esta la ganas tú.",
+      "fr": "Celle-ci est pour vous.",
+      "it": "Questa è tua.",
+      "pl": "Tę wygrywasz.",
+      "pt_BR": "Esta é sua.",
+      "ru": "Эта победа твоя."
     },
     "greetings": {
-      "en": "Hello."
+      "de": "Hallo.",
+      "en": "Hello.",
+      "es": "Hola.",
+      "fr": "Bonjour.",
+      "it": "Salve.",
+      "pl": "Witaj.",
+      "pt_BR": "Olá.",
+      "ru": "Привет."
     },
     "oops": {
-      "en": "Whoops."
+      "de": "Hoppla.",
+      "en": "Whoops.",
+      "es": "Ups.",
+      "fr": "Oups.",
+      "it": "Ops.",
+      "pl": "Ups.",
+      "pt_BR": "Opa.",
+      "ru": "Ой."
     },
     "source": "https://hearthstone.wiki.gg/wiki/Jaina_Proudmoore",
     "start": {
-      "en": "You asked for it!"
+      "de": "Du hast es so gewollt!",
+      "en": "You asked for it!",
+      "es": "¡Tú te lo has buscado!",
+      "fr": "Vous l'aurez voulu !",
+      "it": "Te la sei cercata!",
+      "pl": "Sam się o to prosiłeś!",
+      "pt_BR": "Você pediu por isso!",
+      "ru": "Ты сам напросился!"
     },
     "thanks": {
-      "en": "Thank you."
+      "de": "Danke.",
+      "en": "Thank you.",
+      "es": "Gracias.",
+      "fr": "Merci.",
+      "it": "Grazie.",
+      "pl": "Dziękuję.",
+      "pt_BR": "Obrigada.",
+      "ru": "Спасибо."
     },
     "threaten": {
-      "en": "My magic will tear you apart!"
+      "de": "Meine Magie wird dich zerreißen!",
+      "en": "My magic will tear you apart!",
+      "es": "¡Mi magia te hará pedazos!",
+      "fr": "Ma magie va vous réduire en pièces !",
+      "it": "La mia magia ti farà a pezzi!",
+      "pl": "Moja magia rozerwie cię na strzępy!",
+      "pt_BR": "Minha magia vai despedaçar você!",
+      "ru": "Моя магия разорвет тебя на части!"
     },
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ],
     "well_played": {
-      "en": "Well played."
+      "de": "Gut gespielt.",
+      "en": "Well played.",
+      "es": "Bien jugado.",
+      "fr": "Bien joué.",
+      "it": "Ben giocato.",
+      "pl": "Dobre zagranie.",
+      "pt_BR": "Bem jogado.",
+      "ru": "Хорошо сыграно."
     }
   },
   "VAN_CS1_042": {
     "attack": {
-      "en": "To arms!"
+      "de": "Zu den Waffen!",
+      "en": "To arms!",
+      "es": "¡A las armas!",
+      "fr": "Aux armes !",
+      "it": "All'armi!",
+      "pl": "Do broni!",
+      "pt_BR": "Às armas!",
+      "ru": "К оружию!"
     },
     "play": {
-      "en": "Ready for action!"
+      "de": "Bereit zum Einsatz!",
+      "en": "Ready for action!",
+      "es": "¡Listo para la acción!",
+      "fr": "Prêt à l'action !",
+      "it": "Pronto all'azione!",
+      "pl": "Gotów do akcji!",
+      "pt_BR": "Pronto para a ação!",
+      "ru": "Готов к бою!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Goldshire_Footman"
+    "source": "https://hearthstone.wiki.gg/wiki/Goldshire_Footman_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_059": {
     "attack": {
-      "en": "Sure, send the little guy!"
+      "de": "Klar, schick ruhig den Kleinen!",
+      "en": "Sure, send the little guy!",
+      "es": "Claro, mandad al pequeñín.",
+      "fr": "C'est ça, envoyez le petit !",
+      "it": "Ma certo, mandate il piccoletto!",
+      "pl": "Jasne, wyślijcie maluszka!",
+      "pt_BR": "Claro, manda o baixinho!",
+      "ru": "Ну конечно, шлите малыша!"
     },
     "play": {
-      "en": "Do I have to?"
+      "de": "Muss das sein?",
+      "en": "Do I have to?",
+      "es": "¿De verdad tengo que hacerlo?",
+      "fr": "Je suis obligé ?",
+      "it": "Devo proprio?",
+      "pl": "Muszę?",
+      "pt_BR": "Eu tenho mesmo que ir?",
+      "ru": "А надо?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Blood_Imp"
+    "source": "https://hearthstone.wiki.gg/wiki/Blood_Imp_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_065": {
     "attack": {
-      "en": "As you command."
+      "de": "Wie Ihr befehlt.",
+      "en": "As you command.",
+      "es": "Como ordenes.",
+      "fr": "À vos ordres.",
+      "it": "Come comandi.",
+      "pl": "Jak rozkażesz.",
+      "pt_BR": "Como quiser.",
+      "ru": "Как прикажете."
     },
     "play": {
-      "en": "Why do you call?"
+      "de": "Warum ruft Ihr mich?",
+      "en": "Why do you call?",
+      "es": "¿Por qué me llamas?",
+      "fr": "Pourquoi m'appelez-vous ?",
+      "it": "Perché mi chiami?",
+      "pl": "Czemu mnie wzywasz?",
+      "pt_BR": "Por que me chama?",
+      "ru": "Зачем ты зовешь меня?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Voidwalker"
+    "source": "https://hearthstone.wiki.gg/wiki/Voidwalker_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_088": {
     "attack": {
-      "en": "Vengeance."
+      "de": "Vergeltung.",
+      "en": "Vengeance.",
+      "es": "Venganza.",
+      "fr": "Vengeance.",
+      "it": "Vendetta.",
+      "pl": "Zemsta.",
+      "pt_BR": "Vingança.",
+      "ru": "Возмездие."
     },
     "play": {
-      "en": "Justice."
+      "de": "Gerechtigkeit.",
+      "en": "Justice.",
+      "es": "Justicia.",
+      "fr": "Justice.",
+      "it": "Giustizia.",
+      "pl": "Sprawiedliwość.",
+      "pt_BR": "Justiça.",
+      "ru": "Справедливость."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Guardian_of_Kings"
+    "source": "https://hearthstone.wiki.gg/wiki/Guardian_of_Kings_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_097": {
     "play": {
-      "en": "Strike true!"
+      "de": "Triff wahrhaftig!",
+      "en": "Strike true!",
+      "es": "¡Golpe certero!",
+      "fr": "Frappez juste !",
+      "it": "Colpisci dritto!",
+      "pl": "Uderzaj celnie!",
+      "pt_BR": "Golpeie com precisão!",
+      "ru": "Бей без промаха!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Truesilver_Champion"
+    "source": "https://hearthstone.wiki.gg/wiki/Truesilver_Champion_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_101t": {
     "attack": {
-      "en": "To battle!"
+      "de": "In die Schlacht!",
+      "en": "To battle!",
+      "es": "¡A la batalla!",
+      "fr": "Au combat !",
+      "it": "In battaglia!",
+      "pl": "Do boju!",
+      "pt_BR": "À batalha!",
+      "ru": "В бой!"
     },
     "play": {
-      "en": "To me, paladin!"
+      "de": "Melde mich zum Dienst.",
+      "en": "Reporting for duty.",
+      "es": "Listo para el servicio.",
+      "fr": "À vos ordres.",
+      "it": "Pronto a servire.",
+      "pl": "Melduję się na służbę.",
+      "pt_BR": "Apresentando-me para o serviço.",
+      "ru": "Прибыл для несения службы."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Silver_Hand_Recruit"
+    "source": "https://hearthstone.wiki.gg/wiki/Silver_Hand_Recruit_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_106": {
     "play": {
-      "en": "There is no such thing as a righteous war axe."
+      "de": "So etwas wie eine gerechte Kriegsaxt gibt es nicht.",
+      "en": "There is no such thing as a righteous war axe.",
+      "es": "No existe un hacha de guerra justa.",
+      "fr": "Une hache de guerre vertueuse, ça n'existe pas.",
+      "it": "Non esiste un'ascia da guerra giusta.",
+      "pl": "Nie ma czegoś takiego jak sprawiedliwy topór wojenny.",
+      "pt_BR": "Não existe machado de guerra justo.",
+      "ru": "Праведных боевых топоров не бывает."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Fiery_War_Axe"
+    "source": "https://hearthstone.wiki.gg/wiki/Fiery_War_Axe_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_117": {
     "attack": {
-      "en": "Of course..."
+      "de": "Natürlich...",
+      "en": "Of course...",
+      "es": "Por supuesto...",
+      "fr": "Bien sûr...",
+      "it": "Ma certo...",
+      "pl": "Oczywiście...",
+      "pt_BR": "Claro...",
+      "ru": "Разумеется..."
     },
     "play": {
-      "en": "My eyes are open."
+      "de": "Meine Augen sind offen.",
+      "en": "My eyes are open.",
+      "es": "Mis ojos están abiertos.",
+      "fr": "Mes yeux sont ouverts.",
+      "it": "I miei occhi sono aperti.",
+      "pl": "Moje oczy są otwarte.",
+      "pt_BR": "Meus olhos estão abertos.",
+      "ru": "Мои глаза открыты."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Earthen_Ring_Farseer"
+    "source": "https://hearthstone.wiki.gg/wiki/Earthen_Ring_Farseer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_121": {
     "attack": {
-      "en": "Time for killing!"
+      "de": "Zeit zum Töten!",
+      "en": "Time for killing!",
+      "es": "¡Hora de matar!",
+      "fr": "L'heure de tuer !",
+      "it": "Ora di uccidere!",
+      "pl": "Czas zabijać!",
+      "pt_BR": "Hora de matar!",
+      "ru": "Время убивать!"
     },
     "play": {
-      "en": "What you want?"
+      "de": "Was du wollen?",
+      "en": "What you want?",
+      "es": "¿Qué querer tú?",
+      "fr": "Toi vouloir quoi ?",
+      "it": "Che vuoi?",
+      "pl": "Czego chcieć?",
+      "pt_BR": "Que você quer?",
+      "ru": "Чего надо?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Frostwolf_Grunt"
+    "source": "https://hearthstone.wiki.gg/wiki/Frostwolf_Grunt_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_122": {
     "attack": {
-      "en": "Hit it very hard."
+      "de": "Ganz fest draufhauen.",
+      "en": "Hit it very hard.",
+      "es": "Pegadle muy fuerte.",
+      "fr": "Frappez très fort.",
+      "it": "Colpite fortissimo.",
+      "pl": "Walić bardzo mocno.",
+      "pt_BR": "Bate com muita força.",
+      "ru": "Бейте посильнее."
     },
     "play": {
-      "en": "Handle it!"
+      "de": "Regelt das!",
+      "en": "Handle it!",
+      "es": "¡Encargaos!",
+      "fr": "Occupez-vous-en !",
+      "it": "Occupatevene!",
+      "pl": "Załatwcie to!",
+      "pt_BR": "Dá conta disso!",
+      "ru": "Разберитесь!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Raid_Leader"
+    "source": "https://hearthstone.wiki.gg/wiki/Raid_Leader_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_124": {
     "attack": {
-      "en": "Taste my steel!"
+      "de": "Schmeckt meinen Stahl!",
+      "en": "Taste my steel!",
+      "es": "¡Prueba mi acero!",
+      "fr": "Goûte à mon acier !",
+      "it": "Assaggia il mio acciaio!",
+      "pl": "Posmakuj mojej stali!",
+      "pt_BR": "Prove do meu aço!",
+      "ru": "Отведай моей стали!"
     },
     "play": {
-      "en": "Ready to ride."
+      "de": "Bereit zum Ausreiten.",
+      "en": "Ready to ride.",
+      "es": "Listo para cabalgar.",
+      "fr": "Prêt à chevaucher.",
+      "it": "Pronto a cavalcare.",
+      "pl": "Gotów do jazdy.",
+      "pt_BR": "Pronto pra cavalgar.",
+      "ru": "В седло!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Wolfrider"
+    "source": "https://hearthstone.wiki.gg/wiki/Wolfrider_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_131": {
     "attack": {
-      "en": "For honor."
+      "de": "Für die Ehre.",
+      "en": "For honor.",
+      "es": "Por el honor.",
+      "fr": "Pour l'honneur.",
+      "it": "Per l'onore.",
+      "pl": "Za honor.",
+      "pt_BR": "Pela honra.",
+      "ru": "За честь."
     },
     "death": {
-      "en": "Oh dear."
+      "de": "Ach herrje.",
+      "en": "Oh dear.",
+      "es": "Ay, madre.",
+      "fr": "Oh là là.",
+      "it": "Oh, cielo.",
+      "pl": "O rety.",
+      "pt_BR": "Ai, minha nossa.",
+      "ru": "Ох, батюшки."
     },
     "play": {
-      "en": "For the King!"
+      "de": "Für den König!",
+      "en": "For the King!",
+      "es": "¡Por el rey!",
+      "fr": "Pour le roi !",
+      "it": "Per il Re!",
+      "pl": "Za króla!",
+      "pt_BR": "Pelo Rei!",
+      "ru": "За короля!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Stormwind_Knight"
+    "source": "https://hearthstone.wiki.gg/wiki/Stormwind_Knight_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_141": {
     "attack": {
-      "en": "Fire!"
+      "de": "Feuer!",
+      "en": "Fire!",
+      "es": "¡Fuego!",
+      "fr": "Feu !",
+      "it": "Fuoco!",
+      "pl": "Ognia!",
+      "pt_BR": "Fogo!",
+      "ru": "Огонь!"
     },
     "play": {
-      "en": "Locked and loaded."
+      "de": "Geladen und entsichert.",
+      "en": "Locked and loaded.",
+      "es": "Cargado y listo.",
+      "fr": "Armé et chargé.",
+      "it": "Carico e pronto.",
+      "pl": "Załadowany i gotowy.",
+      "pt_BR": "Armado e carregado.",
+      "ru": "Заряжено и взведено."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Ironforge_Rifleman"
+    "source": "https://hearthstone.wiki.gg/wiki/Ironforge_Rifleman_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_142": {
     "attack": {
-      "en": "Mine!"
+      "de": "Meins!",
+      "en": "Mine!",
+      "es": "¡Mío!",
+      "fr": "C'est à moi !",
+      "it": "Mio!",
+      "pl": "Moje!",
+      "pt_BR": "Meu!",
+      "ru": "Мое!"
     },
     "play": {
-      "en": "You no take candle!"
+      "de": "Du nix nehmen Kerze!",
+      "en": "You no take candle!",
+      "es": "¡Tú no coger vela!",
+      "fr": "Toi pas prendre bougie !",
+      "it": "Tu no prendere candela!",
+      "pl": "Ty nie brać świeczka!",
+      "pt_BR": "Você não pega vela!",
+      "ru": "Твоя не брать свечку!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Kobold_Geomancer"
+    "source": "https://hearthstone.wiki.gg/wiki/Kobold_Geomancer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_147": {
     "attack": {
-      "en": "Hey, gimme a minute!"
+      "de": "He, gib mir 'ne Minute!",
+      "en": "Hey, gimme a minute!",
+      "es": "¡Eh, dame un minuto!",
+      "fr": "Hé, une minute !",
+      "it": "Ehi, dammi un minuto!",
+      "pl": "Hej, daj mi chwilkę!",
+      "pt_BR": "Ei, me dá um minutinho!",
+      "ru": "Эй, дай минутку!"
     },
     "play": {
-      "en": "Pass me that arclight spanner!"
+      "de": "Reich mir mal den Bogenlichtschraubenschlüssel!",
+      "en": "Pass me that arclight spanner!",
+      "es": "¡Pásame esa llave de arcoluz!",
+      "fr": "Passe-moi la clé arc-lumière !",
+      "it": "Passami quella chiave arcoluce!",
+      "pl": "Podaj mi ten klucz łukowy!",
+      "pt_BR": "Me passa aquela chave de arco voltaico!",
+      "ru": "Подай-ка мне вон тот дуговой ключ!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Gnomish_Inventor"
+    "source": "https://hearthstone.wiki.gg/wiki/Gnomish_Inventor_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_150": {
     "attack": {
-      "en": "I'm ready!"
+      "de": "Ich bin bereit!",
+      "en": "I'm ready!",
+      "es": "¡Estoy listo!",
+      "fr": "Je suis prêt !",
+      "it": "Sono pronto!",
+      "pl": "Jestem gotów!",
+      "pt_BR": "Estou pronto!",
+      "ru": "Я готов!"
     },
     "play": {
-      "en": "I've got a huge gun!"
+      "de": "Ich hab 'ne riesige Knarre!",
+      "en": "I've got a huge gun!",
+      "es": "¡Tengo un arma enorme!",
+      "fr": "J'ai un énorme flingue !",
+      "it": "Ho un fucile enorme!",
+      "pl": "Mam wielką spluwę!",
+      "pt_BR": "Eu tenho uma arma enorme!",
+      "ru": "У меня тут здоровенная пушка!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Stormpike_Commando"
+    "source": "https://hearthstone.wiki.gg/wiki/Stormpike_Commando_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_151": {
     "attack": {
-      "en": "To battle!"
+      "de": "In die Schlacht!",
+      "en": "To battle!",
+      "es": "¡A la batalla!",
+      "fr": "Au combat !",
+      "it": "In battaglia!",
+      "pl": "Do boju!",
+      "pt_BR": "À batalha!",
+      "ru": "В бой!"
     },
     "play": {
-      "en": "Squire! Attend me!"
+      "de": "Knappe! Zu mir!",
+      "en": "Squire! Attend me!",
+      "es": "¡Escudero! ¡A mi lado!",
+      "fr": "Écuyer ! À moi !",
+      "it": "Scudiero! A me!",
+      "pl": "Giermku! Do mnie!",
+      "pt_BR": "Escudeiro! Ao meu lado!",
+      "ru": "Оруженосец! Ко мне!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Silver_Hand_Knight"
+    "source": "https://hearthstone.wiki.gg/wiki/Silver_Hand_Knight_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_152": {
     "attack": {
-      "en": "Ah...if you insist."
+      "de": "Ah... wenn Ihr darauf besteht.",
+      "en": "Ah...if you insist.",
+      "es": "Ah... si insistís.",
+      "fr": "Ah... si vous insistez.",
+      "it": "Ah... se proprio insistete.",
+      "pl": "Ach... skoro nalegasz.",
+      "pt_BR": "Ah... se o senhor insiste.",
+      "ru": "Ах... раз вы настаиваете."
     },
     "play": {
-      "en": "Ready, sir."
+      "de": "Bereit, Herr.",
+      "en": "Ready, sir.",
+      "es": "Listo, señor.",
+      "fr": "Prêt, messire.",
+      "it": "Pronto, signore.",
+      "pl": "Gotów, panie.",
+      "pt_BR": "Pronto, senhor.",
+      "ru": "Готов, сэр."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Squire"
+    "source": "https://hearthstone.wiki.gg/wiki/Squire_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_155": {
     "attack": {
-      "en": "Don't blink."
+      "de": "Nicht blinzeln.",
+      "en": "Don't blink.",
+      "es": "No parpadees.",
+      "fr": "Ne clignez pas des yeux.",
+      "it": "Non battere ciglio.",
+      "pl": "Nie mrugaj.",
+      "pt_BR": "Não pisque.",
+      "ru": "Не моргай."
     },
     "play": {
-      "en": "Are you ready for this?"
+      "de": "Seid Ihr bereit dafür?",
+      "en": "Are you ready for this?",
+      "es": "¿Estás preparado para esto?",
+      "fr": "Vous êtes prêt ?",
+      "it": "Sei pronto?",
+      "pl": "Gotów na to?",
+      "pt_BR": "Está pronto para isso?",
+      "ru": "Ты к этому готов?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Archmage"
+    "source": "https://hearthstone.wiki.gg/wiki/Archmage_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_161": {
     "attack": {
-      "en": "Heh. Problem solved."
+      "de": "Heh. Problem gelöst.",
+      "en": "Heh. Problem solved.",
+      "es": "Je. Problema resuelto.",
+      "fr": "Heh. Problème réglé.",
+      "it": "Eh. Problema risolto.",
+      "pl": "Heh. Problem z głowy.",
+      "pt_BR": "Heh. Problema resolvido.",
+      "ru": "Хех. Проблема решена."
     },
     "play": {
-      "en": "I hear you got a problem."
+      "de": "Ich hör, du hast ein Problem.",
+      "en": "I hear you got a problem.",
+      "es": "Me han dicho que tienes un problema.",
+      "fr": "Il paraît que vous avez un problème.",
+      "it": "Ho sentito che hai un problema.",
+      "pl": "Słyszałem, że masz problem.",
+      "pt_BR": "Ouvi dizer que você tem um problema.",
+      "ru": "Слыхал, у тебя проблемы."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Ravenholdt_Assassin"
+    "source": "https://hearthstone.wiki.gg/wiki/Ravenholdt_Assassin_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_162": {
     "attack": {
-      "en": "Farewell."
+      "de": "Lebt wohl.",
+      "en": "Farewell.",
+      "es": "Adiós.",
+      "fr": "Adieu.",
+      "it": "Addio.",
+      "pl": "Żegnaj.",
+      "pt_BR": "Adeus.",
+      "ru": "Прощай."
     },
     "play": {
-      "en": "The gates are open!"
+      "de": "Die Tore sind offen!",
+      "en": "The gates are open!",
+      "es": "¡Las puertas están abiertas!",
+      "fr": "Les portes sont ouvertes !",
+      "it": "I cancelli sono aperti!",
+      "pl": "Bramy otwarte!",
+      "pt_BR": "Os portões estão abertos!",
+      "ru": "Врата открыты!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Lord_of_the_Arena"
+    "source": "https://hearthstone.wiki.gg/wiki/Lord_of_the_Arena_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_179": {
     "attack": {
-      "en": "Ja-ha-ha-ha mon!"
+      "de": "Ja-ha-ha-ha, Mann!",
+      "en": "Ja-ha-ha-ha mon!",
+      "es": "¡Ja-ja-ja-ja, mon!",
+      "fr": "Ja-ha-ha-ha, mon !",
+      "it": "Ja-ha-ha-ha, amico!",
+      "pl": "Ja-ha-ha-ha, mon!",
+      "pt_BR": "Ja-ha-ha-ha, mon!",
+      "ru": "Йа-ха-ха-ха, мон!"
     },
     "play": {
-      "en": "Taz'dingo! Ye-e-es!"
+      "de": "Taz'dingo! Ja-a-a!",
+      "en": "Taz'dingo! Ye-e-es!",
+      "es": "¡Taz'dingo! ¡Sí-í-í!",
+      "fr": "Taz'dingo ! Ou-ou-ouais !",
+      "it": "Taz'dingo! Sì-ì-ì!",
+      "pl": "Taz'dingo! Ta-a-ak!",
+      "pt_BR": "Taz'dingo! Siii-iim!",
+      "ru": "Таз'динго! Да-а-а!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Sen%27jin_Shieldmasta"
+    "source": "https://hearthstone.wiki.gg/wiki/Sen%27jin_Shieldmasta_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_181": {
     "attack": {
-      "en": "Your turn to bleed!"
+      "de": "Jetzt blutest du!",
+      "en": "Your turn to bleed!",
+      "es": "¡Te toca sangrar!",
+      "fr": "À ton tour de saigner !",
+      "it": "Ora tocca a te sanguinare!",
+      "pl": "Teraz ty krwawisz!",
+      "pt_BR": "Sua vez de sangrar!",
+      "ru": "Теперь твоя очередь истекать кровью!"
     },
     "play": {
-      "en": "Grr... Medic!"
+      "de": "Grr... Sanitäter!",
+      "en": "Grr... Medic!",
+      "es": "Grr... ¡Médico!",
+      "fr": "Grr... Un soigneur !",
+      "it": "Grr... Un medico!",
+      "pl": "Grr... Medyk!",
+      "pt_BR": "Grr... Médico!",
+      "ru": "Грр... Лекаря!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Injured_Blademaster"
+    "source": "https://hearthstone.wiki.gg/wiki/Injured_Blademaster_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_187": {
     "attack": {
-      "en": "I'll take him out."
+      "de": "Den mach ich fertig.",
+      "en": "I'll take him out.",
+      "es": "Yo me lo cargo.",
+      "fr": "Je m'en occupe.",
+      "it": "Lo faccio fuori io.",
+      "pl": "Załatwię go.",
+      "pt_BR": "Deixa que eu acabo com ele.",
+      "ru": "Я его уберу."
     },
     "play": {
-      "en": "Get behind me."
+      "de": "Hinter mich.",
+      "en": "Get behind me.",
+      "es": "Ponte detrás de mí.",
+      "fr": "Derrière moi.",
+      "it": "Stammi dietro.",
+      "pl": "Za mnie.",
+      "pt_BR": "Fique atrás de mim.",
+      "ru": "Встань за мной."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Booty_Bay_Bodyguard"
+    "source": "https://hearthstone.wiki.gg/wiki/Booty_Bay_Bodyguard_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_188": {
     "attack": {
-      "en": "Suffer my wrath!"
+      "de": "Spürt meinen Zorn!",
+      "en": "Suffer my wrath!",
+      "es": "¡Sufre mi ira!",
+      "fr": "Subissez ma colère !",
+      "it": "Subisci la mia ira!",
+      "pl": "Poczuj mój gniew!",
+      "pt_BR": "Sinta a minha fúria!",
+      "ru": "Познай мой гнев!"
     },
     "play": {
-      "en": "Get in there and fight, maggot!"
+      "de": "Rein da und kämpf, du Made!",
+      "en": "Get in there and fight, maggot!",
+      "es": "¡Entra ahí y lucha, gusano!",
+      "fr": "Va te battre, larve !",
+      "it": "Vai là in mezzo e combatti, verme!",
+      "pl": "Do walki, robaku!",
+      "pt_BR": "Vai lá e luta, seu verme!",
+      "ru": "А ну марш в бой, личинка!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Abusive_Sergeant"
+    "source": "https://hearthstone.wiki.gg/wiki/Abusive_Sergeant_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_189": {
     "attack": {
-      "en": "I'll give it a shot."
+      "de": "Ich versuch's mal.",
+      "en": "I'll give it a shot.",
+      "es": "Probaré puntería.",
+      "fr": "Je vais tenter le coup.",
+      "it": "Ci provo.",
+      "pl": "Spróbuję strzelić.",
+      "pt_BR": "Vou tentar a sorte.",
+      "ru": "Попытка не пытка."
     },
     "play": {
-      "en": "One shot, one kill."
+      "de": "Ein Schuss, ein Treffer.",
+      "en": "One shot, one kill.",
+      "es": "Un disparo, una baja.",
+      "fr": "Une flèche, un mort.",
+      "it": "Un colpo, un morto.",
+      "pl": "Jeden strzał, jeden trup.",
+      "pt_BR": "Uma flecha, uma morte.",
+      "ru": "Один выстрел, один труп."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Elven_Archer"
+    "source": "https://hearthstone.wiki.gg/wiki/Elven_Archer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_196": {
     "attack": {
-      "en": "Suck steel, swine."
+      "de": "Friss Stahl, Schwein.",
+      "en": "Suck steel, swine.",
+      "es": "Come acero, cerdo.",
+      "fr": "Bouffe de l'acier, porc.",
+      "it": "Assaggia l'acciaio, porco.",
+      "pl": "Łykaj stal, świnio.",
+      "pt_BR": "Engole esse aço, porco.",
+      "ru": "Глотай сталь, свинья."
     },
     "play": {
-      "en": "Don't mess with Tuskerr!"
+      "de": "Leg dich nicht mit Tuskerr an!",
+      "en": "Don't mess with Tuskerr!",
+      "es": "¡No te metas con Tuskerr!",
+      "fr": "Faut pas chercher Tuskerr !",
+      "it": "Non fare arrabbiare Tuskerr!",
+      "pl": "Nie zadzieraj z Tuskerrem!",
+      "pt_BR": "Não mexa com Tuskerr!",
+      "ru": "Не связывайся с клыкарром!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Razorfen_Hunter"
+    "source": "https://hearthstone.wiki.gg/wiki/Razorfen_Hunter_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_197": {
     "attack": {
-      "en": "Crush! (No, smash!)"
+      "de": "Zermalmen! (Nein, zerschmettern!)",
+      "en": "Crush! (No, smash!)",
+      "es": "¡Aplastar! (¡No, machacar!)",
+      "fr": "Écraser ! (Non, broyer !)",
+      "it": "Schiaccia! (No, spacca!)",
+      "pl": "Miażdżyć! (Nie, rozwalać!)",
+      "pt_BR": "Esmaga! (Não, arrebenta!)",
+      "ru": "Раздавить! (Нет, размазать!)"
     },
     "play": {
-      "en": "I'm ready! (I'm not ready.)"
+      "de": "Ich bin bereit! (Ich bin nicht bereit.)",
+      "en": "I'm ready! (I'm not ready.)",
+      "es": "¡Estoy listo! (No estoy listo.)",
+      "fr": "Moi prêt ! (Moi pas prêt.)",
+      "it": "Sono pronto! (Non sono pronto.)",
+      "pl": "Jestem gotowy! (Nie jestem gotowy.)",
+      "pt_BR": "Tô pronto! (Não tô pronto.)",
+      "ru": "Я готов! (Я не готов.)"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Ogre_Magi"
+    "source": "https://hearthstone.wiki.gg/wiki/Ogre_Magi_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_200": {
     "attack": {
-      "en": "Me smash."
+      "de": "Ich zerschmettern.",
+      "en": "Me smash.",
+      "es": "Yo machacar.",
+      "fr": "Moi écraser.",
+      "it": "Io spacca.",
+      "pl": "Ja rozwalić.",
+      "pt_BR": "Eu esmaga.",
+      "ru": "Моя крушить."
     },
     "play": {
-      "en": "What you lookin' at?"
+      "de": "Was du gucken?",
+      "en": "What you lookin' at?",
+      "es": "¿Qué mirar tú?",
+      "fr": "Toi regarder quoi ?",
+      "it": "Che hai da guardare?",
+      "pl": "Na co się gapić?",
+      "pt_BR": "Tá olhando o quê?",
+      "ru": "Чего уставился?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Boulderfist_Ogre"
+    "source": "https://hearthstone.wiki.gg/wiki/Boulderfist_Ogre_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_213": {
     "attack": {
-      "en": "Ahhhh-hahahaha!"
+      "de": "Ahhhh-hahahaha!",
+      "en": "Ahhhh-hahahaha!",
+      "es": "¡Aaaah-jajajaja!",
+      "fr": "Ahhhh-hahahaha !",
+      "it": "Ahhhh-hahahaha!",
+      "pl": "Aaaaa-hahahaha!",
+      "pt_BR": "Ahhhh-hahahaha!",
+      "ru": "А-а-а-ха-ха-ха-ха!"
     },
     "play": {
-      "en": "I'm flying!"
+      "de": "Ich fliege!",
+      "en": "I'm flying!",
+      "es": "¡Estoy volando!",
+      "fr": "Je vole !",
+      "it": "Sto volando!",
+      "pl": "Lecę!",
+      "pt_BR": "Estou voando!",
+      "ru": "Я лечу!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Reckless_Rocketeer"
+    "source": "https://hearthstone.wiki.gg/wiki/Reckless_Rocketeer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_221": {
     "attack": {
-      "en": "Suffer!"
+      "de": "Leide!",
+      "en": "Suffer!",
+      "es": "¡Sufre!",
+      "fr": "Souffrez !",
+      "it": "Soffri!",
+      "pl": "Cierp!",
+      "pt_BR": "Sofra!",
+      "ru": "Страдай!"
     },
     "play": {
-      "en": "They all bend to my command!"
+      "de": "Sie alle beugen sich meinem Befehl!",
+      "en": "They all bend to my command!",
+      "es": "¡Todos se doblegan a mis órdenes!",
+      "fr": "Tous plient sous mes ordres !",
+      "it": "Tutti si piegano al mio comando!",
+      "pl": "Wszyscy uginają się przed moją wolą!",
+      "pt_BR": "Todos se curvam ao meu comando!",
+      "ru": "Все склоняются перед моей волей!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Spiteful_Smith"
+    "source": "https://hearthstone.wiki.gg/wiki/Spiteful_Smith_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_222": {
     "attack": {
-      "en": "For the ALLIANCE!"
+      "de": "Für die ALLIANZ!",
+      "en": "For the ALLIANCE!",
+      "es": "¡Por la ALIANZA!",
+      "fr": "Pour l'ALLIANCE !",
+      "it": "Per l'ALLEANZA!",
+      "pl": "Za PRZYMIERZE!",
+      "pt_BR": "Pela ALIANÇA!",
+      "ru": "За АЛЬЯНС!"
     },
     "play": {
-      "en": "Behold, the might of Stormwind!"
+      "de": "Seht die Macht Sturmwinds!",
+      "en": "Behold, the might of Stormwind!",
+      "es": "¡Contemplad el poder de Ventormenta!",
+      "fr": "Contemplez la puissance de Hurlevent !",
+      "it": "Ammirate la potenza di Roccavento!",
+      "pl": "Oto potęga Wichrogrodu!",
+      "pt_BR": "Contemplem o poder de Ventobravo!",
+      "ru": "Узрите мощь Штормграда!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Stormwind_Champion"
+    "source": "https://hearthstone.wiki.gg/wiki/Stormwind_Champion_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_226": {
     "attack": {
-      "en": "For the Horde!"
+      "de": "Für die Horde!",
+      "en": "For the Horde!",
+      "es": "¡Por la Horda!",
+      "fr": "Pour la Horde !",
+      "it": "Per l'Orda!",
+      "pl": "Za Hordę!",
+      "pt_BR": "Pela Horda!",
+      "ru": "За Орду!"
     },
     "play": {
-      "en": "The Frostwolves stand ready!"
+      "de": "Die Frostwölfe stehen bereit!",
+      "en": "The Frostwolves stand ready!",
+      "es": "¡Los Lobo Gélido están listos!",
+      "fr": "Les Loups-de-givre sont prêts !",
+      "it": "I Lupi Bianchi sono pronti!",
+      "pl": "Mroźne Wilki są gotowe!",
+      "pt_BR": "Os Lobos do Gelo estão prontos!",
+      "ru": "Северные Волки готовы!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Frostwolf_Warlord"
+    "source": "https://hearthstone.wiki.gg/wiki/Frostwolf_Warlord_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_227": {
     "attack": {
-      "en": "Heh, how 'you doin'?!"
+      "de": "Heh, na, wie geht's?!",
+      "en": "Heh, how 'you doin'?!",
+      "es": "¡Je! ¿Qué tal estamos?",
+      "fr": "Hé, comment ça va ?!",
+      "it": "Eh, come andiamo?!",
+      "pl": "Heh, jak leci?!",
+      "pt_BR": "Heh, como vai você?!",
+      "ru": "Хе, как делишки?!"
     },
     "death": {
-      "en": "Not good! Not good! Agony..."
+      "de": "Nicht gut! Nicht gut! Qualen...",
+      "en": "Not good! Not good! Agony...",
+      "es": "¡Fatal! ¡Fatal! Qué agonía...",
+      "fr": "Pas bon ! Pas bon ! Agonie...",
+      "it": "Male! Male! Che agonia...",
+      "pl": "Niedobrze! Niedobrze! Agonia...",
+      "pt_BR": "Nada bom! Nada bom! Agonia...",
+      "ru": "Плохо! Плохо! Агония..."
     },
     "play": {
-      "en": "Y-y-you gotta be kiddin' me!"
+      "de": "D-d-das ist doch wohl ein Witz!",
+      "en": "Y-y-you gotta be kiddin' me!",
+      "es": "¡T-t-tienes que estar de broma!",
+      "fr": "Vous-vous-vous rigolez, là !",
+      "it": "S-s-stai scherzando, vero?!",
+      "pl": "C-c-chyba sobie żartujesz!",
+      "pt_BR": "Vo-vo-você só pode estar de brincadeira!",
+      "ru": "Т-т-ты, должно быть, шутишь!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Venture_Co._Mercenary"
+    "source": "https://hearthstone.wiki.gg/wiki/Venture_Co._Mercenary_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_CS2_235": {
     "attack": {
-      "en": "Right away!"
+      "de": "Sofort!",
+      "en": "Right away!",
+      "es": "¡Enseguida!",
+      "fr": "Tout de suite !",
+      "it": "Subito!",
+      "pl": "Już się robi!",
+      "pt_BR": "É pra já!",
+      "ru": "Сию минуту!"
     },
     "play": {
-      "en": "Is someone injured?"
+      "de": "Ist jemand verletzt?",
+      "en": "Is someone injured?",
+      "es": "¿Hay algún herido?",
+      "fr": "Quelqu'un est blessé ?",
+      "it": "C'è qualche ferito?",
+      "pl": "Czy ktoś jest ranny?",
+      "pt_BR": "Alguém está ferido?",
+      "ru": "Кто-то ранен?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Northshire_Cleric"
+    "source": "https://hearthstone.wiki.gg/wiki/Northshire_Cleric_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_DREAM_01": {
     "attack": {
-      "en": "I'm game!"
+      "de": "Ich bin dabei!",
+      "en": "I'm game!",
+      "es": "¡Me apunto!",
+      "fr": "Je suis partante !",
+      "it": "Ci sto!",
+      "pl": "Wchodzę w to!",
+      "pt_BR": "Tô dentro!",
+      "ru": "Я в деле!"
     },
     "play": {
-      "en": "Is there trouble?"
+      "de": "Gibt es Ärger?",
+      "en": "Is there trouble?",
+      "es": "¿Hay algún problema?",
+      "fr": "Un problème ?",
+      "it": "Ci sono problemi?",
+      "pl": "Są jakieś kłopoty?",
+      "pt_BR": "Algum problema?",
+      "ru": "Что-то случилось?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Laughing_Sister"
+    "source": "https://hearthstone.wiki.gg/wiki/Laughing_Sister_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_DS1_055": {
     "attack": {
-      "en": "Where shall I strike?"
+      "de": "Wo soll ich zuschlagen?",
+      "en": "Where shall I strike?",
+      "es": "¿Dónde ataco?",
+      "fr": "Où dois-je frapper ?",
+      "it": "Dove devo colpire?",
+      "pl": "Gdzie mam uderzyć?",
+      "pt_BR": "Onde devo atacar?",
+      "ru": "Куда мне ударить?"
     },
     "play": {
-      "en": "For Nazjatar."
+      "de": "Für Nazjatar.",
+      "en": "For Nazjatar.",
+      "es": "Por Nazjatar.",
+      "fr": "Pour Nazjatar.",
+      "it": "Per Nazjatar.",
+      "pl": "Za Nazjatar.",
+      "pt_BR": "Por Nazjatar.",
+      "ru": "За Назжатар."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Darkscale_Healer"
+    "source": "https://hearthstone.wiki.gg/wiki/Darkscale_Healer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_DS1_070": {
     "attack": {
-      "en": "Arrr!"
+      "de": "Arrr!",
+      "en": "Arrr!",
+      "es": "¡Arrr!",
+      "fr": "Arrr !",
+      "it": "Arrr!",
+      "pl": "Arrr!",
+      "pt_BR": "Arrr!",
+      "ru": "Ррр!"
     },
     "play": {
-      "en": "I let the dogs out."
+      "de": "Ich lass die Hunde los.",
+      "en": "I let the dogs out.",
+      "es": "Yo solté a los perros.",
+      "fr": "J'ai lâché les chiens.",
+      "it": "Ho liberato i cani.",
+      "pl": "Spuściłem psy ze smyczy.",
+      "pt_BR": "Soltei os cachorros.",
+      "ru": "Я спустил собак."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Houndmaster"
+    "source": "https://hearthstone.wiki.gg/wiki/Houndmaster_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_001": {
     "attack": {
-      "en": "Face the light!"
+      "de": "Stellt Euch dem Licht!",
+      "en": "Face the light!",
+      "es": "¡Enfréntate a la Luz!",
+      "fr": "Affrontez la Lumière !",
+      "it": "Affronta la Luce!",
+      "pl": "Stań w obliczu Światłości!",
+      "pt_BR": "Encare a Luz!",
+      "ru": "Узри Свет!"
     },
     "play": {
-      "en": "In the Light's name!"
+      "de": "Im Namen des Lichts!",
+      "en": "In the Light's name!",
+      "es": "¡En nombre de la Luz!",
+      "fr": "Au nom de la Lumière !",
+      "it": "Nel nome della Luce!",
+      "pl": "W imię Światłości!",
+      "pt_BR": "Em nome da Luz!",
+      "ru": "Во имя Света!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Lightwarden"
+    "source": "https://hearthstone.wiki.gg/wiki/Lightwarden_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_002": {
     "attack": {
-      "en": "I'm invincible!"
+      "de": "Ich bin unbesiegbar!",
+      "en": "I'm invincible!",
+      "es": "¡Soy invencible!",
+      "fr": "Je suis invincible !",
+      "it": "Sono invincibile!",
+      "pl": "Jestem niepokonany!",
+      "pt_BR": "Eu sou invencível!",
+      "ru": "Я непобедим!"
     },
     "play": {
-      "en": "None shall pass."
+      "de": "Hier kommt keiner vorbei.",
+      "en": "None shall pass.",
+      "es": "Nadie pasará.",
+      "fr": "Nul ne passera.",
+      "it": "Nessuno passerà.",
+      "pl": "Nikt nie przejdzie.",
+      "pt_BR": "Ninguém passará.",
+      "ru": "Никто не пройдет."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/The_Black_Knight"
+    "source": "https://hearthstone.wiki.gg/wiki/The_Black_Knight_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_004": {
     "attack": {
-      "en": "More training?"
+      "de": "Noch mehr Übung?",
+      "en": "More training?",
+      "es": "¿Más entrenamiento?",
+      "fr": "Encore de l'entraînement ?",
+      "it": "Altro addestramento?",
+      "pl": "Znowu trening?",
+      "pt_BR": "Mais treino?",
+      "ru": "Снова тренировка?"
     },
     "play": {
-      "en": "Do you need a blessing?"
+      "de": "Braucht Ihr einen Segen?",
+      "en": "Do you need a blessing?",
+      "es": "¿Necesitas una bendición?",
+      "fr": "Besoin d'une bénédiction ?",
+      "it": "Ti serve una benedizione?",
+      "pl": "Potrzebujesz błogosławieństwa?",
+      "pt_BR": "Precisa de uma bênção?",
+      "ru": "Вам нужно благословение?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Young_Priestess"
+    "source": "https://hearthstone.wiki.gg/wiki/Young_Priestess_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_005": {
     "attack": {
-      "en": "Gotcha!"
+      "de": "Hab dich!",
+      "en": "Gotcha!",
+      "es": "¡Te pillé!",
+      "fr": "Je te tiens !",
+      "it": "Preso!",
+      "pl": "Mam cię!",
+      "pt_BR": "Te peguei!",
+      "ru": "Попался!"
     },
     "play": {
-      "en": "I've got the beast in my sights!"
+      "de": "Ich hab die Bestie im Visier!",
+      "en": "I've got the beast in my sights!",
+      "es": "¡Tengo a la bestia en el punto de mira!",
+      "fr": "J'ai la bête dans le viseur !",
+      "it": "Ho la bestia nel mirino!",
+      "pl": "Mam bestię na muszce!",
+      "pt_BR": "A fera está na minha mira!",
+      "ru": "Зверь у меня на прицеле!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Big_Game_Hunter"
+    "source": "https://hearthstone.wiki.gg/wiki/Big_Game_Hunter_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_007": {
     "attack": {
-      "en": "Bring the pain!"
+      "de": "Her mit dem Schmerz!",
+      "en": "Bring the pain!",
+      "es": "¡Que venga el dolor!",
+      "fr": "Que vienne la douleur !",
+      "it": "Avanti il dolore!",
+      "pl": "Dawać ból!",
+      "pt_BR": "Que venha a dor!",
+      "ru": "Больше боли!"
     },
     "death": {
-      "en": "Yesssss..."
+      "de": "Jaaaaa...",
+      "en": "Yesssss...",
+      "es": "Sííííí...",
+      "fr": "Ouiiiiii...",
+      "it": "Sììììì...",
+      "pl": "Taaaaak...",
+      "pt_BR": "Siiiiim...",
+      "ru": "Дааааа..."
     },
     "play": {
-      "en": "Let the pain speak to me."
+      "de": "Lass den Schmerz zu mir sprechen.",
+      "en": "Let the pain speak to me.",
+      "es": "Que el dolor me hable.",
+      "fr": "Que la douleur me parle.",
+      "it": "Che il dolore mi parli.",
+      "pl": "Niech ból do mnie przemówi.",
+      "pt_BR": "Que a dor fale comigo.",
+      "ru": "Пусть боль говорит со мной."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Acolyte_of_Pain"
+    "source": "https://hearthstone.wiki.gg/wiki/Acolyte_of_Pain_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_008": {
     "attack": {
-      "en": "I fight!"
+      "de": "Ich kämpfe!",
+      "en": "I fight!",
+      "es": "¡A luchar!",
+      "fr": "Je combats !",
+      "it": "Io combatto!",
+      "pl": "Walczę!",
+      "pt_BR": "Eu luto!",
+      "ru": "Я сражаюсь!"
     },
     "play": {
-      "en": "The Light protects me."
+      "de": "Das Licht beschützt mich.",
+      "en": "The Light protects me.",
+      "es": "La Luz me protege.",
+      "fr": "La Lumière me protège.",
+      "it": "La Luce mi protegge.",
+      "pl": "Światłość mnie chroni.",
+      "pt_BR": "A Luz me protege.",
+      "ru": "Свет защищает меня."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Argent_Squire"
+    "source": "https://hearthstone.wiki.gg/wiki/Argent_Squire_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_010": {
     "attack": {
-      "en": "First kill."
+      "de": "Erste Beute.",
+      "en": "First kill.",
+      "es": "Primera presa.",
+      "fr": "Première victime.",
+      "it": "Prima preda.",
+      "pl": "Pierwsze zabójstwo.",
+      "pt_BR": "Primeira vítima.",
+      "ru": "Первая добыча."
     },
     "play": {
-      "en": "I smell blood."
+      "de": "Ich rieche Blut.",
+      "en": "I smell blood.",
+      "es": "Huelo sangre.",
+      "fr": "Je sens le sang.",
+      "it": "Sento odore di sangue.",
+      "pl": "Czuję krew.",
+      "pt_BR": "Sinto cheiro de sangue.",
+      "ru": "Чую кровь."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Worgen_Infiltrator"
+    "source": "https://hearthstone.wiki.gg/wiki/Worgen_Infiltrator_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_011": {
     "attack": {
-      "en": "Ahh..."
+      "de": "Ahh...",
+      "en": "Ahh...",
+      "es": "Ahh...",
+      "fr": "Ahh...",
+      "it": "Ahh...",
+      "pl": "Ahh...",
+      "pt_BR": "Ahh...",
+      "ru": "Ааа..."
     },
     "play": {
-      "en": "Someone call for de doctor?"
+      "de": "Hat da wer nach'm Doktor gerufen?",
+      "en": "Someone call for de doctor?",
+      "es": "¿Alguien llamó al dotor?",
+      "fr": "Quelqu'un a d'mandé l'docteur ?",
+      "it": "Qualcuno ha chiamato il dottore?",
+      "pl": "Ktoś wzywał doktora, man?",
+      "pt_BR": "Alguém chamou o doutô?",
+      "ru": "Кто звал доктора?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Voodoo_Doctor"
+    "source": "https://hearthstone.wiki.gg/wiki/Voodoo_Doctor_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_012": {
     "attack": {
-      "en": "More! More souls!"
+      "de": "Mehr! Mehr Seelen!",
+      "en": "More! More souls!",
+      "es": "¡Más! ¡Más almas!",
+      "fr": "Encore ! Plus d'âmes !",
+      "it": "Ancora! Altre anime!",
+      "pl": "Więcej! Więcej dusz!",
+      "pt_BR": "Mais! Mais almas!",
+      "ru": "Еще! Еще душ!"
     },
     "play": {
-      "en": "We hunger for vengeance."
+      "de": "Wir hungern nach Rache.",
+      "en": "We hunger for vengeance.",
+      "es": "Tenemos hambre de venganza.",
+      "fr": "Nous avons soif de vengeance.",
+      "it": "Abbiamo fame di vendetta.",
+      "pl": "Łakniemy zemsty.",
+      "pt_BR": "Temos fome de vingança.",
+      "ru": "Мы жаждем мести."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Bloodmage_Thalnos"
+    "source": "https://hearthstone.wiki.gg/wiki/Bloodmage_Thalnos_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_015": {
     "attack": {
-      "en": "Hoh, if you're sure!"
+      "de": "Hoh, wenn du meinst!",
+      "en": "Hoh, if you're sure!",
+      "es": "¡Oh, si tú lo dices!",
+      "fr": "Oh, si vous êtes sûr !",
+      "it": "Oh, se ne sei sicuro!",
+      "pl": "Hoh, skoro jesteś pewien!",
+      "pt_BR": "Hoh, se você tem certeza!",
+      "ru": "Хо, ну раз ты уверен!"
     },
     "play": {
-      "en": "I hope you like my invention."
+      "de": "Hoffentlich gefällt dir meine Erfindung.",
+      "en": "I hope you like my invention.",
+      "es": "Espero que te guste mi invento.",
+      "fr": "J'espère que mon invention vous plaira.",
+      "it": "Spero che la mia invenzione ti piaccia.",
+      "pl": "Mam nadzieję, że spodoba ci się mój wynalazek.",
+      "pt_BR": "Espero que goste da minha invenção.",
+      "ru": "Надеюсь, тебе понравится мое изобретение."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Novice_Engineer"
+    "source": "https://hearthstone.wiki.gg/wiki/Novice_Engineer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_016": {
     "attack": {
-      "en": "Let none survive!"
+      "de": "Niemand soll überleben!",
+      "en": "Let none survive!",
+      "es": "¡Que nadie sobreviva!",
+      "fr": "Pas de survivants !",
+      "it": "Che nessuno sopravviva!",
+      "pl": "Niech nikt nie przeżyje!",
+      "pt_BR": "Que ninguém sobreviva!",
+      "ru": "Никого не щадить!"
     },
     "play": {
-      "en": "I have no time for games!"
+      "de": "Ich habe keine Zeit für Spielchen!",
+      "en": "I have no time for games!",
+      "es": "¡No tengo tiempo para juegos!",
+      "fr": "Je n'ai pas de temps pour ces jeux !",
+      "it": "Non ho tempo per i giochi!",
+      "pl": "Nie mam czasu na zabawy!",
+      "pt_BR": "Não tenho tempo para joguinhos!",
+      "ru": "У меня нет времени на игры!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Sylvanas_Windrunner"
+    "source": "https://hearthstone.wiki.gg/wiki/Sylvanas_Windrunner_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_019": {
     "attack": {
-      "en": "Push forward."
+      "de": "Vorwärts.",
+      "en": "Push forward.",
+      "es": "Adelante.",
+      "fr": "En avant.",
+      "it": "Avanti.",
+      "pl": "Naprzód.",
+      "pt_BR": "Avante.",
+      "ru": "Вперед."
     },
     "play": {
-      "en": "We must cleanse the Sunwell."
+      "de": "Wir müssen den Sonnenbrunnen reinigen.",
+      "en": "We must cleanse the Sunwell.",
+      "es": "Debemos purificar la Fuente del Sol.",
+      "fr": "Nous devons purifier le Puits de soleil.",
+      "it": "Dobbiamo purificare il Pozzo Solare.",
+      "pl": "Musimy oczyścić Studnię Słońca.",
+      "pt_BR": "Precisamos purificar a Nascente do Sol.",
+      "ru": "Мы должны очистить Солнечный Колодец."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Shattered_Sun_Cleric"
+    "source": "https://hearthstone.wiki.gg/wiki/Shattered_Sun_Cleric_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_020": {
     "attack": {
-      "en": "Join, or die."
+      "de": "Schließ dich an oder stirb.",
+      "en": "Join, or die.",
+      "es": "Únete o muere.",
+      "fr": "Rejoignez-nous ou mourez.",
+      "it": "Unisciti a noi, o muori.",
+      "pl": "Dołącz albo zgiń.",
+      "pt_BR": "Junte-se a nós, ou morra.",
+      "ru": "Присоединяйся или умри."
     },
     "play": {
-      "en": "For the crusade!"
+      "de": "Für den Kreuzzug!",
+      "en": "For the crusade!",
+      "es": "¡Por la Cruzada!",
+      "fr": "Pour la croisade !",
+      "it": "Per la crociata!",
+      "pl": "Za krucjatę!",
+      "pt_BR": "Pela cruzada!",
+      "ru": "За крестовый поход!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Scarlet_Crusader"
+    "source": "https://hearthstone.wiki.gg/wiki/Scarlet_Crusader_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_021": {
     "attack": {
-      "en": "I see your end!"
+      "de": "Ich sehe dein Ende!",
+      "en": "I see your end!",
+      "es": "¡Veo tu final!",
+      "fr": "Je vois votre fin !",
+      "it": "Vedo la tua fine!",
+      "pl": "Widzę twój koniec!",
+      "pt_BR": "Eu vejo o seu fim!",
+      "ru": "Я вижу твой конец!"
     },
     "play": {
-      "en": "What does the future hold?"
+      "de": "Was hält die Zukunft bereit?",
+      "en": "What does the future hold?",
+      "es": "¿Qué nos deparará el futuro?",
+      "fr": "Que nous réserve l'avenir ?",
+      "it": "Cosa ci riserva il futuro?",
+      "pl": "Co przyniesie przyszłość?",
+      "pt_BR": "O que o futuro nos reserva?",
+      "ru": "Что сулит нам будущее?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Thrallmar_Farseer"
+    "source": "https://hearthstone.wiki.gg/wiki/Thrallmar_Farseer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_023": {
     "attack": {
-      "en": "Remember Quel'Thalas!"
+      "de": "Denkt an Quel'Thalas!",
+      "en": "Remember Quel'Thalas!",
+      "es": "¡Recordad Quel'Thalas!",
+      "fr": "Souvenez-vous de Quel'Thalas !",
+      "it": "Ricordate Quel'Thalas!",
+      "pl": "Pamiętajcie o Quel'Thalas!",
+      "pt_BR": "Lembrem-se de Quel'Thalas!",
+      "ru": "Помните о Кель'Таласе!"
     },
     "death": {
-      "en": "Owie!"
+      "de": "Aua!",
+      "en": "Owie!",
+      "es": "¡Ay!",
+      "fr": "Aïe !",
+      "it": "Ahia!",
+      "pl": "Auć!",
+      "pt_BR": "Ai, ai!",
+      "ru": "Ай!"
     },
     "play": {
-      "en": "Silvermoon shall not fall!"
+      "de": "Silbermond wird nicht fallen!",
+      "en": "Silvermoon shall not fall!",
+      "es": "¡Lunargenta no caerá!",
+      "fr": "Lune-d'argent ne tombera pas !",
+      "it": "Lunargenta non cadrà!",
+      "pl": "Srebrna Luna nie upadnie!",
+      "pt_BR": "Luaprata não cairá!",
+      "ru": "Луносвет не падет!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Silvermoon_Guardian"
+    "source": "https://hearthstone.wiki.gg/wiki/Silvermoon_Guardian_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_025": {
     "attack": {
-      "en": "Yuh!"
+      "de": "Jaa!",
+      "en": "Yuh!",
+      "es": "¡Yuju!",
+      "fr": "Yah !",
+      "it": "Yuh!",
+      "pl": "Juh!",
+      "pt_BR": "Ihá!",
+      "ru": "Ха!"
     },
     "play": {
-      "en": "Just me and Mr. Bitey!"
+      "de": "Nur ich und Herr Beißer!",
+      "en": "Just me and Mr. Bitey!",
+      "es": "¡Solo yo y el señor Mordiscos!",
+      "fr": "Juste moi et M. Croc-croc !",
+      "it": "Solo io e il signor Morsetto!",
+      "pl": "Tylko ja i pan Kąsacz!",
+      "pt_BR": "Só eu e o Sr. Mordidinha!",
+      "ru": "Только я и мистер Кусака!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Dragonling_Mechanic"
+    "source": "https://hearthstone.wiki.gg/wiki/Dragonling_Mechanic_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_029": {
     "attack": {
-      "en": "GIMME A BIG HUG!"
+      "de": "LASS DICH GANZ FEST DRÜCKEN!",
+      "en": "GIMME A BIG HUG!",
+      "es": "¡DAME UN ABRAZO BIEN FUERTE!",
+      "fr": "FAIS-MOI UN GROS CÂLIN !",
+      "it": "DAMMI UN BELL'ABBRACCIO!",
+      "pl": "PRZYTUL MNIE MOCNO!",
+      "pt_BR": "ME DÁ UM ABRAÇÃO!",
+      "ru": "ДАВАЙ ОБНИМЕМСЯ!"
     },
     "play": {
-      "en": "I feel icky!"
+      "de": "Mir ist so eklig!",
+      "en": "I feel icky!",
+      "es": "¡Me siento pringoso!",
+      "fr": "Je me sens tout crade !",
+      "it": "Mi sento appiccicoso!",
+      "pl": "Coś mi niedobrze!",
+      "pt_BR": "Tô me sentindo nojento!",
+      "ru": "Мне что-то нехорошо!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Leper_Gnome"
+    "source": "https://hearthstone.wiki.gg/wiki/Leper_Gnome_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_032": {
     "attack": {
-      "en": "Justice shall prevail."
+      "de": "Gerechtigkeit wird siegen.",
+      "en": "Justice shall prevail.",
+      "es": "La justicia prevalecerá.",
+      "fr": "La justice triomphera.",
+      "it": "La giustizia trionferà.",
+      "pl": "Sprawiedliwość zwycięży.",
+      "pt_BR": "A justiça prevalecerá.",
+      "ru": "Справедливость восторжествует."
     },
     "play": {
-      "en": "Truth is my shield."
+      "de": "Wahrheit ist mein Schild.",
+      "en": "Truth is my shield.",
+      "es": "La verdad es mi escudo.",
+      "fr": "La vérité est mon bouclier.",
+      "it": "La verità è il mio scudo.",
+      "pl": "Prawda jest moją tarczą.",
+      "pt_BR": "A verdade é o meu escudo.",
+      "ru": "Истина — мой щит."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Sunwalker"
+    "source": "https://hearthstone.wiki.gg/wiki/Sunwalker_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_044": {
     "attack": {
-      "en": "Quest accepted!"
+      "de": "Quest angenommen!",
+      "en": "Quest accepted!",
+      "es": "¡Misión aceptada!",
+      "fr": "Quête acceptée !",
+      "it": "Missione accettata!",
+      "pl": "Zadanie przyjęte!",
+      "pt_BR": "Missão aceita!",
+      "ru": "Задание принято!"
     },
     "death": {
-      "en": "Quest...failed..."
+      "de": "Quest... gescheitert...",
+      "en": "Quest...failed...",
+      "es": "Misión... fallida...",
+      "fr": "Quête... échouée...",
+      "it": "Missione... fallita...",
+      "pl": "Zadanie... nieudane...",
+      "pt_BR": "Missão... fracassada...",
+      "ru": "Задание... провалено..."
     },
     "play": {
-      "en": "Give me a quest."
+      "de": "Gebt mir eine Quest.",
+      "en": "Give me a quest.",
+      "es": "Dame una misión.",
+      "fr": "Donnez-moi une quête.",
+      "it": "Dammi una missione.",
+      "pl": "Daj mi zadanie.",
+      "pt_BR": "Me dê uma missão.",
+      "ru": "Дайте мне задание."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Questing_Adventurer"
+    "source": "https://hearthstone.wiki.gg/wiki/Questing_Adventurer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_046": {
     "attack": {
-      "en": "Done."
+      "de": "Erledigt.",
+      "en": "Done.",
+      "es": "Hecho.",
+      "fr": "Fait.",
+      "it": "Fatto.",
+      "pl": "Zrobione.",
+      "pt_BR": "Feito.",
+      "ru": "Готово."
     },
     "play": {
-      "en": "Do you call that a weapon? Hah!"
+      "de": "Das nennst du 'ne Waffe? Hah!",
+      "en": "Do you call that a weapon? Hah!",
+      "es": "¿A eso lo llamas arma? ¡Ja!",
+      "fr": "Tu appelles ça une arme ? Ha !",
+      "it": "La chiami arma, quella? Ah!",
+      "pl": "To ma być broń? Ha!",
+      "pt_BR": "Chama isso de arma? Há!",
+      "ru": "Это ты называешь оружием? Ха!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Dark_Iron_Dwarf"
+    "source": "https://hearthstone.wiki.gg/wiki/Dark_Iron_Dwarf_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_048": {
     "attack": {
-      "en": "Die, mage!"
+      "de": "Stirb, Magier!",
+      "en": "Die, mage!",
+      "es": "¡Muere, mago!",
+      "fr": "Meurs, mage !",
+      "it": "Muori, mago!",
+      "pl": "Giń, magu!",
+      "pt_BR": "Morra, mago!",
+      "ru": "Умри, маг!"
     },
     "play": {
-      "en": "Your magic shall not save you."
+      "de": "Deine Magie wird dich nicht retten.",
+      "en": "Your magic shall not save you.",
+      "es": "Tu magia no te salvará.",
+      "fr": "Votre magie ne vous sauvera pas.",
+      "it": "La tua magia non ti salverà.",
+      "pl": "Twoja magia cię nie ocali.",
+      "pt_BR": "Sua magia não vai salvá-lo.",
+      "ru": "Магия тебя не спасет."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Spellbreaker"
+    "source": "https://hearthstone.wiki.gg/wiki/Spellbreaker_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_049": {
     "attack": {
-      "en": "Challenge accepted!"
+      "de": "Herausforderung angenommen!",
+      "en": "Challenge accepted!",
+      "es": "¡Desafío aceptado!",
+      "fr": "Défi accepté !",
+      "it": "Sfida accettata!",
+      "pl": "Wyzwanie przyjęte!",
+      "pt_BR": "Desafio aceito!",
+      "ru": "Вызов принят!"
     },
     "play": {
-      "en": "Drink with me, friend!"
+      "de": "Trink mit mir, Freund!",
+      "en": "Drink with me, friend!",
+      "es": "¡Bebe conmigo, amigo!",
+      "fr": "Bois avec moi, l'ami !",
+      "it": "Bevi con me, amico!",
+      "pl": "Napij się ze mną, przyjacielu!",
+      "pt_BR": "Beba comigo, amigo!",
+      "ru": "Выпей со мной, друг!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Youthful_Brewmaster"
+    "source": "https://hearthstone.wiki.gg/wiki/Youthful_Brewmaster_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_055": {
     "attack": {
-      "en": "What a rush!"
+      "de": "Was für ein Rausch!",
+      "en": "What a rush!",
+      "es": "¡Qué subidón!",
+      "fr": "Ça décoiffe !",
+      "it": "Che scarica!",
+      "pl": "Co za kop!",
+      "pt_BR": "Que adrenalina!",
+      "ru": "Вот это прилив!"
     },
     "play": {
-      "en": "I can taste the mana!"
+      "de": "Ich kann das Mana schmecken!",
+      "en": "I can taste the mana!",
+      "es": "¡Puedo saborear el maná!",
+      "fr": "Je sens le goût du mana !",
+      "it": "Sento il sapore del mana!",
+      "pl": "Czuję smak many!",
+      "pt_BR": "Sinto o gosto da mana!",
+      "ru": "Я чувствую вкус маны!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Mana_Addict"
+    "source": "https://hearthstone.wiki.gg/wiki/Mana_Addict_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_057": {
     "attack": {
-      "en": "Another round?"
+      "de": "Noch 'ne Runde?",
+      "en": "Another round?",
+      "es": "¿Otra ronda?",
+      "fr": "Une autre tournée ?",
+      "it": "Un altro giro?",
+      "pl": "Jeszcze kolejka?",
+      "pt_BR": "Mais uma rodada?",
+      "ru": "Еще по одной?"
     },
     "play": {
-      "en": "I'll put it on your tab!"
+      "de": "Ich schreib's dir an!",
+      "en": "I'll put it on your tab!",
+      "es": "¡Te lo apunto en la cuenta!",
+      "fr": "Je le mets sur ton ardoise !",
+      "it": "Lo metto sul tuo conto!",
+      "pl": "Zapiszę na twój rachunek!",
+      "pt_BR": "Vou pôr na sua conta!",
+      "ru": "Запишу на твой счет!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Ancient_Brewmaster"
+    "source": "https://hearthstone.wiki.gg/wiki/Ancient_Brewmaster_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_058": {
     "attack": {
-      "en": "I got this."
+      "de": "Ich mach das schon.",
+      "en": "I got this.",
+      "es": "Yo me encargo.",
+      "fr": "Je m'en charge.",
+      "it": "Ci penso io.",
+      "pl": "Ogarnę to.",
+      "pt_BR": "Deixa comigo.",
+      "ru": "Я справлюсь."
     },
     "play": {
-      "en": "Shields up!"
+      "de": "Schilde hoch!",
+      "en": "Shields up!",
+      "es": "¡Escudos arriba!",
+      "fr": "Boucliers levés !",
+      "it": "Scudi alzati!",
+      "pl": "Tarcze w górę!",
+      "pt_BR": "Escudos erguidos!",
+      "ru": "Щиты поднять!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Sunfury_Protector"
+    "source": "https://hearthstone.wiki.gg/wiki/Sunfury_Protector_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_059": {
     "attack": {
-      "en": "Don't rush me!"
+      "de": "Hetz mich nicht!",
+      "en": "Don't rush me!",
+      "es": "¡No me metas prisa!",
+      "fr": "Ne me bousculez pas !",
+      "it": "Non mettermi fretta!",
+      "pl": "Nie poganiaj mnie!",
+      "pt_BR": "Não me apresse!",
+      "ru": "Не торопи меня!"
     },
     "play": {
-      "en": "You'll love my new recipe."
+      "de": "Mein neues Rezept wird dir schmecken.",
+      "en": "You'll love my new recipe.",
+      "es": "Te encantará mi nueva receta.",
+      "fr": "Vous allez adorer ma nouvelle recette.",
+      "it": "Adorerai la mia nuova ricetta.",
+      "pl": "Pokochasz mój nowy przepis.",
+      "pt_BR": "Você vai adorar minha nova receita.",
+      "ru": "Тебе понравится мой новый рецепт."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Crazed_Alchemist"
+    "source": "https://hearthstone.wiki.gg/wiki/Crazed_Alchemist_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_067": {
     "attack": {
-      "en": "Victory or death!"
+      "de": "Sieg oder Tod!",
+      "en": "Victory or death!",
+      "es": "¡Victoria o muerte!",
+      "fr": "La victoire ou la mort !",
+      "it": "Vittoria o morte!",
+      "pl": "Zwycięstwo albo śmierć!",
+      "pt_BR": "Vitória ou morte!",
+      "ru": "Победа или смерть!"
     },
     "play": {
-      "en": "To Northrend!"
+      "de": "Auf nach Nordend!",
+      "en": "To Northrend!",
+      "es": "¡A Rasganorte!",
+      "fr": "En route pour le Norfendre !",
+      "it": "Verso Nordania!",
+      "pl": "Do Nordskolu!",
+      "pt_BR": "Para Nortúndria!",
+      "ru": "В Нордскол!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Argent_Commander"
+    "source": "https://hearthstone.wiki.gg/wiki/Argent_Commander_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_076": {
     "attack": {
-      "en": "Comin' through!"
+      "de": "Platz da!",
+      "en": "Comin' through!",
+      "es": "¡Paso, paso!",
+      "fr": "Laissez passer !",
+      "it": "Fate largo!",
+      "pl": "Przepraszam, przechodzę!",
+      "pt_BR": "Dá licença!",
+      "ru": "Дорогу!"
     },
     "play": {
-      "en": "Summoning portal open."
+      "de": "Beschwörungsportal offen.",
+      "en": "Summoning portal open.",
+      "es": "Portal de invocación abierto.",
+      "fr": "Portail d'invocation ouvert.",
+      "it": "Portale di evocazione aperto.",
+      "pl": "Portal przywołania otwarty.",
+      "pt_BR": "Portal de evocação aberto.",
+      "ru": "Портал призыва открыт."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Pint-Sized_Summoner"
+    "source": "https://hearthstone.wiki.gg/wiki/Pint-Sized_Summoner_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_080": {
     "attack": {
-      "en": "Ahahahahaha."
+      "de": "Ahahahahaha.",
+      "en": "Ahahahahaha.",
+      "es": "Ajajajajaja.",
+      "fr": "Ahahahahaha.",
+      "it": "Ahahahahaha.",
+      "pl": "Ahahahahaha.",
+      "pt_BR": "Ahahahahaha.",
+      "ru": "А-ха-ха-ха-ха."
     },
     "play": {
-      "en": "I know what you did."
+      "de": "Ich weiß, was du getan hast.",
+      "en": "I know what you did.",
+      "es": "Sé lo que hiciste.",
+      "fr": "Je sais ce que vous avez fait.",
+      "it": "So cosa hai fatto.",
+      "pl": "Wiem, co zrobiłeś.",
+      "pt_BR": "Eu sei o que você fez.",
+      "ru": "Я знаю, что ты сделал."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Secretkeeper"
+    "source": "https://hearthstone.wiki.gg/wiki/Secretkeeper_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_082": {
     "attack": {
-      "en": "Oo-oo-yeah you got it!"
+      "de": "Uu-uu-jaa, wird gemacht!",
+      "en": "Oo-oo-yeah you got it!",
+      "es": "¡Uu-uu-sí, marchando!",
+      "fr": "Ou-ou-ouais, c'est parti !",
+      "it": "Oh-oh-sì, ci puoi giurare!",
+      "pl": "Uu-uu-tak, masz to!",
+      "pt_BR": "Uu-uu-é, é pra já!",
+      "ru": "У-у-у-да, как скажешь!"
     },
     "death": {
-      "en": "Yoooow!"
+      "de": "Juuuuuh!",
+      "en": "Yoooow!",
+      "es": "¡Yuuuuh!",
+      "fr": "Yaaaaouh !",
+      "it": "Yoooow!",
+      "pl": "Juuuuu!",
+      "pt_BR": "Uaaaau!",
+      "ru": "Уаааау!"
     },
     "play": {
-      "en": "Wanna blow somethin' up? Ha-ha!"
+      "de": "Lust, was in die Luft zu jagen? Ha-ha!",
+      "en": "Wanna blow somethin' up? Ha-ha!",
+      "es": "¿Quieres volar algo por los aires? ¡Ja-ja!",
+      "fr": "On fait sauter un truc ? Ha-ha !",
+      "it": "Vuoi far saltare qualcosa? Ah-ah!",
+      "pl": "Chcesz coś wysadzić? Ha-ha!",
+      "pt_BR": "Quer explodir alguma coisa? Ha-ha!",
+      "ru": "Хочешь что-нибудь взорвать? Ха-ха!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Mad_Bomber"
+    "source": "https://hearthstone.wiki.gg/wiki/Mad_Bomber_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_083": {
     "attack": {
-      "en": "For Gnomeregan!"
+      "de": "Für Gnomeregan!",
+      "en": "For Gnomeregan!",
+      "es": "¡Por Gnomeregan!",
+      "fr": "Pour Gnomeregan !",
+      "it": "Per Gnomeregan!",
+      "pl": "Za Gnomeregan!",
+      "pt_BR": "Por Gnomeregan!",
+      "ru": "За Гномреган!"
     },
     "play": {
-      "en": "This time for sure!"
+      "de": "Diesmal klappt's bestimmt!",
+      "en": "This time for sure!",
+      "es": "¡Esta vez sí que sí!",
+      "fr": "Cette fois, c'est la bonne !",
+      "it": "Stavolta funziona di sicuro!",
+      "pl": "Tym razem na pewno!",
+      "pt_BR": "Desta vez vai!",
+      "ru": "Уж в этот раз точно!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Tinkmaster_Overspark"
+    "source": "https://hearthstone.wiki.gg/wiki/Tinkmaster_Overspark_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_084": {
     "attack": {
-      "en": "For the Warsong!"
+      "de": "Für die Kriegshymne!",
+      "en": "For the Warsong!",
+      "es": "¡Por el Grito de Guerra!",
+      "fr": "Pour Chanteguerre !",
+      "it": "Per i Cantaguerra!",
+      "pl": "Za Wojenną Pieśń!",
+      "pt_BR": "Pelo Brado Guerreiro!",
+      "ru": "За Песню Войны!"
     },
     "play": {
-      "en": "Charge forward!"
+      "de": "Vorwärts, Angriff!",
+      "en": "Charge forward!",
+      "es": "¡A la carga!",
+      "fr": "Chargez !",
+      "it": "Alla carica!",
+      "pl": "Do szarży!",
+      "pt_BR": "Avancem!",
+      "ru": "Вперед, в атаку!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Warsong_Commander"
+    "source": "https://hearthstone.wiki.gg/wiki/Warsong_Commander_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_085": {
     "attack": {
-      "en": "Who are you?!"
+      "de": "Wer bist du?!",
+      "en": "Who are you?!",
+      "es": "¿¡Quién eres!?",
+      "fr": "Qui êtes-vous ?!",
+      "it": "Chi sei tu?!",
+      "pl": "Kim ty jesteś?!",
+      "pt_BR": "Quem é você?!",
+      "ru": "Ты кто такой?!"
     },
     "play": {
-      "en": "Engaging TC-130 Mental Dislocator!"
+      "de": "Aktiviere TC-130-Gedankenverschieber!",
+      "en": "Engaging TC-130 Mental Dislocator!",
+      "es": "¡Activando el dislocador mental TC-130!",
+      "fr": "Activation du dislocateur mental TC-130 !",
+      "it": "Attivazione Dislocatore Mentale TC-130!",
+      "pl": "Uruchamiam Mentalny Dyslokator TC-130!",
+      "pt_BR": "Ativando o Deslocador Mental TC-130!",
+      "ru": "Включаю ментальный дислокатор ТК-130!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Mind_Control_Tech"
+    "source": "https://hearthstone.wiki.gg/wiki/Mind_Control_Tech_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_091": {
     "attack": {
-      "en": "Obey!"
+      "de": "Gehorche!",
+      "en": "Obey!",
+      "es": "¡Obedece!",
+      "fr": "Obéis !",
+      "it": "Obbedisci!",
+      "pl": "Bądź posłuszny!",
+      "pt_BR": "Obedeça!",
+      "ru": "Подчинись!"
     },
     "death": {
-      "en": "Nooooo!"
+      "de": "Neeeeein!",
+      "en": "Nooooo!",
+      "es": "¡Noooooo!",
+      "fr": "Noooooon !",
+      "it": "Nooooo!",
+      "pl": "Nieeeee!",
+      "pt_BR": "Nãããão!",
+      "ru": "Нееееет!"
     },
     "play": {
-      "en": "Let me change your mind!"
+      "de": "Lass mich deine Meinung ändern!",
+      "en": "Let me change your mind!",
+      "es": "¡Deja que te haga cambiar de opinión!",
+      "fr": "Laissez-moi vous faire changer d'avis !",
+      "it": "Lascia che ti faccia cambiare idea!",
+      "pl": "Pozwól, że zmienię twoje zdanie!",
+      "pt_BR": "Deixa eu mudar a sua cabeça!",
+      "ru": "Позволь мне переубедить тебя!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Cabal_Shadow_Priest"
+    "source": "https://hearthstone.wiki.gg/wiki/Cabal_Shadow_Priest_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_093": {
     "attack": {
-      "en": "Into the breach!"
+      "de": "In die Bresche!",
+      "en": "Into the breach!",
+      "es": "¡A la brecha!",
+      "fr": "À la brèche !",
+      "it": "Nella breccia!",
+      "pl": "Do wyłomu!",
+      "pt_BR": "Para a brecha!",
+      "ru": "В брешь!"
     },
     "play": {
-      "en": "My shield, for Argus!"
+      "de": "Mein Schild, für Argus!",
+      "en": "My shield, for Argus!",
+      "es": "¡Mi escudo, por Argus!",
+      "fr": "Mon bouclier, pour Argus !",
+      "it": "Il mio scudo, per Argus!",
+      "pl": "Moja tarcza, za Argusa!",
+      "pt_BR": "Meu escudo, por Argus!",
+      "ru": "Мой щит — за Аргус!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Defender_of_Argus"
+    "source": "https://hearthstone.wiki.gg/wiki/Defender_of_Argus_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_095": {
     "attack": {
-      "en": "Heh-heh-heh-heh-heh, time to pay!"
+      "de": "Heh-heh-heh-heh-heh, Zahltag!",
+      "en": "Heh-heh-heh-heh-heh, time to pay!",
+      "es": "¡Je-je-je-je-je, hora de pagar!",
+      "fr": "Hé-hé-hé-hé-hé, l'heure de payer !",
+      "it": "Eh-eh-eh-eh-eh, è ora di pagare!",
+      "pl": "He-he-he-he-he, czas zapłacić!",
+      "pt_BR": "He-he-he-he-he, hora de pagar!",
+      "ru": "Хе-хе-хе-хе-хе, пора платить!"
     },
     "play": {
-      "en": "I got the best deals anywhere."
+      "de": "Bei mir gibt's die besten Angebote weit und breit.",
+      "en": "I got the best deals anywhere.",
+      "es": "Tengo las mejores ofertas del mundo.",
+      "fr": "J'ai les meilleures affaires du coin.",
+      "it": "Ho le offerte migliori in circolazione.",
+      "pl": "Najlepsze okazje w okolicy.",
+      "pt_BR": "Tenho as melhores ofertas da praça.",
+      "ru": "У меня лучшие цены во всем мире."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Gadgetzan_Auctioneer"
+    "source": "https://hearthstone.wiki.gg/wiki/Gadgetzan_Auctioneer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_096": {
     "attack": {
-      "en": "Hey, gimme that!"
+      "de": "He, gib das her!",
+      "en": "Hey, gimme that!",
+      "es": "¡Eh, dame eso!",
+      "fr": "Hé, donne-moi ça !",
+      "it": "Ehi, dammi qua!",
+      "pl": "Hej, dawaj to!",
+      "pt_BR": "Ei, me dá isso!",
+      "ru": "Эй, дай сюда!"
     },
     "play": {
-      "en": "Mind if I roll need?"
+      "de": "Darf ich auf Bedarf würfeln?",
+      "en": "Mind if I roll need?",
+      "es": "¿Os importa si tiro por necesidad?",
+      "fr": "Ça vous dérange si je fais Besoin ?",
+      "it": "Ti spiace se tiro \"Necessità\"?",
+      "pl": "Mogę rzucić na need?",
+      "pt_BR": "Se importa se eu rolar Necessidade?",
+      "ru": "Можно я нажму «Нужно»?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Loot_Hoarder"
+    "source": "https://hearthstone.wiki.gg/wiki/Loot_Hoarder_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_097": {
     "attack": {
-      "en": "Rend and tear!"
+      "de": "Reißen und zerfetzen!",
+      "en": "Rend and tear!",
+      "es": "¡Rajar y desgarrar!",
+      "fr": "Déchirer et lacérer !",
+      "it": "Strappa e squarta!",
+      "pl": "Szarpać i rwać!",
+      "pt_BR": "Rasga e dilacera!",
+      "ru": "Рвать и терзать!"
     },
     "play": {
-      "en": "What we do?"
+      "de": "Was wir machen?",
+      "en": "What we do?",
+      "es": "¿Qué hacer nosotros?",
+      "fr": "Nous faire quoi ?",
+      "it": "Che noi fare?",
+      "pl": "Co my robić?",
+      "pt_BR": "Que nós faz?",
+      "ru": "Что мы делать?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Abomination"
+    "source": "https://hearthstone.wiki.gg/wiki/Abomination_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_100": {
     "attack": {
-      "en": "Hmm?"
+      "de": "Hmm?",
+      "en": "Hmm?",
+      "es": "¿Mmm?",
+      "fr": "Hmm ?",
+      "it": "Mmh?",
+      "pl": "Hmm?",
+      "pt_BR": "Hmm?",
+      "ru": "Хм?"
     },
     "play": {
-      "en": "Jade Serpent guide you."
+      "de": "Möge die Jadeschlange dich leiten.",
+      "en": "Jade Serpent guide you.",
+      "es": "Que la Serpiente de Jade te guíe.",
+      "fr": "Que le Serpent de jade vous guide.",
+      "it": "Che il Serpente di Giada ti guidi.",
+      "pl": "Niech Nefrytowy Wąż cię prowadzi.",
+      "pt_BR": "Que a Serpente de Jade o guie.",
+      "ru": "Да направит тебя Нефритовая Змея."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Lorewalker_Cho"
+    "source": "https://hearthstone.wiki.gg/wiki/Lorewalker_Cho_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_110": {
     "attack": {
-      "en": "For honor!"
+      "de": "Für die Ehre!",
+      "en": "For honor!",
+      "es": "¡Por el honor!",
+      "fr": "Pour l'honneur !",
+      "it": "Per l'onore!",
+      "pl": "Za honor!",
+      "pt_BR": "Pela honra!",
+      "ru": "За честь!"
     },
     "play": {
-      "en": "Take heart, young one. The Earthmother is near."
+      "de": "Nur Mut, junger Freund. Die Erdenmutter ist nah.",
+      "en": "Take heart, young one. The Earthmother is near.",
+      "es": "Ánimo, joven. La Madre Tierra está cerca.",
+      "fr": "Courage, petit. La Terre-Mère est proche.",
+      "it": "Coraggio, giovane. La Madre Terra è vicina.",
+      "pl": "Głowa do góry, młody. Matka Ziemia jest blisko.",
+      "pt_BR": "Tenha coragem, jovem. A Mãe Terra está próxima.",
+      "ru": "Не падай духом, юнец. Мать-Земля рядом."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Cairne_Bloodhoof"
+    "source": "https://hearthstone.wiki.gg/wiki/Cairne_Bloodhoof_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_110t": {
     "attack": {
-      "en": "Ish-ne-alo por-ah!"
+      "de": "Ish-ne-alo por-ah!",
+      "en": "Ish-ne-alo por-ah!",
+      "es": "¡Ish-ne-alo por-ah!",
+      "fr": "Ish-ne-alo por-ah !",
+      "it": "Ish-ne-alo por-ah!",
+      "pl": "Ish-ne-alo por-ah!",
+      "pt_BR": "Ish-ne-alo por-ah!",
+      "ru": "Иш-не-ало пор-ах!"
     },
     "play": {
-      "en": "The eyes of the Earth Mother are upon us."
+      "de": "Die Augen der Erdenmutter ruhen auf uns.",
+      "en": "The eyes of the Earth Mother are upon us.",
+      "es": "Los ojos de la Madre Tierra están puestos en nosotros.",
+      "fr": "Les yeux de la Terre-Mère sont posés sur nous.",
+      "it": "Gli occhi della Madre Terra sono su di noi.",
+      "pl": "Oczy Matki Ziemi spoczywają na nas.",
+      "pt_BR": "Os olhos da Mãe Terra estão sobre nós.",
+      "ru": "Мать-Земля смотрит на нас."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Baine_Bloodhoof"
+    "source": "https://hearthstone.wiki.gg/wiki/Baine_Bloodhoof_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_112": {
     "attack": {
-      "en": "I won't stand for that!"
+      "de": "Das lasse ich mir nicht gefallen!",
+      "en": "I won't stand for that!",
+      "es": "¡No pienso tolerarlo!",
+      "fr": "Je ne le tolérerai pas !",
+      "it": "Non lo tollererò!",
+      "pl": "Nie pozwolę na to!",
+      "pt_BR": "Não vou tolerar isso!",
+      "ru": "Я этого не потерплю!"
     },
     "play": {
-      "en": "Behold, my mighty invention!"
+      "de": "Seht her, meine mächtige Erfindung!",
+      "en": "Behold, my mighty invention!",
+      "es": "¡Contemplad mi poderoso invento!",
+      "fr": "Contemplez ma puissante invention !",
+      "it": "Ammirate la mia possente invenzione!",
+      "pl": "Oto mój potężny wynalazek!",
+      "pt_BR": "Contemplem minha poderosa invenção!",
+      "ru": "Узрите мое могучее изобретение!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Gelbin_Mekkatorque"
+    "source": "https://hearthstone.wiki.gg/wiki/Gelbin_Mekkatorque_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_116": {
     "attack": {
-      "en": "Time's up! Let's do this."
+      "de": "Die Zeit ist um! Los geht's.",
+      "en": "Time's up! Let's do this.",
+      "es": "¡Se acabó el tiempo! ¡Vamos allá!",
+      "fr": "C'est l'heure ! Allons-y.",
+      "it": "Tempo scaduto! Diamoci dentro.",
+      "pl": "Czas minął! Do dzieła.",
+      "pt_BR": "Acabou o tempo! Vamos nessa.",
+      "ru": "Время вышло! Погнали."
     },
     "death": {
-      "en": "At least I have chicken!"
+      "de": "Wenigstens hab ich Hähnchen!",
+      "en": "At least I have chicken!",
+      "es": "¡Al menos tengo pollo!",
+      "fr": "Au moins, j'ai du poulet !",
+      "it": "Almeno ho il pollo!",
+      "pl": "Przynajmniej mam kurczaka!",
+      "pt_BR": "Pelo menos eu tenho frango!",
+      "ru": "Ну хоть курочка есть!"
     },
     "play": {
-      "en": "Leeroooooy Jeeeenkiiiiins!"
+      "de": "Leeroooooy Jeeeenkiiiiins!",
+      "en": "Leeroooooy Jeeeenkiiiiins!",
+      "es": "¡Leeroooooy Jeeeenkiiiiins!",
+      "fr": "Leeroooooy Jeeeenkiiiiins !",
+      "it": "Leeroooooy Jeeeenkiiiiins!",
+      "pl": "Leeroooooy Jeeeenkiiiiins!",
+      "pt_BR": "Leeroooooy Jeeeenkiiiiins!",
+      "ru": "Лииииирооооой Дженкииииинс!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Leeroy_Jenkins"
+    "source": "https://hearthstone.wiki.gg/wiki/Leeroy_Jenkins_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_130a": {
     "attack": {
-      "en": "Ahaha! I lived!"
+      "de": "Ahaha! Ich lebe noch!",
+      "en": "Ahaha! I lived!",
+      "es": "¡Jaja! ¡Sigo vivo!",
+      "fr": "Ahaha ! J'ai survécu !",
+      "it": "Ahah! Sono vivo!",
+      "pl": "Ahaha! Przeżyłem!",
+      "pt_BR": "Ahaha! Sobrevivi!",
+      "ru": "А-ха-ха! Я выжил!"
     },
     "play": {
-      "en": "Get down!"
+      "de": "Runter!",
+      "en": "Get down!",
+      "es": "¡Al suelo!",
+      "fr": "À terre !",
+      "it": "Giù!",
+      "pl": "Padnij!",
+      "pt_BR": "Abaixa!",
+      "ru": "Ложись!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Defender"
+    "source": "https://hearthstone.wiki.gg/wiki/Defender_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_131": {
     "attack": {
-      "en": "You lookin' at me?"
+      "de": "Guckst du mich an?",
+      "en": "You lookin' at me?",
+      "es": "¿Me estás mirando a mí?",
+      "fr": "C'est à moi que tu causes ?",
+      "it": "Ce l'hai con me?",
+      "pl": "Na mnie się gapisz?",
+      "pt_BR": "Tá olhando pra mim?",
+      "ru": "Ты на меня смотришь?"
     },
     "play": {
-      "en": "This is our town, scrub."
+      "de": "Das ist unsere Stadt, Grünschnabel.",
+      "en": "This is our town, scrub.",
+      "es": "Este es nuestro pueblo, pringado.",
+      "fr": "C'est notre ville, minable.",
+      "it": "Questa è la nostra città, pivello.",
+      "pl": "To nasze miasto, cieniasie.",
+      "pt_BR": "Essa cidade é nossa, mané.",
+      "ru": "Это наш город, сопляк."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Defias_Ringleader"
+    "source": "https://hearthstone.wiki.gg/wiki/Defias_Ringleader_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_134": {
     "attack": {
-      "en": "Hey, lights out."
+      "de": "He, Licht aus.",
+      "en": "Hey, lights out.",
+      "es": "Eh, buenas noches.",
+      "fr": "Hé, bonne nuit.",
+      "it": "Ehi, buonanotte.",
+      "pl": "Hej, gaśnie światło.",
+      "pt_BR": "Ei, boa noite.",
+      "ru": "Эй, спокойной ночи."
     },
     "play": {
-      "en": "Hah, this guy's toast."
+      "de": "Hah, der Typ ist erledigt.",
+      "en": "Hah, this guy's toast.",
+      "es": "Ja, este está frito.",
+      "fr": "Hah, ce type est cuit.",
+      "it": "Ah, questo qui è spacciato.",
+      "pl": "Hah, ten gość już nie żyje.",
+      "pt_BR": "Há, esse aí já era.",
+      "ru": "Ха, этому конец."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/SI%3A7_Agent"
+    "source": "https://hearthstone.wiki.gg/wiki/SI%3A7_Agent_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_165": {
     "attack": {
-      "en": "My strength is yours."
+      "de": "Meine Stärke gehört Euch.",
+      "en": "My strength is yours.",
+      "es": "Mi fuerza es tuya.",
+      "fr": "Ma force est vôtre.",
+      "it": "La mia forza è tua.",
+      "pl": "Moja siła należy do ciebie.",
+      "pt_BR": "Minha força é sua.",
+      "ru": "Моя сила — твоя."
     },
     "play": {
-      "en": "Where shall I strike?"
+      "de": "Wo soll ich zuschlagen?",
+      "en": "Where shall I strike?",
+      "es": "¿Dónde ataco?",
+      "fr": "Où dois-je frapper ?",
+      "it": "Dove devo colpire?",
+      "pl": "Gdzie mam uderzyć?",
+      "pt_BR": "Onde devo atacar?",
+      "ru": "Куда мне ударить?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Druid_of_the_Claw"
+    "source": "https://hearthstone.wiki.gg/wiki/Druid_of_the_Claw_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_166": {
     "attack": {
-      "en": "Feel nature's wrath!"
+      "de": "Spürt den Zorn der Natur!",
+      "en": "Feel nature's wrath!",
+      "es": "¡Siente la ira de la naturaleza!",
+      "fr": "Subissez le courroux de la nature !",
+      "it": "Subisci l'ira della natura!",
+      "pl": "Poczuj gniew natury!",
+      "pt_BR": "Sinta a fúria da natureza!",
+      "ru": "Познай гнев природы!"
     },
     "play": {
-      "en": "I must safeguard the land."
+      "de": "Ich muss das Land beschützen.",
+      "en": "I must safeguard the land.",
+      "es": "Debo proteger esta tierra.",
+      "fr": "Je dois protéger ces terres.",
+      "it": "Devo proteggere la terra.",
+      "pl": "Muszę strzec tej ziemi.",
+      "pt_BR": "Preciso proteger esta terra.",
+      "ru": "Я должен оберегать эти земли."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Keeper_of_the_Grove"
-  },
-  "VAN_EX1_249": {
-    "play": {
-      "en": "You will BURN!"
-    },
-    "source": "https://hearthstone.wiki.gg/wiki/Baron_Geddon"
+    "source": "https://hearthstone.wiki.gg/wiki/Keeper_of_the_Grove_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_298": {
     "attack": {
-      "en": "Too soon."
+      "de": "Zu früh.",
+      "en": "Too soon.",
+      "es": "Demasiado pronto.",
+      "fr": "Trop tôt.",
+      "it": "Troppo presto.",
+      "pl": "Za wcześnie.",
+      "pt_BR": "Cedo demais.",
+      "ru": "Слишком рано."
     },
     "play": {
-      "en": "By fire be purged."
+      "de": "Durch Feuer sollt ihr geläutert werden.",
+      "en": "By fire be purged.",
+      "es": "Por el fuego seréis purgados.",
+      "fr": "Par le feu, soyez purifiés !",
+      "it": "Il fuoco vi purificherà.",
+      "pl": "Niech ogień was oczyści.",
+      "pt_BR": "Pelo fogo sejam purgados.",
+      "ru": "Очистись в огне!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Ragnaros_the_Firelord"
+    "source": "https://hearthstone.wiki.gg/wiki/Ragnaros_the_Firelord_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_301": {
     "attack": {
-      "en": "Too pathetic to fight your own battles?"
+      "de": "Zu erbärmlich, um deine Kämpfe selbst auszufechten?",
+      "en": "Too pathetic to fight your own battles?",
+      "es": "¿Tan patético eres que no libras tus propias batallas?",
+      "fr": "Trop pathétique pour mener vos propres combats ?",
+      "it": "Troppo patetico per combattere da solo?",
+      "pl": "Zbyt żałosny, by samemu walczyć?",
+      "pt_BR": "Patético demais para lutar suas próprias batalhas?",
+      "ru": "Слишком жалок, чтобы сражаться самому?"
     },
     "play": {
-      "en": "I will enjoy watching you die."
+      "de": "Ich werde es genießen, dich sterben zu sehen.",
+      "en": "I will enjoy watching you die.",
+      "es": "Disfrutaré viéndote morir.",
+      "fr": "Je vais prendre plaisir à vous voir mourir.",
+      "it": "Mi godrò lo spettacolo della tua morte.",
+      "pl": "Z przyjemnością popatrzę, jak umierasz.",
+      "pt_BR": "Vou adorar ver você morrer.",
+      "ru": "Я с удовольствием посмотрю, как ты умрешь."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Felguard"
+    "source": "https://hearthstone.wiki.gg/wiki/Felguard_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_310": {
     "attack": {
-      "en": "A paltry task."
+      "de": "Eine lächerliche Aufgabe.",
+      "en": "A paltry task.",
+      "es": "Una tarea insignificante.",
+      "fr": "Une tâche dérisoire.",
+      "it": "Un compito misero.",
+      "pl": "Marne zadanie.",
+      "pt_BR": "Uma tarefa insignificante.",
+      "ru": "Ничтожная задача."
     },
     "play": {
-      "en": "Who dares summon me?!"
+      "de": "Wer wagt es, mich zu beschwören?!",
+      "en": "Who dares summon me?!",
+      "es": "¿¡Quién osa invocarme!?",
+      "fr": "Qui ose m'invoquer ?!",
+      "it": "Chi osa evocarmi?!",
+      "pl": "Kto śmie mnie wzywać?!",
+      "pt_BR": "Quem ousa me evocar?!",
+      "ru": "Кто посмел призвать меня?!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Doomguard"
+    "source": "https://hearthstone.wiki.gg/wiki/Doomguard_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_313": {
     "attack": {
-      "en": "Perish, insect."
+      "de": "Vergehe, Insekt.",
+      "en": "Perish, insect.",
+      "es": "Perece, insecto.",
+      "fr": "Péris, insecte.",
+      "it": "Muori, insetto.",
+      "pl": "Giń, robaku.",
+      "pt_BR": "Pereça, inseto.",
+      "ru": "Сгинь, насекомое."
     },
     "play": {
-      "en": "To the slaughter."
+      "de": "Zum Gemetzel.",
+      "en": "To the slaughter.",
+      "es": "A la masacre.",
+      "fr": "Au massacre.",
+      "it": "Al massacro.",
+      "pl": "Na rzeź.",
+      "pt_BR": "Ao massacre.",
+      "ru": "На бойню."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Pit_Lord"
+    "source": "https://hearthstone.wiki.gg/wiki/Pit_Lord_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_319": {
     "attack": {
-      "en": "Is this really necessary?"
+      "de": "Muss das wirklich sein?",
+      "en": "Is this really necessary?",
+      "es": "¿De verdad hace falta?",
+      "fr": "C'est vraiment nécessaire ?",
+      "it": "È davvero necessario?",
+      "pl": "Czy to naprawdę konieczne?",
+      "pt_BR": "Isso é mesmo necessário?",
+      "ru": "Это правда так необходимо?"
     },
     "play": {
-      "en": "Yeah, I'll get right on it."
+      "de": "Jaja, ich kümmer mich gleich drum.",
+      "en": "Yeah, I'll get right on it.",
+      "es": "Sí, ahora mismo me pongo.",
+      "fr": "Ouais, je m'y mets tout de suite.",
+      "it": "Sì, sì, ci penso subito.",
+      "pl": "Jasne, zaraz się tym zajmę.",
+      "pt_BR": "Tá, já vou fazer.",
+      "ru": "Ага, сейчас же займусь."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Flame_Imp"
+    "source": "https://hearthstone.wiki.gg/wiki/Flame_Imp_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_323": {
     "attack": {
-      "en": "MUAHAHAHAHAHA!"
+      "de": "MUAHAHAHAHAHA!",
+      "en": "MUAHAHAHAHAHA!",
+      "es": "¡MUAJAJAJAJAJA!",
+      "fr": "MOUAHAHAHAHAHA !",
+      "it": "MUAHAHAHAHAHA!",
+      "pl": "MUAHAHAHAHAHA!",
+      "pt_BR": "MUAHAHAHAHAHA!",
+      "ru": "МУА-ХА-ХА-ХА-ХА-ХА!"
     },
     "play": {
-      "en": "You face Jaraxxus, Eredar Lord of the Burning Legion!"
+      "de": "Ihr steht Jaraxxus gegenüber, Eredarlord der Brennenden Legion!",
+      "en": "You face Jaraxxus, Eredar Lord of the Burning Legion!",
+      "es": "¡Te enfrentas a Jaraxxus, Señor eredar de la Legión Ardiente!",
+      "fr": "Vous affrontez Jaraxxus, seigneur érédar de la Légion ardente !",
+      "it": "Affronti Jaraxxus, Sire Eredar della Legione Infuocata!",
+      "pl": "Stajesz przed Jaraxxusem, eredarskim lordem Płonącego Legionu!",
+      "pt_BR": "Você enfrenta Jaraxxus, Lorde Eredar da Legião Ardente!",
+      "ru": "Перед тобой Джараксус, эредарский лорд Пылающего Легиона!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Lord_Jaraxxus"
+    "source": "https://hearthstone.wiki.gg/wiki/Lord_Jaraxxus_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_350": {
     "attack": {
-      "en": "I foresaw this."
+      "de": "Das habe ich vorhergesehen.",
+      "en": "I foresaw this.",
+      "es": "Lo había previsto.",
+      "fr": "Je l'avais prévu.",
+      "it": "L'avevo previsto.",
+      "pl": "Przewidziałem to.",
+      "pt_BR": "Eu previ isso.",
+      "ru": "Я это предвидел."
     },
     "play": {
-      "en": "Not all who wander are lost."
+      "de": "Nicht jeder, der wandert, ist verloren.",
+      "en": "Not all who wander are lost.",
+      "es": "No todos los que vagan están perdidos.",
+      "fr": "Tous ceux qui errent ne sont pas perdus.",
+      "it": "Non tutti coloro che vagano sono perduti.",
+      "pl": "Nie każdy, kto wędruje, jest zagubiony.",
+      "pt_BR": "Nem todos que vagueiam estão perdidos.",
+      "ru": "Не всякий странник заблудился."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Prophet_Velen"
+    "source": "https://hearthstone.wiki.gg/wiki/Prophet_Velen_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_362": {
     "attack": {
-      "en": "This is my responsibility."
+      "de": "Das ist meine Verantwortung.",
+      "en": "This is my responsibility.",
+      "es": "Es mi responsabilidad.",
+      "fr": "C'est ma responsabilité.",
+      "it": "È una mia responsabilità.",
+      "pl": "To moja odpowiedzialność.",
+      "pt_BR": "Esta é a minha responsabilidade.",
+      "ru": "Это мой долг."
     },
     "play": {
-      "en": "Not on my watch."
+      "de": "Nicht, solange ich Wache halte.",
+      "en": "Not on my watch.",
+      "es": "No mientras yo vigile.",
+      "fr": "Pas tant que je monte la garde.",
+      "it": "Non finché ci sono io.",
+      "pl": "Nie na mojej warcie.",
+      "pt_BR": "Não enquanto eu estiver de guarda.",
+      "ru": "Только не в мою смену."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Argent_Protector"
+    "source": "https://hearthstone.wiki.gg/wiki/Argent_Protector_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_382": {
     "attack": {
-      "en": "Last warning!"
+      "de": "Letzte Warnung!",
+      "en": "Last warning!",
+      "es": "¡Última advertencia!",
+      "fr": "Dernier avertissement !",
+      "it": "Ultimo avvertimento!",
+      "pl": "Ostatnie ostrzeżenie!",
+      "pt_BR": "Último aviso!",
+      "ru": "Последнее предупреждение!"
     },
     "play": {
-      "en": "Follow the rules."
+      "de": "Haltet Euch an die Regeln.",
+      "en": "Follow the rules.",
+      "es": "Cumple las normas.",
+      "fr": "Respectez les règles.",
+      "it": "Rispetta le regole.",
+      "pl": "Przestrzegaj zasad.",
+      "pt_BR": "Sigam as regras.",
+      "ru": "Соблюдайте правила."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Aldor_Peacekeeper"
+    "source": "https://hearthstone.wiki.gg/wiki/Aldor_Peacekeeper_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_383": {
     "attack": {
-      "en": "Don't test me, child!"
+      "de": "Fordere mich nicht heraus, Kind!",
+      "en": "Don't test me, child!",
+      "es": "¡No me pongas a prueba, criatura!",
+      "fr": "Ne me provoque pas, mon enfant !",
+      "it": "Non mettermi alla prova, ragazzo!",
+      "pl": "Nie wystawiaj mnie na próbę, dziecko!",
+      "pt_BR": "Não me teste, criança!",
+      "ru": "Не испытывай меня, дитя!"
     },
     "play": {
-      "en": "Put your faith in the Light!"
+      "de": "Vertraut auf das Licht!",
+      "en": "Put your faith in the Light!",
+      "es": "¡Deposita tu fe en la Luz!",
+      "fr": "Placez votre foi en la Lumière !",
+      "it": "Riponi la tua fede nella Luce!",
+      "pl": "Zaufaj Światłości!",
+      "pt_BR": "Ponha sua fé na Luz!",
+      "ru": "Уповай на Свет!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Tirion_Fordring"
+    "source": "https://hearthstone.wiki.gg/wiki/Tirion_Fordring_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_390": {
     "attack": {
-      "en": "Bring it on."
+      "de": "Nur her damit.",
+      "en": "Bring it on.",
+      "es": "¡Que venga!",
+      "fr": "Amène-toi.",
+      "it": "Fatti sotto.",
+      "pl": "Dawaj.",
+      "pt_BR": "Pode vir.",
+      "ru": "Давай, нападай."
     },
     "play": {
-      "en": "May my ancestors watch over me."
+      "de": "Mögen meine Ahnen über mich wachen.",
+      "en": "May my ancestors watch over me.",
+      "es": "Que mis ancestros velen por mí.",
+      "fr": "Que mes ancêtres veillent sur moi.",
+      "it": "Che i miei antenati veglino su di me.",
+      "pl": "Niech przodkowie czuwają nade mną.",
+      "pt_BR": "Que meus ancestrais olhem por mim.",
+      "ru": "Пусть предки хранят меня."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Tauren_Warrior"
+    "source": "https://hearthstone.wiki.gg/wiki/Tauren_Warrior_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_393": {
     "attack": {
-      "en": "Who you wan' me kill?! Heh-heh."
+      "de": "Wen du wollen, dass ich töte?! Heh-heh.",
+      "en": "Who you wan' me kill?! Heh-heh.",
+      "es": "¿¡A quién quieres que mate, mon!? Je-je.",
+      "fr": "Qui tu veux qu'moi tuer ?! Hé-hé.",
+      "it": "Chi tu vuole che io ammazza?! Eh-eh.",
+      "pl": "Kogo mam zabić?! He-he.",
+      "pt_BR": "Quem cê quer que eu mata?! He-he.",
+      "ru": "Кого моя убивать?! Хе-хе."
     },
     "play": {
-      "en": "Heh-heh-heh, iz time for a little blood."
+      "de": "Heh-heh-heh, is' Zeit für bisschen Blut.",
+      "en": "Heh-heh-heh, iz time for a little blood.",
+      "es": "Je-je-je, es hora de un poco de sangre.",
+      "fr": "Hé-hé-hé, c'est l'heure d'un p'tit peu d'sang.",
+      "it": "Eh-eh-eh, è ora di un po' di sangue.",
+      "pl": "He-he-he, czas na trochę krwi.",
+      "pt_BR": "He-he-he, é hora de um pouco de sangue.",
+      "ru": "Хе-хе-хе, пора пустить немного крови."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Amani_Berserker"
+    "source": "https://hearthstone.wiki.gg/wiki/Amani_Berserker_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_396": {
     "attack": {
-      "en": "Hrrrrm, payback!"
+      "de": "Hrrrrm, Vergeltung!",
+      "en": "Hrrrrm, payback!",
+      "es": "Grrrrm, ¡venganza!",
+      "fr": "Hrrrrm, vengeance !",
+      "it": "Hrrrrm, vendetta!",
+      "pl": "Hrrrrm, odwet!",
+      "pt_BR": "Hrrrrm, vingança!",
+      "ru": "Хррррм, расплата!"
     },
     "play": {
-      "en": "Pandaria will be ours!"
+      "de": "Pandaria wird uns gehören!",
+      "en": "Pandaria will be ours!",
+      "es": "¡Pandaria será nuestra!",
+      "fr": "La Pandarie sera à nous !",
+      "it": "Pandaria sarà nostra!",
+      "pl": "Pandaria będzie nasza!",
+      "pt_BR": "Pandária será nossa!",
+      "ru": "Пандария будет нашей!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Mogu%27shan_Warden"
+    "source": "https://hearthstone.wiki.gg/wiki/Mogu%27shan_Warden_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_398": {
     "attack": {
-      "en": "Watch this."
+      "de": "Pass auf.",
+      "en": "Watch this.",
+      "es": "Mira esto.",
+      "fr": "Regardez ça.",
+      "it": "Guarda qua.",
+      "pl": "Patrz na to.",
+      "pt_BR": "Olha só.",
+      "ru": "Смотри."
     },
     "play": {
-      "en": "Try this!"
+      "de": "Probier das mal!",
+      "en": "Try this!",
+      "es": "¡Prueba esto!",
+      "fr": "Essayez ça !",
+      "it": "Prova questa!",
+      "pl": "Spróbuj tego!",
+      "pt_BR": "Experimente esta!",
+      "ru": "Попробуй вот это!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Arathi_Weaponsmith"
+    "source": "https://hearthstone.wiki.gg/wiki/Arathi_Weaponsmith_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_402": {
     "attack": {
-      "en": "Strike!"
+      "de": "Zuschlagen!",
+      "en": "Strike!",
+      "es": "¡Golpea!",
+      "fr": "Frappez !",
+      "it": "Colpisci!",
+      "pl": "Uderzaj!",
+      "pt_BR": "Golpeie!",
+      "ru": "Удар!"
     },
     "play": {
-      "en": "Armor, made to fit."
+      "de": "Rüstung, maßgeschneidert.",
+      "en": "Armor, made to fit.",
+      "es": "Armadura a medida.",
+      "fr": "Une armure, sur mesure.",
+      "it": "Armature su misura.",
+      "pl": "Zbroja na miarę.",
+      "pt_BR": "Armadura sob medida.",
+      "ru": "Доспехи, точно по размеру."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Armorsmith"
+    "source": "https://hearthstone.wiki.gg/wiki/Armorsmith_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_405": {
     "attack": {
-      "en": "Payback time."
+      "de": "Zeit für Vergeltung.",
+      "en": "Payback time.",
+      "es": "Hora de la revancha.",
+      "fr": "L'heure de la revanche.",
+      "it": "È ora di pagare.",
+      "pl": "Czas na odwet.",
+      "pt_BR": "Hora do troco.",
+      "ru": "Время расплаты."
     },
     "play": {
-      "en": "You shall not pass!"
+      "de": "Ihr kommt nicht vorbei!",
+      "en": "You shall not pass!",
+      "es": "¡No puedes pasar!",
+      "fr": "Vous ne passerez pas !",
+      "it": "Tu non passerai!",
+      "pl": "Nie przejdziesz!",
+      "pt_BR": "Você não passará!",
+      "ru": "Ты не пройдешь!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Shieldbearer"
+    "source": "https://hearthstone.wiki.gg/wiki/Shieldbearer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_411": {
     "play": {
-      "en": "Aww, yeah!"
+      "de": "Oh, jaaa!",
+      "en": "Aww, yeah!",
+      "es": "¡Ohhh, sí!",
+      "fr": "Ah, ouais !",
+      "it": "Oh, sììì!",
+      "pl": "O, tak!",
+      "pt_BR": "Aah, é isso aí!",
+      "ru": "О да!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Gorehowl"
+    "source": "https://hearthstone.wiki.gg/wiki/Gorehowl_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_414": {
     "attack": {
-      "en": "Taste my blade."
+      "de": "Kostet meine Klinge.",
+      "en": "Taste my blade.",
+      "es": "Prueba mi filo.",
+      "fr": "Goûte à ma lame.",
+      "it": "Assaggia la mia lama.",
+      "pl": "Posmakuj mego ostrza.",
+      "pt_BR": "Prove a minha lâmina.",
+      "ru": "Отведай моего клинка."
     },
     "play": {
-      "en": "I can wait no longer."
+      "de": "Ich kann nicht länger warten.",
+      "en": "I can wait no longer.",
+      "es": "No puedo esperar más.",
+      "fr": "Je ne peux plus attendre.",
+      "it": "Non posso più aspettare.",
+      "pl": "Nie mogę dłużej czekać.",
+      "pt_BR": "Não posso mais esperar.",
+      "ru": "Я больше не могу ждать."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Grommash_Hellscream"
+    "source": "https://hearthstone.wiki.gg/wiki/Grommash_Hellscream_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_522": {
     "attack": {
-      "en": "Goodbye."
+      "de": "Lebwohl.",
+      "en": "Goodbye.",
+      "es": "Adiós.",
+      "fr": "Adieu.",
+      "it": "Addio.",
+      "pl": "Żegnaj.",
+      "pt_BR": "Adeus.",
+      "ru": "Прощай."
     },
     "play": {
-      "en": "Go ahead... make my day."
+      "de": "Nur zu... mach mir die Freude.",
+      "en": "Go ahead... make my day.",
+      "es": "Vamos... alégrame el día.",
+      "fr": "Vas-y... fais-moi plaisir.",
+      "it": "Avanti... fammi divertire.",
+      "pl": "Śmiało... zrób mi tę przyjemność.",
+      "pt_BR": "Vá em frente... faça o meu dia.",
+      "ru": "Давай... порадуй меня."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Patient_Assassin"
+    "source": "https://hearthstone.wiki.gg/wiki/Patient_Assassin_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_557": {
     "attack": {
-      "en": "Howdy!"
+      "de": "Tag auch!",
+      "en": "Howdy!",
+      "es": "¡Buenas!",
+      "fr": "Salut !",
+      "it": "Salve!",
+      "pl": "Siemka!",
+      "pt_BR": "E aí, parceiro!",
+      "ru": "Здорово!"
     },
     "play": {
-      "en": "I can wait and fish all day!"
+      "de": "Ich kann den ganzen Tag warten und angeln!",
+      "en": "I can wait and fish all day!",
+      "es": "¡Puedo pasarme el día esperando y pescando!",
+      "fr": "Je peux attendre et pêcher toute la journée !",
+      "it": "Posso aspettare e pescare tutto il giorno!",
+      "pl": "Mogę czekać i łowić cały dzień!",
+      "pt_BR": "Posso esperar e pescar o dia inteiro!",
+      "ru": "Могу ждать и рыбачить хоть весь день!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Nat_Pagle"
+    "source": "https://hearthstone.wiki.gg/wiki/Nat_Pagle_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_558": {
     "play": {
-      "en": "That belongs in a museum!"
+      "de": "Das gehört in ein Museum!",
+      "en": "That belongs in a museum!",
+      "es": "¡Eso debería estar en un museo!",
+      "fr": "Ça a sa place dans un musée !",
+      "it": "Questo va in un museo!",
+      "pl": "To powinno być w muzeum!",
+      "pt_BR": "Isso pertence a um museu!",
+      "ru": "Этому место в музее!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Harrison_Jones"
+    "source": "https://hearthstone.wiki.gg/wiki/Harrison_Jones_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_559": {
     "attack": {
-      "en": "To battle!"
+      "de": "In die Schlacht!",
+      "en": "To battle!",
+      "es": "¡A la batalla!",
+      "fr": "Au combat !",
+      "it": "In battaglia!",
+      "pl": "Do boju!",
+      "pt_BR": "À batalha!",
+      "ru": "В бой!"
     },
     "play": {
-      "en": "You require my assistance?"
+      "de": "Ihr benötigt meine Hilfe?",
+      "en": "You require my assistance?",
+      "es": "¿Requieres mi ayuda?",
+      "fr": "Vous avez besoin de mon aide ?",
+      "it": "Richiedi la mia assistenza?",
+      "pl": "Potrzebujesz mojej pomocy?",
+      "pt_BR": "Precisa da minha ajuda?",
+      "ru": "Тебе нужна моя помощь?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Archmage_Antonidas"
+    "source": "https://hearthstone.wiki.gg/wiki/Archmage_Antonidas_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_560": {
     "attack": {
-      "en": "Your time is up!"
+      "de": "Deine Zeit ist abgelaufen!",
+      "en": "Your time is up!",
+      "es": "¡Se te acabó el tiempo!",
+      "fr": "Votre temps est écoulé !",
+      "it": "Il tuo tempo è scaduto!",
+      "pl": "Twój czas się skończył!",
+      "pt_BR": "Seu tempo acabou!",
+      "ru": "Твое время вышло!"
     },
     "play": {
-      "en": "Just in time."
+      "de": "Gerade noch rechtzeitig.",
+      "en": "Just in time.",
+      "es": "Justo a tiempo.",
+      "fr": "Juste à temps.",
+      "it": "Appena in tempo.",
+      "pl": "W samą porę.",
+      "pt_BR": "Bem na hora.",
+      "ru": "Как раз вовремя."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Nozdormu"
+    "source": "https://hearthstone.wiki.gg/wiki/Nozdormu_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_561": {
     "attack": {
-      "en": "I will mourn your death."
+      "de": "Ich werde um dich trauern.",
+      "en": "I will mourn your death.",
+      "es": "Lloraré tu muerte.",
+      "fr": "Je pleurerai votre mort.",
+      "it": "Piangerò la tua morte.",
+      "pl": "Będę opłakiwać twoją śmierć.",
+      "pt_BR": "Lamentarei sua morte.",
+      "ru": "Я буду скорбеть о твоей смерти."
     },
     "play": {
-      "en": "I bring life and hope."
+      "de": "Ich bringe Leben und Hoffnung.",
+      "en": "I bring life and hope.",
+      "es": "Traigo vida y esperanza.",
+      "fr": "J'apporte la vie et l'espoir.",
+      "it": "Porto vita e speranza.",
+      "pl": "Niosę życie i nadzieję.",
+      "pt_BR": "Eu trago vida e esperança.",
+      "ru": "Я несу жизнь и надежду."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Alexstrasza"
+    "source": "https://hearthstone.wiki.gg/wiki/Alexstrasza_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_562": {
     "attack": {
-      "en": "You shall pay for your insolence!"
+      "de": "Ihr werdet für Eure Unverschämtheit bezahlen!",
+      "en": "You shall pay for your insolence!",
+      "es": "¡Pagarás por tu insolencia!",
+      "fr": "Vous paierez pour votre insolence !",
+      "it": "Pagherai per la tua insolenza!",
+      "pl": "Zapłacisz za swoją zuchwałość!",
+      "pt_BR": "Você pagará por sua insolência!",
+      "ru": "Ты заплатишь за свою дерзость!"
     },
     "play": {
-      "en": "You dare challenge the daughter of Deathwing?"
+      "de": "Ihr wagt es, die Tochter Todesschwinges herauszufordern?",
+      "en": "You dare challenge the daughter of Deathwing?",
+      "es": "¿Osas desafiar a la hija de Alamuerte?",
+      "fr": "Vous osez défier la fille d'Aile de mort ?",
+      "it": "Osi sfidare la figlia di Alamorte?",
+      "pl": "Śmiesz rzucać wyzwanie córce Śmiercioskrzydłego?",
+      "pt_BR": "Ousa desafiar a filha do Asa da Morte?",
+      "ru": "Ты смеешь бросать вызов дочери Смертокрыла?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Onyxia"
+    "source": "https://hearthstone.wiki.gg/wiki/Onyxia_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_563": {
     "attack": {
-      "en": "You are finished!"
+      "de": "Ihr seid erledigt!",
+      "en": "You are finished!",
+      "es": "¡Estás acabado!",
+      "fr": "Vous êtes fini !",
+      "it": "Sei finito!",
+      "pl": "To twój koniec!",
+      "pt_BR": "Você está acabado!",
+      "ru": "Тебе конец!"
     },
     "play": {
-      "en": "I am the essence of magic!"
+      "de": "Ich bin die Essenz der Magie!",
+      "en": "I am the essence of magic!",
+      "es": "¡Soy la esencia de la magia!",
+      "fr": "Je suis l'essence de la magie !",
+      "it": "Io sono l'essenza della magia!",
+      "pl": "Jestem esencją magii!",
+      "pt_BR": "Eu sou a essência da magia!",
+      "ru": "Я — воплощение магии!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Malygos"
+    "source": "https://hearthstone.wiki.gg/wiki/Malygos_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_572": {
     "attack": {
-      "en": "I shall bring you rest!"
+      "de": "Ich werde dir Ruhe schenken!",
+      "en": "I shall bring you rest!",
+      "es": "¡Te daré descanso!",
+      "fr": "Je vais vous offrir le repos !",
+      "it": "Ti porterò il riposo!",
+      "pl": "Ukoję cię snem!",
+      "pt_BR": "Eu lhe trarei o descanso!",
+      "ru": "Я подарю тебе покой!"
     },
     "play": {
-      "en": "I dream and the world trembles."
+      "de": "Ich träume, und die Welt erbebt.",
+      "en": "I dream and the world trembles.",
+      "es": "Sueño, y el mundo tiembla.",
+      "fr": "Je rêve, et le monde tremble.",
+      "it": "Io sogno, e il mondo trema.",
+      "pl": "Śnię, a świat drży.",
+      "pt_BR": "Eu sonho, e o mundo treme.",
+      "ru": "Я вижу сны, и мир трепещет."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Ysera"
+    "source": "https://hearthstone.wiki.gg/wiki/Ysera_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_573": {
     "attack": {
-      "en": "Naturally..."
+      "de": "Natürlich...",
+      "en": "Naturally...",
+      "es": "Naturalmente...",
+      "fr": "Naturellement...",
+      "it": "Naturalmente...",
+      "pl": "Naturalnie...",
+      "pt_BR": "Naturalmente...",
+      "ru": "Естественно..."
     },
     "play": {
-      "en": "Who dares defile this ancient land?"
+      "de": "Wer wagt es, dieses uralte Land zu entweihen?",
+      "en": "Who dares defile this ancient land?",
+      "es": "¿Quién osa profanar esta tierra ancestral?",
+      "fr": "Qui ose souiller cette terre ancestrale ?",
+      "it": "Chi osa profanare questa terra antica?",
+      "pl": "Kto śmie bezcześcić tę prastarą ziemię?",
+      "pt_BR": "Quem ousa profanar esta terra ancestral?",
+      "ru": "Кто смеет осквернять эту древнюю землю?"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Cenarius"
+    "source": "https://hearthstone.wiki.gg/wiki/Cenarius_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_582": {
     "attack": {
-      "en": "Vaporization commencing!"
+      "de": "Verdampfung wird eingeleitet!",
+      "en": "Vaporization commencing!",
+      "es": "¡Iniciando vaporización!",
+      "fr": "Vaporisation en cours !",
+      "it": "Vaporizzazione in corso!",
+      "pl": "Rozpoczynam waporyzację!",
+      "pt_BR": "Iniciando vaporização!",
+      "ru": "Начинаю испарение!"
     },
     "play": {
-      "en": "I am a master of magics!"
+      "de": "Ich bin ein Meister der Magie!",
+      "en": "I am a master of magics!",
+      "es": "¡Soy un maestro de la magia!",
+      "fr": "Je suis maître des arcanes !",
+      "it": "Sono un maestro delle arti magiche!",
+      "pl": "Jestem mistrzem magii!",
+      "pt_BR": "Sou um mestre das magias!",
+      "ru": "Я мастер магических искусств!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Dalaran_Mage"
+    "source": "https://hearthstone.wiki.gg/wiki/Dalaran_Mage_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_583": {
     "attack": {
-      "en": "Anu'denah'thelore!"
+      "de": "Anu'denah'thelore!",
+      "en": "Anu'denah'thelore!",
+      "es": "¡Anu'denah'thelore!",
+      "fr": "Anu'denah'thelore !",
+      "it": "Anu'denah'thelore!",
+      "pl": "Anu'denah'thelore!",
+      "pt_BR": "Anu'denah'thelore!",
+      "ru": "Ану'дена'телор!"
     },
     "play": {
-      "en": "I am the blade of the Goddess."
+      "de": "Ich bin die Klinge der Göttin.",
+      "en": "I am the blade of the Goddess.",
+      "es": "Soy la hoja de la Diosa.",
+      "fr": "Je suis la lame de la déesse.",
+      "it": "Sono la lama della Dea.",
+      "pl": "Jestem ostrzem Bogini.",
+      "pt_BR": "Eu sou a lâmina da Deusa.",
+      "ru": "Я клинок Богини."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Priestess_of_Elune"
+    "source": "https://hearthstone.wiki.gg/wiki/Priestess_of_Elune_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_584": {
     "attack": {
-      "en": "Where am I?"
+      "de": "Wo bin ich?",
+      "en": "Where am I?",
+      "es": "¿Dónde estoy?",
+      "fr": "Où suis-je ?",
+      "it": "Dove sono?",
+      "pl": "Gdzie ja jestem?",
+      "pt_BR": "Onde estou?",
+      "ru": "Где я?"
     },
     "play": {
-      "en": "Sometimes, I forget things."
+      "de": "Manchmal vergesse ich Dinge.",
+      "en": "Sometimes, I forget things.",
+      "es": "A veces se me olvidan las cosas.",
+      "fr": "Parfois, j'oublie des choses.",
+      "it": "A volte dimentico le cose.",
+      "pl": "Czasem coś mi umyka.",
+      "pt_BR": "Às vezes, eu esqueço das coisas.",
+      "ru": "Иногда я кое-что забываю."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Ancient_Mage"
+    "source": "https://hearthstone.wiki.gg/wiki/Ancient_Mage_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_587": {
     "attack": {
-      "en": "To war!"
+      "de": "In den Krieg!",
+      "en": "To war!",
+      "es": "¡A la guerra!",
+      "fr": "À la guerre !",
+      "it": "Alla guerra!",
+      "pl": "Na wojnę!",
+      "pt_BR": "À guerra!",
+      "ru": "В бой!"
     },
     "play": {
-      "en": "Feel the power of the winds."
+      "de": "Spürt die Macht der Winde.",
+      "en": "Feel the power of the winds.",
+      "es": "Sentid el poder de los vientos.",
+      "fr": "Sentez la puissance des vents.",
+      "it": "Senti il potere dei venti.",
+      "pl": "Poczuj moc wiatrów.",
+      "pt_BR": "Sinta o poder dos ventos.",
+      "ru": "Почувствуй силу ветров."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Windspeaker"
+    "source": "https://hearthstone.wiki.gg/wiki/Windspeaker_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_590": {
     "attack": {
-      "en": "For Lor'themar!"
+      "de": "Für Lor'themar!",
+      "en": "For Lor'themar!",
+      "es": "¡Por Lor'themar!",
+      "fr": "Pour Lor'themar !",
+      "it": "Per Lor'themar!",
+      "pl": "Za Lor'themara!",
+      "pt_BR": "Por Lor'themar!",
+      "ru": "За Лор'темара!"
     },
     "play": {
-      "en": "Glory to the Sin'dorei!"
+      "de": "Ruhm den Sin'dorei!",
+      "en": "Glory to the Sin'dorei!",
+      "es": "¡Gloria a los sin'dorei!",
+      "fr": "Gloire aux Sin'dorei !",
+      "it": "Gloria ai Sin'dorei!",
+      "pl": "Chwała Sin'dorei!",
+      "pt_BR": "Glória aos Sin'dorei!",
+      "ru": "Слава син'дорай!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Blood_Knight"
+    "source": "https://hearthstone.wiki.gg/wiki/Blood_Knight_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_591": {
     "attack": {
-      "en": "Feel my pain!"
+      "de": "Spürt meinen Schmerz!",
+      "en": "Feel my pain!",
+      "es": "¡Siente mi dolor!",
+      "fr": "Ressentez ma douleur !",
+      "it": "Senti il mio dolore!",
+      "pl": "Poczuj mój ból!",
+      "pt_BR": "Sinta a minha dor!",
+      "ru": "Почувствуй мою боль!"
     },
     "play": {
-      "en": "Embrace the void."
+      "de": "Umarmt die Leere.",
+      "en": "Embrace the void.",
+      "es": "Abraza el vacío.",
+      "fr": "Embrassez le Vide.",
+      "it": "Abbraccia il Vuoto.",
+      "pl": "Przyjmij pustkę.",
+      "pt_BR": "Abrace o caos.",
+      "ru": "Прими Бездну."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Auchenai_Soulpriest"
+    "source": "https://hearthstone.wiki.gg/wiki/Auchenai_Soulpriest_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_593": {
     "attack": {
-      "en": "This one's mine."
+      "de": "Der gehört mir.",
+      "en": "This one's mine.",
+      "es": "Este es mío.",
+      "fr": "Celui-là est à moi.",
+      "it": "Questo è mio.",
+      "pl": "Ten jest mój.",
+      "pt_BR": "Esse é meu.",
+      "ru": "Этот мой."
     },
     "play": {
-      "en": "They'll never know what hit 'em."
+      "de": "Die werden nie wissen, was sie getroffen hat.",
+      "en": "They'll never know what hit 'em.",
+      "es": "No sabrán qué les ha golpeado.",
+      "fr": "Ils ne sauront jamais ce qui les a frappés.",
+      "it": "Non capiranno nemmeno cosa li ha colpiti.",
+      "pl": "Nawet nie będą wiedzieć, co ich trafiło.",
+      "pt_BR": "Eles nem vão saber o que os atingiu.",
+      "ru": "Они даже не поймут, что их убило."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Nightblade"
+    "source": "https://hearthstone.wiki.gg/wiki/Nightblade_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_595": {
     "attack": {
-      "en": "Mwahaha, who's next?!"
+      "de": "Mwahaha, wer ist der Nächste?!",
+      "en": "Mwahaha, who's next?!",
+      "es": "Muajaja, ¿¡quién es el siguiente!?",
+      "fr": "Mouahaha, au suivant ?!",
+      "it": "Muahaha, chi è il prossimo?!",
+      "pl": "Muahaha, kto następny?!",
+      "pt_BR": "Muahaha, quem é o próximo?!",
+      "ru": "Муа-ха-ха, кто следующий?!"
     },
     "death": {
-      "en": "Aaaaaaa, death again!"
+      "de": "Aaaaaaa, schon wieder tot!",
+      "en": "Aaaaaaa, death again!",
+      "es": "¡Aaaaaaa, muerta otra vez!",
+      "fr": "Aaaaaaa, encore mort !",
+      "it": "Aaaaaaa, di nuovo morta!",
+      "pl": "Aaaaaaa, znowu śmierć!",
+      "pt_BR": "Aaaaaaa, morri de novo!",
+      "ru": "Аааааа, опять смерть!"
     },
     "play": {
-      "en": "Join, or die! Or both."
+      "de": "Schließ dich an oder stirb! Oder beides.",
+      "en": "Join, or die! Or both.",
+      "es": "¡Únete o muere! O las dos cosas.",
+      "fr": "Rejoignez-nous ou mourez ! Ou les deux.",
+      "it": "Unisciti a noi, o muori! O tutte e due.",
+      "pl": "Dołącz albo zgiń! Albo jedno i drugie.",
+      "pt_BR": "Junte-se a nós, ou morra! Ou os dois.",
+      "ru": "Вступай или умри! Или и то и другое."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Cult_Master"
+    "source": "https://hearthstone.wiki.gg/wiki/Cult_Master_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_597": {
     "attack": {
-      "en": "Heheheh, let the dark in."
+      "de": "Heheheh, lasst die Dunkelheit herein.",
+      "en": "Heheheh, let the dark in.",
+      "es": "Jejeje, que entre la oscuridad.",
+      "fr": "Héhéhé, laissez entrer les ténèbres.",
+      "it": "Eheheh, fate entrare l'oscurità.",
+      "pl": "He-he-he, wpuśćmy mrok.",
+      "pt_BR": "Hehehe, deixe a escuridão entrar.",
+      "ru": "Хе-хе-хе, впустим тьму."
     },
     "play": {
-      "en": "I am not a morning person..."
+      "de": "Ich bin kein Morgenmensch...",
+      "en": "I am not a morning person...",
+      "es": "Las mañanas no son lo mío...",
+      "fr": "Je ne suis pas du matin...",
+      "it": "Io la mattina non ci sono...",
+      "pl": "Nie jestem rannym ptaszkiem...",
+      "pt_BR": "Eu não sou uma pessoa matinal...",
+      "ru": "Я не жаворонок..."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Imp_Master"
+    "source": "https://hearthstone.wiki.gg/wiki/Imp_Master_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_603": {
     "attack": {
-      "en": "No problem."
+      "de": "Kein Problem.",
+      "en": "No problem.",
+      "es": "Sin problema.",
+      "fr": "Aucun problème.",
+      "it": "Nessun problema.",
+      "pl": "Nie ma sprawy.",
+      "pt_BR": "Sem problema.",
+      "ru": "Без проблем."
     },
     "play": {
-      "en": "Back to work!"
+      "de": "Zurück an die Arbeit!",
+      "en": "Back to work!",
+      "es": "¡Volved al trabajo!",
+      "fr": "Au travail !",
+      "it": "Al lavoro!",
+      "pl": "Do roboty!",
+      "pt_BR": "De volta ao trabalho!",
+      "ru": "За работу!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Cruel_Taskmaster"
+    "source": "https://hearthstone.wiki.gg/wiki/Cruel_Taskmaster_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_604": {
     "attack": {
-      "en": "I strike."
+      "de": "Ich schlage zu.",
+      "en": "I strike.",
+      "es": "Ataco.",
+      "fr": "Je frappe.",
+      "it": "Io colpire.",
+      "pl": "Uderzam.",
+      "pt_BR": "Eu ataco.",
+      "ru": "Я бью."
     },
     "play": {
-      "en": "My blade be thirsty."
+      "de": "Meine Klinge dürstet.",
+      "en": "My blade be thirsty.",
+      "es": "Mi filo tener sed.",
+      "fr": "Ma lame a soif.",
+      "it": "Mia lama avere sete.",
+      "pl": "Moje ostrze łaknąć.",
+      "pt_BR": "Minha lâmina tem sede.",
+      "ru": "Мой клинок жаждет."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Frothing_Berserker"
+    "source": "https://hearthstone.wiki.gg/wiki/Frothing_Berserker_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_608": {
     "attack": {
-      "en": "Me?!"
+      "de": "Ich?!",
+      "en": "Me?!",
+      "es": "¿¡Yo!?",
+      "fr": "Moi ?!",
+      "it": "Io?!",
+      "pl": "Ja?!",
+      "pt_BR": "Eu?!",
+      "ru": "Я?!"
     },
     "play": {
-      "en": "Some day I'll be just like you!"
+      "de": "Eines Tages werde ich genau wie Ihr!",
+      "en": "Some day I'll be just like you!",
+      "es": "¡Algún día seré como tú!",
+      "fr": "Un jour, je serai comme vous !",
+      "it": "Un giorno sarò proprio come te!",
+      "pl": "Kiedyś będę taka jak ty!",
+      "pt_BR": "Um dia eu vou ser igualzinho a você!",
+      "ru": "Когда-нибудь я стану такой же, как ты!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Sorcerer%27s_Apprentice"
+    "source": "https://hearthstone.wiki.gg/wiki/Sorcerer%27s_Apprentice_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_612": {
     "attack": {
-      "en": "For Dalaran."
+      "de": "Für Dalaran.",
+      "en": "For Dalaran.",
+      "es": "Por Dalaran.",
+      "fr": "Pour Dalaran.",
+      "it": "Per Dalaran.",
+      "pl": "Za Dalaran.",
+      "pt_BR": "Por Dalaran.",
+      "ru": "За Даларан."
     },
     "play": {
-      "en": "We have many secrets."
+      "de": "Wir haben viele Geheimnisse.",
+      "en": "We have many secrets.",
+      "es": "Tenemos muchos secretos.",
+      "fr": "Nous avons bien des secrets.",
+      "it": "Abbiamo molti segreti.",
+      "pl": "Mamy wiele sekretów.",
+      "pt_BR": "Temos muitos segredos.",
+      "ru": "У нас много секретов."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Kirin_Tor_Mage"
+    "source": "https://hearthstone.wiki.gg/wiki/Kirin_Tor_Mage_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_613": {
     "attack": {
-      "en": "Lapdogs, all of you!"
+      "de": "Schoßhunde, allesamt!",
+      "en": "Lapdogs, all of you!",
+      "es": "¡Perritos falderos, todos vosotros!",
+      "fr": "Des larbins, tous autant que vous êtes !",
+      "it": "Cagnolini, tutti quanti!",
+      "pl": "Pieski na posyłki, wszyscy co do jednego!",
+      "pt_BR": "Cachorrinhos, todos vocês!",
+      "ru": "Шавки, все до единого!"
     },
     "play": {
-      "en": "The Brotherhood shall prevail."
+      "de": "Die Bruderschaft wird siegen.",
+      "en": "The Brotherhood shall prevail.",
+      "es": "La Hermandad prevalecerá.",
+      "fr": "La Confrérie triomphera.",
+      "it": "La Confraternita trionferà.",
+      "pl": "Bractwo zwycięży.",
+      "pt_BR": "A Irmandade prevalecerá.",
+      "ru": "Братство победит."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Edwin_VanCleef"
+    "source": "https://hearthstone.wiki.gg/wiki/Edwin_VanCleef_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_614": {
     "attack": {
-      "en": "Serve the master!"
+      "de": "Wer kostet als Nächstes meine Klingen?!",
+      "en": "Who shall be next to taste my blades?!",
+      "es": "¡¿Quién será el siguiente en probar mis espadas?!",
+      "fr": "Qui sera le prochain à goûter mes lames ?!",
+      "it": "Chi sarà il prossimo ad assaggiare le mie lame?!",
+      "pl": "Kto następny zasmakuje moich ostrzy?!",
+      "pt_BR": "Quem será o próximo a provar minhas lâminas?!",
+      "ru": "Кто следующим отведает моих клинков?!"
     },
     "play": {
-      "en": "The master gave me many gifts."
+      "de": "Ihr seid nicht vorbereitet!",
+      "en": "You are not prepared!",
+      "es": "¡No estáis preparados!",
+      "fr": "Vous n'êtes pas prêts !",
+      "it": "Non siete pronti!",
+      "pl": "Nie jesteście przygotowani!",
+      "pt_BR": "Vocês não estão preparados!",
+      "ru": "Вы не готовы!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Illidan_Stormrage"
+    "source": "https://hearthstone.wiki.gg/wiki/Illidan_Stormrage_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_EX1_finkle": {
     "attack": {
-      "en": "Finkle... strike!"
+      "de": "Finkle... schlägt zu!",
+      "en": "Finkle... strike!",
+      "es": "Finkle... ¡ataca!",
+      "fr": "Finkle... frappe !",
+      "it": "Finkle... colpisci!",
+      "pl": "Finkle... atakuje!",
+      "pt_BR": "Finkle... ataca!",
+      "ru": "Финкл... бьёт!"
     },
     "play": {
-      "en": "Uhhh... Uhhh... I've been inside that thing for months."
+      "de": "Ähhh... Ähhh... Ich steckte monatelang in diesem Ding.",
+      "en": "Uhhh... Uhhh... I've been inside that thing for months.",
+      "es": "Eeeh... Eeeh... Llevo meses metido ahí dentro.",
+      "fr": "Euhhh... Euhhh... Ça fait des mois que je suis coincé là-dedans.",
+      "it": "Ehm... Ehm... Sono rimasto là dentro per mesi.",
+      "pl": "Yyy... Yyy... Siedziałem w tym czymś od miesięcy.",
+      "pt_BR": "Ahhh... Ahhh... Passei meses dentro daquela coisa.",
+      "ru": "Э-э-э... э-э-э... я просидел в этой штуке несколько месяцев."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Pip_Quickwit"
+    "source": "https://hearthstone.wiki.gg/wiki/Pip_Quickwit_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_005": {
     "attack": {
-      "en": "Come here."
+      "de": "Komm her.",
+      "en": "Come here.",
+      "es": "Ven aquí.",
+      "fr": "Viens par ici.",
+      "it": "Vieni qui.",
+      "pl": "Chodź tu.",
+      "pt_BR": "Vem cá.",
+      "ru": "Иди сюда."
     },
     "play": {
-      "en": "I usually work alone."
+      "de": "Normalerweise arbeite ich allein.",
+      "en": "I usually work alone.",
+      "es": "Suelo trabajar solo.",
+      "fr": "D'habitude, je travaille seul.",
+      "it": "Di solito lavoro da solo.",
+      "pl": "Zwykle pracuję sam.",
+      "pt_BR": "Eu costumo trabalhar sozinho.",
+      "ru": "Обычно я работаю один."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Kidnapper"
+    "source": "https://hearthstone.wiki.gg/wiki/Kidnapper_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_010": {
     "attack": {
-      "en": "Like swatting insects!"
+      "de": "Wie Insekten zerquetschen!",
+      "en": "Like swatting insects!",
+      "es": "¡Como aplastar insectos!",
+      "fr": "Comme écraser des insectes !",
+      "it": "Come schiacciare insetti!",
+      "pl": "Jak zgniatanie owadów!",
+      "pt_BR": "Como espantar insetos!",
+      "ru": "Как мух прихлопнуть!"
     },
     "play": {
-      "en": "Winds! Obey my command!"
+      "de": "Winde! Gehorcht meinem Befehl!",
+      "en": "Winds! Obey my command!",
+      "es": "¡Vientos! ¡Obedeced mis órdenes!",
+      "fr": "Vents ! Obéissez à mes ordres !",
+      "it": "Venti! Obbedite al mio comando!",
+      "pl": "Wiatry! Słuchajcie mego rozkazu!",
+      "pt_BR": "Ventos! Obedeçam ao meu comando!",
+      "ru": "Ветра! Повинуйтесь мне!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Al%27Akir_the_Windlord"
+    "source": "https://hearthstone.wiki.gg/wiki/Al%27Akir_the_Windlord_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_011": {
     "attack": {
-      "en": "For Hellscream!"
+      "de": "Für Höllschrei!",
+      "en": "For Hellscream!",
+      "es": "¡Por Grito Infernal!",
+      "fr": "Pour Hurlenfer !",
+      "it": "Per Malogrido!",
+      "pl": "Za Piekłorycza!",
+      "pt_BR": "Por Grito Infernal!",
+      "ru": "За Адского Крика!"
     },
     "play": {
-      "en": "For the Warchief!"
+      "de": "Für den Kriegshäuptling!",
+      "en": "For the Warchief!",
+      "es": "¡Por el Jefe de Guerra!",
+      "fr": "Pour le chef de guerre !",
+      "it": "Per il Capoguerra!",
+      "pl": "Za Wodza!",
+      "pt_BR": "Pelo Chefe Guerreiro!",
+      "ru": "За вождя!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Kor%27kron_Elite"
+    "source": "https://hearthstone.wiki.gg/wiki/Kor%27kron_Elite_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_014": {
     "attack": {
-      "en": "Blades ready!"
+      "de": "Klingen bereit!",
+      "en": "Blades ready!",
+      "es": "¡Hojas listas!",
+      "fr": "Lames prêtes !",
+      "it": "Lame pronte!",
+      "pl": "Ostrza gotowe!",
+      "pt_BR": "Lâminas prontas!",
+      "ru": "Клинки наготове!"
     },
     "play": {
-      "en": "Enter the shadows!"
+      "de": "Hinein in die Schatten!",
+      "en": "Enter the shadows!",
+      "es": "¡Adentraos en las sombras!",
+      "fr": "Entrez dans l'ombre !",
+      "it": "Entrate nell'ombra!",
+      "pl": "W cień!",
+      "pt_BR": "Para as sombras!",
+      "ru": "В тени!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Master_of_Disguise"
+    "source": "https://hearthstone.wiki.gg/wiki/Master_of_Disguise_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_016": {
     "play": {
-      "en": "Squawk! Pieces of 8!"
+      "de": "Kraah! Piaster! Piaster!",
+      "en": "Squawk! Pieces of 8!",
+      "es": "¡Craac! ¡Reales de a ocho!",
+      "fr": "Croâ ! Pièces de huit !",
+      "it": "Squaak! Dobloni d'oro!",
+      "pl": "Skrzek! Dublony! Dublony!",
+      "pt_BR": "Cuá! Moedas de ouro!",
+      "ru": "Кар-р! Пиастр-р-ры!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Captain%27s_Parrot"
+    "source": "https://hearthstone.wiki.gg/wiki/Captain%27s_Parrot_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_018": {
     "attack": {
-      "en": "Die, landlubber!"
+      "de": "Stirb, Landratte!",
+      "en": "Die, landlubber!",
+      "es": "¡Muere, marinero de agua dulce!",
+      "fr": "Meurs, marin d'eau douce !",
+      "it": "Muori, marinaio d'acqua dolce!",
+      "pl": "Giń, szczurze lądowy!",
+      "pt_BR": "Morra, rato de terra!",
+      "ru": "Умри, сухопутная крыса!"
     },
     "play": {
-      "en": "X marks the spot!"
+      "de": "X markiert die Stelle!",
+      "en": "X marks the spot!",
+      "es": "¡La X marca el lugar!",
+      "fr": "Le trésor est sous la croix !",
+      "it": "La X indica il punto!",
+      "pl": "X oznacza skarb!",
+      "pt_BR": "O X marca o local!",
+      "ru": "Крестиком отмечено!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Bloodsail_Raider"
+    "source": "https://hearthstone.wiki.gg/wiki/Bloodsail_Raider_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_019": {
     "attack": {
-      "en": "Hey, catch!"
+      "de": "He, fang!",
+      "en": "Hey, catch!",
+      "es": "¡Eh, atrapa!",
+      "fr": "Hé, attrape !",
+      "it": "Ehi, prendi!",
+      "pl": "Hej, łap!",
+      "pt_BR": "Ei, pega!",
+      "ru": "Эй, лови!"
     },
     "death": {
-      "en": "Aaaaah… oh, no."
+      "de": "Aaaaah… oh, nein.",
+      "en": "Aaaaah… oh, no.",
+      "es": "Aaaah… oh, no.",
+      "fr": "Aaaaah… oh, non.",
+      "it": "Aaaaah… oh, no.",
+      "pl": "Aaaaach… o nie.",
+      "pt_BR": "Aaaaah… ah, não.",
+      "ru": "Аааах… о нет."
     },
     "play": {
-      "en": "Put this apple on your head."
+      "de": "Leg dir diesen Apfel auf den Kopf.",
+      "en": "Put this apple on your head.",
+      "es": "Ponte esta manzana en la cabeza.",
+      "fr": "Mets cette pomme sur ta tête.",
+      "it": "Mettiti questa mela in testa.",
+      "pl": "Połóż to jabłko na głowie.",
+      "pt_BR": "Põe essa maçã na cabeça.",
+      "ru": "Поставь-ка яблоко на голову."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Knife_Juggler"
+    "source": "https://hearthstone.wiki.gg/wiki/Knife_Juggler_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_020": {
     "attack": {
-      "en": "Burn!"
+      "de": "Brenne!",
+      "en": "Burn!",
+      "es": "¡Arde!",
+      "fr": "Brûle !",
+      "it": "Brucia!",
+      "pl": "Płoń!",
+      "pt_BR": "Queime!",
+      "ru": "Гори!"
     },
     "play": {
-      "en": "Do you like to play with fire?!"
+      "de": "Spielst du gern mit dem Feuer?!",
+      "en": "Do you like to play with fire?!",
+      "es": "¿¡Te gusta jugar con fuego!?",
+      "fr": "Vous aimez jouer avec le feu ?!",
+      "it": "Ti piace giocare col fuoco?!",
+      "pl": "Lubisz igrać z ogniem?!",
+      "pt_BR": "Gosta de brincar com fogo?!",
+      "ru": "Любишь играть с огнем?!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Wild_Pyromancer"
+    "source": "https://hearthstone.wiki.gg/wiki/Wild_Pyromancer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_021": {
     "attack": {
-      "en": "Did I miss it?"
+      "de": "Hab ich's verpasst?",
+      "en": "Did I miss it?",
+      "es": "¿Me lo he perdido?",
+      "fr": "Je l'ai raté ?",
+      "it": "Me la sono persa?",
+      "pl": "Przegapiłem?",
+      "pt_BR": "Eu perdi?",
+      "ru": "Я что, пропустил?"
     },
     "death": {
-      "en": "I knew it!"
+      "de": "Ich hab's gewusst!",
+      "en": "I knew it!",
+      "es": "¡Lo sabía!",
+      "fr": "Je le savais !",
+      "it": "Lo sapevo!",
+      "pl": "Wiedziałem!",
+      "pt_BR": "Eu sabia!",
+      "ru": "Я так и знал!"
     },
     "play": {
-      "en": "The end is coming!!!"
+      "de": "Das Ende naht!!!",
+      "en": "The end is coming!!!",
+      "es": "¡¡¡Se acerca el fin!!!",
+      "fr": "La fin approche !!!",
+      "it": "La fine si avvicina!!!",
+      "pl": "Koniec jest bliski!!!",
+      "pt_BR": "O fim está próximo!!!",
+      "ru": "Конец близок!!!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Doomsayer"
+    "source": "https://hearthstone.wiki.gg/wiki/Doomsayer_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_022": {
     "attack": {
-      "en": "No quarter!"
+      "de": "Kein Pardon!",
+      "en": "No quarter!",
+      "es": "¡Sin cuartel!",
+      "fr": "Pas de quartier !",
+      "it": "Nessuna pietà!",
+      "pl": "Bez litości!",
+      "pt_BR": "Sem piedade!",
+      "ru": "Пощады не будет!"
     },
     "death": {
-      "en": "Ha-ha!"
+      "de": "Ha-ha!",
+      "en": "Ha-ha!",
+      "es": "¡Ja-ja!",
+      "fr": "Ha-ha !",
+      "it": "Ah-ah!",
+      "pl": "Ha-ha!",
+      "pt_BR": "Ha-ha!",
+      "ru": "Ха-ха!"
     },
     "play": {
-      "en": "Blood and plunder!"
+      "de": "Blut und Beute!",
+      "en": "Blood and plunder!",
+      "es": "¡Sangre y botín!",
+      "fr": "Sang et pillage !",
+      "it": "Sangue e bottino!",
+      "pl": "Krew i łupy!",
+      "pt_BR": "Sangue e pilhagem!",
+      "ru": "Кровь и добыча!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Dread_Corsair"
+    "source": "https://hearthstone.wiki.gg/wiki/Dread_Corsair_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_024": {
     "attack": {
-      "en": "Yo Ho!"
+      "de": "Jo-ho!",
+      "en": "Yo Ho!",
+      "es": "¡Yo-jo!",
+      "fr": "Yo ho !",
+      "it": "Yo-ho!",
+      "pl": "Jo-ho!",
+      "pt_BR": "Io-hô!",
+      "ru": "Йо-хо!"
     },
     "play": {
-      "en": "Drink up me hearties!"
+      "de": "Trinkt aus, meine Herzchen!",
+      "en": "Drink up me hearties!",
+      "es": "¡Bebed, mis valientes!",
+      "fr": "Buvez, mes braves !",
+      "it": "Bevete, miei prodi!",
+      "pl": "Pijcie, chłopcy!",
+      "pt_BR": "Bebam, meus marujos!",
+      "ru": "Пейте до дна, ребятки!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Captain_Greenskin"
+    "source": "https://hearthstone.wiki.gg/wiki/Captain_Greenskin_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_025": {
     "attack": {
-      "en": "Yarr!"
+      "de": "Yarr!",
+      "en": "Yarr!",
+      "es": "¡Yarr!",
+      "fr": "Yarr !",
+      "it": "Yarr!",
+      "pl": "Arrr!",
+      "pt_BR": "Iarr!",
+      "ru": "Йарр!"
     },
     "play": {
-      "en": "Avast, matey!"
+      "de": "Ahoi, Kamerad!",
+      "en": "Avast, matey!",
+      "es": "¡Quieto ahí, grumete!",
+      "fr": "Ohé, moussaillon !",
+      "it": "Ehilà, compare!",
+      "pl": "Ahoj, kamracie!",
+      "pt_BR": "Alto lá, marujo!",
+      "ru": "Полундра, приятель!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Bloodsail_Corsair"
+    "source": "https://hearthstone.wiki.gg/wiki/Bloodsail_Corsair_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_026": {
     "attack": {
-      "en": "Instruction begins!"
+      "de": "Der Unterricht beginnt!",
+      "en": "Instruction begins!",
+      "es": "¡Empieza la lección!",
+      "fr": "La leçon commence !",
+      "it": "La lezione comincia!",
+      "pl": "Zaczynamy lekcję!",
+      "pt_BR": "Começa a aula!",
+      "ru": "Начинаем урок!"
     },
     "play": {
-      "en": "Pay attention, class!"
+      "de": "Aufgepasst, Klasse!",
+      "en": "Pay attention, class!",
+      "es": "¡Atención, clase!",
+      "fr": "Soyez attentifs, la classe !",
+      "it": "Attenzione, classe!",
+      "pl": "Uwaga, klaso!",
+      "pt_BR": "Prestem atenção, turma!",
+      "ru": "Внимание, класс!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Violet_Teacher"
+    "source": "https://hearthstone.wiki.gg/wiki/Violet_Teacher_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_026t": {
     "attack": {
-      "en": "I shall do as you say."
+      "de": "Ich tue, was Ihr sagt.",
+      "en": "I shall do as you say.",
+      "es": "Haré lo que digas.",
+      "fr": "Je ferai ce que vous dites.",
+      "it": "Farò come dite.",
+      "pl": "Zrobię, jak mówisz.",
+      "pt_BR": "Farei como disser.",
+      "ru": "Сделаю, как скажете."
     },
     "play": {
-      "en": "I'm ready to learn."
+      "de": "Ich bin bereit zu lernen.",
+      "en": "I'm ready to learn.",
+      "es": "Estoy listo para aprender.",
+      "fr": "Je suis prêt à apprendre.",
+      "it": "Sono pronto a imparare.",
+      "pl": "Jestem gotów do nauki.",
+      "pt_BR": "Estou pronto para aprender.",
+      "ru": "Я готов учиться."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Violet_Apprentice"
+    "source": "https://hearthstone.wiki.gg/wiki/Violet_Apprentice_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_027": {
     "attack": {
-      "en": "Scurvy dog!"
+      "de": "Räudiger Hund!",
+      "en": "Scurvy dog!",
+      "es": "¡Perro sarnoso!",
+      "fr": "Chien galeux !",
+      "it": "Cane rognoso!",
+      "pl": "Parszywy psie!",
+      "pt_BR": "Cão sarnento!",
+      "ru": "Цинготный пес!"
     },
     "play": {
-      "en": "Trust the Pirate's Code."
+      "de": "Vertraut dem Piratenkodex.",
+      "en": "Trust the Pirate's Code.",
+      "es": "Confía en el Código Pirata.",
+      "fr": "Fiez-vous au code des pirates.",
+      "it": "Fidati del Codice dei Pirati.",
+      "pl": "Ufaj Kodeksowi Piratów.",
+      "pt_BR": "Confie no Código Pirata.",
+      "ru": "Чти Пиратский Кодекс."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Southsea_Captain"
+    "source": "https://hearthstone.wiki.gg/wiki/Southsea_Captain_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_029": {
     "attack": {
-      "en": "Here it comes!"
+      "de": "Jetzt kommt's!",
+      "en": "Here it comes!",
+      "es": "¡Ahí va!",
+      "fr": "Ça arrive !",
+      "it": "Eccolo che arriva!",
+      "pl": "No to leci!",
+      "pt_BR": "Lá vai!",
+      "ru": "Вот оно!"
     },
     "play": {
-      "en": "Prepare to face the mighty Millhouse Manastorm!"
+      "de": "Zittert vor dem mächtigen Millhaus Manasturm!",
+      "en": "Prepare to face the mighty Millhouse Manastorm!",
+      "es": "¡Preparaos para enfrentaros al poderoso Molino Tormenta de Maná!",
+      "fr": "Préparez-vous à affronter le puissant Milhouse Tempête-de-Mana !",
+      "it": "Preparati ad affrontare il possente Millhouse Manalampo!",
+      "pl": "Drżyjcie przed potężnym Mełkiem Gromiłłą!",
+      "pt_BR": "Prepare-se para enfrentar o poderoso Millhouse Manavento!",
+      "ru": "Трепещите перед могучим Миллхаусом Манаштормом!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Millhouse_Manastorm"
+    "source": "https://hearthstone.wiki.gg/wiki/Millhouse_Manastorm_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_030": {
     "attack": {
-      "en": "All will burn!"
+      "de": "Alles wird brennen!",
+      "en": "All will burn!",
+      "es": "¡Todo arderá!",
+      "fr": "Tout brûlera !",
+      "it": "Tutto brucerà!",
+      "pl": "Wszystko spłonie!",
+      "pt_BR": "Tudo vai queimar!",
+      "ru": "Все сгорит!"
     },
     "death": {
-      "en": "Rawrrawrrgh!"
+      "de": "Rawrrawrrgh!",
+      "en": "Rawrrawrrgh!",
+      "es": "¡Rawrrawrrgh!",
+      "fr": "Rawrrawrrgh !",
+      "it": "Rawrrawrrgh!",
+      "pl": "Rrraaaarrgh!",
+      "pt_BR": "Rawrrawrrgh!",
+      "ru": "Ррраааррргх!"
     },
     "play": {
-      "en": "I am power incarnate!"
+      "de": "Ich bin die Macht in Person!",
+      "en": "I am power incarnate!",
+      "es": "¡Soy el poder encarnado!",
+      "fr": "Je suis la puissance incarnée !",
+      "it": "Io sono il potere incarnato!",
+      "pl": "Jestem wcieloną potęgą!",
+      "pt_BR": "Eu sou o poder encarnado!",
+      "ru": "Я — воплощенная мощь!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Deathwing"
+    "source": "https://hearthstone.wiki.gg/wiki/Deathwing_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_037": {
     "attack": {
-      "en": "It's time."
+      "de": "Es ist Zeit.",
+      "en": "It's time.",
+      "es": "Es la hora.",
+      "fr": "C'est l'heure.",
+      "it": "È ora.",
+      "pl": "Już czas.",
+      "pt_BR": "Chegou a hora.",
+      "ru": "Пора."
     },
     "play": {
-      "en": "Bring me steel!"
+      "de": "Bringt mir Stahl!",
+      "en": "Bring me steel!",
+      "es": "¡Traedme acero!",
+      "fr": "Apportez-moi de l'acier !",
+      "it": "Portatemi l'acciaio!",
+      "pl": "Dawać mi stal!",
+      "pt_BR": "Tragam-me aço!",
+      "ru": "Несите сталь!"
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Master_Swordsmith"
+    "source": "https://hearthstone.wiki.gg/wiki/Master_Swordsmith_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_NEW1_038": {
     "attack": {
-      "en": "No escape!"
+      "de": "Kein Entkommen!",
+      "en": "No escape!",
+      "es": "¡No hay escapatoria!",
+      "fr": "Pas d'issue !",
+      "it": "Nessuna via di fuga!",
+      "pl": "Nie uciekniesz!",
+      "pt_BR": "Sem escapatória!",
+      "ru": "Не сбежишь!"
     },
     "play": {
-      "en": "Unworthy."
+      "de": "Unwürdig.",
+      "en": "Unworthy.",
+      "es": "Indigno.",
+      "fr": "Indigne.",
+      "it": "Indegni.",
+      "pl": "Niegodni.",
+      "pt_BR": "Indigno.",
+      "ru": "Недостойны."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Gruul"
+    "source": "https://hearthstone.wiki.gg/wiki/Gruul_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   },
   "VAN_tt_010a": {
     "attack": {
-      "en": "As you wish."
+      "de": "Wie Ihr wünscht.",
+      "en": "As you wish.",
+      "es": "Como desees.",
+      "fr": "Comme vous voudrez.",
+      "it": "Come desideri.",
+      "pl": "Jak sobie życzysz.",
+      "pt_BR": "Como quiser.",
+      "ru": "Как пожелаешь."
     },
     "play": {
-      "en": "I'll take that."
+      "de": "Das nehme ich.",
+      "en": "I'll take that.",
+      "es": "Me quedo con eso.",
+      "fr": "Je prends ça.",
+      "it": "Questo lo prendo io.",
+      "pl": "To ja to wezmę.",
+      "pt_BR": "Isso aqui é meu.",
+      "ru": "Это я заберу."
     },
-    "source": "https://hearthstone.wiki.gg/wiki/Spellbender"
+    "source": "https://hearthstone.wiki.gg/wiki/Spellbender_(Classic)",
+    "translated": [
+      "de",
+      "es",
+      "fr",
+      "it",
+      "pl",
+      "pt_BR",
+      "ru"
+    ]
   }
 }
