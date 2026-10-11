@@ -9,6 +9,7 @@ func _ready() -> void:
 	Locale.load_all()
 	Settings.load_settings()
 	Settings.apply()
+	add_child(Sound.new())
 	if Settings.data.fullscreen and not OS.has_feature("web"):  # the browser needs a click first
 		Settings.set_fullscreen(true)
 	show_menu()

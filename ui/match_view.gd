@@ -53,6 +53,7 @@ var _emote_panel: VBoxContainer
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	Sound.music("battle")
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -224,6 +225,7 @@ func show_line(p: int, text: String) -> void:
 	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bubble)
 	_bubbles[p] = bubble
+	Sound.speak(text)
 	if is_inside_tree():
 		var tw := create_tween()
 		tw.tween_interval(2.5 if tutorial == null else 4.5)
@@ -582,7 +584,13 @@ func _on_changed(events: Array) -> void:
 		old[id] = _views[id].position + _views[id].size / 2.0
 	refresh()
 	var big := false
+	var heard := {}
 	for ev in events:
+		var sfx := Sound.sound_for(ev, g, viewer())
+		if not heard.has(sfx):  # one copy of each sound per action
+			heard[sfx] = true
+			Sound.play(sfx)
+		_speak_event(ev, heard)
 		match ev.type:
 			"damage":
 				_float_text(ev.target, "-%d" % ev.amount, Palette.HEALTH, old)
@@ -599,6 +607,20 @@ func _on_changed(events: Array) -> void:
 				show_hint(tr("Secret: %s") % CardText.name(ev.card), 2.5)
 	if big and Match.shake_enabled:
 		_shake()
+
+
+## Legendary minions and new heroes say their name when they enter the board.
+func _speak_event(ev: Dictionary, heard: Dictionary) -> void:
+	var card := ""
+	if ev.type in ["play", "summon"]:
+		var e := g.ent(ev.entity)
+		if e and e.is_minion() and CardDb.card(e.card_id).get("rarity") == "LEGENDARY":
+			card = e.card_id
+	elif ev.type == "hero_replaced":
+		card = ev.card
+	if card != "" and not heard.has(card):
+		heard[card] = true
+		Sound.speak(CardText.name(card))
 
 
 func _float_text(id: int, text: String, color: Color, old: Dictionary) -> void:

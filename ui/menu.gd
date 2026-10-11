@@ -16,6 +16,7 @@ const ITEMS := ["Training", "Online Game", "Tutorial", "Collection", "Debug Tabl
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	Sound.music("menu")
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

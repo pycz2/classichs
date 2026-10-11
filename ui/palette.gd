@@ -55,4 +55,5 @@ static func button(text: String, name := "") -> Button:
 	b.name = name if name != "" else text.replace(" ", "")
 	b.custom_minimum_size = Vector2(260, 48)
 	b.add_theme_font_size_override("font_size", 20)
+	b.pressed.connect(Sound.play.bind("click"))
 	return b
