@@ -278,3 +278,13 @@ func test_opponent_intents_are_shown() -> void:
 	guest.apply_intent({"k": "none"})
 	check(not guest._opp_arrow.visible, "cleared")
 	_free_bound(b)
+
+
+func test_guest_splits_and_renews_host_candidates() -> void:
+	var sdp := "v=0\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\na=mid:0\r\na=candidate:842163049 1 udp 1677729535 1.2.3.4 50000 typ srflx raddr 0.0.0.0 rport 0\r\na=candidate:1 1 udp 2122260223 192.168.1.5 50001 typ host\r\na=end-of-candidates\r\n"
+	var parts := WebRtcTransport.split_candidates(sdp)
+	check(not parts.sdp.contains("a=candidate") and not parts.sdp.contains("end-of-candidates"), "no candidates left in the SDP")
+	eq(parts.ice.size(), 2, "both candidates kept")
+	eq(parts.ice[0][0], "0", "their mid")
+	eq(WebRtcTransport.refounded(parts.ice[0][2], 3, 0), "candidate:r3x0 1 udp 1677729535 1.2.3.4 50000 typ srflx raddr 0.0.0.0 rport 0", "a new foundation, the rest the same")
+	check(WebRtcTransport.ICE.iceServers.any(func(s): return str(s.urls).contains("turn:")), "a TURN server is set")
