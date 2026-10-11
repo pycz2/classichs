@@ -229,6 +229,17 @@ func show_line(p: int, text: String) -> void:
 	add_child(bubble)
 	_bubbles[p] = bubble
 	Sound.speak(text)
+	if not Anim.instant and is_inside_tree():
+		bubble.pivot_offset = Vector2(160, 30)
+		bubble.scale = Vector2(0.3, 0.3)
+		bubble.create_tween().tween_property(bubble, "scale", Vector2.ONE, Anim.d(0.22)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		var hero: EntityView = _views.get(g.hero(p).id)
+		if hero:  # the hero "talks"
+			hero.pivot_offset = hero.size / 2.0
+			var tw := hero.create_tween()
+			for i in 3:
+				tw.tween_property(hero, "scale", Vector2(1.05, 0.96), Anim.d(0.09))
+				tw.tween_property(hero, "scale", Vector2.ONE, Anim.d(0.09))
 	if is_inside_tree():
 		var tw := create_tween()
 		tw.tween_interval(2.5 if tutorial == null else 4.5)
@@ -755,12 +766,12 @@ func _reconcile(want: Dictionary) -> void:
 			var s0 := 1.0
 			if not _laid_out:
 				pass
-			elif spec.kind == "hand":
-				start = (_piles[0] if spec.own else _piles[1]).top() - v.pivot_offset * (1.0 - 0.6)
-				s0 = 0.6
-			elif from.has(id):
+			elif from.has(id):  # a minion returned to the hand, a card that became a minion
 				start = from[id] - v.size / 2.0
 				s0 = 0.9
+			elif spec.kind == "hand":  # drawn from the deck
+				start = (_piles[0] if spec.own else _piles[1]).top() - v.pivot_offset * (1.0 - 0.6)
+				s0 = 0.6
 			else:
 				s0 = 0.3
 				start = spec.pos + v.size * 0.35
@@ -1239,6 +1250,12 @@ func _float_text(id: int, text: String, color: Color, old: Dictionary) -> void:
 		at = old[id]
 	else:
 		return
+	if not Anim.instant:
+		var splash := _Orb.new()
+		splash.color = Color(color, 0.85)
+		splash.position = at
+		_fx.add_child(splash)
+		splash.burst()
 	var l := Palette.label(text, 30, color)
 	l.position = at - Vector2(20, 20)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1356,20 +1373,39 @@ func _show_mulligan() -> void:
 	_overlay.name = "Mulligan"
 	var row := _card_row(box)
 	var marked := {}
-	for e in g.players[p].hand:
-		var cv := CardView.make(e.card_id, 1.3)
-		cv.show_entity(e, g)
+	var views := []
+	var hand := g.players[p].hand
+	for i in hand.size():
+		var cv := CardView.make(hand[i].card_id, 1.3)
+		cv.show_entity(hand[i], g)
+		cv.pivot_offset = cv.size / 2.0
 		cv.clicked.connect(func(v):
 			v.marked = not v.marked
 			marked[v.entity_id] = v.marked
+			v.modulate = Color(0.6, 0.6, 0.6) if v.marked else Color.WHITE
 			v.queue_redraw())
 		row.add_child(cv)
+		views.append(cv)
+		if not Anim.instant:  # the cards come out one after another
+			cv.scale = Vector2(0.2, 0.2)
+			cv.modulate.a = 0.0
+			var tw := cv.create_tween().set_parallel()
+			tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.35)).set_delay(Anim.d(0.12 * i)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			tw.tween_property(cv, "modulate:a", 1.0, Anim.d(0.2)).set_delay(Anim.d(0.12 * i))
 	_centered_button(box, tr("Confirm"), "Confirm", func():
 		var ids: Array = []
 		for id in marked:
 			if marked[id]:
 				ids.append(id)
 		ids.sort()
+		if not Anim.instant and not ids.is_empty():  # replaced cards fly back into the deck
+			for cv in views:
+				if marked.get(cv.entity_id, false):
+					var tw: Tween = cv.create_tween().set_parallel()
+					tw.tween_property(cv, "scale", Vector2(0.3, 0.3), Anim.d(0.35))
+					tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.35))
+					tw.tween_property(cv, "global_position", TableLayout.OWN_DECK, Anim.d(0.35))
+			await _wait(0.4)
 		_close_overlay()
 		controller.submit({"type": "mulligan", "player": p, "replace": ids}))
 
