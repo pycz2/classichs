@@ -3,7 +3,7 @@ extends Node
 ## A message channel to the other player. Messages are Dictionaries sent as JSON.
 
 signal opened
-signal received(msg: Dictionary)
+signal received(msg)  # Dictionary, or null for a broken packet
 signal closed(reason: String)
 
 
