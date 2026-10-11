@@ -67,7 +67,10 @@ const SHOTS = [
   ["changelog", "Changelog", "Журнал", "The whole change history, one click on the version", "Вся история изменений — по клику на версию"],
 ];
 
-let lang = (localStorage.getItem("lang") || navigator.language || "en").toLowerCase().startsWith("ru") ? "ru" : "en";
+function savedLang() {
+  try { return localStorage.getItem("lang"); } catch (e) { return null; }  // storage blocked
+}
+let lang = (savedLang() || navigator.language || "en").toLowerCase().startsWith("ru") ? "ru" : "en";
 let current = 0;
 const $ = (s) => document.querySelector(s);
 
