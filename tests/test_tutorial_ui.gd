@@ -42,6 +42,85 @@ func test_mission_list_unlocks() -> void:
 	_restore()
 
 
+func test_mission_tiles_have_portraits() -> void:
+	_store()
+	var t := TutorialView.new()
+	root().add_child(t)
+	for n in range(1, Missions.count() + 1):
+		var b := t.find_child("Mission%d" % n, true, false) as Button
+		check(b != null, "tile %d" % n)
+		check(b.find_child("Picture", true, false) != null, "tile %d has a picture" % n)
+		check(Art.texture(Missions.get_mission(n).boss) != null, "boss %d has a portrait" % n)
+	eq((t.find_child("Mission1", true, false).find_child("Status", true, false) as Label).text,
+		str(TranslationServer.translate("Up next")), "mission 1 is next")
+	eq((t.find_child("Mission2", true, false).find_child("Status", true, false) as Label).text,
+		str(TranslationServer.translate("Locked")), "mission 2 locked")
+	t.free()
+	_restore()
+
+
+func test_locked_mission_does_not_start() -> void:
+	_store()
+	var t := TutorialView.new()
+	root().add_child(t)
+	var started := []
+	t.start.connect(func(n): started.append(n))
+	(t.find_child("Mission2", true, false) as Button).pressed.emit()
+	check(t.find_child("Intro", true, false) == null, "no intro for a locked mission")
+	eq(started, [], "nothing started")
+	t.free()
+	_restore()
+
+
+func test_mission_intro_then_start() -> void:
+	_store()
+	var t := TutorialView.new()
+	root().add_child(t)
+	var started := []
+	t.start.connect(func(n): started.append(n))
+	(t.find_child("Mission1", true, false) as Button).pressed.emit()
+	var intro := t.find_child("Intro", true, false) as TutorialIntro
+	check(intro != null and intro.number == 1, "mission 1's intro shown")
+	eq(started, [], "not started before the intro is read")
+	var next := intro.find_child("Next", true, false) as Button
+	for i in intro.panels().size() - 1:
+		next.pressed.emit()
+	eq(next.text, str(TranslationServer.translate("Play")), "last panel: Play")
+	next.pressed.emit()
+	eq(started, [1], "the intro's end starts the mission")
+	t.free()
+	_restore()
+
+
+func test_intro_skip_and_back() -> void:
+	var t := TutorialView.new()
+	root().add_child(t)
+	var started := []
+	t.start.connect(func(n): started.append(n))
+	var intro := t.show_intro(3)
+	(intro.find_child("Skip", true, false) as Button).pressed.emit()
+	eq(started, [3], "skip starts the mission")
+	intro = t.show_intro(2)
+	(intro.find_child("Back", true, false) as Button).pressed.emit()
+	check(intro.is_queued_for_deletion(), "back closes the intro")
+	eq(started, [3], "back starts nothing")
+	t.free()
+
+
+func test_every_mission_has_intro_panels() -> void:
+	for n in range(1, Missions.count() + 1):
+		var intro := TutorialIntro.make(n)
+		var panels := intro.panels()
+		check(panels.size() >= 1, "mission %d has panels" % n)
+		for p in panels:
+			check(p.title != "" and p.text != "", "mission %d: titled and explained" % n)
+			check(p.items.any(func(it): return it.has("card") or it.has("hero")), "mission %d: a picture" % n)
+			for it in p.items:
+				if it.has("card"):
+					check(not CardDb.card(it.card).is_empty(), "real card " + it.card)
+		intro.free()
+
+
 func test_intro_hint_and_boss_line() -> void:
 	var v := _view(1)
 	eq(v._hint.text, Missions.get_mission(1).intro, "intro shown")
@@ -80,6 +159,14 @@ func test_win_shows_reward_and_saves_progress() -> void:
 	check(cards.size() == 1 and cards[0].card_id == "VAN_CS2_023", "reward card shown")
 	check(ov.find_child("NextMission", true, false) != null, "next mission button")
 	eq(Progress.completed(), [1], "progress saved")
+	var next := []
+	v.tutorial_next.connect(func(n): next.append(n))
+	(ov.find_child("NextMission", true, false) as Button).pressed.emit()
+	var intros := v.find_children("*", "TutorialIntro", true, false)
+	check(intros.size() == 1 and intros[0].number == 2, "mission 2's intro first")
+	eq(next, [], "not started yet")
+	(intros[0].find_child("Skip", true, false) as Button).pressed.emit()
+	eq(next, [2], "then mission 2")
 	v.free()
 	_restore()
 

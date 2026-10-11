@@ -1888,7 +1888,11 @@ func _tutorial_result(box: VBoxContainer) -> void:
 		line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		box.add_child(line)
 		if n < Missions.count():
-			_centered_button(box, tr("Next Mission"), "NextMission", func(): tutorial_next.emit(n + 1))
+			_centered_button(box, tr("Next Mission"), "NextMission", func():  # its intro first
+				var intro := TutorialIntro.make(n + 1)
+				intro.done.connect(func(): tutorial_next.emit(n + 1))
+				intro.back.connect(intro.queue_free)
+				add_child(intro))
 	else:
 		_centered_button(box, tr("Try Again"), "TryAgain", func(): tutorial_next.emit(n))
 	_centered_button(box, tr("Back"), "BackToMenu", _leave)
