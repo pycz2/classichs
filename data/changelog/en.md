@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-10-12
+
+### Changed
+- The debug tools moved into Settings and became one screen with tabs: "Scene" (build a scene with the mouse: heroes, mana, damage, armor, hand, board, deck; the JSON beside it; the mode as radio buttons), "Interaction test" (ready scenarios for each of the 534 cards, 1108 in all: pick a card and a scenario and it plays in a real match with all effects and sounds), "Card test" and "Effects test".
+
 ## [0.17.1] - 2026-10-12
 
 ### Added

@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-10-12
+
+### Cambiado
+- Las herramientas de depuración pasaron a los ajustes y son una pantalla con pestañas: «Escena» (montar una escena con el ratón: héroes, maná, daño, armadura, mano, tablero, mazo; el JSON al lado; el modo con botones de opción), «Prueba de interacciones» (escenarios listos para cada una de las 534 cartas, 1108 en total: eliges carta y escenario y se juega en una partida real con todos los efectos y sonidos), «Prueba de cartas» y «Prueba de efectos».
+
 ## [0.17.1] - 2026-10-12
 
 ### Añadido

@@ -36,6 +36,9 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_was_lang = TranslationServer.get_locale()
 	back.connect(func(): Locale.set_language(_was_lang))
+	visibility_changed.connect(func():  # another debug tab opened: the game's language again
+		if not is_visible_in_tree() and TranslationServer.get_locale() != _was_lang:
+			set_language(_was_lang))
 	var bg := TextureRect.new()
 	bg.texture = load("res://ui/board_bg.jpg")
 	bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -107,6 +110,10 @@ func _ready() -> void:
 	add_child(_stage)
 	if ids.size() > 0 and _stage.get_child_count() == 0:
 		show_card(ids[index])
+
+
+func _exit_tree() -> void:
+	Locale.set_language(_was_lang)
 
 
 func find(q: String) -> void:

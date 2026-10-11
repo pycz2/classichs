@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-10-12
+
+### Alterado
+- As ferramentas de depuração foram para as configurações e viraram uma tela com abas: "Cena" (montar uma cena com o mouse: heróis, mana, dano, armadura, mão, mesa, deck; o JSON ao lado; o modo com botões de opção), "Teste de interações" (cenários prontos para cada uma das 534 cartas, 1108 ao todo: escolha carta e cenário e ele roda numa partida real com todos os efeitos e sons), "Teste de cartas" e "Teste de efeitos".
+
 ## [0.17.1] - 2026-10-12
 
 ### Adicionado

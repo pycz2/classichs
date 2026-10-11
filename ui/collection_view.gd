@@ -7,6 +7,8 @@ extends Control
 
 ## The deck changed (a card was added): the owner saves at once.
 signal changed
+## Browsing (no deck): a card was clicked.
+signal picked(id: String)
 
 const PER_PAGE := 8
 const CLASSES := ["DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR", "NEUTRAL"]
@@ -25,6 +27,8 @@ var query := ""
 var rarity_filter := ""
 ## "" = any type; else MINION, SPELL or WEAPON.
 var type_filter := ""
+## Only these cards (a Dictionary with the ids as keys); null = all.
+var only: Variant = null
 var _grid := GridContainer.new()
 var _page_label: Label
 var _prev: Button
@@ -80,7 +84,7 @@ func _ready() -> void:
 		_fill())
 	row1.add_child(search)
 	for t in TYPES:  # a second click clears
-		var b := _chip("Type" + t[0], Vector2(120, 40))
+		var b := chip("Type" + t[0], Vector2(120, 40))
 		b.text = tr(t[1])
 		var code: String = t[0]
 		b.pressed.connect(func():
@@ -92,7 +96,7 @@ func _ready() -> void:
 	row2.add_theme_constant_override("separation", 4)
 	rows.add_child(row2)
 	for c in range(-1, 8):
-		var b := _chip("Cost%d" % c, Vector2(56 if c < 0 else 44, 40))
+		var b := chip("Cost%d" % c, Vector2(56 if c < 0 else 44, 40))
 		b.text = tr("All") if c < 0 else ""
 		if c >= 0:  # a mana crystal with the cost
 			var gem := _Crystal.new()
@@ -111,7 +115,7 @@ func _ready() -> void:
 	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row2.add_child(gap)
 	for r in RARITIES:  # a second click clears
-		var b := _chip("Rarity" + r[0], Vector2(44, 40))
+		var b := chip("Rarity" + r[0], Vector2(44, 40))
 		b.tooltip_text = tr(r[1])
 		var gem := _Gem.new()
 		gem.rarity = r[0]
@@ -200,7 +204,7 @@ func filtered() -> Array:
 	var q := query.strip_edges().to_lower()
 	for id in CardDb.collectible():
 		var c := CardDb.card(id)
-		if c.cardClass != tab:
+		if c.cardClass != tab or (only != null and not only.has(id)):
 			continue
 		var cost := int(c.get("cost", 0))
 		if cost_filter >= 0 and (cost != cost_filter if cost_filter < 7 else cost < 7):
@@ -286,6 +290,7 @@ func show_hint(text: String) -> void:
 
 func click_card(id: String) -> void:
 	if deck == null:
+		picked.emit(id)
 		return
 	var why := deck.add(id)
 	show_hint(why)
@@ -306,19 +311,21 @@ func _on_hover(v: EntityView, on: bool) -> void:
 		_tooltip = CardView.make((v as CardView).card_id, 1.9)
 		_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_tooltip.z_index = 50
-		var r := Rect2(v.global_position, v.size)
+		_tooltip.top_level = true  # screen coordinates, at full size even in a scaled-down view
+		var r := v.get_global_rect()
 		var x := r.end.x + 10 if r.end.x + 10 + _tooltip.size.x < 1270 else r.position.x - _tooltip.size.x - 10
 		_tooltip.position = Vector2(x, clampf(r.position.y - 40, 8, 712 - _tooltip.size.y))
 		add_child(_tooltip)
 		_tips = KeywordTips.make(_tooltip.card_id)
 		_tips.z_index = 50
+		_tips.top_level = true
 		if _tips.get_child_count() > 0:
 			add_child(_tips)
 			_tips.beside(Rect2(_tooltip.position, _tooltip.size))
 
 
 ## A filter button: dark when off, lit with a gold edge when on.
-func _chip(id: String, min_size: Vector2) -> Button:
+static func chip(id: String, min_size: Vector2) -> Button:
 	var b := Button.new()
 	b.name = id
 	b.toggle_mode = true

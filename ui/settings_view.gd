@@ -4,6 +4,9 @@ extends Control
 ## Every change is applied and saved at once. Works as a screen and as an overlay.
 
 signal back
+## The debug tools were asked for (the button shows only when this is connected:
+## not in the settings opened over a match).
+signal debug
 ## The language changed; the owner relabels its own texts.
 signal language_changed
 ## The picture set changed; the owner redraws its cards.
@@ -130,9 +133,17 @@ func _build() -> void:
 	ed.text_changed.connect(Profile.save_name)
 	_row(grid, tr("Your name"), ed)
 
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 16)
+	box.add_child(row)
+	if not debug.get_connections().is_empty():
+		var d := Palette.button(tr("Debug tools"), "DebugTools")
+		d.pressed.connect(func(): debug.emit())
+		row.add_child(d)
 	var b := Palette.button(tr("Back"), "Back")
 	b.pressed.connect(func(): back.emit())
-	box.add_child(b)
+	row.add_child(b)
 
 
 func _row(grid: GridContainer, text: String, control: Control) -> void:

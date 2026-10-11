@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-10-12
+
+### Geändert
+- Die Debug-Werkzeuge sind in die Einstellungen gezogen und ein Bildschirm mit Reitern: „Szene“ (eine Szene mit der Maus bauen: Helden, Mana, Schaden, Rüstung, Hand, Spielfeld, Deck; daneben das JSON; der Modus als Optionsfelder), „Interaktionstest“ (fertige Szenarien für jede der 534 Karten, 1108 insgesamt: Karte und Szenario wählen, und es läuft in einem echten Spiel mit allen Effekten und Klängen), „Kartentest“ und „Effekttest“.
+
 ## [0.17.1] - 2026-10-12
 
 ### Hinzugefügt

@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-10-12
+
+### Modifié
+- Les outils de débogage sont passés dans les paramètres et forment un écran à onglets : « Scène » (construire une scène à la souris : héros, mana, dégâts, armure, main, plateau, deck ; le JSON à côté ; le mode en boutons radio), « Test d'interactions » (des scénarios prêts pour chacune des 534 cartes, 1108 en tout : on choisit une carte et un scénario, et il se joue dans une vraie partie avec tous les effets et sons), « Test de cartes » et « Test d'effets ».
+
 ## [0.17.1] - 2026-10-12
 
 ### Ajouté
