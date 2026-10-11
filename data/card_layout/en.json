@@ -1,0 +1,4296 @@
+{
+	"CS2_013t": {
+		"lines": [
+			"Draw a card. (You",
+			"can only have 10",
+			"Mana in your tray.)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_014t": {
+		"lines": [
+			"Give a minion +1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_025t": {
+		"name": 10,
+		"text": 11
+	},
+	"EX1_116t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_131t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_160t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_317t": {
+		"lines": [
+			"You are out of demons!",
+			"At least there are",
+			"always imps..."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"EX1_323h": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_323w": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_383t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_398t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_409t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_534t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_538t": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_625t": {
+		"lines": [
+			"Deal 2 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_625t2": {
+		"lines": [
+			"Deal 3 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"GAME_005": {
+		"lines": [
+			"Gain 1 Mana",
+			"Crystal this",
+			"turn only."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"HERO_01": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_02": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_03": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_04": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_05": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_06": {
+		"name": 11,
+		"text": 11
+	},
+	"HERO_07": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_08": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_09": {
+		"name": 12,
+		"text": 11
+	},
+	"Mekka1": {
+		"lines": [
+			"At the start of your turn,",
+			"destroy this minion and",
+			"draw 3 cards."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"Mekka2": {
+		"lines": [
+			"At the end of your",
+			"turn, restore 6 Health",
+			"to a damaged",
+			"character."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"Mekka3": {
+		"lines": [
+			"At the end of your",
+			"turn, give a random",
+			"minion +1/+1."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"Mekka4": {
+		"lines": [
+			"At the start of your turn,",
+			"transform a random",
+			"minion into a 1/1 Chicken."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"Mekka4t": {
+		"lines": [
+			"Hey Chicken!"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"NEW1_040t": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001a": {
+		"lines": [
+			"Summon",
+			"three, four, or",
+			"five 1/1 Murlocs."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001at": {
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001b": {
+		"lines": [
+			"Deal 4",
+			"damage.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_002": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_003": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_004": {
+		"lines": [
+			"Deal 4 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_005": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_006": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4b_001": {
+		"name": 10,
+		"text": 11
+	},
+	"TU4c_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_002": {
+		"lines": [
+			"Deal 2 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_003": {
+		"lines": [
+			"Is something in",
+			"this barrel?"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_004": {
+		"lines": [
+			"Deal 2",
+			"damage to",
+			"all enemies."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_005": {
+		"lines": [
+			"Was hiding",
+			"in a barrel!"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_006": {
+		"lines": [
+			"Give a friendly",
+			"minion +1/+1. (+1",
+			"Attack/+1 Health)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_007": {
+		"lines": [
+			"So strong!",
+			"And only 6",
+			"Mana?!"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_008": {
+		"lines": [
+			"Restore 8 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_002": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_003": {
+		"lines": [
+			"Deal 1 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_002": {
+		"lines": [
+			"Summon two",
+			"2/1 minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_002t": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_003": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_004": {
+		"name": 10,
+		"text": 11
+	},
+	"TU4e_005": {
+		"lines": [
+			"Shoot 5 missiles at",
+			"random enemies",
+			"for 1 damage each."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_007": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_002": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_003": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_004": {
+		"lines": [
+			"Give your minions",
+			"+2/+2. (+2 Attack/",
+			"+2 Health)"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"TU4f_005": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_006": {
+		"lines": [
+			"Until you kill",
+			"Cho's minions, he",
+			"can't be attacked."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_007": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Throw",
+			"Bananas."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_042": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_069": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_112": {
+		"lines": [
+			"Deal 2 damage to all",
+			"enemies. Restore 2",
+			"Health to all",
+			"friendly characters."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS1_113": {
+		"lines": [
+			"Take control of",
+			"an enemy minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_129": {
+		"lines": [
+			"Change a minion's",
+			"Attack to be equal",
+			"to its Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_130": {
+		"lines": [
+			"Deal 2 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_003": {
+		"lines": [
+			"Put a copy of a random",
+			"card in your opponent's",
+			"hand into your hand."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_004": {
+		"lines": [
+			"Give a minion",
+			"+2 Health.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_005": {
+		"lines": [
+			"Give your hero",
+			"+2 Attack this turn.",
+			"Gain 2 Armor."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_007": {
+		"lines": [
+			"Restore 8 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_008": {
+		"lines": [
+			"Deal 1 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_009": {
+		"lines": [
+			"Give a minion [b]Taunt[/b]",
+			"and +2/+2.",
+			"(+2 Attack/+2 Health)"
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_011": {
+		"lines": [
+			"Give your",
+			"characters",
+			"+2 Attack this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_012": {
+		"lines": [
+			"Deal 4 damage to an",
+			"enemy and 1 damage",
+			"to all other enemies."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_013": {
+		"lines": [
+			"Gain an empty",
+			"Mana Crystal."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_022": {
+		"lines": [
+			"Transform a",
+			"minion",
+			"into a 1/1 Sheep."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_023": {
+		"lines": [
+			"Draw 2 cards."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_024": {
+		"lines": [
+			"Deal 3 damage",
+			"to a character",
+			"and [b]Freeze[/b] it."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_025": {
+		"lines": [
+			"Deal 1 damage to",
+			"all enemy minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_026": {
+		"lines": [
+			"[b]Freeze[/b] all",
+			"enemy minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_027": {
+		"lines": [
+			"Summon two",
+			"0/2 minions",
+			"with [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_028": {
+		"lines": [
+			"Deal 2 damage to",
+			"all enemy minions",
+			"and [b]Freeze[/b] them."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_029": {
+		"lines": [
+			"Deal 6 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_031": {
+		"lines": [
+			"[b]Freeze[/b] a character. If",
+			"it was already [b]Frozen[/b],",
+			"deal 4 damage instead."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_032": {
+		"lines": [
+			"Deal 4 damage to",
+			"all enemy minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_033": {
+		"lines": [
+			"[b]Freeze[/b] any character",
+			"damaged by",
+			"this minion."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_037": {
+		"lines": [
+			"Deal 1 damage to an",
+			"enemy character",
+			"and [b]Freeze[/b] it."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_038": {
+		"lines": [
+			"Choose a minion. When",
+			"that minion is destroyed,",
+			"return it to the battlefield."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_039": {
+		"lines": [
+			"Give a",
+			"minion",
+			"[b]Windfury[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_041": {
+		"lines": [
+			"Restore a minion",
+			"to full Health and",
+			"give it [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_042": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Deal 3",
+			"damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_045": {
+		"lines": [
+			"Give a friendly",
+			"character +3",
+			"Attack this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_046": {
+		"lines": [
+			"Give your minions",
+			"+3 Attack this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_050": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_051": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_052": {
+		"lines": [
+			"[b]Spell Damage +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_053": {
+		"lines": [
+			"Draw a card. That",
+			"card costs (3) less."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_057": {
+		"lines": [
+			"Deal 4",
+			"damage",
+			"to a minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_059": {
+		"lines": [
+			"[b]Stealth[/b]. At the end of your",
+			"turn, give another random",
+			"friendly minion +1 Health."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_CS2_061": {
+		"lines": [
+			"Deal 2 damage.",
+			"Restore 2 Health",
+			"to your hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_062": {
+		"lines": [
+			"Deal 3 damage",
+			"to",
+			"ALL characters."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_063": {
+		"lines": [
+			"Choose an enemy",
+			"minion. At the start of",
+			"your turn, destroy it."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_064": {
+		"lines": [
+			"[b]Battlecry:[/b] Deal 1",
+			"damage to ALL other",
+			"characters."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_065": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_072": {
+		"lines": [
+			"Deal 2 damage to",
+			"an undamaged",
+			"minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_073": {
+		"lines": [
+			"Give a minion +2",
+			"Attack. [b]Combo:[/b]",
+			"+4 Attack instead."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_073_puzzle": {
+		"lines": [
+			"Give a minion +2",
+			"Attack. [b]Combo:[/b]",
+			"+4 Attack instead."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_074": {
+		"lines": [
+			"Give your",
+			"weapon",
+			"+2 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_075": {
+		"lines": [
+			"Deal 3 damage to",
+			"the enemy hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_076": {
+		"lines": [
+			"Destroy an",
+			"enemy minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_077": {
+		"lines": [
+			"Draw 4 cards."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_080": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_082": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_084": {
+		"lines": [
+			"Change a",
+			"minion's",
+			"Health to 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_087": {
+		"lines": [
+			"Give a",
+			"minion",
+			"+3 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_088": {
+		"lines": [
+			"[b]Battlecry:[/b] Restore 6",
+			"Health to",
+			"your hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_089": {
+		"lines": [
+			"Restore 6 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_091": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_092": {
+		"lines": [
+			"Give a minion",
+			"+4/+4. (+4 Attack/",
+			"+4 Health)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_093": {
+		"lines": [
+			"Deal 2",
+			"damage to",
+			"all enemies."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_094": {
+		"lines": [
+			"Deal 3",
+			"damage.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_097": {
+		"lines": [
+			"Whenever your hero",
+			"attacks, restore",
+			"2 Health to it."
+		],
+		"name": 11,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_CS2_101t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_102_H3": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Gain 2 Armor."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_103": {
+		"lines": [
+			"Give a friendly",
+			"minion +2 Attack",
+			"and [b]Charge[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_103_Puzzle": {
+		"lines": [
+			"Give a friendly minion",
+			"[b]Charge[/b]. It can't attack",
+			"heroes this turn."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_104": {
+		"lines": [
+			"Give a",
+			"damaged",
+			"minion +3/+3."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_105": {
+		"lines": [
+			"Give your hero",
+			"+4 Attack this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_106": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_108": {
+		"lines": [
+			"Destroy a",
+			"damaged",
+			"enemy minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_112": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_114": {
+		"lines": [
+			"Deal 2 damage to",
+			"two random enemy",
+			"minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_117": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Restore",
+			"3 Health."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_118": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_119": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_120": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_121": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_122": {
+		"lines": [
+			"Your other",
+			"minions have",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_124": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_125": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_127": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_131": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_141": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Deal 1",
+			"damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_142": {
+		"lines": [
+			"[b]Spell Damage +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_146": {
+		"lines": [
+			"Has [b]Charge[/b] while",
+			"you have a weapon",
+			"equipped."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_147": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_150": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Deal 2",
+			"damage."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_151": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Summon a",
+			"2/2 Squire."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_152": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_155": {
+		"lines": [
+			"[b]Spell Damage +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_161": {
+		"lines": [
+			"[b]Stealth[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_162": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_168": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_169": {
+		"lines": [
+			"[b]Windfury[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_171": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_172": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_173": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_179": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_181": {
+		"lines": [
+			"[b]Battlecry:[/b] Deal",
+			"4 damage to",
+			"HIMSELF."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_182": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_186": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_187": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_188": {
+		"lines": [
+			"[b]Battlecry:[/b] Give a",
+			"minion +2 Attack",
+			"this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_189": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Deal 1",
+			"damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_196": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Summon",
+			"a 1/1 Boar."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_197": {
+		"lines": [
+			"[b]Spell Damage +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_200": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_201": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_203": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"[b]Silence[/b]",
+			"a minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_213": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_221": {
+		"lines": [
+			"[b]Enrage:[/b] Your",
+			"weapon has",
+			"+2 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_222": {
+		"lines": [
+			"Your other",
+			"minions",
+			"have +1/+1."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_226": {
+		"lines": [
+			"[b]Battlecry:[/b] Gain",
+			"+1/+1 for each other",
+			"friendly minion on",
+			"the battlefield."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_227": {
+		"lines": [
+			"Your",
+			"minions cost",
+			"(3) more."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_231": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_232": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_233": {
+		"lines": [
+			"Destroy your weapon",
+			"and deal its damage",
+			"to all enemies."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_234": {
+		"lines": [
+			"Destroy a",
+			"minion with",
+			"3 or less Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_235": {
+		"lines": [
+			"Whenever a minion",
+			"is healed, draw",
+			"a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_236": {
+		"lines": [
+			"Double a",
+			"minion's Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_237": {
+		"lines": [
+			"Whenever you",
+			"summon a Beast,",
+			"draw a card."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_boar": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_mirror": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_tk1": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_01": {
+		"lines": [
+			"[b]Elusive[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_02": {
+		"lines": [
+			"Deal 5 damage",
+			"to all characters",
+			"except Ysera."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_03": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_04": {
+		"lines": [
+			"Return a",
+			"minion to its",
+			"owner's hand."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_05": {
+		"lines": [
+			"Give a minion +5/+5.",
+			"At the start of your",
+			"next turn, destroy it."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_DS1_055": {
+		"lines": [
+			"[b]Battlecry:[/b] Restore 2",
+			"Health to all friendly",
+			"characters."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_DS1_070": {
+		"lines": [
+			"[b]Battlecry:[/b] Give a",
+			"friendly Beast +2/+2",
+			"and [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_DS1_175": {
+		"lines": [
+			"Your other",
+			"Beasts have",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_178": {
+		"lines": [
+			"Your Beasts",
+			"have",
+			"[b]Charge[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_183": {
+		"lines": [
+			"Deal 3 damage",
+			"to two random",
+			"enemy minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_184": {
+		"lines": [
+			"Look at the top 3 cards",
+			"of your deck. Draw one",
+			"and discard the others."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_DS1_185": {
+		"lines": [
+			"Deal 2 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_188": {
+		"lines": [
+			"Your hero is",
+			"[b]Immune[/b] while",
+			"attacking."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_DS1_233": {
+		"lines": [
+			"Deal 5 damage to",
+			"the enemy hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_001": {
+		"lines": [
+			"Whenever a character",
+			"is healed, gain",
+			"+2 Attack."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_002": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy",
+			"an enemy minion",
+			"with [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_004": {
+		"lines": [
+			"At the end of your turn,",
+			"give another random",
+			"friendly minion +1 Health."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_005": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy",
+			"a minion with 7 or",
+			"more Attack."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_006": {
+		"lines": [
+			"At the start of your turn,",
+			"swap this minion with a",
+			"random one",
+			"in your hand."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_007": {
+		"lines": [
+			"Whenever this",
+			"minion takes damage,",
+			"draw a card."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_008": {
+		"lines": [
+			"[b]Divine Shield[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_009": {
+		"lines": [
+			"[b]Enrage:[/b] +5 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_010": {
+		"lines": [
+			"[b]Stealth[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_011": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Restore",
+			"2 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_012": {
+		"lines": [
+			"[b]Spell Damage +1[/b]",
+			"[b]Deathrattle:[/b] Draw",
+			"a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_014": {
+		"lines": [
+			"[b]Battlecry:[/b] Give",
+			"your opponent",
+			"2 Bananas."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_015": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_016": {
+		"lines": [
+			"[b]Deathrattle:[/b] Take",
+			"control of a random",
+			"enemy minion."
+		],
+		"name": 11,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_017": {
+		"lines": [
+			"[b]Stealth[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_019": {
+		"lines": [
+			"[b]Battlecry:[/b] Give a",
+			"friendly minion +1/+1."
+		],
+		"name": 11,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_020": {
+		"lines": [
+			"[b]Divine Shield[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_021": {
+		"lines": [
+			"[b]Windfury[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_023": {
+		"lines": [
+			"[b]Divine Shield[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_025": {
+		"lines": [
+			"[b]Battlecry:[/b] Summon",
+			"a 2/1 Mechanical",
+			"Dragonling."
+		],
+		"name": 11,
+		"text": 10
+	},
+	"VAN_EX1_028": {
+		"lines": [
+			"[b]Stealth[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_029": {
+		"lines": [
+			"[b]Deathrattle:[/b] Deal",
+			"2 damage to the",
+			"enemy hero."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_032": {
+		"lines": [
+			"[b]Taunt[/b]",
+			"[b]Divine[/b]",
+			"[b]Shield[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_033": {
+		"lines": [
+			"[b]Windfury[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_043": {
+		"lines": [
+			"[b]Battlecry:[/b] Gain +1",
+			"Health for each card",
+			"in your hand."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_044": {
+		"lines": [
+			"Whenever you",
+			"play a card,",
+			"gain +1/+1."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_045": {
+		"lines": [
+			"Can't attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_046": {
+		"lines": [
+			"[b]Battlecry:[/b] Give a",
+			"minion +2 Attack",
+			"this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_048": {
+		"lines": [
+			"[b]Battlecry:[/b]",
+			"[b]Silence[/b]",
+			"a minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_049": {
+		"lines": [
+			"[b]Battlecry:[/b] Return a",
+			"friendly minion",
+			"from the battlefield",
+			"to your hand."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_050": {
+		"lines": [
+			"[b]Battlecry:[/b] Each",
+			"player draws 2",
+			"cards."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_055": {
+		"lines": [
+			"Whenever you cast a",
+			"spell, gain +2 Attack",
+			"this turn."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_057": {
+		"lines": [
+			"[b]Battlecry:[/b] Return a",
+			"friendly minion",
+			"from the battlefield",
+			"to your hand."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_058": {
+		"lines": [
+			"[b]Battlecry:[/b] Give",
+			"adjacent minions",
+			"[b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_059": {
+		"lines": [
+			"[b]Battlecry:[/b] Swap the",
+			"Attack and Health",
+			"of a minion."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_062": {
+		"lines": [
+			"[b]Charge[/b]. Has +1",
+			"Attack for each",
+			"other Murloc on",
+			"the battlefield."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_066": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy",
+			"your opponent's",
+			"weapon."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_067": {
+		"lines": [
+			"[b]Charge[/b]",
+			"[b]Divine[/b]",
+			"[b]Shield[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_076": {
+		"lines": [
+			"The first minion",
+			"you play each turn",
+			"costs (1) less."
+		],
+		"name": 10,
+		"text": 10
+	},
+	"VAN_EX1_080": {
+		"lines": [
+			"Whenever a",
+			"[b]Secret[/b] is played,",
+			"gain +1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_082": {
+		"lines": [
+			"[b]Battlecry:[/b] Deal 3 damage",
+			"randomly split between all",
+			"other characters."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_083": {
+		"lines": [
+			"[b]Battlecry:[/b] Transform",
+			"another random minion",
+			"into a 5/5 Devilsaur",
+			"or a 1/1 Squirrel."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_084": {
+		"lines": [
+			"Whenever you summon",
+			"a minion with 3 or less",
+			"Attack, give it [b]Charge[/b]."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_085": {
+		"lines": [
+			"[b]Battlecry:[/b] If your opponent",
+			"has 4 or more minions, take",
+			"control of one at random."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_089": {
+		"lines": [
+			"[b]Charge[/b]. [b]Battlecry:[/b]",
+			"Give your opponent a",
+			"Mana Crystal."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_091": {
+		"lines": [
+			"[b]Battlecry:[/b] Take",
+			"control of an enemy",
+			"minion that has 2 or",
+			"less Attack."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_093": {
+		"lines": [
+			"[b]Battlecry:[/b] Give",
+			"adjacent minions +1/+1",
+			"and [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_095": {
+		"lines": [
+			"Whenever you",
+			"cast a spell, draw",
+			"a card."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_096": {
+		"lines": [
+			"[b]Deathrattle:[/b]",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_097": {
+		"lines": [
+			"[b]Taunt[/b].",
+			"[b]Deathrattle:[/b] Deal 2",
+			"damage to ALL",
+			"characters."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_100": {
+		"lines": [
+			"Whenever a player",
+			"casts a spell, put a",
+			"copy into the other",
+			"player’s hand."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_102": {
+		"lines": [
+			"At the start of your turn,",
+			"deal 2 damage to a",
+			"random enemy."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_103": {
+		"lines": [
+			"[b]Battlecry:[/b] Give",
+			"ALL other Murlocs",
+			"+2 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_105": {
+		"lines": [
+			"Costs (1) less for",
+			"each other card in",
+			"your hand."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_110": {
+		"lines": [
+			"[b]Deathrattle:[/b]",
+			"Summon a 4/5 Baine",
+			"Bloodhoof."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_110t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_112": {
+		"lines": [
+			"[b]Battlecry:[/b] Summon",
+			"an AWESOME",
+			"invention."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_116": {
+		"lines": [
+			"[b]Charge[/b]. [b]Battlecry:[/b]",
+			"Summon two 1/1",
+			"Whelps for your",
+			"opponent."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_124": {
+		"lines": [
+			"Deal 2 damage.",
+			"[b]Combo:[/b] Deal 4",
+			"damage instead."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_126": {
+		"lines": [
+			"Force an enemy minion",
+			"to deal its damage to",
+			"the minions next to it."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_128": {
+		"lines": [
+			"Give your minions",
+			"[b]Stealth[/b] until your",
+			"next turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_129": {
+		"lines": [
+			"Deal 1 damage to",
+			"all enemy minions.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_130": {
+		"lines": [
+			"[b]Secret:[/b] When an enemy",
+			"attacks, summon a 2/1",
+			"Defender as the new target."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_130a": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_131": {
+		"lines": [
+			"[b]Combo:[/b] Summon",
+			"a 2/1 Defias",
+			"Bandit."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_132": {
+		"lines": [
+			"[b]Secret:[/b] When your hero",
+			"takes damage, deal that",
+			"much damage to the",
+			"enemy hero."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_133": {
+		"lines": [
+			"[b]Battlecry:[/b] Deal 1",
+			"damage. [b]Combo:[/b] Deal",
+			"2 instead."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_134": {
+		"lines": [
+			"[b]Combo:[/b]",
+			"Deal 2",
+			"damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_136": {
+		"lines": [
+			"[b]Secret:[/b] When a friendly",
+			"minion dies, return it to",
+			"life with 1 Health."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_137": {
+		"lines": [
+			"Deal 2 damage to the",
+			"enemy hero. [b]Combo:[/b]",
+			"Return this to your",
+			"hand next turn."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_144": {
+		"lines": [
+			"Return a friendly",
+			"minion to your",
+			"hand. It costs (2) less."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_145": {
+		"lines": [
+			"The next spell",
+			"you cast this turn",
+			"costs (3) less."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_154": {
+		"lines": [
+			"[b]Choose One -[/b]",
+			"Deal 3 damage to a",
+			"minion; or 1 damage",
+			"and draw a card."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_154a": {
+		"lines": [
+			"Deal 3",
+			"damage to",
+			"a minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_154b": {
+		"lines": [
+			"Deal 1 damage",
+			"to a minion.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_155": {
+		"lines": [
+			"[b]Choose One -[/b] Give a",
+			"minion +4 Attack; or",
+			"+4 Health and [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_155a": {
+		"lines": [
+			"+4 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_155b": {
+		"lines": [
+			"+4 Health",
+			"and [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_158": {
+		"lines": [
+			"Give your minions",
+			"\"[b]Deathrattle:[/b]",
+			"Summon a 2/2 Treant.\""
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_160": {
+		"lines": [
+			"[b]Choose One -[/b] Give your",
+			"minions +1/+1; or",
+			"Summon a 3/2 Panther."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_160a": {
+		"lines": [
+			"Summon a",
+			"3/2 Panther."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_160b": {
+		"lines": [
+			"Give your",
+			"minions +1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_161": {
+		"lines": [
+			"Destroy a minion.",
+			"Your opponent",
+			"draws 2 cards."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_162": {
+		"lines": [
+			"Adjacent",
+			"minions have",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_164": {
+		"lines": [
+			"[b]Choose One -[/b] Gain",
+			"2 Mana Crystals;",
+			"or Draw 3 cards."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_164a": {
+		"lines": [
+			"Gain 2",
+			"Mana",
+			"Crystals."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_164b": {
+		"lines": [
+			"Draw 3 cards."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165": {
+		"lines": [
+			"[b]Choose One -[/b]",
+			"[b]Charge[/b]; or +2 Health",
+			"and [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_165a": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165b": {
+		"lines": [
+			"+2 Health",
+			"and [b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165t1": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165t2": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_166": {
+		"lines": [
+			"[b]Choose One -[/b]",
+			"Deal 2 damage;",
+			"or [b]Silence[/b] a",
+			"minion."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_166a": {
+		"lines": [
+			"Deal 2 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_166b": {
+		"lines": [
+			"[b]Silence[/b] a minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_169": {
+		"lines": [
+			"Gain 2 Mana",
+			"Crystals this",
+			"turn only."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_170": {
+		"lines": [
+			"Destroy any minion",
+			"damaged by this",
+			"minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_173": {
+		"lines": [
+			"Deal 5",
+			"damage.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_178": {
+		"lines": [
+			"[b]Choose One -[/b]",
+			"+5 Attack; or +5 Health",
+			"and [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_178a": {
+		"lines": [
+			"+5 Health",
+			"and [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_178b": {
+		"lines": [
+			"+5 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_238": {
+		"lines": [
+			"Deal 3",
+			"damage.",
+			"[b]Overload:[/b] (1)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_241": {
+		"lines": [
+			"Deal 5",
+			"damage.",
+			"[b]Overload:[/b] (2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_243": {
+		"lines": [
+			"[b]Windfury[/b].",
+			"[b]Overload:[/b] (2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_244": {
+		"lines": [
+			"Give your",
+			"Totems",
+			"+2 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_245": {
+		"lines": [
+			"[b]Silence[/b] a minion,",
+			"then deal 1",
+			"damage to it."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_246": {
+		"lines": [
+			"Transform a",
+			"minion into a 0/1",
+			"Frog with [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_247": {
+		"lines": [
+			"[b]Overload:[/b] (1)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_248": {
+		"lines": [
+			"Summon two 2/3",
+			"Spirit Wolves with",
+			"[b]Taunt[/b]. [b]Overload:[/b] (2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_249": {
+		"lines": [
+			"At the end of your turn,",
+			"deal 2 damage to ALL",
+			"other characters."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_250": {
+		"lines": [
+			"[b]Taunt[/b]. [b]Overload[/b]: (3)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_251": {
+		"lines": [
+			"Deal 2 damage to",
+			"2 random enemy",
+			"minions. [b]Overload:[/b] (2)"
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_258": {
+		"lines": [
+			"Whenever you play a",
+			"card with [b]Overload[/b],",
+			"gain +1/+1."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_259": {
+		"lines": [
+			"Deal 2-3 damage to",
+			"all enemy minions.",
+			"[b]Overload:[/b] (2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_274": {
+		"lines": [
+			"If you control a [b]Secret[/b]",
+			"at the end of your turn,",
+			"gain +2/+2."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_275": {
+		"lines": [
+			"[b]Freeze[/b] a minion and the",
+			"minions next to it, and",
+			"deal 1 damage to them."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_277": {
+		"lines": [
+			"Deal 3 damage",
+			"randomly split among",
+			"all enemy characters."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_278": {
+		"lines": [
+			"Deal 1",
+			"damage.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_279": {
+		"lines": [
+			"Deal 10 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_283": {
+		"lines": [
+			"[b]Battlecry:[/b] [b]Freeze[/b]",
+			"a character."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_284": {
+		"lines": [
+			"[b]Spell Damage +1[/b]",
+			"[b]Battlecry:[/b] Draw",
+			"a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_287": {
+		"lines": [
+			"[b]Secret:[/b] When your",
+			"opponent casts a",
+			"spell, [b]Counter[/b] it."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_289": {
+		"lines": [
+			"[b]Secret:[/b] As soon as your",
+			"hero is attacked, gain",
+			"8 Armor."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_294": {
+		"lines": [
+			"[b]Secret:[/b] When",
+			"your opponent plays a",
+			"minion, summon a copy",
+			"of it."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_295": {
+		"lines": [
+			"[b]Secret:[/b] When your hero",
+			"takes fatal damage,",
+			"prevent it and become",
+			"[b]Immune[/b] this turn."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_298": {
+		"lines": [
+			"Can't attack. At the",
+			"end of your turn,",
+			"deal 8 damage to a",
+			"random enemy."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_301": {
+		"lines": [
+			"[b]Taunt[/b]",
+			"[b]Battlecry:[/b] Destroy",
+			"one of your Mana",
+			"Crystals."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_302": {
+		"lines": [
+			"Deal 1 damage to a",
+			"minion. If it dies,",
+			"draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_303": {
+		"lines": [
+			"Destroy a friendly",
+			"minion and deal its",
+			"Attack damage to",
+			"all enemy minions."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_304": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy both",
+			"adjacent minions and gain",
+			"their Attack and Health."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_306": {
+		"lines": [
+			"[b]Battlecry:[/b] Discard",
+			"a random card."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_308": {
+		"lines": [
+			"Deal 4 damage.",
+			"Discard a",
+			"random card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_309": {
+		"lines": [
+			"Destroy a minion.",
+			"Restore 3 Health",
+			"to your hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_310": {
+		"lines": [
+			"[b]Charge[/b]. [b]Battlecry:[/b]",
+			"Discard two",
+			"random cards."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_312": {
+		"lines": [
+			"Destroy all minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_313": {
+		"lines": [
+			"[b]Battlecry:[/b] Deal",
+			"5 damage to",
+			"your hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_315": {
+		"lines": [
+			"Your minions cost",
+			"(2) less, but not less",
+			"than (1)."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_316": {
+		"lines": [
+			"Give a friendly minion",
+			"+4/+4 until end of turn.",
+			"Then, it dies. Horribly."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_EX1_317": {
+		"lines": [
+			"Draw 2",
+			"Demons",
+			"from your deck."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_319": {
+		"lines": [
+			"[b]Battlecry:[/b] Deal",
+			"3 damage to",
+			"your hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_320": {
+		"lines": [
+			"Deal 3 damage to a",
+			"character. If it dies,",
+			"summon a random Demon."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_323": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy your",
+			"hero and replace it with",
+			"Lord Jaraxxus."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_332": {
+		"lines": [
+			"[b]Silence[/b] a minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_334": {
+		"lines": [
+			"Gain control of an enemy",
+			"minion with 3 or less",
+			"Attack until end of turn."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_335": {
+		"lines": [
+			"This minion's Attack",
+			"is always equal",
+			"to its Health."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_339": {
+		"lines": [
+			"Copy 2 cards in your",
+			"opponent's deck and",
+			"add them to your hand."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_341": {
+		"lines": [
+			"At the start of your",
+			"turn, restore 3 Health to",
+			"a damaged friendly",
+			"character."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_345": {
+		"lines": [
+			"Put a copy of",
+			"a random minion from",
+			"your opponent's deck",
+			"into the battlefield."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_345t": {
+		"lines": [
+			"Mindgames whiffed!",
+			"Your opponent had",
+			"no minions!"
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_349": {
+		"lines": [
+			"Draw cards until you",
+			"have as many in hand",
+			"as your opponent."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_350": {
+		"lines": [
+			"Double the damage and",
+			"healing of your spells",
+			"and Hero Power."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_354": {
+		"lines": [
+			"Restore 8",
+			"Health.",
+			"Draw 3 cards."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_355": {
+		"lines": [
+			"Double a",
+			"minion's Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_360": {
+		"lines": [
+			"Change a",
+			"minion's",
+			"Attack to 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_362": {
+		"lines": [
+			"[b]Battlecry:[/b] Give a",
+			"friendly minion",
+			"[b]Divine Shield[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_363": {
+		"lines": [
+			"Choose a minion.",
+			"Whenever it attacks,",
+			"draw a card."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_365": {
+		"lines": [
+			"Draw a card and",
+			"deal damage",
+			"equal to its Cost."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_366": {
+		"lines": [
+			"After you summon",
+			"a minion, give it",
+			"+1/+1 and this loses",
+			"1 Durability."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_371": {
+		"lines": [
+			"Give a minion",
+			"[b]Divine Shield[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_379": {
+		"lines": [
+			"[b]Secret:[/b] After your",
+			"opponent plays a",
+			"minion, reduce",
+			"its Health to 1."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_382": {
+		"lines": [
+			"[b]Battlecry:[/b] Change",
+			"an enemy minion's",
+			"Attack to 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_383": {
+		"lines": [
+			"[b]Divine Shield[/b], [b]Taunt[/b]",
+			"[b]Deathrattle:[/b] Equip a",
+			"5/3 Ashbringer."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_384": {
+		"lines": [
+			"Deal 8 damage",
+			"randomly split among",
+			"all enemy characters."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_390": {
+		"lines": [
+			"[b]Taunt[/b].",
+			"[b]Enrage:[/b]",
+			"+3 Attack"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_391": {
+		"lines": [
+			"Deal 2 damage to a",
+			"minion. If it",
+			"survives, draw a card."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_392": {
+		"lines": [
+			"Draw a card for",
+			"each damaged",
+			"friendly character."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_393": {
+		"lines": [
+			"[b]Enrage:[/b] +3 Attack"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_396": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_398": {
+		"lines": [
+			"[b]Battlecry:[/b] Equip a",
+			"2/2 weapon."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_399": {
+		"lines": [
+			"Whenever this minion",
+			"takes damage, gain",
+			"+3 Attack."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_EX1_400": {
+		"lines": [
+			"Deal 1 damage",
+			"to ALL minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_402": {
+		"lines": [
+			"Whenever a friendly",
+			"minion takes damage,",
+			"gain 1 Armor."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_405": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_407": {
+		"lines": [
+			"Destroy all minions",
+			"except one. (chosen",
+			"randomly)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_408": {
+		"lines": [
+			"Deal 4 damage. If you",
+			"have 12 or less Health,",
+			"deal 6 instead."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_409": {
+		"lines": [
+			"If you have a weapon,",
+			"give it +1/+1. Otherwise",
+			"equip a 1/3 weapon."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_410": {
+		"lines": [
+			"Deal 1 damage to",
+			"a minion for each",
+			"Armor you have."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_411": {
+		"lines": [
+			"Attacking a minion",
+			"costs 1 Attack instead of",
+			"1 Durability."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_412": {
+		"lines": [
+			"[b]Enrage:[/b]",
+			"[b]Windfury[/b] and",
+			"+1 Attack"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_414": {
+		"lines": [
+			"[b]Charge[/b]",
+			"[b]Enrage:[/b]",
+			"+6 Attack"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_506": {
+		"lines": [
+			"[b]Battlecry:[/b] Summon",
+			"a 1/1 Murloc Scout."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_506a": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_507": {
+		"lines": [
+			"ALL other",
+			"murlocs",
+			"have +2/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_508": {
+		"lines": [
+			"ALL other",
+			"Murlocs have",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_509": {
+		"lines": [
+			"Whenever a Murloc",
+			"is summoned, gain",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_522": {
+		"lines": [
+			"[b]Stealth[/b]. Destroy any",
+			"minion damaged by",
+			"this minion."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_531": {
+		"lines": [
+			"Whenever a",
+			"friendly Beast dies,",
+			"gain +2/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_533": {
+		"lines": [
+			"[b]Secret:[/b] When an enemy",
+			"attacks your hero, instead",
+			"it attacks another",
+			"random character."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_534": {
+		"lines": [
+			"[b]Deathrattle:[/b]",
+			"Summon two 2/2",
+			"Hyenas."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_536": {
+		"lines": [
+			"Whenever a [b]Secret[/b]",
+			"is revealed, gain +1",
+			"Durability."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_537": {
+		"lines": [
+			"Deal 5 damage to a",
+			"minion and 2 damage",
+			"to adjacent ones."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_538": {
+		"lines": [
+			"For each enemy",
+			"minion, summon a 1/1",
+			"Hound with [b]Charge[/b]."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_EX1_539": {
+		"lines": [
+			"Deal 3 damage. If you",
+			"control a Beast, deal",
+			"5 damage instead."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_543": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_544": {
+		"lines": [
+			"All minions lose [b]Stealth[/b].",
+			"Destroy all enemy",
+			"[b]Secrets[/b]. Draw a card."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_549": {
+		"lines": [
+			"Give a Beast +2",
+			"Attack and",
+			"[b]Immune[/b] this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_554": {
+		"lines": [
+			"[b]Secret:[/b] When one of your",
+			"minions is attacked,",
+			"summon three 1/1 Snakes."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_554t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_556": {
+		"lines": [
+			"[b]Deathrattle:[/b] Summon",
+			"a 2/1 Damaged Golem."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_557": {
+		"lines": [
+			"At the start of your",
+			"turn, you have a",
+			"50% chance to draw",
+			"an extra card."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_558": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy your",
+			"opponent's weapon and",
+			"draw cards equal to its",
+			"Durability."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_559": {
+		"lines": [
+			"Whenever you",
+			"cast a spell, add",
+			"a 'Fireball' spell",
+			"to your hand."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_560": {
+		"lines": [
+			"Players only have",
+			"15 seconds to take",
+			"their turns."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_561": {
+		"lines": [
+			"[b]Battlecry:[/b] Set a",
+			"hero's remaining",
+			"Health to 15."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_562": {
+		"lines": [
+			"[b]Battlecry:[/b] Summon 1/1",
+			"Whelps until your side",
+			"of the battlefield is full."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_563": {
+		"lines": [
+			"[b]Spell Damage +5[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_564": {
+		"lines": [
+			"[b]Battlecry:[/b] Choose a",
+			"minion and become",
+			"a copy of it."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_565": {
+		"lines": [
+			"Adjacent",
+			"minions have",
+			"+2 Attack."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_567": {
+		"lines": [
+			"[b]Windfury,[/b]",
+			"[b]Overload:[/b] (2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_570": {
+		"lines": [
+			"Give your hero",
+			"+4 Attack this turn.",
+			"Gain 4 Armor."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_571": {
+		"lines": [
+			"Summon three 2/2",
+			"Treants with",
+			"[b]Charge[/b] that die at",
+			"the end of the turn."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_572": {
+		"lines": [
+			"At the end of your turn,",
+			"add a Dream Card",
+			"to your hand."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_573": {
+		"lines": [
+			"[b]Choose One -[/b] Give your",
+			"other minions +2/+2; or",
+			"Summon two 2/2 Treants",
+			"with [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_573a": {
+		"lines": [
+			"Give your other",
+			"minions +2/+2."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_573b": {
+		"lines": [
+			"Summon two 2/2",
+			"Treants with [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_575": {
+		"lines": [
+			"At the end of",
+			"your turn, draw",
+			"a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_577": {
+		"lines": [
+			"[b]Deathrattle:[/b] Summon a",
+			"3/3 Pip Quickwit for",
+			"your opponent."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_578": {
+		"lines": [
+			"Deal damage equal",
+			"to your hero's",
+			"Attack to a minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_581": {
+		"lines": [
+			"Return an enemy",
+			"minion to your",
+			"opponent's hand."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_582": {
+		"lines": [
+			"[b]Spell Damage +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_583": {
+		"lines": [
+			"[b]Battlecry:[/b] Restore 4",
+			"Health to",
+			"your hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_584": {
+		"lines": [
+			"[b]Battlecry:[/b] Give",
+			"adjacent minions [b]Spell[/b]",
+			"[b]Damage +1[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_586": {
+		"lines": [
+			"Costs (1) less for each",
+			"other minion on the",
+			"battlefield."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_587": {
+		"lines": [
+			"[b]Battlecry:[/b] Give a",
+			"friendly minion",
+			"[b]Windfury[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_590": {
+		"lines": [
+			"[b]Battlecry:[/b] All minions",
+			"lose [b]Divine Shield[/b].",
+			"Gain +3/+3 for each",
+			"Shield lost."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_591": {
+		"lines": [
+			"Your cards and powers that",
+			"restore Health now deal",
+			"damage instead."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_593": {
+		"lines": [
+			"[b]Battlecry: [/b]Deal",
+			"3 damage to the",
+			"enemy hero."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_594": {
+		"lines": [
+			"[b]Secret:[/b] When a",
+			"minion attacks your",
+			"hero, destroy it."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_595": {
+		"lines": [
+			"After a friendly",
+			"minion dies, draw",
+			"a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_596": {
+		"lines": [
+			"Deal 2 damage to a",
+			"minion. If it’s a",
+			"friendly Demon,",
+			"give it +2/+2 instead."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_597": {
+		"lines": [
+			"At the end of your turn, deal",
+			"1 damage to this minion",
+			"and summon a 1/1 Imp."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_598": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_603": {
+		"lines": [
+			"[b]Battlecry:[/b] Deal 1",
+			"damage to a",
+			"minion and give",
+			"it +2 Attack."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_604": {
+		"lines": [
+			"Whenever a minion",
+			"takes damage, gain",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_606": {
+		"lines": [
+			"Gain 5",
+			"Armor.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_607": {
+		"lines": [
+			"Deal 1 damage",
+			"to a minion and",
+			"give it +2 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_608": {
+		"lines": [
+			"Your spells",
+			"cost (1) less."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_609": {
+		"lines": [
+			"[b]Secret:[/b] After your",
+			"opponent plays a",
+			"minion, deal 4",
+			"damage to it."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_610": {
+		"lines": [
+			"[b]Secret:[/b] When your",
+			"hero is attacked, deal 2",
+			"damage to all enemies."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_611": {
+		"lines": [
+			"[b]Secret:[/b] When an",
+			"enemy minion attacks,",
+			"return it to its owner's",
+			"hand. It costs (2) more."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_612": {
+		"lines": [
+			"[b]Battlecry:[/b] The",
+			"next [b]Secret[/b]",
+			"you play this",
+			"turn costs (0)."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_613": {
+		"lines": [
+			"[b]Combo:[/b] Gain +2/+2 for",
+			"each card played earlier",
+			"this turn."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_614": {
+		"lines": [
+			"Whenever you play",
+			"a card, summon a",
+			"2/1 Flame of",
+			"Azzinoth."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_616": {
+		"lines": [
+			"ALL minions cost",
+			"(1) more."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_617": {
+		"lines": [
+			"Destroy a",
+			"random",
+			"enemy minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_619": {
+		"lines": [
+			"Change the Health",
+			"of ALL minions to 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_620": {
+		"lines": [
+			"Costs (1) less for each",
+			"damage your hero",
+			"has taken."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_621": {
+		"lines": [
+			"Restore 4",
+			"Health to",
+			"ALL minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_622": {
+		"lines": [
+			"Destroy a",
+			"minion with 5 or",
+			"more Attack."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_623": {
+		"lines": [
+			"[b]Battlecry:[/b] Give a",
+			"friendly minion",
+			"+3 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_624": {
+		"lines": [
+			"Deal 5 damage.",
+			"Restore 5 Health",
+			"to your hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_625": {
+		"lines": [
+			"Your Hero Power becomes",
+			"'Deal 2 damage.' If already",
+			"in Shadowform: 3 damage."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_626": {
+		"lines": [
+			"[b]Silence[/b] all",
+			"enemy minions.",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_finkle": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk11": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk28": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk29": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk33": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Summon a",
+			"6/6 Infernal."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk34": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk9": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk9b": {
+		"lines": [
+			"[b]Charge[/b]. At the end",
+			"of the turn, destroy",
+			"this minion."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_HERO_01bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Gain 2 Armor."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_01bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Gain 4 Armor."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_02bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Summon a random",
+			"basic Totem."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_02bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Summon a Totem",
+			"of your choice."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_03bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Equip a 1/2 Dagger."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_03bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Equip a 2/2",
+			"Weapon."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_04bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Summon a Silver",
+			"Hand Recruit."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_04bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Summon",
+			"two Recruits."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_05bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Deal 2 damage to",
+			"the enemy hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_05bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Deal 3 damage to",
+			"the enemy hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_06bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"+1 Attack this turn.",
+			"+1 Armor."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_06bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"+2 Attack this turn.",
+			"+2 Armor."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_07bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Draw a card and",
+			"take 2 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_07bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Draw a card."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_08bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Deal 1 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_08bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Deal 2 damage."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_09bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Restore 2 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_09bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"Restore 4 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_10bp": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"+1 Attack this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_10bp2": {
+		"lines": [
+			"[b]Hero Power[/b]",
+			"+2 Attack this turn."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_003": {
+		"lines": [
+			"Destroy a Demon.",
+			"Restore 5 Health",
+			"to your hero."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_004": {
+		"lines": [
+			"Return all",
+			"minions to their",
+			"owner's hand."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_005": {
+		"lines": [
+			"[b]Combo:[/b] Return a",
+			"minion to its",
+			"owner's hand."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_007": {
+		"lines": [
+			"[b]Choose One -[/b]",
+			"Deal 5 damage to a",
+			"minion; or 2 damage",
+			"to all enemy minions."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_007a": {
+		"lines": [
+			"Deal 2 damage to",
+			"all enemy minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_007b": {
+		"lines": [
+			"Deal 5",
+			"damage to",
+			"a minion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_008": {
+		"lines": [
+			"[b]Choose One -[/b] Draw",
+			"2 cards; or Restore",
+			"5 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_008a": {
+		"lines": [
+			"Draw 2 cards."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_008b": {
+		"lines": [
+			"Restore 5 Health."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_009": {
+		"lines": [
+			"At the end of your",
+			"turn, restore 1 Health",
+			"to all friendly",
+			"minions."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_010": {
+		"lines": [
+			"[b]Charge, Divine[/b]",
+			"[b]Shield, Taunt,[/b]",
+			"[b]Windfury[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_NEW1_011": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_012": {
+		"lines": [
+			"Whenever you",
+			"cast a spell, gain",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_014": {
+		"lines": [
+			"[b]Battlecry:[/b] Give a",
+			"friendly minion",
+			"[b]Stealth[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_016": {
+		"lines": [
+			"[b]Battlecry:[/b] Draw",
+			"a Pirate from",
+			"your deck."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_017": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy",
+			"a Murloc and",
+			"gain +2/+2."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_018": {
+		"lines": [
+			"[b]Battlecry:[/b] Gain Attack",
+			"equal to the Attack",
+			"of your weapon."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_NEW1_019": {
+		"lines": [
+			"After you summon a",
+			"minion, deal 1 damage",
+			"to a random enemy."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_020": {
+		"lines": [
+			"After you cast a spell,",
+			"deal 1 damage to ALL",
+			"minions."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_NEW1_021": {
+		"lines": [
+			"At the start of your",
+			"turn, destroy ALL",
+			"minions."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_022": {
+		"lines": [
+			"[b]Taunt[/b]",
+			"Costs (1) less per Attack",
+			"of your weapon."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_NEW1_023": {
+		"lines": [
+			"[b]Elusive[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_024": {
+		"lines": [
+			"[b]Battlecry:[/b] Give",
+			"your weapon +1/+1."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_NEW1_025": {
+		"lines": [
+			"[b]Battlecry:[/b] Remove",
+			"1 Durability from your",
+			"opponent's weapon."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_026": {
+		"lines": [
+			"Whenever you cast",
+			"a spell, summon a",
+			"1/1 Violet",
+			"Apprentice."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_026t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_027": {
+		"lines": [
+			"Your other",
+			"Pirates",
+			"have +1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_029": {
+		"lines": [
+			"[b]Battlecry:[/b] Enemy",
+			"spells cost (0)",
+			"next turn."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_NEW1_030": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy all",
+			"other minions and discard",
+			"your hand."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_031": {
+		"lines": [
+			"Summon a random",
+			"Beast Companion."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_032": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_033": {
+		"lines": [
+			"Your other",
+			"minions have",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_034": {
+		"lines": [
+			"[b]Charge[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_036": {
+		"lines": [
+			"Your minions can't be",
+			"reduced below 1 Health",
+			"this turn. Draw a card."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_NEW1_037": {
+		"lines": [
+			"At the end of your turn,",
+			"give another random",
+			"friendly minion +1 Attack."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_038": {
+		"lines": [
+			"At the end of",
+			"each turn,",
+			"gain +1/+1 ."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_040": {
+		"lines": [
+			"At the end of your turn,",
+			"summon a 2/2 Gnoll",
+			"with [b]Taunt[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_041": {
+		"lines": [
+			"[b]Battlecry:[/b] Destroy",
+			"a random enemy",
+			"minion with 2 or",
+			"less Attack."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_PRO_001": {
+		"lines": [
+			"[b]Battlecry:[/b] Give both",
+			"players the power to ROCK!",
+			"(with a Power Chord card)"
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_PRO_001c": {
+		"lines": [
+			"Summon a random",
+			"Horde Warrior."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_TU4e_002t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_skele11": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_skele21": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_tt_004": {
+		"lines": [
+			"Whenever a",
+			"minion dies, gain",
+			"+1 Attack."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_tt_010": {
+		"lines": [
+			"[b]Secret:[/b] When an",
+			"enemy casts a spell on",
+			"a minion, summon a",
+			"1/3 as the new target."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_tt_010a": {
+		"name": 12,
+		"text": 11
+	},
+	"ds1_whelptoken": {
+		"name": 12,
+		"text": 11
+	},
+	"hexfrog": {
+		"lines": [
+			"[b]Taunt[/b]"
+		],
+		"name": 12,
+		"text": 11
+	}
+}

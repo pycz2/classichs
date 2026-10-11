@@ -99,7 +99,14 @@ func show_debug_table() -> void:
 	var d := DebugTable.new()
 	d.back.connect(show_menu)
 	d.start.connect(func(g, bots): start_match(g, bots, true))
+	d.card_lab.connect(show_card_lab)
 	_set_screen(d)
+
+
+func show_card_lab() -> void:
+	var l := CardLab.new()
+	l.back.connect(show_debug_table)
+	_set_screen(l)
 
 
 func start_match(g: Game, bots: Array, debug := false) -> MatchView:

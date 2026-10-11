@@ -1,0 +1,4490 @@
+{
+	"CS2_013t": {
+		"lines": [
+			"Dobierz kartę. (Możesz",
+			"mieć maksymalnie 10",
+			"many w zasobniku)."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"EX1_014t": {
+		"lines": [
+			"Daj",
+			"stronnikowi",
+			"+1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_025t": {
+		"name": 11,
+		"text": 11
+	},
+	"EX1_116t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_131t": {
+		"name": 11,
+		"text": 11
+	},
+	"EX1_160t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_317t": {
+		"lines": [
+			"Skończyły ci się Demony!",
+			"Ale przynajmniej zawsze",
+			"masz chochliki..."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"EX1_323h": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_323w": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_383t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_398t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_409t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_534t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_538t": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_625t": {
+		"lines": [
+			"Zadaj",
+			"2 pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_625t2": {
+		"lines": [
+			"Zadaj",
+			"3 pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"GAME_005": {
+		"lines": [
+			"Otrzymujesz 1",
+			"kryształ many",
+			"w tej turze."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"HERO_01": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_02": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_03": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_04": {
+		"name": 10,
+		"text": 11
+	},
+	"HERO_05": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_06": {
+		"name": 9,
+		"text": 11
+	},
+	"HERO_07": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_08": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_09": {
+		"name": 12,
+		"text": 11
+	},
+	"Mekka1": {
+		"lines": [
+			"Na początku twojej tury",
+			"zniszcz tego stronnika i",
+			"dobierz 3 karty."
+		],
+		"name": 8,
+		"text": 9,
+		"valign": "top"
+	},
+	"Mekka2": {
+		"lines": [
+			"Na koniec twojej tury",
+			"przywróć 6 pkt. zdrowia",
+			"rannej postaci."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"Mekka3": {
+		"lines": [
+			"Na koniec twojej",
+			"tury daj losowemu",
+			"stronnikowi +1/+1."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"Mekka4": {
+		"lines": [
+			"Na początku twojej",
+			"tury przemień",
+			"losowego stronnika",
+			"w Kurczaka 1/1."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"Mekka4t": {
+		"lines": [
+			"Hej, kurczaku!"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"NEW1_040t": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001a": {
+		"lines": [
+			"Przyzwij trzy,",
+			"cztery albo pięć",
+			"Murloków 1/1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001at": {
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001b": {
+		"lines": [
+			"Zadaj 4 pkt.",
+			"obrażeń.",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_002": {
+		"name": 11,
+		"text": 11
+	},
+	"TU4a_003": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_004": {
+		"lines": [
+			"Zadaj 4",
+			"pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_005": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_006": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4b_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_002": {
+		"lines": [
+			"Zadaj 2",
+			"pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_003": {
+		"lines": [
+			"Czy w tej",
+			"beczce",
+			"coś jest?"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_004": {
+		"lines": [
+			"Zadaj 2 pkt.",
+			"obrażeń wszystkim",
+			"wrogom."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_005": {
+		"lines": [
+			"Ukrywał",
+			"się w",
+			"beczce!"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_006": {
+		"lines": [
+			"Daj przyjaznemu",
+			"stronnikowi +1/+1. (+1 do",
+			"ataku/+1 do zdrowia)"
+		],
+		"name": 12,
+		"text": 8
+	},
+	"TU4c_007": {
+		"lines": [
+			"Ależ siłacz!",
+			"I za jedyne",
+			"6 many?!"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_008": {
+		"lines": [
+			"Przywróć",
+			"8 pkt. zdrowia."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_002": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_003": {
+		"lines": [
+			"Zadaj",
+			"1 pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_001": {
+		"name": 11,
+		"text": 11
+	},
+	"TU4e_002": {
+		"lines": [
+			"Przyzwij",
+			"dwóch",
+			"stronników 2/1."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"TU4e_002t": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_003": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_004": {
+		"name": 9,
+		"text": 11
+	},
+	"TU4e_005": {
+		"lines": [
+			"Wystrzel 5 pocisków",
+			"w losowych wrogów,",
+			"zadając każdemu",
+			"1 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"TU4e_007": {
+		"name": 9,
+		"text": 11
+	},
+	"TU4f_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_002": {
+		"name": 11,
+		"text": 11
+	},
+	"TU4f_003": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_004": {
+		"lines": [
+			"Daj twoim stronnikom",
+			"+2/+2. (+2 do ataku/",
+			"+2 do zdrowia)."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"TU4f_005": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_006": {
+		"lines": [
+			"Nie możesz zaatakować",
+			"Czo, dopóki nie zabijesz",
+			"jego stronników."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"TU4f_007": {
+		"lines": [
+			"[b]Okrzyk[/b]",
+			"[b]bojowy:[/b] Rzuć",
+			"bananami."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_042": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS1_069": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_112": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"wszystkim wrogom.",
+			"Przywróć 2 pkt.",
+			"zdrowia wszystkim",
+			"przyjaznym postaciom."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_CS1_113": {
+		"lines": [
+			"Przejmij kontrolę",
+			"nad wrogim",
+			"stronnikiem."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_129": {
+		"lines": [
+			"Zmień atak",
+			"stronnika na równy",
+			"jego zdrowiu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_130": {
+		"lines": [
+			"Zadaj 2",
+			"pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_003": {
+		"lines": [
+			"Umieść w twojej ręce",
+			"kopię losowej karty",
+			"z ręki przeciwnika."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_004": {
+		"lines": [
+			"Daj stronnikowi",
+			"+2 do zdrowia.",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_005": {
+		"lines": [
+			"Daj twojemu",
+			"bohaterowi +2 do ataku",
+			"w tej turze. Otrzymujesz",
+			"2 pkt. pancerza."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_007": {
+		"lines": [
+			"Przywróć 8",
+			"pkt. zdrowia."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_008": {
+		"lines": [
+			"Zadaj 1",
+			"pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_009": {
+		"lines": [
+			"Daj stronnikowi",
+			"[b]Prowokację[/b] oraz +2/+2.",
+			"(+2 do ataku/+2 do",
+			"zdrowia)."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_011": {
+		"lines": [
+			"Daj twoim",
+			"postaciom +2 do",
+			"ataku w tej turze."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_012": {
+		"lines": [
+			"Zadaj 4 pkt. obrażeń",
+			"wrogowi i 1 pkt.",
+			"obrażeń wszystkim",
+			"pozostałym wrogom."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_013": {
+		"lines": [
+			"Otrzymujesz pusty",
+			"kryształ many."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_022": {
+		"lines": [
+			"Przemień",
+			"stronnika",
+			"w Owcę 1/1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_023": {
+		"lines": [
+			"Dobierz 2 karty."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_024": {
+		"lines": [
+			"Zadaj 3 pkt.",
+			"obrażeń dowolnej",
+			"postaci i ją [b]Zamroź[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_025": {
+		"lines": [
+			"Zadaj 1 pkt. obrażeń",
+			"wszystkim wrogim",
+			"stronnikom."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_026": {
+		"lines": [
+			"[b]Zamroź[/b] wszystkich",
+			"wrogich",
+			"stronników."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_027": {
+		"lines": [
+			"Przyzwij dwóch",
+			"stronników 0/2",
+			"z [b]Prowokacją[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_028": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"wszystkim wrogim",
+			"stronnikom",
+			"i ich [b]Zamroź[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_029": {
+		"lines": [
+			"Zadaj 6",
+			"pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_031": {
+		"lines": [
+			"[b]Zamroź[/b] postać. Jeśli",
+			"jest już [b]Zamrożona[/b],",
+			"zadaj zamiast tego",
+			"4 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_032": {
+		"lines": [
+			"Zadaj 4 pkt. obrażeń",
+			"wszystkim wrogim",
+			"stronnikom."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_033": {
+		"lines": [
+			"[b]Zamroź[/b] każdą postać",
+			"zranioną przez tego",
+			"stronnika."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_037": {
+		"lines": [
+			"Zadaj 1 pkt. obrażeń",
+			"wrogiej postaci",
+			"i ją [b]Zamroź[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_038": {
+		"lines": [
+			"Wybierz stronnika. Kiedy",
+			"zostanie zniszczony,",
+			"przywróć go na pole bitwy."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_039": {
+		"lines": [
+			"Daj",
+			"stronnikowi",
+			"[b]Furię wichru[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_041": {
+		"lines": [
+			"Przywróć stronnika",
+			"do pełni zdrowia",
+			"i daj mu [b]Prowokację[/b]."
+		],
+		"name": 10,
+		"text": 10
+	},
+	"VAN_CS2_042": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"3 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_CS2_045": {
+		"lines": [
+			"Daj przyjaznej",
+			"postaci +3 do ataku",
+			"w tej turze."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_046": {
+		"lines": [
+			"Daj twoim stronnikom",
+			"+3 do ataku",
+			"w tej turze."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_050": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_051": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_052": {
+		"lines": [
+			"[b]Obrażenia zaklęć +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_053": {
+		"lines": [
+			"Dobierz kartę. Ta",
+			"karta kosztuje",
+			"(3) mniej."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_057": {
+		"lines": [
+			"Zadaj 4 pkt.",
+			"obrażeń",
+			"stronnikowi."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_059": {
+		"lines": [
+			"[b]Ukrycie[/b]",
+			"Na koniec twojej tury daj",
+			"innemu losowemu przyjaznemu",
+			"stronnikowi +1 do zdrowia."
+		],
+		"name": 12,
+		"text": 5
+	},
+	"VAN_CS2_061": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń.",
+			"Przywróć 2 pkt. zdrowia",
+			"twojemu bohaterowi."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_062": {
+		"lines": [
+			"Zadaj 3 pkt. obrażeń",
+			"WSZYSTKIM",
+			"postaciom."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_063": {
+		"lines": [
+			"Wybierz wrogiego",
+			"stronnika i zniszcz go",
+			"na początku twojej tury."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_064": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"1 pkt. obrażeń",
+			"WSZYSTKIM pozostałym",
+			"postaciom."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_CS2_065": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_072": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"niezranionemu",
+			"stronnikowi."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_073": {
+		"lines": [
+			"Daj stronnikowi",
+			"+2 do ataku.",
+			"[b]Kombinacja:[/b] Zamiast",
+			"tego daj +4 do ataku."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_073_puzzle": {
+		"lines": [
+			"Daj stronnikowi",
+			"+2 do ataku.",
+			"[b]Kombinacja:[/b] Zamiast",
+			"tego daj +4 do ataku."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_074": {
+		"lines": [
+			"Daj twojej",
+			"broni",
+			"+2 do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_075": {
+		"lines": [
+			"Zadaj 3 pkt.",
+			"obrażeń wrogiemu",
+			"bohaterowi."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_076": {
+		"lines": [
+			"Zniszcz",
+			"wrogiego",
+			"stronnika."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_077": {
+		"lines": [
+			"Dobierz 4 karty."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_080": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_082": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_084": {
+		"lines": [
+			"Zmień",
+			"zdrowie",
+			"stronnika na 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_087": {
+		"lines": [
+			"Daj",
+			"stronnikowi",
+			"+3 do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_088": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Przywróć",
+			"6 pkt. zdrowia twojemu",
+			"bohaterowi."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_089": {
+		"lines": [
+			"Przywróć",
+			"6 pkt. zdrowia."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_091": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_092": {
+		"lines": [
+			"Daj stronnikowi",
+			"+4/+4 (+4 do ataku/",
+			"+4 do zdrowia)."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_093": {
+		"lines": [
+			"Zadaj 2 pkt.",
+			"obrażeń wszystkim",
+			"wrogom."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_094": {
+		"lines": [
+			"Zadaj 3 pkt.",
+			"obrażeń.",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_097": {
+		"lines": [
+			"Za każdym razem gdy",
+			"twój bohater atakuje,",
+			"przywróć mu 2 pkt.",
+			"zdrowia."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_CS2_101t": {
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_102_H3": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Otrzymujesz 2",
+			"pkt. pancerza."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_103": {
+		"lines": [
+			"Daj przyjaznemu",
+			"stronnikowi +2",
+			"do ataku i [b]Szarżę[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_103_Puzzle": {
+		"lines": [
+			"Daj [b]Szarżę[/b] przyjaznemu",
+			"stronnikowi. W tej turze",
+			"nie może atakować",
+			"bohaterów."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_104": {
+		"lines": [
+			"Daj rannemu",
+			"stronnikowi +3/+3."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_105": {
+		"lines": [
+			"Daj twojemu",
+			"bohaterowi +4 do",
+			"ataku w tej turze."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_106": {
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_108": {
+		"lines": [
+			"Zniszcz wrogiego",
+			"stronnika, który",
+			"jest ranny."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_112": {
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_114": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"dwóm losowym",
+			"wrogim stronnikom."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_117": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przywróć",
+			"3 pkt. zdrowia."
+		],
+		"name": 10,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_CS2_118": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_119": {
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_120": {
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_121": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 8,
+		"text": 11
+	},
+	"VAN_CS2_122": {
+		"lines": [
+			"Twoi pozostali",
+			"stronnicy mają +1",
+			"do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_124": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_125": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_127": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_131": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_141": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"1 pkt. obrażeń."
+		],
+		"name": 9,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_CS2_142": {
+		"lines": [
+			"[b]Obrażenia zaklęć +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_146": {
+		"lines": [
+			"Posiada [b]Szarżę[/b],",
+			"gdy masz broń na",
+			"wyposażeniu."
+		],
+		"name": 8,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_CS2_147": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_CS2_150": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"2 pkt. obrażeń."
+		],
+		"name": 10,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_CS2_151": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przyzwij Giermka 2/2."
+		],
+		"name": 10,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_CS2_152": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_155": {
+		"lines": [
+			"[b]Obrażenia zaklęć +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_161": {
+		"lines": [
+			"[b]Ukrycie[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_162": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_168": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_169": {
+		"lines": [
+			"[b]Furia wichru[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_171": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_172": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_173": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 8,
+		"text": 11
+	},
+	"VAN_CS2_179": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_181": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Zadaje SOBIE 4 pkt.",
+			"obrażeń."
+		],
+		"name": 11,
+		"text": 10
+	},
+	"VAN_CS2_182": {
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_186": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_187": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_188": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Daj",
+			"stronnikowi +2 do ataku",
+			"w tej turze."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_189": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"1 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_CS2_196": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przyzwij Dzika 1/1."
+		],
+		"name": 9,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_CS2_197": {
+		"lines": [
+			"[b]Obrażenia zaklęć +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_200": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_201": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_203": {
+		"lines": [
+			"[b]Okrzyk[/b]",
+			"[b]bojowy:[/b] [b]Wycisz[/b]",
+			"stronnika."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_213": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_221": {
+		"lines": [
+			"[b]Szał:[/b] Twoja",
+			"broń ma +2",
+			"do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_222": {
+		"lines": [
+			"Twoi pozostali",
+			"stronnicy",
+			"mają +1/+1."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_226": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Otrzymuje",
+			"+1/+1 za każdego pozostałego",
+			"przyjaznego stronnika na",
+			"polu bitwy."
+		],
+		"name": 9,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_CS2_227": {
+		"lines": [
+			"Twoi stronnicy",
+			"kosztują (3)",
+			"więcej."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_231": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_232": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_233": {
+		"lines": [
+			"Zniszcz twoją broń i",
+			"zadaj obrażenia od niej",
+			"wszystkim wrogom."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_234": {
+		"lines": [
+			"Zniszcz stronnika",
+			"z atakiem 3",
+			"lub mniejszym."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_235": {
+		"lines": [
+			"Za każdym razem gdy",
+			"stronnik zostanie",
+			"uzdrowiony,",
+			"dobierz kartę."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_236": {
+		"lines": [
+			"Podwajasz",
+			"zdrowie stronnika."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_237": {
+		"lines": [
+			"Dobierz kartę za",
+			"każdym razem,",
+			"gdy przyzywasz",
+			"Bestię."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_boar": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_mirror": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_tk1": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_01": {
+		"lines": [
+			"[b]Nieuchwytność[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_02": {
+		"lines": [
+			"Zadaj 5 pkt. obrażeń",
+			"wszystkim postaciom",
+			"oprócz Ysery."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_DREAM_03": {
+		"name": 9,
+		"text": 11
+	},
+	"VAN_DREAM_04": {
+		"lines": [
+			"Cofnij stronnika",
+			"do ręki właściciela."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_05": {
+		"lines": [
+			"Daj stronnikowi +5/+5.",
+			"Zniszcz go na początku",
+			"twojej następnej tury."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_DS1_055": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przywróć 2 pkt. zdrowia",
+			"wszystkim przyjaznym",
+			"postaciom."
+		],
+		"name": 7,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_DS1_070": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Daj przyjaznej",
+			"Bestii +2/+2 oraz",
+			"[b]Prowokację[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_DS1_175": {
+		"lines": [
+			"Twoje pozostałe",
+			"Bestie mają +1",
+			"do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_178": {
+		"lines": [
+			"Twoje",
+			"Bestie mają",
+			"[b]Szarżę[/b]."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_DS1_183": {
+		"lines": [
+			"Zadaj 3 pkt. obrażeń",
+			"dwóm losowym",
+			"wrogim stronnikom."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_DS1_184": {
+		"lines": [
+			"Spójrz na trzy górne",
+			"karty z twojej talii.",
+			"Jedną dobierz do ręki, a",
+			"dwie pozostałe odrzuć."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_DS1_185": {
+		"lines": [
+			"Zadaj 2",
+			"pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_188": {
+		"lines": [
+			"Twój bohater posiada",
+			"[b]Niewrażliwość[/b]",
+			"podczas ataku."
+		],
+		"name": 11,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_DS1_233": {
+		"lines": [
+			"Zadaj 5 pkt.",
+			"obrażeń wrogiemu",
+			"bohaterowi."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_001": {
+		"lines": [
+			"Otrzymuje +2 do ataku",
+			"za każdym razem, gdy",
+			"dowolna postać zostanie",
+			"uzdrowiona."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_002": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zniszcz",
+			"wrogiego stronnika",
+			"posiadającego",
+			"[b]Prowokację[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_004": {
+		"lines": [
+			"Na koniec twojej tury",
+			"daj innemu losowemu",
+			"przyjaznemu stronnikowi",
+			"+1 do zdrowia."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_005": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zniszcz",
+			"stronnika z atakiem 7",
+			"lub większym."
+		],
+		"name": 10,
+		"text": 9
+	},
+	"VAN_EX1_006": {
+		"lines": [
+			"Na początku twojej tury",
+			"zamień tego stronnika",
+			"z innym, wybranym losowo",
+			"z twojej ręki."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_007": {
+		"lines": [
+			"Dobierz kartę za",
+			"każdym razem, gdy ten",
+			"stronnik otrzyma",
+			"obrażenia."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_008": {
+		"lines": [
+			"[b]Boska tarcza[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_009": {
+		"lines": [
+			"[b]Szał:[/b] +5 do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_010": {
+		"lines": [
+			"[b]Ukrycie[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_011": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przywróć",
+			"2 pkt. zdrowia."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_012": {
+		"lines": [
+			"[b]Obrażenia zaklęć +1[/b]",
+			"[b]Agonia:[/b] Dobierz",
+			"kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_014": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Daj przeciwnikowi",
+			"2 banany."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_015": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_016": {
+		"lines": [
+			"[b]Agonia:[/b] Przejmij",
+			"kontrolę nad",
+			"losowym wrogim",
+			"stronnikiem."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_017": {
+		"lines": [
+			"[b]Ukrycie[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_019": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Daj przyjaznemu",
+			"stronnikowi +1/+1."
+		],
+		"name": 7,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_020": {
+		"lines": [
+			"[b]Boska tarcza[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_021": {
+		"lines": [
+			"[b]Furia wichru[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_023": {
+		"lines": [
+			"[b]Boska tarcza[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_025": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przyzwij",
+			"Mechanicznego",
+			"smokora 2/1."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_028": {
+		"lines": [
+			"[b]Ukrycie[/b]"
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_EX1_029": {
+		"lines": [
+			"[b]Agonia:[/b] Zadaj 2 pkt.",
+			"obrażeń wrogiemu",
+			"bohaterowi."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_032": {
+		"lines": [
+			"[b]Prowokacja[/b]",
+			"[b]Boska[/b]",
+			"[b]tarcza[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_033": {
+		"lines": [
+			"[b]Furia wichru[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_043": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Otrzymuje +1 do",
+			"zdrowia za każdą",
+			"kartę w ręce."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_044": {
+		"lines": [
+			"Otrzymuje +1/+1 za",
+			"każdym razem, gdy",
+			"zagrasz kartę."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_EX1_045": {
+		"lines": [
+			"Nie może atakować."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_046": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Daj",
+			"stronnikowi +2 do ataku",
+			"w tej turze."
+		],
+		"name": 8,
+		"text": 9
+	},
+	"VAN_EX1_048": {
+		"lines": [
+			"[b]Okrzyk[/b]",
+			"[b]bojowy:[/b] [b]Wycisz[/b]",
+			"stronnika."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_049": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Cofnij",
+			"przyjaznego stronnika",
+			"do twojej ręki."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_050": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Każdy gracz dobiera",
+			"2 karty."
+		],
+		"name": 8,
+		"text": 10
+	},
+	"VAN_EX1_055": {
+		"lines": [
+			"Otrzymuje +2 do ataku w",
+			"tej turze za każdym razem,",
+			"gdy rzucasz zaklęcie."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_057": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Cofnij",
+			"przyjaznego stronnika",
+			"do twojej ręki."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_058": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Daj",
+			"sąsiednim stronnikom",
+			"[b]Prowokację[/b]."
+		],
+		"name": 8,
+		"text": 9
+	},
+	"VAN_EX1_059": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Zamień atak i",
+			"zdrowie wybranego",
+			"stronnika."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_062": {
+		"lines": [
+			"[b]Szarża[/b]",
+			"Otrzymuje 1 do ataku za",
+			"każdego pozostałego Murloka",
+			"na polu bitwy."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_066": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Zniszcz broń",
+			"przeciwnika."
+		],
+		"name": 11,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_067": {
+		"lines": [
+			"[b]Szarża[/b]",
+			"[b]Boska[/b]",
+			"[b]tarcza[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_076": {
+		"lines": [
+			"Pierwszy stronnik zagrany",
+			"przez ciebie w każdej turze",
+			"kosztuje (1) mniej."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_080": {
+		"lines": [
+			"Otrzymuje +1/+1",
+			"za każdym razem,",
+			"gdy zagrany",
+			"zostaje [b]Sekret[/b]."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_082": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Rozdziel losowo",
+			"3 pkt. obrażeń między",
+			"wszystkie pozostałe",
+			"postacie."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_083": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Przemień",
+			"innego losowego stronnika",
+			"w Diabłozaura 5/5 lub",
+			"Wiewiórkę 1/1."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_084": {
+		"lines": [
+			"Za każdym razem gdy",
+			"przyzywasz stronnika",
+			"z atakiem 3 lub mniejszym,",
+			"daj mu [b]Szarżę[/b]."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_085": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Jeżeli przeciwnik",
+			"ma przynajmniej 4 stronników,",
+			"przejmij losowo kontrolę nad",
+			"jednym z nich."
+		],
+		"name": 9,
+		"text": 6
+	},
+	"VAN_EX1_089": {
+		"lines": [
+			"[b]Szarża[/b]",
+			"[b]Okrzyk bojowy:[/b] Daj",
+			"twojemu przeciwnikowi",
+			"kryształ many."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_091": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Przejmij",
+			"kontrolę nad wrogim",
+			"stronnikiem z atakiem 2",
+			"lub mniejszym."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_093": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Daj",
+			"sąsiednim stronnikom",
+			"+1/+1 oraz",
+			"[b]Prowokację[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_095": {
+		"lines": [
+			"Dobierz kartę za",
+			"każdym razem, gdy",
+			"rzucasz zaklęcie."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_096": {
+		"lines": [
+			"[b]Agonia:[/b]",
+			"Dobierz",
+			"kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_097": {
+		"lines": [
+			"[b]Prowokacja[/b]",
+			"[b]Agonia:[/b] Zadaj 2 pkt.",
+			"obrażeń WSZYSTKIM",
+			"postaciom."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_100": {
+		"lines": [
+			"Za każdym razem",
+			"gdy gracz rzuci",
+			"zaklęcie, umieść",
+			"jego kopię w ręce",
+			"drugiego gracza."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_102": {
+		"lines": [
+			"Na początku twojej",
+			"tury zadaj 2 pkt.",
+			"obrażeń losowemu",
+			"wrogowi."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_103": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Daj",
+			"WSZYSTKIM pozostałym",
+			"Murlokom +2 do zdrowia."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_105": {
+		"lines": [
+			"Kosztuje (1) mniej za",
+			"każdą pozostałą kartę",
+			"w twojej ręce."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_110": {
+		"lines": [
+			"[b]Agonia:[/b] Przyzwij",
+			"Baina Krwawe",
+			"Kopyto 4/5."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_110t": {
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_112": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przyzwij",
+			"NIESAMOWITY",
+			"wynalazek."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_116": {
+		"lines": [
+			"[b]Szarża[/b]",
+			"[b]Okrzyk bojowy:[/b] Przyzwij",
+			"dwa Pisklęta 1/1 twojemu",
+			"przeciwnikowi."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_124": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń.",
+			"[b]Kombinacja:[/b]",
+			"Zamiast tego zadaj",
+			"4 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_126": {
+		"lines": [
+			"Zmuś wrogiego stronnika",
+			"do zadania obrażeń",
+			"stronnikom obok siebie."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_128": {
+		"lines": [
+			"Daj twoim stronnikom",
+			"[b]Ukrycie[/b] do twojej",
+			"następnej tury."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_129": {
+		"lines": [
+			"Zadaj 1 pkt. obrażeń",
+			"wszystkim wrogim",
+			"stronnikom. Dobierz kartę."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_130": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy wróg",
+			"zaatakuje, przyzwij",
+			"Obrońcę 2/1 jako",
+			"nowy cel ataku."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_130a": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_131": {
+		"lines": [
+			"[b]Kombinacja:[/b] Przyzwij",
+			"Bandytę Nieskornych 2/1."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_132": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy twój bohater",
+			"otrzyma obrażenia,",
+			"zadaj tyle samo obrażeń",
+			"wrogiemu bohaterowi."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_133": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"1 pkt. obrażeń.",
+			"[b]Kombinacja:[/b] Zamiast",
+			"tego zadaj 2 pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_134": {
+		"lines": [
+			"[b]Kombinacja:[/b] Zadaj",
+			"2 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_136": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy zginie",
+			"przyjazny stronnik,",
+			"przywróć go do życia",
+			"z 1 pkt. zdrowia."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_137": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"wrogiemu bohaterowi.",
+			"[b]Kombinacja:[/b] W następnej",
+			"turze cofnij tę kartę do ręki."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_144": {
+		"lines": [
+			"Cofnij przyjaznego",
+			"stronnika do twojej ręki.",
+			"Kosztuje (2) mniej."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_145": {
+		"lines": [
+			"Następne zaklęcie, jakie",
+			"rzucisz w tej turze,",
+			"kosztuje (3) mniej."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_154": {
+		"lines": [
+			"[b]Wybierz jedno:[/b] Zadaj 3",
+			"pkt. obrażeń stronnikowi;",
+			"lub zadaj 1 pkt. obrażeń",
+			"stronnikowi i dobierz kartę."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_154a": {
+		"lines": [
+			"Zadaj 3 pkt.",
+			"obrażeń",
+			"stronnikowi."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_154b": {
+		"lines": [
+			"Zadaj 1 pkt. obrażeń",
+			"stronnikowi.",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_155": {
+		"lines": [
+			"[b]Wybierz jedno:[/b] Daj",
+			"stronnikowi +4 do ataku;",
+			"lub daj mu +4 do zdrowia",
+			"oraz [b]Prowokację[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_155a": {
+		"lines": [
+			"+4 do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_155b": {
+		"lines": [
+			"+4 do zdrowia",
+			"oraz [b]Prowokacja[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_158": {
+		"lines": [
+			"Daj twoim stronnikom",
+			"opis „[b]Agonia:[/b] Przyzwij",
+			"Drzewca 2/2”."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_160": {
+		"lines": [
+			"[b]Wybierz jedno:[/b]",
+			"Daj twoim",
+			"stronnikom +1/+1; lub",
+			"przyzwij Panterę 3/2."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_160a": {
+		"lines": [
+			"Przyzwij",
+			"Panterę 3/2."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_160b": {
+		"lines": [
+			"Daj twoim",
+			"stronnikom +1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_161": {
+		"lines": [
+			"Zniszcz stronnika.",
+			"Przeciwnik dobiera",
+			"2 karty."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_162": {
+		"lines": [
+			"Sąsiedni stronnicy",
+			"otrzymują",
+			"+1 do ataku."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_164": {
+		"lines": [
+			"[b]Wybierz jedno:[/b]",
+			"Otrzymujesz 2 kryształy",
+			"many; lub dobierz 3 karty."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_164a": {
+		"lines": [
+			"Otrzymujesz 2",
+			"kryształy many."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_164b": {
+		"lines": [
+			"Dobierz 3 karty."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165": {
+		"lines": [
+			"[b]Wybierz jedno:[/b] [b]Szarża[/b];",
+			"lub +2 do zdrowia oraz",
+			"[b]Prowokacja[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_165a": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165b": {
+		"lines": [
+			"+2 do zdrowia",
+			"oraz [b]Prowokacja[/b]."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_165t1": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165t2": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_166": {
+		"lines": [
+			"[b]Wybierz jedno:[/b] Zadaj",
+			"2 pkt. obrażeń; lub",
+			"[b]Wycisz[/b] stronnika."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_166a": {
+		"lines": [
+			"Zadaj 2",
+			"pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_166b": {
+		"lines": [
+			"[b]Wycisz[/b] stronnika."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_169": {
+		"lines": [
+			"Otrzymujesz 2",
+			"kryształy many",
+			"w tej turze."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_170": {
+		"lines": [
+			"Zniszcz każdego",
+			"stronnika",
+			"zranionego przez",
+			"tego stronnika."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_173": {
+		"lines": [
+			"Zadaj 5 pkt.",
+			"obrażeń.",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_178": {
+		"lines": [
+			"[b]Wybierz jedno:[/b]",
+			"+5 do ataku; lub",
+			"+5 do zdrowia oraz",
+			"[b]Prowokacja[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_178a": {
+		"lines": [
+			"+5 do zdrowia",
+			"oraz [b]Prowokacja[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_178b": {
+		"lines": [
+			"+5 do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_238": {
+		"lines": [
+			"Zadaj 3 pkt.",
+			"obrażeń.",
+			"[b]Przeciążenie:[/b] (1)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_241": {
+		"lines": [
+			"Zadaj 5 pkt.",
+			"obrażeń.",
+			"[b]Przeciążenie:[/b] (2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_243": {
+		"lines": [
+			"[b]Furia wichru[/b].",
+			"[b]Przeciążenie:[/b]",
+			"(2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_244": {
+		"lines": [
+			"Daj twoim",
+			"Totemom",
+			"+2 do zdrowia."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_245": {
+		"lines": [
+			"[b]Wycisz[/b] stronnika,",
+			"a następnie zadaj mu",
+			"1 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_246": {
+		"lines": [
+			"Przemień stronnika",
+			"w Żabę 0/1",
+			"z [b]Prowokacją[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_247": {
+		"lines": [
+			"[b]Przeciążenie:[/b] (1)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_248": {
+		"lines": [
+			"Przyzwij dwa",
+			"Duchowe wilki 2/3",
+			"z [b]Prowokacją[/b].",
+			"[b]Przeciążenie:[/b] (2)"
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_249": {
+		"lines": [
+			"Na koniec twojej tury",
+			"zadaj 2 pkt. obrażeń",
+			"WSZYSTKIM pozostałym",
+			"postaciom."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_250": {
+		"lines": [
+			"[b]Prowokacja[/b]",
+			"[b]Przeciążenie:[/b]",
+			"(3)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_251": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"dwóm losowym",
+			"wrogim stronnikom.",
+			"[b]Przeciążenie:[/b] (2)"
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_258": {
+		"lines": [
+			"Otrzymuje +1/+1 za każdym",
+			"razem, gdy zagrasz kartę",
+			"z [b]Przeciążeniem[/b]."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_259": {
+		"lines": [
+			"Zadaj 2-3 pkt.",
+			"obrażeń wszystkim",
+			"wrogim stronnikom.",
+			"[b]Przeciążenie:[/b] (2)"
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_274": {
+		"lines": [
+			"Otrzymuje +2/+2, jeśli",
+			"pod koniec twojej tury",
+			"kontrolujesz [b]Sekret[/b]."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_275": {
+		"lines": [
+			"[b]Zamroź[/b] stronnika oraz",
+			"stronników obok niego",
+			"i zadaj im wszystkim 1",
+			"pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_277": {
+		"lines": [
+			"Rozdziel losowo 3",
+			"pkt. obrażeń między",
+			"wszystkich wrogów."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_278": {
+		"lines": [
+			"Zadaj 1 pkt.",
+			"obrażeń.",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_279": {
+		"lines": [
+			"Zadaj 10",
+			"pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_283": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"[b]Zamroź[/b] postać."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_284": {
+		"lines": [
+			"[b]Obrażenia zaklęć +1[/b]",
+			"[b]Okrzyk bojowy:[/b]",
+			"Dobierz kartę."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_EX1_287": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy",
+			"przeciwnik rzuci",
+			"zaklęcie, [b]Kontrujesz[/b] je."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_289": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy twój bohater",
+			"zostanie zaatakowany,",
+			"otrzymujesz 8 pkt.",
+			"pancerza."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_294": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy twój",
+			"przeciwnik zagra",
+			"stronnika, przyzwij",
+			"jego kopię."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_295": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy twój bohater",
+			"otrzyma zabójcze",
+			"obrażenia, zapobiegasz",
+			"im oraz zyskujesz w tej",
+			"turze [b]Niewrażliwość[/b]."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_298": {
+		"lines": [
+			"Nie może atakować. Na",
+			"koniec twojej tury zadaj 8 pkt.",
+			"obrażeń losowemu wrogowi."
+		],
+		"name": 9,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_301": {
+		"lines": [
+			"[b]Prowokacja[/b]",
+			"[b]Okrzyk bojowy:[/b]",
+			"Zniszcz jeden z twoich",
+			"kryształów many."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_302": {
+		"lines": [
+			"Zadaj 1 pkt. obrażeń",
+			"stronnikowi. Jeśli",
+			"zginie, dobierz kartę."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_303": {
+		"lines": [
+			"Zniszcz przyjaznego",
+			"stronnika i zadaj",
+			"obrażenia o wartości",
+			"jego ataku wszystkim",
+			"wrogim stronnikom."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_304": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zniszcz",
+			"obu sąsiadujących z nim",
+			"stronników, a zyska ich",
+			"atak oraz zdrowie."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_306": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Odrzuć losową kartę."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_308": {
+		"lines": [
+			"Zadaj 4 pkt. obrażeń.",
+			"Odrzuć losową kartę."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_309": {
+		"lines": [
+			"Zniszcz stronnika.",
+			"Przywróć 3 pkt. zdrowia",
+			"twojemu bohaterowi."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_310": {
+		"lines": [
+			"[b]Szarża[/b]",
+			"[b]Okrzyk bojowy:[/b]",
+			"Odrzuć dwie",
+			"losowe karty."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_312": {
+		"lines": [
+			"Zniszcz",
+			"wszystkich",
+			"stronników."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_313": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"5 pkt. obrażeń twojemu",
+			"bohaterowi."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_315": {
+		"lines": [
+			"Twoi stronnicy kosztują",
+			"(2) mniej, ale nie mniej",
+			"niż (1)."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_316": {
+		"lines": [
+			"Daj przyjaznemu",
+			"stronnikowi +4/+4 do końca",
+			"tury. Następnie stronnik",
+			"umrze. W męczarniach."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_317": {
+		"lines": [
+			"Dobierz 2",
+			"Demony",
+			"z twojej talii."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_319": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"3 pkt. obrażeń twojemu",
+			"bohaterowi."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_320": {
+		"lines": [
+			"Zadaj 3 pkt. obrażeń",
+			"dowolnej postaci.",
+			"Jeśli zginie, przyzwij",
+			"losowego Demona."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_323": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zniszcz",
+			"twojego bohatera i",
+			"zastąp go Lordem",
+			"Jaraxxusem."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_332": {
+		"lines": [
+			"[b]Wycisz[/b] stronnika."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_334": {
+		"lines": [
+			"Do końca tury przejmij",
+			"kontrolę nad wrogim",
+			"stronnikiem z atakiem",
+			"3 lub mniejszym."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_335": {
+		"lines": [
+			"Atak tego stronnika",
+			"jest zawsze równy",
+			"jego zdrowiu."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_339": {
+		"lines": [
+			"Skopiuj 2 karty z talii",
+			"przeciwnika i dodaj",
+			"je do twojej ręki."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_341": {
+		"lines": [
+			"Na początku twojej",
+			"tury przywróć 3 pkt.",
+			"zdrowia przyjaznej",
+			"rannej postaci."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_345": {
+		"lines": [
+			"Umieść kopię",
+			"losowego stronnika",
+			"z talii przeciwnika",
+			"na polu bitwy."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_345t": {
+		"lines": [
+			"Starcie umysłów",
+			"przegrane! Twój",
+			"przeciwnik nie ma",
+			"stronników!"
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_349": {
+		"lines": [
+			"Dobieraj karty tak",
+			"długo, aż będziesz mieć",
+			"ich tyle co przeciwnik."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_350": {
+		"lines": [
+			"Podwajasz wartości",
+			"obrażeń i uzdrawiania",
+			"z twoich zaklęć oraz",
+			"mocy specjalnej."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_354": {
+		"lines": [
+			"Przywróć 8 pkt.",
+			"zdrowia.",
+			"Dobierz 3 karty."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_355": {
+		"lines": [
+			"Podwajasz",
+			"atak stronnika."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_EX1_360": {
+		"lines": [
+			"Zmień atak",
+			"stronnika na 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_362": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Daj przyjaznemu",
+			"stronnikowi",
+			"[b]Boską tarczę[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_363": {
+		"lines": [
+			"Wybierz stronnika. Za",
+			"każdym razem gdy",
+			"zaatakuje, dobierz kartę."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_365": {
+		"lines": [
+			"Dobierz kartę",
+			"i zadaj obrażenia",
+			"równe jej kosztowi."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_366": {
+		"lines": [
+			"Kiedy przyzwiesz",
+			"stronnika, daj mu",
+			"+1/+1; miecz traci",
+			"1 wytrzymałości."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_371": {
+		"lines": [
+			"Daj",
+			"stronnikowi",
+			"[b]Boską tarczę[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_379": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy twój",
+			"przeciwnik zagra",
+			"stronnika, zmniejsz",
+			"jego zdrowie do 1."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_382": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zmień",
+			"atak wrogiego stronnika",
+			"na 1."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_383": {
+		"lines": [
+			"[b]Boska tarcza[/b]",
+			"[b]Prowokacja[/b]",
+			"[b]Agonia:[/b] Wyposaż",
+			"bohatera",
+			"w Spopielacz 5/3."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_384": {
+		"lines": [
+			"Rozdziel losowo 8",
+			"pkt. obrażeń między",
+			"wszystkich wrogów."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_390": {
+		"lines": [
+			"[b]Prowokacja[/b]",
+			"[b]Szał:[/b] +3",
+			"do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_391": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"stronnikowi. Jeśli",
+			"przeżyje, dobierz kartę."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_392": {
+		"lines": [
+			"Dobierz kartę za",
+			"każdą zranioną",
+			"przyjazną postać."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_393": {
+		"lines": [
+			"[b]Szał:[/b] +3 do ataku."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_396": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_398": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Wyposaż bohatera",
+			"w broń 2/2."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_399": {
+		"lines": [
+			"Otrzymuje +3 do",
+			"ataku za każdym",
+			"razem, gdy otrzyma",
+			"obrażenia."
+		],
+		"name": 9,
+		"text": 8
+	},
+	"VAN_EX1_400": {
+		"lines": [
+			"Zadaj 1 pkt.",
+			"obrażeń wszystkim",
+			"stronnikom."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_402": {
+		"lines": [
+			"Otrzymujesz 1 pkt.",
+			"pancerza za każdym",
+			"razem, gdy przyjazny",
+			"stronnik otrzyma",
+			"obrażenia."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_405": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_407": {
+		"lines": [
+			"Zniszcz wszystkich",
+			"stronników oprócz",
+			"jednego.",
+			"(wybranego losowo)"
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_408": {
+		"lines": [
+			"Zadaj 4 pkt. obrażeń. Jeśli",
+			"masz 12 pkt. zdrowia lub",
+			"mniej, zamiast tego zadaj",
+			"6 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_409": {
+		"lines": [
+			"Jeśli masz broń, daj",
+			"jej +1/+1. W innym",
+			"przypadku wyposaż",
+			"bohatera w broń 1/3."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_410": {
+		"lines": [
+			"Zadaj 1 pkt. obrażeń",
+			"stronnikowi za każdy",
+			"posiadany punkt pancerza."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_411": {
+		"lines": [
+			"Koszt zaatakowania",
+			"stronnika wynosi",
+			"1 ataku zamiast",
+			"1 wytrzymałości."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_412": {
+		"lines": [
+			"[b]Szał:[/b] [b]Furia[/b]",
+			"[b]wichru[/b] oraz +1",
+			"do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_414": {
+		"lines": [
+			"[b]Szarża[/b]",
+			"[b]Szał:[/b] +6",
+			"do ataku."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_506": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przyzwij Murloka",
+			"zwiadowcę 1/1."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_506a": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_507": {
+		"lines": [
+			"WSZYSTKIE",
+			"pozostałe Murloki",
+			"mają +2/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_508": {
+		"lines": [
+			"WSZYSTKIE pozostałe",
+			"Murloki mają",
+			"+1 do ataku."
+		],
+		"name": 9,
+		"text": 9
+	},
+	"VAN_EX1_509": {
+		"lines": [
+			"Otrzymuje +1 do ataku",
+			"za każdym razem, gdy",
+			"zostaje przyzwany Murlok."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_522": {
+		"lines": [
+			"[b]Ukrycie[/b]",
+			"Zniszcz każdego stronnika",
+			"zranionego przez",
+			"tego stronnika."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_531": {
+		"lines": [
+			"Otrzymuje +2/+1 za",
+			"każdym razem, gdy zginie",
+			"przyjazna Bestia."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_533": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy jakiś",
+			"przeciwnik zaatakuje",
+			"twojego bohatera,",
+			"zamiast tego zaatakuje",
+			"inną losową postać."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_534": {
+		"lines": [
+			"[b]Agonia:[/b] Przyzwij",
+			"dwie Hieny 2/2."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_536": {
+		"lines": [
+			"Za każdym razem gdy",
+			"ujawniony zostaje",
+			"[b]Sekret[/b], otrzymuje +1 pkt.",
+			"wytrzymałości."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_537": {
+		"lines": [
+			"Zadaj 5 pkt. obrażeń",
+			"stronnikowi oraz 2 pkt.",
+			"obrażeń jego sąsiadom."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_538": {
+		"lines": [
+			"Przyzwij Ogara 1/1",
+			"z [b]Szarżą[/b] za każdego",
+			"wrogiego stronnika."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_539": {
+		"lines": [
+			"Zadaj 3 pkt. obrażeń.",
+			"Jeśli kontrolujesz",
+			"Bestię, zamiast tego",
+			"zadaj 5 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_543": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_544": {
+		"lines": [
+			"Wszyscy stronnicy",
+			"tracą [b]Ukrycie[/b]. Zniszcz",
+			"wszystkie wrogie",
+			"[b]Sekrety[/b]. Dobierz kartę."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_549": {
+		"lines": [
+			"Daj Bestii +2 do ataku",
+			"oraz [b]Niewrażliwość[/b]",
+			"w tej turze."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_554": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy jeden",
+			"z twoich stronników",
+			"zostanie zaatakowany,",
+			"przyzwij trzy Węże 1/1."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_554t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_556": {
+		"lines": [
+			"[b]Agonia:[/b] Przyzwij",
+			"Uszkodzonego",
+			"golema 2/1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_557": {
+		"lines": [
+			"Na początku twojej tury",
+			"masz 50% szans na",
+			"dobranie dodatkowej karty."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_558": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zniszcz",
+			"broń przeciwnika i dobierz",
+			"tyle kart, ile wynosiła jej",
+			"wytrzymałość."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_559": {
+		"lines": [
+			"Za każdym razem gdy",
+			"rzucasz zaklęcie, umieść",
+			"w ręce zaklęcie „Kula ognia”."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_560": {
+		"lines": [
+			"Gracze mają tylko 15",
+			"sekund na wykonanie",
+			"swojej tury."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_561": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Ustaw",
+			"pozostałe zdrowie",
+			"bohatera na 15."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_562": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Przyzywaj",
+			"Pisklęta 1/1, aż zapełnią",
+			"twoje pole bitwy."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_563": {
+		"lines": [
+			"[b]Obrażenia zaklęć +5[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_564": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Wybierz",
+			"stronnika, a stanie",
+			"się jego kopią."
+		],
+		"name": 9,
+		"text": 8
+	},
+	"VAN_EX1_565": {
+		"lines": [
+			"Sąsiedni",
+			"stronnicy mają +2",
+			"do ataku."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_567": {
+		"lines": [
+			"[b]Furia wichru[/b]",
+			"[b]Przeciążenie:[/b]",
+			"(2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_570": {
+		"lines": [
+			"Daj twojemu",
+			"bohaterowi +4 do ataku",
+			"w tej turze. Otrzymujesz",
+			"4 pkt. pancerza."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_571": {
+		"lines": [
+			"Przyzwij trzy Drzewce",
+			"2/2 z [b]Szarżą[/b], które",
+			"zginą na koniec tury."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_572": {
+		"lines": [
+			"Na koniec twojej tury",
+			"dodaj Kartę Snu do",
+			"twojej ręki."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_573": {
+		"lines": [
+			"[b]Wybierz jedno:[/b] Daj wszystkim",
+			"twoim pozostałym stronnikom",
+			"+2/+2; lub przyzwij dwa Drzewce",
+			"2/2 z [b]Prowokacją[/b]."
+		],
+		"name": 12,
+		"text": 6,
+		"valign": "top"
+	},
+	"VAN_EX1_573a": {
+		"lines": [
+			"Daj twoim",
+			"pozostałym",
+			"stronnikom +2/+2."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_573b": {
+		"lines": [
+			"Przyzwij dwa",
+			"Drzewce 2/2 z",
+			"[b]Prowokacją[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_575": {
+		"lines": [
+			"Na koniec twojej",
+			"tury dobierz kartę."
+		],
+		"name": 10,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_577": {
+		"lines": [
+			"[b]Agonia:[/b] Przyzwij",
+			"Pipa Wartkomyśla",
+			"3/3 twojemu",
+			"przeciwnikowi."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_578": {
+		"lines": [
+			"Zadaj stronnikowi",
+			"obrażenia równe atakowi",
+			"twojego bohatera."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_581": {
+		"lines": [
+			"Cofnij wrogiego",
+			"stronnika do ręki",
+			"przeciwnika."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_582": {
+		"lines": [
+			"[b]Obrażenia zaklęć +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_583": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Przywróć 4 pkt.",
+			"zdrowia twojemu",
+			"bohaterowi."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_584": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Daj",
+			"sąsiednim stronnikom",
+			"[b]Obrażenia zaklęć +1[/b]."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_586": {
+		"lines": [
+			"Kosztuje (1) mniej za",
+			"każdego pozostałego",
+			"stronnika na polu bitwy."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_587": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Daj przyjaznemu",
+			"stronnikowi",
+			"[b]Furię wichru[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_590": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Wszyscy",
+			"stronnicy tracą [b]Boską tarczę[/b].",
+			"Otrzymuje +3/+3 za każdą",
+			"straconą tarczę."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_591": {
+		"lines": [
+			"Twoje karty i moce zamiast",
+			"przywracać zdrowie,",
+			"zadają teraz obrażenia."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_593": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"3 pkt. obrażeń",
+			"wrogiemu",
+			"bohaterowi."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_594": {
+		"lines": [
+			"[b]Sekret:[/b] Zniszcz",
+			"stronnika, który",
+			"zaatakuje",
+			"twojego bohatera."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_595": {
+		"lines": [
+			"Gdy zginie przyjazny",
+			"stronnik, dobierz kartę."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_596": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"stronnikowi. Jeśli jest",
+			"przyjaznym Demonem,",
+			"daj mu zamiast tego +2/+2."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_597": {
+		"lines": [
+			"Na koniec twojej tury zadaj",
+			"temu stronnikowi 1 pkt.",
+			"obrażeń i przyzwij",
+			"Chochlika 1/1."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_598": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_603": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zadaj",
+			"1 pkt. obrażeń stronnikowi",
+			"i daj mu +2 do ataku."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_604": {
+		"lines": [
+			"Otrzymuje +1 do ataku za",
+			"każdym razem, gdy",
+			"dowolny stronnik otrzyma",
+			"obrażenia."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_606": {
+		"lines": [
+			"Otrzymujesz",
+			"5 pkt. pancerza.",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_607": {
+		"lines": [
+			"Zadaj 1 pkt. obrażeń",
+			"stronnikowi i daj",
+			"mu +2 do ataku."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_608": {
+		"lines": [
+			"Twoje zaklęcia",
+			"kosztują",
+			"(1) mniej."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_609": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy twój",
+			"przeciwnik zagra",
+			"stronnika, zadaj mu",
+			"4 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_610": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy twój bohater",
+			"zostanie zaatakowany,",
+			"zadaj 2 pkt. obrażeń",
+			"wszystkim wrogom."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_611": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy wrogi",
+			"stronnik zaatakuje, cofnij",
+			"go do ręki właściciela",
+			"Kosztuje (2) więcej."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_612": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Następny [b]Sekret[/b],",
+			"który zagrasz w tej turze,",
+			"kosztuje (0)."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_613": {
+		"lines": [
+			"[b]Kombinacja:[/b] Otrzymuje",
+			"+2/+2 za każdą kartę",
+			"zagraną wcześniej",
+			"w tej turze."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_614": {
+		"lines": [
+			"Za każdym razem",
+			"gdy zagrasz kartę,",
+			"przyzwij Płomień",
+			"Azzinotha 2/1."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_616": {
+		"lines": [
+			"WSZYSCY",
+			"stronnicy kosztują",
+			"(1) więcej."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_617": {
+		"lines": [
+			"Zniszcz losowego",
+			"wrogiego stronnika."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_619": {
+		"lines": [
+			"Zmień zdrowie",
+			"WSZYSTKICH",
+			"stronników na 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_620": {
+		"lines": [
+			"Kosztuje (1) mniej za każdy",
+			"punkt obrażeń otrzymany",
+			"przez twojego bohatera."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_621": {
+		"lines": [
+			"Przywróć 4 pkt.",
+			"zdrowia WSZYSTKIM",
+			"stronnikom."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_622": {
+		"lines": [
+			"Zniszcz stronnika",
+			"z atakiem 5",
+			"lub większym."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_623": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Daj przyjaznemu",
+			"stronnikowi +3",
+			"do zdrowia."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_624": {
+		"lines": [
+			"Zadaj 5 pkt. obrażeń.",
+			"Przywróć 5 pkt. zdrowia",
+			"twojemu bohaterowi."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_625": {
+		"lines": [
+			"Twoja moc specjalna",
+			"zmienia się na „Zadaj 2 pkt.",
+			"obrażeń”. Jeśli jesteś już",
+			"w postaci cienia:",
+			"3 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_626": {
+		"lines": [
+			"[b]Wycisz[/b] wszystkich",
+			"wrogich stronników.",
+			"Dobierz kartę."
+		],
+		"name": 11,
+		"text": 10
+	},
+	"VAN_EX1_finkle": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk11": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk28": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk29": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk33": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Przyzwij",
+			"Infernala 6/6."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk34": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk9": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk9b": {
+		"lines": [
+			"[b]Szarża[/b]",
+			"Na koniec tury zniszcz",
+			"tego stronnika."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_HERO_01bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Otrzymujesz 2",
+			"pkt. pancerza."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_01bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Otrzymujesz 4",
+			"pkt. pancerza."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_02bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Przyzwij losowy",
+			"podstawowy Totem."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_02bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Przyzwij wybrany",
+			"przez ciebie Totem."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_03bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Wyposaż bohatera",
+			"w sztylet 1/2."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_03bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Wyposaż bohatera",
+			"w broń 2/2."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_04bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Przyzwij Rekruta",
+			"Srebrnej Dłoni ."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_04bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Przyzwij dwóch",
+			"Rekrutów ."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_05bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Zadaj 2 pkt. obrażeń",
+			"wrogiemu bohaterowi."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_HERO_05bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Zadaj 3 pkt. obrażeń",
+			"wrogiemu bohaterowi."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_HERO_06bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"+1 do ataku w tej turze.",
+			"+1 pkt. pancerza."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_HERO_06bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"+2 do ataku w tej turze.",
+			"+2 pkt. pancerza."
+		],
+		"name": 9,
+		"text": 9
+	},
+	"VAN_HERO_07bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Dobierz kartę i otrzymaj",
+			"2 pkt. obrażeń."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_HERO_07bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Dobierz kartę."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_08bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Zadaj 1 pkt.",
+			"obrażeń."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_08bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Zadaj 2 pkt.",
+			"obrażeń."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_HERO_09bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Przywróć 2",
+			"pkt. zdrowia."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_HERO_09bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"Przywróć 4",
+			"pkt. zdrowia."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_10bp": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"+1 do ataku w",
+			"tej turze."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_HERO_10bp2": {
+		"lines": [
+			"[b]Moc specjalna[/b]",
+			"+2 do ataku w",
+			"tej turze."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_003": {
+		"lines": [
+			"Zniszcz Demona.",
+			"Przywróć 5 pkt. zdrowia",
+			"twojemu bohaterowi."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_004": {
+		"lines": [
+			"Cofnij wszystkich",
+			"stronników do",
+			"rąk właścicieli."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_005": {
+		"lines": [
+			"[b]Kombinacja:[/b] Cofnij",
+			"stronnika do ręki",
+			"właściciela."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_NEW1_007": {
+		"lines": [
+			"[b]Wybierz jedno:[/b] Zadaj",
+			"5 pkt. obrażeń",
+			"stronnikowi; lub zadaj 2",
+			"pkt. obrażeń wszystkim",
+			"wrogim stronnikom."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_NEW1_007a": {
+		"lines": [
+			"Zadaj 2 pkt. obrażeń",
+			"wszystkim wrogim",
+			"stronnikom."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_NEW1_007b": {
+		"lines": [
+			"Zadaj 5 pkt.",
+			"obrażeń",
+			"stronnikowi."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_008": {
+		"lines": [
+			"[b]Wybierz jedno:[/b] Dobierz",
+			"2 karty; lub przywróć 5",
+			"pkt. zdrowia."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_NEW1_008a": {
+		"lines": [
+			"Dobierz 2 karty."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_008b": {
+		"lines": [
+			"Przywróć 5",
+			"pkt. zdrowia."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_NEW1_009": {
+		"lines": [
+			"Na koniec twojej tury",
+			"przywróć 1 pkt. zdrowia",
+			"wszystkim przyjaznym",
+			"stronnikom."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_010": {
+		"lines": [
+			"[b]Szarża[/b]",
+			"[b]Boska tarcza[/b]",
+			"[b]Prowokacja[/b]",
+			"[b]Furia wichru[/b]"
+		],
+		"name": 9,
+		"text": 8
+	},
+	"VAN_NEW1_011": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_012": {
+		"lines": [
+			"Otrzymuje +1 do ataku",
+			"za każdym razem, gdy",
+			"rzucasz zaklęcie."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_014": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Daj przyjaznemu",
+			"stronnikowi",
+			"[b]Ukrycie[/b]."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_NEW1_016": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Dobierz Pirata z",
+			"twojej talii."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_017": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b]",
+			"Zniszcz Murloka,",
+			"a otrzyma +2/+2."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_018": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Otrzymuje",
+			"+1 do ataku za każdy punkt",
+			"ataku twojej broni."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_019": {
+		"lines": [
+			"Kiedy przyzywasz",
+			"stronnika, zadaj 1 pkt.",
+			"obrażeń losowemu",
+			"wrogowi."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_020": {
+		"lines": [
+			"Po rzuceniu zaklęcia zadaj",
+			"1 pkt. obrażeń",
+			"WSZYSTKIM stronnikom."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_021": {
+		"lines": [
+			"Na początku twojej tury",
+			"zniszcz WSZYSTKICH",
+			"stronników."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_022": {
+		"lines": [
+			"[b]Prowokacja.[/b]",
+			"Kosztuje (1) mniej za",
+			"każdy punkt ataku",
+			"twojej broni."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_023": {
+		"lines": [
+			"[b]Nieuchwytność[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_024": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Daj",
+			"twojej broni +1/+1."
+		],
+		"name": 11,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_NEW1_025": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zmniejsz",
+			"wytrzymałość broni",
+			"przeciwnika o 1."
+		],
+		"name": 9,
+		"text": 8
+	},
+	"VAN_NEW1_026": {
+		"lines": [
+			"Za każdym razem gdy",
+			"rzucasz zaklęcie, przyzwij",
+			"Czeladnika Purpurowych 1/1."
+		],
+		"name": 8,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_NEW1_026t": {
+		"name": 9,
+		"text": 11
+	},
+	"VAN_NEW1_027": {
+		"lines": [
+			"Twoi pozostali",
+			"Piraci mają +1/+1."
+		],
+		"name": 8,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_NEW1_029": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] W",
+			"następnej turze zaklęcia",
+			"przeciwnika kosztują (0)."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_030": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zniszcz",
+			"wszystkich pozostałych",
+			"stronników i odrzuć",
+			"całą rękę."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_031": {
+		"lines": [
+			"Przyzwij losowo",
+			"jednego ze zwierzęcych",
+			"towarzyszy Rexxara."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_NEW1_032": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_033": {
+		"lines": [
+			"Twoi pozostali",
+			"stronnicy mają +1",
+			"do ataku."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_034": {
+		"lines": [
+			"[b]Szarża[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_036": {
+		"lines": [
+			"W tej turze twoi",
+			"stronnicy nie mogą",
+			"zejść poniżej 1 pkt.",
+			"zdrowia. Dobierz kartę."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_037": {
+		"lines": [
+			"Na koniec twojej tury",
+			"daj innemu losowemu",
+			"przyjaznemu stronnikowi",
+			"+1 do ataku."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_038": {
+		"lines": [
+			"Na koniec każdej",
+			"tury otrzymuje +1/+1."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_NEW1_040": {
+		"lines": [
+			"Na koniec twojej tury",
+			"przyzwij Gnola 2/2",
+			"z [b]Prowokacją[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_041": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Zniszcz",
+			"losowego wrogiego",
+			"stronnika z atakiem 2",
+			"lub mniejszym."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_PRO_001": {
+		"lines": [
+			"[b]Okrzyk bojowy:[/b] Daj obu",
+			"graczom moc metalu! (oraz",
+			"kartę „Odjazdowy riff”)"
+		],
+		"name": 8,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_PRO_001c": {
+		"lines": [
+			"Przyzwij",
+			"losowego",
+			"wojownika Hordy."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_TU4e_002t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_skele11": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_skele21": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_tt_004": {
+		"lines": [
+			"Otrzymuje +1 do ataku",
+			"za każdym razem, gdy",
+			"zginie dowolny",
+			"stronnik."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_tt_010": {
+		"lines": [
+			"[b]Sekret:[/b] Gdy wróg rzuci",
+			"zaklęcie na stronnika,",
+			"przyzwij stronnika 1/3",
+			"jako nowy cel."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_tt_010a": {
+		"name": 12,
+		"text": 11
+	},
+	"ds1_whelptoken": {
+		"name": 12,
+		"text": 11
+	},
+	"hexfrog": {
+		"lines": [
+			"[b]Prowokacja[/b]"
+		],
+		"name": 12,
+		"text": 11
+	}
+}

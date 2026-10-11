@@ -1,0 +1,4464 @@
+{
+	"CS2_013t": {
+		"lines": [
+			"Zieht eine Karte. (Ihr",
+			"könnt nur 10 Mana in",
+			"Eurer Leiste haben.)"
+		],
+		"name": 11,
+		"text": 10
+	},
+	"EX1_014t": {
+		"lines": [
+			"Verleiht",
+			"einem",
+			"Diener +1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_025t": {
+		"name": 9,
+		"text": 11
+	},
+	"EX1_116t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_131t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_160t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_317t": {
+		"lines": [
+			"Euch sind die Dämonen",
+			"ausgegangen! Aber",
+			"zum Glück gibt es ja",
+			"noch Wichtel ..."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"EX1_323h": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_323w": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_383t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_398t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_409t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_534t": {
+		"name": 12,
+		"text": 11
+	},
+	"EX1_538t": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_625t": {
+		"lines": [
+			"Verursacht",
+			"2 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"EX1_625t2": {
+		"lines": [
+			"Verursacht",
+			"3 Schaden."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"GAME_005": {
+		"lines": [
+			"Erhaltet 1",
+			"Manakristall nur",
+			"für diesen Zug."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"HERO_01": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_02": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_03": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_04": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_05": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_06": {
+		"name": 10,
+		"text": 11
+	},
+	"HERO_07": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_08": {
+		"name": 12,
+		"text": 11
+	},
+	"HERO_09": {
+		"name": 12,
+		"text": 11
+	},
+	"Mekka1": {
+		"lines": [
+			"Vernichtet zu",
+			"Beginn Eures Zuges",
+			"diesen Diener und",
+			"zieht 3 Karten."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"Mekka2": {
+		"lines": [
+			"Stellt am Ende Eures Zuges",
+			"bei einem zufälligen",
+			"verletzten Charakter 6",
+			"Leben wieder her."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"Mekka3": {
+		"lines": [
+			"Verleiht am Ende Eures",
+			"Zuges einem zufälligen",
+			"Diener +1/+1."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"Mekka4": {
+		"lines": [
+			"Verwandelt zu Beginn",
+			"Eures Zuges einen",
+			"zufälligen Diener in",
+			"ein Huhn (1/1)."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"Mekka4t": {
+		"lines": [
+			"Put, put, put!"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"NEW1_040t": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001a": {
+		"lines": [
+			"Ruft 3, 4 oder 5",
+			"Murlocs herbei (1/1)."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001at": {
+		"name": 12,
+		"text": 11
+	},
+	"PRO_001b": {
+		"lines": [
+			"Verursacht 4",
+			"Schaden. Zieht",
+			"eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_002": {
+		"name": 11,
+		"text": 11
+	},
+	"TU4a_003": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_004": {
+		"lines": [
+			"Verursacht",
+			"4 Schaden."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"TU4a_005": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4a_006": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4b_001": {
+		"name": 11,
+		"text": 11
+	},
+	"TU4c_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_002": {
+		"lines": [
+			"Verursacht",
+			"2 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_003": {
+		"lines": [
+			"Was ist in dem Fass?"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_004": {
+		"lines": [
+			"Fügt allen",
+			"Feinden 2",
+			"Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_005": {
+		"lines": [
+			"Versteckte sich in",
+			"einem Fass!"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4c_006": {
+		"lines": [
+			"Verleiht einem",
+			"befreundeten Diener",
+			"+1/+1. (+1 Angriff/+1 Leben)"
+		],
+		"name": 12,
+		"text": 8
+	},
+	"TU4c_007": {
+		"lines": [
+			"So stark!",
+			"Und nur",
+			"6 Mana?!"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"TU4c_008": {
+		"lines": [
+			"Stellt 8",
+			"Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_002": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4d_003": {
+		"lines": [
+			"Verursacht",
+			"1 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"TU4e_001": {
+		"name": 11,
+		"text": 11
+	},
+	"TU4e_002": {
+		"lines": [
+			"Ruft 2",
+			"Diener (2/1) herbei."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"TU4e_002t": {
+		"name": 11,
+		"text": 11
+	},
+	"TU4e_003": {
+		"name": 11,
+		"text": 11
+	},
+	"TU4e_004": {
+		"name": 9,
+		"text": 11
+	},
+	"TU4e_005": {
+		"lines": [
+			"Verschießt 5 Geschosse",
+			"auf zufällige Feinde, die",
+			"je 1 Schaden verursachen."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"TU4e_007": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_001": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_002": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_003": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_004": {
+		"lines": [
+			"Verleiht Euren",
+			"Dienern +2/+2. (+2",
+			"Angriff/+2 Leben)"
+		],
+		"name": 9,
+		"text": 11
+	},
+	"TU4f_005": {
+		"name": 12,
+		"text": 11
+	},
+	"TU4f_006": {
+		"lines": [
+			"Cho kann nicht",
+			"angegriffen werden,",
+			"bevor Ihr seine",
+			"Diener erledigt habt."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"TU4f_007": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Wirft",
+			"Bananen."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS1_042": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS1_069": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_112": {
+		"lines": [
+			"Fügt allen Feinden 2",
+			"Schaden zu. Stellt bei allen",
+			"befreundeten Charakteren",
+			"2 Leben wieder her."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS1_113": {
+		"lines": [
+			"Übernehmt die",
+			"Kontrolle über einen",
+			"feindlichen Diener."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS1_129": {
+		"lines": [
+			"Gleicht den Angriff",
+			"eines Dieners an",
+			"sein Leben an."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS1_130": {
+		"lines": [
+			"Verursacht",
+			"2 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_003": {
+		"lines": [
+			"Kopiert eine zufällige",
+			"Handkarte des",
+			"Gegners und fügt sie",
+			"Eurer Hand hinzu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_004": {
+		"lines": [
+			"Verleiht einem",
+			"Diener +2 Leben.",
+			"Zieht eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_005": {
+		"lines": [
+			"Verleiht Eurem Helden",
+			"+2 Angriff in diesem",
+			"Zug und 2 Rüstung."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_007": {
+		"lines": [
+			"Stellt 8",
+			"Leben",
+			"wieder her."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_008": {
+		"lines": [
+			"Verursacht",
+			"1 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_009": {
+		"lines": [
+			"Verleiht einem Diener",
+			"[b]Spott[/b] und +2/+2.",
+			"(+2 Angriff/+2 Leben)"
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_011": {
+		"lines": [
+			"Verleiht Euren",
+			"Charakteren +2",
+			"Angriff in diesem Zug."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_012": {
+		"lines": [
+			"Fügt einem Feind",
+			"4 Schaden und allen",
+			"anderen Feinden",
+			"1 Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_013": {
+		"lines": [
+			"Erhaltet einen",
+			"leeren Manakristall."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_022": {
+		"lines": [
+			"Verwandelt",
+			"einen Diener in",
+			"ein Schaf (1/1)."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_023": {
+		"lines": [
+			"Zieht 2 Karten."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_024": {
+		"lines": [
+			"Fügt einem",
+			"Charakter 3 Schaden",
+			"zu und [b]friert[/b] ihn ein."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_025": {
+		"lines": [
+			"Fügt allen feindlichen",
+			"Dienern 1 Schaden zu."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_026": {
+		"lines": [
+			"[b]Friert[/b] alle",
+			"feindlichen",
+			"Diener ein."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_027": {
+		"lines": [
+			"Ruft 2 Diener (0/2)",
+			"mit [b]Spott[/b] herbei."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_028": {
+		"lines": [
+			"Fügt allen feindlichen",
+			"Dienern 2 Schaden zu",
+			"und [b]friert[/b] sie ein."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_029": {
+		"lines": [
+			"Verursacht",
+			"6 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_031": {
+		"lines": [
+			"[b]Friert[/b] einen Charakter ein.",
+			"Fügt ihm stattdessen",
+			"4 Schaden zu, wenn er",
+			"bereits [b]eingefroren[/b] ist."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_032": {
+		"lines": [
+			"Fügt allen feindlichen",
+			"Dienern 4 Schaden zu."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_033": {
+		"lines": [
+			"[b]Friert[/b] jeden",
+			"Charakter ein, der",
+			"von diesem Diener",
+			"verletzt wurde."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_037": {
+		"lines": [
+			"Fügt einem feindlichen",
+			"Charakter 1 Schaden",
+			"zu und [b]friert[/b] ihn ein."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_038": {
+		"lines": [
+			"Wählt einen Diener. Wenn",
+			"dieser Diener ver[lb]d]nichtet",
+			"wird, kehrt er auf das",
+			"Schlachtfeld zurück."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_039": {
+		"lines": [
+			"Verleiht einem",
+			"Diener [b]Windzorn[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_041": {
+		"lines": [
+			"Stellt das volle",
+			"Leben eines Dieners",
+			"wieder her und",
+			"verleiht ihm [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_042": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Verursacht",
+			"3 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_045": {
+		"lines": [
+			"Verleiht einem",
+			"befreundeten Charakter",
+			"+3 Angriff in diesem Zug."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_CS2_046": {
+		"lines": [
+			"Verleiht Euren",
+			"Dienern +3 Angriff",
+			"in diesem Zug."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_050": {
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_051": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_052": {
+		"lines": [
+			"[b]Zauberschaden +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_053": {
+		"lines": [
+			"Zieht eine",
+			"Karte. Sie kostet",
+			"(3) weniger."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_057": {
+		"lines": [
+			"Fügt einem",
+			"Diener",
+			"4 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_059": {
+		"lines": [
+			"[b]Verstohlenheit[/b]. Verleiht",
+			"am Ende Eures Zuges",
+			"einem anderen",
+			"zufälligen befreundeten",
+			"Diener +1 Leben."
+		],
+		"name": 12,
+		"text": 6
+	},
+	"VAN_CS2_061": {
+		"lines": [
+			"Verursacht 2 Schaden.",
+			"Stellt bei Eurem Helden",
+			"2 Leben wieder her."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_062": {
+		"lines": [
+			"Fügt ALLEN",
+			"Charakteren",
+			"3 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_063": {
+		"lines": [
+			"Wählt einen feindlichen",
+			"Diener. Vernichtet ihn",
+			"zu Beginn Eures Zuges."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_064": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Fügt",
+			"ALLEN anderen",
+			"Charakteren 1",
+			"Schaden zu."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_CS2_065": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_072": {
+		"lines": [
+			"Fügt einem",
+			"unverletzten Diener",
+			"2 Schaden zu."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_073": {
+		"lines": [
+			"Verleiht einem",
+			"Diener +2 Angriff.",
+			"[b]Combo:[/b] Stattdessen",
+			"+4 Angriff."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_073_puzzle": {
+		"lines": [
+			"Verleiht einem",
+			"Diener +2 Angriff.",
+			"[b]Combo:[/b] Stattdessen",
+			"+4 Angriff."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_CS2_074": {
+		"lines": [
+			"Verleiht Eurer",
+			"Waffe +2 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_075": {
+		"lines": [
+			"Fügt dem",
+			"feindlichen Helden",
+			"3 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_076": {
+		"lines": [
+			"Vernichtet einen",
+			"feindlichen Diener."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_077": {
+		"lines": [
+			"Zieht 4 Karten."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_080": {
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_082": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_084": {
+		"lines": [
+			"Setzt das Leben",
+			"eines Dieners auf 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_087": {
+		"lines": [
+			"Verleiht einem",
+			"Diener +3 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_088": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Stellt bei",
+			"Eurem Helden 6 Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_089": {
+		"lines": [
+			"Stellt 6",
+			"Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_091": {
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_092": {
+		"lines": [
+			"Verleiht einem",
+			"Diener +4/+4. (+4",
+			"Angriff/+4 Leben)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_093": {
+		"lines": [
+			"Fügt allen",
+			"Feinden",
+			"2 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_094": {
+		"lines": [
+			"Verursacht 3",
+			"Schaden. Zieht",
+			"eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_097": {
+		"lines": [
+			"Stellt bei Eurem Helden",
+			"jedes Mal 2 Leben wieder",
+			"her, wenn er angreift."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_CS2_101t": {
+		"name": 8,
+		"text": 11
+	},
+	"VAN_CS2_102_H3": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Erhaltet 2 Rüstung."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_103": {
+		"lines": [
+			"Verleiht einem",
+			"befreundeten Diener",
+			"+2 Angriff und [b]Ansturm[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_103_Puzzle": {
+		"lines": [
+			"Verleiht einem",
+			"befreundeten Diener",
+			"[b]Ansturm[/b]. Er kann in",
+			"diesem Zug keine",
+			"Helden angreifen."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_CS2_104": {
+		"lines": [
+			"Verleiht einem",
+			"verletzten",
+			"Diener +3/+3."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_105": {
+		"lines": [
+			"Verleiht Eurem",
+			"Helden +4 Angriff",
+			"in diesem Zug."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_106": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_108": {
+		"lines": [
+			"Vernichtet einen",
+			"verletzten",
+			"feindlichen Diener."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_112": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_114": {
+		"lines": [
+			"Fügt 2 zufälligen",
+			"feindlichen Dienern",
+			"2 Schaden zu."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_117": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Stellt 3 Leben",
+			"wieder her."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_118": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_119": {
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_120": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_121": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_122": {
+		"lines": [
+			"Eure anderen",
+			"Diener haben",
+			"+1 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_124": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_125": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_127": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_131": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_141": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Verursacht",
+			"1 Schaden."
+		],
+		"name": 8,
+		"text": 11
+	},
+	"VAN_CS2_142": {
+		"lines": [
+			"[b]Zauberschaden +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_146": {
+		"lines": [
+			"Hat [b]Ansturm[/b], während",
+			"Ihr eine Waffe",
+			"angelegt habt."
+		],
+		"name": 10,
+		"text": 9
+	},
+	"VAN_CS2_147": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Zieht eine",
+			"Karte."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_150": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Verursacht",
+			"2 Schaden."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_151": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Ruft",
+			"einen Knappen",
+			"(2/2) herbei."
+		],
+		"name": 9,
+		"text": 10
+	},
+	"VAN_CS2_152": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_155": {
+		"lines": [
+			"[b]Zauberschaden +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_161": {
+		"lines": [
+			"[b]Verstohlenheit[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_162": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_168": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_169": {
+		"lines": [
+			"[b]Windzorn[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_171": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_172": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_173": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_179": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_181": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Fügt",
+			"SICH SELBST 4",
+			"Schaden zu."
+		],
+		"name": 9,
+		"text": 10
+	},
+	"VAN_CS2_182": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_186": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_187": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_188": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"einem Diener +2 Angriff",
+			"in diesem Zug."
+		],
+		"name": 10,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_CS2_189": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Verursacht",
+			"1 Schaden."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_196": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Ruft einen Eber",
+			"(1/1) herbei."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_197": {
+		"lines": [
+			"[b]Zauberschaden +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_200": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_201": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_203": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Bringt",
+			"einen Diener zum",
+			"[b]Schweigen[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_CS2_213": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_CS2_221": {
+		"lines": [
+			"[b]Wutanfall:[/b]",
+			"Eure Waffe",
+			"hat +2 Angriff."
+		],
+		"name": 10,
+		"text": 9
+	},
+	"VAN_CS2_222": {
+		"lines": [
+			"Eure anderen",
+			"Diener haben",
+			"+1/+1."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_CS2_226": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Erhält",
+			"+1/+1 für jeden",
+			"anderen befreundeten",
+			"Diener auf dem",
+			"Schlachtfeld."
+		],
+		"name": 11,
+		"text": 7
+	},
+	"VAN_CS2_227": {
+		"lines": [
+			"Eure Diener",
+			"kosten (3)",
+			"mehr."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_231": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_232": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_233": {
+		"lines": [
+			"Zerstört Eure Waffe und",
+			"fügt allen Feinden den",
+			"Schaden der Waffe zu."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_CS2_234": {
+		"lines": [
+			"Vernichtet einen",
+			"Diener mit max.",
+			"3 Angriff."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_CS2_235": {
+		"lines": [
+			"Zieht jedes Mal eine",
+			"Karte, wenn ein Diener",
+			"geheilt wird."
+		],
+		"name": 9,
+		"text": 9
+	},
+	"VAN_CS2_236": {
+		"lines": [
+			"Verdoppelt",
+			"das Leben",
+			"eines Dieners."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_237": {
+		"lines": [
+			"Zieht jedes Mal",
+			"eine Karte, wenn",
+			"Ihr ein Wildtier",
+			"herbeiruft."
+		],
+		"name": 9,
+		"text": 8
+	},
+	"VAN_CS2_boar": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_mirror": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_CS2_tk1": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_01": {
+		"lines": [
+			"[b]Flüchtig[/b]"
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_DREAM_02": {
+		"lines": [
+			"Fügt allen",
+			"Charakteren außer",
+			"Ysera 5 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_03": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DREAM_04": {
+		"lines": [
+			"Lasst einen Diener auf",
+			"die Hand seines",
+			"Besitzers zurückkehren."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_DREAM_05": {
+		"lines": [
+			"Verleiht einem Diener",
+			"+5/+5. Zu Beginn",
+			"Eures nächsten Zuges",
+			"wird er vernichtet."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_DS1_055": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Stellt",
+			"bei allen befreundeten",
+			"Charakteren 2 Leben",
+			"wieder her."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_DS1_070": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"einem befreundeten",
+			"Wildtier +2/+2 und [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_DS1_175": {
+		"lines": [
+			"Eure anderen",
+			"Wildtiere haben",
+			"+1 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_178": {
+		"lines": [
+			"Eure Wildtiere",
+			"haben",
+			"[b]Ansturm[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_183": {
+		"lines": [
+			"Fügt 2 zufälligen",
+			"feindlichen Dienern",
+			"3 Schaden zu."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_DS1_184": {
+		"lines": [
+			"Schaut Euch die 3",
+			"obersten Karten Eures",
+			"Decks an. Zieht eine und",
+			"werft die anderen ab."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_DS1_185": {
+		"lines": [
+			"Verursacht",
+			"2 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_DS1_188": {
+		"lines": [
+			"Euer Held ist",
+			"[b]immun[/b], während",
+			"er angreift."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_DS1_233": {
+		"lines": [
+			"Fügt dem",
+			"feindlichen Helden",
+			"5 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_001": {
+		"lines": [
+			"Erhält jedes Mal",
+			"+2 Angriff, wenn",
+			"ein Charakter",
+			"geheilt wird."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_002": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Vernichtet einen",
+			"feindlichen Diener",
+			"mit [b]Spott[/b]."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_004": {
+		"lines": [
+			"Verleiht am Ende Eures",
+			"Zuges einem anderen",
+			"zufälligen befreundeten",
+			"Diener +1 Leben."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_005": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Vernichtet einen",
+			"Diener mit mind.",
+			"7 Angriff."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_006": {
+		"lines": [
+			"Tauscht zu Beginn Eures",
+			"Zuges diesen Diener gegen",
+			"einen zufälligen Diener auf",
+			"Eurer Hand aus."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_007": {
+		"lines": [
+			"Zieht jedes Mal eine",
+			"Karte, wenn dieser",
+			"Diener Schaden",
+			"erleidet."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_008": {
+		"lines": [
+			"[b]Gottesschild[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_009": {
+		"lines": [
+			"[b]Wutanfall:[/b]",
+			"+5 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_010": {
+		"lines": [
+			"[b]Verstohlenheit[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_011": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Stellt 2 Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_012": {
+		"lines": [
+			"[b]Zauberschaden +1[/b].",
+			"[b]Todesröcheln:[/b] Zieht",
+			"eine Karte."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_014": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Gebt",
+			"Eurem Gegner 2",
+			"Bananen."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_015": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Zieht eine",
+			"Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_016": {
+		"lines": [
+			"[b]Todesröcheln:[/b] Übernehmt",
+			"die Kontrolle über einen",
+			"zufälligen feindlichen",
+			"Diener."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_017": {
+		"lines": [
+			"[b]Verstohlenheit[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_019": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"einem befreundeten",
+			"Diener +1/+1."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_020": {
+		"lines": [
+			"[b]Gottesschild[/b]."
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_EX1_021": {
+		"lines": [
+			"[b]Windzorn[/b]"
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_EX1_023": {
+		"lines": [
+			"[b]Gottesschild[/b]."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_025": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Ruft einen",
+			"Mechanischen Drachling",
+			"(2/1) herbei."
+		],
+		"name": 9,
+		"text": 8
+	},
+	"VAN_EX1_028": {
+		"lines": [
+			"[b]Verstohlenheit[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_029": {
+		"lines": [
+			"[b]Todesröcheln:[/b] Fügt dem",
+			"feindlichen Helden",
+			"2 Schaden zu."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_032": {
+		"lines": [
+			"[b]Spott[/b], [b]Gottesschild[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_033": {
+		"lines": [
+			"[b]Windzorn[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_043": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Erhält +1",
+			"Leben für jede Karte auf",
+			"Eurer Hand."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_044": {
+		"lines": [
+			"Erhält jedes Mal +1/+1,",
+			"wenn Ihr eine Karte",
+			"ausspielt."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_EX1_045": {
+		"lines": [
+			"Kann",
+			"nicht",
+			"angreifen."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_046": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"einem Diener +2 Angriff",
+			"in diesem Zug."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_048": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Bringt",
+			"einen Diener zum",
+			"[b]Schweigen[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_049": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Lasst einen",
+			"befreundeten Diener vom",
+			"Schlachtfeld auf Eure Hand",
+			"zurückkehren."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_050": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Jeder Spieler zieht",
+			"2 Karten."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_055": {
+		"lines": [
+			"Erhält jedes Mal +2",
+			"Angriff in diesem Zug,",
+			"wenn Ihr einen",
+			"Zauber wirkt."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_057": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Lasst einen",
+			"befreundeten Diener vom",
+			"Schlachtfeld auf Eure Hand",
+			"zurückkehren."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_058": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"benachbarten",
+			"Dienern [b]Spott[/b]."
+		],
+		"name": 9,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_059": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Vertauscht",
+			"Angriff und Leben",
+			"eines Dieners."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_062": {
+		"lines": [
+			"[b]Ansturm[/b]. Hat +1 Angriff",
+			"für jeden anderen",
+			"Murloc auf dem",
+			"Schlachtfeld."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_066": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Zerstört",
+			"die Waffe Eures",
+			"Gegners."
+		],
+		"name": 10,
+		"text": 9
+	},
+	"VAN_EX1_067": {
+		"lines": [
+			"[b]Ansturm[/b],",
+			"[b]Gottesschild[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_076": {
+		"lines": [
+			"Der erste Diener, den",
+			"Ihr in einem Zug",
+			"ausspielt, kostet (1)",
+			"weniger."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_080": {
+		"lines": [
+			"Erhält jedes Mal +1/+1,",
+			"wenn ein [b]Geheimnis[/b]",
+			"ausgespielt wird."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_082": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verursacht",
+			"3 Schaden, der zufällig auf",
+			"alle anderen Charaktere",
+			"verteilt wird."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_083": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verwandelt einen",
+			"anderen zufälligen Diener in",
+			"einen Teufelssaurier (5/5) oder",
+			"ein Eichhörnchen (1/1)."
+		],
+		"name": 9,
+		"text": 6,
+		"valign": "top"
+	},
+	"VAN_EX1_084": {
+		"lines": [
+			"Jedes Mal, wenn Ihr",
+			"einen Diener mit max. 3",
+			"Angriff herbeiruft, erhält",
+			"er [b]Ansturm[/b]."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_085": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Falls Euer",
+			"Gegner mind. 4 Diener hat,",
+			"übernehmt zufällig",
+			"die Kontrolle",
+			"über einen davon."
+		],
+		"name": 11,
+		"text": 7
+	},
+	"VAN_EX1_089": {
+		"lines": [
+			"[b]Ansturm[/b]. [b]Kampfschrei:[/b]",
+			"Gebt Eurem Gegner",
+			"1 Manakristall."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_091": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Übernehmt",
+			"die Kontrolle über einen",
+			"feindlichen Diener mit",
+			"max. 2 Angriff."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_093": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"benachbarten Dienern",
+			"+1/+1 und [b]Spott[/b]."
+		],
+		"name": 11,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_095": {
+		"lines": [
+			"Zieht jedes Mal eine",
+			"Karte, wenn Ihr einen",
+			"Zauber wirkt."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_096": {
+		"lines": [
+			"[b]Todesröcheln:[/b]",
+			"Zieht eine",
+			"Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_097": {
+		"lines": [
+			"[b]Spott[/b]. [b]Todesröcheln:[/b]",
+			"Fügt ALLEN",
+			"Charakteren 2",
+			"Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_100": {
+		"lines": [
+			"Wenn ein Spieler einen Zauber",
+			"wirkt, erhält der andere Spieler",
+			"eine Kopie davon auf die Hand."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_102": {
+		"lines": [
+			"Fügt zu Beginn",
+			"Eures Zuges einem",
+			"zufälligen Feind 2",
+			"Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_103": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Verleiht ALLEN",
+			"anderen Murlocs",
+			"+2 Leben."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_105": {
+		"lines": [
+			"Kostet (1) weniger für",
+			"jede andere Karte auf",
+			"Eurer Hand."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_110": {
+		"lines": [
+			"[b]Todesröcheln:[/b] Ruft",
+			"Baine Bluthuf",
+			"(4/5) herbei."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_EX1_110t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_112": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Konstruiert eine",
+			"FANTASTISCHE",
+			"Erfindung."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_116": {
+		"lines": [
+			"[b]Ansturm[/b]. [b]Kampfschrei:[/b]",
+			"Ruft 2 Welplinge (1/1) für",
+			"Euren Gegner herbei."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_124": {
+		"lines": [
+			"Verursacht 2 Schaden.",
+			"[b]Combo:[/b] Verursacht",
+			"stattdessen 4 Schaden."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_126": {
+		"lines": [
+			"Zwingt einen feindlichen",
+			"Diener, seinen Schaden",
+			"benachbarten Dienern",
+			"zuzufügen."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_128": {
+		"lines": [
+			"Verleiht Euren Dienern",
+			"bis zu Eurem nächsten",
+			"Zug [b]Verstohlenheit[/b]."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_129": {
+		"lines": [
+			"Fügt allen feindlichen",
+			"Dienern 1 Schaden",
+			"zu. Zieht eine Karte."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_130": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn ein",
+			"Feind angreift, ruft Ihr",
+			"einen Verteidiger (2/1)",
+			"als neues Ziel herbei."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_130a": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_131": {
+		"lines": [
+			"[b]Combo:[/b] Ruft einen",
+			"Banditen der Defias",
+			"(2/1) herbei."
+		],
+		"name": 10,
+		"text": 10
+	},
+	"VAN_EX1_132": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn Euer",
+			"Held Schaden erleidet,",
+			"wird dem feindlichen",
+			"Helden ebenso viel",
+			"Schaden zugefügt."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_133": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verursacht",
+			"1 Schaden. [b]Combo:[/b]",
+			"Verursacht statt[lb]d]dessen",
+			"2 Schaden."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_134": {
+		"lines": [
+			"[b]Combo:[/b]",
+			"Verursacht",
+			"2 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_136": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn ein",
+			"befreundeter Diener",
+			"stirbt, wird er mit 1",
+			"Leben wiederbelebt."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_137": {
+		"lines": [
+			"Fügt dem feindlichen",
+			"Helden 2 Schaden zu.",
+			"[b]Combo:[/b] Lasst diesen Zauber",
+			"im nächsten Zug wieder auf",
+			"Eure Hand zurückkehren."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_144": {
+		"lines": [
+			"Lasst einen befreundeten",
+			"Diener auf Eure Hand",
+			"zurückkehren. Er kostet",
+			"(2) weniger."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_145": {
+		"lines": [
+			"Der nächste Zauber, den",
+			"Ihr in diesem Zug wirkt,",
+			"kostet (3) weniger."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_154": {
+		"lines": [
+			"[b]Wählt aus:[/b] Fügt einem",
+			"Diener 3 Schaden zu;",
+			"oder fügt einem",
+			"Diener 1 Schaden zu",
+			"und zieht eine Karte."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_154a": {
+		"lines": [
+			"Fügt einem",
+			"Diener",
+			"3 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_154b": {
+		"lines": [
+			"Fügt einem Diener",
+			"1 Schaden zu.",
+			"Zieht eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_155": {
+		"lines": [
+			"[b]Wählt aus:[/b] Verleiht",
+			"einem Diener +4 Angriff;",
+			"oder +4 Leben und [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_155a": {
+		"lines": [
+			"+4 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_155b": {
+		"lines": [
+			"+4 Leben und [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_158": {
+		"lines": [
+			"Verleiht Euren Dienern",
+			"„[b]Todesröcheln:[/b] Ruft",
+			"einen Treant (2/2) herbei“."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_160": {
+		"lines": [
+			"[b]Wählt aus:[/b] Verleiht Euren",
+			"Dienern +1/+1; oder ruft",
+			"einen Panther (3/2) herbei."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_160a": {
+		"lines": [
+			"Ruft einen",
+			"Panther",
+			"(3/2) herbei."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_160b": {
+		"lines": [
+			"Verleiht Euren",
+			"Dienern +1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_161": {
+		"lines": [
+			"Vernichtet einen",
+			"Diener. Euer Gegner",
+			"zieht 2 Karten."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_162": {
+		"lines": [
+			"Benachbarte",
+			"Diener haben",
+			"+1 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_164": {
+		"lines": [
+			"[b]Wählt aus:[/b] Erhaltet",
+			"2 Manakristalle;",
+			"oder zieht 3 Karten."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_164a": {
+		"lines": [
+			"Erhaltet 2",
+			"Manakristalle."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_EX1_164b": {
+		"lines": [
+			"Zieht 3 Karten."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165": {
+		"lines": [
+			"[b]Wählt aus:[/b] [b]Ansturm[/b];",
+			"oder +2 Leben",
+			"und [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_165a": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165b": {
+		"lines": [
+			"+2 Leben und [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165t1": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_165t2": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_166": {
+		"lines": [
+			"[b]Wählt aus:[/b] Verursacht",
+			"2 Schaden; oder bringt",
+			"einen Diener zum",
+			"[b]Schweigen[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_166a": {
+		"lines": [
+			"Verursacht",
+			"2 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_166b": {
+		"lines": [
+			"Bringt einen",
+			"Diener zum",
+			"[b]Schweigen[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_169": {
+		"lines": [
+			"Erhaltet 2",
+			"Manakristalle nur",
+			"für diesen Zug."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_170": {
+		"lines": [
+			"Vernichtet jeden Diener,",
+			"der von diesem Diener",
+			"verletzt wurde."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_173": {
+		"lines": [
+			"Verursacht 5",
+			"Schaden. Zieht",
+			"eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_178": {
+		"lines": [
+			"[b]Wählt aus:[/b] +5 Angriff;",
+			"oder +5 Leben",
+			"und [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_178a": {
+		"lines": [
+			"+5 Leben und [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_178b": {
+		"lines": [
+			"+5 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_238": {
+		"lines": [
+			"Verursacht 3",
+			"Schaden.",
+			"[b]Überladung:[/b] (1)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_241": {
+		"lines": [
+			"Verursacht 5",
+			"Schaden.",
+			"[b]Überladung:[/b] (2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_243": {
+		"lines": [
+			"[b]Windzorn[/b],",
+			"[b]Überladung:[/b]",
+			"(2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_244": {
+		"lines": [
+			"Verleiht Euren",
+			"Totems +2 Leben."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_245": {
+		"lines": [
+			"Bringt einen Diener zum",
+			"[b]Schweigen[/b] und fügt ihm",
+			"dann 1 Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_246": {
+		"lines": [
+			"Verwandelt einen",
+			"Diener in einen",
+			"Frosch (0/1) mit [b]Spott[/b]."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_247": {
+		"lines": [
+			"[b]Überladung:[/b] (1)"
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_EX1_248": {
+		"lines": [
+			"Ruft 2 Geisterwölfe",
+			"(2/3) mit [b]Spott[/b] herbei.",
+			"[b]Überladung:[/b] (2)"
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_249": {
+		"lines": [
+			"Fügt am Ende Eures",
+			"Zuges ALLEN anderen",
+			"Charakteren 2",
+			"Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_250": {
+		"lines": [
+			"[b]Spott[/b], [b]Überladung:[/b] (3)"
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_251": {
+		"lines": [
+			"Fügt 2 zufälligen",
+			"feindlichen Dienern",
+			"2 Schaden zu.",
+			"[b]Überladung:[/b] (2)"
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_258": {
+		"lines": [
+			"Erhält jedes Mal +1/+1,",
+			"wenn Ihr eine Karte",
+			"mit [b]Überladung[/b]",
+			"ausspielt."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_259": {
+		"lines": [
+			"Fügt allen feindlichen",
+			"Dienern 2–3 Schaden",
+			"zu. [b]Überladung:[/b] (2)"
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_274": {
+		"lines": [
+			"Erhält +2/+2, wenn Ihr",
+			"am Ende Eures Zuges ein",
+			"[b]Geheimnis[/b] kontrolliert."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_275": {
+		"lines": [
+			"[b]Friert[/b] einen Diener sowie",
+			"seine benachbarten",
+			"Diener ein und fügt",
+			"ihnen 1 Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_277": {
+		"lines": [
+			"Verursacht 3 Schaden,",
+			"der zufällig auf alle",
+			"feindlichen Charaktere",
+			"verteilt wird."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_278": {
+		"lines": [
+			"Verursacht 1",
+			"Schaden. Zieht",
+			"eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_279": {
+		"lines": [
+			"Verursacht",
+			"10 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_283": {
+		"lines": [
+			"[b]Kampfschrei:[/b] [b]Friert[/b]",
+			"einen Charakter ein."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_284": {
+		"lines": [
+			"[b]Zauberschaden +1[/b].",
+			"[b]Kampfschrei:[/b] Zieht",
+			"eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_287": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn Euer",
+			"Gegner einen Zauber",
+			"wirkt, [b]kontert[/b] Ihr ihn."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_289": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn Euer",
+			"Held angegriffen wird,",
+			"erhält er 8 Rüstung."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_294": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn Euer",
+			"Gegner einen Diener",
+			"ausspielt, ruft Ihr eine",
+			"Kopie davon herbei."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_295": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn Euer Held",
+			"tödlichen Schaden erleidet,",
+			"wird dieser verhindert und der",
+			"Held wird in diesem",
+			"Zug [b]immun[/b]."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_298": {
+		"lines": [
+			"Kann nicht angreifen.",
+			"Fügt am Ende Eures Zuges",
+			"einem zufälligen Feind 8",
+			"Schaden zu."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_301": {
+		"lines": [
+			"[b]Spott[/b]. [b]Kampfschrei:[/b]",
+			"Zerstört einen Eurer",
+			"Manakristalle."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_302": {
+		"lines": [
+			"Fügt einem Diener",
+			"1 Schaden zu. Zieht eine",
+			"Karte, falls er stirbt."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_303": {
+		"lines": [
+			"Vernichtet einen",
+			"befreundeten Diener und",
+			"fügt allen feindlichen Dienern",
+			"Schaden zu, der seinem",
+			"Angriff entspricht."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_304": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Vernichtet",
+			"beide benachbarten Diener",
+			"und erhält deren Angriff",
+			"und Leben."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_306": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Werft eine zufällige",
+			"Karte ab."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_308": {
+		"lines": [
+			"Verursacht 4",
+			"Schaden. Werft eine",
+			"zufällige Karte ab."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_309": {
+		"lines": [
+			"Vernichtet einen",
+			"Diener. Stellt bei",
+			"Eurem Helden 3",
+			"Leben wieder her."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_310": {
+		"lines": [
+			"[b]Ansturm[/b]. [b]Kampfschrei:[/b]",
+			"Werft 2 zufällige",
+			"Karten ab."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_312": {
+		"lines": [
+			"Vernichtet",
+			"alle Diener."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_313": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Fügt",
+			"Eurem Helden 5",
+			"Schaden zu."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_315": {
+		"lines": [
+			"Eure Diener kosten (2)",
+			"weniger, aber nicht",
+			"weniger als (1)."
+		],
+		"name": 11,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_316": {
+		"lines": [
+			"Verleiht einem",
+			"befreundeten Diener bis",
+			"zum Ende des Zuges +4/+4.",
+			"Dann stirbt er. Auf",
+			"schreckliche Art und Weise."
+		],
+		"name": 10,
+		"text": 7
+	},
+	"VAN_EX1_317": {
+		"lines": [
+			"Zieht 2 Dämonen",
+			"aus Eurem Deck."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_319": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Fügt",
+			"Eurem Helden 3",
+			"Schaden zu."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_320": {
+		"lines": [
+			"Fügt einem Charakter 3",
+			"Schaden zu. Falls er",
+			"stirbt, ruft Ihr einen",
+			"zufälligen Dämon herbei."
+		],
+		"name": 10,
+		"text": 8
+	},
+	"VAN_EX1_323": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Vernichtet",
+			"Euren Helden und ersetzt",
+			"ihn durch Lord Jaraxxus."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_332": {
+		"lines": [
+			"Bringt einen",
+			"Diener zum",
+			"[b]Schweigen[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_334": {
+		"lines": [
+			"Übernehmt bis zum Ende",
+			"des Zuges die Kontrolle",
+			"über einen feindlichen",
+			"Diener mit max. 3 Angriff."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_335": {
+		"lines": [
+			"Der Angriff",
+			"dieses Dieners",
+			"entspricht immer",
+			"seinem Leben."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_339": {
+		"lines": [
+			"Kopiert 2 Karten aus",
+			"dem Deck Eures",
+			"Gegners und erhaltet",
+			"die Kopien auf die Hand."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_341": {
+		"lines": [
+			"Stellt zu Beginn Eures Zuges",
+			"bei einem zufälligen verletzten",
+			"befreundeten Charakter 3",
+			"Leben wieder her."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_345": {
+		"lines": [
+			"Legt eine Kopie eines",
+			"zufälligen Dieners aus",
+			"dem Deck Eures Gegners",
+			"auf das Schlachtfeld."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_345t": {
+		"lines": [
+			"Gedankenspiele",
+			"verpufft! Euer",
+			"Gegner hat",
+			"keine Diener!"
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_349": {
+		"lines": [
+			"Zieht Karten, bis Ihr",
+			"so viele auf der Hand",
+			"habt wie Euer Gegner."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_350": {
+		"lines": [
+			"Verdoppelt den Schaden und",
+			"die Heilung Eurer Zauber und",
+			"Heldenfähigkeiten."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_354": {
+		"lines": [
+			"Stellt 8 Leben",
+			"wieder her.",
+			"Zieht 3 Karten."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_355": {
+		"lines": [
+			"Verdoppelt",
+			"den Angriff",
+			"eines Dieners."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_360": {
+		"lines": [
+			"Setzt den Angriff",
+			"eines Dieners auf 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_362": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"einem befreundeten",
+			"Diener [b]Gottesschild[/b]."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_363": {
+		"lines": [
+			"Wählt einen Diener.",
+			"Zieht jedes Mal eine",
+			"Karte, wenn er angreift."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_365": {
+		"lines": [
+			"Zieht eine Karte und",
+			"verursacht Schaden, der",
+			"ihren Kosten entspricht."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_366": {
+		"lines": [
+			"Nachdem Ihr einen Diener",
+			"herbeigerufen habt, erhält er",
+			"+1/+1 und diese Waffe",
+			"verliert 1 Haltbarkeit."
+		],
+		"name": 9,
+		"text": 6
+	},
+	"VAN_EX1_371": {
+		"lines": [
+			"Verleiht",
+			"einem Diener",
+			"[b]Gottesschild[/b]."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_379": {
+		"lines": [
+			"[b]Geheimnis:[/b] Nachdem",
+			"Euer Gegner einen",
+			"Diener ausgespielt",
+			"hat, wird dessen",
+			"Leben auf 1 verringert."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_382": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Setzt den Angriff",
+			"eines feindlichen",
+			"Dieners auf 1."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_383": {
+		"lines": [
+			"[b]Gottesschild[/b], [b]Spott[/b].",
+			"[b]Todesröcheln:[/b] Legt einen",
+			"Aschenbringer (5/3) an."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_384": {
+		"lines": [
+			"Verursacht 8 Schaden,",
+			"der zufällig auf alle",
+			"feindlichen Charaktere",
+			"verteilt wird."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_390": {
+		"lines": [
+			"[b]Spott[/b].",
+			"[b]Wutanfall:[/b]",
+			"+3 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_391": {
+		"lines": [
+			"Fügt einem Diener 2",
+			"Schaden zu. Zieht eine",
+			"Karte, wenn er überlebt."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_392": {
+		"lines": [
+			"Zieht eine Karte für",
+			"jeden verletzten",
+			"befreundeten Charakter."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_393": {
+		"lines": [
+			"[b]Wutanfall:[/b]",
+			"+3 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_396": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_398": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Legt eine Waffe",
+			"(2/2) an."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_399": {
+		"lines": [
+			"Erhält jedes Mal",
+			"+3 Angriff, wenn",
+			"er Schaden",
+			"erleidet."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_400": {
+		"lines": [
+			"Fügt ALLEN",
+			"Dienern",
+			"1 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_402": {
+		"lines": [
+			"Erhaltet jedes Mal 1",
+			"Rüstung, wenn ein",
+			"befreundeter Diener",
+			"Schaden erleidet."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_405": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_407": {
+		"lines": [
+			"Vernichtet alle",
+			"Diener bis auf einen.",
+			"(Zufällige Auswahl)"
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_EX1_408": {
+		"lines": [
+			"Verursacht 4 Schaden.",
+			"Verursacht stattdessen",
+			"6 Schaden, wenn Euer",
+			"Held max. 12 Leben hat."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_409": {
+		"lines": [
+			"Wenn Ihr eine Waffe",
+			"habt, erhält sie +1/+1.",
+			"Legt anderenfalls",
+			"eine Waffe (1/3) an."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_410": {
+		"lines": [
+			"Fügt einem Diener",
+			"für jeden Eurer",
+			"Rüstungspunkte 1",
+			"Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_411": {
+		"lines": [
+			"Angriffe gegen Diener",
+			"kosten 1 Angriff anstatt",
+			"1 Haltbarkeit."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_412": {
+		"lines": [
+			"[b]Wutanfall:[/b] [b]Windzorn[/b]",
+			"und +1 Angriff."
+		],
+		"name": 12,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_414": {
+		"lines": [
+			"[b]Ansturm[/b].",
+			"[b]Wutanfall:[/b]",
+			"+6 Angriff."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_506": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Ruft",
+			"einen Murlocspäher",
+			"(1/1) herbei."
+		],
+		"name": 11,
+		"text": 10
+	},
+	"VAN_EX1_506a": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_507": {
+		"lines": [
+			"ALLE anderen",
+			"Murlocs haben",
+			"+2/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_508": {
+		"lines": [
+			"ALLE anderen",
+			"Murlocs haben",
+			"+1 Angriff."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_509": {
+		"lines": [
+			"Erhält jedes Mal +1",
+			"Angriff, wenn ein Murloc",
+			"herbeigerufen wird."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_522": {
+		"lines": [
+			"[b]Verstohlenheit[/b]. Vernichtet",
+			"jeden Diener, der von diesem",
+			"Diener verletzt wurde."
+		],
+		"name": 10,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_531": {
+		"lines": [
+			"Erhält jedes Mal +2/+1,",
+			"wenn ein befreundetes",
+			"Wildtier stirbt."
+		],
+		"name": 11,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_533": {
+		"lines": [
+			"[b]Geheimnis:[/b]",
+			"Wenn ein Feind Euren",
+			"Helden angreift, greift er",
+			"stattdessen einen zufälligen",
+			"anderen Charakter an."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_534": {
+		"lines": [
+			"[b]Todesröcheln:[/b] Ruft",
+			"2 Hyänen (2/2) herbei."
+		],
+		"name": 11,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_EX1_536": {
+		"lines": [
+			"Erhält jedes Mal",
+			"+1 Haltbarkeit, wenn ein",
+			"[b]Geheimnis[/b] aufgedeckt wird."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_537": {
+		"lines": [
+			"Fügt einem Diener 5",
+			"Schaden und",
+			"benachbarten Dienern",
+			"2 Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_538": {
+		"lines": [
+			"Ruft für jeden",
+			"feindlichen Diener",
+			"einen Jagdhund (1/1)",
+			"mit [b]Ansturm[/b] herbei."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_539": {
+		"lines": [
+			"Verursacht 3 Schaden.",
+			"Verursacht statt[lb]d]dessen",
+			"5 Schaden, wenn Ihr ein",
+			"Wildtier kontrolliert."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_543": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_544": {
+		"lines": [
+			"Alle Diener verlieren",
+			"[b]Verstohlenheit[/b]. Zerstört alle",
+			"feindlichen [b]Geheimnisse[/b].",
+			"Zieht eine Karte."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_549": {
+		"lines": [
+			"Verleiht einem",
+			"Wildtier in diesem Zug +2",
+			"Angriff und [b]Immunität[/b]."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_554": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn ein",
+			"befreundeter Diener",
+			"angegriffen wird, ruft Ihr",
+			"3 Schlangen (1/1) herbei."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_554t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_556": {
+		"lines": [
+			"[b]Todesröcheln:[/b] Ruft einen",
+			"Beschädigten",
+			"Golem (2/1) herbei."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_557": {
+		"lines": [
+			"Zu Beginn Eures Zuges",
+			"besteht eine Chance von 50 %,",
+			"dass Ihr eine zusätzliche",
+			"Karte zieht."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_EX1_558": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Zerstört die Waffe",
+			"Eures Gegners. Zieht ihrer",
+			"Haltbarkeit entsprechend Karten."
+		],
+		"name": 12,
+		"text": 6,
+		"valign": "top"
+	},
+	"VAN_EX1_559": {
+		"lines": [
+			"Erhaltet jedes Mal",
+			"einen Feuerball auf die",
+			"Hand, wenn Ihr einen",
+			"Zauber wirkt."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_560": {
+		"lines": [
+			"Spieler haben nur",
+			"jeweils 15 Sekunden",
+			"für ihren Zug."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_561": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Setzt das",
+			"verbleibende Leben eines",
+			"Helden auf 15."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_562": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Füllt Eure",
+			"Seite des Schlachtfelds mit",
+			"Welplingen (1/1)."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_563": {
+		"lines": [
+			"[b]Zauberschaden +5[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_564": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Wählt",
+			"einen Diener. Verwandelt",
+			"sich in eine Kopie davon."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_565": {
+		"lines": [
+			"Benachbarte",
+			"Diener haben",
+			"+2 Angriff."
+		],
+		"name": 10,
+		"text": 11
+	},
+	"VAN_EX1_567": {
+		"lines": [
+			"[b]Windzorn[/b],",
+			"[b]Überladung:[/b]",
+			"(2)"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_570": {
+		"lines": [
+			"Verleiht Eurem Helden",
+			"+4 Angriff in diesem",
+			"Zug und 4 Rüstung."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_571": {
+		"lines": [
+			"Ruft 3 Treants (2/2)",
+			"mit [b]Ansturm[/b]",
+			"herbei, die am Ende",
+			"des Zuges sterben."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_572": {
+		"lines": [
+			"Erhaltet am Ende Eures",
+			"Zuges eine Traumkarte",
+			"auf die Hand."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_573": {
+		"lines": [
+			"[b]Wählt aus:[/b] Verleiht Euren",
+			"anderen Dienern +2/+2;",
+			"oder ruft 2 Treants (2/2)",
+			"mit [b]Spott[/b] herbei."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_573a": {
+		"lines": [
+			"Verleiht Euren",
+			"anderen",
+			"Dienern +2/+2."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_573b": {
+		"lines": [
+			"Ruft 2 Treants",
+			"(2/2) mit",
+			"[b]Spott[/b] herbei."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_575": {
+		"lines": [
+			"Zieht am Ende",
+			"Eures Zuges",
+			"eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_577": {
+		"lines": [
+			"[b]Todesröcheln:[/b] Ruft Pip",
+			"Flitzwitz (3/3) für Euren",
+			"Gegner herbei."
+		],
+		"name": 12,
+		"text": 9,
+		"valign": "top"
+	},
+	"VAN_EX1_578": {
+		"lines": [
+			"Fügt einem Diener",
+			"Schaden zu, der",
+			"dem Angriff Eures",
+			"Helden entspricht."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_581": {
+		"lines": [
+			"Lasst einen feindlichen",
+			"Diener auf die Hand Eures",
+			"Gegners zurückkehren."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_582": {
+		"lines": [
+			"[b]Zauberschaden +1[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_583": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Stellt bei",
+			"Eurem Helden 4 Leben",
+			"wieder her."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_EX1_584": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"benachbarten Dienern",
+			"[b]Zauberschaden +1[/b]."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_586": {
+		"lines": [
+			"Kostet (1) weniger",
+			"für jeden anderen",
+			"Diener auf dem",
+			"Schlachtfeld."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_587": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"einem befreundeten",
+			"Diener [b]Windzorn[/b]."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_590": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Alle Diener",
+			"verlieren [b]Gottesschild[/b].",
+			"Erhält +3/+3 für jeden",
+			"verlorenen Schild."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_591": {
+		"lines": [
+			"Eure Heileffekte",
+			"verursachen",
+			"stattdessen Schaden."
+		],
+		"name": 9,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_593": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Fügt dem",
+			"feindlichen Helden 3",
+			"Schaden zu."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_594": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn ein",
+			"Diener Euren Helden",
+			"angreift, wird er vernichtet."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_595": {
+		"lines": [
+			"Zieht eine Karte, nachdem",
+			"ein befreundeter Diener",
+			"gestorben ist."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_596": {
+		"lines": [
+			"Fügt einem Diener 2",
+			"Schaden zu. Wenn das Ziel",
+			"ein befreundeter Dämon ist,",
+			"erhält er stattdessen +2/+2."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_597": {
+		"lines": [
+			"Fügt am Ende Eures Zuges",
+			"diesem Diener 1 Schaden",
+			"zu und ruft einen Wichtel",
+			"(1/1) herbei."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_598": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_603": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Fügt einem",
+			"Diener 1 Schaden zu und",
+			"verleiht ihm +2 Angriff."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_604": {
+		"lines": [
+			"Erhält jedes Mal +1",
+			"Angriff, wenn ein",
+			"Diener Schaden",
+			"erleidet."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_606": {
+		"lines": [
+			"Erhaltet 5 Rüstung.",
+			"Zieht eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_607": {
+		"lines": [
+			"Fügt einem Diener",
+			"1 Schaden zu und",
+			"verleiht ihm +2 Angriff."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_608": {
+		"lines": [
+			"Eure Zauber",
+			"kosten",
+			"(1) weniger."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_609": {
+		"lines": [
+			"[b]Geheimnis:[/b] Nachdem Euer",
+			"Gegner einen Diener",
+			"ausgespielt hat, werden",
+			"diesem 4 Schaden zugefügt."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_610": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn",
+			"Euer Held angegriffen",
+			"wird, erleiden alle",
+			"Feinde 2 Schaden."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_611": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn ein",
+			"feindlicher Diener angreift,",
+			"lasst ihn auf die Hand seines",
+			"Besitzers zurückkehren.",
+			"Er kostet (2) mehr."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_612": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Das nächste",
+			"[b]Geheimnis[/b], das Ihr",
+			"in diesem Zug aus[lb]d]spielt,",
+			"kostet (0)."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_613": {
+		"lines": [
+			"[b]Combo:[/b] Erhält für jede in",
+			"diesem Zug",
+			"bereits gespielte",
+			"Karte +2/+2."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_EX1_614": {
+		"lines": [
+			"Ruft jedes Mal eine",
+			"Flamme von Azzinoth",
+			"(2/1) herbei, wenn Ihr eine",
+			"Karte ausspielt."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_EX1_616": {
+		"lines": [
+			"ALLE Diener",
+			"kosten",
+			"(1) mehr."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_617": {
+		"lines": [
+			"Vernichtet einen",
+			"zufälligen",
+			"feindlichen Diener."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_619": {
+		"lines": [
+			"Setzt das Leben",
+			"ALLER Diener auf 1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_620": {
+		"lines": [
+			"Kostet (1) weniger für jeden",
+			"Lebenspunkt, der Eurem",
+			"Helden fehlt."
+		],
+		"name": 11,
+		"text": 8
+	},
+	"VAN_EX1_621": {
+		"lines": [
+			"Stellt bei ALLEN",
+			"Dienern 4 Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_622": {
+		"lines": [
+			"Vernichtet einen",
+			"Diener mit",
+			"mind. 5 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_623": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"einem befreundeten",
+			"Diener +3 Leben."
+		],
+		"name": 9,
+		"text": 8
+	},
+	"VAN_EX1_624": {
+		"lines": [
+			"Verursacht 5 Schaden.",
+			"Stellt bei Eurem Helden",
+			"5 Leben wieder her."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_625": {
+		"lines": [
+			"Eure Heldenfähigkeit wird",
+			"zu „Verursacht 2 Schaden“.",
+			"Wenn Euer Held bereits",
+			"Schattengestalt",
+			"angenommen hat: 3 Schaden."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_EX1_626": {
+		"lines": [
+			"Bringt alle feindlichen",
+			"Diener zum [b]Schweigen[/b].",
+			"Zieht eine Karte."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_finkle": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk11": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk28": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk29": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk33": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Ruft eine Höllenbestie",
+			"(6/6) herbei."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_EX1_tk34": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk9": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_EX1_tk9b": {
+		"lines": [
+			"[b]Ansturm[/b]. Vernichtet",
+			"diesen Diener am Ende",
+			"des Zuges."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_HERO_01bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Erhaltet 2 Rüstung."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_01bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Erhaltet 4 Rüstung."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_02bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Ruft ein zufälliges",
+			"Basistotem herbei."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_02bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Ruft ein Totem",
+			"Eurer Wahl herbei."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_03bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Legt einen",
+			"Dolch (1/2) an."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_03bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Legt eine",
+			"Waffe (2/2) an."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_04bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Ruft einen Rekruten",
+			"der Silbernen Hand",
+			"() herbei."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_HERO_04bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Ruft 2 Rekruten",
+			"() herbei."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_05bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Fügt dem feindlichen",
+			"Helden 2 Schaden zu."
+		],
+		"name": 11,
+		"text": 10
+	},
+	"VAN_HERO_05bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Fügt dem feindlichen",
+			"Helden 3 Schaden zu."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_HERO_06bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"+1 Angriff in diesem",
+			"Zug. +1 Rüstung."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_HERO_06bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"+2 Angriff in diesem",
+			"Zug. +2 Rüstung."
+		],
+		"name": 11,
+		"text": 10
+	},
+	"VAN_HERO_07bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Zieht eine Karte und",
+			"erleidet 2 Schaden."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_HERO_07bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Zieht eine Karte."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_08bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Verursacht",
+			"1 Schaden."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_08bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Verursacht",
+			"2 Schaden."
+		],
+		"name": 11,
+		"text": 11
+	},
+	"VAN_HERO_09bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Stellt 2 Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_09bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"Stellt 4 Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_10bp": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"+1 Angriff in",
+			"diesem Zug."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_HERO_10bp2": {
+		"lines": [
+			"[b]Heldenfähigkeit[/b]",
+			"+2 Angriff in",
+			"diesem Zug."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_003": {
+		"lines": [
+			"Vernichtet einen",
+			"Dämon. Stellt bei",
+			"Eurem Helden 5",
+			"Leben wieder her."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_004": {
+		"lines": [
+			"Lasst alle Diener auf",
+			"die Hand ihrer Besitzer",
+			"zurückkehren."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_005": {
+		"lines": [
+			"[b]Combo:[/b] Lasst einen",
+			"Diener auf die Hand",
+			"seines Besitzers",
+			"zurückkehren."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_007": {
+		"lines": [
+			"[b]Wählt aus:[/b] Fügt einem",
+			"Diener 5 Schaden zu; oder",
+			"fügt allen feindlichen",
+			"Dienern 2 Schaden zu."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_007a": {
+		"lines": [
+			"Fügt allen feindlichen",
+			"Dienern 2 Schaden zu."
+		],
+		"name": 11,
+		"text": 9
+	},
+	"VAN_NEW1_007b": {
+		"lines": [
+			"Fügt einem",
+			"Diener",
+			"5 Schaden zu."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_008": {
+		"lines": [
+			"[b]Wählt aus:[/b] Zieht",
+			"2 Karten; oder",
+			"stellt 5 Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_008a": {
+		"lines": [
+			"Zieht 2 Karten."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_008b": {
+		"lines": [
+			"Stellt 5",
+			"Leben",
+			"wieder her."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_009": {
+		"lines": [
+			"Stellt am Ende Eures Zuges",
+			"bei allen befreundeten",
+			"Dienern 1 Leben wieder her."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_010": {
+		"lines": [
+			"[b]Ansturm[/b],",
+			"[b]Gottesschild[/b], [b]Spott[/b],",
+			"[b]Windzorn[/b]"
+		],
+		"name": 11,
+		"text": 10
+	},
+	"VAN_NEW1_011": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 9,
+		"text": 11
+	},
+	"VAN_NEW1_012": {
+		"lines": [
+			"Erhält jedes Mal +1",
+			"Angriff, wenn Ihr einen",
+			"Zauber wirkt."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_014": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht",
+			"einem befreundeten",
+			"Diener [b]Verstohlenheit[/b]."
+		],
+		"name": 10,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_016": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Zieht",
+			"einen Piraten aus",
+			"Eurem Deck."
+		],
+		"name": 11,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_NEW1_017": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Vernichtet einen",
+			"Murloc und",
+			"erhält +2/+2."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_018": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Erhält",
+			"Angriff entsprechend",
+			"dem Angriff Eurer Waffe."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_019": {
+		"lines": [
+			"Fügt einem zufälligen",
+			"Feind 1 Schaden zu,",
+			"nachdem Ihr einen Diener",
+			"herbeigerufen habt."
+		],
+		"name": 12,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_NEW1_020": {
+		"lines": [
+			"Fügt ALLEN Dienern",
+			"1 Schaden zu, nachdem",
+			"Ihr einen Zauber",
+			"gewirkt habt."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_021": {
+		"lines": [
+			"Vernichtet zu",
+			"Beginn Eures Zuges",
+			"ALLE Diener."
+		],
+		"name": 10,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_NEW1_022": {
+		"lines": [
+			"[b]Spott[/b]. Kostet (1) weniger",
+			"für jeden Angriffspunkt",
+			"Eurer Waffe."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_023": {
+		"lines": [
+			"[b]Flüchtig[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_024": {
+		"lines": [
+			"[b]Kampfschrei:[/b]",
+			"Verleiht Eurer",
+			"Waffe +1/+1."
+		],
+		"name": 12,
+		"text": 10
+	},
+	"VAN_NEW1_025": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Zieht",
+			"1 Haltbarkeit von",
+			"der Waffe Eures",
+			"Gegners ab."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_026": {
+		"lines": [
+			"Ruft jedes Mal einen",
+			"Violetten Lehrling (1/1)",
+			"herbei, wenn Ihr einen",
+			"Zauber wirkt."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_026t": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_027": {
+		"lines": [
+			"Eure anderen",
+			"Piraten haben",
+			"+1/+1."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_029": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Im nächsten",
+			"Zug kosten Zauber für",
+			"Euren Gegner (0) Mana."
+		],
+		"name": 11,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_030": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Vernichtet",
+			"alle anderen Diener und",
+			"werft Eure Hand ab."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_NEW1_031": {
+		"lines": [
+			"Ruft einen zufälligen",
+			"Wildtierbegleiter herbei."
+		],
+		"name": 12,
+		"text": 9
+	},
+	"VAN_NEW1_032": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_033": {
+		"lines": [
+			"Eure anderen",
+			"Diener haben",
+			"+1 Angriff."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_034": {
+		"lines": [
+			"[b]Ansturm[/b]"
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_NEW1_036": {
+		"lines": [
+			"Das Leben Eurer",
+			"Diener kann in diesem",
+			"Zug nicht unter 1",
+			"fallen. Zieht eine Karte."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_037": {
+		"lines": [
+			"Verleiht am Ende Eures",
+			"Zuges einem anderen",
+			"zufälligen",
+			"befreundeten",
+			"Diener +1 Angriff."
+		],
+		"name": 10,
+		"text": 7
+	},
+	"VAN_NEW1_038": {
+		"lines": [
+			"Erhält am Ende",
+			"jedes Zuges +1/+1."
+		],
+		"name": 12,
+		"text": 11,
+		"valign": "top"
+	},
+	"VAN_NEW1_040": {
+		"lines": [
+			"Ruft am Ende",
+			"Eures Zuges einen",
+			"Gnoll (2/2) mit",
+			"[b]Spott[/b] herbei."
+		],
+		"name": 12,
+		"text": 8
+	},
+	"VAN_NEW1_041": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Vernichtet",
+			"einen zufälligen",
+			"feindlichen Diener mit",
+			"max. 2 Angriff."
+		],
+		"name": 12,
+		"text": 8,
+		"valign": "top"
+	},
+	"VAN_PRO_001": {
+		"lines": [
+			"[b]Kampfschrei:[/b] Verleiht beiden",
+			"Spielern die Macht des ROCK!",
+			"(durch eine Powerakkordkarte)"
+		],
+		"name": 10,
+		"text": 7,
+		"valign": "top"
+	},
+	"VAN_PRO_001c": {
+		"lines": [
+			"Ruft einen",
+			"zufälligen Krieger",
+			"der Horde herbei."
+		],
+		"name": 12,
+		"text": 11
+	},
+	"VAN_TU4e_002t": {
+		"name": 11,
+		"text": 11
+	},
+	"VAN_skele11": {
+		"name": 12,
+		"text": 11
+	},
+	"VAN_skele21": {
+		"name": 11,
+		"text": 11
+	},
+	"VAN_tt_004": {
+		"lines": [
+			"Erhält jedes Mal +1",
+			"Angriff, wenn ein",
+			"Diener stirbt."
+		],
+		"name": 10,
+		"text": 10,
+		"valign": "top"
+	},
+	"VAN_tt_010": {
+		"lines": [
+			"[b]Geheimnis:[/b] Wenn Euer",
+			"Gegner einen Zauber auf einen",
+			"Diener wirkt, ruft",
+			"Ihr einen Diener",
+			"(1/3) als neues Ziel herbei."
+		],
+		"name": 12,
+		"text": 7
+	},
+	"VAN_tt_010a": {
+		"name": 12,
+		"text": 11
+	},
+	"ds1_whelptoken": {
+		"name": 12,
+		"text": 11
+	},
+	"hexfrog": {
+		"lines": [
+			"[b]Spott[/b]"
+		],
+		"name": 12,
+		"text": 11
+	}
+}
