@@ -1,7 +1,7 @@
 class_name DeckTracker
 extends RefCounted
-## Deck tracker data: the starting deck, the cards left with the chance to draw
-## each one next, and what the opponent played (public information only).
+## Deck tracker data: the starting deck with the cards left and the chance to
+## draw each one next, and what the opponent played (public information only).
 
 
 static func _counts(ids: Array) -> Array:
@@ -14,8 +14,10 @@ static func _deck_ids(g: Game, p: int) -> Array:
 	return g.players[p].deck.map(func(e): return e.card_id)
 
 
-## [{card, total, left}] for the starting deck (cards put into the deck later count too).
+## [{card, total, left, chance}] for the starting deck (cards put into the deck
+## later count too); chance = copies left / cards in the deck (the next draw).
 static func deck_view(g: Game, p: int) -> Array:
+	var n: int = g.players[p].deck.size()
 	var left := {}
 	for r in _counts(_deck_ids(g, p)):
 		left[r[0]] = r[1]
@@ -27,14 +29,9 @@ static func deck_view(g: Game, p: int) -> Array:
 			continue
 		seen[r[0]] = true
 		var total: int = start.count(r[0])
-		out.append({"card": r[0], "total": maxi(total, left.get(r[0], 0)), "left": left.get(r[0], 0)})
+		var l: int = left.get(r[0], 0)
+		out.append({"card": r[0], "total": maxi(total, l), "left": l, "chance": float(l) / n if n > 0 else 0.0})
 	return out
-
-
-## [{card, count, chance}]: chance = copies / cards in the deck (the next draw).
-static func remaining(g: Game, p: int) -> Array:
-	var n: int = g.players[p].deck.size()
-	return _counts(_deck_ids(g, p)).map(func(r): return {"card": r[0], "count": r[1], "chance": float(r[1]) / n})
 
 
 ## Card ids the opponent of viewer played, in order; "" = a Secret not revealed yet.
@@ -45,4 +42,20 @@ static func opponent_played(g: Game, viewer: int) -> Array:
 			if ev.type == "play" and ev.get("player", -1) == 1 - viewer:
 				var e := g.ent(ev.entity)
 				out.append("" if ev.get("secret", false) and e and e.zone == "SECRET" else ev.card)
+	return out
+
+
+## [{card, count}] the opponent played, in the order first played; each hidden
+## Secret ("") is a row of its own.
+static func opponent_counts(g: Game, viewer: int) -> Array:
+	var out := []
+	var rows := {}
+	for c in opponent_played(g, viewer):
+		if rows.has(c):
+			rows[c].count += 1
+			continue
+		var r := {"card": c, "count": 1}
+		out.append(r)
+		if c != "":
+			rows[c] = r
 	return out
