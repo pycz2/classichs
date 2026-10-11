@@ -28,14 +28,20 @@ static func make(ent: Entity, game: GameState) -> MinionView:
 
 
 func sync() -> void:
+	var b := s
 	s = e.copy()
+	if b:
+		if b.atk() != s.atk():
+			pop("atk")
+		if b.health() != s.health():
+			pop("hp")
 	_current = g.current
 	queue_redraw()
 
 
 func _animated() -> bool:
 	var h := Cards.of(s.card_id)
-	return s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
+	return s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
 		or (not s.silenced and (h.has("on") or h.has("aura")))
 
 
@@ -44,6 +50,7 @@ func _sleeping() -> bool:
 
 
 func _process(delta: float) -> void:
+	super(delta)
 	if s and _animated():
 		_t += delta
 		queue_redraw()
@@ -56,10 +63,10 @@ func _draw() -> void:
 	var center := OVAL.get_center()
 	if glow.a > 0.0:
 		draw_colored_polygon(Art.outline("oval", OVAL.grow(6)), Color(glow, 0.9))
-	if s.has("TAUNT"):  # a stone shield behind the portrait
-		var s := PackedVector2Array([Vector2(6, 10), Vector2(90, 10), Vector2(88, 64), Vector2(48, 112), Vector2(8, 64)])
-		draw_colored_polygon(s, Color("7d7f7d"))
-		Frames.ring(self, s, Color("3b3d3b"), 3)
+	if s.has("TAUNT"):  # a stone shield hugging the portrait, pointed at the bottom
+		var shield := taunt_shield()
+		draw_colored_polygon(shield, Color("7d7f7d"))
+		Frames.ring(self, shield, Color("3b3d3b"), 3)
 	draw_colored_polygon(Art.outline("oval", OVAL.grow(3)), Color("2a2118"))
 	Art.paint_in(self, OVAL, s.card_id, "oval")
 	if s.silenced:
@@ -78,6 +85,14 @@ func _draw() -> void:
 	Frames.ring(self, oval, edge, 3)
 	if c.get("rarity", "") == "LEGENDARY":
 		Frames.crest(self, Vector2(48, 9), 84)  # on top of the oval, above the portrait
+	if s.has("IMMUNE"):  # a white light around it with sparks turning (not the golden bubble)
+		var halo := Art.outline("oval", OVAL.grow(9))
+		draw_colored_polygon(halo, Color(1, 1, 1, 0.16 + 0.08 * sin(_t * 5)))
+		Frames.ring(self, halo, Color(1, 1, 1, 0.85), 2.5)
+		for i in 4:
+			var a := -_t * 2.0 + i * TAU / 4.0
+			var p := center + Vector2(cos(a) * 44, sin(a) * 54)
+			draw_colored_polygon(PackedVector2Array([p + Vector2(0, -6), p + Vector2(1.5, -1.5), p + Vector2(6, 0), p + Vector2(1.5, 1.5), p + Vector2(0, 6), p + Vector2(-1.5, 1.5), p + Vector2(-6, 0), p + Vector2(-1.5, -1.5)]), Color(1, 1, 0.92))
 	if s.has("DIVINE_SHIELD"):  # a shimmering golden bubble
 		draw_colored_polygon(Art.outline("oval", OVAL.grow(5)), Color(1, 0.86, 0.3, 0.18))
 		Frames.ring(self, Art.outline("oval", OVAL.grow(5)), Color(1, 0.9, 0.4, 0.75 + 0.25 * sin(_t * 4)), 3)
@@ -116,13 +131,29 @@ func _draw() -> void:
 			draw_string(font, p, "z", HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(1, 1, 1, 1.0 - ph))
 	var base_atk := int(c.get("attack", 0))
 	var base_hp := int(c.get("health", 0))
-	Frames.attack(self, Vector2(16, 98), s.atk(), 15, Frames.BUFFED if s.atk() > base_atk else Color.WHITE)
+	Frames.attack(self, Vector2(16, 98), s.atk(), 15 * bump("atk"), Frames.BUFFED if s.atk() > base_atk else Color.WHITE)
 	var hp_color := Color.WHITE
 	if s.damage > 0:
 		hp_color = Frames.DAMAGED
 	elif s.max_health() > base_hp:
 		hp_color = Frames.BUFFED
-	Frames.health(self, Vector2(80, 98), s.health(), 15, hp_color)
+	Frames.health(self, Vector2(80, 98), s.health(), 15 * bump("hp"), hp_color)
+
+
+## The Taunt shield: the oval grown a little, its top flattened and its lower
+## half drawn in to a point under the portrait.
+static func taunt_shield() -> PackedVector2Array:
+	var c := OVAL.get_center()
+	var out := PackedVector2Array()
+	for p in Art.outline("oval", OVAL.grow(7)):
+		var q := p
+		q.y = maxf(q.y, OVAL.position.y - 3)  # a flat top
+		if q.y > c.y:  # below the middle: narrower and longer, to a point
+			var t := (q.y - c.y) / (OVAL.size.y / 2.0 + 7)
+			q.x = c.x + (q.x - c.x) * (1.0 - 0.3 * t * t)
+			q.y += 9 * t * t * (1.0 - absf(q.x - c.x) / (OVAL.size.x / 2.0 + 7))
+		out.append(q)
+	return out
 
 
 ## Small status marks under the portrait (vector: the font has no symbol glyphs).

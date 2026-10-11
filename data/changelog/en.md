@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-11
+
+### Added
+- Effects on the table: spells, Battlecries, Deathrattles and start and end of turn effects send bolts from their source to each target. At the hit every minion and hero shows what happened to it: a burst for damage, sparkles for healing, arrows for a buff or a debuff, a flash for a new keyword, ice, a Silence ring, transform smoke, a summon portal, a Deathrattle skull, a Battlecry flare, a swirl when control changes, a shield for armor.
+- Changed numbers on cards grow for a moment with their gem.
+- A card's race (Beast, Demon, Dragon, Murloc, Mech, Totem, Pirate, Undead) on a plate at the bottom of the card.
+- An Immune minion glows white with sparks turning around it.
+
+### Changed
+- The Taunt shield follows the outline of the minion's portrait.
+- "Your Turn" shows after the end of turn effects.
+
 ## [0.11.0] - 2026-10-11
 
 ### Added

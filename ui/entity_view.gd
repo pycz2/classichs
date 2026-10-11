@@ -8,6 +8,7 @@ signal right_clicked(view: EntityView)
 
 var entity_id := -1
 var glow := Color.TRANSPARENT
+var _pops := {}  # a number that just changed ("atk", "hp", "armor", "cost") -> 1.0 down to 0.0
 
 
 func _init() -> void:
@@ -50,3 +51,26 @@ func _draw_stat(center: Vector2, value: int, color: Color, text_color := Color.W
 ## Card art (procedural, see Art).
 func _draw_art(rect: Rect2, card_id: String) -> void:
 	Art.paint(self, rect, card_id)
+
+
+## A number that changed grows for a moment, with its gem, and settles back.
+func pop(stat: String) -> void:
+	if Anim.d(0.5) > 0.0:
+		_pops[stat] = 1.0
+		queue_redraw()
+
+
+## How big a number draws now (1.0 when it is not popping).
+func bump(stat: String) -> float:
+	var p: float = _pops.get(stat, 0.0)
+	return 1.0 + 0.55 * sin(PI * (1.0 - p)) if p > 0.0 else 1.0
+
+
+func _process(delta: float) -> void:
+	if _pops.is_empty():
+		return
+	for k in _pops.keys():
+		_pops[k] -= delta / maxf(0.01, Anim.d(0.5))
+		if _pops[k] <= 0.0:
+			_pops.erase(k)
+	queue_redraw()

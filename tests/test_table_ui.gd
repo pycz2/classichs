@@ -247,3 +247,39 @@ func test_board_views_show_the_state_of_the_last_refresh() -> void:
 	eq((v._views[yeti.id] as MinionView).s.has("DIVINE_SHIELD"), true, "minion: shield after refresh")
 	eq((v._views[hero.id] as HeroView).s.health(), 25, "hero: new health after refresh")
 	v.free()
+
+
+func test_table_effects_follow_what_changed() -> void:
+	var g := H.scene({"hero": "HERO_08", "board": ["VAN_CS2_182"]})
+	var yeti := g.players[0].board[0]
+	var before := yeti.copy()
+	yeti.damage = 2
+	eq(TableFx.kinds(before, yeti), ["hurt"], "damage")
+	before = yeti.copy()
+	yeti.damage = 0
+	eq(TableFx.kinds(before, yeti), ["heal"], "healing")
+	before = yeti.copy()
+	yeti.add_enchant({"atk": 1, "hp": 1})
+	yeti.give_tag("TAUNT")
+	eq(TableFx.kinds(before, yeti), ["buff", "gain"], "buff and a keyword")
+	before = yeti.copy()
+	yeti.give_tag("FROZEN")
+	eq(TableFx.kinds(before, yeti), ["freeze"], "frozen")
+	before = yeti.copy()
+	yeti.silence()
+	eq(TableFx.kinds(before, yeti), ["silence"], "silence (losing the buff is not a debuff)")
+	before = yeti.copy()
+	yeti.add_enchant({"set_atk": 1})
+	eq(TableFx.kinds(before, yeti), ["debuff"], "attack set lower")
+
+
+func test_changed_numbers_pop() -> void:
+	var v := _view({"hero": "HERO_08", "board": ["VAN_CS2_182"]})
+	var yeti := v.g.players[0].board[0]
+	var mv := v._views[yeti.id] as MinionView
+	Anim.instant = false
+	yeti.damage = 2
+	mv.sync()
+	check(mv._pops.has("hp") and not mv._pops.has("atk"), "health pops, attack stays")
+	Anim.instant = true
+	v.free()

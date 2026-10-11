@@ -125,3 +125,20 @@ func test_type_broken_scenarios_rejected() -> void:
 	]:
 		var r := Scenario.build(bad)
 		check(r.game == null and r.error != "", "rejected: %s" % str(bad))
+
+
+func test_events_know_the_card_that_caused_them() -> void:
+	var g := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029", "VAN_CS2_189"], "board": ["VAN_EX1_029"]}, {"hero": "HERO_01", "board": ["VAN_CS2_182", "VAN_CS2_120"]})
+	var yeti := g.players[1].board[0]
+	var r := g.apply({"type": "play", "player": 0, "entity": g.players[0].hand[0].id, "target": yeti.id, "pos": -1, "choice": -1})
+	var dmg: Array = r.events.filter(func(e): return e.type == "damage")
+	eq(dmg[0].get("by"), "VAN_CS2_029", "the spell's damage")
+	var archer := g.players[0].hand[0]
+	r = g.apply({"type": "play", "player": 0, "entity": archer.id, "target": g.players[1].hero.id, "pos": 1, "choice": -1})
+	dmg = r.events.filter(func(e): return e.type == "damage")
+	eq([dmg[0].get("by"), dmg[0].get("by_id")], ["VAN_CS2_189", archer.id], "the battlecry's damage")
+	var gnome := g.players[0].board[0]
+	r = H.attack(g, gnome, g.players[1].board[0])  # the river croc kills the gnome
+	dmg = r.events.filter(func(e): return e.type == "damage" and e.get("by", "") == "VAN_EX1_029")
+	eq(dmg.size(), 1, "the deathrattle's damage")
+	eq(r.events.filter(func(e): return e.type == "damage" and e.get("source") == gnome.id and not e.has("by")).size(), 1, "the attack itself has no source card")

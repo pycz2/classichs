@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-11
+
+### Dodano
+- Efekty na stole: zaklęcia, okrzyki bojowe, ostatnie tchnienia i efekty początku oraz końca tury wysyłają pociski ze źródła do każdego celu. W chwili trafienia każdy stronnik i bohater pokazuje, co się stało: wybuch przy obrażeniach, iskry przy leczeniu, strzałki przy wzmocnieniu i osłabieniu, błysk nowego słowa kluczowego, lód, pierścień wyciszenia, dym przemiany, portal przyzwania, czaszkę ostatniego tchnienia, rozbłysk okrzyku bojowego, wir przejęcia kontroli, tarczę pancerza.
+- Zmienione liczby na kartach na chwilę rosną razem ze swoim kamieniem.
+- Rasa karty (Bestia, Demon, Smok, Murlok, Mech, Totem, Pirat, Nieumarły) na tabliczce na dole karty.
+- Niewrażliwy stronnik świeci na biało, wokół niego krążą iskry.
+
+### Zmieniono
+- Tarcza prowokacji biegnie wzdłuż konturu portretu.
+- „Twoja tura” pojawia się po efektach końca tury.
+
 ## [0.11.0] - 2026-10-11
 
 ### Dodano

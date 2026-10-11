@@ -44,3 +44,14 @@ func test_plural_forms_follow_their_number() -> void:
 	eq(CardText.text("VAN_CS2_012", "frFR"), "Inflige 4 points de dégâts à un adversaire et 1 point de dégâts à tous les autres adversaires.", "Swipe: 1 point")
 	check(CardText.rich("VAN_CS2_061", "frFR").contains("Rend 2 points de vie"), CardText.rich("VAN_CS2_061", "frFR"))
 	check(CardText.text("VAN_CS2_061", "frFR", 1).contains("*3* points"), "with spell damage: " + CardText.text("VAN_CS2_061", "frFR", 1))
+
+
+func test_races_have_names_in_every_language() -> void:
+	eq(CardText.race("VAN_CS2_172", "enUS"), "Beast", "Bloodfen Raptor")
+	eq(CardText.race("VAN_CS2_172", "ruRU"), "Зверь", "Russian")
+	eq(CardText.race("VAN_CS2_182", "enUS"), "", "no race")
+	for c in CardDb.all_ids():
+		var r: String = CardDb.card(c).get("race", "")
+		if r != "":
+			for lang in CardLayout.LANGS:
+				check(CardText.race(c, CardText.hs_locale(lang)) != "", "%s %s %s" % [c, r, lang])

@@ -152,6 +152,9 @@ func hooks_of(e: Entity) -> Dictionary:
 # --- events and resolution --------------------------------------------------
 
 func log_event(ev: Dictionary) -> void:
+	if source_card != "" and not ev.has("by"):  # the card whose effect did it (for the table's effects)
+		ev["by"] = source_card
+		ev["by_id"] = source_id
 	event_log.append(ev)
 
 
@@ -246,14 +249,18 @@ func _death_phase() -> bool:
 
 ## The card whose effect is running now (buffs and auras remember it; display only).
 var source_card := ""
+var source_id := -1
 
 
 ## Runs f with source_card set to the card of e, then restores it.
 func _from(e: Entity, f: Callable) -> void:
 	var was := source_card
+	var was_id := source_id
 	source_card = e.card_id if e else ""
+	source_id = e.id if e else -1
 	f.call()
 	source_card = was
+	source_id = was_id
 
 
 func update_auras() -> void:

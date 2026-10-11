@@ -1206,6 +1206,7 @@ func _play_queue() -> void:
 func _animate(events: Array) -> void:
 	var me := viewer()
 	var hit := {"done": false}
+	var your_turn := false
 	var land := func() -> void:
 		if hit.done:
 			return
@@ -1224,10 +1225,106 @@ func _animate(events: Array) -> void:
 			"secret_revealed":
 				await _reveal(ev.card)
 			"turn_start":
-				if ev.get("player", -1) == me and ev.has("turn"):
-					_banner(tr("Your Turn"))
+				your_turn = your_turn or (ev.get("player", -1) == me and ev.has("turn"))
+	if not hit.done:
+		await _travel(events)  # end of turn effects first, then the new turn
 	land.call()
+	if your_turn:
+		_banner(tr("Your Turn"))
 	await _wait(0.32)
+
+
+## Before a change that nothing hit: the effects fly from their source (a spell,
+## a Battlecry, a minion's trigger at the end or start of a turn) to each target.
+func _travel(events: Array) -> void:
+	var seen := {}
+	for ev in events:
+		var src: int = ev.get("by_id", -1)
+		var t := _event_target(ev)
+		if src < 0 or t < 0 or t == src or not _views.has(t) or seen.has([src, t]):
+			continue
+		seen[[src, t]] = true
+		var from := _center_of(src) if _views.has(src) else Vector2(640, 330)
+		_shoot(from, _center_of(t), _fx_color(ev))
+	if not seen.is_empty():
+		await _wait(0.34)
+
+
+## The entity an event happens to (-1 for none).
+static func _event_target(ev: Dictionary) -> int:
+	match ev.type:
+		"damage", "heal", "buff", "freeze", "silence", "destroy", "take_control", "divine_shield_lost":
+			return ev.get("target", -1)
+		"transform":
+			return ev.get("from", -1)
+		"return_to_hand":
+			return ev.get("entity", -1)
+	return -1
+
+
+## The colour of an effect: the element of the spell, else the kind of change.
+func _fx_color(ev: Dictionary) -> Color:
+	var by: String = ev.get("by", "")
+	if by != "" and Art.design(by).kind == "spell":
+		return _element_color(by)
+	var kind: String = {"damage": "hurt", "heal": "heal", "buff": "buff", "freeze": "freeze", "silence": "silence",
+		"destroy": "destroy", "transform": "smoke", "return_to_hand": "whoosh", "take_control": "control"}.get(ev.type, "hurt")
+	return TableFx.COLORS[kind]
+
+
+## A bolt that flies without being waited for.
+func _shoot(a: Vector2, b: Vector2, col: Color) -> void:
+	var orb := _Orb.new()
+	orb.color = col
+	orb.position = a
+	orb.scale = Vector2(0.7, 0.7)
+	_fx.add_child(orb)
+	var tw := orb.create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.tween_property(orb, "position", b, Anim.d(0.32))
+	tw.tween_callback(orb.burst)
+
+
+## At the change: an effect on every minion and hero by what happened to it, and
+## for the things that leave or arrive (deaths with a Deathrattle, transforms,
+## summons, Battlecries, bounces).
+func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
+	var col_of := {}
+	for ev in events:
+		var t := _event_target(ev)
+		if t >= 0 and ev.has("by"):
+			col_of[t] = _fx_color(ev)
+	for id in before:
+		var now := g.ent(id)
+		if now == null or now.zone != "PLAY" or not _views.has(id):
+			continue
+		for k in TableFx.kinds(before[id], now):
+			TableFx.spawn(_fx, k, _center_of(id), col_of.get(id, Color.TRANSPARENT) if k == "hurt" else Color.TRANSPARENT)
+	var played := -1
+	for ev in events:
+		match ev.type:
+			"play":
+				played = ev.entity
+			"death":
+				var b: Entity = before.get(ev.entity)
+				if old.has(ev.entity) and Cards.of(ev.card).has("deathrattle") and not (b and b.silenced):
+					TableFx.spawn(_fx, "skull", old[ev.entity])
+			"destroy":
+				if old.has(ev.target):
+					TableFx.spawn(_fx, "destroy", old[ev.target])
+			"transform":
+				if old.has(ev.from):
+					TableFx.spawn(_fx, "smoke", old[ev.from])
+			"return_to_hand":
+				if old.has(ev.entity):
+					TableFx.spawn(_fx, "whoosh", old[ev.entity])
+			"take_control":
+				if _views.has(ev.target):
+					TableFx.spawn(_fx, "control", _center_of(ev.target))
+			"summon":
+				if ev.has("by") and _views.has(ev.entity):
+					TableFx.spawn(_fx, "portal", _center_of(ev.entity))
+	if played >= 0 and _views.has(played) and events.any(func(e): return e.get("by_id", -1) == played and e.type != "play"):
+		TableFx.spawn(_fx, "battlecry", _center_of(played))
 
 
 func _wait(t: float) -> void:
@@ -1388,8 +1485,11 @@ class _Orb:
 
 func _effects_now(events: Array) -> void:
 	var old := {}
+	var before := {}  # what the minion and hero views showed before the change
 	for id in _views:
 		old[id] = _views[id].position + _views[id].size / 2.0
+		if _views[id] is MinionView or _views[id] is HeroView:
+			before[id] = _views[id].s
 	for ev in events:  # the new card takes the old one's place instead of dying and arriving
 		var pair: Array = {"return_to_hand": [ev.get("entity", -1), ev.get("new", -1)], "transform": [ev.get("from", -1), ev.get("to", -1)]}.get(ev.type, [])
 		if not pair.is_empty() and _views.has(pair[0]):
@@ -1398,6 +1498,8 @@ func _effects_now(events: Array) -> void:
 	refresh()
 	_moved.clear()
 	_quiet.clear()
+	if is_inside_tree() and not Anim.instant:
+		_impact_fx(events, before, old)
 	var big := false
 	var heard := {}
 	for ev in events:

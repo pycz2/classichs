@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-11
+
+### Adicionado
+- Efeitos na mesa: feitiços, gritos de guerra, últimos suspiros e efeitos de início e fim de turno lançam projéteis da origem para cada alvo. No impacto, cada lacaio e herói mostra o que aconteceu: uma explosão para dano, faíscas para cura, setas para bônus ou penalidade, um brilho para uma nova palavra-chave, gelo, um anel de silêncio, fumaça de transformação, um portal de evocação, uma caveira de último suspiro, um clarão de grito de guerra, um redemoinho ao mudar de controle, um escudo de armadura.
+- Os números que mudam nas cartas crescem por um instante com sua gema.
+- A raça da carta (Fera, Demônio, Dragão, Murloc, Mecanoide, Totem, Pirata, Morto-vivo) numa placa na parte de baixo da carta.
+- Um lacaio imune brilha em branco com faíscas girando ao redor.
+
+### Alterado
+- O escudo de Provocar segue o contorno do retrato.
+- "Seu turno" aparece depois dos efeitos de fim de turno.
+
 ## [0.11.0] - 2026-10-11
 
 ### Adicionado
