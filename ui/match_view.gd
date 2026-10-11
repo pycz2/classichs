@@ -59,6 +59,10 @@ var _enemy_menu: PanelContainer
 var _hover_hand := -1
 var _laid_out := false
 var _gap := -1
+## A press on a view that may become a drag: {id, at}.
+var _press := {}
+var _dragging := false
+var _arrow := TargetArrow.new()
 var _names: Array[Label] = []
 var _hint: Label
 var _hint_timer := 0.0
@@ -129,6 +133,7 @@ func _ready() -> void:
 		add_child(pile)
 	_build_menu()
 	_build_emote_wheel()
+	add_child(_arrow)
 	_hint = Palette.label("", 20, Palette.SELECTED)
 	_hint.position = Vector2(170, 306)
 	_hint.size = Vector2(940, 30)
@@ -252,12 +257,173 @@ func _leave() -> void:
 
 func _process(delta: float) -> void:
 	tick(delta)
-	_track_hand_hover()
+	if not _dragging:
+		_track_hand_hover()
+		_aim_click_mode()
 	if _hint_timer > 0.0:
 		_hint_timer -= delta
 		if _hint_timer <= 0.0:
 			_hint.text = ""
 			_try_tutorial_hint()
+
+
+# --- drag and drop ------------------------------------------------------------------
+
+func _on_press(v: EntityView) -> void:
+	if not my_action() or _overlay != null:
+		return
+	if _sel.get("stage", "") in ["target", "position"]:
+		click_entity(v.entity_id)  # finishing a click-mode choice
+		return
+	_press = {"id": v.entity_id, "at": get_local_mouse_position()}
+
+
+func _input(ev: InputEvent) -> void:
+	if _press.is_empty() or controller == null:
+		return
+	if ev is InputEventMouseMotion:
+		var m := get_local_mouse_position()
+		if not _dragging and m.distance_to(_press.at) > 12.0:
+			_start_drag()
+		if _dragging:
+			_drag_to(m)
+	elif ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT and not ev.pressed:
+		var id: int = _press.id
+		var was := _dragging
+		_press = {}
+		_dragging = false
+		_arrow.visible = false
+		if was:
+			_drop_at(get_local_mouse_position(), id)
+		else:
+			click_entity(id)
+
+
+func _start_drag() -> void:
+	var id: int = _press.id
+	var acts := _actions_for(id)
+	if acts.is_empty():
+		_press = {}
+		click_entity(id)  # shows why it can't be played or attack
+		return
+	_dragging = true
+	_sel = {"id": id, "actions": acts, "dragging": true}
+	_apply_glows()
+	if not _targets(acts).is_empty():
+		for t in _targets(acts):
+			if _views.has(t):
+				_views[t].set_glow(Palette.TARGET)
+
+
+func _actions_for(id: int) -> Array:
+	return _legal().filter(func(a):
+		match a.type:
+			"play": return a.entity == id
+			"attack": return a.attacker == id
+			"hero_power": return id == g.players[viewer()].hero_power.id
+		return false)
+
+
+func _view_at(m: Vector2) -> EntityView:
+	for id in _views:
+		var v: EntityView = _views[id]
+		if v.get_meta("kind") != "hand" and Rect2(v.position, v.size * v.scale).has_point(m):
+			return v
+	return null
+
+
+func _drag_to(m: Vector2) -> void:
+	var id: int = _sel.id
+	var v: EntityView = _views.get(id)
+	var e := g.ent(id)
+	var targets := _targets(_sel.actions)
+	var over := _view_at(m)
+	var hot := over != null and targets.has(over.entity_id)
+	if e.zone == "HAND":
+		var is_minion := e.is_minion()
+		var aiming := not is_minion and not targets.is_empty() and m.y < TableLayout.HAND_Y - 40
+		if v:
+			v.z_index = 50
+			v.rotation = 0.0
+			v.scale = Vector2(0.9, 0.9)
+			v.position = m - v.pivot_offset + Vector2(0, CardView.SIZE.y * 0.45)
+			v.modulate.a = 0.25 if aiming else 1.0
+		if aiming:
+			_arrow.aim(OWN_HERO + HeroView.SIZE / 2.0, m, hot)
+		else:
+			_arrow.visible = false
+		var gap := -1
+		if is_minion and m.y > OWN_BOARD_Y - 40 and m.y < OWN_BOARD_Y + 150 and g.players[viewer()].board.size() < 7:
+			gap = TableLayout.board_index(m.x, g.players[viewer()].board.size())
+		if gap != _gap:
+			_gap = gap
+			refresh()
+	else:
+		var src: EntityView = _views.get(id)
+		if src:
+			_arrow.aim(src.position + src.size * src.scale / 2.0, m, hot)
+
+
+func _drop_at(m: Vector2, id: int) -> void:
+	var gap := _gap
+	_gap = -1
+	var e := g.ent(id)
+	var v: EntityView = _views.get(id)
+	if v:
+		v.modulate.a = 1.0
+	if _sel.is_empty():
+		refresh()
+		return
+	var over := _view_at(m)
+	var targets := _targets(_sel.actions)
+	if e.zone == "HAND":
+		if m.y > TableLayout.HAND_Y - 20:
+			cancel()  # back into the hand
+			return
+		var positions := []
+		for a in _sel.actions:
+			if a.get("pos", -1) >= 0 and not positions.has(a.pos):
+				positions.append(a.pos)
+		if positions.size() > 1:
+			var pos := gap if gap >= 0 else TableLayout.board_index(m.x, g.players[viewer()].board.size())
+			_sel.actions = _sel.actions.filter(func(a): return a.pos == pos)
+			_sel.pos = pos
+		if not e.is_minion() and over and targets.has(over.entity_id):
+			_sel.actions = _sel.actions.filter(func(a): return _target_of(a) == over.entity_id)
+			_sel.target = over.entity_id
+		_sel.erase("dragging")
+		_advance()
+	elif over and targets.has(over.entity_id):
+		_sel.actions = _sel.actions.filter(func(a): return _target_of(a) == over.entity_id)
+		_sel.target = over.entity_id
+		_advance()
+	elif targets.is_empty():
+		_advance()  # an untargeted hero power dragged out
+	else:
+		cancel()
+
+
+## In click mode the arrow follows the mouse from the chosen source; a minion
+## waiting for its place opens a gap under the mouse.
+func _aim_click_mode() -> void:
+	if controller == null:
+		return
+	var stage: String = _sel.get("stage", "")
+	var m := get_local_mouse_position()
+	if stage == "target" and _views.has(_sel.id):
+		var src: EntityView = _views[_sel.id]
+		var over := _view_at(m)
+		_arrow.aim(src.position + src.size * src.scale / 2.0, m, over != null and _targets(_sel.actions).has(over.entity_id))
+	elif _arrow.visible:
+		_arrow.visible = false
+	if stage == "position":
+		var gap := TableLayout.board_index(m.x, g.players[viewer()].board.size())
+		if gap != _gap:
+			_gap = gap
+			refresh()
+	elif _gap >= 0 and not _dragging:
+		_gap = -1
+		refresh()
 
 
 ## The hand card under the mouse rises (by slot, so a rising card never loses the hover).
@@ -545,7 +711,7 @@ func _make_view(e: Entity, spec: Dictionary) -> EntityView:
 			cv.pivot_offset = Vector2(CardView.SIZE.x / 2.0, CardView.SIZE.y)
 			v = cv
 	v.set_meta("kind", spec.kind)
-	v.clicked.connect(func(view): click_entity(view.entity_id))
+	v.clicked.connect(_on_press)
 	v.right_clicked.connect(_on_right_click)
 	v.hovered.connect(_on_hover)
 	return v
@@ -600,6 +766,8 @@ func _reconcile(want: Dictionary) -> void:
 		var pos: Vector2 = spec.pos
 		if spec.kind == "hand":  # fan cards turn around their bottom centre
 			pos = spec.pos + Vector2(CardView.SIZE.x * sc / 2.0, CardView.SIZE.y * sc) - v.pivot_offset
+		if _dragging and id == _press.get("id", -1) and spec.kind == "hand":
+			continue  # the dragged card follows the mouse
 		_glide(v, pos, sc, spec.get("rot", 0.0))
 
 
