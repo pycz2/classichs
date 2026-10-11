@@ -167,10 +167,10 @@ def write_page(lines, all_cards, cfg, overrides, scores):
 <style>body{{font:14px system-ui;margin:16px;background:#fff;color:#222}}table{{border-collapse:collapse}}
 td,th{{border-bottom:1px solid #ddd;padding:4px 8px;text-align:left;vertical-align:middle}}img{{height:64px}}
 @media (prefers-color-scheme:dark){{body{{background:#1b1b1b;color:#ddd}}td,th{{border-color:#444}}}}</style>
-<h1>Voice lines ({len(rows)} clips)</h1><table><tr><th></th><th>Card</th><th>Kind</th><th>Voice</th><th>Style</th>
+<h1>Voice lines ({len(rows)} clips)</h1><div style="overflow-x:auto"><table><tr><th></th><th>Card</th><th>Kind</th><th>Voice</th><th>Style</th>
 <th>Effects</th><th>Lang</th><th>Text</th><th title="how well Whisper understood the raw take (1 = word for word)">ASR</th><th>Listen</th></tr>
 {chr(10).join(rows)}
-</table>"""
+</table></div>"""
     with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
         f.write(page)
     log(f"page: {os.path.join(OUT, 'index.html')} ({len(rows)} clips)")
