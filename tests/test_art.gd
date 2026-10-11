@@ -64,32 +64,41 @@ func test_generated_illustrations_load_when_present() -> void:
 	eq(Art.outline("oval", Rect2(0, 0, 100, 50)).size(), 32, "oval outline")
 
 
-func test_art_set_setting_switches_pictures() -> void:
-	var dir := "user://test_art_original"
-	DirAccess.make_dir_recursive_absolute(dir)
-	var f := FileAccess.open(dir + "/HERO_08.jpg", FileAccess.WRITE)
-	f.store_buffer(FileAccess.get_file_as_bytes("res://art/cards/HERO_08.jpg"))
-	f.close()
-	var was: String = Art.DIRS.original
-	Art.DIRS.original = dir + "/%s.jpg"
+func test_art_sets_are_folders_and_switch_pictures() -> void:
+	var root := "user://test_art_root"
+	for d in ["cards", "original", "my_set"]:
+		DirAccess.make_dir_recursive_absolute(root + "/" + d)
+	var jpg := FileAccess.get_file_as_bytes("res://art/cards/HERO_08.jpg")
+	for path in ["/cards/HERO_01.jpg", "/original/HERO_08.jpg", "/my_set/HERO_09.jpg"]:
+		var f := FileAccess.open(root + path, FileAccess.WRITE)
+		f.store_buffer(jpg)
+		f.close()
+	var was := Art.root
+	Art.root = root
+	Art.reset()
+	eq(Art.sets(), ["generated", "original", "my_set"], "built-in sets first, then the player's folders")
 	Settings.data.art = "original"
 	Art.reset()
 	check(Art.texture("HERO_08") != null, "original picture used")
-	eq(Art.texture("HERO_01"), null, "no original: drawn placeholder")
+	eq(Art.texture("HERO_01"), null, "no picture in this set: drawn placeholder")
+	Settings.data.art = "my_set"
+	Art.reset()
+	check(Art.texture("HERO_09") != null, "the player's own set")
+	Settings.data.art = "no_such_set"
+	Art.reset()
+	check(Art.texture("HERO_01") != null, "an unknown set falls back to the generated pictures")
 	Settings.data.art = "generated"
+	Art.root = was
 	Art.reset()
-	check(Art.texture("HERO_01") != null, "generated picture used")
-	Art.DIRS.original = was
-	Art.reset()
-	DirAccess.remove_absolute(dir + "/HERO_08.jpg")
-	DirAccess.remove_absolute(dir)
+	for path in ["/cards/HERO_01.jpg", "/original/HERO_08.jpg", "/my_set/HERO_09.jpg", "/cards", "/original", "/my_set", ""]:
+		DirAccess.remove_absolute(root + path)
 
 
 func test_settings_screen_offers_art_sets() -> void:
 	var s := SettingsView.new()
 	(Engine.get_main_loop() as SceneTree).root.add_child(s)
 	var pick := s.find_child("ArtSet", true, false) as OptionButton
-	eq(pick.item_count, 2, "generated and original")
+	eq(pick.item_count, Art.sets().size(), "every picture set")
 	pick.item_selected.emit(1)
 	eq(Settings.data.art, "original", "stored")
 	pick.item_selected.emit(0)

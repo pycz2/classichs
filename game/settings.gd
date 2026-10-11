@@ -30,7 +30,7 @@ static func load_settings() -> void:
 					data[k] = clampi(int(v), 1, 4)
 			TYPE_STRING:
 				if k == "art":
-					if v in ["generated", "original"]:
+					if v is String and v != "":  # a folder in art/; a missing one falls back to "generated"
 						data[k] = v
 				elif v is String and (v == "" or Locale.LANGS.has(v)):
 					data[k] = v

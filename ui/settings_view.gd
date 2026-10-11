@@ -67,11 +67,12 @@ func _build() -> void:
 
 	var art := OptionButton.new()
 	art.name = "ArtSet"
-	art.add_item(tr("Generated"))
-	art.add_item(tr("Original"))
-	art.select(1 if Settings.data.art == "original" else 0)
+	var sets := Art.sets()
+	for name in sets:
+		art.add_item({"generated": tr("Generated"), "original": tr("Original")}.get(name, name.capitalize()))
+	art.select(maxi(0, sets.find(Settings.data.art)))
 	art.item_selected.connect(func(i):
-		_store("art", ["generated", "original"][i])
+		_store("art", sets[i])
 		Art.reset()
 		art_changed.emit())
 	_row(grid, tr("Card art"), art)
