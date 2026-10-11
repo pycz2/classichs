@@ -11,10 +11,27 @@ var glow := Color.TRANSPARENT
 var _pops := {}  # a number that just changed ("atk", "hp", "armor", "cost") -> 1.0 down to 0.0
 
 
+var _under_mouse := false
+
+
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	mouse_entered.connect(func(): hovered.emit(self, true))
-	mouse_exited.connect(func(): hovered.emit(self, false))
+	mouse_entered.connect(func():
+		_under_mouse = true
+		queue_redraw()
+		hovered.emit(self, true))
+	mouse_exited.connect(func():
+		_under_mouse = false
+		queue_redraw()
+		hovered.emit(self, false))
+
+
+## The glow to draw: the game's (playable, selected, target), else a soft light
+## while the mouse is over it.
+func shown_glow() -> Color:
+	if glow.a > 0.0:
+		return glow
+	return Color(1, 0.96, 0.8, 0.75) if _under_mouse else Color.TRANSPARENT
 
 
 func _gui_input(ev: InputEvent) -> void:
@@ -32,8 +49,8 @@ func set_glow(c: Color) -> void:
 
 
 func _draw_glow(rect: Rect2, radius: int) -> void:
-	if glow.a > 0.0:
-		soft_glow(self, func(g: float) -> PackedVector2Array: return PackedVector2Array(), glow, rect, radius)
+	if shown_glow().a > 0.0:
+		soft_glow(self, func(g: float) -> PackedVector2Array: return PackedVector2Array(), shown_glow(), rect, radius)
 
 
 ## A soft light around a shape, not a line: layers of the shape grown wider and

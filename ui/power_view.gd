@@ -37,8 +37,9 @@ static func make(ent: Entity, game: GameState, k: Kind, hide := false) -> PowerV
 func _draw() -> void:
 	var c := size / 2
 	var r := size.x / 2 - 4
-	if glow.a > 0:
-		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("circle", Rect2(c - Vector2(r, r) - Vector2(gr, gr), Vector2(r, r) * 2 + Vector2(gr, gr) * 2)), glow)
+	var gl := shown_glow()
+	if gl.a > 0:
+		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("circle", Rect2(c - Vector2(r, r) - Vector2(gr, gr), Vector2(r, r) * 2 + Vector2(gr, gr) * 2)), gl)
 	var cls: String = s.card().get("cardClass", "NEUTRAL")
 	var art := Rect2(c - Vector2(r, r) * 0.86, Vector2(r, r) * 1.72)
 	match kind:
@@ -66,11 +67,14 @@ func _draw() -> void:
 				Frames.mana(self, Vector2(c.x, 9), _cost, 11)
 		Kind.WEAPON:
 			draw_circle(c, r + 3, Color("3b2f22"))
+			if face_down_used:  # sheathed: not its owner's turn, it can't be used now
+				draw_circle(c, r, Color("2a2118"))
+				Sprites.draw(self, "sword", c, r * 0.55, PI / 4.0, Color(0.6, 0.55, 0.5))
+				draw_circle(c, r, Color(0, 0, 0, 0.3))
+				Frames.ring(self, Art.outline("circle", art), Frames.GOLD.darkened(0.45), 3)
+				return
 			Art.paint_in(self, art, s.card_id, "circle")
 			Frames.ring(self, Art.outline("circle", art), Color("8a7a5c"), 3)
-			var active := _active
-			if not active:
-				draw_circle(c, r, Color(0, 0, 0, 0.35))
 			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12 * bump("atk"))
 			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(s.tags.get("DURABILITY", 0)), 11 * bump("hp"), Color.WHITE, "durability")
 
@@ -87,9 +91,9 @@ func sync() -> void:
 	_cost = g.cost(e)
 	_active = e.controller == g.current
 	queue_redraw()
-	if kind != Kind.POWER:
+	if kind == Kind.SECRET:
 		return
-	var used := e.has("USED")
+	var used := e.has("USED") if kind == Kind.POWER else not _active  # a weapon turns over off its turn
 	if used == face_down_used:
 		return
 	if Anim.instant or not is_inside_tree():
