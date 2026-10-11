@@ -1,19 +1,32 @@
 class_name DeckListView
 extends Control
-## "My decks": create, edit, copy, delete, import and export deck codes.
+## The collection screen: all cards on the left (CollectionView), the player's
+## decks on the right. A click on a deck opens it in the right panel: then a
+## click on a card adds it and a click on a line removes one copy.
 ## Every change is saved to DeckStore at once.
 
 signal back
 
-## Button labels (English keys); the translation tool reads this list.
-const BUTTONS := ["New Deck", "Edit", "Copy", "Delete", "Import Code", "Export Code", "Browse Cards", "Back"]
+## Button labels and tooltips (English keys); the translation tool reads this list.
+const BUTTONS := ["New Deck", "Import Code", "Done", "Back", "Copy", "Export Code", "Delete"]
+## The right panel (the deck list or the open deck).
+const RIGHT := Rect2(916, 66, 348, 642)
 
 var decks: Array[Deck] = []
+## The deck being edited, null while the list of decks is shown.
+var editing: Deck
+var browser := CollectionView.new()
 var list := VBoxContainer.new()
-var _group := ButtonGroup.new()
 var message: Label
 var _overlay: Control
-var _editor: CollectionView
+var _list_box := Control.new()
+var _edit_box := Control.new()
+var _deck_list := VBoxContainer.new()
+var _name_edit := LineEdit.new()
+## How full the open deck is, behind the "n / 30" count.
+var _bar := DeckTiles.Bar.new()
+var _count: Label
+var _panel := Panel.new()
 
 
 func _ready() -> void:
@@ -24,62 +37,133 @@ func _ready() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	Palette.backdrop(self, "library_bg")
-	var title := Palette.label(tr("My Decks"), 34, Palette.ATTACK)
-	title.position = Vector2(40, 20)
+	browser.name = "Cards"
+	browser.changed.connect(_on_deck_changed)
+	add_child(browser)
+	var title := Palette.label(tr("My Decks"), 30, Palette.ATTACK)
+	title.position = Vector2(RIGHT.position.x + 4, 12)
+	title.size = Vector2(RIGHT.size.x - 140, 50)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(title)
+	var back_b := Palette.button(tr("Back"), "Back")
+	back_b.custom_minimum_size = Vector2(130, 46)
+	back_b.position = Vector2(RIGHT.end.x - 130, 12)
+	back_b.pressed.connect(func():
+		close_deck()
+		back.emit())
+	add_child(back_b)
+	_panel.position = RIGHT.position
+	_panel.size = RIGHT.size
+	_panel.add_theme_stylebox_override("panel", Palette.box(Palette.PANEL, 12, Color("6b5320"), 2))
+	add_child(_panel)
+	var inner := Rect2(RIGHT.position + Vector2(12, 12), RIGHT.size - Vector2(24, 24))
+	# the list of decks
+	_list_box.name = "DeckListBox"
+	add_child(_list_box)
 	var scroll := ScrollContainer.new()
-	scroll.position = Vector2(40, 80)
-	scroll.size = Vector2(620, 560)
+	scroll.position = inner.position
+	scroll.size = Vector2(inner.size.x, 512)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	add_child(scroll)
+	_list_box.add_child(scroll)
 	list.name = "DeckList"
-	list.custom_minimum_size.x = 604
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 6)
 	scroll.add_child(list)
-	var col := VBoxContainer.new()
-	col.position = Vector2(700, 80)
-	col.add_theme_constant_override("separation", 10)
-	add_child(col)
-	for spec in [["New Deck", _choose_hero], ["Edit", func(): edit_deck(_selected())],
-			["Copy", func(): copy_deck(_selected())], ["Delete", func(): _confirm_delete(_selected())],
-			["Import Code", _show_import], ["Export Code", func(): show_export(_selected())],
-			["Browse Cards", browse], ["Back", func(): back.emit()]]:
+	var buttons := HBoxContainer.new()
+	buttons.position = Vector2(inner.position.x, inner.end.y - 46)
+	buttons.size = Vector2(inner.size.x, 46)
+	buttons.add_theme_constant_override("separation", 8)
+	_list_box.add_child(buttons)
+	for spec in [["New Deck", _choose_hero], ["Import Code", _show_import]]:
 		var b := Palette.button(tr(spec[0]), spec[0].replace(" ", ""))
+		b.custom_minimum_size = Vector2(0, 46)
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.add_theme_font_size_override("font_size", 17)
 		b.pressed.connect(spec[1])
-		col.add_child(b)
-	message = Palette.label("", 18, Palette.SELECTED)
+		buttons.add_child(b)
+	# the open deck
+	_edit_box.name = "DeckEditor"
+	add_child(_edit_box)
+	_name_edit.name = "DeckName"
+	_name_edit.max_length = Deck.NAME_MAX
+	_name_edit.position = inner.position
+	_name_edit.size = Vector2(inner.size.x, 40)
+	_name_edit.text_changed.connect(func(t):
+		if editing:
+			editing.name = t
+			_save())
+	_edit_box.add_child(_name_edit)
+	_bar.position = inner.position + Vector2(0, 48)
+	_bar.size = Vector2(inner.size.x, 26)
+	_edit_box.add_child(_bar)
+	_count = Palette.label("", 17)
+	_count.name = "Count"
+	_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_count.position = _bar.position
+	_count.size = _bar.size
+	_edit_box.add_child(_count)
+	var tiles := ScrollContainer.new()
+	tiles.position = inner.position + Vector2(0, 82)
+	tiles.size = Vector2(inner.size.x, 430)
+	tiles.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_edit_box.add_child(tiles)
+	_deck_list.name = "Tiles"
+	_deck_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_deck_list.add_theme_constant_override("separation", 3)
+	tiles.add_child(_deck_list)
+	var done := Palette.button(tr("Done"), "Done")
+	done.custom_minimum_size = Vector2(inner.size.x, 46)
+	done.position = Vector2(inner.position.x, inner.end.y - 46)
+	done.pressed.connect(close_deck)
+	_edit_box.add_child(done)
+	message = Palette.label("", 15, Palette.SELECTED)
 	message.name = "Message"
-	message.position = Vector2(40, 650)
-	message.size = Vector2(1200, 50)
+	message.position = Vector2(inner.position.x, inner.position.y + 516)
+	message.size = Vector2(inner.size.x, 58)
+	message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(message)
+	_show_mode()
 	refresh()
 	if DeckStore.last_load_error != "":
 		message.text = DeckStore.last_load_error
 
 
 func refresh() -> void:
-	var was := _selected()
 	for c in list.get_children():
 		list.remove_child(c)
 		c.queue_free()
 	for i in decks.size():
 		var row := DeckTiles.DeckRow.new(decks[i])
 		row.name = "Deck%d" % i
-		row.button_group = _group
-		row.button_pressed = i == was
 		var idx := i
-		row.gui_input.connect(func(ev):  # a double click opens the deck
-			if ev is InputEventMouseButton and ev.double_click:
-				edit_deck(idx))
+		row.pressed.connect(func(): edit_deck(idx))
+		var acts := HBoxContainer.new()  # small buttons in the lower right corner
+		acts.name = "Actions"
+		acts.add_theme_constant_override("separation", 4)
+		acts.alignment = BoxContainer.ALIGNMENT_END
+		acts.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		acts.offset_left = -DeckTiles.DeckRow.ACTIONS_W - 10
+		acts.offset_right = -10
+		acts.offset_top = -34
+		acts.offset_bottom = -8
+		row.add_child(acts)
+		for spec in [["copy", "Copy", copy_deck], ["export", "Export Code", show_export], ["delete", "Delete", _confirm_delete]]:
+			var b := DeckTiles.Action.new(spec[0], tr(spec[1]))
+			var act: Callable = spec[2]
+			b.pressed.connect(func(): act.call(idx))
+			acts.add_child(b)
 		list.add_child(row)
+	_refresh_deck()
 
 
-func _selected() -> int:
-	for c in list.get_children():
-		if c is Button and c.button_pressed and not c.is_queued_for_deletion():
-			return c.get_index()
-	return -1
+func _show_mode() -> void:
+	_list_box.visible = editing == null
+	_edit_box.visible = editing != null
+	var cls := editing.card_class() if editing else ""
+	var edge := Palette.of_class(cls) if editing else Color("6b5320")
+	_panel.add_theme_stylebox_override("panel", Palette.box(Palette.PANEL, 12, edge, 3 if editing else 2))
 
 
 func _save() -> void:
@@ -98,35 +182,62 @@ func new_deck(hero: String) -> Deck:
 	return d
 
 
+## Opens a deck in the right panel; the cards on the left become the ones it can use.
 func edit_deck(i: int) -> void:
 	if i < 0 or i >= decks.size():
 		message.text = tr("Select a deck first")
 		return
-	_editor = CollectionView.new()
-	var deck := decks[i]
-	_editor.deck = deck
-	_editor.changed.connect(_save)
-	_editor.done.connect(func(_d):
-		if deck.name.strip_edges() == "":
-			deck.name = tr("Custom %s") % CardText.name(deck.hero)
-		_editor.queue_free()
-		remove_child(_editor)
-		_editor = null
-		_save())
-	add_child(_editor)
+	editing = decks[i]
+	_name_edit.text = editing.name
+	message.text = ""
+	browser.set_deck(editing)
+	_show_mode()
+	_refresh_deck()
 
 
-func browse() -> void:
-	_editor = CollectionView.new()
-	_editor.done.connect(func(_d):
-		_editor.queue_free()
-		remove_child(_editor)
-		_editor = null)
-	add_child(_editor)
+## Back to the list of decks (an empty name gets the default one back).
+func close_deck() -> void:
+	if editing == null:
+		return
+	if editing.name.strip_edges() == "":
+		editing.name = tr("Custom %s") % CardText.name(editing.hero)
+	editing = null
+	browser.set_deck(null)
+	_show_mode()
+	_save()
+
+
+func _on_deck_changed() -> void:
+	message.text = ""
+	_save()
+
+
+func remove_card(id: String) -> void:
+	if editing and editing.remove(id):
+		_save()
+	browser.show_hint("")
+	browser._fill()
+
+
+func _refresh_deck() -> void:
+	for c in _deck_list.get_children():
+		_deck_list.remove_child(c)
+		c.queue_free()
+	if editing == null:
+		return
+	for pair in editing.sorted_counts():
+		var id: String = pair[0]
+		var b := DeckTiles.DeckTile.new(id, pair[1])
+		b.pressed.connect(func(): remove_card(id))
+		_deck_list.add_child(b)
+	var n := editing.cards.size()
+	_count.text = "%d / %d" % [n, Deck.SIZE]
+	_bar.ratio = n / float(Deck.SIZE)
+	_count.add_theme_color_override("font_color", Palette.BUFFED if n == Deck.SIZE else Palette.TEXT)
 
 
 func copy_deck(i: int) -> void:
-	if i < 0:
+	if i < 0 or i >= decks.size():
 		message.text = tr("Select a deck first")
 		return
 	var d := Deck.from_dict(decks[i].to_dict())
@@ -137,6 +248,8 @@ func copy_deck(i: int) -> void:
 
 func delete_deck(i: int) -> void:
 	if i >= 0 and i < decks.size():
+		if decks[i] == editing:
+			close_deck()
 		decks.remove_at(i)
 		_save()
 
@@ -217,7 +330,7 @@ func _choose_hero() -> void:
 
 
 func _confirm_delete(i: int) -> void:
-	if i < 0:
+	if i < 0 or i >= decks.size():
 		message.text = tr("Select a deck first")
 		return
 	var box := _popup(tr("Delete \"%s\"?") % decks[i].name)
