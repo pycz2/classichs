@@ -16,6 +16,9 @@ var page := 0
 var tab := "DRUID"
 var cost_filter := -1  # -1 = any, 7 = 7 or more
 var query := ""
+## "" = any rarity; else FREE (Basic), COMMON, RARE, EPIC or LEGENDARY.
+var rarity_filter := ""
+const RARITIES := [["FREE", "Basic"], ["COMMON", "Common"], ["RARE", "Rare"], ["EPIC", "Epic"], ["LEGENDARY", "Legendary"]]
 var _grid := GridContainer.new()
 var _page_label: Label
 var _hint: Label
@@ -78,6 +81,22 @@ func _ready() -> void:
 			page = 0
 			_fill())
 		costs.add_child(b)
+	for r in RARITIES:  # rarity gems after the cost crystals; a second click clears
+		var b := Button.new()
+		b.name = "Rarity" + r[0]
+		b.tooltip_text = tr(r[1])
+		b.custom_minimum_size = Vector2(36, 40)
+		var gem := _Gem.new()
+		gem.rarity = r[0]
+		gem.size = Vector2(36, 40)
+		gem.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		b.add_child(gem)
+		var code: String = r[0]
+		b.pressed.connect(func():
+			rarity_filter = "" if rarity_filter == code else code
+			page = 0
+			_fill())
+		costs.add_child(b)
 	_grid.columns = 4
 	_grid.position = Vector2(24, 96)
 	_grid.add_theme_constant_override("h_separation", 22)
@@ -131,6 +150,8 @@ func filtered() -> Array:
 			continue
 		var cost := int(c.get("cost", 0))
 		if cost_filter >= 0 and (cost != cost_filter if cost_filter < 7 else cost < 7):
+			continue
+		if rarity_filter != "" and c.get("rarity", "") != rarity_filter:
 			continue
 		if q != "" and not CardText.name(id).to_lower().contains(q) and not CardText.text(id).to_lower().contains(q):
 			continue
@@ -273,3 +294,14 @@ class _Crystal:
 			var font := ThemeDB.fallback_font
 			draw_string_outline(font, size / 2.0 + Vector2(9, -6), "+", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, 3, Color.BLACK)
 			draw_string(font, size / 2.0 + Vector2(9, -6), "+", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
+
+
+class _Gem:
+	extends Control
+	var rarity := ""
+
+	func _draw() -> void:
+		if rarity == "FREE":  # Basic cards have no gem: a plain grey one stands for them
+			draw_colored_polygon(PackedVector2Array([size / 2 + Vector2(0, -9), size / 2 + Vector2(7, 0), size / 2 + Vector2(0, 9), size / 2 + Vector2(-7, 0)]), Color("868e96"))
+		else:
+			Frames.rarity(self, size / 2.0, rarity, 9)

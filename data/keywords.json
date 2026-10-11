@@ -1,0 +1,354 @@
+{
+  "BATTLECRY": {
+    "name": {
+      "en": "Battlecry",
+      "ru": "Боевой клич",
+      "de": "Kampfschrei",
+      "fr": "Cri de guerre",
+      "es": "Grito de batalla",
+      "pt_BR": "Grito de Guerra",
+      "it": "Grido di Battaglia",
+      "pl": "Okrzyk bojowy"
+    },
+    "text": {
+      "en": "Does something when you play it from your hand.",
+      "ru": "Срабатывает, когда вы разыгрываете карту из руки.",
+      "de": "Löst einen Effekt aus, wenn Ihr es aus der Hand ausspielt.",
+      "fr": "Fait quelque chose quand vous la jouez depuis votre main.",
+      "es": "Hace algo cuando la juegas desde tu mano.",
+      "pt_BR": "Faz algo quando você a joga da mão.",
+      "it": "Fa qualcosa quando la giochi dalla mano.",
+      "pl": "Robi coś, gdy zagrasz go z ręki."
+    }
+  },
+  "DEATHRATTLE": {
+    "name": {
+      "en": "Deathrattle",
+      "ru": "Предсмертный хрип",
+      "de": "Todesröcheln",
+      "fr": "Râle d’agonie",
+      "es": "Último aliento",
+      "pt_BR": "Último Suspiro",
+      "it": "Rantolo di Morte",
+      "pl": "Agonia"
+    },
+    "text": {
+      "en": "Does something when it dies.",
+      "ru": "Срабатывает, когда существо погибает.",
+      "de": "Löst einen Effekt aus, wenn es stirbt.",
+      "fr": "Fait quelque chose quand il meurt.",
+      "es": "Hace algo cuando muere.",
+      "pt_BR": "Faz algo quando morre.",
+      "it": "Fa qualcosa quando muore.",
+      "pl": "Robi coś, gdy umrze."
+    }
+  },
+  "TAUNT": {
+    "name": {
+      "en": "Taunt",
+      "ru": "Провокация",
+      "de": "Spott",
+      "fr": "Provocation",
+      "es": "Provocar",
+      "pt_BR": "Provocar",
+      "it": "Provocazione",
+      "pl": "Prowokacja"
+    },
+    "text": {
+      "en": "Enemies must attack minions that have Taunt.",
+      "ru": "Враги обязаны атаковать существ с «Провокацией».",
+      "de": "Gegner müssen Diener mit Spott angreifen.",
+      "fr": "Les ennemis doivent attaquer les serviteurs avec Provocation.",
+      "es": "Los enemigos deben atacar a los esbirros con Provocar.",
+      "pt_BR": "Os inimigos devem atacar lacaios com Provocar.",
+      "it": "I nemici devono attaccare i servitori con Provocazione.",
+      "pl": "Wrogowie muszą atakować stronników z Prowokacją."
+    }
+  },
+  "CHARGE": {
+    "name": {
+      "en": "Charge",
+      "ru": "Рывок",
+      "de": "Ansturm",
+      "fr": "Charge",
+      "es": "Cargar",
+      "pt_BR": "Investida",
+      "it": "Carica",
+      "pl": "Szarża"
+    },
+    "text": {
+      "en": "Can attack immediately.",
+      "ru": "Может атаковать сразу же.",
+      "de": "Kann sofort angreifen.",
+      "fr": "Peut attaquer immédiatement.",
+      "es": "Puede atacar de inmediato.",
+      "pt_BR": "Pode atacar imediatamente.",
+      "it": "Può attaccare subito.",
+      "pl": "Może atakować od razu."
+    }
+  },
+  "DIVINE_SHIELD": {
+    "name": {
+      "en": "Divine Shield",
+      "ru": "Божественный щит",
+      "de": "Gottesschild",
+      "fr": "Bouclier divin",
+      "es": "Escudo divino",
+      "pt_BR": "Escudo Divino",
+      "it": "Scudo Divino",
+      "pl": "Boska tarcza"
+    },
+    "text": {
+      "en": "The first time this minion takes damage, ignore it.",
+      "ru": "Первый раз, когда это существо получает урон, он игнорируется.",
+      "de": "Das erste Mal, wenn dieser Diener Schaden erleidet, wird er ignoriert.",
+      "fr": "La première fois que ce serviteur subit des dégâts, ils sont ignorés.",
+      "es": "La primera vez que este esbirro recibe daño, se ignora.",
+      "pt_BR": "A primeira vez que este lacaio sofrer dano, ignore-o.",
+      "it": "La prima volta che questo servitore subisce danni, vengono ignorati.",
+      "pl": "Pierwsze obrażenia otrzymane przez tego stronnika są ignorowane."
+    }
+  },
+  "WINDFURY": {
+    "name": {
+      "en": "Windfury",
+      "ru": "Неистовство ветра",
+      "de": "Windzorn",
+      "fr": "Furie des vents",
+      "es": "Viento furioso",
+      "pt_BR": "Fúria dos Ventos",
+      "it": "Furia del Vento",
+      "pl": "Furia wichru"
+    },
+    "text": {
+      "en": "Can attack twice each turn.",
+      "ru": "Может атаковать дважды за ход.",
+      "de": "Kann pro Runde zweimal angreifen.",
+      "fr": "Peut attaquer deux fois par tour.",
+      "es": "Puede atacar dos veces por turno.",
+      "pt_BR": "Pode atacar duas vezes por turno.",
+      "it": "Può attaccare due volte per turno.",
+      "pl": "Może atakować dwa razy na turę."
+    }
+  },
+  "STEALTH": {
+    "name": {
+      "en": "Stealth",
+      "ru": "Маскировка",
+      "de": "Verstohlenheit",
+      "fr": "Camouflage",
+      "es": "Sigilo",
+      "pt_BR": "Furtividade",
+      "it": "Furtività",
+      "pl": "Ukrycie"
+    },
+    "text": {
+      "en": "Can't be attacked or targeted until it attacks.",
+      "ru": "Нельзя атаковать или выбирать целью, пока не атакует само.",
+      "de": "Kann nicht angegriffen oder als Ziel gewählt werden, bis es angreift.",
+      "fr": "Ne peut pas être attaqué ni ciblé tant qu’il n’a pas attaqué.",
+      "es": "No se puede atacar ni elegir como objetivo hasta que ataque.",
+      "pt_BR": "Não pode ser atacado nem alvejado até atacar.",
+      "it": "Non può essere attaccato né bersagliato finché non attacca.",
+      "pl": "Nie można go atakować ani wybierać na cel, dopóki sam nie zaatakuje."
+    }
+  },
+  "SPELLPOWER": {
+    "name": {
+      "en": "Spell Damage",
+      "ru": "Урон от заклинаний",
+      "de": "Zauberschaden",
+      "fr": "Dégâts des sorts",
+      "es": "Daño con hechizos",
+      "pt_BR": "Dano Mágico",
+      "it": "Danni Magici",
+      "pl": "Obrażenia zaklęć"
+    },
+    "text": {
+      "en": "Your spells deal extra damage.",
+      "ru": "Ваши заклинания наносят больше урона.",
+      "de": "Eure Zauber verursachen zusätzlichen Schaden.",
+      "fr": "Vos sorts infligent des dégâts supplémentaires.",
+      "es": "Tus hechizos infligen daño adicional.",
+      "pt_BR": "Seus feitiços causam dano adicional.",
+      "it": "I tuoi incantesimi infliggono danni extra.",
+      "pl": "Twoje zaklęcia zadają dodatkowe obrażenia."
+    }
+  },
+  "FREEZE": {
+    "name": {
+      "en": "Freeze",
+      "ru": "Заморозка",
+      "de": "Einfrieren",
+      "fr": "Gel",
+      "es": "Congelar",
+      "pt_BR": "Congelar",
+      "it": "Congelamento",
+      "pl": "Zamrożenie"
+    },
+    "text": {
+      "en": "Frozen characters lose their next attack.",
+      "ru": "Замороженные персонажи пропускают свою следующую атаку.",
+      "de": "Eingefrorene Charaktere verlieren ihren nächsten Angriff.",
+      "fr": "Les personnages gelés perdent leur prochaine attaque.",
+      "es": "Los personajes congelados pierden su próximo ataque.",
+      "pt_BR": "Personagens congelados perdem o próximo ataque.",
+      "it": "I personaggi congelati perdono il prossimo attacco.",
+      "pl": "Zamrożone postacie tracą swój następny atak."
+    }
+  },
+  "OVERLOAD": {
+    "name": {
+      "en": "Overload",
+      "ru": "Перегрузка",
+      "de": "Überladung",
+      "fr": "Surcharge",
+      "es": "Sobrecarga",
+      "pt_BR": "Sobrecarga",
+      "it": "Sovraccarico",
+      "pl": "Przeciążenie"
+    },
+    "text": {
+      "en": "You have fewer Mana Crystals next turn.",
+      "ru": "В следующем ходу у вас будет меньше кристаллов маны.",
+      "de": "Ihr habt in der nächsten Runde weniger Manakristalle.",
+      "fr": "Vous avez moins de cristaux de mana au tour suivant.",
+      "es": "Tienes menos cristales de maná el próximo turno.",
+      "pt_BR": "Você terá menos Cristais de Mana no próximo turno.",
+      "it": "Hai meno cristalli di mana nel turno successivo.",
+      "pl": "Masz mniej kryształów many w następnej turze."
+    }
+  },
+  "COMBO": {
+    "name": {
+      "en": "Combo",
+      "ru": "Серия приемов",
+      "de": "Combo",
+      "fr": "Combo",
+      "es": "Combo",
+      "pt_BR": "Combo",
+      "it": "Combo",
+      "pl": "Kombinacja"
+    },
+    "text": {
+      "en": "A bonus if you already played a card this turn.",
+      "ru": "Бонус, если в этот ход вы уже разыграли карту.",
+      "de": "Ein Bonus, wenn Ihr in diesem Zug bereits eine Karte ausgespielt habt.",
+      "fr": "Un bonus si vous avez déjà joué une carte ce tour-ci.",
+      "es": "Un bonus si ya jugaste una carta este turno.",
+      "pt_BR": "Um bônus se você já jogou uma carta neste turno.",
+      "it": "Un bonus se hai già giocato una carta in questo turno.",
+      "pl": "Premia, jeśli w tej turze zagrano już kartę."
+    }
+  },
+  "SECRET": {
+    "name": {
+      "en": "Secret",
+      "ru": "Секрет",
+      "de": "Geheimnis",
+      "fr": "Secret",
+      "es": "Secreto",
+      "pt_BR": "Segredo",
+      "it": "Segreto",
+      "pl": "Sekret"
+    },
+    "text": {
+      "en": "Hidden until a specific action occurs on your opponent's turn.",
+      "ru": "Скрыт, пока в ход противника не произойдёт определённое действие.",
+      "de": "Bleibt verborgen, bis in der Runde Eures Gegners eine bestimmte Aktion eintritt.",
+      "fr": "Caché jusqu’à ce qu’une action précise ait lieu pendant le tour de l’adversaire.",
+      "es": "Oculto hasta que ocurre una acción concreta en el turno de tu oponente.",
+      "pt_BR": "Oculto até que uma ação específica ocorra no turno do oponente.",
+      "it": "Nascosto finché non avviene una certa azione nel turno dell’avversario.",
+      "pl": "Ukryty, dopóki w turze przeciwnika nie nastąpi określona akcja."
+    }
+  },
+  "ENRAGED": {
+    "name": {
+      "en": "Enrage",
+      "ru": "Исступление",
+      "de": "Wutanfall",
+      "fr": "Accès de rage",
+      "es": "Enfurecer",
+      "pt_BR": "Enfurecer",
+      "it": "Rabbia",
+      "pl": "Szał"
+    },
+    "text": {
+      "en": "While damaged, this minion has a new power.",
+      "ru": "Пока существо ранено, у него появляется новая сила.",
+      "de": "Solange dieser Diener beschädigt ist, erhält er eine neue Fähigkeit.",
+      "fr": "Tant qu’il est blessé, ce serviteur gagne un nouveau pouvoir.",
+      "es": "Mientras está herido, este esbirro tiene un nuevo poder.",
+      "pt_BR": "Enquanto estiver ferido, este lacaio tem um novo poder.",
+      "it": "Finché è ferito, questo servitore ha un nuovo potere.",
+      "pl": "Dopóki jest ranny, ten stronnik zyskuje nową moc."
+    }
+  },
+  "SILENCE": {
+    "name": {
+      "en": "Silence",
+      "ru": "Немота",
+      "de": "Schweigen",
+      "fr": "Silence",
+      "es": "Silencio",
+      "pt_BR": "Silêncio",
+      "it": "Silenzio",
+      "pl": "Wyciszenie"
+    },
+    "text": {
+      "en": "Removes all card text and enchantments.",
+      "ru": "Снимает весь текст карты и все эффекты.",
+      "de": "Entfernt allen Kartentext und alle Verzauberungen.",
+      "fr": "Retire tout le texte de la carte et tous les enchantements.",
+      "es": "Elimina todo el texto de la carta y los encantamientos.",
+      "pt_BR": "Remove todo o texto da carta e os encantamentos.",
+      "it": "Rimuove tutto il testo della carta e gli incantamenti.",
+      "pl": "Usuwa cały tekst karty i wszystkie zaklęcia."
+    }
+  },
+  "CHOOSE_ONE": {
+    "name": {
+      "en": "Choose One",
+      "ru": "Выберите эффект",
+      "de": "Wählt aus",
+      "fr": "Choix des armes",
+      "es": "Elige una opción",
+      "pt_BR": "Escolha Um",
+      "it": "Scegli",
+      "pl": "Wybierz jedno"
+    },
+    "text": {
+      "en": "Choose one of two effects when you play it.",
+      "ru": "При розыгрыше выберите один из двух эффектов.",
+      "de": "Wählt beim Ausspielen einen von zwei Effekten.",
+      "fr": "Choisissez l’un des deux effets quand vous la jouez.",
+      "es": "Elige uno de dos efectos al jugarla.",
+      "pt_BR": "Escolha um de dois efeitos ao jogá-la.",
+      "it": "Scegli uno di due effetti quando la giochi.",
+      "pl": "Wybierz jeden z dwóch efektów, gdy ją zagrywasz."
+    }
+  },
+  "IMMUNE": {
+    "name": {
+      "en": "Immune",
+      "ru": "Неуязвимость",
+      "de": "Immun",
+      "fr": "Insensible",
+      "es": "Inmune",
+      "pt_BR": "Imune",
+      "it": "Immune",
+      "pl": "Niewrażliwość"
+    },
+    "text": {
+      "en": "Can't be damaged.",
+      "ru": "Не может получать урон.",
+      "de": "Kann keinen Schaden erleiden.",
+      "fr": "Ne peut pas subir de dégâts.",
+      "es": "No puede recibir daño.",
+      "pt_BR": "Não pode sofrer dano.",
+      "it": "Non può subire danni.",
+      "pl": "Nie może otrzymywać obrażeń."
+    }
+  }
+}

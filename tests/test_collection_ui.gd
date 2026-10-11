@@ -169,3 +169,18 @@ func test_empty_name_falls_back_on_done() -> void:
 	check(d.name.strip_edges() != "", "default name restored")
 	v.free()
 	_store_restore()
+
+
+func test_rarity_filter() -> void:
+	var c := CollectionView.new()
+	root().add_child(c)
+	c.tab = "NEUTRAL"
+	c.rarity_filter = "LEGENDARY"
+	var cards := c.filtered()
+	check(not cards.is_empty(), "some neutral legendaries")
+	check(cards.all(func(id): return CardDb.card(id).get("rarity") == "LEGENDARY"), "only legendaries")
+	(c.find_child("RarityEPIC", true, false) as Button).pressed.emit()
+	check(c.filtered().all(func(id): return CardDb.card(id).get("rarity") == "EPIC"), "epic button")
+	(c.find_child("RarityEPIC", true, false) as Button).pressed.emit()
+	eq(c.rarity_filter, "", "a second click clears it")
+	c.free()
