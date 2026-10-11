@@ -60,7 +60,8 @@ func _layout() -> void:
 	_name.add_theme_font_size_override("font_size", int((9 if long_name else 11) * k))
 	_text.position = Vector2(8, 106) * k
 	_text.size = Vector2(104, 48) * k
-	_text.add_theme_font_size_override("font_size", int(10 * k))
+	var n := CardText.text(card_id).length() if card_id != "" else 0
+	_text.add_theme_font_size_override("font_size", int((10 if n <= 70 else 9 if n <= 90 else 8) * k))  # long texts fit the frame
 
 
 func _refresh_labels() -> void:

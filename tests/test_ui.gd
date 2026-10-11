@@ -205,3 +205,13 @@ func test_debug_add_card_with_broken_players() -> void:
 	d.add_card(0, "hand", H.WISP)
 	check(d.error.text != "", "message shown")
 	d.free()
+
+
+func test_long_card_text_uses_smaller_font() -> void:
+	var sizes := []
+	for id in ["VAN_CS2_029", "VAN_EX1_295"]:  # Fireball, Ice Block (long text)
+		var c := CardView.make(id)
+		root().add_child(c)
+		sizes.append((c.find_children("*", "Label", false, false)[1] as Label).get_theme_font_size("font_size"))
+		c.free()
+	check(sizes[1] < sizes[0], "long text is smaller: %s" % [sizes])

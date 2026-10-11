@@ -39,10 +39,10 @@ func _ready() -> void:
 		_lists[v[0]] = list
 		var key: String = v[2]
 		var title: String = v[1]
-		header.text = ("▾ " if list.visible else "▸ ") + tr(title)
+		header.text = ("– " if list.visible else "+ ") + tr(title)
 		header.pressed.connect(func():
 			list.visible = not list.visible
-			header.text = ("▾ " if list.visible else "▸ ") + tr(title)
+			header.text = ("– " if list.visible else "+ ") + tr(title)
 			Settings.data[key] = list.visible
 			Settings.save())
 
