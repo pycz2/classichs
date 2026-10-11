@@ -101,18 +101,14 @@ func _ready() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
-	var board := Panel.new()
-	board.add_theme_stylebox_override("panel", Palette.box(Palette.BOARD, 24, Color("2a2118"), 4))
-	board.position = Vector2(150, 176)
-	board.size = Vector2(980, 294)
+	var board := TextureRect.new()  # the game board on a tavern table (generated)
+	board.texture = load("res://ui/board_bg.jpg")
+	board.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	board.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	board.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	board.offset_top = -12  # its middle line meets the line between the two rows of minions
 	board.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(board)
-	var mid := ColorRect.new()
-	mid.color = Color(0, 0, 0, 0.25)
-	mid.position = Vector2(170, 322)
-	mid.size = Vector2(940, 2)
-	mid.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(mid)
 	_rope.name = "Rope"
 	_rope.visible = false
 	_rope.mouse_filter = Control.MOUSE_FILTER_IGNORE

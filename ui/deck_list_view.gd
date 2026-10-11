@@ -23,7 +23,7 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
-	Palette.backdrop(self)
+	Palette.backdrop(self, "library_bg")
 	var title := Palette.label(tr("My Decks"), 34, Palette.ATTACK)
 	title.position = Vector2(40, 20)
 	add_child(title)

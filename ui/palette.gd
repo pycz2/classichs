@@ -59,10 +59,10 @@ static func button(text: String, name := "") -> Button:
 	return b
 
 
-## The tavern picture, darkened, behind a screen (menus, collection, settings).
-static func backdrop(parent: Control) -> void:
+## A generated picture (the tavern by default), darkened, behind a screen.
+static func backdrop(parent: Control, picture := "menu_bg") -> void:
 	var pic := TextureRect.new()
-	pic.texture = load("res://ui/menu_bg.jpg")
+	pic.texture = load("res://ui/%s.jpg" % picture)
 	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
