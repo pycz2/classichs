@@ -1,0 +1,14 @@
+{
+  "VAN_CS2_189": [
+    {
+      "kind": "battlecry",
+      "title": "Elven Archer: Battlecry hits an enemy minion for 1",
+      "scene": {"current": 0, "players": [
+        {"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_189"], "deck": ["VAN_CS2_120"]},
+        {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}
+      ]
+    }
+  ]
+}

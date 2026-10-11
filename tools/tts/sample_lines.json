@@ -1,0 +1,28 @@
+{
+  "VAN_CS2_200": {
+    "play": {"enUS": "Me big. Me smash!", "ruRU": "Я большой. Я крушить!", "deDE": "Ich groß. Ich zerschmettern!", "frFR": "Moi gros. Moi écraser !", "esES": "¡Yo grande. Yo aplastar!", "ptBR": "Eu grande. Eu esmagar!", "itIT": "Io grosso. Io spaccare!", "plPL": "Ja duży. Ja miażdżyć!"},
+    "attack": {"enUS": "Smash you good!", "ruRU": "Щас как вдарю!", "deDE": "Gleich gibt's Haue!", "frFR": "Toi prendre baffe !", "esES": "¡Te voy a aplastar!", "ptBR": "Vou te esmagar!", "itIT": "Ti spiaccico!", "plPL": "Zaraz cię zgniotę!"}
+  },
+  "VAN_EX1_313": {
+    "play": {"enUS": "Your soul is mine!", "ruRU": "Твоя душа принадлежит мне!", "deDE": "Deine Seele gehört mir!", "frFR": "Ton âme m'appartient !", "esES": "¡Tu alma me pertenece!", "ptBR": "Sua alma é minha!", "itIT": "La tua anima è mia!", "plPL": "Twoja dusza należy do mnie!"},
+    "death": {"enUS": "This is not the end...", "ruRU": "Это ещё не конец...", "deDE": "Das ist nicht das Ende...", "frFR": "Ce n'est pas la fin...", "esES": "Esto no es el final...", "ptBR": "Isto não é o fim...", "itIT": "Non è la fine...", "plPL": "To jeszcze nie koniec..."}
+  },
+  "VAN_EX1_506": {
+    "play": {"enUS": "Mrglglglgl! Mrrraaggh!", "ruRU": "Мргл-гл-гл-гл! Мррраагх!", "deDE": "Mrglglglgl! Mrrraaggh!", "frFR": "Mrglglglgl ! Mrrraaggh !", "esES": "¡Mrglglglgl! ¡Mrrraaggh!", "ptBR": "Mrglglglgl! Mrrraaggh!", "itIT": "Mrglglglgl! Mrrraaggh!", "plPL": "Mrglglglgl! Mrrraaggh!"}
+  },
+  "VAN_EX1_556": {
+    "play": {"enUS": "Harvest protocol activated.", "ruRU": "Протокол сбора урожая активирован.", "deDE": "Ernteprotokoll aktiviert.", "frFR": "Protocole de récolte activé.", "esES": "Protocolo de cosecha activado.", "ptBR": "Protocolo de colheita ativado.", "itIT": "Protocollo di raccolta attivato.", "plPL": "Protokół żniw aktywowany."},
+    "death": {"enUS": "System failure.", "ruRU": "Системный сбой.", "deDE": "Systemausfall.", "frFR": "Défaillance du système.", "esES": "Fallo del sistema.", "ptBR": "Falha no sistema.", "itIT": "Guasto di sistema.", "plPL": "Awaria systemu."}
+  },
+  "VAN_EX1_016": {
+    "play": {"enUS": "The dead shall serve.", "ruRU": "Мёртвые будут служить.", "deDE": "Die Toten werden dienen.", "frFR": "Les morts serviront.", "esES": "Los muertos servirán.", "ptBR": "Os mortos servirão.", "itIT": "I morti serviranno.", "plPL": "Umarli będą służyć."},
+    "death": {"enUS": "Darkness... take me.", "ruRU": "Тьма... забери меня.", "deDE": "Dunkelheit... nimm mich.", "frFR": "Ténèbres... emportez-moi.", "esES": "Oscuridad... llévame.", "ptBR": "Escuridão... leve-me.", "itIT": "Oscurità... prendimi.", "plPL": "Ciemności... zabierzcie mnie."}
+  },
+  "VAN_EX1_004": {
+    "play": {"enUS": "May the light guide you!", "ruRU": "Да направит тебя Свет!", "deDE": "Möge das Licht dich leiten!", "frFR": "Que la Lumière te guide !", "esES": "¡Que la Luz te guíe!", "ptBR": "Que a Luz te guie!", "itIT": "Che la Luce ti guidi!", "plPL": "Niech Światłość cię prowadzi!"},
+    "attack": {"enUS": "Forgive me!", "ruRU": "Прости меня!", "deDE": "Vergib mir!", "frFR": "Pardonne-moi !", "esES": "¡Perdóname!", "ptBR": "Perdoe-me!", "itIT": "Perdonami!", "plPL": "Wybacz mi!"}
+  },
+  "VAN_CS2_122": {
+    "play": {"enUS": "Form up! We attack together!", "ruRU": "Стройся! Атакуем вместе!", "deDE": "Formiert euch! Wir greifen gemeinsam an!", "frFR": "En formation ! On attaque ensemble !", "esES": "¡Formad filas! ¡Atacamos juntos!", "ptBR": "Em formação! Atacamos juntos!", "itIT": "In formazione! Attacchiamo insieme!", "plPL": "Do szyku! Atakujemy razem!"}
+  }
+}

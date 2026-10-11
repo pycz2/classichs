@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-10-12
+
+### Añadido
+- Al perder, el retrato del héroe estalla en pedazos.
+- Los símbolos de rayo y veneno están quietos y destellan con un sonido suave cuando se activa su efecto.
+
+### Corregido
+- Tutorial: «Siguiente misión» abre las explicaciones en una pantalla propia; la pantalla de recompensa ya no bloquea.
+
 ## [0.17.0] - 2026-10-12
 
 ### Añadido

@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-10-12
+
+### Dodano
+- Po porażce portret bohatera rozpryskuje się na odłamki.
+- Znaczki błyskawicy i trucizny są nieruchome i błyskają z lekkim dźwiękiem, gdy efekt się uruchamia.
+
+### Naprawiono
+- Samouczek: „Następna misja” otwiera objaśnienia na osobnym ekranie; ekran nagrody już nie blokuje.
+
 ## [0.17.0] - 2026-10-12
 
 ### Dodano

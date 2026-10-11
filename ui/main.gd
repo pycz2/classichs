@@ -75,6 +75,14 @@ func show_tutorial() -> void:
 	_set_screen(t)
 
 
+## Mission n's intro as its own screen, then the mission (Back: the mission list).
+func show_tutorial_intro(n: int) -> void:
+	var intro := TutorialIntro.make(n)
+	intro.done.connect(start_tutorial.bind(n))
+	intro.back.connect(show_tutorial)
+	_set_screen(intro)
+
+
 func start_tutorial(n: int) -> MatchView:
 	var r := Tutorial.start(n)
 	var m := Match.new()
@@ -82,7 +90,8 @@ func start_tutorial(n: int) -> MatchView:
 	var v := MatchView.new()
 	v.tutorial = r.tutorial
 	v.leave.connect(show_tutorial)
-	v.tutorial_next.connect(start_tutorial)
+	v.tutorial_next.connect(show_tutorial_intro)
+	v.tutorial_retry.connect(start_tutorial)
 	_set_screen(v)
 	v.bind(m)
 	return v

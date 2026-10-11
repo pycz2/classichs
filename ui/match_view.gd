@@ -6,7 +6,8 @@ extends Control
 
 signal leave
 ## Tutorial: the player asked for the next mission.
-signal tutorial_next(n: int)
+signal tutorial_next(n: int)  # go on to mission n (its intro first)
+signal tutorial_retry(n: int)  # play mission n again
 
 const ENEMY_HERO := Vector2(575, 40)
 const OWN_HERO := Vector2(575, 466)
@@ -80,6 +81,7 @@ var _queue: Array = []
 var _busy := false
 var _final_refresh := false
 const BURN_SHADER := preload("res://ui/burn.gdshader")
+var _ending := false  # the losing hero's portrait is shattering (the result waits)
 var _hold := {}  # id -> true: views an animation moves (the layout leaves them alone)
 var _mull_wait := -1  # the player whose mulligan overlay waits for the new cards
 ## A card that changed its id in place (bounced, transformed): new id -> where it stood.
@@ -1369,6 +1371,29 @@ func _mulligan_result(events: Array, p: int) -> void:
 	_close_overlay()
 
 
+## The game is over: each losing hero's portrait bursts into shards that fly
+## apart and fall, then the result shows.
+func _shatter_losers() -> void:
+	var losers := [0, 1] if g.winner < 0 else [1 - g.winner]
+	_ending = true
+	Sound.play("hit_big")
+	if Match.shake_enabled:
+		_shake(2.0)
+	for p in losers:
+		var hero := g.players[p].hero
+		var v: EntityView = _views.get(hero.id)
+		if v:
+			var arch := Rect2(v.position + Vector2(10, 6), HeroView.SIZE - Vector2(20, 14))
+			for sh in _Shard.cut(arch, Art.texture(hero.card_id)):
+				_fx.add_child(sh)
+			TableFx.spawn(_fx, "hurt", arch.get_center(), Color("ffb347"))
+			v.modulate.a = 0.0
+	await _wait(1.6)
+	_ending = false
+	if is_inside_tree():
+		refresh()
+
+
 ## Fatigue: a dark card with a skull flies from the empty deck to the hero.
 func _fatigue(ev: Dictionary) -> void:
 	var own: bool = ev.player == viewer()
@@ -1515,6 +1540,17 @@ func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
 					TableFx.spawn(_fx, "portal", _center_of(ev.entity))
 	if played >= 0 and _views.has(played) and events.any(func(e): return e.get("by_id", -1) == played and e.type != "play"):
 		TableFx.spawn(_fx, "battlecry", _center_of(played))
+	var went_off := {}  # minions whose own trigger or poison acted: their mark pops, with a chime
+	for ev in events:
+		var src: int = ev.get("by_id", -1)
+		if src < 0 or src == played or went_off.has(src) or not _views.get(src) is MinionView:
+			continue
+		var m := g.ent(src)
+		if m and not m.silenced and (Cards.of(m.card_id).has("on") or KeywordTips.keywords_of(m.card_id).has("POISONOUS")):
+			went_off[src] = true
+			(_views[src] as MinionView).pop("mark")
+	if not went_off.is_empty():
+		Sound.play("trigger")
 
 
 func _wait(t: float) -> void:
@@ -1649,6 +1685,73 @@ func _banner(text: String) -> void:
 	tw.tween_callback(l.queue_free)
 
 
+## A shard of a shattered hero portrait: a triangle of the picture that flies off,
+## spins, falls and fades.
+class _Shard:
+	extends Node2D
+	var pts := PackedVector2Array()
+	var uv := PackedVector2Array()
+	var tex: Texture2D
+	var vel := Vector2.ZERO
+	var spin := 0.0
+	var life := 1.5
+	var _t := 0.0
+
+	## Cuts rect into jagged triangles (a grid with shaken corners), each a shard.
+	static func cut(rect: Rect2, tex: Texture2D) -> Array:
+		var out := []
+		var cols := 6
+		var rows := 7
+		var grid := []
+		for y in rows + 1:
+			var row := []
+			for x in cols + 1:
+				var p := Vector2(float(x) / cols, float(y) / rows)
+				if x > 0 and x < cols and y > 0 and y < rows:
+					p += Vector2(randf_range(-0.4, 0.4) / cols, randf_range(-0.4, 0.4) / rows)
+				row.append(p)
+			grid.append(row)
+		var c := rect.get_center()
+		for y in rows:
+			for x in cols:
+				var a: Vector2 = grid[y][x]
+				var b: Vector2 = grid[y][x + 1]
+				var d: Vector2 = grid[y + 1][x]
+				var e: Vector2 = grid[y + 1][x + 1]
+				for tri in [[a, b, e], [a, e, d]]:
+					var sh := _Shard.new()
+					var mid: Vector2 = (tri[0] + tri[1] + tri[2]) / 3.0
+					sh.position = rect.position + mid * rect.size
+					for q in tri:
+						sh.pts.append((q - mid) * rect.size)
+						sh.uv.append(q)
+					sh.tex = tex
+					var away := (sh.position - c).normalized()
+					sh.vel = away * randf_range(140, 420) + Vector2(0, randf_range(-260, -60))
+					sh.spin = randf_range(-9, 9)
+					sh.life = randf_range(1.0, 1.5)
+					sh.z_index = 80
+					out.append(sh)
+		return out
+
+	func _process(delta: float) -> void:
+		_t += delta
+		vel.y += 900 * delta
+		position += vel * delta
+		rotation += spin * delta
+		modulate.a = clampf(1.0 - _t / life, 0.0, 1.0)
+		if _t >= life:
+			queue_free()
+		queue_redraw()
+
+	func _draw() -> void:
+		if tex:
+			draw_colored_polygon(pts, Color.WHITE, uv, tex)
+		else:
+			draw_colored_polygon(pts, Color("8a6d3b"))
+		draw_polyline(pts + PackedVector2Array([pts[0]]), Color(1, 0.8, 0.4, 0.6), 1.0)
+
+
 ## The fatigue card: dark, with a skull and the damage it deals.
 class _Fatigue:
 	extends Control
@@ -1747,6 +1850,8 @@ class _Orb:
 
 
 func _effects_now(events: Array) -> void:
+	if is_inside_tree() and not Anim.instant and events.any(func(e): return e.type == "game_over"):
+		_ending = true  # the result waits for the losing hero to shatter
 	var old := {}
 	var before := {}  # what the minion and hero views showed before the change
 	for id in _views:
@@ -1766,6 +1871,8 @@ func _effects_now(events: Array) -> void:
 	_quiet.clear()
 	if is_inside_tree() and not Anim.instant:
 		_impact_fx(events, before, old)
+		if events.any(func(e): return e.type == "game_over"):
+			_shatter_losers()
 	var big := false
 	var hero_hit := 0  # 1: a hero took damage, 2: more than 5
 	var heard := {}
@@ -1916,6 +2023,8 @@ func _refresh_overlay() -> void:
 	if _overlay and _overlay.name == "ConnectionLost":
 		return
 	if g.game_over:
+		if _ending:
+			return  # the losing hero is still shattering; the result comes after
 		if _overlay == null or _overlay.name != "GameOver":
 			var text := tr("Draw")
 			if g.winner >= 0:
@@ -1957,21 +2066,9 @@ func _tutorial_result(box: VBoxContainer) -> void:
 		line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		box.add_child(line)
 		if n < Missions.count():
-			_centered_button(box, tr("Next Mission"), "NextMission", func():  # its intro first
-				var intro := TutorialIntro.make(n + 1)
-				intro.name = "NextIntro"
-				intro.z_index = 120  # above the result overlay, which hides meanwhile
-				var result := _overlay
-				if result:
-					result.visible = false
-				intro.done.connect(func(): tutorial_next.emit(n + 1))
-				intro.back.connect(func():
-					intro.queue_free()
-					if is_instance_valid(result):
-						result.visible = true)
-				add_child(intro))
+			_centered_button(box, tr("Next Mission"), "NextMission", func(): tutorial_next.emit(n + 1))  # main shows its intro first
 	else:
-		_centered_button(box, tr("Try Again"), "TryAgain", func(): tutorial_next.emit(n))
+		_centered_button(box, tr("Try Again"), "TryAgain", func(): tutorial_retry.emit(n))
 	_centered_button(box, tr("Back"), "BackToMenu", _leave)
 
 

@@ -4,6 +4,15 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-10-12
+
+### Ajouté
+- En cas de défaite, le portrait du héros vole en éclats.
+- Les symboles d'éclair et de poison restent immobiles et s'animent avec un léger son quand leur effet se déclenche.
+
+### Corrigé
+- Tutoriel : « Mission suivante » ouvre les explications dans un écran à part ; l'écran de récompense ne bloque plus.
+
 ## [0.17.0] - 2026-10-12
 
 ### Ajouté

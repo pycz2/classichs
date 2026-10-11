@@ -5,3 +5,5 @@ __pycache__/
 .claude/
 art/original/
 .DS_Store
+tools/tts/.venv/
+tools/tts/refs/

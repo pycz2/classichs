@@ -3,7 +3,7 @@ extends RefCounted
 ## What minions and heroes say (data/voice_lines.json: card id -> kind -> language ->
 ## text; kinds: play, attack, death; heroes: greetings, well_played, thanks, wow, oops,
 ## threaten, start, concede, attack) and the recorded clips of those lines
-## (audio/voice/<Hearthstone locale>/<card id>_<kind>.ogg, made by tools/tts).
+## (audio/voice/<game language: en, ru, pt_BR…>/<card id>_<kind>.ogg, made by tools/tts).
 
 const PATH := "res://data/voice_lines.json"
 const CLIPS := "res://audio/voice"
@@ -30,5 +30,6 @@ static func text(card_id: String, kind: String, lang := "") -> String:
 
 ## The recorded clip of the line in the interface language, or null.
 static func clip(card_id: String, kind: String) -> AudioStream:
-	var path := "%s/%s/%s_%s.ogg" % [CLIPS, CardText.hs_locale(TranslationServer.get_locale()), card_id, kind]
+	var lang := TranslationServer.get_locale()
+	var path := "%s/%s/%s_%s.ogg" % [CLIPS, lang if lang in CardLayout.LANGS else "en", card_id, kind]
 	return load(path) if ResourceLoader.exists(path) else null
