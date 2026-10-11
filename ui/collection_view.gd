@@ -5,6 +5,8 @@ extends Control
 ## line in the deck list to remove one copy.
 
 signal done(deck: Deck)
+## The deck changed (card added or removed, name edited): the owner saves at once.
+signal changed
 
 const PER_PAGE := 8
 const CLASSES := ["DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR", "NEUTRAL"]
@@ -175,6 +177,8 @@ func click_card(id: String) -> void:
 	show_hint(why)
 	_fill()
 	_refresh_deck()
+	if why == "":
+		changed.emit()
 
 
 func _on_hover(v: EntityView, on: bool) -> void:
@@ -198,10 +202,12 @@ func _build_sidebar() -> void:
 	add_child(panel)
 	_name_edit.name = "DeckName"
 	_name_edit.text = deck.name
-	_name_edit.max_length = 60
+	_name_edit.max_length = Deck.NAME_MAX
 	_name_edit.position = Vector2(10, 10)
 	_name_edit.size = Vector2(284, 36)
-	_name_edit.text_changed.connect(func(t): deck.name = t)
+	_name_edit.text_changed.connect(func(t):
+		deck.name = t
+		changed.emit())
 	panel.add_child(_name_edit)
 	_count = Palette.label("", 18)
 	_count.position = Vector2(12, 52)
@@ -241,7 +247,8 @@ func _refresh_deck() -> void:
 
 
 func remove_card(id: String) -> void:
-	deck.remove(id)
+	if deck.remove(id):
+		changed.emit()
 	show_hint("")
 	_fill()
 	_refresh_deck()

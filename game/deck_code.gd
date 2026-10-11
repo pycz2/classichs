@@ -83,23 +83,34 @@ static func parse(code: String) -> Dictionary:
 			items.append(v)
 		lists.append(items)
 	var extra: int = read.call()
+	if extra < 0:
+		return bad
 	if extra != 0:
 		return {"error": _t("Decks with more than 2 copies of a card are not supported")}
 	return {"format": format, "heroes": lists[0], "singles": lists[1], "doubles": lists[2], "error": ""}
+
+
+static func _hero_from_cards(dbfs: Array) -> String:
+	for dbf in dbfs:
+		var id := CardDb.by_dbf(dbf)
+		if id != "" and CardDb.card(id).cardClass != "NEUTRAL" and Decks.HEROES.has(CardDb.card(id).cardClass):
+			return Decks.hero(CardDb.card(id).cardClass)
+	return ""
 
 
 ## A deck from a code or from text copied out of the Hearthstone client
 ## ("### Name" header and "#" comment lines). {"deck": Deck or null, "error"}.
 static func decode(text: String) -> Dictionary:
 	var name := ""
-	var code := ""
+	var p := {"error": _t("This is not a deck code")}
 	for line in text.split("\n"):
 		var l := line.strip_edges()
 		if l.begins_with("###"):
-			name = l.substr(3).strip_edges()
-		elif l != "" and not l.begins_with("#") and code == "":
-			code = l
-	var p := parse(code)
+			name = l.substr(3).strip_edges().left(Deck.NAME_MAX)
+		elif l != "" and not l.begins_with("#") and p.error != "":
+			var q := parse(l)  # deck sites put a title line before the code
+			if q.error == "" or p.error == _t("This is not a deck code"):
+				p = q
 	if p.error != "":
 		return {"deck": null, "error": p.error}
 	if not p.format in [FORMAT_WILD, FORMAT_STANDARD, FORMAT_CLASSIC]:
@@ -108,7 +119,9 @@ static func decode(text: String) -> Dictionary:
 		return {"deck": null, "error": _t("A deck needs exactly one hero")}
 	var hero := CardDb.by_dbf(p.heroes[0])
 	if not Decks.HEROES.values().has(hero):
-		return {"deck": null, "error": _t("Unknown hero in the deck code")}
+		hero = _hero_from_cards(p.singles + p.doubles)  # a hero skin (Magni, Medivh…)
+		if hero == "":
+			return {"deck": null, "error": _t("Unknown hero in the deck code")}
 	var deck := Deck.new()
 	deck.name = name if name != "" else _t("Imported deck")
 	deck.hero = hero

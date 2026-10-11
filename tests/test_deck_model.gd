@@ -35,9 +35,11 @@ func test_thirty_cards() -> void:
 
 func test_dict_roundtrip_with_odd_name() -> void:
 	var d := _mage_deck()
-	d.name = "Огонь \"и\" лёд ✨ " + "x".repeat(200)
+	d.name = "Огонь \"и\" лёд ✨ \\ \n" + "x".repeat(30)
 	var d2 := Deck.from_dict(d.to_dict())
 	eq([d2.name, d2.hero, d2.cards], [d.name, d.hero, d.cards], "same deck")
+	d.name = "y".repeat(200)
+	eq(Deck.from_dict(d.to_dict()).name.length(), Deck.NAME_MAX, "long name cut to the limit")
 
 
 func test_code_roundtrip() -> void:
@@ -112,6 +114,7 @@ func test_store_roundtrip_and_broken_file() -> void:
 	var back := DeckStore.load_all()
 	eq(back.size(), 1, "one deck")
 	eq(back[0].cards, d.cards, "same cards")
+	DirAccess.remove_absolute("user://test_decks.bad.json")
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	f.store_string("{ not json")
 	f.close()
@@ -120,4 +123,71 @@ func test_store_roundtrip_and_broken_file() -> void:
 	DirAccess.remove_absolute(path)
 	DirAccess.remove_absolute("user://test_decks.bad.json")
 	DeckStore.path = DeckStore.DEFAULT_PATH
-	eq(DeckStore.load_all().size() >= 0, true, "default path still loads")
+
+
+
+func _tmp_store(text: String) -> void:
+	DeckStore.path = "user://test_store2.json"
+	for p in ["user://test_store2.json", "user://test_store2.bad.json", "user://test_store2.bad1.json"]:
+		DirAccess.remove_absolute(p)
+	var f := FileAccess.open(DeckStore.path, FileAccess.WRITE)
+	f.store_string(text)
+	f.close()
+
+
+func _tmp_clean() -> void:
+	for p in ["user://test_store2.json", "user://test_store2.bad.json", "user://test_store2.bad1.json"]:
+		DirAccess.remove_absolute(p)
+	DeckStore.path = DeckStore.DEFAULT_PATH
+	DeckStore.last_load_error = ""
+
+
+func test_store_drops_unknown_cards_and_rejects_unknown_hero() -> void:
+	_tmp_store('{"version": 1, "decks": [{"name": "A", "hero": "HERO_08", "cards": ["VAN_CS2_029", "VAN_GONE"]}, {"name": "B", "hero": "HERO_99", "cards": []}]}')
+	var decks := DeckStore.load_all()
+	eq(decks.size(), 1, "deck with unknown hero kept aside")
+	eq(decks[0].cards, ["VAN_CS2_029"] as Array[String], "unknown card dropped")
+	check(DeckStore.last_load_error != "", "player is told")
+	check(FileAccess.file_exists("user://test_store2.bad.json"), "copy kept")
+	_tmp_clean()
+
+
+func test_store_backup_not_overwritten() -> void:
+	_tmp_store("{ broken")
+	DeckStore.load_all()
+	var f := FileAccess.open(DeckStore.path, FileAccess.WRITE)
+	f.store_string("{ broken again")
+	f.close()
+	DeckStore.load_all()
+	check(FileAccess.file_exists("user://test_store2.bad1.json"), "second backup gets a new name")
+	eq(FileAccess.get_file_as_string("user://test_store2.bad.json"), "{ broken", "first backup kept")
+	_tmp_clean()
+
+
+func test_decode_hero_skin_uses_card_class() -> void:
+	var d := _mage_deck()
+	var singles := []
+	var doubles := []
+	for pair in d.sorted_counts():
+		(doubles if pair[1] == 2 else singles).append(CardDb.card(pair[0]).dbfId)
+	var r := DeckCode.decode(DeckCode.pack(3, [2828], singles, doubles))  # an unknown hero (skin)
+	eq(r.error, "", "imported")
+	eq(r.deck.hero, "HERO_08", "class from the cards")
+
+
+func test_decode_truncated_code_message() -> void:
+	var code := DeckCode.encode(_mage_deck())
+	var raw := Marshalls.base64_to_raw(code)
+	var cut := Marshalls.raw_to_base64(raw.slice(0, raw.size() - 3))
+	var r := DeckCode.decode(cut)
+	eq(r.error, str(TranslationServer.translate("This is not a deck code")), "truncated is not a deck code")
+
+
+func test_decode_code_on_a_later_line() -> void:
+	var r := DeckCode.decode("My great deck\n" + DeckCode.encode(_mage_deck()))
+	eq(r.error, "", "code found on line 2")
+
+
+func test_imported_name_limited() -> void:
+	var r := DeckCode.decode("### " + "N".repeat(100) + "\n" + DeckCode.encode(_mage_deck()))
+	eq(r.deck.name.length(), Deck.NAME_MAX, "name cut to the limit")

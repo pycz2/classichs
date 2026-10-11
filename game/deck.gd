@@ -3,6 +3,7 @@ extends RefCounted
 ## A player's deck: name, hero and 30 card ids, with Hearthstone deck-building rules.
 
 const SIZE := 30
+const NAME_MAX := 60
 
 var name := ""
 var hero := "HERO_08"
@@ -84,15 +85,20 @@ func to_dict() -> Dictionary:
 	return {"name": name, "hero": hero, "cards": cards.duplicate()}
 
 
-## A deck from saved data; unknown fields are ignored, bad ones give null.
+## A deck from saved data; unknown fields are ignored. Card ids that no longer
+## exist are dropped (they could never be played); a bad structure or an
+## unknown hero gives null.
 static func from_dict(d: Variant) -> Deck:
 	if not d is Dictionary or not d.get("hero") is String or not d.get("cards") is Array:
 		return null
+	if not Decks.HEROES.values().has(d.hero):
+		return null
 	var deck := Deck.new()
-	deck.name = str(d.get("name", ""))
+	deck.name = str(d.get("name", "")).left(NAME_MAX)
 	deck.hero = d.hero
 	for id in d.cards:
 		if not id is String:
 			return null
-		deck.cards.append(id)
+		if CardDb.has(id):
+			deck.cards.append(id)
 	return deck

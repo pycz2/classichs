@@ -46,6 +46,8 @@ func _ready() -> void:
 	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(message)
 	refresh()
+	if DeckStore.last_load_error != "":
+		message.text = DeckStore.last_load_error
 
 
 func refresh() -> void:
@@ -82,8 +84,12 @@ func edit_deck(i: int) -> void:
 		message.text = tr("Select a deck first")
 		return
 	_editor = CollectionView.new()
-	_editor.deck = decks[i]
+	var deck := decks[i]
+	_editor.deck = deck
+	_editor.changed.connect(_save)
 	_editor.done.connect(func(_d):
+		if deck.name.strip_edges() == "":
+			deck.name = tr("Custom %s") % CardText.name(deck.hero)
 		_editor.queue_free()
 		remove_child(_editor)
 		_editor = null
@@ -209,9 +215,15 @@ func _show_import() -> void:
 	ed.name = "CodeInput"
 	ed.custom_minimum_size = Vector2(700, 200)
 	box.add_child(ed)
+	var err := Palette.label("", 18, Palette.TARGET)
+	err.name = "PopupError"
+	err.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	err.custom_minimum_size.x = 700
+	box.add_child(err)
 	var ok := Palette.button(tr("Import"), "DoImport")
 	ok.pressed.connect(func():
-		if import_code(ed.text) == "":
+		err.text = import_code(ed.text)
+		if err.text == "":
 			_close())
 	box.add_child(ok)
 	var no := Palette.button(tr("Cancel"), "Cancel")

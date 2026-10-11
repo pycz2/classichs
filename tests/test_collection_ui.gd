@@ -117,3 +117,54 @@ func test_training_with_saved_deck_and_incomplete_deck() -> void:
 	eq(started[0].name, "Priest", "the saved deck")
 	t.free()
 	_store_restore()
+
+
+
+func test_import_error_visible_in_popup() -> void:
+	_store_reset()
+	var v := DeckListView.new()
+	root().add_child(v)
+	v._show_import()
+	(v.find_child("CodeInput", true, false) as TextEdit).text = "garbage"
+	(v.find_child("DoImport", true, false) as Button).pressed.emit()
+	var err := v.find_child("PopupError", true, false) as Label
+	check(err != null and err.text != "", "error shown inside the popup")
+	v.free()
+	_store_restore()
+
+
+func test_damaged_store_message_shown() -> void:
+	_store_reset()
+	var f := FileAccess.open(TEST_STORE, FileAccess.WRITE)
+	f.store_string("{ broken")
+	f.close()
+	var v := DeckListView.new()
+	root().add_child(v)
+	check(v.message.text != "", "player is told about the damaged file")
+	v.free()
+	DirAccess.remove_absolute("user://test_ui_decks.bad.json")
+	DeckStore.last_load_error = ""
+	_store_restore()
+
+
+func test_builder_saves_every_change() -> void:
+	_store_reset()
+	var v := DeckListView.new()
+	root().add_child(v)
+	v.new_deck("HERO_08")
+	v._editor.click_card("VAN_CS2_029")
+	eq(DeckStore.load_all()[0].cards, ["VAN_CS2_029"] as Array[String], "saved without pressing Done")
+	v.free()
+	_store_restore()
+
+
+func test_empty_name_falls_back_on_done() -> void:
+	_store_reset()
+	var v := DeckListView.new()
+	root().add_child(v)
+	var d := v.new_deck("HERO_08")
+	d.name = "   "
+	v._editor.done.emit(d)
+	check(d.name.strip_edges() != "", "default name restored")
+	v.free()
+	_store_restore()
