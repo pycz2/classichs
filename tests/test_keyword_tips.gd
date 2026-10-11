@@ -28,3 +28,28 @@ func test_hovering_a_board_minion_shows_its_tips() -> void:
 	v._on_hover(v._views[m.game.players[0].board[0].id], true)
 	check(v.find_child("KeywordTips", true, false) != null, "tips next to the big card")
 	v.free()
+
+
+func test_a_buffed_minion_lists_its_changes() -> void:
+	var g := H.game()
+	var yeti := H.board(g, 0, "VAN_CS2_182")
+	H.play(g, H.hand(g, 0, "VAN_CS2_092"), yeti)  # Blessing of Kings
+	H.board(g, 0, "VAN_CS2_122")  # Raid Leader
+	g.update_auras()
+	var lines := KeywordTips.changes(yeti)
+	check(lines.has("+4/+4 — Blessing of Kings"), "the buff and its card: %s" % [lines])
+	check(lines.has("+1/+0 — Raid Leader (aura)"), "the aura: %s" % [lines])
+	var tips := KeywordTips.make(yeti.card_id, yeti)
+	check(tips.find_child("Changes", true, false) != null, "a box with the changes")
+	tips.free()
+	eq(KeywordTips.changes(H.board(g, 1, "VAN_CS2_182")), [], "an untouched minion has none")
+
+
+func test_collection_shows_keyword_tips() -> void:
+	var c := CollectionView.new()
+	root().add_child(c)
+	var cv := CardView.make("VAN_EX1_012")  # Bloodmage Thalnos
+	c._on_hover(cv, true)
+	check(c.find_child("KeywordTips", true, false) != null, "tips beside the big card in the collection")
+	cv.free()
+	c.free()

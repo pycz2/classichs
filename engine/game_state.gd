@@ -175,11 +175,11 @@ func emit_now(ev: Dictionary) -> void:
 	for e in in_play():
 		var h: Dictionary = hooks_of(e).get("now", {})
 		if h.has(ev.type):
-			h[ev.type].call(self, e, ev)
+			_from(e, func(): h[ev.type].call(self, e, ev))
 		for ench: Dictionary in e.enchantments:
 			var eh: Dictionary = Cards.of(ench.get("hooks", "")).get("now", {})
 			if eh.has(ev.type):
-				eh[ev.type].call(self, e, ev)
+				_from(e, func(): eh[ev.type].call(self, e, ev))
 
 
 ## Runs queued triggers, then the death phase, until nothing is left.
@@ -196,7 +196,7 @@ func resolve() -> void:
 			var me: Entity = q[1]
 			if q[3] and not (me.zone == "PLAY" or me.zone == "SECRET"):
 				continue
-			q[0].call(self, me, q[2])
+			_from(me, func(): q[0].call(self, me, q[2]))
 		update_auras()
 		if not _death_phase():
 			break
@@ -244,17 +244,29 @@ func _death_phase() -> bool:
 	return not dead.is_empty()
 
 
+## The card whose effect is running now (buffs and auras remember it; display only).
+var source_card := ""
+
+
+## Runs f with source_card set to the card of e, then restores it.
+func _from(e: Entity, f: Callable) -> void:
+	var was := source_card
+	source_card = e.card_id if e else ""
+	f.call()
+	source_card = was
+
+
 func update_auras() -> void:
 	var all := in_play()
 	var before := {}
 	for e in all:
 		before[e.id] = [e.max_health(), e.health()]
-		e.aura = {"atk": 0, "hp": 0, "tags": {}}
+		e.aura = {"atk": 0, "hp": 0, "tags": {}, "src": {}}
 	for key in ["aura", "aura_final"]:  # aura_final sees every normal aura (Lightspawn)
 		for e in all:
 			var h := hooks_of(e)
 			if h.has(key) and e.zone == "PLAY":
-				h[key].call(self, e)
+				_from(e, func(): h[key].call(self, e))
 	for e in all:
 		e.fix_health(before[e.id][0], before[e.id][1])
 
@@ -262,6 +274,9 @@ func update_auras() -> void:
 func aura_add(t: Entity, atk: int, hp: int, tags := {}) -> void:
 	t.aura.atk += atk
 	t.aura.hp += hp
+	if source_card != "" and (atk != 0 or hp != 0):
+		var was: Array = t.aura.src.get(source_card, [0, 0])
+		t.aura.src[source_card] = [was[0] + atk, was[1] + hp]
 	for k in tags:
 		if k == "SPELLPOWER" or k == "DOUBLE_HEAL_DAMAGE":
 			t.aura.tags[k] = int(t.aura.tags.get(k, 0)) + int(tags[k])
@@ -394,7 +409,10 @@ func discard_random(p: int, count := 1) -> void:
 
 
 func buff(e: Entity, atk: int, hp: int, eot := false) -> void:
-	e.add_enchant({"atk": atk, "hp": hp, "eot": eot})
+	var ench := {"atk": atk, "hp": hp, "eot": eot}
+	if source_card != "":
+		ench["src"] = source_card
+	e.add_enchant(ench)
 	log_event({"type": "buff", "target": e.id, "atk": atk, "hp": hp})
 
 
@@ -406,6 +424,8 @@ func set_stats(e: Entity, atk := -1, hp := -1) -> void:
 	if hp >= 0:
 		ench["set_hp"] = hp
 		e.damage = 0
+	if source_card != "":
+		ench["src"] = source_card
 	e.add_enchant(ench)
 	log_event({"type": "buff", "target": e.id, "set_atk": atk, "set_hp": hp})
 

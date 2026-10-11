@@ -33,7 +33,7 @@ func _draw() -> void:
 	if e.has("IMMUNE"):
 		Frames.ring(self, Art.outline("arch", r.grow(4)), Color(1, 0.9, 0.3), 3)
 	Icons.paint(self, cls if Icons.CLASSES.has(cls) else "NEUTRAL", Rect2(Vector2(SIZE.x / 2 - 13, SIZE.y - 26), Vector2(26, 26)))
-	Frames.health(self, Vector2(112, 108), e.health(), 18, Color("ff9a9a") if e.damage > 0 else Color.WHITE)
+	Frames.health(self, Vector2(112, 108), e.health(), 18, Frames.DAMAGED if e.damage > 0 else Color.WHITE)
 	if int(e.tags.get("ARMOR", 0)) > 0:
 		Frames.shield(self, Vector2(112, 70), int(e.tags.ARMOR), 15)
 	var atk := g.hero_atk(e)

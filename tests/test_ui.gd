@@ -208,14 +208,9 @@ func test_debug_add_card_with_broken_players() -> void:
 
 
 func test_long_card_text_uses_smaller_font() -> void:
-	var sizes := []
-	for id in ["VAN_CS2_029", "VAN_EX1_295"]:  # Fireball, Ice Block (long text)
-		var c := CardView.make(id)
-		root().add_child(c)
-		sizes.append((c.find_children("*", "RichTextLabel", false, false)[0] as RichTextLabel).get_theme_font_size("normal_font_size"))
-		c.free()
-	check(sizes[1] < sizes[0], "long text is smaller: %s" % [sizes])
-
+	var short := CardLayout.of("VAN_CS2_029", "en")  # Fireball
+	var long := CardLayout.of("VAN_EX1_295", "en")  # Ice Block
+	check(int(long.text) < int(short.text), "long text is smaller: %s %s" % [short, long])
 
 func test_hidden_history_follows_new_moves() -> void:
 	var h := HistoryPanel.new()

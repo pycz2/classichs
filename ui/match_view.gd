@@ -1139,13 +1139,13 @@ func _strip_card(card_id: String, on: bool) -> void:
 
 
 ## Keyword boxes beside a big card ("" hides them).
-func _show_tips(card_id: String, rect: Rect2) -> void:
+func _show_tips(card_id: String, rect: Rect2, e: Entity = null) -> void:
 	if _tips:
 		_tips.queue_free()
 		_tips = null
 	if card_id == "":
 		return
-	_tips = KeywordTips.make(card_id)
+	_tips = KeywordTips.make(card_id, e)
 	if _tips.get_child_count() == 0:
 		_tips.free()
 		_tips = null
@@ -1173,7 +1173,7 @@ func _on_hover(v: EntityView, on: bool) -> void:
 		_tooltip.show_entity(e, g)
 	_tooltip.position = TOOLTIP_POS
 	add_child(_tooltip)
-	_show_tips(e.card_id, Rect2(_tooltip.position, _tooltip.size))
+	_show_tips(e.card_id, Rect2(_tooltip.position, _tooltip.size), e if e.zone == "PLAY" else null)
 
 
 # --- events and effects ---------------------------------------------------------

@@ -340,11 +340,11 @@ func _run_effect(e: Entity, key: String, t: Entity, choice: int, combo: bool) ->
 	if t == null and _target_spec(e, choice, combo) != null:
 		return  # targeted effect with no target (none was valid, or it left play)
 	if choice >= 0:
-		Cards.of(h.choose_one[choice]).effect.call(self, e, t)
+		_from(e, func(): Cards.of(h.choose_one[choice]).effect.call(self, e, t))
 	elif combo and h.has("combo"):
-		h.combo.call(self, e, t)
+		_from(e, func(): h.combo.call(self, e, t))
 	elif h.has(key):
-		h[key].call(self, e, t)
+		_from(e, func(): h[key].call(self, e, t))
 
 
 func _play_minion(e: Entity, t: Entity, pos: int, choice: int, combo: bool) -> void:
@@ -444,7 +444,7 @@ func _do_hero_power(t: Entity) -> void:
 	var hp := p.hero_power
 	p.mana -= cost(hp)
 	hp.give_tag("USED")
-	Cards.of(hp.card_id).hero_power.call(self, hp, t)
+	_from(hp, func(): Cards.of(hp.card_id).hero_power.call(self, hp, t))
 	emit({"type": "hero_power", "player": current, "entity": hp.id, "target": t.id if t else -1})
 
 
@@ -457,7 +457,7 @@ func _do_choose(option: Entity) -> void:
 	var src := ent(pending.source)
 	var still := _pending_options()
 	pending = {}
-	Cards.of(src.card_id).on_choose.call(self, src, option, still)
+	_from(src, func(): Cards.of(src.card_id).on_choose.call(self, src, option, still))
 
 
 ## A choice whose options all left their zone (drawn by a trigger, say) is dropped.

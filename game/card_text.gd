@@ -8,6 +8,18 @@ const LOCALES := {"en": "enUS", "ru": "ruRU", "de": "deDE", "fr": "frFR", "es": 
 
 static var _tags := RegEx.create_from_string("<[^>]+>|\\[x\\]|\\{\\d+\\}\\s*")
 static var _numbers := RegEx.create_from_string("[$#](\\d+)")
+## "2 |4(point,points)": the word form for the number before it.
+static var _plural := RegEx.create_from_string("(\\d+)(\\[/b\\]|\\*)?([ \\x{a0}]*)\\|4\\(([^,)]*),([^)]*)\\)")
+
+
+static func _plurals(s: String) -> String:
+	var out := ""
+	var last := 0
+	for m in _plural.search_all(s):
+		var word := m.get_string(4) if int(m.get_string(1)) <= 1 else m.get_string(5)
+		out += s.substr(last, m.get_start() - last) + m.get_string(1) + m.get_string(2) + m.get_string(3) + word
+		last = m.get_end()
+	return out + s.substr(last)
 
 
 ## Godot locale ("ru_RU", "pt") to the Hearthstone key ("ruRU", "ptBR"); English by default.
@@ -46,7 +58,7 @@ static func rich(id: String, locale := "", spellpower := 0) -> String:
 		var n := int(m.get_string(1))
 		out += ("[b]%d[/b]" % (n + spellpower)) if s[m.get_start()] == "$" and spellpower > 0 else str(n)
 		last = m.get_end()
-	out = _spaces.sub(out + s.substr(last), " ", true).replace(" \n", "\n").replace("\n ", "\n")
+	out = _spaces.sub(_plurals(out + s.substr(last)), " ", true).replace(" \n", "\n").replace("\n ", "\n")
 	return out.strip_edges()
 
 
@@ -67,4 +79,4 @@ static func text(id: String, locale := "", spellpower := 0) -> String:
 		var n := int(m.get_string(1))
 		out += ("*%d*" % (n + spellpower)) if s[m.get_start()] == "$" and spellpower > 0 else str(n)
 		last = m.get_end()
-	return (out + s.substr(last)).strip_edges()
+	return _plurals(out + s.substr(last)).strip_edges()

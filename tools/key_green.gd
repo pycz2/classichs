@@ -15,6 +15,7 @@ func _process(_d: float) -> bool:
 			if green > 0.0:
 				c.g = maxf(c.r, c.b)  # no green fringe on the edges
 			img.set_pixel(x, y, c)
+	img = img.get_region(img.get_used_rect())  # trim the empty margins: the bottom edge is the ornament's
 	var w := int(args[2])
 	img.resize(w, int(w * img.get_height() / float(img.get_width())), Image.INTERPOLATE_LANCZOS)
 	img.save_png(args[1])

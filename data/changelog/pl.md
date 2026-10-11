@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-11
+
+### Dodano
+- Każda karta ma teraz własny wygenerowany obrazek.
+- Tekst kart jest złożony ręcznie dla każdej karty w każdym języku: wiersze, rozmiar czcionki i położenie. Sprawdzanie pilnuje, by żaden tekst nie wychodził poza ramkę ani nie wchodził na kamienie; wiersze są wyrównane, liczby zostają przy swoich słowach, słowa kluczowe nie są dzielone.
+- Laboratorium kart (w stole debugowania): jedna karta naraz we wszystkich 8 językach, z ramkami i listą problemów; rozmiary, położenie i wiersze można zmieniać i zapisywać.
+- Stronnicy pokazują swoje zmiany w okienkach: wzmocnienia z kartą, która je dała, aury, ustawione wartości, zdobyte słowa kluczowe, Zamrożenie, Wyciszenie. Okienka słów kluczowych także w kolekcji i przy budowaniu talii.
+- Karty legendarne: prosty złoty fryz ze smokiem wzdłuż górnej krawędzi karty.
+- Ekran ładowania w obecnym wyglądzie menu.
+
+### Zmieniono
+- Miecz za kamieniem ataku wystaje w lewo do góry, poza krawędź karty, z dala od tekstu.
+- Mocniejszy kontrast liczb na kartach, zwłaszcza wzmocnionych i uszkodzonych wartości.
+
+### Naprawiono
+- Francuski tekst niektórych kart pokazywał „|4(point,points)” zamiast „point” lub „points”.
+- Na stronie gry ostatnia litera tytułu nie jest już ucięta.
+
 ## [0.9.0] - 2026-10-12
 
 ### Dodano

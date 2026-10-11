@@ -9,15 +9,20 @@ const ATTACK := Color("f2b705")
 const HEALTH := Color("d6202a")
 const ARMOR := Color("8d99a6")
 const GOLD := Color("d9b44a")
+## Stat numbers above or below the card's own value.
+const BUFFED := Color("4dff5a")
+const DAMAGED := Color("ff3b3b")
 
 
 static func _number(ci: CanvasItem, c: Vector2, value: int, size: float, col := Color.WHITE) -> void:
 	var font := ThemeDB.fallback_font
-	var fs := int(size)
+	var fs := int(size * 1.08)
 	var s := str(value)
 	var w := font.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
 	var at := c + Vector2(-w / 2.0, fs * 0.36)
-	ci.draw_string_outline(font, at, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, maxi(3, fs / 5), Color.BLACK)
+	var outline := maxi(4, int(fs * 0.34))  # a thick black edge keeps every colour readable on every gem
+	ci.draw_string_outline(font, at + Vector2(0, 1.5), s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, outline, Color(0, 0, 0, 0.6))
+	ci.draw_string_outline(font, at, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, outline, Color.BLACK)
 	ci.draw_string(font, at, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, col)
 
 
@@ -39,8 +44,9 @@ static func mana(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.
 
 
 static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE) -> void:
-	# a sword behind the gem: the blade sticks out to the top right, the hilt to the bottom left
-	var d := Vector2(1, -1).normalized()
+	# a sword behind the gem: the blade sticks out to the top left (out of the card, away
+	# from its text), the hilt to the bottom right
+	var d := Vector2(-1, -1).normalized()
 	var n := Vector2(-d.y, d.x)
 	var dark := Color("3a2a05")
 	var w := r * 0.32
@@ -51,7 +57,7 @@ static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Colo
 	ci.draw_line(base, tip - d * w * 1.8, Color(1, 1, 1, 0.45), maxf(1.0, r * 0.08), true)
 	var guard := c - d * r * 1.0
 	_shape(ci, PackedVector2Array([guard + n * r * 0.75 + d * w * 0.5, guard + n * r * 0.75 - d * w * 0.5, guard - n * r * 0.75 - d * w * 0.5, guard - n * r * 0.75 + d * w * 0.5]), ATTACK.darkened(0.15), dark, maxf(1.5, r * 0.12))
-	var grip_end := c - d * r * 1.55
+	var grip_end := c - d * r * 1.4
 	ci.draw_line(guard, grip_end, dark, w * 1.5, true)
 	ci.draw_line(guard, grip_end, Color("8a5a1a"), w * 0.9, true)
 	ci.draw_circle(grip_end, w * 0.75, ATTACK.darkened(0.1))
@@ -70,7 +76,7 @@ static func health(ci: CanvasItem, c: Vector2, value: int, r: float, col := Colo
 			p.x *= 1.0 + p.y / r * 0.45
 			p.y *= 1.25
 		pts.append(c + p + Vector2(0, r * 0.1))
-	_shape(ci, pts, HEALTH, Color("3d0508"), maxf(1.5, r * 0.14))
+	_shape(ci, pts, HEALTH.darkened(0.5) if col == DAMAGED else HEALTH, Color("3d0508"), maxf(1.5, r * 0.14))  # a darker drop makes red damage numbers stand out
 	_number(ci, c + Vector2(0, r * 0.08), value, r * 1.25, col)
 
 
@@ -90,13 +96,14 @@ static func rarity(ci: CanvasItem, c: Vector2, rar: String, r: float) -> void:
 static var _dragon: Texture2D
 
 
-## The gold dragon statue (generated with Codex, background cut out) coiling over
-## the top of a legendary portrait; top is the middle of its upper edge.
-static func crest(ci: CanvasItem, top: Vector2, w: float) -> void:
+## The gold dragon crest (generated with Codex, background cut out) sitting ON a
+## line: base is the middle of its bottom edge, so it rises above a portrait or
+## a card edge instead of covering it.
+static func crest(ci: CanvasItem, base: Vector2, w: float) -> void:
 	if _dragon == null:
 		_dragon = load("res://ui/dragon_crest.png")
 	var h := w * _dragon.get_height() / float(_dragon.get_width())
-	ci.draw_texture_rect(_dragon, Rect2(top - Vector2(w / 2.0, h * 0.35), Vector2(w, h)), false, Color(1, 1, 1, 0.92))
+	ci.draw_texture_rect(_dragon, Rect2(base - Vector2(w / 2.0, h * 0.9), Vector2(w, h)), false, Color(1, 1, 1, 0.95))
 
 
 static func ring(ci: CanvasItem, pts: PackedVector2Array, col: Color, w: float) -> void:

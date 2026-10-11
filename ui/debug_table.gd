@@ -4,6 +4,7 @@ extends Control
 
 signal start(game: Game, bots: Array)
 signal back
+signal card_lab
 
 const ZONES := [["Hand", "hand"], ["Board", "board"], ["Deck", "deck"]]
 
@@ -62,9 +63,9 @@ func _ready() -> void:
 	mode.add_item(tr("Hot-seat: control both players"))
 	add_child(mode)
 	var row := HBoxContainer.new()
-	row.position = Vector2(740, 600)
+	row.position = Vector2(560, 600)
 	row.add_theme_constant_override("separation", 12)
-	for spec in [[tr("Start"), "Start", start_game], [tr("Example"), "Example", load_example], [tr("Back"), "Back", func(): back.emit()]]:
+	for spec in [[tr("Start"), "Start", start_game], [tr("Example"), "Example", load_example], [tr("Card Lab"), "CardLab", func(): card_lab.emit()], [tr("Back"), "Back", func(): back.emit()]]:
 		var b := Palette.button(spec[0], spec[1])
 		b.custom_minimum_size = Vector2(160, 48)
 		b.pressed.connect(spec[2])
