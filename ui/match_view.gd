@@ -63,6 +63,7 @@ var _gap := -1
 var _press := {}
 var _dragging := false
 var _arrow := TargetArrow.new()
+var _strip := HistoryStrip.new()
 ## Online: what the opponent points at.
 var _opp_arrow := TargetArrow.new()
 var _opp_hover := -1
@@ -143,6 +144,9 @@ func _ready() -> void:
 		add_child(pile)
 	_build_menu()
 	_build_emote_wheel()
+	add_child(_strip)
+	_strip.open_history.connect(func(): _history.visible = not _history.visible)
+	_strip.show_card.connect(_strip_card)
 	add_child(_arrow)
 	_opp_arrow.tint = Color("e03131")
 	add_child(_opp_arrow)
@@ -722,6 +726,7 @@ func refresh() -> void:
 		concede.text = tr("Menu") if g.game_over else tr("Concede")
 	_apply_glows()
 	_history.update_from(g, me)
+	_strip.update_from(g, me)
 	_reset_timer()
 	if _tracker.visible:
 		_tracker.update_from(g, me)
@@ -1056,6 +1061,18 @@ func _on_concede() -> void:
 		_close_overlay()
 		controller.submit({"type": "concede", "player": p}))
 	_centered_button(box, tr("Keep playing"), "KeepPlaying", _close_overlay)
+
+
+## Hovering a history tile shows that card big.
+func _strip_card(card_id: String, on: bool) -> void:
+	if _tooltip:
+		_tooltip.queue_free()
+		_tooltip = null
+	if on and card_id != "":
+		_tooltip = CardView.make(card_id, 1.6)
+		_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_tooltip.position = Vector2(70, 160)
+		add_child(_tooltip)
 
 
 func _on_hover(v: EntityView, on: bool) -> void:

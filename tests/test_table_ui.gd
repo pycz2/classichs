@@ -121,3 +121,13 @@ func test_drag_spell_onto_target_and_back_to_hand() -> void:
 	_drag(v, fb.id, _center(v, v.g.hero(1).id))
 	eq(v.g.hero(1).health(), 24, "Fireball dropped on the enemy hero")
 	v.free()
+
+
+func test_history_strip_shows_played_cards_newest_first() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120", "VAN_CS2_182"]}, [false, false])
+	for e in v.g.players[0].hand.duplicate():
+		v.controller.submit({"type": "play", "player": 0, "entity": e.id, "target": -1, "pos": 0, "choice": -1})
+	var strip := v.find_child("HistoryStrip", true, false) as HistoryStrip
+	eq(strip.card_at(5), "VAN_CS2_182", "newest on top")
+	eq(strip.card_at(HistoryStrip.TILE + 10), "VAN_CS2_120", "then the earlier one")
+	v.free()
