@@ -56,3 +56,42 @@ func test_every_card_draws_inside_its_rect() -> void:
 
 func test_same_card_same_art() -> void:
 	eq(Art.shapes("VAN_CS2_182", Rect2(0, 0, 50, 50)), Art.shapes("VAN_CS2_182", Rect2(0, 0, 50, 50)), "deterministic")
+
+
+func test_generated_illustrations_load_when_present() -> void:
+	check(Art.texture("HERO_08") != null, "Jaina has an illustration")
+	eq(Art.texture("NO_SUCH_CARD"), null, "missing: drawn art instead")
+	eq(Art.outline("oval", Rect2(0, 0, 100, 50)).size(), 32, "oval outline")
+
+
+func test_art_set_setting_switches_pictures() -> void:
+	var dir := "user://test_art_original"
+	DirAccess.make_dir_recursive_absolute(dir)
+	var f := FileAccess.open(dir + "/HERO_08.jpg", FileAccess.WRITE)
+	f.store_buffer(FileAccess.get_file_as_bytes("res://art/cards/HERO_08.jpg"))
+	f.close()
+	var was: String = Art.DIRS.original
+	Art.DIRS.original = dir + "/%s.jpg"
+	Settings.data.art = "original"
+	Art.reset()
+	check(Art.texture("HERO_08") != null, "original picture used")
+	eq(Art.texture("HERO_01"), null, "no original: drawn placeholder")
+	Settings.data.art = "generated"
+	Art.reset()
+	check(Art.texture("HERO_01") != null, "generated picture used")
+	Art.DIRS.original = was
+	Art.reset()
+	DirAccess.remove_absolute(dir + "/HERO_08.jpg")
+	DirAccess.remove_absolute(dir)
+
+
+func test_settings_screen_offers_art_sets() -> void:
+	var s := SettingsView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(s)
+	var pick := s.find_child("ArtSet", true, false) as OptionButton
+	eq(pick.item_count, 2, "generated and original")
+	pick.item_selected.emit(1)
+	eq(Settings.data.art, "original", "stored")
+	pick.item_selected.emit(0)
+	eq(Settings.data.art, "generated", "back")
+	s.free()

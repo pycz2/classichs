@@ -19,18 +19,23 @@ static func make(ent: Entity, game: GameState) -> HeroView:
 
 
 func _draw() -> void:
-	var r := Rect2(Vector2(8, 8), SIZE - Vector2(16, 16))
-	_draw_glow(r, 20)
+	var r := Rect2(Vector2(10, 6), SIZE - Vector2(20, 14))
 	var cls: String = Decks.card_class(e.card_id) if Decks.HEROES.values().has(e.card_id) else e.card().get("cardClass", "NEUTRAL")
-	draw_style_box(Palette.box(Palette.of_class(cls), 20, Color("c9a74a"), 4), r)
-	_draw_art(r.grow(-10), e.card_id)
+	var outline := Art.outline("arch", r)
+	if glow.a > 0.0:
+		draw_colored_polygon(Art.outline("arch", r.grow(6)), Color(glow, 0.9))
+	draw_colored_polygon(Art.outline("arch", r.grow(5)), Frames.GOLD.darkened(0.3))
+	draw_colored_polygon(Art.outline("arch", r.grow(2)), Palette.of_class(cls).darkened(0.3))
+	Art.paint_in(self, r, e.card_id, "arch")
+	Frames.ring(self, outline, Frames.GOLD, 3)
 	if e.has("FROZEN"):
-		draw_style_box(Palette.box(Color(0.6, 0.85, 1.0, 0.45), 20), r)
+		draw_colored_polygon(outline, Color(0.6, 0.85, 1.0, 0.45))
 	if e.has("IMMUNE"):
-		draw_style_box(Palette.box(Color(1, 1, 1, 0.0), 22, Color(1, 0.9, 0.3), 3), r.grow(3))
-	_draw_stat(Vector2(112, 112), e.health(), Palette.HEALTH, Color("ff9a9a") if e.damage > 0 else Color.WHITE, 18)
+		Frames.ring(self, Art.outline("arch", r.grow(4)), Color(1, 0.9, 0.3), 3)
+	Icons.paint(self, cls if Icons.CLASSES.has(cls) else "NEUTRAL", Rect2(Vector2(SIZE.x / 2 - 13, SIZE.y - 26), Vector2(26, 26)))
+	Frames.health(self, Vector2(112, 108), e.health(), 18, Color("ff9a9a") if e.damage > 0 else Color.WHITE)
 	if int(e.tags.get("ARMOR", 0)) > 0:
-		_draw_stat(Vector2(112, 72), int(e.tags.ARMOR), Palette.ARMOR, Color.WHITE, 15)
+		Frames.shield(self, Vector2(112, 70), int(e.tags.ARMOR), 15)
 	var atk := g.hero_atk(e)
 	if atk > 0:
-		_draw_stat(Vector2(18, 112), atk, Palette.ATTACK, Color.BLACK, 18)
+		Frames.attack(self, Vector2(18, 108), atk, 18)

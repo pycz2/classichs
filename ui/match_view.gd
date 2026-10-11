@@ -606,6 +606,9 @@ func open_settings() -> void:
 	var s := SettingsView.new()
 	s.back.connect(s.queue_free)
 	s.language_changed.connect(relabel)
+	s.art_changed.connect(func():
+		for v in _views.values():
+			v.queue_redraw())
 	add_child(s)
 
 

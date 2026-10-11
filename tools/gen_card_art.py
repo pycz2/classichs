@@ -71,6 +71,8 @@ def run_batch(batch):
             subprocess.run(["sips", "-Z", str(SIZE), "-s", "format", "jpeg", "-s", "formatOptions", "75", src, "--out", dst],
                            capture_output=True)
             if os.path.exists(dst):
+                with open(dst + ".import", "w") as f:  # Godot exports the JPEG as it is
+                    f.write('[remap]\n\nimporter="keep"\n')
                 done.append(c["id"])
                 os.remove(src)
     tail = (r.stdout or "")[-300:].replace("\n", " ") if len(done) < len(batch) else ""

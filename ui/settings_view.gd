@@ -6,6 +6,8 @@ extends Control
 signal back
 ## The language changed; the owner relabels its own texts.
 signal language_changed
+## The picture set changed; the owner redraws its cards.
+signal art_changed
 
 ## Row labels (English keys); the translation tool reads these lists.
 const SLIDERS := [["Music", "music"], ["Sounds", "sfx"], ["Voice", "voice"]]
@@ -62,6 +64,17 @@ func _build() -> void:
 		var key: String = s[1]
 		sl.value_changed.connect(func(v): _store(key, v))
 		_row(grid, tr(s[0]), sl)
+
+	var art := OptionButton.new()
+	art.name = "ArtSet"
+	art.add_item(tr("Generated"))
+	art.add_item(tr("Original"))
+	art.select(1 if Settings.data.art == "original" else 0)
+	art.item_selected.connect(func(i):
+		_store("art", ["generated", "original"][i])
+		Art.reset()
+		art_changed.emit())
+	_row(grid, tr("Card art"), art)
 
 	var speed := HSlider.new()
 	speed.name = "AnimSpeed"
