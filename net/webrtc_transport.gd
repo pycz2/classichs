@@ -25,6 +25,16 @@ static func available() -> bool:
 	return OS.has_feature("web")
 
 
+## The SDP with the gathered candidates written in as a=candidate lines. Browsers
+## apply a remote description asynchronously and may drop candidates added right
+## after it; candidates inside the SDP always arrive together with it.
+static func with_candidates(sdp: String, ice: Array) -> String:
+	var out := sdp.strip_edges() + "\r\n"
+	for c in ice:
+		out += "a=" + str(c[2]) + "\r\n"
+	return out + "a=end-of-candidates\r\n"
+
+
 func _setup_peer() -> bool:
 	pc = WebRTCPeerConnection.new()
 	if pc.initialize(ICE) != OK:
@@ -55,8 +65,6 @@ func join(invite: String) -> void:
 	if not _setup_peer():
 		return
 	pc.set_remote_description("offer", r.sdp)  # the answer comes via session_description_created
-	for c in r.ice:
-		pc.add_ice_candidate(c[0], c[1], c[2])
 
 
 func finish(answer: String) -> void:
@@ -68,8 +76,6 @@ func finish(answer: String) -> void:
 		error.emit(tr("Create an invite first"))
 		return
 	pc.set_remote_description("answer", r.sdp)
-	for c in r.ice:
-		pc.add_ice_candidate(c[0], c[1], c[2])
 
 
 func _process(delta: float) -> void:
@@ -81,7 +87,7 @@ func _process(delta: float) -> void:
 		_gather_total += delta
 		if (_gather_quiet >= GATHER_QUIET and not _ice.is_empty()) or _gather_total >= GATHER_MAX:
 			_gather_quiet = -1.0
-			code_ready.emit(SignalCode.pack(_sdp.type, _sdp.sdp, _ice))
+			code_ready.emit(SignalCode.pack(_sdp.type, with_candidates(_sdp.sdp, _ice), []))
 	var ready := channel.get_ready_state()
 	if ready == WebRTCDataChannel.STATE_OPEN and not _open:
 		_open = true

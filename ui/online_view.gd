@@ -99,6 +99,8 @@ func _begin(is_host: bool) -> bool:
 	session.setup(transport, is_host, Profile.load_name(), d)
 	session.started.connect(func(m):
 		state = "playing"
+		status.text = tr("Connected")
+		_sync_js()  # the screen changes right after this
 		play.emit(session, m))
 	session.failed.connect(func(reason):
 		state = "failed"
@@ -151,8 +153,23 @@ func _on_back() -> void:
 	back.emit()
 
 
+func _process(_delta: float) -> void:
+	_sync_js()
+
+
+## Browser callbacks can't return values: the code and state are mirrored into
+## window.chs_code and window.chs_state for automated tests.
+func _sync_js() -> void:
+	if OS.has_feature("web"):
+		var w := JavaScriptBridge.get_interface("window")
+		w.chs_code = code_out.text
+		w.chs_state = state + ":" + status.text
+		if transport is WebRtcTransport and transport.pc:
+			w.chs_net = "pc=%d ch=%d" % [transport.pc.get_connection_state(), transport.channel.get_ready_state()]
+
+
 ## Browser-only hooks for automated two-tab tests: window.chs.host(), .join(code),
-## .finish(code), .code(), .state().
+## .finish(code); read window.chs_code and window.chs_state.
 func _expose_js() -> void:
 	if not OS.has_feature("web"):
 		return
@@ -164,7 +181,5 @@ func _expose_js() -> void:
 	api.host = cb.call(func(_a): host_game())
 	api.join = cb.call(func(a): join_game(str(a[0])))
 	api.finish = cb.call(func(a): finish(str(a[0])))
-	api.code = cb.call(func(_a): return code_out.text)
-	api.state = cb.call(func(_a): return state + ":" + status.text)
 	JavaScriptBridge.get_interface("window").chs = api
 	_js_refs.append(api)

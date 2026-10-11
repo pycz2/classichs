@@ -51,3 +51,10 @@ func test_loopback_pair_delivers_json() -> void:
 	eq(closed, ["bye"], "peer sees the close")
 	for t in pair:
 		t.free()
+
+
+func test_candidates_are_embedded_in_sdp() -> void:
+	var sdp := "v=0\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 0.0.0.0\r\n"
+	var full := WebRtcTransport.with_candidates(sdp, [["0", 0, "candidate:1 1 udp 2113937151 192.168.1.3 52789 typ host"]])
+	check(full.contains("\r\na=candidate:1 1 udp 2113937151 192.168.1.3 52789 typ host\r\n"), full)
+	check(full.ends_with("a=end-of-candidates\r\n"), "end marker")
