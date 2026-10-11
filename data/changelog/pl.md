@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-10-12
+
+### Dodano
+- Edytor sceny: strefy Sekrety i Broń, wybór, kto zaczyna, oraz żetony na liście kart.
+
 ## [0.18.0] - 2026-10-12
 
 ### Zmieniono

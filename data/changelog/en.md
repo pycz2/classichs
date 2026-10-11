@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-10-12
+
+### Added
+- Scene editor: Secrets and Weapon zones, a choice of who moves first, and tokens in the card list.
+
 ## [0.18.0] - 2026-10-12
 
 ### Changed

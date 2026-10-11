@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-10-12
+
+### Adicionado
+- Editor de cena: zonas de Segredos e Arma, escolha de quem joga primeiro e fichas na lista de cartas.
+
 ## [0.18.0] - 2026-10-12
 
 ### Alterado

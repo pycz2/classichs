@@ -149,3 +149,27 @@ func test_an_illegal_step_is_shown_not_crashed() -> void:
 	var status := v.find_child("RunStatus", true, false) as Label
 	check(status.text.contains("Step 2 of 2") and status.text.contains("not legal"), status.text)
 	m.free()
+
+
+func test_scene_editor_sets_secrets_weapon_turn_and_tokens() -> void:
+	var d := DebugTable.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(d)
+	d.add_card(0, "secrets", "VAN_EX1_289")  # Ice Barrier
+	check((d.scene.players[0].secrets as Array).has("VAN_EX1_289"), "a Secret in its zone")
+	d.add_card(0, "secrets", "VAN_CS2_029")
+	check(not (d.scene.players[0].secrets as Array).has("VAN_CS2_029"), "a plain spell is refused there")
+	d.add_card(1, "weapon", "VAN_CS2_106")
+	eq(d.scene.players[1].weapon, "VAN_CS2_106", "a weapon")
+	d.add_card(1, "weapon", "VAN_CS2_112")
+	eq(d.scene.players[1].weapon, "VAN_CS2_112", "a second weapon replaces the first: " + d.error.text)
+	d.remove_card(1, "weapon", 0)
+	check(not d.scene.players[1].has("weapon"), "removed")
+	(d.find_child("First1", true, false) as Button).pressed.emit()
+	eq(int(d.scene.current), 1, "player 2 moves first")
+	check(d.editor.text.contains("\"current\""), "the JSON follows")
+	d.add_card(0, "board", "VAN_CS2_101t")  # Silver Hand Recruit, a token
+	check((d.scene.players[0].board as Array).has("VAN_CS2_101t"), "tokens can be added")
+	var list := d.find_child("SceneCards", true, false) as CollectionView
+	list.set_tab("PALADIN")
+	check(list.filtered().has("VAN_CS2_101t"), "and are listed")
+	d.free()
