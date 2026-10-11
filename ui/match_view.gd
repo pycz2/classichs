@@ -63,6 +63,12 @@ var _gap := -1
 var _press := {}
 var _dragging := false
 var _arrow := TargetArrow.new()
+## Online: what the opponent points at.
+var _opp_arrow := TargetArrow.new()
+var _opp_hover := -1
+var _opp_look := -1
+var _last_intent := {}
+var _intent_ms := 0
 ## Event batches waiting for their animation; while one plays the table is busy.
 var _queue: Array = []
 var _busy := false
@@ -138,6 +144,8 @@ func _ready() -> void:
 	_build_menu()
 	_build_emote_wheel()
 	add_child(_arrow)
+	_opp_arrow.tint = Color("e03131")
+	add_child(_opp_arrow)
 	_hint = Palette.label("", 20, Palette.SELECTED)
 	_hint.position = Vector2(170, 306)
 	_hint.size = Vector2(940, 30)
@@ -182,6 +190,7 @@ func bind_online(m: Match, s: NetSession) -> void:
 		if not muted:
 			show_emote(p, id))
 	s.failed.connect(_on_connection_lost)
+	s.intent_received.connect(apply_intent)
 	(find_child("MuteButton", true, false) as Button).visible = true
 	bind(m)
 
@@ -273,6 +282,8 @@ func _leave() -> void:
 
 func _process(delta: float) -> void:
 	tick(delta)
+	if session:
+		_send_intent()
 	if not _dragging:
 		_track_hand_hover()
 		_aim_click_mode()
@@ -281,6 +292,56 @@ func _process(delta: float) -> void:
 		if _hint_timer <= 0.0:
 			_hint.text = ""
 			_try_tutorial_hint()
+
+
+# --- opponent intents (online) ----------------------------------------------------------
+
+func _send_intent() -> void:
+	var i := {"k": "none"}
+	var m := get_local_mouse_position()
+	if _dragging or _sel.get("stage", "") == "target":
+		var over := _view_at(m)
+		i = {"k": "aim", "from": _sel.get("id", -1), "to": over.entity_id if over else -1, "x": m.x, "y": m.y}
+	elif _hover_hand >= 0:
+		i = {"k": "hover", "i": g.players[viewer()].hand.find(g.ent(_hover_hand))}
+	else:
+		var over := _view_at(m)
+		if over and over.get_meta("kind") == "minion":
+			i = {"k": "look", "id": over.entity_id}
+	if i.k == "aim":
+		i.x = snappedf(i.x, 8.0)
+		i.y = snappedf(i.y, 8.0)
+	var now := Time.get_ticks_msec()
+	if i != _last_intent and now - _intent_ms > 100:
+		_last_intent = i
+		_intent_ms = now
+		session.send_intent(i)
+
+
+## Shows what the opponent points at: a raised card in their hand, their arrow,
+## a highlighted minion.
+func apply_intent(i: Dictionary) -> void:
+	var hover := -1
+	var look := -1
+	_opp_arrow.visible = false
+	match i.get("k"):
+		"hover":
+			hover = i.i
+		"look":
+			look = i.id
+		"aim":
+			if _views.has(i.from):
+				var to: Vector2 = _center_of(i.to) if _views.has(i.to) else Vector2(i.x, 720.0 - i.y)
+				_opp_arrow.aim(_center_of(i.from), to, _views.has(i.to))
+	if hover != _opp_hover:
+		_opp_hover = hover
+		refresh()
+	if look != _opp_look:
+		if _views.has(_opp_look):
+			_views[_opp_look].set_glow(Color.TRANSPARENT)
+		_opp_look = look
+		if _views.has(look):
+			_views[look].set_glow(Color(1, 1, 1, 0.6))
 
 
 # --- drag and drop ------------------------------------------------------------------
@@ -711,6 +772,11 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	var fan := TableLayout.hand(pl.hand.size(), own, hover)
 	for i in pl.hand.size():
 		var f: Dictionary = fan[i]
+		if not own and i == _opp_hover:  # the card the opponent is looking at
+			f = f.duplicate()
+			f.pos += Vector2(-6, 46)
+			f.scale = 0.62
+			f.z = 20
 		want[pl.hand[i].id] = {"kind": "hand", "pos": f.pos, "scale": f.scale, "rot": f.rot, "z": f.z, "own": own}
 
 
@@ -827,6 +893,8 @@ func _drop(v: EntityView, gone: bool) -> void:
 func _apply_glows() -> void:
 	for v in _views.values():
 		v.set_glow(Color.TRANSPARENT)
+	if _views.has(_opp_look):
+		_views[_opp_look].set_glow(Color(1, 1, 1, 0.6))
 	var legal := _legal()
 	if not _sel.is_empty():
 		var sv: EntityView = _views.get(_sel.id)

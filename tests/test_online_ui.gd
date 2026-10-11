@@ -253,3 +253,25 @@ func test_turn_timer_moves_reach_the_opponent() -> void:
 	eq(g0.state_hash(), g1.state_hash(), "still in sync")
 	check(v[0].find_child("ConnectionLost", true, false) == null and v[1].find_child("ConnectionLost", true, false) == null, "no desync")
 	_free_bound(b)
+
+
+func test_opponent_intents_are_shown() -> void:
+	var b := _bound_pair()
+	var v: Array = b[1]
+	var got := []
+	(b[2][1] as NetSession).intent_received.connect(func(i): got.append(i))
+	(b[2][0] as NetSession).send_intent({"k": "hover", "i": 1})
+	(b[2][0] as NetSession).send_intent({"k": "bad"})  # ignored, the game goes on
+	LoopbackTransport.pump(b[0])
+	eq(got, [{"k": "hover", "i": 1}], "hover intent arrives; a bad one is dropped")
+	var guest: MatchView = v[1]
+	check(guest.find_child("ConnectionLost", true, false) == null, "no failure for a bad intent")
+	var opp_hand: Array = guest.g.players[0].hand
+	var raised: Control = guest._views[opp_hand[1].id]
+	var other: Control = guest._views[opp_hand[0].id]
+	check(raised.scale.x > other.scale.x, "the card the opponent looks at is raised")
+	guest.apply_intent({"k": "aim", "from": guest.g.hero(0).id, "to": guest.g.hero(1).id})
+	check(guest._opp_arrow.visible, "the opponent's arrow")
+	guest.apply_intent({"k": "none"})
+	check(not guest._opp_arrow.visible, "cleared")
+	_free_bound(b)

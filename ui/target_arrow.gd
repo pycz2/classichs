@@ -6,6 +6,8 @@ extends Control
 var from := Vector2.ZERO
 var to := Vector2.ZERO
 var hot := false
+## The opponent's arrow is red.
+var tint := Color.TRANSPARENT
 var _t := 0.0
 
 
@@ -35,7 +37,7 @@ func point(t: float) -> Vector2:
 
 
 func _draw() -> void:
-	var col := Color("ff6b3d") if hot else Color("f2c94c")
+	var col := tint if tint.a > 0.0 else (Color("ff6b3d") if hot else Color("f2c94c"))
 	var n := maxi(6, int(from.distance_to(to) / 26.0))
 	for i in n:
 		var t0 := (i + fmod(_t * 2.0, 1.0)) / (n + 1.0)
