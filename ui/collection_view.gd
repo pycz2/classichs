@@ -23,6 +23,8 @@ var _grid := GridContainer.new()
 var _page_label: Label
 var _hint: Label
 var _deck_list := VBoxContainer.new()
+## How full the deck is, behind the "n / 30" count.
+var _bar := _Bar.new()
 var _count: Label
 var _name_edit := LineEdit.new()
 var _tabs := HBoxContainer.new()
@@ -238,8 +240,13 @@ func _build_sidebar() -> void:
 		deck.name = t
 		changed.emit())
 	panel.add_child(_name_edit)
+	_bar.position = Vector2(10, 52)
+	_bar.size = Vector2(284, 26)
+	panel.add_child(_bar)
 	_count = Palette.label("", 18)
-	_count.position = Vector2(12, 52)
+	_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_count.position = Vector2(10, 52)
+	_count.size = Vector2(284, 26)
 	panel.add_child(_count)
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(8, 84)
@@ -263,15 +270,12 @@ func _refresh_deck() -> void:
 		_deck_list.remove_child(c)
 		c.queue_free()
 	for pair in deck.sorted_counts():
-		var b := Button.new()
 		var id: String = pair[0]
-		b.name = "Entry_" + id
-		b.text = "(%d) %s%s" % [CardDb.card(id).get("cost", 0), CardText.name(id), "  ×2" if pair[1] == 2 else ""]
-		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.custom_minimum_size = Vector2(272, 30)
+		var b := DeckTiles.DeckTile.new(id, pair[1])
 		b.pressed.connect(func(): remove_card(id))
 		_deck_list.add_child(b)
 	_count.text = "%d / %d" % [deck.cards.size(), Deck.SIZE]
+	_bar.ratio = deck.cards.size() / float(Deck.SIZE)
 	_count.add_theme_color_override("font_color", Palette.BUFFED if deck.cards.size() == Deck.SIZE else Palette.TEXT)
 
 
@@ -305,3 +309,18 @@ class _Gem:
 			draw_colored_polygon(PackedVector2Array([size / 2 + Vector2(0, -9), size / 2 + Vector2(7, 0), size / 2 + Vector2(0, 9), size / 2 + Vector2(-7, 0)]), Color("868e96"))
 		else:
 			Frames.rarity(self, size / 2.0, rarity, 9)
+
+
+class _Bar:
+	extends Control
+	var ratio := 0.0:
+		set(v):
+			ratio = clampf(v, 0.0, 1.0)
+			queue_redraw()
+
+	func _draw() -> void:
+		var r := Rect2(Vector2.ZERO, size)
+		draw_style_box(Palette.box(Color(0, 0, 0, 0.55), 13, Color("6b5320"), 2), r)
+		if ratio > 0.0:
+			var fill := Color("f2c94c") if ratio >= 1.0 else Color("b8862b")
+			draw_style_box(Palette.box(fill, 13), Rect2(r.position + Vector2(2, 2), Vector2((r.size.x - 4) * ratio, r.size.y - 4)))

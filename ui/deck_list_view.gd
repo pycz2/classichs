@@ -9,7 +9,8 @@ signal back
 const BUTTONS := ["New Deck", "Edit", "Copy", "Delete", "Import Code", "Export Code", "Browse Cards", "Back"]
 
 var decks: Array[Deck] = []
-var list := ItemList.new()
+var list := VBoxContainer.new()
+var _group := ButtonGroup.new()
 var message: Label
 var _overlay: Control
 var _editor: CollectionView
@@ -25,12 +26,15 @@ func _ready() -> void:
 	var title := Palette.label(tr("My Decks"), 34, Palette.ATTACK)
 	title.position = Vector2(40, 20)
 	add_child(title)
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(40, 80)
+	scroll.size = Vector2(620, 560)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(scroll)
 	list.name = "DeckList"
-	list.position = Vector2(40, 80)
-	list.size = Vector2(620, 560)
-	list.add_theme_font_size_override("font_size", 18)
-	list.item_activated.connect(func(i): edit_deck(i))
-	add_child(list)
+	list.custom_minimum_size.x = 604
+	list.add_theme_constant_override("separation", 6)
+	scroll.add_child(list)
 	var col := VBoxContainer.new()
 	col.position = Vector2(700, 80)
 	col.add_theme_constant_override("separation", 10)
@@ -54,16 +58,27 @@ func _ready() -> void:
 
 
 func refresh() -> void:
-	list.clear()
-	for d in decks:
-		var state := "" if d.validate() == "" else "  (%d/30)" % d.cards.size()
-		list.add_item("%s — %s%s" % [d.name, CardText.name(d.hero), state])
-		list.set_item_custom_fg_color(list.item_count - 1, Palette.of_class(d.card_class()).lightened(0.4))
+	var was := _selected()
+	for c in list.get_children():
+		list.remove_child(c)
+		c.queue_free()
+	for i in decks.size():
+		var row := DeckTiles.DeckRow.new(decks[i])
+		row.name = "Deck%d" % i
+		row.button_group = _group
+		row.button_pressed = i == was
+		var idx := i
+		row.gui_input.connect(func(ev):  # a double click opens the deck
+			if ev is InputEventMouseButton and ev.double_click:
+				edit_deck(idx))
+		list.add_child(row)
 
 
 func _selected() -> int:
-	var s := list.get_selected_items()
-	return s[0] if not s.is_empty() else -1
+	for c in list.get_children():
+		if c is Button and c.button_pressed and not c.is_queued_for_deletion():
+			return c.get_index()
+	return -1
 
 
 func _save() -> void:
