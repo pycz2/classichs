@@ -29,32 +29,18 @@ function applyLang() {
   buildCards();
 }
 
-// --- cards drawn like the game's (pictures from art/, names in the page language) ---
+// --- cards: pictures drawn by the game itself (tools/site_cards.gd), in the page language ---
 const CLASS_COLORS = {WARRIOR: "#8e1002", SHAMAN: "#0070de", ROGUE: "#4c4d48", PALADIN: "#aa8f00", HUNTER: "#016e01",
   DRUID: "#703606", WARLOCK: "#7624ad", MAGE: "#0092ab", PRIEST: "#b8b090", NEUTRAL: "#6b6b6b"};
-const RARITY = {COMMON: "#f8f9fa", RARE: "#339af0", EPIC: "#ae3ec9", LEGENDARY: "#fd7e14"};
-const CREST = '<svg class="crest" viewBox="0 0 100 40"><path d="M50 4 58 14 60 26 54 36 46 36 40 26 42 14Z M44 16 18 2 6 10 20 14 4 22 22 22 12 32 30 26 40 30Z M56 16 82 2 94 10 80 14 96 22 78 22 88 32 70 26 60 30Z" fill="#d9b44a" stroke="#3a2a08" stroke-width="1.5"/><circle cx="46" cy="20" r="2" fill="#e03131"/><circle cx="54" cy="20" r="2" fill="#e03131"/></svg>';
 let DATA = {heroes: [], cards: []};
 
 function cardEl(c, withBack) {
   const el = document.createElement("div");
-  el.className = `card ${c.type.toLowerCase()}${c.rarity === "LEGENDARY" ? " legendary" : ""}`;
-  el.style.setProperty("--cls", CLASS_COLORS[c.cls] || CLASS_COLORS.NEUTRAL);
-  const name = c.name[lang] || c.name.en, text = c.text[lang] || c.text.en || "";
-  const stats = c.type === "MINION" || c.type === "WEAPON";
-  el.innerHTML = `<div class="face">
-      <div class="art"><img src="art/${c.id}.jpg" alt="" loading="lazy"></div>
-      <div class="banner"></div>
-      ${c.type !== "HERO" ? '<div class="textbox"></div>' : ""}
-      ${RARITY[c.rarity] ? `<span class="rar" style="background:${RARITY[c.rarity]}"></span>` : ""}
-      <div class="shine-sweep"></div>
-    </div>${withBack ? '<div class="back"></div>' : ""}
-    ${c.rarity === "LEGENDARY" ? CREST : ""}
-    ${c.cost != null ? `<i class="gem mana">${c.cost}</i>` : ""}
-    ${stats ? `<i class="gem atk">${c.atk}</i><i class="gem hp">${c.hp}</i>` : ""}`;
-  el.querySelector(".banner").textContent = name;
-  const tb = el.querySelector(".textbox");
-  if (tb) tb.textContent = text;
+  el.className = "card";
+  const name = c.name[lang] || c.name.en;
+  el.innerHTML = `<div class="face"><img src="cards/${lang}/${c.id}.webp" alt="" loading="lazy"><div class="gloss"><div class="shine-sweep"></div></div></div>`
+    + (withBack ? '<div class="back"><img src="cards/back.webp" alt="" loading="lazy"></div>' : "");
+  el.querySelector("img").alt = name;
   el.title = name;
   return el;
 }
