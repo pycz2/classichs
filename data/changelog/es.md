@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-11
+
+### Añadido
+- Efectos en la mesa: hechizos, gritos de batalla, últimos alientos y efectos de inicio y fin de turno lanzan proyectiles desde su origen a cada objetivo. Al impactar, cada esbirro y héroe muestra lo que le pasa: una explosión por daño, chispas por sanación, flechas por mejora o penalización, un destello por una palabra clave nueva, hielo, un anillo de silencio, humo de transformación, un portal de invocación, una calavera de último aliento, un destello de grito de batalla, un remolino al cambiar de control, un escudo de armadura.
+- Los números que cambian en las cartas crecen un momento con su gema.
+- La raza de la carta (Bestia, Demonio, Dragón, Múrloc, Robot, Tótem, Pirata, No-muerto) en una placa abajo de la carta.
+- Un esbirro inmune brilla en blanco con chispas girando a su alrededor.
+
+### Cambiado
+- El escudo de Provocar sigue el contorno del retrato.
+- «Tu turno» aparece después de los efectos de fin de turno.
+
 ## [0.11.0] - 2026-10-11
 
 ### Añadido

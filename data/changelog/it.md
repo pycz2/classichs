@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-11
+
+### Aggiunto
+- Effetti sul tavolo: magie, grida di battaglia, rantoli di morte ed effetti di inizio e fine turno lanciano proiettili dalla fonte a ogni bersaglio. All'impatto ogni servitore ed eroe mostra cosa gli succede: un'esplosione per i danni, scintille per la cura, frecce per potenziamenti e indebolimenti, un lampo per una nuova parola chiave, ghiaccio, un anello di silenzio, fumo di trasformazione, un portale di evocazione, un teschio di rantolo di morte, un bagliore di grido di battaglia, un vortice al cambio di controllo, uno scudo d'armatura.
+- I numeri che cambiano sulle carte si ingrandiscono per un attimo con la loro gemma.
+- La razza della carta (Bestia, Demone, Drago, Murloc, Robot, Totem, Pirata, Non Morto) su una targhetta in fondo alla carta.
+- Un servitore immune brilla di bianco con scintille che gli girano attorno.
+
+### Modificato
+- Lo scudo di Provocazione segue il contorno del ritratto.
+- "Il tuo turno" appare dopo gli effetti di fine turno.
+
 ## [0.11.0] - 2026-10-11
 
 ### Aggiunto

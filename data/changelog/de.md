@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-11
+
+### Hinzugefügt
+- Effekte auf dem Tisch: Zauber, Kampfschreie, Todesröcheln und Effekte zu Beginn und Ende des Zuges schicken Geschosse von ihrer Quelle zu jedem Ziel. Beim Treffer zeigt jeder Diener und Held, was mit ihm geschah: eine Explosion bei Schaden, Funken bei Heilung, Pfeile bei Stärkung oder Schwächung, ein Aufblitzen bei einem neuen Schlüsselwort, Eis, einen Ring der Stille, Rauch beim Verwandeln, ein Portal beim Herbeirufen, einen Schädel beim Todesröcheln, ein Aufleuchten beim Kampfschrei, einen Wirbel bei Kontrollwechsel, einen Schild bei Rüstung.
+- Geänderte Zahlen auf Karten wachsen kurz mit ihrem Stein.
+- Das Volk einer Karte (Wildtier, Dämon, Drache, Murloc, Mech, Totem, Pirat, Untoter) auf einer Plakette unten auf der Karte.
+- Ein immuner Diener leuchtet weiß, Funken drehen sich um ihn.
+
+### Geändert
+- Der Spott-Schild folgt dem Umriss des Porträts.
+- „Ihr seid am Zug“ erscheint nach den Effekten am Zugende.
+
 ## [0.11.0] - 2026-10-11
 
 ### Hinzugefügt

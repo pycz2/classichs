@@ -4,6 +4,18 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-11
+
+### Ajouté
+- Effets sur la table : sorts, cris de guerre, râles d'agonie et effets de début et de fin de tour envoient des projectiles de leur source vers chaque cible. À l'impact, chaque serviteur et héros montre ce qui lui arrive : une explosion pour les dégâts, des étincelles pour les soins, des flèches pour un bonus ou un malus, un éclair pour un nouveau mot-clé, de la glace, un anneau de silence, de la fumée de transformation, un portail d'invocation, un crâne de râle d'agonie, un éclat de cri de guerre, un tourbillon de prise de contrôle, un bouclier d'armure.
+- Les nombres qui changent sur les cartes grossissent un instant avec leur pierre.
+- La race d'une carte (Bête, Démon, Dragon, Murloc, Méca, Totem, Pirate, Mort-vivant) sur une plaque en bas de la carte.
+- Un serviteur insensible brille en blanc, entouré d'étincelles qui tournent.
+
+### Modifié
+- Le bouclier de Provocation suit le contour du portrait.
+- « À vous de jouer » apparaît après les effets de fin de tour.
+
 ## [0.11.0] - 2026-10-11
 
 ### Ajouté
