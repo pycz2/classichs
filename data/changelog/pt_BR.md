@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-11
+
+### Adicionado
+- Mulligan: as cartas trocadas voam para o deck, as novas ocupam seus lugares, a moeda surge girando com luz dourada e depois a mão inteira desce. As cartas marcadas para troca têm um selo vermelho com uma cruz branca.
+- Fadiga: uma carta escura com uma caveira e seu dano voa do deck vazio para o herói.
+- Uma carta queimada (mão cheia) aparece e pega fogo.
+- Passar o mouse sobre um deck também mostra quantas cartas esse jogador tem na mão.
+
+### Alterado
+- A mana que a carta sob o mouse gastaria pulsa claramente, se houver o suficiente.
+- O brilho de cartas e botões jogáveis é mais estreito e mais forte na borda.
+
 ## [0.12.2] - 2026-10-11
 
 ### Alterado

@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-11
+
+### Aggiunto
+- Mulligan: le carte sostituite volano nel mazzo, le nuove prendono il loro posto, la moneta compare girando con una luce dorata e poi tutta la mano scende. Le carte da sostituire hanno un sigillo rosso con una croce bianca.
+- Affaticamento: una carta scura con un teschio e il suo danno vola dal mazzo vuoto all'eroe.
+- Una carta bruciata (mano piena) si mostra e va in fiamme.
+- Passando sul mazzo si vede anche quante carte ha in mano quel giocatore.
+
+### Modificato
+- Il mana che la carta sotto il mouse spenderebbe pulsa chiaramente, se basta.
+- Il bagliore di carte e pulsanti giocabili è più stretto e più intenso sul bordo.
+
 ## [0.12.2] - 2026-10-11
 
 ### Modificato

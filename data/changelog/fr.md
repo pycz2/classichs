@@ -4,6 +4,18 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-11
+
+### Ajouté
+- Mulligan : les cartes remplacées volent vers le deck, les nouvelles prennent leur place, la pièce arrive en tournant dans une lueur dorée, puis toute la main descend. Les cartes à remplacer portent un sceau rouge avec une croix blanche.
+- Fatigue : une carte sombre avec un crâne et ses dégâts vole du deck vide vers le héros.
+- Une carte brûlée (main pleine) s'affiche puis part en flammes.
+- Survoler un deck montre aussi le nombre de cartes en main de ce joueur.
+
+### Modifié
+- Le mana que coûterait la carte survolée pulse nettement, s'il y en a assez.
+- La lueur des cartes et boutons jouables est plus étroite et plus vive au bord.
+
 ## [0.12.2] - 2026-10-11
 
 ### Modifié

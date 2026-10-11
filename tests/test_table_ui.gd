@@ -43,7 +43,9 @@ func test_deck_pile_shows_count_on_hover() -> void:
 	var v := _view({"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]})
 	var pile := v.find_child("Deck0", true, false) as DeckPile
 	eq(pile.count, 3, "count")
-	eq(pile.tooltip_text, "Cards in deck: 3", "exact number on hover")
+	eq(pile.tooltip_text, "Cards in deck: 3\nCards in hand: 0", "exact numbers on hover: deck and hand")
+	var enemy := v.find_child("Deck1", true, false) as DeckPile
+	check(enemy.tooltip_text.ends_with("Cards in hand: %d" % v.g.players[1].hand.size()), "the opponent's hand by the opponent's deck")
 	v.free()
 
 

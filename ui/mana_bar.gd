@@ -48,14 +48,20 @@ func _draw() -> void:
 			draw_polyline(pts + PackedVector2Array([pts[0]]), Color(1, 1, 1, 0.15), 1.5)
 			continue
 		var full := i < mana
+		if full and i >= mana - preview:  # would be spent: a bright crystal that pulses in size and glows
+			var a := 0.5 + 0.5 * sin(_t * 8.0)
+			var k := 1.15 + 0.25 * a
+			var big := PackedVector2Array([c + Vector2(0, -10) * k, c + Vector2(8, 0) * k, c + Vector2(0, 10) * k, c + Vector2(-8, 0) * k])
+			for gi in range(4, 0, -1):
+				var gk := k + gi * 0.18
+				draw_colored_polygon(PackedVector2Array([c + Vector2(0, -10) * gk, c + Vector2(8, 0) * gk, c + Vector2(0, 10) * gk, c + Vector2(-8, 0) * gk]), Color(1, 0.85, 0.3, 0.12 + 0.1 * a))
+			draw_colored_polygon(big, Color("ffd43b").lerp(Color.WHITE, 0.4 * a))
+			draw_polyline(big + PackedVector2Array([big[0]]), Color("fff3bf"), 2.0)
+			continue
 		draw_colored_polygon(pts, Color("1c7ed6") if full else Color("1b2a44"))
 		draw_polyline(pts + PackedVector2Array([pts[0]]), Color("a5d8ff") if full else Color("364fc7"), 1.5)
 		if full:
 			draw_colored_polygon(PackedVector2Array([c + Vector2(0, -7), c + Vector2(3, -1), c + Vector2(0, 1), c + Vector2(-3, -1)]), Color("e7f5ff"))
-			if i >= mana - preview:  # would be spent: blinks
-				var a := 0.5 + 0.5 * sin(_t * 9.0)
-				draw_colored_polygon(pts, Color(1, 1, 1, 0.65 * a))
-				draw_polyline(pts + PackedVector2Array([pts[0]]), Color(1, 0.95, 0.6, a), 2.5)
 		if i >= max_mana - locked:
 			draw_line(c + Vector2(-5, -5), c + Vector2(5, 5), Color("ff6b6b"), 2)
 			draw_line(c + Vector2(5, -5), c + Vector2(-5, 5), Color("ff6b6b"), 2)

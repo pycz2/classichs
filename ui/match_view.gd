@@ -80,6 +80,7 @@ var _queue: Array = []
 var _busy := false
 var _final_refresh := false
 var _hold := {}  # id -> true: views an animation moves (the layout leaves them alone)
+var _mull_wait := -1  # the player whose mulligan overlay waits for the new cards
 ## A card that changed its id in place (bounced, transformed): new id -> where it stood.
 var _moved := {}
 var _quiet := {}
@@ -769,8 +770,10 @@ func refresh() -> void:
 		_mana[i].set_values(p.mana, p.max_mana, p.overload_locked)
 		_names[i].text = _side_name(p.index)
 		_piles[i].count = p.deck.size()
-	var hovered := g.ent(_hover_hand)  # the crystals a playable card would spend blink
-	_mana[0].set_preview(g.cost(hovered) if hovered and hovered.zone == "HAND" and not _actions_for(_hover_hand).is_empty() else 0)
+		_piles[i].hand = p.hand.size()
+	var hovered := g.ent(_hover_hand)  # the crystals a card would spend blink, when there is mana for it
+	var price := g.cost(hovered) if hovered and hovered.zone == "HAND" else 0
+	_mana[0].set_preview(price if price > 0 and price <= g.players[viewer()].mana and my_action() and g.phase == "PLAY" else 0)
 	_end_turn.disabled = not (my_action() and g.phase == "PLAY" and g.pending.is_empty())
 	var ready := not _end_turn.disabled and _legal().all(func(a): return a.type in ["end_turn", "concede"])
 	if ready != end_turn_ready:
@@ -1232,6 +1235,13 @@ func _animate(events: Array) -> void:
 				await _pulse(ev.entity, ev.get("target", -1), land)
 			"secret_revealed":
 				await _reveal(ev.card)
+			"mulligan":
+				if ev.player == _mull_wait and _overlay and _overlay.name == "Mulligan":
+					await _mulligan_result(events, ev.player)
+			"fatigue":
+				await _fatigue(ev)
+			"burn":
+				await _burn(ev)
 			"turn_start":
 				your_turn = your_turn or (ev.get("player", -1) == me and ev.has("turn"))
 	if not hit.done:
@@ -1240,6 +1250,116 @@ func _animate(events: Array) -> void:
 	if your_turn:
 		_banner(tr("Your Turn"))
 	await _wait(0.32)
+
+
+## The mulligan comes back: new cards fly from the deck into the places of the
+## replaced ones, the Coin appears for the second player, then the whole hand
+## goes down to its place.
+func _mulligan_result(events: Array, p: int) -> void:
+	var slots: Dictionary = _overlay.get_meta("slots", {})
+	var views: Array = _overlay.get_meta("views", [])
+	var replaced: Array = _overlay.get_meta("replaced", [])
+	var at := events.find_custom(func(e): return e.type == "mulligan" and e.player == p)
+	var drawn := []
+	for i in at:
+		if events[i].type == "draw" and events[i].player == p:
+			drawn.append(events[i].entity)
+	var shown := []  # [entity id, view]
+	for cv in views:
+		if not replaced.has(cv.entity_id):
+			shown.append([cv.entity_id, cv])
+	for i in mini(drawn.size(), replaced.size()):
+		var e := g.ent(drawn[i])
+		var cv := CardView.make(e.card_id, 1.3)
+		cv.show_entity(e, g)
+		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_overlay.add_child(cv)
+		cv.global_position = _piles[0].global_position
+		cv.scale = Vector2(0.4, 0.4)
+		var tw := cv.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tw.tween_property(cv, "global_position", slots[replaced[i]], Anim.d(0.45)).set_delay(Anim.d(0.12 * i))
+		tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.45)).set_delay(Anim.d(0.12 * i))
+		shown.append([drawn[i], cv])
+	if not drawn.is_empty():
+		await _wait(0.5 + 0.12 * drawn.size())
+	var coin_ev: Dictionary = {}
+	for ev in events:
+		if ev.type == "add_to_hand" and ev.player == p and ev.card == Game.COIN:
+			coin_ev = ev
+	if not coin_ev.is_empty():  # the Coin turns up beside the hand, spinning in with a golden light
+		var last: Vector2 = slots.values().reduce(func(a, b): return a if a.x > b.x else b, Vector2(400, 250))
+		var cv := CardView.make(Game.COIN, 1.3)
+		cv.show_entity(g.ent(coin_ev.entity), g)
+		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cv.set_glow(Palette.SELECTED)
+		_overlay.add_child(cv)
+		cv.global_position = last + Vector2(CardView.SIZE.x * 1.3 + 16, 0)
+		cv.pivot_offset = cv.size / 2.0
+		cv.scale = Vector2(0.05, 1.0)
+		var tw := cv.create_tween()
+		tw.tween_property(cv, "scale", Vector2(-1.0, 1.0), Anim.d(0.2))
+		tw.tween_property(cv, "scale", Vector2(1.0, 1.0), Anim.d(0.25)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		Sound.play("draw")
+		await _wait(0.9)
+		shown.append([coin_ev.entity, cv])
+	for pair in shown:  # the hand's views start where these cards are
+		var cv: CardView = pair[1]
+		_moved[pair[0]] = cv.global_position - global_position + cv.size * cv.scale / 2.0
+		if _views.has(pair[0]):
+			var old: EntityView = _views[pair[0]]
+			_views.erase(pair[0])
+			_layer.remove_child(old)
+			old.queue_free()
+	_mull_wait = -1
+	_close_overlay()
+
+
+## Fatigue: a dark card with a skull flies from the empty deck to the hero.
+func _fatigue(ev: Dictionary) -> void:
+	var own: bool = ev.player == viewer()
+	var card := _Fatigue.new()
+	card.amount = ev.amount
+	card.text = tr("Fatigue")
+	_fx.add_child(card)
+	var pile: DeckPile = _piles[0] if own else _piles[1]
+	card.position = pile.position
+	card.pivot_offset = card.size / 2.0
+	card.scale = Vector2(0.6, 0.6)
+	var mid := Vector2(560, 250)
+	var tw := card.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(card, "position", mid, Anim.d(0.35))
+	tw.parallel().tween_property(card, "scale", Vector2(1.3, 1.3), Anim.d(0.35))
+	tw.tween_interval(Anim.d(0.55))
+	tw.tween_property(card, "position", _center_of(g.players[ev.player].hero.id) - card.size / 2.0, Anim.d(0.25)).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.parallel().tween_property(card, "scale", Vector2(0.4, 0.4), Anim.d(0.25))
+	tw.tween_callback(card.queue_free)
+	await _wait(1.15)
+	TableFx.spawn(_fx, "hurt", _center_of(g.players[ev.player].hero.id), Color("845ef7"))
+
+
+## A card burnt because the hand was full: it shows, then goes up in flames.
+func _burn(ev: Dictionary) -> void:
+	var own: bool = ev.player == viewer()
+	var cv := CardView.make(ev.card, 1.2)
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fx.add_child(cv)
+	var pile: DeckPile = _piles[0] if own else _piles[1]
+	cv.position = pile.position
+	cv.pivot_offset = cv.size / 2.0
+	cv.scale = Vector2(0.5, 0.5)
+	var tw := cv.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(cv, "position", Vector2(900, 210 if own else 120), Anim.d(0.35))
+	tw.parallel().tween_property(cv, "scale", Vector2.ONE, Anim.d(0.35))
+	await _wait(0.6)
+	var fire := _Burn.new()
+	fire.size = cv.size
+	cv.add_child(fire)
+	var out := cv.create_tween().set_parallel()
+	out.tween_property(cv, "modulate", Color(1.6, 0.7, 0.3, 0.0), Anim.d(0.7))
+	out.tween_property(cv, "scale", Vector2(0.85, 0.85), Anim.d(0.7))
+	out.chain().tween_callback(cv.queue_free)
+	show_hint(tr("Hand is full: %s burns") % CardText.name(ev.card), 1.6)
+	await _wait(0.75)
 
 
 ## Before a change that nothing hit: the effects fly from their source (a spell,
@@ -1467,6 +1587,53 @@ func _banner(text: String) -> void:
 	tw.tween_callback(l.queue_free)
 
 
+## The fatigue card: dark, with a skull and the damage it deals.
+class _Fatigue:
+	extends Control
+	var amount := 1
+	var text := "Fatigue"
+
+	func _init() -> void:
+		size = Vector2(100, 140)
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _draw() -> void:
+		var r := Rect2(Vector2.ZERO, size)
+		draw_style_box(Palette.box(Color("1a1325"), 10, Color("6741d9"), 3), r)
+		draw_style_box(Palette.box(Color("2b1d3f"), 8, Color("4c2f8a"), 1), r.grow(-7))
+		var c := Vector2(size.x / 2.0, 52)
+		draw_circle(c, 22, Color("e9ecef"))
+		draw_circle(c + Vector2(-8, -3), 6, Color("1a1325"))
+		draw_circle(c + Vector2(8, -3), 6, Color("1a1325"))
+		draw_rect(Rect2(c + Vector2(-10, 14), Vector2(20, 10)), Color("e9ecef"))
+		for i in 3:
+			draw_line(c + Vector2(-6 + i * 6, 15), c + Vector2(-6 + i * 6, 24), Color("1a1325"), 2)
+		var f := Fonts.ui(700)
+		var tw := f.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x
+		draw_string(f, Vector2((size.x - tw) / 2.0, 100), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("e5dbff"))
+		Frames.attack(self, Vector2(size.x / 2.0, 122), amount, 13)
+
+
+## Flames licking up a burning card.
+class _Burn:
+	extends Control
+	var _t := 0.0
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _process(d: float) -> void:
+		_t += d
+		queue_redraw()
+
+	func _draw() -> void:
+		for i in 14:
+			var x := fmod(i * 37.0, size.x)
+			var h := 30.0 + 40.0 * fmod(_t * 2.0 + i * 0.37, 1.0)
+			var y := size.y - fmod(_t * 160.0 + i * 23.0, size.y + 20.0)
+			draw_colored_polygon(PackedVector2Array([Vector2(x - 9, y + h * 0.3), Vector2(x, y - h * 0.5), Vector2(x + 9, y + h * 0.3)]), Color(1, 0.5 + 0.3 * sin(i), 0.1, 0.8))
+
+
 ## A soft glow behind a button (EntityView.soft_glow around its rect).
 class _Halo:
 	extends Control
@@ -1659,9 +1826,12 @@ func _refresh_overlay() -> void:
 				_centered_button(box, tr("Back to Menu"), "BackToMenu", _leave)
 		return
 	if g.phase == "MULLIGAN" and my_action():
-		if _overlay == null or _overlay.name != "Mulligan":
+		if _overlay == null or _overlay.name != "Mulligan" or _mull_wait >= 0:  # (hot-seat: the next player's)
+			_mull_wait = -1
 			_show_mulligan()
 		return
+	if _mull_wait >= 0 and _overlay and _overlay.name == "Mulligan":
+		return  # chosen: waiting for the opponent, then the new cards come in
 	if not g.pending.is_empty() and my_action():
 		if _overlay == null or _overlay.name != "Choice":
 			_show_choice()
@@ -1703,7 +1873,6 @@ func _show_mulligan() -> void:
 		cv.clicked.connect(func(v):
 			v.marked = not v.marked
 			marked[v.entity_id] = v.marked
-			v.modulate = Color(0.6, 0.6, 0.6) if v.marked else Color.WHITE
 			v.queue_redraw())
 		row.add_child(cv)
 		views.append(cv)
@@ -1719,17 +1888,31 @@ func _show_mulligan() -> void:
 			if marked[id]:
 				ids.append(id)
 		ids.sort()
-		if not Anim.instant and not ids.is_empty():  # replaced cards fly back into the deck
+		if Anim.instant or not is_inside_tree():
+			_close_overlay()
+			controller.submit({"type": "mulligan", "player": p, "replace": ids})
+			return
+		var confirm := _overlay.find_child("Confirm", true, false) as Button
+		confirm.disabled = true
+		confirm.modulate.a = 0.0
+		var slots := {}  # where each card stands, for the new ones to land in
+		for cv in views:
+			slots[cv.entity_id] = cv.global_position
+			cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_overlay.set_meta("slots", slots)
+		_overlay.set_meta("views", views)
+		_overlay.set_meta("replaced", ids)
+		if not ids.is_empty():  # replaced cards fly back into the deck
 			for cv in views:
 				if marked.get(cv.entity_id, false):
 					var tw: Tween = cv.create_tween().set_parallel()
 					tw.tween_property(cv, "scale", Vector2(0.3, 0.3), Anim.d(0.35))
 					tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.35))
-					tw.tween_property(cv, "global_position", TableLayout.OWN_DECK, Anim.d(0.35))
+					tw.tween_property(cv, "global_position", _piles[0].global_position, Anim.d(0.35))
 			await _wait(0.4)
-			if _overlay == null or _overlay.name != "Mulligan" or g.players[p].mulliganed:
-				return  # the timer or a lost connection got there first
-		_close_overlay()
+		if _overlay == null or _overlay.name != "Mulligan" or g.players[p].mulliganed:
+			return  # the timer or a lost connection got there first
+		_mull_wait = p  # the overlay stays: the new cards come into it
 		controller.submit({"type": "mulligan", "player": p, "replace": ids}))
 
 

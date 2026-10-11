@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-11
+
+### Dodano
+- Mulligan: wymienione karty lecą do talii, nowe na ich miejsca, moneta pojawia się, obracając się w złotym blasku, a potem cała ręka zjeżdża w dół. Karty do wymiany mają czerwoną pieczęć z białym krzyżykiem.
+- Zmęczenie: ciemna karta z czaszką i obrażeniami leci z pustej talii do bohatera.
+- Spalona karta (pełna ręka) pokazuje się i płonie.
+- Po najechaniu na talię widać też liczbę kart w ręce tego gracza.
+
+### Zmieniono
+- Mana, którą zużyłaby karta pod kursorem, wyraźnie pulsuje, jeśli jej starcza.
+- Poświata kart i przycisków do zagrania jest węższa i jaśniejsza przy krawędzi.
+
 ## [0.12.2] - 2026-10-11
 
 ### Zmieniono
