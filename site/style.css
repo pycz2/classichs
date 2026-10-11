@@ -52,6 +52,7 @@ nav a:hover { color: var(--gold); }
 .eyebrow { color: var(--gold-2); text-transform: uppercase; letter-spacing: 0.18em; font-size: 13px; font-weight: 700; }
 .hero h1 {
   font-size: clamp(56px, 11vw, 128px); line-height: 1; margin: 8px 0 18px; font-weight: 900;
+  display: inline-block; padding: 0 0.14em 0.06em;  /* room for glyph overhangs: background-clip cuts at the box */
   background: linear-gradient(180deg, #ffe58a, var(--gold) 45%, #a8741a);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   filter: drop-shadow(0 4px 0 #000) drop-shadow(0 0 30px rgba(242, 194, 48, 0.35));
