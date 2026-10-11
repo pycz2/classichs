@@ -123,6 +123,16 @@ func _draw() -> void:
 			Frames.health(self, Vector2(103, 154) * k, h, 15 * k)
 		else:
 			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k)
-	if marked:
-		draw_line(Vector2(10, 10) * k, size - Vector2(10, 10) * k, Palette.TARGET, 6 * k)
-		draw_line(Vector2(size.x - 10 * k, 10 * k), Vector2(10 * k, size.y - 10 * k), Palette.TARGET, 6 * k)
+	if marked:  # to be replaced: the card darkens and a red seal with a white cross sits on it
+		draw_style_box(Palette.box(Color(0, 0, 0, 0.45), int(12 * k)), r)
+		var mc := Vector2(60, 70) * k
+		var rr := 26 * k
+		draw_circle(mc + Vector2(0, 3 * k), rr + 3 * k, Color(0, 0, 0, 0.5))
+		draw_circle(mc, rr + 3 * k, Color("2a0b0b"))
+		draw_circle(mc, rr, Color("c92a2a"))
+		draw_circle(mc + Vector2(-rr * 0.25, -rr * 0.3), rr * 0.55, Color(1, 1, 1, 0.12))
+		draw_arc(mc, rr - 3 * k, 0, TAU, 40, Color("ffa8a8", 0.6), 1.5 * k, true)
+		var d := rr * 0.48
+		for line in [[mc + Vector2(-d, -d), mc + Vector2(d, d)], [mc + Vector2(d, -d), mc + Vector2(-d, d)]]:
+			draw_line(line[0], line[1], Color("2a0b0b"), 9 * k, true)
+			draw_line(line[0], line[1], Color.WHITE, 5.5 * k, true)

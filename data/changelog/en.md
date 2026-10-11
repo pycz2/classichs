@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-11
+
+### Added
+- Mulligan: replaced cards fly into the deck, new ones fly into their places, the Coin spins in with a golden light, then the whole hand goes down. Cards marked for replacement carry a red seal with a white cross.
+- Fatigue: a dark card with a skull and its damage flies from the empty deck into the hero.
+- A burnt card (full hand) shows and goes up in flames.
+- Hovering a deck also shows the number of cards in that player's hand.
+
+### Changed
+- The mana the card under the mouse would spend pulses clearly, when there is mana for it.
+- The glow of playable cards and buttons is narrower and brighter at the edge.
+
 ## [0.12.2] - 2026-10-11
 
 ### Changed

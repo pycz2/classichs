@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-11
+
+### Hinzugefügt
+- Mulligan: ersetzte Karten fliegen ins Deck, neue an ihre Plätze, die Münze dreht sich mit goldenem Licht herein, dann geht die ganze Hand nach unten. Zum Austausch markierte Karten tragen ein rotes Siegel mit weißem Kreuz.
+- Erschöpfung: eine dunkle Karte mit Schädel und Schaden fliegt aus dem leeren Deck in den Helden.
+- Eine verbrannte Karte (volle Hand) wird gezeigt und geht in Flammen auf.
+- Zeigt die Maus auf ein Deck, sieht man auch die Kartenzahl auf der Hand dieses Spielers.
+
+### Geändert
+- Das Mana, das die Karte unter der Maus kosten würde, pulsiert deutlich, wenn es reicht.
+- Das Leuchten spielbarer Karten und Schaltflächen ist schmaler und am Rand heller.
+
 ## [0.12.2] - 2026-10-11
 
 ### Geändert

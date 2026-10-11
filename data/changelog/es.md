@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-11
+
+### Añadido
+- Mulligan: las cartas cambiadas vuelan al mazo, las nuevas ocupan su lugar, la moneda aparece girando con luz dorada y luego toda la mano baja. Las cartas marcadas para cambiar llevan un sello rojo con una cruz blanca.
+- Fatiga: una carta oscura con una calavera y su daño vuela del mazo vacío al héroe.
+- Una carta quemada (mano llena) se muestra y arde en llamas.
+- Al pasar sobre un mazo también se ve cuántas cartas tiene ese jugador en la mano.
+
+### Cambiado
+- El maná que gastaría la carta bajo el ratón pulsa claramente, si hay suficiente.
+- El brillo de cartas y botones jugables es más estrecho y más intenso en el borde.
+
 ## [0.12.2] - 2026-10-11
 
 ### Cambiado
