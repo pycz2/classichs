@@ -19,6 +19,12 @@ func test_main_shows_menu() -> void:
 	m.free()
 
 
+func test_menu_collection_button_enabled() -> void:
+	var m := _main()
+	check(not (m.screen.find_child("Collection", true, false) as Button).disabled, "collection enabled")
+	m.free()
+
+
 func test_menu_to_training_setup_and_back() -> void:
 	var m := _main()
 	m.show_training_setup()

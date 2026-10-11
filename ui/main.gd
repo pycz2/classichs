@@ -20,6 +20,7 @@ func _set_screen(s: Control) -> void:
 func show_menu() -> void:
 	var m := MainMenu.new()
 	m.training.connect(show_training_setup)
+	m.collection.connect(show_collection)
 	m.debug_table.connect(show_debug_table)
 	m.quit.connect(func(): get_tree().quit())
 	_set_screen(m)
@@ -28,11 +29,17 @@ func show_menu() -> void:
 func show_training_setup() -> void:
 	var t := TrainingSetup.new()
 	t.back.connect(show_menu)
-	t.start.connect(func(mine, bot):
-		var g := Game.new({"hero": Decks.hero(mine), "deck": Decks.basic(mine)},
+	t.start.connect(func(deck: Deck, bot: String):
+		var g := Game.new({"hero": deck.hero, "deck": deck.cards.duplicate()},
 			{"hero": Decks.hero(bot), "deck": Decks.basic(bot)}, randi())
 		start_match(g, [false, true], false))
 	_set_screen(t)
+
+
+func show_collection() -> void:
+	var c := DeckListView.new()
+	c.back.connect(show_menu)
+	_set_screen(c)
 
 
 func show_debug_table() -> void:

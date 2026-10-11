@@ -56,7 +56,8 @@ func _layout() -> void:
 	var k := size.x / SIZE.x
 	_name.position = Vector2(6, 84) * k
 	_name.size = Vector2(108, 20) * k
-	_name.add_theme_font_size_override("font_size", int(11 * k))
+	var long_name := CardText.name(card_id).length() > 16 if card_id != "" else false
+	_name.add_theme_font_size_override("font_size", int((9 if long_name else 11) * k))
 	_text.position = Vector2(8, 106) * k
 	_text.size = Vector2(104, 48) * k
 	_text.add_theme_font_size_override("font_size", int(10 * k))
@@ -87,7 +88,7 @@ func _draw() -> void:
 	_draw_art(Rect2(Vector2(10, 12) * k, Vector2(100, 70) * k), card_id)
 	draw_style_box(Palette.box(frame.darkened(0.4), int(4 * k)), Rect2(Vector2(4, 84) * k, Vector2(112, 20) * k))
 	if Palette.RARITY.has(c.get("rarity", "")):
-		draw_circle(Vector2(60, 104) * k, 5 * k, Palette.RARITY[c.rarity])
+		draw_circle(Vector2(60, 82) * k, 5 * k, Palette.RARITY[c.rarity])
 	var shown_cost := cost if cost >= 0 else int(c.get("cost", 0))
 	var cost_color := Color.WHITE if shown_cost == int(c.get("cost", 0)) else (Palette.BUFFED if shown_cost < int(c.get("cost", 0)) else Palette.HEALTH)
 	_draw_stat(Vector2(16, 16) * k, shown_cost, Palette.MANA, cost_color, 15 * k)

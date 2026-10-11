@@ -3,6 +3,7 @@ extends Control
 ## Main menu. Online play, tutorial and collection come with later subprojects.
 
 signal training
+signal collection
 signal debug_table
 signal quit
 
@@ -23,7 +24,7 @@ func _ready() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 	var items := [["Training", training, true], ["Online Game", null, false], ["Tutorial", null, false],
-		["Collection", null, false], ["Debug Table", debug_table, true]]
+		["Collection", collection, true], ["Debug Table", debug_table, true]]
 	if not OS.has_feature("web"):
 		items.append(["Exit", quit, true])
 	for it in items:
