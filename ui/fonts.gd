@@ -83,5 +83,29 @@ static func theme() -> Theme:
 		t.set_color("font_pressed_color", "Button", Color("e0c890"))
 		t.set_color("font_outline_color", "Button", Color("1b0f06"))
 		t.set_constant("outline_size", "Button", 4)
+		var field := Palette.box(Color(0.1, 0.07, 0.05, 0.9), 10, Color("8a6d3b"), 1)
+		field.set_content_margin_all(8)
+		var focus := Palette.box(Color(0.12, 0.09, 0.06, 0.95), 10, Color("d9b44a"), 2)
+		focus.set_content_margin_all(8)
+		for type in ["LineEdit", "TextEdit"]:
+			t.set_stylebox("normal", type, field)
+			t.set_stylebox("focus", type, focus)
+			t.set_stylebox("read_only", type, field)
+		var popup := Palette.box(Color(0.12, 0.08, 0.05, 0.98), 10, Color("c9a74a"), 2)
+		popup.set_content_margin_all(6)
+		t.set_stylebox("panel", "PopupMenu", popup)
+		t.set_stylebox("panel", "ItemList", field)
+		t.set_stylebox("panel", "TooltipPanel", popup)
+		for st in ["normal", "hover", "pressed", "focus", "disabled", "hover_pressed"]:
+			t.set_stylebox(st, "CheckButton", StyleBoxEmpty.new())  # a switch, not a plank
+		var track := Palette.box(Color(0.08, 0.05, 0.03, 0.9), 6, Color("6b5320"), 1)
+		track.content_margin_top = 4
+		track.content_margin_bottom = 4
+		var filled := Palette.box(Color("c9a74a"), 6)
+		filled.content_margin_top = 4
+		filled.content_margin_bottom = 4
+		t.set_stylebox("slider", "HSlider", track)
+		t.set_stylebox("grabber_area", "HSlider", filled)
+		t.set_stylebox("grabber_area_highlight", "HSlider", filled)
 		_theme = t
 	return _theme

@@ -57,3 +57,15 @@ static func button(text: String, name := "") -> Button:
 	b.add_theme_font_size_override("font_size", 20)
 	b.pressed.connect(Sound.play.bind("click"))
 	return b
+
+
+## The tavern picture, darkened, behind a screen (menus, collection, settings).
+static func backdrop(parent: Control) -> void:
+	var pic := TextureRect.new()
+	pic.texture = load("res://ui/menu_bg.jpg")
+	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pic.modulate = Color(0.4, 0.36, 0.33)
+	pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(pic)

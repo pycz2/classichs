@@ -30,6 +30,7 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
+	Palette.backdrop(self)
 	var box := VBoxContainer.new()
 	box.position = Vector2(80, 30)
 	box.add_theme_constant_override("separation", 10)
