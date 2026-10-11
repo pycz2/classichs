@@ -63,3 +63,8 @@ static func register(r: Dictionary) -> void:
 				me.tags.erase("STEALTH")
 				me.enchantments = me.enchantments.filter(func(e): return e.get("hooks") != "ench:transcendence")},
 	}
+	r["ench:tutorial_guard"] = {  # Missions 1-2: Jaina can't drop below 1 Health.
+		"now": {"predamage": func(_g, me, ev):
+			if ev.target == me.id:
+				ev.amount = mini(ev.amount, maxi(0, me.health() - 1 + int(me.tags.get("ARMOR", 0))))},
+	}
