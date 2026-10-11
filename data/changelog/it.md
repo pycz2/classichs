@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-10-11
+
+### Modificato
+- Le gemme di mana, salute, attacco, armatura e durabilità sono più piccole e lisce al centro per leggere meglio i numeri; i simboli sotto il ritratto sono più piccoli.
+
 ## [0.15.0] - 2026-10-11
 
 ### Aggiunto

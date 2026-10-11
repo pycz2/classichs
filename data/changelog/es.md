@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-10-11
+
+### Cambiado
+- Las gemas de maná, salud, ataque, armadura y durabilidad son más pequeñas y lisas en el centro para leer mejor los números; las marcas bajo el retrato son más pequeñas.
+
 ## [0.15.0] - 2026-10-11
 
 ### Añadido

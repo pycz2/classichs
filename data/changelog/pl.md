@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-10-11
+
+### Zmieniono
+- Kamienie many, zdrowia, ataku, pancerza i wytrzymałości są mniejsze i gładkie w środku, by liczby były czytelniejsze; znaczki pod portretem są mniejsze.
+
 ## [0.15.0] - 2026-10-11
 
 ### Dodano
