@@ -42,3 +42,12 @@ func _ready() -> void:
 			var sig: Signal = it[1]
 			b.pressed.connect(func(): sig.emit())
 		box.add_child(b)
+	var version := Button.new()
+	version.name = "Version"
+	version.text = "v" + str(ProjectSettings.get_setting("application/config/version"))
+	version.flat = true
+	version.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	version.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	version.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	version.pressed.connect(func(): add_child(ChangelogView.new()))
+	add_child(version)
