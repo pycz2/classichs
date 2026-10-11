@@ -131,3 +131,58 @@ func test_history_strip_shows_played_cards_newest_first() -> void:
 	eq(strip.card_at(5), "VAN_CS2_182", "newest on top")
 	eq(strip.card_at(HistoryStrip.TILE + 10), "VAN_CS2_120", "then the earlier one")
 	v.free()
+
+
+func test_right_click_during_a_drag_cancels_it_cleanly() -> void:
+	var v := _view({"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "exhausted": false}]})
+	var yeti := v.g.players[0].board[0]
+	v._press = {"id": yeti.id, "at": Vector2(640, 400)}
+	v._start_drag()
+	v.cancel()
+	v._drag_to(Vector2(600, 200))  # the next mouse move after the right click
+	eq([v._dragging, v._press, v._arrow.visible], [false, {}, false], "drag fully cancelled")
+	v.free()
+
+
+func test_menus_and_screens_draw_above_hand_cards() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]})
+	v.open_settings()
+	var s := v.find_child("SettingsView", true, false) as Control
+	var top := 0
+	for c in v._views.values():
+		top = maxi(top, c.z_index)
+	check(s.z_index > top + 20, "settings above the hand (z %d vs %d)" % [s.z_index, top])
+	for n in ["GameMenu", "EmoteWheel", "EnemyMenu"]:
+		check((v.find_child(n, true, false) as Control).z_index > top + 20, n)
+	v._open_overlay("x")
+	check(v._overlay.z_index > top + 20, "dimming overlays (mulligan, game over) above the hand")
+	v.free()
+
+
+func test_bounced_minion_becomes_a_card_where_it_stood() -> void:
+	var v := _view({"hero": "HERO_08", "board": ["VAN_CS2_182"]})
+	var yeti := v.g.players[0].board[0]
+	var at: Vector2 = v._center(yeti.id) if v.has_method("_center") else v._center_of(yeti.id)
+	Anim.instant = false
+	v.g.return_to_hand(yeti)
+	var events: Array = v.g.event_log.duplicate()
+	v._effects_now(events)
+	var card := v.g.players[0].hand[0]
+	var cv: Control = v._views[card.id]
+	var start: Vector2 = cv.position + cv.size * cv.scale / 2.0
+	Anim.instant = true
+	check(start.distance_to(at) < 60.0, "the card starts at the minion's place, not at the deck: %s vs %s" % [start, at])
+	v.free()
+
+
+func test_turn_timer_does_not_end_a_new_turn_while_animating() -> void:
+	var v := _view({"hero": "HERO_08"}, [false, false])
+	v.timer_enabled = true
+	v._time_left = -1.0  # the old turn's timer ran out
+	v._turn_key = "old"
+	v._busy = true  # the opponent's last move is still animating
+	var turn := v.g.turn
+	v.tick(0.1)
+	v._busy = false
+	eq(v.g.turn, turn, "the new turn was not ended by the old turn's timer")
+	v.free()

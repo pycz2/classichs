@@ -74,6 +74,9 @@ var _intent_ms := 0
 var _queue: Array = []
 var _busy := false
 var _final_refresh := false
+## A card that changed its id in place (bounced, transformed): new id -> where it stood.
+var _moved := {}
+var _quiet := {}
 var _names: Array[Label] = []
 var _hint: Label
 var _hint_timer := 0.0
@@ -157,9 +160,11 @@ func _ready() -> void:
 	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_hint)
 	_tracker = DeckTrackerPanel.new()
+	_tracker.z_index = 90
 	_tracker.visible = Settings.data.tracker
 	add_child(_tracker)
 	_history = HistoryPanel.new()
+	_history.z_index = 90
 	_history.visible = false
 	add_child(_history)
 
@@ -414,6 +419,9 @@ func _view_at(m: Vector2) -> EntityView:
 
 
 func _drag_to(m: Vector2) -> void:
+	if _sel.is_empty() or not _dragging:
+		_end_drag()
+		return
 	var id: int = _sel.id
 	var v: EntityView = _views.get(id)
 	var e := g.ent(id)
@@ -509,7 +517,7 @@ func _aim_click_mode() -> void:
 
 ## The hand card under the mouse rises (by slot, so a rising card never loses the hover).
 func _track_hand_hover() -> void:
-	if controller == null or _overlay != null:
+	if controller == null or _overlay != null or _menu.visible or find_child("SettingsView", false, false):
 		return
 	var hand := g.players[viewer()].hand
 	var m := get_local_mouse_position()
@@ -538,6 +546,7 @@ func _build_menu() -> void:
 	add_child(gear)
 	_menu = PanelContainer.new()
 	_menu.name = "GameMenu"
+	_menu.z_index = 100
 	_menu.visible = false
 	_menu.add_theme_stylebox_override("panel", Palette.box(Color(0.1, 0.07, 0.05, 0.95), 10, Color("c9a74a"), 2))
 	var box := VBoxContainer.new()
@@ -568,6 +577,7 @@ func _build_menu() -> void:
 func _build_emote_wheel() -> void:
 	_wheel = Control.new()
 	_wheel.name = "EmoteWheel"
+	_wheel.z_index = 100
 	_wheel.visible = false
 	_wheel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var spots := [Vector2(-190, -10), Vector2(-200, 40), Vector2(-190, 90), Vector2(130, -10), Vector2(140, 40), Vector2(130, 90)]
@@ -590,6 +600,7 @@ func _build_emote_wheel() -> void:
 	add_child(_wheel)
 	_enemy_menu = PanelContainer.new()
 	_enemy_menu.name = "EnemyMenu"
+	_enemy_menu.z_index = 100
 	_enemy_menu.visible = false
 	_enemy_menu.position = ENEMY_HERO + Vector2(140, 20)
 	var mute := Palette.button(tr("Mute"), "MuteButton")
@@ -625,6 +636,7 @@ func tick(delta: float) -> void:
 	if not timer_enabled or controller == null or g.game_over:
 		_rope.visible = false
 		return
+	_reset_timer()  # a new turn gets its full time even while the table is animating
 	_time_left -= delta
 	_rope.visible = _time_left <= ROPE_SECONDS
 	var w := 940.0 * clampf(_time_left / ROPE_SECONDS, 0.0, 1.0)
@@ -635,6 +647,7 @@ func tick(delta: float) -> void:
 		return
 	var me := viewer()
 	if (g.phase == "MULLIGAN" and not g.players[me].mulliganed) or (g.phase != "MULLIGAN" and g.current == me):
+		_end_drag()
 		_sel = {}
 		controller.timeout(me)
 
@@ -680,6 +693,7 @@ func show_hint(text: String, seconds := 2.0) -> void:
 
 func open_settings() -> void:
 	var s := SettingsView.new()
+	s.z_index = 100
 	s.back.connect(s.queue_free)
 	s.language_changed.connect(relabel)
 	s.art_changed.connect(func():
@@ -824,7 +838,7 @@ func _reconcile(want: Dictionary) -> void:
 			from[id] = v.position + v.size * v.scale / 2.0
 			_drop(v, false)
 		else:
-			_drop(v, true)
+			_drop(v, not _quiet.has(id))
 	for id in want:
 		var spec: Dictionary = want[id]
 		var e := g.ent(id)
@@ -837,8 +851,8 @@ func _reconcile(want: Dictionary) -> void:
 			var s0 := 1.0
 			if not _laid_out:
 				pass
-			elif from.has(id):  # a minion returned to the hand, a card that became a minion
-				start = from[id] - v.size / 2.0
+			elif from.has(id) or _moved.has(id):  # a card that became a minion, a bounced or transformed one
+				start = from.get(id, _moved.get(id)) - v.size / 2.0
 				s0 = 0.9
 			elif spec.kind == "hand":  # drawn from the deck
 				start = (_piles[0] if spec.own else _piles[1]).top() - v.pivot_offset * (1.0 - 0.6)
@@ -935,9 +949,20 @@ func _pos_from_x(x: float) -> int:
 
 
 func cancel() -> void:
+	_end_drag()
 	if not _sel.is_empty():
 		_sel = {}
 		refresh()
+
+
+## Drops any drag in progress: the arrow hides and the card goes back to the hand.
+func _end_drag() -> void:
+	if _dragging and _views.has(_press.get("id", -1)):
+		_views[_press.id].modulate.a = 1.0
+	_press = {}
+	_dragging = false
+	_arrow.visible = false
+	_gap = -1
 
 
 func click_entity(id: int) -> void:
@@ -1288,7 +1313,14 @@ func _effects_now(events: Array) -> void:
 	var old := {}
 	for id in _views:
 		old[id] = _views[id].position + _views[id].size / 2.0
+	for ev in events:  # the new card takes the old one's place instead of dying and arriving
+		var pair: Array = {"return_to_hand": [ev.get("entity", -1), ev.get("new", -1)], "transform": [ev.get("from", -1), ev.get("to", -1)]}.get(ev.type, [])
+		if not pair.is_empty() and _views.has(pair[0]):
+			_moved[pair[1]] = _center_of(pair[0])
+			_quiet[pair[0]] = true
 	refresh()
+	_moved.clear()
+	_quiet.clear()
 	var big := false
 	var heard := {}
 	for ev in events:
@@ -1370,6 +1402,7 @@ func _close_overlay() -> void:
 func _open_overlay(title: String) -> VBoxContainer:
 	_close_overlay()
 	_overlay = Control.new()
+	_overlay.z_index = 100  # above the hand cards
 	_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var dim := ColorRect.new()
 	dim.color = Color(0, 0, 0, 0.6)

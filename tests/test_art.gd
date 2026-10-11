@@ -95,6 +95,12 @@ func test_art_sets_are_folders_and_switch_pictures() -> void:
 
 
 func test_settings_screen_offers_art_sets() -> void:
+	var root := "user://test_art_root2"
+	for d in ["cards", "original"]:
+		DirAccess.make_dir_recursive_absolute(root + "/" + d)
+	var was := Art.root
+	Art.root = root
+	Art.reset()
 	var s := SettingsView.new()
 	(Engine.get_main_loop() as SceneTree).root.add_child(s)
 	var pick := s.find_child("ArtSet", true, false) as OptionButton
@@ -104,3 +110,7 @@ func test_settings_screen_offers_art_sets() -> void:
 	pick.item_selected.emit(0)
 	eq(Settings.data.art, "generated", "back")
 	s.free()
+	Art.root = was
+	Art.reset()
+	for d in ["/cards", "/original", ""]:
+		DirAccess.remove_absolute(root + d)
