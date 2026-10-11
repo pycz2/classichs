@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-10-12
+
+### Ajouté
+- Éditeur de scène : zones Secrets et Arme, le choix de qui joue en premier, et les jetons dans la liste des cartes.
+
 ## [0.18.0] - 2026-10-12
 
 ### Modifié

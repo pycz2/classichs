@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-10-12
+
+### Aggiunto
+- Editor di scena: zone Segreti e Arma, la scelta di chi muove per primo e le pedine nell'elenco delle carte.
+
 ## [0.18.0] - 2026-10-12
 
 ### Modificato

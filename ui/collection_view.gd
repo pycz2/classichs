@@ -29,6 +29,8 @@ var rarity_filter := ""
 var type_filter := ""
 ## Only these cards (a Dictionary with the ids as keys); null = all.
 var only: Variant = null
+## Debug tools: tokens and other uncollectible cards are listed too (not heroes or hero powers).
+var include_tokens := false
 var _grid := GridContainer.new()
 var _page_label: Label
 var _prev: Button
@@ -202,8 +204,10 @@ func set_tab(cls: String) -> void:
 func filtered() -> Array:
 	var out: Array = []
 	var q := query.strip_edges().to_lower()
-	for id in CardDb.collectible():
+	for id in (CardDb.all_ids() if include_tokens else CardDb.collectible()):
 		var c := CardDb.card(id)
+		if include_tokens and c.get("type", "") in ["HERO", "HERO_POWER", "ENCHANTMENT"]:
+			continue
 		if c.cardClass != tab or (only != null and not only.has(id)):
 			continue
 		var cost := int(c.get("cost", 0))

@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-10-12
+
+### Hinzugefügt
+- Szeneneditor: Zonen für Geheimnisse und Waffe, die Wahl, wer zuerst am Zug ist, und Spielsteine in der Kartenliste.
+
 ## [0.18.0] - 2026-10-12
 
 ### Geändert

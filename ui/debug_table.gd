@@ -15,7 +15,7 @@ const TABS := ["Scene", "Interaction test", "Card test", "Effects test"]
 const SCENE := 0
 const TESTS := 1
 ## Zones a clicked card can go to: [label, key].
-const ZONES := [["Hand", "hand"], ["Board", "board"], ["Deck", "deck"]]
+const ZONES := [["Hand", "hand"], ["Board", "board"], ["Deck", "deck"], ["Secrets", "secrets"], ["Weapon", "weapon"]]
 ## A player's numbers: [label, key, max].
 const STATS := [["Mana", "mana", 10], ["Max mana", "max_mana", 10], ["Damage", "damage", 29], ["Armor", "armor", 99]]
 ## The card list at this size leaves the right half to the players.
@@ -48,6 +48,7 @@ var _players := HBoxContainer.new()
 var _json := VBoxContainer.new()
 var _test_box := VBoxContainer.new()
 var _steps: Label
+var _first: Array[Button] = []  # "Player 1 moves" / "Player 2 moves"
 var _test_error: Label
 
 
@@ -114,6 +115,7 @@ func _build_scene(page: Control) -> void:
 	var list := CollectionView.new()
 	list.name = "SceneCards"
 	list.scale = Vector2(LIST_SCALE, LIST_SCALE)
+	list.include_tokens = true  # tokens can be put in a scene too
 	list.picked.connect(func(id): add_card(target[0], target[1], id))
 	page.add_child(list)
 	var col := VBoxContainer.new()
@@ -134,6 +136,7 @@ func _build_scene(page: Control) -> void:
 	modes.add_child(bot_mode)
 	modes.add_child(hot_seat)
 	bot_mode.button_pressed = true
+
 	var buttons := HFlowContainer.new()
 	buttons.add_theme_constant_override("h_separation", 10)
 	buttons.add_theme_constant_override("v_separation", 6)
@@ -227,16 +230,30 @@ func add_card(p: int, zone: String, id: String) -> void:
 	if pl == null:
 		error.text = tr("The scenario needs \"players\": a list of two objects")
 		return
-	if not pl.get(zone, []) is Array:
+	if zone != "weapon" and not pl.get(zone, []) is Array:
 		error.text = tr("players[%d].%s must be a list") % [p, zone]
 		return
+	var c := CardDb.card(id)
+	if zone == "secrets" and not c.get("mechanics", []).has("SECRET"):
+		error.text = tr("Only Secrets go there")
+		return
+	if zone == "weapon" and c.get("type", "") != "WEAPON":
+		error.text = tr("Only a weapon goes there")
+		return
 	var was_ok: bool = Scenario.build(scene).error == ""
-	var list: Array = pl.get(zone, [])
-	list.append(id)
-	pl[zone] = list
+	var before = pl.get(zone)
+	if zone == "weapon":  # one slot: a new weapon replaces the old one
+		pl.weapon = id
+	else:
+		var list: Array = pl.get(zone, [])
+		list.append(id)
+		pl[zone] = list
 	var why: String = Scenario.build(scene).error
 	if was_ok and why != "":
-		list.pop_back()
+		if before == null:
+			pl.erase(zone)
+		else:
+			pl[zone] = before if zone == "weapon" else (pl[zone] as Array).slice(0, -1)
 		error.text = why
 		return
 	_changed()
@@ -244,7 +261,10 @@ func add_card(p: int, zone: String, id: String) -> void:
 
 
 func remove_card(p: int, zone: String, i: int) -> void:
-	(_player(p)[zone] as Array).remove_at(i)
+	if zone == "weapon":
+		_player(p).erase("weapon")
+	else:
+		(_player(p)[zone] as Array).remove_at(i)
 	_changed()
 	_show_players()
 
@@ -261,8 +281,11 @@ static func _card_id(item: Variant) -> String:
 	return id if id is String and CardDb.has(id) else ""
 
 
-## Both players' columns: hero, numbers, and the cards in each zone.
+## Both players' columns: hero, numbers, whose turn it is, and the cards in each zone.
 func _show_players() -> void:
+	var cur := int(scene.get("current", 0)) if scene.get("current", 0) is float or scene.get("current", 0) is int else 0
+	_first.clear()
+	var turn_group := ButtonGroup.new()
 	for c in _players.get_children():
 		_players.remove_child(c)
 		c.queue_free()
@@ -292,6 +315,14 @@ func _show_players() -> void:
 		var pp: int = p
 		hero.item_selected.connect(func(i): _set_value(pp, "hero", heroes[i]))
 		head.add_child(hero)
+		var moves := _radio("First%d" % p, tr("Player %d moves") % (p + 1), turn_group)  # whose turn the scene starts on
+		moves.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		moves.button_pressed = p == cur
+		moves.pressed.connect(func():
+			scene["current"] = pp
+			_changed())
+		col.add_child(moves)
+		_first.append(moves)
 		var nums := GridContainer.new()
 		nums.columns = 4
 		nums.add_theme_constant_override("h_separation", 6)
@@ -310,6 +341,8 @@ func _show_players() -> void:
 			nums.add_child(spin)
 		for z in ZONES:
 			var items = pl.get(z[1], [])
+			if z[1] == "weapon":
+				items = [items] if items != null and _card_id(items) != "" else []
 			if not items is Array:
 				items = []
 			var radio := _radio("Zone_" + z[1], "%s (%d)" % [tr(z[0]), items.size()], group)
@@ -320,7 +353,10 @@ func _show_players() -> void:
 			col.add_child(radio)
 			var scroll := ScrollContainer.new()
 			scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-			scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			if z[1] in ["secrets", "weapon"]:  # small zones: as tall as their few rows
+				scroll.custom_minimum_size.y = 31 * maxi(1, items.size())
+			else:
+				scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 			col.add_child(scroll)
 			var tiles := VBoxContainer.new()
 			tiles.name = "Tiles_" + z[1]
