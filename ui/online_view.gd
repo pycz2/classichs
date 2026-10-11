@@ -1,7 +1,7 @@
 class_name OnlineView
 extends Control
-## Online game setup: name, deck, then either "Create game" (invite code →
-## paste answer) or "Join game" (paste invite → send back the answer code).
+## Online game setup: name, deck, then either "Create game" (invite code ->
+## paste answer) or "Join game" (paste invite -> send back the answer code).
 
 signal back
 signal play(session: NetSession, m: Match)

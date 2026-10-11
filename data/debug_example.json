@@ -1,11 +1,12 @@
 {
   "players": [
-    {"hero": "HERO_08", "mana": 10, "max_mana": 10,
-     "hand": ["VAN_CS2_029", "VAN_CS2_024"],
-     "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
-     "board": ["VAN_CS2_033"]},
-    {"hero": "HERO_01", "damage": 10, "armor": 2,
-     "deck": ["VAN_CS2_231", "VAN_CS2_231"],
-     "board": ["VAN_CS1_042", {"card": "VAN_CS2_182", "damage": 2}]}
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "damage": 8,
+     "hand": ["VAN_CS2_029", "VAN_CS2_024", "VAN_CS2_032", "VAN_CS2_022", "VAN_CS2_023"],
+     "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+     "board": ["VAN_EX1_559", "VAN_CS2_033", {"card": "VAN_NEW1_012", "exhausted": false}, "VAN_CS2_182"],
+     "secrets": ["VAN_EX1_295"]},
+    {"hero": "HERO_01", "damage": 12, "armor": 4, "weapon": "VAN_CS2_106",
+     "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+     "board": ["VAN_EX1_298", "VAN_CS2_179", {"card": "VAN_EX1_110", "damage": 2}, "VAN_EX1_067", "VAN_NEW1_011"]}
   ]
 }
