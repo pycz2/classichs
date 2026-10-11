@@ -14,12 +14,12 @@
     "deep":   "rubberband=pitch=0.82",
     "deeper": "rubberband=pitch=0.7",
     "high":   "rubberband=pitch=1.4",
-    "hall":   "aecho=0.8:0.85:40|70|110|160:0.35|0.28|0.2|0.12",
-    "cave":   "aecho=0.8:0.9:60|120|200|300:0.4|0.3|0.22|0.15",
-    "echo":   "aecho=0.8:0.75:220|440:0.45|0.25",
+    "hall":   "aecho=0.9:0.9:40:0.15",
+    "cave":   "aecho=0.9:0.9:60|80:0.2|0.1",
+    "echo":   "aecho=0.9:0.9:80:0.2",
     "growl":  "acrusher=bits=6:mix=0.25,asoftclip=type=atan",
     "robot":  "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=512:overlap=0.75,acrusher=bits=10:mix=0.2",
-    "ghost":  "chorus=0.6:0.9:50|60:0.4|0.32:0.25|0.4:2|1.3"
+    "ghost":  "chorus=0.9:0.9:25:0.2:0.4:1"
   },
   "voices": {
     "m_hero":    {"gender": "m", "ref": "am_michael", "style": "heroic",   "fx": [],
@@ -49,6 +49,7 @@
     "spirit_m":  {"gender": "m", "base": "m_old",    "style": "eerie",    "fx": ["ghost", "echo"]},
     "spirit_f":  {"gender": "f", "base": "f_mystic", "style": "eerie",    "fx": ["ghost", "echo"]},
     "small":     {"gender": "m", "base": "m_rogue",  "style": "cheerful", "fx": ["high"]},
-    "small_f":   {"gender": "f", "base": "f_bright", "style": "cheerful", "fx": ["high"]}
+    "small_f":   {"gender": "f", "base": "f_bright", "style": "cheerful", "fx": ["high"]},
+    "fel_m":     {"gender": "m", "base": "m_old",    "style": "menacing", "fx": ["deep", "growl"]}
   }
 }

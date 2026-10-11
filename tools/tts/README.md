@@ -36,47 +36,54 @@ into the normal Hugging Face cache (`~/.cache/huggingface`), not the repo; after
 ## Run
 
 ```sh
-tools/tts/.venv/bin/python tools/tts/gen_voice.py                 # data/voice_lines.json, or the sample
-tools/tts/.venv/bin/python tools/tts/gen_voice.py --lines tools/tts/sample_lines.json --langs ruRU,plPL
-tools/tts/.venv/bin/python tools/tts/gen_voice.py --cards VAN_EX1_313 --force   # remake one card
-tools/tts/.venv/bin/python tools/tts/gen_voice.py --page-only                   # just rebuild the page
+PY=tools/tts/.venv/bin/python
+$PY tools/tts/gen_voice.py                         # data/voice_lines.json (or the sample) -> build/voice
+$PY tools/tts/gen_voice.py --out ../other/build/voice --langs ru,pl     # another folder, some languages
+$PY tools/tts/gen_voice.py --cards VAN_EX1_313 --force   # remake one card (new takes)
+$PY tools/tts/gen_voice.py --refx                  # redo effects + encoding from the raw takes (fast)
+$PY tools/tts/gen_voice.py --page-only             # just rebuild the page (plain python3 works too)
 python3 tools/tts/cast.py      # self-check + who speaks with which voice (no venv needed)
 ```
 
-Input is `{card_id: {"play"|"attack"|"death": {lang: text}}}`. Output goes to
-`build/voice/<lang>/<card_id>_<kind>.ogg` (Vorbis, mono, 24 kHz, -16 LUFS, silence trimmed). Existing
-clips are skipped, so a stopped run simply continues; `--force` remakes them. Progress (with ETA) is
-printed and appended to `build/voice/gen.log`. Each clip has a fixed seed, so a remake gives the same take;
-change the text or the voice to get another one.
+Input is `{card_id: {kind: {lang: text}}}`: kind is play/attack/death for minions and the emote keys
+(greetings, well_played, thanks, wow, oops, threaten, start, concede, attack) for heroes; non-dict keys
+such as `source` are ignored. Output: `<out>/<lang>/<card_id>_<kind>.ogg` (Vorbis ~32 kbps, mono, 24 kHz,
+-16 LUFS, silence trimmed), the raw take in `<out>/raw/<lang>/*.flac` (so `--refx` can change effects
+without the model), `<out>/scores.json`, `<out>/gen.log` and `<out>/index.html`.
 
-Quality check: takes vary a lot (sometimes mumbled, accented or rambling), so each line gets up to
-`--tries 3` takes, Whisper (`whisper-small`, MLX, ~0.5 GB) transcribes the raw take, and the first take
-it understands (similarity >= 0.85) or else the best one is kept. Scores and what Whisper heard go to
-`build/voice/scores.json` and the page's ASR column, so weak clips are easy to find and remake.
-`--no-check` makes one take per line without Whisper. Nonsense lines (murloc gurgles) always score low
-and use all tries; that is harmless, only slower.
+Order of a run: every hero line in all languages first, then all other cards in English, then ru, de,
+fr, es, pt, it, pl one language at a time. Existing clips are skipped, so a stopped run continues where it
+was (`--force` remakes). Each clip has a fixed seed, so a remake gives the same take; change the text or
+the voice to get another one. The page is rebuilt every 25 clips and at the end.
 
-Listening page: `build/voice/index.html` (card, voice, style, effects, text, player). Serve it from the repo root:
-`python3 -m http.server 8790` and open http://127.0.0.1:8790/build/voice/index.html.
+Quality check: takes vary (sometimes mumbled, accented or rambling), so a line gets up to `--tries 2`
+takes; Whisper (`whisper-small`, MLX, ~0.5 GB) transcribes the raw take and the first one it understands
+(similarity >= 0.75) or else the better one is kept. Lines of 3 words or fewer are not checked (Whisper
+is unreliable there) and get one take unless it hit the length cap (a ramble). Scores and what Whisper
+heard go to `scores.json` and the page's ASR column, so weak clips are easy to find and remake.
+`--no-check` makes one take per line without Whisper.
 
-Speed on an M1 Pro: roughly 20-60 s per short line (the model is about 10x slower than real time here,
-more when the machine is busy), so the full game (~280 minions x 3 lines x 8 languages) is a long
-overnight job; run it per language with `--langs`.
+Listening page: serve the repo root with `python3 -m http.server 8790` and open
+http://127.0.0.1:8790/build/voice/index.html (filter by language, search by card/voice/text).
+
+Speed on this M1 Pro (busy with other work): 40-75 s per clip, so all 3264 lines of
+`data/voice_lines.json` take a few days; the order above makes the run useful long before it ends.
 
 ## Voices, styles, effects (`voices.json`)
 
 - `styles`: Chatterbox settings per mood (`neutral heroic cheerful gruff menacing eerie calm`), plus
   optional `tempo` (ffmpeg atempo). For non-English lines `cfg_weight` is replaced by
   `cross_lang_cfg_weight` (0), which Chatterbox recommends to keep the English reference's accent out.
-- `effects`: named ffmpeg filter chains (`deep deeper high hall cave echo growl robot ghost`).
+- `effects`: named ffmpeg filter chains (`deep deeper high hall cave echo growl robot ghost`). Echoes
+  and rooms are kept short and quiet (40-80 ms, decay <= 0.2) so the words stay clear.
 - `voices`: 8 human voices (`m_hero m_gruff m_old m_rogue`, `f_hero f_mystic f_noble f_bright`), each a
   Kokoro speaker + reference text + default style; and creature voices that reuse one of them through
-  effects (`giant beast demon dragon dragon_f elemental mech spirit_m spirit_f small small_f`).
+  effects (`giant beast demon dragon dragon_f elemental mech spirit_m spirit_f small small_f fel_m`).
 
 To add a voice: add an entry with `ref` (a Kokoro speaker such as `af_sky`, `bm_lewis`; the list is in
 the Kokoro-82M model card) and `ref_text`, or with `base` (an existing voice) and `fx`. Any other
 reference clip you are allowed to use also works: drop it in `tools/tts/refs/<voice>.wav` and give the
-voice a dummy `ref`. Changing a voice does not remake old clips; use `--force`.
+voice a dummy `ref`. Changing effects: `--refx`; changing a speaker or style: `--force`.
 
 ## Who gets which voice (`cast.py`, `cast_overrides.json`)
 
@@ -86,4 +93,4 @@ totems -> `elemental`; giants, ogres, golems, ancients -> `giant`; beasts -> `be
 then name hints (knight/champion -> `m_hero`, mage/priest -> `m_old`, ...), the card's class, and a stable
 spread over the human voices. Female characters are found by name (`FEMALE` in cast.py). Names with
 doom/dread/shadow/fel/... get the `menacing` style. Fix any card in `cast_overrides.json`:
-`"VAN_EX1_116": {"voice": "m_rogue", "style": "cheerful"}`.
+`"VAN_EX1_116": {"voice": "m_rogue", "style": "cheerful"}`. The heroes are all set there.

@@ -35,5 +35,57 @@
   "VAN_CS2_221": {
     "voice": "f_hero",
     "style": "gruff"
+  },
+  "EX1_323h": {
+    "voice": "demon",
+    "style": "menacing"
+  },
+  "HERO_01": {
+    "voice": "m_gruff",
+    "style": "gruff"
+  },
+  "HERO_02": {
+    "voice": "m_hero",
+    "style": "calm"
+  },
+  "HERO_03": {
+    "voice": "f_bright",
+    "style": "cheerful"
+  },
+  "HERO_04": {
+    "voice": "m_hero",
+    "style": "heroic"
+  },
+  "HERO_05": {
+    "voice": "m_gruff",
+    "style": "gruff"
+  },
+  "HERO_06": {
+    "voice": "m_old",
+    "style": "calm"
+  },
+  "HERO_07": {
+    "voice": "fel_m",
+    "style": "menacing"
+  },
+  "HERO_08": {
+    "voice": "f_hero",
+    "style": "heroic"
+  },
+  "HERO_09": {
+    "voice": "m_rogue",
+    "style": "calm"
+  },
+  "TU4a_006": {
+    "voice": "f_hero",
+    "style": "heroic"
+  },
+  "VAN_CS2_106": {
+    "voice": "m_gruff",
+    "style": "gruff"
+  },
+  "VAN_EX1_411": {
+    "voice": "m_gruff",
+    "style": "menacing"
   }
 }
