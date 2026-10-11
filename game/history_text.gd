@@ -150,3 +150,103 @@ static func event_lines(ev: Dictionary, g: GameState, viewer: int, loc := "") ->
 	if s != "":
 		out.append(s)
 	return out
+
+
+## The line saying who made the move of an entry ("You play X on Y", "Opponent
+## uses…"); "" for moves without a card (end of turn, mulligan).
+static func title(entry: Dictionary, g: GameState, viewer: int, loc := "") -> String:
+	for ev: Dictionary in entry.events:
+		if ev.type in ["play", "attack", "hero_power"]:
+			return event_lines(ev, g, viewer, loc)[0]
+	return ""
+
+
+## The card that made the move of an entry (played, attacking, Hero Power), or -1.
+static func actor(entry: Dictionary, g: GameState) -> int:
+	var a: Dictionary = entry.action
+	var id: int = {"play": a.get("entity", -1), "attack": a.get("attacker", -1), "hero_power": a.get("entity", -1)}.get(a.get("type", ""), -1)
+	if a.get("type") == "hero_power" and id < 0:
+		id = g.players[int(a.get("player", 0))].hero_power.id
+	return id
+
+
+## What one entry did, for the history pop-up: rows {"card", "name", "text",
+## "color", "from"} in event order. "card" is the picture ("" for none), "name"
+## the affected card ("" when "text" is a whole sentence), "color" good/bad/"",
+## "from" the trigger that caused it (a Deathrattle, a Secret, Knife Juggler…),
+## "" for the move itself. The opponent's draws and hand cards stay hidden.
+static func effects(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Array:
+	var out := []
+	var a: Dictionary = entry.action
+	var main := actor(entry, g)
+	var chosen: bool = a.get("type", "") == "choose"
+	var dead := {}
+	var gone := {}  # destroyed: their "death" adds nothing
+	for ev: Dictionary in entry.events:
+		var row := {}
+		if chosen and ev.type == "discard" and ev.player != viewer:
+			row = {"card": "", "name": "", "text": _t("Opponent discards a card"), "color": ""}  # unchosen options stay secret
+		else:
+			row = _effect(ev, g, viewer, loc, main, gone)
+		var by: int = ev.get("by_id", -1)
+		if not row.is_empty():
+			row.from = (_t("Deathrattle") + ": " if dead.has(by) else "") + _name(g, by, loc) \
+				if by >= 0 and by != main and g.ent(by) else ""
+			out.append(row)
+		if ev.type == "death":
+			dead[ev.entity] = true
+	return out
+
+
+static func _effect(ev: Dictionary, g: GameState, viewer: int, loc: String, main: int, gone: Dictionary) -> Dictionary:
+	var row := func(id: int, text: String, color := "") -> Dictionary:
+		var e := g.ent(id)
+		return {"card": e.card_id if e else "", "name": _name(g, id, loc), "text": text, "color": color}
+	var mine: bool = ev.get("player", -1) == viewer
+	match ev.type:
+		"play", "attack", "hero_power":
+			if ev.get("entity", ev.get("attacker", -1)) == main:
+				return {}
+		"turn_start", "mana":
+			return {}
+		"damage":
+			return row.call(ev.target, _t("-%d Health") % ev.amount, "bad")
+		"heal":
+			return row.call(ev.target, _t("+%d Health") % ev.amount, "good")
+		"armor":
+			return row.call(g.hero(ev.player).id, _t("+%d Armor") % ev.amount, "good")
+		"armor_lost":
+			return row.call(ev.target, _t("-%d Armor") % ev.amount, "bad")
+		"buff":
+			if ev.has("atk"):
+				return row.call(ev.target, "%+d/%+d" % [ev.atk, ev.hp], "good" if ev.atk + ev.hp >= 0 else "bad")
+			return row.call(ev.target, "= %s/%s" % [str(ev.set_atk) if ev.set_atk >= 0 else "-", str(ev.set_hp) if ev.set_hp >= 0 else "-"])
+		"freeze":
+			return row.call(ev.target, _t("Frozen"), "bad")
+		"silence":
+			return row.call(ev.target, _t("Silenced"), "bad")
+		"divine_shield_lost":
+			return row.call(ev.target, _t("Loses Divine Shield"), "bad")
+		"destroy":
+			gone[ev.target] = true
+			return row.call(ev.target, _t("Destroyed"), "bad")
+		"death":
+			return {} if gone.has(ev.entity) else row.call(ev.entity, _t("Dies") if ev.minion else _t("Destroyed"), "bad")
+		"summon":
+			return {} if ev.entity == main else row.call(ev.entity, _t("Summoned"), "good")
+		"equip":
+			return row.call(g.hero(ev.player).id, _t("Equips %s") % _name(g, ev.entity, loc), "good")
+		"transform":
+			return row.call(ev.from, _t("Becomes %s") % CardText.name(ev.card, loc))
+		"return_to_hand":
+			return row.call(ev.entity, _t("Returned to hand"))
+		"take_control":
+			return row.call(ev.target, _t("Changes sides"))
+		"draw":
+			if mine:
+				return row.call(ev.entity, _t("Drawn"), "good")
+		"add_to_hand":
+			if mine:
+				return row.call(ev.entity, _t("Added to hand"), "good")
+	var lines := event_lines(ev, g, viewer, loc)  # whole sentences, which already hide the opponent's cards
+	return {} if lines.is_empty() else {"card": "", "name": "", "text": lines[0], "color": ""}

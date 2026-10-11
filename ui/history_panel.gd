@@ -65,8 +65,16 @@ func update_from(g: GameState, viewer: int) -> void:
 			var l := Palette.label(r.text, 14)
 			l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			l.custom_minimum_size.x = _list.custom_minimum_size.x
+			var style := StyleBoxFlat.new()  # a turn opens with a gold rule; its moves are indented under it
+			style.bg_color = Color.TRANSPARENT
 			if r.turn:
 				l.add_theme_color_override("font_color", Palette.ATTACK)
+				style.border_color = Color("c9a74a")
+				style.border_width_top = 2
+				style.content_margin_top = 4
+			else:
+				style.content_margin_left = 14
+			l.add_theme_stylebox_override("normal", style)
 			_list.add_child(l)
 			added = true
 		_shown += 1
