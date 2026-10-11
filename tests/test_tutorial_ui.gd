@@ -162,12 +162,7 @@ func test_win_shows_reward_and_saves_progress() -> void:
 	var next := []
 	v.tutorial_next.connect(func(n): next.append(n))
 	(ov.find_child("NextMission", true, false) as Button).pressed.emit()
-	var intros := v.find_children("*", "TutorialIntro", true, false)
-	check(intros.size() == 1 and intros[0].number == 2, "mission 2's intro first")
-	check(not ov.visible and intros[0].z_index > ov.z_index, "the result screen hides under the intro (no reward button left in front)")
-	eq(next, [], "not started yet")
-	(intros[0].find_child("Skip", true, false) as Button).pressed.emit()
-	eq(next, [2], "then mission 2")
+	eq(next, [2], "on to mission 2 (main shows its intro as its own screen)")
 	v.free()
 	_restore()
 
@@ -214,4 +209,16 @@ func test_no_mute_in_tutorial_and_done_marker_is_text() -> void:
 	root().add_child(t)
 	check(not (t.find_child("Mission1", true, false) as Button).text.contains("✓"), "no special glyph")
 	t.free()
+	_restore()
+
+
+func test_next_mission_goes_through_its_intro_screen() -> void:
+	_store()
+	var m: Node = load("res://ui/main.tscn").instantiate()
+	(Engine.get_main_loop() as SceneTree).root.add_child(m)
+	m.show_tutorial_intro(2)
+	check(m.screen is TutorialIntro, "the intro is a screen of its own, nothing under it")
+	(m.screen.find_child("Skip", true, false) as Button).pressed.emit()
+	check(m.screen is MatchView and m.screen.tutorial.number == 2, "then mission 2")
+	m.free()
 	_restore()
