@@ -26,6 +26,12 @@ func _process(_delta: float) -> bool:
 
 
 func _run_all() -> void:
+	# Tests never read the player's real settings and always run in English.
+	Settings.path = "user://test_runner_settings.json"
+	var sf := FileAccess.open(Settings.path, FileAccess.WRITE)
+	sf.store_string(JSON.stringify({"language": "en", "music": 0.0, "sfx": 0.0, "voice": 0.0, "tts": false}))
+	sf.close()
+	Locale.load_all()
 	var args := OS.get_cmdline_user_args()
 	var filter: String = args[0] if args.size() > 0 else ""
 	var errors := ErrorCounter.new()
@@ -52,6 +58,8 @@ func _run_all() -> void:
 			total += 1
 			var before := errors.count
 			var t: TestCase = script.new()
+			Settings.load_settings()
+			Locale.set_language("en")
 			t.call(name)
 			H.cleanup()
 			if errors.count > before:
@@ -63,6 +71,7 @@ func _run_all() -> void:
 			for msg in t.failures:
 				print("    " + msg)
 	print("%d tests, %d failed" % [total, failed])
+	DirAccess.remove_absolute(Settings.path)
 	Cards.unload()
 	OS.remove_logger(errors)
 	quit(1 if failed > 0 or total == 0 else 0)

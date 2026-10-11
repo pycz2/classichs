@@ -9,6 +9,9 @@ signal tutorial
 signal debug_table
 signal quit
 
+## Button labels (English keys); the translation tool reads this list.
+const ITEMS := ["Training", "Online Game", "Tutorial", "Collection", "Debug Table", "Exit"]
+
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

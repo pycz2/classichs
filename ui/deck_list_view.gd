@@ -5,6 +5,9 @@ extends Control
 
 signal back
 
+## Button labels (English keys); the translation tool reads this list.
+const BUTTONS := ["New Deck", "Edit", "Copy", "Delete", "Import Code", "Export Code", "Browse Cards", "Back"]
+
 var decks: Array[Deck] = []
 var list := ItemList.new()
 var message: Label

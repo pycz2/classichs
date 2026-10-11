@@ -1,0 +1,32 @@
+class_name I18nKeys
+extends RefCounted
+## Every English interface string: literals in tr()/translate()/_t()/_tr() calls,
+## plus the tables that are translated through a variable.
+
+const DIRS := ["res://engine", "res://cards", "res://game", "res://net", "res://ui"]
+static var _call := RegEx.create_from_string("(?:\\btr|TranslationServer\\.translate|\\b_t|\\b_tr)\\(\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
+
+
+static func collect() -> Array:
+	var keys := {}
+	for dir in DIRS:
+		for f in DirAccess.get_files_at(dir):
+			if not f.ends_with(".gd"):
+				continue
+			for m in _call.search_all(FileAccess.get_file_as_string(dir + "/" + f)):
+				keys[m.get_string(1).c_unescape()] = true
+	var tables: Array = []
+	tables.append_array(MainMenu.ITEMS)
+	tables.append_array(DeckListView.BUTTONS)
+	tables.append_array(DebugTable.ZONES.map(func(z): return z[0]))
+	tables.append_array(MatchView.EMOTES.values())
+	tables.append_array(Tutorial.HINTS.values())
+	tables.append_array(NetSession.BYE_TEXT.values())
+	for m in Missions.LIST:
+		tables.append_array([m.intro, m.reward_line])
+		tables.append_array(m.lines.values())
+	for k in tables:
+		keys[k] = true
+	var out := keys.keys()
+	out.sort()
+	return out

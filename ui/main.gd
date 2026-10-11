@@ -6,6 +6,9 @@ var screen: Control
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	Locale.load_all()
+	Settings.load_settings()
+	Settings.apply()
 	show_menu()
 
 
