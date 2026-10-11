@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.15.3] - 2026-10-11
+
+### Ajouté
+- L'écran de chargement affiche la version du jeu.
+
 ## [0.15.2] - 2026-10-11
 
 ### Modifié

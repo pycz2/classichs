@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.15.3] - 2026-10-11
+
+### Added
+- The loading splash shows the game's version.
+
 ## [0.15.2] - 2026-10-11
 
 ### Changed

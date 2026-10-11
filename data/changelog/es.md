@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.15.3] - 2026-10-11
+
+### Añadido
+- La pantalla de carga muestra la versión del juego.
+
 ## [0.15.2] - 2026-10-11
 
 ### Cambiado
