@@ -5,6 +5,8 @@ extends Control
 ## Input flow: pick a card / attacker / hero power → (Choose One) → (position) → (target).
 
 signal leave
+## Tutorial: the player asked for the next mission.
+signal tutorial_next(n: int)
 
 const ENEMY_HERO := Vector2(575, 40)
 const OWN_HERO := Vector2(575, 466)
@@ -23,6 +25,8 @@ var player_names: Array = ["", ""]
 ## Online opponent's emotes are hidden.
 var muted := false
 var session: NetSession
+## Set for a tutorial mission (hints, turn-end rules, reward screen).
+var tutorial: Tutorial
 var controller: Match
 var g: Game:
 	get:
@@ -131,6 +135,8 @@ func _ready() -> void:
 	_history = HistoryPanel.new()
 	_history.visible = false
 	add_child(_history)
+	if tutorial:
+		emote.visible = false
 
 
 func bind(m: Match) -> void:
@@ -142,6 +148,8 @@ func bind(m: Match) -> void:
 		var me := m.viewer()
 		player_names[me] = Profile.load_name()
 		player_names[1 - me] = tr("Bot") if m.bots[1 - me] else ""
+		if tutorial:
+			player_names[1 - me] = CardText.name(tutorial.mission.boss)
 	m.start()
 	refresh()
 
@@ -188,12 +196,20 @@ func send_emote(id: String) -> void:
 
 
 func show_emote(p: int, id: String) -> void:
+	show_line(p, tr(EMOTES[id]))
+
+
+## A speech bubble next to player p's hero (emotes, tutorial boss lines).
+func show_line(p: int, text: String) -> void:
 	if _bubbles.has(p) and is_instance_valid(_bubbles[p]):
 		_bubbles[p].queue_free()
 	var own := p == viewer()
 	var bubble := PanelContainer.new()
 	bubble.add_theme_stylebox_override("panel", Palette.box(Color("f4ead5"), 14, Color("2a2118"), 3))
-	var l := Palette.label(tr(EMOTES[id]), 20, Color("2a2118"))
+	var l := Palette.label(text, 20, Color("2a2118"))
+	var text_width := ThemeDB.fallback_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
+	l.custom_minimum_size.x = minf(320.0, text_width + 8)  # set before wrapping, or the label collapses
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.add_theme_constant_override("outline_size", 0)
 	bubble.add_child(l)
 	bubble.position = (OWN_HERO + Vector2(-210, 20)) if own else (ENEMY_HERO + Vector2(-210, 40))
@@ -202,7 +218,7 @@ func show_emote(p: int, id: String) -> void:
 	_bubbles[p] = bubble
 	if is_inside_tree():
 		var tw := create_tween()
-		tw.tween_interval(2.5)
+		tw.tween_interval(2.5 if tutorial == null else 4.5)
 		tw.tween_property(bubble, "modulate:a", 0.0, 0.5)
 		tw.tween_callback(bubble.queue_free)
 
@@ -283,6 +299,13 @@ func refresh() -> void:
 	_apply_glows()
 	_history.update_from(g, me)
 	_refresh_overlay()
+	if tutorial:
+		var line := tutorial.boss_line(g)
+		if line != "":
+			show_line(g.opponent(me), line)
+		var hint := tutorial.next_hint(g, me)
+		if hint != "":
+			show_hint(hint, 7.0)
 
 
 func _side_name(p: int) -> String:
@@ -305,7 +328,8 @@ func _add_side(p: int, own: bool) -> void:
 	var pl := g.players[p]
 	var hero_pos := OWN_HERO if own else ENEMY_HERO
 	_add_view(HeroView.make(pl.hero, g), hero_pos)
-	_add_view(PowerView.make(pl.hero_power, g, PowerView.Kind.POWER), hero_pos + Vector2(150, 30))
+	if not pl.hero_power.has("LOCKED"):
+		_add_view(PowerView.make(pl.hero_power, g, PowerView.Kind.POWER), hero_pos + Vector2(150, 30))
 	if pl.weapon:
 		_add_view(PowerView.make(pl.weapon, g, PowerView.Kind.WEAPON), hero_pos + Vector2(-100, 30))
 	for i in pl.secrets.size():
@@ -473,6 +497,11 @@ func _advance() -> void:
 
 
 func _on_end_turn() -> void:
+	if tutorial and my_action():
+		var why := tutorial.end_turn_block(g, viewer())
+		if why != "":
+			show_hint(why, 3.0)
+			return
 	if my_action():
 		_sel = {}
 		controller.submit({"type": "end_turn", "player": viewer()})
@@ -633,7 +662,10 @@ func _refresh_overlay() -> void:
 					text = tr("Victory!") if g.winner == viewer() else tr("Defeat")
 			var box := _open_overlay(text)
 			_overlay.name = "GameOver"
-			_centered_button(box, tr("Back to Menu"), "BackToMenu", _leave)
+			if tutorial:
+				_tutorial_result(box)
+			else:
+				_centered_button(box, tr("Back to Menu"), "BackToMenu", _leave)
 		return
 	if g.phase == "MULLIGAN" and my_action():
 		if _overlay == null or _overlay.name != "Mulligan":
@@ -647,6 +679,22 @@ func _refresh_overlay() -> void:
 		return
 	if _overlay and _overlay.name in ["Mulligan", "Choice", "GameOver"]:
 		_close_overlay()
+
+
+func _tutorial_result(box: VBoxContainer) -> void:
+	var n := tutorial.number
+	if g.winner == viewer():
+		Progress.complete(n)
+		var row := _card_row(box)
+		row.add_child(CardView.make(tutorial.mission.reward, 1.4))
+		var line := Palette.label(tr(tutorial.mission.reward_line), 24)
+		line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		box.add_child(line)
+		if n < Missions.count():
+			_centered_button(box, tr("Next Mission"), "NextMission", func(): tutorial_next.emit(n + 1))
+	else:
+		_centered_button(box, tr("Try Again"), "TryAgain", func(): tutorial_next.emit(n))
+	_centered_button(box, tr("Back"), "BackToMenu", _leave)
 
 
 func _show_mulligan() -> void:

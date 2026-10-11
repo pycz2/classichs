@@ -22,6 +22,7 @@ func show_menu() -> void:
 	m.training.connect(show_training_setup)
 	m.collection.connect(show_collection)
 	m.online.connect(show_online)
+	m.tutorial.connect(show_tutorial)
 	m.debug_table.connect(show_debug_table)
 	m.quit.connect(func(): get_tree().quit())
 	_set_screen(m)
@@ -35,6 +36,26 @@ func show_training_setup() -> void:
 			{"hero": Decks.hero(bot), "deck": Decks.basic(bot)}, randi())
 		start_match(g, [false, true], false))
 	_set_screen(t)
+
+
+func show_tutorial() -> void:
+	var t := TutorialView.new()
+	t.back.connect(show_menu)
+	t.start.connect(start_tutorial)
+	_set_screen(t)
+
+
+func start_tutorial(n: int) -> MatchView:
+	var r := Tutorial.start(n)
+	var m := Match.new()
+	m.setup(r.game, [false, true])
+	var v := MatchView.new()
+	v.tutorial = r.tutorial
+	v.leave.connect(show_tutorial)
+	v.tutorial_next.connect(start_tutorial)
+	_set_screen(v)
+	v.bind(m)
+	return v
 
 
 func show_online() -> void:

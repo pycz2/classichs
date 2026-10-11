@@ -21,7 +21,7 @@ static func make(ent: Entity, game: GameState) -> HeroView:
 func _draw() -> void:
 	var r := Rect2(Vector2(8, 8), SIZE - Vector2(16, 16))
 	_draw_glow(r, 20)
-	var cls := Decks.card_class(e.card_id) if Decks.HEROES.values().has(e.card_id) else "WARLOCK"
+	var cls: String = Decks.card_class(e.card_id) if Decks.HEROES.values().has(e.card_id) else e.card().get("cardClass", "NEUTRAL")
 	draw_style_box(Palette.box(Palette.of_class(cls), 20, Color("c9a74a"), 4), r)
 	_draw_art(r.grow(-10), e.card_id)
 	if e.has("FROZEN"):

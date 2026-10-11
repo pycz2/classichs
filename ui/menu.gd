@@ -5,6 +5,7 @@ extends Control
 signal training
 signal collection
 signal online
+signal tutorial
 signal debug_table
 signal quit
 
@@ -24,7 +25,7 @@ func _ready() -> void:
 	var title := Palette.label("Classic HS", 56, Palette.ATTACK)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
-	var items := [["Training", training, true], ["Online Game", online, WebRtcTransport.available()], ["Tutorial", null, false],
+	var items := [["Training", training, true], ["Online Game", online, WebRtcTransport.available()], ["Tutorial", tutorial, true],
 		["Collection", collection, true], ["Debug Table", debug_table, true]]
 	if not OS.has_feature("web"):
 		items.append(["Exit", quit, true])
