@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.16.2] - 2026-10-12
+
+### Fixed
+- Tutorial: after a win, "Next Mission" opened the notes under the reward screen and the screen locked up.
+
 ## [0.16.1] - 2026-10-12
 
 ### Added

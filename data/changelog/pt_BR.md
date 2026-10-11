@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.16.2] - 2026-10-12
+
+### Corrigido
+- Tutorial: após uma vitória, "Próxima missão" abria as explicações por baixo da tela de recompensa e a tela travava.
+
 ## [0.16.1] - 2026-10-12
 
 ### Adicionado

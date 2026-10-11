@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.16.2] - 2026-10-12
+
+### Behoben
+- Tutorial: nach einem Sieg öffnete „Nächste Mission“ die Erklärungen unter dem Belohnungsbildschirm, und der Bildschirm blockierte.
+
 ## [0.16.1] - 2026-10-12
 
 ### Hinzugefügt

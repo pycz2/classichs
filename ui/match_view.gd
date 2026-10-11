@@ -1965,8 +1965,16 @@ func _tutorial_result(box: VBoxContainer) -> void:
 		if n < Missions.count():
 			_centered_button(box, tr("Next Mission"), "NextMission", func():  # its intro first
 				var intro := TutorialIntro.make(n + 1)
+				intro.name = "NextIntro"
+				intro.z_index = 120  # above the result overlay, which hides meanwhile
+				var result := _overlay
+				if result:
+					result.visible = false
 				intro.done.connect(func(): tutorial_next.emit(n + 1))
-				intro.back.connect(intro.queue_free)
+				intro.back.connect(func():
+					intro.queue_free()
+					if is_instance_valid(result):
+						result.visible = true)
 				add_child(intro))
 	else:
 		_centered_button(box, tr("Try Again"), "TryAgain", func(): tutorial_next.emit(n))

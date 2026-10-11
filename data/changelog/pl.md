@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.16.2] - 2026-10-12
+
+### Naprawiono
+- Samouczek: po wygranej „Następna misja” otwierała objaśnienia pod ekranem nagrody i ekran się blokował.
+
 ## [0.16.1] - 2026-10-12
 
 ### Dodano
