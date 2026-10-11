@@ -36,7 +36,8 @@ func _set_screen(s: Control) -> void:
 	add_child(s)
 
 
-func show_menu() -> void:
+## The main menu; play=true opens it at the Play submenu (coming back from a game mode).
+func show_menu(play := false) -> void:
 	var m := MainMenu.new()
 	m.training.connect(show_training_setup)
 	m.collection.connect(show_collection)
@@ -46,6 +47,8 @@ func show_menu() -> void:
 	m.settings.connect(show_settings)
 	m.quit.connect(func(): get_tree().quit())
 	_set_screen(m)
+	if play:
+		m.show_play()
 
 
 func show_settings() -> void:
@@ -56,7 +59,7 @@ func show_settings() -> void:
 
 func show_training_setup() -> void:
 	var t := TrainingSetup.new()
-	t.back.connect(show_menu)
+	t.back.connect(show_menu.bind(true))
 	t.start.connect(func(deck: Deck, bot: String):
 		var g := Game.new({"hero": deck.hero, "deck": deck.cards.duplicate()},
 			{"hero": Decks.hero(bot), "deck": Decks.basic(bot)}, randi())
@@ -66,7 +69,7 @@ func show_training_setup() -> void:
 
 func show_tutorial() -> void:
 	var t := TutorialView.new()
-	t.back.connect(show_menu)
+	t.back.connect(show_menu.bind(true))
 	t.start.connect(start_tutorial)
 	_set_screen(t)
 
@@ -86,7 +89,7 @@ func start_tutorial(n: int) -> MatchView:
 
 func show_online() -> void:
 	var o := OnlineView.new()
-	o.back.connect(show_menu)
+	o.back.connect(show_menu.bind(true))
 	o.play.connect(start_online_match)
 	_set_screen(o)
 
