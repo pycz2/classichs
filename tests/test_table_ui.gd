@@ -300,3 +300,27 @@ func test_hovered_card_shows_the_mana_it_would_spend() -> void:
 	v.refresh()
 	eq(v._mana[0].preview, 0, "no card under the mouse")
 	v.free()
+
+
+func test_press_below_the_raised_card_grabs_it() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120", "VAN_CS2_182", "VAN_CS2_029"]})
+	var hand := v.g.players[0].hand
+	v._hover_hand = hand[1].id
+	v.refresh()
+	var ev := InputEventMouseButton.new()
+	ev.button_index = MOUSE_BUTTON_LEFT
+	ev.pressed = true
+	ev.position = Vector2(640, 712)  # under the raised card, at the bottom of the screen
+	v._gui_input(ev)
+	eq(v._press.get("id", -1), hand[1].id, "the hovered card is pressed")
+	v.free()
+
+
+func test_hovered_hand_card_shows_its_keyword_boxes() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120", "VAN_CS2_026", "VAN_CS2_029"]})  # Frost Nova: Freeze
+	var nova := v.g.players[0].hand[1]
+	v._hover_hand = -1
+	v._show_tips(nova.card_id, Rect2(500, 400, 120, 170))  # what _track_hand_hover does
+	v._on_hover(v._views[nova.id], true)  # then the raised card comes under the mouse
+	check(v._tips != null and is_instance_valid(v._tips), "the keyword boxes stay")
+	v.free()

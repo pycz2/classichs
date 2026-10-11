@@ -162,7 +162,7 @@ func _on_back() -> void:
 
 func _process(delta: float) -> void:
 	if _connect_wait >= 0.0 and state != "playing" and state != "failed":
-		_connect_wait += delta
+		_connect_wait += minf(delta, 0.5)  # a hidden tab sleeps: its time away does not count
 		if _connect_wait >= CONNECT_TIMEOUT:
 			_connect_wait = -1.0
 			state = "failed"

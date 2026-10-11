@@ -4,6 +4,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-10-11
+
+### Zmieniono
+- Smok legendarnego stronnika na stole owija się wokół owalu portretu.
+
+### Naprawiono
+- W przeglądarce pierwsze Cmd/Ctrl+V nie wklejało nic zamiast skopiowanego kodu (kod znajomego, import talii).
+- Gra sieciowa: czas ukrycia karty przeglądarki nie przerywa już czekania na połączenie.
+- Kartę w ręce można chwycić, klikając pod podniesioną kartą, tam gdzie leżała.
+- Okienka słów kluczowych znów pojawiają się po najechaniu na kartę w ręce.
+
 ## [0.14.0] - 2026-10-11
 
 ### Dodano

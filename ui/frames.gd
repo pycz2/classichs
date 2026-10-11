@@ -105,6 +105,26 @@ static func crest(ci: CanvasItem, base: Vector2, w: float) -> void:
 	ci.draw_texture_rect(DRAGON_CREST, Rect2(base - Vector2(w / 2.0, h * 0.9), Vector2(w, h)), false, Color(1, 1, 1, 0.95))
 
 
+## The dragon crest bent around an oval portrait: the frieze is laid along the
+## oval's upper edge, its lower edge on the frame and its body outside, from
+## t0 to t1 (radians on the ellipse; PI is the left, 1.5 PI the top).
+static func crest_around(ci: CanvasItem, oval: Rect2, thick: float, t0 := PI - 0.3, t1 := TAU + 0.3) -> void:
+	var c := oval.get_center()
+	var r := oval.size / 2.0
+	var n := 40
+	for i in n:
+		var pts := PackedVector2Array()
+		var uvs := PackedVector2Array()
+		for k in [[i, 1.0], [i + 1, 1.0], [i + 1, 0.0], [i, 0.0]]:  # inner, inner, outer, outer
+			var u: float = float(k[0]) / n
+			var t := lerpf(t0, t1, u)
+			var d := Vector2(cos(t), sin(t))
+			var inner := c + d * r * 0.97
+			pts.append(inner if k[1] == 1.0 else inner + d * thick)
+			uvs.append(Vector2(u, k[1]))
+		ci.draw_polygon(pts, PackedColorArray([Color(1, 1, 1, 0.95)]), uvs, DRAGON_CREST)
+
+
 static func ring(ci: CanvasItem, pts: PackedVector2Array, col: Color, w: float) -> void:
 	var closed := pts.duplicate()
 	closed.append(pts[0])

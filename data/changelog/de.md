@@ -4,6 +4,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-10-11
+
+### Geändert
+- Der Drache eines legendären Dieners auf dem Tisch windet sich um das Oval des Porträts.
+
+### Behoben
+- Im Browser fügte das erste Cmd/Strg+V nichts statt des kopierten Codes ein (Code eines Freundes, Deckimport).
+- Online-Spiel: die Zeit, in der ein Tab verborgen war, bricht das Warten auf die Verbindung nicht mehr ab.
+- Eine Handkarte lässt sich unter der angehobenen Karte greifen, wo sie lag.
+- Schlüsselwort-Fenster erscheinen wieder beim Zeigen auf eine Handkarte.
+
 ## [0.14.0] - 2026-10-11
 
 ### Hinzugefügt
