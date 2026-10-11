@@ -20,3 +20,10 @@ func test_voice_lines_parse_and_match_cards() -> void:
 				check(str(lines[lang]).strip_edges() != "", "%s %s %s not empty" % [id, key, lang])
 		for lang: Variant in entry.get("translated", []):
 			check(lang in LANGS and lang != "en", "%s translated: %s" % [id, lang])
+
+
+func test_heroes_say_emotes_in_their_own_words() -> void:
+	eq(VoiceLines.text("HERO_08", "threaten", "en"), "My magic will tear you apart!", "Jaina")
+	check(VoiceLines.text("HERO_08", "greetings", "ru") != "", "in Russian too")
+	eq(VoiceLines.text("VAN_CS2_182", "play", "en"), "", "no line: empty")
+	eq(Sound.voice("HERO_08", "greetings"), false, "silent without the sound node (tests)")

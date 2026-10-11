@@ -81,8 +81,8 @@ func test_online_names_emotes_and_mute() -> void:
 	check(v[0]._names[1].text.contains("Bob"), "host sees Bob: " + v[0]._names[1].text)
 	v[0].send_emote("greetings")
 	LoopbackTransport.pump(tr)
-	check(v[0].bubble_text(0).contains("Greetings"), "own bubble")
-	check(v[1].bubble_text(0).contains("Greetings"), "the guest sees the host's emote")
+	check(v[0].bubble_text(0) == _said(v[0], 0, "greetings"), "own bubble: the hero's own words")
+	check(v[1].bubble_text(0) == _said(v[1], 0, "greetings"), "the guest sees the host's emote")
 	v[1].muted = true
 	v[0].send_emote("wow")
 	LoopbackTransport.pump(tr)
@@ -146,7 +146,7 @@ func test_training_emote_shows_locally() -> void:
 	m.setup(g, [false, true])
 	v.bind(m)
 	v.send_emote("thanks")
-	check(v.bubble_text(0).contains("Thanks"), "bubble")
+	eq(v.bubble_text(0), "Thank you.", "bubble: Jaina's own words")
 	v.free()
 
 
@@ -221,7 +221,7 @@ func test_emote_cooldown_and_mute_hides_bubble() -> void:
 	host.send_emote("greetings")
 	host.send_emote("wow")
 	LoopbackTransport.pump(b[0])
-	check(guest.bubble_text(0).contains("Greetings"), "second emote dropped by the cooldown")
+	check(guest.bubble_text(0) == _said(guest, 0, "greetings"), "second emote dropped by the cooldown")
 	guest.set_muted(true)
 	eq(guest.bubble_text(0), "", "mute hides the shown bubble")
 	_free_bound(b)
@@ -288,3 +288,9 @@ func test_guest_splits_and_renews_host_candidates() -> void:
 	eq(parts.ice[0][0], "0", "their mid")
 	eq(WebRtcTransport.refounded(parts.ice[0][2], 3, 0), "candidate:r3x0 1 udp 1677729535 1.2.3.4 50000 typ srflx raddr 0.0.0.0 rport 0", "a new foundation, the rest the same")
 	check(WebRtcTransport.ICE.iceServers.any(func(s): return str(s.urls).contains("turn:")), "a TURN server is set")
+
+
+## What player p's hero says for an emote (its own words, else the common text).
+func _said(v: MatchView, p: int, id: String) -> String:
+	var t := VoiceLines.text(v.g.players[p].hero.card_id, id)
+	return t if t != "" else MatchView.EMOTES[id]

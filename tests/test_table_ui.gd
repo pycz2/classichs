@@ -23,7 +23,7 @@ func test_right_click_own_hero_opens_emotes() -> void:
 	eq(wheel.visible, true, "open on right click")
 	eq(wheel.find_children("Emote_*", "Button", false, false).size(), 6, "6 emotes")
 	(wheel.find_child("Emote_wow", false, false) as Button).pressed.emit()
-	eq(v.bubble_text(0), "Wow!", "emote said")
+	eq(v.bubble_text(0), "Amazing.", "emote said in Jaina's own words")
 	eq(wheel.visible, false, "closed after choosing")
 	v.free()
 

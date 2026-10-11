@@ -189,6 +189,19 @@ func bind(m: Match) -> void:
 			_bot_side = 1 - me  # named in _side_name, so the name follows the language
 	m.start()
 	refresh()
+	_say_start()
+
+
+## At the start of a match each hero says its opening line: yours, then the opponent's.
+func _say_start() -> void:
+	if Anim.instant or not is_inside_tree() or g.turn > 0:
+		return
+	var me := viewer()
+	await get_tree().create_timer(0.8).timeout
+	if is_inside_tree() and Sound.voice(g.players[me].hero.card_id, "start"):
+		await get_tree().create_timer(2.6).timeout
+	if is_inside_tree():
+		Sound.voice(g.players[g.opponent(me)].hero.card_id, "start")
 
 
 ## An online match: the session (and its transport) now live under this view.
@@ -232,12 +245,16 @@ func send_emote(id: String) -> void:
 		session.send_emote(id)
 
 
+## The hero says the emote in its own words (VoiceLines) when it has them.
 func show_emote(p: int, id: String) -> void:
-	show_line(p, tr(EMOTES[id]))
+	var hero := g.players[p].hero.card_id
+	var own := VoiceLines.text(hero, id)
+	var recorded := Sound.voice(hero, id)
+	show_line(p, own if own != "" else tr(EMOTES[id]), not recorded)  # (no speech synthesis on top of a clip)
 
 
 ## A speech bubble next to player p's hero (emotes, tutorial boss lines).
-func show_line(p: int, text: String) -> void:
+func show_line(p: int, text: String, speak := true) -> void:
 	if _bubbles.has(p) and is_instance_valid(_bubbles[p]):
 		_bubbles[p].queue_free()
 	var own := p == viewer()
@@ -253,7 +270,8 @@ func show_line(p: int, text: String) -> void:
 	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bubble)
 	_bubbles[p] = bubble
-	Sound.speak(text)
+	if speak:
+		Sound.speak(text)
 	if not Anim.instant and is_inside_tree():
 		bubble.pivot_offset = Vector2(160, 30)
 		bubble.scale = Vector2(0.3, 0.3)
@@ -1156,6 +1174,7 @@ func _on_concede() -> void:
 	var p := viewer() if not controller.bots[viewer()] else controller.actor()
 	_centered_button(box, tr("Concede"), "ConfirmConcede", func():
 		_close_overlay()
+		Sound.voice(g.players[p].hero.card_id, "concede")
 		controller.submit({"type": "concede", "player": p}))
 	_centered_button(box, tr("Keep playing"), "KeepPlaying", _close_overlay)
 
@@ -1751,8 +1770,28 @@ func _effects_now(events: Array) -> void:
 		_shake()
 
 
-## Legendary minions and new heroes say their name when they enter the board.
+## Minions and heroes say their lines (when played, attacking, dying); without a
+## recorded line, legendary minions and new heroes say their name.
 func _speak_event(ev: Dictionary, heard: Dictionary) -> void:
+	var said := ""
+	match ev.type:
+		"play", "summon":
+			var m := g.ent(ev.entity)
+			if m and (m.is_minion() or m.is_weapon()) and not heard.has("voice"):
+				said = m.card_id
+				heard["voice"] = Sound.voice(m.card_id, "play")
+		"equip":
+			if not heard.has("voice"):
+				heard["voice"] = Sound.voice(ev.card, "play")
+		"attack":
+			var a := g.ent(ev.attacker)
+			if a and not heard.has("voice"):
+				heard["voice"] = Sound.voice(a.card_id, "attack")
+		"death":
+			if ev.get("minion", false) and not heard.has("death_voice"):
+				heard["death_voice"] = Sound.voice(ev.card, "death")
+	if heard.get("voice", false) and said != "":
+		heard[said] = true  # the line was said: no name on top of it
 	var card := ""
 	if ev.type in ["play", "summon"]:
 		var e := g.ent(ev.entity)

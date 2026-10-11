@@ -127,6 +127,6 @@ func test_match_speaks_legendary_names_and_emotes() -> void:
 	m.submit({"type": "play", "player": 0, "entity": rag, "pos": 0, "target": -1, "choice": -1})
 	check(spoken.any(func(x): return x[0] == "Ragnaros the Firelord"), "legendary name spoken: %s" % [spoken])
 	v.send_emote("greetings")
-	check(spoken.any(func(x): return x[0] == "Greetings!"), "emote spoken")
+	check(spoken.any(func(x): return x[0] == VoiceLines.text("HERO_08", "greetings", "en")), "emote spoken in Jaina's words (no clip in tests)")
 	v.free()
 	_done(s)
