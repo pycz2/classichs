@@ -231,7 +231,7 @@ func _legal_play_actions(out: Array) -> void:
 					out.append({"type": "play", "player": current, "entity": e.id, "target": t,
 						"pos": pos, "choice": choice})
 	var hp := p.hero_power
-	if not hp.has("USED") and cost(hp) <= p.mana:
+	if not hp.has("USED") and not hp.has("LOCKED") and cost(hp) <= p.mana:
 		var hh := Cards.of(hp.card_id)
 		if hh.has("hero_power") and (not hh.has("can_play") or hh.can_play.call(self, hp)):
 			for t: int in _spec_targets(hp, hh.get("target"), true, false):

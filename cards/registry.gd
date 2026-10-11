@@ -3,7 +3,7 @@ extends RefCounted
 ## Card hooks by card id. Each file in FILES has `static func register(r: Dictionary)`.
 
 const FILES := ["heroes", "neutral", "druid", "hunter", "mage", "paladin", "priest", "rogue",
-	"shaman", "warlock", "warrior"]
+	"shaman", "warlock", "warrior", "tutorial"]
 
 static var _hooks: Dictionary = {}
 

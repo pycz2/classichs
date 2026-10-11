@@ -43,6 +43,8 @@ static func _fill_player(g: Game, i: int, d: Dictionary) -> void:
 	p.cost_mods = _ints(d.get("cost_mods", []))
 	if d.get("hero_power_used", false):
 		p.hero_power.give_tag("USED")
+	if d.get("hero_power_locked", false):
+		p.hero_power.give_tag("LOCKED")  # tutorial: no hero power yet
 	for item in d.get("deck", []):
 		var spec := _spec(item)
 		var e := g.new_entity(spec.card, i)
@@ -227,6 +229,7 @@ static func dump(g: GameState) -> Dictionary:
 			"overload_owed": p.overload_owed, "overload_locked": p.overload_locked,
 			"fatigue": p.fatigue, "cards_played": p.cards_played_this_turn,
 			"hero_power_used": p.hero_power.has("USED"),
+			"hero_power_locked": p.hero_power.has("LOCKED"),
 			"cost_mods": p.cost_mods.duplicate(true),
 			"minions_played": p.minions_played_this_turn,
 			"hero_state": _dump_entity(p.hero),

@@ -41,7 +41,7 @@ func setup_players(hero0: String, hero1: String) -> void:
 		var hero_id: String = [hero0, hero1][i]
 		p.hero = new_entity(hero_id, i)
 		_enter_play(p.hero)
-		p.hero_power = new_entity(HERO_POWERS[hero_id], i)
+		p.hero_power = new_entity(HERO_POWERS.get(hero_id, "VAN_HERO_08bp"), i)  # bosses: replaced by Scenario
 		_enter_play(p.hero_power)
 		players.append(p)
 
