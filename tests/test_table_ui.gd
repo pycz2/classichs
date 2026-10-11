@@ -283,3 +283,18 @@ func test_changed_numbers_pop() -> void:
 	check(mv._pops.has("hp") and not mv._pops.has("atk"), "health pops, attack stays")
 	Anim.instant = true
 	v.free()
+
+
+func test_hovered_card_shows_the_mana_it_would_spend() -> void:
+	var v := _view({"hero": "HERO_08", "mana": 5, "max_mana": 5, "hand": ["VAN_CS2_029", "VAN_CS2_032"]})  # Fireball 4, Flamestrike 7
+	var hand := v.g.players[0].hand
+	v._hover_hand = hand[0].id
+	v.refresh()
+	eq(v._mana[0].preview, 4, "Fireball: 4 crystals blink")
+	v._hover_hand = hand[1].id
+	v.refresh()
+	eq(v._mana[0].preview, 0, "Flamestrike costs too much: nothing blinks")
+	v._hover_hand = -1
+	v.refresh()
+	eq(v._mana[0].preview, 0, "no card under the mouse")
+	v.free()

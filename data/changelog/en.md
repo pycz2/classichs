@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-11
+
+### Added
+- Hovering a card in hand makes the mana crystals it would spend blink, when it can be played.
+
 ## [0.12.0] - 2026-10-11
 
 ### Added

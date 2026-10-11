@@ -763,6 +763,8 @@ func refresh() -> void:
 		_mana[i].set_values(p.mana, p.max_mana, p.overload_locked)
 		_names[i].text = _side_name(p.index)
 		_piles[i].count = p.deck.size()
+	var hovered := g.ent(_hover_hand)  # the crystals a playable card would spend blink
+	_mana[0].set_preview(g.cost(hovered) if hovered and hovered.zone == "HAND" and not _actions_for(_hover_hand).is_empty() else 0)
 	_end_turn.disabled = not (my_action() and g.phase == "PLAY" and g.pending.is_empty())
 	var ready := not _end_turn.disabled and _legal().all(func(a): return a.type in ["end_turn", "concede"])
 	if ready != end_turn_ready:
