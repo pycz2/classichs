@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-11
+
+### Añadido
+- Imágenes de interfaz pintadas: cristal de maná, gota de salud, gema de ataque con espada, escudos de armadura y durabilidad, escudo de Provocar, calavera y huesos, frasco de veneno, rayo, emblemas de clase, una imagen para la fatiga.
+- Los esbirros venenosos (Cobra emperador, Asesina paciente) llevan un frasco de veneno.
+- Una ventanita de palabra clave para Enfurecer.
+- La carta de un esbirro silenciado muestra su texto tachado con una cruz roja al pasar el ratón.
+- La sobrecarga se ve enseguida: candados naranjas sobre los cristales para el próximo turno; un cristal bloqueado muestra un candado en vez de una cruz.
+- Una carta creada por una carta en la mesa (Archimago Antonidas, Ysera) vuela desde ella a la mano.
+
+### Cambiado
+- Los brillos (jugable, seleccionado, objetivo) quedan siempre fuera de todos los efectos de una carta.
+- Viento furioso: ráfagas en una órbita inclinada, por detrás y por delante de la carta.
+- Sigilo: una neblina a través de la que se adivina la imagen; Congelado: una capa de escarcha y un borde helado.
+- Los secretos sobre el retrato del héroe son redondos: morados para el mago, verdes para el cazador, amarillos para el paladín.
+- Las gemas de rareza son redondas, con sombra y brillo.
+- El dragón de un esbirro legendario cubre solo la parte superior del óvalo.
+
 ## [0.14.1] - 2026-10-11
 
 ### Cambiado

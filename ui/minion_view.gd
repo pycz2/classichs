@@ -41,7 +41,7 @@ func sync() -> void:
 
 func _animated() -> bool:
 	var h := Cards.of(s.card_id)
-	return s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
+	return glow.a > 0.0 or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
 		or (not s.silenced and (h.has("on") or h.has("aura")))
 
 
@@ -61,30 +61,39 @@ func _draw() -> void:
 	var h := Cards.of(s.card_id)
 	var oval := Art.outline("oval", OVAL)
 	var center := OVAL.get_center()
-	if glow.a > 0.0:
-		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("oval", OVAL.grow(gr)), glow)
-	if s.has("TAUNT"):  # a stone shield hugging the portrait, pointed at the bottom
-		var shield := taunt_shield()
-		draw_colored_polygon(shield, Color("7d7f7d"))
-		Frames.ring(self, shield, Color("3b3d3b"), 3)
+	if glow.a > 0.0:  # always outside everything else on it
+		var taunt := s.has("TAUNT")
+		var reach := _reach()
+		soft_glow(self, func(gr: float) -> PackedVector2Array:
+			return _scaled(taunt_shield(), center, 1.0 + gr / 44.0) if taunt else Art.outline("oval", OVAL.grow(reach + gr)), glow)
+	if s.has("WINDFURY"):
+		_wind(false)  # the half of the swirl behind the card
+	if s.has("TAUNT"):  # a stone and iron shield behind the portrait
+		if not Sprites.draw(self, "taunt_shield", TAUNT_RECT.get_center(), TAUNT_RECT.size.x):
+			var shield := taunt_shield()
+			draw_colored_polygon(shield, Color("7d7f7d"))
+			Frames.ring(self, shield, Color("3b3d3b"), 3)
 	draw_colored_polygon(Art.outline("oval", OVAL.grow(3)), Color("2a2118"))
 	Art.paint_in(self, OVAL, s.card_id, "oval")
 	if s.silenced:
 		draw_colored_polygon(oval, Color(0.5, 0.5, 0.55, 0.45))
-	if s.has("STEALTH"):
-		draw_colored_polygon(oval, Color(0.05, 0.05, 0.12, 0.45))
-		for i in 6:
-			var a := _t * 0.8 + i * 1.1
-			draw_circle(center + Vector2(cos(a) * 26, sin(a * 1.3) * 34), 7, Color(0.6, 0.6, 0.8, 0.18))
-	if s.has("FROZEN"):
-		draw_colored_polygon(oval, Color(0.6, 0.85, 1.0, 0.4))
-		for i in 5:
-			var p := center + Vector2(cos(i * 1.3) * 30, sin(i * 1.3) * 40)
-			draw_colored_polygon(PackedVector2Array([p + Vector2(0, -9), p + Vector2(4, 0), p + Vector2(0, 9), p + Vector2(-4, 0)]), Color(0.9, 0.97, 1.0, 0.8 + 0.2 * sin(_t * 3 + i)))
+	if s.has("STEALTH"):  # drifting smoke: two layers of noise moving apart; the portrait shows faintly
+		var uv := _oval_uv(oval)
+		draw_colored_polygon(oval, Color(0.1, 0.09, 0.16, 0.3))
+		draw_colored_polygon(oval, Color(0.62, 0.58, 0.75, 0.5), _shift(uv, Vector2(_t * 0.05, _t * 0.02)), _smoke())
+		draw_colored_polygon(oval, Color(0.4, 0.38, 0.52, 0.4), _shift(uv, Vector2(-_t * 0.03, 0.4 + _t * 0.04)), _smoke())
+	if s.has("FROZEN"):  # a sheet of frost over the portrait, an icy rim, a cold shimmer
+		var ice := Sprites.get_tex("ice")
+		if ice:
+			draw_colored_polygon(oval, Color(0.85, 0.95, 1.0, 0.55), _oval_uv(oval), ice)
+		else:
+			draw_colored_polygon(oval, Color(0.6, 0.85, 1.0, 0.45))
+		draw_colored_polygon(oval, Color(0.55, 0.8, 1.0, 0.15 + 0.08 * sin(_t * 2.0)))
+		Frames.ring(self, Art.outline("oval", OVAL.grow(1)), Color(0.85, 0.96, 1.0, 0.95), 4)
 	var edge := Frames.GOLD if c.get("rarity", "") == "LEGENDARY" else Color("8a7a5c")
 	Frames.ring(self, oval, edge, 3)
 	if c.get("rarity", "") == "LEGENDARY":
-		Frames.crest_around(self, OVAL.grow(2), 15)  # coiled around the top of the oval
+		Frames.crest_around(self, OVAL.grow(2), 15, PI + PI / 6.0, TAU - PI / 6.0)  # around the top quarter of the oval
 	if s.has("IMMUNE"):  # a white light around it with sparks turning (not the golden bubble)
 		var halo := Art.outline("oval", OVAL.grow(9))
 		draw_colored_polygon(halo, Color(1, 1, 1, 0.16 + 0.08 * sin(_t * 5)))
@@ -98,15 +107,11 @@ func _draw() -> void:
 		Frames.ring(self, Art.outline("oval", OVAL.grow(5)), Color(1, 0.9, 0.4, 0.75 + 0.25 * sin(_t * 4)), 3)
 		var a := _t * 1.5
 		draw_circle(center + Vector2(cos(a) * 34, sin(a) * 44), 4, Color(1, 1, 0.8, 0.9))
-	if s.has("WINDFURY"):  # two swirls circling the portrait
-		for k in 2:
-			for i in 5:
-				var a0 := _t * 3.0 + k * PI + i * 0.25
-				var a1 := a0 + 0.22
-				draw_line(center + Vector2(cos(a0) * 42, sin(a0) * 52), center + Vector2(cos(a1) * 42, sin(a1) * 52), Color(0.85, 0.95, 1.0, 0.25 + i * 0.15), 3, true)
+	if s.has("WINDFURY"):
+		_wind(true)  # the half of the swirl in front of the card
 	if not s.silenced and h.has("aura"):
 		Frames.ring(self, Art.outline("oval", OVAL.grow(8 + 2 * sin(_t * 2))), Color(0.5, 0.9, 1.0, 0.45), 2)
-	if not s.silenced and c.get("mechanics", []).has("ENRAGED") and s.damage > 0:
+	if not s.silenced and KeywordTips.keywords_of(s.card_id).has("ENRAGED") and s.damage > 0:
 		Frames.ring(self, Art.outline("oval", OVAL.grow(4)), Color("ff4d4d"), 3)
 	if s.spellpower() > 0 and not s.silenced:
 		for i in 3:
@@ -115,7 +120,9 @@ func _draw() -> void:
 	var marks := []
 	if not s.silenced and h.has("deathrattle"):
 		marks.append("deathrattle")
-	if not s.silenced and h.has("on"):
+	if not s.silenced and KeywordTips.keywords_of(s.card_id).has("POISONOUS"):
+		marks.append("poison")
+	elif not s.silenced and h.has("on"):
 		marks.append("trigger")
 	if s.silenced:
 		marks.append("silenced")
@@ -140,24 +147,97 @@ func _draw() -> void:
 	Frames.health(self, Vector2(80, 98), s.health(), 15 * bump("hp"), hp_color)
 
 
-## The Taunt shield: the oval grown a little, its top flattened and its lower
-## half drawn in to a point under the portrait.
+## Where the Taunt shield picture goes (behind the oval, a little wider and longer).
+const TAUNT_RECT := Rect2(Vector2(2, 1), Vector2(92, 114))
+
+
+## The Taunt shield's outline (for the glow and when there is no picture): a flat
+## top, straight sides, then curving in to a point under the portrait.
 static func taunt_shield() -> PackedVector2Array:
-	var c := OVAL.get_center()
-	var out := PackedVector2Array()
-	for p in Art.outline("oval", OVAL.grow(7)):
-		var q := p
-		q.y = maxf(q.y, OVAL.position.y - 3)  # a flat top
-		if q.y > c.y:  # below the middle: narrower and longer, to a point
-			var t := (q.y - c.y) / (OVAL.size.y / 2.0 + 7)
-			q.x = c.x + (q.x - c.x) * (1.0 - 0.3 * t * t)
-			q.y += 9 * t * t * (1.0 - absf(q.x - c.x) / (OVAL.size.x / 2.0 + 7))
-		out.append(q)
+	var r := TAUNT_RECT
+	var out := PackedVector2Array([r.position, Vector2(r.end.x, r.position.y)])
+	var side := r.position.y + r.size.y * 0.42
+	for i in 13:  # the right side down to the point, then the left side up
+		var t := i / 12.0
+		out.append(Vector2(lerpf(r.end.x, r.get_center().x, t * t), lerpf(side, r.end.y, sin(t * PI / 2.0))))
+	for i in range(11, -1, -1):
+		var t := i / 12.0
+		out.append(Vector2(lerpf(r.position.x, r.get_center().x, t * t), lerpf(side, r.end.y, sin(t * PI / 2.0))))
 	return out
+
+
+static func _scaled(pts: PackedVector2Array, c: Vector2, k: float) -> PackedVector2Array:
+	var out := PackedVector2Array()
+	for p in pts:
+		out.append(c + (p - c) * k)
+	return out
+
+
+## How far out of the oval the effects on it reach (the glow starts there).
+func _reach() -> float:
+	if s.has("IMMUNE"):
+		return 9.0
+	if Cards.of(s.card_id).has("aura") and not s.silenced:
+		return 9.0
+	if s.has("DIVINE_SHIELD"):
+		return 6.0
+	return 3.0
+
+
+## Windfury: two gusts on a tilted orbit (like a planet's, at 45 degrees), passing
+## behind the card and in front of it.
+func _wind(front: bool) -> void:
+	var c := OVAL.get_center()
+	var tilt := Transform2D(-PI / 4.0, Vector2.ZERO)
+	for k in 2:
+		for i in 9:
+			var a0 := _t * 2.5 + k * PI + i * 0.12
+			var a1 := a0 + 0.13
+			if (sin(a0) > 0.0) != front:  # the lower half of the orbit is nearer the viewer
+				continue
+			var p0 := c + tilt * Vector2(cos(a0) * 54, sin(a0) * 18)
+			var p1 := c + tilt * Vector2(cos(a1) * 54, sin(a1) * 18)
+			var depth := 0.6 + 0.4 * sin(a0)
+			draw_line(p0, p1, Color(0.88, 0.96, 1.0, (0.15 + i * 0.09) * depth), 2.0 + 2.5 * depth, true)
+
+
+## Texture coordinates for a shape: its bounding box mapped to 0..1.
+static func _oval_uv(pts: PackedVector2Array) -> PackedVector2Array:
+	var out := PackedVector2Array()
+	for p in pts:
+		out.append((p - OVAL.position) / OVAL.size)
+	return out
+
+
+static func _shift(uv: PackedVector2Array, by: Vector2) -> PackedVector2Array:
+	var out := PackedVector2Array()
+	for p in uv:
+		out.append(p + by)
+	return out
+
+
+static var _smoke_tex: NoiseTexture2D
+
+
+## A soft seamless noise for the Stealth smoke (made once).
+static func _smoke() -> Texture2D:
+	if _smoke_tex == null:
+		var n := FastNoiseLite.new()
+		n.noise_type = FastNoiseLite.TYPE_PERLIN
+		n.frequency = 0.012
+		n.fractal_octaves = 4
+		_smoke_tex = NoiseTexture2D.new()
+		_smoke_tex.width = 128
+		_smoke_tex.height = 128
+		_smoke_tex.seamless = true
+		_smoke_tex.noise = n
+	return _smoke_tex
 
 
 ## Small status marks under the portrait (vector: the font has no symbol glyphs).
 func _draw_icon(kind: String, at: Vector2) -> void:
+	if Sprites.draw(self, kind, at + Vector2(0, -1), 20.0 * (1.0 + 0.1 * sin(_t * 4.0))):
+		return
 	var pulse := 1.0 + 0.12 * sin(_t * 4.0)
 	draw_set_transform(at, 0.0, Vector2(1.4, 1.4) * pulse)
 	var c := Vector2.ZERO

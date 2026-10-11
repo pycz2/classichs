@@ -14,6 +14,8 @@ var marked := false  # mulligan: card will be replaced
 var locale := ""
 ## Card lab: outline the name box, the text box, the lines and the gems.
 var show_boxes := false
+## A silenced minion's card (when hovered): a red cross over its text.
+var silenced := false
 
 
 static func make(id: String, scale_factor := 1.0) -> CardView:
@@ -103,6 +105,12 @@ func _draw() -> void:
 	Frames.ring(self, banner, Color("2a2118"), 1.5 * k)
 	Frames.rarity(self, Vector2(60, 101) * k, c.get("rarity", ""), 5 * k)
 	_draw_words(k)
+	if silenced:  # a red cross over the text box, drawn like two brush strokes with a dark edge
+		var tb := Rect2(Vector2(14, 104) * k, Vector2(92, 50) * k)
+		for line in [[tb.position, tb.end], [Vector2(tb.end.x, tb.position.y), Vector2(tb.position.x, tb.end.y)]]:
+			draw_line(line[0], line[1], Color("3d0508", 0.9), 9 * k, true)
+			draw_line(line[0], line[1], Color("e03131"), 5.5 * k, true)
+			draw_line(line[0] + Vector2(0, -1.2 * k), line[1] + Vector2(0, -1.2 * k), Color("ff8787", 0.7), 1.5 * k, true)
 	var race := CardText.race(card_id, CardText.hs_locale(lang()))
 	if race != "":  # the race on a plate across the bottom edge, between the gems
 		var rf := CardLayout.name_font()
@@ -122,7 +130,7 @@ func _draw() -> void:
 		if type == "MINION":
 			Frames.health(self, Vector2(103, 154) * k, h, 15 * k)
 		else:
-			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k)
+			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k, Color.WHITE, "durability")
 	if marked:  # to be replaced: the card darkens and a red seal with a white cross sits on it
 		draw_style_box(Palette.box(Color(0, 0, 0, 0.45), int(12 * k)), r)
 		var mc := Vector2(60, 70) * k

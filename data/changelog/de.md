@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-11
+
+### Hinzugefügt
+- Gemalte Oberflächenbilder: Manakristall, Lebenstropfen, Angriffsstein mit Schwert, Rüstungs- und Haltbarkeitsschilde, Spott-Schild, Totenkopf mit Knochen, Giftflasche, Blitz, Klassenembleme, ein Bild für Erschöpfung.
+- Giftige Diener (Kaiserkobra, Geduldige Attentäterin) tragen eine Giftflasche.
+- Ein Schlüsselwort-Fenster für Wutanfall.
+- Die Karte eines zum Schweigen gebrachten Dieners zeigt beim Zeigen ihren Text rot durchgestrichen.
+- Überladung ist sofort sichtbar: orange Schlösser über den Kristallen für den nächsten Zug; ein gesperrter Kristall zeigt ein Schloss statt eines Kreuzes.
+- Eine Karte, die eine Karte auf dem Tisch erschafft (Erzmagier Antonidas, Ysera), fliegt von ihr in die Hand.
+
+### Geändert
+- Das Leuchten (spielbar, gewählt, Ziel) liegt immer außerhalb aller Effekte einer Karte.
+- Windzorn: Böen auf einer geneigten Bahn, hinter und vor der Karte.
+- Verstohlenheit: ein Dunst, durch den das Bild schwach scheint; Eingefroren: eine Reifschicht und ein eisiger Rand.
+- Geheimnisse am Heldenporträt sind rund: lila beim Magier, grün beim Jäger, gelb beim Paladin.
+- Seltenheitssteine sind rund, mit Schatten und Glanzlicht.
+- Der Drache eines legendären Dieners umfasst nur den oberen Teil des Ovals.
+
 ## [0.14.1] - 2026-10-11
 
 ### Geändert

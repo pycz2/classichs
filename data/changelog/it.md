@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-11
+
+### Aggiunto
+- Immagini dell'interfaccia dipinte: cristallo di mana, goccia di salute, gemma d'attacco con spada, scudi di armatura e durabilità, scudo di Provocazione, teschio con ossa, boccetta di veleno, fulmine, emblemi di classe, un'immagine per l'affaticamento.
+- I servitori velenosi (Cobra Imperiale, Assassina Paziente) hanno una boccetta di veleno.
+- Una finestra della parola chiave per Ira.
+- La carta di un servitore silenziato mostra il testo barrato da una croce rossa al passaggio del mouse.
+- Il sovraccarico si vede subito: lucchetti arancioni sopra i cristalli per il turno seguente; un cristallo bloccato mostra un lucchetto invece di una croce.
+- Una carta creata da una carta sul tavolo (Arcimago Antonidas, Ysera) vola da questa nella mano.
+
+### Modificato
+- I bagliori (giocabile, selezionato, bersaglio) sono sempre all'esterno di tutti gli effetti di una carta.
+- Furia del Vento: raffiche su un'orbita inclinata, dietro e davanti alla carta.
+- Furtività: una foschia attraverso cui l'immagine traspare appena; Congelato: uno strato di brina e un bordo ghiacciato.
+- I segreti sul ritratto dell'eroe sono rotondi: viola per il mago, verdi per il cacciatore, gialli per il paladino.
+- Le gemme di rarità sono rotonde, con ombra e riflesso.
+- Il drago di un servitore leggendario copre solo la parte alta dell'ovale.
+
 ## [0.14.1] - 2026-10-11
 
 ### Modificato

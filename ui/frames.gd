@@ -33,7 +33,14 @@ static func _shape(ci: CanvasItem, pts: PackedVector2Array, fill: Color, edge: C
 	ci.draw_polyline(closed, edge, w, true)
 
 
+## How wide each generated stat sprite is drawn, in gem radii (see ui/sprites).
+const SPRITE_W := {"mana": 2.35, "health": 2.1, "attack_gem": 2.1, "sword": 1.15, "armor": 2.2, "durability": 2.2}
+
+
 static func mana(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE) -> void:
+	if Sprites.draw(ci, "mana", c, r * SPRITE_W.mana):
+		_number(ci, c, value, r * 1.25, col)
+		return
 	var pts := PackedVector2Array()
 	for i in 6:
 		var a := TAU * i / 6.0 + PI / 6.0
@@ -47,6 +54,11 @@ static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Colo
 	# a sword behind the gem: the blade sticks out to the top left (out of the card, away
 	# from its text), the hilt to the bottom right
 	var d := Vector2(-1, -1).normalized()
+	if Sprites.get_tex("sword") and Sprites.get_tex("attack_gem"):
+		Sprites.draw(ci, "sword", c + d * r * 0.45, r * SPRITE_W.sword, -PI / 4.0)
+		Sprites.draw(ci, "attack_gem", c, r * SPRITE_W.attack_gem)
+		_number(ci, c, value, r * 1.25, col)
+		return
 	var n := Vector2(-d.y, d.x)
 	var dark := Color("3a2a05")
 	var w := r * 0.32
@@ -68,6 +80,10 @@ static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Colo
 
 
 static func health(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE) -> void:
+	# a darker drop makes red damage numbers stand out
+	if Sprites.draw(ci, "health", c, r * SPRITE_W.health, 0.0, Color(0.55, 0.5, 0.5) if col == DAMAGED else Color.WHITE):
+		_number(ci, c + Vector2(0, r * 0.08), value, r * 1.25, col)
+		return
 	var pts := PackedVector2Array()
 	for i in 20:
 		var a := TAU * i / 20.0
@@ -80,7 +96,11 @@ static func health(ci: CanvasItem, c: Vector2, value: int, r: float, col := Colo
 	_number(ci, c + Vector2(0, r * 0.08), value, r * 1.25, col)
 
 
-static func shield(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE) -> void:
+## Armor (kind "armor") or a weapon's durability (kind "durability").
+static func shield(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE, kind := "armor") -> void:
+	if Sprites.draw(ci, kind, c, r * SPRITE_W[kind]):
+		_number(ci, c, value, r * 1.15, col)
+		return
 	var pts := PackedVector2Array([c + Vector2(-r, -r * 0.9), c + Vector2(r, -r * 0.9), c + Vector2(r * 0.9, r * 0.2), c + Vector2(0, r * 1.05), c + Vector2(-r * 0.9, r * 0.2)])
 	_shape(ci, pts, ARMOR, Color("2b3036"), maxf(1.5, r * 0.14))
 	_number(ci, c, value, r * 1.15, col)
@@ -90,7 +110,12 @@ static func rarity(ci: CanvasItem, c: Vector2, rar: String, r: float) -> void:
 	var col: Color = {"COMMON": Color("f8f9fa"), "RARE": Color("339af0"), "EPIC": Color("ae3ec9"), "LEGENDARY": Color("fd7e14")}.get(rar, Color.TRANSPARENT)
 	if col.a == 0.0:
 		return
-	_shape(ci, PackedVector2Array([c + Vector2(0, -r), c + Vector2(r * 0.8, 0), c + Vector2(0, r), c + Vector2(-r * 0.8, 0)]), col, Color("2a2118"), maxf(1.0, r * 0.2))
+	# a round polished gem: a shadow under it, a dark rim, the colour darker at the bottom, a highlight
+	ci.draw_circle(c + Vector2(0, r * 0.25), r * 1.15, Color(0, 0, 0, 0.45))
+	ci.draw_circle(c, r * 1.1, Color("2a2118"))
+	ci.draw_circle(c, r * 0.9, col.darkened(0.35))
+	ci.draw_circle(c + Vector2(0, -r * 0.12), r * 0.72, col)
+	ci.draw_circle(c + Vector2(-r * 0.25, -r * 0.32), r * 0.3, Color(1, 1, 1, 0.75))
 
 
 ## Preloaded: a texture first loaded while drawing shows white in the web build.

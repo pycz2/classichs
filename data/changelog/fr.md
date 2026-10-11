@@ -4,6 +4,24 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-11
+
+### Ajouté
+- Images d'interface peintes : cristal de mana, goutte de vie, pierre d'attaque avec épée, boucliers d'armure et de durabilité, bouclier de Provocation, crâne et os, fiole de poison, éclair, emblèmes de classe, une image pour la fatigue.
+- Les serviteurs venimeux (Cobra impérial, Assassin patient) portent une fiole de poison.
+- Une fenêtre de mot-clé pour Accès de rage.
+- La carte d'un serviteur réduit au silence montre son texte barré d'une croix rouge au survol.
+- La surcharge se voit tout de suite : des cadenas orange au-dessus des cristaux pour le tour suivant ; un cristal bloqué montre un cadenas au lieu d'une croix.
+- Une carte créée par une carte sur la table (Archimage Antonidas, Ysera) vole de celle-ci vers la main.
+
+### Modifié
+- Les lueurs (jouable, sélectionné, cible) sont toujours à l'extérieur de tous les effets d'une carte.
+- Furie des vents : des rafales sur une orbite inclinée, derrière et devant la carte.
+- Camouflage : une brume à travers laquelle l'image se devine ; Gelé : une couche de givre et un bord glacé.
+- Les secrets sur le portrait du héros sont ronds : violets pour le mage, verts pour le chasseur, jaunes pour le paladin.
+- Les pierres de rareté sont rondes, avec une ombre et un reflet.
+- Le dragon d'un serviteur légendaire ne couvre que le haut de l'ovale.
+
 ## [0.14.1] - 2026-10-11
 
 ### Modifié

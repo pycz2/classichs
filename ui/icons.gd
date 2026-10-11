@@ -20,6 +20,8 @@ static func shapes(kind: String, rect: Rect2) -> Array:
 
 
 static func paint(ci: CanvasItem, kind: String, rect: Rect2) -> void:
+	if kind in CLASSES and Sprites.draw(ci, "class_" + kind, rect.get_center(), minf(rect.size.x, rect.size.y)):
+		return  # the generated emblem
 	for s in shapes(kind, rect):
 		match s[0]:
 			"circle":

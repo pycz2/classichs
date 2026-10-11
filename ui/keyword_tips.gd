@@ -16,6 +16,22 @@ static func _keywords() -> Dictionary:
 	return _data
 
 
+## The card's keywords: its mechanics, and keywords written in bold in its text
+## (the Classic data lists no mechanic for Enrage). POISONOUS marks "Destroy any
+## minion damaged by this minion" (it has no keyword box).
+static func keywords_of(card_id: String) -> Array:
+	var c := CardDb.card(card_id)
+	var out: Array = c.get("mechanics", []).duplicate()
+	var en: String = c.get("text", {}).get("enUS", "") if c.get("text") is Dictionary else ""
+	var kw := _keywords()
+	for k in kw:
+		if not out.has(k) and en.contains("<b>" + String(kw[k].name.en)):
+			out.append(k)
+	if en.contains("Destroy any minion damaged by this minion"):
+		out.append("POISONOUS")
+	return out
+
+
 ## What changed on a minion compared with its card: buffs (with the card that
 ## gave them), auras, set values, gained keywords, Silence.
 static func changes(e: Entity) -> Array:
@@ -62,7 +78,7 @@ static func make(card_id: String, e: Entity = null) -> KeywordTips:
 	var lines := changes(e)
 	if not lines.is_empty():
 		tips.add_child(_box("Changes", TranslationServer.translate("Changes"), "\n".join(lines), Color("dcefd2")))
-	for m in CardDb.card(card_id).get("mechanics", []):
+	for m in keywords_of(card_id):
 		if kw.has(m):
 			tips.add_child(_box("Title" + m, kw[m].name.get(lang, kw[m].name.en), kw[m].text.get(lang, kw[m].text.en), Color("efe0bd")))
 	return tips

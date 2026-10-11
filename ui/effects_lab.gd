@@ -65,6 +65,7 @@ func _ready() -> void:
 	_lang.item_selected.connect(func(i): set_language(CardLayout.LANGS[i]))
 	bar.add_child(_lang)
 	var glow_pick := OptionButton.new()
+	glow_pick.name = "GlowPick"
 	for gl in GLOWS:
 		glow_pick.add_item("glow: " + gl[0])
 	glow_pick.item_selected.connect(func(i):

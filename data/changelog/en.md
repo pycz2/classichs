@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-11
+
+### Added
+- Painted interface pictures: the mana crystal, the health drop, the attack gem with a sword, armor and durability shields, the Taunt shield, a skull and crossbones, a poison bottle, a lightning bolt, class emblems, a fatigue picture.
+- Poisonous minions (Emperor Cobra, Patient Assassin) are marked with a poison bottle.
+- A keyword box for Enrage.
+- A silenced minion's card shows its text crossed out with a red cross when hovered.
+- Overload shows at once: orange padlocks above the crystals for next turn; a locked crystal shows a padlock instead of a cross.
+- A card made by a card on the table (Archmage Antonidas, Ysera) flies into the hand from it.
+
+### Changed
+- Glows (playable, selected, target) are always outside every effect on a card.
+- Windfury: gusts on a tilted orbit, passing behind the card and in front of it.
+- Stealth: a haze the picture shows faintly through; Frozen: a layer of frost and an icy rim.
+- Secrets on the hero portrait are round: purple for the Mage, green for the Hunter, yellow for the Paladin.
+- Rarity gems are round, with a shadow and a highlight.
+- A legendary minion's dragon covers only the top of the oval.
+
 ## [0.14.1] - 2026-10-11
 
 ### Changed
