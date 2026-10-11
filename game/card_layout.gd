@@ -13,6 +13,7 @@ const TEXT_BOX := Rect2(Vector2(14, 105), Vector2(92, 48))
 ## How much tighter than the font's own line height the text lines are (in sizes).
 const LEADING_CUT := 0.25
 ## Gems the text must not run into (minions and weapons): centre and radius.
+## (The attack gem's sword points out of the card, away from the text.)
 const GEMS := [[Vector2(17, 154), 17.0], [Vector2(103, 154), 17.0]]
 
 static var _data := {}  # lang -> card id -> {text, name, lines, valign?}
@@ -27,7 +28,7 @@ static func _lang(lang: String) -> Dictionary:
 
 
 ## The layout of a card in a language: text and name sizes, lines (rich lines:
-## [b]bold[/b], [lb] for "["), valign ("top"; else centred).
+## [b]bold[/b], [lb] for "["), valign ("top"; else centred), dy (a shift, px).
 static func of(card_id: String, lang: String) -> Dictionary:
 	var e: Dictionary = _lang(lang).get(card_id, {})
 	return e if e.has("text") else {"text": 8, "name": 10}
@@ -116,17 +117,31 @@ static func height(p: TextParagraph) -> float:
 
 
 ## Where each line lies on the card (scale 1): the text is centred in its box,
-## or at its top (valign "top").
+## or at its top (valign "top"), then moved down by dy (up if negative).
 static func line_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0) -> Array:
 	var out := []
 	var h := height(p) / k
-	var top: bool = of(card_id, lang).get("valign", "") == "top"
-	var y := TEXT_BOX.position.y + (0.0 if top else maxf(0.0, (TEXT_BOX.size.y - h) / 2.0))
+	var e := of(card_id, lang)
+	var top: bool = e.get("valign", "") == "top"
+	var y := TEXT_BOX.position.y + (0.0 if top else maxf(0.0, (TEXT_BOX.size.y - h) / 2.0)) + float(e.get("dy", 0))
 	for i in p.get_line_count():
 		var sz := p.get_line_size(i) / k
 		var w := p.get_line_width(i) / k
 		out.append(Rect2(Vector2(TEXT_BOX.get_center().x - w / 2.0, y), Vector2(w, sz.y)))
 		y += sz.y + p.line_spacing / k
+	return out
+
+
+## Where the letters of each line are (scale 1): from the top of the capitals
+## to the bottom of the descenders, without the empty space of the line.
+static func ink_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0) -> Array:
+	var size := float(int(of(card_id, lang).text))
+	var out := []
+	var rects := line_rects(card_id, lang, p, k)
+	for i in rects.size():
+		var r: Rect2 = rects[i]
+		var base := r.position.y + p.get_line_ascent(i) / k
+		out.append(Rect2(Vector2(r.position.x, base - 0.72 * size), Vector2(r.size.x, 0.94 * size)))
 	return out
 
 
@@ -141,7 +156,8 @@ static func _hits_gem(r: Rect2) -> bool:
 
 ## What is wrong with a card's layout ([] = all fine): "no layout", "name too
 ## long", "text differs" (the lines do not say what the card says), "text too
-## tall", "line too wide", "hits a gem".
+## tall", "text too high", "text too low" (moved out of the box), "line too
+## wide", "hits a gem" (the letters run into a gem).
 static func problems(card_id: String, lang: String) -> Array:
 	var out := []
 	var e := of(card_id, lang)
@@ -159,9 +175,13 @@ static func problems(card_id: String, lang: String) -> Array:
 	if height(p) > TEXT_BOX.size.y:
 		out.append("text too tall")
 	var rects := line_rects(card_id, lang, p)
+	if rects[0].position.y < TEXT_BOX.position.y - 0.5:
+		out.append("text too high")
+	if rects[-1].end.y > TEXT_BOX.end.y + 0.5:
+		out.append("text too low")
 	if rects.any(func(r): return r.size.x > TEXT_BOX.size.x + 0.5):
 		out.append("line too wide")
-	if CardDb.card(card_id).get("type") in ["MINION", "WEAPON"] and rects.any(_hits_gem):
+	if CardDb.card(card_id).get("type") in ["MINION", "WEAPON"] and ink_rects(card_id, lang, p).any(_hits_gem):
 		out.append("hits a gem")
 	return out
 

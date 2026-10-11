@@ -44,8 +44,9 @@ static func mana(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.
 
 
 static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE) -> void:
-	# a sword behind the gem: the blade sticks out to the top right, the hilt to the bottom left
-	var d := Vector2(1, -1).normalized()
+	# a sword behind the gem: the blade sticks out to the top left (out of the card, away
+	# from its text), the hilt to the bottom right
+	var d := Vector2(-1, -1).normalized()
 	var n := Vector2(-d.y, d.x)
 	var dark := Color("3a2a05")
 	var w := r * 0.32
@@ -56,7 +57,7 @@ static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Colo
 	ci.draw_line(base, tip - d * w * 1.8, Color(1, 1, 1, 0.45), maxf(1.0, r * 0.08), true)
 	var guard := c - d * r * 1.0
 	_shape(ci, PackedVector2Array([guard + n * r * 0.75 + d * w * 0.5, guard + n * r * 0.75 - d * w * 0.5, guard - n * r * 0.75 - d * w * 0.5, guard - n * r * 0.75 + d * w * 0.5]), ATTACK.darkened(0.15), dark, maxf(1.5, r * 0.12))
-	var grip_end := c - d * r * 1.55
+	var grip_end := c - d * r * 1.4
 	ci.draw_line(guard, grip_end, dark, w * 1.5, true)
 	ci.draw_line(guard, grip_end, Color("8a5a1a"), w * 0.9, true)
 	ci.draw_circle(grip_end, w * 0.75, ATTACK.darkened(0.1))

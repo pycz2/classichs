@@ -19,7 +19,9 @@ func test_problems_are_found() -> void:
 	CardLayout.store("VAN_CS2_029", "en", {"text": 11, "name": 12, "lines": ["Deal 6 damage. Deal 6 damage. Deal 6 damage."]})
 	eq(CardLayout.problems("VAN_CS2_029", "en"), ["text differs", "line too wide"], "a wrong text in one long line")
 	CardLayout.store("VAN_CS2_029", "en", {"text": 11, "name": 60, "lines": ["De", "al", "[b]6[/b]", "dam", "age."]})
-	eq(CardLayout.problems("VAN_CS2_029", "en"), ["name too long", "text too tall"], "a big name, too many lines")
+	eq(CardLayout.problems("VAN_CS2_029", "en"), ["name too long", "text too tall", "text too low"], "a big name, too many lines")
+	CardLayout.store("VAN_CS2_029", "en", {"text": 11, "name": 12, "lines": ["Deal 6 damage."], "dy": -30})
+	eq(CardLayout.problems("VAN_CS2_029", "en"), ["text too high"], "moved up into the name")
 	CardLayout.store("VAN_CS2_029", "en", was)
 
 

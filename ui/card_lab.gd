@@ -104,11 +104,11 @@ func _panel(id: String, lang: String) -> Control:
 	status.add_theme_color_override("font_color", Color("69db7c") if pr.is_empty() else Color("ff6b6b"))
 	side.add_child(status)
 	var info := Label.new()
-	info.text = "text %d  name %d  %s" % [e.text, e.name, e.get("valign", "center")]
+	info.text = "text %d  name %d\n%s  dy %d" % [e.text, e.name, e.get("valign", "center"), e.get("dy", 0)]
 	info.add_theme_font_size_override("font_size", 12)
 	side.add_child(info)
 	for row in [[["text -", "text", -1], ["text +", "text", 1]], [["name -", "name", -1], ["name +", "name", 1]],
-			[["top/mid", "valign", 0], ["edit lines", "edit", 0]]]:
+			[["up", "dy", -1], ["down", "dy", 1]], [["top/mid", "valign", 0], ["edit lines", "edit", 0]]]:
 		var h := HBoxContainer.new()
 		for b_spec in row:
 			var b := Button.new()
@@ -131,6 +131,10 @@ func change(id: String, lang: String, what: String, step: int) -> void:
 			e.text = clampi(int(e.text) + step, 4, 14)
 		"name":
 			e.name = clampi(int(e.name) + step, 4, 14)
+		"dy":
+			e.dy = int(e.get("dy", 0)) + step
+			if e.dy == 0:
+				e.erase("dy")
 		"valign":
 			if e.get("valign", "") == "top":
 				e.erase("valign")

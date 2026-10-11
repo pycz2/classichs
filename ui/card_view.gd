@@ -63,7 +63,7 @@ func _draw_words(k: float) -> void:
 	if show_boxes:
 		draw_rect(nb, Color(0.2, 0.6, 1, 0.8), false, 1)
 		draw_rect(Rect2(CardLayout.TEXT_BOX.position * k, CardLayout.TEXT_BOX.size * k), Color(0.2, 0.6, 1, 0.8), false, 1)
-		for r in rects:
+		for r in CardLayout.ink_rects(card_id, lg, CardLayout.paragraph(card_id, lg), 1.0):
 			draw_rect(Rect2(r.position * k, r.size * k), Color(0.2, 0.9, 0.3, 0.6), false, 1)
 		if CardDb.card(card_id).get("type") in ["MINION", "WEAPON"]:
 			for g in CardLayout.GEMS:
