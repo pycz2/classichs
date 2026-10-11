@@ -4,6 +4,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-12
+
+### Dodano
+- Menu główne: wygenerowane tło karczmy z powolnym przybliżaniem, lecące iskry, wektorowy złoty tytuł ze smokiem i przesuwającym się blaskiem; przyciski pojawiają się jeden po drugim.
+- Wygenerowane tła: mecz toczy się na kamiennej planszy na stole w karczmie, wybór talii i kolekcja znajdują się w karczmianej bibliotece, pozostałe ekrany w przyciemnionej karczmie.
+- Czcionka Alegreya w interfejsie (łacina, cyrylica, greka) i drewniane przyciski w stylu karczmy z zaokrąglonymi rogami i złotą ramką; zaokrąglone pola wprowadzania, złote suwaki.
+- Teksty kart zawsze mieszczą się w ramce: rozmiar czcionki jest dobierany pomiarem dla każdej karty w każdym języku. Słowa kluczowe pogrubione.
+- Okienka z objaśnieniem słów kluczowych obok powiększonej karty.
+- Miecz za kamieniem ataku, mały wygenerowany smok na kartach legendarnych.
+- Moc bohatera obraca się po użyciu; przycisk „Koniec tury” świeci na zielono, gdy nie ma już ruchów.
+- Filtr rzadkości w kolekcji i przy budowaniu talii.
+- Listy talii jak w oryginale: pasek z portretem bohatera za nazwą talii, pasek z grafiką karty na liście kart talii, koszt na krysztale, wypełnienie talii jako pasek.
+- Dziennik zmian otwiera się w języku gry.
+- Grę można zainstalować jako aplikację (PWA) i grać w nią offline po pierwszym załadowaniu.
+- Na stronie gry zrzuty ekranu są po angielsku.
+
+### Naprawiono
+- Powtarzające się lub zbyt częste zamiary przeciwnika nie obciążają już stołu; wyskakująca karta historii nie jest tworzona na nowo przy każdym ruchu myszy; potwierdzenie mulligana ustępuje timerowi i utracie połączenia; przeciągana karta pozostaje nad stołem.
+
 ## [0.8.1] - 2026-10-11
 
 ### Naprawiono (po przeglądzie)

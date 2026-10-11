@@ -4,6 +4,25 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-12
+
+### Adicionado
+- Menu principal: um fundo de taverna gerado com zoom lento, faíscas voando, um título dourado vetorial com um dragão e um brilho que percorre o texto; os botões aparecem um por vez.
+- Fundos gerados: a partida é jogada em um tabuleiro de pedra sobre uma mesa de taverna, a escolha de baralho e a coleção ficam em uma biblioteca de taverna, e as demais telas, em uma taverna escurecida.
+- Fonte Alegreya para a interface (latino, cirílico, grego) e botões de madeira no estilo da taverna, com cantos arredondados e moldura dourada; campos de entrada arredondados, controles deslizantes dourados.
+- Os textos das cartas sempre cabem na moldura: o tamanho da fonte é ajustado por medição para cada carta em cada idioma. Palavras-chave em negrito.
+- Caixas com a explicação das palavras-chave ao lado da carta ampliada.
+- Uma espada atrás da pedra de ataque, um pequeno dragão gerado nas cartas lendárias.
+- O poder heroico vira após o uso; o botão "Finalizar turno" brilha em verde quando não há mais jogadas.
+- Filtro de raridade na coleção e na montagem de baralhos.
+- Listas de baralhos como no original: uma faixa com o retrato do herói atrás do nome do baralho, uma faixa com a arte da carta na lista de cartas do baralho, o custo em um cristal, o preenchimento do baralho como uma barra.
+- O registro de alterações abre no idioma do jogo.
+- O jogo pode ser instalado como aplicativo (PWA) e jogado offline após o primeiro carregamento.
+- Na página do jogo, as capturas de tela estão em inglês.
+
+### Corrigido
+- Intenções repetidas ou frequentes demais do oponente não sobrecarregam mais a mesa; a carta pop-up do histórico não é recriada a cada movimento do mouse; a confirmação do mulligan cede ao cronômetro e à perda de conexão; uma carta arrastada permanece sobre a mesa.
+
 ## [0.8.1] - 2026-10-11
 
 ### Corrigido (após a revisão)

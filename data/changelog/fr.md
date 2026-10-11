@@ -4,6 +4,25 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-12
+
+### Ajouté
+- Menu principal : un fond de taverne généré avec un lent zoom, des étincelles volantes, un titre doré vectoriel avec un dragon et un reflet qui défile, les boutons apparaissent l'un après l'autre.
+- Fonds générés : la partie se joue sur un plateau de pierre posé sur une table de taverne, le choix du deck et la collection se trouvent dans une bibliothèque de taverne, les autres écrans dans une taverne assombrie.
+- Police Alegreya pour l'interface (latin, cyrillique, grec) et boutons en bois dans le style de la taverne, aux coins arrondis et au cadre doré ; champs de saisie arrondis, curseurs dorés.
+- Les textes des cartes tiennent toujours dans le cadre : la taille de la police est ajustée par mesure pour chaque carte et chaque langue. Mots-clés en gras.
+- Encadrés d'explication des mots-clés à côté de la carte agrandie.
+- Une épée derrière la pierre d'attaque, un petit dragon généré sur les cartes légendaires.
+- Le pouvoir héroïque se retourne après utilisation ; le bouton « Fin du tour » brille en vert quand il ne reste plus de coups à jouer.
+- Filtre de rareté dans la collection et lors de la construction du deck.
+- Listes de decks comme dans l'original : une bande avec le portrait du héros derrière le nom du deck, une bande avec l'illustration de la carte dans la liste des cartes du deck, le coût sur un cristal, le remplissage du deck sous forme de barre.
+- Le journal des modifications s'ouvre dans la langue du jeu.
+- Le jeu peut être installé comme une application (PWA) et joué hors ligne après le premier chargement.
+- Sur la page du jeu, les captures d'écran sont en anglais.
+
+### Corrigé
+- Les intentions répétées ou trop fréquentes de l'adversaire ne chargent plus le plateau ; la carte contextuelle de l'historique n'est plus recréée à chaque mouvement de la souris ; la confirmation du mulligan cède devant le minuteur et la perte de connexion ; une carte déplacée reste au-dessus du plateau.
+
 ## [0.8.1] - 2026-10-11
 
 ### Corrigé (après relecture)

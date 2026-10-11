@@ -4,6 +4,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-12
+
+### Hinzugefügt
+- Hauptmenü: ein generierter Tavernenhintergrund mit langsamem Zoom, fliegende Funken, ein goldener Vektortitel mit Drache und laufendem Glanzlicht, die Schaltflächen erscheinen nacheinander.
+- Generierte Hintergründe: Das Match wird auf einem steinernen Spielfeld auf einem Tavernentisch gespielt, Deckauswahl und Sammlung befinden sich in einer Tavernenbibliothek, die übrigen Bildschirme in einer abgedunkelten Taverne.
+- Schrift Alegreya für die Oberfläche (Lateinisch, Kyrillisch, Griechisch) und hölzerne Schaltflächen im Tavernenstil mit abgerundeten Ecken und goldenem Rahmen; abgerundete Eingabefelder, goldene Schieberegler.
+- Kartentexte passen immer in den Rahmen: Die Schriftgröße wird für jede Karte in jeder Sprache durch Messen angepasst. Schlüsselwörter in Fettschrift.
+- Erklärungsfelder zu Schlüsselwörtern neben der vergrößerten Karte.
+- Ein Schwert hinter dem Angriffsstein, ein kompakter generierter Drache auf legendären Karten.
+- Die Heldenfähigkeit dreht sich nach dem Einsatz um; die Schaltfläche „Zug beenden“ leuchtet grün, wenn keine Züge mehr möglich sind.
+- Seltenheitsfilter in der Sammlung und beim Deckbau.
+- Decklisten wie im Original: ein Streifen mit dem Heldenporträt hinter dem Decknamen, ein Streifen mit dem Kartenbild in der Kartenliste des Decks, die Kosten auf einem Kristall, die Deckfüllung als Balken.
+- Das Änderungsprotokoll öffnet sich in der Sprache des Spiels.
+- Das Spiel lässt sich als App installieren (PWA) und nach dem ersten Laden offline spielen.
+- Auf der Spielseite sind die Screenshots auf Englisch.
+
+### Behoben
+- Wiederholte oder zu häufige Absichten des Gegners belasten das Spielfeld nicht mehr; die Pop-up-Karte des Verlaufs wird nicht bei jeder Mausbewegung neu erstellt; die Mulligan-Bestätigung weicht dem Timer und einem Verbindungsabbruch; eine gezogene Karte bleibt über dem Spielfeld.
+
 ## [0.8.1] - 2026-10-11
 
 ### Behoben (nach Review)

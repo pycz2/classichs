@@ -4,6 +4,25 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-12
+
+### Aggiunto
+- Menu principale: uno sfondo di taverna generato con zoom lento, scintille volanti, un titolo dorato vettoriale con un drago e un riflesso che scorre; i pulsanti compaiono uno alla volta.
+- Sfondi generati: la partita si gioca su un tavolo di pietra sopra un tavolo di taverna, la scelta del mazzo e la collezione si trovano in una biblioteca di taverna, le altre schermate in una taverna oscurata.
+- Font Alegreya per l'interfaccia (latino, cirillico, greco) e pulsanti di legno in stile taverna con angoli arrotondati e cornice dorata; campi di input arrotondati, cursori dorati.
+- I testi delle carte entrano sempre nella cornice: la dimensione del carattere viene adattata misurando per ogni carta in ogni lingua. Parole chiave in grassetto.
+- Riquadri con la spiegazione delle parole chiave accanto alla carta ingrandita.
+- Una spada dietro la pietra dell'attacco, un piccolo drago generato sulle carte leggendarie.
+- Il potere eroe si capovolge dopo l'uso; il pulsante «Fine turno» si illumina di verde quando non ci sono più mosse.
+- Filtro di rarità nella collezione e nella costruzione dei mazzi.
+- Elenchi dei mazzi come nell'originale: una striscia con il ritratto dell'eroe dietro il nome del mazzo, una striscia con l'illustrazione della carta nell'elenco delle carte del mazzo, il costo su un cristallo, il riempimento del mazzo come barra.
+- Il registro delle modifiche si apre nella lingua del gioco.
+- Il gioco si può installare come app (PWA) e giocare offline dopo il primo caricamento.
+- Sulla pagina del gioco gli screenshot sono in inglese.
+
+### Corretto
+- Le intenzioni ripetute o troppo frequenti dell'avversario non appesantiscono più il tavolo; la carta popup della cronologia non viene ricreata a ogni movimento del mouse; la conferma del mulligan cede al timer e alla perdita di connessione; una carta trascinata resta sopra il tavolo.
+
 ## [0.8.1] - 2026-10-11
 
 ### Corretto (dopo la revisione)

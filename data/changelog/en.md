@@ -4,6 +4,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-12
+
+### Added
+- Main menu: a generated tavern background with a slow zoom, flying sparks, a vector gold title with a dragon and a running glint, buttons appear one by one.
+- Generated backgrounds: the match is played on a stone board on a tavern table, deck choice and the collection sit in a tavern library, the other screens are on a darkened tavern.
+- Alegreya font for the interface (Latin, Cyrillic, Greek) and wooden tavern-style buttons with rounded corners and a gold frame; rounded input fields, gold sliders.
+- Card texts always fit the frame: the font size is fitted by measuring for every card in every language. Keywords in bold.
+- Keyword explanation boxes beside the enlarged card.
+- A sword behind the attack stone, a compact generated dragon on legendary cards.
+- The hero power flips over after use; the "End Turn" button glows green when there are no moves left.
+- Rarity filter in the collection and in deck building.
+- Deck lists like the original: a strip of the hero's portrait behind the deck name, a strip of the card's art in the deck's card list, the cost on a crystal, the deck fill as a bar.
+- The changelog opens in the game's language.
+- The game can be installed as an app (PWA) and played offline after the first load.
+- The game page shows screenshots in English.
+
+### Fixed
+- Repeated or too frequent opponent intents no longer load the board; the history pop-up card is not recreated on every mouse move; the mulligan confirmation yields to the timer and to a lost connection; a dragged card stays on top of the board.
+
 ## [0.8.1] - 2026-10-11
 
 ### Fixed (after review)

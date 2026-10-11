@@ -4,6 +4,25 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-12
+
+### Añadido
+- Menú principal: un fondo de taberna generado con un zoom lento, chispas voladoras, un título dorado vectorial con un dragón y un destello que recorre el texto; los botones aparecen uno tras otro.
+- Fondos generados: la partida se juega sobre un tablero de piedra en una mesa de taberna, la elección de mazo y la colección están en una biblioteca de taberna, y el resto de pantallas, en una taberna oscurecida.
+- Fuente Alegreya para la interfaz (latino, cirílico, griego) y botones de madera al estilo de la taberna, con esquinas redondeadas y marco dorado; campos de entrada redondeados, deslizadores dorados.
+- Los textos de las cartas siempre caben en el marco: el tamaño de la fuente se ajusta midiendo para cada carta y cada idioma. Palabras clave en negrita.
+- Cuadros con la explicación de las palabras clave junto a la carta ampliada.
+- Una espada detrás de la piedra de ataque, un pequeño dragón generado en las cartas legendarias.
+- El poder de héroe se da la vuelta tras usarse; el botón «Finalizar turno» brilla en verde cuando no quedan jugadas.
+- Filtro de rareza en la colección y al crear mazos.
+- Listas de mazos como en el original: una franja con el retrato del héroe tras el nombre del mazo, una franja con la ilustración de la carta en la lista de cartas del mazo, el coste en un cristal, el llenado del mazo como una barra.
+- El registro de cambios se abre en el idioma del juego.
+- El juego se puede instalar como aplicación (PWA) y jugar sin conexión tras la primera carga.
+- En la página del juego, las capturas de pantalla están en inglés.
+
+### Corregido
+- Las intenciones repetidas o demasiado frecuentes del rival ya no sobrecargan la mesa; la carta emergente del historial no se vuelve a crear con cada movimiento del ratón; la confirmación del mulligan cede ante el temporizador y la pérdida de conexión; una carta arrastrada permanece sobre la mesa.
+
 ## [0.8.1] - 2026-10-11
 
 ### Corregido (tras la revisión)
