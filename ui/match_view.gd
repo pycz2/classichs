@@ -71,6 +71,8 @@ var _intent_ms := 0
 var _applied_intent := {}
 ## Full table layouts done (tests check that repeated intents cause none).
 var _layouts := 0
+## Nothing is left to do this turn: the End Turn button glows green.
+var end_turn_ready := false
 ## Event batches waiting for their animation; while one plays the table is busy.
 var _queue: Array = []
 var _busy := false
@@ -519,6 +521,22 @@ func _aim_click_mode() -> void:
 		refresh()
 
 
+## End Turn: wood while moves are left, glowing green (and pulsing) when none are.
+func _style_end_turn() -> void:
+	var tint := Color(0.75, 1.35, 0.7) if end_turn_ready else Color.WHITE
+	for st in [["normal", 1.0], ["hover", 1.15], ["pressed", 0.85]]:
+		_end_turn.add_theme_stylebox_override(st[0], Fonts.plank(tint * st[1]))
+	if _end_turn.has_meta("pulse"):
+		(_end_turn.get_meta("pulse") as Tween).kill()
+		_end_turn.remove_meta("pulse")
+	_end_turn.modulate = Color.WHITE
+	if end_turn_ready and not Anim.instant and is_inside_tree():
+		var tw := _end_turn.create_tween().set_loops()
+		tw.tween_property(_end_turn, "modulate", Color(1.25, 1.25, 1.25), 0.6)
+		tw.tween_property(_end_turn, "modulate", Color.WHITE, 0.6)
+		_end_turn.set_meta("pulse", tw)
+
+
 ## The hand card under the mouse rises (by slot, so a rising card never loses the hover).
 func _track_hand_hover() -> void:
 	if controller == null or _overlay != null or _menu.visible or find_child("SettingsView", false, false):
@@ -739,6 +757,10 @@ func refresh() -> void:
 		_names[i].text = _side_name(p.index)
 		_piles[i].count = p.deck.size()
 	_end_turn.disabled = not (my_action() and g.phase == "PLAY" and g.pending.is_empty())
+	var ready := not _end_turn.disabled and _legal().all(func(a): return a.type in ["end_turn", "concede"])
+	if ready != end_turn_ready:
+		end_turn_ready = ready
+		_style_end_turn()
 	_end_turn.text = tr("End Turn") if my_action() or g.game_over else tr("Enemy Turn")
 	var concede := find_child("Concede", true, false) as Button
 	if concede:
@@ -872,6 +894,9 @@ func _reconcile(want: Dictionary) -> void:
 			if spec.own:
 				v.show_entity(e, g)
 		elif v is MinionView or v is HeroView:
+			v.queue_redraw()
+		elif v is PowerView:
+			v.sync()
 			v.queue_redraw()
 		if not (_dragging and id == _press.get("id", -1)):
 			v.z_index = spec.get("z", 0)

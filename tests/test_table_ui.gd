@@ -210,3 +210,21 @@ func test_history_strip_signals_only_when_the_card_changes() -> void:
 		strip._gui_input(ev)
 	eq(shown, [["VAN_CS2_120", true], ["VAN_CS2_182", true]], "one signal per card")
 	strip.free()
+
+
+func test_end_turn_turns_green_when_nothing_is_left_to_do() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120"], "mana": 2, "max_mana": 2})
+	eq(v.end_turn_ready, false, "a card can still be played")
+	var croc := v.g.players[0].hand[0]
+	v.controller.submit({"type": "play", "player": 0, "entity": croc.id, "target": -1, "pos": 0, "choice": -1})
+	eq(v.end_turn_ready, true, "no mana, no attacks, hero power too dear: end turn glows")
+	v.free()
+
+
+func test_used_hero_power_turns_face_down() -> void:
+	var v := _view({"hero": "HERO_01"})
+	var power := v.g.players[0].hero_power
+	eq((v._views[power.id] as PowerView).face_down_used, false, "ready")
+	v.controller.submit({"type": "hero_power", "player": 0, "target": -1})
+	eq((v._views[power.id] as PowerView).face_down_used, true, "used: turned over")
+	v.free()
