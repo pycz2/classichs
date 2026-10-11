@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.12.2] - 2026-10-11
+
+### Zmieniono
+- Karty do zagrania, stronnicy, moc specjalna i przycisk „Koniec tury” mają miękką, pulsującą poświatę zamiast obwódki.
+
 ## [0.12.1] - 2026-10-11
 
 ### Dodano

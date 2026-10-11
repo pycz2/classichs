@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.12.2] - 2026-10-11
+
+### Geändert
+- Spielbare Karten, Diener, die Heldenfähigkeit und die Schaltfläche „Zug beenden“ haben ein weiches, pulsierendes Leuchten statt eines Umrisses.
+
 ## [0.12.1] - 2026-10-11
 
 ### Hinzugefügt

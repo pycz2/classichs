@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.12.2] - 2026-10-11
+
+### Alterado
+- Cartas jogáveis, lacaios, o poder heroico e o botão "Encerrar turno" têm um brilho suave e pulsante em vez de um contorno.
+
 ## [0.12.1] - 2026-10-11
 
 ### Adicionado

@@ -50,6 +50,7 @@ var _tips: KeywordTips
 var _history: HistoryPanel
 var _tracker: DeckTrackerPanel
 var _end_turn: Button
+var _end_halo := _Halo.new()  # a green light behind End Turn when nothing is left to do
 var _mana: Array[ManaBar] = []
 var _piles: Array[DeckPile] = []
 var _menu: PanelContainer
@@ -130,6 +131,10 @@ func _ready() -> void:
 	_end_turn.custom_minimum_size = Vector2(140, 52)
 	_end_turn.position = Vector2(1132, 310)
 	_end_turn.pressed.connect(_on_end_turn)
+	_end_halo.position = _end_turn.position
+	_end_halo.size = _end_turn.custom_minimum_size
+	_end_halo.visible = false
+	add_child(_end_halo)  # behind the button
 	add_child(_end_turn)
 	for i in 2:
 		var bar := ManaBar.new()
@@ -521,6 +526,7 @@ func _aim_click_mode() -> void:
 
 ## End Turn: wood while moves are left, glowing green (and pulsing) when none are.
 func _style_end_turn() -> void:
+	_end_halo.visible = end_turn_ready
 	var tint := Color(0.75, 1.35, 0.7) if end_turn_ready else Color.WHITE
 	for st in [["normal", 1.0], ["hover", 1.15], ["pressed", 0.85]]:
 		_end_turn.add_theme_stylebox_override(st[0], Fonts.plank(tint * st[1]))
@@ -1459,6 +1465,22 @@ func _banner(text: String) -> void:
 	tw.tween_interval(Anim.d(0.7))
 	tw.tween_property(l, "modulate:a", 0.0, Anim.d(0.3))
 	tw.tween_callback(l.queue_free)
+
+
+## A soft glow behind a button (EntityView.soft_glow around its rect).
+class _Halo:
+	extends Control
+	var color := Palette.PLAYABLE
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _process(_d: float) -> void:
+		if visible:
+			queue_redraw()
+
+	func _draw() -> void:
+		EntityView.soft_glow(self, Callable(), color, Rect2(Vector2.ZERO, size), 10)
 
 
 class _Orb:

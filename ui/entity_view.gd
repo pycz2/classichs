@@ -33,7 +33,21 @@ func set_glow(c: Color) -> void:
 
 func _draw_glow(rect: Rect2, radius: int) -> void:
 	if glow.a > 0.0:
-		draw_style_box(Palette.box(Color.TRANSPARENT, radius, glow, 4), rect.grow(4))
+		soft_glow(self, func(g: float) -> PackedVector2Array: return PackedVector2Array(), glow, rect, radius)
+
+
+## A soft light around a shape, not a line: layers of the shape grown wider and
+## fainter, gently pulsing. shape(grow) gives the outline grown by grow pixels;
+## with a rect, rounded rects are drawn instead.
+static func soft_glow(ci: CanvasItem, shape: Callable, col: Color, rect := Rect2(), radius := 0) -> void:
+	var pulse := 0.8 + 0.2 * sin(Time.get_ticks_msec() / 1000.0 * 3.0)
+	for i in range(6, 0, -1):
+		var gr := i * 3.0
+		var c := Color(col, col.a * 0.17 * pulse)
+		if rect.size != Vector2.ZERO:
+			ci.draw_style_box(Palette.box(c, radius + int(gr)), rect.grow(gr))
+		else:
+			ci.draw_colored_polygon(shape.call(gr), c)
 
 
 ## A number in a coloured circle (cost, attack, health).
@@ -67,6 +81,8 @@ func bump(stat: String) -> float:
 
 
 func _process(delta: float) -> void:
+	if glow.a > 0.0:
+		queue_redraw()  # the glow pulses
 	if _pops.is_empty():
 		return
 	for k in _pops.keys():

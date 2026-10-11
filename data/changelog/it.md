@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.12.2] - 2026-10-11
+
+### Modificato
+- Le carte giocabili, i servitori, il potere eroe e il pulsante "Fine turno" hanno un bagliore morbido e pulsante invece di un contorno.
+
 ## [0.12.1] - 2026-10-11
 
 ### Aggiunto

@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.12.2] - 2026-10-11
+
+### Modifié
+- Les cartes jouables, les serviteurs, le pouvoir héroïque et le bouton « Fin du tour » ont une douce lueur pulsante au lieu d'un contour.
+
 ## [0.12.1] - 2026-10-11
 
 ### Ajouté
