@@ -4,3 +4,4 @@ build/
 __pycache__/
 .claude/
 art/original/
+.DS_Store
