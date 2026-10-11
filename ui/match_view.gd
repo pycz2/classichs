@@ -46,6 +46,7 @@ var _views := {}
 var _sel := {}
 var _overlay: Control
 var _tooltip: CardView
+var _tips: KeywordTips
 var _history: HistoryPanel
 var _tracker: DeckTrackerPanel
 var _end_turn: Button
@@ -555,6 +556,13 @@ func _track_hand_hover() -> void:
 	if id != _hover_hand:
 		_hover_hand = id
 		refresh()
+		var e := g.ent(id)
+		if e:  # beside where the raised card ends up
+			var i := hand.find(e)
+			var f: Dictionary = TableLayout.hand(hand.size(), true, i)[i]
+			_show_tips(e.card_id, Rect2(f.pos, CardView.SIZE * f.scale))
+		elif _tooltip == null:
+			_show_tips("", Rect2())
 
 
 func _build_menu() -> void:
@@ -1129,12 +1137,33 @@ func _strip_card(card_id: String, on: bool) -> void:
 		_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_tooltip.position = Vector2(70, 160)
 		add_child(_tooltip)
+		_show_tips(card_id, Rect2(_tooltip.position, _tooltip.size))
+	else:
+		_show_tips("", Rect2())
+
+
+## Keyword boxes beside a big card ("" hides them).
+func _show_tips(card_id: String, rect: Rect2) -> void:
+	if _tips:
+		_tips.queue_free()
+		_tips = null
+	if card_id == "":
+		return
+	_tips = KeywordTips.make(card_id)
+	if _tips.get_child_count() == 0:
+		_tips.free()
+		_tips = null
+		return
+	_tips.z_index = 95
+	add_child(_tips)
+	_tips.beside(rect)
 
 
 func _on_hover(v: EntityView, on: bool) -> void:
 	if _tooltip:
 		_tooltip.queue_free()
 		_tooltip = null
+	_show_tips("", Rect2())
 	if not on or _dragging or _sel.get("stage", "") == "target":
 		return  # no card pop-ups while aiming
 	var e := g.ent(v.entity_id)
@@ -1148,6 +1177,7 @@ func _on_hover(v: EntityView, on: bool) -> void:
 		_tooltip.show_entity(e, g)
 	_tooltip.position = TOOLTIP_POS
 	add_child(_tooltip)
+	_show_tips(e.card_id, Rect2(_tooltip.position, _tooltip.size))
 
 
 # --- events and effects ---------------------------------------------------------
