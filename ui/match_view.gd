@@ -723,9 +723,11 @@ func open_settings() -> void:
 	s.z_index = 100
 	s.back.connect(s.queue_free)
 	s.language_changed.connect(relabel)
-	s.art_changed.connect(func():
+	s.art_changed.connect(func():  # card art or card back
 		for v in _views.values():
-			v.queue_redraw())
+			v.queue_redraw()
+		for p in _piles:
+			p.queue_redraw())
 	add_child(s)
 
 
