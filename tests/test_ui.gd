@@ -21,6 +21,7 @@ func test_main_shows_menu() -> void:
 		check(m.screen.find_child(n, true, false) != null, n + " in the Play submenu")
 	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
 	check(m.screen.find_child("Collection", true, false) != null, "back to the first level")
+	check(m.screen.find_child("DebugTable", true, false) == null, "the debug tools are in the settings")
 	m.free()
 
 
@@ -168,6 +169,7 @@ func test_debug_table_flow() -> void:
 	d.start_game()
 	check(d.error.text.contains("unknown card NOPE"), "scenario error shown")
 	d.load_example()
+	eq(d.error.text, "", "the example builds")
 	d.add_card(1, "board", "VAN_CS2_182")
 	check(JSON.parse_string(d.editor.text).players[1].board.has("VAN_CS2_182"), "card added")
 	eq(started.size(), 1, "errors did not start a game")
@@ -207,8 +209,10 @@ func test_debug_add_card_with_broken_players() -> void:
 	var d := DebugTable.new()
 	root().add_child(d)
 	d.editor.text = '{"players": [1, 2]}'
+	check(d.apply_json(), "valid JSON is read")
+	check(d.error.text.contains("hero is required"), "the scene's problem shown: " + d.error.text)
 	d.add_card(0, "hand", H.WISP)
-	check(d.error.text != "", "message shown")
+	check(d.error.text.contains("two objects"), "no player to add to: " + d.error.text)
 	d.free()
 
 
