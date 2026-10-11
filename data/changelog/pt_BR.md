@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.18.2] - 2026-10-12
+
+### Alterado
+- A síntese de voz foi removida: o jogo não lê mais nomes e emotes em voz alta; as opções Voz e Fala saíram das configurações. As falas dos heróis aparecem como texto em balões com a ponta voltada para o herói.
+
+### Corrigido
+- Uma caixa marcada perdia o fundo sob o mouse.
+
 ## [0.18.1] - 2026-10-12
 
 ### Adicionado

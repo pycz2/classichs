@@ -192,19 +192,6 @@ func bind(m: Match) -> void:
 			_bot_side = 1 - me  # named in _side_name, so the name follows the language
 	m.start()
 	refresh()
-	_say_start()
-
-
-## At the start of a match each hero says its opening line: yours, then the opponent's.
-func _say_start() -> void:
-	if Anim.instant or not is_inside_tree() or g.turn > 0:
-		return
-	var me := viewer()
-	await get_tree().create_timer(0.8).timeout
-	if is_inside_tree() and Sound.voice(g.players[me].hero.card_id, "start"):
-		await get_tree().create_timer(2.6).timeout
-	if is_inside_tree():
-		Sound.voice(g.players[g.opponent(me)].hero.card_id, "start")
 
 
 ## An online match: the session (and its transport) now live under this view.
@@ -252,29 +239,27 @@ func send_emote(id: String) -> void:
 func show_emote(p: int, id: String) -> void:
 	var hero := g.players[p].hero.card_id
 	var own := VoiceLines.text(hero, id)
-	var recorded := Sound.voice(hero, id)
-	show_line(p, own if own != "" else tr(EMOTES[id]), not recorded)  # (no speech synthesis on top of a clip)
+	show_line(p, own if own != "" else tr(EMOTES[id]))
 
 
 ## A speech bubble next to player p's hero (emotes, tutorial boss lines).
-func show_line(p: int, text: String, speak := true) -> void:
+func show_line(p: int, text: String) -> void:
 	if _bubbles.has(p) and is_instance_valid(_bubbles[p]):
 		_bubbles[p].queue_free()
 	var own := p == viewer()
-	var bubble := PanelContainer.new()
-	bubble.add_theme_stylebox_override("panel", Palette.box(Color("f4ead5"), 14, Color("2a2118"), 3))
+	var bubble := _Bubble.new()
 	var l := Palette.label(text, 20, Color("2a2118"))
 	var text_width := ThemeDB.fallback_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
 	l.custom_minimum_size.x = minf(320.0, text_width + 8)  # set before wrapping, or the label collapses
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.add_theme_constant_override("outline_size", 0)
 	bubble.add_child(l)
-	bubble.position = (OWN_HERO + Vector2(-210, 20)) if own else (ENEMY_HERO + Vector2(-210, 40))
 	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bubble)
+	# its right edge (and tail) just left of the hero, whatever the text's length
+	var w := bubble.get_combined_minimum_size().x
+	bubble.position = (OWN_HERO if own else ENEMY_HERO) + Vector2(-w - 18, 20 if own else 40)
 	_bubbles[p] = bubble
-	if speak:
-		Sound.speak(text)
 	if not Anim.instant and is_inside_tree():
 		bubble.pivot_offset = Vector2(160, 30)
 		bubble.scale = Vector2(0.3, 0.3)
@@ -1204,7 +1189,6 @@ func _on_concede() -> void:
 	var p := viewer() if not controller.bots[viewer()] else controller.actor()
 	_centered_button(box, tr("Concede"), "ConfirmConcede", func():
 		_close_overlay()
-		Sound.voice(g.players[p].hero.card_id, "concede")
 		controller.submit({"type": "concede", "player": p}))
 	_centered_button(box, tr("Keep playing"), "KeepPlaying", _close_overlay)
 
@@ -1809,6 +1793,28 @@ class _Burn:
 			draw_colored_polygon(PackedVector2Array([Vector2(x - 9, y + h * 0.3), Vector2(x, y - h * 0.5), Vector2(x + 9, y + h * 0.3)]), Color(1, 0.5 + 0.3 * sin(i), 0.1, 0.8))
 
 
+## A speech bubble: a round-cornered cloud with a shadow and a tail pointing at
+## the hero on its right.
+class _Bubble:
+	extends PanelContainer
+
+	func _init() -> void:
+		var st := Palette.box(Color("fbf3df"), 22, Color("2a2118"), 3)
+		st.set_content_margin_all(14)
+		st.content_margin_left = 18
+		st.content_margin_right = 18
+		st.shadow_color = Color(0, 0, 0, 0.35)
+		st.shadow_size = 6
+		st.shadow_offset = Vector2(2, 4)
+		add_theme_stylebox_override("panel", st)
+
+	func _draw() -> void:  # the tail, drawn over the panel's right edge
+		var y := size.y * 0.62
+		var tail := PackedVector2Array([Vector2(size.x - 3, y - 12), Vector2(size.x + 26, y + 16), Vector2(size.x - 3, y + 8)])
+		draw_colored_polygon(tail, Color("fbf3df"))
+		draw_polyline(PackedVector2Array([tail[0], tail[1], tail[2]]), Color("2a2118"), 3.0, true)
+
+
 ## A soft glow behind a button (EntityView.soft_glow around its rect).
 class _Halo:
 	extends Control
@@ -1881,7 +1887,6 @@ func _effects_now(events: Array) -> void:
 		if not heard.has(sfx):  # one copy of each sound per action
 			heard[sfx] = true
 			Sound.play(sfx)
-		_speak_event(ev, heard)
 		match ev.type:
 			"damage":
 				var on_hero := g.ent(ev.target) != null and g.ent(ev.target).is_hero()
@@ -1903,40 +1908,6 @@ func _effects_now(events: Array) -> void:
 		Sound.play("hit_big")
 	if Match.shake_enabled and (big or hero_hit > 0):
 		_shake(2.0 if hero_hit == 2 else 1.0)
-
-
-## Minions and heroes say their lines (when played, attacking, dying); without a
-## recorded line, legendary minions and new heroes say their name.
-func _speak_event(ev: Dictionary, heard: Dictionary) -> void:
-	var said := ""
-	match ev.type:
-		"play", "summon":
-			var m := g.ent(ev.entity)
-			if m and (m.is_minion() or m.is_weapon()) and not heard.has("voice"):
-				said = m.card_id
-				heard["voice"] = Sound.voice(m.card_id, "play")
-		"equip":
-			if not heard.has("voice"):
-				heard["voice"] = Sound.voice(ev.card, "play")
-		"attack":
-			var a := g.ent(ev.attacker)
-			if a and not heard.has("voice"):
-				heard["voice"] = Sound.voice(a.card_id, "attack")
-		"death":
-			if ev.get("minion", false) and not heard.has("death_voice"):
-				heard["death_voice"] = Sound.voice(ev.card, "death")
-	if heard.get("voice", false) and said != "":
-		heard[said] = true  # the line was said: no name on top of it
-	var card := ""
-	if ev.type in ["play", "summon"]:
-		var e := g.ent(ev.entity)
-		if e and e.is_minion() and CardDb.card(e.card_id).get("rarity") == "LEGENDARY":
-			card = e.card_id
-	elif ev.type == "hero_replaced":
-		card = ev.card
-	if card != "" and not heard.has(card):
-		heard[card] = true
-		Sound.speak(CardText.name(card))
 
 
 func _float_text(id: int, text: String, color: Color, old: Dictionary, font_size := 30) -> void:

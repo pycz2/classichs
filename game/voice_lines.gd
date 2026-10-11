@@ -2,11 +2,9 @@ class_name VoiceLines
 extends RefCounted
 ## What minions and heroes say (data/voice_lines.json: card id -> kind -> language ->
 ## text; kinds: play, attack, death; heroes: greetings, well_played, thanks, wow, oops,
-## threaten, start, concede, attack) and the recorded clips of those lines
-## (audio/voice/<game language: en, ru, pt_BR…>/<card id>_<kind>.ogg, made by tools/tts).
+## threaten, start, concede, attack). Heroes' emotes show these words.
 
 const PATH := "res://data/voice_lines.json"
-const CLIPS := "res://audio/voice"
 
 static var _data := {}
 
@@ -27,9 +25,3 @@ static func text(card_id: String, kind: String, lang := "") -> String:
 	var l := lang if lang != "" else TranslationServer.get_locale()
 	return by_lang.get(l, by_lang.get(l.get_slice("_", 0), by_lang.get("en", "")))
 
-
-## The recorded clip of the line in the interface language, or null.
-static func clip(card_id: String, kind: String) -> AudioStream:
-	var lang := TranslationServer.get_locale()
-	var path := "%s/%s/%s_%s.ogg" % [CLIPS, lang if lang in CardLayout.LANGS else "en", card_id, kind]
-	return load(path) if ResourceLoader.exists(path) else null

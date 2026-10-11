@@ -62,8 +62,7 @@ func test_volume_shake_and_tts() -> void:
 	check(AudioServer.is_bus_mute(AudioServer.get_bus_index("Music")), "music bus muted")
 	(s.find_child("Shake", true, false) as CheckButton).button_pressed = false
 	eq(Match.shake_enabled, false, "shake off")
-	(s.find_child("Tts", true, false) as CheckButton).button_pressed = false
-	eq(Settings.data.tts, false, "tts off")
+	check(s.find_child("Tts", true, false) == null and s.find_child("voice", true, false) == null, "no speech settings any more")
 	Settings.load_settings()
 	eq(Settings.data.shake, false, "saved")
 	s.free()

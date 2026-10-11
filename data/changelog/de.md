@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.18.2] - 2026-10-12
+
+### Geändert
+- Die Sprachausgabe ist entfernt: das Spiel liest Namen und Emotes nicht mehr vor; die Einstellungen Stimme und Sprachausgabe sind weg. Sätze der Helden erscheinen als Text in Sprechblasen mit Spitze zum Helden.
+
+### Behoben
+- Ein angehaktes Feld verlor unter der Maus seinen Hintergrund.
+
 ## [0.18.1] - 2026-10-12
 
 ### Hinzugefügt

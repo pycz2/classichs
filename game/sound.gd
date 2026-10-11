@@ -1,6 +1,6 @@
 class_name Sound
 extends Node
-## Music, event sounds and speech. Main adds one instance; without it every call
+## Music and event sounds. Main adds one instance; without it every call
 ## is silent (tests, tools). Sounds come from audio/*.wav (tools/gen_audio.py).
 
 ## Event type -> sound file.
@@ -12,13 +12,6 @@ const POOL := 6
 const BATTLE_TRACKS := ["battle_1", "battle_2", "battle_3"]
 
 static var instance: Sound
-static var default_speaker := func(text: String, voice: String, volume: int) -> void:
-	DisplayServer.tts_speak(text, voice, volume, 1.0, 1.0, 0, true)
-static var default_voices := func(lang: String) -> PackedStringArray:
-	return DisplayServer.tts_get_voices_for_language(lang)
-## Replaceable in tests.
-static var speaker: Callable = default_speaker
-static var voices: Callable = default_voices
 
 var _music := AudioStreamPlayer.new()
 var _track := ""
@@ -28,7 +21,6 @@ var _last_battle := ""
 var _pool: Array[AudioStreamPlayer] = []
 var _next := 0
 var _streams := {}
-var _voice := AudioStreamPlayer.new()  # minions' and heroes' lines: one at a time
 
 
 func _ready() -> void:
@@ -37,8 +29,6 @@ func _ready() -> void:
 	_music.bus = "Music"
 	_music.finished.connect(_on_music_finished)
 	add_child(_music)
-	_voice.bus = "SFX"
-	add_child(_voice)
 	for i in POOL:
 		var p := AudioStreamPlayer.new()
 		p.bus = "SFX"
@@ -104,32 +94,6 @@ func _on_music_finished() -> void:
 		_music.play()
 
 
-## Plays what a card says (VoiceLines) at the voice volume; true when a clip played.
-## A new line cuts the one before (the newest event matters most).
-static func voice(card_id: String, kind: String) -> bool:
-	if instance == null or Settings.data.voice <= 0.0:
-		return false
-	var s := VoiceLines.clip(card_id, kind)
-	if s == null:
-		return false
-	instance._voice.stream = s
-	instance._voice.volume_db = linear_to_db(Settings.data.voice)
-	instance._voice.play()
-	return true
-
-
-## Speaks text with a voice of the interface language; silent when speech is off,
-## the voice volume is 0 or the system has no voice for the language.
-static func speak(text: String) -> void:
-	if instance == null or text == "" or not Settings.data.tts or Settings.data.voice <= 0.0:
-		return
-	var list: PackedStringArray = voices.call(Settings.language().get_slice("_", 0))
-	if list.is_empty():
-		return
-	speaker.call(text, list[0], int(round(Settings.data.voice * 100)))
-
-
-## The sound for an engine event as seen by viewer ("" = none).
 static func sound_for(ev: Dictionary, g: Game, viewer: int) -> String:
 	match ev.type:
 		"play":

@@ -228,3 +228,8 @@ func test_hidden_history_follows_new_moves() -> void:
 	check(h.following(), "a hidden panel follows the newest line")
 	h.visible = true
 	h.free()
+
+
+func test_ticked_buttons_keep_their_plank_under_the_mouse() -> void:
+	var t := Fonts.theme()
+	check(t.has_stylebox("hover_pressed", "Button") and not t.get_stylebox("hover_pressed", "Button") is StyleBoxEmpty, "a pressed button under the mouse still has its background")

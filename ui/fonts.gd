@@ -76,6 +76,7 @@ static func theme() -> Theme:
 		t.set_stylebox("normal", "Button", plank())
 		t.set_stylebox("hover", "Button", plank(Color(1.18, 1.12, 1.05)))
 		t.set_stylebox("pressed", "Button", plank(Color(0.8, 0.78, 0.75)))
+		t.set_stylebox("hover_pressed", "Button", plank(Color(0.92, 0.88, 0.82)))  # a ticked box or a lit toggle under the mouse
 		t.set_stylebox("disabled", "Button", plank(Color(0.55, 0.55, 0.55)))
 		t.set_stylebox("focus", "Button", StyleBoxEmpty.new())
 		t.set_color("font_color", "Button", Color("f4ead5"))

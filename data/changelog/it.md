@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.18.2] - 2026-10-12
+
+### Modificato
+- La sintesi vocale è stata tolta: il gioco non legge più ad alta voce nomi ed emote; le impostazioni Voce e Parlato sono state rimosse. Le battute degli eroi compaiono come testo in fumetti con la punta verso l'eroe.
+
+### Corretto
+- Una casella spuntata perdeva lo sfondo sotto il mouse.
+
 ## [0.18.1] - 2026-10-12
 
 ### Aggiunto
