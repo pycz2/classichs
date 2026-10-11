@@ -16,6 +16,9 @@ const HAND_Y := 604.0
 const SLOT := 104.0
 const TOOLTIP_POS := Vector2(1035, 160)
 
+## Fixed button texts by node name, set again when the language changes.
+const LABELS := {"HistoryButton": "History", "JsonButton": "Position → JSON", "EmoteButton": "Emote",
+	"MuteButton": "Mute", "SettingsButton": "Settings"}
 const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "thanks": "Thanks.",
 	"wow": "Wow!", "oops": "Oops.", "threaten": "I will destroy you!"}
 
@@ -108,6 +111,10 @@ func _ready() -> void:
 	mute.visible = false
 	mute.toggled.connect(set_muted)
 	left.add_child(mute)
+	var settings := Palette.button(tr("Settings"), "SettingsButton")
+	settings.custom_minimum_size = Vector2(130, 40)
+	settings.pressed.connect(open_settings)
+	left.add_child(settings)
 	var concede := Palette.button(tr("Concede"), "Concede")
 	concede.custom_minimum_size = Vector2(130, 40)
 	concede.pressed.connect(_on_concede)
@@ -288,6 +295,24 @@ func show_hint(text: String, seconds := 2.0) -> void:
 
 # --- rendering ----------------------------------------------------------------
 
+func open_settings() -> void:
+	var s := SettingsView.new()
+	s.back.connect(s.queue_free)
+	s.language_changed.connect(relabel)
+	add_child(s)
+
+
+## Sets the fixed texts again in the current language.
+func relabel() -> void:
+	for n in LABELS:
+		var b := find_child(n, true, false) as Button
+		if b:
+			b.text = tr(LABELS[n])
+	for id in EMOTES:
+		(_emote_panel.get_node("Emote_" + id) as Button).text = tr(EMOTES[id])
+	refresh()
+
+
 func refresh() -> void:
 	for c in _layer.get_children():
 		_layer.remove_child(c)
@@ -305,7 +330,7 @@ func refresh() -> void:
 		_names[i].text = "%s · %s %d · %s %d" % [_side_name(p.index), tr("Hand"), p.hand.size(), tr("Deck"), p.deck.size()]
 	_end_turn.disabled = not (my_action() and g.phase == "PLAY" and g.pending.is_empty())
 	_end_turn.text = tr("End Turn") if my_action() or g.game_over else tr("Enemy Turn")
-	var concede := find_child("Concede", false, false) as Button
+	var concede := find_child("Concede", true, false) as Button
 	if concede:
 		concede.text = tr("Menu") if g.game_over else tr("Concede")
 	_apply_glows()

@@ -26,6 +26,8 @@ static func collect() -> Array:
 	tables.append_array(DeckListView.BUTTONS)
 	tables.append_array(DebugTable.ZONES.map(func(z): return z[0]))
 	tables.append_array(MatchView.EMOTES.values())
+	tables.append_array(SettingsView.SLIDERS.map(func(r): return r[0]))
+	tables.append_array(SettingsView.TOGGLES.map(func(r): return r[0]))
 	tables.append_array(Tutorial.HINTS.values())
 	tables.append_array(NetSession.BYE_TEXT.values())
 	for m in Missions.LIST:
