@@ -61,7 +61,7 @@ func test_locked_power_hidden_and_no_emotes() -> void:
 	var v := _view(1)
 	check(not v._views.has(v.g.players[0].hero_power.id), "Jaina's locked power not shown")
 	check(not v._views.has(v.g.players[1].hero_power.id), "boss power not shown")
-	check(not (v.find_child("EmoteButton", true, false) as Button).visible, "emotes off")
+	check(not v.emotes_allowed(), "emotes off")
 	v.free()
 	var v5 := _view(5)
 	check(v5._views.has(v5.g.players[0].hero_power.id), "mission 5: Fireblast shown")

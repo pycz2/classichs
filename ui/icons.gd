@@ -134,3 +134,16 @@ class _Pen:
 	func i_neutral() -> void:  # a gem
 		poly([0.5, 0.2, 0.74, 0.42, 0.5, 0.8, 0.26, 0.42], Icons.GOLD)
 		poly([0.5, 0.28, 0.64, 0.42, 0.5, 0.68, 0.36, 0.42], Color("fff3bf"))
+
+	# --- interface icons ------------------------------------------------------------
+
+	func i_gear() -> void:
+		for i in 8:
+			var a := TAU * i / 8.0
+			var d := Vector2(cos(a), sin(a))
+			var n := Vector2(-d.y, d.x) * 0.08
+			var p0 := Vector2(0.5, 0.5) + d * 0.28
+			var p1 := Vector2(0.5, 0.5) + d * 0.44
+			poly([p0.x - n.x, p0.y - n.y, p1.x - n.x, p1.y - n.y, p1.x + n.x, p1.y + n.y, p0.x + n.x, p0.y + n.y], Icons.GOLD)
+		circle(0.5, 0.5, 0.3, Icons.GOLD)
+		circle(0.5, 0.5, 0.13, Icons.DARK)

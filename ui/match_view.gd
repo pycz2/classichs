@@ -51,12 +51,18 @@ var _tooltip: CardView
 var _history: HistoryPanel
 var _tracker: DeckTrackerPanel
 var _end_turn: Button
-var _mana: Array[Label] = []
+var _mana: Array[ManaBar] = []
+var _piles: Array[DeckPile] = []
+var _menu: PanelContainer
+var _wheel: Control
+var _enemy_menu: PanelContainer
+var _hover_hand := -1
+var _laid_out := false
+var _gap := -1
 var _names: Array[Label] = []
 var _hint: Label
 var _hint_timer := 0.0
 var _bubbles := {}
-var _emote_panel: VBoxContainer
 var _rope := Control.new()
 var _rope_line := ColorRect.new()
 var _rope_spark := ColorRect.new()
@@ -103,71 +109,26 @@ func _ready() -> void:
 		add_child(c)
 	_end_turn = Palette.button(tr("End Turn"), "EndTurn")
 	_end_turn.custom_minimum_size = Vector2(140, 52)
-	_end_turn.position = Vector2(1128, 310)
+	_end_turn.position = Vector2(1132, 310)
 	_end_turn.pressed.connect(_on_end_turn)
 	add_child(_end_turn)
 	for i in 2:
-		var l := Palette.label("", 20, Palette.MANA.lightened(0.4))
-		l.position = Vector2(1128, 560 if i == 0 else 120)
-		_mana.append(l)
-		add_child(l)
+		var bar := ManaBar.new()
+		bar.name = "Mana%d" % i
+		bar.position = Vector2(1000, 684) if i == 0 else Vector2(950, 10)
+		_mana.append(bar)
+		add_child(bar)
 		var n := Palette.label("", 16)
 		n.position = Vector2(12, 690 if i == 0 else 8)
 		_names.append(n)
 		add_child(n)
-	var left := VBoxContainer.new()
-	left.position = Vector2(12, 250)
-	left.add_theme_constant_override("separation", 8)
-	add_child(left)
-	var hist := Palette.button(tr("History"), "HistoryButton")
-	hist.custom_minimum_size = Vector2(130, 40)
-	hist.pressed.connect(func(): _history.visible = not _history.visible)
-	left.add_child(hist)
-	if debug_mode:
-		var js := Palette.button(tr("Position -> JSON"), "JsonButton")
-		js.custom_minimum_size = Vector2(130, 40)
-		js.pressed.connect(show_json)
-		left.add_child(js)
-	var tracker := Palette.button(tr("Deck Tracker"), "TrackerButton")
-	tracker.custom_minimum_size = Vector2(130, 40)
-	tracker.pressed.connect(func():
-		_tracker.visible = not _tracker.visible
-		Settings.data.tracker = _tracker.visible
-		Settings.save()
-		refresh())
-	left.add_child(tracker)
-	var emote := Palette.button(tr("Emote"), "EmoteButton")
-	emote.custom_minimum_size = Vector2(130, 40)
-	emote.pressed.connect(func(): _emote_panel.visible = not _emote_panel.visible)
-	left.add_child(emote)
-	var mute := Palette.button(tr("Mute"), "MuteButton")
-	mute.custom_minimum_size = Vector2(130, 40)
-	mute.toggle_mode = true
-	mute.visible = false
-	mute.toggled.connect(set_muted)
-	left.add_child(mute)
-	var settings := Palette.button(tr("Settings"), "SettingsButton")
-	settings.custom_minimum_size = Vector2(130, 40)
-	settings.pressed.connect(open_settings)
-	left.add_child(settings)
-	var concede := Palette.button(tr("Concede"), "Concede")
-	concede.custom_minimum_size = Vector2(130, 40)
-	concede.pressed.connect(_on_concede)
-	left.add_child(concede)
-	_emote_panel = VBoxContainer.new()
-	_emote_panel.position = Vector2(150, 420)
-	_emote_panel.visible = false
-	for id in EMOTES:
-		var b := Button.new()
-		b.name = "Emote_" + id
-		b.text = tr(EMOTES[id])
-		b.custom_minimum_size = Vector2(200, 34)
-		var e: String = id
-		b.pressed.connect(func():
-			_emote_panel.visible = false
-			send_emote(e))
-		_emote_panel.add_child(b)
-	add_child(_emote_panel)
+		var pile := DeckPile.new()
+		pile.name = "Deck%d" % i
+		pile.position = TableLayout.OWN_DECK if i == 0 else TableLayout.ENEMY_DECK
+		_piles.append(pile)
+		add_child(pile)
+	_build_menu()
+	_build_emote_wheel()
 	_hint = Palette.label("", 20, Palette.SELECTED)
 	_hint.position = Vector2(170, 306)
 	_hint.size = Vector2(940, 30)
@@ -180,9 +141,6 @@ func _ready() -> void:
 	_history = HistoryPanel.new()
 	_history.visible = false
 	add_child(_history)
-	if tutorial:
-		emote.visible = false
-		mute.visible = false
 
 
 func bind(m: Match) -> void:
@@ -214,9 +172,7 @@ func bind_online(m: Match, s: NetSession) -> void:
 		if not muted:
 			show_emote(p, id))
 	s.failed.connect(_on_connection_lost)
-	var mute := find_child("MuteButton", true, false) as Button
-	if mute:
-		mute.visible = true
+	(find_child("MuteButton", true, false) as Button).visible = true
 	bind(m)
 
 
@@ -296,11 +252,124 @@ func _leave() -> void:
 
 func _process(delta: float) -> void:
 	tick(delta)
+	_track_hand_hover()
 	if _hint_timer > 0.0:
 		_hint_timer -= delta
 		if _hint_timer <= 0.0:
 			_hint.text = ""
 			_try_tutorial_hint()
+
+
+## The hand card under the mouse rises (by slot, so a rising card never loses the hover).
+func _track_hand_hover() -> void:
+	if controller == null or _overlay != null:
+		return
+	var hand := g.players[viewer()].hand
+	var m := get_local_mouse_position()
+	var id := -1
+	if m.y > TableLayout.HAND_Y - (TableLayout.HOVER_LIFT if _hover_hand >= 0 else 10.0) and not hand.is_empty():
+		var fan := TableLayout.hand(hand.size(), true)
+		var best := INF
+		for i in hand.size():
+			var cx: float = fan[i].pos.x + CardView.SIZE.x * fan[i].scale / 2.0
+			if absf(m.x - cx) < best and absf(m.x - cx) < CardView.SIZE.x * 0.7:
+				best = absf(m.x - cx)
+				id = hand[i].id
+	if id != _hover_hand:
+		_hover_hand = id
+		refresh()
+
+
+func _build_menu() -> void:
+	var gear := Button.new()
+	gear.name = "MenuButton"
+	gear.custom_minimum_size = Vector2(40, 40)
+	gear.position = Vector2(1236, 4)
+	gear.tooltip_text = tr("Menu")
+	gear.pressed.connect(func(): _menu.visible = not _menu.visible)
+	Icons.attach(gear, "gear", 30)
+	add_child(gear)
+	_menu = PanelContainer.new()
+	_menu.name = "GameMenu"
+	_menu.visible = false
+	_menu.add_theme_stylebox_override("panel", Palette.box(Color(0.1, 0.07, 0.05, 0.95), 10, Color("c9a74a"), 2))
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 6)
+	_menu.add_child(box)
+	var items := [["History", "HistoryButton", func(): _history.visible = not _history.visible],
+		["Deck Tracker", "TrackerButton", func():
+			_tracker.visible = not _tracker.visible
+			Settings.data.tracker = _tracker.visible
+			Settings.save()
+			refresh()],
+		["Settings", "SettingsButton", open_settings]]
+	if debug_mode:
+		items.append(["Position -> JSON", "JsonButton", show_json])
+	items.append(["Concede", "Concede", _on_concede])
+	for it in items:
+		var b := Palette.button(tr(it[0]), it[1])
+		b.custom_minimum_size = Vector2(220, 42)
+		var fn: Callable = it[2]
+		b.pressed.connect(func():
+			_menu.visible = false
+			fn.call())
+		box.add_child(b)
+	add_child(_menu)
+	_menu.position = Vector2(1036, 50)
+
+
+func _build_emote_wheel() -> void:
+	_wheel = Control.new()
+	_wheel.name = "EmoteWheel"
+	_wheel.visible = false
+	_wheel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var spots := [Vector2(-190, -10), Vector2(-200, 40), Vector2(-190, 90), Vector2(130, -10), Vector2(140, 40), Vector2(130, 90)]
+	var ids := EMOTES.keys()
+	for i in ids.size():
+		var b := Button.new()
+		b.name = "Emote_" + ids[i]
+		b.text = tr(EMOTES[ids[i]])
+		b.custom_minimum_size = Vector2(190, 40)
+		b.position = OWN_HERO + spots[i]
+		b.add_theme_stylebox_override("normal", Palette.box(Color("f4ead5"), 20, Color("2a2118"), 3))
+		b.add_theme_stylebox_override("hover", Palette.box(Color("fff8e8"), 20, Color("c9a74a"), 3))
+		b.add_theme_color_override("font_color", Color("2a2118"))
+		b.add_theme_color_override("font_hover_color", Color("2a2118"))
+		var e: String = ids[i]
+		b.pressed.connect(func():
+			_wheel.visible = false
+			send_emote(e))
+		_wheel.add_child(b)
+	add_child(_wheel)
+	_enemy_menu = PanelContainer.new()
+	_enemy_menu.name = "EnemyMenu"
+	_enemy_menu.visible = false
+	_enemy_menu.position = ENEMY_HERO + Vector2(140, 20)
+	var mute := Palette.button(tr("Mute"), "MuteButton")
+	mute.toggle_mode = true
+	mute.visible = false
+	mute.toggled.connect(func(on):
+		_enemy_menu.visible = false
+		set_muted(on))
+	_enemy_menu.add_child(mute)
+	add_child(_enemy_menu)
+
+
+## Emotes may be sent (not in the tutorial, only by a human side).
+func emotes_allowed() -> bool:
+	return tutorial == null and controller != null and not controller.bots[viewer()]
+
+
+## Right click: your hero opens the emotes, the online opponent's hero the mute option.
+func _on_right_click(v: EntityView) -> void:
+	var e := g.ent(v.entity_id)
+	if e == null or not e.is_hero():
+		cancel()
+		return
+	if e.controller == viewer():
+		_wheel.visible = emotes_allowed() and not _wheel.visible
+	elif session:
+		_enemy_menu.visible = not _enemy_menu.visible
 
 
 ## Runs the online turn timer: the rope in the last seconds, then the local
@@ -376,7 +445,7 @@ func relabel() -> void:
 		if b:
 			b.text = tr(LABELS[n])
 	for id in EMOTES:
-		(_emote_panel.get_node("Emote_" + id) as Button).text = tr(EMOTES[id])
+		(_wheel.get_node("Emote_" + id) as Button).text = tr(EMOTES[id])
 	_history.relabel()
 	_tracker.relabel()
 	if _overlay and _overlay.name != "ConnectionLost":
@@ -385,20 +454,18 @@ func relabel() -> void:
 
 
 func refresh() -> void:
-	for c in _layer.get_children():
-		_layer.remove_child(c)
-		c.queue_free()
-	_views.clear()
 	var me := viewer()
 	var opp := g.opponent(me)
-	_add_side(opp, false)
-	_add_side(me, true)
+	var want := {}
+	_layout_side(opp, false, want)
+	_layout_side(me, true, want)
+	_reconcile(want)
+	_laid_out = true
 	for i in 2:
 		var p := g.players[[me, opp][i]]
-		_mana[i].text = "%s %d/%d" % [tr("Mana"), p.mana, p.max_mana]
-		if p.overload_locked > 0:
-			_mana[i].text += " (-%d)" % p.overload_locked
-		_names[i].text = "%s · %s %d · %s %d" % [_side_name(p.index), tr("Hand"), p.hand.size(), tr("Deck"), p.deck.size()]
+		_mana[i].set_values(p.mana, p.max_mana, p.overload_locked)
+		_names[i].text = _side_name(p.index)
+		_piles[i].count = p.deck.size()
 	_end_turn.disabled = not (my_action() and g.phase == "PLAY" and g.pending.is_empty())
 	_end_turn.text = tr("End Turn") if my_action() or g.game_over else tr("Enemy Turn")
 	var concede := find_child("Concede", true, false) as Button
@@ -429,45 +496,147 @@ func _side_name(p: int) -> String:
 	return tr("You") if p == viewer() else tr("Opponent")
 
 
-func _add_view(v: EntityView, pos: Vector2) -> void:
-	v.position = pos
-	v.clicked.connect(func(view): click_entity(view.entity_id))
-	v.hovered.connect(_on_hover)
-	_layer.add_child(v)
-	_views[v.entity_id] = v
+func _slot_x(i: int, n: int) -> float:
+	return TableLayout.board_x(i, n, _gap if n == g.players[viewer()].board.size() else -1)
 
 
-func _add_side(p: int, own: bool) -> void:
+## What should be on the table: id -> {kind, pos, scale, rot, z, own}.
+func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	var pl := g.players[p]
 	var hero_pos := OWN_HERO if own else ENEMY_HERO
-	_add_view(HeroView.make(pl.hero, g), hero_pos)
+	want[pl.hero.id] = {"kind": "hero", "pos": hero_pos}
 	if not pl.hero_power.has("LOCKED"):
-		_add_view(PowerView.make(pl.hero_power, g, PowerView.Kind.POWER), hero_pos + Vector2(150, 30))
+		want[pl.hero_power.id] = {"kind": "power", "pos": hero_pos + Vector2(150, 30)}
 	if pl.weapon:
-		_add_view(PowerView.make(pl.weapon, g, PowerView.Kind.WEAPON), hero_pos + Vector2(-100, 30))
+		want[pl.weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
 	for i in pl.secrets.size():
-		var hide := not own  # enemy Secrets stay hidden
-		_add_view(PowerView.make(pl.secrets[i], g, PowerView.Kind.SECRET, hide), hero_pos + Vector2(-10 + 40 * i, -6 if own else 120))
+		want[pl.secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6 if own else 120), "hide": not own}
 	var n := pl.board.size()
-	var y := OWN_BOARD_Y if own else ENEMY_BOARD_Y
+	var gap := _gap if own else -1
 	for i in n:
-		_add_view(MinionView.make(pl.board[i], g), Vector2(_slot_x(i, n), y))
-	var hand := pl.hand
-	var k := 1.0 if own else 0.55
-	var step := minf(112.0 * k, (620.0 if own else 520.0) / maxf(1, hand.size()))
-	var start := 640.0 - (step * (hand.size() - 1) + CardView.SIZE.x * k) / 2.0
-	for i in hand.size():
-		var cv := CardView.make(hand[i].card_id, k)
-		cv.face_up = own
-		cv.show_entity(hand[i], g)
-		_add_view(cv, Vector2(start + step * i, HAND_Y if own else -48.0))
+		want[pl.board[i].id] = {"kind": "minion", "pos": Vector2(TableLayout.board_x(i, n, gap), OWN_BOARD_Y if own else ENEMY_BOARD_Y)}
+	var hover := -1
+	if own:
+		for i in pl.hand.size():
+			if pl.hand[i].id == _hover_hand:
+				hover = i
+	var fan := TableLayout.hand(pl.hand.size(), own, hover)
+	for i in pl.hand.size():
+		var f: Dictionary = fan[i]
+		want[pl.hand[i].id] = {"kind": "hand", "pos": f.pos, "scale": f.scale, "rot": f.rot, "z": f.z, "own": own}
 
 
-func _slot_x(i: int, n: int) -> float:
-	return 640.0 - n * SLOT / 2.0 + i * SLOT + (SLOT - MinionView.SIZE.x) / 2.0
+func _make_view(e: Entity, spec: Dictionary) -> EntityView:
+	var v: EntityView
+	match spec.kind:
+		"hero":
+			v = HeroView.make(e, g)
+		"power":
+			v = PowerView.make(e, g, PowerView.Kind.POWER)
+		"weapon":
+			v = PowerView.make(e, g, PowerView.Kind.WEAPON)
+		"secret":
+			v = PowerView.make(e, g, PowerView.Kind.SECRET, spec.get("hide", false))
+		"minion":
+			v = MinionView.make(e, g)
+		"hand":
+			var cv := CardView.make(e.card_id)
+			cv.face_up = spec.own
+			cv.pivot_offset = Vector2(CardView.SIZE.x / 2.0, CardView.SIZE.y)
+			v = cv
+	v.set_meta("kind", spec.kind)
+	v.clicked.connect(func(view): click_entity(view.entity_id))
+	v.right_clicked.connect(_on_right_click)
+	v.hovered.connect(_on_hover)
+	return v
+
+
+## Brings the views in line with the wanted layout: new views come in from where
+## they start (the deck, the card that was played), others glide to their new
+## place, and views of things that left the table go away.
+func _reconcile(want: Dictionary) -> void:
+	var from := {}
+	for id in _views.keys():
+		var v: EntityView = _views[id]
+		if want.has(id) and v.get_meta("kind") == want[id].kind:
+			continue
+		_views.erase(id)
+		if want.has(id):  # the same card in a new form (a card in hand became a minion)
+			from[id] = v.position + v.size * v.scale / 2.0
+			_drop(v, false)
+		else:
+			_drop(v, true)
+	for id in want:
+		var spec: Dictionary = want[id]
+		var e := g.ent(id)
+		var v: EntityView = _views.get(id)
+		if v == null:
+			v = _make_view(e, spec)
+			_views[id] = v
+			_layer.add_child(v)
+			var start: Vector2 = spec.pos
+			var s0 := 1.0
+			if not _laid_out:
+				pass
+			elif spec.kind == "hand":
+				start = (_piles[0] if spec.own else _piles[1]).top() - v.pivot_offset * (1.0 - 0.6)
+				s0 = 0.6
+			elif from.has(id):
+				start = from[id] - v.size / 2.0
+				s0 = 0.9
+			else:
+				s0 = 0.3
+				start = spec.pos + v.size * 0.35
+			v.position = start
+			v.scale = Vector2(s0, s0)
+		if v is CardView:
+			v.face_up = spec.own
+			if spec.own:
+				v.show_entity(e, g)
+		elif v is MinionView or v is HeroView:
+			v.queue_redraw()
+		v.z_index = spec.get("z", 0)
+		var sc: float = spec.get("scale", 1.0)
+		var pos: Vector2 = spec.pos
+		if spec.kind == "hand":  # fan cards turn around their bottom centre
+			pos = spec.pos + Vector2(CardView.SIZE.x * sc / 2.0, CardView.SIZE.y * sc) - v.pivot_offset
+		_glide(v, pos, sc, spec.get("rot", 0.0))
+
+
+func _glide(v: Control, pos: Vector2, s := 1.0, rot := 0.0, dur := 0.3) -> void:
+	if v.has_meta("tw"):
+		var old: Tween = v.get_meta("tw")
+		if old and old.is_valid():
+			old.kill()
+	if Anim.instant or not is_inside_tree() or (v.position == pos and v.scale.x == s and v.rotation == rot):
+		v.position = pos
+		v.scale = Vector2(s, s)
+		v.rotation = rot
+		return
+	var tw := v.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(v, "position", pos, Anim.d(dur))
+	tw.tween_property(v, "scale", Vector2(s, s), Anim.d(dur))
+	tw.tween_property(v, "rotation", rot, Anim.d(dur))
+	v.set_meta("tw", tw)
+
+
+## Removes a view; gone=true plays a fade (death, discard), false removes it at once.
+func _drop(v: EntityView, gone: bool) -> void:
+	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if Anim.instant or not gone or not is_inside_tree():
+		_layer.remove_child(v)
+		v.queue_free()
+		return
+	var tw := v.create_tween().set_parallel()
+	tw.tween_property(v, "modulate:a", 0.0, Anim.d(0.45))
+	tw.tween_property(v, "scale", v.scale * 0.6, Anim.d(0.45))
+	tw.tween_property(v, "position", v.position + v.size * v.scale * 0.2, Anim.d(0.45))
+	tw.chain().tween_callback(v.queue_free)
 
 
 func _apply_glows() -> void:
+	for v in _views.values():
+		v.set_glow(Color.TRANSPARENT)
 	var legal := _legal()
 	if not _sel.is_empty():
 		var sv: EntityView = _views.get(_sel.id)
@@ -499,11 +668,7 @@ func _gui_input(ev: InputEvent) -> void:
 
 
 func _pos_from_x(x: float) -> int:
-	var board := g.players[viewer()].board
-	for i in board.size():
-		if x < _slot_x(i, board.size()) + MinionView.SIZE.x / 2.0:
-			return i
-	return board.size()
+	return TableLayout.board_index(x, g.players[viewer()].board.size())
 
 
 func cancel() -> void:
@@ -640,6 +805,8 @@ func _on_hover(v: EntityView, on: bool) -> void:
 	if not on:
 		return
 	var e := g.ent(v.entity_id)
+	if e and e.zone == "HAND" and e.controller == viewer():
+		return  # the card itself rises in the hand
 	if e == null or (e.zone == "HAND" and e.controller != viewer()) or (e.zone == "SECRET" and e.controller != viewer()):
 		return
 	_tooltip = CardView.make(e.card_id, 1.8)
@@ -675,8 +842,6 @@ func _on_changed(events: Array) -> void:
 				_float_text(g.players[ev.player].hero.id, "+%d" % ev.amount, Palette.ARMOR, old)
 			"divine_shield_lost":
 				_float_text(ev.target, tr("Shield!"), Palette.ATTACK, old)
-			"death":
-				_ghost(ev.entity, old)
 			"secret_revealed":
 				show_hint(tr("Secret: %s") % CardText.name(ev.card), 2.5)
 	if big and Match.shake_enabled:
@@ -713,20 +878,6 @@ func _float_text(id: int, text: String, color: Color, old: Dictionary) -> void:
 	tw.tween_property(l, "position:y", l.position.y - 40, 0.9)
 	tw.parallel().tween_property(l, "modulate:a", 0.0, 0.9)
 	tw.tween_callback(l.queue_free)
-
-
-func _ghost(id: int, old: Dictionary) -> void:
-	if not old.has(id) or _views.has(id):
-		return
-	var r := ColorRect.new()
-	r.color = Color(0, 0, 0, 0.6)
-	r.size = MinionView.SIZE * 0.8
-	r.position = old[id] - r.size / 2.0
-	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_fx.add_child(r)
-	var tw := create_tween()
-	tw.tween_property(r, "modulate:a", 0.0, 0.6)
-	tw.tween_callback(r.queue_free)
 
 
 func _shake() -> void:

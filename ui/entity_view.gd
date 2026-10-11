@@ -4,6 +4,7 @@ extends Control
 
 signal clicked(view: EntityView)
 signal hovered(view: EntityView, on: bool)
+signal right_clicked(view: EntityView)
 
 var entity_id := -1
 var glow := Color.TRANSPARENT
@@ -18,6 +19,9 @@ func _init() -> void:
 func _gui_input(ev: InputEvent) -> void:
 	if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
 		clicked.emit(self)
+		accept_event()
+	elif ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_RIGHT:
+		right_clicked.emit(self)
 		accept_event()
 
 
