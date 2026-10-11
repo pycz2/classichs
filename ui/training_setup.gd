@@ -15,15 +15,11 @@ var _decks: Array[Deck] = []
 
 ## Basic decks for all classes, then the player's saved decks.
 static func available_decks() -> Array[Deck]:
-	var out: Array[Deck] = []
-	for cls in ORDER:
-		var d := Deck.new()
-		d.hero = Decks.hero(cls)
-		d.name = TranslationServer.translate("Basic deck: %s") % CardText.name(d.hero)
-		for id in Decks.basic(cls):
-			d.cards.append(id)
-		out.append(d)
-	out.append_array(DeckStore.load_all())
+	var out := DeckStore.load_all()
+	var have := out.map(func(d: Deck): return [d.hero, d.sorted_counts()])
+	for d in DeckStore.starter():
+		if not have.has([d.hero, d.sorted_counts()]):
+			out.append(d)
 	return out
 
 

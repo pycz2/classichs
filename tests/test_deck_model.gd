@@ -191,3 +191,23 @@ func test_decode_code_on_a_later_line() -> void:
 func test_imported_name_limited() -> void:
 	var r := DeckCode.decode("### " + "N".repeat(100) + "\n" + DeckCode.encode(_mage_deck()))
 	eq(r.deck.name.length(), Deck.NAME_MAX, "name cut to the limit")
+
+
+func test_starter_decks_for_every_hero_when_no_decks() -> void:
+	DeckStore.path = "user://test_starter_decks.json"
+	DirAccess.remove_absolute(DeckStore.path)
+	var decks := DeckStore.load_all()
+	eq(decks.size(), 9, "one deck per hero")
+	var classes := {}
+	for d in decks:
+		eq(d.validate(), "", d.name)
+		classes[d.card_class()] = true
+	eq(classes.size(), 9, "every class")
+	eq(TrainingSetup.available_decks().size(), 9, "the pickers show each starter deck once")
+	DeckStore.save_all(decks.slice(0, 2))
+	eq(DeckStore.load_all().size(), 2, "saved decks are kept as they are")
+	DeckStore.save_all([])
+	eq(DeckStore.load_all().size(), 0, "deleting every deck leaves the list empty")
+	DeckStore.save_all(decks.slice(0, 2))
+	eq(TrainingSetup.available_decks().size(), 9, "plus the starter decks the player deleted")
+	DirAccess.remove_absolute(DeckStore.path)

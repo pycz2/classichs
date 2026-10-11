@@ -11,10 +11,22 @@ static var path := DEFAULT_PATH
 static var last_load_error := ""
 
 
+## A ready Basic deck for every hero (the first run starts with them).
+static func starter() -> Array[Deck]:
+	var out: Array[Deck] = []
+	for cls in TrainingSetup.ORDER:
+		var d := Deck.new()
+		d.hero = Decks.hero(cls)
+		d.name = TranslationServer.translate("Basic deck: %s") % CardText.name(d.hero)
+		d.cards.assign(Decks.basic(cls))
+		out.append(d)
+	return out
+
+
 static func load_all() -> Array[Deck]:
 	var out: Array[Deck] = []
 	if not FileAccess.file_exists(path):
-		return out
+		return starter()
 	var text := FileAccess.get_file_as_string(path)
 	var j := JSON.new()
 	var ok := j.parse(text) == OK and j.data is Dictionary and j.data.get("decks") is Array
