@@ -261,11 +261,11 @@ static func _smoke() -> Texture2D:
 ## Small status marks under the portrait (vector: the font has no symbol glyphs).
 func _draw_icon(kind: String, at: Vector2) -> void:
 	var w: float = {"trigger": 9.0, "poison": 12.0}.get(kind, 16.0)
-	var bob := 1.0 if kind == "poison" else 1.0 + 0.08 * sin(_t * 4.0)  # the poison bottle stays still
+	var bob := bump("mark") if kind in ["trigger", "poison"] else 1.0 + 0.08 * sin(_t * 4.0)  # still; they pop when they go off
 	var tint := Color(0.5, 1.0, 0.35) if kind == "poison" else Color.WHITE  # (green can't survive the green-screen cut)
 	if Sprites.draw(self, kind, at + Vector2(0, -1), w * bob, 0.0, tint):
 		return
-	var pulse := 1.0 + 0.12 * sin(_t * 4.0)
+	var pulse := bump("mark") if kind in ["trigger", "poison"] else 1.0 + 0.12 * sin(_t * 4.0)
 	draw_set_transform(at, 0.0, Vector2(1.4, 1.4) * pulse)
 	var c := Vector2.ZERO
 	match kind:

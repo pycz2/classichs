@@ -1515,6 +1515,17 @@ func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
 					TableFx.spawn(_fx, "portal", _center_of(ev.entity))
 	if played >= 0 and _views.has(played) and events.any(func(e): return e.get("by_id", -1) == played and e.type != "play"):
 		TableFx.spawn(_fx, "battlecry", _center_of(played))
+	var went_off := {}  # minions whose own trigger or poison acted: their mark pops, with a chime
+	for ev in events:
+		var src: int = ev.get("by_id", -1)
+		if src < 0 or src == played or went_off.has(src) or not _views.get(src) is MinionView:
+			continue
+		var m := g.ent(src)
+		if m and not m.silenced and (Cards.of(m.card_id).has("on") or KeywordTips.keywords_of(m.card_id).has("POISONOUS")):
+			went_off[src] = true
+			(_views[src] as MinionView).pop("mark")
+	if not went_off.is_empty():
+		Sound.play("trigger")
 
 
 func _wait(t: float) -> void:
