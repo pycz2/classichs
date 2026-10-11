@@ -158,7 +158,6 @@ func _ready() -> void:
 	_build_emote_wheel()
 	add_child(_strip)
 	_strip.open_history.connect(func(): _history.visible = not _history.visible)
-	_strip.show_card.connect(_strip_card)
 	add_child(_arrow)
 	_opp_arrow.tint = Color("e03131")
 	add_child(_opp_arrow)
@@ -1206,21 +1205,6 @@ func _on_concede() -> void:
 		Sound.voice(g.players[p].hero.card_id, "concede")
 		controller.submit({"type": "concede", "player": p}))
 	_centered_button(box, tr("Keep playing"), "KeepPlaying", _close_overlay)
-
-
-## Hovering a history tile shows that card big.
-func _strip_card(card_id: String, on: bool) -> void:
-	if _tooltip:
-		_tooltip.queue_free()
-		_tooltip = null
-	if on and card_id != "":
-		_tooltip = CardView.make(card_id, 1.6)
-		_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_tooltip.position = Vector2(70, 160)
-		add_child(_tooltip)
-		_show_tips(card_id, Rect2(_tooltip.position, _tooltip.size))
-	else:
-		_show_tips("", Rect2())
 
 
 ## Keyword boxes beside a big card ("" hides them).
