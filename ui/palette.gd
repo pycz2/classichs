@@ -30,7 +30,7 @@ static func of_class(card_class: String) -> Color:
 
 
 ## A filled rounded box style for panels and card parts.
-static func box(color: Color, radius := 8, border := Color.TRANSPARENT, border_width := 0) -> StyleBoxFlat:
+static func box(color: Color, radius := 12, border := Color.TRANSPARENT, border_width := 0) -> StyleBoxFlat:
 	var s := StyleBoxFlat.new()
 	s.bg_color = color
 	s.set_corner_radius_all(radius)
@@ -57,3 +57,15 @@ static func button(text: String, name := "") -> Button:
 	b.add_theme_font_size_override("font_size", 20)
 	b.pressed.connect(Sound.play.bind("click"))
 	return b
+
+
+## A generated picture (the tavern by default), darkened, behind a screen.
+static func backdrop(parent: Control, picture := "menu_bg") -> void:
+	var pic := TextureRect.new()
+	pic.texture = load("res://ui/%s.jpg" % picture)
+	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pic.modulate = Color(0.4, 0.36, 0.33)
+	pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(pic)

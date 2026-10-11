@@ -21,6 +21,7 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
+	Palette.backdrop(self)
 	var title := Palette.label(tr("Debug Table"), 30, Palette.ATTACK)
 	title.position = Vector2(20, 14)
 	add_child(title)

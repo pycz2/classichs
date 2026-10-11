@@ -186,3 +186,45 @@ func test_turn_timer_does_not_end_a_new_turn_while_animating() -> void:
 	v._busy = false
 	eq(v.g.turn, turn, "the new turn was not ended by the old turn's timer")
 	v.free()
+
+
+func test_repeated_intents_do_not_rebuild_the_table() -> void:
+	var v := _view({"hero": "HERO_08"}, [false, false])
+	v.apply_intent({"k": "hover", "i": 1})
+	var builds: int = v._layouts
+	for i in 50:
+		v.apply_intent({"k": "hover", "i": 1})
+	eq(v._layouts, builds, "the same intent again changes nothing")
+	v.free()
+
+
+func test_history_strip_signals_only_when_the_card_changes() -> void:
+	var strip := HistoryStrip.new()
+	root().add_child(strip)
+	strip._items = [["VAN_CS2_120", true], ["VAN_CS2_182", false]]
+	var shown := []
+	strip.show_card.connect(func(c, on): shown.append([c, on]))
+	for y in [5.0, 8.0, 12.0, 60.0, 62.0]:
+		var ev := InputEventMouseMotion.new()
+		ev.position = Vector2(10, y)
+		strip._gui_input(ev)
+	eq(shown, [["VAN_CS2_120", true], ["VAN_CS2_182", true]], "one signal per card")
+	strip.free()
+
+
+func test_end_turn_turns_green_when_nothing_is_left_to_do() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120"], "mana": 2, "max_mana": 2})
+	eq(v.end_turn_ready, false, "a card can still be played")
+	var croc := v.g.players[0].hand[0]
+	v.controller.submit({"type": "play", "player": 0, "entity": croc.id, "target": -1, "pos": 0, "choice": -1})
+	eq(v.end_turn_ready, true, "no mana, no attacks, hero power too dear: end turn glows")
+	v.free()
+
+
+func test_used_hero_power_turns_face_down() -> void:
+	var v := _view({"hero": "HERO_01"})
+	var power := v.g.players[0].hero_power
+	eq((v._views[power.id] as PowerView).face_down_used, false, "ready")
+	v.controller.submit({"type": "hero_power", "player": 0, "target": -1})
+	eq((v._views[power.id] as PowerView).face_down_used, true, "used: turned over")
+	v.free()

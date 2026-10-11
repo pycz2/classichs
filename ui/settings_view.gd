@@ -28,6 +28,7 @@ func _build() -> void:
 	bg.color = Color(Palette.TABLE, 0.95)
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
+	Palette.backdrop(self)
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)

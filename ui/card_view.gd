@@ -3,6 +3,11 @@ extends EntityView
 ## A card face (or back). Stats can show current values from the game.
 
 const SIZE := Vector2(120, 170)
+## Where the name and the text go at scale 1, and their largest font sizes.
+const NAME_BOX := Rect2(Vector2(10, 86), Vector2(100, 16))
+const TEXT_BOX := Rect2(Vector2(15, 107), Vector2(90, 46))
+const NAME_MAX := 12
+const TEXT_MAX := 11
 
 var card_id := ""
 var face_up := true
@@ -10,7 +15,7 @@ var cost := -1
 var attack := -1
 var health := -1
 var marked := false  # mulligan: card will be replaced
-var _text: Label
+var _text: RichTextLabel
 var _name: Label
 
 
@@ -40,10 +45,11 @@ func _ready() -> void:
 	_name = Palette.label("", 11)
 	_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_text = Palette.label("", 10)
-	_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_text = RichTextLabel.new()
+	_text.bbcode_enabled = true
+	_text.scroll_active = false
 	_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_text.add_theme_constant_override("outline_size", 3)
+	_text.add_theme_color_override("default_color", Color("3b2a14"))
 	for l in [_name, _text]:
 		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(l)
@@ -52,18 +58,37 @@ func _ready() -> void:
 	_layout()
 
 
+## The largest font size (hi down to lo) at which text fits box; -1 if none does.
+static func fit_text(font: Font, text: String, box: Vector2, hi: int, lo := 5) -> int:
+	for fs in range(hi, lo - 1, -1):
+		var sz := font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, box.x, fs)
+		if sz.y <= box.y * 0.92 and sz.x <= box.x:
+			return fs
+	return -1
+
+
+## The largest font size at which a name fits on one line of width w; -1 if none does.
+static func fit_name(font: Font, name: String, w: float, hi: int, lo := 6) -> int:
+	for fs in range(hi, lo - 1, -1):
+		if font.get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x <= w:
+			return fs
+	return -1
+
+
 func _layout() -> void:
 	var k := size.x / SIZE.x
-	_name.position = Vector2(8, 84) * k
-	_name.size = Vector2(104, 18) * k
-	var long_name := CardText.name(card_id).length() > 16 if card_id != "" else false
-	_name.add_theme_font_size_override("font_size", int((9 if long_name else 11) * k))
-	_text.position = Vector2(14, 107) * k
-	_text.size = Vector2(92, 46) * k
-	var n := CardText.text(card_id).length() if card_id != "" else 0
-	_text.add_theme_font_size_override("font_size", int((10 if n <= 70 else 9 if n <= 90 else 8) * k))  # long texts fit the frame
-	_text.add_theme_color_override("font_color", Color("3b2a14"))
-	_text.add_theme_constant_override("outline_size", 0)
+	_name.position = NAME_BOX.position * k
+	_name.size = NAME_BOX.size * k
+	_text.position = TEXT_BOX.position * k
+	_text.size = TEXT_BOX.size * k
+	if card_id == "":
+		return
+	var name_font := _name.get_theme_font("font")
+	_name.add_theme_font_size_override("font_size", maxi(1, fit_name(name_font, CardText.name(card_id), NAME_BOX.size.x * k, int(NAME_MAX * k), maxi(1, int(5 * k)))))
+	var bold := _text.get_theme_font("bold_font")
+	var fs := fit_text(bold, CardText.plain_rich(CardText.rich(card_id)), TEXT_BOX.size * k, int(TEXT_MAX * k), maxi(1, int(4 * k)))
+	for key in ["normal_font_size", "bold_font_size", "italics_font_size"]:
+		_text.add_theme_font_size_override(key, maxi(1, fs))
 
 
 func _refresh_labels() -> void:
@@ -73,7 +98,8 @@ func _refresh_labels() -> void:
 	_text.visible = face_up
 	if face_up and card_id != "":
 		_name.text = CardText.name(card_id)
-		_text.text = CardText.text(card_id)
+		_text.text = "[center]%s[/center]" % CardText.rich(card_id)
+		_layout()
 	queue_redraw()
 
 
@@ -98,7 +124,7 @@ func _draw() -> void:
 	Art.paint_in(self, art, card_id, shape)
 	Frames.ring(self, outline, Frames.GOLD.darkened(0.1), 2 * k)
 	if c.get("rarity", "") == "LEGENDARY":
-		Frames.crest(self, Vector2(60, 12) * k, 104 * k)
+		Frames.crest(self, Vector2(60, 8) * k, 86 * k)
 	# text box (parchment) and the name banner across it
 	draw_style_box(Palette.box(Color("efe0bd"), int(6 * k), Color("8a6d3b"), int(2 * k)), Rect2(Vector2(12, 100) * k, Vector2(96, 56) * k))
 	var bend := 4.0 * k if type == "MINION" else 0.0

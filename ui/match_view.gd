@@ -12,8 +12,6 @@ const ENEMY_HERO := Vector2(575, 40)
 const OWN_HERO := Vector2(575, 466)
 const ENEMY_BOARD_Y := 188.0
 const OWN_BOARD_Y := 336.0
-const HAND_Y := 604.0
-const SLOT := 104.0
 const TOOLTIP_POS := Vector2(1035, 160)
 
 ## Fixed button texts by node name, set again when the language changes.
@@ -48,6 +46,7 @@ var _views := {}
 var _sel := {}
 var _overlay: Control
 var _tooltip: CardView
+var _tips: KeywordTips
 var _history: HistoryPanel
 var _tracker: DeckTrackerPanel
 var _end_turn: Button
@@ -70,6 +69,11 @@ var _opp_hover := -1
 var _opp_look := -1
 var _last_intent := {}
 var _intent_ms := 0
+var _applied_intent := {}
+## Full table layouts done (tests check that repeated intents cause none).
+var _layouts := 0
+## Nothing is left to do this turn: the End Turn button glows green.
+var end_turn_ready := false
 ## Event batches waiting for their animation; while one plays the table is busy.
 var _queue: Array = []
 var _busy := false
@@ -97,18 +101,14 @@ func _ready() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
-	var board := Panel.new()
-	board.add_theme_stylebox_override("panel", Palette.box(Palette.BOARD, 24, Color("2a2118"), 4))
-	board.position = Vector2(150, 176)
-	board.size = Vector2(980, 294)
+	var board := TextureRect.new()  # the game board on a tavern table (generated)
+	board.texture = load("res://ui/board_bg.jpg")
+	board.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	board.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	board.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	board.offset_top = -12  # its middle line meets the line between the two rows of minions
 	board.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(board)
-	var mid := ColorRect.new()
-	mid.color = Color(0, 0, 0, 0.25)
-	mid.position = Vector2(170, 322)
-	mid.size = Vector2(940, 2)
-	mid.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(mid)
 	_rope.name = "Rope"
 	_rope.visible = false
 	_rope.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -330,6 +330,9 @@ func _send_intent() -> void:
 ## Shows what the opponent points at: a raised card in their hand, their arrow,
 ## a highlighted minion.
 func apply_intent(i: Dictionary) -> void:
+	if i == _applied_intent:
+		return  # nothing new: a stuck or flooding peer costs nothing
+	_applied_intent = i
 	var hover := -1
 	var look := -1
 	_opp_arrow.visible = false
@@ -515,6 +518,22 @@ func _aim_click_mode() -> void:
 		refresh()
 
 
+## End Turn: wood while moves are left, glowing green (and pulsing) when none are.
+func _style_end_turn() -> void:
+	var tint := Color(0.75, 1.35, 0.7) if end_turn_ready else Color.WHITE
+	for st in [["normal", 1.0], ["hover", 1.15], ["pressed", 0.85]]:
+		_end_turn.add_theme_stylebox_override(st[0], Fonts.plank(tint * st[1]))
+	if _end_turn.has_meta("pulse"):
+		(_end_turn.get_meta("pulse") as Tween).kill()
+		_end_turn.remove_meta("pulse")
+	_end_turn.modulate = Color.WHITE
+	if end_turn_ready and not Anim.instant and is_inside_tree():
+		var tw := _end_turn.create_tween().set_loops()
+		tw.tween_property(_end_turn, "modulate", Color(1.25, 1.25, 1.25), 0.6)
+		tw.tween_property(_end_turn, "modulate", Color.WHITE, 0.6)
+		_end_turn.set_meta("pulse", tw)
+
+
 ## The hand card under the mouse rises (by slot, so a rising card never loses the hover).
 func _track_hand_hover() -> void:
 	if controller == null or _overlay != null or _menu.visible or find_child("SettingsView", false, false):
@@ -533,6 +552,13 @@ func _track_hand_hover() -> void:
 	if id != _hover_hand:
 		_hover_hand = id
 		refresh()
+		var e := g.ent(id)
+		if e:  # beside where the raised card ends up
+			var i := hand.find(e)
+			var f: Dictionary = TableLayout.hand(hand.size(), true, i)[i]
+			_show_tips(e.card_id, Rect2(f.pos, CardView.SIZE * f.scale))
+		elif _tooltip == null:
+			_show_tips("", Rect2())
 
 
 func _build_menu() -> void:
@@ -727,6 +753,7 @@ func refresh() -> void:
 	_layout_side(opp, false, want)
 	_layout_side(me, true, want)
 	_reconcile(want)
+	_layouts += 1
 	_laid_out = true
 	for i in 2:
 		var p := g.players[[me, opp][i]]
@@ -734,6 +761,10 @@ func refresh() -> void:
 		_names[i].text = _side_name(p.index)
 		_piles[i].count = p.deck.size()
 	_end_turn.disabled = not (my_action() and g.phase == "PLAY" and g.pending.is_empty())
+	var ready := not _end_turn.disabled and _legal().all(func(a): return a.type in ["end_turn", "concede"])
+	if ready != end_turn_ready:
+		end_turn_ready = ready
+		_style_end_turn()
 	_end_turn.text = tr("End Turn") if my_action() or g.game_over else tr("Enemy Turn")
 	var concede := find_child("Concede", true, false) as Button
 	if concede:
@@ -868,7 +899,11 @@ func _reconcile(want: Dictionary) -> void:
 				v.show_entity(e, g)
 		elif v is MinionView or v is HeroView:
 			v.queue_redraw()
-		v.z_index = spec.get("z", 0)
+		elif v is PowerView:
+			v.sync()
+			v.queue_redraw()
+		if not (_dragging and id == _press.get("id", -1)):
+			v.z_index = spec.get("z", 0)
 		var sc: float = spec.get("scale", 1.0)
 		var pos: Vector2 = spec.pos
 		if spec.kind == "hand":  # fan cards turn around their bottom centre
@@ -1098,12 +1133,33 @@ func _strip_card(card_id: String, on: bool) -> void:
 		_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_tooltip.position = Vector2(70, 160)
 		add_child(_tooltip)
+		_show_tips(card_id, Rect2(_tooltip.position, _tooltip.size))
+	else:
+		_show_tips("", Rect2())
+
+
+## Keyword boxes beside a big card ("" hides them).
+func _show_tips(card_id: String, rect: Rect2) -> void:
+	if _tips:
+		_tips.queue_free()
+		_tips = null
+	if card_id == "":
+		return
+	_tips = KeywordTips.make(card_id)
+	if _tips.get_child_count() == 0:
+		_tips.free()
+		_tips = null
+		return
+	_tips.z_index = 95
+	add_child(_tips)
+	_tips.beside(rect)
 
 
 func _on_hover(v: EntityView, on: bool) -> void:
 	if _tooltip:
 		_tooltip.queue_free()
 		_tooltip = null
+	_show_tips("", Rect2())
 	if not on or _dragging or _sel.get("stage", "") == "target":
 		return  # no card pop-ups while aiming
 	var e := g.ent(v.entity_id)
@@ -1117,6 +1173,7 @@ func _on_hover(v: EntityView, on: bool) -> void:
 		_tooltip.show_entity(e, g)
 	_tooltip.position = TOOLTIP_POS
 	add_child(_tooltip)
+	_show_tips(e.card_id, Rect2(_tooltip.position, _tooltip.size))
 
 
 # --- events and effects ---------------------------------------------------------
@@ -1524,6 +1581,8 @@ func _show_mulligan() -> void:
 					tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.35))
 					tw.tween_property(cv, "global_position", TableLayout.OWN_DECK, Anim.d(0.35))
 			await _wait(0.4)
+			if _overlay == null or _overlay.name != "Mulligan" or g.players[p].mulliganed:
+				return  # the timer or a lost connection got there first
 		_close_overlay()
 		controller.submit({"type": "mulligan", "player": p, "replace": ids}))
 

@@ -169,3 +169,39 @@ func test_empty_name_falls_back_on_done() -> void:
 	check(d.name.strip_edges() != "", "default name restored")
 	v.free()
 	_store_restore()
+
+
+func test_rarity_filter() -> void:
+	var c := CollectionView.new()
+	root().add_child(c)
+	c.tab = "NEUTRAL"
+	c.rarity_filter = "LEGENDARY"
+	var cards := c.filtered()
+	check(not cards.is_empty(), "some neutral legendaries")
+	check(cards.all(func(id): return CardDb.card(id).get("rarity") == "LEGENDARY"), "only legendaries")
+	(c.find_child("RarityEPIC", true, false) as Button).pressed.emit()
+	check(c.filtered().all(func(id): return CardDb.card(id).get("rarity") == "EPIC"), "epic button")
+	(c.find_child("RarityEPIC", true, false) as Button).pressed.emit()
+	eq(c.rarity_filter, "", "a second click clears it")
+	c.free()
+
+
+func test_deck_rows_tiles_and_fill_bar() -> void:
+	_store_reset()
+	var v := DeckListView.new()
+	root().add_child(v)
+	v.new_deck("HERO_08")
+	var editor := v.find_child("*", true, false)
+	var c := v._editor
+	c.click_card("VAN_CS2_029")
+	c.click_card("VAN_CS2_029")
+	var tile := c.find_child("Entry_VAN_CS2_029", true, false)
+	check(tile is DeckTiles.DeckTile and tile.copies == 2, "a tile with two copies")
+	eq(c._bar.ratio, 2.0 / 30.0, "the bar shows 2 of 30")
+	(c.find_child("Done", true, false) as Button).pressed.emit()
+	var row := v.find_child("Deck0", true, false)
+	check(row is DeckTiles.DeckRow, "the deck shows as a row with its hero")
+	(row as Button).button_pressed = true
+	eq(v._selected(), 0, "selecting a row selects the deck")
+	v.free()
+	_store_restore()

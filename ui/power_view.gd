@@ -8,6 +8,8 @@ var e: Entity
 var g: GameState
 var kind := Kind.POWER
 var face_down := false  # an enemy Secret: show "?" only
+## A used hero power lies face down (it turns over when used and again when ready).
+var face_down_used := false
 
 
 static func make(ent: Entity, game: GameState, k: Kind, hide := false) -> PowerView:
@@ -39,13 +41,16 @@ func _draw() -> void:
 			draw_string_outline(font, Vector2(c.x - 5, c.y + 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, 3, Color.BLACK)
 			draw_string(font, Vector2(c.x - 5, c.y + 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
 		Kind.POWER:
-			var used := e.has("USED")
 			draw_circle(c, r + 3, Frames.GOLD.darkened(0.3))
-			Art.paint_in(self, art, e.card_id, "circle")
-			Frames.ring(self, Art.outline("circle", art), Frames.GOLD, 3)
-			if used:
-				draw_circle(c, r, Color(0.1, 0.1, 0.1, 0.65))
+			if face_down_used:  # the back: dark stone with the class crest
+				draw_circle(c, r, Color("2a2118"))
+				var cls_icon: String = cls if Icons.CLASSES.has(cls) else "NEUTRAL"
+				Icons.paint(self, cls_icon, Rect2(c - Vector2(r, r) * 0.6, Vector2(r, r) * 1.2))
+				draw_circle(c, r, Color(0, 0, 0, 0.35))
+				Frames.ring(self, Art.outline("circle", art), Frames.GOLD.darkened(0.4), 3)
 			else:
+				Art.paint_in(self, art, e.card_id, "circle")
+				Frames.ring(self, Art.outline("circle", art), Frames.GOLD, 3)
 				Frames.mana(self, Vector2(c.x, 9), g.cost(e), 11)
 		Kind.WEAPON:
 			draw_circle(c, r + 3, Color("3b2f22"))
@@ -56,3 +61,23 @@ func _draw() -> void:
 				draw_circle(c, r, Color(0, 0, 0, 0.35))
 			Frames.attack(self, Vector2(12, size.y - 12), e.atk(), 12)
 			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(e.tags.get("DURABILITY", 0)), 11)
+
+
+## Turns the hero power over when it becomes used or ready again (a flip animation).
+func sync() -> void:
+	if kind != Kind.POWER:
+		return
+	var used := e.has("USED")
+	if used == face_down_used:
+		return
+	if Anim.instant or not is_inside_tree():
+		face_down_used = used
+		queue_redraw()
+		return
+	pivot_offset = size / 2.0
+	var tw := create_tween()
+	tw.tween_property(self, "scale:x", 0.0, Anim.d(0.14))
+	tw.tween_callback(func():
+		face_down_used = used
+		queue_redraw())
+	tw.tween_property(self, "scale:x", 1.0, Anim.d(0.14))

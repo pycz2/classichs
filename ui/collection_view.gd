@@ -16,10 +16,15 @@ var page := 0
 var tab := "DRUID"
 var cost_filter := -1  # -1 = any, 7 = 7 or more
 var query := ""
+## "" = any rarity; else FREE (Basic), COMMON, RARE, EPIC or LEGENDARY.
+var rarity_filter := ""
+const RARITIES := [["FREE", "Basic"], ["COMMON", "Common"], ["RARE", "Rare"], ["EPIC", "Epic"], ["LEGENDARY", "Legendary"]]
 var _grid := GridContainer.new()
 var _page_label: Label
 var _hint: Label
 var _deck_list := VBoxContainer.new()
+## How full the deck is, behind the "n / 30" count.
+var _bar := _Bar.new()
 var _count: Label
 var _name_edit := LineEdit.new()
 var _tabs := HBoxContainer.new()
@@ -32,6 +37,7 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
+	Palette.backdrop(self, "library_bg")
 	if deck:
 		tab = deck.card_class()
 	_tabs.position = Vector2(16, 10)
@@ -75,6 +81,22 @@ func _ready() -> void:
 		var v: int = c
 		b.pressed.connect(func():
 			cost_filter = v
+			page = 0
+			_fill())
+		costs.add_child(b)
+	for r in RARITIES:  # rarity gems after the cost crystals; a second click clears
+		var b := Button.new()
+		b.name = "Rarity" + r[0]
+		b.tooltip_text = tr(r[1])
+		b.custom_minimum_size = Vector2(36, 40)
+		var gem := _Gem.new()
+		gem.rarity = r[0]
+		gem.size = Vector2(36, 40)
+		gem.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		b.add_child(gem)
+		var code: String = r[0]
+		b.pressed.connect(func():
+			rarity_filter = "" if rarity_filter == code else code
 			page = 0
 			_fill())
 		costs.add_child(b)
@@ -131,6 +153,8 @@ func filtered() -> Array:
 			continue
 		var cost := int(c.get("cost", 0))
 		if cost_filter >= 0 and (cost != cost_filter if cost_filter < 7 else cost < 7):
+			continue
+		if rarity_filter != "" and c.get("rarity", "") != rarity_filter:
 			continue
 		if q != "" and not CardText.name(id).to_lower().contains(q) and not CardText.text(id).to_lower().contains(q):
 			continue
@@ -217,8 +241,13 @@ func _build_sidebar() -> void:
 		deck.name = t
 		changed.emit())
 	panel.add_child(_name_edit)
+	_bar.position = Vector2(10, 52)
+	_bar.size = Vector2(284, 26)
+	panel.add_child(_bar)
 	_count = Palette.label("", 18)
-	_count.position = Vector2(12, 52)
+	_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_count.position = Vector2(10, 52)
+	_count.size = Vector2(284, 26)
 	panel.add_child(_count)
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(8, 84)
@@ -242,15 +271,12 @@ func _refresh_deck() -> void:
 		_deck_list.remove_child(c)
 		c.queue_free()
 	for pair in deck.sorted_counts():
-		var b := Button.new()
 		var id: String = pair[0]
-		b.name = "Entry_" + id
-		b.text = "(%d) %s%s" % [CardDb.card(id).get("cost", 0), CardText.name(id), "  ×2" if pair[1] == 2 else ""]
-		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.custom_minimum_size = Vector2(272, 30)
+		var b := DeckTiles.DeckTile.new(id, pair[1])
 		b.pressed.connect(func(): remove_card(id))
 		_deck_list.add_child(b)
 	_count.text = "%d / %d" % [deck.cards.size(), Deck.SIZE]
+	_bar.ratio = deck.cards.size() / float(Deck.SIZE)
 	_count.add_theme_color_override("font_color", Palette.BUFFED if deck.cards.size() == Deck.SIZE else Palette.TEXT)
 
 
@@ -273,3 +299,29 @@ class _Crystal:
 			var font := ThemeDB.fallback_font
 			draw_string_outline(font, size / 2.0 + Vector2(9, -6), "+", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, 3, Color.BLACK)
 			draw_string(font, size / 2.0 + Vector2(9, -6), "+", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
+
+
+class _Gem:
+	extends Control
+	var rarity := ""
+
+	func _draw() -> void:
+		if rarity == "FREE":  # Basic cards have no gem: a plain grey one stands for them
+			draw_colored_polygon(PackedVector2Array([size / 2 + Vector2(0, -9), size / 2 + Vector2(7, 0), size / 2 + Vector2(0, 9), size / 2 + Vector2(-7, 0)]), Color("868e96"))
+		else:
+			Frames.rarity(self, size / 2.0, rarity, 9)
+
+
+class _Bar:
+	extends Control
+	var ratio := 0.0:
+		set(v):
+			ratio = clampf(v, 0.0, 1.0)
+			queue_redraw()
+
+	func _draw() -> void:
+		var r := Rect2(Vector2.ZERO, size)
+		draw_style_box(Palette.box(Color(0, 0, 0, 0.55), 13, Color("6b5320"), 2), r)
+		if ratio > 0.0:
+			var fill := Color("f2c94c") if ratio >= 1.0 else Color("b8862b")
+			draw_style_box(Palette.box(fill, 13), Rect2(r.position + Vector2(2, 2), Vector2((r.size.x - 4) * ratio, r.size.y - 4)))
