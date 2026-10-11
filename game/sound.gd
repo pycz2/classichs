@@ -28,6 +28,7 @@ var _last_battle := ""
 var _pool: Array[AudioStreamPlayer] = []
 var _next := 0
 var _streams := {}
+var _voice := AudioStreamPlayer.new()  # minions' and heroes' lines: one at a time
 
 
 func _ready() -> void:
@@ -36,6 +37,8 @@ func _ready() -> void:
 	_music.bus = "Music"
 	_music.finished.connect(_on_music_finished)
 	add_child(_music)
+	_voice.bus = "SFX"
+	add_child(_voice)
 	for i in POOL:
 		var p := AudioStreamPlayer.new()
 		p.bus = "SFX"
@@ -99,6 +102,20 @@ func _on_music_finished() -> void:
 		_start(_next_battle())
 	else:
 		_music.play()
+
+
+## Plays what a card says (VoiceLines) at the voice volume; true when a clip played.
+## A new line cuts the one before (the newest event matters most).
+static func voice(card_id: String, kind: String) -> bool:
+	if instance == null or Settings.data.voice <= 0.0:
+		return false
+	var s := VoiceLines.clip(card_id, kind)
+	if s == null:
+		return false
+	instance._voice.stream = s
+	instance._voice.volume_db = linear_to_db(Settings.data.voice)
+	instance._voice.play()
+	return true
 
 
 ## Speaks text with a voice of the interface language; silent when speech is off,

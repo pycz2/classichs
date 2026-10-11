@@ -61,11 +61,12 @@ func _draw() -> void:
 	var h := Cards.of(s.card_id)
 	var oval := Art.outline("oval", OVAL)
 	var center := OVAL.get_center()
-	if glow.a > 0.0:  # always outside everything else on it
+	var gl := shown_glow()
+	if gl.a > 0.0:  # always outside everything else on it
 		var taunt := s.has("TAUNT")
 		var reach := _reach()
 		soft_glow(self, func(gr: float) -> PackedVector2Array:
-			return _scaled(taunt_shield(), center, 1.0 + gr / 44.0) if taunt else Art.outline("oval", OVAL.grow(reach + gr)), glow)
+			return _scaled(taunt_shield(), center, 1.0 + gr / 44.0) if taunt else Art.outline("oval", OVAL.grow(reach + gr)), gl)
 	if s.has("WINDFURY"):
 		_wind(false)  # the half of the swirl behind the card
 	if s.has("TAUNT"):  # a stone and iron shield behind the portrait

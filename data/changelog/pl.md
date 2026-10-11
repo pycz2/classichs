@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-10-12
+
+### Dodano
+- Pod przyciskiem „Koniec tury”: czas gry i, w grze sieciowej, czas pozostały do końca tury.
+- Wszystko na stole podświetla się pod kursorem; broń odwraca się, gdy to nie tura jej bohatera.
+- Stronnicy i bohaterowie mówią swoje kwestie (przy zagraniu, ataku, śmierci, emotkach, na początku gry, przy poddaniu), gdy jest nagranie; emotki bohaterów ich własnymi słowami.
+
+### Zmieniono
+- Lont timera to skręcony sznur z żarzącym się węgielkiem, iskrami i dymem.
+- Spalona karta wypala się od krawędzi z żarzącym się brzegiem.
+- Uderzenie w bohatera: większa liczba obrażeń; ponad 5 obrażeń mocniej trzęsie z ciężkim dźwiękiem.
+- Bohater, który może atakować, świeci jaśniej.
+
 ## [0.16.0] - 2026-10-11
 
 ### Dodano

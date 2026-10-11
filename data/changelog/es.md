@@ -4,6 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-10-12
+
+### Añadido
+- Bajo el botón «Fin de turno»: el tiempo de partida y, en línea, el tiempo que queda del turno.
+- Todo lo de la mesa se ilumina bajo el ratón; un arma se da la vuelta cuando no es el turno de su héroe.
+- Esbirros y héroes dicen sus frases (al jugarse, atacar, morir, emoticonos, inicio de partida, rendirse) cuando hay grabación; los emoticonos de los héroes, con sus propias palabras.
+
+### Cambiado
+- La mecha del temporizador es un cordel trenzado con una brasa, chispas y humo.
+- Una carta quemada arde desde los bordes con un borde incandescente.
+- Un golpe al héroe: número de daño más grande; más de 5 de daño sacude más fuerte con un sonido grave.
+- Un héroe que puede atacar brilla más.
+
 ## [0.16.0] - 2026-10-11
 
 ### Añadido

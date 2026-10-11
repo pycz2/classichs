@@ -79,6 +79,7 @@ var end_turn_ready := false
 var _queue: Array = []
 var _busy := false
 var _final_refresh := false
+const BURN_SHADER := preload("res://ui/burn.gdshader")
 var _hold := {}  # id -> true: views an animation moves (the layout leaves them alone)
 var _mull_wait := -1  # the player whose mulligan overlay waits for the new cards
 ## A card that changed its id in place (bounced, transformed): new id -> where it stood.
@@ -88,9 +89,9 @@ var _names: Array[Label] = []
 var _hint: Label
 var _hint_timer := 0.0
 var _bubbles := {}
-var _rope := Control.new()
-var _rope_line := ColorRect.new()
-var _rope_spark := ColorRect.new()
+var _rope := Fuse.new()
+var _clock := Label.new()  # the match time and, in online games, the turn's time left
+var _match_time := 0.0
 var _turn_key := ""
 var _bot_side := -1
 var _time_left := 0.0
@@ -114,15 +115,6 @@ func _ready() -> void:
 	add_child(board)
 	_rope.name = "Rope"
 	_rope.visible = false
-	_rope.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_rope_line.color = Color("c8a165")
-	_rope_line.position = Vector2(170, 319)
-	_rope_line.size = Vector2(940, 6)
-	_rope_spark.color = Color("ffb703")
-	_rope_spark.size = Vector2(12, 12)
-	for r in [_rope_line, _rope_spark]:
-		r.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_rope.add_child(r)
 	add_child(_rope)
 	for c in [_layer, _fx]:
 		c.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -132,6 +124,16 @@ func _ready() -> void:
 	_end_turn.custom_minimum_size = Vector2(140, 52)
 	_end_turn.position = Vector2(1132, 310)
 	_end_turn.pressed.connect(_on_end_turn)
+	_clock.name = "Clock"
+	_clock.position = Vector2(1132, 366)
+	_clock.size = Vector2(140, 44)
+	_clock.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_clock.add_theme_font_size_override("font_size", 15)
+	_clock.add_theme_color_override("font_color", Color("f4ead5"))
+	_clock.add_theme_color_override("font_outline_color", Color.BLACK)
+	_clock.add_theme_constant_override("outline_size", 5)
+	_clock.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_clock)
 	_end_halo.position = _end_turn.position
 	_end_halo.size = _end_turn.custom_minimum_size
 	_end_halo.visible = false
@@ -189,6 +191,19 @@ func bind(m: Match) -> void:
 			_bot_side = 1 - me  # named in _side_name, so the name follows the language
 	m.start()
 	refresh()
+	_say_start()
+
+
+## At the start of a match each hero says its opening line: yours, then the opponent's.
+func _say_start() -> void:
+	if Anim.instant or not is_inside_tree() or g.turn > 0:
+		return
+	var me := viewer()
+	await get_tree().create_timer(0.8).timeout
+	if is_inside_tree() and Sound.voice(g.players[me].hero.card_id, "start"):
+		await get_tree().create_timer(2.6).timeout
+	if is_inside_tree():
+		Sound.voice(g.players[g.opponent(me)].hero.card_id, "start")
 
 
 ## An online match: the session (and its transport) now live under this view.
@@ -232,12 +247,16 @@ func send_emote(id: String) -> void:
 		session.send_emote(id)
 
 
+## The hero says the emote in its own words (VoiceLines) when it has them.
 func show_emote(p: int, id: String) -> void:
-	show_line(p, tr(EMOTES[id]))
+	var hero := g.players[p].hero.card_id
+	var own := VoiceLines.text(hero, id)
+	var recorded := Sound.voice(hero, id)
+	show_line(p, own if own != "" else tr(EMOTES[id]), not recorded)  # (no speech synthesis on top of a clip)
 
 
 ## A speech bubble next to player p's hero (emotes, tutorial boss lines).
-func show_line(p: int, text: String) -> void:
+func show_line(p: int, text: String, speak := true) -> void:
 	if _bubbles.has(p) and is_instance_valid(_bubbles[p]):
 		_bubbles[p].queue_free()
 	var own := p == viewer()
@@ -253,7 +272,8 @@ func show_line(p: int, text: String) -> void:
 	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bubble)
 	_bubbles[p] = bubble
-	Sound.speak(text)
+	if speak:
+		Sound.speak(text)
 	if not Anim.instant and is_inside_tree():
 		bubble.pivot_offset = Vector2(160, 30)
 		bubble.scale = Vector2(0.3, 0.3)
@@ -670,16 +690,14 @@ func _on_right_click(v: EntityView) -> void:
 ## Runs the online turn timer: the rope in the last seconds, then the local
 ## player's turn ends by itself (Match.timeout).
 func tick(delta: float) -> void:
+	_update_clock(delta)
 	if not timer_enabled or controller == null or g.game_over:
 		_rope.visible = false
 		return
 	_reset_timer()  # a new turn gets its full time even while the table is animating
 	_time_left -= delta
 	_rope.visible = _time_left <= ROPE_SECONDS
-	var w := 940.0 * clampf(_time_left / ROPE_SECONDS, 0.0, 1.0)
-	_rope_line.size.x = w
-	_rope_spark.position = Vector2(164 + w, 316)
-	_rope_spark.color.a = 0.6 + 0.4 * absf(sin(_time_left * 9.0))
+	_rope.left = _time_left / ROPE_SECONDS
 	if _time_left > 0.0:
 		return
 	var me := viewer()
@@ -687,6 +705,25 @@ func tick(delta: float) -> void:
 		_end_drag()
 		_sel = {}
 		controller.timeout(me)
+
+
+## Under End Turn: the time since the match began (counting up) and, when the turn
+## has a time limit, the time left in this turn (counting down, full again each turn).
+func _update_clock(delta: float) -> void:
+	if controller == null:
+		return
+	if not g.game_over:
+		_match_time += delta
+	var t := tr("Game %s") % _mmss(_match_time)
+	if timer_enabled and not g.game_over:
+		t += "\n" + tr("Turn %s") % _mmss(maxf(0.0, _time_left))
+	_clock.text = t
+	_clock.add_theme_color_override("font_color", Color("ff8a5b") if timer_enabled and _time_left <= ROPE_SECONDS else Color("f4ead5"))
+
+
+static func _mmss(seconds: float) -> String:
+	var s := int(ceil(seconds))
+	return "%d:%02d" % [s / 60, s % 60]
 
 
 func _reset_timer() -> void:
@@ -1156,6 +1193,7 @@ func _on_concede() -> void:
 	var p := viewer() if not controller.bots[viewer()] else controller.actor()
 	_centered_button(box, tr("Concede"), "ConfirmConcede", func():
 		_close_overlay()
+		Sound.voice(g.players[p].hero.card_id, "concede")
 		controller.submit({"type": "concede", "player": p}))
 	_centered_button(box, tr("Keep playing"), "KeepPlaying", _close_overlay)
 
@@ -1374,15 +1412,22 @@ func _burn(ev: Dictionary) -> void:
 	tw.tween_property(cv, "position", Vector2(900, 210 if own else 120), Anim.d(0.35))
 	tw.parallel().tween_property(cv, "scale", Vector2.ONE, Anim.d(0.35))
 	await _wait(0.6)
-	var fire := _Burn.new()
+	var burn := ShaderMaterial.new()  # the card burns away from its edges, with a glowing rim
+	burn.shader = BURN_SHADER
+	burn.set_shader_parameter("noise", MinionView._smoke())
+	burn.set_shader_parameter("size", cv.size)
+	burn.set_shader_parameter("progress", 0.0)
+	cv.material = burn
+	var fire := _Burn.new()  # a few flames licking up as it goes
 	fire.size = cv.size
+	fire.modulate.a = 0.55
 	cv.add_child(fire)
-	var out := cv.create_tween().set_parallel()
-	out.tween_property(cv, "modulate", Color(1.6, 0.7, 0.3, 0.0), Anim.d(0.7))
-	out.tween_property(cv, "scale", Vector2(0.85, 0.85), Anim.d(0.7))
-	out.chain().tween_callback(cv.queue_free)
+	var out := cv.create_tween()
+	out.tween_method(func(v: float): burn.set_shader_parameter("progress", v), 0.0, 1.0, Anim.d(1.1))
+	out.parallel().tween_property(fire, "modulate:a", 0.0, Anim.d(1.1))
+	out.tween_callback(cv.queue_free)
 	show_hint(tr("Hand is full: %s burns") % CardText.name(ev.card), 1.6)
-	await _wait(0.75)
+	await _wait(1.15)
 
 
 ## Before a change that nothing hit: the effects fly from their source (a spell,
@@ -1728,6 +1773,7 @@ func _effects_now(events: Array) -> void:
 	if is_inside_tree() and not Anim.instant:
 		_impact_fx(events, before, old)
 	var big := false
+	var hero_hit := 0  # 1: a hero took damage, 2: more than 5
 	var heard := {}
 	for ev in events:
 		var sfx := Sound.sound_for(ev, g, viewer())
@@ -1737,7 +1783,12 @@ func _effects_now(events: Array) -> void:
 		_speak_event(ev, heard)
 		match ev.type:
 			"damage":
-				_float_text(ev.target, "-%d" % ev.amount, Palette.HEALTH, old)
+				var on_hero := g.ent(ev.target) != null and g.ent(ev.target).is_hero()
+				var heavy: bool = on_hero and ev.amount > 5
+				# a hero's damage shows bigger; a blow of more than 5 hits harder
+				_float_text(ev.target, "-%d" % ev.amount, Palette.HEALTH, old, 58 if heavy else (44 if on_hero else 30))
+				if on_hero:
+					hero_hit = maxi(hero_hit, 2 if heavy else 1)
 				big = big or ev.amount >= 5
 			"heal":
 				_float_text(ev.target, "+%d" % ev.amount, Palette.BUFFED, old)
@@ -1747,12 +1798,34 @@ func _effects_now(events: Array) -> void:
 				_float_text(ev.target, tr("Shield!"), Palette.ATTACK, old)
 			"secret_revealed":
 				show_hint(tr("Secret: %s") % CardText.name(ev.card), 2.5)
-	if big and Match.shake_enabled:
-		_shake()
+	if hero_hit == 2:
+		Sound.play("hit_big")
+	if Match.shake_enabled and (big or hero_hit > 0):
+		_shake(2.0 if hero_hit == 2 else 1.0)
 
 
-## Legendary minions and new heroes say their name when they enter the board.
+## Minions and heroes say their lines (when played, attacking, dying); without a
+## recorded line, legendary minions and new heroes say their name.
 func _speak_event(ev: Dictionary, heard: Dictionary) -> void:
+	var said := ""
+	match ev.type:
+		"play", "summon":
+			var m := g.ent(ev.entity)
+			if m and (m.is_minion() or m.is_weapon()) and not heard.has("voice"):
+				said = m.card_id
+				heard["voice"] = Sound.voice(m.card_id, "play")
+		"equip":
+			if not heard.has("voice"):
+				heard["voice"] = Sound.voice(ev.card, "play")
+		"attack":
+			var a := g.ent(ev.attacker)
+			if a and not heard.has("voice"):
+				heard["voice"] = Sound.voice(a.card_id, "attack")
+		"death":
+			if ev.get("minion", false) and not heard.has("death_voice"):
+				heard["death_voice"] = Sound.voice(ev.card, "death")
+	if heard.get("voice", false) and said != "":
+		heard[said] = true  # the line was said: no name on top of it
 	var card := ""
 	if ev.type in ["play", "summon"]:
 		var e := g.ent(ev.entity)
@@ -1765,7 +1838,7 @@ func _speak_event(ev: Dictionary, heard: Dictionary) -> void:
 		Sound.speak(CardText.name(card))
 
 
-func _float_text(id: int, text: String, color: Color, old: Dictionary) -> void:
+func _float_text(id: int, text: String, color: Color, old: Dictionary, font_size := 30) -> void:
 	var at: Vector2
 	if _views.has(id):
 		at = _views[id].position + _views[id].size / 2.0
@@ -1779,8 +1852,9 @@ func _float_text(id: int, text: String, color: Color, old: Dictionary) -> void:
 		splash.position = at
 		_fx.add_child(splash)
 		splash.burst()
-	var l := Palette.label(text, 30, color)
-	l.position = at - Vector2(20, 20)
+	var l := Palette.label(text, font_size, color)
+	l.add_theme_constant_override("outline_size", maxi(8, font_size / 4))
+	l.position = at - Vector2(font_size * 0.66, font_size * 0.66)
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_fx.add_child(l)
 	var tw := create_tween()
@@ -1789,10 +1863,11 @@ func _float_text(id: int, text: String, color: Color, old: Dictionary) -> void:
 	tw.tween_callback(l.queue_free)
 
 
-func _shake() -> void:
+## The table shakes; strength 2 is a heavy blow (wider and longer).
+func _shake(strength := 1.0) -> void:
 	var tw := create_tween()
-	for i in 6:
-		tw.tween_property(_layer, "position", Vector2(randf_range(-8, 8), randf_range(-6, 6)), 0.04)
+	for i in int(6 * strength):
+		tw.tween_property(_layer, "position", Vector2(randf_range(-8, 8), randf_range(-6, 6)) * strength, 0.04)
 	tw.tween_property(_layer, "position", Vector2.ZERO, 0.05)
 
 
