@@ -26,9 +26,12 @@ static func make(id: String, scale_factor := 1.0) -> CardView:
 
 ## Current cost/attack/health from a hand card or a minion in play.
 func show_entity(e: Entity, g: GameState) -> void:
+	var was := cost if entity_id == e.id else -1
 	entity_id = e.id
 	card_id = e.card_id
 	cost = g.cost(e) if e.zone == "HAND" else int(e.card().get("cost", 0))
+	if was >= 0 and was != cost:
+		pop("cost")
 	if e.is_minion():
 		attack = e.atk()
 		health = e.health()
@@ -111,7 +114,7 @@ func _draw() -> void:
 	var base_cost := int(c.get("cost", 0))
 	var shown_cost := cost if cost >= 0 else base_cost
 	var cost_color := Color.WHITE if shown_cost == base_cost else (Frames.BUFFED if shown_cost < base_cost else Frames.DAMAGED)
-	Frames.mana(self, Vector2(17, 17) * k, shown_cost, 15 * k, cost_color)
+	Frames.mana(self, Vector2(17, 17) * k, shown_cost, 15 * k * bump("cost"), cost_color)
 	if type == "MINION" or type == "WEAPON":
 		var a := attack if attack >= 0 else int(c.get("attack", 0))
 		var h := health if health >= 0 else int(c.get("health", c.get("durability", 0)))

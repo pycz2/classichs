@@ -28,7 +28,13 @@ static func make(ent: Entity, game: GameState) -> MinionView:
 
 
 func sync() -> void:
+	var b := s
 	s = e.copy()
+	if b:
+		if b.atk() != s.atk():
+			pop("atk")
+		if b.health() != s.health():
+			pop("hp")
 	_current = g.current
 	queue_redraw()
 
@@ -44,6 +50,7 @@ func _sleeping() -> bool:
 
 
 func _process(delta: float) -> void:
+	super(delta)
 	if s and _animated():
 		_t += delta
 		queue_redraw()
@@ -124,13 +131,13 @@ func _draw() -> void:
 			draw_string(font, p, "z", HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(1, 1, 1, 1.0 - ph))
 	var base_atk := int(c.get("attack", 0))
 	var base_hp := int(c.get("health", 0))
-	Frames.attack(self, Vector2(16, 98), s.atk(), 15, Frames.BUFFED if s.atk() > base_atk else Color.WHITE)
+	Frames.attack(self, Vector2(16, 98), s.atk(), 15 * bump("atk"), Frames.BUFFED if s.atk() > base_atk else Color.WHITE)
 	var hp_color := Color.WHITE
 	if s.damage > 0:
 		hp_color = Frames.DAMAGED
 	elif s.max_health() > base_hp:
 		hp_color = Frames.BUFFED
-	Frames.health(self, Vector2(80, 98), s.health(), 15, hp_color)
+	Frames.health(self, Vector2(80, 98), s.health(), 15 * bump("hp"), hp_color)
 
 
 ## The Taunt shield: the oval grown a little, its top flattened and its lower

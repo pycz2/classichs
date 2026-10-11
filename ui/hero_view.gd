@@ -23,8 +23,17 @@ static func make(ent: Entity, game: GameState) -> HeroView:
 
 
 func sync() -> void:
+	var b := s
+	var b_atk := _atk
 	s = e.copy()
 	_atk = g.hero_atk(e)
+	if b:
+		if b.health() != s.health():
+			pop("hp")
+		if int(b.tags.get("ARMOR", 0)) != int(s.tags.get("ARMOR", 0)):
+			pop("armor")
+		if b_atk != _atk:
+			pop("atk")
 	queue_redraw()
 
 
@@ -43,9 +52,9 @@ func _draw() -> void:
 	if s.has("IMMUNE"):
 		Frames.ring(self, Art.outline("arch", r.grow(4)), Color(1, 0.9, 0.3), 3)
 	Icons.paint(self, cls if Icons.CLASSES.has(cls) else "NEUTRAL", Rect2(Vector2(SIZE.x / 2 - 13, SIZE.y - 26), Vector2(26, 26)))
-	Frames.health(self, Vector2(112, 108), s.health(), 18, Frames.DAMAGED if s.damage > 0 else Color.WHITE)
+	Frames.health(self, Vector2(112, 108), s.health(), 18 * bump("hp"), Frames.DAMAGED if s.damage > 0 else Color.WHITE)
 	if int(s.tags.get("ARMOR", 0)) > 0:
-		Frames.shield(self, Vector2(112, 70), int(s.tags.ARMOR), 15)
+		Frames.shield(self, Vector2(112, 70), int(s.tags.ARMOR), 15 * bump("armor"))
 	var atk := g.hero_atk(e)
 	if atk > 0:
-		Frames.attack(self, Vector2(18, 108), atk, 18)
+		Frames.attack(self, Vector2(18, 108), atk, 18 * bump("atk"))

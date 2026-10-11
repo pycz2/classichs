@@ -66,13 +66,19 @@ func _draw() -> void:
 			var active := _active
 			if not active:
 				draw_circle(c, r, Color(0, 0, 0, 0.35))
-			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12)
-			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(s.tags.get("DURABILITY", 0)), 11)
+			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12 * bump("atk"))
+			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(s.tags.get("DURABILITY", 0)), 11 * bump("hp"))
 
 
 ## Turns the hero power over when it becomes used or ready again (a flip animation).
 func sync() -> void:
+	var b := s
 	s = e.copy()
+	if b and kind == Kind.WEAPON:
+		if b.atk() != s.atk():
+			pop("atk")
+		if int(b.tags.get("DURABILITY", 0)) != int(s.tags.get("DURABILITY", 0)):
+			pop("hp")
 	_cost = g.cost(e)
 	_active = e.controller == g.current
 	queue_redraw()
