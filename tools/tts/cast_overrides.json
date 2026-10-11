@@ -1,0 +1,39 @@
+{
+  "_doc": "card_id -> {\"voice\": voice id from voices.json, \"style\": style name}; either key is optional.",
+  "VAN_EX1_116": {
+    "voice": "m_rogue",
+    "style": "cheerful"
+  },
+  "VAN_EX1_100": {
+    "voice": "m_old",
+    "style": "calm"
+  },
+  "VAN_EX1_557": {
+    "voice": "m_rogue",
+    "style": "cheerful"
+  },
+  "VAN_EX1_110": {
+    "voice": "m_old",
+    "style": "heroic"
+  },
+  "VAN_PRO_001": {
+    "voice": "m_rogue",
+    "style": "cheerful"
+  },
+  "VAN_EX1_414": {
+    "voice": "m_gruff",
+    "style": "menacing"
+  },
+  "VAN_EX1_614": {
+    "voice": "m_gruff",
+    "style": "menacing"
+  },
+  "VAN_NEW1_040": {
+    "voice": "m_gruff",
+    "style": "gruff"
+  },
+  "VAN_CS2_221": {
+    "voice": "f_hero",
+    "style": "gruff"
+  }
+}
