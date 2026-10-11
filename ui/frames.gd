@@ -95,13 +95,14 @@ static func rarity(ci: CanvasItem, c: Vector2, rar: String, r: float) -> void:
 static var _dragon: Texture2D
 
 
-## The gold dragon statue (generated with Codex, background cut out) coiling over
-## the top of a legendary portrait; top is the middle of its upper edge.
-static func crest(ci: CanvasItem, top: Vector2, w: float) -> void:
+## The gold dragon crest (generated with Codex, background cut out) sitting ON a
+## line: base is the middle of its bottom edge, so it rises above a portrait or
+## a card edge instead of covering it.
+static func crest(ci: CanvasItem, base: Vector2, w: float) -> void:
 	if _dragon == null:
 		_dragon = load("res://ui/dragon_crest.png")
 	var h := w * _dragon.get_height() / float(_dragon.get_width())
-	ci.draw_texture_rect(_dragon, Rect2(top - Vector2(w / 2.0, h * 0.35), Vector2(w, h)), false, Color(1, 1, 1, 0.92))
+	ci.draw_texture_rect(_dragon, Rect2(base - Vector2(w / 2.0, h * 0.9), Vector2(w, h)), false, Color(1, 1, 1, 0.95))
 
 
 static func ring(ci: CanvasItem, pts: PackedVector2Array, col: Color, w: float) -> void:

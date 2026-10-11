@@ -66,7 +66,7 @@ func _draw() -> void:
 	var edge := Frames.GOLD if c.get("rarity", "") == "LEGENDARY" else Color("8a7a5c")
 	Frames.ring(self, oval, edge, 3)
 	if c.get("rarity", "") == "LEGENDARY":
-		Frames.crest(self, Vector2(48, 6), 74)
+		Frames.crest(self, Vector2(48, 9), 84)  # on top of the oval, above the portrait
 	if e.has("DIVINE_SHIELD"):  # a shimmering golden bubble
 		draw_colored_polygon(Art.outline("oval", OVAL.grow(5)), Color(1, 0.86, 0.3, 0.18))
 		Frames.ring(self, Art.outline("oval", OVAL.grow(5)), Color(1, 0.9, 0.4, 0.75 + 0.25 * sin(_t * 4)), 3)

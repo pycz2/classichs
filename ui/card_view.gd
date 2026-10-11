@@ -124,7 +124,7 @@ func _draw() -> void:
 	Art.paint_in(self, art, card_id, shape)
 	Frames.ring(self, outline, Frames.GOLD.darkened(0.1), 2 * k)
 	if c.get("rarity", "") == "LEGENDARY":
-		Frames.crest(self, Vector2(60, 8) * k, 86 * k)
+		Frames.crest(self, Vector2(60, 5) * k, 104 * k)  # along the card's top edge
 	# text box (parchment) and the name banner across it
 	draw_style_box(Palette.box(Color("efe0bd"), int(6 * k), Color("8a6d3b"), int(2 * k)), Rect2(Vector2(12, 100) * k, Vector2(96, 56) * k))
 	var bend := 4.0 * k if type == "MINION" else 0.0

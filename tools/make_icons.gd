@@ -23,7 +23,7 @@ func _process(_d: float) -> bool:
 				c = Color("1b0f06")
 			c.a = clampf(edge + 0.5, 0.0, 1.0)
 			img.set_pixel(x, y, c)
-	var dragon := Image.load_from_file("res://ui/dragon_crest.png")
+	var dragon := Image.load_from_file("res://ui/dragon_title.png")
 	dragon.resize(430, int(430.0 * dragon.get_height() / dragon.get_width()), Image.INTERPOLATE_LANCZOS)
 	img.blend_rect(dragon, Rect2i(Vector2i.ZERO, dragon.get_size()), Vector2i((n - dragon.get_width()) / 2, (n - dragon.get_height()) / 2 - 10))
 	DirAccess.make_dir_recursive_absolute("res://icons")
