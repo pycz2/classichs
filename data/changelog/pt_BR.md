@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-10-11
+
+### Adicionado
+- Menu principal: Jogar abre um submenu com jogo online, treino e tutorial.
+- Treino em etapas: escolha um deck numa lista com retratos dos heróis (ou vá aos decks), depois o oponente numa grade 3×3, depois Jogar.
+- Jogo online em etapas: nome, deck, Criar jogo ou Entrar; os códigos têm um botão Copiar ao lado.
+- Tutorial: missões com os retratos dos chefes; antes de cada missão, explicações ilustradas dos novos conceitos (partes da carta, combate, mana, feitiços, grito de guerra, provocar, investida, último suspiro, poder heroico, congelar, armas).
+- Coleção e decks numa só tela: todas as cartas à esquerda com abas de classe, filtros de tipo, custo, raridade e busca; os decks à direita com copiar, exportar e excluir; um deck é editado no mesmo lugar.
+
+### Corrigido
+- Jogo online: um repetidor TURN para redes sem caminho direto; o convidado espera até 4 minutos pela resposta do anfitrião e renova os candidatos de conexão todo esse tempo (antes o navegador desistia em poucos segundos).
+
 ## [0.15.3] - 2026-10-11
 
 ### Adicionado

@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-10-11
+
+### Dodano
+- Menu główne: Graj otwiera podmenu z grą sieciową, treningiem i samouczkiem.
+- Trening krok po kroku: wybór talii z listy z portretami bohaterów (lub przejście do talii), potem przeciwnik z siatki 3×3, potem Graj.
+- Gra sieciowa krok po kroku: imię, talia, Utwórz grę lub Dołącz; kody mają obok przycisk Kopiuj.
+- Samouczek: misje z portretami bossów; przed każdą misją ilustrowane objaśnienia nowych pojęć (części karty, walka, mana, zaklęcia, okrzyk bojowy, prowokacja, szarża, ostatnie tchnienie, moc specjalna, zamrożenie, broń).
+- Kolekcja i talie na jednym ekranie: po lewej wszystkie karty z zakładkami klas, filtrami typu, kosztu, rzadkości i wyszukiwaniem; po prawej talie z kopiowaniem, eksportem i usuwaniem; talię edytuje się w tym samym miejscu.
+
+### Naprawiono
+- Gra sieciowa: przekaźnik TURN dla sieci bez bezpośredniej drogi; gość czeka do 4 minut na odpowiedź gospodarza i przez cały ten czas odnawia kandydatów połączenia (wcześniej przeglądarka poddawała się po kilku sekundach).
+
 ## [0.15.3] - 2026-10-11
 
 ### Dodano

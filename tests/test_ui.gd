@@ -15,7 +15,12 @@ func _main() -> Node:
 func test_main_shows_menu() -> void:
 	var m := _main()
 	check(m.screen is MainMenu, "menu first")
-	check(m.screen.find_child("Training", true, false) != null, "training button")
+	check(m.screen.find_child("Training", true, false) == null, "training is inside Play")
+	(m.screen.find_child("Play", true, false) as Button).pressed.emit()
+	for n in ["OnlineGame", "Training", "Tutorial", "Back"]:
+		check(m.screen.find_child(n, true, false) != null, n + " in the Play submenu")
+	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
+	check(m.screen.find_child("Collection", true, false) != null, "back to the first level")
 	m.free()
 
 

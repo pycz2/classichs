@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-10-11
+
+### Added
+- Main menu: Play opens a submenu with online play, training and the tutorial.
+- Training in steps: choose a deck from a list with hero portraits (or go to the decks), then the opponent from a 3×3 grid of portraits, then Play.
+- Online play in steps: name, deck, Create game or Join game; the codes have a Copy button right beside them.
+- Tutorial: missions with the bosses' portraits; before each mission, illustrated notes on its new concepts (card parts, combat, mana, spells, Battlecry, Taunt, Charge, Deathrattle, Hero Power, Freeze, weapons).
+- Collection and decks on one screen: all cards on the left with class tabs, type, cost and rarity filters and search; decks on the right with copy, export and delete buttons; a deck opens for editing in the same place.
+
+### Fixed
+- Online play: a TURN relay for networks with no direct path; the guest waits up to 4 minutes for the host's answer and keeps renewing the connection candidates all that time (before, the browser gave up after a few seconds).
+
 ## [0.15.3] - 2026-10-11
 
 ### Added

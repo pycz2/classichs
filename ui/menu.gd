@@ -1,6 +1,7 @@
 class_name MainMenu
 extends Control
-## Main menu. Online play, tutorial and collection come with later subprojects.
+## Main menu: Play (a submenu with online play, training and the tutorial),
+## Collection, Debug Table, Settings, Exit.
 
 signal training
 signal collection
@@ -11,7 +12,9 @@ signal settings
 signal quit
 
 ## Button labels (English keys); the translation tool reads this list.
-const ITEMS := ["Training", "Online Game", "Tutorial", "Collection", "Debug Table", "Settings", "Exit"]
+const ITEMS := ["Play", "Online Game", "Training", "Tutorial", "Back", "Collection", "Debug Table", "Settings", "Exit"]
+
+var _box: VBoxContainer
 
 
 func _ready() -> void:
@@ -47,22 +50,8 @@ func _ready() -> void:
 		var drift := pic.create_tween().set_loops()
 		drift.tween_property(pic, "scale", Vector2(1.07, 1.07), 24.0).set_trans(Tween.TRANS_SINE)
 		drift.tween_property(pic, "scale", Vector2.ONE, 24.0).set_trans(Tween.TRANS_SINE)
-	var items := [["Training", training, true], ["Online Game", online, WebRtcTransport.available()], ["Tutorial", tutorial, true],
-		["Collection", collection, true], ["Debug Table", debug_table, true], ["Settings", settings, true]]
-	if not OS.has_feature("web"):
-		items.append(["Exit", quit, true])
-	for it in items:
-		var b := Palette.button(tr(it[0]), it[0].replace(" ", ""))
-		b.disabled = not it[2]
-		if it[0] == "Online Game" and b.disabled:
-			b.tooltip_text = tr("Online play works in the browser version of the game")
-		if it[1] != null:
-			var sig: Signal = it[1]
-			b.pressed.connect(func(): sig.emit())
-		box.add_child(b)
-		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		b.custom_minimum_size = Vector2(300, 52)
-		_animate_button(b, box.get_child_count() - 2)
+	_box = box
+	show_main()
 	var version := Button.new()
 	version.name = "Version"
 	version.text = "v" + str(ProjectSettings.get_setting("application/config/version"))
@@ -72,6 +61,40 @@ func _ready() -> void:
 	version.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	version.pressed.connect(func(): add_child(ChangelogView.new()))
 	add_child(version)
+
+
+## The first level: Play, Collection, Debug Table, Settings, Exit.
+func show_main() -> void:
+	var items := [["Play", show_play, true], ["Collection", collection, true], ["Debug Table", debug_table, true], ["Settings", settings, true]]
+	if not OS.has_feature("web"):
+		items.append(["Exit", quit, true])
+	_fill(items)
+
+
+## The Play submenu: online play, training, the tutorial, and Back.
+func show_play() -> void:
+	_fill([["Online Game", online, WebRtcTransport.available()], ["Training", training, true], ["Tutorial", tutorial, true], ["Back", show_main, true]])
+
+
+func _fill(items: Array) -> void:
+	for c in _box.get_children():
+		if c.name != "Title":
+			_box.remove_child(c)
+			c.queue_free()
+	for it in items:
+		var b := Palette.button(tr(it[0]), it[0].replace(" ", ""))
+		b.disabled = not it[2]
+		if it[0] == "Online Game" and b.disabled:
+			b.tooltip_text = tr("Online play works in the browser version of the game")
+		if it[1] is Signal:
+			var sig: Signal = it[1]
+			b.pressed.connect(func(): sig.emit())
+		else:
+			b.pressed.connect(it[1])
+		_box.add_child(b)
+		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		b.custom_minimum_size = Vector2(300, 52)
+		_animate_button(b, _box.get_child_count() - 2)
 
 
 ## Buttons come in one after another and grow a little under the mouse.

@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-10-11
+
+### Aggiunto
+- Menu principale: Gioca apre un sottomenu con gioco online, allenamento e tutorial.
+- Allenamento a passi: scegli un mazzo da un elenco con i ritratti degli eroi (o vai ai mazzi), poi l'avversario da una griglia 3×3, poi Gioca.
+- Gioco online a passi: nome, mazzo, Crea partita o Unisciti; i codici hanno un pulsante Copia accanto.
+- Tutorial: missioni con i ritratti dei boss; prima di ogni missione, spiegazioni illustrate dei nuovi concetti (parti della carta, combattimento, mana, magie, grido di battaglia, provocazione, carica, rantolo di morte, potere eroe, congelamento, armi).
+- Collezione e mazzi in un'unica schermata: tutte le carte a sinistra con schede di classe, filtri per tipo, costo, rarità e ricerca; i mazzi a destra con copia, esporta ed elimina; un mazzo si modifica nello stesso posto.
+
+### Corretto
+- Gioco online: un relay TURN per le reti senza percorso diretto; l'ospite attende fino a 4 minuti la risposta dell'host e rinnova i candidati di connessione per tutto il tempo (prima il browser si arrendeva dopo pochi secondi).
+
 ## [0.15.3] - 2026-10-11
 
 ### Aggiunto

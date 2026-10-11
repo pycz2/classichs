@@ -1,15 +1,20 @@
 class_name CollectionView
 extends Control
-## All collectible cards, 8 per page, with class tabs, cost filter and search.
-## With a deck it becomes the deck builder: click a card to add it, click a
-## line in the deck list to remove one copy.
+## The left half of the collection screen: all collectible cards, 8 per page,
+## under class tabs, with search, type, cost and rarity filters that combine.
+## With a deck set it shows only the cards that deck can use, and a click on a
+## card adds it (DeckListView keeps the deck list on the right).
 
-signal done(deck: Deck)
-## The deck changed (card added or removed, name edited): the owner saves at once.
+## The deck changed (a card was added): the owner saves at once.
 signal changed
 
 const PER_PAGE := 8
 const CLASSES := ["DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR", "NEUTRAL"]
+const RARITIES := [["FREE", "Basic"], ["COMMON", "Common"], ["RARE", "Rare"], ["EPIC", "Epic"], ["LEGENDARY", "Legendary"]]
+const TYPES := [["MINION", "Minions"], ["SPELL", "Spells"], ["WEAPON", "Weapons"]]
+## The card area under the tabs (screen coordinates: this view sits at 0,0).
+const AREA := Rect2(16, 66, 884, 642)
+const CARD_SCALE := 1.32
 
 var deck: Deck  # null = browse only
 var page := 0
@@ -18,60 +23,77 @@ var cost_filter := -1  # -1 = any, 7 = 7 or more
 var query := ""
 ## "" = any rarity; else FREE (Basic), COMMON, RARE, EPIC or LEGENDARY.
 var rarity_filter := ""
-const RARITIES := [["FREE", "Basic"], ["COMMON", "Common"], ["RARE", "Rare"], ["EPIC", "Epic"], ["LEGENDARY", "Legendary"]]
+## "" = any type; else MINION, SPELL or WEAPON.
+var type_filter := ""
 var _grid := GridContainer.new()
 var _page_label: Label
+var _prev: Button
+var _next: Button
 var _hint: Label
-var _deck_list := VBoxContainer.new()
-var _tips: KeywordTips
-## How full the deck is, behind the "n / 30" count.
-var _bar := _Bar.new()
-var _count: Label
-var _name_edit := LineEdit.new()
+var _empty: Label
+var _area := Panel.new()
 var _tabs := HBoxContainer.new()
+var _tips: KeywordTips
 var _tooltip: CardView
 
 
 func _ready() -> void:
-	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var bg := ColorRect.new()
-	bg.color = Palette.TABLE
-	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
-	Palette.backdrop(self, "library_bg")
-	if deck:
-		tab = deck.card_class()
-	_tabs.position = Vector2(16, 10)
+	size = Vector2(AREA.end.x, 720)
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_area.name = "CardArea"
+	_area.position = AREA.position
+	_area.size = AREA.size
+	add_child(_area)
+	_tabs.name = "Tabs"
+	_tabs.position = Vector2(AREA.position.x + 10, 10)
+	_tabs.size = Vector2(AREA.size.x - 20, AREA.position.y - 10)
 	_tabs.add_theme_constant_override("separation", 4)
 	add_child(_tabs)
-	for cls in tabs():
+	for cls in CLASSES:
 		var b := Button.new()
 		b.name = "Tab" + cls
 		b.tooltip_text = tr("Neutral") if cls == "NEUTRAL" else CardText.name(Decks.hero(cls))
-		b.custom_minimum_size = Vector2(52, 40)
-		b.add_theme_stylebox_override("normal", Palette.box(Palette.of_class(cls).darkened(0.35), 8))
+		b.focus_mode = Control.FOCUS_NONE
+		b.size_flags_vertical = Control.SIZE_SHRINK_END
 		Icons.attach(b, cls, 34)
 		var c: String = cls
 		b.pressed.connect(func(): set_tab(c))
 		_tabs.add_child(b)
+	# row 1: search and card type; row 2: cost crystals and rarity gems
+	var rows := VBoxContainer.new()
+	rows.position = AREA.position + Vector2(14, 14)
+	rows.size = Vector2(AREA.size.x - 28, 88)
+	rows.add_theme_constant_override("separation", 8)
+	add_child(rows)
+	var row1 := HBoxContainer.new()
+	row1.add_theme_constant_override("separation", 8)
+	rows.add_child(row1)
 	var search := LineEdit.new()
 	search.name = "Search"
 	search.placeholder_text = tr("Search")
-	search.position = Vector2(16, 52)
-	search.size = Vector2(260, 34)
+	search.custom_minimum_size = Vector2(0, 40)
+	search.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search.clear_button_enabled = true
 	search.text_changed.connect(func(t):
 		query = t
 		page = 0
 		_fill())
-	add_child(search)
-	var costs := HBoxContainer.new()
-	costs.position = Vector2(290, 52)
-	add_child(costs)
+	row1.add_child(search)
+	for t in TYPES:  # a second click clears
+		var b := _chip("Type" + t[0], Vector2(120, 40))
+		b.text = tr(t[1])
+		var code: String = t[0]
+		b.pressed.connect(func():
+			type_filter = "" if type_filter == code else code
+			page = 0
+			_fill())
+		row1.add_child(b)
+	var row2 := HBoxContainer.new()
+	row2.add_theme_constant_override("separation", 4)
+	rows.add_child(row2)
 	for c in range(-1, 8):
-		var b := Button.new()
-		b.name = "Cost%d" % c
+		var b := _chip("Cost%d" % c, Vector2(56 if c < 0 else 44, 40))
 		b.text = tr("All") if c < 0 else ""
-		b.custom_minimum_size = Vector2(44, 40)
 		if c >= 0:  # a mana crystal with the cost
 			var gem := _Crystal.new()
 			gem.value = c
@@ -84,15 +106,16 @@ func _ready() -> void:
 			cost_filter = v
 			page = 0
 			_fill())
-		costs.add_child(b)
-	for r in RARITIES:  # rarity gems after the cost crystals; a second click clears
-		var b := Button.new()
-		b.name = "Rarity" + r[0]
+		row2.add_child(b)
+	var gap := Control.new()
+	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row2.add_child(gap)
+	for r in RARITIES:  # a second click clears
+		var b := _chip("Rarity" + r[0], Vector2(44, 40))
 		b.tooltip_text = tr(r[1])
-		b.custom_minimum_size = Vector2(36, 40)
 		var gem := _Gem.new()
 		gem.rarity = r[0]
-		gem.size = Vector2(36, 40)
+		gem.size = Vector2(44, 40)
 		gem.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		b.add_child(gem)
 		var code: String = r[0]
@@ -100,37 +123,64 @@ func _ready() -> void:
 			rarity_filter = "" if rarity_filter == code else code
 			page = 0
 			_fill())
-		costs.add_child(b)
+		row2.add_child(b)
+	_grid.name = "Grid"
 	_grid.columns = 4
-	_grid.position = Vector2(24, 96)
-	_grid.add_theme_constant_override("h_separation", 22)
+	_grid.add_theme_constant_override("h_separation", 24)
 	_grid.add_theme_constant_override("v_separation", 14)
+	var card := CardView.SIZE * CARD_SCALE
+	var grid_w := card.x * 4 + 24 * 3
+	_grid.position = Vector2(AREA.position.x + (AREA.size.x - grid_w) / 2.0, AREA.position.y + 116)
 	add_child(_grid)
-	var prev := Palette.button("<", "Prev")
-	prev.custom_minimum_size = Vector2(60, 44)
-	prev.position = Vector2(30, 660)
-	prev.pressed.connect(func(): turn_page(-1))
-	add_child(prev)
-	var next := Palette.button(">", "Next")
-	next.custom_minimum_size = Vector2(60, 44)
-	next.position = Vector2(560, 660)
-	next.pressed.connect(func(): turn_page(1))
-	add_child(next)
-	_page_label = Palette.label("", 18)
-	_page_label.position = Vector2(110, 670)
-	add_child(_page_label)
-	_hint = Palette.label("", 18, Palette.SELECTED)
-	_hint.position = Vector2(200, 670)
+	_empty = Palette.label(tr("No cards match the filters"), 20, Palette.ARMOR)
+	_empty.name = "Empty"
+	_empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_empty.position = Vector2(AREA.position.x, AREA.position.y + 300)
+	_empty.size = Vector2(AREA.size.x, 30)
+	add_child(_empty)
+	# the pager, centred under the grid
+	var pager := HBoxContainer.new()
+	pager.name = "Pager"
+	pager.alignment = BoxContainer.ALIGNMENT_CENTER
+	pager.position = Vector2(AREA.position.x, AREA.end.y - 52)
+	pager.size = Vector2(AREA.size.x, 42)
+	pager.add_theme_constant_override("separation", 10)
+	add_child(pager)
+	_prev = Palette.button("<", "Prev")
+	_prev.custom_minimum_size = Vector2(56, 42)
+	_prev.pressed.connect(func(): turn_page(-1))
+	pager.add_child(_prev)
+	_page_label = Palette.label("", 20)
+	_page_label.name = "Page"
+	_page_label.custom_minimum_size = Vector2(90, 42)
+	_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_page_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pager.add_child(_page_label)
+	_next = Palette.button(">", "Next")
+	_next.custom_minimum_size = Vector2(56, 42)
+	_next.pressed.connect(func(): turn_page(1))
+	pager.add_child(_next)
+	_hint = Palette.label("", 15, Palette.SELECTED)
 	_hint.name = "Hint"
+	_hint.position = Vector2(AREA.position.x + 14, AREA.end.y - 56)
+	_hint.size = Vector2(300, 50)
+	_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(_hint)
+	set_deck(deck)
+
+
+## Starts (a deck) or ends (null) building: only usable class tabs are shown.
+func set_deck(d: Deck) -> void:
+	deck = d
 	if deck:
-		_build_sidebar()
-	else:
-		var back := Palette.button(tr("Back"), "Back")
-		back.custom_minimum_size = Vector2(160, 44)
-		back.position = Vector2(1100, 660)
-		back.pressed.connect(func(): done.emit(null))
-		add_child(back)
+		tab = deck.card_class()
+	elif not tab in CLASSES:
+		tab = CLASSES[0]
+	for b in _tabs.get_children():
+		b.visible = (b.name as String).trim_prefix("Tab") in tabs()
+	page = 0
+	show_hint("")
 	_fill()
 
 
@@ -144,7 +194,7 @@ func set_tab(cls: String) -> void:
 	_fill()
 
 
-## Cards matching the current tab, cost filter and search, sorted by cost and name.
+## Cards matching the tab and every filter, sorted by cost and name.
 func filtered() -> Array:
 	var out: Array = []
 	var q := query.strip_edges().to_lower()
@@ -156,6 +206,8 @@ func filtered() -> Array:
 		if cost_filter >= 0 and (cost != cost_filter if cost_filter < 7 else cost < 7):
 			continue
 		if rarity_filter != "" and c.get("rarity", "") != rarity_filter:
+			continue
+		if type_filter != "" and c.get("type", "") != type_filter:
 			continue
 		if q != "" and not CardText.name(id).to_lower().contains(q) and not CardText.text(id).to_lower().contains(q):
 			continue
@@ -181,12 +233,15 @@ func shown_cards() -> Array:
 
 
 func _fill() -> void:
+	_on_hover(null, false)
 	for c in _grid.get_children():
 		_grid.remove_child(c)
 		c.queue_free()
 	var ids := filtered()
+	var pages := maxi(1, ceili(ids.size() / float(PER_PAGE)))
+	page = clampi(page, 0, pages - 1)
 	for id in ids.slice(page * PER_PAGE, (page + 1) * PER_PAGE):
-		var cv := CardView.make(id, 1.5 if deck == null else 1.36)
+		var cv := CardView.make(id, CARD_SCALE)
 		cv.clicked.connect(func(v): click_card(v.card_id))
 		cv.hovered.connect(_on_hover)
 		if deck and deck.count(id) > 0:
@@ -194,9 +249,35 @@ func _fill() -> void:
 			badge.position = Vector2(cv.size.x - 34, -8)
 			cv.add_child(badge)
 		_grid.add_child(cv)
-	_page_label.text = "%d / %d" % [page + 1, page_count()]
-	for b in _tabs.get_children():
-		b.modulate = Color.WHITE if b.name == "Tab" + tab else Color(1, 1, 1, 0.6)
+	_empty.visible = ids.is_empty()
+	_page_label.text = "%d / %d" % [page + 1, pages]
+	_prev.disabled = page == 0
+	_next.disabled = page >= pages - 1
+	var col := Palette.of_class(tab)
+	_area.add_theme_stylebox_override("panel", Palette.box(col.darkened(0.78), 12, col.darkened(0.2), 2))
+	for b: Button in _tabs.get_children():
+		var cls := (b.name as String).trim_prefix("Tab")
+		var on := cls == tab
+		b.custom_minimum_size = Vector2(78, 56 if on else 46)
+		var st: StyleBoxFlat
+		if on:  # the open tab: lit, taller, and joined to the card area under it
+			st = Palette.box(col.darkened(0.78), 12, col.darkened(0.2), 2)
+			st.border_width_bottom = 0
+			st.expand_margin_bottom = 2
+		else:
+			st = Palette.box(Palette.of_class(cls).darkened(0.55), 10, Color(0, 0, 0, 0.5), 1)
+			st.border_width_bottom = 0
+		st.corner_radius_bottom_left = 0
+		st.corner_radius_bottom_right = 0
+		for s in ["normal", "hover", "pressed", "hover_pressed"]:
+			b.add_theme_stylebox_override(s, st)
+		b.modulate = Color.WHITE if on else Color(0.75, 0.75, 0.75)
+	for b in find_children("Cost*", "Button", true, false):
+		b.set_pressed_no_signal(b.name == "Cost%d" % cost_filter)
+	for b in find_children("Rarity*", "Button", true, false):
+		b.set_pressed_no_signal(b.name == "Rarity" + rarity_filter)
+	for b in find_children("Type*", "Button", true, false):
+		b.set_pressed_no_signal(b.name == "Type" + type_filter)
 
 
 func show_hint(text: String) -> void:
@@ -209,11 +290,11 @@ func click_card(id: String) -> void:
 	var why := deck.add(id)
 	show_hint(why)
 	_fill()
-	_refresh_deck()
 	if why == "":
 		changed.emit()
 
 
+## The big card beside the hovered one, with its keyword tips.
 func _on_hover(v: EntityView, on: bool) -> void:
 	if _tooltip:
 		_tooltip.queue_free()
@@ -224,76 +305,40 @@ func _on_hover(v: EntityView, on: bool) -> void:
 	if on:
 		_tooltip = CardView.make((v as CardView).card_id, 1.9)
 		_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_tooltip.position = Vector2(650, 120) if deck == null else Vector2(640, 110)
+		_tooltip.z_index = 50
+		var r := Rect2(v.global_position, v.size)
+		var x := r.end.x + 10 if r.end.x + 10 + _tooltip.size.x < 1270 else r.position.x - _tooltip.size.x - 10
+		_tooltip.position = Vector2(x, clampf(r.position.y - 40, 8, 712 - _tooltip.size.y))
 		add_child(_tooltip)
 		_tips = KeywordTips.make(_tooltip.card_id)
+		_tips.z_index = 50
 		if _tips.get_child_count() > 0:
 			add_child(_tips)
 			_tips.beside(Rect2(_tooltip.position, _tooltip.size))
 
 
-# --- deck sidebar ---------------------------------------------------------------
-
-func _build_sidebar() -> void:
-	var panel := Panel.new()
-	panel.add_theme_stylebox_override("panel", Palette.box(Palette.PANEL, 10, Palette.of_class(deck.card_class()), 3))
-	panel.position = Vector2(960, 52)
-	panel.size = Vector2(304, 600)
-	add_child(panel)
-	_name_edit.name = "DeckName"
-	_name_edit.text = deck.name
-	_name_edit.max_length = Deck.NAME_MAX
-	_name_edit.position = Vector2(10, 10)
-	_name_edit.size = Vector2(284, 36)
-	_name_edit.text_changed.connect(func(t):
-		deck.name = t
-		changed.emit())
-	panel.add_child(_name_edit)
-	_bar.position = Vector2(10, 52)
-	_bar.size = Vector2(284, 26)
-	panel.add_child(_bar)
-	_count = Palette.label("", 18)
-	_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_count.position = Vector2(10, 52)
-	_count.size = Vector2(284, 26)
-	panel.add_child(_count)
-	var scroll := ScrollContainer.new()
-	scroll.position = Vector2(8, 84)
-	scroll.size = Vector2(288, 506)
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	panel.add_child(scroll)
-	_deck_list.custom_minimum_size.x = 272
-	scroll.add_child(_deck_list)
-	var save := Palette.button(tr("Done"), "Done")
-	save.custom_minimum_size = Vector2(160, 44)
-	save.position = Vector2(1100, 660)
-	save.pressed.connect(func(): done.emit(deck))
-	add_child(save)
-	_refresh_deck()
-
-
-func _refresh_deck() -> void:
-	if deck == null:
-		return
-	for c in _deck_list.get_children():
-		_deck_list.remove_child(c)
-		c.queue_free()
-	for pair in deck.sorted_counts():
-		var id: String = pair[0]
-		var b := DeckTiles.DeckTile.new(id, pair[1])
-		b.pressed.connect(func(): remove_card(id))
-		_deck_list.add_child(b)
-	_count.text = "%d / %d" % [deck.cards.size(), Deck.SIZE]
-	_bar.ratio = deck.cards.size() / float(Deck.SIZE)
-	_count.add_theme_color_override("font_color", Palette.BUFFED if deck.cards.size() == Deck.SIZE else Palette.TEXT)
-
-
-func remove_card(id: String) -> void:
-	if deck.remove(id):
-		changed.emit()
-	show_hint("")
-	_fill()
-	_refresh_deck()
+## A filter button: dark when off, lit with a gold edge when on.
+func _chip(id: String, min_size: Vector2) -> Button:
+	var b := Button.new()
+	b.name = id
+	b.toggle_mode = true
+	b.focus_mode = Control.FOCUS_NONE
+	b.custom_minimum_size = min_size
+	b.add_theme_font_size_override("font_size", 17)
+	var off := Palette.box(Color(0.1, 0.07, 0.05, 0.85), 8, Color("6b5320"), 1)
+	var hover := Palette.box(Color(0.18, 0.13, 0.08, 0.9), 8, Color("a8873a"), 1)
+	var on := Palette.box(Color(0.36, 0.26, 0.1, 0.95), 8, Frames.GOLD, 2)
+	for st: StyleBoxFlat in [off, hover, on]:
+		st.content_margin_left = 8
+		st.content_margin_right = 8
+	b.add_theme_stylebox_override("normal", off)
+	b.add_theme_stylebox_override("hover", hover)
+	b.add_theme_stylebox_override("pressed", on)
+	b.add_theme_stylebox_override("hover_pressed", on)
+	b.add_theme_color_override("font_pressed_color", Color("fff3c4"))
+	b.add_theme_color_override("font_hover_pressed_color", Color("fff3c4"))
+	b.pressed.connect(Sound.play.bind("click"))
+	return b
 
 
 class _Crystal:
@@ -319,17 +364,3 @@ class _Gem:
 		else:
 			Frames.rarity(self, size / 2.0, rarity, 9)
 
-
-class _Bar:
-	extends Control
-	var ratio := 0.0:
-		set(v):
-			ratio = clampf(v, 0.0, 1.0)
-			queue_redraw()
-
-	func _draw() -> void:
-		var r := Rect2(Vector2.ZERO, size)
-		draw_style_box(Palette.box(Color(0, 0, 0, 0.55), 13, Color("6b5320"), 2), r)
-		if ratio > 0.0:
-			var fill := Color("f2c94c") if ratio >= 1.0 else Color("b8862b")
-			draw_style_box(Palette.box(fill, 13), Rect2(r.position + Vector2(2, 2), Vector2((r.size.x - 4) * ratio, r.size.y - 4)))

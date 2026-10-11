@@ -28,6 +28,7 @@ static func collect() -> Array:
 	tables.append_array(MatchView.EMOTES.values())
 	tables.append_array(DeckTrackerPanel.VIEWS.map(func(r): return r[1]))
 	tables.append_array(CollectionView.RARITIES.map(func(r): return r[1]))
+	tables.append_array(CollectionView.TYPES.map(func(r): return r[1]))
 	tables.append_array(SettingsView.SLIDERS.map(func(r): return r[0]))
 	tables.append_array(SettingsView.TOGGLES.map(func(r): return r[0]))
 	tables.append_array(Tutorial.HINTS.values())
