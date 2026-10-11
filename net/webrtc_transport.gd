@@ -174,7 +174,8 @@ func _process(delta: float) -> void:
 		var text := channel.get_packet().get_string_from_utf8()
 		received.emit(j.data if j.parse(text) == OK else null)
 	var state := pc.get_connection_state()
-	if state == WebRTCPeerConnection.STATE_FAILED and not _open:
+	var retrying := _retry_at >= 0.0 and _retry_t <= RETRY_FOR  # the guest: the host may paste the answer later
+	if state == WebRTCPeerConnection.STATE_FAILED and not _open and not retrying:
 		_closed = true
 		error.emit(tr("Could not connect: the networks may block direct connections"))
 	elif _open and (ready == WebRTCDataChannel.STATE_CLOSED or state in [WebRTCPeerConnection.STATE_FAILED, WebRTCPeerConnection.STATE_CLOSED]):

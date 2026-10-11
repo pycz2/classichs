@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-10-11
+
+### Añadido
+- Menú principal: Jugar abre un submenú con juego en línea, entrenamiento y tutorial.
+- Entrenamiento por pasos: elegir un mazo de una lista con retratos de héroes (o ir a los mazos), luego el rival en una cuadrícula de 3×3, luego Jugar.
+- Juego en línea por pasos: nombre, mazo, Crear partida o Unirse; los códigos tienen un botón Copiar al lado.
+- Tutorial: misiones con los retratos de los jefes; antes de cada misión, explicaciones ilustradas de sus nuevos conceptos (partes de una carta, combate, maná, hechizos, grito de batalla, provocar, cargar, último aliento, poder de héroe, congelar, armas).
+- Colección y mazos en una sola pantalla: todas las cartas a la izquierda con pestañas de clase, filtros de tipo, coste, rareza y búsqueda; los mazos a la derecha con copiar, exportar y borrar; un mazo se edita en el mismo sitio.
+
+### Corregido
+- Juego en línea: un repetidor TURN para redes sin camino directo; el invitado espera hasta 4 minutos la respuesta del anfitrión y renueva los candidatos de conexión todo ese tiempo (antes el navegador se rendía a los pocos segundos).
+
 ## [0.15.3] - 2026-10-11
 
 ### Añadido

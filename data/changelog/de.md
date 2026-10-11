@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-10-11
+
+### Hinzugefügt
+- Hauptmenü: Spielen öffnet ein Untermenü mit Online-Spiel, Training und Tutorial.
+- Training in Schritten: ein Deck aus einer Liste mit Heldenporträts wählen (oder zu den Decks gehen), dann den Gegner aus einem 3×3-Raster, dann Spielen.
+- Online-Spiel in Schritten: Name, Deck, Spiel erstellen oder beitreten; neben den Codes steht ein Kopieren-Knopf.
+- Tutorial: Missionen mit den Porträts der Bosse; vor jeder Mission bebilderte Erklärungen der neuen Begriffe (Kartenteile, Kampf, Mana, Zauber, Kampfschrei, Spott, Ansturm, Todesröcheln, Heldenfähigkeit, Einfrieren, Waffen).
+- Sammlung und Decks auf einem Bildschirm: links alle Karten mit Klassenreitern, Filtern nach Typ, Kosten, Seltenheit und Suche; rechts die Decks mit Kopieren, Exportieren und Löschen; ein Deck wird am selben Ort bearbeitet.
+
+### Behoben
+- Online-Spiel: ein TURN-Relais für Netze ohne direkten Weg; der Gast wartet bis zu 4 Minuten auf die Antwort des Gastgebers und erneuert die ganze Zeit die Verbindungskandidaten (vorher gab der Browser nach wenigen Sekunden auf).
+
 ## [0.15.3] - 2026-10-11
 
 ### Hinzugefügt

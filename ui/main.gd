@@ -60,6 +60,7 @@ func show_settings() -> void:
 func show_training_setup() -> void:
 	var t := TrainingSetup.new()
 	t.back.connect(show_menu.bind(true))
+	t.edit_decks.connect(show_collection)
 	t.start.connect(func(deck: Deck, bot: String):
 		var g := Game.new({"hero": deck.hero, "deck": deck.cards.duplicate()},
 			{"hero": Decks.hero(bot), "deck": Decks.basic(bot)}, randi())
@@ -90,6 +91,7 @@ func start_tutorial(n: int) -> MatchView:
 func show_online() -> void:
 	var o := OnlineView.new()
 	o.back.connect(show_menu.bind(true))
+	o.edit_decks.connect(show_collection)
 	o.play.connect(start_online_match)
 	_set_screen(o)
 
