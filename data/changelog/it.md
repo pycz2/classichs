@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.16.2] - 2026-10-12
+
+### Corretto
+- Tutorial: dopo una vittoria, "Missione successiva" apriva le spiegazioni sotto la schermata della ricompensa e la schermata si bloccava.
+
 ## [0.16.1] - 2026-10-12
 
 ### Aggiunto

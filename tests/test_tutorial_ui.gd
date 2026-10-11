@@ -164,6 +164,7 @@ func test_win_shows_reward_and_saves_progress() -> void:
 	(ov.find_child("NextMission", true, false) as Button).pressed.emit()
 	var intros := v.find_children("*", "TutorialIntro", true, false)
 	check(intros.size() == 1 and intros[0].number == 2, "mission 2's intro first")
+	check(not ov.visible and intros[0].z_index > ov.z_index, "the result screen hides under the intro (no reward button left in front)")
 	eq(next, [], "not started yet")
 	(intros[0].find_child("Skip", true, false) as Button).pressed.emit()
 	eq(next, [2], "then mission 2")

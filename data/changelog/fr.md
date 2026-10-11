@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.16.2] - 2026-10-12
+
+### Corrigé
+- Tutoriel : après une victoire, « Mission suivante » ouvrait les explications sous l'écran de récompense et l'écran se bloquait.
+
 ## [0.16.1] - 2026-10-12
 
 ### Ajouté
