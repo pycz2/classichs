@@ -9,6 +9,7 @@ const VIEWS := [["Deck", "Your deck", "tracker_deck"], ["Left", "Cards left in d
 	["Opponent", "Opponent played", "tracker_opp"]]
 
 var _lists := {}
+var _headers := {}
 
 
 func _ready() -> void:
@@ -37,14 +38,19 @@ func _ready() -> void:
 		list.visible = Settings.data[v[2]]
 		box.add_child(list)
 		_lists[v[0]] = list
+		_headers[v[0]] = header
 		var key: String = v[2]
-		var title: String = v[1]
-		header.text = ("– " if list.visible else "+ ") + tr(title)
 		header.pressed.connect(func():
 			list.visible = not list.visible
-			header.text = ("– " if list.visible else "+ ") + tr(title)
 			Settings.data[key] = list.visible
-			Settings.save())
+			Settings.save()
+			relabel())
+	relabel()
+
+
+func relabel() -> void:
+	for v in VIEWS:
+		_headers[v[0]].text = ("– " if _lists[v[0]].visible else "+ ") + tr(v[1])
 
 
 func update_from(g: Game, me: int) -> void:

@@ -87,13 +87,21 @@ func test_match_settings_relabels_static_buttons() -> void:
 	root().add_child(v)
 	var m := Match.new()
 	m.bot_delay = 0.0
-	m.setup(H.scene({"hero": "HERO_08"}), [false, false])
+	m.setup(H.scene({"hero": "HERO_08"}), [false, true])
 	v.bind(m)
 	(v.find_child("SettingsButton", true, false) as Button).pressed.emit()
 	var s := v.find_child("SettingsView", true, false) as SettingsView
 	check(s != null, "settings overlay")
 	s.set_language("ru")
 	eq((v.find_child("EndTurn", true, false) as Button).text, "Конец хода", "end turn relabeled")
+	var texts := func() -> Array:
+		return v.find_children("*", "Label", true, false).map(func(l): return l.text) + \
+			v.find_children("*", "Button", true, false).map(func(b): return b.text)
+	check(texts.call().has("– Ваша колода"), "tracker header relabeled")
+	eq((v.find_child("HistoryTitle", true, false) as Label).text, "История", "history title relabeled")
+	check(texts.call().any(func(t): return t.begins_with("Бот ·")), "bot name relabeled")
+	s.set_language("en")
+	check(texts.call().any(func(t): return t.begins_with("Bot ·")), "bot name back in English")
 	(s.find_child("Back", true, false) as Button).pressed.emit()
 	check(not is_instance_valid(s) or s.is_queued_for_deletion(), "overlay closed")
 	v.free()

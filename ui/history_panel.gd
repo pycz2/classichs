@@ -6,21 +6,44 @@ var _list := VBoxContainer.new()
 var _scroll := ScrollContainer.new()
 var _shown := 0
 var _viewer := -1
+var _title: Label
 
 
 func _ready() -> void:
 	add_theme_stylebox_override("panel", Palette.box(Palette.PANEL, 10, Color("c9a74a"), 2))
 	position = Vector2(150, 20)
 	size = Vector2(520, 560)
-	var title := Palette.label(tr("History"), 22, Palette.ATTACK)
-	title.position = Vector2(14, 8)
-	add_child(title)
+	_title = Palette.label(tr("History"), 22, Palette.ATTACK)
+	_title.name = "HistoryTitle"
+	_title.position = Vector2(14, 8)
+	add_child(_title)
 	_scroll.position = Vector2(10, 44)
 	_scroll.size = size - Vector2(20, 54)
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(_scroll)
 	_list.custom_minimum_size.x = _scroll.size.x - 16
 	_scroll.add_child(_list)
+	visibility_changed.connect(func():
+		if is_visible_in_tree():
+			_scroll_to_end())
+
+
+func relabel() -> void:
+	_title.text = tr("History")
+
+
+## True when new lines should scroll into view: the panel is closed, or the
+## reader is already at the bottom (an open panel never yanks a reader away).
+func following() -> bool:
+	var bar := _scroll.get_v_scroll_bar()
+	return not is_visible_in_tree() or _scroll.scroll_vertical >= int(bar.max_value - bar.page) - 8
+
+
+func _scroll_to_end() -> void:
+	if not is_inside_tree():
+		return
+	await get_tree().process_frame  # the scroll range updates after layout
+	_scroll.scroll_vertical = int(_scroll.get_v_scroll_bar().max_value)
 
 
 func line_count() -> int:
@@ -36,8 +59,7 @@ func update_from(g: GameState, viewer: int) -> void:
 		_shown = 0
 		_viewer = viewer
 	var added := false
-	var bar := _scroll.get_v_scroll_bar()
-	var at_bottom := _scroll.scroll_vertical >= int(bar.max_value - bar.page) - 8
+	var follow := following()
 	while _shown < g.history.size():
 		for r in HistoryText.rows(g.history[_shown], g, viewer):
 			var l := Palette.label(r.text, 14)
@@ -48,6 +70,5 @@ func update_from(g: GameState, viewer: int) -> void:
 			_list.add_child(l)
 			added = true
 		_shown += 1
-	if added and at_bottom and is_inside_tree():  # don't yank a reader away from older lines
-		await get_tree().process_frame
-		_scroll.scroll_vertical = int(bar.max_value)
+	if added and follow and is_visible_in_tree():
+		_scroll_to_end()

@@ -61,6 +61,7 @@ var _rope := Control.new()
 var _rope_line := ColorRect.new()
 var _rope_spark := ColorRect.new()
 var _turn_key := ""
+var _bot_side := -1
 var _time_left := 0.0
 
 
@@ -192,9 +193,8 @@ func bind(m: Match) -> void:
 	if player_names == ["", ""] and m.bots[0] != m.bots[1]:
 		var me := m.viewer()
 		player_names[me] = Profile.load_name()
-		player_names[1 - me] = tr("Bot") if m.bots[1 - me] else ""
-		if tutorial:
-			player_names[1 - me] = CardText.name(tutorial.mission.boss)
+		if m.bots[1 - me]:
+			_bot_side = 1 - me  # named in _side_name, so the name follows the language
 	m.start()
 	refresh()
 
@@ -377,6 +377,10 @@ func relabel() -> void:
 			b.text = tr(LABELS[n])
 	for id in EMOTES:
 		(_emote_panel.get_node("Emote_" + id) as Button).text = tr(EMOTES[id])
+	_history.relabel()
+	_tracker.relabel()
+	if _overlay and _overlay.name != "ConnectionLost":
+		_close_overlay()  # refresh() builds it again in the new language
 	refresh()
 
 
@@ -414,6 +418,8 @@ func refresh() -> void:
 
 
 func _side_name(p: int) -> String:
+	if p == _bot_side and player_names[p] == "":
+		return CardText.name(tutorial.mission.boss) if tutorial else tr("Bot")
 	if player_names[p] == Profile.DEFAULT_NAME:
 		return tr("Player")
 	if player_names[p] != "":

@@ -25,6 +25,14 @@ func _process(_delta: float) -> bool:
 	return false
 
 
+## Every test starts on test files, even if an earlier test pointed a path at the player's real file.
+func _use_test_files() -> void:
+	Settings.path = "user://test_runner_settings.json"
+	Profile.path = "user://test_runner_profile.json"
+	DeckStore.path = "user://test_runner_decks.json"
+	Progress.path = "user://test_runner_tutorial.json"
+
+
 func _run_all() -> void:
 	# Tests never read the player's real settings and always run in English.
 	Settings.path = "user://test_runner_settings.json"
@@ -58,6 +66,7 @@ func _run_all() -> void:
 			total += 1
 			var before := errors.count
 			var t: TestCase = script.new()
+			_use_test_files()
 			Settings.load_settings()
 			Locale.set_language("en")
 			t.call(name)
@@ -71,7 +80,9 @@ func _run_all() -> void:
 			for msg in t.failures:
 				print("    " + msg)
 	print("%d tests, %d failed" % [total, failed])
-	DirAccess.remove_absolute(Settings.path)
+	_use_test_files()
+	for path in [Settings.path, Profile.path, DeckStore.path, Progress.path]:
+		DirAccess.remove_absolute(path)
 	Cards.unload()
 	OS.remove_logger(errors)
 	quit(1 if failed > 0 or total == 0 else 0)

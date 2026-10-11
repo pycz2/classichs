@@ -215,3 +215,12 @@ func test_long_card_text_uses_smaller_font() -> void:
 		sizes.append((c.find_children("*", "Label", false, false)[1] as Label).get_theme_font_size("font_size"))
 		c.free()
 	check(sizes[1] < sizes[0], "long text is smaller: %s" % [sizes])
+
+
+func test_hidden_history_follows_new_moves() -> void:
+	var h := HistoryPanel.new()
+	h.visible = false
+	root().add_child(h)
+	check(h.following(), "a hidden panel follows the newest line")
+	h.visible = true
+	h.free()
