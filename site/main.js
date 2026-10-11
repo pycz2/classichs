@@ -94,7 +94,7 @@ function buildCards() {
 
 fetch("data.json").then((r) => r.json()).then((d) => { DATA = d; buildCards(); }).catch(() => {});
 
-function src(name) { return `screens/${lang}/${name}.png`; }
+function src(name) { return `screens/en/${name}.png`; }  // screenshots are in English
 
 function buildGallery() {
   const tabs = $(".tabs"), thumbs = $(".thumbs");
