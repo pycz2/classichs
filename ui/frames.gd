@@ -39,9 +39,25 @@ static func mana(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.
 
 
 static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE) -> void:
-	ci.draw_circle(c, r + maxf(1.5, r * 0.14), Color("3a2a05"))
+	# a sword behind the gem: the blade sticks out to the top right, the hilt to the bottom left
+	var d := Vector2(1, -1).normalized()
+	var n := Vector2(-d.y, d.x)
+	var dark := Color("3a2a05")
+	var w := r * 0.32
+	var tip := c + d * r * 1.75
+	var base := c - d * r * 0.9
+	var blade := PackedVector2Array([base + n * w, tip - d * w * 1.6 + n * w, tip, tip - d * w * 1.6 - n * w, base - n * w])
+	_shape(ci, blade, ATTACK.lightened(0.15), dark, maxf(1.5, r * 0.12))
+	ci.draw_line(base, tip - d * w * 1.8, Color(1, 1, 1, 0.45), maxf(1.0, r * 0.08), true)
+	var guard := c - d * r * 1.0
+	_shape(ci, PackedVector2Array([guard + n * r * 0.75 + d * w * 0.5, guard + n * r * 0.75 - d * w * 0.5, guard - n * r * 0.75 - d * w * 0.5, guard - n * r * 0.75 + d * w * 0.5]), ATTACK.darkened(0.15), dark, maxf(1.5, r * 0.12))
+	var grip_end := c - d * r * 1.55
+	ci.draw_line(guard, grip_end, dark, w * 1.5, true)
+	ci.draw_line(guard, grip_end, Color("8a5a1a"), w * 0.9, true)
+	ci.draw_circle(grip_end, w * 0.75, ATTACK.darkened(0.1))
+	ci.draw_circle(c, r + maxf(1.5, r * 0.14), dark)
 	ci.draw_circle(c, r, ATTACK)
-	ci.draw_line(c + Vector2(-r * 0.55, r * 0.55), c + Vector2(r * 0.55, -r * 0.55), Color(1, 1, 1, 0.3), r * 0.25)
+	ci.draw_circle(c + Vector2(-r * 0.3, -r * 0.3), r * 0.45, Color(1, 1, 1, 0.18))
 	_number(ci, c, value, r * 1.25, col)
 
 
@@ -71,29 +87,16 @@ static func rarity(ci: CanvasItem, c: Vector2, rar: String, r: float) -> void:
 	_shape(ci, PackedVector2Array([c + Vector2(0, -r), c + Vector2(r * 0.8, 0), c + Vector2(0, r), c + Vector2(-r * 0.8, 0)]), col, Color("2a2118"), maxf(1.0, r * 0.2))
 
 
-## The gold dragon above a legendary portrait: a horned head in the middle and
-## spread, scalloped wings along the top edge, like the original frame.
+static var _dragon: Texture2D
+
+
+## The gold dragon statue (generated with Codex, background cut out) coiling over
+## the top of a legendary portrait; top is the middle of its upper edge.
 static func crest(ci: CanvasItem, top: Vector2, w: float) -> void:
-	var dark := Color("3a2a08")
-	var light := Color("f7dc7a")
-	var line := maxf(1.0, w * 0.025)
-	for sx in [-1.0, 1.0]:
-		var p := func(x: float, y: float) -> Vector2: return top + Vector2(sx * x * w, y * w)
-		var wing := PackedVector2Array([p.call(0.1, 0.12), p.call(0.28, -0.08), p.call(0.5, -0.07), p.call(0.64, 0.1),
-			p.call(0.52, 0.08), p.call(0.5, 0.2), p.call(0.38, 0.14), p.call(0.32, 0.27), p.call(0.21, 0.18), p.call(0.12, 0.24)])
-		ci.draw_colored_polygon(wing, GOLD)
-		ring(ci, wing, dark, line)
-		for tip in [[0.5, -0.07], [0.52, 0.08], [0.38, 0.14], [0.21, 0.18]]:
-			ci.draw_line(p.call(0.12, 0.12), p.call(tip[0], tip[1]), Color(light, 0.8), line * 0.8, true)
-		ci.draw_colored_polygon(PackedVector2Array([p.call(0.05, -0.08), p.call(0.15, -0.24), p.call(0.09, -0.05)]), light)
-	var head := PackedVector2Array([top + Vector2(0, -0.17) * w, top + Vector2(0.08, -0.09) * w, top + Vector2(0.1, 0.05) * w,
-		top + Vector2(0.04, 0.15) * w, top + Vector2(-0.04, 0.15) * w, top + Vector2(-0.1, 0.05) * w, top + Vector2(-0.08, -0.09) * w])
-	ci.draw_colored_polygon(head, GOLD.lightened(0.1))
-	ring(ci, head, dark, line)
-	ci.draw_line(top + Vector2(0, -0.12) * w, top + Vector2(0, 0.1) * w, Color(light, 0.9), line, true)
-	for sx in [-1.0, 1.0]:
-		ci.draw_circle(top + Vector2(sx * 0.04, -0.02) * w, w * 0.022, Color("e03131"))
-		ci.draw_circle(top + Vector2(sx * 0.025, 0.11) * w, w * 0.01, dark)
+	if _dragon == null:
+		_dragon = load("res://ui/dragon_crest.png")
+	var h := w * _dragon.get_height() / float(_dragon.get_width())
+	ci.draw_texture_rect(_dragon, Rect2(top - Vector2(w / 2.0, h * 0.35), Vector2(w, h)), false, Color(1, 1, 1, 0.92))
 
 
 static func ring(ci: CanvasItem, pts: PackedVector2Array, col: Color, w: float) -> void:

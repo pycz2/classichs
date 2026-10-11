@@ -37,7 +37,7 @@ static func baseline(s: Vector2) -> Vector2:
 func _draw() -> void:
 	var f := Fonts.title()
 	var at := baseline(size)
-	Frames.crest(self, Vector2(size.x / 2.0, 30), 300)
+	Frames.crest(self, Vector2(size.x / 2.0, 34), 250)
 	draw_string(f, at + Vector2(5, 7), TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color(0, 0, 0, 0.55))
 	draw_string_outline(f, at, TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 20, Color("1b0f06"))
 	draw_string_outline(f, at, TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 10, Color("8a6d2a"))

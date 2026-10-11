@@ -38,21 +38,30 @@ static func plank(tint := Color.WHITE) -> StyleBoxTexture:
 	var phase := []
 	for i in 6:
 		phase.append(rng.randf() * TAU)
+	var r := 11.0  # rounded corners; the frame follows them
+	var half := Vector2(w, h) / 2.0
 	for y in h:
 		for x in w:
+			var q := (Vector2(x + 0.5, y + 0.5) - half).abs() - (half - Vector2(r, r))
+			var dist := Vector2(maxf(q.x, 0), maxf(q.y, 0)).length() + minf(maxf(q.x, q.y), 0.0) - r
+			var edge := -dist
+			if edge < -0.5:
+				img.set_pixel(x, y, Color(0, 0, 0, 0))
+				continue
 			var grain := sin(x * 0.11 + sin(y * 0.6 + phase[y % 6]) * 2.2) * 0.5 + 0.5
 			var c := Color("6b4428").lerp(Color("4a2c18"), grain * 0.55 + (0.12 if y % 9 == 0 else 0.0))
-			var edge := mini(mini(x, w - 1 - x), mini(y, h - 1 - y))
-			if edge < 2:
+			if edge < 2.2:
 				c = Color("d9b44a").lerp(Color("8a6d2a"), float(y) / h)
-			elif edge < 3:
+			elif edge < 3.4:
 				c = Color("2a170b")
-			elif edge < 5:
+			elif edge < 5.5:
 				c = c.lightened(0.12) if y < h / 2 else c.darkened(0.15)
-			img.set_pixel(x, y, c * tint)
+			c = c * tint
+			c.a = clampf(edge + 0.5, 0.0, 1.0)
+			img.set_pixel(x, y, c)
 	var sb := StyleBoxTexture.new()
 	sb.texture = ImageTexture.create_from_image(img)
-	sb.set_texture_margin_all(6)
+	sb.set_texture_margin_all(13)
 	sb.set_content_margin_all(10)
 	return sb
 
@@ -62,6 +71,8 @@ static func theme() -> Theme:
 		var t := Theme.new()
 		t.default_font = ui()
 		t.set_font("font", "Button", ui(700))
+		t.set_font("normal_font", "RichTextLabel", ui(500))
+		t.set_font("bold_font", "RichTextLabel", ui(800))
 		t.set_stylebox("normal", "Button", plank())
 		t.set_stylebox("hover", "Button", plank(Color(1.18, 1.12, 1.05)))
 		t.set_stylebox("pressed", "Button", plank(Color(0.8, 0.78, 0.75)))

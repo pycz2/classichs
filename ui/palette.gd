@@ -30,7 +30,7 @@ static func of_class(card_class: String) -> Color:
 
 
 ## A filled rounded box style for panels and card parts.
-static func box(color: Color, radius := 8, border := Color.TRANSPARENT, border_width := 0) -> StyleBoxFlat:
+static func box(color: Color, radius := 12, border := Color.TRANSPARENT, border_width := 0) -> StyleBoxFlat:
 	var s := StyleBoxFlat.new()
 	s.bg_color = color
 	s.set_corner_radius_all(radius)
