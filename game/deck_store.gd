@@ -6,6 +6,20 @@ extends RefCounted
 const DEFAULT_PATH := "user://decks.json"
 const VERSION := 1
 
+## Well-known decks of the Classic era, ready to play (name, deck code).
+const CLASSIC := [
+	["Control Warrior", "AAEDAQcIraEEr6EE3KEExKIExqIE1qIE2aIExKoEC5eWBJiWBP+WBLCXBLGhBMShBNChBLmiBL6iBMCiBMOiBAAA"],
+	["Midrange Shaman", "AAEDAaa0BgK1oQSHogQO7ZUE7pUEr5YE55YE+ZYEsqEEy6EE06EEhKIEiaIEjqIEk6IE1KIEkKMEAAA="],
+	["Midrange Druid", "AAEDAZICCK2hBK+hBLWhBL6hBNuhBI+jBJajBNGjBAvZlQTblQSwlgSzlgTdlgTpoQTxoQTUogS8owS9owTFqgQAAA=="],
+	["Control Priest", "AAEDAa0GBr6WBICXBLehBNKhBJiiBKeiBAzLlQTNlQTQlQS3lwT6oASAoQSTogSpogSXowSrowStowTEowQAAA=="],
+	["Miracle Rogue", "AAEDAaIHBvigBPugBIahBLWhBNyhBKWjBAz8lQT9lQTclgTqlgT7lgTBoQTUoQTdoQTfoQTkoQTnoQTooQQAAA=="],
+	["Midrange Paladin", "AAEDAZ8FAraiBLeiBA6MlgSOlgSQlgSBoQSuoQS6oQS9oQS+oQTLoQTgoQSwogS1ogTDowTFowQAAA=="],
+	["Handlock", "AAEDAf0GCvuVBK6XBIKhBK+hBNahBNyhBJqiBJyiBKWiBNyiBAr3lQTrlgTtlgT6oATAoQTCoQTJoQTToQTaoQSqowQAAA=="],
+	["Freeze Mage", "AAEDAf0ECOWVBOeVBK+hBLWhBMahBJGiBNeiBNmiBAvhlQTilQTklQTmlQTUlgTzoAT0oASVogSXogSYowTFowQAAA=="],
+	["Midrange Hunter", "AAEDAR8EhZYEnZYEwJYE3KEEDcqWBNGWBPiWBLGXBLyhBL2hBMyiBM2iBM+iBKKjBKOjBKijBMOjBAAA"],
+	["Zoolock", "AAEDAf0GBK6hBMOhBNyhBMWjBA33lQT7lQTVlgTtlgSBoQSyoQS9oQTToQTuoQSdogSjogTUogTDowQAAA=="],
+]
+
 static var path := DEFAULT_PATH
 ## Set by load_all when the file was damaged (a copy is kept); shown to the player.
 static var last_load_error := ""
@@ -20,6 +34,17 @@ static func starter() -> Array[Deck]:
 		d.name = TranslationServer.translate("Basic deck: %s") % CardText.name(d.hero)
 		d.cards.assign(Decks.basic(cls))
 		out.append(d)
+	out.append_array(classic())
+	return out
+
+
+static func classic() -> Array[Deck]:
+	var out: Array[Deck] = []
+	for spec in CLASSIC:
+		var d: Deck = DeckCode.decode(spec[1]).deck
+		if d:
+			d.name = spec[0]
+			out.append(d)
 	return out
 
 
@@ -40,6 +65,8 @@ static func load_all() -> Array[Deck]:
 				if deck.cards.size() != d.cards.size():
 					ok = false  # some cards no longer exist
 				out.append(deck)
+	if ok and int(j.data.get("classic", 0)) < 1:  # saved before the classic decks came: they are added once
+		out.append_array(classic())
 	if not ok:
 		var backup := _free_backup_path()
 		var bad := FileAccess.open(backup, FileAccess.WRITE)
@@ -61,7 +88,7 @@ static func _free_backup_path() -> String:
 
 
 static func save_all(decks: Array) -> bool:
-	var data := {"version": VERSION, "decks": decks.map(func(d: Deck): return d.to_dict())}
+	var data := {"version": VERSION, "classic": 1, "decks": decks.map(func(d: Deck): return d.to_dict())}
 	var tmp := path + ".tmp"
 	var f := FileAccess.open(tmp, FileAccess.WRITE)
 	if f == null:

@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-10-11
+
+### Añadido
+- 10 mazos clásicos listos en el menú de mazos: Control Warrior, Midrange Shaman, Midrange Druid, Control Priest, Miracle Rogue, Midrange Paladin, Handlock, Freeze Mage, Midrange Hunter, Zoolock. Los jugadores con mazos guardados los reciben una vez.
+
 ## [0.13.0] - 2026-10-11
 
 ### Añadido

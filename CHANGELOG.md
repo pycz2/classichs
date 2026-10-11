@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-10-11
+
+### Добавлено
+- 10 готовых классических колод в меню колод: Control Warrior, Midrange Shaman, Midrange Druid, Control Priest, Miracle Rogue, Midrange Paladin, Handlock, Freeze Mage, Midrange Hunter, Zoolock. Игроки с сохранёнными колодами получают их один раз.
+
 ## [0.13.0] - 2026-10-11
 
 ### Добавлено

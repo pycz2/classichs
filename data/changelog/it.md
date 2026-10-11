@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-10-11
+
+### Aggiunto
+- 10 mazzi classici pronti nel menu dei mazzi: Control Warrior, Midrange Shaman, Midrange Druid, Control Priest, Miracle Rogue, Midrange Paladin, Handlock, Freeze Mage, Midrange Hunter, Zoolock. Chi ha mazzi salvati li riceve una volta.
+
 ## [0.13.0] - 2026-10-11
 
 ### Aggiunto
