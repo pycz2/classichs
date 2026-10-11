@@ -149,3 +149,16 @@ class _Pen:
 			poly([p0.x - n.x, p0.y - n.y, p1.x - n.x, p1.y - n.y, p1.x + n.x, p1.y + n.y, p0.x + n.x, p0.y + n.y], Icons.GOLD)
 		circle(0.5, 0.5, 0.3, Icons.GOLD)
 		circle(0.5, 0.5, 0.13, Icons.DARK)
+
+	func i_cards() -> void:  # three fanned cards (the deck tracker)
+		for a in [-0.42, 0.0, 0.42]:
+			var pts := []
+			for c in [[-0.17, -0.5], [0.17, -0.5], [0.17, 0.0], [-0.17, 0.0]]:  # around the bottom middle
+				var v := Vector2(c[0], c[1]).rotated(a) * 1.25
+				pts.append_array([0.5 + v.x, 0.86 + v.y])
+			poly(pts, Icons.GOLD)
+			var inner := []
+			for c in [[-0.12, -0.45], [0.12, -0.45], [0.12, -0.05], [-0.12, -0.05]]:
+				var v := Vector2(c[0], c[1]).rotated(a) * 1.25
+				inner.append_array([0.5 + v.x, 0.86 + v.y])
+			poly(inner, Color("6b3a1a"))

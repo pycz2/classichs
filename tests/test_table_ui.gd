@@ -28,13 +28,13 @@ func test_right_click_own_hero_opens_emotes() -> void:
 	v.free()
 
 
-func test_menu_holds_settings_tracker_and_concede() -> void:
+func test_menu_holds_settings_history_and_concede() -> void:
 	var v := _view({"hero": "HERO_08"})
 	var menu := v.find_child("GameMenu", true, false) as Control
 	eq(menu.visible, false, "closed")
 	(v.find_child("MenuButton", true, false) as Button).pressed.emit()
 	eq(menu.visible, true, "opens from the gear")
-	for n in ["SettingsButton", "TrackerButton", "Concede", "HistoryButton"]:
+	for n in ["SettingsButton", "Concede", "HistoryButton"]:
 		check(menu.find_child(n, true, false) != null, n)
 	v.free()
 
