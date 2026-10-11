@@ -1,7 +1,7 @@
 class_name DeckPile
 extends Control
 ## A player's deck beside the hero: the pile is thicker with more cards; the
-## exact number shows on hover.
+## exact number, and the cards in that player's hand, show on hover.
 
 const SIZE := Vector2(84, 120)
 
@@ -10,8 +10,20 @@ var count := -1:
 		if v == count:
 			return
 		count = v
-		tooltip_text = TranslationServer.translate("Cards in deck: %d") % v
+		_tip()
 		queue_redraw()
+## Cards in the same player's hand (shown on hover too; -1 = not shown).
+var hand := -1:
+	set(v):
+		if v != hand:
+			hand = v
+			_tip()
+
+
+func _tip() -> void:
+	tooltip_text = TranslationServer.translate("Cards in deck: %d") % count
+	if hand >= 0:
+		tooltip_text += "\n" + TranslationServer.translate("Cards in hand: %d") % hand
 
 
 func _init() -> void:
