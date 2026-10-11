@@ -197,17 +197,38 @@ func test_starter_decks_for_every_hero_when_no_decks() -> void:
 	DeckStore.path = "user://test_starter_decks.json"
 	DirAccess.remove_absolute(DeckStore.path)
 	var decks := DeckStore.load_all()
-	eq(decks.size(), 9, "one deck per hero")
+	eq(decks.size(), 19, "one Basic deck per hero and the 10 classic decks")
 	var classes := {}
 	for d in decks:
 		eq(d.validate(), "", d.name)
 		classes[d.card_class()] = true
 	eq(classes.size(), 9, "every class")
-	eq(TrainingSetup.available_decks().size(), 9, "the pickers show each starter deck once")
+	eq(TrainingSetup.available_decks().size(), 19, "the pickers show each starter deck once")
 	DeckStore.save_all(decks.slice(0, 2))
 	eq(DeckStore.load_all().size(), 2, "saved decks are kept as they are")
 	DeckStore.save_all([])
 	eq(DeckStore.load_all().size(), 0, "deleting every deck leaves the list empty")
 	DeckStore.save_all(decks.slice(0, 2))
-	eq(TrainingSetup.available_decks().size(), 9, "plus the starter decks the player deleted")
+	eq(TrainingSetup.available_decks().size(), 19, "plus the starter decks the player deleted")
 	DirAccess.remove_absolute(DeckStore.path)
+
+
+func test_classic_decks_come_ready_and_valid() -> void:
+	eq(DeckStore.CLASSIC.size(), 10, "ten classic decks")
+	for spec in DeckStore.CLASSIC:
+		var r := DeckCode.decode(spec[1])
+		check(r.deck != null, "%s: %s" % [spec[0], r.error])
+	var first := DeckStore.starter()
+	eq(first.size(), 19, "9 Basic decks and the 10 classic ones on a first run")
+	eq(first[9].name, "Control Warrior", "named")
+
+
+func test_classic_decks_are_added_once_to_saved_decks() -> void:
+	_tmp_store('{"version": 1, "decks": [{"name": "Mine", "hero": "HERO_08", "cards": ["VAN_CS2_029"]}]}')
+	var decks := DeckStore.load_all()
+	eq(decks.size(), 11, "my deck and the classic decks")
+	eq(decks[0].name, "Mine", "mine first")
+	decks.remove_at(1)  # the player deletes one and the list is saved
+	DeckStore.save_all(decks)
+	eq(DeckStore.load_all().size(), 10, "a deleted classic deck does not come back")
+	_tmp_clean()

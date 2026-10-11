@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-10-11
+
+### Dodano
+- 10 gotowych klasycznych talii w menu talii: Control Warrior, Midrange Shaman, Midrange Druid, Control Priest, Miracle Rogue, Midrange Paladin, Handlock, Freeze Mage, Midrange Hunter, Zoolock. Gracze z zapisanymi taliami dostają je raz.
+
 ## [0.13.0] - 2026-10-11
 
 ### Dodano

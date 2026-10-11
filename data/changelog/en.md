@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-10-11
+
+### Added
+- 10 ready classic decks in the deck menu: Control Warrior, Midrange Shaman, Midrange Druid, Control Priest, Miracle Rogue, Midrange Paladin, Handlock, Freeze Mage, Midrange Hunter, Zoolock. Players with saved decks get them once.
+
 ## [0.13.0] - 2026-10-11
 
 ### Added
