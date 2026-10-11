@@ -105,12 +105,12 @@ func _draw() -> void:
 			draw_string(font, p, "z", HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(1, 1, 1, 1.0 - ph))
 	var base_atk := int(c.get("attack", 0))
 	var base_hp := int(c.get("health", 0))
-	Frames.attack(self, Vector2(16, 98), e.atk(), 15, Color("8ce99a") if e.atk() > base_atk else Color.WHITE)
+	Frames.attack(self, Vector2(16, 98), e.atk(), 15, Frames.BUFFED if e.atk() > base_atk else Color.WHITE)
 	var hp_color := Color.WHITE
 	if e.damage > 0:
-		hp_color = Color("ff9a9a")
+		hp_color = Frames.DAMAGED
 	elif e.max_health() > base_hp:
-		hp_color = Color("8ce99a")
+		hp_color = Frames.BUFFED
 	Frames.health(self, Vector2(80, 98), e.health(), 15, hp_color)
 
 

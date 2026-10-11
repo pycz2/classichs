@@ -16,39 +16,82 @@ static func _keywords() -> Dictionary:
 	return _data
 
 
-static func make(card_id: String) -> KeywordTips:
+## What changed on a minion compared with its card: buffs (with the card that
+## gave them), auras, set values, gained keywords, Silence.
+static func changes(e: Entity) -> Array:
+	var out := []
+	if e == null:
+		return out
+	var tr := func(k: String) -> String: return TranslationServer.translate(k)
+	var src := func(d: Dictionary) -> String: return (" — " + CardText.name(d.src)) if d.get("src", "") != "" else ""
+	for ench in e.enchantments:
+		var line := ""
+		if ench.has("set_atk"):
+			line = tr.call("Attack set to %d") % ench.set_atk
+		if ench.has("set_hp"):
+			line = (line + ", " if line != "" else "") + tr.call("Health set to %d") % ench.set_hp
+		if line == "" and (int(ench.get("atk", 0)) != 0 or int(ench.get("hp", 0)) != 0):
+			line = "%+d/%+d" % [int(ench.get("atk", 0)), int(ench.get("hp", 0))]
+		if line != "":
+			if ench.get("eot", false):
+				line += " (%s)" % tr.call("this turn")
+			out.append(line + src.call(ench))
+	for card in e.aura.get("src", {}):
+		var v: Array = e.aura.src[card]
+		out.append("%+d/%+d — %s (%s)" % [v[0], v[1], CardText.name(card), tr.call("aura")])
+	var base: Array = e.card().get("mechanics", [])
+	var kw := _keywords()
+	var lang := TranslationServer.get_locale()
+	for k in ["TAUNT", "CHARGE", "DIVINE_SHIELD", "STEALTH", "WINDFURY", "IMMUNE"]:
+		if e.has(k) and not base.has(k) and kw.has(k):
+			out.append(kw[k].name.get(lang, kw[k].name.en))
+	if e.has("FROZEN"):
+		out.append(tr.call("Frozen"))
+	if e.silenced:
+		out.append(tr.call("Silenced"))
+	return out
+
+
+static func make(card_id: String, e: Entity = null) -> KeywordTips:
 	var tips := KeywordTips.new()
 	tips.name = "KeywordTips"
 	tips.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	tips.add_theme_constant_override("separation", 6)
 	var lang := TranslationServer.get_locale()
 	var kw := _keywords()
+	var lines := changes(e)
+	if not lines.is_empty():
+		tips.add_child(_box("Changes", TranslationServer.translate("Changes"), "\n".join(lines), Color("dcefd2")))
 	for m in CardDb.card(card_id).get("mechanics", []):
-		if not kw.has(m):
-			continue
-		var box := PanelContainer.new()
-		var st := Palette.box(Color("efe0bd"), 10, Color("8a6d3b"), 2)
-		st.set_content_margin_all(8)
-		box.add_theme_stylebox_override("panel", st)
-		box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var col := VBoxContainer.new()
-		col.add_theme_constant_override("separation", 2)
-		box.add_child(col)
-		var title := Label.new()
-		title.name = "Title" + m
-		title.text = kw[m].name.get(lang, kw[m].name.en)
-		title.add_theme_font_size_override("font_size", 16)
-		title.add_theme_color_override("font_color", Color("2a1a08"))
-		col.add_child(title)
-		var text := Label.new()
-		text.text = kw[m].text.get(lang, kw[m].text.en)
-		text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		text.custom_minimum_size.x = WIDTH - 16
-		text.add_theme_font_size_override("font_size", 13)
-		text.add_theme_color_override("font_color", Color("3b2a14"))
-		col.add_child(text)
-		tips.add_child(box)
+		if kw.has(m):
+			tips.add_child(_box("Title" + m, kw[m].name.get(lang, kw[m].name.en), kw[m].text.get(lang, kw[m].text.en), Color("efe0bd")))
 	return tips
+
+
+static func _box(title_name: String, title_text: String, body: String, color: Color) -> PanelContainer:
+	var box := PanelContainer.new()
+	box.name = title_name if title_name == "Changes" else "Box"
+	var st := Palette.box(color, 10, Color("8a6d3b"), 2)
+	st.set_content_margin_all(8)
+	box.add_theme_stylebox_override("panel", st)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 2)
+	box.add_child(col)
+	var title := Label.new()
+	title.name = title_name
+	title.text = title_text
+	title.add_theme_font_size_override("font_size", 16)
+	title.add_theme_color_override("font_color", Color("2a1a08"))
+	col.add_child(title)
+	var text := Label.new()
+	text.text = body
+	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text.custom_minimum_size.x = WIDTH - 16
+	text.add_theme_font_size_override("font_size", 13)
+	text.add_theme_color_override("font_color", Color("3b2a14"))
+	col.add_child(text)
+	return box
 
 
 ## Places the boxes beside rect (right of it, or left when there is no room).

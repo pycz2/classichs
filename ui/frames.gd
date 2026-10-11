@@ -9,15 +9,20 @@ const ATTACK := Color("f2b705")
 const HEALTH := Color("d6202a")
 const ARMOR := Color("8d99a6")
 const GOLD := Color("d9b44a")
+## Stat numbers above or below the card's own value.
+const BUFFED := Color("4dff5a")
+const DAMAGED := Color("ff3b3b")
 
 
 static func _number(ci: CanvasItem, c: Vector2, value: int, size: float, col := Color.WHITE) -> void:
 	var font := ThemeDB.fallback_font
-	var fs := int(size)
+	var fs := int(size * 1.08)
 	var s := str(value)
 	var w := font.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
 	var at := c + Vector2(-w / 2.0, fs * 0.36)
-	ci.draw_string_outline(font, at, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, maxi(3, fs / 5), Color.BLACK)
+	var outline := maxi(4, int(fs * 0.34))  # a thick black edge keeps every colour readable on every gem
+	ci.draw_string_outline(font, at + Vector2(0, 1.5), s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, outline, Color(0, 0, 0, 0.6))
+	ci.draw_string_outline(font, at, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, outline, Color.BLACK)
 	ci.draw_string(font, at, s, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, col)
 
 
@@ -70,7 +75,7 @@ static func health(ci: CanvasItem, c: Vector2, value: int, r: float, col := Colo
 			p.x *= 1.0 + p.y / r * 0.45
 			p.y *= 1.25
 		pts.append(c + p + Vector2(0, r * 0.1))
-	_shape(ci, pts, HEALTH, Color("3d0508"), maxf(1.5, r * 0.14))
+	_shape(ci, pts, HEALTH.darkened(0.5) if col == DAMAGED else HEALTH, Color("3d0508"), maxf(1.5, r * 0.14))  # a darker drop makes red damage numbers stand out
 	_number(ci, c + Vector2(0, r * 0.08), value, r * 1.25, col)
 
 

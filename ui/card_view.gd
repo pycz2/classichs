@@ -134,7 +134,7 @@ func _draw() -> void:
 	Frames.rarity(self, Vector2(60, 106) * k, c.get("rarity", ""), 5 * k)
 	var base_cost := int(c.get("cost", 0))
 	var shown_cost := cost if cost >= 0 else base_cost
-	var cost_color := Color.WHITE if shown_cost == base_cost else (Color("8ce99a") if shown_cost < base_cost else Color("ff8787"))
+	var cost_color := Color.WHITE if shown_cost == base_cost else (Frames.BUFFED if shown_cost < base_cost else Frames.DAMAGED)
 	Frames.mana(self, Vector2(17, 17) * k, shown_cost, 15 * k, cost_color)
 	if type == "MINION" or type == "WEAPON":
 		var a := attack if attack >= 0 else int(c.get("attack", 0))

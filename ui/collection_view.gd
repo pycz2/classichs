@@ -23,6 +23,7 @@ var _grid := GridContainer.new()
 var _page_label: Label
 var _hint: Label
 var _deck_list := VBoxContainer.new()
+var _tips: KeywordTips
 ## How full the deck is, behind the "n / 30" count.
 var _bar := _Bar.new()
 var _count: Label
@@ -217,11 +218,18 @@ func _on_hover(v: EntityView, on: bool) -> void:
 	if _tooltip:
 		_tooltip.queue_free()
 		_tooltip = null
+	if _tips:
+		_tips.queue_free()
+		_tips = null
 	if on:
 		_tooltip = CardView.make((v as CardView).card_id, 1.9)
 		_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_tooltip.position = Vector2(650, 120) if deck == null else Vector2(640, 110)
 		add_child(_tooltip)
+		_tips = KeywordTips.make(_tooltip.card_id)
+		if _tips.get_child_count() > 0:
+			add_child(_tips)
+			_tips.beside(Rect2(_tooltip.position, _tooltip.size))
 
 
 # --- deck sidebar ---------------------------------------------------------------
