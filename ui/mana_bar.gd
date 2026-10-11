@@ -5,6 +5,8 @@ extends Control
 var mana := 0
 var max_mana := 0
 var locked := 0
+## Overload owed: crystals locked next turn (shown as soon as the card is played).
+var owed := 0
 ## Crystals the card under the mouse would spend: the top ones of the full crystals blink.
 var preview := 0
 var _t := 0.0
@@ -15,16 +17,17 @@ func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-func set_values(m: int, mx: int, lock: int) -> void:
-	if [m, mx, lock] != [mana, max_mana, locked]:
+func set_values(m: int, mx: int, lock: int, next_lock := 0) -> void:
+	if [m, mx, lock, next_lock] != [mana, max_mana, locked, owed]:
 		mana = m
 		max_mana = mx
 		locked = lock
+		owed = next_lock
 		queue_redraw()
 
 
 func _process(delta: float) -> void:
-	if preview > 0:
+	if preview > 0 or owed > 0:
 		_t += delta
 		queue_redraw()
 
@@ -62,6 +65,19 @@ func _draw() -> void:
 		draw_polyline(pts + PackedVector2Array([pts[0]]), Color("a5d8ff") if full else Color("364fc7"), 1.5)
 		if full:
 			draw_colored_polygon(PackedVector2Array([c + Vector2(0, -7), c + Vector2(3, -1), c + Vector2(0, 1), c + Vector2(-3, -1)]), Color("e7f5ff"))
-		if i >= max_mana - locked:
-			draw_line(c + Vector2(-5, -5), c + Vector2(5, 5), Color("ff6b6b"), 2)
-			draw_line(c + Vector2(5, -5), c + Vector2(-5, 5), Color("ff6b6b"), 2)
+		if i >= max_mana - locked:  # locked by Overload this turn: a padlock on the crystal
+			draw_colored_polygon(pts, Color(0.05, 0.05, 0.08, 0.55))
+			_lock(c + Vector2(0, 1), 1.0, Color("ced4da"))
+	var next_max := mini(10, max_mana + 1)
+	for i in range(maxi(0, next_max - owed), next_max):  # locked next turn: small orange padlocks above
+		_lock(Vector2(66 + i * 20, 15) + Vector2(0, -15 + 1.5 * sin(_t * 4.0 + i)), 0.8, Color("ff922b"))
+
+
+## A small padlock: a shackle and a body with a keyhole.
+func _lock(c: Vector2, k: float, col: Color) -> void:
+	draw_arc(c + Vector2(0, -2.5) * k, 3.2 * k, PI, TAU, 12, Color(0, 0, 0, 0.8), 3.2 * k, true)
+	draw_arc(c + Vector2(0, -2.5) * k, 3.2 * k, PI, TAU, 12, col, 1.8 * k, true)
+	var body := Rect2(c + Vector2(-5, -2.5) * k, Vector2(10, 8) * k)
+	draw_rect(body.grow(1.2 * k), Color(0, 0, 0, 0.8))
+	draw_rect(body, col)
+	draw_circle(c + Vector2(0, 1) * k, 1.3 * k, Color(0, 0, 0, 0.8))

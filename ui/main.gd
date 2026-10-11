@@ -8,6 +8,7 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = Fonts.theme()  # the medieval font and tavern buttons everywhere below
 	Locale.load_all()
+	Sprites.load_all()
 	Settings.load_settings()
 	Settings.apply()
 	add_child(Sound.new())

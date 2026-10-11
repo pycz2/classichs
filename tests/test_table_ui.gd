@@ -324,3 +324,24 @@ func test_hovered_hand_card_shows_its_keyword_boxes() -> void:
 	v._on_hover(v._views[nova.id], true)  # then the raised card comes under the mouse
 	check(v._tips != null and is_instance_valid(v._tips), "the keyword boxes stay")
 	v.free()
+
+
+func test_a_card_made_on_the_table_comes_from_its_maker() -> void:
+	var v := _view({"hero": "HERO_08", "board": ["VAN_EX1_559"], "hand": ["VAN_CS2_029"]})  # Archmage Antonidas, Fireball
+	var antonidas := v.g.players[0].board[0]
+	var fireball := v.g.players[0].hand[0]
+	var from := v._center_of(antonidas.id)
+	var r := v.g.apply({"type": "play", "player": 0, "entity": fireball.id, "target": v.g.players[1].hero.id, "pos": -1, "choice": -1})
+	var made: Array = r.events.filter(func(e): return e.type == "add_to_hand")
+	eq(made[0].get("by_id"), antonidas.id, "the new Fireball is Antonidas's")
+	v._effects_now.call(r.events)
+	check(v._views.has(made[0].entity), "it is in the hand")
+	v.free()
+
+
+func test_overload_shows_at_once() -> void:
+	var v := _view({"hero": "HERO_02", "mana": 5, "max_mana": 5, "hand": ["VAN_EX1_238"]})  # Lightning Bolt: Overload (1)
+	var bolt := v.g.players[0].hand[0]
+	v.controller.submit({"type": "play", "player": 0, "entity": bolt.id, "target": v.g.players[1].hero.id, "pos": -1, "choice": -1})
+	eq(v._mana[0].owed, 1, "the crystal locked next turn shows now")
+	v.free()

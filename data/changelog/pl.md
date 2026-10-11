@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-11
+
+### Dodano
+- Malowane obrazki interfejsu: kryształ many, kropla zdrowia, kamień ataku z mieczem, tarcze pancerza i wytrzymałości, tarcza prowokacji, czaszka ze skrzyżowanymi kośćmi, fiolka trucizny, błyskawica, emblematy klas, obrazek zmęczenia.
+- Jadowici stronnicy (Kobra cesarska, Cierpliwa zabójczyni) mają fiolkę trucizny.
+- Okienko słowa kluczowego dla Szału.
+- Karta wyciszonego stronnika po najechaniu pokazuje tekst przekreślony czerwonym krzyżykiem.
+- Przeciążenie widać od razu: pomarańczowe kłódki nad kryształami na następną turę; zablokowany kryształ pokazuje kłódkę zamiast krzyżyka.
+- Karta stworzona przez kartę na stole (Arcymag Antonidas, Ysera) leci od niej do ręki.
+
+### Zmieniono
+- Poświaty (do zagrania, wybrane, cel) są zawsze na zewnątrz wszystkich efektów karty.
+- Furia wichru: podmuchy na pochylonej orbicie, za kartą i przed nią.
+- Ukrycie: mgiełka, przez którą lekko widać obrazek; Zamrożenie: warstwa szronu i lodowa krawędź.
+- Sekrety na portrecie bohatera są okrągłe: fioletowe u maga, zielone u łowcy, żółte u paladyna.
+- Kamienie rzadkości są okrągłe, z cieniem i odblaskiem.
+- Smok legendarnego stronnika obejmuje tylko górną część owalu.
+
 ## [0.14.1] - 2026-10-11
 
 ### Zmieniono

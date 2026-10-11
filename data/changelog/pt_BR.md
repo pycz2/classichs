@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-11
+
+### Adicionado
+- Imagens de interface pintadas: cristal de mana, gota de vida, gema de ataque com espada, escudos de armadura e durabilidade, escudo de Provocar, caveira com ossos, frasco de veneno, raio, emblemas de classe, uma imagem para a fadiga.
+- Lacaios venenosos (Naja Imperial, Assassina Paciente) têm um frasco de veneno.
+- Uma janelinha de palavra-chave para Enfurecer.
+- A carta de um lacaio silenciado mostra o texto riscado com uma cruz vermelha ao passar o mouse.
+- A sobrecarga aparece na hora: cadeados laranja sobre os cristais para o próximo turno; um cristal bloqueado mostra um cadeado em vez de uma cruz.
+- Uma carta criada por uma carta na mesa (Arquimago Antonidas, Ysera) voa dela para a mão.
+
+### Alterado
+- Os brilhos (jogável, selecionado, alvo) ficam sempre do lado de fora de todos os efeitos de uma carta.
+- Fúria dos Ventos: rajadas numa órbita inclinada, por trás e pela frente da carta.
+- Furtividade: uma névoa através da qual a imagem aparece de leve; Congelado: uma camada de geada e uma borda gelada.
+- Os segredos no retrato do herói são redondos: roxos para o mago, verdes para o caçador, amarelos para o paladino.
+- As gemas de raridade são redondas, com sombra e brilho.
+- O dragão de um lacaio lendário cobre só a parte de cima do oval.
+
 ## [0.14.1] - 2026-10-11
 
 ### Alterado

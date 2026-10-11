@@ -767,7 +767,7 @@ func refresh() -> void:
 	_laid_out = true
 	for i in 2:
 		var p := g.players[[me, opp][i]]
-		_mana[i].set_values(p.mana, p.max_mana, p.overload_locked)
+		_mana[i].set_values(p.mana, p.max_mana, p.overload_locked, p.overload_owed)
 		_names[i].text = _side_name(p.index)
 		_piles[i].count = p.deck.size()
 		_piles[i].hand = p.hand.size()
@@ -1188,6 +1188,7 @@ func _on_hover(v: EntityView, on: bool) -> void:
 	_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if e.zone != "SECRET":
 		_tooltip.show_entity(e, g)
+		_tooltip.silenced = e.silenced
 	_tooltip.position = TOOLTIP_POS
 	add_child(_tooltip)
 	_show_tips(e.card_id, Rect2(_tooltip.position, _tooltip.size), e if e.zone == "PLAY" else null)
@@ -1603,13 +1604,23 @@ class _Fatigue:
 		var r := Rect2(Vector2.ZERO, size)
 		draw_style_box(Palette.box(Color("1a1325"), 10, Color("6741d9"), 3), r)
 		draw_style_box(Palette.box(Color("2b1d3f"), 8, Color("4c2f8a"), 1), r.grow(-7))
+		var pic := Sprites.get_tex("fatigue")
 		var c := Vector2(size.x / 2.0, 52)
-		draw_circle(c, 22, Color("e9ecef"))
-		draw_circle(c + Vector2(-8, -3), 6, Color("1a1325"))
-		draw_circle(c + Vector2(8, -3), 6, Color("1a1325"))
-		draw_rect(Rect2(c + Vector2(-10, 14), Vector2(20, 10)), Color("e9ecef"))
-		for i in 3:
-			draw_line(c + Vector2(-6 + i * 6, 15), c + Vector2(-6 + i * 6, 24), Color("1a1325"), 2)
+		if pic:  # the generated picture in an arch, like a card's art
+			var art := Rect2(Vector2(12, 12), Vector2(size.x - 24, 76))
+			var arch := Art.outline("arch", art)
+			var uv := PackedVector2Array()
+			for p in arch:
+				uv.append((p - art.position) / art.size)
+			draw_colored_polygon(arch, Color.WHITE, uv, pic)
+			Frames.ring(self, arch, Color("6741d9"), 2)
+		else:  # a skull
+			draw_circle(c, 22, Color("e9ecef"))
+			draw_circle(c + Vector2(-8, -3), 6, Color("1a1325"))
+			draw_circle(c + Vector2(8, -3), 6, Color("1a1325"))
+			draw_rect(Rect2(c + Vector2(-10, 14), Vector2(20, 10)), Color("e9ecef"))
+			for i in 3:
+				draw_line(c + Vector2(-6 + i * 6, 15), c + Vector2(-6 + i * 6, 24), Color("1a1325"), 2)
 		var f := Fonts.ui(700)
 		var tw := f.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x
 		draw_string(f, Vector2((size.x - tw) / 2.0, 100), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("e5dbff"))
@@ -1683,6 +1694,9 @@ func _effects_now(events: Array) -> void:
 		old[id] = _views[id].position + _views[id].size / 2.0
 		if _views[id] is MinionView or _views[id] is HeroView:
 			before[id] = _views[id].s
+	for ev in events:  # a card made by a card on the table (Antonidas, Ysera) comes from it, not from the deck
+		if ev.type == "add_to_hand" and _views.has(ev.get("by_id", -1)) and not _views.has(ev.entity) and not _moved.has(ev.entity):
+			_moved[ev.entity] = _center_of(ev.by_id)
 	for ev in events:  # the new card takes the old one's place instead of dying and arriving
 		var pair: Array = {"return_to_hand": [ev.get("entity", -1), ev.get("new", -1)], "transform": [ev.get("from", -1), ev.get("to", -1)]}.get(ev.type, [])
 		if not pair.is_empty() and _views.has(pair[0]):

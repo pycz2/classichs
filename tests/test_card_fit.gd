@@ -47,3 +47,12 @@ func test_card_lab_shows_every_language_and_changes_a_layout() -> void:
 	eq(CardLayout.of("VAN_CS2_029", "ru").lines, ["Наносит 6 ед.", "урона."], "lines as typed")
 	CardLayout.store("VAN_CS2_029", "ru", was)
 	lab.free()
+
+
+func test_keywords_come_from_bold_text_too() -> void:
+	check(KeywordTips.keywords_of("VAN_EX1_393").has("ENRAGED"), "Amani Berserker: Enrage from its text")
+	check(KeywordTips.keywords_of("VAN_EX1_170").has("POISONOUS"), "Emperor Cobra is poisonous")
+	check(not KeywordTips.keywords_of("VAN_CS2_182").has("POISONOUS"), "a plain minion is not")
+	var tips := KeywordTips.make("VAN_EX1_393")
+	check(tips.get_child_count() == 1, "Enrage gets its box")
+	tips.free()

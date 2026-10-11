@@ -4,6 +4,8 @@ extends EntityView
 
 enum Kind { POWER, WEAPON, SECRET }
 
+const SECRET_COLORS := {"MAGE": Color("9b4dff"), "HUNTER": Color("2fb344"), "PALADIN": Color("f2c230")}
+
 var e: Entity  # the live entity
 var g: GameState
 ## What the view shows: a copy taken by sync() (see MinionView.s).
@@ -40,10 +42,13 @@ func _draw() -> void:
 	var cls: String = s.card().get("cardClass", "NEUTRAL")
 	var art := Rect2(c - Vector2(r, r) * 0.86, Vector2(r, r) * 1.72)
 	match kind:
-		Kind.SECRET:
-			var pts := PackedVector2Array([c + Vector2(0, -r), c + Vector2(r * 0.85, 0), c + Vector2(0, r), c + Vector2(-r * 0.85, 0)])
-			draw_colored_polygon(pts, Color("7048e8") if face_down else Palette.of_class(cls))
-			Frames.ring(self, pts, Frames.GOLD, 2)
+		Kind.SECRET:  # a round gem in the class's colour (the opponent sees it too, with a "?")
+			var col: Color = SECRET_COLORS.get(cls, Color("7048e8"))
+			draw_circle(c + Vector2(0, 2), r + 2, Color(0, 0, 0, 0.45))
+			draw_circle(c, r + 1.5, Frames.GOLD.darkened(0.2))
+			draw_circle(c, r - 0.5, col.darkened(0.4))
+			draw_circle(c + Vector2(0, -r * 0.1), r * 0.8, col)
+			draw_circle(c + Vector2(-r * 0.3, -r * 0.35), r * 0.28, Color(1, 1, 1, 0.55))
 			var font := ThemeDB.fallback_font
 			draw_string_outline(font, Vector2(c.x - 5, c.y + 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, 3, Color.BLACK)
 			draw_string(font, Vector2(c.x - 5, c.y + 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
@@ -67,7 +72,7 @@ func _draw() -> void:
 			if not active:
 				draw_circle(c, r, Color(0, 0, 0, 0.35))
 			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12 * bump("atk"))
-			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(s.tags.get("DURABILITY", 0)), 11 * bump("hp"))
+			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(s.tags.get("DURABILITY", 0)), 11 * bump("hp"), Color.WHITE, "durability")
 
 
 ## Turns the hero power over when it becomes used or ready again (a flip animation).

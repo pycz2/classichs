@@ -47,8 +47,16 @@ func _draw() -> void:
 	draw_colored_polygon(Art.outline("arch", r.grow(2)), Palette.of_class(cls).darkened(0.3))
 	Art.paint_in(self, r, s.card_id, "arch")
 	Frames.ring(self, outline, Frames.GOLD, 3)
-	if s.has("FROZEN"):
-		draw_colored_polygon(outline, Color(0.6, 0.85, 1.0, 0.45))
+	if s.has("FROZEN"):  # frost over the portrait and an icy rim
+		var ice := Sprites.get_tex("ice")
+		if ice:
+			var uv := PackedVector2Array()
+			for p in outline:
+				uv.append((p - r.position) / r.size)
+			draw_colored_polygon(outline, Color(0.85, 0.95, 1.0, 0.55), uv, ice)
+		else:
+			draw_colored_polygon(outline, Color(0.6, 0.85, 1.0, 0.45))
+		Frames.ring(self, outline, Color(0.85, 0.96, 1.0, 0.95), 4)
 	if s.has("IMMUNE"):
 		Frames.ring(self, Art.outline("arch", r.grow(4)), Color(1, 0.9, 0.3), 3)
 	Icons.paint(self, cls if Icons.CLASSES.has(cls) else "NEUTRAL", Rect2(Vector2(SIZE.x / 2 - 13, SIZE.y - 26), Vector2(26, 26)))
