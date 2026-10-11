@@ -7,8 +7,12 @@ extends EntityView
 const SIZE := Vector2(96, 116)
 const OVAL := Rect2(Vector2(12, 8), Vector2(72, 92))
 
-var e: Entity
+var e: Entity  # the live entity
 var g: GameState
+## What the view shows: a copy taken by sync() (the table syncs its views when an
+## animation reaches the moment of the change, e.g. the hit, not before).
+var s: Entity
+var _current := -1
 var _t := 0.0
 
 
@@ -19,46 +23,53 @@ static func make(ent: Entity, game: GameState) -> MinionView:
 	v.entity_id = ent.id
 	v.custom_minimum_size = SIZE
 	v.size = SIZE
+	v.sync()
 	return v
 
 
+func sync() -> void:
+	s = e.copy()
+	_current = g.current
+	queue_redraw()
+
+
 func _animated() -> bool:
-	var h := Cards.of(e.card_id)
-	return e.has("DIVINE_SHIELD") or e.has("WINDFURY") or e.has("STEALTH") or e.has("FROZEN") or _sleeping() \
-		or (not e.silenced and (h.has("on") or h.has("aura")))
+	var h := Cards.of(s.card_id)
+	return s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
+		or (not s.silenced and (h.has("on") or h.has("aura")))
 
 
 func _sleeping() -> bool:
-	return e.has("EXHAUSTED") and not e.has("CHARGE") and e.controller == g.current
+	return s.has("EXHAUSTED") and not s.has("CHARGE") and s.controller == _current
 
 
 func _process(delta: float) -> void:
-	if e and _animated():
+	if s and _animated():
 		_t += delta
 		queue_redraw()
 
 
 func _draw() -> void:
-	var c := e.card()
-	var h := Cards.of(e.card_id)
+	var c := s.card()
+	var h := Cards.of(s.card_id)
 	var oval := Art.outline("oval", OVAL)
 	var center := OVAL.get_center()
 	if glow.a > 0.0:
 		draw_colored_polygon(Art.outline("oval", OVAL.grow(6)), Color(glow, 0.9))
-	if e.has("TAUNT"):  # a stone shield behind the portrait
+	if s.has("TAUNT"):  # a stone shield behind the portrait
 		var s := PackedVector2Array([Vector2(6, 10), Vector2(90, 10), Vector2(88, 64), Vector2(48, 112), Vector2(8, 64)])
 		draw_colored_polygon(s, Color("7d7f7d"))
 		Frames.ring(self, s, Color("3b3d3b"), 3)
 	draw_colored_polygon(Art.outline("oval", OVAL.grow(3)), Color("2a2118"))
-	Art.paint_in(self, OVAL, e.card_id, "oval")
-	if e.silenced:
+	Art.paint_in(self, OVAL, s.card_id, "oval")
+	if s.silenced:
 		draw_colored_polygon(oval, Color(0.5, 0.5, 0.55, 0.45))
-	if e.has("STEALTH"):
+	if s.has("STEALTH"):
 		draw_colored_polygon(oval, Color(0.05, 0.05, 0.12, 0.45))
 		for i in 6:
 			var a := _t * 0.8 + i * 1.1
 			draw_circle(center + Vector2(cos(a) * 26, sin(a * 1.3) * 34), 7, Color(0.6, 0.6, 0.8, 0.18))
-	if e.has("FROZEN"):
+	if s.has("FROZEN"):
 		draw_colored_polygon(oval, Color(0.6, 0.85, 1.0, 0.4))
 		for i in 5:
 			var p := center + Vector2(cos(i * 1.3) * 30, sin(i * 1.3) * 40)
@@ -67,31 +78,31 @@ func _draw() -> void:
 	Frames.ring(self, oval, edge, 3)
 	if c.get("rarity", "") == "LEGENDARY":
 		Frames.crest(self, Vector2(48, 9), 84)  # on top of the oval, above the portrait
-	if e.has("DIVINE_SHIELD"):  # a shimmering golden bubble
+	if s.has("DIVINE_SHIELD"):  # a shimmering golden bubble
 		draw_colored_polygon(Art.outline("oval", OVAL.grow(5)), Color(1, 0.86, 0.3, 0.18))
 		Frames.ring(self, Art.outline("oval", OVAL.grow(5)), Color(1, 0.9, 0.4, 0.75 + 0.25 * sin(_t * 4)), 3)
 		var a := _t * 1.5
 		draw_circle(center + Vector2(cos(a) * 34, sin(a) * 44), 4, Color(1, 1, 0.8, 0.9))
-	if e.has("WINDFURY"):  # two swirls circling the portrait
+	if s.has("WINDFURY"):  # two swirls circling the portrait
 		for k in 2:
 			for i in 5:
 				var a0 := _t * 3.0 + k * PI + i * 0.25
 				var a1 := a0 + 0.22
 				draw_line(center + Vector2(cos(a0) * 42, sin(a0) * 52), center + Vector2(cos(a1) * 42, sin(a1) * 52), Color(0.85, 0.95, 1.0, 0.25 + i * 0.15), 3, true)
-	if not e.silenced and h.has("aura"):
+	if not s.silenced and h.has("aura"):
 		Frames.ring(self, Art.outline("oval", OVAL.grow(8 + 2 * sin(_t * 2))), Color(0.5, 0.9, 1.0, 0.45), 2)
-	if not e.silenced and c.get("mechanics", []).has("ENRAGED") and e.damage > 0:
+	if not s.silenced and c.get("mechanics", []).has("ENRAGED") and s.damage > 0:
 		Frames.ring(self, Art.outline("oval", OVAL.grow(4)), Color("ff4d4d"), 3)
-	if e.spellpower() > 0 and not e.silenced:
+	if s.spellpower() > 0 and not s.silenced:
 		for i in 3:
 			var p := center + Vector2(-20 + i * 20, -40 + 4 * sin(_t * 3 + i))
 			draw_colored_polygon(PackedVector2Array([p + Vector2(0, -5), p + Vector2(1.5, -1.5), p + Vector2(5, 0), p + Vector2(1.5, 1.5), p + Vector2(0, 5), p + Vector2(-1.5, 1.5), p + Vector2(-5, 0), p + Vector2(-1.5, -1.5)]), Color("e5dbff"))
 	var marks := []
-	if not e.silenced and h.has("deathrattle"):
+	if not s.silenced and h.has("deathrattle"):
 		marks.append("deathrattle")
-	if not e.silenced and h.has("on"):
+	if not s.silenced and h.has("on"):
 		marks.append("trigger")
-	if e.silenced:
+	if s.silenced:
 		marks.append("silenced")
 	for i in marks.size():
 		_draw_icon(marks[i], Vector2(48 + (i - (marks.size() - 1) / 2.0) * 18, 98))
@@ -105,13 +116,13 @@ func _draw() -> void:
 			draw_string(font, p, "z", HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(1, 1, 1, 1.0 - ph))
 	var base_atk := int(c.get("attack", 0))
 	var base_hp := int(c.get("health", 0))
-	Frames.attack(self, Vector2(16, 98), e.atk(), 15, Frames.BUFFED if e.atk() > base_atk else Color.WHITE)
+	Frames.attack(self, Vector2(16, 98), s.atk(), 15, Frames.BUFFED if s.atk() > base_atk else Color.WHITE)
 	var hp_color := Color.WHITE
-	if e.damage > 0:
+	if s.damage > 0:
 		hp_color = Frames.DAMAGED
-	elif e.max_health() > base_hp:
+	elif s.max_health() > base_hp:
 		hp_color = Frames.BUFFED
-	Frames.health(self, Vector2(80, 98), e.health(), 15, hp_color)
+	Frames.health(self, Vector2(80, 98), s.health(), 15, hp_color)
 
 
 ## Small status marks under the portrait (vector: the font has no symbol glyphs).

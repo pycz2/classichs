@@ -4,8 +4,12 @@ extends EntityView
 
 enum Kind { POWER, WEAPON, SECRET }
 
-var e: Entity
+var e: Entity  # the live entity
 var g: GameState
+## What the view shows: a copy taken by sync() (see MinionView.s).
+var s: Entity
+var _cost := 0
+var _active := false
 var kind := Kind.POWER
 var face_down := false  # an enemy Secret: show "?" only
 ## A used hero power lies face down (it turns over when used and again when ready).
@@ -19,9 +23,12 @@ static func make(ent: Entity, game: GameState, k: Kind, hide := false) -> PowerV
 	v.kind = k
 	v.face_down = hide
 	v.entity_id = ent.id
-	var s := Vector2(36, 36) if k == Kind.SECRET else Vector2(76, 76)
-	v.custom_minimum_size = s
-	v.size = s
+	var sz := Vector2(36, 36) if k == Kind.SECRET else Vector2(76, 76)
+	v.custom_minimum_size = sz
+	v.size = sz
+	v.s = ent.copy()
+	v._cost = game.cost(ent)
+	v._active = ent.controller == game.current
 	return v
 
 
@@ -30,7 +37,7 @@ func _draw() -> void:
 	var r := size.x / 2 - 4
 	if glow.a > 0:
 		draw_circle(c, r + 6, glow)
-	var cls: String = e.card().get("cardClass", "NEUTRAL")
+	var cls: String = s.card().get("cardClass", "NEUTRAL")
 	var art := Rect2(c - Vector2(r, r) * 0.86, Vector2(r, r) * 1.72)
 	match kind:
 		Kind.SECRET:
@@ -49,22 +56,26 @@ func _draw() -> void:
 				draw_circle(c, r, Color(0, 0, 0, 0.35))
 				Frames.ring(self, Art.outline("circle", art), Frames.GOLD.darkened(0.4), 3)
 			else:
-				Art.paint_in(self, art, e.card_id, "circle")
+				Art.paint_in(self, art, s.card_id, "circle")
 				Frames.ring(self, Art.outline("circle", art), Frames.GOLD, 3)
-				Frames.mana(self, Vector2(c.x, 9), g.cost(e), 11)
+				Frames.mana(self, Vector2(c.x, 9), _cost, 11)
 		Kind.WEAPON:
 			draw_circle(c, r + 3, Color("3b2f22"))
-			Art.paint_in(self, art, e.card_id, "circle")
+			Art.paint_in(self, art, s.card_id, "circle")
 			Frames.ring(self, Art.outline("circle", art), Color("8a7a5c"), 3)
-			var active := e.controller == g.current
+			var active := _active
 			if not active:
 				draw_circle(c, r, Color(0, 0, 0, 0.35))
-			Frames.attack(self, Vector2(12, size.y - 12), e.atk(), 12)
-			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(e.tags.get("DURABILITY", 0)), 11)
+			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12)
+			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(s.tags.get("DURABILITY", 0)), 11)
 
 
 ## Turns the hero power over when it becomes used or ready again (a flip animation).
 func sync() -> void:
+	s = e.copy()
+	_cost = g.cost(e)
+	_active = e.controller == g.current
+	queue_redraw()
 	if kind != Kind.POWER:
 		return
 	var used := e.has("USED")
