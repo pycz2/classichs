@@ -43,7 +43,14 @@ static func save(lang: String) -> bool:
 	var f := FileAccess.open("%s/%s.json" % [DIR, lang], FileAccess.WRITE)
 	if f == null:
 		return false
-	f.store_string(JSON.stringify(_lang(lang), "\t", true))
+	var data := {}
+	for id in _lang(lang):  # sizes and shifts as whole numbers ("11", not "11.0")
+		var e: Dictionary = _lang(lang)[id].duplicate(true)
+		for k in ["text", "name", "dy"]:
+			if e.has(k):
+				e[k] = int(e[k])
+		data[id] = e
+	f.store_string(JSON.stringify(data, "\t", true))
 	return true
 
 

@@ -1670,8 +1670,7 @@
 			"mécanique 2/1."
 		],
 		"name": 10,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_028": {
 		"lines": [
@@ -1730,8 +1729,7 @@
 			"pas attaquer."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_046": {
 		"lines": [
@@ -1808,8 +1806,7 @@
 			"d’un serviteur."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_062": {
 		"lines": [
@@ -1939,8 +1936,7 @@
 			"lancez un sort."
 		],
 		"name": 11,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_096": {
 		"lines": [
@@ -1999,8 +1995,7 @@
 			"dans votre main."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_110": {
 		"lines": [
@@ -2342,8 +2337,7 @@
 			"un serviteur."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_166a": {
 		"lines": [
@@ -2694,8 +2688,7 @@
 			"carte aléatoire."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_308": {
 		"lines": [
@@ -2801,8 +2794,7 @@
 			"prend sa place."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_332": {
 		"lines": [
@@ -2867,8 +2859,7 @@
 			"serviteurs » ?"
 		],
 		"name": 12,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_349": {
 		"lines": [
@@ -2948,8 +2939,7 @@
 			"perd 1 Durabilité."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_371": {
 		"lines": [
@@ -3059,8 +3049,7 @@
 			"il gagne +3 ATQ."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_400": {
 		"lines": [
@@ -3347,8 +3336,7 @@
 			"votre main."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_560": {
 		"lines": [
@@ -3357,8 +3345,7 @@
 			"jouer leur tour."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_561": {
 		"lines": [
@@ -3620,8 +3607,7 @@
 			"un diablotin 1/1."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_598": {
 		"name": 12,
@@ -3771,8 +3757,7 @@
 			"par votre héros."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_621": {
 		"lines": [
@@ -3872,8 +3857,7 @@
 			"à la fin du tour."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_HERO_01bp": {
 		"lines": [
@@ -4261,8 +4245,7 @@
 			"votre arme."
 		],
 		"name": 11,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_NEW1_025": {
 		"lines": [

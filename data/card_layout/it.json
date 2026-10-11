@@ -38,8 +38,7 @@
 			"sempre gli Imp..."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"EX1_323h": {
 		"name": 12,
@@ -1476,8 +1475,7 @@
 			"servitore casuale."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_005": {
 		"lines": [
@@ -1575,8 +1573,7 @@
 			"nemico casuale."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_017": {
 		"lines": [
@@ -1775,8 +1772,7 @@
 			"dell'avversario."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_067": {
 		"lines": [
@@ -1916,8 +1912,7 @@
 			"dell'avversario."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_102": {
 		"lines": [
@@ -2308,8 +2303,7 @@
 			"infligge danni."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_173": {
 		"lines": [
@@ -2505,8 +2499,7 @@
 			"personaggio."
 		],
 		"name": 12,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_284": {
 		"lines": [
@@ -2565,8 +2558,7 @@
 			"nemico casuale."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_301": {
 		"lines": [
@@ -2741,8 +2733,7 @@
 			"alla sua Salute."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_339": {
 		"lines": [
@@ -3106,8 +3097,7 @@
 			"infligge danni."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_531": {
 		"lines": [
@@ -3279,8 +3269,7 @@
 			"lato del campo."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_563": {
 		"lines": [
@@ -4067,8 +4056,7 @@
 			"dal tuo mazzo."
 		],
 		"name": 11,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_NEW1_017": {
 		"lines": [

@@ -139,8 +139,7 @@
 			"y roba 3 cartas."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"Mekka2": {
 		"lines": [
@@ -904,8 +903,7 @@
 			"2 p. de salud."
 		],
 		"name": 10,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_CS2_101t": {
 		"name": 10,
@@ -1094,8 +1092,7 @@
 			"a un escudero 2/2."
 		],
 		"name": 9,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_CS2_152": {
 		"name": 12,
@@ -2262,8 +2259,7 @@
 			"y [b]Provocar[/b]."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_165a": {
 		"lines": [
@@ -2669,8 +2665,7 @@
 			"cartas aleatorias."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_312": {
 		"lines": [
@@ -2891,8 +2886,7 @@
 			"1 p. de durabilidad."
 		],
 		"name": 12,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_371": {
 		"lines": [
@@ -3258,8 +3252,7 @@
 			"dañado 2/1."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_557": {
 		"lines": [
@@ -3320,8 +3313,7 @@
 			"esté lleno."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_563": {
 		"lines": [
@@ -3546,8 +3538,7 @@
 			"roba una carta."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_596": {
 		"lines": [
@@ -4119,8 +4110,7 @@
 			"de tu mazo."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_NEW1_017": {
 		"lines": [

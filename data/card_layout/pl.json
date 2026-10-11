@@ -149,8 +149,7 @@
 			"rannej postaci."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"Mekka3": {
 		"lines": [
@@ -265,7 +264,7 @@
 			"wszystkim wrogom."
 		],
 		"name": 12,
-		"text": 10
+		"text": 11
 	},
 	"TU4c_005": {
 		"lines": [
@@ -726,8 +725,7 @@
 			"+1 do zdrowia."
 		],
 		"name": 12,
-		"text": 6,
-		"valign": "top"
+		"text": 6
 	},
 	"VAN_CS2_061": {
 		"lines": [
@@ -780,7 +778,7 @@
 			"stronnikowi."
 		],
 		"name": 12,
-		"text": 10
+		"text": 11
 	},
 	"VAN_CS2_073": {
 		"lines": [
@@ -894,7 +892,7 @@
 			"wszystkim wrogom."
 		],
 		"name": 12,
-		"text": 10
+		"text": 11
 	},
 	"VAN_CS2_094": {
 		"lines": [
@@ -1175,8 +1173,7 @@
 			"4 pkt. obrażeń."
 		],
 		"name": 11,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_CS2_182": {
 		"name": 9,
@@ -1433,8 +1430,7 @@
 			"mają [b]Szarżę[/b]."
 		],
 		"name": 11,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_DS1_183": {
 		"lines": [
@@ -1470,8 +1466,7 @@
 			"podczas ataku."
 		],
 		"name": 11,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_DS1_233": {
 		"lines": [
@@ -1573,8 +1568,7 @@
 			"2 pkt. zdrowia."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_012": {
 		"lines": [
@@ -1683,8 +1677,7 @@
 			"[b]Boska tarcza[/b]"
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_033": {
 		"lines": [
@@ -1810,8 +1803,7 @@
 			"przeciwnika."
 		],
 		"name": 11,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_067": {
 		"lines": [
@@ -1819,8 +1811,7 @@
 			"[b]Boska tarcza[/b]"
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_076": {
 		"lines": [
@@ -1951,8 +1942,7 @@
 			"drugiego gracza."
 		],
 		"name": 12,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_102": {
 		"lines": [
@@ -2494,8 +2484,7 @@
 			"z [b]Przeciążeniem[/b]."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_259": {
 		"lines": [
@@ -2616,8 +2605,7 @@
 			"losowemu wrogowi."
 		],
 		"name": 9,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_301": {
 		"lines": [
@@ -2941,8 +2929,7 @@
 			"stronnika na 1."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_383": {
 		"lines": [
@@ -3123,8 +3110,7 @@
 			"zwiadowcę 1/1."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_506a": {
 		"name": 12,
@@ -3332,8 +3318,7 @@
 			"bohatera na 15."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_562": {
 		"lines": [
@@ -3525,8 +3510,7 @@
 			"straconą tarczę."
 		],
 		"name": 12,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_591": {
 		"lines": [
@@ -3598,8 +3582,7 @@
 			"+2 do ataku."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_604": {
 		"lines": [
@@ -4039,8 +4022,7 @@
 			"właściciela."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_NEW1_007": {
 		"lines": [
@@ -4060,7 +4042,7 @@
 			"stronnikom."
 		],
 		"name": 12,
-		"text": 10
+		"text": 11
 	},
 	"VAN_NEW1_007b": {
 		"lines": [
@@ -4077,8 +4059,7 @@
 			"5 pkt. zdrowia."
 		],
 		"name": 11,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_NEW1_008a": {
 		"lines": [
@@ -4168,8 +4149,7 @@
 			"twojej broni."
 		],
 		"name": 9,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_NEW1_019": {
 		"lines": [
@@ -4178,8 +4158,7 @@
 			"losowemu wrogowi."
 		],
 		"name": 12,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_NEW1_020": {
 		"lines": [
@@ -4208,8 +4187,7 @@
 			"twojej broni."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_NEW1_023": {
 		"lines": [
@@ -4268,8 +4246,7 @@
 			"kosztują (0)."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_NEW1_030": {
 		"lines": [

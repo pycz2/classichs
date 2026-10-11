@@ -18,19 +18,19 @@
 	},
 	"EX1_025t": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_116t": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_131t": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_160t": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_317t": {
 		"lines": [
@@ -43,27 +43,27 @@
 	},
 	"EX1_323h": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_323w": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_383t": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_398t": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_409t": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_534t": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"EX1_538t": {
 		"lines": [
@@ -97,39 +97,39 @@
 	},
 	"HERO_01": {
 		"name": 10,
-		"text": 11.0
+		"text": 11
 	},
 	"HERO_02": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"HERO_03": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"HERO_04": {
 		"name": 10,
-		"text": 11.0
+		"text": 11
 	},
 	"HERO_05": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"HERO_06": {
 		"name": 10,
-		"text": 11.0
+		"text": 11
 	},
 	"HERO_07": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"HERO_08": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"HERO_09": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"Mekka1": {
 		"lines": [
@@ -138,8 +138,7 @@
 			"e compre 3 cards."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"Mekka2": {
 		"lines": [
@@ -196,7 +195,7 @@
 	},
 	"PRO_001at": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"PRO_001b": {
 		"lines": [
@@ -208,15 +207,15 @@
 	},
 	"TU4a_001": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4a_002": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4a_003": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4a_004": {
 		"lines": [
@@ -227,19 +226,19 @@
 	},
 	"TU4a_005": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4a_006": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4b_001": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4c_001": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4c_002": {
 		"lines": [
@@ -289,8 +288,7 @@
 			"6 de Mana?!"
 		],
 		"name": 8,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"TU4c_008": {
 		"lines": [
@@ -301,11 +299,11 @@
 	},
 	"TU4d_001": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4d_002": {
 		"name": 10,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4d_003": {
 		"lines": [
@@ -316,7 +314,7 @@
 	},
 	"TU4e_001": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4e_002": {
 		"lines": [
@@ -328,15 +326,15 @@
 	},
 	"TU4e_002t": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4e_003": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4e_004": {
 		"name": 8,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4e_005": {
 		"lines": [
@@ -350,19 +348,19 @@
 	},
 	"TU4e_007": {
 		"name": 9,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4f_001": {
 		"name": 9,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4f_002": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4f_003": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4f_004": {
 		"lines": [
@@ -375,7 +373,7 @@
 	},
 	"TU4f_005": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"TU4f_006": {
 		"lines": [
@@ -682,7 +680,7 @@
 	},
 	"VAN_CS2_050": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_051": {
 		"lines": [
@@ -696,8 +694,7 @@
 			"[b]+1 de Dano Mágico[/b]"
 		],
 		"name": 9,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_CS2_053": {
 		"lines": [
@@ -830,11 +827,11 @@
 	},
 	"VAN_CS2_080": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_082": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_084": {
 		"lines": [
@@ -860,8 +857,7 @@
 			"do seu herói."
 		],
 		"name": 12,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_CS2_089": {
 		"lines": [
@@ -872,7 +868,7 @@
 	},
 	"VAN_CS2_091": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_092": {
 		"lines": [
@@ -910,7 +906,7 @@
 	},
 	"VAN_CS2_101t": {
 		"name": 9,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_102_H3": {
 		"lines": [
@@ -959,7 +955,7 @@
 	},
 	"VAN_CS2_106": {
 		"name": 7,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_108": {
 		"lines": [
@@ -972,7 +968,7 @@
 	},
 	"VAN_CS2_112": {
 		"name": 10,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_114": {
 		"lines": [
@@ -994,15 +990,15 @@
 	},
 	"VAN_CS2_118": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_119": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_120": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_121": {
 		"lines": [
@@ -1062,8 +1058,7 @@
 			"[b]+1 de Dano Mágico[/b]"
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_CS2_146": {
 		"lines": [
@@ -1104,15 +1099,14 @@
 	},
 	"VAN_CS2_152": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_155": {
 		"lines": [
 			"[b]+1 de Dano Mágico[/b]"
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_CS2_161": {
 		"lines": [
@@ -1130,7 +1124,7 @@
 	},
 	"VAN_CS2_168": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_169": {
 		"lines": [
@@ -1148,7 +1142,7 @@
 	},
 	"VAN_CS2_172": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_173": {
 		"lines": [
@@ -1176,11 +1170,11 @@
 	},
 	"VAN_CS2_182": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_186": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_187": {
 		"lines": [
@@ -1222,16 +1216,15 @@
 			"[b]+1 de Dano Mágico[/b]"
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_CS2_200": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_201": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_203": {
 		"lines": [
@@ -1290,7 +1283,7 @@
 	},
 	"VAN_CS2_231": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_232": {
 		"lines": [
@@ -1345,7 +1338,7 @@
 	},
 	"VAN_CS2_boar": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_CS2_mirror": {
 		"lines": [
@@ -1356,7 +1349,7 @@
 	},
 	"VAN_CS2_tk1": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_DREAM_01": {
 		"lines": [
@@ -1376,7 +1369,7 @@
 	},
 	"VAN_DREAM_03": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_DREAM_04": {
 		"lines": [
@@ -1548,8 +1541,7 @@
 			"+5 de Ataque."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_010": {
 		"lines": [
@@ -1574,8 +1566,7 @@
 			"Compre um card."
 		],
 		"name": 9,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_014": {
 		"lines": [
@@ -1619,8 +1610,7 @@
 			"lacaio aliado."
 		],
 		"name": 11,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_020": {
 		"lines": [
@@ -1667,8 +1657,7 @@
 			"ao herói inimigo."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_032": {
 		"lines": [
@@ -1757,8 +1746,7 @@
 			"no mesmo turno."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_057": {
 		"lines": [
@@ -1824,8 +1812,7 @@
 			"custa (1) a menos."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_080": {
 		"lines": [
@@ -1877,8 +1864,7 @@
 			"aleatoriamente."
 		],
 		"name": 8,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_089": {
 		"lines": [
@@ -1985,12 +1971,11 @@
 			"Sangrento 4/5."
 		],
 		"name": 9,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_110t": {
 		"name": 10,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_112": {
 		"lines": [
@@ -2059,7 +2044,7 @@
 	},
 	"VAN_EX1_130a": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_131": {
 		"lines": [
@@ -2551,8 +2536,7 @@
 			"Compre um card."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_287": {
 		"lines": [
@@ -2648,8 +2632,7 @@
 			"aleatório."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_308": {
 		"lines": [
@@ -2694,8 +2677,7 @@
 			"ao seu herói."
 		],
 		"name": 12,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_315": {
 		"lines": [
@@ -2732,8 +2714,7 @@
 			"ao seu herói."
 		],
 		"name": 11,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_320": {
 		"lines": [
@@ -2898,8 +2879,7 @@
 			"1 de Durabilidade."
 		],
 		"name": 12,
-		"text": 7,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_371": {
 		"lines": [
@@ -2927,8 +2907,7 @@
 			"inimigo para 1."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_383": {
 		"lines": [
@@ -2984,8 +2963,7 @@
 			"+3 de Ataque."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_396": {
 		"lines": [
@@ -3111,12 +3089,11 @@
 			"Murloc 1/1."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_506a": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_507": {
 		"lines": [
@@ -3164,8 +3141,7 @@
 			"receba +2/+1."
 		],
 		"name": 12,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_533": {
 		"lines": [
@@ -3261,7 +3237,7 @@
 	},
 	"VAN_EX1_554t": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_556": {
 		"lines": [
@@ -3270,8 +3246,7 @@
 			"Danificado 2/1."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_557": {
 		"lines": [
@@ -3302,8 +3277,7 @@
 			"à sua mão."
 		],
 		"name": 10,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_560": {
 		"lines": [
@@ -3333,16 +3307,14 @@
 			"estar cheio."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_563": {
 		"lines": [
 			"[b]+5 de Dano Mágico[/b]"
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_564": {
 		"lines": [
@@ -3472,8 +3444,7 @@
 			"[b]+1 de Dano Mágico[/b]"
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_EX1_583": {
 		"lines": [
@@ -3482,8 +3453,7 @@
 			"do seu herói."
 		],
 		"name": 11,
-		"text": 10,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_584": {
 		"lines": [
@@ -3534,8 +3504,7 @@
 			"e causam dano."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_593": {
 		"lines": [
@@ -3544,8 +3513,7 @@
 			"ao herói inimigo."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_594": {
 		"lines": [
@@ -3588,7 +3556,7 @@
 	},
 	"VAN_EX1_598": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_603": {
 		"lines": [
@@ -3791,7 +3759,7 @@
 	},
 	"VAN_EX1_finkle": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_tk11": {
 		"lines": [
@@ -3802,11 +3770,11 @@
 	},
 	"VAN_EX1_tk28": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_tk29": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_tk33": {
 		"lines": [
@@ -3819,11 +3787,11 @@
 	},
 	"VAN_EX1_tk34": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_tk9": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_EX1_tk9b": {
 		"lines": [
@@ -4147,8 +4115,7 @@
 			"e receba +2/+2."
 		],
 		"name": 11,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_NEW1_018": {
 		"lines": [
@@ -4214,8 +4181,7 @@
 			"à sua arma."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_NEW1_025": {
 		"lines": [
@@ -4238,7 +4204,7 @@
 	},
 	"VAN_NEW1_026t": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_NEW1_027": {
 		"lines": [
@@ -4337,8 +4303,7 @@
 			"com [b]Provocar[/b]."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_NEW1_041": {
 		"lines": [
@@ -4371,15 +4336,15 @@
 	},
 	"VAN_TU4e_002t": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_skele11": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_skele21": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"VAN_tt_004": {
 		"lines": [
@@ -4403,11 +4368,11 @@
 	},
 	"VAN_tt_010a": {
 		"name": 11,
-		"text": 11.0
+		"text": 11
 	},
 	"ds1_whelptoken": {
 		"name": 12,
-		"text": 11.0
+		"text": 11
 	},
 	"hexfrog": {
 		"lines": [
