@@ -13,8 +13,8 @@ signal language_changed
 signal art_changed
 
 ## Row labels (English keys); the translation tool reads these lists.
-const SLIDERS := [["Music", "music"], ["Sounds", "sfx"], ["Voice", "voice"]]
-const TOGGLES := [["Speech", "Tts", "tts"], ["Screen shake", "Shake", "shake"], ["Fullscreen", "Fullscreen", "fullscreen"]]
+const SLIDERS := [["Music", "music"], ["Sounds", "sfx"]]
+const TOGGLES := [["Screen shake", "Shake", "shake"], ["Fullscreen", "Fullscreen", "fullscreen"]]
 
 
 func _ready() -> void:

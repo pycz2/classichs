@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.18.2] - 2026-10-12
+
+### Zmieniono
+- Usunięto syntezę mowy: gra nie czyta już na głos imion i emotek; ustawienia Głos i Mowa zniknęły. Kwestie bohaterów pokazują się jako tekst w dymkach z ogonkiem wskazującym bohatera.
+
+### Naprawiono
+- Zaznaczone pole traciło tło pod kursorem.
+
 ## [0.18.1] - 2026-10-12
 
 ### Dodano

@@ -4,6 +4,14 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.18.2] - 2026-10-12
+
+### Modifié
+- La synthèse vocale est retirée : le jeu ne lit plus les noms et les emotes ; les réglages Voix et Parole sont supprimés. Les répliques des héros s'affichent en texte dans des bulles dont la pointe vise le héros.
+
+### Corrigé
+- Une case cochée perdait son fond sous la souris.
+
 ## [0.18.1] - 2026-10-12
 
 ### Ajouté

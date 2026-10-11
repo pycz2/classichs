@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.18.2] - 2026-10-12
+
+### Changed
+- Speech synthesis is gone: the game no longer reads names and emotes aloud; the Voice and Speech settings are removed. Heroes' lines show as text in speech bubbles with a tail pointing at the hero.
+
+### Fixed
+- A ticked box lost its background under the mouse.
+
 ## [0.18.1] - 2026-10-12
 
 ### Added

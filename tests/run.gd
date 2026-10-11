@@ -38,7 +38,7 @@ func _run_all() -> void:
 	# Tests never read the player's real settings and always run in English.
 	Settings.path = "user://test_runner_settings.json"
 	var sf := FileAccess.open(Settings.path, FileAccess.WRITE)
-	sf.store_string(JSON.stringify({"language": "en", "music": 0.0, "sfx": 0.0, "voice": 0.0, "tts": false}))
+	sf.store_string(JSON.stringify({"language": "en", "music": 0.0, "sfx": 0.0}))
 	sf.close()
 	Locale.load_all()
 	var args := OS.get_cmdline_user_args()
