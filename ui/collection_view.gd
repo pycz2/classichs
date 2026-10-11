@@ -63,8 +63,15 @@ func _ready() -> void:
 	for c in range(-1, 8):
 		var b := Button.new()
 		b.name = "Cost%d" % c
-		b.text = tr("All") if c < 0 else ("7+" if c == 7 else str(c))
-		b.custom_minimum_size = Vector2(44, 34)
+		b.text = tr("All") if c < 0 else ""
+		b.custom_minimum_size = Vector2(44, 40)
+		if c >= 0:  # a mana crystal with the cost
+			var gem := _Crystal.new()
+			gem.value = c
+			gem.plus = c == 7
+			gem.size = Vector2(44, 40)
+			gem.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			b.add_child(gem)
 		var v: int = c
 		b.pressed.connect(func():
 			cost_filter = v
@@ -253,3 +260,16 @@ func remove_card(id: String) -> void:
 	show_hint("")
 	_fill()
 	_refresh_deck()
+
+
+class _Crystal:
+	extends Control
+	var value := 0
+	var plus := false
+
+	func _draw() -> void:
+		Frames.mana(self, size / 2.0, value, 15)
+		if plus:
+			var font := ThemeDB.fallback_font
+			draw_string_outline(font, size / 2.0 + Vector2(9, -6), "+", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, 3, Color.BLACK)
+			draw_string(font, size / 2.0 + Vector2(9, -6), "+", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
