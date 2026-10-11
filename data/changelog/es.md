@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-10-12
+
+### Añadido
+- El historial de la izquierda está separado por turnos («Turno N» en el color del jugador); al pasar el ratón sobre una acción se ve qué hizo y a quién: daño, sanación, mejoras, congelación, silencio, muertes, invocaciones, armas equipadas y los gritos de batalla y últimos alientos que desencadenó. Las cartas ocultas del rival siguen ocultas.
+- El rastreador de mazo tiene su propio botón junto al menú: «Tu mazo» con imágenes, ×2, cartas agotadas atenuadas y la probabilidad de robar cada carta; «Jugado por el rival», una lista que crece con ×2.
+
 ## [0.16.2] - 2026-10-12
 
 ### Corregido

@@ -16,7 +16,7 @@ const TOOLTIP_POS := Vector2(1035, 160)
 
 ## Fixed button texts by node name, set again when the language changes.
 const LABELS := {"HistoryButton": "History", "JsonButton": "Position -> JSON", "EmoteButton": "Emote",
-	"MuteButton": "Mute", "SettingsButton": "Settings", "TrackerButton": "Deck Tracker"}
+	"MuteButton": "Mute", "SettingsButton": "Settings"}
 const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "thanks": "Thanks.",
 	"wow": "Wow!", "oops": "Oops.", "threaten": "I will destroy you!"}
 
@@ -158,7 +158,6 @@ func _ready() -> void:
 	_build_emote_wheel()
 	add_child(_strip)
 	_strip.open_history.connect(func(): _history.visible = not _history.visible)
-	_strip.show_card.connect(_strip_card)
 	add_child(_arrow)
 	_opp_arrow.tint = Color("e03131")
 	add_child(_opp_arrow)
@@ -601,6 +600,21 @@ func _build_menu() -> void:
 	gear.pressed.connect(func(): _menu.visible = not _menu.visible)
 	Icons.attach(gear, "gear", 30)
 	add_child(gear)
+	var deck := Button.new()  # the deck tracker, left of the gear
+	deck.name = "TrackerButton"
+	deck.custom_minimum_size = Vector2(40, 40)
+	deck.position = gear.position - Vector2(46, 0)
+	deck.tooltip_text = tr("Deck Tracker")
+	deck.focus_mode = Control.FOCUS_NONE
+	for st in ["normal", "hover", "pressed"]:
+		deck.add_theme_stylebox_override(st, Palette.box(Color(0.1, 0.07, 0.05, 0.9 if st == "normal" else 1.0), 20, Color("c9a74a") if st != "normal" else Color("6b5320"), 2))
+	deck.pressed.connect(func():
+		Settings.data.tracker = not Settings.data.tracker
+		Settings.save()
+		_tracker.slide(Settings.data.tracker)
+		refresh())
+	Icons.attach(deck, "cards", 28)
+	add_child(deck)
 	_menu = PanelContainer.new()
 	_menu.name = "GameMenu"
 	_menu.z_index = 100
@@ -610,11 +624,6 @@ func _build_menu() -> void:
 	box.add_theme_constant_override("separation", 6)
 	_menu.add_child(box)
 	var items := [["History", "HistoryButton", func(): _history.visible = not _history.visible],
-		["Deck Tracker", "TrackerButton", func():
-			_tracker.visible = not _tracker.visible
-			Settings.data.tracker = _tracker.visible
-			Settings.save()
-			refresh()],
 		["Settings", "SettingsButton", open_settings]]
 	if debug_mode:
 		items.append(["Position -> JSON", "JsonButton", show_json])
@@ -1196,21 +1205,6 @@ func _on_concede() -> void:
 		Sound.voice(g.players[p].hero.card_id, "concede")
 		controller.submit({"type": "concede", "player": p}))
 	_centered_button(box, tr("Keep playing"), "KeepPlaying", _close_overlay)
-
-
-## Hovering a history tile shows that card big.
-func _strip_card(card_id: String, on: bool) -> void:
-	if _tooltip:
-		_tooltip.queue_free()
-		_tooltip = null
-	if on and card_id != "":
-		_tooltip = CardView.make(card_id, 1.6)
-		_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_tooltip.position = Vector2(70, 160)
-		add_child(_tooltip)
-		_show_tips(card_id, Rect2(_tooltip.position, _tooltip.size))
-	else:
-		_show_tips("", Rect2())
 
 
 ## Keyword boxes beside a big card ("" hides them).

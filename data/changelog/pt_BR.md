@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-10-12
+
+### Adicionado
+- O histórico à esquerda é separado por turnos ("Turno N" na cor do jogador); ao passar o mouse sobre uma ação vê-se o que ela fez e a quem: dano, cura, bônus, congelamento, silêncio, mortes, evocações, armas equipadas e os gritos de guerra e últimos suspiros que disparou. As cartas ocultas do oponente continuam ocultas.
+- O rastreador de deck tem seu próprio botão ao lado do menu: "Seu deck" com imagens, ×2, cartas esgotadas escurecidas e a chance de comprar cada carta; "Jogado pelo oponente", uma lista que cresce com ×2.
+
 ## [0.16.2] - 2026-10-12
 
 ### Corrigido

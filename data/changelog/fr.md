@@ -4,6 +4,12 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-10-12
+
+### Ajouté
+- L'historique à gauche est séparé par tours (« Tour N » à la couleur du joueur) ; au survol d'une action, on voit ce qu'elle a fait et à qui : dégâts, soins, bonus, gel, silence, morts, invocations, armes équipées, ainsi que les cris de guerre et râles d'agonie déclenchés. Les cartes cachées de l'adversaire restent cachées.
+- Le suivi de deck a son propre bouton à côté du menu : « Votre deck » avec images, ×2, cartes épuisées assombries et la probabilité de piocher chaque carte ; « Joué par l'adversaire », une liste qui grandit avec ×2.
+
 ## [0.16.2] - 2026-10-12
 
 ### Corrigé

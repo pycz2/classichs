@@ -5,12 +5,12 @@ static func root() -> Window:
 	return (Engine.get_main_loop() as SceneTree).root
 
 
-func _view(p0: Dictionary, bots := [false, true]) -> MatchView:
+func _view(p0: Dictionary, bots := [false, true], p1 := {"hero": "HERO_01"}, current := 0) -> MatchView:
 	var v := MatchView.new()
 	root().add_child(v)
 	var m := Match.new()
 	m.bot_delay = 0.0
-	m.setup(H.scene(p0), bots)
+	m.setup(H.scene(p0, p1, current), bots)
 	v.bind(m)
 	return v
 
@@ -28,13 +28,13 @@ func test_right_click_own_hero_opens_emotes() -> void:
 	v.free()
 
 
-func test_menu_holds_settings_tracker_and_concede() -> void:
+func test_menu_holds_settings_history_and_concede() -> void:
 	var v := _view({"hero": "HERO_08"})
 	var menu := v.find_child("GameMenu", true, false) as Control
 	eq(menu.visible, false, "closed")
 	(v.find_child("MenuButton", true, false) as Button).pressed.emit()
 	eq(menu.visible, true, "opens from the gear")
-	for n in ["SettingsButton", "TrackerButton", "Concede", "HistoryButton"]:
+	for n in ["SettingsButton", "Concede", "HistoryButton"]:
 		check(menu.find_child(n, true, false) != null, n)
 	v.free()
 
@@ -130,8 +130,9 @@ func test_history_strip_shows_played_cards_newest_first() -> void:
 	for e in v.g.players[0].hand.duplicate():
 		v.controller.submit({"type": "play", "player": 0, "entity": e.id, "target": -1, "pos": 0, "choice": -1})
 	var strip := v.find_child("HistoryStrip", true, false) as HistoryStrip
-	eq(strip.card_at(5), "VAN_CS2_182", "newest on top")
-	eq(strip.card_at(HistoryStrip.TILE + 10), "VAN_CS2_120", "then the earlier one")
+	eq(strip.card_at(5), "", "the turn line on top")
+	eq(strip.card_at(HistoryStrip.SEP + 5), "VAN_CS2_182", "newest first")
+	eq(strip.card_at(HistoryStrip.SEP + HistoryStrip.TILE + 10), "VAN_CS2_120", "then the earlier one")
 	v.free()
 
 
@@ -200,18 +201,82 @@ func test_repeated_intents_do_not_rebuild_the_table() -> void:
 	v.free()
 
 
-func test_history_strip_signals_only_when_the_card_changes() -> void:
-	var strip := HistoryStrip.new()
-	root().add_child(strip)
-	strip._items = [["VAN_CS2_120", true], ["VAN_CS2_182", false]]
-	var shown := []
-	strip.show_card.connect(func(c, on): shown.append([c, on]))
-	for y in [5.0, 8.0, 12.0, 60.0, 62.0]:
+func test_history_strip_pops_up_once_per_tile() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120", "VAN_CS2_182"]}, [false, false])
+	for e in v.g.players[0].hand.duplicate():
+		v.controller.submit({"type": "play", "player": 0, "entity": e.id, "target": -1, "pos": 0, "choice": -1})
+	var strip := v.find_child("HistoryStrip", true, false) as HistoryStrip
+	var popups := []
+	for y in [HistoryStrip.SEP + 5.0, HistoryStrip.SEP + 12.0, HistoryStrip.SEP + 60.0, HistoryStrip.SEP + 62.0]:
 		var ev := InputEventMouseMotion.new()
 		ev.position = Vector2(10, y)
 		strip._gui_input(ev)
-	eq(shown, [["VAN_CS2_120", true], ["VAN_CS2_182", true]], "one signal per card")
-	strip.free()
+		if not popups.has(strip.popup):
+			popups.append(strip.popup)
+	eq(popups.size(), 2, "one pop-up per tile")
+	strip.hover(-1)
+	eq(strip.popup, null, "gone when the mouse leaves")
+	v.free()
+
+
+## The rows of the pop-up of the newest move: [title, ["name text", …]].
+func _popup_rows(v: MatchView) -> Array:
+	var strip := v.find_child("HistoryStrip", true, false) as HistoryStrip
+	strip.hover(1)  # 0 is the turn line
+	var rows := []
+	for r in strip.popup.find_children("Effect*", "HBoxContainer", true, false):
+		rows.append("%s %s" % [(r.get_child(1) as Label).text, (r.get_child(2) as Label).text])
+	return [(strip.popup.find_child("Title", true, false) as Label).text, rows]
+
+
+func test_history_strip_separates_turns() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120"]}, [false, false], {"hero": "HERO_01", "hand": ["VAN_CS2_182"]})
+	var g := v.g
+	v.controller.submit({"type": "play", "player": 0, "entity": g.players[0].hand[0].id, "target": -1, "pos": 0, "choice": -1})
+	v.controller.submit({"type": "end_turn", "player": 0})
+	v.controller.submit({"type": "play", "player": 1, "entity": g.players[1].hand[0].id, "target": -1, "pos": 0, "choice": -1})
+	var strip := v.find_child("HistoryStrip", true, false) as HistoryStrip
+	eq(strip._items.map(func(it): return it[0]), [2, "VAN_CS2_182", 1, "VAN_CS2_120"], "a turn line heads each turn, newest on top")
+	var ruled := v._history._list.get_children().filter(func(l: Label):
+		var s := l.get_theme_stylebox("normal") as StyleBoxFlat
+		return s and s.border_width_top == 2)
+	eq(ruled.size(), 1, "the history panel draws a gold line where turn 2 starts")
+	v.free()
+
+
+func test_history_popup_lists_whom_a_move_hit() -> void:
+	var v := _view({"hero": "HERO_06", "hand": ["VAN_CS2_012"]}, [false, false], {"hero": "HERO_01", "board": ["VAN_CS2_182", "VAN_EX1_029"]})
+	v.controller.submit({"type": "play", "player": 0, "entity": v.g.players[0].hand[0].id, "target": v.g.hero(1).id, "pos": -1, "choice": -1})
+	var p := _popup_rows(v)
+	eq(p[0], "You play Swipe on Garrosh Hellscream", "who did what")
+	eq(p[1], ["Garrosh Hellscream -4 Health", "Chillwind Yeti -1 Health", "Leper Gnome -1 Health", "Leper Gnome Dies",
+		"Malfurion Stormrage -2 Health"], "both minions, the hero, the Deathrattle")
+	var strip := v.find_child("HistoryStrip", true, false) as HistoryStrip
+	eq(strip.popup.find_children("*", "CardView", true, false).size(), 1, "the card big")
+	check(strip.popup.find_children("*", "Label", true, false).any(func(l): return l.text == "Deathrattle: Leper Gnome"), "the Deathrattle is named")
+	v.free()
+
+
+func test_history_popup_hides_the_opponents_secret_and_draws() -> void:
+	var v := _view({"hero": "HERO_08"}, [false, false], {"hero": "HERO_05", "hand": ["VAN_EX1_554", "VAN_EX1_015"], "deck": [H.WISP]}, 1)
+	var g := v.g
+	v.controller.submit({"type": "play", "player": 1, "entity": g.players[1].hand[0].id, "target": -1, "pos": -1, "choice": -1})
+	var strip := v.find_child("HistoryStrip", true, false) as HistoryStrip
+	strip.update_from(g, 0)  # hot seat shows the player to move: look as player 0
+	eq(strip.card_at(HistoryStrip.SEP + 5), "", "the Secret's tile is blank")
+	var p := _popup_rows(v)
+	eq(p[0], "Opponent plays a Secret", "not which one")
+	eq(strip.popup.find_children("*", "CardView", true, false).size(), 0, "no card shown")
+	v.controller.submit({"type": "play", "player": 1, "entity": g.players[1].hand[0].id, "target": -1, "pos": 0, "choice": -1})
+	strip.update_from(g, 0)
+	_popup_rows(v)
+	var texts := _texts(strip.popup)
+	check(texts.has("Opponent draws a card") and not texts.has("Wisp"), "Novice Engineer's draw stays hidden: %s" % [texts])
+	v.free()
+
+
+func _texts(c: Control) -> Array:
+	return c.find_children("*", "Label", true, false).map(func(l): return l.text)
 
 
 func test_end_turn_turns_green_when_nothing_is_left_to_do() -> void:

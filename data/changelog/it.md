@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-10-12
+
+### Aggiunto
+- La cronologia a sinistra è divisa per turni ("Turno N" nel colore del giocatore); passando su un'azione si vede cosa ha fatto e a chi: danni, cure, potenziamenti, congelamento, silenzio, morti, evocazioni, armi equipaggiate e i grida di battaglia e rantoli di morte innescati. Le carte nascoste dell'avversario restano nascoste.
+- Il tracker del mazzo ha un proprio pulsante accanto al menu: "Il tuo mazzo" con immagini, ×2, carte esaurite oscurate e la probabilità di pescare ogni carta; "Giocate dall'avversario", un elenco che cresce con ×2.
+
 ## [0.16.2] - 2026-10-12
 
 ### Corretto
