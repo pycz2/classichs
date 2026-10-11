@@ -33,7 +33,7 @@ static func load_all(dir := DEFAULT_DIR) -> void:
 		_loaded.append(t)
 
 
-## A supported language for an OS locale ("ru_RU" → "ru"); English otherwise.
+## A supported language for an OS locale ("ru_RU" -> "ru"); English otherwise.
 static func pick(os_locale: String) -> String:
 	if LANGS.has(os_locale):
 		return os_locale

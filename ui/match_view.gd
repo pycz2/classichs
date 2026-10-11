@@ -2,7 +2,7 @@ class_name MatchView
 extends Control
 ## The game table. Everything on it is rebuilt from the game state after each
 ## action; effects (floating numbers, ghosts of dead minions, shake) come from events.
-## Input flow: pick a card / attacker / hero power → (Choose One) → (position) → (target).
+## Input flow: pick a card / attacker / hero power -> (Choose One) -> (position) -> (target).
 
 signal leave
 ## Tutorial: the player asked for the next mission.
@@ -17,7 +17,7 @@ const SLOT := 104.0
 const TOOLTIP_POS := Vector2(1035, 160)
 
 ## Fixed button texts by node name, set again when the language changes.
-const LABELS := {"HistoryButton": "History", "JsonButton": "Position → JSON", "EmoteButton": "Emote",
+const LABELS := {"HistoryButton": "History", "JsonButton": "Position -> JSON", "EmoteButton": "Emote",
 	"MuteButton": "Mute", "SettingsButton": "Settings", "TrackerButton": "Deck Tracker"}
 const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "thanks": "Thanks.",
 	"wow": "Wow!", "oops": "Oops.", "threaten": "I will destroy you!"}
@@ -124,7 +124,7 @@ func _ready() -> void:
 	hist.pressed.connect(func(): _history.visible = not _history.visible)
 	left.add_child(hist)
 	if debug_mode:
-		var js := Palette.button(tr("Position → JSON"), "JsonButton")
+		var js := Palette.button(tr("Position -> JSON"), "JsonButton")
 		js.custom_minimum_size = Vector2(130, 40)
 		js.pressed.connect(show_json)
 		left.add_child(js)

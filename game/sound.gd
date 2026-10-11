@@ -3,7 +3,7 @@ extends Node
 ## Music, event sounds and speech. Main adds one instance; without it every call
 ## is silent (tests, tools). Sounds come from audio/*.wav (tools/gen_audio.py).
 
-## Event type → sound file.
+## Event type -> sound file.
 const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "death": "death",
 	"hero_power": "hero_power", "turn_start": "turn_start", "heal": "heal", "armor": "armor",
 	"equip": "equip", "secret_revealed": "secret", "freeze": "freeze", "divine_shield_lost": "shield"}

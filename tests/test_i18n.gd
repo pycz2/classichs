@@ -41,3 +41,21 @@ func test_language_switch_changes_interface_strings() -> void:
 	eq(str(TranslationServer.translate("End Turn")) != "End Turn", true, "de")
 	Locale.set_language("en")
 	eq(str(TranslationServer.translate("End Turn")), "End Turn", "en")
+
+
+func test_font_has_every_character_the_interface_uses() -> void:
+	var font := ThemeDB.fallback_font
+	var texts := []
+	for dir in ["res://ui", "res://game"]:
+		for f in DirAccess.get_files_at(dir):
+			if f.ends_with(".gd"):
+				texts.append([f, FileAccess.get_file_as_string(dir + "/" + f)])
+	for code in Locale.LANGS:
+		if code != "en":
+			texts.append([code, FileAccess.get_file_as_string("%s/%s.json" % [Locale.DEFAULT_DIR, code])])
+	var missing := {}
+	for t in texts:
+		for ch in t[1]:
+			if ch.unicode_at(0) > 127 and not font.has_char(ch.unicode_at(0)):
+				missing[ch] = t[0]
+	eq(missing, {}, "characters the font lacks (shown as boxes)")

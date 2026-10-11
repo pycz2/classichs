@@ -4,7 +4,7 @@ extends RefCounted
 ## the English card name, then race, then type and class. Shapes are plain data
 ## ([kind, ...]) so tests can check them; paint() draws them on a CanvasItem.
 
-## Name keywords (start of a word) → motif. The first match wins, so specific words come first.
+## Name keywords (start of a word) -> motif. The first match wins, so specific words come first.
 const KEYWORDS := [
 	["yeti", "yeti"], ["polymorph", "sheep"], ["sheep", "sheep"], ["murloc", "murloc"],
 	["banana", "banana"], ["monkey", "banana"], ["mukla", "banana"], ["totem", "totem"],
