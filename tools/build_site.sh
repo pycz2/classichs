@@ -13,6 +13,7 @@ godot --headless --path . --export-release "Web" "$OUT/play/index.html"
 cp -R site/index.html site/style.css site/main.js site/favicon.svg site/i18n "$OUT/"
 cp -R media/screens/en "$OUT/screens/"
 python3 tools/site_data.py "$OUT"
+godot --path . --script res://tools/site_cards.gd -- "$OUT"  # the cards as the game draws them (needs a window)
 touch "$OUT/.nojekyll"
 echo "Site built in $OUT"
 [ "$1" = "--publish" ] || exit 0

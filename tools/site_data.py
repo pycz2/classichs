@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Writes the landing page data (heroes and showcase cards with names and texts in
-the game's 8 languages) and copies their pictures. Used by tools/build_site.sh.
+the game's 8 languages) and copies the heroes' portraits. Used by tools/build_site.sh.
 
 Usage: python3 tools/site_data.py <out dir>
 """
@@ -13,8 +13,10 @@ import sys
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 LANGS = {"en": "enUS", "ru": "ruRU", "de": "deDE", "fr": "frFR", "es": "esES", "pt_BR": "ptBR", "it": "itIT", "pl": "plPL"}
 HEROES = ["HERO_08", "HERO_01", "HERO_05", "HERO_06", "HERO_03", "HERO_09", "HERO_04", "HERO_02", "HERO_07"]
+## The page shows the first 6 floating in the header and the first 9 in the fan;
+## tools/site_cards.gd draws their pictures.
 SHOWCASE = ["VAN_CS2_029", "VAN_CS2_182", "VAN_CS2_033", "VAN_EX1_298", "VAN_CS2_022", "VAN_CS2_112", "VAN_EX1_116",
-            "VAN_CS2_042", "VAN_CS2_200", "VAN_CS2_168", "VAN_CS2_064", "VAN_CS2_155", "VAN_CS2_024", "VAN_CS2_172"]
+            "VAN_CS2_042", "VAN_CS2_200"]
 
 
 def text(v, lang):
@@ -32,7 +34,8 @@ def main(out):
         src = os.path.join(ROOT, "art", "cards", cid + ".jpg")
         if not os.path.exists(src):
             return None
-        shutil.copy(src, os.path.join(out, "art", cid + ".jpg"))
+        if c["type"] == "HERO":  # hero portraits; the cards are pictures drawn by the game
+            shutil.copy(src, os.path.join(out, "art", cid + ".jpg"))
         e = {"id": cid, "type": c["type"], "cls": c.get("cardClass", "NEUTRAL"), "rarity": c.get("rarity", ""),
              "cost": c.get("cost"), "atk": c.get("attack"), "hp": c.get("health", c.get("durability")),
              "name": {l: text(c["name"], l) for l in LANGS}, "text": {l: text(c.get("text"), l) for l in LANGS}}
