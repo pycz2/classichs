@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-10-11
+
+### Changed
+- The mana, health, attack, armor and durability gems are smaller, with a plain centre so the numbers read better; the marks under the portrait are smaller.
+
 ## [0.15.0] - 2026-10-11
 
 ### Added

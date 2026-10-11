@@ -236,7 +236,7 @@ static func _smoke() -> Texture2D:
 
 ## Small status marks under the portrait (vector: the font has no symbol glyphs).
 func _draw_icon(kind: String, at: Vector2) -> void:
-	if Sprites.draw(self, kind, at + Vector2(0, -1), 20.0 * (1.0 + 0.1 * sin(_t * 4.0))):
+	if Sprites.draw(self, kind, at + Vector2(0, -1), 16.0 * (1.0 + 0.08 * sin(_t * 4.0))):
 		return
 	var pulse := 1.0 + 0.12 * sin(_t * 4.0)
 	draw_set_transform(at, 0.0, Vector2(1.4, 1.4) * pulse)

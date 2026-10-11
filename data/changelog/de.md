@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-10-11
+
+### Geändert
+- Die Steine für Mana, Leben, Angriff, Rüstung und Haltbarkeit sind kleiner und in der Mitte schlicht, damit die Zahlen besser lesbar sind; die Zeichen unter dem Porträt sind kleiner.
+
 ## [0.15.0] - 2026-10-11
 
 ### Hinzugefügt

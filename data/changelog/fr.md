@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-10-11
+
+### Modifié
+- Les pierres de mana, de vie, d'attaque, d'armure et de durabilité sont plus petites, au centre uni pour mieux lire les nombres ; les symboles sous le portrait sont plus petits.
+
 ## [0.15.0] - 2026-10-11
 
 ### Ajouté

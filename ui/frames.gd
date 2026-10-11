@@ -34,7 +34,7 @@ static func _shape(ci: CanvasItem, pts: PackedVector2Array, fill: Color, edge: C
 
 
 ## How wide each generated stat sprite is drawn, in gem radii (see ui/sprites).
-const SPRITE_W := {"mana": 2.35, "health": 2.1, "attack_gem": 2.1, "sword": 1.15, "armor": 2.2, "durability": 2.2}
+const SPRITE_W := {"mana": 2.1, "health": 1.9, "attack_gem": 1.9, "sword": 1.05, "armor": 2.0, "durability": 2.0}
 
 
 static func mana(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE) -> void:
