@@ -93,17 +93,16 @@ static func rarity(ci: CanvasItem, c: Vector2, rar: String, r: float) -> void:
 	_shape(ci, PackedVector2Array([c + Vector2(0, -r), c + Vector2(r * 0.8, 0), c + Vector2(0, r), c + Vector2(-r * 0.8, 0)]), col, Color("2a2118"), maxf(1.0, r * 0.2))
 
 
-static var _dragon: Texture2D
+## Preloaded: a texture first loaded while drawing shows white in the web build.
+const DRAGON_CREST := preload("res://ui/dragon_crest.png")
 
 
 ## The gold dragon crest (generated with Codex, background cut out) sitting ON a
 ## line: base is the middle of its bottom edge, so it rises above a portrait or
 ## a card edge instead of covering it.
 static func crest(ci: CanvasItem, base: Vector2, w: float) -> void:
-	if _dragon == null:
-		_dragon = load("res://ui/dragon_crest.png")
-	var h := w * _dragon.get_height() / float(_dragon.get_width())
-	ci.draw_texture_rect(_dragon, Rect2(base - Vector2(w / 2.0, h * 0.9), Vector2(w, h)), false, Color(1, 1, 1, 0.95))
+	var h := w * DRAGON_CREST.get_height() / float(DRAGON_CREST.get_width())
+	ci.draw_texture_rect(DRAGON_CREST, Rect2(base - Vector2(w / 2.0, h * 0.9), Vector2(w, h)), false, Color(1, 1, 1, 0.95))
 
 
 static func ring(ci: CanvasItem, pts: PackedVector2Array, col: Color, w: float) -> void:

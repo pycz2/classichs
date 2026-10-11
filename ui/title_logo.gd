@@ -6,6 +6,9 @@ extends Control
 
 const TEXT := "Classic HS"
 const FONT_SIZE := 86
+## The coiled dragon above the title (preloaded: a texture first loaded while
+## drawing shows white in the web build).
+const DRAGON := preload("res://ui/dragon_title.png")
 
 var _shine: Control
 
@@ -37,7 +40,7 @@ static func baseline(s: Vector2) -> Vector2:
 func _draw() -> void:
 	var f := Fonts.title()
 	var at := baseline(size)
-	var dragon: Texture2D = load("res://ui/dragon_title.png")  # the coiled dragon above the title
+	var dragon: Texture2D = DRAGON
 	var dw := 250.0
 	var dh := dw * dragon.get_height() / dragon.get_width()
 	draw_texture_rect(dragon, Rect2(Vector2((size.x - dw) / 2.0, 34 - dh * 0.35), Vector2(dw, dh)), false)
