@@ -4,6 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-11
+
+### Aggiunto
+- Sei dorsi delle carte da scegliere nelle impostazioni: Classico, Orda, Druido, Arcano, Oro, Notte.
+- Laboratorio effetti nel tavolo di debug: qualsiasi carta sul tavolo e in mano con le sue finestre; parole chiave, potenziamenti, indebolimenti, aure, danni, silenzio, sonno, cambi di costo e bagliori si attivano e disattivano in tutte le 8 lingue.
+
+### Modificato
+- Il tavolo cambia nel momento del colpo: numeri, scudi e morti appaiono quando l'attaccante tocca il bersaglio o arriva il proiettile della magia, non prima. Un servitore che muore svanisce con i suoi ultimi numeri.
+
+### Corretto
+- Nella versione web sopra il titolo del menu c'era un rettangolo bianco al posto del drago.
+- Le carte nella pagina del gioco sono disegnate dal gioco stesso e appaiono come nel gioco.
+
 ## [0.10.0] - 2026-10-11
 
 ### Aggiunto

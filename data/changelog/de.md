@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-11
+
+### Hinzugefügt
+- Sechs Kartenrücken zur Wahl in den Einstellungen: Klassisch, Horde, Druide, Arkan, Gold, Nacht.
+- Effektlabor im Debug-Tisch: jede Karte auf dem Tisch und auf der Hand mit ihren kleinen Fenstern; Schlüsselwörter, Stärkungen, Schwächungen, Auren, Schaden, Stille, Schlaf, Kostenänderungen und Leuchten lassen sich in jeder der 8 Sprachen ein- und ausschalten.
+
+### Geändert
+- Der Tisch ändert sich im Moment des Treffers: Zahlen, Schilde und Tode erscheinen, wenn der Angreifer sein Ziel berührt oder das Geschoss des Zaubers ankommt, nicht vorher. Ein sterbender Diener verblasst mit seinen letzten Zahlen.
+
+### Behoben
+- In der Webversion stand über dem Menütitel ein weißes Rechteck statt des Drachen.
+- Die Karten auf der Seite des Spiels zeichnet das Spiel selbst; sie sehen aus wie im Spiel.
+
 ## [0.10.0] - 2026-10-11
 
 ### Hinzugefügt

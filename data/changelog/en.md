@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-11
+
+### Added
+- Six card backs to choose in the settings: Classic, Horde, Druid, Arcane, Gold, Night.
+- Effects Lab in the Debug Table: any card on the table and in hand with its pop-up boxes; keywords, buffs, debuffs, auras, damage, Silence, sleep, cost changes and glows can be switched on and off in any of the 8 languages.
+
+### Changed
+- The table changes at the moment of the hit: numbers, shields and deaths show when the attacker touches its target or the spell's bolt arrives, not before. A dying minion fades out with its last numbers.
+
+### Fixed
+- In the web version a white box stood above the menu title instead of the dragon.
+- The cards on the game's page are drawn by the game itself and look as they do in the game.
+
 ## [0.10.0] - 2026-10-11
 
 ### Added

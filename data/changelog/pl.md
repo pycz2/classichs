@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-11
+
+### Dodano
+- Sześć rewersów kart do wyboru w ustawieniach: Klasyczny, Horda, Druid, Arkana, Złoty, Noc.
+- Laboratorium efektów w stole debugowania: dowolna karta na stole i w ręce z okienkami; słowa kluczowe, wzmocnienia, osłabienia, aury, obrażenia, wyciszenie, sen, zmiany kosztu i podświetlenia można włączać i wyłączać w każdym z 8 języków.
+
+### Zmieniono
+- Stół zmienia się w chwili uderzenia: liczby, tarcze i śmierć widać, gdy atakujący dotyka celu lub pocisk zaklęcia dolatuje, nie wcześniej. Ginący stronnik znika ze swoimi ostatnimi liczbami.
+
+### Naprawiono
+- W wersji przeglądarkowej nad tytułem menu był biały prostokąt zamiast smoka.
+- Karty na stronie gry rysuje sama gra; wyglądają tak jak w grze.
+
 ## [0.10.0] - 2026-10-11
 
 ### Dodano
