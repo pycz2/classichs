@@ -4,6 +4,17 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-10-11
+
+### Modificato
+- Il drago di un servitore leggendario sul tavolo si avvolge attorno all'ovale del ritratto.
+
+### Corretto
+- Nel browser il primo Cmd/Ctrl+V non incollava nulla invece del codice copiato (codice di un amico, importazione del mazzo).
+- Gioco online: il tempo con la scheda nascosta non interrompe più l'attesa della connessione.
+- Una carta in mano si può prendere premendo sotto la carta sollevata, dove si trovava.
+- Le finestre delle parole chiave riappaiono passando su una carta in mano.
+
 ## [0.14.0] - 2026-10-11
 
 ### Aggiunto

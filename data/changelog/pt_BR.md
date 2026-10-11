@@ -4,6 +4,17 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-10-11
+
+### Alterado
+- O dragão de um lacaio lendário na mesa se enrola em volta do oval do retrato.
+
+### Corrigido
+- No navegador, o primeiro Cmd/Ctrl+V não colava nada em vez do código copiado (código de um amigo, importar deck).
+- Jogo online: o tempo com a aba oculta não interrompe mais a espera pela conexão.
+- Uma carta na mão pode ser pega clicando abaixo da carta levantada, onde ela estava.
+- As janelinhas de palavras-chave voltam a aparecer ao passar o mouse sobre uma carta na mão.
+
 ## [0.14.0] - 2026-10-11
 
 ### Adicionado

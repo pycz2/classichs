@@ -990,6 +990,8 @@ func _gui_input(ev: InputEvent) -> void:
 		elif ev.button_index == MOUSE_BUTTON_LEFT:
 			if _sel.get("stage", "") == "position" and ev.position.y > OWN_BOARD_Y - 20 and ev.position.y < OWN_BOARD_Y + 140:
 				click_board(_pos_from_x(ev.position.x))
+			elif _views.has(_hover_hand) and ev.position.y > TableLayout.HAND_Y and _sel.is_empty():
+				_on_press(_views[_hover_hand])  # below the raised card, where it was: still that card
 			else:
 				cancel()
 
@@ -1171,15 +1173,15 @@ func _show_tips(card_id: String, rect: Rect2, e: Entity = null) -> void:
 
 
 func _on_hover(v: EntityView, on: bool) -> void:
+	var e := g.ent(v.entity_id)
+	if e and e.zone == "HAND" and e.controller == viewer():
+		return  # the card itself rises in the hand; _track_hand_hover shows its keyword boxes
 	if _tooltip:
 		_tooltip.queue_free()
 		_tooltip = null
 	_show_tips("", Rect2())
 	if not on or _dragging or _sel.get("stage", "") == "target":
 		return  # no card pop-ups while aiming
-	var e := g.ent(v.entity_id)
-	if e and e.zone == "HAND" and e.controller == viewer():
-		return  # the card itself rises in the hand
 	if e == null or (e.zone == "HAND" and e.controller != viewer()) or (e.zone == "SECRET" and e.controller != viewer()):
 		return
 	_tooltip = CardView.make(e.card_id, 1.8)

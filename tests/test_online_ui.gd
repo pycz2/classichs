@@ -160,7 +160,10 @@ func test_connect_timeout() -> void:
 	root().add_child(h)
 	h.host_game()
 	h.finish(SignalCode.pack("answer", "x", []))
-	h._process(OnlineView.CONNECT_TIMEOUT + 1.0)
+	h._process(OnlineView.CONNECT_TIMEOUT + 1.0)  # one long frame: a tab that was hidden
+	check(h.state != "failed", "time in a hidden tab does not count")
+	for i in int(OnlineView.CONNECT_TIMEOUT / 0.5) + 2:
+		h._process(0.5)
 	eq(h.state, "failed", "gave up")
 	check(h.status.text != "" and not h.status.text.ends_with("…"), h.status.text)
 	h.free()

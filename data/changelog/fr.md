@@ -4,6 +4,17 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-10-11
+
+### Modifié
+- Le dragon d'un serviteur légendaire sur la table s'enroule autour de l'ovale du portrait.
+
+### Corrigé
+- Dans le navigateur, le premier Cmd/Ctrl+V ne collait rien au lieu du code copié (code d'un ami, import de deck).
+- Jeu en ligne : le temps où un onglet était caché n'interrompt plus l'attente de la connexion.
+- Une carte en main peut être prise en cliquant sous la carte levée, là où elle était.
+- Les fenêtres de mots-clés réapparaissent au survol d'une carte en main.
+
 ## [0.14.0] - 2026-10-11
 
 ### Ajouté

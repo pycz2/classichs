@@ -4,6 +4,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-10-11
+
+### Changed
+- A legendary minion's dragon on the table coils around the portrait's oval.
+
+### Fixed
+- In the browser the first Cmd/Ctrl+V pasted nothing instead of the copied code (a friend's code, deck import).
+- Online play: the time a tab was hidden no longer cuts the wait for the connection short.
+- A card in hand can be taken by pressing below the raised card, where it was.
+- Keyword boxes show again when hovering a card in hand.
+
 ## [0.14.0] - 2026-10-11
 
 ### Added

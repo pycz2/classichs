@@ -4,6 +4,17 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-10-11
+
+### Cambiado
+- El dragón de un esbirro legendario en la mesa se enrosca alrededor del óvalo del retrato.
+
+### Corregido
+- En el navegador, el primer Cmd/Ctrl+V no pegaba nada en lugar del código copiado (código de un amigo, importar mazo).
+- Juego en línea: el tiempo con la pestaña oculta ya no corta la espera de la conexión.
+- Una carta de la mano se puede coger pulsando bajo la carta levantada, donde estaba.
+- Las ventanitas de palabras clave vuelven a aparecer al pasar sobre una carta de la mano.
+
 ## [0.14.0] - 2026-10-11
 
 ### Añadido

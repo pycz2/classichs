@@ -84,7 +84,7 @@ func _draw() -> void:
 	var edge := Frames.GOLD if c.get("rarity", "") == "LEGENDARY" else Color("8a7a5c")
 	Frames.ring(self, oval, edge, 3)
 	if c.get("rarity", "") == "LEGENDARY":
-		Frames.crest(self, Vector2(48, 9), 84)  # on top of the oval, above the portrait
+		Frames.crest_around(self, OVAL.grow(2), 15)  # coiled around the top of the oval
 	if s.has("IMMUNE"):  # a white light around it with sparks turning (not the golden bubble)
 		var halo := Art.outline("oval", OVAL.grow(9))
 		draw_colored_polygon(halo, Color(1, 1, 1, 0.16 + 0.08 * sin(_t * 5)))
