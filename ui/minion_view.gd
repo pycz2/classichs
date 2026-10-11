@@ -45,7 +45,7 @@ func _draw() -> void:
 	if e.has("EXHAUSTED") and not e.has("CHARGE"):
 		icons.append("sleep")
 	for i in icons.size():
-		_draw_icon(icons[i], Vector2(48 + (i - (icons.size() - 1) / 2.0) * 14, 92))
+		_draw_icon(icons[i], Vector2(48 + (i - (icons.size() - 1) / 2.0) * 20, 90))
 	var base_atk := int(c.get("attack", 0))
 	var base_hp := int(c.get("health", 0))
 	_draw_stat(Vector2(16, 100), e.atk(), Palette.ATTACK, Palette.BUFFED if e.atk() > base_atk else Color.BLACK)
@@ -58,7 +58,9 @@ func _draw() -> void:
 
 
 ## Small status marks under the art (vector: the font has no symbol glyphs).
-func _draw_icon(kind: String, c: Vector2) -> void:
+func _draw_icon(kind: String, at: Vector2) -> void:
+	draw_set_transform(at, 0.0, Vector2(1.5, 1.5))
+	var c := Vector2.ZERO
 	match kind:
 		"deathrattle":
 			draw_circle(c, 6, Color.BLACK)
@@ -76,3 +78,4 @@ func _draw_icon(kind: String, c: Vector2) -> void:
 			var font := ThemeDB.fallback_font
 			draw_string_outline(font, c + Vector2(-4, 5), "z", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, 3, Color.BLACK)
 			draw_string(font, c + Vector2(-4, 5), "z", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Palette.TEXT)
+	draw_set_transform(Vector2.ZERO)
