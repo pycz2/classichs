@@ -14,7 +14,9 @@ func _ready() -> void:
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(dim)
 	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", Palette.box(Palette.TABLE, 12))
+	var style := Palette.box(Palette.TABLE, 12)
+	style.set_content_margin_all(20)
+	panel.add_theme_stylebox_override("panel", style)
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.offset_left = 140
 	panel.offset_right = -140
