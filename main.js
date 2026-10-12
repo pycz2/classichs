@@ -21,7 +21,9 @@ let lang = pick(savedLang() || navigator.language);
 let current = 0;
 const touch = matchMedia("(hover: none)").matches;  // phones: no hover, so tap to enlarge, double-tap to turn
 // A text in the page language; {mb} is the game's download size.
-const t = (key) => ((TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || "").replace("{mb}", DATA.download_mb || 61);
+const t = (key) => ((TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || "")
+  .replace(/\{mb\} ?/, (m) => (DATA.download_mb || 61) + (m.length > 4 ? "\u00a0" : ""))  // "61 MB" never breaks.replace("{tests}", DATA.tests || 757)
+  .replace("{v}", DATA.version || "").replace("{date}", DATA.date || "");
 
 function applyLang() {
   document.documentElement.lang = lang.replace("_", "-");
@@ -29,6 +31,11 @@ function applyLang() {
     el.textContent = t(touch && el.dataset.i18n === "cards.sub" ? "cards.sub_touch" : el.dataset.i18n);
   });
   $("#lang").value = lang;
+  // the changelog in the page language (Russian is the main CHANGELOG.md)
+  const log = lang === "ru" ? "CHANGELOG.md" : `data/changelog/${lang}.md`;
+  document.querySelectorAll(".changelog-link").forEach((a) => { a.href = `https://github.com/pycz2/classichs/blob/main/${log}`; });
+  $("#version").textContent = DATA.version ? t("hero.version") : "";
+  buildNews();
   buildGallery();
   buildCards();
 }
@@ -37,6 +44,23 @@ function applyLang() {
 const CLASS_COLORS = {WARRIOR: "#8e1002", SHAMAN: "#0070de", ROGUE: "#4c4d48", PALADIN: "#aa8f00", HUNTER: "#016e01",
   DRUID: "#703606", WARLOCK: "#7624ad", MAGE: "#0092ab", PRIEST: "#b8b090", NEUTRAL: "#6b6b6b"};
 let DATA = {heroes: [], cards: []};
+
+// The last versions from the game's changelog, in the page language (tools/site_data.py).
+function buildNews() {
+  const list = $("#newsList"), news = (DATA.news || {})[lang] || (DATA.news || {}).en || [];
+  list.innerHTML = "";
+  news.forEach((n) => {
+    const el = document.createElement("article");
+    el.className = "news-item";
+    el.innerHTML = "<h3></h3><ul></ul>";
+    el.querySelector("h3").textContent = n.version;
+    const date = document.createElement("span");
+    date.textContent = n.date;
+    el.querySelector("h3").append(date);
+    n.items.forEach((text) => { const li = document.createElement("li"); li.textContent = text; el.querySelector("ul").append(li); });
+    list.append(el);
+  });
+}
 
 function cardEl(c, withBack) {
   const el = document.createElement("div");
