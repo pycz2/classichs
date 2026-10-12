@@ -4,6 +4,15 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-10-12
+
+### Ajouté
+- L'Arène avec un ami en ligne : Partie en ligne → Arène. Chacun prend un héros parmi trois et construit 30 cartes comme dans l'Arène de 2014 : trois cartes d'une rareté par choix (de base et commune comptent pour une), rare ou mieux aux choix 1, 10, 20 et 30, cartes de classe une fois et demie plus fréquentes, sans limite de copies. La liste du deck à droite, la courbe de mana en bas à gauche, la progression de l'adversaire en haut à droite (héros choisi ou non, cartes, prêt ; jamais le héros ni les cartes). Quand les deux appuient sur « Prêt », une série en trois victoires commence ; après chaque partie, le salon avec le score ; on peut abandonner l'Arène ou quitter vers le menu à tout moment.
+- Le résultat d'une partie de votre point de vue — Victoire !, Défaite ou Match nul — sur une image semi-transparente (en ligne, il était écrit « Le joueur N gagne »).
+
+### Vérifié
+- Match nul : des Flammes infernales qui tuent les deux héros donnent un match nul, et les deux héros volent en éclats.
+
 ## [0.19.5] - 2026-10-12
 
 ### Corrigé

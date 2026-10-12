@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-10-12
+
+### Hinzugefügt
+- Die Arena mit einem Freund online: Online-Spiel → Arena. Jeder nimmt einen von drei Helden und baut 30 Karten wie in der Arena von 2014: drei Karten einer Seltenheit pro Wahl (Basis und Gewöhnlich zählen als eine), selten oder besser bei Wahl 1, 10, 20 und 30, Klassenkarten anderthalbmal so häufig, beliebig viele Kopien. Rechts die Deckliste, unten links die Manakurve, oben rechts der Fortschritt des Gegners (Held gewählt oder nicht, Karten, bereit; nie der Held oder die Karten). Wenn beide „Bereit“ drücken, beginnt eine Serie bis drei Siege; nach jedem Spiel die Lobby mit dem Punktestand; die Arena kann jederzeit aufgegeben oder verlassen werden.
+- Das Ergebnis eines Spiels aus deiner Sicht — Sieg!, Niederlage oder Unentschieden — über einem halbtransparenten Bild dazu (online stand vorher „Spieler N gewinnt“).
+
+### Geprüft
+- Unentschieden: Ein Höllenfeuer, das beide Helden tötet, ergibt ein Unentschieden, und beide Helden zerspringen.
+
 ## [0.19.5] - 2026-10-12
 
 ### Behoben

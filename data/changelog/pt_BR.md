@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-10-12
+
+### Adicionado
+- A Arena com um amigo online: Jogo Online → Arena. Cada um pega um de três heróis e monta 30 cartas como na Arena de 2014: três cartas de uma raridade por escolha (básicas e comuns contam como uma), rara ou melhor nas escolhas 1, 10, 20 e 30, cartas de classe uma vez e meia mais frequentes, sem limite de cópias. A lista do deck à direita, a curva de mana embaixo à esquerda, o progresso do oponente em cima à direita (herói escolhido ou não, cartas, pronto; nunca o herói nem as cartas). Quando os dois tocam em “Pronto”, começa uma série até três vitórias; depois de cada partida, o saguão com o placar; dá para desistir da Arena ou sair para o menu a qualquer momento.
+- O resultado de uma partida do seu lado — Vitória!, Derrota ou Empate — sobre uma imagem semitransparente (online aparecia “Jogador N vence”).
+
+### Verificado
+- Empate: um Fogo do Inferno que mata os dois heróis dá empate, e os dois heróis se despedaçam.
+
 ## [0.19.5] - 2026-10-12
 
 ### Corrigido

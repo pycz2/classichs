@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-10-12
+
+### Aggiunto
+- L'Arena con un amico online: Partita online → Arena. Ognuno prende uno di tre eroi e costruisce 30 carte come nell'Arena del 2014: tre carte di una rarità per scelta (base e comuni contano come una), rara o meglio alle scelte 1, 10, 20 e 30, carte di classe una volta e mezza più frequenti, copie senza limite. La lista del mazzo a destra, la curva di mana in basso a sinistra, i progressi dell'avversario in alto a destra (eroe scelto o no, carte, pronto; mai l'eroe né le carte). Quando entrambi premono “Pronto”, inizia una serie fino a tre vittorie; dopo ogni partita, la sala con il punteggio; si può abbandonare l'Arena o uscire al menu in qualsiasi momento.
+- Il risultato di una partita dal tuo lato — Vittoria!, Sconfitta o Pareggio — sopra un'immagine semitrasparente (online prima c'era “Il giocatore N vince”).
+
+### Verificato
+- Pareggio: un Fuoco Infernale che uccide entrambi gli eroi dà un pareggio, ed entrambi gli eroi vanno in frantumi.
+
 ## [0.19.5] - 2026-10-12
 
 ### Corretto

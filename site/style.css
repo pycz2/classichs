@@ -134,7 +134,7 @@ nav a:hover { color: var(--gold); }
 
 /* features */
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
-#match .grid, #dev .grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }  /* 6 and 3 cards: rows of three */
+#features .grid, #match .grid, #dev .grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }  /* 9, 6 and 3 cards: rows of three */
 .feature {
   --mx: 50%; --my: 50%;
   background: radial-gradient(300px circle at var(--mx) var(--my), rgba(242,194,48,.14), transparent 60%), linear-gradient(180deg, rgba(59,46,34,.75), rgba(36,27,20,.75));

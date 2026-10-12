@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-10-12
+
+### Añadido
+- La Arena con un amigo en línea: Partida en línea → Arena. Cada uno toma uno de tres héroes y arma 30 cartas como en la Arena de 2014: tres cartas de una rareza por elección (básicas y comunes cuentan como una), rara o mejor en las elecciones 1, 10, 20 y 30, cartas de clase una vez y media más frecuentes, sin límite de copias. La lista del mazo a la derecha, la curva de maná abajo a la izquierda, el progreso del rival arriba a la derecha (héroe elegido o no, cartas, listo; nunca el héroe ni las cartas). Cuando los dos pulsan «Listo», empieza una serie a tres victorias; tras cada partida, el vestíbulo con el marcador; se puede rendirse en la Arena o salir al menú en cualquier momento.
+- El resultado de una partida desde tu lado — ¡Victoria!, Derrota o Empate — sobre una imagen semitransparente (en línea antes decía «Gana el jugador N»).
+
+### Comprobado
+- Empate: un Fuego infernal que mata a los dos héroes da empate, y los dos héroes se hacen añicos.
+
 ## [0.19.5] - 2026-10-12
 
 ### Corregido

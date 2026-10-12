@@ -11,6 +11,7 @@ A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas
 - **All 382 cards** with original names, values and mechanics: Secrets, Choose One, Overload, Combo, Enrage, Deathrattle, auras, transformations and more.
 - **Training** against a simple bot of any class with a Basic deck, one of ten well-known Classic decks or your own; once loaded, it needs no internet.
 - **Online play without a server.** WebRTC connects two browsers directly (public Google STUN; a free public TURN relay when networks block a direct link). One player creates an invite code, the other answers with a code; the codes go through any messenger. Both games run the same deterministic engine in lockstep and check the game state after every move. 75-second turns with a burning fuse.
+- **Arena with a friend** (online): each player takes one of three heroes and drafts 30 cards like the 2014 Arena — three cards of one rarity per pick, Rare or better at picks 1, 10, 20 and 30, class cards more often, no limit on copies; both see each other's progress, then play until one has three wins (concede or leave from the lobby).
 - **Tutorial** like the original: six missions as Jaina against Hogger, Millhouse Manastorm, Lorewalker Cho, King Mukla, Hemet Nesingwary and Illidan Stormrage.
 - **Collection and decks:** every card unlocked, unlimited decks saved in the browser, ten well-known Classic decks ready to play, Hearthstone-compatible deck codes (import and export).
 - **Deck tracker** (your deck, cards left with the chance to draw each one, what the opponent played) and the **move history** by turns: a tile for every move, hover it to see what it did; the full text history on a click.
@@ -24,6 +25,7 @@ A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas
 | ![Deck tracker](media/screens/en/tracker.png) | ![History](media/screens/en/history.png) |
 | ![Collection](media/screens/en/collection.png) | ![Tutorial](media/screens/en/tutorial.png) |
 | ![Online](media/screens/en/online.png) | ![Settings](media/screens/en/settings.png) |
+| ![Arena draft](media/screens/en/arena.png) | ![Arena lobby](media/screens/en/lobby.png) |
 | ![Mission intro](media/screens/en/intro.png) | ![Debug tools](media/screens/en/debug.png) |
 
 ## Build and run
@@ -63,7 +65,7 @@ Every folder in `art/` is a picture set, selectable in Settings → Card art:
 
 ## На русском
 
-Фанатский ремейк Hearthstone Classic (июнь 2014): все 382 карты, девять классов, обучение как в оригинале, тренировка с ботом и игра с другом по сети прямо в браузере без игрового сервера — коды подключения передаются через любой мессенджер. Коллекция, колоды и коды колод, дектрекер, история ходов, инструменты отладки, 8 языков, музыка, звуки и эмоции. Играть: **https://pycz2.github.io/classichs/**
+Фанатский ремейк Hearthstone Classic (июнь 2014): все 382 карты, девять классов, обучение как в оригинале, тренировка с ботом и игра с другом по сети прямо в браузере без игрового сервера — обычная или Арена (драфт как в 2014 году, до трёх побед) — коды подключения передаются через любой мессенджер. Коллекция, колоды и коды колод, дектрекер, история ходов, инструменты отладки, 8 языков, музыка, звуки и эмоции. Играть: **https://pycz2.github.io/classichs/**
 
 ![Матч](media/screens/ru/match.png)
 
