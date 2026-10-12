@@ -17,7 +17,22 @@ func _ready() -> void:
 	get_viewport().gui_focus_changed.connect(func(c: Control):
 		if c is LineEdit or c is TextEdit:
 			_fresh_clipboard())
-	show_menu()
+	if Settings.first_run:
+		show_language_picker()
+	else:
+		show_menu()
+
+
+## The first run: pick the language, then the menu.
+func show_language_picker() -> void:
+	var l := LanguagePicker.new()
+	l.chosen.connect(func(code: String):
+		Settings.data.language = code
+		Settings.save()
+		Settings.first_run = false
+		Settings.apply()
+		show_menu())
+	_set_screen(l)
 
 
 ## In the browser Godot gets the clipboard late: a paste uses the text read on

@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-10-12
+
+### Aggiunto
+- Al primo avvio il gioco chiede di scegliere la lingua; quella del sistema è evidenziata.
+
 ## [0.18.5] - 2026-10-12
 
 ### Modificato

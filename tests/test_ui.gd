@@ -233,3 +233,22 @@ func test_hidden_history_follows_new_moves() -> void:
 func test_ticked_buttons_keep_their_plank_under_the_mouse() -> void:
 	var t := Fonts.theme()
 	check(t.has_stylebox("hover_pressed", "Button") and not t.get_stylebox("hover_pressed", "Button") is StyleBoxEmpty, "a pressed button under the mouse still has its background")
+
+
+func test_first_run_asks_for_the_language() -> void:
+	var was := Settings.path
+	Settings.path = "user://test_first_run_settings.json"
+	DirAccess.remove_absolute(Settings.path)
+	var m := _main()
+	check(m.screen is LanguagePicker, "the language comes first")
+	eq(m.screen.find_children("Lang_*", "Button", true, false).size(), 8, "all 8 languages")
+	(m.screen.find_child("Lang_de", true, false) as Button).pressed.emit()
+	check(m.screen is MainMenu, "then the menu")
+	eq(TranslationServer.get_locale(), "de", "in German")
+	Settings.load_settings()
+	eq([Settings.first_run, Settings.data.language], [false, "de"], "kept for the next run")
+	m.free()
+	DirAccess.remove_absolute(Settings.path)
+	Settings.path = was
+	Settings.load_settings()
+	Locale.set_language("en")

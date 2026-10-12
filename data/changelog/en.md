@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-10-12
+
+### Added
+- On the first run the game asks you to choose a language; the system's language is lit.
+
 ## [0.18.5] - 2026-10-12
 
 ### Changed
