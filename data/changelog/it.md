@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.19.3] - 2026-10-12
+
+### Aggiunto
+- Sito: la versione del gioco e un blocco “Novità” (le ultime voci del registro nella lingua della pagina), una sezione “In partita”, domande e risposte (requisiti, telefoni, dove sono salvati i mazzi, giocare offline, installare come app, cosa invia il gioco online, come segnalare un errore), una sezione sul codice aperto; il link al registro apre la lingua della pagina; sul telefono la pagina non scorre più di lato.
+
 ## [0.19.2] - 2026-10-12
 
 ### Modificato

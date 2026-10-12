@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.19.3] - 2026-10-12
+
+### Hinzugefügt
+- Website: die Spielversion und ein Block „Was ist neu“ (die letzten Einträge des Änderungsprotokolls in der Seitensprache), ein Abschnitt „Im Spiel“, Fragen und Antworten (Voraussetzungen, Handys, wo Decks liegen, offline spielen, als App installieren, was das Online-Spiel sendet, Fehler melden), ein Abschnitt zum offenen Quellcode; der Link zum Änderungsprotokoll öffnet die Seitensprache; auf dem Handy scrollt die Seite nicht mehr seitwärts.
+
 ## [0.19.2] - 2026-10-12
 
 ### Geändert

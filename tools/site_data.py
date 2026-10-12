@@ -33,6 +33,21 @@ def download_mb(play):
     return round(size / 1e6)
 
 
+## The last releases of the changelog in each page language: [{version, date, items}].
+def news(lang, count=4):
+    path = os.path.join(ROOT, "CHANGELOG.md" if lang == "ru" else os.path.join("data", "changelog", lang + ".md"))
+    out = []
+    for line in open(path, encoding="utf-8"):
+        m = re.match(r"## \[(\d[^\]]*)\] - (\S+)", line)
+        if m:
+            if len(out) == count:
+                break
+            out.append({"version": m.group(1), "date": m.group(2), "items": []})
+        elif out and line.startswith("- "):
+            out[-1]["items"].append(re.sub(r"[*`]", "", line[2:].strip()))
+    return out
+
+
 def main(out):
     data = json.load(open(os.path.join(ROOT, "data", "cards.json")))
     cards = {c["id"]: c for c in (data if isinstance(data, list) else data.values())}
@@ -56,7 +71,12 @@ def main(out):
 
     site = {"heroes": [e for e in map(entry, HEROES) if e], "cards": [e for e in map(entry, SHOWCASE) if e],
             "total": sum(1 for c in cards.values() if c.get("collectible") and c["type"] != "HERO"),
-            "download_mb": download_mb(os.path.join(out, "play"))}
+            "download_mb": download_mb(os.path.join(out, "play")),
+            "version": re.search(r'config/version="([^"]+)"', open(os.path.join(ROOT, "project.godot")).read()).group(1),
+            "tests": sum(len(re.findall(r"^func test_", open(os.path.join(ROOT, "tests", f)).read(), re.M))
+                         for f in os.listdir(os.path.join(ROOT, "tests")) if f.endswith(".gd")),
+            "news": {l: news(l) for l in LANGS}}
+    site["date"] = site["news"]["en"][0]["date"] if site["news"]["en"] else ""
     json.dump(site, open(os.path.join(out, "data.json"), "w"), ensure_ascii=False)
     print(f"site data: {len(site['heroes'])} heroes, {len(site['cards'])} cards, download {site['download_mb']} MB")
 

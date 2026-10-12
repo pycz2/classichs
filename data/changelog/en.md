@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.19.3] - 2026-10-12
+
+### Added
+- Site: the game version and a “What's new” block (the latest changelog entries in the page language), an “In a match” section, questions and answers (requirements, phones, where decks are kept, playing offline, installing as an app, what online play sends, how to report a bug), an open source section; the changelog link opens the page language; on a phone the page no longer scrolls sideways.
+
 ## [0.19.2] - 2026-10-12
 
 ### Changed
