@@ -63,3 +63,15 @@ they agree).
   is sent to the other (`bye {code: "error"}`).
 - While a game is starting, Ready shows "Waiting for the opponent…" and Concede
   is off; a game that starts after the Arena ended is not shown.
+
+## Rules of an Arena and higher odds (owner, 2026-10-12)
+
+- Before the heroes, the host chooses the rules for both (`rules {deck, keep}`):
+  **one deck** for the whole Arena, or **a new deck for every game**; with the
+  second, a separate setting lets players **keep their last deck** instead of
+  drafting again. The guest waits for the choice and sees it.
+- With a new deck every game and no keeping, both draft again after each game
+  (a draw too). With keeping allowed, each player chooses after each game:
+  "Draft a new deck" or "Keep my deck"; the opponent sees "Deciding".
+- Odds raised: normal picks 76.5 % common, 14 % rare, 7.5 % epic, 2 % legendary;
+  picks 1, 10, 20, 30: 65 % rare, 27 % epic, 8 % legendary.

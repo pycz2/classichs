@@ -4,6 +4,14 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-10-12
+
+### Ajouté
+- Règles de l'Arène : avant les héros, l'hôte choisit pour les deux « Un seul deck pour toute l'Arène » ou « Un nouveau deck à chaque partie » ; le second a un réglage « Les joueurs peuvent garder leur deck au lieu d'une nouvelle sélection ». S'il est activé, après chaque partie chacun choisit « Construire un nouveau deck » ou « Garder mon deck », et l'adversaire voit que le joueur décide. L'invité attend le choix et voit les règles ; le score reste visible pendant une nouvelle sélection.
+
+### Modifié
+- Arène : les cartes légendaires sortent deux fois plus souvent (2 % par choix normal, 8 % aux choix 1, 10, 20 et 30), les épiques une fois et demie plus souvent (7,5 % et 27 %).
+
 ## [0.20.1] - 2026-10-12
 
 ### Modifié

@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-10-12
+
+### Dodano
+- Zasady Areny: przed bohaterami gospodarz wybiera dla obu „Jedna talia na całą Arenę” albo „Nowa talia na każdą grę”; druga opcja ma ustawienie „Gracze mogą zostawić swoją talię zamiast składać nową”. Gdy jest włączone, po każdej grze każdy wybiera „Złóż nową talię” albo „Zostaw moją talię”, a przeciwnik widzi, że gracz decyduje. Gość czeka na wybór i widzi zasady; w czasie nowego wyboru kart widać wynik.
+
+### Zmieniono
+- Arena: karty legendarne trafiają się dwa razy częściej (2 % w zwykłym wyborze, 8 % przy wyborach 1, 10, 20 i 30), epickie półtora raza częściej (7,5 % i 27 %).
+
 ## [0.20.1] - 2026-10-12
 
 ### Zmieniono

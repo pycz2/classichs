@@ -3,8 +3,9 @@ extends Node
 ## The online Arena: both players draft a deck (ArenaDraft), see each other's
 ## progress, then play games over the same connection until one has WINS wins.
 ## Each game is a normal NetSession over a ChannelTransport (number n).
-## Messages: hello {mode: "arena"} → status {hero, cards, ready} → game {g, m} …
-## concede {} (the sender gives up the Arena) and bye {} (the sender left).
+## Messages: hello {mode: "arena"} → rules {deck, keep} (the host's choice) →
+## status {hero, cards, ready, deciding} → game {g, m} … concede {} (the sender
+## gives up the Arena) and bye {} (the sender left).
 
 signal changed  # the opponent's progress, the score or the end of the Arena
 signal game_started(session: NetSession, m: Match)
@@ -18,10 +19,17 @@ var player_name := ""
 var remote_name := ""
 var version: String = ProjectSettings.get_setting("application/config/version", "0")
 var draft: ArenaDraft
+## The Arena's rules, chosen by the host for both: "one" deck for the whole
+## Arena or "each" game a new draft ("" = not chosen yet); may_keep lets a
+## player keep the last deck instead of drafting again ("each" only).
+var rules := ""
+var may_keep := false
+## After a game with rules "each" and may_keep: this side chooses a new deck or the same.
+var deck_choice := false
 var connected := false
 var is_ready := false
 ## The opponent's progress (never which hero).
-var remote := {"hero": false, "cards": 0, "ready": false}
+var remote := {"hero": false, "cards": 0, "ready": false, "deciding": false}
 var score := [0, 0]  # [this side, the opponent]
 var games := 0  # games started
 var game: NetSession  # the game being played (null in the lobby)
@@ -32,12 +40,14 @@ var failure := ""  # why the connection broke ("" = it did not)
 var _channel: ChannelTransport
 var _pending := {}  # game number -> messages that came before that game started here
 var _done := false
+var _seed := -1
 
 
 func setup(t: Transport, is_host: bool, p_name: String, seed := -1) -> void:
 	transport = t
 	host = is_host
 	player_name = Profile.clean(p_name)
+	_seed = seed
 	draft = ArenaDraft.new(seed)
 	t.opened.connect(say_hello)
 	t.received.connect(_on_message)
@@ -56,12 +66,38 @@ func say_hello() -> void:
 ## Tells the opponent how far this side is (after every pick).
 func send_status() -> void:
 	if not _done:
-		transport.send({"t": "status", "hero": draft.hero != "", "cards": draft.cards.size(), "ready": is_ready})
+		transport.send({"t": "status", "hero": draft.hero != "", "cards": draft.cards.size(), "ready": is_ready,
+			"deciding": deck_choice})
+
+
+## The host chooses the rules once; the guest gets them.
+func set_rules(deck: String, keep := false) -> void:
+	if not host or rules != "" or not deck in ["one", "each"] or _done:
+		return
+	rules = deck
+	may_keep = keep and deck == "each"
+	transport.send({"t": "rules", "deck": rules, "keep": may_keep})
+	changed.emit()
+
+
+## After a game (rules "each" with keeping allowed): draft a new deck …
+func new_deck() -> void:
+	deck_choice = false
+	draft = ArenaDraft.new(-1 if _seed < 0 else _seed + games * 1000)
+	send_status()
+	changed.emit()
+
+
+## … or keep the one just played.
+func keep_deck() -> void:
+	deck_choice = false
+	send_status()
+	changed.emit()
 
 
 ## Ready for the next game (the deck must be complete); the game starts when both are.
 func set_ready() -> void:
-	if over or _done or not draft.done() or game != null:
+	if over or _done or not draft.done() or game != null or deck_choice:
 		return
 	is_ready = true
 	send_status()
@@ -106,15 +142,31 @@ func end_game() -> void:
 
 ## Counts a game's result (winner = the player number in the game; -1 = a draw).
 func record(game_winner: int) -> void:
-	if over or game_winner < 0:
+	if over:
+		changed.emit()
+		return
+	if game_winner < 0:  # a draw counts for nobody, but the next game still gets its deck
+		_next_deck()
 		changed.emit()
 		return
 	var side := 0 if game_winner == local_player() else 1
 	score[side] += 1
 	if score[side] >= WINS:
 		_finish(side)
+		return
+	_next_deck()
+	changed.emit()
+
+
+## With rules "each" a game is followed by a new draft (or the choice to keep the deck).
+func _next_deck() -> void:
+	if rules != "each":
+		return
+	if may_keep:
+		deck_choice = true
+		send_status()
 	else:
-		changed.emit()
+		new_deck()
 
 
 func _finish(side: int) -> void:
@@ -191,10 +243,17 @@ func _on_message(msg: Variant) -> void:
 				remote_name = Profile.clean(str(msg.get("name", "")))
 				send_status()
 				changed.emit()
+		"rules":
+			if host or rules != "" or not msg.get("deck") in ["one", "each"]:
+				_fail(_tr("The opponent sent an unexpected message"))
+			else:
+				rules = msg.deck
+				may_keep = msg.get("keep") == true and rules == "each"
+				changed.emit()
 		"status":
 			var cards = msg.get("cards")
 			remote = {"hero": msg.get("hero") == true, "cards": clampi(int(cards), 0, ArenaDraft.PICKS) if cards is float else 0,
-				"ready": msg.get("ready") == true}
+				"ready": msg.get("ready") == true, "deciding": msg.get("deciding") == true}
 			changed.emit()
 			_maybe_start()
 		"game":

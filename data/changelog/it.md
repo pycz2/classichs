@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-10-12
+
+### Aggiunto
+- Regole dell'Arena: prima degli eroi, l'host sceglie per entrambi “Un mazzo per tutta l'Arena” o “Un mazzo nuovo per ogni partita”; il secondo ha l'impostazione “I giocatori possono tenere il mazzo invece di sceglierne uno nuovo”. Se è attiva, dopo ogni partita ognuno sceglie “Costruire un mazzo nuovo” o “Tenere il mio mazzo”, e l'avversario vede che il giocatore sta decidendo. L'ospite aspetta la scelta e vede le regole; il punteggio resta visibile durante una nuova selezione.
+
+### Modificato
+- Arena: le carte leggendarie escono il doppio (2 % in una scelta normale, 8 % alle scelte 1, 10, 20 e 30), le epiche una volta e mezza di più (7,5 % e 27 %).
+
 ## [0.20.1] - 2026-10-12
 
 ### Modificato

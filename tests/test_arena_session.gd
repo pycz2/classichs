@@ -22,6 +22,14 @@ func _pair() -> Array:
 	return [h, g, tr, games, fails]
 
 
+## A pair with the rules chosen by the host.
+func _pair_with(rules: String) -> Array:
+	var p := _pair()
+	p[0].set_rules(rules)
+	LoopbackTransport.pump(p[2])
+	return p
+
+
 func _free(p: Array) -> void:
 	for side in p[3]:
 		for m in side:
@@ -71,13 +79,13 @@ func test_hello_connects_and_names() -> void:
 func test_the_opponent_sees_progress_but_not_the_hero() -> void:
 	var p := _pair()
 	var h: ArenaSession = p[0]
-	eq(p[1].remote, {"hero": false, "cards": 0, "ready": false}, "choosing a hero")
+	eq(p[1].remote, {"hero": false, "cards": 0, "ready": false, "deciding": false}, "choosing a hero")
 	h.draft.choose_hero(1)
 	h.draft.pick(0)
 	h.draft.pick(2)
 	h.send_status()
 	LoopbackTransport.pump(p[2])
-	eq(p[1].remote, {"hero": true, "cards": 2, "ready": false}, "a hero is chosen, 2 cards")
+	eq(p[1].remote, {"hero": true, "cards": 2, "ready": false, "deciding": false}, "a hero is chosen, 2 cards")
 	check(not str(p[2][1]).contains(h.draft.hero), "the hero itself is not sent")
 	_free(p)
 
@@ -219,4 +227,100 @@ func test_concede_while_a_game_is_starting_does_not_start_it() -> void:
 	check(p[0].over and p[1].over, "over")
 	eq(p[3][1].size(), 0, "the guest is not pulled into a game")
 	eq(p[4], [[], []], "no failure on either side")
+	_free(p)
+
+
+func test_the_host_chooses_the_rules() -> void:
+	var p := _pair()
+	eq([p[0].rules, p[1].rules], ["", ""], "not chosen yet")
+	p[1].set_rules("each", true)
+	LoopbackTransport.pump(p[2])
+	eq([p[0].rules, p[1].rules], ["", ""], "the guest can't choose")
+	p[0].set_rules("each", true)
+	LoopbackTransport.pump(p[2])
+	eq([p[0].rules, p[1].rules], ["each", "each"], "the host's choice reaches the guest")
+	eq([p[0].may_keep, p[1].may_keep], [true, true], "the same on both sides")
+	p[0].set_rules("one")
+	LoopbackTransport.pump(p[2])
+	eq([p[0].rules, p[1].rules], ["each", "each"], "chosen once")
+	_free(p)
+
+
+func test_one_deck_for_the_whole_arena() -> void:
+	var p := _pair()
+	p[0].set_rules("one")
+	LoopbackTransport.pump(p[2])
+	_to_first_game(p)
+	var cards: Array = p[0].draft.cards.duplicate()
+	_guest_concedes(p)
+	eq(p[0].draft.cards, cards, "the same deck after a game")
+	check(p[0].draft.done(), "and still complete")
+	_free(p)
+
+
+func test_a_new_deck_for_every_game() -> void:
+	var p := _pair()
+	p[0].set_rules("each", false)
+	LoopbackTransport.pump(p[2])
+	_to_first_game(p)
+	var first: Array = p[0].draft.cards.duplicate()
+	_guest_concedes(p)
+	for s in [p[0], p[1]]:
+		eq(s.draft.hero, "", "a new hero to choose")
+		eq(s.draft.cards.size(), 0, "a new deck to draft")
+	LoopbackTransport.pump(p[2])
+	eq(p[1].remote, {"hero": false, "cards": 0, "ready": false, "deciding": false}, "the opponent sees the new draft")
+	for s in [p[0], p[1]]:
+		_draft(s)
+		s.set_ready()
+	LoopbackTransport.pump(p[2])
+	eq(p[3][0].size(), 2, "game 2 starts")
+	var m: Match = p[3][0][1]
+	var cards := []
+	for e in m.game.players[0].deck + m.game.players[0].hand:
+		if e.card_id != "GAME_005":
+			cards.append(e.card_id)
+	cards.sort()
+	var second: Array = p[0].draft.cards.duplicate()
+	second.sort()
+	eq(cards, second, "game 2 is played with the new deck")
+	check(second != first, "a different deck")
+	eq(p[0].score, [1, 0], "the score goes on")
+	_free(p)
+
+
+func test_keeping_the_deck_when_allowed() -> void:
+	var p := _pair()
+	p[0].set_rules("each", true)
+	LoopbackTransport.pump(p[2])
+	_to_first_game(p)
+	var host_cards: Array = p[0].draft.cards.duplicate()
+	_guest_concedes(p)
+	check(p[0].deck_choice and p[1].deck_choice, "both decide: a new deck or the same")
+	p[0].set_ready()
+	check(not p[0].is_ready, "no Ready before deciding")
+	LoopbackTransport.pump(p[2])
+	check(p[1].remote.deciding, "the guest sees the host deciding")
+	p[0].keep_deck()
+	p[1].new_deck()
+	LoopbackTransport.pump(p[2])
+	eq(p[0].draft.cards, host_cards, "the host keeps the deck")
+	eq(p[1].draft.cards.size(), 0, "the guest drafts again")
+	eq(p[0].remote, {"hero": false, "cards": 0, "ready": false, "deciding": false}, "the host sees the guest's new draft")
+	_draft(p[1])
+	p[0].set_ready()
+	p[1].set_ready()
+	LoopbackTransport.pump(p[2])
+	eq(p[3][0].size(), 2, "game 2 starts")
+	_free(p)
+
+
+func test_no_choice_when_keeping_is_not_allowed() -> void:
+	var p := _pair()
+	p[0].set_rules("each", false)
+	LoopbackTransport.pump(p[2])
+	_to_first_game(p)
+	_guest_concedes(p)
+	check(not p[0].deck_choice and not p[1].deck_choice, "no choice: a new deck is a must")
+	eq(p[0].draft.cards.size(), 0, "drafting again")
 	_free(p)

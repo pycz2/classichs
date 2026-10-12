@@ -1,6 +1,8 @@
 class_name ArenaView
 extends Control
-## The online Arena between games: choose a hero out of three, draft 30 cards
+## The online Arena between games: the host chooses the rules (one deck for the
+## whole Arena, or a new one every game, maybe with the right to keep the last
+## one), then each player chooses a hero out of three, drafts 30 cards
 ## (three to choose from each time; the deck list on the right, the mana curve
 ## at the bottom left), then the lobby: ready, the score, concede, exit. The
 ## opponent's progress is in the upper right all the time.
@@ -12,7 +14,9 @@ const OFFER_SCALE := 1.75
 const LIST_X := 968.0
 
 var session: ArenaSession
-var stage := ""  # "hero", "draft", "lobby" or "end" (the Arena is won, lost or broken)
+## "rules", "hero", "draft", "lobby", "decide" (after a game: a new deck or the
+## same) or "end" (the Arena is won, lost or broken)
+var stage := ""
 var curve: _Curve
 var _body := Control.new()  # what the stage shows; rebuilt on every change
 var _title: Label
@@ -23,6 +27,8 @@ var _tips: Control
 var _score: Label  # the lobby's parts that change without a rebuild
 var _ready_button: Button
 var _concede_button: Button
+var _rules_line: Label
+var _rules_pick := "one"  # the host's choice before Start
 
 
 func _ready() -> void:
@@ -38,6 +44,10 @@ func _ready() -> void:
 	_subtitle = Palette.label("", 22)
 	_subtitle.position = Vector2(42, 72)
 	add_child(_subtitle)
+	_rules_line = Palette.label("", 16, Palette.SELECTED)
+	_rules_line.name = "RulesLine"
+	_rules_line.position = Vector2(42, 104)
+	add_child(_rules_line)
 	var panel := PanelContainer.new()
 	panel.position = Vector2(LIST_X, 14)
 	panel.custom_minimum_size = Vector2(292, 0)
@@ -63,6 +73,10 @@ func _ready() -> void:
 func _stage() -> String:
 	if session.over or session.failure != "":
 		return "end"
+	if session.rules == "":
+		return "rules"
+	if session.deck_choice:
+		return "decide"
 	if session.draft.hero == "":
 		return "hero"
 	return "draft" if not session.draft.done() else "lobby"
@@ -74,6 +88,10 @@ func remote_text() -> String:
 		return tr("The opponent left")
 	if not session.connected:
 		return tr("Connecting…")
+	if session.rules == "":
+		return tr("Choosing the rules") if not session.host else tr("Waiting for your rules")
+	if r.deciding:
+		return tr("Deciding: a new deck or the same")
 	if not r.hero:
 		return tr("Choosing a hero")
 	if r.cards < ArenaDraft.PICKS:
@@ -97,6 +115,20 @@ func _update_status() -> void:
 	var name_text := session.remote_name if session.remote_name != "" else tr("Opponent")
 	_opponent.text = tr("Opponent: %s") % name_text
 	_status.text = remote_text()
+	_rules_line.text = rules_text()
+	if session.games > 0:  # (a new draft between games: the score stays in sight)
+		_rules_line.text += "   ·   " + tr("Score %d : %d") % session.score
+
+
+func rules_text() -> String:
+	match [session.rules, session.may_keep]:
+		["one", _]:
+			return tr("One deck for the whole Arena")
+		["each", false]:
+			return tr("A new deck for every game")
+		["each", true]:
+			return tr("A new deck for every game, or keep the last one")
+	return ""
 
 
 ## Builds the whole stage again (a new stage, or this player's own pick).
@@ -110,6 +142,12 @@ func _rebuild() -> void:
 		_body.remove_child(c)
 		c.queue_free()
 	match stage:
+		"rules":
+			_subtitle.text = tr("The Arena's rules")
+			_build_rules()
+		"decide":
+			_subtitle.text = tr("A new deck for the next game, or the same?")
+			_build_decide()
 		"hero":
 			_subtitle.text = tr("Choose your hero")
 			_build_heroes()
@@ -122,6 +160,78 @@ func _rebuild() -> void:
 		"end":
 			_subtitle.text = ""
 			_build_end()
+
+
+## The host picks the rules for both; the guest waits for them.
+func _build_rules() -> void:
+	if not session.host:
+		var wait := Palette.label(tr("The host chooses the Arena's rules…"), 26)
+		wait.position = Vector2(40, 260)
+		_body.add_child(wait)
+		_exit_button(Vector2(40, 642))
+		return
+	var row := HBoxContainer.new()
+	row.position = Vector2(40, 160)
+	row.add_theme_constant_override("separation", 30)
+	_body.add_child(row)
+	var group := ButtonGroup.new()
+	var keep := CheckBox.new()
+	for spec in [["one", "RulesOne", tr("One deck for the whole Arena"), tr("Draft once, then play every game of the Arena with that deck")],
+			["each", "RulesEach", tr("A new deck for every game"), tr("Draft again before each game: less luck in one draft")]]:
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 10)
+		row.add_child(col)
+		var b := Palette.button(spec[2], spec[1])
+		b.toggle_mode = true
+		b.button_group = group
+		b.button_pressed = spec[0] == _rules_pick
+		b.custom_minimum_size = Vector2(430, 150)
+		b.add_theme_font_size_override("font_size", 26)
+		var kind: String = spec[0]
+		b.pressed.connect(func():
+			_rules_pick = kind
+			keep.disabled = kind != "each"
+			if keep.disabled:
+				keep.button_pressed = false)
+		col.add_child(b)
+		var why := Palette.label(spec[3], 18)
+		why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		why.custom_minimum_size.x = 430
+		col.add_child(why)
+	var mark := func():  # the chosen rule bright, the other dimmed
+		for b in group.get_buttons():
+			b.modulate = Color.WHITE if b.button_pressed else Color(0.6, 0.6, 0.6)
+	group.pressed.connect(func(_b): mark.call())
+	mark.call()
+	keep.name = "MayKeep"
+	keep.text = tr("Players may keep their deck instead of drafting again")
+	keep.add_theme_font_size_override("font_size", 20)
+	keep.disabled = _rules_pick != "each"
+	keep.position = Vector2(500, 400)
+	_body.add_child(keep)
+	var go := Palette.button(tr("Start"), "StartArena")
+	go.custom_minimum_size = Vector2(240, 52)
+	go.position = Vector2(40, 560)
+	go.pressed.connect(func():
+		session.set_rules(_rules_pick, keep.button_pressed)
+		_rebuild())
+	_body.add_child(go)
+	_exit_button(Vector2(40, 642))
+
+
+## After a game when keeping is allowed: the deck just played, and the choice.
+func _build_decide() -> void:
+	var box := _lobby_box()
+	var q := Palette.label(tr("Draft a new deck or keep this one?"), 22)
+	q.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(q)
+	_button(box, tr("Draft a new deck"), "NewDeck", func():
+		session.new_deck()
+		_rebuild())
+	_button(box, tr("Keep my deck"), "KeepDeck", func():
+		session.keep_deck()
+		_rebuild())
+	_button(box, tr("Exit to Menu"), "ExitArena", func(): exit.emit())
 
 
 func _build_heroes() -> void:

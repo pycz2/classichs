@@ -7,8 +7,9 @@ static func root() -> Window:
 	return (Engine.get_main_loop() as SceneTree).root
 
 
-## Two connected Arena sessions and a view of the host's. Returns [view, host, guest, transports].
-func _setup() -> Array:
+## Two connected Arena sessions (rules: one deck, unless given) and a view of
+## the host's. Returns [view, host, guest, transports].
+func _setup(rules := "one", keep := false) -> Array:
 	var tr := LoopbackTransport.pair()
 	var h := ArenaSession.new()
 	var g := ArenaSession.new()
@@ -17,6 +18,9 @@ func _setup() -> Array:
 	h.say_hello()
 	g.say_hello()
 	LoopbackTransport.pump(tr)
+	if rules != "":
+		h.set_rules(rules, keep)
+		LoopbackTransport.pump(tr)
 	var v := ArenaView.new()
 	v.session = h
 	root().add_child(v)
@@ -240,4 +244,52 @@ func test_lobby_updates_in_place() -> void:
 	LoopbackTransport.pump(p[3])
 	check(is_instance_valid(dialog) and v.find_child("ConcedeDialog", true, false) == dialog, "the open question stays")
 	eq((v.find_child("Score", true, false) as Label).text, "1 : 0", "the score updates")
+	_free(p)
+
+
+func test_the_host_chooses_the_rules_first() -> void:
+	var p := _setup("")
+	var v: ArenaView = p[0]
+	eq(v.stage, "rules", "the rules come first")
+	var keep := v.find_child("MayKeep", true, false) as CheckBox
+	check(keep != null and keep.disabled, "keeping the deck needs a new deck every game")
+	_press(v, "RulesEach")
+	check(not keep.disabled, "now it can be allowed")
+	keep.button_pressed = true
+	_press(v, "StartArena")
+	eq([p[1].rules, p[1].may_keep], ["each", true], "chosen")
+	eq(v.stage, "hero", "then the hero")
+	LoopbackTransport.pump(p[3])
+	eq([p[2].rules, p[2].may_keep], ["each", true], "the guest has the same rules")
+	_free(p)
+
+
+func test_the_guest_waits_for_the_rules() -> void:
+	var p := _setup("")
+	var gv := ArenaView.new()
+	gv.session = p[2]
+	root().add_child(gv)
+	eq(gv.stage, "rules", "waiting")
+	check(gv.find_child("StartArena", true, false) == null, "the guest can't choose")
+	p[1].set_rules("one")
+	LoopbackTransport.pump(p[3])
+	eq(gv.stage, "hero", "the rules came: the hero")
+	check((gv.find_child("RulesLine", true, false) as Label).text.contains("One deck"), "the rules are shown")
+	gv.free()
+	_free(p)
+
+
+func test_after_a_game_keep_or_draft_again() -> void:
+	var p := _setup("each", true)
+	var v: ArenaView = p[0]
+	_full_draft(v, p[1])
+	var cards: Array = p[1].draft.cards.duplicate()
+	p[1].record(p[1].local_player())  # a game was won
+	eq(v.stage, "decide", "a new deck or the same")
+	_press(v, "KeepDeck")
+	eq(v.stage, "lobby", "kept: back in the lobby")
+	eq(p[1].draft.cards, cards, "the same deck")
+	p[1].record(p[1].local_player())
+	_press(v, "NewDeck")
+	eq(v.stage, "hero", "a new draft")
 	_free(p)
