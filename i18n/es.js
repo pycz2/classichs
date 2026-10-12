@@ -13,7 +13,7 @@
     "f5.t": "Colección y mazos", "f5.d": "Todas las cartas desbloqueadas. Tus mazos se guardan en el navegador; diez mazos Classic famosos están listos para jugar; los códigos de mazo funcionan con Hearthstone (importar y exportar).",
     "f6.t": "Rastreador de mazo e historial", "f6.d": "Tu mazo con imágenes y la probabilidad de robar cada carta, las cartas que jugó el rival y un historial por turnos — pasa el ratón por una acción para ver a quién afectó.",
     "f7.t": "Herramientas de depuración", "f7.d": "En Ajustes: monta cualquier posición con el ratón y juégala contra el bot o por ambos lados, juega una escena de prueba lista para cada una de las 534 cartas y fichas, y mira cualquier carta con cualquier efecto.",
-    "f8.t": "8 idiomas, sonido y efectos", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Música y sonidos, efectos que vuelan y golpean en la mesa, emoticonos con las palabras de los héroes, dos juegos de ilustraciones y seis reversos.",
+    "f8.t": "8 idiomas, sonido y efectos", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Sonidos y dos conjuntos de música a elegir (generada, o música libre de taberna medieval), efectos que vuelan y golpean en la mesa, emoticonos con las palabras de los héroes, dos juegos de ilustraciones y seis reversos.",
     "screens.title": "Capturas de pantalla",
     "online.title": "Juega con un amigo en tres pasos",
     "online.s1": "Jugar → Partida en línea: escribe tu nombre, elige «Partida normal» (y un mazo) o «Arena», pulsa «Crear partida» y envía el código de invitación a un amigo.",

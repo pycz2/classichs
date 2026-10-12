@@ -13,7 +13,7 @@
     "f5.t": "Sammlung und Decks", "f5.d": "Alle Karten freigeschaltet. Deine Decks werden im Browser gespeichert; zehn bekannte Classic-Decks sind spielbereit; Deckcodes funktionieren mit Hearthstone (Import und Export).",
     "f6.t": "Decktracker und Verlauf", "f6.d": "Dein Deck mit Kartenbildern und der Ziehchance jeder Karte, die Karten des Gegners und ein Verlauf nach Zügen — zeig auf einen Zug, um zu sehen, wen er traf.",
     "f7.t": "Debug-Werkzeuge", "f7.d": "In den Einstellungen: Baue jede Stellung mit der Maus und spiele sie gegen den Bot oder für beide Seiten, spiele eine fertige Testszene für jede der 534 Karten und Token, sieh dir jede Karte mit jedem Effekt an.",
-    "f8.t": "8 Sprachen, Klang und Effekte", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Musik und Klänge, Effekte, die über den Tisch fliegen und treffen, Emotes in den Worten der Helden, zwei Sätze Kartenbilder und sechs Kartenrücken.",
+    "f8.t": "8 Sprachen, Klang und Effekte", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Klänge und zwei Musiksätze zur Wahl (generiert oder offene mittelalterliche Tavernenmusik), Effekte, die über den Tisch fliegen und treffen, Emotes in den Worten der Helden, zwei Sätze Kartenbilder und sechs Kartenrücken.",
     "screens.title": "Screenshots",
     "online.title": "Mit einem Freund spielen in drei Schritten",
     "online.s1": "Spielen → Online-Spiel: Namen eingeben, „Normales Spiel“ (und ein Deck) oder „Arena“ wählen, „Spiel erstellen“ drücken und den Einladungscode an einen Freund schicken.",
