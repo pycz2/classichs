@@ -28,6 +28,7 @@ var game: NetSession  # the game being played (null in the lobby)
 var over := false  # the Arena has a winner
 var winner := -1  # 0 = this side won the Arena, 1 = the opponent
 var remote_left := false
+var failure := ""  # why the connection broke ("" = it did not)
 var _channel: ChannelTransport
 var _pending := {}  # game number -> messages that came before that game started here
 var _done := false
@@ -123,6 +124,7 @@ func _fail(reason: String) -> void:
 	if _done:
 		return
 	_done = true
+	failure = reason
 	failed.emit(reason)
 
 
@@ -201,7 +203,8 @@ func _on_message(msg: Variant) -> void:
 		"bye":
 			_done = true
 			if msg.get("code") == "mode":
-				failed.emit(_tr("The opponent chose a normal game, not the Arena"))
+				failure = _tr("The opponent chose a normal game, not the Arena")
+				failed.emit(failure)
 				return
 			remote_left = true
 			if not over:

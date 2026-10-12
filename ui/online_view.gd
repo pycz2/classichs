@@ -1,19 +1,21 @@
 class_name OnlineView
 extends Control
-## Online game setup, one step at a time: your name, your deck, then either
-## "Create game" (invite code -> paste the answer) or "Join game" (paste the
-## invite -> send back the answer code).
+## Online game setup, one step at a time: your name, a normal game or the Arena,
+## your deck (a normal game only), then either "Create game" (invite code ->
+## paste the answer) or "Join game" (paste the invite -> send back the answer code).
 
 signal back
 signal edit_decks
 signal play(session: NetSession, m: Match)
+signal arena(session: ArenaSession)
 
 ## Seconds to wait for the connection after the codes are exchanged.
 const CONNECT_TIMEOUT := 25.0
 ## Seconds the guest waits after showing its answer code: the host pastes it by hand.
 const GUEST_WAIT := 240.0
-## The steps in order; Back goes to the one before ("host" and "join" go back to "mode").
-const STAGES := ["name", "deck", "mode", "host", "join"]
+## The steps in order; Back goes to the one before ("host" and "join" go back to
+## "mode"; the Arena has no deck step).
+const STAGES := ["name", "kind", "deck", "mode", "host", "join"]
 
 ## Makes the transport; tests replace it with an in-memory fake.
 var transport_factory: Callable = func() -> Transport: return WebRtcTransport.new()
@@ -27,6 +29,8 @@ var stage := "name"
 var deck: Deck
 var transport: Transport
 var session: NetSession
+var arena_session: ArenaSession
+var kind := "game"  # "game" or "arena"
 var _stages := {}
 var _subtitle: Label
 var _exchange := VBoxContainer.new()
@@ -71,12 +75,31 @@ func _ready() -> void:
 	name_edit.max_length = Profile.NAME_MAX
 	name_edit.custom_minimum_size = Vector2(480, 52)
 	name_edit.add_theme_font_size_override("font_size", 24)
-	name_edit.text_submitted.connect(func(_t): show_stage("deck"))
+	name_edit.text_submitted.connect(func(_t): show_stage("kind"))
 	row.add_child(name_edit)
 	var next := Palette.button(tr("Next"), "Next")
 	next.custom_minimum_size = Vector2(200, 52)
-	next.pressed.connect(show_stage.bind("deck"))
+	next.pressed.connect(show_stage.bind("kind"))
 	row.add_child(next)
+	# a normal game or the Arena
+	var kinds := HBoxContainer.new()
+	kinds.position = Vector2(140, 150)
+	kinds.add_theme_constant_override("separation", 40)
+	_stages.kind.add_child(kinds)
+	for spec in [[tr("Normal Game"), "KindGame", "game", tr("Your deck against your friend's")],
+			[tr("Arena"), "KindArena", "arena", tr("Both draft a deck from three cards at a time, then play until one has three wins")]]:
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 10)
+		kinds.add_child(col)
+		var b := Palette.button(spec[0], spec[1])
+		b.custom_minimum_size = Vector2(480, 200)
+		b.add_theme_font_size_override("font_size", 34)
+		b.pressed.connect(choose_kind.bind(spec[2]))
+		col.add_child(b)
+		var why := Palette.label(spec[3], 18)
+		why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		why.custom_minimum_size.x = 480
+		col.add_child(why)
 	# your deck
 	chooser.name = "DeckChooser"
 	chooser.position = Vector2(140, 130)
@@ -134,7 +157,7 @@ func _ready() -> void:
 	for c in [_out_hint, _out_row, _in_label, _in_row, status]:
 		_exchange.add_child(c)
 	# Back for every stage but the deck one (the chooser has its own)
-	for s in ["name", "mode", "host", "join"]:
+	for s in ["name", "kind", "mode", "host", "join"]:
 		var bk := Palette.button(tr("Back"), "Back")
 		bk.position = Vector2(140, 642)
 		bk.pressed.connect(step_back)
@@ -162,7 +185,7 @@ func show_stage(s: String) -> void:
 	stage = s
 	for k in _stages:
 		_stages[k].visible = k == s
-	_subtitle.text = {"name": tr("Your name"), "deck": tr("Choose your deck"),
+	_subtitle.text = {"name": tr("Your name"), "kind": tr("A normal game or the Arena?"), "deck": tr("Choose your deck"),
 		"mode": tr("Create a new game or join a friend's game"), "host": tr("Create Game"), "join": tr("Join Game")}[s]
 	_exchange.visible = s == "host" or s == "join"
 	if s == "host":
@@ -196,10 +219,12 @@ func step_back() -> void:
 		"name":
 			_drop_session()
 			back.emit()
-		"deck":
+		"kind":
 			show_stage("name")
+		"deck":
+			show_stage("kind")
 		"mode":
-			show_stage("deck")
+			show_stage("deck" if kind == "game" else "kind")
 		_:
 			_drop_session()
 			state = "idle"
@@ -209,6 +234,11 @@ func step_back() -> void:
 			show_stage("mode")
 
 
+func choose_kind(k: String) -> void:
+	kind = k
+	show_stage("deck" if k == "game" else "mode")
+
+
 func choose_deck(d: Deck) -> void:
 	deck = d
 	show_stage("mode")
@@ -216,15 +246,17 @@ func choose_deck(d: Deck) -> void:
 
 func _drop_session() -> void:
 	_connect_wait = -1.0
-	if session:
-		session.leave()
-		session.queue_free()
-		transport.queue_free()
-		session = null
+	for s: Node in [session, arena_session]:
+		if s:
+			s.leave()
+			s.queue_free()
+			transport.queue_free()
+	session = null
+	arena_session = null
 
 
 func _begin(is_host: bool) -> bool:
-	var why := tr("Choose your deck") if deck == null else deck.validate()
+	var why := "" if kind == "arena" else (tr("Choose your deck") if deck == null else deck.validate())
 	if why != "":
 		status.text = why
 		return false
@@ -233,6 +265,35 @@ func _begin(is_host: bool) -> bool:
 	Profile.save_name(name_edit.text)
 	transport = transport_factory.call()
 	add_child(transport)
+	if kind == "arena":
+		_begin_arena(is_host)
+	else:
+		_begin_game(is_host)
+	if transport.has_signal("code_ready"):
+		transport.code_ready.connect(_on_code)
+		transport.error.connect(func(text):
+			state = "failed"
+			status.text = text)
+	return true
+
+
+func _begin_arena(is_host: bool) -> void:
+	arena_session = ArenaSession.new()
+	add_child(arena_session)
+	arena_session.setup(transport, is_host, Profile.load_name())
+	var s := arena_session
+	s.changed.connect(func():
+		if s.connected and state != "playing":
+			state = "playing"
+			status.text = tr("Connected")
+			_sync_js()
+			arena.emit(s))
+	s.failed.connect(func(reason):
+		state = "failed"
+		status.text = reason)
+
+
+func _begin_game(is_host: bool) -> void:
 	session = NetSession.new()
 	add_child(session)
 	session.setup(transport, is_host, Profile.load_name(), deck)
@@ -244,12 +305,6 @@ func _begin(is_host: bool) -> bool:
 	session.failed.connect(func(reason):
 		state = "failed"
 		status.text = reason)
-	if transport.has_signal("code_ready"):
-		transport.code_ready.connect(_on_code)
-		transport.error.connect(func(text):
-			state = "failed"
-			status.text = text)
-	return true
 
 
 func host_game() -> void:
@@ -277,7 +332,7 @@ func join_game(invite: String) -> void:
 
 
 func finish(answer: String) -> void:
-	if session == null or not session.host:
+	if not _hosting():
 		status.text = tr("Create a game first")
 		return
 	status.text = tr("Connecting…")
@@ -289,10 +344,14 @@ func finish(answer: String) -> void:
 func _on_code(code: String) -> void:
 	code_out.text = code
 	state = "code"
-	status.text = "" if session.host else tr("Waiting for your friend to connect…")
-	_connect_wait = -1.0 if session.host else 0.0
+	status.text = "" if _hosting() else tr("Waiting for your friend to connect…")
+	_connect_wait = -1.0 if _hosting() else 0.0
 	_wait_limit = GUEST_WAIT
 	_refresh()
+
+
+func _hosting() -> bool:
+	return (session != null and session.host) or (arena_session != null and arena_session.host)
 
 
 func _process(delta: float) -> void:

@@ -294,3 +294,46 @@ func test_guest_splits_and_renews_host_candidates() -> void:
 func _said(v: MatchView, p: int, id: String) -> String:
 	var t := VoiceLines.text(v.g.players[p].hero.card_id, id)
 	return t if t != "" else MatchView.EMOTES[id]
+
+
+## Host and guest wizards on a fake WebRTC pair, with the given kinds; the codes are exchanged.
+func _connect_kinds(host_kind: String, guest_kind: String) -> Array:
+	var pair := FakeRtc.fake_pair()
+	var h := OnlineView.new()
+	var g := OnlineView.new()
+	h.transport_factory = func(): return pair[0]
+	g.transport_factory = func(): return pair[1]
+	root().add_child(h)
+	root().add_child(g)
+	h.kind = host_kind
+	g.kind = guest_kind
+	h.host_game()
+	g.join_game(h.code_out.text)
+	h.finish(g.code_out.text)
+	LoopbackTransport.pump([pair[0], pair[1]])
+	return [h, g]
+
+
+func test_arena_codes_open_the_arena_on_both_sides() -> void:
+	Profile.path = "user://test_profile_arena.json"
+	var arenas := [null, null]
+	var v := _connect_kinds("arena", "arena")
+	check(v[0].arena_session != null and v[1].arena_session != null, "Arena sessions made")
+	check(v[0].arena_session.connected and v[1].arena_session.connected, "connected")
+	eq([v[0].state, v[1].state], ["playing", "playing"], "both went on")
+	v[0].free()
+	v[1].free()
+	DirAccess.remove_absolute(Profile.path)
+	Profile.path = Profile.DEFAULT_PATH
+
+
+func test_arena_and_normal_game_tell_why() -> void:
+	Profile.path = "user://test_profile_arena2.json"
+	var v := _connect_kinds("arena", "game")
+	eq([v[0].state, v[1].state], ["failed", "failed"], "neither goes on")
+	check(v[0].status.text.contains("Arena"), "the Arena side: " + v[0].status.text)
+	check(v[1].status.text.contains("Arena"), "the game side: " + v[1].status.text)
+	v[0].free()
+	v[1].free()
+	DirAccess.remove_absolute(Profile.path)
+	Profile.path = Profile.DEFAULT_PATH

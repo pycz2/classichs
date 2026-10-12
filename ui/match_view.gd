@@ -5,6 +5,7 @@ extends Control
 ## Input flow: pick a card / attacker / hero power -> (Choose One) -> (position) -> (target).
 
 signal leave
+signal arena_back  # an Arena game: back to the Arena's lobby
 ## Tutorial: the player asked for the next mission.
 signal tutorial_next(n: int)  # go on to mission n (its intro first)
 signal tutorial_retry(n: int)  # play mission n again
@@ -34,6 +35,8 @@ var player_names: Array = ["", ""]
 ## Online opponent's emotes are hidden.
 var muted := false
 var session: NetSession
+## Set for a game of the Arena: the result shows the Arena's score and leads back to it.
+var arena: ArenaSession
 ## Set for a tutorial mission (hints, turn-end rules, reward screen).
 var tutorial: Tutorial
 var controller: Match
@@ -199,6 +202,8 @@ func bind_online(m: Match, s: NetSession) -> void:
 	session = s
 	timer_enabled = true
 	for n in [s, s.transport]:
+		if s.transport is ChannelTransport:
+			break  # an Arena game: the Arena keeps its session
 		if n.get_parent() and n.get_parent() != self:
 			n.reparent(self)
 		elif n.get_parent() == null:
@@ -293,10 +298,16 @@ func _on_connection_lost(reason: String) -> void:
 	var why := Palette.label(reason, 20)
 	why.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(why)
-	_centered_button(box, tr("Back to Menu"), "BackToMenuLost", _leave)
+	if arena:
+		_centered_button(box, tr("Back to the Arena"), "BackToArena", _leave)
+	else:
+		_centered_button(box, tr("Back to Menu"), "BackToMenuLost", _leave)
 
 
 func _leave() -> void:
+	if arena:
+		arena_back.emit()  # the Arena's connection stays: its lobby decides what next
+		return
 	if session:
 		session.leave()
 	leave.emit()
@@ -2058,6 +2069,8 @@ func _refresh_overlay() -> void:
 			_result_look(box, res[0])
 			if tutorial:
 				_tutorial_result(box)
+			elif arena:
+				_arena_result(box)
 			else:
 				_centered_button(box, tr("Back to Menu"), "BackToMenu", _leave)
 		return
@@ -2104,6 +2117,25 @@ func _result_look(box: VBoxContainer, kind: String) -> void:
 	title.pivot_offset = Vector2(640, 40)
 	title.scale = Vector2(0.5, 0.5)
 	create_tween().tween_property(title, "scale", Vector2.ONE, Anim.d(0.5)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+## The Arena's score under the result (it may change a moment later: the game
+## is counted right after it ends) and the way back to its lobby.
+func _arena_result(box: VBoxContainer) -> void:
+	var line := Palette.label("", 30, Palette.TEXT)
+	line.name = "ArenaScore"
+	line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(line)
+	var show := func():
+		if not is_instance_valid(line):
+			return
+		line.text = tr("Arena: you %d : %d opponent") % arena.score
+		if arena.over:
+			line.text += "\n" + (tr("You won the Arena!") if arena.winner == 0 else tr("You lost the Arena"))
+	show.call()
+	arena.changed.connect(show)
+	line.tree_exiting.connect(func(): if arena.changed.is_connected(show): arena.changed.disconnect(show))
+	_centered_button(box, tr("Back to the Arena"), "BackToArena", _leave)
 
 
 func _tutorial_result(box: VBoxContainer) -> void:
