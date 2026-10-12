@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.19.4] - 2026-10-12
+
+### Added
+- A link to the site in Telegram, WhatsApp, Discord, Slack and other messengers shows a preview with the main screenshot of the game (a match), the title and a description.
+
 ## [0.19.3] - 2026-10-12
 
 ### Added

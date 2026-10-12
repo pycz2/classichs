@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.19.4] - 2026-10-12
+
+### Ajouté
+- Un lien vers le site dans Telegram, WhatsApp, Discord, Slack et d'autres messageries affiche un aperçu avec la capture principale du jeu (une partie), le titre et une description.
+
 ## [0.19.3] - 2026-10-12
 
 ### Ajouté
