@@ -195,3 +195,28 @@ func test_arena_and_normal_game_do_not_mix() -> void:
 		t.free()
 	a.free()
 	n.free()
+
+
+func test_a_broken_message_ends_the_arena_on_both_sides() -> void:
+	var p := _pair()
+	p[2][1].send({"t": "nonsense"})
+	LoopbackTransport.pump(p[2])
+	eq(p[4][0].size(), 1, "the host fails")
+	check(p[1].failure != "", "the guest is told too: " + p[1].failure)
+	check(not p[1].over, "nobody wins an Arena that broke")
+	_free(p)
+
+
+func test_concede_while_a_game_is_starting_does_not_start_it() -> void:
+	var p := _pair()
+	for s in [p[0], p[1]]:
+		_draft(s)
+	p[1].set_ready()
+	LoopbackTransport.pump(p[2])
+	p[0].set_ready()  # the host starts game 1 and sends its hello
+	p[1].concede()  # the guest gives up before the hello comes
+	LoopbackTransport.pump(p[2])
+	check(p[0].over and p[1].over, "over")
+	eq(p[3][1].size(), 0, "the guest is not pulled into a game")
+	eq(p[4], [[], []], "no failure on either side")
+	_free(p)

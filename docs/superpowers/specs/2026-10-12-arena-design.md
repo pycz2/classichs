@@ -51,3 +51,15 @@ observed averages 79 % Common, 15 % Rare, 5 % Epic, 1 % Legendary). The exact
 
 Score: both sides count it from each game's result (the games are lockstep, so
 they agree).
+
+## Rulings after the review (2026-10-12)
+
+- Exit to the menu is on every Arena stage (hero choice, draft, lobby); leaving
+  at any time gives the opponent the Arena.
+- The Arena screen rebuilds only on a new stage or this player's own action;
+  the opponent's progress and the score update in place.
+- A lost connection (a closed tab looks the same as a network drop) ends the
+  Arena without a winner: "The Arena ended" and the reason. An error on one side
+  is sent to the other (`bye {code: "error"}`).
+- While a game is starting, Ready shows "Waiting for the opponent…" and Concede
+  is off; a game that starts after the Arena ended is not shown.

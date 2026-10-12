@@ -178,3 +178,66 @@ func test_main_runs_an_arena_game_and_comes_back() -> void:
 	p[2].end_game()
 	p[3][1].free()
 	p[2].free()
+
+
+func test_exit_on_every_stage() -> void:
+	var p := _setup()
+	var v: ArenaView = p[0]
+	check(v.find_child("ExitArena", true, false) != null, "exit while choosing a hero")
+	_press(v, "Hero_" + Decks.card_class(p[1].draft.heroes[0]))
+	check(v.find_child("ExitArena", true, false) != null, "exit while drafting")
+	_free(p)
+
+
+func test_a_broken_connection_shows_at_once_during_the_draft() -> void:
+	var p := _setup()
+	var v: ArenaView = p[0]
+	_press(v, "Hero_" + Decks.card_class(p[1].draft.heroes[0]))
+	_offer(v, 0).clicked.emit(_offer(v, 0))
+	p[3][1].close("gone")
+	LoopbackTransport.pump(p[3])
+	var res := v.find_child("ArenaResult", true, false) as Label
+	check(res != null, "the end is shown without drafting 29 more cards")
+	eq(res.text if res else "", "The Arena ended", "a neutral title")
+	check(v.find_child("ExitArena", true, false) != null, "and the way out")
+	_free(p)
+
+
+func test_the_opponent_leaving_during_the_draft_wins_it_at_once() -> void:
+	var p := _setup()
+	var v: ArenaView = p[0]
+	_press(v, "Hero_" + Decks.card_class(p[1].draft.heroes[0]))
+	p[2].leave()
+	LoopbackTransport.pump(p[3])
+	var res := v.find_child("ArenaResult", true, false) as Label
+	eq(res.text if res else "", "You won the Arena!", "the opponent left")
+	_free(p)
+
+
+func test_opponent_progress_does_not_rebuild_my_choice() -> void:
+	var p := _setup()
+	var v: ArenaView = p[0]
+	_press(v, "Hero_" + Decks.card_class(p[1].draft.heroes[0]))
+	var card := _offer(v, 1)
+	p[2].draft.choose_hero(0)
+	p[2].draft.pick(0)
+	p[2].send_status()
+	LoopbackTransport.pump(p[3])
+	check(_offer(v, 1) == card, "the same three cards stay")
+	eq((v.find_child("OpponentStatus", true, false) as Label).text, "Drafting: 1 / 30 cards", "the status still updates")
+	_free(p)
+
+
+func test_lobby_updates_in_place() -> void:
+	var p := _setup()
+	var v: ArenaView = p[0]
+	_full_draft(v, p[1])
+	_press(v, "ConcedeArena")
+	var dialog := v.find_child("ConcedeDialog", true, false)
+	p[2].draft.choose_hero(0)
+	p[2].send_status()
+	p[1].record(0)
+	LoopbackTransport.pump(p[3])
+	check(is_instance_valid(dialog) and v.find_child("ConcedeDialog", true, false) == dialog, "the open question stays")
+	eq((v.find_child("Score", true, false) as Label).text, "1 : 0", "the score updates")
+	_free(p)

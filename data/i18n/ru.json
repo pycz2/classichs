@@ -325,6 +325,8 @@
 "Taunt: attack this one first": "Провокация: сначала атакуйте его",
 "Thanks.": "Спасибо.",
 "That was incredible.": "Это было невероятно.",
+"The Arena broke on the opponent's side": "У соперника произошла ошибка Арены",
+"The Arena ended": "Арена прервалась",
 "The choice is cancelled: no options left": "Выбор отменён: вариантов не осталось",
 "The deck already has 30 cards": "В колоде уже 30 карт",
 "The deck has a card that is not in the Classic set (dbfId %d)": "В колоде есть карта не из классического набора (dbfId %d)",

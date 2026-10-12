@@ -77,10 +77,14 @@ func concede() -> void:
 
 
 func leave() -> void:
-	if _done:
-		return
-	_done = true
-	transport.send({"t": "bye"})
+	if not _done:
+		_done = true
+		transport.send({"t": "bye"})
+	_close_soon()
+
+
+## Closes on the next frame so the last message (bye) gets out first.
+func _close_soon() -> void:
 	if is_inside_tree():
 		transport.call_deferred("close", "left")
 	else:
@@ -120,11 +124,14 @@ func _finish(side: int) -> void:
 	changed.emit()
 
 
+## The Arena breaks: the opponent is told, the connection closes; nobody wins it.
 func _fail(reason: String) -> void:
 	if _done:
 		return
 	_done = true
 	failure = reason
+	transport.send({"t": "bye", "code": "error"})
+	_close_soon()
 	failed.emit(reason)
 
 
@@ -146,8 +153,11 @@ func _maybe_start() -> void:
 	var g := game
 	game.started.connect(func(m: Match):
 		m.finished.connect(func(w): record(w))
-		game_started.emit(g, m))
-	game.failed.connect(func(reason): _fail(reason))
+		if not over:  # e.g. the opponent conceded the Arena while this game was starting
+			game_started.emit(g, m))
+	game.failed.connect(func(reason):
+		if not over:
+			_fail(reason))
 	game.say_hello()
 	for msg in _pending.get(games, []):
 		_channel.received.emit(msg)
@@ -202,8 +212,9 @@ func _on_message(msg: Variant) -> void:
 				_finish(0)
 		"bye":
 			_done = true
-			if msg.get("code") == "mode":
-				failure = _tr("The opponent chose a normal game, not the Arena")
+			if msg.get("code") in ["mode", "error"]:
+				failure = _tr("The opponent chose a normal game, not the Arena") if msg.code == "mode" \
+					else _tr("The Arena broke on the opponent's side")
 				failed.emit(failure)
 				return
 			remote_left = true

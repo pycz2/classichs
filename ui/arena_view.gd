@@ -12,7 +12,7 @@ const OFFER_SCALE := 1.75
 const LIST_X := 968.0
 
 var session: ArenaSession
-var stage := ""  # "hero", "draft" or "lobby"
+var stage := ""  # "hero", "draft", "lobby" or "end" (the Arena is won, lost or broken)
 var curve: _Curve
 var _body := Control.new()  # what the stage shows; rebuilt on every change
 var _title: Label
@@ -20,6 +20,9 @@ var _subtitle: Label
 var _status: Label
 var _opponent: Label
 var _tips: Control
+var _score: Label  # the lobby's parts that change without a rebuild
+var _ready_button: Button
+var _concede_button: Button
 
 
 func _ready() -> void:
@@ -54,10 +57,12 @@ func _ready() -> void:
 	session.changed.connect(_refresh)
 	session.failed.connect(func(_r): _refresh())
 	session.game_started.connect(func(g, m): play.emit(g, m))
-	_refresh()
+	_rebuild()
 
 
 func _stage() -> String:
+	if session.over or session.failure != "":
+		return "end"
 	if session.draft.hero == "":
 		return "hero"
 	return "draft" if not session.draft.done() else "lobby"
@@ -76,13 +81,30 @@ func remote_text() -> String:
 	return tr("Ready to play") if r.ready else tr("Deck ready")
 
 
+## The session changed (the opponent's progress, the score, the end): only what
+## changed is redrawn, so the cards being chosen and an open question stay.
 func _refresh() -> void:
 	if not is_inside_tree():
 		return
-	stage = _stage()
+	_update_status()
+	if _stage() != stage:
+		_rebuild()
+	elif stage == "lobby":
+		_update_lobby()
+
+
+func _update_status() -> void:
 	var name_text := session.remote_name if session.remote_name != "" else tr("Opponent")
 	_opponent.text = tr("Opponent: %s") % name_text
 	_status.text = remote_text()
+
+
+## Builds the whole stage again (a new stage, or this player's own pick).
+func _rebuild() -> void:
+	if not is_inside_tree():
+		return
+	stage = _stage()
+	_update_status()
 	_hide_tips()
 	for c in _body.get_children():  # freed later: a pressed card may still be in its signal
 		_body.remove_child(c)
@@ -97,6 +119,9 @@ func _refresh() -> void:
 		"lobby":
 			_subtitle.text = tr("Your Arena deck is ready")
 			_build_lobby()
+		"end":
+			_subtitle.text = ""
+			_build_end()
 
 
 func _build_heroes() -> void:
@@ -111,12 +136,22 @@ func _build_heroes() -> void:
 		t.toggle_mode = false
 		t.pressed.connect(choose_hero.bind(i))
 		row.add_child(t)
+	_exit_button(Vector2(40, 642))
+
+
+## Leaves the Arena (before the lobby too): the opponent wins it.
+func _exit_button(at: Vector2) -> void:
+	var b := Palette.button(tr("Exit to Menu"), "ExitArena")
+	b.custom_minimum_size = Vector2(240, 48)
+	b.position = at
+	b.pressed.connect(func(): exit.emit())
+	_body.add_child(b)
 
 
 func choose_hero(i: int) -> void:
 	session.draft.choose_hero(i)
 	session.send_status()
-	_refresh()
+	_rebuild()
 
 
 func _build_draft() -> void:
@@ -141,6 +176,7 @@ func _build_draft() -> void:
 	rarity.position = Vector2(x0, 440)
 	_body.add_child(rarity)
 	_build_deck_side()
+	_exit_button(Vector2(470, 650))
 
 
 func _rarity_text() -> String:
@@ -152,7 +188,7 @@ func _rarity_text() -> String:
 func pick(i: int) -> void:
 	session.draft.pick(i)
 	session.send_status()
-	_refresh()
+	_rebuild()
 
 
 ## The deck list on the right, the card count and the mana curve at the bottom left.
@@ -185,15 +221,56 @@ func _build_deck_side() -> void:
 
 
 func _build_lobby() -> void:
-	_build_deck_side()
-	var me := TrainingSetup.HeroTile.new(Decks.card_class(session.draft.hero))
-	me.name = "MyHero"
-	me.toggle_mode = false
-	me.disabled = true
-	me.custom_minimum_size = Vector2(380, 170)
-	_body.add_child(me)
-	me.position = Vector2(40, 150)
-	me.size = me.custom_minimum_size  # in the tree: the class emblem follows the size
+	var box := _lobby_box()
+	_ready_button = _button(box, tr("Ready"), "Ready", func():
+		session.set_ready()
+		_update_lobby())
+	_concede_button = _button(box, tr("Concede the Arena"), "ConcedeArena", _confirm_concede)
+	_button(box, tr("Exit to Menu"), "ExitArena", func(): exit.emit())
+	_update_lobby()
+
+
+## Ready waits for the opponent, and nothing else can be done while a game starts.
+func _update_lobby() -> void:
+	_score.text = "%d : %d" % session.score
+	var waiting := session.is_ready or session.game != null
+	_ready_button.text = tr("Waiting for the opponent…") if waiting else tr("Ready")
+	_ready_button.disabled = waiting
+	_concede_button.disabled = session.game != null
+
+
+## The end of the Arena: won, lost, or broken (and why), and the way out.
+func _build_end() -> void:
+	var box := _lobby_box()
+	var res := Palette.label(_result_text(), 34, Palette.ATTACK)
+	res.name = "ArenaResult"
+	res.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(res)
+	if not session.over:
+		var why := Palette.label(session.failure, 18)
+		why.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		why.custom_minimum_size.x = 440
+		box.add_child(why)
+	_button(box, tr("Exit to Menu"), "ExitArena", func(): exit.emit())
+
+
+## The hero, the deck and the score; returns the column for the buttons.
+func _lobby_box() -> VBoxContainer:
+	if session.draft.hero != "":  # (the Arena may end while a hero is being chosen)
+		_build_deck_side()
+		var me := TrainingSetup.HeroTile.new(Decks.card_class(session.draft.hero))
+		me.name = "MyHero"
+		me.toggle_mode = false
+		me.disabled = true
+		me.custom_minimum_size = Vector2(380, 170)
+		_body.add_child(me)
+		me.position = Vector2(40, 150)
+		me.size = me.custom_minimum_size  # in the tree: the class emblem follows the size
+	return _score_box()
+
+
+func _score_box() -> VBoxContainer:
 	var box := VBoxContainer.new()
 	box.position = Vector2(470, 150)
 	box.custom_minimum_size = Vector2(440, 0)
@@ -202,37 +279,20 @@ func _build_lobby() -> void:
 	var you := Palette.label(tr("You") + "   —   " + (session.remote_name if session.remote_name != "" else tr("Opponent")), 20)
 	you.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(you)
-	var score := Palette.label("%d : %d" % session.score, 64, Palette.ATTACK)
-	score.name = "Score"
-	score.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(score)
+	_score = Palette.label("%d : %d" % session.score, 64, Palette.ATTACK)
+	_score.name = "Score"
+	_score.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(_score)
 	var rule := Palette.label(tr("First to %d wins takes the Arena") % ArenaSession.WINS, 16)
 	rule.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(rule)
-	if session.over or session.failure != "":
-		var res := Palette.label(_result_text(), 34, Palette.ATTACK)
-		res.name = "ArenaResult"
-		res.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		box.add_child(res)
-		if session.failure != "" and not session.over:
-			var why := Palette.label(session.failure, 18)
-			why.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			box.add_child(why)
-		_button(box, tr("Exit to Menu"), "ExitArena", func(): exit.emit())
-		return
-	var rb := _button(box, tr("Waiting for the opponent…") if session.is_ready else tr("Ready"), "Ready", func():
-		session.set_ready()
-		_refresh())
-	rb.disabled = session.is_ready
-	_button(box, tr("Concede the Arena"), "ConcedeArena", _confirm_concede)
-	_button(box, tr("Exit to Menu"), "ExitArena", func(): exit.emit())
+	return box
 
 
 func _result_text() -> String:
 	if session.over:
 		return tr("You won the Arena!") if session.winner == 0 else tr("You lost the Arena")
-	return tr("Connection lost")
+	return tr("The Arena ended")
 
 
 func _button(box: Container, text: String, id: String, fn: Callable) -> Button:
@@ -261,7 +321,7 @@ func _confirm_concede() -> void:
 	box.add_child(q)
 	_button(box, tr("Concede"), "ConfirmConcedeArena", func():
 		session.concede()
-		_refresh())
+		_rebuild())
 	_button(box, tr("Keep playing"), "KeepPlayingArena", func(): dim.queue_free())
 
 
