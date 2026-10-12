@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.19.2] - 2026-10-12
+
+### Changed
+- The site and the README now match the game: training with a choice of deck and bot hero, ten well-known Classic decks, the relay for online play, debug tools in Settings, emotes in the heroes' words, card art sets and backs; the online steps use the game's button names; outdated claims are gone (no servers at all, all art drawn by code).
+
 ## [0.19.1] - 2026-10-12
 
 ### Changed

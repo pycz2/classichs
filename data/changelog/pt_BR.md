@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.19.2] - 2026-10-12
+
+### Alterado
+- O site e o README agora batem com o jogo: treino com escolha de deck e herói do bot, dez decks Classic famosos, o repetidor do jogo online, ferramentas de depuração nas Configurações, emotes com as palavras dos heróis, conjuntos de artes e versos; os passos online usam os nomes dos botões do jogo; afirmações antigas foram removidas (nenhum servidor, toda a arte desenhada por código).
+
 ## [0.19.1] - 2026-10-12
 
 ### Alterado

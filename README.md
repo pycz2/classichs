@@ -1,6 +1,6 @@
 # Classic HS
 
-A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas: all 382 Basic and Classic cards, nine classes, the original tutorial, a bot, and online play with a friend straight from the browser — without servers.
+A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas: all 382 Basic and Classic cards, nine classes, the original tutorial, a bot, and online play with a friend straight from the browser — without a game server.
 
 **▶ Play: https://pycz2.github.io/classichs/** · [Changelog](CHANGELOG.md) · [На русском](#на-русском)
 
@@ -9,14 +9,14 @@ A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas
 ## Features
 
 - **All 382 cards** with original names, values and mechanics: Secrets, Choose One, Overload, Combo, Enrage, Deathrattle, auras, transformations and more.
-- **Training** against a simple bot of any class; works offline.
-- **Online play without a server.** WebRTC connects two browsers directly (public Google STUN). One player creates an invite code, the other answers with a code; the codes go through any messenger. Both games run the same deterministic engine in lockstep and check the game state after every move. 75-second turns with the rope.
+- **Training** against a simple bot of any class with a Basic deck, one of ten well-known Classic decks or your own; once loaded, it needs no internet.
+- **Online play without a server.** WebRTC connects two browsers directly (public Google STUN; a free public TURN relay when networks block a direct link). One player creates an invite code, the other answers with a code; the codes go through any messenger. Both games run the same deterministic engine in lockstep and check the game state after every move. 75-second turns with a burning fuse.
 - **Tutorial** like the original: six missions as Jaina against Hogger, Millhouse Manastorm, Lorewalker Cho, King Mukla, Hemet Nesingwary and Illidan Stormrage.
-- **Collection and decks:** every card unlocked, unlimited decks saved in the browser, Hearthstone-compatible deck codes (import and export).
-- **Deck tracker** (your deck, cards left with the chance to draw each one, what the opponent played) and the **full move history** of the match.
-- **Debug table:** set up any position in JSON and play it against the bot or for both sides.
-- **8 languages** (English, Русский, Deutsch, Français, Español, Português (Brasil), Italiano, Polski), synthesized sound and music, speech for emotes and legendary minions, 6 emotes and mute, screen shake toggle, fullscreen.
-- **Own art:** every card, hero and hero power is drawn by code — no image files, a light download.
+- **Collection and decks:** every card unlocked, unlimited decks saved in the browser, ten well-known Classic decks ready to play, Hearthstone-compatible deck codes (import and export).
+- **Deck tracker** (your deck, cards left with the chance to draw each one, what the opponent played) and the **move history** by turns: a tile for every move, hover it to see what it did; the full text history on a click.
+- **Debug tools** (Settings): build any position with the mouse (or in JSON) and play it against the bot or for both sides; a test scene for each of the 534 cards and tokens; any card with any effect.
+- **8 languages** (English, Русский, Deutsch, Français, Español, Português (Brasil), Italiano, Polski), synthesized sound and music, 6 emotes in the heroes' own words (speech bubbles) and mute, six card backs, animation speed, screen shake toggle, fullscreen.
+- **Card art:** generated illustrations for every card and hero (see *Card art sets* below); frames, gems and table effects are drawn by code.
 
 | | |
 |---|---|
@@ -62,10 +62,10 @@ Every folder in `art/` is a picture set, selectable in Settings → Card art:
 
 ## На русском
 
-Фанатский ремейк Hearthstone Classic (июнь 2014): все 382 карты, девять классов, обучение как в оригинале, тренировка с ботом и игра с другом по сети прямо в браузере без серверов — коды подключения передаются через любой мессенджер. Коллекция, колоды и коды колод, дектрекер, история ходов, отладочный стол, 8 языков, звук и озвучка. Играть: **https://pycz2.github.io/classichs/**
+Фанатский ремейк Hearthstone Classic (июнь 2014): все 382 карты, девять классов, обучение как в оригинале, тренировка с ботом и игра с другом по сети прямо в браузере без игрового сервера — коды подключения передаются через любой мессенджер. Коллекция, колоды и коды колод, дектрекер, история ходов, инструменты отладки, 8 языков, музыка, звуки и эмоции. Играть: **https://pycz2.github.io/classichs/**
 
 ![Матч](media/screens/ru/match.png)
 
 ## Legal
 
-Classic HS is a non-commercial fan project and is not affiliated with or endorsed by Blizzard Entertainment. Hearthstone and the card names and texts are trademarks and property of Blizzard Entertainment, Inc. Card data comes from [HearthstoneJSON](https://hearthstonejson.com/). All art in the game is drawn by code. The code is under the [MIT License](LICENSE).
+Classic HS is a non-commercial fan project and is not affiliated with or endorsed by Blizzard Entertainment. Hearthstone and the card names and texts are trademarks and property of Blizzard Entertainment, Inc. Card data comes from [HearthstoneJSON](https://hearthstonejson.com/). The original card art belongs to Blizzard Entertainment. The code is under the [MIT License](LICENSE).

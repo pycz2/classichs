@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.19.2] - 2026-10-12
+
+### Zmieniono
+- Strona i README zgadzają się z grą: trening z wyborem talii i bohatera bota, dziesięć znanych talii Classic, przekaźnik gry sieciowej, narzędzia debugowania w ustawieniach, emotki słowami bohaterów, zestawy grafik kart i rewersy; kroki gry sieciowej używają nazw przycisków z gry; usunięto nieaktualne twierdzenia (zero serwerów, cała grafika rysowana kodem).
+
 ## [0.19.1] - 2026-10-12
 
 ### Zmieniono

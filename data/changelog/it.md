@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.19.2] - 2026-10-12
+
+### Modificato
+- Il sito e il README corrispondono al gioco: allenamento con scelta del mazzo e dell'eroe del bot, dieci mazzi Classic famosi, il relay del gioco online, strumenti di debug nelle Impostazioni, emote con le parole degli eroi, set di illustrazioni e dorsi; i passi online usano i nomi dei pulsanti del gioco; tolte le affermazioni superate (nessun server, tutta l'arte disegnata dal codice).
+
 ## [0.19.1] - 2026-10-12
 
 ### Modificato
