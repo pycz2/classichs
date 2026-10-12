@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.19.2] - 2026-10-12
+
+### Cambiado
+- El sitio y el README coinciden con el juego: entrenamiento con elección de mazo y héroe del bot, diez mazos Classic famosos, el repetidor del juego en línea, herramientas de depuración en Ajustes, emoticonos con las palabras de los héroes, juegos de ilustraciones y reversos; los pasos en línea usan los nombres de los botones del juego; se quitan afirmaciones viejas (ningún servidor, todo el arte dibujado por código).
+
 ## [0.19.1] - 2026-10-12
 
 ### Cambiado
