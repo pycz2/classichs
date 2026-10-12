@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.18.5] - 2026-10-12
+
+### Cambiado
+- El daño aleatorio a varios objetivos (Misiles Arcanos, Ira vengativa, Bombardero loco, Disparo múltiple, Relámpago bifurcado, etc.) vuela proyectil a proyectil; la salud del objetivo baja con cada impacto.
+
 ## [0.18.4] - 2026-10-12
 
 ### Añadido

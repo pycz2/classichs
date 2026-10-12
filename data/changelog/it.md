@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.18.5] - 2026-10-12
+
+### Modificato
+- I danni casuali su più bersagli (Dardi Arcani, Furia Vendicativa, Bombarolo Pazzo, Tiro Multiplo, Fulmine Biforcato e simili) volano un proiettile alla volta; la salute del bersaglio scende a ogni colpo.
+
 ## [0.18.4] - 2026-10-12
 
 ### Aggiunto

@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.18.5] - 2026-10-12
+
+### Zmieniono
+- Losowe obrażenia w kilka celów (Arkane Pociski, Gniew Mściciela, Szalony Bombardier, Salwa, Rozwidlona Błyskawica itd.) lecą pocisk po pocisku; zdrowie celu spada z każdym trafieniem.
+
 ## [0.18.4] - 2026-10-12
 
 ### Dodano

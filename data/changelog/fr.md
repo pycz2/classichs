@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.18.5] - 2026-10-12
+
+### Modifié
+- Les dégâts aléatoires sur plusieurs cibles (Projectiles des Arcanes, Courroux vengeur, Bombardier fou, Flèches multiples, Éclair fourchu, etc.) partent un projectile à la fois ; la vie de la cible baisse à chaque coup.
+
 ## [0.18.4] - 2026-10-12
 
 ### Ajouté
