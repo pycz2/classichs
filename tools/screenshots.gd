@@ -18,6 +18,7 @@ var m: Node
 var steps: Array = []  # [callable, shot name or ""]
 var at := 0
 var since := 0  # msec of the last step
+var arena: Array = []  # [host session, guest session, transports] of the Arena shots
 
 
 func _initialize() -> void:
@@ -47,10 +48,16 @@ func _initialize() -> void:
 			m.screen.show_stage("mode"), "online"])
 		steps.append([func(): m.show_settings(), "settings"])
 		steps.append([func(): m.show_debug_table(), "debug"])
+		steps.append([_arena_draft, "arena"])
+		steps.append([_arena_lobby, "lobby"])
+		steps.append([_arena_game, ""])
+		steps.append([_arena_win, ""])
+		steps.append([func(): pass, "result"])  # the losing hero shatters first
 
 
 ## A fresh game in this language, at the menu.
 func _open(lang: String) -> void:
+	_drop_arena()
 	if m:
 		m.free()
 	Settings.load_settings()
@@ -91,7 +98,68 @@ func _tracker() -> void:
 	(m.screen.find_child("TrackerButton", true, false) as Button).pressed.emit()
 
 
+## The Arena against a second, local session: the host's screen is shown.
+func _arena_draft() -> void:
+	Settings.data.tracker = false  # the result picture without the tracker over it
+	var tr := LoopbackTransport.pair()
+	var h := ArenaSession.new()
+	var g := ArenaSession.new()
+	h.setup(tr[0], true, "Jaina", 21)
+	g.setup(tr[1], false, "Garrosh", 22)
+	arena = [h, g, tr]
+	h.say_hello()
+	g.say_hello()
+	LoopbackTransport.pump(tr)
+	m.show_arena(h)
+	h.draft.choose_hero(1)
+	for i in 13:
+		h.draft.pick(i % 3)
+	g.draft.choose_hero(0)
+	for i in 7:
+		g.draft.pick(0)
+	for s in [h, g]:
+		s.send_status()
+	LoopbackTransport.pump(tr)
+	m.screen._refresh()
+
+
+func _arena_lobby() -> void:
+	for s: ArenaSession in arena.slice(0, 2):
+		while not s.draft.done():
+			s.draft.pick(0)
+		s.send_status()
+	arena[0].record(0)  # a game won already
+	LoopbackTransport.pump(arena[2])
+	m.screen._refresh()
+
+
+func _arena_game() -> void:
+	arena[0].set_ready()
+	arena[1].set_ready()
+	LoopbackTransport.pump(arena[2])
+
+
+func _arena_win() -> void:
+	var gm: Match = arena[1].game.match_
+	gm.submit({"type": "concede", "player": gm.viewer()})
+	LoopbackTransport.pump(arena[2])
+
+
+func _drop_arena() -> void:
+	if arena.is_empty():
+		return
+	var g: ArenaSession = arena[1]
+	if g.game and is_instance_valid(g.game.match_):
+		g.game.match_.free()
+	g.end_game()
+	g.free()
+	arena[2][1].free()  # the host's side goes with the main scene
+	arena = []
+
+
 func _process(_d: float) -> bool:
+	if not arena.is_empty():
+		LoopbackTransport.pump(arena[2])  # the Arena game's moves
 	if Time.get_ticks_msec() - since < 1600:  # let animations (and the turn banner) end
 		return false
 	since = Time.get_ticks_msec()
@@ -105,6 +173,7 @@ func _process(_d: float) -> bool:
 			shot.save_jpg("res://site/og.jpg", 0.85)  # the site's link preview
 		print("saved ", lang, "/", steps[at - 1][1])
 	if at >= steps.size():
+		_drop_arena()
 		m.free()
 		for p in [Settings.path, DeckStore.path, Progress.path]:
 			DirAccess.remove_absolute(p)

@@ -117,6 +117,7 @@ func show_online() -> void:
 	o.back.connect(show_menu.bind(true))
 	o.edit_decks.connect(show_collection)
 	o.play.connect(start_online_match)
+	o.arena.connect(show_arena)
 	_set_screen(o)
 
 
@@ -127,6 +128,36 @@ func start_online_match(session: NetSession, m: Match) -> MatchView:
 	session.transport.reparent(v)
 	_set_screen(v)
 	v.bind_online(m, session)
+	return v
+
+
+## The Arena between games (draft and lobby). Its session and connection live
+## here, across the Arena's screens.
+func show_arena(s: ArenaSession) -> ArenaView:
+	for n: Node in [s, s.transport]:
+		if n.get_parent() == null:
+			add_child(n)
+		elif n.get_parent() != self:
+			n.reparent(self)
+	s.end_game()
+	var a := ArenaView.new()
+	a.session = s
+	a.play.connect(func(game, m): start_arena_match(s, game, m))
+	a.exit.connect(func():
+		s.leave()
+		s.queue_free()
+		s.transport.queue_free()
+		show_menu(true))
+	_set_screen(a)
+	return a
+
+
+func start_arena_match(s: ArenaSession, game: NetSession, m: Match) -> MatchView:
+	var v := MatchView.new()
+	v.arena = s
+	v.arena_back.connect(func(): show_arena(s))
+	_set_screen(v)
+	v.bind_online(m, game)
 	return v
 
 

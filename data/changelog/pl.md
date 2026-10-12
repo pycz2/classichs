@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-10-12
+
+### Dodano
+- Arena ze znajomym w sieci: Gra sieciowa → Arena. Każdy bierze jednego z trzech bohaterów i składa 30 kart jak na Arenie z 2014 roku: trzy karty jednej rzadkości na wybór (podstawowe i zwykłe liczą się jako jedna), rzadka lub lepsza przy wyborach 1, 10, 20 i 30, karty klasowe półtora raza częściej, bez limitu kopii. Lista talii po prawej, krzywa many na dole po lewej, postępy przeciwnika u góry po prawej (czy wybrał bohatera, ile kart, czy gotowy; nigdy bohater ani karty). Gdy obaj naciśniecie „Gotowe”, zaczyna się seria do trzech zwycięstw; po każdej grze poczekalnia z wynikiem; Arenę można poddać albo wyjść do menu na każdym etapie.
+- Wynik gry z twojej strony — Zwycięstwo!, Porażka albo Remis — na półprzezroczystym obrazie (w grze sieciowej było „Gracz N wygrywa”).
+
+### Sprawdzono
+- Remis: Piekielny ogień, który zabija obu bohaterów, daje remis, a obaj bohaterowie rozpadają się na odłamki.
+
 ## [0.19.5] - 2026-10-12
 
 ### Naprawiono

@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-10-12
+
+### Added
+- The Arena with a friend online: Online Game → Arena. Each player takes one of three heroes and drafts 30 cards like the 2014 Arena: three cards of one rarity per pick (Basic and Common count as one), Rare or better at picks 1, 10, 20 and 30, class cards one and a half times as likely, no limit on copies. The deck list is on the right, the mana curve at the bottom left, the opponent's progress at the top right (hero chosen or not, cards, ready; never the hero or the cards). When both press Ready, a series to three wins starts; after each game there is the lobby with the score; you can concede the Arena or exit to the menu at any stage.
+- The result of a game from your side — Victory!, Defeat or Draw — over a semi-transparent picture of it (online games showed "Player N wins").
+
+### Checked
+- A draw: a Hellfire that kills both heroes is a draw, and both heroes shatter.
+
 ## [0.19.5] - 2026-10-12
 
 ### Fixed

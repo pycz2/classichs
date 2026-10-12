@@ -50,6 +50,16 @@ SPRITES = {
     # full pictures (no green background, nothing cut out)
     "fatigue": (256, "FULL: a painterly fantasy card illustration of exhaustion: an empty, dusty deck box in a dark crypt, "
                      "a ghostly skeletal hand reaching out of purple mist, cold violet light. Square 1:1, no text."),
+    # the backgrounds of the match result (shown dimmed behind "Victory!", "Defeat" and "Draw")
+    "result_victory": (1280, "FULL: a wide 16:9 painterly fantasy scene of triumph: a golden banner and a raised sword above a tavern "
+                             "card table, bright gold light breaking through clouds, falling sparks and confetti of gold coins, warm and joyful. "
+                             "Wide landscape 16:9, no people's faces in close-up, no text."),
+    "result_defeat": (1280, "FULL: a wide 16:9 painterly fantasy scene of defeat: a broken shield and a cracked sword on a dark tavern "
+                            "card table, scattered cards, cold blue-grey light, smoke and falling ash, gloomy and quiet. "
+                            "Wide landscape 16:9, no people, no text."),
+    "result_draw": (1280, "FULL: a wide 16:9 painterly fantasy scene of a draw: two crossed swords both broken in the middle, "
+                          "lying across a tavern card table split by light, half warm gold and half cold blue, embers and dust in the air, calm. "
+                          "Wide landscape 16:9, no people, no text."),
     "ice": (256, "FULL: a seamless square texture of thick frost and ice crystals on glass, white and pale blue, "
                  "feathery frost patterns and small cracks, evenly spread over the whole square, no object, no text."),
 }
@@ -74,12 +84,15 @@ def run_batch(names):
         src = os.path.join(WORK, "out", n + ".png")
         if os.path.exists(src):
             dst = os.path.join(OUT, n + ".png")
-            if n in FULL:
+            if n in FULL and SPRITES[n][0] >= 1000:  # a full-screen picture: JPEG, a fifth of the PNG
+                subprocess.run(["sips", "-Z", str(SPRITES[n][0]), "-s", "format", "jpeg", "-s", "formatOptions", "80",
+                                src, "--out", dst.removesuffix(".png") + ".jpg"], capture_output=True)
+            elif n in FULL:
                 subprocess.run(["sips", "-Z", str(SPRITES[n][0]), src, "--out", dst], capture_output=True)
             else:
                 subprocess.run(["godot", "--headless", "--path", ROOT, "--script", "res://tools/key_green.gd", "--",
                                 src, dst, str(SPRITES[n][0])], capture_output=True)
-            if os.path.exists(dst):
+            if os.path.exists(dst) or os.path.exists(dst.removesuffix(".png") + ".jpg"):
                 done.append(n)
     return done
 
@@ -91,7 +104,7 @@ def main():
     ap.add_argument("--batch", type=int, default=4)
     a = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
-    todo = [n for n in (a.only or SPRITES) if not os.path.exists(os.path.join(OUT, n + ".png"))]
+    todo = [n for n in (a.only or SPRITES) if not any(os.path.exists(os.path.join(OUT, n + e)) for e in (".png", ".jpg"))]
     batches = [todo[i:i + a.batch] for i in range(0, len(todo), a.batch)]
     print(f"{len(todo)} sprites in {len(batches)} batches", flush=True)
     with cf.ThreadPoolExecutor(a.workers) as ex:

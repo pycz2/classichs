@@ -8,6 +8,8 @@ const NAME_MAX := 60
 var name := ""
 var hero := "HERO_08"
 var cards: Array[String] = []
+## An Arena deck: drafted, so any number of copies of a card.
+var arena := false
 
 
 func card_class() -> String:
@@ -31,7 +33,7 @@ func can_add(id: String) -> String:
 		return TranslationServer.translate("This card belongs to another class")
 	if cards.size() >= SIZE:
 		return TranslationServer.translate("The deck already has 30 cards")
-	if count(id) >= max_copies(id):
+	if not arena and count(id) >= max_copies(id):
 		return TranslationServer.translate("No more copies of this card are allowed")
 	return ""
 
@@ -57,6 +59,7 @@ func validate() -> String:
 		return TranslationServer.translate("Unknown hero")
 	var copy := Deck.new()
 	copy.hero = hero
+	copy.arena = arena
 	for id in cards:
 		var why := copy.add(id)
 		if why != "":
@@ -82,7 +85,10 @@ func sorted_counts() -> Array:
 
 
 func to_dict() -> Dictionary:
-	return {"name": name, "hero": hero, "cards": cards.duplicate()}
+	var d := {"name": name, "hero": hero, "cards": cards.duplicate()}
+	if arena:
+		d["arena"] = true
+	return d
 
 
 ## A deck from saved data; unknown fields are ignored. Card ids that no longer
@@ -96,6 +102,7 @@ static func from_dict(d: Variant) -> Deck:
 	var deck := Deck.new()
 	deck.name = str(d.get("name", "")).left(NAME_MAX)
 	deck.hero = d.hero
+	deck.arena = d.get("arena", false) == true
 	for id in d.cards:
 		if not id is String:
 			return null

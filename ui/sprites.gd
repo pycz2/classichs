@@ -1,6 +1,6 @@
 class_name Sprites
 extends RefCounted
-## Interface pictures made by tools/gen_ui_art.py (ui/sprites/<name>.png). They are
+## Interface pictures made by tools/gen_ui_art.py (ui/sprites/<name>.png, big ones .jpg). They are
 ## all loaded at start (main.gd): a texture first loaded while drawing shows white
 ## in the web build. A missing picture gives null, and the code draws its own.
 
@@ -15,12 +15,12 @@ static func load_all() -> void:
 	if d == null:
 		return
 	for f in d.get_files():
-		if not f.ends_with(".png.import"):  # only imported pictures (a new one needs `godot --import`)
+		if not (f.ends_with(".png.import") or f.ends_with(".jpg.import")):  # only imported pictures (a new one needs `godot --import`)
 			continue
-		var png := f.trim_suffix(".import")
-		var t = load(DIR + "/" + png)
+		var pic := f.trim_suffix(".import")  # .jpg: the big full-screen pictures
+		var t = load(DIR + "/" + pic)
 		if t is Texture2D:
-			_tex[png.get_basename()] = t
+			_tex[pic.get_basename()] = t
 
 
 static func get_tex(name: String) -> Texture2D:

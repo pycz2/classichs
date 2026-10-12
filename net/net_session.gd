@@ -17,6 +17,8 @@ var transport: Transport
 var host := false
 var player_name := ""
 var deck: Deck
+## A game of the Arena: the opponent's deck may have any number of copies.
+var arena := false
 var version: String = ProjectSettings.get_setting("application/config/version", "0")
 var remote_name := ""
 var match_: Match
@@ -28,7 +30,8 @@ var _done := false
 var failure_kind := ""
 
 const BYE_TEXT := {"left": "The opponent left the game", "version": "The opponent has a different version of the game",
-	"desync": "Out of sync with the opponent", "protocol": "The opponent's game sent something unexpected"}
+	"desync": "Out of sync with the opponent", "protocol": "The opponent's game sent something unexpected",
+	"mode": "The opponent chose the Arena, not a normal game"}
 
 
 func setup(t: Transport, is_host: bool, p_name: String, d: Deck) -> void:
@@ -143,13 +146,16 @@ func _on_hello(msg: Dictionary) -> void:
 	if not _remote.is_empty():
 		_fail(_tr("The opponent sent an unexpected message"), "protocol")
 		return
+	if msg.get("mode") == "arena":
+		_fail(_tr("The opponent chose the Arena, not a normal game"), "mode")
+		return
 	if msg.get("protocol") != float(PROTOCOL) or msg.get("version") != version:
 		_fail(_tr("Different game versions: yours %s, the opponent's %s") % [version, str(msg.get("version", "?")).left(20)], "version")
 		return
 	if msg.get("data") != CardDb.data_hash():
 		_fail(_tr("Your card data differs from the opponent's: update the game on both sides"), "version")
 		return
-	var d := Deck.from_dict({"name": "", "hero": msg.get("hero"), "cards": msg.get("cards")})
+	var d := Deck.from_dict({"name": "", "hero": msg.get("hero"), "cards": msg.get("cards"), "arena": arena})
 	if d == null or d.validate() != "":
 		_fail(_tr("The opponent's deck is not valid"), "protocol")
 		return
