@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.18.3] - 2026-10-12
+
+### Added
+- Burnt cards (full hand) and fatigue damage show in the history on the left: their own tile with a picture and a note on hover.
+
+### Fixed
+- Tutorial: Lorewalker Cho can't be attacked while he has minions.
+
 ## [0.18.2] - 2026-10-12
 
 ### Changed

@@ -38,6 +38,8 @@ static func start(n: int) -> Dictionary:
 	var t := Tutorial.new(n)
 	if t.mission.unlosable:
 		r.game.hero(0).add_enchant({"hooks": "ench:tutorial_guard"})
+	if t.mission.get("guarded", false):  # the boss can't be attacked while he has minions
+		r.game.hero(1).give_tag("GUARDED")
 	return {"game": r.game, "tutorial": t, "error": ""}
 
 

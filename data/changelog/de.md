@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.18.3] - 2026-10-12
+
+### Hinzugefügt
+- Verbrannte Karten (volle Hand) und Erschöpfungsschaden erscheinen im Verlauf links: eine eigene Kachel mit Bild und Erklärung beim Zeigen.
+
+### Behoben
+- Tutorial: Lehrensucher Cho kann nicht angegriffen werden, solange er Diener hat.
+
 ## [0.18.2] - 2026-10-12
 
 ### Geändert

@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.18.3] - 2026-10-12
+
+### Dodano
+- Spalone karty (pełna ręka) i obrażenia od zmęczenia widać w historii po lewej: własny kafelek z obrazkiem i opisem po najechaniu.
+
+### Naprawiono
+- Samouczek: Kronikarza Cho nie można atakować, dopóki ma stronników.
+
 ## [0.18.2] - 2026-10-12
 
 ### Zmieniono
