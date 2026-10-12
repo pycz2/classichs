@@ -20,9 +20,10 @@ function savedLang() {
 let lang = pick(savedLang() || navigator.language);
 let current = 0;
 const touch = matchMedia("(hover: none)").matches;  // phones: no hover, so tap to enlarge, double-tap to turn
-// A text in the page language; {mb} is the game's download size.
+// A text in the page language; {mb} is the game's download size (a no-break space keeps "61 MB" together).
 const t = (key) => ((TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || "")
-  .replace(/\{mb\} ?/, (m) => (DATA.download_mb || 61) + (m.length > 4 ? "\u00a0" : ""))  // "61 MB" never breaks.replace("{tests}", DATA.tests || 757)
+  .replace(/\{mb\} ?/, (m) => (DATA.download_mb || 61) + (m.length > 4 ? "\u00a0" : ""))
+  .replace("{tests}", DATA.tests || 757)
   .replace("{v}", DATA.version || "").replace("{date}", DATA.date || "");
 
 function applyLang() {

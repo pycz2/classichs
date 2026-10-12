@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.19.5] - 2026-10-12
+
+### Behoben
+- Website: Der Abschnitt zum offenen Quellcode zeigte „{tests}“ statt der Zahl der Tests.
+
 ## [0.19.4] - 2026-10-12
 
 ### Hinzugefügt
