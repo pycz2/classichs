@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.20.1] - 2026-10-12
+
+### Cambiado
+- Las imágenes del resultado están comprimidas: la descarga vuelve a unos 61 MB (64 MB en 0.20.0).
+
 ## [0.20.0] - 2026-10-12
 
 ### Añadido

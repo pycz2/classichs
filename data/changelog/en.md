@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.20.1] - 2026-10-12
+
+### Changed
+- The match result pictures are compressed: the game's download is about 61 MB again (64 MB in 0.20.0).
+
 ## [0.20.0] - 2026-10-12
 
 ### Added

@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.20.1] - 2026-10-12
+
+### Zmieniono
+- Obrazy wyniku gry są skompresowane: pobieranie znów ma około 61 MB (64 MB w 0.20.0).
+
 ## [0.20.0] - 2026-10-12
 
 ### Dodano
