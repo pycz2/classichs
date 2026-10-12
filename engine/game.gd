@@ -310,9 +310,12 @@ func _can_attack(a: Entity) -> bool:
 func _defenders(a: Entity) -> Array[Entity]:
 	var all: Array[Entity] = []
 	var taunts: Array[Entity] = []
-	for t in chars(opponent(a.controller)):
+	var foe := opponent(a.controller)
+	for t in chars(foe):
 		if t.has("STEALTH"):
 			continue
+		if t.is_hero() and t.has("GUARDED") and not players[foe].board.is_empty():
+			continue  # a tutorial boss behind his minions (Lorewalker Cho): minions first
 		all.append(t)
 		if t.is_minion() and t.has("TAUNT"):
 			taunts.append(t)

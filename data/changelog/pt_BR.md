@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.18.3] - 2026-10-12
+
+### Adicionado
+- Cartas queimadas (mão cheia) e dano de fadiga aparecem no histórico à esquerda: um quadro próprio com imagem e explicação ao passar o mouse.
+
+### Corrigido
+- Tutorial: o Mestre Cho não pode ser atacado enquanto tiver lacaios.
+
 ## [0.18.2] - 2026-10-12
 
 ### Alterado

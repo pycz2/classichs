@@ -4,6 +4,14 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.18.3] - 2026-10-12
+
+### Ajouté
+- Les cartes brûlées (main pleine) et les dégâts de fatigue apparaissent dans l'historique à gauche : une tuile avec image et explication au survol.
+
+### Corrigé
+- Tutoriel : Chroniqueur Cho ne peut pas être attaqué tant qu'il a des serviteurs.
+
 ## [0.18.2] - 2026-10-12
 
 ### Modifié

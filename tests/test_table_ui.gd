@@ -230,7 +230,7 @@ func _popup_rows(v: MatchView) -> Array:
 
 
 func test_history_strip_separates_turns() -> void:
-	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120"]}, [false, false], {"hero": "HERO_01", "hand": ["VAN_CS2_182"]})
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120"], "deck": ["VAN_CS2_120"]}, [false, false], {"hero": "HERO_01", "hand": ["VAN_CS2_182"], "deck": ["VAN_CS2_120"]})
 	var g := v.g
 	v.controller.submit({"type": "play", "player": 0, "entity": g.players[0].hand[0].id, "target": -1, "pos": 0, "choice": -1})
 	v.controller.submit({"type": "end_turn", "player": 0})
@@ -431,4 +431,19 @@ func test_battlecry_minion_stands_on_the_board_while_aiming() -> void:
 	v.cancel()
 	check(v._views[archer.id] is CardView, "cancelled: the card is back in the hand")
 	eq(archer.zone, "HAND", "and was not played")
+	v.free()
+
+
+func test_history_strip_shows_burnt_cards_and_fatigue() -> void:
+	var full := []
+	for i in 10:
+		full.append("VAN_CS2_120")
+	var v := _view({"hero": "HERO_08"}, [false, false], {"hero": "HERO_01", "hand": full, "deck": ["VAN_EX1_298"]})
+	v.controller.submit({"type": "end_turn", "player": 0})  # player 2's hand is full: Ragnaros burns
+	v.controller.submit({"type": "end_turn", "player": 1})  # player 1's deck is empty: fatigue
+	var tiles := v._strip._items.filter(func(it): return it.size() > 3)
+	eq(tiles.map(func(it): return it[3]), ["fatigue", "burn"], "both have tiles, newest on top")
+	eq(tiles[1][0], "VAN_EX1_298", "the burnt card is shown")
+	v._strip.hover(v._strip._items.find(tiles[0]))
+	check(v._strip.popup != null and (v._strip.popup.find_child("Title", true, false) as Label).text.contains("1"), "fatigue pop-up names the damage")
 	v.free()

@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.18.3] - 2026-10-12
+
+### Añadido
+- Las cartas quemadas (mano llena) y el daño por fatiga aparecen en el historial de la izquierda: una casilla propia con imagen y explicación al pasar el ratón.
+
+### Corregido
+- Tutorial: no se puede atacar al Cronista Cho mientras tenga esbirros.
+
 ## [0.18.2] - 2026-10-12
 
 ### Cambiado

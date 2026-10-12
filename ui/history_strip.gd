@@ -1,7 +1,8 @@
 class_name HistoryStrip
 extends Control
 ## The history bar on the left, like the original: a tile with the picture of
-## every card played, attack or hero power, newest on top; blue edge for your
+## every card played, attack or hero power, card burnt (hand full) and fatigue
+## damage, newest on top; blue edge for your
 ## moves, red for the opponent's. A gold "Turn N" line heads the moves of each
 ## turn. Hovering a tile shows the card and what the move did (whom it hit,
 ## healed, buffed, summoned…); a click opens the full text history.
@@ -41,27 +42,40 @@ static func _height(it: Array) -> float:
 func update_from(g: GameState, viewer: int) -> void:
 	_g = g
 	_viewer = viewer
-	var items := []
-	var turn := -1
-	var h := 0.0
+	var rows := []  # [turn, mine, tile], newest first
 	for i in range(g.history.size() - 1, -1, -1):
 		var entry: Dictionary = g.history[i]
 		var a: Dictionary = entry.action
+		# an end of turn is logged with the new turn: its events (the next player's draw: a burnt
+		# card, fatigue) are that player's
+		var ev_mine: bool = (int(entry.player) == viewer) != (a.get("type") == "end_turn")
+		var evs: Array = entry.get("events", [])
+		for k in range(evs.size() - 1, -1, -1):
+			var ev: Dictionary = evs[k]
+			var own: bool = int(ev.get("player", -1)) == viewer
+			if ev.type == "burn":
+				rows.append([entry.turn, ev_mine, [ev.card, own, i, "burn"]])
+			elif ev.type == "fatigue":
+				rows.append([entry.turn, ev_mine, ["", own, i, "fatigue", int(ev.amount)]])
 		var e := g.ent(HistoryText.actor(entry, g))
-		if e == null:
-			continue
-		var mine: bool = int(entry.player) == viewer
-		var tile := []
-		if entry.turn != turn:
-			turn = entry.turn
-			tile.append([turn, mine])
-		var secret: bool = a.get("type") == "play" and e.card().get("mechanics", []).has("SECRET") and not mine and e.zone == "SECRET"
-		tile.append(["" if secret else e.card_id, mine, i])
-		for it in tile:
+		if e:
+			var mine: bool = int(entry.player) == viewer
+			var secret: bool = a.get("type") == "play" and e.card().get("mechanics", []).has("SECRET") and not mine and e.zone == "SECRET"
+			rows.append([entry.turn, mine, ["" if secret else e.card_id, mine, i]])
+	var items := []
+	var turn := -1
+	var h := 0.0
+	for r in rows:
+		var add := []
+		if r[0] != turn:
+			turn = r[0]
+			add.append([turn, r[1]])  # in the colour of the player whose turn it is
+		add.append(r[2])
+		for it in add:
 			h += _height(it)
 		if h > (TILE + 6) * MAX:
 			break
-		items.append_array(tile)
+		items.append_array(add)
 	if items != _items:
 		_items = items
 		hover(-1)
@@ -107,9 +121,15 @@ func hover(i: int) -> void:
 		_make_popup(_items[i], _top_of(i))
 
 
+## The kind of a tile: "" (a move), "burn" or "fatigue".
+static func _kind(it: Array) -> String:
+	return it[3] if it.size() > 3 else ""
+
+
 func _make_popup(it: Array, y: float) -> void:
 	var entry: Dictionary = _g.history[it[2]]
 	var card: String = it[0]
+	var kind := _kind(it)
 	popup = PanelContainer.new()
 	popup.name = "HistoryPopup"
 	var style := Palette.box(Palette.PANEL, 10, _edge(it[1]), 2)
@@ -129,13 +149,19 @@ func _make_popup(it: Array, y: float) -> void:
 	col.custom_minimum_size.x = 300
 	col.add_theme_constant_override("separation", 3)
 	row.add_child(col)
-	var title := Palette.label(HistoryText.title(entry, _g, _viewer), 16, _edge(it[1]))
+	var said := HistoryText.title(entry, _g, _viewer)
+	match kind:
+		"burn":
+			said = tr("Hand is full: %s burns") % CardText.name(card)
+		"fatigue":
+			said = tr("Fatigue: %d damage") % it[4]
+	var title := Palette.label(said, 16, _edge(it[1]))
 	title.name = "Title"
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.custom_minimum_size.x = 300
 	col.add_child(title)
 	var from := ""
-	var effects := HistoryText.effects(entry, _g, _viewer)
+	var effects: Array = [] if kind != "" else HistoryText.effects(entry, _g, _viewer)
 	for k in mini(effects.size(), ROWS):
 		var ef: Dictionary = effects[k]
 		if ef.from != from:
@@ -226,8 +252,22 @@ func _draw() -> void:
 		else:
 			var r := Rect2(Vector2(4, top), Vector2(TILE, TILE))
 			draw_style_box(Palette.box(Color("1b140f"), 8, _edge(it[1]), 3), r.grow(2))
-			if it[0] == "":
+			if _kind(it) == "fatigue":  # the fatigue picture and the damage it dealt
+				var pic := Sprites.get_tex("fatigue")
+				if pic:
+					draw_texture_rect(pic, r, false)
+				else:
+					draw_style_box(Palette.box(Color("2b1d3f"), 6), r)
+				Frames.attack(self, r.end - Vector2(9, 9), it[4], 9)
+			elif it[0] == "":
 				draw_style_box(Palette.box(Color("7048e8"), 6), r)
 			else:
 				Art.paint_in(self, r, it[0], "rect")
+			if _kind(it) == "burn":  # burnt: darkened, flames along the bottom
+				draw_rect(r, Color(0.15, 0.05, 0, 0.45))
+				for f in 5:
+					var x := r.position.x + 4 + f * (r.size.x - 8) / 4.0
+					var h := 14.0 + 6.0 * float(f % 2)
+					draw_colored_polygon(PackedVector2Array([Vector2(x - 6, r.end.y), Vector2(x, r.end.y - h), Vector2(x + 6, r.end.y)]), Color(1, 0.45, 0.05, 0.9))
+					draw_colored_polygon(PackedVector2Array([Vector2(x - 3, r.end.y), Vector2(x, r.end.y - h * 0.55), Vector2(x + 3, r.end.y)]), Color(1, 0.85, 0.3))
 		top += _height(it)

@@ -36,7 +36,7 @@ const LIST := [
 		"hints": ["mana", "play", "attack", "raid_leader"],
 	},
 	{
-		"boss": "TU4f_001", "boss_power": FIREBLAST, "locked": true, "unlosable": false,
+		"boss": "TU4f_001", "boss_power": FIREBLAST, "locked": true, "unlosable": false, "guarded": true,
 		"block_mana": false, "block_attack": true,
 		"player_hand": ["VAN_EX1_011", "VAN_CS2_189"],
 		"player_deck": ["VAN_EX1_015", "VAN_CS2_117", "VAN_CS2_172", "VAN_EX1_019", "VAN_DS1_055", "VAN_CS2_120", "VAN_CS2_141",

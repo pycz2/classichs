@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.18.3] - 2026-10-12
+
+### Aggiunto
+- Le carte bruciate (mano piena) e i danni da affaticamento compaiono nella cronologia a sinistra: una casella propria con immagine e spiegazione al passaggio del mouse.
+
+### Corretto
+- Tutorial: il Cronista Cho non può essere attaccato finché ha servitori.
+
 ## [0.18.2] - 2026-10-12
 
 ### Modificato
