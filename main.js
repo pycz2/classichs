@@ -3,7 +3,7 @@
 
 const LANGS = {en: "English", ru: "Русский", de: "Deutsch", fr: "Français", es: "Español", pt_BR: "Português (Brasil)", it: "Italiano", pl: "Polski"};
 const TEXT = window.TEXT;
-const SHOTS = ["match", "arena", "lobby", "result", "history", "tracker", "collection", "tutorial", "intro", "online", "debug", "settings", "menu"];
+const SHOTS = ["match", "rules", "arena", "lobby", "result", "history", "tracker", "collection", "tutorial", "intro", "online", "debug", "settings", "menu"];
 const $ = (s) => document.querySelector(s);
 
 // A supported language for a browser locale ("de-AT" -> "de", "pt-PT" -> "pt_BR"); English otherwise.
