@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-10-12
+
+### Alterado
+- Site: novas capturas (histórico por turnos, rastreador de deck, lições antes das missões, ferramentas de depuração; a página russa mostra capturas em russo), textos atualizados e tamanho do download (cerca de 61 MB). No celular, um toque amplia uma carta do leque e dois toques a viram.
+
 ## [0.19.0] - 2026-10-12
 
 ### Adicionado

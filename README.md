@@ -23,6 +23,7 @@ A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas
 | ![Deck tracker](media/screens/en/tracker.png) | ![History](media/screens/en/history.png) |
 | ![Collection](media/screens/en/collection.png) | ![Tutorial](media/screens/en/tutorial.png) |
 | ![Online](media/screens/en/online.png) | ![Settings](media/screens/en/settings.png) |
+| ![Mission intro](media/screens/en/intro.png) | ![Debug tools](media/screens/en/debug.png) |
 
 ## Build and run
 

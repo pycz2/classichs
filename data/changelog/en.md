@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-10-12
+
+### Changed
+- Site: new screenshots (history by turns, deck tracker, mission lessons, debug tools; the Russian page shows Russian shots), texts for the game as it is now, and the game's download size (about 61 MB). On a phone a tap enlarges a card in the fan and a double tap turns it over.
+
 ## [0.19.0] - 2026-10-12
 
 ### Added

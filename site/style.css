@@ -90,7 +90,7 @@ nav a:hover { color: var(--gold); }
 .card img { position: absolute; left: -11.667%; top: -8.235%; width: 123.333%; height: 116.471%; display: block; filter: drop-shadow(0 14px 18px rgba(0,0,0,.55)); }
 .card .gloss { position: absolute; inset: 0; border-radius: 10%/7%; overflow: hidden; pointer-events: none; }
 .card .shine-sweep { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.35) 48%, transparent 60%); translate: -120% 0; transition: translate 0.7s; }
-.card:hover .shine-sweep { translate: 120% 0; }
+@media (hover: hover) { .card:hover .shine-sweep { translate: 120% 0; } }
 
 /* stats strip */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1000px; padding-top: 30px; padding-bottom: 30px; }
@@ -110,18 +110,26 @@ nav a:hover { color: var(--gold); }
 .hero-tile { position: relative; cursor: pointer; text-align: center; transition: transform .3s; }
 .hero-tile .portrait { aspect-ratio: 3 / 4; border-radius: 50% 50% 12px 12px / 36% 36% 12px 12px; overflow: hidden; border: 3px solid #c9a74a; box-shadow: 0 10px 26px rgba(0,0,0,.5), inset 0 0 0 3px rgba(0,0,0,.3); background: var(--cls); filter: saturate(.75) brightness(.85); transition: filter .3s, box-shadow .3s; }
 .hero-tile img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.04); transition: transform .5s; }
-.hero-tile:hover { transform: translateY(-10px) scale(1.06); z-index: 2; }
-.hero-tile:hover .portrait { filter: none; box-shadow: 0 16px 34px rgba(0,0,0,.6), 0 0 26px color-mix(in srgb, var(--cls) 70%, white); }
-.hero-tile:hover img { transform: scale(1.14); }
+@media (hover: hover) {
+  .hero-tile:hover { transform: translateY(-10px) scale(1.06); z-index: 2; }
+  .hero-tile:hover .portrait { filter: none; box-shadow: 0 16px 34px rgba(0,0,0,.6), 0 0 26px color-mix(in srgb, var(--cls) 70%, white); }
+  .hero-tile:hover img { transform: scale(1.14); }
+  .hero-tile .power { opacity: 0; }  /* phones show the hero power at once */
+  .hero-tile:hover .power { opacity: 1; }
+}
 .hero-tile .name { margin-top: 8px; font: 700 13px/1.2 "Open Sans", sans-serif; color: var(--text); }
-.hero-tile .power { font-size: 12px; color: var(--muted); opacity: 0; transition: opacity .3s; }
-.hero-tile:hover .power { opacity: 1; }
+.hero-tile .power { font-size: 12px; color: var(--muted); transition: opacity .3s; }
 
 /* card fan */
 .fan { position: relative; height: 340px; display: flex; justify-content: center; align-items: flex-end; }
-.fan .card { width: 170px; margin: 0 -44px; transform-origin: 50% 120%; transition: transform .45s cubic-bezier(.2,.8,.2,1), margin .45s; cursor: pointer; }
-.fan:hover .card { margin: 0 -14px; }
-.fan .card:hover { transform: translateY(-36px) scale(1.12) rotate(0deg) !important; z-index: 5; }
+.fan .card { width: 170px; margin: 0 -44px; transform-origin: 50% 120%; transition: transform .45s cubic-bezier(.2,.8,.2,1), margin .45s; cursor: pointer; touch-action: manipulation; }  /* no double-tap zoom: a double tap turns the card */
+@media (hover: hover) {
+  .fan:hover .card { margin: 0 -14px; }
+  .fan .card:hover { transform: translateY(-36px) scale(1.12) rotate(0deg) !important; z-index: 5; }
+}
+/* phones: one tap enlarges a card, a double tap turns it (main.js) */
+.fan .card.zoomed { transform-origin: 50% 60%; transform: translateY(-30px) scale(1.8) rotate(0deg) !important; z-index: 6; }  /* stays over its place: the second tap hits it */
+.fan .card.zoomed .shine-sweep { translate: 120% 0; }
 
 /* features */
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
@@ -219,7 +227,6 @@ header, section, footer, .divider { position: relative; z-index: 1; }
   .hero-cards .card:nth-child(2) { left: -20px; top: 76%; }
   .hero-cards .card:nth-child(4) { right: -20px; top: 78%; }
   .fan .card { width: 92px; margin: 0 -30px; }
-  .fan:hover .card { margin: 0 -24px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-cards .card, .shine, .scroll-hint span { animation: none; }

@@ -3,7 +3,7 @@
 
 const LANGS = {en: "English", ru: "Русский", de: "Deutsch", fr: "Français", es: "Español", pt_BR: "Português (Brasil)", it: "Italiano", pl: "Polski"};
 const TEXT = window.TEXT;
-const SHOTS = ["match", "tracker", "history", "collection", "tutorial", "online", "menu", "settings", "changelog"];
+const SHOTS = ["match", "history", "tracker", "collection", "tutorial", "intro", "online", "debug", "settings", "menu"];
 const $ = (s) => document.querySelector(s);
 
 // A supported language for a browser locale ("de-AT" -> "de", "pt-PT" -> "pt_BR"); English otherwise.
@@ -19,11 +19,15 @@ function savedLang() {
 }
 let lang = pick(savedLang() || navigator.language);
 let current = 0;
-const t = (key) => (TEXT[lang] && TEXT[lang][key]) || TEXT.en[key];
+const touch = matchMedia("(hover: none)").matches;  // phones: no hover, so tap to enlarge, double-tap to turn
+// A text in the page language; {mb} is the game's download size.
+const t = (key) => ((TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || "").replace("{mb}", DATA.download_mb || 61);
 
 function applyLang() {
   document.documentElement.lang = lang.replace("_", "-");
-  document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(touch && el.dataset.i18n === "cards.sub" ? "cards.sub_touch" : el.dataset.i18n);
+  });
   $("#lang").value = lang;
   buildGallery();
   buildCards();
@@ -61,7 +65,14 @@ function buildCards() {
     const el = cardEl(c, true);
     const k = i - (list.length - 1) / 2;
     el.style.transform = `rotate(${k * 6}deg) translateY(${Math.abs(k) * Math.abs(k) * 4}px)`;
-    el.onclick = () => el.classList.toggle("flipped");
+    if (touch) {
+      el.onclick = () => {  // the second tap of a double tap turns the card; one tap enlarges it
+        const zoomed = el.classList.contains("zoomed");
+        fan.querySelectorAll(".zoomed").forEach((z) => z.classList.remove("zoomed"));
+        if (Date.now() - (el.tapped || 0) < 350) { el.classList.toggle("flipped"); el.classList.add("zoomed"); el.tapped = 0; }
+        else { el.classList.toggle("zoomed", !zoomed); el.tapped = Date.now(); }
+      };
+    } else el.onclick = () => el.classList.toggle("flipped");
     fan.append(el);
   });
   const row = $("#heroRow");
@@ -78,9 +89,12 @@ function buildCards() {
   });
 }
 
-fetch("data.json").then((r) => r.json()).then((d) => { DATA = d; buildCards(); }).catch(() => {});
+document.addEventListener("click", (e) => {  // a tap outside the fan puts an enlarged card back
+  if (!e.target.closest("#fan")) document.querySelectorAll("#fan .zoomed").forEach((z) => z.classList.remove("zoomed"));
+});
+fetch("data.json").then((r) => r.json()).then((d) => { DATA = d; applyLang(); }).catch(() => {});
 
-function src(name) { return `screens/en/${name}.png`; }  // screenshots are in English
+function src(name) { return `screens/${lang === "ru" ? "ru" : "en"}/${name}.png`; }  // screenshots are in English and Russian
 
 function buildGallery() {
   const tabs = $(".tabs"), thumbs = $(".thumbs");

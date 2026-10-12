@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-10-12
+
+### Modifié
+- Site : nouvelles captures (historique par tours, suivi de deck, leçons avant les missions, outils de débogage ; la page russe montre des captures russes), textes à jour et taille du téléchargement (environ 61 Mo). Sur téléphone, un toucher agrandit une carte de l'éventail, un double toucher la retourne.
+
 ## [0.19.0] - 2026-10-12
 
 ### Ajouté

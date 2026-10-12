@@ -13,7 +13,7 @@ godot --path . --script res://tools/make_splash.gd  # the splash shows the versi
 godot --headless --path . --import >/dev/null
 godot --headless --path . --export-release "Web" "$OUT/play/index.html"
 cp -R site/index.html site/style.css site/main.js site/favicon.svg site/i18n "$OUT/"
-cp -R media/screens/en "$OUT/screens/"
+cp -R media/screens/en media/screens/ru "$OUT/screens/"
 python3 tools/site_data.py "$OUT"
 godot --path . --script res://tools/site_cards.gd -- "$OUT"  # the cards as the game draws them (needs a window)
 touch "$OUT/.nojekyll"

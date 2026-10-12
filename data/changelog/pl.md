@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-10-12
+
+### Zmieniono
+- Strona: nowe zrzuty ekranu (historia według tur, śledzenie talii, lekcje przed misjami, narzędzia debugowania; rosyjska strona pokazuje rosyjskie zrzuty), aktualne teksty i rozmiar pobierania (około 61 MB). Na telefonie dotknięcie powiększa kartę w wachlarzu, a podwójne dotknięcie ją odwraca.
+
 ## [0.19.0] - 2026-10-12
 
 ### Dodano
