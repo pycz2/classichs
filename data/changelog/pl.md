@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.18.4] - 2026-10-12
+
+### Dodano
+- Nieuchwytność: stronnik jest otoczony mieniącą się złotą mgiełką, a słowo ma swoje okienko (zaklęcia i moce specjalne nie mogą go wybrać na cel).
+
 ## [0.18.3] - 2026-10-12
 
 ### Dodano

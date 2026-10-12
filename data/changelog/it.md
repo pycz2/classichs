@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.18.4] - 2026-10-12
+
+### Aggiunto
+- Elusivo: il servitore è avvolto da una foschia dorata scintillante, e la parola ha la sua finestra (magie e poteri eroe non possono bersagliarlo).
+
 ## [0.18.3] - 2026-10-12
 
 ### Aggiunto

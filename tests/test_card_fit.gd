@@ -56,3 +56,10 @@ func test_keywords_come_from_bold_text_too() -> void:
 	var tips := KeywordTips.make("VAN_EX1_393")
 	check(tips.get_child_count() == 1, "Enrage gets its box")
 	tips.free()
+
+
+func test_elusive_has_a_keyword_box() -> void:
+	check(KeywordTips.keywords_of("VAN_NEW1_023").has("ELUSIVE"), "Faerie Dragon is Elusive")
+	var tips := KeywordTips.make("VAN_NEW1_023")
+	check(tips.get_child_count() >= 1, "and gets its box")
+	tips.free()

@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.18.4] - 2026-10-12
+
+### Added
+- Elusive: the minion is wrapped in a shimmering golden haze, and the word has its pop-up box (spells and Hero Powers can't target it).
+
 ## [0.18.3] - 2026-10-12
 
 ### Added
