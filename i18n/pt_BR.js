@@ -53,7 +53,7 @@
     "m2.t": "Dicas ao passar o mouse",
     "m2.d": "Passe o mouse numa carta: caixas explicam suas palavras-chave, e os cristais de mana que ela vai gastar se acendem. O botão “Fim do turno” brilha em verde quando não há mais nada a fazer.",
     "m3.t": "Arrastar e mirar",
-    "m3.d": "Arraste uma carta para jogá-la e um lacaio para atacar; uma seta mostra o alvo. Um lacaio com Grito de Guerra primeiro ocupa seu lugar e depois mira.",
+    "m3.d": "Arraste uma carta para jogá-la e um lacaio para atacar; uma seta mostra o alvo. Um lacaio com Grito de Guerra primeiro ocupa seu lugar e depois mira. Dá para dar a próxima ordem enquanto a anterior ainda anima: as ordens esperam numa fila e vão uma por uma.",
     "m4.t": "Efeitos na mesa",
     "m4.d": "Projéteis voam um a um, gelo e fogo atingem o alvo, golpes pesados sacodem a mesa, um herói derrotado se despedaça, e o resultado — vitória, derrota ou empate — aparece sobre a própria imagem.",
     "m5.t": "Relógio e pavio",

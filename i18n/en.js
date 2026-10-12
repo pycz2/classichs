@@ -53,7 +53,7 @@
     "m2.t": "Hints on hover",
     "m2.d": "Hover a card: boxes explain its keywords, and the mana crystals it will spend light up. The End Turn button glows green when nothing is left to do.",
     "m3.t": "Drag and aim",
-    "m3.d": "Drag a card to play it and a minion to attack; an arrow shows the target. A Battlecry minion takes its place first, then aims.",
+    "m3.d": "Drag a card to play it and a minion to attack; an arrow shows the target. A Battlecry minion takes its place first, then aims. The next order can be given while the last one still animates: orders wait in a queue and go one by one.",
     "m4.t": "Effects on the table",
     "m4.d": "Missiles fly one by one, frost and fire hit the target, heavy hits shake the table, a defeated hero shatters, and the result — victory, defeat or a draw — comes over its own picture.",
     "m5.t": "Clock and fuse",

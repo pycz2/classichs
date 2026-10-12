@@ -53,7 +53,7 @@
     "m2.t": "Hinweise beim Zeigen",
     "m2.d": "Zeig auf eine Karte: Kästen erklären ihre Schlüsselwörter, und die Manakristalle, die sie kostet, leuchten auf. Der Knopf „Zug beenden“ leuchtet grün, wenn nichts mehr zu tun ist.",
     "m3.t": "Ziehen und zielen",
-    "m3.d": "Zieh eine Karte, um sie auszuspielen, und einen Diener, um anzugreifen; ein Pfeil zeigt das Ziel. Ein Diener mit Kampfschrei nimmt erst seinen Platz ein und zielt dann.",
+    "m3.d": "Zieh eine Karte, um sie auszuspielen, und einen Diener, um anzugreifen; ein Pfeil zeigt das Ziel. Ein Diener mit Kampfschrei nimmt erst seinen Platz ein und zielt dann. Den nächsten Befehl kannst du geben, während der letzte noch läuft: Befehle warten in einer Reihe und kommen nacheinander.",
     "m4.t": "Effekte auf dem Tisch",
     "m4.d": "Geschosse fliegen einzeln, Frost und Feuer treffen das Ziel, schwere Treffer erschüttern den Tisch, ein besiegter Held zerspringt, und das Ergebnis — Sieg, Niederlage oder Unentschieden — erscheint über einem eigenen Bild.",
     "m5.t": "Uhr und Lunte",
