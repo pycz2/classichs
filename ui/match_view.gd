@@ -1357,8 +1357,23 @@ func _mulligan_result(events: Array, p: int) -> void:
 
 ## The game is over: each losing hero's portrait bursts into shards that fly
 ## apart and fall, then the result shows.
+## The players whose heroes lost: both on a draw.
+func losers() -> Array:
+	return [0, 1] if g.winner < 0 else [1 - g.winner]
+
+
+## The result from the local player's side: [kind, text]; kind is "victory",
+## "defeat" or "draw" (the picture). Two people at one screen get the winner's number.
+func result() -> Array:
+	if g.winner < 0:
+		return ["draw", tr("Draw")]
+	if controller.remote < 0 and controller.bots[0] == controller.bots[1]:
+		return ["victory", tr("Player %d wins") % (g.winner + 1)]
+	return ["victory", tr("Victory!")] if g.winner == viewer() else ["defeat", tr("Defeat")]
+
+
 func _shatter_losers() -> void:
-	var losers := [0, 1] if g.winner < 0 else [1 - g.winner]
+	var losers := losers()
 	_ending = true
 	Sound.play("hit_big")
 	if Match.shake_enabled:
@@ -2037,14 +2052,10 @@ func _refresh_overlay() -> void:
 		if _ending:
 			return  # the losing hero is still shattering; the result comes after
 		if _overlay == null or _overlay.name != "GameOver":
-			var text := tr("Draw")
-			if g.winner >= 0:
-				if controller.bots[0] == controller.bots[1]:
-					text = tr("Player %d wins") % (g.winner + 1)
-				else:
-					text = tr("Victory!") if g.winner == viewer() else tr("Defeat")
-			var box := _open_overlay(text)
+			var res := result()
+			var box := _open_overlay(res[1])
 			_overlay.name = "GameOver"
+			_result_look(box, res[0])
 			if tutorial:
 				_tutorial_result(box)
 			else:
@@ -2065,6 +2076,34 @@ func _refresh_overlay() -> void:
 		return
 	if _overlay and _overlay.name in ["Mulligan", "Choice", "GameOver"]:
 		_close_overlay()
+
+
+## The result screen: the picture of the result dimmed behind a big title that
+## grows in (ui/sprites/result_<kind>.png, made by tools/gen_ui_art.py).
+func _result_look(box: VBoxContainer, kind: String) -> void:
+	var art := TextureRect.new()
+	art.name = "ResultArt"
+	art.set_meta("kind", kind)
+	art.texture = Sprites.get_tex("result_" + kind)
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	art.modulate.a = 0.7
+	_overlay.add_child(art)
+	_overlay.move_child(art, 1)  # over the dimming, under the title and buttons
+	var title := box.get_child(0) as Label
+	title.name = "ResultTitle"
+	title.add_theme_font_size_override("font_size", 72)
+	title.add_theme_constant_override("outline_size", 12)
+	title.add_theme_color_override("font_color", {"victory": Color("ffd75e"), "defeat": Color("c9d4e6"), "draw": Color("f0e2c0")}[kind])
+	if Anim.instant:
+		return
+	art.modulate.a = 0.0
+	create_tween().tween_property(art, "modulate:a", 0.7, Anim.d(0.8))
+	title.pivot_offset = Vector2(640, 40)
+	title.scale = Vector2(0.5, 0.5)
+	create_tween().tween_property(title, "scale", Vector2.ONE, Anim.d(0.5)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
 func _tutorial_result(box: VBoxContainer) -> void:
