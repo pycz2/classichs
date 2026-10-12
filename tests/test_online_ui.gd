@@ -203,6 +203,40 @@ func test_guest_mulligans_without_waiting_for_host() -> void:
 	_free_bound(b)
 
 
+func test_my_mulligan_comes_in_before_the_opponent_chooses() -> void:
+	var b := _bound_pair()
+	var guest: MatchView = b[1][1]
+	var host: MatchView = b[1][0]
+	var hand: Array = guest.g.players[1].hand.duplicate()
+	var ov := guest.find_child("Mulligan", true, false)
+	var first: CardView = ov.find_children("*", "CardView", true, false)[0]
+	first.clicked.emit(first)
+	(ov.find_child("Confirm", true, false) as Button).pressed.emit()
+	var now: Array = guest.g.players[1].hand
+	check(not now.has(hand[0]) and now[1] == hand[1], "the new card is in the hand at once, in the same place")
+	eq(guest.g.phase, "MULLIGAN", "the host still chooses")
+	check(guest.find_child("Mulligan", true, false) == null, "the mulligan screen is closed")
+	eq(guest._hint.text, "Waiting for the opponent…", "waiting for the opponent")
+	LoopbackTransport.pump(b[0])
+	check(host.find_child("Mulligan", true, false) != null, "the host still sees its mulligan")
+	eq(host.g.state_hash(), guest.g.state_hash(), "in sync")
+	_free_bound(b)
+
+
+func test_mulligan_countdown_in_the_last_ten_seconds() -> void:
+	var b := _bound_pair()
+	var host: MatchView = b[1][0]
+	var t := host.find_child("MulliganTimer", true, false) as Label
+	check(t != null and not t.visible, "hidden at first")
+	host.tick(MatchView.MULLIGAN_SECONDS - 12.0)
+	check(not t.visible, "still hidden with 12 seconds left")
+	host.tick(5.0)
+	check(t.visible, "shown with 7 seconds left")
+	eq(t.text, "7", "the seconds")
+	check(not host._rope.visible, "no fuse during the mulligan")
+	_free_bound(b)
+
+
 func test_desync_overlay_title() -> void:
 	var b := _bound_pair()
 	b[0][0].send({"t": "action", "n": 0, "action": {"type": "end_turn", "player": 0}, "hash": "zzz"})

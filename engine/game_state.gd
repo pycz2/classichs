@@ -580,9 +580,11 @@ func random_alive(arr: Array) -> Entity:
 	return random_choice(arr.filter(func(e: Entity) -> bool: return e.zone == "PLAY" and e.health() > 0))
 
 
-func shuffle(arr: Array) -> void:
+func shuffle(arr: Array, r: RandomNumberGenerator = null) -> void:
+	if r == null:
+		r = rng
 	for i in range(arr.size() - 1, 0, -1):
-		var j := rng.randi_range(0, i)
+		var j := r.randi_range(0, i)
 		var tmp = arr[i]
 		arr[i] = arr[j]
 		arr[j] = tmp

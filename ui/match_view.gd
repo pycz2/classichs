@@ -26,6 +26,7 @@ const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "than
 const TURN_SECONDS := 75.0
 const ROPE_SECONDS := 15.0
 const MULLIGAN_SECONDS := 45.0
+const MULLIGAN_WARN := 10.0  # the mulligan's last seconds: red numbers under the cards
 
 var debug_mode := false
 ## The turn timer runs only in online games against a person.
@@ -710,8 +711,15 @@ func tick(delta: float) -> void:
 		return
 	_reset_timer()  # a new turn gets its full time even while the table is animating
 	_time_left -= delta
-	_rope.visible = _time_left <= ROPE_SECONDS
+	var mull := g.phase == "MULLIGAN"
+	_rope.visible = _time_left <= ROPE_SECONDS and not mull  # the mulligan has its numbers instead
 	_rope.left = _time_left / ROPE_SECONDS
+	var count := find_child("MulliganTimer", true, false) as Label
+	if count:
+		count.visible = mull and _time_left <= MULLIGAN_WARN
+		count.text = str(int(ceil(maxf(0.0, _time_left))))
+	if mull and g.players[viewer()].mulliganed and not g.players[1 - viewer()].mulliganed:
+		show_hint(tr("Waiting for the opponent…"), 0.5)
 	if _time_left > 0.0:
 		return
 	var me := viewer()
@@ -1519,13 +1527,8 @@ func _burn(ev: Dictionary) -> void:
 	burn.set_shader_parameter("size", cv.size)
 	burn.set_shader_parameter("progress", 0.0)
 	cv.material = burn
-	var fire := _Burn.new()  # a few flames licking up as it goes
-	fire.size = cv.size
-	fire.modulate.a = 0.55
-	cv.add_child(fire)
 	var out := cv.create_tween()
 	out.tween_method(func(v: float): burn.set_shader_parameter("progress", v), 0.0, 1.0, Anim.d(1.1))
-	out.parallel().tween_property(fire, "modulate:a", 0.0, Anim.d(1.1))
 	out.tween_callback(cv.queue_free)
 	show_hint(tr("Hand is full: %s burns") % CardText.name(ev.card), 1.6)
 	await _wait(1.15)
@@ -1910,25 +1913,6 @@ class _Fatigue:
 
 
 ## Flames licking up a burning card.
-class _Burn:
-	extends Control
-	var _t := 0.0
-
-	func _ready() -> void:
-		mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	func _process(d: float) -> void:
-		_t += d
-		queue_redraw()
-
-	func _draw() -> void:
-		for i in 14:
-			var x := fmod(i * 37.0, size.x)
-			var h := 30.0 + 40.0 * fmod(_t * 2.0 + i * 0.37, 1.0)
-			var y := size.y - fmod(_t * 160.0 + i * 23.0, size.y + 20.0)
-			draw_colored_polygon(PackedVector2Array([Vector2(x - 9, y + h * 0.3), Vector2(x, y - h * 0.5), Vector2(x + 9, y + h * 0.3)]), Color(1, 0.5 + 0.3 * sin(i), 0.1, 0.8))
-
-
 ## A speech bubble: a round-cornered cloud with a shadow and a tail pointing at
 ## the hero on its right.
 class _Bubble:
@@ -2152,7 +2136,9 @@ func _refresh_overlay() -> void:
 			_show_mulligan()
 		return
 	if _mull_wait >= 0 and _overlay and _overlay.name == "Mulligan":
-		return  # chosen: waiting for the opponent, then the new cards come in
+		return  # chosen: the new cards come in
+	if g.phase == "MULLIGAN" and g.players[viewer()].mulliganed and not g.players[1 - viewer()].mulliganed:
+		show_hint(tr("Waiting for the opponent…"), 2.0)  # (the turn timer keeps it on online)
 	if not g.pending.is_empty() and my_action():
 		if _overlay == null or _overlay.name != "Choice":
 			_show_choice()
@@ -2250,6 +2236,12 @@ func _show_mulligan() -> void:
 			var tw := cv.create_tween().set_parallel()
 			tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.35)).set_delay(Anim.d(0.12 * i)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			tw.tween_property(cv, "modulate:a", 1.0, Anim.d(0.2)).set_delay(Anim.d(0.12 * i))
+	var count := Palette.label("", 44, Palette.OPPONENT)
+	count.name = "MulliganTimer"
+	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	count.add_theme_constant_override("outline_size", 8)
+	count.visible = false
+	box.add_child(count)
 	_centered_button(box, tr("Confirm"), "Confirm", func():
 		var ids: Array = []
 		for id in marked:
@@ -2282,6 +2274,7 @@ func _show_mulligan() -> void:
 			return  # the timer or a lost connection got there first
 		_mull_wait = p  # the overlay stays: the new cards come into it
 		controller.submit({"type": "mulligan", "player": p, "replace": ids}))
+	box.move_child(count, -1)  # under Confirm
 
 
 func _show_choice() -> void:

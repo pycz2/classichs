@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-10-12
+
+### Changed
+- Mulligan: after Confirm the new cards come into the hand at once, without waiting for the opponent, and take the places of the replaced ones — the hand keeps the order of the mulligan screen; then "Waiting for the opponent…". Online games stay in sync: each player's mulligan shuffle uses that player's own random stream.
+- The online mulligan timer has no fuse: in the last 10 seconds red numbers show under Confirm.
+- What the opponent points at no longer hides your own glow: the green or yellow stays, with a faint red ring outside.
+- A card burnt by a full hand burns with the shader only, without the rising triangles.
+
 ## [0.22.0] - 2026-10-12
 
 ### Added

@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-10-12
+
+### Zmieniono
+- Mulligan: po „Potwierdź” nowe karty od razu trafiają do ręki, bez czekania na przeciwnika, i zajmują miejsca wymienionych — ręka zachowuje kolejność z ekranu mulligana; potem „Czekamy na przeciwnika…”. W sieci wszystko zostaje zgodne: tasowanie przy mulliganie używa własnego strumienia losowego każdego gracza.
+- Licznik mulligana w sieci nie ma lontu: przez ostatnie 10 sekund pod „Potwierdź” świecą czerwone cyfry.
+- To, na co wskazuje przeciwnik, nie gasi już twojej poświaty: zielona lub żółta zostaje, z lekkim czerwonym pierścieniem na zewnątrz.
+- Karta spalona przez pełną rękę płonie tylko shaderem, bez unoszących się trójkątów.
+
 ## [0.22.0] - 2026-10-12
 
 ### Dodano

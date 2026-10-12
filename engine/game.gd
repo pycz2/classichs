@@ -133,28 +133,43 @@ func _subsets(ids: Array[int]) -> Array:
 
 ## Records p's choice; both mulligans run in a fixed order (0, then 1) once both
 ## have arrived, so the arrival order of the two actions cannot change the game.
+## A player's mulligan is carried out at once (the new cards come while the
+## opponent still chooses); the game starts when both have chosen.
 func _do_mulligan(p: int, replace: Array) -> void:
 	players[p].mulliganed = true
 	players[p].mulligan_replace = replace
 	log_event({"type": "mulligan_chosen", "player": p})
+	_run_mulligan(p, replace)
 	if players[0].mulliganed and players[1].mulliganed:
-		for i in 2:
-			_run_mulligan(i, players[i].mulligan_replace)
 		_finish_mulligan()
 
 
+## New cards take the places of the replaced ones (the hand keeps the order the
+## player saw); the old ones are shuffled back. The shuffle uses the player's own
+## random stream, so online both sides get the same game whichever mulligan
+## comes first.
 func _run_mulligan(p: int, replace: Array) -> void:
 	var pl := players[p]
 	var old: Array[Entity] = []
 	for id: int in replace:
-		var e := ent(id)
-		pl.hand.erase(e)
-		old.append(e)
-	draw(p, old.size())
+		old.append(ent(id))
+	var fresh := draw(p, old.size())
+	var hand: Array[Entity] = []
+	var k := 0
+	for e in pl.hand:
+		if old.has(e):
+			if k < fresh.size():
+				hand.append(fresh[k])
+				k += 1
+		elif not fresh.has(e):
+			hand.append(e)
+	pl.hand = hand
 	for e in old:
 		e.zone = "DECK"
 		pl.deck.append(e)
-	shuffle(pl.deck)
+	var own := RandomNumberGenerator.new()
+	own.seed = hash([rng.seed, "mulligan", p])
+	shuffle(pl.deck, own)
 	log_event({"type": "mulligan", "player": p, "count": old.size()})
 
 

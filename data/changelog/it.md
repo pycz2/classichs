@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-10-12
+
+### Modificato
+- Mulligan: dopo “Conferma” le carte nuove arrivano subito in mano, senza aspettare l'avversario, e prendono il posto di quelle sostituite — la mano mantiene l'ordine della schermata del mulligan; poi “In attesa dell'avversario…”. Online tutto resta sincronizzato: il mescolamento del mulligan usa il flusso casuale proprio di ogni giocatore.
+- Il timer del mulligan online non ha la miccia: negli ultimi 10 secondi compaiono numeri rossi sotto “Conferma”.
+- Ciò che indica l'avversario non spegne più il tuo bagliore: il verde o il giallo resta, con un leggero anello rosso all'esterno.
+- Una carta bruciata per mano piena brucia solo con lo shader, senza i triangoli che salgono.
+
 ## [0.22.0] - 2026-10-12
 
 ### Aggiunto

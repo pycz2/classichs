@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-10-12
+
+### Cambiado
+- Mulligan: tras «Confirmar», las cartas nuevas llegan a la mano al momento, sin esperar al rival, y ocupan el lugar de las cambiadas — la mano conserva el orden de la pantalla de mulligan; luego «Esperando al rival…». En línea todo sigue sincronizado: el barajado del mulligan usa el flujo aleatorio propio de cada jugador.
+- El temporizador del mulligan en línea no tiene mecha: en los últimos 10 segundos aparecen números rojos bajo «Confirmar».
+- Lo que señala el rival ya no apaga tu propio brillo: el verde o el amarillo se mantiene, con un leve anillo rojo por fuera.
+- Una carta quemada por mano llena arde solo con el shader, sin los triángulos que suben.
+
 ## [0.22.0] - 2026-10-12
 
 ### Añadido

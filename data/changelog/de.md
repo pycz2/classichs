@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-10-12
+
+### Geändert
+- Mulligan: Nach „Bestätigen“ kommen die neuen Karten sofort auf die Hand, ohne auf den Gegner zu warten, und nehmen die Plätze der ersetzten ein — die Hand behält die Reihenfolge des Mulligan-Bildschirms; dann „Warte auf den Gegner…“. Online bleibt alles synchron: Das Mischen beim Mulligan nutzt den eigenen Zufallsstrom jedes Spielers.
+- Der Online-Mulligan-Timer hat keine Lunte: In den letzten 10 Sekunden stehen rote Zahlen unter „Bestätigen“.
+- Worauf der Gegner zeigt, löscht dein eigenes Leuchten nicht mehr: Grün oder Gelb bleibt, außen ein leichter roter Ring.
+- Eine wegen voller Hand verbrannte Karte brennt nur mit dem Shader, ohne aufsteigende Dreiecke.
+
 ## [0.22.0] - 2026-10-12
 
 ### Hinzugefügt

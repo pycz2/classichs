@@ -28,10 +28,50 @@ func test_mulligan_replaces_with_other_cards() -> void:
 	ids.sort()
 	var r := g.apply({"type": "mulligan", "player": 0, "replace": ids})
 	check(r.ok, "ok")
-	g.apply({"type": "mulligan", "player": 1, "replace": []})  # replacement happens once both chose
+	g.apply({"type": "mulligan", "player": 1, "replace": []})
 	eq(g.players[0].hand.size(), 4, "3 after mulligan + turn draw")
 	check(not g.players[0].hand.has(old[0]) or g.players[0].hand.back() == old[0], "replaced card left the hand")
 	eq(g.players[0].deck.size(), 26, "30 - 3 - 1")
+
+
+## Distinct cards so the hand order can be seen.
+func _mixed_game(seed := 5) -> Game:
+	var deck: Array = []
+	for id in Decks.basic("MAGE"):
+		deck.append(id)
+	return Game.new({"hero": "HERO_08", "deck": deck}, {"hero": "HERO_01", "deck": Decks.basic("WARRIOR")}, seed, 0)
+
+
+func test_a_mulligan_is_carried_out_at_once() -> void:
+	var g := _mixed_game()
+	var old := g.players[0].hand.duplicate()
+	g.apply({"type": "mulligan", "player": 0, "replace": [old[1].id]})
+	eq(g.phase, "MULLIGAN", "the opponent still chooses")
+	check(not g.players[0].hand.has(old[1]), "the replaced card is gone already")
+	eq(g.players[0].hand.size(), 3, "a new card in its place")
+	eq(g.players[0].deck.size(), 27, "the old card went back into the deck")
+
+
+func test_new_cards_take_the_places_of_the_replaced_ones() -> void:
+	var g := _mixed_game()
+	var old := g.players[0].hand.duplicate()
+	g.apply({"type": "mulligan", "player": 0, "replace": [old[0].id, old[2].id]})
+	var hand := g.players[0].hand
+	eq(hand[1], old[1], "the kept card keeps its place in the middle")
+	check(hand[0] != old[0] and hand[2] != old[2], "new cards on the left and on the right")
+
+
+func test_mulligan_order_does_not_change_the_game() -> void:
+	# online both sides apply the two mulligans in their own order: the result must be the same
+	var a := _mixed_game(9)
+	var b := _mixed_game(9)
+	var ra := [a.players[0].hand[0].id, a.players[0].hand[2].id]
+	var rb := [a.players[1].hand[1].id]
+	a.apply({"type": "mulligan", "player": 0, "replace": ra})
+	a.apply({"type": "mulligan", "player": 1, "replace": rb})
+	b.apply({"type": "mulligan", "player": 1, "replace": rb})
+	b.apply({"type": "mulligan", "player": 0, "replace": ra})
+	eq(a.state_hash(), b.state_hash(), "the same game either way")
 
 
 func test_first_player_by_rng_is_deterministic() -> void:

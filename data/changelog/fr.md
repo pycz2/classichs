@@ -4,6 +4,14 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-10-12
+
+### Modifié
+- Mulligan : après « Confirmer », les nouvelles cartes arrivent tout de suite en main, sans attendre l'adversaire, et prennent la place des cartes remplacées — la main garde l'ordre de l'écran de mulligan ; puis « En attente de l'adversaire… ». En ligne, tout reste synchronisé : le mélange du mulligan utilise le flux aléatoire propre à chaque joueur.
+- Le minuteur du mulligan en ligne n'a pas de mèche : pendant les 10 dernières secondes, des chiffres rouges s'affichent sous « Confirmer ».
+- Ce que survole l'adversaire n'efface plus votre propre lueur : le vert ou le jaune reste, avec un léger anneau rouge autour.
+- Une carte brûlée par une main pleine brûle avec le shader seul, sans les triangles qui montent.
+
 ## [0.22.0] - 2026-10-12
 
 ### Ajouté
