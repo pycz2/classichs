@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-10-12
+
+### Hinzugefügt
+- Arena-Regeln: Vor den Helden wählt der Gastgeber für beide „Ein Deck für die ganze Arena“ oder „Ein neues Deck für jedes Spiel“; für das zweite gibt es die Einstellung „Spieler dürfen ihr Deck behalten, statt neu zu wählen“. Ist sie an, wählt nach jedem Spiel jeder „Neues Deck bauen“ oder „Mein Deck behalten“, und der Gegner sieht, dass der Spieler entscheidet. Der Gast wartet auf die Wahl und sieht die Regeln; während einer neuen Auswahl ist der Punktestand zu sehen.
+
+### Geändert
+- Arena: Legendäre Karten kommen doppelt so oft (2 % bei einer normalen Wahl, 8 % bei Wahl 1, 10, 20 und 30), epische anderthalbmal so oft (7,5 % und 27 %).
+
 ## [0.20.1] - 2026-10-12
 
 ### Geändert

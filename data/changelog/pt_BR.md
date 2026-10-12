@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-10-12
+
+### Adicionado
+- Regras da Arena: antes dos heróis, o anfitrião escolhe para os dois “Um deck para toda a Arena” ou “Um deck novo a cada partida”; o segundo tem a opção “Os jogadores podem manter o deck em vez de escolher de novo”. Com ela ligada, depois de cada partida cada um escolhe “Montar um deck novo” ou “Manter meu deck”, e o oponente vê que o jogador está decidindo. O convidado espera a escolha e vê as regras; o placar fica visível durante uma nova seleção.
+
+### Alterado
+- Arena: cartas lendárias aparecem o dobro (2 % numa escolha normal, 8 % nas escolhas 1, 10, 20 e 30), épicas uma vez e meia mais (7,5 % e 27 %).
+
 ## [0.20.1] - 2026-10-12
 
 ### Alterado

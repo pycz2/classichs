@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-10-12
+
+### Added
+- Arena rules: before the heroes, the host chooses for both "One deck for the whole Arena" or "A new deck for every game"; the second has a separate setting "Players may keep their deck instead of drafting again". With it on, after each game each player chooses "Draft a new deck" or "Keep my deck", and the opponent sees the player deciding. The guest waits for the choice and sees the rules; the score is in sight during a new draft.
+
+### Changed
+- Arena: Legendary cards come twice as often (2 % in a normal pick, 8 % in picks 1, 10, 20 and 30), Epic cards one and a half times as often (7.5 % and 27 %).
+
 ## [0.20.1] - 2026-10-12
 
 ### Changed

@@ -48,6 +48,7 @@ func _initialize() -> void:
 			m.screen.show_stage("kind"), "online"])
 		steps.append([func(): m.show_settings(), "settings"])
 		steps.append([func(): m.show_debug_table(), "debug"])
+		steps.append([_arena_rules, "rules"])
 		steps.append([_arena_draft, "arena"])
 		steps.append([_arena_lobby, "lobby"])
 		steps.append([_arena_game, ""])
@@ -99,7 +100,7 @@ func _tracker() -> void:
 
 
 ## The Arena against a second, local session: the host's screen is shown.
-func _arena_draft() -> void:
+func _arena_rules() -> void:
 	Settings.data.tracker = false  # the result picture without the tracker over it
 	var tr := LoopbackTransport.pair()
 	var h := ArenaSession.new()
@@ -110,7 +111,18 @@ func _arena_draft() -> void:
 	h.say_hello()
 	g.say_hello()
 	LoopbackTransport.pump(tr)
-	m.show_arena(h)
+	var v: ArenaView = m.show_arena(h)
+	v._rules_pick = "each"
+	v._rebuild()
+	(v.find_child("MayKeep", true, false) as CheckBox).button_pressed = true
+
+
+func _arena_draft() -> void:
+	var h: ArenaSession = arena[0]
+	var g: ArenaSession = arena[1]
+	var tr: Array = arena[2]
+	(m.screen.find_child("StartArena", true, false) as Button).pressed.emit()
+	LoopbackTransport.pump(tr)
 	h.draft.choose_hero(1)
 	for i in 13:
 		h.draft.pick(i % 3)
@@ -128,9 +140,12 @@ func _arena_lobby() -> void:
 		while not s.draft.done():
 			s.draft.pick(0)
 		s.send_status()
-	arena[0].record(0)  # a game won already
+	for s: ArenaSession in arena.slice(0, 2):  # a game won by the host already, on both sides
+		s.games = 1
+		s.record(0)
+		s.keep_deck()
 	LoopbackTransport.pump(arena[2])
-	m.screen._refresh()
+	m.screen._rebuild()
 
 
 func _arena_game() -> void:

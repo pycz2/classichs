@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-10-12
+
+### Añadido
+- Reglas de la Arena: antes de los héroes, el anfitrión elige para ambos «Un mazo para toda la Arena» o «Un mazo nuevo en cada partida»; el segundo tiene un ajuste «Los jugadores pueden conservar su mazo en vez de elegir de nuevo». Si está activo, tras cada partida cada uno elige «Armar un mazo nuevo» o «Conservar mi mazo», y el rival ve que el jugador está decidiendo. El invitado espera la elección y ve las reglas; el marcador se ve durante una nueva selección.
+
+### Cambiado
+- Arena: las cartas legendarias salen el doble (2 % en una elección normal, 8 % en las elecciones 1, 10, 20 y 30), las épicas una vez y media más (7,5 % y 27 %).
+
 ## [0.20.1] - 2026-10-12
 
 ### Cambiado
