@@ -28,7 +28,7 @@
     "shot.history.tab": "Verlauf", "shot.history.cap": "Verlauf nach Zügen: zeig auf einen Zug, um zu sehen, was er bewirkte",
     "shot.collection.tab": "Sammlung", "shot.collection.cap": "Sammlung und Decks auf einem Bildschirm",
     "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "Tutorial: sechs Missionen wie im Original",
-    "shot.online.tab": "Online", "shot.online.cap": "Online-Spiel Schritt für Schritt: Spiel erstellen oder beitreten",
+    "shot.online.tab": "Online", "shot.online.cap": "Online-Spiel: normal oder Arena, dann ein Spiel erstellen oder beitreten",
     "shot.menu.tab": "Menü", "shot.menu.cap": "Hauptmenü",
     "shot.settings.tab": "Einstellungen", "shot.settings.cap": "Einstellungen: Sprache, Name, Musik und Klänge, Kartenbilder, Kartenrücken, Animationstempo, Debug-Werkzeuge",
     "nav.heroes": "Helden",

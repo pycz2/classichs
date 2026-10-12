@@ -28,7 +28,7 @@
     "shot.history.tab": "Histórico", "shot.history.cap": "Histórico por turnos: passe o mouse numa ação para ver o que ela fez",
     "shot.collection.tab": "Coleção", "shot.collection.cap": "Coleção e decks numa só tela",
     "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "Tutorial: seis missões, como o original",
-    "shot.online.tab": "Online", "shot.online.cap": "Jogo online passo a passo: crie um jogo ou entre num",
+    "shot.online.tab": "Online", "shot.online.cap": "Jogo online: normal ou Arena, depois crie um jogo ou entre num",
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu principal",
     "shot.settings.tab": "Configurações", "shot.settings.cap": "Configurações: idioma, nome, música e sons, artes, verso, velocidade de animação, ferramentas de depuração",
     "nav.heroes": "Heróis",

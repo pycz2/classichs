@@ -28,7 +28,7 @@
     "shot.history.tab": "History", "shot.history.cap": "History by turns: hover a move to see what it did",
     "shot.collection.tab": "Collection", "shot.collection.cap": "Collection and decks on one screen",
     "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "Tutorial: six missions, like the original",
-    "shot.online.tab": "Online", "shot.online.cap": "Online play step by step: create a game or join one",
+    "shot.online.tab": "Online", "shot.online.cap": "Online play: a normal game or the Arena, then create a game or join one",
     "shot.menu.tab": "Menu", "shot.menu.cap": "Main menu",
     "shot.settings.tab": "Settings", "shot.settings.cap": "Settings: language, name, music and sounds, card art, card back, animation speed, debug tools",
     "nav.heroes": "Heroes",
