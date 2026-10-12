@@ -99,7 +99,10 @@ func _process(_d: float) -> bool:
 	if at > 0 and steps[at - 1][1] != "":
 		var lang: String = Settings.data.language
 		DirAccess.make_dir_recursive_absolute("res://media/screens/" + lang)
-		root.get_texture().get_image().save_png("res://media/screens/%s/%s.png" % [lang, steps[at - 1][1]])
+		var shot := root.get_texture().get_image()
+		shot.save_png("res://media/screens/%s/%s.png" % [lang, steps[at - 1][1]])
+		if lang == "en" and steps[at - 1][1] == "match":
+			shot.save_jpg("res://site/og.jpg", 0.85)  # the site's link preview
 		print("saved ", lang, "/", steps[at - 1][1])
 	if at >= steps.size():
 		m.free()

@@ -12,7 +12,7 @@ mkdir -p "$OUT/play" "$OUT/screens"
 godot --path . --script res://tools/make_splash.gd  # the splash shows the version (needs a window)
 godot --headless --path . --import >/dev/null
 godot --headless --path . --export-release "Web" "$OUT/play/index.html"
-cp -R site/index.html site/style.css site/main.js site/favicon.svg site/i18n "$OUT/"
+cp -R site/index.html site/style.css site/main.js site/favicon.svg site/og.jpg site/i18n "$OUT/"  # og.jpg: the link preview (media/screens/en/match.png as JPEG)
 cp -R media/screens/en media/screens/ru "$OUT/screens/"
 python3 tools/site_data.py "$OUT"
 godot --path . --script res://tools/site_cards.gd -- "$OUT"  # the cards as the game draws them (needs a window)

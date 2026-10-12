@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.19.4] - 2026-10-12
+
+### Hinzugefügt
+- Ein Link zur Website in Telegram, WhatsApp, Discord, Slack und anderen Messengern zeigt eine Vorschau mit dem Haupt-Bildschirmfoto des Spiels (ein Spiel), Titel und Beschreibung.
+
 ## [0.19.3] - 2026-10-12
 
 ### Hinzugefügt

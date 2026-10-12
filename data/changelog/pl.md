@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.19.4] - 2026-10-12
+
+### Dodano
+- Link do strony w Telegramie, WhatsAppie, Discordzie, Slacku i innych komunikatorach pokazuje podgląd z głównym zrzutem ekranu gry (rozgrywka), tytułem i opisem.
+
 ## [0.19.3] - 2026-10-12
 
 ### Dodano
