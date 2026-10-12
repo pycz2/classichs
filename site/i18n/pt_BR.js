@@ -13,7 +13,7 @@
     "f5.t": "Coleção e baralhos", "f5.d": "Todas as cartas liberadas. Seus decks ficam salvos no navegador; dez decks Classic famosos estão prontos para jogar; os códigos de deck funcionam com o Hearthstone (importar e exportar).",
     "f6.t": "Rastreador de deck e histórico", "f6.d": "Seu deck com imagens e a chance de comprar cada carta, as cartas jogadas pelo oponente e um histórico por turnos — passe o mouse numa ação para ver quem ela atingiu.",
     "f7.t": "Ferramentas de depuração", "f7.d": "Nas Configurações: monte qualquer posição com o mouse e jogue contra o bot ou pelos dois lados, jogue uma cena de teste pronta para cada uma das 534 cartas e fichas, e veja qualquer carta com qualquer efeito.",
-    "f8.t": "8 idiomas, som e efeitos", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Música e sons, efeitos que voam e acertam na mesa, emotes com as palavras dos heróis, dois conjuntos de artes e seis versos.",
+    "f8.t": "8 idiomas, som e efeitos", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Sons e dois conjuntos de música à escolha (gerada, ou músicas livres de taverna medieval), efeitos que voam e acertam na mesa, emotes com as palavras dos heróis, dois conjuntos de artes e seis versos.",
     "screens.title": "Capturas de tela",
     "online.title": "Jogue com um amigo em três passos",
     "online.s1": "Jogar → Jogo Online: digite seu nome, escolha “Jogo normal” (e um deck) ou “Arena”, toque em “Criar Jogo” e envie o código de convite para um amigo.",

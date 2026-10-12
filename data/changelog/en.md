@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-10-12
+
+### Added
+- Settings → Music set: generated or open (CC0) — medieval tavern tunes by RandomMind: "Minstrel Dance" in the menu, "The Old Tower Inn", "King's Feast" and "The Bard's Tale" in battle. The sounds stay the generated ones.
+
 ## [0.23.3] - 2026-10-12
 
 ### Changed

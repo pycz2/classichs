@@ -13,7 +13,7 @@
     "f5.t": "Kolekcja i talie", "f5.d": "Wszystkie karty odblokowane. Twoje talie są zapisane w przeglądarce; dziesięć znanych talii Classic jest gotowych do gry; kody talii działają z Hearthstone (import i eksport).",
     "f6.t": "Śledzenie talii i historia", "f6.d": "Twoja talia z obrazkami i szansą dobrania każdej karty, karty zagrane przez przeciwnika i historia według tur — najedź na ruch, by zobaczyć, kogo trafił.",
     "f7.t": "Narzędzia debugowania", "f7.d": "W ustawieniach: zbuduj dowolną pozycję myszą i zagraj ją z botem lub za obie strony, zagraj gotową scenę testową dla każdej z 534 kart i żetonów, obejrzyj dowolną kartę z dowolnym efektem.",
-    "f8.t": "8 języków, dźwięk i efekty", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Muzyka i dźwięki, efekty, które lecą i trafiają na stole, emotki słowami bohaterów, dwa zestawy grafik kart i sześć rewersów.",
+    "f8.t": "8 języków, dźwięk i efekty", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Dźwięki i dwa zestawy muzyki do wyboru (generowana albo otwarta średniowieczna muzyka z karczmy), efekty, które lecą i trafiają na stole, emotki słowami bohaterów, dwa zestawy grafik kart i sześć rewersów.",
     "screens.title": "Zrzuty ekranu",
     "online.title": "Gra ze znajomym w trzech krokach",
     "online.s1": "Graj → Gra sieciowa: wpisz imię, wybierz „Zwykła gra” (i talię) albo „Arena”, naciśnij „Utwórz grę” i wyślij kod zaproszenia znajomemu.",

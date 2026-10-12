@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-10-12
+
+### Ajouté
+- Paramètres → Ensemble musical : générée ou libre (CC0) — airs de taverne médiévale de RandomMind : « Minstrel Dance » au menu, « The Old Tower Inn », « King's Feast » et « The Bard's Tale » en partie. Les sons restent les sons générés.
+
 ## [0.23.3] - 2026-10-12
 
 ### Modifié

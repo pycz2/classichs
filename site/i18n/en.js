@@ -13,7 +13,7 @@
     "f5.t": "Collection and decks", "f5.d": "All cards unlocked. Your decks are saved in the browser; ten well-known Classic decks are ready to play; deck codes work with Hearthstone (import and export).",
     "f6.t": "Deck tracker and history", "f6.d": "Your deck with card pictures and the chance to draw each one, the cards the opponent played, and a move history split by turns — hover a move to see whom it hit.",
     "f7.t": "Debug tools", "f7.d": "In Settings: build any position with the mouse and play it against the bot or for both sides, play a ready test scene for each of the 534 cards and tokens, and see any card with any effect on it.",
-    "f8.t": "8 languages, sound and effects", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Music and sounds, effects that fly and hit on the table, emotes in the heroes' own words, two sets of card art and six card backs.",
+    "f8.t": "8 languages, sound and effects", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Sounds and two music sets to choose from (generated, or open medieval tavern tunes), effects that fly and hit on the table, emotes in the heroes' own words, two sets of card art and six card backs.",
     "screens.title": "Screenshots",
     "online.title": "Play with a friend in three steps",
     "online.s1": "Play → Online Game: enter your name, choose “Normal Game” (and a deck) or “Arena”, press “Create Game” and send the invite code to a friend.",

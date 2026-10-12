@@ -4,7 +4,8 @@ extends RefCounted
 
 const DEFAULT_PATH := "user://settings.json"
 const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "shake": true, "fullscreen": false,
-	"tracker": false, "anim_speed": 1, "art": "generated", "card_back": "classic", "tracker_deck": true, "tracker_opp": true}
+	"tracker": false, "anim_speed": 1, "art": "generated", "card_back": "classic", "tracker_deck": true, "tracker_opp": true,
+	"music_set": "generated"}
 const BUSES := ["Music", "SFX"]
 
 static var path := DEFAULT_PATH
@@ -39,6 +40,9 @@ static func load_settings() -> void:
 						data[k] = v
 				elif k == "card_back":
 					if v is String and CardBacks.NAMES.has(v):
+						data[k] = v
+				elif k == "music_set":
+					if v in Sound.MUSIC_SETS:
 						data[k] = v
 				elif v is String and (v == "" or Locale.LANGS.has(v)):
 					data[k] = v

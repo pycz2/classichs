@@ -82,3 +82,12 @@ func test_without_sound_node_everything_is_silent() -> void:
 	Sound.play("attack")
 	Sound.music("menu")
 	check(Sound.instance == null, "no node: nothing plays, nothing fails")
+
+
+func test_music_sets() -> void:
+	eq(Sound.path_for("menu", "generated"), "res://audio/menu.wav", "generated menu music")
+	eq(Sound.path_for("menu", "open"), "res://audio/open/menu.ogg", "open menu music")
+	eq(Sound.path_for("battle_2", "open"), "res://audio/open/battle_2.ogg", "open battle music")
+	eq(Sound.path_for("attack", "open"), "res://audio/attack.wav", "sounds stay the generated ones")
+	for slot in ["menu", "battle_1", "battle_2", "battle_3"]:
+		check(ResourceLoader.exists(Sound.path_for(slot, "open")), "the open track is there: " + slot)

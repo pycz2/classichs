@@ -13,7 +13,7 @@
     "f5.t": "Collection et decks", "f5.d": "Toutes les cartes débloquées. Vos decks sont enregistrés dans le navigateur ; dix decks Classic célèbres sont prêts à jouer ; les codes de deck fonctionnent avec Hearthstone (import et export).",
     "f6.t": "Suivi de deck et historique", "f6.d": "Votre deck avec les images des cartes et la chance de piocher chacune, les cartes jouées par l'adversaire et un historique par tours — survolez une action pour voir qui elle a touché.",
     "f7.t": "Outils de débogage", "f7.d": "Dans les paramètres : construisez n'importe quelle position à la souris et jouez-la contre le bot ou pour les deux camps, jouez une scène de test prête pour chacune des 534 cartes et jetons, voyez n'importe quelle carte avec n'importe quel effet.",
-    "f8.t": "8 langues, son et effets", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Musique et sons, effets qui volent et frappent sur la table, émotes dans les mots des héros, deux jeux d'illustrations et six dos de carte.",
+    "f8.t": "8 langues, son et effets", "f8.d": "English, Русский, Deutsch, Français, Español, Português, Italiano, Polski. Des sons et deux ensembles de musique au choix (générée, ou airs de taverne médiévale libres), des effets qui volent et frappent sur la table, des émotes dans les mots des héros, deux jeux d'illustrations et six dos de carte.",
     "screens.title": "Captures d'écran",
     "online.title": "Jouez avec un ami en trois étapes",
     "online.s1": "Jouer → Partie en ligne : entrez votre nom, choisissez « Partie normale » (et un deck) ou « Arène », appuyez sur « Créer une partie » et envoyez le code d'invitation à un ami.",

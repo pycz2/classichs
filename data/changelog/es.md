@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-10-12
+
+### Añadido
+- Ajustes → Conjunto musical: generada o libre (CC0) — música de taberna medieval de RandomMind: «Minstrel Dance» en el menú, «The Old Tower Inn», «King's Feast» y «The Bard's Tale» en la partida. Los sonidos siguen siendo los generados.
+
 ## [0.23.3] - 2026-10-12
 
 ### Cambiado

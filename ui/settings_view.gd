@@ -69,6 +69,16 @@ func _build() -> void:
 		sl.value_changed.connect(func(v): _store(key, v))
 		_row(grid, tr(s[0]), sl)
 
+	var music := OptionButton.new()
+	music.name = "MusicSet"
+	for name in Sound.MUSIC_SETS:
+		music.add_item({"generated": tr("Generated"), "open": tr("Open (CC0)")}[name])
+	music.select(maxi(0, Sound.MUSIC_SETS.find(Settings.data.music_set)))
+	music.item_selected.connect(func(i):
+		_store("music_set", Sound.MUSIC_SETS[i])
+		Sound.restart_music())
+	_row(grid, tr("Music set"), music)
+
 	var art := OptionButton.new()
 	art.name = "ArtSet"
 	var sets := Art.sets()

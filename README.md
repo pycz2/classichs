@@ -42,6 +42,13 @@ tools/build_site.sh --publish  # ... and publish to the gh-pages branch
 
 Other tools: `tools/extract_cards.py` rebuilds `data/cards.json` from HearthstoneJSON; `tools/gen_audio.py` synthesizes `audio/*.wav`.
 
+## Music sets
+
+Settings → Music set chooses the music; the sounds are always the generated ones:
+
+- **Generated** — `audio/*.wav`, synthesized by `tools/gen_audio.py`.
+- **Open (CC0)** — `audio/open/*.ogg`, tracks by RandomMind from OpenGameArt, public domain (CC0): menu — [Minstrel Dance](https://opengameart.org/content/medieval-minstrel-dance); battle — [The Old Tower Inn](https://opengameart.org/content/medieval-the-old-tower-inn), [King's Feast](https://opengameart.org/content/medieval-kings-feast), [The Bard's Tale](https://opengameart.org/content/medieval-the-bards-tale). `tools/fetch_open_music.py` downloads and encodes them.
+
 ## Card art sets
 
 Every folder in `art/` is a picture set, selectable in Settings → Card art:

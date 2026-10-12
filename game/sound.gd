@@ -1,7 +1,9 @@
 class_name Sound
 extends Node
 ## Music and event sounds. Main adds one instance; without it every call
-## is silent (tests, tools). Sounds come from audio/*.wav (tools/gen_audio.py).
+## is silent (tests, tools). Sounds come from audio/*.wav (tools/gen_audio.py);
+## the music is the generated set (audio/*.wav) or the open one (audio/open/*.ogg,
+## tools/fetch_open_music.py), as chosen in the settings.
 
 ## Event type -> sound file.
 const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "death": "death",
@@ -10,6 +12,7 @@ const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "d
 const POOL := 6
 ## Sound.music("battle") plays these as a shuffled playlist.
 const BATTLE_TRACKS := ["battle_1", "battle_2", "battle_3"]
+const MUSIC_SETS := ["generated", "open"]
 
 static var instance: Sound
 
@@ -41,11 +44,24 @@ func _exit_tree() -> void:
 		instance = null
 
 
+## The file of a sound or a music track: the music comes from the chosen set.
+static func path_for(file: String, music_set: String) -> String:
+	if music_set == "open" and (file == "menu" or BATTLE_TRACKS.has(file)):
+		return "res://audio/open/%s.ogg" % file
+	return "res://audio/%s.wav" % file
+
+
 func _stream(file: String) -> AudioStream:
-	if not _streams.has(file):
-		var path := "res://audio/%s.wav" % file
-		_streams[file] = load(path) if ResourceLoader.exists(path) else null
-	return _streams[file]
+	var path := path_for(file, Settings.data.get("music_set", "generated"))
+	if not _streams.has(path):
+		_streams[path] = load(path) if ResourceLoader.exists(path) else null
+	return _streams[path]
+
+
+## The music set changed: the track playing now starts again from the new set.
+static func restart_music() -> void:
+	if instance and instance.music_file != "":
+		instance._start(instance.music_file)
 
 
 static func play(file: String) -> void:
