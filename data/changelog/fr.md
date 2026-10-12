@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.19.3] - 2026-10-12
+
+### Ajouté
+- Site : la version du jeu et un bloc « Nouveautés » (les dernières entrées du journal dans la langue de la page), une section « En partie », des questions et réponses (configuration, téléphones, où sont gardés les decks, jouer hors ligne, installer comme application, ce qu'envoie le jeu en ligne, signaler un bug), une section sur le code ouvert ; le lien du journal ouvre la langue de la page ; sur téléphone, la page ne défile plus de côté.
+
 ## [0.19.2] - 2026-10-12
 
 ### Modifié

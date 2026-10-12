@@ -19,6 +19,7 @@
     <a href="#heroes" data-i18n="nav.heroes">Heroes</a>
     <a href="#features" data-i18n="nav.features">Features</a>
     <a href="#screens" data-i18n="nav.screens">Screenshots</a>
+    <a href="#faq" data-i18n="nav.faq">FAQ</a>
     <a href="#play" class="nav-play" data-i18n="nav.play">Play</a>
     <a href="https://github.com/pycz2/classichs" target="_blank" rel="noopener">GitHub</a>
     <select id="lang" class="lang" aria-label="Language / Язык"></select>
@@ -36,6 +37,7 @@
       <a class="btn ghost" href="https://github.com/pycz2/classichs" target="_blank" rel="noopener" data-i18n="hero.source">Source code</a>
     </div>
     <p class="note" data-i18n="hero.note">Free. No account. Download: about 61 MB.</p>
+    <p class="version"><a href="#news" id="version"></a></p>
   </div>
   <a class="scroll-hint" href="#stats" aria-label="Scroll"><span></span></a>
 </section>
@@ -79,6 +81,18 @@
   </div>
 </section>
 
+<section id="match" class="features">
+  <h2 class="reveal" data-i18n="match.title">In a match</h2>
+  <div class="grid">
+    <article class="feature reveal"><div class="ico">🪙</div><h3 data-i18n="m1.t"></h3><p data-i18n="m1.d"></p></article>
+    <article class="feature reveal"><div class="ico">💡</div><h3 data-i18n="m2.t"></h3><p data-i18n="m2.d"></p></article>
+    <article class="feature reveal"><div class="ico">🎯</div><h3 data-i18n="m3.t"></h3><p data-i18n="m3.d"></p></article>
+    <article class="feature reveal"><div class="ico">💥</div><h3 data-i18n="m4.t"></h3><p data-i18n="m4.d"></p></article>
+    <article class="feature reveal"><div class="ico">⏱️</div><h3 data-i18n="m5.t"></h3><p data-i18n="m5.d"></p></article>
+    <article class="feature reveal"><div class="ico">💬</div><h3 data-i18n="m6.t"></h3><p data-i18n="m6.d"></p></article>
+  </div>
+</section>
+
 <section id="screens" class="screens">
   <h2 class="reveal" data-i18n="screens.title">Screenshots</h2>
   <div class="tabs reveal" role="tablist"></div>
@@ -110,9 +124,39 @@
   <p class="reveal"><a href="play/" target="_blank" rel="noopener" data-i18n="play.full">Open in a separate tab (full screen)</a></p>
 </section>
 
+<section id="news" class="news">
+  <h2 class="reveal" data-i18n="news.title">What's new</h2>
+  <div class="news-list reveal" id="newsList"></div>
+  <p class="more reveal"><a class="changelog-link" href="https://github.com/pycz2/classichs/blob/main/data/changelog/en.md" target="_blank" rel="noopener" data-i18n="news.all">All changes</a></p>
+</section>
+
+<section id="faq" class="faq">
+  <h2 class="reveal" data-i18n="faq.title">Questions</h2>
+  <div class="qa reveal">
+    <details><summary data-i18n="q1.q"></summary><p data-i18n="q1.a"></p></details>
+    <details><summary data-i18n="q2.q"></summary><p data-i18n="q2.a"></p></details>
+    <details><summary data-i18n="q3.q"></summary><p data-i18n="q3.a"></p></details>
+    <details><summary data-i18n="q4.q"></summary><p data-i18n="q4.a"></p></details>
+    <details><summary data-i18n="q5.q"></summary><p data-i18n="q5.a"></p></details>
+    <details><summary data-i18n="q6.q"></summary><p data-i18n="q6.a"></p></details>
+    <details><summary data-i18n="q7.q"></summary><p data-i18n="q7.a"></p></details>
+    <details><summary data-i18n="q8.q"></summary><p data-i18n="q8.a"></p></details>
+  </div>
+</section>
+
+<section id="dev" class="dev">
+  <h2 class="reveal" data-i18n="dev.title">Open source</h2>
+  <div class="grid">
+    <article class="feature reveal"><div class="ico">🛠️</div><h3 data-i18n="d1.t"></h3><p data-i18n="d1.d"></p></article>
+    <article class="feature reveal"><div class="ico">⚖️</div><h3 data-i18n="d2.t"></h3><p data-i18n="d2.d"></p></article>
+    <article class="feature reveal"><div class="ico">✅</div><h3 data-i18n="d3.t"></h3><p data-i18n="d3.d"></p></article>
+  </div>
+  <p class="more reveal"><a href="https://github.com/pycz2/classichs#build-and-run" target="_blank" rel="noopener" data-i18n="dev.build">Build and run it yourself</a> · <a href="https://github.com/pycz2/classichs/issues" target="_blank" rel="noopener" data-i18n="dev.issues">Report a bug</a></p>
+</section>
+
 <footer>
   <p data-i18n="footer.legal"></p>
-  <p><a href="https://github.com/pycz2/classichs">GitHub</a> · <a href="https://github.com/pycz2/classichs/blob/main/CHANGELOG.md" data-i18n="footer.changes">Changelog</a> · MIT</p>
+  <p><a href="https://github.com/pycz2/classichs">GitHub</a> · <a class="changelog-link" href="https://github.com/pycz2/classichs/blob/main/data/changelog/en.md" data-i18n="footer.changes">Changelog</a> · MIT</p>
 </footer>
 
 <div id="lightbox" class="lightbox" hidden><img alt=""></div>

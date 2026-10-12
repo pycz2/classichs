@@ -16,6 +16,7 @@ A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas
 - **Deck tracker** (your deck, cards left with the chance to draw each one, what the opponent played) and the **move history** by turns: a tile for every move, hover it to see what it did; the full text history on a click.
 - **Debug tools** (Settings): build any position with the mouse (or in JSON) and play it against the bot or for both sides; a test scene for each of the 534 cards and tokens; any card with any effect.
 - **8 languages** (English, Русский, Deutsch, Français, Español, Português (Brasil), Italiano, Polski), synthesized sound and music, 6 emotes in the heroes' own words (speech bubbles) and mute, six card backs, animation speed, screen shake toggle, fullscreen.
+- **Web app:** the browser version can be installed as an app (PWA); after the first runs the browser keeps the game files, so it starts faster and opens offline.
 - **Card art:** generated illustrations for every card and hero (see *Card art sets* below); frames, gems and table effects are drawn by code.
 
 | | |

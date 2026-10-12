@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.19.3] - 2026-10-12
+
+### Añadido
+- Sitio: la versión del juego y un bloque «Novedades» (las últimas entradas del registro en el idioma de la página), una sección «En la partida», preguntas y respuestas (requisitos, móviles, dónde se guardan los mazos, jugar sin conexión, instalar como aplicación, qué envía el juego en línea, cómo informar de un error), una sección de código abierto; el enlace al registro abre el idioma de la página; en el móvil la página ya no se desplaza de lado.
+
 ## [0.19.2] - 2026-10-12
 
 ### Cambiado

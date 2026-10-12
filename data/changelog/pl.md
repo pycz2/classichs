@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.19.3] - 2026-10-12
+
+### Dodano
+- Strona: wersja gry i blok „Co nowego” (ostatnie wpisy dziennika zmian w języku strony), sekcja „W grze”, pytania i odpowiedzi (wymagania, telefony, gdzie są zapisane talie, gra offline, instalacja jako aplikacji, co wysyła gra sieciowa, jak zgłosić błąd), sekcja o otwartym kodzie; link do dziennika zmian otwiera język strony; na telefonie strona nie przewija się już w bok.
+
 ## [0.19.2] - 2026-10-12
 
 ### Zmieniono
