@@ -41,7 +41,7 @@ func sync() -> void:
 
 func _animated() -> bool:
 	var h := Cards.of(s.card_id)
-	return glow.a > 0.0 or s.silenced or s.spellpower() > 0 or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
+	return glow.a > 0.0 or s.silenced or s.spellpower() > 0 or s.has("ELUSIVE") or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
 		or (not s.silenced and (h.has("on") or h.has("aura")))
 
 
@@ -83,6 +83,11 @@ func _draw() -> void:
 		draw_colored_polygon(oval, Color(0.1, 0.09, 0.16, 0.3))
 		draw_colored_polygon(oval, Color(0.62, 0.58, 0.75, 0.5), _shift(uv, Vector2(_t * 0.05, _t * 0.02)), _smoke())
 		draw_colored_polygon(oval, Color(0.4, 0.38, 0.52, 0.4), _shift(uv, Vector2(-_t * 0.03, 0.4 + _t * 0.04)), _smoke())
+	if s.has("ELUSIVE"):  # a shimmering golden haze: spells and hero powers can't pick it
+		var uv := _oval_uv(oval)
+		draw_colored_polygon(oval, Color(1.0, 0.85, 0.3, 0.28 + 0.08 * sin(_t * 2.5)), _shift(uv, Vector2(_t * 0.06, -_t * 0.03)), _smoke())
+		draw_colored_polygon(oval, Color(1.0, 0.95, 0.6, 0.18), _shift(uv, Vector2(-_t * 0.04, 0.5 + _t * 0.05)), _smoke())
+		Frames.ring(self, Art.outline("oval", OVAL.grow(1)), Color(1.0, 0.85, 0.35, 0.55 + 0.3 * sin(_t * 3.0)), 2.5)
 	if s.has("FROZEN"):  # a sheet of frost over the portrait, an icy rim, a cold shimmer
 		var ice := Sprites.get_tex("ice")
 		if ice:

@@ -11,7 +11,7 @@ signal back
 ## [key, label]: a tag key (TAUNT...) is given as a tag; the others are below.
 const EFFECTS := [
 	["TAUNT", "Taunt"], ["DIVINE_SHIELD", "Divine Shield"], ["STEALTH", "Stealth"], ["WINDFURY", "Windfury"],
-	["CHARGE", "Charge"], ["IMMUNE", "Immune"], ["FROZEN", "Frozen"], ["SPELLPOWER", "Spell Damage +1"],
+	["CHARGE", "Charge"], ["IMMUNE", "Immune"], ["ELUSIVE", "Elusive"], ["FROZEN", "Frozen"], ["SPELLPOWER", "Spell Damage +1"],
 	["sleeping", "Played this turn (asleep)"], ["damaged", "Damaged (2)"],
 	["buff", "+1/+1 (Shattered Sun Cleric)"], ["turn_buff", "+3 Attack this turn (Rockbiter)"],
 	["set_attack", "Attack set to 1 (Humility)"], ["aura", "Aura +1/+1 (Stormwind Champion)"],

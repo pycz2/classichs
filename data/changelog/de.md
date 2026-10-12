@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.18.4] - 2026-10-12
+
+### Hinzugefügt
+- Unangreifbar: der Diener ist von schimmerndem goldenem Dunst umhüllt, und das Wort hat sein Erklärfenster (Zauber und Heldenfähigkeiten können ihn nicht als Ziel wählen).
+
 ## [0.18.3] - 2026-10-12
 
 ### Hinzugefügt

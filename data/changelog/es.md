@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.18.4] - 2026-10-12
+
+### Añadido
+- Esquivo: el esbirro está envuelto en una neblina dorada que brilla, y la palabra tiene su ventanita (hechizos y poderes de héroe no pueden elegirlo como objetivo).
+
 ## [0.18.3] - 2026-10-12
 
 ### Añadido

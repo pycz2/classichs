@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.18.4] - 2026-10-12
+
+### Ajouté
+- Insaisissable : le serviteur est enveloppé d'une brume dorée chatoyante, et le mot a sa fenêtre d'aide (sorts et pouvoirs héroïques ne peuvent pas le cibler).
+
 ## [0.18.3] - 2026-10-12
 
 ### Ajouté

@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.18.4] - 2026-10-12
+
+### Adicionado
+- Esquivo: o lacaio fica envolto numa névoa dourada cintilante, e a palavra tem sua janelinha (feitiços e poderes heroicos não podem escolhê-lo como alvo).
+
 ## [0.18.3] - 2026-10-12
 
 ### Adicionado

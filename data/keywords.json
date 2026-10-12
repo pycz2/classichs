@@ -350,5 +350,27 @@
       "it": "Non può subire danni.",
       "pl": "Nie może otrzymywać obrażeń."
     }
+  },
+  "ELUSIVE": {
+    "name": {
+      "en": "Elusive",
+      "ru": "Неуловимость",
+      "de": "Unangreifbar",
+      "fr": "Insaisissable",
+      "es": "Esquivo",
+      "pt_BR": "Esquivo",
+      "it": "Elusivo",
+      "pl": "Nieuchwytność"
+    },
+    "text": {
+      "en": "Can't be targeted by spells or Hero Powers.",
+      "ru": "Не может быть целью заклинаний и силы героя.",
+      "de": "Kann nicht als Ziel von Zaubern oder Heldenfähigkeiten gewählt werden.",
+      "fr": "Ne peut pas être la cible de sorts ou de pouvoirs héroïques.",
+      "es": "No puede ser objetivo de hechizos ni de poderes de héroe.",
+      "pt_BR": "Não pode ser alvo de feitiços nem de poderes heroicos.",
+      "it": "Non può essere bersaglio di magie né di poteri eroe.",
+      "pl": "Nie może być celem zaklęć ani mocy specjalnych."
+    }
   }
 }
