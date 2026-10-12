@@ -4,6 +4,7 @@ the game's 8 languages) and copies the heroes' portraits. Used by tools/build_si
 
 Usage: python3 tools/site_data.py <out dir>
 """
+import gzip
 import json
 import os
 import re
@@ -22,6 +23,14 @@ SHOWCASE = ["VAN_CS2_029", "VAN_CS2_182", "VAN_CS2_033", "VAN_EX1_298", "VAN_CS2
 def text(v, lang):
     s = v.get(LANGS[lang], v.get("enUS", "")) if isinstance(v, dict) else (v or "")
     return re.sub(r"<[^>]+>|[$#\[\]]|\{\d\}", "", s).replace("\n", " ").strip()
+
+
+## What a browser downloads on the first start: the game files as the server
+## sends them (compressed), in MB.
+def download_mb(play):
+    files = ["index.wasm", "index.pck", "index.js"]
+    size = sum(len(gzip.compress(open(os.path.join(play, f), "rb").read(), 6)) for f in files)
+    return round(size / 1e6)
 
 
 def main(out):
@@ -46,9 +55,10 @@ def main(out):
         return e
 
     site = {"heroes": [e for e in map(entry, HEROES) if e], "cards": [e for e in map(entry, SHOWCASE) if e],
-            "total": sum(1 for c in cards.values() if c.get("collectible") and c["type"] != "HERO")}
+            "total": sum(1 for c in cards.values() if c.get("collectible") and c["type"] != "HERO"),
+            "download_mb": download_mb(os.path.join(out, "play"))}
     json.dump(site, open(os.path.join(out, "data.json"), "w"), ensure_ascii=False)
-    print(f"site data: {len(site['heroes'])} heroes, {len(site['cards'])} cards")
+    print(f"site data: {len(site['heroes'])} heroes, {len(site['cards'])} cards, download {site['download_mb']} MB")
 
 
 if __name__ == "__main__":

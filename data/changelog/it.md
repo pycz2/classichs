@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-10-12
+
+### Modificato
+- Sito: nuove schermate (cronologia per turni, tracker del mazzo, lezioni prima delle missioni, strumenti di debug; la pagina russa mostra schermate in russo), testi aggiornati e dimensione del download (circa 61 MB). Sul telefono un tocco ingrandisce una carta del ventaglio e un doppio tocco la gira.
+
 ## [0.19.0] - 2026-10-12
 
 ### Aggiunto

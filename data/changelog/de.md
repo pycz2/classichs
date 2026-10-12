@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-10-12
+
+### Geändert
+- Website: neue Bildschirmfotos (Verlauf nach Zügen, Decktracker, Lektionen vor Missionen, Debug-Werkzeuge; die russische Seite zeigt russische Bilder), Texte für den heutigen Stand des Spiels und die Downloadgröße (etwa 61 MB). Auf dem Handy vergrößert ein Tippen eine Karte im Fächer, Doppeltippen dreht sie um.
+
 ## [0.19.0] - 2026-10-12
 
 ### Hinzugefügt

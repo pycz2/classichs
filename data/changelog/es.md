@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-10-12
+
+### Cambiado
+- Sitio: capturas nuevas (historial por turnos, rastreador de mazo, lecciones antes de las misiones, herramientas de depuración; la página rusa muestra capturas en ruso), textos al día y tamaño de la descarga (unos 61 MB). En el móvil, un toque amplía una carta del abanico y un doble toque le da la vuelta.
+
 ## [0.19.0] - 2026-10-12
 
 ### Añadido
