@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.23.1] - 2026-10-12
+
+### Behoben
+- Der Knopf zum Stummschalten des Gegners zeigt den Zustand: „Stummschalten“, und „Stummschaltung aufheben“, solange der Gegner stumm ist.
+
 ## [0.23.0] - 2026-10-12
 
 ### Geändert

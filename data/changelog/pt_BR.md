@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.23.1] - 2026-10-12
+
+### Corrigido
+- O botão que silencia o oponente mostra o estado: “Silenciar”, e “Ativar som” enquanto o oponente está silenciado.
+
 ## [0.23.0] - 2026-10-12
 
 ### Alterado

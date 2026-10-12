@@ -256,8 +256,14 @@ func test_emote_cooldown_and_mute_hides_bubble() -> void:
 	host.send_emote("wow")
 	LoopbackTransport.pump(b[0])
 	check(guest.bubble_text(0) == _said(guest, 0, "greetings"), "second emote dropped by the cooldown")
+	var button := guest.find_child("MuteButton", true, false) as Button
+	eq(button.text, "Mute", "the opponent can be heard: Mute")
 	guest.set_muted(true)
 	eq(guest.bubble_text(0), "", "mute hides the shown bubble")
+	eq(button.text, "Unmute", "muted: the button turns the opponent back on")
+	button.button_pressed = false
+	check(not guest.muted, "unmuted")
+	eq(button.text, "Mute", "Mute again")
 	_free_bound(b)
 
 

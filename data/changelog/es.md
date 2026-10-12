@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.23.1] - 2026-10-12
+
+### Corregido
+- El botón que silencia al rival muestra el estado: «Silenciar», y «Activar sonido» mientras el rival está silenciado.
+
 ## [0.23.0] - 2026-10-12
 
 ### Cambiado

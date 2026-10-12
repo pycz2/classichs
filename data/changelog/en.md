@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.23.1] - 2026-10-12
+
+### Fixed
+- The button that mutes the opponent shows the state: "Mute", and "Unmute" while the opponent is muted.
+
 ## [0.23.0] - 2026-10-12
 
 ### Changed

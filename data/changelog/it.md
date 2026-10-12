@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.23.1] - 2026-10-12
+
+### Corretto
+- Il pulsante che silenzia l'avversario mostra lo stato: “Muto”, e “Riattiva audio” finché l'avversario è silenziato.
+
 ## [0.23.0] - 2026-10-12
 
 ### Modificato

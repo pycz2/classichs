@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.23.1] - 2026-10-12
+
+### Corrigé
+- Le bouton qui coupe l'adversaire montre l'état : « Couper le son », et « Rétablir le son » tant que l'adversaire est coupé.
+
 ## [0.23.0] - 2026-10-12
 
 ### Modifié

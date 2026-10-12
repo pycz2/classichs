@@ -18,7 +18,7 @@ const TOOLTIP_POS := Vector2(1035, 160)
 
 ## Fixed button texts by node name, set again when the language changes.
 const LABELS := {"HistoryButton": "History", "JsonButton": "Position -> JSON", "EmoteButton": "Emote",
-	"MuteButton": "Mute", "SettingsButton": "Settings"}
+	"SettingsButton": "Settings"}
 const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "thanks": "Thanks.",
 	"wow": "Wow!", "oops": "Oops.", "threaten": "I will destroy you!"}
 
@@ -227,6 +227,10 @@ func bind_online(m: Match, s: NetSession) -> void:
 
 func set_muted(on: bool) -> void:
 	muted = on
+	var b := find_child("MuteButton", true, false) as Button
+	if b:
+		b.set_pressed_no_signal(on)
+		b.text = tr("Unmute") if on else tr("Mute")  # what a press will do
 	if on and controller and _bubbles.has(1 - viewer()) and is_instance_valid(_bubbles[1 - viewer()]):
 		_bubbles[1 - viewer()].queue_free()
 
@@ -854,6 +858,7 @@ func relabel() -> void:
 		var b := find_child(n, true, false) as Button
 		if b:
 			b.text = tr(LABELS[n])
+	set_muted(muted)  # Mute or Unmute
 	for id in EMOTES:
 		(_wheel.get_node("Emote_" + id) as Button).text = tr(EMOTES[id])
 	_history.relabel()

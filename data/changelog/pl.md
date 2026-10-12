@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.23.1] - 2026-10-12
+
+### Naprawiono
+- Przycisk wyciszania przeciwnika pokazuje stan: „Wycisz”, a gdy przeciwnik jest wyciszony — „Wyłącz wyciszenie”.
+
 ## [0.23.0] - 2026-10-12
 
 ### Zmieniono
