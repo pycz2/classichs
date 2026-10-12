@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.23.2] - 2026-10-12
+
+### Zmieniono
+- Karta z Kombinacją w ręce, którą można zagrać, świeci na żółto zamiast na zielono, gdy w tej turze zagrano już kartę (Kombinacja zadziała).
+- Moneta zawsze pojawia się z własną animacją — obraca się w złotym świetle i trafia do ręki — także gdy przeciwnik skończył mulligan później, i u obu graczy.
+
 ## [0.23.1] - 2026-10-12
 
 ### Naprawiono

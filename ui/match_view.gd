@@ -1122,11 +1122,14 @@ func _own_glows() -> void:
 				if _views.has(id):
 					_views[id].set_glow(Palette.TARGET)
 		return
+	var plan := _plan()
+	var combo: bool = plan.players[viewer()].cards_played_this_turn > 0  # a card played this turn
 	for a in legal:
 		var id: int = {"play": a.get("entity", -1), "attack": a.get("attacker", -1),
 			"hero_power": g.players[viewer()].hero_power.id}.get(a.type, -1)
 		if _views.has(id):
-			_views[id].set_glow(Palette.PLAYABLE)
+			var lit: bool = a.type == "play" and combo and plan.ent(id).card().get("mechanics", []).has("COMBO")
+			_views[id].set_glow(Palette.COMBO if lit else Palette.PLAYABLE)
 
 
 # --- input --------------------------------------------------------------------
@@ -1379,6 +1382,9 @@ func _animate(events: Array) -> void:
 				await _fatigue(ev)
 			"burn":
 				await _burn(ev)
+			"add_to_hand":
+				if ev.get("card", "") == Game.COIN and not ev.get("shown", false):
+					await _coin_in(ev)
 			"turn_start":
 				your_turn = your_turn or (ev.get("player", -1) == me and ev.has("turn"))
 	if not hit.done:
@@ -1387,6 +1393,30 @@ func _animate(events: Array) -> void:
 	if your_turn:
 		_banner(tr("Your Turn"))
 	await _wait(0.32)
+
+
+## The Coin comes for the second player whenever the mulligan ends (also when
+## the opponent chose last): it spins in with a golden light over that player's
+## side of the table, then goes into the hand.
+func _coin_in(ev: Dictionary) -> void:
+	var own: bool = ev.player == viewer()
+	var e := g.ent(ev.entity)
+	var cv := CardView.make(Game.COIN, 1.3)
+	if e:
+		cv.show_entity(e, g)
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.set_glow(Palette.SELECTED)
+	_fx.add_child(cv)
+	cv.pivot_offset = cv.size / 2.0
+	cv.position = Vector2(640, 430 if own else 150) - cv.size / 2.0
+	cv.scale = Vector2(0.05, 1.0)
+	var tw := cv.create_tween()
+	tw.tween_property(cv, "scale", Vector2(-1.0, 1.0), Anim.d(0.2))
+	tw.tween_property(cv, "scale", Vector2(1.0, 1.0), Anim.d(0.25)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	Sound.play("draw")
+	await _wait(0.9)
+	_moved[ev.entity] = cv.position + cv.size / 2.0  # the hand's card starts from here
+	cv.queue_free()
 
 
 ## The mulligan comes back: new cards fly from the deck into the places of the
@@ -1424,6 +1454,7 @@ func _mulligan_result(events: Array, p: int) -> void:
 		if ev.type == "add_to_hand" and ev.player == p and ev.card == Game.COIN:
 			coin_ev = ev
 	if not coin_ev.is_empty():  # the Coin turns up beside the hand, spinning in with a golden light
+		coin_ev["shown"] = true  # (not again in the batch's own turn)
 		var last: Vector2 = slots.values().reduce(func(a, b): return a if a.x > b.x else b, Vector2(400, 250))
 		var cv := CardView.make(Game.COIN, 1.3)
 		cv.show_entity(g.ent(coin_ev.entity), g)

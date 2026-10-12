@@ -4,6 +4,12 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.23.2] - 2026-10-12
+
+### Modifié
+- Une carte Combo jouable en main brille en jaune au lieu de vert dès qu'une carte a été jouée ce tour-ci (son Combo s'appliquera).
+- La Pièce arrive toujours avec sa propre animation — elle tourne dans une lumière dorée puis va en main — même si l'adversaire a fini son mulligan plus tard, et pour les deux joueurs.
+
 ## [0.23.1] - 2026-10-12
 
 ### Corrigé

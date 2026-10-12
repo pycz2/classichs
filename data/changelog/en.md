@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.23.2] - 2026-10-12
+
+### Changed
+- A playable Combo card in the hand glows yellow instead of green once a card was played this turn (its Combo will work).
+- The Coin always comes with its own animation — it spins in with a golden light and goes into the hand — also when the opponent finished the mulligan later, and for both players.
+
 ## [0.23.1] - 2026-10-12
 
 ### Fixed

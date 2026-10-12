@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.23.2] - 2026-10-12
+
+### Geändert
+- Eine spielbare Karte mit Combo leuchtet gelb statt grün, sobald in diesem Zug schon eine Karte gespielt wurde (die Combo wirkt).
+- Die Münze kommt immer mit ihrer eigenen Animation — sie dreht sich mit goldenem Licht herein und geht auf die Hand —, auch wenn der Gegner den Mulligan später beendet hat, und bei beiden Spielern.
+
 ## [0.23.1] - 2026-10-12
 
 ### Behoben

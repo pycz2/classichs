@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.23.2] - 2026-10-12
+
+### Modificato
+- Una carta con Combo giocabile in mano brilla di giallo invece che di verde quando in questo turno è già stata giocata una carta (la Combo funzionerà).
+- La Moneta arriva sempre con la sua animazione — gira con una luce dorata e va in mano — anche quando l'avversario ha finito il mulligan più tardi, e per entrambi i giocatori.
+
 ## [0.23.1] - 2026-10-12
 
 ### Corretto

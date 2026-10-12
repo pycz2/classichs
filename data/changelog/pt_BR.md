@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.23.2] - 2026-10-12
+
+### Alterado
+- Uma carta com Combo jogável na mão brilha em amarelo em vez de verde quando uma carta já foi jogada neste turno (o Combo vai funcionar).
+- A Moeda sempre chega com a própria animação — gira com luz dourada e vai para a mão —, também quando o oponente terminou o mulligan depois, e para os dois jogadores.
+
 ## [0.23.1] - 2026-10-12
 
 ### Corrigido

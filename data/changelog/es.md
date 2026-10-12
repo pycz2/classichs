@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.23.2] - 2026-10-12
+
+### Cambiado
+- Una carta con Combo jugable en la mano brilla en amarillo en vez de verde cuando ya se jugó una carta este turno (su Combo se activará).
+- La Moneda siempre llega con su propia animación — gira con luz dorada y va a la mano —, también cuando el rival terminó el mulligan más tarde, y para los dos jugadores.
+
 ## [0.23.1] - 2026-10-12
 
 ### Corregido
