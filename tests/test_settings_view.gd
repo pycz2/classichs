@@ -9,6 +9,7 @@ func _setup() -> void:
 	Settings.path = "user://test_settings_view.json"
 	Profile.path = "user://test_profile_settings.json"
 	Settings.load_settings()
+	Settings.save()  # not a first run (that one asks for the language)
 
 
 func _teardown() -> void:

@@ -11,8 +11,13 @@ static var path := DEFAULT_PATH
 static var data: Dictionary = DEFAULTS.duplicate()
 
 
+## True when there was no settings file yet (the first run: the language is asked).
+static var first_run := false
+
+
 static func load_settings() -> void:
 	data = DEFAULTS.duplicate()
+	first_run = not FileAccess.file_exists(path)
 	var j := JSON.new()
 	if not FileAccess.file_exists(path) or j.parse(FileAccess.get_file_as_string(path)) != OK or not j.data is Dictionary:
 		return
