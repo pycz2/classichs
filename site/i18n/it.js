@@ -28,7 +28,7 @@
     "shot.history.tab": "Cronologia", "shot.history.cap": "Cronologia per turni: passa su un'azione per vedere cosa ha fatto",
     "shot.collection.tab": "Collezione", "shot.collection.cap": "Collezione e mazzi in un'unica schermata",
     "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "Tutorial: sei missioni come l'originale",
-    "shot.online.tab": "Online", "shot.online.cap": "Gioco online passo passo: crea una partita o unisciti",
+    "shot.online.tab": "Online", "shot.online.cap": "Gioco online: partita normale o Arena, poi crea una partita o unisciti",
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu principale",
     "shot.settings.tab": "Impostazioni", "shot.settings.cap": "Impostazioni: lingua, nome, musica e suoni, illustrazioni, dorso, velocità delle animazioni, strumenti di debug",
     "nav.heroes": "Eroi",

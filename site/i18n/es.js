@@ -28,7 +28,7 @@
     "shot.history.tab": "Historial", "shot.history.cap": "Historial por turnos: pasa el ratón por una acción para ver qué hizo",
     "shot.collection.tab": "Colección", "shot.collection.cap": "Colección y mazos en una sola pantalla",
     "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "Tutorial: seis misiones, como el original",
-    "shot.online.tab": "En línea", "shot.online.cap": "Juego en línea paso a paso: crea una partida o únete a una",
+    "shot.online.tab": "En línea", "shot.online.cap": "Juego en línea: partida normal o Arena, luego crea una partida o únete a una",
     "shot.menu.tab": "Menú", "shot.menu.cap": "Menú principal",
     "shot.settings.tab": "Ajustes", "shot.settings.cap": "Ajustes: idioma, nombre, música y sonidos, ilustraciones, reverso, velocidad de animación, herramientas de depuración",
     "nav.heroes": "Héroes",

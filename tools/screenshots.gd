@@ -45,7 +45,7 @@ func _initialize() -> void:
 		steps.append([func(): m.show_tutorial_intro(4), "intro"])
 		steps.append([func():
 			m.show_online()
-			m.screen.show_stage("mode"), "online"])
+			m.screen.show_stage("kind"), "online"])
 		steps.append([func(): m.show_settings(), "settings"])
 		steps.append([func(): m.show_debug_table(), "debug"])
 		steps.append([_arena_draft, "arena"])
