@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-12
+
+### Dodano
+- Kolejka rozkazów: następny ruch można wydać bez czekania na koniec animacji poprzedniego — zagrać kartę, zaatakować, użyć mocy bohatera, zakończyć turę. Rozkazy czekają w kolejce (zaznaczone na żółto) i wykonują się po kolei po animacjach; to, czy rozkaz jest możliwy, sprawdza się po tych, które już czekają. Gdy rozkaz staje się niemożliwy (tura się skończyła), kolejka jest anulowana z podpowiedzią. W samouczku kolejki nie ma.
+
+### Zmieniono
+- Lont tury pali się bez kropkowanej linii popiołu za sobą.
+
 ## [0.21.1] - 2026-10-12
 
 ### Zmieniono

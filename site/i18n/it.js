@@ -53,7 +53,7 @@
     "m2.t": "Suggerimenti al passaggio",
     "m2.d": "Passa su una carta: dei riquadri spiegano le sue parole chiave e si accendono i cristalli di mana che spenderà. Il pulsante “Fine turno” si illumina di verde quando non resta nulla da fare.",
     "m3.t": "Trascina e mira",
-    "m3.d": "Trascina una carta per giocarla e un servitore per attaccare; una freccia mostra il bersaglio. Un servitore con Grido di Battaglia prima prende posto, poi mira.",
+    "m3.d": "Trascina una carta per giocarla e un servitore per attaccare; una freccia mostra il bersaglio. Un servitore con Grido di Battaglia prima prende posto, poi mira. Puoi dare l'ordine successivo mentre il precedente è ancora in animazione: gli ordini aspettano in coda e vanno uno alla volta.",
     "m4.t": "Effetti sul tavolo",
     "m4.d": "I proiettili volano uno alla volta, gelo e fuoco colpiscono il bersaglio, i colpi pesanti scuotono il tavolo, un eroe sconfitto va in frantumi, e il risultato — vittoria, sconfitta o pareggio — appare sulla sua immagine.",
     "m5.t": "Orologio e miccia",

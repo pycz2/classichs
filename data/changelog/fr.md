@@ -4,6 +4,14 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-12
+
+### Ajouté
+- Une file d'ordres : l'action suivante peut être donnée sans attendre la fin de l'animation précédente — jouer une carte, attaquer, utiliser le pouvoir héroïque, finir le tour. Les ordres attendent dans une file (marqués en jaune) et s'exécutent un par un après les animations, dans l'ordre ; la possibilité d'un ordre est vérifiée après ceux déjà en file. Si un ordre devient impossible (le tour est fini), la file est annulée avec une indication. Le tutoriel n'a pas de file.
+
+### Modifié
+- La mèche du tour brûle sans la ligne pointillée de cendres derrière elle.
+
 ## [0.21.1] - 2026-10-12
 
 ### Modifié

@@ -82,6 +82,11 @@ var end_turn_ready := false
 ## Event batches waiting for their animation; while one plays the table is busy.
 var _queue: Array = []
 var _busy := false
+## The local player's orders given while the table still animates: carried out
+## one by one after the animations, in order (not in the tutorial).
+var _pending_acts: Array = []
+var _plan_cache: GameState  # the state after those orders (null = not made yet)
+var _drag_home := []  # where a dragged hand card was: [id, position, scale, rotation]
 var _final_refresh := false
 const BURN_SHADER := preload("res://ui/burn.gdshader")
 var _ending := false  # the losing hero's portrait is shattering (the result waits)
@@ -383,7 +388,7 @@ func apply_intent(i: Dictionary) -> void:
 # --- drag and drop ------------------------------------------------------------------
 
 func _on_press(v: EntityView) -> void:
-	if not my_action() or _overlay != null or _busy:
+	if not my_action() or _overlay != null or (_busy and tutorial != null):
 		return
 	if _sel.get("stage", "") in ["target", "position"]:
 		click_entity(v.entity_id)  # finishing a click-mode choice
@@ -421,6 +426,8 @@ func _start_drag() -> void:
 		return
 	_dragging = true
 	_sel = {"id": id, "actions": acts, "dragging": true}
+	var dv: EntityView = _views.get(id)
+	_drag_home = [id, dv.position, dv.scale.x, dv.rotation] if dv and dv.get_meta("kind") == "hand" else []
 	_apply_glows()
 	if not _targets(acts).is_empty():
 		for t in _targets(acts):
@@ -762,7 +769,55 @@ func my_action() -> bool:
 
 
 func _legal() -> Array:
-	return g.legal_actions().filter(func(a): return a.player == viewer()) if my_action() else []
+	return _plan().legal_actions().filter(func(a): return a.player == viewer()) if my_action() else []
+
+
+## The state the next order is checked against: the game after the orders still
+## waiting in the queue.
+func _plan() -> GameState:
+	if _pending_acts.is_empty():
+		return g
+	if _plan_cache == null:
+		_plan_cache = g.clone()
+		for a in _pending_acts:
+			_plan_cache.apply(a)
+	return _plan_cache
+
+
+## Carries out an order now, or queues it while the table animates.
+func _act(a: Dictionary) -> void:
+	if a.is_empty():
+		return
+	if (_busy or not _pending_acts.is_empty()) and tutorial == null:
+		_pending_acts.append(a)
+		_plan_cache = null
+		_return_dragged()
+		_apply_glows()
+		return
+	controller.submit(a)
+
+
+## The orders waiting for the animations, in order; an order that is no longer
+## possible (the turn ended, a target died) drops it and the rest.
+func _release_orders() -> void:
+	while not _pending_acts.is_empty() and not _busy:
+		var a: Dictionary = _pending_acts.pop_front()
+		_plan_cache = null
+		var r := controller.submit(a)
+		if not r.ok:
+			_pending_acts.clear()
+			show_hint(tr("The queued moves were cancelled: they are no longer possible"), 3.0)
+	_apply_glows()
+
+
+## A hand card dropped as a queued order goes back to its place until its turn comes.
+## (While the table animates the layout waits, so the card is put back by hand.)
+func _return_dragged() -> void:
+	if _drag_home.size() == 4 and not _dragging:
+		var v: EntityView = _views.get(_drag_home[0])
+		if v:
+			_glide(v, _drag_home[1], _drag_home[2], _drag_home[3])
+		_drag_home = []
 
 
 func show_hint(text: String, seconds := 2.0) -> void:
@@ -803,6 +858,7 @@ func relabel() -> void:
 func refresh() -> void:
 	if _busy and not _final_refresh:
 		_apply_glows()  # the layout changes when the running animation ends
+		_return_dragged()
 		return
 	var me := viewer()
 	var opp := g.opponent(me)
@@ -1034,6 +1090,11 @@ func _apply_glows() -> void:
 		looked = g.players[opp].hand[_opp_hover].id
 	if _views.has(looked) and looked != _sel.get("id", -1):
 		_views[looked].set_glow(Palette.OPPONENT)
+	for a in _pending_acts:  # what waits in the queue is marked as chosen
+		var id: int = {"play": a.get("entity", -1), "attack": a.get("attacker", -1),
+			"hero_power": g.players[viewer()].hero_power.id}.get(a.type, -1)
+		if _views.has(id):
+			_views[id].set_glow(Palette.SELECTED)
 
 
 ## This player's glows: the chosen card and its targets, or what can be played.
@@ -1183,22 +1244,22 @@ func _advance() -> void:
 		return
 	var a: Dictionary = acts[0]
 	_sel = {}
-	controller.submit(a)
+	_act(a)
 	if _overlay == null:
 		refresh()
 
 
 func _on_end_turn() -> void:
-	if _busy:
+	if _busy and tutorial != null:
 		return
 	if tutorial and my_action():
 		var why := tutorial.end_turn_block(g, viewer())
 		if why != "":
 			show_hint(why, 3.0)
 			return
-	if my_action():
+	if my_action() and _legal().any(func(a): return a.type == "end_turn"):
 		_sel = {}
-		controller.submit({"type": "end_turn", "player": viewer()})
+		_act({"type": "end_turn", "player": viewer()})
 
 
 func _on_concede() -> void:
@@ -1270,6 +1331,7 @@ func _play_queue() -> void:
 		await _animate(_queue.pop_front())
 	_busy = false
 	refresh()
+	_release_orders()  # the next queued order starts its own animation
 
 
 ## Plays one batch: what happens before the change (cards shown, attacks,

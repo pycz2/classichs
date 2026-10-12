@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-12
+
+### Añadido
+- Una cola de órdenes: la siguiente jugada se puede dar sin esperar a que termine la animación anterior — jugar una carta, atacar, usar el poder de héroe, terminar el turno. Las órdenes esperan en cola (marcadas en amarillo) y se cumplen de una en una tras las animaciones, en orden; si una orden es posible se comprueba después de las que ya esperan. Si una orden se vuelve imposible (el turno terminó), la cola se cancela con un aviso. El tutorial no tiene cola.
+
+### Cambiado
+- La mecha del turno arde sin la línea punteada de ceniza detrás.
+
 ## [0.21.1] - 2026-10-12
 
 ### Cambiado

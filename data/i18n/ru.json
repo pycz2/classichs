@@ -358,6 +358,7 @@
 "The opponent started a different game": "Соперник начал другую игру",
 "The opponent's deck is not valid": "Колода соперника недопустима",
 "The opponent's game sent something unexpected": "Игра соперника прислала что-то неожиданное",
+"The queued moves were cancelled: they are no longer possible": "Ходы из очереди отменены: они больше невозможны",
 "The saved decks file was damaged; a copy was kept as %s": "Файл колод был повреждён; копия сохранена как %s",
 "The scenario needs \"players\": a list of two objects": "Сценарию нужен «players»: список из двух объектов",
 "This card belongs to another class": "Эта карта другого класса",

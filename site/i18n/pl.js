@@ -53,7 +53,7 @@
     "m2.t": "Podpowiedzi po najechaniu",
     "m2.d": "Najedź na kartę: ramki objaśniają jej słowa kluczowe, a kryształy many, które wyda, podświetlają się. Przycisk „Koniec tury” świeci na zielono, gdy nie ma już nic do zrobienia.",
     "m3.t": "Przeciągnij i celuj",
-    "m3.d": "Przeciągnij kartę, by ją zagrać, a stronnika, by zaatakować; strzałka pokazuje cel. Stronnik z Okrzykiem bojowym najpierw zajmuje miejsce, potem celuje.",
+    "m3.d": "Przeciągnij kartę, by ją zagrać, a stronnika, by zaatakować; strzałka pokazuje cel. Stronnik z Okrzykiem bojowym najpierw zajmuje miejsce, potem celuje. Następny rozkaz można wydać, gdy poprzedni jeszcze trwa: rozkazy czekają w kolejce i idą po kolei.",
     "m4.t": "Efekty na stole",
     "m4.d": "Pociski lecą po jednym, mróz i ogień trafiają cel, ciężkie ciosy trzęsą stołem, pokonany bohater rozpada się na odłamki, a wynik — zwycięstwo, porażka lub remis — pojawia się na własnym obrazie.",
     "m5.t": "Zegar i lont",

@@ -53,7 +53,7 @@
     "m2.t": "Pistas al pasar el ratón",
     "m2.d": "Pasa el ratón por una carta: unos recuadros explican sus palabras clave y se iluminan los cristales de maná que gastará. El botón «Fin de turno» brilla en verde cuando no queda nada por hacer.",
     "m3.t": "Arrastrar y apuntar",
-    "m3.d": "Arrastra una carta para jugarla y un esbirro para atacar; una flecha muestra el objetivo. Un esbirro con Grito de batalla primero ocupa su sitio y luego apunta.",
+    "m3.d": "Arrastra una carta para jugarla y un esbirro para atacar; una flecha muestra el objetivo. Un esbirro con Grito de batalla primero ocupa su sitio y luego apunta. Puedes dar la siguiente orden mientras la anterior aún se anima: las órdenes esperan en cola y van de una en una.",
     "m4.t": "Efectos en la mesa",
     "m4.d": "Los proyectiles vuelan de uno en uno, la escarcha y el fuego golpean al objetivo, los golpes fuertes sacuden la mesa, un héroe derrotado se hace añicos, y el resultado — victoria, derrota o empate — aparece sobre su propia imagen.",
     "m5.t": "Reloj y mecha",

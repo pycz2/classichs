@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-12
+
+### Aggiunto
+- Una coda di ordini: la mossa successiva si può dare senza aspettare la fine dell'animazione precedente — giocare una carta, attaccare, usare il potere eroe, finire il turno. Gli ordini aspettano in coda (segnati in giallo) e vengono eseguiti uno alla volta dopo le animazioni, in ordine; se un ordine è possibile si controlla dopo quelli già in coda. Se un ordine diventa impossibile (il turno è finito), la coda viene annullata con un suggerimento. Il tutorial non ha la coda.
+
+### Modificato
+- La miccia del turno brucia senza la linea tratteggiata di cenere dietro.
+
 ## [0.21.1] - 2026-10-12
 
 ### Modificato

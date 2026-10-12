@@ -345,6 +345,7 @@
   "The opponent started a different game",
   "The opponent's deck is not valid",
   "The opponent's game sent something unexpected",
+  "The queued moves were cancelled: they are no longer possible",
   "The saved decks file was damaged; a copy was kept as %s",
   "The scenario needs \"players\": a list of two objects",
   "This card belongs to another class",

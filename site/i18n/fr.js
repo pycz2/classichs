@@ -53,7 +53,7 @@
     "m2.t": "Aides au survol",
     "m2.d": "Survolez une carte : des encadrés expliquent ses mots-clés, et les cristaux de mana qu'elle coûtera s'allument. Le bouton « Fin du tour » brille en vert quand il n'y a plus rien à faire.",
     "m3.t": "Glisser et viser",
-    "m3.d": "Glissez une carte pour la jouer et un serviteur pour attaquer ; une flèche montre la cible. Un serviteur avec Cri de guerre prend d'abord sa place, puis vise.",
+    "m3.d": "Glissez une carte pour la jouer et un serviteur pour attaquer ; une flèche montre la cible. Un serviteur avec Cri de guerre prend d'abord sa place, puis vise. L'ordre suivant peut être donné pendant l'animation du précédent : les ordres attendent dans une file et passent un par un.",
     "m4.t": "Effets sur la table",
     "m4.d": "Les projectiles volent un par un, le givre et le feu frappent la cible, les gros coups secouent la table, un héros vaincu vole en éclats, et le résultat — victoire, défaite ou match nul — apparaît sur sa propre image.",
     "m5.t": "Horloge et mèche",

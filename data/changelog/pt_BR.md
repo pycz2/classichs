@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-12
+
+### Adicionado
+- Uma fila de ordens: a próxima jogada pode ser dada sem esperar a animação da anterior — jogar uma carta, atacar, usar o poder heroico, terminar o turno. As ordens esperam numa fila (marcadas em amarelo) e são cumpridas uma por uma depois das animações, em ordem; se uma ordem é possível é verificado depois das que já esperam. Se uma ordem fica impossível (o turno acabou), a fila é cancelada com um aviso. O tutorial não tem fila.
+
+### Alterado
+- O pavio do turno queima sem a linha pontilhada de cinzas atrás.
+
 ## [0.21.1] - 2026-10-12
 
 ### Alterado

@@ -358,6 +358,7 @@
 "The opponent started a different game": "Przeciwnik rozpoczął inną grę",
 "The opponent's deck is not valid": "Talia przeciwnika jest nieprawidłowa",
 "The opponent's game sent something unexpected": "Gra przeciwnika wysłała coś nieoczekiwanego",
+"The queued moves were cancelled: they are no longer possible": "Ruchy z kolejki anulowano: nie są już możliwe",
 "The saved decks file was damaged; a copy was kept as %s": "Plik zapisanych talii był uszkodzony; kopię zachowano jako %s",
 "The scenario needs \"players\": a list of two objects": "Scenariusz wymaga „players”: listy dwóch obiektów",
 "This card belongs to another class": "Ta karta należy do innej klasy",

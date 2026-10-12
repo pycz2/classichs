@@ -1,8 +1,8 @@
 class_name Fuse
 extends Control
 ## The burning rope of the turn timer: a twisted cord across the table that burns
-## down from the right, a glowing ember at its end throwing sparks and smoke, ash
-## behind it. left: 1.0 = whole, 0.0 = burnt out.
+## down from the right, a glowing ember at its end throwing sparks and smoke.
+## left: 1.0 = whole, 0.0 = burnt out.
 
 const FROM := Vector2(170, 322)
 const LENGTH := 940.0
@@ -66,17 +66,12 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var tip := _tip()
-	# ash: a thin broken grey line where the cord has burnt
-	var x := tip.x + 6.0
-	while x < FROM.x + LENGTH:
-		draw_line(Vector2(x, FROM.y + 1), Vector2(minf(x + 5.0, FROM.x + LENGTH), FROM.y + 1), Color(0.35, 0.33, 0.3, 0.55), 2.0)
-		x += 9.0
 	if left <= 0.0:
 		return
 	# the cord: dark edge, hemp colour, and diagonal twists along it
 	draw_line(FROM, tip, Color("2a1d10"), 13.0)
 	draw_line(FROM, tip, Color("b08850"), 9.0)
-	x = FROM.x
+	var x := FROM.x
 	while x < tip.x - 3.0:
 		draw_line(Vector2(x, FROM.y + 4), Vector2(x + 6.0, FROM.y - 4), Color("7a5a30"), 2.5, true)
 		draw_line(Vector2(x + 1.5, FROM.y + 3), Vector2(x + 4.5, FROM.y - 2), Color("e2c08a", 0.7), 1.2, true)

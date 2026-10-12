@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-12
+
+### Added
+- An order queue: the next move can be given without waiting for the last one's animation — play a card, attack, use the hero power, end the turn. Orders wait in a queue (marked yellow) and are carried out one by one after the animations, in order; whether an order is possible is checked after the ones already queued. If an order became impossible (the turn ended), the queue is cancelled with a hint. The tutorial has no queue.
+
+### Changed
+- The turn fuse burns without the dotted line of ash behind it.
+
 ## [0.21.1] - 2026-10-12
 
 ### Changed

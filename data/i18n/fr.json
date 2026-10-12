@@ -358,6 +358,7 @@
 "The opponent started a different game": "L'adversaire a lancé une autre partie",
 "The opponent's deck is not valid": "Le deck de l'adversaire n'est pas valide",
 "The opponent's game sent something unexpected": "Le jeu de l'adversaire a envoyé quelque chose d'inattendu",
+"The queued moves were cancelled: they are no longer possible": "Les actions en attente sont annulées : elles ne sont plus possibles",
 "The saved decks file was damaged; a copy was kept as %s": "Le fichier des decks enregistrés était endommagé ; une copie a été conservée sous %s",
 "The scenario needs \"players\": a list of two objects": "Le scénario requiert « players » : une liste de deux objets",
 "This card belongs to another class": "Cette carte appartient à une autre classe",

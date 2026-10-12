@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-10-12
+
+### Hinzugefügt
+- Eine Befehlsreihe: Den nächsten Zug kannst du geben, ohne auf die Animation des letzten zu warten — Karte ausspielen, angreifen, Heldenfähigkeit, Zug beenden. Befehle warten in einer Reihe (gelb markiert) und werden nach den Animationen nacheinander ausgeführt; ob ein Befehl möglich ist, wird nach den bereits vorgemerkten geprüft. Wird ein Befehl unmöglich (der Zug ist vorbei), wird die Reihe mit einem Hinweis abgebrochen. Im Tutorial gibt es keine Reihe.
+
+### Geändert
+- Die Lunte des Zuges brennt ohne die gepunktete Ascheline dahinter.
+
 ## [0.21.1] - 2026-10-12
 
 ### Geändert
