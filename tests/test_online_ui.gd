@@ -280,6 +280,29 @@ func test_opponent_intents_are_shown() -> void:
 	_free_bound(b)
 
 
+func test_whatever_the_opponent_points_at_glows_red() -> void:
+	var b := _bound_pair()
+	var guest: MatchView = b[1][1]
+	var host: MatchView = b[1][0]
+	var g := guest.g
+	for id in [g.players[0].hero.id, g.players[0].hero_power.id, g.players[1].hero.id, g.players[1].hero_power.id]:
+		guest.apply_intent({"k": "look", "id": id})
+		eq(guest._views[id].glow, Palette.OPPONENT, "red: %s" % g.ent(id).card_id)
+		guest.refresh()
+		eq(guest._views[id].glow, Palette.OPPONENT, "still red after a refresh")
+	guest.apply_intent({"k": "none"})
+	eq(guest._views[g.players[1].hero_power.id].glow, Color.TRANSPARENT, "cleared")
+	guest.apply_intent({"k": "hover", "i": 1})
+	eq(guest._views[g.players[0].hand[1].id].glow, Palette.OPPONENT, "the raised card in the opponent's hand is red")
+	eq(guest._views[g.players[0].hand[0].id].glow, Color.TRANSPARENT, "the others are not")
+	# the sender: pointing at a hero, a hero power or a weapon is sent too
+	var hero_view: Control = host._views[host.g.players[1].hero.id]
+	eq(host.intent_at(hero_view.position + hero_view.size / 2.0), {"k": "look", "id": host.g.players[1].hero.id}, "a hero")
+	var power: Control = host._views[host.g.players[0].hero_power.id]
+	eq(host.intent_at(power.position + power.size / 2.0), {"k": "look", "id": host.g.players[0].hero_power.id}, "a hero power")
+	_free_bound(b)
+
+
 func test_guest_splits_and_renews_host_candidates() -> void:
 	var sdp := "v=0\r\nm=application 9 UDP/DTLS/SCTP webrtc-datachannel\r\na=mid:0\r\na=candidate:842163049 1 udp 1677729535 1.2.3.4 50000 typ srflx raddr 0.0.0.0 rport 0\r\na=candidate:1 1 udp 2122260223 192.168.1.5 50001 typ host\r\na=end-of-candidates\r\n"
 	var parts := WebRtcTransport.split_candidates(sdp)

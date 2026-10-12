@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-10-12
+
+### Zmieniono
+- Gra sieciowa: wszystko, na co wskazuje przeciwnik, świeci na czerwono — stronnicy, bohaterowie, moce bohatera, broń, sekrety i uniesiona karta w jego ręce (wcześniej tylko stronnicy, na biało).
+
 ## [0.21.0] - 2026-10-12
 
 ### Dodano

@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-10-12
+
+### Cambiado
+- Partida en línea: todo lo que señala el rival brilla en rojo — esbirros, héroes, poderes de héroe, armas, secretos y la carta levantada en su mano (antes solo los esbirros, en blanco).
+
 ## [0.21.0] - 2026-10-12
 
 ### Añadido

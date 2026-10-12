@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-10-12
+
+### Changed
+- Online game: whatever the opponent points at glows red — minions, heroes, hero powers, weapons, Secrets and the raised card in their hand (only minions showed before, in white).
+
 ## [0.21.0] - 2026-10-12
 
 ### Added

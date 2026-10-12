@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-10-12
+
+### Modifié
+- Partie en ligne : tout ce que l'adversaire survole brille en rouge — serviteurs, héros, pouvoirs héroïques, armes, Secrets et la carte levée dans sa main (avant, seulement les serviteurs, en blanc).
+
 ## [0.21.0] - 2026-10-12
 
 ### Ajouté

@@ -330,20 +330,7 @@ func _process(delta: float) -> void:
 # --- opponent intents (online) ----------------------------------------------------------
 
 func _send_intent() -> void:
-	var i := {"k": "none"}
-	var m := get_local_mouse_position()
-	if _dragging or _sel.get("stage", "") == "target":
-		var over := _view_at(m)
-		i = {"k": "aim", "from": _sel.get("id", -1), "to": over.entity_id if over else -1, "x": m.x, "y": m.y}
-	elif _hover_hand >= 0:
-		i = {"k": "hover", "i": g.players[viewer()].hand.find(g.ent(_hover_hand))}
-	else:
-		var over := _view_at(m)
-		if over and over.get_meta("kind") == "minion":
-			i = {"k": "look", "id": over.entity_id}
-	if i.k == "aim":
-		i.x = snappedf(i.x, 8.0)
-		i.y = snappedf(i.y, 8.0)
+	var i := intent_at(get_local_mouse_position())
 	var now := Time.get_ticks_msec()
 	if i != _last_intent and now - _intent_ms > 100:
 		_last_intent = i
@@ -351,8 +338,23 @@ func _send_intent() -> void:
 		session.send_intent(i)
 
 
-## Shows what the opponent points at: a raised card in their hand, their arrow,
-## a highlighted minion.
+## What the local player points at with the mouse at m: an aim, a card of the
+## hand, or anything on the table (minion, hero, hero power, weapon, Secret).
+func intent_at(m: Vector2) -> Dictionary:
+	if _dragging or _sel.get("stage", "") == "target":
+		var over := _view_at(m)
+		return {"k": "aim", "from": _sel.get("id", -1), "to": over.entity_id if over else -1,
+			"x": snappedf(m.x, 8.0), "y": snappedf(m.y, 8.0)}
+	if _hover_hand >= 0:
+		return {"k": "hover", "i": g.players[viewer()].hand.find(g.ent(_hover_hand))}
+	var over := _view_at(m)
+	if over and over.get_meta("kind") != "hand":
+		return {"k": "look", "id": over.entity_id}
+	return {"k": "none"}
+
+
+## Shows what the opponent points at: their arrow, and in red the card raised in
+## their hand or whatever on the table they look at.
 func apply_intent(i: Dictionary) -> void:
 	if i == _applied_intent:
 		return  # nothing new: a stuck or flooding peer costs nothing
@@ -371,13 +373,11 @@ func apply_intent(i: Dictionary) -> void:
 				_opp_arrow.aim(_center_of(i.from), to, _views.has(i.to))
 	if hover != _opp_hover:
 		_opp_hover = hover
-		refresh()
-	if look != _opp_look:
-		if _views.has(_opp_look):
-			_views[_opp_look].set_glow(Color.TRANSPARENT)
 		_opp_look = look
-		if _views.has(look):
-			_views[look].set_glow(Color(1, 1, 1, 0.6))
+		refresh()  # the card is raised (refresh puts the glows on too)
+	elif look != _opp_look:
+		_opp_look = look
+		_apply_glows()
 
 
 # --- drag and drop ------------------------------------------------------------------
@@ -1026,8 +1026,18 @@ func _drop(v: EntityView, gone: bool) -> void:
 func _apply_glows() -> void:
 	for v in _views.values():
 		v.set_glow(Color.TRANSPARENT)
-	if _views.has(_opp_look):
-		_views[_opp_look].set_glow(Color(1, 1, 1, 0.6))
+	_own_glows()
+	# on top: what the online opponent points at, in red (but not over this player's chosen card)
+	var opp := 1 - viewer()
+	var looked := _opp_look
+	if _opp_hover >= 0 and _opp_hover < g.players[opp].hand.size():
+		looked = g.players[opp].hand[_opp_hover].id
+	if _views.has(looked) and looked != _sel.get("id", -1):
+		_views[looked].set_glow(Palette.OPPONENT)
+
+
+## This player's glows: the chosen card and its targets, or what can be played.
+func _own_glows() -> void:
 	var legal := _legal()
 	if not _sel.is_empty():
 		var sv: EntityView = _views.get(_sel.id)

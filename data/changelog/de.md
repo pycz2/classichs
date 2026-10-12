@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-10-12
+
+### Geändert
+- Online-Spiel: Alles, worauf der Gegner zeigt, leuchtet rot — Diener, Helden, Heldenfähigkeiten, Waffen, Geheimnisse und die angehobene Karte in seiner Hand (vorher nur Diener, in Weiß).
+
 ## [0.21.0] - 2026-10-12
 
 ### Hinzugefügt

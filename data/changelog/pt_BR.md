@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-10-12
+
+### Alterado
+- Jogo online: tudo o que o oponente aponta brilha em vermelho — lacaios, heróis, poderes heroicos, armas, segredos e a carta erguida na mão dele (antes só os lacaios, em branco).
+
 ## [0.21.0] - 2026-10-12
 
 ### Adicionado

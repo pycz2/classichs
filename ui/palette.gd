@@ -22,6 +22,7 @@ const BUFFED := Color("3fd14b")
 const PLAYABLE := Color("3fd14b")
 const TARGET := Color("ff5a36")
 const SELECTED := Color("ffe14a")
+const OPPONENT := Color("ff3030")  # what the online opponent points at
 const CARD_BACK := Color("27408b")
 
 

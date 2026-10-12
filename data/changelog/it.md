@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-10-12
+
+### Modificato
+- Partita online: tutto ciò che l'avversario indica brilla di rosso — servitori, eroi, poteri eroe, armi, segreti e la carta sollevata nella sua mano (prima solo i servitori, in bianco).
+
 ## [0.21.0] - 2026-10-12
 
 ### Aggiunto
