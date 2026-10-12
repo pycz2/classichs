@@ -42,6 +42,8 @@ func _draw() -> void:
 	var cls: String = Decks.card_class(s.card_id) if Decks.HEROES.values().has(s.card_id) else s.card().get("cardClass", "NEUTRAL")
 	var outline := Art.outline("arch", r)
 	var gl := shown_glow()
+	if outer_mark().a > 0.0:  # under the own glow: the glows are filled shapes
+		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("arch", r.grow(MARK_OUT + gr * 1.3)), outer_mark())
 	if gl.a > 0.0:  # drawn twice: a hero's light must stand out on the dark table
 		for i in (2 if glow.a > 0.0 else 1):
 			soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("arch", r.grow(1.0 + gr * 1.3)), gl)

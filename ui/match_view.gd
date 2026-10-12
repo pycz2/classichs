@@ -1083,13 +1083,13 @@ func _apply_glows() -> void:
 	for v in _views.values():
 		v.set_glow(Color.TRANSPARENT)
 	_own_glows()
-	# on top: what the online opponent points at, in red (but not over this player's chosen card)
+	# what the online opponent points at: a red mark, over this player's own glow
 	var opp := 1 - viewer()
 	var looked := _opp_look
 	if _opp_hover >= 0 and _opp_hover < g.players[opp].hand.size():
 		looked = g.players[opp].hand[_opp_hover].id
-	if _views.has(looked) and looked != _sel.get("id", -1):
-		_views[looked].set_glow(Palette.OPPONENT)
+	for id in _views:
+		_views[id].set_opp_mark(id == looked)
 	for a in _pending_acts:  # what waits in the queue is marked as chosen
 		var id: int = {"play": a.get("entity", -1), "attack": a.get("attacker", -1),
 			"hero_power": g.players[viewer()].hero_power.id}.get(a.type, -1)

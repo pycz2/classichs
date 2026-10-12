@@ -287,20 +287,39 @@ func test_whatever_the_opponent_points_at_glows_red() -> void:
 	var g := guest.g
 	for id in [g.players[0].hero.id, g.players[0].hero_power.id, g.players[1].hero.id, g.players[1].hero_power.id]:
 		guest.apply_intent({"k": "look", "id": id})
-		eq(guest._views[id].glow, Palette.OPPONENT, "red: %s" % g.ent(id).card_id)
+		eq(guest._views[id].shown_glow(), Palette.OPPONENT, "red: %s" % g.ent(id).card_id)
 		guest.refresh()
-		eq(guest._views[id].glow, Palette.OPPONENT, "still red after a refresh")
+		eq(guest._views[id].shown_glow(), Palette.OPPONENT, "still red after a refresh")
 	guest.apply_intent({"k": "none"})
-	eq(guest._views[g.players[1].hero_power.id].glow, Color.TRANSPARENT, "cleared")
+	check(not guest._views[g.players[1].hero_power.id].opp_mark, "cleared")
 	guest.apply_intent({"k": "hover", "i": 1})
-	eq(guest._views[g.players[0].hand[1].id].glow, Palette.OPPONENT, "the raised card in the opponent's hand is red")
-	eq(guest._views[g.players[0].hand[0].id].glow, Color.TRANSPARENT, "the others are not")
+	eq(guest._views[g.players[0].hand[1].id].shown_glow(), Palette.OPPONENT, "the raised card in the opponent's hand is red")
+	check(not guest._views[g.players[0].hand[0].id].opp_mark, "the others are not")
 	# the sender: pointing at a hero, a hero power or a weapon is sent too
 	var hero_view: Control = host._views[host.g.players[1].hero.id]
 	eq(host.intent_at(hero_view.position + hero_view.size / 2.0), {"k": "look", "id": host.g.players[1].hero.id}, "a hero")
 	var power: Control = host._views[host.g.players[0].hero_power.id]
 	eq(host.intent_at(power.position + power.size / 2.0), {"k": "look", "id": host.g.players[0].hero_power.id}, "a hero power")
 	_free_bound(b)
+
+
+func test_the_opponent_mark_keeps_the_own_green_glow() -> void:
+	var g := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029"], "board": ["VAN_CS2_182"]}, {"hero": "HERO_01"})
+	var v := MatchView.new()
+	root().add_child(v)
+	var m := Match.new()
+	m.setup(g, [false, false])
+	m.remote = 1
+	v.bind(m)
+	var yeti: EntityView = v._views[g.players[0].board[0].id]
+	eq(yeti.glow, Palette.PLAYABLE, "the Yeti can attack: green")
+	v.apply_intent({"k": "look", "id": g.players[0].board[0].id})
+	eq(yeti.glow, Palette.PLAYABLE, "still green while the opponent points at it")
+	check(yeti.opp_mark and yeti.outer_mark().a > 0.0, "with a red ring outside")
+	v.apply_intent({"k": "none"})
+	eq(yeti.glow, Palette.PLAYABLE, "green after the opponent looks away")
+	check(not yeti.opp_mark, "the ring is gone")
+	v.free()
 
 
 func test_guest_splits_and_renews_host_candidates() -> void:

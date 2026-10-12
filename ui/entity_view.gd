@@ -8,6 +8,10 @@ signal right_clicked(view: EntityView)
 
 var entity_id := -1
 var glow := Color.TRANSPARENT
+## The online opponent points at it: red when it has no glow of its own, else a
+## faint red ring outside its own glow (the player's green or yellow stays).
+var opp_mark := false
+const MARK_OUT := 8.0
 var _pops := {}  # a number that just changed ("atk", "hp", "armor", "cost") -> 1.0 down to 0.0
 
 
@@ -31,6 +35,8 @@ func _init() -> void:
 func shown_glow() -> Color:
 	if glow.a > 0.0:
 		return glow
+	if opp_mark:
+		return Palette.OPPONENT
 	return Color(1, 0.96, 0.8, 0.75) if _under_mouse else Color.TRANSPARENT
 
 
@@ -48,7 +54,20 @@ func set_glow(c: Color) -> void:
 	queue_redraw()
 
 
+func set_opp_mark(on: bool) -> void:
+	if on != opp_mark:
+		opp_mark = on
+		queue_redraw()
+
+
+## The opponent's ring outside this player's own glow (both shown), or nothing.
+func outer_mark() -> Color:
+	return Color(Palette.OPPONENT, 0.55) if opp_mark and glow.a > 0.0 else Color.TRANSPARENT
+
+
 func _draw_glow(rect: Rect2, radius: int) -> void:
+	if outer_mark().a > 0.0:  # under the own glow: the glows are filled shapes
+		soft_glow(self, func(g: float) -> PackedVector2Array: return PackedVector2Array(), outer_mark(), rect.grow(MARK_OUT), radius + int(MARK_OUT))
 	if shown_glow().a > 0.0:
 		soft_glow(self, func(g: float) -> PackedVector2Array: return PackedVector2Array(), shown_glow(), rect, radius)
 

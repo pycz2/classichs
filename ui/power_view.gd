@@ -38,6 +38,9 @@ func _draw() -> void:
 	var c := size / 2
 	var r := size.x / 2 - 4
 	var gl := shown_glow()
+	if outer_mark().a > 0.0:  # under the own glow: the glows are filled shapes
+		var ro := r + MARK_OUT
+		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("circle", Rect2(c - Vector2(ro, ro) - Vector2(gr, gr), Vector2(ro, ro) * 2 + Vector2(gr, gr) * 2)), outer_mark())
 	if gl.a > 0:
 		soft_glow(self, func(gr: float) -> PackedVector2Array: return Art.outline("circle", Rect2(c - Vector2(r, r) - Vector2(gr, gr), Vector2(r, r) * 2 + Vector2(gr, gr) * 2)), gl)
 	var cls: String = s.card().get("cardClass", "NEUTRAL")

@@ -65,6 +65,9 @@ func _draw() -> void:
 	if gl.a > 0.0:  # always outside everything else on it
 		var taunt := s.has("TAUNT")
 		var reach := _reach()
+		if outer_mark().a > 0.0:  # under the own glow: the glows are filled shapes
+			soft_glow(self, func(gr: float) -> PackedVector2Array:
+				return _scaled(taunt_shield(), center, 1.0 + (gr + MARK_OUT) / 44.0) if taunt else Art.outline("oval", OVAL.grow(reach + MARK_OUT + gr)), outer_mark())
 		soft_glow(self, func(gr: float) -> PackedVector2Array:
 			return _scaled(taunt_shield(), center, 1.0 + gr / 44.0) if taunt else Art.outline("oval", OVAL.grow(reach + gr)), gl)
 	if s.has("WINDFURY"):
