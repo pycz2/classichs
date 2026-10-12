@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.23.3] - 2026-10-12
+
+### Cambiado
+- El mulligan como en el original: las cartas elegidas vuelan al mazo, las nuevas ocupan su lugar y se quedan delante de ti («Esperando al rival…»); cuando el rival ha elegido, al segundo jugador le aparece la Moneda al lado, luego todas las cartas bajan a la mano en el mismo orden y solo entonces se roba la carta del primer turno. La mano bajo la pantalla de mulligan no se muestra.
+- El botón del rastreador de mazo está bajo el botón del menú y ya no tapa los cristales de maná del rival.
+
 ## [0.23.2] - 2026-10-12
 
 ### Cambiado

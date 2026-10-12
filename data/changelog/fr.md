@@ -4,6 +4,12 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.23.3] - 2026-10-12
+
+### Modifié
+- Le mulligan comme dans l'original : les cartes choisies partent dans le deck, les nouvelles prennent leur place et restent devant vous (« En attente de l'adversaire… ») ; quand l'adversaire a choisi, la Pièce apparaît à côté pour le second joueur, puis toutes les cartes descendent en main dans le même ordre, et seulement ensuite la carte du premier tour est piochée. La main sous l'écran de mulligan est cachée.
+- Le bouton du suivi de deck est sous le bouton du menu et ne cache plus les cristaux de mana de l'adversaire.
+
 ## [0.23.2] - 2026-10-12
 
 ### Modifié

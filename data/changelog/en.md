@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.23.3] - 2026-10-12
+
+### Changed
+- The mulligan as in the original: the chosen cards fly into the deck, the new ones fly into their places and stay in front of you ("Waiting for the opponent…"); once the opponent has chosen, the Coin turns up beside them for the second player, then all the cards go down into the hand in the same order, and only then the first turn's card is drawn. The hand under the mulligan screen is hidden.
+- The deck tracker button is under the menu button and no longer covers the opponent's mana crystals.
+
 ## [0.23.2] - 2026-10-12
 
 ### Changed

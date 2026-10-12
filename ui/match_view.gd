@@ -610,10 +610,10 @@ func _build_menu() -> void:
 	gear.pressed.connect(func(): _menu.visible = not _menu.visible)
 	Icons.attach(gear, "gear", 30)
 	add_child(gear)
-	var deck := Button.new()  # the deck tracker, left of the gear
+	var deck := Button.new()  # the deck tracker, under the gear (left of it covered the opponent's mana)
 	deck.name = "TrackerButton"
 	deck.custom_minimum_size = Vector2(40, 40)
-	deck.position = gear.position - Vector2(46, 0)
+	deck.position = gear.position + Vector2(0, 46)
 	deck.tooltip_text = tr("Deck Tracker")
 	deck.focus_mode = Control.FOCUS_NONE
 	for st in ["normal", "hover", "pressed"]:
@@ -720,10 +720,10 @@ func tick(delta: float) -> void:
 	_rope.left = _time_left / ROPE_SECONDS
 	var count := find_child("MulliganTimer", true, false) as Label
 	if count:
-		count.visible = mull and _time_left <= MULLIGAN_WARN
+		count.visible = mull and _time_left <= MULLIGAN_WARN and not g.players[viewer()].mulliganed
 		count.text = str(int(ceil(maxf(0.0, _time_left))))
-	if mull and g.players[viewer()].mulliganed and not g.players[1 - viewer()].mulliganed:
-		show_hint(tr("Waiting for the opponent…"), 0.5)
+	if mull and g.players[viewer()].mulliganed and not g.players[1 - viewer()].mulliganed and not _mulligan_waiting(viewer()):
+		show_hint(tr("Waiting for the opponent…"), 0.5)  # (the mulligan screen says it while it stays)
 	if _time_left > 0.0:
 		return
 	var me := viewer()
@@ -949,6 +949,8 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	for i in n:
 		want[board[i].id] = {"kind": "minion", "pos": Vector2(TableLayout.board_x(i, n, gap), OWN_BOARD_Y if own else ENEMY_BOARD_Y)}
 	var hand: Array = pl.hand.filter(func(e): return e.id != placing)
+	if own and (g.phase == "MULLIGAN" or _mulligan_waiting(p)) and not Anim.instant:
+		hand = []  # the cards are on the mulligan screen; they come down into the hand after it
 	var hover := -1
 	if own:
 		for i in hand.size():
@@ -1384,8 +1386,13 @@ func _animate(events: Array) -> void:
 				await _burn(ev)
 			"add_to_hand":
 				if ev.get("card", "") == Game.COIN and not ev.get("shown", false):
-					await _coin_in(ev)
+					if _mulligan_waiting(ev.player):
+						await _mulligan_coin(ev)  # beside the cards still shown
+					else:
+						await _coin_in(ev)
 			"turn_start":
+				if _mulligan_waiting(_mull_wait):
+					_mulligan_down()  # the hand first, then the first turn's card
 				your_turn = your_turn or (ev.get("player", -1) == me and ev.has("turn"))
 	if not hit.done:
 		await _travel(events)  # end of turn effects first, then the new turn
@@ -1447,30 +1454,54 @@ func _mulligan_result(events: Array, p: int) -> void:
 		tw.tween_property(cv, "global_position", slots[replaced[i]], Anim.d(0.45)).set_delay(Anim.d(0.12 * i))
 		tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.45)).set_delay(Anim.d(0.12 * i))
 		shown.append([drawn[i], cv])
+	_overlay.set_meta("shown", shown)
 	if not drawn.is_empty():
 		await _wait(0.5 + 0.12 * drawn.size())
-	var coin_ev: Dictionary = {}
+	if g.phase == "MULLIGAN" and controller.remote >= 0:
+		# online, the opponent still chooses: the cards stay here; the Coin and the way
+		# down into the hand come with the opponent's choice
+		var title: Label = _overlay.get_meta("title")
+		title.text = tr("Waiting for the opponent…")
+		return
 	for ev in events:
-		if ev.type == "add_to_hand" and ev.player == p and ev.card == Game.COIN:
-			coin_ev = ev
-	if not coin_ev.is_empty():  # the Coin turns up beside the hand, spinning in with a golden light
-		coin_ev["shown"] = true  # (not again in the batch's own turn)
-		var last: Vector2 = slots.values().reduce(func(a, b): return a if a.x > b.x else b, Vector2(400, 250))
-		var cv := CardView.make(Game.COIN, 1.3)
-		cv.show_entity(g.ent(coin_ev.entity), g)
-		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		cv.set_glow(Palette.SELECTED)
-		_overlay.add_child(cv)
-		cv.global_position = last + Vector2(CardView.SIZE.x * 1.3 + 16, 0)
-		cv.pivot_offset = cv.size / 2.0
-		cv.scale = Vector2(0.05, 1.0)
-		var tw := cv.create_tween()
-		tw.tween_property(cv, "scale", Vector2(-1.0, 1.0), Anim.d(0.2))
-		tw.tween_property(cv, "scale", Vector2(1.0, 1.0), Anim.d(0.25)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		Sound.play("draw")
-		await _wait(0.9)
-		shown.append([coin_ev.entity, cv])
-	for pair in shown:  # the hand's views start where these cards are
+		if ev.type == "add_to_hand" and ev.player == p and ev.card == Game.COIN and not ev.get("shown", false):
+			await _mulligan_coin(ev)
+	_mulligan_down()
+
+
+## The mulligan screen still open after the choice (online, waiting for the opponent).
+func _mulligan_waiting(p: int) -> bool:
+	return _mull_wait == p and _overlay != null and _overlay.name == "Mulligan" and _overlay.has_meta("shown")
+
+
+## The Coin turns up beside the cards of the mulligan, spinning in with a golden light.
+func _mulligan_coin(ev: Dictionary) -> void:
+	ev["shown"] = true  # (not again in the batch's own turn)
+	var shown: Array = _overlay.get_meta("shown", [])
+	var last := Vector2(400, 250)
+	for pair in shown:
+		if pair[1].global_position.x > last.x:
+			last = pair[1].global_position
+	var cv := CardView.make(Game.COIN, 1.3)
+	cv.show_entity(g.ent(ev.entity), g)
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.set_glow(Palette.SELECTED)
+	_overlay.add_child(cv)
+	cv.global_position = last + Vector2(CardView.SIZE.x * 1.3 + 16, 0)
+	cv.pivot_offset = cv.size / 2.0
+	cv.scale = Vector2(0.05, 1.0)
+	var tw := cv.create_tween()
+	tw.tween_property(cv, "scale", Vector2(-1.0, 1.0), Anim.d(0.2))
+	tw.tween_property(cv, "scale", Vector2(1.0, 1.0), Anim.d(0.25)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	Sound.play("draw")
+	await _wait(0.9)
+	shown.append([ev.entity, cv])
+
+
+## The cards of the mulligan (and the Coin) go down into the hand, in the same
+## order: the hand's views start where these cards are.
+func _mulligan_down() -> void:
+	for pair in _overlay.get_meta("shown", []):
 		var cv: CardView = pair[1]
 		_moved[pair[0]] = cv.global_position - global_position + cv.size * cv.scale / 2.0
 		if _views.has(pair[0]):
@@ -2252,6 +2283,7 @@ func _show_mulligan() -> void:
 	var p := controller.actor()
 	var box := _open_overlay(tr("Choose cards to replace"))
 	_overlay.name = "Mulligan"
+	_overlay.set_meta("title", box.get_child(0))
 	var row := _card_row(box)
 	var marked := {}
 	var views := []

@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.23.3] - 2026-10-12
+
+### Alterado
+- O mulligan como no original: as cartas escolhidas voam para o deck, as novas ocupam os lugares delas e ficam na sua frente (“Esperando o oponente…”); quando o oponente escolheu, a Moeda aparece ao lado para o segundo jogador, depois todas as cartas descem para a mão na mesma ordem, e só então a carta do primeiro turno é comprada. A mão sob a tela de mulligan fica oculta.
+- O botão do rastreador de deck fica sob o botão do menu e não cobre mais os cristais de mana do oponente.
+
 ## [0.23.2] - 2026-10-12
 
 ### Alterado

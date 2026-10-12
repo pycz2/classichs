@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.23.3] - 2026-10-12
+
+### Modificato
+- Il mulligan come nell'originale: le carte scelte volano nel mazzo, le nuove prendono il loro posto e restano davanti a te (“In attesa dell'avversario…”); quando l'avversario ha scelto, al secondo giocatore appare la Moneta accanto, poi tutte le carte scendono in mano nello stesso ordine e solo dopo si pesca la carta del primo turno. La mano sotto la schermata del mulligan è nascosta.
+- Il pulsante del tracker del mazzo sta sotto il pulsante del menu e non copre più i cristalli di mana dell'avversario.
+
 ## [0.23.2] - 2026-10-12
 
 ### Modificato

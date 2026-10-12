@@ -92,12 +92,14 @@ func _view() -> MatchView:
 	return v
 
 
-func test_tracker_button_beside_the_gear_toggles_the_panel() -> void:
+func test_tracker_button_under_the_gear_toggles_the_panel() -> void:
 	var v := _view()
 	var gear := v.find_child("MenuButton", true, false) as Button
 	var button := v.find_child("TrackerButton", true, false) as Button
-	eq(button.position.y, gear.position.y, "in line with the gear")
-	check(button.position.x < gear.position.x and gear.position.x - button.get_rect().end.x < 12, "just left of the gear")
+	eq(button.position.x, gear.position.x, "in line with the gear")
+	check(button.position.y > gear.get_rect().end.y and button.position.y - gear.get_rect().end.y < 12, "just under the gear")
+	var mana: Control = v._mana[1]  # the opponent's crystals at the top
+	check(not button.get_global_rect().intersects(mana.get_global_rect()), "clear of the opponent's mana")
 	check((v.find_child("GameMenu", true, false) as Control).find_child("TrackerButton", true, false) == null, "no longer in the menu")
 	var panel := v.find_child("DeckTracker", true, false) as Control
 	eq(panel.visible, false, "hidden at first")

@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.23.3] - 2026-10-12
+
+### Geändert
+- Der Mulligan wie im Original: Die gewählten Karten fliegen ins Deck, die neuen auf ihre Plätze und bleiben vor dir („Warte auf den Gegner…“); hat der Gegner gewählt, erscheint beim zweiten Spieler daneben die Münze, dann gehen alle Karten in derselben Reihenfolge auf die Hand, und erst danach wird die Karte des ersten Zuges gezogen. Die Hand unter dem Mulligan ist verborgen.
+- Der Knopf des Decktrackers sitzt unter dem Menüknopf und verdeckt die Manakristalle des Gegners nicht mehr.
+
 ## [0.23.2] - 2026-10-12
 
 ### Geändert

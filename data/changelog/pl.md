@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.23.3] - 2026-10-12
+
+### Zmieniono
+- Mulligan jak w oryginale: wybrane karty lecą do talii, nowe zajmują ich miejsca i zostają przed tobą („Czekamy na przeciwnika…”); gdy przeciwnik wybrał, drugiemu graczowi obok pojawia się Moneta, potem wszystkie karty schodzą do ręki w tej samej kolejności i dopiero wtedy dobierana jest karta pierwszej tury. Ręka pod ekranem mulligana jest ukryta.
+- Przycisk śledzenia talii jest pod przyciskiem menu i nie zasłania już kryształów many przeciwnika.
+
 ## [0.23.2] - 2026-10-12
 
 ### Zmieniono
