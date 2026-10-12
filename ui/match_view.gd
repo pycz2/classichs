@@ -1437,6 +1437,7 @@ func _burn(ev: Dictionary) -> void:
 ## a Battlecry, a minion's trigger at the end or start of a turn) to each target.
 func _travel(events: Array) -> void:
 	var seen := {}
+	await _missiles(events, seen)
 	for ev in events:
 		var src: int = ev.get("by_id", -1)
 		var t := _event_target(ev)
@@ -1447,6 +1448,43 @@ func _travel(events: Array) -> void:
 		_shoot(from, _center_of(t), _fx_color(ev))
 	if not seen.is_empty():
 		await _wait(0.34)
+
+
+## A card that hits random targets several times (Arcane Missiles, Avenging Wrath,
+## Mad Bomber, Multi-Shot…): its hits fly one after another, each target's number
+## dropping as it is hit. Deaths come after, with the rest of the change.
+func _missiles(events: Array, seen: Dictionary) -> void:
+	var count := {}
+	for ev in events:
+		if ev.type == "damage" and ev.has("by_id"):
+			count[ev.by_id] = count.get(ev.by_id, 0) + 1
+	for ev in events:
+		var src: int = ev.get("by_id", -1)
+		if ev.type != "damage" or count.get(src, 0) < 2 or not _views.has(ev.target):
+			continue
+		var text: Dictionary = CardDb.card(ev.by).get("text", {}) if CardDb.card(ev.by).get("text") is Dictionary else {}
+		if not str(text.get("enUS", "")).to_lower().contains("random"):
+			continue
+		seen[[src, ev.target]] = true  # no second bolt for it in _travel
+		var from := _center_of(src) if _views.has(src) else Vector2(640, 330)
+		var to := _center_of(ev.target)
+		_shoot(from, to, _fx_color(ev))
+		await _wait(0.3)
+		var v = _views.get(ev.target)
+		if v is MinionView or v is HeroView:  # the number drops at once (the real state comes after)
+			var hit: int = ev.amount
+			if v is HeroView:
+				var armor := int(v.s.tags.get("ARMOR", 0))
+				v.s.tags.ARMOR = maxi(0, armor - hit)
+				hit = maxi(0, hit - armor)
+			v.s.damage += hit
+			v.pop("hp")
+			v.queue_redraw()
+		TableFx.spawn(_fx, "hurt", to, _fx_color(ev))
+		_float_text(ev.target, "-%d" % ev.amount, Palette.HEALTH, {})
+		ev["shown"] = true  # its number already flew
+		Sound.play("damage")
+		await _wait(0.12)
 
 
 ## The entity an event happens to (-1 for none).
@@ -1889,6 +1927,8 @@ func _effects_now(events: Array) -> void:
 			Sound.play(sfx)
 		match ev.type:
 			"damage":
+				if ev.get("shown", false):
+					continue  # shown missile by missile already
 				var on_hero := g.ent(ev.target) != null and g.ent(ev.target).is_hero()
 				var heavy: bool = on_hero and ev.amount > 5
 				# a hero's damage shows bigger; a blow of more than 5 hits harder

@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.18.5] - 2026-10-12
+
+### Changed
+- Random damage to several targets (Arcane Missiles, Avenging Wrath, Mad Bomber, Multi-Shot, Forked Lightning and so on) flies one missile at a time; the target's health number drops with each hit.
+
 ## [0.18.4] - 2026-10-12
 
 ### Added

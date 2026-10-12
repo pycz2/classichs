@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.18.5] - 2026-10-12
+
+### Geändert
+- Zufälliger Schaden an mehreren Zielen (Arkane Geschosse, Rachsüchtiger Zorn, Verrückter Bomber, Mehrfachschuss, Gespaltener Blitz usw.) fliegt Geschoss für Geschoss; die Lebenszahl des Ziels sinkt mit jedem Treffer.
+
 ## [0.18.4] - 2026-10-12
 
 ### Hinzugefügt

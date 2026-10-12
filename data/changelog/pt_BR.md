@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.18.5] - 2026-10-12
+
+### Alterado
+- Dano aleatório em vários alvos (Mísseis Arcanos, Ira Vingativa, Bombardeiro Louco, Rajada de Flechas, Relâmpago Bifurcado etc.) voa um projétil por vez; a vida do alvo cai a cada acerto.
+
 ## [0.18.4] - 2026-10-12
 
 ### Adicionado
