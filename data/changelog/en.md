@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.24.1] - 2026-10-12
+
+### Changed
+- Basic decks are gone from the deck lists: every class has a classic deck. A Basic deck appears only for a class without a classic one (none now). Unchanged Basic decks leave the saved decks once; changed ones stay.
+
 ## [0.24.0] - 2026-10-12
 
 ### Added

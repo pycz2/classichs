@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.24.1] - 2026-10-12
+
+### Zmieniono
+- Talie podstawowe zniknęły z list talii: każda klasa ma talię klasyczną. Talia podstawowa pojawia się tylko dla klasy bez talii klasycznej (obecnie żadnej). Niezmienione talie podstawowe znikają raz z zapisanych talii; zmienione zostają.
+
 ## [0.24.0] - 2026-10-12
 
 ### Dodano

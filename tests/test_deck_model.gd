@@ -197,19 +197,19 @@ func test_starter_decks_for_every_hero_when_no_decks() -> void:
 	DeckStore.path = "user://test_starter_decks.json"
 	DirAccess.remove_absolute(DeckStore.path)
 	var decks := DeckStore.load_all()
-	eq(decks.size(), 19, "one Basic deck per hero and the 10 classic decks")
+	eq(decks.size(), 10, "the 10 classic decks (every class has one: no Basic decks)")
 	var classes := {}
 	for d in decks:
 		eq(d.validate(), "", d.name)
 		classes[d.card_class()] = true
 	eq(classes.size(), 9, "every class")
-	eq(TrainingSetup.available_decks().size(), 19, "the pickers show each starter deck once")
+	eq(TrainingSetup.available_decks().size(), 10, "the pickers show each starter deck once")
 	DeckStore.save_all(decks.slice(0, 2))
 	eq(DeckStore.load_all().size(), 2, "saved decks are kept as they are")
 	DeckStore.save_all([])
 	eq(DeckStore.load_all().size(), 0, "deleting every deck leaves the list empty")
 	DeckStore.save_all(decks.slice(0, 2))
-	eq(TrainingSetup.available_decks().size(), 19, "plus the starter decks the player deleted")
+	eq(TrainingSetup.available_decks().size(), 10, "plus the starter decks the player deleted")
 	DirAccess.remove_absolute(DeckStore.path)
 
 
@@ -219,8 +219,31 @@ func test_classic_decks_come_ready_and_valid() -> void:
 		var r := DeckCode.decode(spec[1])
 		check(r.deck != null, "%s: %s" % [spec[0], r.error])
 	var first := DeckStore.starter()
-	eq(first.size(), 19, "9 Basic decks and the 10 classic ones on a first run")
-	eq(first[9].name, "Control Warrior", "named")
+	eq(first.size(), 10, "the 10 classic decks on a first run")
+	eq(first[0].name, "Control Warrior", "named")
+
+
+func test_a_basic_deck_only_for_a_class_without_a_classic_one() -> void:
+	var classes := DeckStore.classic().map(func(d): return d.card_class())
+	for cls in TrainingSetup.ORDER:
+		check(classes.has(cls), "a classic deck for " + cls)
+	check(DeckStore.starter().all(func(d): return not d.name.begins_with("Basic deck")), "so no Basic deck")
+
+
+func test_unchanged_basic_decks_leave_saved_decks_once() -> void:
+	var basic: Array = Decks.basic("MAGE")
+	var changed: Array = basic.duplicate()
+	changed[0] = "VAN_CS2_029"
+	var file := {"version": 1, "classic": 1, "decks": [
+		{"name": "Basic deck: Jaina", "hero": "HERO_08", "cards": basic},
+		{"name": "My Mage", "hero": "HERO_08", "cards": changed},
+		{"name": "Freeze Mage", "hero": "HERO_08", "cards": DeckStore.classic()[7].cards}]}
+	_tmp_store(JSON.stringify(file))
+	var decks := DeckStore.load_all()
+	eq(decks.map(func(d): return d.name), ["My Mage", "Freeze Mage"], "the unchanged Basic deck is gone, a changed one stays")
+	DeckStore.save_all(decks + [Deck.from_dict({"name": "Again", "hero": "HERO_08", "cards": basic})])
+	eq(DeckStore.load_all().size(), 3, "only once: a Basic deck made again later stays")
+	_tmp_clean()
 
 
 func test_classic_decks_are_added_once_to_saved_decks() -> void:

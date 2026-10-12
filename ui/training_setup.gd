@@ -18,7 +18,7 @@ var _step2 := Control.new()
 var _deck_line: Label
 
 
-## Basic decks for all classes, then the player's saved decks.
+## The player's saved decks, then the ready decks (DeckStore.starter) not among them.
 static func available_decks() -> Array[Deck]:
 	var out := DeckStore.load_all()
 	var have := out.map(func(d: Deck): return [d.hero, d.sorted_counts()])

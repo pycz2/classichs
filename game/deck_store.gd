@@ -25,17 +25,23 @@ static var path := DEFAULT_PATH
 static var last_load_error := ""
 
 
-## A ready Basic deck for every hero (the first run starts with them).
+## The ready decks a first run starts with: the classic decks, and a Basic deck
+## only for a class that has no classic deck.
 static func starter() -> Array[Deck]:
-	var out: Array[Deck] = []
+	var out := classic()
+	var covered := out.map(func(d: Deck): return d.card_class())
 	for cls in TrainingSetup.ORDER:
-		var d := Deck.new()
-		d.hero = Decks.hero(cls)
-		d.name = TranslationServer.translate("Basic deck: %s") % CardText.name(d.hero)
-		d.cards.assign(Decks.basic(cls))
-		out.append(d)
-	out.append_array(classic())
+		if not covered.has(cls):
+			out.append(_basic(cls))
 	return out
+
+
+static func _basic(cls: String) -> Deck:
+	var d := Deck.new()
+	d.hero = Decks.hero(cls)
+	d.name = TranslationServer.translate("Basic deck: %s") % CardText.name(d.hero)
+	d.cards.assign(Decks.basic(cls))
+	return d
 
 
 static func classic() -> Array[Deck]:
@@ -67,6 +73,10 @@ static func load_all() -> Array[Deck]:
 				out.append(deck)
 	if ok and int(j.data.get("classic", 0)) < 1:  # saved before the classic decks came: they are added once
 		out.append_array(classic())
+	if ok and int(j.data.get("basic", 0)) < 1:  # saved when every class got a Basic deck: the unchanged
+		var covered := classic().map(func(d: Deck): return d.card_class())  # ones of classes with a classic deck go, once
+		out = out.filter(func(d: Deck): return not (covered.has(d.card_class()) \
+			and d.sorted_counts() == _basic(d.card_class()).sorted_counts()))
 	if not ok:
 		var backup := _free_backup_path()
 		var bad := FileAccess.open(backup, FileAccess.WRITE)
@@ -88,7 +98,7 @@ static func _free_backup_path() -> String:
 
 
 static func save_all(decks: Array) -> bool:
-	var data := {"version": VERSION, "classic": 1, "decks": decks.map(func(d: Deck): return d.to_dict())}
+	var data := {"version": VERSION, "classic": 1, "basic": 1, "decks": decks.map(func(d: Deck): return d.to_dict())}
 	var tmp := path + ".tmp"
 	var f := FileAccess.open(tmp, FileAccess.WRITE)
 	if f == null:

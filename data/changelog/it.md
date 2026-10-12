@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.24.1] - 2026-10-12
+
+### Modificato
+- I mazzi base escono dagli elenchi dei mazzi: ogni classe ha un mazzo classico. Un mazzo base compare solo per una classe senza mazzo classico (ora nessuna). I mazzi base non modificati escono una volta dai mazzi salvati; quelli modificati restano.
+
 ## [0.24.0] - 2026-10-12
 
 ### Aggiunto

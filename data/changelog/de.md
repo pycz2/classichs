@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.24.1] - 2026-10-12
+
+### Geändert
+- Basis-Decks sind aus den Decklisten verschwunden: Jede Klasse hat ein klassisches Deck. Ein Basis-Deck erscheint nur für eine Klasse ohne klassisches Deck (zurzeit keine). Unveränderte Basis-Decks werden einmal aus den gespeicherten Decks entfernt; geänderte bleiben.
+
 ## [0.24.0] - 2026-10-12
 
 ### Hinzugefügt

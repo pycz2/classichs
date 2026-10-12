@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.24.1] - 2026-10-12
+
+### Alterado
+- Os decks básicos saíram das listas de decks: cada classe tem um deck clássico. Um deck básico só aparece para uma classe sem deck clássico (nenhuma agora). Decks básicos não alterados saem uma vez dos decks salvos; os alterados ficam.
+
 ## [0.24.0] - 2026-10-12
 
 ### Adicionado

@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.24.1] - 2026-10-12
+
+### Modifié
+- Les decks de base ont quitté les listes de decks : chaque classe a un deck classique. Un deck de base n'apparaît que pour une classe sans deck classique (aucune aujourd'hui). Les decks de base non modifiés quittent une fois les decks enregistrés ; les decks modifiés restent.
+
 ## [0.24.0] - 2026-10-12
 
 ### Ajouté

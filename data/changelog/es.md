@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.24.1] - 2026-10-12
+
+### Cambiado
+- Los mazos básicos salen de las listas de mazos: cada clase tiene un mazo clásico. Un mazo básico aparece solo para una clase sin mazo clásico (ahora ninguna). Los mazos básicos sin cambios salen una vez de los mazos guardados; los cambiados se quedan.
+
 ## [0.24.0] - 2026-10-12
 
 ### Añadido
