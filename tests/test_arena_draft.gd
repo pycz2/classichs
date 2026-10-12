@@ -89,17 +89,25 @@ func test_arena_decks_have_no_copy_limit() -> void:
 
 
 func test_rarity_odds() -> void:
+	# normal picks: 76.5 % common, 14 % rare, 7.5 % epic, 2 % legendary
 	var d := ArenaDraft.new(5)
 	var count := {}
-	for i in 4000:
+	for i in 20000:
 		var t := d.roll_tier(false)
 		count[t] = count.get(t, 0) + 1
-	var share := func(t: String) -> float: return float(count.get(t, 0)) / 4000.0
-	check(absf(share.call("common") - 0.80) < 0.03, "about 80 %% common: %s" % share.call("common"))
-	check(absf(share.call("rare") - 0.14) < 0.03, "about 14 %% rare: %s" % share.call("rare"))
-	check(share.call("legendary") < 0.03, "few legendaries: %s" % share.call("legendary"))
-	for i in 500:
-		check(d.roll_tier(true) != "common", "a special pick is never common")
+	var share := func(t: String) -> float: return float(count.get(t, 0)) / 20000.0
+	check(absf(share.call("common") - 0.765) < 0.015, "about 76.5 %% common: %s" % share.call("common"))
+	check(absf(share.call("rare") - 0.14) < 0.01, "about 14 %% rare: %s" % share.call("rare"))
+	check(absf(share.call("epic") - 0.075) < 0.008, "about 7.5 %% epic: %s" % share.call("epic"))
+	check(absf(share.call("legendary") - 0.02) < 0.005, "about 2 %% legendary: %s" % share.call("legendary"))
+	# picks 1, 10, 20, 30: 65 % rare, 27 % epic, 8 % legendary
+	count.clear()
+	for i in 20000:
+		var t := d.roll_tier(true)
+		count[t] = count.get(t, 0) + 1
+	eq(count.get("common", 0), 0, "a special pick is never common")
+	check(absf(share.call("epic") - 0.27) < 0.015, "about 27 %% epic: %s" % share.call("epic"))
+	check(absf(share.call("legendary") - 0.08) < 0.01, "about 8 %% legendary: %s" % share.call("legendary"))
 
 
 func test_class_cards_come_more_often() -> void:

@@ -9,8 +9,10 @@ extends RefCounted
 
 const PICKS := 30
 const SPECIAL := [0, 9, 19, 29]  # pick indexes that are Rare or better
-const ODDS := {"common": 0.80, "rare": 0.14, "epic": 0.05, "legendary": 0.01}
-const SPECIAL_ODDS := {"rare": 0.78, "epic": 0.18, "legendary": 0.04}
+## Legendary twice and Epic one and a half times as likely as in the first
+## ruling (owner's request): more of the big cards.
+const ODDS := {"common": 0.765, "rare": 0.14, "epic": 0.075, "legendary": 0.02}
+const SPECIAL_ODDS := {"rare": 0.65, "epic": 0.27, "legendary": 0.08}
 const CLASS_WEIGHT := 1.5
 const CLASSES := ["DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR"]
 
