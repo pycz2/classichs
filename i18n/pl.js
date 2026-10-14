@@ -100,4 +100,5 @@
     "shot.result.cap": "Wynik gry na jej obrazie, z wynikiem Areny",
     "shot.rules.tab": "Zasady Areny",
     "shot.rules.cap": "Zasady Areny: jedna talia albo nowa na każdą grę, z prawem zostawienia poprzedniej",
+    "play.download": "Pobierz grę:",
 };

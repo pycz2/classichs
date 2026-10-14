@@ -100,4 +100,5 @@
     "shot.result.cap": "El resultado de una partida sobre su imagen, con el marcador de la Arena",
     "shot.rules.tab": "Reglas de la Arena",
     "shot.rules.cap": "Las reglas de la Arena: un mazo, o uno nuevo en cada partida, con derecho a conservar el anterior",
+    "play.download": "Descargar el juego:",
 };

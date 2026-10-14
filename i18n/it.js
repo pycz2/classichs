@@ -100,4 +100,5 @@
     "shot.result.cap": "Il risultato di una partita sulla sua immagine, con il punteggio dell'Arena",
     "shot.rules.tab": "Regole dell'Arena",
     "shot.rules.cap": "Le regole dell'Arena: un mazzo, o uno nuovo per ogni partita, con il diritto di tenere il precedente",
+    "play.download": "Scarica il gioco:",
 };
