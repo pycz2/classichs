@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Архитектура Classic HS</title>
+<style>
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --text: #1d1f24; --muted: #5b616d; --line: #dcd8cd; --soft: #efede6;
+  --accent: #2f62c9;
+  --core: #2f62c9; --game: #23875a; --ui: #7d4fcf; --net: #c76c12; --data: #13838f; --ops: #b83a55; --ext: #6c717c;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171c; --panel: #1e2128; --text: #e6e8ed; --muted: #9ba2ae; --line: #333844; --soft: #262a32;
+    --accent: #7ea3ff;
+    --core: #7ea3ff; --game: #5cd39a; --ui: #b99cff; --net: #ffae63; --data: #5ccfdb; --ops: #ff8da3; --ext: #a6acb8;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .86em; }
+code { background: var(--soft); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+a { color: var(--accent); }
+h1 { font-size: 22px; margin: 0; line-height: 1.25; }
+h2 { font-size: 19px; margin: 34px 0 12px; }
+h3 { font-size: 16px; margin: 0 0 6px; }
+
+/* top bar */
+.bar { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.bar-in { max-width: 1400px; margin: 0 auto; padding: 12px 16px; display: flex; gap: 14px 22px; flex-wrap: wrap; align-items: center; }
+.bar .sub { color: var(--muted); font-size: 13px; }
+.grow { flex: 1 1 auto; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--panel); }
+.seg button { border: 0; background: none; color: var(--text); font: inherit; font-size: 14px; padding: 7px 14px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+@media (prefers-color-scheme: dark) { .seg button[aria-pressed="true"] { color: #0f1115; } }
+input[type=search] { font: inherit; font-size: 14px; padding: 7px 11px; width: 240px; max-width: 100%;
+  border: 1px solid var(--line); border-radius: 9px; background: var(--panel); color: var(--text); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px;
+  background: var(--c); margin-right: 6px; vertical-align: -1px; }
+
+main { max-width: 1400px; margin: 0 auto; padding: 8px 16px 60px; }
+.intro { max-width: 980px; }
+.intro ul { padding-left: 20px; margin: 8px 0; }
+.intro li { margin: 3px 0; }
+.hint { color: var(--muted); font-size: 14px; }
+
+/* map + panel */
+.map { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 18px; align-items: start; margin-top: 10px; }
+@media (max-width: 1050px) { .map { grid-template-columns: minmax(0, 1fr); } }
+.diagram { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px; overflow-x: auto; }
+.diagram svg { width: 100%; min-width: 720px; height: auto; display: block; }
+.box { cursor: pointer; }
+.box rect { fill: var(--c); fill-opacity: .12; stroke: var(--c); stroke-width: 1.5; transition: fill-opacity .15s; }
+.box:hover rect, .box:focus-visible rect { fill-opacity: .24; }
+.box:focus { outline: none; }
+.box:focus-visible rect { stroke-width: 3; }
+.box.sel rect { fill-opacity: .3; stroke-width: 3; }
+.box.dim { opacity: .22; }
+.box .nm { font-size: 15px; font-weight: 650; fill: var(--text); }
+.box .pt { font-size: 11.5px; fill: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; }
+.arrow path { fill: none; stroke: var(--muted); stroke-width: 1.4; opacity: .75; }
+.arrow.dash path { stroke-dasharray: 5 4; }
+.arrow text { font-size: 12px; fill: var(--muted); paint-order: stroke; stroke: var(--panel); stroke-width: 5px; stroke-linejoin: round; }
+.arrow.hot path { stroke: var(--accent); stroke-width: 2.4; opacity: 1; }
+.arrow.hot text { fill: var(--text); font-weight: 600; }
+.arrow.dim { opacity: .2; }
+#mk path { fill: var(--muted); } #mkh path { fill: var(--accent); }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
+  position: sticky; top: 76px; max-height: calc(100vh - 92px); overflow: auto; }
+@media (max-width: 1050px) { .panel { position: static; max-height: none; } }
+.tag { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px; color: var(--c);
+  border: 1px solid var(--c); margin-bottom: 6px; }
+.short { margin: 6px 0 10px; }
+dl { margin: 0; }
+dt { font-weight: 650; font-size: 13px; color: var(--muted); margin-top: 10px; text-transform: uppercase; letter-spacing: .03em; }
+dd { margin: 3px 0 0; }
+dd ul, .deep ul { margin: 2px 0; padding-left: 18px; }
+dd li, .deep li { margin: 2px 0; }
+.files { display: flex; flex-wrap: wrap; gap: 4px; }
+.deep { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); }
+.deep h4 { margin: 0 0 4px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+.more { color: var(--muted); font-size: 13px; margin-top: 10px; }
+
+/* component cards + flows */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 14px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--c); border-radius: 12px; padding: 14px 16px; }
+.card h3 { cursor: pointer; }
+.card.flash { box-shadow: 0 0 0 3px var(--accent); }
+.flows { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 560px), 1fr)); gap: 14px; }
+.flow { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
+.flow ol { padding-left: 22px; margin: 6px 0 0; }
+.flow li { margin: 5px 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 2px 0 4px; }
+.chip { font: inherit; font-size: 12px; border: 1px solid var(--c); color: var(--c); background: none; border-radius: 99px; padding: 0 9px; cursor: pointer; }
+.ref { color: var(--accent); background: none; padding: 0; }
+.none { color: var(--muted); font-style: italic; display: none; }
+.hidden { display: none !important; }
+body[data-level="1"] [data-min="2"], body[data-level="1"] [data-min="3"], body[data-level="2"] [data-min="3"] { display: none !important; }
+body[data-level="3"] [data-max="2"], body[data-level="2"] [data-max="1"], body[data-level="3"] [data-max="1"] { display: none !important; }
+footer { color: var(--muted); font-size: 13px; margin-top: 40px; border-top: 1px solid var(--line); padding-top: 12px; }
+</style>
+</head>
+<body data-level="1">
+
+<div class="bar"><div class="bar-in">
+  <div>
+    <h1>Classic HS: как устроена система</h1>
+    <div class="sub">Godot 4.7.2 · версия 0.24.1 · состояние на 15.10.2026</div>
+  </div>
+  <div class="grow"></div>
+  <div class="seg" role="group" aria-label="Уровень подробностей">
+    <button data-lv="1" aria-pressed="true">Обзор</button>
+    <button data-lv="2" aria-pressed="false">Подробнее</button>
+    <button data-lv="3" aria-pressed="false">Всё</button>
+  </div>
+  <input type="search" id="q" placeholder="Поиск: net, Арена, hash, user://…" aria-label="Фильтр компонентов">
+</div></div>
+
+<main>
+  <section class="intro">
+    <p class="hint" data-max="1">Нажмите на блок схемы, чтобы прочитать о нём. Переключатель «Обзор / Подробнее / Всё» наверху добавляет файлы, классы и связи, а на уровне «Всё» ещё и пошаговые потоки со ссылками <code>файл:строка</code>.</p>
+    <p><b>В двух словах.</b> Игра собрана как слоёный пирог. Внизу лежит детерминированный <b>движок правил</b>: он получает действие-словарь и возвращает список событий. Поведение карт описано словарями-хуками в <code>cards/</code>, а их числа и тексты взяты из <code>data/cards.json</code>. Над движком стоит <b>игровой слой</b> (<code>Match</code>): он решает, чей ход (человек, бот или соперник по сети), и рассылает события. <b>Интерфейс</b> целиком собран кодом: он по событиям проигрывает анимации и перестраивает стол по состоянию. <b>Сеть</b> обходится без сервера: два браузера соединяются по WebRTC, коды подключения пересылаются через мессенджер, обе стороны считают одну и ту же партию (lockstep) и после каждого хода сверяют хэш состояния.</p>
+    <ul data-min="2">
+      <li><b>Детерминизм.</b> Один <code>RandomNumberGenerator</code> с seed матча, никаких float в логике, явный порядок обхода. Одинаковые seed и действия всегда дают одинаковую игру, поэтому онлайну достаточно передавать одни ходы.</li>
+      <li><b>Одна сцена.</b> <code>ui/main.tscn</code> содержит только корневой <code>Control</code>, все экраны — классы GDScript, которые <code>ui/main.gd</code> подменяет друг другом.</li>
+      <li><b>Данные отдельно от кода.</b> Карты, переводы, раскладки текста на картах, реплики и журнал изменений лежат в <code>data/</code>. Арт и звук сгенерированы скриптами из <code>tools/</code>.</li>
+      <li><b>Всё проверяется тестами.</b> Около 820 тестов в 68 файлах <code>tests/test_*.gd</code>: каждая карта, сеть, UI-потоки, случайные полные партии.</li>
+      <li><b>Выпуск.</b> Версия в <code>project.godot</code>, журнал на 8 языках, тег <code>vX.Y.Z</code>, сайт через <code>tools/build_site.sh --publish</code> в ветку <code>gh-pages</code>, релизные сборки под все платформы на каждый тег (GitHub Actions).</li>
+    </ul>
+  </section>
+
+  <div class="legend" id="legend"></div>
+
+  <section class="map">
+    <div class="diagram"><svg id="svg" viewBox="0 0 1100 680" role="img" aria-label="Схема компонентов"></svg></div>
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </section>
+
+  <section data-min="2">
+    <h2>Компоненты</h2>
+    <p class="hint">Те же описания, что и в панели справа, но все сразу. Клик по заголовку выделяет блок на схеме.</p>
+    <div class="cards" id="cards"></div>
+    <p class="none" id="none-c">Ни один компонент не подходит под запрос.</p>
+  </section>
+
+  <section>
+    <h2>Ключевые потоки</h2>
+    <p class="hint" data-max="2">Пошаговые потоки (запуск, ход, онлайн, Арена, обучение, карты, данные, тесты, сайт, выпуск) показаны на уровне «Всё».</p>
+    <div class="flows" id="flows" data-min="3"></div>
+    <p class="none" id="none-f" data-min="3">Ни один поток не подходит под запрос.</p>
+  </section>
+
+  <footer>Страница сделана по коду репозитория (версия 0.24.1). Ссылки вида <code>файл:строка</code> указывают на начало функции на момент написания и со временем могут сдвинуться. Файл: <code>docs/architecture/index.html</code>, без внешних зависимостей. Незакоммиченная работа над игровым сервером (<code>net/referee.gd</code>, спецификации от 15.10.2026 в <code>docs/superpowers/specs/</code>) здесь не описана.</footer>
+</main>
+
+<script>
+"use strict";
+const LAYERS = {
+  core: "Ядро правил", game: "Игровая логика", ui: "Интерфейс", net: "Сеть",
+  data: "Данные и ресурсы", ops: "Сборка, тесты, выпуск", ext: "Внешнее"
+};
+const f = (...p) => '<span class="files">' + p.map(x => "<code>" + x + "</code>").join("") + "</span>";
+const r = (x) => '<code class="ref">' + x + "</code>";
+const ul = (...li) => "<ul>" + li.map(x => "<li>" + x + "</li>").join("") + "</ul>";
+const sec = (o) => "<dl>" +
+  [["Файлы", o.files], ["Задача", o.role], ["Главные классы", o.classes], ["Вход", o.input], ["Выход", o.output], ["Связи с соседями", o.links]]
+    .filter(x => x[1]).map(x => "<dt>" + x[0] + "</dt><dd>" + x[1] + "</dd>").join("") + "</dl>";
+
+// x, y: top-left corner of the box on the 1100x680 diagram (box 190x64).
+const C = [
+{ id: "external", name: "Внешние источники", path: "интернет, Codex CLI", layer: "ext", x: 30, y: 50,
+  short: "Откуда приходят данные и ресурсы: HearthstoneJSON (карты и оригинальный арт), hearthstone.wiki.gg (реплики), OpenGameArt (музыка CC0), локальный Codex CLI (генерация картинок). Во время игры нужны только STUN/TURN-серверы для онлайна.",
+  l2: sec({
+    role: "Не часть репозитория. Скрипты из <code>tools/</code> обращаются к этим источникам один раз, а результат кладётся в репозиторий. Игре сами источники не нужны.",
+    input: ul("<code>api.hearthstonejson.com/v1/latest/all/cards.json</code>: все карты со всеми локалями",
+      "картинки HearthstoneJSON (оригинальный арт Blizzard, только для локальной игры)",
+      "hearthstone.wiki.gg (таблицы Cargo Sound и AudioText): реплики героев и существ",
+      "opengameart.org: треки RandomMind (CC0)",
+      "локальный Codex CLI со встроенным генератором изображений"),
+    output: "<code>data/cards.json</code>, <code>data/voice_lines.json</code>, <code>art/</code>, <code>audio/open/</code>, <code>ui/sprites/</code>.",
+    links: "Онлайн-игра во время партии ходит к <code>stun:stun.l.google.com:19302</code> и при необходимости к TURN <code>free.expressturn.com:3478</code> (константа <code>ICE</code> в <code>net/webrtc_transport.gd</code>)."
+  }),
+  l3: '<div class="deep"><h4>Подробно</h4>' + ul(
+    "TURN нужен, когда прямой путь невозможен (симметричный NAT, закрытый UDP). Сейчас это публичный тестовый логин бесплатного тарифа ExpressTURN, порты UDP/TCP 3478. Данные остаются зашифрованными (DTLS). Для продукта понадобились бы короткоживущие логины с бэкенда (комментарий в коде).",
+    "Оригинальный арт (<code>art/original/</code>) принадлежит Blizzard: он в <code>.gitignore</code> и в <code>exclude_filter</code> всех пресетов экспорта.") + "</div>"
+},
+{ id: "tools", name: "Инструменты", path: "tools/", layer: "ops", x: 310, y: 50,
+  short: "Скрипты на Python и GDScript: выгрузка карт, генерация арта и звука, иконки и заставка, скриншоты, проверки раскладок и сцен карт, сборка сайта и релизных сборок.",
+  l2: sec({
+    files: f("tools/extract_cards.py", "tools/gen_card_art.py", "tools/gen_ui_art.py", "tools/key_green.gd", "tools/gen_audio.py",
+      "tools/fetch_open_music.py", "tools/fetch_original_art.py", "tools/fetch_voice_lines.py", "tools/voice_lines.md", "tools/make_icons.gd",
+      "tools/make_splash.gd", "tools/screenshots.gd", "tools/card_sheets.gd", "tools/card_layout.gd", "tools/check_card_tests.gd",
+      "tools/art_sheet.gd", "tools/site_data.py", "tools/site_cards.gd", "tools/build_site.sh", "tools/export_all.sh"),
+    role: "Всё, что делается вне игры и один раз: получить данные, нарисовать или синтезировать ресурсы, проверить их и собрать результат.",
+    classes: "GDScript-инструменты — это <code>extends SceneTree</code>, запуск: <code>godot --path . --script res://tools/….gd</code>. Части из них нужно окно (без <code>--headless</code>): make_splash, screenshots, card_sheets, site_cards.",
+    input: "Внешние источники, код и данные игры.",
+    output: "Файлы в <code>data/</code>, <code>art/</code>, <code>audio/</code>, <code>ui/sprites/</code>, <code>icons/</code>, <code>media/screens/</code>, <code>build/site</code>, <code>build/release</code>.",
+    links: "Используют классы самой игры (CardDb, CardView, CardLayout, CardTests), поэтому картинки для сайта и скриншоты выглядят точно как в игре."
+  }),
+  l3: '<div class="deep"><h4>Что за что отвечает</h4>' + ul(
+    "<code>extract_cards.py</code>: <code>data/cards.json</code> (набор VANILLA, карты обучения TU4*, список EXTRA: герои, Монета <code>GAME_005</code>, жетоны).",
+    "<code>gen_card_art.py</code>: <code>art/cards/&lt;id&gt;.jpg</code> 256×256 через Codex. Уже готовые пропускает, поэтому прерванный запуск продолжается.",
+    "<code>gen_ui_art.py</code> + <code>key_green.gd</code>: спрайты интерфейса на зелёном фоне, затем хромакей.",
+    "<code>gen_audio.py</code>: детерминированный синтез звуков и музыки в <code>audio/*.wav</code>, чистый Python без зависимостей.",
+    "<code>fetch_open_music.py</code>: <code>audio/open/*.ogg</code> (нужны curl и ffmpeg). <code>fetch_original_art.py</code>: <code>art/original/</code>. <code>fetch_voice_lines.py</code>: английские реплики в <code>data/voice_lines.json</code>.",
+    "<code>make_icons.gd</code>: иконки PWA из драконьего герба. <code>make_splash.gd</code>: <code>icons/splash.png</code> с номером версии.",
+    "<code>screenshots.gd</code>: <code>media/screens/&lt;lang&gt;/*.png</code> с настоящих экранов. <code>card_sheets.gd</code>: листы карт для проверки раскладок глазами. <code>art_sheet.gd</code>: весь арт на одном SVG.",
+    "<code>card_layout.gd</code> и <code>check_card_tests.gd</code>: консольные проверки (должны выдать 0 проблем).",
+    "<code>build_site.sh</code>, <code>site_data.py</code>, <code>site_cards.gd</code>: сайт. <code>export_all.sh</code>: релизные сборки.") + "</div>"
+},
+{ id: "data", name: "Данные", path: "data/", layer: "data", x: 590, y: 50,
+  short: "Всё, что не код: 534 карты из HearthstoneJSON с текстами на всех языках, переводы интерфейса на 8 языков, ручные раскладки текста карт, подсказки ключевых слов, реплики, тестовые сцены карт, журнал изменений.",
+  l2: sec({
+    files: f("data/cards.json", "data/i18n/", "data/i18n/keys.json", "data/card_layout/", "data/keywords.json", "data/voice_lines.json",
+      "data/card_tests/", "data/changelog/", "CHANGELOG.md", "data/debug_example.json"),
+    role: "Единый источник фактов о картах и текстах. Код читает эти файлы при первом обращении и держит их в статических словарях.",
+    classes: "Читатели: <code>CardDb</code> (engine/card_db.gd), <code>CardText</code>, <code>Locale</code>, <code>CardLayout</code>, <code>VoiceLines</code>, <code>CardTests</code> (game/), <code>KeywordTips</code>, <code>ChangelogView</code> (ui/).",
+    input: "<code>tools/extract_cards.py</code>, <code>tools/fetch_voice_lines.py</code>, ручные переводы, Card Lab (отладка) сохраняет <code>data/card_layout/&lt;lang&gt;.json</code>.",
+    output: "В сборку попадают через <code>include_filter</code> в <code>export_presets.cfg</code>: <code>data/*.json, data/i18n/*.json, data/card_layout/*.json, CHANGELOG.md, data/changelog/*.md, art/cards/*.jpg</code>.",
+    links: "Движок берёт отсюда числа и механики карт, игровой слой и интерфейс — тексты, переводы и раскладки. Онлайн сверяет SHA-256 от <code>cards.json</code> (<code>CardDb.data_hash</code>)."
+  }),
+  l3: '<div class="deep"><h4>Подробно</h4>' + ul(
+    "<code>cards.json</code>: массив записей <code>{id, dbfId, type, cardClass, rarity, cost, attack, health, mechanics, name: {enUS, ruRU, …}, text: {…}}</code>. <code>CardDb._ensure_loaded</code> приводит числовые поля к int и строит индекс по dbfId (он нужен кодам колод).",
+    "Переводы: английская строка служит ключом, <code>data/i18n/&lt;code&gt;.json</code> — это словарь «английский → перевод». <code>keys.json</code> хранит полный список ключей, <code>tests/i18n_keys.gd</code> собирает строки из вызовов <code>tr()/translate()/_t()/_tr()</code>, <code>tests/test_i18n.gd</code> требует перевод каждого ключа и наличие всех символов в шрифте.",
+    "Раскладки карт не вычисляются алгоритмом (так решил владелец): для каждой карты и языка вручную записаны размер текста, размер имени и строки. <code>CardLayout.problems()</code> только проверяет их, а <code>tests/test_card_fit.gd</code> проверяет все карты на всех 8 языках.",
+    "<code>card_tests/*.json</code>: сцена (формат <code>Scenario</code>) и шаги для каждой карты, формат описан в <code>data/card_tests/README.md</code>.",
+    "Журнал: <code>CHANGELOG.md</code> — русский оригинал, <code>data/changelog/{en,de,fr,es,pt_BR,it,pl}.md</code> — переводы.") + "</div>"
+},
+{ id: "assets", name: "Арт, звук, шрифты", path: "art/ audio/ fonts/", layer: "data", x: 870, y: 50,
+  short: "Иллюстрации карт (наборы — это папки в art/), спрайты интерфейса, фоны, синтезированные звуки и две музыкальные подборки, шрифты, иконки и заставка. Рамки, самоцветы и эффекты стола рисуются кодом.",
+  l2: sec({
+    files: f("art/cards/", "art/custom/", "art/original/", "ui/sprites/", "ui/menu_bg.jpg", "ui/board_bg.jpg", "ui/library_bg.jpg",
+      "audio/", "audio/open/", "fonts/", "icons/", "ui/art.gd", "ui/sprites.gd", "game/sound.gd", "ui/fonts.gd", "ui/frames.gd", "ui/card_backs.gd"),
+    role: "Внешний вид и звук. Если картинки нет, всё равно что-то видно: <code>Art</code> рисует процедурную картинку, <code>Sprites</code> возвращает null, и тогда код рисует элемент сам.",
+    classes: ul("<code>Art</code> (ui/art.gd): процедурный векторный арт для каждой карты и наборы картинок. <code>Art.sets()</code> = «generated» (art/cards), «original» и любые другие папки art/. <code>Art.texture(id)</code> ищет jpg/png/webp/jpeg.",
+      "<code>Sprites</code> (ui/sprites.gd): все <code>ui/sprites/*.png|jpg</code> загружаются при старте.",
+      "<code>Sound</code> (game/sound.gd): тип события → звук (<code>EVENTS</code>), пул из 6 плееров, музыка «generated» (<code>audio/*.wav</code>) или «open» (<code>audio/open/*.ogg</code>).",
+      "<code>Fonts</code>: Alegreya для интерфейса, Cinzel Decorative для заголовка, деревянные кнопки таверны."),
+    input: "Генераторы из <code>tools/</code>. Свой набор арта: положить картинки с именем по id карты в <code>art/&lt;имя&gt;/</code>.",
+    output: "Текстуры и звуки для интерфейса, иконки PWA, заставка загрузки.",
+    links: "Выбор набора арта, подборки музыки и рубашки сохраняется в <code>Settings</code>. Смена набора вызывает <code>Art.reset()</code>."
+  }),
+  l3: '<div class="deep"><h4>Правила и тонкости</h4>' + ul(
+    "<b>Правило предзагрузки для веба:</b> текстура, впервые загруженная внутри <code>_draw</code>, в веб-сборке (рендерер Compatibility) показывается белой. Поэтому <code>Sprites.load_all()</code> вызывается в " + r("ui/main.gd:7") + ", а не при рисовании.",
+    "<code>Art._load</code> сначала читает файл как есть (так работают наборы игрока без import-настроек), а иначе берёт импортированную Godot текстуру.",
+    "<code>art/custom/</code> (перекодированные копии оригинала) не хранится в git, но входит в веб-сборку: в пресете Web исключён только <code>art/original/*</code>. В настольных и Android-пресетах исключены оба.",
+    "Звук события выбирает <code>Sound.sound_for(ev, g, viewer)</code>. Громкость задаётся шинами <code>Music</code> и <code>SFX</code>, их создаёт <code>Settings.apply()</code>.") + "</div>"
+},
+{ id: "cards", name: "Скрипты карт", path: "cards/", layer: "core", x: 30, y: 220,
+  short: "Около 400 словарей-хуков: для каждой карты с особым поведением (клич, хрип, триггеры, ауры, изменение стоимости, секреты, силы героев), а также для временных чар «ench:…». Файлы разложены по классам.",
+  l2: sec({
+    files: f("cards/registry.gd", "cards/neutral.gd", "cards/druid.gd", "cards/hunter.gd", "cards/mage.gd", "cards/paladin.gd", "cards/priest.gd",
+      "cards/rogue.gd", "cards/shaman.gd", "cards/warlock.gd", "cards/warrior.gd", "cards/heroes.gd", "cards/tutorial.gd"),
+    role: "Описать то, чего нет в данных. Простые ключевые слова (Taunt, Charge, Divine Shield, Stealth, Windfury…) и поля <code>spellDamage</code> и <code>overload</code> движок берёт прямо из <code>cards.json</code>.",
+    classes: "<code>Cards</code> (cards/registry.gd): статический реестр, загружает файлы из <code>FILES</code>. Каждый файл содержит <code>static func register(r: Dictionary)</code>. Помощник <code>Cards.secret(event, cond, effect)</code> для Секретов, спецификации целей в <code>T</code> (engine/t.gd).",
+    input: "Id карты (например <code>VAN_CS2_024</code>, Frostbolt).",
+    output: "Словарь хуков. Ключи: <code>target</code>, <code>spell</code>, <code>battlecry</code>, <code>deathrattle</code>, <code>on</code> {событие: f}, <code>now</code>, <code>aura</code>, <code>aura_final</code>, <code>cost_aura</code>, <code>cost_mod</code>, <code>can_play</code>, <code>combo</code>, <code>combo_target</code>, <code>choose_one</code>, <code>on_choose</code>, <code>hero_power</code>, <code>durability_on_attack</code>, <code>immune_while_attacking</code>.",
+    links: "Движок вызывает <code>Cards.of(id)</code> (через <code>hooks_of</code>, который учитывает Silence). Хук получает <code>(g, me, t)</code> или <code>(g, me, ev)</code> и вызывает примитивы GameState: <code>damage</code>, <code>summon</code>, <code>buff</code>, <code>draw</code>…"
+  }),
+  l3: '<div class="deep"><h4>Пример и правила</h4>' + ul(
+    '<code>r["VAN_CS2_024"] = {"target": T.ANY, "spell": func(g, me, t): g.damage(me, t, g.spell_dmg(me, 3)); g.freeze(t)}</code>, см. <code>cards/mage.gd</code>.',
+    "Временные эффекты — это чары (enchantments) с полем <code>hooks: \"ench:…\"</code>, например <code>ench:blessing_of_wisdom</code> в cards/paladin.gd или <code>ench:tutorial_guard</code> в cards/tutorial.gd.",
+    "<code>Cards.unload()</code> обязательно вызывается при выходе (" + r("ui/main.gd:213") + "): лямбды хуков в статическом словаре иначе роняют Godot при завершении.",
+    "Каждая карта покрыта тестами <code>tests/test_cards_*.gd</code> и сценой в <code>data/card_tests/</code>. <code>tests/test_coverage.gd</code> следит, чтобы у каждой механики из текста был обработчик.") + "</div>"
+},
+{ id: "engine", name: "Движок правил", path: "engine/", layer: "core", x: 310, y: 220,
+  short: "Детерминированная модель партии: сущности с тегами и чарами, очередь событий, фаза смертей, ауры, список законных действий, клон для бота и хэш состояния. Ничего не знает ни об экране, ни о сети.",
+  l2: sec({
+    files: f("engine/game.gd", "engine/game_state.gd", "engine/entity.gd", "engine/player.gd", "engine/card_db.gd", "engine/scenario.gd", "engine/t.gd"),
+    role: "Правила Hearthstone образца июня 2014. Принимает действие-словарь, проверяет его по списку законных, применяет и возвращает события.",
+    classes: ul("<code>Game</code> extends <code>GameState</code>: подготовка, ходы, действия, законность.",
+      "<code>GameState</code>: состояние, <code>emit</code>/<code>resolve</code>, смерти, ауры, примитивы для хуков, <code>clone()</code>, <code>state_hash()</code>.",
+      "<code>Entity</code> (id, card_id, zone, tags, enchantments, aura), <code>Player</code> (hand, deck, board, secrets, mana, overload…).",
+      "<code>CardDb</code>: карты из cards.json. <code>Scenario</code>: позиция ↔ JSON. <code>T</code>: спецификации целей."),
+    input: "Две колоды с героями и seed. Действия <code>{type: play|attack|hero_power|choose|mulligan|end_turn|concede, player, …}</code>.",
+    output: "<code>{ok, error, events}</code>, <code>history</code> (вся партия), <code>legal_actions()</code>, <code>state_hash()</code>, <code>clone()</code>, <code>to_scenario()</code>.",
+    links: "Вызывают его <code>Match</code> и <code>Bot</code> (на клонах). <code>Scenario.build</code> используют обучение, отладочный стол и тесты. <code>NetSession</code> сверяет <code>state_hash</code>. Данные карт берутся из <code>CardDb</code>, поведение — из <code>Cards.of</code>."
+  }),
+  l3: '<div class="deep"><h4>Как работает внутри</h4>' + ul(
+    r("engine/game.gd:47") + " <code>apply</code>: <code>_normalize</code> (float из JSON превращает в int; ввод из сети не считается доверенным) → проверка <code>legal_actions().has(a)</code> → ветка по типу → <code>resolve()</code> → <code>_prune_pending</code> → запись в <code>history</code>.",
+    r("engine/game_state.gd:162") + " <code>emit</code>: пишет событие в журнал и ставит в <code>queue</code> все хуки <code>on</code> сущностей в игре и их чар. " + r("engine/game_state.gd:177") + " <code>emit_now</code> вызывает хуки <code>now</code> сразу (замещающие эффекты: Ice Block, Commanding Shout).",
+    r("engine/game_state.gd:189") + " <code>resolve</code>: выполняет очередь, затем <code>update_auras</code> и <code>_death_phase</code> (" + r("engine/game_state.gd:209") + "), и так до затишья. Ограничение — MAX_QUEUE_STEPS = 5000.",
+    "Детерминизм: только <code>rng</code> с seed матча, порядок по <code>play_order</code>. Муллиган тасует колоду собственным потоком <code>hash([seed, \"mulligan\", p])</code> (" + r("engine/game.gd:138") + "), поэтому порядок прихода двух муллиганов онлайн не влияет на игру.",
+    r("engine/game_state.gd:741") + " <code>state_hash</code> = SHA-256 от <code>JSON.stringify(to_dict())</code>. " + r("engine/game_state.gd:701") + " <code>clone</code> копирует состояние вместе с RNG, но без истории.",
+    "Ходы: " + r("engine/game.gd:182") + " <code>_start_turn</code> (+1 кристалл, перегрузка, снятие EXHAUSTED, добор), " + r("engine/game.gd:201") + " <code>_end_turn</code>. Розыгрыш: " + r("engine/game.gd:368") + " существо, " + r("engine/game.gd:388") + " заклинание и секрет, " + r("engine/game.gd:430") + " атака.",
+    "Пределы: MAX_HAND 10, MAX_BOARD 7, MAX_MANA 10.") + "</div>"
+},
+{ id: "game", name: "Игровой слой", path: "game/", layer: "game", x: 590, y: 220,
+  short: "Связка между движком и экранами: Match решает, кто ходит (человек, бот, соперник по сети), и рассылает события. Здесь же бот, колоды и коды колод, сохранения, настройки, язык, звук, дектрекер и текст истории.",
+  l2: sec({
+    files: f("game/match.gd", "game/bot.gd", "game/deck.gd", "game/decks.gd", "game/deck_code.gd", "game/deck_store.gd", "game/deck_tracker.gd",
+      "game/history_text.gd", "game/card_text.gd", "game/card_layout.gd", "game/settings.gd", "game/locale.gd", "game/sound.gd",
+      "game/profile.gd", "game/progress.gd", "game/voice_lines.gd", "game/card_tests.gd"),
+    role: "Управлять партией и хранить всё, что относится к игроку, а не к правилам.",
+    classes: ul("<code>Match</code> (Node): сигналы <code>changed(events)</code>, <code>finished(winner)</code>, <code>local_action(action, hash)</code>. Методы <code>submit</code>, <code>submit_remote</code>, <code>timeout</code>, <code>actor</code>, <code>viewer</code>.",
+      "<code>Bot</code>: жадный бот на один шаг. Пробует каждое законное действие на <code>clone()</code> и выбирает лучшее, если оно лучше конца хода. Видит скрытую информацию (он только для тренировки).",
+      "<code>Deck</code> (правила сборки, вариант для Арены), <code>DeckCode</code> (коды колод, совместимые с Hearthstone), <code>DeckStore</code> (сохранённые колоды и 10 известных классических колод), <code>Decks</code> (базовые колоды бота).",
+      "<code>Settings</code>, <code>Locale</code>, <code>Sound</code>, <code>Profile</code> (имя), <code>Progress</code> (обучение), <code>DeckTracker</code>, <code>HistoryText</code>, <code>CardText</code>, <code>CardLayout</code>, <code>VoiceLines</code>."),
+    input: "Действия от интерфейса, ходы бота, ходы соперника из NetSession. Файлы <code>user://</code> и <code>data/</code>.",
+    output: "Пакеты событий для интерфейса, действие с хэшем для сети, сохранённые файлы.",
+    links: "MatchView подписан на <code>changed</code> и передаёт <code>busy</code>, чтобы бот ждал конца анимаций. NetSession слушает <code>local_action</code> и вызывает <code>submit_remote</code>."
+  }),
+  l3: '<div class="deep"><h4>Хранилища и настройки</h4>' + ul(
+    "<code>user://settings.json</code> (Settings): <code>language, music, sfx, shake, fullscreen, tracker, anim_speed, art, card_back, tracker_deck, tracker_opp, music_set</code>. Плохие значения заменяются значениями по умолчанию. Если файла нет, это первый запуск и игра спрашивает язык.",
+    "<code>user://decks.json</code> (DeckStore). В браузере <code>user://</code> хранится в IndexedDB. Повреждённый файл не теряется, а откладывается в <code>*.bad.json</code>.",
+    "<code>user://profile.json</code> (имя для соперника), <code>user://tutorial.json</code> (пройденные миссии).",
+    "<code>Settings.apply()</code>: <code>Locale.set_language</code>, громкость шин, <code>Match.shake_enabled</code>. <code>Locale.load_all()</code> превращает <code>data/i18n/*.json</code> в объекты <code>Translation</code> для <code>TranslationServer</code>. <code>Locale.pick(OS.get_locale())</code> выбирает язык по системе.",
+    "Ход бота: " + r("game/match.gd:116") + " <code>_after</code> ставит таймер <code>bot_delay</code> = 0.6 с и ждёт, пока <code>busy()</code> не вернёт false. " + r("game/match.gd:142") + " <code>_bot_step</code>: если бот сделал незаконный ход, это ошибка, и он сдаётся.",
+    r("game/match.gd:61") + " <code>submit</code> (локальный ход), " + r("game/match.gd:97") + " <code>submit_remote</code> (ход соперника с проверкой хэша), " + r("game/match.gd:75") + " <code>timeout</code> (время хода вышло).") + "</div>"
+},
+{ id: "ui", name: "Интерфейс", path: "ui/", layer: "ui", x: 870, y: 220,
+  short: "Все экраны собраны кодом, сцена всего одна (main.tscn). Главный экран — игровой стол MatchView: он перестраивает стол по состоянию игры и проигрывает анимации по событиям. Ещё есть меню, коллекция, тренировка, онлайн, настройки и отладка.",
+  l2: sec({
+    files: f("ui/main.tscn", "ui/main.gd", "ui/menu.gd", "ui/match_view.gd", "ui/minion_view.gd", "ui/hero_view.gd", "ui/card_view.gd", "ui/entity_view.gd",
+      "ui/power_view.gd", "ui/mana_bar.gd", "ui/deck_pile.gd", "ui/table_fx.gd", "ui/anim.gd", "ui/target_arrow.gd", "ui/fuse.gd", "ui/history_panel.gd",
+      "ui/history_strip.gd", "ui/deck_tracker_panel.gd", "ui/keyword_tips.gd", "ui/collection_view.gd", "ui/deck_list_view.gd", "ui/training_setup.gd",
+      "ui/online_view.gd", "ui/settings_view.gd", "ui/language_picker.gd", "ui/changelog_view.gd", "ui/debug_table.gd", "ui/card_lab.gd",
+      "ui/effects_lab.gd", "ui/palette.gd", "ui/burn.gdshader"),
+    role: "Показать игру и принять ввод. Правил интерфейс не знает: что можно сделать, он спрашивает у <code>legal_actions()</code>.",
+    classes: ul("<code>Main</code> (ui/main.gd): корень, переключает экраны через <code>_set_screen</code> и держит текущий матч.",
+      "<code>MatchView</code> (ui/match_view.gd, ~2400 строк): стол, ввод (клик или перетаскивание → Choose One → место → цель), очередь анимаций, таймер, эмоции, результат.",
+      "<code>CardView</code>, <code>MinionView</code>, <code>HeroView</code>, <code>Frames</code>, <code>TableFx</code>, <code>Anim</code> (длительности, делённые на скорость 1–4x).",
+      "<code>DeckListView</code> + <code>CollectionView</code> (коллекция), <code>TrainingSetup</code>, <code>OnlineView</code>, <code>ArenaView</code>, <code>TutorialView</code>/<code>TutorialIntro</code>, <code>SettingsView</code>, <code>DebugTable</code> (сцена, тесты карт, CardLab, EffectsLab)."),
+    input: "События от <code>Match.changed</code>, состояние <code>Game</code>, клики и перетаскивания игрока, ресурсы.",
+    output: "Действия в <code>Match.submit</code>, сохранение колод и настроек, намерения (intent) в сеть.",
+    links: "Подписан на Match, для онлайна — на NetSession (эмоции, намерения, обрыв). Арт и звук берёт из <code>Art</code>, <code>Sprites</code>, <code>Sound</code>."
+  }),
+  l3: '<div class="deep"><h4>Очередь анимаций и приказов</h4>' + ul(
+    r("ui/match_view.gd:191") + " <code>bind(m)</code>: <code>m.busy = func(): return _busy</code>, <code>m.changed → _on_changed</code>, <code>m.start()</code>. " + r("ui/match_view.gd:207") + " <code>bind_online</code> дополнительно включает таймер хода, имена игроков, эмоции и сигнал обрыва.",
+    r("ui/match_view.gd:1337") + " <code>_on_changed</code> кладёт пакет событий в <code>_queue</code>. " + r("ui/match_view.gd:1346") + " <code>_play_queue</code> по одному вызывает <code>await _animate(…)</code> (" + r("ui/match_view.gd:1359") + "): сначала то, что происходит до изменения (показ карты, выпад атакующего, полёт заклинания), а в момент удара — <code>refresh()</code>, числа и звуки.",
+    r("ui/match_view.gd:871") + " <code>refresh</code> → " + r("ui/match_view.gd:1010") + " <code>_reconcile</code>: новые виды прилетают из колоды или от сыгранной карты, остальные скользят на новые места, исчезнувшие уходят.",
+    r("ui/match_view.gd:800") + " <code>_act</code>: пока стол анимируется, приказы игрока копятся в <code>_pending_acts</code> и проверяются против <code>_plan()</code>, то есть состояния после этих приказов. " + r("ui/match_view.gd:814") + " <code>_release_orders</code> выполняет их по одному. В обучении очередь приказов отключена.",
+    "В тестах <code>Anim.instant = true</code>: события применяются сразу, без ожидания.") + "</div>"
+},
+{ id: "tests", name: "Тесты", path: "tests/ · run_tests.sh", layer: "ops", x: 30, y: 390,
+  short: "Около 820 тестов в 68 файлах: каждая карта, правила, коды колод, сетевой протокол, Арена, обучение, UI-потоки, переводы и шрифты, случайные полные партии. Всё запускается одной командой ./run_tests.sh без окна.",
+  l2: sec({
+    files: f("run_tests.sh", "tests/run.gd", "tests/test_case.gd", "tests/h.gd", "tests/sim.gd", "tests/fake_rtc.gd", "tests/i18n_keys.gd",
+      "tests/scenarios/example.json", "tests/test_zz_isolation.gd", "net/loopback_transport.gd"),
+    role: "Ловить регрессии в правилах, данных, сети и интерфейсе до выпуска.",
+    classes: "<code>TestCase</code> (проверки), <code>H</code> (помощники: голый GameState с Джайной и Гаррошем, уборка тестовых карт), <code>Sim</code> (случайные партии), <code>LoopbackTransport</code> (две стороны в памяти), <code>tests/fake_rtc.gd</code> (подмена WebRtcTransport с настоящими кодами).",
+    input: "Весь код и данные. Фильтр: <code>./run_tests.sh -- deck_code</code> (подстрока в «файл:метод»).",
+    output: "Строки <code>FAIL файл:метод</code> и итог. Число тестов попадает на сайт (<code>tools/site_data.py</code>).",
+    links: "Проверяют все слои. Дополнительно: <code>tools/check_card_tests.gd</code> (сцены карт) и <code>tools/card_layout.gd</code> (раскладки)."
+  }),
+  l3: '<div class="deep"><h4>Как устроен прогон</h4>' + ul(
+    "<code>run_tests.sh</code>: <code>godot --headless --import</code> (кэш class_name), затем <code>godot --headless --script res://tests/run.gd</code>.",
+    "<code>tests/run.gd</code>: тесты стартуют на первом кадре, когда root уже в дереве, поэтому UI-тесты получают <code>_ready()</code>. Включается <code>Anim.instant</code>, язык английский. Настройки, колоды, профиль и прогресс пишутся в <code>user://test_runner_*.json</code>.",
+    "Свой <code>Logger</code> (ErrorCounter) считает ошибки скриптов: любая ошибка во время теста означает провал.",
+    "<code>test_zz_isolation.gd</code> запускается последним и проверяет, что ни один тест не оставил путь к настоящим файлам игрока.",
+    "<code>test_sim.gd</code>: случайные полные партии и повтор, который должен дать те же хэши (детерминизм). <code>test_net_session.gd</code>: полный матч по сети без рассинхронизации, подменённый хэш, мусорные сообщения, обрыв.") + "</div>"
+},
+{ id: "tutorial", name: "Обучение", path: "game/tutorial.gd", layer: "game", x: 310, y: 390,
+  short: "Шесть миссий как в оригинале: Джайна против Хоггера, Миллхауса, Лорвокера Чо, Короля Муклы, Хемета Несингвари и Иллидана. Заданные руки и колоды, подсказки, запреты на конец хода, реплики боссов.",
+  l2: sec({
+    files: f("game/tutorial.gd", "game/missions.gd", "game/progress.gd", "cards/tutorial.gd", "ui/tutorial_view.gd", "ui/tutorial_intro.gd"),
+    role: "Провести новичка через основы так же, как в игре 2014 года.",
+    classes: "<code>Missions</code> (LIST шести миссий: босс, сила, колоды сверху вниз, правила), <code>Tutorial</code> (одна миссия в игре: подсказки, правила конца хода, реплики), <code>Progress</code> (user://tutorial.json).",
+    input: "Номер миссии.",
+    output: "<code>{game, tutorial}</code> для MatchView, отметка о прохождении.",
+    links: "Собирает партию через <code>Scenario.build</code> (движок). MatchView получает <code>tutorial</code> и спрашивает у него подсказки. Карты боссов (TU4*) берутся из cards.json и <code>cards/tutorial.gd</code>."
+  }),
+  l3: '<div class="deep"><h4>Подробно</h4>' + ul(
+    r("game/missions.gd:104") + " <code>build</code>: колоды разворачиваются (в Scenario верх колоды — последний элемент), Джайна ходит первой, муллигана нет, сила героя может быть закрыта (<code>hero_power_locked</code>).",
+    r("game/tutorial.gd:34") + " <code>start</code>: для <code>unlosable</code> миссий герой получает чару <code>ench:tutorial_guard</code> (ниже 1 здоровья не опускается). Для <code>guarded</code> босс получает тег <code>GUARDED</code>: пока у него есть существа, атаковать его нельзя (<code>_defenders</code> в engine/game.gd).",
+    r("game/tutorial.gd:55") + " <code>end_turn_block</code>, " + r("game/tutorial.gd:90") + " <code>next_hint</code>, " + r("game/tutorial.gd:104") + " <code>boss_line</code>.") + "</div>"
+},
+{ id: "net", name: "Сеть", path: "net/", layer: "net", x: 590, y: 390,
+  short: "Игра без сервера: WebRTC между двумя браузерами, коды приглашения и ответа пересылаются через любой мессенджер. Обе стороны считают одну партию (lockstep) и сверяют хэш состояния после каждого хода.",
+  l2: sec({
+    files: f("net/transport.gd", "net/webrtc_transport.gd", "net/signal_code.gd", "net/net_session.gd", "net/loopback_transport.gd", "net/channel_transport.gd", "ui/online_view.gd"),
+    role: "Соединить двух игроков, договориться о партии и передавать ходы так, чтобы партии не разошлись.",
+    classes: ul("<code>Transport</code>: абстракция с <code>send(dict)</code> и сигналами <code>opened</code>, <code>received</code>, <code>closed</code>. Сообщения передаются как JSON.",
+      "<code>WebRtcTransport</code>: <code>WebRTCPeerConnection</code> и один упорядоченный надёжный канал «game». Методы <code>host()</code>, <code>join(invite)</code>, <code>finish(answer)</code>, сигнал <code>code_ready</code>.",
+      "<code>SignalCode</code>: <code>pack</code>/<code>unpack</code> кодов (JSON → deflate → base64 + 4 байта контрольной суммы SHA-256).",
+      "<code>NetSession</code>: протокол обычной игры <code>hello → start → action/emote/intent → bye</code>.",
+      "<code>LoopbackTransport</code> для тестов, <code>ChannelTransport</code> для игр Арены внутри одного соединения."),
+    input: "Колода, имя, код друга. Действия из <code>Match.local_action</code>.",
+    output: "<code>started(match)</code>, <code>failed(reason)</code>, <code>emote_received</code>, <code>intent_received</code>, вызовы <code>Match.submit_remote</code>.",
+    links: "Создаётся экраном OnlineView, затем переходит под MatchView. Матч проверяет действие соперника движком, а хэш состояния — после применения."
+  }),
+  l3: '<div class="deep"><h4>Протокол и проверки</h4>' + ul(
+    "Хозяин — всегда игрок 0, он выбирает seed. <code>hello</code> несёт <code>protocol, version, data</code> (SHA-256 cards.json), <code>name, hero, cards</code>. Если не совпадает версия или данные, отправляется <code>bye</code> с понятной причиной (" + r("net/net_session.gd:145") + ").",
+    r("net/net_session.gd:194") + " <code>_on_local_action</code> отправляет <code>{t: action, n, action, hash}</code>. Для <code>mulligan</code> и <code>concede</code> хэш пустой: эти ходы оба игрока могут сделать одновременно.",
+    r("net/net_session.gd:200") + " <code>_on_action</code>: проверяет номер хода n (пропуск означает desync) и наличие хэша, затем вызывает <code>submit_remote</code>. Причины разрыва: <code>left, connection, version, desync, protocol, mode</code>.",
+    "Сетевая игра работает только в браузерной сборке: в настольных сборках нет плагина webrtc-native, и <code>initialize</code> возвращает ошибку «Online play needs the browser version».",
+    "Lockstep требует, чтобы обе стороны знали обе колоды. Для игры с друзьями это допустимо: интерфейс показывает только то, что положено.") + "</div>"
+},
+{ id: "arena", name: "Арена", path: "net/arena_session.gd", layer: "net", x: 870, y: 390,
+  short: "Арена с другом по сети: хозяин выбирает правила, каждый игрок выбирает героя из трёх и драфтит 30 карт по правилам 2014 года, потом идут игры до трёх побед по одному соединению.",
+  l2: sec({
+    files: f("game/arena_draft.gd", "net/arena_session.gd", "net/channel_transport.gd", "ui/arena_view.gd"),
+    role: "Серия игр с драфтом поверх одного WebRTC-соединения.",
+    classes: ul("<code>ArenaDraft</code>: 3 героя разных классов, 30 выборов по 3 карты одной редкости. Выборы 1, 10, 20 и 30 дают редкую карту или выше. Шансы 76.5 / 14 / 7.5 / 2 %, классовые карты выпадают в 1.5 раза чаще, ограничения на копии нет.",
+      "<code>ArenaSession</code>: протокол <code>hello{mode: arena} → rules{deck, keep} → status{hero, cards, ready, deciding} → game{g, m} … concede / bye</code>, счёт, <code>WINS = 3</code>.",
+      "<code>ChannelTransport</code>: сообщения игры номер n упакованы в <code>{t: game, g: n, m}</code>, закрытие завершает только эту игру.",
+      "<code>ArenaView</code>: правила, выбор героя, драфт, лобби."),
+    input: "Соединение от OnlineView, выборы игрока.",
+    output: "<code>game_started(session, match)</code>, <code>changed</code> (прогресс соперника, счёт), <code>failed</code>.",
+    links: "Каждая игра Арены — обычная <code>NetSession</code> (с <code>arena = true</code>, чтобы разрешить колоду с любым числом копий) поверх ChannelTransport. Сессия Арены живёт под корнем Main между экранами."
+  }),
+  l3: '<div class="deep"><h4>Подробно</h4>' + ul(
+    r("net/arena_session.gd:190") + " <code>_maybe_start</code>: когда оба готовы, создаются <code>ChannelTransport</code> и <code>NetSession</code>. Сообщения игры, пришедшие раньше её старта, ждут в <code>_pending</code>.",
+    r("net/arena_session.gd:144") + " <code>record</code> считает результат, " + r("net/arena_session.gd:162") + " <code>_next_deck</code> запускает новый драфт для правил «each». Соперник видит прогресс драфта, но не выбранного героя.",
+    r("ui/main.gd:141") + " <code>show_arena</code> переносит сессию и транспорт под Main, " + r("ui/main.gd:160") + " <code>start_arena_match</code> открывает стол с <code>v.arena = s</code>.") + "</div>"
+},
+{ id: "github", name: "GitHub", path: "pycz2/classichs", layer: "ext", x: 30, y: 560,
+  short: "Где живёт результат: ветка main (код), ветка gh-pages (сайт и веб-сборка на https://pycz2.github.io/classichs/), теги vX.Y.Z и релизные сборки, которые собирает GitHub Actions.",
+  l2: sec({
+    role: "Хостинг кода, сайта (GitHub Pages) и релизов. Других веток нет: работа коммитится прямо в main.",
+    input: "<code>git push origin main</code>, <code>git push origin vX.Y.Z</code>, <code>tools/build_site.sh --publish</code> (push в gh-pages).",
+    output: "Сайт с игрой в браузере (PWA), архив кода, релизные файлы по тегу.",
+    links: "GitHub Actions (<code>.github/workflows/release.yml</code>, только что добавлен): на каждый push в main — проверочная сборка (тесты + все платформы), на тег <code>vX.Y.Z</code> — GitHub Release с файлами Web, Windows, Linux AppImage, macOS и Android."
+  }),
+  l3: ""
+},
+{ id: "site", name: "Сайт (лендинг)", path: "site/ · build_site.sh", layer: "ops", x: 310, y: 560,
+  short: "Посадочная страница на 8 языках со скриншотами и картами, нарисованными самой игрой. Рядом лежит веб-сборка игры в play/, её можно установить как приложение (PWA).",
+  l2: sec({
+    files: f("site/index.html", "site/main.js", "site/style.css", "site/i18n/", "site/favicon.svg", "site/og.jpg", "tools/build_site.sh", "tools/site_data.py", "tools/site_cards.gd", "media/screens/"),
+    role: "Показать игру и дать в неё сыграть по ссылке.",
+    classes: "<code>site/main.js</code>: тексты из <code>window.TEXT</code> (site/i18n/&lt;lang&gt;.js), язык по браузеру или по сохранённому выбору, галерея, параллакс карт. Данные — из <code>data.json</code>.",
+    input: "Веб-экспорт Godot (пресет «Web»), скриншоты <code>media/screens/en</code> и <code>ru</code>, cards.json, CHANGELOG.",
+    output: "<code>build/site/</code> → ветка gh-pages.",
+    links: "Сайт собирается и публикуется при каждом выпуске. <code>site/.gdignore</code> не даёт Godot импортировать сайт в игру."
+  }),
+  l3: '<div class="deep"><h4>PWA</h4>' + ul(
+    "В пресете Web включено <code>progressive_web_app/enabled=true</code>, есть иконки 144/180/512 и цвет фона. Браузер кэширует файлы игры: со второго запуска она стартует быстрее и открывается без сети.",
+    "<code>tests/test_changelog.gd</code> проверяет, что веб-сборка устанавливается как приложение и что журнал изменений попадает в сборку.") + "</div>"
+},
+{ id: "release", name: "Выпуск версии", path: "CHANGELOG.md, теги", layer: "ops", x: 590, y: 560,
+  short: "Версия X.Y.Z в project.godot, запись в журнале на 8 языках, заставка с номером версии, аннотированный тег vX.Y.Z, публикация сайта и релизные сборки под все платформы.",
+  l2: sec({
+    files: f("project.godot", "CHANGELOG.md", "data/changelog/", "export_presets.cfg", "tools/export_all.sh", ".github/workflows/release.yml", "tools/make_splash.gd", "icons/splash.png"),
+    role: "Превратить состояние main в выпуск, видимый игрокам.",
+    classes: "Пресеты экспорта: <code>Web</code>, <code>Windows Desktop</code>, <code>Linux</code>, <code>macOS</code>, <code>Android</code> (пакет <code>io.github.pycz2.classichs</code>).",
+    input: "Зелёные тесты, изменения в main.",
+    output: "Тег vX.Y.Z, обновлённый сайт, файлы <code>build/release/ClassicHS-&lt;версия&gt;-web.zip</code>, <code>-windows-x86_64.exe</code>, <code>-linux-x86_64.AppImage</code>, <code>-macos.zip</code>, <code>-android-arm64.apk</code>.",
+    links: "Версия видна в меню, на заставке и в онлайн-<code>hello</code>: игроки с разными версиями вместе не играют. Журнал показывается в игре на языке интерфейса (<code>ui/changelog_view.gd</code>)."
+  }),
+  l3: '<div class="deep"><h4>Подробно</h4>' + ul(
+    "<code>tools/export_all.sh [web windows linux macos android]</code>: версию берёт из <code>project.godot</code>, делает <code>--export-release</code> для каждого пресета. Для Linux собирает AppDir и AppImage (если найден <code>appimagetool</code>, иначе кладёт просто бинарник), для Android нужны SDK и keystore.",
+    "<code>.github/workflows/release.yml</code> (только что добавлен): job <code>game</code> на ubuntu-24.04 ставит Godot 4.7.2 с шаблонами экспорта, appimagetool, Java 17 и Android SDK, запускает <code>./run_tests.sh</code> (ожидает «0 failed») и <code>tools/export_all.sh</code>. Файлы выкладываются как артефакты.",
+    "Android подписывается keystore из секретов <code>ANDROID_KEYSTORE_BASE64 / _USER / _PASSWORD</code>. Если секретов нет, создаётся одноразовый ключ, и тогда APK при обновлении придётся переустанавливать.",
+    "Job <code>release</code> работает только для тегов <code>v*</code>: собирает все артефакты и через <code>softprops/action-gh-release</code> создаёт релиз «Classic HS vX.Y.Z». На push в main сборка служит только проверкой.",
+    "В том же workflow есть job <code>server</code> для будущего игрового сервера на Rust: он ничего не делает, пока в репозитории нет <code>server/Cargo.toml</code>.") + "</div>"
+}
+];
+
+// [from, to, label, options]; labels may have "\n". both: arrows both ways; d: custom path; lx/ly: label spot.
+const A = [
+  ["external", "tools", "скачивание,\nгенерация"],
+  ["tools", "data", "cards.json,\nреплики"],
+  ["tools", "assets", "арт, звук, спрайты, иконки", { d: "M405 50 C 405 8, 965 8, 965 46", lx: 685, ly: 22 }],
+  ["data", "engine", "cards.json"],
+  ["data", "game", "переводы,\nраскладки"],
+  ["cards", "engine", "Cards.of(id)"],
+  ["engine", "game", "apply ⇄\nсобытия", { both: true }],
+  ["game", "ui", "submit ⇄\nchanged", { both: true }],
+  ["assets", "ui", "текстуры"],
+  ["net", "game", "action + hash", { both: true }],
+  ["arena", "net", "игры по\nканалу"],
+  ["arena", "ui", "экраны Арены"],
+  ["tutorial", "engine", "Scenario.build"],
+  ["tests", "cards", "проверяют всё", { dash: true }],
+  ["tests", "release", "./run_tests.sh перед выпуском", { dash: true }],
+  ["release", "site", "--publish"],
+  ["site", "github", "gh-pages"],
+  ["release", "github", "тег vX.Y.Z → релизные сборки", { d: "M685 628 C 685 672, 125 672, 125 632", lx: 405, ly: 664 }]
+];
+
+const W = 190, H = 64;
+const byId = Object.fromEntries(C.map(c => [c.id, c]));
+const svg = document.getElementById("svg");
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+const col = (layer) => "var(--" + layer + ")";
+const plain = (html) => { const d = document.createElement("div"); d.innerHTML = html; return d.textContent; };
+
+// Arrow markers.
+const defs = el("defs", {}, svg);
+for (const id of ["mk", "mkh"]) {
+  const m = el("marker", { id, viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse" }, defs);
+  el("path", { d: "M0 0 L10 5 L0 10 z" }, m);
+}
+
+// The point where the line from the box centre towards (tx, ty) leaves the box (plus a small gap).
+function edge(c, tx, ty) {
+  const cx = c.x + W / 2, cy = c.y + H / 2, dx = tx - cx, dy = ty - cy;
+  const t = Math.min((W / 2 + 4) / Math.abs(dx || 1e-9), (H / 2 + 4) / Math.abs(dy || 1e-9));
+  return [cx + dx * t, cy + dy * t];
+}
+
+const arrowEls = [];
+const gA = el("g", {}, svg);
+for (const [from, to, label, o = {}] of A) {
+  const a = byId[from], b = byId[to];
+  const g = el("g", { class: "arrow" + (o.dash ? " dash" : "") }, gA);
+  let d = o.d, lx = o.lx, ly = o.ly;
+  if (!d) {
+    const [x1, y1] = edge(a, b.x + W / 2, b.y + H / 2);
+    const [x2, y2] = edge(b, a.x + W / 2, a.y + H / 2);
+    d = `M${x1} ${y1} L${x2} ${y2}`;
+    lx = (x1 + x2) / 2; ly = (y1 + y2) / 2;
+  }
+  const p = el("path", { d, "marker-end": "url(#mk)" }, g);
+  if (o.both) p.setAttribute("marker-start", "url(#mk)");
+  const lines = label.split("\n");
+  // On a horizontal arrow the label sits above the line; elsewhere it is centred on it.
+  const flat = !o.d && Math.abs(byId[from].y - byId[to].y) < 1;
+  const y0 = flat ? ly - 8 - (lines.length - 1) * 14 : ly - (lines.length - 1) * 7 + 4;
+  const t = el("text", { x: lx, y: y0, "text-anchor": "middle" }, g);
+  lines.forEach((s, i) => { const ts = el("tspan", { x: lx, dy: i ? 14 : 0 }, t); ts.textContent = s; });
+  arrowEls.push({ g, p, from, to, both: !!o.both });
+}
+
+const boxEls = {};
+for (const c of C) {
+  const g = el("g", { class: "box", tabindex: 0, role: "button", "aria-label": c.name, style: "--c:" + col(c.layer) }, svg);
+  el("rect", { x: c.x, y: c.y, width: W, height: H, rx: 10 }, g);
+  el("text", { x: c.x + 14, y: c.y + 27, class: "nm" }, g).textContent = c.name;
+  el("text", { x: c.x + 14, y: c.y + 47, class: "pt" }, g).textContent = c.path;
+  g.addEventListener("click", () => select(c.id));
+  g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(c.id); } });
+  boxEls[c.id] = g;
+}
+
+document.getElementById("legend").innerHTML = Object.entries(LAYERS)
+  .map(([k, v]) => `<span style="--c:${col(k)}">${v}</span>`).join("");
+
+const body = (c) => `<span class="tag" style="--c:${col(c.layer)}">${LAYERS[c.layer]}</span>
+  <p class="short">${c.short}</p><div data-min="2">${c.l2}</div><div data-min="3">${c.l3}</div>`;
+
+// Component cards (level 2+).
+const cardsEl = document.getElementById("cards");
+for (const c of C) {
+  const d = document.createElement("article");
+  d.className = "card"; d.id = "c-" + c.id; d.style.setProperty("--c", col(c.layer));
+  d.innerHTML = `<h3>${c.name} <span class="mono" style="color:var(--muted);font-weight:400">${c.path}</span></h3>` + body(c);
+  d.querySelector("h3").addEventListener("click", () => { select(c.id); document.querySelector(".map").scrollIntoView(); });
+  cardsEl.appendChild(d);
+  c.text = plain(c.name + " " + c.path + " " + c.id + " " + c.short + " " + c.l2 + " " + c.l3).toLowerCase();
+}
+
+// Flows (level 3).
+const FLOWS = [
+{ title: "1. Запуск игры", comps: ["ui", "game", "assets", "data"], steps: [
+  "Godot показывает заставку <code>icons/splash.png</code> (на ней номер версии, её рисует <code>tools/make_splash.gd</code>) и открывает <code>run/main_scene = res://ui/main.tscn</code> из <code>project.godot</code>.",
+  "<code>main.tscn</code> — единственная сцена: корневой <code>Control</code> со скриптом <code>ui/main.gd</code>. Все остальные экраны — классы, созданные кодом.",
+  r("ui/main.gd:7") + " <code>_ready</code>: <code>theme = Fonts.theme()</code>, затем <code>Locale.load_all()</code> (переводы в TranslationServer), <code>Sprites.load_all()</code> (все спрайты сразу, это правило для веба), <code>Settings.load_settings()</code> + <code>apply()</code> (язык, громкость, тряска), <code>add_child(Sound.new())</code>. Полный экран включается только вне браузера: там нужен клик.",
+  "Первый запуск (нет <code>user://settings.json</code>): " + r("ui/main.gd:32") + " <code>LanguagePicker</code> → язык сохраняется → меню. Иначе сразу " + r("ui/main.gd:60") + " <code>show_menu</code>.",
+  "<code>MainMenu</code> (ui/menu.gd) отдаёт сигналы <code>training / collection / online / tutorial / settings / quit</code>, Main вызывает соответствующий <code>show_*</code>. " + r("ui/main.gd:51") + " <code>_set_screen</code> удаляет старый экран и ставит новый.",
+  "Выход: " + r("ui/main.gd:213") + " <code>_notification</code> → <code>Cards.unload()</code>."
+]},
+{ title: "2. Ход в матче (тренировка с ботом)", comps: ["ui", "game", "engine", "cards"], steps: [
+  "TrainingSetup отдаёт колоду игрока и класс бота. " + r("ui/main.gd:80") + " создаёт <code>Game.new({hero, deck}, {hero: Decks.hero(bot), deck: Decks.basic(bot)}, randi())</code>.",
+  r("ui/main.gd:202") + " <code>start_match</code>: <code>Match.setup(g, [false, true])</code> (второй игрок — бот) → <code>MatchView.bind(m)</code> (" + r("ui/match_view.gd:191") + ").",
+  "Игрок кликает или тянет карту. MatchView собирает действие из <code>g.legal_actions()</code>: карта → вариант Choose One → место на столе → цель. Затем вызывается " + r("ui/match_view.gd:800") + " <code>_act</code>. Если стол ещё анимируется, приказ ждёт в очереди.",
+  r("game/match.gd:61") + " <code>Match.submit</code> → " + r("engine/game.gd:47") + " <code>Game.apply</code>: нормализация, проверка законности, исполнение (хуки карт через <code>Cards.of</code>), <code>resolve()</code> — триггеры и смерти до затишья. Возвращаются события.",
+  "Match отправляет <code>changed(events)</code> и вызывает <code>_after</code>. Если ходит бот, через <code>bot_delay</code> = 0.6 с (и только когда <code>busy()</code> вернёт false) вызывается <code>Bot.choose</code>, а затем <code>apply</code> → <code>changed</code>.",
+  r("ui/match_view.gd:1337") + " <code>_on_changed</code> → <code>_queue</code> → " + r("ui/match_view.gd:1346") + " <code>_play_queue</code> → " + r("ui/match_view.gd:1359") + " <code>_animate</code>: показ карты, выпад, полёт снаряда. В момент удара — <code>refresh()</code> и <code>_reconcile</code>, всплывающие числа, <code>TableFx</code>, <code>Sound</code>.",
+  "Очередь опустела → <code>refresh()</code> и <code>_release_orders()</code>: выполняется следующий отложенный приказ игрока.",
+  "<code>game_over</code> → <code>Match.finished(winner)</code> → портрет проигравшего героя разлетается на осколки → экран результата (победа, поражение или ничья с точки зрения игрока)."
+]},
+{ title: "3. Онлайн: подключение по кодам", comps: ["ui", "net", "external"], steps: [
+  "Меню → Играть → Сетевая игра: " + r("ui/main.gd:120") + " <code>show_online</code> → <code>OnlineView</code>. Шаги: имя → обычная игра или Арена → колода → «Создать» или «Присоединиться».",
+  "Хозяин: <code>host_game</code> → <code>_begin(true)</code>: создаются <code>WebRtcTransport</code> и <code>NetSession.setup(transport, true, имя, колода)</code> → <code>transport.host()</code>: <code>WebRTCPeerConnection</code> с STUN Google и TURN ExpressTURN, канал «game» (negotiated, id 1), <code>create_offer()</code>.",
+  "Кандидаты ICE собираются до конца (gathering complete, максимум 10 с). <code>SignalCode.pack</code> склеивает SDP со всеми кандидатами, жмёт deflate и кодирует в base64 с контрольной суммой. Получается <b>код приглашения</b>, его отправляют другу.",
+  "Гость: <code>join_game(код)</code> → <code>SignalCode.unpack(код, \"offer\")</code> (проверяет сумму, тип и формат, понятно сообщает, если перепутаны коды) → <code>set_remote_description</code> → браузер создаёт ответ → так же собирается <b>код ответа</b>. Кандидаты хозяина гость повторяет каждые 5 с в течение 300 с: Firefox бросает проверки через ~10 с, а хозяин вставляет ответ руками гораздо позже.",
+  "Хозяин вставляет код ответа: <code>finish(answer)</code> → <code>set_remote_description(\"answer\")</code>. Канал открывается → <code>Transport.opened</code> → <code>say_hello</code> с обеих сторон.",
+  "<code>hello</code>: сверяются протокол, версия игры, хэш cards.json и проверяется колода соперника (<code>Deck.validate</code>). Хозяин выбирает seed, строит <code>Game</code> и шлёт <code>start {seed, decks}</code>. Гость сверяет колоды и строит такую же партию (" + r("net/net_session.gd:171") + ").",
+  r("net/net_session.gd:186") + " <code>_begin</code>: <code>Match</code> с <code>remote</code> = номер соперника → <code>started</code> → " + r("ui/main.gd:129") + " <code>start_online_match</code>: сессия и транспорт переподвешиваются под MatchView, чтобы пережить смену экрана.",
+  "Для автотестов двух вкладок в headless Chrome: <code>window.chs.host() / join(code) / finish(code)</code>, состояние читается из <code>window.chs_code</code> и <code>window.chs_state</code> (" + r("ui/online_view.gd:380") + ")."
+]},
+{ title: "4. Онлайн: lockstep во время партии", comps: ["net", "game", "engine", "ui"], steps: [
+  "Свой ход: <code>Match.submit</code> → <code>apply</code> → <code>local_action(action, state_hash())</code> → " + r("net/net_session.gd:194") + " отправка <code>{t: \"action\", n, action, hash}</code>. Для муллигана и сдачи хэш пустой.",
+  "Ход соперника: " + r("net/net_session.gd:200") + " проверяется номер <code>n</code> и наличие хэша → " + r("game/match.gd:97") + " <code>submit_remote</code>: ход должен быть за игрока <code>remote</code>, законным, а хэш после применения должен совпасть с присланным.",
+  "Любое расхождение → <code>bye {code: \"desync\"}</code> и сообщение «Рассинхронизация». Закрытие канала → «Соединение потеряно». После конца партии обрыв уже не считается ошибкой.",
+  "Вне lockstep: <code>emote</code> (6 эмоций, их можно заглушить) и <code>intent</code> (на что соперник наводит мышь или куда целится; красная стрелка и подсветка). <code>clean_intent</code> отбрасывает испорченные данные. Состояние игры эти сообщения не меняют.",
+  "Таймер хода: 75 с, в последние 15 с горит фитиль (<code>ui/fuse.gd</code>), на муллиган 45 с. Когда время вышло, " + r("ui/match_view.gd:711") + " <code>tick</code> → " + r("game/match.gd:75") + " <code>Match.timeout</code>: рука сохраняется, берётся первый вариант выбора, ход завершается. Это обычные ходы, они уходят сопернику как всегда."
+]},
+{ title: "5. Арена с другом", comps: ["arena", "net", "ui", "game"], steps: [
+  "OnlineView, выбор «Арена» → <code>_begin_arena</code>: <code>ArenaSession.setup(transport, host, имя)</code>, обмен кодами тот же.",
+  "<code>hello {mode: \"arena\"}</code>: если один выбрал обычную игру, а другой Арену, отправляется <code>bye {code: \"mode\"}</code> с понятным сообщением. После hello → <code>connected</code> → " + r("ui/main.gd:141") + " <code>show_arena</code>: сессия живёт под Main.",
+  "Хозяин выбирает правила: <code>rules {deck: \"one\" | \"each\", keep}</code> — одна колода на всю Арену или новая на каждую игру (возможно, с правом оставить прошлую).",
+  "Драфт (<code>ArenaDraft</code>): выбор героя из трёх, затем 30 выборов. После каждого выбора отправляется <code>status</code>, и соперник видит прогресс.",
+  "Оба готовы → " + r("net/arena_session.gd:190") + " <code>_maybe_start</code>: <code>ChannelTransport</code> номер n и <code>NetSession</code> с <code>arena = true</code> → <code>game_started</code> → " + r("ui/main.gd:160") + " <code>start_arena_match</code>.",
+  "Конец игры → <code>record(winner)</code> → счёт. «Назад к Арене» → <code>show_arena</code> → <code>end_game</code> → новый драфт или та же колода, пока у кого-то не будет 3 побед. <code>concede</code> — сдать Арену, <code>bye</code> — соперник ушёл."
+]},
+{ title: "6. Обучение", comps: ["tutorial", "engine", "ui", "game"], steps: [
+  r("ui/main.gd:91") + " <code>show_tutorial</code> → <code>TutorialView</code>: 6 миссий. Первая открыта всегда, каждая следующая открывается после победы в предыдущей (<code>Progress</code>).",
+  r("ui/main.gd:99") + " <code>show_tutorial_intro(n)</code> → <code>TutorialIntro</code> → " + r("ui/main.gd:106") + " <code>start_tutorial(n)</code>.",
+  r("game/tutorial.gd:34") + " <code>Tutorial.start</code> → " + r("game/missions.gd:104") + " <code>Missions.build</code> → <code>Scenario.build</code>: заданные руки и порядок колод, без муллигана. Плюс страховка <code>ench:tutorial_guard</code> или тег <code>GUARDED</code>.",
+  "<code>Match.setup(game, [false, true])</code>, <code>MatchView.tutorial = r.tutorial</code>. Во время игры стол спрашивает <code>next_hint</code> (подсказки), <code>end_turn_block</code> («Ещё рано!») и <code>boss_line</code> (реплики босса в облачке).",
+  "Победа → <code>Progress.complete(n)</code>, карта-награда, «Следующая миссия» → <code>tutorial_next</code> → заставка следующей. Поражение → «Ещё раз» → <code>tutorial_retry</code>."
+]},
+{ title: "7. Карта: от данных до хуков движка", comps: ["data", "cards", "engine", "ui"], steps: [
+  "Запись в <code>data/cards.json</code>: стоимость, атака, здоровье, <code>mechanics</code>, имя и текст на всех языках. Читается через <code>CardDb.card(id)</code>.",
+  "Ключевые слова из <code>mechanics</code> становятся тегами сущности (<code>Entity.KEYWORDS</code>), и движок обрабатывает их сам. <code>spellDamage</code> и <code>overload</code> — поля данных.",
+  "Особое поведение описывается в <code>cards/&lt;класс&gt;.gd</code>, в <code>register(r)</code>: <code>r[\"ID\"] = {\"target\": T.…, \"battlecry\": func(g, me, t): …}</code>.",
+  "Розыгрыш: <code>legal_actions</code> берёт <code>target</code> / <code>combo_target</code> / <code>choose_one</code> → <code>_do_play</code> → <code>_play_minion</code> / <code>_play_spell</code> / <code>_play_weapon</code> → <code>_run_effect</code> вызывает нужный хук внутри <code>_from(e, …)</code>, чтобы журнал и стол знали источник.",
+  "Триггеры: <code>on: {turn_end, damage, play, death, attack, …}</code> ставятся в очередь через <code>emit</code>. <code>now</code> — мгновенные замещения. <code>deathrattle</code> срабатывает в фазе смертей. <code>aura</code> и <code>aura_final</code> пересчитываются в <code>update_auras</code>. <code>cost_aura</code> и <code>cost_mod</code> меняют стоимость.",
+  "Проверка: <code>tests/test_cards_*.gd</code>, сцена в <code>data/card_tests/*.json</code> (её можно посмотреть в Отладке → «Interaction test» и прогнать <code>tools/check_card_tests.gd</code>), <code>tests/test_coverage.gd</code>.",
+  "Отображение: <code>CardText</code> (текст на языке интерфейса), <code>CardLayout</code> (ручная раскладка), <code>CardView</code> + <code>Frames</code> + <code>Art.texture(id)</code> или процедурный <code>Art.paint</code>."
+]},
+{ title: "8. Откуда берутся данные", comps: ["external", "tools", "data", "assets"], steps: [
+  "<code>python3 tools/extract_cards.py</code>: скачивает HearthstoneJSON и записывает <code>data/cards.json</code> (534 записи: набор VANILLA, карты обучения TU4*, герои, Монета, жетоны).",
+  "Переводы интерфейса: строку добавляют в коде на английском (<code>tr(\"…\")</code>), затем переводят в <code>data/i18n/&lt;lang&gt;.json</code> и добавляют ключ в <code>keys.json</code>. Без этого <code>tests/test_i18n.gd</code> упадёт.",
+  "Раскладки текста карт: <code>data/card_layout/&lt;lang&gt;.json</code> правятся вручную в Card Lab (Отладка), листы для просмотра рисует <code>tools/card_sheets.gd</code>.",
+  "Реплики: <code>tools/fetch_voice_lines.py</code> → <code>data/voice_lines.json</code> (английские строки, остальные языки сохраняются). Подсказки ключевых слов: <code>data/keywords.json</code>.",
+  "Арт: <code>tools/gen_card_art.py</code> → <code>art/cards/</code>. Спрайты: <code>tools/gen_ui_art.py</code> + <code>tools/key_green.gd</code> → <code>ui/sprites/</code>. Оригинал: <code>tools/fetch_original_art.py</code> → <code>art/original/</code>, только для локальной игры. После новых картинок нужен <code>godot --import</code>.",
+  "Звук: <code>tools/gen_audio.py</code> → <code>audio/*.wav</code>, <code>tools/fetch_open_music.py</code> → <code>audio/open/*.ogg</code>.",
+  "В сборку всё это попадает по <code>include_filter</code> / <code>exclude_filter</code> пресетов в <code>export_presets.cfg</code>."
+]},
+{ title: "9. Тесты", comps: ["tests"], steps: [
+  "<code>./run_tests.sh</code>: импорт проекта, затем <code>godot --headless --path . --script res://tests/run.gd</code>. <code>./run_tests.sh -- deck_code</code> запускает только тесты, у которых «файл:метод» содержит строку.",
+  "<code>tests/run.gd</code> находит все <code>tests/test_*.gd</code> и все методы <code>test_*</code>, перед каждым методом подставляет временные файлы настроек и колод и включает английский язык.",
+  "Провал — это непустой <code>failures</code> или любая ошибка скрипта, пойманная собственным Logger. В конце печатаются строки <code>FAIL файл:метод</code> и итог.",
+  "Перед выпуском также стоит прогнать <code>tools/check_card_tests.gd</code> и <code>tools/card_layout.gd</code>: оба должны показать 0 проблем."
+]},
+{ title: "10. Сборка и публикация сайта", comps: ["site", "github", "release"], steps: [
+  "<code>tools/build_site.sh</code> очищает <code>build/site</code> и создаёт <code>build/.gdignore</code>, чтобы Godot не импортировал содержимое build/.",
+  "<code>make_splash.gd</code> (нужно окно) рисует заставку с версией → <code>godot --import</code> → <code>--export-release \"Web\" build/site/play/index.html</code>: веб-сборка с PWA.",
+  "Копируются файлы <code>site/</code> и скриншоты <code>media/screens/en</code>, <code>ru</code>. <code>tools/site_data.py</code> пишет <code>data.json</code>: герои и витринные карты на 8 языках, версия, дата, размер загрузки, число тестов, последние записи журнала.",
+  "<code>tools/site_cards.gd</code> (нужно окно) рисует карты самой игрой в <code>cards/&lt;lang&gt;/&lt;id&gt;.webp</code> и рубашку. Добавляется <code>.nojekyll</code>.",
+  "<code>--publish</code>: git worktree <code>build/gh-pages</code> на <code>origin/gh-pages</code> (если ветки ещё нет, создаётся orphan), содержимое заменяется, коммит «Site from &lt;rev&gt;», <code>git push origin gh-pages</code> → https://pycz2.github.io/classichs/."
+]},
+{ title: "11. Выпуск версии", comps: ["release", "tests", "data", "site", "github"], steps: [
+  "Изменения в main, <code>./run_tests.sh</code> зелёный.",
+  "Новая версия в <code>project.godot</code>: <code>config/version=\"X.Y.Z\"</code> (SemVer).",
+  "Запись в <code>CHANGELOG.md</code> (русский оригинал, формат Keep a Changelog) и та же запись в переводах <code>data/changelog/{en,de,fr,es,pt_BR,it,pl}.md</code>. <code>tests/test_changelog.gd</code> сверяет заголовки версий.",
+  "Коммит «… (X.Y.Z)», затем коммит «Splash for X.Y.Z» с новой <code>icons/splash.png</code>.",
+  "Аннотированный тег <code>vX.Y.Z</code> («Version X.Y.Z») на последнем коммите выпуска, затем <code>git push origin main</code> и <code>git push origin vX.Y.Z</code>.",
+  "<code>tools/build_site.sh --publish</code> публикует сайт и веб-сборку.",
+  "Push тега запускает GitHub Actions (<code>.github/workflows/release.yml</code>, только что добавлен): тесты, релизные сборки Web, Windows, Linux AppImage, macOS и Android и GitHub Release «Classic HS vX.Y.Z» с этими файлами. Локально то же самое делает <code>tools/export_all.sh</code>, результат в <code>build/release/</code>."
+]}
+];
+
+const flowsEl = document.getElementById("flows");
+for (const fl of FLOWS) {
+  const a = document.createElement("article");
+  a.className = "flow";
+  a.innerHTML = `<h3>${fl.title}</h3><div class="chips">${fl.comps.map(id =>
+    `<button class="chip" data-id="${id}" style="--c:${col(byId[id].layer)}">${byId[id].name}</button>`).join("")}</div>
+    <ol>${fl.steps.map(s => "<li>" + s + "</li>").join("")}</ol>`;
+  fl.el = a;
+  fl.text = plain(a.innerHTML).toLowerCase();
+  flowsEl.appendChild(a);
+}
+flowsEl.addEventListener("click", (e) => {
+  const b = e.target.closest(".chip");
+  if (b) { select(b.dataset.id); document.querySelector(".map").scrollIntoView(); }
+});
+
+// Selection.
+const panel = document.getElementById("panel");
+let current = "engine";
+function select(id) {
+  current = id;
+  const c = byId[id];
+  for (const k in boxEls) boxEls[k].classList.toggle("sel", k === id);
+  for (const a of arrowEls) {
+    const hot = a.from === id || a.to === id;
+    a.g.classList.toggle("hot", hot);
+    a.p.setAttribute("marker-end", hot ? "url(#mkh)" : "url(#mk)");
+    if (a.both) a.p.setAttribute("marker-start", hot ? "url(#mkh)" : "url(#mk)");
+  }
+  const near = arrowEls.filter(a => a.from === id || a.to === id)
+    .map(a => byId[a.from === id ? a.to : a.from]).filter((v, i, s) => s.indexOf(v) === i);
+  panel.style.setProperty("--c", col(c.layer));
+  panel.innerHTML = `<h3>${c.name}</h3><div class="mono" style="color:var(--muted);margin-bottom:6px">${c.path}</div>` + body(c) +
+    (near.length ? `<div class="more">На схеме связан с: ${near.map(n => `<a href="#" data-id="${n.id}">${n.name}</a>`).join(", ")}</div>` : "") +
+    `<div class="more" data-max="1">Файлы, классы и связи — на уровне «Подробнее».</div>` +
+    `<div class="more" data-max="2" data-min="2">Ссылки на код и пошаговые потоки — на уровне «Всё».</div>`;
+  const card = document.getElementById("c-" + id);
+  if (card) { card.classList.add("flash"); setTimeout(() => card.classList.remove("flash"), 900); }
+}
+panel.addEventListener("click", (e) => {
+  const a = e.target.closest("a[data-id]");
+  if (a) { e.preventDefault(); select(a.dataset.id); }
+});
+
+// Level switch.
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+function setLevel(lv) {
+  document.body.dataset.level = lv;
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lv === lv)));
+  store.set("arch-level", lv);
+}
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => setLevel(b.dataset.lv)));
+
+// Search.
+document.getElementById("q").addEventListener("input", (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  let nc = 0, nf = 0;
+  for (const c of C) {
+    const hit = !q || c.text.includes(q);
+    boxEls[c.id].classList.toggle("dim", !hit);
+    document.getElementById("c-" + c.id).classList.toggle("hidden", !hit);
+    if (hit) nc++;
+  }
+  for (const a of arrowEls) a.g.classList.toggle("dim", !!q && (boxEls[a.from].classList.contains("dim") || boxEls[a.to].classList.contains("dim")));
+  for (const fl of FLOWS) {
+    const hit = !q || fl.text.includes(q);
+    fl.el.classList.toggle("hidden", !hit);
+    if (hit) nf++;
+  }
+  document.getElementById("none-c").style.display = nc ? "none" : "block";
+  document.getElementById("none-f").style.display = nf ? "none" : "block";
+  const first = C.find(c => q && c.text.includes(q));
+  if (first && boxEls[current].classList.contains("dim")) select(first.id);
+});
+
+const fromHash = (location.hash.match(/^#level-([123])$/) || [])[1];  // a link may open a level: …/index.html#level-3
+setLevel(fromHash || (["1", "2", "3"].includes(store.get("arch-level")) ? store.get("arch-level") : "1"));
+select("engine");
+</script>
+</body>
+</html>
