@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.25.1] - 2026-10-15
+
+### Corrigé
+- Les Secrets de l'adversaire s'affichent en haut de son portrait, comme les vôtres (ils étaient dessous).
+
 ## [0.25.0] - 2026-10-15
 
 ### Ajouté

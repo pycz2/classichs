@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.25.1] - 2026-10-15
+
+### Corregido
+- Los secretos del rival se muestran en la parte superior de su retrato, como los tuyos (antes, debajo).
+
 ## [0.25.0] - 2026-10-15
 
 ### Añadido

@@ -52,6 +52,7 @@ for p in $WANT; do
 		;;
 	android)
 		export_preset "Android" "$OUT/ClassicHS-$VER-android-arm64.apk"
+		rm -f "$OUT/ClassicHS-$VER-android-arm64.apk.idsig"  # (a v4 signature file the release does not need)
 		;;
 	*)
 		echo "unknown platform: $p" >&2

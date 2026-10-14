@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.25.1] - 2026-10-15
+
+### Corrigido
+- Os segredos do oponente aparecem no topo do retrato dele, como os seus (antes, embaixo).
+
 ## [0.25.0] - 2026-10-15
 
 ### Adicionado

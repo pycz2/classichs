@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.25.1] - 2026-10-15
+
+### Naprawiono
+- Sekrety przeciwnika są na górze jego portretu, jak twoje (wcześniej pod nim).
+
 ## [0.25.0] - 2026-10-15
 
 ### Dodano

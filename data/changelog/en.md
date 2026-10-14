@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.25.1] - 2026-10-15
+
+### Fixed
+- The opponent's Secrets show on the top of their portrait, like yours (they were under it).
+
 ## [0.25.0] - 2026-10-15
 
 ### Added
