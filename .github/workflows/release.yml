@@ -1,0 +1,177 @@
+# Builds the game for every platform on each push to main (a check) and, on a
+# version tag vX.Y.Z, publishes a GitHub release with the builds:
+#   Web (zip), Windows (.exe), Linux (.AppImage), macOS (.zip with the app), Android (.apk).
+# The game server (server/, Rust) is built for Windows, Linux and macOS in the server job.
+name: Release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.7.2"
+
+jobs:
+  game:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot and export templates
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}
+
+      - name: Download Godot and export templates
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/godot && cd ~/godot
+          base=https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable
+          curl -sSfL -o godot.zip "$base/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q godot.zip && mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" godot && rm godot.zip
+          curl -sSfL -o templates.tpz "$base/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -q templates.tpz && rm templates.tpz
+
+      - name: Install Godot
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          cp -r ~/godot/templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
+          sudo ln -sf ~/godot/godot /usr/local/bin/godot
+          godot --version
+
+      - name: Install appimagetool
+        run: |
+          curl -sSfL -o /tmp/appimagetool https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x /tmp/appimagetool
+          printf '#!/bin/sh\nAPPIMAGE_EXTRACT_AND_RUN=1 exec /tmp/appimagetool "$@"\n' | sudo tee /usr/local/bin/appimagetool >/dev/null
+          sudo chmod +x /usr/local/bin/appimagetool
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools build-tools;35.0.0"
+
+      - name: Android signing
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_USER: ${{ secrets.ANDROID_KEYSTORE_USER }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          # A release keystore from the repository secrets when there is one; else a
+          # throwaway one (the APK then has to be reinstalled on each update).
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > ~/release.keystore
+            user="$KEYSTORE_USER"; pass="$KEYSTORE_PASSWORD"
+          else
+            user=classichs; pass=$(openssl rand -hex 16)
+            keytool -genkeypair -v -keystore ~/release.keystore -alias "$user" -keyalg RSA -keysize 2048 \
+              -validity 10000 -storepass "$pass" -keypass "$pass" -dname "CN=Classic HS" >/dev/null
+          fi
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_PATH=$HOME/release.keystore" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_USER=$user" >> "$GITHUB_ENV"
+          echo "::add-mask::$pass"
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD=$pass" >> "$GITHUB_ENV"
+          for v in 4 4.7; do
+            mkdir -p ~/.config/godot
+            printf '[gd_resource type="EditorSettings" format=3]\n\n[resource]\nexport/android/android_sdk_path = "%s"\nexport/android/java_sdk_path = "%s"\n' \
+              "$ANDROID_HOME" "$JAVA_HOME" > ~/.config/godot/editor_settings-$v.tres
+          done
+
+      - name: Import and test
+        run: |
+          godot --headless --path . --import >/dev/null 2>&1 || true
+          ./run_tests.sh 2>&1 | tee /tmp/tests.log | tail -5
+          grep -q " 0 failed" /tmp/tests.log
+
+      - name: Export every platform
+        run: tools/export_all.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: game
+          path: build/release/ClassicHS-*
+          if-no-files-found: error
+
+  server:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            name: linux-x86_64
+            bin: classichs-server
+          - os: windows-2022
+            name: windows-x86_64
+            bin: classichs-server.exe
+          - os: macos-14
+            name: macos-arm64
+            bin: classichs-server
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Is there a server?
+        id: has
+        shell: bash
+        run: echo "server=$([ -f server/Cargo.toml ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+      - uses: dtolnay/rust-toolchain@stable
+        if: steps.has.outputs.server == 'yes'
+      - name: Test and build
+        if: steps.has.outputs.server == 'yes'
+        shell: bash
+        run: |
+          cd server
+          cargo test --release
+          cargo build --release
+          mkdir -p ../build/server
+          cp target/release/${{ matrix.bin }} ../build/server/
+      - name: Package
+        if: steps.has.outputs.server == 'yes'
+        shell: bash
+        run: |
+          ver=$(sed -n 's/^config\/version="\(.*\)"/\1/p' project.godot)
+          cd build/server
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            mv classichs-server.exe "ClassicHS-server-$ver-${{ matrix.name }}.exe"
+          else
+            mv classichs-server "ClassicHS-server-$ver-${{ matrix.name }}"
+            chmod +x "ClassicHS-server-$ver-${{ matrix.name }}"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: steps.has.outputs.server == 'yes'
+        with:
+          name: server-${{ matrix.name }}
+          path: build/server/ClassicHS-server-*
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [game, server]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: List files
+        run: ls -l dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Classic HS ${{ github.ref_name }}
+          body: |
+            Builds of ${{ github.ref_name }}. Changes: see CHANGELOG.md (data/changelog/<lang>.md for other languages).
+            - Web: unzip and serve the folder over HTTP, or play at https://pycz2.github.io/classichs/
+            - Windows: ClassicHS-*-windows-x86_64.exe
+            - Linux: ClassicHS-*-linux-x86_64.AppImage (chmod +x, then run)
+            - macOS: unzip ClassicHS-*-macos.zip; the app is not notarized: right-click → Open the first time
+            - Android: ClassicHS-*-android-arm64.apk (allow installing from this source)
+          files: dist/*

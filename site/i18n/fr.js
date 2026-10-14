@@ -100,4 +100,5 @@
     "shot.result.cap": "Le résultat d'une partie sur son image, avec le score de l'Arène",
     "shot.rules.tab": "Règles de l'Arène",
     "shot.rules.cap": "Les règles de l'Arène : un seul deck, ou un nouveau à chaque partie, avec le droit de garder le précédent",
+    "play.download": "Télécharger le jeu :",
 };

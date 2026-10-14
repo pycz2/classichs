@@ -100,4 +100,5 @@
     "shot.result.cap": "The result of a game over its picture, with the Arena's score",
     "shot.rules.tab": "Arena rules",
     "shot.rules.cap": "The Arena's rules: one deck, or a new deck every game, with the right to keep the last one",
+    "play.download": "Download the game:",
 };

@@ -100,4 +100,5 @@
     "shot.result.cap": "O resultado de uma partida sobre a sua imagem, com o placar da Arena",
     "shot.rules.tab": "Regras da Arena",
     "shot.rules.cap": "As regras da Arena: um deck, ou um novo a cada partida, com o direito de manter o anterior",
+    "play.download": "Baixar o jogo:",
 };

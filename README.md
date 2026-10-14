@@ -28,6 +28,15 @@ A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas
 | ![Arena draft](media/screens/en/arena.png) | ![Arena lobby](media/screens/en/lobby.png) |
 | ![Mission intro](media/screens/en/intro.png) | ![Debug tools](media/screens/en/debug.png) |
 
+## Downloads
+
+Every version tag `vX.Y.Z` builds a [GitHub release](https://github.com/pycz2/classichs/releases/latest) with:
+Windows (`.exe`), Linux (`.AppImage`), macOS (`.zip` with the app, not notarized: right-click → Open the first time),
+Android (`.apk`) and the web build (`.zip`). The workflow is `.github/workflows/release.yml`; it runs the tests and
+calls `tools/export_all.sh`, which also works locally (`tools/export_all.sh web windows macos linux`).
+For a stable Android signature add the secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_USER`,
+`ANDROID_KEYSTORE_PASSWORD`; without them each build is signed with a new throwaway key.
+
 ## Build and run
 
 You need [Godot 4.7.2](https://godotengine.org/) (standard build, no C#) and its export templates for the web build.

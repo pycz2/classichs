@@ -100,4 +100,5 @@
     "shot.result.cap": "Das Ergebnis eines Spiels über seinem Bild, mit dem Punktestand der Arena",
     "shot.rules.tab": "Arena-Regeln",
     "shot.rules.cap": "Die Regeln der Arena: ein Deck oder ein neues für jedes Spiel, mit dem Recht, das letzte zu behalten",
+    "play.download": "Spiel herunterladen:",
 };

@@ -10,7 +10,7 @@ boot_splash/image="res://icons/splash.png"
 boot_splash/fullsize=true
 boot_splash/stretch_mode=1
 boot_splash/use_filter=true
-config/version="0.24.1"
+config/version="0.25.0"
 run/main_scene="res://ui/main.tscn"
 config/features=PackedStringArray("4.7")
 
@@ -23,3 +23,7 @@ window/stretch/aspect="keep"
 [audio]
 
 general/text_to_speech=true
+
+[rendering]
+
+textures/vram_compression/import_etc2_astc=true

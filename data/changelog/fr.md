@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.25.0] - 2026-10-15
+
+### Ajouté
+- Des versions pour toutes les plateformes : chaque version reçoit une publication GitHub avec le jeu pour Windows (.exe), Linux (.AppImage), macOS (.zip), Android (.apk) et la version web (.zip). Le site y renvoie : « Télécharger le jeu ».
+
 ## [0.24.1] - 2026-10-12
 
 ### Modifié
