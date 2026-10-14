@@ -6,6 +6,7 @@ extends Control
 
 signal leave
 signal arena_back  # an Arena game: back to the Arena's lobby
+signal lobby_back  # a game on a server: back to the server's lobby
 ## Tutorial: the player asked for the next mission.
 signal tutorial_next(n: int)  # go on to mission n (its intro first)
 signal tutorial_retry(n: int)  # play mission n again
@@ -38,6 +39,8 @@ var muted := false
 var session: NetSession
 ## Set for a game of the Arena: the result shows the Arena's score and leads back to it.
 var arena: ArenaSession
+## A game on a game server: the result leads back to the server's lobby.
+var lobby := false
 ## Set for a tutorial mission (hints, turn-end rules, reward screen).
 var tutorial: Tutorial
 var controller: Match
@@ -310,6 +313,8 @@ func _on_connection_lost(reason: String) -> void:
 	box.add_child(why)
 	if arena:
 		_centered_button(box, tr("Back to the Arena"), "BackToArena", _leave)
+	elif lobby:
+		_centered_button(box, tr("Back to the lobby"), "BackToLobby", _leave)
 	else:
 		_centered_button(box, tr("Back to Menu"), "BackToMenuLost", _leave)
 
@@ -317,6 +322,11 @@ func _on_connection_lost(reason: String) -> void:
 func _leave() -> void:
 	if arena:
 		arena_back.emit()  # the Arena's connection stays: its lobby decides what next
+		return
+	if lobby:
+		if session and not g.game_over:
+			session.leave()  # leaving a running game on a server loses it
+		lobby_back.emit()
 		return
 	if session:
 		session.leave()
@@ -2194,6 +2204,8 @@ func _refresh_overlay() -> void:
 				_tutorial_result(box)
 			elif arena:
 				_arena_result(box)
+			elif lobby:
+				_centered_button(box, tr("Back to the lobby"), "BackToLobby", _leave)
 			else:
 				_centered_button(box, tr("Back to Menu"), "BackToMenu", _leave)
 		return

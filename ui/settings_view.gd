@@ -143,6 +143,19 @@ func _build() -> void:
 	ed.text_changed.connect(Profile.save_name)
 	_row(grid, tr("Your name"), ed)
 
+	var server := LineEdit.new()
+	server.name = "ServerAddress"
+	server.text = Settings.data.server
+	server.placeholder_text = "ws://localhost:7377"
+	server.custom_minimum_size = Vector2(300, 36)
+	server.text_changed.connect(func(t: String):
+		if Settings.server_ok(t.strip_edges()):
+			_store("server", t.strip_edges())
+			server.remove_theme_color_override("font_color")
+		else:
+			server.add_theme_color_override("font_color", Palette.OPPONENT))
+	_row(grid, tr("Game server"), server)
+
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 16)

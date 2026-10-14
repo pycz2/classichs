@@ -5,6 +5,11 @@ var screen: Control
 
 
 func _ready() -> void:
+	var args := OS.get_cmdline_user_args()
+	var ref := args.find("--referee")
+	if ref >= 0 and ref + 1 < args.size():  # the game server's referee: no window, no menu
+		Referee.run(get_tree(), int(args[ref + 1]))
+		return
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = Fonts.theme()  # the medieval font and tavern buttons everywhere below
 	Locale.load_all()
@@ -118,6 +123,7 @@ func show_online() -> void:
 	o.edit_decks.connect(show_collection)
 	o.play.connect(start_online_match)
 	o.arena.connect(show_arena)
+	o.server.connect(show_server)
 	_set_screen(o)
 
 
@@ -150,6 +156,38 @@ func show_arena(s: ArenaSession) -> ArenaView:
 		show_menu(true))
 	_set_screen(a)
 	return a
+
+
+## Playing through a game server. The connection lives here, across its screens.
+var server_link: ServerLink
+
+
+func show_server() -> ServerView:
+	if server_link == null or not is_instance_valid(server_link):
+		server_link = ServerLink.new()
+		server_link.name = "ServerLink"
+		add_child(server_link)
+	var v := ServerView.new()
+	v.link = server_link
+	v.back.connect(func():
+		server_link.queue_free()
+		server_link = null
+		show_menu(true))
+	v.play.connect(start_server_match)
+	_set_screen(v)
+	return v
+
+
+func start_server_match(session: NetSession, m: Match, _mode: String) -> MatchView:
+	var v := MatchView.new()
+	v.lobby = true
+	v.lobby_back.connect(func(): show_server())
+	server_link.message.connect(func(msg: Dictionary):  # the server's result, for the lobby after the game
+		if msg.get("t") == "game_over":
+			server_link.set_meta("game_over", msg), CONNECT_ONE_SHOT)
+	_set_screen(v)
+	v.bind_online(m, session)
+	return v
 
 
 func start_arena_match(s: ArenaSession, game: NetSession, m: Match) -> MatchView:

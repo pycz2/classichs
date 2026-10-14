@@ -8,6 +8,7 @@ signal back
 signal edit_decks
 signal play(session: NetSession, m: Match)
 signal arena(session: ArenaSession)
+signal server  # the player chose to play through a game server
 
 ## Seconds to wait for the connection after the codes are exchanged.
 const CONNECT_TIMEOUT := 25.0
@@ -15,7 +16,7 @@ const CONNECT_TIMEOUT := 25.0
 const GUEST_WAIT := 240.0
 ## The steps in order; Back goes to the one before ("host" and "join" go back to
 ## "mode"; the Arena has no deck step).
-const STAGES := ["name", "kind", "deck", "mode", "host", "join"]
+const STAGES := ["via", "name", "kind", "deck", "mode", "host", "join"]
 
 ## Makes the transport; tests replace it with an in-memory fake.
 var transport_factory: Callable = func() -> Transport: return WebRtcTransport.new()
@@ -65,6 +66,25 @@ func _ready() -> void:
 		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(c)
 		_stages[s] = c
+	# directly with codes, or through a game server
+	var vias := HBoxContainer.new()
+	vias.position = Vector2(140, 150)
+	vias.add_theme_constant_override("separation", 40)
+	_stages.via.add_child(vias)
+	for spec in [[tr("Directly, with codes"), "ViaCodes", func(): show_stage("name"), tr("Two browsers connect directly; you exchange codes in any messenger")],
+			[tr("Through a game server"), "ViaServer", func(): server.emit(), tr("An account, ranked games, the Arena, friends and messages (the address is in the settings)")]]:
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 10)
+		vias.add_child(col)
+		var b := Palette.button(spec[0], spec[1])
+		b.custom_minimum_size = Vector2(480, 200)
+		b.add_theme_font_size_override("font_size", 30)
+		b.pressed.connect(spec[2])
+		col.add_child(b)
+		var why := Palette.label(spec[3], 18)
+		why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		why.custom_minimum_size.x = 480
+		col.add_child(why)
 	# your name
 	var row := HBoxContainer.new()
 	row.position = Vector2(140, 140)
@@ -157,12 +177,12 @@ func _ready() -> void:
 	for c in [_out_hint, _out_row, _in_label, _in_row, status]:
 		_exchange.add_child(c)
 	# Back for every stage but the deck one (the chooser has its own)
-	for s in ["name", "kind", "mode", "host", "join"]:
+	for s in ["via", "name", "kind", "mode", "host", "join"]:
 		var bk := Palette.button(tr("Back"), "Back")
 		bk.position = Vector2(140, 642)
 		bk.pressed.connect(step_back)
 		_stages[s].add_child(bk)
-	show_stage("name")
+	show_stage("via")
 	_expose_js()
 
 
@@ -185,7 +205,7 @@ func show_stage(s: String) -> void:
 	stage = s
 	for k in _stages:
 		_stages[k].visible = k == s
-	_subtitle.text = {"name": tr("Your name"), "kind": tr("A normal game or the Arena?"), "deck": tr("Choose your deck"),
+	_subtitle.text = {"via": tr("How do you want to play?"), "name": tr("Your name"), "kind": tr("A normal game or the Arena?"), "deck": tr("Choose your deck"),
 		"mode": tr("Create a new game or join a friend's game"), "host": tr("Create Game"), "join": tr("Join Game")}[s]
 	_exchange.visible = s == "host" or s == "join"
 	if s == "host":
@@ -216,9 +236,11 @@ func _refresh() -> void:
 
 func step_back() -> void:
 	match stage:
-		"name":
+		"via":
 			_drop_session()
 			back.emit()
+		"name":
+			show_stage("via")
 		"kind":
 			show_stage("name")
 		"deck":

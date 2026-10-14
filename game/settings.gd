@@ -5,7 +5,7 @@ extends RefCounted
 const DEFAULT_PATH := "user://settings.json"
 const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "shake": true, "fullscreen": false,
 	"tracker": false, "anim_speed": 1, "art": "generated", "card_back": "classic", "tracker_deck": true, "tracker_opp": true,
-	"music_set": "generated"}
+	"music_set": "generated", "server": "ws://localhost:7377"}
 const BUSES := ["Music", "SFX"]
 
 static var path := DEFAULT_PATH
@@ -44,8 +44,17 @@ static func load_settings() -> void:
 				elif k == "music_set":
 					if v in Sound.MUSIC_SETS:
 						data[k] = v
+				elif k == "server":
+					if v is String and server_ok(v):
+						data[k] = v
 				elif v is String and (v == "" or Locale.LANGS.has(v)):
 					data[k] = v
+
+
+## A game server address the client may use: ws:// or wss://, a host, no spaces.
+static func server_ok(address: String) -> bool:
+	return address.length() <= 200 and (address.begins_with("ws://") or address.begins_with("wss://")) \
+		and address.split("://")[1] != "" and not address.contains(" ")
 
 
 static func save() -> void:

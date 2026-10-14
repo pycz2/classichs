@@ -19,6 +19,8 @@ var player_name := ""
 var deck: Deck
 ## A game of the Arena: the opponent's deck may have any number of copies.
 var arena := false
+## A game on a server: the server gives the seed (it checks the host uses it).
+var seed_override := -1
 var version: String = ProjectSettings.get_setting("application/config/version", "0")
 var remote_name := ""
 var match_: Match
@@ -162,7 +164,7 @@ func _on_hello(msg: Dictionary) -> void:
 	_remote = msg
 	remote_name = Profile.clean(str(msg.get("name", "")))
 	if host:
-		var seed := randi()
+		var seed := seed_override if seed_override >= 0 else randi()
 		var g := Game.new({"hero": deck.hero, "deck": deck.cards.duplicate()}, {"hero": d.hero, "deck": d.cards.duplicate()}, seed)
 		transport.send({"t": "start", "seed": seed, "decks": [[deck.hero, deck.cards], [d.hero, d.cards]]})
 		_begin(g)
