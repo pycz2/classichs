@@ -939,7 +939,7 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	if pl.weapon:
 		want[pl.weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
 	for i in pl.secrets.size():
-		want[pl.secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6 if own else 120), "hide": not own}
+		want[pl.secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own}  # on the top of the portrait, both sides
 	var board: Array = pl.board.duplicate()
 	var placing := _placing() if own else -1
 	if placing >= 0:  # a minion waiting for its Battlecry target already stands in its place
