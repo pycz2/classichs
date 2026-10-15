@@ -93,6 +93,8 @@ enum In {
         #[serde(default)]
         game: Option<String>,
     },
+    Packs {},
+    PackDelete { content_hash: String },
 }
 
 /// An error reply: code and text (and, for server errors, what went wrong, for the event log).
@@ -515,8 +517,18 @@ impl Session {
             };
         };
         let app = self.app.clone();
+        if !app.hub().conns.get(&me).is_some_and(|c| c.id == self.conn) {
+            return Ok(()); // kicked: another login has the account now
+        }
         let db = &app.db;
         match msg {
+            In::Packs {} => self.ok(crate::packs::packs_msg(db, me).await?),
+            In::PackDelete { content_hash } => {
+                if !crate::packs::delete_own(&app, me, &my_name, &content_hash).await? {
+                    return Err(e("not_found", "No such pack of yours"));
+                }
+                self.ok(crate::packs::packs_msg(db, me).await?)
+            }
             In::Register { .. } | In::Login { .. } | In::Resume { .. } => Err(e("bad_request", "Already logged in")),
             In::Ping {} => self.ok(json!({"t": "pong"})),
             In::Logout {} => {
@@ -882,9 +894,14 @@ impl Session {
         let me = me_json(db, id).await?;
         // auth first: attaching may bring the player back into a game (match, state).
         self.send(json!({"t": "auth", "ok": true, "token": token.clone(), "me": me}));
-        self.conn = self.app.hub().attach(id, &name, self.tx.clone());
+        let (conn, kicked) = self.app.hub().attach(id, &name, self.tx.clone());
+        self.conn = conn;
         self.me = Some((id, name.clone()));
         self.token = token;
+        if kicked {
+            let text = format!("{name} logged in elsewhere: the old connection was closed");
+            self.app.event(self.ev("kicked", text).data(json!({"ip": self.ip.to_string(), "via": via, "reason": "another_login"})));
+        }
         if via != "register" {
             self.app.event(self.ev("login", format!("{name} logged in")).data(json!({"ip": self.ip.to_string(), "via": via})));
         }

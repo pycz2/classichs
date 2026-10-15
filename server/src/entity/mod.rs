@@ -8,5 +8,7 @@ pub mod event;
 pub mod friend;
 pub mod game;
 pub mod message;
+pub mod pack;
+pub mod pack_import;
 pub mod request;
 pub mod session;

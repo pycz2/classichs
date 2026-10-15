@@ -1,4 +1,4 @@
-// Games: the live ones, the finished ones, and one game's timeline (live while it runs).
+// Matches: the live ones, the finished ones, and one game's timeline (live while it runs).
 
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { api, qs } from './api.js'
@@ -18,7 +18,7 @@ export function Games ({ query }) {
   useEvents((e) => { if (e.resync || e.kind === 'game_end') later() })
   useTick(1000)
   return html`<div class="page">
-    <header class="page-head"><h1>Games</h1></header>
+    <header class="page-head"><h1>Matches</h1></header>
     <${Card} title=${html`<span class="live-dot"></span>Live now (${live.games.length})`} pad=${false}>
       ${live.games.length ? html`<div class="table-wrap"><table class="table">
         <thead><tr><th>Game</th><th>Mode</th><th>Player 1</th><th>Player 2</th><th class="num">Turn</th><th>To move</th><th class="num">Actions</th><th class="num">Running</th></tr></thead>
@@ -74,7 +74,7 @@ export function GamePage ({ id }) {
   useTick(1000)
   const events = data ? [...data.events, ...extra.filter((e) => !data.events.some((d) => d.id === e.id))] : []
   useEffect(() => { if (follow && end.current && extra.length) end.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) }, [extra.length])
-  if (error && !data) return html`<div class="page"><a class="back" href="#/games"><${Icon} name="back" size=${16} />Games</a><${ErrorBox} error=${error} onRetry=${reload} /></div>`
+  if (error && !data) return html`<div class="page"><a class="back" href="#/games"><${Icon} name="back" size=${16} />Matches</a><${ErrorBox} error=${error} onRetry=${reload} /></div>`
   if (!data) return html`<div class="page"><div class="skel-title"></div></div>`
   const lg = live.games.find((g) => g.id === id)
   const g = lg ? { ...data.game, ...lg, live: true } : data.game
@@ -85,7 +85,7 @@ export function GamePage ({ id }) {
   let after = 0
   let shown = null
   return html`<div class="page">
-    <a class="back" href="#/games"><${Icon} name="back" size=${16} />Games</a>
+    <a class="back" href="#/games"><${Icon} name="back" size=${16} />Matches</a>
     <header class="page-head game-head">
       <div>
         <h1 class="vs-title"><span class="p0">${players[0] && players[0].user}</span><span class="muted">vs</span><span class="p1">${players[1] && players[1].user}</span></h1>

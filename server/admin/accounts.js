@@ -208,7 +208,7 @@ export function AccountPage ({ id }) {
   </div>`
 }
 
-function Confirm ({ title, text, button, kind, onClose, onYes }) {
+export function Confirm ({ title, text, button, kind, onClose, onYes }) {
   return html`<${Modal} title=${title} onClose=${onClose}>
     <p>${text}</p>
     <div class="form-actions"><button class="btn ghost" onClick=${onClose}>Cancel</button><button class=${'btn ' + kind} onClick=${onYes} autofocus>${button}</button></div>

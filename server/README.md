@@ -42,6 +42,61 @@ All flags are optional (defaults shown). `--trust-proxy` takes the client addres
 from the last `X-Forwarded-For` entry (use it only behind your own reverse proxy:
 the login rate limits are per address). `RUST_LOG=debug` for more logging.
 
+### Game packs: storage and bundled packs
+
+Pack files (`.cardpack`, by content hash) live in an S3-compatible bucket when one is
+configured, else in a local directory:
+
+| Flag | Environment | Default |
+|---|---|---|
+| `--store-dir <dir>` | | `store` (used when no bucket is given) |
+| `--s3-bucket <name>` | `S3_BUCKET` | none (= local directory) |
+| `--s3-endpoint <url>` | `S3_ENDPOINT` | AWS; e.g. `http://seaweedfs:8333` |
+| `--s3-region <r>` | `S3_REGION` | `us-east-1` |
+| `--s3-access-key <k>` | `S3_ACCESS_KEY` | |
+| `--s3-secret-key <s>` | `S3_SECRET_KEY` | |
+| `--packs-dir <dir>` | | `packs/` next to the binary |
+
+Flags win over the environment. Requests are path-style (`<endpoint>/<bucket>/<key>`),
+so any S3-compatible store works; plain `http://` endpoints are allowed. The bucket must
+exist (the compose file below creates it). The object key is `<content_hash>.cardpack`;
+uploads over 10 MB go up as multipart uploads, downloads are streamed to the client.
+
+At every start the server installs each `*.cardpack` in `--packs-dir` as an enabled
+server pack, once: a pack the admin deleted stays deleted, a new file (another content
+hash) is installed. This is how the default packs ship (the Neon pack, later).
+
+### Docker
+
+`docker-compose.yml` runs the server (built by `Dockerfile`: a Rust build stage and a
+distroless Debian 13 runtime, about 90 MB, user 65532, no shell) and
+[SeaweedFS](https://github.com/seaweedfs/seaweedfs) as the S3 store:
+
+```sh
+cd server
+docker compose up -d --build          # game: ws://localhost:7377, admin: http://localhost:7377/admin
+docker compose exec server classichs-server admin root --db /data/classichs.db   # the superuser
+docker compose logs -f server
+docker compose down                   # keeps the data (volumes server-data, s3-data); -v deletes it
+```
+
+The build context is the repository root (the engine is `../rust/engine`);
+`Dockerfile.dockerignore` sends only `data/cards.json`, `rust/engine` and `server`.
+Bundled packs: put `*.cardpack` into `server/packs/` (mounted read-only at `/packs`).
+Set `S3_ACCESS_KEY` and `S3_SECRET_KEY` (an `.env` file next to the compose file) for
+anything but a test; the S3 port is not published.
+
+Why SeaweedFS: MinIO stopped publishing free images and binaries in 2025
+(`minio/minio:latest` is no longer pullable). SeaweedFS is Apache-2.0, released every
+few weeks for over ten years, one small image (`chrislusf/seaweedfs`, pinned to 4.48),
+and `weed mini` runs the whole store (master, volume, filer, S3) in one process, takes
+its credentials from `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY` and creates the bucket
+at start (`-bucket=packs`): no init container, no config file. Garage needs a layout,
+a key and a bucket made with its CLI after the first start; RustFS is still young.
+Checked: `docker compose up`, a 12 MB pack uploaded by a player (multipart) and a
+server pack by the admin, downloaded byte for byte, `docker compose down` and `up`
+again: everything still listed and downloadable; anonymous S3 requests get 403.
+
 ### The superuser and the admin panel
 
 ```sh
@@ -63,8 +118,12 @@ updates live over `/admin/ws`:
   per hour, the queues, who is online, the latest events.
 - **Event log**: everything the server does (below), filtered by kind, user, game,
   time and text, sorted, paged, with a live tail; a row opens its details.
-- **Games**: live and finished games; a game's page is its timeline (every action,
+- **Matches**: live and finished games; a game's page is its timeline (every action,
   grouped by turn, live while it runs) and what ended it.
+- **Games** (game packs): the server packs (name, id, version, size, rules and content
+  hashes, downloads, enabled switch, delete with confirmation), upload by drag and drop
+  (several files, with progress), the players' packs (who uploaded what; the switch
+  stops sharing it), the totals and the pack activity, live.
 - **Accounts**: search, filters (online, in game, searching, offline, suspended,
   role), sorting; an account's page (profile, rank, friends, requests, blocks,
   sessions, recent games, messages, activity) with suspend, unsuspend, reset the
@@ -94,6 +153,9 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `GET events?kind=a,b&user&game&from&to&q&sort&dir&page&size` | `{list, total, page, size}`; from/to in ms; sort: time (default), kind, user |
 | `GET conversations?user&page` · `GET conversations/{a}/{b}` | conversations, the latest first · one conversation |
 | `GET games?user&mode&reason&page&size` · `GET games/{id}` | finished games · one game with its timeline |
+| `GET packs` | `{server: [pack], players: [pack], stats: {server, enabled, players, uploaders, files, bytes, downloads, storage, limits: {player, server, per_player}}}`; a pack is `{id, pack_id, version, name, rules_hash, content_hash, size, enabled, created, downloads, owner: {id, user} \| null}` |
+| `POST packs` (the `.cardpack` as the raw body, up to 1 GB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
+| `POST packs/{id}/{enable\|disable\|delete}` | any pack, a player's too (the player's game gets a new `packs`) |
 
 `/admin/ws` (the cookie, same origin) sends `hello {live}`, then `event {e}` for every
 event, `live {live}` when the online list, queues or games change and `resync {}`
@@ -107,7 +169,9 @@ password, token), `login_failed` (`data.reason`, `data.admin`), `logout`,
 `disconnect`, `admin_login`, `admin_logout`, `tag`, `friend_request`,
 `friend_accept`, `friend_decline`, `friend_remove`, `block`, `unblock`, `msg` (the
 text), `invite`, `invite_accept`, `invite_decline`, `queue`, `unqueue`, `arena`,
-`match` (with the seed), `game_start` (who goes first, the opening draws), `game_action`
+`kicked` (a second login closed the first connection), `pack_upload`, `pack_import` (a
+bundled pack installed), `pack_enable`, `pack_disable`, `pack_delete`, `pack_download`,
+`pack_rejected` (a refused upload: the reason), `match` (with the seed), `game_start` (who goes first, the opening draws), `game_action`
 (every applied action, timeout moves marked `timeout`, with the turn, the state hash
 and the engine's events), `game_left`, `game_back`, `game_end` (reason, results, the
 final turn and hash, and for `illegal` the refused actions), `admin` (every admin
@@ -161,6 +225,10 @@ In the game: Settings → Server: `ws://localhost:7377`.
 | Back after a disconnect in a game | 30 s, then the game is lost |
 | A turn (the mulligan) | 75 s (45 s) + 5 s, then the timeout moves |
 | Refused actions | 3 per player in a game, then the game is lost |
+| Connections per account | 1: a new login closes the old connection (`kicked`) |
+| A player's pack | 100 MB; 10 packs per player |
+| A server pack (admin upload) | 1 GB |
+| Inside a pack | 20 000 files; `manifest.json` 64 KB; the rules files 64 MB together |
 
 ## Protocol summary
 
@@ -168,7 +236,11 @@ JSON text frames, each an object with `"t"`; errors are `{"t":"error","code","te
 Full details: the design doc.
 
 - Auth: `register {user, password}`, `login {user, password}`, `resume {token}` →
-  `auth {ok, token, me}`; `logout {}` → `logged_out`. Keep the token: `resume` is
+  `auth {ok, token, me}`; `logout {}` → `logged_out`. One connection per account: when
+  an account logs in or resumes while it already has a connection, the old one gets
+  `kicked {reason: "another_login"}` and is closed (the client should not reconnect by
+  itself after it); the new one takes over (friends keep seeing it online; in a game it
+  gets `match {…, rejoin: true}` and a fresh `state`). Keep the token: `resume` is
   the normal way back in (after a restart too); it is valid 30 days and every
   `resume` renews it (the same token comes back). `me {}` → `me {me}`;
   `me = {user, tag, rank: {rank, stars, legend, streak}, arena, season}` (rank 0 =
@@ -218,3 +290,31 @@ Full details: the design doc.
     `message` "Something does not add up: …"), `disconnect`, `aborted` (a rules
     engine failure). Older games in the database may show `left`, `desync`, `cheat`,
     `protocol`.
+
+### Game packs
+
+A pack is `{id, name: {lang: text}, version, rules_hash, content_hash, size, url}` (`id` =
+the manifest's id; `url` is relative to the server's HTTP address, e.g.
+`http://host:7377` for `ws://host:7377`).
+
+- `packs {}` → `packs {server: [pack], mine: [pack + enabled]}`: the enabled server packs
+  and the player's own (sent again by the server after the player's upload or an admin's
+  change to their packs).
+- `pack_delete {content_hash}` → `packs {…}` (or `error not_found`).
+- `GET /packs/<content_hash>.cardpack` with the game's session token as
+  `Authorization: Bearer <token>` or `?token=<token>` → the zip, streamed, with
+  `ETag: "<content_hash>"`, `Cache-Control: private, max-age=31536000, immutable`
+  (`If-None-Match` → 304). Who may: everyone for an enabled server pack; a player's pack
+  for its owner and (while enabled) the owner's friends. Otherwise 404; no or a bad token 401.
+- `POST /packs` with the token, the `.cardpack` as the raw body → `201 {pack}`; refusals
+  are `{error, code}`: 401 `auth_required`/`bad_token`, 409 `exists` (already yours) or
+  `too_many` (10), 413 `too_large` (100 MB), 422 `invalid` (the reason), 400 `empty`.
+- Both answer CORS (`Access-Control-Allow-Origin: *`, preflight included) for the web build.
+
+The check (`packs::validate_pack`, run on every upload and bundled pack): a zip with at
+most 20 000 entries, no absolute, `..`, `\` or `:` paths, a `manifest.json` (≤ 64 KB) with
+`format` 1, `id` (1–64 of `a-z 0-9 . _ -`), `version` (1–32 visible characters) and `name`
+(`{lang: 1–100 characters}`). `content_hash` = SHA-256 of the file; `rules_hash` =
+SHA-256 of `path:sha256(bytes)\n` over `rules.json`, `cards.json`, `rules/**` and
+`scripts/**`, sorted by path (D8). Phase D extends the check with the engine (load,
+compile the scripts, a trial game) and may define the rules hash itself.

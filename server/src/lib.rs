@@ -9,7 +9,9 @@ pub mod entity;
 pub mod events;
 pub mod game;
 pub mod migration;
+pub mod packs;
 pub mod ranked;
+pub mod storage;
 pub mod ws;
 
 use auth::RateLimit;
@@ -45,6 +47,8 @@ pub struct App {
     pub timers: Timers,
     /// The event log and the admin panels' live feed.
     pub log: Log,
+    /// Where pack files live (S3 or a directory).
+    pub store: storage::Storage,
 }
 
 /// The game clocks.
@@ -67,7 +71,7 @@ impl Default for Timers {
 
 impl App {
     /// Needs a tokio runtime (it starts the event log's writer).
-    pub fn new(db: Db, trust_proxy: bool, timers: Timers) -> AppRef {
+    pub fn new(db: Db, trust_proxy: bool, timers: Timers, store: storage::Storage) -> AppRef {
         let db_clone = db.clone();
         Arc::new(App {
             db,
@@ -76,6 +80,7 @@ impl App {
             trust_proxy,
             timers,
             log: Log::start(db_clone),
+            store,
         })
     }
 
@@ -188,12 +193,13 @@ impl Hub {
         json!({"online": online, "queue": queue, "games": games})
     }
 
-    /// The account's new connection; an older one is closed. Returns the connection id.
-    pub fn attach(&mut self, account: i64, name: &str, tx: UnboundedSender<Out>) -> u64 {
+    /// The account's new connection. One login per account: an older connection gets
+    /// `kicked {reason: "another_login"}` and is closed. Returns (connection id, kicked one).
+    pub fn attach(&mut self, account: i64, name: &str, tx: UnboundedSender<Out>) -> (u64, bool) {
         self.next_conn += 1;
         let old = self.conns.insert(account, Conn { id: self.next_conn, name: name.into(), tx });
-        if let Some(old) = old {
-            let _ = old.tx.send(Out::Text(json!({"t": "error", "code": "replaced", "text": "Logged in elsewhere"}).to_string()));
+        if let Some(old) = &old {
+            let _ = old.tx.send(Out::Text(json!({"t": "kicked", "reason": "another_login"}).to_string()));
             let _ = old.tx.send(Out::Close);
         }
         if let Some((g, p)) = self.in_game.get(&account) {
@@ -201,7 +207,7 @@ impl Hub {
                 let _ = lg.tx.send(game::Ev::Back(*p));
             }
         }
-        self.next_conn
+        (self.next_conn, old.is_some())
     }
 
     /// The account went away (this connection, or any with `conn` None: a kick).
@@ -331,7 +337,7 @@ pub fn spawn_background(app: AppRef) {
 }
 
 pub fn router(app: AppRef) -> Router {
-    Router::new().route("/", get(ws_upgrade)).merge(admin::routes(app.clone())).with_state(app)
+    Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(admin::routes(app.clone())).with_state(app)
 }
 
 pub fn client_ip(app: &App, headers: &HeaderMap, addr: SocketAddr) -> IpAddr {

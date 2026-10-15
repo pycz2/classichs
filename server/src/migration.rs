@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3)]
     }
 }
 
@@ -302,5 +302,72 @@ impl MigrationTrait for M2 {
             m.create_index(i).await?;
         }
         Ok(())
+    }
+}
+
+#[derive(DeriveIden)]
+enum Packs {
+    Table,
+    Id,
+    PackId,
+    Version,
+    Name,
+    RulesHash,
+    ContentHash,
+    Size,
+    Owner,
+    Enabled,
+    Created,
+    Downloads,
+}
+
+#[derive(DeriveIden)]
+enum PackImports {
+    Table,
+    ContentHash,
+    At,
+}
+
+/// Game packs.
+struct M3;
+
+impl MigrationName for M3 {
+    fn name(&self) -> &str {
+        "m20261016_000003_packs"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M3 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let text = |c: Packs| ColumnDef::new(c).text().not_null().to_owned();
+        m.create_table(
+            Table::create()
+                .table(Packs::Table)
+                .col(ColumnDef::new(Packs::Id).integer().not_null().primary_key())
+                .col(text(Packs::PackId))
+                .col(text(Packs::Version))
+                .col(text(Packs::Name))
+                .col(text(Packs::RulesHash))
+                .col(text(Packs::ContentHash))
+                .col(int(Packs::Size))
+                .col(ColumnDef::new(Packs::Owner).integer())
+                .col(int(Packs::Enabled).default(1))
+                .col(int(Packs::Created))
+                .col(int(Packs::Downloads).default(0))
+                .foreign_key(&mut fk(Packs::Table, Packs::Owner))
+                .to_owned(),
+        )
+        .await?;
+        m.create_index(Index::create().name("packs_hash").table(Packs::Table).col(Packs::ContentHash).to_owned()).await?;
+        m.create_index(Index::create().name("packs_owner").table(Packs::Table).col(Packs::Owner).to_owned()).await?;
+        m.create_table(
+            Table::create()
+                .table(PackImports::Table)
+                .col(ColumnDef::new(PackImports::ContentHash).text().not_null().primary_key())
+                .col(int(PackImports::At))
+                .to_owned(),
+        )
+        .await
     }
 }

@@ -7,6 +7,7 @@ use classichs_engine::state::Ev as Events;
 use classichs_engine::{bot, deck, Game};
 use classichs_server::entity::{account, event};
 use classichs_server::game::DOES_NOT_ADD_UP;
+use classichs_server::storage::Storage;
 use classichs_server::{db, router, spawn_background, App, AppRef, Timers};
 use futures_util::{SinkExt, StreamExt};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QueryOrder};
@@ -17,8 +18,13 @@ use tokio_tungstenite::tungstenite::Message;
 
 type Ws = tokio_tungstenite::WebSocketStream<tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>>;
 
+/// A pack storage in a fresh temp directory.
+fn temp_store() -> Storage {
+    Storage::dir(&std::env::temp_dir().join(format!("chs-test-{}", rand::random::<u64>()))).unwrap()
+}
+
 async fn server(timers: Timers) -> (SocketAddr, AppRef) {
-    let app = App::new(db::open(":memory:").await.unwrap(), false, timers);
+    let app = App::new(db::open(":memory:").await.unwrap(), false, timers, temp_store());
     spawn_background(app.clone());
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
     let addr = listener.local_addr().unwrap();
@@ -530,7 +536,7 @@ async fn auth_rules_and_abuse() {
     assert_eq!(d.want("error").await["code"], "bad_login");
     d.send(json!({"t": "resume", "token": token})).await;
     assert_eq!(d.want("auth").await["me"]["user"], "quinn");
-    assert_eq!(c.want("error").await["code"], "replaced");
+    assert_eq!(c.want("kicked").await["reason"], "another_login");
     d.send(json!({"t": "logout"})).await;
     d.want("logged_out").await;
     d.send(json!({"t": "resume", "token": token})).await;
@@ -638,4 +644,77 @@ async fn presence_follows_a_game() {
     t.p[1].c.want("game_over").await;
     let p = f.want("presence").await;
     assert_eq!((p["user"].as_str(), p["online"].as_bool(), p["status"].as_str()), (Some(name.as_str()), Some(true), Some("online")));
+}
+
+/// Waits until the old connection is closed by the server.
+async fn closed(c: &mut C) {
+    for _ in 0..40 {
+        match tokio::time::timeout(Duration::from_secs(5), c.ws.next()).await {
+            Ok(Some(Ok(Message::Close(_)))) | Ok(None) | Ok(Some(Err(_))) => return,
+            Ok(Some(Ok(Message::Text(t)))) => panic!("after kicked: {t}"),
+            Ok(Some(Ok(_))) => {}
+            Err(_) => panic!("not closed"),
+        }
+    }
+}
+
+#[tokio::test]
+async fn second_login_kicks_the_first() {
+    let (addr, app) = server(std_server()).await;
+    let mut f = C::register(addr, "fred").await;
+    let mut t = Table::queue(addr, &app, "kim", "lee", "casual").await;
+    f.send(json!({"t": "set_tag", "tag": "Fred"})).await;
+    f.want("me").await;
+    t.p[0].c.send(json!({"t": "me"})).await;
+    let name = t.p[0].c.want("me").await["me"]["user"].as_str().unwrap().to_string();
+    t.p[0].c.send(json!({"t": "friend_add", "tag": "fred"})).await;
+    f.want("friends").await;
+    f.send(json!({"t": "friend_accept", "user": name})).await;
+    assert_eq!(f.want("presence").await["status"], "in_game");
+    t.act(0, json!({"type": "mulligan", "player": 0, "replace": []})).await;
+
+    // The same account logs in on a new connection while the old one is still open (password this time).
+    let mut d = C::connect(addr).await;
+    d.send(json!({"t": "login", "user": name, "password": "password123"})).await;
+    assert_eq!(d.want("auth").await["me"]["user"], name.as_str());
+    let k = t.p[0].c.want("kicked").await;
+    assert_eq!(k, json!({"t": "kicked", "reason": "another_login"}));
+    closed(&mut t.p[0].c).await;
+    // The new connection takes the game over: match (rejoin) and a fresh state.
+    let m = d.want("match").await;
+    assert_eq!((m["rejoin"].as_bool(), m["you"].as_u64(), m["game"].as_str()), (Some(true), Some(0), Some(t.game.as_str())));
+    let s = d.want("state").await;
+    check_state(&s, &t.mirror, &[], 0);
+    t.p[0].c = d;
+    t.act(1, json!({"type": "mulligan", "player": 1, "replace": []})).await;
+    let (p, a) = t.next();
+    t.act(p, a).await;
+
+    // Still in the game for the friends: no offline in between. A message proves nothing else came.
+    f.send(json!({"t": "ping"})).await;
+    let mut seen = vec![];
+    loop {
+        let m = tokio::time::timeout(Duration::from_secs(5), f.ws.next()).await.unwrap().unwrap().unwrap();
+        let v: Value = serde_json::from_str(m.to_text().unwrap()).unwrap();
+        if v["t"] == "pong" {
+            break;
+        }
+        seen.push(v);
+    }
+    assert!(seen.iter().all(|v| v["t"] != "presence"), "{seen:?}");
+    let id = db::id_by_name(&app.db, &name).await.unwrap().unwrap();
+    assert_eq!(app.hub().status(id), "in_game");
+
+    // Logged: kicked, and neither a disconnect nor leaving the game.
+    let mut kinds = vec![];
+    for _ in 0..50 {
+        kinds = event::Entity::find().filter(event::Column::Account.eq(id)).order_by_asc(event::Column::Id).all(&app.db).await.unwrap()
+            .into_iter().map(|e| e.kind).collect::<Vec<_>>();
+        if kinds.iter().any(|k| k == "game_back") {
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(20)).await;
+    }
+    assert!(kinds.iter().any(|k| k == "kicked"), "{kinds:?}");
+    assert!(!kinds.iter().any(|k| k == "disconnect" || k == "game_left"), "{kinds:?}");
 }

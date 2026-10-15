@@ -1,0 +1,10 @@
+# The build context is the repository root: send only what the server build needs.
+*
+!data/cards.json
+!rust/engine
+rust/engine/target
+rust/engine/tests
+!server
+server/target
+server/store
+server/*.db*

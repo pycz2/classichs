@@ -5,6 +5,7 @@ use axum::body::Body;
 use axum::extract::connect_info::MockConnectInfo;
 use axum::http::{header, Request, StatusCode};
 use classichs_server::entity::account;
+use classichs_server::storage::Storage;
 use classichs_server::{auth, db, router, App, AppRef, Timers};
 use sea_orm::EntityTrait;
 use serde_json::{json, Value};
@@ -51,7 +52,8 @@ fn post(uri: &str, cookie: &str, csrf: Option<&str>, body: Value) -> Request<Bod
 }
 
 async fn setup() -> (AppRef, axum::Router, i64) {
-    let state = App::new(db::open(":memory:").await.unwrap(), false, Timers::default());
+    let store = Storage::dir(&std::env::temp_dir().join(format!("chs-test-{}", rand::random::<u64>()))).unwrap();
+    let state = App::new(db::open(":memory:").await.unwrap(), false, Timers::default(), store);
     let hash = auth::hash_password("rootpassword");
     db::make_superuser(&state.db, "root", &hash).await.unwrap();
     let victim = db::create_account(&state.db, "victim", &hash, "user").await.unwrap().unwrap();

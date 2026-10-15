@@ -9,6 +9,7 @@ axum = { version = "0.8.9", features = ["ws"] }
 base64 = "0.22"
 classichs-engine = { path = "../rust/engine" }
 futures-util = "0.3.34"
+object_store = { version = "0.14", features = ["aws", "fs"] }
 rand = "0.8"
 rpassword = "7.5.4"
 sea-orm = { version = "2.0.4", default-features = false, features = ["macros", "with-json", "sqlx-sqlite", "runtime-tokio", "sqlite-use-returning-for-3_35"] }
@@ -17,8 +18,10 @@ serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
 sha2 = "0.10"
 tokio = { version = "1.53.3", features = ["full"] }
+tokio-util = { version = "0.7.20", features = ["io"] }
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+zip = { version = "9", default-features = false, features = ["deflate-flate2-zlib-rs"] }
 
 [dev-dependencies]
 tokio-tungstenite = "0.30.0"

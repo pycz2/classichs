@@ -125,6 +125,16 @@ export function dur (s) {
 
 export const num = (n) => (n ?? 0).toLocaleString()
 
+/** 12345678 → "11.8 MB" */
+export function bytes (n) {
+  n = n || 0
+  if (n < 1024) return n + ' B'
+  const u = ['KB', 'MB', 'GB', 'TB']
+  let i = -1
+  do { n /= 1024; i++ } while (n >= 1024 && i < u.length - 1)
+  return (n < 10 ? n.toFixed(1) : Math.round(n)) + ' ' + u[i]
+}
+
 export function rankText (a) {
   if (a.rank === 0) return a.legend ? 'Legend #' + a.legend : 'Legend'
   return 'Rank ' + a.rank
@@ -137,19 +147,21 @@ export const CATS = {
   social: 'Social',
   chat: 'Chat',
   queue: 'Queues',
-  game: 'Games',
+  game: 'Matches',
+  pack: 'Game packs',
   admin: 'Admin',
   error: 'Problems'
 }
 
 export const KINDS = {
-  register: 'auth', login: 'auth', logout: 'auth', disconnect: 'auth', admin_login: 'auth', admin_logout: 'auth',
+  register: 'auth', login: 'auth', logout: 'auth', disconnect: 'auth', kicked: 'auth', admin_login: 'auth', admin_logout: 'auth',
   login_failed: 'error', error: 'error',
   tag: 'social', friend_request: 'social', friend_accept: 'social', friend_decline: 'social', friend_remove: 'social',
   block: 'social', unblock: 'social', invite: 'social', invite_accept: 'social', invite_decline: 'social',
   msg: 'chat',
   queue: 'queue', unqueue: 'queue', arena: 'queue',
   match: 'game', game_start: 'game', game_action: 'game', game_left: 'game', game_back: 'game', game_end: 'game',
+  pack_upload: 'pack', pack_import: 'pack', pack_enable: 'pack', pack_disable: 'pack', pack_delete: 'pack', pack_download: 'pack', pack_rejected: 'error',
   admin: 'admin'
 }
 
@@ -179,7 +191,10 @@ const ICONS = {
   chevron: 'M9 6l6 6-6 6',
   pause: 'M8 5v14M16 5v14',
   play: 'M7 5l12 7-12 7V5z',
-  refresh: 'M20 11a8 8 0 10-2.3 5.7M20 4v7h-7'
+  refresh: 'M20 11a8 8 0 10-2.3 5.7M20 4v7h-7',
+  packs: 'M21 8l-9-5-9 5v8l9 5 9-5V8zM3 8l9 5 9-5M12 13v8M7.5 5.5l9 5',
+  upload: 'M12 15V4m-5 5l5-5 5 5M4 15v4a1 1 0 001 1h14a1 1 0 001-1v-4',
+  trash: 'M4 7h16M10 11v6m4-6v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3'
 }
 
 export function Icon ({ name, size = 18 }) {

@@ -6,12 +6,14 @@
 
 use crate::auth;
 use crate::db::{self, Account};
-use crate::entity::{account, arena, block, event, game as played, message, request, session};
+use crate::entity::{account, arena, block, event, game as played, message, pack, request, session};
+use crate::packs;
 use crate::events::{event_json, now_ms, Event};
 use crate::ranked;
 use crate::ws::{accounts_in_order, friends_of};
 use crate::{presence, App, AppRef};
 use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
+use axum::body::Body;
 use axum::extract::{ConnectInfo, Path, Query, Request, State};
 use axum::http::{header, HeaderMap, HeaderValue, Method, StatusCode};
 use axum::middleware::{self, Next};
@@ -53,6 +55,8 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/conversations/{a}/{b}", get(conversation))
         .route("/admin/api/games", get(games))
         .route("/admin/api/games/{id}", get(game_page))
+        .route("/admin/api/packs", get(packs_list).post(packs_upload))
+        .route("/admin/api/packs/{id}/{action}", post(pack_action))
         .route("/admin/ws", get(feed))
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
@@ -81,6 +85,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "accounts.js",
     "games.js",
     "messages.js",
+    "packs.js",
     "style.css",
     "vendor/preact.module.js",
     "vendor/hooks.module.js",
@@ -661,7 +666,12 @@ async fn account_action(
             if f.confirm != t.name {
                 return err(StatusCode::BAD_REQUEST, "Type the account's name to confirm");
             }
+            let hashes: Vec<String> =
+                pack::Entity::find().filter(pack::Column::Owner.eq(id)).all(db).await.unwrap_or_default().into_iter().map(|p| p.content_hash).collect();
             let r = account::Entity::delete_by_id(id).exec(db).await.map(|_| ());
+            for h in hashes {
+                packs::gc(&app, &h).await;
+            }
             kick().await;
             (format!("{} deleted the account {}", a.me.name, t.name), r)
         }
@@ -913,4 +923,105 @@ async fn game_page(State(app): State<AppRef>, Path(id): Path<String>) -> Respons
         Ok(None) => err(StatusCode::NOT_FOUND, "No such game"),
         Err(e) => db_err(e),
     }
+}
+
+// --- game packs ------------------------------------------------------------------------------
+
+/// `{server: [pack], players: [pack], stats}`; a pack is `packs::admin_json`.
+async fn packs_list(State(app): State<AppRef>) -> Response {
+    let db = &app.db;
+    let r = async {
+        let all = pack::Entity::find().order_by_desc(pack::Column::Id).all(db).await?;
+        let mut owners: Vec<i64> = all.iter().filter_map(|p| p.owner).collect();
+        owners.sort_unstable();
+        owners.dedup();
+        let names: HashMap<i64, String> = accounts_in_order(db, &owners).await?.into_iter().map(|a| (a.id, a.name)).collect();
+        let (server, players): (Vec<&pack::Model>, Vec<&pack::Model>) = all.iter().partition(|p| p.owner.is_none());
+        let mut hashes: Vec<(&str, i64)> = all.iter().map(|p| (p.content_hash.as_str(), p.size)).collect();
+        hashes.sort_unstable();
+        hashes.dedup();
+        let stats = json!({
+            "server": server.len(), "enabled": server.iter().filter(|p| p.enabled).count(), "players": players.len(),
+            "uploaders": owners.len(), "files": hashes.len(), "bytes": hashes.iter().map(|h| h.1).sum::<i64>(),
+            "downloads": all.iter().map(|p| p.downloads).sum::<i64>(), "storage": app.store.what,
+            "limits": {"player": packs::MAX_PLAYER_PACK, "server": packs::MAX_SERVER_PACK, "per_player": packs::MAX_PER_PLAYER},
+        });
+        let list = |v: &[&pack::Model]| v.iter().map(|p| packs::admin_json(p, &names)).collect::<Vec<_>>();
+        Ok::<_, sea_orm::DbErr>(json!({"server": list(&server), "players": list(&players), "stats": stats}))
+    };
+    match r.await {
+        Ok(v) => Json(v).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+/// The zip as the body: a new server pack (enabled).
+async fn packs_upload(State(app): State<AppRef>, Extension(a): Extension<Admin>, headers: HeaderMap, body: Body) -> Response {
+    let up = match packs::receive(&headers, body, packs::MAX_SERVER_PACK).await {
+        Ok(u) => u,
+        Err(e) => return e.into_response(),
+    };
+    match packs::add(&app, &up.path, &up.hash, up.size, None).await {
+        Ok(p) => {
+            let text = format!("{} uploaded the server pack {}", a.me.name, packs::label(&p));
+            let mut data = packs::event_data(&p);
+            data["admin"] = json!(true);
+            app.event(Event::new("pack_upload", text).user(a.me.id, &a.me.name).data(data));
+            Json(json!({"pack": packs::admin_json(&p, &HashMap::new())})).into_response()
+        }
+        Err(e) => {
+            if e.1 == "invalid" {
+                app.event(Event::new("pack_rejected", format!("{} uploaded a pack that was refused: {}", a.me.name, e.2))
+                    .user(a.me.id, &a.me.name)
+                    .data(json!({"reason": e.2, "content_hash": up.hash, "size": up.size, "admin": true})));
+            }
+            e.into_response()
+        }
+    }
+}
+
+/// enable | disable | delete (any pack, a player's too).
+async fn pack_action(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path((id, action)): Path<(i64, String)>) -> Response {
+    let db = &app.db;
+    let p = match pack::Entity::find_by_id(id).one(db).await {
+        Ok(Some(p)) => p,
+        Ok(None) => return err(StatusCode::NOT_FOUND, "No such pack"),
+        Err(e) => return db_err(e),
+    };
+    let owner = match p.owner {
+        Some(o) => Some(db::name_of(db, o).await.unwrap_or_default()),
+        None => None,
+    };
+    let whose = owner.as_ref().map_or("the server pack".to_string(), |o| format!("{o}'s pack"));
+    let (kind, text, r) = match action.as_str() {
+        "enable" | "disable" => {
+            let on = action == "enable";
+            let r = pack::ActiveModel { id: Unchanged(id), enabled: Set(on), ..Default::default() }.update(db).await.map(|_| ());
+            (if on { "pack_enable" } else { "pack_disable" }, format!("{} {action}d {whose} {}", a.me.name, packs::label(&p)), r)
+        }
+        "delete" => {
+            let r = pack::Entity::delete_by_id(id).exec(db).await.map(|_| ());
+            if r.is_ok() {
+                packs::gc(&app, &p.content_hash).await;
+            }
+            ("pack_delete", format!("{} deleted {whose} {}", a.me.name, packs::label(&p)), r)
+        }
+        _ => return err(StatusCode::NOT_FOUND, "No such action"),
+    };
+    if let Err(e) = r {
+        return db_err(e);
+    }
+    let mut data = packs::event_data(&p);
+    data["admin"] = json!(true);
+    let mut ev = Event::new(kind, text.clone()).user(a.me.id, &a.me.name).data(data);
+    if let Some(o) = &owner {
+        ev = ev.other(o);
+    }
+    app.event(ev);
+    if let Some(o) = p.owner {
+        if let Ok(m) = packs::packs_msg(db, o).await {
+            app.hub().send(o, &m);
+        }
+    }
+    Json(json!({"ok": true, "text": text})).into_response()
 }

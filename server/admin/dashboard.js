@@ -7,7 +7,7 @@ import { html, useLive, useEvents, useLoad, useTick, Card, Kind, NameLink, GameL
 const HOUR = 3600000
 const SERIES = [
   ['login', 'Logins'],
-  ['match', 'Games started'],
+  ['match', 'Matches started'],
   ['msg', 'Messages'],
   ['register', 'Registrations']
 ]
@@ -59,7 +59,7 @@ export function Dashboard () {
       <${Tile} label="Online now" value=${live.online.length} sub=${`${inGame} in a game · ${q.length} searching`} accent />
       <${Tile} label="Searching" value=${q.length} sub=${`casual ${byMode('casual')} · ranked ${byMode('ranked')} · arena ${byMode('arena')}`} />
       <${Tile} label="Live games" value=${live.games.length} sub=${`${num(live.games.reduce((n, g) => n + g.actions, 0))} actions so far`} />
-      <${Tile} label="Games today" value=${t('match')} sub=${`${t('game_end')} finished · ${num(t('game_action'))} actions`} />
+      <${Tile} label="Matches today" value=${t('match')} sub=${`${t('game_end')} finished · ${num(t('game_action'))} actions`} />
       <${Tile} label="New players" value=${t('register')} sub=${data ? `${num(data.totals.accounts)} accounts in all` : ''} />
       <${Tile} label="Logins" value=${t('login')} sub=${`${t('login_failed')} failed`} warn=${t('login_failed') > 20} />
       <${Tile} label="Messages" value=${t('msg')} sub=${`${t('friend_request')} friend requests`} />
