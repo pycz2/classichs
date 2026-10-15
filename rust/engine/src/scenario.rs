@@ -144,7 +144,7 @@ fn apply_spec(e: &mut Entity, s: &Value) {
 }
 
 /// JSON gives floats; the engine uses ints only.
-fn ints(v: &Value) -> Value {
+pub(crate) fn ints(v: &Value) -> Value {
     match v {
         Value::Number(_) => json!(int(Some(v))),
         Value::Array(a) => Value::Array(a.iter().map(ints).collect()),

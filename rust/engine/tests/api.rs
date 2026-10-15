@@ -115,3 +115,52 @@ fn engine_can_move_between_threads() {
     fn send_sync<T: Send + Sync>() {}
     send_sync::<Engine>();
 }
+
+/// A player's view rebuilt into a game (`new` with `state`) gives that player the
+/// same legal actions as the real game: a client of a server finds its moves with it.
+#[test]
+fn a_view_gives_the_same_legal_actions() {
+    let mut e = Engine::new();
+    let classes = ["MAGE", "HUNTER", "PALADIN", "WARRIOR", "DRUID", "WARLOCK", "SHAMAN", "ROGUE", "PRIEST"];
+    let mut checked = 0;
+    for seed in 0..18i64 {
+        let (a, b) = (classes[seed as usize % 9], classes[(seed as usize * 4 + 1) % 9]);
+        let decks = if seed % 2 == 0 {
+            json!([deck(a), deck(b)])
+        } else {
+            // 30 cards from the whole pool (every class): Secrets, auras, choices, giants
+            let all = classichs_engine::card_db::collectible();
+            let pick = |k: i64| -> Vec<String> { (0..30).map(|i| all[((seed * 7919 + k * 104729 + i * 7907) as usize) % all.len()].clone()).collect() };
+            json!([{"hero": "HERO_08", "cards": pick(1)}, {"hero": "HERO_05", "cards": pick(2)}])
+        };
+        let r = call(&mut e, json!({"op": "new", "game": "g", "decks": decks, "seed": seed, "check": false}));
+        assert_eq!(r["ok"], true, "{r}");
+        for _ in 0..400 {
+            let st = call(&mut e, json!({"op": "snapshot", "game": "g"}))["state"].clone();
+            if st["game_over"] == true {
+                break;
+            }
+            for p in 0..2 {
+                let view = call(&mut e, json!({"op": "snapshot", "game": "g", "view": p}))["state"].clone();
+                let r = call(&mut e, json!({"op": "new", "game": "v", "state": view}));
+                assert_eq!(r["ok"], true, "{r}");
+                let want = call(&mut e, json!({"op": "legal", "game": "g", "player": p}))["actions"].clone();
+                let got = call(&mut e, json!({"op": "legal", "game": "v", "player": p}))["actions"].clone();
+                assert_eq!(got, want, "seed {seed}, player {p}");
+                checked += 1;
+            }
+            let p = if st["pending"].get("player").is_some() {
+                st["pending"]["player"].as_i64().unwrap()
+            } else if st["phase"] == "MULLIGAN" {
+                if st["players"][0]["mulliganed"] == true { 1 } else { 0 }
+            } else {
+                st["current"].as_i64().unwrap()
+            };
+            let a = call(&mut e, json!({"op": "bot", "game": "g", "player": p}))["action"].clone();
+            assert_eq!(call(&mut e, json!({"op": "act", "game": "g", "action": a}))["ok"], true);
+        }
+    }
+    assert!(checked > 1000, "{checked}");
+    let r = call(&mut e, json!({"op": "new", "game": "c", "copy": "g"}));
+    assert_eq!(r["hash"], call(&mut e, json!({"op": "hash", "game": "g"}))["hash"], "a copy is the same game");
+}

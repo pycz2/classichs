@@ -1,6 +1,6 @@
 class_name Deck
 extends RefCounted
-## A player's deck: name, hero and 30 card ids, with Hearthstone deck-building rules.
+## A player's deck: name, hero and 30 card ids. The deck-building rules are the engine's.
 
 const SIZE := 30
 const NAME_MAX := 60
@@ -20,22 +20,12 @@ func count(id: String) -> int:
 	return cards.count(id)
 
 
-static func max_copies(id: String) -> int:
-	return 1 if CardDb.card(id).get("rarity", "") == "LEGENDARY" else 2
-
-
-## Why id can't be added ("" = it can).
+## Why id can't be added ("" = it can): the engine's deck rules.
 func can_add(id: String) -> String:
-	if not CardDb.has(id) or not CardDb.collectible().has(id):
+	if not CardDb.has(id):  # (the engine drops unknown ids from a deck it reads)
 		return TranslationServer.translate("This card can't be put in a deck")
-	var cls: String = CardDb.card(id).cardClass
-	if cls != "NEUTRAL" and cls != card_class():
-		return TranslationServer.translate("This card belongs to another class")
-	if cards.size() >= SIZE:
-		return TranslationServer.translate("The deck already has 30 cards")
-	if not arena and count(id) >= max_copies(id):
-		return TranslationServer.translate("No more copies of this card are allowed")
-	return ""
+	var why := Rules.deck_error({"hero": hero, "cards": Array(cards) + [id], "arena": arena})
+	return "" if why.begins_with("A deck needs exactly 30 cards") else Rules.tr_error(why)
 
 
 func add(id: String) -> String:
@@ -53,20 +43,9 @@ func remove(id: String) -> bool:
 	return true
 
 
-## Why the deck can't be played ("" = it is complete and legal).
+## Why the deck can't be played ("" = it is complete and legal), from the engine.
 func validate() -> String:
-	if not Decks.HEROES.values().has(hero):
-		return TranslationServer.translate("Unknown hero")
-	var copy := Deck.new()
-	copy.hero = hero
-	copy.arena = arena
-	for id in cards:
-		var why := copy.add(id)
-		if why != "":
-			return why
-	if cards.size() != SIZE:
-		return TranslationServer.translate("A deck needs exactly 30 cards. Cards now: %d") % cards.size()
-	return ""
+	return Rules.validate({"hero": hero, "cards": Array(cards), "arena": arena})
 
 
 ## [card id, copies] sorted by cost, then name.

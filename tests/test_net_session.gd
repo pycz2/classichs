@@ -43,7 +43,7 @@ func test_both_sides_start_the_same_game() -> void:
 	var p := _pair()
 	var m: Array = p[3]
 	check(m[0] != null and m[1] != null, "both started")
-	eq(m[0].game.state_hash(), m[1].game.state_hash(), "same state")
+	eq(m[0].state_hash, m[1].state_hash, "same state")
 	eq([m[0].viewer(), m[1].viewer()], [0, 1], "host is player 0")
 	eq(p[1].remote_name, "Host", "guest knows the host's name")
 	_free(p)
@@ -60,8 +60,8 @@ func test_full_match_over_the_network_stays_in_sync() -> void:
 			if match_.game.game_over:
 				continue
 			if match_.actor() == side or (match_.game.phase == "MULLIGAN" and not match_.game.players[side].mulliganed):
-				var a := Bot.choose(match_.game, side)
-				if not a.is_empty() and match_.submit(a).ok:
+				var a = Rules.request({"op": "bot", "game": match_.id, "player": side}).get("action")
+				if a is Dictionary and match_.submit(a).ok:
 					acted = true
 		LoopbackTransport.pump(p[2])
 		steps += 1
@@ -69,7 +69,7 @@ func test_full_match_over_the_network_stays_in_sync() -> void:
 			break
 	check(m[0].game.game_over and m[1].game.game_over, "both finished in %d rounds" % steps)
 	eq(m[0].game.winner, m[1].game.winner, "same winner")
-	eq(m[0].game.state_hash(), m[1].game.state_hash(), "same final state")
+	eq(m[0].state_hash, m[1].state_hash, "same final state")
 	eq(p[4], [[], []], "no failures")
 	_free(p)
 
@@ -111,10 +111,13 @@ func test_tampered_hash_is_a_desync() -> void:
 		m[side].submit({"type": "mulligan", "player": side, "replace": []})
 	LoopbackTransport.pump(p[2])
 	var actor: int = m[0].game.current
-	var legal: Array = m[actor].game.legal_actions().filter(func(a): return a.player == actor and a.type == "end_turn")
+	var legal: Array = m[actor].legal().filter(func(a): return a.player == actor and a.type == "end_turn")
 	p[2][actor].send({"t": "action", "n": 1, "action": legal[0], "hash": "bad"})
 	LoopbackTransport.pump(p[2])
 	check(not p[4][1 - actor].is_empty(), "receiver detects the desync")
+	var said := str(TranslationServer.translate(NetSession.DESYNC))
+	eq(p[4][1 - actor], [said], "the receiver: the two games differ, nobody is banned")
+	eq(p[4][actor], [said], "the sender is told the same")
 	_free(p)
 
 
@@ -149,7 +152,7 @@ func test_concurrent_mulligans_and_concede() -> void:
 	m[1].submit({"type": "mulligan", "player": 1, "replace": []})
 	m[0].submit({"type": "mulligan", "player": 0, "replace": []})
 	LoopbackTransport.pump(p[2])
-	eq(m[0].game.state_hash(), m[1].game.state_hash(), "same state after both mulligans")
+	eq(m[0].state_hash, m[1].state_hash, "same state after both mulligans")
 	var actor: int = m[0].game.current
 	var other := 1 - actor
 	m[actor].submit({"type": "end_turn", "player": actor})
@@ -186,7 +189,7 @@ func test_garbage_start_fails_cleanly() -> void:
 	g.setup(tr[1], false, "Guest", _deck("MAGE"))
 	var fails := []
 	g.failed.connect(func(r): fails.append(r))
-	var hello := {"t": "hello", "protocol": NetSession.PROTOCOL, "version": g.version, "data": CardDb.data_hash(), "name": "H", "hero": "HERO_08", "cards": Decks.basic("MAGE")}
+	var hello := {"t": "hello", "protocol": NetSession.PROTOCOL, "version": g.version, "data": Rules.data_hash(), "name": "H", "hero": "HERO_08", "cards": Decks.basic("MAGE")}
 	tr[0].send(hello)
 	tr[0].send({"t": "start", "seed": 1.0, "decks": [5, ["HERO_08", Decks.basic("MAGE")]]})
 	LoopbackTransport.pump(tr)

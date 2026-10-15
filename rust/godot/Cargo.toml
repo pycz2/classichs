@@ -1,0 +1,13 @@
+[package]
+name = "classichs-godot"
+version = "0.1.0"
+edition = "2021"
+description = "GDExtension of the Classic HS rules engine: class RulesEngine (desktop and Android builds)."
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+classichs-engine = { path = "../engine" }
+godot = { version = "0.5.5", features = ["api-4-7"] }

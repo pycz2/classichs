@@ -1,11 +1,14 @@
 # classichs-engine
 
 The rules engine of Classic HS (Hearthstone Classic, June 2014) in Rust: every
-rule, every card, the bot, the Arena draft and deck rules. It is a port of the
-GDScript engine (`engine/`, `cards/`, `game/bot.gd`, `game/arena_draft.gd`,
-`game/deck.gd`, the rules part of `game/missions.gd` and `game/tutorial.gd`)
-and behaves exactly like it: the same actions from the same seed give the same
-events and the same `state_hash()` (see Parity below).
+rule, every card, the bot, the Arena draft and deck rules. It is the only rules
+code of the game: the server links it, the game reaches it through GDExtension
+(`rust/godot`, class `RulesEngine`) on desktop and Android and as WebAssembly
+(`rust/wasm` + `web/rules.js`) in the browser; GDScript only draws snapshots
+(`game/rules.gd`, `game/game_view.gd`; docs/superpowers/specs/2026-10-15-thin-client-design.md).
+It was ported from the GDScript engine (`engine/`, `cards/`, `game/bot.gd`, …,
+removed in 0.27) and behaves exactly like it: the same actions from the same seed
+give the same events and the same `state_hash()` (see Parity below).
 
 No I/O, no threads; dependencies: serde, serde_json, sha2. Builds for the host,
 `wasm32-unknown-unknown` and `aarch64-linux-android`. Card data
@@ -58,6 +61,8 @@ included), decks are given as `deck_count` only, and the RNG state is left out.
 | `new` | `game`, `decks: [deck, deck]`, `seed`, `first?` (0/1, default: random), `check?` (default true: decks must be legal; false for tests) | state reply + `events` (the opening draws) |
 | `new` | `game`, `scenario` (the Debug Table format, `engine/scenario.gd`) | state reply + `events` (`[]`) |
 | `new` | `game`, `mission` (1-6: a tutorial mission with its rules) | state reply + `events` |
+| `new` | `game`, `copy` (another game's id) | state reply: the same position (RNG included; no history) |
+| `new` | `game`, `state` (a `snapshot`, also a player's view) | state reply: a playable game from it (`view.rs`); hidden cards become a filler minion, decks of a view are made of hidden ids. A client of a server finds its legal actions with it (they equal the server's, `tests/api.rs`). Not for parity: no RNG, history or start decks |
 | `act` | `game`, `action`, `view?` | state reply + `events`; `ok: false` + `error` if illegal (nothing changes). After the game is over: `ok: true`, no change (as the referee) |
 | `legal` | `game`, `player?` | `actions`: the legal actions, in the engine's order |
 | `bot` | `game`, `player` | `action`: what `Bot.choose` takes (`null`: nothing to do) |
@@ -112,20 +117,19 @@ is. A server that hides hands should map ids in its views.
 
 ## Parity
 
-`tests/parity.rs` replays games recorded from the GDScript engine by
-`tools/engine_record.gd` and checks, at every step, the legal actions (hash of
+`tests/parity.rs` replays games recorded from the GDScript engine and checks, at every step, the legal actions (hash of
 the list), the bot's choice where the bot chose, ok/error, the events (hash or
 full list) and the state hash; at the end of each game the `Scenario.dump`.
 `misc.jsonl` checks the RNG, the mulligan seed, the referee's `draft` and
 `validate`.
 
+The fixtures are frozen: the GDScript engine and its recorder
+(`tools/engine_record.gd`) were removed in 0.27, when the game switched to this
+engine (they are in git history before that; the last big run: 7833 games, 0
+mismatches). A rules change now changes the fixtures on purpose: update the
+recorded expectations with the change and say so in the changelog.
+
 ```sh
-# committed set (tests/fixtures)
-godot --headless --path . --script res://tools/engine_record.gd -- \
-    --out rust/engine/tests/fixtures --games 120 --reps 1 --extra 4 --seed 1
-# big set (tests/fixtures/big, gitignored; a few minutes)
-godot --headless --path . --script res://tools/engine_record.gd -- \
-    --out rust/engine/tests/fixtures/big --games 3000 --reps 4 --extra 25 --seed 2
 cd rust && cargo test -p classichs-engine -- --nocapture   # prints games, steps, cards covered
 ```
 
@@ -135,9 +139,6 @@ of `data/card_tests` with its steps; random positions (Scenario) that start by
 playing each playable card (tokens and tutorial cards included) with random
 boards, weapons, secrets and hero powers; the six tutorial missions; illegal
 and malformed actions.
-
-When a step differs, record that game with full events:
-`--only N --full` (games.jsonl) and diff.
 
 The mulligan shuffle seed is `Game.mulligan_seed` (splitmix64 of the game seed
 and the player) in both engines; it replaced Godot's internal `hash()`, which

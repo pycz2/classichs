@@ -10,8 +10,11 @@ touch build/.gdignore  # Godot must not import (and pack) what lies in build/
 rm -rf "$OUT"
 mkdir -p "$OUT/play" "$OUT/screens"
 godot --path . --script res://tools/make_splash.gd  # the splash shows the version (needs a window)
+[ "$RULES_PREBUILT" = 1 ] || tools/build_rules.sh web  # the rules engine (rules.wasm)
 godot --headless --path . --import >/dev/null
 godot --headless --path . --export-release "Web" "$OUT/play/index.html"
+cp web/rules.js rules/bin/rules.wasm "$OUT/play/"  # loaded by index.html (html/head_include)
+perl -pi -e 's/const CACHEABLE_FILES = \[/const CACHEABLE_FILES = ["rules.js","rules.wasm",/' "$OUT/play/index.service.worker.js"  # offline play (PWA) keeps the engine too
 cp -R site/index.html site/style.css site/main.js site/favicon.svg site/og.jpg site/i18n "$OUT/"  # og.jpg: the link preview (media/screens/en/match.png as JPEG)
 cp -R media/screens/en media/screens/ru "$OUT/screens/"
 python3 tools/site_data.py "$OUT"

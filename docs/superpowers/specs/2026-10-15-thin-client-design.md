@@ -18,9 +18,10 @@ builds, and as WebAssembly in the browser. No rules code is duplicated.
 | Web | crate `rust/wasm` (`classichs-wasm`), target `wasm32-unknown-unknown`, plain C ABI (`alloc`, `dealloc`, `call(ptr, len)`, `out_ptr`, `out_len`); `web/rules.js` (≈30 lines) instantiates `rules.wasm` and exposes `window.ClassicRules.call_json(string) -> string`; the Web export preset loads it with `html/head_include`; build scripts copy `rules.js` and `rules.wasm` next to `index.html`. Godot calls it synchronously through `JavaScriptBridge.get_interface("ClassicRules")`. |
 | Server | links `classichs-engine` as a normal Rust dependency (`path = "../rust/engine"`). |
 
-GDScript sees one class, `Rules` (`net/` or `game/rules.gd`): `Rules.call(req: Dictionary) -> Dictionary`,
-choosing the native class when `ClassDB.class_exists("RulesEngine")`, else the web interface. The web
-build waits for `ClassicRules.ready` before the menu is usable.
+GDScript sees one class, `Rules` (`game/rules.gd`): `Rules.request(req: Dictionary) -> Dictionary`
+(not `call`: that is Object's), choosing the native class when `ClassDB.class_exists("RulesEngine")`, else
+the web interface. The web build waits for `ClassicRules.ready` before the menu is usable; a build without
+its library shows "the rules engine is missing" instead of the menu (no fallback).
 
 ### Spike (2026-10-15)
 
@@ -43,6 +44,10 @@ build waits for `ClassicRules.ready` before the menu is usable.
   screens change little) and animates from engine events.
 - Local games (training with the bot — bot moves from the `bot` op —, tutorial, debug table, card
   tests) run in the local engine with the full view.
+- Server games: the client has no game of its own. To light up what can be played (and to check
+  the orders queued while the table animates) it rebuilds a game from its own view with the engine
+  (`new` with `state`: hidden cards become a filler minion); its legal actions equal the server's
+  (rust/engine/tests/api.rs). The server still checks every `act`.
 - Peer-to-peer (codes, WebRTC): both peers run the local engine with the full view (as before, both
   know both decks). Lockstep: an action is applied locally, sent with its hash; the peer applies it in
   its engine and compares. An illegal action or a different hash ends the game for both with the

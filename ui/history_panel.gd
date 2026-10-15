@@ -51,7 +51,7 @@ func line_count() -> int:
 
 
 ## Adds lines for history entries not shown yet; rebuilds when the viewer changes.
-func update_from(g: GameState, viewer: int) -> void:
+func update_from(g: GameView, viewer: int) -> void:
 	if viewer != _viewer:
 		for c in _list.get_children():
 			_list.remove_child(c)

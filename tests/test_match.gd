@@ -1,14 +1,16 @@
 extends TestCase
 
 
-func _game(seed := 1) -> Game:
-	return Game.new({"hero": "HERO_08", "deck": Decks.basic("MAGE")}, {"hero": "HERO_01", "deck": Decks.basic("WARRIOR")}, seed, 0)
+func _setup(m: Match, bots: Array, seed := 1) -> void:
+	var why := m.setup({"decks": [{"hero": "HERO_08", "cards": Decks.basic("MAGE")}, {"hero": "HERO_01", "cards": Decks.basic("WARRIOR")}],
+		"seed": seed, "first": 0}, bots)
+	eq(why, "", "the engine starts the game")
 
 
 func test_human_vs_bot_turns() -> void:
 	var m := Match.new()
 	m.bot_delay = 0.0
-	m.setup(_game(), [false, true])
+	_setup(m, [false, true])
 	m.start()
 	check(m.game.players[1].mulliganed, "bot mulliganed at once")
 	eq(m.actor(), 0, "human to mulligan")
@@ -25,7 +27,7 @@ func test_bot_vs_bot_finishes_once() -> void:
 	m.bot_delay = 0.0
 	var winners := []
 	m.finished.connect(func(w): winners.append(w))
-	m.setup(_game(4), [true, true])
+	_setup(m, [true, true], 4)
 	m.start()
 	check(m.game.game_over, "finished")
 	eq(winners.size(), 1, "signal once")
@@ -37,7 +39,7 @@ func test_illegal_submit_emits_nothing() -> void:
 	m.bot_delay = 0.0
 	var count := [0]
 	m.changed.connect(func(_e): count[0] += 1)
-	m.setup(_game(), [false, true])
+	_setup(m, [false, true])
 	m.start()
 	count[0] = 0
 	check(not m.submit({"type": "end_turn", "player": 0}).ok, "illegal during mulligan")
@@ -47,7 +49,7 @@ func test_illegal_submit_emits_nothing() -> void:
 
 func test_hot_seat_viewer_follows_actor() -> void:
 	var m := Match.new()
-	m.setup(_game(), [false, false])
+	_setup(m, [false, false])
 	m.start()
 	m.submit({"type": "mulligan", "player": 0, "replace": []})
 	m.submit({"type": "mulligan", "player": 1, "replace": []})
@@ -60,7 +62,7 @@ func test_hot_seat_viewer_follows_actor() -> void:
 func test_viewer_is_human_against_bot() -> void:
 	var m := Match.new()
 	m.bot_delay = 0.0
-	m.setup(_game(), [true, false])
+	_setup(m, [true, false])
 	m.start()
 	eq(m.viewer(), 1, "the human side")
 	m.free()
@@ -69,7 +71,7 @@ func test_viewer_is_human_against_bot() -> void:
 func test_bot_with_delay_outside_tree_does_not_crash() -> void:
 	var m := Match.new()
 	m.bot_delay = 0.6
-	m.setup(_game(), [true, false])
+	_setup(m, [true, false])
 	m.start()  # the bot acts first, but the node is not in a tree (left the screen)
 	check(not m.game.players[0].mulliganed, "nothing scheduled")
 	m.free()

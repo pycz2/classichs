@@ -26,8 +26,11 @@ func _json(d: DebugTable) -> Dictionary:
 func test_example_position_builds() -> void:
 	var j := JSON.new()
 	eq(j.parse(FileAccess.get_file_as_string("res://data/debug_example.json")), OK, "valid JSON")
-	var r := Scenario.build(j.data)
-	eq(r.error, "", "the example builds")
+	eq(Rules.scenario_error(j.data), "", "the example builds in the engine")
+	var t := JSON.new()
+	eq(t.parse(FileAccess.get_file_as_string("res://tests/scenarios/example.json")), OK, "valid JSON")
+	eq(Rules.scenario_error(t.data), "", "the tests' example builds too")
+	check(Rules.scenario_error({"players": [{"hero": "HERO_08", "board": ["VAN_CS2_029"]}, {"hero": "HERO_01"}]}).contains("not a minion"), "a broken scene says why")
 
 
 func test_settings_open_the_debug_tools_and_back() -> void:

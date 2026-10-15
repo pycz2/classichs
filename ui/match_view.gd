@@ -36,7 +36,8 @@ var timer_enabled := false
 var player_names: Array = ["", ""]
 ## Online opponent's emotes are hidden.
 var muted := false
-var session: NetSession
+## The online session: a NetSession (peer to peer) or a ServerSession (a game server).
+var session: Node
 ## Set for a game of the Arena: the result shows the Arena's score and leads back to it.
 var arena: ArenaSession
 ## A game on a game server: the result leads back to the server's lobby.
@@ -44,7 +45,7 @@ var lobby := false
 ## Set for a tutorial mission (hints, turn-end rules, reward screen).
 var tutorial: Tutorial
 var controller: Match
-var g: Game:
+var g: GameView:
 	get:
 		return controller.game
 
@@ -89,7 +90,7 @@ var _busy := false
 ## The local player's orders given while the table still animates: carried out
 ## one by one after the animations, in order (not in the tutorial).
 var _pending_acts: Array = []
-var _plan_cache: GameState  # the state after those orders (null = not made yet)
+var _plan_cache := {}  # {game, legal} after those orders ({} = not made yet)
 var _drag_home := []  # where a dragged hand card was: [id, position, scale, rotation]
 var _final_refresh := false
 const BURN_SHADER := preload("res://ui/burn.gdshader")
@@ -207,12 +208,14 @@ func bind(m: Match) -> void:
 
 
 ## An online match: the session (and its transport) now live under this view.
-func bind_online(m: Match, s: NetSession) -> void:
+func bind_online(m: Match, s: Node) -> void:
 	session = s
 	timer_enabled = true
 	for n in [s, s.transport]:
 		if s.transport is ChannelTransport:
 			break  # an Arena game: the Arena keeps its session
+		if n == null:
+			continue  # a server game has no transport of its own
 		if n.get_parent() and n.get_parent() != self:
 			n.reparent(self)
 		elif n.get_parent() == null:
@@ -224,8 +227,17 @@ func bind_online(m: Match, s: NetSession) -> void:
 			show_emote(p, id))
 	s.failed.connect(_on_connection_lost)
 	s.intent_received.connect(apply_intent)
+	m.refused.connect(_on_refused)
 	(find_child("MuteButton", true, false) as Button).visible = true
 	bind(m)
+
+
+## The server refused a move (the table showed an old state): the queue goes too.
+func _on_refused(_error: String) -> void:
+	_pending_acts.clear()
+	_plan_cache = {}
+	show_hint(tr("You can't do that now"), 2.5)
+	refresh()
 
 
 func set_muted(on: bool) -> void:
@@ -725,6 +737,8 @@ func tick(delta: float) -> void:
 		return
 	_reset_timer()  # a new turn gets its full time even while the table is animating
 	_time_left -= delta
+	if controller.is_server() and controller.time_left() >= 0.0:
+		_time_left = controller.time_left()  # the server's clock (it plays the timeout moves itself)
 	var mull := g.phase == "MULLIGAN"
 	_rope.visible = _time_left <= ROPE_SECONDS and not mull  # the mulligan has its numbers instead
 	_rope.left = _time_left / ROPE_SECONDS
@@ -791,18 +805,20 @@ func my_action() -> bool:
 
 
 func _legal() -> Array:
-	return _plan().legal_actions().filter(func(a): return a.player == viewer()) if my_action() else []
+	return _planned().legal.filter(func(a): return a.player == viewer()) if my_action() else []
 
 
 ## The state the next order is checked against: the game after the orders still
 ## waiting in the queue.
-func _plan() -> GameState:
+func _plan() -> GameView:
+	return _planned().game
+
+
+func _planned() -> Dictionary:
 	if _pending_acts.is_empty():
-		return g
-	if _plan_cache == null:
-		_plan_cache = g.clone()
-		for a in _pending_acts:
-			_plan_cache.apply(a)
+		return controller.plan([])
+	if _plan_cache.is_empty():
+		_plan_cache = controller.plan(_pending_acts)
 	return _plan_cache
 
 
@@ -810,9 +826,9 @@ func _plan() -> GameState:
 func _act(a: Dictionary) -> void:
 	if a.is_empty():
 		return
-	if (_busy or not _pending_acts.is_empty()) and tutorial == null:
+	if (_busy or controller.waiting() or not _pending_acts.is_empty()) and tutorial == null:
 		_pending_acts.append(a)
-		_plan_cache = null
+		_plan_cache = {}
 		_return_dragged()
 		_apply_glows()
 		return
@@ -822,9 +838,9 @@ func _act(a: Dictionary) -> void:
 ## The orders waiting for the animations, in order; an order that is no longer
 ## possible (the turn ended, a target died) drops it and the rest.
 func _release_orders() -> void:
-	while not _pending_acts.is_empty() and not _busy:
+	while not _pending_acts.is_empty() and not _busy and not controller.waiting():
 		var a: Dictionary = _pending_acts.pop_front()
-		_plan_cache = null
+		_plan_cache = {}
 		var r := controller.submit(a)
 		if not r.ok:
 			_pending_acts.clear()
@@ -895,7 +911,7 @@ func refresh() -> void:
 		var p := g.players[[me, opp][i]]
 		_mana[i].set_values(p.mana, p.max_mana, p.overload_locked, p.overload_owed)
 		_names[i].text = _side_name(p.index)
-		_piles[i].count = p.deck.size()
+		_piles[i].count = p.deck_count
 		_piles[i].hand = p.hand.size()
 	var hovered := g.ent(_hover_hand)  # the crystals a card would spend blink, when there is mana for it
 	var price := g.cost(hovered) if hovered and hovered.zone == "HAND" else 0
@@ -989,7 +1005,7 @@ func _placing_pos() -> int:
 	return _sel.get("pos", _sel.actions[0].get("pos", 0) if not _sel.actions.is_empty() else 0)
 
 
-func _make_view(e: Entity, spec: Dictionary) -> EntityView:
+func _make_view(e: GameView.Ent, spec: Dictionary) -> EntityView:
 	var v: EntityView
 	match spec.kind:
 		"hero":
@@ -1140,7 +1156,7 @@ func _own_glows() -> void:
 		var id: int = {"play": a.get("entity", -1), "attack": a.get("attacker", -1),
 			"hero_power": g.players[viewer()].hero_power.id}.get(a.type, -1)
 		if _views.has(id):
-			var lit: bool = a.type == "play" and combo and plan.ent(id).card().get("mechanics", []).has("COMBO")
+			var lit: bool = a.type == "play" and combo and plan.ent(id) != null and plan.ent(id).card().get("mechanics", []).has("COMBO")
 			_views[id].set_glow(Palette.COMBO if lit else Palette.PLAYABLE)
 
 
@@ -1281,7 +1297,7 @@ func _on_end_turn() -> void:
 	if _busy and tutorial != null:
 		return
 	if tutorial and my_action():
-		var why := tutorial.end_turn_block(g, viewer())
+		var why := controller.end_turn_block(viewer())
 		if why != "":
 			show_hint(why, 3.0)
 			return
@@ -1304,7 +1320,7 @@ func _on_concede() -> void:
 
 
 ## Keyword boxes beside a big card ("" hides them).
-func _show_tips(card_id: String, rect: Rect2, e: Entity = null) -> void:
+func _show_tips(card_id: String, rect: Rect2, e: GameView.Ent = null) -> void:
 	if _tips:
 		_tips.queue_free()
 		_tips = null
@@ -1347,6 +1363,7 @@ func _on_hover(v: EntityView, on: bool) -> void:
 func _on_changed(events: Array) -> void:
 	if Anim.instant or not is_inside_tree():
 		_effects_now(events)
+		_release_orders()
 		return
 	_queue.append(events)
 	if not _busy:
@@ -1395,7 +1412,7 @@ func _animate(events: Array) -> void:
 			"burn":
 				await _burn(ev)
 			"add_to_hand":
-				if ev.get("card", "") == Game.COIN and not ev.get("shown", false):
+				if ev.get("card", "") == GameView.COIN and not ev.get("shown", false):
 					if _mulligan_waiting(ev.player):
 						await _mulligan_coin(ev)  # beside the cards still shown
 					else:
@@ -1418,7 +1435,7 @@ func _animate(events: Array) -> void:
 func _coin_in(ev: Dictionary) -> void:
 	var own: bool = ev.player == viewer()
 	var e := g.ent(ev.entity)
-	var cv := CardView.make(Game.COIN, 1.3)
+	var cv := CardView.make(GameView.COIN, 1.3)
 	if e:
 		cv.show_entity(e, g)
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1474,7 +1491,7 @@ func _mulligan_result(events: Array, p: int) -> void:
 		title.text = tr("Waiting for the opponent…")
 		return
 	for ev in events:
-		if ev.type == "add_to_hand" and ev.player == p and ev.card == Game.COIN and not ev.get("shown", false):
+		if ev.type == "add_to_hand" and ev.player == p and ev.card == GameView.COIN and not ev.get("shown", false):
 			await _mulligan_coin(ev)
 	_mulligan_down()
 
@@ -1492,7 +1509,7 @@ func _mulligan_coin(ev: Dictionary) -> void:
 	for pair in shown:
 		if pair[1].global_position.x > last.x:
 			last = pair[1].global_position
-	var cv := CardView.make(Game.COIN, 1.3)
+	var cv := CardView.make(GameView.COIN, 1.3)
 	cv.show_entity(g.ent(ev.entity), g)
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cv.set_glow(Palette.SELECTED)
@@ -1720,8 +1737,8 @@ func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
 			"play":
 				played = ev.entity
 			"death":
-				var b: Entity = before.get(ev.entity)
-				if old.has(ev.entity) and Cards.of(ev.card).has("deathrattle") and not (b and b.silenced):
+				var b: GameView.Ent = before.get(ev.entity)
+				if old.has(ev.entity) and Rules.hooks(ev.card).has("deathrattle") and not (b and b.silenced):
 					TableFx.spawn(_fx, "skull", old[ev.entity])
 			"destroy":
 				if old.has(ev.target):
@@ -1746,7 +1763,7 @@ func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
 		if src < 0 or src == played or went_off.has(src) or not _views.get(src) is MinionView:
 			continue
 		var m := g.ent(src)
-		if m and not m.silenced and (Cards.of(m.card_id).has("on") or KeywordTips.keywords_of(m.card_id).has("POISONOUS")):
+		if m and not m.silenced and (Rules.hooks(m.card_id).has("on") or KeywordTips.keywords_of(m.card_id).has("POISONOUS")):
 			went_off[src] = true
 			(_views[src] as MinionView).pop("mark")
 	if not went_off.is_empty():
@@ -2361,7 +2378,7 @@ func _show_choice() -> void:
 	var box := _open_overlay(tr("Choose a card"))
 	_overlay.name = "Choice"
 	var row := _card_row(box)
-	for a in g.legal_actions().filter(func(x): return x.type == "choose"):
+	for a in controller.legal().filter(func(x): return x.type == "choose" and x.player == viewer()):
 		var e := g.ent(a.option)
 		var cv := CardView.make(e.card_id, 1.3)
 		cv.entity_id = e.id
@@ -2377,7 +2394,7 @@ func _show_choose_one(choices: Array) -> void:
 	_overlay.name = "ChooseOne"
 	var row := _card_row(box)
 	var card := g.ent(_sel.id)
-	var opts: Array = Cards.of(card.card_id).choose_one
+	var opts: Array = Rules.hooks(card.card_id).get("choose_one", [])
 	for c in choices:
 		var cv := CardView.make(opts[c], 1.3)
 		var choice: int = c
@@ -2394,7 +2411,7 @@ func _show_choose_one(choices: Array) -> void:
 
 ## Debug: the current position as JSON (also copied to the clipboard).
 func show_json() -> void:
-	var text := JSON.stringify(Scenario.dump(g), "  ")
+	var text := JSON.stringify(controller.dump(), "  ")
 	DisplayServer.clipboard_set(text)
 	var box := _open_overlay(tr("Position (copied to clipboard)"))
 	_overlay.name = "Json"

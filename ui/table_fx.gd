@@ -124,7 +124,7 @@ func _star(p: Vector2, r: float, col: Color) -> void:
 
 ## What happened to an entity between what its view shows (before) and now:
 ## the effect kinds to play on it.
-static func kinds(before: Entity, now: Entity) -> Array:
+static func kinds(before: GameView.Ent, now: GameView.Ent) -> Array:
 	var out := []
 	if before == null or now == null:
 		return out

@@ -1,0 +1,16 @@
+; The rules engine (rust/godot) for desktop and Android; built by tools/build_rules.sh
+; into rules/bin/ (not committed). The Web build uses web/rules.js + rules.wasm instead.
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.5
+reloadable = false
+
+[libraries]
+macos.debug = "res://rules/bin/libclassichs_godot.macos.dylib"
+macos.release = "res://rules/bin/libclassichs_godot.macos.dylib"
+windows.debug.x86_64 = "res://rules/bin/classichs_godot.windows.x86_64.dll"
+windows.release.x86_64 = "res://rules/bin/classichs_godot.windows.x86_64.dll"
+linux.debug.x86_64 = "res://rules/bin/libclassichs_godot.linux.x86_64.so"
+linux.release.x86_64 = "res://rules/bin/libclassichs_godot.linux.x86_64.so"
+android.debug.arm64 = "res://rules/bin/libclassichs_godot.android.arm64.so"
+android.release.arm64 = "res://rules/bin/libclassichs_godot.android.arm64.so"

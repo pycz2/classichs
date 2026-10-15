@@ -19,12 +19,13 @@ func _process(_d: float) -> bool:
 					print("%s %s: no \"%s\"" % [id, t.get("kind", "?"), k])
 					bad += 1
 			var r := CardTests.run(t)
+			if r.match:
+				r.match.free()
 			if r.error != "":
 				print("%s %s: step %d: %s" % [id, t.get("kind", "?"), r.step, r.error])
 				bad += 1
 	var all := CardDb.all_ids()
 	var covered := all.filter(func(id): return tests.has(id))
 	print("%d tests for %d of %d cards; %d problems" % [n, covered.size(), all.size(), bad])
-	Cards.unload()
 	quit()
 	return true

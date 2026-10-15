@@ -1,7 +1,6 @@
 extends TestCase
-## The Arena draft (2014 rules): 3 heroes to choose from, 30 picks of 3 cards of
-## one rarity, Rare or better at picks 1, 10, 20 and 30, class cards more likely,
-## no limit on copies.
+## The Arena draft wrapper over the engine's `draft` op (its odds and rules are
+## tested in Rust): 3 heroes, 30 picks of 3 cards, an Arena deck without copy limits.
 
 
 func _drafted(seed: int) -> ArenaDraft:
@@ -28,7 +27,7 @@ func d_offer_before_hero() -> int:
 
 
 func test_every_offer_is_three_cards_of_one_rarity_for_the_class() -> void:
-	for seed in 10:
+	for seed in 3:
 		var d := ArenaDraft.new(seed)
 		d.choose_hero(seed % 3)
 		var cls := Decks.card_class(d.hero)
@@ -42,18 +41,6 @@ func test_every_offer_is_three_cards_of_one_rarity_for_the_class() -> void:
 				check(CardDb.collectible().has(id) and c.type != "HERO", "a collectible card: " + id)
 				check(c.cardClass == cls or c.cardClass == "NEUTRAL", "the hero's class or neutral: " + id)
 			d.pick(seed % 3)
-
-
-func test_picks_1_10_20_30_are_rare_or_better() -> void:
-	for seed in 30:
-		var d := ArenaDraft.new(seed)
-		d.choose_hero(0)
-		var n := 0
-		while not d.done():
-			if n in [0, 9, 19, 29]:
-				check(ArenaDraft.tier(d.offer[0]) != "common", "pick %d is rare or better" % (n + 1))
-			d.pick(1)
-			n += 1
 
 
 func test_a_full_draft_is_a_valid_arena_deck() -> void:
@@ -88,56 +75,11 @@ func test_arena_decks_have_no_copy_limit() -> void:
 	check(Deck.from_dict({"hero": "HERO_08", "cards": ["VAN_CS2_029", "VAN_CS2_029", "VAN_CS2_029"], "arena": true}).arena, "and loading")
 
 
-func test_rarity_odds() -> void:
-	# normal picks: 76.5 % common, 14 % rare, 7.5 % epic, 2 % legendary
-	var d := ArenaDraft.new(5)
-	var count := {}
-	for i in 20000:
-		var t := d.roll_tier(false)
-		count[t] = count.get(t, 0) + 1
-	var share := func(t: String) -> float: return float(count.get(t, 0)) / 20000.0
-	check(absf(share.call("common") - 0.765) < 0.015, "about 76.5 %% common: %s" % share.call("common"))
-	check(absf(share.call("rare") - 0.14) < 0.01, "about 14 %% rare: %s" % share.call("rare"))
-	check(absf(share.call("epic") - 0.075) < 0.008, "about 7.5 %% epic: %s" % share.call("epic"))
-	check(absf(share.call("legendary") - 0.02) < 0.005, "about 2 %% legendary: %s" % share.call("legendary"))
-	# picks 1, 10, 20, 30: 65 % rare, 27 % epic, 8 % legendary
-	count.clear()
-	for i in 20000:
-		var t := d.roll_tier(true)
-		count[t] = count.get(t, 0) + 1
-	eq(count.get("common", 0), 0, "a special pick is never common")
-	check(absf(share.call("epic") - 0.27) < 0.015, "about 27 %% epic: %s" % share.call("epic"))
-	check(absf(share.call("legendary") - 0.08) < 0.01, "about 8 %% legendary: %s" % share.call("legendary"))
-
-
-func test_class_cards_come_more_often() -> void:
-	# common tier for a Mage: class cards weigh 1.5, neutral cards 1
-	var pool := ArenaDraft.pool("MAGE", "common")
-	var cls := 0
-	var neu := 0
-	for it in pool:
-		if CardDb.card(it[0]).cardClass == "MAGE":
-			cls += 1
-			eq(it[1], 1.5, "class weight")
-		else:
-			neu += 1
-			eq(it[1], 1.0, "neutral weight")
-	check(cls > 0 and neu > 0, "both kinds in the pool")
-	var d := ArenaDraft.new(9)
-	d.hero = "HERO_08"
-	var seen := 0
-	var mage := 0
-	for i in 600:
-		for id in d.roll_offer("common"):
-			seen += 1
-			if CardDb.card(id).cardClass == "MAGE":
-				mage += 1
-	var expected := 1.5 * cls / (1.5 * cls + neu)
-	check(absf(float(mage) / seen - expected) < 0.05, "class share %.2f, expected %.2f" % [float(mage) / seen, expected])
+func test_tier_helper() -> void:
+	eq([ArenaDraft.tier("VAN_CS2_029"), ArenaDraft.tier("VAN_CS2_231"), ArenaDraft.tier("VAN_EX1_559")], ["common", "common", "legendary"], "Basic counts as common")
 
 
 func test_mana_curve() -> void:
 	var d := ArenaDraft.new(3)
-	d.hero = "HERO_08"
 	d.cards.assign(["VAN_CS2_027", "VAN_CS2_029", "VAN_CS2_029", "VAN_CS2_032", "VAN_EX1_279"])  # 1, 4, 4, 7, 10
 	eq(d.curve(), [0, 1, 0, 0, 2, 0, 0, 2], "costs 0..6 and 7+")

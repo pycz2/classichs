@@ -86,6 +86,5 @@ func _run_all() -> void:
 	_use_test_files()
 	for path in [Settings.path, Profile.path, DeckStore.path, Progress.path]:
 		DirAccess.remove_absolute(path)
-	Cards.unload()
 	OS.remove_logger(errors)
 	quit(1 if failed > 0 or total == 0 else 0)

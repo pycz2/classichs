@@ -16,6 +16,7 @@ pub mod player;
 pub mod rng;
 pub mod scenario;
 pub mod state;
+pub mod view;
 
 pub use api::Engine;
 pub use state::Game;

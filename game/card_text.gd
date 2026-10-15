@@ -36,6 +36,8 @@ static func _loc(locale: String) -> String:
 
 
 static func name(id: String, locale := "") -> String:
+	if id == "":
+		return "?"  # a card the view hides
 	var n: Dictionary = CardDb.card(id).get("name", {})
 	return n.get(_loc(locale), n.get("enUS", id))
 

@@ -110,7 +110,7 @@ func _on_music_finished() -> void:
 		_music.play()
 
 
-static func sound_for(ev: Dictionary, g: Game, viewer: int) -> String:
+static func sound_for(ev: Dictionary, g: GameView, viewer: int) -> String:
 	match ev.type:
 		"play":
 			var e := g.ent(ev.entity)

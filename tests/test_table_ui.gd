@@ -8,10 +8,7 @@ static func root() -> Window:
 func _view(p0: Dictionary, bots := [false, true], p1 := {"hero": "HERO_01"}, current := 0) -> MatchView:
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.bot_delay = 0.0
-	m.setup(H.scene(p0, p1, current), bots)
-	v.bind(m)
+	v.bind(H.scene(p0, p1, current, bots))
 	return v
 
 
@@ -65,7 +62,7 @@ func test_hovered_hand_card_rises_and_others_stay() -> void:
 func test_played_minion_keeps_other_views() -> void:
 	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120"], "board": ["VAN_CS2_182"]})
 	var yeti_view = v._views[v.g.players[0].board[0].id]
-	var croc := v.g.players[0].hand[0]
+	var croc: GameView.Ent = v.g.players[0].hand[0]
 	v.controller.submit({"type": "play", "player": 0, "entity": croc.id, "target": -1, "pos": 1, "choice": -1})
 	check(v._views[v.g.players[0].board[0].id] == yeti_view, "existing minion view kept")
 	check(v._views[croc.id] is MinionView, "the card became a minion view")
@@ -89,10 +86,10 @@ func _center(v: MatchView, id: int) -> Vector2:
 func test_drag_minion_between_two_opens_a_gap_and_plays_there() -> void:
 	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120"], "board": ["VAN_CS2_182", "VAN_CS2_182"]})
 	var board := v.g.players[0].board
-	var left := board[0]
-	var right := board[1]
+	var left: GameView.Ent = board[0]
+	var right: GameView.Ent = board[1]
 	var x0: float = v._views[left.id].position.x
-	var croc := v.g.players[0].hand[0]
+	var croc: GameView.Ent = v.g.players[0].hand[0]
 	var mid := (_center(v, left.id) + _center(v, right.id)) / 2.0
 	v._press = {"id": croc.id, "at": Vector2(640, 650)}
 	v._start_drag()
@@ -109,7 +106,7 @@ func test_drag_minion_between_two_opens_a_gap_and_plays_there() -> void:
 
 func test_drag_attacker_onto_enemy_hero() -> void:
 	var v := _view({"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "exhausted": false}]})
-	var yeti := v.g.players[0].board[0]
+	var yeti: GameView.Ent = v.g.players[0].board[0]
 	_drag(v, yeti.id, _center(v, v.g.hero(1).id))
 	eq(v.g.hero(1).health(), 26, "attacked the hero")
 	v.free()
@@ -117,7 +114,7 @@ func test_drag_attacker_onto_enemy_hero() -> void:
 
 func test_drag_spell_onto_target_and_back_to_hand() -> void:
 	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_029", "VAN_CS2_029"]}, [false, false])
-	var fb := v.g.players[0].hand[0]
+	var fb: GameView.Ent = v.g.players[0].hand[0]
 	_drag(v, fb.id, Vector2(640, 690))
 	eq(v.g.players[0].hand.size(), 2, "dropped back in the hand: nothing played")
 	_drag(v, fb.id, _center(v, v.g.hero(1).id))
@@ -138,7 +135,7 @@ func test_history_strip_shows_played_cards_newest_first() -> void:
 
 func test_right_click_during_a_drag_cancels_it_cleanly() -> void:
 	var v := _view({"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "exhausted": false}]})
-	var yeti := v.g.players[0].board[0]
+	var yeti: GameView.Ent = v.g.players[0].board[0]
 	v._press = {"id": yeti.id, "at": Vector2(640, 400)}
 	v._start_drag()
 	v.cancel()
@@ -163,14 +160,14 @@ func test_menus_and_screens_draw_above_hand_cards() -> void:
 
 
 func test_bounced_minion_becomes_a_card_where_it_stood() -> void:
-	var v := _view({"hero": "HERO_08", "board": ["VAN_CS2_182"]})
-	var yeti := v.g.players[0].board[0]
+	var v := _view({"hero": "HERO_08", "board": ["VAN_CS2_182"], "hand": ["VAN_EX1_049"]})
+	var yeti: GameView.Ent = v.g.players[0].board[0]
 	var at: Vector2 = v._center(yeti.id) if v.has_method("_center") else v._center_of(yeti.id)
 	Anim.instant = false
-	v.g.return_to_hand(yeti)
-	var events: Array = v.g.event_log.duplicate()
+	# Youthful Brewmaster's Battlecry returns the Yeti (applied without the animation queue)
+	var events: Array = v.controller._apply({"type": "play", "player": 0, "entity": v.g.players[0].hand[0].id, "target": yeti.id, "pos": 1, "choice": -1}).events
 	v._effects_now(events)
-	var card := v.g.players[0].hand[0]
+	var card: GameView.Ent = v.g.players[0].hand[0]
 	var cv: Control = v._views[card.id]
 	var start: Vector2 = cv.position + cv.size * cv.scale / 2.0
 	Anim.instant = true
@@ -282,7 +279,7 @@ func _texts(c: Control) -> Array:
 func test_end_turn_turns_green_when_nothing_is_left_to_do() -> void:
 	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120"], "mana": 2, "max_mana": 2})
 	eq(v.end_turn_ready, false, "a card can still be played")
-	var croc := v.g.players[0].hand[0]
+	var croc: GameView.Ent = v.g.players[0].hand[0]
 	v.controller.submit({"type": "play", "player": 0, "entity": croc.id, "target": -1, "pos": 0, "choice": -1})
 	eq(v.end_turn_ready, true, "no mana, no attacks, hero power too dear: end turn glows")
 	v.free()
@@ -301,10 +298,10 @@ func test_board_views_show_the_state_of_the_last_refresh() -> void:
 	# The engine changes the state at once; the table shows it when the animation
 	# reaches that moment (the hit), not before.
 	var v := _view({"hero": "HERO_08", "board": ["VAN_CS2_182"]})
-	var yeti := v.g.players[0].board[0]
+	var yeti: GameView.Ent = v.g.players[0].board[0]
 	var hero := v.g.hero(0)
-	yeti.damage = 2
-	yeti.give_tag("DIVINE_SHIELD")
+	yeti.damage = 2  # (the view's entity changes in place, as an update does)
+	yeti.tags["DIVINE_SHIELD"] = true
 	hero.damage = 5
 	eq((v._views[yeti.id] as MinionView).s.health(), 5, "minion: old health shown")
 	eq((v._views[yeti.id] as MinionView).s.has("DIVINE_SHIELD"), false, "minion: no shield yet")
@@ -317,8 +314,9 @@ func test_board_views_show_the_state_of_the_last_refresh() -> void:
 
 
 func test_table_effects_follow_what_changed() -> void:
-	var g := H.scene({"hero": "HERO_08", "board": ["VAN_CS2_182"]})
-	var yeti := g.players[0].board[0]
+	# the snapshot values of one minion between two updates
+	var g := H.scene({"hero": "HERO_08", "board": ["VAN_CS2_182"]}).game
+	var yeti: GameView.Ent = g.players[0].board[0]
 	var before := yeti.copy()
 	yeti.damage = 2
 	eq(TableFx.kinds(before, yeti), ["hurt"], "damage")
@@ -326,23 +324,28 @@ func test_table_effects_follow_what_changed() -> void:
 	yeti.damage = 0
 	eq(TableFx.kinds(before, yeti), ["heal"], "healing")
 	before = yeti.copy()
-	yeti.add_enchant({"atk": 1, "hp": 1})
-	yeti.give_tag("TAUNT")
+	yeti._atk += 1
+	yeti._max_health += 1
+	yeti.tags["TAUNT"] = true
 	eq(TableFx.kinds(before, yeti), ["buff", "gain"], "buff and a keyword")
 	before = yeti.copy()
-	yeti.give_tag("FROZEN")
+	yeti.tags["FROZEN"] = true
 	eq(TableFx.kinds(before, yeti), ["freeze"], "frozen")
 	before = yeti.copy()
-	yeti.silence()
+	yeti.silenced = true
+	yeti.tags.erase("TAUNT")
+	yeti.tags.erase("FROZEN")
+	yeti._atk -= 1
+	yeti._max_health -= 1
 	eq(TableFx.kinds(before, yeti), ["silence"], "silence (losing the buff is not a debuff)")
 	before = yeti.copy()
-	yeti.add_enchant({"set_atk": 1})
+	yeti._atk = 1
 	eq(TableFx.kinds(before, yeti), ["debuff"], "attack set lower")
 
 
 func test_changed_numbers_pop() -> void:
 	var v := _view({"hero": "HERO_08", "board": ["VAN_CS2_182"]})
-	var yeti := v.g.players[0].board[0]
+	var yeti: GameView.Ent = v.g.players[0].board[0]
 	var mv := v._views[yeti.id] as MinionView
 	Anim.instant = false
 	yeti.damage = 2
@@ -383,7 +386,7 @@ func test_press_below_the_raised_card_grabs_it() -> void:
 
 func test_hovered_hand_card_shows_its_keyword_boxes() -> void:
 	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_120", "VAN_CS2_026", "VAN_CS2_029"]})  # Frost Nova: Freeze
-	var nova := v.g.players[0].hand[1]
+	var nova: GameView.Ent = v.g.players[0].hand[1]
 	v._hover_hand = -1
 	v._show_tips(nova.card_id, Rect2(500, 400, 120, 170))  # what _track_hand_hover does
 	v._on_hover(v._views[nova.id], true)  # then the raised card comes under the mouse
@@ -393,10 +396,10 @@ func test_hovered_hand_card_shows_its_keyword_boxes() -> void:
 
 func test_a_card_made_on_the_table_comes_from_its_maker() -> void:
 	var v := _view({"hero": "HERO_08", "board": ["VAN_EX1_559"], "hand": ["VAN_CS2_029"]})  # Archmage Antonidas, Fireball
-	var antonidas := v.g.players[0].board[0]
-	var fireball := v.g.players[0].hand[0]
+	var antonidas: GameView.Ent = v.g.players[0].board[0]
+	var fireball: GameView.Ent = v.g.players[0].hand[0]
 	var from := v._center_of(antonidas.id)
-	var r := v.g.apply({"type": "play", "player": 0, "entity": fireball.id, "target": v.g.players[1].hero.id, "pos": -1, "choice": -1})
+	var r := v.controller._apply({"type": "play", "player": 0, "entity": fireball.id, "target": v.g.players[1].hero.id, "pos": -1, "choice": -1})
 	var made: Array = r.events.filter(func(e): return e.type == "add_to_hand")
 	eq(made[0].get("by_id"), antonidas.id, "the new Fireball is Antonidas's")
 	v._effects_now.call(r.events)
@@ -406,14 +409,14 @@ func test_a_card_made_on_the_table_comes_from_its_maker() -> void:
 
 func test_overload_shows_at_once() -> void:
 	var v := _view({"hero": "HERO_02", "mana": 5, "max_mana": 5, "hand": ["VAN_EX1_238"]})  # Lightning Bolt: Overload (1)
-	var bolt := v.g.players[0].hand[0]
+	var bolt: GameView.Ent = v.g.players[0].hand[0]
 	v.controller.submit({"type": "play", "player": 0, "entity": bolt.id, "target": v.g.players[1].hero.id, "pos": -1, "choice": -1})
 	eq(v._mana[0].owed, 1, "the crystal locked next turn shows now")
 	v.free()
 
 
 func test_spell_damage_sparks_keep_moving() -> void:
-	var g := H.scene({"hero": "HERO_08", "board": ["VAN_CS2_142"]})  # Kobold Geomancer: Spell Damage +1
+	var g := H.scene({"hero": "HERO_08", "board": ["VAN_CS2_142"]}).game  # Kobold Geomancer: Spell Damage +1
 	var mv := MinionView.make(g.players[0].board[0], g)
 	check(mv._animated(), "a Spell Damage minion is redrawn every frame")
 	mv.free()
@@ -421,7 +424,7 @@ func test_spell_damage_sparks_keep_moving() -> void:
 
 func test_battlecry_minion_stands_on_the_board_while_aiming() -> void:
 	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_189"], "board": ["VAN_CS2_182"]})  # Elven Archer: Battlecry, 1 damage
-	var archer := v.g.players[0].hand[0]
+	var archer: GameView.Ent = v.g.players[0].hand[0]
 	v._press = {"id": archer.id, "at": Vector2(640, 650)}
 	v._start_drag()
 	v._drop_at(Vector2(700, TableLayout.HAND_Y - 260), archer.id)

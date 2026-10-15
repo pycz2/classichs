@@ -83,7 +83,7 @@ func slide(open: bool) -> void:
 	set_meta("tween", tw)
 
 
-func update_from(g: Game, me: int) -> void:
+func update_from(g: GameView, me: int) -> void:
 	_fill("Deck", DeckTracker.deck_view(g, me).map(func(r):
 		return [r.card, r.left, r.left == 0, "%d%%" % roundi(r.chance * 100) if r.left > 0 else ""]))
 	_fill("Opponent", DeckTracker.opponent_counts(g, me).map(func(r): return [r.card, r.count, false, ""]))

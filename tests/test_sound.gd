@@ -21,13 +21,13 @@ func _done(s: Sound) -> void:
 
 
 func test_every_effect_event_has_a_sound_file() -> void:
-	var g := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029"]})
+	var g := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029"]}).game
 	for type in Sound.EVENTS:
 		var name: String = Sound.EVENTS[type]
 		check(ResourceLoader.exists("res://audio/%s.wav" % name), "file for " + type)
 	for name in ["spell", "victory", "defeat", "click"]:
 		check(ResourceLoader.exists("res://audio/%s.wav" % name), "file " + name)
-	var fireball := g.players[0].hand[0]
+	var fireball: GameView.Ent = g.players[0].hand[0]
 	eq(Sound.sound_for({"type": "play", "player": 0, "entity": fireball.id}, g, 0), "spell", "spell sound")
 	eq(Sound.sound_for({"type": "game_over", "winner": 0}, g, 0), "victory", "victory")
 	eq(Sound.sound_for({"type": "game_over", "winner": 0}, g, 1), "defeat", "defeat")

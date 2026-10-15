@@ -80,21 +80,28 @@ func test_rank_text_legend() -> void:
 	_free(v)
 
 
-## MatchView.bind_online moves the game's channel under itself: it must still get the game's messages.
-func test_channel_gets_messages_after_reparent() -> void:
-	var l := ServerLink.new()
-	var c := l.channel("g1")
-	l.add_child(c)
+## MatchView.bind_online moves the game's session under itself: it must still get the game's
+## messages; a freed session's are dropped.
+func test_session_gets_messages_after_reparent() -> void:
+	var l := FakeLink.new()
+	l.me = {"user": "anna"}
+	var s := l.session({"t": "match", "game": "g1", "mode": "casual", "opponent": {"user": "bob", "tag": "Bob1"}, "you": 0}, null)
+	l.add_child(s)
 	root().add_child(l)
 	var other := Node.new()
 	root().add_child(other)
-	c.reparent(other)
+	s.reparent(other)
 	var got := []
-	c.received.connect(func(m): got.append(m))
-	l.dispatch({"t": "game", "game": "g1", "m": {"t": "action", "n": 0}})
-	eq(got.size(), 1, "the message reaches the channel")
+	s.started.connect(func(m): got.append(m))
+	FakeLink.engine_game("e1")
+	l.dispatch(FakeLink.state("g1", "e1", 0))
+	eq(got.size(), 1, "the first state reaches the session: the game starts")
+	eq([s.you, s.remote_name, s.mode], [0, "bob", "casual"], "seat, opponent and mode from the match")
+	l.dispatch(FakeLink.state("g2", "e1", 0))
+	eq(got.size(), 1, "another game's state is not this one's")
 	other.free()
-	l.dispatch({"t": "game", "game": "g1", "m": {"t": "action", "n": 1}})  # a freed channel: dropped
+	l.dispatch(FakeLink.state("g1", "e1", 0))  # a freed session: dropped
+	Rules.request({"op": "drop", "game": "e1"})
 	l.free()
 
 
@@ -164,7 +171,7 @@ func test_play_remembers_the_deck_and_the_mode() -> void:
 	(v.find_child("QueueTime", true, false) as Label).text = ""
 	v._process(1.5)
 	check((v.find_child("QueueTime", true, false) as Label).text.ends_with("0:01"), "the search time runs")
-	v.link.dispatch({"t": "match", "game": "g", "host": true, "seed": 1.0, "mode": "ranked"})
+	v.link.dispatch({"t": "match", "game": "g", "mode": "ranked", "opponent": {"user": "bob", "tag": null}, "you": 0.0})
 	eq(v.queued, "", "a match ends the search")
 	_free(v)
 

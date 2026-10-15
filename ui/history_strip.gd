@@ -17,7 +17,7 @@ const ROWS := 14  # effect rows shown in a pop-up
 
 var _items: Array = []  # tiles [card_id, mine, history index]; turn lines [turn, mine]
 var _hover := -1
-var _g: GameState
+var _g: GameView
 var _viewer := -1
 var popup: Control  # the hovered move: card, who, effects
 var _tips: Control
@@ -39,7 +39,7 @@ static func _height(it: Array) -> float:
 
 
 ## Rebuilds the tiles from the game history, seen by viewer.
-func update_from(g: GameState, viewer: int) -> void:
+func update_from(g: GameView, viewer: int) -> void:
 	_g = g
 	_viewer = viewer
 	var rows := []  # [turn, mine, tile], newest first

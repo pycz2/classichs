@@ -153,19 +153,31 @@ func _build() -> void:
 	var c := CardDb.card(id)
 	var type: String = c.get("type", "SPELL")
 	var p0 := {"hero": id if type == "HERO" else "HERO_08", "mana": 10, "max_mana": 10}
-	if type == "MINION":
-		p0.board = [id]
-	elif type == "WEAPON":
-		p0.weapon = id
-	p0.hand = [id] if type != "HERO" else []
-	var r := Scenario.build({"current": 0, "players": [p0, {"hero": "HERO_01"}]})
-	if r.error != "":
+	var spec := _spec(id)
+	match type:
+		"MINION":
+			p0.board = [spec]
+		"WEAPON":
+			p0.weapon = spec
+		"HERO":
+			p0.hero_state = spec
+	p0.hand = [] if type == "HERO" else [spec if type not in ["MINION", "WEAPON"] else id]
+	var gid := Rules.new_id("lab")
+	var r := Rules.request({"op": "new", "game": gid, "scenario": {"current": 0, "players": [p0, {"hero": "HERO_01"}]}})
+	if not r.ok:
 		_title.text = "%s: %s" % [id, r.error]
 		return
-	var g: GameState = r.game
+	var g := GameView.new()
+	g.update(Rules.request({"op": "snapshot", "game": gid}).state)
+	Rules.request({"op": "drop", "game": gid})
 	var pl = g.players[0]
-	var e: Entity = pl.board[0] if type == "MINION" else (pl.hero if type == "HERO" else (pl.weapon if type == "WEAPON" else pl.hand[0]))
-	_effects(e, g)
+	var e: GameView.Ent = pl.board[0] if type == "MINION" else (pl.hero if type == "HERO" else (pl.weapon if type == "WEAPON" else pl.hand[0]))
+	if on.has("aura"):  # a Stormwind Champion's aura, drawn on the entity only
+		e.aura.atk = int(e.aura.get("atk", 0)) + 1
+		e.aura.hp = int(e.aura.get("hp", 0)) + 1
+		e.aura.get_or_add("src", {})["VAN_CS2_222"] = [1, 1]
+		e._atk += 1
+		e._max_health += 1
 	_title.text = "%s — %s  (%d / %d)" % [id, CardText.name(id), index + 1, ids.size()]
 	for ch in _stage.get_children():
 		_stage.remove_child(ch)
@@ -193,7 +205,7 @@ func _build() -> void:
 		small.set_glow(glow)
 		small.position = Vector2(518, 480)
 		_stage.add_child(small)
-	var hand: Entity = pl.hand[0] if not pl.hand.is_empty() else e  # in hand only the cost changes
+	var hand: GameView.Ent = pl.hand[0] if not pl.hand.is_empty() else e  # in hand only the cost changes
 	var cv := CardView.make(id, 1.6)
 	cv.name = "Card"
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -209,32 +221,27 @@ func _build() -> void:
 	_stage.add_child(tips)
 
 
-## The effects on the entity in the engine's order: tags, enchantments, Silence,
-## damage, auras.
-func _effects(e: Entity, g: GameState) -> void:
+## The entity with the effects switched on, as a scenario item (the engine builds
+## it: Silence first, so the keywords and buffs Silence would remove are left out).
+func _spec(id: String) -> Dictionary:
+	var silenced := on.has("silenced")
+	var spec := {"card": id, "tags": [], "enchantments": [], "silenced": silenced}
 	for ef in EFFECTS:
 		var k: String = ef[0]
-		if on.has(k) and k == k.to_upper():
-			if k == "SPELLPOWER":
-				e.tags.SPELLPOWER = 1
-			else:
-				e.give_tag(k)
+		if on.has(k) and k == k.to_upper() and not silenced:
+			spec.tags.append(k)
 	if on.has("sleeping"):
-		e.give_tag("EXHAUSTED")
-	if on.has("buff"):
-		e.add_enchant({"atk": 1, "hp": 1, "src": "VAN_EX1_019"})
-	if on.has("turn_buff"):
-		e.add_enchant({"atk": 3, "eot": true, "src": "VAN_CS2_045"})
-	if on.has("set_attack"):
-		e.add_enchant({"set_atk": 1, "src": "VAN_EX1_360"})
-	if on.has("silenced"):
-		e.silence()
+		spec.tags.append("EXHAUSTED")
+	if not silenced:
+		if on.has("buff"):
+			spec.enchantments.append({"atk": 1, "hp": 1, "src": "VAN_EX1_019"})
+		if on.has("turn_buff"):
+			spec.enchantments.append({"atk": 3, "eot": true, "src": "VAN_CS2_045"})
+		if on.has("set_attack"):
+			spec.enchantments.append({"set_atk": 1, "src": "VAN_EX1_360"})
 	if on.has("damaged"):
-		e.damage = mini(2, maxi(0, e.max_health() - 1))
-	g.update_auras()  # the card's own auras, as in a game (Enrage)
-	if on.has("aura"):
-		if not e.aura.has("src"):  # a card in hand: update_auras() does not reset it
-			e.aura["src"] = {}
-		g.source_card = "VAN_CS2_222"
-		g.aura_add(e, 1, 1)
-		g.source_card = ""
+		var hp := int(CardDb.card(id).get("health", 0)) + (1 if on.has("buff") and not silenced else 0)
+		spec.damage = mini(2, maxi(0, hp - 1))
+	return spec
+
+

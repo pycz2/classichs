@@ -12,6 +12,5 @@ func _process(_d: float) -> bool:
 				n += 1
 				print("%s %s %s" % [id, lang, pr])
 	print("%d card faces with problems" % n)
-	Cards.unload()
 	quit()
 	return true

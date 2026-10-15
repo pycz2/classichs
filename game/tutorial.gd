@@ -1,6 +1,7 @@
 class_name Tutorial
 extends RefCounted
-## One tutorial mission in play: Jaina's safety net, turn-end rules, hints and boss lines.
+## One tutorial mission in play: hints and boss lines. Its rules (Jaina's safety
+## net, the boss guarded by his minions, the turn-end rules) are the engine's missions.
 
 const HINTS := {
 	"play": "Click a card in your hand to play it. Minions go on the board.",
@@ -21,52 +22,30 @@ const HINTS := {
 
 var number: int
 var mission: Dictionary
+## The mission's match (its legal actions; the engine plays the mission's rules).
+var match_: Match
 var _shown := {}
 var _said := {}
 
 
-func _init(n: int) -> void:
+func _init(n: int, m: Match = null) -> void:
 	number = n
 	mission = Missions.get_mission(n)
-
-
-## {"game": Game, "tutorial": Tutorial, "error": String}
-static func start(n: int) -> Dictionary:
-	var r := Missions.build(n)
-	if r.error != "":
-		return {"game": null, "tutorial": null, "error": r.error}
-	var t := Tutorial.new(n)
-	if t.mission.unlosable:
-		r.game.hero(0).add_enchant({"hooks": "ench:tutorial_guard"})
-	if t.mission.get("guarded", false):  # the boss can't be attacked while he has minions
-		r.game.hero(1).give_tag("GUARDED")
-	return {"game": r.game, "tutorial": t, "error": ""}
+	match_ = m
 
 
 func _t(s: String) -> String:
 	return TranslationServer.translate(s)
 
 
-func _legal(g: Game, p: int) -> Array:
-	return g.legal_actions().filter(func(a): return a.player == p)
+func _legal(_g: GameView, p: int) -> Array:
+	return match_.legal().filter(func(a): return a.player == p) if match_ else []
 
 
-## Why the turn can't end yet ("" = it can), as in the first original missions.
-func end_turn_block(g: Game, p: int) -> String:
-	if g.current != p or g.game_over:
-		return ""
-	var legal := _legal(g, p)
-	if mission.block_mana and legal.any(func(a): return a.type == "play"):
-		return _t("Not yet! You have more cards to play!")
-	if mission.block_attack and legal.any(func(a): return a.type == "attack"):
-		return _t("Not yet! You can still attack.")
-	return ""
-
-
-func _holds(key: String, g: Game, p: int) -> bool:
+func _holds(key: String, g: GameView, p: int) -> bool:
 	var legal := _legal(g, p)
 	var hand: Array = g.players[p].hand
-	var enemy: Array = g.minions(1 - p)
+	var enemy: Array = g.players[1 - p].board
 	match key:
 		"play": return legal.any(func(a): return a.type == "play")
 		"attack": return legal.any(func(a): return a.type == "attack")
@@ -87,7 +66,7 @@ func _holds(key: String, g: Game, p: int) -> bool:
 
 
 ## The next hint to show (each once), or "". The mission intro comes first.
-func next_hint(g: Game, p: int) -> String:
+func next_hint(g: GameView, p: int) -> String:
 	if not _shown.has("intro"):
 		_shown.intro = true
 		return _t(mission.intro)
@@ -101,7 +80,7 @@ func next_hint(g: Game, p: int) -> String:
 
 
 ## The boss's next line ("" = nothing new): at the start, at half health, on defeat.
-func boss_line(g: Game) -> String:
+func boss_line(g: GameView) -> String:
 	var boss := g.hero(1)
 	for key in ["start", "hurt", "defeat"]:
 		if _said.has(key):

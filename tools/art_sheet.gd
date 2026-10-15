@@ -32,6 +32,5 @@ func _process(_d: float) -> bool:
 	f.store_string("\n".join(svg))
 	f.close()
 	print("cards: ", ids.size())
-	Cards.unload()
 	quit()
 	return true

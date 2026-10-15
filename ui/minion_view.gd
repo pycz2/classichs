@@ -7,16 +7,16 @@ extends EntityView
 const SIZE := Vector2(96, 116)
 const OVAL := Rect2(Vector2(12, 8), Vector2(72, 92))
 
-var e: Entity  # the live entity
-var g: GameState
+var e: GameView.Ent  # the live entity
+var g: GameView
 ## What the view shows: a copy taken by sync() (the table syncs its views when an
 ## animation reaches the moment of the change, e.g. the hit, not before).
-var s: Entity
+var s: GameView.Ent
 var _current := -1
 var _t := 0.0
 
 
-static func make(ent: Entity, game: GameState) -> MinionView:
+static func make(ent: GameView.Ent, game: GameView) -> MinionView:
 	var v := MinionView.new()
 	v.e = ent
 	v.g = game
@@ -40,7 +40,7 @@ func sync() -> void:
 
 
 func _animated() -> bool:
-	var h := Cards.of(s.card_id)
+	var h := Rules.hooks(s.card_id)
 	return glow.a > 0.0 or s.silenced or s.spellpower() > 0 or s.has("ELUSIVE") or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
 		or (not s.silenced and (h.has("on") or h.has("aura")))
 
@@ -58,7 +58,7 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var c := s.card()
-	var h := Cards.of(s.card_id)
+	var h := Rules.hooks(s.card_id)
 	var oval := Art.outline("oval", OVAL)
 	var center := OVAL.get_center()
 	var gl := shown_glow()
@@ -188,7 +188,7 @@ static func _scaled(pts: PackedVector2Array, c: Vector2, k: float) -> PackedVect
 func _reach() -> float:
 	if s.has("IMMUNE"):
 		return 9.0
-	if Cards.of(s.card_id).has("aura") and not s.silenced:
+	if Rules.hooks(s.card_id).has("aura") and not s.silenced:
 		return 9.0
 	if s.has("DIVINE_SHIELD"):
 		return 6.0

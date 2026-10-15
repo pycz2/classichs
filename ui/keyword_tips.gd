@@ -34,7 +34,7 @@ static func keywords_of(card_id: String) -> Array:
 
 ## What changed on a minion compared with its card: buffs (with the card that
 ## gave them), auras, set values, gained keywords, Silence.
-static func changes(e: Entity) -> Array:
+static func changes(e: GameView.Ent) -> Array:
 	var out := []
 	if e == null:
 		return out
@@ -68,7 +68,7 @@ static func changes(e: Entity) -> Array:
 	return out
 
 
-static func make(card_id: String, e: Entity = null) -> KeywordTips:
+static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 	var tips := KeywordTips.new()
 	tips.name = "KeywordTips"
 	tips.mouse_filter = Control.MOUSE_FILTER_IGNORE

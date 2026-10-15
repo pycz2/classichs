@@ -7,11 +7,10 @@ static func root() -> Window:
 
 
 func test_secrets_sit_above_both_portraits() -> void:
-	var g := H.scene({"hero": "HERO_08", "secrets": ["VAN_EX1_289"]}, {"hero": "HERO_05", "secrets": ["VAN_EX1_554"]})
+	var m := H.scene({"hero": "HERO_08", "secrets": ["VAN_EX1_289"]}, {"hero": "HERO_05", "secrets": ["VAN_EX1_554"]}, 0, [false, true])
+	var g := m.game
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.setup(g, [false, true])
 	v.bind(m)
 	for p in 2:
 		var hero: Control = v._views[g.players[p].hero.id]

@@ -70,7 +70,7 @@ func _open(lang: String) -> void:
 
 
 func _match() -> void:
-	m.start_match(Scenario.build(SCENE).game, [false, false], false)
+	m.start_match({"scenario": SCENE}, [false, false], false)
 
 
 ## A few moves so the history and the tracker have something to show.

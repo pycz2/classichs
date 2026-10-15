@@ -5,7 +5,8 @@ extends Control
 ## Interaction test (a card's test from data/card_tests played in a real match),
 ## Card test (CardLab) and Effects test (EffectsLab).
 
-signal start(game: Game, bots: Array)
+## A game from the scene: the engine's `new` request ({scenario}) and who the bots are.
+signal start(req: Dictionary, bots: Array)
 ## Play this card test (CardTests format) in a match.
 signal run_test(test: Dictionary)
 signal back
@@ -207,7 +208,7 @@ func apply_json() -> bool:
 			error.text += " (%s %d: %s)" % [tr("line"), j.get_error_line(), j.get_error_message()]
 		return false
 	scene = j.data
-	error.text = Scenario.build(scene).error
+	error.text = Rules.scenario_error(scene)
 	_show_players()
 	return true
 
@@ -220,8 +221,8 @@ func _player(p: int) -> Variant:
 
 ## The visual editor changed the scene: the JSON follows.
 func _changed() -> void:
-	editor.text = JSON.stringify(Scenario._ints(scene), "  ")
-	error.text = Scenario.build(scene).error
+	editor.text = JSON.stringify(Rules.ints(scene.duplicate(true)), "  ")
+	error.text = Rules.scenario_error(scene)
 
 
 ## Adds a card to a player's zone (refused when the scene would break).
@@ -240,7 +241,7 @@ func add_card(p: int, zone: String, id: String) -> void:
 	if zone == "weapon" and c.get("type", "") != "WEAPON":
 		error.text = tr("Only a weapon goes there")
 		return
-	var was_ok: bool = Scenario.build(scene).error == ""
+	var was_ok: bool = Rules.scenario_error(scene) == ""
 	var before = pl.get(zone)
 	if zone == "weapon":  # one slot: a new weapon replaces the old one
 		pl.weapon = id
@@ -248,7 +249,7 @@ func add_card(p: int, zone: String, id: String) -> void:
 		var list: Array = pl.get(zone, [])
 		list.append(id)
 		pl[zone] = list
-	var why: String = Scenario.build(scene).error
+	var why: String = Rules.scenario_error(scene)
 	if was_ok and why != "":
 		if before == null:
 			pl.erase(zone)
@@ -378,12 +379,12 @@ func _show_players() -> void:
 func start_game() -> void:
 	if not apply_json():
 		return
-	var r := Scenario.build(scene)
-	if r.error != "":
-		error.text = r.error
+	var why := Rules.scenario_error(scene)
+	if why != "":
+		error.text = why
 		return
 	last_scene = editor.text
-	start.emit(r.game, [false, true] if bot_mode.button_pressed else [false, false])
+	start.emit({"scenario": scene}, [false, true] if bot_mode.button_pressed else [false, false])
 
 
 # --- Interaction test ----------------------------------------------------------
@@ -488,9 +489,9 @@ func run_selected() -> void:
 	if t.is_empty():
 		_test_error.text = tr("No tests for this card")
 		return
-	var r := Scenario.build(t.get("scene", {}) if t.get("scene") is Dictionary else {})
-	if r.error != "":
-		_test_error.text = r.error
+	var why := Rules.scenario_error(t.get("scene", {}) if t.get("scene") is Dictionary else {})
+	if why != "":
+		_test_error.text = why
 		return
 	last_test = [test_card, test_list.get_selected_items()[0]]
 	run_test.emit(t)
@@ -575,7 +576,7 @@ class Run:
 			await _settle()
 			var step = steps[i]
 			status.text = tr("Step %d of %d") % [i + 1, steps.size()] + ": " + DebugTable.describe(step)
-			var a := CardTests.action(view.g, step) if step is Dictionary else {"error": "not a step"}
+			var a := CardTests.action(view.controller, step) if step is Dictionary else {"error": "not a step"}
 			var r: Dictionary = a if a.has("error") else view.controller.submit(a)
 			if a.has("error") or not r.ok:
 				status.text += "\n" + str(r.get("error", "?"))

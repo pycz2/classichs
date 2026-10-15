@@ -4,14 +4,14 @@ extends EntityView
 
 const SIZE := Vector2(130, 130)
 
-var e: Entity  # the live entity
-var g: GameState
+var e: GameView.Ent  # the live entity
+var g: GameView
 ## What the view shows: a copy taken by sync() (see MinionView.s).
-var s: Entity
+var s: GameView.Ent
 var _atk := 0
 
 
-static func make(ent: Entity, game: GameState) -> HeroView:
+static func make(ent: GameView.Ent, game: GameView) -> HeroView:
 	var v := HeroView.new()
 	v.e = ent
 	v.g = game

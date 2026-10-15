@@ -30,3 +30,17 @@ func of(t: String) -> Array:
 func close() -> void:
 	super()
 	up = false
+
+
+## A game in the local engine standing in for the server's (id eng): Basic Mage
+## against Basic Warrior.
+static func engine_game(eng: String, seed := 5) -> void:
+	Rules.request({"op": "new", "game": eng, "seed": seed, "first": 0, "decks": [
+		{"hero": "HERO_08", "cards": Decks.basic("MAGE")}, {"hero": "HERO_01", "cards": Decks.basic("WARRIOR")}]})
+
+
+## The server's `state` of game for seat, from the engine game eng (the player's view only).
+static func state(game: String, eng: String, seat: int, events := []) -> Dictionary:
+	var v: Dictionary = Rules.request({"op": "snapshot", "game": eng, "view": seat}).state
+	return {"t": "state", "game": game, "view": v, "events": events, "result": {"over": v.game_over,
+		"winner": v.winner, "turn": v.turn, "current": v.current, "phase": v.phase, "deadline": 75}}

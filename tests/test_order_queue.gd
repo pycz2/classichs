@@ -8,18 +8,16 @@ static func root() -> Window:
 	return (Engine.get_main_loop() as SceneTree).root
 
 
-func _view(g: Game, bots := [false, true]) -> MatchView:
+func _view(m: Match, bots := [false, true]) -> MatchView:
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.bot_delay = 0.0
-	m.setup(g, bots)
+	m.bots = bots
 	v.bind(m)
 	return v
 
 
 ## Mage with Fireball (4) and Frostbolt (2), 6 mana; a Chillwind Yeti that can attack.
-func _game() -> Game:
+func _game() -> Match:
 	return H.scene({"hero": "HERO_08", "mana": 6, "max_mana": 6, "hand": ["VAN_CS2_029", "VAN_CS2_024"],
 		"board": ["VAN_CS2_182"]}, {"hero": "HERO_01"})
 
@@ -32,8 +30,9 @@ func _play(v: MatchView, card_id: String, target: int) -> Dictionary:
 
 
 func test_orders_wait_while_the_table_animates() -> void:
-	var g := _game()
-	var v := _view(g)
+	var m := _game()
+	var g := m.game
+	var v := _view(m)
 	var foe: int = g.players[1].hero.id
 	v._busy = true  # an animation is running
 	v._act(_play(v, "VAN_CS2_029", foe))
@@ -58,8 +57,9 @@ func test_orders_wait_while_the_table_animates() -> void:
 
 
 func test_end_turn_can_be_ordered_too() -> void:
-	var g := _game()
-	var v := _view(g)
+	var m := _game()
+	var g := m.game
+	var v := _view(m)
 	v._busy = true
 	v._act(_play(v, "VAN_CS2_024", g.players[1].hero.id))
 	v._on_end_turn()
@@ -74,8 +74,9 @@ func test_end_turn_can_be_ordered_too() -> void:
 
 
 func test_an_order_that_became_impossible_is_dropped() -> void:
-	var g := _game()
-	var v := _view(g, [false, false])  # two people: the turn stays with the other one
+	var m := _game()
+	var g := m.game
+	var v := _view(m, [false, false])  # two people: the turn stays with the other one
 	v._busy = true
 	v._act(_play(v, "VAN_CS2_029", g.players[1].hero.id))
 	v._act(_play(v, "VAN_CS2_024", g.players[1].hero.id))
@@ -89,8 +90,9 @@ func test_an_order_that_became_impossible_is_dropped() -> void:
 
 
 func test_no_waiting_orders_without_an_animation() -> void:
-	var g := _game()
-	var v := _view(g)
+	var m := _game()
+	var g := m.game
+	var v := _view(m)
 	v._act(_play(v, "VAN_CS2_024", g.players[1].hero.id))
 	eq(v._pending_acts.size(), 0, "carried out at once")
 	eq(g.players[1].hero.damage, 3, "done")

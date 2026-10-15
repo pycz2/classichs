@@ -6,10 +6,10 @@ enum Kind { POWER, WEAPON, SECRET }
 
 const SECRET_COLORS := {"MAGE": Color("9b4dff"), "HUNTER": Color("2fb344"), "PALADIN": Color("f2c230")}
 
-var e: Entity  # the live entity
-var g: GameState
+var e: GameView.Ent  # the live entity
+var g: GameView
 ## What the view shows: a copy taken by sync() (see MinionView.s).
-var s: Entity
+var s: GameView.Ent
 var _cost := 0
 var _active := false
 var kind := Kind.POWER
@@ -18,7 +18,7 @@ var face_down := false  # an enemy Secret: show "?" only
 var face_down_used := false
 
 
-static func make(ent: Entity, game: GameState, k: Kind, hide := false) -> PowerView:
+static func make(ent: GameView.Ent, game: GameView, k: Kind, hide := false) -> PowerView:
 	var v := PowerView.new()
 	v.e = ent
 	v.g = game

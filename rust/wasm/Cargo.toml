@@ -1,0 +1,12 @@
+[package]
+name = "classichs-wasm"
+version = "0.1.0"
+edition = "2021"
+description = "The Classic HS rules engine for the browser: plain C ABI for web/rules.js."
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+classichs-engine = { path = "../engine" }

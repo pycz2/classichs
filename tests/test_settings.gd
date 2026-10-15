@@ -78,9 +78,9 @@ func test_collector_finds_paired_history_strings() -> void:
 
 
 func test_history_turn_lines_marked_by_event() -> void:
-	var g := H.game()
-	H.end_turn(g)
-	var rows := HistoryText.rows(g.history.back(), g, 0, "en")
+	var m := H.game()
+	H.end_turn(m)
+	var rows := HistoryText.rows(m.game.history.back(), m.game, 0, "en")
 	check(rows.any(func(r): return r.turn and r.text.begins_with("Turn")), "turn row marked")
 	check(rows.any(func(r): return not r.turn), "other rows not marked")
 

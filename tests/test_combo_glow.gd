@@ -9,12 +9,10 @@ static func root() -> Window:
 
 func test_combo_card_glows_yellow_when_its_combo_is_on() -> void:
 	# Rogue: SI:7 Agent (Combo) and Backstab
-	var g := H.scene({"hero": "HERO_03", "hand": ["VAN_EX1_134", "VAN_CS2_072"]}, {"hero": "HERO_01", "board": ["VAN_CS2_182"]})
+	var m := H.scene({"hero": "HERO_03", "hand": ["VAN_EX1_134", "VAN_CS2_072"]}, {"hero": "HERO_01", "board": ["VAN_CS2_182"]}, 0, [false, true])
+	var g := m.game
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.bot_delay = 0.0
-	m.setup(g, [false, true])
 	v.bind(m)
 	var agent: EntityView = v._views[g.players[0].hand[0].id]
 	var stab: EntityView = v._views[g.players[0].hand[1].id]

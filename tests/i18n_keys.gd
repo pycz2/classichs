@@ -3,7 +3,7 @@ extends RefCounted
 ## Every English interface string: literals in tr()/translate()/_t()/_tr() calls,
 ## plus the tables that are translated through a variable.
 
-const DIRS := ["res://engine", "res://cards", "res://game", "res://net", "res://ui"]
+const DIRS := ["res://game", "res://net", "res://ui"]
 static var _call := RegEx.create_from_string("(?:\\btr|TranslationServer\\.translate|\\b_t|\\b_tr)\\(\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
 ## HistoryText._say(p, viewer, "You …", "Opponent …", args)
 static var _say := RegEx.create_from_string("_say\\([^,]+,\\s*[^,]+,\\s*\"((?:[^\"\\\\]|\\\\.)*)\",\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
@@ -35,6 +35,8 @@ static func collect() -> Array:
 	tables.append_array(SettingsView.TOGGLES.map(func(r): return r[0]))
 	tables.append_array(Tutorial.HINTS.values())
 	tables.append_array(NetSession.BYE_TEXT.values())
+	tables.append_array(ServerSession.GAME_OVER_TEXT.values())
+	tables.append_array(Rules.MESSAGES)
 	tables.append_array(Social.STATUS.values().map(func(v): return v[1]))
 	for m in Missions.LIST:
 		tables.append_array([m.intro, m.reward_line])

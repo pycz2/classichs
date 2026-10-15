@@ -1,49 +1,47 @@
 class_name ArenaDraft
 extends RefCounted
-## The Arena draft as in Hearthstone in 2014: three heroes of different classes to
-## choose from, then 30 picks; each pick offers three different cards of one
-## rarity (Basic and Common are one tier) from the hero's class and the neutral
-## cards. Picks 1, 10, 20 and 30 are Rare or better; class cards are 1.5 times as
-## likely as neutral ones; an Arena deck has no limit on copies.
-## The odds are a ruling (docs/superpowers/specs/2026-10-12-arena-design.md).
+## The Arena draft (three heroes, then 30 picks of three cards): the engine's
+## `draft` op computes it from the seed and the picks (stateless), so both online
+## players and the server get the same offers. This keeps the seed and the picks.
 
 const PICKS := 30
-const SPECIAL := [0, 9, 19, 29]  # pick indexes that are Rare or better
-## Legendary twice and Epic one and a half times as likely as in the first
-## ruling (owner's request): more of the big cards.
-const ODDS := {"common": 0.765, "rare": 0.14, "epic": 0.075, "legendary": 0.02}
-const SPECIAL_ODDS := {"rare": 0.65, "epic": 0.27, "legendary": 0.08}
-const CLASS_WEIGHT := 1.5
-const CLASSES := ["DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR"]
 
-var rng := RandomNumberGenerator.new()
+var seed := 0
 var heroes: Array[String] = []  # the three offered
 var hero := ""
 var cards: Array[String] = []
 var offer: Array[String] = []  # the three cards of the current pick
+var _hero := -1
+var _picks: Array = []
 
 
-func _init(seed := -1) -> void:
-	if seed >= 0:
-		rng.seed = seed
-	else:
-		rng.randomize()
-	var classes := CLASSES.duplicate()
-	for i in 3:
-		heroes.append(Decks.hero(classes.pop_at(rng.randi_range(0, classes.size() - 1))))
+func _init(p_seed := -1) -> void:
+	seed = p_seed if p_seed >= 0 else randi()
+	_ask()
 
 
 func choose_hero(i: int) -> void:
-	hero = heroes[i]
-	_next()
+	_hero = i
+	_ask()
 
 
 ## Takes card i of the offer; the other two are gone.
 func pick(i: int) -> void:
 	if done() or i < 0 or i >= offer.size():
 		return
-	cards.append(offer[i])
-	_next()
+	_picks.append(i)
+	_ask()
+
+
+func _ask() -> void:
+	var req := {"op": "draft", "seed": seed}
+	if _hero >= 0:
+		req.merge({"hero": _hero, "picks": _picks})
+	var r := Rules.request(req)
+	heroes.assign(r.get("heroes", []))
+	hero = str(r.get("hero", ""))
+	cards.assign(r.get("cards", []))
+	offer.assign(r.get("offer", []))
 
 
 func done() -> bool:
@@ -67,54 +65,7 @@ func curve() -> Array:
 	return out
 
 
-func _next() -> void:
-	offer.clear()
-	if not done():
-		offer = roll_offer(roll_tier(cards.size() in SPECIAL))
-
-
-## The rarity tier of a card: Basic counts as common.
+## The rarity tier of a card (Basic counts as common), as the draft screens show it.
 static func tier(id: String) -> String:
 	var r: String = CardDb.card(id).get("rarity", "FREE")
 	return "common" if r == "FREE" or r == "COMMON" else r.to_lower()
-
-
-func roll_tier(special: bool) -> String:
-	var odds: Dictionary = SPECIAL_ODDS if special else ODDS
-	var x := rng.randf()
-	for t in odds:
-		x -= odds[t]
-		if x < 0.0:
-			return t
-	return odds.keys()[-1]
-
-
-## The cards of a tier for a class with their weights: [[id, weight], …].
-static func pool(card_class: String, t: String) -> Array:
-	var out := []
-	for id in CardDb.collectible():
-		var c := CardDb.card(id)
-		if c.type == "HERO" or tier(id) != t:
-			continue
-		if c.cardClass == card_class:
-			out.append([id, CLASS_WEIGHT])
-		elif c.cardClass == "NEUTRAL":
-			out.append([id, 1.0])
-	return out
-
-
-## Three different cards of tier t for the hero, drawn by weight.
-func roll_offer(t: String) -> Array[String]:
-	var left := pool(Decks.card_class(hero), t)
-	var out: Array[String] = []
-	while out.size() < 3 and not left.is_empty():
-		var total := 0.0
-		for it in left:
-			total += it[1]
-		var x := rng.randf() * total
-		var k := 0
-		while k < left.size() - 1 and x >= left[k][1]:
-			x -= left[k][1]
-			k += 1
-		out.append(left.pop_at(k)[0])
-	return out

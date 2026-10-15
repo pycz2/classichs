@@ -34,9 +34,9 @@ Besides peer-to-peer play there is an optional game server in Rust (`server/`):
 accounts (argon2id passwords), an admin panel at `/admin`, SQLite, casual and ranked
 games (the 25 ranks of 2014 and Legend, a hidden MMR, a search window that widens
 while you wait), the Arena (12 wins or 3 losses), friends by tag, messages, invites
-and blocking. Every move is checked on the server by the game's own rules engine,
-started without a window as a referee (`-- --referee <port>`). Nothing is hosted:
-run it yourself.
+and blocking. The server keeps the game (the same Rust rules engine): each player gets
+only their own view and sends moves, so nobody sees the opponent's hand. Nothing is
+hosted: run it yourself.
 
 ```sh
 cd server
@@ -61,9 +61,11 @@ For a stable Android signature add the secrets `ANDROID_KEYSTORE_BASE64`, `ANDRO
 
 ## Build and run
 
-You need [Godot 4.7.2](https://godotengine.org/) (standard build, no C#) and its export templates for the web build.
+You need [Godot 4.7.2](https://godotengine.org/) (standard build, no C#) and its export templates for the web build,
+and [Rust](https://rustup.rs/) for the rules engine (built into `rules/bin/`, not committed).
 
 ```sh
+tools/build_rules.sh           # the rules engine for this machine (+ Android with an NDK, + web)
 godot --path .                 # run the game
 ./run_tests.sh                 # run all tests (headless)
 ./run_tests.sh -- deck_code    # only tests whose "file:method" contains the text
@@ -92,12 +94,11 @@ Every folder in `art/` is a picture set, selectable in Settings → Card art:
 
 | Folder | What is there |
 |---|---|
-| `engine/` | Deterministic game engine: entities with tags and enchantments, event queue, death phase, auras, legal actions, state hash. No floats, one seeded RNG. |
-| `cards/` | One hook dictionary per card (battlecry, deathrattle, triggers, auras, cost changes…), by class. |
-| `game/` | Match controller, bot, decks and deck codes, tutorial missions, settings, locale, sound, deck tracker. |
+| `rust/engine/` | The rules engine in Rust: every rule and card, the bot, the Arena draft, deck rules, tutorial missions; a JSON API. The same crate runs in the game server, in the game through GDExtension (`rust/godot`, desktop and Android) and in the browser as WebAssembly (`rust/wasm` + `web/rules.js`). See [its README](rust/engine/README.md) and [the design](docs/superpowers/specs/2026-10-15-thin-client-design.md). |
+| `game/` | `Rules` (the bridge to the engine), `GameView` (the game as the table draws it), the match controller, decks and deck codes, tutorial texts, settings, locale, sound, deck tracker. |
 | `net/` | Transport (WebRTC data channel), signalling codes, session protocol (hello, start, actions with state hashes, emotes). |
 | `ui/` | All screens, built in code; procedural art. |
-| `tests/` | Over 640 tests: every card, engine rules, deck codes, network protocol, UI flows, random full-game simulations. |
+| `tests/` | GDScript tests of the screens, flows, network protocols and helpers (through the engine). The rules are tested in Rust (`cd rust && cargo test`). |
 | `site/` | The GitHub Pages landing page. |
 | `docs/superpowers/` | Design specs and implementation plans with the decisions taken. |
 

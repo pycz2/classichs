@@ -24,13 +24,13 @@ static func _say(p: int, viewer: int, mine: String, theirs: String, args: Array)
 	return (_t(mine) if _you(p, viewer) else _t(theirs)) % args
 
 
-static func _name(g: GameState, id: int, loc: String) -> String:
+static func _name(g: GameView, id: int, loc: String) -> String:
 	var e := g.ent(id)
 	return CardText.name(e.card_id, loc) if e else "?"
 
 
 ## Lines for one history entry ({"turn", "player", "action", "events"}).
-static func lines(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Array[String]:
+static func lines(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Array[String]:
 	var out: Array[String] = []
 	for r in rows(entry, g, viewer, loc):
 		out.append(r.text)
@@ -38,7 +38,7 @@ static func lines(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Ar
 
 
 ## Rows {"text", "turn": bool} — "turn" marks the turn header line (for styling).
-static func rows(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Array:
+static func rows(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Array:
 	var out: Array = []
 	var played := {}
 	var chosen: bool = entry.action.get("type", "") == "choose"
@@ -55,7 +55,7 @@ static func rows(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Arr
 	return out
 
 
-static func event_lines(ev: Dictionary, g: GameState, viewer: int, loc := "") -> Array[String]:
+static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> Array[String]:
 	var out: Array[String] = []
 	if SILENT.has(ev.type):
 		return out
@@ -154,7 +154,7 @@ static func event_lines(ev: Dictionary, g: GameState, viewer: int, loc := "") ->
 
 ## The line saying who made the move of an entry ("You play X on Y", "Opponent
 ## uses…"); "" for moves without a card (end of turn, mulligan).
-static func title(entry: Dictionary, g: GameState, viewer: int, loc := "") -> String:
+static func title(entry: Dictionary, g: GameView, viewer: int, loc := "") -> String:
 	for ev: Dictionary in entry.events:
 		if ev.type in ["play", "attack", "hero_power"]:
 			return event_lines(ev, g, viewer, loc)[0]
@@ -162,7 +162,7 @@ static func title(entry: Dictionary, g: GameState, viewer: int, loc := "") -> St
 
 
 ## The card that made the move of an entry (played, attacking, Hero Power), or -1.
-static func actor(entry: Dictionary, g: GameState) -> int:
+static func actor(entry: Dictionary, g: GameView) -> int:
 	var a: Dictionary = entry.action
 	var id: int = {"play": a.get("entity", -1), "attack": a.get("attacker", -1), "hero_power": a.get("entity", -1)}.get(a.get("type", ""), -1)
 	if a.get("type") == "hero_power" and id < 0:
@@ -175,7 +175,7 @@ static func actor(entry: Dictionary, g: GameState) -> int:
 ## the affected card ("" when "text" is a whole sentence), "color" good/bad/"",
 ## "from" the trigger that caused it (a Deathrattle, a Secret, Knife Juggler…),
 ## "" for the move itself. The opponent's draws and hand cards stay hidden.
-static func effects(entry: Dictionary, g: GameState, viewer: int, loc := "") -> Array:
+static func effects(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Array:
 	var out := []
 	var a: Dictionary = entry.action
 	var main := actor(entry, g)
@@ -198,7 +198,7 @@ static func effects(entry: Dictionary, g: GameState, viewer: int, loc := "") -> 
 	return out
 
 
-static func _effect(ev: Dictionary, g: GameState, viewer: int, loc: String, main: int, gone: Dictionary) -> Dictionary:
+static func _effect(ev: Dictionary, g: GameView, viewer: int, loc: String, main: int, gone: Dictionary) -> Dictionary:
 	var row := func(id: int, text: String, color := "") -> Dictionary:
 		var e := g.ent(id)
 		return {"card": e.card_id if e else "", "name": _name(g, id, loc), "text": text, "color": color}

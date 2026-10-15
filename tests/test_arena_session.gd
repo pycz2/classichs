@@ -105,7 +105,7 @@ func test_both_ready_start_the_same_game_with_the_arena_decks() -> void:
 	eq([games[0].size(), games[1].size()], [1, 1], "game 1 started on both sides")
 	var hm: Match = games[0][0]
 	var gm: Match = games[1][0]
-	eq(hm.game.state_hash(), gm.game.state_hash(), "the same game")
+	eq(hm.state_hash, gm.state_hash, "the same game")
 	var cards := []
 	for e in hm.game.players[0].deck + hm.game.players[0].hand:
 		cards.append(e.card_id)

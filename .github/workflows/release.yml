@@ -1,6 +1,9 @@
 # Builds the game for every platform on each push to main (a check) and, on a
 # version tag vX.Y.Z, publishes a GitHub release with the builds:
 #   Web (zip), Windows (.exe), Linux (.AppImage), macOS (.zip with the app), Android (.apk).
+# The rules engine (rust/, tools/build_rules.sh) is built per platform in the rules
+# job (macOS universal on macOS, Windows on Windows, Linux + Android + WebAssembly on
+# Linux); the game job takes those libraries, tests and exports everything.
 # The game server (server/, Rust) is built for Windows, Linux and macOS in the server job.
 name: Release
 
@@ -17,10 +20,48 @@ env:
   GODOT_VERSION: "4.7.2"
 
 jobs:
+  rules:
+    strategy:
+      matrix:
+        include:
+          - os: macos-14
+            platforms: macos
+            targets: aarch64-apple-darwin,x86_64-apple-darwin
+          - os: windows-2022
+            platforms: windows
+            targets: ""
+          - os: ubuntu-24.04
+            platforms: linux android web
+            targets: aarch64-linux-android,wasm32-unknown-unknown
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.targets }}
+      - name: Engine tests
+        if: runner.os == 'Linux'
+        run: cd rust && cargo test --release -p classichs-engine
+      - name: Build the rules engine
+        shell: bash
+        run: tools/build_rules.sh ${{ matrix.platforms }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rules-${{ runner.os }}
+          path: rules/bin/*
+          if-no-files-found: error
+
   game:
+    needs: rules
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: rules-*
+          path: rules/bin
+          merge-multiple: true
 
       - name: Cache Godot and export templates
         id: godot-cache
@@ -95,7 +136,7 @@ jobs:
           grep -q " 0 failed" /tmp/tests.log
 
       - name: Export every platform
-        run: tools/export_all.sh
+        run: RULES_PREBUILT=1 tools/export_all.sh
 
       - uses: actions/upload-artifact@v4
         with:

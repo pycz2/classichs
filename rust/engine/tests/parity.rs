@@ -1,7 +1,8 @@
-//! Replays games recorded from the GDScript engine (tools/engine_record.gd) and
-//! checks that the Rust engine gives the same legal actions, bot choices,
-//! events and state hashes at every step. Fixtures: tests/fixtures/*.jsonl
-//! (committed) and tests/fixtures/big/*.jsonl (generated, gitignored).
+//! Replays games recorded from the GDScript engine (tools/engine_record.gd, both
+//! removed in 0.27: the fixtures are frozen) and checks that the Rust engine gives
+//! the same legal actions, bot choices, events and state hashes at every step.
+//! Fixtures: tests/fixtures/*.jsonl (committed) and tests/fixtures/big/*.jsonl
+//! (generated earlier, gitignored).
 
 use classichs_engine::api::Engine;
 use classichs_engine::entity::int;

@@ -5,11 +5,6 @@ var screen: Control
 
 
 func _ready() -> void:
-	var args := OS.get_cmdline_user_args()
-	var ref := args.find("--referee")
-	if ref >= 0 and ref + 1 < args.size():  # the game server's referee: no window, no menu
-		Referee.run(get_tree(), int(args[ref + 1]))
-		return
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = Fonts.theme()  # the medieval font and tavern buttons everywhere below
 	Locale.load_all()
@@ -23,10 +18,33 @@ func _ready() -> void:
 		if c is LineEdit or c is TextEdit:
 			_fresh_clipboard())
 	_start_server_link()
+	if not await _wait_for_rules():
+		return
 	if Settings.first_run:
 		show_language_picker()
 	else:
 		show_menu()
+
+
+## The rules engine must be there before anything can be played: the browser
+## loads rules.wasm a moment after the page; a build without its native library
+## says so instead of starting without rules.
+func _wait_for_rules() -> bool:
+	var t0 := Time.get_ticks_msec()
+	while Rules.missing() == "loading" and Time.get_ticks_msec() - t0 < 30000:
+		await get_tree().process_frame
+	var why := Rules.missing()
+	if why == "":
+		return true
+	push_error("rules engine: " + why)
+	var l := Palette.label(tr("The game cannot start: its rules engine is missing.") + "\n" + why, 20)
+	l.name = "RulesMissing"
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_set_screen(l)
+	return false
 
 
 ## The first run: pick the language, then the menu.
@@ -85,9 +103,8 @@ func show_training_setup() -> void:
 	t.back.connect(show_menu.bind(true))
 	t.edit_decks.connect(show_collection)
 	t.start.connect(func(deck: Deck, bot: String):
-		var g := Game.new({"hero": deck.hero, "deck": deck.cards.duplicate()},
-			{"hero": Decks.hero(bot), "deck": Decks.basic(bot)}, randi())
-		start_match(g, [false, true], false))
+		start_match({"decks": [{"hero": deck.hero, "cards": Array(deck.cards)},
+			{"hero": Decks.hero(bot), "cards": Decks.basic(bot)}], "seed": randi()}, [false, true], false))
 	_set_screen(t)
 
 
@@ -107,11 +124,11 @@ func show_tutorial_intro(n: int) -> void:
 
 
 func start_tutorial(n: int) -> MatchView:
-	var r := Tutorial.start(n)
 	var m := Match.new()
-	m.setup(r.game, [false, true])
+	var why := m.setup({"mission": n}, [false, true])
+	assert(why == "", why)
 	var v := MatchView.new()
-	v.tutorial = r.tutorial
+	v.tutorial = Tutorial.new(n, m)
 	v.leave.connect(show_tutorial)
 	v.tutorial_next.connect(show_tutorial_intro)
 	v.tutorial_retry.connect(start_tutorial)
@@ -192,7 +209,7 @@ func show_server() -> ServerView:
 	return v
 
 
-func start_server_match(session: NetSession, m: Match, mode: String) -> MatchView:
+func start_server_match(session: ServerSession, m: Match, mode: String) -> MatchView:
 	var v := MatchView.new()
 	v.lobby = true
 	v.lobby_back.connect(func(): show_server())
@@ -211,23 +228,17 @@ func _on_server_message(msg: Dictionary) -> void:
 			start_server_game(msg)
 
 
-## The server matched us (a queue, the Arena or an invite, from any screen): the
-## game runs as a NetSession over the server with the deck sent for it.
-func start_server_game(msg: Dictionary) -> NetSession:
-	var d := server_link.game_deck
-	if d == null or msg.get("rejoin", false) or (screen is MatchView and (screen as MatchView).lobby):
-		return null  # ponytail: no rejoin after a restart yet; the server ends that game after 30 s
+## The server matched us (a queue, the Arena or an invite, from any screen, or
+## a game still running after a reconnect: rejoin): the server keeps the game; its
+## first state opens the table.
+func start_server_game(msg: Dictionary) -> ServerSession:
 	var mode := str(msg.get("mode", "casual"))
-	var ch := server_link.channel(str(msg.get("game", "")))
-	var s := NetSession.new()
-	s.arena = mode == "arena"
-	s.seed_override = int(msg.get("seed", -1))
-	s.setup(ch, msg.get("host", false) == true, str(server_link.me.get("user", "")), d)
-	server_link.add_child(ch)
+	var s := server_link.session(msg, server_link.game_deck)
 	server_link.add_child(s)
 	s.started.connect(func(m: Match): start_server_match(s, m, mode))
-	s.failed.connect(func(reason): social.toast(reason))
-	s.say_hello()
+	s.failed.connect(func(reason):
+		if s.match_ == null:
+			social.toast(reason))
 	return s
 
 
@@ -260,7 +271,9 @@ func show_debug_table(tab := DebugTable.SCENE) -> void:
 ## the controller one by one; leaving comes back to the Interaction test tab.
 func start_card_test(test: Dictionary) -> MatchView:
 	var m := Match.new()
-	m.setup(Scenario.build(test.scene).game, [false, false])
+	var why := m.setup({"scenario": test.scene}, [false, false])
+	if why != "":
+		push_warning("card test: " + why)
 	var v := MatchView.new()
 	v.debug_mode = true
 	v.leave.connect(show_debug_table.bind(DebugTable.TESTS))
@@ -273,9 +286,13 @@ func start_card_test(test: Dictionary) -> MatchView:
 	return v
 
 
-func start_match(g: Game, bots: Array, debug := false) -> MatchView:
+## A local game: req is the engine's `new` request ({decks, seed} or {scenario}).
+func start_match(req: Dictionary, bots: Array, debug := false) -> MatchView:
 	var m := Match.new()
-	m.setup(g, bots)
+	var why := m.setup(req, bots)
+	if why != "":
+		push_error("cannot start the game: " + why)
+		return null
 	var v := MatchView.new()
 	v.debug_mode = debug
 	v.leave.connect(show_debug_table if debug else show_menu)
@@ -287,5 +304,3 @@ func start_match(g: Game, bots: Array, debug := false) -> MatchView:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_IN:
 		_fresh_clipboard()
-	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_PREDELETE:
-		Cards.unload()

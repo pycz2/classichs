@@ -138,12 +138,10 @@ func test_local_player_cannot_move_for_remote() -> void:
 
 
 func test_training_emote_shows_locally() -> void:
-	var g := H.scene({"hero": "HERO_08"})
+	var m := H.scene({"hero": "HERO_08"}, {"hero": "HERO_01"}, 0, [false, true])
+	var g := m.game
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.bot_delay = 0.0
-	m.setup(g, [false, true])
 	v.bind(m)
 	v.send_emote("thanks")
 	eq(v.bubble_text(0), "Thank you.", "bubble: Jaina's own words")
@@ -219,7 +217,7 @@ func test_my_mulligan_comes_in_before_the_opponent_chooses() -> void:
 	eq(guest._hint.text, "Waiting for the opponent…", "waiting for the opponent")
 	LoopbackTransport.pump(b[0])
 	check(host.find_child("Mulligan", true, false) != null, "the host still sees its mulligan")
-	eq(host.g.state_hash(), guest.g.state_hash(), "in sync")
+	eq(host.controller.state_hash, guest.controller.state_hash, "in sync")
 	_free_bound(b)
 
 
@@ -268,11 +266,10 @@ func test_emote_cooldown_and_mute_hides_bubble() -> void:
 
 
 func test_hot_seat_names() -> void:
-	var g := H.scene({"hero": "HERO_08"})
+	var m := H.scene({"hero": "HERO_08"}, {"hero": "HERO_01"}, 0, [false, false])
+	var g := m.game
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.setup(g, [false, false])
 	v.bind(m)
 	check(v._names[0].text.begins_with("Player 1"), v._names[0].text)
 	v.free()
@@ -285,15 +282,15 @@ func test_turn_timer_moves_reach_the_opponent() -> void:
 		check(v[side].timer_enabled, "timer on in online games")
 		v[side].tick(MatchView.MULLIGAN_SECONDS + 1)
 		LoopbackTransport.pump(b[0])
-	var g0: Game = v[0].g
-	var g1: Game = v[1].g
+	var g0: GameView = v[0].g
+	var g1: GameView = v[1].g
 	eq([g0.phase, g1.phase], ["PLAY", "PLAY"], "both mulligans kept on time out")
 	var active: int = g0.current
 	var turn := g0.turn
 	v[active].tick(MatchView.TURN_SECONDS + 1)
 	LoopbackTransport.pump(b[0])
 	eq([g0.turn, g1.turn], [turn + 1, turn + 1], "turn ended on both sides")
-	eq(g0.state_hash(), g1.state_hash(), "still in sync")
+	eq(v[0].controller.state_hash, v[1].controller.state_hash, "still in sync")
 	check(v[0].find_child("ConnectionLost", true, false) == null and v[1].find_child("ConnectionLost", true, false) == null, "no desync")
 	_free_bound(b)
 
@@ -344,11 +341,10 @@ func test_whatever_the_opponent_points_at_glows_red() -> void:
 
 
 func test_the_opponent_mark_keeps_the_own_green_glow() -> void:
-	var g := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029"], "board": ["VAN_CS2_182"]}, {"hero": "HERO_01"})
+	var m := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029"], "board": ["VAN_CS2_182"]}, {"hero": "HERO_01"}, 0, [false, false])
+	var g := m.game
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.setup(g, [false, false])
 	m.remote = 1
 	v.bind(m)
 	var yeti: EntityView = v._views[g.players[0].board[0].id]

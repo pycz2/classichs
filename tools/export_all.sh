@@ -5,6 +5,8 @@
 # Usage: tools/export_all.sh [platform ...]   (web windows linux macos android; all by default)
 # Needs Godot 4.7.2 with its export templates on PATH as `godot`. The AppImage needs
 # appimagetool on PATH (Linux); Android needs the SDK and a keystore (see .github/workflows/release.yml).
+# The rules engine is built first (tools/build_rules.sh) for each platform; with
+# RULES_PREBUILT=1 the libraries already in rules/bin are used (CI builds them per platform).
 set -e
 cd "$(dirname "$0")/.."
 VER=$(sed -n 's/^config\/version="\(.*\)"/\1/p' project.godot)
@@ -13,6 +15,21 @@ WANT=${*:-web windows linux macos android}
 mkdir -p "$OUT"
 touch build/.gdignore
 godot --headless --path . --import >/dev/null 2>&1 || true
+
+rules_lib() {  # the rules engine library a platform's export needs
+	case $1 in
+	web) echo rules/bin/rules.wasm ;;
+	windows) echo rules/bin/classichs_godot.windows.x86_64.dll ;;
+	linux) echo rules/bin/libclassichs_godot.linux.x86_64.so ;;
+	macos) echo rules/bin/libclassichs_godot.macos.dylib ;;
+	android) echo rules/bin/libclassichs_godot.android.arm64.so ;;
+	esac
+}
+
+for p in $WANT; do
+	[ "$RULES_PREBUILT" = 1 ] || tools/build_rules.sh "$p"
+	[ -s "$(rules_lib "$p")" ] || { echo "the rules engine for $p is missing: $(rules_lib "$p") (tools/build_rules.sh $p)" >&2; exit 1; }
+done
 
 export_preset() {  # preset name, output path
 	mkdir -p "$(dirname "$2")"
@@ -25,6 +42,8 @@ for p in $WANT; do
 	web)
 		rm -rf "$OUT/web"
 		export_preset "Web" "$OUT/web/index.html"
+		cp web/rules.js rules/bin/rules.wasm "$OUT/web/"  # the rules engine, loaded by index.html (html/head_include)
+		perl -pi -e 's/const CACHEABLE_FILES = \[/const CACHEABLE_FILES = ["rules.js","rules.wasm",/' "$OUT/web/index.service.worker.js"  # offline play (PWA) keeps the engine too
 		(cd "$OUT/web" && zip -qr "../ClassicHS-$VER-web.zip" .)
 		;;
 	windows)

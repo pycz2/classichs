@@ -122,7 +122,20 @@ impl Engine {
             return fail("bad new request");
         }
         let mut mission = None;
-        let game = if let Some(sc) = req.get("scenario") {
+        let game = if let Some(src) = req.get("copy").and_then(Value::as_str) {
+            match self.games.get(src) {
+                Some(s) => {
+                    mission = s.mission;
+                    s.game.clone_state()
+                }
+                None => return fail("no such game"),
+            }
+        } else if let Some(st) = req.get("state") {
+            match crate::view::from_snapshot(st) {
+                Ok(g) => g,
+                Err(e) => return fail(&e),
+            }
+        } else if let Some(sc) = req.get("scenario") {
             match scenario::build(sc) {
                 Ok(g) => g,
                 Err(e) => return fail(&format!("scenario: {e}")),
@@ -152,7 +165,7 @@ impl Engine {
             Game::new(&pair[0].hero, &pair[0].cards, &pair[1].hero, &pair[1].cards, seed, first, true)
         };
         let mut reply = state(id, &game);
-        let start: Vec<Ev> = game.history[0]["events"]
+        let start: Vec<Ev> = game.history.first().map_or(&Value::Null, |h| &h["events"])
             .as_array()
             .map(|a| a.iter().filter_map(|e| e.as_object().cloned()).collect())
             .unwrap_or_default();

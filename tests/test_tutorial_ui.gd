@@ -16,13 +16,12 @@ func _restore() -> void:
 
 
 func _view(n: int) -> MatchView:
-	var r := Tutorial.start(n)
-	var v := MatchView.new()
-	v.tutorial = r.tutorial
-	root().add_child(v)
 	var m := Match.new()
 	m.bot_delay = 0.0
-	m.setup(r.game, [false, true])
+	eq(m.setup({"mission": n}, [false, true]), "", "mission %d starts" % n)
+	var v := MatchView.new()
+	v.tutorial = Tutorial.new(n, m)
+	root().add_child(v)
 	v.bind(m)
 	return v
 
@@ -150,9 +149,7 @@ func test_locked_power_hidden_and_no_emotes() -> void:
 func test_win_shows_reward_and_saves_progress() -> void:
 	_store()
 	var v := _view(1)
-	v.g.damage(v.g.hero(0), v.g.hero(1), 10)
-	v.g.resolve()
-	v.refresh()
+	v.controller.submit({"type": "concede", "player": 1})  # Hogger gives up: Jaina wins
 	var ov := v.find_child("GameOver", true, false)
 	check(ov != null, "game over overlay")
 	var cards := ov.find_children("*", "CardView", true, false)
@@ -222,22 +219,3 @@ func test_next_mission_goes_through_its_intro_screen() -> void:
 	check(m.screen is MatchView and m.screen.tutorial.number == 2, "then mission 2")
 	m.free()
 	_restore()
-
-
-func test_cho_cannot_be_attacked_while_he_has_minions() -> void:
-	var n := -1
-	for i in range(1, Missions.count() + 1):
-		if Missions.get_mission(i).boss == "TU4f_001":
-			n = i
-	var r := Tutorial.start(n)
-	var g: Game = r.game
-	var cho := g.hero(1)
-	g.place_on_board(g.new_entity("VAN_CS2_182", 0), -1)
-	g.place_on_board(g.new_entity("VAN_CS2_120", 1), -1)
-	g.current = 0
-	g.phase = "PLAY"
-	var hits := g.legal_actions().filter(func(a): return a.type == "attack")
-	check(not hits.is_empty(), "the yeti can attack")
-	check(hits.all(func(a): return a.defender != cho.id), "but not Cho while he has a minion")
-	g.players[1].board.clear()
-	check(g.legal_actions().any(func(a): return a.type == "attack" and a.defender == cho.id), "Cho alone can be attacked")

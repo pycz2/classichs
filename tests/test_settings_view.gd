@@ -101,9 +101,7 @@ func test_match_settings_relabels_static_buttons() -> void:
 	_setup()
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.bot_delay = 0.0
-	m.setup(H.scene({"hero": "HERO_08"}), [false, true])
+	var m := H.scene({"hero": "HERO_08"}, {"hero": "HERO_01"}, 0, [false, true])
 	v.bind(m)
 	(v.find_child("SettingsButton", true, false) as Button).pressed.emit()
 	var s := v.find_child("SettingsView", true, false) as SettingsView
@@ -127,9 +125,7 @@ func test_match_settings_relabels_static_buttons() -> void:
 func test_concede_button_becomes_menu_after_game_over() -> void:
 	var v := MatchView.new()
 	root().add_child(v)
-	var m := Match.new()
-	m.bot_delay = 0.0
-	m.setup(H.scene({"hero": "HERO_08"}), [false, false])
+	var m := H.scene({"hero": "HERO_08"}, {"hero": "HERO_01"}, 0, [false, false])
 	v.bind(m)
 	m.submit({"type": "concede", "player": 1})
 	v.refresh()

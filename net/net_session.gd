@@ -1,8 +1,9 @@
 class_name NetSession
 extends Node
 ## The online protocol over a Transport: hello → start → actions/emotes → bye.
-## The host is player 0 and chooses the seed; both sides then run the same Game
-## (lockstep) and check each other's state hash after every action.
+## The host is player 0 and chooses the seed; both sides then run the same game in
+## their own rules engine with the full view (lockstep) and check each other's state
+## hash after every action. Any disagreement ends the game for both (no ban).
 
 signal started(m: Match)
 signal failed(reason: String)
@@ -31,8 +32,10 @@ var _done := false
 ## Why the session ended: "left", "connection", "version", "desync" or "protocol".
 var failure_kind := ""
 
+## Shown on both sides when the two games disagree (an illegal move or another state).
+const DESYNC := "Something does not add up: the two games differ. Nobody is banned."
 const BYE_TEXT := {"left": "The opponent left the game", "version": "The opponent has a different version of the game",
-	"desync": "Out of sync with the opponent", "protocol": "The opponent's game sent something unexpected",
+	"desync": DESYNC, "protocol": "The opponent's game sent something unexpected",
 	"mode": "The opponent chose the Arena, not a normal game"}
 
 
@@ -51,7 +54,7 @@ func local_player() -> int:
 
 
 func say_hello() -> void:
-	transport.send({"t": "hello", "protocol": PROTOCOL, "version": version, "data": CardDb.data_hash(),
+	transport.send({"t": "hello", "protocol": PROTOCOL, "version": version, "data": Rules.data_hash(),
 		"name": player_name, "hero": deck.hero, "cards": deck.cards})
 
 
@@ -154,7 +157,7 @@ func _on_hello(msg: Dictionary) -> void:
 	if msg.get("protocol") != float(PROTOCOL) or msg.get("version") != version:
 		_fail(_tr("Different game versions: yours %s, the opponent's %s") % [version, str(msg.get("version", "?")).left(20)], "version")
 		return
-	if msg.get("data") != CardDb.data_hash():
+	if msg.get("data") != Rules.data_hash():
 		_fail(_tr("Your card data differs from the opponent's: update the game on both sides"), "version")
 		return
 	var d := Deck.from_dict({"name": "", "hero": msg.get("hero"), "cards": msg.get("cards"), "arena": arena})
@@ -165,9 +168,8 @@ func _on_hello(msg: Dictionary) -> void:
 	remote_name = Profile.clean(str(msg.get("name", "")))
 	if host:
 		var seed := seed_override if seed_override >= 0 else randi()
-		var g := Game.new({"hero": deck.hero, "deck": deck.cards.duplicate()}, {"hero": d.hero, "deck": d.cards.duplicate()}, seed)
 		transport.send({"t": "start", "seed": seed, "decks": [[deck.hero, deck.cards], [d.hero, d.cards]]})
-		_begin(g)
+		_begin([_engine_deck(deck.hero, deck.cards, deck.arena), _engine_deck(d.hero, d.cards, arena)], seed)
 
 
 func _on_start(msg: Dictionary) -> void:
@@ -181,13 +183,21 @@ func _on_start(msg: Dictionary) -> void:
 			or decks[0][0] != _remote.hero or decks[0][1] != _remote.cards or not msg.get("seed") is float:
 		_fail(_tr("The opponent started a different game"), "protocol")
 		return
-	var g := Game.new({"hero": _remote.hero, "deck": _remote.cards.duplicate()}, {"hero": deck.hero, "deck": deck.cards.duplicate()}, int(msg.seed))
-	_begin(g)
+	_begin([_engine_deck(_remote.hero, _remote.cards, arena), _engine_deck(deck.hero, deck.cards, deck.arena)], int(msg.seed))
 
 
-func _begin(g: Game) -> void:
+static func _engine_deck(hero: String, cards: Array, is_arena: bool) -> Dictionary:
+	return {"hero": hero, "cards": Array(cards), "arena": is_arena}
+
+
+func _begin(decks: Array, seed: int) -> void:
 	match_ = Match.new()
-	match_.setup(g, [false, false])
+	var why := match_.setup({"decks": decks, "seed": seed}, [false, false])
+	if why != "":
+		match_.free()
+		match_ = null
+		_fail(_tr("The opponent started a different game"), "protocol")
+		return
 	match_.remote = 1 - local_player()
 	match_.local_action.connect(_on_local_action)
 	started.emit(match_)
@@ -215,7 +225,8 @@ func _on_action(msg: Dictionary) -> void:
 		return
 	var why := match_.submit_remote(a, expected)
 	if why != "":
-		_fail(_tr("Out of sync: %s") % why, "desync")
+		push_warning("out of sync with the opponent: " + why)
+		_fail(_tr(DESYNC), "desync")
 
 
 func _on_closed(_reason: String) -> void:

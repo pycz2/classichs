@@ -2,7 +2,8 @@ class_name ServerLink
 extends Node
 ## The connection to a game server (docs/superpowers/specs/2026-10-15-server-design.md):
 ## one WebSocket with JSON messages {"t": …}. It lives as long as the player stays
-## on the server, across screens; a game runs over a ServerChannel on top of it.
+## on the server, across screens. A game's messages (state, act_error, emote,
+## intent, game_over) go to its ServerSession; the server keeps the game.
 
 signal opened
 signal message(msg: Dictionary)
@@ -26,7 +27,7 @@ var game_deck: Deck
 var _probing := false
 var _was_open := false
 var _closed := true  # nothing to close before open()
-var _channels := {}  # game id -> ServerChannel
+var _games := {}  # game id -> ServerSession
 
 
 ## The saved session file (an empty dictionary when there is none).
@@ -109,13 +110,12 @@ func close() -> void:
 		socket.close()
 
 
-## A channel for the game with this id (the NetSession of that game talks through it).
-func channel(game_id: String) -> ServerChannel:
-	var c := ServerChannel.new()
-	c.link = self
-	c.game = game_id
-	_channels[game_id] = c  # a freed channel is dropped on its next message (MatchView reparents it)
-	return c
+## A session for a game the server started (`match`); its messages go to it.
+func session(msg: Dictionary, d: Deck) -> ServerSession:
+	var s := ServerSession.new()
+	s.setup(self, msg, str(me.get("user", "")), d)
+	_games[s.game] = s  # a freed session is dropped on its next message
+	return s
 
 
 func _process(_d: float) -> void:
@@ -134,9 +134,9 @@ func _process(_d: float) -> void:
 		resuming = false
 		token = ""
 		var why := socket.get_close_reason()
-		for c in _channels.values():
-			if is_instance_valid(c):
-				c.closed.emit("connection")
+		for s in _games.values():
+			if is_instance_valid(s):
+				s.on_closed()
 		closed.emit(why if why != "" else TranslationServer.translate("Connection lost"))
 
 
@@ -167,26 +167,13 @@ func dispatch(msg: Dictionary) -> void:
 			has_chats = true
 		"logged_out":
 			token = ""
-	if msg.t != "game":
-		message.emit(msg)
-		return
-	var id := str(msg.get("game", ""))
-	var c = _channels.get(id)
-	if c != null and not is_instance_valid(c):
-		_channels.erase(id)
-	elif c != null and msg.get("m") is Dictionary:
-		c.received.emit(msg.m)
-
-
-## One game over the server: NetSession messages go inside {"t": "game", "game": id, "m": …}.
-class ServerChannel:
-	extends Transport
-	var link: ServerLink
-	var game := ""
-
-	func send(msg: Dictionary) -> void:
-		if link:
-			link.send({"t": "game", "game": game, "m": msg})
-
-	func close(_reason := "") -> void:
-		pass  # the link stays: only this game ends
+	if msg.t in ["state", "act_error", "emote", "intent", "game_over"]:
+		var id := str(msg.get("game", ""))
+		var s = _games.get(id)
+		if s != null and not is_instance_valid(s):
+			_games.erase(id)
+		elif s != null:
+			s.on_message(msg)
+		if msg.t != "game_over":
+			return
+	message.emit(msg)

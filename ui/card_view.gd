@@ -27,7 +27,7 @@ static func make(id: String, scale_factor := 1.0) -> CardView:
 
 
 ## Current cost/attack/health from a hand card or a minion in play.
-func show_entity(e: Entity, g: GameState) -> void:
+func show_entity(e: GameView.Ent, g: GameView) -> void:
 	var was := cost if entity_id == e.id else -1
 	entity_id = e.id
 	card_id = e.card_id

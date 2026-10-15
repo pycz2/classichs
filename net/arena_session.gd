@@ -60,7 +60,7 @@ func local_player() -> int:
 
 func say_hello() -> void:
 	transport.send({"t": "hello", "mode": "arena", "protocol": NetSession.PROTOCOL, "version": version,
-		"data": CardDb.data_hash(), "name": player_name})
+		"data": Rules.data_hash(), "name": player_name})
 
 
 ## Tells the opponent how far this side is (after every pick).
@@ -236,7 +236,7 @@ func _on_message(msg: Variant) -> void:
 				_fail(_tr("The opponent chose a normal game, not the Arena"))
 			elif msg.get("protocol") != float(NetSession.PROTOCOL) or msg.get("version") != version:
 				_fail(_tr("Different game versions: yours %s, the opponent's %s") % [version, str(msg.get("version", "?")).left(20)])
-			elif msg.get("data") != CardDb.data_hash():
+			elif msg.get("data") != Rules.data_hash():
 				_fail(_tr("Your card data differs from the opponent's: update the game on both sides"))
 			else:
 				connected = true
