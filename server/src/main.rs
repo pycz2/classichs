@@ -39,8 +39,8 @@ fn main() {
             other => die(&format!("unknown argument {other}")),
         }
     }
-    let db = db::Db::open(&db_path).unwrap_or_else(|e| die(&format!("cannot open the database {db_path}: {e}")));
     let rt = tokio::runtime::Runtime::new().expect("tokio runtime");
+    let db = rt.block_on(db::open(&db_path)).unwrap_or_else(|e| die(&format!("cannot open the database {db_path}: {e}")));
     if let Some(name) = admin {
         return rt.block_on(make_admin(db, name));
     }
@@ -74,8 +74,7 @@ async fn make_admin(db: db::Db, name: String) {
         die("the passwords differ");
     }
     let hash = auth::hash_password(&pw);
-    let n = name.clone();
-    match db.run(move |c| db::make_superuser(c, &n, &hash)).await {
+    match db::make_superuser(&db, &name, &hash).await {
         Ok(true) => println!("Superuser {name} created."),
         Ok(false) => println!("{name} is the superuser now; the password was reset."),
         Err(e) => die(&format!("database error: {e}")),

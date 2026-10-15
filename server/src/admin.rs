@@ -1,57 +1,144 @@
-//! The admin panel at /admin: server-rendered HTML, its own login (superuser and admins),
-//! an HttpOnly SameSite=Strict session cookie and a CSRF token on every form.
+//! The admin panel: a single-page app (Preact + htm, plain ES modules embedded in the
+//! binary, `server/admin/`) at /admin, its JSON API under /admin/api and a live feed at
+//! /admin/ws. Its own login (superuser and admins): a 30-day sliding session in an HttpOnly
+//! SameSite=Strict cookie, a CSRF token header on every state-changing call, Origin checks,
+//! a strict Content-Security-Policy.
 
 use crate::auth;
 use crate::db::{self, Account};
+use crate::entity::{account, arena, block, event, game as played, message, request, session};
+use crate::events::{event_json, now_ms, Event};
 use crate::ranked;
-use crate::AppRef;
-use axum::extract::{ConnectInfo, Path, Query, State};
-use axum::http::{header, HeaderMap, StatusCode};
-use axum::response::{Html, IntoResponse, Redirect, Response};
+use crate::ws::{accounts_in_order, friends_of};
+use crate::{presence, App, AppRef};
+use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
+use axum::extract::{ConnectInfo, Path, Query, Request, State};
+use axum::http::{header, HeaderMap, HeaderValue, Method, StatusCode};
+use axum::middleware::{self, Next};
+use axum::response::{IntoResponse, Redirect, Response};
 use axum::routing::{get, post};
-use axum::{Form, Router};
-use base64::engine::general_purpose::URL_SAFE_NO_PAD;
+use axum::{Extension, Json, Router};
+use base64::engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD};
 use base64::Engine;
 use rand::RngCore;
-use rusqlite::params;
+use sea_orm::sea_query::{Expr, Func};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, Condition, EntityTrait, Order, PaginatorTrait, QueryFilter, QueryOrder, QuerySelect, Select, Set,
+    Unchanged,
+};
+use serde::Deserialize;
+use serde_json::{json, Value};
+use sha2::{Digest, Sha256};
 use std::collections::HashMap;
 use std::net::SocketAddr;
-use std::time::Instant;
+use std::sync::OnceLock;
+use std::time::Duration;
+use tokio::sync::broadcast::error::RecvError;
 
 const COOKIE: &str = "chs_admin";
-const PRE_COOKIE: &str = "chs_pre";
-const SESSION_SECS: i64 = 12 * 3600;
-const PAGE: i64 = 50;
+/// 30 days, renewed (at most hourly) while the panel is used.
+const SESSION_SECS: i64 = 30 * 86400;
 
-type F = Form<HashMap<String, String>>;
-
-pub fn routes() -> Router<AppRef> {
+pub fn routes(app: AppRef) -> Router<AppRef> {
+    let guarded = Router::new()
+        .route("/admin/api/me", get(me))
+        .route("/admin/api/logout", post(logout))
+        .route("/admin/api/dashboard", get(dashboard))
+        .route("/admin/api/live", get(live))
+        .route("/admin/api/accounts", get(accounts).post(create))
+        .route("/admin/api/accounts/{id}", get(account_page))
+        .route("/admin/api/accounts/{id}/{action}", post(account_action))
+        .route("/admin/api/events", get(events))
+        .route("/admin/api/conversations", get(conversations))
+        .route("/admin/api/conversations/{a}/{b}", get(conversation))
+        .route("/admin/api/games", get(games))
+        .route("/admin/api/games/{id}", get(game_page))
+        .route("/admin/ws", get(feed))
+        .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
-        .route("/admin", get(|| async { Redirect::to("/admin/accounts") }))
-        .route("/admin/login", get(login_page).post(login))
-        .route("/admin/logout", post(logout))
-        .route("/admin/accounts", get(accounts))
-        .route("/admin/accounts/{id}", get(account))
-        .route("/admin/accounts/{id}/delete", get(delete_page))
-        .route("/admin/accounts/{id}/{action}", post(account_action))
-        .route("/admin/create", get(create_page).post(create))
-        .route("/admin/games", get(games))
+        .route("/admin", get(index))
+        .route("/admin/", get(|| async { Redirect::permanent("/admin") }))
+        .route("/admin/static/{*path}", get(asset))
+        .route("/admin/api/login", post(login))
+        .merge(guarded)
+        .layer(middleware::map_response(security_headers))
 }
 
-pub fn esc(s: &str) -> String {
-    let mut o = String::with_capacity(s.len());
-    for c in s.chars() {
-        match c {
-            '&' => o.push_str("&amp;"),
-            '<' => o.push_str("&lt;"),
-            '>' => o.push_str("&gt;"),
-            '"' => o.push_str("&quot;"),
-            '\'' => o.push_str("&#39;"),
-            _ => o.push(c),
-        }
-    }
-    o
+// --- static files ----------------------------------------------------------------
+
+macro_rules! assets {
+    ($($p:literal),* $(,)?) => { &[$(($p, include_str!(concat!("../admin/", $p)))),*] };
 }
+
+/// The panel's files, embedded at build time (edit `server/admin/`, then rebuild).
+const ASSETS: &[(&str, &str)] = assets![
+    "app.js",
+    "api.js",
+    "ui.js",
+    "login.js",
+    "dashboard.js",
+    "events.js",
+    "accounts.js",
+    "games.js",
+    "messages.js",
+    "style.css",
+    "vendor/preact.module.js",
+    "vendor/hooks.module.js",
+    "vendor/htm.module.js",
+];
+
+const INDEX: &str = include_str!("../admin/index.html");
+
+/// The CSP: scripts from /admin/static plus the page's inline scripts (the import map and
+/// the theme picker) by their hashes; nothing else from anywhere.
+fn csp() -> &'static str {
+    static CSP: OnceLock<String> = OnceLock::new();
+    CSP.get_or_init(|| {
+        let mut hashes = String::new();
+        let mut rest = INDEX;
+        while let Some(i) = rest.find("<script") {
+            let tag_end = i + rest[i..].find('>').unwrap_or(0) + 1;
+            let end = tag_end + rest[tag_end..].find("</script>").unwrap_or(0);
+            if !rest[i..tag_end].contains("src=") {
+                hashes += &format!(" 'sha256-{}'", STANDARD.encode(Sha256::digest(&rest.as_bytes()[tag_end..end])));
+            }
+            rest = &rest[end..];
+        }
+        format!(
+            "default-src 'none'; script-src 'self'{hashes}; style-src 'self'; img-src 'self' data:; connect-src 'self'; \
+             base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+        )
+    })
+}
+
+async fn security_headers(mut res: Response) -> Response {
+    let h = res.headers_mut();
+    h.insert(header::X_CONTENT_TYPE_OPTIONS, HeaderValue::from_static("nosniff"));
+    h.insert(header::REFERRER_POLICY, HeaderValue::from_static("no-referrer"));
+    h.insert(header::X_FRAME_OPTIONS, HeaderValue::from_static("DENY"));
+    h.entry(header::CACHE_CONTROL).or_insert(HeaderValue::from_static("no-store"));
+    res
+}
+
+async fn index() -> Response {
+    (
+        [(header::CONTENT_TYPE, "text/html; charset=utf-8"), (header::CONTENT_SECURITY_POLICY, csp()), (header::CACHE_CONTROL, "no-cache")],
+        INDEX,
+    )
+        .into_response()
+}
+
+async fn asset(Path(path): Path<String>) -> Response {
+    let Some((_, body)) = ASSETS.iter().find(|(p, _)| *p == path) else { return StatusCode::NOT_FOUND.into_response() };
+    let mime = match path.rsplit('.').next() {
+        Some("js") => "text/javascript; charset=utf-8",
+        Some("css") => "text/css; charset=utf-8",
+        _ => "text/plain; charset=utf-8",
+    };
+    ([(header::CONTENT_TYPE, mime), (header::CACHE_CONTROL, "no-cache")], *body).into_response()
+}
+
+// --- auth ------------------------------------------------------------------------
 
 fn random() -> String {
     let mut b = [0u8; 32];
@@ -69,187 +156,340 @@ fn cookie(headers: &HeaderMap, name: &str) -> Option<String> {
 }
 
 /// Secure cookies when a TLS proxy says the request came over https.
-fn set_cookie(headers: &HeaderMap, name: &str, value: &str, max_age: i64) -> String {
+fn set_cookie(headers: &HeaderMap, value: &str, max_age: i64) -> String {
     let secure = headers.get("x-forwarded-proto").is_some_and(|v| v.as_bytes() == b"https");
-    format!(
-        "{name}={value}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age={max_age}{}",
-        if secure { "; Secure" } else { "" }
-    )
+    format!("{COOKIE}={value}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age={max_age}{}", if secure { "; Secure" } else { "" })
 }
 
-struct Admin {
+/// A request a browser sends from another site carries its Origin: refuse it (cross-site
+/// WebSocket hijacking, CSRF). Requests without Origin (same-origin GETs, tools) pass.
+fn origin_ok(app: &App, h: &HeaderMap) -> bool {
+    let Some(origin) = h.get(header::ORIGIN).and_then(|o| o.to_str().ok()) else { return true };
+    let fwd = if app.trust_proxy { h.get("x-forwarded-host") } else { None };
+    let host = fwd.or(h.get(header::HOST)).and_then(|v| v.to_str().ok());
+    host.is_some() && origin.split_once("://").map(|(_, rest)| rest) == host
+}
+
+fn err(status: StatusCode, text: &str) -> Response {
+    (status, Json(json!({"error": text}))).into_response()
+}
+
+/// The admin making a request (put there by `guard`).
+#[derive(Clone)]
+pub struct Admin {
     me: Account,
     csrf: String,
+    token: String,
 }
 
-async fn admin(app: &AppRef, headers: &HeaderMap) -> Option<Admin> {
-    let token = cookie(headers, COOKIE)?;
-    let (me, csrf) = app.db.run(move |c| db::session(c, &token, "admin")).await.ok()??;
-    matches!(me.role.as_str(), "admin" | "super").then_some(Admin { me, csrf })
-}
-
-fn csrf_ok(a: &Admin, f: &HashMap<String, String>) -> bool {
-    f.get("csrf").is_some_and(|t| auth::ct_eq(t.as_bytes(), a.csrf.as_bytes()))
-}
-
-fn forbidden(text: &str) -> Response {
-    (StatusCode::FORBIDDEN, Html(page("Forbidden", None, &format!("<p class=err>{}</p>", esc(text))))).into_response()
-}
-
-const CSS: &str = "body{font:15px/1.45 system-ui,sans-serif;margin:0;background:#f6f5f2;color:#222}
-header{background:#2b2622;color:#f3e6c8;padding:10px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-header a{color:#f3e6c8}header form{margin-left:auto}main{padding:20px;max-width:1100px}
-table{border-collapse:collapse;width:100%;background:#fff}td,th{border:1px solid #ddd;padding:6px 8px;text-align:left}
-th{background:#eee}form.inline{display:inline}input,select,button{font:inherit;padding:4px 8px;margin:2px}
-.err{color:#a00}.ok{color:#070}.box{background:#fff;border:1px solid #ddd;padding:12px 16px;margin:12px 0}
-button.danger{background:#a00;color:#fff;border:1px solid #700}";
-
-fn page(title: &str, a: Option<&Admin>, body: &str) -> String {
-    let nav = match a {
-        Some(a) => format!(
-            "<a href=/admin/accounts>Accounts</a><a href=/admin/create>Create account</a><a href=/admin/games>Live games</a>\
-             <form method=post action=/admin/logout class=inline>{} <input type=hidden name=csrf value=\"{}\"><button>Log out</button></form>",
-            esc(&a.me.name),
-            esc(&a.csrf)
-        ),
-        None => String::new(),
-    };
-    format!(
-        "<!doctype html><html><head><meta charset=utf-8><meta name=viewport content=\"width=device-width,initial-scale=1\">\
-         <title>{} · Classic HS admin</title><style>{CSS}</style></head><body><header><b>Classic HS admin</b>{nav}</header>\
-         <main><h1>{}</h1>{body}</main></body></html>",
-        esc(title),
-        esc(title)
-    )
-}
-
-fn hidden(a: &Admin) -> String {
-    format!("<input type=hidden name=csrf value=\"{}\">", esc(&a.csrf))
-}
-
-fn rank_text(a: &Account) -> String {
-    if a.rank.legend() {
-        "Legend".into()
-    } else {
-        format!("{} ({}★)", a.rank.rank, a.rank.stars)
+impl Admin {
+    fn ev(&self, text: String) -> Event {
+        Event::new("admin", text).user(self.me.id, &self.me.name)
     }
 }
 
-async fn login_page(headers: HeaderMap) -> Response {
-    let pre = random();
-    let body = format!(
-        "<form method=post action=/admin/login class=box><input type=hidden name=csrf value=\"{pre}\">\
-         <p><label>Name <input name=user required maxlength=20 autocomplete=username></label></p>\
-         <p><label>Password <input name=password type=password required maxlength=128 autocomplete=current-password></label></p>\
-         <button>Log in</button></form>"
-    );
-    ([(header::SET_COOKIE, set_cookie(&headers, PRE_COOKIE, &pre, 3600))], Html(page("Log in", None, &body))).into_response()
+async fn admin_of(app: &App, token: &str) -> Option<(Account, session::Model)> {
+    let (me, s) = db::session(&app.db, token, "admin").await.ok()??;
+    matches!(me.role.as_str(), "admin" | "super").then_some((me, s))
 }
 
-async fn login(State(app): State<AppRef>, ConnectInfo(addr): ConnectInfo<SocketAddr>, headers: HeaderMap, Form(f): F) -> Response {
-    let pre = cookie(&headers, PRE_COOKIE).unwrap_or_default();
-    if pre.is_empty() || !f.get("csrf").is_some_and(|t| auth::ct_eq(t.as_bytes(), pre.as_bytes())) {
-        return forbidden("The form expired: open the login page again.");
+/// Every /admin/api call (but login) and /admin/ws: a live admin session, the same Origin,
+/// and on anything but GET the CSRF token in the X-CSRF-Token header. Renews the session.
+async fn guard(State(app): State<AppRef>, mut req: Request, next: Next) -> Response {
+    if !origin_ok(&app, req.headers()) {
+        return err(StatusCode::FORBIDDEN, "Cross-site request refused");
+    }
+    let Some(token) = cookie(req.headers(), COOKIE) else { return err(StatusCode::UNAUTHORIZED, "Log in") };
+    let Some((me, s)) = admin_of(&app, &token).await else { return err(StatusCode::UNAUTHORIZED, "Log in") };
+    if req.method() != Method::GET {
+        let sent = req.headers().get("x-csrf-token").map(|v| v.as_bytes()).unwrap_or_default();
+        if !auth::ct_eq(sent, s.csrf.as_bytes()) {
+            return err(StatusCode::FORBIDDEN, "Bad CSRF token: reload the page");
+        }
+    }
+    let renew = s.expires - ranked::now() < SESSION_SECS - 3600 && !req.uri().path().ends_with("/logout");
+    if renew {
+        let _ = db::renew_session(&app.db, s.hash.clone(), SESSION_SECS).await;
+    }
+    let headers = req.headers().clone();
+    req.extensions_mut().insert(Admin { me, csrf: s.csrf, token: token.clone() });
+    let mut res = next.run(req).await;
+    if renew {
+        if let Ok(v) = HeaderValue::from_str(&set_cookie(&headers, &token, SESSION_SECS)) {
+            res.headers_mut().append(header::SET_COOKIE, v);
+        }
+    }
+    res
+}
+
+#[derive(Deserialize)]
+struct LoginIn {
+    user: String,
+    password: String,
+}
+
+/// JSON only (a cross-site form cannot send it), same Origin, rate-limited.
+async fn login(State(app): State<AppRef>, ConnectInfo(addr): ConnectInfo<SocketAddr>, headers: HeaderMap, Json(f): Json<LoginIn>) -> Response {
+    if !origin_ok(&app, &headers) {
+        return err(StatusCode::FORBIDDEN, "Cross-site request refused");
     }
     let ip = crate::client_ip(&app, &headers, addr);
-    let user = f.get("user").cloned().unwrap_or_default();
-    let password = f.get("password").cloned().unwrap_or_default();
-    let fail = |text: &str| {
-        Html(page("Log in", None, &format!("<p class=err>{}</p><p><a href=/admin/login>Try again</a></p>", esc(text)))).into_response()
+    let user: String = f.user.chars().take(40).collect();
+    let failed = |why: &str| {
+        app.event(
+            Event::new("login_failed", format!("Failed admin login as {user}: {why}"))
+                .other(&user)
+                .data(json!({"ip": ip.to_string(), "reason": why, "admin": true})),
+        );
     };
     if !app.login_allowed(&format!("admin:{ip}")) || !app.login_allowed(&format!("user:{}", user.to_lowercase())) {
-        return fail("Too many attempts: wait a minute.");
+        failed("rate limited");
+        return err(StatusCode::TOO_MANY_REQUESTS, "Too many attempts: wait a minute");
     }
-    if !auth::valid_user(&user) || password.len() > 1024 {
-        return fail("Wrong name or password.");
+    if !auth::valid_user(&user) || f.password.len() > 1024 {
+        failed("bad name");
+        return err(StatusCode::UNAUTHORIZED, "Wrong name or password");
     }
-    let found = app.db.run(move |c| db::account_by_name(c, &user)).await.ok().flatten();
+    let found = db::account_by_name(&app.db, &user).await.ok().flatten();
+    let password = f.password;
     let ok = tokio::task::spawn_blocking(move || {
-        let stored = found.as_ref().map_or(auth::dummy_hash(), |(_, h)| h.as_str());
+        let stored = found.as_ref().map_or(auth::dummy_hash(), |a| a.pass.as_str());
         let ok = auth::verify_password(&password, stored);
-        found.filter(|(a, _)| ok && !a.suspended && matches!(a.role.as_str(), "admin" | "super")).map(|(a, _)| a)
+        found.filter(|a| ok && !a.suspended && matches!(a.role.as_str(), "admin" | "super"))
     })
     .await
     .ok()
     .flatten();
-    let Some(a) = ok else { return fail("Wrong name or password.") };
-    let csrf = random();
-    let Ok(token) = app.db.run(move |c| db::new_session(c, a.id, "admin", SESSION_SECS, &csrf)).await else {
-        return fail("Server error.");
+    let Some(a) = ok else {
+        failed("wrong password or not an admin");
+        return err(StatusCode::UNAUTHORIZED, "Wrong name or password");
     };
+    let csrf = random();
+    let Ok(token) = db::new_session(&app.db, a.id, "admin", SESSION_SECS, &csrf).await else {
+        return err(StatusCode::INTERNAL_SERVER_ERROR, "Server error");
+    };
+    app.event(Event::new("admin_login", format!("{} opened the admin panel", a.name)).user(a.id, &a.name).data(json!({"ip": ip.to_string()})));
     (
-        [(header::SET_COOKIE, set_cookie(&headers, COOKIE, &token, SESSION_SECS))],
-        Redirect::to("/admin/accounts"),
+        [(header::SET_COOKIE, set_cookie(&headers, &token, SESSION_SECS))],
+        Json(json!({"id": a.id, "user": a.name, "role": a.role, "csrf": csrf})),
     )
         .into_response()
 }
 
-async fn logout(State(app): State<AppRef>, headers: HeaderMap, Form(f): F) -> Response {
-    let Some(a) = admin(&app, &headers).await else { return Redirect::to("/admin/login").into_response() };
-    if !csrf_ok(&a, &f) {
-        return forbidden("Bad CSRF token.");
-    }
-    if let Some(t) = cookie(&headers, COOKIE) {
-        let _ = app.db.run(move |c| db::drop_session(c, &t)).await;
-    }
-    ([(header::SET_COOKIE, set_cookie(&headers, COOKIE, "", 0))], Redirect::to("/admin/login")).into_response()
+async fn me(Extension(a): Extension<Admin>) -> Json<Value> {
+    Json(json!({"id": a.me.id, "user": a.me.name, "role": a.me.role, "csrf": a.csrf}))
 }
 
-async fn accounts(State(app): State<AppRef>, headers: HeaderMap, Query(q): Query<HashMap<String, String>>) -> Response {
-    let Some(a) = admin(&app, &headers).await else { return Redirect::to("/admin/login").into_response() };
-    let search = q.get("q").cloned().unwrap_or_default().chars().take(40).collect::<String>();
-    let pg: i64 = q.get("page").and_then(|p| p.parse().ok()).unwrap_or(0).clamp(0, 1_000_000);
-    let s = search.clone();
-    let rows = app
-        .db
-        .run(move |c| {
-            let mut st = c.prepare(&format!(
-                "SELECT {} FROM accounts WHERE ?1 = '' OR instr(lower(name), lower(?1)) > 0 OR instr(lower(coalesce(tag, '')), lower(?1)) > 0
-                 ORDER BY id DESC LIMIT ?2 OFFSET ?3",
-                db::ACCOUNT_COLS
-            ))?;
-            let rows = st.query_map(params![s, PAGE + 1, pg * PAGE], db::account_row)?;
-            rows.collect::<rusqlite::Result<Vec<_>>>()
-        })
-        .await
-        .unwrap_or_default();
-    let more = rows.len() as i64 > PAGE;
+async fn logout(State(app): State<AppRef>, Extension(a): Extension<Admin>, headers: HeaderMap) -> Response {
+    let _ = db::drop_session(&app.db, &a.token).await;
+    app.event(Event::new("admin_logout", format!("{} left the admin panel", a.me.name)).user(a.me.id, &a.me.name));
+    ([(header::SET_COOKIE, set_cookie(&headers, "", 0))], Json(json!({"ok": true}))).into_response()
+}
+
+// --- the live feed ------------------------------------------------------------------
+
+/// /admin/ws: `hello {live}`, then `event {e}` for every logged event, `live {live}` when the
+/// online list, queues or games change, `resync {}` when this panel fell behind. The session
+/// is checked again every 30 s.
+async fn feed(State(app): State<AppRef>, Extension(a): Extension<Admin>, ws: WebSocketUpgrade) -> Response {
+    ws.on_upgrade(move |s| run_feed(app, a, s))
+}
+
+async fn run_feed(app: AppRef, a: Admin, mut socket: WebSocket) {
+    let mut rx = app.log.feed.subscribe();
+    let hello = json!({"t": "hello", "live": app.hub().live_json()}).to_string();
+    if socket.send(Message::Text(hello.into())).await.is_err() {
+        return;
+    }
+    let mut check = tokio::time::interval(Duration::from_secs(30));
+    check.tick().await;
+    loop {
+        let out: String = tokio::select! {
+            m = rx.recv() => match m {
+                Ok(t) => t.to_string(),
+                Err(RecvError::Lagged(_)) => r#"{"t":"resync"}"#.into(),
+                Err(RecvError::Closed) => break,
+            },
+            m = socket.recv() => match m {
+                Some(Ok(Message::Close(_))) | Some(Err(_)) | None => break,
+                _ => continue,
+            },
+            _ = check.tick() => {
+                if admin_of(&app, &a.token).await.is_none() {
+                    break;
+                }
+                continue;
+            }
+        };
+        if socket.send(Message::Text(out.into())).await.is_err() {
+            break;
+        }
+    }
+    let _ = socket.send(Message::Close(None)).await;
+}
+
+async fn live(State(app): State<AppRef>) -> Json<Value> {
+    Json(app.hub().live_json())
+}
+
+// --- dashboard -------------------------------------------------------------------------
+
+#[derive(Deserialize)]
+struct DashQ {
+    /// The admin's local midnight (unix ms): "today" starts there.
+    day: Option<i64>,
+}
+
+/// Kinds counted per hour on the dashboard chart.
+const CHART_KINDS: [&str; 5] = ["login", "register", "match", "msg", "game_action"];
+
+async fn dashboard(State(app): State<AppRef>, Query(q): Query<DashQ>) -> Response {
+    match dashboard_json(&app, q).await {
+        Ok(v) => Json(v).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+fn db_err(e: sea_orm::DbErr) -> Response {
+    tracing::error!("admin: {e}");
+    err(StatusCode::INTERNAL_SERVER_ERROR, "Database error")
+}
+
+async fn dashboard_json(app: &AppRef, q: DashQ) -> Result<Value, sea_orm::DbErr> {
+    let db = &app.db;
+    let now = now_ms();
+    let day = q.day.filter(|d| (now - 2 * 86_400_000..=now).contains(d)).unwrap_or(now - now % 86_400_000);
+    let today: HashMap<String, i64> = event::Entity::find()
+        .select_only()
+        .column(event::Column::Kind)
+        .column_as(event::Column::Id.count(), "n")
+        .filter(event::Column::At.gte(day))
+        .group_by(event::Column::Kind)
+        .into_tuple::<(String, i64)>()
+        .all(db)
+        .await?
+        .into_iter()
+        .collect();
+    use sea_orm::sea_query::ExprTrait;
+    let start = (now / 3_600_000 - 23) * 3_600_000;
+    let hour = Expr::col(event::Column::At).sub(start).div(3_600_000);
+    let rows: Vec<(i64, String, i64)> = event::Entity::find()
+        .select_only()
+        .column_as(hour.clone(), "h")
+        .column(event::Column::Kind)
+        .column_as(event::Column::Id.count(), "n")
+        .filter(event::Column::At.gte(start))
+        .filter(event::Column::Kind.is_in(CHART_KINDS))
+        .group_by(hour)
+        .group_by(event::Column::Kind)
+        .into_tuple()
+        .all(db)
+        .await?;
+    let mut series: HashMap<&str, Vec<i64>> = CHART_KINDS.iter().map(|k| (*k, vec![0; 24])).collect();
+    for (h, kind, n) in rows {
+        if let (Some(s), Ok(h)) = (series.get_mut(kind.as_str()), usize::try_from(h)) {
+            if h < 24 {
+                s[h] = n;
+            }
+        }
+    }
+    let accounts = account::Entity::find().count(db).await?;
+    let suspended = account::Entity::find().filter(account::Column::Suspended.eq(true)).count(db).await?;
+    let games = played::Entity::find().count(db).await?;
+    let recent: Vec<Value> = event::Entity::find()
+        .filter(event::Column::Kind.ne("game_action"))
+        .order_by_desc(event::Column::Id)
+        .limit(40)
+        .all(db)
+        .await?
+        .iter()
+        .map(event_json)
+        .collect();
+    Ok(json!({"now": now, "day": day, "today": today, "totals": {"accounts": accounts, "suspended": suspended, "games": games},
+              "chart": {"start": start, "series": series}, "recent": recent, "live": app.hub().live_json()}))
+}
+
+// --- accounts ---------------------------------------------------------------------------
+
+fn account_json(a: &Account, status: &str) -> Value {
+    json!({"id": a.id, "user": a.name, "tag": a.tag, "role": a.role, "created": a.created, "last_seen": a.last_seen,
+           "suspended": a.suspended, "rank": a.rank, "stars": a.stars, "streak": a.streak, "level": a.rank().level(),
+           "casual_mmr": a.casual_mmr.round(), "ranked_mmr": a.ranked_mmr.round(), "season": ranked::season_name(a.season),
+           "status": status})
+}
+
+#[derive(Deserialize)]
+struct ListQ {
+    q: Option<String>,
+    sort: Option<String>,
+    dir: Option<String>,
+    page: Option<u64>,
+    size: Option<u64>,
+    /// online | offline | in_game | searching | suspended
+    status: Option<String>,
+    role: Option<String>,
+}
+
+impl ListQ {
+    fn order(&self) -> Order {
+        if self.dir.as_deref() == Some("asc") { Order::Asc } else { Order::Desc }
+    }
+
+    fn page(&self) -> (u64, u64) {
+        (self.page.unwrap_or(0).min(1_000_000), self.size.unwrap_or(50).clamp(1, 500))
+    }
+}
+
+/// Paged: {list, total, page, size}.
+async fn page_of<E: EntityTrait>(sel: Select<E>, page: u64, size: u64, db: &crate::db::Db) -> Result<(Vec<E::Model>, u64), sea_orm::DbErr>
+where
+    E::Model: Sync,
+{
+    let p = sel.paginate(db, size);
+    let total = p.num_items().await?;
+    Ok((p.fetch_page(page).await?, total))
+}
+
+async fn accounts(State(app): State<AppRef>, Query(q): Query<ListQ>) -> Response {
+    let mut sel = account::Entity::find();
+    let search: String = q.q.clone().unwrap_or_default().trim().chars().take(40).collect();
+    if !search.is_empty() {
+        sel = sel.filter(Condition::any().add(account::Column::Name.contains(&search)).add(account::Column::Tag.contains(&search)));
+    }
+    if let Some(r) = q.role.as_deref().filter(|r| !r.is_empty()) {
+        sel = sel.filter(account::Column::Role.eq(r));
+    }
+    match q.status.as_deref().unwrap_or("") {
+        "suspended" => sel = sel.filter(account::Column::Suspended.eq(true)),
+        "" => {}
+        st => {
+            let hub = app.hub();
+            let ids: Vec<i64> = hub.conns.keys().copied().filter(|id| st == "online" || st == "offline" || hub.status(*id) == st).collect();
+            drop(hub);
+            sel = if st == "offline" { sel.filter(account::Column::Id.is_not_in(ids)) } else { sel.filter(account::Column::Id.is_in(ids)) };
+        }
+    }
+    let o = q.order();
+    let rev = if o == Order::Asc { Order::Desc } else { Order::Asc };
+    sel = match q.sort.as_deref().unwrap_or("id") {
+        "user" => sel.order_by(account::Column::Name, o),
+        "created" => sel.order_by(account::Column::Created, o),
+        "last_seen" => sel.order_by(account::Column::LastSeen, o),
+        // the best first when descending: Legend (rank 0), then rank 1 with the most stars…
+        "rank" => sel.order_by(account::Column::Rank, rev).order_by(account::Column::Stars, o),
+        "ranked_mmr" => sel.order_by(account::Column::RankedMmr, o),
+        "casual_mmr" => sel.order_by(account::Column::CasualMmr, o),
+        _ => sel.order_by(account::Column::Id, o),
+    }
+    .order_by_desc(account::Column::Id);
+    let (page, size) = q.page();
+    let (rows, total) = match page_of(sel, page, size, &app.db).await {
+        Ok(r) => r,
+        Err(e) => return db_err(e),
+    };
     let hub = app.hub();
-    let mut body = format!(
-        "<form method=get class=box><input name=q value=\"{}\" placeholder=\"Name or tag\"><button>Search</button></form>\
-         <table><tr><th>User</th><th>Tag</th><th>Role</th><th>Created</th><th>Last seen</th><th>Rank</th><th>Status</th></tr>",
-        esc(&search)
-    );
-    for r in rows.iter().take(PAGE as usize) {
-        body += &format!(
-            "<tr><td><a href=/admin/accounts/{}>{}</a></td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>",
-            r.id,
-            esc(&r.name),
-            esc(r.tag.as_deref().unwrap_or("")),
-            esc(&r.role),
-            ranked::date(r.created),
-            ranked::date(r.last_seen),
-            rank_text(r),
-            if r.suspended { "<b class=err>suspended</b>" } else { hub.status(r.id) }
-        );
-    }
-    drop(hub);
-    body += "</table><p>";
-    let qs = |p: i64| format!("/admin/accounts?q={}&page={p}", url_encode(&search));
-    if pg > 0 {
-        body += &format!("<a href=\"{}\">← Previous</a> ", esc(&qs(pg - 1)));
-    }
-    if more {
-        body += &format!("<a href=\"{}\">Next →</a>", esc(&qs(pg + 1)));
-    }
-    body += "</p>";
-    Html(page("Accounts", Some(&a), &body)).into_response()
-}
-
-fn url_encode(s: &str) -> String {
-    s.bytes()
-        .map(|b| if b.is_ascii_alphanumeric() || b"-_.~".contains(&b) { (b as char).to_string() } else { format!("%{b:02X}") })
-        .collect()
+    let list: Vec<Value> = rows.iter().map(|a| account_json(a, hub.status(a.id))).collect();
+    Json(json!({"list": list, "total": total, "page": page, "size": size})).into_response()
 }
 
 /// May this admin change that account? Superusers are changed from the command line only.
@@ -257,228 +497,420 @@ fn may_manage(a: &Admin, t: &Account) -> bool {
     t.role != "super" && t.id != a.me.id && (a.me.role == "super" || t.role == "user")
 }
 
-async fn load(app: &AppRef, id: i64) -> Option<Account> {
-    app.db.run(move |c| db::account_by_id(c, id)).await.ok().flatten()
+async fn account_page(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path(id): Path<i64>) -> Response {
+    match account_page_json(&app, &a, id).await {
+        Ok(Some(v)) => Json(v).into_response(),
+        Ok(None) => err(StatusCode::NOT_FOUND, "No such account"),
+        Err(e) => db_err(e),
+    }
 }
 
-async fn account(State(app): State<AppRef>, headers: HeaderMap, Path(id): Path<i64>, Query(q): Query<HashMap<String, String>>) -> Response {
-    let Some(a) = admin(&app, &headers).await else { return Redirect::to("/admin/login").into_response() };
-    let Some(t) = load(&app, id).await else { return (StatusCode::NOT_FOUND, Html(page("No such account", Some(&a), ""))).into_response() };
-    let status = app.hub().status(t.id);
-    let mut body = String::new();
-    if let Some(m) = q.get("done") {
-        body += &format!("<p class=ok>{}</p>", esc(m));
-    }
-    body += &format!(
-        "<div class=box><p>Name: <b>{}</b> · tag: {} · role: {}</p><p>Created {} · last seen {} · now {}</p>\
-         <p>Rank {} (streak {}) · season {} · ranked MMR {:.0} · casual MMR {:.0}</p><p>{}</p></div>",
-        esc(&t.name),
-        esc(t.tag.as_deref().unwrap_or("—")),
-        esc(&t.role),
-        ranked::date(t.created),
-        ranked::date(t.last_seen),
-        status,
-        rank_text(&t),
-        t.rank.streak,
-        ranked::season_name(t.season),
-        t.ranked_mmr,
-        t.casual_mmr,
-        if t.suspended { "<b class=err>Suspended</b>" } else { "Active" }
-    );
-    if may_manage(&a, &t) {
-        let h = hidden(&a);
-        let act = |action: &str, label: &str| {
-            format!("<form method=post action=/admin/accounts/{}/{action} class=inline>{h}<button>{label}</button></form>", t.id)
-        };
-        body += "<div class=box>";
-        body += &if t.suspended { act("unsuspend", "Unsuspend") } else { act("suspend", "Suspend") };
-        body += &format!(" <a href=/admin/accounts/{}/delete>Delete…</a></div>", t.id);
-        body += &format!(
-            "<form method=post action=/admin/accounts/{}/password class=box>{h}<label>New password \
-             <input name=password type=password minlength=8 maxlength=128 required autocomplete=new-password></label>\
-             <button>Reset password</button></form>",
-            t.id
-        );
-        if a.me.role == "super" {
-            let other = if t.role == "admin" { "user" } else { "admin" };
-            body += &format!(
-                "<form method=post action=/admin/accounts/{}/role class=box>{h}<input type=hidden name=role value={other}>\
-                 <button>Make {other}</button></form>",
-                t.id
-            );
-        }
-    }
-    Html(page(&format!("Account {}", t.name), Some(&a), &body)).into_response()
+async fn account_page_json(app: &AppRef, admin: &Admin, id: i64) -> Result<Option<Value>, sea_orm::DbErr> {
+    let db = &app.db;
+    let Some(t) = db::account_by_id(db, id).await? else { return Ok(None) };
+    let friends = friends_of(db, id).await?;
+    let ins: Vec<i64> = request::Entity::find().filter(request::Column::Dst.eq(id)).all(db).await?.iter().map(|r| r.src).collect();
+    let outs: Vec<i64> = request::Entity::find().filter(request::Column::Src.eq(id)).all(db).await?.iter().map(|r| r.dst).collect();
+    let blocked: Vec<i64> = block::Entity::find().filter(block::Column::Who.eq(id)).all(db).await?.iter().map(|b| b.whom).collect();
+    let games = played::Entity::find()
+        .filter(Condition::any().add(played::Column::P0.eq(id)).add(played::Column::P1.eq(id)))
+        .order_by_desc(played::Column::Ended)
+        .limit(20)
+        .all(db)
+        .await?;
+    let msgs = message::Entity::find()
+        .filter(Condition::any().add(message::Column::Lo.eq(id)).add(message::Column::Hi.eq(id)))
+        .order_by_desc(message::Column::Id)
+        .limit(30)
+        .all(db)
+        .await?;
+    let mut others: Vec<i64> = ins.iter().chain(&outs).chain(&blocked).copied().collect();
+    others.extend(games.iter().flat_map(|g| [g.p0, g.p1]).flatten());
+    others.extend(msgs.iter().flat_map(|m| [m.lo, m.hi]));
+    others.sort_unstable();
+    others.dedup();
+    let names: HashMap<i64, String> = accounts_in_order(db, &others).await?.into_iter().map(|a| (a.id, a.name)).collect();
+    let name = |i: i64| names.get(&i).cloned().unwrap_or_else(|| "(deleted)".into());
+    let person = |i: &i64| json!({"id": i, "user": name(*i)});
+    let sessions: Vec<Value> = session::Entity::find()
+        .filter(session::Column::Account.eq(id))
+        .filter(session::Column::Expires.gt(ranked::now()))
+        .order_by_desc(session::Column::LastUsed)
+        .all(db)
+        .await?
+        .iter()
+        .map(|s| json!({"kind": s.kind, "created": s.created, "last_used": s.last_used, "expires": s.expires}))
+        .collect();
+    let run = arena::Entity::find_by_id(id).one(db).await?;
+    let recent: Vec<Value> = event::Entity::find()
+        .filter(Condition::any().add(event::Column::Account.eq(id)).add(event::Column::Other.eq(&t.name)))
+        .filter(event::Column::Kind.ne("game_action"))
+        .order_by_desc(event::Column::Id)
+        .limit(40)
+        .all(db)
+        .await?
+        .iter()
+        .map(event_json)
+        .collect();
+    let legend = db::legend_number(db, &t).await?;
+    let hub = app.hub();
+    let friends: Vec<Value> = friends.iter().map(|f| json!({"id": f.id, "user": f.name, "tag": f.tag, "status": hub.status(f.id)})).collect();
+    let mut acc = account_json(&t, hub.status(t.id));
+    drop(hub);
+    acc["legend"] = json!(legend);
+    let games: Vec<Value> = games
+        .iter()
+        .map(|g| {
+            let p = if g.p0 == Some(id) { 0 } else { 1 };
+            let opp = if p == 0 { g.p1 } else { g.p0 };
+            let result = if g.winner < 0 { "draw" } else if g.winner == p { "win" } else { "loss" };
+            json!({"id": g.id, "mode": g.mode, "opponent": opp.map(|o| person(&o)), "result": result, "reason": g.reason,
+                   "started": g.started, "ended": g.ended})
+        })
+        .collect();
+    let messages: Vec<Value> = msgs
+        .iter()
+        .map(|m| {
+            let with = if m.lo == id { m.hi } else { m.lo };
+            json!({"id": m.id, "with": person(&with), "out": m.src == id, "text": m.text, "at": m.at, "seen": m.seen})
+        })
+        .collect();
+    Ok(Some(json!({
+        "account": acc,
+        "may_manage": may_manage(admin, &t),
+        "can_role": admin.me.role == "super" && may_manage(admin, &t),
+        "friends": friends,
+        "requests_in": ins.iter().map(person).collect::<Vec<_>>(),
+        "requests_out": outs.iter().map(person).collect::<Vec<_>>(),
+        "blocked": blocked.iter().map(person).collect::<Vec<_>>(),
+        "games": games,
+        "messages": messages,
+        "sessions": sessions,
+        "arena": run.map(|r| json!({"wins": r.wins, "losses": r.losses, "hero": r.hero,
+                                    "picks": serde_json::from_str::<Value>(&r.picks).ok().and_then(|p| p.as_array().map(|a| a.len()))})),
+        "events": recent,
+    })))
 }
 
-async fn delete_page(State(app): State<AppRef>, headers: HeaderMap, Path(id): Path<i64>) -> Response {
-    let Some(a) = admin(&app, &headers).await else { return Redirect::to("/admin/login").into_response() };
-    let Some(t) = load(&app, id).await else { return (StatusCode::NOT_FOUND, Html(page("No such account", Some(&a), ""))).into_response() };
-    if !may_manage(&a, &t) {
-        return forbidden("You may not change this account.");
-    }
-    let body = format!(
-        "<form method=post action=/admin/accounts/{}/delete class=box>{}<p>Delete <b>{}</b> with friends, messages and the Arena run? \
-         This cannot be undone.</p><p><label>Type the name to confirm <input name=confirm required></label></p>\
-         <button class=danger>Delete</button> <a href=/admin/accounts/{}>Cancel</a></form>",
-        t.id,
-        hidden(&a),
-        esc(&t.name),
-        t.id
-    );
-    Html(page("Delete account", Some(&a), &body)).into_response()
+#[derive(Deserialize, Default)]
+#[serde(default)]
+struct ActionIn {
+    password: String,
+    role: String,
+    confirm: String,
 }
 
 async fn account_action(
     State(app): State<AppRef>,
-    headers: HeaderMap,
+    Extension(a): Extension<Admin>,
     Path((id, action)): Path<(i64, String)>,
-    Form(f): F,
+    Json(f): Json<ActionIn>,
 ) -> Response {
-    let Some(a) = admin(&app, &headers).await else { return Redirect::to("/admin/login").into_response() };
-    if !csrf_ok(&a, &f) {
-        return forbidden("Bad CSRF token.");
-    }
-    let Some(t) = load(&app, id).await else { return (StatusCode::NOT_FOUND, Html(page("No such account", Some(&a), ""))).into_response() };
+    let db = &app.db;
+    let t = match db::account_by_id(db, id).await {
+        Ok(Some(t)) => t,
+        Ok(None) => return err(StatusCode::NOT_FOUND, "No such account"),
+        Err(e) => return db_err(e),
+    };
     if !may_manage(&a, &t) {
-        return forbidden("You may not change this account.");
+        return err(StatusCode::FORBIDDEN, "You may not change this account");
     }
-    let back = |msg: &str| Redirect::to(&format!("/admin/accounts/{id}?done={}", url_encode(msg))).into_response();
-    let kick = |app: &AppRef| app.hub().detach(id, None);
-    match action.as_str() {
+    let kick = || async {
+        app.hub().detach(id, None);
+        presence(&app, id).await;
+    };
+    let (text, r) = match action.as_str() {
         "suspend" | "unsuspend" => {
             let s = action == "suspend";
-            let r = app
-                .db
-                .run(move |c| {
-                    c.execute("UPDATE accounts SET suspended = ?1 WHERE id = ?2", params![s, id])?;
-                    if s {
-                        c.execute("DELETE FROM sessions WHERE account = ?1", [id])?;
-                    }
-                    Ok(())
-                })
-                .await;
-            if s {
-                kick(&app);
+            let r = async {
+                account::ActiveModel { id: Unchanged(id), suspended: Set(s), ..Default::default() }.update(db).await?;
+                if s {
+                    db::drop_sessions(db, id, None).await?;
+                }
+                Ok(())
             }
-            tracing::info!("admin {}: {action} {}", a.me.name, t.name);
-            if r.is_ok() { back(if s { "Suspended" } else { "Unsuspended" }) } else { forbidden("Server error.") }
+            .await;
+            if s {
+                kick().await;
+            }
+            (format!("{} {action}ed {}", a.me.name, t.name), r)
         }
         "password" => {
-            let pw = f.get("password").cloned().unwrap_or_default();
-            if !auth::valid_password(&pw) {
-                return back("A password is 8 to 128 characters: not changed");
+            if !auth::valid_password(&f.password) {
+                return err(StatusCode::BAD_REQUEST, "A password is 8 to 128 characters");
             }
+            let pw = f.password;
             let hash = tokio::task::spawn_blocking(move || auth::hash_password(&pw)).await.unwrap_or_default();
-            let _ = app.db.run(move |c| db::set_password(c, id, &hash)).await;
-            kick(&app);
-            tracing::info!("admin {}: reset the password of {}", a.me.name, t.name);
-            back("Password reset; the account was logged out")
+            let r = db::set_password(db, id, &hash).await;
+            kick().await;
+            (format!("{} reset the password of {}", a.me.name, t.name), r)
         }
-        "role" if a.me.role == "super" => {
-            let role = if f.get("role").map(String::as_str) == Some("admin") { "admin" } else { "user" };
-            let _ = app
-                .db
-                .run(move |c| {
-                    c.execute("UPDATE accounts SET role = ?1 WHERE id = ?2", params![role, id])?;
-                    c.execute("DELETE FROM sessions WHERE account = ?1 AND kind = 'admin'", [id])
-                })
-                .await;
-            tracing::info!("admin {}: {} is now {role}", a.me.name, t.name);
-            back(&format!("Role: {role}"))
+        "role" => {
+            if a.me.role != "super" {
+                return err(StatusCode::FORBIDDEN, "Only the superuser makes admins");
+            }
+            let role = if f.role == "admin" { "admin" } else { "user" };
+            let r = async {
+                account::ActiveModel { id: Unchanged(id), role: Set(role.into()), ..Default::default() }.update(db).await?;
+                db::drop_sessions(db, id, Some("admin")).await
+            }
+            .await;
+            (format!("{} made {} {role}", a.me.name, t.name), r)
         }
         "delete" => {
-            if f.get("confirm") != Some(&t.name) {
-                return Redirect::to(&format!("/admin/accounts/{id}/delete")).into_response();
+            if f.confirm != t.name {
+                return err(StatusCode::BAD_REQUEST, "Type the account's name to confirm");
             }
-            let _ = app.db.run(move |c| c.execute("DELETE FROM accounts WHERE id = ?1", [id])).await;
-            kick(&app);
-            tracing::info!("admin {}: deleted {}", a.me.name, t.name);
-            Redirect::to("/admin/accounts").into_response()
+            let r = account::Entity::delete_by_id(id).exec(db).await.map(|_| ());
+            kick().await;
+            (format!("{} deleted the account {}", a.me.name, t.name), r)
         }
-        _ => (StatusCode::NOT_FOUND, "no such action").into_response(),
-    }
-}
-
-async fn create_page(State(app): State<AppRef>, headers: HeaderMap) -> Response {
-    let Some(a) = admin(&app, &headers).await else { return Redirect::to("/admin/login").into_response() };
-    Html(page("Create account", Some(&a), &create_form(&a, ""))).into_response()
-}
-
-fn create_form(a: &Admin, msg: &str) -> String {
-    let role = if a.me.role == "super" {
-        "<p><label>Role <select name=role><option>user</option><option>admin</option></select></label></p>"
-    } else {
-        ""
+        _ => return err(StatusCode::NOT_FOUND, "No such action"),
     };
-    format!(
-        "{msg}<form method=post action=/admin/create class=box>{}\
-         <p><label>Name <input name=user required minlength=3 maxlength=20 pattern=\"[A-Za-z0-9_]+\"></label></p>\
-         <p><label>Password <input name=password type=password required minlength=8 maxlength=128 autocomplete=new-password></label></p>\
-         {role}<button>Create</button></form>",
-        hidden(a)
-    )
+    if let Err(e) = r {
+        return db_err(e);
+    }
+    tracing::info!("admin: {text}");
+    app.event(a.ev(text.clone()).other(&t.name).data(json!({"action": action, "target": id})));
+    Json(json!({"ok": true, "text": text})).into_response()
 }
 
-async fn create(State(app): State<AppRef>, headers: HeaderMap, Form(f): F) -> Response {
-    let Some(a) = admin(&app, &headers).await else { return Redirect::to("/admin/login").into_response() };
-    if !csrf_ok(&a, &f) {
-        return forbidden("Bad CSRF token.");
+#[derive(Deserialize)]
+struct CreateIn {
+    user: String,
+    password: String,
+    #[serde(default)]
+    role: String,
+}
+
+async fn create(State(app): State<AppRef>, Extension(a): Extension<Admin>, Json(f): Json<CreateIn>) -> Response {
+    if !auth::valid_user(&f.user) {
+        return err(StatusCode::BAD_REQUEST, "A name is 3 to 20 letters, digits or _");
     }
-    let user = f.get("user").cloned().unwrap_or_default();
-    let pw = f.get("password").cloned().unwrap_or_default();
-    let err = |m: &str| Html(page("Create account", Some(&a), &create_form(&a, &format!("<p class=err>{}</p>", esc(m))))).into_response();
-    if !auth::valid_user(&user) {
-        return err("A name is 3 to 20 letters, digits or _.");
+    if !auth::valid_password(&f.password) {
+        return err(StatusCode::BAD_REQUEST, "A password is 8 to 128 characters");
     }
-    if !auth::valid_password(&pw) {
-        return err("A password is 8 to 128 characters.");
-    }
-    let role = if a.me.role == "super" && f.get("role").map(String::as_str) == Some("admin") { "admin" } else { "user" };
+    let role = if a.me.role == "super" && f.role == "admin" { "admin" } else { "user" };
+    let pw = f.password;
     let hash = tokio::task::spawn_blocking(move || auth::hash_password(&pw)).await.unwrap_or_default();
-    let u = user.clone();
-    match app.db.run(move |c| db::create_account(c, &u, &hash, role)).await {
+    match db::create_account(&app.db, &f.user, &hash, role).await {
         Ok(Some(id)) => {
-            tracing::info!("admin {}: created {user} ({role})", a.me.name);
-            Redirect::to(&format!("/admin/accounts/{id}")).into_response()
+            app.event(a.ev(format!("{} created the account {} ({role})", a.me.name, f.user)).other(&f.user).data(json!({"action": "create", "target": id})));
+            Json(json!({"id": id})).into_response()
         }
-        Ok(None) => err("This name is taken."),
-        Err(_) => err("Server error."),
+        Ok(None) => err(StatusCode::CONFLICT, "This name is taken"),
+        Err(e) => db_err(e),
     }
 }
 
-async fn games(State(app): State<AppRef>, headers: HeaderMap) -> Response {
-    let Some(a) = admin(&app, &headers).await else { return Redirect::to("/admin/login").into_response() };
-    let hub = app.hub();
-    let mut body = String::from("<h2>Games</h2><table><tr><th>Game</th><th>Mode</th><th>Players (host first)</th><th>Turn</th><th>Current</th><th>Started</th></tr>");
-    let mut games: Vec<_> = hub.games.iter().collect();
-    games.sort_by_key(|(_, g)| g.started);
-    for (id, g) in games {
-        body += &format!(
-            "<tr><td>{}</td><td>{}</td><td><a href=/admin/accounts/{}>{}</a> vs <a href=/admin/accounts/{}>{}</a></td><td>{}</td><td>{}</td><td>{}</td></tr>",
-            esc(id),
-            g.mode.as_str(),
-            g.ids[0],
-            esc(&g.names[0]),
-            g.ids[1],
-            esc(&g.names[1]),
-            g.turn,
-            esc(g.names.get(g.current as usize).map_or("", |s| s.as_str())),
-            ranked::date(g.started)
-        );
+// --- the event log -----------------------------------------------------------------------
+
+#[derive(Deserialize)]
+struct EventsQ {
+    /// Kinds, comma-separated.
+    kind: Option<String>,
+    /// Either side (user or other), ignoring case.
+    user: Option<String>,
+    game: Option<String>,
+    /// Unix ms, inclusive.
+    from: Option<i64>,
+    to: Option<i64>,
+    /// In the text or the data.
+    q: Option<String>,
+    sort: Option<String>,
+    dir: Option<String>,
+    page: Option<u64>,
+    size: Option<u64>,
+}
+
+async fn events(State(app): State<AppRef>, Query(q): Query<EventsQ>) -> Response {
+    let mut sel = event::Entity::find();
+    let kinds: Vec<&str> = q.kind.as_deref().unwrap_or("").split(',').map(str::trim).filter(|k| !k.is_empty()).collect();
+    if !kinds.is_empty() {
+        sel = sel.filter(event::Column::Kind.is_in(kinds));
     }
-    body += "</table><h2>Queues</h2><table><tr><th>Player</th><th>Mode</th><th>Waited</th><th>Window</th></tr>";
-    let now = Instant::now();
-    for (id, s) in &hub.queue {
-        let w = now.duration_since(s.since).as_secs();
-        body += &format!(
-            "<tr><td><a href=/admin/accounts/{id}>{}</a></td><td>{}</td><td>{w} s</td><td>{}</td></tr>",
-            esc(&s.name),
-            s.mode.as_str(),
-            ranked::shown_window(s.mode, &s.key, w)
-        );
+    if let Some(u) = q.user.as_deref().map(str::trim).filter(|u| !u.is_empty()) {
+        sel = sel.filter(Condition::any().add(event::Column::User.eq(u)).add(event::Column::Other.eq(u)));
     }
-    body += &format!("</table><p>{} players online.</p>", hub.conns.len());
-    drop(hub);
-    Html(page("Live games", Some(&a), &body)).into_response()
+    if let Some(g) = q.game.as_deref().map(str::trim).filter(|g| !g.is_empty()) {
+        sel = sel.filter(event::Column::Game.eq(g));
+    }
+    if let Some(f) = q.from {
+        sel = sel.filter(event::Column::At.gte(f));
+    }
+    if let Some(t) = q.to {
+        sel = sel.filter(event::Column::At.lte(t));
+    }
+    let text: String = q.q.as_deref().unwrap_or("").trim().chars().take(100).collect();
+    if !text.is_empty() {
+        sel = sel.filter(Condition::any().add(event::Column::Text.contains(&text)).add(event::Column::Data.contains(&text)));
+    }
+    let o = if q.dir.as_deref() == Some("asc") { Order::Asc } else { Order::Desc };
+    sel = match q.sort.as_deref().unwrap_or("") {
+        "kind" => sel.order_by(event::Column::Kind, o.clone()),
+        "user" => sel.order_by(event::Column::User, o.clone()),
+        _ => sel,
+    }
+    .order_by(event::Column::Id, o);
+    let (page, size) = (q.page.unwrap_or(0).min(1_000_000), q.size.unwrap_or(100).clamp(1, 1000));
+    // ponytail: COUNT(*) per page; a "more" flag instead if the log reaches tens of millions.
+    match page_of(sel, page, size, &app.db).await {
+        Ok((rows, total)) => Json(json!({"list": rows.iter().map(event_json).collect::<Vec<_>>(), "total": total, "page": page, "size": size})).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+// --- messages ------------------------------------------------------------------------------
+
+#[derive(Deserialize)]
+struct ConvQ {
+    user: Option<String>,
+    page: Option<u64>,
+}
+
+/// Conversations, the latest first: {list: [{a, b, count, unread, last}], more}.
+async fn conversations(State(app): State<AppRef>, Query(q): Query<ConvQ>) -> Response {
+    let page = Ord::min(q.page.unwrap_or(0), 100_000);
+    use sea_orm::sea_query::ExprTrait;
+    let db = &app.db;
+    let r = async {
+        let mut sel = message::Entity::find()
+            .select_only()
+            .column(message::Column::Lo)
+            .column(message::Column::Hi)
+            .column_as(message::Column::Id.max(), "last")
+            .column_as(message::Column::Id.count(), "n")
+            .column_as(Expr::expr(Func::sum(Expr::col(message::Column::Seen).eq(false))), "unread")
+            .group_by(message::Column::Lo)
+            .group_by(message::Column::Hi)
+            .order_by_desc(message::Column::Id.max());
+        if let Some(u) = q.user.as_deref().map(str::trim).filter(|u| !u.is_empty()) {
+            let id = db::id_by_name(db, u).await?.unwrap_or(-1);
+            sel = sel.filter(Condition::any().add(message::Column::Lo.eq(id)).add(message::Column::Hi.eq(id)));
+        }
+        let rows: Vec<(i64, i64, i64, i64, i64)> = sel.offset(page * 50).limit(51).into_tuple().all(db).await?;
+        let more = rows.len() > 50;
+        let rows = &rows[..rows.len().min(50)];
+        let lasts: HashMap<i64, message::Model> =
+            message::Entity::find().filter(message::Column::Id.is_in(rows.iter().map(|r| r.2))).all(db).await?.into_iter().map(|m| (m.id, m)).collect();
+        let mut ids: Vec<i64> = rows.iter().flat_map(|r| [r.0, r.1]).collect();
+        ids.sort_unstable();
+        ids.dedup();
+        let names: HashMap<i64, String> = accounts_in_order(db, &ids).await?.into_iter().map(|a| (a.id, a.name)).collect();
+        let person = |i: i64| json!({"id": i, "user": names.get(&i)});
+        let list: Vec<Value> = rows
+            .iter()
+            .map(|&(lo, hi, last, n, unread)| {
+                let l = lasts.get(&last);
+                json!({"a": person(lo), "b": person(hi), "count": n, "unread": unread,
+                       "last": l.map(|m| json!({"from": m.src, "text": m.text, "at": m.at}))})
+            })
+            .collect();
+        Ok::<_, sea_orm::DbErr>(json!({"list": list, "more": more, "page": page}))
+    };
+    match r.await {
+        Ok(v) => Json(v).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+async fn conversation(State(app): State<AppRef>, Path((a, b)): Path<(i64, i64)>) -> Response {
+    let db = &app.db;
+    let r = async {
+        let list: Vec<Value> = message::Entity::find()
+            .filter(message::Column::Lo.eq(a.min(b)))
+            .filter(message::Column::Hi.eq(a.max(b)))
+            .order_by_asc(message::Column::Id)
+            .all(db)
+            .await?
+            .iter()
+            .map(|m| json!({"id": m.id, "from": m.src, "text": m.text, "at": m.at, "seen": m.seen}))
+            .collect();
+        let who = accounts_in_order(db, &[a.min(b), a.max(b)]).await?;
+        let people: Vec<Value> = who.iter().map(|x| json!({"id": x.id, "user": x.name, "tag": x.tag})).collect();
+        Ok::<_, sea_orm::DbErr>(json!({"people": people, "list": list}))
+    };
+    match r.await {
+        Ok(v) => Json(v).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+// --- games ---------------------------------------------------------------------------------
+
+#[derive(Deserialize)]
+struct GamesQ {
+    user: Option<String>,
+    mode: Option<String>,
+    reason: Option<String>,
+    page: Option<u64>,
+    size: Option<u64>,
+}
+
+async fn games(State(app): State<AppRef>, Query(q): Query<GamesQ>) -> Response {
+    let db = &app.db;
+    let r = async {
+        let mut sel = played::Entity::find().order_by_desc(played::Column::Ended);
+        if let Some(u) = q.user.as_deref().map(str::trim).filter(|u| !u.is_empty()) {
+            let id = db::id_by_name(db, u).await?.unwrap_or(-1);
+            sel = sel.filter(Condition::any().add(played::Column::P0.eq(id)).add(played::Column::P1.eq(id)));
+        }
+        if let Some(m) = q.mode.as_deref().filter(|m| !m.is_empty()) {
+            sel = sel.filter(played::Column::Mode.eq(m));
+        }
+        if let Some(m) = q.reason.as_deref().filter(|m| !m.is_empty()) {
+            sel = sel.filter(played::Column::Reason.eq(m));
+        }
+        let (page, size) = (q.page.unwrap_or(0).min(1_000_000), q.size.unwrap_or(50).clamp(1, 500));
+        let (rows, total) = page_of(sel, page, size, db).await?;
+        let mut ids: Vec<i64> = rows.iter().flat_map(|g| [g.p0, g.p1]).flatten().collect();
+        ids.sort_unstable();
+        ids.dedup();
+        let names: HashMap<i64, String> = accounts_in_order(db, &ids).await?.into_iter().map(|a| (a.id, a.name)).collect();
+        let person = |i: Option<i64>| json!({"id": i, "user": i.and_then(|i| names.get(&i))});
+        let list: Vec<Value> = rows
+            .iter()
+            .map(|g| json!({"id": g.id, "mode": g.mode, "players": [person(g.p0), person(g.p1)], "started": g.started, "ended": g.ended,
+                            "winner": g.winner, "reason": g.reason}))
+            .collect();
+        Ok::<_, sea_orm::DbErr>(json!({"list": list, "total": total, "page": page, "size": size}))
+    };
+    match r.await {
+        Ok(v) => Json(v).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+/// One game: its summary (live or finished) and its whole timeline from the event log.
+async fn game_page(State(app): State<AppRef>, Path(id): Path<String>) -> Response {
+    let db = &app.db;
+    let r = async {
+        let timeline: Vec<event::Model> =
+            event::Entity::find().filter(event::Column::Game.eq(&id)).order_by_asc(event::Column::Id).limit(20_000).all(db).await?;
+        let live = app.hub().live_json()["games"].as_array().and_then(|g| g.iter().find(|g| g["id"] == id.as_str()).cloned());
+        let done = played::Entity::find_by_id(&id).one(db).await?;
+        if live.is_none() && done.is_none() && timeline.is_empty() {
+            return Ok(None);
+        }
+        let matched = timeline.iter().find(|e| e.kind == "match").and_then(|e| e.data.as_deref()).and_then(|d| serde_json::from_str::<Value>(d).ok());
+        let summary = match (&live, &done) {
+            (Some(g), _) => {
+                let mut g = g.clone();
+                g["live"] = json!(true);
+                g
+            }
+            (None, Some(g)) => {
+                let names = matched.as_ref().map(|m| m["players"].clone()).unwrap_or(json!([null, null]));
+                json!({"id": g.id, "mode": g.mode, "live": false, "started": g.started, "ended": g.ended, "winner": g.winner, "reason": g.reason,
+                       "players": [{"id": g.p0, "user": names[0]}, {"id": g.p1, "user": names[1]}]})
+            }
+            (None, None) => json!({"id": id, "live": false, "players": matched.as_ref().map(|m| m["players"].clone())}),
+        };
+        Ok::<_, sea_orm::DbErr>(Some(json!({"game": summary, "match": matched, "events": timeline.iter().map(event_json).collect::<Vec<_>>()})))
+    };
+    match r.await {
+        Ok(Some(v)) => Json(v).into_response(),
+        Ok(None) => err(StatusCode::NOT_FOUND, "No such game"),
+        Err(e) => db_err(e),
+    }
 }

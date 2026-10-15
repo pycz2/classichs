@@ -6,7 +6,7 @@ with a SQLite database. Design: `docs/superpowers/specs/2026-10-15-server-design
 
 ## Build
 
-Stable Rust (1.85+):
+Stable Rust (1.94+, for SeaORM 2):
 
 ```sh
 cd server
@@ -61,11 +61,73 @@ the login rate limits are per address). `RUST_LOG=debug` for more logging.
 
 asks for the password twice (no echo) and creates the superuser `root`, or makes
 an existing account the superuser and resets its password. Then open
-<http://localhost:7377/admin> and log in. The panel lists and searches accounts
-(user, tag, created, last seen, rank, status), shows an account (suspend,
-unsuspend, reset the password, delete with confirmation), creates accounts and
-shows live games and queues. Admins manage players; only the superuser makes or
-removes admins; the superuser itself is changed from the command line only.
+<http://localhost:7377/admin> and log in; the browser stays logged in (30 days,
+renewed while used). Admins manage players; only the superuser makes or removes
+admins; the superuser itself is changed from the command line only.
+
+The panel is a single-page app (Preact + htm as plain ES modules, no build step;
+`admin/*.js`, `admin/style.css`, embedded into the binary: edit, then rebuild). It
+updates live over `/admin/ws`:
+
+- **Dashboard**: online now, searching per mode, live games, today's games,
+  registrations, logins, messages and errors, a 24-hour activity chart, game actions
+  per hour, the queues, who is online, the latest events.
+- **Event log**: everything the server does (below), filtered by kind, user, game,
+  time and text, sorted, paged, with a live tail; a row opens its details.
+- **Games**: live and finished games; a game's page is its timeline (every action,
+  grouped by turn, live while it runs) and what ended it.
+- **Accounts**: search, filters (online, in game, searching, offline, suspended,
+  role), sorting; an account's page (profile, rank, friends, requests, blocks,
+  sessions, recent games, messages, activity) with suspend, unsuspend, reset the
+  password, make admin/player (superuser), delete (type the name); create accounts.
+- **Messages**: every conversation between players (with unread counts), live.
+
+Light and dark themes (the system's by default; the switch is remembered).
+
+Vendored, unchanged: `admin/vendor/preact.module.js` and `hooks.module.js` from
+preact@10.29.8, `htm.module.js` from htm@3.1.1 (unpkg.com `dist/` files).
+
+#### The admin API
+
+JSON under `/admin/api` (all but `login` need the session cookie; anything but GET
+also needs the `X-CSRF-Token` header with the token from `login`/`me`):
+
+| Call | What |
+|---|---|
+| `POST login {user, password}` | sets the cookie → `{id, user, role, csrf}` |
+| `GET me` · `POST logout` | the admin and the CSRF token · end the session |
+| `GET dashboard?day=<local midnight, ms>` | `{today: {kind: n}, totals, chart: {start, series}, recent, live}` |
+| `GET live` | `{online: [{id, user, status}], queue: [{id, user, mode, waited, window}], games: [{id, mode, players, started, turn, current, actions}]}` |
+| `GET accounts?q&status&role&sort&dir&page&size` | `{list, total, page, size}`; sort: id, user, created, last_seen, rank, ranked_mmr, casual_mmr |
+| `POST accounts {user, password, role}` | creates → `{id}` |
+| `GET accounts/{id}` | the account page's data |
+| `POST accounts/{id}/{suspend\|unsuspend\|password\|role\|delete}` | `{password}`, `{role: "admin"\|"user"}`, `{confirm: <name>}` |
+| `GET events?kind=a,b&user&game&from&to&q&sort&dir&page&size` | `{list, total, page, size}`; from/to in ms; sort: time (default), kind, user |
+| `GET conversations?user&page` · `GET conversations/{a}/{b}` | conversations, the latest first · one conversation |
+| `GET games?user&mode&reason&page&size` · `GET games/{id}` | finished games · one game with its timeline |
+
+`/admin/ws` (the cookie, same origin) sends `hello {live}`, then `event {e}` for every
+event, `live {live}` when the online list, queues or games change and `resync {}`
+when the panel fell behind (reload). An event is `{id, at (ms), kind, account, user,
+other, game, text, data}`.
+
+#### The event log
+
+Kept 90 days in the `events` table. Kinds: `register`, `login` (`data.via`:
+password, token), `login_failed` (`data.reason`, `data.admin`), `logout`,
+`disconnect`, `admin_login`, `admin_logout`, `tag`, `friend_request`,
+`friend_accept`, `friend_decline`, `friend_remove`, `block`, `unblock`, `msg` (the
+text), `invite`, `invite_accept`, `invite_decline`, `queue`, `unqueue`, `arena`,
+`match`, `game_start`, `game_action` (every accepted action with the referee's turn
+and hash), `game_left`, `game_back`, `game_end` (reason, results, and the message
+that broke the rules), `admin` (every admin action), `error` (database and referee
+failures).
+
+### The database
+
+SQLite through SeaORM: the tables are the entities in `src/entity/`, the schema is
+`src/migration.rs`, applied at every start (databases from 0.26 are taken over as
+they are).
 
 ### Connect the game
 
@@ -79,12 +141,16 @@ In the game: Settings → Server: `ws://localhost:7377`.
   the admin cookie then gets the `Secure` flag.
 - Passwords: argon2id (default parameters), never logged or stored in clear.
 - Sessions: 32 random bytes (base64url) given to the client; only their SHA-256 is
-  stored; 30 days (admin sessions 12 hours); deleted on logout, suspension,
-  password reset and account deletion.
-- Admin panel: its own login (superuser and admins), HttpOnly + SameSite=Strict
-  cookie, a CSRF token on every POST form (the login form too), every value
-  HTML-escaped, works without JavaScript.
-- SQL is parameterized only. Suspended accounts cannot log in or play.
+  stored; 30 days, renewed on use (game tokens on every `resume`, admin cookies at
+  most hourly); deleted on logout, suspension, password reset and account deletion.
+- Admin panel: its own login (superuser and admins, 10 tries a minute per address
+  and per name), HttpOnly + SameSite=Strict cookie (`Secure` behind https), the CSRF
+  token as a header on every state-changing call, JSON-only login, requests and the
+  live feed from another Origin refused (behind a proxy with `--trust-proxy`,
+  `X-Forwarded-Host` counts as the host; else the proxy must pass `Host`), a strict
+  Content-Security-Policy (scripts from the server only, no inline code but the
+  hashed import map), the session checked again every 30 s on the live feed.
+- Queries go through SeaORM (parameterized). Suspended accounts cannot log in or play.
 - Known limit: clients still hold the whole game state (lockstep), so a modified
   client can read the opponent's hand. The referee stops illegal moves, not peeking.
 
@@ -108,14 +174,27 @@ JSON text frames, each an object with `"t"`; errors are `{"t":"error","code","te
 Full details: the design doc.
 
 - Auth: `register {user, password}`, `login {user, password}`, `resume {token}` →
-  `auth {ok, token, me}`; `logout {}` → `logged_out`. `me {}` → `me {me}`;
+  `auth {ok, token, me}`; `logout {}` → `logged_out`. Keep the token: `resume` is
+  the normal way back in (after a restart too); it is valid 30 days and every
+  `resume` renews it (the same token comes back). `me {}` → `me {me}`;
   `me = {user, tag, rank: {rank, stars, legend, streak}, arena, season}` (rank 0 =
   Legend, `legend` = its number).
 - Social: `set_tag {tag}` → `me`; `friends {}` → `friends {list, requests_in,
   requests_out, blocked}` (also pushed after changes); `friend_add {tag}`,
   `friend_accept|friend_decline|friend_remove|block|unblock {user}`;
-  `msg {to, text}` → `msg_sent`, the friend gets `msg {from, text, at}`;
-  `history {with}` → `history {with, list}`.
+  `msg {to, text}` → `msg_sent {to, at}`, the friend gets `msg {from, text, at}`;
+  `history {with}` → `history {with, list: [{from, text, at}]}` (oldest first).
+  Friend `status` (in `friends` and below): `"online" | "in_game" | "searching" |
+  "offline"`.
+- Presence: `presence {user, online, status}` is pushed to all of a player's
+  friends when the status changes: log in, log out or disconnect, a game starts or
+  ends, searching starts or stops (queue, unqueue, Arena queue, a match). New
+  friends get each other's presence at once.
+- Chats: `chats {}` → `chats {list: [{with, tag, online, status, last: {from, text,
+  at} | null, unread}]}`: every friend, the latest conversations first (friends
+  without messages after them, by name); `unread` = their messages not yet marked
+  read. `read {with}` → `read_ok {with}` marks that friend's messages read (kept in
+  the database, so the counts survive restarts).
 - Friendly games: `invite {to, deck}` (friend gets `invite {from}`),
   `invite_accept {from, deck}`, `invite_decline {from}` (inviter gets `invite_declined {by}`).
 - Ladder: `queue {mode: "casual"|"ranked", deck}` → `queued {mode}`, then

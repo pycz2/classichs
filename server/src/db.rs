@@ -1,237 +1,198 @@
-//! SQLite (WAL) behind one mutex; every call runs on the blocking pool.
+//! SQLite through SeaORM: opening (with the migrations) and the account and session helpers.
 
-use crate::ranked::{self, Rank};
-use rusqlite::{params, Connection, OptionalExtension, Row};
-use std::sync::{Arc, Mutex};
+use crate::entity::{account, session};
+use crate::migration::Migrator;
+use crate::ranked;
+use sea_orm::sqlx::sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, ConnectionTrait, DatabaseConnection, EntityTrait, PaginatorTrait, QueryFilter, Set, Unchanged,
+    SqlxSqliteConnector, TryInsertResult,
+};
+use sea_orm_migration::MigratorTrait;
+use std::str::FromStr;
 
-pub use rusqlite::Error as DbError;
+pub use sea_orm::DbErr as DbError;
 pub type DbResult<T> = Result<T, DbError>;
+pub type Db = DatabaseConnection;
+pub type Account = account::Model;
 
-#[derive(Clone)]
-pub struct Db(Arc<Mutex<Connection>>);
-
-const SCHEMA: &str = "
-PRAGMA journal_mode = WAL;
-PRAGMA foreign_keys = ON;
-PRAGMA busy_timeout = 5000;
-CREATE TABLE IF NOT EXISTS accounts (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL UNIQUE COLLATE NOCASE,
-  pass TEXT NOT NULL,
-  role TEXT NOT NULL DEFAULT 'user',          -- user | admin | super
-  tag TEXT,
-  tag_key TEXT UNIQUE,                        -- lower(tag): unique case-insensitively
-  created INTEGER NOT NULL,
-  last_seen INTEGER NOT NULL,
-  suspended INTEGER NOT NULL DEFAULT 0,
-  casual_mmr REAL NOT NULL DEFAULT 1500,
-  ranked_mmr REAL NOT NULL DEFAULT 1500,
-  rank INTEGER NOT NULL DEFAULT 25,           -- 0 = Legend
-  stars INTEGER NOT NULL DEFAULT 0,
-  streak INTEGER NOT NULL DEFAULT 0,
-  season INTEGER NOT NULL DEFAULT 0
-);
-CREATE TABLE IF NOT EXISTS sessions (
-  hash BLOB PRIMARY KEY,
-  account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  kind TEXT NOT NULL,                         -- game | admin
-  expires INTEGER NOT NULL,
-  csrf TEXT NOT NULL DEFAULT ''
-);
-CREATE TABLE IF NOT EXISTS friends (
-  a INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  b INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  PRIMARY KEY (a, b)
-);
-CREATE TABLE IF NOT EXISTS requests (
-  src INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  dst INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  at INTEGER NOT NULL,
-  PRIMARY KEY (src, dst)
-);
-CREATE TABLE IF NOT EXISTS blocks (
-  who INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  whom INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  PRIMARY KEY (who, whom)
-);
-CREATE TABLE IF NOT EXISTS messages (
-  id INTEGER PRIMARY KEY,
-  lo INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  hi INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  src INTEGER NOT NULL,
-  text TEXT NOT NULL,
-  at INTEGER NOT NULL
-);
-CREATE INDEX IF NOT EXISTS messages_pair ON messages(lo, hi, id);
-CREATE TABLE IF NOT EXISTS arena (
-  account INTEGER PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
-  seed INTEGER NOT NULL,
-  hero INTEGER NOT NULL DEFAULT -1,
-  picks TEXT NOT NULL DEFAULT '[]',
-  draft TEXT NOT NULL DEFAULT '{}',           -- the referee's last draft reply
-  wins INTEGER NOT NULL DEFAULT 0,
-  losses INTEGER NOT NULL DEFAULT 0
-);
-CREATE TABLE IF NOT EXISTS games (
-  id TEXT PRIMARY KEY,
-  mode TEXT NOT NULL,
-  p0 INTEGER, p1 INTEGER,
-  started INTEGER NOT NULL,
-  ended INTEGER NOT NULL,
-  winner INTEGER NOT NULL,
-  reason TEXT NOT NULL
-);
-";
-
-impl Db {
-    pub fn open(path: &str) -> DbResult<Db> {
-        let c = Connection::open(path)?;
-        c.execute_batch(SCHEMA)?;
-        Ok(Db(Arc::new(Mutex::new(c))))
-    }
-
-    /// Runs `f` with the connection on the blocking pool.
-    // ponytail: one connection behind a mutex; a reader pool if the panel or chat ever gets busy.
-    pub async fn run<T, F>(&self, f: F) -> DbResult<T>
-    where
-        T: Send + 'static,
-        F: FnOnce(&mut Connection) -> DbResult<T> + Send + 'static,
-    {
-        let db = self.0.clone();
-        tokio::task::spawn_blocking(move || f(&mut db.lock().unwrap_or_else(|e| e.into_inner())))
-            .await
-            .expect("db task panicked")
-    }
+/// Opens (or creates) the database and brings its schema up to date. ":memory:" for tests.
+// ponytail: one connection, as before the ORM (SQLite writes one at a time anyway);
+// a separate reader pool if the admin panel's searches ever slow the game down.
+pub async fn open(path: &str) -> DbResult<Db> {
+    let opts = if path == ":memory:" {
+        SqliteConnectOptions::from_str("sqlite::memory:").map_err(|e| DbError::Custom(e.to_string()))?
+    } else {
+        SqliteConnectOptions::new().filename(path).create_if_missing(true).journal_mode(SqliteJournalMode::Wal)
+    };
+    let pool = SqlitePoolOptions::new()
+        .max_connections(1)
+        .idle_timeout(None)
+        .max_lifetime(None) // an in-memory database lives as long as its connection
+        .connect_with(opts.foreign_keys(true))
+        .await
+        .map_err(|e| DbError::Custom(e.to_string()))?;
+    let db = SqlxSqliteConnector::from_sqlx_sqlite_pool(pool);
+    Migrator::up(&db, None).await?;
+    Ok(db)
 }
 
-#[derive(Clone, Debug)]
-pub struct Account {
-    pub id: i64,
-    pub name: String,
-    pub role: String,
-    pub tag: Option<String>,
-    pub created: i64,
-    pub last_seen: i64,
-    pub suspended: bool,
-    pub casual_mmr: f64,
-    pub ranked_mmr: f64,
-    pub rank: Rank,
-    pub season: i64,
+pub async fn account_by_id(c: &impl ConnectionTrait, id: i64) -> DbResult<Option<Account>> {
+    account::Entity::find_by_id(id).one(c).await
 }
 
-pub const ACCOUNT_COLS: &str =
-    "id, name, role, tag, created, last_seen, suspended, casual_mmr, ranked_mmr, rank, stars, streak, season";
-
-pub fn account_row(r: &Row) -> rusqlite::Result<Account> {
-    Ok(Account {
-        id: r.get(0)?,
-        name: r.get(1)?,
-        role: r.get(2)?,
-        tag: r.get(3)?,
-        created: r.get(4)?,
-        last_seen: r.get(5)?,
-        suspended: r.get::<_, i64>(6)? != 0,
-        casual_mmr: r.get(7)?,
-        ranked_mmr: r.get(8)?,
-        rank: Rank { rank: r.get(9)?, stars: r.get(10)?, streak: r.get(11)? },
-        season: r.get(12)?,
-    })
+/// By name, ignoring case.
+pub async fn account_by_name(c: &impl ConnectionTrait, name: &str) -> DbResult<Option<Account>> {
+    account::Entity::find().filter(account::Column::Name.eq(name)).one(c).await
 }
 
-pub fn account_by_id(c: &Connection, id: i64) -> DbResult<Option<Account>> {
-    c.query_row(&format!("SELECT {ACCOUNT_COLS} FROM accounts WHERE id = ?1"), [id], account_row).optional()
+pub async fn id_by_name(c: &impl ConnectionTrait, name: &str) -> DbResult<Option<i64>> {
+    Ok(account_by_name(c, name).await?.map(|a| a.id))
 }
 
-pub fn account_by_name(c: &Connection, name: &str) -> DbResult<Option<(Account, String)>> {
-    c.query_row(
-        &format!("SELECT {ACCOUNT_COLS}, pass FROM accounts WHERE name = ?1"),
-        [name],
-        |r| Ok((account_row(r)?, r.get(13)?)),
-    )
-    .optional()
+pub async fn name_of(c: &impl ConnectionTrait, id: i64) -> DbResult<String> {
+    Ok(account_by_id(c, id).await?.map(|a| a.name).unwrap_or_default())
 }
 
 /// Creates an account (the password is already hashed). None = the name is taken.
-pub fn create_account(c: &Connection, name: &str, pass_hash: &str, role: &str) -> DbResult<Option<i64>> {
+pub async fn create_account(c: &impl ConnectionTrait, name: &str, pass_hash: &str, role: &str) -> DbResult<Option<i64>> {
     let now = ranked::now();
-    let n = c.execute(
-        "INSERT INTO accounts (name, pass, role, created, last_seen, season) VALUES (?1, ?2, ?3, ?4, ?4, ?5)
-         ON CONFLICT(name) DO NOTHING",
-        params![name, pass_hash, role, now, ranked::season_of(now)],
-    )?;
-    Ok((n == 1).then(|| c.last_insert_rowid()))
+    let a = account::ActiveModel {
+        name: Set(name.into()),
+        pass: Set(pass_hash.into()),
+        role: Set(role.into()),
+        created: Set(now),
+        last_seen: Set(now),
+        season: Set(ranked::season_of(now)),
+        ..Default::default()
+    };
+    match account::Entity::insert(a).on_conflict_do_nothing_on([account::Column::Name]).exec(c).await? {
+        TryInsertResult::Inserted(r) => Ok(Some(r.last_insert_id)),
+        _ => Ok(None),
+    }
+}
+
+pub async fn touch(c: &impl ConnectionTrait, id: i64) -> DbResult<()> {
+    account::Entity::update_many().col_expr(account::Column::LastSeen, ranked::now().into()).filter(account::Column::Id.eq(id)).exec(c).await?;
+    Ok(())
+}
+
+/// Saves the rank, MMRs and season of `a`.
+pub async fn save_standing(c: &impl ConnectionTrait, a: &Account) -> DbResult<()> {
+    account::ActiveModel {
+        id: Unchanged(a.id),
+        casual_mmr: Set(a.casual_mmr),
+        ranked_mmr: Set(a.ranked_mmr),
+        rank: Set(a.rank),
+        stars: Set(a.stars),
+        streak: Set(a.streak),
+        season: Set(a.season),
+        ..Default::default()
+    }
+    .update(c)
+    .await?;
+    Ok(())
 }
 
 /// Brings an account's rank into the current season (the monthly reset) and saves it.
-pub fn refresh_season(c: &Connection, a: &mut Account) -> DbResult<()> {
+pub async fn refresh_season(c: &impl ConnectionTrait, a: &mut Account) -> DbResult<()> {
     let s = ranked::season_of(ranked::now());
     if a.season != s {
-        a.rank = ranked::advance(a.rank, a.season, s);
-        a.season = s;
-        c.execute(
-            "UPDATE accounts SET rank = ?1, stars = ?2, streak = ?3, season = ?4 WHERE id = ?5",
-            params![a.rank.rank, a.rank.stars, a.rank.streak, s, a.id],
-        )?;
+        let r = ranked::advance(a.rank(), a.season, s);
+        (a.rank, a.stars, a.streak, a.season) = (r.rank, r.stars, r.streak, s);
+        save_standing(c, a).await?;
     }
     Ok(())
 }
 
 /// The Legend number: 1 + Legends of this season with a higher ranked MMR.
-pub fn legend_number(c: &Connection, a: &Account) -> DbResult<Option<i64>> {
-    if !a.rank.legend() {
+pub async fn legend_number(c: &impl ConnectionTrait, a: &Account) -> DbResult<Option<i64>> {
+    if !a.rank().legend() {
         return Ok(None);
     }
-    let n: i64 = c.query_row(
-        "SELECT COUNT(*) FROM accounts WHERE rank = 0 AND season = ?1 AND ranked_mmr > ?2",
-        params![a.season, a.ranked_mmr],
-        |r| r.get(0),
-    )?;
-    Ok(Some(n + 1))
+    let n = account::Entity::find()
+        .filter(account::Column::Rank.eq(ranked::LEGEND))
+        .filter(account::Column::Season.eq(a.season))
+        .filter(account::Column::RankedMmr.gt(a.ranked_mmr))
+        .count(c)
+        .await?;
+    Ok(Some(n as i64 + 1))
 }
 
-pub fn new_session(c: &Connection, account: i64, kind: &str, secs: i64, csrf: &str) -> DbResult<String> {
+pub async fn new_session(c: &impl ConnectionTrait, account: i64, kind: &str, secs: i64, csrf: &str) -> DbResult<String> {
     let (token, hash) = crate::auth::new_token();
-    c.execute("DELETE FROM sessions WHERE expires < ?1", [ranked::now()])?;
-    c.execute(
-        "INSERT INTO sessions (hash, account, kind, expires, csrf) VALUES (?1, ?2, ?3, ?4, ?5)",
-        params![hash, account, kind, ranked::now() + secs, csrf],
-    )?;
+    let now = ranked::now();
+    session::Entity::delete_many().filter(session::Column::Expires.lt(now)).exec(c).await?;
+    let s = session::ActiveModel {
+        hash: Set(hash),
+        account: Set(account),
+        kind: Set(kind.into()),
+        expires: Set(now + secs),
+        csrf: Set(csrf.into()),
+        created: Set(now),
+        last_used: Set(now),
+    };
+    session::Entity::insert(s).exec_without_returning(c).await?;
     Ok(token)
 }
 
-/// The live, unsuspended account of a session token: (account, csrf).
-pub fn session(c: &Connection, token: &str, kind: &str) -> DbResult<Option<(Account, String)>> {
-    let hash = crate::auth::token_hash(token);
-    let cols = ACCOUNT_COLS.split(", ").map(|x| format!("a.{x}")).collect::<Vec<_>>().join(", ");
-    c.query_row(
-        &format!(
-            "SELECT {cols}, s.csrf FROM sessions s JOIN accounts a ON a.id = s.account
-             WHERE s.hash = ?1 AND s.kind = ?2 AND s.expires > ?3 AND a.suspended = 0"
-        ),
-        params![hash, kind, ranked::now()],
-        |r| Ok((account_row(r)?, r.get(13)?)),
-    )
-    .optional()
+/// The live, unsuspended account of a session token, with the session.
+pub async fn session(c: &impl ConnectionTrait, token: &str, kind: &str) -> DbResult<Option<(Account, session::Model)>> {
+    let found = session::Entity::find_by_id(crate::auth::token_hash(token))
+        .filter(session::Column::Kind.eq(kind))
+        .filter(session::Column::Expires.gt(ranked::now()))
+        .find_also_related(account::Entity)
+        .one(c)
+        .await?;
+    Ok(match found {
+        Some((s, Some(a))) if !a.suspended => Some((a, s)),
+        _ => None,
+    })
 }
 
-pub fn drop_session(c: &Connection, token: &str) -> DbResult<()> {
-    c.execute("DELETE FROM sessions WHERE hash = ?1", [crate::auth::token_hash(token)])?;
+/// Sliding sessions: `secs` more from now.
+pub async fn renew_session(c: &impl ConnectionTrait, hash: Vec<u8>, secs: i64) -> DbResult<()> {
+    let now = ranked::now();
+    session::Entity::update_many()
+        .col_expr(session::Column::Expires, (now + secs).into())
+        .col_expr(session::Column::LastUsed, now.into())
+        .filter(session::Column::Hash.eq(hash))
+        .exec(c)
+        .await?;
     Ok(())
 }
 
-pub fn set_password(c: &Connection, id: i64, pass_hash: &str) -> DbResult<()> {
-    c.execute("UPDATE accounts SET pass = ?1 WHERE id = ?2", params![pass_hash, id])?;
-    c.execute("DELETE FROM sessions WHERE account = ?1", [id])?;
+pub async fn drop_session(c: &impl ConnectionTrait, token: &str) -> DbResult<()> {
+    session::Entity::delete_by_id(crate::auth::token_hash(token)).exec(c).await?;
     Ok(())
 }
 
-/// `classichs-server admin <name>`: creates or resets the superuser.
-pub fn make_superuser(c: &Connection, name: &str, pass_hash: &str) -> DbResult<bool> {
-    if create_account(c, name, pass_hash, "super")?.is_some() {
+/// Every session of an account (of one kind, or all).
+pub async fn drop_sessions(c: &impl ConnectionTrait, account: i64, kind: Option<&str>) -> DbResult<()> {
+    let mut q = session::Entity::delete_many().filter(session::Column::Account.eq(account));
+    if let Some(k) = kind {
+        q = q.filter(session::Column::Kind.eq(k));
+    }
+    q.exec(c).await?;
+    Ok(())
+}
+
+/// A new password logs the account out everywhere.
+pub async fn set_password(c: &impl ConnectionTrait, id: i64, pass_hash: &str) -> DbResult<()> {
+    account::ActiveModel { id: Unchanged(id), pass: Set(pass_hash.into()), ..Default::default() }.update(c).await?;
+    drop_sessions(c, id, None).await
+}
+
+/// `classichs-server admin <name>`: creates or resets the superuser. true = created.
+pub async fn make_superuser(c: &impl ConnectionTrait, name: &str, pass_hash: &str) -> DbResult<bool> {
+    if create_account(c, name, pass_hash, "super").await?.is_some() {
         return Ok(true);
     }
-    let id: i64 = c.query_row("SELECT id FROM accounts WHERE name = ?1", [name], |r| r.get(0))?;
-    c.execute("UPDATE accounts SET role = 'super', suspended = 0 WHERE id = ?1", [id])?;
-    set_password(c, id, pass_hash)?;
+    let a = account_by_name(c, name).await?.ok_or(DbError::RecordNotFound(name.into()))?;
+    account::ActiveModel { id: Unchanged(a.id), role: Set("super".into()), suspended: Set(false), ..Default::default() }
+        
+        .update(c)
+        .await?;
+    set_password(c, a.id, pass_hash).await?;
     Ok(false)
 }

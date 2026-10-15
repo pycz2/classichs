@@ -1,24 +1,31 @@
 //! One WebSocket client: strict JSON messages {"t": …}, auth, social, queues, Arena, game relay.
 
 use crate::auth::{self, RateLimit};
-use crate::db::{self, DbError};
+use crate::db::{self, Account, DbError, DbResult};
+use crate::entity::{account, arena, block, friend, message, request};
+use crate::events::Event;
 use crate::game::{self, rank_json};
 use crate::ranked::{self, Key, Mode};
-use crate::{AppRef, Out, Seeker};
+use crate::{presence, AppRef, Out, Seeker};
 use axum::extract::ws::{Message, WebSocket};
 use futures_util::{SinkExt, StreamExt};
 use rand::Rng;
-use rusqlite::{params, Connection, OptionalExtension};
+use sea_orm::sea_query::Expr;
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, Condition, ConnectionTrait, DatabaseTransaction, EntityTrait, PaginatorTrait, QueryFilter,
+    QueryOrder, QuerySelect, Set, TransactionTrait, Unchanged,
+};
 use serde::Deserialize;
 use serde_json::{json, Value};
+use std::collections::HashMap;
 use std::net::IpAddr;
 use std::time::{Duration, Instant};
 use tokio::sync::mpsc::{self, UnboundedSender};
 
 /// Malformed messages before the connection is closed.
 const MAX_ERRORS: u32 = 20;
-const MAX_FRIENDS: i64 = 200;
-const HISTORY: i64 = 200;
+const MAX_FRIENDS: u64 = 200;
+const HISTORY: u64 = 200;
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -59,6 +66,8 @@ enum In {
     Unblock { user: String },
     Msg { to: String, text: String },
     History { with: String },
+    Chats {},
+    Read { with: String },
     Invite { to: String, deck: DeckIn },
     InviteAccept { from: String, deck: DeckIn },
     InviteDecline { from: String },
@@ -76,18 +85,18 @@ enum In {
     },
 }
 
-/// An error reply: code and text.
-pub struct E(&'static str, String);
+/// An error reply: code and text (and, for server errors, what went wrong, for the event log).
+pub struct E(&'static str, String, Option<String>);
 
 impl From<DbError> for E {
-    fn from(e: DbError) -> E {
-        tracing::error!("db: {e}");
-        E("server", "Server error".into())
+    fn from(err: DbError) -> E {
+        tracing::error!("db: {err}");
+        E("server", "Server error".into(), Some(format!("database: {err}")))
     }
 }
 
 fn e(code: &'static str, text: &str) -> E {
-    E(code, text.into())
+    E(code, text.into(), None)
 }
 
 type R = Result<(), E>;
@@ -142,7 +151,10 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
         match msg {
             Some(Ok(Message::Text(t))) => {
                 if !general.allow("", Instant::now()) {
-                    s.reply(Err(e("rate_limited", "Too many messages")));
+                    s.reply("", Err(e("rate_limited", "Too many messages")));
+                    if let Some((id, name)) = &s.me {
+                        s.app.event(Event::new("error", format!("{name} sent too many messages: disconnected")).user(*id, name));
+                    }
                     break;
                 }
                 s.handle(t.as_str()).await;
@@ -152,15 +164,20 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
             }
             Some(Ok(Message::Binary(_))) => {
                 s.errors += 1;
-                s.reply(Err(e("bad_request", "Text frames only")));
+                s.reply("", Err(e("bad_request", "Text frames only")));
             }
             Some(Ok(Message::Close(_))) | Some(Err(_)) | None => break,
             Some(Ok(_)) => {}
         }
     }
-    if let Some((id, _)) = s.me.take() {
+    if let Some((id, name)) = s.me.take() {
+        let ours = s.app.hub().conns.get(&id).is_some_and(|c| c.id == s.conn);
         s.app.hub().detach(id, Some(s.conn));
-        let _ = s.app.db.run(move |c| c.execute("UPDATE accounts SET last_seen = ?1 WHERE id = ?2", params![ranked::now(), id])).await;
+        let _ = db::touch(&s.app.db, id).await;
+        if ours {
+            s.app.event(Event::new("disconnect", format!("{name} went offline")).user(id, &name));
+        }
+        presence(&s.app, id).await;
     }
     let _ = s.tx.send(Out::Close);
     drop(s);
@@ -169,67 +186,143 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
     }
 }
 
-fn id_by_name(c: &Connection, name: &str) -> rusqlite::Result<Option<i64>> {
-    c.query_row("SELECT id FROM accounts WHERE name = ?1", [name], |r| r.get(0)).optional()
+fn not_found(what: &str) -> DbError {
+    DbError::RecordNotFound(what.into())
 }
 
-fn are_friends(c: &Connection, a: i64, b: i64) -> rusqlite::Result<bool> {
-    c.query_row("SELECT 1 FROM friends WHERE a = ?1 AND b = ?2", [a, b], |_| Ok(())).optional().map(|x| x.is_some())
+async fn are_friends(c: &impl ConnectionTrait, a: i64, b: i64) -> DbResult<bool> {
+    Ok(friend::Entity::find_by_id((a, b)).one(c).await?.is_some())
 }
 
-fn arena_json(c: &Connection, me: i64) -> rusqlite::Result<Value> {
-    let row: Option<(String, i64, i64)> = c
-        .query_row("SELECT draft, wins, losses FROM arena WHERE account = ?1", [me], |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)))
-        .optional()?;
-    Ok(match row {
+async fn blocked(c: &impl ConnectionTrait, who: i64, whom: i64) -> DbResult<bool> {
+    Ok(block::Entity::find_by_id((who, whom)).one(c).await?.is_some())
+}
+
+async fn friend_count(c: &impl ConnectionTrait, a: i64) -> DbResult<u64> {
+    friend::Entity::find().filter(friend::Column::A.eq(a)).count(c).await
+}
+
+pub async fn friend_ids(c: &impl ConnectionTrait, me: i64) -> DbResult<Vec<i64>> {
+    friend::Entity::find().select_only().column(friend::Column::B).filter(friend::Column::A.eq(me)).into_tuple().all(c).await
+}
+
+/// Accounts by id, in the order given.
+pub async fn accounts_in_order(c: &impl ConnectionTrait, ids: &[i64]) -> DbResult<Vec<Account>> {
+    let found = account::Entity::find().filter(account::Column::Id.is_in(ids.iter().copied())).all(c).await?;
+    let mut by_id: HashMap<i64, Account> = found.into_iter().map(|a| (a.id, a)).collect();
+    Ok(ids.iter().filter_map(|i| by_id.remove(i)).collect())
+}
+
+async fn make_friends(c: &impl ConnectionTrait, a: i64, b: i64) -> DbResult<()> {
+    let pair = |a, b| friend::ActiveModel { a: Set(a), b: Set(b) };
+    friend::Entity::insert_many([pair(a, b), pair(b, a)]).on_conflict_do_nothing().exec(c).await?;
+    Ok(())
+}
+
+async fn unfriend(c: &impl ConnectionTrait, a: i64, b: i64) -> DbResult<()> {
+    let pair = |a: i64, b: i64| Condition::all().add(friend::Column::A.eq(a)).add(friend::Column::B.eq(b));
+    friend::Entity::delete_many().filter(Condition::any().add(pair(a, b)).add(pair(b, a))).exec(c).await?;
+    Ok(())
+}
+
+/// The friend list, sorted by name.
+pub async fn friends_of(c: &impl ConnectionTrait, me: i64) -> DbResult<Vec<Account>> {
+    let mut v = accounts_in_order(c, &friend_ids(c, me).await?).await?;
+    v.sort_by_key(|a| a.name.to_lowercase());
+    Ok(v)
+}
+
+async fn arena_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Value> {
+    Ok(match arena::Entity::find_by_id(me).one(c).await? {
         None => Value::Null,
-        Some((d, w, l)) => {
-            let mut v: Value = serde_json::from_str(&d).unwrap_or_else(|_| json!({}));
+        Some(a) => {
+            let mut v: Value = serde_json::from_str(&a.draft).unwrap_or_else(|_| json!({}));
             if let Some(o) = v.as_object_mut() {
                 o.remove("ok");
             }
-            v["wins"] = json!(w);
-            v["losses"] = json!(l);
+            v["wins"] = json!(a.wins);
+            v["losses"] = json!(a.losses);
             v
         }
     })
 }
 
-fn me_json(c: &Connection, me: i64) -> rusqlite::Result<Value> {
-    let mut a = db::account_by_id(c, me)?.ok_or(rusqlite::Error::QueryReturnedNoRows)?;
-    db::refresh_season(c, &mut a)?;
-    Ok(json!({"user": a.name, "tag": a.tag, "rank": rank_json(c, &a)?, "arena": arena_json(c, me)?,
+async fn me_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Value> {
+    let mut a = db::account_by_id(c, me).await?.ok_or_else(|| not_found("account"))?;
+    db::refresh_season(c, &mut a).await?;
+    Ok(json!({"user": a.name, "tag": a.tag, "rank": rank_json(c, &a).await?, "arena": arena_json(c, me).await?,
               "season": ranked::season_name(a.season)}))
-}
-
-type People = Vec<(i64, String, Option<String>)>;
-
-fn people(c: &Connection, sql: &str, me: i64) -> rusqlite::Result<People> {
-    let mut st = c.prepare(sql)?;
-    let rows = st.query_map([me], |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)))?;
-    rows.collect()
 }
 
 /// The friends message for an account (online status from the hub).
 async fn friends_json(app: &AppRef, me: i64) -> Result<Value, E> {
-    let lists = app
-        .db
-        .run(move |c| {
-            Ok([
-                people(c, "SELECT a.id, a.name, a.tag FROM friends f JOIN accounts a ON a.id = f.b WHERE f.a = ?1 ORDER BY a.name", me)?,
-                people(c, "SELECT a.id, a.name, a.tag FROM requests r JOIN accounts a ON a.id = r.src WHERE r.dst = ?1 ORDER BY r.at", me)?,
-                people(c, "SELECT a.id, a.name, a.tag FROM requests r JOIN accounts a ON a.id = r.dst WHERE r.src = ?1 ORDER BY r.at", me)?,
-                people(c, "SELECT a.id, a.name, a.tag FROM blocks b JOIN accounts a ON a.id = b.whom WHERE b.who = ?1 ORDER BY a.name", me)?,
-            ])
-        })
-        .await?;
+    let c = &app.db;
+    let friends = friends_of(c, me).await?;
+    let reqs = |col: request::Column, val: i64| request::Entity::find().filter(col.eq(val)).order_by_asc(request::Column::At).all(c);
+    let ins: Vec<i64> = reqs(request::Column::Dst, me).await?.iter().map(|r| r.src).collect();
+    let outs: Vec<i64> = reqs(request::Column::Src, me).await?.iter().map(|r| r.dst).collect();
+    let blocks: Vec<i64> = block::Entity::find().filter(block::Column::Who.eq(me)).all(c).await?.iter().map(|b| b.whom).collect();
+    let (ins, outs) = (accounts_in_order(c, &ins).await?, accounts_in_order(c, &outs).await?);
+    let mut blocks = accounts_in_order(c, &blocks).await?;
+    blocks.sort_by_key(|a| a.name.to_lowercase());
     let hub = app.hub();
-    let plain = |l: &People| l.iter().map(|(_, n, t)| json!({"user": n, "tag": t})).collect::<Vec<_>>();
-    let list: Vec<Value> = lists[0]
+    let plain = |l: &[Account]| l.iter().map(|a| json!({"user": a.name, "tag": a.tag})).collect::<Vec<_>>();
+    let list: Vec<Value> = friends
         .iter()
-        .map(|(id, n, t)| json!({"user": n, "tag": t, "online": hub.conns.contains_key(id), "status": hub.status(*id)}))
+        .map(|a| json!({"user": a.name, "tag": a.tag, "online": hub.conns.contains_key(&a.id), "status": hub.status(a.id)}))
         .collect();
-    Ok(json!({"t": "friends", "list": list, "requests_in": plain(&lists[1]), "requests_out": plain(&lists[2]), "blocked": plain(&lists[3])}))
+    Ok(json!({"t": "friends", "list": list, "requests_in": plain(&ins), "requests_out": plain(&outs), "blocked": plain(&blocks)}))
+}
+
+/// All friends with the latest message of each conversation and the unread count, the
+/// latest conversations first.
+async fn chats_json(app: &AppRef, me: i64) -> Result<Value, E> {
+    let c = &app.db;
+    let friends = friends_of(c, me).await?;
+    let mine = Condition::any().add(message::Column::Lo.eq(me)).add(message::Column::Hi.eq(me));
+    let unread: HashMap<i64, i64> = message::Entity::find()
+        .select_only()
+        .column(message::Column::Src)
+        .column_as(message::Column::Id.count(), "n")
+        .filter(mine.clone())
+        .filter(message::Column::Src.ne(me))
+        .filter(message::Column::Seen.eq(false))
+        .group_by(message::Column::Src)
+        .into_tuple::<(i64, i64)>()
+        .all(c)
+        .await?
+        .into_iter()
+        .collect();
+    let last_ids: Vec<i64> = message::Entity::find()
+        .select_only()
+        .column_as(message::Column::Id.max(), "id")
+        .filter(mine)
+        .group_by(message::Column::Lo)
+        .group_by(message::Column::Hi)
+        .into_tuple()
+        .all(c)
+        .await?;
+    let last: HashMap<i64, message::Model> = message::Entity::find()
+        .filter(message::Column::Id.is_in(last_ids))
+        .all(c)
+        .await?
+        .into_iter()
+        .map(|m| (if m.lo == me { m.hi } else { m.lo }, m))
+        .collect();
+    let my_name = db::name_of(c, me).await?;
+    let hub = app.hub();
+    let mut list: Vec<(i64, Value)> = friends
+        .iter()
+        .map(|a| {
+            let l = last.get(&a.id);
+            let lj = l.map(|m| json!({"from": if m.src == me { &my_name } else { &a.name }, "text": m.text, "at": m.at}));
+            (l.map_or(-1, |m| m.id), json!({"with": a.name, "tag": a.tag, "online": hub.conns.contains_key(&a.id),
+                   "status": hub.status(a.id), "last": lj, "unread": unread.get(&a.id).copied().unwrap_or(0)}))
+        })
+        .collect();
+    drop(hub);
+    list.sort_by_key(|(id, _)| std::cmp::Reverse(*id)); // stable: friends without messages stay by name
+    Ok(json!({"t": "chats", "list": list.into_iter().map(|(_, v)| v).collect::<Vec<_>>()}))
 }
 
 async fn push_friends(app: &AppRef, who: i64) {
@@ -255,6 +348,101 @@ fn index(i: f64, n: usize) -> Result<usize, E> {
     }
 }
 
+/// friend_add inside a transaction: (the other account, true = they had asked me: now friends).
+async fn friend_add(c: &DatabaseTransaction, me: i64, key: &str) -> Result<(Account, bool), E> {
+    let other = account::Entity::find().filter(account::Column::TagKey.eq(key)).one(c).await?;
+    let Some(o) = other.filter(|o| o.id != me) else { return Err(e("not_found", "No player with this tag")) };
+    if blocked(c, o.id, me).await? {
+        return Err(e("not_found", "No player with this tag"));
+    }
+    if blocked(c, me, o.id).await? {
+        return Err(e("blocked", "You blocked this player"));
+    }
+    if are_friends(c, me, o.id).await? {
+        return Err(e("already", "Already friends"));
+    }
+    if friend_count(c, me).await? >= MAX_FRIENDS {
+        return Err(e("friends_full", "You have 200 friends"));
+    }
+    let theirs = request::Entity::delete_by_id((o.id, me)).exec(c).await?.rows_affected == 1;
+    if theirs {
+        if friend_count(c, o.id).await? >= MAX_FRIENDS {
+            return Err(e("friends_full", "The player has 200 friends"));
+        }
+        make_friends(c, me, o.id).await?;
+    } else {
+        let r = request::ActiveModel { src: Set(me), dst: Set(o.id), at: Set(ranked::now()) };
+        request::Entity::insert(r).on_conflict_do_nothing().exec(c).await?;
+    }
+    Ok((o, theirs))
+}
+
+#[derive(Clone, Copy)]
+enum PairOp {
+    Accept,
+    Decline,
+    Remove,
+    Block,
+    Unblock,
+}
+
+impl PairOp {
+    fn kind(self) -> &'static str {
+        match self {
+            PairOp::Accept => "friend_accept",
+            PairOp::Decline => "friend_decline",
+            PairOp::Remove => "friend_remove",
+            PairOp::Block => "block",
+            PairOp::Unblock => "unblock",
+        }
+    }
+
+    fn verb(self) -> &'static str {
+        match self {
+            PairOp::Accept => "accepted the friend request of",
+            PairOp::Decline => "declined the friend request of",
+            PairOp::Remove => "removed the friend",
+            PairOp::Block => "blocked",
+            PairOp::Unblock => "unblocked",
+        }
+    }
+
+    /// Applies the change between me and o inside a transaction.
+    async fn apply(self, c: &DatabaseTransaction, me: i64, o: i64) -> Result<(), E> {
+        let req = |src: i64, dst: i64| request::Entity::delete_by_id((src, dst)).exec(c);
+        match self {
+            PairOp::Accept => {
+                if request::Entity::find_by_id((o, me)).one(c).await?.is_none() {
+                    return Err(e("not_found", "No such request"));
+                }
+                if friend_count(c, me).await? >= MAX_FRIENDS || friend_count(c, o).await? >= MAX_FRIENDS {
+                    return Err(e("friends_full", "200 friends at most"));
+                }
+                req(o, me).await?;
+                req(me, o).await?;
+                make_friends(c, me, o).await?;
+            }
+            PairOp::Decline => {
+                req(o, me).await?;
+            }
+            PairOp::Remove => {
+                unfriend(c, me, o).await?;
+                req(me, o).await?;
+            }
+            PairOp::Block => {
+                block::Entity::insert(block::ActiveModel { who: Set(me), whom: Set(o) }).on_conflict_do_nothing().exec(c).await?;
+                unfriend(c, me, o).await?;
+                req(me, o).await?;
+                req(o, me).await?;
+            }
+            PairOp::Unblock => {
+                block::Entity::delete_by_id((me, o)).exec(c).await?;
+            }
+        }
+        Ok(())
+    }
+}
+
 impl Session {
     fn send(&self, v: Value) {
         let _ = self.tx.send(Out::Text(v.to_string()));
@@ -265,28 +453,49 @@ impl Session {
         Ok(())
     }
 
-    fn reply(&self, r: R) {
-        if let Err(E(code, text)) = r {
+    fn name(&self) -> String {
+        self.me.as_ref().map(|m| m.1.clone()).unwrap_or_default()
+    }
+
+    /// An event by this player.
+    fn ev(&self, kind: &'static str, text: impl Into<String>) -> Event {
+        let e = Event::new(kind, text);
+        match &self.me {
+            Some((id, name)) => e.user(*id, name),
+            None => e,
+        }
+    }
+
+    fn reply(&self, t: &str, r: R) {
+        if let Err(E(code, text, detail)) = r {
+            if matches!(code, "server" | "referee") {
+                let what = detail.unwrap_or_else(|| text.clone());
+                self.app.event(self.ev("error", format!("{t}: {what}")).data(json!({"code": code, "message": t})));
+            }
             self.send(json!({"t": "error", "code": code, "text": text}));
         }
     }
 
     async fn handle(&mut self, text: &str) {
-        let msg: In = match serde_json::from_str(text) {
+        let parsed = serde_json::from_str::<Value>(text).and_then(|v| {
+            let t = v["t"].as_str().unwrap_or("").chars().take(32).collect::<String>();
+            Ok((t, serde_json::from_value::<In>(v)?))
+        });
+        let (t, msg) = match parsed {
             Ok(m) => m,
             Err(err) => {
                 self.errors += 1;
                 let mut t = err.to_string();
                 t.truncate(200);
-                return self.reply(Err(E("bad_request", t)));
+                return self.reply("", Err(E("bad_request", t, None)));
             }
         };
         let r = self.dispatch(msg).await;
-        self.reply(r);
+        self.reply(&t, r);
     }
 
     async fn dispatch(&mut self, msg: In) -> R {
-        let Some((me, _name)) = self.me.clone() else {
+        let Some((me, my_name)) = self.me.clone() else {
             return match msg {
                 In::Register { user, password } => self.register(user, password).await,
                 In::Login { user, password } => self.login(user, password).await,
@@ -296,14 +505,17 @@ impl Session {
             };
         };
         let app = self.app.clone();
+        let db = &app.db;
         match msg {
             In::Register { .. } | In::Login { .. } | In::Resume { .. } => Err(e("bad_request", "Already logged in")),
             In::Ping {} => self.ok(json!({"t": "pong"})),
             In::Logout {} => {
                 let t = std::mem::take(&mut self.token);
-                app.db.run(move |c| db::drop_session(c, &t)).await?;
+                db::drop_session(db, &t).await?;
                 app.hub().detach(me, Some(self.conn));
+                app.event(self.ev("logout", format!("{my_name} logged out")));
                 self.me = None;
+                presence(&app, me).await;
                 self.ok(json!({"t": "logged_out"}))
             }
             In::Me {} => self.send_me(me).await,
@@ -312,85 +524,45 @@ impl Session {
                     return Err(e("bad_tag", "A tag is 3 to 16 letters or digits"));
                 }
                 let key = tag.to_lowercase();
-                let n = app
-                    .db
-                    .run(move |c| {
-                        c.execute("UPDATE accounts SET tag = ?1, tag_key = ?2 WHERE id = ?3 AND NOT EXISTS
-                                   (SELECT 1 FROM accounts WHERE tag_key = ?2 AND id <> ?3)", params![tag, key, me])
-                    })
-                    .await?;
-                if n == 0 {
+                let tx = db.begin().await?;
+                let taken = account::Entity::find()
+                    .filter(account::Column::TagKey.eq(&key))
+                    .filter(account::Column::Id.ne(me))
+                    .one(&tx)
+                    .await?
+                    .is_some();
+                if taken {
                     return Err(e("tag_taken", "This tag is taken"));
                 }
+                account::ActiveModel { id: Unchanged(me), tag: Set(Some(tag.clone())), tag_key: Set(Some(key)), ..Default::default() }
+                    .update(&tx)
+                    .await?;
+                tx.commit().await?;
+                app.event(self.ev("tag", format!("{my_name} took the tag {tag}")).data(json!({"tag": tag})));
                 self.send_me(me).await
             }
             In::Friends {} => self.ok(friends_json(&app, me).await?),
             In::FriendAdd { tag } => {
-                let key = tag.to_lowercase();
-                let other = app
-                    .db
-                    .run(move |c| -> rusqlite::Result<Result<(i64, bool), E>> {
-                        let Some(o) = c.query_row("SELECT id FROM accounts WHERE tag_key = ?1", [&key], |r| r.get::<_, i64>(0)).optional()? else {
-                            return Ok(Err(e("not_found", "No player with this tag")));
-                        };
-                        let blocked = |a: i64, b: i64| c.query_row("SELECT 1 FROM blocks WHERE who = ?1 AND whom = ?2", [a, b], |_| Ok(())).optional();
-                        if o == me || blocked(o, me)?.is_some() {
-                            return Ok(Err(e("not_found", "No player with this tag")));
-                        }
-                        if blocked(me, o)?.is_some() {
-                            return Ok(Err(e("blocked", "You blocked this player")));
-                        }
-                        if are_friends(c, me, o)? {
-                            return Ok(Err(e("already", "Already friends")));
-                        }
-                        let count = |a: i64| c.query_row("SELECT COUNT(*) FROM friends WHERE a = ?1", [a], |r| r.get::<_, i64>(0));
-                        if count(me)? >= MAX_FRIENDS {
-                            return Ok(Err(e("friends_full", "You have 200 friends")));
-                        }
-                        let theirs = c.execute("DELETE FROM requests WHERE src = ?1 AND dst = ?2", [o, me])? == 1;
-                        if theirs {
-                            if count(o)? >= MAX_FRIENDS {
-                                return Ok(Err(e("friends_full", "The player has 200 friends")));
-                            }
-                            c.execute("INSERT OR IGNORE INTO friends (a, b) VALUES (?1, ?2), (?2, ?1)", [me, o])?;
-                        } else {
-                            c.execute("INSERT OR IGNORE INTO requests (src, dst, at) VALUES (?1, ?2, ?3)", params![me, o, ranked::now()])?;
-                        }
-                        Ok(Ok((o, theirs)))
-                    })
-                    .await??;
-                self.friends_changed(other.0).await
+                let tx = db.begin().await?;
+                let (o, now_friends) = friend_add(&tx, me, &tag.to_lowercase()).await?;
+                tx.commit().await?;
+                let ev = if now_friends {
+                    self.ev("friend_accept", format!("{my_name} and {} are friends now", o.name))
+                } else {
+                    self.ev("friend_request", format!("{my_name} asked {} to be friends", o.name))
+                };
+                app.event(ev.other(&o.name).data(json!({"tag": tag})));
+                self.friends_changed(o.id).await?;
+                if now_friends {
+                    self.presence_pair(o.id).await;
+                }
+                Ok(())
             }
-            In::FriendAccept { user } => {
-                let o = app
-                    .db
-                    .run(move |c| -> rusqlite::Result<Result<i64, E>> {
-                        let Some(o) = id_by_name(c, &user)? else { return Ok(Err(e("not_found", "No such request"))) };
-                        let count = |a: i64| c.query_row("SELECT COUNT(*) FROM friends WHERE a = ?1", [a], |r| r.get::<_, i64>(0));
-                        if c.query_row("SELECT 1 FROM requests WHERE src = ?1 AND dst = ?2", [o, me], |_| Ok(())).optional()?.is_none() {
-                            return Ok(Err(e("not_found", "No such request")));
-                        }
-                        if count(me)? >= MAX_FRIENDS || count(o)? >= MAX_FRIENDS {
-                            return Ok(Err(e("friends_full", "200 friends at most")));
-                        }
-                        c.execute("DELETE FROM requests WHERE (src = ?1 AND dst = ?2) OR (src = ?2 AND dst = ?1)", [o, me])?;
-                        c.execute("INSERT OR IGNORE INTO friends (a, b) VALUES (?1, ?2), (?2, ?1)", [me, o])?;
-                        Ok(Ok(o))
-                    })
-                    .await??;
-                self.friends_changed(o).await
-            }
-            In::FriendDecline { user } => self.pair_op(user, "DELETE FROM requests WHERE src = ?2 AND dst = ?1").await,
-            In::FriendRemove { user } => {
-                self.pair_op(user, "DELETE FROM friends WHERE (a = ?1 AND b = ?2) OR (a = ?2 AND b = ?1);
-                                    DELETE FROM requests WHERE src = ?1 AND dst = ?2").await
-            }
-            In::Block { user } => {
-                self.pair_op(user, "INSERT OR IGNORE INTO blocks (who, whom) VALUES (?1, ?2);
-                                    DELETE FROM friends WHERE (a = ?1 AND b = ?2) OR (a = ?2 AND b = ?1);
-                                    DELETE FROM requests WHERE (src = ?1 AND dst = ?2) OR (src = ?2 AND dst = ?1)").await
-            }
-            In::Unblock { user } => self.pair_op(user, "DELETE FROM blocks WHERE who = ?1 AND whom = ?2").await,
+            In::FriendAccept { user } => self.pair_op(user, PairOp::Accept).await,
+            In::FriendDecline { user } => self.pair_op(user, PairOp::Decline).await,
+            In::FriendRemove { user } => self.pair_op(user, PairOp::Remove).await,
+            In::Block { user } => self.pair_op(user, PairOp::Block).await,
+            In::Unblock { user } => self.pair_op(user, PairOp::Unblock).await,
             In::Msg { to, text } => {
                 let n = text.chars().count();
                 if n == 0 || n > 500 || text.trim().is_empty() {
@@ -399,130 +571,153 @@ impl Session {
                 if !self.chat.allow("", Instant::now()) {
                     return Err(e("rate_limited", "Too many messages: wait a little"));
                 }
-                let t = text.clone();
-                let (o, at) = app
-                    .db
-                    .run(move |c| -> rusqlite::Result<Result<(i64, i64), E>> {
-                        let Some(o) = id_by_name(c, &to)? else { return Ok(Err(e("not_found", "No such player"))) };
-                        if !are_friends(c, me, o)? {
-                            return Ok(Err(e("not_friends", "Messages go to friends only")));
-                        }
-                        let (lo, hi, at) = (me.min(o), me.max(o), ranked::now());
-                        c.execute("INSERT INTO messages (lo, hi, src, text, at) VALUES (?1, ?2, ?3, ?4, ?5)", params![lo, hi, me, t, at])?;
-                        c.execute(
-                            "DELETE FROM messages WHERE lo = ?1 AND hi = ?2 AND id NOT IN
-                             (SELECT id FROM messages WHERE lo = ?1 AND hi = ?2 ORDER BY id DESC LIMIT ?3)",
-                            params![lo, hi, HISTORY],
-                        )?;
-                        Ok(Ok((o, at)))
-                    })
-                    .await??;
-                let name = self.me.as_ref().map(|m| m.1.clone()).unwrap_or_default();
-                app.hub().send(o, &json!({"t": "msg", "from": name, "text": text, "at": at}));
-                self.ok(json!({"t": "msg_sent", "to": name_of(&app, o).await, "at": at}))
+                let tx = db.begin().await?;
+                let o = match db::account_by_name(&tx, &to).await? {
+                    Some(o) if are_friends(&tx, me, o.id).await? => o,
+                    Some(_) => return Err(e("not_friends", "Messages go to friends only")),
+                    None => return Err(e("not_found", "No such player")),
+                };
+                let (lo, hi, at) = (me.min(o.id), me.max(o.id), ranked::now());
+                let m = message::ActiveModel { lo: Set(lo), hi: Set(hi), src: Set(me), text: Set(text.clone()), at: Set(at), seen: Set(false), ..Default::default() };
+                message::Entity::insert(m).exec_without_returning(&tx).await?;
+                let pair = Condition::all().add(message::Column::Lo.eq(lo)).add(message::Column::Hi.eq(hi));
+                let oldest_kept: Option<i64> = message::Entity::find()
+                    .select_only()
+                    .column(message::Column::Id)
+                    .filter(pair.clone())
+                    .order_by_desc(message::Column::Id)
+                    .offset(HISTORY - 1)
+                    .limit(1)
+                    .into_tuple()
+                    .one(&tx)
+                    .await?;
+                if let Some(id) = oldest_kept {
+                    message::Entity::delete_many().filter(pair).filter(message::Column::Id.lt(id)).exec(&tx).await?;
+                }
+                tx.commit().await?;
+                app.event(
+                    self.ev("msg", format!("{my_name} → {}: {text}", o.name))
+                        .other(&o.name)
+                        .data(json!({"text": text, "from": me, "to": o.id})),
+                );
+                app.hub().send(o.id, &json!({"t": "msg", "from": my_name, "text": text, "at": at}));
+                self.ok(json!({"t": "msg_sent", "to": o.name, "at": at}))
             }
             In::History { with } => {
-                let w = with.clone();
-                let list = app
-                    .db
-                    .run(move |c| -> rusqlite::Result<Option<Vec<Value>>> {
-                        let Some(o) = id_by_name(c, &w)? else { return Ok(None) };
-                        let mut st = c.prepare(
-                            "SELECT a.name, m.text, m.at FROM messages m JOIN accounts a ON a.id = m.src
-                             WHERE m.lo = ?1 AND m.hi = ?2 ORDER BY m.id DESC LIMIT ?3",
-                        )?;
-                        let rows = st.query_map(params![me.min(o), me.max(o), HISTORY], |r| {
-                            Ok(json!({"from": r.get::<_, String>(0)?, "text": r.get::<_, String>(1)?, "at": r.get::<_, i64>(2)?}))
-                        })?;
-                        let mut v = rows.collect::<rusqlite::Result<Vec<_>>>()?;
-                        v.reverse();
-                        Ok(Some(v))
-                    })
+                let o = db::account_by_name(db, &with).await?.ok_or_else(|| e("not_found", "No such player"))?;
+                let mut list: Vec<Value> = message::Entity::find()
+                    .filter(message::Column::Lo.eq(me.min(o.id)))
+                    .filter(message::Column::Hi.eq(me.max(o.id)))
+                    .order_by_desc(message::Column::Id)
+                    .limit(HISTORY)
+                    .all(db)
                     .await?
-                    .ok_or_else(|| e("not_found", "No such player"))?;
+                    .into_iter()
+                    .map(|m| json!({"from": if m.src == me { &my_name } else { &o.name }, "text": m.text, "at": m.at}))
+                    .collect();
+                list.reverse();
                 self.ok(json!({"t": "history", "with": with, "list": list}))
+            }
+            In::Chats {} => self.ok(chats_json(&app, me).await?),
+            In::Read { with } => {
+                let o = db::id_by_name(db, &with).await?.ok_or_else(|| e("not_found", "No such player"))?;
+                message::Entity::update_many()
+                    .col_expr(message::Column::Seen, Expr::value(true))
+                    .filter(message::Column::Lo.eq(me.min(o)))
+                    .filter(message::Column::Hi.eq(me.max(o)))
+                    .filter(message::Column::Src.eq(o))
+                    .filter(message::Column::Seen.eq(false))
+                    .exec(db)
+                    .await?;
+                self.ok(json!({"t": "read_ok", "with": with}))
             }
             In::Invite { to, deck } => {
                 let deck = deck_value(&deck, false)?;
-                let t = to.clone();
-                let o = app
-                    .db
-                    .run(move |c| Ok(match id_by_name(c, &t)? { Some(o) if are_friends(c, me, o)? => Some(o), _ => None }))
-                    .await?
-                    .ok_or_else(|| e("not_friends", "Invites go to friends only"))?;
+                let o = match db::account_by_name(db, &to).await? {
+                    Some(o) if are_friends(db, me, o.id).await? => o,
+                    _ => return Err(e("not_friends", "Invites go to friends only")),
+                };
                 self.validate(&deck).await?;
-                let mut hub = app.hub();
-                if hub.in_game.contains_key(&me) {
-                    return Err(e("in_game", "You are in a game"));
+                {
+                    let mut hub = app.hub();
+                    if hub.in_game.contains_key(&me) {
+                        return Err(e("in_game", "You are in a game"));
+                    }
+                    if !matches!(hub.status(o.id), "online" | "searching") {
+                        return Err(e("busy", "The friend is not available"));
+                    }
+                    hub.invites.insert((me, o.id), deck);
+                    hub.send(o.id, &json!({"t": "invite", "from": my_name}));
                 }
-                if hub.status(o) != "online" && hub.status(o) != "queue" {
-                    return Err(e("busy", "The friend is not available"));
-                }
-                hub.invites.insert((me, o), deck);
-                let name = hub.conns.get(&me).map(|c| c.name.clone()).unwrap_or_default();
-                hub.send(o, &json!({"t": "invite", "from": name}));
-                drop(hub);
+                app.event(self.ev("invite", format!("{my_name} invited {} to a friendly game", o.name)).other(&o.name));
                 self.ok(json!({"t": "invited", "to": to}))
             }
             In::InviteAccept { from, deck } => {
                 let deck = deck_value(&deck, false)?;
-                let o = app.db.run(move |c| id_by_name(c, &from)).await?.ok_or_else(|| e("not_found", "No such invite"))?;
-                if !app.hub().invites.contains_key(&(o, me)) {
+                let o = db::account_by_name(db, &from).await?.ok_or_else(|| e("not_found", "No such invite"))?;
+                if !app.hub().invites.contains_key(&(o.id, me)) {
                     return Err(e("not_found", "No such invite"));
                 }
                 self.validate(&deck).await?;
-                let Some(theirs) = app.hub().invites.remove(&(o, me)) else { return Err(e("not_found", "No such invite")) };
-                tokio::spawn(game::start(app.clone(), Mode::Friendly, [(o, theirs), (me, deck)]));
+                let Some(theirs) = app.hub().invites.remove(&(o.id, me)) else { return Err(e("not_found", "No such invite")) };
+                app.event(self.ev("invite_accept", format!("{my_name} accepted the invite of {}", o.name)).other(&o.name));
+                tokio::spawn(game::start(app.clone(), Mode::Friendly, [(o.id, theirs), (me, deck)]));
                 Ok(())
             }
             In::InviteDecline { from } => {
-                let o = app.db.run(move |c| id_by_name(c, &from)).await?.ok_or_else(|| e("not_found", "No such invite"))?;
-                let mut hub = app.hub();
-                if hub.invites.remove(&(o, me)).is_some() {
-                    let name = hub.conns.get(&me).map(|c| c.name.clone()).unwrap_or_default();
-                    hub.send(o, &json!({"t": "invite_declined", "by": name}));
+                let o = db::account_by_name(db, &from).await?.ok_or_else(|| e("not_found", "No such invite"))?;
+                let had = {
+                    let mut hub = app.hub();
+                    let had = hub.invites.remove(&(o.id, me)).is_some();
+                    if had {
+                        hub.send(o.id, &json!({"t": "invite_declined", "by": my_name}));
+                    }
+                    had
+                };
+                if had {
+                    app.event(self.ev("invite_decline", format!("{my_name} declined the invite of {}", o.name)).other(&o.name));
                 }
                 Ok(())
             }
             In::Queue { mode, deck } => {
                 let deck = deck_value(&deck, false)?;
                 self.validate(&deck).await?;
-                let mut a = app.db.run(move |c| db::account_by_id(c, me)).await?.ok_or_else(|| e("server", "No account"))?;
+                let mut a = db::account_by_id(db, me).await?.ok_or_else(|| e("server", "No account"))?;
                 let mode = match mode {
                     QMode::Casual => Mode::Casual,
                     QMode::Ranked => Mode::Ranked,
                 };
                 if mode == Mode::Ranked {
-                    let id = a.id;
-                    a = app
-                        .db
-                        .run(move |c| {
-                            let mut a = db::account_by_id(c, id)?.ok_or(rusqlite::Error::QueryReturnedNoRows)?;
-                            db::refresh_season(c, &mut a)?;
-                            Ok(a)
-                        })
-                        .await?;
+                    db::refresh_season(db, &mut a).await?;
                 }
                 let key = match mode {
                     Mode::Casual => Key { mmr: a.casual_mmr, level: 0, legend: false },
-                    _ => Key { mmr: a.ranked_mmr, level: a.rank.level(), legend: a.rank.legend() },
+                    _ => Key { mmr: a.ranked_mmr, level: a.rank().level(), legend: a.rank().legend() },
                 };
-                self.enqueue(me, mode, deck, key)
+                self.enqueue(me, mode, deck, key).await
             }
             In::Unqueue {} => {
-                app.hub().queue.remove(&me);
+                let was = app.hub().queue.remove(&me);
+                if let Some(s) = was {
+                    app.event(self.ev("unqueue", format!("{my_name} stopped searching ({})", s.mode.as_str())).data(json!({"mode": s.mode})));
+                    presence(&app, me).await;
+                }
                 self.ok(json!({"t": "unqueued"}))
             }
             In::ArenaStart {} => {
-                let exists = app.db.run(move |c| c.query_row("SELECT 1 FROM arena WHERE account = ?1", [me], |_| Ok(())).optional()).await?;
-                if exists.is_some() {
+                if arena::Entity::find_by_id(me).one(db).await?.is_some() {
                     return Err(e("arena_active", "An Arena run is already going"));
                 }
                 let seed: u32 = rand::thread_rng().gen();
                 let d = self.draft(seed as i64, -1, &[]).await?;
-                app.db
-                    .run(move |c| c.execute("INSERT INTO arena (account, seed, draft) VALUES (?1, ?2, ?3)", params![me, seed, d.to_string()]))
-                    .await?;
+                let run = arena::ActiveModel {
+                    account: Set(me),
+                    seed: Set(seed as i64),
+                    draft: Set(d.to_string()),
+                    ..Default::default()
+                };
+                arena::Entity::insert(run).exec_without_returning(db).await?;
+                app.event(self.ev("arena", format!("{my_name} started an Arena run")));
                 self.send_arena(me).await
             }
             In::ArenaHero { i } => {
@@ -533,9 +728,7 @@ impl Session {
                 }
                 let i = index(i, heroes)? as i64;
                 let d = self.draft(seed, i, &[]).await?;
-                app.db
-                    .run(move |c| c.execute("UPDATE arena SET hero = ?1, draft = ?2 WHERE account = ?3", params![i, d.to_string(), me]))
-                    .await?;
+                arena::ActiveModel { account: Unchanged(me), hero: Set(i), draft: Set(d.to_string()), ..Default::default() }.update(db).await?;
                 self.send_arena(me).await
             }
             In::ArenaPick { i } => {
@@ -545,9 +738,8 @@ impl Session {
                 }
                 picks.push(index(i, d["offer"].as_array().map_or(0, |o| o.len()))? as i64);
                 let d = self.draft(seed, hero, &picks).await?;
-                let p = json!(picks).to_string();
-                app.db
-                    .run(move |c| c.execute("UPDATE arena SET picks = ?1, draft = ?2 WHERE account = ?3", params![p, d.to_string(), me]))
+                arena::ActiveModel { account: Unchanged(me), picks: Set(json!(picks).to_string()), draft: Set(d.to_string()), ..Default::default() }
+                    .update(db)
                     .await?;
                 self.send_arena(me).await
             }
@@ -557,16 +749,22 @@ impl Session {
                     return Err(e("not_ready", "The deck is not drafted yet"));
                 }
                 let deck = json!({"hero": d["hero"], "cards": d["cards"], "arena": true});
-                let rec = app.db.run(move |c| c.query_row("SELECT wins - losses FROM arena WHERE account = ?1", [me], |r| r.get(0))).await?;
-                self.enqueue(me, Mode::Arena, deck, Key { mmr: 0.0, level: rec, legend: false })
+                let run = arena::Entity::find_by_id(me).one(db).await?.ok_or_else(|| e("no_arena", "No Arena run: start one"))?;
+                self.enqueue(me, Mode::Arena, deck, Key { mmr: 0.0, level: run.wins - run.losses, legend: false }).await
             }
             In::ArenaRetire {} => {
-                app.db.run(move |c| c.execute("DELETE FROM arena WHERE account = ?1", [me])).await?;
-                {
+                arena::Entity::delete_by_id(me).exec(db).await?;
+                let left_queue = {
                     let mut hub = app.hub();
-                    if hub.queue.get(&me).is_some_and(|s| s.mode == Mode::Arena) {
+                    let q = hub.queue.get(&me).is_some_and(|s| s.mode == Mode::Arena);
+                    if q {
                         hub.queue.remove(&me);
                     }
+                    q
+                };
+                app.event(self.ev("arena", format!("{my_name} retired from the Arena")));
+                if left_queue {
+                    presence(&app, me).await;
                 }
                 self.send_arena(me).await
             }
@@ -602,97 +800,130 @@ impl Session {
             return Err(e("bad_password", "A password is 8 to 128 characters"));
         }
         let hash = tokio::task::spawn_blocking(move || auth::hash_password(&password)).await.map_err(|_| e("server", "Server error"))?;
-        let id = self.app.db.run(move |c| db::create_account(c, &user, &hash, "user")).await?;
+        let id = db::create_account(&self.app.db, &user, &hash, "user").await?;
         let id = id.ok_or_else(|| e("taken", "This name is taken"))?;
-        self.logged_in(id, None).await
+        self.app.event(Event::new("register", format!("{user} registered")).user(id, &user).data(json!({"ip": self.ip.to_string()})));
+        self.logged_in(id, None, "register").await
+    }
+
+    fn failed(&self, user: &str, why: &str) {
+        let user: String = user.chars().take(40).collect();
+        self.app.event(
+            Event::new("login_failed", format!("Failed login as {user}: {why}"))
+                .other(&user)
+                .data(json!({"ip": self.ip.to_string(), "reason": why})),
+        );
     }
 
     async fn login(&mut self, user: String, password: String) -> R {
         let ip_ok = self.app.login_allowed(&format!("ip:{}", self.ip));
         let user_ok = self.app.login_allowed(&format!("user:{}", user.to_lowercase()));
         if !ip_ok || !user_ok {
+            self.failed(&user, "rate limited");
             return Err(e("rate_limited", "Too many attempts: wait a minute"));
         }
         if !auth::valid_user(&user) || password.len() > 1024 {
+            self.failed(&user, "bad name");
             return Err(e("bad_login", "Wrong name or password"));
         }
-        let found = self.app.db.run(move |c| db::account_by_name(c, &user)).await?;
+        let found = db::account_by_name(&self.app.db, &user).await?;
         let (ok, found) = tokio::task::spawn_blocking(move || {
-            let stored = found.as_ref().map_or(auth::dummy_hash(), |(_, h)| h.as_str());
+            let stored = found.as_ref().map_or(auth::dummy_hash(), |a| a.pass.as_str());
             (auth::verify_password(&password, stored) && found.is_some(), found)
         })
         .await
         .map_err(|_| e("server", "Server error"))?;
         match found {
-            Some((a, _)) if ok => {
+            Some(a) if ok => {
                 if a.suspended {
+                    self.failed(&user, "suspended");
                     return Err(e("suspended", "This account is suspended"));
                 }
-                self.logged_in(a.id, None).await
+                self.logged_in(a.id, None, "password").await
             }
-            _ => Err(e("bad_login", "Wrong name or password")),
+            Some(_) => {
+                self.failed(&user, "wrong password");
+                Err(e("bad_login", "Wrong name or password"))
+            }
+            None => {
+                self.failed(&user, "no such account");
+                Err(e("bad_login", "Wrong name or password"))
+            }
         }
     }
 
+    /// The normal way back in: the token from `auth`, valid 30 days and renewed on every use.
     async fn resume(&mut self, token: String) -> R {
         if !self.app.login_allowed(&format!("ip:{}", self.ip)) {
             return Err(e("rate_limited", "Too many attempts: wait a minute"));
         }
-        let t = token.clone();
-        let a = self.app.db.run(move |c| db::session(c, &t, "game")).await?;
-        let (a, _) = a.ok_or_else(|| e("bad_token", "The session expired: log in again"))?;
-        self.logged_in(a.id, Some(token)).await
+        let Some((a, s)) = db::session(&self.app.db, &token, "game").await? else {
+            self.failed("(token)", "expired or unknown token");
+            return Err(e("bad_token", "The session expired: log in again"));
+        };
+        db::renew_session(&self.app.db, s.hash, auth::TOKEN_DAYS * 86400).await?;
+        self.logged_in(a.id, Some(token), "token").await
     }
 
-    async fn logged_in(&mut self, id: i64, token: Option<String>) -> R {
-        let (token, name, me) = self
-            .app
-            .db
-            .run(move |c| {
-                let token = match token {
-                    Some(t) => t,
-                    None => db::new_session(c, id, "game", auth::TOKEN_DAYS * 86400, "")?,
-                };
-                c.execute("UPDATE accounts SET last_seen = ?1 WHERE id = ?2", params![ranked::now(), id])?;
-                let name: String = c.query_row("SELECT name FROM accounts WHERE id = ?1", [id], |r| r.get(0))?;
-                Ok((token, name, me_json(c, id)?))
-            })
-            .await?;
+    async fn logged_in(&mut self, id: i64, token: Option<String>, via: &str) -> R {
+        let db = &self.app.db;
+        let token = match token {
+            Some(t) => t,
+            None => db::new_session(db, id, "game", auth::TOKEN_DAYS * 86400, "").await?,
+        };
+        db::touch(db, id).await?;
+        let name = db::name_of(db, id).await?;
+        let me = me_json(db, id).await?;
         self.conn = self.app.hub().attach(id, &name, self.tx.clone());
-        self.me = Some((id, name));
+        self.me = Some((id, name.clone()));
         self.token = token.clone();
         self.send(json!({"t": "auth", "ok": true, "token": token, "me": me}));
+        if via != "register" {
+            self.app.event(self.ev("login", format!("{name} logged in")).data(json!({"ip": self.ip.to_string(), "via": via})));
+        }
+        presence(&self.app, id).await;
         Ok(())
     }
 
     async fn send_me(&self, me: i64) -> R {
-        let v = self.app.db.run(move |c| me_json(c, me)).await?;
+        let v = me_json(&self.app.db, me).await?;
         self.ok(json!({"t": "me", "me": v}))
     }
 
     async fn send_arena(&self, me: i64) -> R {
-        let v = self.app.db.run(move |c| arena_json(c, me)).await?;
+        let v = arena_json(&self.app.db, me).await?;
         self.ok(json!({"t": "arena", "state": v}))
     }
 
-    /// Runs a two-account statement (?1 = me, ?2 = the named player), then refreshes both friend lists.
-    async fn pair_op(&self, user: String, sql: &'static str) -> R {
+    /// A change between me and the named player, then both friend lists are refreshed.
+    async fn pair_op(&self, user: String, op: PairOp) -> R {
+        let (me, my_name) = self.me.clone().unwrap_or_default();
+        let tx = self.app.db.begin().await?;
+        let o = db::account_by_name(&tx, &user).await?.ok_or_else(|| match op {
+            PairOp::Accept => e("not_found", "No such request"),
+            _ => e("not_found", "No such player"),
+        })?;
+        op.apply(&tx, me, o.id).await?;
+        tx.commit().await?;
+        self.app.event(self.ev(op.kind(), format!("{my_name} {} {}", op.verb(), o.name)).other(&o.name));
+        self.friends_changed(o.id).await?;
+        if matches!(op, PairOp::Accept) {
+            self.presence_pair(o.id).await;
+        }
+        Ok(())
+    }
+
+    /// New friends see each other's status (the friends message carries it too).
+    async fn presence_pair(&self, other: i64) {
         let me = self.me.as_ref().map_or(0, |m| m.0);
-        let o = self
-            .app
-            .db
-            .run(move |c| {
-                let Some(o) = id_by_name(c, &user)? else { return Ok(None) };
-                let tx = c.transaction()?;
-                for stmt in sql.split(';').filter(|s| !s.trim().is_empty()) {
-                    tx.execute(stmt, [me, o])?;
-                }
-                tx.commit()?;
-                Ok(Some(o))
-            })
-            .await?
-            .ok_or_else(|| e("not_found", "No such player"))?;
-        self.friends_changed(o).await
+        let hub = self.app.hub();
+        for (a, b) in [(me, other), (other, me)] {
+            let st = hub.status(a);
+            let name = hub.conns.get(&a).map(|c| c.name.clone());
+            if let Some(name) = name {
+                hub.send(b, &json!({"t": "presence", "user": name, "online": st != "offline", "status": st}));
+            }
+        }
     }
 
     async fn friends_changed(&self, other: i64) -> R {
@@ -705,50 +936,45 @@ impl Session {
     async fn validate(&self, deck: &Value) -> R {
         match self.app.referee.call(json!({"op": "validate", "deck": deck})).await {
             Ok(r) if r["ok"] == true => Ok(()),
-            Ok(r) => Err(E("deck", r["error"].as_str().unwrap_or("The deck is not valid").chars().take(200).collect())),
-            Err(_) => Err(e("referee", "The referee is not available")),
+            Ok(r) => Err(E("deck", r["error"].as_str().unwrap_or("The deck is not valid").chars().take(200).collect(), None)),
+            Err(err) => Err(E("referee", "The referee is not available".into(), Some(format!("referee: {err}")))),
         }
     }
 
     async fn draft(&self, seed: i64, hero: i64, picks: &[i64]) -> Result<Value, E> {
         match self.app.referee.call(json!({"op": "draft", "seed": seed, "hero": hero, "picks": picks})).await {
             Ok(r) if r["ok"] == true => Ok(r),
-            _ => Err(e("referee", "The referee is not available")),
+            Ok(r) => Err(E("referee", "The referee is not available".into(), Some(format!("draft refused: {r}")))),
+            Err(err) => Err(E("referee", "The referee is not available".into(), Some(format!("referee: {err}")))),
         }
     }
 
     /// The account's Arena run: (seed, hero, picks, last draft reply).
     async fn run_of(&self, me: i64) -> Result<(i64, i64, Vec<i64>, Value), E> {
-        let row = self
-            .app
-            .db
-            .run(move |c| {
-                c.query_row("SELECT seed, hero, picks, draft FROM arena WHERE account = ?1", [me], |r| {
-                    Ok((r.get::<_, i64>(0)?, r.get::<_, i64>(1)?, r.get::<_, String>(2)?, r.get::<_, String>(3)?))
-                })
-                .optional()
-            })
-            .await?
-            .ok_or_else(|| e("no_arena", "No Arena run: start one"))?;
-        let picks = serde_json::from_str(&row.2).unwrap_or_default();
-        Ok((row.0, row.1, picks, serde_json::from_str(&row.3).unwrap_or(Value::Null)))
+        let run = arena::Entity::find_by_id(me).one(&self.app.db).await?.ok_or_else(|| e("no_arena", "No Arena run: start one"))?;
+        let picks = serde_json::from_str(&run.picks).unwrap_or_default();
+        Ok((run.seed, run.hero, picks, serde_json::from_str(&run.draft).unwrap_or(Value::Null)))
     }
 
-    fn enqueue(&self, me: i64, mode: Mode, deck: Value, key: Key) -> R {
-        let mut hub = self.app.hub();
-        if hub.in_game.contains_key(&me) {
-            return Err(e("queue", "You are in a game"));
+    async fn enqueue(&self, me: i64, mode: Mode, deck: Value, key: Key) -> R {
+        {
+            let mut hub = self.app.hub();
+            if hub.in_game.contains_key(&me) {
+                return Err(e("queue", "You are in a game"));
+            }
+            hub.queue.insert(me, Seeker { name: self.name(), mode, deck: deck.clone(), key, since: Instant::now() });
         }
-        let name = self.me.as_ref().map(|m| m.1.clone()).unwrap_or_default();
-        hub.queue.insert(me, Seeker { name, mode, deck, key, since: Instant::now() });
-        drop(hub);
+        let detail = match mode {
+            Mode::Casual => format!("MMR {:.0}", key.mmr),
+            Mode::Ranked if key.legend => format!("Legend, MMR {:.0}", key.mmr),
+            Mode::Ranked => format!("level {}", key.level),
+            _ => format!("record {:+}", key.level),
+        };
+        self.app.event(
+            self.ev("queue", format!("{} is searching ({}, {detail})", self.name(), mode.as_str()))
+                .data(json!({"mode": mode, "mmr": key.mmr.round(), "level": key.level, "hero": deck["hero"]})),
+        );
+        presence(&self.app, me).await;
         self.ok(json!({"t": "queued", "mode": mode}))
     }
-}
-
-async fn name_of(app: &AppRef, id: i64) -> String {
-    app.db
-        .run(move |c| c.query_row("SELECT name FROM accounts WHERE id = ?1", [id], |r| r.get(0)))
-        .await
-        .unwrap_or_default()
 }

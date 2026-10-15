@@ -1,11 +1,13 @@
 //! A refereed game: the server relays the players' NetSession messages and checks
 //! every action with the referee before it reaches the other player.
 
-use crate::db::{self, Account};
+use crate::db::{self, Account, DbError, DbResult};
+use crate::entity::{arena, game as played};
+use crate::events::Event;
 use crate::ranked::{self, Mode};
-use crate::{AppRef, LiveGame};
+use crate::{presence, AppRef, LiveGame};
 use rand::Rng;
-use rusqlite::{params, Connection, OptionalExtension};
+use sea_orm::{ActiveModelTrait, ConnectionTrait, EntityTrait, Set, TransactionTrait, Unchanged};
 use serde_json::{json, Value};
 use std::time::Duration;
 use tokio::sync::mpsc;
@@ -27,6 +29,7 @@ struct Ctx {
     id: String,
     mode: Mode,
     ids: [i64; 2],
+    names: [String; 2],
     decks: [Value; 2],
     seed: u32,
     started: i64,
@@ -35,7 +38,15 @@ struct Ctx {
 }
 
 /// Starts a game between two players ([account, deck]); the host (player 0) is drawn at random.
-pub async fn start(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
+pub async fn start(app: AppRef, mode: Mode, players: [(i64, Value); 2]) {
+    let ids = [players[0].0, players[1].0];
+    begin(app.clone(), mode, players).await;
+    for id in ids {
+        presence(&app, id).await;
+    }
+}
+
+async fn begin(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
     if rand::thread_rng().gen_bool(0.5) {
         players.swap(0, 1);
     }
@@ -54,13 +65,14 @@ pub async fn start(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
             return fail(&app, "The opponent is gone");
         }
     }
-    let accounts = app.db.run(move |c| Ok([db::account_by_id(c, ids[0])?, db::account_by_id(c, ids[1])?])).await;
-    let Ok([Some(a0), Some(a1)]) = accounts else { return fail(&app, "No such account") };
+    let (a0, a1) = (db::account_by_id(&app.db, ids[0]).await, db::account_by_id(&app.db, ids[1]).await);
+    let (Ok(Some(a0)), Ok(Some(a1))) = (a0, a1) else { return fail(&app, "No such account") };
     let id = format!("{:016x}", rand::thread_rng().gen::<u64>());
     let seed: u32 = rand::thread_rng().gen();
     let r = app.referee.call(json!({"op": "new", "game": id, "seed": seed, "decks": decks})).await;
     if !matches!(&r, Ok(v) if v["ok"] == true) {
         tracing::warn!("referee refused game {id}: {r:?}");
+        app.event(Event::new("error", format!("The referee could not start a game of {} and {}: {r:?}", a0.name, a1.name)).game(&id));
         return fail(&app, "The referee could not start the game");
     }
     let accs = [a0, a1];
@@ -83,7 +95,15 @@ pub async fn start(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
         return fail(&app, "Already in a game");
     }
     tracing::info!("game {id} ({}) {} vs {}", mode.as_str(), accs[0].name, accs[1].name);
-    let ctx = Ctx { app, id, mode, ids, decks, seed, started: ranked::now(), hello };
+    let names = [accs[0].name.clone(), accs[1].name.clone()];
+    app.event(
+        Event::new("match", format!("{} vs {} ({})", names[0], names[1], mode.as_str()))
+            .user(ids[0], &names[0])
+            .other(&names[1])
+            .game(&id)
+            .data(json!({"mode": mode, "seed": seed, "players": names, "heroes": [decks[0]["hero"], decks[1]["hero"]]})),
+    );
+    let ctx = Ctx { app, id, mode, ids, names, decks, seed, started: ranked::now(), hello };
     tokio::spawn(run(ctx, rx));
 }
 
@@ -96,7 +116,7 @@ fn register(hub: &mut crate::Hub, id: &str, ids: [i64; 2], hello: &[Value; 2], a
         }
         hub.games.insert(id.to_string(), LiveGame {
             tx: tx.clone(), mode, ids, names: [accs[0].name.clone(), accs[1].name.clone()],
-            started: ranked::now(), turn: 0, current: 0,
+            started: ranked::now(), turn: 0, current: 0, actions: 0,
         });
         for (p, a) in ids.iter().enumerate() {
             if !hub.conns.contains_key(a) {
@@ -109,6 +129,9 @@ fn register(hub: &mut crate::Hub, id: &str, ids: [i64; 2], hello: &[Value; 2], a
 /// The end of a game: (winner, reason); winner −1 = nobody.
 type End = (i64, &'static str);
 
+/// What ended a game early: who, and the message (if a message did).
+type Cause = Option<(usize, Option<Value>)>;
+
 struct Play {
     hello: [bool; 2],
     started: bool,
@@ -120,33 +143,65 @@ struct Play {
 async fn run(ctx: Ctx, mut rx: mpsc::UnboundedReceiver<Ev>) {
     let mut play = Play { hello: [false; 2], started: false, n: [0; 2], log: vec![] };
     let mut gone: [Option<Instant>; 2] = [None; 2];
+    let mut cause: Cause = None;
     let end = loop {
         let deadline = gone.iter().flatten().min().copied();
         let ev = tokio::select! {
             ev = rx.recv() => ev,
             _ = tokio::time::sleep_until(deadline.unwrap_or_else(|| Instant::now() + Duration::from_secs(3600))), if deadline.is_some() => {
                 let p = if gone[0] == deadline { 0 } else { 1 };
+                cause = Some((p, None));
                 break (1 - p as i64, "disconnect");
             }
         };
         match ev {
             None => break (-1, "aborted"),
-            Some(Ev::Gone(p)) => gone[p] = Some(Instant::now() + ctx.app.grace),
+            Some(Ev::Gone(p)) => {
+                gone[p] = Some(Instant::now() + ctx.app.grace);
+                ctx.app.event(ctx.ev(p, "game_left", format!("{} dropped out of the game", ctx.names[p])));
+            }
             Some(Ev::Back(p)) => {
                 gone[p] = None;
+                ctx.app.event(ctx.ev(p, "game_back", format!("{} is back in the game", ctx.names[p])));
                 let mut m = ctx.hello[p].clone();
                 m["rejoin"] = json!(true);
                 m["log"] = json!(play.log);
                 ctx.app.hub().send(ctx.ids[p], &m);
             }
             Some(Ev::Msg(p, m)) => {
+                let copy = m.clone();
                 if let Some(end) = relay(&ctx, &mut play, p, m).await {
+                    if end.1 != "over" {
+                        cause = Some((p, Some(copy)));
+                    }
                     break end;
                 }
             }
         }
     };
-    finish(&ctx, end.0, end.1).await;
+    finish(&ctx, end.0, end.1, cause).await;
+}
+
+impl Ctx {
+    /// An event of this game by player p.
+    fn ev(&self, p: usize, kind: &'static str, text: String) -> Event {
+        Event::new(kind, text).user(self.ids[p], &self.names[p]).other(&self.names[1 - p]).game(&self.id)
+    }
+}
+
+/// One line for an action: "alice: attack 12 → 7".
+fn action_text(name: &str, a: &Value) -> String {
+    let t = a["type"].as_str().unwrap_or("?");
+    let n = |k: &str| a[k].as_i64().map(|x| x.to_string());
+    let detail = match t {
+        "play" => [n("entity"), n("target").filter(|x| x != "-1")].into_iter().flatten().collect::<Vec<_>>().join(" → "),
+        "attack" => [n("attacker"), n("defender")].into_iter().flatten().collect::<Vec<_>>().join(" → "),
+        "hero_power" => n("target").filter(|x| x != "-1").map(|x| format!("→ {x}")).unwrap_or_default(),
+        "mulligan" => format!("replaces {}", a["replace"].as_array().map_or(0, |r| r.len())),
+        "choose" => n("option").unwrap_or_default(),
+        _ => String::new(),
+    };
+    if detail.is_empty() { format!("{name}: {t}") } else { format!("{name}: {t} {detail}") }
 }
 
 /// Checks one message from player p and forwards it; Some = the game ends.
@@ -172,6 +227,7 @@ async fn relay(ctx: &Ctx, play: &mut Play, p: usize, m: Value) -> Option<End> {
                 return lose("cheat");
             }
             play.started = true;
+            ctx.app.event(ctx.ev(p, "game_start", format!("{} started the game", ctx.names[p])).data(json!({"seed": ctx.seed})));
         }
         "action" => {
             if !play.started || m["n"].as_f64() != Some(play.n[p] as f64) {
@@ -185,6 +241,7 @@ async fn relay(ctx: &Ctx, play: &mut Play, p: usize, m: Value) -> Option<End> {
                 Ok(r) => r,
                 Err(e) => {
                     tracing::error!("game {}: referee failed: {e}", ctx.id);
+                    ctx.app.event(ctx.ev(p, "error", format!("The referee failed: {e}")));
                     return Some((-1, "aborted"));
                 }
             };
@@ -199,7 +256,10 @@ async fn relay(ctx: &Ctx, play: &mut Play, p: usize, m: Value) -> Option<End> {
             if let Some(g) = ctx.app.hub().games.get_mut(&ctx.id) {
                 g.turn = r["turn"].as_f64().map_or(g.turn, |x| x as i64);
                 g.current = r["current"].as_f64().map_or(g.current, |x| x as i64);
+                g.actions += 1;
             }
+            ctx.app.event(ctx.ev(p, "game_action", action_text(&ctx.names[p], a)).data(json!({
+                "p": p, "n": play.n[p] - 1, "action": a, "turn": r["turn"], "current": r["current"], "hash": r["hash"], "over": r["over"]})));
             if r["over"] == true {
                 forward(ctx, p, &m);
                 return Some((r["winner"].as_f64().map_or(-1, |x| x as i64), "over"));
@@ -231,7 +291,7 @@ fn forward(ctx: &Ctx, from: usize, m: &Value) {
     ctx.app.hub().send(ctx.ids[1 - from], &json!({"t": "game", "game": ctx.id, "m": m}));
 }
 
-async fn finish(ctx: &Ctx, winner: i64, reason: &'static str) {
+async fn finish(ctx: &Ctx, winner: i64, reason: &'static str, cause: Cause) {
     {
         let mut hub = ctx.app.hub();
         hub.games.remove(&ctx.id);
@@ -240,90 +300,105 @@ async fn finish(ctx: &Ctx, winner: i64, reason: &'static str) {
         }
     }
     let _ = ctx.app.referee.call(json!({"op": "drop", "game": ctx.id})).await;
-    let (mode, ids, id, started) = (ctx.mode, ctx.ids, ctx.id.clone(), ctx.started);
-    let extra = ctx
-        .app
-        .db
-        .run(move |c| {
-            let tx = c.transaction()?;
-            let extra = apply_results(&tx, mode, ids, winner)?;
-            tx.execute(
-                "INSERT INTO games (id, mode, p0, p1, started, ended, winner, reason) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-                params![id, mode.as_str(), ids[0], ids[1], started, ranked::now(), winner, reason],
-            )?;
-            tx.commit()?;
-            Ok(extra)
-        })
-        .await
-        .unwrap_or_else(|e| {
-            tracing::error!("game {}: results not saved: {e}", ctx.id);
-            [json!({}), json!({})]
-        });
+    let saved = async {
+        let tx = ctx.app.db.begin().await?;
+        let extra = apply_results(&tx, ctx.mode, ctx.ids, winner).await?;
+        let g = played::ActiveModel {
+            id: Set(ctx.id.clone()),
+            mode: Set(ctx.mode.as_str().into()),
+            p0: Set(Some(ctx.ids[0])),
+            p1: Set(Some(ctx.ids[1])),
+            started: Set(ctx.started),
+            ended: Set(ranked::now()),
+            winner: Set(winner),
+            reason: Set(reason.into()),
+        };
+        played::Entity::insert(g).exec_without_returning(&tx).await?;
+        tx.commit().await?;
+        Ok::<_, DbError>(extra)
+    };
+    let extra = saved.await.unwrap_or_else(|e| {
+        tracing::error!("game {}: results not saved: {e}", ctx.id);
+        ctx.app.event(Event::new("error", format!("The results of game {} were not saved: {e}", ctx.id)).game(&ctx.id));
+        [json!({}), json!({})]
+    });
     tracing::info!("game {} over: winner {winner} ({reason})", ctx.id);
-    let hub = ctx.app.hub();
-    for (p, a) in ctx.ids.iter().enumerate() {
-        let result = if winner < 0 { "draw" } else if winner == p as i64 { "win" } else { "loss" };
-        let mut m = json!({"t": "game_over", "game": ctx.id, "result": result, "reason": reason});
-        if let Some(o) = extra[p].as_object() {
-            for (k, v) in o {
-                m[k] = v.clone();
+    let text = match winner {
+        0 | 1 => format!("{} beat {} ({}, {reason})", ctx.names[winner as usize], ctx.names[1 - winner as usize], ctx.mode.as_str()),
+        _ => format!("{} and {}: no winner ({}, {reason})", ctx.names[0], ctx.names[1], ctx.mode.as_str()),
+    };
+    let w = winner.clamp(0, 1) as usize;
+    let mut data = json!({"winner": winner, "reason": reason, "mode": ctx.mode, "players": ctx.names, "results": extra,
+                          "duration": ranked::now() - ctx.started});
+    if let Some((p, m)) = &cause {
+        data["by"] = json!(ctx.names[*p]);
+        data["message"] = json!(m);
+    }
+    ctx.app.event(ctx.ev(w, "game_end", text).data(data));
+    {
+        let hub = ctx.app.hub();
+        for (p, a) in ctx.ids.iter().enumerate() {
+            let result = if winner < 0 { "draw" } else if winner == p as i64 { "win" } else { "loss" };
+            let mut m = json!({"t": "game_over", "game": ctx.id, "result": result, "reason": reason});
+            if let Some(o) = extra[p].as_object() {
+                for (k, v) in o {
+                    m[k] = v.clone();
+                }
             }
+            hub.send(*a, &m);
         }
-        hub.send(*a, &m);
+    }
+    // Friends see both players back online (or offline).
+    for id in ctx.ids {
+        presence(&ctx.app, id).await;
     }
 }
 
-pub fn rank_json(c: &Connection, a: &Account) -> rusqlite::Result<Value> {
-    Ok(json!({"rank": a.rank.rank, "stars": a.rank.stars, "legend": db::legend_number(c, a)?, "streak": a.rank.streak}))
+pub async fn rank_json(c: &impl ConnectionTrait, a: &Account) -> DbResult<Value> {
+    Ok(json!({"rank": a.rank, "stars": a.stars, "legend": db::legend_number(c, a).await?, "streak": a.streak}))
 }
 
 /// MMR, ranked stars and the Arena record; returns what each player's game_over adds.
-fn apply_results(c: &Connection, mode: Mode, ids: [i64; 2], winner: i64) -> rusqlite::Result<[Value; 2]> {
+async fn apply_results(c: &impl ConnectionTrait, mode: Mode, ids: [i64; 2], winner: i64) -> DbResult<[Value; 2]> {
     if winner < 0 || mode == Mode::Friendly {
         return Ok([json!({}), json!({})]);
     }
     let w = winner as usize;
-    let load = |id| db::account_by_id(c, id)?.ok_or(rusqlite::Error::QueryReturnedNoRows);
+    let load = |id| async move { db::account_by_id(c, id).await?.ok_or(DbError::RecordNotFound("account".into())) };
     match mode {
         Mode::Casual => {
-            let (a, b) = (load(ids[w])?, load(ids[1 - w])?);
-            let (ma, mb) = ranked::elo(a.casual_mmr, b.casual_mmr, true);
-            c.execute("UPDATE accounts SET casual_mmr = ?1 WHERE id = ?2", params![ma, a.id])?;
-            c.execute("UPDATE accounts SET casual_mmr = ?1 WHERE id = ?2", params![mb, b.id])?;
+            let (mut a, mut b) = (load(ids[w]).await?, load(ids[1 - w]).await?);
+            (a.casual_mmr, b.casual_mmr) = ranked::elo(a.casual_mmr, b.casual_mmr, true);
+            db::save_standing(c, &a).await?;
+            db::save_standing(c, &b).await?;
             Ok([json!({}), json!({})])
         }
         Mode::Ranked => {
-            let mut acc = [load(ids[0])?, load(ids[1])?];
+            let mut acc = [load(ids[0]).await?, load(ids[1]).await?];
             for a in acc.iter_mut() {
-                db::refresh_season(c, a)?;
+                db::refresh_season(c, a).await?;
             }
-            let (mw, ml) = ranked::elo(acc[w].ranked_mmr, acc[1 - w].ranked_mmr, true);
-            acc[w].ranked_mmr = mw;
-            acc[1 - w].ranked_mmr = ml;
-            acc[w].rank.win();
-            acc[1 - w].rank.lose();
-            for a in &acc {
-                c.execute(
-                    "UPDATE accounts SET ranked_mmr = ?1, rank = ?2, stars = ?3, streak = ?4 WHERE id = ?5",
-                    params![a.ranked_mmr, a.rank.rank, a.rank.stars, a.rank.streak, a.id],
-                )?;
+            (acc[w].ranked_mmr, acc[1 - w].ranked_mmr) = ranked::elo(acc[w].ranked_mmr, acc[1 - w].ranked_mmr, true);
+            for (p, a) in acc.iter_mut().enumerate() {
+                let mut r = a.rank();
+                if p == w { r.win() } else { r.lose() }
+                (a.rank, a.stars, a.streak) = (r.rank, r.stars, r.streak);
+                db::save_standing(c, a).await?;
             }
-            Ok([json!({"rank": rank_json(c, &acc[0])?}), json!({"rank": rank_json(c, &acc[1])?})])
+            Ok([json!({"rank": rank_json(c, &acc[0]).await?}), json!({"rank": rank_json(c, &acc[1]).await?})])
         }
         Mode::Arena => {
             let mut out = [json!({}), json!({})];
             for (p, id) in ids.iter().enumerate() {
-                let col = if p == w { "wins" } else { "losses" };
-                c.execute(&format!("UPDATE arena SET {col} = {col} + 1 WHERE account = ?1"), [id])?;
-                let rec: Option<(i64, i64)> =
-                    c.query_row("SELECT wins, losses FROM arena WHERE account = ?1", [id], |r| Ok((r.get(0)?, r.get(1)?))).optional()?;
-                if let Some((wins, losses)) = rec {
-                    let over = wins >= 12 || losses >= 3;
-                    if over {
-                        c.execute("DELETE FROM arena WHERE account = ?1", [id])?;
-                    }
-                    out[p] = json!({"arena": {"wins": wins, "losses": losses, "over": over}});
+                let Some(run) = arena::Entity::find_by_id(*id).one(c).await? else { continue };
+                let (wins, losses) = if p == w { (run.wins + 1, run.losses) } else { (run.wins, run.losses + 1) };
+                let over = wins >= 12 || losses >= 3;
+                if over {
+                    arena::Entity::delete_by_id(*id).exec(c).await?;
+                } else {
+                    arena::ActiveModel { account: Unchanged(*id), wins: Set(wins), losses: Set(losses), ..Default::default() }.update(c).await?;
                 }
+                out[p] = json!({"arena": {"wins": wins, "losses": losses, "over": over}});
             }
             Ok(out)
         }

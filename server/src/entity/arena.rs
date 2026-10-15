@@ -1,0 +1,24 @@
+//! An account's Arena run: the referee recomputes heroes and offers from seed + picks.
+
+use sea_orm::entity::prelude::*;
+
+#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
+#[sea_orm(table_name = "arena")]
+pub struct Model {
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub account: i64,
+    pub seed: i64,
+    /// The chosen hero's index; −1 = not chosen yet.
+    pub hero: i64,
+    /// JSON array of the offer indexes picked.
+    pub picks: String,
+    /// The referee's last draft reply (JSON).
+    pub draft: String,
+    pub wins: i64,
+    pub losses: i64,
+}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {}
+
+impl ActiveModelBehavior for ActiveModel {}

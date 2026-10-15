@@ -4,7 +4,10 @@
 pub mod admin;
 pub mod auth;
 pub mod db;
+pub mod entity;
+pub mod events;
 pub mod game;
+pub mod migration;
 pub mod ranked;
 pub mod referee;
 pub mod ws;
@@ -17,6 +20,9 @@ use axum::response::Response;
 use axum::routing::get;
 use axum::Router;
 use db::Db;
+use entity::friend;
+use events::{Event, Log};
+use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QuerySelect};
 use ranked::{Key, Mode};
 use referee::Referee;
 use serde_json::{json, Value};
@@ -40,10 +46,14 @@ pub struct App {
     pub trust_proxy: bool,
     /// How long a player who dropped out of a game has to come back.
     pub grace: Duration,
+    /// The event log and the admin panels' live feed.
+    pub log: Log,
 }
 
 impl App {
+    /// Needs a tokio runtime (it starts the event log's writer).
     pub fn new(db: Db, referee: Arc<dyn Referee>, trust_proxy: bool, grace: Duration) -> AppRef {
+        let db_clone = db.clone();
         Arc::new(App {
             db,
             referee,
@@ -51,7 +61,12 @@ impl App {
             logins: Mutex::new(RateLimit::new(10, Duration::from_secs(60))),
             trust_proxy,
             grace,
+            log: Log::start(db_clone),
         })
+    }
+
+    pub fn event(&self, e: Event) {
+        self.log.add(e);
     }
 
     pub fn hub(&self) -> std::sync::MutexGuard<'_, Hub> {
@@ -90,6 +105,8 @@ pub struct LiveGame {
     pub started: i64,
     pub turn: i64,
     pub current: i64,
+    /// Actions the referee accepted so far.
+    pub actions: u64,
 }
 
 #[derive(Default)]
@@ -102,6 +119,8 @@ pub struct Hub {
     pub in_game: HashMap<i64, (String, usize)>,
     /// (from, to) → the inviter's deck.
     pub invites: HashMap<(i64, i64), Value>,
+    /// The last presence status sent to each account's friends (absent = offline).
+    shown: HashMap<i64, &'static str>,
 }
 
 impl Hub {
@@ -111,16 +130,48 @@ impl Hub {
         }
     }
 
+    /// "offline" | "in_game" | "searching" | "online".
     pub fn status(&self, account: i64) -> &'static str {
         if !self.conns.contains_key(&account) {
             "offline"
         } else if self.in_game.contains_key(&account) {
-            "game"
+            "in_game"
         } else if self.queue.contains_key(&account) {
-            "queue"
+            "searching"
         } else {
             "online"
         }
+    }
+
+    /// What the admin panel shows live: who is online, the queues, the games.
+    pub fn live_json(&self) -> Value {
+        let now = Instant::now();
+        let mut online: Vec<Value> =
+            self.conns.iter().map(|(id, c)| json!({"id": id, "user": c.name, "status": self.status(*id)})).collect();
+        online.sort_by(|a, b| a["user"].as_str().cmp(&b["user"].as_str()));
+        let mut queue: Vec<Value> = self
+            .queue
+            .iter()
+            .map(|(id, s)| {
+                let w = now.duration_since(s.since).as_secs();
+                json!({"id": id, "user": s.name, "mode": s.mode, "waited": w, "window": ranked::shown_window(s.mode, &s.key, w),
+                       "mmr": s.key.mmr.round(), "level": s.key.level})
+            })
+            .collect();
+        queue.sort_by_key(|q| std::cmp::Reverse(q["waited"].as_u64()));
+        let mut games: Vec<Value> = self
+            .games
+            .iter()
+            .map(|(id, g)| {
+                let players: Vec<Value> = (0..2)
+                    .map(|p| json!({"id": g.ids[p], "user": g.names[p], "online": self.conns.contains_key(&g.ids[p])}))
+                    .collect();
+                json!({"id": id, "mode": g.mode, "players": players, "started": g.started, "turn": g.turn,
+                       "current": g.current, "actions": g.actions})
+            })
+            .collect();
+        games.sort_by_key(|g| g["started"].as_i64());
+        json!({"online": online, "queue": queue, "games": games})
     }
 
     /// The account's new connection; an older one is closed. Returns the connection id.
@@ -201,10 +252,45 @@ impl Hub {
     }
 }
 
-/// The matchmaking tick (every second) and the rate-limit sweep.
+/// Tells the account's friends its status ("online" | "in_game" | "searching" | "offline")
+/// when it changed since the last time: `presence {user, online, status}`.
+pub async fn presence(app: &AppRef, account: i64) {
+    let friends: Result<Vec<i64>, _> = friend::Entity::find()
+        .select_only()
+        .column(friend::Column::B)
+        .filter(friend::Column::A.eq(account))
+        .into_tuple()
+        .all(&app.db)
+        .await;
+    let Ok(friends) = friends else { return };
+    let online = app.hub().conns.get(&account).map(|c| c.name.clone());
+    let name = match online {
+        Some(n) => n,
+        None => db::name_of(&app.db, account).await.unwrap_or_default(),
+    };
+    let mut hub = app.hub();
+    let status = hub.status(account);
+    if hub.shown.get(&account).copied().unwrap_or("offline") == status {
+        return;
+    }
+    if status == "offline" {
+        hub.shown.remove(&account);
+    } else {
+        hub.shown.insert(account, status);
+    }
+    let m = json!({"t": "presence", "user": name, "online": status != "offline", "status": status});
+    for f in friends {
+        hub.send(f, &m);
+    }
+}
+
+/// The matchmaking tick (every second), the rate-limit sweep, the admin panels' live
+/// snapshot (when it changed) and, hourly, the deletion of old events.
 pub fn spawn_background(app: AppRef) {
     tokio::spawn(async move {
         let mut tick = tokio::time::interval(Duration::from_secs(1));
+        let mut last_live = String::new();
+        let mut n: u64 = 0;
         loop {
             tick.tick().await;
             let now = Instant::now();
@@ -213,12 +299,25 @@ pub fn spawn_background(app: AppRef) {
                 tokio::spawn(game::start(app.clone(), mode, players));
             }
             app.logins.lock().unwrap_or_else(|e| e.into_inner()).sweep(now);
+            let live = app.hub().live_json();
+            let text = live.to_string();
+            if text != last_live {
+                app.log.push(&json!({"t": "live", "live": live}));
+                last_live = text;
+            }
+            if n.is_multiple_of(3600) {
+                let old = events::now_ms() - events::KEEP_DAYS * 86_400_000;
+                if let Err(e) = entity::event::Entity::delete_many().filter(entity::event::Column::At.lt(old)).exec(&app.db).await {
+                    tracing::error!("pruning events: {e}");
+                }
+            }
+            n += 1;
         }
     });
 }
 
 pub fn router(app: AppRef) -> Router {
-    Router::new().route("/", get(ws_upgrade)).merge(admin::routes()).with_state(app)
+    Router::new().route("/", get(ws_upgrade)).merge(admin::routes(app.clone())).with_state(app)
 }
 
 pub fn client_ip(app: &App, headers: &HeaderMap, addr: SocketAddr) -> IpAddr {
