@@ -3,6 +3,7 @@
 tools/gen_art_styles.py — the original art (art/original, local only), the current
 generated art (art/cards) and every new style (build/art_styles/<style>).
 Result: build/art_styles/page/index.html (open it in a browser; the images are copied next to it).
+With --all: every card that has a picture in any new style (e.g. after gen_art_styles.py --all).
 """
 import json
 import os
@@ -23,8 +24,12 @@ def main():
     data = json.load(open(os.path.join(ROOT, "data", "cards.json")))
     cards = {c["id"]: c for c in (data if isinstance(data, list) else data.values())}
     os.makedirs(os.path.join(PAGE, "img"), exist_ok=True)
+    ids = CARDS
+    if "--all" in sys.argv:
+        drawn = {f[:-4] for s in STYLES if os.path.isdir(os.path.join(OUT, s)) for f in os.listdir(os.path.join(OUT, s)) if f.endswith(".jpg")}
+        ids = CARDS + sorted(drawn - set(CARDS))
     rows = []
-    for cid in CARDS:
+    for cid in ids:
         c = cards[cid]
         cells = []
         for key, _label, folder in SETS:
