@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classic HS 0.27</title>
+<style>
+:root { --bg:#14100c; --panel:#211912; --panel2:#2b2018; --line:#46362a; --text:#f3e9d6; --muted:#b4a387; --gold:#f2c230; --green:#55d47a; --blue:#7ec8ff; --orange:#ffae4a; --red:#ff7a6b; --violet:#c9a7ff; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f7f0e3; --panel:#fffaf1; --panel2:#f7eedc; --line:#e2d3b8; --text:#2a1f17; --muted:#6c5a43; --gold:#a8741a; --green:#1f8a3a; --blue:#1d6fb8; --orange:#b5651d; --red:#b33a2c; --violet:#6b46b8; } }
+:root[data-theme="light"] { --bg:#f7f0e3; --panel:#fffaf1; --panel2:#f7eedc; --line:#e2d3b8; --text:#2a1f17; --muted:#6c5a43; --gold:#a8741a; --green:#1f8a3a; --blue:#1d6fb8; --orange:#b5651d; --red:#b33a2c; --violet:#6b46b8; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:15.5px/1.6 -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { display:grid; grid-template-columns:260px 1fr; min-height:100vh; }
+nav { position:sticky; top:0; height:100vh; overflow:auto; border-right:1px solid var(--line); padding:20px 12px; background:var(--panel); }
+nav h1 { font-size:19px; color:var(--gold); margin:0 8px 2px; }
+nav .sub { color:var(--muted); font-size:12.5px; margin:0 8px 14px; }
+nav button.sec { display:flex; gap:9px; align-items:center; width:100%; text-align:left; font:inherit; font-size:14.5px; background:none; color:var(--text); border:1px solid transparent; border-radius:9px; padding:7px 10px; cursor:pointer; }
+nav button.sec:hover { border-color:var(--line); }
+nav button.sec.on { background:var(--panel2); border-color:var(--gold); }
+nav .ico { width:22px; text-align:center; }
+.theme { display:flex; gap:4px; margin:16px 8px 0; }
+.theme button { flex:1; font:inherit; font-size:12.5px; padding:5px; border-radius:7px; border:1px solid var(--line); background:var(--panel2); color:var(--text); cursor:pointer; }
+.theme button.on { border-color:var(--gold); color:var(--gold); }
+main { padding:28px 38px 90px; max-width:1100px; }
+section { display:none; } section.on { display:block; }
+h2 { color:var(--gold); margin:0 0 6px; font-size:28px; }
+h3 { margin:24px 0 8px; font-size:18px; }
+.lead { color:var(--muted); font-size:16px; margin:0 0 18px; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:12px 0; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }
+.stat { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+.stat b { display:block; font-size:30px; color:var(--gold); line-height:1.1; }
+.stat span { color:var(--muted); font-size:13.5px; }
+.tile { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; cursor:pointer; transition:transform .15s, border-color .15s; }
+.tile:hover { transform:translateY(-2px); border-color:var(--gold); }
+.tile .t { font-weight:700; margin-bottom:4px; }
+.tile .d { color:var(--muted); font-size:14px; }
+code, .path { font:13px ui-monospace, SFMono-Regular, Menlo, monospace; background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:1px 6px; }
+pre { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px 14px; overflow:auto; font:13px/1.5 ui-monospace, Menlo, monospace; }
+table { border-collapse:collapse; width:100%; font-size:14.5px; }
+td, th { border-bottom:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+th { color:var(--muted); font-weight:600; }
+a { color:var(--blue); }
+.ok { color:var(--green); font-weight:600; } .no { color:var(--red); font-weight:600; }
+details { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 16px; margin:8px 0; }
+summary { cursor:pointer; font-weight:600; }
+.pill { display:inline-block; font-size:12px; padding:1px 8px; border-radius:20px; border:1px solid var(--line); color:var(--muted); margin-left:6px; }
+/* before / after */
+.switch { display:inline-flex; border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:6px 0 12px; }
+.switch button { font:inherit; padding:7px 16px; border:0; background:var(--panel); color:var(--text); cursor:pointer; }
+.switch button.on { background:var(--gold); color:#1b140d; font-weight:700; }
+.arch { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; align-items:stretch; }
+.box { border:2px solid var(--line); border-radius:14px; padding:12px 14px; background:var(--panel); position:relative; }
+.box h4 { margin:0 0 6px; font-size:15.5px; }
+.box ul { margin:0; padding-left:18px; color:var(--muted); font-size:14px; }
+.box.rust { border-color:var(--orange); } .box.rust h4 { color:var(--orange); }
+.box.gd { border-color:var(--blue); } .box.gd h4 { color:var(--blue); }
+.box.bad { border-style:dashed; border-color:var(--red); } .box.bad h4 { color:var(--red); }
+.arrow { text-align:center; color:var(--muted); font-size:13px; margin:6px 0; }
+/* protocol stepper */
+.lanes { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:center; font-weight:700; margin-bottom:6px; }
+.msgs { position:relative; }
+.msg { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; align-items:center; margin:6px 0; opacity:.18; transition:opacity .25s; }
+.msg.on { opacity:1; }
+.msg .m { grid-column:span 2; border:1px solid var(--line); background:var(--panel); border-radius:10px; padding:7px 10px; font-size:14px; }
+.msg.l .m { grid-column:1 / span 2; } .msg.r .m { grid-column:2 / span 2; }
+.msg.cur .m { border-color:var(--gold); box-shadow:0 0 0 2px color-mix(in srgb, var(--gold) 30%, transparent); }
+.ctl { display:flex; gap:8px; align-items:center; margin:10px 0; }
+.ctl button { font:inherit; padding:6px 14px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); color:var(--text); cursor:pointer; }
+.ctl button:hover { border-color:var(--gold); }
+.ctl .note { color:var(--muted); font-size:14px; }
+/* gallery */
+.gal { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:12px; }
+.gal figure { margin:0; background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; cursor:zoom-in; }
+.gal img { width:100%; display:block; aspect-ratio:16/9; object-fit:cover; object-position:top; }
+.gal figcaption { padding:7px 10px; font-size:13.5px; color:var(--muted); }
+.arts { display:flex; gap:10px; flex-wrap:wrap; }
+.arts img { width:120px; height:120px; border-radius:12px; object-fit:cover; border:1px solid var(--line); cursor:zoom-in; }
+#box { position:fixed; inset:0; background:rgba(0,0,0,.9); display:none; align-items:center; justify-content:center; flex-direction:column; gap:10px; z-index:9; cursor:zoom-out; }
+#box.on { display:flex; } #box img { max-width:94vw; max-height:86vh; border-radius:10px; } #box p { color:#f3e9d6; margin:0; }
+.bar { height:12px; border-radius:6px; background:var(--panel2); border:1px solid var(--line); overflow:hidden; }
+.bar i { display:block; height:100%; background:linear-gradient(90deg, var(--orange), var(--gold)); }
+@media (max-width: 860px) { .wrap { grid-template-columns:1fr; } nav { position:static; height:auto; } main { padding:18px 16px 70px; } .arch { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h1>Classic HS 0.27</h1>
+  <p class="sub">Итоги: одна логика на Rust, тонкий клиент, свой сервер. Щёлкните раздел или листайте клавишами ← →.</p>
+  <div id="menu"></div>
+  <div class="theme" id="theme"><button data-t="auto">Авто</button><button data-t="light">Светлая</button><button data-t="dark">Тёмная</button></div>
+</nav>
+<main>
+
+<section id="overview" data-title="Обзор" data-ico="🧭">
+  <h2>Что получилось</h2>
+  <p class="lead">Godot теперь только рисует. Все правила — в одном модуле на Rust, который работает в игре на всех платформах, в браузере и на сервере.</p>
+  <div class="grid">
+    <div class="stat"><b>7833</b><span>записанных партий: новый движок совпадает со старым до бита (323 838 шагов, 0 расхождений)</span></div>
+    <div class="stat"><b>−10 044</b><span>строк удалено: движок, карты и бот на GDScript больше не нужны</span></div>
+    <div class="stat"><b>1</b><span>модуль правил на Rust для macOS, Windows, Linux, Android, браузера и сервера</span></div>
+    <div class="stat"><b>0</b><span>скрытых карт соперника приходит клиенту в игре через сервер (проверяет тест)</span></div>
+  </div>
+  <h3>Разделы</h3>
+  <div class="grid" id="tiles"></div>
+</section>
+
+<section id="arch" data-title="Было и стало" data-ico="🏗️">
+  <h2>Как устроена игра</h2>
+  <p class="lead">Где раньше жила логика игры и где она теперь. Переключите, чтобы сравнить.</p>
+  <div class="switch" id="archSwitch"><button data-v="old">Было (0.26)</button><button data-v="new" class="on">Стало (0.27)</button></div>
+  <div id="archOld" hidden>
+    <div class="arch">
+      <div class="box gd"><h4>Игра (Godot)</h4><ul><li>интерфейс</li><li>движок правил на GDScript</li><li>скрипты 534 карт</li><li>бот</li></ul></div>
+      <div class="box gd"><h4>Второй игрок (Godot)</h4><ul><li>та же копия движка</li><li>знает всю колоду и руку соперника</li></ul></div>
+      <div class="box bad"><h4>Сервер (Rust) + судья</h4><ul><li>пересылал ходы</li><li>запускал Godot без окна, чтобы проверить ход</li><li>клиенты знали всё состояние</li></ul></div>
+    </div>
+    <p class="arrow">Логика жила в Godot. Её копию сервер запускал как отдельный процесс.</p>
+  </div>
+  <div id="archNew">
+    <div class="arch">
+      <div class="box gd"><h4>Игра (Godot) — только экран</h4><ul><li>рисует снимок состояния и события</li><li>отправляет действия</li><li><code>game/rules.gd</code> выбирает мост</li></ul></div>
+      <div class="box rust"><h4>Модуль правил (Rust)</h4><ul><li><code>rust/engine</code>: все правила, 534 карты, бот, драфт арены, проверка колод</li><li>JSON API: <code>new</code>, <code>act</code>, <code>legal</code>, <code>snapshot</code>, <code>bot</code>…</li><li>вид для каждого игрока без чужих скрытых карт</li></ul></div>
+      <div class="box rust"><h4>Сервер (Rust)</h4><ul><li>сам ведёт партию тем же модулем</li><li>каждому шлёт только его вид</li><li>таймер хода, переподключение</li><li>админка, журнал событий</li></ul></div>
+    </div>
+    <p class="arrow">Мосты: GDExtension (настольные и Android) · WebAssembly + JavaScriptBridge (браузер) · обычная зависимость Rust (сервер)</p>
+  </div>
+</section>
+
+<section id="engine" data-title="Движок на Rust" data-ico="⚙️">
+  <h2>Движок правил на Rust</h2>
+  <p class="lead"><span class="path">rust/engine</span> (крейт <code>classichs-engine</code>, около 6200 строк). Зависимости: serde, serde_json и sha2; ввода-вывода нет.</p>
+  <h3>Как проверено совпадение со старым движком</h3>
+  <div class="card">
+    Инструмент записал партии старого движка GDScript: случайные ходы и ходы бота, колоды всех классов и случайные колоды из всех карт, 1108 тестовых сцен карт, позиции, которые начинаются с розыгрыша каждой из 491 играбельной карты, 6 миссий обучения и неверные ходы. Тест на Rust повторяет их и на каждом шаге сравнивает хэш состояния, события, список разрешённых ходов и выбор бота.
+    <table style="margin-top:10px">
+      <tr><th>Что</th><th>Итог</th></tr>
+      <tr><td>Партии / шаги / выборы бота</td><td>7833 / 323 838 / 142 694 — <span class="ok">все совпали</span></td></tr>
+      <tr><td>Карты, сыгранные в проверке</td><td>все 382 коллекционные, всего 505</td></tr>
+      <tr><td>Генератор случайных чисел (PCG32 Godot) и <code>JSON.stringify</code></td><td><span class="ok">бит в бит</span></td></tr>
+      <tr><td>Проверка самой проверки</td><td>одно число карты изменили нарочно — тест сразу упал</td></tr>
+    </table>
+  </div>
+  <details><summary>Что изменилось в протоколе</summary><p>Сид перемешивания при муллигане раньше строился через внутренний <code>hash()</code> Godot, а его нельзя повторить в Rust. Теперь он строится через splitmix64. Поэтому версия протокола сетевой игры стала 2, и старые версии с новой играть не могут.</p></details>
+</section>
+
+<section id="bridges" data-title="Мосты к Godot" data-ico="🌉">
+  <h2>Как Godot достаёт до модуля</h2>
+  <p class="lead">Один и тот же JSON API на всех платформах. Отличается только способ вызова.</p>
+  <table>
+    <tr><th>Платформа</th><th>Мост</th><th>Размер</th></tr>
+    <tr><td>macOS (универсальная сборка)</td><td>GDExtension (gdext 0.5.5), класс <code>RulesEngine.call_json</code></td><td>9,1 МБ</td></tr>
+    <tr><td>Windows, Linux</td><td>GDExtension, собирается в CI</td><td>—</td></tr>
+    <tr><td>Android arm64</td><td>GDExtension, собран с NDK</td><td>4,8 МБ</td></tr>
+    <tr><td>Браузер</td><td><code>rules.wasm</code> + <code>rules.js</code>, вызов через <code>JavaScriptBridge</code></td><td>+196 КБ в gzip ко всей загрузке</td></tr>
+    <tr><td>Сервер</td><td>обычная зависимость Rust</td><td>—</td></tr>
+  </table>
+  <h3>Опробованные варианты для браузера</h3>
+  <div class="grid">
+    <div class="card"><b class="ok">Выбран: WASM + JavaScriptBridge</b><br>Работает со стабильным Rust и обычным шаблоном Godot. Модуль готов к первому кадру. 10 000 вызовов — 28 мс.</div>
+    <div class="card"><b class="no">Отклонён: экспериментальный gdext в вебе</b><br>Сборка прошла (emsdk 4.0.20, nightly, 11 минут), но модуль требует исключения WebAssembly, которые Godot 4.7.2 не принимает (LinkError <code>__cpp_exception</code>). Флаг для отключения из nightly убрали.</div>
+  </div>
+  <h3>Скорость вызова</h3>
+  <div class="card">
+    <div>Нативно: 10 000 вызовов за 2 мс</div><div class="bar"><i style="width:7%"></i></div>
+    <div style="margin-top:8px">Браузер: 10 000 вызовов за 28 мс</div><div class="bar"><i style="width:100%"></i></div>
+  </div>
+</section>
+
+<section id="client" data-title="Тонкий клиент" data-ico="🖥️">
+  <h2>Тонкий клиент</h2>
+  <p class="lead">Интерфейс читает <code>GameView</code> — объект, который строится из снимка состояния движка. Поэтому экраны почти не поменялись.</p>
+  <div class="grid">
+    <div class="tile"><div class="t">Тренировка и бот</div><div class="d">Ходы бота считает движок (операция <code>bot</code>).</div></div>
+    <div class="tile"><div class="t">Обучение</div><div class="d">Правила миссий в движке, подсказки остались в GDScript.</div></div>
+    <div class="tile"><div class="t">Отладочный стол и тесты карт</div><div class="d">Позиции строит движок (операции <code>scenario</code> и <code>dump</code>).</div></div>
+    <div class="tile"><div class="t">Драфт арены и колоды</div><div class="d">Операции <code>draft</code> и <code>validate</code>.</div></div>
+  </div>
+  <h3>Игра напрямую, по кодам</h3>
+  <div class="card">У обоих игроков работает свой движок. Каждый ход проверяется: если ход неверный или хэши разошлись, партия у обоих заканчивается с сообщением «Что-то не сходится: игры у вас разные. Никого не банят».</div>
+  <h3>Тесты</h3>
+  <table>
+    <tr><th>Где</th><th>Сколько</th></tr>
+    <tr><td>Godot (интерфейс и сценарии)</td><td>354, все проходят. Тесты правил переехали в Rust.</td></tr>
+    <tr><td>Rust, движок</td><td>совпадение на записанных партиях, API, виды игроков</td></tr>
+    <tr><td>Rust, сервер</td><td>23: полные партии, утечки скрытых карт, таймеры, переподключение, админка</td></tr>
+  </table>
+</section>
+
+<section id="server" data-title="Сервер" data-ico="🏰">
+  <h2>Сервер ведёт партию сам</h2>
+  <p class="lead">Сервер сам считает партию, а каждый игрок видит только своё. Нажмите «Дальше», чтобы пройти один ход шаг за шагом.</p>
+  <div class="lanes"><div>Игрок A</div><div>Сервер</div><div>Игрок B</div></div>
+  <div class="msgs" id="msgs">
+    <div class="msg r"><div class="m">→ <code>match</code> обоим: режим, соперник, ваше место (0 или 1)</div></div>
+    <div class="msg r"><div class="m">→ <code>state</code> обоим: <b>каждому свой вид</b> и первые карты. Колода и рука соперника скрыты.</div></div>
+    <div class="msg l"><div class="m">A → <code>act {play, …}</code>: «разыграть карту»</div></div>
+    <div class="msg l"><div class="m">Сервер проверяет ход движком. Если ход неверный — <code>act_error</code> только игроку A. После 3 отказов партия заканчивается.</div></div>
+    <div class="msg r"><div class="m">→ <code>state</code> обоим: новый вид и события, отфильтрованные для каждого</div></div>
+    <div class="msg l"><div class="m">75 с без хода → сервер сам заканчивает ход (у муллигана — 45 с)</div></div>
+    <div class="msg r"><div class="m">Связь оборвалась → 30 с, чтобы вернуться: <code>match {rejoin}</code> и свежий <code>state</code></div></div>
+    <div class="msg r"><div class="m">→ <code>game_over</code>: итог, звёзды ранга, счёт арены</div></div>
+  </div>
+  <div class="ctl"><button id="prev">← Назад</button><button id="next">Дальше →</button><button id="all">Показать всё</button><span class="note" id="stepNote"></span></div>
+  <h3>Цифры</h3>
+  <div class="grid">
+    <div class="stat"><b>0,5 мс</b><span>работы сервера на одно действие</span></div>
+    <div class="stat"><b>~1850</b><span>действий в секунду на одно ядро</span></div>
+    <div class="stat"><b>6 КБ</b><span>средний размер сообщения <code>state</code> (самое большое — 18 КБ)</span></div>
+    <div class="stat"><b>56 КБ</b><span>памяти на партию без истории</span></div>
+  </div>
+  <details><summary>Безопасность</summary><ul>
+    <li>Сервер — единственный источник правды. Клиент не получает скрытых карт соперника. Тест проверяет каждое сообщение и падает, если в нём есть скрытая карта.</li>
+    <li>Пароли хранятся как хэши argon2id. Вход живёт 30 дней и продлевается при каждом входе. Сессия хранится как хэш.</li>
+    <li>Публичному серверу нужен <code>wss://</code> (TLS через обратный прокси).</li>
+    <li>Известное ограничение: номера объектов выдаются в порядке списка колоды. В играх через сервер список колоды соперника неизвестен, поэтому по номеру карту не угадать.</li>
+  </ul></details>
+</section>
+
+<section id="lobby" data-title="Лобби и друзья" data-ico="🍻">
+  <h2>Лобби как в игре 2014 года</h2>
+  <p class="lead">Коробки колод, медаль ранга, большая кнопка «Играть». Вход запоминается, а друзья и чат доступны на любом экране. Щёлкните картинку, чтобы увеличить.</p>
+  <div class="gal" data-gal>
+    <figure><img src="img/A_play_ranked.jpg" alt=""><figcaption>Выбор колоды и рейтинговая игра</figcaption></figure>
+    <figure><img src="img/A_searching.jpg" alt=""><figcaption>Поиск соперника</figcaption></figure>
+    <figure><img src="img/A_arena_draft.jpg" alt=""><figcaption>Драфт арены</figcaption></figure>
+    <figure><img src="img/A_arena_run.jpg" alt=""><figcaption>Забег арены: 12 побед или 3 поражения</figcaption></figure>
+    <figure><img src="img/A_friends.jpg" alt=""><figcaption>Панель друзей поверх экрана</figcaption></figure>
+    <figure><img src="img/A_chat.jpg" alt=""><figcaption>Чат</figcaption></figure>
+    <figure><img src="img/B_match_toast.jpg" alt=""><figcaption>Сообщение во время матча</figcaption></figure>
+    <figure><img src="img/B_invite.jpg" alt=""><figcaption>Приглашение с любого экрана</figcaption></figure>
+  </div>
+</section>
+
+<section id="admin" data-title="Админка" data-ico="🛡️">
+  <h2>Панель администратора</h2>
+  <p class="lead">Одностраничное приложение на Preact без сборки. Данные приходят через JSON API на Rust, работа с базой — через SeaORM. Изменения появляются сразу по WebSocket.</p>
+  <div class="gal" data-gal>
+    <figure><img src="img/dashboard_dark.jpg" alt=""><figcaption>Дашборд: кто в сети, очереди, живые игры, графики</figcaption></figure>
+    <figure><img src="img/events_light.jpg" alt=""><figcaption>Журнал событий: фильтры, сортировка, живая лента</figcaption></figure>
+    <figure><img src="img/game_live_dark.jpg" alt=""><figcaption>Партия в реальном времени</figcaption></figure>
+    <figure><img src="img/account_dark.jpg" alt=""><figcaption>Аккаунт: ранг, друзья, игры, сессии, действия</figcaption></figure>
+    <figure><img src="img/messages_dark.jpg" alt=""><figcaption>Переписка игроков</figcaption></figure>
+    <figure><img src="img/mobile_dashboard_dark.jpg" alt=""><figcaption>На телефоне</figcaption></figure>
+  </div>
+  <details><summary>Что записывает журнал</summary><p>Входы, неудачные входы, регистрацию, выход, обрыв связи, действия с друзьями, сообщения (кто кому и что), приглашения, очередь, арену, начало игры, каждый ход (ход, хэш, события), конец игры с причиной, действия администраторов и ошибки. Записи хранятся 90 дней.</p></details>
+  <details><summary>Вход в админку</summary><p>Сессия на 30 дней, браузер её помнит. Cookie с флагами HttpOnly и SameSite=Strict, токен CSRF в заголовке, проверка Origin, строгий CSP. Суперпользователя создаёт команда <code>classichs-server admin &lt;имя&gt;</code>.</p></details>
+</section>
+
+<section id="art" data-title="Арт 2D" data-ico="🎨">
+  <h2>Новый стиль артов: 2D</h2>
+  <p class="lead">Готова половина: 267 карт из 534 (каждая вторая, из всех классов). Codex рисовал их в фоне. Пустых или сорванных пакетов не было.</p>
+  <div class="arts" data-gal>
+    <img src="img/art_HERO_08.jpg" alt="Джайна"><img src="img/art_VAN_EX1_298.jpg" alt="Рагнарос"><img src="img/art_VAN_CS2_182.jpg" alt="Йети"><img src="img/art_VAN_EX1_116.jpg" alt="Лирой"><img src="img/art_VAN_CS2_029.jpg" alt="Огненный шар"><img src="img/art_VAN_EX1_559.jpg" alt="">
+  </div>
+  <div class="card">Все картинки рядом с оригиналом и текущим артом: <span class="path">build/art_styles/page/index.html</span>. Вторая половина: <code>python3 tools/gen_art_styles.py --styles cartoon --all</code>.</div>
+</section>
+
+<section id="run" data-title="Как запустить" data-ico="▶️">
+  <h2>Как запустить и проверить</h2>
+  <p class="lead">Команды для сборки модуля, запуска сервера и тестов.</p>
+<pre># модуль правил для своей платформы (игра без него не стартует)
+tools/build_rules.sh macos          # или windows, linux, android, web
+
+# сервер: Godot ему больше не нужен
+cd server
+cargo run --release -- admin admin  # один раз: администратор
+cargo run --release                 # ws://localhost:7377, админка: http://localhost:7377/admin
+
+# проверка: два клиента играют через сервер
+godot --headless --path . --script res://tools/server_e2e.gd -- casual   # или ranked, arena
+
+# тесты
+./run_tests.sh                                   # Godot
+(cd rust &amp;&amp; cargo test --release)              # движок
+(cd server &amp;&amp; cargo test --release)            # сервер</pre>
+  <p>В игре: «Сетевая игра» → «Через игровой сервер». Адрес сервера задаётся в настройках.</p>
+</section>
+
+<section id="checked" data-title="Что проверено" data-ico="✅">
+  <h2>Что проверено</h2>
+  <p class="lead">Каждую часть я запускал по-настоящему, а не только в тестах.</p>
+  <table id="checks">
+    <tr><th>Проверка</th><th>Где</th><th>Итог</th></tr>
+  </table>
+</section>
+
+<section id="next" data-title="Что дальше" data-ico="🧩">
+  <h2>Что решить дальше</h2>
+  <p class="lead">Решения за вами и известные ограничения.</p>
+  <ol>
+    <li><b>Стиль артов 2D:</b> дорисовать вторую половину и сделать его набором в настройках.</li>
+    <li><b>Подпись Android:</b> добавить три секрета в GitHub, чтобы обновления ставились поверх.</li>
+    <li><b>Сервер в интернете:</b> если захотите, его нужно разместить за TLS (<code>wss://</code>).</li>
+    <li><b>Новое название и отделение контента</b> — по плану в <span class="path">docs/superpowers/specs/2026-10-15-content-separation-plan.md</span>.</li>
+  </ol>
+  <h3>Известные ограничения</h3>
+  <ul>
+    <li>Библиотеки для Windows и Linux собраны в CI, но здесь их не запускали. Android-сборку не запускали на устройстве.</li>
+    <li>Если после перезапуска игры вернуться в партию через сервер, у трекера колоды нет списка колоды.</li>
+    <li>Ошибка внутри движка в браузере выключает движок до перезагрузки страницы.</li>
+  </ul>
+</section>
+
+</main>
+</div>
+<div id="box"><img alt=""><p></p></div>
+<script>
+const CHECKS = [
+  ["Новый движок = старый движок", "7833 партии, 323 838 шагов", "ok"],
+  ["Тренировка с ботом через мост", "macOS нативно, приложение macOS, Chrome", "ok"],
+  ["Игра напрямую (p2p) через мост", "две вкладки Chrome по WebRTC; два процесса", "ok"],
+  ["Обычная, рейтинговая игры и арена через сервер", "tools/server_e2e.gd против настоящего сервера", "ok"],
+  ["Утечка скрытых карт", "тест сервера проверяет каждое сообщение", "ok"],
+  ["Таймер хода, 3 отказа, переподключение", "тесты сервера", "ok"],
+  ["Лобби, друзья, чат, вход без пароля после перезапуска", "два окна игры, веб-версия", "ok"],
+  ["Админка в двух темах, на телефоне и с живыми данными", "headless Chrome", "ok"],
+  ["Сборки мостов в CI: macOS, Windows, Linux, Android, веб", "GitHub Actions", "ok"],
+];
+const secs = [...document.querySelectorAll("section")];
+const menu = document.getElementById("menu"), tiles = document.getElementById("tiles");
+function show(id) {
+  secs.forEach(s => s.classList.toggle("on", s.id === id));
+  menu.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.id === id));
+  try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  window.scrollTo(0, 0);
+}
+for (const s of secs) {
+  const b = document.createElement("button");
+  b.className = "sec"; b.dataset.id = s.id;
+  b.innerHTML = `<span class="ico"></span><span></span>`;
+  b.children[0].textContent = s.dataset.ico; b.children[1].textContent = s.dataset.title;
+  b.onclick = () => show(s.id);
+  menu.append(b);
+  if (s.id !== "overview") {
+    const t = document.createElement("div");
+    t.className = "tile";
+    t.innerHTML = `<div class="t"></div><div class="d"></div>`;
+    t.children[0].textContent = s.dataset.ico + " " + s.dataset.title;
+    t.children[1].textContent = (s.querySelector(".lead") || s.querySelector("p") || {}).textContent || "";
+    t.onclick = () => show(s.id);
+    tiles.append(t);
+  }
+}
+document.addEventListener("keydown", e => {
+  if (document.getElementById("box").classList.contains("on")) return;
+  const i = secs.findIndex(s => s.classList.contains("on"));
+  if (e.key === "ArrowRight" && i < secs.length - 1) show(secs[i + 1].id);
+  if (e.key === "ArrowLeft" && i > 0) show(secs[i - 1].id);
+});
+show(secs.some(s => "#" + s.id === location.hash) ? location.hash.slice(1) : "overview");
+// theme
+const root = document.documentElement;
+function theme(t) {
+  if (t === "auto") root.removeAttribute("data-theme"); else root.dataset.theme = t;
+  document.querySelectorAll("#theme button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  try { localStorage.setItem("report-theme", t); } catch (e) {}
+}
+document.querySelectorAll("#theme button").forEach(b => b.onclick = () => theme(b.dataset.t));
+let saved = "auto"; try { saved = localStorage.getItem("report-theme") || "auto"; } catch (e) {}
+theme(saved);
+// before / after
+document.querySelectorAll("#archSwitch button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#archSwitch button").forEach(x => x.classList.toggle("on", x === b));
+  document.getElementById("archOld").hidden = b.dataset.v !== "old";
+  document.getElementById("archNew").hidden = b.dataset.v !== "new";
+});
+// protocol stepper
+const msgs = [...document.querySelectorAll("#msgs .msg")];
+let step = 0;
+function draw() {
+  msgs.forEach((m, i) => { m.classList.toggle("on", i <= step); m.classList.toggle("cur", i === step); });
+  document.getElementById("stepNote").textContent = `шаг ${step + 1} из ${msgs.length}`;
+}
+document.getElementById("next").onclick = () => { step = Math.min(step + 1, msgs.length - 1); draw(); };
+document.getElementById("prev").onclick = () => { step = Math.max(step - 1, 0); draw(); };
+document.getElementById("all").onclick = () => { step = msgs.length - 1; draw(); };
+draw();
+// checks
+const ct = document.getElementById("checks");
+for (const [what, where, r] of CHECKS) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = "<td></td><td></td><td></td>";
+  tr.children[0].textContent = what; tr.children[1].textContent = where;
+  tr.children[2].innerHTML = r === "ok" ? '<span class="ok">✓ работает</span>' : '<span class="no">✗</span>';
+  ct.append(tr);
+}
+// lightbox
+const box = document.getElementById("box");
+document.querySelectorAll("[data-gal] img").forEach(img => img.onclick = () => {
+  box.querySelector("img").src = img.src;
+  box.querySelector("p").textContent = img.closest("figure")?.querySelector("figcaption")?.textContent || img.alt;
+  box.classList.add("on");
+});
+box.onclick = () => box.classList.remove("on");
+document.addEventListener("keydown", e => { if (e.key === "Escape") box.classList.remove("on"); });
+</script>
+</body>
+</html>
