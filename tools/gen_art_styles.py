@@ -4,7 +4,9 @@ local Codex CLI (like tools/gen_card_art.py), into build/art_styles/<style>/<id>
 and tools/art_styles_page.py puts them side by side with the current art.
 
 Usage: python3 tools/gen_art_styles.py [--styles cartoon simple photo] [--workers 3]
-Existing pictures are kept (delete one to draw it again).
+       python3 tools/gen_art_styles.py --styles cartoon --all [--limit N]   # every card (art/cards)
+With --all the order is every second card first (an even half), then the rest;
+--limit draws at most N new pictures. Existing pictures are kept (delete one to draw it again).
 """
 import argparse
 import concurrent.futures as cf
@@ -75,13 +77,21 @@ def main():
     ap.add_argument("--styles", nargs="+", default=list(STYLES))
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--batch", type=int, default=5)
+    ap.add_argument("--all", action="store_true", help="every card that has art in art/cards")
+    ap.add_argument("--limit", type=int, default=0, help="at most N new pictures per style")
     a = ap.parse_args()
+    ids = CARDS
+    if a.all:
+        every = sorted(f[:-4] for f in os.listdir(os.path.join(ROOT, "art", "cards")) if f.endswith(".jpg"))
+        ids = every[::2] + every[1::2]  # an even half first
     data = json.load(open(os.path.join(ROOT, "data", "cards.json")))
     cards = {c["id"]: c for c in (data if isinstance(data, list) else data.values())}
     jobs = []
     for style in a.styles:
         os.makedirs(os.path.join(OUT, style), exist_ok=True)
-        todo = [i for i in CARDS if not os.path.exists(os.path.join(OUT, style, i + ".jpg"))]
+        todo = [i for i in ids if not os.path.exists(os.path.join(OUT, style, i + ".jpg"))]
+        if a.limit:
+            todo = todo[:a.limit]
         jobs += [(style, todo[k:k + a.batch]) for k in range(0, len(todo), a.batch)]
     print(f"{len(jobs)} batches", flush=True)
     with cf.ThreadPoolExecutor(a.workers) as ex:
