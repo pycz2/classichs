@@ -10,7 +10,7 @@ signal emote_received(player: int, id: String)
 ## The opponent hovers, aims or looks at something (not part of the game state).
 signal intent_received(intent: Dictionary)
 
-const PROTOCOL := 1
+const PROTOCOL := 2  # 2: portable mulligan shuffle seed (Game.mulligan_seed)
 const EMOTES := ["greetings", "well_played", "thanks", "wow", "oops", "threaten"]
 
 var transport: Transport

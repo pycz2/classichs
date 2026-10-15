@@ -168,9 +168,23 @@ func _run_mulligan(p: int, replace: Array) -> void:
 		e.zone = "DECK"
 		pl.deck.append(e)
 	var own := RandomNumberGenerator.new()
-	own.seed = hash([rng.seed, "mulligan", p])
+	own.seed = mulligan_seed(rng.seed, p)
 	shuffle(pl.deck, own)
 	log_event({"type": "mulligan", "player": p, "count": old.size()})
+
+
+## The seed of player p's mulligan shuffle: splitmix64(seed + (p + 1) * golden).
+## Portable (the Rust engine computes the same); hash() is Godot-internal.
+static func mulligan_seed(seed: int, p: int) -> int:
+	var z := seed + (p + 1) * -7046029254386353131  # 0x9E3779B97F4A7C15
+	z = (z ^ _shr(z, 30)) * -4658895280553007687  # 0xBF58476D1CE4E5B9
+	z = (z ^ _shr(z, 27)) * -7723592293110705685  # 0x94D049BB133111EB
+	return z ^ _shr(z, 31)
+
+
+## Logical shift right of a 64-bit int (GDScript >> keeps the sign).
+static func _shr(x: int, n: int) -> int:
+	return (x >> n) & ((1 << (64 - n)) - 1)
 
 
 func _finish_mulligan() -> void:

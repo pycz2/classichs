@@ -1,0 +1,989 @@
+//! Match state, event queue, death phase, auras and the primitives that card
+//! hooks use (engine/game_state.gd). Turns, actions and legality: game.rs.
+
+use crate::card_db;
+use crate::cards::{self, Base, DeathFn, Hooks, OnFn, Secret, Spec};
+use crate::entity::{int, truthy, Entity, Id, NONE};
+use crate::json;
+use crate::player::Player;
+use crate::rng::Rng;
+use serde_json::{json, Map, Value};
+use sha2::{Digest, Sha256};
+use std::collections::VecDeque;
+
+pub const MAX_HAND: usize = 10;
+pub const MAX_BOARD: usize = 7;
+pub const MAX_MANA: i64 = 10;
+pub const MAX_QUEUE_STEPS: usize = 5000;
+
+pub fn default_hero_power(hero: &str) -> Option<&'static str> {
+    Some(match hero {
+        "HERO_01" => "VAN_HERO_01bp",
+        "HERO_02" => "VAN_HERO_02bp",
+        "HERO_03" => "VAN_HERO_03bp",
+        "HERO_04" => "VAN_HERO_04bp",
+        "HERO_05" => "VAN_HERO_05bp",
+        "HERO_06" => "VAN_HERO_06bp",
+        "HERO_07" => "VAN_HERO_07bp",
+        "HERO_08" => "VAN_HERO_08bp",
+        "HERO_09" => "VAN_HERO_09bp",
+        _ => return None,
+    })
+}
+
+/// An event: a JSON object ({"type": ..., ...}).
+pub type Ev = Map<String, Value>;
+
+#[derive(Clone, Copy)]
+pub(crate) enum Trigger {
+    On(OnFn),
+    Secret(Secret),
+    Deathrattle(DeathFn),
+}
+
+#[derive(Clone, Copy)]
+pub(crate) struct QItem {
+    f: Trigger,
+    me: Id,
+    /// Index into event_log (None: a deathrattle's empty event).
+    ev: Option<usize>,
+    needs_in_play: bool,
+}
+
+/// A choice the player must make (Tracking).
+#[derive(Clone, Debug)]
+pub struct Pending {
+    pub player: usize,
+    pub source: Id,
+    pub options: Vec<Id>,
+    /// The zone each option was offered from.
+    pub zones: Vec<&'static str>,
+}
+
+pub struct Game {
+    pub rng: Rng,
+    pub players: Vec<Player>,
+    /// Entity id n is entities[n - 1]; entities are never removed.
+    pub entities: Vec<Entity>,
+    pub turn: i64,
+    pub current: usize,
+    pub phase: &'static str,
+    pub pending: Option<Pending>,
+    pub game_over: bool,
+    pub winner: i64,
+    pub event_log: Vec<Ev>,
+    /// Full match history, never trimmed: [{"turn", "player", "action", "events"}].
+    /// Entry 0 is {"action": {"type": "start"}} with the opening draws.
+    pub history: Vec<Value>,
+    pub(crate) queue: VecDeque<QItem>,
+    pub(crate) next_id: Id,
+    pub(crate) next_order: i64,
+    /// The card whose effect is running now (buffs and auras remember it; display only).
+    pub source_card: String,
+    pub source_id: Id,
+    /// The deck lists the match started with (the deck tracker shows them).
+    pub start_decks: [Vec<String>; 2],
+}
+
+impl Game {
+    pub(crate) fn blank(seed: i64) -> Game {
+        Game { rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
+            phase: "MULLIGAN", pending: None, game_over: false, winner: -1, event_log: vec![], history: vec![],
+            queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: String::new(), source_id: NONE,
+            start_decks: [vec![], vec![]] }
+    }
+
+    pub(crate) fn setup_players(&mut self, hero0: &str, hero1: &str) {
+        for (i, hero_id) in [hero0, hero1].into_iter().enumerate() {
+            let mut p = Player::new(i);
+            p.hero = self.new_entity(hero_id, i);
+            self.enter_play(p.hero);
+            p.hero_power = self.new_entity(default_hero_power(hero_id).unwrap_or("VAN_HERO_08bp"), i);
+            self.enter_play(p.hero_power);
+            self.players.push(p);
+        }
+    }
+
+    // --- entities -------------------------------------------------------------
+
+    pub fn new_entity(&mut self, card_id: &str, controller: usize) -> Id {
+        let id = self.next_id;
+        self.entities.push(Entity::new(id, card_id, controller));
+        self.next_id += 1;
+        id
+    }
+
+    pub fn e(&self, id: Id) -> &Entity {
+        &self.entities[(id - 1) as usize]
+    }
+
+    pub fn em(&mut self, id: Id) -> &mut Entity {
+        &mut self.entities[(id - 1) as usize]
+    }
+
+    /// The entity with this id, if it exists.
+    pub fn ent(&self, id: Id) -> Option<&Entity> {
+        if id >= 1 { self.entities.get((id - 1) as usize) } else { None }
+    }
+
+    pub fn ctrl(&self, id: Id) -> usize {
+        self.e(id).controller
+    }
+
+    pub(crate) fn enter_play(&mut self, id: Id) {
+        let order = self.next_order;
+        self.next_order += 1;
+        let e = self.em(id);
+        e.zone = "PLAY";
+        e.play_order = order;
+    }
+
+    pub fn place_on_board(&mut self, id: Id, pos: i64) {
+        let c = self.ctrl(id);
+        let board = &mut self.players[c].board;
+        let pos = if pos < 0 || pos as usize > board.len() { board.len() } else { pos as usize };
+        board.insert(pos, id);
+        self.enter_play(id);
+    }
+
+    pub fn opponent(&self, p: usize) -> usize {
+        1 - p
+    }
+
+    pub fn minions(&self, p: usize) -> Vec<Id> {
+        self.players[p].board.clone()
+    }
+
+    pub fn all_minions(&self) -> Vec<Id> {
+        let mut v = self.minions(0);
+        v.extend(self.minions(1));
+        self.by_order(v)
+    }
+
+    pub fn chars(&self, p: usize) -> Vec<Id> {
+        let mut v = vec![self.players[p].hero];
+        v.extend(&self.players[p].board);
+        v
+    }
+
+    pub fn all_chars(&self) -> Vec<Id> {
+        let mut v = self.chars(0);
+        v.extend(self.chars(1));
+        self.by_order(v)
+    }
+
+    pub fn hero(&self, p: usize) -> Id {
+        self.players[p].hero
+    }
+
+    pub fn weapon(&self, p: usize) -> Option<Id> {
+        self.players[p].weapon
+    }
+
+    /// Friendly minions of me, without me.
+    pub fn others(&self, me: Id) -> Vec<Id> {
+        self.players[self.ctrl(me)].board.iter().copied().filter(|&m| m != me).collect()
+    }
+
+    /// Summons for me's controller right of me (left-to-right board order).
+    pub fn summon_right(&mut self, me: Id, card_id: &str) -> Id {
+        let c = self.ctrl(me);
+        let pos = match self.players[c].board.iter().position(|&m| m == me) {
+            Some(i) => i as i64 + 1,
+            None => -1,
+        };
+        self.summon(c, card_id, pos)
+    }
+
+    pub fn board_pos(&self, m: Id) -> Option<usize> {
+        self.players[self.ctrl(m)].board.iter().position(|&x| x == m)
+    }
+
+    pub fn adjacent(&self, m: Id) -> Vec<Id> {
+        let board = &self.players[self.ctrl(m)].board;
+        let mut out = vec![];
+        if let Some(i) = board.iter().position(|&x| x == m) {
+            if i > 0 {
+                out.push(board[i - 1]);
+            }
+            if i + 1 < board.len() {
+                out.push(board[i + 1]);
+            }
+        }
+        out
+    }
+
+    /// All entities whose hooks can trigger: heroes, hero powers, weapons, minions, secrets.
+    pub fn in_play(&self) -> Vec<Id> {
+        let mut out = vec![];
+        for p in &self.players {
+            out.push(p.hero);
+            out.push(p.hero_power);
+            if let Some(w) = p.weapon {
+                out.push(w);
+            }
+            out.extend(&p.board);
+            out.extend(&p.secrets);
+        }
+        self.by_order(out)
+    }
+
+    pub fn by_order(&self, mut v: Vec<Id>) -> Vec<Id> {
+        v.sort_by_key(|&id| self.e(id).play_order);
+        v
+    }
+
+    pub fn hooks_of(&self, id: Id) -> &'static Hooks {
+        let e = self.e(id);
+        if e.silenced { cards::of("") } else { cards::of(&e.card_id) }
+    }
+
+    // --- events and resolution --------------------------------------------------
+
+    /// Logs the event (with the card whose effect did it) and returns its index.
+    pub fn log_event(&mut self, ev: Value) -> usize {
+        let Value::Object(mut ev) = ev else { panic!("event must be an object") };
+        if !self.source_card.is_empty() && !ev.contains_key("by") {
+            ev.insert("by".into(), json!(self.source_card));
+            ev.insert("by_id".into(), json!(self.source_id));
+        }
+        self.event_log.push(ev);
+        self.event_log.len() - 1
+    }
+
+    /// An event of the current action.
+    pub fn ev(&self, i: usize) -> &Ev {
+        &self.event_log[i]
+    }
+
+    pub fn ev_i(&self, i: usize, key: &str) -> i64 {
+        int(self.event_log[i].get(key))
+    }
+
+    pub fn ev_s(&self, i: usize, key: &str) -> &str {
+        self.event_log[i].get(key).and_then(Value::as_str).unwrap_or("")
+    }
+
+    pub fn ev_b(&self, i: usize, key: &str) -> bool {
+        truthy(self.event_log[i].get(key))
+    }
+
+    pub fn ev_set(&mut self, i: usize, key: &str, v: Value) {
+        self.event_log[i].insert(key.into(), v);
+    }
+
+    /// Logs the event and queues every matching "on" trigger (card and enchantment hooks).
+    pub fn emit(&mut self, ev: Value) -> usize {
+        let i = self.log_event(ev);
+        let ty = self.ev_s(i, "type").to_string();
+        for e in self.in_play() {
+            let h = self.hooks_of(e);
+            if let Some(f) = h.on(&ty) {
+                self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: true });
+            }
+            if let Some(s) = h.secret {
+                if s.event == ty {
+                    self.queue.push_back(QItem { f: Trigger::Secret(s), me: e, ev: Some(i), needs_in_play: true });
+                }
+            }
+            for hooks in self.ench_hooks(e) {
+                if let Some(f) = hooks.on(&ty) {
+                    self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: true });
+                }
+            }
+        }
+        i
+    }
+
+    /// The hooks of e's enchantments, in order.
+    fn ench_hooks(&self, e: Id) -> Vec<&'static Hooks> {
+        self.e(e).enchantments.iter().filter_map(|x| x.get("hooks").and_then(Value::as_str)).map(cards::of).collect()
+    }
+
+    /// Calls matching "now" hooks (card and enchantment) at once. Used for
+    /// replacement effects (Ice Block, Commanding Shout).
+    pub fn emit_now(&mut self, ev: &mut Ev) {
+        let ty = ev.get("type").and_then(Value::as_str).unwrap_or("").to_string();
+        for e in self.in_play() {
+            if let Some(f) = self.hooks_of(e).now(&ty) {
+                self.from(e, |g| f(g, e, &mut *ev));
+            }
+            for hooks in self.ench_hooks(e) {
+                if let Some(f) = hooks.now(&ty) {
+                    self.from(e, |g| f(g, e, &mut *ev));
+                }
+            }
+        }
+    }
+
+    /// Runs queued triggers, then the death phase, until nothing is left.
+    pub fn resolve(&mut self) {
+        let mut steps = 0;
+        while !self.game_over {
+            while !self.queue.is_empty() && !self.game_over {
+                steps += 1;
+                if steps > MAX_QUEUE_STEPS {
+                    self.queue.clear();
+                    break;
+                }
+                let q = self.queue.pop_front().unwrap();
+                let zone = self.e(q.me).zone;
+                if q.needs_in_play && !(zone == "PLAY" || zone == "SECRET") {
+                    continue;
+                }
+                let me = q.me;
+                self.from(me, |g| match q.f {
+                    Trigger::On(f) => f(g, me, q.ev.unwrap()),
+                    Trigger::Secret(s) => {
+                        let ev = q.ev.unwrap();
+                        if g.secret_ready(me) && (s.cond)(g, me, ev) {
+                            g.reveal(me);
+                            (s.effect)(g, me, ev);
+                        }
+                    }
+                    Trigger::Deathrattle(f) => f(g, me),
+                });
+            }
+            self.update_auras();
+            if !self.death_phase() {
+                break;
+            }
+        }
+        self.update_auras();
+    }
+
+    fn death_phase(&mut self) -> bool {
+        let mut dead = vec![];
+        for p in &self.players {
+            for &m in &p.board {
+                let e = self.e(m);
+                if e.health() <= 0 || truthy(e.tags.get("TO_DESTROY")) {
+                    dead.push(m);
+                }
+            }
+            if let Some(w) = p.weapon {
+                let e = self.e(w);
+                if e.tag("DURABILITY") <= 0 || truthy(e.tags.get("TO_DESTROY")) {
+                    dead.push(w);
+                }
+            }
+        }
+        let dead = self.by_order(dead);
+        for &d in &dead {
+            let c = self.ctrl(d);
+            if self.e(d).is_minion() {
+                let pos = self.players[c].board.iter().position(|&x| x == d).map_or(-1, |i| i as i64);
+                self.em(d).set_tag("DIED_POS", json!(pos));
+                self.players[c].board.retain(|&x| x != d);
+            } else {
+                self.players[c].weapon = None;
+            }
+            self.em(d).zone = "GRAVEYARD";
+        }
+        for &d in &dead {
+            if let Some(f) = self.hooks_of(d).deathrattle {
+                self.queue.push_back(QItem { f: Trigger::Deathrattle(f), me: d, ev: None, needs_in_play: false });
+            }
+            for hooks in self.ench_hooks(d) {
+                if let Some(f) = hooks.deathrattle {
+                    self.queue.push_back(QItem { f: Trigger::Deathrattle(f), me: d, ev: None, needs_in_play: false });
+                }
+            }
+            let e = self.e(d);
+            let ev = json!({"type": "death", "entity": d, "player": e.controller, "card": e.card_id,
+                "minion": e.is_minion()});
+            self.emit(ev);
+        }
+        let mut heroes_dead = vec![];
+        for p in &self.players {
+            let h = self.e(p.hero);
+            if h.health() <= 0 || truthy(h.tags.get("TO_DESTROY")) {
+                heroes_dead.push(p.index);
+            }
+        }
+        if !heroes_dead.is_empty() {
+            self.game_over = true;
+            self.phase = "OVER";
+            self.winner = if heroes_dead.len() == 2 { -1 } else { self.opponent(heroes_dead[0]) as i64 };
+            self.queue.clear();
+            self.log_event(json!({"type": "game_over", "winner": self.winner}));
+            return false;
+        }
+        !dead.is_empty()
+    }
+
+    /// Runs f with source_card set to the card of e, then restores it.
+    pub fn from<R>(&mut self, e: Id, f: impl FnOnce(&mut Game) -> R) -> R {
+        let was = std::mem::take(&mut self.source_card);
+        let was_id = self.source_id;
+        if e != NONE {
+            self.source_card = self.e(e).card_id.clone();
+            self.source_id = e;
+        } else {
+            self.source_id = NONE;
+        }
+        let r = f(self);
+        self.source_card = was;
+        self.source_id = was_id;
+        r
+    }
+
+    pub fn update_auras(&mut self) {
+        let all = self.in_play();
+        let before: Vec<(i64, i64)> = all.iter().map(|&e| (self.e(e).max_health(), self.e(e).health())).collect();
+        for &e in &all {
+            self.em(e).aura = Default::default();
+        }
+        for final_pass in [false, true] {
+            for &e in &all {
+                let h = self.hooks_of(e);
+                let f = if final_pass { h.aura_final } else { h.aura };
+                if let Some(f) = f {
+                    if self.e(e).zone == "PLAY" {
+                        self.from(e, |g| f(g, e));
+                    }
+                }
+            }
+        }
+        for (i, &e) in all.iter().enumerate() {
+            self.em(e).fix_health(before[i].0, before[i].1);
+        }
+    }
+
+    pub fn aura_add(&mut self, t: Id, atk: i64, hp: i64, tags: &[(&str, Value)]) {
+        let src = self.source_card.clone();
+        let a = &mut self.em(t).aura;
+        a.atk += atk;
+        a.hp += hp;
+        if !src.is_empty() && (atk != 0 || hp != 0) {
+            let was = a.src.get(&src).cloned().unwrap_or(json!([0, 0]));
+            a.src.insert(src, json!([int(was.get(0)) + atk, int(was.get(1)) + hp]));
+        }
+        for (k, v) in tags {
+            if *k == "SPELLPOWER" || *k == "DOUBLE_HEAL_DAMAGE" {
+                let n = int(a.tags.get(*k)) + int(Some(v));
+                a.tags.insert(k.to_string(), json!(n));
+            } else {
+                a.tags.insert(k.to_string(), v.clone());
+            }
+        }
+    }
+
+    // --- primitives -------------------------------------------------------------
+
+    fn alive_in_play(&self, t: Id) -> bool {
+        t != NONE && self.e(t).zone == "PLAY"
+    }
+
+    pub fn damage(&mut self, src: Id, t: Id, amount: i64) -> i64 {
+        if !self.alive_in_play(t) || amount <= 0 {
+            return 0;
+        }
+        let mut pre = json!({"type": "predamage", "source": src, "target": t, "amount": amount});
+        self.emit_now(pre.as_object_mut().unwrap());
+        let mut amount = int(pre.get("amount"));
+        if amount <= 0 || self.e(t).has("IMMUNE") {
+            return 0;
+        }
+        if self.e(t).has("DIVINE_SHIELD") {
+            self.em(t).erase_tag("DIVINE_SHIELD");
+            self.log_event(json!({"type": "divine_shield_lost", "target": t}));
+            return 0;
+        }
+        if self.e(t).is_hero() {
+            let armor = self.e(t).tag("ARMOR");
+            let absorbed = armor.min(amount);
+            self.em(t).set_tag("ARMOR", json!(armor - absorbed));
+            amount -= absorbed;
+            if amount <= 0 {
+                self.log_event(json!({"type": "armor_lost", "target": t, "amount": absorbed}));
+                return 0;
+            }
+        }
+        self.em(t).damage += amount;
+        if src != NONE && self.e(src).is_minion() && self.e(src).has("STEALTH") {
+            self.em(src).erase_tag("STEALTH");
+        }
+        let player = self.ctrl(t);
+        self.emit(json!({"type": "damage", "source": src, "target": t, "amount": amount, "player": player}));
+        amount
+    }
+
+    pub fn heal(&mut self, src: Id, t: Id, amount: i64) -> i64 {
+        if !self.alive_in_play(t) || amount <= 0 {
+            return 0;
+        }
+        if src != NONE && self.e(self.hero(self.ctrl(src))).has("HEAL_IS_DAMAGE") {
+            return self.damage(src, t, amount);
+        }
+        let healed = amount.min(self.e(t).damage);
+        if healed <= 0 {
+            return 0;
+        }
+        self.em(t).damage -= healed;
+        self.emit(json!({"type": "heal", "source": src, "target": t, "amount": healed}));
+        healed
+    }
+
+    pub fn destroy(&mut self, e: Id) {
+        if self.alive_in_play(e) {
+            self.em(e).set_tag("TO_DESTROY", json!(true));
+        }
+    }
+
+    pub fn summon(&mut self, p: usize, card_id: &str, pos: i64) -> Id {
+        if self.players[p].board.len() >= MAX_BOARD {
+            return NONE;
+        }
+        let e = self.new_entity(card_id, p);
+        self.summon_entity(e, pos)
+    }
+
+    /// Puts an existing entity (for example a card from the hand) onto the board as a summon.
+    pub fn summon_entity(&mut self, e: Id, pos: i64) -> Id {
+        let c = self.ctrl(e);
+        if self.players[c].board.len() >= MAX_BOARD {
+            return NONE;
+        }
+        self.place_on_board(e, pos);
+        self.em(e).give_tag("EXHAUSTED", false);
+        let card = self.e(e).card_id.clone();
+        self.emit(json!({"type": "summon", "entity": e, "player": c, "card": card}));
+        self.emit(json!({"type": "after_summon", "entity": e, "player": c, "card": card}));
+        e
+    }
+
+    pub fn draw(&mut self, p: usize, count: i64) -> Vec<Id> {
+        let mut out = vec![];
+        for _ in 0..count {
+            let Some(e) = self.players[p].deck.pop() else {
+                self.players[p].fatigue += 1;
+                let f = self.players[p].fatigue;
+                self.log_event(json!({"type": "fatigue", "player": p, "amount": f}));
+                self.damage(NONE, self.players[p].hero, f);
+                continue;
+            };
+            let card = self.e(e).card_id.clone();
+            if self.players[p].hand.len() >= MAX_HAND {
+                self.em(e).zone = "GRAVEYARD";
+                self.log_event(json!({"type": "burn", "player": p, "entity": e, "card": card}));
+                continue;
+            }
+            self.em(e).zone = "HAND";
+            self.players[p].hand.push(e);
+            out.push(e);
+            self.emit(json!({"type": "draw", "player": p, "entity": e, "card": card}));
+        }
+        out
+    }
+
+    /// Draws a specific card from p's deck (burns it if the hand is full).
+    pub fn draw_entity(&mut self, p: usize, e: Id) {
+        let pl = &mut self.players[p];
+        let Some(i) = pl.deck.iter().position(|&x| x == e) else { return };
+        pl.deck.remove(i);
+        let card = self.e(e).card_id.clone();
+        if self.players[p].hand.len() >= MAX_HAND {
+            self.em(e).zone = "GRAVEYARD";
+            self.log_event(json!({"type": "burn", "player": p, "entity": e, "card": card}));
+            return;
+        }
+        self.em(e).zone = "HAND";
+        self.players[p].hand.push(e);
+        self.emit(json!({"type": "draw", "player": p, "entity": e, "card": card}));
+    }
+
+    pub fn add_to_hand(&mut self, p: usize, card_id: &str) -> Id {
+        if self.players[p].hand.len() >= MAX_HAND {
+            return NONE;
+        }
+        let e = self.new_entity(card_id, p);
+        self.em(e).zone = "HAND";
+        self.players[p].hand.push(e);
+        self.log_event(json!({"type": "add_to_hand", "player": p, "entity": e, "card": card_id}));
+        e
+    }
+
+    pub fn discard_random(&mut self, p: usize, count: i64) {
+        for _ in 0..count {
+            let hand = self.players[p].hand.clone();
+            let e = self.random_choice(&hand);
+            if e == NONE {
+                return;
+            }
+            self.players[p].hand.retain(|&x| x != e);
+            self.em(e).zone = "GRAVEYARD";
+            let card = self.e(e).card_id.clone();
+            self.emit(json!({"type": "discard", "player": p, "entity": e, "card": card}));
+        }
+    }
+
+    pub fn buff(&mut self, e: Id, atk: i64, hp: i64, eot: bool) {
+        let mut ench = json!({"atk": atk, "hp": hp, "eot": eot});
+        if !self.source_card.is_empty() {
+            ench["src"] = json!(self.source_card);
+        }
+        self.em(e).add_enchant(ench);
+        self.log_event(json!({"type": "buff", "target": e, "atk": atk, "hp": hp}));
+    }
+
+    /// Sets Attack and/or Health (-1 keeps the value). Setting Health clears damage.
+    pub fn set_stats(&mut self, e: Id, atk: i64, hp: i64) {
+        let mut ench = Map::new();
+        if atk >= 0 {
+            ench.insert("set_atk".into(), json!(atk));
+        }
+        if hp >= 0 {
+            ench.insert("set_hp".into(), json!(hp));
+            self.em(e).damage = 0;
+        }
+        if !self.source_card.is_empty() {
+            ench.insert("src".into(), json!(self.source_card));
+        }
+        self.em(e).enchantments.push(ench);
+        self.log_event(json!({"type": "buff", "target": e, "set_atk": atk, "set_hp": hp}));
+    }
+
+    pub fn silence(&mut self, e: Id) {
+        self.em(e).silence();
+        self.log_event(json!({"type": "silence", "target": e}));
+    }
+
+    pub fn freeze(&mut self, e: Id) {
+        if !self.alive_in_play(e) {
+            return;
+        }
+        let cur = self.current;
+        let x = self.em(e);
+        x.set_tag("FROZEN", json!(true));
+        if x.controller == cur {
+            x.set_tag("FROZEN_THIS_TURN", json!(true));
+        }
+        self.log_event(json!({"type": "freeze", "target": e}));
+    }
+
+    pub fn transform(&mut self, e: Id, card_id: &str) -> Id {
+        let c = self.ctrl(e);
+        let Some(i) = self.players[c].board.iter().position(|&x| x == e) else { return NONE };
+        let n = self.new_entity(card_id, c);
+        self.players[c].board[i] = n;
+        let order = self.e(e).play_order;
+        let ne = self.em(n);
+        ne.zone = "PLAY";
+        ne.play_order = order;
+        ne.give_tag("EXHAUSTED", false);
+        self.em(e).zone = "SETASIDE";
+        self.log_event(json!({"type": "transform", "from": e, "to": n, "card": card_id}));
+        n
+    }
+
+    /// Returns a minion to its owner's hand as a fresh card (NONE if the hand is full).
+    pub fn return_to_hand(&mut self, e: Id) -> Id {
+        let c = self.ctrl(e);
+        if !self.players[c].board.contains(&e) {
+            return NONE;
+        }
+        self.players[c].board.retain(|&x| x != e);
+        self.em(e).zone = "SETASIDE";
+        let card = self.e(e).card_id.clone();
+        let n = self.add_to_hand(c, &card);
+        self.log_event(json!({"type": "return_to_hand", "entity": e, "new": n}));
+        n
+    }
+
+    pub fn take_control(&mut self, e: Id, p: usize) {
+        let c = self.ctrl(e);
+        if c == p || !self.players[c].board.contains(&e) {
+            return;
+        }
+        self.players[c].board.retain(|&x| x != e);
+        if self.players[p].board.len() >= MAX_BOARD {
+            self.em(e).zone = "GRAVEYARD";
+            self.log_event(json!({"type": "destroy", "target": e}));
+            return;
+        }
+        self.em(e).controller = p;
+        self.players[p].board.push(e);
+        let x = self.em(e);
+        x.give_tag("EXHAUSTED", false);
+        x.set_tag("ATTACKS", json!(0));
+        self.log_event(json!({"type": "take_control", "target": e, "player": p}));
+    }
+
+    pub fn equip(&mut self, p: usize, card_id: &str) -> Id {
+        let w = self.new_entity(card_id, p);
+        self.equip_entity(w)
+    }
+
+    pub fn equip_entity(&mut self, w: Id) -> Id {
+        let c = self.ctrl(w);
+        if let Some(old) = self.players[c].weapon {
+            self.em(old).zone = "GRAVEYARD";
+            self.log_event(json!({"type": "destroy", "target": old}));
+        }
+        self.players[c].weapon = Some(w);
+        self.enter_play(w);
+        let card = self.e(w).card_id.clone();
+        self.emit(json!({"type": "equip", "player": c, "entity": w, "card": card}));
+        w
+    }
+
+    pub fn gain_armor(&mut self, p: usize, n: i64) {
+        let h = self.hero(p);
+        let a = self.e(h).tag("ARMOR");
+        self.em(h).set_tag("ARMOR", json!(a + n));
+        self.log_event(json!({"type": "armor", "player": p, "amount": n}));
+    }
+
+    /// Full crystals by default. empty=true adds empty crystals (Wild Growth).
+    pub fn gain_mana(&mut self, p: usize, n: i64, empty: bool) {
+        let pl = &mut self.players[p];
+        for _ in 0..n {
+            if pl.max_mana < MAX_MANA {
+                pl.max_mana += 1;
+                if !empty {
+                    pl.mana += 1;
+                }
+            }
+        }
+        let (max, mana) = (pl.max_mana, pl.mana);
+        self.log_event(json!({"type": "mana", "player": p, "max": max, "mana": mana}));
+    }
+
+    /// Prophet Velen doubles damage and healing of spells and hero powers only;
+    /// each Velen doubles again (counter tag on the hero).
+    fn velen(&self, me: Id) -> i64 {
+        let k = self.e(me).kind();
+        if k != "SPELL" && k != "HERO_POWER" {
+            return 1;
+        }
+        1 << int(self.e(self.hero(self.ctrl(me))).aura.tags.get("DOUBLE_HEAL_DAMAGE"))
+    }
+
+    pub fn spell_dmg(&self, me: Id, n: i64) -> i64 {
+        let sp: i64 = self.players[self.ctrl(me)].board.iter().map(|&m| self.e(m).spellpower()).sum();
+        (n + sp) * self.velen(me)
+    }
+
+    pub fn hp_dmg(&self, me: Id, n: i64) -> i64 {
+        n * self.velen(me)
+    }
+
+    pub fn heal_amt(&self, me: Id, n: i64) -> i64 {
+        n * self.velen(me)
+    }
+
+    /// Replaces p's hero with a fresh hero entity (full health, no armor or Frozen).
+    pub fn replace_hero(&mut self, p: usize, card_id: &str) -> Id {
+        let old = self.players[p].hero;
+        self.em(old).zone = "SETASIDE";
+        let h = self.new_entity(card_id, p);
+        self.enter_play(h);
+        self.players[p].hero = h;
+        self.log_event(json!({"type": "hero_replaced", "player": p, "entity": h, "card": card_id}));
+        h
+    }
+
+    /// Replaces p's hero power with a fresh, unused one.
+    pub fn set_hero_power(&mut self, p: usize, card_id: &str) -> Id {
+        let old = self.players[p].hero_power;
+        self.em(old).zone = "SETASIDE";
+        let hp = self.new_entity(card_id, p);
+        self.enter_play(hp);
+        self.players[p].hero_power = hp;
+        self.log_event(json!({"type": "hero_power_changed", "player": p, "entity": hp, "card": card_id}));
+        hp
+    }
+
+    /// A random element (None for an empty list).
+    pub fn pick<T: Clone>(&mut self, arr: &[T]) -> Option<T> {
+        if arr.is_empty() {
+            return None;
+        }
+        Some(arr[self.rng.randi_range(0, arr.len() as i64 - 1) as usize].clone())
+    }
+
+    pub fn random_choice(&mut self, arr: &[Id]) -> Id {
+        self.pick(arr).unwrap_or(NONE)
+    }
+
+    /// Random entity from arr that is in play and not already dying (health > 0).
+    pub fn random_alive(&mut self, arr: &[Id]) -> Id {
+        let alive: Vec<Id> = arr.iter().copied().filter(|&e| self.e(e).zone == "PLAY" && self.e(e).health() > 0).collect();
+        self.random_choice(&alive)
+    }
+
+    pub fn shuffle<T>(arr: &mut [T], r: &mut Rng) {
+        for i in (1..arr.len()).rev() {
+            let j = r.randi_range(0, i as i64) as usize;
+            arr.swap(i, j);
+        }
+    }
+
+    pub fn shuffle_ids(&mut self, arr: &mut [Id]) {
+        Game::shuffle(arr, &mut self.rng);
+    }
+
+    fn spec_ok(&self, src: Id, spec: &Spec, t: Id) -> bool {
+        let te = self.e(t);
+        let mine = te.controller == self.ctrl(src);
+        let base = match spec.base {
+            Base::Any => true,
+            Base::Minion => te.is_minion(),
+            Base::EnemyMinion => te.is_minion() && !mine,
+            Base::FriendlyMinion => te.is_minion() && mine,
+            Base::EnemyChar => !mine,
+            Base::FriendlyChar => mine,
+            Base::EnemyHero => te.is_hero() && !mine,
+        };
+        base && spec.pred.is_none_or(|p| p(self, src, t))
+    }
+
+    /// Characters that src may target. Enemy Stealth is never targetable;
+    /// Elusive blocks spells and hero powers (is_spell=true).
+    pub fn targets(&self, src: Id, spec: &Spec, is_spell: bool) -> Vec<Id> {
+        let me = self.ctrl(src);
+        self.all_chars()
+            .into_iter()
+            .filter(|&t| {
+                let te = self.e(t);
+                !(te.controller != me && te.has("STEALTH")) && !(is_spell && te.has("ELUSIVE")) && self.spec_ok(src, spec, t)
+            })
+            .collect()
+    }
+
+    pub fn secret_ready(&self, me: Id) -> bool {
+        let e = self.e(me);
+        e.zone == "SECRET" && self.current != e.controller
+    }
+
+    pub fn reveal(&mut self, me: Id) {
+        let c = self.ctrl(me);
+        self.players[c].secrets.retain(|&x| x != me);
+        self.em(me).zone = "GRAVEYARD";
+        let card = self.e(me).card_id.clone();
+        self.emit(json!({"type": "secret_revealed", "entity": me, "player": c, "card": card}));
+    }
+
+    pub fn request_choice(&mut self, me: Id, options: Vec<Id>) {
+        let zones = options.iter().map(|&id| self.e(id).zone).collect();
+        let player = self.ctrl(me);
+        self.pending = Some(Pending { player, source: me, options: options.clone(), zones });
+        self.log_event(json!({"type": "choice", "player": player, "options": options}));
+    }
+
+    pub fn add_cost_mod(&mut self, p: usize, mut m: Value) {
+        m["turn"] = json!(self.turn);
+        let Value::Object(m) = m else { unreachable!() };
+        self.players[p].cost_mods.push(m);
+    }
+
+    fn mod_applies(&self, m: &Map<String, Value>, e: Id) -> bool {
+        let x = self.e(e);
+        match m.get("kind").and_then(Value::as_str).unwrap_or("") {
+            "any" => true,
+            "minion" => x.is_minion(),
+            "spell" => x.kind() == "SPELL",
+            "secret" => x.card.is_secret(),
+            _ => false,
+        }
+    }
+
+    pub fn cost(&self, e: Id) -> i64 {
+        let x = self.e(e);
+        let mut c = x.card.cost;
+        if let Some(f) = cards::of(&x.card_id).cost_mod {
+            c += f(self, e);
+        }
+        for ench in &x.enchantments {
+            c += int(ench.get("cost"));
+        }
+        for src in self.in_play() {
+            if let Some(f) = self.hooks_of(src).cost_aura {
+                if self.e(src).zone == "PLAY" {
+                    c = f(self, src, e, c);
+                }
+            }
+        }
+        for m in &self.players[x.controller].cost_mods {
+            if int(m.get("turn")) == self.turn && self.mod_applies(m, e) {
+                c = if m.contains_key("set") { int(m.get("set")) } else { c + int(m.get("delta")) };
+            }
+        }
+        c.max(0)
+    }
+
+    /// Removes "until": "use" mods that applied to e (called when e is played).
+    pub fn consume_cost_mods(&mut self, e: Id) {
+        let c = self.ctrl(e);
+        let mods = std::mem::take(&mut self.players[c].cost_mods);
+        let keep = mods
+            .into_iter()
+            .filter(|m| {
+                !(m.get("until").and_then(Value::as_str) == Some("use") && int(m.get("turn")) == self.turn && self.mod_applies(m, e))
+            })
+            .collect();
+        self.players[c].cost_mods = keep;
+    }
+
+    /// Hero attack: weapon attack counts only on the controller's own turn.
+    pub fn hero_atk(&self, hero: Id) -> i64 {
+        let h = self.e(hero);
+        let mut v = h.atk();
+        if let Some(w) = self.players[h.controller].weapon {
+            if h.controller == self.current {
+                v += self.e(w).atk();
+            }
+        }
+        v
+    }
+
+    pub fn attack_value(&self, e: Id) -> i64 {
+        if self.e(e).is_hero() { self.hero_atk(e) } else { self.e(e).atk() }
+    }
+
+    // --- look-ahead -------------------------------------------------------------
+
+    /// Deep copy for look-ahead (the bot). Same entity ids and RNG state; history
+    /// and event log are not copied. Call only between actions (empty queue).
+    pub fn clone_state(&self) -> Game {
+        Game { rng: self.rng.clone(), players: self.players.clone(), entities: self.entities.clone(), turn: self.turn,
+            current: self.current, phase: self.phase, pending: self.pending.clone(), game_over: self.game_over,
+            winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(), next_id: self.next_id,
+            next_order: self.next_order, source_card: String::new(), source_id: NONE, start_decks: [vec![], vec![]] }
+    }
+
+    // --- serialization ----------------------------------------------------------
+
+    pub fn pending_value(&self) -> Value {
+        match &self.pending {
+            None => json!({}),
+            Some(p) => {
+                let zones: Map<String, Value> =
+                    p.options.iter().zip(&p.zones).map(|(id, z)| (id.to_string(), json!(z))).collect();
+                json!({"player": p.player, "source": p.source, "options": p.options, "zones": zones})
+            }
+        }
+    }
+
+    pub fn to_dict(&self) -> Value {
+        let ents: Map<String, Value> = self.entities.iter().map(|e| (e.id.to_string(), e.snapshot())).collect();
+        let ps: Vec<Value> = self.players.iter().map(|p| p.snapshot()).collect();
+        json!({"turn": self.turn, "current": self.current, "phase": self.phase,
+            "rng": (self.rng.state as i64).to_string(), "next_id": self.next_id, "next_order": self.next_order,
+            "pending": self.pending_value(), "game_over": self.game_over, "winner": self.winner,
+            "entities": ents, "players": ps})
+    }
+
+    pub fn state_hash(&self) -> String {
+        hex(&Sha256::digest(json::stringify(&self.to_dict()).as_bytes()))
+    }
+
+    pub fn card(&self, id: Id) -> &'static card_db::Card {
+        self.e(id).card
+    }
+}
+
+pub fn hex(b: &[u8]) -> String {
+    b.iter().map(|x| format!("{:02x}", x)).collect()
+}
