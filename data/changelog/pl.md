@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-10-15
+
+### Dodano
+- Serwer gry (eksperymentalny, opcjonalny): Gra sieciowa → „Przez serwer gry”. Konto z hasłem, zwykłe i rankingowe gry (25 rang z 2014 roku i Legenda, gwiazdki, co miesiąc nowy sezon; ukryty ranking szuka równego przeciwnika), Arena do 12 zwycięstw lub 3 porażek, znajomi po tagu, wiadomości, zaproszenia do gry towarzyskiej i blokowanie. Serwer sprawdza każdy ruch regułami samej gry. Adres serwera jest w Ustawienia → „Serwer gry” (domyślnie ws://localhost:7377). Sam serwer (Rust, folder server/) nie jest nigdzie hostowany: uruchamiasz go sam; każde wydanie zawiera serwer dla Windows, macOS i Linuxa. Gra bezpośrednia kodami zostaje bez zmian.
+
 ## [0.25.1] - 2026-10-15
 
 ### Naprawiono

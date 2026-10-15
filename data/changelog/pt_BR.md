@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-10-15
+
+### Adicionado
+- Um servidor de jogo (experimental, opcional): Jogo Online → “Por um servidor de jogo”. Uma conta com senha, partidas normais e ranqueadas (os 25 ranques de 2014 e Lenda, estrelas, uma temporada nova todo mês; uma pontuação oculta encontra um oponente do mesmo nível), a Arena até 12 vitórias ou 3 derrotas, amigos por tag, mensagens, convites para uma partida amistosa e bloqueio. O servidor verifica cada jogada com as regras do próprio jogo. O endereço do servidor fica em Configurações → “Servidor de jogo” (ws://localhost:7377 por padrão). O servidor (Rust, pasta server/) não fica hospedado em lugar nenhum: você mesmo o roda; cada versão traz o servidor para Windows, macOS e Linux. O jogo direto com códigos continua como antes.
+
 ## [0.25.1] - 2026-10-15
 
 ### Corrigido

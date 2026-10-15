@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-10-15
+
+### Hinzugefügt
+- Ein Spielserver (experimentell, optional): Online-Spiel → „Über einen Spielserver“. Ein Konto mit Passwort, normale und Ranglistenspiele (die 25 Ränge von 2014 und Legende, Sterne, jeden Monat eine neue Saison; eine versteckte Wertung findet einen gleich starken Gegner), die Arena bis 12 Siege oder 3 Niederlagen, Freunde per Tag, Nachrichten, Einladungen zu einem Freundschaftsspiel und Blockieren. Der Server prüft jeden Zug mit den Regeln des Spiels selbst. Die Serveradresse steht unter Einstellungen → „Spielserver“ (standardmäßig ws://localhost:7377). Der Server selbst (Rust, Ordner server/) wird nirgends gehostet: Du startest ihn selbst; jedes Release enthält Server-Builds für Windows, macOS und Linux. Das direkte Spiel mit Codes bleibt, wie es war.
+
 ## [0.25.1] - 2026-10-15
 
 ### Behoben

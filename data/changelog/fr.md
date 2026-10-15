@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-10-15
+
+### Ajouté
+- Un serveur de jeu (expérimental, facultatif) : Partie en ligne → « Par un serveur de jeu ». Un compte avec mot de passe, parties normales et classées (les 25 rangs de 2014 et Légende, étoiles, une nouvelle saison chaque mois ; une cote cachée trouve un adversaire de même niveau), l'Arène jusqu'à 12 victoires ou 3 défaites, amis par tag, messages, invitations à une partie amicale et blocage. Le serveur vérifie chaque coup avec les règles du jeu lui-même. L'adresse du serveur est dans Paramètres → « Serveur de jeu » (ws://localhost:7377 par défaut). Le serveur (Rust, dossier server/) n'est hébergé nulle part : vous le lancez vous-même ; chaque version contient le serveur pour Windows, macOS et Linux. Le jeu direct avec des codes reste comme avant.
+
 ## [0.25.1] - 2026-10-15
 
 ### Corrigé

@@ -57,17 +57,22 @@ func _ready() -> void:
 	add_child(_body)
 	deck = _first_playable()
 	link.message.connect(_on_message)
-	link.closed.connect(func(why):
+	link.closed.connect(func(_why):
 		queued = ""
 		_go("login")
-		say(tr("Connection lost") + (": " + why if why != "" else "")))
-	if link.is_open() and link.token != "":
+		say(tr("Connection lost") if link.was_open() else tr("Could not connect to %s") % link.url))
+	if link.is_open() and link.token != "":  # back from a game
+		if link.get_meta("mode", "") == "arena":
+			tab = "Arena"
+		_set_arena(link.me.get("arena"))
 		_go("lobby")
 		link.send({"t": "friends"})
 		var last: Dictionary = link.get_meta("game_over", {})
-		if not last.is_empty():
-			say(_result_text(last))
-			link.remove_meta("game_over")
+		link.remove_meta("game_over")
+		if last.is_empty():
+			link.send({"t": "me"})
+		else:
+			_on_message(last)  # the result, the Arena score; asks for a fresh profile
 	elif link.is_open():
 		_go("login")
 	else:
@@ -180,7 +185,7 @@ func log_in(op: String, user: String, password: String) -> void:
 
 func _build_lobby() -> void:
 	var me := link.me
-	_subtitle.text = "%s#%s  ·  %s" % [me.get("user", ""), me.get("tag", ""), rank_text(me.get("rank", {}))]
+	_subtitle.text = "%s  ·  %s" % [player_label(me), rank_text(me.get("rank", {}))]
 	var tabs := VBoxContainer.new()
 	tabs.position = Vector2(40, 130)
 	tabs.add_theme_constant_override("separation", 10)
@@ -213,12 +218,12 @@ func _build_lobby() -> void:
 		_build_invite()
 
 
-## "Rank 18 · Sorcerer's Apprentice · stars 2 of 3" or "Legend 42".
+## "Rank 18 · Sorcerer's Apprentice · stars 2 of 3" or "Legend 42" (server: {rank, stars, legend}).
 func rank_text(r: Dictionary) -> String:
 	if r.is_empty():
 		return ""
-	if r.get("legend", false) or int(r.get("rank", 25)) == 0:
-		var n := int(r.get("legend_rank", 0))
+	if int(r.get("rank", 25)) == 0:  # Legend; "legend" is the place, null outside the top
+		var n := int(r.get("legend")) if r.get("legend") is float else 0
 		return tr("Legend") + (" %d" % n if n > 0 else "")
 	var rank := int(r.get("rank", 25))
 	var need := 2 if rank > 20 else (3 if rank > 15 else (4 if rank > 10 else 5))
@@ -316,8 +321,8 @@ func _choose_deck() -> void:
 # --- arena --------------------------------------------------------------------
 
 func _build_arena(area: Control) -> void:
-	var st: String = arena.get("status", "")
-	if arena.is_empty() or st in ["", "none", "over"]:
+	var st: String = arena.get("status", "")  # only "over" (set here after the last game); the server's run has none
+	if arena.is_empty() or st == "over":
 		if st == "over":
 			var res := Palette.label(tr("Your last Arena: %d wins, %d losses") % [int(arena.get("wins", 0)), int(arena.get("losses", 0))], 22)
 			res.position = Vector2(0, 0)
@@ -423,7 +428,9 @@ func arena_deck() -> Deck:
 # --- friends and messages -----------------------------------------------------
 
 func _build_friends(area: Control) -> void:
-	var mine := Palette.label(tr("Your tag: %s — share it so friends can add you") % link.me.get("tag", ""), 18)
+	var my_tag := _str(link.me.get("tag"))
+	var mine := Palette.label(tr("Your tag: %s — share it so friends can add you") % my_tag if my_tag != ""
+		else tr("Set a tag in the profile so friends can add you"), 18)
 	area.add_child(mine)
 	var add := HBoxContainer.new()
 	add.position = Vector2(0, 34)
@@ -439,7 +446,8 @@ func _build_friends(area: Control) -> void:
 	b.custom_minimum_size = Vector2(180, 40)
 	b.pressed.connect(func():
 		if tag.text.strip_edges() != "":
-			link.send({"t": "friend_add", "tag": tag.text.strip_edges()}))
+			var t := tag.text.strip_edges()
+			link.send({"t": "friend_add", "tag": t.substr(t.rfind("#") + 1)}))
 	add.add_child(b)
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(0, 86)
@@ -451,12 +459,12 @@ func _build_friends(area: Control) -> void:
 	list.add_theme_constant_override("separation", 6)
 	scroll.add_child(list)
 	for f in friends.get("requests_in", []):
-		var row := _friend_row(list, str(f.get("user", "")), "%s#%s" % [f.get("user", ""), f.get("tag", "")] + "  — " + tr("wants to be friends"))
+		var row := _friend_row(list, str(f.get("user", "")), player_label(f) + "  — " + tr("wants to be friends"))
 		_small(row, tr("Accept"), func(): link.send({"t": "friend_accept", "user": f.user}))
 		_small(row, tr("Decline"), func(): link.send({"t": "friend_decline", "user": f.user}))
 	for f in friends.get("list", []):
 		var who := str(f.get("user", ""))
-		var row := _friend_row(list, who, "%s#%s" % [who, f.get("tag", "")] + (" (" + tr("online") + ")" if f.get("online", false) else ""))
+		var row := _friend_row(list, who, player_label(f) + (" (" + tr("online") + ")" if f.get("online", false) else ""))
 		_small(row, tr("Message"), func():
 			chat_with = who
 			link.send({"t": "history", "with": who})
@@ -465,7 +473,7 @@ func _build_friends(area: Control) -> void:
 		_small(row, tr("Remove"), func(): link.send({"t": "friend_remove", "user": who}))
 		_small(row, tr("Block"), func(): link.send({"t": "block", "user": who}))
 	for f in friends.get("requests_out", []):
-		_friend_row(list, str(f.get("user", "")), "%s#%s  — %s" % [f.get("user", ""), f.get("tag", ""), tr("request sent")])
+		_friend_row(list, str(f.get("user", "")), player_label(f) + "  — " + tr("request sent"))
 	for f in friends.get("blocked", []):
 		var row := _friend_row(list, str(f.get("user", "")), tr("Blocked: %s") % f.get("user", ""))
 		_small(row, tr("Unblock"), func(): link.send({"t": "unblock", "user": f.user}))
@@ -473,15 +481,18 @@ func _build_friends(area: Control) -> void:
 		_build_chat(area)
 
 
+## A friend list entry: the name on one line, its buttons (the returned row) under it.
 func _friend_row(list: Container, user: String, text: String) -> HBoxContainer:
-	var row := HBoxContainer.new()
-	row.name = "Friend_" + user
-	row.add_theme_constant_override("separation", 6)
+	var box := VBoxContainer.new()
+	box.name = "Friend_" + user
 	var l := Palette.label(text, 17)
-	l.custom_minimum_size.x = 210
-	l.clip_text = true
-	row.add_child(l)
-	list.add_child(row)
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.custom_minimum_size.x = 480
+	box.add_child(l)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	box.add_child(row)
+	list.add_child(box)
 	return row
 
 
@@ -496,15 +507,15 @@ func _small(row: Container, text: String, fn: Callable) -> void:
 func _build_chat(area: Control) -> void:
 	var panel := PanelContainer.new()
 	panel.name = "Chat"
-	panel.position = Vector2(520, 0)
-	panel.size = Vector2(420, 540)
+	panel.position = Vector2(520, 86)  # beside the friend list, under the tag line
+	panel.size = Vector2(420, 454)
 	panel.add_theme_stylebox_override("panel", Palette.box(Color(0.08, 0.06, 0.04, 0.9), 10, Color("6b5320"), 2))
 	area.add_child(panel)
 	var col := VBoxContainer.new()
 	panel.add_child(col)
 	col.add_child(Palette.label(tr("Messages with %s") % chat_with, 18, Palette.ATTACK))
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(400, 420)
+	scroll.custom_minimum_size = Vector2(400, 336)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	col.add_child(scroll)
 	var lines := VBoxContainer.new()
@@ -584,7 +595,7 @@ func _build_profile(area: Control) -> void:
 	box.add_child(row)
 	var tag := LineEdit.new()
 	tag.name = "TagEdit"
-	tag.text = str(link.me.get("tag", ""))
+	tag.text = _str(link.me.get("tag"))
 	tag.max_length = 16
 	tag.custom_minimum_size = Vector2(260, 40)
 	row.add_child(tag)
@@ -617,6 +628,7 @@ func _on_message(msg: Dictionary) -> void:
 			if msg.get("ok", false):
 				link.token = str(msg.get("token", ""))
 				link.me = msg.get("me", {})
+				_set_arena(link.me.get("arena"))
 				say("")
 				link.send({"t": "friends"})
 				_go("lobby")
@@ -629,6 +641,7 @@ func _on_message(msg: Dictionary) -> void:
 				_go("lobby")
 		"me":
 			link.me = msg.get("me", msg)
+			_set_arena(link.me.get("arena"))
 			if stage == "lobby":
 				_go("lobby")
 		"friends":
@@ -655,13 +668,40 @@ func _on_message(msg: Dictionary) -> void:
 		"queue_status":
 			waited = float(msg.get("waited", waited))
 		"arena":
-			arena = msg.get("state", msg)
+			_set_arena(msg.get("state"))
 			if stage == "lobby" and tab == "Arena":
 				_go("lobby")
 		"match":
 			_start_game(msg)
 		"game_over":
 			say(_result_text(msg))
+			var a = msg.get("arena")
+			if a is Dictionary:
+				if a.get("over", false):
+					arena = {"status": "over", "wins": a.get("wins", 0), "losses": a.get("losses", 0)}
+				else:
+					arena.merge(a, true)
+			link.send({"t": "me"})
+		"invite_declined":
+			say(tr("%s declined the invitation") % str(msg.get("by", "")))
+
+
+func _set_arena(v: Variant) -> void:
+	if not v is Dictionary and arena.get("status", "") == "over":
+		return  # keep the result of the run that just ended
+	arena = v if v is Dictionary else {}
+	if stage == "lobby" and tab == "Arena":
+		_go("lobby")
+
+
+## "name#tag", or the name alone before the player sets a tag.
+static func player_label(p: Dictionary) -> String:
+	var t := _str(p.get("tag"))
+	return str(p.get("user", "")) + ("#" + t if t != "" else "")
+
+
+static func _str(v: Variant) -> String:
+	return "" if v == null else str(v)
 
 
 func _result_text(msg: Dictionary) -> String:
@@ -700,7 +740,7 @@ class RankEmblem:
 		draw_circle(c, r + 6, Color("c9a74a"))
 		draw_circle(c, r + 2, Color("2a1d10"))
 		var n := int(rank.get("rank", 25))
-		if rank.get("legend", false) or n == 0:
+		if n == 0:
 			draw_circle(c, r, Color("ff9f1a"))
 			Sprites.draw(self, "class_NEUTRAL", c, r * 1.4)
 			return

@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-10-15
+
+### Added
+- A game server (experimental, optional): Online Game → “Through a game server”. An account with a password, casual and ranked games (the 25 ranks of 2014 and Legend, stars, a new season every month; a hidden rating finds an equal opponent), the Arena to 12 wins or 3 losses, friends by tag, messages, invites to a friendly game and blocking. The server checks every move with the game's own rules. The server address is in Settings → “Game server” (ws://localhost:7377 by default). The server itself (Rust, the server/ folder) is not hosted anywhere: you run it yourself; every release has server builds for Windows, macOS and Linux. Playing directly with codes stays as it was.
+
 ## [0.25.1] - 2026-10-15
 
 ### Fixed

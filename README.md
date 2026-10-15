@@ -28,6 +28,28 @@ A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas
 | ![Arena draft](media/screens/en/arena.png) | ![Arena lobby](media/screens/en/lobby.png) |
 | ![Mission intro](media/screens/en/intro.png) | ![Debug tools](media/screens/en/debug.png) |
 
+## Game server (experimental)
+
+Besides peer-to-peer play there is an optional game server in Rust (`server/`):
+accounts (argon2id passwords), an admin panel at `/admin`, SQLite, casual and ranked
+games (the 25 ranks of 2014 and Legend, a hidden MMR, a search window that widens
+while you wait), the Arena (12 wins or 3 losses), friends by tag, messages, invites
+and blocking. Every move is checked on the server by the game's own rules engine,
+started without a window as a referee (`-- --referee <port>`). Nothing is hosted:
+run it yourself.
+
+```sh
+cd server
+cargo run --release -- admin admin        # once: create the superuser (asks for a password)
+cargo run --release                        # listens on 127.0.0.1:7377
+```
+
+Then in the game: Online Game → Through a game server (the address is in Settings → Game server,
+`ws://localhost:7377` by default); the admin panel is at http://localhost:7377/admin.
+Release builds of the server for Windows, Linux and macOS come with every version tag.
+Details, security notes and the protocol: [server/README.md](server/README.md) and
+[the design](docs/superpowers/specs/2026-10-15-server-design.md).
+
 ## Downloads
 
 Every version tag `vX.Y.Z` builds a [GitHub release](https://github.com/pycz2/classichs/releases/latest) with:

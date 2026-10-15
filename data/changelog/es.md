@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-10-15
+
+### Añadido
+- Un servidor de juego (experimental, opcional): Partida en línea → «Por un servidor de juego». Una cuenta con contraseña, partidas normales y clasificatorias (los 25 rangos de 2014 y Leyenda, estrellas, una temporada nueva cada mes; una puntuación oculta busca un rival parejo), la Arena hasta 12 victorias o 3 derrotas, amigos por etiqueta, mensajes, invitaciones a una partida amistosa y bloqueo. El servidor comprueba cada jugada con las reglas del propio juego. La dirección del servidor está en Ajustes → «Servidor de juego» (ws://localhost:7377 por defecto). El servidor (Rust, carpeta server/) no está alojado en ningún sitio: lo ejecutas tú; cada versión incluye el servidor para Windows, macOS y Linux. El juego directo con códigos sigue igual.
+
 ## [0.25.1] - 2026-10-15
 
 ### Corregido

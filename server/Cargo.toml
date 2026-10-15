@@ -1,0 +1,23 @@
+[package]
+name = "classichs-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+argon2 = "0.5"
+axum = { version = "0.8.9", features = ["ws"] }
+base64 = "0.22"
+futures-util = "0.3.34"
+rand = "0.8"
+rpassword = "7.5.4"
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha2 = "0.10"
+tokio = { version = "1.53.3", features = ["full"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+
+[dev-dependencies]
+tokio-tungstenite = "0.30.0"
+tower = { version = "0.5.3", features = ["util"] }

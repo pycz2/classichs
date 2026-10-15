@@ -20,10 +20,16 @@ var _channels := {}  # game id -> ServerChannel
 func open(address: String) -> Error:
 	url = address
 	_closed = false
+	_was_open = false
 	socket = WebSocketPeer.new()
 	socket.inbound_buffer_size = 1 << 20
 	socket.outbound_buffer_size = 1 << 20
 	return socket.connect_to_url(address)
+
+
+## Whether the connection was ever open (else the server could not be reached).
+func was_open() -> bool:
+	return _was_open
 
 
 func is_open() -> bool:
@@ -46,8 +52,7 @@ func channel(game_id: String) -> ServerChannel:
 	var c := ServerChannel.new()
 	c.link = self
 	c.game = game_id
-	_channels[game_id] = c
-	c.tree_exited.connect(func(): _channels.erase(game_id))
+	_channels[game_id] = c  # a freed channel is dropped on its next message (MatchView reparents it)
 	return c
 
 
@@ -60,20 +65,28 @@ func _process(_d: float) -> void:
 	while socket.get_available_packet_count() > 0:
 		var text := socket.get_packet().get_string_from_utf8()
 		var msg = JSON.parse_string(text)
-		if not msg is Dictionary or not msg.get("t") is String:
-			continue
-		if msg.t == "game":
-			var c: ServerChannel = _channels.get(str(msg.get("game", "")))
-			if c and msg.get("m") is Dictionary:
-				c.received.emit(msg.m)
-			continue
-		message.emit(msg)
+		if msg is Dictionary and msg.get("t") is String:
+			dispatch(msg)
 	if st == WebSocketPeer.STATE_CLOSED and not _closed:
 		_closed = true
 		var why := socket.get_close_reason()
 		for c in _channels.values():
-			c.closed.emit("connection")
+			if is_instance_valid(c):
+				c.closed.emit("connection")
 		closed.emit(why if why != "" else TranslationServer.translate("Connection lost"))
+
+
+## A message from the server: a game's message goes to its channel, the rest to `message`.
+func dispatch(msg: Dictionary) -> void:
+	if msg.t != "game":
+		message.emit(msg)
+		return
+	var id := str(msg.get("game", ""))
+	var c = _channels.get(id)
+	if c != null and not is_instance_valid(c):
+		_channels.erase(id)
+	elif c != null and msg.get("m") is Dictionary:
+		c.received.emit(msg.m)
 
 
 ## One game over the server: NetSession messages go inside {"t": "game", "game": id, "m": …}.

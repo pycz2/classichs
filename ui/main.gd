@@ -178,16 +178,22 @@ func show_server() -> ServerView:
 	return v
 
 
-func start_server_match(session: NetSession, m: Match, _mode: String) -> MatchView:
+func start_server_match(session: NetSession, m: Match, mode: String) -> MatchView:
 	var v := MatchView.new()
 	v.lobby = true
 	v.lobby_back.connect(func(): show_server())
-	server_link.message.connect(func(msg: Dictionary):  # the server's result, for the lobby after the game
-		if msg.get("t") == "game_over":
-			server_link.set_meta("game_over", msg), CONNECT_ONE_SHOT)
+	server_link.set_meta("mode", mode)
+	if not server_link.message.is_connected(_on_server_message):
+		server_link.message.connect(_on_server_message)
 	_set_screen(v)
 	v.bind_online(m, session)
 	return v
+
+
+## The server's result arrives during the game: kept for the lobby after it.
+func _on_server_message(msg: Dictionary) -> void:
+	if msg.get("t") == "game_over" and not screen is ServerView:
+		server_link.set_meta("game_over", msg)
 
 
 func start_arena_match(s: ArenaSession, game: NetSession, m: Match) -> MatchView:

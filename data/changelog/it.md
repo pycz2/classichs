@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.26.0] - 2026-10-15
+
+### Aggiunto
+- Un server di gioco (sperimentale, facoltativo): Partita online → “Tramite un server di gioco”. Un account con password, partite normali e classificate (i 25 gradi del 2014 e Leggenda, stelle, una nuova stagione ogni mese; un punteggio nascosto trova un avversario alla pari), l'Arena fino a 12 vittorie o 3 sconfitte, amici tramite tag, messaggi, inviti a una partita amichevole e blocco. Il server controlla ogni mossa con le regole del gioco stesso. L'indirizzo del server è in Impostazioni → “Server di gioco” (ws://localhost:7377 di default). Il server (Rust, cartella server/) non è ospitato da nessuna parte: lo avvii tu; ogni versione contiene il server per Windows, macOS e Linux. Il gioco diretto con i codici resta com'era.
+
 ## [0.25.1] - 2026-10-15
 
 ### Corretto
