@@ -58,6 +58,8 @@ Android (`.apk`) and the web build (`.zip`). The workflow is `.github/workflows/
 calls `tools/export_all.sh`, which also works locally (`tools/export_all.sh web windows macos linux`).
 For a stable Android signature add the secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_USER`,
 `ANDROID_KEYSTORE_PASSWORD`; without them each build is signed with a new throwaway key.
+To check the three values before you paste them (or to make a new keystore): `python3 tools/android_keystore_check.py`
+opens a local page that runs the same checks as the CI and says what to fix.
 
 ## Build and run
 
