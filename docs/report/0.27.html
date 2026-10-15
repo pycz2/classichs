@@ -86,7 +86,7 @@ summary { cursor:pointer; font-weight:600; }
 <body>
 <div class="wrap">
 <nav>
-  <h1>Classic HS 0.27</h1>
+  <h1>Classic HS 0.27.1</h1>
   <p class="sub">Итоги: одна логика на Rust, тонкий клиент, свой сервер. Щёлкните раздел или листайте клавишами ← →.</p>
   <div id="menu"></div>
   <div class="theme" id="theme"><button data-t="auto">Авто</button><button data-t="light">Светлая</button><button data-t="dark">Тёмная</button></div>
@@ -297,7 +297,8 @@ godot --headless --path . --script res://tools/server_e2e.gd -- casual   # ил�
   </ol>
   <h3>Известные ограничения</h3>
   <ul>
-    <li>Библиотеки для Windows и Linux собраны в CI, но здесь их не запускали. Android-сборку не запускали на устройстве.</li>
+    <li>Сборки для Windows и Linux собираются в CI, но на этих системах их здесь не запускали. Android-сборку не запускали на устройстве.</li>
+    <li>Секреты подписи Android в репозитории есть, но не открывают хранилище ключей (неверное имя ключа или пароль). Пока CI подписывает APK одноразовым ключом и пишет предупреждение.</li>
     <li>Если после перезапуска игры вернуться в партию через сервер, у трекера колоды нет списка колоды.</li>
     <li>Ошибка внутри движка в браузере выключает движок до перезагрузки страницы.</li>
   </ul>
@@ -317,6 +318,8 @@ const CHECKS = [
   ["Лобби, друзья, чат, вход без пароля после перезапуска", "два окна игры, веб-версия", "ok"],
   ["Админка в двух темах, на телефоне и с живыми данными", "headless Chrome", "ok"],
   ["Сборки мостов в CI: macOS, Windows, Linux, Android, веб", "GitHub Actions", "ok"],
+  ["Релиз: модуль правил рядом с игрой (Windows — .zip с .dll, Linux — .so внутри AppImage)", "найдено при проверке v0.27.0, исправлено в 0.27.1", "ok"],
+  ["Опубликованная веб-версия загружает модуль правил", "pycz2.github.io/classichs/play, headless Chrome, ошибок в консоли нет", "ok"],
 ];
 const secs = [...document.querySelectorAll("section")];
 const menu = document.getElementById("menu"), tiles = document.getElementById("tiles");
