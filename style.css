@@ -249,3 +249,4 @@ header, section, footer, .divider { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) {
   .hero-cards .card, .shine, .scroll-hint span { animation: none; }
 }
+.server-card { max-width: 760px; margin: 28px auto 0; text-align: left; }
