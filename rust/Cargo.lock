@@ -35,6 +35,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "classichs-script"
+version = "0.1.0"
+
+[[package]]
 name = "classichs-wasm"
 version = "0.1.0"
 dependencies = [

@@ -1,0 +1,12 @@
+[package]
+name = "classichs-script"
+version = "0.1.0"
+edition = "2021"
+description = "A sandboxed, deterministic interpreter for a subset of Lua (integers only) for card scripts of game packs."
+license = "MIT"
+
+[lib]
+name = "classichs_script"
+crate-type = ["rlib"]
+
+[dependencies]
