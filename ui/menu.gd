@@ -72,7 +72,7 @@ func show_main() -> void:
 
 ## The Play submenu: online play, training, the tutorial, and Back.
 func show_play() -> void:
-	_fill([["Online Game", online, WebRtcTransport.available()], ["Training", training, true], ["Tutorial", tutorial, true], ["Back", show_main, true]])
+	_fill([["Online Game", online, true], ["Training", training, true], ["Tutorial", tutorial, true], ["Back", show_main, true]])
 
 
 func _fill(items: Array) -> void:
@@ -83,8 +83,6 @@ func _fill(items: Array) -> void:
 	for it in items:
 		var b := Palette.button(tr(it[0]), it[0].replace(" ", ""))
 		b.disabled = not it[2]
-		if it[0] == "Online Game" and b.disabled:
-			b.tooltip_text = tr("Online play works in the browser version of the game")
 		if it[1] is Signal:
 			var sig: Signal = it[1]
 			b.pressed.connect(func(): sig.emit())

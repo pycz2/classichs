@@ -159,6 +159,7 @@
 "Destroyed": "Уничтожен",
 "Dies": "Погибает",
 "Different game versions: yours %s, the opponent's %s": "Разные версии игры: у вас %s, у соперника %s",
+"Direct play works only in the browser version of the game": "Прямая игра работает только в браузерной версии игры",
 "Directly, with codes": "Напрямую, по кодам",
 "Don't understand a card? Mouse-over it!": "Непонятна карта? Наведите на неё курсор!",
 "Done": "Готово",

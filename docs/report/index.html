@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Итоги работы</title>
+<style>
+:root { --bg:#17110d; --panel:#241a13; --panel2:#2d2118; --line:#4a3a28; --text:#f4ead5; --muted:#b9a88a; --gold:#f2c230; --green:#4fd16b; --blue:#7ec8ff; --orange:#ffae4a; }
+@media (prefers-color-scheme: light) { :root { --bg:#f6efe2; --panel:#fffaf0; --panel2:#fbf3e3; --line:#e0d2b8; --text:#2a1f17; --muted:#6b5a44; --gold:#a8741a; --green:#1f8a2d; --blue:#1d6fb8; --orange:#b5651d; } }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:15.5px/1.55 -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { display:grid; grid-template-columns:270px 1fr; min-height:100vh; }
+nav { position:sticky; top:0; height:100vh; overflow:auto; border-right:1px solid var(--line); padding:18px 12px; background:var(--panel); }
+nav h1 { font-size:18px; color:var(--gold); margin:0 6px 4px; }
+nav p { color:var(--muted); font-size:12.5px; margin:0 6px 14px; }
+nav button { display:flex; gap:8px; align-items:center; width:100%; text-align:left; font:inherit; font-size:14.5px; background:none; color:var(--text); border:1px solid transparent; border-radius:8px; padding:8px 10px; cursor:pointer; }
+nav button:hover { border-color:var(--line); }
+nav button.on { background:var(--panel2); border-color:var(--gold); }
+.dot { flex:none; width:9px; height:9px; border-radius:50%; }
+.done { background:var(--green); } .plan { background:var(--blue); } .wip { background:var(--orange); }
+main { padding:26px 34px 80px; max-width:1050px; }
+section { display:none; } section.on { display:block; }
+h2 { color:var(--gold); margin:0 0 4px; font-size:26px; }
+h3 { margin:22px 0 8px; font-size:18px; }
+.status { display:inline-flex; gap:6px; align-items:center; font-size:13px; color:var(--muted); margin-bottom:14px; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:12px 0; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px; }
+code, .path { font:13px ui-monospace, SFMono-Regular, Menlo, monospace; background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:1px 6px; }
+pre { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:10px 12px; overflow:auto; font:13px ui-monospace, Menlo, monospace; }
+table { border-collapse:collapse; width:100%; font-size:14px; }
+td, th { border-bottom:1px solid var(--line); padding:6px 8px; text-align:left; vertical-align:top; }
+th { color:var(--muted); font-weight:600; }
+a { color:var(--blue); }
+details { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 14px; margin:8px 0; }
+summary { cursor:pointer; font-weight:600; }
+.flow { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0; }
+.flow span { background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:14px; }
+.flow i { color:var(--muted); font-style:normal; }
+.legend { display:flex; gap:14px; flex-wrap:wrap; font-size:13px; color:var(--muted); margin:6px 6px 16px; }
+@media (max-width: 820px) { .wrap { grid-template-columns:1fr; } nav { position:static; height:auto; } main { padding:18px 16px 60px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h1>Итоги работы</h1>
+  <p>Версии 0.25.0–0.26.1. Щёлкните раздел слева.</p>
+  <div class="legend"><span><i class="dot done" style="display:inline-block"></i> сделано</span><span><i class="dot wip" style="display:inline-block"></i> эксперимент</span><span><i class="dot plan" style="display:inline-block"></i> предложение</span></div>
+  <div id="menu"></div>
+</nav>
+<main id="main">
+
+<section id="overview" data-title="Обзор" data-kind="done">
+  <h2>Обзор</h2>
+  <div class="status"><i class="dot done"></i> что сделано и что предлагается</div>
+  <div class="grid">
+    <div class="card"><b>CI/CD и релизы</b><br>На каждый тег <code>vX.Y.Z</code> GitHub собирает игру для Windows, Linux, macOS, Android и веба и выкладывает релиз.</div>
+    <div class="card"><b>Секреты соперника</b><br>Теперь над его портретом, как у вас.</div>
+    <div class="card"><b>Схема устройства системы</b><br>Интерактивная страница: три уровня подробности.</div>
+    <div class="card"><b>Новые стили артов</b><br>15 карт × 3 стиля, страница сравнения с оригиналом и текущим артом.</div>
+    <div class="card"><b>Игровой сервер на Rust</b><br>Аккаунты, админка, рейтинг 2014 года, арена, друзья, сообщения; ходы проверяет движок игры.</div>
+    <div class="card"><b>Движок на Rust</b><br>Исследование и путь к единому источнику правды: сервер, клиенты, браузер.</div>
+    <div class="card"><b>Отделение от контента Blizzard</b><br>План: нейтральные механики, пакеты контента, новое название.</div>
+  </div>
+  <h3>Где что лежит</h3>
+  <table>
+    <tr><th>Что</th><th>Где</th></tr>
+    <tr><td>Схема системы</td><td><a href="../architecture/index.html">docs/architecture/index.html</a></td></tr>
+    <tr><td>Сравнение стилей артов</td><td><span class="path">build/art_styles/page/index.html</span> (локально; пересобрать: <code>python3 tools/art_styles_page.py</code>)</td></tr>
+    <tr><td>Сервер</td><td><span class="path">server/</span>, <span class="path">server/README.md</span></td></tr>
+    <tr><td>Проектные документы</td><td><span class="path">docs/superpowers/specs/2026-10-15-*.md</span></td></tr>
+    <tr><td>Релизы</td><td><a href="https://github.com/pycz2/classichs/releases">github.com/pycz2/classichs/releases</a></td></tr>
+  </table>
+</section>
+
+<section id="ci" data-title="CI/CD и релизы" data-kind="done">
+  <h2>CI/CD и релизы</h2>
+  <div class="status"><i class="dot done"></i> сделано, работает с версии 0.25.0</div>
+  <div class="flow"><span>git tag v0.25.1</span><i>→</i><span>GitHub Actions: тесты</span><i>→</i><span>экспорт 5 платформ</span><i>→</i><span>сервер: 3 ОС</span><i>→</i><span>GitHub Release</span></div>
+  <div class="card">
+    <b>Файлы:</b> <span class="path">.github/workflows/release.yml</span>, <span class="path">tools/export_all.sh</span>, пресеты в <span class="path">export_presets.cfg</span>.<br>
+    На каждый push в <code>main</code> — проверочная сборка. На тег <code>vX.Y.Z</code> — релиз с файлами:
+    <table>
+      <tr><th>Платформа</th><th>Файл</th><th>Заметка</th></tr>
+      <tr><td>Windows</td><td>ClassicHS-…-windows-x86_64.exe</td><td>один файл, данные внутри</td></tr>
+      <tr><td>Linux</td><td>ClassicHS-…-linux-x86_64.AppImage</td><td>chmod +x и запустить</td></tr>
+      <tr><td>macOS</td><td>ClassicHS-…-macos.zip</td><td>универсальное приложение, подпись ad-hoc; первый запуск — правый клик → «Открыть»</td></tr>
+      <tr><td>Android</td><td>ClassicHS-…-android-arm64.apk</td><td>без секретов подписи каждая сборка подписана новым ключом</td></tr>
+      <tr><td>Веб</td><td>ClassicHS-…-web.zip</td><td>то же, что на сайте</td></tr>
+      <tr><td>Сервер</td><td>ClassicHS-server-…-{linux, windows, macos}</td><td>когда есть <code>server/</code></td></tr>
+    </table>
+  </div>
+  <details><summary>Как сделать стабильную подпись Android</summary>
+    <p>Добавьте в Settings → Secrets репозитория: <code>ANDROID_KEYSTORE_BASE64</code> (keystore в base64), <code>ANDROID_KEYSTORE_USER</code>, <code>ANDROID_KEYSTORE_PASSWORD</code>. Тогда обновления ставятся поверх.</p>
+  </details>
+  <details><summary>Как собрать локально</summary><pre>tools/export_all.sh web windows macos linux   # android и AppImage — в CI</pre></details>
+</section>
+
+<section id="secrets" data-title="Секреты соперника" data-kind="done">
+  <h2>Секреты соперника над портретом</h2>
+  <div class="status"><i class="dot done"></i> исправлено в 0.25.1</div>
+  <div class="card">Секреты соперника стояли под его портретом. Теперь они на верхней дуге портрета, как ваши. Тест: <span class="path">tests/test_secret_place.gd</span>.</div>
+</section>
+
+<section id="arch" data-title="Схема системы" data-kind="done">
+  <h2>Схема устройства системы</h2>
+  <div class="status"><i class="dot done"></i> сделано</div>
+  <div class="card">
+    <a href="../architecture/index.html">docs/architecture/index.html</a> — одна страница без интернета.
+    <ul>
+      <li><b>Обзор:</b> 14 компонентов на схеме со стрелками; щелчок — описание.</li>
+      <li><b>Подробнее:</b> файлы, классы, входы и выходы каждого компонента.</li>
+      <li><b>Всё:</b> 11 сценариев по шагам со ссылками на код (ход, сетевая игра, арена, обучение, сборка сайта, релиз).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="art" data-title="Новые стили артов" data-kind="done">
+  <h2>Новые стили артов</h2>
+  <div class="status"><i class="dot done"></i> 45 картинок готовы — выбор за вами</div>
+  <div class="card">
+    15 разных карт: 3 героя (Джайна, Гаррош, Малфурион), существа (Йети, Рагнарос, Лирой, Мурлок-налётчик, Разъярённый ворген, Сумеречный дракон, Тревого-бот), заклинания (Огненный шар, Освящение, Кража мыслей), оружие (Огненный боевой топор), секрет (Ледяная преграда).
+    <table>
+      <tr><th>Стиль</th><th>Идея</th></tr>
+      <tr><td>Мультяшный 2D</td><td>минимум деталей: простые формы, толстый контур, плоские цвета, однотонный фон</td></tr>
+      <tr><td>Простой рисованный</td><td>картинка для карточной игры, но мало деталей: мягкие тени, ограниченная палитра, чистый фон</td></tr>
+      <tr><td>Фото, мало деталей</td><td>фотореализм как кадр из студии: один объект, тёмный фон, малая глубина резкости</td></tr>
+    </table>
+    Страница сравнения: <span class="path">build/art_styles/page/index.html</span> — по картам или по стилям, щелчок на весь экран, стрелки листают.
+    Генерация: <code>python3 tools/gen_art_styles.py</code> (Codex), страница: <code>python3 tools/art_styles_page.py</code>.
+  </div>
+  <h3>Что дальше</h3>
+  <div class="card">Выберите стиль — сгенерирую его для всех 534 карт как новый набор «Изображения карт».</div>
+</section>
+
+<section id="server" data-title="Игровой сервер (Rust)" data-kind="wip">
+  <h2>Игровой сервер на Rust</h2>
+  <div class="status"><i class="dot wip"></i> эксперимент, вышел в 0.26.0: код, проверка на этом компьютере, сборки в релизах; нигде не размещён</div>
+  <div class="flow"><span>Клиент Godot</span><i>⇄ WebSocket ws://localhost:7377 ⇄</i><span>Сервер (Rust, tokio + axum)</span><i>⇄ TCP 127.0.0.1 ⇄</i><span>Судья: игра без окна (<code>-- --referee</code>)</span></div>
+  <div class="flow"><span>SQLite: аккаунты, сессии, друзья, сообщения, ранги, арена</span><span>Админка /admin</span></div>
+  <div class="card" id="server-body">
+    <p><b>Логика игры.</b> Движок правил один — тот, что в игре. Сервер запускает игру без окна как «судью» и передаёт ей каждый ход. Ход идёт сопернику, только если судья его принял и состояние совпало с тем, что прислал клиент. Нечестный ход — поражение.</p>
+    <p><b>Безопасность.</b> Пароли — argon2id; сессии — случайные 256-битные токены, в базе только их SHA-256; ограничение частоты входа; проверка каждого сообщения; админка с отдельным входом, cookie HttpOnly + SameSite=Strict, CSRF-токены; SQL только с параметрами.</p>
+    <p><b>Режимы.</b> Обычная игра (скрытый MMR), рейтинговая (25 рангов 2014 года, звёзды, серии побед, Легенда, сезоны по месяцам), арена (12 побед или 3 поражения, одна колода), дружеские игры по приглашению. Правила 2014 года — по <a href="https://hearthstone.wiki.gg/wiki/Ranked/2013-2020">Hearthstone Wiki: Ranked 2013–2020</a> и <a href="https://hearthstone.wiki.gg/wiki/Arena">Arena</a>; подробности — в <span class="path">docs/superpowers/specs/2026-10-15-ranked-research.md</span>.</p>
+    <p><b>Поиск соперника.</b> Окно поиска растёт с ожиданием: обычная игра — MMR ±50 и +25 в секунду; рейтинговая — ±2 звезды и +1 каждые 5 секунд; арена — разница в счёте забега +1 каждые 10 секунд.</p>
+    <p><b>Друзья.</b> Уникальный тег, до 200 друзей, запросы, сообщения, блокировка (запрещает приглашения и сообщения, но не ладдер).</p>
+    <p><b>Порт:</b> 7377 (WebSocket и админка на одном порту). <b>Код:</b> <span class="path">server/src/</span> — 9 файлов, ≈2800 строк Rust; 19 тестов Rust с поддельным судьёй, один из них проверяет и настоящего судью, если задать CLASSICHS_GODOT и CLASSICHS_PROJECT.</p>
+    <p><b>Ограничение сейчас:</b> клиенты по-прежнему знают всё состояние партии (руку и колоду соперника можно прочитать изменённым клиентом). Это уйдёт с тонким клиентом после переноса движка на Rust.</p>
+  </div>
+  <h3>Что проверено на этом компьютере</h3>
+  <table>
+    <tr><th>Проверка</th><th>Итог</th></tr>
+    <tr><td>Два клиента без окон (<span class="path">tools/server_e2e.gd</span>): обычная, рейтинговая, арена с драфтом через сервер</td><td>игра до конца, все ходы проверил судья; победителю +1 звезда; счёт арены 1–0 / 0–1</td></tr>
+    <tr><td>Настоящая игра в двух окнах: вход, лобби, очередь, игра, итог, возврат в лобби (обычная, рейтинговая, арена)</td><td>работает</td></tr>
+    <tr><td>Веб-версия в двух вкладках Chrome: регистрация, тег, друг по тегу, сообщение, приглашение, дружеская игра, сдача, блокировка</td><td>работает</td></tr>
+    <tr><td>Админка: вход с CSRF, список аккаунтов, живые игры, отказ без сессии и с плохим CSRF</td><td>работает</td></tr>
+    <tr><td>Собранная игра (не проект) как судья</td><td>работает; путь с пробелом — в кавычках</td></tr>
+    <tr><td>CI: сервер собран и проверен на Linux, Windows и macOS</td><td>успешно</td></tr>
+  </table>
+  <details><summary>Ошибки, которые нашла проверка (исправлены в 0.26.0 и 0.26.1)</summary>
+    <ul>
+      <li>Ходы соперника терялись: экран партии переносил канал игры к себе, и связь с сервером забывала этот канал. Тест: <span class="path">tests/test_server_view.gd</span>.</li>
+      <li>Лобби после игры не показывало итог: подписка на итог отключалась на первом же сообщении.</li>
+      <li>Вкладка арены во время забега предлагала начать новый забег.</li>
+      <li>В скачиваемой игре (Windows, macOS, Linux, Android) кнопка «Сетевая игра» была выключена: она требовала WebRTC, а он есть только в браузере. Исправлено в 0.26.1: сервер доступен везде, игра по кодам — в браузере.</li>
+      <li>Пустой тег показывался как «&lt;null&gt;»; номер Легенды читался не из того поля; строки друзей обрезались; чат закрывал кнопки.</li>
+    </ul>
+  </details>
+  <details open><summary>Как запустить и попробовать</summary>
+<pre>cd server
+cargo run --release -- admin admin     # один раз: суперпользователь (спросит пароль)
+cargo run --release                    # 127.0.0.1:7377; судья: godot --headless --path .. -- --referee
+# игра: Сетевая игра → Через игровой сервер; адрес — Настройки → Игровой сервер
+# админка: http://localhost:7377/admin
+# проверка двумя клиентами без окон:
+godot --headless --path . --script res://tools/server_e2e.gd -- casual   # или ranked, arena</pre>
+  </details>
+  <details><summary>Сервер из релиза (без Rust и без исходного кода)</summary>
+<pre># скачайте из релиза сервер и игру той же версии, затем:
+./ClassicHS-server-0.26.0-linux-x86_64 admin admin
+./ClassicHS-server-0.26.0-linux-x86_64 --referee "/путь/ClassicHS-0.26.0-linux-x86_64.AppImage --headless -- --referee"
+# macOS: --referee "'/Applications/Classic HS.app/Contents/MacOS/Classic HS' --headless -- --referee"</pre>
+  </details>
+</section>
+
+<section id="rust" data-title="Движок на Rust" data-kind="plan">
+  <h2>Единый движок на Rust</h2>
+  <div class="status"><i class="dot plan"></i> предложение (исследование: docs/superpowers/specs/2026-10-15-rust-engine-research.md)</div>
+  <div class="card">
+    <b>Вывод.</b> Сейчас — сервер на Rust и судья на текущем движке (сделано). Потом — перенос движка в крейт Rust и подключение везде через одну функцию <code>api::call(json) → json</code>.
+  </div>
+  <table>
+    <tr><th>Фаза</th><th>Что</th><th>Оценка</th></tr>
+    <tr><td>0</td><td>Сервер + судья на GDScript (сделано)</td><td>—</td></tr>
+    <tr><td>1</td><td>В клиенте общий интерфейс правил и <code>view(player)</code>: интерфейс не лезет во внутренности движка (≈230 мест в 15 файлах)</td><td>1–2 недели</td></tr>
+    <tr><td>2</td><td>Порт в крейт <code>engine</code>: по файлу Rust на каждый <code>cards/*.gd</code>, данные карт остаются в cards.json; проверка паритета на записанных играх (хэш после каждого хода)</td><td>3–6 недель</td></tr>
+    <tr><td>3</td><td>Сервер на нативном движке, судья рядом ещё один выпуск для сверки</td><td>дни</td></tr>
+    <tr><td>4</td><td>Клиенты: gdext для Windows/Linux/macOS/Android; в браузере — отдельный модуль WASM через JavaScriptBridge (gdext в вебе пока экспериментальный: nightly Rust, особые шаблоны)</td><td>1–2 недели</td></tr>
+  </table>
+  <details><summary>Что важно для детерминизма</summary>
+    <ul>
+      <li>ГСЧ — стандартный PCG32, хэш состояния — SHA-256 от JSON с сортированными ключами: переносимо.</li>
+      <li><code>hash([seed, "mulligan", p])</code> использует внутренний хэш Godot — заменить на явную функцию и поднять версию протокола.</li>
+      <li>Хуки карт меняют события на месте (Контрзаклинание, Ледяная глыба) — переносить аккуратно.</li>
+    </ul>
+  </details>
+  <h3>Решения за вами</h3>
+  <ul><li>Начинать ли перенос сразу после сервера.</li><li>Сделать ли сервер основным сетевым режимом, оставив прямую игру для друзей.</li></ul>
+</section>
+
+<section id="content" data-title="Отделение от контента" data-kind="plan">
+  <h2>Отделение движка от контента Blizzard</h2>
+  <div class="status"><i class="dot plan"></i> план (docs/superpowers/specs/2026-10-15-content-separation-plan.md)</div>
+  <div class="card">
+    Движок знает только правила и id; всё узнаваемое — карты, герои, тексты, арт, обучение, 10 колод 2014 года — в отдельном <b>пакете контента</b> <code>.cardpack</code>. Свои пакеты: свои чемпионы, карты, наборы, любые параметры.
+  </div>
+  <h3>Переименование механик (главное)</h3>
+  <table>
+    <tr><th>Сейчас</th><th>В движке</th><th>Игроку</th></tr>
+    <tr><td>Hero / Hero Power</td><td>CHAMPION / POWER</td><td>Чемпион / Сила чемпиона</td></tr>
+    <tr><td>Taunt</td><td>GUARD</td><td>Страж</td></tr>
+    <tr><td>Charge</td><td>HASTE</td><td>Натиск</td></tr>
+    <tr><td>Divine Shield</td><td>BARRIER</td><td>Барьер</td></tr>
+    <tr><td>Windfury</td><td>DOUBLE_ATTACK</td><td>Шквал</td></tr>
+    <tr><td>Battlecry / Deathrattle</td><td>ON_PLAY / ON_DEATH</td><td>Появление / Прощание</td></tr>
+    <tr><td>Enrage</td><td>WOUNDED</td><td>Ярость (пока ранен)</td></tr>
+    <tr><td>Overload</td><td>MANA_LOCK</td><td>Выгорание</td></tr>
+    <tr><td>Secret</td><td>TRAP</td><td>Ловушка</td></tr>
+    <tr><td>The Coin</td><td>second_player_card</td><td>Искра</td></tr>
+    <tr><td>Murloc</td><td>(из пакета)</td><td>Рыболюд</td></tr>
+    <tr><td>Stealth, Combo, Silence, Freeze, Spell Power, Immune, Choose One</td><td>без изменений</td><td>общие слова</td></tr>
+  </table>
+  <p>Пакет «классика» может вернуть оригинальные названия — для тех, у кого есть права.</p>
+  <h3>Название игры</h3>
+  <div class="card">Рекомендация: <b>Inglestone</b> (<i>ingle</i> — огонь в очаге) или <b>Emberstone</b>. Заняты: Firestone, Stonehearth, Hearthfire, Fireside. Перед выбором нужна проверка торговых марок.</div>
+  <h3>Как два игрока играют в одни правила</h3>
+  <div class="flow"><span>hello: id и хэш правил пакета</span><i>→</i><span>у гостя нет пакета?</span><i>→</i><span>хозяин предлагает передать правила и тексты (без арта)</span><i>→</i><span>гость соглашается</span><i>→</i><span>игра</span></div>
+  <p>В пакетах нет скриптов: эффекты — маленький JSON-язык (≈25 действий) плюс встроенные эффекты движка. Чужой код не исполняется. Сервер принимает только одобренные хэши пакетов.</p>
+  <h3>Фазы</h3>
+  <ol><li>Слой пакета без изменения поведения.</li><li>Переименование механик в движке.</li><li>Язык эффектов и перевод классики (самое рискованное).</li><li>Вынос названий и текстов (≈430 строк в 8 языках).</li><li>Свой нейтральный стартовый пакет (дизайн карт).</li><li>Импорт пакетов.</li><li>Сеть.</li><li>Переименование игры (сохранить папку user:// и id пакета Android, чтобы не потерять колоды).</li></ol>
+</section>
+
+<section id="next" data-title="Что решить дальше" data-kind="plan">
+  <h2>Что решить дальше</h2>
+  <div class="status"><i class="dot plan"></i> решения за вами</div>
+  <ol>
+    <li><b>Стиль артов:</b> какой из трёх (или их смесь) сделать новым набором для всех карт.</li>
+    <li><b>Перенос движка на Rust:</b> начинать ли сейчас.</li>
+    <li><b>Отделение контента:</b> какое название выбрать, начинать ли фазу 1.</li>
+    <li><b>Сервер:</b> где его разместить, если захотите (нужен TLS: wss://; сайт на https может подключиться только к wss:// или к ws://localhost).</li>
+    <li><b>Бот в тренировке:</b> давать ли ему классическую колоду его класса вместо базовой.</li>
+    <li><b>Android:</b> добавить секреты подписи для обновлений поверх.</li>
+  </ol>
+</section>
+
+</main>
+</div>
+<script>
+const secs = [...document.querySelectorAll("section")];
+const menu = document.getElementById("menu");
+function show(id) {
+  secs.forEach(s => s.classList.toggle("on", s.id === id));
+  menu.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.id === id));
+  try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  window.scrollTo(0, 0);
+}
+for (const s of secs) {
+  const b = document.createElement("button");
+  b.dataset.id = s.id;
+  b.innerHTML = `<i class="dot ${s.dataset.kind}"></i><span></span>`;
+  b.querySelector("span").textContent = s.dataset.title;
+  b.onclick = () => show(s.id);
+  menu.append(b);
+}
+show(secs.some(s => "#" + s.id === location.hash) ? location.hash.slice(1) : "overview");
+</script>
+</body>
+</html>

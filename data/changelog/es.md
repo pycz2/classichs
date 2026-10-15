@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.26.1] - 2026-10-15
+
+### Corregido
+- En el juego descargado para Windows, macOS, Linux y Android, «Partida en línea» ahora funciona: ahí se puede jugar por un servidor de juego. El juego directo con códigos sigue solo en la versión del navegador.
+
 ## [0.26.0] - 2026-10-15
 
 ### Añadido

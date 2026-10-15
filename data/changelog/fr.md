@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.26.1] - 2026-10-15
+
+### Corrigé
+- Dans le jeu téléchargé pour Windows, macOS, Linux et Android, « Partie en ligne » fonctionne maintenant : on peut y jouer par un serveur de jeu. Le jeu direct avec des codes reste réservé à la version navigateur.
+
 ## [0.26.0] - 2026-10-15
 
 ### Ajouté

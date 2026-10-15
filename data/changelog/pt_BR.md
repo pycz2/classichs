@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.26.1] - 2026-10-15
+
+### Corrigido
+- No jogo baixado para Windows, macOS, Linux e Android, “Jogo Online” agora funciona: dá para jogar por um servidor de jogo. O jogo direto com códigos continua só na versão para navegador.
+
 ## [0.26.0] - 2026-10-15
 
 ### Adicionado

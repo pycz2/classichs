@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.26.1] - 2026-10-15
+
+### Naprawiono
+- W pobranej grze na Windows, macOS, Linuxa i Androida „Gra sieciowa” teraz działa: można grać przez serwer gry. Gra bezpośrednia kodami nadal działa tylko w wersji przeglądarkowej.
+
 ## [0.26.0] - 2026-10-15
 
 ### Dodano

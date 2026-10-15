@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.26.1] - 2026-10-15
+
+### Behoben
+- In der heruntergeladenen Version für Windows, macOS, Linux und Android funktioniert „Online-Spiel“ jetzt: Dort kannst du über einen Spielserver spielen. Das direkte Spiel mit Codes gibt es weiterhin nur in der Browserversion.
+
 ## [0.26.0] - 2026-10-15
 
 ### Hinzugefügt

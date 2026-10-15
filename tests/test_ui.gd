@@ -252,3 +252,17 @@ func test_first_run_asks_for_the_language() -> void:
 	Settings.path = was
 	Settings.load_settings()
 	Locale.set_language("en")
+
+
+## Desktop and Android builds have no WebRTC, but they can play through a game server.
+func test_online_without_webrtc_offers_the_server() -> void:
+	var m := _main()
+	(m.screen.find_child("Play", true, false) as Button).pressed.emit()
+	check(not (m.screen.find_child("OnlineGame", true, false) as Button).disabled, "Online Game enabled everywhere")
+	var o := OnlineView.new()
+	root().add_child(o)
+	var codes := o.find_child("ViaCodes", true, false) as Button
+	eq(codes.disabled, not WebRtcTransport.available(), "codes need WebRTC (the browser)")
+	check(not (o.find_child("ViaServer", true, false) as Button).disabled, "the server works everywhere")
+	o.free()
+	m.free()

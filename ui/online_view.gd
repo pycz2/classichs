@@ -81,7 +81,9 @@ func _ready() -> void:
 		b.add_theme_font_size_override("font_size", 30)
 		b.pressed.connect(spec[2])
 		col.add_child(b)
-		var why := Palette.label(spec[3], 18)
+		var codes: bool = spec[1] == "ViaCodes"
+		b.disabled = codes and not WebRtcTransport.available()  # WebRTC: only in the browser
+		var why := Palette.label(tr("Direct play works only in the browser version of the game") if b.disabled else spec[3], 18)
 		why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		why.custom_minimum_size.x = 480
 		col.add_child(why)

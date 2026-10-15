@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.26.1] - 2026-10-15
+
+### Fixed
+- In the downloaded game for Windows, macOS, Linux and Android, “Online Game” now works: you can play through a game server there. Direct play with codes stays in the browser version only.
+
 ## [0.26.0] - 2026-10-15
 
 ### Added

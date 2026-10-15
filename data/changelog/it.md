@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.26.1] - 2026-10-15
+
+### Corretto
+- Nel gioco scaricato per Windows, macOS, Linux e Android, “Partita online” ora funziona: si può giocare tramite un server di gioco. Il gioco diretto con i codici resta solo nella versione per browser.
+
 ## [0.26.0] - 2026-10-15
 
 ### Aggiunto

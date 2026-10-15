@@ -159,6 +159,7 @@
 "Destroyed": "Destruido",
 "Dies": "Muere",
 "Different game versions: yours %s, the opponent's %s": "Versiones del juego distintas: la tuya %s, la del oponente %s",
+"Direct play works only in the browser version of the game": "El juego directo solo funciona en la versión del navegador",
 "Directly, with codes": "Directamente, con códigos",
 "Don't understand a card? Mouse-over it!": "¿No entiendes una carta? ¡Pasa el ratón por encima!",
 "Done": "Hecho",

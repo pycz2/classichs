@@ -115,7 +115,7 @@ footer { color: var(--muted); font-size: 13px; margin-top: 40px; border-top: 1px
 <div class="bar"><div class="bar-in">
   <div>
     <h1>Classic HS: как устроена система</h1>
-    <div class="sub">Godot 4.7.2 · версия 0.24.1 · состояние на 15.10.2026</div>
+    <div class="sub">Godot 4.7.2 · версия 0.26.1 · состояние на 15.10.2026</div>
   </div>
   <div class="grow"></div>
   <div class="seg" role="group" aria-label="Уровень подробностей">
@@ -129,13 +129,14 @@ footer { color: var(--muted); font-size: 13px; margin-top: 40px; border-top: 1px
 <main>
   <section class="intro">
     <p class="hint" data-max="1">Нажмите на блок схемы, чтобы прочитать о нём. Переключатель «Обзор / Подробнее / Всё» наверху добавляет файлы, классы и связи, а на уровне «Всё» ещё и пошаговые потоки со ссылками <code>файл:строка</code>.</p>
-    <p><b>В двух словах.</b> Игра собрана как слоёный пирог. Внизу лежит детерминированный <b>движок правил</b>: он получает действие-словарь и возвращает список событий. Поведение карт описано словарями-хуками в <code>cards/</code>, а их числа и тексты взяты из <code>data/cards.json</code>. Над движком стоит <b>игровой слой</b> (<code>Match</code>): он решает, чей ход (человек, бот или соперник по сети), и рассылает события. <b>Интерфейс</b> целиком собран кодом: он по событиям проигрывает анимации и перестраивает стол по состоянию. <b>Сеть</b> обходится без сервера: два браузера соединяются по WebRTC, коды подключения пересылаются через мессенджер, обе стороны считают одну и ту же партию (lockstep) и после каждого хода сверяют хэш состояния.</p>
+    <p><b>В двух словах.</b> Игра собрана как слоёный пирог. Внизу лежит детерминированный <b>движок правил</b>: он получает действие-словарь и возвращает список событий. Поведение карт описано словарями-хуками в <code>cards/</code>, а их числа и тексты взяты из <code>data/cards.json</code>. Над движком стоит <b>игровой слой</b> (<code>Match</code>): он решает, чей ход (человек, бот или соперник по сети), и рассылает события. <b>Интерфейс</b> целиком собран кодом: он по событиям проигрывает анимации и перестраивает стол по состоянию. <b>Сеть</b> работает двумя способами. Первый обходится без сервера: два браузера соединяются по WebRTC, коды подключения пересылаются через мессенджер. Второй идёт через необязательный <b>игровой сервер на Rust</b> (<code>server/</code>): там аккаунты, обычные и рейтинговые игры, Арена, друзья и сообщения. В обоих случаях обе стороны считают одну и ту же партию (lockstep) и после каждого хода сверяют хэш состояния. Сервер дополнительно проверяет каждый ход <b>судьёй</b>: это та же игра, запущенная без окна.</p>
     <ul data-min="2">
       <li><b>Детерминизм.</b> Один <code>RandomNumberGenerator</code> с seed матча, никаких float в логике, явный порядок обхода. Одинаковые seed и действия всегда дают одинаковую игру, поэтому онлайну достаточно передавать одни ходы.</li>
       <li><b>Одна сцена.</b> <code>ui/main.tscn</code> содержит только корневой <code>Control</code>, все экраны — классы GDScript, которые <code>ui/main.gd</code> подменяет друг другом.</li>
       <li><b>Данные отдельно от кода.</b> Карты, переводы, раскладки текста на картах, реплики и журнал изменений лежат в <code>data/</code>. Арт и звук сгенерированы скриптами из <code>tools/</code>.</li>
-      <li><b>Всё проверяется тестами.</b> Около 820 тестов в 68 файлах <code>tests/test_*.gd</code>: каждая карта, сеть, UI-потоки, случайные полные партии.</li>
-      <li><b>Выпуск.</b> Версия в <code>project.godot</code>, журнал на 8 языках, тег <code>vX.Y.Z</code>, сайт через <code>tools/build_site.sh --publish</code> в ветку <code>gh-pages</code>, релизные сборки под все платформы на каждый тег (GitHub Actions).</li>
+      <li><b>Всё проверяется тестами.</b> Около 830 тестов в 70 файлах <code>tests/test_*.gd</code>: каждая карта, сеть, UI-потоки, случайные полные партии. У сервера свои тесты: <code>cargo test</code> в <code>server/</code>.</li>
+      <li><b>Сервер необязателен.</b> Игра по кодам работает и без него. Сервер — отдельная программа <code>classichs-server</code> (Rust, axum, SQLite). Каждый ход он передаёт сопернику только после проверки судьёй, поэтому чужой изменённый клиент не может сделать незаконный ход.</li>
+      <li><b>Выпуск.</b> Версия в <code>project.godot</code>, журнал на 8 языках, тег <code>vX.Y.Z</code>, сайт через <code>tools/build_site.sh --publish</code> в ветку <code>gh-pages</code>, релизные сборки под все платформы на каждый тег (GitHub Actions), там же собирается сервер для Linux, Windows и macOS.</li>
     </ul>
   </section>
 
@@ -155,12 +156,12 @@ footer { color: var(--muted); font-size: 13px; margin-top: 40px; border-top: 1px
 
   <section>
     <h2>Ключевые потоки</h2>
-    <p class="hint" data-max="2">Пошаговые потоки (запуск, ход, онлайн, Арена, обучение, карты, данные, тесты, сайт, выпуск) показаны на уровне «Всё».</p>
+    <p class="hint" data-max="2">Пошаговые потоки (запуск, ход, онлайн, Арена, обучение, карты, данные, тесты, сайт, выпуск, игровой сервер) показаны на уровне «Всё».</p>
     <div class="flows" id="flows" data-min="3"></div>
     <p class="none" id="none-f" data-min="3">Ни один поток не подходит под запрос.</p>
   </section>
 
-  <footer>Страница сделана по коду репозитория (версия 0.24.1). Ссылки вида <code>файл:строка</code> указывают на начало функции на момент написания и со временем могут сдвинуться. Файл: <code>docs/architecture/index.html</code>, без внешних зависимостей. Незакоммиченная работа над игровым сервером (<code>net/referee.gd</code>, спецификации от 15.10.2026 в <code>docs/superpowers/specs/</code>) здесь не описана.</footer>
+  <footer>Страница сделана по коду репозитория (версия 0.26.1). Ссылки вида <code>файл:строка</code> указывают на начало функции на момент написания и со временем могут сдвинуться. Файл: <code>docs/architecture/index.html</code>, без внешних зависимостей. Протокол сервера подробно описан в <code>docs/superpowers/specs/2026-10-15-server-design.md</code>.</footer>
 </main>
 
 <script>
@@ -179,7 +180,7 @@ const sec = (o) => "<dl>" +
 // x, y: top-left corner of the box on the 1100x680 diagram (box 190x64).
 const C = [
 { id: "external", name: "Внешние источники", path: "интернет, Codex CLI", layer: "ext", x: 30, y: 50,
-  short: "Откуда приходят данные и ресурсы: HearthstoneJSON (карты и оригинальный арт), hearthstone.wiki.gg (реплики), OpenGameArt (музыка CC0), локальный Codex CLI (генерация картинок). Во время игры нужны только STUN/TURN-серверы для онлайна.",
+  short: "Откуда приходят данные и ресурсы: HearthstoneJSON (карты и оригинальный арт), hearthstone.wiki.gg (реплики), OpenGameArt (музыка CC0), локальный Codex CLI (генерация картинок). Во время игры нужны только STUN/TURN-серверы для онлайна по кодам или адрес игрового сервера, если играть через него.",
   l2: sec({
     role: "Не часть репозитория. Скрипты из <code>tools/</code> обращаются к этим источникам один раз, а результат кладётся в репозиторий. Игре сами источники не нужны.",
     input: ul("<code>api.hearthstonejson.com/v1/latest/all/cards.json</code>: все карты со всеми локалями",
@@ -200,7 +201,7 @@ const C = [
     files: f("tools/extract_cards.py", "tools/gen_card_art.py", "tools/gen_ui_art.py", "tools/key_green.gd", "tools/gen_audio.py",
       "tools/fetch_open_music.py", "tools/fetch_original_art.py", "tools/fetch_voice_lines.py", "tools/voice_lines.md", "tools/make_icons.gd",
       "tools/make_splash.gd", "tools/screenshots.gd", "tools/card_sheets.gd", "tools/card_layout.gd", "tools/check_card_tests.gd",
-      "tools/art_sheet.gd", "tools/site_data.py", "tools/site_cards.gd", "tools/build_site.sh", "tools/export_all.sh"),
+      "tools/art_sheet.gd", "tools/site_data.py", "tools/site_cards.gd", "tools/build_site.sh", "tools/export_all.sh", "tools/server_e2e.gd"),
     role: "Всё, что делается вне игры и один раз: получить данные, нарисовать или синтезировать ресурсы, проверить их и собрать результат.",
     classes: "GDScript-инструменты — это <code>extends SceneTree</code>, запуск: <code>godot --path . --script res://tools/….gd</code>. Части из них нужно окно (без <code>--headless</code>): make_splash, screenshots, card_sheets, site_cards.",
     input: "Внешние источники, код и данные игры.",
@@ -216,7 +217,8 @@ const C = [
     "<code>make_icons.gd</code>: иконки PWA из драконьего герба. <code>make_splash.gd</code>: <code>icons/splash.png</code> с номером версии.",
     "<code>screenshots.gd</code>: <code>media/screens/&lt;lang&gt;/*.png</code> с настоящих экранов. <code>card_sheets.gd</code>: листы карт для проверки раскладок глазами. <code>art_sheet.gd</code>: весь арт на одном SVG.",
     "<code>card_layout.gd</code> и <code>check_card_tests.gd</code>: консольные проверки (должны выдать 0 проблем).",
-    "<code>build_site.sh</code>, <code>site_data.py</code>, <code>site_cards.gd</code>: сайт. <code>export_all.sh</code>: релизные сборки.") + "</div>"
+    "<code>build_site.sh</code>, <code>site_data.py</code>, <code>site_cards.gd</code>: сайт. <code>export_all.sh</code>: релизные сборки.",
+    "<code>server_e2e.gd</code>: проверка запущенного игрового сервера от начала до конца. Два клиента в одном процессе регистрируются, встают в очередь (casual, ranked или arena), играют ходами бота через сервер и печатают результат и ранги.") + "</div>"
 },
 { id: "data", name: "Данные", path: "data/", layer: "data", x: 590, y: 50,
   short: "Всё, что не код: 534 карты из HearthstoneJSON с текстами на всех языках, переводы интерфейса на 8 языков, ручные раскладки текста карт, подсказки ключевых слов, реплики, тестовые сцены карт, журнал изменений.",
@@ -270,7 +272,7 @@ const C = [
   l3: '<div class="deep"><h4>Пример и правила</h4>' + ul(
     '<code>r["VAN_CS2_024"] = {"target": T.ANY, "spell": func(g, me, t): g.damage(me, t, g.spell_dmg(me, 3)); g.freeze(t)}</code>, см. <code>cards/mage.gd</code>.',
     "Временные эффекты — это чары (enchantments) с полем <code>hooks: \"ench:…\"</code>, например <code>ench:blessing_of_wisdom</code> в cards/paladin.gd или <code>ench:tutorial_guard</code> в cards/tutorial.gd.",
-    "<code>Cards.unload()</code> обязательно вызывается при выходе (" + r("ui/main.gd:213") + "): лямбды хуков в статическом словаре иначе роняют Godot при завершении.",
+    "<code>Cards.unload()</code> обязательно вызывается при выходе (" + r("ui/main.gd:252") + "): лямбды хуков в статическом словаре иначе роняют Godot при завершении.",
     "Каждая карта покрыта тестами <code>tests/test_cards_*.gd</code> и сценой в <code>data/card_tests/</code>. <code>tests/test_coverage.gd</code> следит, чтобы у каждой механики из текста был обработчик.") + "</div>"
 },
 { id: "engine", name: "Движок правил", path: "engine/", layer: "core", x: 310, y: 220,
@@ -324,26 +326,26 @@ const C = [
     files: f("ui/main.tscn", "ui/main.gd", "ui/menu.gd", "ui/match_view.gd", "ui/minion_view.gd", "ui/hero_view.gd", "ui/card_view.gd", "ui/entity_view.gd",
       "ui/power_view.gd", "ui/mana_bar.gd", "ui/deck_pile.gd", "ui/table_fx.gd", "ui/anim.gd", "ui/target_arrow.gd", "ui/fuse.gd", "ui/history_panel.gd",
       "ui/history_strip.gd", "ui/deck_tracker_panel.gd", "ui/keyword_tips.gd", "ui/collection_view.gd", "ui/deck_list_view.gd", "ui/training_setup.gd",
-      "ui/online_view.gd", "ui/settings_view.gd", "ui/language_picker.gd", "ui/changelog_view.gd", "ui/debug_table.gd", "ui/card_lab.gd",
+      "ui/online_view.gd", "ui/server_view.gd", "ui/settings_view.gd", "ui/language_picker.gd", "ui/changelog_view.gd", "ui/debug_table.gd", "ui/card_lab.gd",
       "ui/effects_lab.gd", "ui/palette.gd", "ui/burn.gdshader"),
     role: "Показать игру и принять ввод. Правил интерфейс не знает: что можно сделать, он спрашивает у <code>legal_actions()</code>.",
     classes: ul("<code>Main</code> (ui/main.gd): корень, переключает экраны через <code>_set_screen</code> и держит текущий матч.",
       "<code>MatchView</code> (ui/match_view.gd, ~2400 строк): стол, ввод (клик или перетаскивание → Choose One → место → цель), очередь анимаций, таймер, эмоции, результат.",
       "<code>CardView</code>, <code>MinionView</code>, <code>HeroView</code>, <code>Frames</code>, <code>TableFx</code>, <code>Anim</code> (длительности, делённые на скорость 1–4x).",
-      "<code>DeckListView</code> + <code>CollectionView</code> (коллекция), <code>TrainingSetup</code>, <code>OnlineView</code>, <code>ArenaView</code>, <code>TutorialView</code>/<code>TutorialIntro</code>, <code>SettingsView</code>, <code>DebugTable</code> (сцена, тесты карт, CardLab, EffectsLab)."),
+      "<code>DeckListView</code> + <code>CollectionView</code> (коллекция), <code>TrainingSetup</code>, <code>OnlineView</code>, <code>ServerView</code> (вход и лобби игрового сервера), <code>ArenaView</code>, <code>TutorialView</code>/<code>TutorialIntro</code>, <code>SettingsView</code>, <code>DebugTable</code> (сцена, тесты карт, CardLab, EffectsLab)."),
     input: "События от <code>Match.changed</code>, состояние <code>Game</code>, клики и перетаскивания игрока, ресурсы.",
     output: "Действия в <code>Match.submit</code>, сохранение колод и настроек, намерения (intent) в сеть.",
-    links: "Подписан на Match, для онлайна — на NetSession (эмоции, намерения, обрыв). Арт и звук берёт из <code>Art</code>, <code>Sprites</code>, <code>Sound</code>."
+    links: "Подписан на Match, для онлайна — на NetSession (эмоции, намерения, обрыв), для игры через сервер — на ServerLink. Арт и звук берёт из <code>Art</code>, <code>Sprites</code>, <code>Sound</code>."
   }),
   l3: '<div class="deep"><h4>Очередь анимаций и приказов</h4>' + ul(
-    r("ui/match_view.gd:191") + " <code>bind(m)</code>: <code>m.busy = func(): return _busy</code>, <code>m.changed → _on_changed</code>, <code>m.start()</code>. " + r("ui/match_view.gd:207") + " <code>bind_online</code> дополнительно включает таймер хода, имена игроков, эмоции и сигнал обрыва.",
-    r("ui/match_view.gd:1337") + " <code>_on_changed</code> кладёт пакет событий в <code>_queue</code>. " + r("ui/match_view.gd:1346") + " <code>_play_queue</code> по одному вызывает <code>await _animate(…)</code> (" + r("ui/match_view.gd:1359") + "): сначала то, что происходит до изменения (показ карты, выпад атакующего, полёт заклинания), а в момент удара — <code>refresh()</code>, числа и звуки.",
-    r("ui/match_view.gd:871") + " <code>refresh</code> → " + r("ui/match_view.gd:1010") + " <code>_reconcile</code>: новые виды прилетают из колоды или от сыгранной карты, остальные скользят на новые места, исчезнувшие уходят.",
-    r("ui/match_view.gd:800") + " <code>_act</code>: пока стол анимируется, приказы игрока копятся в <code>_pending_acts</code> и проверяются против <code>_plan()</code>, то есть состояния после этих приказов. " + r("ui/match_view.gd:814") + " <code>_release_orders</code> выполняет их по одному. В обучении очередь приказов отключена.",
+    r("ui/match_view.gd:194") + " <code>bind(m)</code>: <code>m.busy = func(): return _busy</code>, <code>m.changed → _on_changed</code>, <code>m.start()</code>. " + r("ui/match_view.gd:210") + " <code>bind_online</code> дополнительно включает таймер хода, имена игроков, эмоции и сигнал обрыва.",
+    r("ui/match_view.gd:1347") + " <code>_on_changed</code> кладёт пакет событий в <code>_queue</code>. " + r("ui/match_view.gd:1356") + " <code>_play_queue</code> по одному вызывает <code>await _animate(…)</code> (" + r("ui/match_view.gd:1369") + "): сначала то, что происходит до изменения (показ карты, выпад атакующего, полёт заклинания), а в момент удара — <code>refresh()</code>, числа и звуки.",
+    r("ui/match_view.gd:881") + " <code>refresh</code> → " + r("ui/match_view.gd:1020") + " <code>_reconcile</code>: новые виды прилетают из колоды или от сыгранной карты, остальные скользят на новые места, исчезнувшие уходят.",
+    r("ui/match_view.gd:810") + " <code>_act</code>: пока стол анимируется, приказы игрока копятся в <code>_pending_acts</code> и проверяются против <code>_plan()</code>, то есть состояния после этих приказов. " + r("ui/match_view.gd:824") + " <code>_release_orders</code> выполняет их по одному. В обучении очередь приказов отключена.",
     "В тестах <code>Anim.instant = true</code>: события применяются сразу, без ожидания.") + "</div>"
 },
 { id: "tests", name: "Тесты", path: "tests/ · run_tests.sh", layer: "ops", x: 30, y: 390,
-  short: "Около 820 тестов в 68 файлах: каждая карта, правила, коды колод, сетевой протокол, Арена, обучение, UI-потоки, переводы и шрифты, случайные полные партии. Всё запускается одной командой ./run_tests.sh без окна.",
+  short: "Около 830 тестов в 70 файлах: каждая карта, правила, коды колод, сетевой протокол, судья сервера, Арена, обучение, UI-потоки, переводы и шрифты, случайные полные партии. Всё запускается одной командой ./run_tests.sh без окна.",
   l2: sec({
     files: f("run_tests.sh", "tests/run.gd", "tests/test_case.gd", "tests/h.gd", "tests/sim.gd", "tests/fake_rtc.gd", "tests/i18n_keys.gd",
       "tests/scenarios/example.json", "tests/test_zz_isolation.gd", "net/loopback_transport.gd"),
@@ -358,7 +360,8 @@ const C = [
     "<code>tests/run.gd</code>: тесты стартуют на первом кадре, когда root уже в дереве, поэтому UI-тесты получают <code>_ready()</code>. Включается <code>Anim.instant</code>, язык английский. Настройки, колоды, профиль и прогресс пишутся в <code>user://test_runner_*.json</code>.",
     "Свой <code>Logger</code> (ErrorCounter) считает ошибки скриптов: любая ошибка во время теста означает провал.",
     "<code>test_zz_isolation.gd</code> запускается последним и проверяет, что ни один тест не оставил путь к настоящим файлам игрока.",
-    "<code>test_sim.gd</code>: случайные полные партии и повтор, который должен дать те же хэши (детерминизм). <code>test_net_session.gd</code>: полный матч по сети без рассинхронизации, подменённый хэш, мусорные сообщения, обрыв.") + "</div>"
+    "<code>test_sim.gd</code>: случайные полные партии и повтор, который должен дать те же хэши (детерминизм). <code>test_net_session.gd</code>: полный матч по сети без рассинхронизации, подменённый хэш, мусорные сообщения, обрыв.",
+    "<code>test_referee.gd</code>: ответы судьи (new, act, validate, draft). <code>test_server_view.gd</code>: ServerView на сообщениях в том виде, в каком их шлёт сервер (пустой тег, Арена, Легенда), и доставка ходов в канал игры через <code>ServerLink.dispatch</code>. Сам сервер проверяется отдельно: <code>cargo test</code> в <code>server/</code>, а живой сервер — <code>tools/server_e2e.gd</code>.") + "</div>"
 },
 { id: "tutorial", name: "Обучение", path: "game/tutorial.gd", layer: "game", x: 310, y: 390,
   short: "Шесть миссий как в оригинале: Джайна против Хоггера, Миллхауса, Лорвокера Чо, Короля Муклы, Хемета Несингвари и Иллидана. Заданные руки и колоды, подсказки, запреты на конец хода, реплики боссов.",
@@ -376,25 +379,40 @@ const C = [
     r("game/tutorial.gd:55") + " <code>end_turn_block</code>, " + r("game/tutorial.gd:90") + " <code>next_hint</code>, " + r("game/tutorial.gd:104") + " <code>boss_line</code>.") + "</div>"
 },
 { id: "net", name: "Сеть", path: "net/", layer: "net", x: 590, y: 390,
-  short: "Игра без сервера: WebRTC между двумя браузерами, коды приглашения и ответа пересылаются через любой мессенджер. Обе стороны считают одну партию (lockstep) и сверяют хэш состояния после каждого хода.",
+  short: "Два пути. Без сервера: WebRTC между двумя браузерами, коды приглашения и ответа пересылаются через любой мессенджер. Через игровой сервер: одно WebSocket-соединение (ServerLink), вход, лобби и игры. В обоих случаях обе стороны считают одну партию (lockstep) и сверяют хэш состояния после каждого хода. Здесь же судья — игра без окна, которая проверяет ходы для сервера.",
   l2: sec({
-    files: f("net/transport.gd", "net/webrtc_transport.gd", "net/signal_code.gd", "net/net_session.gd", "net/loopback_transport.gd", "net/channel_transport.gd", "ui/online_view.gd"),
-    role: "Соединить двух игроков, договориться о партии и передавать ходы так, чтобы партии не разошлись.",
+    files: f("net/transport.gd", "net/webrtc_transport.gd", "net/signal_code.gd", "net/net_session.gd", "net/loopback_transport.gd", "net/channel_transport.gd", "ui/online_view.gd",
+      "net/server_link.gd", "net/referee.gd", "ui/server_view.gd", "game/settings.gd", "tools/server_e2e.gd"),
+    role: "Соединить двух игроков, договориться о партии и передавать ходы так, чтобы партии не разошлись. Для сервера ещё и войти в аккаунт, показать лобби и проверять ходы судьёй.",
     classes: ul("<code>Transport</code>: абстракция с <code>send(dict)</code> и сигналами <code>opened</code>, <code>received</code>, <code>closed</code>. Сообщения передаются как JSON.",
       "<code>WebRtcTransport</code>: <code>WebRTCPeerConnection</code> и один упорядоченный надёжный канал «game». Методы <code>host()</code>, <code>join(invite)</code>, <code>finish(answer)</code>, сигнал <code>code_ready</code>.",
       "<code>SignalCode</code>: <code>pack</code>/<code>unpack</code> кодов (JSON → deflate → base64 + 4 байта контрольной суммы SHA-256).",
       "<code>NetSession</code>: протокол обычной игры <code>hello → start → action/emote/intent → bye</code>.",
-      "<code>LoopbackTransport</code> для тестов, <code>ChannelTransport</code> для игр Арены внутри одного соединения."),
-    input: "Колода, имя, код друга. Действия из <code>Match.local_action</code>.",
-    output: "<code>started(match)</code>, <code>failed(reason)</code>, <code>emote_received</code>, <code>intent_received</code>, вызовы <code>Match.submit_remote</code>.",
-    links: "Создаётся экраном OnlineView, затем переходит под MatchView. Матч проверяет действие соперника движком, а хэш состояния — после применения."
+      "<code>LoopbackTransport</code> для тестов, <code>ChannelTransport</code> для игр Арены внутри одного соединения.",
+      "<code>ServerLink</code> (Node): <code>WebSocketPeer</code> к серверу, сообщения <code>{t: …}</code> в JSON, сигналы <code>opened</code>, <code>message</code>, <code>closed</code>. Хранит <code>token</code> и <code>me</code> (профиль) только в памяти. <code>dispatch</code> отдаёт <code>{t: game}</code> в канал своей игры, остальное — в <code>message</code>.",
+      "<code>ServerChannel</code> (внутри server_link.gd): Transport одной игры на сервере, заворачивает сообщения NetSession в <code>{t: game, game, m}</code>. Так обычная <code>NetSession</code> играет через сервер без изменений.",
+      "<code>Referee</code> (net/referee.gd): судья сервера. Та же игра, запущенная без окна с <code>-- --referee &lt;port&gt;</code>, отвечает на запросы <code>new, act, drop, validate, draft, ping</code>.",
+      "<code>ServerView</code> (ui/server_view.gd): вход и регистрация, лобби с вкладками Играть / Арена / Друзья / Профиль, эмблема ранга <code>RankEmblem</code>."),
+    input: "Колода, имя, код друга или адрес сервера (<code>Settings.data.server</code>, по умолчанию <code>ws://localhost:7377</code>). Действия из <code>Match.local_action</code>.",
+    output: "<code>started(match)</code>, <code>failed(reason)</code>, <code>emote_received</code>, <code>intent_received</code>, вызовы <code>Match.submit_remote</code>. Для сервера: <code>ServerView.play(session, match, mode)</code>.",
+    links: "Создаётся экраном OnlineView (первый шаг: «Напрямую, по кодам» или «Через игровой сервер»), затем переходит под MatchView. Матч проверяет действие соперника движком, а хэш состояния — после применения. С игровым сервером говорит по WebSocket, судья — по TCP на 127.0.0.1."
   }),
   l3: '<div class="deep"><h4>Протокол и проверки</h4>' + ul(
-    "Хозяин — всегда игрок 0, он выбирает seed. <code>hello</code> несёт <code>protocol, version, data</code> (SHA-256 cards.json), <code>name, hero, cards</code>. Если не совпадает версия или данные, отправляется <code>bye</code> с понятной причиной (" + r("net/net_session.gd:145") + ").",
-    r("net/net_session.gd:194") + " <code>_on_local_action</code> отправляет <code>{t: action, n, action, hash}</code>. Для <code>mulligan</code> и <code>concede</code> хэш пустой: эти ходы оба игрока могут сделать одновременно.",
-    r("net/net_session.gd:200") + " <code>_on_action</code>: проверяет номер хода n (пропуск означает desync) и наличие хэша, затем вызывает <code>submit_remote</code>. Причины разрыва: <code>left, connection, version, desync, protocol, mode</code>.",
+    "Хозяин — всегда игрок 0, он выбирает seed. <code>hello</code> несёт <code>protocol, version, data</code> (SHA-256 cards.json), <code>name, hero, cards</code>. Если не совпадает версия или данные, отправляется <code>bye</code> с понятной причиной (" + r("net/net_session.gd:147") + ").",
+    r("net/net_session.gd:196") + " <code>_on_local_action</code> отправляет <code>{t: action, n, action, hash}</code>. Для <code>mulligan</code> и <code>concede</code> хэш пустой: эти ходы оба игрока могут сделать одновременно.",
+    r("net/net_session.gd:202") + " <code>_on_action</code>: проверяет номер хода n (пропуск означает desync) и наличие хэша, затем вызывает <code>submit_remote</code>. Причины разрыва: <code>left, connection, version, desync, protocol, mode</code>.",
     "Сетевая игра работает только в браузерной сборке: в настольных сборках нет плагина webrtc-native, и <code>initialize</code> возвращает ошибку «Online play needs the browser version».",
-    "Lockstep требует, чтобы обе стороны знали обе колоды. Для игры с друзьями это допустимо: интерфейс показывает только то, что положено.") + "</div>"
+    "Lockstep требует, чтобы обе стороны знали обе колоды. Для игры с друзьями это допустимо: интерфейс показывает только то, что положено.") +
+    '<h4>Клиент игрового сервера</h4>' + ul(
+    r("net/server_link.gd:20") + " <code>open</code>: новый <code>WebSocketPeer</code> с буферами по 1 МБ. " + r("net/server_link.gd:59") + " <code>_process</code> опрашивает сокет: первое открытие → <code>opened</code>, закрытие → <code>closed</code> всем каналам и экрану.",
+    r("net/server_link.gd:80") + " <code>dispatch</code>: сообщение <code>game</code> уходит в <code>ServerChannel</code> по id игры (освобождённый канал выбрасывается), остальные — в сигнал <code>message</code>. " + r("net/server_link.gd:51") + " <code>channel</code> создаёт канал для игры.",
+    "<code>WebSocketPeer</code> работает везде, поэтому «Сетевая игра» включена во всех сборках. Кнопка «Напрямую, по кодам» в <code>ui/online_view.gd</code> выключена там, где нет WebRTC (<code>WebRtcTransport.available()</code>: только браузер); «Через игровой сервер» доступна везде (с 0.26.1).",
+    r("ui/server_view.gd:37") + " <code>_ready</code>: если связь уже открыта и есть токен, это возврат из игры, и экран сразу показывает лобби и результат. Иначе <code>link.open(Settings.data.server)</code> и экран входа. " + r("ui/server_view.gd:625") + " <code>_on_message</code> разбирает ответы сервера.",
+    r("ui/server_view.gd:714") + " <code>_start_game</code>: на <code>match</code> создаются <code>ServerChannel</code> и <code>NetSession</code> с <code>seed_override</code> от сервера (" + r("net/net_session.gd:173") + " хозяин берёт этот seed) и <code>arena = true</code> для Арены.",
+    r("ui/server_view.gd:733") + " <code>RankEmblem</code>: ранги 2014 года названы по картам (<code>RANK_CARDS</code>), поэтому эмблема — арт одноимённой карты в золотом кольце. Ранг 1 — Трактирщик, Легенда — золотой герб.",
+    r("game/settings.gd:55") + " <code>server_ok</code>: адрес только <code>ws://</code> или <code>wss://</code>, без пробелов, до 200 символов. Поле адреса — в настройках (<code>ui/settings_view.gd</code>).",
+    r("net/referee.gd:13") + " <code>handle</code>: <code>new</code> строит <code>Game</code> из seed и двух колод, " + r("net/referee.gd:53") + " <code>act</code> применяет ход и отвечает <code>{ok, hash, over, winner, turn, current, phase}</code>, <code>validate</code> проверяет колоду, " + r("net/referee.gd:73") + " <code>draft</code> пересчитывает драфт Арены из seed и выборов (судья ничего не хранит).",
+    r("net/referee.gd:90") + " <code>Referee.run</code>: подключается к <code>127.0.0.1:&lt;port&gt;</code>, читает строки JSON и на каждую отвечает строкой. Когда сервер закрывает соединение, игра завершается. Запускается из " + r("ui/main.gd:7") + " <code>_ready</code> до всякого интерфейса.") + "</div>"
 },
 { id: "arena", name: "Арена", path: "net/arena_session.gd", layer: "net", x: 870, y: 390,
   short: "Арена с другом по сети: хозяин выбирает правила, каждый игрок выбирает героя из трёх и драфтит 30 карт по правилам 2014 года, потом идут игры до трёх побед по одному соединению.",
@@ -412,7 +430,7 @@ const C = [
   l3: '<div class="deep"><h4>Подробно</h4>' + ul(
     r("net/arena_session.gd:190") + " <code>_maybe_start</code>: когда оба готовы, создаются <code>ChannelTransport</code> и <code>NetSession</code>. Сообщения игры, пришедшие раньше её старта, ждут в <code>_pending</code>.",
     r("net/arena_session.gd:144") + " <code>record</code> считает результат, " + r("net/arena_session.gd:162") + " <code>_next_deck</code> запускает новый драфт для правил «each». Соперник видит прогресс драфта, но не выбранного героя.",
-    r("ui/main.gd:141") + " <code>show_arena</code> переносит сессию и транспорт под Main, " + r("ui/main.gd:160") + " <code>start_arena_match</code> открывает стол с <code>v.arena = s</code>.") + "</div>"
+    r("ui/main.gd:142") + " <code>show_arena</code> переносит сессию и транспорт под Main, " + r("ui/main.gd:199") + " <code>start_arena_match</code> открывает стол с <code>v.arena = s</code>.") + "</div>"
 },
 { id: "github", name: "GitHub", path: "pycz2/classichs", layer: "ext", x: 30, y: 560,
   short: "Где живёт результат: ветка main (код), ветка gh-pages (сайт и веб-сборка на https://pycz2.github.io/classichs/), теги vX.Y.Z и релизные сборки, которые собирает GitHub Actions.",
@@ -420,7 +438,7 @@ const C = [
     role: "Хостинг кода, сайта (GitHub Pages) и релизов. Других веток нет: работа коммитится прямо в main.",
     input: "<code>git push origin main</code>, <code>git push origin vX.Y.Z</code>, <code>tools/build_site.sh --publish</code> (push в gh-pages).",
     output: "Сайт с игрой в браузере (PWA), архив кода, релизные файлы по тегу.",
-    links: "GitHub Actions (<code>.github/workflows/release.yml</code>, только что добавлен): на каждый push в main — проверочная сборка (тесты + все платформы), на тег <code>vX.Y.Z</code> — GitHub Release с файлами Web, Windows, Linux AppImage, macOS и Android."
+    links: "GitHub Actions (<code>.github/workflows/release.yml</code>, только что добавлен): на каждый push в main — проверочная сборка (тесты + все платформы), на тег <code>vX.Y.Z</code> — GitHub Release с файлами Web, Windows, Linux AppImage, macOS и Android, а также сервер <code>ClassicHS-server-X.Y.Z-…</code> для Linux, Windows и macOS."
   }),
   l3: ""
 },
@@ -445,7 +463,7 @@ const C = [
     role: "Превратить состояние main в выпуск, видимый игрокам.",
     classes: "Пресеты экспорта: <code>Web</code>, <code>Windows Desktop</code>, <code>Linux</code>, <code>macOS</code>, <code>Android</code> (пакет <code>io.github.pycz2.classichs</code>).",
     input: "Зелёные тесты, изменения в main.",
-    output: "Тег vX.Y.Z, обновлённый сайт, файлы <code>build/release/ClassicHS-&lt;версия&gt;-web.zip</code>, <code>-windows-x86_64.exe</code>, <code>-linux-x86_64.AppImage</code>, <code>-macos.zip</code>, <code>-android-arm64.apk</code>.",
+    output: "Тег vX.Y.Z, обновлённый сайт, файлы <code>build/release/ClassicHS-&lt;версия&gt;-web.zip</code>, <code>-windows-x86_64.exe</code>, <code>-linux-x86_64.AppImage</code>, <code>-macos.zip</code>, <code>-android-arm64.apk</code>. В GitHub Release ещё и сервер: <code>ClassicHS-server-&lt;версия&gt;-linux-x86_64</code>, <code>-windows-x86_64.exe</code>, <code>-macos-arm64</code>.",
     links: "Версия видна в меню, на заставке и в онлайн-<code>hello</code>: игроки с разными версиями вместе не играют. Журнал показывается в игре на языке интерфейса (<code>ui/changelog_view.gd</code>)."
   }),
   l3: '<div class="deep"><h4>Подробно</h4>' + ul(
@@ -453,7 +471,38 @@ const C = [
     "<code>.github/workflows/release.yml</code> (только что добавлен): job <code>game</code> на ubuntu-24.04 ставит Godot 4.7.2 с шаблонами экспорта, appimagetool, Java 17 и Android SDK, запускает <code>./run_tests.sh</code> (ожидает «0 failed») и <code>tools/export_all.sh</code>. Файлы выкладываются как артефакты.",
     "Android подписывается keystore из секретов <code>ANDROID_KEYSTORE_BASE64 / _USER / _PASSWORD</code>. Если секретов нет, создаётся одноразовый ключ, и тогда APK при обновлении придётся переустанавливать.",
     "Job <code>release</code> работает только для тегов <code>v*</code>: собирает все артефакты и через <code>softprops/action-gh-release</code> создаёт релиз «Classic HS vX.Y.Z». На push в main сборка служит только проверкой.",
-    "В том же workflow есть job <code>server</code> для будущего игрового сервера на Rust: он ничего не делает, пока в репозитории нет <code>server/Cargo.toml</code>.") + "</div>"
+    "Job <code>server</code> собирает игровой сервер на трёх системах (matrix: ubuntu-24.04, windows-2022, macos-14): <code>cargo test --release</code> и <code>cargo build --release</code> в <code>server/</code>. Если <code>server/Cargo.toml</code> нет, шаги пропускаются. Job <code>release</code> ждёт и <code>game</code>, и <code>server</code>.") + "</div>"
+},
+{ id: "server", name: "Игровой сервер (Rust)", path: "server/ · axum, SQLite", layer: "net", x: 870, y: 560,
+  short: "Необязательный сервер: аккаунты, друзья и сообщения, обычные и рейтинговые игры (ранги 2014 года), Арена и игры, где каждый ход проверяет судья — сама игра без окна. Один асинхронный процесс на Rust с базой SQLite и админкой /admin.",
+  l2: sec({
+    files: f("server/Cargo.toml", "server/README.md", "server/src/main.rs", "server/src/lib.rs", "server/src/ws.rs", "server/src/game.rs", "server/src/ranked.rs",
+      "server/src/auth.rs", "server/src/db.rs", "server/src/referee.rs", "server/src/admin.rs", "server/tests/flow.rs", "server/tests/admin.rs"),
+    role: "Свести двух игроков, передавать ходы между ними и не пропустить незаконный ход или подмену колоды. Хранить аккаунты, ранги, друзей, переписку и Арену. Игра по кодам работает и без сервера.",
+    classes: ul("<code>main.rs</code>: разбор аргументов <code>--listen</code> (127.0.0.1:7377), <code>--db</code> (classichs.db), <code>--referee</code>, <code>--trust-proxy</code> и команда <code>admin &lt;name&gt;</code> (создать суперпользователя или сбросить его пароль).",
+      "<code>App</code> (lib.rs): база, судья, <code>Hub</code> (подключения, очередь, живые игры, кто в какой игре, приглашения) и лимиты входа. <code>spawn_background</code> — подбор пар раз в секунду.",
+      "<code>ws.rs</code>: одно WebSocket-подключение. Перечисление <code>In</code> — все сообщения клиента, лишние поля запрещены. <code>Session.dispatch</code> отвечает на каждое.",
+      "<code>game.rs</code>: одна игра. Передаёт сообщения NetSession, проверяет их судьёй, считает итог (MMR, звёзды, счёт Арены) и пишет его в базу.",
+      "<code>ranked.rs</code>: чистые правила — <code>Rank</code> (25 рангов и Легенда, звёзды, серии побед), <code>elo</code> (K = 32), окна подбора, сезоны по календарным месяцам.",
+      "<code>auth.rs</code>: argon2id, токены, правила имён и тегов, <code>RateLimit</code>. <code>db.rs</code>: SQLite (WAL) за одним мьютексом. <code>referee.rs</code>: процесс судьи. <code>admin.rs</code>: админка."),
+    input: "WebSocket-сообщения клиентов (<code>ServerLink</code>) на <code>/</code>, HTTP-запросы админки на <code>/admin</code>, ответы судьи.",
+    output: "Ответы и события клиентам (<code>auth</code>, <code>friends</code>, <code>match</code>, <code>game</code>, <code>game_over</code>…), строки в базе, страницы админки.",
+    links: "Клиент — <code>ServerLink</code> и <code>ServerView</code> (компонент «Сеть»). Судья — та же игра (<code>net/referee.gd</code>) с тем же движком и тем же хэшем, поэтому сервер и игра должны быть одной версии. Собирается в GitHub Actions (job <code>server</code>)."
+  }),
+  l3: '<div class="deep"><h4>Как устроен внутри</h4>' + ul(
+    r("server/src/main.rs:15") + " <code>main</code>: открывает базу, при <code>admin &lt;name&gt;</code> вызывает " + r("server/src/main.rs:64") + " <code>make_admin</code> (пароль дважды без эха). Иначе пингует судью, создаёт <code>App</code>, запускает фоновый цикл и <code>axum::serve</code>.",
+    r("server/src/lib.rs:33") + " <code>App</code>, " + r("server/src/lib.rs:96") + " <code>Hub</code>. " + r("server/src/lib.rs:127") + " <code>attach</code>: новый вход закрывает старое подключение («Logged in elsewhere») и возвращает игрока в его игру. " + r("server/src/lib.rs:143") + " <code>detach</code>: убирает из очереди и приглашений, игре сообщает, что игрок пропал.",
+    r("server/src/lib.rs:164") + " <code>Hub.pair</code>: раз в секунду (" + r("server/src/lib.rs:205") + " <code>spawn_background</code>) дольше всех ждущий получает ближайшего соперника, если разрыв помещается в окна обоих. Остальным уходит <code>queue_status {waited, window}</code>.",
+    r("server/src/ws.rs:45") + " <code>In</code>: все сообщения клиента. " + r("server/src/ws.rs:106") + " <code>run</code>: кадр до 64 КБ, только текст, не больше 300 сообщений за 10 с, после 20 испорченных сообщений соединение закрывается. " + r("server/src/ws.rs:288") + " <code>dispatch</code>: до входа можно только <code>register / login / resume / ping</code>.",
+    r("server/src/game.rs:38") + " <code>start</code>: хозяин выбирается случайно, судья получает <code>new {game, seed, decks}</code>, обоим уходит <code>match</code>. " + r("server/src/game.rs:153") + " <code>relay</code> проверяет каждое сообщение, " + r("server/src/game.rs:234") + " <code>finish</code> сохраняет итог в транзакции и шлёт <code>game_over</code>.",
+    r("server/src/ranked.rs:71") + " <code>win</code>: звезда, а с третьей победы подряд на рангах 25–6 ещё одна. " + r("server/src/ranked.rs:80") + " <code>lose</code>: минус звезда. На рангах 25–21 и на Легенде звёзды не теряются, ниже ранга 20 игрок не опускается. " + r("server/src/ranked.rs:94") + " <code>season_reset</code>: в новом месяце ранг 25 плюс звезда за каждый пройденный ранг. " + r("server/src/ranked.rs:141") + " <code>window</code>: по MMR 50 + 25 за секунду, по звёздам 2 + 1 за 5 с, Арена — 1 за 10 с.",
+    "Обычная игра подбирается по скрытому MMR (Elo от 1500), рейтинговая — по числу звёзд от 25/0 (Легенда = 95), две Легенды — по рейтинговому MMR, Арена — по разнице побед и поражений.",
+    r("server/src/auth.rs:14") + " <code>hash_password</code> (argon2id), " + r("server/src/auth.rs:32") + " <code>new_token</code>: 32 случайных байта клиенту, в базе только SHA-256. Сессия игры живёт 30 дней, админки — 12 часов. Вход и регистрация: 10 попыток в минуту с одного адреса, вход ещё и 10 на одно имя.",
+    r("server/src/db.rs:13") + " <code>SCHEMA</code>: таблицы <code>accounts</code> (роль user/admin/super, тег, MMR, ранг, сезон), <code>sessions</code>, <code>friends</code>, <code>requests</code>, <code>blocks</code>, <code>messages</code>, <code>arena</code>, <code>games</code>. " + r("server/src/db.rs:95") + " <code>Db.run</code> выполняет запрос в пуле блокирующих задач.",
+    r("server/src/referee.rs:54") + " <code>spawn</code>: слушает свободный порт на 127.0.0.1, запускает команду судьи с этим портом последним аргументом и ждёт подключения 20 с. " + r("server/src/referee.rs:80") + " <code>request</code>: одна строка JSON туда, одна обратно, ответ за 10 с. Если судья умер, следующий запрос запускает нового, а его игры заканчиваются ничьей (<code>aborted</code>).",
+    "Команда судьи: <code>--referee \"…\"</code>, иначе <code>CLASSICHS_REFEREE</code>, иначе <code>godot --headless --path &lt;проект&gt; -- --referee</code> (проект ищется в <code>.</code> и <code>..</code>). Можно указать скачанную сборку игры с <code>--headless -- --referee</code>.",
+    "Тесты: <code>cargo test</code> — правила рангов, лимиты, пароли и подбор в <code>src/</code>, полные сценарии с поддельным судьёй <code>FakeReferee</code> в <code>tests/flow.rs</code> (вход, очередь, игра, подмена хэша и seed, обрыв, друзья, Арена, злоупотребления), админка в <code>tests/admin.rs</code>. Тест <code>real_referee</code> запускает настоящего судью, если заданы <code>CLASSICHS_GODOT</code> и <code>CLASSICHS_PROJECT</code>.",
+    "Известное ограничение (README): клиенты по-прежнему знают всё состояние партии (lockstep), поэтому изменённый клиент может подсмотреть руку соперника. Судья останавливает незаконные ходы, но не подглядывание.") + "</div>"
 }
 ];
 
@@ -476,7 +525,9 @@ const A = [
   ["tests", "release", "./run_tests.sh перед выпуском", { dash: true }],
   ["release", "site", "--publish"],
   ["site", "github", "gh-pages"],
-  ["release", "github", "тег vX.Y.Z → релизные сборки", { d: "M685 628 C 685 672, 125 672, 125 632", lx: 405, ly: 664 }]
+  ["release", "github", "тег vX.Y.Z → релизные сборки", { d: "M685 628 C 685 672, 125 672, 125 632", lx: 405, ly: 664 }],
+  ["server", "net", "WebSocket,\nсудья по TCP", { both: true }],
+  ["release", "server", "сборки"]
 ];
 
 const W = 190, H = 64;
@@ -557,44 +608,44 @@ const FLOWS = [
 { title: "1. Запуск игры", comps: ["ui", "game", "assets", "data"], steps: [
   "Godot показывает заставку <code>icons/splash.png</code> (на ней номер версии, её рисует <code>tools/make_splash.gd</code>) и открывает <code>run/main_scene = res://ui/main.tscn</code> из <code>project.godot</code>.",
   "<code>main.tscn</code> — единственная сцена: корневой <code>Control</code> со скриптом <code>ui/main.gd</code>. Все остальные экраны — классы, созданные кодом.",
-  r("ui/main.gd:7") + " <code>_ready</code>: <code>theme = Fonts.theme()</code>, затем <code>Locale.load_all()</code> (переводы в TranslationServer), <code>Sprites.load_all()</code> (все спрайты сразу, это правило для веба), <code>Settings.load_settings()</code> + <code>apply()</code> (язык, громкость, тряска), <code>add_child(Sound.new())</code>. Полный экран включается только вне браузера: там нужен клик.",
+  r("ui/main.gd:7") + " <code>_ready</code>: если игра запущена с <code>-- --referee &lt;port&gt;</code>, вместо интерфейса работает судья игрового сервера (<code>Referee.run</code>, поток 13), и дальше ничего не происходит. Иначе <code>theme = Fonts.theme()</code>, затем <code>Locale.load_all()</code> (переводы в TranslationServer), <code>Sprites.load_all()</code> (все спрайты сразу, это правило для веба), <code>Settings.load_settings()</code> + <code>apply()</code> (язык, громкость, тряска), <code>add_child(Sound.new())</code>. Полный экран включается только вне браузера: там нужен клик.",
   "Первый запуск (нет <code>user://settings.json</code>): " + r("ui/main.gd:32") + " <code>LanguagePicker</code> → язык сохраняется → меню. Иначе сразу " + r("ui/main.gd:60") + " <code>show_menu</code>.",
   "<code>MainMenu</code> (ui/menu.gd) отдаёт сигналы <code>training / collection / online / tutorial / settings / quit</code>, Main вызывает соответствующий <code>show_*</code>. " + r("ui/main.gd:51") + " <code>_set_screen</code> удаляет старый экран и ставит новый.",
-  "Выход: " + r("ui/main.gd:213") + " <code>_notification</code> → <code>Cards.unload()</code>."
+  "Выход: " + r("ui/main.gd:252") + " <code>_notification</code> → <code>Cards.unload()</code>."
 ]},
 { title: "2. Ход в матче (тренировка с ботом)", comps: ["ui", "game", "engine", "cards"], steps: [
   "TrainingSetup отдаёт колоду игрока и класс бота. " + r("ui/main.gd:80") + " создаёт <code>Game.new({hero, deck}, {hero: Decks.hero(bot), deck: Decks.basic(bot)}, randi())</code>.",
-  r("ui/main.gd:202") + " <code>start_match</code>: <code>Match.setup(g, [false, true])</code> (второй игрок — бот) → <code>MatchView.bind(m)</code> (" + r("ui/match_view.gd:191") + ").",
-  "Игрок кликает или тянет карту. MatchView собирает действие из <code>g.legal_actions()</code>: карта → вариант Choose One → место на столе → цель. Затем вызывается " + r("ui/match_view.gd:800") + " <code>_act</code>. Если стол ещё анимируется, приказ ждёт в очереди.",
+  r("ui/main.gd:241") + " <code>start_match</code>: <code>Match.setup(g, [false, true])</code> (второй игрок — бот) → <code>MatchView.bind(m)</code> (" + r("ui/match_view.gd:194") + ").",
+  "Игрок кликает или тянет карту. MatchView собирает действие из <code>g.legal_actions()</code>: карта → вариант Choose One → место на столе → цель. Затем вызывается " + r("ui/match_view.gd:810") + " <code>_act</code>. Если стол ещё анимируется, приказ ждёт в очереди.",
   r("game/match.gd:61") + " <code>Match.submit</code> → " + r("engine/game.gd:47") + " <code>Game.apply</code>: нормализация, проверка законности, исполнение (хуки карт через <code>Cards.of</code>), <code>resolve()</code> — триггеры и смерти до затишья. Возвращаются события.",
   "Match отправляет <code>changed(events)</code> и вызывает <code>_after</code>. Если ходит бот, через <code>bot_delay</code> = 0.6 с (и только когда <code>busy()</code> вернёт false) вызывается <code>Bot.choose</code>, а затем <code>apply</code> → <code>changed</code>.",
-  r("ui/match_view.gd:1337") + " <code>_on_changed</code> → <code>_queue</code> → " + r("ui/match_view.gd:1346") + " <code>_play_queue</code> → " + r("ui/match_view.gd:1359") + " <code>_animate</code>: показ карты, выпад, полёт снаряда. В момент удара — <code>refresh()</code> и <code>_reconcile</code>, всплывающие числа, <code>TableFx</code>, <code>Sound</code>.",
+  r("ui/match_view.gd:1347") + " <code>_on_changed</code> → <code>_queue</code> → " + r("ui/match_view.gd:1356") + " <code>_play_queue</code> → " + r("ui/match_view.gd:1369") + " <code>_animate</code>: показ карты, выпад, полёт снаряда. В момент удара — <code>refresh()</code> и <code>_reconcile</code>, всплывающие числа, <code>TableFx</code>, <code>Sound</code>.",
   "Очередь опустела → <code>refresh()</code> и <code>_release_orders()</code>: выполняется следующий отложенный приказ игрока.",
   "<code>game_over</code> → <code>Match.finished(winner)</code> → портрет проигравшего героя разлетается на осколки → экран результата (победа, поражение или ничья с точки зрения игрока)."
 ]},
 { title: "3. Онлайн: подключение по кодам", comps: ["ui", "net", "external"], steps: [
-  "Меню → Играть → Сетевая игра: " + r("ui/main.gd:120") + " <code>show_online</code> → <code>OnlineView</code>. Шаги: имя → обычная игра или Арена → колода → «Создать» или «Присоединиться».",
+  "Меню → Играть → Сетевая игра: " + r("ui/main.gd:120") + " <code>show_online</code> → <code>OnlineView</code>. Шаги: способ («Напрямую, по кодам» или «Через игровой сервер», второй ведёт в поток 12) → имя → обычная игра или Арена → колода → «Создать» или «Присоединиться».",
   "Хозяин: <code>host_game</code> → <code>_begin(true)</code>: создаются <code>WebRtcTransport</code> и <code>NetSession.setup(transport, true, имя, колода)</code> → <code>transport.host()</code>: <code>WebRTCPeerConnection</code> с STUN Google и TURN ExpressTURN, канал «game» (negotiated, id 1), <code>create_offer()</code>.",
   "Кандидаты ICE собираются до конца (gathering complete, максимум 10 с). <code>SignalCode.pack</code> склеивает SDP со всеми кандидатами, жмёт deflate и кодирует в base64 с контрольной суммой. Получается <b>код приглашения</b>, его отправляют другу.",
   "Гость: <code>join_game(код)</code> → <code>SignalCode.unpack(код, \"offer\")</code> (проверяет сумму, тип и формат, понятно сообщает, если перепутаны коды) → <code>set_remote_description</code> → браузер создаёт ответ → так же собирается <b>код ответа</b>. Кандидаты хозяина гость повторяет каждые 5 с в течение 300 с: Firefox бросает проверки через ~10 с, а хозяин вставляет ответ руками гораздо позже.",
   "Хозяин вставляет код ответа: <code>finish(answer)</code> → <code>set_remote_description(\"answer\")</code>. Канал открывается → <code>Transport.opened</code> → <code>say_hello</code> с обеих сторон.",
-  "<code>hello</code>: сверяются протокол, версия игры, хэш cards.json и проверяется колода соперника (<code>Deck.validate</code>). Хозяин выбирает seed, строит <code>Game</code> и шлёт <code>start {seed, decks}</code>. Гость сверяет колоды и строит такую же партию (" + r("net/net_session.gd:171") + ").",
-  r("net/net_session.gd:186") + " <code>_begin</code>: <code>Match</code> с <code>remote</code> = номер соперника → <code>started</code> → " + r("ui/main.gd:129") + " <code>start_online_match</code>: сессия и транспорт переподвешиваются под MatchView, чтобы пережить смену экрана.",
-  "Для автотестов двух вкладок в headless Chrome: <code>window.chs.host() / join(code) / finish(code)</code>, состояние читается из <code>window.chs_code</code> и <code>window.chs_state</code> (" + r("ui/online_view.gd:380") + ")."
+  "<code>hello</code>: сверяются протокол, версия игры, хэш cards.json и проверяется колода соперника (<code>Deck.validate</code>). Хозяин выбирает seed, строит <code>Game</code> и шлёт <code>start {seed, decks}</code>. Гость сверяет колоды и строит такую же партию (" + r("net/net_session.gd:173") + ").",
+  r("net/net_session.gd:188") + " <code>_begin</code>: <code>Match</code> с <code>remote</code> = номер соперника → <code>started</code> → " + r("ui/main.gd:130") + " <code>start_online_match</code>: сессия и транспорт переподвешиваются под MatchView, чтобы пережить смену экрана.",
+  "Для автотестов двух вкладок в headless Chrome: <code>window.chs.host() / join(code) / finish(code)</code>, состояние читается из <code>window.chs_code</code> и <code>window.chs_state</code> (" + r("ui/online_view.gd:402") + ")."
 ]},
 { title: "4. Онлайн: lockstep во время партии", comps: ["net", "game", "engine", "ui"], steps: [
-  "Свой ход: <code>Match.submit</code> → <code>apply</code> → <code>local_action(action, state_hash())</code> → " + r("net/net_session.gd:194") + " отправка <code>{t: \"action\", n, action, hash}</code>. Для муллигана и сдачи хэш пустой.",
-  "Ход соперника: " + r("net/net_session.gd:200") + " проверяется номер <code>n</code> и наличие хэша → " + r("game/match.gd:97") + " <code>submit_remote</code>: ход должен быть за игрока <code>remote</code>, законным, а хэш после применения должен совпасть с присланным.",
+  "Свой ход: <code>Match.submit</code> → <code>apply</code> → <code>local_action(action, state_hash())</code> → " + r("net/net_session.gd:196") + " отправка <code>{t: \"action\", n, action, hash}</code>. Для муллигана и сдачи хэш пустой.",
+  "Ход соперника: " + r("net/net_session.gd:202") + " проверяется номер <code>n</code> и наличие хэша → " + r("game/match.gd:97") + " <code>submit_remote</code>: ход должен быть за игрока <code>remote</code>, законным, а хэш после применения должен совпасть с присланным.",
   "Любое расхождение → <code>bye {code: \"desync\"}</code> и сообщение «Рассинхронизация». Закрытие канала → «Соединение потеряно». После конца партии обрыв уже не считается ошибкой.",
   "Вне lockstep: <code>emote</code> (6 эмоций, их можно заглушить) и <code>intent</code> (на что соперник наводит мышь или куда целится; красная стрелка и подсветка). <code>clean_intent</code> отбрасывает испорченные данные. Состояние игры эти сообщения не меняют.",
-  "Таймер хода: 75 с, в последние 15 с горит фитиль (<code>ui/fuse.gd</code>), на муллиган 45 с. Когда время вышло, " + r("ui/match_view.gd:711") + " <code>tick</code> → " + r("game/match.gd:75") + " <code>Match.timeout</code>: рука сохраняется, берётся первый вариант выбора, ход завершается. Это обычные ходы, они уходят сопернику как всегда."
+  "Таймер хода: 75 с, в последние 15 с горит фитиль (<code>ui/fuse.gd</code>), на муллиган 45 с. Когда время вышло, " + r("ui/match_view.gd:721") + " <code>tick</code> → " + r("game/match.gd:75") + " <code>Match.timeout</code>: рука сохраняется, берётся первый вариант выбора, ход завершается. Это обычные ходы, они уходят сопернику как всегда."
 ]},
 { title: "5. Арена с другом", comps: ["arena", "net", "ui", "game"], steps: [
   "OnlineView, выбор «Арена» → <code>_begin_arena</code>: <code>ArenaSession.setup(transport, host, имя)</code>, обмен кодами тот же.",
-  "<code>hello {mode: \"arena\"}</code>: если один выбрал обычную игру, а другой Арену, отправляется <code>bye {code: \"mode\"}</code> с понятным сообщением. После hello → <code>connected</code> → " + r("ui/main.gd:141") + " <code>show_arena</code>: сессия живёт под Main.",
+  "<code>hello {mode: \"arena\"}</code>: если один выбрал обычную игру, а другой Арену, отправляется <code>bye {code: \"mode\"}</code> с понятным сообщением. После hello → <code>connected</code> → " + r("ui/main.gd:142") + " <code>show_arena</code>: сессия живёт под Main.",
   "Хозяин выбирает правила: <code>rules {deck: \"one\" | \"each\", keep}</code> — одна колода на всю Арену или новая на каждую игру (возможно, с правом оставить прошлую).",
   "Драфт (<code>ArenaDraft</code>): выбор героя из трёх, затем 30 выборов. После каждого выбора отправляется <code>status</code>, и соперник видит прогресс.",
-  "Оба готовы → " + r("net/arena_session.gd:190") + " <code>_maybe_start</code>: <code>ChannelTransport</code> номер n и <code>NetSession</code> с <code>arena = true</code> → <code>game_started</code> → " + r("ui/main.gd:160") + " <code>start_arena_match</code>.",
+  "Оба готовы → " + r("net/arena_session.gd:190") + " <code>_maybe_start</code>: <code>ChannelTransport</code> номер n и <code>NetSession</code> с <code>arena = true</code> → <code>game_started</code> → " + r("ui/main.gd:199") + " <code>start_arena_match</code>.",
   "Конец игры → <code>record(winner)</code> → счёт. «Назад к Арене» → <code>show_arena</code> → <code>end_game</code> → новый драфт или та же колода, пока у кого-то не будет 3 побед. <code>concede</code> — сдать Арену, <code>bye</code> — соперник ушёл."
 ]},
 { title: "6. Обучение", comps: ["tutorial", "engine", "ui", "game"], steps: [
@@ -642,7 +693,61 @@ const FLOWS = [
   "Коммит «… (X.Y.Z)», затем коммит «Splash for X.Y.Z» с новой <code>icons/splash.png</code>.",
   "Аннотированный тег <code>vX.Y.Z</code> («Version X.Y.Z») на последнем коммите выпуска, затем <code>git push origin main</code> и <code>git push origin vX.Y.Z</code>.",
   "<code>tools/build_site.sh --publish</code> публикует сайт и веб-сборку.",
-  "Push тега запускает GitHub Actions (<code>.github/workflows/release.yml</code>, только что добавлен): тесты, релизные сборки Web, Windows, Linux AppImage, macOS и Android и GitHub Release «Classic HS vX.Y.Z» с этими файлами. Локально то же самое делает <code>tools/export_all.sh</code>, результат в <code>build/release/</code>."
+  "Push тега запускает GitHub Actions (<code>.github/workflows/release.yml</code>, только что добавлен): тесты, релизные сборки Web, Windows, Linux AppImage, macOS и Android и GitHub Release «Classic HS vX.Y.Z» с этими файлами. Локально то же самое делает <code>tools/export_all.sh</code>, результат в <code>build/release/</code>. Сервер собирается там же (поток 17)."
+]},
+{ title: "12. Сервер: вход и лобби", comps: ["ui", "net", "server"], steps: [
+  "Меню → Играть → Сетевая игра → «Через игровой сервер»: <code>OnlineView</code> отдаёт сигнал <code>server</code> → " + r("ui/main.gd:165") + " <code>show_server</code>: создаётся <code>ServerLink</code> под корнем Main (он живёт между экранами), затем <code>ServerView</code>.",
+  r("ui/server_view.gd:37") + " <code>_ready</code> → " + r("net/server_link.gd:20") + " <code>link.open(Settings.data.server)</code> (адрес задаётся в настройках, по умолчанию <code>ws://localhost:7377</code>). Пока соединение открывается, на экране «Подключение…», после <code>opened</code> — форма входа.",
+  r("ui/server_view.gd:176") + " <code>log_in</code>: <code>{t: login | register, user, password}</code>. На сервере " + r("server/src/ws.rs:594") + " <code>register</code> (имя 3–20 символов <code>[A-Za-z0-9_]</code>, пароль 8–128, argon2id) или " + r("server/src/ws.rs:610") + " <code>login</code> (для неизвестного имени проверка идёт по фиктивному хэшу, чтобы время ответа было одинаковым; замороженный аккаунт не входит).",
+  r("server/src/ws.rs:647") + " <code>logged_in</code>: новый токен сессии, <code>Hub.attach</code> (старое подключение того же аккаунта закрывается), ответ <code>auth {ok, token, me}</code>. <code>me = {user, tag, rank: {rank, stars, legend, streak}, arena, season}</code>.",
+  r("ui/server_view.gd:625") + " <code>_on_message</code>: на <code>auth</code> токен и профиль сохраняются в <code>ServerLink</code> (только в памяти), уходит запрос <code>friends</code>, и " + r("ui/server_view.gd:186") + " <code>_build_lobby</code> строит лобби: имя<code>#тег</code>, ранг и вкладки Играть / Арена / Друзья / Профиль.",
+  "Профиль: " + r("ui/server_view.gd:588") + " <code>_build_profile</code> — тег (<code>set_tag</code>, 3–16 букв или цифр, без учёта регистра уникален) и выход (<code>logout</code>: сессия удаляется из базы).",
+  "Обрыв: <code>ServerLink.closed</code> → экран входа и «Соединение потеряно» (или «Не удалось подключиться к …», если связи не было). «Назад» освобождает <code>ServerLink</code> и возвращает в меню."
+]},
+{ title: "13. Сервер: очередь, матч и судья", comps: ["server", "net", "game", "engine", "ui"], steps: [
+  "Вкладка «Играть» (" + r("ui/server_view.gd:240") + " <code>_build_play</code>): эмблема ранга, колода, кнопки «Обычная игра» и «Рейтинговая игра». " + r("ui/server_view.gd:293") + " <code>queue</code> → <code>{t: queue, mode, deck}</code>.",
+  "Сервер (" + r("server/src/ws.rs:487") + " <code>Queue</code>): колода проверяется судьёй (<code>validate</code>), для рейтинга сначала применяется сброс сезона. В очередь игрок попадает с ключом: MMR для обычной игры, звёзды для рейтинговой. Ответ <code>queued</code>, затем каждую секунду <code>queue_status</code>.",
+  r("server/src/lib.rs:164") + " <code>Hub.pair</code> находит пару, окна растут со временем ожидания → " + r("server/src/game.rs:38") + " <code>game::start</code>: случайный хозяин, новый id игры и seed, судье <code>new {game, seed, decks}</code>, обоим <code>match {game, host, seed, opponent, mode}</code>.",
+  r("ui/server_view.gd:714") + " <code>_start_game</code>: " + r("net/server_link.gd:51") + " <code>link.channel(game)</code> + <code>NetSession</code> с <code>seed_override</code> → <code>say_hello</code>. Дальше обычный протокол NetSession (<code>hello → start → action …</code>), только каждое сообщение идёт через сервер в виде <code>{t: game, game, m}</code>.",
+  r("server/src/game.rs:153") + " <code>relay</code>: в <code>hello</code> колода должна совпасть с той, что стояла в очереди, <code>start</code> шлёт только хозяин, с seed сервера и обеими колодами. Иначе — поражение с причиной <code>cheat</code> или <code>protocol</code>.",
+  "Каждое <code>action</code>: номер хода <code>n</code> по порядку, ход за своего игрока, затем судье <code>act {game, action}</code>. Судья (" + r("net/referee.gd:53") + ") применяет ход тем же движком и возвращает хэш. Незаконный ход → <code>illegal</code>, хэш не совпал с присланным → <code>desync</code> (для муллигана и сдачи хэш не сверяется). Только после этого ход уходит сопернику.",
+  "Эмоции и намерения передаются без судьи (короткие, до 1 КБ). <code>bye</code> — поражение <code>left</code>. Пропавшему игроку даётся 30 с вернуться (" + r("server/src/game.rs:120") + " <code>run</code>), иначе <code>disconnect</code>. Вернувшийся получает <code>match</code> с <code>rejoin: true</code> и журналом ходов (клиент пока это не использует).",
+  r("ui/main.gd:181") + " <code>start_server_match</code>: <code>MatchView.lobby = true</code>, <code>bind_online</code>. " + r("ui/main.gd:194") + " <code>_on_server_message</code> запоминает <code>game_over</code>, пришедший во время партии.",
+  "Судья ответил <code>over</code> → " + r("server/src/game.rs:234") + " <code>finish</code>: судье <code>drop</code>, в одной транзакции " + r("server/src/game.rs:281") + " <code>apply_results</code> (обычная — Elo, рейтинговая — Elo и звёзды по " + r("server/src/ranked.rs:71") + ", Арена — победы и поражения) и строка в <code>games</code>. Каждому <code>game_over {result, reason, rank?, arena?}</code>.",
+  "«Вернуться в лобби» (<code>lobby_back</code>; выход из идущей игры её проигрывает) → <code>show_server</code>: связь открыта и токен есть, поэтому ServerView сразу показывает лобби и результат с новым рангом."
+]},
+{ title: "14. Сервер: Арена", comps: ["server", "net", "ui", "game"], steps: [
+  "Вкладка «Арена» (" + r("ui/server_view.gd:323") + " <code>_build_arena</code>). «Начать» → <code>arena_start</code>. Сервер (" + r("server/src/ws.rs:516") + ") выбирает seed, просит судью <code>draft {seed, hero: -1}</code> и сохраняет забег в таблицу <code>arena</code>. Одновременно у игрока может быть только один забег.",
+  "Выбор героя: <code>arena_hero {i}</code> (" + r("server/src/ws.rs:528") + "). Выбор карты: <code>arena_pick {i}</code> (" + r("server/src/ws.rs:541") + "). Сервер хранит только seed, героя и номера выборов, а предложения каждый раз пересчитывает судья: " + r("net/referee.gd:73") + " <code>_draft</code> строит <code>ArenaDraft</code> из seed и повторяет выборы. Поэтому подделать предложение нельзя.",
+  "Каждый ответ — <code>arena {state}</code>: герои, герой, карты, текущие три карты, готово ли, победы и поражения. Клиент показывает героев, затем карты для выбора и список колоды.",
+  "Колода готова → <code>arena_queue</code> (" + r("server/src/ws.rs:554") + "): в очередь Арены с ключом «победы минус поражения», окно растёт на 1 каждые 10 с. Матч и игра идут так же, как в потоке 13, NetSession с <code>arena = true</code>.",
+  "Итог: " + r("server/src/game.rs:281") + " <code>apply_results</code> добавляет победу или поражение. На 12 победах или 3 поражениях забег удаляется, и в <code>game_over</code> приходит <code>arena {wins, losses, over}</code>. <code>arena_retire</code> — закончить забег досрочно.",
+  "<code>MatchView</code> возвращает в лобби сервера на вкладку «Арена» (<code>mode</code> игры запоминается в метаданных ServerLink)."
+]},
+{ title: "15. Сервер: друзья, сообщения, приглашения", comps: ["server", "ui", "net"], steps: [
+  "Вкладка «Друзья» (" + r("ui/server_view.gd:430") + " <code>_build_friends</code>): друзья с состоянием (в сети, в игре, в очереди, не в сети), входящие и исходящие заявки, заблокированные. Данные — сообщение <code>friends</code>, сервер присылает его и сам после каждого изменения.",
+  "Добавить по тегу: <code>friend_add {tag}</code> (" + r("server/src/ws.rs:328") + "). Если встречная заявка уже есть, двое сразу становятся друзьями, иначе создаётся заявка. Если игрок вас заблокировал, сервер ответит так же, как будто такого тега нет (<code>not_found</code>). Не больше 200 друзей.",
+  "<code>friend_accept</code> (" + r("server/src/ws.rs:364") + "), <code>friend_decline</code>, <code>friend_remove</code>. <code>block</code> (" + r("server/src/ws.rs:388") + ") убирает дружбу и заявки в обе стороны, <code>unblock</code> снимает блок.",
+  "Сообщения: " + r("ui/server_view.gd:507") + " <code>_build_chat</code>, <code>msg {to, text}</code> (" + r("server/src/ws.rs:394") + "): только друзьям, 1–500 символов, не больше 10 за 10 с, в базе хранятся последние 200 на пару. Получатель в сети сразу получает <code>msg {from, text, at}</code>. <code>history {with}</code> загружает переписку.",
+  "Приглашение: " + r("ui/server_view.gd:548") + " <code>invite</code> → <code>invite {to, deck}</code> (" + r("server/src/ws.rs:445") + "): только другу, который в сети или в очереди, колода проверяется судьёй. Друг видит окно приглашения (" + r("ui/server_view.gd:556") + " <code>_build_invite</code>).",
+  "<code>invite_accept {from, deck}</code> (" + r("server/src/ws.rs:467") + ") → <code>game::start</code> с режимом <code>friendly</code>: игра идёт как в потоке 13, но ранги и MMR не меняются. <code>invite_decline</code> → пригласивший получает <code>invite_declined</code>."
+]},
+{ title: "16. Сервер: админка", comps: ["server"], steps: [
+  "Суперпользователь создаётся только из командной строки: <code>classichs-server admin root --db classichs.db</code> → " + r("server/src/main.rs:64") + " <code>make_admin</code> спрашивает пароль дважды без эха → " + r("server/src/db.rs:229") + " <code>make_superuser</code> (создаёт аккаунт или делает существующий суперпользователем и сбрасывает пароль).",
+  r("server/src/admin.rs:28") + " <code>routes</code>: <code>/admin</code> на том же порту, что и WebSocket. Страницы собираются на сервере, работают без JavaScript, каждое значение экранируется (<code>esc</code>).",
+  r("server/src/admin.rs:149") + " <code>login</code>: войти могут только <code>admin</code> и <code>super</code>. Форма входа защищена CSRF-токеном из предварительной cookie, попытки ограничены так же, как в игре. Сессия — cookie <code>chs_admin</code> (HttpOnly, SameSite=Strict, Secure за TLS-прокси) на 12 часов, CSRF-токен в каждой форме.",
+  r("server/src/admin.rs:198") + " <code>accounts</code>: список и поиск (имя, тег, создан, последний вход, ранг, статус), по 50 на странице.",
+  r("server/src/admin.rs:332") + " <code>account_action</code>: заморозить и разморозить (сессии удаляются, игрок отключается), сбросить пароль, удалить с подтверждением по имени. Роль admin выдаёт и снимает только суперпользователь, самого суперпользователя из панели менять нельзя.",
+  r("server/src/admin.rs:423") + " <code>create</code> — новый аккаунт. " + r("server/src/admin.rs:450") + " <code>games</code> — живые игры (режим, игроки, ход, чей ход) и очереди (сколько ждёт, окно)."
+]},
+{ title: "17. Сервер: сборка и выпуск", comps: ["server", "release", "github"], steps: [
+  "Локально: <code>cd server && cargo build --release</code> → <code>target/release/classichs-server</code>, <code>cargo test</code> — модульные тесты и сценарии с поддельным судьёй (" + r("server/src/referee.rs:139") + " <code>FakeReferee</code>).",
+  "Запуск: <code>classichs-server --listen 127.0.0.1:7377 --db classichs.db --referee \"godot --headless --path /путь/к/проекту -- --referee\"</code>. Все флаги необязательны. Для доступа извне — TLS-прокси (Caddy, nginx) с <code>wss://</code>, тогда нужен <code>--trust-proxy</code>.",
+  "Судья — та же игра той же версии, а не отдельная программа: можно указать скачанную сборку (AppImage, exe или приложение macOS) с <code>--headless -- --referee</code>. Сервер сам допишет номер порта.",
+  "<code>.github/workflows/release.yml</code>, job <code>server</code>: matrix <code>ubuntu-24.04</code> (linux-x86_64), <code>windows-2022</code> (windows-x86_64), <code>macos-14</code> (macos-arm64). Шаги: проверка, что есть <code>server/Cargo.toml</code> → <code>dtolnay/rust-toolchain@stable</code> → <code>cargo test --release</code> и <code>cargo build --release</code>.",
+  "Бинарник переименовывается в <code>ClassicHS-server-&lt;версия из project.godot&gt;-&lt;система&gt;</code> (<code>.exe</code> для Windows) и выкладывается как артефакт <code>server-&lt;система&gt;</code>. Это происходит на каждый push в main как проверка.",
+  "На тег <code>vX.Y.Z</code> job <code>release</code> (<code>needs: [game, server]</code>) скачивает все артефакты и прикладывает их к GitHub Release вместе со сборками игры.",
+  "Клиент подключается к серверу так: Настройки → поле «Игровой сервер» (например, <code>ws://localhost:7377</code>) → Играть → Сетевая игра → «Через игровой сервер»."
 ]}
 ];
 
