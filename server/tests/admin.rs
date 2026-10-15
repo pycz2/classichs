@@ -5,11 +5,10 @@ use axum::body::Body;
 use axum::extract::connect_info::MockConnectInfo;
 use axum::http::{header, Request, StatusCode};
 use classichs_server::entity::account;
-use classichs_server::{auth, db, referee::FakeReferee, router, App, AppRef};
+use classichs_server::{auth, db, router, App, AppRef, Timers};
 use sea_orm::EntityTrait;
 use serde_json::{json, Value};
 use std::net::SocketAddr;
-use std::sync::Arc;
 use std::time::Duration;
 use tower::ServiceExt;
 
@@ -52,7 +51,7 @@ fn post(uri: &str, cookie: &str, csrf: Option<&str>, body: Value) -> Request<Bod
 }
 
 async fn setup() -> (AppRef, axum::Router, i64) {
-    let state = App::new(db::open(":memory:").await.unwrap(), Arc::new(FakeReferee::default()), false, Duration::from_secs(30));
+    let state = App::new(db::open(":memory:").await.unwrap(), false, Timers::default());
     let hash = auth::hash_password("rootpassword");
     db::make_superuser(&state.db, "root", &hash).await.unwrap();
     let victim = db::create_account(&state.db, "victim", &hash, "user").await.unwrap().unwrap();

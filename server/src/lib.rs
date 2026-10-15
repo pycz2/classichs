@@ -1,4 +1,5 @@
-//! classichs-server: accounts, social, matchmaking and refereed games for Classic HS.
+//! classichs-server: accounts, social, matchmaking and authoritative games for Classic HS
+//! (the rules engine `classichs-engine` runs every game).
 //! Protocol: docs/superpowers/specs/2026-10-15-server-design.md.
 
 pub mod admin;
@@ -9,7 +10,6 @@ pub mod events;
 pub mod game;
 pub mod migration;
 pub mod ranked;
-pub mod referee;
 pub mod ws;
 
 use auth::RateLimit;
@@ -24,7 +24,6 @@ use entity::friend;
 use events::{Event, Log};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QuerySelect};
 use ranked::{Key, Mode};
-use referee::Referee;
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::net::{IpAddr, SocketAddr};
@@ -38,29 +37,44 @@ pub type AppRef = Arc<App>;
 
 pub struct App {
     pub db: Db,
-    pub referee: Arc<dyn Referee>,
     pub hub: Mutex<Hub>,
     /// Login and register attempts, keyed "ip:…" and "user:…": 10 a minute.
     pub logins: Mutex<RateLimit>,
     /// Use the last X-Forwarded-For address (behind a reverse proxy).
     pub trust_proxy: bool,
-    /// How long a player who dropped out of a game has to come back.
-    pub grace: Duration,
+    pub timers: Timers,
     /// The event log and the admin panels' live feed.
     pub log: Log,
 }
 
+/// The game clocks.
+#[derive(Clone, Copy, Debug)]
+pub struct Timers {
+    /// How long a player who dropped out of a game has to come back.
+    pub away: Duration,
+    pub turn: Duration,
+    pub mulligan: Duration,
+    /// After the deadline the players see, before the server plays the timeout moves.
+    pub slack: Duration,
+}
+
+impl Default for Timers {
+    fn default() -> Timers {
+        let s = Duration::from_secs;
+        Timers { away: s(30), turn: s(75), mulligan: s(45), slack: s(5) }
+    }
+}
+
 impl App {
     /// Needs a tokio runtime (it starts the event log's writer).
-    pub fn new(db: Db, referee: Arc<dyn Referee>, trust_proxy: bool, grace: Duration) -> AppRef {
+    pub fn new(db: Db, trust_proxy: bool, timers: Timers) -> AppRef {
         let db_clone = db.clone();
         Arc::new(App {
             db,
-            referee,
             hub: Mutex::new(Hub::default()),
             logins: Mutex::new(RateLimit::new(10, Duration::from_secs(60))),
             trust_proxy,
-            grace,
+            timers,
             log: Log::start(db_clone),
         })
     }
@@ -105,7 +119,7 @@ pub struct LiveGame {
     pub started: i64,
     pub turn: i64,
     pub current: i64,
-    /// Actions the referee accepted so far.
+    /// Actions applied so far.
     pub actions: u64,
 }
 

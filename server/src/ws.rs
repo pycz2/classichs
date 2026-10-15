@@ -1,4 +1,4 @@
-//! One WebSocket client: strict JSON messages {"t": …}, auth, social, queues, Arena, game relay.
+//! One WebSocket client: strict JSON messages {"t": …}, auth, social, queues, Arena, games.
 
 use crate::auth::{self, RateLimit};
 use crate::db::{self, Account, DbError, DbResult};
@@ -78,8 +78,18 @@ enum In {
     ArenaPick { i: f64 },
     ArenaQueue {},
     ArenaRetire {},
-    Game {
-        m: Value,
+    Act {
+        action: Value,
+        #[serde(default)]
+        game: Option<String>,
+    },
+    Emote {
+        id: String,
+        #[serde(default)]
+        game: Option<String>,
+    },
+    Intent {
+        i: Value,
         #[serde(default)]
         game: Option<String>,
     },
@@ -468,7 +478,7 @@ impl Session {
 
     fn reply(&self, t: &str, r: R) {
         if let Err(E(code, text, detail)) = r {
-            if matches!(code, "server" | "referee") {
+            if code == "server" {
                 let what = detail.unwrap_or_else(|| text.clone());
                 self.app.event(self.ev("error", format!("{t}: {what}")).data(json!({"code": code, "message": t})));
             }
@@ -768,25 +778,21 @@ impl Session {
                 }
                 self.send_arena(me).await
             }
-            In::Game { m, game } => {
-                if !m.is_object() {
-                    self.errors += 1;
-                    return Err(e("bad_request", "A game message is an object"));
-                }
-                let hub = app.hub();
-                let g = hub
-                    .in_game
-                    .get(&me)
-                    .filter(|(g, _)| game.as_ref().is_none_or(|x| x == g))
-                    .and_then(|(g, p)| hub.games.get(g).map(|lg| (lg.tx.clone(), *p)));
-                drop(hub);
-                // A message for a game that is over (e.g. a bye after game_over) is dropped silently.
-                if let Some((tx, p)) = g {
-                    let _ = tx.send(game::Ev::Msg(p, m));
-                }
-                Ok(())
-            }
+            In::Act { action, game } => self.to_game(me, game, |p| game::Ev::Act(p, action)),
+            In::Emote { id, game } => self.to_game(me, game, |p| game::Ev::Emote(p, id)),
+            In::Intent { i, game } => self.to_game(me, game, |p| game::Ev::Intent(p, i)),
         }
+    }
+
+    /// Passes a message to the player's game. One for a game that is over (or another game)
+    /// is dropped silently.
+    fn to_game(&self, me: i64, game: Option<String>, ev: impl FnOnce(usize) -> game::Ev) -> R {
+        let hub = self.app.hub();
+        let found = hub.in_game.get(&me).filter(|(g, _)| game.as_ref().is_none_or(|x| x == g));
+        if let Some((lg, p)) = found.and_then(|(g, p)| Some((hub.games.get(g)?, *p))) {
+            let _ = lg.tx.send(ev(p));
+        }
+        Ok(())
     }
 
     async fn register(&mut self, user: String, password: String) -> R {
@@ -874,10 +880,11 @@ impl Session {
         db::touch(db, id).await?;
         let name = db::name_of(db, id).await?;
         let me = me_json(db, id).await?;
+        // auth first: attaching may bring the player back into a game (match, state).
+        self.send(json!({"t": "auth", "ok": true, "token": token.clone(), "me": me}));
         self.conn = self.app.hub().attach(id, &name, self.tx.clone());
         self.me = Some((id, name.clone()));
-        self.token = token.clone();
-        self.send(json!({"t": "auth", "ok": true, "token": token, "me": me}));
+        self.token = token;
         if via != "register" {
             self.app.event(self.ev("login", format!("{name} logged in")).data(json!({"ip": self.ip.to_string(), "via": via})));
         }
@@ -934,18 +941,20 @@ impl Session {
     }
 
     async fn validate(&self, deck: &Value) -> R {
-        match self.app.referee.call(json!({"op": "validate", "deck": deck})).await {
-            Ok(r) if r["ok"] == true => Ok(()),
-            Ok(r) => Err(E("deck", r["error"].as_str().unwrap_or("The deck is not valid").chars().take(200).collect(), None)),
-            Err(err) => Err(E("referee", "The referee is not available".into(), Some(format!("referee: {err}")))),
+        let r = classichs_engine::Engine::new().handle(&json!({"op": "validate", "deck": deck}));
+        if r["ok"] == true {
+            Ok(())
+        } else {
+            Err(E("deck", r["error"].as_str().unwrap_or("The deck is not valid").chars().take(200).collect(), None))
         }
     }
 
     async fn draft(&self, seed: i64, hero: i64, picks: &[i64]) -> Result<Value, E> {
-        match self.app.referee.call(json!({"op": "draft", "seed": seed, "hero": hero, "picks": picks})).await {
-            Ok(r) if r["ok"] == true => Ok(r),
-            Ok(r) => Err(E("referee", "The referee is not available".into(), Some(format!("draft refused: {r}")))),
-            Err(err) => Err(E("referee", "The referee is not available".into(), Some(format!("referee: {err}")))),
+        let r = classichs_engine::Engine::new().handle(&json!({"op": "draft", "seed": seed, "hero": hero, "picks": picks}));
+        if r["ok"] == true {
+            Ok(r)
+        } else {
+            Err(E("server", "Server error".into(), Some(format!("draft refused: {r}"))))
         }
     }
 

@@ -510,12 +510,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "classichs-engine"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+]
+
+[[package]]
 name = "classichs-server"
 version = "0.1.0"
 dependencies = [
  "argon2",
  "axum",
  "base64 0.22.1",
+ "classichs-engine",
  "futures-util",
  "rand 0.8.8",
  "rpassword",

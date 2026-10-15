@@ -21,7 +21,7 @@ export function Games ({ query }) {
     <header class="page-head"><h1>Games</h1></header>
     <${Card} title=${html`<span class="live-dot"></span>Live now (${live.games.length})`} pad=${false}>
       ${live.games.length ? html`<div class="table-wrap"><table class="table">
-        <thead><tr><th>Game</th><th>Mode</th><th>Host</th><th>Guest</th><th class="num">Turn</th><th>To move</th><th class="num">Actions</th><th class="num">Running</th></tr></thead>
+        <thead><tr><th>Game</th><th>Mode</th><th>Player 1</th><th>Player 2</th><th class="num">Turn</th><th>To move</th><th class="num">Actions</th><th class="num">Running</th></tr></thead>
         <tbody>${live.games.map((g) => html`<tr key=${g.id} class="clickable" onClick=${() => go('games/' + g.id)}>
           <td class="mono">${g.id.slice(0, 8)}</td><td><span class=${'mode m-' + g.mode}>${g.mode}</span></td>
           ${g.players.map((p) => html`<td><${UserLink} ...${p} />${!p.online && html` <span class="badge warn" title="Dropped out: 30 s to come back">away</span>`}</td>`)}
@@ -81,7 +81,7 @@ export function GamePage ({ id }) {
   const players = (g.players || []).map((p, i) => ({ ...p, user: (p && p.user) || (data.match && data.match.players[i]) }))
   const heroes = data.match ? data.match.heroes : []
   const t0 = events.length ? events[0].at : Date.now()
-  // Turns as they were when each action was sent (the referee reports the turn after it).
+  // Turns as they were when each action was sent (the server logs the turn after it).
   let after = 0
   let shown = null
   return html`<div class="page">
@@ -123,7 +123,7 @@ export function GamePage ({ id }) {
       <div class="stack">
         <${Card} title="Players">
           ${players.map((p, i) => html`<div class=${'player-card p' + i} key=${i}>
-            <span class="pnum">${i === 0 ? 'Host' : 'Guest'}</span>
+            <span class="pnum">${'Player ' + (i + 1)}</span>
             <b>${p.id != null ? html`<${UserLink} ...${p} />` : p.user}</b>
             ${heroes[i] && html`<span class="muted small mono">${heroes[i]}</span>`}
             ${lg && html`<span class="small">${lg.current === i ? '▶ to move' : ''} ${p.online === false ? html`<span class="badge warn">away</span>` : ''}</span>`}
@@ -139,7 +139,7 @@ export function GamePage ({ id }) {
         ${(() => {
           const endEv = events.find((e) => e.kind === 'game_end')
           return endEv && endEv.data && endEv.data.message && html`<${Card} title="What ended it">
-            <p>${endEv.data.by} sent:</p><${Json} value=${endEv.data.message} /></${Card}>`
+            <p>${endEv.data.by} sent${endEv.data.refused ? ' (refused by the rules)' : ''}:</p><${Json} value=${endEv.data.refused || endEv.data.message} /></${Card}>`
         })()}
       </div>
     </div>

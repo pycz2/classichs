@@ -1,5 +1,7 @@
 # Game server (Rust) — design
 
+> **Superseded in part (0.27):** the headless-Godot referee and the relay of NetSession messages are replaced by authoritative games on the Rust engine — see `2026-10-15-thin-client-design.md`; the admin panel is now a Preact SPA with a JSON API — see `server/README.md`.
+
 Owner's request (2026-10-15): an optional game server besides peer-to-peer play.
 Accounts (register, log in, secure), an admin panel (accounts: list, view, create,
 suspend, delete; live games), SQLite, one async process, casual / ranked (2014

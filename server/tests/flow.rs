@@ -1,24 +1,24 @@
-//! End-to-end: real WebSocket clients against the server with the fake referee.
+//! End-to-end: real WebSocket clients against the server, which runs every game in the
+//! rules engine. The tests that play keep a mirror engine (same decks, the seed from the
+//! event log) to choose moves (the engine's bot) and to check every `state` exactly.
 
-use classichs_server::referee::{FakeReferee, ProcessReferee, Referee};
-use classichs_server::entity::account;
-use classichs_server::{db, router, spawn_background, App, AppRef};
-use sea_orm::{EntityTrait, QueryOrder};
+use classichs_engine::api::{events_for, snapshot};
+use classichs_engine::state::Ev as Events;
+use classichs_engine::{bot, deck, Game};
+use classichs_server::entity::{account, event};
+use classichs_server::game::DOES_NOT_ADD_UP;
+use classichs_server::{db, router, spawn_background, App, AppRef, Timers};
 use futures_util::{SinkExt, StreamExt};
+use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QueryOrder};
 use serde_json::{json, Value};
 use std::net::SocketAddr;
-use std::sync::Arc;
 use std::time::Duration;
 use tokio_tungstenite::tungstenite::Message;
 
 type Ws = tokio_tungstenite::WebSocketStream<tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>>;
 
-async fn server(grace: Duration) -> (SocketAddr, AppRef) {
-    server_with(Arc::new(FakeReferee::default()), grace).await
-}
-
-async fn server_with(referee: Arc<dyn Referee>, grace: Duration) -> (SocketAddr, AppRef) {
-    let app = App::new(db::open(":memory:").await.unwrap(), referee, false, grace);
+async fn server(timers: Timers) -> (SocketAddr, AppRef) {
+    let app = App::new(db::open(":memory:").await.unwrap(), false, timers);
     spawn_background(app.clone());
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
     let addr = listener.local_addr().unwrap();
@@ -27,14 +27,19 @@ async fn server_with(referee: Arc<dyn Referee>, grace: Duration) -> (SocketAddr,
     (addr, app)
 }
 
+fn std_server() -> Timers {
+    Timers::default()
+}
+
 struct C {
     ws: Ws,
+    token: String,
 }
 
 impl C {
     async fn connect(addr: SocketAddr) -> C {
         let (ws, _) = tokio_tungstenite::connect_async(format!("ws://{addr}/")).await.unwrap();
-        C { ws }
+        C { ws, token: String::new() }
     }
 
     async fn send(&mut self, v: Value) {
@@ -56,6 +61,7 @@ impl C {
                     return v;
                 }
                 assert!(v["t"] != "error" || t == "error", "unexpected error while waiting for {t}: {v}");
+                assert!(v["t"] != "act_error" || t == "act_error", "unexpected act_error while waiting for {t}: {v}");
             }
         }
     }
@@ -66,142 +72,340 @@ impl C {
         let a = c.want("auth").await;
         assert_eq!(a["me"]["user"], name);
         assert_eq!(a["me"]["rank"]["rank"], 25);
+        c.token = a["token"].as_str().unwrap().to_string();
         c
     }
+}
 
-    async fn game(&mut self, m: Value) {
-        self.send(json!({"t": "game", "m": m})).await;
+/// A Basic deck of the class.
+fn deck(class: &str) -> Value {
+    json!({"name": "Test", "hero": deck::hero(class).unwrap(), "cards": deck::basic(class)})
+}
+
+/// A player in a game: the connection, the seat (`you`) and the deck.
+struct P {
+    c: C,
+    deck: Value,
+}
+
+/// Both players' side of one game, by seat, and the mirror engine.
+struct Table {
+    game: String,
+    p: [P; 2],
+    mirror: Game,
+}
+
+impl Table {
+    /// Two players queue in `mode` (a Mage and a Warrior) and get their match.
+    async fn queue(addr: SocketAddr, app: &AppRef, a: &str, b: &str, mode: &str) -> Table {
+        let mut ca = C::register(addr, a).await;
+        let mut cb = C::register(addr, b).await;
+        ca.send(json!({"t": "queue", "mode": mode, "deck": deck("MAGE")})).await;
+        ca.want("queued").await;
+        cb.send(json!({"t": "queue", "mode": mode, "deck": deck("WARRIOR")})).await;
+        cb.want("queued").await;
+        Table::matched(app, [(ca, deck("MAGE")), (cb, deck("WARRIOR"))], mode).await
+    }
+
+    /// Reads both `match` messages and the opening `state`s.
+    async fn matched(app: &AppRef, mut cs: [(C, Value); 2], mode: &str) -> Table {
+        let ma = cs[0].0.want("match").await;
+        let mb = cs[1].0.want("match").await;
+        assert_eq!(ma["game"], mb["game"]);
+        assert_eq!(ma["mode"], mode);
+        assert_eq!(mb["mode"], mode);
+        assert!(ma.get("seed").is_none() && ma.get("host").is_none(), "{ma}");
+        let (sa, sb) = (ma["you"].as_u64().unwrap(), mb["you"].as_u64().unwrap());
+        assert_eq!(sa + sb, 1, "seats {ma} {mb}");
+        let [x, y] = cs;
+        let (p0, p1) = if sa == 0 { (x, y) } else { (y, x) };
+        let game = ma["game"].as_str().unwrap().to_string();
+        let seed = seed_of(app, &game).await;
+        let d = |v: &Value| (v["hero"].as_str().unwrap().to_string(), cards(v));
+        let ((h0, c0), (h1, c1)) = (d(&p0.1), d(&p1.1));
+        let mirror = Game::new(&h0, &c0, &h1, &c1, seed, -1, true);
+        let mut t = Table { game, p: [P { c: p0.0, deck: p0.1 }, P { c: p1.0, deck: p1.1 }], mirror };
+        let opening: Vec<Events> = t.mirror.history[0]["events"].as_array().unwrap().iter().map(|e| e.as_object().unwrap().clone()).collect();
+        for q in 0..2 {
+            let s = t.p[q].c.want("state").await;
+            check_state(&s, &t.mirror, &opening, q);
+        }
+        t
+    }
+
+    async fn send(&mut self, p: usize, action: Value) {
+        let game = self.game.clone();
+        self.p[p].c.send(json!({"t": "act", "game": game, "action": action})).await;
+    }
+
+    /// Player p plays `action` (legal): both players get the state the mirror has after it.
+    async fn act(&mut self, p: usize, action: Value) {
+        self.send(p, action.clone()).await;
+        let r = self.mirror.apply(&action);
+        assert!(r.ok, "the mirror refused {action}: {}", r.error);
+        for q in 0..2 {
+            let s = self.p[q].c.want("state").await;
+            check_state(&s, &self.mirror, &r.events, q);
+        }
+    }
+
+    /// The next action by the engine's bot: (player, action).
+    fn next(&self) -> (usize, Value) {
+        let g = &self.mirror;
+        let p = if g.phase == "MULLIGAN" {
+            (0..2).find(|&p| !g.players[p].mulliganed).unwrap()
+        } else {
+            g.pending.as_ref().map_or(g.current, |c| c.player)
+        };
+        let a = bot::choose(g, p).map_or(json!({"type": "end_turn", "player": p}), Value::Object);
+        (p, a)
     }
 }
 
-fn deck(hero: &str) -> Value {
-    json!({"name": "Test", "hero": hero, "cards": vec!["CARD_A"; 30]})
+fn cards(d: &Value) -> Vec<String> {
+    d["cards"].as_array().unwrap().iter().map(|c| c.as_str().unwrap().to_string()).collect()
 }
 
-/// Two players queue in `mode` (the first with HERO_08); returns (host, guest, host's match message).
-async fn matched(addr: SocketAddr, a: &str, b: &str, mode: &str) -> (C, C, Value) {
-    let mut ca = C::register(addr, a).await;
-    let mut cb = C::register(addr, b).await;
-    ca.send(json!({"t": "queue", "mode": mode, "deck": deck("HERO_08")})).await;
-    ca.want("queued").await;
-    cb.send(json!({"t": "queue", "mode": mode, "deck": deck("HERO_01")})).await;
-    cb.want("queued").await;
-    let ma = ca.want("match").await;
-    let mb = cb.want("match").await;
-    assert_eq!(ma["game"], mb["game"]);
-    assert_eq!(ma["seed"], mb["seed"]);
-    assert_ne!(ma["host"], mb["host"]);
-    assert_eq!(ma["mode"], mode);
-    if ma["host"] == true {
-        (ca, cb, ma)
-    } else {
-        (cb, ca, mb)
+/// The seed of a game, from the event log (admins see it; players never get it).
+async fn seed_of(app: &AppRef, game: &str) -> i64 {
+    for _ in 0..100 {
+        let m = event::Entity::find().filter(event::Column::Game.eq(game)).filter(event::Column::Kind.eq("match")).one(&app.db).await.unwrap();
+        if let Some(m) = m {
+            let d: Value = serde_json::from_str(m.data.as_deref().unwrap()).unwrap();
+            return d["seed"].as_i64().unwrap();
+        }
+        tokio::time::sleep(Duration::from_millis(20)).await;
+    }
+    panic!("no match event for {game}");
+}
+
+/// A `state` is exactly the mirror's view and events for player p, and hides the opponent's cards.
+fn check_state(s: &Value, g: &Game, events: &[Events], p: usize) {
+    assert_eq!(s["view"], snapshot(g, p as i64), "view of player {p}");
+    assert_eq!(s["events"], events_for(g, events, p as i64), "events for player {p}");
+    let r = &s["result"];
+    assert_eq!((r["over"].as_bool(), r["winner"].as_i64(), r["turn"].as_i64()), (Some(g.game_over), Some(g.winner), Some(g.turn)));
+    assert_eq!((r["current"].as_u64(), r["phase"].as_str()), (Some(g.current as u64), Some(g.phase)));
+    assert!(r["deadline"].is_u64(), "{r}");
+    assert_no_leak(s, g, p);
+}
+
+/// No card of an entity in the opponent's hand, deck or secrets anywhere in what player p gets:
+/// every object with a non-empty "card" is tied to an entity (the key in `entities`, or
+/// `entity`/`to` in an event) that p may see now; no RNG state, no deck lists.
+fn assert_no_leak(s: &Value, g: &Game, p: usize) {
+    let hidden = |id: i64| g.ent(id).is_some_and(|e| e.controller != p && matches!(e.zone, "DECK" | "HAND" | "SECRET"));
+    fn walk(v: &Value, owner: Option<i64>, hidden: &dyn Fn(i64) -> bool, path: &str) {
+        match v {
+            Value::Object(o) => {
+                let id = o.get("entity").or_else(|| o.get("to")).and_then(Value::as_i64).or(owner);
+                if let Some(c) = o.get("card").and_then(Value::as_str).filter(|c| !c.is_empty()) {
+                    let id = id.unwrap_or_else(|| panic!("card {c} without an entity at {path}"));
+                    assert!(!hidden(id), "hidden card {c} (entity {id}) leaks at {path}");
+                }
+                for (k, x) in o {
+                    let owner = if path.ends_with(".entities") { k.parse().ok() } else { id };
+                    walk(x, owner, hidden, &format!("{path}.{k}"));
+                }
+            }
+            Value::Array(a) => a.iter().enumerate().for_each(|(i, x)| walk(x, owner, hidden, &format!("{path}[{i}]"))),
+            _ => {}
+        }
+    }
+    walk(s, None, &hidden, "");
+    let view = &s["view"];
+    assert!(view.get("rng").is_none() && view.get("start_decks").is_none());
+    for q in 0..2 {
+        assert_eq!(view["players"][q]["deck"], json!([]));
+    }
+    for id in g.players[1 - p].hand.iter().chain(&g.players[1 - p].secrets) {
+        assert_eq!(view["entities"][id.to_string()]["card"], "", "opponent's entity {id}");
+    }
+    for id in &g.players[1 - p].deck {
+        assert!(view["entities"].get(id.to_string()).is_none(), "opponent's deck entity {id} shown");
     }
 }
 
-/// hello both ways and the host's start.
-async fn begin(host: &mut C, guest: &mut C, m: &Value) {
-    let (hd, gd) = (m["_host_hero"].clone(), m["_guest_hero"].clone());
-    host.game(json!({"t": "hello", "protocol": 1, "hero": hd, "cards": vec!["CARD_A"; 30]})).await;
-    guest.game(json!({"t": "hello", "protocol": 1, "hero": gd, "cards": vec!["CARD_A"; 30]})).await;
-    assert_eq!(guest.want("game").await["m"]["t"], "hello");
-    assert_eq!(host.want("game").await["m"]["t"], "hello");
-    host.game(json!({"t": "start", "seed": m["seed"], "decks": [[hd, vec!["CARD_A"; 30]], [gd, vec!["CARD_A"; 30]]]})).await;
-    assert_eq!(guest.want("game").await["m"]["t"], "start");
-}
-
-/// Fills in which hero each side queued with (alice/carol queue first with HERO_08).
-fn heroes(m: &mut Value, host_first: bool) {
-    let (h, g) = if host_first { ("HERO_08", "HERO_01") } else { ("HERO_01", "HERO_08") };
-    m["_host_hero"] = json!(h);
-    m["_guest_hero"] = json!(g);
-}
-
-async fn setup(addr: SocketAddr, a: &str, b: &str, mode: &str) -> (C, C, Value) {
-    let (mut host, mut guest, mut m) = matched(addr, a, b, mode).await;
-    let host_first = m["opponent"]["user"] == b;
-    heroes(&mut m, host_first);
-    begin(&mut host, &mut guest, &m).await;
-    (host, guest, m)
+/// Plays the game to its end with the engine's bot on both sides; returns both game_overs by seat.
+async fn play_out(t: &mut Table) -> [Value; 2] {
+    let mut n = 0;
+    while !t.mirror.game_over {
+        let (p, a) = t.next();
+        t.act(p, a).await;
+        n += 1;
+        assert!(n < 3000, "the game does not end");
+    }
+    let (g0, g1) = (t.p[0].c.want("game_over").await, t.p[1].c.want("game_over").await);
+    let w = t.mirror.winner;
+    for (p, g) in [&g0, &g1].into_iter().enumerate() {
+        let want = if w < 0 { "draw" } else if w == p as i64 { "win" } else { "loss" };
+        assert_eq!((g["result"].as_str(), g["reason"].as_str()), (Some(want), Some("over")), "{g}");
+    }
+    eprintln!("game {}: {n} actions, turn {}, winner {w}", t.game, t.mirror.turn);
+    [g0, g1]
 }
 
 #[tokio::test]
-async fn register_queue_match_relay_game_over() {
-    let (addr, app) = server(Duration::from_secs(30)).await;
-    let (mut host, mut guest, _) = setup(addr, "alice", "bob", "casual").await;
-    host.game(json!({"t": "action", "n": 0, "action": {"type": "mulligan", "player": 0, "replace": []}, "hash": ""})).await;
-    assert_eq!(guest.want("game").await["m"]["action"]["type"], "mulligan");
-    guest.game(json!({"t": "action", "n": 0, "action": {"type": "mulligan", "player": 1, "replace": []}, "hash": ""})).await;
-    host.want("game").await;
-    host.game(json!({"t": "action", "n": 1, "action": {"type": "end_turn", "player": 0}, "hash": "h3"})).await;
-    assert_eq!(guest.want("game").await["m"]["hash"], "h3");
-    guest.game(json!({"t": "emote", "id": "greetings"})).await;
-    assert_eq!(host.want("game").await["m"]["id"], "greetings");
-    guest.game(json!({"t": "action", "n": 1, "action": {"type": "concede", "player": 1}, "hash": ""})).await;
-    let h = host.want("game_over").await;
-    let g = guest.want("game_over").await;
-    assert_eq!((h["result"].as_str(), g["result"].as_str()), (Some("win"), Some("loss")));
-    assert_eq!(h["reason"], "over");
-    let mmrs: Vec<f64> =
-        account::Entity::find().order_by_asc(account::Column::CasualMmr).all(&app.db).await.unwrap().iter().map(|a| a.casual_mmr).collect();
-    assert_eq!(mmrs, vec![1484.0, 1516.0]);
+async fn casual_game_played_out_by_bots() {
+    let (addr, app) = server(std_server()).await;
+    let mut t = Table::queue(addr, &app, "alice", "bob", "casual").await;
+    // Emotes and intents go to the opponent with the sender's seat.
+    t.p[0].c.send(json!({"t": "emote", "game": t.game, "id": "greetings"})).await;
+    let e = t.p[1].c.want("emote").await;
+    assert_eq!((e["id"].as_str(), e["from"].as_u64(), e["game"].as_str()), (Some("greetings"), Some(0), Some(t.game.as_str())));
+    t.p[1].c.send(json!({"t": "intent", "i": {"k": "hover", "i": 3}})).await;
+    let i = t.p[0].c.want("intent").await;
+    assert_eq!((i["i"]["k"].as_str(), i["from"].as_u64()), (Some("hover"), Some(1)));
+    let start = std::time::Instant::now();
+    let n0 = t.mirror.history.len();
+    play_out(&mut t).await;
+    let n = t.mirror.history.len() - n0;
+    eprintln!("{n} actions over WebSocket in {:?} ({:.0} actions/s, with the mirror and the checks)", start.elapsed(),
+              n as f64 / start.elapsed().as_secs_f64());
+    if t.mirror.winner >= 0 {
+        let mmrs: Vec<f64> =
+            account::Entity::find().order_by_asc(account::Column::CasualMmr).all(&app.db).await.unwrap().iter().map(|a| a.casual_mmr).collect();
+        assert_eq!(mmrs, vec![1484.0, 1516.0]);
+    }
     assert!(app.hub().games.is_empty());
     // Free to queue again.
-    host.send(json!({"t": "queue", "mode": "casual", "deck": deck("HERO_08")})).await;
-    host.want("queued").await;
+    t.p[0].c.send(json!({"t": "queue", "mode": "casual", "deck": t.p[0].deck})).await;
+    t.p[0].c.want("queued").await;
 }
 
 #[tokio::test]
-async fn wrong_hash_or_seed_loses() {
-    let (addr, _app) = server(Duration::from_secs(30)).await;
-    let (mut host, mut guest, _) = setup(addr, "carol", "dave", "ranked").await;
-    host.game(json!({"t": "action", "n": 0, "action": {"type": "end_turn", "player": 0}, "hash": "nope"})).await;
-    let h = host.want("game_over").await;
-    assert_eq!((h["result"].as_str(), h["reason"].as_str()), (Some("loss"), Some("desync")));
-    let g = guest.want("game_over").await;
-    assert_eq!(g["result"], "win");
-    assert_eq!(g["rank"]["stars"], 1);
-    assert_eq!(h["rank"]["rank"], 25);
-
-    let (mut host, mut guest, _) = matched(addr, "erin", "frank", "casual").await;
-    host.game(json!({"t": "hello", "hero": "HERO_99", "cards": vec!["CARD_A"; 30]})).await;
-    assert_eq!(host.want("game_over").await["reason"], "cheat");
-    guest.want("game_over").await;
+async fn ranked_game_played_out_by_bots() {
+    let (addr, app) = server(std_server()).await;
+    let mut t = Table::queue(addr, &app, "carol", "dave", "ranked").await;
+    let [g0, g1] = play_out(&mut t).await;
+    if t.mirror.winner >= 0 {
+        let w = t.mirror.winner as usize;
+        let (gw, gl) = if w == 0 { (g0, g1) } else { (g1, g0) };
+        assert_eq!(gw["rank"]["stars"], 1);
+        assert_eq!((gl["rank"]["rank"].as_i64(), gl["rank"]["stars"].as_i64()), (Some(25), Some(0)));
+    }
 }
 
 #[tokio::test]
-async fn bad_start_and_actions_for_the_other_player() {
-    let (addr, _app) = server(Duration::from_secs(30)).await;
-    let (mut host, mut guest, mut m) = matched(addr, "gina", "hank", "casual").await;
-    let host_first = m["opponent"]["user"] == "hank";
-    heroes(&mut m, host_first);
-    let (hd, gd) = (m["_host_hero"].clone(), m["_guest_hero"].clone());
-    host.game(json!({"t": "hello", "hero": hd, "cards": vec!["CARD_A"; 30]})).await;
-    guest.game(json!({"t": "hello", "hero": gd, "cards": vec!["CARD_A"; 30]})).await;
-    host.want("game").await;
-    host.game(json!({"t": "start", "seed": 1, "decks": [[hd, vec!["CARD_A"; 30]], [gd, vec!["CARD_A"; 30]]]})).await;
-    assert_eq!(host.want("game_over").await["reason"], "cheat");
-    guest.want("game_over").await;
+async fn refused_actions_and_three_strikes() {
+    let (addr, app) = server(std_server()).await;
+    let mut t = Table::queue(addr, &app, "erin", "frank", "casual").await;
+    // Another seat's action, nonsense, a card that is not in the hand: refused, nothing changes.
+    t.send(0, json!({"type": "mulligan", "player": 1, "replace": []})).await;
+    let e = t.p[0].c.want("act_error").await;
+    assert_eq!(e["game"], t.game.as_str());
+    assert!(e["error"].as_str().unwrap().contains("player 0"), "{e}");
+    t.send(0, json!("end_turn")).await;
+    t.p[0].c.want("act_error").await;
+    // A legal move still works after two refusals.
+    t.act(0, json!({"type": "mulligan", "player": 0, "replace": []})).await;
+    t.act(1, json!({"type": "mulligan", "player": 1, "replace": []})).await;
+    // The other player's refusals count for them alone.
+    t.send(1, json!({"type": "mulligan", "player": 1, "replace": []})).await;
+    assert!(t.p[1].c.want("act_error").await["error"].as_str().unwrap().contains("illegal"));
+    // The third refusal ends the game: player 0 loses, both get the message.
+    t.send(0, json!({"type": "attack", "player": 0, "attacker": 999, "defender": 1})).await;
+    t.p[0].c.want("act_error").await;
+    let (g0, g1) = (t.p[0].c.want("game_over").await, t.p[1].c.want("game_over").await);
+    assert_eq!((g0["result"].as_str(), g0["reason"].as_str()), (Some("loss"), Some("illegal")));
+    assert_eq!((g1["result"].as_str(), g1["reason"].as_str()), (Some("win"), Some("illegal")));
+    assert_eq!(g0["message"], DOES_NOT_ADD_UP);
+    assert_eq!(g1["message"], DOES_NOT_ADD_UP);
+    assert!(DOES_NOT_ADD_UP.starts_with("Something does not add up"));
+    // The event log: every applied action with turn and hash, the end with the refused moves.
+    let evs = game_events(&app, &t.game).await;
+    let kinds: Vec<&str> = evs.iter().map(|e| e.kind.as_str()).collect();
+    assert_eq!(kinds, ["match", "game_start", "game_action", "game_action", "game_end"]);
+    let act: Value = serde_json::from_str(evs[2].data.as_deref().unwrap()).unwrap();
+    assert!(act["hash"].as_str().unwrap().len() == 64 && act["turn"].is_i64() && act["events"].is_array(), "{act}");
+    assert!(evs[2].text.ends_with(": mulligan replaces 0"), "{}", evs[2].text);
+    let end: Value = serde_json::from_str(evs[4].data.as_deref().unwrap()).unwrap();
+    assert_eq!(end["reason"], "illegal");
+    assert_eq!(end["refused"].as_array().unwrap().len(), 3);
+    assert_eq!(end["message"]["type"], "attack");
+}
 
-    let (mut host, mut guest, _) = setup(addr, "ivan", "judy", "casual").await;
-    guest.game(json!({"t": "action", "n": 0, "action": {"type": "concede", "player": 0}, "hash": ""})).await;
-    let g = guest.want("game_over").await;
-    assert_eq!((g["result"].as_str(), g["reason"].as_str()), (Some("loss"), Some("cheat")));
-    host.want("game_over").await;
+/// The game's events once game_end is logged.
+async fn game_events(app: &AppRef, game: &str) -> Vec<event::Model> {
+    for _ in 0..100 {
+        let evs = event::Entity::find().filter(event::Column::Game.eq(game)).order_by_asc(event::Column::Id).all(&app.db).await.unwrap();
+        if evs.last().is_some_and(|e| e.kind == "game_end") {
+            return evs;
+        }
+        tokio::time::sleep(Duration::from_millis(20)).await;
+    }
+    panic!("no game_end for {game}");
 }
 
 #[tokio::test]
-async fn disconnect_loses_after_grace() {
-    let (addr, _app) = server(Duration::from_millis(500)).await;
-    let (host, mut guest, _) = setup(addr, "kate", "liam", "casual").await;
-    drop(host);
-    let g = guest.want("game_over").await;
+async fn timeout_moves() {
+    let ms = Duration::from_millis;
+    let (addr, app) = server(Timers { turn: ms(400), mulligan: ms(300), slack: ms(100), ..Timers::default() }).await;
+    let mut t = Table::queue(addr, &app, "gina", "hank", "casual").await;
+    // Nobody moves: the server keeps both hands, then ends the turns.
+    for p in 0..2 {
+        let a = json!({"type": "mulligan", "player": p, "replace": []});
+        let r = t.mirror.apply(&a);
+        assert!(r.ok);
+        for q in 0..2 {
+            check_state(&t.p[q].c.want("state").await, &t.mirror, &r.events, q);
+        }
+    }
+    assert_eq!(t.mirror.phase, "PLAY");
+    for _ in 0..2 {
+        let cur = t.mirror.current;
+        let r = t.mirror.apply(&json!({"type": "end_turn", "player": cur}));
+        for q in 0..2 {
+            let s = t.p[q].c.want("state").await;
+            check_state(&s, &t.mirror, &r.events, q);
+            assert_eq!(s["result"]["current"], 1 - cur);
+        }
+    }
+    // A move in time keeps the game going; then the opponent's turn times out again.
+    let (p, a) = t.next();
+    t.act(p, a).await;
+    t.p[0].c.send(json!({"t": "act", "action": {"type": "concede", "player": 0}})).await;
+    t.mirror.apply(&json!({"type": "concede", "player": 0}));
+    t.p[0].c.want("game_over").await;
+    let evs = game_events(&app, &t.game).await;
+    let timeouts = evs
+        .iter()
+        .filter(|e| e.kind == "game_action")
+        .filter(|e| serde_json::from_str::<Value>(e.data.as_deref().unwrap()).unwrap()["timeout"] == true)
+        .count();
+    assert!(timeouts >= 4, "{timeouts} timeout moves");
+}
+
+#[tokio::test]
+async fn rejoin_and_disconnect() {
+    let (addr, app) = server(Timers { away: Duration::from_millis(800), ..Timers::default() }).await;
+    let mut t = Table::queue(addr, &app, "ivan", "judy", "casual").await;
+    t.act(0, json!({"type": "mulligan", "player": 0, "replace": []})).await;
+    // Player 0 drops out and logs in again: match (rejoin) and a fresh state.
+    let token = t.p[0].c.token.clone();
+    let old = std::mem::replace(&mut t.p[0].c, C::connect(addr).await);
+    drop(old);
+    tokio::time::sleep(Duration::from_millis(100)).await;
+    t.p[0].c.send(json!({"t": "resume", "token": token})).await;
+    assert_eq!(t.p[0].c.want("auth").await["ok"], true);
+    let m = t.p[0].c.want("match").await;
+    assert_eq!((m["rejoin"].as_bool(), m["you"].as_u64(), m["game"].as_str()), (Some(true), Some(0), Some(t.game.as_str())));
+    let s = t.p[0].c.want("state").await;
+    check_state(&s, &t.mirror, &[], 0);
+    assert_eq!(s["events"], json!([]));
+    // The game goes on.
+    t.act(1, json!({"type": "mulligan", "player": 1, "replace": []})).await;
+    let (p, a) = t.next();
+    t.act(p, a).await;
+    // Gone for good: the other player wins after the grace time.
+    drop(std::mem::replace(&mut t.p[1].c, C::connect(addr).await));
+    let g = t.p[0].c.want("game_over").await;
     assert_eq!((g["result"].as_str(), g["reason"].as_str()), (Some("win"), Some("disconnect")));
 }
 
 #[tokio::test]
 async fn social_and_friendly_invite() {
-    let (addr, _app) = server(Duration::from_secs(30)).await;
+    let (addr, app) = server(std_server()).await;
     let mut a = C::register(addr, "mona").await;
     let mut b = C::register(addr, "ned").await;
     a.send(json!({"t": "set_tag", "tag": "Mona"})).await;
@@ -227,16 +431,26 @@ async fn social_and_friendly_invite() {
     a.send(json!({"t": "msg", "to": "ned", "text": ""})).await;
     assert_eq!(a.want("error").await["code"], "bad_text");
 
-    // Friendly game by invite.
-    a.send(json!({"t": "invite", "to": "ned", "deck": deck("HERO_08")})).await;
+    // Decks are checked by the engine.
+    let mut bad = deck("MAGE");
+    bad["cards"][0] = json!(deck::basic("WARRIOR")[0]);
+    a.send(json!({"t": "invite", "to": "ned", "deck": bad})).await;
+    assert_eq!(a.want("error").await["text"], "This card belongs to another class");
+
+    // Friendly game by invite; a concede ends it.
+    a.send(json!({"t": "invite", "to": "ned", "deck": deck("MAGE")})).await;
     a.want("invited").await;
     assert_eq!(b.want("invite").await["from"], "mona");
-    b.send(json!({"t": "invite_accept", "from": "mona", "deck": deck("HERO_01")})).await;
-    assert_eq!(a.want("match").await["mode"], "friendly");
-    assert_eq!(b.want("match").await["mode"], "friendly");
-    a.game(json!({"t": "bye", "code": "left"})).await;
-    assert_eq!(a.want("game_over").await["reason"], "left");
-    b.want("game_over").await;
+    b.send(json!({"t": "invite_accept", "from": "mona", "deck": deck("WARRIOR")})).await;
+    let mut t = Table::matched(&app, [(a, deck("MAGE")), (b, deck("WARRIOR"))], "friendly").await;
+    t.act(1, json!({"type": "concede", "player": 1})).await;
+    let g = t.p[0].c.want("game_over").await;
+    assert_eq!((g["result"].as_str(), g["reason"].as_str()), (Some("win"), Some("over")));
+    assert!(g.get("rank").is_none());
+    t.p[1].c.want("game_over").await;
+    let mona_first = t.p[0].deck["hero"] == "HERO_08";
+    let [P { c: x, .. }, P { c: y, .. }] = t.p;
+    let (mut a, mut b) = if mona_first { (x, y) } else { (y, x) };
 
     // A block ends the friendship and stops messages and invites.
     b.send(json!({"t": "block", "user": "mona"})).await;
@@ -245,13 +459,13 @@ async fn social_and_friendly_invite() {
     assert_eq!(a.want("error").await["code"], "not_friends");
     a.send(json!({"t": "friend_add", "tag": "Ned"})).await;
     assert_eq!(a.want("error").await["code"], "not_found");
-    a.send(json!({"t": "invite", "to": "ned", "deck": deck("HERO_08")})).await;
+    a.send(json!({"t": "invite", "to": "ned", "deck": deck("MAGE")})).await;
     assert_eq!(a.want("error").await["code"], "not_friends");
 }
 
 #[tokio::test]
 async fn arena_run() {
-    let (addr, _app) = server(Duration::from_secs(30)).await;
+    let (addr, app) = server(std_server()).await;
     let mut cs = vec![];
     for name in ["olga", "pete"] {
         let mut c = C::register(addr, name).await;
@@ -261,38 +475,37 @@ async fn arena_run() {
         c.send(json!({"t": "arena_queue"})).await;
         assert_eq!(c.want("error").await["code"], "not_ready");
         c.send(json!({"t": "arena_hero", "i": 1})).await;
-        assert_eq!(c.want("arena").await["state"]["hero"], "HERO_02");
+        let s = c.want("arena").await;
+        assert_eq!(s["state"]["hero"], s["state"]["heroes"][1]);
+        let mut last = s;
         for k in 0..30 {
+            assert_eq!(last["state"]["offer"].as_array().unwrap().len(), 3);
             c.send(json!({"t": "arena_pick", "i": k % 3})).await;
-            c.want("arena").await;
+            last = c.want("arena").await;
         }
+        assert_eq!(last["state"]["done"], true);
+        assert_eq!(last["state"]["cards"].as_array().unwrap().len(), 30);
         c.send(json!({"t": "arena_pick", "i": 0})).await;
         assert_eq!(c.want("error").await["code"], "bad_request");
         c.send(json!({"t": "arena_queue"})).await;
         assert_eq!(c.want("queued").await["mode"], "arena");
-        cs.push(c);
+        let d = json!({"hero": last["state"]["hero"], "cards": last["state"]["cards"], "arena": true});
+        cs.push((c, d));
     }
-    let m0 = cs[0].want("match").await;
-    cs[1].want("match").await;
-    assert_eq!(m0["mode"], "arena");
-    let (host, guest) = if m0["host"] == true { (0, 1) } else { (1, 0) };
-    let hello = json!({"t": "hello", "hero": "HERO_02", "cards": (0..30).map(|k| format!("CARD_{}", k % 3)).collect::<Vec<_>>()});
-    cs[host].game(hello.clone()).await;
-    cs[guest].game(hello).await;
-    cs[host].want("game").await;
-    cs[host].game(json!({"t": "action", "n": 0, "action": {"type": "concede", "player": 1}, "hash": ""})).await;
-    // Only the started game accepts actions: the host's action before start is a protocol loss.
-    let h = cs[host].want("game_over").await;
+    let cs: [(C, Value); 2] = cs.try_into().ok().unwrap();
+    let mut t = Table::matched(&app, cs, "arena").await;
+    t.act(0, json!({"type": "concede", "player": 0})).await;
+    let h = t.p[0].c.want("game_over").await;
     assert_eq!(h["arena"]["losses"], 1);
     assert_eq!(h["arena"]["over"], false);
-    assert_eq!(cs[guest].want("game_over").await["arena"]["wins"], 1);
-    cs[host].send(json!({"t": "arena_retire"})).await;
-    assert_eq!(cs[host].want("arena").await["state"], Value::Null);
+    assert_eq!(t.p[1].c.want("game_over").await["arena"]["wins"], 1);
+    t.p[0].c.send(json!({"t": "arena_retire"})).await;
+    assert_eq!(t.p[0].c.want("arena").await["state"], Value::Null);
 }
 
 #[tokio::test]
 async fn auth_rules_and_abuse() {
-    let (addr, _app) = server(Duration::from_secs(30)).await;
+    let (addr, _app) = server(std_server()).await;
     let mut c = C::connect(addr).await;
     c.send(json!({"t": "friends"})).await;
     assert_eq!(c.want("error").await["code"], "auth_required");
@@ -304,6 +517,12 @@ async fn auth_rules_and_abuse() {
     assert_eq!(c.want("error").await["code"], "bad_request");
     c.send(json!({"t": "register", "user": "quinn", "password": "password123"})).await;
     let token = c.want("auth").await["token"].as_str().unwrap().to_string();
+    // The old relay message is gone; actions outside a game are dropped.
+    c.send(json!({"t": "game", "m": {"t": "hello"}})).await;
+    assert_eq!(c.want("error").await["code"], "bad_request");
+    c.send(json!({"t": "act", "action": {"type": "end_turn", "player": 0}})).await;
+    c.send(json!({"t": "ping"})).await;
+    c.want("pong").await;
 
     // Wrong password, then resume with the token on a new connection.
     let mut d = C::connect(addr).await;
@@ -337,59 +556,9 @@ async fn auth_rules_and_abuse() {
     assert!(closed);
 }
 
-/// With the real referee (the game without a window): set CLASSICHS_GODOT=godot and
-/// CLASSICHS_PROJECT=/path/to/like_classic_hs, else this test does nothing.
-#[tokio::test]
-async fn real_referee() {
-    let (Ok(godot), Ok(project)) = (std::env::var("CLASSICHS_GODOT"), std::env::var("CLASSICHS_PROJECT")) else {
-        eprintln!("real_referee skipped: set CLASSICHS_GODOT and CLASSICHS_PROJECT");
-        return;
-    };
-    let r = Arc::new(ProcessReferee::new(&format!("{godot} --headless --path {project} -- --referee")));
-    assert_eq!(r.call(json!({"op": "ping"})).await.unwrap()["ok"], true);
-    let mut cards: Vec<&str> = vec![];
-    for id in ["VAN_CS2_022", "VAN_CS2_023", "VAN_CS2_024", "VAN_CS2_025", "VAN_CS2_026", "VAN_CS2_027", "VAN_CS2_029",
-               "VAN_CS2_032", "VAN_CS2_033", "VAN_EX1_277", "VAN_EX1_066", "VAN_CS2_172", "VAN_EX1_019", "VAN_CS2_182", "VAN_CS2_147"] {
-        cards.extend([id, id]);
-    }
-    let mage = json!({"hero": "HERO_08", "cards": cards});
-    let v = r.call(json!({"op": "validate", "deck": mage})).await.unwrap();
-    assert_eq!(v["ok"], true, "{v}");
-    let v = r.call(json!({"op": "validate", "deck": {"hero": "HERO_08", "cards": &cards[..29]}})).await.unwrap();
-    assert_eq!(v["ok"], false);
-    let d = r.call(json!({"op": "draft", "seed": 5, "hero": 0, "picks": [0, 1]})).await.unwrap();
-    assert_eq!(d["heroes"].as_array().unwrap().len(), 3);
-    assert_eq!(d["cards"].as_array().unwrap().len(), 2);
-    assert_eq!(d["offer"].as_array().unwrap().len(), 3);
-
-    // A whole game through the server: hello, start, mulligans, a concede.
-    let (addr, _app) = server_with(r, Duration::from_secs(30)).await;
-    let mut a = C::register(addr, "rhea").await;
-    let mut b = C::register(addr, "saul").await;
-    for c in [&mut a, &mut b] {
-        c.send(json!({"t": "queue", "mode": "ranked", "deck": mage})).await;
-        c.want("queued").await;
-    }
-    let m = a.want("match").await;
-    b.want("match").await;
-    let (mut host, mut guest) = if m["host"] == true { (a, b) } else { (b, a) };
-    let hello = json!({"t": "hello", "hero": "HERO_08", "cards": cards});
-    host.game(hello.clone()).await;
-    guest.game(hello).await;
-    host.want("game").await;
-    host.game(json!({"t": "start", "seed": m["seed"], "decks": [["HERO_08", cards], ["HERO_08", cards]]})).await;
-    guest.want("game").await;
-    host.game(json!({"t": "action", "n": 0, "action": {"type": "mulligan", "player": 0, "replace": []}, "hash": ""})).await;
-    guest.want("game").await;
-    guest.game(json!({"t": "action", "n": 0, "action": {"type": "concede", "player": 1}, "hash": ""})).await;
-    let h = host.want("game_over").await;
-    assert_eq!((h["result"].as_str(), h["reason"].as_str()), (Some("win"), Some("over")));
-    assert_eq!(guest.want("game_over").await["result"], "loss");
-}
-
 #[tokio::test]
 async fn presence_chats_and_read() {
-    let (addr, app) = server(Duration::from_secs(30)).await;
+    let (addr, app) = server(std_server()).await;
     let mut a = C::connect(addr).await;
     a.send(json!({"t": "register", "user": "uma", "password": "password123"})).await;
     let token = a.want("auth").await["token"].as_str().unwrap().to_string();
@@ -430,7 +599,7 @@ async fn presence_chats_and_read() {
     assert_eq!(b.want("error").await["code"], "not_found");
 
     // Searching, back online, offline, back by token.
-    a.send(json!({"t": "queue", "mode": "casual", "deck": deck("HERO_08")})).await;
+    a.send(json!({"t": "queue", "mode": "casual", "deck": deck("MAGE")})).await;
     assert_eq!(b.want("presence").await["status"], "searching");
     a.send(json!({"t": "unqueue"})).await;
     assert_eq!(b.want("presence").await["status"], "online");
@@ -440,7 +609,6 @@ async fn presence_chats_and_read() {
 
     // The token is renewed on use: 30 days from now again.
     use classichs_server::entity::session;
-    use sea_orm::{ColumnTrait, QueryFilter};
     let soon = classichs_server::ranked::now() + 60;
     session::Entity::update_many().col_expr(session::Column::Expires, soon.into()).exec(&app.db).await.unwrap();
     let mut a = C::connect(addr).await;
@@ -452,56 +620,22 @@ async fn presence_chats_and_read() {
 }
 
 #[tokio::test]
-async fn games_are_in_the_event_log() {
-    use classichs_server::entity::event;
-    use sea_orm::{ColumnTrait, QueryFilter};
-    let (addr, app) = server(Duration::from_secs(30)).await;
-    let (mut host, mut guest, m) = setup(addr, "walt", "xena", "casual").await;
-    host.game(json!({"t": "action", "n": 0, "action": {"type": "end_turn", "player": 0}, "hash": "h1"})).await;
-    guest.want("game").await;
-    guest.game(json!({"t": "action", "n": 0, "action": {"type": "illegal", "player": 1}, "hash": ""})).await;
-    assert_eq!(guest.want("game_over").await["reason"], "illegal");
-    host.want("game_over").await;
-    let game = m["game"].as_str().unwrap().to_string();
-    let mut kinds = vec![];
-    for _ in 0..50 {
-        let evs = event::Entity::find().filter(event::Column::Game.eq(&game)).order_by_asc(event::Column::Id).all(&app.db).await.unwrap();
-        kinds = evs.iter().map(|e| e.kind.clone()).collect::<Vec<_>>();
-        if kinds.last().map(String::as_str) == Some("game_end") {
-            let end = evs.last().unwrap();
-            let data: Value = serde_json::from_str(end.data.as_deref().unwrap()).unwrap();
-            assert_eq!(data["reason"], "illegal");
-            assert_eq!(data["message"]["action"]["type"], "illegal");
-            assert!(end.text.contains("beat"), "{}", end.text);
-            let act = evs.iter().find(|e| e.kind == "game_action").unwrap();
-            assert_eq!(act.text, format!("{}: end_turn", act.user.as_deref().unwrap()));
-            break;
-        }
-        tokio::time::sleep(Duration::from_millis(50)).await;
-    }
-    assert_eq!(kinds, ["match", "game_start", "game_action", "game_end"]);
-    let all: Vec<String> = event::Entity::find().all(&app.db).await.unwrap().into_iter().map(|e| e.kind).collect();
-    for k in ["register", "queue", "match", "game_end"] {
-        assert!(all.iter().any(|x| x == k), "{k} missing from {all:?}");
-    }
-}
-
-#[tokio::test]
 async fn presence_follows_a_game() {
-    let (addr, _app) = server(Duration::from_secs(30)).await;
+    let (addr, app) = server(std_server()).await;
     let mut f = C::register(addr, "yuri").await;
-    let (mut host, mut guest, m) = setup(addr, "zack", "abby", "casual").await;
+    let mut t = Table::queue(addr, &app, "zack", "abby", "casual").await;
     f.send(json!({"t": "set_tag", "tag": "Yuri"})).await;
     f.want("me").await;
-    let host_name = if m["opponent"]["user"] == "abby" { "zack" } else { "abby" };
-    host.send(json!({"t": "friend_add", "tag": "yuri"})).await;
+    t.p[0].c.send(json!({"t": "me"})).await;
+    let name = t.p[0].c.want("me").await["me"]["user"].as_str().unwrap().to_string();
+    t.p[0].c.send(json!({"t": "friend_add", "tag": "yuri"})).await;
     f.want("friends").await;
-    f.send(json!({"t": "friend_accept", "user": host_name})).await;
+    f.send(json!({"t": "friend_accept", "user": name})).await;
     let p = f.want("presence").await;
-    assert_eq!((p["user"].as_str(), p["status"].as_str()), (Some(host_name), Some("in_game")));
-    host.game(json!({"t": "action", "n": 0, "action": {"type": "concede", "player": 0}, "hash": ""})).await;
-    host.want("game_over").await;
-    guest.want("game_over").await;
+    assert_eq!((p["user"].as_str(), p["status"].as_str()), (Some(name.as_str()), Some("in_game")));
+    t.act(0, json!({"type": "concede", "player": 0})).await;
+    t.p[0].c.want("game_over").await;
+    t.p[1].c.want("game_over").await;
     let p = f.want("presence").await;
-    assert_eq!((p["user"].as_str(), p["online"].as_bool(), p["status"].as_str()), (Some(host_name), Some(true), Some("online")));
+    assert_eq!((p["user"].as_str(), p["online"].as_bool(), p["status"].as_str()), (Some(name.as_str()), Some(true), Some("online")));
 }

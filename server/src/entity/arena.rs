@@ -1,4 +1,4 @@
-//! An account's Arena run: the referee recomputes heroes and offers from seed + picks.
+//! An account's Arena run: the engine recomputes heroes and offers from seed + picks.
 
 use sea_orm::entity::prelude::*;
 
@@ -12,7 +12,7 @@ pub struct Model {
     pub hero: i64,
     /// JSON array of the offer indexes picked.
     pub picks: String,
-    /// The referee's last draft reply (JSON).
+    /// The engine's last draft reply (JSON).
     pub draft: String,
     pub wins: i64,
     pub losses: i64,

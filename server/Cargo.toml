@@ -7,6 +7,7 @@ edition = "2021"
 argon2 = "0.5"
 axum = { version = "0.8.9", features = ["ws"] }
 base64 = "0.22"
+classichs-engine = { path = "../rust/engine" }
 futures-util = "0.3.34"
 rand = "0.8"
 rpassword = "7.5.4"
@@ -22,3 +23,7 @@ tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 [dev-dependencies]
 tokio-tungstenite = "0.30.0"
 tower = { version = "0.5.3", features = ["util"] }
+
+# The rules engine is slow unoptimized (the tests play whole games with its bot).
+[profile.dev.package.classichs-engine]
+opt-level = 2

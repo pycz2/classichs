@@ -1,52 +1,41 @@
 # classichs-server
 
 The optional game server for Classic HS: accounts, friends, messages, casual and
-ranked ladders (2014 rules), the Arena, and refereed games. One async Rust process
-with a SQLite database. Design: `docs/superpowers/specs/2026-10-15-server-design.md`.
+ranked ladders (2014 rules), the Arena, and authoritative games. One async Rust process
+with a SQLite database. Design: `docs/superpowers/specs/2026-10-15-server-design.md`;
+server games: `docs/superpowers/specs/2026-10-15-thin-client-design.md` ("Server games").
 
 ## Build
 
-Stable Rust (1.94+, for SeaORM 2):
+Stable Rust (1.94+, for SeaORM 2). The rules engine is the crate `classichs-engine` in
+`../rust/engine` (a path dependency; it embeds `../data/cards.json`), so build from a
+checkout of the whole repository:
 
 ```sh
 cd server
 cargo build --release        # → target/release/classichs-server
-cargo test                   # unit + integration tests (a fake referee)
+cargo test                   # unit + integration tests (whole games played by the engine's bot)
+cargo run --release --example bench   # what an action and a game cost the server
 ```
 
-The real-referee test runs only when told where Godot and the project are:
+## The rules
 
-```sh
-CLASSICHS_GODOT=godot CLASSICHS_PROJECT=/path/to/like_classic_hs cargo test real_referee
-```
+Every game runs inside the server, in the same rules engine the game uses (exact parity
+with the old GDScript engine). The server keeps the only game state: it applies the
+players' actions, refuses illegal ones, runs the turn clock, and sends each player only
+what that player may see (never the opponent's hand, deck or secrets). Deck checks and
+the Arena draft use the engine too. Nothing else needs to be installed or started.
 
-## The referee
-
-Every move is checked by the game itself, started without a window. The server
-listens on a free port on `127.0.0.1`, starts the referee command with that port
-appended as the last argument, and talks JSON lines over that socket
-(`net/referee.gd`). The command is, in order of preference:
-
-1. `--referee "<command line>"`,
-2. the `CLASSICHS_REFEREE` environment variable,
-3. `godot --headless --path <project> -- --referee`, with the project folder found
-   in `.` or `..` (so `cargo run` works both in the project folder and in `server/`).
-
-With a downloaded game instead of the project (put a path with spaces in quotes):
-
-- Linux: `--referee "/path/to/ClassicHS-x.y.z-linux-x86_64.AppImage --headless -- --referee"`
-- Windows: `--referee "C:\Games\ClassicHS-x.y.z-windows-x86_64.exe --headless -- --referee"`
-- macOS: `--referee "'/Applications/Classic HS.app/Contents/MacOS/Classic HS' --headless -- --referee"`
-
-The game and the server must be the same version. The referee is restarted on the next request if it dies;
-games it was checking end as a draw ("aborted").
+Each game is one task that owns its engine state, so games never wait for each other.
+Measured (`examples/bench.rs`, Apple M1 Pro, one core): about 0.5 ms of server work per
+action (apply 0.01 ms, state hash 0.13 ms, the two players' `state` messages 0.38 ms),
+so about 1900 actions a second per core; a `state` message is about 6 KB (18 KB the most seen in 1000 bot games);
+a game holds about 55 KB of heap plus its history (about 300 KB in all when it ends).
 
 ## Run
 
 ```sh
-./target/release/classichs-server \
-  --listen 127.0.0.1:7377 --db classichs.db \
-  --referee "godot --headless --path /path/to/like_classic_hs -- --referee"
+./target/release/classichs-server --listen 127.0.0.1:7377 --db classichs.db
 ```
 
 All flags are optional (defaults shown). `--trust-proxy` takes the client address
@@ -118,10 +107,11 @@ password, token), `login_failed` (`data.reason`, `data.admin`), `logout`,
 `disconnect`, `admin_login`, `admin_logout`, `tag`, `friend_request`,
 `friend_accept`, `friend_decline`, `friend_remove`, `block`, `unblock`, `msg` (the
 text), `invite`, `invite_accept`, `invite_decline`, `queue`, `unqueue`, `arena`,
-`match`, `game_start`, `game_action` (every accepted action with the referee's turn
-and hash), `game_left`, `game_back`, `game_end` (reason, results, and the message
-that broke the rules), `admin` (every admin action), `error` (database and referee
-failures).
+`match` (with the seed), `game_start` (who goes first, the opening draws), `game_action`
+(every applied action, timeout moves marked `timeout`, with the turn, the state hash
+and the engine's events), `game_left`, `game_back`, `game_end` (reason, results, the
+final turn and hash, and for `illegal` the refused actions), `admin` (every admin
+action), `error` (database failures and rules engine panics).
 
 ### The database
 
@@ -151,14 +141,16 @@ In the game: Settings → Server: `ws://localhost:7377`.
   Content-Security-Policy (scripts from the server only, no inline code but the
   hashed import map), the session checked again every 30 s on the live feed.
 - Queries go through SeaORM (parameterized). Suspended accounts cannot log in or play.
-- Known limit: clients still hold the whole game state (lockstep), so a modified
-  client can read the opponent's hand. The referee stops illegal moves, not peeking.
+- Games are authoritative: clients get only their own view, so a modified client can
+  neither make illegal moves nor read the opponent's hand. Known limit: entity ids are
+  given out in deck-list order before the shuffle; the opponent's list is unknown, so
+  this tells nothing useful.
 
 ## Limits
 
 | What | Limit |
 |---|---|
-| WebSocket frame / message | 64 KB |
+| WebSocket frame / message from a client | 64 KB |
 | Login + register | 10 a minute per address and per account name |
 | Messages from one connection | 300 per 10 s (then disconnected) |
 | Malformed messages | 20 per connection (then disconnected) |
@@ -167,6 +159,8 @@ In the game: Settings → Server: `ws://localhost:7377`.
 | Passwords | 8–128 characters |
 | Friends | 200 |
 | Back after a disconnect in a game | 30 s, then the game is lost |
+| A turn (the mulligan) | 75 s (45 s) + 5 s, then the timeout moves |
+| Refused actions | 3 per player in a game, then the game is lost |
 
 ## Protocol summary
 
@@ -202,9 +196,25 @@ Full details: the design doc.
 - Arena: `arena_start`, `arena_hero {i}`, `arena_pick {i}`, `arena_queue`,
   `arena_retire` → `arena {state}` (`state` = heroes, hero, cards, offer, done,
   wins, losses, or null).
-- Games: `match {game, host, seed, opponent, mode}`; then `game {game, m}` both ways
-  carrying the NetSession messages (hello, start, action, emote, intent, bye); the
-  host must start with the server's seed and the queued decks. The end:
-  `game_over {game, result, reason, rank?, arena?}`, reasons `over`, `illegal`,
-  `desync`, `cheat`, `protocol`, `left`, `disconnect`, `aborted`. A player who logs
-  in again during a game gets `match {…, rejoin: true, log}` (the messages so far).
+- Games (the server holds the game; seats are 0 and 1, who goes first is random):
+  - S→C `match {game, mode, opponent: {user, tag}, you: 0|1, rejoin?: true}`.
+  - S→C `state {game, view, events, result}` to both players after the start (the
+    opening draws) and after every applied action: `view` = the engine's `snapshot`
+    for that player, `events` = that action's engine events for that player,
+    `result = {over, winner, turn, current, phase, deadline}` (`deadline`: whole
+    seconds left to move; 0 when over).
+  - C→S `act {game?, action}` (an engine action; `action.player` must be your seat).
+    Refused → `act_error {game, error}` to the sender and nothing changes; a player's
+    third refused action ends the game (reason `illegal`, that player loses).
+  - C→S `emote {game?, id}` (≤ 32 bytes), `intent {game?, i}` (≤ 1 KB) → the opponent
+    gets the same with `from` (the sender's seat). Concede is the `concede` action.
+  - Turn clock: 75 s a turn, 45 s for the mulligan, then 5 s more; then the server
+    plays the timeout moves (keeps the mulligan hand, takes the first option of a
+    pending choice, ends the turn).
+  - Dropped out: 30 s to come back, else the game is lost (`disconnect`). Logging in
+    again during a game gives `match {…, rejoin: true}` and a fresh `state` (no events).
+  - The end: `game_over {game, result: "win"|"loss"|"draw", reason, message?, rank?,
+    arena?}`, reasons `over` (the game ended, a concede included), `illegal` (with
+    `message` "Something does not add up: …"), `disconnect`, `aborted` (a rules
+    engine failure). Older games in the database may show `left`, `desync`, `cheat`,
+    `protocol`.

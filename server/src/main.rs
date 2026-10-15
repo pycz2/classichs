@@ -1,16 +1,12 @@
-use classichs_server::{auth, db, referee::ProcessReferee, App};
-use serde_json::json;
+use classichs_server::{auth, db, App, Timers};
 use std::net::SocketAddr;
-use std::sync::Arc;
-use std::time::Duration;
 
 const USAGE: &str = "usage:
-  classichs-server [--listen 127.0.0.1:7377] [--db classichs.db] [--referee \"<command line>\"] [--trust-proxy]
+  classichs-server [--listen 127.0.0.1:7377] [--db classichs.db] [--trust-proxy]
   classichs-server admin <name> [--db classichs.db]
 
-The referee command gets the port to connect to appended as its last argument.
-Default: $CLASSICHS_REFEREE, else \"godot --headless --path <project> -- --referee\"
-with the project folder (project.godot) found in . or .. (cargo run in server/).";
+Every game runs in the server with the built-in rules engine (classichs-engine);
+nothing else is needed.";
 
 fn main() {
     tracing_subscriber::fmt()
@@ -19,8 +15,6 @@ fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let mut listen = "127.0.0.1:7377".to_string();
     let mut db_path = "classichs.db".to_string();
-    let project = if !std::path::Path::new("project.godot").exists() && std::path::Path::new("../project.godot").exists() { ".." } else { "." };
-    let mut referee = std::env::var("CLASSICHS_REFEREE").unwrap_or_else(|_| format!("godot --headless --path {project} -- --referee"));
     let mut trust_proxy = false;
     let mut admin: Option<String> = None;
     let mut it = args.into_iter();
@@ -29,7 +23,6 @@ fn main() {
         match a.as_str() {
             "--listen" => listen = val("--listen"),
             "--db" => db_path = val("--db"),
-            "--referee" => referee = val("--referee"),
             "--trust-proxy" => trust_proxy = true,
             "admin" if admin.is_none() => admin = Some(val("admin")),
             "-h" | "--help" => {
@@ -46,12 +39,8 @@ fn main() {
     }
     let addr: SocketAddr = listen.parse().unwrap_or_else(|_| die(&format!("bad --listen address {listen}")));
     rt.block_on(async move {
-        let referee = Arc::new(ProcessReferee::new(&referee));
-        match classichs_server::referee::Referee::call(&*referee, json!({"op": "ping"})).await {
-            Ok(v) => tracing::info!("referee ready: version {}", v["version"]),
-            Err(e) => tracing::warn!("the referee is not available yet ({e}); games and deck checks fail until it is"),
-        }
-        let app = App::new(db, referee, trust_proxy, Duration::from_secs(30));
+        tracing::info!("rules engine {} (cards {})", classichs_engine::api::VERSION, classichs_engine::card_db::data_hash());
+        let app = App::new(db, trust_proxy, Timers::default());
         classichs_server::spawn_background(app.clone());
         let listener = tokio::net::TcpListener::bind(addr).await.unwrap_or_else(|e| die(&format!("cannot listen on {addr}: {e}")));
         println!("classichs-server listening on ws://{addr} (admin panel: http://{addr}/admin, database: {db_path})");
