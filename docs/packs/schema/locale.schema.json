@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "locales/<lang>.json of a .cardpack: every player-facing text of the pack in one language",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "cards": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/id"},
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {"name": {"$ref": "#/$defs/short"}, "text": {"$ref": "#/$defs/long"}}
+      }
+    },
+    "mechanics": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/id"},
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {"name": {"$ref": "#/$defs/short"}, "tip": {"$ref": "#/$defs/long"}}
+      }
+    },
+    "classes": {"$ref": "#/$defs/names"},
+    "races": {"$ref": "#/$defs/names"},
+    "rarities": {"$ref": "#/$defs/names"},
+    "sets": {"$ref": "#/$defs/names"},
+    "ranks": {"type": "object", "propertyNames": {"type": "string", "pattern": "^[0-9]{1,3}$"}, "additionalProperties": {"$ref": "#/$defs/short"}},
+    "decks": {"$ref": "#/$defs/names"},
+    "missions": {
+      "type": "object",
+      "propertyNames": {"type": "string", "pattern": "^[0-9]{1,3}$"},
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {"$ref": "#/$defs/short"},
+          "intro": {"$ref": "#/$defs/long"},
+          "lines": {"type": "object", "propertyNames": {"$ref": "#/$defs/key"}, "additionalProperties": {"$ref": "#/$defs/long"}},
+          "reward_line": {"$ref": "#/$defs/long"}
+        }
+      }
+    },
+    "hints": {"type": "object", "propertyNames": {"$ref": "#/$defs/key"}, "additionalProperties": {"$ref": "#/$defs/long"}},
+    "voice": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/id"},
+      "additionalProperties": {"type": "object", "propertyNames": {"$ref": "#/$defs/key"}, "additionalProperties": {"$ref": "#/$defs/long"}}
+    },
+    "ui": {"type": "object", "propertyNames": {"$ref": "#/$defs/key"}, "additionalProperties": {"$ref": "#/$defs/long"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9_]{1,64}$"},
+    "key": {"type": "string", "pattern": "^[a-z0-9_]{1,32}$"},
+    "short": {"type": "string", "maxLength": 100},
+    "long": {"type": "string", "maxLength": 1000},
+    "names": {"type": "object", "propertyNames": {"$ref": "#/$defs/id"}, "additionalProperties": {"$ref": "#/$defs/short"}}
+  }
+}

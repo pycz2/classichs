@@ -1,0 +1,10 @@
+{
+  "format": 1,
+  "about": "Named visual effects the client has (docs/packs/fx.md). Cards name them in 'fx'; an unknown name falls back to the default for that slot.",
+  "elements": ["fire", "ice", "arcane", "moon", "holy", "shadow", "nature", "lightning", "poison", "steel", "gold"],
+  "cast": ["bolt", "missiles", "none"],
+  "hit": ["hurt", "heal", "buff", "debuff", "gain", "freeze", "silence", "smoke", "destroy", "portal", "whoosh", "control", "armor", "none"],
+  "play": ["battlecry", "portal", "none"],
+  "death": ["skull", "destroy", "none"],
+  "table": ["shake", "shatter", "burn", "fatigue", "reveal", "banner", "lunge", "pulse"]
+}

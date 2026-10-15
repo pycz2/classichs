@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "missions/<n>.json of a .cardpack (a tutorial or story mission)",
+  "type": "object",
+  "required": ["id", "champion", "boss", "player", "boss_deck"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "integer", "minimum": 1, "maximum": 999},
+    "champion": {"$ref": "#/$defs/id"},
+    "boss": {"$ref": "#/$defs/id"},
+    "boss_power": {"$ref": "#/$defs/id"},
+    "powers_locked": {"type": "boolean"},
+    "unlosable": {"type": "boolean"},
+    "boss_guarded": {"type": "boolean"},
+    "end_turn_block": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {"while_can_play": {"type": "boolean"}, "while_can_attack": {"type": "boolean"}}
+    },
+    "player": {
+      "type": "object",
+      "required": ["hand", "deck"],
+      "additionalProperties": false,
+      "properties": {"mana": {"type": "integer", "minimum": 0, "maximum": 99}, "hand": {"$ref": "#/$defs/ids"}, "deck": {"$ref": "#/$defs/ids"}}
+    },
+    "boss_deck": {"$ref": "#/$defs/ids"},
+    "mulligan": {"type": "boolean"},
+    "reward": {"$ref": "#/$defs/id"},
+    "hints": {"type": "array", "maxItems": 50, "items": {"type": "string", "pattern": "^[a-z0-9_]{1,32}$"}},
+    "script": {"type": ["string", "null"], "pattern": "^scripts/[A-Za-z0-9_][A-Za-z0-9_./-]*\\.lua(#[A-Za-z0-9_]{1,64})?$"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9_]{1,64}$"},
+    "ids": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/id"}}
+  }
+}

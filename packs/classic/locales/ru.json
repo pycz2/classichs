@@ -1,0 +1,30 @@
+{
+  "classes": {
+    "DRUID": "Друид",
+    "HUNTER": "Охотник",
+    "MAGE": "Маг",
+    "PALADIN": "Паладин",
+    "PRIEST": "Жрец",
+    "ROGUE": "Разбойник",
+    "SHAMAN": "Шаман",
+    "WARLOCK": "Чернокнижник",
+    "WARRIOR": "Воин",
+    "NEUTRAL": "Нейтральные"
+  },
+  "races": {
+    "BEAST": "Зверь",
+    "DEMON": "Демон",
+    "DRAGON": "Дракон",
+    "MURLOC": "Мурлок",
+    "MECHANICAL": "Механизм",
+    "TOTEM": "Тотем",
+    "PIRATE": "Пират",
+    "UNDEAD": "Нежить"
+  },
+  "mechanics": {
+    "CANT_ATTACK": {
+      "name": "Не может атаковать",
+      "tip": "Не может атаковать."
+    }
+  }
+}

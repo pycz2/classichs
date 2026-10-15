@@ -1,0 +1,18 @@
+{
+  "about": "How tools/pack.py builds the Classic pack from the repo data (docs/packs/format.md, 'Build recipes'). Paths in steps are relative to root; root is relative to this folder.",
+  "root": "../..",
+  "steps": [
+    {"do": "hsjson", "from": "data/cards.json", "patch": "cards.patch.json",
+     "locales": {"en": "enUS", "ru": "ruRU", "de": "deDE", "fr": "frFR", "es": "esES", "pt_BR": "ptBR", "it": "itIT", "pl": "plPL"},
+     "rename": {"HERO": "CHAMPION", "HERO_POWER": "POWER"}},
+    {"do": "keywords", "from": "data/keywords.json"},
+    {"do": "voice", "from": "data/voice_lines.json"},
+    {"do": "translate", "from": "data/i18n", "sections": ["rarities", "ranks", "missions", "hints"]},
+    {"do": "rank_names"},
+    {"do": "copy", "from": "data/card_layout", "to": "layout", "files": ["*.json"]},
+    {"do": "copy", "from": "art/cards", "to": "art/generated", "files": ["*.jpg"]},
+    {"do": "copy", "from": "audio", "to": "sounds/generated", "files": ["*.wav"], "except": ["menu.wav", "battle_*.wav"]},
+    {"do": "copy", "from": "audio", "to": "music/generated", "files": ["menu.wav", "battle_*.wav"]},
+    {"do": "copy", "from": "audio/open", "to": "music/open", "files": ["*.ogg", "CREDITS.md"]}
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": 4,
+  "champion": "HERO_08",
+  "boss": "TU4c_001",
+  "boss_power": "VAN_HERO_08bp",
+  "powers_locked": true,
+  "unlosable": false,
+  "boss_guarded": false,
+  "end_turn_block": {"while_can_play": false, "while_can_attack": false},
+  "player": {
+    "mana": 1,
+    "hand": ["VAN_CS1_042", "VAN_CS2_171", "VAN_EX1_019"],
+    "deck": [
+      "VAN_CS2_124", "VAN_CS2_121", "VAN_CS2_022", "VAN_CS2_179", "VAN_CS2_213", "VAN_CS2_182", "VAN_CS2_022",
+      "VAN_CS2_200", "VAN_CS2_162", "VAN_CS2_222", "VAN_CS2_179", "VAN_CS2_201", "VAN_CS2_213"
+    ]
+  },
+  "boss_deck": [
+    "TU4c_003", "TU4c_002", "TU4f_007", "TU4c_004", "TU4c_005", "TU4c_006", "TU4c_007", "TU4c_008", "TU4c_003",
+    "TU4c_002", "TU4f_007", "TU4c_007"
+  ],
+  "mulligan": false,
+  "reward": "VAN_CS2_022",
+  "hints": ["tooltip", "taunt", "charge", "buff"],
+  "script": null
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "manifest.json of a .cardpack (docs/packs/format.md)",
+  "type": "object",
+  "required": ["format", "id", "version", "name", "default_locale", "locales"],
+  "additionalProperties": false,
+  "properties": {
+    "format": {"const": 1},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"},
+    "version": {"type": "string", "pattern": "^[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,6}$"},
+    "engine": {"type": "string", "pattern": "^[0-9]{1,4}\\.[0-9]{1,4}\\.[0-9]{1,6}$"},
+    "name": {"$ref": "#/$defs/text"},
+    "description": {"$ref": "#/$defs/text"},
+    "authors": {"type": "array", "maxItems": 50, "items": {"type": "string", "maxLength": 200}},
+    "license": {"type": "string", "maxLength": 2000},
+    "redistributable": {"type": "boolean"},
+    "default_locale": {"$ref": "#/$defs/lang"},
+    "locales": {"type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": {"$ref": "#/$defs/lang"}},
+    "art_sets": {"$ref": "#/$defs/sets"},
+    "sound_sets": {"$ref": "#/$defs/sets"},
+    "music_sets": {"$ref": "#/$defs/sets"},
+    "card_back": {"$ref": "#/$defs/image"},
+    "logo": {"$ref": "#/$defs/image"},
+    "colors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {"classes": {"$ref": "#/$defs/colors"}, "rarities": {"$ref": "#/$defs/colors"}}
+    },
+    "fx": {"type": "array", "maxItems": 200, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_]{1,32}$"}},
+    "rules_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "lang": {"type": "string", "pattern": "^[a-z]{2}(_[A-Z]{2})?$"},
+    "text": {"type": "object", "propertyNames": {"$ref": "#/$defs/lang"}, "additionalProperties": {"type": "string", "maxLength": 2000}},
+    "image": {"type": ["string", "null"], "pattern": "^ui/[A-Za-z0-9_][A-Za-z0-9_.-]*\\.(png|jpg|jpeg|webp)$"},
+    "colors": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{6}$"}},
+    "sets": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9_]{1,32}$"},
+          "name": {"$ref": "#/$defs/text"},
+          "default": {"type": "boolean"},
+          "local": {"type": "boolean"}
+        }
+      }
+    }
+  }
+}

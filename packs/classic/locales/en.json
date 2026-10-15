@@ -1,0 +1,113 @@
+{
+  "classes": {
+    "DRUID": "Druid",
+    "HUNTER": "Hunter",
+    "MAGE": "Mage",
+    "PALADIN": "Paladin",
+    "PRIEST": "Priest",
+    "ROGUE": "Rogue",
+    "SHAMAN": "Shaman",
+    "WARLOCK": "Warlock",
+    "WARRIOR": "Warrior",
+    "NEUTRAL": "Neutral"
+  },
+  "races": {
+    "BEAST": "Beast",
+    "DEMON": "Demon",
+    "DRAGON": "Dragon",
+    "MURLOC": "Murloc",
+    "MECHANICAL": "Mech",
+    "TOTEM": "Totem",
+    "PIRATE": "Pirate",
+    "UNDEAD": "Undead"
+  },
+  "rarities": {
+    "FREE": "Basic",
+    "COMMON": "Common",
+    "RARE": "Rare",
+    "EPIC": "Epic",
+    "LEGENDARY": "Legendary"
+  },
+  "ranks": {
+    "0": "Legend",
+    "1": "Innkeeper"
+  },
+  "missions": {
+    "1": {
+      "intro": "Play minions and use them to attack Hogger. Deal enough damage and you win!",
+      "lines": {
+        "start": "Grrr! Hogger smash puny mage!",
+        "hurt": "Rrraaagh! Hogger angry!",
+        "defeat": "Nooo... Hogger... tired..."
+      },
+      "reward_line": "Oh yeah!"
+    },
+    "2": {
+      "intro": "Expend your Mana each turn to crush this annoying gnome!",
+      "lines": {
+        "start": "Millhouse Manastorm is here! Prepare to be amazed!",
+        "hurt": "Hey, that hurt! Wait till you see my big spell!",
+        "defeat": "No fair! I was just getting to the good part!"
+      },
+      "reward_line": "This is quite impressive."
+    },
+    "3": {
+      "intro": "When minions fight each other, they both take damage.",
+      "lines": {
+        "start": "Greetings, traveler. Let us learn together.",
+        "hurt": "A wise move. But balance must be kept.",
+        "defeat": "Your skill honors the path. Go well."
+      },
+      "reward_line": "Hot hot hot!"
+    },
+    "4": {
+      "intro": "Don't understand a card? Mouse-over it!",
+      "lines": {
+        "start": "Mukla want bananas! You no take!",
+        "hurt": "Ooh ooh! Mukla call big brother!",
+        "defeat": "Mukla... share bananas..."
+      },
+      "reward_line": "You are on a roll!"
+    },
+    "5": {
+      "intro": "Kill his minions or he'll overwhelm you!",
+      "lines": {
+        "start": "Fresh game! Let the hunt begin!",
+        "hurt": "You're a tough one to bag!",
+        "defeat": "Well, I'll be... the hunter becomes the hunted."
+      },
+      "reward_line": "That was incredible."
+    },
+    "6": {
+      "intro": "This fight is totally not fair. Blame the terrible game designers.",
+      "lines": {
+        "start": "You are not prepared!",
+        "hurt": "I will not be stopped!",
+        "defeat": "Impossible... beaten by a novice?"
+      },
+      "reward_line": "Magnificent!"
+    }
+  },
+  "hints": {
+    "play": "Click a card in your hand to play it. Minions go on the board.",
+    "attack": "Click a minion that can attack, then click an enemy to attack it.",
+    "end_turn": "Nothing more to do? Press End Turn.",
+    "mana": "You get one more Mana Crystal every turn. Spend it all!",
+    "raid_leader": "Raid Leader gives your other minions +1 Attack.",
+    "trade": "Kill enemy minions before they become a problem!",
+    "battlecry": "A Battlecry happens when you play the card from your hand.",
+    "tooltip": "Hover over any card to read it.",
+    "taunt": "Minions with Taunt must be attacked first. Play one to protect your hero!",
+    "heal": "Some cards restore Health. Use them on a damaged hero or minion.",
+    "buff": "Some cards make your minions stronger.",
+    "charge": "Minions with Charge can attack right away.",
+    "hero_power": "Your Hero Power deals 1 damage. You can use it once per turn.",
+    "weapon": "Weapons let heroes attack. Each attack costs 1 Durability."
+  },
+  "mechanics": {
+    "CANT_ATTACK": {
+      "name": "Can't Attack",
+      "tip": "Can't attack."
+    }
+  }
+}

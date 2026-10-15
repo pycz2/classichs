@@ -1,0 +1,30 @@
+{
+  "classes": {
+    "DRUID": "Druido",
+    "HUNTER": "Cacciatore",
+    "MAGE": "Mago",
+    "PALADIN": "Paladino",
+    "PRIEST": "Sacerdote",
+    "ROGUE": "Ladro",
+    "SHAMAN": "Sciamano",
+    "WARLOCK": "Stregone",
+    "WARRIOR": "Guerriero",
+    "NEUTRAL": "Neutrali"
+  },
+  "races": {
+    "BEAST": "Bestia",
+    "DEMON": "Demone",
+    "DRAGON": "Drago",
+    "MURLOC": "Murloc",
+    "MECHANICAL": "Robot",
+    "TOTEM": "Totem",
+    "PIRATE": "Pirata",
+    "UNDEAD": "Non Morto"
+  },
+  "mechanics": {
+    "CANT_ATTACK": {
+      "name": "Non può attaccare",
+      "tip": "Non può attaccare."
+    }
+  }
+}

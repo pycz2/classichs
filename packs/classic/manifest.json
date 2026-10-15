@@ -1,0 +1,56 @@
+{
+  "format": 1,
+  "id": "classic-2014",
+  "version": "1.0.0",
+  "engine": "0.28.0",
+  "name": {
+    "en": "Classic 2014",
+    "ru": "Классика 2014",
+    "de": "Klassik 2014",
+    "fr": "Classique 2014",
+    "es": "Clásico 2014",
+    "pt_BR": "Clássico 2014",
+    "it": "Classico 2014",
+    "pl": "Klasyka 2014"
+  },
+  "description": {
+    "en": "The Classic set as it was played in June 2014: 9 heroes, the Basic and Classic cards, the tutorial, the 2014 ladder and Arena.",
+    "ru": "Классический набор, как в него играли в июне 2014 года: 9 героев, базовые и классические карты, обучение, рейтинг и Арена 2014 года.",
+    "de": "Das Klassik-Set, wie es im Juni 2014 gespielt wurde: 9 Helden, Basis- und Klassik-Karten, das Tutorial, die Rangliste und die Arena von 2014.",
+    "fr": "L’ensemble Classique tel qu’on le jouait en juin 2014 : 9 héros, les cartes de base et classiques, le didacticiel, le classement et l’Arène de 2014.",
+    "es": "El set Clásico tal como se jugaba en junio de 2014: 9 héroes, las cartas básicas y clásicas, el tutorial, la clasificación y la Arena de 2014.",
+    "pt_BR": "O conjunto Clássico como era jogado em junho de 2014: 9 heróis, os cards Básicos e Clássicos, o tutorial, o ranqueado e a Arena de 2014.",
+    "it": "Il set Classico come si giocava a giugno 2014: 9 eroi, le carte Base e Classiche, il tutorial, la classificata e l’Arena del 2014.",
+    "pl": "Zestaw Klasyczny w wersji z czerwca 2014: 9 bohaterów, karty podstawowe i klasyczne, samouczek, rankingi i Arena z 2014 roku."
+  },
+  "authors": ["Classic HS"],
+  "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+  "redistributable": true,
+  "default_locale": "en",
+  "locales": ["en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"],
+  "art_sets": [{"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированный"}, "default": true}],
+  "sound_sets": [{"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированные"}, "default": true}],
+  "music_sets": [
+    {"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированная"}, "default": true},
+    {"id": "open", "name": {"en": "Open (CC0)", "ru": "Открытая (CC0)"}}
+  ],
+  "card_back": null,
+  "logo": null,
+  "colors": {
+    "classes": {
+      "DRUID": "703606",
+      "HUNTER": "016e01",
+      "MAGE": "0092ab",
+      "PALADIN": "aa8f00",
+      "PRIEST": "b8b090",
+      "ROGUE": "4c4d48",
+      "SHAMAN": "0070de",
+      "WARLOCK": "7624ad",
+      "WARRIOR": "8e1002",
+      "NEUTRAL": "6b6b6b",
+      "DREAM": "6b6b6b",
+      "DEMONHUNTER": "6b6b6b"
+    },
+    "rarities": {"FREE": "e8e8e8", "COMMON": "e8e8e8", "RARE": "2f7cff", "EPIC": "a335ee", "LEGENDARY": "ff8000"}
+  }
+}
