@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.27.0] - 2026-10-15
+
+### Added
+- Game server: a new lobby in the style of the game — deck boxes with heroes, a Casual/Ranked switch, the rank medal with stars, a big Play button; the Arena with the ticket, big hero portraits, the draft and the run screen to 12 wins.
+- The server login is remembered: the game logs in by itself at start. While you are logged in, every screen has a friends button: who is online, searching or playing, requests, chat windows over the game, and invites you can accept from anywhere.
+- A new server admin panel: a live dashboard, an event log with filters (logins, messages, moves, errors), games with their moves in real time, accounts, conversations; dark and light themes.
+
+### Changed
+- All the rules of the game now live in one Rust module: it runs inside the game on every platform (as WebAssembly in the browser) and on the server; the game window only draws. The rules were checked on 7833 recorded games: the results match the old engine bit for bit.
+- Server games: the server runs the game and sends each player only what that player may see — the opponent's hidden cards never reach your computer. The turn timer runs on the server; after a dropped connection you can come back into the game.
+- Direct play with codes: both games check every move; if they differ, the game ends for both with a “something does not add up” message (nobody is banned). Older versions cannot play with this one.
+
 ## [0.26.1] - 2026-10-15
 
 ### Fixed

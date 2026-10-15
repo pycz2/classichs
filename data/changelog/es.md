@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.27.0] - 2026-10-15
+
+### Añadido
+- Servidor de juego: un nuevo vestíbulo al estilo del juego — cajas de mazos con los héroes, un selector Normal/Clasificatoria, la medalla de rango con estrellas, un gran botón Jugar; la Arena con la entrada, grandes retratos de héroes, el draft y la pantalla de la racha hasta 12 victorias.
+- El inicio de sesión en el servidor se recuerda: el juego entra solo al arrancar. Mientras estás conectado, cada pantalla tiene un botón de amigos: quién está en línea, buscando o jugando, solicitudes, ventanas de chat sobre el juego e invitaciones que puedes aceptar desde cualquier lugar.
+- Un nuevo panel de administración del servidor: un panel en vivo, un registro de eventos con filtros (inicios de sesión, mensajes, jugadas, errores), partidas con sus jugadas en tiempo real, cuentas, conversaciones; temas oscuro y claro.
+
+### Cambiado
+- Todas las reglas del juego viven ahora en un solo módulo en Rust: funciona dentro del juego en todas las plataformas (como WebAssembly en el navegador) y en el servidor; la ventana del juego solo dibuja. Las reglas se comprobaron con 7833 partidas grabadas: los resultados coinciden con el motor anterior bit a bit.
+- Partidas por el servidor: el servidor lleva la partida y envía a cada uno solo lo que puede ver — las cartas ocultas del rival nunca llegan a tu ordenador. El temporizador del turno corre en el servidor; tras un corte de conexión puedes volver a la partida.
+- Juego directo con códigos: ambos juegos comprueban cada jugada; si difieren, la partida termina para los dos con el mensaje «algo no cuadra» (no se banea a nadie). Las versiones anteriores no pueden jugar con esta.
+
 ## [0.26.1] - 2026-10-15
 
 ### Corregido

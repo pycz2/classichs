@@ -136,7 +136,17 @@ jobs:
           grep -q " 0 failed" /tmp/tests.log
 
       - name: Export every platform
-        run: RULES_PREBUILT=1 tools/export_all.sh
+        # one platform at a time; a failure shows the end of its log as an annotation (readable without login)
+        run: |
+          fail=0
+          for p in web windows linux macos android; do
+            if ! RULES_PREBUILT=1 tools/export_all.sh "$p" > "/tmp/export_$p.log" 2>&1; then
+              fail=1
+              echo "::error title=Export $p failed::$(grep -v '^\s*$' "/tmp/export_$p.log" | tail -n 25 | tr '\n' '|' | tr -d '%' | cut -c1-6000)"
+            fi
+          done
+          ls -l build/release
+          exit $fail
 
       - uses: actions/upload-artifact@v4
         with:

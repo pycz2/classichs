@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.27.0] - 2026-10-15
+
+### Dodano
+- Serwer gry: nowe lobby w stylu gry — pudełka talii z bohaterami, przełącznik Zwykła/Rankingowa, medal rangi z gwiazdkami, duży przycisk Graj; Arena z biletem, dużymi portretami bohaterów, draftem i ekranem przebiegu do 12 zwycięstw.
+- Logowanie do serwera jest zapamiętywane: gra loguje się sama przy starcie. Gdy jesteś zalogowany, na każdym ekranie jest przycisk znajomych: kto jest online, szuka gry lub gra, zaproszenia do znajomych, okna czatu nad grą i zaproszenia do gry, które przyjmiesz z dowolnego miejsca.
+- Nowy panel administratora serwera: dashboard na żywo, dziennik zdarzeń z filtrami (logowania, wiadomości, ruchy, błędy), partie z ruchami w czasie rzeczywistym, konta, rozmowy; motywy ciemny i jasny.
+
+### Zmieniono
+- Wszystkie zasady gry są teraz w jednym module w Rust: działa w grze na każdej platformie (w przeglądarce jako WebAssembly) i na serwerze; okno gry tylko rysuje. Zasady sprawdzono na 7833 nagranych partiach: wyniki zgadzają się ze starym silnikiem co do bitu.
+- Gry przez serwer: serwer prowadzi partię i wysyła każdemu tylko to, co może widzieć — ukryte karty przeciwnika nigdy nie trafiają na twój komputer. Zegar tury działa na serwerze; po zerwaniu połączenia możesz wrócić do partii.
+- Gra bezpośrednia kodami: obie gry sprawdzają każdy ruch; jeśli się różnią, partia kończy się dla obu z komunikatem „coś się nie zgadza” (nikt nie dostaje bana). Starsze wersje nie mogą grać z tą.
+
 ## [0.26.1] - 2026-10-15
 
 ### Naprawiono

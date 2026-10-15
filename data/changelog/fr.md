@@ -4,6 +4,18 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.27.0] - 2026-10-15
+
+### Ajouté
+- Serveur de jeu : un nouveau salon dans le style du jeu — boîtes de decks avec les héros, un sélecteur Normale/Classée, la médaille de rang avec ses étoiles, un grand bouton Jouer ; l'Arène avec le ticket, de grands portraits de héros, le draft et l'écran de la course jusqu'à 12 victoires.
+- La connexion au serveur est retenue : le jeu se connecte tout seul au démarrage. Tant que vous êtes connecté, chaque écran a un bouton d'amis : qui est en ligne, cherche une partie ou joue, les demandes, des fenêtres de discussion par-dessus le jeu et des invitations à accepter depuis n'importe où.
+- Un nouveau panneau d'administration du serveur : un tableau de bord en direct, un journal d'événements avec filtres (connexions, messages, coups, erreurs), les parties et leurs coups en temps réel, les comptes, les conversations ; thèmes sombre et clair.
+
+### Modifié
+- Toutes les règles du jeu sont maintenant dans un seul module en Rust : il tourne dans le jeu sur toutes les plateformes (en WebAssembly dans le navigateur) et sur le serveur ; la fenêtre du jeu ne fait plus que dessiner. Les règles ont été vérifiées sur 7833 parties enregistrées : les résultats sont identiques à l'ancien moteur au bit près.
+- Parties par le serveur : le serveur mène la partie et n'envoie à chacun que ce qu'il peut voir — les cartes cachées de l'adversaire n'arrivent jamais sur votre ordinateur. Le minuteur du tour tourne sur le serveur ; après une coupure, vous pouvez revenir dans la partie.
+- Jeu direct avec des codes : les deux jeux vérifient chaque coup ; s'ils diffèrent, la partie s'arrête pour les deux avec le message « quelque chose ne colle pas » (personne n'est banni). Les anciennes versions ne peuvent pas jouer avec celle-ci.
+
 ## [0.26.1] - 2026-10-15
 
 ### Corrigé

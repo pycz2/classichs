@@ -48,7 +48,7 @@ Then in the game: Online Game → Through a game server (the address is in Setti
 `ws://localhost:7377` by default); the admin panel is at http://localhost:7377/admin.
 Release builds of the server for Windows, Linux and macOS come with every version tag.
 Details, security notes and the protocol: [server/README.md](server/README.md) and
-[the design](docs/superpowers/specs/2026-10-15-server-design.md).
+[the design](docs/superpowers/specs/2026-10-15-thin-client-design.md).
 
 ## Downloads
 

@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.27.0] - 2026-10-15
+
+### Hinzugefügt
+- Spielserver: eine neue Lobby im Stil des Spiels — Deckboxen mit Helden, ein Schalter Normal/Gewertet, die Rangmedaille mit Sternen, ein großer Spielen-Knopf; die Arena mit Eintrittskarte, großen Heldenporträts, dem Draft und dem Lauf bis 12 Siege.
+- Die Anmeldung am Server wird gespeichert: Das Spiel meldet sich beim Start selbst an. Solange du angemeldet bist, gibt es auf jedem Bildschirm einen Freunde-Knopf: wer online ist, sucht oder spielt, Anfragen, Chatfenster über dem Spiel und Einladungen, die du überall annehmen kannst.
+- Ein neuer Admin-Bereich für den Server: ein Live-Dashboard, ein Ereignisprotokoll mit Filtern (Anmeldungen, Nachrichten, Züge, Fehler), Partien mit ihren Zügen in Echtzeit, Konten, Unterhaltungen; dunkles und helles Design.
+
+### Geändert
+- Alle Spielregeln stecken jetzt in einem Rust-Modul: Es läuft im Spiel auf jeder Plattform (im Browser als WebAssembly) und auf dem Server; das Spielfenster zeichnet nur noch. Die Regeln wurden an 7833 aufgezeichneten Partien geprüft: Die Ergebnisse stimmen mit der alten Engine bitgenau überein.
+- Spiele über den Server: Der Server führt die Partie und schickt jedem nur, was er sehen darf — die verdeckten Karten des Gegners erreichen deinen Computer nie. Der Zugtimer läuft auf dem Server; nach einem Verbindungsabbruch kannst du in die Partie zurückkehren.
+- Direktes Spiel mit Codes: Beide Spiele prüfen jeden Zug; weichen sie ab, endet die Partie für beide mit der Meldung „Hier stimmt etwas nicht“ (niemand wird gesperrt). Ältere Versionen können nicht mit dieser spielen.
+
 ## [0.26.1] - 2026-10-15
 
 ### Behoben

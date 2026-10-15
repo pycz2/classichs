@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.27.0] - 2026-10-15
+
+### Aggiunto
+- Server di gioco: una nuova lobby nello stile del gioco — scatole dei mazzi con gli eroi, un selettore Normale/Classificata, la medaglia del grado con le stelle, un grande pulsante Gioca; l'Arena con il biglietto, grandi ritratti degli eroi, il draft e la schermata della corsa fino a 12 vittorie.
+- L'accesso al server viene ricordato: il gioco entra da solo all'avvio. Mentre sei connesso, ogni schermata ha un pulsante degli amici: chi è online, cerca o gioca, le richieste, finestre di chat sopra il gioco e inviti che puoi accettare ovunque.
+- Un nuovo pannello di amministrazione del server: una dashboard dal vivo, un registro eventi con filtri (accessi, messaggi, mosse, errori), le partite con le mosse in tempo reale, gli account, le conversazioni; temi scuro e chiaro.
+
+### Modificato
+- Tutte le regole del gioco ora stanno in un solo modulo in Rust: gira nel gioco su ogni piattaforma (come WebAssembly nel browser) e sul server; la finestra del gioco disegna soltanto. Le regole sono state verificate su 7833 partite registrate: i risultati coincidono con il vecchio motore bit per bit.
+- Partite tramite server: il server conduce la partita e invia a ciascuno solo ciò che può vedere — le carte nascoste dell'avversario non arrivano mai sul tuo computer. Il timer del turno gira sul server; dopo una caduta di connessione puoi rientrare nella partita.
+- Gioco diretto con i codici: i due giochi controllano ogni mossa; se divergono, la partita finisce per entrambi con il messaggio “qualcosa non torna” (nessuno viene bannato). Le versioni precedenti non possono giocare con questa.
+
 ## [0.26.1] - 2026-10-15
 
 ### Corretto
