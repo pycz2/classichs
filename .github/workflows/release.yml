@@ -111,10 +111,20 @@ jobs:
         run: |
           # A release keystore from the repository secrets when there is one; else a
           # throwaway one (the APK then has to be reinstalled on each update).
+          user=""
           if [ -n "$KEYSTORE_B64" ]; then
-            echo "$KEYSTORE_B64" | base64 -d > ~/release.keystore
-            user="$KEYSTORE_USER"; pass="$KEYSTORE_PASSWORD"
-          else
+            echo "$KEYSTORE_B64" | tr -d ' \r\n' | base64 -d > ~/release.keystore
+            user=$(printf %s "$KEYSTORE_USER" | tr -d '\r\n'); pass=$(printf %s "$KEYSTORE_PASSWORD" | tr -d '\r\n')
+            echo "::add-mask::$pass"
+            # Godot uses one password for the store and the key: check both, through the private key
+            if ! keytool -certreq -keystore ~/release.keystore -storepass "$pass" -keypass "$pass" -alias "$user" -file /dev/null >/dev/null 2>&1; then
+              # the secrets do not open the keystore (wrong alias, password or file): say so, and still build
+              echo "::warning title=Android signing::ANDROID_KEYSTORE_* secrets do not open the keystore (check the alias in ANDROID_KEYSTORE_USER, the password — the key password must equal the store password —, and that ANDROID_KEYSTORE_BASE64 is the whole file); this build uses a throwaway key"
+              user=""
+            fi
+          fi
+          if [ -z "$user" ]; then
+            rm -f ~/release.keystore
             user=classichs; pass=$(openssl rand -hex 16)
             keytool -genkeypair -v -keystore ~/release.keystore -alias "$user" -keyalg RSA -keysize 2048 \
               -validity 10000 -storepass "$pass" -keypass "$pass" -dname "CN=Classic HS" >/dev/null
