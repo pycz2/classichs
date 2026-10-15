@@ -1,37 +1,36 @@
 class_name ServerView
 extends Control
-## Playing through a game server: log in or register, then the lobby — Play
-## (casual and ranked with a deck), the Arena (12 wins or 3 losses), friends
-## (by tag, requests, messages, invites, blocking) and the profile. The games
-## themselves run as a NetSession over the server (main shows the match).
-## Protocol: docs/superpowers/specs/2026-10-15-server-design.md.
+## Playing through a game server, in the look of the 2014 game: log in (once —
+## the session is saved), then Play (a deck box, Casual or Ranked with the rank
+## medal, one big Play button) or the Arena (a ticket, three heroes, the draft,
+## the record of wins and losses). Friends and messages are the Social overlay's
+## (on every screen); a game the server starts is shown by main. The last deck,
+## mode and tab are remembered. Protocol: server/README.md.
 
 signal back
-signal play(session: NetSession, m: Match, mode: String)
 
 ## The 2014 ranks are named after cards: their art is the rank's emblem.
 const RANK_CARDS := ["VAN_EX1_002", "VAN_EX1_620", "VAN_EX1_105", "VAN_EX1_586", "VAN_EX1_178", "VAN_EX1_032",
 	"VAN_CS2_226", "VAN_CS2_151", "VAN_CS2_197", "VAN_EX1_005", "VAN_EX1_084", "VAN_NEW1_022", "VAN_CS2_122",
 	"VAN_EX1_023", "VAN_EX1_044", "VAN_EX1_390", "VAN_EX1_608", "VAN_EX1_015", "VAN_EX1_405", "VAN_CS2_146",
 	"VAN_CS2_168", "VAN_EX1_008", "VAN_EX1_029", "VAN_EX1_009"]  # ranks 2 … 25; rank 1 is the Innkeeper
-const TABS := ["Play", "Arena", "Friends", "Profile"]
+const TABS := ["Play", "Arena"]
+const MODES := ["casual", "ranked"]
+const ARENA_WINS := 12
+const ARENA_LOSSES := 3
+const LIST_X := 968.0  # the Arena deck list on the right
 
 var link: ServerLink
 var stage := ""  # "connecting", "login", "lobby"
 var tab := "Play"
-var deck: Deck  # the deck chosen for casual, ranked and friendly games
-var friends := {"list": [], "requests_in": [], "requests_out": [], "blocked": []}
+var mode := "casual"  # Play: casual or ranked
+var deck: Deck  # the deck for casual, ranked and friendly games
 var arena := {}  # the Arena run from the server
-var chat_with := ""
-var chats := {}  # user -> [{from, text, at}]
 var queued := ""  # the mode being searched ("" = none)
 var waited := 0.0
-var invite_from := ""
-var _title: Label
-var _subtitle: Label
 var _status: Label
 var _body := Control.new()
-var _chooser: DeckChooser
+var _retire_armed := false
 
 
 func _ready() -> void:
@@ -41,32 +40,32 @@ func _ready() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	Palette.backdrop(self)
-	_title = Palette.label(tr("Game server"), 40, Palette.ATTACK)
-	_title.position = Vector2(40, 18)
-	add_child(_title)
-	_subtitle = Palette.label("", 20)
-	_subtitle.position = Vector2(42, 72)
-	add_child(_subtitle)
-	_status = Palette.label("", 18, Palette.SELECTED)
-	_status.name = "Status"
-	_status.position = Vector2(42, 682)
-	_status.custom_minimum_size.x = 1180
-	add_child(_status)
 	_body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_body)
-	deck = _first_playable()
+	_status = Palette.label("", 18, Palette.SELECTED)
+	_status.name = "Status"
+	_status.position = Vector2(372, 668)
+	_status.custom_minimum_size = Vector2(460, 0)
+	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	add_child(_status)
+	var s := ServerLink.saved()
+	tab = s.get("tab") if s.get("tab") in TABS else "Play"
+	mode = s.get("mode") if s.get("mode") in MODES else "casual"
+	deck = remembered_deck()
+	if link.is_open() and link.url != Settings.data.server:
+		link.close()  # the address was changed in the settings: connect there
 	link.message.connect(_on_message)
 	link.closed.connect(func(_why):
 		queued = ""
 		_go("login")
 		say(tr("Connection lost") if link.was_open() else tr("Could not connect to %s") % link.url))
-	if link.is_open() and link.token != "":  # back from a game
+	if link.logged_in():  # back from a game, or still logged in
 		if link.get_meta("mode", "") == "arena":
 			tab = "Arena"
 		_set_arena(link.me.get("arena"))
 		_go("lobby")
-		link.send({"t": "friends"})
 		var last: Dictionary = link.get_meta("game_over", {})
 		link.remove_meta("game_over")
 		if last.is_empty():
@@ -74,14 +73,16 @@ func _ready() -> void:
 		else:
 			_on_message(last)  # the result, the Arena score; asks for a fresh profile
 	elif link.is_open():
-		_go("login")
+		_go("connecting" if link.resuming else "login")
 	else:
 		_go("connecting")
-		if link.open(Settings.data.server) != OK:
+		if link.open_and_resume(Settings.data.server) != OK:
 			_go("login")
 			say(tr("Could not connect to %s") % Settings.data.server)
 		else:
-			link.opened.connect(func(): _go("login"), CONNECT_ONE_SHOT)
+			link.opened.connect(func():
+				if not link.resuming and stage == "connecting":
+					_go("login"), CONNECT_ONE_SHOT)
 
 
 func say(text: String) -> void:
@@ -100,77 +101,132 @@ static func _mmss(s: float) -> String:
 	return "%d:%02d" % [int(s) / 60, int(s) % 60]
 
 
-func _first_playable() -> Deck:
+## The deck chosen last time (by name and hero), else the first finished one.
+static func remembered_deck() -> Deck:
+	var want = ServerLink.saved().get("deck")
+	var first: Deck = null
 	for d in TrainingSetup.available_decks():
-		if d.validate() == "":
+		if d.validate() != "":
+			continue
+		if want is Dictionary and d.name == want.get("name") and d.hero == want.get("hero"):
 			return d
-	return null
+		if first == null:
+			first = d
+	return first
 
 
 ## Rebuilds the screen for a stage.
 func _go(s: String) -> void:
 	stage = s
-	for c in _body.get_children():
+	_retire_armed = false
+	for c in _body.get_children():  # freed later: a pressed button may still be in its signal
 		_body.remove_child(c)
 		c.queue_free()
-	_subtitle.text = Settings.data.server
 	match s:
 		"connecting":
-			_subtitle.text = tr("Connecting to %s…") % Settings.data.server
-			_back_button(Vector2(40, 620))
+			_build_connecting()
 		"login":
 			_build_login()
 		"lobby":
 			_build_lobby()
 
 
-func _back_button(at: Vector2) -> void:
+func _panel(at: Vector2, sz: Vector2, parent: Control = _body) -> Panel:
+	var p := Panel.new()
+	p.position = at
+	p.size = sz
+	p.add_theme_stylebox_override("panel", Palette.frame())
+	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(p)
+	return p
+
+
+func _centered(text: String, font_size: int, at: Vector2, width: float, color := Palette.TEXT, parent: Control = _body) -> Label:
+	var l := Palette.label(text, font_size, color)
+	l.position = at
+	l.custom_minimum_size.x = width
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	parent.add_child(l)
+	return l
+
+
+func _back_button(close_link: bool) -> void:
 	var b := Palette.button(tr("Back"), "Back")
-	b.position = at
-	b.custom_minimum_size = Vector2(200, 48)
+	b.position = Vector2(156, 664)
+	b.custom_minimum_size = Vector2(190, 46)
 	b.pressed.connect(func():
-		link.close()
+		if close_link:
+			link.close()
+		elif queued != "":
+			unqueue()
 		back.emit())
 	_body.add_child(b)
 
 
-# --- log in -------------------------------------------------------------------
+# --- connecting and log in -------------------------------------------------------
+
+func _build_connecting() -> void:
+	_panel(Vector2(390, 200), Vector2(500, 260))
+	var spin := Spinner.new()
+	spin.position = Vector2(640, 300)
+	_body.add_child(spin)
+	_centered(tr("Connecting to %s…") % _address(), 22, Vector2(410, 380), 460)
+	_back_button(true)
+
+
+func _address() -> String:
+	return link.url if link.url != "" else Settings.data.server
+
 
 func _build_login() -> void:
+	_panel(Vector2(370, 110), Vector2(540, 470))
+	_centered(tr("Game server"), 40, Vector2(390, 132), 500, Palette.ATTACK)
+	_centered(_address(), 18, Vector2(390, 186), 500, Color("c9b48a"))
 	var box := VBoxContainer.new()
-	box.position = Vector2(140, 150)
+	box.position = Vector2(430, 232)
 	box.custom_minimum_size.x = 420
-	box.add_theme_constant_override("separation", 12)
+	box.add_theme_constant_override("separation", 14)
 	_body.add_child(box)
 	var user := LineEdit.new()
 	user.name = "User"
 	user.placeholder_text = tr("Account name")
 	user.max_length = 20
-	user.text = Profile.load_name().replace(" ", "_")
+	var known := Profile.load_name()
+	user.text = known.replace(" ", "_") if known != Profile.DEFAULT_NAME else ""
 	var pw := LineEdit.new()
 	pw.name = "Password"
 	pw.placeholder_text = tr("Password (8 characters or more)")
 	pw.secret = true
 	pw.max_length = 128
 	for e in [user, pw]:
-		e.custom_minimum_size = Vector2(420, 48)
+		e.custom_minimum_size = Vector2(420, 52)
 		e.add_theme_font_size_override("font_size", 22)
 		box.add_child(e)
+	user.text_submitted.connect(func(_t): pw.grab_focus())
+	pw.text_submitted.connect(func(_t): log_in("login", user.text.strip_edges(), pw.text))
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 16)
 	box.add_child(row)
 	for spec in [[tr("Log in"), "Login", "login"], [tr("Register"), "Register", "register"]]:
 		var b := Palette.button(spec[0], spec[1])
-		b.custom_minimum_size = Vector2(202, 52)
+		b.custom_minimum_size = Vector2(202, 56)
+		b.add_theme_font_size_override("font_size", 24)
 		var op: String = spec[2]
 		b.pressed.connect(func(): log_in(op, user.text.strip_edges(), pw.text))
 		row.add_child(b)
-	pw.text_submitted.connect(func(_t): log_in("login", user.text.strip_edges(), pw.text))
-	var note := Palette.label(tr("The password goes only to this server. Use a server you trust; a public server needs wss:// (TLS)."), 16)
+	var stay := Palette.label(tr("You stay logged in on this device until you log out."), 16, Color("c9b48a"))
+	stay.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	stay.custom_minimum_size.x = 420
+	box.add_child(stay)
+	var note := Palette.label(tr("The password goes only to this server. Use a server you trust; a public server needs wss:// (TLS)."), 15, Color("a8967a"))
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.custom_minimum_size.x = 420
 	box.add_child(note)
-	_back_button(Vector2(40, 620))
+	_back_button(true)
+	var field := user if user.text == "" else pw
+	if field.is_inside_tree():
+		field.grab_focus()
 
 
 func log_in(op: String, user: String, password: String) -> void:
@@ -184,38 +240,63 @@ func log_in(op: String, user: String, password: String) -> void:
 # --- lobby --------------------------------------------------------------------
 
 func _build_lobby() -> void:
-	var me := link.me
-	_subtitle.text = "%s  ·  %s" % [player_label(me), rank_text(me.get("rank", {}))]
-	var tabs := VBoxContainer.new()
-	tabs.position = Vector2(40, 130)
-	tabs.add_theme_constant_override("separation", 10)
-	_body.add_child(tabs)
-	for t in TABS:
+	var bar := Panel.new()
+	bar.name = "TopBar"
+	bar.size = Vector2(1280, 62)
+	var st := Palette.box(Color(0.07, 0.045, 0.025, 0.94), 0)
+	st.border_color = Color("a8863a")
+	st.border_width_bottom = 3
+	st.shadow_color = Color(0, 0, 0, 0.5)
+	st.shadow_size = 8
+	bar.add_theme_stylebox_override("panel", st)
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_body.add_child(bar)
+	for i in TABS.size():
+		var t: String = TABS[i]
 		var b := Palette.button(tr(t), "Tab" + t)
-		b.custom_minimum_size = Vector2(220, 52)
+		b.position = Vector2(20 + i * 196, 8)
+		b.custom_minimum_size = Vector2(184, 46)
+		b.add_theme_font_size_override("font_size", 24)
 		b.toggle_mode = true
 		b.button_pressed = t == tab
-		var name_t: String = t
+		b.modulate = Color.WHITE if t == tab else Color(0.68, 0.64, 0.6)
 		b.pressed.connect(func():
-			tab = name_t
+			tab = t
+			ServerLink.remember({"tab": t})
 			_go("lobby"))
-		tabs.add_child(b)
-	var area := Control.new()
-	area.name = "Area"
-	area.position = Vector2(300, 130)
-	area.size = Vector2(940, 540)
-	_body.add_child(area)
-	match tab:
-		"Play":
-			_build_play(area)
-		"Arena":
-			_build_arena(area)
-		"Friends":
-			_build_friends(area)
-		"Profile":
-			_build_profile(area)
-	if invite_from != "":
-		_build_invite()
+		_body.add_child(b)
+	var me := link.me
+	var who := Palette.label(player_label(me), 22, Palette.ATTACK)
+	who.name = "PlayerName"
+	who.position = Vector2(560, 4)
+	who.custom_minimum_size.x = 560
+	who.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_body.add_child(who)
+	var rank := Palette.label(rank_text(me.get("rank", {})), 15, Color("c9b48a"))
+	rank.name = "RankLine"
+	rank.position = Vector2(560, 32)
+	rank.custom_minimum_size.x = 560
+	rank.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_body.add_child(rank)
+	var out := Palette.button(tr("Log out"), "Logout")
+	out.position = Vector2(1136, 10)
+	out.custom_minimum_size = Vector2(128, 42)
+	out.add_theme_font_size_override("font_size", 17)
+	out.pressed.connect(log_out)
+	_body.add_child(out)
+	if tab == "Arena":
+		_build_arena()
+	else:
+		_build_play()
+	_back_button(false)
+
+
+func log_out() -> void:
+	if queued != "":
+		link.send({"t": "unqueue"})
+	queued = ""
+	link.log_out()
+	_go("login")
 
 
 ## "Rank 18 · Sorcerer's Apprentice · stars 2 of 3" or "Legend 42" (server: {rank, stars, legend}).
@@ -226,9 +307,12 @@ func rank_text(r: Dictionary) -> String:
 		var n := int(r.get("legend")) if r.get("legend") is float else 0
 		return tr("Legend") + (" %d" % n if n > 0 else "")
 	var rank := int(r.get("rank", 25))
-	var need := 2 if rank > 20 else (3 if rank > 15 else (4 if rank > 10 else 5))
-	var stars := int(r.get("stars", 0))
-	return tr("Rank %d") % rank + " · " + rank_name(rank) + " · " + tr("stars %d of %d") % [stars, need]
+	return tr("Rank %d") % rank + " · " + rank_name(rank) + " · " + tr("stars %d of %d") % [int(r.get("stars", 0)), stars_needed(rank)]
+
+
+## Stars to the next rank, as in 2014: 2 at ranks 25–21, 3 at 20–16, 4 at 15–11, 5 above.
+static func stars_needed(rank: int) -> int:
+	return 2 if rank > 20 else (3 if rank > 15 else (4 if rank > 10 else 5))
 
 
 static func rank_name(rank: int) -> String:
@@ -237,180 +321,275 @@ static func rank_name(rank: int) -> String:
 	return CardText.name(RANK_CARDS[rank - 2]) if rank >= 2 and rank <= 25 else ""
 
 
-func _build_play(area: Control) -> void:
-	var emblem := RankEmblem.new()
-	emblem.rank = link.me.get("rank", {})
-	emblem.position = Vector2(0, 0)
-	emblem.size = Vector2(120, 120)
-	area.add_child(emblem)
-	var r := Palette.label(rank_text(link.me.get("rank", {})), 22, Palette.ATTACK)
-	r.position = Vector2(140, 20)
-	area.add_child(r)
-	var d := Palette.label(tr("Your deck: %s") % (deck.name if deck else "—"), 20)
-	d.name = "DeckLine"
-	d.position = Vector2(140, 60)
-	area.add_child(d)
-	var pick := Palette.button(tr("Choose a deck"), "ChooseDeck")
-	pick.position = Vector2(140, 92)
-	pick.custom_minimum_size = Vector2(220, 40)
-	pick.pressed.connect(_choose_deck)
-	area.add_child(pick)
+# --- play: the deck boxes, casual or ranked, the Play button ----------------------
+
+func _build_play() -> void:
+	var book := _panel(Vector2(24, 76), Vector2(800, 576))
+	book.name = "DeckBook"
+	var head := Palette.label(tr("Choose a deck"), 24, Palette.ATTACK)
+	head.position = Vector2(46, 86)
+	_body.add_child(head)
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(40, 124)
+	scroll.size = Vector2(772, 516)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_body.add_child(scroll)
+	var grid := GridContainer.new()
+	grid.name = "Decks"
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 12)
+	scroll.add_child(grid)
+	var decks := TrainingSetup.available_decks().filter(func(d: Deck): return d.validate() == "")
+	if decks.is_empty():
+		var none := _centered(tr("No finished deck yet: build one in the Collection"), 22, Vector2(60, 300), 720)
+		none.name = "NoDecks"
+	for i in decks.size():
+		var d: Deck = decks[i]
+		var b := DeckBox.new(d)
+		b.name = "Deck%d" % i
+		b.selected = deck != null and d.name == deck.name and d.hero == deck.hero
+		b.pressed.connect(func(): choose_deck(d))
+		b.gui_input.connect(func(ev):  # a double click searches at once
+			if ev is InputEventMouseButton and ev.double_click and queued == "":
+				choose_deck(d)
+				queue(mode))
+		grid.add_child(b)
+	# the right column: casual or ranked, the hero, the rank, Play
+	for i in MODES.size():
+		var m: String = MODES[i]
+		var b := Palette.button(tr("Casual") if m == "casual" else tr("Ranked"), "Mode_" + m)
+		b.position = Vector2(848 + i * 208, 76)
+		b.custom_minimum_size = Vector2(200, 50)
+		b.add_theme_font_size_override("font_size", 22)
+		b.toggle_mode = true
+		b.button_pressed = m == mode
+		b.modulate = Color.WHITE if m == mode else Color(0.62, 0.58, 0.55)
+		b.disabled = queued != ""
+		b.pressed.connect(func(): set_mode(m))
+		_body.add_child(b)
+	var plate := HeroPlate.new()
+	plate.name = "HeroPlate"
+	plate.deck = deck
+	plate.searching = queued != ""
+	plate.position = Vector2(848, 136)
+	plate.size = Vector2(408, 330)
+	_body.add_child(plate)
+	var info := Control.new()
+	info.position = Vector2(848, 476)
+	info.size = Vector2(408, 88)
+	_body.add_child(info)
 	if queued != "":
-		var t := Palette.label("", 26, Palette.SELECTED)
+		var t := _centered("", 22, Vector2(0, 26), 408, Palette.SELECTED, info)
 		t.name = "QueueTime"
-		t.position = Vector2(0, 200)
-		area.add_child(t)
-		var stop := Palette.button(tr("Cancel"), "Unqueue")
-		stop.position = Vector2(0, 260)
-		stop.custom_minimum_size = Vector2(240, 52)
-		stop.pressed.connect(func():
-			link.send({"t": "unqueue"})
-			queued = ""
-			_go("lobby"))
-		area.add_child(stop)
-		return
-	var row := HBoxContainer.new()
-	row.position = Vector2(0, 200)
-	row.add_theme_constant_override("separation", 30)
-	area.add_child(row)
-	for spec in [["casual", tr("Casual game"), tr("No rank, a hidden rating finds an equal opponent")],
-			["ranked", tr("Ranked game"), tr("25 ranks and Legend, as in 2014: stars for wins, a new season every month")]]:
-		var col := VBoxContainer.new()
-		col.add_theme_constant_override("separation", 8)
-		row.add_child(col)
-		var b := Palette.button(spec[1], "Queue_" + spec[0])
-		b.custom_minimum_size = Vector2(400, 140)
-		b.add_theme_font_size_override("font_size", 28)
-		var mode: String = spec[0]
-		b.pressed.connect(func(): queue(mode))
-		col.add_child(b)
-		var why := Palette.label(spec[2], 17)
-		why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		why.custom_minimum_size.x = 400
-		col.add_child(why)
+		t.text = tr("Searching for an opponent… %s") % _mmss(waited)
+	elif mode == "ranked":
+		var r := RankInfo.new()
+		r.name = "RankInfo"
+		r.rank = link.me.get("rank", {})
+		r.text = rank_text(r.rank)
+		r.size = info.size
+		info.add_child(r)
+	else:
+		_centered(tr("No rank, a hidden rating finds an equal opponent"), 18, Vector2(10, 18), 388, Color("e0d2b4"), info)
+	var go := PlayButton.new()
+	go.position = Vector2(848, 572)
+	go.size = Vector2(408, 124)
+	if queued != "":
+		go.name = "Unqueue"
+		go.text = tr("Cancel")
+		go.calm = true
+		go.pressed.connect(unqueue)
+	else:
+		go.name = "Queue_" + mode
+		go.text = tr("Play")
+		go.disabled = deck == null
+		go.pressed.connect(func(): queue(mode))
+	_body.add_child(go)
 
 
-func queue(mode: String) -> void:
-	if deck == null or deck.validate() != "":
-		say(tr("Choose your deck"))
+func choose_deck(d: Deck) -> void:
+	if queued != "":
 		return
-	link.send({"t": "queue", "mode": mode, "deck": deck.to_dict()})
-	queued = mode
-	waited = 0.0
+	deck = d
+	ServerLink.remember({"deck": {"name": d.name, "hero": d.hero}})
 	_go("lobby")
 
 
-func _choose_deck() -> void:
-	var dim := ColorRect.new()
-	dim.name = "DeckDialog"
-	dim.color = Color(0.05, 0.03, 0.02, 0.95)
-	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_body.add_child(dim)
-	var c := DeckChooser.new()
-	c.position = Vector2(140, 90)
-	c.size = Vector2(1000, 580)
-	c.chosen.connect(func(dk: Deck):
-		deck = dk
-		dim.queue_free()
-		_go("lobby"))
-	c.back.connect(func(): dim.queue_free())
-	c.edit_decks.connect(func(): dim.queue_free())
-	dim.add_child(c)
+func set_mode(m: String) -> void:
+	mode = m
+	ServerLink.remember({"mode": m})
+	_go("lobby")
+
+
+func queue(m: String) -> void:
+	if deck == null or deck.validate() != "":
+		say(tr("Choose your deck"))
+		return
+	link.game_deck = deck
+	link.send({"t": "queue", "mode": m, "deck": deck.to_dict()})
+	queued = m
+	waited = 0.0
+	say("")
+	_go("lobby")
+
+
+func unqueue() -> void:
+	link.send({"t": "unqueue"})
+	queued = ""
+	_go("lobby")
 
 
 # --- arena --------------------------------------------------------------------
 
-func _build_arena(area: Control) -> void:
+func _build_arena() -> void:
 	var st: String = arena.get("status", "")  # only "over" (set here after the last game); the server's run has none
 	if arena.is_empty() or st == "over":
-		if st == "over":
-			var res := Palette.label(tr("Your last Arena: %d wins, %d losses") % [int(arena.get("wins", 0)), int(arena.get("losses", 0))], 22)
-			res.position = Vector2(0, 0)
-			area.add_child(res)
-		var b := Palette.button(tr("Start an Arena run"), "ArenaStart")
-		b.position = Vector2(0, 60)
-		b.custom_minimum_size = Vector2(400, 120)
-		b.add_theme_font_size_override("font_size", 28)
-		b.pressed.connect(func(): link.send({"t": "arena_start"}))
-		area.add_child(b)
-		var why := Palette.label(tr("Draft a deck from three cards at a time, then play until 12 wins or 3 losses"), 17)
-		why.position = Vector2(0, 196)
-		why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		why.custom_minimum_size.x = 600
-		area.add_child(why)
-		return
-	var head := Palette.label(tr("Arena: %d wins, %d losses") % [int(arena.get("wins", 0)), int(arena.get("losses", 0))], 22, Palette.ATTACK)
-	area.add_child(head)
-	if str(arena.get("hero", "")) == "":
-		var row := HBoxContainer.new()
-		row.position = Vector2(0, 50)
-		row.add_theme_constant_override("separation", 12)
-		area.add_child(row)
-		var heroes: Array = arena.get("heroes", [])
-		for i in heroes.size():
-			var t := TrainingSetup.HeroTile.new(Decks.card_class(heroes[i]))
-			t.name = "Hero_%d" % i
-			t.toggle_mode = false
-			t.custom_minimum_size = Vector2(300, 150)
-			var k := i
-			t.pressed.connect(func(): link.send({"t": "arena_hero", "i": k}))
-			row.add_child(t)
-		return
+		_build_ticket(st == "over")
+	elif str(arena.get("hero", "")) == "":
+		_build_heroes()
+	elif not arena.get("done", false):
+		_build_draft()
+	else:
+		_build_run()
+
+
+## No run: the ticket, and the last run's result.
+func _build_ticket(after: bool) -> void:
+	if after:
+		var res := _centered(tr("Your last Arena: %d wins, %d losses") % [int(arena.get("wins", 0)), int(arena.get("losses", 0))], 24, Vector2(340, 80), 600, Palette.ATTACK)
+		res.name = "LastArena"
+	var t := Ticket.new()
+	t.name = "Ticket"
+	t.position = Vector2(400, 124)
+	t.size = Vector2(480, 300)
+	_body.add_child(t)
+	var go := PlayButton.new()
+	go.name = "ArenaStart"
+	go.text = tr("Enter the Arena")
+	go.position = Vector2(440, 444)
+	go.size = Vector2(400, 104)
+	go.pressed.connect(func(): link.send({"t": "arena_start"}))
+	_body.add_child(go)
+	_centered(tr("Draft a deck from three cards at a time, then play until 12 wins or 3 losses"), 18, Vector2(390, 560), 500, Color("e0d2b4"))
+
+
+func _build_heroes() -> void:
+	_centered(tr("Choose your hero"), 30, Vector2(240, 76), 800, Palette.ATTACK)
+	var heroes: Array = arena.get("heroes", [])
+	var x0 := (1280 - heroes.size() * 300 - (heroes.size() - 1) * 40) / 2.0
+	for i in heroes.size():
+		var h := HeroChoice.new(str(heroes[i]))
+		h.name = "Hero_%d" % i
+		h.position = Vector2(x0 + i * 340, 128)
+		h.size = Vector2(300, 440)
+		var k := i
+		h.pressed.connect(func(): link.send({"t": "arena_hero", "i": k}))
+		_body.add_child(h)
+
+
+func _build_draft() -> void:
 	var cards: Array = arena.get("cards", [])
-	if not arena.get("done", false):
-		var picks := Palette.label(tr("Choose a card: pick %d of 30") % (cards.size() + 1), 20)
-		picks.position = Vector2(0, 34)
-		area.add_child(picks)
-		var offer: Array = arena.get("offer", [])
-		for i in offer.size():
-			var cv := CardView.make(offer[i], 1.45)
-			cv.name = "Offer%d" % i
-			cv.position = Vector2(i * 200, 70)
-			var k := i
-			cv.clicked.connect(func(_v): link.send({"t": "arena_pick", "i": k}))
-			area.add_child(cv)
-	_arena_deck_list(area, cards)
-	if arena.get("done", false):
-		var row := HBoxContainer.new()
-		row.position = Vector2(0, 60)
-		row.add_theme_constant_override("separation", 16)
-		area.add_child(row)
-		if queued == "arena":
-			var t := Palette.label("", 24, Palette.SELECTED)
-			t.name = "QueueTime"
-			row.add_child(t)
-		else:
-			var go := Palette.button(tr("Find an opponent"), "ArenaQueue")
-			go.custom_minimum_size = Vector2(300, 60)
-			go.pressed.connect(func():
-				link.send({"t": "arena_queue"})
-				queued = "arena"
-				waited = 0.0
-				_go("lobby"))
-			row.add_child(go)
-			var quit := Palette.button(tr("Retire"), "ArenaRetire")
-			quit.custom_minimum_size = Vector2(200, 60)
-			quit.pressed.connect(func(): link.send({"t": "arena_retire"}))
-			row.add_child(quit)
+	_centered(tr("Choose a card: pick %d of 30") % (cards.size() + 1), 26, Vector2(40, 72), LIST_X - 80, Palette.ATTACK)
+	var offer: Array = arena.get("offer", [])
+	var k := ArenaView.OFFER_SCALE
+	var w := CardView.SIZE.x * k
+	var x0 := (LIST_X - (offer.size() * w + (offer.size() - 1) * 44)) / 2.0
+	for i in offer.size():
+		var cv := CardView.make(offer[i], k)
+		cv.name = "Offer%d" % i
+		cv.position = Vector2(x0 + i * (w + 44), 116)
+		var n := i
+		cv.clicked.connect(func(_v): link.send({"t": "arena_pick", "i": n}))
+		_body.add_child(cv)
+	if not offer.is_empty():
+		var tier := ArenaDraft.tier(offer[0])
+		_centered({"common": tr("Common"), "rare": tr("Rare"), "epic": tr("Epic"), "legendary": tr("Legendary")}.get(tier, ""),
+			18, Vector2(40, 422), LIST_X - 80, Palette.RARITY.get(tier.to_upper(), Palette.TEXT))
+	var curve := ArenaView._Curve.new()
+	curve.name = "Curve"
+	var d := arena_deck()
+	var counts := [0, 0, 0, 0, 0, 0, 0, 0]
+	for id in d.cards:
+		counts[mini(int(CardDb.card(id).get("cost", 0)), 7)] += 1
+	curve.counts = counts
+	curve.position = Vector2(400, 500)
+	curve.size = Vector2(380, 150)
+	_body.add_child(curve)
+	_deck_list(d)
 
 
-func _arena_deck_list(area: Control, cards: Array) -> void:
-	var d := Deck.new()
-	d.hero = str(arena.get("hero", "HERO_08"))
-	d.arena = true
-	for id in cards:
-		d.cards.append(str(id))
+## The drafted deck: the record, Play (or the search), Retire, the deck list.
+func _build_run() -> void:
+	var plate := HeroPlate.new()
+	plate.name = "HeroPlate"
+	plate.deck = arena_deck()
+	plate.searching = queued == "arena"
+	plate.position = Vector2(40, 80)
+	plate.size = Vector2(380, 330)
+	_body.add_child(plate)
+	var rec := Record.new()
+	rec.name = "Record"
+	rec.wins = int(arena.get("wins", 0))
+	rec.losses = int(arena.get("losses", 0))
+	rec.position = Vector2(450, 80)
+	rec.size = Vector2(490, 330)
+	_body.add_child(rec)
+	var go := PlayButton.new()
+	go.position = Vector2(450, 470)
+	go.size = Vector2(490, 116)
+	if queued == "arena":
+		var t := _centered(tr("Searching for an opponent… %s") % _mmss(waited), 22, Vector2(450, 426), 490, Palette.SELECTED)
+		t.name = "QueueTime"
+		go.name = "Unqueue"
+		go.text = tr("Cancel")
+		go.calm = true
+		go.pressed.connect(unqueue)
+	else:
+		go.name = "ArenaQueue"
+		go.text = tr("Play")
+		go.pressed.connect(func():
+			link.game_deck = arena_deck()
+			link.send({"t": "arena_queue"})
+			queued = "arena"
+			waited = 0.0
+			say("")
+			_go("lobby"))
+	_body.add_child(go)
+	var quit := Palette.button(tr("Retire"), "ArenaRetire")
+	quit.position = Vector2(595, 600)
+	quit.custom_minimum_size = Vector2(200, 46)
+	quit.disabled = queued != ""
+	quit.pressed.connect(func():
+		if _retire_armed:
+			link.send({"t": "arena_retire"})
+			return
+		_retire_armed = true
+		quit.text = tr("Retire? Press again"))
+	_body.add_child(quit)
+	_deck_list(arena_deck())
+
+
+func _deck_list(d: Deck) -> void:
+	_panel(Vector2(LIST_X, 76), Vector2(292, 632))
+	var head := HeroStrip.new()
+	head.hero = d.hero
+	head.text = "%s · %d / 30" % [CardText.name(d.hero), d.cards.size()]
+	head.position = Vector2(LIST_X + 8, 84)
+	head.size = Vector2(276, 48)
+	_body.add_child(head)
 	var scroll := ScrollContainer.new()
-	scroll.position = Vector2(650, 0)
-	scroll.size = Vector2(290, 540)
+	scroll.position = Vector2(LIST_X + 8, 138)
+	scroll.size = Vector2(280, 562)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	area.add_child(scroll)
+	_body.add_child(scroll)
 	var list := VBoxContainer.new()
+	list.name = "ArenaDeck"
+	list.add_theme_constant_override("separation", 2)
 	scroll.add_child(list)
-	list.add_child(Palette.label("%s · %d / 30" % [CardText.name(d.hero), cards.size()], 18, Palette.ATTACK))
 	for it in d.sorted_counts():
 		var t := DeckTiles.DeckTile.new(it[0], it[1])
-		t.custom_minimum_size.x = 276
+		t.custom_minimum_size.x = 268
 		list.add_child(t)
 
 
@@ -425,216 +604,20 @@ func arena_deck() -> Deck:
 	return d
 
 
-# --- friends and messages -----------------------------------------------------
-
-func _build_friends(area: Control) -> void:
-	var my_tag := _str(link.me.get("tag"))
-	var mine := Palette.label(tr("Your tag: %s — share it so friends can add you") % my_tag if my_tag != ""
-		else tr("Set a tag in the profile so friends can add you"), 18)
-	area.add_child(mine)
-	var add := HBoxContainer.new()
-	add.position = Vector2(0, 34)
-	add.add_theme_constant_override("separation", 8)
-	area.add_child(add)
-	var tag := LineEdit.new()
-	tag.name = "FriendTag"
-	tag.placeholder_text = tr("A friend's tag")
-	tag.max_length = 16
-	tag.custom_minimum_size = Vector2(240, 40)
-	add.add_child(tag)
-	var b := Palette.button(tr("Add a friend"), "FriendAdd")
-	b.custom_minimum_size = Vector2(180, 40)
-	b.pressed.connect(func():
-		if tag.text.strip_edges() != "":
-			var t := tag.text.strip_edges()
-			link.send({"t": "friend_add", "tag": t.substr(t.rfind("#") + 1)}))
-	add.add_child(b)
-	var scroll := ScrollContainer.new()
-	scroll.position = Vector2(0, 86)
-	scroll.size = Vector2(500, 454)
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	area.add_child(scroll)
-	var list := VBoxContainer.new()
-	list.name = "FriendList"
-	list.add_theme_constant_override("separation", 6)
-	scroll.add_child(list)
-	for f in friends.get("requests_in", []):
-		var row := _friend_row(list, str(f.get("user", "")), player_label(f) + "  — " + tr("wants to be friends"))
-		_small(row, tr("Accept"), func(): link.send({"t": "friend_accept", "user": f.user}))
-		_small(row, tr("Decline"), func(): link.send({"t": "friend_decline", "user": f.user}))
-	for f in friends.get("list", []):
-		var who := str(f.get("user", ""))
-		var row := _friend_row(list, who, player_label(f) + (" (" + tr("online") + ")" if f.get("online", false) else ""))
-		_small(row, tr("Message"), func():
-			chat_with = who
-			link.send({"t": "history", "with": who})
-			_go("lobby"))
-		_small(row, tr("Invite"), func(): invite(who))
-		_small(row, tr("Remove"), func(): link.send({"t": "friend_remove", "user": who}))
-		_small(row, tr("Block"), func(): link.send({"t": "block", "user": who}))
-	for f in friends.get("requests_out", []):
-		_friend_row(list, str(f.get("user", "")), player_label(f) + "  — " + tr("request sent"))
-	for f in friends.get("blocked", []):
-		var row := _friend_row(list, str(f.get("user", "")), tr("Blocked: %s") % f.get("user", ""))
-		_small(row, tr("Unblock"), func(): link.send({"t": "unblock", "user": f.user}))
-	if chat_with != "":
-		_build_chat(area)
-
-
-## A friend list entry: the name on one line, its buttons (the returned row) under it.
-func _friend_row(list: Container, user: String, text: String) -> HBoxContainer:
-	var box := VBoxContainer.new()
-	box.name = "Friend_" + user
-	var l := Palette.label(text, 17)
-	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	l.custom_minimum_size.x = 480
-	box.add_child(l)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
-	box.add_child(row)
-	list.add_child(box)
-	return row
-
-
-func _small(row: Container, text: String, fn: Callable) -> void:
-	var b := Button.new()
-	b.text = text
-	b.add_theme_font_size_override("font_size", 14)
-	b.pressed.connect(fn)
-	row.add_child(b)
-
-
-func _build_chat(area: Control) -> void:
-	var panel := PanelContainer.new()
-	panel.name = "Chat"
-	panel.position = Vector2(520, 86)  # beside the friend list, under the tag line
-	panel.size = Vector2(420, 454)
-	panel.add_theme_stylebox_override("panel", Palette.box(Color(0.08, 0.06, 0.04, 0.9), 10, Color("6b5320"), 2))
-	area.add_child(panel)
-	var col := VBoxContainer.new()
-	panel.add_child(col)
-	col.add_child(Palette.label(tr("Messages with %s") % chat_with, 18, Palette.ATTACK))
-	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(400, 336)
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	col.add_child(scroll)
-	var lines := VBoxContainer.new()
-	lines.name = "ChatLines"
-	scroll.add_child(lines)
-	for m in chats.get(chat_with, []):
-		var l := Palette.label("%s: %s" % [m.get("from", ""), m.get("text", "")], 16)
-		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		l.custom_minimum_size.x = 380
-		lines.add_child(l)
-	scroll.call_deferred("set_v_scroll", 1 << 20)
-	var row := HBoxContainer.new()
-	col.add_child(row)
-	var text := LineEdit.new()
-	text.name = "ChatText"
-	text.max_length = 500
-	text.custom_minimum_size = Vector2(300, 38)
-	row.add_child(text)
-	var send := func():
-		var t := text.text.strip_edges()
-		if t != "":
-			link.send({"t": "msg", "to": chat_with, "text": t})
-			chats[chat_with] = chats.get(chat_with, []) + [{"from": link.me.get("user", ""), "text": t}]
-			text.text = ""
-			_go("lobby")
-	text.text_submitted.connect(func(_t): send.call())
-	_small(row, tr("Send"), send)
-
-
-func invite(user: String) -> void:
-	if deck == null or deck.validate() != "":
-		say(tr("Choose your deck"))
-		return
-	link.send({"t": "invite", "to": user, "deck": deck.to_dict()})
-	say(tr("Invitation sent to %s") % user)
-
-
-func _build_invite() -> void:
-	var dim := ColorRect.new()
-	dim.name = "InviteDialog"
-	dim.color = Color(0, 0, 0, 0.6)
-	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_body.add_child(dim)
-	var box := VBoxContainer.new()
-	box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	box.alignment = BoxContainer.ALIGNMENT_CENTER
-	box.add_theme_constant_override("separation", 14)
-	dim.add_child(box)
-	var q := Palette.label(tr("%s invites you to a friendly game (your deck: %s)") % [invite_from, deck.name if deck else "—"], 26, Palette.ATTACK)
-	q.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(q)
-	for spec in [[tr("Accept"), "InviteAccept"], [tr("Decline"), "InviteDecline"]]:
-		var c := CenterContainer.new()
-		var b := Palette.button(spec[0], spec[1])
-		b.custom_minimum_size = Vector2(300, 48)
-		var accept: bool = spec[1] == "InviteAccept"
-		b.pressed.connect(func():
-			if accept and deck:
-				link.send({"t": "invite_accept", "from": invite_from, "deck": deck.to_dict()})
-			else:
-				link.send({"t": "invite_decline", "from": invite_from})
-			invite_from = ""
-			_go("lobby"))
-		c.add_child(b)
-		box.add_child(c)
-
-
-# --- profile ------------------------------------------------------------------
-
-func _build_profile(area: Control) -> void:
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 12)
-	area.add_child(box)
-	box.add_child(Palette.label(tr("Account: %s") % link.me.get("user", ""), 22))
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	box.add_child(row)
-	var tag := LineEdit.new()
-	tag.name = "TagEdit"
-	tag.text = _str(link.me.get("tag"))
-	tag.max_length = 16
-	tag.custom_minimum_size = Vector2(260, 40)
-	row.add_child(tag)
-	var save := Palette.button(tr("Save the tag"), "TagSave")
-	save.custom_minimum_size = Vector2(200, 40)
-	save.pressed.connect(func(): link.send({"t": "set_tag", "tag": tag.text.strip_edges()}))
-	row.add_child(save)
-	box.add_child(Palette.label(tr("A tag: 3–16 letters and digits; friends add you by it"), 16))
-	var out := Palette.button(tr("Log out"), "Logout")
-	out.custom_minimum_size = Vector2(200, 48)
-	out.pressed.connect(func():
-		link.send({"t": "logout"})
-		link.token = ""
-		link.me = {}
-		_go("login"))
-	box.add_child(out)
-	var bk := Palette.button(tr("Back to Menu"), "BackToMenu")
-	bk.custom_minimum_size = Vector2(200, 48)
-	bk.pressed.connect(func():
-		link.close()
-		back.emit())
-	box.add_child(bk)
-
-
 # --- messages from the server -------------------------------------------------
 
 func _on_message(msg: Dictionary) -> void:
 	match msg.t:
 		"auth":
 			if msg.get("ok", false):
-				link.token = str(msg.get("token", ""))
-				link.me = msg.get("me", {})
 				_set_arena(link.me.get("arena"))
 				say("")
-				link.send({"t": "friends"})
 				_go("lobby")
 			else:
 				say(str(msg.get("text", tr("Wrong account name or password"))))
 		"error":
+			if stage == "connecting":  # a refused saved session: log in by hand
+				_go("login")
 			say(str(msg.get("text", msg.get("code", "error"))))
 			if msg.get("code", "") in ["queue", "deck"]:
 				queued = ""
@@ -642,25 +625,6 @@ func _on_message(msg: Dictionary) -> void:
 		"me":
 			link.me = msg.get("me", msg)
 			_set_arena(link.me.get("arena"))
-			if stage == "lobby":
-				_go("lobby")
-		"friends":
-			friends = msg
-			if stage == "lobby" and tab == "Friends":
-				_go("lobby")
-		"msg":
-			var who := str(msg.get("from", ""))
-			chats[who] = chats.get(who, []) + [msg]
-			if stage == "lobby" and tab == "Friends" and chat_with == who:
-				_go("lobby")
-			else:
-				say(tr("A message from %s") % who)
-		"history":
-			chats[str(msg.get("with", ""))] = msg.get("list", [])
-			if stage == "lobby":
-				_go("lobby")
-		"invite":
-			invite_from = str(msg.get("from", ""))
 			if stage == "lobby":
 				_go("lobby")
 		"queued":
@@ -672,7 +636,8 @@ func _on_message(msg: Dictionary) -> void:
 			if stage == "lobby" and tab == "Arena":
 				_go("lobby")
 		"match":
-			_start_game(msg)
+			queued = ""  # main starts the game
+			say(tr("Opponent found!"))
 		"game_over":
 			say(_result_text(msg))
 			var a = msg.get("arena")
@@ -684,6 +649,8 @@ func _on_message(msg: Dictionary) -> void:
 			link.send({"t": "me"})
 		"invite_declined":
 			say(tr("%s declined the invitation") % str(msg.get("by", "")))
+		"logged_out":
+			_go("login")
 
 
 func _set_arena(v: Variant) -> void:
@@ -710,23 +677,155 @@ func _result_text(msg: Dictionary) -> String:
 	return res + ("  ·  " + rank_text(r) if not r.is_empty() else "")
 
 
-## The server matched us: the game runs as a NetSession over the server.
-func _start_game(msg: Dictionary) -> void:
-	var mode := str(msg.get("mode", "casual"))
-	var d: Deck = arena_deck() if mode == "arena" else deck
-	if d == null:
+# --- drawing --------------------------------------------------------------------
+
+## Text centred on x (cut with … to width).
+static func ctext(ci: Control, x: float, baseline: float, s: String, font_size: int, col := Palette.TEXT, width := 10000.0) -> void:
+	var f := ci.get_theme_font("font", "Label")
+	var w := minf(f.get_string_size(s, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x, width)
+	DeckTiles.text(ci, Vector2(x - w / 2.0, baseline), s, font_size, col, width)
+
+
+## A band of a card's picture filling rect (focus: where the band sits, 0 top … 1 bottom).
+static func band(ci: CanvasItem, rect: Rect2, card_id: String, focus := 0.3) -> void:
+	var tex := Art.texture(card_id)
+	if tex == null:
+		Art.paint(ci, rect, card_id)
 		return
-	queued = ""
-	var ch := link.channel(str(msg.get("game", "")))
-	var s := NetSession.new()
-	s.arena = mode == "arena"
-	s.seed_override = int(msg.get("seed", -1))
-	s.setup(ch, msg.get("host", false) == true, str(link.me.get("user", "")), d)
-	link.add_child(ch)
-	link.add_child(s)
-	s.started.connect(func(m: Match): play.emit(s, m, mode))
-	s.failed.connect(func(reason): say(reason))
-	s.say_hello()
+	var tw := float(tex.get_width())
+	var th := float(tex.get_height())
+	var src := Rect2(0, 0, tw, tw * rect.size.y / rect.size.x)
+	if src.size.y > th:
+		src = Rect2(0, 0, th * rect.size.x / rect.size.y, th)
+		src.position.x = (tw - src.size.x) / 2.0
+	src.position.y = clampf(th * focus - src.size.y / 2.0, 0.0, th - src.size.y)
+	ci.draw_texture_rect_region(tex, rect, src)
+
+
+## A big arched hero portrait in a gold frame (the crest on top).
+static func portrait(ci: CanvasItem, r: Rect2, hero: String) -> void:
+	var cls := Decks.card_class(hero) if hero != "" else "NEUTRAL"
+	ci.draw_colored_polygon(Art.outline("arch", r.grow(9)), Color("2a1a0b"))
+	ci.draw_colored_polygon(Art.outline("arch", r.grow(6)), Frames.GOLD.darkened(0.25))
+	ci.draw_colored_polygon(Art.outline("arch", r.grow(2)), Palette.of_class(cls).darkened(0.35))
+	if hero != "":
+		Art.paint_in(ci, r, hero, "arch")
+	Frames.ring(ci, Art.outline("arch", r), Frames.GOLD, 3)
+	Frames.crest(ci, Vector2(r.get_center().x, r.position.y + 6), r.size.x * 0.62)
+
+
+## A star of the rank (filled or empty).
+static func star(ci: CanvasItem, c: Vector2, r: float, filled: bool) -> void:
+	var pts := PackedVector2Array()
+	for i in 10:
+		var a := -PI / 2 + PI * i / 5.0
+		pts.append(c + Vector2(cos(a), sin(a)) * (r if i % 2 == 0 else r * 0.45))
+	ci.draw_colored_polygon(pts, Color("ffd75e") if filled else Color(0.1, 0.07, 0.04, 0.9))
+	Frames.ring(ci, pts, Color("8a6d2a") if filled else Color("6b5320"), 1.5)
+
+
+## A deck box: the hero's portrait, the class crest and the deck's name on a plate.
+class DeckBox:
+	extends Button
+	var deck: Deck
+	var selected := false
+
+	func _init(d: Deck) -> void:
+		deck = d
+		flat = true
+		focus_mode = Control.FOCUS_NONE
+		custom_minimum_size = Vector2(244, 160)
+		tooltip_text = d.name
+		pressed.connect(Sound.play.bind("click"))
+		mouse_entered.connect(queue_redraw)
+		mouse_exited.connect(queue_redraw)
+
+	func _draw() -> void:
+		var r := Rect2(Vector2(4, 4), size - Vector2(8, 8))
+		var cls := deck.card_class()
+		if selected:
+			for i in 3:
+				draw_style_box(Palette.box(Color(0, 0, 0, 0), 16 + i * 2, Color(1, 0.82, 0.3, 0.45 - i * 0.13), 3), r.grow(1 + i * 2))
+		draw_style_box(Palette.box(Palette.of_class(cls).darkened(0.6), 12, Frames.GOLD.darkened(0.45 if not selected else 0.0), 3), r)
+		var art := Rect2(r.position + Vector2(5, 5), r.size - Vector2(10, 46))
+		ServerView.band(self, art, deck.hero, 0.3)
+		if not selected and not is_hovered():
+			draw_rect(art, Color(0, 0, 0, 0.22))
+		var plate := Rect2(Vector2(r.position.x + 3, r.end.y - 42), Vector2(r.size.x - 6, 39))
+		draw_style_box(Palette.box(Color("21150b"), 8), plate)
+		draw_line(plate.position, plate.position + Vector2(plate.size.x, 0), Frames.GOLD.darkened(0.2), 2)
+		ServerView.ctext(self, size.x / 2.0, plate.position.y + 27, deck.name, 19, Palette.SELECTED if selected else Palette.TEXT, plate.size.x - 16)
+		Icons.paint(self, cls, Rect2(r.position + Vector2(8, 8), Vector2(36, 36)))
+		if is_hovered() and not selected:
+			draw_style_box(Palette.box(Color(0, 0, 0, 0), 12, Color("e8cc78", 0.8), 3), r)
+
+
+## The chosen deck's hero, big: a frame, the arched portrait and a ribbon with
+## the deck's name. While searching, gold arcs turn around it.
+class HeroPlate:
+	extends Control
+	var deck: Deck
+	var searching := false
+	var _t := 0.0
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		set_process(searching and not Anim.instant)
+
+	func _process(d: float) -> void:
+		_t += d
+		queue_redraw()
+
+	func _draw() -> void:
+		draw_style_box(Palette.frame(), Rect2(Vector2.ZERO, size))
+		var pr := Rect2(Vector2(size.x / 2.0 - 105, 44), Vector2(210, 226))
+		ServerView.portrait(self, pr, deck.hero if deck else "")
+		if deck == null:
+			ServerView.ctext(self, size.x / 2.0, pr.get_center().y, "?", 64, Palette.ATTACK)
+		if searching:
+			var c := pr.get_center()
+			for i in 3:
+				var a := _t * 2.4 + TAU * i / 3.0
+				draw_arc(c, 150, a, a + 1.2, 24, Color(1, 0.84, 0.35, 0.85), 6, true)
+				draw_arc(c, 162, -a * 0.7, -a * 0.7 + 0.8, 16, Color(1, 0.6, 0.2, 0.5), 3, true)
+		var rib := Rect2(Vector2(24, size.y - 54), Vector2(size.x - 48, 40))
+		var col := Palette.of_class(deck.card_class() if deck else "NEUTRAL").darkened(0.35)
+		var k := 14.0
+		draw_colored_polygon(PackedVector2Array([rib.position - Vector2(k, -4), rib.position, Vector2(rib.end.x, rib.position.y), Vector2(rib.end.x + k, rib.position.y + 4),
+			Vector2(rib.end.x + 4, rib.get_center().y + 4), Vector2(rib.end.x + k, rib.end.y + 4), rib.end, Vector2(rib.position.x, rib.end.y),
+			Vector2(rib.position.x - k, rib.end.y + 4), Vector2(rib.position.x - 4, rib.get_center().y + 4)]), col)
+		draw_line(rib.position, Vector2(rib.end.x, rib.position.y), Frames.GOLD, 2)
+		draw_line(Vector2(rib.position.x, rib.end.y), rib.end, Frames.GOLD, 2)
+		ServerView.ctext(self, size.x / 2.0, rib.position.y + 28, deck.name if deck else tr("Choose your deck"), 22, Palette.TEXT, rib.size.x - 12)
+
+
+## The rank medal with the stars and the rank's name (Legend: the place).
+class RankInfo:
+	extends Control
+	var rank := {}
+	var text := ""
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var e := RankEmblem.new()
+		e.rank = rank
+		e.position = Vector2(4, 0)
+		e.size = Vector2(88, 88)
+		add_child(e)
+
+	func _draw() -> void:
+		draw_style_box(Palette.box(Color(0.07, 0.045, 0.025, 0.85), 12, Color("6b5320"), 2), Rect2(Vector2(44, 6), size - Vector2(44, 12)))
+		var n := int(rank.get("rank", 25))
+		var name := tr("Legend") if n == 0 else ServerView.rank_name(n)
+		DeckTiles.text(self, Vector2(104, 38), name, 20, Palette.ATTACK, size.x - 112)
+		if n == 0:
+			var place := int(rank.get("legend")) if rank.get("legend") is float else 0
+			if place > 0:
+				DeckTiles.text(self, Vector2(104, 68), "#%d" % place, 20, Palette.TEXT)
+			return
+		var need := ServerView.stars_needed(n)
+		for i in need:
+			ServerView.star(self, Vector2(118 + i * 30, 62), 12, i < int(rank.get("stars", 0)))
 
 
 ## The rank's emblem: the namesake card's art in a gold ring (Legend: a gold crest).
@@ -750,5 +849,173 @@ class RankEmblem:
 		elif n <= 25:
 			Art.paint_in(self, Rect2(c - Vector2(r, r), Vector2(r, r) * 2), ServerView.RANK_CARDS[n - 2], "circle")
 		var f := get_theme_default_font()
-		draw_string_outline(f, Vector2(0, size.y - 4), str(n), HORIZONTAL_ALIGNMENT_CENTER, size.x, 30, 6, Color.BLACK)
-		draw_string(f, Vector2(0, size.y - 4), str(n), HORIZONTAL_ALIGNMENT_CENTER, size.x, 30, Color("ffd75e"))
+		var fs := int(size.y * 0.34)
+		draw_string_outline(f, Vector2(0, size.y - 4), str(n), HORIZONTAL_ALIGNMENT_CENTER, size.x, fs, 6, Color.BLACK)
+		draw_string(f, Vector2(0, size.y - 4), str(n), HORIZONTAL_ALIGNMENT_CENTER, size.x, fs, Color("ffd75e"))
+
+
+## The big Play button: a glowing gold plaque (calm: a plain one, for Cancel).
+class PlayButton:
+	extends Button
+	var calm := false
+	var _t := 0.0
+
+	func _ready() -> void:
+		flat = true
+		focus_mode = Control.FOCUS_NONE
+		add_theme_font_override("font", Fonts.ui(800))
+		pressed.connect(Sound.play.bind("click"))
+		set_process(not Anim.instant)
+		mouse_entered.connect(queue_redraw)
+		mouse_exited.connect(queue_redraw)
+
+	func _process(d: float) -> void:
+		_t += d
+		queue_redraw()
+
+	func _draw() -> void:
+		var r := Rect2(Vector2(6, 6), size - Vector2(12, 12))
+		var pulse := 0.5 + 0.5 * sin(_t * 2.6)
+		if not disabled and not calm:
+			for i in 4:
+				draw_style_box(Palette.box(Color(0, 0, 0, 0), 26 + i * 3, Color(1, 0.75, 0.25, (0.28 - i * 0.06) * (0.6 + 0.4 * pulse)), 4), r.grow(2 + i * 3))
+		var fill := Color("6b4a14") if not calm else Color("4a2c18")
+		if disabled:
+			fill = Color("3a3530")
+		elif is_hovered():
+			fill = fill.lightened(0.15)
+		draw_style_box(Palette.box(Color("1b0f06"), 26), r.grow(3))
+		draw_style_box(Palette.box(fill, 24, Frames.GOLD if not disabled else Color("6b6b6b"), 4), r)
+		var inner := r.grow(-10)
+		draw_style_box(Palette.box(Color(1, 0.85, 0.45, 0.10 if not calm else 0.04), 16), Rect2(inner.position, Vector2(inner.size.x, inner.size.y * 0.45)))
+		var f := get_theme_font("font")
+		var fs := int(minf(size.y * 0.42, 52))
+		var col := Color("fff1c1") if not disabled else Color("9a9a9a")
+		var w := f.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+		var at := Vector2((size.x - w) / 2.0, size.y / 2.0 + fs * 0.34)
+		draw_string_outline(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 8, Color("2a1606"))
+		draw_string(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, col)
+
+
+## The Arena's admission ticket (no run yet).
+class Ticket:
+	extends Control
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _draw() -> void:
+		var r := Rect2(Vector2(10, 30), size - Vector2(20, 40))
+		var pts := PackedVector2Array()
+		var notch := 22.0
+		var cy := r.get_center().y
+		pts.append_array([r.position, Vector2(r.end.x, r.position.y)])
+		for i in 9:  # a punched half circle on the right
+			var a := -PI / 2 - PI * i / 8.0
+			pts.append(Vector2(r.end.x, cy) + Vector2(cos(a), sin(a)) * notch)
+		pts.append_array([r.end, Vector2(r.position.x, r.end.y)])
+		for i in 9:  # and on the left
+			var a := PI / 2 - PI * i / 8.0
+			pts.append(Vector2(r.position.x, cy) + Vector2(cos(a), sin(a)) * notch)
+		draw_colored_polygon(pts, Color("e7d3a2"))
+		Frames.ring(self, pts, Color("8a6d2a"), 4)
+		var inner := r.grow(-16)
+		draw_style_box(Palette.box(Color(0, 0, 0, 0), 8, Color("a8863a", 0.8), 2), inner)
+		Frames.crest(self, Vector2(size.x / 2.0, r.position.y + 14), 230)
+		var f := get_theme_font("font", "Label")
+		var title := tr("Arena")
+		var tw := f.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, 64).x
+		draw_string(f, Vector2((size.x - tw) / 2.0, r.position.y + 132), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 64, Color("5a3510"))
+		var sub := tr("Admit one")
+		var sw := f.get_string_size(sub, HORIZONTAL_ALIGNMENT_LEFT, -1, 24).x
+		draw_string(f, Vector2((size.x - sw) / 2.0, r.position.y + 176), sub, HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color("7a5320"))
+
+
+## A hero to choose for the Arena: a big portrait, the name and the class crest.
+class HeroChoice:
+	extends Button
+	var hero := ""
+
+	func _init(h: String) -> void:
+		hero = h
+		flat = true
+		focus_mode = Control.FOCUS_NONE
+		tooltip_text = CardText.name(h)
+		pressed.connect(Sound.play.bind("click"))
+		mouse_entered.connect(queue_redraw)
+		mouse_exited.connect(queue_redraw)
+
+	func _draw() -> void:
+		var cls := Decks.card_class(hero)
+		var box := Rect2(Vector2.ZERO, size)
+		if is_hovered():
+			for i in 3:
+				draw_style_box(Palette.box(Color(0, 0, 0, 0), 18 + i * 2, Color(1, 0.82, 0.3, 0.5 - i * 0.14), 3), box.grow(1 + i * 2))
+		draw_style_box(Palette.frame(Palette.of_class(cls).darkened(0.7)), box)
+		ServerView.portrait(self, Rect2(Vector2(28, 58), Vector2(size.x - 56, 290)), hero)
+		ServerView.ctext(self, size.x / 2.0, size.y - 44, CardText.name(hero), 28, Palette.ATTACK, size.x - 20)
+		Icons.paint(self, cls, Rect2(Vector2(size.x / 2.0 - 18, size.y - 36), Vector2(36, 30)))
+
+
+## The run's record, as in 2014: twelve win gems and three loss marks.
+class Record:
+	extends Control
+	var wins := 0
+	var losses := 0
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _draw() -> void:
+		draw_style_box(Palette.frame(), Rect2(Vector2.ZERO, size))
+		ServerView.ctext(self, size.x / 2.0, 82, str(wins), 72, Palette.ATTACK)
+		ServerView.ctext(self, size.x / 2.0, 116, tr("Wins"), 22, Palette.TEXT)
+		for i in ServerView.ARENA_WINS:
+			var c := Vector2(size.x / 2.0 + ((i % 6) - 2.5) * 66, 160 + (i / 6) * 50)
+			var won := i < wins
+			draw_circle(c, 21, Color("2a1a0b"))
+			draw_circle(c, 18, Color("ffcc4d") if won else Color(0.16, 0.11, 0.07))
+			if won:
+				draw_circle(c + Vector2(-5, -6), 6, Color(1, 1, 1, 0.45))
+			Frames.ring(self, Art.outline("circle", Rect2(c - Vector2(18, 18), Vector2(36, 36))), Frames.GOLD.darkened(0.2 if won else 0.5), 2)
+			ServerView.ctext(self, c.x, c.y + 7, str(i + 1), 17, Color("3a2306") if won else Color("8a7a60"))
+		ServerView.ctext(self, size.x / 2.0, 284, tr("Losses"), 20, Palette.TEXT)
+		for i in ServerView.ARENA_LOSSES:
+			var c := Vector2(size.x / 2.0 + (i - 1) * 60, 306)
+			draw_circle(c, 16, Color("2a1a0b"))
+			Frames.ring(self, Art.outline("circle", Rect2(c - Vector2(16, 16), Vector2(32, 32))), Color("6b5320"), 2)
+			if i < losses:
+				draw_line(c + Vector2(-10, -10), c + Vector2(10, 10), Color("e0352b"), 6, true)
+				draw_line(c + Vector2(10, -10), c + Vector2(-10, 10), Color("e0352b"), 6, true)
+
+
+## A hero's portrait band behind a line of text (the Arena deck's header).
+class HeroStrip:
+	extends Control
+	var hero := ""
+	var text := ""
+
+	func _draw() -> void:
+		var r := Rect2(Vector2.ZERO, size)
+		draw_style_box(Palette.box(Color("1b140f"), 8, Color("6b5320"), 2), r)
+		if hero != "":
+			DeckTiles.strip(self, r.grow(-3), hero, 0.3)
+		DeckTiles.text(self, Vector2(12, size.y / 2.0 + 7), text, 19, Palette.ATTACK, size.x - 20)
+
+
+## Gold arcs turning (waiting for the server).
+class Spinner:
+	extends Control
+	var _t := 0.0
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _process(d: float) -> void:
+		_t += d
+		queue_redraw()
+
+	func _draw() -> void:
+		for i in 3:
+			var a := _t * 3.0 + TAU * i / 3.0
+			draw_arc(Vector2.ZERO, 40, a, a + 1.3, 20, Color(1, 0.84, 0.35, 0.9), 6, true)

@@ -162,3 +162,48 @@ class _Pen:
 				var v := Vector2(c[0], c[1]).rotated(a) * 1.25
 				inner.append_array([0.5 + v.x, 0.86 + v.y])
 			poly(inner, Color("6b3a1a"))
+
+	## Half an ellipse (the shoulders of a bust) as polygon points.
+	func _shoulders(cx: float, top: float, rx: float, ry: float) -> Array:
+		var pts := []
+		for i in 13:
+			var a := PI + PI * i / 12.0
+			pts.append_array([cx + cos(a) * rx, top + ry + sin(a) * ry])
+		return pts
+
+	func i_friends() -> void:  # two busts, one behind the other
+		poly(_shoulders(0.66, 0.5, 0.22, 0.3), Icons.GOLD.darkened(0.35))
+		circle(0.66, 0.36, 0.13, Icons.GOLD.darkened(0.35))
+		poly(_shoulders(0.4, 0.56, 0.26, 0.34), Icons.GOLD)
+		circle(0.4, 0.4, 0.15, Icons.GOLD)
+
+	func i_chat() -> void:  # a speech bubble with three dots
+		var pts := []
+		for i in 24:
+			var a := TAU * i / 24.0
+			pts.append_array([0.5 + cos(a) * 0.42, 0.44 + sin(a) * 0.3])
+		poly(pts, Icons.GOLD)
+		poly([0.24, 0.62, 0.4, 0.7, 0.16, 0.88], Icons.GOLD)
+		for x in [0.33, 0.5, 0.67]:
+			circle(x, 0.44, 0.06, Icons.DARK)
+
+	func i_swords() -> void:  # crossed swords (a friendly duel)
+		for s in [1.0, -1.0]:
+			var a := Vector2(0.5 - 0.34 * s, 0.16)
+			var b := Vector2(0.5 + 0.3 * s, 0.8)
+			line(a.x, a.y, b.x, b.y, Icons.GOLD, 0.09)
+			var g := a.lerp(b, 0.78)
+			var n := Vector2(b.y - a.y, -(b.x - a.x)).normalized() * 0.13
+			line(g.x - n.x, g.y - n.y, g.x + n.x, g.y + n.y, Icons.GOLD, 0.08)
+
+	func i_more() -> void:  # three dots
+		for x in [0.22, 0.5, 0.78]:
+			circle(x, 0.5, 0.09, Icons.GOLD)
+
+	func i_check() -> void:  # a tick (accept)
+		line(0.2, 0.52, 0.42, 0.74, Color("7be36f"), 0.13)
+		line(0.42, 0.74, 0.8, 0.26, Color("7be36f"), 0.13)
+
+	func i_cross() -> void:  # a cross (decline, unblock)
+		line(0.25, 0.25, 0.75, 0.75, Color("ff7a5c"), 0.12)
+		line(0.75, 0.25, 0.25, 0.75, Color("ff7a5c"), 0.12)

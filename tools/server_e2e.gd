@@ -19,6 +19,7 @@ var stamp := str(int(Time.get_unix_time_from_system())).right(6)
 
 
 func _initialize() -> void:
+	ServerLink.session_path = "user://e2e_session.json"  # never the player's saved login
 	var args := OS.get_cmdline_user_args()
 	if args.size() > 0:
 		mode = args[0]
@@ -86,6 +87,7 @@ func _on_message(i: int, msg: Dictionary) -> void:
 
 func _fail(why: String) -> void:
 	printerr("E2E FAIL: " + why)
+	DirAccess.remove_absolute(ServerLink.session_path)
 	quit(1)
 
 
@@ -113,6 +115,7 @@ func _process(delta: float) -> bool:
 				var a := Bot.choose(g, me)
 				m.submit(a)
 		if matches.all(func(m): return m.game.game_over) and results.all(func(r): return not r.is_empty()):
+			DirAccess.remove_absolute(ServerLink.session_path)
 			print("E2E OK: winner %d, turns %d, results %s / %s" % [matches[0].game.winner, matches[0].game.turn, results[0].get("result"), results[1].get("result")])
 			quit(0)
 			return true

@@ -22,6 +22,7 @@ func _ready() -> void:
 	get_viewport().gui_focus_changed.connect(func(c: Control):
 		if c is LineEdit or c is TextEdit:
 			_fresh_clipboard())
+	_start_server_link()
 	if Settings.first_run:
 		show_language_picker()
 	else:
@@ -54,6 +55,8 @@ func _set_screen(s: Control) -> void:
 		remove_child(screen)
 	screen = s
 	add_child(s)
+	if social:
+		social.screen_changed(s)
 
 
 ## The main menu; play=true opens it at the Play submenu (coming back from a game mode).
@@ -158,22 +161,33 @@ func show_arena(s: ArenaSession) -> ArenaView:
 	return a
 
 
-## Playing through a game server. The connection lives here, across its screens.
+## Playing through a game server. The connection lives here for the whole run of
+## the game (the player stays logged in across screens), with the friends overlay.
 var server_link: ServerLink
+var social: Social
+
+
+## The connection and the overlay; a saved session logs in again by itself, silently
+## (a refused one is forgotten; an unreachable server is tried again next time).
+func _start_server_link() -> void:
+	if server_link == null:  # (a test may put its own in first)
+		server_link = ServerLink.new()
+	server_link.name = "ServerLink"
+	add_child(server_link)
+	server_link.message.connect(_on_server_message)
+	social = Social.new()
+	social.name = "Social"
+	social.link = server_link
+	add_child(social)
+	var s := ServerLink.saved()
+	if str(s.get("token", "")) != "" and Settings.server_ok(str(s.get("server", ""))):
+		server_link.open_and_resume(str(s.server))
 
 
 func show_server() -> ServerView:
-	if server_link == null or not is_instance_valid(server_link):
-		server_link = ServerLink.new()
-		server_link.name = "ServerLink"
-		add_child(server_link)
 	var v := ServerView.new()
 	v.link = server_link
-	v.back.connect(func():
-		server_link.queue_free()
-		server_link = null
-		show_menu(true))
-	v.play.connect(start_server_match)
+	v.back.connect(func(): show_menu(true))
 	_set_screen(v)
 	return v
 
@@ -183,17 +197,38 @@ func start_server_match(session: NetSession, m: Match, mode: String) -> MatchVie
 	v.lobby = true
 	v.lobby_back.connect(func(): show_server())
 	server_link.set_meta("mode", mode)
-	if not server_link.message.is_connected(_on_server_message):
-		server_link.message.connect(_on_server_message)
 	_set_screen(v)
 	v.bind_online(m, session)
 	return v
 
 
-## The server's result arrives during the game: kept for the lobby after it.
 func _on_server_message(msg: Dictionary) -> void:
-	if msg.get("t") == "game_over" and not screen is ServerView:
-		server_link.set_meta("game_over", msg)
+	match msg.get("t"):
+		"game_over":  # the result arrives during the game: kept for the lobby after it
+			if not screen is ServerView:
+				server_link.set_meta("game_over", msg)
+		"match":
+			start_server_game(msg)
+
+
+## The server matched us (a queue, the Arena or an invite, from any screen): the
+## game runs as a NetSession over the server with the deck sent for it.
+func start_server_game(msg: Dictionary) -> NetSession:
+	var d := server_link.game_deck
+	if d == null or msg.get("rejoin", false) or (screen is MatchView and (screen as MatchView).lobby):
+		return null  # ponytail: no rejoin after a restart yet; the server ends that game after 30 s
+	var mode := str(msg.get("mode", "casual"))
+	var ch := server_link.channel(str(msg.get("game", "")))
+	var s := NetSession.new()
+	s.arena = mode == "arena"
+	s.seed_override = int(msg.get("seed", -1))
+	s.setup(ch, msg.get("host", false) == true, str(server_link.me.get("user", "")), d)
+	server_link.add_child(ch)
+	server_link.add_child(s)
+	s.started.connect(func(m: Match): start_server_match(s, m, mode))
+	s.failed.connect(func(reason): social.toast(reason))
+	s.say_hello()
+	return s
 
 
 func start_arena_match(s: ArenaSession, game: NetSession, m: Match) -> MatchView:

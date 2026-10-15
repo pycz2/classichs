@@ -31,6 +31,8 @@ func _use_test_files() -> void:
 	Profile.path = "user://test_runner_profile.json"
 	DeckStore.path = "user://test_runner_decks.json"
 	Progress.path = "user://test_runner_tutorial.json"
+	ServerLink.session_path = "user://test_runner_server_session.json"
+	DirAccess.remove_absolute(ServerLink.session_path)  # no saved session: main never connects by itself
 
 
 func _run_all() -> void:

@@ -71,3 +71,12 @@ static func backdrop(parent: Control, picture := "menu_bg") -> void:
 	pic.modulate = Color(0.4, 0.36, 0.33)
 	pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(pic)
+
+
+## A panel of the game: dark wood inside a gold rim, with a soft shadow.
+static func frame(fill := Color(0.11, 0.075, 0.045, 0.96), radius := 14) -> StyleBoxFlat:
+	var s := box(fill, radius, Color("a8863a"), 3)
+	s.shadow_color = Color(0, 0, 0, 0.55)
+	s.shadow_size = 14
+	s.set_content_margin_all(14)
+	return s
