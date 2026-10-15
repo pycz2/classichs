@@ -53,7 +53,7 @@ Details, security notes and the protocol: [server/README.md](server/README.md) a
 ## Downloads
 
 Every version tag `vX.Y.Z` builds a [GitHub release](https://github.com/pycz2/classichs/releases/latest) with:
-Windows (`.exe`), Linux (`.AppImage`), macOS (`.zip` with the app, not notarized: right-click → Open the first time),
+Windows (`.zip`: `ClassicHS.exe` with the rules engine `.dll` next to it), Linux (`.AppImage`), macOS (`.zip` with the app, not notarized: right-click → Open the first time),
 Android (`.apk`) and the web build (`.zip`). The workflow is `.github/workflows/release.yml`; it runs the tests and
 calls `tools/export_all.sh`, which also works locally (`tools/export_all.sh web windows macos linux`).
 For a stable Android signature add the secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_USER`,

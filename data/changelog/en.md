@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.27.1] - 2026-10-15
+
+### Fixed
+- The Windows and Linux builds start again: the rules engine now ships next to the game. Windows is a .zip (ClassicHS.exe with the .dll next to it); the AppImage has it inside. Documentation images no longer end up in the game.
+
 ## [0.27.0] - 2026-10-15
 
 ### Added

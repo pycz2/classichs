@@ -221,6 +221,11 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
+          name: game
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: server-*
           path: dist
           merge-multiple: true
       - name: List files
@@ -231,8 +236,9 @@ jobs:
           body: |
             Builds of ${{ github.ref_name }}. Changes: see CHANGELOG.md (data/changelog/<lang>.md for other languages).
             - Web: unzip and serve the folder over HTTP, or play at https://pycz2.github.io/classichs/
-            - Windows: ClassicHS-*-windows-x86_64.exe
+            - Windows: unzip ClassicHS-*-windows-x86_64.zip and run ClassicHS.exe (keep the .dll next to it)
             - Linux: ClassicHS-*-linux-x86_64.AppImage (chmod +x, then run)
             - macOS: unzip ClassicHS-*-macos.zip; the app is not notarized: right-click → Open the first time
             - Android: ClassicHS-*-android-arm64.apk (allow installing from this source)
+            - Game server: ClassicHS-server-* for Linux, Windows, macOS (see server/README.md)
           files: dist/*

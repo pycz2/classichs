@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.27.1] - 2026-10-15
+
+### Corregido
+- Las versiones de Windows y Linux vuelven a arrancar: el módulo de reglas ahora va junto al juego. Windows es un .zip (ClassicHS.exe con el .dll al lado); el AppImage lo lleva dentro. Las imágenes de la documentación ya no acaban en el juego.
+
 ## [0.27.0] - 2026-10-15
 
 ### Añadido

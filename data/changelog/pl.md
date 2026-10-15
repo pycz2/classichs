@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.27.1] - 2026-10-15
+
+### Naprawiono
+- Wersje na Windows i Linuksa znów się uruchamiają: moduł zasad jest teraz dostarczany obok gry. Windows to .zip (ClassicHS.exe z plikiem .dll obok); AppImage ma go w środku. Obrazy dokumentacji nie trafiają już do gry.
+
 ## [0.27.0] - 2026-10-15
 
 ### Dodano

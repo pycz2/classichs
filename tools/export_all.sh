@@ -1,6 +1,6 @@
 #!/bin/sh
 # Exports the game for every platform into build/release/:
-#   ClassicHS-<version>-web.zip, -windows-x86_64.exe, -linux-x86_64.AppImage,
+#   ClassicHS-<version>-web.zip, -windows-x86_64.zip (the .exe and the rules .dll), -linux-x86_64.AppImage,
 #   -macos.zip, -android-arm64.apk
 # Usage: tools/export_all.sh [platform ...]   (web windows linux macos android; all by default)
 # Needs Godot 4.7.2 with its export templates on PATH as `godot`. The AppImage needs
@@ -47,23 +47,30 @@ for p in $WANT; do
 		(cd "$OUT/web" && zip -qr "../ClassicHS-$VER-web.zip" .)
 		;;
 	windows)
-		export_preset "Windows Desktop" "$OUT/ClassicHS-$VER-windows-x86_64.exe"
+		# Godot puts the rules engine (.dll) next to the .exe: both go into the zip
+		rm -rf "$OUT/windows" && mkdir -p "$OUT/windows/ClassicHS"
+		export_preset "Windows Desktop" "$OUT/windows/ClassicHS/ClassicHS.exe"
+		[ -s "$OUT/windows/ClassicHS/$(basename "$(rules_lib windows)")" ] || { echo "the export did not put the rules .dll next to the .exe" >&2; exit 1; }
+		(cd "$OUT/windows" && rm -f "../ClassicHS-$VER-windows-x86_64.zip" && zip -qr "../ClassicHS-$VER-windows-x86_64.zip" ClassicHS)
 		;;
 	linux)
+		rm -rf "$OUT/linux"
 		export_preset "Linux" "$OUT/linux/ClassicHS.x86_64"
+		SO="$OUT/linux/$(basename "$(rules_lib linux)")"  # the rules engine, next to the binary
+		[ -s "$SO" ] || { echo "the export did not put the rules .so next to the binary" >&2; exit 1; }
 		if command -v appimagetool >/dev/null; then
 			APP="$OUT/linux/AppDir"
 			rm -rf "$APP"
 			mkdir -p "$APP/usr/bin"
-			cp "$OUT/linux/ClassicHS.x86_64" "$APP/usr/bin/"
+			cp "$OUT/linux/ClassicHS.x86_64" "$SO" "$APP/usr/bin/"
 			cp icons/icon_512.png "$APP/classichs.png"
 			printf '[Desktop Entry]\nType=Application\nName=Classic HS\nExec=ClassicHS.x86_64\nIcon=classichs\nCategories=Game;CardGame;\n' > "$APP/classichs.desktop"
 			printf '#!/bin/sh\nexec "$(dirname "$(readlink -f "$0")")/usr/bin/ClassicHS.x86_64" "$@"\n' > "$APP/AppRun"
 			chmod +x "$APP/AppRun"
 			ARCH=x86_64 appimagetool "$APP" "$OUT/ClassicHS-$VER-linux-x86_64.AppImage"
 		else
-			echo "appimagetool not found: only the plain Linux binary was made" >&2
-			cp "$OUT/linux/ClassicHS.x86_64" "$OUT/ClassicHS-$VER-linux-x86_64"
+			echo "appimagetool not found: a .tar.gz of the binary and the rules .so instead" >&2
+			tar -czf "$OUT/ClassicHS-$VER-linux-x86_64.tar.gz" -C "$OUT/linux" ClassicHS.x86_64 "$(basename "$SO")"
 		fi
 		;;
 	macos)

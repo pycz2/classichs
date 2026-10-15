@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.27.1] - 2026-10-15
+
+### Behoben
+- Die Builds für Windows und Linux starten wieder: Das Regelmodul liegt jetzt neben dem Spiel. Windows ist ein .zip (ClassicHS.exe mit der .dll daneben); im AppImage steckt es mit drin. Bilder der Dokumentation landen nicht mehr im Spiel.
+
 ## [0.27.0] - 2026-10-15
 
 ### Hinzugefügt
