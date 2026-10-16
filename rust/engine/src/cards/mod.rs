@@ -12,14 +12,12 @@ use std::sync::OnceLock;
 
 mod druid;
 mod heroes;
-mod hunter;
 mod neutral;
 mod paladin;
 mod priest;
 mod rogue;
 mod shaman;
 mod tutorial;
-mod warlock;
 mod warrior;
 
 /// Faceless Manipulator's copy (now `Game::copy_minion`).
@@ -131,12 +129,10 @@ fn registry() -> &'static Registry {
         heroes::register(&mut r);
         neutral::register(&mut r);
         druid::register(&mut r);
-        hunter::register(&mut r);
         paladin::register(&mut r);
         priest::register(&mut r);
         rogue::register(&mut r);
         shaman::register(&mut r);
-        warlock::register(&mut r);
         warrior::register(&mut r);
         tutorial::register(&mut r);
         r
