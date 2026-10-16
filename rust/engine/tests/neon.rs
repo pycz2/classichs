@@ -325,7 +325,7 @@ fn chrome_cards() {
     t.play("nitro_shot", m);
     assert_eq!(t.atk(m), 3);
     assert!(t.attacks_of(m) > 0);
-    assert_eq!(t.g.players[0].overload_owed, 1);
+    assert_eq!(t.g.players[0].mana_lock_owed, 1);
 
     // Stim Junkie: Dual-Core only while damaged
     let t = game(json!({"board": ["stim_junkie", {"card": "stim_junkie", "damage": 1}]}), json!({}));
@@ -335,7 +335,7 @@ fn chrome_cards() {
     let mut t = game(json!({"hand": ["hot_courier"]}), json!({}));
     t.play("hot_courier", NONE);
     assert!(t.attacks_of(t.nth(0, 0)) > 0);
-    assert_eq!(t.g.players[0].overload_owed, 1);
+    assert_eq!(t.g.players[0].mana_lock_owed, 1);
 
     // Chrome Up: 3 Plating, +2 champion Attack this turn
     let mut t = game(json!({"hand": ["chrome_up"]}), json!({}));
@@ -365,7 +365,7 @@ fn chrome_cards() {
     t.play("chain_whip", NONE);
     let (me, foe) = (t.hero(0), t.hero(1));
     t.attack(me, foe).attack(me, foe);
-    assert_eq!((t.hp(foe), t.g.players[0].overload_owed), (26, 1));
+    assert_eq!((t.hp(foe), t.g.players[0].mana_lock_owed), (26, 1));
 
     // Scrap Bruiser: 1 to all other minions
     let mut t = game(json!({"hand": ["scrap_bruiser"], "board": ["scrap_drone"]}), json!({"board": ["glitch"]}));
@@ -390,7 +390,7 @@ fn chrome_cards() {
     let mut t = game(json!({"hand": ["ramraider"]}), json!({}));
     t.play("ramraider", NONE);
     assert!(t.attacks_of(t.nth(0, 0)) > 0);
-    assert_eq!(t.g.players[0].overload_owed, 2);
+    assert_eq!(t.g.players[0].mana_lock_owed, 2);
 
     // Vulka: Firewall; 2 Plating whenever it takes damage
     let mut t = game(json!({"hand": ["scrap_bruiser"], "board": ["vulka"]}), json!({}));
@@ -537,7 +537,7 @@ fn neutral_cards() {
     // Knockoff Mech: 3/4, Heat 1
     let mut t = game(json!({"hand": ["knockoff_mech"]}), json!({}));
     t.play("knockoff_mech", NONE);
-    assert_eq!((t.atk(t.nth(0, 0)), t.hp(t.nth(0, 0)), t.g.players[0].overload_owed), (3, 4, 1));
+    assert_eq!((t.atk(t.nth(0, 0)), t.hp(t.nth(0, 0)), t.g.players[0].mana_lock_owed), (3, 4, 1));
 
     // Club Bouncer: Flatline: Firewall to a random friendly minion
     let mut t = game(json!({"hand": ["zero_day"], "board": [{"card": "club_bouncer", "damage": 2}, "scrap_drone"]}), json!({}));
