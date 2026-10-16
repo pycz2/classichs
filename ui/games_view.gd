@@ -91,7 +91,7 @@ func _build() -> void:
 	_panel.size = PANEL.size
 	_panel.add_theme_stylebox_override("panel", Palette.frame())
 	add_child(_panel)
-	message = Palette.label("", 17, Palette.TARGET)
+	message = Palette.label("", 17, Palette.DANGER)
 	message.name = "Message"
 	message.position = Vector2(GRID.position.x + 4, GRID.end.y - 2)
 	message.size = Vector2(GRID.size.x, 20)
@@ -186,7 +186,7 @@ func activate(p: Pack) -> void:
 
 func show_message(text: String, good := false) -> void:
 	message.text = text
-	message.add_theme_color_override("font_color", Palette.BUFFED if good else Palette.TARGET)
+	message.add_theme_color_override("font_color", Palette.OK if good else Palette.DANGER)
 
 
 func _build_details() -> void:
@@ -430,7 +430,7 @@ class PackTile:
 			PackedColorArray([shade, shade, dark, dark]))
 		var head := Rect2(inner.position + Vector2(10, 14), Vector2(inner.size.x - 20, 96))
 		if not _logo:  # (a logo is a child added onto the picture: light on black)
-			var f := Fonts.title()
+			var f := Fonts.title(pack)  # each game's tile in its own title font
 			var t := pack.title()
 			var fs := 40
 			while fs > 20 and f.get_string_size(t, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > head.size.x:
@@ -447,9 +447,10 @@ class PackTile:
 		if active:  # a green-gold ribbon in the top left corner
 			var label := TranslationServer.translate("Active")
 			var w := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 15).x + 24
-			draw_style_box(Palette.box(Color("2f6b2a"), 8, Color("c9e88a"), 2), Rect2(Vector2(12, 10), Vector2(w, 26)))
+			var ribbon := Palette.box(Color("2f6b2a"), 8, Color("c9e88a"), 2) if Palette.CLASSIC else Palette.box(Palette.OK.darkened(0.7), 4, Palette.OK, 1)
+			draw_style_box(ribbon, Rect2(Vector2(12, 10), Vector2(w, 26)))
 			draw_string(font, Vector2(24, 29), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("f4ffe0"))
-		var edge := Palette.SELECTED if selected else (Color("c9a74a") if is_hovered() else Color("6b5320"))
+		var edge := (Palette.SELECTED if Palette.CLASSIC else Palette.ATTACK) if selected else (Color("c9a74a") if is_hovered() else Color("6b5320"))
 		var st := Palette.box(Color.TRANSPARENT, 14, edge, 4 if selected else 3)
 		st.draw_center = false
 		draw_style_box(st, r)

@@ -109,7 +109,7 @@ static var _fonts := {}
 
 static func _font(weight: int) -> Font:
 	if not _fonts.has(weight):
-		_fonts[weight] = Fonts.ui(weight)
+		_fonts[weight] = Fonts.card(weight)
 	return _fonts[weight]
 
 

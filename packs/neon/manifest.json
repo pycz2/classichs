@@ -6,7 +6,7 @@
  "authors": [
   "Classic HS"
  ],
- "license": "Original content made for Classic HS (texts, card designs, generated pictures, synthesized sounds and music); MIT, as the game.",
+ "license": "Original content made for Classic HS (texts, card designs, generated pictures, synthesized sounds and music); MIT, as the game. Fonts in ui/fonts: Tektur and Exo 2, SIL Open Font License 1.1 (ui/fonts/*-OFL.txt).",
  "redistributable": true,
  "default_locale": "en",
  "locales": [

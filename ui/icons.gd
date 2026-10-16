@@ -29,14 +29,14 @@ static func paint(ci: CanvasItem, kind: String, rect: Rect2) -> void:
 		ci.draw_circle(c, side * 0.44, Palette.of_class(kind).darkened(0.15))
 		Art.paint_in(ci, Rect2(c - Vector2(side, side) * 0.41, Vector2(side, side) * 0.82), Decks.hero(kind), "circle")
 		return
-	for s in shapes(kind, rect):
+	for s in shapes(kind, rect):  # the gold and dark of interface icons follow the pack's theme
 		match s[0]:
 			"circle":
-				ci.draw_circle(s[1], s[2], s[3])
+				ci.draw_circle(s[1], s[2], Palette.ui(s[3]))
 			"poly":
-				ci.draw_colored_polygon(s[1], s[2])
+				ci.draw_colored_polygon(s[1], Palette.ui(s[2]))
 			"line":
-				ci.draw_line(s[1], s[2], s[3], s[4], true)
+				ci.draw_line(s[1], s[2], Palette.ui(s[3]), s[4], true)
 
 
 ## Puts an icon on a button: alone (centred) or to the left of the text.

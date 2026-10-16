@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ui/theme.json of a .cardpack: the look of the interface (docs/packs/format.md, 'UI theme')",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "about": {"type": "string", "maxLength": 2000},
+    "colors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": {"$ref": "#/$defs/color"},
+        "muted": {"$ref": "#/$defs/color"},
+        "accent": {"$ref": "#/$defs/color"},
+        "table": {"$ref": "#/$defs/color"},
+        "panel": {"$ref": "#/$defs/color"},
+        "panel_border": {"$ref": "#/$defs/color"},
+        "backdrop": {"$ref": "#/$defs/color"},
+        "button": {"$ref": "#/$defs/color"},
+        "button_hover": {"$ref": "#/$defs/color"},
+        "button_pressed": {"$ref": "#/$defs/color"},
+        "button_disabled": {"$ref": "#/$defs/color"},
+        "button_border": {"$ref": "#/$defs/color"},
+        "button_text": {"$ref": "#/$defs/color"},
+        "button_text_hover": {"$ref": "#/$defs/color"},
+        "button_text_pressed": {"$ref": "#/$defs/color"},
+        "button_text_disabled": {"$ref": "#/$defs/color"},
+        "outline": {"$ref": "#/$defs/color"},
+        "danger": {"$ref": "#/$defs/color"},
+        "ok": {"$ref": "#/$defs/color"}
+      }
+    },
+    "outline_size": {"type": "integer", "minimum": 0, "maximum": 8},
+    "button": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "style": {"enum": ["wood", "flat", "neon"]},
+        "radius": {"$ref": "#/$defs/px"},
+        "border": {"type": "integer", "minimum": 0, "maximum": 8},
+        "glow": {"$ref": "#/$defs/color"},
+        "glow_size": {"$ref": "#/$defs/px"},
+        "glow_hover": {"$ref": "#/$defs/color"},
+        "glow_hover_size": {"$ref": "#/$defs/px"},
+        "texture": {"$ref": "#/$defs/picture"},
+        "texture_margin": {"$ref": "#/$defs/px"}
+      }
+    },
+    "panel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "radius": {"$ref": "#/$defs/px"},
+        "border": {"type": "integer", "minimum": 0, "maximum": 8},
+        "glow": {"$ref": "#/$defs/color"},
+        "glow_size": {"$ref": "#/$defs/px"},
+        "texture": {"$ref": "#/$defs/picture"},
+        "texture_margin": {"$ref": "#/$defs/px"}
+      }
+    },
+    "fonts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {"title": {"$ref": "#/$defs/font"}, "body": {"$ref": "#/$defs/font"}}
+    },
+    "end_turn": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "button": {"$ref": "#/$defs/color"},
+        "border": {"$ref": "#/$defs/color"},
+        "text": {"$ref": "#/$defs/color"},
+        "ready": {"$ref": "#/$defs/color"},
+        "ready_border": {"$ref": "#/$defs/color"}
+      }
+    },
+    "mana": {"$ref": "#/$defs/color"},
+    "rarities": {"type": "object", "additionalProperties": {"$ref": "#/$defs/color"}},
+    "menu": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {"shade": {"$ref": "#/$defs/color"}, "particles": {"enum": ["embers", "rain", "none"]}}
+    }
+  },
+  "$defs": {
+    "color": {"type": "string", "pattern": "^[0-9a-f]{6}([0-9a-f]{2})?$"},
+    "px": {"type": "integer", "minimum": 0, "maximum": 64},
+    "picture": {"type": "string", "pattern": "^ui/[A-Za-z0-9_][A-Za-z0-9_.-]*\\.(png|jpg|jpeg|webp)$"},
+    "font": {"type": "string", "pattern": "^ui/fonts/[A-Za-z0-9_][A-Za-z0-9_.-]*\\.(ttf|otf)$"}
+  }
+}

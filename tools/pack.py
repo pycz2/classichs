@@ -44,12 +44,13 @@ DIRS = {  # dir -> (extensions, depth below dir: 1 = files right in it, 2 = in a
     "layout": ((".json",), 1),
     "decks": ((".json",), 1),
     "missions": ((".json",), 1),
-    "ui": (IMAGES, 1),
+    "ui": (IMAGES + (".json",), 1),  # pictures and theme.json; fonts in ui/fonts/ (FONT_FILES)
     "art": (IMAGES + (".md",), 2),
     "sounds": (AUDIO + (".md",), 2),
     "music": (AUDIO + (".md",), 2),
     "voice": (AUDIO + (".md",), None),
 }
+FONT_FILES = (".ttf", ".otf", ".txt", ".md")  # ui/fonts/: the theme's fonts and their licences
 # Card fields that only change how a card looks or sounds: left out of rules_hash.
 PRESENTATION = ("fx", "sounds", "voice")
 NO_COMPRESS = IMAGES + (".ogg", ".mp3")
@@ -259,6 +260,10 @@ def check_paths(files, r):
             r.error(f"{p}: unknown folder {top}/")
             continue
         exts, depth = DIRS[top]
+        if top == "ui" and len(parts) == 3 and parts[1] == "fonts":
+            exts, depth = FONT_FILES, 2
+        elif top == "ui" and p.lower().endswith(".json") and p != "ui/theme.json":
+            r.error(f"{p}: the only JSON file in ui/ is theme.json")
         if not p.lower().endswith(exts):
             r.error(f"{p}: {top}/ holds only {' '.join(exts)}")
         if depth is not None and len(parts) - 1 != depth:
@@ -454,6 +459,13 @@ def check_files(files):
     for key in ("card_back", "logo"):
         if man.get(key) and man[key] not in files:
             r.error(f"manifest.json: {key} {man[key]} is not in the pack")
+    if "ui/theme.json" in files:
+        theme = _json(files, "ui/theme.json", r, "theme.schema.json")
+        refs = [] if theme is None else [theme.get(k, {}).get(f) for k, f in
+                                         (("fonts", "title"), ("fonts", "body"), ("button", "texture"), ("panel", "texture"))]
+        for f in refs:
+            if f and f not in files:
+                r.error(f"ui/theme.json: {f} is not in the pack")
     for kind, top in (("art_sets", "art"), ("sound_sets", "sounds"), ("music_sets", "music")):
         listed = {s["id"] for s in man.get(kind, [])}
         present = {p.split("/")[1] for p in files if p.startswith(top + "/")}

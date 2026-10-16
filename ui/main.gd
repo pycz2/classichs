@@ -6,11 +6,11 @@ var screen: Control
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	theme = Fonts.theme()  # the medieval font and tavern buttons everywhere below
 	Locale.load_all()
 	Sprites.load_all()
 	Settings.load_settings()
 	Settings.apply()
+	theme = Fonts.theme()  # the medieval font and tavern buttons everywhere below (the active pack's look)
 	add_child(Sound.new())
 	if Settings.data.fullscreen and not OS.has_feature("web"):  # the browser needs a click first
 		Settings.set_fullscreen(true)

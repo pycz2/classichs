@@ -1,0 +1,32 @@
+{
+ "about": "Neonfall's interface (docs/packs/format.md, 'UI theme'): dark glass panels, thin neon rims, glowing flat buttons.",
+ "colors": {
+  "text": "e8f4ff",
+  "muted": "8fa6c4",
+  "accent": "3ee8ff",
+  "table": "070a14",
+  "panel": "070c1ae6",
+  "panel_border": "22d3eecc",
+  "backdrop": "6a6f8c",
+  "button": "0b1230e6",
+  "button_hover": "1c1446f0",
+  "button_pressed": "06091a",
+  "button_disabled": "0a0f1c99",
+  "button_border": "ff3ec8",
+  "button_text": "f0f6ff",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "9ff3ff",
+  "button_text_disabled": "56627a",
+  "outline": "02040a",
+  "danger": "ff4d6d",
+  "ok": "3cffb4"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 4, "border": 1, "glow": "ff3ec840", "glow_size": 4, "glow_hover": "ff3ec8a6", "glow_hover_size": 12},
+ "panel": {"radius": 6, "border": 1, "glow": "22d3ee30", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/Tektur.ttf", "body": "ui/fonts/Exo2.ttf"},
+ "end_turn": {"button": "0b2433", "border": "3ee8ff", "text": "eafcff", "ready": "0c3a2c", "ready_border": "3cffb4"},
+ "mana": "2ec5ff",
+ "rarities": {"COMMON": "d8e2f0", "RARE": "2fa8ff", "EPIC": "c13cff", "LEGENDARY": "ffb020"},
+ "menu": {"shade": "05031059", "particles": "rain"}
+}

@@ -85,8 +85,8 @@ func _draw() -> void:
 	var c := CardDb.card(card_id)
 	var type: String = c.get("type", "MINION")
 	var frame := Palette.of_class(c.get("cardClass", "NEUTRAL"))
-	draw_style_box(Palette.box(frame.darkened(0.25), int(12 * k), Frames.GOLD.darkened(0.2), int(3 * k)), r)
-	draw_style_box(Palette.box(frame.darkened(0.55), int(8 * k)), r.grow(-6 * k))
+	draw_style_box(Palette.raw_box(frame.darkened(0.25), int(12 * k), Frames.GOLD.darkened(0.2), int(3 * k)), r)
+	draw_style_box(Palette.raw_box(frame.darkened(0.55), int(8 * k)), r.grow(-6 * k))
 	var shape: String = {"MINION": "oval", "WEAPON": "circle", "SPELL": "arch", "HERO_POWER": "circle", "HERO": "arch"}.get(type, "arch")
 	var art := {"oval": Rect2(Vector2(22, 8), Vector2(76, 84)), "circle": Rect2(Vector2(25, 10), Vector2(70, 70)),
 		"arch": Rect2(Vector2(14, 10), Vector2(92, 76))}[shape] as Rect2
@@ -98,7 +98,7 @@ func _draw() -> void:
 	if c.get("rarity", "") == "LEGENDARY":
 		Frames.crest(self, Vector2(60, 5) * k, 104 * k)  # along the card's top edge
 	# text box (parchment) and the name banner across it
-	draw_style_box(Palette.box(Color("efe0bd"), int(6 * k), Color("8a6d3b"), int(2 * k)), Rect2(Vector2(11, 100) * k, Vector2(98, 56) * k))
+	draw_style_box(Palette.raw_box(Color("efe0bd"), int(6 * k), Color("8a6d3b"), int(2 * k)), Rect2(Vector2(11, 100) * k, Vector2(98, 56) * k))
 	var bend := 4.0 * k if type == "MINION" else 0.0
 	var banner := PackedVector2Array([Vector2(4, 86) * k, Vector2(60 * k, 86 * k - bend), Vector2(116, 86) * k, Vector2(116, 102) * k, Vector2(60 * k, 102 * k - bend), Vector2(4, 102) * k])
 	draw_colored_polygon(banner, frame.darkened(0.15))
@@ -117,7 +117,7 @@ func _draw() -> void:
 		var rs := int(8 * k)
 		var rw := rf.get_string_size(race, HORIZONTAL_ALIGNMENT_LEFT, -1, rs).x
 		var plate := Rect2(Vector2(60 * k - rw / 2.0 - 5 * k, 158 * k), Vector2(rw + 10 * k, 11 * k))
-		draw_style_box(Palette.box(Color("2a2118"), int(4 * k), Frames.GOLD.darkened(0.25), maxi(1, int(1.5 * k))), plate)
+		draw_style_box(Palette.raw_box(Color("2a2118"), int(4 * k), Frames.GOLD.darkened(0.25), maxi(1, int(1.5 * k))), plate)
 		draw_string(rf, Vector2(plate.position.x + 5 * k, plate.position.y + 8.6 * k), race, HORIZONTAL_ALIGNMENT_LEFT, -1, rs, Color("f4ead5"))
 	var base_cost := int(c.get("cost", 0))
 	var shown_cost := cost if cost >= 0 else base_cost
@@ -132,7 +132,7 @@ func _draw() -> void:
 		else:
 			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k, Color.WHITE, "durability")
 	if marked:  # to be replaced: the card darkens and a red seal with a white cross sits on it
-		draw_style_box(Palette.box(Color(0, 0, 0, 0.45), int(12 * k)), r)
+		draw_style_box(Palette.raw_box(Color(0, 0, 0, 0.45), int(12 * k)), r)
 		var mc := Vector2(60, 70) * k
 		var rr := 26 * k
 		draw_circle(mc + Vector2(0, 3 * k), rr + 3 * k, Color(0, 0, 0, 0.5))

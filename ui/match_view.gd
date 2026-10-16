@@ -586,12 +586,15 @@ func _aim_click_mode() -> void:
 		refresh()
 
 
-## End Turn: wood while moves are left, glowing green (and pulsing) when none are.
+## End Turn: wood (or the theme's colours) while moves are left, glowing green (and pulsing) when none are.
 func _style_end_turn() -> void:
 	_end_halo.visible = end_turn_ready
-	var tint := Color(0.75, 1.35, 0.7) if end_turn_ready else Color.WHITE
 	for st in [["normal", 1.0], ["hover", 1.15], ["pressed", 0.85]]:
-		_end_turn.add_theme_stylebox_override(st[0], Fonts.plank(tint * st[1]))
+		_end_turn.add_theme_stylebox_override(st[0], Fonts.end_turn(end_turn_ready, st[1]))
+	var text := Palette.tc("end_turn.text")
+	if text.a > 0.0:
+		for c in ["font_color", "font_hover_color", "font_pressed_color"]:
+			_end_turn.add_theme_color_override(c, text)
 	if _end_turn.has_meta("pulse"):
 		(_end_turn.get_meta("pulse") as Tween).kill()
 		_end_turn.remove_meta("pulse")

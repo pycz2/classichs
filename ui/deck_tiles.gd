@@ -116,6 +116,8 @@ class Bar:
 		draw_style_box(Palette.box(Color(0, 0, 0, 0.55), 13, Color("6b5320"), 2), r)
 		if ratio > 0.0:
 			var fill := Color("f2c94c") if ratio >= 1.0 else Color("b8862b")
+			if not Palette.CLASSIC:  # a dim bar of the theme's accent: the count stays readable on it
+				fill = Palette.ATTACK.darkened(0.45 if ratio >= 1.0 else 0.65)
 			draw_style_box(Palette.box(fill, 13), Rect2(r.position + Vector2(2, 2), Vector2((r.size.x - 4) * ratio, r.size.y - 4)))
 
 

@@ -9,7 +9,8 @@ them and fills them with content. Decisions: `docs/superpowers/plans/2026-10-16-
 
 Related pages: [rules.md](rules.md) (`rules.json`), [cards.md](cards.md)
 (`cards.json`, locales, layout), [fx.md](fx.md) (visual effects), [lua.md](lua.md)
-(the Lua subset of card scripts), [api.md](api.md) (the engine API and hooks of card scripts). Machine-readable: [schema/](schema/) (JSON Schemas,
+(the Lua subset of card scripts), [api.md](api.md) (the engine API and hooks of card scripts);
+§11 below: the interface theme (`ui/theme.json`). Machine-readable: [schema/](schema/) (JSON Schemas,
 the engine vocabulary `keywords.json`, the effect catalog `fx.json`).
 Tool: `tools/pack.py` (build, check, info, hash; see the end of this page).
 
@@ -30,6 +31,8 @@ music/<set>/<name>.wav|ogg|mp3       one folder per music set (+ .md credits)
 voice/<lang>/…                       optional recorded voice lines (.wav|ogg|mp3)
 ui/<name>.png|jpg|webp               optional pictures: logo, card back, rank emblems; by name the client also
                                      shows ui/menu (menu and screen backdrops), ui/board (the game board), ui/library
+ui/theme.json                        optional: the look of the interface (§11)
+ui/fonts/<name>.ttf|otf              optional: the theme's fonts, with their licences (.txt|.md)
 decks/<name>.json        ready decks
 missions/<n>.json        tutorial or story missions (data; their scripts live in scripts/)
 README.md, CREDITS.md, LICENSE.txt   optional, at the top
@@ -40,7 +43,8 @@ refuse a pack that breaks them):
 
 - Only the folders above; only the listed extensions in each; `art/`, `sounds/`,
   `music/` hold files one level down (`art/<set>/<file>`), `locales/`, `layout/`,
-  `decks/`, `missions/`, `ui/` hold files right in them.
+  `decks/`, `missions/`, `ui/` hold files right in them; the one sub-folder is
+  `ui/fonts/` (`.ttf`, `.otf`, `.txt`, `.md`), and the one JSON file in `ui/` is `theme.json`.
 - Each path segment matches `[A-Za-z0-9_][A-Za-z0-9_.-]*`: no `..`, no absolute
   paths, no `\`, no hidden files (leading dot), at most 200 characters.
 - No symbolic links, no encrypted entries, no file twice.
@@ -305,4 +309,51 @@ the schemas in `schema/` (a small subset of JSON Schema: `type`, `enum`, `const`
 classes, rarities, races, sets and mechanics of every card; mechanics → engine
 vocabulary; champions → `POWER` cards; scripts exist; art/sound/music folders ↔
 manifest; every locale file present and every card named in the default one;
-decks legal; mission cards exist; emblems exist; `rules_hash` current.
+decks legal; mission cards exist; emblems exist; `rules_hash` current; `ui/theme.json`
+against `schema/theme.schema.json` and the fonts and pictures it names present.
+
+## 11. UI theme (`ui/theme.json`)
+
+An optional file that styles the interface while the pack is active: buttons, panels,
+headings, text, fields, popups, the End Turn button, mana crystals and rarity gems.
+Without it the interface looks exactly like Classic (wooden planks, tavern panels,
+Alegreya and Cinzel Decorative). Every key is optional; a missing one keeps Classic's
+value. The client reads it when the pack becomes active and restyles every open screen
+at once (no restart). Presentation only: not in `rules_hash`. Schema:
+[schema/theme.schema.json](schema/theme.schema.json). Colours are `"rrggbb"` or
+`"rrggbbaa"` (lowercase hex).
+
+| Key | Meaning |
+|---|---|
+| `about` | Free text for people. |
+| `colors.text`, `colors.muted` | Interface text, secondary text. |
+| `colors.accent` | Classic's gold: headings, titles, highlights, focused fields, slider fill. |
+| `colors.table` | Behind the screens' pictures. |
+| `colors.panel`, `colors.panel_border` | Fill (alpha for translucent glass) and rim of panels, popups, fields and menus. |
+| `colors.backdrop` | Tint of the screen backdrops (`ui/menu`, `ui/library`). |
+| `colors.button`, `button_hover`, `button_pressed`, `button_disabled` | Button fills (styles `flat`, `neon`). |
+| `colors.button_border` | Button rim (lighter under the mouse). |
+| `colors.button_text`, `button_text_hover`, `button_text_pressed`, `button_text_disabled` | Button labels. |
+| `colors.outline`, `outline_size` | The dark edge around interface text (0–8 px). |
+| `colors.danger`, `colors.ok` | Errors and confirmations. |
+| `button.style` | `wood` (Classic's planks), `flat` (flat boxes), `neon` (flat boxes that glow). |
+| `button.radius`, `button.border` | Corner radius and rim width in px. |
+| `button.glow`, `glow_size`, `glow_hover`, `glow_hover_size` | `neon`: the soft light around a button, and under the mouse. |
+| `button.texture`, `button.texture_margin` | A 9-slice picture in `ui/` for every button (tinted for hover, pressed, disabled); wins over `style`. |
+| `panel.radius`, `panel.border`, `panel.glow`, `panel.glow_size` | Panels: corners, rim width, the glow around them. |
+| `panel.texture`, `panel.texture_margin` | A 9-slice picture in `ui/` for popups, tooltips and plain panels (the frames screens draw stay flat). |
+| `fonts.title`, `fonts.body` | `ui/fonts/<file>.ttf|otf`: headings and pack titles; all other interface text. A variable font with a `wght` axis gets the weights the interface asks for. It must cover every language of the pack (Latin with diacritics, Cyrillic…). Card texts keep the client's own font (the card layout is measured with it). |
+| `end_turn.button`, `border`, `text`, `ready`, `ready_border` | End Turn while moves are left and when none are (default: the button colours and `ok`). |
+| `mana` | The mana crystals of the game screen. |
+| `rarities` | `{rarity id: colour}`: the rarity gems; wins over `manifest.json` `colors.rarities`. |
+| `menu.shade`, `menu.particles` | The main menu: a tint over its picture, and `embers` (Classic), `rain` (streaks in the accent colours) or `none`. |
+
+Fonts must allow redistribution (SIL OFL, Apache…); put their licence next to them
+(`ui/fonts/<Name>-OFL.txt`). Neonfall (`packs/neon/ui/`) is the example: dark glass
+panels with thin cyan rims, glowing magenta-rimmed buttons, Tektur for titles and
+Exo 2 for text (both OFL, subset to Latin, Latin Extended-A and Cyrillic).
+
+In the client: `ui/palette.gd` loads the theme (`Palette.UI`, `TEXT`, `ATTACK`, `MUTED`,
+`DANGER`, `OK`, `Palette.ui()` maps Classic's interface colours to the theme's roles, so
+screens that pass Classic's colours restyle by themselves), `ui/fonts.gd` builds the one
+Godot `Theme` from it and refills it in place on a pack switch.

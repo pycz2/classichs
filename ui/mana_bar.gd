@@ -44,6 +44,7 @@ func _draw() -> void:
 	var s := "%d/%d" % [mana, max_mana]
 	draw_string_outline(font, Vector2(0, 22), s, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, 4, Color.BLACK)
 	draw_string(font, Vector2(0, 22), s, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("dbe4ff"))
+	var col := crystal_colors()
 	for i in 10:
 		var c := Vector2(66 + i * 20, 15)
 		var pts := PackedVector2Array([c + Vector2(0, -10), c + Vector2(8, 0), c + Vector2(0, 10), c + Vector2(-8, 0)])
@@ -61,16 +62,24 @@ func _draw() -> void:
 			draw_colored_polygon(big, Color("ffd43b").lerp(Color.WHITE, 0.4 * a))
 			draw_polyline(big + PackedVector2Array([big[0]]), Color("fff3bf"), 2.0)
 			continue
-		draw_colored_polygon(pts, Color("1c7ed6") if full else Color("1b2a44"))
-		draw_polyline(pts + PackedVector2Array([pts[0]]), Color("a5d8ff") if full else Color("364fc7"), 1.5)
+		draw_colored_polygon(pts, col[0] if full else col[2])
+		draw_polyline(pts + PackedVector2Array([pts[0]]), col[1] if full else col[3], 1.5)
 		if full:
-			draw_colored_polygon(PackedVector2Array([c + Vector2(0, -7), c + Vector2(3, -1), c + Vector2(0, 1), c + Vector2(-3, -1)]), Color("e7f5ff"))
+			draw_colored_polygon(PackedVector2Array([c + Vector2(0, -7), c + Vector2(3, -1), c + Vector2(0, 1), c + Vector2(-3, -1)]), col[4])
 		if i >= max_mana - locked:  # locked by Overload this turn: a padlock on the crystal
 			draw_colored_polygon(pts, Color(0.05, 0.05, 0.08, 0.55))
 			_lock(c + Vector2(0, 1), 1.0, Color("ced4da"))
 	var next_max := mini(10, max_mana + 1)
 	for i in range(maxi(0, next_max - owed), next_max):  # locked next turn: small orange padlocks above
 		_lock(Vector2(66 + i * 20, 15) + Vector2(0, -15 + 1.5 * sin(_t * 4.0 + i)), 0.8, Color("ff922b"))
+
+
+## A crystal's colours: full, its edge, empty, its edge, the shine (the theme's "mana" colour, or Classic's blue).
+static func crystal_colors() -> Array:
+	var m := Palette.tc("mana")
+	if m.a == 0.0:
+		return [Color("1c7ed6"), Color("a5d8ff"), Color("1b2a44"), Color("364fc7"), Color("e7f5ff")]
+	return [m, m.lerp(Color.WHITE, 0.6), m.darkened(0.75), m.darkened(0.25), m.lerp(Color.WHITE, 0.85)]
 
 
 ## A small padlock: a shackle and a body with a keyhole.

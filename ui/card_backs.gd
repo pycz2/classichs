@@ -38,7 +38,7 @@ static func draw(ci: CanvasItem, r: Rect2, back := "") -> void:
 	var k := r.size.x / 72.0  # the designs are made for a 72 px wide card
 	var c := r.get_center()
 	if back == "pack" and pack_texture():
-		ci.draw_style_box(Palette.box(Color("1b140f"), int(8 * k), Frames.GOLD.darkened(0.2), maxi(2, int(3 * k))), r)
+		ci.draw_style_box(Palette.raw_box(Color("1b140f"), int(8 * k), Frames.GOLD.darkened(0.2), maxi(2, int(3 * k))), r)
 		ci.draw_texture_rect(pack_texture(), r.grow(-3 * k), false)
 		return
 	match back:
@@ -103,8 +103,8 @@ static func draw(ci: CanvasItem, r: Rect2, back := "") -> void:
 
 ## The card's body, an inner panel and their two borders.
 static func _frame(ci: CanvasItem, r: Rect2, k: float, body: Color, inner: Color, inner_edge: Color, edge: Color) -> void:
-	ci.draw_style_box(Palette.box(body, int(8 * k), edge, maxi(2, int(3 * k))), r)
-	ci.draw_style_box(Palette.box(inner, int(6 * k), inner_edge, maxi(1, int(2 * k))), r.grow(-8 * k))
+	ci.draw_style_box(Palette.raw_box(body, int(8 * k), edge, maxi(2, int(3 * k))), r)
+	ci.draw_style_box(Palette.raw_box(inner, int(6 * k), inner_edge, maxi(1, int(2 * k))), r.grow(-8 * k))
 
 
 static func _lines(ci: CanvasItem, pts: Array, col: Color, w: float) -> void:

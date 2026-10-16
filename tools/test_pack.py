@@ -142,6 +142,23 @@ class Check(unittest.TestCase):
         s["cards.json"][3]["power_level"] = 9000
         self.assertTrue(any("unknown field" in e for e in errors(s)))
 
+    def test_ui_theme(self):
+        s = tiny()
+        s["ui/theme.json"] = {"colors": {"accent": "3ee8ff"}, "button": {"style": "neon"},
+                              "fonts": {"body": "ui/fonts/Body.ttf"}}
+        s["ui/fonts/Body.ttf"] = b"font"
+        s["ui/fonts/OFL.txt"] = b"licence"
+        self.assertEqual(errors(s), [])
+        del s["ui/fonts/Body.ttf"]
+        self.assertTrue(any("ui/fonts/Body.ttf is not in the pack" in e for e in errors(s)))
+        s = tiny()
+        s["ui/theme.json"] = {"button": {"style": "glass"}}
+        self.assertTrue(errors(s))
+        for p in ["ui/other.json", "ui/fonts/x.exe", "ui/fonts/a/b.ttf"]:
+            s = tiny()
+            s[p] = b"x"
+            self.assertTrue(errors(s), p)
+
     def test_stale_rules_hash(self):
         s = tiny()
         s["manifest.json"]["rules_hash"] = "0" * 64

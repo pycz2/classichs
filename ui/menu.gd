@@ -32,10 +32,12 @@ func _ready() -> void:
 	pic.modulate = Color(0.78, 0.74, 0.7)
 	add_child(pic)
 	var shade := ColorRect.new()
-	shade.color = Color(0.08, 0.05, 0.03, 0.35)
+	shade.color = Color(0.08, 0.05, 0.03, 0.35) if Palette.CLASSIC else Palette.tc("menu.shade")
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
-	add_child(_embers())
+	match str(Palette.UI.menu.particles):
+		"embers": add_child(_embers())
+		"rain": add_child(_rain())
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
@@ -138,5 +140,37 @@ func _embers() -> CPUParticles2D:
 	ramp.set_color(0, Color(1.0, 0.7, 0.3, 0.9))
 	ramp.set_color(1, Color(1.0, 0.45, 0.1, 0.0))
 	p.color_ramp = ramp
+	p.emitting = not Anim.instant
+	return p
+
+
+## Thin streaks of rain in the theme's accent colours, falling at a slant (a theme's "rain").
+func _rain() -> CPUParticles2D:
+	var p := CPUParticles2D.new()
+	p.position = Vector2(700, -40)
+	p.amount = 160
+	p.lifetime = 1.6
+	p.preprocess = 2.0
+	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	p.emission_rect_extents = Vector2(760, 10)
+	p.direction = Vector2(-0.18, 1)
+	p.spread = 2.0
+	p.gravity = Vector2.ZERO
+	p.initial_velocity_min = 520.0
+	p.initial_velocity_max = 760.0
+	p.particle_flag_align_y = true
+	var img := Image.create(2, 40, false, Image.FORMAT_RGBA8)
+	for y in 40:
+		for x in 2:
+			img.set_pixel(x, y, Color(1, 1, 1, float(y) / 39.0))
+	p.texture = ImageTexture.create_from_image(img)
+	var ramp := Gradient.new()
+	ramp.set_color(0, Color(Palette.ATTACK, 0.0))
+	ramp.add_point(0.15, Color(Palette.ATTACK, 0.8))
+	ramp.add_point(0.6, Color(Palette.tc("button_border", Palette.ATTACK), 0.7))
+	ramp.set_color(ramp.get_point_count() - 1, Color(Palette.ATTACK, 0.0))
+	p.color_ramp = ramp
+	p.scale_amount_min = 0.7
+	p.scale_amount_max = 1.4
 	p.emitting = not Anim.instant
 	return p

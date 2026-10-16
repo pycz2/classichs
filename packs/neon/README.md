@@ -14,6 +14,8 @@ and the full card list: [DESIGN.md](DESIGN.md).
 | `art/default/<id>.jpg` | One picture per card (512×512), `card_back` (512×768), `logo` (1280×720), `board` and `menu` (1920×1080) |
 | `sounds/default/<event>.ogg` | The event sounds `game/sound.gd` plays (`play_card`, `attack`, `damage`, `spell`, `death`, `heal`, `turn_start`, `victory`, `defeat`, `click`, …) |
 | `music/default/{menu,battle_1,battle_2}.ogg` | Synthwave loops |
+| `ui/theme.json` | The interface look (docs/packs/format.md §11): dark glass panels, neon rims, glowing buttons, rain in the menu |
+| `ui/fonts/` | Tektur (titles) and Exo 2 (text), SIL OFL 1.1 (licences beside them), subset to Latin, Latin Extended-A and Cyrillic with `pyftsubset` |
 
 `cards.json` follows the field names of `docs/packs/cards.md` (`attack`,
 `health`, `race`, `rarity`, `keywords`, `refs`, `mana_lock`, `spell_power`,
