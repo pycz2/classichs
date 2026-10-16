@@ -244,10 +244,10 @@ The Classic pack's hooks are moving from `rust/engine/src/cards/<class>.rs`
 to `packs/classic/scripts/<class>.lua`. A card with a `script` field uses Lua;
 a card without one still uses its Rust hook (the fallback goes away with the
 last Rust file). Done: `mage.lua` (all Mage cards, Fireblast), `neutral.lua`
-(the Basic neutral cards, The Coin), `lib.lua`.
+(the Basic neutral cards, The Coin), `warlock.lua`, `hunter.lua`, `lib.lua`.
 
-Left: `druid.rs`, `hunter.rs`, `paladin.rs`, `priest.rs`, `rogue.rs`,
-`shaman.rs`, `warlock.rs`, `warrior.rs`, `heroes.rs` (the other powers),
+Left: `druid.rs`, `paladin.rs`, `priest.rs`, `rogue.rs`,
+`shaman.rs`, `warrior.rs`, `heroes.rs` (the other powers),
 `neutral.rs` (common to legendary and tokens), `tutorial.rs` (boss cards and
 the `ench:tutorial_guard` / `ench:transcendence` hooks).
 

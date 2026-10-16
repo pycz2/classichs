@@ -11,13 +11,11 @@ use std::collections::HashMap;
 use std::sync::OnceLock;
 
 mod heroes;
-mod hunter;
 mod neutral;
 mod priest;
 mod rogue;
 mod shaman;
 mod tutorial;
-mod warlock;
 
 /// Faceless Manipulator's copy (now `Game::copy_minion`).
 pub fn copy_minion(g: &mut Game, me: Id, t: Id) -> Id {
@@ -127,11 +125,9 @@ fn registry() -> &'static Registry {
         let mut r = Registry::new();
         heroes::register(&mut r);
         neutral::register(&mut r);
-        hunter::register(&mut r);
         priest::register(&mut r);
         rogue::register(&mut r);
         shaman::register(&mut r);
-        warlock::register(&mut r);
         tutorial::register(&mut r);
         r
     })
