@@ -241,7 +241,6 @@ mode's sets, collectible). File names sort the list (`01_…`).
 | `id` | Mission number (1-based). |
 | `champion`, `boss`, `boss_power` | The player's champion, the boss (a `CHAMPION`) and its power. |
 | `powers_locked` | Both powers can't be used. |
-| `unlosable` | The player's champion can't drop below 1 health. |
 | `boss_guarded` | The boss can't be attacked while it has minions. |
 | `end_turn_block` | `{while_can_play, while_can_attack}`: the player can't end the turn while a card can be played / a minion can attack. |
 | `player` | `{mana, hand, deck}`: starting mana crystals, hand, deck **top card first**. |
@@ -249,7 +248,7 @@ mode's sets, collectible). File names sort the list (`01_…`).
 | `mulligan` | false: no mulligan. |
 | `reward` | A card shown after a win. |
 | `hints` | Hint keys, in order; texts in `locales/<lang>.json` `hints`. |
-| `script` | `scripts/<file>.lua#<id>`: mission hooks (phase B), or null. |
+| `script` | `scripts/<file>.lua#<name>`: a named hook set the player's champion gets at the start (an enchantment), or null. Classic missions 1–2: `ench:tutorial_guard`, the champion can't drop below 1 health. |
 
 Missions are in `rules_hash` (they define decks and rules); their texts are not.
 

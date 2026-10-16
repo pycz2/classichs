@@ -61,7 +61,7 @@ pub fn register(r: &mut Registry) {
     });
     r.insert("VAN_CS2_114", Hooks { // Cleave
         can_play: Some(|g, me| g.minions(g.foe(me)).len() >= 2),
-        spell: Some(|g, me, _| super::shaman::two_random_enemies(g, me, 2)),
+        spell: Some(|g, me, _| super::two_random_enemies(g, me, 2)),
         ..d()
     });
     r.insert("VAN_NEW1_036", Hooks { // Commanding Shout: lives on the hero this turn, so later minions count too.

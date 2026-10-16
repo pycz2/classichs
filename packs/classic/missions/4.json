@@ -4,7 +4,6 @@
   "boss": "TU4c_001",
   "boss_power": "VAN_HERO_08bp",
   "powers_locked": true,
-  "unlosable": false,
   "boss_guarded": false,
   "end_turn_block": {"while_can_play": false, "while_can_attack": false},
   "player": {

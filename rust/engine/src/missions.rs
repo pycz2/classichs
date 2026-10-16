@@ -1,6 +1,7 @@
 //! Tutorial missions (a pack's missions/<n>.json, docs/packs/format.md §8):
-//! the rules part only (decks, locked powers, the champion's safety net, the
-//! guarded boss, turn-end blocks). Hints, boss lines and rewards are the client's.
+//! the rules part only (decks, locked powers, the mission's hooks on the
+//! champion, the guarded boss, turn-end blocks). Hints, boss lines and rewards
+//! are the client's.
 
 use crate::ruleset::{self, Ruleset};
 use crate::state::Game;
@@ -13,7 +14,8 @@ pub struct Mission {
     pub boss: String,
     pub boss_power: String,
     pub locked: bool,
-    pub unlosable: bool,
+    /// The hook set (`script` key) the player's champion gets at the start, or "".
+    pub script: String,
     pub guarded: bool,
     pub block_mana: bool,
     pub block_attack: bool,
@@ -40,7 +42,7 @@ impl Mission {
             boss: s("boss"),
             boss_power: s("boss_power"),
             locked: b(v, "powers_locked"),
-            unlosable: b(v, "unlosable"),
+            script: s("script").split_once('#').map_or(String::new(), |(_, k)| k.to_string()),
             guarded: b(v, "boss_guarded"),
             block_mana: b(block, "while_can_play"),
             block_attack: b(block, "while_can_attack"),
@@ -72,13 +74,13 @@ pub fn start(n: usize) -> Result<Game, String> {
     start_in(ruleset::classic(), n)
 }
 
-/// The mission's game with the champion's safety net and the guarded boss.
+/// The mission's game with the mission's hooks on the champion and the guarded boss.
 pub fn start_in(rs: &'static Ruleset, n: usize) -> Result<Game, String> {
     let m = rs.mission(n).ok_or_else(|| format!("no mission {n}"))?;
     let mut g = crate::scenario::build_in(rs, &scenario(m))?;
-    if m.unlosable {
+    if !m.script.is_empty() {
         let h = g.hero(0);
-        g.em(h).add_enchant(json!({"hooks": "ench:tutorial_guard"}));
+        g.em(h).add_enchant(json!({"hooks": m.script}));
     }
     if m.guarded {
         let (h, t) = (g.hero(1), rs.names.guarded);

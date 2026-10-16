@@ -11,20 +11,26 @@ use std::collections::HashMap;
 use std::sync::OnceLock;
 
 mod druid;
-mod heroes;
 mod hunter;
 mod neutral;
 mod paladin;
 mod priest;
 mod rogue;
-mod shaman;
-mod tutorial;
 mod warlock;
 mod warrior;
 
 /// Faceless Manipulator's copy (now `Game::copy_minion`).
 pub fn copy_minion(g: &mut Game, me: Id, t: Id) -> Id {
     g.copy_minion(me, t)
+}
+
+/// Multi-Shot, Cleave: n spell damage to two random enemy minions.
+pub(crate) fn two_random_enemies(g: &mut Game, me: Id, n: i64) {
+    let mut pool = g.minions(g.foe(me));
+    g.shuffle_ids(&mut pool);
+    for &m in pool.iter().take(2) {
+        g.damage(me, m, g.spell_dmg(me, n));
+    }
 }
 
 fn ev_mine(g: &Game, me: Id, ev: usize) -> bool {
@@ -128,17 +134,14 @@ fn registry() -> &'static Registry {
     static R: OnceLock<Registry> = OnceLock::new();
     R.get_or_init(|| {
         let mut r = Registry::new();
-        heroes::register(&mut r);
         neutral::register(&mut r);
         druid::register(&mut r);
         hunter::register(&mut r);
         paladin::register(&mut r);
         priest::register(&mut r);
         rogue::register(&mut r);
-        shaman::register(&mut r);
         warlock::register(&mut r);
         warrior::register(&mut r);
-        tutorial::register(&mut r);
         r
     })
 }

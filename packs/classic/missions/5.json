@@ -4,7 +4,6 @@
   "boss": "TU4d_001",
   "boss_power": "TU4d_003",
   "powers_locked": false,
-  "unlosable": false,
   "boss_guarded": false,
   "end_turn_block": {"while_can_play": false, "while_can_attack": false},
   "player": {

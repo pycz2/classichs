@@ -208,7 +208,7 @@ pub fn register(r: &mut Registry) {
     });
     r.insert("VAN_DS1_183", Hooks { // Multi-Shot. 2014: needs two enemy minions (as Fireplace).
         can_play: Some(|g, me| g.minions(g.foe(me)).len() >= 2),
-        spell: Some(|g, me, _| super::shaman::two_random_enemies(g, me, 3)),
+        spell: Some(|g, me, _| super::two_random_enemies(g, me, 3)),
         ..d()
     });
     r.insert("VAN_EX1_537", Hooks { // Explosive Shot

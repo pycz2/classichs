@@ -451,6 +451,9 @@ impl Ruleset {
                 }
             }
         }
+        if let Some(m) = rs.missions.iter().find(|m| !m.script.is_empty() && !hooks.contains_key(&m.script)) {
+            return Err(format!("missions/{}.json: no hooks {}", m.id, m.script));
+        }
         rs.hooks = hooks;
         Ok(rs)
     }
