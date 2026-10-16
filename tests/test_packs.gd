@@ -164,6 +164,27 @@ func test_games_screen_lists_selects_activates_and_deletes() -> void:
 	v.free()
 
 
+func test_a_pack_without_music_opens_in_the_games_screen_and_settings() -> void:
+	var manifest: Dictionary = _pack("neon").manifest.duplicate(true)
+	manifest.id = "no-music"
+	manifest.music_sets = []
+	var bytes := _repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"),
+		{"manifest.json": JSON.stringify(manifest).to_utf8_buffer(), "drop": "music/"})
+	var p: Pack = Packs.install(bytes, "imported").get("pack")
+	check(p != null and p.sets("music").is_empty(), "installed, no music")
+	var v := GamesView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(v)
+	v.select(p)
+	eq((v.find_child("MusicSet", true, false) as OptionButton).item_count, 0, "an empty music picker")
+	v.activate(p)
+	v.free()
+	var s := SettingsView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(s)
+	s.free()
+	Packs.set_active(_pack(Packs.CLASSIC))
+	Packs.remove(p)
+
+
 ## The pack's files with some added or replaced, zipped again.
 ## [rules_hash, content_hash] of a pack's bytes (docs/packs/format.md).
 func _hashes(bytes: PackedByteArray) -> Array:
@@ -206,11 +227,13 @@ func _repacked(bytes: PackedByteArray, change: Dictionary) -> PackedByteArray:
 	var w := ZIPPacker.new()
 	w.open(out)
 	for name in r.get_files():
-		if not change.has(name):
+		if not change.has(name) and not (change.has("drop") and name.begins_with(change.drop)):
 			w.start_file(name)
 			w.write_file(r.read_file(name))
 			w.close_file()
 	for name in change:
+		if name == "drop":  # "drop": a path prefix whose files are left out
+			continue
 		w.start_file(name)
 		w.write_file(change[name])
 		w.close_file()

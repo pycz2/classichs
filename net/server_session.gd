@@ -30,6 +30,10 @@ var match_: Match
 var failure_kind := ""
 var transport = null  # (a NetSession has one; MatchView asks)
 var _done := false
+## The game's pack (`match.pack`, a rules hash) while this device still has to get it; its
+## states wait in _held (a state is the whole view: the last one is enough).
+var _want_pack := ""
+var _held := {}
 
 
 func setup(p_link: Object, msg: Dictionary, p_name: String, d: Deck) -> void:
@@ -42,6 +46,59 @@ func setup(p_link: Object, msg: Dictionary, p_name: String, d: Deck) -> void:
 	remote_name = Profile.clean(str(opp.get("user", ""))) if opp is Dictionary else ""
 	player_name = Profile.clean(p_name)
 	deck = d
+	_want_pack = str(msg.get("pack", ""))
+	_use_pack()
+
+
+## The table shows the game's pack: one this device has becomes the active one at once; else
+## the server's file is downloaded first (a rejoin on another device, or after the file was deleted).
+func _use_pack() -> void:
+	var act := Packs.active()
+	if _want_pack == "" or act == null or act.rules_hash() == _want_pack:
+		_want_pack = ""
+		return
+	var have := Packs.find_rules(_want_pack)
+	if have:
+		Packs.set_active(have)
+		_want_pack = ""
+		return
+	if not link is ServerLink:
+		return
+	var entry := {}
+	for e in link.packs.server + link.packs.mine:
+		if str(e.get("rules_hash", "")) == _want_pack:
+			entry = e
+	if entry.is_empty() and not link.has_packs:  # the list comes a moment after the login
+		link.packs_changed.connect(_use_pack, CONNECT_ONE_SHOT)
+		return
+	if entry.is_empty():
+		_fail_pack(TranslationServer.translate("The server no longer has this game"))
+		return
+	link.pack_downloaded.connect(_on_pack_downloaded)
+	link.download_pack(entry)
+
+
+func _on_pack_downloaded(_h: String, res: Dictionary) -> void:
+	if _want_pack == "" or _done:
+		return
+	var p = res.get("pack")
+	if not p is Pack or p.rules_hash() != _want_pack:
+		if res.has("error"):
+			_fail_pack(str(res.error))
+		return
+	link.pack_downloaded.disconnect(_on_pack_downloaded)
+	Packs.set_active(p)
+	_want_pack = ""
+	if not _held.is_empty():
+		var h := _held
+		_held = {}
+		on_message(h)
+
+
+func _fail_pack(reason: String) -> void:
+	_done = true
+	failure_kind = "connection"
+	failed.emit(reason)
 
 
 func send(msg: Dictionary) -> void:
@@ -57,6 +114,9 @@ func on_message(msg: Dictionary) -> void:
 	match msg.get("t"):
 		"state":
 			if not msg.get("view") is Dictionary or not msg.get("result") is Dictionary:
+				return
+			if _want_pack != "":
+				_held = msg
 				return
 			if match_ == null:
 				match_ = Match.new()
@@ -89,7 +149,8 @@ func on_closed() -> void:
 		return
 	_done = true
 	failure_kind = "connection"
-	failed.emit(TranslationServer.translate("Connection lost"))
+	var kicked: bool = link is ServerLink and link.kicked  # another login took the account (and this game)
+	failed.emit(TranslationServer.translate("You logged in on another device" if kicked else "Connection lost"))
 
 
 func send_emote(id: String) -> void:

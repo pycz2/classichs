@@ -179,3 +179,42 @@ func test_main_opens_the_table_on_match_and_state() -> void:
 	var v: MatchView = m.screen
 	eq(v.g.players[1].hand.size(), 4, "the own view")
 	m.free()
+
+
+## A `match` names its game's pack: the table shows that one. A pack the device has becomes
+## active at once (a rejoin while another one was active); one it lacks is downloaded first
+## and the states wait for it; when the download fails the game is not shown in a wrong pack.
+func test_the_table_uses_the_games_pack() -> void:
+	var classic := Packs.active()
+	var neon: Pack = null
+	for p in Packs.all():
+		if p.builtin() and p.id() != Packs.CLASSIC:
+			neon = p
+	var f := Fake.new()
+	f.start()
+	var s := f.link.session({"t": "match", "game": GAME, "you": 1, "rejoin": true, "pack": neon.rules_hash()}, null)
+	eq(Packs.active(), neon, "switched to the game's pack")
+	s.free()
+	Packs.set_active(classic)
+	var other := "f".repeat(64)
+	f.link.has_packs = true
+	f.link.packs = {"server": [], "mine": [{"id": "x", "rules_hash": other, "content_hash": "e".repeat(64), "size": 9}]}
+	s = f.link.session({"t": "match", "game": "s2", "you": 1, "rejoin": true, "pack": other}, null)
+	var why := []
+	s.failed.connect(func(r): why.append(r))
+	var started := []
+	s.started.connect(func(m): started.append(m))
+	eq(f.link.http.back().path, "/packs/%s.cardpack" % ("e".repeat(64)), "the server's file is fetched")
+	s.on_message(f.state([]))
+	eq(started, [], "the table waits for the game's pack")
+	f.link.http.back().done.call(404, PackedByteArray())
+	eq(why.size(), 1, "a failed download ends it")
+	eq([started, Packs.active()], [[], classic], "never shown in another pack")
+	s.free()
+	# another login took the account: the table says so, not "Connection lost"
+	s = f.link.session({"t": "match", "game": "s3", "you": 1}, null)
+	s.failed.connect(func(r): why.append(r))
+	f.link.dispatch({"t": "kicked", "reason": "another_login"})
+	s.on_closed()
+	eq(str(why.back()), tr("You logged in on another device"), "why the game ended here")
+	s.free()

@@ -75,7 +75,7 @@ func _build() -> void:
 	var music_sets := pack.sets("music").map(func(x): return str(x.id))
 	for x in pack.sets("music"):
 		music.add_item(pack_set_name(pack, x))
-	music.select(maxi(0, music_sets.find(Packs.choice(pack, "music"))))
+	music.select(maxi(0, music_sets.find(Packs.choice(pack, "music"))) if not music_sets.is_empty() else -1)  # a pack may have no music
 	music.item_selected.connect(func(i):
 		Packs.set_choice(pack, "music", music_sets[i])
 		Sound.restart_music())

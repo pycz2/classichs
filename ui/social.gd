@@ -645,11 +645,13 @@ func _show_invite() -> void:
 	p.size = Vector2(520, 300)
 	dim.add_child(p)
 	var q := Palette.label(_about(_invite, tr("%s invites you to a friendly game") % invite_from), 26, Palette.ATTACK)
+	q.name = "InviteTitle"
 	q.position = Vector2(20, 18)
 	q.custom_minimum_size.x = 480
 	q.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	q.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	q.clip_text = true
 	p.add_child(q)
+	_fit_line(q, 480)  # one line: a second one would run into the lines below (wide pack fonts, long names)
 	var how := invite_game(_invite)
 	if not _invite.invite_pack.is_empty():
 		var e := _invite.invite_pack
@@ -687,6 +689,15 @@ func _show_invite() -> void:
 		b.custom_minimum_size = Vector2(210, 54)
 		b.pressed.connect(answer_invite.bind(i == 0))
 		p.add_child(b)
+
+
+## Shrinks a one-line label's font until its text fits the width (down to 16).
+static func _fit_line(l: Label, width: float) -> void:
+	var font := l.get_theme_font("font")
+	var fs := l.get_theme_font_size("font_size")
+	while fs > 16 and font.get_string_size(l.text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > width:
+		fs -= 1
+	l.add_theme_font_size_override("font_size", fs)
 
 
 func _choose_invite_deck() -> void:

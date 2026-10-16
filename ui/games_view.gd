@@ -238,7 +238,7 @@ func _build_details() -> void:
 		pick.custom_minimum_size = Vector2(220, 36)
 		for x in sets:
 			pick.add_item(SettingsView.pack_set_name(p, x))
-		pick.select(maxi(0, sets.map(func(x): return str(x.id)).find(Packs.choice(p, kind))))
+		pick.select(maxi(0, sets.map(func(x): return str(x.id)).find(Packs.choice(p, kind))) if not sets.is_empty() else -1)  # a pack may have no music
 		pick.disabled = sets.size() < 2
 		pick.item_selected.connect(func(i): Packs.set_choice(p, kind, str(sets[i].id)))
 		grid.add_child(Palette.label(tr(row[0]), 17))

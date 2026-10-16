@@ -195,6 +195,21 @@ func test_refused_session_is_silent() -> void:
 
 ## D12: an invite to a game in another pack: one the player has is switched to on Accept; one
 ## the player lacks is downloaded first (the button says so), then the deck and the answer.
+## Neonfall's wide font and a long name: the title still fits one line (a second one ran into the game line).
+func test_invite_title_fits_one_line() -> void:
+	var m := _main()
+	var classic := Packs.active()
+	for p in Packs.all():
+		if p.builtin() and p.id() != Packs.CLASSIC:
+			Packs.set_active(p)
+	m.server_link.dispatch({"t": "invite", "from": "Abcdefghijklmnopqrst"})
+	var title := m.social.find_child("InviteTitle", true, false) as Label
+	var fs := title.get_theme_font_size("font_size")
+	check(title.get_theme_font("font").get_string_size(title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x <= 480, "fits one line")
+	Packs.set_active(classic)
+	m.free()
+
+
 func test_invite_in_another_game() -> void:
 	var m := _main()
 	var s: Social = m.social
@@ -208,6 +223,7 @@ func test_invite_in_another_game() -> void:
 	m.server_link.dispatch({"t": "invite", "from": "bob", "pack": entry})
 	var dlg := s.find_child("InviteDialog", true, false)
 	check((dlg.find_child("InviteGame", true, false) as Label).text.contains("Neonfall"), "the game is named")
+
 	eq((dlg.find_child("InviteAccept", true, false) as Button).text, tr("Accept"), "the player has it")
 	(dlg.find_child("InviteAccept", true, false) as Button).pressed.emit()
 	eq(Packs.active(), neon, "accepting switches to the invite's game")
