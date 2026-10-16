@@ -31,6 +31,7 @@ music/<set>/<name>.wav|ogg|mp3       one folder per music set (+ .md credits)
 voice/<lang>/…                       optional recorded voice lines (.wav|ogg|mp3)
 ui/<name>.png|jpg|webp               optional pictures: logo, card back, rank emblems; by name the client also
                                      shows ui/menu (menu and screen backdrops), ui/board (the game board), ui/library
+                                     (collection), ui/result_victory|result_defeat|result_draw (the result screen)
 ui/theme.json                        optional: the look of the interface (§11)
 ui/fonts/<name>.ttf|otf              optional: the theme's fonts, with their licences (.txt|.md)
 decks/<name>.json        ready decks

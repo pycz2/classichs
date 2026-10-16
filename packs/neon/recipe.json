@@ -17,7 +17,10 @@
     "art/default/card_back.jpg": "ui/card_back.jpg",
     "art/default/logo.jpg": "ui/logo.jpg",
     "art/default/board.jpg": "ui/board.jpg",
-    "art/default/menu.jpg": "ui/menu.jpg"
+    "art/default/menu.jpg": "ui/menu.jpg",
+    "art/default/result_victory.jpg": "ui/result_victory.jpg",
+    "art/default/result_defeat.jpg": "ui/result_defeat.jpg",
+    "art/default/result_draw.jpg": "ui/result_draw.jpg"
    },
    "drop_files": [
     "DESIGN.md"

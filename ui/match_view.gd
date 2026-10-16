@@ -2270,12 +2270,13 @@ func _refresh_overlay() -> void:
 
 
 ## The result screen: the picture of the result dimmed behind a big title that
-## grows in (ui/sprites/result_<kind>.png, made by tools/gen_ui_art.py).
+## grows in (the pack's ui/result_<kind> picture, or ui/sprites/result_<kind> from tools/gen_ui_art.py).
 func _result_look(box: VBoxContainer, kind: String) -> void:
 	var art := TextureRect.new()
 	art.name = "ResultArt"
 	art.set_meta("kind", kind)
-	art.texture = Sprites.get_tex("result_" + kind)
+	var own := Packs.picture("result_" + kind)  # the active pack's ui/result_<kind>, else Classic's
+	art.texture = own if own != null else Sprites.get_tex("result_" + kind)
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

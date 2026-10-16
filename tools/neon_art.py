@@ -43,6 +43,12 @@ EXTRA = {
                                               "rain drops on the glass, no objects in the middle"),
     "menu": ("landscape 16:9", (1080, 1920), "a sweeping view of a vertical neon megacity built on stilts over a drowned "
                                              "coast at night, endless rain, flying vehicles, huge holograms, a rooftop in the foreground"),
+    "result_victory": ("landscape 16:9", (1080, 1920), "the moment of victory: a lone silhouetted figure on a rain-swept rooftop "
+                       "raising a fist as the whole neon skyline lights up in celebration, fireworks of cyan and gold data sparks"),
+    "result_defeat": ("landscape 16:9", (1080, 1920), "the moment of defeat: a shattered chrome helmet lying in a dark flooded alley, "
+                      "flickering broken neon, red warning glow reflected in puddles, heavy rain"),
+    "result_draw": ("landscape 16:9", (1080, 1920), "a stalemate: two empty chairs facing each other across a wet metal table "
+                    "under a single humming neon lamp, rain on the window, everything in balance"),
     "logo": ("landscape 16:9", (720, 1280), "a game logo: the single word NEONFALL in bold glowing magenta and cyan neon tube "
                                             "letters with falling rain streaks and a chrome bevel, on a plain pure black background. "
                                             "This one image must contain exactly the word NEONFALL and no other text"),
