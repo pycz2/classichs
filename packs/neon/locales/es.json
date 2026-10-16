@@ -30,7 +30,7 @@
     "mother_rust": {"name": "Madre Herrumbre", "text": "Cromada. Jefa de los Santos de Herrumbre; su brazo zanja cualquier discusión."},
     "director_vale": {"name": "Director Vale", "text": "Ejecutivo. Jefe de seguridad de Sunvault Consolidated; todo es un activo."},
     "siphon": {"name": "Sifón", "text": "Inflige 1 de daño a un esbirro. Si muere, roba una carta."},
-    "shakedown": {"name": "Extorsión", "text": "Inflige 1 de daño al campeón enemigo. Obtienes 1 de blindaje."},
+    "shakedown": {"name": "Extorsión", "text": "Inflige 2 de daño al campeón enemigo. Obtienes 1 de blindaje."},
     "deploy": {"name": "Despliegue", "text": "Invoca un Dron centinela 0/2 con <b>Cortafuegos</b>."},
     "jumpstart": {"name": "Puente eléctrico", "text": "Obtienes 1 de maná solo este turno."},
     "sentry_drone": {"name": "Dron centinela", "text": "<b>Cortafuegos</b>"},

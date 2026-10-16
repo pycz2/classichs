@@ -30,7 +30,7 @@
     "mother_rust": {"name": "Mère Rouille", "text": "Tête-de-chrome. Cheffe des Saints de la Rouille ; son bras règle toutes les disputes."},
     "director_vale": {"name": "Directeur Vale", "text": "Cadre. Chef de la sécurité de Sunvault Consolidated ; tout est un actif."},
     "siphon": {"name": "Siphon", "text": "Inflige 1 point de dégâts à un serviteur. S’il meurt, piochez une carte."},
-    "shakedown": {"name": "Racket", "text": "Inflige 1 point de dégâts au champion adverse. Vous gagnez 1 point de blindage."},
+    "shakedown": {"name": "Racket", "text": "Inflige 2 points de dégâts au champion adverse. Vous gagnez 1 point de blindage."},
     "deploy": {"name": "Déploiement", "text": "Invoque un drone sentinelle 0/2 avec <b>Pare-feu</b>."},
     "jumpstart": {"name": "Recharge express", "text": "Vous gagnez 1 cristal de mana pour ce tour uniquement."},
     "sentry_drone": {"name": "Drone sentinelle", "text": "<b>Pare-feu</b>"},

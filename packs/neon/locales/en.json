@@ -30,7 +30,7 @@
     "mother_rust": {"name": "Mother Rust", "text": "Chromehead. Boss of the Rust Saints; her arm settles every argument."},
     "director_vale": {"name": "Director Vale", "text": "Executive. Security chief of Sunvault Consolidated; everything is an asset."},
     "siphon": {"name": "Siphon", "text": "Deal 1 damage to a minion. If it dies, draw a card."},
-    "shakedown": {"name": "Shakedown", "text": "Deal 1 damage to the enemy champion. Gain 1 Plating."},
+    "shakedown": {"name": "Shakedown", "text": "Deal 2 damage to the enemy champion. Gain 1 Plating."},
     "deploy": {"name": "Deploy", "text": "Summon a 0/2 Sentry Drone with <b>Firewall</b>."},
     "jumpstart": {"name": "Jumpstart", "text": "Gain 1 Mana this turn only."},
     "sentry_drone": {"name": "Sentry Drone", "text": "<b>Firewall</b>"},

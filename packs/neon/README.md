@@ -9,6 +9,7 @@ and the full card list: [DESIGN.md](DESIGN.md).
 | `DESIGN.md` | Setting, champions, mechanic names, effect spec, balance, card tables (generated), decks |
 | `cards.json` | Every card (champions, powers and tokens included): stats, `keywords`/`refs` (engine ids), `effects` (machine-readable logic for the Lua scripts), `note` (value), `look` (art concept) |
 | `locales/{en,ru,de,fr,es,pt_BR,it,pl}.json` | Pack name and description, classes, races, rarities, terms, mechanic names and tips, deck names, card names and texts (`$N` spell damage, `#N` healing) |
+| `scripts/*.lua` | Card logic (docs/packs/api.md): one file per class, `neutral.lua`, `lib.lua` |
 | `decks/*.json` | Starter decks: `zero_trace` (Iris Null), `redline_rush` (Mother Rust), `hostile_merger` (Director Vale) |
 | `art/default/<id>.jpg` | One picture per card (512×512), `card_back` (512×768), `logo` (1280×720), `board` and `menu` (1920×1080) |
 | `sounds/default/<event>.ogg` | The event sounds `game/sound.gd` plays (`play_card`, `attack`, `damage`, `spell`, `death`, `heal`, `turn_start`, `victory`, `defeat`, `click`, …) |
@@ -17,10 +18,10 @@ and the full card list: [DESIGN.md](DESIGN.md).
 `cards.json` follows the field names of `docs/packs/cards.md` (`attack`,
 `health`, `race`, `rarity`, `keywords`, `refs`, `mana_lock`, `spell_power`,
 `unique`, `power`); `effects`, `target`, `combo_target`, `can_play`,
-`options`, `note` and `look` are source-only: the pack build turns `effects`
-into `scripts/neon.lua` and drops the rest. Not here yet: `manifest.json`,
-`rules.json` (the mechanics map is the table in DESIGN.md §3) and the Lua
-scripts (after the interpreter, phase A1/B).
+`options`, `note` and `look` are source-only: the pack build drops them. The
+card logic is in `scripts/` (`ghost.lua`, `chrome.lua`, `exec.lua`,
+`neutral.lua`, `lib.lua`); `cards.json` `script` fields point at it. Tests and
+the balance simulation: `rust/engine/tests/neon.rs` (DESIGN.md §9).
 
 ## How it was made
 
