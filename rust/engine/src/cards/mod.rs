@@ -10,7 +10,6 @@ use crate::state::{Ev, Game};
 use std::collections::HashMap;
 use std::sync::OnceLock;
 
-mod druid;
 mod heroes;
 mod hunter;
 mod neutral;
@@ -128,7 +127,6 @@ fn registry() -> &'static Registry {
         let mut r = Registry::new();
         heroes::register(&mut r);
         neutral::register(&mut r);
-        druid::register(&mut r);
         hunter::register(&mut r);
         priest::register(&mut r);
         rogue::register(&mut r);
