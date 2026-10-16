@@ -13,7 +13,6 @@ use std::sync::OnceLock;
 mod druid;
 mod heroes;
 mod hunter;
-mod neutral;
 mod paladin;
 mod priest;
 mod rogue;
@@ -129,7 +128,6 @@ fn registry() -> &'static Registry {
     R.get_or_init(|| {
         let mut r = Registry::new();
         heroes::register(&mut r);
-        neutral::register(&mut r);
         druid::register(&mut r);
         hunter::register(&mut r);
         paladin::register(&mut r);
