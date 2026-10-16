@@ -1,39 +1,26 @@
 //! Match state, event queue, death phase, auras and the primitives that card
 //! hooks use (engine/game_state.gd). Turns, actions and legality: game.rs.
 
-use crate::card_db;
-use crate::cards::{Base, DeathFn, Fx, HookSet, OnFn, SecretH, TSpec};
+use crate::hooks::{Base, HookFn, HookSet, TSpec, TrapHook};
 use crate::entity::{int, truthy, Entity, Id, NONE};
 use crate::json;
 use crate::lua::LuaSlot;
 use crate::player::Player;
 use crate::rng::Rng;
-use crate::ruleset::{self, Names, Ruleset};
+use crate::ruleset::{Names, Ruleset};
 use serde_json::{json, Map, Value};
 use sha2::{Digest, Sha256};
 use std::collections::VecDeque;
 use std::sync::OnceLock;
-
-// Classic's limits, for the Rust card hooks (rust/engine/src/cards). The engine
-// itself reads them from the game's ruleset (`Game::rs`).
-pub const MAX_HAND: usize = 10;
-pub const MAX_BOARD: usize = 7;
-pub const MAX_MANA: i64 = 10;
-pub const MAX_QUEUE_STEPS: usize = 5000;
-
-/// The power a class champion of the built-in Classic ruleset starts with.
-pub fn default_hero_power(hero: &str) -> Option<&'static str> {
-    ruleset::classic().class_power(hero)
-}
 
 /// An event: a JSON object ({"type": ..., ...}).
 pub type Ev = Map<String, Value>;
 
 #[derive(Clone, Copy)]
 pub(crate) enum Trigger {
-    On(Fx<OnFn>),
-    Secret(SecretH),
-    Deathrattle(Fx<DeathFn>),
+    On(HookFn),
+    Trap(TrapHook),
+    OnDeath(HookFn),
 }
 
 #[derive(Clone, Copy)]
@@ -45,7 +32,7 @@ pub(crate) struct QItem {
     needs_in_play: bool,
 }
 
-/// A choice the player must make (Tracking).
+/// A choice the player must make (`g.request_choice`).
 #[derive(Clone, Debug)]
 pub struct Pending {
     pub player: usize,
@@ -301,9 +288,9 @@ impl Game {
             if let Some(f) = h.on(&ty) {
                 self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: true });
             }
-            if let Some(s) = h.secret {
+            if let Some(s) = h.trap {
                 if s.event == ty {
-                    self.queue.push_back(QItem { f: Trigger::Secret(s), me: e, ev: Some(i), needs_in_play: true });
+                    self.queue.push_back(QItem { f: Trigger::Trap(s), me: e, ev: Some(i), needs_in_play: true });
                 }
             }
             for hooks in self.ench_hooks(e) {
@@ -322,7 +309,7 @@ impl Game {
     }
 
     /// Calls matching "now" hooks (card and enchantment) at once. Used for
-    /// replacement effects (Ice Block, Commanding Shout).
+    /// replacement effects (`now` hooks: "predamage").
     pub fn emit_now(&mut self, ev: &mut Ev) {
         let ty = ev.get("type").and_then(Value::as_str).unwrap_or("").to_string();
         for e in self.in_play() {
@@ -357,14 +344,14 @@ impl Game {
                 let me = q.me;
                 self.from(me, |g| match q.f {
                     Trigger::On(f) => g.fx_on(f, me, q.ev.unwrap()),
-                    Trigger::Secret(s) => {
+                    Trigger::Trap(s) => {
                         let ev = q.ev.unwrap();
-                        if g.secret_ready(me) && s.cond.is_none_or(|c| g.fx_cond(c, me, ev)) && !g.game_over {
+                        if g.trap_ready(me) && s.cond.is_none_or(|c| g.fx_cond(c, me, ev)) && !g.game_over {
                             g.reveal(me);
                             g.fx_on(s.effect, me, ev);
                         }
                     }
-                    Trigger::Deathrattle(f) => g.fx_me(f, me),
+                    Trigger::OnDeath(f) => g.fx_me(f, me),
                 });
                 self.end_by_script_error();
             }
@@ -406,12 +393,12 @@ impl Game {
             self.em(d).zone = "GRAVEYARD";
         }
         for &d in &dead {
-            if let Some(f) = self.hooks_of(d).deathrattle {
-                self.queue.push_back(QItem { f: Trigger::Deathrattle(f), me: d, ev: None, needs_in_play: false });
+            if let Some(f) = self.hooks_of(d).on_death {
+                self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: d, ev: None, needs_in_play: false });
             }
             for hooks in self.ench_hooks(d) {
-                if let Some(f) = hooks.deathrattle {
-                    self.queue.push_back(QItem { f: Trigger::Deathrattle(f), me: d, ev: None, needs_in_play: false });
+                if let Some(f) = hooks.on_death {
+                    self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: d, ev: None, needs_in_play: false });
                 }
             }
             let e = self.e(d);
@@ -517,7 +504,7 @@ impl Game {
             self.log_event(json!({"type": "divine_shield_lost", "target": t}));
             return 0;
         }
-        if self.e(t).is_hero() {
+        if self.e(t).is_champion() {
             let armor = self.e(t).tag(n.armor);
             let absorbed = armor.min(amount);
             self.em(t).set_tag(n.armor, json!(armor - absorbed));
@@ -770,7 +757,7 @@ impl Game {
         self.log_event(json!({"type": "armor", "player": p, "amount": n}));
     }
 
-    /// Full crystals by default. empty=true adds empty crystals (Wild Growth).
+    /// Full crystals by default. empty=true adds empty crystals.
     pub fn gain_mana(&mut self, p: usize, n: i64, empty: bool) {
         let max = self.rs.max_mana;
         let pl = &mut self.players[p];
@@ -786,11 +773,11 @@ impl Game {
         self.log_event(json!({"type": "mana", "player": p, "max": max, "mana": mana}));
     }
 
-    /// Prophet Velen doubles damage and healing of spells and hero powers only;
-    /// each Velen doubles again (counter tag on the hero).
-    fn velen(&self, me: Id) -> i64 {
+    /// POWER_MULTIPLIER (an aura tag on the champion, a count) doubles damage and
+    /// healing of spells and powers only, once per count.
+    fn power_multiplier(&self, me: Id) -> i64 {
         let k = self.e(me).kind();
-        if k != "SPELL" && k != "HERO_POWER" {
+        if k != "SPELL" && k != "POWER" {
             return 1;
         }
         1 << int(self.e(self.hero(self.ctrl(me))).aura.tags.get(self.n().power_multiplier)).clamp(0, 20)
@@ -798,16 +785,16 @@ impl Game {
 
     pub fn spell_dmg(&self, me: Id, n: i64) -> i64 {
         let t = self.n().spell_power;
-        let sp: i64 = self.players[self.ctrl(me)].board.iter().map(|&m| self.e(m).spellpower(t)).sum();
-        (n + sp) * self.velen(me)
+        let sp: i64 = self.players[self.ctrl(me)].board.iter().map(|&m| self.e(m).spell_power(t)).sum();
+        (n + sp) * self.power_multiplier(me)
     }
 
     pub fn hp_dmg(&self, me: Id, n: i64) -> i64 {
-        n * self.velen(me)
+        n * self.power_multiplier(me)
     }
 
     pub fn heal_amt(&self, me: Id, n: i64) -> i64 {
-        n * self.velen(me)
+        n * self.power_multiplier(me)
     }
 
     /// Replaces p's hero with a fresh hero entity (full health, no armor or Frozen).
@@ -871,13 +858,13 @@ impl Game {
             Base::FriendlyMinion => te.is_minion() && mine,
             Base::EnemyChar => !mine,
             Base::FriendlyChar => mine,
-            Base::EnemyHero => te.is_hero() && !mine,
+            Base::EnemyChampion => te.is_champion() && !mine,
         };
-        base && spec.pred.is_none_or(|p| self.fx_pred(p, src, t))
+        base && spec.filter.is_none_or(|p| self.fx_filter(p, src, t))
     }
 
     /// Characters that src may target. Enemy Stealth is never targetable;
-    /// Elusive blocks spells and hero powers (is_spell=true).
+    /// SPELLPROOF blocks spells and powers (is_spell=true).
     pub fn targets(&self, src: Id, spec: &TSpec, is_spell: bool) -> Vec<Id> {
         let (me, n) = (self.ctrl(src), self.n());
         self.all_chars()
@@ -889,7 +876,7 @@ impl Game {
             .collect()
     }
 
-    pub fn secret_ready(&self, me: Id) -> bool {
+    pub fn trap_ready(&self, me: Id) -> bool {
         let e = self.e(me);
         e.zone == self.n().trap && self.current != e.controller
     }
@@ -921,7 +908,7 @@ impl Game {
             "any" => true,
             "minion" => x.is_minion(),
             "spell" => x.kind() == "SPELL",
-            "secret" => x.card.is_secret(),
+            "secret" | "trap" => x.card.trap,
             _ => false,
         }
     }
@@ -976,7 +963,7 @@ impl Game {
     }
 
     pub fn attack_value(&self, e: Id) -> i64 {
-        if self.e(e).is_hero() { self.hero_atk(e) } else { self.e(e).atk() }
+        if self.e(e).is_champion() { self.hero_atk(e) } else { self.e(e).atk() }
     }
 
     // --- look-ahead -------------------------------------------------------------
@@ -1000,7 +987,7 @@ impl Game {
         g
     }
 
-    /// Faceless Manipulator: transforms me into a copy of t, with t's damage,
+    /// Transforms me into a copy of t, with t's damage,
     /// enchantments, keywords and Silence. Auras are not copied; the copy is a new
     /// minion (summoning sickness, not Frozen).
     pub fn copy_minion(&mut self, me: Id, t: Id) -> Id {
@@ -1051,8 +1038,26 @@ impl Game {
         hex(&Sha256::digest(json::stringify(&self.to_dict()).as_bytes()))
     }
 
-    pub fn card(&self, id: Id) -> &'static card_db::Card {
+    pub fn card(&self, id: Id) -> &'static crate::ruleset::Card {
         self.e(id).card
+    }
+
+    /// The opponent of me's controller.
+    pub fn foe(&self, me: Id) -> usize {
+        1 - self.ctrl(me)
+    }
+
+    pub fn add_tag_int(&mut self, e: Id, tag: &str, n: i64) {
+        let v = self.e(e).tag(tag) + n;
+        self.em(e).set_tag(tag, json!(v));
+    }
+
+    /// DIED_POS of a dead minion (-1 if it has none).
+    pub fn died_pos(&self, e: Id) -> i64 {
+        match self.e(e).tags.get(self.n().died_pos) {
+            Some(v) => int(Some(v)),
+            None => -1,
+        }
     }
 }
 

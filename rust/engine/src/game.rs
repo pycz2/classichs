@@ -1,6 +1,6 @@
 //! Match setup, turns, actions and legality (engine/game.gd).
 
-use crate::cards;
+use crate::hooks::TSpec;
 use crate::entity::{int, truthy, Id, NONE};
 use crate::json;
 use crate::rng::Rng;
@@ -9,9 +9,6 @@ use crate::state::Game;
 use serde_json::{json, Map, Value};
 
 pub use crate::state::Ev;
-
-/// Classic's coin (rules.json `start.coin`; the engine reads the game's ruleset).
-pub const COIN: &str = "GAME_005";
 
 /// An action: {"type": ..., "player": ..., ...} with whole numbers as ints.
 pub type Action = Map<String, Value>;
@@ -41,8 +38,9 @@ fn obj(v: Value) -> Action {
 }
 
 impl Game {
-    /// A new match: decks are card id lists (the last card is the top before the
-    /// shuffle). first = -1 lets the RNG choose; deal=false skips the opening draws.
+    /// A new match of the built-in ruleset: decks are card id lists (the last card is
+    /// the top before the shuffle). first = -1 lets the RNG choose; deal=false skips
+    /// the opening draws.
     pub fn new(hero0: &str, deck0: &[String], hero1: &str, deck1: &[String], seed: i64, first: i64, deal: bool) -> Game {
         Game::new_in(ruleset::classic(), hero0, deck0, hero1, deck1, seed, first, deal)
     }
@@ -190,9 +188,9 @@ impl Game {
         let (max, n) = (self.rs.max_mana, self.n());
         let p = &mut self.players[cur];
         p.max_mana = max.min(p.max_mana + 1);
-        p.overload_locked = p.overload_owed;
-        p.overload_owed = 0;
-        p.mana = 0.max(p.max_mana - p.overload_locked);
+        p.mana_locked = p.mana_lock_owed;
+        p.mana_lock_owed = 0;
+        p.mana = 0.max(p.max_mana - p.mana_locked);
         p.cards_played_this_turn = 0;
         p.minions_played_this_turn = 0;
         let hp = p.hero_power;
@@ -268,7 +266,7 @@ impl Game {
             if self.cost(e) > p.mana || !self.can_play(e) {
                 continue;
             }
-            let choices: &[i64] = if self.rs.hooks(&self.e(e).card_id).choose_one.is_some() { &[0, 1] } else { &[-1] };
+            let choices: &[i64] = if self.rs.hooks(&self.e(e).card_id).choice.is_some() { &[0, 1] } else { &[-1] };
             for &choice in choices {
                 for t in self.play_targets(e, choice) {
                     for pos in self.positions(e) {
@@ -283,7 +281,7 @@ impl Game {
         let n = self.n();
         if !hpe.has(n.used) && !hpe.has(n.locked) && self.cost(hp) <= p.mana {
             let hh = self.rs.hooks(&hpe.card_id);
-            if hh.hero_power.is_some() && hh.can_play.is_none_or(|f| self.fx_can_play(f, hp)) {
+            if hh.power.is_some() && hh.can_play.is_none_or(|f| self.fx_can_play(f, hp)) {
                 for t in self.spec_targets(hp, hh.target, true, false) {
                     out.push(obj(json!({"type": "hero_power", "player": cur, "target": t})));
                 }
@@ -322,18 +320,18 @@ impl Game {
     }
 
     /// The target spec that applies when e is played with this choice and combo state.
-    pub fn target_spec(&self, e: Id, choice: i64, combo: bool) -> Option<cards::TSpec> {
+    pub fn target_spec(&self, e: Id, choice: i64, combo: bool) -> Option<TSpec> {
         let h = self.rs.hooks(&self.e(e).card_id);
         if h.combo_target.is_some() {
             return if combo { h.combo_target } else { None };
         }
         if choice >= 0 {
-            return self.rs.hooks(h.choose_one.unwrap()[choice as usize]).target;
+            return self.rs.hooks(h.choice.unwrap()[choice as usize]).target;
         }
         h.target
     }
 
-    fn spec_targets(&self, e: Id, spec: Option<cards::TSpec>, is_spell: bool, optional: bool) -> Vec<Id> {
+    fn spec_targets(&self, e: Id, spec: Option<TSpec>, is_spell: bool, optional: bool) -> Vec<Id> {
         let Some(spec) = spec else { return vec![NONE] };
         let ids = self.targets(e, &spec, is_spell);
         if ids.is_empty() && optional {
@@ -358,7 +356,7 @@ impl Game {
         if x.is_minion() && x.has(n.exhausted) && !x.has(n.haste) {
             return false;
         }
-        let weapon_wf = x.is_hero() && self.players[x.controller].weapon.is_some_and(|w| self.e(w).has(n.double_attack));
+        let weapon_wf = x.is_champion() && self.players[x.controller].weapon.is_some_and(|w| self.e(w).has(n.double_attack));
         let limit = if x.has(n.double_attack) || weapon_wf { 2 } else { 1 };
         x.tag(n.attacks) < limit
     }
@@ -373,8 +371,8 @@ impl Game {
             if te.has(n.stealth) {
                 continue;
             }
-            if te.is_hero() && te.has(n.guarded) && !self.players[foe].board.is_empty() {
-                continue; // a tutorial boss behind his minions (Lorewalker Cho): minions first
+            if te.is_champion() && te.has(n.guarded) && !self.players[foe].board.is_empty() {
+                continue; // GUARDED (a tutorial boss): minions first
             }
             all.push(t);
             if te.is_minion() && te.has(n.guard) {
@@ -394,7 +392,7 @@ impl Game {
         self.players[c].hand.retain(|&x| x != e);
         let combo = self.combo_active(e);
         self.players[c].cards_played_this_turn += 1;
-        self.players[c].overload_owed += self.e(e).card.overload;
+        self.players[c].mana_lock_owed += self.e(e).card.mana_lock;
         match self.e(e).kind() {
             "MINION" => self.play_minion(e, t, pos, choice, combo),
             "SPELL" => self.play_spell(e, t, choice, combo),
@@ -409,11 +407,11 @@ impl Game {
             return; // targeted effect with no target (none was valid, or it left play)
         }
         let f = if choice >= 0 {
-            self.rs.hooks(h.choose_one.unwrap()[choice as usize]).effect
+            self.rs.hooks(h.choice.unwrap()[choice as usize]).effect
         } else if combo && h.combo.is_some() {
             h.combo
-        } else if key == "battlecry" {
-            h.battlecry
+        } else if key == "on_play" {
+            h.on_play
         } else {
             h.spell
         };
@@ -438,7 +436,7 @@ impl Game {
         if t != NONE && self.e(t).zone != "PLAY" {
             t = NONE;
         }
-        self.run_effect(e, "battlecry", t, choice, combo);
+        self.run_effect(e, "on_play", t, choice, combo);
         self.resolve();
         if self.game_over || self.e(e).zone != "PLAY" {
             return;
@@ -450,16 +448,16 @@ impl Game {
     fn play_spell(&mut self, e: Id, t: Id, choice: i64, combo: bool) {
         let c = self.ctrl(e);
         let card = self.e(e).card_id.clone();
-        let is_secret = self.e(e).card.trap;
+        let is_trap = self.e(e).card.trap;
         self.em(e).zone = "SETASIDE";
-        let ev = self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_secret,
+        let ev = self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_trap,
             "target": t, "card": card, "countered": false}));
         self.resolve();
         if self.game_over {
             return;
         }
         let countered = self.ev_b(ev, "countered");
-        if is_secret {
+        if is_trap {
             if countered {
                 self.em(e).zone = "GRAVEYARD";
             } else {
@@ -492,7 +490,7 @@ impl Game {
         if self.game_over {
             return;
         }
-        self.run_effect(e, "battlecry", t, -1, combo);
+        self.run_effect(e, "on_play", t, -1, combo);
         self.resolve();
         if !self.game_over {
             self.equip_entity(e);
@@ -516,7 +514,7 @@ impl Game {
         if self.ent(d).is_none_or(|x| x.zone != "PLAY") {
             return;
         }
-        let weapon = if self.e(a).is_hero() { self.players[self.ctrl(a)].weapon } else { None };
+        let weapon = if self.e(a).is_champion() { self.players[self.ctrl(a)].weapon } else { None };
         let immune = weapon.is_some_and(|w| self.rs.hooks(&self.e(w).card_id).immune_while_attacking);
         if immune {
             self.em(a).give_tag(names.immune, false);
@@ -553,7 +551,7 @@ impl Game {
         self.players[cur].mana -= cost;
         let used = self.n().used;
         self.em(hp).give_tag(used, false);
-        if let Some(f) = self.rs.hooks(&self.e(hp).card_id).hero_power {
+        if let Some(f) = self.rs.hooks(&self.e(hp).card_id).power {
             self.from(hp, |g| g.fx_effect(f, hp, t));
         }
         self.emit(json!({"type": "hero_power", "player": cur, "entity": hp, "target": t}));

@@ -5,9 +5,6 @@
 use crate::ruleset::{self, Ruleset};
 use serde_json::Value;
 
-/// Classic's deck size (a ruleset has its own: `Ruleset::deck_size`).
-pub const SIZE: usize = 30;
-
 /// The champion of a class (Classic).
 pub fn hero(card_class: &str) -> Option<&'static str> {
     ruleset::classic().champion(card_class)
@@ -18,17 +15,18 @@ pub fn card_class(hero_id: &str) -> Option<&'static str> {
     ruleset::classic().class_of_champion(hero_id)
 }
 
-/// A starter deck (Classic): two of every Basic card of the class, then the starter core.
+/// A starter deck of the built-in ruleset (`basic_in`).
 pub fn basic(card_class: &str) -> Vec<String> {
     basic_in(ruleset::classic(), card_class)
 }
 
-/// Two copies of every Basic (`FREE`) card of the class, then the ruleset's starter core up to the deck size.
+/// Two copies of every collectible card of the class with a starter rarity
+/// (`modes.constructed.starter_rarities`), then the starter core, two each, up to the deck size.
 pub fn basic_in(rs: &Ruleset, card_class: &str) -> Vec<String> {
     let mut deck = vec![];
     for id in &rs.collectible {
         let c = rs.card(id);
-        if c.card_class == card_class && c.rarity == "FREE" {
+        if c.card_class == card_class && rs.starter_rarities.contains(&c.rarity) {
             deck.push(id.clone());
             deck.push(id.clone());
         }

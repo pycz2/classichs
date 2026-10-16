@@ -7,7 +7,7 @@ integers-only, sandboxed Lua 5.4 subset, its limits and standard library) is in
 
 Contents: [script files](#script-files) · [hooks](#hooks) · [events](#events) ·
 [the `g` library](#the-g-library) · [errors and limits](#errors-and-limits) ·
-[porting a Classic class from Rust](#porting-a-classic-class-from-rust)
+[checking a pack against recorded games](#checking-a-pack-against-recorded-games)
 
 ## Script files
 
@@ -58,14 +58,14 @@ Return values are ignored unless said otherwise.
 
 | Hook | Signature | When |
 |---|---|---|
-| `target` | `"any"` \| `{base = …, filter = fn(g, me, t) → bool}` | The card (or power) needs a target. Bases: `any`, `minion`, `enemy_minion`, `friendly_minion`, `enemy_char`, `friendly_char`, `enemy_hero`. Enemy STEALTH is never a target; SPELLPROOF blocks spells and powers. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required. `filter` is read-only. |
+| `target` | `"any"` \| `{base = …, filter = fn(g, me, t) → bool}` | The card (or power) needs a target. Bases: `any`, `minion`, `enemy_minion`, `friendly_minion`, `enemy_char`, `friendly_char`, `enemy_hero` (alias `enemy_champion`). Enemy STEALTH is never a target; SPELLPROOF blocks spells and powers. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required. `filter` is read-only. |
 | `battlecry` (alias `on_play`) | `fn(g, me, t)` | A minion or weapon is played from the hand (after it is on the board / before it is equipped). |
 | `spell` | `fn(g, me, t)` | A spell is cast (not if countered). |
 | `combo` | `fn(g, me, t)` | Instead of `battlecry`/`spell` when another card was played before it this turn. |
 | `combo_target` | like `target` | The target spec while combo is active (no target without combo). |
-| `choose_one` | `{"OPTION_A", "OPTION_B"}` | Two option *cards*; the player picks one (`choice` 0/1); the option card's `target` and `effect` are used. |
+| `choose_one` (alias `choice`) | `{"OPTION_A", "OPTION_B"}` | Two option *cards*; the player picks one (`choice` 0/1); the option card's `target` and `effect` are used. |
 | `effect` | `fn(g, me, t)` | On a Choose One option card: what the option does (`me` is the played card). |
-| `hero_power` | `fn(g, me, t)` | On a POWER card: the power is used. |
+| `hero_power` (alias `power`) | `fn(g, me, t)` | On a POWER card: the power is used. |
 | `can_play` | `fn(g, me) → bool` | The card/power may be played now (read-only). |
 | `deathrattle` (alias `on_death`) | `fn(g, me)` | It died (minion or weapon; `g.died_pos(me)` is where). |
 | `on` | `{<event type> = fn(g, me, ev)}` | Any event of that type while `me` is in play (or a trap). Queued: runs after the action that caused it. |
@@ -213,7 +213,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.replace_hero(p, card)`, `g.set_power(p, card)` | A new champion / power. |
 | `g.reveal(me)` | Reveals a trap (for `now` hooks; `secret` hooks are revealed for you). |
 | `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. |
-| `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret"|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n]}`; `turn` defaults to now. |
+| `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n]}`; `turn` defaults to now. |
 | `g.log(ev)`, `g.emit(ev)` | Logs an event table (`emit` also triggers `on` hooks). |
 | `g.remove(e[, zone])` | Takes `e` out of its hand/deck/board/trap list (and the weapon slot), optionally setting its zone. |
 | `g.cost(e)` | A card's cost now (cost hooks included). |
@@ -238,101 +238,36 @@ platform, the server and replays then agree.
 - The engine never panics on a script; a pack that cannot load is refused by
   `load_pack` with the reason.
 
-## Porting a Classic class from Rust
+## Checking a pack against recorded games
 
-The Classic pack's hooks are moving from `rust/engine/src/cards/<class>.rs`
-to `packs/classic/scripts/<class>.lua`. A card with a `script` field uses Lua;
-a card without one still uses its Rust hook (the fallback goes away with the
-last Rust file). Done: `mage.lua` (all Mage cards, Fireblast), `neutral.lua`
-(the Basic neutral cards and every other neutral card, The Coin), `druid.lua`, `hunter.lua`, `paladin.lua`, `priest.lua`,
-`rogue.lua`, `shaman.lua`, `warlock.lua`, `warrior.lua`, `heroes.lua` (the other powers, Healing Totem),
-`tutorial.lua` (boss cards, `ench:transcendence`, `ench:tutorial_guard`), `lib.lua`.
+Every Classic card hook is Lua (`packs/classic/scripts/`); the engine has no
+card logic of its own. The Classic pack is checked against the games recorded
+from the old GDScript engine (7833 games, rust/engine/README.md "Parity"):
 
-Left: nothing — every Classic card hook is in Lua; no card hooks remain in Rust.
+```sh
+cd rust
+# quick (~3 s): the committed 1731 games that mention a Warrior card
+PARITY_BIG=0 PARITY_FILTER=WARRIOR cargo test -p classichs-engine --test parity -- --nocapture
+# a few cards, all fixtures
+PARITY_FILTER=VAN_EX1_398,VAN_EX1_407 cargo test -p classichs-engine --test parity -- --nocapture
+# everything, 7833 games (~80 s)
+cargo test -p classichs-engine -- --nocapture
+```
 
-### Steps
-
-1. Create `packs/classic/scripts/<class>.lua` (one file per class; tokens and
-   the class's `ench:*` hooks go with it). Translate each `r.insert(id, Hooks {…})`
-   to `cards.<id> = {…}` (table below). Shared helpers go to `lib.lua`.
-2. Point the cards at it — add `"script": "scripts/<class>.lua#<id>"` to each
-   card's line in `packs/classic/cards.patch.json` (keep one card per line; the
-   file is shared, so only touch your cards' lines). Choose One option cards
-   (`VAN_EX1_160a`) are cards too and need their own `script`. This adds the
-   field for every `cards.<id> =` line of the given files:
-
-   ```sh
-   python3 - packs/classic/scripts/<class>.lua <<'EOF'
-   import json, re, sys
-   src = "packs/classic/cards.patch.json"; patch = json.load(open(src))
-   for f in sys.argv[1:]:
-       for key in re.findall(r'^cards\.([A-Za-z0-9_]+)\s*=', open(f).read(), re.M):
-           patch.setdefault(key, {})["script"] = f"scripts/{f.split('/')[-1]}#{key}"
-   patch = dict(sorted(patch.items()))
-   body = ",\n".join(f"  {json.dumps(k)}: {json.dumps(v, ensure_ascii=False)}" for k, v in patch.items())
-   open(src, "w").write("{\n" + body + "\n}\n")
-   EOF
-   ```
-
-   Named enchantment hooks (`"ench:…"`) need no field: they are found by name.
-3. Delete the ported `r.insert` blocks (or the whole `<class>.rs` and its two
-   lines in `cards/mod.rs`).
-4. Check parity for the class, then everything:
-
-   ```sh
-   cd rust
-   # quick (~3 s): the committed 1731 games that mention a Warrior card
-   PARITY_BIG=0 PARITY_FILTER=WARRIOR cargo test -p classichs-engine --test parity -- --nocapture
-   # a few cards, all fixtures
-   PARITY_FILTER=VAN_EX1_398,VAN_EX1_407 cargo test -p classichs-engine --test parity -- --nocapture
-   # before you are done: everything, 7833 games (~80 s)
-   cargo test -p classichs-engine -- --nocapture
-   ```
-
-   `PARITY_FILTER` takes card ids, class names and `lua` (every card with Lua
-   hooks), comma-separated; a game is replayed if its recorded line mentions
-   any of them (random decks mention many classes, so a class still selects
-   most of the big set: ~55 s). `PARITY_BIG=0` skips `fixtures/big`. The first lines of a mismatch report show the step, the action
-   and what differs. The Lua files are built into the engine (build.rs), so a
-   test run always uses the current scripts. `builtin_rules_hash_matches_pack_py`
-   (tests/packs.rs) checks the built-in ruleset against `tools/pack.py`.
-
-### Rust → Lua
-
-| Rust | Lua |
-|---|---|
-| `Hooks { target: ANY, spell: Some(\|g, me, t\| …), ..d() }` | `{ target = "any", spell = function(g, me, t) … end }` |
-| `spec_if(Base::Minion, pred)` | `target = { base = "minion", filter = function(g, me, t) return … end }` |
-| `on: vec![("turn_end", f)]` | `on = { turn_end = function(g, me, ev) … end }` |
-| `secret: Some(Secret { event, cond, effect })` | `secret = { event = "attack", cond = function(g, me, ev) … end, effect = … }` |
-| `now: vec![("predamage", f)]` (`ev.insert("amount", …)`) | `now = { predamage = function(g, me, ev) ev.amount = 0 end }` |
-| `g.ctrl(me)`, `g.foe(me)`, `1 - p` | `g.ctrl(me)`, `g.enemy(me)`, `g.opponent(p)` |
-| `ev_mine(g, me, ev)` | `g.mine(me, ev)` |
-| `g.ev_i(ev, "target")`, `g.ev_s(ev, "kind")`, `g.ev_b(ev, "played")` | `ev.target`, `ev.kind`, `ev.played` |
-| `g.ev_set(ev, "countered", json!(true))` | `ev.countered = true` |
-| `g.e(t).has("TAUNT")`, `.tag("ARMOR")`, `.atk()`, `.health()`, `.damage`, `.race()`, `.is_minion()`, `.card_id`, `.zone` | `g.has(t, "TAUNT")`, `g.tag(t, "ARMOR")`, `g.atk(t)`, `g.health(t)`, `g.dmg(t)`, `g.race(t)`, `g.is_minion(t)`, `g.card(t)`, `g.zone(t)` |
-| `g.em(m).give_tag("TAUNT", false)`, `.erase_tag(…)`, `g.add_tag_int(w, "DURABILITY", -1)` | `g.give_tag(m, "TAUNT")`, `g.erase_tag(m, …)`, `g.add_tag(w, "DURABILITY", -1)` |
-| `g.em(t).add_enchant(json!({"hooks": "ench:x", "player": p}))` | `g.enchant(t, { hooks = "ench:x", player = p })` |
-| `g.weapon(p)` (`Option`), `g.weapon_of(p)` (`NONE`) | `g.weapon(p)` (`nil`) |
-| `g.board_has_room(me)`, `MAX_BOARD` | `g.room(g.ctrl(me)) > 0`, `g.rule("board")` |
-| `g.players[p].hand / deck / board / secrets` | `g.hand(p)`, `g.deck(p)`, `g.minions(p)`, `g.traps(p)` |
-| `g.players[p].mana = MAX_MANA.min(mana + 2)` | `g.add_mana(p, 2)` |
-| `g.players[p].cards_played_this_turn` | `g.cards_played(p)` |
-| `g.random_choice(&v)`, `g.pick(&v)`, `g.rng.randi_range(a, b)`, `g.shuffle_ids(&mut v)` | `g.pick(v)`, `g.pick(v)`, `g.random(a, b)`, `g.shuffle(v)` |
-| `g.random_alive(&v)` (`NONE`) | `g.random_alive(v)` (`nil`) |
-| `card_db::card(id).race` | `g.info(id).race` |
-| `x.retain(…); g.em(e).zone = "GRAVEYARD"; g.log_event(json!({…}))` | `g.remove(e, "GRAVEYARD"); g.log{ type = "discard", … }` |
-| `g.died_pos(me)` | `g.died_pos(me)` |
-| `copy_minion(g, me, t)` | `g.copy_minion(me, t)` |
-| `for _ in 0..n` | `for _ = 1, n do … end` |
-| `if t != NONE` | `if t then` (queries) / `if t >= 0 then` (event fields) |
+`PARITY_FILTER` takes card ids, class names and `lua` (every card with hooks),
+comma-separated; a game is replayed if its recorded line mentions any of them.
+`PARITY_BIG=0` skips `fixtures/big`. The first lines of a mismatch report show
+the step, the action and what differs. The Classic scripts are built into the
+engine (build.rs), so a test run always uses the current ones.
+`builtin_rules_hash_matches_pack_py` (tests/packs.rs) checks the built-in
+ruleset against `tools/pack.py`.
 
 ### Pitfalls
 
 - **Same order, same randomness.** Parity compares every event and the RNG
-  state: call `g.pick`/`g.random`/`g.random_alive` exactly where the Rust did,
-  as many times, on lists in the same order; compute things inside a loop if the
-  Rust did (`g.spell_dmg` per target), keep event order (damage before freeze…).
+  state: a change to a Classic script must call `g.pick`/`g.random`/`g.random_alive`
+  exactly where it did, as many times, on lists in the same order, and keep
+  event order (damage before freeze…).
 - `nil` vs `-1`: queries and actions return `nil` for "none"; events keep `-1`.
   `ev.field` is `nil` when the event lacks it — `nil >= 0` is an error.
 - `0` and `""` are **true** in Lua: write `g.room(p) > 0`, `#list > 0`.
@@ -342,8 +277,8 @@ Left: nothing — every Classic card hook is in Lua; no card hooks remain in Rus
 - Read-only hooks (`target.filter`, `can_play`, `cost_mod`, `cost_aura`) see
   only queries: no `g.cost`, no actions.
 - `g.tag` adds aura values (`SPELLPOWER` from an aura counts); `g.add_tag`
-  changes only the entity's own tag, like Rust `add_tag_int`.
+  changes only the entity's own tag.
 - An `on` hook's changes to `ev` are written back; a copy of `ev` is not.
 - Do not keep game state in file-level locals (see [script files](#script-files)).
-- `cards.patch.json` and `lib.lua` are shared by everyone porting: add, do not
-  reorder; prefer class-local helpers in your own file.
+- In Classic, `cards.patch.json` and `lib.lua` are shared by every script file:
+  add, do not reorder; prefer file-local helpers.

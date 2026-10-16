@@ -14,7 +14,7 @@ pub fn has(id: &str) -> bool {
     ruleset::classic().has(id)
 }
 
-/// Collectible VANILLA cards, sorted by id.
+/// Collectible cards of the constructed sets, sorted by id.
 pub fn collectible() -> &'static [String] {
     &ruleset::classic().collectible
 }

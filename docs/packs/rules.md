@@ -4,7 +4,12 @@ Everything about a match, a deck, the Arena and the ladder that is not a card.
 Schema: [schema/rules.schema.json](schema/rules.schema.json). Whole numbers only
 (it is hashed canonically, [format.md](format.md) §3). Values below are the
 Classic pack's (`packs/classic/rules.json`), which match what the game and the
-server do today.
+server do today. The engine knows no game of its own: everything game-specific
+it uses (the coin, champions and their powers, classes, rarities, starter decks,
+the Arena) comes from here and from `cards.json`; an optional field the pack
+leaves out takes the engine's default (the Classic value in these tables,
+`champion_health` 30, `queue_steps` 5000, `champions_offered` 3, …; no coin,
+no starter rarities).
 
 ## `limits`
 
@@ -71,7 +76,8 @@ keeping the Hearthstone names (D7).
 |---|---|---|
 | `sets` | `["VANILLA"]` | Collectible cards of these sets can be put in a deck. |
 | `class_cards` | `"own_and_neutral"` | A deck holds its champion's class cards and neutral ones. |
-| `starter_core` | 10 ids | Neutral cards that fill a starter deck: two of every Basic (`FREE`) card of the class, then these, two each, up to `deck_size`. |
+| `starter_rarities` | `["FREE"]` | A starter deck (the engine's `deck::basic_in`) takes two of every collectible class card of these rarities … |
+| `starter_core` | 10 ids | … then these neutral cards, two each, up to `deck_size`. |
 
 ### `arena`
 

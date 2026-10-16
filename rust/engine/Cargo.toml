@@ -2,7 +2,7 @@
 name = "classichs-engine"
 version = "0.1.0"
 edition = "2021"
-description = "Rules engine of Classic HS (Hearthstone Classic, June 2014): one JSON API for the server, Godot (GDExtension) and the browser (WASM)."
+description = "Rules engine of Classic HS: card-game mechanics played by game packs (Lua card scripts); one JSON API for the server, Godot (GDExtension) and the browser (WASM)."
 license = "MIT"
 
 [lib]

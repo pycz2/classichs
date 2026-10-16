@@ -107,7 +107,7 @@ fn tutorial_mission_blocks_the_turn_end() {
     let mut e = Engine::new();
     assert_eq!(call(&mut e, json!({"op": "new", "game": "t", "mission": 1}))["ok"], true);
     let b = call(&mut e, json!({"op": "end_turn_block", "game": "t", "player": 0}));
-    assert_eq!(b["block"], "Not yet! You have more cards to play!");
+    assert_eq!(b["reason"], "while_can_play");
 }
 
 #[test]

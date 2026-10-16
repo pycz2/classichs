@@ -19,7 +19,7 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 struct Slot {
     game: Game,
-    /// The tutorial mission this game plays (1-6), if any.
+    /// The mission this game plays (its number), if any.
     mission: Option<usize>,
 }
 
@@ -153,7 +153,7 @@ impl Engine {
                         let mut ids: Vec<&String> = rs.hooks.keys().collect();
                         ids.sort();
                         let all: Map<String, Value> =
-                            ids.into_iter().map(|id| (id.clone(), crate::cards::summary(rs.hooks(id)))).collect();
+                            ids.into_iter().map(|id| (id.clone(), crate::hooks::summary(rs.hooks(id)))).collect();
                         json!({"ok": true, "hooks": all})
                     }
                     "validate" => match Deck::from_value_in(rs, req.get("deck").unwrap_or(&Value::Null)) {
@@ -304,11 +304,11 @@ fn game_op(op: &str, id: &str, slot: &mut Slot, req: &Value, view: i64) -> Value
         "dump" => json!({"ok": true, "game": id, "scenario": scenario::dump(g)}),
         _ => {
             // end_turn_block
-            let (reason, block) = match slot.mission.and_then(|n| g.rs.mission(n)) {
+            let reason = match slot.mission.and_then(|n| g.rs.mission(n)) {
                 Some(m) if (0..=1).contains(&player) => missions::end_turn_block(m, g, player as usize),
-                _ => ("", ""),
+                _ => "",
             };
-            json!({"ok": true, "game": id, "block": block, "reason": reason, "mission": slot.mission})
+            json!({"ok": true, "game": id, "reason": reason, "mission": slot.mission})
         }
     }
 }
@@ -375,9 +375,19 @@ pub fn events_for(g: &Game, events: &[Ev], viewer: i64) -> Value {
     )
 }
 
+/// The snapshot's name of a card type: clients know a CHAMPION as `HERO` and a
+/// POWER as `HERO_POWER`.
+fn client_type(kind: &str) -> &str {
+    match kind {
+        "CHAMPION" => "HERO",
+        "POWER" => "HERO_POWER",
+        k => k,
+    }
+}
+
 /// Everything a client needs to draw the table. view -1: the full state
 /// (GDScript to_dict() plus computed stats); view 0/1: that player's view
-/// (no RNG state, no deck contents, the opponent's hand and secrets hidden).
+/// (no RNG state, no deck contents, the opponent's hand and traps hidden).
 pub fn snapshot(g: &Game, view: i64) -> Value {
     let mut d = g.to_dict();
     let mut ents = Map::new();
@@ -390,8 +400,8 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
             continue;
         }
         let mut s = e.snapshot();
-        s["type"] = json!(e.kind());
-        s["atk"] = json!(if e.is_hero() { g.hero_atk(e.id) } else { e.atk() });
+        s["type"] = json!(client_type(e.kind()));
+        s["atk"] = json!(if e.is_champion() { g.hero_atk(e.id) } else { e.atk() });
         s["health"] = json!(e.health());
         s["max_health"] = json!(e.max_health());
         s["cost"] = json!(g.cost(e.id));
@@ -402,7 +412,7 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
     for (i, p) in g.players.iter().enumerate() {
         let pd = &mut d["players"][i];
         pd["deck_count"] = json!(p.deck.len());
-        pd["spell_damage"] = json!(p.board.iter().map(|&m| g.e(m).spellpower(g.n().spell_power)).sum::<i64>());
+        pd["spell_damage"] = json!(p.board.iter().map(|&m| g.e(m).spell_power(g.n().spell_power)).sum::<i64>());
         if view >= 0 {
             pd["deck"] = json!([]);
         }

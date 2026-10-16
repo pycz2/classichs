@@ -81,6 +81,7 @@
     "constructed": {
       "sets": ["VANILLA"],
       "class_cards": "own_and_neutral",
+      "starter_rarities": ["FREE"],
       "starter_core": [
         "VAN_EX1_066", "VAN_CS2_172", "VAN_EX1_019", "VAN_CS2_182", "VAN_CS2_147", "VAN_CS2_179",
         "VAN_CS2_200", "VAN_CS2_120", "VAN_EX1_015", "VAN_CS2_189"

@@ -13,11 +13,13 @@ pub struct Player {
     /// The last element is the top card.
     pub deck: Vec<Id>,
     pub board: Vec<Id>,
+    /// TRAP cards in play (the protocol's `secrets`, like `hero` and `hero_power`).
     pub secrets: Vec<Id>,
     pub mana: i64,
     pub max_mana: i64,
-    pub overload_owed: i64,
-    pub overload_locked: i64,
+    /// MANA_LOCK for the next turn / locked this turn.
+    pub mana_lock_owed: i64,
+    pub mana_locked: i64,
     pub fatigue: i64,
     pub cards_played_this_turn: i64,
     pub minions_played_this_turn: i64,
@@ -36,8 +38,8 @@ impl Player {
     pub fn snapshot(&self) -> Value {
         json!({"hero": self.hero, "power": self.hero_power, "weapon": self.weapon.unwrap_or(NONE),
             "hand": self.hand, "deck": self.deck, "board": self.board, "secrets": self.secrets,
-            "mana": self.mana, "max_mana": self.max_mana, "ol_owed": self.overload_owed,
-            "ol_locked": self.overload_locked, "fatigue": self.fatigue, "played": self.cards_played_this_turn,
+            "mana": self.mana, "max_mana": self.max_mana, "ol_owed": self.mana_lock_owed,
+            "ol_locked": self.mana_locked, "fatigue": self.fatigue, "played": self.cards_played_this_turn,
             "minions_played": self.minions_played_this_turn, "cost_mods": self.cost_mods,
             "mulliganed": self.mulliganed, "mulligan_replace": self.mulligan_replace})
     }

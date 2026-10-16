@@ -9,15 +9,14 @@ use crate::scenario::ints;
 use crate::state::{Game, Pending};
 use serde_json::{Map, Value};
 
-/// A minion standing in for a hidden card: Classic's vanilla Wisp; in another
-/// pack its first minion without hooks.
+/// A minion standing in for a hidden card: the pack's cheapest (collectible first) minion without
+/// hooks or keywords (then the lowest id).
 fn filler(rs: &Ruleset) -> &str {
-    if rs.has("VAN_CS2_231") {
-        return "VAN_CS2_231";
-    }
-    let mut ids: Vec<&String> = rs.cards.iter().filter(|(_, c)| c.kind == "MINION" && c.script.is_empty()).map(|(k, _)| k).collect();
-    ids.sort();
-    ids.first().map_or("", |s| s.as_str())
+    rs.cards
+        .values()
+        .filter(|c| c.kind == "MINION" && c.script.is_empty() && c.keywords.is_empty())
+        .min_by_key(|c| (!c.collectible, c.cost, c.id.as_str()))
+        .map_or("", |c| c.id.as_str())
 }
 
 fn zone(rs: &Ruleset, s: &str) -> &'static str {
@@ -87,8 +86,8 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
         pl.secrets = ids(&p["secrets"]);
         pl.mana = int(p.get("mana"));
         pl.max_mana = int(p.get("max_mana"));
-        pl.overload_owed = int(p.get("ol_owed"));
-        pl.overload_locked = int(p.get("ol_locked"));
+        pl.mana_lock_owed = int(p.get("ol_owed"));
+        pl.mana_locked = int(p.get("ol_locked"));
         pl.fatigue = int(p.get("fatigue"));
         pl.cards_played_this_turn = int(p.get("played"));
         pl.minions_played_this_turn = int(p.get("minions_played"));
@@ -135,4 +134,13 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
     }
     g.update_auras();
     Ok(g)
+}
+
+#[cfg(test)]
+mod tests {
+    /// Classic keeps its stand-in: the vanilla Wisp.
+    #[test]
+    fn classic_filler_is_the_wisp() {
+        assert_eq!(super::filler(crate::ruleset::classic()), "VAN_CS2_231");
+    }
 }

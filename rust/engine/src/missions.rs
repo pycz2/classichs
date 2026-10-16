@@ -69,7 +69,7 @@ pub fn scenario(m: &Mission) -> Value {
     ]})
 }
 
-/// Tutorial.start: mission n of the built-in Classic pack.
+/// Mission n of the built-in Classic pack.
 pub fn start(n: usize) -> Result<Game, String> {
     start_in(ruleset::classic(), n)
 }
@@ -89,20 +89,19 @@ pub fn start_in(rs: &'static Ruleset, n: usize) -> Result<Game, String> {
     Ok(g)
 }
 
-/// Why player p can't end the turn yet: (reason key, the English text), ("", "") if they can.
-/// The key is what a client translates (`while_can_play`, `while_can_attack`, as the mission's
-/// `end_turn_block` fields); the English text is kept for old clients.
-pub fn end_turn_block(m: &Mission, g: &Game, p: usize) -> (&'static str, &'static str) {
+/// Why player p can't end the turn yet: a reason key the client turns into words
+/// (`while_can_play`, `while_can_attack`, as the mission's `end_turn_block` fields), "" if they can.
+pub fn end_turn_block(m: &Mission, g: &Game, p: usize) -> &'static str {
     if g.current != p || g.game_over {
-        return ("", "");
+        return "";
     }
     let legal = g.legal_actions();
     let any = |ty: &str| legal.iter().any(|a| a["player"] == p && a["type"] == ty);
     if m.block_mana && any("play") {
-        return ("while_can_play", "Not yet! You have more cards to play!");
+        return "while_can_play";
     }
     if m.block_attack && any("attack") {
-        return ("while_can_attack", "Not yet! You can still attack.");
+        return "while_can_attack";
     }
-    ("", "")
+    ""
 }

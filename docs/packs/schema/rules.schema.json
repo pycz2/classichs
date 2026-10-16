@@ -106,6 +106,7 @@
           "properties": {
             "sets": {"$ref": "#/$defs/ids"},
             "class_cards": {"enum": ["own_and_neutral"]},
+            "starter_rarities": {"$ref": "#/$defs/ids"},
             "starter_core": {"$ref": "#/$defs/ids"}
           }
         },

@@ -15,6 +15,10 @@ signal refused(error: String)
 
 ## Screen shake on heavy damage; the settings screen (subproject 6) toggles it.
 static var shake_enabled := true
+## What the player is told when a tutorial mission does not let the turn end, by the
+## engine's reason key (`end_turn_block`); translated (Rules.MESSAGES).
+const END_TURN_BLOCKS := {"while_can_play": "Not yet! You have more cards to play!",
+	"while_can_attack": "Not yet! You can still attack."}
 
 var game := GameView.new()
 ## The game in the local engine ("" in a server game).
@@ -148,7 +152,8 @@ func dump() -> Dictionary:
 
 ## Why a tutorial mission does not let player p end the turn yet ("" = it does), translated.
 func end_turn_block(p: int) -> String:
-	var why := str(Rules.request({"op": "end_turn_block", "game": id, "player": p}).get("block", ""))
+	var reason := str(Rules.request({"op": "end_turn_block", "game": id, "player": p}).get("reason", ""))
+	var why: String = END_TURN_BLOCKS.get(reason, "")
 	return "" if why == "" else TranslationServer.translate(why)
 
 

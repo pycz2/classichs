@@ -4,7 +4,7 @@
 //! process (`&'static`), so entities and games can point into it.
 //! The built-in one is the Classic pack, made from the repo's sources at build time.
 
-use crate::cards::{self, HookSet};
+use crate::hooks::HookSet;
 use crate::lua::LuaRules;
 use crate::missions::Mission;
 use crate::pack::{self, Files};
@@ -29,8 +29,9 @@ pub(crate) fn leak(s: &str) -> &'static str {
     Box::leak(s.to_string().into_boxed_str())
 }
 
-/// A card as the engine uses it. `kind` keeps the engine's internal type names
-/// (`HERO` for a CHAMPION, `HERO_POWER` for a POWER): snapshots show them.
+/// A card as the engine uses it. `kind` is the pack type (`MINION`, `SPELL`,
+/// `WEAPON`, `CHAMPION`, `POWER`, `ENCHANTMENT`); snapshots show the client's
+/// older names (`api::snapshot`).
 #[derive(Debug, Default)]
 pub struct Card {
     pub id: String,
@@ -40,12 +41,12 @@ pub struct Card {
     pub health: i64,
     pub durability: i64,
     /// MANA_LOCK amount.
-    pub overload: i64,
+    pub mana_lock: i64,
     /// SPELL_POWER amount.
-    pub spell_damage: Option<i64>,
+    pub spell_power: Option<i64>,
     pub race: String,
     /// The pack's keyword names.
-    pub mechanics: Vec<String>,
+    pub keywords: Vec<String>,
     pub rarity: String,
     pub card_class: String,
     pub collectible: bool,
@@ -54,19 +55,10 @@ pub struct Card {
     pub power: String,
     /// `scripts/<file>.lua#<key>` ("" = no script).
     pub script: String,
-    /// A TRAP spell (a Secret).
+    /// A TRAP spell.
     pub trap: bool,
     /// The tags an entity of this card starts with.
     pub start_tags: Map<String, Value>,
-}
-
-impl Card {
-    pub fn has_mechanic(&self, m: &str) -> bool {
-        self.mechanics.iter().any(|x| x == m)
-    }
-    pub fn is_secret(&self) -> bool {
-        self.trap
-    }
 }
 
 #[derive(Deserialize)]
@@ -253,6 +245,8 @@ pub struct Ruleset {
     pub classes: Vec<Class>,
     pub tiers: HashMap<String, String>,
     pub no_rarity_tier: String,
+    /// Rarities whose class cards a starter deck takes two of (`modes.constructed.starter_rarities`).
+    pub starter_rarities: Vec<String>,
     pub starter_core: Vec<String>,
     pub own_and_neutral: bool,
     pub arena: Arena,
@@ -407,6 +401,7 @@ impl Ruleset {
                 .as_array()
                 .map_or(HashMap::new(), |a| a.iter().map(|r| (s(r, "id"), s(r, "tier"))).collect()),
             no_rarity_tier: rules.get("no_rarity_tier").and_then(Value::as_str).unwrap_or("common").to_string(),
+            starter_rarities: strs(constructed, "starter_rarities"),
             starter_core: strs(constructed, "starter_core"),
             own_and_neutral: constructed.get("class_cards").and_then(Value::as_str).unwrap_or("own_and_neutral")
                 == "own_and_neutral",
@@ -434,23 +429,13 @@ impl Ruleset {
                 return Err(format!("{}: unknown power {}", c.id, c.power));
             }
         }
-        let champions = rs.cards.values().any(|c| c.kind == "HERO");
-        if champions && rs.cards.get(&rs.default_power).is_none_or(|c| c.kind != "HERO_POWER") {
+        let champions = rs.cards.values().any(|c| c.kind == "CHAMPION");
+        if champions && rs.cards.get(&rs.default_power).is_none_or(|c| c.kind != "POWER") {
             return Err(format!("rules.json: default_power {:?} is not a POWER card", rs.default_power));
         }
         let scripts: Vec<(&String, &Vec<u8>)> = files.iter().filter(|(p, _)| p.starts_with("scripts/") && p.ends_with(".lua")).collect();
-        let (lua, mut hooks) = crate::lua::build(&rs, &scripts)?;
+        let (lua, hooks) = crate::lua::build(&rs, &scripts)?;
         rs.lua = lua;
-        // ponytail: the Rust hooks of rust/engine/src/cards serve Classic cards not ported to Lua yet;
-        // delete with the last Rust card file.
-        if rs.id == "classic-2014" {
-            for id in cards::all_ids() {
-                let scripted = rs.cards.get(id).is_some_and(|c| !c.script.is_empty());
-                if !scripted && !hooks.contains_key(id) {
-                    hooks.insert(id.to_string(), HookSet::from(cards::of(id)));
-                }
-            }
-        }
         if let Some(m) = rs.missions.iter().find(|m| !m.script.is_empty() && !hooks.contains_key(&m.script)) {
             return Err(format!("missions/{}.json: no hooks {}", m.id, m.script));
         }
@@ -461,12 +446,9 @@ impl Ruleset {
 
 fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, String> {
     let kind = match c.kind.as_str() {
-        "CHAMPION" => "HERO",
-        "POWER" => "HERO_POWER",
-        "MINION" | "SPELL" | "WEAPON" | "ENCHANTMENT" => c.kind.as_str(),
+        "MINION" | "SPELL" | "WEAPON" | "CHAMPION" | "POWER" | "ENCHANTMENT" => c.kind.clone(),
         k => return Err(format!("{}: unknown type {k}", c.id)),
-    }
-    .to_string();
+    };
     let mut tags = Map::new();
     let mut trap = false;
     for k in &c.keywords {
@@ -482,21 +464,21 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
     if kind == "WEAPON" {
         tags.insert(names.durability.into(), json!(c.durability));
     }
-    if kind == "HERO" {
+    if kind == "CHAMPION" {
         tags.insert(names.armor.into(), json!(0));
     }
     Ok(Card {
         trap: trap && kind == "SPELL",
-        health: if kind == "HERO" && c.health == 0 { champion_health } else { c.health },
+        health: if kind == "CHAMPION" && c.health == 0 { champion_health } else { c.health },
         id: c.id,
         kind,
         cost: c.cost,
         attack: c.attack,
         durability: c.durability,
-        overload: c.mana_lock,
-        spell_damage: c.spell_power,
+        mana_lock: c.mana_lock,
+        spell_power: c.spell_power,
         race: c.race,
-        mechanics: c.keywords,
+        keywords: c.keywords,
         rarity: c.rarity,
         card_class: c.class,
         collectible: c.collectible,

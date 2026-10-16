@@ -55,8 +55,8 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
     let p = &mut g.players[i];
     p.mana = num(d, "mana");
     p.max_mana = num(d, "max_mana");
-    p.overload_owed = num(d, "overload_owed");
-    p.overload_locked = num(d, "overload_locked");
+    p.mana_lock_owed = num(d, "overload_owed");
+    p.mana_locked = num(d, "overload_locked");
     p.fatigue = num(d, "fatigue");
     p.cards_played_this_turn = num(d, "cards_played");
     p.minions_played_this_turn = num(d, "minions_played");
@@ -222,7 +222,7 @@ pub fn validate_in(rs: &Ruleset, sc: &Value) -> Result<(), String> {
         if !d.is_object() || d.get("hero").is_none() {
             return Err(format!("{at}: hero is required"));
         }
-        check_card(rs, &format!("{at}.hero"), d.get("hero"), "HERO")?;
+        check_card(rs, &format!("{at}.hero"), d.get("hero"), "CHAMPION")?;
         for k in NUMBER_FIELDS {
             if d.get(k).is_some_and(|v| !v.is_number()) {
                 return Err(format!("{at}.{k}: must be a number"));
@@ -242,7 +242,7 @@ pub fn validate_in(rs: &Ruleset, sc: &Value) -> Result<(), String> {
             return Err(format!("{at}.hero_power: required for hero {hero}"));
         }
         if d.get("hero_power").is_some() {
-            check_card(rs, &format!("{at}.hero_power"), d.get("hero_power"), "HERO_POWER")?;
+            check_card(rs, &format!("{at}.hero_power"), d.get("hero_power"), "POWER")?;
         }
         for (zone, kind) in [("hand", ""), ("deck", ""), ("board", "MINION"), ("secrets", "SPELL")] {
             let items = match d.get(zone) {
@@ -304,7 +304,7 @@ pub fn dump(g: &Game) -> Value {
                 "hero": hero.card_id, "hero_power": hp.card_id,
                 "damage": hero.damage, "armor": hero.tag(n.armor), "hero_attacks": hero.tag(n.attacks),
                 "mana": p.mana, "max_mana": p.max_mana,
-                "overload_owed": p.overload_owed, "overload_locked": p.overload_locked,
+                "overload_owed": p.mana_lock_owed, "overload_locked": p.mana_locked,
                 "fatigue": p.fatigue, "cards_played": p.cards_played_this_turn,
                 "hero_power_used": hp.has(n.used), "hero_power_locked": hp.has(n.locked),
                 "cost_mods": p.cost_mods, "minions_played": p.minions_played_this_turn,

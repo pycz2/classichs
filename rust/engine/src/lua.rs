@@ -15,7 +15,7 @@
 //! A script error ends the game as a draw with the reason (`Game::script_error`),
 //! never a panic.
 
-use crate::cards::{Base, Fx, HookSet, SecretH, TSpec};
+use crate::hooks::{Base, HookFn, HookSet, TSpec, TrapHook};
 use crate::entity::{Id, NONE};
 use crate::ruleset::{leak, Ruleset};
 use crate::state::{Ev, Game};
@@ -222,43 +222,42 @@ impl Parse<'_> {
                 "friendly_minion" => Base::FriendlyMinion,
                 "enemy_char" => Base::EnemyChar,
                 "friendly_char" => Base::FriendlyChar,
-                "enemy_hero" => Base::EnemyHero,
+                "enemy_hero" | "enemy_champion" => Base::EnemyChampion,
                 _ => return None,
             })
         };
         if let Some(s) = v.as_str() {
-            return Ok(TSpec { base: base_of(s).ok_or(self.bad(&format!("{field}: unknown target {s:?}")))?, pred: None });
+            return Ok(TSpec { base: base_of(s).ok_or(self.bad(&format!("{field}: unknown target {s:?}")))?, filter: None });
         }
-        let (b, pb) = self.get(v, pv, "base");
+        let (b, _) = self.get(v, pv, "base");
         let base = b.as_str().and_then(base_of).ok_or(self.bad(&format!("{field}.base: a target kind expected")))?;
         let (f, pf) = self.get(v, pv, "filter");
-        let pred = if f.is_nil() { None } else { Some(Fx::Lua(self.func(&f, &pf, "filter", true)?)) };
-        let _ = pb;
-        Ok(TSpec { base, pred })
+        let filter = if f.is_nil() { None } else { Some(self.func(&f, &pf, "filter", true)?) };
+        Ok(TSpec { base, filter })
     }
 
     fn hooks(&mut self, t: &L, pt: &L) -> Result<HookSet, String> {
         if !matches!(t, L::Table(_)) {
             return Err(self.bad("hooks must be a table"));
         }
-        let mut h = HookSet { lua: true, ..HookSet::default() };
+        let mut h = HookSet::default();
         for (k, v) in self.m.pairs(t).map_err(err)? {
             let key = k.as_str().unwrap_or("?").to_string();
             let pv = self.p.get(pt, k.clone()).unwrap_or_default();
             macro_rules! f {
                 ($ro:expr) => {
-                    Fx::Lua(self.func(&v, &pv, &key, $ro)?)
+                    self.func(&v, &pv, &key, $ro)?
                 };
             }
             match key.as_str() {
                 "target" => h.target = Some(self.spec(&v, &pv, &key)?),
                 "combo_target" => h.combo_target = Some(self.spec(&v, &pv, &key)?),
-                "battlecry" | "on_play" => h.battlecry = Some(f!(false)),
+                "battlecry" | "on_play" => h.on_play = Some(f!(false)),
                 "spell" => h.spell = Some(f!(false)),
                 "combo" => h.combo = Some(f!(false)),
                 "effect" => h.effect = Some(f!(false)),
-                "hero_power" => h.hero_power = Some(f!(false)),
-                "deathrattle" | "on_death" => h.deathrattle = Some(f!(false)),
+                "hero_power" | "power" => h.power = Some(f!(false)),
+                "deathrattle" | "on_death" => h.on_death = Some(f!(false)),
                 "aura" => h.aura = Some(f!(false)),
                 "aura_final" => h.aura_final = Some(f!(false)),
                 "on_choose" => h.on_choose = Some(f!(false)),
@@ -267,10 +266,10 @@ impl Parse<'_> {
                 "cost_mod" => h.cost_mod = Some(f!(true)),
                 "cost_aura" => h.cost_aura = Some(f!(true)),
                 "immune_while_attacking" => h.immune_while_attacking = v.truthy(),
-                "choose_one" => {
+                "choose_one" | "choice" => {
                     let o = self.m.list_items(&v).map_err(err)?;
                     match (o.first().and_then(L::as_str), o.get(1).and_then(L::as_str), o.len()) {
-                        (Some(a), Some(b), 2) => h.choose_one = Some([leak(a), leak(b)]),
+                        (Some(a), Some(b), 2) => h.choice = Some([leak(a), leak(b)]),
                         _ => return Err(self.bad("choose_one must be a list of two card ids")),
                     }
                 }
@@ -279,9 +278,9 @@ impl Parse<'_> {
                         let name = ek.as_str().ok_or(self.bad(&format!("{key}: event names are strings")))?;
                         let fi = self.func(&ev, &L::Nil, &format!("{key}.{name}"), false)?;
                         if key == "on" {
-                            h.on.push((leak(name), Fx::Lua(fi)));
+                            h.on.push((leak(name), fi));
                         } else {
-                            h.now.push((leak(name), Fx::Lua(fi)));
+                            h.now.push((leak(name), fi));
                         }
                     }
                 }
@@ -289,10 +288,10 @@ impl Parse<'_> {
                     let (e, _) = self.get(&v, &pv, "event");
                     let event = leak(e.as_str().ok_or(self.bad("secret.event must be an event name"))?);
                     let (c, _) = self.get(&v, &pv, "cond");
-                    let cond = if c.is_nil() { None } else { Some(Fx::Lua(self.func(&c, &L::Nil, "secret.cond", false)?)) };
+                    let cond = if c.is_nil() { None } else { Some(self.func(&c, &L::Nil, "secret.cond", false)?) };
                     let (x, _) = self.get(&v, &pv, "effect");
-                    let effect = Fx::Lua(self.func(&x, &L::Nil, "secret.effect", false)?);
-                    h.secret = Some(SecretH { event, cond, effect });
+                    let effect = self.func(&x, &L::Nil, "secret.effect", false)?;
+                    h.trap = Some(TrapHook { event, cond, effect });
                 }
                 _ => return Err(self.bad(&format!("unknown hook '{key}'"))),
             }
@@ -466,114 +465,70 @@ impl Game {
         self.log_event(json!({"type": "game_over", "winner": -1, "reason": "script_error", "error": msg}));
     }
 
-    pub(crate) fn fx_effect(&mut self, f: Fx<crate::cards::Effect>, me: Id, t: Id) {
-        match f {
-            Fx::Rust(f) => f(self, me, t),
-            Fx::Lua(i) => {
-                self.lua(i, |_| Ok(vec![L::Int(me), id(t)]), |_, _, _| Ok(()));
-            }
-        }
+    pub(crate) fn fx_effect(&mut self, f: HookFn, me: Id, t: Id) {
+        self.lua(f, |_| Ok(vec![L::Int(me), id(t)]), |_, _, _| Ok(()));
     }
 
-    pub(crate) fn fx_me(&mut self, f: Fx<fn(&mut Game, Id)>, me: Id) {
-        match f {
-            Fx::Rust(f) => f(self, me),
-            Fx::Lua(i) => {
-                self.lua(i, |_| Ok(vec![L::Int(me)]), |_, _, _| Ok(()));
-            }
-        }
+    pub(crate) fn fx_me(&mut self, f: HookFn, me: Id) {
+        self.lua(f, |_| Ok(vec![L::Int(me)]), |_, _, _| Ok(()));
     }
 
     /// An event hook; changes to the event table go back to the logged event.
-    pub(crate) fn fx_on(&mut self, f: Fx<crate::cards::OnFn>, me: Id, ev: usize) {
-        match f {
-            Fx::Rust(f) => f(self, me, ev),
-            Fx::Lua(i) => {
-                self.lua(
-                    i,
-                    |g| {
-                        let e = Value::Object(g.event_log[ev].clone());
-                        Ok(vec![L::Int(me), to_lua(g.vm(), &e, 0)?])
-                    },
-                    |g, _, a| {
-                        let mut e = std::mem::take(&mut g.event_log[ev]);
-                        let r = write_back(g, &a[2], &mut e);
-                        g.event_log[ev] = e;
-                        r
-                    },
-                );
-            }
-        }
+    pub(crate) fn fx_on(&mut self, f: HookFn, me: Id, ev: usize) {
+        self.lua(
+            f,
+            |g| {
+                let e = Value::Object(g.event_log[ev].clone());
+                Ok(vec![L::Int(me), to_lua(g.vm(), &e, 0)?])
+            },
+            |g, _, a| {
+                let mut e = std::mem::take(&mut g.event_log[ev]);
+                let r = write_back(g, &a[2], &mut e);
+                g.event_log[ev] = e;
+                r
+            },
+        );
     }
 
-    pub(crate) fn fx_now(&mut self, f: Fx<crate::cards::NowFn>, me: Id, ev: &mut Ev) {
-        match f {
-            Fx::Rust(f) => f(self, me, ev),
-            Fx::Lua(i) => {
-                let src = Value::Object(ev.clone());
-                self.lua(i, |g| Ok(vec![L::Int(me), to_lua(g.vm(), &src, 0)?]), |g, _, a| write_back(g, &a[2], ev));
-            }
-        }
+    pub(crate) fn fx_now(&mut self, f: HookFn, me: Id, ev: &mut Ev) {
+        let src = Value::Object(ev.clone());
+        self.lua(f, |g| Ok(vec![L::Int(me), to_lua(g.vm(), &src, 0)?]), |g, _, a| write_back(g, &a[2], ev));
     }
 
-    pub(crate) fn fx_cond(&mut self, f: Fx<crate::cards::SecretCond>, me: Id, ev: usize) -> bool {
-        match f {
-            Fx::Rust(f) => f(self, me, ev),
-            Fx::Lua(i) => self
-                .lua(i, |g| {
-                        let e = Value::Object(g.event_log[ev].clone());
-                        Ok(vec![L::Int(me), to_lua(g.vm(), &e, 0)?])
-                    }, |_, r, _| {
-                    Ok(r.first().is_some_and(L::truthy))
-                })
-                .unwrap_or(false),
-        }
+    pub(crate) fn fx_cond(&mut self, f: HookFn, me: Id, ev: usize) -> bool {
+        self.lua(
+            f,
+            |g| {
+                let e = Value::Object(g.event_log[ev].clone());
+                Ok(vec![L::Int(me), to_lua(g.vm(), &e, 0)?])
+            },
+            |_, r, _| Ok(r.first().is_some_and(L::truthy)),
+        )
+        .unwrap_or(false)
     }
 
-    pub(crate) fn fx_choose(&mut self, f: Fx<crate::cards::OnChoose>, me: Id, opt: Id, still: Vec<Id>) {
-        match f {
-            Fx::Rust(f) => f(self, me, opt, still),
-            Fx::Lua(i) => {
-                self.lua(i, |g| Ok(vec![L::Int(me), L::Int(opt), g.vm().list(still.into_iter().map(L::Int).collect())?]), |_, _, _| {
-                    Ok(())
-                });
-            }
-        }
+    pub(crate) fn fx_choose(&mut self, f: HookFn, me: Id, opt: Id, still: Vec<Id>) {
+        self.lua(f, |g| Ok(vec![L::Int(me), L::Int(opt), g.vm().list(still.into_iter().map(L::Int).collect())?]), |_, _, _| Ok(()));
     }
 
-    pub(crate) fn fx_dur(&mut self, f: Fx<crate::cards::DurFn>, w: Id, d: Id) -> bool {
-        match f {
-            Fx::Rust(f) => f(self, w, d),
-            Fx::Lua(i) => self.lua(i, |_| Ok(vec![L::Int(w), L::Int(d)]), |_, r, _| Ok(r.first().is_some_and(L::truthy))).unwrap_or(true),
-        }
+    pub(crate) fn fx_dur(&mut self, f: HookFn, w: Id, d: Id) -> bool {
+        self.lua(f, |_| Ok(vec![L::Int(w), L::Int(d)]), |_, r, _| Ok(r.first().is_some_and(L::truthy))).unwrap_or(true)
     }
 
-    pub(crate) fn fx_can_play(&self, f: Fx<crate::cards::CanPlay>, me: Id) -> bool {
-        match f {
-            Fx::Rust(f) => f(self, me),
-            Fx::Lua(i) => self.probe(i, &[L::Int(me)]).is_some_and(|v| v.truthy()),
-        }
+    pub(crate) fn fx_can_play(&self, f: HookFn, me: Id) -> bool {
+        self.probe(f, &[L::Int(me)]).is_some_and(|v| v.truthy())
     }
 
-    pub(crate) fn fx_pred(&self, f: Fx<crate::cards::Pred>, me: Id, t: Id) -> bool {
-        match f {
-            Fx::Rust(f) => f(self, me, t),
-            Fx::Lua(i) => self.probe(i, &[L::Int(me), L::Int(t)]).is_some_and(|v| v.truthy()),
-        }
+    pub(crate) fn fx_filter(&self, f: HookFn, me: Id, t: Id) -> bool {
+        self.probe(f, &[L::Int(me), L::Int(t)]).is_some_and(|v| v.truthy())
     }
 
-    pub(crate) fn fx_cost_mod(&self, f: Fx<crate::cards::CostMod>, me: Id) -> i64 {
-        match f {
-            Fx::Rust(f) => f(self, me),
-            Fx::Lua(i) => self.probe(i, &[L::Int(me)]).and_then(|v| v.as_int()).unwrap_or(0),
-        }
+    pub(crate) fn fx_cost_mod(&self, f: HookFn, me: Id) -> i64 {
+        self.probe(f, &[L::Int(me)]).and_then(|v| v.as_int()).unwrap_or(0)
     }
 
-    pub(crate) fn fx_cost_aura(&self, f: Fx<crate::cards::CostAura>, me: Id, card: Id, c: i64) -> i64 {
-        match f {
-            Fx::Rust(f) => f(self, me, card, c),
-            Fx::Lua(i) => self.probe(i, &[L::Int(me), L::Int(card), L::Int(c)]).and_then(|v| v.as_int()).unwrap_or(c),
-        }
+    pub(crate) fn fx_cost_aura(&self, f: HookFn, me: Id, card: Id, c: i64) -> i64 {
+        self.probe(f, &[L::Int(me), L::Int(card), L::Int(c)]).and_then(|v| v.as_int()).unwrap_or(c)
     }
 }
 
@@ -629,22 +584,13 @@ fn card_arg(g: &Game, a: &Args, i: usize, kind: &str) -> Result<String, Error> {
     let c = a.string(i)?;
     match g.rs.cards.get(&c) {
         None => Err(a.bad(i, &format!("unknown card '{c}'"))),
-        Some(x) if !kind.is_empty() && x.kind != kind => Err(a.bad(i, &format!("'{c}' is not a {}", type_name(kind)))),
+        Some(x) if !kind.is_empty() && x.kind != kind => Err(a.bad(i, &format!("'{c}' is not a {}", kind))),
         _ => Ok(c),
     }
 }
 
 fn tag_arg(g: &Game, a: &Args, i: usize) -> Result<String, Error> {
     Ok(g.rs.names.tag(&a.string(i)?).to_string())
-}
-
-/// The pack's type name of an engine kind.
-fn type_name(kind: &str) -> &str {
-    match kind {
-        "HERO" => "CHAMPION",
-        "HERO_POWER" => "POWER",
-        k => k,
-    }
 }
 
 fn zone_name(g: &Game, z: &str) -> &'static str {
@@ -710,7 +656,7 @@ ql!(q_hand, |g, a| g.players[player(&a, 0)?].hand.clone());
 ql!(q_deck, |g, a| g.players[player(&a, 0)?].deck.clone());
 ql!(q_traps, |g, a| g.players[player(&a, 0)?].secrets.clone());
 q!(q_card, |g, a| one(g.e(ent(g, &a, 0)?).card_id.as_str()));
-q!(q_type, |g, a| one(type_name(g.e(ent(g, &a, 0)?).kind())));
+q!(q_type, |g, a| one(g.e(ent(g, &a, 0)?).kind()));
 q!(q_race, |g, a| one(g.e(ent(g, &a, 0)?).race()));
 q!(q_class, |g, a| one(g.e(ent(g, &a, 0)?).card.card_class.as_str()));
 q!(q_zone, |g, a| one(g.e(ent(g, &a, 0)?).zone));
@@ -727,7 +673,7 @@ q!(q_tag, |g, a| {
 });
 q!(q_silenced, |g, a| one(g.e(ent(g, &a, 0)?).silenced));
 q!(q_is_minion, |g, a| one(g.e(ent(g, &a, 0)?).is_minion()));
-q!(q_is_champion, |g, a| one(g.e(ent(g, &a, 0)?).is_hero()));
+q!(q_is_champion, |g, a| one(g.e(ent(g, &a, 0)?).is_champion()));
 q!(q_is_weapon, |g, a| one(g.e(ent(g, &a, 0)?).is_weapon()));
 q!(q_is_spell, |g, a| one(g.e(ent(g, &a, 0)?).kind() == "SPELL"));
 q!(q_turn, |g, _a| one(g.turn));
@@ -739,7 +685,7 @@ q!(q_minions_played, |g, a| one(g.players[player(&a, 0)?].minions_played_this_tu
 q!(q_room, |g, a| one(g.rs.board.saturating_sub(g.players[player(&a, 0)?].board.len()) as i64));
 q!(q_board_pos, |g, a| Ok(vec![g.board_pos(ent(g, &a, 0)?).map_or(L::Nil, |i| L::Int(i as i64))]));
 q!(q_died_pos, |g, a| one(g.died_pos(ent(g, &a, 0)?)));
-q!(q_trap_ready, |g, a| one(g.secret_ready(ent(g, &a, 0)?)));
+q!(q_trap_ready, |g, a| one(g.trap_ready(ent(g, &a, 0)?)));
 q!(q_spell_dmg, |g, a| one(g.spell_dmg(ent(g, &a, 0)?, num(&a, 1, 0)?)));
 q!(q_heal_amt, |g, a| one(g.heal_amt(ent(g, &a, 0)?, num(&a, 1, 0)?)));
 q!(q_hp_dmg, |g, a| one(g.hp_dmg(ent(g, &a, 0)?, num(&a, 1, 0)?)));
@@ -774,10 +720,10 @@ fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
     let v = {
         let g = h.game()?;
         let c = g.rs.card(&card_arg(g, &a, 0, "")?);
-        json!({"id": c.id, "type": type_name(&c.kind), "class": c.card_class, "rarity": c.rarity, "set": c.set,
+        json!({"id": c.id, "type": c.kind, "class": c.card_class, "rarity": c.rarity, "set": c.set,
             "cost": c.cost, "attack": c.attack, "health": c.health, "durability": c.durability, "race": c.race,
-            "mana_lock": c.overload, "spell_power": c.spell_damage.unwrap_or(0), "collectible": c.collectible,
-            "keywords": c.mechanics, "trap": c.trap})
+            "mana_lock": c.mana_lock, "spell_power": c.spell_power.unwrap_or(0), "collectible": c.collectible,
+            "keywords": c.keywords, "trap": c.trap})
     };
     one(to_lua(h.vm(), &v, 0)?)
 }
@@ -1066,12 +1012,12 @@ fn a_aura_add(g: &mut Game, a: Args) -> R {
 }
 fn a_replace_hero(g: &mut Game, a: Args) -> R {
     live(g)?;
-    let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "HERO")?);
+    let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "CHAMPION")?);
     one(g.replace_hero(p, &c))
 }
 fn a_set_power(g: &mut Game, a: Args) -> R {
     live(g)?;
-    let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "HERO_POWER")?);
+    let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "POWER")?);
     one(g.set_hero_power(p, &c))
 }
 fn a_reveal(g: &mut Game, a: Args) -> R {
@@ -1104,7 +1050,7 @@ fn a_add_cost_mod(g: &mut Game, a: Args) -> R {
     let Some(turn) = m.as_object().map(|o| o.get("turn").cloned()) else { return Err(a.bad(1, "a table expected")) };
     g.add_cost_mod(p, m);
     if let (Some(t), Some(last)) = (turn, g.players[p].cost_mods.last_mut()) {
-        last.insert("turn".into(), t); // add_cost_mod stamps this turn; a given one wins (Millhouse: next turn)
+        last.insert("turn".into(), t); // add_cost_mod stamps this turn; a given one wins (say, next turn)
     }
     none()
 }

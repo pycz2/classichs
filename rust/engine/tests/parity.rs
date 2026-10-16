@@ -5,7 +5,7 @@
 //! (generated earlier, gitignored).
 //!
 //! `PARITY_FILTER` replays only the games that mention some cards (in their
-//! setup, actions or events): a class (`MAGE`), `lua` (every card with Lua
+//! setup, actions or events): a class (`MAGE`), `lua` (every card with
 //! hooks), or card ids (`VAN_CS2_029,VAN_EX1_287`); comma-separated, mixed.
 //! `PARITY_BIG=0` skips fixtures/big (the committed 1731 games only: a quick check).
 //! `PARITY_FIXTURES=<dir>` reads the fixtures from another folder.
@@ -157,7 +157,7 @@ fn filter() -> Option<Vec<String>> {
     let mut ids = vec![];
     for w in f.split(',').map(str::trim) {
         if w == "lua" {
-            ids.extend(rs.hooks.iter().filter(|(_, h)| h.lua).map(|(id, _)| id.clone()));
+            ids.extend(rs.hooks.keys().cloned());
         } else if rs.has(w) {
             ids.push(w.to_string());
         } else {
@@ -211,7 +211,7 @@ fn parity_with_gdscript() {
             }
         }
     }
-    let playable: Vec<&String> = card_db::collectible().iter().filter(|id| card_db::card(id).kind != "HERO").collect();
+    let playable: Vec<&String> = card_db::collectible().iter().filter(|id| card_db::card(id).kind != "CHAMPION").collect();
     let missing: Vec<&&String> = playable.iter().filter(|id| !st.played.contains(**id)).collect();
     eprintln!(
         "parity: {} files, {} games, {} steps, {} bot choices checked, {} cards played ({} of {} collectible), {} cards seen in events, {} mismatches, {:.1} s",

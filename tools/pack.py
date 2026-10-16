@@ -382,6 +382,9 @@ def check_files(files):
         for s in mode["sets"]:
             if s not in sets:
                 r.error(f"rules.json: modes.{mname} uses unknown set {s}")
+    for rid in modes["constructed"].get("starter_rarities", []):
+        if rid not in rarities:
+            r.error(f"rules.json: starter_rarities names unknown rarity {rid}")
     for cid in modes["constructed"].get("starter_core", []):
         c = card(cid, "rules.json starter_core")
         if c and not c.get("collectible"):

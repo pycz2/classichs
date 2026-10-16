@@ -22,7 +22,7 @@ pub fn pool(rs: &Ruleset, card_class: &str, t: &str) -> Vec<(String, f64)> {
     let mut out = vec![];
     for id in &rs.arena_pool {
         let c = rs.card(id);
-        if c.kind == "HERO" || rs.tier(id) != t {
+        if c.kind == "CHAMPION" || rs.tier(id) != t {
             continue;
         }
         if c.card_class == card_class {

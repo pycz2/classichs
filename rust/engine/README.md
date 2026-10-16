@@ -1,7 +1,10 @@
 # classichs-engine
 
-The rules engine of Classic HS (Hearthstone Classic, June 2014) in Rust: every
-rule, every card, the bot, the Arena draft and deck rules. It is the only rules
+The rules engine of Classic HS in Rust: the general mechanics of a card game
+(turns, mana, combat, keywords, triggers, auras, deaths), the bot, the Arena
+draft and deck rules. It knows no game of its own: a game pack gives the rules,
+cards, mechanic names and the Lua hooks of every card (below); the built-in
+ruleset is the Classic pack (Hearthstone Classic, June 2014). It is the only rules
 code of the game: the server links it, the game reaches it through GDExtension
 (`rust/godot`, class `RulesEngine`) on desktop and Android and as WebAssembly
 (`rust/wasm` + `web/rules.js`) in the browser; GDScript only draws snapshots
@@ -26,9 +29,22 @@ missions and scripts, and its `cards.json` made from `data/cards.json` +
 `cards.patch.json` as `tools/pack.py` does, without the texts). Every API call
 without `pack` plays it, so older hosts work unchanged.
 
-Card hooks are Lua (`packs/classic/scripts/*.lua`, docs/packs/api.md) or, for
-Classic cards not ported yet, the Rust functions of `src/cards/*.rs` (a card
-without a `script` field falls back to them; Classic only).
+Card hooks are Lua only (`packs/classic/scripts/*.lua` for Classic,
+docs/packs/api.md); a card without a `script` has none. Nothing in `src/` names
+a card, a class, a race, a rarity or a mechanic of a particular game: the coin
+(`start.coin`), champions and their powers (`classes`, a champion's `power`,
+`default_power`), the Arena's classes and odds, starter decks
+(`modes.constructed.starter_rarities` + `starter_core`) and copy limits come
+from `rules.json`; mechanics are the neutral ids of
+docs/packs/schema/keywords.json inside (`Names`, hook fields such as `on_play`,
+`on_death`, `trap`, `power`, `choice`) and the pack's names only where the engine
+reads or writes tags. Card types are the pack's (`CHAMPION`, `POWER`, …);
+snapshots show a CHAMPION as `HERO` and a POWER as `HERO_POWER`, and the
+`hooks` op keeps its keys (`battlecry`, `deathrattle`, `secret`, `hero_power`,
+`choose_one`), as clients know them. Event types and snapshot field names
+(`secret_revealed`, `divine_shield_lost`, `secrets`, `ol_owed`, …) are the
+engine's protocol and stay as recorded (parity). Texts are the clients' (a
+tutorial's end-of-turn block is a reason key).
 
 ## Layout
 
@@ -40,7 +56,7 @@ without a `script` field falls back to them; Classic only).
 | `entity.rs`, `player.rs` | `engine/entity.gd`, `engine/player.gd` |
 | `state.rs` | `engine/game_state.gd`: entities, events, triggers, death phase, auras, primitives |
 | `game.rs` | `engine/game.gd`: setup, mulligan, turns, actions, legality |
-| `cards/*.rs` | `cards/*.gd`, one file per class (the Rust hooks still to port to Lua); `cards/mod.rs` = `registry.gd` + `t.gd` + `HookSet` (what the engine calls: a Rust or a Lua function) |
+| `hooks.rs` | `t.gd` + the hook set of a card (what the engine calls; the card logic of `cards/*.gd` is the pack's Lua) |
 | `ruleset.rs` | a pack's rules, cards, names, missions and hooks; the built-in Classic ruleset; the cache by rules_hash |
 | `pack.rs` | reading a `.cardpack` (zip) or a folder, strict and canonical JSON, `rules_hash` (docs/packs/format.md §3) |
 | `lua.rs` | loading card scripts, the `g` library (docs/packs/api.md), calling hooks, script errors |
@@ -49,11 +65,11 @@ without a `script` field falls back to them; Classic only).
 | `arena_draft.rs`, `deck.rs`, `missions.rs` | `game/arena_draft.gd`, `game/deck.gd` + `decks.gd`, `game/missions.gd` + `tutorial.gd` |
 | `api.rs` | `net/referee.gd` and more: the JSON API |
 
-A card hook is a Lua function (or a plain Rust `fn(&mut Game, me, target)`);
-entities are ids (`-1` = none); events are JSON objects in `Game::event_log`,
-and triggers get the index of their event, so a hook that changes an event
-(Counterspell, Misdirection, Spellbender) changes the logged one, as in
-GDScript (a Lua hook gets the event as a table; changed fields are copied back).
+A card hook is a Lua function (`hooks::HookFn`, an index into the ruleset's
+script functions); entities are ids (`-1` = none); events are JSON objects in
+`Game::event_log`, and triggers get the index of their event, so a hook that
+changes an event (a counter, a redirect) changes the logged one, as in GDScript
+(the hook gets the event as a table; changed fields are copied back).
 
 Lua runs on two interpreters per ruleset (`lua.rs`): the main one (a game
 checks it out for a call and shares it with its look-ahead copies, so the bot
@@ -100,7 +116,7 @@ included), decks are given as `deck_count` only, and the RNG state is left out.
 | `hash` | `game` | `hash`: `state_hash()` |
 | `history` | `game`, `from?`, `view?` | `history`: `[{turn, player, action, events}]` (entry 0 is the start), `start_decks` |
 | `dump` | `game` | `scenario`: the position as a scenario (`Scenario.dump`) |
-| `end_turn_block` | `game`, `player` | `reason`: why a tutorial mission does not let the player end the turn yet (`while_can_play`, `while_can_attack`; `""`: it may), a key the client translates; `block`: the same in English (old clients; `""`), `mission` |
+| `end_turn_block` | `game`, `player` | `reason`: why a tutorial mission does not let the player end the turn yet (`while_can_play`, `while_can_attack`; `""`: it may), a key the client turns into words, `mission` |
 | `drop` | `game` | |
 | `validate` | `deck`, `pack?` | `ok`, `error` (English, as `Deck.validate()`) |
 | `draft` | `seed`, `hero?` (0-2), `picks?`, `pack?` | `heroes`, `hero`, `cards`, `offer`, `done` (stateless, as the referee) |
@@ -118,7 +134,7 @@ Actions (exactly the objects `legal` lists):
 `{"type": "mulligan", "player", "replace": [ids]}`, `{"type": "end_turn", "player"}`,
 `{"type": "play", "player", "entity", "target", "pos", "choice"}`,
 `{"type": "attack", "player", "attacker", "defender"}`, `{"type": "hero_power", "player", "target"}`,
-`{"type": "choose", "player", "option"}` (Tracking), `{"type": "concede", "player"}`.
+`{"type": "choose", "player", "option"}` (a `g.request_choice`), `{"type": "concede", "player"}`.
 `target`/`pos`/`choice` are `-1` when not used.
 
 ### Snapshot

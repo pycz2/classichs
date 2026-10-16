@@ -68,8 +68,8 @@ impl Entity {
     pub fn is_minion(&self) -> bool {
         self.kind() == "MINION"
     }
-    pub fn is_hero(&self) -> bool {
-        self.kind() == "HERO"
+    pub fn is_champion(&self) -> bool {
+        self.kind() == "CHAMPION"
     }
     pub fn is_weapon(&self) -> bool {
         self.kind() == "WEAPON"
@@ -122,7 +122,7 @@ impl Entity {
     }
 
     /// Its spell power (`name`: the SPELL_POWER tag name).
-    pub fn spellpower(&self, name: &str) -> i64 {
+    pub fn spell_power(&self, name: &str) -> i64 {
         self.tag(name) + int(self.aura.tags.get(name))
     }
 
