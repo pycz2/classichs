@@ -208,7 +208,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.give_tag(e, tag[, this_turn])`, `g.erase_tag(e, tag)`, `g.add_tag(e, tag, n)` | |
 | `g.set_damage(e, n)` | Sets the damage taken (Alexstrasza). |
 | `g.enchant(e, t)` | Adds an enchantment table: `{hooks = name, player = p}`, `{cost = -2}`, `{atk = 1, hp = 1, eot = true}`, … |
-| `g.remove_enchant(e, hooks)` | Removes `e`'s enchantments with these hooks. |
+| `g.remove_enchant(e, hooks[, p])` | Removes `e`'s enchantments with these hooks (`p` given: only those whose `player` is `p`; Conceal, Headcrack, Shadow Madness). |
 | `g.aura_add(e, atk, hp[, tags])` | In an `aura` hook: what `e` gets now (`{WINDFURY = true}`, `{SPELLPOWER = 1}`). |
 | `g.replace_hero(p, card)`, `g.set_power(p, card)` | A new champion / power. |
 | `g.reveal(me)` | Reveals a trap (for `now` hooks; `secret` hooks are revealed for you). |

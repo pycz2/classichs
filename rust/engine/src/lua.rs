@@ -1040,7 +1040,14 @@ fn a_enchant(g: &mut Game, a: Args) -> R {
 fn a_remove_enchant(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (e, hooks) = (ent(g, &a, 0)?, a.string(1)?);
-    g.em(e).enchantments.retain(|x| x.get("hooks").and_then(Value::as_str) != Some(hooks.as_str()));
+    let p = match a.get(2) {
+        L::Nil => None,
+        _ => Some(player(&a, 2)? as i64),
+    };
+    g.em(e).enchantments.retain(|x| {
+        x.get("hooks").and_then(Value::as_str) != Some(hooks.as_str())
+            || p.is_some_and(|p| crate::entity::int(x.get("player")) != p)
+    });
     none()
 }
 fn a_aura_add(g: &mut Game, a: Args) -> R {

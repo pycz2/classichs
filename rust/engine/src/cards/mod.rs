@@ -15,8 +15,6 @@ mod heroes;
 mod hunter;
 mod neutral;
 mod paladin;
-mod priest;
-mod rogue;
 mod shaman;
 mod tutorial;
 mod warlock;
@@ -133,8 +131,6 @@ fn registry() -> &'static Registry {
         druid::register(&mut r);
         hunter::register(&mut r);
         paladin::register(&mut r);
-        priest::register(&mut r);
-        rogue::register(&mut r);
         shaman::register(&mut r);
         warlock::register(&mut r);
         warrior::register(&mut r);
