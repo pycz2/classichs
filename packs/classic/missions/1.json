@@ -4,7 +4,6 @@
   "boss": "TU4a_001",
   "boss_power": "VAN_HERO_08bp",
   "powers_locked": true,
-  "unlosable": true,
   "boss_guarded": false,
   "end_turn_block": {"while_can_play": true, "while_can_attack": true},
   "player": {
@@ -22,5 +21,5 @@
   "mulligan": false,
   "reward": "VAN_CS2_023",
   "hints": ["play", "attack", "end_turn"],
-  "script": null
+  "script": "scripts/tutorial.lua#ench:tutorial_guard"
 }

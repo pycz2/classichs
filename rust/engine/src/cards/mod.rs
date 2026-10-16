@@ -10,18 +10,9 @@ use crate::state::{Ev, Game};
 use std::collections::HashMap;
 use std::sync::OnceLock;
 
-mod heroes;
-mod shaman;
-mod tutorial;
 
-/// Faceless Manipulator's copy (now `Game::copy_minion`).
-pub fn copy_minion(g: &mut Game, me: Id, t: Id) -> Id {
-    g.copy_minion(me, t)
-}
 
-fn ev_mine(g: &Game, me: Id, ev: usize) -> bool {
-    g.ev_mine(me, ev)
-}
+
 
 pub type Effect = fn(&mut Game, Id, Id);
 pub type OnFn = fn(&mut Game, Id, usize);
@@ -118,13 +109,7 @@ pub type Registry = HashMap<&'static str, Hooks>;
 
 fn registry() -> &'static Registry {
     static R: OnceLock<Registry> = OnceLock::new();
-    R.get_or_init(|| {
-        let mut r = Registry::new();
-        heroes::register(&mut r);
-        shaman::register(&mut r);
-        tutorial::register(&mut r);
-        r
-    })
+    R.get_or_init(Registry::new)
 }
 
 /// The Rust hooks of a Classic card id ("" or unknown: none). The engine reads
@@ -273,10 +258,6 @@ pub fn summary(h: &HookSet) -> serde_json::Value {
     serde_json::Value::Object(m)
 }
 
-/// Hooks with nothing set (for `..d()`).
-pub(crate) fn d() -> Hooks {
-    Hooks::default()
-}
 
 /// Helpers that card hooks share.
 impl Game {

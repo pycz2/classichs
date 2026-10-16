@@ -10,7 +10,6 @@
     "boss": {"$ref": "#/$defs/id"},
     "boss_power": {"$ref": "#/$defs/id"},
     "powers_locked": {"type": "boolean"},
-    "unlosable": {"type": "boolean"},
     "boss_guarded": {"type": "boolean"},
     "end_turn_block": {
       "type": "object",
@@ -27,7 +26,7 @@
     "mulligan": {"type": "boolean"},
     "reward": {"$ref": "#/$defs/id"},
     "hints": {"type": "array", "maxItems": 50, "items": {"type": "string", "pattern": "^[a-z0-9_]{1,32}$"}},
-    "script": {"type": ["string", "null"], "pattern": "^scripts/[A-Za-z0-9_][A-Za-z0-9_./-]*\\.lua(#[A-Za-z0-9_]{1,64})?$"}
+    "script": {"type": ["string", "null"], "pattern": "^scripts/[A-Za-z0-9_][A-Za-z0-9_./-]*\\.lua(#[A-Za-z0-9_:]{1,64})?$"}
   },
   "$defs": {
     "id": {"type": "string", "pattern": "^[A-Za-z0-9_]{1,64}$"},
