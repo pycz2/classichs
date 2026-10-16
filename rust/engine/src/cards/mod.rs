@@ -11,7 +11,6 @@ use std::collections::HashMap;
 use std::sync::OnceLock;
 
 mod heroes;
-mod neutral;
 mod shaman;
 mod tutorial;
 
@@ -122,7 +121,6 @@ fn registry() -> &'static Registry {
     R.get_or_init(|| {
         let mut r = Registry::new();
         heroes::register(&mut r);
-        neutral::register(&mut r);
         shaman::register(&mut r);
         tutorial::register(&mut r);
         r
