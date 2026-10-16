@@ -18,6 +18,8 @@ pub struct Model {
     pub winner: i64,
     /// over | illegal | desync | cheat | protocol | left | disconnect | aborted.
     pub reason: String,
+    /// The pack's rules_hash ("" = the built-in Classic rules, before packs).
+    pub pack: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

@@ -1,4 +1,5 @@
-//! An account's Arena run: the engine recomputes heroes and offers from seed + picks.
+//! An account's Arena run (one at a time, in one pack): the engine recomputes heroes and
+//! offers from seed + picks.
 
 use sea_orm::entity::prelude::*;
 
@@ -16,6 +17,8 @@ pub struct Model {
     pub draft: String,
     pub wins: i64,
     pub losses: i64,
+    /// The pack's rules_hash the run is drafted and played in ("" = the built-in Classic rules).
+    pub pack: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

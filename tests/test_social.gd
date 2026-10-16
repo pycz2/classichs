@@ -191,3 +191,46 @@ func test_refused_session_is_silent() -> void:
 	m.server_link.dispatch({"t": "error", "code": "not_found", "text": "No such player"})
 	eq(m.social._toast.visible, true, "other errors show off the lobby")
 	m.free()
+
+
+## D12: an invite to a game in another pack: one the player has is switched to on Accept; one
+## the player lacks is downloaded first (the button says so), then the deck and the answer.
+func test_invite_in_another_game() -> void:
+	var m := _main()
+	var s: Social = m.social
+	var classic := Packs.active()
+	var neon: Pack = null
+	for p in Packs.all():
+		if p.builtin() and p.id() != Packs.CLASSIC:
+			neon = p
+	var entry := {"id": neon.id(), "name": {"en": "Neonfall"}, "version": "1", "rules_hash": neon.rules_hash(),
+		"content_hash": Packs.content_hash(neon), "size": 1000, "url": "/packs/x.cardpack"}
+	m.server_link.dispatch({"t": "invite", "from": "bob", "pack": entry})
+	var dlg := s.find_child("InviteDialog", true, false)
+	check((dlg.find_child("InviteGame", true, false) as Label).text.contains("Neonfall"), "the game is named")
+	eq((dlg.find_child("InviteAccept", true, false) as Button).text, tr("Accept"), "the player has it")
+	(dlg.find_child("InviteAccept", true, false) as Button).pressed.emit()
+	eq(Packs.active(), neon, "accepting switches to the invite's game")
+	var acc := _sent(m, "invite_accept")
+	if acc.is_empty():  # no deck of this game yet: chosen first
+		check(s.find_child("InviteChooseDeck", true, false) != null, "the deck is asked for")
+	else:
+		eq(acc[0].pack, neon.rules_hash(), "the answer names the game")
+	Packs.set_active(classic)
+	# A game the player does not have: Download and play, then the server's file.
+	var other := entry.duplicate()
+	other.rules_hash = "f".repeat(64)
+	other.content_hash = "e".repeat(64)
+	m.server_link.dispatch({"t": "invite", "from": "cid", "pack": other})
+	dlg = s._dialog  # the one before is freed at the end of the frame
+	eq((dlg.find_child("InviteAccept", true, false) as Button).text, tr("Download and play"), "consent to the download")
+	(dlg.find_child("InviteAccept", true, false) as Button).pressed.emit()
+	var get: Array = (m.server_link as FakeLink).http
+	eq(get.back().path, "/packs/%s.cardpack" % other.content_hash, "downloaded from the server")
+	eq(_sent(m, "invite_accept").size(), acc.size(), "not accepted before the game is here")
+	get.back().done.call(404, PackedByteArray())
+	check(s._dialog != null and s._dialog != dlg, "a failed download asks again")
+	(s._dialog.find_child("InviteDecline", true, false) as Button).pressed.emit()
+	eq(_sent(m, "invite_decline").back().from, "cid", "declined")
+	eq(Packs.active(), classic, "the game stays")
+	m.free()

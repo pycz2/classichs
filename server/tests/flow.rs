@@ -4,17 +4,19 @@
 
 use classichs_engine::api::{events_for, snapshot};
 use classichs_engine::state::Ev as Events;
-use classichs_engine::{bot, deck, Game};
-use classichs_server::entity::{account, event};
+use classichs_engine::{bot, deck, ruleset, Game};
+use classichs_server::entity::{event, pack, standing};
 use classichs_server::game::DOES_NOT_ADD_UP;
 use classichs_server::storage::Storage;
-use classichs_server::{db, router, spawn_background, App, AppRef, Timers};
+use classichs_server::{db, packs, router, spawn_background, App, AppRef, Timers};
 use futures_util::{SinkExt, StreamExt};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QueryOrder};
 use serde_json::{json, Value};
 use std::net::SocketAddr;
 use std::time::Duration;
 use tokio_tungstenite::tungstenite::Message;
+
+mod common;
 
 type Ws = tokio_tungstenite::WebSocketStream<tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>>;
 
@@ -24,6 +26,11 @@ fn temp_store() -> Storage {
 }
 
 async fn server(timers: Timers) -> (SocketAddr, AppRef) {
+    server_with(Some(timers)).await
+}
+
+/// timers None: each pack's own (rules.json).
+async fn server_with(timers: Option<Timers>) -> (SocketAddr, AppRef) {
     let app = App::new(db::open(":memory:").await.unwrap(), false, timers, temp_store());
     spawn_background(app.clone());
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
@@ -129,7 +136,8 @@ impl Table {
         let seed = seed_of(app, &game).await;
         let d = |v: &Value| (v["hero"].as_str().unwrap().to_string(), cards(v));
         let ((h0, c0), (h1, c1)) = (d(&p0.1), d(&p1.1));
-        let mirror = Game::new(&h0, &c0, &h1, &c1, seed, -1, true);
+        let rs = ruleset::get(ma["pack"].as_str().unwrap()).expect("the game's pack is loaded");
+        let mirror = Game::new_in(rs, &h0, &c0, &h1, &c1, seed, -1, true);
         let mut t = Table { game, p: [P { c: p0.0, deck: p0.1 }, P { c: p1.0, deck: p1.1 }], mirror };
         let opening: Vec<Events> = t.mirror.history[0]["events"].as_array().unwrap().iter().map(|e| e.as_object().unwrap().clone()).collect();
         for q in 0..2 {
@@ -269,9 +277,9 @@ async fn casual_game_played_out_by_bots() {
     eprintln!("{n} actions over WebSocket in {:?} ({:.0} actions/s, with the mirror and the checks)", start.elapsed(),
               n as f64 / start.elapsed().as_secs_f64());
     if t.mirror.winner >= 0 {
-        let mmrs: Vec<f64> =
-            account::Entity::find().order_by_asc(account::Column::CasualMmr).all(&app.db).await.unwrap().iter().map(|a| a.casual_mmr).collect();
-        assert_eq!(mmrs, vec![1484.0, 1516.0]);
+        let mmrs: Vec<(String, f64)> = standing::Entity::find().order_by_asc(standing::Column::CasualMmr).all(&app.db).await.unwrap()
+            .iter().map(|s| (s.pack.clone(), s.casual_mmr)).collect();
+        assert_eq!(mmrs, vec![("classic-2014".into(), 1484.0), ("classic-2014".into(), 1516.0)]);
     }
     assert!(app.hub().games.is_empty());
     // Free to queue again.
@@ -679,6 +687,11 @@ async fn second_login_kicks_the_first() {
     assert_eq!(d.want("auth").await["me"]["user"], name.as_str());
     let k = t.p[0].c.want("kicked").await;
     assert_eq!(k, json!({"t": "kicked", "reason": "another_login"}));
+    // The close frame says it again: code 4001, reason "another_login".
+    match tokio::time::timeout(Duration::from_secs(5), t.p[0].c.ws.next()).await.unwrap() {
+        Some(Ok(Message::Close(Some(f)))) => assert_eq!((u16::from(f.code), f.reason.as_str()), (4001, "another_login")),
+        other => panic!("not closed with 4001: {other:?}"),
+    }
     closed(&mut t.p[0].c).await;
     // The new connection takes the game over: match (rejoin) and a fresh state.
     let m = d.want("match").await;
@@ -717,4 +730,138 @@ async fn second_login_kicks_the_first() {
     }
     assert!(kinds.iter().any(|k| k == "kicked"), "{kinds:?}");
     assert!(!kinds.iter().any(|k| k == "disconnect" || k == "game_left"), "{kinds:?}");
+}
+
+// --- games in packs -----------------------------------------------------------------------------
+
+/// Installs a test pack (common::pack_bytes) as a server pack (owner None) or a player's.
+async fn install(app: &AppRef, zip: &[u8], owner: Option<i64>) -> pack::Model {
+    let path = std::env::temp_dir().join(format!("chs-test-{}.cardpack", rand::random::<u64>()));
+    std::fs::write(&path, zip).unwrap();
+    let p = packs::add(app, &path, zip.len() as u64, owner).await.unwrap_or_else(|e| panic!("{}", e.2));
+    let _ = std::fs::remove_file(path);
+    p
+}
+
+/// A pack with one-second turns, a three-rank ladder without Legend and a one-win Arena.
+fn quick_pack() -> Vec<u8> {
+    let ladder = json!({"start": {"rank": 3, "stars": 0}, "ranks": [{"rank": 3, "stars": 1}, {"rank": 2, "stars": 1}, {"rank": 1, "stars": 1}],
+        "streak": {"wins": 9, "bonus_stars": 1}, "legend": null, "season": {"length": "month", "reset": {"to_rank": 3, "stars_per_rank_above": 0}}});
+    common::pack_bytes("org.test.quick", "1.0.0", &[
+        ("/timers", json!({"turn": 1, "fuse": 1, "mulligan": 1, "grace": 1, "away": 2})),
+        ("/ranked", ladder),
+        ("/modes/arena/wins", json!(1)),
+    ], &[])
+}
+
+/// Queues and games are per pack; timers and ranks come from the pack's rules.json; ranks are
+/// kept per pack; `me {pack}` shows the rank in that pack.
+#[tokio::test]
+async fn games_in_a_pack_with_its_own_rules() {
+    let (addr, app) = server_with(None).await;
+    let quick = install(&app, &quick_pack(), None).await;
+    let rh = quick.rules_hash.clone();
+    let mut a = C::register(addr, "ppa").await;
+    let mut b = C::register(addr, "ppb").await;
+    let mut c = C::register(addr, "ppc").await;
+    a.send(json!({"t": "queue", "mode": "ranked", "deck": deck("MAGE"), "pack": rh})).await;
+    assert_eq!(a.want("queued").await["pack"], rh);
+    c.send(json!({"t": "queue", "mode": "ranked", "deck": deck("MAGE")})).await; // the default game
+    assert_eq!(c.want("queued").await["pack"], packs::GameRules::classic().rules_hash.as_str());
+    b.send(json!({"t": "queue", "mode": "ranked", "deck": deck("WARRIOR"), "pack": rh})).await;
+    b.want("queued").await;
+    // Unknown packs and bad decks for a pack are refused.
+    let mut d = C::register(addr, "ppd").await;
+    d.send(json!({"t": "queue", "mode": "casual", "deck": deck("MAGE"), "pack": "f".repeat(64)})).await;
+    assert_eq!(d.want("error").await["code"], "pack");
+    let ma = a.want("match").await;
+    let mb = b.want("match").await;
+    assert_eq!((ma["pack"].as_str(), mb["pack"].as_str()), (Some(rh.as_str()), Some(rh.as_str())));
+    let cid = db::id_by_name(&app.db, "ppc").await.unwrap().unwrap();
+    assert!(app.hub().queue.contains_key(&cid), "the other pack's seeker still waits");
+    let live = app.hub().live_json();
+    assert_eq!(live["games"][0]["pack"], rh.as_str());
+    // The pack's clock: one second a mulligan (and one of grace), then the server moves.
+    let s = a.want("state").await;
+    assert!(s["result"]["deadline"].as_u64().unwrap() <= 1, "{}", s["result"]);
+    let t0 = std::time::Instant::now();
+    let s = a.want("state").await;
+    assert_eq!(s["result"]["phase"], "MULLIGAN");
+    assert!(t0.elapsed() >= Duration::from_millis(1500) && t0.elapsed() < Duration::from_secs(4), "{:?}", t0.elapsed());
+    // A concede: ranks move on the pack's ladder.
+    let pa = ma["you"].as_u64().unwrap();
+    a.send(json!({"t": "act", "action": {"type": "concede", "player": pa}})).await;
+    let (ga, gb) = (a.want("game_over").await, b.want("game_over").await);
+    assert_eq!((ga["rank"]["rank"].as_i64(), ga["rank"]["stars"].as_i64()), (Some(3), Some(0)), "{ga}");
+    assert_eq!((gb["rank"]["rank"].as_i64(), gb["rank"]["stars"].as_i64()), (Some(3), Some(1)), "{gb}");
+    b.send(json!({"t": "me", "pack": rh})).await;
+    let me = b.want("me").await["me"].clone();
+    assert_eq!((me["rank"]["rank"].as_i64(), me["rank"]["stars"].as_i64(), me["pack"].as_str()), (Some(3), Some(1), Some(rh.as_str())));
+    b.send(json!({"t": "me"})).await;
+    let me = b.want("me").await["me"].clone();
+    assert_eq!((me["rank"]["rank"].as_i64(), me["rank"]["stars"].as_i64()), (Some(25), Some(0)), "the default game's rank is apart");
+    let st = standing::Entity::find().filter(standing::Column::Pack.eq("org.test.quick")).all(&app.db).await.unwrap();
+    assert_eq!(st.len(), 2);
+    let rows = classichs_server::entity::game::Entity::find().all(&app.db).await.unwrap();
+    assert_eq!(rows[0].pack, rh);
+}
+
+/// D12: a friendly game in the inviter's own pack; the invite says which (to download it).
+#[tokio::test]
+async fn friendly_game_in_the_inviters_pack() {
+    let (addr, app) = server(std_server()).await;
+    let mut a = C::register(addr, "ffa").await;
+    let mut b = C::register(addr, "ffb").await;
+    a.send(json!({"t": "set_tag", "tag": "Ffa"})).await;
+    a.want("me").await;
+    b.send(json!({"t": "friend_add", "tag": "ffa"})).await;
+    a.want("friends").await;
+    a.send(json!({"t": "friend_accept", "user": "ffb"})).await;
+    b.want("friends").await;
+    let aid = db::id_by_name(&app.db, "ffa").await.unwrap().unwrap();
+    let mine = install(&app, &common::pack_bytes("org.test.fa", "0.1.0", &[("/limits/queue_steps", json!(4999))], &[]), Some(aid)).await;
+    // Not the inviter's pack: refused (b invites with a's pack).
+    b.send(json!({"t": "invite", "to": "ffa", "deck": deck("MAGE"), "pack": mine.rules_hash})).await;
+    assert_eq!(b.want("error").await["code"], "pack");
+    a.send(json!({"t": "invite", "to": "ffb", "deck": deck("MAGE"), "pack": mine.rules_hash})).await;
+    a.want("invited").await;
+    let inv = b.want("invite").await;
+    assert_eq!((inv["pack"]["content_hash"].as_str(), inv["pack"]["size"].as_i64()), (Some(mine.content_hash.as_str()), Some(mine.size)));
+    assert_eq!(inv["pack"]["url"], format!("/packs/{}.cardpack", mine.content_hash));
+    b.send(json!({"t": "invite_accept", "from": "ffa", "deck": deck("WARRIOR"), "pack": "0".repeat(64)})).await;
+    assert_eq!(b.want("error").await["code"], "pack");
+    b.send(json!({"t": "invite_accept", "from": "ffa", "deck": deck("WARRIOR"), "pack": mine.rules_hash})).await;
+    let mut t = Table::matched(&app, [(a, deck("MAGE")), (b, deck("WARRIOR"))], "friendly").await;
+    assert_eq!(app.hub().games.values().next().unwrap().pack, mine.rules_hash);
+    t.act(0, json!({"type": "concede", "player": 0})).await;
+    t.p[0].c.want("game_over").await;
+}
+
+/// An Arena run in a pack: drafted with its rules, ended by its win count.
+#[tokio::test]
+async fn arena_run_in_a_pack() {
+    let (addr, app) = server(std_server()).await;
+    let quick = install(&app, &quick_pack(), None).await;
+    let mut cs = vec![];
+    for name in ["aaa", "aab"] {
+        let mut c = C::register(addr, name).await;
+        c.send(json!({"t": "arena_start", "pack": quick.rules_hash})).await;
+        let s = c.want("arena").await;
+        assert_eq!(s["state"]["pack"], quick.rules_hash.as_str());
+        c.send(json!({"t": "arena_hero", "i": 0})).await;
+        let mut last = c.want("arena").await;
+        while last["state"]["done"] != true {
+            c.send(json!({"t": "arena_pick", "i": 0})).await;
+            last = c.want("arena").await;
+        }
+        c.send(json!({"t": "arena_queue"})).await;
+        c.want("queued").await;
+        cs.push((c, json!({"hero": last["state"]["hero"], "cards": last["state"]["cards"], "arena": true})));
+    }
+    let cs: [(C, Value); 2] = cs.try_into().ok().unwrap();
+    let mut t = Table::matched(&app, cs, "arena").await;
+    t.act(0, json!({"type": "concede", "player": 0})).await;
+    let (g0, g1) = (t.p[0].c.want("game_over").await, t.p[1].c.want("game_over").await);
+    assert_eq!((g0["arena"]["over"].as_bool(), g0["arena"]["losses"].as_i64()), (Some(false), Some(1)));
+    assert_eq!((g1["arena"]["over"].as_bool(), g1["arena"]["wins"].as_i64()), (Some(true), Some(1)), "one win ends this pack's run");
 }

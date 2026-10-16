@@ -11,12 +11,13 @@ use futures_util::{SinkExt, StreamExt};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
-use std::io::{Cursor, Write};
 use std::net::SocketAddr;
 use std::path::PathBuf;
 use std::time::Duration;
 use tokio_tungstenite::tungstenite::Message;
 use tower::ServiceExt;
+
+mod common;
 
 type Ws = tokio_tungstenite::WebSocketStream<tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>>;
 
@@ -26,7 +27,7 @@ fn temp_dir() -> PathBuf {
 
 /// A running server (for WebSockets) and its router (for HTTP calls in-process).
 async fn server() -> (SocketAddr, AppRef, axum::Router) {
-    let app = App::new(db::open(":memory:").await.unwrap(), false, Timers::default(), Storage::dir(&temp_dir()).unwrap());
+    let app = App::new(db::open(":memory:").await.unwrap(), false, Some(Timers::default()), Storage::dir(&temp_dir()).unwrap());
     spawn_background(app.clone());
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
     let addr = listener.local_addr().unwrap();
@@ -103,23 +104,18 @@ fn download(hash: &str, token: Option<&str>) -> axum::http::request::Builder {
     }
 }
 
-fn zip_of(files: &[(&str, &str)]) -> Vec<u8> {
-    let mut w = zip::ZipWriter::new(Cursor::new(vec![]));
-    for (name, body) in files {
-        w.start_file(*name, zip::write::SimpleFileOptions::default()).unwrap();
-        w.write_all(body.as_bytes()).unwrap();
-    }
-    w.finish().unwrap().into_inner()
-}
-
-/// A valid pack: id, version, and some content.
-fn pack_zip(id: &str, version: &str, cards: &str) -> Vec<u8> {
-    let manifest = json!({"format": 1, "id": id, "version": version, "name": {"en": "Test pack", "ru": "Тестовый"}});
-    zip_of(&[("manifest.json", &manifest.to_string()), ("rules.json", "{}"), ("cards.json", cards), ("art/a.webp", "art")])
+/// A valid pack: id, version, and rules that differ by `rules` (the engine's queue limit).
+fn pack_zip(id: &str, version: &str, rules: i64) -> Vec<u8> {
+    common::pack_bytes(id, version, &[("/limits/queue_steps", json!(5000 + rules))], &[("art/x/a.webp", b"art")])
 }
 
 fn sha(b: &[u8]) -> String {
     Sha256::digest(b).iter().map(|x| format!("{x:02x}")).collect()
+}
+
+/// The content hash of docs/packs/format.md (the server's key for a pack).
+fn content(zip: &[u8]) -> String {
+    packs::content_hash(zip).unwrap()
 }
 
 async fn kinds(app: &AppRef, kind: &str, want: usize) -> Vec<event::Model> {
@@ -138,8 +134,8 @@ async fn players_upload_list_download_and_delete() {
     let (addr, app, http) = server().await;
     let mut pia = C::register(addr, "pia").await;
     let mut bob = C::register(addr, "bob").await;
-    let zip = pack_zip("org.test.mine", "1.0.0", "[]");
-    let hash = sha(&zip);
+    let zip = pack_zip("org.test.mine", "1.0.0", 0);
+    let hash = content(&zip);
 
     // Upload: the session token is needed, the file must be a pack.
     assert_eq!(call(&http, upload(None, &zip)).await.status, StatusCode::UNAUTHORIZED);
@@ -224,10 +220,10 @@ async fn limits() {
     let c = C::register(addr, "lim").await;
     // Ten packs a player.
     for i in 0..10 {
-        let r = call(&http, upload(Some(&c.token), &pack_zip("org.test.many", &format!("1.0.{i}"), "[]"))).await;
+        let r = call(&http, upload(Some(&c.token), &pack_zip("org.test.many", &format!("1.0.{i}"), 0))).await;
         assert_eq!(r.status, StatusCode::CREATED, "{}", String::from_utf8_lossy(&r.body));
     }
-    let r = call(&http, upload(Some(&c.token), &pack_zip("org.test.many", "2.0.0", "[]"))).await;
+    let r = call(&http, upload(Some(&c.token), &pack_zip("org.test.many", "2.0.0", 0))).await;
     assert_eq!((r.status, r.json()["code"].as_str()), (StatusCode::CONFLICT, Some("too_many")));
     // 100 MB: refused by the declared length, and while streaming.
     let mut big = upload(Some(&c.token), b"x");
@@ -287,8 +283,8 @@ async fn admin_manages_packs() {
     let (addr, app, http) = server().await;
     let (cookie, csrf) = admin_session(&app, &http).await;
     let ok_origin = "http://admin.test";
-    let zip = pack_zip("org.test.server", "1.0.0", "[]");
-    let hash = sha(&zip);
+    let zip = pack_zip("org.test.server", "1.0.0", 1);
+    let hash = content(&zip);
     let up = |csrf: Option<&str>, origin: &str, body: &[u8]| admin_post("/admin/api/packs", &cookie, csrf, origin, "application/zip", body.to_vec());
 
     // Not logged in, no CSRF token, a wrong one, another site: refused.
@@ -318,7 +314,7 @@ async fn admin_manages_packs() {
     let m = c.want("packs").await;
     assert_eq!((m["server"][0]["content_hash"].as_str(), m["server"][0]["id"].as_str()), (Some(hash.as_str()), Some("org.test.server")));
     assert_eq!(call(&http, download(&hash, Some(&c.token)).body(Body::empty()).unwrap()).await.status, StatusCode::OK);
-    let mine = pack_zip("org.test.gus", "0.1.0", "[1]");
+    let mine = pack_zip("org.test.gus", "0.1.0", 2);
     assert_eq!(call(&http, upload(Some(&c.token), &mine)).await.status, StatusCode::CREATED);
     c.want("packs").await;
 
@@ -344,6 +340,12 @@ async fn admin_manages_packs() {
     c.send(json!({"t": "packs"})).await;
     assert_eq!(c.want("packs").await["server"].as_array().unwrap().len(), 1);
     assert_eq!(call(&http, act("explode")).await.status, StatusCode::NOT_FOUND);
+    // The default game: requests without `pack` play it; the panel shows it, games per pack too.
+    assert_eq!(call(&http, act("default")).await.status, StatusCode::OK);
+    let v = call(&http, Request::get("/admin/api/packs").header(header::COOKIE, &cookie).body(Body::empty()).unwrap()).await.json();
+    assert_eq!((v["server"][0]["default"].as_bool(), v["server"][0]["games"].as_i64(), v["server"][0]["live"].as_i64()), (Some(true), Some(0), Some(0)));
+    assert_eq!(v["stats"]["default_rules"], v["server"][0]["rules_hash"]);
+    kinds(&app, "pack_default", 1).await;
     assert_eq!(call(&http, act("delete")).await.status, StatusCode::OK);
     assert!(!app.store.exists(&hash).await.unwrap());
     assert_eq!(call(&http, act("delete")).await.status, StatusCode::NOT_FOUND);
@@ -366,7 +368,7 @@ async fn bundled_packs_are_installed_once() {
     let (_addr, app, http) = server().await;
     let dir = temp_dir();
     std::fs::create_dir_all(&dir).unwrap();
-    let neon = pack_zip("org.classichs.neon", "1.0.0", "[]");
+    let neon = pack_zip("org.classichs.neon", "1.0.0", 3);
     std::fs::write(dir.join("neon.cardpack"), &neon).unwrap();
     std::fs::write(dir.join("broken.cardpack"), b"nope").unwrap();
     std::fs::write(dir.join("readme.txt"), b"not a pack").unwrap();
@@ -374,9 +376,14 @@ async fn bundled_packs_are_installed_once() {
     let rows = pack::Entity::find().all(&app.db).await.unwrap();
     assert_eq!(rows.len(), 1);
     assert_eq!((rows[0].pack_id.as_str(), rows[0].owner, rows[0].enabled), ("org.classichs.neon", None, true));
-    assert!(app.store.exists(&sha(&neon)).await.unwrap());
+    assert!(app.store.exists(&content(&neon)).await.unwrap());
     kinds(&app, "pack_import", 1).await;
     kinds(&app, "pack_rejected", 1).await;
+    // The bundled default game (main: --default-pack): set once, when there is none.
+    assert_eq!(packs::default_hash(&app.db).await.unwrap(), packs::GameRules::classic().rules_hash, "none yet: the built-in rules");
+    assert_eq!(packs::set_default(&app, None, "org.classichs.neon").await.unwrap().map(|p| p.id), Some(rows[0].id));
+    assert_eq!(packs::default_hash(&app.db).await.unwrap(), rows[0].rules_hash);
+    assert!(packs::set_default(&app, None, "org.classichs.neon").await.unwrap().is_none(), "there is one");
     // Again: nothing new. Deleted by the admin: stays deleted after a restart.
     assert_eq!(packs::import_bundled(&app, &dir).await, 0);
     let (cookie, csrf) = admin_session(&app, &http).await;
@@ -385,7 +392,73 @@ async fn bundled_packs_are_installed_once() {
     assert_eq!(packs::import_bundled(&app, &dir).await, 0);
     assert!(pack::Entity::find().all(&app.db).await.unwrap().is_empty());
     // A new version in the directory is installed.
-    std::fs::write(dir.join("neon.cardpack"), pack_zip("org.classichs.neon", "1.1.0", "[]")).unwrap();
+    std::fs::write(dir.join("neon.cardpack"), pack_zip("org.classichs.neon", "1.1.0", 3)).unwrap();
     assert_eq!(packs::import_bundled(&app, &dir).await, 1);
     assert_eq!(packs::import_bundled(&app, &temp_dir()).await, 0, "a missing directory is fine");
+    // A new version of the default game becomes the default.
+    packs::set_default(&app, None, "org.classichs.neon").await.unwrap();
+    std::fs::write(dir.join("neon.cardpack"), pack_zip("org.classichs.neon", "1.2.0", 4)).unwrap();
+    assert_eq!(packs::import_bundled(&app, &dir).await, 1);
+    let d = pack::Entity::find().filter(pack::Column::IsDefault.eq(true)).all(&app.db).await.unwrap();
+    assert_eq!((d.len(), d[0].version.as_str()), (1, "1.2.0"));
 }
+
+/// D11: the engine loads the pack and compiles every script; a broken one is refused with the
+/// reason (also in the event log), and so is a pack whose manifest lies about its rules.
+#[tokio::test]
+async fn a_broken_pack_is_refused() {
+    let (addr, app, http) = server().await;
+    let c = C::register(addr, "bea").await;
+    let broken = common::pack_bytes("org.test.broken", "1.0.0", &[], &[("scripts/zz_broken.lua", b"return { x = ")]);
+    let r = call(&http, upload(Some(&c.token), &broken)).await;
+    assert_eq!((r.status, r.json()["code"].as_str()), (StatusCode::UNPROCESSABLE_ENTITY, Some("invalid")));
+    let why = r.json()["error"].as_str().unwrap().to_string();
+    assert!(why.contains("zz_broken.lua"), "{why}");
+    let ev = kinds(&app, "pack_rejected", 1).await;
+    assert!(ev[0].text.contains("zz_broken.lua"), "{}", ev[0].text);
+    // A script that fails while the trial game runs: every minion's battlecry errors.
+    let mut files = classichs_engine::ruleset::classic_files();
+    let mut cards: Value = serde_json::from_slice(&files["cards.json"]).unwrap();
+    for card in cards.as_array_mut().unwrap() {
+        if card["type"] == "MINION" {
+            card["script"] = json!("scripts/zz_fail.lua#boom");
+        }
+    }
+    files.insert("cards.json".into(), serde_json::to_vec(&cards).unwrap());
+    let failing = common::pack_bytes("org.test.fails", "1.0.0", &[], &[
+        ("cards.json", &files["cards.json"]),
+        ("scripts/zz_fail.lua", b"return { boom = { battlecry = function(g, me, t) error('boom') end } }"),
+    ]);
+    let r = call(&http, upload(Some(&c.token), &failing)).await;
+    assert_eq!(r.json()["code"], "invalid", "{} {}", r.status, String::from_utf8_lossy(&r.body));
+    assert!(r.json()["error"].as_str().unwrap().contains("trial game"), "{}", r.json());
+    assert!(pack::Entity::find().all(&app.db).await.unwrap().is_empty());
+}
+
+/// Rows stored before phase D (the file's SHA-256 as content_hash, another rules hash) get the
+/// hashes of docs/packs/format.md at start; the file moves to its new key.
+#[tokio::test]
+async fn old_hashes_are_migrated() {
+    let (_addr, app, _http) = server().await;
+    let zip = pack_zip("org.test.old", "1.0.0", 5);
+    let old = sha(&zip);
+    app.store.put_bytes(&old, zip.clone()).await.unwrap();
+    app.store.put_bytes(&"0".repeat(64), b"not a zip".to_vec()).await.unwrap();
+    for (h, rh) in [(old.clone(), "x".repeat(64)), ("0".repeat(64), "y".repeat(64))] {
+        let row = pack::ActiveModel {
+            pack_id: Set("org.test.old".into()), version: Set("1.0.0".into()), name: Set(json!({"en": "Old"}).to_string()),
+            rules_hash: Set(rh), content_hash: Set(h), size: Set(zip.len() as i64), owner: Set(None), enabled: Set(true),
+            created: Set(0), downloads: Set(0), hashes: Set(0), is_default: Set(false), ..Default::default()
+        };
+        sea_orm::ActiveModelTrait::insert(row, &app.db).await.unwrap();
+    }
+    assert_eq!(packs::migrate_hashes(&app).await, 2);
+    let rows = pack::Entity::find().all(&app.db).await.unwrap();
+    assert_eq!((rows[0].content_hash.clone(), rows[0].rules_hash.clone(), rows[0].hashes, rows[0].enabled),
+        (content(&zip), common::rules_hash(&zip), 1, true));
+    assert!(app.store.exists(&content(&zip)).await.unwrap() && !app.store.exists(&old).await.unwrap());
+    assert_eq!((rows[1].hashes, rows[1].enabled), (1, false), "not a pack: turned off");
+    kinds(&app, "pack_rejected", 1).await;
+    assert_eq!(packs::migrate_hashes(&app).await, 0, "once");
+}
+

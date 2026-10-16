@@ -23,7 +23,7 @@ export function Games ({ query }) {
       ${live.games.length ? html`<div class="table-wrap"><table class="table">
         <thead><tr><th>Game</th><th>Mode</th><th>Player 1</th><th>Player 2</th><th class="num">Turn</th><th>To move</th><th class="num">Actions</th><th class="num">Running</th></tr></thead>
         <tbody>${live.games.map((g) => html`<tr key=${g.id} class="clickable" onClick=${() => go('games/' + g.id)}>
-          <td class="mono">${g.id.slice(0, 8)}</td><td><span class=${'mode m-' + g.mode}>${g.mode}</span></td>
+          <td class="mono">${g.id.slice(0, 8)}</td><td><span class=${'mode m-' + g.mode}>${g.mode}</span>${g.pack_name ? html` <span class="muted small">${g.pack_name}</span>` : ''}</td>
           ${g.players.map((p) => html`<td><${UserLink} ...${p} />${!p.online && html` <span class="badge warn" title="Dropped out: 30 s to come back">away</span>`}</td>`)}
           <td class="num">${g.turn}</td><td>${g.players[g.current] ? g.players[g.current].user : '—'}</td>
           <td class="num">${num(g.actions)}</td><td class="num mono">${dur(Date.now() / 1000 - g.started)}</td>
@@ -42,7 +42,7 @@ export function Games ({ query }) {
           const draw = g.winner < 0
           const [w, l] = draw ? g.players : [g.players[g.winner], g.players[1 - g.winner]]
           return html`<tr key=${g.id} class="clickable" onClick=${() => go('games/' + g.id)}>
-            <td class="mono">${g.id.slice(0, 8)}</td><td><span class=${'mode m-' + g.mode}>${g.mode}</span></td>
+            <td class="mono">${g.id.slice(0, 8)}</td><td><span class=${'mode m-' + g.mode}>${g.mode}</span>${g.pack_name ? html` <span class="muted small">${g.pack_name}</span>` : ''}</td>
             <td>${draw ? html`<span class="muted">draw:</span> ` : ''}<${UserLink} ...${w} /></td><td><${UserLink} ...${l} /></td>
             <td><span class=${'reason ' + (g.reason === 'over' ? '' : 'odd')}>${g.reason}</span></td>
             <td class="num mono">${dur(g.ended - g.started)}</td>

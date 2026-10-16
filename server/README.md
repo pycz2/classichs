@@ -8,8 +8,9 @@ server games: `docs/superpowers/specs/2026-10-15-thin-client-design.md` ("Server
 ## Build
 
 Stable Rust (1.94+, for SeaORM 2). The rules engine is the crate `classichs-engine` in
-`../rust/engine` (a path dependency; it embeds `../data/cards.json`), so build from a
-checkout of the whole repository:
+`../rust/engine` (a path dependency with `../rust/script`; it embeds `../data/cards.json`,
+`../docs/packs/schema/keywords.json` and the Classic pack source `../packs/classic`), so
+build from a checkout of the whole repository:
 
 ```sh
 cd server
@@ -21,7 +22,15 @@ cargo run --release --example bench   # what an action and a game cost the serve
 ## The rules
 
 Every game runs inside the server, in the same rules engine the game uses (exact parity
-with the old GDScript engine). The server keeps the only game state: it applies the
+with the old GDScript engine), in a **game pack** (`.cardpack`, docs/packs/): the engine
+loads a pack's rules, cards and Lua scripts by `rules_hash` the first time a game, a deck
+check or a draft needs it (from the storage; kept for the life of the process, at most
+`packs::MAX_RULESETS` = 48 different rule sets). Without a `pack` a request plays the
+server's **default game**: the server pack the admin starred, else (first start) the newest
+bundled pack with the manifest id `--default-pack` (`neon`: Neonfall), else the engine's
+built-in Classic rules. The turn, mulligan, grace and away timers, the ranked ladder (ranks,
+stars, floors, streaks, Legend, the season reset) and the Arena's end come from the pack's
+`rules.json` (docs/packs/rules.md). The server keeps the only game state: it applies the
 players' actions, refuses illegal ones, runs the turn clock, and sends each player only
 what that player may see (never the opponent's hand, deck or secrets). Deck checks and
 the Arena draft use the engine too. Nothing else needs to be installed or started.
@@ -63,16 +72,25 @@ exist (the compose file below creates it). The object key is `<content_hash>.car
 uploads over 10 MB go up as multipart uploads, downloads are streamed to the client.
 
 At every start the server installs each `*.cardpack` in `--packs-dir` as an enabled
-server pack, once: a pack the admin deleted stays deleted, a new file (another content
-hash) is installed. This is how the default packs ship (the Neon pack, later).
+server pack, once (by the file's SHA-256): a pack the admin deleted stays deleted, a new
+file is installed, and a new version of the default game becomes the default. This is how
+Neonfall (the default game) and Classic ship. `--default-pack <manifest id>` (default
+`neon`) names the game that becomes the default when none is set.
+
+**Hashes** are docs/packs/format.md §3: `rules_hash` is computed by the engine
+(`classichs_engine::pack::rules_hash`) and must equal the manifest's; `content_hash` is
+SHA-256 over every file's path and SHA-256 (not the zip's bytes) and is the storage key.
+Packs stored before (their `content_hash` was the file's SHA-256) are rehashed and moved to
+the new key at start; one whose file is gone or no longer valid is turned off (`pack_rejected`).
 
 ### Docker
 
 `docker-compose.yml` runs the server (built by `Dockerfile`: a Rust build stage and a
-distroless Debian 13 runtime, about 90 MB, user 65532, no shell) and
-[SeaweedFS](https://github.com/seaweedfs/seaweedfs) as the S3 store:
+distroless Debian 13 runtime, user 65532, no shell; it bundles `packs/*.cardpack`, so build
+the packs first) and [SeaweedFS](https://github.com/seaweedfs/seaweedfs) as the S3 store:
 
 ```sh
+tools/build_packs.sh                  # packs/classic.cardpack, packs/neon.cardpack
 cd server
 docker compose up -d --build          # game: ws://localhost:7377, admin: http://localhost:7377/admin
 docker compose exec server classichs-server admin root --db /data/classichs.db   # the superuser
@@ -81,8 +99,10 @@ docker compose down                   # keeps the data (volumes server-data, s3-
 ```
 
 The build context is the repository root (the engine is `../rust/engine`);
-`Dockerfile.dockerignore` sends only `data/cards.json`, `rust/engine` and `server`.
-Bundled packs: put `*.cardpack` into `server/packs/` (mounted read-only at `/packs`).
+`Dockerfile.dockerignore` sends only `data/cards.json`, `docs/packs/schema/keywords.json`,
+`packs/classic` (source), `packs/*.cardpack`, `rust/engine`, `rust/script` and `server`.
+The image has Neonfall (the default game) and Classic in `/packs`; more: mount files there
+(see the compose file).
 Set `S3_ACCESS_KEY` and `S3_SECRET_KEY` (an `.env` file next to the compose file) for
 anything but a test; the S3 port is not published.
 
@@ -120,10 +140,12 @@ updates live over `/admin/ws`:
   time and text, sorted, paged, with a live tail; a row opens its details.
 - **Matches**: live and finished games; a game's page is its timeline (every action,
   grouped by turn, live while it runs) and what ended it.
-- **Games** (game packs): the server packs (name, id, version, size, rules and content
-  hashes, downloads, enabled switch, delete with confirmation), upload by drag and drop
-  (several files, with progress), the players' packs (who uploaded what; the switch
-  stops sharing it), the totals and the pack activity, live.
+- **Games** (game packs): the server packs (the default game's star — click another to
+  make it the default —, name, id, version, size, rules and content hashes, games played
+  and live in its rules, downloads, enabled switch, delete with confirmation), upload by
+  drag and drop (several files, with progress; each is checked by the engine), the
+  players' packs (who uploaded what; the switch stops sharing it), the totals and the pack
+  activity, live. Matches show each game's pack; an account shows its rank in every game.
 - **Accounts**: search, filters (online, in game, searching, offline, suspended,
   role), sorting; an account's page (profile, rank, friends, requests, blocks,
   sessions, recent games, messages, activity) with suspend, unsuspend, reset the
@@ -153,9 +175,9 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `GET events?kind=a,b&user&game&from&to&q&sort&dir&page&size` | `{list, total, page, size}`; from/to in ms; sort: time (default), kind, user |
 | `GET conversations?user&page` · `GET conversations/{a}/{b}` | conversations, the latest first · one conversation |
 | `GET games?user&mode&reason&page&size` · `GET games/{id}` | finished games · one game with its timeline |
-| `GET packs` | `{server: [pack], players: [pack], stats: {server, enabled, players, uploaders, files, bytes, downloads, storage, limits: {player, server, per_player}}}`; a pack is `{id, pack_id, version, name, rules_hash, content_hash, size, enabled, created, downloads, owner: {id, user} \| null}` |
-| `POST packs` (the `.cardpack` as the raw body, up to 1 GB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
-| `POST packs/{id}/{enable\|disable\|delete}` | any pack, a player's too (the player's game gets a new `packs`) |
+| `GET packs` | `{server: [pack], players: [pack], stats: {server, enabled, players, uploaders, files, bytes, downloads, storage, games, live, default_rules, builtin: {rules_hash, default}, limits: {player, server, per_player}}}`; a pack is `{id, pack_id, version, name, rules_hash, content_hash, size, enabled, default, created, downloads, games, live, owner: {id, user} \| null}` (`games`/`live`: finished and live games in its rules) |
+| `POST packs` (the `.cardpack` as the raw body, up to 128 MB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
+| `POST packs/{id}/{enable\|disable\|delete\|default}` | any pack, a player's too (the player's game gets a new `packs`); `default`: a server pack becomes the default game |
 
 `/admin/ws` (the cookie, same origin) sends `hello {live}`, then `event {e}` for every
 event, `live {live}` when the online list, queues or games change and `resync {}`
@@ -170,8 +192,8 @@ password, token), `login_failed` (`data.reason`, `data.admin`), `logout`,
 `friend_accept`, `friend_decline`, `friend_remove`, `block`, `unblock`, `msg` (the
 text), `invite`, `invite_accept`, `invite_decline`, `queue`, `unqueue`, `arena`,
 `kicked` (a second login closed the first connection), `pack_upload`, `pack_import` (a
-bundled pack installed), `pack_enable`, `pack_disable`, `pack_delete`, `pack_download`,
-`pack_rejected` (a refused upload: the reason), `match` (with the seed), `game_start` (who goes first, the opening draws), `game_action`
+bundled pack installed), `pack_default`, `pack_enable`, `pack_disable`, `pack_delete`,
+`pack_download`, `pack_rejected` (a refused upload or a stored pack turned off: the reason), `match` (with the seed), `game_start` (who goes first, the opening draws), `game_action`
 (every applied action, timeout moves marked `timeout`, with the turn, the state hash
 and the engine's events), `game_left`, `game_back`, `game_end` (reason, results, the
 final turn and hash, and for `illegal` the refused actions), `admin` (every admin
@@ -181,7 +203,10 @@ action), `error` (database failures and rules engine panics).
 
 SQLite through SeaORM: the tables are the entities in `src/entity/`, the schema is
 `src/migration.rs`, applied at every start (databases from 0.26 are taken over as
-they are).
+they are). Ranks and MMRs are in `standings` per (account, pack manifest id, season) — a
+new version of a pack keeps them, a new season starts from the last one's (M4 moved the
+ranks earned before packs to `classic-2014`); a game row and an Arena run keep their pack's
+`rules_hash` (`""` = the built-in Classic rules, before packs).
 
 ### Connect the game
 
@@ -222,13 +247,15 @@ In the game: Settings → Server: `ws://localhost:7377`.
 | Names | user 3–20 `[A-Za-z0-9_]`; tag 3–16 letters/digits, unique ignoring case |
 | Passwords | 8–128 characters |
 | Friends | 200 |
-| Back after a disconnect in a game | 30 s, then the game is lost |
-| A turn (the mulligan) | 75 s (45 s) + 5 s, then the timeout moves |
+| Back after a disconnect in a game | the pack's `timers.away` (30 s), then the game is lost |
+| A turn (the mulligan) | the pack's `timers` (Classic and Neonfall: 75 s (45 s) + 5 s), then the timeout moves |
 | Refused actions | 3 per player in a game, then the game is lost |
 | Connections per account | 1: a new login closes the old connection (`kicked`) |
 | A player's pack | 100 MB; 10 packs per player |
-| A server pack (admin upload) | 1 GB |
-| Inside a pack | 20 000 files; `manifest.json` 64 KB; the rules files 64 MB together |
+| A server pack (admin upload) | 128 MB |
+| Inside a pack | docs/packs/format.md §1 (10 000 files, 256 MB unpacked, 16 MB a file, the rules part 8 MB, no zip bombs) |
+| The check of a new pack's rules | a trial game of at most 600 actions and 20 s; one check at a time |
+| Different rule sets in the engine | 48 per process (then new ones are refused until a restart) |
 
 ## Protocol summary
 
@@ -238,13 +265,15 @@ Full details: the design doc.
 - Auth: `register {user, password}`, `login {user, password}`, `resume {token}` →
   `auth {ok, token, me}`; `logout {}` → `logged_out`. One connection per account: when
   an account logs in or resumes while it already has a connection, the old one gets
-  `kicked {reason: "another_login"}` and is closed (the client should not reconnect by
+  `kicked {reason: "another_login"}` and is then closed with close code 4001 and reason
+  `another_login` (the close frame says it again; the client should not reconnect by
   itself after it); the new one takes over (friends keep seeing it online; in a game it
   gets `match {…, rejoin: true}` and a fresh `state`). Keep the token: `resume` is
   the normal way back in (after a restart too); it is valid 30 days and every
-  `resume` renews it (the same token comes back). `me {}` → `me {me}`;
-  `me = {user, tag, rank: {rank, stars, legend, streak}, arena, season}` (rank 0 =
-  Legend, `legend` = its number).
+  `resume` renews it (the same token comes back). `me {pack?}` → `me {me}`;
+  `me = {user, tag, rank: {rank, stars, legend, streak}, arena, season, pack}`: the rank in
+  that game (`pack`: a rules_hash; none: the default game; `auth` gives the default's), rank
+  0 = Legend, `legend` = its number.
 - Social: `set_tag {tag}` → `me`; `friends {}` → `friends {list, requests_in,
   requests_out, blocked}` (also pushed after changes); `friend_add {tag}`,
   `friend_accept|friend_decline|friend_remove|block|unblock {user}`;
@@ -261,15 +290,26 @@ Full details: the design doc.
   without messages after them, by name); `unread` = their messages not yet marked
   read. `read {with}` → `read_ok {with}` marks that friend's messages read (kept in
   the database, so the counts survive restarts).
-- Friendly games: `invite {to, deck}` (friend gets `invite {from}`),
-  `invite_accept {from, deck}`, `invite_decline {from}` (inviter gets `invite_declined {by}`).
-- Ladder: `queue {mode: "casual"|"ranked", deck}` → `queued {mode}`, then
-  `queue_status {mode, waited, window}` every second; `unqueue {}`.
-- Arena: `arena_start`, `arena_hero {i}`, `arena_pick {i}`, `arena_queue`,
-  `arena_retire` → `arena {state}` (`state` = heroes, hero, cards, offer, done,
-  wins, losses, or null).
+- Games in packs: `queue`, `arena_start`, `invite`, `invite_accept` and `me` take an
+  optional `pack` (a rules_hash); without it the server's default game. Queues and games
+  are a server pack's (enabled) or the default; a friendly game may also be in the
+  inviter's own enabled pack (D12). Unknown or not allowed: `error pack`. Decks are checked
+  with the pack's rules (`error deck`).
+- Friendly games: `invite {to, deck, pack?}` (friend gets `invite {from, pack}`, `pack` =
+  the game as in `packs`: `{id, name, version, rules_hash, content_hash, size, url}` — the
+  client asks the player and downloads it before accepting; `{id, name, version,
+  rules_hash}` for the built-in rules), `invite_accept {from, deck, pack?}` (`pack`, if
+  given, must be the invite's: else `error pack`), `invite_decline {from}` (inviter gets
+  `invite_declined {by}`).
+- Ladder: `queue {mode: "casual"|"ranked", deck, pack?}` → `queued {mode, pack}`, then
+  `queue_status {mode, waited, window}` every second; `unqueue {}`. Queues are per (mode,
+  pack); `ranked` needs a pack with a ladder (`error queue`).
+- Arena (one run at a time, in one pack): `arena_start {pack?}`, `arena_hero {i}`,
+  `arena_pick {i}`, `arena_queue`, `arena_retire` → `arena {state}` (`state` = heroes,
+  hero, cards, offer, done, wins, losses, pack (rules_hash), or null). A run whose pack left
+  the server answers `error pack` (retire it).
 - Games (the server holds the game; seats are 0 and 1, who goes first is random):
-  - S→C `match {game, mode, opponent: {user, tag}, you: 0|1, rejoin?: true}`.
+  - S→C `match {game, mode, opponent: {user, tag}, you: 0|1, pack, rejoin?: true}` (`pack`: the game's rules_hash).
   - S→C `state {game, view, events, result}` to both players after the start (the
     opening draws) and after every applied action: `view` = the engine's `snapshot`
     for that player, `events` = that action's engine events for that player,
@@ -280,10 +320,10 @@ Full details: the design doc.
     third refused action ends the game (reason `illegal`, that player loses).
   - C→S `emote {game?, id}` (≤ 32 bytes), `intent {game?, i}` (≤ 1 KB) → the opponent
     gets the same with `from` (the sender's seat). Concede is the `concede` action.
-  - Turn clock: 75 s a turn, 45 s for the mulligan, then 5 s more; then the server
-    plays the timeout moves (keeps the mulligan hand, takes the first option of a
-    pending choice, ends the turn).
-  - Dropped out: 30 s to come back, else the game is lost (`disconnect`). Logging in
+  - Turn clock (the pack's `timers`; Classic: 75 s a turn, 45 s for the mulligan, then 5 s
+    `grace`); then the server plays the timeout moves (keeps the mulligan hand, takes the
+    first option of a pending choice, ends the turn).
+  - Dropped out: the pack's `away` (30 s) to come back, else the game is lost (`disconnect`). Logging in
     again during a game gives `match {…, rejoin: true}` and a fresh `state` (no events).
   - The end: `game_over {game, result: "win"|"loss"|"draw", reason, message?, rank?,
     arena?}`, reasons `over` (the game ended, a concede included), `illegal` (with
@@ -293,8 +333,8 @@ Full details: the design doc.
 
 ### Game packs
 
-A pack is `{id, name: {lang: text}, version, rules_hash, content_hash, size, url}` (`id` =
-the manifest's id; `url` is relative to the server's HTTP address, e.g.
+A pack is `{id, name: {lang: text}, version, rules_hash, content_hash, size, default, url}`
+(`id` = the manifest's id; `default`: the server's default game; `url` is relative to the server's HTTP address, e.g.
 `http://host:7377` for `ws://host:7377`).
 
 - `packs {}` → `packs {server: [pack], mine: [pack + enabled]}`: the enabled server packs
@@ -311,10 +351,12 @@ the manifest's id; `url` is relative to the server's HTTP address, e.g.
   `too_many` (10), 413 `too_large` (100 MB), 422 `invalid` (the reason), 400 `empty`.
 - Both answer CORS (`Access-Control-Allow-Origin: *`, preflight included) for the web build.
 
-The check (`packs::validate_pack`, run on every upload and bundled pack): a zip with at
-most 20 000 entries, no absolute, `..`, `\` or `:` paths, a `manifest.json` (≤ 64 KB) with
-`format` 1, `id` (1–64 of `a-z 0-9 . _ -`), `version` (1–32 visible characters) and `name`
-(`{lang: 1–100 characters}`). `content_hash` = SHA-256 of the file; `rules_hash` =
-SHA-256 of `path:sha256(bytes)\n` over `rules.json`, `cards.json`, `rules/**` and
-`scripts/**`, sorted by path (D8). Phase D extends the check with the engine (load,
-compile the scripts, a trial game) and may define the rules hash itself.
+The check (`packs::inspect` and `packs::trial`, on every upload and bundled pack): the zip
+by docs/packs/format.md §1 (paths, sizes, entries; read by the engine), a `manifest.json`
+with `format` 1, `id` (1–64 of `a-z 0-9 . _ -`), `version` (1–32 visible characters),
+`name` (`{lang: 1–100 characters}`) and the `rules_hash` of its files; then (D11), unless a
+pack with the same rules passed before, the engine loads the rules and compiles every
+script, and its bot plays a trial game with the pack's first two legal ready decks (else
+starter decks), trying every legal move on a copy at each step: a script error, an engine
+failure, a stuck game or more than 20 s refuses the pack (`422 invalid` with the reason,
+event `pack_rejected`).

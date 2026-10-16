@@ -77,7 +77,7 @@ func _ready() -> void:
 		var last: Dictionary = link.get_meta("game_over", {})
 		link.remove_meta("game_over")
 		if last.is_empty():
-			link.send({"t": "me"})
+			link.request_me()
 		else:
 			_on_message(last)  # the result, the Arena score; asks for a fresh profile
 	elif link.is_open():
@@ -531,12 +531,52 @@ func _build_arena() -> void:
 	var st: String = arena.get("status", "")  # only "over" (set here after the last game); the server's run has none
 	if arena.is_empty() or st == "over":
 		_build_ticket(st == "over")
+	elif Packs.active() and str(arena.get("pack", Packs.active().rules_hash())) != Packs.active().rules_hash():
+		_build_other_arena()
 	elif str(arena.get("hero", "")) == "":
 		_build_heroes()
 	elif not arena.get("done", false):
 		_build_draft()
 	else:
 		_build_run()
+
+
+## The run is in another game (pack): use that game (download it first if needed) or retire.
+func _build_other_arena() -> void:
+	var h := str(arena.get("pack", ""))
+	var entry := {}
+	for e in link.packs.server + link.packs.mine:
+		if str(e.get("rules_hash", "")) == h:
+			entry = e
+	var have := ServerLink.local_pack(entry) if not entry.is_empty() else null
+	var name := have.title(Settings.language()) if have else (entry_title(entry) if not entry.is_empty() else "?")
+	var l := _centered(tr("Your Arena run is in another game: %s") % name, 26, Vector2(290, 200), 700, Palette.ATTACK)
+	l.name = "OtherArena"
+	var go := Palette.button(tr("Use") if have else tr("Download"), "ArenaGame")
+	go.position = Vector2(440, 320)
+	go.custom_minimum_size = Vector2(400, 60)
+	go.disabled = have == null and (entry.is_empty() or link.downloading.has(str(entry.get("content_hash", ""))))
+	go.pressed.connect(func():
+		if have:
+			Packs.set_active(have)
+			link.request_me()
+			deck = remembered_deck(link)
+			_go("lobby")
+		else:
+			link.download_pack(entry)
+			go.disabled = true
+			say(tr("Downloading…")))
+	_body.add_child(go)
+	var quit := Palette.button(tr("Retire"), "ArenaRetire")
+	quit.position = Vector2(540, 400)
+	quit.custom_minimum_size = Vector2(200, 46)
+	quit.pressed.connect(func():
+		if _retire_armed:
+			link.send({"t": "arena_retire"})
+			return
+		_retire_armed = true
+		quit.text = tr("Retire? Press again"))
+	_body.add_child(quit)
 
 
 ## No run: the ticket, and the last run's result.
@@ -829,6 +869,7 @@ func _game_row(e: Dictionary) -> Control:
 	elif have:
 		_row_button(right, tr("Use"), "Use", func():
 			Packs.set_active(have)
+			link.request_me()
 			deck = remembered_deck(link)
 			_go(stage)
 			_build_games())
@@ -865,6 +906,8 @@ func _row_button(parent: Control, text: String, id: String, fn: Callable) -> But
 func _packs_changed() -> void:
 	if _games:
 		_build_games()
+	if link.logged_in() and Packs.active() and str(link.me.get("pack", "")) != Packs.active().rules_hash() and not link.server_pack_for(Packs.active(), false).is_empty():
+		link.request_me()  # the rank in the active game
 	if stage == "lobby":
 		_go("lobby")
 
@@ -877,6 +920,9 @@ func _pack_progress(h: String, done: int, total: int) -> void:
 
 
 func _pack_downloaded(_h: String, res: Dictionary) -> void:
+	if stage == "lobby" and not _games:
+		_go("lobby")
+		say(tr("Downloaded: %s") % res.pack.title(Settings.language()) if res.has("pack") else str(res.get("error", "")))
 	if _games:
 		_build_games()
 		_games_say(tr("Downloaded: %s") % res.pack.title(Settings.language()) if res.has("pack") else str(res.get("error", "")))
@@ -930,7 +976,7 @@ func _on_message(msg: Dictionary) -> void:
 					arena = {"status": "over", "wins": a.get("wins", 0), "losses": a.get("losses", 0)}
 				else:
 					arena.merge(a, true)
-			link.send({"t": "me"})
+			link.request_me()
 		"invite_declined":
 			say(tr("%s declined the invitation") % str(msg.get("by", "")))
 		"logged_out":

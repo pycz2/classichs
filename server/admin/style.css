@@ -571,3 +571,8 @@ g.s4, .leg.s4, .sw.s4 { --c: var(--s4); }
   .page-head h1 { font-size: 19px; }
   .head-actions { margin-left: 0; }
 }
+
+.default-star { color: var(--text-2); }
+.default-star.on { color: #e3a008; display: inline-flex; padding: 0 6px; }
+.default-star.on .icon { fill: currentColor; }
+.live-count { color: var(--ok, #2f9e44); font-size: 12px; }

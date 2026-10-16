@@ -22,10 +22,9 @@ signal pack_uploaded(result: Dictionary)
 ## Tests point it at their own file.
 const SESSION_DEFAULT_PATH := "user://server_session.json"
 static var session_path := SESSION_DEFAULT_PATH
-## Whether queue, invite, invite_accept and arena_start carry `pack` (the rules hash).
-# ponytail: off until phase D: the server's messages refuse unknown fields (ws.rs deny_unknown_fields).
-static var send_pack := false
-static var _file_hashes := {}  # pack path -> SHA-256 of the file (the server's content_hash)
+## Whether queue, invite, invite_accept, arena_start and me carry `pack` (the rules hash) to a
+## server that knows packs (an older one refuses unknown fields).
+static var send_pack := true
 ## Every connection is in this group (the settings find who is logged in).
 const GROUP := "server_links"
 
@@ -332,53 +331,61 @@ func http_base() -> String:
 	return ("https://" if url.begins_with("wss://") else "http://") + rest
 
 
-## A message with the pack it plays (`pack`: the rules hash) once the server takes it (send_pack).
-func with_pack(msg: Dictionary) -> Dictionary:
-	if send_pack:
-		var p := Packs.active()
-		msg["pack"] = str(server_pack_for(p).get("rules_hash", p.rules_hash()))
+## A message with the game it plays (`pack`: the rules hash of p, else of the active pack)
+## when the server lists that game (send_pack); without `pack` the server plays its default
+## (an older server, or Classic on a server without packs: its built-in rules).
+func with_pack(msg: Dictionary, p: Pack = null) -> Dictionary:
+	p = p if p else Packs.active()
+	if send_pack and not server_pack_for(p).is_empty():
+		msg["pack"] = p.rules_hash()
 	return msg
 
 
-## SHA-256 of a pack's file: the server's content_hash (not the per-file one of format.md).
-static func file_hash(p: Pack) -> String:
-	if not _file_hashes.has(p.path):
-		_file_hashes[p.path] = Pack.sha256(Packs.bytes_of(p))
-	return _file_hashes[p.path]
+## Asks for the profile with the rank in the active game (`me {pack}`).
+func request_me() -> void:
+	send(with_pack({"t": "me"}))
 
 
-## The server's entry for a pack the player has ({} when the server does not list it):
-## the same file, or the same rules.
-func server_pack_for(p: Pack) -> Dictionary:
+## The server's entry for a pack the player has ({} when the server does not list it): the
+## same rules (a different picture set plays the same game). friendly: the player's own
+## uploads count too (only friendly games use them; queues use the server's packs).
+func server_pack_for(p: Pack, friendly := true) -> Dictionary:
 	if p == null:
 		return {}
-	for e in packs.server + packs.mine:
-		if str(e.get("rules_hash", "")) == p.rules_hash() or str(e.get("content_hash", "")) == file_hash(p):
+	for e in packs.server + (packs.mine if friendly else []):
+		if str(e.get("rules_hash", "")) == p.rules_hash():
 			return e
 	return {}
 
 
-## Why games of the pack cannot be played here (translated; "" = they can).
-# ponytail: until phase D every server plays only its built-in Classic rules, listed or not;
-# send_pack (phase D) lets a listed pack be played.
-func game_problem(p: Pack) -> String:
-	if p != null and p.id() == Packs.CLASSIC:
+## Why games of the pack cannot be played here (translated; "" = they can). A server without
+## packs (an older one, or none installed) plays its built-in Classic rules.
+func game_problem(p: Pack, friendly := false) -> String:
+	if p == null:
 		return ""
-	if server_pack_for(p).is_empty():
+	if p.id() == Packs.CLASSIC and (not has_packs or packs.server.is_empty()):
+		return ""
+	if server_pack_for(p, friendly).is_empty():
 		return _tr("This server does not have this game")
-	return "" if send_pack else _tr("This server does not play this game yet")
+	return ""
 
 
-func has_game(p: Pack) -> bool:
-	return game_problem(p) == ""
+func has_game(p: Pack, friendly := false) -> bool:
+	return game_problem(p, friendly) == ""
 
 
-## The player's own pack for a server entry (the same file or the same rules), or null.
+## The player's pack for a server entry, or null: the same file (content_hash, D9) first,
+## else the same rules.
 static func local_pack(entry: Dictionary) -> Pack:
+	var same_rules: Pack = null
 	for p in Packs.all():
-		if p.rules_hash() == str(entry.get("rules_hash", "")) or file_hash(p) == str(entry.get("content_hash", "")):
+		if p.rules_hash() != str(entry.get("rules_hash", "")):
+			continue
+		if Packs.content_hash(p) == str(entry.get("content_hash", "")):
 			return p
-	return null
+		if same_rules == null:
+			same_rules = p
+	return same_rules
 
 
 ## Whether an entry is the player's own upload.
@@ -387,7 +394,7 @@ func is_mine(entry: Dictionary) -> bool:
 
 
 ## Downloads a server pack (GET /packs/<content_hash>.cardpack with the session token),
-## checks the file's SHA-256 and installs it: pack_progress, then pack_downloaded.
+## installs it if its files give that content hash: pack_progress, then pack_downloaded.
 func download_pack(entry: Dictionary) -> void:
 	var h := str(entry.get("content_hash", ""))
 	if h == "" or downloading.has(h):
@@ -408,12 +415,10 @@ func _downloaded(code: int, body: PackedByteArray, entry: Dictionary) -> void:
 		res = {"error": _tr("The server no longer has this game")}
 	elif code != 200:
 		res = {"error": _tr("The download failed (%s)") % (str(code) if code > 0 else "-")}
-	elif Pack.sha256(body) != h:
-		res = {"error": _tr("The download is damaged: try again")}
 	else:
-		res = Packs.install(body, "downloaded", {"server": url})
-		if res.has("pack"):
-			_file_hashes[res.pack.path] = h
+		res = Packs.install(body, "downloaded", {"server": url}, h)
+		if str(res.get("error", "")) in [Packs.ERRORS[2], Packs.ERRORS[3]]:
+			res = {"error": _tr("The download is damaged: try again"), "detail": res.get("detail", "")}
 	pack_downloaded.emit(h, res)
 
 

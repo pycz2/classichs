@@ -7,7 +7,7 @@ import { html, useEvents, useLoad, useDebounced, useTick, toast, Card, UserLink,
 import { FeedRow } from './dashboard.js'
 import { Confirm } from './accounts.js'
 
-const PACK_KINDS = ['pack_upload', 'pack_import', 'pack_enable', 'pack_disable', 'pack_delete', 'pack_rejected', 'pack_download']
+const PACK_KINDS = ['pack_upload', 'pack_import', 'pack_default', 'pack_enable', 'pack_disable', 'pack_delete', 'pack_rejected', 'pack_download']
 /** The activity card leaves the downloads out (the counts show them). */
 const FEED_KINDS = PACK_KINDS.filter((k) => k !== 'pack_download')
 
@@ -84,24 +84,38 @@ function DropZone ({ limit, onDone }) {
   </div>`
 }
 
+/** The default game's name (the starred server pack, else the server's built-in Classic rules). */
+function defaultName (data) {
+  const d = data.server.find((p) => p.default && p.enabled)
+  return d ? `${title(d)} ${d.version}` : 'built-in Classic'
+}
+
 function PackCell ({ p }) {
   return html`<div class="pack-cell"><${Cover} p=${p} /><span><b>${title(p)}</b><small class="mono">${p.pack_id}</small></span></div>`
 }
 
-function PackTable ({ list, players, busy, onToggle, onDelete }) {
+/** The default game's star: on for the default, a button that makes a server pack the default. */
+function DefaultStar ({ p, onDefault }) {
+  if (p.default) return html`<span class="default-star on" title="The default game: requests without a pack play it"><${Icon} name="star" size=${17} /></span>`
+  return html`<button class="btn ghost sm icon-only default-star" disabled=${!p.enabled} title=${p.enabled ? 'Make it the default game' : 'Enable it first'}
+    aria-label=${'Make ' + title(p) + ' the default game'} onClick=${() => onDefault(p)}><${Icon} name="star" size=${17} /></button>`
+}
+
+function PackTable ({ list, players, busy, onToggle, onDelete, onDefault }) {
   if (!list.length) return html`<${Empty}>${players ? 'No player has uploaded a pack yet' : 'No server packs: drop one above, or put *.cardpack files into --packs-dir'}</${Empty}>`
   return html`<div class="table-wrap"><table class="table packs">
     <thead><tr>
-      ${players && html`<th>Player</th>`}<th>Pack</th><th>Version</th><th class="num">Size</th><th>Rules hash</th><th>Content hash</th>
-      <th class="num">Downloads</th><th>${players ? 'Uploaded' : 'Added'}</th><th>${players ? 'Shared' : 'Enabled'}</th><th></th>
+      ${players ? html`<th>Player</th>` : html`<th title="The default game">Default</th>`}<th>Pack</th><th>Version</th><th class="num">Size</th><th>Rules hash</th><th>Content hash</th>
+      <th class="num" title="Finished games in these rules (and live now)">Games</th><th class="num">Downloads</th><th>${players ? 'Uploaded' : 'Added'}</th><th>${players ? 'Shared' : 'Enabled'}</th><th></th>
     </tr></thead>
     <tbody>${list.map((p) => html`<tr key=${p.id} class=${p.enabled ? '' : 'off'}>
-      ${players && html`<td><${UserLink} ...${p.owner} /></td>`}
+      ${players ? html`<td><${UserLink} ...${p.owner} /></td>` : html`<td><${DefaultStar} p=${p} onDefault=${onDefault} /></td>`}
       <td><${PackCell} p=${p} /></td>
       <td><span class="ver">${p.version}</span></td>
       <td class="num nowrap">${bytes(p.size)}</td>
       <td><${Hash} value=${p.rules_hash} label="Rules hash" /></td>
       <td><${Hash} value=${p.content_hash} label="Content hash" /></td>
+      <td class="num nowrap">${num(p.games || 0)}${p.live ? html` <span class="live-count" title="Live now">· ${p.live} live</span>` : ''}</td>
       <td class="num">${num(p.downloads)}</td>
       <td class="nowrap" title=${fullDate(p.created * 1000)}>${ago(p.created * 1000)}</td>
       <td><${Switch} on=${p.enabled} busy=${busy === p.id} label=${p.enabled ? 'Disable' : 'Enable'} onChange=${(on) => onToggle(p, on)} /></td>
@@ -130,6 +144,9 @@ export function Packs () {
     try { const r = await api(`packs/${p.id}/${on ? 'enable' : 'disable'}`, { method: 'POST' }); toast(r.text); reload() } catch (err) { toast(err.message, 'err') }
     setBusy(null)
   }
+  const makeDefault = async (p) => {
+    try { const r = await api(`packs/${p.id}/default`, { method: 'POST' }); toast(r.text); reload() } catch (err) { toast(err.message, 'err') }
+  }
   const remove = async () => {
     const p = del
     setDel(null)
@@ -142,13 +159,13 @@ export function Packs () {
     ${s ? html`<div class="tiles">
       <div class="tile accent"><span class="tile-label">Server packs</span><span class="tile-value">${num(s.server)}</span><span class="tile-sub">${s.enabled} enabled · offered to every player</span></div>
       <div class="tile"><span class="tile-label">Players' packs</span><span class="tile-value">${num(s.players)}</span><span class="tile-sub">by ${s.uploaders} player${s.uploaders === 1 ? '' : 's'} · ${s.limits.per_player} each at most</span></div>
-      <div class="tile"><span class="tile-label">Downloads</span><span class="tile-value">${num(s.downloads)}</span><span class="tile-sub">by players' games, all packs</span></div>
-      <div class="tile"><span class="tile-label">Stored</span><span class="tile-value">${bytes(s.bytes)}</span><span class="tile-sub" title=${s.storage}>${s.files} file${s.files === 1 ? '' : 's'} · ${s.storage}</span></div>
+      <div class="tile"><span class="tile-label">Games played</span><span class="tile-value">${num(s.games || 0)}</span><span class="tile-sub">${num(s.live || 0)} live now · default: ${defaultName(data)}</span></div>
+      <div class="tile"><span class="tile-label">Stored</span><span class="tile-value">${bytes(s.bytes)}</span><span class="tile-sub" title=${s.storage}>${s.files} file${s.files === 1 ? '' : 's'} · ${num(s.downloads)} downloads · ${s.storage}</span></div>
     </div>` : html`<div class="tiles">${[0, 1, 2, 3].map(() => html`<div class="tile skel-tile"></div>`)}</div>`}
     <${DropZone} limit=${s ? s.limits.server : 0} onDone=${reload} />
     <${Card} title=${`Server packs${data ? ' (' + data.server.length + ')' : ''}`} pad=${false} cls=${loading ? 'loading' : ''}
-      actions=${html`<span class="muted small">Only server packs go to the queues</span>`}>
-      ${data && html`<${PackTable} list=${data.server} busy=${busy} onToggle=${toggle} onDelete=${setDel} />`}
+      actions=${html`<span class="muted small">Only server packs go to the queues · the starred one is the default game</span>`}>
+      ${data && html`<${PackTable} list=${data.server} busy=${busy} onToggle=${toggle} onDelete=${setDel} onDefault=${makeDefault} />`}
     </${Card}>
     <${Card} title=${`Players' packs${data ? ' (' + data.players.length + ')' : ''}`} pad=${false} cls=${loading ? 'loading' : ''}
       actions=${html`<span class="muted small">For friendly games with friends; ${s ? bytes(s.limits.player) : '100 MB'} each · off = not shared</span>`}>

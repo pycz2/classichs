@@ -2,11 +2,12 @@
 //! `classichs-engine`), applies the players' actions and sends each player its own view.
 //! Protocol: docs/superpowers/specs/2026-10-15-thin-client-design.md, "Server games".
 
-use crate::db::{self, Account, DbError, DbResult};
+use crate::db::{self, DbError, DbResult, Standing};
 use crate::entity::{arena, game as played};
 use crate::events::Event;
+use crate::packs::{self, GameRules};
 use crate::ranked::{self, Mode};
-use crate::{presence, AppRef, LiveGame};
+use crate::{presence, AppRef, LiveGame, Timers};
 use classichs_engine::api::{events_for, snapshot};
 use classichs_engine::deck::Deck;
 use classichs_engine::state::Ev as Events;
@@ -15,6 +16,7 @@ use rand::Rng;
 use sea_orm::{ActiveModelTrait, ConnectionTrait, EntityTrait, Set, TransactionTrait, Unchanged};
 use serde_json::{json, Value};
 use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc;
 use tokio::time::Instant;
@@ -39,6 +41,9 @@ struct Ctx {
     app: AppRef,
     id: String,
     mode: Mode,
+    rules: Arc<GameRules>,
+    /// The game clocks: the pack's, or the app's for every game (tests).
+    timers: Timers,
     ids: [i64; 2],
     names: [String; 2],
     started: i64,
@@ -46,16 +51,16 @@ struct Ctx {
     hello: [Value; 2],
 }
 
-/// Starts a game between two players ([account, deck]); the seats are drawn at random.
-pub async fn start(app: AppRef, mode: Mode, players: [(i64, Value); 2]) {
+/// Starts a game between two players ([account, deck]) in a pack; the seats are drawn at random.
+pub async fn start(app: AppRef, mode: Mode, rules: Arc<GameRules>, players: [(i64, Value); 2]) {
     let ids = [players[0].0, players[1].0];
-    begin(app.clone(), mode, players).await;
+    begin(app.clone(), mode, rules, players).await;
     for id in ids {
         presence(&app, id).await;
     }
 }
 
-async fn begin(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
+async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i64, Value); 2]) {
     if rand::thread_rng().gen_bool(0.5) {
         players.swap(0, 1);
     }
@@ -78,9 +83,10 @@ async fn begin(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
     let id = format!("{:016x}", rand::thread_rng().gen::<u64>());
     let seed: u32 = rand::thread_rng().gen();
     // The decks were checked when queued or invited; a bad one here is a server bug.
-    let decks: Vec<Deck> = players.iter().filter_map(|p| Deck::from_value(&p.1)).filter(|d| d.validate().is_empty()).collect();
+    let rs = rules.rs;
+    let decks: Vec<Deck> = players.iter().filter_map(|p| Deck::from_value_in(rs, &p.1)).filter(|d| d.validate_in(rs).is_empty()).collect();
     let game = match decks.as_slice() {
-        [d0, d1] => catch_unwind(|| Game::new(&d0.hero, &d0.cards, &d1.hero, &d1.cards, seed as i64, -1, true)).ok(),
+        [d0, d1] => catch_unwind(|| Game::new_in(rs, &d0.hero, &d0.cards, &d1.hero, &d1.cards, seed as i64, -1, true)).ok(),
         _ => None,
     };
     let Some(game) = game else {
@@ -90,7 +96,7 @@ async fn begin(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
     let accs = [a0, a1];
     let hello: [Value; 2] = std::array::from_fn(|p| {
         let o = &accs[1 - p];
-        json!({"t": "match", "game": id, "mode": mode, "opponent": {"user": o.name, "tag": o.tag}, "you": p})
+        json!({"t": "match", "game": id, "mode": mode, "opponent": {"user": o.name, "tag": o.tag}, "you": p, "pack": rules.rules_hash})
     });
     let (tx, rx) = mpsc::unbounded_channel();
     let names = [accs[0].name.clone(), accs[1].name.clone()];
@@ -106,7 +112,7 @@ async fn begin(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
             hub.send(*a, &hello[p]);
         }
         hub.games.insert(id.clone(), LiveGame {
-            tx: tx.clone(), mode, ids, names: names.clone(), started: ranked::now(), turn: game.turn,
+            tx: tx.clone(), mode, pack: rules.rules_hash.clone(), pack_name: packs::short_name(&rules), ids, names: names.clone(), started: ranked::now(), turn: game.turn,
             current: game.current as i64, actions: 0,
         });
         for (p, a) in ids.iter().enumerate() {
@@ -115,16 +121,19 @@ async fn begin(app: AppRef, mode: Mode, mut players: [(i64, Value); 2]) {
             }
         }
     }
-    tracing::info!("game {id} ({}) {} vs {}", mode.as_str(), names[0], names[1]);
+    let pack_name = packs::short_name(&rules);
+    tracing::info!("game {id} ({}, {pack_name}) {} vs {}", mode.as_str(), names[0], names[1]);
     let heroes = [players[0].1["hero"].clone(), players[1].1["hero"].clone()];
     app.event(
-        Event::new("match", format!("{} vs {} ({})", names[0], names[1], mode.as_str()))
+        Event::new("match", format!("{} vs {} ({}, {pack_name})", names[0], names[1], mode.as_str()))
             .user(ids[0], &names[0])
             .other(&names[1])
             .game(&id)
-            .data(json!({"mode": mode, "seed": seed, "players": names, "heroes": heroes})),
+            .data(json!({"mode": mode, "seed": seed, "players": names, "heroes": heroes, "pack": rules.rules_hash, "pack_id": rules.id,
+                         "pack_name": pack_name})),
     );
-    let ctx = Ctx { app, id, mode, ids, names, started: ranked::now(), hello };
+    let timers = app.timers.unwrap_or(rules.timers);
+    let ctx = Ctx { app, id, mode, rules, timers, ids, names, started: ranked::now(), hello };
     tokio::spawn(run(ctx, game, rx));
 }
 
@@ -199,7 +208,7 @@ impl Ctx {
         if !r.ok {
             return Step::Refused(r.error);
         }
-        clock.update(g, &self.app.timers);
+        clock.update(g, &self.timers);
         if let Some(lg) = self.app.hub().games.get_mut(&self.id) {
             lg.turn = g.turn;
             lg.current = g.current as i64;
@@ -242,7 +251,7 @@ impl Ctx {
             return Some((g.winner, "over"));
         }
         if clock.key == key {
-            clock.at = Instant::now() + self.app.timers.turn; // never spin on a move that does not take
+            clock.at = Instant::now() + self.timers.turn; // never spin on a move that does not take
         }
         None
     }
@@ -256,7 +265,7 @@ struct Cause {
 }
 
 async fn run(ctx: Ctx, mut g: Game, mut rx: mpsc::UnboundedReceiver<Ev>) {
-    let t = ctx.app.timers;
+    let t = ctx.timers;
     let mut clock = Clock { key: ("", -1, 9), at: Instant::now() };
     clock.update(&g, &t);
     let opening: Vec<Events> =
@@ -361,7 +370,7 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
     }
     let saved = async {
         let tx = ctx.app.db.begin().await?;
-        let extra = apply_results(&tx, ctx.mode, ctx.ids, winner).await?;
+        let extra = apply_results(&tx, &ctx.rules, ctx.mode, ctx.ids, winner).await?;
         let row = played::ActiveModel {
             id: Set(ctx.id.clone()),
             mode: Set(ctx.mode.as_str().into()),
@@ -371,6 +380,7 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
             ended: Set(ranked::now()),
             winner: Set(winner),
             reason: Set(reason.into()),
+            pack: Set(ctx.rules.rules_hash.clone()),
         };
         played::Entity::insert(row).exec_without_returning(&tx).await?;
         tx.commit().await?;
@@ -387,7 +397,7 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
         _ => format!("{} and {}: no winner ({}, {reason})", ctx.names[0], ctx.names[1], ctx.mode.as_str()),
     };
     let w = winner.clamp(0, 1) as usize;
-    let mut data = json!({"winner": winner, "reason": reason, "mode": ctx.mode, "players": ctx.names, "results": extra,
+    let mut data = json!({"winner": winner, "reason": reason, "mode": ctx.mode, "pack": ctx.rules.rules_hash, "players": ctx.names, "results": extra,
                           "duration": ranked::now() - ctx.started, "turn": g.turn, "hash": g.state_hash()});
     if let Some(c) = &cause {
         data["by"] = json!(ctx.names[c.p]);
@@ -419,45 +429,43 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
     }
 }
 
-pub async fn rank_json(c: &impl ConnectionTrait, a: &Account) -> DbResult<Value> {
-    Ok(json!({"rank": a.rank, "stars": a.stars, "legend": db::legend_number(c, a).await?, "streak": a.streak}))
+pub async fn rank_json(c: &impl ConnectionTrait, s: &Standing) -> DbResult<Value> {
+    Ok(json!({"rank": s.rank, "stars": s.stars, "legend": db::legend_number(c, s).await?, "streak": s.streak}))
 }
 
-/// MMR, ranked stars and the Arena record; returns what each player's game_over adds.
-async fn apply_results(c: &impl ConnectionTrait, mode: Mode, ids: [i64; 2], winner: i64) -> DbResult<[Value; 2]> {
+/// MMR, ranked stars (both in the game's pack) and the Arena record; returns what each
+/// player's game_over adds.
+async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, ids: [i64; 2], winner: i64) -> DbResult<[Value; 2]> {
     if winner < 0 || mode == Mode::Friendly {
         return Ok([json!({}), json!({})]);
     }
     let w = winner as usize;
-    let load = |id| async move { db::account_by_id(c, id).await?.ok_or(DbError::RecordNotFound("account".into())) };
+    let l = &rules.ladder;
     match mode {
         Mode::Casual => {
-            let (mut a, mut b) = (load(ids[w]).await?, load(ids[1 - w]).await?);
+            let (mut a, mut b) = (db::standing(c, ids[w], &rules.id, l).await?, db::standing(c, ids[1 - w], &rules.id, l).await?);
             (a.casual_mmr, b.casual_mmr) = ranked::elo(a.casual_mmr, b.casual_mmr, true);
             db::save_standing(c, &a).await?;
             db::save_standing(c, &b).await?;
             Ok([json!({}), json!({})])
         }
         Mode::Ranked => {
-            let mut acc = [load(ids[0]).await?, load(ids[1]).await?];
-            for a in acc.iter_mut() {
-                db::refresh_season(c, a).await?;
+            let mut st = [db::standing(c, ids[0], &rules.id, l).await?, db::standing(c, ids[1], &rules.id, l).await?];
+            (st[w].ranked_mmr, st[1 - w].ranked_mmr) = ranked::elo(st[w].ranked_mmr, st[1 - w].ranked_mmr, true);
+            for (p, s) in st.iter_mut().enumerate() {
+                let mut r = s.rank();
+                if p == w { r.win(l) } else { r.lose(l) }
+                (s.rank, s.stars, s.streak) = (r.rank, r.stars, r.streak);
+                db::save_standing(c, s).await?;
             }
-            (acc[w].ranked_mmr, acc[1 - w].ranked_mmr) = ranked::elo(acc[w].ranked_mmr, acc[1 - w].ranked_mmr, true);
-            for (p, a) in acc.iter_mut().enumerate() {
-                let mut r = a.rank();
-                if p == w { r.win() } else { r.lose() }
-                (a.rank, a.stars, a.streak) = (r.rank, r.stars, r.streak);
-                db::save_standing(c, a).await?;
-            }
-            Ok([json!({"rank": rank_json(c, &acc[0]).await?}), json!({"rank": rank_json(c, &acc[1]).await?})])
+            Ok([json!({"rank": rank_json(c, &st[0]).await?}), json!({"rank": rank_json(c, &st[1]).await?})])
         }
         Mode::Arena => {
             let mut out = [json!({}), json!({})];
             for (p, id) in ids.iter().enumerate() {
                 let Some(run) = arena::Entity::find_by_id(*id).one(c).await? else { continue };
                 let (wins, losses) = if p == w { (run.wins + 1, run.losses) } else { (run.wins, run.losses + 1) };
-                let over = wins >= 12 || losses >= 3;
+                let over = wins >= rules.arena_wins || losses >= rules.arena_losses;
                 if over {
                     arena::Entity::delete_by_id(*id).exec(c).await?;
                 } else {

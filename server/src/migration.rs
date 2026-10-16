@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4)]
     }
 }
 
@@ -88,6 +88,7 @@ enum Arena {
     Draft,
     Wins,
     Losses,
+    Pack,
 }
 
 #[derive(DeriveIden)]
@@ -101,6 +102,7 @@ enum Games {
     Ended,
     Winner,
     Reason,
+    Pack,
 }
 
 #[derive(DeriveIden)]
@@ -319,6 +321,8 @@ enum Packs {
     Enabled,
     Created,
     Downloads,
+    Hashes,
+    IsDefault,
 }
 
 #[derive(DeriveIden)]
@@ -369,5 +373,69 @@ impl MigrationTrait for M3 {
                 .to_owned(),
         )
         .await
+    }
+}
+
+#[derive(DeriveIden)]
+enum Standings {
+    Table,
+    Account,
+    Pack,
+    Season,
+    Rank,
+    Stars,
+    Streak,
+    RankedMmr,
+    CasualMmr,
+}
+
+
+/// Games on packs (phase D): hashes by docs/packs/format.md (rows of the old scheme are
+/// recomputed at start, `packs::migrate_hashes`), the default pack, the pack of a game and
+/// of an Arena run, and standings per (account, pack, season): the ranks and MMRs so far were
+/// earned in Classic and move there.
+struct M4;
+
+impl MigrationName for M4 {
+    fn name(&self) -> &str {
+        "m20261016_000004_games_on_packs"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M4 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        m.alter_table(Table::alter().table(Packs::Table).add_column(int(Packs::Hashes).default(0)).to_owned()).await?;
+        m.alter_table(Table::alter().table(Packs::Table).add_column(int(Packs::IsDefault).default(0)).to_owned()).await?;
+        m.create_index(Index::create().name("packs_rules").table(Packs::Table).col(Packs::RulesHash).to_owned()).await?;
+        m.alter_table(Table::alter().table(Games::Table).add_column(ColumnDef::new(Games::Pack).text().not_null().default("")).to_owned()).await?;
+        m.alter_table(Table::alter().table(Arena::Table).add_column(ColumnDef::new(Arena::Pack).text().not_null().default("")).to_owned()).await?;
+        m.create_table(
+            Table::create()
+                .table(Standings::Table)
+                .col(int(Standings::Account))
+                .col(ColumnDef::new(Standings::Pack).text().not_null())
+                .col(int(Standings::Season))
+                .col(int(Standings::Rank))
+                .col(int(Standings::Stars).default(0))
+                .col(int(Standings::Streak).default(0))
+                .col(ColumnDef::new(Standings::RankedMmr).double().not_null().default(1500.0))
+                .col(ColumnDef::new(Standings::CasualMmr).double().not_null().default(1500.0))
+                .primary_key(Index::create().col(Standings::Account).col(Standings::Pack).col(Standings::Season))
+                .foreign_key(&mut fk(Standings::Table, Standings::Account))
+                .to_owned(),
+        )
+        .await?;
+        m.create_index(
+            Index::create().name("standings_ladder").table(Standings::Table).col(Standings::Pack).col(Standings::Season).col(Standings::Rank).to_owned(),
+        )
+        .await?;
+        m.get_connection()
+            .execute_unprepared(
+                "INSERT INTO standings (account, pack, season, rank, stars, streak, ranked_mmr, casual_mmr) \
+                 SELECT id, 'classic-2014', season, rank, stars, streak, ranked_mmr, casual_mmr FROM accounts",
+            )
+            .await?;
+        Ok(())
     }
 }

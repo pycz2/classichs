@@ -161,7 +161,7 @@ export const KINDS = {
   msg: 'chat',
   queue: 'queue', unqueue: 'queue', arena: 'queue',
   match: 'game', game_start: 'game', game_action: 'game', game_left: 'game', game_back: 'game', game_end: 'game',
-  pack_upload: 'pack', pack_import: 'pack', pack_enable: 'pack', pack_disable: 'pack', pack_delete: 'pack', pack_download: 'pack', pack_rejected: 'error',
+  pack_upload: 'pack', pack_import: 'pack', pack_default: 'pack', pack_enable: 'pack', pack_disable: 'pack', pack_delete: 'pack', pack_download: 'pack', pack_rejected: 'error',
   admin: 'admin'
 }
 
@@ -194,6 +194,7 @@ const ICONS = {
   refresh: 'M20 11a8 8 0 10-2.3 5.7M20 4v7h-7',
   packs: 'M21 8l-9-5-9 5v8l9 5 9-5V8zM3 8l9 5 9-5M12 13v8M7.5 5.5l9 5',
   upload: 'M12 15V4m-5 5l5-5 5 5M4 15v4a1 1 0 001 1h14a1 1 0 001-1v-4',
+  star: 'M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3z',
   trash: 'M4 7h16M10 11v6m4-6v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3'
 }
 

@@ -1,5 +1,6 @@
 # The game server with an S3-compatible pack store (SeaweedFS, `weed mini`).
-#   cd server && docker compose up -d --build
+#   tools/build_packs.sh && cd server && docker compose up -d --build
+# The image bundles packs/*.cardpack (Neonfall, the default game, and Classic).
 # Game: ws://localhost:7377 · admin panel: http://localhost:7377/admin
 # The superuser: docker compose exec server classichs-server admin root --db /data/classichs.db
 # Change S3_ACCESS_KEY / S3_SECRET_KEY (in .env next to this file) for anything but a test.
@@ -40,8 +41,8 @@ services:
       - "7377:7377"
     volumes:
       - server-data:/data
-      # Bundled packs: every *.cardpack here becomes a server pack once.
-      - ./packs:/packs:ro
+      # More bundled packs (each becomes a server pack once), e.g.:
+      # - ./my-game.cardpack:/packs/my-game.cardpack:ro
     restart: unless-stopped
 
 volumes:

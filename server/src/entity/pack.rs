@@ -15,7 +15,7 @@ pub struct Model {
     pub name: String,
     /// SHA-256 (hex) of what affects play; games are tied to it.
     pub rules_hash: String,
-    /// SHA-256 (hex) of the whole file: its storage key.
+    /// docs/packs/format.md §3 (SHA-256 over the files): its storage key.
     pub content_hash: String,
     pub size: i64,
     /// The uploading player; null = a server pack.
@@ -23,6 +23,11 @@ pub struct Model {
     pub enabled: bool,
     pub created: i64,
     pub downloads: i64,
+    /// The hash scheme of rules_hash and content_hash: 0 = before phase D (recomputed at
+    /// start), 1 = docs/packs/format.md.
+    pub hashes: i64,
+    /// The server's default game (one server pack): requests without `pack` play it.
+    pub is_default: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

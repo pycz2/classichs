@@ -1,11 +1,11 @@
 use classichs_server::storage::{Storage, S3};
-use classichs_server::{auth, db, packs, App, Timers};
+use classichs_server::{auth, db, packs, App};
 use std::net::SocketAddr;
 use std::path::PathBuf;
 
 const USAGE: &str = "usage:
   classichs-server [--listen 127.0.0.1:7377] [--db classichs.db] [--trust-proxy]
-                   [--packs-dir <dir>] [--store-dir store]
+                   [--packs-dir <dir>] [--default-pack neon] [--store-dir store]
                    [--s3-bucket <name> --s3-endpoint <url> --s3-region <r>
                     --s3-access-key <key> --s3-secret-key <secret>]
   classichs-server admin <name> [--db classichs.db]
@@ -16,7 +16,9 @@ nothing else is needed.
 Game packs are stored in S3 when a bucket is given (flags, or the environment:
 S3_BUCKET, S3_ENDPOINT, S3_REGION, S3_ACCESS_KEY, S3_SECRET_KEY), else in --store-dir.
 Bundled packs (*.cardpack in --packs-dir, default: packs/ next to the binary) are
-installed as server packs at start, each once.";
+installed as server packs at start, each once. Games without a pack are played in the
+default pack (the admin panel sets it); until one is set, the newest enabled server
+pack with the manifest id --default-pack becomes it, else the built-in Classic rules.";
 
 fn main() {
     tracing_subscriber::fmt()
@@ -37,6 +39,7 @@ fn main() {
     };
     let mut store_dir = "store".to_string();
     let mut packs_dir: Option<PathBuf> = None;
+    let mut default_pack = "neon".to_string();
     let mut it = args.into_iter();
     while let Some(a) = it.next() {
         let mut val = |name: &str| it.next().unwrap_or_else(|| die(&format!("{name} needs a value")));
@@ -46,6 +49,7 @@ fn main() {
             "--trust-proxy" => trust_proxy = true,
             "--store-dir" => store_dir = val("--store-dir"),
             "--packs-dir" => packs_dir = Some(val("--packs-dir").into()),
+            "--default-pack" => default_pack = val("--default-pack"),
             "--s3-bucket" => s3.bucket = val("--s3-bucket"),
             "--s3-endpoint" => s3.endpoint = val("--s3-endpoint"),
             "--s3-region" => s3.region = val("--s3-region"),
@@ -73,11 +77,22 @@ fn main() {
     rt.block_on(async move {
         tracing::info!("rules engine {} (cards {})", classichs_engine::api::VERSION, classichs_engine::card_db::data_hash());
         tracing::info!("pack storage: {}; bundled packs: {}", store.what, packs_dir.display());
-        let app = App::new(db, trust_proxy, Timers::default(), store);
+        let app = App::new(db, trust_proxy, None, store);
+        let n = packs::migrate_hashes(&app).await;
+        if n > 0 {
+            tracing::info!("{n} pack(s) moved to the hashes of docs/packs/format.md");
+        }
         let n = packs::import_bundled(&app, &packs_dir).await;
         if n > 0 {
             tracing::info!("{n} bundled pack(s) installed");
         }
+        match packs::set_default(&app, None, &default_pack).await {
+            Ok(Some(p)) => tracing::info!("default game: {}", packs::label(&p)),
+            Ok(None) => {}
+            Err(e) => tracing::error!("default game: {e}"),
+        }
+        let d = packs::playable(&app, None, None).await.map(|r| packs::short_name(&r.0)).unwrap_or_else(|e| e.1);
+        tracing::info!("games without a pack: {d}");
         classichs_server::spawn_background(app.clone());
         let listener = tokio::net::TcpListener::bind(addr).await.unwrap_or_else(|e| die(&format!("cannot listen on {addr}: {e}")));
         println!("classichs-server listening on ws://{addr} (admin panel: http://{addr}/admin, database: {db_path})");

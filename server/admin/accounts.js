@@ -58,7 +58,7 @@ export function Accounts ({ query }) {
         <thead><tr>
           <${SortTh} col="user" ...${sortProps}>User</${SortTh}>
           <th>Tag</th><th>Status</th>
-          <${SortTh} col="rank" ...${sortProps}>Rank</${SortTh}>
+          <${SortTh} col="rank" ...${sortProps}>Rank <span class="muted small">(default game)</span></${SortTh}>
           <${SortTh} col="ranked_mmr" ...${sortProps} cls="num">Ranked MMR</${SortTh}>
           <${SortTh} col="casual_mmr" ...${sortProps} cls="num">Casual MMR</${SortTh}>
           <${SortTh} col="created" ...${sortProps}>Created</${SortTh}>
@@ -156,11 +156,13 @@ export function AccountPage ({ id }) {
         <dl class="kv">
           <dt>Created</dt><dd title=${fullDate(a.created * 1000)}>${fullDate(a.created * 1000)}</dd>
           <dt>Last seen</dt><dd>${status !== 'offline' ? html`<span class="ok-text">online now</span>` : html`<span title=${fullDate(a.last_seen * 1000)}>${ago(a.last_seen * 1000)}</span>`}</dd>
-          <dt>Rank</dt><dd><${Rank} a=${a} /> <span class="muted small">season ${a.season}</span></dd>
+          <dt>Rank</dt><dd><${Rank} a=${a} /> <span class="muted small">${a.pack} · season ${a.season}</span></dd>
+          ${(data.ranks || []).filter((r) => !r.default).map((r) => html`<dt class="muted">${r.pack}</dt><dd><${Rank} a=${r} />
+            <span class="muted small">MMR ${num(r.ranked_mmr)} / ${num(r.casual_mmr)}</span></dd>`)}
           <dt>Win streak</dt><dd>${a.streak}</dd>
           <dt>Ranked MMR</dt><dd>${num(a.ranked_mmr)}</dd>
           <dt>Casual MMR</dt><dd>${num(a.casual_mmr)}</dd>
-          <dt>Arena</dt><dd>${data.arena ? html`${data.arena.wins}–${data.arena.losses} <span class="muted small">${data.arena.picks} of 30 picked</span>` : html`<span class="muted">no run</span>`}</dd>
+          <dt>Arena</dt><dd>${data.arena ? html`${data.arena.wins}–${data.arena.losses} <span class="muted small">${data.arena.picks} picked${data.arena.pack ? ' · ' + data.arena.pack.slice(0, 10) + '…' : ''}</span>` : html`<span class="muted">no run</span>`}</dd>
         </dl>
       </${Card}>
       <${Card} title=${`Friends (${data.friends.length})`} pad=${false}>

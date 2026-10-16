@@ -2,6 +2,7 @@
 //! through `object_store`. Keys are content hashes, so a file never changes once written.
 
 use futures_util::stream::BoxStream;
+use futures_util::StreamExt;
 use object_store::aws::AmazonS3Builder;
 use object_store::buffered::BufWriter;
 use object_store::local::LocalFileSystem;
@@ -73,6 +74,23 @@ impl Storage {
             return Err(Error::Generic { store: "upload", source: Box::new(e) });
         }
         Ok(())
+    }
+
+    pub async fn put_bytes(&self, content_hash: &str, bytes: Vec<u8>) -> Result<(), Error> {
+        self.store.put(&key(content_hash), bytes.into()).await.map(|_| ())
+    }
+
+    /// The whole file (at most `limit` bytes).
+    pub async fn read(&self, content_hash: &str, limit: u64) -> Result<Vec<u8>, Error> {
+        let (size, mut s) = self.get(content_hash).await?;
+        if size > limit {
+            return Err(Error::Generic { store: "read", source: format!("{size} bytes, more than {limit}").into() });
+        }
+        let mut out = Vec::with_capacity(size as usize);
+        while let Some(c) = s.next().await {
+            out.extend_from_slice(&c?);
+        }
+        Ok(out)
     }
 
     pub async fn exists(&self, content_hash: &str) -> Result<bool, Error> {

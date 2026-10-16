@@ -165,6 +165,36 @@ func test_games_screen_lists_selects_activates_and_deletes() -> void:
 
 
 ## The pack's files with some added or replaced, zipped again.
+## [rules_hash, content_hash] of a pack's bytes (docs/packs/format.md).
+func _hashes(bytes: PackedByteArray) -> Array:
+	var at := "user://test_packs_hash.zip"
+	var f := FileAccess.open(at, FileAccess.WRITE)
+	f.store_buffer(bytes)
+	f.close()
+	var p := Pack.open(at)
+	var out := [p.computed_rules_hash(), p.content_hash()]
+	p.close()
+	DirAccess.remove_absolute(at)
+	return out
+
+
+## The pack with other rules (another game for the server's list), its manifest's rules_hash right.
+func _other_rules(bytes: PackedByteArray) -> PackedByteArray:
+	var at := "user://test_packs_rules.zip"
+	var f := FileAccess.open(at, FileAccess.WRITE)
+	f.store_buffer(bytes)
+	f.close()
+	var p := Pack.open(at)
+	var rules: Dictionary = p.rules()
+	rules.limits.queue_steps = int(rules.limits.get("queue_steps", 5000)) + 1
+	var manifest: Dictionary = p.manifest.duplicate()
+	p.close()
+	DirAccess.remove_absolute(at)
+	var changed := _repacked(bytes, {"rules.json": JSON.stringify(rules).to_utf8_buffer()})
+	manifest.rules_hash = _hashes(changed)[0]
+	return _repacked(changed, {"manifest.json": JSON.stringify(manifest).to_utf8_buffer()})
+
+
 func _repacked(bytes: PackedByteArray, change: Dictionary) -> PackedByteArray:
 	var src := "user://test_packs_src.zip"
 	var out := "user://test_packs_out.zip"
@@ -201,9 +231,10 @@ func test_games_screen_shows_and_downloads_a_servers_games() -> void:
 	(Engine.get_main_loop() as SceneTree).root.add_child(v)
 	check(v.find_child("Get_*", true, false) == null, "logged out: no games listed")
 	l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"user": "me"}})
-	var bytes := _repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"), {"README.md": "server copy".to_utf8_buffer()})
-	var h := Pack.sha256(bytes)
-	l.dispatch({"t": "packs", "server": [{"id": "neon", "name": {"en": "Neonfall"}, "version": "1.0.0", "rules_hash": "not yet the same",
+	var bytes := _other_rules(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"))
+	var hs := _hashes(bytes)
+	var h: String = hs[1]
+	l.dispatch({"t": "packs", "server": [{"id": "neon", "name": {"en": "Neonfall"}, "version": "1.0.0", "rules_hash": hs[0],
 		"content_hash": h, "size": bytes.size(), "url": "/packs/%s.cardpack" % h}], "mine": []})
 	var get := v.find_child("Get_" + h.left(12), true, false) as Button
 	check(get != null and get.text == tr("Download"), "the server's game, to download")

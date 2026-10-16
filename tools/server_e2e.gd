@@ -4,7 +4,9 @@ extends SceneTree
 ## (chosen on each client's own view) as server games (the server keeps the game,
 ## sends each its view), and print the result and ranks. Needs the server: cargo run in server/ (port 7377).
 ## Arena: both draft a deck (the first hero, the first card of each offer), then play.
-## Usage: godot --headless --path . --script res://tools/server_e2e.gd -- [casual|ranked|arena] [ws://localhost:7377]
+## The game pack: a built-in one by id (classic-2014, neon; default: the active one); the
+## queue names it by rules_hash, the decks are its first two ready decks (else Basic decks).
+## Usage: godot --headless --path . --script res://tools/server_e2e.gd -- [casual|ranked|arena] [ws://localhost:7377] [pack id]
 
 var mode := "casual"
 var url := "ws://localhost:7377"
@@ -16,6 +18,7 @@ var drafts: Array = [{}, {}]
 var t := 0.0
 var step := 0
 var stamp := str(int(Time.get_unix_time_from_system())).right(6)
+var pack: Pack
 
 
 func _initialize() -> void:
@@ -25,6 +28,12 @@ func _initialize() -> void:
 		mode = args[0]
 	if args.size() > 1:
 		url = args[1]
+	pack = Packs.active()
+	for p in Packs.all():
+		if args.size() > 2 and p.id() == args[2]:
+			pack = p
+	Packs._active = pack  # this run only: not saved in the player's settings
+	Packs._changed()
 	for i in 2:
 		var l := ServerLink.new()
 		root.add_child(l)
@@ -32,10 +41,17 @@ func _initialize() -> void:
 		var k := i
 		l.message.connect(func(msg): _on_message(k, msg))
 		l.open(url)
-	print("e2e: %s on %s" % [mode, url])
+	print("e2e: %s on %s, pack %s %s (%s)" % [mode, url, pack.id(), pack.version(), pack.rules_hash()])
 
 
-func _deck(cls: String) -> Dictionary:
+## Player i's deck: the pack's ready decks in order, else a Basic Mage and Warrior.
+func _deck(i: int) -> Dictionary:
+	var ready := pack.files().filter(func(f): return f.begins_with("decks/") and f.ends_with(".json"))
+	ready.sort()
+	if ready.size() > 0:
+		var d: Dictionary = pack.json(ready[i % ready.size()])
+		return {"name": str(d.get("id", "deck")), "hero": str(d.get("champion", d.get("hero", ""))), "cards": d.get("cards", [])}
+	var cls: String = ["MAGE", "WARRIOR"][i]
 	return {"name": cls, "hero": Decks.hero(cls), "cards": Decks.basic(cls)}
 
 
@@ -46,9 +62,9 @@ func _on_message(i: int, msg: Dictionary) -> void:
 			if msg.get("ok", false):
 				links[i].me = msg.get("me", {})
 				if mode == "arena":
-					links[i].send({"t": "arena_start"})
+					links[i].send({"t": "arena_start", "pack": pack.rules_hash()})
 				else:
-					links[i].send({"t": "queue", "mode": mode, "deck": _deck(["MAGE", "WARRIOR"][i])})
+					links[i].send({"t": "queue", "mode": mode, "deck": _deck(i), "pack": pack.rules_hash()})
 			else:
 				_fail("auth: %s" % msg)
 		"arena":
@@ -65,7 +81,9 @@ func _on_message(i: int, msg: Dictionary) -> void:
 			print("client %d error: %s" % [i, msg])
 		"match":
 			print("client %d match: %s" % [i, msg])
-			var d := Deck.from_dict(_deck(["MAGE", "WARRIOR"][i]))
+			if str(msg.get("pack", "")) != pack.rules_hash():
+				_fail("the game is in another pack: %s" % msg.get("pack"))
+			var d := Deck.from_dict(_deck(i))
 			if mode == "arena":
 				d = Deck.from_dict({"name": "Arena", "hero": drafts[i].hero, "cards": drafts[i].cards, "arena": true})
 			var s := links[i].session(msg, d)

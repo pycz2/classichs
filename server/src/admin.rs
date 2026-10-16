@@ -5,9 +5,10 @@
 //! a strict Content-Security-Policy.
 
 use crate::auth;
-use crate::db::{self, Account};
-use crate::entity::{account, arena, block, event, game as played, message, pack, request, session};
-use crate::packs;
+use crate::db::{self, Account, Standing};
+use crate::entity::{account, arena, block, event, game as played, message, pack, request, session, standing};
+use crate::packs::{self, GameRules};
+use std::sync::Arc;
 use crate::events::{event_json, now_ms, Event};
 use crate::ranked;
 use crate::ws::{accounts_in_order, friends_of};
@@ -416,11 +417,32 @@ async fn dashboard_json(app: &AppRef, q: DashQ) -> Result<Value, sea_orm::DbErr>
 
 // --- accounts ---------------------------------------------------------------------------
 
-fn account_json(a: &Account, status: &str) -> Value {
+/// An account with its standing in the default game this season (none yet: the ladder's start).
+fn account_json(a: &Account, st: Option<&Standing>, g: &GameRules, status: &str) -> Value {
+    let l = &g.ladder;
+    let (r, casual, ranked_mmr) = st.map_or((l.start, 1500.0, 1500.0), |s| (s.rank(), s.casual_mmr, s.ranked_mmr));
     json!({"id": a.id, "user": a.name, "tag": a.tag, "role": a.role, "created": a.created, "last_seen": a.last_seen,
-           "suspended": a.suspended, "rank": a.rank, "stars": a.stars, "streak": a.streak, "level": a.rank().level(),
-           "casual_mmr": a.casual_mmr.round(), "ranked_mmr": a.ranked_mmr.round(), "season": ranked::season_name(a.season),
-           "status": status})
+           "suspended": a.suspended, "rank": r.rank, "stars": r.stars, "streak": r.streak, "level": r.level(l),
+           "casual_mmr": casual.round(), "ranked_mmr": ranked_mmr.round(), "season": ranked::season_name(ranked::season_of(ranked::now())),
+           "pack": g.id, "status": status})
+}
+
+/// The default game's rules (its ladder is what the account list shows).
+async fn default_game(app: &AppRef) -> Arc<GameRules> {
+    packs::playable(app, None, None).await.map(|r| r.0).unwrap_or_else(|_| GameRules::classic())
+}
+
+/// Standings in a pack (manifest id) this season, by account.
+async fn standings_of(db: &crate::db::Db, pack: &str, ids: &[i64]) -> Result<HashMap<i64, Standing>, sea_orm::DbErr> {
+    Ok(standing::Entity::find()
+        .filter(standing::Column::Pack.eq(pack))
+        .filter(standing::Column::Season.eq(ranked::season_of(ranked::now())))
+        .filter(standing::Column::Account.is_in(ids.iter().copied()))
+        .all(db)
+        .await?
+        .into_iter()
+        .map(|s| (s.account, s))
+        .collect())
 }
 
 #[derive(Deserialize)]
@@ -476,14 +498,22 @@ async fn accounts(State(app): State<AppRef>, Query(q): Query<ListQ>) -> Response
     }
     let o = q.order();
     let rev = if o == Order::Asc { Order::Desc } else { Order::Asc };
+    let g = default_game(&app).await;
+    // The standing in the default game this season (a correlated subquery; none: the start).
+    let of = |col: &str, def: String| {
+        Expr::cust_with_values(
+            format!("COALESCE((SELECT s.{col} FROM standings s WHERE s.account = accounts.id AND s.pack = ? AND s.season = ?), {def})"),
+            [sea_orm::Value::from(g.id.clone()), sea_orm::Value::from(ranked::season_of(ranked::now()))],
+        )
+    };
     sel = match q.sort.as_deref().unwrap_or("id") {
         "user" => sel.order_by(account::Column::Name, o),
         "created" => sel.order_by(account::Column::Created, o),
         "last_seen" => sel.order_by(account::Column::LastSeen, o),
         // the best first when descending: Legend (rank 0), then rank 1 with the most stars…
-        "rank" => sel.order_by(account::Column::Rank, rev).order_by(account::Column::Stars, o),
-        "ranked_mmr" => sel.order_by(account::Column::RankedMmr, o),
-        "casual_mmr" => sel.order_by(account::Column::CasualMmr, o),
+        "rank" => sel.order_by(of("rank", g.ladder.start.rank.to_string()), rev).order_by(of("stars", g.ladder.start.stars.to_string()), o),
+        "ranked_mmr" => sel.order_by(of("ranked_mmr", "1500".into()), o),
+        "casual_mmr" => sel.order_by(of("casual_mmr", "1500".into()), o),
         _ => sel.order_by(account::Column::Id, o),
     }
     .order_by_desc(account::Column::Id);
@@ -492,8 +522,13 @@ async fn accounts(State(app): State<AppRef>, Query(q): Query<ListQ>) -> Response
         Ok(r) => r,
         Err(e) => return db_err(e),
     };
+    let ids: Vec<i64> = rows.iter().map(|a| a.id).collect();
+    let st = match standings_of(&app.db, &g.id, &ids).await {
+        Ok(s) => s,
+        Err(e) => return db_err(e),
+    };
     let hub = app.hub();
-    let list: Vec<Value> = rows.iter().map(|a| account_json(a, hub.status(a.id))).collect();
+    let list: Vec<Value> = rows.iter().map(|a| account_json(a, st.get(&a.id), &g, hub.status(a.id))).collect();
     Json(json!({"list": list, "total": total, "page": page, "size": size})).into_response()
 }
 
@@ -557,10 +592,22 @@ async fn account_page_json(app: &AppRef, admin: &Admin, id: i64) -> Result<Optio
         .iter()
         .map(event_json)
         .collect();
-    let legend = db::legend_number(db, &t).await?;
+    let g = default_game(app).await;
+    let season = ranked::season_of(ranked::now());
+    let all = standing::Entity::find().filter(standing::Column::Account.eq(id)).filter(standing::Column::Season.eq(season)).all(db).await?;
+    let mut ranks = vec![];
+    for s in &all {
+        ranks.push(json!({"pack": s.pack, "rank": s.rank, "stars": s.stars, "streak": s.streak, "legend": db::legend_number(db, s).await?,
+                          "casual_mmr": s.casual_mmr.round(), "ranked_mmr": s.ranked_mmr.round(), "default": s.pack == g.id}));
+    }
+    let mine = all.iter().find(|s| s.pack == g.id);
+    let legend = match mine {
+        Some(s) => db::legend_number(db, s).await?,
+        None => None,
+    };
     let hub = app.hub();
     let friends: Vec<Value> = friends.iter().map(|f| json!({"id": f.id, "user": f.name, "tag": f.tag, "status": hub.status(f.id)})).collect();
-    let mut acc = account_json(&t, hub.status(t.id));
+    let mut acc = account_json(&t, mine, &g, hub.status(t.id));
     drop(hub);
     acc["legend"] = json!(legend);
     let games: Vec<Value> = games
@@ -570,7 +617,7 @@ async fn account_page_json(app: &AppRef, admin: &Admin, id: i64) -> Result<Optio
             let opp = if p == 0 { g.p1 } else { g.p0 };
             let result = if g.winner < 0 { "draw" } else if g.winner == p { "win" } else { "loss" };
             json!({"id": g.id, "mode": g.mode, "opponent": opp.map(|o| person(&o)), "result": result, "reason": g.reason,
-                   "started": g.started, "ended": g.ended})
+                   "started": g.started, "ended": g.ended, "pack": g.pack})
         })
         .collect();
     let messages: Vec<Value> = msgs
@@ -591,7 +638,8 @@ async fn account_page_json(app: &AppRef, admin: &Admin, id: i64) -> Result<Optio
         "games": games,
         "messages": messages,
         "sessions": sessions,
-        "arena": run.map(|r| json!({"wins": r.wins, "losses": r.losses, "hero": r.hero,
+        "ranks": ranks,
+        "arena": run.map(|r| json!({"wins": r.wins, "losses": r.losses, "hero": r.hero, "pack": r.pack,
                                     "picks": serde_json::from_str::<Value>(&r.picks).ok().and_then(|p| p.as_array().map(|a| a.len()))})),
         "events": recent,
     })))
@@ -878,10 +926,11 @@ async fn games(State(app): State<AppRef>, Query(q): Query<GamesQ>) -> Response {
         ids.dedup();
         let names: HashMap<i64, String> = accounts_in_order(db, &ids).await?.into_iter().map(|a| (a.id, a.name)).collect();
         let person = |i: Option<i64>| json!({"id": i, "user": i.and_then(|i| names.get(&i))});
+        let pack_names = pack_names(db).await?;
         let list: Vec<Value> = rows
             .iter()
             .map(|g| json!({"id": g.id, "mode": g.mode, "players": [person(g.p0), person(g.p1)], "started": g.started, "ended": g.ended,
-                            "winner": g.winner, "reason": g.reason}))
+                            "winner": g.winner, "reason": g.reason, "pack": g.pack, "pack_name": pack_names.get(&g.pack)}))
             .collect();
         Ok::<_, sea_orm::DbErr>(json!({"list": list, "total": total, "page": page, "size": size}))
     };
@@ -889,6 +938,24 @@ async fn games(State(app): State<AppRef>, Query(q): Query<GamesQ>) -> Response {
         Ok(v) => Json(v).into_response(),
         Err(e) => db_err(e),
     }
+}
+
+/// "Name version" of every rules_hash the server knows ("" = before packs: the built-in Classic).
+async fn pack_names(db: &crate::db::Db) -> Result<HashMap<String, String>, sea_orm::DbErr> {
+    let mut m: HashMap<String, String> = pack::Entity::find()
+        .order_by_desc(pack::Column::Id)
+        .all(db)
+        .await?
+        .into_iter()
+        .map(|p| {
+            let n: Value = serde_json::from_str(&p.name).unwrap_or(Value::Null);
+            (p.rules_hash, format!("{} {}", n["en"].as_str().unwrap_or(&p.pack_id), p.version))
+        })
+        .collect();
+    let c = GameRules::classic();
+    m.entry(c.rules_hash.clone()).or_insert_with(|| packs::short_name(&c));
+    m.insert(String::new(), "Classic (before packs)".into());
+    Ok(m)
 }
 
 /// One game: its summary (live or finished) and its whole timeline from the event log.
@@ -946,7 +1013,42 @@ async fn packs_list(State(app): State<AppRef>) -> Response {
             "downloads": all.iter().map(|p| p.downloads).sum::<i64>(), "storage": app.store.what,
             "limits": {"player": packs::MAX_PLAYER_PACK, "server": packs::MAX_SERVER_PACK, "per_player": packs::MAX_PER_PLAYER},
         });
-        let list = |v: &[&pack::Model]| v.iter().map(|p| packs::admin_json(p, &names)).collect::<Vec<_>>();
+        // Games per pack (by rules_hash): finished ones from the games table, live ones from the hub.
+        let played: HashMap<String, i64> = played::Entity::find()
+            .select_only()
+            .column(played::Column::Pack)
+            .column_as(played::Column::Id.count(), "n")
+            .group_by(played::Column::Pack)
+            .into_tuple::<(String, i64)>()
+            .all(db)
+            .await?
+            .into_iter()
+            .collect();
+        let mut live: HashMap<String, i64> = HashMap::new();
+        for g in app.hub().games.values() {
+            *live.entry(g.pack.clone()).or_default() += 1;
+        }
+        let classic = GameRules::classic().rules_hash.clone();
+        let default = packs::default_hash(db).await?;
+        let list = |v: &[&pack::Model]| {
+            v.iter()
+                .map(|p| {
+                    let mut j = packs::admin_json(p, &names);
+                    let mut games = played.get(&p.rules_hash).copied().unwrap_or(0);
+                    if p.rules_hash == classic {
+                        games += played.get("").copied().unwrap_or(0); // before packs: Classic
+                    }
+                    j["games"] = json!(games);
+                    j["live"] = json!(live.get(&p.rules_hash).copied().unwrap_or(0));
+                    j
+                })
+                .collect::<Vec<_>>()
+        };
+        let mut stats = stats;
+        stats["games"] = json!(played.values().sum::<i64>());
+        stats["live"] = json!(live.values().sum::<i64>());
+        stats["default_rules"] = json!(default);
+        stats["builtin"] = json!({"rules_hash": classic, "default": !all.iter().any(|p| p.is_default && p.enabled && p.owner.is_none())});
         Ok::<_, sea_orm::DbErr>(json!({"server": list(&server), "players": list(&players), "stats": stats}))
     };
     match r.await {
@@ -961,7 +1063,7 @@ async fn packs_upload(State(app): State<AppRef>, Extension(a): Extension<Admin>,
         Ok(u) => u,
         Err(e) => return e.into_response(),
     };
-    match packs::add(&app, &up.path, &up.hash, up.size, None).await {
+    match packs::add(&app, &up.path, up.size, None).await {
         Ok(p) => {
             let text = format!("{} uploaded the server pack {}", a.me.name, packs::label(&p));
             let mut data = packs::event_data(&p);
@@ -998,6 +1100,10 @@ async fn pack_action(State(app): State<AppRef>, Extension(a): Extension<Admin>, 
             let on = action == "enable";
             let r = pack::ActiveModel { id: Unchanged(id), enabled: Set(on), ..Default::default() }.update(db).await.map(|_| ());
             (if on { "pack_enable" } else { "pack_disable" }, format!("{} {action}d {whose} {}", a.me.name, packs::label(&p)), r)
+        }
+        "default" if p.owner.is_none() => {
+            let r = packs::set_default(&app, Some(id), "").await.map(|_| ());
+            ("pack_default", format!("{} made {} the default game", a.me.name, packs::label(&p)), r)
         }
         "delete" => {
             let r = pack::Entity::delete_by_id(id).exec(db).await.map(|_| ());

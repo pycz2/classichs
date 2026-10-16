@@ -53,7 +53,7 @@ fn post(uri: &str, cookie: &str, csrf: Option<&str>, body: Value) -> Request<Bod
 
 async fn setup() -> (AppRef, axum::Router, i64) {
     let store = Storage::dir(&std::env::temp_dir().join(format!("chs-test-{}", rand::random::<u64>()))).unwrap();
-    let state = App::new(db::open(":memory:").await.unwrap(), false, Timers::default(), store);
+    let state = App::new(db::open(":memory:").await.unwrap(), false, Some(Timers::default()), store);
     let hash = auth::hash_password("rootpassword");
     db::make_superuser(&state.db, "root", &hash).await.unwrap();
     let victim = db::create_account(&state.db, "victim", &hash, "user").await.unwrap().unwrap();

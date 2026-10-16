@@ -25,6 +25,7 @@ use db::Db;
 use entity::friend;
 use events::{Event, Log};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, QuerySelect};
+use packs::GameRules;
 use ranked::{Key, Mode};
 use serde_json::{json, Value};
 use std::collections::HashMap;
@@ -44,15 +45,20 @@ pub struct App {
     pub logins: Mutex<RateLimit>,
     /// Use the last X-Forwarded-For address (behind a reverse proxy).
     pub trust_proxy: bool,
-    pub timers: Timers,
+    /// The game clocks for every game (tests); None = each pack's (rules.json `timers`).
+    pub timers: Option<Timers>,
     /// The event log and the admin panels' live feed.
     pub log: Log,
     /// Where pack files live (S3 or a directory).
     pub store: storage::Storage,
+    /// The rules of the packs games were played in, by rules_hash (`packs::rules_for`).
+    pub rules: Mutex<HashMap<String, Arc<GameRules>>>,
+    /// One pack load or trial game at a time.
+    pub loading: tokio::sync::Mutex<()>,
 }
 
-/// The game clocks.
-#[derive(Clone, Copy, Debug)]
+/// The game clocks (a pack's: rules.json `timers`, docs/packs/rules.md).
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Timers {
     /// How long a player who dropped out of a game has to come back.
     pub away: Duration,
@@ -71,7 +77,7 @@ impl Default for Timers {
 
 impl App {
     /// Needs a tokio runtime (it starts the event log's writer).
-    pub fn new(db: Db, trust_proxy: bool, timers: Timers, store: storage::Storage) -> AppRef {
+    pub fn new(db: Db, trust_proxy: bool, timers: Option<Timers>, store: storage::Storage) -> AppRef {
         let db_clone = db.clone();
         Arc::new(App {
             db,
@@ -81,6 +87,8 @@ impl App {
             timers,
             log: Log::start(db_clone),
             store,
+            rules: Mutex::default(),
+            loading: tokio::sync::Mutex::new(()),
         })
     }
 
@@ -100,7 +108,12 @@ impl App {
 pub enum Out {
     Text(String),
     Close,
+    /// Close with a code and a reason (a second login: 4001 "another_login").
+    CloseWith(u16, &'static str),
 }
+
+/// The close code of a connection another login took over.
+pub const KICKED_CODE: u16 = 4001;
 
 pub struct Conn {
     pub id: u64,
@@ -111,14 +124,22 @@ pub struct Conn {
 pub struct Seeker {
     pub name: String,
     pub mode: Mode,
+    /// The pack the game is played in: queues are per (mode, pack).
+    pub rules: Arc<GameRules>,
     pub deck: Value,
     pub key: Key,
     pub since: Instant,
 }
 
+/// Two seekers paired: the mode, the pack, [(account, deck)].
+pub type Pairing = (Mode, Arc<GameRules>, [(i64, Value); 2]);
+
 pub struct LiveGame {
     pub tx: UnboundedSender<game::Ev>,
     pub mode: Mode,
+    /// The pack's rules_hash and "Name version".
+    pub pack: String,
+    pub pack_name: String,
     pub ids: [i64; 2],
     pub names: [String; 2],
     pub started: i64,
@@ -136,8 +157,8 @@ pub struct Hub {
     pub games: HashMap<String, LiveGame>,
     /// Account → (game id, player number).
     pub in_game: HashMap<i64, (String, usize)>,
-    /// (from, to) → the inviter's deck.
-    pub invites: HashMap<(i64, i64), Value>,
+    /// (from, to) → the inviter's deck and the game's rules.
+    pub invites: HashMap<(i64, i64), (Value, Arc<GameRules>)>,
     /// The last presence status sent to each account's friends (absent = offline).
     shown: HashMap<i64, &'static str>,
 }
@@ -174,7 +195,7 @@ impl Hub {
             .map(|(id, s)| {
                 let w = now.duration_since(s.since).as_secs();
                 json!({"id": id, "user": s.name, "mode": s.mode, "waited": w, "window": ranked::shown_window(s.mode, &s.key, w),
-                       "mmr": s.key.mmr.round(), "level": s.key.level})
+                       "mmr": s.key.mmr.round(), "level": s.key.level, "pack": s.rules.rules_hash, "pack_name": packs::short_name(&s.rules)})
             })
             .collect();
         queue.sort_by_key(|q| std::cmp::Reverse(q["waited"].as_u64()));
@@ -186,7 +207,7 @@ impl Hub {
                     .map(|p| json!({"id": g.ids[p], "user": g.names[p], "online": self.conns.contains_key(&g.ids[p])}))
                     .collect();
                 json!({"id": id, "mode": g.mode, "players": players, "started": g.started, "turn": g.turn,
-                       "current": g.current, "actions": g.actions})
+                       "current": g.current, "actions": g.actions, "pack": g.pack, "pack_name": g.pack_name})
             })
             .collect();
         games.sort_by_key(|g| g["started"].as_i64());
@@ -199,8 +220,10 @@ impl Hub {
         self.next_conn += 1;
         let old = self.conns.insert(account, Conn { id: self.next_conn, name: name.into(), tx });
         if let Some(old) = &old {
+            // The message first, then the close frame tells it again (a client may lose a
+            // message that arrives right before the close).
             let _ = old.tx.send(Out::Text(json!({"t": "kicked", "reason": "another_login"}).to_string()));
-            let _ = old.tx.send(Out::Close);
+            let _ = old.tx.send(Out::CloseWith(KICKED_CODE, "another_login"));
         }
         if let Some((g, p)) = self.in_game.get(&account) {
             if let Some(lg) = self.games.get(g) {
@@ -232,7 +255,7 @@ impl Hub {
 
     /// Pairs the queued players whose gaps fit both windows (the longest waiting first).
     // ponytail: O(n²) scan per tick; bucket by mode and key if queues reach thousands.
-    pub fn pair(&mut self, now: Instant) -> Vec<(Mode, [(i64, Value); 2])> {
+    pub fn pair(&mut self, now: Instant) -> Vec<Pairing> {
         let waited = |s: &Seeker| now.duration_since(s.since).as_secs();
         let mut order: Vec<i64> = self.queue.keys().copied().collect();
         order.sort_by_key(|id| (self.queue[id].since, *id));
@@ -245,7 +268,7 @@ impl Hub {
             let sa = &self.queue[&a];
             let best = order
                 .iter()
-                .filter(|&&b| b != a && !taken.contains(&b) && self.queue[&b].mode == sa.mode)
+                .filter(|&&b| b != a && !taken.contains(&b) && self.queue[&b].mode == sa.mode && self.queue[&b].rules.rules_hash == sa.rules.rules_hash)
                 .filter_map(|&b| {
                     let sb = &self.queue[&b];
                     ranked::fits(sa.mode, &sa.key, waited(sa), &sb.key, waited(sb)).map(|g| (g, b))
@@ -266,7 +289,7 @@ impl Hub {
             .into_iter()
             .map(|(a, b)| {
                 let (sa, sb) = (self.queue.remove(&a).unwrap(), self.queue.remove(&b).unwrap());
-                (sa.mode, [(a, sa.deck), (b, sb.deck)])
+                (sa.mode, sa.rules, [(a, sa.deck), (b, sb.deck)])
             })
             .collect()
     }
@@ -315,8 +338,8 @@ pub fn spawn_background(app: AppRef) {
             tick.tick().await;
             let now = Instant::now();
             let pairs = app.hub().pair(now);
-            for (mode, players) in pairs {
-                tokio::spawn(game::start(app.clone(), mode, players));
+            for (mode, rules, players) in pairs {
+                tokio::spawn(game::start(app.clone(), mode, rules, players));
             }
             app.logins.lock().unwrap_or_else(|e| e.into_inner()).sweep(now);
             let live = app.hub().live_json();
@@ -372,17 +395,21 @@ mod tests {
     fn pairs_by_window() {
         let mut h = Hub::default();
         let t0 = Instant::now();
-        let mut add = |id, mmr| {
-            h.queue.insert(id, Seeker { name: format!("p{id}"), mode: Mode::Casual, deck: json!(id),
+        let classic = GameRules::classic();
+        let mut add = |id, mmr, rules: &Arc<GameRules>| {
+            h.queue.insert(id, Seeker { name: format!("p{id}"), mode: Mode::Casual, rules: rules.clone(), deck: json!(id),
                 key: Key { mmr, level: 0, legend: false }, since: t0 });
         };
-        add(1, 1500.0);
-        add(2, 1700.0);
-        add(3, 1540.0);
-        add(4, 1900.0);
+        add(1, 1500.0, &classic);
+        add(2, 1700.0, &classic);
+        add(3, 1540.0, &classic);
+        add(4, 1900.0, &classic);
+        // Another pack's queue: never paired with the Classic seekers.
+        let other = Arc::new(GameRules { rules_hash: "other".into(), ..GameRules::of(classic.rs, &classichs_engine::ruleset::classic_files()) });
+        add(5, 1500.0, &other);
         let p = h.pair(t0);
         assert_eq!(p.len(), 1);
-        assert_eq!([p[0].1[0].0, p[0].1[1].0], [1, 3]);
+        assert_eq!([p[0].2[0].0, p[0].2[1].0], [1, 3]);
         assert!(h.pair(t0 + Duration::from_secs(5)).is_empty()); // 200 > 50 + 125
         assert_eq!(h.pair(t0 + Duration::from_secs(6)).len(), 1); // 200 ≤ 50 + 150
     }

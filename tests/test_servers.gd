@@ -174,21 +174,27 @@ func test_packs_list_and_download() -> void:
 	eq(l.has_packs, false, "a server without packs: no error shown")
 	eq([l.http_base(), _base("wss://x.org/ws"), _base("ws://[::1]:7")], ["http://h.test:7377", "https://x.org", "http://[::1]:7"])
 	var bytes := FileAccess.get_file_as_bytes("res://packs/neon.cardpack")
-	var entry := {"id": "neon", "name": {"en": "Neonfall"}, "version": "1.0.0", "rules_hash": "r", "content_hash": Pack.sha256(bytes),
+	var n0: Pack = null
+	for p in Packs.all():
+		if p.builtin() and p.id() != Packs.CLASSIC:
+			n0 = p
+	var entry := {"id": "neon", "name": {"en": "Neonfall"}, "version": "1.0.0", "rules_hash": n0.rules_hash(), "content_hash": Packs.content_hash(n0),
 		"size": bytes.size(), "url": "/packs/x.cardpack"}
 	var changed := [0]
 	l.packs_changed.connect(func(): changed[0] += 1)
 	l.dispatch({"t": "packs", "server": [entry], "mine": []})
 	eq([changed[0], l.packs.server.size(), l.has_packs], [1, 1, true], "the list and the signal")
 	var neon := ServerLink.local_pack(entry)
-	check(neon != null and neon.builtin() and neon.id() != Packs.CLASSIC, "the same file is the player's (by the file's SHA-256)")
+	check(neon != null and neon.builtin() and neon.id() != Packs.CLASSIC, "the same pack is the player's (by the hashes of format.md)")
+	eq(ServerLink.local_pack({"rules_hash": entry.rules_hash, "content_hash": "other art"}), neon, "the same rules will do")
+	eq(ServerLink.local_pack({"rules_hash": "other rules", "content_hash": entry.content_hash}), null, "other rules will not")
 	eq(l.server_pack_for(neon), entry, "the server's entry of a pack the player has")
 	var got := []
 	l.pack_downloaded.connect(func(h, res): got.append([h, res]))
 	l.download_pack(entry)
 	eq([l.http.size(), l.http[0].path, l.http[0].method], [1, "/packs/%s.cardpack" % entry.content_hash, HTTPClient.METHOD_GET], "GET the file")
 	l.http[0].done.call(200, bytes.slice(0, 1000))
-	eq([got[0][0], got[0][1].get("error")], [entry.content_hash, tr("The download is damaged: try again")], "the file's hash is checked")
+	eq([got[0][0], got[0][1].get("error")], [entry.content_hash, tr("The download is damaged: try again")], "a broken file is refused")
 	l.download_pack(entry)
 	l.http[1].done.call(200, bytes)
 	check(got[1][1].get("pack") is Pack and got[1][1].pack.id() == neon.id(), "installed (already there: the same pack)")
@@ -243,31 +249,33 @@ func test_pack_field_and_games_panel() -> void:
 	eq(ServerView.rank_name(18), CardText.name("VAN_EX1_608"), "Classic ranks are named after their emblem cards")
 	eq([ServerView.rank_name(1), ServerView.rank_name(0)], [tr("Innkeeper"), tr("Legend")], "and the pack's names")
 	v.queue("casual")
-	check(not l.of("queue")[0].has("pack"), "no pack field while send_pack is off")
-	ServerLink.send_pack = true
-	v.unqueue()
-	v.queue("casual")
-	check(l.of("queue")[1].has("pack"), "the rules hash goes with send_pack")
-	ServerLink.send_pack = false
+	check(not l.of("queue")[0].has("pack"), "no pack field to a server that lists no packs (it plays its built-in Classic)")
 	v.unqueue()
 	var neon: Pack = null
 	for p in Packs.all():
 		if p.builtin() and p.id() != Packs.CLASSIC:
 			neon = p
 	var bytes := Packs.bytes_of(neon)
-	var entry := {"id": neon.id(), "name": {"en": "Neonfall"}, "version": "1", "rules_hash": "r", "content_hash": Pack.sha256(bytes), "size": bytes.size()}
+	var entry := {"id": neon.id(), "name": {"en": "Neonfall"}, "version": "1", "rules_hash": neon.rules_hash(), "content_hash": "other art", "size": bytes.size()}
+	var classic := {"id": Packs.CLASSIC, "name": {"en": "Classic"}, "version": "1", "rules_hash": Packs.all()[0].rules_hash(), "content_hash": "c1", "size": 1}
+	l.dispatch({"t": "packs", "server": [classic], "mine": []})
+	v.queue("casual")
+	eq(l.of("queue")[1].get("pack"), Packs.all()[0].rules_hash(), "the rules hash of the game goes with the queue")
+	v.unqueue()
 	l.dispatch({"t": "packs", "server": [entry], "mine": [{"id": "own", "name": {"en": "Mine"}, "version": "2", "rules_hash": "q", "content_hash": "c0ffee", "size": 10, "enabled": true}]})
+	eq(l.game_problem(Packs.all()[0]), tr("This server does not have this game"), "a server with packs, without Classic")
 	(v.find_child("GamesButton", true, false) as Button).pressed.emit()
 	var panel := v.find_child("GamesPanel", true, false)
 	check(panel != null, "the server's games")
 	var row := panel.find_child("Game_" + entry.content_hash.left(12), true, false)
 	(row.find_child("Use", true, false) as Button).pressed.emit()
 	eq(Packs.active().id(), neon.id(), "Use switches the active game")
+	eq(l.of("me").back(), {"t": "me", "pack": neon.rules_hash()}, "and asks for the rank in it")
 	check(v.find_child("GamesPanel", true, false).find_child("Game_" + entry.content_hash.left(12), true, false).find_child("Use", true, false) == null, "in use now")
-	eq(l.game_problem(neon), tr("This server does not play this game yet"), "listed, but the server plays packs only from phase D")
-	var sent := l.of("queue").size()
+	eq(l.game_problem(neon), "", "listed: played here")
 	v.queue("casual")
-	eq(l.of("queue").size(), sent, "not queued")
+	eq(l.of("queue").back().get("pack"), neon.rules_hash(), "queued in it")
+	v.unqueue()
 	var mine := v.find_child("Game_c0ffee", true, false)
 	check(mine.find_child("Download", true, false) != null, "not installed: Download")
 	(mine.find_child("Delete", true, false) as Button).pressed.emit()

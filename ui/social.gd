@@ -84,6 +84,11 @@ class Server:
 	var asked := {}  # user -> true: the history was asked for
 	var user := ""  # who is logged in: another account starts clean
 	var invite_from := ""
+	## The invite's game: the server's entry {id, name, version, rules_hash, content_hash, size, url}
+	## ({} from an older server: the active game).
+	var invite_pack := {}
+	## Its download for the invite is under way (the content hash; "" = none).
+	var fetching := ""
 
 
 ## The invite shown (or waiting for the screen to allow it).
@@ -102,6 +107,7 @@ func _sync() -> void:
 			var srv := Server.new()
 			srv.link = l
 			l.message.connect(_on_message.bind(srv))
+			l.pack_downloaded.connect(_on_invite_download.bind(srv))
 			_servers.append(srv)
 	if not _servers.has(_cur):
 		_cur = _servers[0] if not _servers.is_empty() else null
@@ -269,6 +275,8 @@ func _reset(srv: Server) -> void:
 	srv.unread = {}
 	srv.asked = {}
 	srv.invite_from = ""
+	srv.invite_pack = {}
+	srv.fetching = ""
 	for k in open_chats.duplicate():
 		if _windows[k].srv == srv:
 			close_chat(k)
@@ -507,8 +515,8 @@ func invite(user: String) -> void:
 	if d == null:
 		toast(tr("Choose your deck"))
 		return
-	if not link.has_game(Packs.active()):
-		toast(link.game_problem(Packs.active()))
+	if not link.has_game(Packs.active(), true):
+		toast(link.game_problem(Packs.active(), true))
 		return
 	link.game_deck = d
 	link.send(link.with_pack({"t": "invite", "to": user, "deck": d.to_dict()}))
@@ -642,8 +650,20 @@ func _show_invite() -> void:
 	q.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	q.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	p.add_child(q)
-	var d := ServerView.remembered_deck(_invite.link)
-	var deck_line := Palette.label(tr("Your deck:"), 18)
+	var how := invite_game(_invite)
+	if not _invite.invite_pack.is_empty():
+		var e := _invite.invite_pack
+		var game := tr("Game: %s") % ServerView.entry_title(e)
+		if how == "download":
+			game += "  ·  " + tr("download %s") % Packs.size_text(int(e.get("size", 0)))
+		var g := Palette.label(game, 18, Palette.TEXT if how == "" else Palette.SELECTED)
+		g.name = "InviteGame"
+		g.position = Vector2(40, 70)
+		g.custom_minimum_size.x = 440
+		g.clip_text = true
+		p.add_child(g)
+	var d := ServerView.remembered_deck(_invite.link) if how == "" else null
+	var deck_line := Palette.label(tr("Your deck:") if how == "" else tr("You choose a deck of this game after it"), 18)
 	deck_line.position = Vector2(40, 100)
 	p.add_child(deck_line)
 	if d:
@@ -654,8 +674,15 @@ func _show_invite() -> void:
 		row.tooltip_text = tr("Choose a deck")
 		row.pressed.connect(_choose_invite_deck)
 		p.add_child(row)
+	elif how == "":
+		var pick := Palette.button(tr("Choose a deck"), "InviteChooseDeck")
+		pick.position = Vector2(40, 132)
+		pick.custom_minimum_size = Vector2(440, 56)
+		pick.pressed.connect(_choose_invite_deck)
+		p.add_child(pick)
 	for i in 2:
-		var b := Palette.button(tr("Accept") if i == 0 else tr("Decline"), "InviteAccept" if i == 0 else "InviteDecline")
+		var yes := tr("Download and play") if how == "download" else tr("Accept")
+		var b := Palette.button(yes if i == 0 else tr("Decline"), "InviteAccept" if i == 0 else "InviteDecline")
 		b.position = Vector2(40 + i * 230, 222)
 		b.custom_minimum_size = Vector2(210, 54)
 		b.pressed.connect(answer_invite.bind(i == 0))
@@ -680,21 +707,48 @@ func _choose_invite_deck() -> void:
 	dim.add_child(c)
 
 
+## The invite's game as the player has it: "" = the active one; "use" = another pack the player
+## has (accepting switches to it); "download" = the server has to send it first.
+static func invite_game(srv: Server) -> String:
+	var e := srv.invite_pack
+	if e.is_empty() or not Packs.active() or str(e.get("rules_hash", "")) == Packs.active().rules_hash():
+		return ""
+	return "use" if ServerLink.local_pack(e) else "download"
+
+
 func answer_invite(accept: bool) -> void:
 	var srv := _invite
 	if srv == null:
 		return
 	var l := srv.link
+	if accept:
+		match invite_game(srv):
+			"download":  # the player agreed: get the game, then accept with a deck of it
+				srv.fetching = str(srv.invite_pack.get("content_hash", ""))
+				l.download_pack(srv.invite_pack)
+				toast(_about(srv, tr("Downloading %s…") % ServerView.entry_title(srv.invite_pack)))
+				if _dialog:
+					_dialog.queue_free()
+					_dialog = null
+				return
+			"use":
+				Packs.set_active(ServerLink.local_pack(srv.invite_pack))
 	var d := ServerView.remembered_deck(l)
-	if accept and d and not l.has_game(Packs.active()):
-		toast(l.game_problem(Packs.active()))
-		accept = false
+	if accept and d == null:  # no deck in this game yet: choose one
+		toast(tr("Choose your deck"))
+		_show_invite()
+		return
 	if accept and d:
 		l.game_deck = d
-		l.send(l.with_pack({"t": "invite_accept", "from": srv.invite_from, "deck": d.to_dict()}))
+		var msg := {"t": "invite_accept", "from": srv.invite_from, "deck": d.to_dict()}
+		if srv.invite_pack.has("rules_hash"):
+			msg["pack"] = srv.invite_pack.rules_hash
+		l.send(msg)
 	else:
 		l.send({"t": "invite_decline", "from": srv.invite_from})
 	srv.invite_from = ""
+	srv.invite_pack = {}
+	srv.fetching = ""
 	_invite = null
 	for x in _servers:  # another server's invite waits behind this one
 		if x.invite_from != "":
@@ -759,6 +813,7 @@ func _on_message(msg: Dictionary, srv: Server) -> void:
 				_windows[k].refresh()
 		"invite":
 			srv.invite_from = str(msg.get("from", ""))
+			srv.invite_pack = msg.get("pack") if msg.get("pack") is Dictionary else {}
 			_invite = srv
 			if in_match:
 				toast(_about(srv, tr("%s invites you to a friendly game") % srv.invite_from))
@@ -769,6 +824,26 @@ func _on_message(msg: Dictionary, srv: Server) -> void:
 		"error":
 			if not (on_lobby and srv == _cur) and not msg.get("resume", false):
 				toast(_about(srv, str(msg.get("text", msg.get("code", "error")))))
+
+
+## The invite's game arrived (or did not): on to the deck and the answer.
+func _on_invite_download(h: String, res: Dictionary, srv: Server) -> void:
+	if srv.fetching == "" or h != srv.fetching:
+		return
+	srv.fetching = ""
+	if not res.has("pack"):
+		toast(_about(srv, str(res.get("error", ""))))
+		if srv.invite_from != "" and not in_match:
+			_invite = srv
+			_show_invite()
+		return
+	Packs.set_active(res.pack)
+	if srv.invite_from == "":
+		return  # the invite went away meanwhile
+	_invite = srv
+	if in_match:
+		return
+	_show_invite()
 
 
 func _changed() -> void:
