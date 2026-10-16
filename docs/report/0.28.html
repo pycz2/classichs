@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classic HS 0.28</title>
+<style>
+:root { --bg:#14100c; --panel:#211912; --panel2:#2b2018; --line:#46362a; --text:#f3e9d6; --muted:#b4a387; --gold:#f2c230; --green:#55d47a; --blue:#7ec8ff; --orange:#ffae4a; --red:#ff7a6b; --violet:#c9a7ff; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f7f0e3; --panel:#fffaf1; --panel2:#f7eedc; --line:#e2d3b8; --text:#2a1f17; --muted:#6c5a43; --gold:#a8741a; --green:#1f8a3a; --blue:#1d6fb8; --orange:#b5651d; --red:#b33a2c; --violet:#6b46b8; } }
+:root[data-theme="light"] { --bg:#f7f0e3; --panel:#fffaf1; --panel2:#f7eedc; --line:#e2d3b8; --text:#2a1f17; --muted:#6c5a43; --gold:#a8741a; --green:#1f8a3a; --blue:#1d6fb8; --orange:#b5651d; --red:#b33a2c; --violet:#6b46b8; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:15.5px/1.6 -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { display:grid; grid-template-columns:260px 1fr; min-height:100vh; }
+nav { position:sticky; top:0; height:100vh; overflow:auto; border-right:1px solid var(--line); padding:20px 12px; background:var(--panel); }
+nav h1 { font-size:19px; color:var(--gold); margin:0 8px 2px; }
+nav .sub { color:var(--muted); font-size:12.5px; margin:0 8px 14px; }
+nav button.sec { display:flex; gap:9px; align-items:center; width:100%; text-align:left; font:inherit; font-size:14.5px; background:none; color:var(--text); border:1px solid transparent; border-radius:9px; padding:7px 10px; cursor:pointer; }
+nav button.sec:hover { border-color:var(--line); }
+nav button.sec.on { background:var(--panel2); border-color:var(--gold); }
+nav .ico { width:22px; text-align:center; }
+.theme { display:flex; gap:4px; margin:16px 8px 0; }
+.theme button { flex:1; font:inherit; font-size:12.5px; padding:5px; border-radius:7px; border:1px solid var(--line); background:var(--panel2); color:var(--text); cursor:pointer; }
+.theme button.on { border-color:var(--gold); color:var(--gold); }
+main { padding:28px 38px 90px; max-width:1100px; }
+section { display:none; } section.on { display:block; }
+h2 { color:var(--gold); margin:0 0 6px; font-size:28px; }
+h3 { margin:24px 0 8px; font-size:18px; }
+.lead { color:var(--muted); font-size:16px; margin:0 0 18px; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:12px 0; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }
+.stat { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+.stat b { display:block; font-size:30px; color:var(--gold); line-height:1.1; }
+.stat span { color:var(--muted); font-size:13.5px; }
+.tile { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; cursor:pointer; transition:transform .15s, border-color .15s; }
+.tile:hover { transform:translateY(-2px); border-color:var(--gold); }
+.tile .t { font-weight:700; margin-bottom:4px; }
+.tile .d { color:var(--muted); font-size:14px; }
+code, .path { font:13px ui-monospace, SFMono-Regular, Menlo, monospace; background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:1px 6px; }
+pre { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px 14px; overflow:auto; font:13px/1.5 ui-monospace, Menlo, monospace; }
+table { border-collapse:collapse; width:100%; font-size:14.5px; }
+td, th { border-bottom:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+th { color:var(--muted); font-weight:600; }
+a { color:var(--blue); }
+.ok { color:var(--green); font-weight:600; } .no { color:var(--red); font-weight:600; }
+details { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 16px; margin:8px 0; }
+summary { cursor:pointer; font-weight:600; }
+.pill { display:inline-block; font-size:12px; padding:1px 8px; border-radius:20px; border:1px solid var(--line); color:var(--muted); margin-left:6px; }
+/* before / after */
+.switch { display:inline-flex; border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:6px 0 12px; }
+.switch button { font:inherit; padding:7px 16px; border:0; background:var(--panel); color:var(--text); cursor:pointer; }
+.switch button.on { background:var(--gold); color:#1b140d; font-weight:700; }
+.arch { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; align-items:stretch; }
+.box { border:2px solid var(--line); border-radius:14px; padding:12px 14px; background:var(--panel); position:relative; }
+.box h4 { margin:0 0 6px; font-size:15.5px; }
+.box ul { margin:0; padding-left:18px; color:var(--muted); font-size:14px; }
+.box.rust { border-color:var(--orange); } .box.rust h4 { color:var(--orange); }
+.box.gd { border-color:var(--blue); } .box.gd h4 { color:var(--blue); }
+.box.bad { border-style:dashed; border-color:var(--red); } .box.bad h4 { color:var(--red); }
+.arrow { text-align:center; color:var(--muted); font-size:13px; margin:6px 0; }
+/* protocol stepper */
+.lanes { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; text-align:center; font-weight:700; margin-bottom:6px; }
+.msgs { position:relative; }
+.msg { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; align-items:center; margin:6px 0; opacity:.18; transition:opacity .25s; }
+.msg.on { opacity:1; }
+.msg .m { grid-column:span 2; border:1px solid var(--line); background:var(--panel); border-radius:10px; padding:7px 10px; font-size:14px; }
+.msg.l .m { grid-column:1 / span 2; } .msg.r .m { grid-column:2 / span 2; }
+.msg.cur .m { border-color:var(--gold); box-shadow:0 0 0 2px color-mix(in srgb, var(--gold) 30%, transparent); }
+.ctl { display:flex; gap:8px; align-items:center; margin:10px 0; }
+.ctl button { font:inherit; padding:6px 14px; border-radius:9px; border:1px solid var(--line); background:var(--panel2); color:var(--text); cursor:pointer; }
+.ctl button:hover { border-color:var(--gold); }
+.ctl .note { color:var(--muted); font-size:14px; }
+/* gallery */
+.gal { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:12px; }
+.gal figure { margin:0; background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; cursor:zoom-in; }
+.gal img { width:100%; display:block; aspect-ratio:16/9; object-fit:cover; object-position:top; }
+.gal figcaption { padding:7px 10px; font-size:13.5px; color:var(--muted); }
+.arts { display:flex; gap:10px; flex-wrap:wrap; }
+.arts img { width:120px; height:120px; border-radius:12px; object-fit:cover; border:1px solid var(--line); cursor:zoom-in; }
+#box { position:fixed; inset:0; background:rgba(0,0,0,.9); display:none; align-items:center; justify-content:center; flex-direction:column; gap:10px; z-index:9; cursor:zoom-out; }
+#box.on { display:flex; } #box img { max-width:94vw; max-height:86vh; border-radius:10px; } #box p { color:#f3e9d6; margin:0; }
+.bar { height:12px; border-radius:6px; background:var(--panel2); border:1px solid var(--line); overflow:hidden; }
+.bar i { display:block; height:100%; background:linear-gradient(90deg, var(--orange), var(--gold)); }
+@media (max-width: 860px) { .wrap { grid-template-columns:1fr; } nav { position:static; height:auto; } main { padding:18px 16px 70px; } .arch { grid-template-columns:1fr; } }
+
+#tree .row { padding:6px 10px; border-radius:8px; cursor:pointer; }
+#tree .row:hover { background:var(--panel2); } #tree .row.on { background:var(--panel2); outline:1px solid var(--gold); }
+#treeInfo { min-height:60px; }
+.muted { color:var(--muted); font-size:13.5px; }
+.warn { color:var(--orange); font-weight:600; }
+.brow { display:grid; grid-template-columns:260px 1fr 90px; gap:10px; align-items:center; margin:6px 0; }
+.brow2 { display:grid; grid-template-columns:260px 1fr 120px; gap:10px; align-items:center; margin:10px 0; }
+.bv { color:var(--muted); font-size:13.5px; text-align:right; }
+.track { position:relative; height:14px; border-radius:7px; background:var(--panel2); border:1px solid var(--line); }
+.track .band { position:absolute; left:45%; width:10%; top:0; bottom:0; background:color-mix(in srgb, var(--green) 30%, transparent); }
+.track i { position:absolute; top:-3px; width:18px; height:18px; margin-left:-9px; border-radius:50%; border:2px solid var(--bg); }
+.track .pa, .dot.da { background:var(--red); } .track .pb, .dot.db { background:var(--green); }
+.dot { display:inline-block; width:10px; height:10px; border-radius:50%; vertical-align:middle; }
+.band-l { display:inline-block; width:22px; height:10px; vertical-align:middle; background:color-mix(in srgb, var(--green) 30%, transparent); }
+@media (max-width: 860px) { .brow, .brow2 { grid-template-columns:1fr; } .bv { text-align:left; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h1>Classic HS 0.28</h1>
+  <p class="sub">Пакеты игр: движок без контента, правила на Lua, «Неон», серверы. Щёлкните раздел или листайте клавишами ← →.</p>
+  <div id="menu"></div>
+  <div class="theme" id="theme"><button data-t="auto">Авто</button><button data-t="light">Светлая</button><button data-t="dark">Тёмная</button></div>
+</nav>
+<main>
+
+<section id="overview" data-title="Обзор" data-ico="🧭">
+  <h2>Что получилось</h2>
+  <p class="lead">Движок больше ничего не знает о Hearthstone. Сама игра — правила, карты, их логика на Lua, тексты, арт, звуки, музыка, ранги, таймеры и оформление — лежит в одном файле <code>.cardpack</code>. Classic 2014 стал одним из таких пакетов. Рядом появился новый — «Neonfall», киберпанк.</p>
+  <div class="grid">
+    <div class="stat"><b>0</b><span>расхождений с прежним движком на 7833 записанных партиях после переноса всех карт Classic на Lua</span></div>
+    <div class="stat"><b>~530</b><span>хуков карт Classic переписано на Lua; в Rust не осталось ни одного</span></div>
+    <div class="stat"><b>60</b><span>новых карт «Neonfall», 3 чемпиона, 77 картинок, свои звуки, музыка и шрифты</span></div>
+    <div class="stat"><b>2</b><span>пакета в каждой сборке игры; сервер раздаёт их и пакеты игроков из S3</span></div>
+  </div>
+  <h3>Разделы</h3>
+  <div class="grid" id="tiles"></div>
+</section>
+
+<section id="android" data-title="Подпись Android" data-ico="🔑">
+  <h2>Проверка подписи Android</h2>
+  <p class="lead">Локальная страница, которая проверяет три секрета GitHub так же, как CI, и говорит, что именно не так.</p>
+<pre>python3 tools/android_keystore_check.py     # откроет страницу в браузере</pre>
+  <div class="grid">
+    <div class="card"><b>Проверяет по шагам</b><ul><li>base64 корректен и не закодирован дважды</li><li>это хранилище ключей (JKS или PKCS12)</li><li>пароль открывает хранилище</li><li>есть ключ с таким alias (с учётом регистра)</li><li>это закрытый ключ</li><li>пароль ключа равен паролю хранилища</li></ul></div>
+    <div class="card"><b>Умеет</b><ul><li>на каждую ошибку — как её исправить</li><li>создать новое хранилище PKCS12 и сразу дать три значения для GitHub</li><li>работает только на этом компьютере; секреты не пишутся ни в лог, ни на диск</li></ul></div>
+  </div>
+  <p>CI тоже стал умнее: если секреты не открывают ключ, сборка не падает, а пишет понятное предупреждение и подписывает APK одноразовым ключом.</p>
+</section>
+
+<section id="arch" data-title="Было и стало" data-ico="🏗️">
+  <h2>Где живёт игра</h2>
+  <p class="lead">Переключите, чтобы сравнить.</p>
+  <div class="switch" id="archSwitch"><button data-v="old">Было (0.27)</button><button data-v="new" class="on">Стало (0.28)</button></div>
+  <div id="archOld" hidden>
+    <div class="arch">
+      <div class="box gd"><h4>Godot</h4><ul><li>экраны</li><li>карты из <code>data/cards.json</code></li><li>арт, звуки, тексты в проекте</li></ul></div>
+      <div class="box rust"><h4>Движок (Rust)</h4><ul><li>правила</li><li><b>530 хуков карт Classic в коде Rust</b></li><li>константы Hearthstone: 30 здоровья, 10 маны, «Монетка»…</li></ul></div>
+      <div class="box rust"><h4>Сервер</h4><ul><li>одна игра — Classic</li><li>один ладдер</li></ul></div>
+    </div>
+  </div>
+  <div id="archNew">
+    <div class="arch">
+      <div class="box gd"><h4>Godot — экран</h4><ul><li>берёт всё из активного пакета: карты, тексты, арт, звуки, музыку, тему</li><li>экран «Игры»: выбор, импорт, кэш</li></ul></div>
+      <div class="box rust"><h4>Движок — только механики</h4><ul><li>нейтральные механики: GUARD, HASTE, BARRIER, TRAP…</li><li>читает правила пакета и исполняет его Lua</li><li>ни одного id карты Classic в коде</li></ul></div>
+      <div class="box rust"><h4>Пакет <code>.cardpack</code></h4><ul><li><code>rules.json</code>, <code>cards.json</code>, <code>scripts/*.lua</code></li><li>тексты на 8 языках, арт, звуки, музыка, тема</li><li>ранги, таймеры, режимы, обучение</li></ul></div>
+    </div>
+    <p class="arrow">Один и тот же пакет работает в браузере, на Windows, macOS, Linux, Android и на сервере.</p>
+  </div>
+</section>
+
+<section id="format" data-title="Формат пакета" data-ico="📦">
+  <h2>Что внутри <code>.cardpack</code></h2>
+  <p class="lead">Обычный zip. Щёлкните строку, чтобы прочитать, зачем этот файл.</p>
+  <div class="card" id="tree"></div>
+  <div class="card" id="treeInfo">Выберите файл слева.</div>
+  <h3>Два хэша</h3>
+  <div class="grid">
+    <div class="card"><b>rules_hash</b> — от правил, карт, миссий и скриптов (всё, что влияет на игру). Игроки с одинаковым <code>rules_hash</code> играют вместе, даже если у них разный арт.</div>
+    <div class="card"><b>content_hash</b> — от содержимого всех файлов. По нему пакет хранится, скачивается и проверяется после передачи.</div>
+  </div>
+<pre>python3 tools/pack.py build packs/neon -o build/packs/neon.cardpack
+python3 tools/pack.py check build/packs/neon.cardpack     # 0 ошибок, 0 предупреждений
+python3 tools/pack.py hash  build/packs/neon.cardpack</pre>
+  <p>Документация: <span class="path">docs/packs/format.md</span>, <span class="path">rules.md</span>, <span class="path">cards.md</span>, <span class="path">api.md</span>, <span class="path">lua.md</span>, <span class="path">fx.md</span>, схемы в <span class="path">docs/packs/schema/</span>.</p>
+</section>
+
+<section id="lua" data-title="Lua для карт" data-ico="📜">
+  <h2>Логика карт на маленьком Lua</h2>
+  <p class="lead">Свой интерпретатор подмножества Lua на Rust (<span class="path">rust/script</span>): без зависимостей и без <code>unsafe</code>, работает и в браузере.</p>
+  <div class="grid">
+    <div class="card"><b>Можно</b><ul><li>переменные, функции, замыкания, таблицы, циклы</li><li>библиотека <code>table</code>, <code>string</code>, <code>math</code>, <code>list</code></li><li>API движка <code>g.*</code>: урон, лечение, призыв, добор, усиления, события, случайность через ГСЧ партии</li></ul></div>
+    <div class="card"><b>Нельзя</b><ul><li>файлы, сеть, время, <code>load</code>, <code>require</code>, <code>os</code>, <code>io</code></li><li>метатаблицы, корутины, дробные числа</li><li>больше 200 000 шагов, 200 вызовов вглубь, 10 000 элементов в таблице — ошибка карты, а не зависание</li></ul></div>
+  </div>
+  <div class="switch" id="codeSwitch"><button data-v="classic" class="on">Classic: Огненный столп</button><button data-v="neon">Neonfall: Root Access</button></div>
+<pre id="codeClassic">cards.VAN_CS2_032 = {
+  spell = function(g, me)
+    lib.each_enemy_minion(g, me, 4)   -- 4 урона каждому существу противника
+  end,
+}</pre>
+<pre id="codeNeon" hidden>-- Root Access: take control of a random enemy minion; the opponent draws 2.
+cards.root_access = {
+  can_play = function(g, me) return #g.minions(g.enemy(me)) > 0 end,
+  spell = function(g, me)
+    local p = g.ctrl(me)
+    g.take_control(lib.random_enemy_minion(g, me), p)
+    g.draw(g.opponent(p), 2)
+  end,
+}</pre>
+  <h3>Скорость</h3>
+  <div class="card">
+    <div>Вызов небольшого хука: ~80 нс нативно, ~120 нс в WebAssembly</div><div class="bar"><i style="width:40%"></i></div>
+    <div style="margin-top:8px">Заклинание «урон всем существам» (цикл + 3 удара): ~1 мкс нативно, ~1,2 мкс в WebAssembly</div><div class="bar"><i style="width:100%"></i></div>
+    <div style="margin-top:8px">Полная проверка 7833 партий: 79 с до переноса на Lua, ~80–90 с после.</div>
+  </div>
+</section>
+
+<section id="port" data-title="Classic на Lua" data-ico="🔁">
+  <h2>Перенос Classic на Lua</h2>
+  <p class="lead">Все хуки карт переписаны с Rust на Lua. Каждый шаг проверялся на 7833 записанных партиях прежнего движка: 323 838 шагов, 142 694 выбора бота, 0 расхождений.</p>
+  <div class="card" id="portBars"></div>
+  <p>Шесть агентов переносили классы параллельно, каждый в своей копии репозитория. Потом ветки слились, общие файлы объединились скриптом, и последний шаг (B3) убрал из движка весь старый механизм Rust-хуков и все константы Hearthstone: «Монетку», 30 здоровья, 10 маны, классы, редкости, английские тексты.</p>
+</section>
+
+<section id="neon" data-title="Neonfall" data-ico="🌆">
+  <h2>Neonfall — новая игра</h2>
+  <p class="lead">Веспер-Арк, затопленный мегаполис на сваях, где дождь не кончается никогда. Корпорации наверху, банды внизу, призраки в Решётке. Всё придумано с нуля.</p>
+  <div class="arts" data-gal>
+    <img src="img28/neon_iris_null.jpg" alt="Айрис Нуль — Призрак"><img src="img28/neon_mother_rust.jpg" alt="Мать Ржавчина — Хромач"><img src="img28/neon_director_vale.jpg" alt="Директор Вейл — Корпорат"><img src="img28/neon_archon.jpg" alt="ARCHON"><img src="img28/neon_compiler_wyrm.jpg" alt="Червь-компилятор"><img src="img28/neon_billboard_leviathan.jpg" alt="Левиафан-билборд"><img src="img28/neon_courier_drone.jpg" alt="Дрон-курьер"><img src="img28/neon_glitch.jpg" alt="Глитч"><img src="img28/neon_chain_whip.jpg" alt="Цепной кнут">
+  </div>
+  <h3>Чемпионы</h3>
+  <table>
+    <tr><th>Чемпион</th><th>Класс</th><th>Стиль</th><th>Сила</th></tr>
+    <tr><td>Айрис Нуль</td><td>Призрак</td><td>заклинания, темп, контроль</td><td><b>Откачка</b> (3): 1 урон существу; если оно погибает — карта</td></tr>
+    <tr><td>Мать Ржавчина</td><td>Хромач</td><td>оружие, обшивка, перегрев, агрессия</td><td><b>Поборы</b> (2): 2 урона чемпиону врага, +1 обшивка</td></tr>
+    <tr><td>Директор Вейл</td><td>Корпорат</td><td>дроны, протоколы, стены</td><td><b>Развёртывание</b> (2): дрон-часовой 0/2 с Файрволом</td></tr>
+  </table>
+  <h3>Свои названия механик</h3>
+  <div class="grid" id="mech"></div>
+  <h3>Баланс (тысячи партий бот против бота)</h3>
+  <div class="card" id="balance"></div>
+  <p>Чтобы первый ход не давал перевеса, правила пакета дают второму игроку 5 карт, а боту — настройки <code>bot.trap</code> и <code>bot.depth</code>, чтобы он играл «Протоколы» и «Jumpstart». Classic это не затрагивает.</p>
+</section>
+
+<section id="look" data-title="Оформление" data-ico="🎨">
+  <h2>Каждый пакет со своим лицом</h2>
+  <p class="lead">Пакет может принести тему интерфейса (<code>ui/theme.json</code>): цвета, кнопки, панели, свечение, шрифты, частицы в меню. Classic выглядит ровно как раньше (проверено попиксельно), Neonfall — неоново. Смена — сразу, без перезапуска.</p>
+  <div class="gal" data-gal>
+    <figure><img src="img28/neon_ru_menu.jpg" alt=""><figcaption>Главное меню Neonfall: дождь, неоновые кнопки, шрифты Tektur и Exo 2</figcaption></figure>
+    <figure><img src="img28/neon_ru_games.jpg" alt=""><figcaption>Экран «Игры»: выбор пакета, наборы арта, звуков и музыки</figcaption></figure>
+    <figure><img src="img28/neon_ru_match.jpg" alt=""><figcaption>Партия Neonfall: свой стол, рубашка, кнопка «Конец хода»</figcaption></figure>
+    <figure><img src="img28/neon_ru_social.jpg" alt=""><figcaption>Друзья и чат в теме пакета</figcaption></figure>
+    <figure><img src="img28/neon_ru_collection.jpg" alt=""><figcaption>Коллекция</figcaption></figure>
+    <figure><img src="img28/ru_games_neon.jpg" alt=""><figcaption>Тот же экран до темы (деревянные кнопки Classic)</figcaption></figure>
+  </div>
+</section>
+
+<section id="p2p" data-title="Передача в P2P" data-ico="🔗">
+  <h2>Пакет переходит к другу напрямую</h2>
+  <p class="lead">Нажмите «Дальше», чтобы пройти передачу шаг за шагом.</p>
+  <div class="lanes"><div>Хозяин</div><div></div><div>Гость</div></div>
+  <div class="msgs" id="msgsP2P">
+    <div class="msg l"><div class="m"><code>hello</code>: пакет — id, <code>rules_hash</code>, <code>content_hash</code>, размер</div></div>
+    <div class="msg r"><div class="m">У гостя нет пакета → окно согласия: название и размер</div></div>
+    <div class="msg r"><div class="m">Гость соглашается → <code>pack_want</code></div></div>
+    <div class="msg l"><div class="m"><code>pack_chunk</code> по 32 КБ, на каждый — <code>pack_ack</code>; у обоих полоса прогресса и «Отмена»</div></div>
+    <div class="msg r"><div class="m">Гость проверяет <code>content_hash</code>, кладёт пакет в кэш и переключается на него</div></div>
+    <div class="msg l"><div class="m">Партия начинается; оба движка считают её и сверяют хэши после каждого хода</div></div>
+  </div>
+  <div class="ctl"><button data-for="msgsP2P" data-d="-1">← Назад</button><button data-for="msgsP2P" data-d="1">Дальше →</button><button data-for="msgsP2P" data-d="99">Показать всё</button></div>
+</section>
+
+<section id="server" data-title="Сервер и пакеты" data-ico="🏰">
+  <h2>Сервер раздаёт игры</h2>
+  <p class="lead">Пакеты хранятся в S3 (SeaweedFS в Docker) или в папке. Neonfall — игра сервера по умолчанию, Classic тоже есть.</p>
+  <div class="lanes"><div>Админ / игрок</div><div>Сервер</div><div>Хранилище S3</div></div>
+  <div class="msgs" id="msgsSrv">
+    <div class="msg l"><div class="m">Загрузка <code>.cardpack</code> (админ — для всех, игрок — свой, до 100 МБ и 10 штук)</div></div>
+    <div class="msg r"><div class="m">Полная проверка: лимиты формата, правила, компиляция всех скриптов, пробная партия ботов, где пробуется каждый разрешённый ход</div></div>
+    <div class="msg r"><div class="m">Хранение по <code>content_hash</code>; событие в журнале админки</div></div>
+    <div class="msg l"><div class="m">Игрок видит пакеты сервера, скачивает (с проверкой хэша) и кэширует</div></div>
+    <div class="msg l"><div class="m">Очередь <code>queue {mode, deck, pack}</code>: своя для каждой игры; таймеры, ранги и арена — из правил пакета</div></div>
+    <div class="msg l"><div class="m">Дружеская игра на своём пакете: друг видит «Скачать и играть» с размером</div></div>
+  </div>
+  <div class="ctl"><button data-for="msgsSrv" data-d="-1">← Назад</button><button data-for="msgsSrv" data-d="1">Дальше →</button><button data-for="msgsSrv" data-d="99">Показать всё</button></div>
+  <h3>Ещё</h3>
+  <div class="grid">
+    <div class="card"><b>Один вход</b><br>Вход в тот же аккаунт с другого устройства выкидывает первое: «Вы вошли на другом устройстве», без автоматического переподключения.</div>
+    <div class="card"><b>Несколько серверов</b><br>Список серверов в настройках, своя сессия у каждого, вкладки серверов в окне друзей.</div>
+    <div class="card"><b>Ранги по играм</b><br>У каждой игры свой ладдер; ранги хранятся по id пакета и сезону, поэтому новая версия пакета их не сбрасывает.</div>
+  </div>
+  <div class="gal" data-gal style="margin-top:12px">
+    <figure><img src="img28/packs_dark.jpg" alt=""><figcaption>Админка, страница «Игры»: пакеты сервера и игроков, загрузка перетаскиванием, включение, игра по умолчанию</figcaption></figure>
+  </div>
+<pre>cd server
+docker compose up -d --build     # сервер + SeaweedFS (S3); пакеты из packs/*.cardpack
+# или без Docker:
+cargo run --release -- admin admin
+cargo run --release -- --packs-dir ../packs</pre>
+</section>
+
+<section id="checked" data-title="Что проверено" data-ico="✅">
+  <h2>Что проверено вживую</h2>
+  <p class="lead">Каждый сценарий запускался по-настоящему: в браузере, в окнах игры, с настоящим сервером и хранилищем.</p>
+  <table id="checks"><tr><th>Сценарий</th><th>Как</th><th>Итог</th></tr></table>
+  <h3>Снимки проверки</h3>
+  <div class="gal" data-gal>
+    <figure><img src="img28/qa_03_games_imported_remix.jpg" alt=""><figcaption>Веб: своя игра «Neon Remix» добавлена из файла</figcaption></figure>
+    <figure><img src="img28/qa_07_training_spell_effect.jpg" alt=""><figcaption>Веб: тренировка Neonfall, заклинание с эффектом</figcaption></figure>
+    <figure><img src="img28/qa_10_p2p_consent.jpg" alt=""><figcaption>P2P: у гостя нет игры — окно согласия с размером</figcaption></figure>
+    <figure><img src="img28/qa_11_p2p_transfer_guest.jpg" alt=""><figcaption>P2P: передача с прогрессом</figcaption></figure>
+    <figure><img src="img28/qa_13_p2p_game_host_view.jpg" alt=""><figcaption>P2P: партия на переданной игре, без рассинхрона</figcaption></figure>
+    <figure><img src="img28/qa_17_server_casual_game.jpg" alt=""><figcaption>Сервер: обычная игра в очереди Neonfall</figcaption></figure>
+    <figure><img src="img28/qa_20_friendly_invite_download.jpg" alt=""><figcaption>Сервер: приглашение на своей игре друга, «Скачать и играть» (снимок до исправления наезда заголовка)</figcaption></figure>
+    <figure><img src="img28/qa_22_friendly_on_neon_remix.jpg" alt=""><figcaption>Сервер: дружеская партия на «Neon Remix»</figcaption></figure>
+    <figure><img src="img28/qa_23_kicked_first_tab.jpg" alt=""><figcaption>Второй вход: первая вкладка — «Вы вошли на другом устройстве»</figcaption></figure>
+    <figure><img src="img28/qa_25_two_servers_social_tabs.jpg" alt=""><figcaption>Два сервера: вкладки в окне друзей</figcaption></figure>
+    <figure><img src="img28/qa_26_admin_games_dark.jpg" alt=""><figcaption>Админка: игры сервера, игра по умолчанию, игры по пакетам</figcaption></figure>
+    <figure><img src="img28/qa_27_admin_matches_dark.jpg" alt=""><figcaption>Админка: партии с пакетом каждой</figcaption></figure>
+    <figure><img src="img28/qa_30_macos_bot_match.jpg" alt=""><figcaption>macOS: партия Neonfall против бота</figcaption></figure>
+  </div>
+</section>
+
+<section id="next" data-title="Что дальше" data-ico="🧩">
+  <h2>Что дальше</h2>
+  <p class="lead">Решения за вами и известные ограничения.</p>
+  <ol id="nextList"></ol>
+</section>
+
+</main>
+</div>
+<div id="box"><img alt=""><p></p></div>
+
+<script>window.CHECKS = [["Паритет Classic на Lua с прежним движком", "7833 записанные партии, 323 838 шагов, 142 694 выбора бота", true], ["Каждая карта Neonfall", "тест на каждую карту, токен, силу и вариант «Развилки»", true], ["Баланс Neonfall", "тысячи партий бот против бота на каждую пару чемпионов и порядок хода", true], ["Тесты", "389 в Godot; движок и интерпретатор Lua; 37 на сервере; 18 на tools/pack.py", true], ["Пакеты собираются и проверяются", "tools/pack.py check: 0 ошибок для Classic и Neonfall", true], ["Экран «Игры» в браузере", "смена Classic ↔ Neonfall, импорт своей игры из файла, удаление из кэша", true], ["Тренировка Neonfall в браузере", "5 ходов против бота, заклинания с эффектами, без ошибок в консоли", true], ["P2P с передачей игры", "два профиля Chrome: согласие, передача, партия на переданной игре без рассинхрона", true], ["Сервер: очередь Neonfall", "свой сервер, две вкладки, матч и ходы", true], ["Сервер: дружеская игра на своей игре", "загрузка «Neon Remix», приглашение, скачивание, партия", true], ["Второй вход в тот же аккаунт", "первая вкладка: «Вы вошли на другом устройстве», без автоподключения; закрытие с кодом 4001", true], ["Два сервера сразу", "вход на оба, вкладки в окне друзей, выход с одного", true], ["Админка: игры и партии", "оба пакета, игра по умолчанию, загрузка, выключение, пакет каждой партии; тёмная и светлая", true], ["Docker: сервер + SeaweedFS (S3)", "пакеты в S3, скачивание с совпадением хэша, перезапуск", true], ["macOS", "сборка .app, модуль правил грузится, меню и партия Neonfall в окне", true], ["Проверка подписи Android", "верный ключ, неверные пароль и alias, alias в другом регистре, отдельный пароль ключа, двойной base64", true], ["Сборки Windows, Linux, Android", "собираются в CI; на этих системах здесь не запускались", null]]; window.NEXT = ["<b>Ваш вход на локальный сервер:</b> при проверке приложение macOS открыло вашу настоящую папку данных и стёрло сохранённый вход на <code>ws://localhost:7377</code>. Войдите один раз заново. Остальные данные не изменились.", "<b>Ваш запущенный сервер</b> (порт 7377) — старая сборка. Чтобы появились игры-пакеты и новая админка: <code>cd server &amp;&amp; cargo build --release</code> и перезапуск с <code>--packs-dir ../packs</code> (пакеты собирает <code>tools/build_packs.sh</code>).", "<b>Подпись Android:</b> секреты в GitHub пока не открывают ключ. Проверьте их страницей <code>python3 tools/android_keystore_check.py</code>.", "<b>Арт 2D для Classic:</b> готова половина (267 карт); дорисовать вторую и сделать набором в пакете Classic?", "<b>Ограничения:</b> большая кнопка «Играть» в лобби Neonfall осталась золотой; бот слабо выбирает момент для «Протоколов»; ошибка скрипта, которая случается только в редкой позиции, не ловится пробной партией при загрузке пакета."];</script>
+<script>
+const TREE = [
+  ["manifest.json", "Паспорт пакета: id, версия, название и описание на 8 языках, наборы арта, звуков и музыки, цвета, рубашка, логотип."],
+  ["rules.json", "Правила: здоровье, мана, рука, стол, колода, копии, старт и «монета», усталость, таймеры (ход, фитиль, муллиган), режимы (обычный, арена), ранги, классы, редкости, названия механик, настройки бота."],
+  ["cards.json", "Карты: тип, класс, редкость, стоимость, атака, здоровье, механики, эффекты (fx), звуки и ссылка на скрипт."],
+  ["scripts/*.lua", "Логика карт на подмножестве Lua: хуки on_play, spell, deathrattle, on, aura, trap, cost_mod и другие."],
+  ["locales/<lang>.json", "Названия и тексты карт, механик, классов, колод и строки интерфейса пакета на каждом языке."],
+  ["layout/<lang>.json", "Необязательно: ручная раскладка текста карт (у Classic она своя для каждого языка)."],
+  ["art/<набор>/", "Картинки карт. Наборов может быть несколько — игрок выбирает на экране «Игры»."],
+  ["sounds/<набор>/, music/<набор>/", "Звуки и музыка, тоже наборами (у Classic — сгенерированная и открытая средневековая)."],
+  ["voice/<lang>/", "Реплики чемпионов."],
+  ["ui/", "Логотип, рубашка, фон меню и стола, эмблемы рангов, тема интерфейса theme.json и шрифты."],
+  ["decks/, missions/", "Готовые колоды и миссии обучения (у Classic их 6)."],
+];
+const MECH = [["GUARD","Провокация","Файрвол"],["HASTE","Рывок","Разгон"],["BARRIER","Божественный щит","Твёрдый свет"],["DOUBLE_ATTACK","Неистовство ветра","Два ядра"],["STEALTH","Маскировка","Маскировка"],["ON_PLAY","Боевой клич","Запуск"],["ON_DEATH","Предсмертный хрип","Отключение"],["WOUNDED","Исступление","На пределе"],["COMBO","Серия приёмов","Цепочка"],["MANA_LOCK","Перегрузка","Перегрев"],["TRAP","Секрет","Протокол"],["CHOICE","Выберите одно","Развилка"],["SILENCE","Немота","Стирание"],["FREEZE","Заморозка","Глушение"],["SPELL_POWER","Урон от заклинаний","Канал"],["ARMOR","Броня","Обшивка"]];
+const PORT = [["Нейтральные (базовые и все остальные)",124],["Маг и «Монетка»",27],["Друид",47],["Разбойник и жрец",52],["Чернокнижник и охотник",51],["Паладин и воин",48],["Шаман, обучение, силы героев",47]];
+const BAL = [
+  ["Первый игрок, стартовые колоды", 63.4, 46.5],
+  ["Первый игрок, случайные колоды", 66.2, 52.6],
+  ["Айрис Нуль (была сильнейшей)", 69.2, 51.6],
+  ["Директор Вейл", 39.9, 50.5],
+  ["Мать Ржавчина", 40.9, 47.9],
+];
+const CHECKS = window.CHECKS || [];
+const NEXT = window.NEXT || [];
+const secs = [...document.querySelectorAll("section")];
+const menu = document.getElementById("menu"), tiles = document.getElementById("tiles");
+function show(id) {
+  secs.forEach(s => s.classList.toggle("on", s.id === id));
+  menu.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.id === id));
+  try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  window.scrollTo(0, 0);
+}
+for (const s of secs) {
+  const b = document.createElement("button");
+  b.className = "sec"; b.dataset.id = s.id;
+  b.innerHTML = `<span class="ico"></span><span></span>`;
+  b.children[0].textContent = s.dataset.ico; b.children[1].textContent = s.dataset.title;
+  b.onclick = () => show(s.id); menu.append(b);
+  if (s.id !== "overview") {
+    const t = document.createElement("div"); t.className = "tile";
+    t.innerHTML = `<div class="t"></div><div class="d"></div>`;
+    t.children[0].textContent = s.dataset.ico + " " + s.dataset.title;
+    t.children[1].textContent = (s.querySelector(".lead") || {}).textContent || "";
+    t.onclick = () => show(s.id); tiles.append(t);
+  }
+}
+document.addEventListener("keydown", e => {
+  if (document.getElementById("box").classList.contains("on")) return;
+  const i = secs.findIndex(s => s.classList.contains("on"));
+  if (e.key === "ArrowRight" && i < secs.length - 1) show(secs[i + 1].id);
+  if (e.key === "ArrowLeft" && i > 0) show(secs[i - 1].id);
+});
+show(secs.some(s => "#" + s.id === location.hash) ? location.hash.slice(1) : "overview");
+const root = document.documentElement;
+function theme(t) {
+  if (t === "auto") root.removeAttribute("data-theme"); else root.dataset.theme = t;
+  document.querySelectorAll("#theme button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  try { localStorage.setItem("report-theme", t); } catch (e) {}
+}
+document.querySelectorAll("#theme button").forEach(b => b.onclick = () => theme(b.dataset.t));
+let saved = "auto"; try { saved = localStorage.getItem("report-theme") || "auto"; } catch (e) {}
+theme(saved);
+function sw(id, map) {
+  document.querySelectorAll(`#${id} button`).forEach(b => b.onclick = () => {
+    document.querySelectorAll(`#${id} button`).forEach(x => x.classList.toggle("on", x === b));
+    for (const [v, el] of Object.entries(map)) document.getElementById(el).hidden = b.dataset.v !== v;
+  });
+}
+sw("archSwitch", {old: "archOld", new: "archNew"});
+sw("codeSwitch", {classic: "codeClassic", neon: "codeNeon"});
+// tree
+const tree = document.getElementById("tree"), info = document.getElementById("treeInfo");
+TREE.forEach(([p, d], i) => {
+  const r = document.createElement("div"); r.className = "row";
+  r.innerHTML = `<code></code>`; r.querySelector("code").textContent = p;
+  r.onclick = () => { tree.querySelectorAll(".row").forEach(x => x.classList.remove("on")); r.classList.add("on"); info.textContent = d; };
+  tree.append(r); if (i === 0) r.click();
+});
+// mechanics
+const mech = document.getElementById("mech");
+for (const [e, c, n] of MECH) { const d = document.createElement("div"); d.className = "card"; d.innerHTML = `<code></code><div><b></b></div><div class="muted"></div>`; d.querySelector("code").textContent = e; d.querySelector("b").textContent = n; d.querySelector(".muted").textContent = "в Classic: " + c; mech.append(d); }
+// bars
+function bars(el, rows, max, fmt) {
+  const box = document.getElementById(el);
+  for (const r of rows) { const d = document.createElement("div"); d.className = "brow"; d.innerHTML = `<span class="bl"></span><div class="bar"><i></i></div><span class="bv"></span>`; d.querySelector(".bl").textContent = r[0]; d.querySelector("i").style.width = (100 * r[1] / max) + "%"; d.querySelector(".bv").textContent = fmt(r); box.append(d); }
+}
+bars("portBars", PORT, 130, r => r[1] + " хуков");
+const bal = document.getElementById("balance");
+for (const [n, a, b] of BAL) { const d = document.createElement("div"); d.className = "brow2"; d.innerHTML = `<span class="bl"></span><div class="track"><span class="band"></span><i class="pa"></i><i class="pb"></i></div><span class="bv"></span>`; d.querySelector(".bl").textContent = n; d.querySelector(".pa").style.left = a + "%"; d.querySelector(".pb").style.left = b + "%"; d.querySelector(".bv").textContent = `${a}% → ${b}%`; bal.append(d); }
+const leg = document.createElement("p"); leg.className = "muted"; leg.innerHTML = '<span class="dot da"></span> до правок &nbsp; <span class="dot db"></span> после &nbsp; <span class="band-l"></span> цель 45–55 %'; bal.append(leg);
+// steppers
+const step = {};
+function draw(id) { const ms = [...document.querySelectorAll(`#${id} .msg`)]; ms.forEach((m, i) => { m.classList.toggle("on", i <= step[id]); m.classList.toggle("cur", i === step[id]); }); }
+document.querySelectorAll(".msgs").forEach(m => { step[m.id] = 0; draw(m.id); });
+document.querySelectorAll(".ctl button[data-for]").forEach(b => b.onclick = () => { const id = b.dataset.for, n = document.querySelectorAll(`#${id} .msg`).length; step[id] = Math.max(0, Math.min(n - 1, step[id] + Number(b.dataset.d))); draw(id); });
+// checks & next
+const ct = document.getElementById("checks");
+for (const [w, h, ok] of CHECKS) { const tr = document.createElement("tr"); tr.innerHTML = "<td></td><td></td><td></td>"; tr.children[0].textContent = w; tr.children[1].textContent = h; tr.children[2].innerHTML = ok === true ? '<span class="ok">✓ работает</span>' : ok === false ? '<span class="no">✗ нет</span>' : '<span class="warn">≈ частично</span>'; ct.append(tr); }
+const nl = document.getElementById("nextList");
+for (const t of NEXT) { const li = document.createElement("li"); li.innerHTML = t; nl.append(li); }
+const box = document.getElementById("box");
+document.querySelectorAll("[data-gal] img").forEach(img => img.onclick = () => { box.querySelector("img").src = img.src; box.querySelector("p").textContent = img.closest("figure")?.querySelector("figcaption")?.textContent || img.alt; box.classList.add("on"); });
+box.onclick = () => box.classList.remove("on");
+document.addEventListener("keydown", e => { if (e.key === "Escape") box.classList.remove("on"); });
+
+</script>
+</body>
+</html>
