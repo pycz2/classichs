@@ -64,7 +64,7 @@ configured, else in a local directory:
 | `--s3-region <r>` | `S3_REGION` | `us-east-1` |
 | `--s3-access-key <k>` | `S3_ACCESS_KEY` | |
 | `--s3-secret-key <s>` | `S3_SECRET_KEY` | |
-| `--packs-dir <dir>` | | `packs/` next to the binary |
+| `--packs-dir <dir>` | | the first of `packs/` next to the binary, `./packs`, `../packs` or a `packs/` above the binary that holds a `.cardpack` (so `cargo run` or `target/release/classichs-server` in `server/` finds the project's `packs/`, built by `tools/build_packs.sh`) |
 
 Flags win over the environment. Requests are path-style (`<endpoint>/<bucket>/<key>`),
 so any S3-compatible store works; plain `http://` endpoints are allowed. The bucket must

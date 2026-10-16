@@ -15,7 +15,7 @@ nothing else is needed.
 
 Game packs are stored in S3 when a bucket is given (flags, or the environment:
 S3_BUCKET, S3_ENDPOINT, S3_REGION, S3_ACCESS_KEY, S3_SECRET_KEY), else in --store-dir.
-Bundled packs (*.cardpack in --packs-dir, default: packs/ next to the binary) are
+Bundled packs (*.cardpack in --packs-dir; default: the first of packs/ next to the binary,\n./packs, ../packs or a packs/ folder above the binary that has a .cardpack) are
 installed as server packs at start, each once. Games without a pack are played in the
 default pack (the admin panel sets it); until one is set, the newest enabled server
 pack with the manifest id --default-pack becomes it, else the built-in Classic rules.";
@@ -72,7 +72,15 @@ fn main() {
     let store = if s3.bucket.is_empty() { Storage::dir(store_dir.as_ref()) } else { Storage::s3(&s3) };
     let store = store.unwrap_or_else(|e| die(&format!("cannot open the pack storage: {e}")));
     let packs_dir = packs_dir.unwrap_or_else(|| {
-        std::env::current_exe().ok().and_then(|p| Some(p.parent()?.join("packs"))).unwrap_or_else(|| "packs".into())
+        let exe = std::env::current_exe().ok();
+        let cwd = std::env::current_dir().unwrap_or_else(|_| ".".into());
+        find_packs_dir(exe.as_deref(), &cwd).unwrap_or_else(|| {
+            tracing::warn!(
+                "no game packs found (no *.cardpack in packs/ next to the binary, in ./packs, ../packs or a packs/ \
+                 folder above the binary): run tools/build_packs.sh in the project, or pass --packs-dir"
+            );
+            exe.as_deref().and_then(|p| Some(p.parent()?.join("packs"))).unwrap_or_else(|| "packs".into())
+        })
     });
     rt.block_on(async move {
         tracing::info!("rules engine {} (cards {})", classichs_engine::api::VERSION, classichs_engine::card_db::data_hash());
@@ -125,4 +133,46 @@ async fn make_admin(db: db::Db, name: String) {
 fn die(msg: &str) -> ! {
     eprintln!("classichs-server: {msg}\n\n{USAGE}");
     std::process::exit(2);
+}
+
+
+/// The bundled packs folder when --packs-dir is not given: the first of packs/ next to the
+/// binary, ./packs, ../packs, or a packs/ folder in a directory above the binary (e.g. the
+/// project's packs/ for server/target/release/classichs-server) that holds a *.cardpack.
+fn find_packs_dir(exe: Option<&std::path::Path>, cwd: &std::path::Path) -> Option<PathBuf> {
+    let has_pack = |d: &std::path::Path| {
+        std::fs::read_dir(d).is_ok_and(|r| r.flatten().any(|e| e.path().extension().is_some_and(|x| x == "cardpack")))
+    };
+    let mut tries: Vec<PathBuf> = Vec::new();
+    if let Some(bin) = exe.and_then(|p| p.parent()) {
+        tries.push(bin.join("packs"));
+    }
+    tries.push(cwd.join("packs"));
+    tries.push(cwd.join("..").join("packs"));
+    if let Some(bin) = exe.and_then(|p| p.parent()) {
+        tries.extend(bin.ancestors().skip(1).take(6).map(|a| a.join("packs")));
+    }
+    tries.into_iter().find(|d| has_pack(d))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::find_packs_dir;
+
+    #[test]
+    fn packs_dir_found_above_the_binary_and_next_to_the_working_dir() {
+        let t = std::env::temp_dir().join(format!("chs_packs_{}", std::process::id()));
+        let bin = t.join("server/target/release");
+        std::fs::create_dir_all(&bin).unwrap();
+        std::fs::create_dir_all(t.join("packs")).unwrap();
+        let exe = bin.join("classichs-server");
+        assert_eq!(find_packs_dir(Some(&exe), &t.join("server")), None, "no pack yet");
+        std::fs::write(t.join("packs/neon.cardpack"), b"x").unwrap();
+        assert_eq!(find_packs_dir(Some(&exe), &t.join("server")), Some(t.join("server").join("..").join("packs")));
+        assert_eq!(find_packs_dir(Some(&exe), &bin), Some(t.join("packs")), "found above the binary");
+        std::fs::create_dir_all(bin.join("packs")).unwrap();
+        std::fs::write(bin.join("packs/x.cardpack"), b"x").unwrap();
+        assert_eq!(find_packs_dir(Some(&exe), &t), Some(bin.join("packs")), "next to the binary wins");
+        std::fs::remove_dir_all(&t).unwrap();
+    }
 }
