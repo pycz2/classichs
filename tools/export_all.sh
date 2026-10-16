@@ -87,4 +87,7 @@ for p in $WANT; do
 		;;
 	esac
 done
+for f in packs/*.cardpack; do  # the game packs, for servers started from a release build (--packs-dir)
+	[ -f "$f" ] && cp "$f" "$OUT/ClassicHS-$VER-$(basename "$f" .cardpack).cardpack"
+done
 ls -l "$OUT"/ClassicHS-"$VER"-* 2>/dev/null
