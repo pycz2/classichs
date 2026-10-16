@@ -4,6 +4,20 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.28.0] - 2026-10-16
+
+### Añadido
+- Un juego nuevo, Neonfall: ciberpunk en la inundada Vesper Arc. Tres campeones (Iris Null, Mother Rust, Director Vale), 60 cartas nuevas, su propio arte, sonidos, música, fuentes y un estilo neón. Es el juego por defecto del servidor.
+- Una pantalla «Juegos»: elegir el juego, sus conjuntos de arte, sonidos y música, añadir tu propio juego desde un archivo .cardpack (también en el navegador), borrar los descargados.
+- En el juego directo con códigos, un amigo puede enviarte un juego que te falta: consentimiento, transferencia con progreso, comprobación de integridad.
+- Varios servidores de juego en los ajustes, cada uno con su sesión y sus amigos. Entrar en la misma cuenta en otro sitio cierra la sesión anterior («Iniciaste sesión en otro dispositivo»).
+- El servidor reparte juegos: colas, rangos y Arena por juego; una partida amistosa en el juego propio de un amigo, descargado con consentimiento.
+- Una comprobación de la firma de Android: python3 tools/android_keystore_check.py abre una página que comprueba los secretos de GitHub y crea una clave nueva.
+
+### Cambiado
+- El motor ya no sabe nada de Hearthstone: todo el juego —reglas, cartas, su lógica en un Lua pequeño, textos, arte, sonidos, rangos, temporizadores— está en un .cardpack. Classic 2014 pasó a ser un paquete así y se comprobó con 7833 partidas grabadas: los resultados coinciden bit a bit.
+- El protocolo del juego directo es la versión 3: las versiones anteriores no pueden jugar con esta.
+
 ## [0.27.1] - 2026-10-15
 
 ### Corregido

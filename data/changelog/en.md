@@ -4,6 +4,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.28.0] - 2026-10-16
+
+### Added
+- A new game, Neonfall: cyberpunk in drowned Vesper Arc. Three champions (Iris Null, Mother Rust, Director Vale), 60 new cards, its own art, sounds, music, fonts and a neon look. It is the server's default game.
+- A Games screen: pick the game, its art, sound and music sets, add your own game from a .cardpack file (in the browser too), delete downloaded ones.
+- In direct play with codes, a friend can send you a game you lack: a consent dialog, a transfer with progress, an integrity check.
+- Several game servers in the settings, each with its own login and friends. Logging in to the same account elsewhere closes the old session (“You logged in on another device”).
+- The server serves games: queues, ranks and the Arena per game; a friendly game on a friend's own game, downloaded with consent.
+- An Android signing check: python3 tools/android_keystore_check.py opens a page that checks the GitHub secrets and makes a new key.
+
+### Changed
+- The engine knows nothing about Hearthstone any more: the whole game — rules, cards, their logic in a small Lua, texts, art, sounds, ranks, timers — lives in a .cardpack. Classic 2014 became such a pack and was checked on 7833 recorded games: the results match bit for bit.
+- The protocol of direct play is version 3: older versions cannot play with this one.
+
 ## [0.27.1] - 2026-10-15
 
 ### Fixed
