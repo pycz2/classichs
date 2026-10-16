@@ -1,8 +1,8 @@
-//! Hero powers and The Coin (cards/heroes.gd). Upgraded powers and Demon Hunter
+//! Hero powers (cards/heroes.gd); The Coin and Fireblast are Lua now
+//! (packs/classic/scripts/neutral.lua, mage.lua). Upgraded powers and Demon Hunter
 //! powers are unreachable in Classic: no hooks.
 
 use super::*;
-use crate::state::MAX_MANA;
 
 const BASIC_TOTEMS: [&str; 4] = ["VAN_CS2_050", "VAN_CS2_051", "VAN_CS2_052", "VAN_NEW1_009"];
 
@@ -16,14 +16,6 @@ fn board_has_room(g: &Game, me: Id) -> bool {
 }
 
 pub fn register(r: &mut Registry) {
-    r.insert("GAME_005", Hooks { // The Coin
-        spell: Some(|g, me, _| {
-            let c = g.ctrl(me);
-            let p = &mut g.players[c];
-            p.mana = MAX_MANA.min(p.mana + 1);
-        }),
-        ..d()
-    });
     r.insert("VAN_HERO_01bp", Hooks { hero_power: Some(|g, me, _| g.gain_armor(g.ctrl(me), 2)), ..d() }); // Armor Up!
     r.insert("VAN_HERO_02bp", Hooks { // Totemic Call
         can_play: Some(|g, me| board_has_room(g, me) && !missing_totems(g, me).is_empty()),
@@ -64,7 +56,6 @@ pub fn register(r: &mut Registry) {
         }),
         ..d()
     });
-    r.insert("VAN_HERO_08bp", Hooks { target: ANY, hero_power: Some(|g, me, t| { g.damage(me, t, g.hp_dmg(me, 1)); }), ..d() }); // Fireblast
     r.insert("VAN_HERO_09bp", Hooks { target: ANY, hero_power: Some(|g, me, t| { g.heal(me, t, g.heal_amt(me, 2)); }), ..d() }); // Lesser Heal
     r.insert("VAN_EX1_tk33", Hooks { // INFERNO! (Lord Jaraxxus)
         can_play: Some(board_has_room),

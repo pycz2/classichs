@@ -10,9 +10,25 @@ It was ported from the GDScript engine (`engine/`, `cards/`, `game/bot.gd`, …,
 removed in 0.27) and behaves exactly like it: the same actions from the same seed
 give the same events and the same `state_hash()` (see Parity below).
 
-No I/O, no threads; dependencies: serde, serde_json, sha2. Builds for the host,
-`wasm32-unknown-unknown` and `aarch64-linux-android`. Card data
-(`data/cards.json`) is embedded at build time.
+No I/O (except `load_pack` by path on native hosts), no threads; dependencies:
+serde, serde_json, sha2, miniz_oxide (zip inflate), classichs-script (the Lua
+subset, `rust/script`). Builds for the host, `wasm32-unknown-unknown` and
+`aarch64-linux-android`.
+
+**Game packs** (docs/packs/, D1–D19 of docs/superpowers/plans/2026-10-16-game-packs.md):
+everything a game needs is a *ruleset* (`ruleset.rs`) made from a pack's
+`rules.json`, `cards.json`, missions and Lua card scripts. The engine keeps the
+pack's mechanic names (D7): tags in snapshots, events and the state hash are the
+pack's words, and the engine finds them through `Ruleset::names` (engine ids of
+docs/packs/schema/keywords.json → pack names). The built-in ruleset is the
+Classic pack, embedded at build time (`build.rs`: `packs/classic` rules,
+missions and scripts, and its `cards.json` made from `data/cards.json` +
+`cards.patch.json` as `tools/pack.py` does, without the texts). Every API call
+without `pack` plays it, so older hosts work unchanged.
+
+Card hooks are Lua (`packs/classic/scripts/*.lua`, docs/packs/api.md) or, for
+Classic cards not ported yet, the Rust functions of `src/cards/*.rs` (a card
+without a `script` field falls back to them; Classic only).
 
 ## Layout
 
@@ -24,16 +40,28 @@ No I/O, no threads; dependencies: serde, serde_json, sha2. Builds for the host,
 | `entity.rs`, `player.rs` | `engine/entity.gd`, `engine/player.gd` |
 | `state.rs` | `engine/game_state.gd`: entities, events, triggers, death phase, auras, primitives |
 | `game.rs` | `engine/game.gd`: setup, mulligan, turns, actions, legality |
-| `cards/*.rs` | `cards/*.gd`, one file per class; `cards/mod.rs` = `registry.gd` + `t.gd` |
+| `cards/*.rs` | `cards/*.gd`, one file per class (the Rust hooks still to port to Lua); `cards/mod.rs` = `registry.gd` + `t.gd` + `HookSet` (what the engine calls: a Rust or a Lua function) |
+| `ruleset.rs` | a pack's rules, cards, names, missions and hooks; the built-in Classic ruleset; the cache by rules_hash |
+| `pack.rs` | reading a `.cardpack` (zip) or a folder, strict and canonical JSON, `rules_hash` (docs/packs/format.md §3) |
+| `lua.rs` | loading card scripts, the `g` library (docs/packs/api.md), calling hooks, script errors |
 | `scenario.rs` | `engine/scenario.gd` |
 | `bot.rs` | `game/bot.gd` |
 | `arena_draft.rs`, `deck.rs`, `missions.rs` | `game/arena_draft.gd`, `game/deck.gd` + `decks.gd`, `game/missions.gd` + `tutorial.gd` |
 | `api.rs` | `net/referee.gd` and more: the JSON API |
 
-A card hook is a plain function `fn(&mut Game, me, target)`; entities are ids
-(`-1` = none); events are JSON objects in `Game::event_log`, and triggers get
-the index of their event, so a hook that changes an event (Counterspell,
-Misdirection, Spellbender) changes the logged one, as in GDScript.
+A card hook is a Lua function (or a plain Rust `fn(&mut Game, me, target)`);
+entities are ids (`-1` = none); events are JSON objects in `Game::event_log`,
+and triggers get the index of their event, so a hook that changes an event
+(Counterspell, Misdirection, Spellbender) changes the logged one, as in
+GDScript (a Lua hook gets the event as a table; changed fields are copied back).
+
+Lua runs on two interpreters per ruleset (`lua.rs`): the main one (a game
+checks it out for a call and shares it with its look-ahead copies, so the bot
+does not copy the Lua heap per action; scripts keep no state of their own) and
+a read-only one for the hooks the engine calls while it only reads the game
+(target filters, `can_play`, `cost_mod`, `cost_aura`). A script error ends the
+game as a draw (`game_over` event with `reason: "script_error"`, `script_error`
+in state replies), never a panic.
 
 ## JSON API
 
@@ -56,8 +84,10 @@ included), decks are given as `deck_count` only, and the RNG state is left out.
 | op | request | reply |
 |---|---|---|
 | `ping` | | `version`, `engine`, `data` (card data hash) |
-| `data_hash` | | `hash`: SHA-256 of cards.json (`CardDb.data_hash()`) |
-| `hooks` | | `hooks`: card id → what hooks it has (`on`: event types, `aura`, `deathrattle`, `combo`, `choose_one`: [a, b], `secret`, ...) for glows and effects |
+| `load_pack` | `data` (a `.cardpack` as base64) or `path` (native: a `.cardpack` or an unpacked pack folder) | `pack` (its rules_hash), `id`, `version`; `ok: false` + `error` for a bad pack (format, limits, rules, cards, scripts that do not load) |
+| `packs` | | `packs`: `[{pack, id, version, builtin}]`, the built-in Classic one first |
+| `data_hash` | `pack?` | `hash`: SHA-256 of data/cards.json for the built-in ruleset (`CardDb.data_hash()`), a pack's rules_hash |
+| `hooks` | `pack?` | `hooks`: card id → what hooks it has (`on`: event types, `aura`, `deathrattle`, `combo`, `choose_one`: [a, b], `secret`, ...) for glows and effects |
 | `new` | `game`, `decks: [deck, deck]`, `seed`, `first?` (0/1, default: random), `check?` (default true: decks must be legal; false for tests) | state reply + `events` (the opening draws) |
 | `new` | `game`, `scenario` (the Debug Table format, `engine/scenario.gd`) | state reply + `events` (`[]`) |
 | `new` | `game`, `mission` (1-6: a tutorial mission with its rules) | state reply + `events` |
@@ -70,13 +100,17 @@ included), decks are given as `deck_count` only, and the RNG state is left out.
 | `hash` | `game` | `hash`: `state_hash()` |
 | `history` | `game`, `from?`, `view?` | `history`: `[{turn, player, action, events}]` (entry 0 is the start), `start_decks` |
 | `dump` | `game` | `scenario`: the position as a scenario (`Scenario.dump`) |
-| `end_turn_block` | `game`, `player` | `block`: why a tutorial mission does not let the player end the turn yet (`""`: it does), `mission` |
+| `end_turn_block` | `game`, `player` | `reason`: why a tutorial mission does not let the player end the turn yet (`while_can_play`, `while_can_attack`; `""`: it may), a key the client translates; `block`: the same in English (old clients; `""`), `mission` |
 | `drop` | `game` | |
-| `validate` | `deck` | `ok`, `error` (English, as `Deck.validate()`) |
-| `draft` | `seed`, `hero?` (0-2), `picks?` | `heroes`, `hero`, `cards`, `offer`, `done` (stateless, as the referee) |
+| `validate` | `deck`, `pack?` | `ok`, `error` (English, as `Deck.validate()`) |
+| `draft` | `seed`, `hero?` (0-2), `picks?`, `pack?` | `heroes`, `hero`, `cards`, `offer`, `done` (stateless, as the referee) |
+
+Every `new` takes `pack` (a rules_hash from `load_pack`; absent: built-in
+Classic); `copy` keeps the copied game's pack.
 
 The state reply (as the referee's): `ok`, `game`, `hash`, `over`, `winner`
-(-1: none or a draw), `turn`, `current`, `phase` (`MULLIGAN`, `PLAY`, `OVER`).
+(-1: none or a draw), `turn`, `current`, `phase` (`MULLIGAN`, `PLAY`, `OVER`),
+and `script_error` (the message) once a card script failed and ended the game.
 
 A deck: `{"hero": "HERO_08", "cards": [30 card ids], "arena": false}`.
 
@@ -130,8 +164,15 @@ mismatches). A rules change now changes the fixtures on purpose: update the
 recorded expectations with the change and say so in the changelog.
 
 ```sh
-cd rust && cargo test -p classichs-engine -- --nocapture   # prints games, steps, cards covered
+cd rust && cargo test -p classichs-engine -- --nocapture   # prints games, steps, cards covered, time
+PARITY_BIG=0 PARITY_FILTER=MAGE cargo test -p classichs-engine --test parity -- --nocapture  # quick: some games
 ```
+
+`PARITY_FILTER` (card ids, class names, `lua`) replays only the games that
+mention those cards; `PARITY_BIG=0` skips `fixtures/big` (docs/packs/api.md,
+"Porting"). `tests/packs.rs` checks the built-in ruleset's rules_hash against
+`tools/pack.py`, loading a pack, the pack's names in snapshots, Lua hooks and
+script errors.
 
 Games: random and bot play from random seeds with Basic class decks, random
 30-card decks from the whole pool and random class decks; every card test scene

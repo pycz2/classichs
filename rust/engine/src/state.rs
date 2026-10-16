@@ -2,33 +2,28 @@
 //! hooks use (engine/game_state.gd). Turns, actions and legality: game.rs.
 
 use crate::card_db;
-use crate::cards::{self, Base, DeathFn, Hooks, OnFn, Secret, Spec};
+use crate::cards::{Base, DeathFn, Fx, HookSet, OnFn, SecretH, TSpec};
 use crate::entity::{int, truthy, Entity, Id, NONE};
 use crate::json;
+use crate::lua::LuaSlot;
 use crate::player::Player;
 use crate::rng::Rng;
+use crate::ruleset::{self, Names, Ruleset};
 use serde_json::{json, Map, Value};
 use sha2::{Digest, Sha256};
 use std::collections::VecDeque;
+use std::sync::OnceLock;
 
+// Classic's limits, for the Rust card hooks (rust/engine/src/cards). The engine
+// itself reads them from the game's ruleset (`Game::rs`).
 pub const MAX_HAND: usize = 10;
 pub const MAX_BOARD: usize = 7;
 pub const MAX_MANA: i64 = 10;
 pub const MAX_QUEUE_STEPS: usize = 5000;
 
+/// The power a class champion of the built-in Classic ruleset starts with.
 pub fn default_hero_power(hero: &str) -> Option<&'static str> {
-    Some(match hero {
-        "HERO_01" => "VAN_HERO_01bp",
-        "HERO_02" => "VAN_HERO_02bp",
-        "HERO_03" => "VAN_HERO_03bp",
-        "HERO_04" => "VAN_HERO_04bp",
-        "HERO_05" => "VAN_HERO_05bp",
-        "HERO_06" => "VAN_HERO_06bp",
-        "HERO_07" => "VAN_HERO_07bp",
-        "HERO_08" => "VAN_HERO_08bp",
-        "HERO_09" => "VAN_HERO_09bp",
-        _ => return None,
-    })
+    ruleset::classic().class_power(hero)
 }
 
 /// An event: a JSON object ({"type": ..., ...}).
@@ -36,9 +31,9 @@ pub type Ev = Map<String, Value>;
 
 #[derive(Clone, Copy)]
 pub(crate) enum Trigger {
-    On(OnFn),
-    Secret(Secret),
-    Deathrattle(DeathFn),
+    On(Fx<OnFn>),
+    Secret(SecretH),
+    Deathrattle(Fx<DeathFn>),
 }
 
 #[derive(Clone, Copy)]
@@ -61,6 +56,8 @@ pub struct Pending {
 }
 
 pub struct Game {
+    /// What is being played: rules, cards, mechanic names, hooks.
+    pub rs: &'static Ruleset,
     pub rng: Rng,
     pub players: Vec<Player>,
     /// Entity id n is entities[n - 1]; entities are never removed.
@@ -83,14 +80,36 @@ pub struct Game {
     pub source_id: Id,
     /// The deck lists the match started with (the deck tracker shows them).
     pub start_decks: [Vec<String>; 2],
+    /// The interpreter of the card scripts (crate::lua).
+    pub(crate) lua: LuaSlot,
+    /// Why a card script failed (the game then ended as a draw).
+    pub script_error: OnceLock<String>,
 }
 
 impl Game {
-    pub(crate) fn blank(seed: i64) -> Game {
-        Game { rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
+    pub(crate) fn blank(rs: &'static Ruleset, seed: i64) -> Game {
+        Game { rs, rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
             phase: "MULLIGAN", pending: None, game_over: false, winner: -1, event_log: vec![], history: vec![],
             queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: String::new(), source_id: NONE,
-            start_decks: [vec![], vec![]] }
+            start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new() }
+    }
+
+    /// A game with no cards: the host that loads a pack's scripts.
+    pub(crate) fn loader() -> Game {
+        static EMPTY: OnceLock<&'static Ruleset> = OnceLock::new();
+        let rs = EMPTY.get_or_init(|| {
+            let mut f = crate::pack::Files::new();
+            f.insert("manifest.json".into(), br#"{"format": 1}"#.to_vec());
+            f.insert("rules.json".into(), b"{}".to_vec());
+            f.insert("cards.json".into(), b"[]".to_vec());
+            Box::leak(Box::new(Ruleset::from_files(&f, false).expect("the empty ruleset")))
+        });
+        Game::blank(rs, 0)
+    }
+
+    /// The pack's tag names.
+    pub fn n(&self) -> &'static Names {
+        &self.rs.names
     }
 
     pub(crate) fn setup_players(&mut self, hero0: &str, hero1: &str) {
@@ -98,7 +117,8 @@ impl Game {
             let mut p = Player::new(i);
             p.hero = self.new_entity(hero_id, i);
             self.enter_play(p.hero);
-            p.hero_power = self.new_entity(default_hero_power(hero_id).unwrap_or("VAN_HERO_08bp"), i);
+            let power = self.rs.class_power(hero_id).unwrap_or(&self.rs.default_power).to_string();
+            p.hero_power = self.new_entity(&power, i);
             self.enter_play(p.hero_power);
             self.players.push(p);
         }
@@ -108,7 +128,7 @@ impl Game {
 
     pub fn new_entity(&mut self, card_id: &str, controller: usize) -> Id {
         let id = self.next_id;
-        self.entities.push(Entity::new(id, card_id, controller));
+        self.entities.push(Entity::new(id, self.rs.card(card_id), controller));
         self.next_id += 1;
         id
     }
@@ -233,9 +253,9 @@ impl Game {
         v
     }
 
-    pub fn hooks_of(&self, id: Id) -> &'static Hooks {
+    pub fn hooks_of(&self, id: Id) -> &'static HookSet {
         let e = self.e(id);
-        if e.silenced { cards::of("") } else { cards::of(&e.card_id) }
+        self.rs.hooks(if e.silenced { "" } else { &e.card_id })
     }
 
     // --- events and resolution --------------------------------------------------
@@ -296,8 +316,9 @@ impl Game {
     }
 
     /// The hooks of e's enchantments, in order.
-    fn ench_hooks(&self, e: Id) -> Vec<&'static Hooks> {
-        self.e(e).enchantments.iter().filter_map(|x| x.get("hooks").and_then(Value::as_str)).map(cards::of).collect()
+    fn ench_hooks(&self, e: Id) -> Vec<&'static HookSet> {
+        let rs = self.rs;
+        self.e(e).enchantments.iter().filter_map(|x| x.get("hooks").and_then(Value::as_str)).map(|h| rs.hooks(h)).collect()
     }
 
     /// Calls matching "now" hooks (card and enchantment) at once. Used for
@@ -306,11 +327,11 @@ impl Game {
         let ty = ev.get("type").and_then(Value::as_str).unwrap_or("").to_string();
         for e in self.in_play() {
             if let Some(f) = self.hooks_of(e).now(&ty) {
-                self.from(e, |g| f(g, e, &mut *ev));
+                self.from(e, |g| g.fx_now(f, e, &mut *ev));
             }
             for hooks in self.ench_hooks(e) {
                 if let Some(f) = hooks.now(&ty) {
-                    self.from(e, |g| f(g, e, &mut *ev));
+                    self.from(e, |g| g.fx_now(f, e, &mut *ev));
                 }
             }
         }
@@ -318,31 +339,34 @@ impl Game {
 
     /// Runs queued triggers, then the death phase, until nothing is left.
     pub fn resolve(&mut self) {
+        self.end_by_script_error();
         let mut steps = 0;
+        let trap = self.n().trap;
         while !self.game_over {
             while !self.queue.is_empty() && !self.game_over {
                 steps += 1;
-                if steps > MAX_QUEUE_STEPS {
+                if steps > self.rs.queue_steps {
                     self.queue.clear();
                     break;
                 }
                 let q = self.queue.pop_front().unwrap();
                 let zone = self.e(q.me).zone;
-                if q.needs_in_play && !(zone == "PLAY" || zone == "SECRET") {
+                if q.needs_in_play && !(zone == "PLAY" || zone == trap) {
                     continue;
                 }
                 let me = q.me;
                 self.from(me, |g| match q.f {
-                    Trigger::On(f) => f(g, me, q.ev.unwrap()),
+                    Trigger::On(f) => g.fx_on(f, me, q.ev.unwrap()),
                     Trigger::Secret(s) => {
                         let ev = q.ev.unwrap();
-                        if g.secret_ready(me) && (s.cond)(g, me, ev) {
+                        if g.secret_ready(me) && s.cond.is_none_or(|c| g.fx_cond(c, me, ev)) && !g.game_over {
                             g.reveal(me);
-                            (s.effect)(g, me, ev);
+                            g.fx_on(s.effect, me, ev);
                         }
                     }
-                    Trigger::Deathrattle(f) => f(g, me),
+                    Trigger::Deathrattle(f) => g.fx_me(f, me),
                 });
+                self.end_by_script_error();
             }
             self.update_auras();
             if !self.death_phase() {
@@ -354,16 +378,17 @@ impl Game {
 
     fn death_phase(&mut self) -> bool {
         let mut dead = vec![];
+        let n = self.n();
         for p in &self.players {
             for &m in &p.board {
                 let e = self.e(m);
-                if e.health() <= 0 || truthy(e.tags.get("TO_DESTROY")) {
+                if e.health() <= 0 || truthy(e.tags.get(n.to_destroy)) {
                     dead.push(m);
                 }
             }
             if let Some(w) = p.weapon {
                 let e = self.e(w);
-                if e.tag("DURABILITY") <= 0 || truthy(e.tags.get("TO_DESTROY")) {
+                if e.tag(n.durability) <= 0 || truthy(e.tags.get(n.to_destroy)) {
                     dead.push(w);
                 }
             }
@@ -373,7 +398,7 @@ impl Game {
             let c = self.ctrl(d);
             if self.e(d).is_minion() {
                 let pos = self.players[c].board.iter().position(|&x| x == d).map_or(-1, |i| i as i64);
-                self.em(d).set_tag("DIED_POS", json!(pos));
+                self.em(d).set_tag(n.died_pos, json!(pos));
                 self.players[c].board.retain(|&x| x != d);
             } else {
                 self.players[c].weapon = None;
@@ -397,7 +422,7 @@ impl Game {
         let mut heroes_dead = vec![];
         for p in &self.players {
             let h = self.e(p.hero);
-            if h.health() <= 0 || truthy(h.tags.get("TO_DESTROY")) {
+            if h.health() <= 0 || truthy(h.tags.get(n.to_destroy)) {
                 heroes_dead.push(p.index);
             }
         }
@@ -440,7 +465,7 @@ impl Game {
                 let f = if final_pass { h.aura_final } else { h.aura };
                 if let Some(f) = f {
                     if self.e(e).zone == "PLAY" {
-                        self.from(e, |g| f(g, e));
+                        self.from(e, |g| g.fx_me(f, e));
                     }
                 }
             }
@@ -452,6 +477,7 @@ impl Game {
 
     pub fn aura_add(&mut self, t: Id, atk: i64, hp: i64, tags: &[(&str, Value)]) {
         let src = self.source_card.clone();
+        let n = self.n();
         let a = &mut self.em(t).aura;
         a.atk += atk;
         a.hp += hp;
@@ -460,7 +486,7 @@ impl Game {
             a.src.insert(src, json!([int(was.get(0)) + atk, int(was.get(1)) + hp]));
         }
         for (k, v) in tags {
-            if *k == "SPELLPOWER" || *k == "DOUBLE_HEAL_DAMAGE" {
+            if *k == n.spell_power || *k == n.power_multiplier {
                 let n = int(a.tags.get(*k)) + int(Some(v));
                 a.tags.insert(k.to_string(), json!(n));
             } else {
@@ -482,18 +508,19 @@ impl Game {
         let mut pre = json!({"type": "predamage", "source": src, "target": t, "amount": amount});
         self.emit_now(pre.as_object_mut().unwrap());
         let mut amount = int(pre.get("amount"));
-        if amount <= 0 || self.e(t).has("IMMUNE") {
+        let n = self.n();
+        if amount <= 0 || self.e(t).has(n.immune) {
             return 0;
         }
-        if self.e(t).has("DIVINE_SHIELD") {
-            self.em(t).erase_tag("DIVINE_SHIELD");
+        if self.e(t).has(n.barrier) {
+            self.em(t).erase_tag(n.barrier);
             self.log_event(json!({"type": "divine_shield_lost", "target": t}));
             return 0;
         }
         if self.e(t).is_hero() {
-            let armor = self.e(t).tag("ARMOR");
+            let armor = self.e(t).tag(n.armor);
             let absorbed = armor.min(amount);
-            self.em(t).set_tag("ARMOR", json!(armor - absorbed));
+            self.em(t).set_tag(n.armor, json!(armor - absorbed));
             amount -= absorbed;
             if amount <= 0 {
                 self.log_event(json!({"type": "armor_lost", "target": t, "amount": absorbed}));
@@ -501,8 +528,8 @@ impl Game {
             }
         }
         self.em(t).damage += amount;
-        if src != NONE && self.e(src).is_minion() && self.e(src).has("STEALTH") {
-            self.em(src).erase_tag("STEALTH");
+        if src != NONE && self.e(src).is_minion() && self.e(src).has(n.stealth) {
+            self.em(src).erase_tag(n.stealth);
         }
         let player = self.ctrl(t);
         self.emit(json!({"type": "damage", "source": src, "target": t, "amount": amount, "player": player}));
@@ -513,7 +540,7 @@ impl Game {
         if !self.alive_in_play(t) || amount <= 0 {
             return 0;
         }
-        if src != NONE && self.e(self.hero(self.ctrl(src))).has("HEAL_IS_DAMAGE") {
+        if src != NONE && self.e(self.hero(self.ctrl(src))).has(self.n().heal_is_damage) {
             return self.damage(src, t, amount);
         }
         let healed = amount.min(self.e(t).damage);
@@ -527,12 +554,13 @@ impl Game {
 
     pub fn destroy(&mut self, e: Id) {
         if self.alive_in_play(e) {
-            self.em(e).set_tag("TO_DESTROY", json!(true));
+            let t = self.n().to_destroy;
+            self.em(e).set_tag(t, json!(true));
         }
     }
 
     pub fn summon(&mut self, p: usize, card_id: &str, pos: i64) -> Id {
-        if self.players[p].board.len() >= MAX_BOARD {
+        if self.players[p].board.len() >= self.rs.board {
             return NONE;
         }
         let e = self.new_entity(card_id, p);
@@ -542,11 +570,12 @@ impl Game {
     /// Puts an existing entity (for example a card from the hand) onto the board as a summon.
     pub fn summon_entity(&mut self, e: Id, pos: i64) -> Id {
         let c = self.ctrl(e);
-        if self.players[c].board.len() >= MAX_BOARD {
+        if self.players[c].board.len() >= self.rs.board {
             return NONE;
         }
         self.place_on_board(e, pos);
-        self.em(e).give_tag("EXHAUSTED", false);
+        let t = self.n().exhausted;
+        self.em(e).give_tag(t, false);
         let card = self.e(e).card_id.clone();
         self.emit(json!({"type": "summon", "entity": e, "player": c, "card": card}));
         self.emit(json!({"type": "after_summon", "entity": e, "player": c, "card": card}));
@@ -557,14 +586,18 @@ impl Game {
         let mut out = vec![];
         for _ in 0..count {
             let Some(e) = self.players[p].deck.pop() else {
+                let (on, first, step) = self.rs.fatigue;
+                if !on {
+                    continue;
+                }
                 self.players[p].fatigue += 1;
-                let f = self.players[p].fatigue;
+                let f = first + (self.players[p].fatigue - 1) * step;
                 self.log_event(json!({"type": "fatigue", "player": p, "amount": f}));
                 self.damage(NONE, self.players[p].hero, f);
                 continue;
             };
             let card = self.e(e).card_id.clone();
-            if self.players[p].hand.len() >= MAX_HAND {
+            if self.players[p].hand.len() >= self.rs.hand {
                 self.em(e).zone = "GRAVEYARD";
                 self.log_event(json!({"type": "burn", "player": p, "entity": e, "card": card}));
                 continue;
@@ -583,7 +616,7 @@ impl Game {
         let Some(i) = pl.deck.iter().position(|&x| x == e) else { return };
         pl.deck.remove(i);
         let card = self.e(e).card_id.clone();
-        if self.players[p].hand.len() >= MAX_HAND {
+        if self.players[p].hand.len() >= self.rs.hand {
             self.em(e).zone = "GRAVEYARD";
             self.log_event(json!({"type": "burn", "player": p, "entity": e, "card": card}));
             return;
@@ -594,7 +627,7 @@ impl Game {
     }
 
     pub fn add_to_hand(&mut self, p: usize, card_id: &str) -> Id {
-        if self.players[p].hand.len() >= MAX_HAND {
+        if self.players[p].hand.len() >= self.rs.hand {
             return NONE;
         }
         let e = self.new_entity(card_id, p);
@@ -645,7 +678,8 @@ impl Game {
     }
 
     pub fn silence(&mut self, e: Id) {
-        self.em(e).silence();
+        let tags = &self.rs.names.silenced;
+        self.em(e).silence(tags);
         self.log_event(json!({"type": "silence", "target": e}));
     }
 
@@ -653,11 +687,11 @@ impl Game {
         if !self.alive_in_play(e) {
             return;
         }
-        let cur = self.current;
+        let (cur, n) = (self.current, self.n());
         let x = self.em(e);
-        x.set_tag("FROZEN", json!(true));
+        x.set_tag(n.frozen, json!(true));
         if x.controller == cur {
-            x.set_tag("FROZEN_THIS_TURN", json!(true));
+            x.set_tag(n.frozen_this_turn, json!(true));
         }
         self.log_event(json!({"type": "freeze", "target": e}));
     }
@@ -667,11 +701,11 @@ impl Game {
         let Some(i) = self.players[c].board.iter().position(|&x| x == e) else { return NONE };
         let n = self.new_entity(card_id, c);
         self.players[c].board[i] = n;
-        let order = self.e(e).play_order;
+        let (order, t) = (self.e(e).play_order, self.n().exhausted);
         let ne = self.em(n);
         ne.zone = "PLAY";
         ne.play_order = order;
-        ne.give_tag("EXHAUSTED", false);
+        ne.give_tag(t, false);
         self.em(e).zone = "SETASIDE";
         self.log_event(json!({"type": "transform", "from": e, "to": n, "card": card_id}));
         n
@@ -697,16 +731,17 @@ impl Game {
             return;
         }
         self.players[c].board.retain(|&x| x != e);
-        if self.players[p].board.len() >= MAX_BOARD {
+        if self.players[p].board.len() >= self.rs.board {
             self.em(e).zone = "GRAVEYARD";
             self.log_event(json!({"type": "destroy", "target": e}));
             return;
         }
         self.em(e).controller = p;
         self.players[p].board.push(e);
+        let n = self.n();
         let x = self.em(e);
-        x.give_tag("EXHAUSTED", false);
-        x.set_tag("ATTACKS", json!(0));
+        x.give_tag(n.exhausted, false);
+        x.set_tag(n.attacks, json!(0));
         self.log_event(json!({"type": "take_control", "target": e, "player": p}));
     }
 
@@ -729,17 +764,18 @@ impl Game {
     }
 
     pub fn gain_armor(&mut self, p: usize, n: i64) {
-        let h = self.hero(p);
-        let a = self.e(h).tag("ARMOR");
-        self.em(h).set_tag("ARMOR", json!(a + n));
+        let (h, t) = (self.hero(p), self.n().armor);
+        let a = self.e(h).tag(t);
+        self.em(h).set_tag(t, json!(a + n));
         self.log_event(json!({"type": "armor", "player": p, "amount": n}));
     }
 
     /// Full crystals by default. empty=true adds empty crystals (Wild Growth).
     pub fn gain_mana(&mut self, p: usize, n: i64, empty: bool) {
+        let max = self.rs.max_mana;
         let pl = &mut self.players[p];
         for _ in 0..n {
-            if pl.max_mana < MAX_MANA {
+            if pl.max_mana < max {
                 pl.max_mana += 1;
                 if !empty {
                     pl.mana += 1;
@@ -757,11 +793,12 @@ impl Game {
         if k != "SPELL" && k != "HERO_POWER" {
             return 1;
         }
-        1 << int(self.e(self.hero(self.ctrl(me))).aura.tags.get("DOUBLE_HEAL_DAMAGE"))
+        1 << int(self.e(self.hero(self.ctrl(me))).aura.tags.get(self.n().power_multiplier)).clamp(0, 20)
     }
 
     pub fn spell_dmg(&self, me: Id, n: i64) -> i64 {
-        let sp: i64 = self.players[self.ctrl(me)].board.iter().map(|&m| self.e(m).spellpower()).sum();
+        let t = self.n().spell_power;
+        let sp: i64 = self.players[self.ctrl(me)].board.iter().map(|&m| self.e(m).spellpower(t)).sum();
         (n + sp) * self.velen(me)
     }
 
@@ -824,7 +861,7 @@ impl Game {
         Game::shuffle(arr, &mut self.rng);
     }
 
-    fn spec_ok(&self, src: Id, spec: &Spec, t: Id) -> bool {
+    fn spec_ok(&self, src: Id, spec: &TSpec, t: Id) -> bool {
         let te = self.e(t);
         let mine = te.controller == self.ctrl(src);
         let base = match spec.base {
@@ -836,25 +873,25 @@ impl Game {
             Base::FriendlyChar => mine,
             Base::EnemyHero => te.is_hero() && !mine,
         };
-        base && spec.pred.is_none_or(|p| p(self, src, t))
+        base && spec.pred.is_none_or(|p| self.fx_pred(p, src, t))
     }
 
     /// Characters that src may target. Enemy Stealth is never targetable;
     /// Elusive blocks spells and hero powers (is_spell=true).
-    pub fn targets(&self, src: Id, spec: &Spec, is_spell: bool) -> Vec<Id> {
-        let me = self.ctrl(src);
+    pub fn targets(&self, src: Id, spec: &TSpec, is_spell: bool) -> Vec<Id> {
+        let (me, n) = (self.ctrl(src), self.n());
         self.all_chars()
             .into_iter()
             .filter(|&t| {
                 let te = self.e(t);
-                !(te.controller != me && te.has("STEALTH")) && !(is_spell && te.has("ELUSIVE")) && self.spec_ok(src, spec, t)
+                !(te.controller != me && te.has(n.stealth)) && !(is_spell && te.has(n.spellproof)) && self.spec_ok(src, spec, t)
             })
             .collect()
     }
 
     pub fn secret_ready(&self, me: Id) -> bool {
         let e = self.e(me);
-        e.zone == "SECRET" && self.current != e.controller
+        e.zone == self.n().trap && self.current != e.controller
     }
 
     pub fn reveal(&mut self, me: Id) {
@@ -892,8 +929,8 @@ impl Game {
     pub fn cost(&self, e: Id) -> i64 {
         let x = self.e(e);
         let mut c = x.card.cost;
-        if let Some(f) = cards::of(&x.card_id).cost_mod {
-            c += f(self, e);
+        if let Some(f) = self.rs.hooks(&x.card_id).cost_mod {
+            c += self.fx_cost_mod(f, e);
         }
         for ench in &x.enchantments {
             c += int(ench.get("cost"));
@@ -901,7 +938,7 @@ impl Game {
         for src in self.in_play() {
             if let Some(f) = self.hooks_of(src).cost_aura {
                 if self.e(src).zone == "PLAY" {
-                    c = f(self, src, e, c);
+                    c = self.fx_cost_aura(f, src, e, c);
                 }
             }
         }
@@ -946,11 +983,46 @@ impl Game {
 
     /// Deep copy for look-ahead (the bot). Same entity ids and RNG state; history
     /// and event log are not copied. Call only between actions (empty queue).
+    /// The copy shares the card scripts' interpreter (crate::lua); `deep_clone`
+    /// gives an independent one.
     pub fn clone_state(&self) -> Game {
-        Game { rng: self.rng.clone(), players: self.players.clone(), entities: self.entities.clone(), turn: self.turn,
-            current: self.current, phase: self.phase, pending: self.pending.clone(), game_over: self.game_over,
-            winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(), next_id: self.next_id,
-            next_order: self.next_order, source_card: String::new(), source_id: NONE, start_decks: [vec![], vec![]] }
+        Game { rs: self.rs, rng: self.rng.clone(), players: self.players.clone(), entities: self.entities.clone(),
+            turn: self.turn, current: self.current, phase: self.phase, pending: self.pending.clone(),
+            game_over: self.game_over, winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(),
+            next_id: self.next_id, next_order: self.next_order, source_card: String::new(), source_id: NONE,
+            start_decks: [vec![], vec![]], lua: self.lua.share(), script_error: self.script_error.clone() }
+    }
+
+    /// clone_state with its own copy of the scripts' interpreter (a game of its own: `new {copy}`).
+    pub fn deep_clone(&self) -> Game {
+        let mut g = self.clone_state();
+        g.lua = self.lua.deep();
+        g
+    }
+
+    /// Faceless Manipulator: transforms me into a copy of t, with t's damage,
+    /// enchantments, keywords and Silence. Auras are not copied; the copy is a new
+    /// minion (summoning sickness, not Frozen).
+    pub fn copy_minion(&mut self, me: Id, t: Id) -> Id {
+        let card = self.e(t).card_id.clone();
+        let n = self.transform(me, &card);
+        if n == NONE {
+            return NONE;
+        }
+        let names = self.n();
+        if self.e(t).silenced {
+            self.em(n).silence(&names.silenced);
+        }
+        let src = self.e(t).clone();
+        let ne = self.em(n);
+        ne.tags = src.tags;
+        for k in [names.frozen, names.frozen_this_turn, names.attacks, names.to_destroy, names.died_pos] {
+            ne.tags.remove(k);
+        }
+        ne.give_tag(names.exhausted, false);
+        ne.enchantments = src.enchantments;
+        ne.damage = src.damage;
+        n
     }
 
     // --- serialization ----------------------------------------------------------

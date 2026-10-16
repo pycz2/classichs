@@ -4,15 +4,16 @@
 
 use crate::arena_draft::ArenaDraft;
 use crate::bot;
-use crate::card_db;
 use crate::deck::Deck;
 use crate::entity::{int, Id};
 use crate::json::stringify;
 use crate::missions;
+use crate::pack;
+use crate::ruleset::{self, Ruleset};
 use crate::scenario;
 use crate::state::{Ev, Game};
 use serde_json::{json, Map, Value};
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -25,6 +26,8 @@ struct Slot {
 #[derive(Default)]
 pub struct Engine {
     games: HashMap<String, Slot>,
+    /// Packs loaded with `load_pack`, by rules_hash (the built-in Classic one is always there).
+    packs: BTreeMap<String, &'static Ruleset>,
 }
 
 fn err(msg: impl Into<String>) -> Value {
@@ -74,6 +77,48 @@ impl Engine {
         self.games.insert(id.to_string(), Slot { game, mission: None });
     }
 
+    /// The ruleset a request names with `pack` (a rules_hash); the built-in Classic one without it.
+    fn ruleset(&self, req: &Value) -> Result<&'static Ruleset, Value> {
+        match req.get("pack") {
+            None | Some(Value::Null) => Ok(ruleset::classic()),
+            Some(Value::String(h)) if *h == ruleset::classic().rules_hash => Ok(ruleset::classic()),
+            // a pack any Engine of this process loaded will do
+            Some(Value::String(h)) => {
+                self.packs.get(h).copied().or_else(|| ruleset::get(h)).ok_or_else(|| err(format!("unknown pack {h}")))
+            }
+            Some(_) => Err(err("bad pack")),
+        }
+    }
+
+    /// Loads a pack (rust API): `.cardpack` bytes; returns its rules_hash.
+    pub fn load_pack_bytes(&mut self, bytes: &[u8]) -> Result<&'static Ruleset, String> {
+        let rs = ruleset::load(&pack::read_zip(bytes)?)?;
+        self.packs.insert(rs.rules_hash.clone(), rs);
+        Ok(rs)
+    }
+
+    fn load_pack(&mut self, req: &Value) -> Value {
+        let files = if let Some(d) = req.get("data").and_then(Value::as_str) {
+            pack::base64(d).and_then(|b| pack::read_zip(&b))
+        } else if let Some(p) = req.get("path").and_then(Value::as_str) {
+            let p = std::path::Path::new(p);
+            if p.is_dir() {
+                pack::read_dir(p)
+            } else {
+                std::fs::read(p).map_err(|e| format!("{}: {e}", p.display())).and_then(|b| pack::read_zip(&b))
+            }
+        } else {
+            Err("load_pack needs data (base64 of a .cardpack) or path".into())
+        };
+        match files.and_then(|f| ruleset::load(&f)) {
+            Ok(rs) => {
+                self.packs.insert(rs.rules_hash.clone(), rs);
+                json!({"ok": true, "pack": rs.rules_hash, "id": rs.id, "version": rs.version})
+            }
+            Err(e) => err(format!("bad pack: {e}")),
+        }
+    }
+
     pub fn handle(&mut self, req: &Value) -> Value {
         if !req.is_object() {
             return err("not an object");
@@ -86,21 +131,41 @@ impl Engine {
         let view = number(req.get("view")).unwrap_or(-1);
         let op = req.get("op").and_then(Value::as_str).unwrap_or("");
         match op {
-            "ping" => json!({"ok": true, "version": VERSION, "engine": "classichs-engine", "data": card_db::data_hash()}),
-            "data_hash" => json!({"ok": true, "hash": card_db::data_hash()}),
-            "hooks" => {
-                let all: Map<String, Value> =
-                    crate::cards::all_ids().into_iter().map(|id| (id.to_string(), crate::cards::summary(id))).collect();
-                json!({"ok": true, "hooks": all})
+            "ping" => json!({"ok": true, "version": VERSION, "engine": "classichs-engine", "data": ruleset::classic().data_hash}),
+            "load_pack" => self.load_pack(req),
+            "packs" => {
+                let mut list = vec![ruleset::classic()];
+                list.extend(self.packs.values().filter(|r| !r.builtin));
+                let list: Vec<Value> = list
+                    .iter()
+                    .map(|r| json!({"pack": r.rules_hash, "id": r.id, "version": r.version, "builtin": r.builtin}))
+                    .collect();
+                json!({"ok": true, "packs": list})
             }
-            "validate" => match Deck::from_value(req.get("deck").unwrap_or(&Value::Null)) {
-                None => err("not a deck"),
-                Some(d) => {
-                    let why = d.validate();
-                    if why.is_empty() { json!({"ok": true}) } else { err(why) }
+            "data_hash" | "hooks" | "validate" | "draft" => {
+                let rs = match self.ruleset(req) {
+                    Ok(r) => r,
+                    Err(e) => return e,
+                };
+                match op {
+                    "data_hash" => json!({"ok": true, "hash": rs.data_hash}),
+                    "hooks" => {
+                        let mut ids: Vec<&String> = rs.hooks.keys().collect();
+                        ids.sort();
+                        let all: Map<String, Value> =
+                            ids.into_iter().map(|id| (id.clone(), crate::cards::summary(rs.hooks(id)))).collect();
+                        json!({"ok": true, "hooks": all})
+                    }
+                    "validate" => match Deck::from_value_in(rs, req.get("deck").unwrap_or(&Value::Null)) {
+                        None => err("not a deck"),
+                        Some(d) => {
+                            let why = d.validate_in(rs);
+                            if why.is_empty() { json!({"ok": true}) } else { err(why) }
+                        }
+                    },
+                    _ => draft(rs, req),
                 }
-            },
-            "draft" => draft(req),
+            }
             "new" => self.new_game(&id, req, view),
             "drop" => {
                 self.games.remove(&id);
@@ -121,27 +186,31 @@ impl Engine {
         if id.is_empty() {
             return fail("bad new request");
         }
+        let rs = match self.ruleset(req) {
+            Ok(r) => r,
+            Err(e) => return fail(e["error"].as_str().unwrap_or("bad pack")),
+        };
         let mut mission = None;
         let game = if let Some(src) = req.get("copy").and_then(Value::as_str) {
             match self.games.get(src) {
                 Some(s) => {
                     mission = s.mission;
-                    s.game.clone_state()
+                    s.game.deep_clone()
                 }
                 None => return fail("no such game"),
             }
         } else if let Some(st) = req.get("state") {
-            match crate::view::from_snapshot(st) {
+            match crate::view::from_snapshot_in(rs, st) {
                 Ok(g) => g,
                 Err(e) => return fail(&e),
             }
         } else if let Some(sc) = req.get("scenario") {
-            match scenario::build(sc) {
+            match scenario::build_in(rs, sc) {
                 Ok(g) => g,
                 Err(e) => return fail(&format!("scenario: {e}")),
             }
         } else if let Some(n) = number(req.get("mission")) {
-            match missions::start(n as usize) {
+            match missions::start_in(rs, n as usize) {
                 Ok(g) => {
                     mission = Some(n as usize);
                     g
@@ -157,12 +226,12 @@ impl Engine {
             };
             let mut pair = vec![];
             for d in decks {
-                match Deck::from_value(d) {
-                    Some(deck) if !check || deck.validate().is_empty() => pair.push(deck),
+                match Deck::from_value_in(rs, d) {
+                    Some(deck) if !check || deck.validate_in(rs).is_empty() => pair.push(deck),
                     _ => return fail("bad deck"),
                 }
             }
-            Game::new(&pair[0].hero, &pair[0].cards, &pair[1].hero, &pair[1].cards, seed, first, true)
+            Game::new_in(rs, &pair[0].hero, &pair[0].cards, &pair[1].hero, &pair[1].cards, seed, first, true)
         };
         let mut reply = state(id, &game);
         let start: Vec<Ev> = game.history.first().map_or(&Value::Null, |h| &h["events"])
@@ -235,31 +304,35 @@ fn game_op(op: &str, id: &str, slot: &mut Slot, req: &Value, view: i64) -> Value
         "dump" => json!({"ok": true, "game": id, "scenario": scenario::dump(g)}),
         _ => {
             // end_turn_block
-            let block = match slot.mission.and_then(missions::get) {
+            let (reason, block) = match slot.mission.and_then(|n| g.rs.mission(n)) {
                 Some(m) if (0..=1).contains(&player) => missions::end_turn_block(m, g, player as usize),
-                _ => "",
+                _ => ("", ""),
             };
-            json!({"ok": true, "game": id, "block": block, "mission": slot.mission})
+            json!({"ok": true, "game": id, "block": block, "reason": reason, "mission": slot.mission})
         }
     }
 }
 
 /// The referee's state reply.
 fn state(id: &str, g: &Game) -> Value {
-    json!({"ok": true, "game": id, "hash": g.state_hash(), "over": g.game_over, "winner": g.winner, "turn": g.turn,
-        "current": g.current, "phase": g.phase})
+    let mut r = json!({"ok": true, "game": id, "hash": g.state_hash(), "over": g.game_over, "winner": g.winner,
+        "turn": g.turn, "current": g.current, "phase": g.phase});
+    if let Some(e) = g.script_error.get() {
+        r["script_error"] = json!(e);
+    }
+    r
 }
 
 /// The Arena draft from its seed and picks (stateless: the caller keeps them).
-fn draft(req: &Value) -> Value {
+fn draft(rs: &'static Ruleset, req: &Value) -> Value {
     let Some(seed) = number(req.get("seed")) else { return err("no seed") };
-    let mut d = ArenaDraft::new(seed);
-    if let Some(h) = number(req.get("hero")).filter(|h| (0..3).contains(h)) {
+    let mut d = ArenaDraft::new_in(rs, seed);
+    if let Some(h) = number(req.get("hero")).filter(|h| (0..d.heroes.len() as i64).contains(h)) {
         d.choose_hero(h as usize);
         if let Some(picks) = req.get("picks").and_then(Value::as_array) {
             for p in picks {
                 match number(Some(p)) {
-                    Some(i) if (0..=2).contains(&i) => d.pick(i as usize),
+                    Some(i) if (0..rs.arena.offer as i64).contains(&i) => d.pick(i as usize),
                     _ => return err("bad pick"),
                 }
             }
@@ -278,7 +351,8 @@ fn visible(g: &Game, id: Id, viewer: i64) -> bool {
     let chooser = g.pending.as_ref().is_some_and(|p| p.player as i64 == viewer && p.options.contains(&id));
     match e.zone {
         "DECK" => chooser,
-        "HAND" | "SECRET" => mine,
+        "HAND" => mine,
+        z if z == g.n().trap => mine,
         _ => true,
     }
 }
@@ -328,7 +402,7 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
     for (i, p) in g.players.iter().enumerate() {
         let pd = &mut d["players"][i];
         pd["deck_count"] = json!(p.deck.len());
-        pd["spell_damage"] = json!(p.board.iter().map(|&m| g.e(m).spellpower()).sum::<i64>());
+        pd["spell_damage"] = json!(p.board.iter().map(|&m| g.e(m).spellpower(g.n().spell_power)).sum::<i64>());
         if view >= 0 {
             pd["deck"] = json!([]);
         }

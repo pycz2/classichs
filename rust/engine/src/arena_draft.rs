@@ -1,45 +1,33 @@
-//! The Arena draft as in Hearthstone in 2014 (game/arena_draft.gd): three heroes
-//! of different classes, then 30 picks of three cards of one rarity tier.
+//! The Arena draft (game/arena_draft.gd) by a ruleset's `modes.arena`
+//! (docs/packs/rules.md): champions of different classes, then picks of cards
+//! of one rarity tier. Classic: three heroes, 30 picks of three cards, 2014 odds.
 
-use crate::card_db;
-use crate::deck;
 use crate::rng::Rng;
-
-pub const PICKS: usize = 30;
-/// Pick indexes that are Rare or better.
-pub const SPECIAL: [usize; 4] = [0, 9, 19, 29];
-pub const ODDS: [(&str, f64); 4] = [("common", 0.765), ("rare", 0.14), ("epic", 0.075), ("legendary", 0.02)];
-pub const SPECIAL_ODDS: [(&str, f64); 3] = [("rare", 0.65), ("epic", 0.27), ("legendary", 0.08)];
-pub const CLASS_WEIGHT: f64 = 1.5;
-pub const CLASSES: [&str; 9] = ["DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR"];
+use crate::ruleset::{self, Ruleset};
 
 pub struct ArenaDraft {
+    pub rs: &'static Ruleset,
     pub rng: Rng,
-    /// The three offered.
+    /// The champions offered.
     pub heroes: Vec<String>,
     pub hero: String,
     pub cards: Vec<String>,
-    /// The three cards of the current pick.
+    /// The cards of the current pick.
     pub offer: Vec<String>,
 }
 
-/// The rarity tier of a card: Basic counts as common.
-pub fn tier(id: &str) -> String {
-    let r = &card_db::card(id).rarity;
-    if r.is_empty() || r == "FREE" || r == "COMMON" { "common".into() } else { r.to_lowercase() }
-}
-
-/// The cards of a tier for a class with their weights.
-pub fn pool(card_class: &str, t: &str) -> Vec<(String, f64)> {
+/// The cards of a tier for a class with their weights (class : neutral = class_weight : neutral_weight).
+pub fn pool(rs: &Ruleset, card_class: &str, t: &str) -> Vec<(String, f64)> {
+    let cw = rs.arena.class_weight as f64 / rs.arena.neutral_weight.max(1) as f64;
     let mut out = vec![];
-    for id in card_db::collectible() {
-        let c = card_db::card(id);
-        if c.kind == "HERO" || tier(id) != t {
+    for id in &rs.arena_pool {
+        let c = rs.card(id);
+        if c.kind == "HERO" || rs.tier(id) != t {
             continue;
         }
         if c.card_class == card_class {
-            out.push((id.clone(), CLASS_WEIGHT));
-        } else if c.card_class == "NEUTRAL" {
+            out.push((id.clone(), cw));
+        } else if rs.is_neutral(&c.card_class) {
             out.push((id.clone(), 1.0));
         }
     }
@@ -47,12 +35,17 @@ pub fn pool(card_class: &str, t: &str) -> Vec<(String, f64)> {
 }
 
 impl ArenaDraft {
+    /// A draft of the built-in Classic ruleset.
     pub fn new(seed: i64) -> ArenaDraft {
-        let mut d = ArenaDraft { rng: Rng::new(seed as u64), heroes: vec![], hero: String::new(), cards: vec![], offer: vec![] };
-        let mut classes = CLASSES.to_vec();
-        for _ in 0..3 {
+        ArenaDraft::new_in(ruleset::classic(), seed)
+    }
+
+    pub fn new_in(rs: &'static Ruleset, seed: i64) -> ArenaDraft {
+        let mut d = ArenaDraft { rs, rng: Rng::new(seed as u64), heroes: vec![], hero: String::new(), cards: vec![], offer: vec![] };
+        let mut classes: Vec<&str> = rs.arena.classes.iter().map(String::as_str).filter(|c| rs.champion(c).is_some()).collect();
+        for _ in 0..rs.arena.champions_offered.min(classes.len()) {
             let i = d.rng.randi_range(0, classes.len() as i64 - 1) as usize;
-            d.heroes.push(deck::hero(classes.remove(i)).unwrap().to_string());
+            d.heroes.push(rs.champion(classes.remove(i)).unwrap().to_string());
         }
         d
     }
@@ -62,7 +55,7 @@ impl ArenaDraft {
         self.next();
     }
 
-    /// Takes card i of the offer; the other two are gone.
+    /// Takes card i of the offer; the others are gone.
     pub fn pick(&mut self, i: usize) {
         if self.done() || i >= self.offer.len() {
             return;
@@ -72,34 +65,35 @@ impl ArenaDraft {
     }
 
     pub fn done(&self) -> bool {
-        self.cards.len() >= PICKS
+        self.cards.len() >= self.rs.arena.picks
     }
 
     fn next(&mut self) {
         self.offer.clear();
         if !self.done() {
-            let t = self.roll_tier(SPECIAL.contains(&self.cards.len()));
+            let t = self.roll_tier(self.rs.arena.special_picks.contains(&self.cards.len()));
             self.offer = self.roll_offer(t);
         }
     }
 
     pub fn roll_tier(&mut self, special: bool) -> &'static str {
-        let odds: &[(&'static str, f64)] = if special { &SPECIAL_ODDS } else { &ODDS };
+        let a = &self.rs.arena;
+        let odds = if special { &a.special_tier_weights } else { &a.tier_weights };
         let mut x = self.rng.randf();
-        for (t, p) in odds {
-            x -= p;
+        for (t, w) in odds {
+            x -= *w as f64 / 1000.0;
             if x < 0.0 {
                 return t;
             }
         }
-        odds[odds.len() - 1].0
+        odds.last().map_or("common", |o| o.0)
     }
 
-    /// Three different cards of tier t for the hero, drawn by weight.
+    /// `offer` different cards of tier t for the hero, drawn by weight.
     pub fn roll_offer(&mut self, t: &str) -> Vec<String> {
-        let mut left = pool(deck::card_class(&self.hero).unwrap_or(""), t);
+        let mut left = pool(self.rs, self.rs.class_of_champion(&self.hero).unwrap_or(""), t);
         let mut out = vec![];
-        while out.len() < 3 && !left.is_empty() {
+        while out.len() < self.rs.arena.offer && !left.is_empty() {
             let mut total = 0.0;
             for it in &left {
                 total += it.1;

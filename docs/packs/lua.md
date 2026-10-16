@@ -317,8 +317,8 @@ together with the game (for the bot's look-ahead) and both copies continue ident
 
 ## Examples
 
-These are written against the engine functions planned for the pack format
-(`g.minions`, `g.damage`, ...; see the next section). Hook names follow the
+These are written against a toy engine with functions like the real one's
+(`g.minions`, `g.damage`, ...; the real `g` is in [api.md](api.md)). Hook names follow the
 plan: `spell`, `battlecry`, `deathrattle`, `on = {event = fn}`, `aura`, ...
 
 **Deal 4 damage to all enemy minions** (a spell):
@@ -377,8 +377,8 @@ These examples (with a toy engine) are tests: `rust/script/tests/host.rs`.
 
 ## Engine functions (`g`)
 
-*The engine API for scripts is documented in the next phase (engine with packs);
-this section explains how engine functions appear to scripts.*
+*The engine's functions, the hooks a card can have and the events they get are in
+[api.md](api.md); this section explains how engine functions appear to scripts.*
 
 - The engine registers its functions in the interpreter before the pack's files
   are loaded. They are built-in functions like the standard library: some are globals,

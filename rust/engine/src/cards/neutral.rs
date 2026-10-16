@@ -1,4 +1,5 @@
-//! Neutral cards and their tokens (cards/neutral.gd).
+//! Neutral cards and their tokens (cards/neutral.gd). The Basic ones are Lua now
+//! (packs/classic/scripts/neutral.lua).
 
 use super::*;
 use crate::entity::NONE;
@@ -27,76 +28,11 @@ const HORDE: [&str; 6] = ["VAN_CS2_121", "VAN_CS2_179", "VAN_EX1_023", "VAN_EX1_
 const INVENTIONS: [&str; 4] = ["Mekka1", "Mekka2", "Mekka3", "Mekka4"];
 
 pub fn register(r: &mut Registry) {
-    basic(r);
     common(r);
     rare(r);
     epic(r);
     legendary(r);
     legendary_tokens(r);
-}
-
-fn basic(r: &mut Registry) {
-    r.insert("VAN_CS2_189", Hooks { target: ANY, battlecry: Some(|g, me, t| { g.damage(me, t, 1); }), ..d() }); // Elven Archer
-    r.insert("VAN_EX1_508", Hooks { // Grimscale Oracle: ALL other Murlocs have +1 Attack.
-        aura: Some(|g, me| {
-            for m in g.all_minions() {
-                if is_murloc_other(g, me, m) {
-                    g.aura_add(m, 1, 0, &[]);
-                }
-            }
-        }),
-        ..d()
-    });
-    r.insert("VAN_EX1_011", Hooks { target: ANY, battlecry: Some(|g, me, t| { g.heal(me, t, g.heal_amt(me, 2)); }), ..d() }); // Voodoo Doctor
-    r.insert("VAN_EX1_066", Hooks { battlecry: Some(|g, me, _| g.destroy(g.weapon_of(g.foe(me)))), ..d() }); // Acidic Swamp Ooze
-    r.insert("VAN_EX1_506", Hooks { battlecry: Some(|g, me, _| { g.summon_right(me, "VAN_EX1_506a"); }), ..d() }); // Murloc Tidehunter
-    r.insert("VAN_EX1_015", Hooks { battlecry: Some(|g, me, _| { g.draw(g.ctrl(me), 1); }), ..d() }); // Novice Engineer
-    r.insert("VAN_CS2_147", Hooks { battlecry: Some(|g, me, _| { g.draw(g.ctrl(me), 1); }), ..d() }); // Gnomish Inventor
-    r.insert("VAN_CS2_141", Hooks { target: ANY, battlecry: Some(|g, me, t| { g.damage(me, t, 1); }), ..d() }); // Ironforge Rifleman
-    r.insert("VAN_CS2_122", Hooks { // Raid Leader
-        aura: Some(|g, me| {
-            for m in g.others(me) {
-                g.aura_add(m, 1, 0, &[]);
-            }
-        }),
-        ..d()
-    });
-    r.insert("VAN_CS2_196", Hooks { battlecry: Some(|g, me, _| { g.summon_right(me, "VAN_CS2_boar"); }), ..d() }); // Razorfen Hunter
-    r.insert("VAN_EX1_019", Hooks { target: FRIENDLY_MINION, battlecry: Some(|g, _, t| g.buff(t, 1, 1, false)), ..d() }); // Shattered Sun Cleric
-    r.insert("VAN_EX1_025", Hooks { battlecry: Some(|g, me, _| { g.summon_right(me, "EX1_025t"); }), ..d() }); // Dragonling Mechanic
-    r.insert("VAN_DS1_055", Hooks { // Darkscale Healer
-        battlecry: Some(|g, me, _| {
-            for c in g.chars(g.ctrl(me)) {
-                g.heal(me, c, g.heal_amt(me, 2));
-            }
-        }),
-        ..d()
-    });
-    r.insert("VAN_CS2_226", Hooks { // Frostwolf Warlord
-        battlecry: Some(|g, me, _| {
-            let n = g.others(me).len() as i64;
-            g.buff(me, n, n, false);
-        }),
-        ..d()
-    });
-    r.insert("VAN_EX1_399", Hooks { // Gurubashi Berserker
-        on: vec![("damage", |g, me, ev| {
-            if g.ev_i(ev, "target") == me {
-                g.buff(me, 3, 0, false);
-            }
-        })],
-        ..d()
-    });
-    r.insert("VAN_EX1_593", Hooks { battlecry: Some(|g, me, _| { g.damage(me, g.hero(g.foe(me)), 3); }), ..d() }); // Nightblade
-    r.insert("VAN_CS2_150", Hooks { target: ANY, battlecry: Some(|g, me, t| { g.damage(me, t, 2); }), ..d() }); // Stormpike Commando
-    r.insert("VAN_CS2_222", Hooks { // Stormwind Champion
-        aura: Some(|g, me| {
-            for m in g.others(me) {
-                g.aura_add(m, 1, 1, &[]);
-            }
-        }),
-        ..d()
-    });
 }
 
 fn common(r: &mut Registry) {
@@ -441,30 +377,6 @@ fn rare(r: &mut Registry) {
         }),
         ..d()
     });
-}
-
-/// Faceless Manipulator: transforms me into a copy of t, with t's damage,
-/// enchantments, keywords and Silence. Auras are not copied; the copy is a new
-/// minion (summoning sickness, not Frozen).
-pub fn copy_minion(g: &mut Game, me: Id, t: Id) -> Id {
-    let card = g.e(t).card_id.clone();
-    let n = g.transform(me, &card);
-    if n == NONE {
-        return NONE;
-    }
-    if g.e(t).silenced {
-        g.em(n).silence();
-    }
-    let src = g.e(t).clone();
-    let ne = g.em(n);
-    ne.tags = src.tags;
-    for k in ["FROZEN", "FROZEN_THIS_TURN", "ATTACKS", "TO_DESTROY", "DIED_POS"] {
-        ne.tags.remove(k);
-    }
-    ne.give_tag("EXHAUSTED", false);
-    ne.enchantments = src.enchantments;
-    ne.damage = src.damage;
-    n
 }
 
 fn epic(r: &mut Registry) {

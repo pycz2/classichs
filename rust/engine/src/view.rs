@@ -3,22 +3,30 @@
 //! Cards it cannot see (the opponent's hand and Secrets, both decks) become a
 //! filler card; RNG, history and start decks are not restored. Not for parity.
 
-use crate::card_db;
 use crate::entity::{int, truthy, Entity, Id};
+use crate::ruleset::{self, Ruleset};
 use crate::scenario::ints;
 use crate::state::{Game, Pending};
 use serde_json::{Map, Value};
 
-/// A vanilla minion standing in for a hidden card (no hooks: it changes nothing).
-const FILLER: &str = "VAN_CS2_231";
+/// A minion standing in for a hidden card: Classic's vanilla Wisp; in another
+/// pack its first minion without hooks.
+fn filler(rs: &Ruleset) -> &str {
+    if rs.has("VAN_CS2_231") {
+        return "VAN_CS2_231";
+    }
+    let mut ids: Vec<&String> = rs.cards.iter().filter(|(_, c)| c.kind == "MINION" && c.script.is_empty()).map(|(k, _)| k).collect();
+    ids.sort();
+    ids.first().map_or("", |s| s.as_str())
+}
 
-fn zone(s: &str) -> &'static str {
+fn zone(rs: &Ruleset, s: &str) -> &'static str {
     match s {
         "DECK" => "DECK",
         "HAND" => "HAND",
         "PLAY" => "PLAY",
-        "SECRET" => "SECRET",
         "GRAVEYARD" => "GRAVEYARD",
+        _ if s == rs.names.trap => rs.names.trap,
         _ => "SETASIDE",
     }
 }
@@ -27,28 +35,37 @@ fn ids(v: &Value) -> Vec<Id> {
     v.as_array().map_or(vec![], |a| a.iter().map(|x| int(Some(x))).collect())
 }
 
+/// A game of the built-in Classic ruleset from a snapshot.
 pub fn from_snapshot(snap: &Value) -> Result<Game, String> {
+    from_snapshot_in(ruleset::classic(), snap)
+}
+
+pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, String> {
     let s = ints(snap);
+    let filler = filler(rs);
+    if filler.is_empty() {
+        return Err("the pack has no minion to stand in for hidden cards".into());
+    }
     let (Some(ents), Some(ps)) = (s["entities"].as_object(), s["players"].as_array()) else {
         return Err("not a snapshot".into());
     };
     if ps.len() != 2 {
         return Err("not a snapshot".into());
     }
-    let mut g = Game::blank(0);
+    let mut g = Game::blank(rs, 0);
     let next_id = int(s.get("next_id")).max(1);
     let mut hidden: Vec<Id> = vec![];
     for id in 1..next_id {
         let Some(d) = ents.get(&id.to_string()) else {
             hidden.push(id);
-            g.entities.push(Entity::new(id, FILLER, 0));
+            g.entities.push(Entity::new(id, rs.card(filler), 0));
             continue;
         };
-        let card = d["card"].as_str().filter(|c| card_db::has(c)).unwrap_or(FILLER);
-        let mut e = Entity::new(id, card, int(d.get("ctrl")).clamp(0, 1) as usize);
-        e.zone = zone(d["zone"].as_str().unwrap_or(""));
+        let card = d["card"].as_str().filter(|c| rs.has(c)).unwrap_or(filler);
+        let mut e = Entity::new(id, rs.card(card), int(d.get("ctrl")).clamp(0, 1) as usize);
+        e.zone = zone(rs, d["zone"].as_str().unwrap_or(""));
         e.play_order = int(d.get("order"));
-        if card != FILLER || d["card"] == FILLER {
+        if card != filler || d["card"] == filler {
             e.damage = int(d.get("dmg"));
             if let Some(t) = d["tags"].as_object() {
                 e.tags = t.clone();
@@ -112,7 +129,7 @@ pub fn from_snapshot(snap: &Value) -> Result<Game, String> {
         g.pending = Some(Pending {
             player: int(p.get("player")).clamp(0, 1) as usize,
             source: int(p.get("source")),
-            zones: options.iter().map(|o| zone(zones.get(&o.to_string()).and_then(Value::as_str).unwrap_or(""))).collect(),
+            zones: options.iter().map(|o| zone(rs, zones.get(&o.to_string()).and_then(Value::as_str).unwrap_or(""))).collect(),
             options,
         });
     }

@@ -24,21 +24,21 @@ pub fn value(g: &Game, p: usize) -> f64 {
 }
 
 fn side(g: &Game, p: usize, own: bool) -> f64 {
-    let pl = &g.players[p];
+    let (pl, n) = (&g.players[p], g.n());
     let hero = g.e(pl.hero);
-    let mut v = (hero.health() + hero.tag("ARMOR")) as f64;
+    let mut v = (hero.health() + hero.tag(n.armor)) as f64;
     for &m in &pl.board {
         let e = g.e(m);
         v += 1.5 * e.atk() as f64 + e.health() as f64;
-        if e.has("TAUNT") {
+        if e.has(n.guard) {
             v += 1.0;
         }
-        if e.has("DIVINE_SHIELD") {
+        if e.has(n.barrier) {
             v += e.atk() as f64;
         }
     }
     if let Some(w) = pl.weapon {
-        v += 0.5 * g.e(w).atk() as f64 * g.e(w).tag("DURABILITY") as f64;
+        v += 0.5 * g.e(w).atk() as f64 * g.e(w).tag(n.durability) as f64;
     }
     if own {
         v += 1.0 * pl.hand.len() as f64;

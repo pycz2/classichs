@@ -1,15 +1,11 @@
 //! One card in the match (engine/entity.gd).
 
-use crate::card_db::{self, Card};
+use crate::card_db::Card;
 use serde_json::{json, Map, Value};
 
 pub type Id = i64;
 /// "No entity" (GDScript null; actions use -1 for "no target").
 pub const NONE: Id = -1;
-
-/// Keywords that come from card mechanics and that Silence removes.
-pub const KEYWORDS: [&str; 10] = ["TAUNT", "CHARGE", "DIVINE_SHIELD", "STEALTH", "WINDFURY", "CANT_ATTACK",
-    "ELUSIVE", "FROZEN", "IMMUNE", "FROZEN_THIS_TURN"];
 
 /// GDScript truthiness of a Variant.
 pub fn truthy(v: Option<&Value>) -> bool {
@@ -59,25 +55,11 @@ pub struct Entity {
 }
 
 impl Entity {
-    pub fn new(id: Id, card_id: &str, controller: usize) -> Entity {
-        let card = card_db::card(card_id);
-        let mut tags = Map::new();
-        for m in &card.mechanics {
-            if KEYWORDS.contains(&m.as_str()) {
-                tags.insert(m.clone(), Value::Bool(true));
-            }
-        }
-        if let Some(sd) = card.spell_damage {
-            tags.insert("SPELLPOWER".into(), json!(sd));
-        }
-        if card.kind == "WEAPON" {
-            tags.insert("DURABILITY".into(), json!(card.durability));
-        }
-        if card.kind == "HERO" {
-            tags.insert("ARMOR".into(), json!(0));
-        }
-        Entity { id, card_id: card_id.to_string(), card, controller, zone: "SETASIDE", play_order: 0, damage: 0,
-            tags, enchantments: vec![], eot_tags: vec![], aura: Aura::default(), silenced: false }
+    /// A new entity of a card: the card's start tags (its keywords, spell power,
+    /// a weapon's durability, a champion's armor), out of play.
+    pub fn new(id: Id, card: &'static Card, controller: usize) -> Entity {
+        Entity { id, card_id: card.id.clone(), card, controller, zone: "SETASIDE", play_order: 0, damage: 0,
+            tags: card.start_tags.clone(), enchantments: vec![], eot_tags: vec![], aura: Aura::default(), silenced: false }
     }
 
     pub fn kind(&self) -> &'static str {
@@ -139,8 +121,9 @@ impl Entity {
         self.tags.remove(tag);
     }
 
-    pub fn spellpower(&self) -> i64 {
-        self.tag("SPELLPOWER") + int(self.aura.tags.get("SPELLPOWER"))
+    /// Its spell power (`name`: the SPELL_POWER tag name).
+    pub fn spellpower(&self, name: &str) -> i64 {
+        self.tag(name) + int(self.aura.tags.get(name))
     }
 
     pub fn give_tag(&mut self, tag: &str, eot: bool) {
@@ -176,14 +159,14 @@ impl Entity {
         self.fix_health(old_max, old_hp);
     }
 
-    pub fn silence(&mut self) {
+    /// Silence: no enchantments, no "this turn" tags, none of `tags` (the ruleset's silenced tags).
+    pub fn silence(&mut self, tags: &[&str]) {
         let (old_max, old_hp) = (self.max_health(), self.health());
         self.enchantments.clear();
         self.eot_tags.clear();
-        for k in KEYWORDS {
-            self.tags.remove(k);
+        for k in tags {
+            self.tags.remove(*k);
         }
-        self.tags.remove("SPELLPOWER");
         self.silenced = true;
         self.fix_health(old_max, old_hp);
     }

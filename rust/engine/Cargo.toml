@@ -13,3 +13,10 @@ crate-type = ["rlib"]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
+classichs-script = { path = "../script" }
+# inflate for .cardpack (zip) files; pure Rust, builds for wasm32 and Android
+miniz_oxide = "0.9"
+
+[build-dependencies]
+serde_json = "1"
+sha2 = "0.10"

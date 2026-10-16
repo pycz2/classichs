@@ -1,4 +1,6 @@
-//! Card hooks by card id (cards/registry.gd). Each class file has `register`.
+//! Card hooks: the Rust hooks of the Classic cards not ported to Lua yet (by card
+//! id, cards/registry.gd; each class file has `register`) and `HookSet`, what the
+//! engine calls (Rust or Lua).
 //!
 //! A hook is a plain function; `me` is the entity whose card it is, `t` the
 //! target (or NONE), `ev` an index into `Game::event_log`.
@@ -11,7 +13,6 @@ use std::sync::OnceLock;
 mod druid;
 mod heroes;
 mod hunter;
-mod mage;
 mod neutral;
 mod paladin;
 mod priest;
@@ -21,7 +22,10 @@ mod tutorial;
 mod warlock;
 mod warrior;
 
-pub use neutral::copy_minion;
+/// Faceless Manipulator's copy (now `Game::copy_minion`).
+pub fn copy_minion(g: &mut Game, me: Id, t: Id) -> Id {
+    g.copy_minion(me, t)
+}
 
 fn ev_mine(g: &Game, me: Id, ev: usize) -> bool {
     g.ev_mine(me, ev)
@@ -128,7 +132,6 @@ fn registry() -> &'static Registry {
         neutral::register(&mut r);
         druid::register(&mut r);
         hunter::register(&mut r);
-        mage::register(&mut r);
         paladin::register(&mut r);
         priest::register(&mut r);
         rogue::register(&mut r);
@@ -140,16 +143,117 @@ fn registry() -> &'static Registry {
     })
 }
 
-/// The hooks of a card id ("" or unknown: none).
+/// The Rust hooks of a Classic card id ("" or unknown: none). The engine reads
+/// hooks through its ruleset (`Ruleset::hooks`), which falls back to these.
 pub fn of(card_id: &str) -> &'static Hooks {
     static EMPTY: OnceLock<Hooks> = OnceLock::new();
     registry().get(card_id).unwrap_or_else(|| EMPTY.get_or_init(Hooks::default))
 }
 
+/// Every card id with Rust hooks.
+pub fn all_ids() -> Vec<&'static str> {
+    let mut v: Vec<&'static str> = registry().keys().copied().collect();
+    v.sort();
+    v
+}
+
+// --- hook sets: what the engine calls, a Rust function or a Lua one -------------------------
+
+/// A hook function: Rust (the Classic cards not ported yet) or Lua (an index
+/// into the ruleset's script functions, `LuaRules::fns`).
+#[derive(Clone, Copy)]
+pub enum Fx<F> {
+    Rust(F),
+    Lua(u32),
+}
+
+pub type DurFn = fn(&mut Game, Id, Id) -> bool;
+
+#[derive(Clone, Copy)]
+pub struct TSpec {
+    pub base: Base,
+    pub pred: Option<Fx<Pred>>,
+}
+
+#[derive(Clone, Copy)]
+pub struct SecretH {
+    pub event: &'static str,
+    /// None: always.
+    pub cond: Option<Fx<SecretCond>>,
+    pub effect: Fx<OnFn>,
+}
+
+/// The hooks of a card or of an enchantment ("ench:…"), as the engine calls them.
+#[derive(Clone, Default)]
+pub struct HookSet {
+    pub target: Option<TSpec>,
+    pub battlecry: Option<Fx<Effect>>,
+    pub spell: Option<Fx<Effect>>,
+    pub combo: Option<Fx<Effect>>,
+    pub combo_target: Option<TSpec>,
+    pub choose_one: Option<[&'static str; 2]>,
+    pub effect: Option<Fx<Effect>>,
+    pub hero_power: Option<Fx<Effect>>,
+    pub can_play: Option<Fx<CanPlay>>,
+    pub deathrattle: Option<Fx<DeathFn>>,
+    pub on: Vec<(&'static str, Fx<OnFn>)>,
+    pub secret: Option<SecretH>,
+    pub now: Vec<(&'static str, Fx<NowFn>)>,
+    pub aura: Option<Fx<AuraFn>>,
+    pub aura_final: Option<Fx<AuraFn>>,
+    pub cost_mod: Option<Fx<CostMod>>,
+    pub cost_aura: Option<Fx<CostAura>>,
+    pub on_choose: Option<Fx<OnChoose>>,
+    pub immune_while_attacking: bool,
+    pub durability_on_attack: Option<Fx<DurFn>>,
+    /// The hooks are Lua (for the parity filter and the API).
+    pub lua: bool,
+}
+
+impl HookSet {
+    pub fn on(&self, ev_type: &str) -> Option<Fx<OnFn>> {
+        self.on.iter().find(|(t, _)| *t == ev_type).map(|(_, f)| *f)
+    }
+    pub fn now(&self, ev_type: &str) -> Option<Fx<NowFn>> {
+        self.now.iter().find(|(t, _)| *t == ev_type).map(|(_, f)| *f)
+    }
+}
+
+fn rust_spec(s: Option<Spec>) -> Option<TSpec> {
+    s.map(|s| TSpec { base: s.base, pred: s.pred.map(Fx::Rust) })
+}
+
+impl From<&Hooks> for HookSet {
+    fn from(h: &Hooks) -> HookSet {
+        HookSet {
+            target: rust_spec(h.target),
+            battlecry: h.battlecry.map(Fx::Rust),
+            spell: h.spell.map(Fx::Rust),
+            combo: h.combo.map(Fx::Rust),
+            combo_target: rust_spec(h.combo_target),
+            choose_one: h.choose_one,
+            effect: h.effect.map(Fx::Rust),
+            hero_power: h.hero_power.map(Fx::Rust),
+            can_play: h.can_play.map(Fx::Rust),
+            deathrattle: h.deathrattle.map(Fx::Rust),
+            on: h.on.iter().map(|(t, f)| (*t, Fx::Rust(*f))).collect(),
+            secret: h.secret.map(|s| SecretH { event: s.event, cond: Some(Fx::Rust(s.cond)), effect: Fx::Rust(s.effect) }),
+            now: h.now.iter().map(|(t, f)| (*t, Fx::Rust(*f))).collect(),
+            aura: h.aura.map(Fx::Rust),
+            aura_final: h.aura_final.map(Fx::Rust),
+            cost_mod: h.cost_mod.map(Fx::Rust),
+            cost_aura: h.cost_aura.map(Fx::Rust),
+            on_choose: h.on_choose.map(Fx::Rust),
+            immune_while_attacking: h.immune_while_attacking,
+            durability_on_attack: h.durability_on_attack.map(Fx::Rust),
+            lua: false,
+        }
+    }
+}
+
 /// What hooks a card has, for clients (glows, Deathrattle skulls, Choose One
 /// options): {"on": [event types], "aura": true, "choose_one": [a, b], ...}.
-pub fn summary(card_id: &str) -> serde_json::Value {
-    let h = of(card_id);
+pub fn summary(h: &HookSet) -> serde_json::Value {
     let mut m = serde_json::Map::new();
     let mut flag = |k: &str, b: bool| {
         if b {
@@ -185,13 +289,6 @@ pub fn summary(card_id: &str) -> serde_json::Value {
     serde_json::Value::Object(m)
 }
 
-/// Every card id with hooks.
-pub fn all_ids() -> Vec<&'static str> {
-    let mut v: Vec<&'static str> = registry().keys().copied().collect();
-    v.sort();
-    v
-}
-
 /// Hooks with nothing set (for `..d()`).
 pub(crate) fn d() -> Hooks {
     Hooks::default()
@@ -210,7 +307,7 @@ impl Game {
     }
 
     pub fn board_has_room(&self, me: Id) -> bool {
-        self.players[self.ctrl(me)].board.len() < crate::state::MAX_BOARD
+        self.players[self.ctrl(me)].board.len() < self.rs.board
     }
 
     pub fn add_tag_int(&mut self, e: Id, tag: &str, n: i64) {

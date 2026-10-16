@@ -3,6 +3,12 @@
 //! the same legal actions, bot choices, events and state hashes at every step.
 //! Fixtures: tests/fixtures/*.jsonl (committed) and tests/fixtures/big/*.jsonl
 //! (generated earlier, gitignored).
+//!
+//! `PARITY_FILTER` replays only the games that mention some cards (in their
+//! setup, actions or events): a class (`MAGE`), `lua` (every card with Lua
+//! hooks), or card ids (`VAN_CS2_029,VAN_EX1_287`); comma-separated, mixed.
+//! `PARITY_BIG=0` skips fixtures/big (the committed 1731 games only: a quick check).
+//! `PARITY_FIXTURES=<dir>` reads the fixtures from another folder.
 
 use classichs_engine::api::Engine;
 use classichs_engine::entity::int;
@@ -10,7 +16,7 @@ use classichs_engine::game::mulligan_seed;
 use classichs_engine::json::stringify;
 use classichs_engine::rng::Rng;
 use classichs_engine::state::{hex, Game};
-use classichs_engine::{bot, card_db, missions, scenario};
+use classichs_engine::{bot, card_db, missions, ruleset, scenario};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
@@ -144,6 +150,26 @@ fn misc(line: &Value, st: &mut Stats) {
     }
 }
 
+/// The quoted card ids PARITY_FILTER names (None: replay everything).
+fn filter() -> Option<Vec<String>> {
+    let f = std::env::var("PARITY_FILTER").ok().filter(|f| !f.trim().is_empty())?;
+    let rs = ruleset::classic();
+    let mut ids = vec![];
+    for w in f.split(',').map(str::trim) {
+        if w == "lua" {
+            ids.extend(rs.hooks.iter().filter(|(_, h)| h.lua).map(|(id, _)| id.clone()));
+        } else if rs.has(w) {
+            ids.push(w.to_string());
+        } else {
+            let class: Vec<String> = rs.cards.values().filter(|c| c.card_class == w).map(|c| c.id.clone()).collect();
+            assert!(!class.is_empty(), "PARITY_FILTER: {w} is neither a card id, a class nor 'lua'");
+            ids.extend(class);
+        }
+    }
+    eprintln!("PARITY_FILTER={f}: games that mention any of {} cards", ids.len());
+    Some(ids.into_iter().map(|id| format!("\"{id}\"")).collect())
+}
+
 #[test]
 fn parity_with_gdscript() {
     let dir = match std::env::var("PARITY_FIXTURES") {
@@ -151,7 +177,8 @@ fn parity_with_gdscript() {
         Err(_) => Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures"),
     };
     let mut files = vec![];
-    for d in [dir.clone(), dir.join("big")] {
+    let big = std::env::var("PARITY_BIG").map_or(true, |v| v != "0");
+    for d in [dir.clone(), dir.join("big")].into_iter().take(if big { 2 } else { 1 }) {
         if let Ok(rd) = std::fs::read_dir(&d) {
             for e in rd.flatten() {
                 if e.path().extension().is_some_and(|x| x == "jsonl") {
@@ -162,10 +189,17 @@ fn parity_with_gdscript() {
     }
     files.sort();
     assert!(!files.is_empty(), "no fixtures in {}", dir.display());
+    let needles = filter();
+    let t0 = std::time::Instant::now();
     let mut st = Stats::default();
     for f in &files {
         let text = std::fs::read_to_string(f).unwrap();
         for line in text.lines().filter(|l| !l.trim().is_empty()) {
+            if let Some(n) = &needles {
+                if !n.iter().any(|x| line.contains(x.as_str())) {
+                    continue;
+                }
+            }
             let Ok(v) = serde_json::from_str::<Value>(line) else {
                 eprintln!("skipping a broken line in {}", f.display());
                 continue;
@@ -180,17 +214,22 @@ fn parity_with_gdscript() {
     let playable: Vec<&String> = card_db::collectible().iter().filter(|id| card_db::card(id).kind != "HERO").collect();
     let missing: Vec<&&String> = playable.iter().filter(|id| !st.played.contains(**id)).collect();
     eprintln!(
-        "parity: {} files, {} games, {} steps, {} bot choices checked, {} cards played ({} of {} collectible), {} cards seen in events, {} mismatches",
+        "parity: {} files, {} games, {} steps, {} bot choices checked, {} cards played ({} of {} collectible), {} cards seen in events, {} mismatches, {:.1} s",
         files.len(), st.games, st.steps, st.bot_checks, st.played.len(), playable.len() - missing.len(), playable.len(),
-        st.seen.len(), st.mismatches.len()
+        st.seen.len(), st.mismatches.len(), t0.elapsed().as_secs_f64()
     );
-    if !missing.is_empty() {
+    if !missing.is_empty() && needles.is_none() {
         eprintln!("collectible cards never played: {:?}", missing);
     }
-    let hooked: Vec<&str> = classichs_engine::cards::all_ids()
-        .into_iter()
+    let rs = ruleset::classic();
+    let mut hooked: Vec<&str> = rs
+        .hooks
+        .keys()
+        .map(String::as_str)
         .filter(|id| card_db::has(id) && !st.played.contains(*id) && !st.seen.contains(*id))
+        .filter(|id| needles.as_ref().is_none_or(|n| n.contains(&format!("\"{id}\""))))
         .collect();
+    hooked.sort();
     eprintln!("cards with hooks never played or seen in an event: {:?}", hooked);
     assert!(st.mismatches.is_empty(), "{} mismatches, first: {}", st.mismatches.len(), st.mismatches[0]);
 }

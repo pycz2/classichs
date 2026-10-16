@@ -8,8 +8,8 @@ them and fills them with content. Decisions: `docs/superpowers/plans/2026-10-16-
 (D6–D9, D16–D19).
 
 Related pages: [rules.md](rules.md) (`rules.json`), [cards.md](cards.md)
-(`cards.json`, locales, layout), [fx.md](fx.md) (visual effects), `lua.md`
-(card scripts, phase A1/B). Machine-readable: [schema/](schema/) (JSON Schemas,
+(`cards.json`, locales, layout), [fx.md](fx.md) (visual effects), [lua.md](lua.md)
+(the Lua subset of card scripts), [api.md](api.md) (the engine API and hooks of card scripts). Machine-readable: [schema/](schema/) (JSON Schemas,
 the engine vocabulary `keywords.json`, the effect catalog `fx.json`).
 Tool: `tools/pack.py` (build, check, info, hash; see the end of this page).
 
@@ -21,14 +21,15 @@ A pack is a zip file with the extension `.cardpack`. Nothing else may be in it.
 manifest.json            who and what: id, version, names, locales, art/sound/music sets, rules_hash
 rules.json               limits, start, fatigue, timers, classes, races, rarities, sets, mechanics, modes, ranked
 cards.json               every card: stats, keywords, champion powers, script references, fx
-scripts/*.lua            card logic (phase B); any depth below scripts/; scripts/README.md allowed
+scripts/*.lua            card logic (api.md); any depth below scripts/; scripts/README.md allowed
 locales/<lang>.json      every player-facing text in one language (cards, mechanics, classes, ranks, missions, voice…)
 layout/<lang>.json       optional: hand-tuned card text layout
 art/<set>/<card id>.jpg|png|webp     one folder per art set
 sounds/<set>/<name>.wav|ogg|mp3      one folder per sound set (+ .md credits)
 music/<set>/<name>.wav|ogg|mp3       one folder per music set (+ .md credits)
 voice/<lang>/…                       optional recorded voice lines (.wav|ogg|mp3)
-ui/<name>.png|jpg|webp               optional pictures: logo, card back, rank emblems
+ui/<name>.png|jpg|webp               optional pictures: logo, card back, rank emblems; by name the client also
+                                     shows ui/menu (menu and screen backdrops), ui/board (the game board), ui/library
 decks/<name>.json        ready decks
 missions/<n>.json        tutorial or story missions (data; their scripts live in scripts/)
 README.md, CREDITS.md, LICENSE.txt   optional, at the top
@@ -255,9 +256,17 @@ Missions are in `rules_hash` (they define decks and rules); their texts are not.
 ## 9. Card scripts
 
 `cards.json` points a card at its logic: `"script": "scripts/mage.lua#VAN_CS2_029"`.
-A script file returns a table of cards with hooks. The language subset, the API
-(`g`) and the hooks are in `lua.md` (phase A1); Classic's scripts come in phase B.
-A card without a script has no hooks (vanilla minion, weapon, …).
+A script file returns a table of cards with hooks; `scripts/lib.lua` (optional)
+holds shared helpers, visible to the other files as the global `lib`. The
+language subset is in [lua.md](lua.md); the engine API (`g`), the hooks and the
+events in [api.md](api.md). A card without a script has no hooks (vanilla
+minion, weapon, …). Keys of a script table that are not card ids name hook sets
+for enchantments (`"ench:nightmare"`).
+
+The engine (`rust/engine`) loads a pack with the API op `load_pack` (the
+`.cardpack` bytes as base64, or a path on native hosts) and plays it with
+`new {pack: <rules_hash>, …}`; without `pack` it plays its built-in Classic
+ruleset, made at build time from `packs/classic` (rust/engine/README.md).
 
 ## 10. Build recipes and `tools/pack.py`
 
