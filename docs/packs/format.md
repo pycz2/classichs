@@ -19,7 +19,7 @@ A pack is a zip file with the extension `.cardpack`. Nothing else may be in it.
 
 ```
 manifest.json            who and what: id, version, names, locales, art/sound/music sets, rules_hash
-rules.json               limits, start, fatigue, timers, classes, races, rarities, sets, mechanics, modes, ranked
+rules.json               limits, start, bot, fatigue, timers, classes, races, rarities, sets, mechanics, modes, ranked
 cards.json               every card: stats, keywords, champion powers, script references, fx
 scripts/*.lua            card logic (api.md); any depth below scripts/; scripts/README.md allowed
 locales/<lang>.json      every player-facing text in one language (cards, mechanics, classes, ranks, missions, voice…)

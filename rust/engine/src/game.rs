@@ -202,7 +202,7 @@ impl Game {
         }
         self.emit(json!({"type": "turn_start", "player": cur, "turn": self.turn}));
         self.resolve();
-        if !self.game_over {
+        if !self.game_over && (self.turn > 1 || self.rs.first_player_draws) {
             self.draw(cur, 1);
         }
     }

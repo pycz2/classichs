@@ -41,35 +41,60 @@ fn side(g: &Game, p: usize, own: bool) -> f64 {
         v += 0.5 * g.e(w).atk() as f64 * g.e(w).tag(n.durability) as f64;
     }
     if own {
-        v += 1.0 * pl.hand.len() as f64;
+        v += 1.0 * pl.hand.len() as f64 + g.rs.bot_trap * pl.secrets.len() as f64;
     }
     v
 }
 
-/// The action player p should take now (None if p has nothing to do).
-pub fn choose(g: &Game, p: usize) -> Option<Action> {
-    let legal: Vec<Action> = g
-        .legal_actions()
+/// p's actions the bot considers: no concede, a minion only to the rightmost slot.
+fn options(g: &Game, p: usize) -> Vec<Action> {
+    let last = g.players[p].board.len() as i64;
+    g.legal_actions()
         .into_iter()
         .filter(|a| int(a.get("player")) == p as i64 && a["type"] != "concede")
-        .collect();
+        // ponytail: rightmost slot only; adjacency-aware placement if the bot needs it
+        .filter(|a| !(a["type"] == "play" && int(a.get("pos")) >= 0 && int(a.get("pos")) != last))
+        .collect()
+}
+
+/// The action player p should take now (None if p has nothing to do).
+pub fn choose(g: &Game, p: usize) -> Option<Action> {
+    let legal = options(g, p);
     if legal.is_empty() {
         return None;
     }
     if g.phase == "MULLIGAN" {
         return Some(mulligan(g, p, legal));
     }
+    let (best, score) = greedy(g, p, &legal);
+    if g.rs.bot_depth < 2 || best.as_ref().is_none_or(|a| a["type"] != "end_turn") {
+        return best;
+    }
+    // bot.depth 2: before ending the turn, an action that pays off only with the next one
+    // (a temporary Mana card, then a minion)
+    let mut two: Option<(Action, f64)> = None;
+    for a in legal.into_iter().filter(|a| a["type"] != "end_turn") {
+        let mut c = g.clone_state();
+        if !c.apply(&Value::Object(a.clone())).ok || c.game_over {
+            continue;
+        }
+        let s = greedy(&c, p, &options(&c, p)).1;
+        if s > two.as_ref().map_or(score, |t| t.1) + 0.01 {
+            two = Some((a, s));
+        }
+    }
+    two.map(|t| t.0).or(best)
+}
+
+/// The best of these actions one step ahead (ending the turn wins ties) and its value.
+fn greedy(g: &Game, p: usize, legal: &[Action]) -> (Option<Action>, f64) {
     let mut best: Option<Action> = None;
     let mut best_score = f64::NEG_INFINITY;
-    let last = g.players[p].board.len() as i64;
     for a in legal {
-        if a["type"] == "play" && int(a.get("pos")) >= 0 && int(a.get("pos")) != last {
-            continue; // ponytail: rightmost slot only; adjacency-aware placement if the bot needs it
-        }
         if a["type"] == "end_turn" {
             let v = value(g, p);
             if v > best_score {
-                best = Some(a);
+                best = Some(a.clone());
                 best_score = v;
             }
             continue;
@@ -80,11 +105,11 @@ pub fn choose(g: &Game, p: usize) -> Option<Action> {
         }
         let s = value(&c, p);
         if s > best_score + 0.01 || best.is_none() {
-            best = Some(a);
+            best = Some(a.clone());
             best_score = s;
         }
     }
-    best
+    (best, best_score)
 }
 
 fn mulligan(g: &Game, p: usize, legal: Vec<Action>) -> Action {

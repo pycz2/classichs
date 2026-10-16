@@ -150,7 +150,7 @@ fn the_built_pack_loads_and_plays() {
     let mut g = Game::new_in(built, "iris_null", &decks["iris_null"], "mother_rust", &decks["mother_rust"], 5, 0, true);
     while !g.game_over && g.turn < 90 {
         let p = if g.phase == "MULLIGAN" { (0..2).find(|&p| !g.players[p].mulliganed).unwrap() } else { g.current };
-        let a = choose(&g, p).unwrap();
+        let a = bot::choose(&g, p).unwrap();
         assert!(g.apply(&Value::Object(a)).ok);
         assert_eq!(g.script_error.get(), None);
     }
@@ -679,17 +679,6 @@ struct Outcome {
     played: [Vec<String>; 2],
 }
 
-/// The engine's greedy bot, except that a Protocol it can afford is played instead of ending the
-/// turn (the bot's value counts a card in hand but not a trap in play, so it never plays one).
-fn choose(g: &Game, p: usize) -> Option<Map<String, Value>> {
-    let a = bot::choose(g, p)?;
-    if a["type"] != "end_turn" {
-        return Some(a);
-    }
-    let trap = g.legal_actions().into_iter().find(|x| x["type"] == "play" && g.e(int(x.get("entity"))).card.trap);
-    Some(trap.unwrap_or(a))
-}
-
 /// A bot-vs-bot game; panics on a script error.
 fn play_game(c0: &str, d0: &[String], c1: &str, d1: &[String], seed: i64, first: i64) -> Outcome {
     let mut g = Game::new_in(rs(), c0, d0, c1, d1, seed, first, true);
@@ -698,7 +687,7 @@ fn play_game(c0: &str, d0: &[String], c1: &str, d1: &[String], seed: i64, first:
     let trace = std::env::var("NEON_TRACE").is_ok();
     while !g.game_over && g.turn < 90 {
         let p = if g.phase == "MULLIGAN" { (0..2).find(|&p| !g.players[p].mulliganed).unwrap() } else { g.current };
-        let Some(a) = choose(&g, p) else { break };
+        let Some(a) = bot::choose(&g, p) else { break };
         if a["type"] == "play" {
             played[p].push(g.e(int(a.get("entity"))).card_id.clone());
         }
@@ -726,6 +715,39 @@ fn play_game(c0: &str, d0: &[String], c1: &str, d1: &[String], seed: i64, first:
         assert!(steps < 5000, "runaway game");
     }
     Outcome { winner: if g.game_over { g.winner } else { -1 }, turns: g.turn, played }
+}
+
+/// The opening (`start` of rules.json) and the pack's bot settings (`bot.trap`, `bot.depth`).
+#[test]
+fn opening_and_bot() {
+    let decks = starter_decks();
+    let opening = |rs: &'static Ruleset| {
+        let mut g = Game::new_in(rs, "iris_null", &decks["iris_null"], "mother_rust", &decks["mother_rust"], 1, 0, true);
+        let hands = (g.players[0].hand.len(), g.players[1].hand.len());
+        for p in 0..2 {
+            assert!(g.apply(&json!({"type": "mulligan", "player": p, "replace": []})).ok);
+        }
+        (hands, g.players[0].hand.len(), g.players[1].hand.iter().any(|&e| g.e(e).card_id == "jumpstart"))
+    };
+    // Neonfall: 3 and 5 cards, the first player draws on turn 1, the second gets Jumpstart
+    assert_eq!(opening(rs()), ((3, 5), 4, true));
+    let mut files = pack::read_dir(&repo().join("packs/neon")).unwrap();
+    let mut rules: Value = serde_json::from_slice(&files["rules.json"]).unwrap();
+    rules["start"]["first_player_draws"] = json!(false);
+    files.insert("rules.json".into(), serde_json::to_vec(&rules).unwrap());
+    assert_eq!(opening(ruleset::load(&files).unwrap()), ((3, 5), 3, true));
+
+    // bot.trap 2: the bot plays a Protocol it can afford when nothing better is left
+    let mut t = game(json!({"hand": ["lockout"], "mana": 1}), json!({}));
+    let a = bot::choose(&t.g, 0).unwrap();
+    assert_eq!((a["type"].as_str(), int(a.get("entity"))), (Some("play"), t.hand_id("lockout")));
+    t.g.apply(&Value::Object(a));
+    assert_eq!(t.g.players[0].secrets.len(), 1);
+
+    // bot.depth 2: Jumpstart first when it pays for a minion
+    let t = game(json!({"hand": ["jumpstart", "chrome_stray"], "mana": 1}), json!({}));
+    let a = bot::choose(&t.g, 0).unwrap();
+    assert_eq!(int(a.get("entity")), t.hand_id("jumpstart"));
 }
 
 #[test]

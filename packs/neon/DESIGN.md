@@ -221,14 +221,14 @@ Curve: 0: 0 | 1: 2 | 2: 3 | 3: 3 | 4: 2 | 5: 1 | 6: 1 | 7+: 1 | total 13
 | **Zero-Day** `zero_day` | Spell | Common | 1 | - | Deal 1 damage to a minion and **Jam** it. **Chain:** Deal 3 damage instead. | combo, damage, freeze, spell, targets | 1 damage + Jam (~2.5) for 1; Chain makes it 3 + Jam (~4.5), premium only after another card. |
 | **Cache Raid** `cache_raid` | Spell | Common | 2 | - | Draw a card. **Chain:** Draw 2 cards instead. | combo, draw, spell | Alone it only replaces itself (weak on purpose); with Chain +1 card for 2 mana. |
 | **Signal Leech** `signal_leech` | Minion (Daemon) | Common | 2 | 1/2 | **Bandwidth +1**. After you cast a spell, deal 1 damage to the enemy champion. | SPELL_POWER, damage, on:after_spell | 1/2 (3) + Bandwidth (1) + 1 face damage per spell (~1) = 5 = budget. |
-| **Static Lock** `static_lock` | Spell | Common | 2 | - | **Jam** a minion and the minions next to it. Draw a card. | draw, freeze, spell, targets | Jam up to 3 minions (~2) and replace itself (2). |
+| **Static Lock** `static_lock` | Spell | Common | 3 | - | **Jam** a minion and the minions next to it. Draw a card. | draw, freeze, spell, targets | Jam up to 3 minions (~2) and replace itself (2). |
 | **Corrupt** `corrupt` | Spell | Common | 3 | - | Transform an enemy minion into a 0/3 Glitch with **Firewall**. | spell, targets, transform | Hard removal at 3, but leaves the opponent a 0/3 Firewall wall that costs you tempo. |
 | **Firmware Rot** `firmware_rot` | Spell | Rare | 3 | - | **Wipe** a minion, then deal 2 damage to it. | damage, silence, spell, targets | Wipe (2) + 2 damage (3) = 5; answers buffed or Firewall minions. |
-| **Lattice Diver** `lattice_diver` | Minion | Common | 3 | 3/3 | **Cloak**. **Chain:** Return an enemy minion that costs (3) or less to its owner's hand. | STEALTH, combo, return_to_hand, targets | 3/3 (6) + Cloak (1) = 7 = budget (balance pass: 3/2); Chain bounce (~2) for tempo turns. |
+| **Lattice Diver** `lattice_diver` | Minion | Common | 3 | 3/2 | **Cloak**. **Chain:** Return an enemy minion that costs (3) or less to its owner's hand. | STEALTH, combo, return_to_hand, targets | 3/3 (6) + Cloak (1) = 7 = budget (balance pass: 3/2); Chain bounce (~2) for tempo turns. |
 | **Packet Storm** `packet_storm` | Spell | Rare | 4 | - | Deal 2 damage to all enemy minions. **Chain:** Deal 3 damage instead. | combo, damage, spell | One-sided 2 AoE for 4 (fair), 3 with Chain (strong, needs 5+ mana in practice). |
 | **Recursive Hound** `recursive_hound` | Minion (Daemon) | Rare | 4 | 4/3 | **Flatline:** Add a 2/1 Hound Shard to your hand. | add_to_hand, on_death | 4/3 (7) + a 2/1 in hand (~2) = 9 = budget. |
 | **Root Access** `root_access` | Spell | Epic | 5 | - | Take control of a random enemy minion. Your opponent draws 2 cards. | draw, random, spell, take_control | Steal a random minion (~6-10) but give 2 cards (-5): a swing card, not a value card. |
-| **Compiler Wyrm** `compiler_wyrm` | Minion (Daemon) | Epic | 6 | 4/6 | Your spells cost (1) less. | cost_aura | 4/6 (10) + spells cost (1) less (~2-3) = 12-13 of 13. |
+| **Compiler Wyrm** `compiler_wyrm` | Minion (Daemon) | Epic | 6 | 4/5 | Your spells cost (1) less. | cost_aura | 4/5 (9) + spells cost (1) less (~2-3) = 11-12 of 13 (4/6 before the second balance pass). |
 | **SABLE, the Unwritten** `sable` | Minion (Daemon) | Legendary | 7 | 6/6 | **Boot:** **Wipe** all enemy minions. | on_play, silence | 6/6 (12) of 15; mass Wipe of the enemy board pays the rest when they have buffs, Firewall or Flatline. |
 
 ### Chromehead (CHROME)
@@ -327,9 +327,9 @@ Curve: 0: 0 | 1: 10 | 2: 8 | 3: 1 | 4: 4 | 5: 4 | 6: 2 | 7+: 1 | minions 22, spe
 
 Curve: 0: 0 | 1: 8 | 2: 9 | 3: 7 | 4: 3 | 5: 1 | 6: 1 | 7+: 1 | minions 18, spells 7, weapons 5
 
-**Zero Trace** (`decks/zero_trace.json`, Iris Null): 1x Ghostwalk (1), 2x Zero-Day (1), 2x Courier Drone (1), 2x Cache Raid (2), 2x Signal Leech (2), 2x Static Lock (2), 2x Chrome Stray (2), 2x Corrupt (3), 1x Firmware Rot (3), 2x Lattice Diver (3), 2x Bit-Rot Daemon (3), 2x Packet Storm (4), 1x Recursive Hound (4), 1x Lattice Phantom (4), 2x Rooftop Sniper (4), 1x Root Access (5), 1x Billboard Leviathan (5), 1x Compiler Wyrm (6), 1x SABLE, the Unwritten (7)
+**Zero Trace** (`decks/zero_trace.json`, Iris Null): 1x Ghostwalk (1), 2x Zero-Day (1), 2x Courier Drone (1), 2x Cache Raid (2), 2x Signal Leech (2), 2x Static Lock (3), 2x Chrome Stray (2), 2x Corrupt (3), 1x Firmware Rot (3), 2x Lattice Diver (3), 2x Bit-Rot Daemon (3), 2x Packet Storm (4), 1x Recursive Hound (4), 1x Lattice Phantom (4), 2x Rooftop Sniper (4), 1x Root Access (5), 1x Billboard Leviathan (5), 1x Compiler Wyrm (6), 1x SABLE, the Unwritten (7)
 
-Curve: 0: 0 | 1: 5 | 2: 8 | 3: 7 | 4: 6 | 5: 2 | 6: 1 | 7+: 1 | minions 17, spells 13, weapons 0
+Curve: 0: 0 | 1: 5 | 2: 6 | 3: 9 | 4: 6 | 5: 2 | 6: 1 | 7+: 1 | minions 17, spells 13, weapons 0
 
 <!-- cards:end -->
 
@@ -359,18 +359,19 @@ Curve: 0: 0 | 1: 5 | 2: 8 | 3: 7 | 4: 6 | 5: 2 | 6: 1 | 7+: 1 | minions 17, spel
   (E minor, 118 bpm), `battle_2` (D minor, 126 bpm): four-on-the-floor drums,
   saw bass, kick-ducked pad, dotted-echo arpeggio, a generated lead motif.
 
-## 9. Balance pass (phase E1)
+## 9. Balance passes (phase E1, then the opening and the bot)
 
 **How it was measured.** `rust/engine/tests/neon.rs` `simulate` plays the
 engine's greedy bot (`rust/engine/src/bot.rs`, one-step look-ahead) against
 itself, every pair of champions, both seat orders (each side goes first in
 half the games), with the three starter decks and with random legal decks
 (30 cards from the champion's class and the neutrals, at most 2 copies, 1
-legendary). The bot's value counts a card in hand but not a trap in play, so
-on its own it never plays a Protocol; the simulation plays an affordable
-Protocol whenever the bot would end its turn (the in-game bot does not do
-that yet). Mirrors are not played; a champion's rate is over its two
-matchups, a draw counts half.
+legendary). In this pass the bot's value counted a card in hand but not a
+trap in play, so on its own it never played a Protocol; the simulation played
+an affordable Protocol whenever the bot would end its turn. Since the second
+pass (below) the simulation is the in-game bot with the pack's `bot` settings.
+Mirrors are not played; a champion's rate is over its two matchups, a draw
+counts half.
 
 ```sh
 cd rust
@@ -441,4 +442,81 @@ numbers depend on how the bot plays them.
 **Findings beyond the cards.** The first player wins 63–66 % of bot games
 (Jumpstart is only one temporary Mana); a rules change (a second Jumpstart or
 a card more) would be the next lever, not in this pass. The in-game bot never
-plays a Protocol (see above).
+plays a Protocol (see above). Both are the second pass below.
+
+### Second pass: the opening and the bot
+
+**The bot.** Two pack settings (`rules.json` `bot`, docs/packs/rules.md;
+Classic leaves them out, so its bot and the parity fixtures stay as recorded):
+
+- `trap: 2`: the bot counts each of its Protocols in play as 2 (a card in
+  hand is 1), so it plays an affordable Protocol when nothing better is left,
+  as the E1 simulation did by hand (same numbers to 0.1 point). The
+  simulation's workaround is gone.
+- `depth: 2`: before ending its turn the bot also tries two actions in a row.
+  The one-step bot played the second player's Jumpstart in only 2–8 % of games
+  (a card that pays off only with the next one looks like a lost card), and a
+  spell only to turn on a Chain never. With `depth: 2` it plays Jumpstart in
+  nearly every game it gets it, and Chains like a player would. The first
+  player's 63–66 % was largely the bot wasting Jumpstart: with `depth: 2`
+  alone it is 56–60 %.
+
+**The opening.** The engine's levers (`start` in rules.json): opening hands,
+the coin, and `first_player_draws` (new; true is Classic). Measured first
+player win rates (starter / random decks, 1000 games per pairing and seat):
+
+| Opening | One-step bot | `depth: 2` |
+|---|---|---|
+| `[3, 4]` + Jumpstart (E1) | 63.4 / 66.2 % | 55.8 / 60.2 % |
+| `[3, 5]` + Jumpstart | 55.2 / 60.2 % | **46.8 / 52.9 %** |
+| `[3, 5]`, no Jumpstart, first player skips the first draw | 43.4 / 48.4 % | |
+| `[3, 6]` + Jumpstart | 49.0 / 54.6 % | (~40 / 46 %) |
+| `[4, 6]` + Jumpstart | | 49.9 / 56.6 % |
+| `[3, 4]` + Jumpstart, first player skips the first draw | 50.4 / 55.4 % | 43.2 / 47.6 % |
+| `[4, 5]` + Jumpstart, first player skips the first draw | 56.3 / 60.0 % | |
+| `[3, 4]` + Jumpstart, second player +1 Mana crystal | 27.8 / 27.3 % | |
+
+(The `depth: 2` column for `[3, 6]` and the skipped draw is a bot that plays
+Jumpstart when it pays for a play right away, the test that led to `depth`.)
+Random decks always favour the first player by 5–6 points more than the
+starter decks, so no opening puts both inside 48–55 %; `[3, 5]` is the one
+closest to 50 % on average (49.6 %) and the second player's extra card is
+the simplest rule to explain. A permanent Mana crystal is far too much, so
+the engine has no such setting. Tuning the opening against the one-step bot
+(`[3, 6]`) would have favoured the second player in real games, where
+Jumpstart is always played.
+
+**Cards.** A bot that plays Chain made Iris too strong (starter 57.3 %, Vale
+vs Iris 32.6 %). Retuned (1000 games per pairing and seat each):
+
+| Card | Before | After | Why (with `depth: 2`, `[3, 5]`) |
+|---|---|---|---|
+| Lattice Diver | 3/3 | **3/2** | Back to the E1 original: Iris starter 57.3 → 55.4 %, Vale vs Iris +3. |
+| Compiler Wyrm | 4/6 | **4/5** | Iris −1, Vale vs Iris +1. |
+| Static Lock | (2) | **(3)** | Iris's best card (64–68 % when played): Iris −0.6, Vale vs Iris +0.8 (Recursive Hound 3/3 instead did less: −0.2, −0.4). |
+
+**Result** (`bot: {trap: 2, depth: 2}`, `start.hand: [3, 5]`, the cards above;
+1000 games per pairing and seat order, ~50 s):
+
+| | Before (E1): starter | Before (E1): random | After: starter | After: random |
+|---|---|---|---|---|
+| Director Vale | 50.5 % | 48.0 % | 46.9 % | 50.6 % |
+| Iris Null | 51.6 % | 53.2 % | 53.8 % | 53.6 % |
+| Mother Rust | 47.9 % | 48.8 % | 49.2 % | 45.8 % |
+| Vale vs Iris | 37.9 % | 44.5 % | 36.8 % | 47.0 % |
+| Vale vs Rust | 63.1 % | 51.5 % | 57.1 % | 54.2 % |
+| Iris vs Rust | 41.1 % | 51.0 % | 44.4 % | 54.1 % |
+| Average length | 18.5 turns | 19.5 turns | 18.6 turns | 19.5 turns |
+| First player wins | **63.4 %** | **66.2 %** | 46.5 % | 52.6 % |
+
+Champions 45.8–53.8 %, matchups 36.8–57.1 %; the first player wins 46.5 %
+(starter) and 52.6 % (random). With 3000 games per pairing and seat (before
+Static Lock) the numbers moved by up to 1.6 points.
+
+Win rate when played, after: starter decks highest Billboard Leviathan 69 %,
+Lattice Phantom 65 %, Static Lock 64 %; lowest Asset Seizure 34 %, Lockout
+40 %, Golden Parachute 41 %. Random decks highest Packet Storm 61 %,
+Billboard Leviathan 59 %; lowest Asset Seizure 37 %, Chrome Up 41 %. The
+Protocols (Asset Seizure, Lockout, Golden Parachute: 34–43 %) are the weakest
+cards as the bot plays them (leftover Mana, no timing); a person may find
+them better. Watch next: Billboard Leviathan, Lattice Phantom, the Protocols.

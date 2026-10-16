@@ -31,8 +31,10 @@ without `pack` plays it, so older hosts work unchanged.
 
 Card hooks are Lua only (`packs/classic/scripts/*.lua` for Classic,
 docs/packs/api.md); a card without a `script` has none. Nothing in `src/` names
-a card, a class, a race, a rarity or a mechanic of a particular game: the coin
-(`start.coin`), champions and their powers (`classes`, a champion's `power`,
+a card, a class, a race, a rarity or a mechanic of a particular game: the opening
+(`start`: hands, the coin, `first_player_draws`), how the bot plays
+(`bot.trap`, `bot.depth`; Classic's bot counts no trap and looks one action
+ahead), champions and their powers (`classes`, a champion's `power`,
 `default_power`), the Arena's classes and odds, starter decks
 (`modes.constructed.starter_rarities` + `starter_core`) and copy limits come
 from `rules.json`; mechanics are the neutral ids of
@@ -61,7 +63,7 @@ tutorial's end-of-turn block is a reason key).
 | `pack.rs` | reading a `.cardpack` (zip) or a folder, strict and canonical JSON, `rules_hash` (docs/packs/format.md §3) |
 | `lua.rs` | loading card scripts, the `g` library (docs/packs/api.md), calling hooks, script errors |
 | `scenario.rs` | `engine/scenario.gd` |
-| `bot.rs` | `game/bot.gd` |
+| `bot.rs` | `game/bot.gd` (+ the pack's `bot` settings, docs/packs/rules.md) |
 | `arena_draft.rs`, `deck.rs`, `missions.rs` | `game/arena_draft.gd`, `game/deck.gd` + `decks.gd`, `game/missions.gd` + `tutorial.gd` |
 | `api.rs` | `net/referee.gd` and more: the JSON API |
 

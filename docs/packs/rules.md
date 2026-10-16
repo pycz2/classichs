@@ -32,6 +32,24 @@ no starter rarities).
 | `hand` | `[3, 4]` | Cards drawn by the first and the second player. |
 | `coin` | `"GAME_005"` | The card the second player gets after the mulligan (null: none). |
 | `mulligan` | true | Players may replace any of their opening cards once. |
+| `first_player_draws` | true | The first player draws a card at the start of their first turn (false: only from the second turn on). |
+
+These are the levers on the first player's advantage: more opening cards for
+the second player (`hand`), the coin, and the first player's first draw.
+Neonfall gives the second player five cards (`[3, 5]`): with `[3, 4]` the first
+player won 56–60 % of bot games, with `[3, 5]` 47–53 % (packs/neon/DESIGN.md §9).
+
+## `bot`
+
+How the engine's bot (`rust/engine/src/bot.rs`, greedy: it takes the action
+whose result it values most, until ending the turn is worth as much) plays
+this pack. Optional; Classic leaves it out, and its bot stays the recorded one
+(parity).
+
+| Field | Classic | Meaning |
+|---|---|---|
+| `trap` | 0 | What the bot counts for each of its own traps in play (a card in hand counts 1). At 0 it never plays a trap; at 2 it plays one when nothing better is left to do (Neonfall). |
+| `depth` | 1 | 2: before ending its turn, the bot also tries two actions in a row, so it plays a card that pays off only with the next one (the coin, then a minion; a spell to turn on a Chain). Turn ends cost about as many look-aheads as there are actions squared. |
 
 ## `fatigue`
 

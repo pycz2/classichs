@@ -16,10 +16,14 @@
   "first_player": "random",
   "hand": [
    3,
-   4
+   5
   ],
   "coin": "jumpstart",
   "mulligan": true
+ },
+ "bot": {
+  "trap": 2,
+  "depth": 2
  },
  "fatigue": {
   "enabled": true,

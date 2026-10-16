@@ -240,6 +240,12 @@ pub struct Ruleset {
     pub champion_health: i64,
     pub start_hand: [i64; 2],
     pub coin: Option<String>,
+    /// `start.first_player_draws`: the first player draws on their first turn (Classic: yes).
+    pub first_player_draws: bool,
+    /// `bot.trap`: what the bot counts for each of its own traps in play (a card in hand is 1; Classic: 0).
+    pub bot_trap: f64,
+    /// `bot.depth`: 2 = before ending its turn the bot also tries two actions in a row (Classic: 1).
+    pub bot_depth: i64,
     pub fatigue: (bool, i64, i64),
     pub default_power: String,
     pub classes: Vec<Class>,
@@ -394,6 +400,9 @@ impl Ruleset {
                 [h.first().and_then(Value::as_i64).unwrap_or(3), h.get(1).and_then(Value::as_i64).unwrap_or(4)]
             }),
             coin: start.get("coin").and_then(Value::as_str).map(String::from),
+            first_player_draws: start.get("first_player_draws") != Some(&json!(false)),
+            bot_trap: i(&rules["bot"], "trap", 0) as f64,
+            bot_depth: i(&rules["bot"], "depth", 1),
             fatigue: (fat.get("enabled") != Some(&json!(false)), i(fat, "first", 1), i(fat, "step", 1)),
             default_power: s(&rules, "default_power"),
             classes,
