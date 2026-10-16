@@ -30,7 +30,7 @@
     "mother_rust": {"name": "Madre Ruggine", "text": "Testa cromata. Boss dei Santi della Ruggine; il suo braccio chiude ogni discussione."},
     "director_vale": {"name": "Direttore Vale", "text": "Dirigente. Capo della sicurezza della Sunvault Consolidated; tutto è un asset."},
     "siphon": {"name": "Sifone", "text": "Infliggi 1 danno a un servitore. Se muore, pesca una carta."},
-    "shakedown": {"name": "Pizzo", "text": "Infliggi 1 danno al campione nemico. Ottieni 1 Blindatura."},
+    "shakedown": {"name": "Pizzo", "text": "Infliggi 2 danni al campione nemico. Ottieni 1 Blindatura."},
     "deploy": {"name": "Schieramento", "text": "Evoca un Drone sentinella 0/2 con <b>Firewall</b>."},
     "jumpstart": {"name": "Avviamento d'emergenza", "text": "Ottieni 1 Mana solo per questo turno."},
     "sentry_drone": {"name": "Drone sentinella", "text": "<b>Firewall</b>"},

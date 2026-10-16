@@ -30,7 +30,7 @@
     "mother_rust": {"name": "Matka Rdza", "text": "Chromowiec. Szefowa Rdzawych Świętych; jej ramię kończy każdy spór."},
     "director_vale": {"name": "Dyrektor Vale", "text": "Korporat. Szef ochrony Sunvault Consolidated; wszystko jest aktywem."},
     "siphon": {"name": "Wysysanie", "text": "Zadaj 1 pkt. obrażeń stronnikowi. Jeśli zginie, dobierz kartę."},
-    "shakedown": {"name": "Haracz", "text": "Zadaj 1 pkt. obrażeń wrogiemu czempionowi. Zyskaj 1 pkt. pancerza."},
+    "shakedown": {"name": "Haracz", "text": "Zadaj 2 pkt. obrażeń wrogiemu czempionowi. Zyskaj 1 pkt. pancerza."},
     "deploy": {"name": "Rozmieszczenie", "text": "Przyzwij Drona wartownika 0/2 z <b>Zaporą</b>."},
     "jumpstart": {"name": "Zastrzyk energii", "text": "Zyskaj 1 manę tylko w tej turze."},
     "sentry_drone": {"name": "Dron wartownik", "text": "<b>Zapora</b>"},

@@ -30,7 +30,7 @@
     "mother_rust": {"name": "Mãe Ferrugem", "text": "Cromada. Chefe dos Santos da Ferrugem; o braço dela encerra qualquer discussão."},
     "director_vale": {"name": "Diretor Vale", "text": "Executivo. Chefe de segurança da Sunvault Consolidated; tudo é um ativo."},
     "siphon": {"name": "Sifão", "text": "Cause 1 de dano a um lacaio. Se ele morrer, compre um card."},
-    "shakedown": {"name": "Achaque", "text": "Cause 1 de dano ao campeão inimigo. Ganhe 1 de Blindagem."},
+    "shakedown": {"name": "Achaque", "text": "Cause 2 de dano ao campeão inimigo. Ganhe 1 de Blindagem."},
     "deploy": {"name": "Implantar", "text": "Evoque um Drone Sentinela 0/2 com <b>Firewall</b>."},
     "jumpstart": {"name": "Chupeta", "text": "Ganhe 1 de mana somente neste turno."},
     "sentry_drone": {"name": "Drone Sentinela", "text": "<b>Firewall</b>"},

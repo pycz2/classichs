@@ -36,18 +36,19 @@ A match is a **run**: two champions fight for control of a block of the city.
 
 ## 2. Champions
 
-All three have 30 Health and a 2-mana Champion Power built from existing engine
-primitives (the Classic powers are 2-point effects; these are too).
+All three have 30 Health and a Champion Power built from existing engine
+primitives (the Classic powers are 2-point effects; these started so, and the
+balance pass (§9) moved Siphon to 3 mana and Shakedown to 2 damage).
 
 | Champion | Class | Playstyle | Power |
 |---|---|---|---|
-| **Iris Null** — a freelance ghost who erases people from the Lattice for money | **Ghost** (`GHOST`) | Tempo-control with spells: cheap Jam and Wipe, Chain bonuses, card draw, steal and transform late. Daemon minions. | **Siphon** (2): Deal 1 damage to a minion. If it dies, draw a card. — `damage`, `draw` |
-| **Mother Rust** — boss of the Rust Saints, half woman, half scrapyard | **Chromehead** (`CHROME`) | Aggro-midrange: weapons, Plating, Overclock and Heat for burst, Redline minions, discards for raw power. | **Shakedown** (2): Deal 1 damage to the enemy champion. Gain 1 Plating. — `damage`, `gain_armor` |
+| **Iris Null** — a freelance ghost who erases people from the Lattice for money | **Ghost** (`GHOST`) | Tempo-control with spells: cheap Jam and Wipe, Chain bonuses, card draw, steal and transform late. Daemon minions. | **Siphon** (3): Deal 1 damage to a minion. If it dies, draw a card. — `damage`, `draw` |
+| **Mother Rust** — boss of the Rust Saints, half woman, half scrapyard | **Chromehead** (`CHROME`) | Aggro-midrange: weapons, Plating, Overclock and Heat for burst, Redline minions, discards for raw power. | **Shakedown** (2): Deal 2 damage to the enemy champion. Gain 1 Plating. — `damage`, `gain_armor` |
 | **Director Vale** — Sunvault's head of security; everything is an asset | **Executive** (`EXEC`) | Control: Drone walls, Firewall and Hardlight, Protocols (traps), healing, Flatline value, sacrifices for removal. | **Deploy** (2): Summon a 0/2 Sentry Drone with Firewall. — `summon` |
 
 Why these powers: Siphon cannot hit champions, so the Ghost never races with it;
-it trades with 1-health minions and refills the hand. Shakedown is half Steady
-Shot, half Armor Up: steady pressure that also keeps Mother Rust alive against
+it trades with 1-health minions and refills the hand. Shakedown is Steady
+Shot plus a point of Armor Up: steady pressure that also keeps Mother Rust alive against
 other aggro decks. Deploy gives a 0/2 wall every turn — weak against big
 minions, strong against swarms, and it feeds every Drone card (Grid Overseer,
 Field Auditor, ARCHON, Severance).
@@ -91,8 +92,11 @@ have none.
 Each card's logic is data a script can be written (or generated) from. Fields
 beyond the format of `docs/packs/cards.md` are source-only: `effects`,
 `target`, `combo_target`, `can_play`, `options`, `note` (balance note) and
-`look` (art concept); the pack build turns `effects` into
-`scripts/neon.lua#<id>` and drops the rest.
+`look` (art concept); the pack build drops them. The logic itself is in
+`scripts/*.lua` (one file per class plus `neutral.lua` and `lib.lua`), written
+by hand from `effects`; each card with `effects` (or `options`) has a `script`
+field pointing at its hook set, and `rust/engine/tests/neon.rs` checks every
+card's script in a scenario.
 
 ```json
 "target": "minion" | "any" | "enemy_minion" | "friendly_minion" | "enemy_char" | {"base": "...", "race": "DRONE", "cost_le": 3}
@@ -188,7 +192,8 @@ rate per champion): Deploy (0/2 Firewall every turn may be too strong against
 aggro — fallback: 1/1 without Firewall), Packet Storm with Chain (3 one-sided
 AoE for 4 — fallback: Chain only adds +1), ARCHON (snowball — fallback: no
 Attack buff), Fence the Goods (fallback: draw 2), Varga (swing card; it can
-kill 0-Attack walls by design), Root Access (random steal).
+kill 0-Attack walls by design), Root Access (random steal). What the
+simulations found about them, and what changed instead: §9.
 
 Value notes per card are in the tables (`note` in `cards.json`).
 
@@ -219,7 +224,7 @@ Curve: 0: 0 | 1: 2 | 2: 3 | 3: 3 | 4: 2 | 5: 1 | 6: 1 | 7+: 1 | total 13
 | **Static Lock** `static_lock` | Spell | Common | 2 | - | **Jam** a minion and the minions next to it. Draw a card. | draw, freeze, spell, targets | Jam up to 3 minions (~2) and replace itself (2). |
 | **Corrupt** `corrupt` | Spell | Common | 3 | - | Transform an enemy minion into a 0/3 Glitch with **Firewall**. | spell, targets, transform | Hard removal at 3, but leaves the opponent a 0/3 Firewall wall that costs you tempo. |
 | **Firmware Rot** `firmware_rot` | Spell | Rare | 3 | - | **Wipe** a minion, then deal 2 damage to it. | damage, silence, spell, targets | Wipe (2) + 2 damage (3) = 5; answers buffed or Firewall minions. |
-| **Lattice Diver** `lattice_diver` | Minion | Common | 3 | 3/2 | **Cloak**. **Chain:** Return an enemy minion that costs (3) or less to its owner's hand. | STEALTH, combo, return_to_hand, targets | 3/2 (5) + Cloak (1) = 6 of 7; Chain bounce (~2) for tempo turns. |
+| **Lattice Diver** `lattice_diver` | Minion | Common | 3 | 3/3 | **Cloak**. **Chain:** Return an enemy minion that costs (3) or less to its owner's hand. | STEALTH, combo, return_to_hand, targets | 3/3 (6) + Cloak (1) = 7 = budget (balance pass: 3/2); Chain bounce (~2) for tempo turns. |
 | **Packet Storm** `packet_storm` | Spell | Rare | 4 | - | Deal 2 damage to all enemy minions. **Chain:** Deal 3 damage instead. | combo, damage, spell | One-sided 2 AoE for 4 (fair), 3 with Chain (strong, needs 5+ mana in practice). |
 | **Recursive Hound** `recursive_hound` | Minion (Daemon) | Rare | 4 | 4/3 | **Flatline:** Add a 2/1 Hound Shard to your hand. | add_to_hand, on_death | 4/3 (7) + a 2/1 in hand (~2) = 9 = budget. |
 | **Root Access** `root_access` | Spell | Epic | 5 | - | Take control of a random enemy minion. Your opponent draws 2 cards. | draw, random, spell, take_control | Steal a random minion (~6-10) but give 2 cards (-5): a swing card, not a value card. |
@@ -248,19 +253,19 @@ Curve: 0: 0 | 1: 3 | 2: 3 | 3: 3 | 4: 1 | 5: 1 | 6: 1 | 7+: 1 | total 13
 
 ### Executive (EXEC)
 
-Curve: 0: 0 | 1: 3 | 2: 4 | 3: 2 | 4: 1 | 5: 1 | 6: 1 | 7+: 1 | total 13
+Curve: 0: 0 | 1: 5 | 2: 4 | 3: 0 | 4: 1 | 5: 1 | 6: 1 | 7+: 1 | total 13
 
 | Card | Type | Rarity | Cost | Stats | Text | Engine primitives | Value note |
 |---|---|---|---|---|---|---|---|
-| **Field Auditor** `field_auditor` | Minion | Common | 1 | 1/2 | **Boot:** Give a friendly Drone **Hardlight**. | on_play, set_tag, targets | 1/2 (3) of 3 + Hardlight on a Drone when you have one (~1). |
+| **Executive Decision** `executive_decision` | Spell | Rare | 1 | - | **Fork:** **Wipe** a minion; or give a minion +2 Health and **Firewall**. | options | Either a Wipe (2) or +2 Health and Firewall (2) for (1) (balance pass: at 2 it was rarely worth the card). |
+| **Field Auditor** `field_auditor` | Minion | Common | 1 | 2/2 | **Boot:** Give a friendly Drone **Hardlight**. | on_play, set_tag, targets | 2/2 (4) + Hardlight on a Drone when you have one (~1) = 5 of 3 (balance pass: 1/2 was too weak; Executive bodies need Attack). |
+| **Protocol: Lockout** `lockout` | Spell | Common | 1 | - | **Protocol:** When your opponent plays a minion, deal 1 damage to it and **Jam** it. | damage, freeze, trap:after_summon | Delays their next minion a turn (~2) and kills 1-health ones; (1) after the balance pass. |
 | **Patch Job** `patch_job` | Spell | Common | 1 | - | Restore 3 Health to a minion and give it **Firewall**. | heal, set_tag, spell, targets | Heal 3 (1.5) + Firewall (1) for 1: protect a key minion or wall off a fresh one. |
 | **Severance** `severance` | Spell | Rare | 1 | - | Destroy a friendly minion. Deal damage equal to its Health to a random enemy minion. | damage, destroy, random, spell, targets | Turns a body into random removal; best with Sentry Drones (2) and Riot Sentinel (5). |
-| **Executive Decision** `executive_decision` | Spell | Rare | 2 | - | **Fork:** **Wipe** a minion; or give a minion +2 Health and **Firewall**. | options | Either a Wipe (2) or +2 Health and Firewall (2): one flexible 2-mana card. |
+| **Protocol: Asset Seizure** `asset_seizure` | Spell | Epic | 2 | - | **Protocol:** When an enemy minion dies, add a copy of it to your hand. | add_to_hand, trap:death | A copy of their dead minion (~3-5) for (2) (balance pass); card advantage for the long game. |
 | **Protocol: Golden Parachute** `golden_parachute` | Spell | Rare | 2 | - | **Protocol:** When a friendly minion dies, draw 2 cards. | draw, trap:death | 2 cards (5) for 2 mana once something dies on their turn. |
-| **Protocol: Lockout** `lockout` | Spell | Common | 2 | - | **Protocol:** When your opponent plays a minion, deal 1 damage to it and **Jam** it. | damage, freeze, trap:after_summon | Delays their next minion a turn (~2) and kills 1-health ones. |
-| **Medic Drone** `medic_drone` | Minion (Drone) | Common | 2 | 1/3 | At the end of your turn, restore 2 Health to a random damaged friendly character. | heal, on:turn_end, random | 1/3 (4) + 2 healing per turn (~1+) = 5 = budget. |
-| **Protocol: Asset Seizure** `asset_seizure` | Spell | Epic | 3 | - | **Protocol:** When an enemy minion dies, add a copy of it to your hand. | add_to_hand, trap:death | A copy of their dead minion (~3-5) for 3; card advantage for the long game. |
-| **Grid Overseer** `grid_overseer` | Minion | Rare | 3 | 2/4 | Your Drones have +1 Attack. | aura, aura_add | 2/4 (6) + Drones +1 Attack (~1-2): Sentry Drones become 1/2 Firewalls. |
+| **Grid Overseer** `grid_overseer` | Minion | Rare | 2 | 2/4 | Your Drones have +1 Attack. | aura, aura_add | 2/4 (6) + Drones +1 Attack (~1-2) at (2) (balance pass): Sentry Drones become 1/2 Firewalls early. |
+| **Medic Drone** `medic_drone` | Minion (Drone) | Common | 2 | 2/3 | At the end of your turn, restore 2 Health to a random damaged friendly character. | heal, on:turn_end, random | 2/3 (5) + 2 healing per turn (~1+) = 6 of 5 (balance pass: 1/3 did not pressure). |
 | **Riot Sentinel** `riot_sentinel` | Minion (Drone) | Common | 4 | 2/5 | **Firewall**. **Hardlight** | BARRIER, GUARD | 2/5 (7) + Firewall (1) + Hardlight (2) = 10 of 9: the class's best wall, low Attack. |
 | **Vat-Grown Clone** `vat_clone` | Minion | Common | 5 | 3/3 | **Boot:** Summon a copy of this minion. | copy_minion, on_play | Two 3/3 bodies (12) for 5: spreads value, weak to AoE. |
 | **Enforcement Mech** `enforcement_mech` | Minion (Drone) | Epic | 6 | 5/4 | **Firewall**. **Flatline:** Summon two 0/2 Sentry Drones with **Firewall**. | GUARD, on_death, summon | 5/4 (9) + Firewall (1) + two 0/2 Firewalls (3) = 13 = budget. |
@@ -301,8 +306,8 @@ Curve: 0: 0 | 1: 3 | 2: 4 | 3: 4 | 4: 3 | 5: 3 | 6: 2 | 7+: 2 | total 21
 | **Iris Null** `iris_null` | Champion (GHOST) | - | 30 HP | Ghost. She rides the Lattice and leaves no trace. |  |
 | **Mother Rust** `mother_rust` | Champion (CHROME) | - | 30 HP | Chromehead. Boss of the Rust Saints; her arm settles every argument. |  |
 | **Director Vale** `director_vale` | Champion (EXEC) | - | 30 HP | Executive. Security chief of Sunvault Consolidated; everything is an asset. |  |
-| **Siphon** `siphon` | Power (GHOST) | 2 | - | Deal 1 damage to a minion. If it dies, draw a card. | damage, draw, if, power, targets |
-| **Shakedown** `shakedown` | Power (CHROME) | 2 | - | Deal 1 damage to the enemy champion. Gain 1 Plating. | damage, gain_armor, power |
+| **Siphon** `siphon` | Power (GHOST) | 3 | - | Deal 1 damage to a minion. If it dies, draw a card. | damage, draw, if, power, targets |
+| **Shakedown** `shakedown` | Power (CHROME) | 2 | - | Deal 2 damage to the enemy champion. Gain 1 Plating. | damage, gain_armor, power |
 | **Deploy** `deploy` | Power (EXEC) | 2 | - | Summon a 0/2 Sentry Drone with **Firewall**. | power, summon |
 | **Jumpstart** `jumpstart` | Spell (NEUTRAL) | 0 | - | Gain 1 Mana this turn only. | gain_mana, spell |
 | **Sentry Drone** `sentry_drone` | Minion (EXEC) | 1 | 0/2 | **Firewall** | GUARD |
@@ -314,9 +319,9 @@ Curve: 0: 0 | 1: 3 | 2: 4 | 3: 4 | 4: 3 | 5: 3 | 6: 2 | 7+: 2 | total 21
 
 ### Starter decks
 
-**Hostile Merger** (`decks/hostile_merger.json`, Director Vale): 2x Field Auditor (1), 1x Patch Job (1), 2x Severance (1), 2x Signal Jammer (1), 2x Executive Decision (2), 1x Protocol: Golden Parachute (2), 1x Protocol: Lockout (2), 2x Medic Drone (2), 2x Club Bouncer (2), 1x Protocol: Asset Seizure (3), 2x Grid Overseer (3), 1x Night Market Cook (3), 2x Riot Sentinel (4), 2x Swarm Wrangler (4), 2x Vat-Grown Clone (5), 1x Rapid-Response Medic (5), 1x Repo Mech (5), 1x Enforcement Mech (6), 1x Maglev Juggernaut (6), 1x ARCHON, Executive Intelligence (8)
+**Hostile Merger** (`decks/hostile_merger.json`, Director Vale): 2x Executive Decision (1), 2x Field Auditor (1), 1x Protocol: Lockout (1), 1x Patch Job (1), 2x Severance (1), 2x Signal Jammer (1), 1x Protocol: Asset Seizure (2), 1x Protocol: Golden Parachute (2), 2x Grid Overseer (2), 2x Medic Drone (2), 2x Club Bouncer (2), 1x Night Market Cook (3), 2x Riot Sentinel (4), 2x Swarm Wrangler (4), 2x Vat-Grown Clone (5), 1x Rapid-Response Medic (5), 1x Repo Mech (5), 1x Enforcement Mech (6), 1x Maglev Juggernaut (6), 1x ARCHON, Executive Intelligence (8)
 
-Curve: 0: 0 | 1: 7 | 2: 8 | 3: 4 | 4: 4 | 5: 4 | 6: 2 | 7+: 1 | minions 22, spells 8, weapons 0
+Curve: 0: 0 | 1: 10 | 2: 8 | 3: 1 | 4: 4 | 5: 4 | 6: 2 | 7+: 1 | minions 22, spells 8, weapons 0
 
 **Redline Rush** (`decks/redline_rush.json`, Mother Rust): 2x Nitro Shot (1), 2x Rust Shiv (1), 2x Stim Junkie (1), 2x Neon Moth (1), 1x Chrome Up (2), 2x Fence the Goods (2), 2x Hot Courier (2), 2x Chrome Stray (2), 2x Knockoff Mech (2), 2x Back-Alley Bomb (3), 2x Chain Whip (3), 1x Scrap Bruiser (3), 2x Glasshound Runner (3), 2x Pawn Shark (4), 1x Rooftop Sniper (4), 1x Hydraulic Maul (5), 1x Ramraider (6), 1x Vulka, the Scrap Saint (7)
 
@@ -353,3 +358,87 @@ Curve: 0: 0 | 1: 5 | 2: 8 | 3: 7 | 4: 6 | 5: 2 | 6: 1 | 7+: 1 | minions 17, spel
 - Music: three synthwave loops — `menu` (A minor, 96 bpm), `battle_1`
   (E minor, 118 bpm), `battle_2` (D minor, 126 bpm): four-on-the-floor drums,
   saw bass, kick-ducked pad, dotted-echo arpeggio, a generated lead motif.
+
+## 9. Balance pass (phase E1)
+
+**How it was measured.** `rust/engine/tests/neon.rs` `simulate` plays the
+engine's greedy bot (`rust/engine/src/bot.rs`, one-step look-ahead) against
+itself, every pair of champions, both seat orders (each side goes first in
+half the games), with the three starter decks and with random legal decks
+(30 cards from the champion's class and the neutrals, at most 2 copies, 1
+legendary). The bot's value counts a card in hand but not a trap in play, so
+on its own it never plays a Protocol; the simulation plays an affordable
+Protocol whenever the bot would end its turn (the in-game bot does not do
+that yet). Mirrors are not played; a champion's rate is over its two
+matchups, a draw counts half.
+
+```sh
+cd rust
+NEON_SIM=1000 cargo test --release -p classichs-engine --test neon simulate -- --nocapture
+# NEON_DECKS=starter|random|both, NEON_PAIR=iris_null,director_vale (one matchup),
+# NEON_ALL=1 (every card's win rate when played), NEON_TRACE=1 (a game log)
+```
+
+1000 games per pairing and seat order, 6000 games per deck mode, ~55 s on
+all cores.
+
+| | Before: starter | Before: random | After: starter | After: random |
+|---|---|---|---|---|
+| Director Vale | 39.9 % | 41.9 % | 50.5 % | 48.0 % |
+| Iris Null | **69.2 %** | **64.3 %** | 51.6 % | 53.2 % |
+| Mother Rust | 40.9 % | 43.8 % | 47.9 % | 48.8 % |
+| Vale vs Iris | **21.1 %** | **33.3 %** | 37.9 % | 44.5 % |
+| Vale vs Rust | 58.8 % | 50.5 % | 63.1 % | 51.5 % |
+| Iris vs Rust | 59.5 % | 62.0 % | 41.1 % | 51.0 % |
+| Average length | 19.5 turns | 20.1 turns | 18.5 turns | 19.5 turns |
+| First player wins | 61.4 % | 64.6 % | 63.4 % | 66.2 % |
+
+Target met: every champion within 45–55 %, no matchup outside 35–65 %. The
+starter decks keep a rock-paper-scissors shape (Vale's walls beat Rust's
+aggro, Rust outraces Iris, Iris outvalues Vale); random decks are flatter.
+
+**Changes** (each tried alone first, 500 games per pairing and seat; the
+paired seeds make an untouched matchup repeat exactly, so small shifts are
+real):
+
+| Card | Before | After | Why (measured alone, starter decks) |
+|---|---|---|---|
+| Siphon (Iris power) | (2) | **(3)** | The draw on kill is a card every turn against Drones and 1-health bodies; without the draw Iris fell 10 points. At (3): Iris −6, Vale vs Iris +6, text unchanged. |
+| Shakedown (Rust power) | 1 damage, 1 Plating | **2 damage**, 1 Plating | Rust lost to Firewall walls; damage that ignores Firewall: Rust +11, Vale vs Rust −8 (text changed in all 8 locales). |
+| Field Auditor | 1/2 | **2/2** | Executive bodies had no Attack: Vale vs Iris +3, Vale vs Rust −2. |
+| Medic Drone | 1/3 | **2/3** | Vale vs Iris +4. |
+| Grid Overseer | (3) | **(2)** | Drones with Attack early; with the two above: Vale vs Iris +5. |
+| Executive Decision | (2) | **(1)** | Rarely worth a card at (2) (33 % when played, random decks). |
+| Protocol: Lockout | (2) | **(1)** | Weakest Executive cards in random decks (34 %, 31 %); together with Executive Decision: random Vale +3. |
+| Protocol: Asset Seizure | (3) | **(2)** | |
+| Lattice Diver | 3/2 | **3/3** | After the Siphon nerf Iris lost too much to Rust: Iris vs Rust +3, Vale vs Iris −4. |
+
+**The risky cards of §5** were tested and left as designed: Deploy's Sentry
+Drone at 1/2 lifts Vale vs Rust by 14 points (the 0/2 wall is not too strong
+for the bot; a stronger one would be); Root Access at (6) moved Iris by only
+1 point; Packet Storm at (5), or no Packet Storm at all, made Iris *stronger*
+(the bot uses the slot better), so its Chain is not the problem; ARCHON at (7)
+moved Vale by 1 point (it wins 54 % / 58 % when played, no snowball); Fence
+the Goods and Varga are average or below (41–46 %, 50 %).
+Other single changes tried and dropped: Corrupt (4), Static Lock (3),
+Billboard Leviathan 2/5, Riot Sentinel 3/5, Vat-Grown Clone (4), Lattice
+Phantom 3/3, Bit-Rot Daemon 2/3, Cache Raid (3), SABLE 5/5, Signal Leech 1/1,
+Chain Whip without Heat, Signal Jammer 1/3 and Club Bouncer 2/3 (neutral
+buffs that helped the starter Vale but left random Executive decks at 42 %).
+
+**Win rate when played** (the player who played the card at least once;
+biased toward cards played when already ahead, e.g. Jumpstart 80 %+ and
+Sentry Drone 20 %, a Deploy that never got used is not counted).
+After, starter decks: highest Billboard Leviathan 69 %, Static Lock 68 %,
+Lattice Phantom 64 %, Cache Raid 60 %; lowest Asset Seizure 38 %, Fence the
+Goods 41 %, Chain Whip 42 %, Scrap Bruiser 42 %. Random decks: highest
+Seawall Colossus, Corrupt 61 %, Packet Storm, SABLE, Billboard Leviathan
+59 %; lowest Asset Seizure 37 %, Severance 37 %, Chain Whip 41 %. Before, the
+spread was 33–81 % (starter) and 31–71 % (random). Watch next: Billboard
+Leviathan and Static Lock (Iris's best cards), and the Protocols, whose
+numbers depend on how the bot plays them.
+
+**Findings beyond the cards.** The first player wins 63–66 % of bot games
+(Jumpstart is only one temporary Mana); a rules change (a second Jumpstart or
+a card more) would be the next lever, not in this pass. The in-game bot never
+plays a Protocol (see above).

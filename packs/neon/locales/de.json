@@ -30,7 +30,7 @@
     "mother_rust": {"name": "Mutter Rost", "text": "Chromschädel. Bossin der Rostheiligen; ihr Arm beendet jeden Streit."},
     "director_vale": {"name": "Direktor Vale", "text": "Konzerner. Sicherheitschef von Sunvault Consolidated; alles ist ein Vermögenswert."},
     "siphon": {"name": "Absaugen", "text": "Füge einem Diener 1 Schaden zu. Wenn er stirbt, ziehst du eine Karte."},
-    "shakedown": {"name": "Schutzgeld", "text": "Füge dem feindlichen Champion 1 Schaden zu. Erhalte 1 Panzerung."},
+    "shakedown": {"name": "Schutzgeld", "text": "Füge dem feindlichen Champion 2 Schaden zu. Erhalte 1 Panzerung."},
     "deploy": {"name": "Ausrücken", "text": "Ruft eine Wachdrohne (0/2) mit <b>Firewall</b> herbei."},
     "jumpstart": {"name": "Starthilfe", "text": "Erhalte 1 Mana nur für diesen Zug."},
     "sentry_drone": {"name": "Wachdrohne", "text": "<b>Firewall</b>"},
