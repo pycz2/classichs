@@ -109,6 +109,8 @@ static func shield(ci: CanvasItem, c: Vector2, value: int, r: float, col := Colo
 
 static func rarity(ci: CanvasItem, c: Vector2, rar: String, r: float) -> void:
 	var col: Color = {"COMMON": Color("f8f9fa"), "RARE": Color("339af0"), "EPIC": Color("ae3ec9"), "LEGENDARY": Color("fd7e14")}.get(rar, Color.TRANSPARENT)
+	if Packs.active() and Packs.active().id() != Packs.CLASSIC and rar != "":  # Classic keeps its gem colours
+		col = Palette.of_rarity(rar, Color.TRANSPARENT)
 	if col.a == 0.0:
 		return
 	# a round polished gem: a shadow under it, a dark rim, the colour darker at the bottom, a highlight

@@ -5,15 +5,14 @@ extends Control
 ## medal, one big Play button) or the Arena (a ticket, three heroes, the draft,
 ## the record of wins and losses). Friends and messages are the Social overlay's
 ## (on every screen); a game the server starts is shown by main. The last deck,
-## mode and tab are remembered. Protocol: server/README.md.
+## mode and tab are remembered per server. With several servers a picker at the top
+## switches (D14); "Games" lists the server's game packs (download, use, upload).
+## The ranks' names and emblems come from the active pack. Protocol: server/README.md.
 
 signal back
+## Another server was picked (main shows the lobby again for it).
+signal server_chosen(link: ServerLink)
 
-## The 2014 ranks are named after cards: their art is the rank's emblem.
-const RANK_CARDS := ["VAN_EX1_002", "VAN_EX1_620", "VAN_EX1_105", "VAN_EX1_586", "VAN_EX1_178", "VAN_EX1_032",
-	"VAN_CS2_226", "VAN_CS2_151", "VAN_CS2_197", "VAN_EX1_005", "VAN_EX1_084", "VAN_NEW1_022", "VAN_CS2_122",
-	"VAN_EX1_023", "VAN_EX1_044", "VAN_EX1_390", "VAN_EX1_608", "VAN_EX1_015", "VAN_EX1_405", "VAN_CS2_146",
-	"VAN_CS2_168", "VAN_EX1_008", "VAN_EX1_029", "VAN_EX1_009"]  # ranks 2 … 25; rank 1 is the Innkeeper
 const TABS := ["Play", "Arena"]
 const MODES := ["casual", "ranked"]
 const ARENA_WINS := 12
@@ -21,6 +20,8 @@ const ARENA_LOSSES := 3
 const LIST_X := 968.0  # the Arena deck list on the right
 
 var link: ServerLink
+## Every server's connection (for the picker; main's server_links).
+var links: Array = []
 var stage := ""  # "connecting", "login", "lobby"
 var tab := "Play"
 var mode := "casual"  # Play: casual or ranked
@@ -31,6 +32,8 @@ var waited := 0.0
 var _status: Label
 var _body := Control.new()
 var _retire_armed := false
+var _games: Control  # the "Games on this server" panel while open
+var _delete_armed := ""  # the content hash whose Delete was pressed once
 
 
 func _ready() -> void:
@@ -50,17 +53,22 @@ func _ready() -> void:
 	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(_status)
-	var s := ServerLink.saved()
+	var s := link.saved()
 	tab = s.get("tab") if s.get("tab") in TABS else "Play"
 	mode = s.get("mode") if s.get("mode") in MODES else "casual"
-	deck = remembered_deck()
-	if link.is_open() and link.url != Settings.data.server:
-		link.close()  # the address was changed in the settings: connect there
+	deck = remembered_deck(link)
 	link.message.connect(_on_message)
+	link.packs_changed.connect(_packs_changed)
+	link.pack_progress.connect(_pack_progress)
+	link.pack_downloaded.connect(_pack_downloaded)
+	link.pack_uploaded.connect(_pack_uploaded)
 	link.closed.connect(func(_why):
 		queued = ""
 		_go("login")
-		say(tr("Connection lost") if link.was_open() else tr("Could not connect to %s") % link.url))
+		if link.kicked:
+			say(tr("You logged in on another device"))
+		else:
+			say(tr("Connection lost") if link.was_open() else tr("Could not connect to %s") % link.url))
 	if link.logged_in():  # back from a game, or still logged in
 		if link.get_meta("mode", "") == "arena":
 			tab = "Arena"
@@ -76,9 +84,9 @@ func _ready() -> void:
 		_go("connecting" if link.resuming else "login")
 	else:
 		_go("connecting")
-		if link.open_and_resume(Settings.data.server) != OK:
+		if link.open_and_resume(link.url) != OK:
 			_go("login")
-			say(tr("Could not connect to %s") % Settings.data.server)
+			say(tr("Could not connect to %s") % link.url)
 		else:
 			link.opened.connect(func():
 				if not link.resuming and stage == "connecting":
@@ -101,9 +109,9 @@ static func _mmss(s: float) -> String:
 	return "%d:%02d" % [int(s) / 60, int(s) % 60]
 
 
-## The deck chosen last time (by name and hero), else the first finished one.
-static func remembered_deck() -> Deck:
-	var want = ServerLink.saved().get("deck")
+## The deck chosen last time on a server (by name and hero), else the first finished one.
+static func remembered_deck(l: ServerLink = null) -> Deck:
+	var want = l.saved().get("deck") if l else null
 	var first: Deck = null
 	for d in TrainingSetup.available_decks():
 		if d.validate() != "":
@@ -129,6 +137,28 @@ func _go(s: String) -> void:
 			_build_login()
 		"lobby":
 			_build_lobby()
+	if links.size() > 1:
+		_server_picker(Vector2(360, 8) if s == "lobby" else Vector2(490, 40))
+
+
+## The server picker (several servers): another one shows the lobby for it.
+func _server_picker(at: Vector2) -> void:
+	var pick := OptionButton.new()
+	pick.name = "ServerPick"
+	pick.position = at
+	pick.custom_minimum_size = Vector2(180 if stage == "lobby" else 300, 46)
+	pick.clip_text = true
+	pick.focus_mode = Control.FOCUS_NONE
+	pick.add_theme_font_size_override("font_size", 18)
+	for l in links:
+		pick.add_item(l.display_name() + (" · " + str(l.me.get("user", "")) if l.logged_in() else ""))
+	pick.select(maxi(0, links.find(link)))
+	pick.item_selected.connect(func(i):
+		if links[i] != link:
+			if queued != "":
+				unqueue()
+			server_chosen.emit(links[i]))
+	_body.add_child(pick)
 
 
 func _panel(at: Vector2, sz: Vector2, parent: Control = _body) -> Panel:
@@ -176,13 +206,14 @@ func _build_connecting() -> void:
 
 
 func _address() -> String:
-	return link.url if link.url != "" else Settings.data.server
+	return link.url
 
 
 func _build_login() -> void:
 	_panel(Vector2(370, 110), Vector2(540, 470))
 	_centered(tr("Game server"), 40, Vector2(390, 132), 500, Palette.ATTACK)
-	_centered(_address(), 18, Vector2(390, 186), 500, Color("c9b48a"))
+	var host := Settings.server_label(link.url)
+	_centered(_address() if link.display_name() == host else "%s · %s" % [link.display_name(), _address()], 18, Vector2(390, 186), 500, Color("c9b48a"))
 	var box := VBoxContainer.new()
 	box.position = Vector2(430, 232)
 	box.custom_minimum_size.x = 420
@@ -224,9 +255,25 @@ func _build_login() -> void:
 	note.custom_minimum_size.x = 420
 	box.add_child(note)
 	_back_button(true)
+	if link.saved().get("kicked", false) and str(link.saved().get("token", "")) != "":
+		var here := Palette.button(tr("Play here"), "PlayHere")
+		here.position = Vector2(520, 596)
+		here.custom_minimum_size = Vector2(240, 50)
+		here.tooltip_text = tr("You logged in on another device")
+		here.pressed.connect(play_here)
+		_body.add_child(here)
 	var field := user if user.text == "" else pw
 	if field.is_inside_tree():
 		field.grab_focus()
+
+
+## Kicked out by another login: the saved session again (the other device gets kicked).
+func play_here() -> void:
+	if link.is_open():
+		link.resume_saved()
+	else:
+		link.open_and_resume(link.url, true)
+	_go("connecting")
 
 
 func log_in(op: String, user: String, password: String) -> void:
@@ -251,33 +298,46 @@ func _build_lobby() -> void:
 	bar.add_theme_stylebox_override("panel", st)
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_body.add_child(bar)
+	var several := links.size() > 1  # room for the server picker: narrower tabs
+	var tw := 152.0 if several else 184.0
 	for i in TABS.size():
 		var t: String = TABS[i]
 		var b := Palette.button(tr(t), "Tab" + t)
-		b.position = Vector2(20 + i * 196, 8)
-		b.custom_minimum_size = Vector2(184, 46)
+		b.position = Vector2(20 + i * (tw + 12), 8)
+		b.custom_minimum_size = Vector2(tw, 46)
 		b.add_theme_font_size_override("font_size", 24)
 		b.toggle_mode = true
 		b.button_pressed = t == tab
 		b.modulate = Color.WHITE if t == tab else Color(0.68, 0.64, 0.6)
 		b.pressed.connect(func():
 			tab = t
-			ServerLink.remember({"tab": t})
+			link.remember({"tab": t})
 			_go("lobby"))
 		_body.add_child(b)
+	var gx := 552.0 if several else 412.0
+	var games := Palette.button(_game_line(), "GamesButton")
+	games.position = Vector2(gx, 8)
+	games.custom_minimum_size = Vector2(180 if several else 196, 46)
+	games.size = games.custom_minimum_size
+	games.clip_text = true
+	games.add_theme_font_size_override("font_size", 18)
+	games.tooltip_text = tr("Games on this server")
+	if not link.has_game(Packs.active()):
+		games.add_theme_color_override("font_color", Palette.OPPONENT)
+		games.tooltip_text = link.game_problem(Packs.active())
+	games.pressed.connect(show_games)
+	_body.add_child(games)
 	var me := link.me
-	var who := Palette.label(player_label(me), 22, Palette.ATTACK)
-	who.name = "PlayerName"
-	who.position = Vector2(560, 4)
-	who.custom_minimum_size.x = 560
-	who.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_body.add_child(who)
-	var rank := Palette.label(rank_text(me.get("rank", {})), 15, Color("c9b48a"))
-	rank.name = "RankLine"
-	rank.position = Vector2(560, 32)
-	rank.custom_minimum_size.x = 560
-	rank.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_body.add_child(rank)
+	var nx := gx + games.custom_minimum_size.x + 12
+	for spec in [["PlayerName", player_label(me), 22, Palette.ATTACK, 4], ["RankLine", rank_text(me.get("rank", {})), 15, Color("c9b48a"), 32]]:
+		var l := Palette.label(spec[1], spec[2], spec[3])
+		l.name = spec[0]
+		l.position = Vector2(nx, spec[4])
+		l.size = Vector2(1120 - nx, 28)
+		l.clip_text = true
+		l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		_body.add_child(l)
 	var out := Palette.button(tr("Log out"), "Logout")
 	out.position = Vector2(1136, 10)
 	out.custom_minimum_size = Vector2(128, 42)
@@ -307,18 +367,41 @@ func rank_text(r: Dictionary) -> String:
 		var n := int(r.get("legend")) if r.get("legend") is float else 0
 		return tr("Legend") + (" %d" % n if n > 0 else "")
 	var rank := int(r.get("rank", 25))
-	return tr("Rank %d") % rank + " · " + rank_name(rank) + " · " + tr("stars %d of %d") % [int(r.get("stars", 0)), stars_needed(rank)]
+	var n := rank_name(rank)
+	return tr("Rank %d") % rank + (" · " + n if n != "" else "") + " · " + tr("stars %d of %d") % [int(r.get("stars", 0)), stars_needed(rank)]
 
 
-## Stars to the next rank, as in 2014: 2 at ranks 25–21, 3 at 20–16, 4 at 15–11, 5 above.
+## The active pack's rule for a rank (rules.json ranked.ranks[]: {rank, stars, emblem…}; {} when none).
+static func rank_rule(rank: int) -> Dictionary:
+	var p := Packs.active()
+	var ranked = p.rules().get("ranked") if p else null
+	for r in ranked.get("ranks", []) if ranked is Dictionary else []:
+		if r is Dictionary and int(r.get("rank", -1)) == rank:
+			return r
+	return {}
+
+
+## Stars to the next rank: the pack's, else as in 2014 (2 at ranks 25–21, 3 at 20–16, 4 at 15–11, 5 above).
 static func stars_needed(rank: int) -> int:
+	var r := rank_rule(rank)
+	if r.get("stars") is float or r.get("stars") is int:
+		return int(r.stars)
 	return 2 if rank > 20 else (3 if rank > 15 else (4 if rank > 10 else 5))
 
 
+## A rank's name: the active pack's (locales: ranks "25" … "1", "0" = Legend), else its emblem
+## card's name, else "" (the number alone).
 static func rank_name(rank: int) -> String:
-	if rank == 1:
-		return TranslationServer.translate("Innkeeper")
-	return CardText.name(RANK_CARDS[rank - 2]) if rank >= 2 and rank <= 25 else ""
+	var p := Packs.active()
+	if p:
+		var names = p.locale(p.lang_for(Settings.language())).get("ranks")
+		if names is Dictionary and names.has(str(rank)):
+			return str(names[str(rank)])
+		names = p.locale(p.default_locale()).get("ranks")  # the client knows the words of the default
+		if names is Dictionary and names.has(str(rank)):
+			return TranslationServer.translate(str(names[str(rank)]))
+	var e = rank_rule(rank).get("emblem")
+	return CardText.name(str(e.card)) if e is Dictionary and e.get("card") is String else ""
 
 
 # --- play: the deck boxes, casual or ranked, the Play button ----------------------
@@ -412,13 +495,13 @@ func choose_deck(d: Deck) -> void:
 	if queued != "":
 		return
 	deck = d
-	ServerLink.remember({"deck": {"name": d.name, "hero": d.hero}})
+	link.remember({"deck": {"name": d.name, "hero": d.hero}})
 	_go("lobby")
 
 
 func set_mode(m: String) -> void:
 	mode = m
-	ServerLink.remember({"mode": m})
+	link.remember({"mode": m})
 	_go("lobby")
 
 
@@ -426,8 +509,10 @@ func queue(m: String) -> void:
 	if deck == null or deck.validate() != "":
 		say(tr("Choose your deck"))
 		return
+	if not _game_here():
+		return
 	link.game_deck = deck
-	link.send({"t": "queue", "mode": m, "deck": deck.to_dict()})
+	link.send(link.with_pack({"t": "queue", "mode": m, "deck": deck.to_dict()}))
 	queued = m
 	waited = 0.0
 	say("")
@@ -469,7 +554,9 @@ func _build_ticket(after: bool) -> void:
 	go.text = tr("Enter the Arena")
 	go.position = Vector2(440, 444)
 	go.size = Vector2(400, 104)
-	go.pressed.connect(func(): link.send({"t": "arena_start"}))
+	go.pressed.connect(func():
+		if _game_here():
+			link.send(link.with_pack({"t": "arena_start"})))
 	_body.add_child(go)
 	_centered(tr("Draft a deck from three cards at a time, then play until 12 wins or 3 losses"), 18, Vector2(390, 560), 500, Color("e0d2b4"))
 
@@ -505,7 +592,7 @@ func _build_draft() -> void:
 	if not offer.is_empty():
 		var tier := ArenaDraft.tier(offer[0])
 		_centered({"common": tr("Common"), "rare": tr("Rare"), "epic": tr("Epic"), "legendary": tr("Legendary")}.get(tier, ""),
-			18, Vector2(40, 422), LIST_X - 80, Palette.RARITY.get(tier.to_upper(), Palette.TEXT))
+			18, Vector2(40, 422), LIST_X - 80, Palette.of_rarity(tier.to_upper()))
 	var curve := ArenaView._Curve.new()
 	curve.name = "Curve"
 	var d := arena_deck()
@@ -604,6 +691,203 @@ func arena_deck() -> Deck:
 	return d
 
 
+# --- games (packs) on this server ------------------------------------------------
+
+## The top bar's game: the active pack's name (a warning mark when this server lacks it).
+func _game_line() -> String:
+	var p := Packs.active()
+	return ("" if link.has_game(p) else "! ") + (p.title(Settings.language()) if p else "")
+
+
+## Whether the active game can be played here; if not, says so and shows the server's games.
+func _game_here() -> bool:
+	if link.has_game(Packs.active()):
+		return true
+	say(link.game_problem(Packs.active()))
+	show_games()
+	return false
+
+
+## A server pack's name in the interface language ({lang: text}), else its id.
+static func entry_title(e: Dictionary) -> String:
+	var n = e.get("name")
+	if n is Dictionary and not n.is_empty():
+		var lang := Settings.language()
+		for k in [lang, lang.get_slice("_", 0), "en"]:
+			if n.has(k):
+				return str(n[k])
+		return str(n.values()[0])
+	return str(e.get("id", "?"))
+
+
+## The "Games on this server" panel: the server's packs and the player's uploads, each
+## with Download (and its progress), Use or In use; Upload my game; Delete (own, twice).
+func show_games() -> void:
+	close_games()
+	_delete_armed = ""
+	var dim := ColorRect.new()
+	dim.name = "GamesPanel"
+	dim.color = Color(0, 0, 0, 0.6)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(dim)
+	_games = dim
+	_build_games()
+	link.request_packs()
+
+
+func close_games() -> void:
+	if _games:
+		remove_child(_games)
+		_games.queue_free()
+		_games = null
+
+
+func _build_games() -> void:
+	for c in _games.get_children():
+		_games.remove_child(c)
+		c.queue_free()
+	var p := _panel(Vector2(240, 60), Vector2(800, 600), _games)
+	p.mouse_filter = Control.MOUSE_FILTER_STOP
+	_centered(tr("Games on this server"), 32, Vector2(20, 14), 760, Palette.ATTACK, p)
+	var act := Packs.active()
+	var here := link.has_game(act)
+	var line := _centered((tr("Your game: %s") % act.title(Settings.language())) + ("" if here else "  ·  " + link.game_problem(act)),
+		18, Vector2(20, 62), 760, Palette.TEXT if here else Palette.OPPONENT, p)
+	line.name = "GameLine"
+	var scroll := ScrollContainer.new()
+	scroll.position = Vector2(24, 100)
+	scroll.size = Vector2(752, 410)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	p.add_child(scroll)
+	var list := VBoxContainer.new()
+	list.name = "GamesList"
+	list.custom_minimum_size.x = 740
+	list.add_theme_constant_override("separation", 6)
+	scroll.add_child(list)
+	var all: Array = link.packs.server + link.packs.mine
+	if all.is_empty():
+		var none := Palette.label(tr("No games on this server yet") if link.has_packs or not link.logged_in() else tr("This server does not share games"), 18, Color("c9b48a"))
+		none.name = "NoGames"
+		list.add_child(none)
+	for e in all:
+		list.add_child(_game_row(e))
+	var up := Palette.button(tr("Upload my game"), "UploadPack")
+	up.position = Vector2(24, 530)
+	up.custom_minimum_size = Vector2(260, 50)
+	up.tooltip_text = act.title(Settings.language())
+	up.disabled = not link.has_packs
+	up.pressed.connect(func():
+		up.disabled = true
+		_games_say(tr("Uploading %s…") % act.title(Settings.language()))
+		link.upload_pack(act))
+	p.add_child(up)
+	var note := _centered("", 16, Vector2(296, 534), 300, Color("c9b48a"), p)
+	note.name = "GamesNote"
+	var close := Palette.button(tr("Close"), "CloseGames")
+	close.position = Vector2(616, 530)
+	close.custom_minimum_size = Vector2(160, 50)
+	close.pressed.connect(close_games)
+	p.add_child(close)
+
+
+func _games_say(text: String) -> void:
+	var n := _games.find_child("GamesNote", true, false) as Label if _games else null
+	if n:
+		n.text = text
+
+
+## One server pack: its name, version and size; on the right what can be done with it.
+func _game_row(e: Dictionary) -> Control:
+	var h := str(e.get("content_hash", ""))
+	var row := PanelContainer.new()
+	row.name = "Game_" + h.left(12)
+	var st := Palette.box(Color(0, 0, 0, 0.28), 10, Color("6b5320", 0.7), 1)
+	st.content_margin_left = 12
+	st.content_margin_right = 8
+	st.content_margin_top = 6
+	st.content_margin_bottom = 6
+	row.add_theme_stylebox_override("panel", st)
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 10)
+	row.add_child(hb)
+	var mine := link.is_mine(e)
+	var words := VBoxContainer.new()
+	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	words.add_theme_constant_override("separation", 0)
+	hb.add_child(words)
+	words.add_child(Palette.label(entry_title(e), 20, Palette.ATTACK))
+	var sub := "%s · %s" % [str(e.get("version", "")), Packs.size_text(int(e.get("size", 0)))]
+	if mine:
+		sub += " · " + (tr("uploaded by you") if e.get("enabled", true) else tr("uploaded by you, turned off"))
+	words.add_child(Palette.label(sub, 15, Color("c9b48a")))
+	var have := ServerLink.local_pack(e)
+	var right := HBoxContainer.new()
+	right.add_theme_constant_override("separation", 6)
+	hb.add_child(right)
+	if have and have == Packs.active():
+		right.add_child(Palette.label(tr("In use"), 18, Color("8fd97a")))
+	elif have:
+		_row_button(right, tr("Use"), "Use", func():
+			Packs.set_active(have)
+			deck = remembered_deck(link)
+			_go(stage)
+			_build_games())
+	elif link.downloading.has(h):
+		var prog := Palette.label(tr("Downloading…"), 17, Palette.SELECTED)
+		prog.name = "Progress"
+		right.add_child(prog)
+	else:
+		_row_button(right, tr("Download"), "Download", func():
+			link.download_pack(e)
+			_build_games())
+	if mine:
+		var del := _row_button(right, tr("Delete"), "Delete", func(): pass)
+		del.pressed.connect(func():
+			if _delete_armed == h:
+				link.delete_pack(h)
+				_delete_armed = ""
+				_games_say(tr("Deleting…"))
+				return
+			_delete_armed = h
+			del.text = tr("Delete? Press again"))
+	return row
+
+
+func _row_button(parent: Control, text: String, id: String, fn: Callable) -> Button:
+	var b := Palette.button(text, id)
+	b.custom_minimum_size = Vector2(0, 40)
+	b.add_theme_font_size_override("font_size", 17)
+	b.pressed.connect(fn)
+	parent.add_child(b)
+	return b
+
+
+func _packs_changed() -> void:
+	if _games:
+		_build_games()
+	if stage == "lobby":
+		_go("lobby")
+
+
+func _pack_progress(h: String, done: int, total: int) -> void:
+	var row := _games.find_child("Game_" + h.left(12), true, false) if _games else null
+	var l := row.find_child("Progress", true, false) as Label if row else null
+	if l:
+		l.text = tr("Downloading… %d%%") % (100 * done / total) if total > 0 else tr("Downloading…")
+
+
+func _pack_downloaded(_h: String, res: Dictionary) -> void:
+	if _games:
+		_build_games()
+		_games_say(tr("Downloaded: %s") % res.pack.title(Settings.language()) if res.has("pack") else str(res.get("error", "")))
+
+
+func _pack_uploaded(res: Dictionary) -> void:
+	if _games:
+		_build_games()
+		_games_say(tr("Uploaded: %s") % entry_title(res.pack) if res.has("pack") else str(res.get("error", "")))
+
+
 # --- messages from the server -------------------------------------------------
 
 func _on_message(msg: Dictionary) -> void:
@@ -651,6 +935,10 @@ func _on_message(msg: Dictionary) -> void:
 			say(tr("%s declined the invitation") % str(msg.get("by", "")))
 		"logged_out":
 			_go("login")
+		"kicked":
+			queued = ""
+			_go("login")
+			say(tr("You logged in on another device"))
 
 
 func _set_arena(v: Variant) -> void:
@@ -817,6 +1105,8 @@ class RankInfo:
 		draw_style_box(Palette.box(Color(0.07, 0.045, 0.025, 0.85), 12, Color("6b5320"), 2), Rect2(Vector2(44, 6), size - Vector2(44, 12)))
 		var n := int(rank.get("rank", 25))
 		var name := tr("Legend") if n == 0 else ServerView.rank_name(n)
+		if name == "":
+			name = tr("Rank %d") % n
 		DeckTiles.text(self, Vector2(104, 38), name, 20, Palette.ATTACK, size.x - 112)
 		if n == 0:
 			var place := int(rank.get("legend")) if rank.get("legend") is float else 0
@@ -828,10 +1118,20 @@ class RankInfo:
 			ServerView.star(self, Vector2(118 + i * 30, 62), 12, i < int(rank.get("stars", 0)))
 
 
-## The rank's emblem: the namesake card's art in a gold ring (Legend: a gold crest).
+## The rank's emblem in a gold ring, from the active pack: a card's art, a picture, or the
+## crest when it has none (Legend: a gold crest).
 class RankEmblem:
 	extends Control
 	var rank := {}
+	var _tex: Texture2D
+	var _tex_of := ""
+
+	## The active pack's picture for an {image} emblem (loaded once).
+	func _image(file: String) -> Texture2D:
+		if _tex_of != file:
+			_tex_of = file
+			_tex = Packs.active().texture(file)
+		return _tex
 
 	func _draw() -> void:
 		var c := size / 2.0
@@ -843,11 +1143,19 @@ class RankEmblem:
 			draw_circle(c, r, Color("ff9f1a"))
 			Sprites.draw(self, "class_NEUTRAL", c, r * 1.4)
 			return
-		if n == 1:
+		var e = ServerView.rank_rule(n).get("emblem")
+		var box := Rect2(c - Vector2(r, r), Vector2(r, r) * 2)
+		if e is Dictionary and e.get("card") is String:
+			Art.paint_in(self, box, str(e.card), "circle")
+		elif e is Dictionary and e.get("image") is String and _image(str(e.image)):
+			var pts := Art.outline("circle", box)
+			var uvs := PackedVector2Array()
+			for pt in pts:
+				uvs.append((pt - box.position) / box.size)
+			draw_colored_polygon(pts, Color.WHITE, uvs, _tex)
+		else:  # no emblem: the crest
 			draw_circle(c, r, Color("7a4a1c"))
 			Sprites.draw(self, "class_NEUTRAL", c, r * 1.4)
-		elif n <= 25:
-			Art.paint_in(self, Rect2(c - Vector2(r, r), Vector2(r, r) * 2), ServerView.RANK_CARDS[n - 2], "circle")
 		var f := get_theme_default_font()
 		var fs := int(size.y * 0.34)
 		draw_string_outline(f, Vector2(0, size.y - 4), str(n), HORIZONTAL_ALIGNMENT_CENTER, size.x, fs, 6, Color.BLACK)

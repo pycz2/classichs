@@ -21,7 +21,8 @@ const STAGES := ["via", "name", "kind", "deck", "mode", "host", "join"]
 ## Makes the transport; tests replace it with an in-memory fake.
 var transport_factory: Callable = func() -> Transport: return WebRtcTransport.new()
 var name_edit := LineEdit.new()
-var chooser := DeckChooser.new()
+var chooser: DeckChooser
+var _chooser_pack: Pack  # the pack the chooser's decks belong to
 var status: Label
 var code_out := TextEdit.new()
 var code_in := TextEdit.new()
@@ -44,6 +45,10 @@ var _join_button: Button
 var _js_refs: Array = []
 var _connect_wait := -1.0
 var _wait_limit := CONNECT_TIMEOUT
+## The game pack dialog over the screen (the host's pack offered, then its transfer); null when none.
+var pack_dialog: Control
+var _pack_text: Label
+var _pack_bar: ProgressBar
 
 
 func _ready() -> void:
@@ -123,14 +128,7 @@ func _ready() -> void:
 		why.custom_minimum_size.x = 480
 		col.add_child(why)
 	# your deck
-	chooser.name = "DeckChooser"
-	chooser.position = Vector2(140, 130)
-	chooser.size = Vector2(1000, 560)
-	chooser.chosen.connect(choose_deck)
-	chooser.edit_decks.connect(func(): edit_decks.emit())
-	chooser.back.connect(step_back)
-	_stages.deck.add_child(chooser)
-	deck = _first_playable()
+	_build_chooser()
 	# create or join
 	var modes := HBoxContainer.new()
 	modes.position = Vector2(140, 150)
@@ -196,6 +194,22 @@ func _side_button(text: String, id: String, action: Callable) -> Button:
 	return b
 
 
+## The deck list of the active pack (again after a guest switched to the host's pack).
+func _build_chooser() -> void:
+	if chooser:
+		chooser.queue_free()
+	_chooser_pack = Packs.active()
+	chooser = DeckChooser.new()
+	chooser.name = "DeckChooser"
+	chooser.position = Vector2(140, 130)
+	chooser.size = Vector2(1000, 560)
+	chooser.chosen.connect(choose_deck)
+	chooser.edit_decks.connect(func(): edit_decks.emit())
+	chooser.back.connect(step_back)
+	_stages.deck.add_child(chooser)
+	deck = _first_playable()
+
+
 func _first_playable() -> Deck:
 	for d in chooser.decks:
 		if d.validate() == "":
@@ -205,6 +219,8 @@ func _first_playable() -> Deck:
 
 func show_stage(s: String) -> void:
 	stage = s
+	if Packs.active() != _chooser_pack:
+		_build_chooser()
 	for k in _stages:
 		_stages[k].visible = k == s
 	_subtitle.text = {"via": tr("How do you want to play?"), "name": tr("Your name"), "kind": tr("A normal game or the Arena?"), "deck": tr("Choose your deck"),
@@ -270,6 +286,7 @@ func choose_deck(d: Deck) -> void:
 
 func _drop_session() -> void:
 	_connect_wait = -1.0
+	_close_pack_dialog()
 	for s: Node in [session, arena_session]:
 		if s:
 			s.leave()
@@ -322,13 +339,73 @@ func _begin_game(is_host: bool) -> void:
 	add_child(session)
 	session.setup(transport, is_host, Profile.load_name(), deck)
 	session.started.connect(func(m):
+		_close_pack_dialog()
 		state = "playing"
 		status.text = tr("Connected")
 		_sync_js()  # the screen changes right after this
 		play.emit(session, m))
 	session.failed.connect(func(reason):
+		_close_pack_dialog()
 		state = "failed"
 		status.text = reason)
+	var s := session
+	s.pack_offer.connect(func(info: Dictionary):
+		_pack_dialog(tr("Your opponent plays %s %s (%s). Download it and play?") % [info.name, info.version, Packs.size_text(info.size)],
+			[[tr("Download"), "PackDownload", func():
+				s.accept_pack()
+				_pack_dialog(tr("Receiving the game: %s / %s") % [Packs.size_text(0), Packs.size_text(info.size)], [[tr("Cancel"), "PackCancel", s.cancel_pack]], true)],
+			[tr("No"), "PackNo", s.decline_pack]]))
+	s.pack_progress.connect(func(done: int, total: int):
+		if pack_dialog == null:  # the host: its first chunk went out
+			_pack_dialog("", [[tr("Cancel"), "PackCancel", s.cancel_pack]], true)
+		_pack_text.text = tr("Sending the game to your opponent: %d%%") % (done * 100 / maxi(total, 1)) if s.host \
+			else tr("Receiving the game: %s / %s") % [Packs.size_text(done), Packs.size_text(total)]
+		_pack_bar.value = done * 100.0 / maxi(total, 1))
+
+
+## Shows the pack dialog: a text, an optional progress bar and buttons [[text, name, action]].
+func _pack_dialog(text: String, buttons: Array, bar := false) -> void:
+	_close_pack_dialog()
+	pack_dialog = ColorRect.new()
+	pack_dialog.name = "PackDialog"
+	pack_dialog.color = Color(0, 0, 0, 0.55)
+	pack_dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(pack_dialog)
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", Palette.frame())
+	panel.position = Vector2(340, 220)
+	panel.custom_minimum_size.x = 600
+	pack_dialog.add_child(panel)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 18)
+	panel.add_child(col)
+	_pack_text = Palette.label(text, 24)
+	_pack_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_pack_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_pack_text.custom_minimum_size.x = 570
+	col.add_child(_pack_text)
+	_pack_bar = ProgressBar.new()
+	_pack_bar.visible = bar
+	_pack_bar.show_percentage = false
+	_pack_bar.custom_minimum_size = Vector2(570, 24)
+	_pack_bar.add_theme_stylebox_override("background", Palette.box(Color(0, 0, 0, 0.5), 8, Color("a8863a"), 2))
+	_pack_bar.add_theme_stylebox_override("fill", Palette.box(Palette.MANA, 8))
+	col.add_child(_pack_bar)
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 20)
+	col.add_child(row)
+	for spec in buttons:
+		var b := Palette.button(spec[0], spec[1])
+		b.custom_minimum_size.x = 220
+		b.pressed.connect(spec[2])
+		row.add_child(b)
+
+
+func _close_pack_dialog() -> void:
+	if pack_dialog:
+		pack_dialog.queue_free()
+		pack_dialog = null
 
 
 func host_game() -> void:
@@ -395,12 +472,13 @@ func _sync_js() -> void:
 		var w := JavaScriptBridge.get_interface("window")
 		w.chs_code = code_out.text
 		w.chs_state = state + ":" + status.text
+		w.chs_pack = _pack_text.text if pack_dialog else ""
 		if transport is WebRtcTransport and transport.pc:
 			w.chs_net = "pc=%d ch=%d" % [transport.pc.get_connection_state(), transport.channel.get_ready_state()]
 
 
 ## Browser-only hooks for automated two-tab tests: window.chs.host(), .join(code),
-## .finish(code); read window.chs_code and window.chs_state.
+## .finish(code), .accept_pack(); read window.chs_code, window.chs_state and window.chs_pack.
 func _expose_js() -> void:
 	if not OS.has_feature("web"):
 		return
@@ -412,5 +490,9 @@ func _expose_js() -> void:
 	api.host = cb.call(func(_a): host_game())
 	api.join = cb.call(func(a): join_game(str(a[0])))
 	api.finish = cb.call(func(a): finish(str(a[0])))
+	api.accept_pack = cb.call(func(_a):
+		var b := find_child("PackDownload", true, false) as Button
+		if b:
+			b.pressed.emit())
 	JavaScriptBridge.get_interface("window").chs = api
 	_js_refs.append(api)

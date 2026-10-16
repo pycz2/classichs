@@ -309,7 +309,7 @@ func _choose_hero() -> void:
 	var box := _popup(tr("Choose a hero"))
 	var grid := GridContainer.new()
 	grid.columns = 3
-	for cls in TrainingSetup.ORDER:
+	for cls in Decks.classes():
 		var b := Button.new()
 		b.name = "Hero" + cls
 		b.text = CardText.name(Decks.hero(cls))

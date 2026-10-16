@@ -105,9 +105,23 @@ class Ent:
 		eot_tags = d.get("eot", [])
 		silenced = bool(d.get("sil", false))
 		aura = d.get("aura", {"atk": 0, "hp": 0, "tags": {}, "src": {}})
+		var names := Packs.renames()  # a pack's own mechanic names (and its trap zone) in the client's words
+		if not names.is_empty():
+			zone = names.get(zone, zone)
+			tags = GameView.renamed(tags, names)
+			eot_tags = eot_tags.map(func(t): return names.get(t, t))
+			if aura.get("tags") is Dictionary:
+				aura.tags = GameView.renamed(aura.tags, names)
 		_atk = int(d.get("atk", 0))
 		_max_health = int(d.get("max_health", 0))
 		_cost = int(d.get("cost", card().get("cost", 0)))
+
+
+static func renamed(d: Dictionary, names: Dictionary) -> Dictionary:
+	var out := {}
+	for k in d:
+		out[names.get(k, k)] = d[k]
+	return out
 
 
 ## One side of the match.

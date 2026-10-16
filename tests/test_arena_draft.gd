@@ -18,7 +18,7 @@ func test_three_different_heroes_are_offered() -> void:
 		var classes := d.heroes.map(func(h): return Decks.card_class(h))
 		check(classes[0] != classes[1] and classes[1] != classes[2] and classes[0] != classes[2], "different classes")
 		for h in d.heroes:
-			check(Decks.HEROES.values().has(h), "a hero card: " + h)
+			check(Decks.heroes().values().has(h), "a hero card: " + h)
 	eq(d_offer_before_hero(), 0, "no cards before a hero is chosen")
 
 

@@ -76,7 +76,7 @@ func to_dict() -> Dictionary:
 static func from_dict(d: Variant) -> Deck:
 	if not d is Dictionary or not d.get("hero") is String or not d.get("cards") is Array:
 		return null
-	if not Decks.HEROES.values().has(d.hero):
+	if not Decks.heroes().values().has(d.hero):
 		return null
 	var deck := Deck.new()
 	deck.name = str(d.get("name", "")).left(NAME_MAX)

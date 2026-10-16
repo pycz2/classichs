@@ -1,0 +1,27 @@
+{
+ "about": "How tools/pack.py builds Neonfall from this folder (docs/packs/format.md, 'Build recipes').",
+ "root": ".",
+ "steps": [
+  {
+   "do": "source",
+   "drop_card_fields": [
+    "effects",
+    "target",
+    "combo_target",
+    "can_play",
+    "options",
+    "note",
+    "look"
+   ],
+   "move": {
+    "art/default/card_back.jpg": "ui/card_back.jpg",
+    "art/default/logo.jpg": "ui/logo.jpg",
+    "art/default/board.jpg": "ui/board.jpg",
+    "art/default/menu.jpg": "ui/menu.jpg"
+   },
+   "drop_files": [
+    "DESIGN.md"
+   ]
+  }
+ ]
+}

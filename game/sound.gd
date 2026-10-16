@@ -1,18 +1,16 @@
 class_name Sound
 extends Node
-## Music and event sounds. Main adds one instance; without it every call
-## is silent (tests, tools). Sounds come from audio/*.wav (tools/gen_audio.py);
-## the music is the generated set (audio/*.wav) or the open one (audio/open/*.ogg,
-## tools/fetch_open_music.py), as chosen in the settings.
+## Music and event sounds from the active pack: sounds/<set>/<name>.(ogg|wav|mp3) and
+## music/<set>/<name> (menu, battle_1 … battle_N), the sets chosen per pack
+## (Packs.choice "sound", "music"). Main adds one instance; without it every call is
+## silent (tests, tools).
 
-## Event type -> sound file.
+## Event type -> sound name.
 const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "death": "death",
 	"hero_power": "hero_power", "turn_start": "turn_start", "heal": "heal", "armor": "armor",
 	"equip": "equip", "secret_revealed": "secret", "freeze": "freeze", "divine_shield_lost": "shield"}
 const POOL := 6
-## Sound.music("battle") plays these as a shuffled playlist.
-const BATTLE_TRACKS := ["battle_1", "battle_2", "battle_3"]
-const MUSIC_SETS := ["generated", "open"]
+const AUDIO := ["ogg", "wav", "mp3"]
 
 static var instance: Sound
 
@@ -44,24 +42,53 @@ func _exit_tree() -> void:
 		instance = null
 
 
-## The file of a sound or a music track: the music comes from the chosen set.
-static func path_for(file: String, music_set: String) -> String:
-	if music_set == "open" and (file == "menu" or BATTLE_TRACKS.has(file)):
-		return "res://audio/open/%s.ogg" % file
-	return "res://audio/%s.wav" % file
+## The pack file of a sound or a music track ("" when the pack has none): the chosen
+## set first, then the pack's default set.
+static func path_for(file: String, p: Pack = null) -> String:
+	p = p if p else Packs.active()
+	if p == null:
+		return ""
+	var kind := "music" if file == "menu" or file.begins_with("battle_") else "sound"
+	var folder := "music" if kind == "music" else "sounds"
+	for set_id in [Packs.choice(p, kind), p.default_set(kind)]:
+		var f := p.find("%s/%s" % [folder, set_id], file, AUDIO)
+		if f != "":
+			return f
+	return ""
+
+
+## The battle tracks of the chosen music set (battle_1 … battle_N), a shuffled playlist.
+static func battle_tracks(p: Pack = null) -> Array:
+	var out := []
+	for n in range(1, 21):
+		if path_for("battle_%d" % n, p) == "":
+			break
+		out.append("battle_%d" % n)
+	return out
 
 
 func _stream(file: String) -> AudioStream:
-	var path := path_for(file, Settings.data.get("music_set", "generated"))
+	var path := path_for(file)
 	if not _streams.has(path):
-		_streams[path] = load(path) if ResourceLoader.exists(path) else null
+		_streams[path] = Packs.active().stream(path) if path != "" else null
 	return _streams[path]
+
+
+## The pack or its sound or music set changed: sounds load again, the music starts again.
+static func reset() -> void:
+	if instance:
+		instance._streams = {}
+		instance._last_battle = ""
+		restart_music()
 
 
 ## The music set changed: the track playing now starts again from the new set.
 static func restart_music() -> void:
 	if instance and instance.music_file != "":
-		instance._start(instance.music_file)
+		if instance._track == "battle" and not battle_tracks().has(instance.music_file):
+			instance._start(instance._next_battle())
+		else:
+			instance._start(instance.music_file)
 
 
 static func play(file: String) -> void:
@@ -91,8 +118,9 @@ static func music(track: String) -> void:
 
 
 func _next_battle() -> String:
-	var others := BATTLE_TRACKS.filter(func(f): return f != _last_battle)
-	_last_battle = others.pick_random()
+	var tracks := battle_tracks()
+	var others := tracks.filter(func(f): return f != _last_battle)
+	_last_battle = others.pick_random() if not others.is_empty() else (tracks[0] if not tracks.is_empty() else "menu")
 	return _last_battle
 
 
@@ -110,12 +138,27 @@ func _on_music_finished() -> void:
 		_music.play()
 
 
+## The sound of an engine event: a card's own (its `sounds` play, attack, death) or the event's.
 static func sound_for(ev: Dictionary, g: GameView, viewer: int) -> String:
+	var own := func(id, slot: String) -> String:
+		var e := g.ent(int(id)) if id != null else null
+		return str(e.card().get("sounds", {}).get(slot, "")) if e and e.card().get("sounds") is Dictionary else ""
 	match ev.type:
 		"play":
 			var e := g.ent(ev.entity)
+			var mine: String = own.call(ev.entity, "play")
+			if mine != "":
+				return mine
 			if e and CardDb.card(e.card_id).get("type") == "SPELL":
 				return "spell"
+		"attack":
+			var mine: String = own.call(ev.get("attacker"), "attack")
+			if mine != "":
+				return mine
+		"death":
+			var mine: String = own.call(ev.get("entity"), "death")
+			if mine != "":
+				return mine
 		"game_over":
 			if ev.winner == viewer:
 				return "victory"

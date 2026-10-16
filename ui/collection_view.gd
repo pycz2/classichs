@@ -11,7 +11,6 @@ signal changed
 signal picked(id: String)
 
 const PER_PAGE := 8
-const CLASSES := ["DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR", "NEUTRAL"]
 const RARITIES := [["FREE", "Basic"], ["COMMON", "Common"], ["RARE", "Rare"], ["EPIC", "Epic"], ["LEGENDARY", "Legendary"]]
 const TYPES := [["MINION", "Minions"], ["SPELL", "Spells"], ["WEAPON", "Weapons"]]
 ## The card area under the tabs (screen coordinates: this view sits at 0,0).
@@ -55,7 +54,7 @@ func _ready() -> void:
 	_tabs.size = Vector2(AREA.size.x - 20, AREA.position.y - 10)
 	_tabs.add_theme_constant_override("separation", 4)
 	add_child(_tabs)
-	for cls in CLASSES:
+	for cls in Decks.classes_and_neutral():
 		var b := Button.new()
 		b.name = "Tab" + cls
 		b.tooltip_text = tr("Neutral") if cls == "NEUTRAL" else CardText.name(Decks.hero(cls))
@@ -116,7 +115,10 @@ func _ready() -> void:
 	var gap := Control.new()
 	gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row2.add_child(gap)
+	var pack_rarities: Array = Packs.active().rules().get("rarities", []).map(func(x): return x.get("id", "") if x is Dictionary else "")
 	for r in RARITIES:  # a second click clears
+		if not pack_rarities.has(r[0]):  # the active pack has no such rarity
+			continue
 		var b := chip("Rarity" + r[0], Vector2(44, 40))
 		b.tooltip_text = tr(r[1])
 		var gem := _Gem.new()
@@ -181,8 +183,8 @@ func set_deck(d: Deck) -> void:
 	deck = d
 	if deck:
 		tab = deck.card_class()
-	elif not tab in CLASSES:
-		tab = CLASSES[0]
+	elif not tab in Decks.classes_and_neutral():
+		tab = Decks.classes_and_neutral()[0]
 	for b in _tabs.get_children():
 		b.visible = (b.name as String).trim_prefix("Tab") in tabs()
 	page = 0
@@ -191,7 +193,7 @@ func set_deck(d: Deck) -> void:
 
 
 func tabs() -> Array:
-	return [deck.card_class(), "NEUTRAL"] if deck else CLASSES
+	return [deck.card_class(), "NEUTRAL"] if deck else Decks.classes_and_neutral()
 
 
 func set_tab(cls: String) -> void:

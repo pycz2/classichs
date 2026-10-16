@@ -12,6 +12,8 @@ signal game_started(session: NetSession, m: Match)
 signal failed(reason: String)
 
 const WINS := 3
+## Both sides check the packs' rules_hash in hello (no pack transfer for the Arena).
+const SAME_GAME := "Both players need the same game for the Arena"
 
 var transport: Transport
 var host := false
@@ -60,7 +62,7 @@ func local_player() -> int:
 
 func say_hello() -> void:
 	transport.send({"t": "hello", "mode": "arena", "protocol": NetSession.PROTOCOL, "version": version,
-		"data": Rules.data_hash(), "name": player_name})
+		"data": Rules.data_hash(), "name": player_name, "pack": NetSession.pack_info(Packs.active())})
 
 
 ## Tells the opponent how far this side is (after every pick).
@@ -236,6 +238,9 @@ func _on_message(msg: Variant) -> void:
 				_fail(_tr("The opponent chose a normal game, not the Arena"))
 			elif msg.get("protocol") != float(NetSession.PROTOCOL) or msg.get("version") != version:
 				_fail(_tr("Different game versions: yours %s, the opponent's %s") % [version, str(msg.get("version", "?")).left(20)])
+			elif not msg.get("pack") is Dictionary or msg.pack.get("rules_hash") != Packs.active().rules_hash():
+				transport.send({"t": "bye", "code": "pack"})
+				_fail(_tr(SAME_GAME))
 			elif msg.get("data") != Rules.data_hash():
 				_fail(_tr("Your card data differs from the opponent's: update the game on both sides"))
 			else:
@@ -271,9 +276,9 @@ func _on_message(msg: Variant) -> void:
 				_finish(0)
 		"bye":
 			_done = true
-			if msg.get("code") in ["mode", "error"]:
+			if msg.get("code") in ["mode", "error", "pack"]:
 				failure = _tr("The opponent chose a normal game, not the Arena") if msg.code == "mode" \
-					else _tr("The Arena broke on the opponent's side")
+					else _tr(SAME_GAME) if msg.code == "pack" else _tr("The Arena broke on the opponent's side")
 				failed.emit(failure)
 				return
 			remote_left = true

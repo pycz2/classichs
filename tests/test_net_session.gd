@@ -237,7 +237,8 @@ func test_card_data_mismatch_message() -> void:
 	h.setup(tr[0], true, "Host", _deck("MAGE"))
 	var fails := []
 	h.failed.connect(func(r): fails.append(r))
-	tr[1].send({"t": "hello", "protocol": NetSession.PROTOCOL, "version": h.version, "data": "other", "name": "G", "hero": "HERO_08", "cards": Decks.basic("MAGE")})
+	tr[1].send({"t": "hello", "protocol": NetSession.PROTOCOL, "version": h.version, "data": "other", "name": "G", "hero": "HERO_08", "cards": Decks.basic("MAGE"),
+		"pack": NetSession.pack_info(Packs.active())})
 	LoopbackTransport.pump(tr)
 	check(not fails.is_empty() and not fails[0].contains(h.version + ", the opponent's " + h.version), str(fails))
 	check(fails[0].to_lower().contains("card"), "names the card data: " + str(fails))

@@ -6,8 +6,6 @@ signal start(my_deck: Deck, bot_class: String)
 signal back
 signal edit_decks
 
-const ORDER := ["DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR"]
-
 var deck: Deck
 var bot_class := "WARRIOR"
 var step := 1
@@ -59,7 +57,9 @@ func _ready() -> void:
 	grid.add_theme_constant_override("v_separation", 14)
 	_step2.add_child(grid)
 	var group := ButtonGroup.new()
-	for cls in ORDER:
+	if not Decks.classes().has(bot_class):
+		bot_class = Decks.classes()[-1]
+	for cls in Decks.classes():
 		var t := HeroTile.new(cls)
 		t.button_group = group
 		t.button_pressed = cls == bot_class

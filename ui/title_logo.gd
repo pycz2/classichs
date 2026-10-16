@@ -2,7 +2,7 @@ class_name TitleLogo
 extends Control
 ## The game title drawn as a vector logo: a gold dragon crest, "Classic HS" in
 ## Cinzel Decorative with shadow and two outlines, and a shine that sweeps
-## across the letters (clipped to them).
+## across the letters (clipped to them). A pack with a logo (manifest `logo`) shows it instead.
 
 const TEXT := "Classic HS"
 const FONT_SIZE := 86
@@ -17,6 +17,11 @@ func _ready() -> void:
 	custom_minimum_size = Vector2(640, 190)
 	size = custom_minimum_size
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if Packs.picture("logo"):  # the pack's own logo, light on black: added to what is behind it
+		var m := CanvasItemMaterial.new()
+		m.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+		material = m
+		return
 	var mask := _Letters.new()  # the gold letters; the shine is drawn only inside them
 	mask.size = size
 	mask.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
@@ -38,6 +43,11 @@ static func baseline(s: Vector2) -> Vector2:
 
 
 func _draw() -> void:
+	var logo := Packs.picture("logo")
+	if logo:  # its middle band, where a wide logo's letters are, fills the title's place
+		var h := logo.get_width() * size.y / size.x
+		draw_texture_rect_region(logo, Rect2(Vector2.ZERO, size), Rect2(0, (logo.get_height() - h) / 2.0, logo.get_width(), h))
+		return
 	var f := Fonts.title()
 	var at := baseline(size)
 	var dragon: Texture2D = DRAGON

@@ -1,0 +1,68 @@
+{
+ "format": 1,
+ "id": "neon",
+ "version": "1.0.0",
+ "engine": "0.28.0",
+ "authors": [
+  "Classic HS"
+ ],
+ "license": "Original content made for Classic HS (texts, card designs, generated pictures, synthesized sounds and music); MIT, as the game.",
+ "redistributable": true,
+ "default_locale": "en",
+ "locales": [
+  "en",
+  "ru",
+  "de",
+  "fr",
+  "es",
+  "pt_BR",
+  "it",
+  "pl"
+ ],
+ "art_sets": [
+  {
+   "id": "default",
+   "name": {
+    "en": "Neonfall",
+    "ru": "Неонопад"
+   },
+   "default": true
+  }
+ ],
+ "sound_sets": [
+  {
+   "id": "default",
+   "name": {
+    "en": "Neonfall",
+    "ru": "Неонопад"
+   },
+   "default": true
+  }
+ ],
+ "music_sets": [
+  {
+   "id": "default",
+   "name": {
+    "en": "Synthwave",
+    "ru": "Синтвейв"
+   },
+   "default": true
+  }
+ ],
+ "card_back": "ui/card_back.jpg",
+ "logo": "ui/logo.jpg",
+ "colors": {
+  "classes": {
+   "GHOST": "1098ad",
+   "CHROME": "c2410c",
+   "EXEC": "6741d9",
+   "NEUTRAL": "495057"
+  },
+  "rarities": {
+   "COMMON": "e8e8e8",
+   "RARE": "2f7cff",
+   "EPIC": "c13cff",
+   "LEGENDARY": "ff9f1c"
+  }
+ }
+}

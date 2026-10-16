@@ -685,7 +685,35 @@ def step_rank_names(b, root, s):
                 b.put(lang, name, "ranks", str(x["rank"]))
 
 
-STEPS = {"copy": step_copy, "hsjson": step_hsjson, "keywords": step_keywords, "voice": step_voice,
+def step_source(b, root, s):
+    """A pack source written in its own shape (packs/neon): drops source-only card fields and files, moves files
+    (pictures of the pack into ui/), takes each locale's `pack` {name, description} into the manifest
+    and its `terms` into `ui` (keys lowercased)."""
+    if s.get("drop_card_fields") and "cards.json" in b.files:
+        cards = load_json(b.files["cards.json"], "cards.json")
+        b.files["cards.json"] = pretty([{k: v for k, v in c.items() if k not in s["drop_card_fields"]} for c in cards])
+    names = b.locales.get(b.manifest.get("default_locale", "en"), {}).get("decks", {})
+    for p in [p for p in b.files if p.startswith("decks/") and p.endswith(".json")]:
+        d = load_json(b.files[p], p)
+        if "id" in d and "name" not in d:  # {id, …} -> {name: the deck's name in the default locale, …}
+            d = {"name": names.get(d["id"], d["id"]), **{k: v for k, v in d.items() if k != "id"}}
+            b.files[p] = pretty(d)
+    for f in s.get("drop_files", []):
+        b.files.pop(f, None)
+    for frm, to in s.get("move", {}).items():
+        if frm not in b.files:
+            raise PackError(f"source: {frm} is not in the source")
+        b.files[to] = b.files.pop(frm)
+    for lang, loc in b.locales.items():
+        meta = loc.pop("pack", {})
+        for k in ("name", "description"):
+            if k in meta:
+                b.manifest.setdefault(k, {}).setdefault(lang, meta[k])
+        for k, v in loc.pop("terms", {}).items():
+            loc.setdefault("ui", {}).setdefault(k.lower(), v)
+
+
+STEPS = {"source": step_source, "copy": step_copy, "hsjson": step_hsjson, "keywords": step_keywords, "voice": step_voice,
          "translate": step_translate, "rank_names": step_rank_names}
 
 

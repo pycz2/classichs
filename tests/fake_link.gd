@@ -5,6 +5,9 @@ extends ServerLink
 
 var sent: Array = []
 var up := true
+## HTTP requests made (downloads, uploads): {path, method, body, done}; a test answers
+## with done.call(code, body).
+var http: Array = []
 
 
 func open(address: String) -> Error:
@@ -30,6 +33,11 @@ func of(t: String) -> Array:
 func close() -> void:
 	super()
 	up = false
+
+
+func _http(path: String, method: int, body: PackedByteArray, done: Callable) -> HTTPRequest:
+	http.append({"path": path, "method": method, "body": body, "done": done})
+	return null
 
 
 ## A game in the local engine standing in for the server's (id eng): Basic Mage

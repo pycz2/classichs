@@ -1,9 +1,11 @@
 class_name CardLayout
 extends RefCounted
 ## How each card's name and text sit on the card, per language, written out by
-## hand in data/card_layout/<lang>.json: the text size, the name size and the
-## text's lines (nothing is wrapped by code). problems() only checks a layout;
-## the card lab (ui/card_lab.gd) is where layouts are changed.
+## hand in the active pack's layout/<lang>.json (the Classic pack's come from
+## data/card_layout/<lang>.json): the text size, the name size and the text's lines
+## (nothing is wrapped by code). problems() only checks a layout; the card lab
+## (ui/card_lab.gd) is where layouts are changed. A pack without a layout gets the
+## biggest sizes that fit, its text wrapped at word bounds (fit()).
 
 const DIR := "res://data/card_layout"
 const LANGS := ["en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"]
@@ -17,13 +19,19 @@ const LEADING_CUT := 0.25
 const GEMS := [[Vector2(17, 154), 17.0], [Vector2(103, 154), 17.0]]
 
 static var _data := {}  # lang -> card id -> {text, name, lines, valign?}
+static var _fitted := {}  # lang -> card id -> {text, name}
+
+
+static func reset() -> void:
+	_data = {}
+	_fitted = {}
 
 
 static func _lang(lang: String) -> Dictionary:
 	if not _data.has(lang):
-		var j := JSON.new()
-		var path := "%s/%s.json" % [DIR, lang]
-		_data[lang] = j.data if FileAccess.file_exists(path) and j.parse(FileAccess.get_file_as_string(path)) == OK and j.data is Dictionary else {}
+		var p := Packs.active()
+		var d = p.json("layout/%s.json" % lang) if p else null
+		_data[lang] = d.duplicate(true) if d is Dictionary else {}
 	return _data[lang]
 
 
@@ -31,14 +39,55 @@ static func _lang(lang: String) -> Dictionary:
 ## [b]bold[/b], [lb] for "["), valign ("top"; else centred), dy (a shift, px).
 static func of(card_id: String, lang: String) -> Dictionary:
 	var e: Dictionary = _lang(lang).get(card_id, {})
-	return e if e.has("text") else {"text": 8, "name": 10}
+	if e.has("text"):
+		return e
+	if _lang(lang).is_empty() and card_id != "":  # a pack without layouts: sizes that fit
+		return fit(card_id, lang)
+	return {"text": 8, "name": 10}
+
+
+## The biggest text size (11 down to 6) whose wrapped text fits the text box without
+## running into a gem (centred, else at the top), and the biggest name size (12 down to 7)
+## that fits the name box.
+static func fit(card_id: String, lang: String) -> Dictionary:
+	var by_card: Dictionary = _fitted.get_or_add(lang, {})
+	if not by_card.has(card_id):
+		var loc := CardText.hs_locale(lang)
+		var name := CardText.name(card_id, loc)
+		var n := 12
+		while n > 7 and name_font().get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, n).x > NAME_BOX.size.x:
+			n -= 1
+		var rich := CardText.rich(card_id, loc)
+		var gems: bool = CardDb.card(card_id).get("type") in ["MINION", "WEAPON"]
+		var e := {"text": 6, "name": n, "valign": "top"}
+		for t in range(11, 5, -1):
+			var p := TextParagraph.new()
+			p.width = TEXT_BOX.size.x - 4
+			p.line_spacing = -LEADING_CUT * t
+			p.break_flags = TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND
+			for s in _spans_of(rich):
+				p.add_string(s[0], bold_font() if s[1] else body_font(), t)
+			if height(p) > TEXT_BOX.size.y - 2:
+				continue
+			var found := false
+			for v in ["", "top"]:
+				var tried := {"text": t, "name": n, "valign": v}
+				if not gems or not _ink_rects(p, tried).any(_hits_gem):
+					e = tried
+					found = true
+					break
+			if found:
+				break
+		by_card[card_id] = e
+	return by_card[card_id]
 
 
 static func store(card_id: String, lang: String, entry: Dictionary) -> void:
 	_lang(lang)[card_id] = entry
 
 
-## Writes one language's file (only where the game runs from its source folder).
+## Writes one language's file of the Classic pack's source (only where the game runs from its
+## source folder; tools/build_packs.sh puts it into the pack).
 static func save(lang: String) -> bool:
 	var f := FileAccess.open("%s/%s.json" % [DIR, lang], FileAccess.WRITE)
 	if f == null:
@@ -80,7 +129,10 @@ static func name_font() -> Font:
 ## (a card without lines yet: its own text, wrapped by paragraph()).
 static func spans(card_id: String, lang: String) -> Array:
 	var e := of(card_id, lang)
-	var rich: String = "\n".join(e.lines) if e.has("lines") else CardText.rich(card_id, CardText.hs_locale(lang))
+	return _spans_of("\n".join(e.lines) if e.has("lines") else CardText.rich(card_id, CardText.hs_locale(lang)))
+
+
+static func _spans_of(rich: String) -> Array:
 	var out := []
 	var bold := false
 	var i := 0
@@ -108,7 +160,7 @@ static func paragraph(card_id: String, lang: String, k := 1.0) -> TextParagraph:
 	p.line_spacing = -LEADING_CUT * size  # the font's own lines are 1.5 sizes apart
 	p.break_flags = TextServer.BREAK_MANDATORY
 	if not of(card_id, lang).has("lines"):
-		p.width = TEXT_BOX.size.x * k
+		p.width = (TEXT_BOX.size.x - (4 if _lang(lang).is_empty() else 0)) * k
 		p.break_flags |= TextServer.BREAK_WORD_BOUND
 	for s in spans(card_id, lang):
 		p.add_string(s[0], bold_font() if s[1] else body_font(), size)
@@ -126,9 +178,12 @@ static func height(p: TextParagraph) -> float:
 ## Where each line lies on the card (scale 1): the text is centred in its box,
 ## or at its top (valign "top"), then moved down by dy (up if negative).
 static func line_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0) -> Array:
+	return _line_rects(p, of(card_id, lang), k)
+
+
+static func _line_rects(p: TextParagraph, e: Dictionary, k := 1.0) -> Array:
 	var out := []
 	var h := height(p) / k
-	var e := of(card_id, lang)
 	var top: bool = e.get("valign", "") == "top"
 	var y := TEXT_BOX.position.y + (0.0 if top else maxf(0.0, (TEXT_BOX.size.y - h) / 2.0)) + float(e.get("dy", 0))
 	for i in p.get_line_count():
@@ -142,9 +197,13 @@ static func line_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0
 ## Where the letters of each line are (scale 1): from the top of the capitals
 ## to the bottom of the descenders, without the empty space of the line.
 static func ink_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0) -> Array:
-	var size := float(int(of(card_id, lang).text))
+	return _ink_rects(p, of(card_id, lang), k)
+
+
+static func _ink_rects(p: TextParagraph, e: Dictionary, k := 1.0) -> Array:
+	var size := float(int(e.text))
 	var out := []
-	var rects := line_rects(card_id, lang, p, k)
+	var rects := _line_rects(p, e, k)
 	for i in rects.size():
 		var r: Rect2 = rects[i]
 		var base := r.position.y + p.get_line_ascent(i) / k

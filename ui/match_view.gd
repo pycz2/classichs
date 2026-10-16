@@ -27,6 +27,13 @@ const EMOTES := {"greetings": "Greetings!", "well_played": "Well played!", "than
 const TURN_SECONDS := 75.0
 const ROPE_SECONDS := 15.0
 const MULLIGAN_SECONDS := 45.0
+
+
+## A turn timer of the active pack's rules.json `timers` (turn, fuse, mulligan), in seconds;
+## the constants above are the Classic pack's.
+static func timer(name: String) -> float:
+	var t = Packs.active().rules().get("timers", {}).get(name) if Packs.active() else null
+	return float(t) if t is float or t is int else {"turn": TURN_SECONDS, "fuse": ROPE_SECONDS, "mulligan": MULLIGAN_SECONDS}[name]
 const MULLIGAN_WARN := 10.0  # the mulligan's last seconds: red numbers under the cards
 
 var debug_mode := false
@@ -121,7 +128,7 @@ func _ready() -> void:
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
 	var board := TextureRect.new()  # the game board on a tavern table (generated)
-	board.texture = load("res://ui/board_bg.jpg")
+	board.texture = Packs.picture("board") if Packs.picture("board") else load("res://ui/board_bg.jpg")
 	board.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	board.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	board.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -740,8 +747,8 @@ func tick(delta: float) -> void:
 	if controller.is_server() and controller.time_left() >= 0.0:
 		_time_left = controller.time_left()  # the server's clock (it plays the timeout moves itself)
 	var mull := g.phase == "MULLIGAN"
-	_rope.visible = _time_left <= ROPE_SECONDS and not mull  # the mulligan has its numbers instead
-	_rope.left = _time_left / ROPE_SECONDS
+	_rope.visible = _time_left <= timer("fuse") and not mull  # the mulligan has its numbers instead
+	_rope.left = _time_left / timer("fuse")
 	var count := find_child("MulliganTimer", true, false) as Label
 	if count:
 		count.visible = mull and _time_left <= MULLIGAN_WARN and not g.players[viewer()].mulliganed
@@ -768,7 +775,7 @@ func _update_clock(delta: float) -> void:
 	if timer_enabled and not g.game_over:
 		t += "\n" + tr("Turn %s") % _mmss(maxf(0.0, _time_left))
 	_clock.text = t
-	_clock.add_theme_color_override("font_color", Color("ff8a5b") if timer_enabled and _time_left <= ROPE_SECONDS else Color("f4ead5"))
+	_clock.add_theme_color_override("font_color", Color("ff8a5b") if timer_enabled and _time_left <= timer("fuse") else Color("f4ead5"))
 
 
 static func _mmss(seconds: float) -> String:
@@ -780,7 +787,7 @@ func _reset_timer() -> void:
 	var key := "M" if g.phase == "MULLIGAN" else "%d:%d" % [g.turn, g.current]
 	if key != _turn_key:
 		_turn_key = key
-		_time_left = MULLIGAN_SECONDS if g.phase == "MULLIGAN" else TURN_SECONDS
+		_time_left = timer("mulligan") if g.phase == "MULLIGAN" else timer("turn")
 
 
 ## Shows the next tutorial hint only when nothing else is on the banner (an
@@ -1658,7 +1665,8 @@ func _missiles(events: Array, seen: Dictionary) -> void:
 		if ev.type != "damage" or count.get(src, 0) < 2 or not _views.has(ev.target):
 			continue
 		var text: Dictionary = CardDb.card(ev.by).get("text", {}) if CardDb.card(ev.by).get("text") is Dictionary else {}
-		if not str(text.get("enUS", "")).to_lower().contains("random"):
+		var cast := TableFx.named(ev.by, "cast")
+		if cast != "missiles" and (cast != "" or not str(text.get("enUS", "")).to_lower().contains("random")):
 			continue
 		seen[[src, ev.target]] = true  # no second bolt for it in _travel
 		var from := _center_of(src) if _views.has(src) else Vector2(640, 330)
@@ -1697,7 +1705,7 @@ static func _event_target(ev: Dictionary) -> int:
 ## The colour of an effect: the element of the spell, else the kind of change.
 func _fx_color(ev: Dictionary) -> Color:
 	var by: String = ev.get("by", "")
-	if by != "" and Art.design(by).kind == "spell":
+	if by != "" and TableFx.element(by) != "":
 		return _element_color(by)
 	var kind: String = {"damage": "hurt", "heal": "heal", "buff": "buff", "freeze": "freeze", "silence": "silence",
 		"destroy": "destroy", "transform": "smoke", "return_to_hand": "whoosh", "take_control": "control"}.get(ev.type, "hurt")
@@ -1721,15 +1729,23 @@ func _shoot(a: Vector2, b: Vector2, col: Color) -> void:
 ## summons, Battlecries, bounces).
 func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
 	var col_of := {}
+	var hit_of := {}
 	for ev in events:
 		var t := _event_target(ev)
 		if t >= 0 and ev.has("by"):
 			col_of[t] = _fx_color(ev)
+			hit_of[t] = TableFx.named(ev.by, "hit")
 	for id in before:
 		var now := g.ent(id)
 		if now == null or now.zone != "PLAY" or not _views.has(id):
 			continue
-		for k in TableFx.kinds(before[id], now):
+		var kinds := TableFx.kinds(before[id], now)
+		var hit: String = hit_of.get(id, "")  # the card's own hit effect (fx.hit), besides what the change shows; "none": nothing
+		if hit == "none":
+			kinds = []
+		elif hit != "" and not kinds.is_empty() and not kinds.has(hit):
+			kinds.append(hit)
+		for k in kinds:
 			TableFx.spawn(_fx, k, _center_of(id), col_of.get(id, Color.TRANSPARENT) if k == "hurt" else Color.TRANSPARENT)
 	var played := -1
 	for ev in events:
@@ -1738,7 +1754,10 @@ func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
 				played = ev.entity
 			"death":
 				var b: GameView.Ent = before.get(ev.entity)
-				if old.has(ev.entity) and Rules.hooks(ev.card).has("deathrattle") and not (b and b.silenced):
+				var mark := TableFx.named(ev.card, "death")  # skull (with an unsilenced death hook), destroy, none
+				if old.has(ev.entity) and mark == "destroy":
+					TableFx.spawn(_fx, "destroy", old[ev.entity])
+				elif old.has(ev.entity) and mark != "none" and Rules.hooks(ev.card).has("deathrattle") and not (b and b.silenced):
 					TableFx.spawn(_fx, "skull", old[ev.entity])
 			"destroy":
 				if old.has(ev.target):
@@ -1755,7 +1774,10 @@ func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
 			"summon":
 				if ev.has("by") and _views.has(ev.entity):
 					TableFx.spawn(_fx, "portal", _center_of(ev.entity))
-	if played >= 0 and _views.has(played) and events.any(func(e): return e.get("by_id", -1) == played and e.type != "play"):
+	var on_play := TableFx.named(g.ent(played).card_id, "play") if played >= 0 and g.ent(played) else ""
+	if played >= 0 and _views.has(played) and on_play == "portal":
+		TableFx.spawn(_fx, "portal", _center_of(played))
+	elif played >= 0 and _views.has(played) and on_play != "none" and events.any(func(e): return e.get("by_id", -1) == played and e.type != "play"):
 		TableFx.spawn(_fx, "battlecry", _center_of(played))
 	var went_off := {}  # minions whose own trigger or poison acted: their mark pops, with a chime
 	for ev in events:
@@ -1800,7 +1822,8 @@ func _show_played(ev: Dictionary, land: Callable) -> void:
 		_glide(cv, Vector2(580, 200), 1.1, 0.0, 0.25)
 		await _wait(0.35)
 	if not e.is_minion() and ev.get("target", -1) >= 0:
-		await _bolt(_center_of(ev.entity), _center_of(ev.target), _element_color(e.card_id))
+		if TableFx.named(e.card_id, "cast") != "none":
+			await _bolt(_center_of(ev.entity), _center_of(ev.target), _element_color(e.card_id))
 		land.call()  # the spell touches its target
 	if not e.is_minion() and not e.is_weapon():
 		var tw := cv.create_tween().set_parallel()
@@ -1810,10 +1833,7 @@ func _show_played(ev: Dictionary, land: Callable) -> void:
 
 
 func _element_color(card_id: String) -> Color:
-	var d := Art.design(card_id)
-	if d.kind == "spell":
-		return Color(Art.ELEMENT_COLORS[d.subject[0]][0])
-	return Color("ffd43b")
+	return TableFx.element_color(card_id)
 
 
 ## A glowing bolt flies from a to b.
@@ -1865,7 +1885,8 @@ func _pulse(id: int, target: int, land: Callable) -> void:
 	tw.tween_property(v, "scale", Vector2.ONE, Anim.d(0.14))
 	await tw.finished
 	if target >= 0:
-		await _bolt(_center_of(id), _center_of(target), _element_color(g.ent(id).card_id))
+		if TableFx.named(g.ent(id).card_id, "cast") != "none":
+			await _bolt(_center_of(id), _center_of(target), _element_color(g.ent(id).card_id))
 		land.call()
 
 

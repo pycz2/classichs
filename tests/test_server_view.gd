@@ -14,7 +14,7 @@ static func root() -> Window:
 func _view(logged_in := false) -> ServerView:
 	var v := ServerView.new()
 	var l := FakeLink.new()
-	l.url = Settings.data.server
+	l.url = "ws://localhost:7377"
 	v.link = l
 	if logged_in:
 		l.dispatch({"t": "auth", "ok": true, "token": "x", "me": ME})
@@ -109,7 +109,7 @@ func test_session_gets_messages_after_reparent() -> void:
 func test_arena_tab_shows_the_run() -> void:
 	var v := _view(true)
 	_press(v, "TabArena")
-	eq(ServerLink.saved().get("tab"), "Arena", "the tab is remembered")
+	eq(v.link.saved().get("tab"), "Arena", "the tab is remembered")
 	check(v.find_child("Ticket", true, false) != null, "no run: the ticket")
 	_press(v, "ArenaStart")
 	eq((v.link as FakeLink).of("arena_start").size(), 1, "Enter the Arena")
@@ -176,19 +176,20 @@ func test_play_remembers_the_deck_and_the_mode() -> void:
 	_free(v)
 
 
-## The session: saved on login with its server, sent again by itself, forgotten on logout or refusal.
+## The session: saved on login under its server, sent again by itself, forgotten on logout or refusal.
 func test_session_is_saved_resumed_and_forgotten() -> void:
 	var l := FakeLink.new()
 	l.url = "ws://one"
 	l.dispatch({"t": "auth", "ok": true, "token": "tok1", "me": ME})
-	eq([ServerLink.saved().get("token"), ServerLink.saved().get("server")], ["tok1", "ws://one"], "saved with the server")
+	eq(ServerLink.saved_for("ws://one").get("token"), "tok1", "saved under the server")
+	eq(ServerLink.saved_all().servers.keys(), ["ws://one"], "keyed by the address")
 	eq(l.of("chats").size(), 1, "asks for the chats once")
 	l.dispatch({"t": "error", "code": "bad_request", "text": "unknown variant `chats`"})
-	eq(l.has_chats, false, "an older server: no chats")
+	eq([l.has_chats, l.of("packs").size()], [false, 0], "an older server: no chats (nor packs)")
 	l.log_out()
 	eq(l.of("logout").size(), 1, "logout sent")
-	eq(ServerLink.saved().get("token"), null, "logout forgets the session")
-	ServerLink.remember({"token": "tok2", "server": "ws://one"})
+	eq(ServerLink.saved_for("ws://one").get("token"), null, "logout forgets the session")
+	ServerLink.remember_for("ws://one", {"token": "tok2"})
 	var r := FakeLink.new()
 	r.open_and_resume("ws://two")
 	eq(r.resuming, false, "another server: no resume")
@@ -198,23 +199,20 @@ func test_session_is_saved_resumed_and_forgotten() -> void:
 	eq(r.of("resume"), [{"t": "resume", "token": "tok2"}], "the token goes on opening")
 	r.dispatch({"t": "chats", "list": []})
 	r.dispatch({"t": "error", "code": "bad_token", "text": "The session expired: log in again"})
-	eq([r.resuming, ServerLink.saved().get("token")], [false, null], "a refused session is forgotten")
-	eq(ServerLink.saved().get("server"), "ws://one", "the address stays")
+	eq([r.resuming, ServerLink.saved_for("ws://one").get("token")], [false, null], "a refused session is forgotten")
 	l.free()
 	r.free()
 
 
 ## A view opened while the saved session is being resumed waits, then shows the lobby.
 func test_view_waits_for_the_resume() -> void:
-	ServerLink.remember({"token": "tok", "server": "ws://test"})
+	ServerLink.remember_for("ws://test", {"token": "tok"})
 	var v := ServerView.new()
 	var l := FakeLink.new()
+	l.url = "ws://test"
 	l.up = false
 	v.link = l
-	var keep: String = Settings.data.server
-	Settings.data.server = "ws://test"
 	root().add_child(v)
-	Settings.data.server = keep
 	eq([v.stage, l.resuming], ["connecting", true], "connecting with the saved session")
 	l.up = true
 	l.opened.emit()
@@ -223,17 +221,5 @@ func test_view_waits_for_the_resume() -> void:
 	eq(v.stage, "lobby", "logged in again without the password")
 	_press(v, "Logout")
 	eq(v.stage, "login", "logout shows the login")
-	eq(ServerLink.saved().get("token"), null, "and forgets the session")
-	_free(v)
-
-
-## Another address in the settings: the open connection is left for it.
-func test_changed_address_reconnects() -> void:
-	var v := ServerView.new()
-	var l := FakeLink.new()
-	l.url = "ws://old"
-	l.token = "t"
-	v.link = l
-	root().add_child(v)
-	eq([l.url, v.stage], [Settings.data.server, "connecting"], "connecting to the address in the settings")
+	eq(l.saved().get("token"), null, "and forgets the session")
 	_free(v)

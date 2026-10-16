@@ -5,3 +5,4 @@ __pycache__/
 .claude/
 art/original/
 .DS_Store
+packs/*.cardpack

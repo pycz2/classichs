@@ -6,7 +6,7 @@ static func root() -> Window:
 
 
 func _sound() -> Sound:
-	Settings.data = Settings.DEFAULTS.duplicate()
+	Settings.data = Settings.DEFAULTS.duplicate(true)
 	Settings.data.language = "en"
 	var s := Sound.new()
 	root().add_child(s)
@@ -24,9 +24,9 @@ func test_every_effect_event_has_a_sound_file() -> void:
 	var g := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029"]}).game
 	for type in Sound.EVENTS:
 		var name: String = Sound.EVENTS[type]
-		check(ResourceLoader.exists("res://audio/%s.wav" % name), "file for " + type)
+		eq(Sound.path_for(name), "sounds/generated/%s.wav" % name, "file for " + type)
 	for name in ["spell", "victory", "defeat", "click"]:
-		check(ResourceLoader.exists("res://audio/%s.wav" % name), "file " + name)
+		check(Packs.active().has("sounds/generated/%s.wav" % name), "file " + name)
 	var fireball: GameView.Ent = g.players[0].hand[0]
 	eq(Sound.sound_for({"type": "play", "player": 0, "entity": fireball.id}, g, 0), "spell", "spell sound")
 	eq(Sound.sound_for({"type": "game_over", "winner": 0}, g, 0), "victory", "victory")
@@ -35,9 +35,9 @@ func test_every_effect_event_has_a_sound_file() -> void:
 
 
 func test_every_music_track_has_a_file() -> void:
-	for name in ["menu"] + Sound.BATTLE_TRACKS:
-		check(ResourceLoader.exists("res://audio/%s.wav" % name), "music file " + name)
-	eq(Sound.BATTLE_TRACKS.size(), 3, "three battle tracks")
+	for name in ["menu"] + Sound.battle_tracks():
+		check(Packs.active().has("music/generated/%s.wav" % name), "music file " + name)
+	eq(Sound.battle_tracks().size(), 3, "three battle tracks")
 
 
 func test_each_match_gets_a_battle_track_other_than_the_last() -> void:
@@ -45,7 +45,7 @@ func test_each_match_gets_a_battle_track_other_than_the_last() -> void:
 	var last := ""
 	for i in 20:
 		Sound.music("battle")
-		check(s.music_file in Sound.BATTLE_TRACKS, "battle track: " + s.music_file)
+		check(s.music_file in Sound.battle_tracks(), "battle track: " + s.music_file)
 		check(s.music_file != last, "%s repeats the previous match" % s.music_file)
 		last = s.music_file
 		Sound.music("menu")
@@ -59,7 +59,7 @@ func test_battle_playlist_moves_on_and_menu_loops() -> void:
 	for i in 10:
 		var was := s.music_file
 		s._music.finished.emit()
-		check(s.music_file in Sound.BATTLE_TRACKS and s.music_file != was, "%s follows %s" % [s.music_file, was])
+		check(s.music_file in Sound.battle_tracks() and s.music_file != was, "%s follows %s" % [s.music_file, was])
 	Sound.music("menu")
 	s._music.finished.emit()
 	eq(s.music_file, "menu", "menu loops")
@@ -85,9 +85,18 @@ func test_without_sound_node_everything_is_silent() -> void:
 
 
 func test_music_sets() -> void:
-	eq(Sound.path_for("menu", "generated"), "res://audio/menu.wav", "generated menu music")
-	eq(Sound.path_for("menu", "open"), "res://audio/open/menu.ogg", "open menu music")
-	eq(Sound.path_for("battle_2", "open"), "res://audio/open/battle_2.ogg", "open battle music")
-	eq(Sound.path_for("attack", "open"), "res://audio/attack.wav", "sounds stay the generated ones")
+	eq(Sound.path_for("menu"), "music/generated/menu.wav", "generated menu music")
+	Settings.data.music_set = "open"
+	eq(Sound.path_for("menu"), "music/open/menu.ogg", "open menu music")
+	eq(Sound.path_for("battle_2"), "music/open/battle_2.ogg", "open battle music")
+	eq(Sound.path_for("attack"), "sounds/generated/attack.wav", "sounds stay the generated ones")
 	for slot in ["menu", "battle_1", "battle_2", "battle_3"]:
-		check(ResourceLoader.exists(Sound.path_for(slot, "open")), "the open track is there: " + slot)
+		check(Packs.active().stream(Sound.path_for(slot)) != null, "the open track is there: " + slot)
+	Settings.data.music_set = "generated"
+
+
+func test_a_pack_brings_its_own_sounds_and_playlist() -> void:
+	var neon: Pack = Packs.all().filter(func(p): return p.id() == "neon")[0]
+	eq(Sound.battle_tracks(neon), ["battle_1", "battle_2"], "Neonfall has two battle tracks")
+	eq(Sound.path_for("menu", neon), "music/default/menu.ogg", "its menu music")
+	eq(Sound.path_for("attack", neon), "sounds/default/attack.ogg", "its sounds")

@@ -1,6 +1,6 @@
 class_name CardText
 extends RefCounted
-## Localized card names and texts from cards.json.
+## Localized card names and texts of the active pack (CardDb), and its other names (term()).
 
 const LOCALES := {"en": "enUS", "ru": "ruRU", "de": "deDE", "fr": "frFR", "es": "esES", "es_MX": "esMX",
 	"it": "itIT", "pt": "ptBR", "pl": "plPL", "ja": "jaJP", "ko": "koKR", "zh_CN": "zhCN", "zh_TW": "zhTW",
@@ -46,17 +46,23 @@ static var _spaces := RegEx.create_from_string("[ \\t]+")
 static var _bb := RegEx.create_from_string("\\[/?(b|i|center|color[^\\]]*)\\]")
 
 
-## Race names as the game shows them under the card (by Hearthstone locale).
-const RACES := {
-	"BEAST": {"enUS": "Beast", "ruRU": "Зверь", "deDE": "Wildtier", "frFR": "Bête", "esES": "Bestia", "ptBR": "Fera", "itIT": "Bestia", "plPL": "Bestia"},
-	"DEMON": {"enUS": "Demon", "ruRU": "Демон", "deDE": "Dämon", "frFR": "Démon", "esES": "Demonio", "ptBR": "Demônio", "itIT": "Demone", "plPL": "Demon"},
-	"DRAGON": {"enUS": "Dragon", "ruRU": "Дракон", "deDE": "Drache", "frFR": "Dragon", "esES": "Dragón", "ptBR": "Dragão", "itIT": "Drago", "plPL": "Smok"},
-	"MURLOC": {"enUS": "Murloc", "ruRU": "Мурлок", "deDE": "Murloc", "frFR": "Murloc", "esES": "Múrloc", "ptBR": "Murloc", "itIT": "Murloc", "plPL": "Murlok"},
-	"MECHANICAL": {"enUS": "Mech", "ruRU": "Механизм", "deDE": "Mech", "frFR": "Méca", "esES": "Robot", "ptBR": "Mecanoide", "itIT": "Robot", "plPL": "Mech"},
-	"TOTEM": {"enUS": "Totem", "ruRU": "Тотем", "deDE": "Totem", "frFR": "Totem", "esES": "Tótem", "ptBR": "Totem", "itIT": "Totem", "plPL": "Totem"},
-	"PIRATE": {"enUS": "Pirate", "ruRU": "Пират", "deDE": "Pirat", "frFR": "Pirate", "esES": "Pirata", "ptBR": "Pirata", "itIT": "Pirata", "plPL": "Pirat"},
-	"UNDEAD": {"enUS": "Undead", "ruRU": "Нежить", "deDE": "Untoter", "frFR": "Mort-vivant", "esES": "No-muerto", "ptBR": "Morto-vivo", "itIT": "Non Morto", "plPL": "Nieumarły"},
-}
+## The pack language of a Hearthstone locale key ("ruRU" -> "ru").
+static func pack_lang(hs: String) -> String:
+	var l = CardDb.HS.find_key(hs)
+	return l if l != null else hs
+
+
+## A name from the active pack's locales (section "races", "classes", "rarities"…): the language,
+## the pack's default language, else "".
+static func term(section: String, key: String, locale := "") -> String:
+	var p := Packs.active()
+	if p == null:
+		return ""
+	for lang in [p.lang_for(pack_lang(_loc(locale))), p.default_locale()]:
+		var names = p.locale(lang).get(section, {})
+		if names is Dictionary and names.has(key):
+			return str(names[key])
+	return ""
 
 
 ## The card's race in a language ("" for none).
@@ -64,8 +70,8 @@ static func race(id: String, locale := "") -> String:
 	var r: String = CardDb.card(id).get("race", "")
 	if r == "":
 		return ""
-	var names: Dictionary = RACES.get(r, {})
-	return names.get(_loc(locale), names.get("enUS", r.capitalize()))
+	var t := term("races", r, locale)
+	return t if t != "" else r.capitalize()
 
 
 ## Card text as BBCode: keywords (<b>) bold, <i> italic, spaces collapsed.

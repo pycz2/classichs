@@ -14,10 +14,44 @@ const COLORS := {"hurt": Color("ff7b2e"), "heal": Color("8ce99a"), "buff": Color
 	"destroy": Color("343a40"), "portal": Color("ffd43b"), "skull": Color("f1f3f5"), "battlecry": Color("ffd43b"),
 	"whoosh": Color("ffffff"), "control": Color("9775fa"), "armor": Color("ced4da")}
 
+## The named effects a pack's cards may ask for in their `fx` (decision D16, docs/packs/fx.md,
+## docs/packs/schema/fx.json); a name not in it plays the slot's default.
+const CATALOG := {
+	"element": ["fire", "ice", "arcane", "moon", "holy", "shadow", "nature", "lightning", "poison", "steel", "gold"],
+	"cast": ["bolt", "missiles", "none"],
+	"hit": ["hurt", "heal", "buff", "debuff", "gain", "freeze", "silence", "smoke", "destroy", "portal", "whoosh", "control", "armor", "none"],
+	"play": ["battlecry", "portal", "none"],
+	"death": ["skull", "destroy", "none"]}
+
 var kind := "hurt"
 var color := Color.WHITE
 var t := 0.0  # 0..1 over the effect's life
 var _life := 0.6
+
+
+## The effect a card names for a slot ("element", "cast", "hit", "play", "death"), "" when it
+## names none or one the client does not have.
+static func named(card_id: String, slot: String) -> String:
+	if card_id == "" or not CardDb.has(card_id):
+		return ""
+	var fx = CardDb.card(card_id).get("fx", {})
+	var n = fx.get(slot, "") if fx is Dictionary else ""
+	return n if n is String and CATALOG.get(slot, []).has(n) else ""
+
+
+## The element of a card's bolts and hits: its `fx` element, else the picture's (a spell's
+## motif or class), else "" (gold).
+static func element(card_id: String) -> String:
+	var e := named(card_id, "element")
+	if e != "":
+		return e
+	var d := Art.design(card_id)
+	return str(d.subject[0]) if d.kind == "spell" else ""
+
+
+static func element_color(card_id: String) -> Color:
+	var e := element(card_id)
+	return Color(Art.ELEMENT_COLORS[e][0]) if Art.ELEMENT_COLORS.has(e) else Color("ffd43b")
 
 
 ## Starts an effect centred at at (the table's layer is the parent).

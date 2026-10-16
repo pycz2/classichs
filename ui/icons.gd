@@ -22,6 +22,13 @@ static func shapes(kind: String, rect: Rect2) -> Array:
 static func paint(ci: CanvasItem, kind: String, rect: Rect2) -> void:
 	if kind in CLASSES and Sprites.draw(ci, "class_" + kind, rect.get_center(), minf(rect.size.x, rect.size.y)):
 		return  # the generated emblem
+	if not kind in CLASSES and Decks.hero(kind) != "":  # a pack's own class: its champion in a gold ring
+		var side := minf(rect.size.x, rect.size.y)
+		var c := rect.get_center()
+		ci.draw_circle(c, side * 0.48, GOLD.darkened(0.25))
+		ci.draw_circle(c, side * 0.44, Palette.of_class(kind).darkened(0.15))
+		Art.paint_in(ci, Rect2(c - Vector2(side, side) * 0.41, Vector2(side, side) * 0.82), Decks.hero(kind), "circle")
+		return
 	for s in shapes(kind, rect):
 		match s[0]:
 			"circle":

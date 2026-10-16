@@ -14,6 +14,7 @@ OUT=build/release
 WANT=${*:-web windows linux macos android}
 mkdir -p "$OUT"
 touch build/.gdignore
+tools/build_packs.sh  # res://packs/*.cardpack: the built-in game packs
 godot --headless --path . --import >/dev/null 2>&1 || true
 
 rules_lib() {  # the rules engine library a platform's export needs

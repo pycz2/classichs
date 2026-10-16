@@ -74,6 +74,7 @@ func _set_screen(s: Control) -> void:
 	screen = s
 	add_child(s)
 	if social:
+		sync_server_links()  # the list may have changed in the settings
 		social.screen_changed(s)
 
 
@@ -85,10 +86,20 @@ func show_menu(play := false) -> void:
 	m.online.connect(show_online)
 	m.tutorial.connect(show_tutorial)
 	m.settings.connect(show_settings)
+	m.games.connect(show_games)
 	m.quit.connect(func(): get_tree().quit())
 	_set_screen(m)
 	if play:
 		m.show_play()
+
+
+## The game packs: which game the whole client shows and plays.
+func show_games() -> GamesView:
+	var g := GamesView.new()
+	g.links = server_links
+	g.back.connect(show_menu)
+	_set_screen(g)
+	return g
 
 
 func show_settings() -> void:
@@ -178,33 +189,87 @@ func show_arena(s: ArenaSession) -> ArenaView:
 	return a
 
 
-## Playing through a game server. The connection lives here for the whole run of
-## the game (the player stays logged in across screens), with the friends overlay.
+## Playing through game servers (D14: several, each with its own session, friends and
+## chats). A connection per server lives here for the whole run of the game (the player
+## stays logged in across screens), with the friends overlay. server_link is the server
+## chosen in the lobby.
+var server_links: Array[ServerLink] = []
 var server_link: ServerLink
 var social: Social
 
 
-## The connection and the overlay; a saved session logs in again by itself, silently
-## (a refused one is forgotten; an unreachable server is tried again next time).
+## The connections and the overlay; a saved session logs in again by itself, silently
+## (a refused one is forgotten; an unreachable server is tried again next time; one
+## another login took waits for the player).
 func _start_server_link() -> void:
-	if server_link == null:  # (a test may put its own in first)
-		server_link = ServerLink.new()
-	server_link.name = "ServerLink"
-	add_child(server_link)
-	server_link.message.connect(_on_server_message)
+	if server_link != null and not server_links.has(server_link):  # (a test may put its own in first)
+		if server_link.url == "" and not Settings.data.servers.is_empty():
+			server_link.url = Settings.data.servers[0].url
+		server_links.push_front(server_link)
 	social = Social.new()
 	social.name = "Social"
-	social.link = server_link
 	add_child(social)
-	var s := ServerLink.saved()
-	if str(s.get("token", "")) != "" and Settings.server_ok(str(s.get("server", ""))):
-		server_link.open_and_resume(str(s.server))
+	sync_server_links()
+	for l in server_links:
+		if Settings.server_ok(l.url) and l.can_resume():
+			l.open_and_resume(l.url)
+
+
+## A connection for every server in the settings (new ones added, removed ones closed);
+## server_link stays the chosen one (else the last chosen, else the first).
+func sync_server_links() -> void:
+	var want: Array = Settings.data.servers.map(func(e): return e.url)
+	for l in server_links.duplicate():
+		if not want.has(l.url):
+			server_links.erase(l)
+			l.close()
+			l.queue_free()
+	for u in want:
+		if not server_links.any(func(l): return l.url == u):
+			var l := ServerLink.new()
+			l.url = u
+			server_links.append(l)
+	for l in server_links:
+		if l.get_parent() == null:
+			l.name = "ServerLink" if l == server_links[0] else "ServerLink%d" % server_links.find(l)
+			add_child(l)
+			l.message.connect(_on_server_message.bind(l))
+	if not server_links.has(server_link):
+		server_link = link_for(ServerLink.last())
+	if server_link == null and not server_links.is_empty():
+		server_link = server_links[0]
+	social.links = server_links
+	if server_link:
+		social.link = server_link
+
+
+## The connection to a server (null when it is not in the list).
+func link_for(url: String) -> ServerLink:
+	for l in server_links:
+		if l.url == url:
+			return l
+	return null
+
+
+## The lobby switched to another server.
+func choose_server(l: ServerLink) -> void:
+	server_link = l
+	ServerLink.remember_last(l.url)
+	social.link = l
+	show_server()
 
 
 func show_server() -> ServerView:
+	sync_server_links()
+	if server_link == null:  # every server was removed: the list to add one
+		show_settings()
+		screen.show_servers()
+		return null
 	var v := ServerView.new()
 	v.link = server_link
+	v.links = server_links
 	v.back.connect(func(): show_menu(true))
+	v.server_chosen.connect(choose_server)
 	_set_screen(v)
 	return v
 
@@ -212,29 +277,34 @@ func show_server() -> ServerView:
 func start_server_match(session: ServerSession, m: Match, mode: String) -> MatchView:
 	var v := MatchView.new()
 	v.lobby = true
-	v.lobby_back.connect(func(): show_server())
-	server_link.set_meta("mode", mode)
+	v.lobby_back.connect(func():
+		if session.link is ServerLink and server_links.has(session.link):
+			server_link = session.link
+		show_server())
+	session.link.set_meta("mode", mode)
 	_set_screen(v)
 	v.bind_online(m, session)
 	return v
 
 
-func _on_server_message(msg: Dictionary) -> void:
+func _on_server_message(msg: Dictionary, l: ServerLink) -> void:
 	match msg.get("t"):
 		"game_over":  # the result arrives during the game: kept for the lobby after it
-			if not screen is ServerView:
-				server_link.set_meta("game_over", msg)
+			if not (screen is ServerView and l == server_link):
+				l.set_meta("game_over", msg)
 		"match":
-			start_server_game(msg)
+			start_server_game(msg, l)
 
 
 ## The server matched us (a queue, the Arena or an invite, from any screen, or
 ## a game still running after a reconnect: rejoin): the server keeps the game; its
 ## first state opens the table.
-func start_server_game(msg: Dictionary) -> ServerSession:
+func start_server_game(msg: Dictionary, l: ServerLink = null) -> ServerSession:
+	if l == null:
+		l = server_link
 	var mode := str(msg.get("mode", "casual"))
-	var s := server_link.session(msg, server_link.game_deck)
-	server_link.add_child(s)
+	var s := l.session(msg, l.game_deck)
+	l.add_child(s)
 	s.started.connect(func(m: Match): start_server_match(s, m, mode))
 	s.failed.connect(func(reason):
 		if s.match_ == null:

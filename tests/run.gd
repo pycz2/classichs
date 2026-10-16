@@ -33,15 +33,23 @@ func _use_test_files() -> void:
 	Progress.path = "user://test_runner_tutorial.json"
 	ServerLink.session_path = "user://test_runner_server_session.json"
 	DirAccess.remove_absolute(ServerLink.session_path)  # no saved session: main never connects by itself
+	if Packs.user_dir != "user://test_runner_packs" or Packs.active() == null or Packs.active().id() != Packs.CLASSIC:
+		Packs.user_dir = "user://test_runner_packs"  # downloaded and imported packs of the tests; Classic active
+		Settings.data.erase("pack")
+		Packs.rescan()
+
+
+func _fresh_settings() -> void:
+	Settings.path = "user://test_runner_settings.json"
+	var sf := FileAccess.open(Settings.path, FileAccess.WRITE)
+	sf.store_string(JSON.stringify({"language": "en", "music": 0.0, "sfx": 0.0}))
+	sf.close()
 
 
 func _run_all() -> void:
 	Anim.instant = true  # tests never wait for animations
 	# Tests never read the player's real settings and always run in English.
-	Settings.path = "user://test_runner_settings.json"
-	var sf := FileAccess.open(Settings.path, FileAccess.WRITE)
-	sf.store_string(JSON.stringify({"language": "en", "music": 0.0, "sfx": 0.0}))
-	sf.close()
+	_fresh_settings()
 	Locale.load_all()
 	var args := OS.get_cmdline_user_args()
 	var filter: String = args[0] if args.size() > 0 else ""
@@ -70,6 +78,7 @@ func _run_all() -> void:
 			var before := errors.count
 			var t: TestCase = script.new()
 			_use_test_files()
+			_fresh_settings()  # (a test may have saved its own)
 			Settings.load_settings()
 			Locale.set_language("en")
 			t.call(name)

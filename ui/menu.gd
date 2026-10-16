@@ -1,17 +1,18 @@
 class_name MainMenu
 extends Control
 ## Main menu: Play (a submenu with online play, training and the tutorial),
-## Collection, Settings (with the debug tools), Exit.
+## Collection, Games (the game packs), Settings (with the debug tools), Exit.
 
 signal training
 signal collection
 signal online
 signal tutorial
 signal settings
+signal games
 signal quit
 
 ## Button labels (English keys); the translation tool reads this list.
-const ITEMS := ["Play", "Online Game", "Training", "Tutorial", "Back", "Collection", "Settings", "Exit"]
+const ITEMS := ["Play", "Online Game", "Training", "Tutorial", "Back", "Collection", "Games", "Settings", "Exit"]
 
 var _box: VBoxContainer
 
@@ -24,7 +25,7 @@ func _ready() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	var pic := TextureRect.new()  # a quiet tavern behind the menu, slowly drifting closer
-	pic.texture = load("res://ui/menu_bg.jpg")
+	pic.texture = Packs.picture("menu") if Packs.picture("menu") else load("res://ui/menu_bg.jpg")
 	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -62,9 +63,9 @@ func _ready() -> void:
 	add_child(version)
 
 
-## The first level: Play, Collection, Settings, Exit.
+## The first level: Play, Collection, Games, Settings, Exit.
 func show_main() -> void:
-	var items := [["Play", show_play, true], ["Collection", collection, true], ["Settings", settings, true]]
+	var items := [["Play", show_play, true], ["Collection", collection, true], ["Games", games, true], ["Settings", settings, true]]
 	if not OS.has_feature("web"):
 		items.append(["Exit", quit, true])
 	_fill(items)
@@ -72,7 +73,16 @@ func show_main() -> void:
 
 ## The Play submenu: online play, training, the tutorial, and Back.
 func show_play() -> void:
-	_fill([["Online Game", online, true], ["Training", training, true], ["Tutorial", tutorial, true], ["Back", show_main, true]])
+	var why := Rules.can_play()  # a pack this rules engine can't play yet: its games can't start
+	var items := [["Online Game", online, why == ""], ["Training", training, why == ""]]
+	if Packs.active().files().any(func(f): return f.begins_with("missions/")):
+		items.append(["Tutorial", tutorial, why == ""])
+	_fill(items + [["Back", show_main, true]])
+	if why != "":
+		var note := Palette.label(tr(why), 18, Color("ffb070"))
+		note.name = "CannotPlay"
+		note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_box.add_child(note)
 
 
 func _fill(items: Array) -> void:

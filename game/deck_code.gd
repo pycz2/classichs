@@ -93,7 +93,7 @@ static func parse(code: String) -> Dictionary:
 static func _hero_from_cards(dbfs: Array) -> String:
 	for dbf in dbfs:
 		var id := CardDb.by_dbf(dbf)
-		if id != "" and CardDb.card(id).cardClass != "NEUTRAL" and Decks.HEROES.has(CardDb.card(id).cardClass):
+		if id != "" and CardDb.card(id).cardClass != "NEUTRAL" and Decks.heroes().has(CardDb.card(id).cardClass):
 			return Decks.hero(CardDb.card(id).cardClass)
 	return ""
 
@@ -118,7 +118,7 @@ static func decode(text: String) -> Dictionary:
 	if p.heroes.size() != 1:
 		return {"deck": null, "error": _t("A deck needs exactly one hero")}
 	var hero := CardDb.by_dbf(p.heroes[0])
-	if not Decks.HEROES.values().has(hero):
+	if not Decks.heroes().values().has(hero):
 		hero = _hero_from_cards(p.singles + p.doubles)  # a hero skin (Magni, Medivh…)
 		if hero == "":
 			return {"deck": null, "error": _t("Unknown hero in the deck code")}

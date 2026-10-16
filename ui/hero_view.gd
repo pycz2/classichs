@@ -39,7 +39,7 @@ func sync() -> void:
 
 func _draw() -> void:
 	var r := Rect2(Vector2(10, 6), SIZE - Vector2(20, 14))
-	var cls: String = Decks.card_class(s.card_id) if Decks.HEROES.values().has(s.card_id) else s.card().get("cardClass", "NEUTRAL")
+	var cls: String = Decks.card_class(s.card_id) if Decks.heroes().values().has(s.card_id) else s.card().get("cardClass", "NEUTRAL")
 	var outline := Art.outline("arch", r)
 	var gl := shown_glow()
 	if outer_mark().a > 0.0:  # under the own glow: the glows are filled shapes

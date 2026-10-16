@@ -168,12 +168,11 @@ const HEROES := {"MAGE": ["human", "jaina"], "WARRIOR": ["orc", "garrosh"], "HUN
 
 static var _designs := {}
 static var _textures := {}
-## Picture sets: every folder in art/ is one (Settings.data.art picks it).
-## "cards" holds the generated pictures (tools/gen_card_art.py), "original" the
-## original art (tools/fetch_original_art.py, local only); any other folder is
-## the player's own set. Files are named by card id: <id>.jpg, .png or .webp.
+## Picture sets: the active pack's art sets (art/<set>/<card id>.jpg|png|webp in the
+## pack), plus the player's own folders in res://art (any folder but "cards"; "original"
+## holds the original art, tools/fetch_original_art.py, local only) that have pictures of
+## the pack's cards. The choice is per pack (Packs.choice "art").
 static var root := "res://art"
-const BUILT_IN := {"generated": "cards", "original": "original"}
 const EXTENSIONS := ["jpg", "png", "webp", "jpeg"]
 
 static var _word_re := RegEx.create_from_string("[a-z]+")
@@ -347,18 +346,22 @@ static func shapes(card_id: String, rect: Rect2) -> Array:
 	return out
 
 
-## The card's illustration, or null when it has none (the drawn art is used then).
+## The card's illustration, or null when it has none (the drawn art is used then): the
+## chosen set, else the pack's default set.
 static func texture(card_id: String) -> Texture2D:
 	if not _textures.has(card_id):
-		var set_name: String = Settings.data.get("art", "generated")
-		if not sets().has(set_name):
-			set_name = "generated"
-		var base := "%s/%s/%s" % [root, BUILT_IN.get(set_name, set_name), card_id]
+		var p := Packs.active()
 		var tex: Texture2D = null
-		for ext in EXTENSIONS:
-			tex = _load(base + "." + ext, ext)
-			if tex:
-				break
+		var chosen := Packs.choice(p, "art") if p else ""
+		if p and not p.sets("art").any(func(s): return s.id == chosen) and sets().has(chosen):
+			for ext in EXTENSIONS:  # a folder of the player's
+				tex = _load("%s/%s/%s.%s" % [root, chosen, card_id, ext], ext)
+				if tex:
+					break
+		for set_id in [chosen, p.default_set("art") if p else ""]:
+			if tex == null and p and set_id != "":
+				var f := p.find("art/" + set_id, card_id, EXTENSIONS)
+				tex = p.texture(f) if f != "" else null
 		_textures[card_id] = tex
 	return _textures[card_id]
 
@@ -380,25 +383,45 @@ static func _load(path: String, ext: String) -> Texture2D:
 static var _sets: Array = []
 
 
-## The picture sets there are: built-in ones first, then the player's folders.
+## The picture sets there are: the pack's (not the local ones a build marked), then the
+## player's folders that have pictures of the pack's cards.
 static func sets() -> Array:
 	if _sets.is_empty():
-		var out := ["generated"]
+		var p := Packs.active()
+		var out := []
+		for s in p.sets("art") if p else []:
+			if not s.get("local", false) or p.builtin():
+				out.append(str(s.id))
 		var dirs := Array(DirAccess.get_directories_at(root)) if DirAccess.dir_exists_absolute(root) else []
-		if dirs.has("original"):
-			out.append("original")
 		dirs.sort()
+		if dirs.has("original"):  # the original art first among the folders, as before
+			dirs.erase("original")
+			dirs.push_front("original")
 		for d in dirs:
-			if d not in ["cards", "original"] and not d.begins_with("."):
+			if d != "cards" and not d.begins_with(".") and not out.has(d) and _has_pack_cards("%s/%s" % [root, d]):
 				out.append(d)
 		_sets = out
 	return _sets.duplicate()
+
+
+## Whether a folder has a picture of one of the active pack's cards (among its first files).
+static func _has_pack_cards(dir: String) -> bool:
+	var files := Array(DirAccess.get_files_at(dir)).slice(0, 40)
+	return files.any(func(f: String):  # an export lists imported pictures as <name>.jpg.import
+		f = f.trim_suffix(".import").trim_suffix(".remap")
+		return EXTENSIONS.has(f.get_extension()) and CardDb.has(f.get_basename()))
 
 
 ## Forgets loaded pictures (after the picture set changes).
 static func reset() -> void:
 	_textures = {}
 	_sets = []
+
+
+## Forgets everything of the pack (after the active pack changes): pictures and picture plans.
+static func reset_all() -> void:
+	reset()
+	_designs = {}
 
 
 ## Points of a portrait outline inside rect: "oval", "arch", "circle" or "rect".

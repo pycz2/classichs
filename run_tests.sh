@@ -4,5 +4,6 @@
 #        ./run_tests.sh -- name    only tests whose "file:method" contains name
 set -e
 cd "$(dirname "$0")"
+tools/build_packs.sh  # res://packs/*.cardpack: the game reads its cards from them
 godot --headless --path . --import >/dev/null 2>&1 || true
 exec godot --headless --path . --script res://tests/run.gd "$@"

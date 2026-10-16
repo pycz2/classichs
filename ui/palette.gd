@@ -1,6 +1,6 @@
 class_name Palette
 extends RefCounted
-## Colours of the interface and of the nine classes.
+## Colours of the interface, and of the classes and rarities (the active pack may give its own).
 
 const CLASS := {
 	"WARRIOR": Color("8e1002"), "SHAMAN": Color("0070de"), "ROGUE": Color("4c4d48"),
@@ -27,8 +27,20 @@ const OPPONENT := Color("ff3030")  # what the online opponent points at
 const CARD_BACK := Color("27408b")
 
 
+## A class's colour: the active pack's (manifest `colors.classes`), else the built-in one.
 static func of_class(card_class: String) -> Color:
+	var p := Packs.active()
+	var c = p.manifest.get("colors", {}).get("classes", {}).get(card_class) if p else null
+	if c is String:
+		return Color(c)
 	return CLASS.get(card_class, CLASS.NEUTRAL)
+
+
+## A rarity's colour: the active pack's (manifest `colors.rarities`), else the built-in one.
+static func of_rarity(rarity: String, fallback := TEXT) -> Color:
+	var p := Packs.active()
+	var c = p.manifest.get("colors", {}).get("rarities", {}).get(rarity) if p else null
+	return Color(c) if c is String else RARITY.get(rarity, fallback)
 
 
 ## A filled rounded box style for panels and card parts.
@@ -61,10 +73,12 @@ static func button(text: String, name := "") -> Button:
 	return b
 
 
-## A generated picture (the tavern by default), darkened, behind a screen.
+## A generated picture (the tavern by default), darkened, behind a screen. A pack with
+## its own pictures (ui/menu, ui/library) shows them instead.
 static func backdrop(parent: Control, picture := "menu_bg") -> void:
 	var pic := TextureRect.new()
-	pic.texture = load("res://ui/%s.jpg" % picture)
+	var own := Packs.picture(picture.trim_suffix("_bg"))
+	pic.texture = own if own else (Packs.picture("menu") if Packs.picture("menu") else load("res://ui/%s.jpg" % picture))
 	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

@@ -7,12 +7,40 @@ const NAMES := ["classic", "horde", "druid", "arcane", "gold", "night"]
 const LABELS := {"classic": "Classic", "horde": "Horde", "druid": "Druid", "arcane": "Arcane", "gold": "Gold", "night": "Night"}
 
 
-## Draws the back named in the settings (or the given one) into r.
+static var _pack_tex: Texture2D
+static var _pack_tex_of: Pack
+
+
+## The back in use: the one chosen for the active pack; a pack with its own back (manifest
+## `card_back`) shows it ("pack") until another is chosen; else the settings' back.
+static func current() -> String:
+	var p := Packs.active()
+	var mine = Settings.data.get("pack_sets", {}).get(p.id(), {}).get("back") if p and Settings.data.get("pack_sets") is Dictionary else null
+	if mine is String and (mine != "pack" or pack_texture()):
+		return mine
+	return "pack" if pack_texture() else Settings.data.get("card_back", "classic")
+
+
+## The active pack's own card back picture (null when it has none).
+static func pack_texture() -> Texture2D:
+	var p := Packs.active()
+	if _pack_tex_of != p:
+		_pack_tex_of = p
+		var f = p.manifest.get("card_back") if p else null
+		_pack_tex = p.texture(f) if f is String else null
+	return _pack_tex
+
+
+## Draws the back in use (or the given one) into r.
 static func draw(ci: CanvasItem, r: Rect2, back := "") -> void:
 	if back == "":
-		back = Settings.data.get("card_back", "classic")
+		back = current()
 	var k := r.size.x / 72.0  # the designs are made for a 72 px wide card
 	var c := r.get_center()
+	if back == "pack" and pack_texture():
+		ci.draw_style_box(Palette.box(Color("1b140f"), int(8 * k), Frames.GOLD.darkened(0.2), maxi(2, int(3 * k))), r)
+		ci.draw_texture_rect(pack_texture(), r.grow(-3 * k), false)
+		return
 	match back:
 		"horde":
 			_frame(ci, r, k, Color("7a1410"), Color("4a0a08"), Color("3a3a3a"), Color("9a9a9a"))

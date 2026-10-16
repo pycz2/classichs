@@ -107,5 +107,8 @@ card as a starting point (dumped from `Art._subject` with headless Godot):
   except draw, summon, mana, secrets and plain emblems (nothing flies).
 - Minions: `play: battlecry` with `BATTLECRY`, `death: skull` with `DEATHRATTLE`.
 
-Phase C makes the client read `fx` from the pack instead of deriving it; until
-then these values equal what the client shows.
+The client reads `fx` from the pack (`TableFx.named`, `ui/table_fx.gd`): a name
+that is not in the catalog counts as none given, and the slot's default plays.
+`cast: none` sends no bolt, `hit` adds its effect to what the change shows (`none`:
+nothing), `play: portal` always shows, `battlecry` and `skull` keep their conditions
+(the play hook acted; an unsilenced death hook), `death: destroy` always shows.

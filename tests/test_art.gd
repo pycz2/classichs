@@ -80,7 +80,7 @@ func test_art_sets_are_folders_and_switch_pictures() -> void:
 	Settings.data.art = "original"
 	Art.reset()
 	check(Art.texture("HERO_08") != null, "original picture used")
-	eq(Art.texture("HERO_01"), null, "no picture in this set: drawn placeholder")
+	check(Art.texture("HERO_01") != null, "no picture in this set: the pack's default set's (docs/packs/format.md §7)")
 	Settings.data.art = "my_set"
 	Art.reset()
 	check(Art.texture("HERO_09") != null, "the player's own set")
@@ -98,6 +98,9 @@ func test_settings_screen_offers_art_sets() -> void:
 	var root := "user://test_art_root2"
 	for d in ["cards", "original"]:
 		DirAccess.make_dir_recursive_absolute(root + "/" + d)
+	var f := FileAccess.open(root + "/original/HERO_08.jpg", FileAccess.WRITE)  # a folder with the pack's cards
+	f.store_buffer(FileAccess.get_file_as_bytes("res://art/cards/HERO_08.jpg"))
+	f.close()
 	var was := Art.root
 	Art.root = root
 	Art.reset()
@@ -112,7 +115,7 @@ func test_settings_screen_offers_art_sets() -> void:
 	s.free()
 	Art.root = was
 	Art.reset()
-	for d in ["/cards", "/original", ""]:
+	for d in ["/original/HERO_08.jpg", "/cards", "/original", ""]:
 		DirAccess.remove_absolute(root + d)
 
 

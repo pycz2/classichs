@@ -225,7 +225,7 @@ func test_classic_decks_come_ready_and_valid() -> void:
 
 func test_a_basic_deck_only_for_a_class_without_a_classic_one() -> void:
 	var classes := DeckStore.classic().map(func(d): return d.card_class())
-	for cls in TrainingSetup.ORDER:
+	for cls in Decks.classes():
 		check(classes.has(cls), "a classic deck for " + cls)
 	check(DeckStore.starter().all(func(d): return not d.name.begins_with("Basic deck")), "so no Basic deck")
 

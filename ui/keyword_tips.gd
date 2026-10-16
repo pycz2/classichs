@@ -1,18 +1,32 @@
 class_name KeywordTips
 extends VBoxContainer
 ## Small parchment boxes beside a big card, one per keyword on it, explaining
-## what the keyword does (data/keywords.json, in the interface language).
+## what the keyword does (the active pack's locales `mechanics`, in the interface language).
 
 const WIDTH := 210.0
 
-static var _data := {}
+static var _data := {}  # client mechanic name -> {name: {lang: text}, text: {lang: tip}}
+
+
+static func reset() -> void:
+	_data = {}
 
 
 static func _keywords() -> Dictionary:
-	if _data.is_empty():
-		var j := JSON.new()
-		if j.parse(FileAccess.get_file_as_string("res://data/keywords.json")) == OK:
-			_data = j.data
+	var p := Packs.active()
+	if _data.is_empty() and p:
+		for lang in p.manifest.get("locales", []):
+			var mech = p.locale(lang).get("mechanics", {})
+			for name in mech if mech is Dictionary else {}:
+				var e: Dictionary = _data.get_or_add(Packs.client_name(name), {"name": {}, "text": {}})
+				if mech[name].has("name"):
+					e.name[lang] = mech[name].name
+				if mech[name].has("tip"):
+					e.text[lang] = mech[name].tip
+		for k in _data:  # the client falls back to English: the pack's default language is it
+			for f in ["name", "text"]:
+				if not _data[k][f].has("en"):
+					_data[k][f].en = _data[k][f].get(p.default_locale(), "")
 	return _data
 
 

@@ -94,7 +94,7 @@ func test_opponent_counts_group_copies_in_play_order() -> void:
 
 
 func _view() -> MatchView:
-	Settings.data = Settings.DEFAULTS.duplicate()
+	Settings.data = Settings.DEFAULTS.duplicate(true)
 	var v := MatchView.new()
 	root().add_child(v)
 	var m := H.decks({"hero": "HERO_08", "cards": _deck()}, {"hero": "HERO_01", "cards": _deck()}, 7, 0, [false, true])
@@ -128,12 +128,12 @@ func test_tracker_button_under_the_gear_toggles_the_panel() -> void:
 	eq(panel.visible, false, "hidden again")
 	eq(Settings.data.tracker, false, "remembered closed")
 	v.free()
-	Settings.data = Settings.DEFAULTS.duplicate()
+	Settings.data = Settings.DEFAULTS.duplicate(true)
 	Settings.data.language = "en"
 
 
 func _panel() -> DeckTrackerPanel:
-	Settings.data = Settings.DEFAULTS.duplicate()
+	Settings.data = Settings.DEFAULTS.duplicate(true)
 	var p := DeckTrackerPanel.new()
 	root().add_child(p)
 	return p

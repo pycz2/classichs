@@ -35,13 +35,13 @@ func test_settings_roundtrip_and_apply() -> void:
 	Settings.data.music = 0.25
 	Settings.data.language = "de"
 	Settings.save()
-	Settings.data = Settings.DEFAULTS.duplicate()
+	Settings.data = Settings.DEFAULTS.duplicate(true)
 	Settings.load_settings()
 	eq([Settings.data.shake, Settings.data.music, Settings.data.language], [false, 0.25, "de"], "loaded")
 	Settings.apply()
 	eq(Match.shake_enabled, false, "shake applied")
 	eq(TranslationServer.get_locale(), "de", "language applied")
-	Settings.data = Settings.DEFAULTS.duplicate()
+	Settings.data = Settings.DEFAULTS.duplicate(true)
 	Settings.data.language = "en"
 	Settings.apply()
 	DirAccess.remove_absolute(Settings.path)

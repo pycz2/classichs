@@ -1,27 +1,25 @@
 class_name VoiceLines
 extends RefCounted
-## What minions and heroes say (data/voice_lines.json: card id -> kind -> language ->
-## text; kinds: play, attack, death; heroes: greetings, well_played, thanks, wow, oops,
-## threaten, start, concede, attack). Heroes' emotes show these words.
-
-const PATH := "res://data/voice_lines.json"
-
-static var _data := {}
+## What minions and heroes say: the active pack's locales/<lang>.json `voice` (card id ->
+## kind -> text; kinds: play, attack, death; heroes: greetings, well_played, thanks, wow,
+## oops, threaten, start, concede, attack). Heroes' emotes show these words. A card's
+## `voice` field names whose lines it speaks.
 
 
-static func _lines() -> Dictionary:
-	if _data.is_empty():
-		var j := JSON.new()
-		if FileAccess.file_exists(PATH) and j.parse(FileAccess.get_file_as_string(PATH)) == OK and j.data is Dictionary:
-			_data = j.data
-	return _data
+static func reset() -> void:
+	pass  # the pack caches its locale files
 
 
-## The line in the language ("" = the interface language), English when it has none, "" when none at all.
+## The line in the language ("" = the interface language), the pack's default language when it
+## has none, "" when none at all.
 static func text(card_id: String, kind: String, lang := "") -> String:
-	var by_lang = _lines().get(card_id, {}).get(kind)
-	if not by_lang is Dictionary:
+	var p := Packs.active()
+	if p == null:
 		return ""
+	var who: String = CardDb.card(card_id).get("voice", card_id) if CardDb.has(card_id) else card_id
 	var l := lang if lang != "" else TranslationServer.get_locale()
-	return by_lang.get(l, by_lang.get(l.get_slice("_", 0), by_lang.get("en", "")))
-
+	for code in [p.lang_for(l), p.default_locale()]:
+		var line = p.locale(code).get("voice", {}).get(who, {}).get(kind)
+		if line is String:
+			return line
+	return ""

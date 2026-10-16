@@ -21,7 +21,7 @@ func test_every_class_icon_draws_inside_its_rect() -> void:
 func test_class_buttons_show_icons() -> void:
 	var c := CollectionView.new()
 	root().add_child(c)
-	for cls in TrainingSetup.ORDER:
+	for cls in Decks.classes():
 		var tab := c.find_child("Tab" + cls, true, false) as Button
 		check(tab.find_children("*", "IconView", false, false).size() == 1, "tab icon " + cls)
 		check(tab.tooltip_text != "", "tab tooltip " + cls)

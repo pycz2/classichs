@@ -1,0 +1,416 @@
+{
+ "format": 1,
+ "limits": {
+  "champion_health": 30,
+  "max_mana": 10,
+  "hand": 10,
+  "board": 7,
+  "deck_size": 30,
+  "copies": 2,
+  "copies_by_rarity": {
+   "LEGENDARY": 1
+  },
+  "queue_steps": 5000
+ },
+ "start": {
+  "first_player": "random",
+  "hand": [
+   3,
+   4
+  ],
+  "coin": "jumpstart",
+  "mulligan": true
+ },
+ "fatigue": {
+  "enabled": true,
+  "first": 1,
+  "step": 1
+ },
+ "timers": {
+  "turn": 75,
+  "fuse": 15,
+  "mulligan": 45,
+  "grace": 5,
+  "away": 30
+ },
+ "default_power": "siphon",
+ "classes": [
+  {
+   "id": "GHOST",
+   "champion": "iris_null"
+  },
+  {
+   "id": "CHROME",
+   "champion": "mother_rust"
+  },
+  {
+   "id": "EXEC",
+   "champion": "director_vale"
+  },
+  {
+   "id": "NEUTRAL",
+   "neutral": true
+  }
+ ],
+ "races": [
+  "DRONE",
+  "DAEMON"
+ ],
+ "rarities": [
+  {
+   "id": "COMMON",
+   "tier": "common"
+  },
+  {
+   "id": "RARE",
+   "tier": "rare"
+  },
+  {
+   "id": "EPIC",
+   "tier": "epic"
+  },
+  {
+   "id": "LEGENDARY",
+   "tier": "legendary"
+  }
+ ],
+ "no_rarity_tier": "common",
+ "sets": [
+  "core",
+  "token"
+ ],
+ "mechanics": {
+  "GUARD": {
+   "engine": "GUARD"
+  },
+  "HASTE": {
+   "engine": "HASTE"
+  },
+  "BARRIER": {
+   "engine": "BARRIER"
+  },
+  "DOUBLE_ATTACK": {
+   "engine": "DOUBLE_ATTACK"
+  },
+  "STEALTH": {
+   "engine": "STEALTH"
+  },
+  "SPELLPROOF": {
+   "engine": "SPELLPROOF"
+  },
+  "CANT_ATTACK": {
+   "engine": "CANT_ATTACK"
+  },
+  "IMMUNE": {
+   "engine": "IMMUNE"
+  },
+  "SPELL_POWER": {
+   "engine": "SPELL_POWER"
+  },
+  "MANA_LOCK": {
+   "engine": "MANA_LOCK"
+  },
+  "TRAP": {
+   "engine": "TRAP"
+  },
+  "FREEZE": {
+   "engine": "FREEZE"
+  },
+  "SILENCE": {
+   "engine": "SILENCE"
+  },
+  "COUNTER": {
+   "engine": "COUNTER"
+  },
+  "ON_PLAY": {
+   "engine": "ON_PLAY"
+  },
+  "ON_DEATH": {
+   "engine": "ON_DEATH"
+  },
+  "COMBO": {
+   "engine": "COMBO"
+  },
+  "CHOICE": {
+   "engine": "CHOICE"
+  },
+  "WOUNDED": {
+   "engine": "WOUNDED"
+  },
+  "AURA": {
+   "engine": "AURA"
+  },
+  "TRIGGER": {
+   "engine": "TRIGGER"
+  },
+  "ADJACENT": {
+   "engine": "ADJACENT"
+  },
+  "SPELL_SCALED": {
+   "engine": "SPELL_SCALED"
+  },
+  "NO_SPELL_POWER": {
+   "engine": "NO_SPELL_POWER"
+  },
+  "FROZEN": {
+   "engine": "FROZEN"
+  },
+  "FROZEN_THIS_TURN": {
+   "engine": "FROZEN_THIS_TURN"
+  },
+  "EXHAUSTED": {
+   "engine": "EXHAUSTED"
+  },
+  "ATTACKS": {
+   "engine": "ATTACKS"
+  },
+  "ARMOR": {
+   "engine": "ARMOR"
+  },
+  "DURABILITY": {
+   "engine": "DURABILITY"
+  },
+  "USED": {
+   "engine": "USED"
+  },
+  "LOCKED": {
+   "engine": "LOCKED"
+  },
+  "GUARDED": {
+   "engine": "GUARDED"
+  },
+  "TO_DESTROY": {
+   "engine": "TO_DESTROY"
+  },
+  "DIED_POS": {
+   "engine": "DIED_POS"
+  },
+  "POWER_MULTIPLIER": {
+   "engine": "POWER_MULTIPLIER"
+  },
+  "HEAL_IS_DAMAGE": {
+   "engine": "HEAL_IS_DAMAGE"
+  }
+ },
+ "modes": {
+  "constructed": {
+   "sets": [
+    "core"
+   ],
+   "class_cards": "own_and_neutral",
+   "starter_core": []
+  },
+  "arena": {
+   "sets": [
+    "core"
+   ],
+   "champions_offered": 3,
+   "classes": [
+    "GHOST",
+    "CHROME",
+    "EXEC"
+   ],
+   "picks": 30,
+   "offer": 3,
+   "tier_weights": {
+    "common": 765,
+    "rare": 140,
+    "epic": 75,
+    "legendary": 20
+   },
+   "special_picks": [
+    1,
+    10,
+    20,
+    30
+   ],
+   "special_tier_weights": {
+    "rare": 650,
+    "epic": 270,
+    "legendary": 80
+   },
+   "class_weight": 3,
+   "neutral_weight": 2,
+   "copies": 0,
+   "wins": 12,
+   "losses": 3
+  }
+ },
+ "ranked": {
+  "start": {
+   "rank": 25,
+   "stars": 0
+  },
+  "ranks": [
+   {
+    "rank": 25,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 24,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 23,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 22,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 21,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 20,
+    "stars": 3,
+    "floor": true,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 19,
+    "stars": 3,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 18,
+    "stars": 3,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 17,
+    "stars": 3,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 16,
+    "stars": 3,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 15,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 14,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 13,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 12,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 11,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 10,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 9,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 8,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 7,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 6,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": null
+   },
+   {
+    "rank": 5,
+    "stars": 5,
+    "emblem": null
+   },
+   {
+    "rank": 4,
+    "stars": 5,
+    "emblem": null
+   },
+   {
+    "rank": 3,
+    "stars": 5,
+    "emblem": null
+   },
+   {
+    "rank": 2,
+    "stars": 5,
+    "emblem": null
+   },
+   {
+    "rank": 1,
+    "stars": 5,
+    "emblem": null
+   }
+  ],
+  "streak": {
+   "wins": 3,
+   "bonus_stars": 1
+  },
+  "legend": {
+   "after_rank": 1,
+   "keep_for_season": true,
+   "numbered_top": 10000,
+   "emblem": null
+  },
+  "season": {
+   "length": "month",
+   "reset": {
+    "to_rank": 25,
+    "stars_per_rank_above": 1,
+    "legend_counts_as": 0
+   }
+  }
+ }
+}

@@ -17,7 +17,6 @@ static func root() -> Window:
 func _main(logged_in := true) -> Node:
 	var m: Node = load("res://ui/main.tscn").instantiate()
 	m.server_link = FakeLink.new()
-	m.server_link.url = Settings.data.server
 	root().add_child(m)
 	if logged_in:
 		_login(m)
@@ -165,7 +164,9 @@ func test_invite_from_anywhere_starts_the_game() -> void:
 
 ## A saved session connects and logs in again at the start, without asking.
 func test_main_resumes_a_saved_session() -> void:
-	ServerLink.remember({"token": "saved", "server": "ws://saved:7377"})
+	Settings.data.servers = [{"url": "ws://saved:7377", "name": "saved"}]
+	Settings.save()  # main reads the settings
+	ServerLink.remember_for("ws://saved:7377", {"token": "saved"})
 	var m := _main(false)
 	var l: FakeLink = m.server_link
 	eq([l.url, l.resuming], ["ws://saved:7377", true], "the saved server, resuming")
@@ -180,11 +181,13 @@ func test_main_resumes_a_saved_session() -> void:
 
 ## A refused saved session is forgotten without a word.
 func test_refused_session_is_silent() -> void:
-	ServerLink.remember({"token": "old", "server": "ws://saved:7377"})
+	Settings.data.servers = [{"url": "ws://saved:7377", "name": "saved"}]
+	Settings.save()  # main reads the settings
+	ServerLink.remember_for("ws://saved:7377", {"token": "old"})
 	var m := _main(false)
 	m.server_link.opened.emit()
 	m.server_link.dispatch({"t": "error", "code": "bad_token", "text": "The session expired: log in again"})
-	eq([m.social._toast.visible, ServerLink.saved().get("token")], [false, null], "no toast, token gone")
+	eq([m.social._toast.visible, m.server_link.saved().get("token")], [false, null], "no toast, token gone")
 	m.server_link.dispatch({"t": "error", "code": "not_found", "text": "No such player"})
 	eq(m.social._toast.visible, true, "other errors show off the lobby")
 	m.free()

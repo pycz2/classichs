@@ -7,6 +7,7 @@ cd "$(dirname "$0")/.."
 OUT=build/site
 mkdir -p build
 touch build/.gdignore  # Godot must not import (and pack) what lies in build/
+tools/build_packs.sh  # res://packs/*.cardpack: the built-in game packs
 rm -rf "$OUT"
 mkdir -p "$OUT/play" "$OUT/screens"
 godot --path . --script res://tools/make_splash.gd  # the splash shows the version (needs a window)

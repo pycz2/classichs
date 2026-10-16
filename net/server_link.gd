@@ -8,11 +8,26 @@ extends Node
 signal opened
 signal message(msg: Dictionary)
 signal closed(reason: String)
+## The server's game packs changed (`packs`: the list arrived or changed).
+signal packs_changed
+## A download's progress: bytes so far of total (total 0 = not known yet).
+signal pack_progress(content_hash: String, done: int, total: int)
+## A download ended: Packs.install's {pack} or {error} (translated).
+signal pack_downloaded(content_hash: String, result: Dictionary)
+## An upload ended: {pack} (the server's entry) or {error (translated), code}.
+signal pack_uploaded(result: Dictionary)
 
-## The saved session (user://, per player): {token, server, deck: {name, hero}, mode, tab}.
+## The saved sessions (user://, per player), one per server (D14):
+## {"servers": {url: {token, deck: {name, hero}, mode, tab, kicked?}}, "last": url}.
 ## Tests point it at their own file.
 const SESSION_DEFAULT_PATH := "user://server_session.json"
 static var session_path := SESSION_DEFAULT_PATH
+## Whether queue, invite, invite_accept and arena_start carry `pack` (the rules hash).
+# ponytail: off until phase D: the server's messages refuse unknown fields (ws.rs deny_unknown_fields).
+static var send_pack := false
+static var _file_hashes := {}  # pack path -> SHA-256 of the file (the server's content_hash)
+## Every connection is in this group (the settings find who is logged in).
+const GROUP := "server_links"
 
 var url := ""
 var socket := WebSocketPeer.new()
@@ -22,33 +37,103 @@ var me := {}  # the player's profile from the server
 var resuming := false
 ## Whether the server answers `chats` and `read` (asked once after login; an older server does not).
 var has_chats := false
+## Whether the server knows game packs (`packs`; asked after `chats`).
+var has_packs := false
+## Another login took the account (`kicked`): no resume by itself until the player logs in.
+var kicked := false
+## The server's packs: {server: [pack], mine: [pack + enabled]}; a pack is
+## {id, name: {lang: text}, version, rules_hash, content_hash, size, url} (server/README.md).
+var packs := {"server": [], "mine": []}
+## Downloads under way: content_hash -> HTTPRequest.
+var downloading := {}
 ## The deck sent with the last queue, invite or acceptance: the server's game uses it.
 var game_deck: Deck
 var _probing := false
+var _probing_packs := false
 var _was_open := false
 var _closed := true  # nothing to close before open()
 var _games := {}  # game id -> ServerSession
 
 
-## The saved session file (an empty dictionary when there is none).
-static func saved() -> Dictionary:
+static func _tr(text: String) -> String:
+	return str(TranslationServer.translate(text))
+
+
+func _init() -> void:
+	add_to_group(GROUP)
+
+
+## The whole saved file (the old single-session form is read as its server's entry).
+static func saved_all() -> Dictionary:
 	var j := JSON.new()
 	if not FileAccess.file_exists(session_path) or j.parse(FileAccess.get_file_as_string(session_path)) != OK or not j.data is Dictionary:
-		return {}
-	return j.data
+		return {"servers": {}}
+	var d: Dictionary = j.data
+	if d.get("servers") is Dictionary:
+		return d
+	var old := d.duplicate()  # {token, server, deck, mode, tab}
+	var at := str(old.get("server", ""))
+	if at == "":
+		at = Settings.data.servers[0].url if not Settings.data.servers.is_empty() else ""
+	old.erase("server")
+	return {"servers": {at: old} if at != "" and not old.is_empty() else {}, "last": at}
 
 
-## Merges values into the saved session (null removes one).
-static func remember(values: Dictionary) -> void:
-	var d := saved()
-	for k in values:
-		if values[k] == null:
-			d.erase(k)
-		else:
-			d[k] = values[k]
+static func _save_all(d: Dictionary) -> void:
 	var f := FileAccess.open(session_path, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(d))
+
+
+## The saved session of a server ({} when there is none).
+static func saved_for(address: String) -> Dictionary:
+	var e = saved_all().servers.get(address)
+	return e if e is Dictionary else {}
+
+
+## Merges values into a server's saved session (null removes one).
+static func remember_for(address: String, values: Dictionary) -> void:
+	var d := saved_all()
+	var e := saved_for(address)
+	for k in values:
+		if values[k] == null:
+			e.erase(k)
+		else:
+			e[k] = values[k]
+	d.servers[address] = e
+	_save_all(d)
+
+
+## Forgets everything saved for a server (it was removed from the list).
+static func forget(address: String) -> void:
+	var d := saved_all()
+	d.servers.erase(address)
+	_save_all(d)
+
+
+## The server chosen last in the lobby ("" = none yet).
+static func last() -> String:
+	return str(saved_all().get("last", ""))
+
+
+static func remember_last(address: String) -> void:
+	var d := saved_all()
+	d["last"] = address
+	_save_all(d)
+
+
+## This server's saved session.
+func saved() -> Dictionary:
+	return saved_for(url)
+
+
+func remember(values: Dictionary) -> void:
+	remember_for(url, values)
+
+
+## The server's name in the list (its host when not there).
+func display_name() -> String:
+	return Settings.server_name(url)
 
 
 ## Logged in on an open connection.
@@ -56,12 +141,19 @@ func logged_in() -> bool:
 	return token != "" and is_open()
 
 
+## Whether a saved session would log in by itself (a token, not kicked out by another login).
+func can_resume() -> bool:
+	var s := saved_for(url)
+	return str(s.get("token", "")) != "" and not s.get("kicked", false)
+
+
 ## Opens the connection; with a saved session for this address it logs in again
-## by itself (resume). A rejected session is forgotten.
-func open_and_resume(address: String) -> Error:
+## by itself (resume), unless another login took it (`kicked`) or force says so
+## (the player asked to play here again). A rejected session is forgotten.
+func open_and_resume(address: String, force := false) -> Error:
 	var err := open(address)
 	var s := saved()
-	if err == OK and str(s.get("token", "")) != "" and s.get("server") == address:
+	if err == OK and str(s.get("token", "")) != "" and (force or not s.get("kicked", false)):
 		resuming = true
 		opened.connect(func():
 			if resuming:
@@ -69,11 +161,20 @@ func open_and_resume(address: String) -> Error:
 	return err
 
 
+## The saved session on an open connection, asked for by the player (after `kicked`).
+func resume_saved() -> void:
+	var t := str(saved().get("token", ""))
+	if t != "" and is_open():
+		resuming = true
+		send({"t": "resume", "token": t})
+
+
 func log_out() -> void:
 	send({"t": "logout"})
 	token = ""
 	me = {}
-	remember({"token": null})
+	_clear_packs()
+	remember({"token": null, "kicked": null})
 
 
 func open(address: String) -> Error:
@@ -105,6 +206,7 @@ func send(msg: Dictionary) -> void:
 func close() -> void:
 	resuming = false
 	token = ""
+	_clear_packs()
 	if not _closed:
 		_closed = true
 		socket.close()
@@ -129,15 +231,21 @@ func _process(_d: float) -> void:
 		var msg = JSON.parse_string(text)
 		if msg is Dictionary and msg.get("t") is String:
 			dispatch(msg)
+	for h in downloading:
+		var r: HTTPRequest = downloading[h]
+		pack_progress.emit(h, r.get_downloaded_bytes(), maxi(r.get_body_size(), int(r.get_meta("size", 0))))
 	if st == WebSocketPeer.STATE_CLOSED and not _closed:
 		_closed = true
 		resuming = false
 		token = ""
+		_clear_packs()
 		var why := socket.get_close_reason()
+		if why == "another_login" and not kicked:  # the kick told in the close frame (its text may be lost with the close)
+			dispatch({"t": "kicked", "reason": why})
 		for s in _games.values():
 			if is_instance_valid(s):
 				s.on_closed()
-		closed.emit(why if why != "" else TranslationServer.translate("Connection lost"))
+		closed.emit(_tr("You logged in on another device") if kicked else (why if why != "" else _tr("Connection lost")))
 
 
 ## A message from the server: a game's message goes to its channel, the rest to
@@ -149,7 +257,8 @@ func dispatch(msg: Dictionary) -> void:
 			if msg.get("ok", false):
 				token = str(msg.get("token", ""))
 				me = msg.get("me", {}) if msg.get("me") is Dictionary else {}
-				remember({"token": token, "server": url})
+				kicked = false
+				remember({"token": token, "kicked": null})
 				_probing = true
 				send({"t": "chats"})
 		"error":
@@ -162,11 +271,29 @@ func dispatch(msg: Dictionary) -> void:
 				_probing = false
 				has_chats = false
 				return
+			elif _probing_packs and msg.get("code") == "bad_request":  # a server without packs
+				_probing_packs = false
+				has_packs = false
+				return
 		"chats":
-			_probing = false
+			if _probing:
+				_probing = false
+				_probing_packs = true
+				send({"t": "packs"})
 			has_chats = true
+		"packs":
+			_probing_packs = false
+			has_packs = true
+			packs = {"server": _list(msg.get("server")), "mine": _list(msg.get("mine"))}
+			packs_changed.emit()
+		"kicked":  # another login took the account; the server closes this connection
+			token = ""
+			kicked = true
+			resuming = false
+			remember({"kicked": true})
 		"logged_out":
 			token = ""
+			_clear_packs()
 	if msg.t in ["state", "act_error", "emote", "intent", "game_over"]:
 		var id := str(msg.get("game", ""))
 		var s = _games.get(id)
@@ -177,3 +304,169 @@ func dispatch(msg: Dictionary) -> void:
 		if msg.t != "game_over":
 			return
 	message.emit(msg)
+
+
+static func _list(v: Variant) -> Array:
+	return v.filter(func(e): return e is Dictionary) if v is Array else []
+
+
+func _clear_packs() -> void:
+	var had: bool = not (packs.server.is_empty() and packs.mine.is_empty())
+	packs = {"server": [], "mine": []}
+	has_packs = false
+	_probing_packs = false
+	if had:
+		packs_changed.emit()
+
+
+# --- game packs on the server (server/README.md, "Game packs") ---------------------------
+
+## Asks for the server's packs again (the answer is `packs`, then packs_changed).
+func request_packs() -> void:
+	send({"t": "packs"})
+
+
+## The server's HTTP address: ws://host:port → http://host:port (wss → https).
+func http_base() -> String:
+	var rest := url.split("://")[-1].get_slice("/", 0)
+	return ("https://" if url.begins_with("wss://") else "http://") + rest
+
+
+## A message with the pack it plays (`pack`: the rules hash) once the server takes it (send_pack).
+func with_pack(msg: Dictionary) -> Dictionary:
+	if send_pack:
+		var p := Packs.active()
+		msg["pack"] = str(server_pack_for(p).get("rules_hash", p.rules_hash()))
+	return msg
+
+
+## SHA-256 of a pack's file: the server's content_hash (not the per-file one of format.md).
+static func file_hash(p: Pack) -> String:
+	if not _file_hashes.has(p.path):
+		_file_hashes[p.path] = Pack.sha256(Packs.bytes_of(p))
+	return _file_hashes[p.path]
+
+
+## The server's entry for a pack the player has ({} when the server does not list it):
+## the same file, or the same rules.
+func server_pack_for(p: Pack) -> Dictionary:
+	if p == null:
+		return {}
+	for e in packs.server + packs.mine:
+		if str(e.get("rules_hash", "")) == p.rules_hash() or str(e.get("content_hash", "")) == file_hash(p):
+			return e
+	return {}
+
+
+## Why games of the pack cannot be played here (translated; "" = they can).
+# ponytail: until phase D every server plays only its built-in Classic rules, listed or not;
+# send_pack (phase D) lets a listed pack be played.
+func game_problem(p: Pack) -> String:
+	if p != null and p.id() == Packs.CLASSIC:
+		return ""
+	if server_pack_for(p).is_empty():
+		return _tr("This server does not have this game")
+	return "" if send_pack else _tr("This server does not play this game yet")
+
+
+func has_game(p: Pack) -> bool:
+	return game_problem(p) == ""
+
+
+## The player's own pack for a server entry (the same file or the same rules), or null.
+static func local_pack(entry: Dictionary) -> Pack:
+	for p in Packs.all():
+		if p.rules_hash() == str(entry.get("rules_hash", "")) or file_hash(p) == str(entry.get("content_hash", "")):
+			return p
+	return null
+
+
+## Whether an entry is the player's own upload.
+func is_mine(entry: Dictionary) -> bool:
+	return packs.mine.any(func(e): return e.get("content_hash") == entry.get("content_hash"))
+
+
+## Downloads a server pack (GET /packs/<content_hash>.cardpack with the session token),
+## checks the file's SHA-256 and installs it: pack_progress, then pack_downloaded.
+func download_pack(entry: Dictionary) -> void:
+	var h := str(entry.get("content_hash", ""))
+	if h == "" or downloading.has(h):
+		return
+	var r := _http("/packs/%s.cardpack" % h, HTTPClient.METHOD_GET, PackedByteArray(), _downloaded.bind(entry))
+	if r:
+		r.set_meta("size", int(entry.get("size", 0)))
+		downloading[h] = r
+
+
+func _downloaded(code: int, body: PackedByteArray, entry: Dictionary) -> void:
+	var h := str(entry.get("content_hash", ""))
+	downloading.erase(h)
+	var res := {}
+	if code == 401:
+		res = {"error": _tr("Log in to the server again")}
+	elif code == 404:
+		res = {"error": _tr("The server no longer has this game")}
+	elif code != 200:
+		res = {"error": _tr("The download failed (%s)") % (str(code) if code > 0 else "-")}
+	elif Pack.sha256(body) != h:
+		res = {"error": _tr("The download is damaged: try again")}
+	else:
+		res = Packs.install(body, "downloaded", {"server": url})
+		if res.has("pack"):
+			_file_hashes[res.pack.path] = h
+	pack_downloaded.emit(h, res)
+
+
+## Uploads one of the player's packs (POST /packs, the file as the body): pack_uploaded;
+## the server sends a new `packs` after it.
+func upload_pack(p: Pack) -> void:
+	var bytes := Packs.bytes_of(p)
+	if bytes.is_empty():
+		pack_uploaded.emit({"error": _tr("Cannot read the pack"), "code": "read"})
+		return
+	_http("/packs", HTTPClient.METHOD_POST, bytes, _uploaded)
+
+
+## The server's answers to an upload (server/README.md): code -> the player's words.
+const UPLOAD_ERRORS := {"auth_required": "Log in to the server again", "bad_token": "Log in to the server again",
+	"exists": "You have uploaded this game already", "too_many": "You have the most games this server keeps: delete one first",
+	"too_large": "The game is too big for this server", "empty": "The upload broke off", "bad_body": "The upload broke off"}
+
+
+func _uploaded(code: int, body: PackedByteArray) -> void:
+	var j = JSON.parse_string(body.get_string_from_utf8())
+	var d: Dictionary = j if j is Dictionary else {}
+	if code == 201 and d.get("pack") is Dictionary:
+		pack_uploaded.emit({"pack": d.pack})
+		return
+	var c := str(d.get("code", str(code)))
+	var text: String = _tr(UPLOAD_ERRORS[c]) if UPLOAD_ERRORS.has(c) else ""
+	if c == "invalid":
+		text = _tr("The server refused the game: %s") % str(d.get("error", ""))
+	elif text == "":
+		text = _tr("The server could not take the game (%s)") % c
+	pack_uploaded.emit({"error": text, "code": c})
+
+
+## Deletes one of the player's uploads (`pack_delete`; the answer is a new `packs`).
+func delete_pack(content_hash: String) -> void:
+	send({"t": "pack_delete", "content_hash": content_hash})
+
+
+## An HTTP request to the server with the session token; done(code, body) gets the answer
+## (code 0: no answer). Tests replace it.
+func _http(path: String, method: int, body: PackedByteArray, done: Callable) -> HTTPRequest:
+	var r := HTTPRequest.new()
+	r.use_threads = not OS.has_feature("web")
+	add_child(r)
+	r.request_completed.connect(func(result: int, code: int, _h, data: PackedByteArray):
+		r.queue_free()
+		done.call(code if result == HTTPRequest.RESULT_SUCCESS else 0, data))
+	var headers := PackedStringArray(["Authorization: Bearer " + token])
+	if method == HTTPClient.METHOD_POST:
+		headers.append("Content-Type: application/octet-stream")
+	if r.request_raw(http_base() + path, headers, method, body) != OK:
+		r.queue_free()
+		done.call(0, PackedByteArray())
+		return null
+	return r

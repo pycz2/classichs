@@ -307,7 +307,7 @@ func _show_players() -> void:
 		hero.name = "Hero"
 		hero.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		hero.clip_text = true
-		var heroes: Array = CollectionView.CLASSES.slice(0, 9).map(func(c): return Decks.hero(c))
+		var heroes: Array = Decks.heroes().values()
 		if not pl.get("hero") in heroes and pl.get("hero") is String and CardDb.has(pl.hero):
 			heroes.append(pl.hero)
 		for h in heroes:
