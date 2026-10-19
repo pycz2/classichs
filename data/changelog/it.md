@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.28.1] - 2026-10-19
+
+### Aggiunto
+- Un nuovo set di immagini per Classic, “Cartone 2D”: tutte le 534 carte in uno stile da cartone animato piatto. Sceglilo in Giochi → Classic 2014 → Immagini delle carte (o nelle impostazioni).
+
 ## [0.28.0] - 2026-10-16
 
 ### Aggiunto

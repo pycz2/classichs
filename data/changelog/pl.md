@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.28.1] - 2026-10-19
+
+### Dodano
+- Nowy zestaw obrazów dla Classic, „Kreskówka 2D”: wszystkie 534 karty w płaskim stylu kreskówki. Wybór: Gry → Classic 2014 → Obrazy kart (albo w ustawieniach).
+
 ## [0.28.0] - 2026-10-16
 
 ### Dodano

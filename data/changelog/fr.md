@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.28.1] - 2026-10-19
+
+### Ajouté
+- Un nouvel ensemble d'images pour Classic, « Dessin animé 2D » : les 534 cartes dans un style dessin animé à plat. À choisir dans Jeux → Classic 2014 → Images des cartes (ou dans les paramètres).
+
 ## [0.28.0] - 2026-10-16
 
 ### Ajouté

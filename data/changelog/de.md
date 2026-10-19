@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.28.1] - 2026-10-19
+
+### Hinzugefügt
+- Ein neues Bilderset für Classic, „Cartoon 2D“: alle 534 Karten im flachen Cartoon-Stil. Auswahl unter Spiele → Classic 2014 → Kartenbilder (oder in den Einstellungen).
+
 ## [0.28.0] - 2026-10-16
 
 ### Hinzugefügt

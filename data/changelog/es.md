@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.28.1] - 2026-10-19
+
+### Añadido
+- Un nuevo conjunto de imágenes para Classic, «Dibujos 2D»: las 534 cartas en un estilo de dibujos animados plano. Elígelo en Juegos → Classic 2014 → Imágenes de cartas (o en los ajustes).
+
 ## [0.28.0] - 2026-10-16
 
 ### Añadido

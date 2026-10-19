@@ -28,7 +28,10 @@
   "redistributable": true,
   "default_locale": "en",
   "locales": ["en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"],
-  "art_sets": [{"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированный"}, "default": true}],
+  "art_sets": [
+    {"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированный"}, "default": true},
+    {"id": "cartoon", "name": {"en": "Cartoon 2D", "ru": "Мультяшный 2D", "de": "Cartoon 2D", "fr": "Dessin animé 2D", "es": "Dibujos 2D", "pt_BR": "Desenho 2D", "it": "Cartone 2D", "pl": "Kreskówka 2D"}}
+  ],
   "sound_sets": [{"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированные"}, "default": true}],
   "music_sets": [
     {"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированная"}, "default": true},
