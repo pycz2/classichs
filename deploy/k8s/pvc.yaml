@@ -1,0 +1,13 @@
+# The SQLite database (and the pack store when no S3 bucket is configured).
+# Block storage with ReadWriteOnce (a cloud disk, local-path, Longhorn…), not NFS/SMB:
+# SQLite's WAL needs working file locks and shared memory on a local filesystem.
+# Size: docs/server-profiling.md, "Sizing" (~45 KB per game kept 90 days: ≈ 4 MB × games per day).
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: classichs-data
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 10Gi

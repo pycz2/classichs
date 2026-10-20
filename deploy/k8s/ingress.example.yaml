@@ -1,0 +1,28 @@
+# An example for ingress-nginx; set the host and the TLS secret. One replica, so no sticky
+# sessions are needed. WebSockets need no annotation in ingress-nginx, but its timeouts do:
+# neither the game nor the server pings an idle connection, so the default 60 s read timeout
+# would drop every player sitting in the menu once a minute.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: classichs-server
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "128m"        # pack uploads (players 100 MB, admins 128 MB)
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off" # stream them to the server
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [game.example.com]
+      secretName: classichs-tls
+  rules:
+    - host: game.example.com          # the game: wss://game.example.com · admin: https://game.example.com/admin
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: classichs-server
+                port: {name: ws}

@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Нагрузка сервера</title>
+<style>
+:root { --bg:#14100c; --panel:#211912; --panel2:#2b2018; --line:#46362a; --text:#f3e9d6; --muted:#b4a387; --gold:#f2c230; --green:#55d47a; --blue:#7ec8ff; --orange:#ffae4a; --red:#ff7a6b; --violet:#c9a7ff; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f7f0e3; --panel:#fffaf1; --panel2:#f7eedc; --line:#e2d3b8; --text:#2a1f17; --muted:#6c5a43; --gold:#a8741a; --green:#1f8a3a; --blue:#1d6fb8; --orange:#b5651d; --red:#b33a2c; --violet:#6b46b8; } }
+:root[data-theme="light"] { --bg:#f7f0e3; --panel:#fffaf1; --panel2:#f7eedc; --line:#e2d3b8; --text:#2a1f17; --muted:#6c5a43; --gold:#a8741a; --green:#1f8a3a; --blue:#1d6fb8; --orange:#b5651d; --red:#b33a2c; --violet:#6b46b8; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:15.5px/1.6 -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { display:grid; grid-template-columns:260px 1fr; min-height:100vh; }
+nav { position:sticky; top:0; height:100vh; overflow:auto; border-right:1px solid var(--line); padding:20px 12px; background:var(--panel); }
+nav h1 { font-size:19px; color:var(--gold); margin:0 8px 2px; }
+nav .sub { color:var(--muted); font-size:12.5px; margin:0 8px 14px; }
+nav button.sec { display:flex; gap:9px; align-items:center; width:100%; text-align:left; font:inherit; font-size:14.5px; background:none; color:var(--text); border:1px solid transparent; border-radius:9px; padding:7px 10px; cursor:pointer; }
+nav button.sec:hover { border-color:var(--line); }
+nav button.sec.on { background:var(--panel2); border-color:var(--gold); }
+nav .ico { width:22px; text-align:center; }
+.theme { display:flex; gap:4px; margin:16px 8px 0; }
+.theme button { flex:1; font:inherit; font-size:12.5px; padding:5px; border-radius:7px; border:1px solid var(--line); background:var(--panel2); color:var(--text); cursor:pointer; }
+.theme button.on { border-color:var(--gold); color:var(--gold); }
+main { padding:28px 38px 90px; max-width:1100px; }
+section { display:none; } section.on { display:block; }
+h2 { color:var(--gold); margin:0 0 6px; font-size:28px; }
+h3 { margin:24px 0 8px; font-size:18px; }
+.lead { color:var(--muted); font-size:16px; margin:0 0 18px; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:12px 0; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }
+.stat { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+.stat b { display:block; font-size:30px; color:var(--gold); line-height:1.1; }
+.stat span { color:var(--muted); font-size:13.5px; }
+.tile { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; cursor:pointer; transition:transform .15s, border-color .15s; }
+.tile:hover { transform:translateY(-2px); border-color:var(--gold); }
+.tile .t { font-weight:700; margin-bottom:4px; }
+.tile .d { color:var(--muted); font-size:14px; }
+code, .path { font:13px ui-monospace, SFMono-Regular, Menlo, monospace; background:var(--panel2); border:1px solid var(--line); border-radius:6px; padding:1px 6px; }
+pre { background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px 14px; overflow:auto; font:13px/1.5 ui-monospace, Menlo, monospace; }
+table { border-collapse:collapse; width:100%; font-size:14.5px; }
+td, th { border-bottom:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+th { color:var(--muted); font-weight:600; }
+a { color:var(--blue); }
+.ok { color:var(--green); font-weight:600; } .no { color:var(--red); font-weight:600; }
+details { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 16px; margin:8px 0; }
+summary { cursor:pointer; font-weight:600; }
+.pill { display:inline-block; font-size:12px; padding:1px 8px; border-radius:20px; border:1px solid var(--line); color:var(--muted); margin-left:6px; }
+
+.muted { color:var(--muted); font-size:13.5px; } .warn { color:var(--orange); font-weight:600; }
+.chart { position:relative; } .chart svg { width:100%; height:auto; display:block; overflow:visible; }
+.chart .tip { position:absolute; pointer-events:none; background:var(--panel2); border:1px solid var(--gold); border-radius:8px; padding:5px 9px; font-size:13px; display:none; white-space:nowrap; z-index:2; }
+.chart rect.hit { fill:transparent; cursor:default; }
+.chart .lab { fill:var(--text); font-size:12.5px; } .chart .val { fill:var(--muted); font-size:12px; }
+.chart .thr { stroke:var(--red); stroke-width:1.5; stroke-dasharray:5 4; } .chart .thrl { fill:var(--red); font-size:12px; }
+.chart .ax { stroke:var(--line); stroke-width:1; }
+.calc { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px; }
+.calc label { display:block; font-size:14px; color:var(--muted); }
+.calc input[type=range] { width:100%; accent-color:var(--gold); }
+.calc output { font-weight:700; color:var(--text); }
+.out { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-top:12px; }
+.tblwrap { overflow-x:auto; }
+@media (max-width: 860px) { .wrap { grid-template-columns:1fr; } nav { position:static; height:auto; } main { padding:20px 16px 60px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h1>Нагрузка сервера</h1>
+  <p class="sub">classichs-server 0.28.1: сколько ему нужно процессора, памяти, диска и сети, и почему. Разделы — слева или клавишами ← →.</p>
+  <div id="menu"></div>
+  <div class="theme" id="theme"><button data-t="auto">Авто</button><button data-t="light">Светлая</button><button data-t="dark">Тёмная</button></div>
+</nav>
+<main>
+
+<section id="overview" data-title="Обзор" data-ico="🧭">
+  <h2>Главное</h2>
+  <p class="lead">Один процесс на Rust тянет тысячу игроков в пятистах партиях на одном-двух ядрах и полугигабайте памяти. Первым кончится память, а не процессор: каждый вход по паролю на миг берёт 19 МиБ, и таких входов одновременно может быть сколько угодно.</p>
+  <div class="grid">
+    <div class="stat"><b>7 МиБ</b><span>памяти у пустого сервера в контейнере, старт за 0,3–0,7 с</span></div>
+    <div class="stat"><b>0,8 ядра</b><span>и 440 МиБ на 1000 игроков в 500 партиях (ход каждые 0,5–2 с — втрое быстрее людей)</span></div>
+    <div class="stat"><b>145 КиБ</b><span>на каждое соединение: буфер чтения WebSocket. С буфером 8 КиБ — 26 КиБ</span></div>
+    <div class="stat"><b>~4000</b><span>ходов в секунду — потолок одного процесса; упирается в общий мьютекс, а не в ядра</span></div>
+    <div class="stat"><b>45 КБ</b><span>на партию в журнале событий; хранится 90 дней: база ≈ 4 МБ × партий в день</span></div>
+    <div class="stat"><b>OOM</b><span>при 50 одновременных входах по паролю и лимите 512 МиБ — все партии теряются</span></div>
+  </div>
+  <h3>Разделы</h3>
+  <div class="grid" id="tiles"></div>
+</section>
+
+<section id="method" data-title="Как мерили" data-ico="🧪">
+  <h2>Как мерили</h2>
+  <p class="lead">Настоящие клиенты по WebSocket играют настоящие партии через протокол сервера; сервер не знает, что это тест.</p>
+  <div class="card">
+    <p><b>Генератор нагрузки</b> — <code>server/examples/loadgen.rs</code>. Каждый клиент — своё соединение со своим <code>X-Forwarded-For</code> (сервер запущен с <code>--trust-proxy</code>, иначе лимит входов на адрес остановил бы тест).</p>
+    <ul>
+      <li><code>setup</code> — регистрирует аккаунты и сохраняет токены; у каждого 10 друзей.</li>
+      <li><code>idle</code> — клиенты входят по токену и молчат; <code>--churn</code> переподключает N в секунду (присутствие друзьям).</li>
+      <li><code>play</code> — клиент встаёт в обычную очередь Neonfall или Classic (поровну), восстанавливает игру из своего вида (<code>view::from_snapshot_in</code>, как клиент Godot через <code>new {state}</code>), ходит ботом движка после «раздумья» 0,5–2 с (или без пауз — стресс), после конца партии встаёт снова.</li>
+      <li><code>burst</code> — вход по паролю, N одновременно (argon2). <code>--admin</code> держит открытой живую ленту админки.</li>
+    </ul>
+    <p><b>Где:</b> Apple M1 Pro (8+2 ядра, 16 ГБ), сборка release, генератор на той же машине. <b>Linux-контейнер</b> (то, что видит Kubernetes): образ из <code>server/Dockerfile</code> в Docker Desktop с <code>--cpus</code>/<code>--memory</code>, память по <code>docker stats</code> (без кэша страниц, как working set у kubelet). Каждый сценарий — с копии одной подготовленной базы (5000 аккаунтов); три прогона, в таблицах медианы.</p>
+    <p class="muted">Задержка — от отправки <code>act</code> до прихода <code>state</code> на клиенте, то есть с запасом: в неё входит и сам генератор. Профиль процессора — macOS <code>sample</code> под нагрузкой ~3500 ходов/с.</p>
+  </div>
+</section>
+
+<section id="base" data-title="Старт и простой" data-ico="🚀">
+  <h2>Старт и простой</h2>
+  <p class="lead">Сервер поднимается меньше чем за секунду и в простое почти ничего не ест. Правила обеих игр вместе — 3 МиБ.</p>
+  <div class="tblwrap"><table>
+    <tr><th>Что</th><th>macOS</th><th>Linux-контейнер</th></tr>
+    <tr><td>Первый старт: ставит и проверяет пробной партией оба пакета</td><td>0,81 с, 0,75 с ЦП, пик 101 МиБ</td><td>1,38 с, потом 28 МиБ</td></tr>
+    <tr><td>Повторный старт</td><td>0,31 с, 0,24 с ЦП, пик 35 МиБ</td><td>0,69 с, <b>7 МиБ</b></td></tr>
+    <tr><td>Первый старт с S3 (SeaweedFS): заливает 59 МБ пакетов</td><td>1,5 с</td><td>—</td></tr>
+    <tr><td>Повторный старт с S3 (читает Neonfall, 16 МБ)</td><td>0,44 с</td><td>—</td></tr>
+    <tr><td>Простой</td><td>0,03 % ядра</td><td>0,1–0,2 %</td></tr>
+    <tr><td>SeaweedFS <code>weed mini</code></td><td>—</td><td>206 МиБ, ~1 % ядра</td></tr>
+  </table></div>
+  <h3>Правила в памяти</h3>
+  <div class="chart" id="chRules"></div>
+  <p class="muted">Classic в пакете совпадает со встроенным (тот же rules_hash), поэтому партия Classic ничего не догружает. Пик при старте — чтение файла пакета целиком (16 и 43 МБ) на мгновение.</p>
+</section>
+
+<section id="conn" data-title="Соединения" data-ico="🔌">
+  <h2>Соединения</h2>
+  <p class="lead">Простаивающий игрок почти не стоит процессора, но каждое соединение держит 145 КиБ буфера. Вход по паролю — 19 МиБ на время хэша, без ограничения числа одновременных.</p>
+  <h3>Память контейнера: простаивающие игроки</h3>
+  <div class="chart" id="chConn"></div>
+  <p class="muted">Последняя строка — эксперимент: <code>.read_buffer_size(8 * 1024)</code> в <code>ws_upgrade</code>. Измерено и откачено; рекомендация — в разделе «Узкие места».</p>
+  <div class="grid">
+    <div class="stat"><b>2,5 %</b><span>ядра на 5000 простаивающих: секундный тик (живая сводка для админки строится всегда)</span></div>
+    <div class="stat"><b>6,5 мс</b><span>ЦП на переподключение: события, сессия, 20 сообщений присутствия друзьям</span></div>
+    <div class="stat"><b>~20 мс</b><span>ЦП на вход или регистрацию по паролю (argon2)</span></div>
+  </div>
+  <h3>Входы по паролю разом: пик памяти</h3>
+  <div class="chart" id="chBurst"></div>
+  <p>В контейнере с <code>--memory 512m</code> 50 одновременных входов убили процесс (OOM) — а с ним все идущие партии. С 1 ГиБ — пик 978 МиБ. Обычно игроки возвращаются по токену (<code>resume</code>, без хэша), так что это риск всплеска — например, после рестарта, когда у многих истекли токены.</p>
+</section>
+
+<section id="games" data-title="Партии" data-ico="⚔️">
+  <h2>Партии</h2>
+  <p class="lead">Ход стоит 1–2 мс процессора вместе с журналом событий; сам движок — около 0,5 мс. Задержка ответа на ход — единицы миллисекунд, пока процессора хватает.</p>
+  <h3>macOS, раздумье 0,5–2 с (медианы трёх прогонов)</h3>
+  <div class="tblwrap"><table>
+    <tr><th>Клиентов (партий)</th><th>ходов/с</th><th>ЦП сервера</th><th>ЦП на ход</th><th>задержка p50 / p95 / p99</th></tr>
+    <tr><td>20 (10)</td><td>7,7</td><td>0,03 ядра</td><td>4,4 мс</td><td>4,5 / 10 / 15 мс</td></tr>
+    <tr><td>100 (50)</td><td>40</td><td>0,14</td><td>3,4 мс</td><td>3,8 / 9,5 / 14 мс</td></tr>
+    <tr><td>400 (200)</td><td>160</td><td>0,35</td><td>2,2 мс</td><td>2,0 / 6,0 / 9,3 мс</td></tr>
+    <tr><td>1000 (500)</td><td>401</td><td>0,61</td><td>1,5 мс</td><td>1,3 / 2,4 / 4,1 мс</td></tr>
+  </table></div>
+  <h3>Без пауз (стресс): сколько ходов в секунду</h3>
+  <div class="chart" id="chSat"></div>
+  <p class="muted">Контейнер: генератор в той же сети Docker, 400 клиентов. На macOS генератор делит машину с сервером.</p>
+  <h3>Сообщения и диск</h3>
+  <div class="grid">
+    <div class="stat"><b>7,2 КБ</b><span><code>state</code> в среднем; p99 15 КБ, максимум 29,5 КБ. Каждый ход — два таких</span></div>
+    <div class="stat"><b>~110 Б</b><span>сообщение <code>act</code> от клиента</span></div>
+    <div class="stat"><b>45 КБ</b><span>в базе на партию (журнал событий с индексами)</span></div>
+    <div class="stat"><b>0,44 МиБ</b><span>памяти на играющего клиента (из них 145 КиБ — соединение)</span></div>
+  </div>
+  <p>Открытая админка с живой лентой получает ~1,2 КБ на ход (185 КБ/с при 160 ходах/с); на процессор сервера это не повлияло (0,35 ядра и с ней, и без).</p>
+</section>
+
+<section id="k8slimits" data-title="Лимиты контейнера" data-ico="📦">
+  <h2>Лимиты контейнера</h2>
+  <p class="lead">Лимит процессора бьёт по хвосту задержки задолго до того, как среднее упрётся в него. 1000 игроков при 1 ядре: в среднем 85 %, а p99 — сотни миллисекунд.</p>
+  <h3>p99 задержки хода, 1000 игроков (500 партий)</h3>
+  <div class="chart" id="chP99"></div>
+  <div class="tblwrap"><table>
+    <tr><th>Клиентов (партий)</th><th><code>--cpus</code></th><th>ЦП сред.</th><th>память</th><th>p50 / p95 / p99</th></tr>
+    <tr><td>100 (50)</td><td>0,25</td><td>12 %</td><td>53 МиБ</td><td>2,7 / 7,0 / 14 мс</td></tr>
+    <tr><td>400 (200)</td><td>0,5</td><td>31 %</td><td>180 МиБ</td><td>1,9 / 4,2 / 8,5 мс</td></tr>
+    <tr><td>400 (200)</td><td>1</td><td>35 %</td><td>181 МиБ</td><td>2,1 / 5,6 / 16 мс</td></tr>
+    <tr><td>1000 (500)</td><td>1</td><td>85–90 %</td><td>440 МиБ</td><td>7–9 / 150–260 / <span class="no">150–725 мс</span></td></tr>
+    <tr><td>1000 (500)</td><td>2</td><td>80 %</td><td>440 МиБ</td><td>1,8 / 5,5 / <span class="ok">36 мс</span></td></tr>
+    <tr><td>2000 (1000)</td><td>2</td><td>184 %</td><td>1,0 ГиБ</td><td><span class="no">p99 1,8 с</span></td></tr>
+  </table></div>
+  <p class="muted">Строки 1000 при 1 ядре — семь прогонов разными путями (через проброс порта и внутри сети Docker), разброс большой. Нехватка памяти приводит к OOM-kill: процесс перезапускается, все партии в памяти теряются.</p>
+</section>
+
+<section id="bottlenecks" data-title="Узкие места" data-ico="🧱">
+  <h2>Узкие места</h2>
+  <p class="lead">В порядке, в котором в них упрёшься: память на входах по паролю, память на соединения, общий мьютекс хаба. SQLite далеко от предела.</p>
+  <h3>Где проводит время ход (≈3500 ходов/с, доля опросов рабочих потоков)</h3>
+  <div class="chart" id="chProf"></div>
+  <p><b>Ожидание мьютекса — около 60 % времени рабочих потоков.</b> <code>Hub::send</code> превращает <code>state</code> в текст (<code>to_string</code>), держа общий <code>Mutex&lt;Hub&gt;</code>; каждое входящее сообщение берёт его минимум дважды. Поэтому с 2 до 4 ядер пропускная способность выросла лишь на 24 %.</p>
+  <h3>Что поправить (не сделано — решать вам)</h3>
+  <ol>
+    <li><b>Ограничить одновременные хэши argon2</b> семафором (например, по числу ядер) вокруг <code>spawn_blocking</code> в <code>ws.rs</code> и <code>admin.rs</code>: всплеск памяти станет ~19 МиБ × ядра, лимит 512 МиБ — безопасным.</li>
+    <li><b><code>.read_buffer_size(8 * 1024)</code></b> в <code>ws_upgrade</code>: −120 КиБ на соединение (измерено: 726 → 137 МиБ на 5000 клиентов).</li>
+    <li><b>Сериализовать вне замка</b>: передавать в <code>Hub::send</code> готовый текст или брать копию отправителя и отпускать замок.</li>
+    <li>Не строить <code>live_json</code> каждую секунду, когда админка не открыта.</li>
+  </ol>
+  <p class="muted">Движок на асинхронных потоках (заметка <code>ponytail:</code> про <code>spawn_blocking</code>) — ~0,5 мс на ход, задержек не дал. SQLite с одним соединением — ~3 % процессора на пике, вставки пачками до 500 строк; рост базы 2,3 МБ/с на 4000 ходах/с.</p>
+</section>
+
+<section id="sizing" data-title="Сколько ресурсов" data-ico="📏">
+  <h2>Сколько ресурсов</h2>
+  <p class="lead">Цифры — для темпа теста (ход раз в 0,5–2 с). Люди ходят примерно втрое реже: тот же процессор выдержит втрое больше игроков, а память не уменьшится.</p>
+  <div class="tblwrap"><table>
+    <tr><th></th><th>Малый: ≤ 100 игроков</th><th>Средний: ≤ 1000</th><th>Большой: ≤ 5000</th></tr>
+    <tr><td>Партий одновременно</td><td>≤ 50</td><td>≤ 500</td><td>≤ 1000–2000</td></tr>
+    <tr><td>Измерено</td><td>0,12 ядра, 53 МиБ</td><td>0,8 ядра, 440 МиБ</td><td>726 МиБ без партий</td></tr>
+    <tr><td>ЦП минимум / рекомендуется</td><td>0,25 / 0,5</td><td>1 / 2</td><td>2 / 4</td></tr>
+    <tr><td>Память минимум / рекомендуется</td><td>256 / 512 МиБ</td><td>768 МиБ / 1,5 ГиБ</td><td>2 / 3 ГиБ</td></tr>
+    <tr><td>k8s requests</td><td><code>250m</code>, <code>256Mi</code></td><td><code>1</code>, <code>512Mi</code></td><td><code>2</code>, <code>1536Mi</code></td></tr>
+    <tr><td>k8s limits</td><td><code>memory: 512Mi</code></td><td><code>memory: 1536Mi</code></td><td><code>memory: 3Gi</code></td></tr>
+  </table></div>
+  <p class="muted">Без лимита процессора. Запас памяти — под всплеск входов по паролю: «минимум» переживает ~10 одновременных, «рекомендуется» — ~50.</p>
+  <h3>Прикинуть свой случай</h3>
+  <div class="card calc">
+    <label>Игроков онлайн: <output id="oOn"></output><input type="range" id="iOn" min="50" max="5000" step="50" value="1000"></label>
+    <label>Из них в партиях: <output id="oIn"></output> %<input type="range" id="iIn" min="0" max="100" step="5" value="100"></label>
+    <label>В партии ход раз в: <output id="oPace"></output> с (тест: 1,25; люди: 3–6)<input type="range" id="iPace" min="1" max="10" step="0.25" value="1.25"></label>
+    <label>Партий в день: <output id="oDay"></output><input type="range" id="iDay" min="100" max="50000" step="100" value="2000"></label>
+    <label>Входов по паролю одновременно: <output id="oPw"></output><input type="range" id="iPw" min="0" max="100" step="5" value="25"></label>
+    <label><input type="checkbox" id="iBuf"> с буфером чтения 8 КиБ (рекомендация 2)</label>
+  </div>
+  <div class="out" id="calcOut"></div>
+  <p class="muted">Формулы: память ≈ 30 МиБ + 145 КиБ (26 с буфером) × соединения + 0,3 МиБ × игроков в партиях + 19 МиБ × входы по паролю; ЦП ≈ 2 мс × ходов/с, держать среднее не выше половины выделенного; диск ≈ 45 КБ × партий в день × 90; сеть ≈ 14 КБ × ходов/с.</p>
+</section>
+
+<section id="k8s" data-title="Kubernetes" data-ico="☸️">
+  <h2>Kubernetes</h2>
+  <p class="lead">Одна реплика и стратегия Recreate: партии живут в памяти процесса, а у SQLite один писатель. Масштабировать — вверх, не вширь.</p>
+  <div class="tblwrap"><table>
+    <tr><th>Файл</th><th>Что</th></tr>
+    <tr><td><code>deploy/k8s/deployment.yaml</code></td><td>1 реплика, Recreate, пробы <code>GET /admin</code> (startup, readiness, liveness), requests <code>1</code> CPU / <code>512Mi</code>, limit <code>1536Mi</code>, без лимита ЦП, том <code>/data</code>, S3 из секрета</td></tr>
+    <tr><td><code>pvc.yaml</code></td><td>10 Gi ReadWriteOnce под SQLite — блочное хранилище, не NFS</td></tr>
+    <tr><td><code>service.yaml</code>, <code>ingress.example.yaml</code></td><td>порт 7377; ingress-nginx с TLS, таймауты чтения/записи 1 ч (иначе через 60 с тишины отвалится каждый игрок в меню), тело до 128 МБ</td></tr>
+    <tr><td><code>secret.example.yaml</code>, <code>seaweedfs.yaml</code></td><td>настройки S3; при желании SeaweedFS в кластере (~210 МиБ)</td></tr>
+  </table></div>
+  <p>Обновление или переезд пода обрывает идущие партии: игроки вернутся по токену через секунду, но незаконченные партии пропадут. Липкие сессии не нужны. Манифесты проверены <code>kubeconform -strict</code>.</p>
+</section>
+
+<section id="notdone" data-title="Не измерено" data-ico="❔">
+  <h2>Что не измерено</h2>
+  <p class="lead">Чего в цифрах нет, и где они могут разойтись с жизнью.</p>
+  <ul>
+    <li>Арена, рейтинг, дружеские приглашения, чат.</li>
+    <li>Загрузка и скачивание пакетов игроков (до 100 МБ каждый).</li>
+    <li>Поиск по журналу событий в админке на полной 90-дневной таблице (общее соединение SQLite).</li>
+    <li>TLS, ingress, настоящая сеть, настоящий узел Kubernetes (вместо него — VM Docker Desktop).</li>
+    <li>Человеческий темп: бот ходит примерно втрое быстрее людей.</li>
+    <li>Многочасовой прогон: фрагментация памяти, часовая чистка на полной таблице.</li>
+    <li>Профиль под Linux (<code>perf</code>): профиль снят <code>sample</code> на macOS.</li>
+  </ul>
+  <p>Подробности и все таблицы: <span class="path">docs/server-profiling.md</span>.</p>
+</section>
+
+</main>
+</div>
+<script>
+const MiB = v => v >= 1024 ? (v / 1024).toFixed(1).replace(".", ",") + " ГиБ" : Math.round(v) + " МиБ";
+// [label, value, shown value, tooltip]
+const DATA = {
+  chRules: {unit: "МиБ", rows: [["Встроенный Classic", 2.5, "2,5 МиБ", "куча после загрузки правил"], ["Neonfall", 0.4, "0,4 МиБ", "куча после загрузки правил"], ["Пик при чтении Neonfall (16 МБ)", 16.1, "+16 МиБ", "временно, пока читается файл"], ["Пик при чтении Classic (43 МБ)", 42.5, "+43 МиБ", "временно; встроенный Classic не читается"]]},
+  chConn: {unit: "МиБ", rows: [["Пустой сервер", 6.4, "6 МиБ", "после старта"], ["1000 соединений", 153, "153 МиБ", "146 КиБ на соединение"], ["5000 соединений", 726, "726 МиБ", "145 КиБ на соединение"], ["5000, буфер 8 КиБ", 137, "137 МиБ", "26 КиБ на соединение (эксперимент)"]]},
+  chBurst: {unit: "МиБ", thr: [512, "лимит 512 МиБ"], rows: [["10 разом (macOS)", 233, "233 МиБ", "300 входов/с, p99 125 мс"], ["10 разом (контейнер)", 204, "204 МиБ", "лимит 512 МиБ — выжил"], ["50 разом (macOS)", 949, "949 МиБ", "213 входов/с, p99 695 мс"], ["50 разом (контейнер, 1 ГиБ)", 978, "978 МиБ", "выжил на грани"], ["50 разом (контейнер, 512 МиБ)", 512, "OOM", "процесс убит, все партии потеряны"]]},
+  chSat: {unit: "ходов/с", rows: [["Контейнер, 1 ядро", 761, "761", "p99 112 мс"], ["Контейнер, 2 ядра", 1282, "1282", "p99 84 мс"], ["Контейнер, 4 ядра", 1587, "1587", "p99 133 мс: упор в мьютекс"], ["macOS, ~4 ядра", 3959, "3959", "p99 42 мс, генератор на той же машине"]]},
+  chP99: {unit: "мс", thr: [100, "цель 100 мс"], rows: [["0,5 ядра", 922, "922 мс", "успевает лишь 269 ходов/с из 400"], ["1 ядро (медиана 7)", 316, "316 мс", "разброс 48–725 мс"], ["1,5 ядра", 356, "356 мс", "один прогон через проброс порта"], ["2 ядра", 36, "36 мс", "внутри сети Docker, 2 прогона"]]},
+  chProf: {unit: "%", rows: [["Отправка state (Hub::send под замком)", 34, "34 %", "включая ожидание мьютекса"], ["Сборка видов игроков (snapshot)", 30, "30 %", "два вида + события"], ["Хэш состояния для журнала", 12, "12 %", "SHA-256 канонического JSON"], ["Правила (Game::apply)", 3, "3 %", ""], ["SQLite (поток sqlx)", 3, "~3 %", "вставки пачками, fsync"]]},
+};
+function bars(id) {
+  const d = DATA[id], box = document.getElementById(id);
+  const rowH = 30, labW = 250, valW = 80, W = 760, plotW = W - labW - valW, H = d.rows.length * rowH + (d.thr ? 22 : 6);
+  const max = Math.max(...d.rows.map(r => r[1]), d.thr ? d.thr[0] : 0) * 1.05;
+  const x = v => labW + plotW * v / max;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${id}">`;
+  s += `<line class="ax" x1="${labW}" x2="${labW}" y1="0" y2="${d.rows.length * rowH}"/>`;
+  d.rows.forEach((r, i) => {
+    const y = i * rowH + 7, w = Math.max(2, x(r[1]) - labW);
+    s += `<text class="lab" x="${labW - 10}" y="${y + 12}" text-anchor="end">${r[0]}</text>`;
+    s += `<path d="M${labW} ${y} h${w - 4} a4 4 0 0 1 4 4 v8 a4 4 0 0 1 -4 4 h${-(w - 4)} z" fill="var(--gold)"/>`;
+    s += `<text class="val" x="${labW + w + 8}" y="${y + 12}">${r[2]}</text>`;
+    s += `<rect class="hit" x="0" y="${i * rowH}" width="${W}" height="${rowH}" data-i="${i}"/>`;
+  });
+  if (d.thr) { const tx = x(d.thr[0]); s += `<line class="thr" x1="${tx}" x2="${tx}" y1="0" y2="${d.rows.length * rowH}"/><text class="thrl" x="${tx}" y="${d.rows.length * rowH + 16}" text-anchor="middle">${d.thr[1]}</text>`; }
+  box.innerHTML = s + `</svg><div class="tip"></div>`;
+  const tip = box.querySelector(".tip");
+  box.querySelectorAll("rect.hit").forEach(h => {
+    h.onmousemove = e => { const r = d.rows[h.dataset.i], b = box.getBoundingClientRect(); tip.textContent = `${r[0]}: ${r[2]}${r[3] ? " — " + r[3] : ""}`; tip.style.display = "block"; tip.style.left = Math.min(e.clientX - b.left + 12, b.width - tip.offsetWidth) + "px"; tip.style.top = (e.clientY - b.top + 14) + "px"; };
+    h.onmouseleave = () => tip.style.display = "none";
+  });
+}
+Object.keys(DATA).forEach(bars);
+// sizing calculator
+const $ = id => document.getElementById(id);
+function calc() {
+  const on = +$("iOn").value, inG = on * $("iIn").value / 100, pace = +$("iPace").value, day = +$("iDay").value, pw = +$("iPw").value, buf = $("iBuf").checked;
+  $("oOn").textContent = on; $("oIn").textContent = $("iIn").value; $("oPace").textContent = String(pace).replace(".", ","); $("oDay").textContent = day; $("oPw").textContent = pw;
+  const acts = inG / 2 / pace;          // a game: one move at a time
+  const mem = 30 + on * (buf ? 26 : 145) / 1024 + inG * 0.3 + pw * 19;
+  const cpuAvg = acts * 0.002 + 0.02, cpu = Math.max(0.25, Math.ceil(cpuAvg * 2 * 4) / 4);
+  const disk = day * 45e3 * 90 / 1e9, net = acts * 14e3 * 8 / 1e6;
+  const tiles = [[MiB(mem), "памяти в пике; limit ≈ " + MiB(Math.ceil(mem * 1.3 / 128) * 128)], [cpuAvg.toFixed(2).replace(".", ",") + " ядра", `в среднем при ${Math.round(acts)} ходах/с; дать ≥ ${String(cpu).replace(".", ",")}`], [disk.toFixed(1).replace(".", ",") + " ГБ", "база SQLite через 90 дней"], [net.toFixed(1).replace(".", ",") + " Мбит/с", "исходящий трафик партий"]];
+  $("calcOut").innerHTML = tiles.map(t => `<div class="stat"><b>${t[0]}</b><span>${t[1]}</span></div>`).join("");
+  if (acts > 1300) $("calcOut").insertAdjacentHTML("beforeend", `<div class="stat"><b class="warn">мьютекс</b><span>больше ~1300 ходов/с в контейнере упирается в общий замок хаба, а не в ядра</span></div>`);
+}
+document.querySelectorAll(".calc input").forEach(i => i.oninput = calc); calc();
+// navigation (as docs/report/0.28.html)
+const secs = [...document.querySelectorAll("section")];
+const menu = $("menu"), tiles = $("tiles");
+function show(id) {
+  secs.forEach(s => s.classList.toggle("on", s.id === id));
+  menu.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.id === id));
+  try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  window.scrollTo(0, 0);
+}
+for (const s of secs) {
+  const b = document.createElement("button");
+  b.className = "sec"; b.dataset.id = s.id;
+  b.innerHTML = `<span class="ico"></span><span></span>`;
+  b.children[0].textContent = s.dataset.ico; b.children[1].textContent = s.dataset.title;
+  b.onclick = () => show(s.id); menu.append(b);
+  if (s.id !== "overview") {
+    const t = document.createElement("div"); t.className = "tile";
+    t.innerHTML = `<div class="t"></div><div class="d"></div>`;
+    t.children[0].textContent = s.dataset.ico + " " + s.dataset.title;
+    t.children[1].textContent = (s.querySelector(".lead") || {}).textContent || "";
+    t.onclick = () => show(s.id); tiles.append(t);
+  }
+}
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  const i = secs.findIndex(s => s.classList.contains("on"));
+  if (e.key === "ArrowRight" && i < secs.length - 1) show(secs[i + 1].id);
+  if (e.key === "ArrowLeft" && i > 0) show(secs[i - 1].id);
+});
+show(secs.some(s => "#" + s.id === location.hash) ? location.hash.slice(1) : "overview");
+const root = document.documentElement;
+function theme(t) {
+  if (t === "auto") root.removeAttribute("data-theme"); else root.dataset.theme = t;
+  document.querySelectorAll("#theme button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  try { localStorage.setItem("report-theme", t); } catch (e) {}
+}
+document.querySelectorAll("#theme button").forEach(b => b.onclick = () => theme(b.dataset.t));
+let saved = "auto"; try { saved = localStorage.getItem("report-theme") || "auto"; } catch (e) {}
+theme(saved);
+</script>
+</body>
+</html>

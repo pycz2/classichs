@@ -17,7 +17,10 @@ cd server
 cargo build --release        # → target/release/classichs-server
 cargo test                   # unit + integration tests (whole games played by the engine's bot)
 cargo run --release --example bench   # what an action and a game cost the server
+cargo run --release --example loadgen  # simulated players over the protocol (usage: its top comment)
 ```
+
+Load tests, sizing and Kubernetes: `docs/server-profiling.md`, `deploy/k8s/`.
 
 ## The rules
 

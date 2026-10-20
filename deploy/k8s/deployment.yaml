@@ -1,0 +1,75 @@
+# The game server: ONE replica, Recreate. Games live in the process's memory (each is a
+# task holding its engine state) and SQLite allows one writer, so a second pod would split
+# players between two worlds and corrupt nothing only by luck. A restart or a new version
+# ends the games being played (players log back in with their token; the games are lost).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: classichs-server
+  labels: {app: classichs-server}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate          # never two pods on the same SQLite file
+  selector:
+    matchLabels: {app: classichs-server}
+  template:
+    metadata:
+      labels: {app: classichs-server}
+    spec:
+      securityContext:
+        runAsUser: 65532    # the distroless "nonroot" user of the image
+        runAsGroup: 65532
+        runAsNonRoot: true
+        fsGroup: 65532      # the volume becomes writable for it
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: server
+          # Build and push it yourself (no public image):
+          #   tools/build_packs.sh && docker build -f server/Dockerfile -t <registry>/classichs-server:0.28.1 .
+          image: classichs-server:0.28.1
+          imagePullPolicy: IfNotPresent
+          args:
+            - --listen
+            - "0.0.0.0:7377"
+            - --db
+            - /data/classichs.db
+            - --packs-dir
+            - /packs
+            - --store-dir          # used only when S3_BUCKET is empty
+            - /data/store
+            - --trust-proxy        # the client address from the Ingress's X-Forwarded-For
+          envFrom:
+            - secretRef:
+                name: classichs-s3          # S3_BUCKET, S3_ENDPOINT, S3_REGION, S3_ACCESS_KEY, S3_SECRET_KEY
+                optional: true              # no secret: packs in /data/store on the volume
+          env:
+            - {name: RUST_LOG, value: info}
+          ports:
+            - {name: ws, containerPort: 7377}
+          # docs/server-profiling.md, "Sizing" (Medium): up to ~1 000 players online, ~500 live
+          # games: measured 0.8 core and 440 MiB at a fast test pace. The memory limit is room
+          # for password-login bursts (argon2: 19 MiB each, not capped). No CPU limit: CFS
+          # throttling shows up as turn latency long before the average reaches the limit.
+          # Small (<= 100 players): requests 250m / 256Mi, limit 512Mi.
+          resources:
+            requests: {cpu: "1", memory: 512Mi}
+            limits: {memory: 1536Mi}
+          startupProbe:                    # the first start installs and trials the bundled packs
+            httpGet: {path: /admin, port: ws}
+            periodSeconds: 2
+            failureThreshold: 60
+          readinessProbe:
+            httpGet: {path: /admin, port: ws}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /admin, port: ws}
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - {name: data, mountPath: /data}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: classichs-data
