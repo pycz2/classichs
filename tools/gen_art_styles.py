@@ -46,11 +46,10 @@ STYLES = {
 }
 
 
-def run_batch(style, batch, cards):
-    work = os.path.join(OUT, "_work", style)
-    os.makedirs(os.path.join(work, "out"), exist_ok=True)
+def prompt_for(style, batch, cards):
+    """The Codex prompt for these card ids in a style (tools/art_styles_page.py shows it per card)."""
     lines = "\n".join(f"- ID {i}: {describe(cards[i])}" for i in batch)
-    prompt = (
+    return (
         f"Use your built-in image generation tool (not code, not other tools) to create {len(batch)} images, "
         "one per card listed below, in the given order. For each card, show what the card is: the creature "
         "or character, the weapon, or the visible magic of the spell.\n"
@@ -58,6 +57,12 @@ def run_batch(style, batch, cards):
         "After generating each image, copy the generated PNG file to ./out/<ID>.png (use the exact ID). "
         "Do not create any other files. Cards:\n" + lines
     )
+
+
+def run_batch(style, batch, cards):
+    work = os.path.join(OUT, "_work", style)
+    os.makedirs(os.path.join(work, "out"), exist_ok=True)
+    prompt = prompt_for(style, batch, cards)
     subprocess.run([CODEX, "exec", "--skip-git-repo-check", "--ephemeral", "-s", "workspace-write", "-C", work, prompt],
                    stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=2400)
     done = []

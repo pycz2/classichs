@@ -11,7 +11,8 @@ import shutil
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from gen_art_styles import CARDS, OUT, ROOT, STYLES  # noqa: E402
+from gen_art_styles import CARDS, OUT, ROOT, STYLES, prompt_for  # noqa: E402
+import gen_card_art  # noqa: E402
 
 PAGE = os.path.join(OUT, "page")
 SETS = [("original", "Оригинал (Blizzard)", os.path.join(ROOT, "art", "original")),
@@ -28,6 +29,12 @@ def main():
     if "--all" in sys.argv:
         drawn = {f[:-4] for s in STYLES if os.path.isdir(os.path.join(OUT, s)) for f in os.listdir(os.path.join(OUT, s)) if f.endswith(".jpg")}
         ids = CARDS + sorted(drawn - set(CARDS))
+    # The Codex prompt of each set (None: no prompt, e.g. the original art): the text is the same for every
+    # card except its own line, so the page keeps one template per set (CARD marks the line) and each card's line.
+    some = cards[ids[0]]
+    line = lambda cid: f"- ID {cid}: {gen_card_art.describe(cards[cid])}"
+    templates = [None, gen_card_art.prompt_for([some]).replace(line(some["id"]), "\x00CARD")]
+    templates += [prompt_for(st, [some["id"]], cards).replace(line(some["id"]), "\x00CARD") for st in STYLES]
     rows = []
     for cid in ids:
         c = cards[cid]
@@ -41,8 +48,8 @@ def main():
             else:
                 cells.append("")
         rows.append({"id": cid, "name": c["name"].get("ruRU") or c["name"]["enUS"], "en": c["name"]["enUS"],
-                     "type": c["type"], "cells": cells})
-    sets = [{"key": k, "label": l} for k, l, _f in SETS]
+                     "type": c["type"], "cells": cells, "line": line(cid)})
+    sets = [{"key": k, "label": l, "prompt": t} for (k, l, _f), t in zip(SETS, templates)]
     html = PAGE_HTML.replace("__ROWS__", json.dumps(rows, ensure_ascii=False)).replace("__SETS__", json.dumps(sets, ensure_ascii=False))
     open(os.path.join(PAGE, "index.html"), "w").write(html)
     print(os.path.join(PAGE, "index.html"))
@@ -83,6 +90,18 @@ figure.none { display:grid; place-items:center; color:var(--muted); font-size:13
 #box img { max-width:92vw; max-height:84vh; border-radius:12px; }
 #box p { color:#f4ead5; margin:0; }
 .hint { color:var(--muted); font-size:13px; }
+.cell { display:flex; flex-direction:column; gap:4px; }
+.pbtn { font-size:12px; padding:3px 8px; border-radius:6px; align-self:flex-start; }
+.pbtn.todo { border-style:dashed; color:var(--muted); }
+#pbox { position:fixed; inset:0; z-index:30; background:rgba(0,0,0,.75); display:none; align-items:center; justify-content:center; padding:20px; }
+#pbox.on { display:flex; }
+#pbox .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px 18px; max-width:860px; width:100%; max-height:88vh; display:flex; flex-direction:column; gap:10px; }
+#pbox h3 { margin:0; color:var(--gold); font-size:17px; }
+#pbox .note { color:var(--muted); font-size:13.5px; }
+#pbox pre { margin:0; white-space:pre-wrap; overflow:auto; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px; font:13px/1.5 ui-monospace, Menlo, monospace; }
+#pbox pre mark { background:color-mix(in srgb, var(--gold) 35%, transparent); color:inherit; border-radius:3px; }
+#pbox .row { display:flex; gap:8px; justify-content:flex-end; }
+#box .pbtn { margin-top:4px; }
 </style>
 </head>
 <body>
@@ -91,22 +110,47 @@ figure.none { display:grid; place-items:center; color:var(--muted); font-size:13
   <button id="byCard" class="on">По картам</button>
   <button id="byStyle">По стилям</button>
   <label><input type="range" id="zoom" min="110" max="320" value="170"> размер</label>
-  <span class="hint">Щелчок — на весь экран; ← → — соседние; Esc — закрыть.</span>
+  <span class="hint">Щелчок — на весь экран; ← → — соседние; Esc — закрыть; «Промпт» — по какому тексту нарисовано (или будет нарисовано).</span>
 </header>
 <main id="main"></main>
-<div id="box"><img alt=""><p></p></div>
+<div id="box"><img alt=""><p></p><button class="pbtn" id="boxPrompt">Промпт</button></div>
+<div id="pbox"><div class="card"><h3></h3><div class="note"></div><pre></pre><div class="row"><button id="pcopy">Копировать</button><button id="pclose">Закрыть</button></div></div></div>
 <script>
 const ROWS = __ROWS__, SETS = __SETS__;
 let mode = "card", flat = [], at = 0;
 const main = document.getElementById("main"), box = document.getElementById("box");
-function fig(src, caption) {
-  const f = document.createElement("figure");
-  if (!src) { f.className = "none"; f.textContent = "нет"; return f; }
-  const img = document.createElement("img"); img.src = src; img.alt = caption; img.loading = "lazy";
-  f.append(img);
-  const i = flat.push([src, caption]) - 1;
-  f.onclick = () => open(i);
-  return f;
+function promptOf(r, k) {
+  const t = SETS[k].prompt;
+  return t ? t.replace("\u0000CARD", r.line) : null;
+}
+function showPrompt(r, k) {
+  const p = promptOf(r, k), drawn = !!r.cells[k], pb = document.getElementById("pbox");
+  pb.querySelector("h3").textContent = `${r.name} — ${SETS[k].label}`;
+  pb.querySelector(".note").textContent = drawn
+    ? "Картинка нарисована по этому промпту. Codex рисовал по 5 карт за раз; здесь — промпт с одной этой картой (её строка выделена)."
+    : "Картинки ещё нет: она будет нарисована по этому промпту (python3 tools/gen_art_styles.py --styles " + SETS[k].key + " --all — дорисует все недостающие).";
+  const pre = pb.querySelector("pre"); pre.textContent = "";
+  const [a, b] = p.split(r.line);
+  pre.append(a); const m = document.createElement("mark"); m.textContent = r.line; pre.append(m); pre.append(b || "");
+  pb.dataset.text = p; pb.classList.add("on");
+}
+function cell(r, k, caption, withName) {
+  const wrap = document.createElement("div"); wrap.className = "cell";
+  const src = r.cells[k], f = document.createElement("figure");
+  if (!src) { f.className = "none"; f.textContent = "нет"; }
+  else {
+    const img = document.createElement("img"); img.src = src; img.alt = caption; img.loading = "lazy"; f.append(img);
+    const i = flat.push([src, caption, r, k]) - 1; f.onclick = () => open(i);
+  }
+  if (withName) { const cap = document.createElement("figcaption"); cap.textContent = r.name; f.append(cap); }
+  wrap.append(f);
+  if (SETS[k].prompt) {
+    const b = document.createElement("button"); b.className = "pbtn" + (src ? "" : " todo");
+    b.textContent = src ? "Промпт" : "Промпт (ещё не нарисовано)";
+    b.onclick = (e) => { e.stopPropagation(); showPrompt(r, k); };
+    wrap.append(b);
+  }
+  return wrap;
 }
 function render() {
   main.innerHTML = ""; flat = [];
@@ -120,7 +164,7 @@ function render() {
       const n = document.createElement("div"); n.className = "name";
       n.innerHTML = "<b></b><span></span>"; n.querySelector("b").textContent = r.name; n.querySelector("span").textContent = r.en + " · " + r.id;
       g.append(n);
-      r.cells.forEach((src, k) => g.append(fig(src, `${r.name} — ${SETS[k].label}`)));
+      r.cells.forEach((src, k) => g.append(cell(r, k, `${r.name} — ${SETS[k].label}`, false)));
     }
     main.append(g);
   } else {
@@ -128,18 +172,24 @@ function render() {
       const b = document.createElement("section"); b.className = "style-block";
       b.innerHTML = "<h2></h2><div class='cards'></div>"; b.querySelector("h2").textContent = s.label;
       b.querySelector(".cards").style.gridTemplateColumns = `repeat(auto-fill, minmax(${size}, 1fr))`;
-      for (const r of ROWS) {
-        const f = fig(r.cells[k], `${r.name} — ${s.label}`);
-        const cap = document.createElement("figcaption"); cap.textContent = r.name; f.append(cap);
-        b.querySelector(".cards").append(f);
-      }
+      for (const r of ROWS) b.querySelector(".cards").append(cell(r, k, `${r.name} — ${s.label}`, true));
       main.append(b);
     });
   }
 }
-function open(i) { at = (i + flat.length) % flat.length; box.querySelector("img").src = flat[at][0]; box.querySelector("p").textContent = flat[at][1]; box.classList.add("on"); }
+function open(i) {
+  at = (i + flat.length) % flat.length; box.querySelector("img").src = flat[at][0]; box.querySelector("p").textContent = flat[at][1];
+  document.getElementById("boxPrompt").hidden = !SETS[flat[at][3]].prompt;
+  box.classList.add("on");
+}
 box.onclick = () => box.classList.remove("on");
+document.getElementById("boxPrompt").onclick = (e) => { e.stopPropagation(); showPrompt(flat[at][2], flat[at][3]); };
+const pbox = document.getElementById("pbox");
+pbox.onclick = (e) => { if (e.target === pbox) pbox.classList.remove("on"); };
+document.getElementById("pclose").onclick = () => pbox.classList.remove("on");
+document.getElementById("pcopy").onclick = (e) => { navigator.clipboard.writeText(pbox.dataset.text || ""); e.target.textContent = "Скопировано"; setTimeout(() => e.target.textContent = "Копировать", 1200); };
 document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && pbox.classList.contains("on")) { pbox.classList.remove("on"); return; }
   if (!box.classList.contains("on")) return;
   if (e.key === "Escape") box.classList.remove("on");
   if (e.key === "ArrowRight") open(at + 1);
