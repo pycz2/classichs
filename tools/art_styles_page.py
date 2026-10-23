@@ -48,7 +48,8 @@ def main():
             else:
                 cells.append("")
         rows.append({"id": cid, "name": c["name"].get("ruRU") or c["name"]["enUS"], "en": c["name"]["enUS"],
-                     "type": c["type"], "cells": cells, "line": line(cid)})
+                     "type": c["type"], "cls": c.get("cardClass") or "NEUTRAL", "rarity": c.get("rarity") or "NONE",
+                     "cost": c.get("cost"), "cells": cells, "line": line(cid)})
     sets = [{"key": k, "label": l, "prompt": t} for (k, l, _f), t in zip(SETS, templates)]
     html = PAGE_HTML.replace("__ROWS__", json.dumps(rows, ensure_ascii=False)).replace("__SETS__", json.dumps(sets, ensure_ascii=False))
     open(os.path.join(PAGE, "index.html"), "w").write(html)
@@ -66,16 +67,29 @@ PAGE_HTML = r'''<!doctype html>
 @media (prefers-color-scheme: light) { :root { --bg:#f6efe2; --panel:#fffaf0; --line:#e0d2b8; --text:#2a1f17; --muted:#6b5a44; --gold:#a8741a; } }
 * { box-sizing:border-box; }
 body { margin:0; background:var(--bg); color:var(--text); font:15px/1.4 -apple-system, "Segoe UI", Roboto, sans-serif; }
-header { position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--line); padding:12px 16px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.bar { position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--line); padding:10px 16px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+#filters { padding:10px 16px 4px; display:flex; flex-direction:column; gap:6px; border-bottom:1px solid var(--line); }
+#filters.off { display:none; }
+.frow { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.flabel { color:var(--muted); font-size:13px; width:92px; flex:none; }
+.chips { display:flex; flex-wrap:wrap; gap:5px; }
+.chip { font-size:13px; padding:3px 10px; border-radius:999px; }
+.chip small { color:var(--muted); margin-left:4px; }
+input[type=search], select { font:inherit; border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:8px; padding:6px 10px; }
+input[type=search] { width:min(320px, 100%); }
+.star { border:none; background:none; padding:0 4px 0 0; font-size:17px; color:var(--muted); line-height:1; }
+.star.on { color:var(--gold); }
+.meta { display:block; color:var(--muted); font-size:12px; }
+.empty { color:var(--muted); padding:30px 0; text-align:center; }
 h1 { margin:0 12px 0 0; font-size:20px; color:var(--gold); }
 button { font:inherit; border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:8px; padding:6px 12px; cursor:pointer; }
 button.on { border-color:var(--gold); color:var(--gold); }
 label { color:var(--muted); font-size:14px; }
 main { padding:12px 16px 60px; }
 .grid { display:grid; gap:10px; align-items:start; }
-.head { position:sticky; top:58px; z-index:3; background:var(--bg); padding:6px 0; font-weight:600; color:var(--gold); text-align:center; }
+.head { position:sticky; top:var(--hh, 58px); z-index:3; background:var(--bg); padding:6px 0; font-weight:600; color:var(--gold); text-align:center; }
 .name { align-self:center; }
-.name b { display:block; font-size:16px; }
+.name b { font-size:16px; }
 .name span { color:var(--muted); font-size:12px; }
 figure { margin:0; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; aspect-ratio:1; cursor:zoom-in; }
 figure img { width:100%; height:100%; object-fit:cover; display:block; }
@@ -105,19 +119,106 @@ figure.none { display:grid; place-items:center; color:var(--muted); font-size:13
 </style>
 </head>
 <body>
-<header>
+<div class="bar" id="bar">
   <h1>Стили артов</h1>
   <button id="byCard" class="on">По картам</button>
   <button id="byStyle">По стилям</button>
+  <input type="search" id="q" placeholder="Поиск: имя (рус./англ.) или ID">
+  <select id="sort" title="Порядок">
+    <option value="gen">Порядок генерации</option><option value="cost">По мане</option>
+    <option value="name">По имени</option><option value="cls">По классу</option><option value="rarity">По редкости</option>
+  </select>
   <label><input type="range" id="zoom" min="110" max="320" value="170"> размер</label>
-  <span class="hint">Щелчок — на весь экран; ← → — соседние; Esc — закрыть; «Промпт» — по какому тексту нарисовано (или будет нарисовано).</span>
-</header>
+  <button id="toggleF" class="on">Фильтры</button>
+  <button id="reset">Сбросить</button>
+  <span id="count" class="hint"></span>
+</div>
+<div id="filters">
+  <div class="frow"><span class="flabel">Стили</span><div id="fSets" class="chips"></div></div>
+  <div class="frow"><span class="flabel">Класс</span><div id="fCls" class="chips"></div></div>
+  <div class="frow"><span class="flabel">Редкость</span><div id="fRar" class="chips"></div></div>
+  <div class="frow"><span class="flabel">Мана</span><div id="fCost" class="chips"></div></div>
+  <div class="frow"><span class="flabel">Тип</span><div id="fType" class="chips"></div></div>
+  <div class="frow"><span class="flabel">Наличие</span><div id="fHave" class="chips"></div></div>
+  <div class="frow"><span class="flabel">Отмеченные</span><button id="onlyPicked" class="chip"></button><button id="clearPicked" class="chip">Снять все отметки</button>
+    <span class="hint">☆ у имени — отметить карту, потом «Только отмеченные» — сравнить только их.</span></div>
+  <div class="hint">Внутри одной строки фильтра — «или», между строками — «и». Щелчок по картинке — на весь экран; ← → — соседние; Esc — закрыть; «Промпт» — по какому тексту нарисовано (или будет нарисовано).</div>
+</div>
 <main id="main"></main>
 <div id="box"><img alt=""><p></p><button class="pbtn" id="boxPrompt">Промпт</button></div>
 <div id="pbox"><div class="card"><h3></h3><div class="note"></div><pre></pre><div class="row"><button id="pcopy">Копировать</button><button id="pclose">Закрыть</button></div></div></div>
 <script>
 const ROWS = __ROWS__, SETS = __SETS__;
 let mode = "card", flat = [], at = 0;
+const CLS = {DRUID:"Друид", HUNTER:"Охотник", MAGE:"Маг", PALADIN:"Паладин", PRIEST:"Жрец", ROGUE:"Разбойник", SHAMAN:"Шаман",
+  WARLOCK:"Чернокнижник", WARRIOR:"Воин", NEUTRAL:"Нейтральные", DREAM:"Сны", DEMONHUNTER:"Охотник на демонов"};
+const RAR = {FREE:"Базовая", COMMON:"Обычная", RARE:"Редкая", EPIC:"Эпическая", LEGENDARY:"Легендарная", NONE:"Без редкости"};
+const TYPE = {MINION:"Существо", SPELL:"Заклинание", WEAPON:"Оружие", HERO:"Герой", HERO_POWER:"Сила героя"};
+const COSTS = ["0", "1", "2", "3", "4", "5", "6", "7", "8+", "—"];
+const costKey = (r) => r.cost == null ? "—" : r.cost >= 8 ? "8+" : String(r.cost);
+const order = (o) => (v) => { const i = Object.keys(o).indexOf(v); return i < 0 ? 99 : i; };
+const F = {q: "", cls: new Set(), rar: new Set(), cost: new Set(), type: new Set(), have: "all", only: false,
+  sets: new Set(SETS.map((_, k) => k)), picked: new Set()};
+try { F.picked = new Set(JSON.parse(localStorage.getItem("artPicked") || "[]")); } catch (e) {}
+const savePicked = () => { try { localStorage.setItem("artPicked", JSON.stringify([...F.picked])); } catch (e) {} };
+const shownSets = () => [...F.sets].sort((a, b) => a - b);
+function visible() {
+  const q = F.q.trim().toLowerCase(), ks = shownSets();
+  const out = ROWS.filter((r) => (!q || (r.name + " " + r.en + " " + r.id).toLowerCase().includes(q))
+    && (!F.cls.size || F.cls.has(r.cls)) && (!F.rar.size || F.rar.has(r.rarity))
+    && (!F.cost.size || F.cost.has(costKey(r))) && (!F.type.size || F.type.has(r.type))
+    && (!F.only || F.picked.has(r.id))
+    && (F.have === "all" || (F.have === "full") === ks.every((k) => r.cells[k])));
+  const by = document.getElementById("sort").value, nm = (a, b) => a.name.localeCompare(b.name, "ru");
+  const cost = (r) => r.cost == null ? 99 : r.cost;
+  if (by === "cost") out.sort((a, b) => cost(a) - cost(b) || nm(a, b));
+  if (by === "name") out.sort(nm);
+  if (by === "cls") out.sort((a, b) => order(CLS)(a.cls) - order(CLS)(b.cls) || cost(a) - cost(b) || nm(a, b));
+  if (by === "rarity") out.sort((a, b) => order(RAR)(a.rarity) - order(RAR)(b.rarity) || cost(a) - cost(b) || nm(a, b));
+  return out;
+}
+function chips(id, labels, set, key) {
+  const el = document.getElementById(id); el.innerHTML = "";
+  const n = {}; for (const r of ROWS) n[key(r)] = (n[key(r)] || 0) + 1;
+  for (const [v, l] of Object.entries(labels)) {
+    if (!n[v]) continue;
+    const b = document.createElement("button"); b.className = "chip" + (set.has(v) ? " on" : "");
+    b.append(l); const sm = document.createElement("small"); sm.textContent = n[v]; b.append(sm);
+    b.onclick = () => { set.has(v) ? set.delete(v) : set.add(v); b.classList.toggle("on"); render(); };
+    el.append(b);
+  }
+}
+function filters() {
+  chips("fCls", CLS, F.cls, (r) => r.cls);
+  chips("fRar", RAR, F.rar, (r) => r.rarity);
+  chips("fCost", Object.fromEntries(COSTS.map((c) => [c, c === "—" ? "без цены" : c])), F.cost, costKey);
+  chips("fType", TYPE, F.type, (r) => r.type);
+  const fs = document.getElementById("fSets"); fs.innerHTML = "";
+  SETS.forEach((s, k) => {
+    const b = document.createElement("button"); b.className = "chip" + (F.sets.has(k) ? " on" : ""); b.textContent = s.label;
+    b.onclick = () => { if (F.sets.has(k) && F.sets.size > 1) F.sets.delete(k); else F.sets.add(k); b.classList.toggle("on", F.sets.has(k)); render(); };
+    fs.append(b);
+  });
+  const fh = document.getElementById("fHave"); fh.innerHTML = "";
+  for (const [v, l] of [["all", "Все карты"], ["full", "Есть во всех выбранных стилях"], ["miss", "Где-то нет картинки"]]) {
+    const b = document.createElement("button"); b.className = "chip" + (F.have === v ? " on" : ""); b.textContent = l;
+    b.onclick = () => { F.have = v; fh.querySelectorAll(".chip").forEach((x) => x.classList.toggle("on", x === b)); render(); };
+    fh.append(b);
+  }
+}
+function star(r) {
+  const b = document.createElement("button"); const on = F.picked.has(r.id);
+  b.className = "star" + (on ? " on" : ""); b.textContent = on ? "★" : "☆"; b.title = "Отметить для сравнения";
+  b.onclick = (e) => { e.stopPropagation(); F.picked.has(r.id) ? F.picked.delete(r.id) : F.picked.add(r.id); savePicked();
+    if (F.only) render(); else { document.querySelectorAll(`.star[data-id="${r.id}"]`).forEach((x) => { const o = F.picked.has(r.id); x.classList.toggle("on", o); x.textContent = o ? "★" : "☆"; }); counts(); } };
+  b.dataset.id = r.id;
+  return b;
+}
+function counts(n) {
+  if (n != null) document.getElementById("count").textContent = `Показано ${n} из ${ROWS.length}`;
+  const op = document.getElementById("onlyPicked");
+  op.textContent = `Только отмеченные (${F.picked.size})`; op.classList.toggle("on", F.only);
+}
 const main = document.getElementById("main"), box = document.getElementById("box");
 function promptOf(r, k) {
   const t = SETS[k].prompt;
@@ -142,7 +243,7 @@ function cell(r, k, caption, withName) {
     const img = document.createElement("img"); img.src = src; img.alt = caption; img.loading = "lazy"; f.append(img);
     const i = flat.push([src, caption, r, k]) - 1; f.onclick = () => open(i);
   }
-  if (withName) { const cap = document.createElement("figcaption"); cap.textContent = r.name; f.append(cap); }
+  if (withName) { const cap = document.createElement("figcaption"); cap.append(star(r), r.name); cap.onclick = (e) => e.stopPropagation(); f.append(cap); }
   wrap.append(f);
   if (SETS[k].prompt) {
     const b = document.createElement("button"); b.className = "pbtn" + (src ? "" : " todo");
@@ -154,25 +255,30 @@ function cell(r, k, caption, withName) {
 }
 function render() {
   main.innerHTML = ""; flat = [];
-  const size = document.getElementById("zoom").value + "px";
+  const size = document.getElementById("zoom").value + "px", list = visible(), ks = shownSets();
+  counts(list.length);
+  if (!list.length) { main.innerHTML = "<p class='empty'>Нет карт под эти фильтры.</p>"; return; }
   if (mode === "card") {
     const g = document.createElement("div"); g.className = "grid";
-    g.style.gridTemplateColumns = `minmax(130px, 170px) repeat(${SETS.length}, ${size})`;
+    g.style.gridTemplateColumns = `minmax(130px, 190px) repeat(${ks.length}, ${size})`;
     g.append(document.createElement("div"));
-    for (const s of SETS) { const h = document.createElement("div"); h.className = "head"; h.textContent = s.label; g.append(h); }
-    for (const r of ROWS) {
+    for (const k of ks) { const h = document.createElement("div"); h.className = "head"; h.textContent = SETS[k].label; g.append(h); }
+    for (const r of list) {
       const n = document.createElement("div"); n.className = "name";
-      n.innerHTML = "<b></b><span></span>"; n.querySelector("b").textContent = r.name; n.querySelector("span").textContent = r.en + " · " + r.id;
+      n.innerHTML = "<div></div><span class='meta'></span><span class='meta'></span>";
+      const b = document.createElement("b"); b.textContent = r.name; n.firstChild.append(star(r), b);
+      n.children[1].textContent = r.en + " · " + r.id;
+      n.children[2].textContent = [CLS[r.cls] || r.cls, RAR[r.rarity] || r.rarity, TYPE[r.type] || r.type, r.cost == null ? null : r.cost + " маны"].filter(Boolean).join(" · ");
       g.append(n);
-      r.cells.forEach((src, k) => g.append(cell(r, k, `${r.name} — ${SETS[k].label}`, false)));
+      for (const k of ks) g.append(cell(r, k, `${r.name} — ${SETS[k].label}`, false));
     }
     main.append(g);
   } else {
-    SETS.forEach((s, k) => {
-      const b = document.createElement("section"); b.className = "style-block";
+    ks.forEach((k) => {
+      const s = SETS[k], b = document.createElement("section"); b.className = "style-block";
       b.innerHTML = "<h2></h2><div class='cards'></div>"; b.querySelector("h2").textContent = s.label;
       b.querySelector(".cards").style.gridTemplateColumns = `repeat(auto-fill, minmax(${size}, 1fr))`;
-      for (const r of ROWS) b.querySelector(".cards").append(cell(r, k, `${r.name} — ${s.label}`, true));
+      for (const r of list) b.querySelector(".cards").append(cell(r, k, `${r.name} — ${s.label}`, true));
       main.append(b);
     });
   }
@@ -198,6 +304,19 @@ document.addEventListener("keydown", (e) => {
 document.getElementById("byCard").onclick = (e) => { mode = "card"; e.target.classList.add("on"); document.getElementById("byStyle").classList.remove("on"); render(); };
 document.getElementById("byStyle").onclick = (e) => { mode = "style"; e.target.classList.add("on"); document.getElementById("byCard").classList.remove("on"); render(); };
 document.getElementById("zoom").oninput = render;
+document.getElementById("sort").onchange = render;
+let qt; document.getElementById("q").oninput = (e) => { clearTimeout(qt); qt = setTimeout(() => { F.q = e.target.value; render(); }, 150); };
+document.getElementById("onlyPicked").onclick = () => { F.only = !F.only; render(); };
+document.getElementById("clearPicked").onclick = () => { F.picked.clear(); savePicked(); render(); };
+document.getElementById("toggleF").onclick = (e) => { e.target.classList.toggle("on", document.getElementById("filters").classList.toggle("off") === false); };
+document.getElementById("reset").onclick = () => {
+  Object.assign(F, {q: "", have: "all", only: false}); for (const s of [F.cls, F.rar, F.cost, F.type]) s.clear();
+  SETS.forEach((_, k) => F.sets.add(k)); document.getElementById("q").value = ""; document.getElementById("sort").value = "gen";
+  filters(); render();
+};
+const bar = document.getElementById("bar");
+new ResizeObserver(() => document.documentElement.style.setProperty("--hh", bar.offsetHeight + "px")).observe(bar);
+filters();
 render();
 </script>
 </body>
