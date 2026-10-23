@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.28.2] - 2026-10-23
+
+### Added
+- A new picture set for Classic, “Simple painted”: all 534 cards as painted illustrations with very few details. Pick it in Games → Classic 2014 → Card pictures (or in the settings).
+
 ## [0.28.1] - 2026-10-19
 
 ### Added

@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.28.2] - 2026-10-23
+
+### Dodano
+- Nowy zestaw obrazów dla Classic, „Prosty malowany”: wszystkie 534 karty jako malowane ilustracje z bardzo małą liczbą szczegółów. Wybór: Gry → Classic 2014 → Obrazy kart (albo w ustawieniach).
+
 ## [0.28.1] - 2026-10-19
 
 ### Dodano

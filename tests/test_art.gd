@@ -76,7 +76,7 @@ func test_art_sets_are_folders_and_switch_pictures() -> void:
 	var was := Art.root
 	Art.root = root
 	Art.reset()
-	eq(Art.sets(), ["generated", "cartoon", "original", "my_set"], "the pack's sets first, then the player's folders")
+	eq(Art.sets(), ["generated", "cartoon", "simple", "original", "my_set"], "the pack's sets first, then the player's folders")
 	Settings.data.art = "original"
 	Art.reset()
 	check(Art.texture("HERO_08") != null, "original picture used")
@@ -108,7 +108,7 @@ func test_settings_screen_offers_art_sets() -> void:
 	(Engine.get_main_loop() as SceneTree).root.add_child(s)
 	var pick := s.find_child("ArtSet", true, false) as OptionButton
 	eq(pick.item_count, Art.sets().size(), "every picture set")
-	pick.item_selected.emit(2)  # generated, cartoon (the pack's sets), then the player's folder
+	pick.item_selected.emit(3)  # generated, cartoon, simple (the pack's sets), then the player's folder
 	eq(Settings.data.art, "original", "stored")
 	pick.item_selected.emit(0)
 	eq(Settings.data.art, "generated", "back")

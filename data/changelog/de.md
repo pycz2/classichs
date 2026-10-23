@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.28.2] - 2026-10-23
+
+### Hinzugefügt
+- Ein neues Bilderset für Classic, „Einfach gemalt“: alle 534 Karten als gemalte Illustrationen mit wenigen Details. Auswahl unter Spiele → Classic 2014 → Kartenbilder (oder in den Einstellungen).
+
 ## [0.28.1] - 2026-10-19
 
 ### Hinzugefügt

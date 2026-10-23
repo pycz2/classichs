@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.28.2] - 2026-10-23
+
+### Ajouté
+- Un nouvel ensemble d'images pour Classic, « Peint simple » : les 534 cartes en illustrations peintes avec très peu de détails. À choisir dans Jeux → Classic 2014 → Images des cartes (ou dans les paramètres).
+
 ## [0.28.1] - 2026-10-19
 
 ### Ajouté

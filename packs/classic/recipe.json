@@ -12,6 +12,7 @@
     {"do": "copy", "from": "data/card_layout", "to": "layout", "files": ["*.json"]},
     {"do": "copy", "from": "art/cards", "to": "art/generated", "files": ["*.jpg"]},
     {"do": "copy", "from": "art/cartoon", "to": "art/cartoon", "files": ["*.webp"]},
+    {"do": "copy", "from": "art/simple", "to": "art/simple", "files": ["*.webp"]},
     {"do": "copy", "from": "audio", "to": "sounds/generated", "files": ["*.wav"], "except": ["menu.wav", "battle_*.wav"]},
     {"do": "copy", "from": "audio", "to": "music/generated", "files": ["menu.wav", "battle_*.wav"]},
     {"do": "copy", "from": "audio/open", "to": "music/open", "files": ["*.ogg", "CREDITS.md"]}
