@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.28.4] - 2026-10-24
+
+### Naprawiono
+- Android: gra nie zawiesza się już na ekranie startowym. Kompilacja kompresowała wbudowane gry (paczki) w APK i Android czytał je minutami; teraz są zapisane bez kompresji, a gra otwiera się w kilka sekund.
+
 ## [0.28.3] - 2026-10-24
 
 ### Naprawiono

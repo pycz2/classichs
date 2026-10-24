@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.28.4] - 2026-10-24
+
+### Corretto
+- Android: il gioco non si blocca più sulla schermata iniziale. La build comprimeva i giochi integrati (pacchetti) nell'APK e Android impiegava minuti a leggerli; ora sono salvati senza compressione e il gioco si apre in pochi secondi.
+
 ## [0.28.3] - 2026-10-24
 
 ### Corretto

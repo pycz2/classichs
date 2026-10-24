@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.28.4] - 2026-10-24
+
+### Corrigé
+- Android : le jeu ne reste plus bloqué sur l'écran de démarrage. La compilation compressait les jeux intégrés (packs) dans l'APK et Android mettait des minutes à les lire ; ils sont maintenant stockés sans compression et le jeu s'ouvre en quelques secondes.
+
 ## [0.28.3] - 2026-10-24
 
 ### Corrigé

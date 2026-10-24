@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.28.4] - 2026-10-24
+
+### Corregido
+- Android: el juego ya no se queda colgado en la pantalla de inicio. La compilación comprimía los juegos integrados (paquetes) dentro del APK y Android tardaba minutos en leerlos; ahora se guardan sin comprimir y el juego se abre en pocos segundos.
+
 ## [0.28.3] - 2026-10-24
 
 ### Corregido

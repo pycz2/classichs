@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.28.4] - 2026-10-24
+
+### Fixed
+- Android: the game no longer hangs on its splash screen. The build compressed the built-in games (packs) inside the APK, and Android took minutes to read them; now they are stored uncompressed and the game opens in a few seconds.
+
 ## [0.28.3] - 2026-10-24
 
 ### Fixed

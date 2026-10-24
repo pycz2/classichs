@@ -32,6 +32,25 @@ for p in $WANT; do
 	[ -s "$(rules_lib "$p")" ] || { echo "the rules engine for $p is missing: $(rules_lib "$p") (tools/build_rules.sh $p)" >&2; exit 1; }
 done
 
+# Android reads a compressed file inside the APK from its start again on every backward seek, so a game
+# pack (a zip, read by random access) took minutes to open and the game hung on its splash (0.28.x).
+# Godot compresses the files it does not know (.cardpack): store them again uncompressed, align the APK
+# and sign it again with the export's key (GODOT_ANDROID_KEYSTORE_RELEASE_PATH/_USER/_PASSWORD).
+android_store_packs() {  # the APK
+	apk=$(cd "$(dirname "$1")" && pwd)/$(basename "$1")
+	bt=$(ls -d "${ANDROID_HOME:-${ANDROID_SDK_ROOT:-$HOME/Library/Android/sdk}}"/build-tools/*/ | sort -V | tail -1)
+	t=$(mktemp -d)
+	(cd "$t" && unzip -q "$apk" 'assets/packs/*.cardpack' && zip -q -0 "$apk" assets/packs/*.cardpack)
+	"${bt}zipalign" -P 16 -f 4 "$apk" "$t/aligned.apk"
+	"${bt}apksigner" sign --ks "$GODOT_ANDROID_KEYSTORE_RELEASE_PATH" --ks-key-alias "$GODOT_ANDROID_KEYSTORE_RELEASE_USER" \
+		--ks-pass env:GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD --key-pass env:GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD \
+		--out "$apk" "$t/aligned.apk"
+	rm -rf "$t" "$apk.idsig"
+	if unzip -lv "$apk" | grep '\.cardpack$' | grep -qv ' Stored '; then
+		echo "a game pack is still compressed in $apk" >&2; exit 1
+	fi
+}
+
 export_preset() {  # preset name, output path
 	mkdir -p "$(dirname "$2")"
 	godot --headless --path . --export-release "$1" "$2"
@@ -79,7 +98,7 @@ for p in $WANT; do
 		;;
 	android)
 		export_preset "Android" "$OUT/ClassicHS-$VER-android-arm64.apk"
-		rm -f "$OUT/ClassicHS-$VER-android-arm64.apk.idsig"  # (a v4 signature file the release does not need)
+		android_store_packs "$OUT/ClassicHS-$VER-android-arm64.apk"  # (also drops the v4 .idsig the release does not need)
 		;;
 	*)
 		echo "unknown platform: $p" >&2

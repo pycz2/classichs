@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.28.4] - 2026-10-24
+
+### Corrigido
+- Android: o jogo não trava mais na tela de abertura. A compilação comprimia os jogos embutidos (pacotes) dentro do APK, e o Android levava minutos para lê-los; agora eles ficam sem compressão e o jogo abre em poucos segundos.
+
 ## [0.28.3] - 2026-10-24
 
 ### Corrigido

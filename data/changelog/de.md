@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.28.4] - 2026-10-24
+
+### Behoben
+- Android: Das Spiel hängt nicht mehr auf dem Startbildschirm. Der Build komprimierte die eingebauten Spiele (Pakete) in der APK, und Android brauchte Minuten, um sie zu lesen; jetzt liegen sie unkomprimiert dort, und das Spiel öffnet sich in wenigen Sekunden.
+
 ## [0.28.3] - 2026-10-24
 
 ### Behoben
