@@ -63,6 +63,6 @@ if ! { run "$IMG:$V" && healthy; }; then
   exit 1
 fi
 # 2 images stay: the running one and the newest other one (the version to roll back to)
-docker images "$IMG" --format '{{.Tag}}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | grep -vx "$V" | sort -V -r | tail -n +2 \
+docker images "$IMG" --format '{{.Tag}}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | { grep -vx "$V" || true; } | sort -V -r | tail -n +2 \
   | while read -r t; do docker rmi "$IMG:$t" >/dev/null 2>&1 || true; done
 echo "classichs $V is running (images: $(docker images "$IMG" --format '{{.Tag}}' | sort -V -r | tr '\n' ' '))"
