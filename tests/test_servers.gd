@@ -51,7 +51,26 @@ func test_settings_migrate_the_old_server_and_check_the_list() -> void:
 	eq(Settings.server_name(B), "b.test")
 	DirAccess.remove_absolute(Settings.path)
 	Settings.load_settings()
-	eq(Settings.data.servers, [{"url": "ws://localhost:7377", "name": "localhost"}], "localhost by default")
+	eq(Settings.data.servers, [], "no server by default: the game plays without one, a server is added later")
+
+
+## A first start with no server: the menu opens, nothing connects; the lobby button leads
+## to the list where a server is added, and main makes its connection then.
+func test_main_starts_without_a_server_and_one_is_added_later() -> void:
+	var f := FileAccess.open(Settings.path, FileAccess.WRITE)  # no "servers": the default list
+	f.store_string(JSON.stringify({"language": "en"}))
+	f.close()
+	Settings.load_settings()
+	var m := _main()
+	eq(m.server_links, [], "no connection")
+	check(m.server_link == null, "no lobby server")
+	check(m.screen is MainMenu, "the menu, not a wait for a server")
+	eq(m.show_server(), null, "no server: no lobby")
+	check(m.screen is SettingsView and m.screen.find_child("ServerList", true, false) != null, "the list to add one")
+	check(m.screen.add_server("Mine", "wss://mine.example"), "added")
+	eq(m.show_server().link.url, "wss://mine.example", "its lobby")
+	eq(m.server_links.map(func(l): return l.url), ["wss://mine.example"], "and its connection")
+	m.free()
 
 
 func test_old_saved_session_is_read_as_its_server() -> void:
@@ -289,6 +308,7 @@ func test_pack_field_and_games_panel() -> void:
 
 ## The settings' server list: add, rename, log out, remove.
 func test_settings_server_list() -> void:
+	Settings.data.servers = [{"url": "ws://localhost:7377", "name": "localhost"}]
 	var s := SettingsView.new()
 	root().add_child(s)
 	(s.find_child("Servers", true, false) as Button).pressed.emit()

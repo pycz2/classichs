@@ -166,6 +166,8 @@ func test_leaving_a_running_game_concedes_it() -> void:
 
 ## main opens the table for a `match` (from any screen), also for a rejoin.
 func test_main_opens_the_table_on_match_and_state() -> void:
+	Settings.data.servers = [{"url": "ws://localhost:7377", "name": "localhost"}]  # one server (none by default)
+	Settings.save()  # main reads the settings
 	var m: Node = load("res://ui/main.tscn").instantiate()
 	var f := Fake.new()
 	f.start()

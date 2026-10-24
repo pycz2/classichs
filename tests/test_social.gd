@@ -15,6 +15,9 @@ static func root() -> Window:
 
 ## main with a fake connection (logged in unless told otherwise).
 func _main(logged_in := true) -> Node:
+	if Settings.data.servers.is_empty():  # one server (none by default)
+		Settings.data.servers = [{"url": "ws://localhost:7377", "name": "localhost"}]
+	Settings.save()  # main reads the settings
 	var m: Node = load("res://ui/main.tscn").instantiate()
 	m.server_link = FakeLink.new()
 	root().add_child(m)

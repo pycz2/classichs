@@ -58,6 +58,8 @@ build() {
 		export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER="${LLVM}bin/aarch64-linux-android24-clang"
 		export CC_aarch64_linux_android="$CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER"
 		export AR_aarch64_linux_android="${LLVM}bin/llvm-ar"
+		# 16 KB pages (Android 15+ devices): without it Android runs the app in a compatibility mode or not at all
+		export CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS="-C link-arg=-Wl,-z,max-page-size=16384"
 		(cd rust && cargo build -p classichs-godot --release --target aarch64-linux-android)
 		cp $T/aarch64-linux-android/release/libclassichs_godot.so "$BIN/libclassichs_godot.android.arm64.so"
 		;;

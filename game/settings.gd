@@ -8,7 +8,7 @@ extends RefCounted
 const DEFAULT_PATH := "user://settings.json"
 const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "shake": true, "fullscreen": false,
 	"tracker": false, "anim_speed": 1, "art": "generated", "card_back": "classic", "tracker_deck": true, "tracker_opp": true,
-	"music_set": "generated", "servers": [{"url": "ws://localhost:7377", "name": "localhost"}],
+	"music_set": "generated", "servers": [],
 	"pack": {}, "pack_sets": {}}
 const BUSES := ["Music", "SFX"]
 
