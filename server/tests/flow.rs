@@ -31,6 +31,8 @@ async fn server(timers: Timers) -> (SocketAddr, AppRef) {
 
 /// timers None: each pack's own (rules.json).
 async fn server_with(timers: Option<Timers>) -> (SocketAddr, AppRef) {
+    // RUST_LOG=classichs_server::ws=debug shows the connections' logs of a failed test
+    let _ = tracing_subscriber::fmt().with_env_filter(tracing_subscriber::EnvFilter::from_default_env()).with_test_writer().try_init();
     let app = App::new(db::open(":memory:").await.unwrap(), false, timers, temp_store());
     spawn_background(app.clone());
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();

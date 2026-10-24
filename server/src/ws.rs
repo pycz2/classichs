@@ -152,12 +152,15 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
     let (tx, mut rx) = mpsc::unbounded_channel::<Out>();
     // ponytail: unbounded outbox; inbound rate limits bound what peers can push. Bound it if memory ever matters.
     let mut writer = tokio::spawn(async move {
+        let mut sent = 0u32;
         while let Some(o) = rx.recv().await {
             match o {
                 Out::Text(t) => {
-                    if sink.send(Message::Text(t.into())).await.is_err() {
+                    if let Err(err) = sink.send(Message::Text(t.into())).await {
+                        tracing::debug!(sent, %err, "ws writer: send failed");
                         break;
                     }
+                    sent += 1;
                 }
                 Out::Close => {
                     let _ = sink.send(Message::Close(None)).await;
@@ -169,6 +172,7 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
                 }
             }
         }
+        tracing::debug!(sent, "ws writer: done");
     });
     let mut s = Session {
         app,
@@ -182,6 +186,7 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
     };
     let mut general = RateLimit::new(300, Duration::from_secs(10));
     let mut writer_done = false;
+    let mut frames = 0u32;
     loop {
         let msg = tokio::select! {
             m = stream.next() => m,
@@ -189,6 +194,7 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
         };
         match msg {
             Some(Ok(Message::Text(t))) => {
+                frames += 1;
                 if !general.allow("", Instant::now()) {
                     s.reply("", Err(e("rate_limited", "Too many messages")));
                     if let Some((id, name)) = &s.me {
@@ -209,6 +215,7 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
             Some(Ok(_)) => {}
         }
     }
+    tracing::debug!(frames, errors = s.errors, writer_done, "ws reader: done");
     if let Some((id, name)) = s.me.take() {
         let ours = s.app.hub().conns.get(&id).is_some_and(|c| c.id == s.conn);
         s.app.hub().detach(id, Some(s.conn));
@@ -220,8 +227,8 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
     }
     let _ = s.tx.send(Out::Close);
     drop(s);
-    if !writer_done {
-        let _ = tokio::time::timeout(Duration::from_secs(5), writer).await;
+    if !writer_done && tokio::time::timeout(Duration::from_secs(5), &mut writer).await.is_err() {
+        tracing::warn!("ws: the writer did not finish in 5 s");
     }
 }
 

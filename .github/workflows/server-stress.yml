@@ -18,6 +18,9 @@ on:
       filter:
         description: Only tests whose name contains this (empty = all in the file)
         default: ""
+      log:
+        description: RUST_LOG for the server (a failed test prints it), e.g. classichs_server::ws=debug
+        default: ""
 
 jobs:
   stress:
@@ -30,12 +33,14 @@ jobs:
         run: cd server && cargo test --release --test "${{ inputs.test }}" --no-run
       - name: Run them again and again
         shell: bash
+        env:
+          RUST_LOG: ${{ inputs.log }}
         run: |
           cd server
           for i in $(seq 1 "${{ inputs.runs }}"); do
             if ! cargo test --release --test "${{ inputs.test }}" -- ${{ inputs.filter }} > run.log 2>&1; then
               echo "::error title=Run $i of ${{ inputs.runs }} failed::$(grep -m1 -E 'panicked|not closed' run.log)"
-              tail -60 run.log
+              grep -v -E '^test .* ok$' run.log | tail -80
               exit 1
             fi
             grep -o 'finished in [0-9.]*s' run.log | tail -1 | sed "s/^/run $i: /"
