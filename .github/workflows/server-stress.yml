@@ -1,0 +1,43 @@
+# Manual: runs the server's integration tests many times on one runner, to catch a rare failure
+# (one that does not show on a developer's machine). Stops at the first failed run and prints its log.
+#   gh workflow run server-stress.yml -f runs=150 -f os=macos-14 -f test=flow
+name: Server stress
+
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: How many times
+        default: "100"
+      os:
+        description: Runner
+        default: macos-14
+      test:
+        description: Test file in server/tests (flow, admin, packs)
+        default: flow
+      filter:
+        description: Only tests whose name contains this (empty = all in the file)
+        default: ""
+
+jobs:
+  stress:
+    runs-on: ${{ inputs.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build the tests
+        shell: bash
+        run: cd server && cargo test --release --test "${{ inputs.test }}" --no-run
+      - name: Run them again and again
+        shell: bash
+        run: |
+          cd server
+          for i in $(seq 1 "${{ inputs.runs }}"); do
+            if ! cargo test --release --test "${{ inputs.test }}" -- ${{ inputs.filter }} > run.log 2>&1; then
+              echo "::error title=Run $i of ${{ inputs.runs }} failed::$(grep -m1 -E 'panicked|not closed' run.log)"
+              tail -60 run.log
+              exit 1
+            fi
+            grep -o 'finished in [0-9.]*s' run.log | tail -1 | sed "s/^/run $i: /"
+          done
+          echo "all ${{ inputs.runs }} runs passed"
