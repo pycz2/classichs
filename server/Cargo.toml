@@ -28,5 +28,8 @@ tokio-tungstenite = "0.30.0"
 tower = { version = "0.5.3", features = ["util"] }
 
 # The rules engine is slow unoptimized (the tests play whole games with its bot).
+[profile.release]
+strip = true  # the released server binaries ship without debug symbols (28.8 → 22.2 MB on Linux)
+
 [profile.dev.package.classichs-engine]
 opt-level = 2

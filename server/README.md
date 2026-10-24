@@ -215,6 +215,14 @@ ranks earned before packs to `classic-2014`); a game row and an Arena run keep t
 
 In the game: Settings → Server: `ws://localhost:7377`.
 
+## Deploy to a Docker host behind Caddy
+
+`deploy/docker-host/setup.sh` sets a host up once (its own domain in the host's Caddy, HTTPS on 443,
+no new ports); then `DEPLOY_HOST=… DEPLOY_URL=https://… tools/deploy_server.sh X.Y.Z` deploys a
+release: an image of about 26 MB (the stripped binary on scratch, 11 MB to upload), the packs only
+when they change, a database copy, a check through Caddy and a rollback when the new version does
+not answer, 2 images kept. The headers of these scripts tell the details.
+
 ## Security notes
 
 - **Put it behind TLS** (a reverse proxy such as Caddy or nginx giving `wss://` and

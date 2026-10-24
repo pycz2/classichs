@@ -1,0 +1,68 @@
+#!/bin/bash
+# classichs-deploy X.Y.Z — runs the game server version X.Y.Z as the container "classichs" in the
+# Docker network of the host's Caddy (Caddy proxies its domain to classichs:7377).
+# Installed by setup.sh as /usr/local/sbin/classichs-deploy (root), the deploy user may run it with
+# sudo and no password; it is the only thing that user may do as root without a password.
+# The packs come from ~DEPLOY_USER/classichs/packs (read-only at /packs; tools/deploy_server.sh fills it).
+#  1. loads ~DEPLOY_USER/classichs/incoming/classichs-server-X.Y.Z.tar.gz if it is there (tools/deploy_server.sh
+#     uploads it), else uses the image classichs-server:X.Y.Z that is already loaded (a rollback);
+#  2. stops the old container, copies the database to /srv/classichs/backup-before-X.Y.Z (the last 2 are kept);
+#  3. starts the new one and checks it through Caddy's network; if it does not answer, starts the old one again;
+#  4. keeps 2 classichs-server images: the running one and the newest other one.
+set -euo pipefail
+DEPLOY_USER=__DEPLOY_USER__
+IMG=classichs-server
+DATA=/srv/classichs
+V=${1:-}
+[[ $V =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "usage: classichs-deploy X.Y.Z" >&2; exit 2; }
+
+IN=/home/$DEPLOY_USER/classichs/incoming/$IMG-$V.tar.gz
+if [ -e "$IN" ]; then
+  [ -f "$IN" ] && [ ! -L "$IN" ] || { echo "$IN is not a plain file" >&2; exit 1; }
+  loaded=$(gunzip -c "$IN" | docker load | sed -n 's/^Loaded image: //p')
+  [ "$loaded" = "$IMG:$V" ] || { echo "the archive holds '$loaded', not $IMG:$V" >&2; exit 1; }
+  rm -f "$IN"
+fi
+docker image inspect "$IMG:$V" >/dev/null 2>&1 || { echo "no image $IMG:$V (upload it first)" >&2; exit 1; }
+
+CADDY=$(docker ps -q --filter ancestor=caddy:2 | head -1)
+[ -n "$CADDY" ] || { echo "no running caddy:2 container" >&2; exit 1; }
+NET=$(docker inspect -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}} {{end}}' "$CADDY" | cut -d' ' -f1)
+
+run() {
+  docker rm -f classichs >/dev/null 2>&1 || true
+  docker run -d --name classichs --restart unless-stopped --network "$NET" --memory 384m \
+    --label com.centurylinklabs.watchtower.enable=false -v "$DATA:/data" \
+    -v "/home/$DEPLOY_USER/classichs/packs:/packs:ro" "$1" \
+    --listen 0.0.0.0:7377 --db /data/classichs.db --store-dir /data/store --packs-dir /packs \
+    --default-pack neon --trust-proxy >/dev/null
+}
+healthy() {
+  for _ in $(seq 20); do
+    docker exec "$CADDY" wget -q -O /dev/null http://classichs:7377/admin 2>/dev/null && return 0
+    sleep 1
+  done
+  return 1
+}
+
+prev=$(docker inspect -f '{{.Config.Image}}' classichs 2>/dev/null || true)
+docker stop classichs >/dev/null 2>&1 || true
+if [ -f "$DATA/classichs.db" ]; then
+  # with its -wal and -shm files: the last writes can still be in the WAL
+  rm -rf "$DATA/backup-before-$V" && mkdir "$DATA/backup-before-$V"
+  cp -p "$DATA"/classichs.db* "$DATA/backup-before-$V/"
+  ls -dt "$DATA"/backup-before-* | tail -n +3 | xargs -r rm -rf
+fi
+# in an if, a failed docker run does not stop the script (set -e): the old version comes back
+if ! { run "$IMG:$V" && healthy; }; then
+  echo "classichs $V does not answer; its last log lines:" >&2
+  docker logs --tail 30 classichs >&2 || true
+  if [ -n "$prev" ] && [ "$prev" != "$IMG:$V" ]; then
+    { run "$prev" && healthy && echo "rolled back to $prev" >&2; } || echo "the old version $prev does not start either" >&2
+  fi
+  exit 1
+fi
+# 2 images stay: the running one and the newest other one (the version to roll back to)
+docker images "$IMG" --format '{{.Tag}}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | grep -vx "$V" | sort -V -r | tail -n +2 \
+  | while read -r t; do docker rmi "$IMG:$t" >/dev/null 2>&1 || true; done
+echo "classichs $V is running (images: $(docker images "$IMG" --format '{{.Tag}}' | sort -V -r | tr '\n' ' '))"
