@@ -1,10 +1,11 @@
 # Builds the game for every platform on each push to main (a check) and, on a
 # version tag vX.Y.Z, publishes a GitHub release with the builds:
 #   Web (zip), Windows (.exe), Linux (.AppImage), macOS (.zip with the app), Android (.apk).
-# The rules engine (rust/, tools/build_rules.sh) is built per platform in the rules
-# job (macOS universal on macOS, Windows on Windows, Linux + Android + WebAssembly on
-# Linux); the game job takes those libraries, tests and exports everything.
-# The game server (server/, Rust) is built for Windows, Linux and macOS in the server job.
+# The rust job builds, per OS, the rules engine (rust/, tools/build_rules.sh: macOS universal
+# on macOS, Windows on Windows, Linux + Android + WebAssembly on Linux) and the game server
+# (server/) in one target directory, so the engine and the shared crates compile once; the
+# crates are cached (Swatinem/rust-cache, saved from main only). The game job takes the
+# libraries, tests and exports everything. A version tag runs no tests: they passed on main.
 name: Release
 
 on:
@@ -20,27 +21,44 @@ env:
   GODOT_VERSION: "4.7.2"
 
 jobs:
-  rules:
+  rust:
     strategy:
       matrix:
         include:
           - os: macos-14
             platforms: macos
             targets: aarch64-apple-darwin,x86_64-apple-darwin
+            server: macos-arm64
+            bin: classichs-server
           - os: windows-2022
             platforms: windows
             targets: ""
+            server: windows-x86_64
+            bin: classichs-server.exe
           - os: ubuntu-24.04
             platforms: linux android web
             targets: aarch64-linux-android,wasm32-unknown-unknown
+            server: linux-x86_64
+            bin: classichs-server
     runs-on: ${{ matrix.os }}
+    env:
+      # the rules engine and the server share it: the engine and the common crates build once
+      CARGO_TARGET_DIR: ${{ github.workspace }}/target
     steps:
       - uses: actions/checkout@v7
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.targets }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            rust -> ../target
+            server -> ../target
+          key: ${{ matrix.os }}
+          # a tag's cache is seen by no other run: save from main only (tags read main's)
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - name: Engine tests
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && !startsWith(github.ref, 'refs/tags/')
         run: cd rust && cargo test --release -p classichs-engine
       - name: Build the rules engine
         shell: bash
@@ -50,9 +68,27 @@ jobs:
           name: rules-${{ runner.os }}
           path: rules/bin/*
           if-no-files-found: error
+      - name: Server tests
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        shell: bash
+        run: cd server && cargo test --release
+      - name: Build the server
+        shell: bash
+        run: |
+          cd server && cargo build --release
+          ver=$(sed -n 's/^config\/version="\(.*\)"/\1/p' ../project.godot)
+          mkdir -p ../build/server
+          ext=$([ "${{ runner.os }}" = Windows ] && echo .exe || echo "")
+          cp "$CARGO_TARGET_DIR/release/${{ matrix.bin }}" "../build/server/ClassicHS-server-$ver-${{ matrix.server }}$ext"
+          chmod +x ../build/server/ClassicHS-server-*
+      - uses: actions/upload-artifact@v7
+        with:
+          name: server-${{ matrix.server }}
+          path: build/server/ClassicHS-server-*
+          if-no-files-found: error
 
   game:
-    needs: rules
+    needs: rust
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -142,6 +178,7 @@ jobs:
       - name: Import and test
         run: |
           godot --headless --path . --import >/dev/null 2>&1 || true
+          if [ "${GITHUB_REF#refs/tags/}" != "$GITHUB_REF" ]; then echo "a tag: the tests passed on main"; exit 0; fi
           ./run_tests.sh 2>&1 | tee /tmp/tests.log | tail -5
           grep -q " 0 failed" /tmp/tests.log
 
@@ -164,59 +201,9 @@ jobs:
           path: build/release/ClassicHS-*
           if-no-files-found: error
 
-  server:
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-24.04
-            name: linux-x86_64
-            bin: classichs-server
-          - os: windows-2022
-            name: windows-x86_64
-            bin: classichs-server.exe
-          - os: macos-14
-            name: macos-arm64
-            bin: classichs-server
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v7
-      - name: Is there a server?
-        id: has
-        shell: bash
-        run: echo "server=$([ -f server/Cargo.toml ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
-      - uses: dtolnay/rust-toolchain@stable
-        if: steps.has.outputs.server == 'yes'
-      - name: Test and build
-        if: steps.has.outputs.server == 'yes'
-        shell: bash
-        run: |
-          cd server
-          cargo test --release
-          cargo build --release
-          mkdir -p ../build/server
-          cp target/release/${{ matrix.bin }} ../build/server/
-      - name: Package
-        if: steps.has.outputs.server == 'yes'
-        shell: bash
-        run: |
-          ver=$(sed -n 's/^config\/version="\(.*\)"/\1/p' project.godot)
-          cd build/server
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            mv classichs-server.exe "ClassicHS-server-$ver-${{ matrix.name }}.exe"
-          else
-            mv classichs-server "ClassicHS-server-$ver-${{ matrix.name }}"
-            chmod +x "ClassicHS-server-$ver-${{ matrix.name }}"
-          fi
-      - uses: actions/upload-artifact@v7
-        if: steps.has.outputs.server == 'yes'
-        with:
-          name: server-${{ matrix.name }}
-          path: build/server/ClassicHS-server-*
-          if-no-files-found: error
-
   release:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [game, server]
+    needs: [game, rust]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/download-artifact@v8

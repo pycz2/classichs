@@ -17,7 +17,7 @@ for d in /opt/homebrew/opt/rustup/bin "$HOME/.cargo/bin"; do
 done
 BIN=rules/bin
 mkdir -p "$BIN"
-T=rust/target
+T=${CARGO_TARGET_DIR:-rust/target}  # (CI shares one target directory with the server: CARGO_TARGET_DIR)
 
 target() {  # makes sure a Rust target is installed
 	command -v rustup >/dev/null && rustup target list --installed | grep -qx "$1" || rustup target add "$1"
