@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.28.3] - 2026-10-24
+
+### Corretto
+- Android: la libreria delle regole del gioco è compilata per pagine di memoria da 16 KB (telefoni con Android 15 o più recente). Questi telefoni avviavano il gioco in modalità di compatibilità o non lo avviavano.
+- Nessun server predefinito: il gioco si avvia e si gioca senza server; aggiungine uno più tardi in Impostazioni → Server di gioco (o con il pulsante del server in Partita online).
+
 ## [0.28.2] - 2026-10-23
 
 ### Aggiunto

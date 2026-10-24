@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.28.3] - 2026-10-24
+
+### Fixed
+- Android: the game's rules library is built for 16 KB memory pages (Android 15 and newer phones). Such phones used to run the game in a compatibility mode or not at all.
+- No default server any more: the game starts and plays without one; add a server later in Settings → Game servers (or with the server button in Online Game).
+
 ## [0.28.2] - 2026-10-23
 
 ### Added

@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.28.3] - 2026-10-24
+
+### Naprawiono
+- Android: biblioteka zasad gry jest zbudowana dla stron pamięci 16 KB (telefony z Androidem 15 i nowszym). Takie telefony uruchamiały grę w trybie zgodności albo wcale.
+- Nie ma już domyślnego serwera: gra uruchamia się i działa bez serwera; serwer dodasz później w Ustawienia → Serwery gry (albo przyciskiem serwera w Grze sieciowej).
+
 ## [0.28.2] - 2026-10-23
 
 ### Dodano

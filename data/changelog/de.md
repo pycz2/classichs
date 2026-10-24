@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.28.3] - 2026-10-24
+
+### Behoben
+- Android: Die Regelbibliothek des Spiels ist für 16-KB-Speicherseiten gebaut (Telefone mit Android 15 und neuer). Solche Telefone starteten das Spiel bisher im Kompatibilitätsmodus oder gar nicht.
+- Kein voreingestellter Server mehr: Das Spiel startet und läuft ohne Server; einen Server fügst du später unter Einstellungen → Spielserver hinzu (oder mit der Server-Schaltfläche im Online-Spiel).
+
 ## [0.28.2] - 2026-10-23
 
 ### Hinzugefügt

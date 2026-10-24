@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.28.3] - 2026-10-24
+
+### Corrigido
+- Android: a biblioteca de regras do jogo é compilada para páginas de memória de 16 KB (celulares com Android 15 ou mais novo). Esses celulares abriam o jogo em modo de compatibilidade ou não abriam.
+- Não há mais servidor padrão: o jogo abre e se joga sem servidor; adicione um depois em Configurações → Servidores de jogo (ou com o botão do servidor em Jogo Online).
+
 ## [0.28.2] - 2026-10-23
 
 ### Adicionado
