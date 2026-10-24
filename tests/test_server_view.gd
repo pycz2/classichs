@@ -38,6 +38,8 @@ func _press(parent: Node, button_name: String) -> void:
 func test_null_tag_and_arena_after_login() -> void:
 	var v := _view()
 	eq(v.stage, "login", "an open connection without a session: log in")
+	eq((v.find_child("Password", true, false) as LineEdit).virtual_keyboard_type, LineEdit.KEYBOARD_TYPE_PASSWORD,
+		"a phone's keyboard and password manager see a password field")
 	v.link.dispatch({"t": "auth", "ok": true, "token": "x", "me": ME})
 	eq(v.stage, "lobby")
 	var who := v.find_child("PlayerName", true, false) as Label

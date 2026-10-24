@@ -8,6 +8,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ### Corregido
 - Android: el juego ya no se queda colgado en la pantalla de inicio. La compilación comprimía los juegos integrados (paquetes) dentro del APK y Android tardaba minutos en leerlos; ahora se guardan sin comprimir y el juego se abre en pocos segundos.
+- Navegador: Ctrl+V (Cmd+V) en un campo de texto pega lo que hay ahora en el portapapeles. Antes, el primer pegado daba el contenido anterior (o nada), por ejemplo con una contraseña copiada de un gestor de contraseñas.
+- Android: el campo de la contraseña está marcado como contraseña, así el teclado y el gestor de contraseñas pueden ofrecer la guardada; la dirección del servidor usa un teclado de direcciones.
 
 ## [0.28.3] - 2026-10-24
 

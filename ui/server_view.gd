@@ -229,6 +229,7 @@ func _build_login() -> void:
 	pw.name = "Password"
 	pw.placeholder_text = tr("Password (8 characters or more)")
 	pw.secret = true
+	pw.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_PASSWORD  # a phone's keyboard offers the saved password
 	pw.max_length = 128
 	for e in [user, pw]:
 		e.custom_minimum_size = Vector2(420, 52)

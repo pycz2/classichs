@@ -12,6 +12,8 @@ func _ready() -> void:
 	Settings.apply()
 	theme = Fonts.theme()  # the medieval font and tavern buttons everywhere below (the active pack's look)
 	add_child(Sound.new())
+	if OS.has_feature("web"):
+		add_child(WebPaste.new())  # Ctrl+V pastes the clipboard of now, not the one before
 	if Settings.data.fullscreen and not OS.has_feature("web"):  # the browser needs a click first
 		Settings.set_fullscreen(true)
 	get_viewport().gui_focus_changed.connect(func(c: Control):

@@ -260,6 +260,7 @@ func show_servers() -> void:
 	p.add_child(add)
 	var name_ed := _edit("NewName", tr("Name"), 200)
 	var url_ed := _edit("NewUrl", "wss://example.org:7377", 0)
+	url_ed.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_URL
 	url_ed.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	add.add_child(name_ed)
 	add.add_child(url_ed)
