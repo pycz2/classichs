@@ -186,6 +186,7 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
     };
     let mut general = RateLimit::new(300, Duration::from_secs(10));
     let mut writer_done = false;
+    let mut peer_closed = false;
     let mut frames = 0u32;
     loop {
         let msg = tokio::select! {
@@ -211,7 +212,10 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
                 s.errors += 1;
                 s.reply("", Err(e("bad_request", "Text frames only")));
             }
-            Some(Ok(Message::Close(_))) | Some(Err(_)) | None => break,
+            Some(Ok(Message::Close(_))) | Some(Err(_)) | None => {
+                peer_closed = true;
+                break;
+            }
             Some(Ok(_)) => {}
         }
     }
@@ -229,6 +233,19 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
     drop(s);
     if !writer_done && tokio::time::timeout(Duration::from_secs(5), &mut writer).await.is_err() {
         tracing::warn!("ws: the writer did not finish in 5 s");
+    }
+    // The close of RFC 6455: after our Close, read until the peer's (3 s at most). Dropping a socket
+    // with unread frames in it sends a TCP reset, and the peer can lose our last frames and the
+    // Close itself (a client that sent much at once saw 17 of its 20 replies and then silence).
+    if !peer_closed && !writer_done {
+        let _ = tokio::time::timeout(Duration::from_secs(3), async {
+            while let Some(Ok(m)) = stream.next().await {
+                if matches!(m, Message::Close(_)) {
+                    break;
+                }
+            }
+        })
+        .await;
     }
 }
 
