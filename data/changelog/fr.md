@@ -6,6 +6,9 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [0.28.4] - 2026-10-24
 
+### Ajouté
+- Un nouvel ensemble d'images pour Classic, « Photoréaliste » : les 534 cartes en style photoréaliste avec très peu de détails. À choisir dans Jeux → Classic 2014 → Images des cartes (ou dans les paramètres).
+
 ### Corrigé
 - Android : le jeu ne reste plus bloqué sur l'écran de démarrage. La compilation compressait les jeux intégrés (packs) dans l'APK et Android mettait des minutes à les lire ; ils sont maintenant stockés sans compression et le jeu s'ouvre en quelques secondes.
 - Navigateur : Ctrl+V (Cmd+V) dans un champ de texte colle le contenu actuel du presse-papiers. Le premier collage donnait le contenu précédent (ou rien), par exemple pour un mot de passe copié depuis un gestionnaire de mots de passe.

@@ -31,7 +31,8 @@
   "art_sets": [
     {"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированный"}, "default": true},
     {"id": "cartoon", "name": {"en": "Cartoon 2D", "ru": "Мультяшный 2D", "de": "Cartoon 2D", "fr": "Dessin animé 2D", "es": "Dibujos 2D", "pt_BR": "Desenho 2D", "it": "Cartone 2D", "pl": "Kreskówka 2D"}},
-    {"id": "simple", "name": {"en": "Simple painted", "ru": "Простой рисованный", "de": "Einfach gemalt", "fr": "Peint simple", "es": "Pintado simple", "pt_BR": "Pintura simples", "it": "Dipinto semplice", "pl": "Prosty malowany"}}
+    {"id": "simple", "name": {"en": "Simple painted", "ru": "Простой рисованный", "de": "Einfach gemalt", "fr": "Peint simple", "es": "Pintado simple", "pt_BR": "Pintura simples", "it": "Dipinto semplice", "pl": "Prosty malowany"}},
+    {"id": "photo", "name": {"en": "Photoreal", "ru": "Фотореалистичный", "de": "Fotorealistisch", "fr": "Photoréaliste", "es": "Fotorrealista", "pt_BR": "Fotorrealista", "it": "Fotorealistico", "pl": "Fotorealistyczny"}}
   ],
   "sound_sets": [{"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированные"}, "default": true}],
   "music_sets": [

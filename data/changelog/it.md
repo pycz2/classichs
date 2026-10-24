@@ -6,6 +6,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [0.28.4] - 2026-10-24
 
+### Aggiunto
+- Un nuovo set di immagini per Classic, “Fotorealistico”: tutte le 534 carte in stile fotorealistico con pochissimi dettagli. Sceglilo in Giochi → Classic 2014 → Immagini delle carte (o nelle impostazioni).
+
 ### Corretto
 - Android: il gioco non si blocca più sulla schermata iniziale. La build comprimeva i giochi integrati (pacchetti) nell'APK e Android impiegava minuti a leggerli; ora sono salvati senza compressione e il gioco si apre in pochi secondi.
 - Browser: Ctrl+V (Cmd+V) in un campo di testo incolla ciò che c'è ora negli appunti. Prima il primo incolla dava il contenuto precedente (o niente), ad esempio con una password copiata da un gestore di password.

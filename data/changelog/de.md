@@ -6,6 +6,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [0.28.4] - 2026-10-24
 
+### Hinzugefügt
+- Ein neues Bilderset für Classic, „Fotorealistisch“: alle 534 Karten fotorealistisch mit wenigen Details. Auswahl unter Spiele → Classic 2014 → Kartenbilder (oder in den Einstellungen).
+
 ### Behoben
 - Android: Das Spiel hängt nicht mehr auf dem Startbildschirm. Der Build komprimierte die eingebauten Spiele (Pakete) in der APK, und Android brauchte Minuten, um sie zu lesen; jetzt liegen sie unkomprimiert dort, und das Spiel öffnet sich in wenigen Sekunden.
 - Browser: Strg+V (Cmd+V) in einem Textfeld fügt ein, was jetzt in der Zwischenablage ist. Bisher lieferte das erste Einfügen den vorherigen Inhalt (oder nichts), etwa bei einem Passwort aus dem Passwortmanager.

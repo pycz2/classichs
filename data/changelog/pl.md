@@ -6,6 +6,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [0.28.4] - 2026-10-24
 
+### Dodano
+- Nowy zestaw obrazów dla Classic, „Fotorealistyczny”: wszystkie 534 karty w stylu fotorealistycznym z bardzo małą liczbą szczegółów. Wybór: Gry → Classic 2014 → Obrazy kart (albo w ustawieniach).
+
 ### Naprawiono
 - Android: gra nie zawiesza się już na ekranie startowym. Kompilacja kompresowała wbudowane gry (paczki) w APK i Android czytał je minutami; teraz są zapisane bez kompresji, a gra otwiera się w kilka sekund.
 - Przeglądarka: Ctrl+V (Cmd+V) w polu tekstowym wkleja to, co jest teraz w schowku. Wcześniej pierwsze wklejenie dawało poprzednią zawartość (albo nic), np. hasło skopiowane z menedżera haseł.

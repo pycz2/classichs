@@ -6,6 +6,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [0.28.4] - 2026-10-24
 
+### Added
+- A new picture set for Classic, “Photoreal”: all 534 cards photorealistic with very few details. Pick it in Games → Classic 2014 → Card pictures (or in the settings).
+
 ### Fixed
 - Android: the game no longer hangs on its splash screen. The build compressed the built-in games (packs) inside the APK, and Android took minutes to read them; now they are stored uncompressed and the game opens in a few seconds.
 - Browser: Ctrl+V (Cmd+V) in a text field pastes what is in the clipboard now. The first paste used to give the previous contents (or nothing), for example a password copied from a password manager.
