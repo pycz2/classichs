@@ -4,7 +4,7 @@
 # The rust job builds, per OS, the rules engine (rust/, tools/build_rules.sh: macOS universal
 # on macOS, Windows on Windows, Linux + Android + WebAssembly on Linux) and the game server
 # (server/) in one target directory, so the engine and the shared crates compile once; the
-# crates are cached (Swatinem/rust-cache, saved from main only). The game job takes the
+# crates and the target directory are cached (actions/cache, saved from main only). The game job takes the
 # libraries, tests and exports everything. A version tag runs no tests: they passed on main.
 name: Release
 
@@ -49,14 +49,20 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.targets }}
-      - uses: Swatinem/rust-cache@v2
+      # The crates and the whole shared target directory, as they are (Swatinem/rust-cache cleans
+      # the directory once per workspace and so deleted the other workspace's crates). A new key
+      # when a Cargo.lock changes; saved from main only (a tag's cache is seen by no other run).
+      - name: Restore the Rust build cache
+        id: rust-cache
+        uses: actions/cache/restore@v6
         with:
-          workspaces: |
-            rust -> ../target
-            server -> ../target
-          key: ${{ matrix.os }}
-          # a tag's cache is seen by no other run: save from main only (tags read main's)
-          save-if: ${{ github.ref == 'refs/heads/main' }}
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            target
+          key: rust-${{ matrix.os }}-${{ hashFiles('rust/Cargo.lock', 'server/Cargo.lock') }}
+          restore-keys: rust-${{ matrix.os }}-
       - name: Engine tests
         if: runner.os == 'Linux' && !startsWith(github.ref, 'refs/tags/')
         run: cd rust && cargo test --release -p classichs-engine
@@ -86,6 +92,16 @@ jobs:
           name: server-${{ matrix.server }}
           path: build/server/ClassicHS-server-*
           if-no-files-found: error
+      - name: Save the Rust build cache
+        if: github.ref == 'refs/heads/main' && steps.rust-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            target
+          key: ${{ steps.rust-cache.outputs.cache-primary-key }}
 
   game:
     needs: rust
