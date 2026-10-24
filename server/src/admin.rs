@@ -93,6 +93,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "packs.js",
     "bots.js",
     "style.css",
+    "favicon.svg",
     "vendor/preact.module.js",
     "vendor/hooks.module.js",
     "vendor/htm.module.js",
@@ -144,6 +145,7 @@ async fn asset(Path(path): Path<String>) -> Response {
     let mime = match path.rsplit('.').next() {
         Some("js") => "text/javascript; charset=utf-8",
         Some("css") => "text/css; charset=utf-8",
+        Some("svg") => "image/svg+xml",
         _ => "text/plain; charset=utf-8",
     };
     ([(header::CONTENT_TYPE, mime), (header::CACHE_CONTROL, "no-cache")], *body).into_response()

@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.29.1] - 2026-10-24
+
+### Added
+- Server admin: its own tab icon — the gold tile with the dark diamond of the panel's logo.
+
 ## [0.29.0] - 2026-10-24
 
 ### Added

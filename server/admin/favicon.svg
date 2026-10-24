@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- the admin's logo: the gold tile with the dark diamond (style.css .logo) -->
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8cf72"/>
+      <stop offset="1" stop-color="#b8740d"/>
+    </linearGradient>
+    <linearGradient id="gem" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d2805"/>
+      <stop offset="1" stop-color="#1c1201"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="30" height="30" rx="8" fill="url(#gold)"/>
+  <rect x="1.6" y="1.6" width="28.8" height="28.8" rx="7.4" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.2"/>
+  <path d="M16 6 L25.5 16 L16 26 L6.5 16 Z" fill="url(#gem)"/>
+  <path d="M16 6 L25.5 16 L16 16 Z" fill="#fff" fill-opacity=".14"/>
+  <path d="M16 9.6 L22 16 L16 22.4 L10 16 Z" fill="none" stroke="#f8cf72" stroke-opacity=".45" stroke-width=".9"/>
+</svg>

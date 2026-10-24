@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.29.1] - 2026-10-24
+
+### Aggiunto
+- Amministrazione del server: un'icona della scheda propria — la tessera dorata con il rombo scuro del logo.
+
 ## [0.29.0] - 2026-10-24
 
 ### Aggiunto

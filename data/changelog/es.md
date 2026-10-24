@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.29.1] - 2026-10-24
+
+### Añadido
+- Administración del servidor: su propio icono de pestaña, la ficha dorada con el rombo oscuro del logotipo.
+
 ## [0.29.0] - 2026-10-24
 
 ### Añadido

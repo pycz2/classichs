@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.29.1] - 2026-10-24
+
+### Ajouté
+- Administration du serveur : sa propre icône d'onglet — la tuile dorée au losange sombre du logo.
+
 ## [0.29.0] - 2026-10-24
 
 ### Ajouté

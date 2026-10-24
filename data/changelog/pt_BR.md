@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.29.1] - 2026-10-24
+
+### Adicionado
+- Administração do servidor: um ícone de aba próprio — o bloco dourado com o losango escuro do logotipo.
+
 ## [0.29.0] - 2026-10-24
 
 ### Adicionado

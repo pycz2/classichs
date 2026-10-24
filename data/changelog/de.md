@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.29.1] - 2026-10-24
+
+### Hinzugefügt
+- Server-Verwaltung: ein eigenes Tab-Symbol — die goldene Kachel mit der dunklen Raute aus dem Logo.
+
 ## [0.29.0] - 2026-10-24
 
 ### Hinzugefügt

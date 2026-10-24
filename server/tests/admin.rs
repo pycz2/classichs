@@ -213,6 +213,10 @@ async fn static_files_and_csp() {
     let csp = r.headers[header::CONTENT_SECURITY_POLICY].to_str().unwrap();
     assert!(csp.contains("default-src 'none'") && csp.contains("script-src 'self' 'sha256-") && csp.contains("frame-ancestors 'none'"), "{csp}");
     assert!(r.body.contains("importmap"));
+    assert!(r.body.contains(r#"<link rel="icon" type="image/svg+xml" href="/admin/static/favicon.svg">"#));
+    let r = call(&app, get("/admin/static/favicon.svg", "")).await;
+    assert_eq!((r.status, r.headers[header::CONTENT_TYPE].to_str().unwrap()), (StatusCode::OK, "image/svg+xml"));
+    assert!(r.body.starts_with("<svg"));
     let r = call(&app, get("/admin/static/app.js", "")).await;
     assert_eq!(r.headers[header::CONTENT_TYPE], "text/javascript; charset=utf-8");
     assert_eq!(r.headers[header::X_CONTENT_TYPE_OPTIONS], "nosniff");

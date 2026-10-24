@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.29.1] - 2026-10-24
+
+### Dodano
+- Panel serwera: własna ikona karty — złoty kafelek z ciemnym rombem z logo.
+
 ## [0.29.0] - 2026-10-24
 
 ### Dodano
