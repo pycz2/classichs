@@ -271,9 +271,9 @@ func show_servers() -> void:
 	add.add_child(go)
 	var note := Palette.label(tr("The password goes only to this server. Use a server you trust; a public server needs wss:// (TLS)."), 15, Color("a8967a"))
 	note.name = "ServersNote"
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # before the size: a label without wrapping is as wide as its text
 	note.position = Vector2(24, 500)
 	note.size = Vector2(660, 60)
-	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	p.add_child(note)
 	var done := Palette.button(tr("Close"), "CloseServers")
 	done.position = Vector2(716, 508)

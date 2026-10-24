@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Android: gra nie zawiesza się już na ekranie startowym. Kompilacja kompresowała wbudowane gry (paczki) w APK i Android czytał je minutami; teraz są zapisane bez kompresji, a gra otwiera się w kilka sekund.
 - Przeglądarka: Ctrl+V (Cmd+V) w polu tekstowym wkleja to, co jest teraz w schowku. Wcześniej pierwsze wklejenie dawało poprzednią zawartość (albo nic), np. hasło skopiowane z menedżera haseł.
 - Android: pole hasła jest oznaczone jako hasło, więc klawiatura i menedżer haseł mogą podsunąć zapisane hasło; adres serwera ma klawiaturę do adresów.
+- Telefony: pole tekstowe unosi się nad klawiaturę ekranową; wcześniej klawiatura zasłaniała pola na dole ekranu i nie było widać wpisywanego tekstu. Podpowiedź na liście serwerów nie wchodzi już pod przycisk „Zamknij”.
 
 ## [0.28.3] - 2026-10-24
 

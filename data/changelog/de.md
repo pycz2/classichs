@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Android: Das Spiel hängt nicht mehr auf dem Startbildschirm. Der Build komprimierte die eingebauten Spiele (Pakete) in der APK, und Android brauchte Minuten, um sie zu lesen; jetzt liegen sie unkomprimiert dort, und das Spiel öffnet sich in wenigen Sekunden.
 - Browser: Strg+V (Cmd+V) in einem Textfeld fügt ein, was jetzt in der Zwischenablage ist. Bisher lieferte das erste Einfügen den vorherigen Inhalt (oder nichts), etwa bei einem Passwort aus dem Passwortmanager.
 - Android: Das Passwortfeld ist als Passwort markiert, sodass Tastatur und Passwortmanager das gespeicherte Passwort anbieten können; die Serveradresse bekommt eine Adresstastatur.
+- Telefone: Ein Textfeld rückt über die Bildschirmtastatur; bisher verdeckte die Tastatur Felder unten auf dem Bildschirm, und man sah nicht, was man tippte. Der Hinweis in der Serverliste läuft nicht mehr unter die Schaltfläche „Schließen“.
 
 ## [0.28.3] - 2026-10-24
 

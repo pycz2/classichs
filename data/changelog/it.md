@@ -10,6 +10,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Android: il gioco non si blocca più sulla schermata iniziale. La build comprimeva i giochi integrati (pacchetti) nell'APK e Android impiegava minuti a leggerli; ora sono salvati senza compressione e il gioco si apre in pochi secondi.
 - Browser: Ctrl+V (Cmd+V) in un campo di testo incolla ciò che c'è ora negli appunti. Prima il primo incolla dava il contenuto precedente (o niente), ad esempio con una password copiata da un gestore di password.
 - Android: il campo della password è segnato come password, così la tastiera e il gestore di password possono proporre quella salvata; l'indirizzo del server ha una tastiera per indirizzi.
+- Telefoni: il campo di testo sale sopra la tastiera a schermo; prima la tastiera copriva i campi in basso e non si vedeva cosa si scriveva. Il suggerimento nell'elenco dei server non finisce più sotto il pulsante “Chiudi”.
 
 ## [0.28.3] - 2026-10-24
 

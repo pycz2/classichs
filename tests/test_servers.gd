@@ -315,6 +315,8 @@ func test_settings_server_list() -> void:
 	var box := s.find_child("ServerList", true, false)
 	check(box != null, "the list opens")
 	eq((s.find_child("NewUrl", true, false) as LineEdit).virtual_keyboard_type, LineEdit.KEYBOARD_TYPE_URL, "an address keyboard")
+	var note := s.find_child("ServersNote", true, false) as Control
+	check(not note.get_rect().intersects((s.find_child("CloseServers", true, false) as Control).get_rect()), "the note wraps before the Close button")
 	eq(s.add_server("Mine", "http://nope"), false, "only ws:// or wss://")
 	eq(s.add_server("Mine", "wss://mine.example"), true)
 	eq(Settings.data.servers.map(func(e): return e.name), ["localhost", "Mine"], "added")

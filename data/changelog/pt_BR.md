@@ -10,6 +10,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Android: o jogo não trava mais na tela de abertura. A compilação comprimia os jogos embutidos (pacotes) dentro do APK, e o Android levava minutos para lê-los; agora eles ficam sem compressão e o jogo abre em poucos segundos.
 - Navegador: Ctrl+V (Cmd+V) em um campo de texto cola o que está agora na área de transferência. Antes, a primeira colagem trazia o conteúdo anterior (ou nada), por exemplo uma senha copiada de um gerenciador de senhas.
 - Android: o campo de senha é marcado como senha, então o teclado e o gerenciador de senhas podem oferecer a senha salva; o endereço do servidor usa um teclado de endereços.
+- Celulares: o campo de texto sobe acima do teclado na tela; antes o teclado cobria os campos na parte de baixo e não dava para ver o que se digitava. A dica da lista de servidores não fica mais sob o botão “Fechar”.
 
 ## [0.28.3] - 2026-10-24
 

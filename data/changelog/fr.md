@@ -10,6 +10,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Android : le jeu ne reste plus bloqué sur l'écran de démarrage. La compilation compressait les jeux intégrés (packs) dans l'APK et Android mettait des minutes à les lire ; ils sont maintenant stockés sans compression et le jeu s'ouvre en quelques secondes.
 - Navigateur : Ctrl+V (Cmd+V) dans un champ de texte colle le contenu actuel du presse-papiers. Le premier collage donnait le contenu précédent (ou rien), par exemple pour un mot de passe copié depuis un gestionnaire de mots de passe.
 - Android : le champ du mot de passe est marqué comme tel, le clavier et le gestionnaire de mots de passe peuvent proposer le mot de passe enregistré ; l'adresse du serveur a un clavier pour les adresses.
+- Téléphones : le champ de texte remonte au-dessus du clavier à l'écran ; le clavier cachait les champs en bas de l'écran et l'on ne voyait pas ce que l'on tapait. L'aide de la liste des serveurs ne passe plus sous le bouton « Fermer ».
 
 ## [0.28.3] - 2026-10-24
 

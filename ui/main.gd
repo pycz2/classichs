@@ -14,6 +14,8 @@ func _ready() -> void:
 	add_child(Sound.new())
 	if OS.has_feature("web"):
 		add_child(WebPaste.new())  # Ctrl+V pastes the clipboard of now, not the one before
+	if DisplayServer.has_feature(DisplayServer.FEATURE_VIRTUAL_KEYBOARD) and DisplayServer.is_touchscreen_available():
+		add_child(KeyboardLift.new())  # a field under the on-screen keyboard rises above it
 	if Settings.data.fullscreen and not OS.has_feature("web"):  # the browser needs a click first
 		Settings.set_fullscreen(true)
 	get_viewport().gui_focus_changed.connect(func(c: Control):
