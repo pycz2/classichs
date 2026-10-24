@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.29.2] - 2026-10-25
+
+### Corretto
+- Android: l'app non riusciva a raggiungere un server di gioco — accesso, registrazione, gioco online, download dei giochi. Mancava il permesso di accesso a Internet; ora c'è e la build lo verifica.
+
 ## [0.29.1] - 2026-10-24
 
 ### Aggiunto

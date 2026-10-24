@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.29.2] - 2026-10-25
+
+### Corregido
+- Android: la aplicación no podía conectar con un servidor de juego — iniciar sesión, registrarse, jugar en línea, descargar juegos. Faltaba el permiso de acceso a Internet; ahora está y la compilación lo comprueba.
+
 ## [0.29.1] - 2026-10-24
 
 ### Añadido

@@ -49,6 +49,10 @@ android_store_packs() {  # the APK
 	if unzip -lv "$apk" | grep '\.cardpack$' | grep -qv ' Stored '; then
 		echo "a game pack is still compressed in $apk" >&2; exit 1
 	fi
+	# without INTERNET Android allows no socket: no game server, no pack download (0.29.1)
+	if ! "${bt}aapt2" dump permissions "$apk" | grep -q 'android.permission.INTERNET'; then
+		echo "$apk does not ask for android.permission.INTERNET (export_presets.cfg permissions/internet)" >&2; exit 1
+	fi
 }
 
 export_preset() {  # preset name, output path

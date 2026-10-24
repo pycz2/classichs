@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.29.2] - 2026-10-25
+
+### Naprawiono
+- Android: aplikacja nie mogła połączyć się z serwerem gry — logowanie, rejestracja, gra online, pobieranie gier. W kompilacji brakowało uprawnienia do internetu; teraz jest, a kompilacja to sprawdza.
+
 ## [0.29.1] - 2026-10-24
 
 ### Dodano

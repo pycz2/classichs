@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.29.2] - 2026-10-25
+
+### Fixed
+- Android: the app could not reach a game server — log in, register, play online, download games. The build lacked the internet permission; now it has it, and the build checks it.
+
 ## [0.29.1] - 2026-10-24
 
 ### Added
