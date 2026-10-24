@@ -23,6 +23,7 @@ fn die(msg: &str) -> ! {
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt().with_env_filter(tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| "info".into())).init();
+    let _ = rustls::crypto::ring::default_provider().install_default(); // (wss://: rustls panics without a provider)
     let mut server = "wss://hs.borovilov.xyz".to_string();
     let (mut ladder, mut arena) = (6usize, 3usize);
     let mut admin_addr = "127.0.0.1:8098".to_string();
@@ -94,7 +95,15 @@ async fn main() {
         tokio::spawn(async move {
             // (logins spread out: the server allows 10 a minute per address)
             tokio::time::sleep(Duration::from_millis(1500 * i as u64)).await;
-            runtime::run(cfg, lib, sh, i, name, kind).await
+            // a panic must not end the bot: it starts again in 30 s, and the page shows why
+            loop {
+                let r = tokio::spawn(runtime::run(cfg.clone(), lib.clone(), sh.clone(), i, name.clone(), kind)).await;
+                if let Err(e) = r {
+                    sh.error(i, format!("the bot crashed ({e}); a new start in 30 s"));
+                    sh.update(i, |b| b.online = false);
+                }
+                tokio::time::sleep(Duration::from_secs(30)).await;
+            }
         });
     }
     if let Err(e) = admin::serve(&admin_addr, sh).await {
