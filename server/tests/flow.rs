@@ -552,22 +552,24 @@ async fn auth_rules_and_abuse() {
 
     // Garbage again and again: the server hangs up.
     let mut e = C::connect(addr).await;
+    let mut sent = 0;
     for _ in 0..25 {
         if e.ws.send(Message::text("{not json")).await.is_err() {
             break;
         }
+        sent += 1;
     }
-    let mut closed = false;
-    for _ in 0..40 {
+    // What came back, for the message when it fails (CI once saw no close here, 2026-10-24).
+    let (mut closed, mut replies, mut silent) = (false, 0, 0);
+    while !closed && silent < 3 {
         match tokio::time::timeout(Duration::from_secs(5), e.ws.next()).await {
-            Ok(Some(Ok(Message::Close(_)))) | Ok(None) | Ok(Some(Err(_))) => {
-                closed = true;
-                break;
-            }
-            _ => {}
+            Ok(Some(Ok(Message::Close(_)))) | Ok(None) | Ok(Some(Err(_))) => closed = true,
+            Ok(Some(Ok(Message::Text(_)))) => replies += 1,
+            Ok(Some(Ok(_))) => {}
+            Err(_) => silent += 1,
         }
     }
-    assert!(closed);
+    assert!(closed, "not closed: {sent} bad messages sent, {replies} replies, then {silent} silent waits of 5 s");
 }
 
 #[tokio::test]
