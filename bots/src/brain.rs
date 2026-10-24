@@ -1,0 +1,376 @@
+//! How a bot chooses a move from what a player sees (the server's `view`), never more:
+//!
+//! 1. The view becomes a playable game (`view::from_snapshot_in`); the cards it cannot see are a filler.
+//! 2. **Worlds** (determinization): each world puts a plausible card in every hidden place — the own
+//!    deck from the own deck list minus the cards already seen, the opponent's hand, deck and secrets
+//!    from its class pool — and a new random seed. Probabilities count; the future is not known.
+//! 3. In each world every legal first action is tried: the rest of the turn is played greedily by
+//!    the evaluation, then **the opponent's whole turn** is played (the engine's bot with the sampled
+//!    hand), and the position after it is scored. Lethal is ±1 000 000.
+//! 4. The action with the best average over the worlds is played; after it the bot looks again.
+
+use crate::cards::{class_of, Library, Pool};
+use classichs_engine::entity::Entity;
+use classichs_engine::game::Action;
+use classichs_engine::rng::Rng;
+use classichs_engine::state::Game;
+use classichs_engine::{bot, view};
+use rand::seq::SliceRandom;
+use rand::SeedableRng;
+use serde_json::{json, Value};
+use std::collections::{HashMap, HashSet};
+use std::time::{Duration, Instant};
+
+pub const WIN: f64 = 1_000_000.0;
+
+/// What the bot knows besides the view: its own deck list and how to guess the opponent's cards.
+pub struct Knowledge<'a> {
+    pub lib: &'a Library,
+    pub seat: usize,
+    /// the 30 cards the bot queued with
+    pub my_deck: Vec<String>,
+    /// an Arena game: the opponent drafted (weights by draft scores), else a constructed deck
+    pub arena: bool,
+}
+
+#[derive(Clone, Debug)]
+pub struct Candidate {
+    pub label: String,
+    pub score: f64,
+}
+
+#[derive(Clone, Debug)]
+pub struct Decision {
+    pub action: Action,
+    pub label: String,
+    pub worlds: usize,
+    pub ms: u128,
+    /// the best few first actions with their average scores
+    pub top: Vec<Candidate>,
+}
+
+/// The move for this view, or None when it is not the bot's move.
+pub fn decide(view_json: &Value, k: &Knowledge, budget: Duration) -> Result<Option<Decision>, String> {
+    let t0 = Instant::now();
+    let base = view::from_snapshot_in(k.lib.rs, view_json)?;
+    let me = k.seat;
+    if base.game_over {
+        return Ok(None);
+    }
+    if base.phase == "MULLIGAN" {
+        if base.players[me].mulliganed {
+            return Ok(None);
+        }
+        let a = mulligan(&base, me);
+        let label = format!("замена: {}", a["replace"].as_array().map_or(0, |r| r.len()));
+        return Ok(Some(Decision { action: a, label, worlds: 0, ms: t0.elapsed().as_millis(), top: vec![] }));
+    }
+    let mine = |a: &Action| a.get("player").and_then(Value::as_i64) == Some(me as i64) && a["type"] != "concede";
+    let legal: Vec<Action> = base.legal_actions().into_iter().filter(|a| mine(a)).collect();
+    if legal.is_empty() {
+        return Ok(None);
+    }
+    if legal.len() == 1 {
+        let a = legal[0].clone();
+        return Ok(Some(Decision { label: label(k, &base, &a), action: a, worlds: 0, ms: t0.elapsed().as_millis(), top: vec![] }));
+    }
+    let hidden = hidden_ids(view_json);
+    let mut rng = rand::rngs::StdRng::from_entropy();
+    let mut sums = vec![0.0f64; legal.len()];
+    let mut worlds = 0usize;
+    // at least 4 worlds, then more while the time lasts (at most 24)
+    while worlds < 24 && (worlds < 4 || t0.elapsed() < budget) {
+        let w = determinize(&base, view_json, &hidden, k, &mut rng);
+        for (i, a) in legal.iter().enumerate() {
+            sums[i] += score_first(&w, me, a);
+        }
+        worlds += 1;
+    }
+    let mut order: Vec<usize> = (0..legal.len()).collect();
+    // the best average; on a tie the earlier action (the engine lists ending the turn first)
+    order.sort_by(|&x, &y| sums[y].partial_cmp(&sums[x]).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y)));
+    let best = order[0];
+    let top = order
+        .iter()
+        .take(6)
+        .map(|&i| Candidate { label: label(k, &base, &legal[i]), score: sums[i] / worlds as f64 })
+        .collect();
+    Ok(Some(Decision { action: legal[best].clone(), label: label(k, &base, &legal[best]), worlds, ms: t0.elapsed().as_millis(), top }))
+}
+
+/// Entities the view hides: its "card": "" ones (the opponent's hand and secrets) and the ids it
+/// leaves out (both decks).
+fn hidden_ids(v: &Value) -> HashSet<i64> {
+    let ents = v["entities"].as_object();
+    let next = v["next_id"].as_i64().unwrap_or(1);
+    (1..next).filter(|id| ents.and_then(|e| e.get(&id.to_string())).is_none_or(|d| d["card"] == "")).collect()
+}
+
+/// One world: the hidden cards made plausible, a new random seed.
+fn determinize(base: &Game, view_json: &Value, hidden: &HashSet<i64>, k: &Knowledge, rng: &mut impl rand::Rng) -> Game {
+    let mut g = base.clone_state();
+    g.rng = Rng::new(rng.gen());
+    let rs = k.lib.rs;
+    let me = k.seat;
+    let opp = 1 - me;
+    // cards seen per side (each copy once): what is left of a deck is what was not seen yet
+    let mut seen: [HashMap<String, i64>; 2] = [HashMap::new(), HashMap::new()];
+    if let Some(ents) = view_json["entities"].as_object() {
+        for d in ents.values() {
+            let c = d["card"].as_str().unwrap_or_default();
+            let ctrl = d["ctrl"].as_i64().unwrap_or(0).clamp(0, 1) as usize;
+            if !c.is_empty() && c.starts_with("VAN_") {
+                *seen[ctrl].entry(c.to_string()).or_default() += 1;
+            }
+        }
+    }
+    // the own deck: the list minus what was seen, shuffled
+    let mut left: Vec<String> = vec![];
+    let mut counts: HashMap<&str, i64> = HashMap::new();
+    for c in &k.my_deck {
+        *counts.entry(c.as_str()).or_default() += 1;
+    }
+    for (c, n) in counts {
+        let s = seen[me].get(c).copied().unwrap_or(0);
+        for _ in 0..(n - s).max(0) {
+            left.push(c.to_string());
+        }
+    }
+    left.shuffle(rng);
+    let opp_class = class_of(rs, &g.e(g.players[opp].hero).card_id);
+    let my_class = class_of(rs, &g.e(g.players[me].hero).card_id);
+    let pools = if k.arena { &k.lib.arena_pools } else { &k.lib.ladder_pools };
+    let empty = Pool::default();
+    let opp_pool = pools.get(&opp_class).unwrap_or(&empty);
+    let my_pool = pools.get(&my_class).unwrap_or(&empty);
+    let secret_pool = Pool::from(opp_pool.cards.iter().filter(|(c, _)| rs.card(c).trap).cloned().collect::<Vec<_>>());
+    let mut used: HashMap<String, i64> = seen[opp].clone();
+    let mut pick_opp = |rng: &mut dyn rand::RngCore, only_secrets: bool| -> Option<String> {
+        let full = |c: &str| {
+            let max = if rs.card(c).rarity == "LEGENDARY" { 1 } else { 2 };
+            used.get(c).copied().unwrap_or(0) >= max
+        };
+        let pool = if only_secrets { &secret_pool } else { opp_pool };
+        let c = pool.sample(&mut RngWrap(rng), full)?;
+        *used.entry(c.clone()).or_default() += 1;
+        Some(c)
+    };
+    for side in [me, opp] {
+        let (hand, deck, secs) = (g.players[side].hand.clone(), g.players[side].deck.clone(), g.players[side].secrets.clone());
+        for (ids, zone_secret) in [(hand, false), (deck, false), (secs, true)] {
+            for id in ids.into_iter().filter(|id| hidden.contains(id)) {
+                let card = if side == me {
+                    left.pop().or_else(|| my_pool.sample(&mut RngWrap(rng), |_| false))
+                } else {
+                    pick_opp(rng, zone_secret).or_else(|| pick_opp(rng, false))
+                };
+                if let Some(c) = card.filter(|c| rs.has(c)) {
+                    let old = g.e(id);
+                    let (zone, order) = (old.zone, old.play_order);
+                    let mut e = Entity::new(id, rs.card(&c), side);
+                    e.zone = zone;
+                    e.play_order = order;
+                    *g.em(id) = e;
+                }
+            }
+        }
+    }
+    g.update_auras();
+    g
+}
+
+impl From<Vec<(String, f64)>> for Pool {
+    fn from(v: Vec<(String, f64)>) -> Pool {
+        let mut p = Pool::default();
+        for (c, w) in v {
+            p.add(&c, w);
+        }
+        p
+    }
+}
+
+/// A `&mut dyn RngCore` as a sized Rng.
+struct RngWrap<'a>(&'a mut dyn rand::RngCore);
+impl rand::RngCore for RngWrap<'_> {
+    fn next_u32(&mut self) -> u32 {
+        self.0.next_u32()
+    }
+    fn next_u64(&mut self) -> u64 {
+        self.0.next_u64()
+    }
+    fn fill_bytes(&mut self, d: &mut [u8]) {
+        self.0.fill_bytes(d)
+    }
+    fn try_fill_bytes(&mut self, d: &mut [u8]) -> Result<(), rand::Error> {
+        self.0.try_fill_bytes(d)
+    }
+}
+
+/// A first action in one world: the turn played on greedily, then the opponent's turn, then the score.
+fn score_first(w: &Game, me: usize, a: &Action) -> f64 {
+    let mut g = w.clone_state();
+    if !g.apply(&Value::Object(a.clone())).ok {
+        return -WIN; // (not legal in this world: should not happen, its cards are the same)
+    }
+    if a["type"] != "end_turn" {
+        finish_turn(&mut g, me);
+    }
+    opponent_turn(&mut g, me);
+    eval(&g, me)
+}
+
+/// The rest of the bot's turn: the best action by the evaluation while it beats ending the turn.
+fn finish_turn(g: &mut Game, me: usize) {
+    for _ in 0..25 {
+        if g.game_over || g.current != me || g.phase != "PLAY" {
+            return;
+        }
+        let here = eval(g, me);
+        let mut best: Option<(Action, f64)> = None;
+        for a in g.legal_actions() {
+            if a.get("player").and_then(Value::as_i64) != Some(me as i64) || a["type"] == "concede" || a["type"] == "end_turn" {
+                continue;
+            }
+            let mut c = g.clone_state();
+            if !c.apply(&Value::Object(a.clone())).ok {
+                continue;
+            }
+            let s = eval(&c, me);
+            if best.as_ref().is_none_or(|b| s > b.1) {
+                best = Some((a, s));
+            }
+        }
+        match best {
+            Some((a, s)) if s > here + 0.05 => {
+                g.apply(&Value::Object(a));
+            }
+            _ => break,
+        }
+    }
+    if !g.game_over && g.current == me && g.phase == "PLAY" {
+        g.apply(&json!({"type": "end_turn", "player": me}));
+    }
+}
+
+/// The opponent's turn in this world, played by the engine's bot (greedy, it sees this world).
+fn opponent_turn(g: &mut Game, me: usize) {
+    let opp = 1 - me;
+    for _ in 0..30 {
+        if g.game_over || g.current != opp {
+            return;
+        }
+        if let Some(p) = &g.pending {
+            if p.player != opp {
+                return;
+            }
+        }
+        match bot::choose(g, opp) {
+            Some(a) => {
+                if !g.apply(&Value::Object(a)).ok {
+                    return;
+                }
+            }
+            None => return,
+        }
+    }
+}
+
+/// The position for player `me`: own side minus the opponent's; a finished game is ±WIN.
+pub fn eval(g: &Game, me: usize) -> f64 {
+    if g.game_over {
+        return if g.winner == me as i64 { WIN } else if g.winner == -1 { 0.0 } else { -WIN };
+    }
+    side(g, me, true) - side(g, 1 - me, false)
+}
+
+fn side(g: &Game, p: usize, own: bool) -> f64 {
+    let n = g.n();
+    let pl = &g.players[p];
+    let hero = g.e(pl.hero);
+    let life = (hero.health() + hero.tag(n.armor)) as f64;
+    // each point of life counts more when little is left
+    let mut v = life - 0.12 * (15.0 - life).max(0.0).powi(2);
+    for &m in &pl.board {
+        let e = g.e(m);
+        let (a, h) = (e.atk() as f64, e.health() as f64);
+        let mut mv = 1.0 + 1.5 * a + h;
+        if e.has(n.guard) {
+            mv += 1.5;
+        }
+        if e.has(n.barrier) {
+            mv += a + 1.0;
+        }
+        if e.has(n.double_attack) {
+            mv += 0.8 * a;
+        }
+        if e.has(n.stealth) {
+            mv += 1.0;
+        }
+        if e.has(n.frozen) {
+            mv -= 0.7 * a;
+        }
+        if e.has(n.cant_attack) {
+            mv -= 0.8 * a;
+        }
+        mv += 1.5 * e.spell_power(n.spell_power) as f64;
+        v += mv;
+    }
+    if let Some(w) = pl.weapon {
+        let w = g.e(w);
+        v += 0.75 * w.atk() as f64 * w.tag(n.durability).max(0) as f64;
+    }
+    let hand = pl.hand.len() as f64;
+    v += 2.2 * hand.min(8.0) + 0.5 * (hand - 8.0).max(0.0);
+    if own {
+        v += 3.0 * pl.secrets.len() as f64;
+    } else {
+        v += 2.5 * pl.secrets.len() as f64;
+    }
+    if pl.deck.is_empty() {
+        v -= (pl.fatigue + 1) as f64;
+    }
+    v
+}
+
+/// The opening hand: keep the cheap cards (and the Coin), replace those costing 4 or more; a 3 stays
+/// only next to a cheaper card.
+fn mulligan(g: &Game, me: usize) -> Action {
+    let hand = &g.players[me].hand;
+    let cheap = hand.iter().any(|&e| g.cost(e) <= 2);
+    let mut replace: Vec<i64> = hand.iter().copied().filter(|&e| g.cost(e) >= 4 || (g.cost(e) == 3 && !cheap)).collect();
+    replace.sort();
+    json!({"type": "mulligan", "player": me, "replace": replace}).as_object().unwrap().clone()
+}
+
+/// An action in words, with card names.
+pub fn label(k: &Knowledge, g: &Game, a: &Action) -> String {
+    let name = |id: Option<i64>| -> String {
+        match id {
+            Some(id) if id >= 1 && (id as usize) <= g.entities.len() => {
+                let e = g.e(id);
+                if e.is_champion() {
+                    if e.controller == k.seat { "свой герой".into() } else { "герой соперника".into() }
+                } else {
+                    k.lib.name(&e.card_id)
+                }
+            }
+            _ => "?".into(),
+        }
+    };
+    let get = |f: &str| a.get(f).and_then(Value::as_i64).filter(|&x| x > 0);
+    match a["type"].as_str().unwrap_or("") {
+        "end_turn" => "закончить ход".into(),
+        "attack" => format!("{} → {}", name(get("attacker")), name(get("defender"))),
+        "hero_power" => match get("target") {
+            Some(t) => format!("сила героя → {}", name(Some(t))),
+            None => "сила героя".into(),
+        },
+        "play" => match get("target") {
+            Some(t) => format!("{} → {}", name(get("entity")), name(Some(t))),
+            None => name(get("entity")),
+        },
+        "choose" => format!("выбор: {}", name(get("option"))),
+        "mulligan" => "замена карт".into(),
+        t => t.to_string(),
+    }
+}

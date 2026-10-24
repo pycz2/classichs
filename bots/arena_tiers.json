@@ -1,0 +1,2825 @@
+{
+ "version": 1,
+ "scale": "0-100",
+ "cards": {
+  "VAN_CS1_042": {
+   "score": 2,
+   "name": "Goldshire Footman",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 6
+   }
+  },
+  "VAN_CS1_069": {
+   "score": 62,
+   "name": "Fen Creeper",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 58
+   }
+  },
+  "VAN_CS1_112": {
+   "score": 92,
+   "name": "Holy Nova",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS1_113": {
+   "score": 64,
+   "name": "Mind Control",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS1_129": {
+   "score": 34,
+   "name": "Inner Fire",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS1_130": {
+   "score": 62,
+   "name": "Holy Smite",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_003": {
+   "score": 50,
+   "name": "Mind Vision",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_004": {
+   "score": 76,
+   "name": "Power Word: Shield",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_005": {
+   "score": 60,
+   "name": "Claw",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_007": {
+   "score": 30,
+   "name": "Healing Touch",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_008": {
+   "score": 34,
+   "name": "Moonfire",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_009": {
+   "score": 46,
+   "name": "Mark of the Wild",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_011": {
+   "score": 58,
+   "name": "Savage Roar",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_012": {
+   "score": 94,
+   "name": "Swipe",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_013": {
+   "score": 30,
+   "name": "Wild Growth",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_022": {
+   "score": 80,
+   "name": "Polymorph",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_023": {
+   "score": 54,
+   "name": "Arcane Intellect",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_024": {
+   "score": 80,
+   "name": "Frostbolt",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_025": {
+   "score": 40,
+   "name": "Arcane Explosion",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_026": {
+   "score": 32,
+   "name": "Frost Nova",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_027": {
+   "score": 42,
+   "name": "Mirror Image",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_028": {
+   "score": 88,
+   "name": "Blizzard",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_029": {
+   "score": 94,
+   "name": "Fireball",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_031": {
+   "score": 12,
+   "name": "Ice Lance",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_032": {
+   "score": 92,
+   "name": "Flamestrike",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_033": {
+   "score": 88,
+   "name": "Water Elemental",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_037": {
+   "score": 38,
+   "name": "Frost Shock",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_038": {
+   "score": 44,
+   "name": "Ancestral Spirit",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_039": {
+   "score": 38,
+   "name": "Windfury",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_041": {
+   "score": 14,
+   "name": "Ancestral Healing",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_042": {
+   "score": 96,
+   "name": "Fire Elemental",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_045": {
+   "score": 76,
+   "name": "Rockbiter Weapon",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_046": {
+   "score": 60,
+   "name": "Bloodlust",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_053": {
+   "score": 38,
+   "name": "Far Sight",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_057": {
+   "score": 60,
+   "name": "Shadow Bolt",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_059": {
+   "score": 54,
+   "name": "Blood Imp",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_061": {
+   "score": 36,
+   "name": "Drain Life",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_062": {
+   "score": 62,
+   "name": "Hellfire",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_063": {
+   "score": 30,
+   "name": "Corruption",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_064": {
+   "score": 80,
+   "name": "Dread Infernal",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_065": {
+   "score": 38,
+   "name": "Voidwalker",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_072": {
+   "score": 88,
+   "name": "Backstab",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_073": {
+   "score": 42,
+   "name": "Cold Blood",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_074": {
+   "score": 86,
+   "name": "Deadly Poison",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_075": {
+   "score": 4,
+   "name": "Sinister Strike",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_076": {
+   "score": 74,
+   "name": "Assassinate",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_077": {
+   "score": 66,
+   "name": "Sprint",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_080": {
+   "score": 68,
+   "name": "Assassin's Blade",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_084": {
+   "score": 56,
+   "name": "Hunter's Mark",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG) + adjusted",
+   "note": "pre-nerf: 0 mana (sheet rated the 1-mana version)"
+  },
+  "VAN_CS2_087": {
+   "score": 40,
+   "name": "Blessing of Might",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_088": {
+   "score": 66,
+   "name": "Guardian of Kings",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_089": {
+   "score": 32,
+   "name": "Holy Light",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_091": {
+   "score": 52,
+   "name": "Light's Justice",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_092": {
+   "score": 70,
+   "name": "Blessing of Kings",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_093": {
+   "score": 90,
+   "name": "Consecration",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_094": {
+   "score": 66,
+   "name": "Hammer of Wrath",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_097": {
+   "score": 94,
+   "name": "Truesilver Champion",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_103": {
+   "score": 32,
+   "name": "Charge",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_104": {
+   "score": 20,
+   "name": "Rampage",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_105": {
+   "score": 52,
+   "name": "Heroic Strike",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_106": {
+   "score": 96,
+   "name": "Fiery War Axe",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_108": {
+   "score": 62,
+   "name": "Execute",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_112": {
+   "score": 86,
+   "name": "Arcanite Reaper",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_114": {
+   "score": 66,
+   "name": "Cleave",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_117": {
+   "score": 64,
+   "name": "Earthen Ring Farseer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 60,
+    "PRIEST": 66,
+    "ROGUE": 66,
+    "WARLOCK": 68
+   }
+  },
+  "VAN_CS2_118": {
+   "score": 6,
+   "name": "Magma Rager",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_119": {
+   "score": 44,
+   "name": "Oasis Snapjaw",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 48,
+    "MAGE": 42
+   }
+  },
+  "VAN_CS2_120": {
+   "score": 46,
+   "name": "River Crocolisk",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 50
+   }
+  },
+  "VAN_CS2_121": {
+   "score": 30,
+   "name": "Frostwolf Grunt",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_122": {
+   "score": 12,
+   "name": "Raid Leader",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 16,
+    "SHAMAN": 18
+   }
+  },
+  "VAN_CS2_124": {
+   "score": 44,
+   "name": "Wolfrider",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 46,
+    "PRIEST": 46
+   }
+  },
+  "VAN_CS2_125": {
+   "score": 44,
+   "name": "Ironfur Grizzly",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 46,
+    "PRIEST": 42
+   }
+  },
+  "VAN_CS2_127": {
+   "score": 4,
+   "name": "Silverback Patriarch",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 10
+   }
+  },
+  "VAN_CS2_131": {
+   "score": 46,
+   "name": "Stormwind Knight",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_141": {
+   "score": 16,
+   "name": "Ironforge Rifleman",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 24,
+    "MAGE": 12,
+    "PALADIN": 20,
+    "PRIEST": 24,
+    "SHAMAN": 20,
+    "WARLOCK": 20,
+    "WARRIOR": 26
+   }
+  },
+  "VAN_CS2_142": {
+   "score": 42,
+   "name": "Kobold Geomancer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 44,
+    "ROGUE": 46,
+    "SHAMAN": 44
+   }
+  },
+  "VAN_CS2_146": {
+   "score": 2,
+   "name": "Southsea Deckhand",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 4,
+    "PALADIN": 10,
+    "ROGUE": 50,
+    "SHAMAN": 10,
+    "WARLOCK": 6,
+    "WARRIOR": 32
+   }
+  },
+  "VAN_CS2_147": {
+   "score": 54,
+   "name": "Gnomish Inventor",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 52
+   }
+  },
+  "VAN_CS2_150": {
+   "score": 44,
+   "name": "Stormpike Commando",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 46,
+    "PRIEST": 46,
+    "WARRIOR": 46
+   }
+  },
+  "VAN_CS2_151": {
+   "score": 72,
+   "name": "Silver Hand Knight",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 70
+   }
+  },
+  "VAN_CS2_155": {
+   "score": 50,
+   "name": "Archmage",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 52
+   }
+  },
+  "VAN_CS2_161": {
+   "score": 50,
+   "name": "Ravenholdt Assassin",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 56
+   }
+  },
+  "VAN_CS2_162": {
+   "score": 46,
+   "name": "Lord of the Arena",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 42,
+    "SHAMAN": 44
+   }
+  },
+  "VAN_CS2_168": {
+   "score": 2,
+   "name": "Murloc Raider",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 6
+   }
+  },
+  "VAN_CS2_169": {
+   "score": 1,
+   "name": "Young Dragonhawk",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 2,
+    "WARLOCK": 2
+   }
+  },
+  "VAN_CS2_171": {
+   "score": 10,
+   "name": "Stonetusk Boar",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 32,
+    "PALADIN": 12,
+    "PRIEST": 14,
+    "SHAMAN": 12,
+    "WARLOCK": 18
+   }
+  },
+  "VAN_CS2_172": {
+   "score": 54,
+   "name": "Bloodfen Raptor",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 58
+   }
+  },
+  "VAN_CS2_173": {
+   "score": 44,
+   "name": "Bluegill Warrior",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 46
+   }
+  },
+  "VAN_CS2_179": {
+   "score": 74,
+   "name": "Sen'jin Shieldmasta",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_181": {
+   "score": 58,
+   "name": "Injured Blademaster",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 56,
+    "PRIEST": 64
+   }
+  },
+  "VAN_CS2_182": {
+   "score": 84,
+   "name": "Chillwind Yeti",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_186": {
+   "score": 40,
+   "name": "War Golem",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_187": {
+   "score": 34,
+   "name": "Booty Bay Bodyguard",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 30
+   }
+  },
+  "VAN_CS2_188": {
+   "score": 32,
+   "name": "Abusive Sergeant",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "SHAMAN": 34,
+    "WARLOCK": 38
+   }
+  },
+  "VAN_CS2_189": {
+   "score": 32,
+   "name": "Elven Archer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 40,
+    "MAGE": 28,
+    "PALADIN": 34,
+    "PRIEST": 40,
+    "SHAMAN": 34,
+    "WARLOCK": 36,
+    "WARRIOR": 42
+   }
+  },
+  "VAN_CS2_196": {
+   "score": 44,
+   "name": "Razorfen Hunter",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 46,
+    "PRIEST": 42
+   }
+  },
+  "VAN_CS2_197": {
+   "score": 54,
+   "name": "Ogre Magi",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 56,
+    "MAGE": 52,
+    "ROGUE": 58,
+    "SHAMAN": 56
+   }
+  },
+  "VAN_CS2_200": {
+   "score": 78,
+   "name": "Boulderfist Ogre",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_201": {
+   "score": 30,
+   "name": "Core Hound",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 36
+   }
+  },
+  "VAN_CS2_203": {
+   "score": 40,
+   "name": "Ironbeak Owl",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 46
+   }
+  },
+  "VAN_CS2_213": {
+   "score": 42,
+   "name": "Reckless Rocketeer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 48,
+    "PRIEST": 44
+   }
+  },
+  "VAN_CS2_221": {
+   "score": 54,
+   "name": "Spiteful Smith",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 52,
+    "PALADIN": 56,
+    "ROGUE": 78,
+    "SHAMAN": 56,
+    "WARRIOR": 68
+   }
+  },
+  "VAN_CS2_222": {
+   "score": 68,
+   "name": "Stormwind Champion",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 72,
+    "PRIEST": 66,
+    "SHAMAN": 74
+   }
+  },
+  "VAN_CS2_226": {
+   "score": 54,
+   "name": "Frostwolf Warlord",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 52,
+    "PALADIN": 60,
+    "PRIEST": 50,
+    "SHAMAN": 60
+   }
+  },
+  "VAN_CS2_227": {
+   "score": 68,
+   "name": "Venture Co. Mercenary",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 66
+   }
+  },
+  "VAN_CS2_231": {
+   "score": 2,
+   "name": "Wisp",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "ROGUE": 6
+   }
+  },
+  "VAN_CS2_232": {
+   "score": 76,
+   "name": "Ironbark Protector",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_233": {
+   "score": 50,
+   "name": "Blade Flurry",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_234": {
+   "score": 86,
+   "name": "Shadow Word: Pain",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_235": {
+   "score": 58,
+   "name": "Northshire Cleric",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_236": {
+   "score": 44,
+   "name": "Divine Spirit",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_CS2_237": {
+   "score": 38,
+   "name": "Starving Buzzard",
+   "class": "HUNTER",
+   "src": "heuristic",
+   "note": "pre-nerf: 2-mana 2/1 (sheet rated the 5-mana 3/2)"
+  },
+  "VAN_DS1_055": {
+   "score": 54,
+   "name": "Darkscale Healer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 52,
+    "PRIEST": 58,
+    "ROGUE": 56,
+    "WARLOCK": 58
+   }
+  },
+  "VAN_DS1_070": {
+   "score": 62,
+   "name": "Houndmaster",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_DS1_175": {
+   "score": 26,
+   "name": "Timber Wolf",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_DS1_178": {
+   "score": 46,
+   "name": "Tundra Rhino",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_DS1_183": {
+   "score": 68,
+   "name": "Multi-Shot",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_DS1_184": {
+   "score": 56,
+   "name": "Tracking",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_DS1_185": {
+   "score": 62,
+   "name": "Arcane Shot",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_DS1_188": {
+   "score": 86,
+   "name": "Gladiator's Longbow",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_DS1_233": {
+   "score": 4,
+   "name": "Mind Blast",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_001": {
+   "score": 1,
+   "name": "Lightwarden",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PRIEST": 58,
+    "SHAMAN": 6,
+    "WARLOCK": 2
+   }
+  },
+  "VAN_EX1_002": {
+   "score": 92,
+   "name": "The Black Knight",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_004": {
+   "score": 18,
+   "name": "Young Priestess",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PRIEST": 20,
+    "WARLOCK": 26
+   }
+  },
+  "VAN_EX1_005": {
+   "score": 58,
+   "name": "Big Game Hunter",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_006": {
+   "score": 4,
+   "name": "Alarm-o-Bot",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_007": {
+   "score": 44,
+   "name": "Acolyte of Pain",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "MAGE": 50,
+    "WARLOCK": 42,
+    "WARRIOR": 46
+   }
+  },
+  "VAN_EX1_008": {
+   "score": 32,
+   "name": "Argent Squire",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 38
+   }
+  },
+  "VAN_EX1_009": {
+   "score": 1,
+   "name": "Angry Chicken",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 2,
+    "WARLOCK": 2
+   }
+  },
+  "VAN_EX1_010": {
+   "score": 56,
+   "name": "Worgen Infiltrator",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 54,
+    "MAGE": 52,
+    "WARLOCK": 60
+   }
+  },
+  "VAN_EX1_011": {
+   "score": 10,
+   "name": "Voodoo Doctor",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PRIEST": 14,
+    "ROGUE": 12,
+    "WARLOCK": 16
+   }
+  },
+  "VAN_EX1_012": {
+   "score": 48,
+   "name": "Bloodmage Thalnos",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 52,
+    "ROGUE": 56,
+    "SHAMAN": 56
+   }
+  },
+  "VAN_EX1_014": {
+   "score": 60,
+   "name": "King Mukla",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 62,
+    "PRIEST": 62,
+    "WARLOCK": 62
+   }
+  },
+  "VAN_EX1_015": {
+   "score": 30,
+   "name": "Novice Engineer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 26,
+    "WARLOCK": 28
+   }
+  },
+  "VAN_EX1_016": {
+   "score": 88,
+   "name": "Sylvanas Windrunner",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 90
+   }
+  },
+  "VAN_EX1_017": {
+   "score": 52,
+   "name": "Jungle Panther",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 58,
+    "PRIEST": 50
+   }
+  },
+  "VAN_EX1_019": {
+   "score": 66,
+   "name": "Shattered Sun Cleric",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 68,
+    "SHAMAN": 68
+   }
+  },
+  "VAN_EX1_020": {
+   "score": 68,
+   "name": "Scarlet Crusader",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_021": {
+   "score": 8,
+   "name": "Thrallmar Farseer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 6,
+    "MAGE": 6,
+    "PRIEST": 6
+   }
+  },
+  "VAN_EX1_023": {
+   "score": 40,
+   "name": "Silvermoon Guardian",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "MAGE": 38,
+    "PRIEST": 38
+   }
+  },
+  "VAN_EX1_025": {
+   "score": 34,
+   "name": "Dragonling Mechanic",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "MAGE": 32
+   }
+  },
+  "VAN_EX1_028": {
+   "score": 62,
+   "name": "Stranglethorn Tiger",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 60,
+    "HUNTER": 66
+   }
+  },
+  "VAN_EX1_029": {
+   "score": 10,
+   "name": "Leper Gnome",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 18
+   }
+  },
+  "VAN_EX1_032": {
+   "score": 84,
+   "name": "Sunwalker",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 82
+   }
+  },
+  "VAN_EX1_033": {
+   "score": 30,
+   "name": "Windfury Harpy",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "SHAMAN": 28
+   }
+  },
+  "VAN_EX1_043": {
+   "score": 66,
+   "name": "Twilight Drake",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 70
+   }
+  },
+  "VAN_EX1_044": {
+   "score": 52,
+   "name": "Questing Adventurer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "ROGUE": 56
+   }
+  },
+  "VAN_EX1_045": {
+   "score": 2,
+   "name": "Ancient Watcher",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_046": {
+   "score": 78,
+   "name": "Dark Iron Dwarf",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "SHAMAN": 80
+   }
+  },
+  "VAN_EX1_048": {
+   "score": 66,
+   "name": "Spellbreaker",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_049": {
+   "score": 56,
+   "name": "Youthful Brewmaster",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_050": {
+   "score": 12,
+   "name": "Coldlight Oracle",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 8
+   }
+  },
+  "VAN_EX1_055": {
+   "score": 12,
+   "name": "Mana Addict",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_057": {
+   "score": 56,
+   "name": "Ancient Brewmaster",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "MAGE": 54
+   }
+  },
+  "VAN_EX1_058": {
+   "score": 48,
+   "name": "Sunfury Protector",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 46,
+    "PALADIN": 50,
+    "SHAMAN": 50
+   }
+  },
+  "VAN_EX1_059": {
+   "score": 54,
+   "name": "Crazed Alchemist",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PRIEST": 58
+   }
+  },
+  "VAN_EX1_062": {
+   "score": 30,
+   "name": "Old Murk-Eye",
+   "class": "NEUTRAL",
+   "src": "heuristic"
+  },
+  "VAN_EX1_066": {
+   "score": 68,
+   "name": "Acidic Swamp Ooze",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_067": {
+   "score": 86,
+   "name": "Argent Commander",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 88,
+    "PRIEST": 88
+   }
+  },
+  "VAN_EX1_076": {
+   "score": 40,
+   "name": "Pint-Sized Summoner",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_080": {
+   "score": 1,
+   "name": "Secretkeeper",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 2,
+    "MAGE": 2,
+    "PALADIN": 2,
+    "WARLOCK": 2
+   }
+  },
+  "VAN_EX1_082": {
+   "score": 66,
+   "name": "Mad Bomber",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARRIOR": 68
+   }
+  },
+  "VAN_EX1_083": {
+   "score": 48,
+   "name": "Tinkmaster Overspark",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 46,
+    "PALADIN": 50,
+    "SHAMAN": 50
+   }
+  },
+  "VAN_EX1_084": {
+   "score": 52,
+   "name": "Warsong Commander",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_085": {
+   "score": 62,
+   "name": "Mind Control Tech",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_089": {
+   "score": 42,
+   "name": "Arcane Golem",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 48,
+    "PRIEST": 44
+   }
+  },
+  "VAN_EX1_091": {
+   "score": 90,
+   "name": "Cabal Shadow Priest",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_093": {
+   "score": 74,
+   "name": "Defender of Argus",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 72,
+    "PALADIN": 78,
+    "SHAMAN": 82
+   }
+  },
+  "VAN_EX1_095": {
+   "score": 60,
+   "name": "Gadgetzan Auctioneer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG) + adjusted",
+   "note": "pre-nerf: 5 mana (sheet rated the 6-mana version)",
+   "by_class": {
+    "ROGUE": 70,
+    "SHAMAN": 70
+   }
+  },
+  "VAN_EX1_096": {
+   "score": 54,
+   "name": "Loot Hoarder",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 52
+   }
+  },
+  "VAN_EX1_097": {
+   "score": 66,
+   "name": "Abomination",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG) + adjusted",
+   "note": "raised by hand (not from a list): ADWCTA had it at 46, the brief wants it near the top",
+   "by_class": {
+    "PALADIN": 64,
+    "ROGUE": 70,
+    "SHAMAN": 62,
+    "WARRIOR": 70
+   }
+  },
+  "VAN_EX1_100": {
+   "score": 12,
+   "name": "Lorewalker Cho",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_102": {
+   "score": 42,
+   "name": "Demolisher",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 40,
+    "PRIEST": 40
+   }
+  },
+  "VAN_EX1_103": {
+   "score": 10,
+   "name": "Coldlight Seer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_105": {
+   "score": 34,
+   "name": "Mountain Giant",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 40
+   }
+  },
+  "VAN_EX1_110": {
+   "score": 94,
+   "name": "Cairne Bloodhoof",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_112": {
+   "score": 50,
+   "name": "Gelbin Mekkatorque",
+   "class": "NEUTRAL",
+   "src": "heuristic"
+  },
+  "VAN_EX1_116": {
+   "score": 62,
+   "name": "Leeroy Jenkins",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG) + adjusted",
+   "note": "pre-nerf: 4 mana (sheet rated the 5-mana version)",
+   "by_class": {
+    "DRUID": 66,
+    "HUNTER": 72,
+    "MAGE": 66,
+    "PRIEST": 64,
+    "ROGUE": 66
+   }
+  },
+  "VAN_EX1_124": {
+   "score": 90,
+   "name": "Eviscerate",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_126": {
+   "score": 62,
+   "name": "Betrayal",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_128": {
+   "score": 30,
+   "name": "Conceal",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_129": {
+   "score": 56,
+   "name": "Fan of Knives",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_130": {
+   "score": 42,
+   "name": "Noble Sacrifice",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_131": {
+   "score": 60,
+   "name": "Defias Ringleader",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_132": {
+   "score": 2,
+   "name": "Eye for an Eye",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_133": {
+   "score": 74,
+   "name": "Perdition's Blade",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_134": {
+   "score": 92,
+   "name": "SI:7 Agent",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_136": {
+   "score": 38,
+   "name": "Redemption",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_137": {
+   "score": 8,
+   "name": "Headcrack",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_144": {
+   "score": 28,
+   "name": "Shadowstep",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_145": {
+   "score": 16,
+   "name": "Preparation",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_154": {
+   "score": 74,
+   "name": "Wrath",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_155": {
+   "score": 44,
+   "name": "Mark of Nature",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_158": {
+   "score": 34,
+   "name": "Soul of the Forest",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_160": {
+   "score": 66,
+   "name": "Power of the Wild",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_161": {
+   "score": 30,
+   "name": "Naturalize",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_162": {
+   "score": 50,
+   "name": "Dire Wolf Alpha",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 54,
+    "PALADIN": 52,
+    "SHAMAN": 54
+   }
+  },
+  "VAN_EX1_164": {
+   "score": 70,
+   "name": "Nourish",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_165": {
+   "score": 82,
+   "name": "Druid of the Claw",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_166": {
+   "score": 80,
+   "name": "Keeper of the Grove",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_169": {
+   "score": 54,
+   "name": "Innervate",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_170": {
+   "score": 60,
+   "name": "Emperor Cobra",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 62,
+    "HUNTER": 64,
+    "PALADIN": 64,
+    "WARLOCK": 62
+   }
+  },
+  "VAN_EX1_173": {
+   "score": 68,
+   "name": "Starfire",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_178": {
+   "score": 94,
+   "name": "Ancient of War",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_238": {
+   "score": 68,
+   "name": "Lightning Bolt",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_241": {
+   "score": 76,
+   "name": "Lava Burst",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_243": {
+   "score": 2,
+   "name": "Dust Devil",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_244": {
+   "score": 6,
+   "name": "Totemic Might",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_245": {
+   "score": 52,
+   "name": "Earth Shock",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_246": {
+   "score": 90,
+   "name": "Hex",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_247": {
+   "score": 90,
+   "name": "Stormforged Axe",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_248": {
+   "score": 68,
+   "name": "Feral Spirit",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_249": {
+   "score": 84,
+   "name": "Baron Geddon",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 86,
+    "PALADIN": 78,
+    "ROGUE": 82,
+    "SHAMAN": 74,
+    "WARLOCK": 76,
+    "WARRIOR": 88
+   }
+  },
+  "VAN_EX1_250": {
+   "score": 94,
+   "name": "Earth Elemental",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_251": {
+   "score": 64,
+   "name": "Forked Lightning",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_258": {
+   "score": 64,
+   "name": "Unbound Elemental",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_259": {
+   "score": 96,
+   "name": "Lightning Storm",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_274": {
+   "score": 34,
+   "name": "Ethereal Arcanist",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_275": {
+   "score": 50,
+   "name": "Cone of Cold",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_277": {
+   "score": 48,
+   "name": "Arcane Missiles",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_278": {
+   "score": 54,
+   "name": "Shiv",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_279": {
+   "score": 76,
+   "name": "Pyroblast",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_283": {
+   "score": 60,
+   "name": "Frost Elemental",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_284": {
+   "score": 90,
+   "name": "Azure Drake",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 92,
+    "ROGUE": 92,
+    "SHAMAN": 92,
+    "WARLOCK": 86
+   }
+  },
+  "VAN_EX1_287": {
+   "score": 48,
+   "name": "Counterspell",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_289": {
+   "score": 34,
+   "name": "Ice Barrier",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_294": {
+   "score": 50,
+   "name": "Mirror Entity",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_295": {
+   "score": 20,
+   "name": "Ice Block",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_298": {
+   "score": 96,
+   "name": "Ragnaros the Firelord",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 98
+   }
+  },
+  "VAN_EX1_301": {
+   "score": 40,
+   "name": "Felguard",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_302": {
+   "score": 60,
+   "name": "Mortal Coil",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_303": {
+   "score": 74,
+   "name": "Shadowflame",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_304": {
+   "score": 42,
+   "name": "Void Terror",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_306": {
+   "score": 30,
+   "name": "Felstalker",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_308": {
+   "score": 88,
+   "name": "Soulfire",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_309": {
+   "score": 80,
+   "name": "Siphon Soul",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_310": {
+   "score": 84,
+   "name": "Doomguard",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_312": {
+   "score": 32,
+   "name": "Twisting Nether",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_313": {
+   "score": 68,
+   "name": "Pit Lord",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_315": {
+   "score": 16,
+   "name": "Summoning Portal",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_316": {
+   "score": 46,
+   "name": "Power Overwhelming",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_317": {
+   "score": 12,
+   "name": "Sense Demons",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_319": {
+   "score": 70,
+   "name": "Flame Imp",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_320": {
+   "score": 50,
+   "name": "Bane of Doom",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_323": {
+   "score": 96,
+   "name": "Lord Jaraxxus",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_332": {
+   "score": 34,
+   "name": "Silence",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_334": {
+   "score": 84,
+   "name": "Shadow Madness",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_335": {
+   "score": 68,
+   "name": "Lightspawn",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_339": {
+   "score": 52,
+   "name": "Thoughtsteal",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_341": {
+   "score": 14,
+   "name": "Lightwell",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_345": {
+   "score": 38,
+   "name": "Mindgames",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_349": {
+   "score": 38,
+   "name": "Divine Favor",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_350": {
+   "score": 64,
+   "name": "Prophet Velen",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_354": {
+   "score": 86,
+   "name": "Lay on Hands",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_355": {
+   "score": 30,
+   "name": "Blessed Champion",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_360": {
+   "score": 40,
+   "name": "Humility",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_362": {
+   "score": 78,
+   "name": "Argent Protector",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_363": {
+   "score": 54,
+   "name": "Blessing of Wisdom",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_365": {
+   "score": 44,
+   "name": "Holy Wrath",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_366": {
+   "score": 78,
+   "name": "Sword of Justice",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_371": {
+   "score": 46,
+   "name": "Hand of Protection",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_379": {
+   "score": 18,
+   "name": "Repentance",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_382": {
+   "score": 94,
+   "name": "Aldor Peacekeeper",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_383": {
+   "score": 100,
+   "name": "Tirion Fordring",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_384": {
+   "score": 86,
+   "name": "Avenging Wrath",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_390": {
+   "score": 18,
+   "name": "Tauren Warrior",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 16,
+    "MAGE": 22,
+    "PRIEST": 16,
+    "WARRIOR": 20
+   }
+  },
+  "VAN_EX1_391": {
+   "score": 64,
+   "name": "Slam",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_392": {
+   "score": 58,
+   "name": "Battle Rage",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_393": {
+   "score": 54,
+   "name": "Amani Berserker",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "MAGE": 60,
+    "WARRIOR": 56
+   }
+  },
+  "VAN_EX1_396": {
+   "score": 32,
+   "name": "Mogu'shan Warden",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 28,
+    "MAGE": 30
+   }
+  },
+  "VAN_EX1_398": {
+   "score": 92,
+   "name": "Arathi Weaponsmith",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_399": {
+   "score": 44,
+   "name": "Gurubashi Berserker",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 42,
+    "MAGE": 48,
+    "PRIEST": 48,
+    "WARRIOR": 46
+   }
+  },
+  "VAN_EX1_400": {
+   "score": 40,
+   "name": "Whirlwind",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_402": {
+   "score": 34,
+   "name": "Armorsmith",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_405": {
+   "score": 10,
+   "name": "Shieldbearer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 18
+   }
+  },
+  "VAN_EX1_407": {
+   "score": 70,
+   "name": "Brawl",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_408": {
+   "score": 58,
+   "name": "Mortal Strike",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_409": {
+   "score": 52,
+   "name": "Upgrade!",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_410": {
+   "score": 38,
+   "name": "Shield Slam",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_411": {
+   "score": 100,
+   "name": "Gorehowl",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_412": {
+   "score": 54,
+   "name": "Raging Worgen",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "MAGE": 58,
+    "PRIEST": 52,
+    "WARRIOR": 56
+   }
+  },
+  "VAN_EX1_414": {
+   "score": 82,
+   "name": "Grommash Hellscream",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_506": {
+   "score": 38,
+   "name": "Murloc Tidehunter",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_507": {
+   "score": 44,
+   "name": "Murloc Warleader",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 42
+   }
+  },
+  "VAN_EX1_508": {
+   "score": 1,
+   "name": "Grimscale Oracle",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 2
+   }
+  },
+  "VAN_EX1_509": {
+   "score": 1,
+   "name": "Murloc Tidecaller",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 2
+   }
+  },
+  "VAN_EX1_522": {
+   "score": 62,
+   "name": "Patient Assassin",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_531": {
+   "score": 44,
+   "name": "Scavenging Hyena",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_533": {
+   "score": 40,
+   "name": "Misdirection",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_534": {
+   "score": 96,
+   "name": "Savannah Highmane",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_536": {
+   "score": 82,
+   "name": "Eaglehorn Bow",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_537": {
+   "score": 96,
+   "name": "Explosive Shot",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_538": {
+   "score": 64,
+   "name": "Unleash the Hounds",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_539": {
+   "score": 68,
+   "name": "Kill Command",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_543": {
+   "score": 86,
+   "name": "King Krush",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_544": {
+   "score": 52,
+   "name": "Flare",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_549": {
+   "score": 42,
+   "name": "Bestial Wrath",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_554": {
+   "score": 50,
+   "name": "Snake Trap",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_556": {
+   "score": 74,
+   "name": "Harvest Golem",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 72
+   }
+  },
+  "VAN_EX1_557": {
+   "score": 28,
+   "name": "Nat Pagle",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_558": {
+   "score": 70,
+   "name": "Harrison Jones",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 68
+   }
+  },
+  "VAN_EX1_559": {
+   "score": 88,
+   "name": "Archmage Antonidas",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_560": {
+   "score": 36,
+   "name": "Nozdormu",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_561": {
+   "score": 68,
+   "name": "Alexstrasza",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "ROGUE": 78,
+    "WARLOCK": 82,
+    "WARRIOR": 72
+   }
+  },
+  "VAN_EX1_562": {
+   "score": 88,
+   "name": "Onyxia",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_563": {
+   "score": 62,
+   "name": "Malygos",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 64,
+    "ROGUE": 66,
+    "SHAMAN": 66
+   }
+  },
+  "VAN_EX1_564": {
+   "score": 64,
+   "name": "Faceless Manipulator",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_565": {
+   "score": 72,
+   "name": "Flametongue Totem",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_567": {
+   "score": 70,
+   "name": "Doomhammer",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_570": {
+   "score": 54,
+   "name": "Bite",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_571": {
+   "score": 64,
+   "name": "Force of Nature",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_572": {
+   "score": 98,
+   "name": "Ysera",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 96,
+    "WARLOCK": 94
+   }
+  },
+  "VAN_EX1_573": {
+   "score": 90,
+   "name": "Cenarius",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_575": {
+   "score": 66,
+   "name": "Mana Tide Totem",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_577": {
+   "score": 54,
+   "name": "The Beast",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 58
+   }
+  },
+  "VAN_EX1_578": {
+   "score": 10,
+   "name": "Savagery",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_581": {
+   "score": 52,
+   "name": "Sap",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_582": {
+   "score": 10,
+   "name": "Dalaran Mage",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 12,
+    "ROGUE": 14,
+    "SHAMAN": 12
+   }
+  },
+  "VAN_EX1_583": {
+   "score": 32,
+   "name": "Priestess of Elune",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "ROGUE": 36,
+    "WARLOCK": 40,
+    "WARRIOR": 34
+   }
+  },
+  "VAN_EX1_584": {
+   "score": 16,
+   "name": "Ancient Mage",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 18,
+    "MAGE": 14,
+    "ROGUE": 18,
+    "SHAMAN": 18
+   }
+  },
+  "VAN_EX1_586": {
+   "score": 86,
+   "name": "Sea Giant",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 90,
+    "SHAMAN": 90
+   }
+  },
+  "VAN_EX1_587": {
+   "score": 50,
+   "name": "Windspeaker",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_590": {
+   "score": 62,
+   "name": "Blood Knight",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_591": {
+   "score": 76,
+   "name": "Auchenai Soulpriest",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_593": {
+   "score": 30,
+   "name": "Nightblade",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 28,
+    "HUNTER": 36
+   }
+  },
+  "VAN_EX1_594": {
+   "score": 42,
+   "name": "Vaporize",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_595": {
+   "score": 68,
+   "name": "Cult Master",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 70,
+    "PRIEST": 66,
+    "WARLOCK": 66
+   }
+  },
+  "VAN_EX1_596": {
+   "score": 54,
+   "name": "Demonfire",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_597": {
+   "score": 66,
+   "name": "Imp Master",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 64,
+    "PRIEST": 70,
+    "SHAMAN": 68,
+    "WARLOCK": 68
+   }
+  },
+  "VAN_EX1_603": {
+   "score": 62,
+   "name": "Cruel Taskmaster",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_604": {
+   "score": 84,
+   "name": "Frothing Berserker",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_606": {
+   "score": 44,
+   "name": "Shield Block",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_607": {
+   "score": 40,
+   "name": "Inner Rage",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_608": {
+   "score": 64,
+   "name": "Sorcerer's Apprentice",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_609": {
+   "score": 38,
+   "name": "Snipe",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_610": {
+   "score": 46,
+   "name": "Explosive Trap",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_611": {
+   "score": 52,
+   "name": "Freezing Trap",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_612": {
+   "score": 66,
+   "name": "Kirin Tor Mage",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_613": {
+   "score": 82,
+   "name": "Edwin VanCleef",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_614": {
+   "score": 66,
+   "name": "Illidan Stormrage",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "ROGUE": 70,
+    "WARLOCK": 74
+   }
+  },
+  "VAN_EX1_616": {
+   "score": 30,
+   "name": "Mana Wraith",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "MAGE": 18,
+    "WARLOCK": 24
+   }
+  },
+  "VAN_EX1_617": {
+   "score": 72,
+   "name": "Deadly Shot",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_619": {
+   "score": 82,
+   "name": "Equality",
+   "class": "PALADIN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_620": {
+   "score": 54,
+   "name": "Molten Giant",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG) + adjusted",
+   "note": "pre-nerf: base cost 20 (sheet rated 25)",
+   "by_class": {
+    "DRUID": 60,
+    "ROGUE": 80,
+    "SHAMAN": 58,
+    "WARLOCK": 80,
+    "WARRIOR": 68
+   }
+  },
+  "VAN_EX1_621": {
+   "score": 12,
+   "name": "Circle of Healing",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_622": {
+   "score": 82,
+   "name": "Shadow Word: Death",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_623": {
+   "score": 86,
+   "name": "Temple Enforcer",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_624": {
+   "score": 78,
+   "name": "Holy Fire",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_625": {
+   "score": 46,
+   "name": "Shadowform",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_EX1_626": {
+   "score": 34,
+   "name": "Mass Dispel",
+   "class": "PRIEST",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_003": {
+   "score": 1,
+   "name": "Sacrificial Pact",
+   "class": "WARLOCK",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_004": {
+   "score": 10,
+   "name": "Vanish",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_005": {
+   "score": 36,
+   "name": "Kidnapper",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_007": {
+   "score": 86,
+   "name": "Starfall",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_008": {
+   "score": 98,
+   "name": "Ancient of Lore",
+   "class": "DRUID",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_010": {
+   "score": 78,
+   "name": "Al'Akir the Windlord",
+   "class": "SHAMAN",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_011": {
+   "score": 70,
+   "name": "Kor'kron Elite",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_012": {
+   "score": 60,
+   "name": "Mana Wyrm",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_014": {
+   "score": 56,
+   "name": "Master of Disguise",
+   "class": "ROGUE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_016": {
+   "score": 16,
+   "name": "Captain's Parrot",
+   "class": "NEUTRAL",
+   "src": "heuristic"
+  },
+  "VAN_NEW1_017": {
+   "score": 2,
+   "name": "Hungry Crab",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "WARLOCK": 6
+   }
+  },
+  "VAN_NEW1_018": {
+   "score": 46,
+   "name": "Bloodsail Raider",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 48,
+    "ROGUE": 60,
+    "SHAMAN": 48,
+    "WARRIOR": 56
+   }
+  },
+  "VAN_NEW1_019": {
+   "score": 76,
+   "name": "Knife Juggler",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 78,
+    "SHAMAN": 78,
+    "WARLOCK": 78
+   }
+  },
+  "VAN_NEW1_020": {
+   "score": 56,
+   "name": "Wild Pyromancer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PRIEST": 60,
+    "WARRIOR": 58
+   }
+  },
+  "VAN_NEW1_021": {
+   "score": 12,
+   "name": "Doomsayer",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_022": {
+   "score": 10,
+   "name": "Dread Corsair",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PALADIN": 22,
+    "ROGUE": 42,
+    "SHAMAN": 18,
+    "WARRIOR": 30
+   }
+  },
+  "VAN_NEW1_023": {
+   "score": 62,
+   "name": "Faerie Dragon",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_024": {
+   "score": 30,
+   "name": "Captain Greenskin",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 34,
+    "PALADIN": 54,
+    "ROGUE": 72,
+    "SHAMAN": 54,
+    "WARRIOR": 66
+   }
+  },
+  "VAN_NEW1_025": {
+   "score": 10,
+   "name": "Bloodsail Corsair",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_026": {
+   "score": 64,
+   "name": "Violet Teacher",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "ROGUE": 66,
+    "SHAMAN": 66
+   }
+  },
+  "VAN_NEW1_027": {
+   "score": 44,
+   "name": "Southsea Captain",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 42,
+    "ROGUE": 46,
+    "WARRIOR": 46
+   }
+  },
+  "VAN_NEW1_029": {
+   "score": 42,
+   "name": "Millhouse Manastorm",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "PRIEST": 44
+   }
+  },
+  "VAN_NEW1_030": {
+   "score": 70,
+   "name": "Deathwing",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "DRUID": 72,
+    "PALADIN": 72,
+    "WARLOCK": 86
+   }
+  },
+  "VAN_NEW1_031": {
+   "score": 78,
+   "name": "Animal Companion",
+   "class": "HUNTER",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_036": {
+   "score": 54,
+   "name": "Commanding Shout",
+   "class": "WARRIOR",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_037": {
+   "score": 12,
+   "name": "Master Swordsmith",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "SHAMAN": 14
+   }
+  },
+  "VAN_NEW1_038": {
+   "score": 80,
+   "name": "Gruul",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_040": {
+   "score": 76,
+   "name": "Hogger",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  },
+  "VAN_NEW1_041": {
+   "score": 76,
+   "name": "Stampeding Kodo",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 78
+   }
+  },
+  "VAN_PRO_001": {
+   "score": 42,
+   "name": "Elite Tauren Chieftain",
+   "class": "NEUTRAL",
+   "src": "heuristic"
+  },
+  "VAN_tt_004": {
+   "score": 52,
+   "name": "Flesheating Ghoul",
+   "class": "NEUTRAL",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)",
+   "by_class": {
+    "HUNTER": 50,
+    "PRIEST": 50
+   }
+  },
+  "VAN_tt_010": {
+   "score": 42,
+   "name": "Spellbender",
+   "class": "MAGE",
+   "src": "ADWCTA Arena Tier List 2014-12-03 (pre-GvG)"
+  }
+ }
+}
