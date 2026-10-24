@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5)]
     }
 }
 
@@ -437,5 +437,54 @@ impl MigrationTrait for M4 {
             )
             .await?;
         Ok(())
+    }
+}
+
+
+/// The server's bots (0.29): their accounts and how and when they play.
+struct M5;
+
+impl MigrationName for M5 {
+    fn name(&self) -> &str {
+        "m20261024_000005_bots"
+    }
+}
+
+#[derive(DeriveIden)]
+enum Bots {
+    Table,
+    Id,
+    Account,
+    Level,
+    Modes,
+    Enabled,
+    FromMin,
+    ToMin,
+    PauseMin,
+    PauseMax,
+    Created,
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M5 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let text = |c: Bots| ColumnDef::new(c).text().not_null().to_owned();
+        m.create_table(
+            Table::create()
+                .table(Bots::Table)
+                .col(ColumnDef::new(Bots::Id).integer().not_null().primary_key())
+                .col(int(Bots::Account).unique_key())
+                .col(text(Bots::Level))
+                .col(text(Bots::Modes))
+                .col(int(Bots::Enabled).default(1))
+                .col(int(Bots::FromMin).default(0))
+                .col(int(Bots::ToMin).default(0))
+                .col(int(Bots::PauseMin).default(5))
+                .col(int(Bots::PauseMax).default(15))
+                .col(int(Bots::Created))
+                .foreign_key(&mut fk(Bots::Table, Bots::Account))
+                .to_owned(),
+        )
+        .await
     }
 }

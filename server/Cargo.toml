@@ -11,6 +11,9 @@ classichs-engine = { path = "../rust/engine" }
 futures-util = "0.3.34"
 object_store = { version = "0.14", features = ["aws", "fs"] }
 rand = "0.8"
+# the bots' network adapter (wss:// needs one rustls crypto provider)
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+tokio-tungstenite = { version = "0.30.0", features = ["rustls-tls-webpki-roots"] }
 rpassword = "7.5.4"
 sea-orm = { version = "2.0.4", default-features = false, features = ["macros", "with-json", "sqlx-sqlite", "runtime-tokio", "sqlite-use-returning-for-3_35"] }
 sea-orm-migration = { version = "2.0.4", default-features = false, features = ["sqlx-sqlite", "runtime-tokio"] }
@@ -24,7 +27,6 @@ tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 zip = { version = "9", default-features = false, features = ["deflate-flate2-zlib-rs"] }
 
 [dev-dependencies]
-tokio-tungstenite = "0.30.0"
 tower = { version = "0.5.3", features = ["util"] }
 
 # The rules engine is slow unoptimized (the tests play whole games with its bot).

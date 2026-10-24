@@ -4,6 +4,7 @@
 
 pub mod admin;
 pub mod auth;
+pub mod bots;
 pub mod db;
 pub mod entity;
 pub mod events;
@@ -55,6 +56,8 @@ pub struct App {
     pub rules: Mutex<HashMap<String, Arc<GameRules>>>,
     /// One pack load or trial game at a time.
     pub loading: tokio::sync::Mutex<()>,
+    /// The server's bots (the admin's Bots page): the running ones and what they do.
+    pub bots: bots::Manager,
 }
 
 /// The game clocks (a pack's: rules.json `timers`, docs/packs/rules.md).
@@ -89,6 +92,7 @@ impl App {
             store,
             rules: Mutex::default(),
             loading: tokio::sync::Mutex::new(()),
+            bots: bots::Manager::default(),
         })
     }
 

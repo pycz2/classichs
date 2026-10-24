@@ -1,7 +1,7 @@
 //! Arena drafting: the hero by the class's Arena strength, each card by its draft score
 //! (bots/arena_tiers.json, per class) corrected for the mana curve.
 
-use crate::cards::{class_of, Library};
+use crate::bots::cards::{class_of, Library};
 
 /// Classic Arena classes, strongest first (the 2014 class tier lists).
 pub const CLASS_ORDER: [&str; 9] = ["MAGE", "PALADIN", "ROGUE", "DRUID", "HUNTER", "WARLOCK", "SHAMAN", "WARRIOR", "PRIEST"];
@@ -45,20 +45,18 @@ pub fn pick_card(lib: &Library, class: &str, picked: &[String], offer: &[String]
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::Path;
-
-    fn lib() -> Library {
-        Library::load(&Path::new(env!("CARGO_MANIFEST_DIR")).join("..")).unwrap()
+    fn lib() -> &'static Library {
+        Library::get()
     }
 
     #[test]
     fn takes_the_strong_class_and_the_strong_card() {
         let lib = lib();
         let heroes = vec!["HERO_09".to_string(), "HERO_08".to_string(), "HERO_01".to_string()];
-        assert_eq!(pick_hero(&lib, &heroes), 1, "Mage over Priest and Warrior");
+        assert_eq!(pick_hero(lib, &heroes), 1, "Mage over Priest and Warrior");
         // Fireball over Wisp and Magma Rager
         let offer = vec!["VAN_CS2_231".to_string(), "VAN_CS2_029".to_string(), "VAN_CS2_118".to_string()];
-        assert_eq!(pick_card(&lib, "MAGE", &[], &offer), 1);
+        assert_eq!(pick_card(lib, "MAGE", &[], &offer), 1);
     }
 
     #[test]
@@ -66,6 +64,6 @@ mod tests {
         let lib = lib();
         let yeti = "VAN_CS2_182".to_string();
         let fours: Vec<String> = vec![yeti.clone(); 6];
-        assert!(pick_score(&lib, "MAGE", &fours, &yeti) < pick_score(&lib, "MAGE", &[], &yeti) - 10.0);
+        assert!(pick_score(lib, "MAGE", &fours, &yeti) < pick_score(lib, "MAGE", &[], &yeti) - 10.0);
     }
 }

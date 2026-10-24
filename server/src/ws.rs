@@ -140,6 +140,8 @@ struct Session {
     app: AppRef,
     tx: UnboundedSender<Out>,
     ip: IpAddr,
+    /// a built-in client of this process (the server's bots): no login rate limit
+    local: bool,
     me: Option<(i64, String)>,
     token: String,
     conn: u64,
@@ -148,7 +150,19 @@ struct Session {
 }
 
 pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
-    let (mut sink, mut stream) = socket.split();
+    let (sink, stream) = socket.split();
+    serve(app, sink, stream.map(|r| r.map_err(|e| e.to_string())), ip, false).await
+}
+
+/// One client over any pair of message channels: a WebSocket (`run`), or an in-process one — the
+/// server's own bots (`bots::transport`), which speak the same protocol and get the same answers.
+/// `local`: such a built-in client (not reachable from outside): no login rate limit.
+pub async fn serve<S, R>(app: AppRef, mut sink: S, mut stream: R, ip: IpAddr, local: bool)
+where
+    S: futures_util::Sink<Message> + Unpin + Send + 'static,
+    S::Error: std::fmt::Display,
+    R: futures_util::Stream<Item = Result<Message, String>> + Unpin + Send,
+{
     let (tx, mut rx) = mpsc::unbounded_channel::<Out>();
     // ponytail: unbounded outbox; inbound rate limits bound what peers can push. Bound it if memory ever matters.
     let mut writer = tokio::spawn(async move {
@@ -178,6 +192,7 @@ pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
         app,
         tx,
         ip,
+        local,
         me: None,
         token: String::new(),
         conn: 0,
@@ -870,7 +885,7 @@ impl Session {
     }
 
     async fn register(&mut self, user: String, password: String) -> R {
-        if !self.app.login_allowed(&format!("ip:{}", self.ip)) {
+        if !(self.local || self.app.login_allowed(&format!("ip:{}", self.ip))) {
             return Err(e("rate_limited", "Too many attempts: wait a minute"));
         }
         if !auth::valid_user(&user) {
@@ -896,8 +911,8 @@ impl Session {
     }
 
     async fn login(&mut self, user: String, password: String) -> R {
-        let ip_ok = self.app.login_allowed(&format!("ip:{}", self.ip));
-        let user_ok = self.app.login_allowed(&format!("user:{}", user.to_lowercase()));
+        let ip_ok = self.local || self.app.login_allowed(&format!("ip:{}", self.ip));
+        let user_ok = self.local || self.app.login_allowed(&format!("user:{}", user.to_lowercase()));
         if !ip_ok || !user_ok {
             self.failed(&user, "rate limited");
             return Err(e("rate_limited", "Too many attempts: wait a minute"));
@@ -934,7 +949,7 @@ impl Session {
 
     /// The normal way back in: the token from `auth`, valid 30 days and renewed on every use.
     async fn resume(&mut self, token: String) -> R {
-        if !self.app.login_allowed(&format!("ip:{}", self.ip)) {
+        if !(self.local || self.app.login_allowed(&format!("ip:{}", self.ip))) {
             return Err(e("rate_limited", "Too many attempts: wait a minute"));
         }
         let Some((a, s)) = db::session(&self.app.db, &token, "game").await? else {

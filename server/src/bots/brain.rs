@@ -9,7 +9,7 @@
 //!    hand), and the position after it is scored. Lethal is ±1 000 000.
 //! 4. The action with the best average over the worlds is played; after it the bot looks again.
 
-use crate::cards::{class_of, Library, Pool};
+use crate::bots::cards::{class_of, Library, Pool};
 use classichs_engine::entity::Entity;
 use classichs_engine::game::Action;
 use classichs_engine::rng::Rng;
@@ -22,6 +22,46 @@ use std::collections::{HashMap, HashSet};
 use std::time::{Duration, Instant};
 
 pub const WIN: f64 = 1_000_000.0;
+
+/// How strong a bot plays (the admin sets it per bot).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Level {
+    /// One guess of the hidden cards, the position right after the action only, a wrong pick now and
+    /// then (30%: a random one of the best three), the opening hand kept.
+    Easy,
+    /// 2-3 worlds, the rest of the turn played on, the opponent's reply not looked at.
+    Medium,
+    /// 4-24 worlds within the time, the turn played on and the opponent's whole turn simulated.
+    Hard,
+}
+
+impl Level {
+    pub fn parse(s: &str) -> Option<Level> {
+        match s {
+            "easy" => Some(Level::Easy),
+            "medium" => Some(Level::Medium),
+            "hard" => Some(Level::Hard),
+            _ => None,
+        }
+    }
+
+    pub fn name(self) -> &'static str {
+        match self {
+            Level::Easy => "easy",
+            Level::Medium => "medium",
+            Level::Hard => "hard",
+        }
+    }
+
+    /// (fewest worlds, most worlds, the turn played on, the opponent's turn simulated)
+    fn search(self) -> (usize, usize, bool, bool) {
+        match self {
+            Level::Easy => (1, 1, false, false),
+            Level::Medium => (2, 3, true, false),
+            Level::Hard => (4, 24, true, true),
+        }
+    }
+}
 
 /// What the bot knows besides the view: its own deck list and how to guess the opponent's cards.
 pub struct Knowledge<'a> {
@@ -50,7 +90,7 @@ pub struct Decision {
 }
 
 /// The move for this view, or None when it is not the bot's move.
-pub fn decide(view_json: &Value, k: &Knowledge, budget: Duration) -> Result<Option<Decision>, String> {
+pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) -> Result<Option<Decision>, String> {
     let t0 = Instant::now();
     let base = view::from_snapshot_in(k.lib.rs, view_json)?;
     let me = k.seat;
@@ -61,8 +101,12 @@ pub fn decide(view_json: &Value, k: &Knowledge, budget: Duration) -> Result<Opti
         if base.players[me].mulliganed {
             return Ok(None);
         }
-        let a = mulligan(&base, me);
-        let label = format!("замена: {}", a["replace"].as_array().map_or(0, |r| r.len()));
+        let a = if level == Level::Easy {
+            json!({"type": "mulligan", "player": me, "replace": []}).as_object().unwrap().clone()
+        } else {
+            mulligan(&base, me)
+        };
+        let label = format!("mulligan: replace {}", a["replace"].as_array().map_or(0, |r| r.len()));
         return Ok(Some(Decision { action: a, label, worlds: 0, ms: t0.elapsed().as_millis(), top: vec![] }));
     }
     let mine = |a: &Action| a.get("player").and_then(Value::as_i64) == Some(me as i64) && a["type"] != "concede";
@@ -78,18 +122,22 @@ pub fn decide(view_json: &Value, k: &Knowledge, budget: Duration) -> Result<Opti
     let mut rng = rand::rngs::StdRng::from_entropy();
     let mut sums = vec![0.0f64; legal.len()];
     let mut worlds = 0usize;
-    // at least 4 worlds, then more while the time lasts (at most 24)
-    while worlds < 24 && (worlds < 4 || t0.elapsed() < budget) {
+    // the level's fewest worlds, then more while the time lasts
+    let (fewest, most, play_on, reply) = level.search();
+    while worlds < most && (worlds < fewest || t0.elapsed() < budget) {
         let w = determinize(&base, view_json, &hidden, k, &mut rng);
         for (i, a) in legal.iter().enumerate() {
-            sums[i] += score_first(&w, me, a);
+            sums[i] += score_first(&w, me, a, play_on, reply);
         }
         worlds += 1;
     }
     let mut order: Vec<usize> = (0..legal.len()).collect();
     // the best average; on a tie the earlier action (the engine lists ending the turn first)
     order.sort_by(|&x, &y| sums[y].partial_cmp(&sums[x]).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y)));
-    let best = order[0];
+    let mut best = order[0];
+    if level == Level::Easy && rand::Rng::gen_bool(&mut rng, 0.3) {
+        best = order[rand::Rng::gen_range(&mut rng, 0..order.len().min(3))]; // (the easy bot errs)
+    }
     let top = order
         .iter()
         .take(6)
@@ -206,16 +254,22 @@ impl rand::RngCore for RngWrap<'_> {
     }
 }
 
-/// A first action in one world: the turn played on greedily, then the opponent's turn, then the score.
-fn score_first(w: &Game, me: usize, a: &Action) -> f64 {
+/// A first action in one world: (play_on) the turn played on greedily, (reply) then the opponent's
+/// turn, then the score.
+fn score_first(w: &Game, me: usize, a: &Action, play_on: bool, reply: bool) -> f64 {
     let mut g = w.clone_state();
     if !g.apply(&Value::Object(a.clone())).ok {
         return -WIN; // (not legal in this world: should not happen, its cards are the same)
     }
-    if a["type"] != "end_turn" {
+    if play_on && a["type"] != "end_turn" {
         finish_turn(&mut g, me);
     }
-    opponent_turn(&mut g, me);
+    if reply {
+        if !g.game_over && g.current == me && g.phase == "PLAY" {
+            g.apply(&json!({"type": "end_turn", "player": me}));
+        }
+        opponent_turn(&mut g, me);
+    }
     eval(&g, me)
 }
 
@@ -349,7 +403,7 @@ pub fn label(k: &Knowledge, g: &Game, a: &Action) -> String {
             Some(id) if id >= 1 && (id as usize) <= g.entities.len() => {
                 let e = g.e(id);
                 if e.is_champion() {
-                    if e.controller == k.seat { "свой герой".into() } else { "герой соперника".into() }
+                    if e.controller == k.seat { "own hero".into() } else { "enemy hero".into() }
                 } else {
                     k.lib.name(&e.card_id)
                 }
@@ -359,18 +413,18 @@ pub fn label(k: &Knowledge, g: &Game, a: &Action) -> String {
     };
     let get = |f: &str| a.get(f).and_then(Value::as_i64).filter(|&x| x > 0);
     match a["type"].as_str().unwrap_or("") {
-        "end_turn" => "закончить ход".into(),
+        "end_turn" => "end turn".into(),
         "attack" => format!("{} → {}", name(get("attacker")), name(get("defender"))),
         "hero_power" => match get("target") {
-            Some(t) => format!("сила героя → {}", name(Some(t))),
-            None => "сила героя".into(),
+            Some(t) => format!("hero power → {}", name(Some(t))),
+            None => "hero power".into(),
         },
         "play" => match get("target") {
             Some(t) => format!("{} → {}", name(get("entity")), name(Some(t))),
             None => name(get("entity")),
         },
-        "choose" => format!("выбор: {}", name(get("option"))),
-        "mulligan" => "замена карт".into(),
+        "choose" => format!("choose: {}", name(get("option"))),
+        "mulligan" => "mulligan".into(),
         t => t.to_string(),
     }
 }

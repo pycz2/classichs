@@ -4,6 +4,12 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.29.0] - 2026-10-24
+
+### Ajouté
+- Des bots sur le serveur : le serveur fait jouer ses propres joueurs de Classic — en classé, en partie libre et en Arène — pour qu'il y ait toujours quelqu'un contre qui jouer. L'administration du serveur a une nouvelle page « Bots » : nombre, force (facile, moyen, fort), modes, horaires et pauses ; démarrage et arrêt à chaud ; ce que fait chacun, sa partie vue par lui, sa dernière décision et son journal.
+- Les bots jouent honnêtement : comme tout joueur, par le même protocole, et ne voient que leur côté ; ils estiment les cartes cachées de l'adversaire par les probabilités.
+
 ## [0.28.4] - 2026-10-24
 
 ### Ajouté

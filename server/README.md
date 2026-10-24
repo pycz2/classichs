@@ -215,6 +215,26 @@ ranks earned before packs to `classic-2014`); a game row and an Arena run keep t
 
 In the game: Settings → Server: `ws://localhost:7377`.
 
+## Bots
+
+The server can run its own players of Classic (`src/bots`), managed on the admin panel's **Bots** page:
+add any number (accounts `Bot_<Level>_<n>`, with a password nobody knows), set each one's strength
+(easy, medium, hard), games (ranked + casual in turn, ranked, casual, or Arena runs), daily window
+(UTC) and the pause before a game, start and stop them live, see each one's state, its game as it sees
+it, its last decision and its log; their errors also go to the event log (kind `bot`).
+
+- **Fair:** a bot is a client like any player. It speaks the same protocol through an adapter —
+  in this process (`transport::Transport::local`: channels into the same session code a WebSocket
+  client gets, `ws::serve`) or over the network (`Transport::net`, `ws://` or `wss://`) — and sees
+  only its own player's view. Hidden cards are guessed many times over (its own deck list minus the
+  cards seen; the opponent's class pool), each guess with its own random seed (`brain`).
+- **Levels** (against the engine's greedy bot, which sees every card, 18 games each): easy 8 won,
+  medium 13, hard 15 (`cargo test --release --test bot_levels -- --ignored --nocapture`).
+- **Data built in:** 35 validated decks, 3-5 a class (`src/bots/decks.json`, `DECKS.md`), the
+  Arena draft scores (`arena_tiers.json`, `ARENA_TIERS.md`), the card names (`data/cards.json`).
+- **CPU:** bots think one less at a time than the server has CPUs (at least one); a hard bot takes
+  up to a second a decision.
+
 ## Deploy to a Docker host behind Caddy
 
 `deploy/docker-host/setup.sh` sets a host up once (its own domain in the host's Caddy, HTTPS on 443,

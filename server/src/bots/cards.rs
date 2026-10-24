@@ -1,12 +1,11 @@
-//! What the bots know before a game: card names (data/cards.json), the deck library (bots/decks),
-//! the Arena draft scores (bots/arena_tiers.json) and, per class, the cards an opponent of that
+//! What the bots know before a game: card names (data/cards.json), the deck library (decks.json),
+//! the Arena draft scores (arena_tiers.json) and, per class, the cards an opponent of that
 //! class probably holds (weights for guessing hidden cards).
 
 use classichs_engine::ruleset::{self, Ruleset};
 use rand::Rng;
 use serde_json::Value;
 use std::collections::HashMap;
-use std::path::Path;
 
 #[derive(Clone, Debug)]
 pub struct Deck {
@@ -78,17 +77,20 @@ fn collectible(rs: &'static Ruleset, class: &str) -> Vec<&'static str> {
 }
 
 impl Library {
-    /// `root`: the repository (data/cards.json, bots/decks, bots/arena_tiers.json).
-    pub fn load(root: &Path) -> Result<Library, String> {
-        Library::load_from(root, &root.join("bots/decks"))
+    /// The library built into the server: card names (data/cards.json), decks (decks.json),
+    /// draft scores (arena_tiers.json). Built once.
+    pub fn get() -> &'static Library {
+        static LIB: std::sync::OnceLock<Library> = std::sync::OnceLock::new();
+        LIB.get_or_init(|| {
+            Library::from_json(include_str!("../../../data/cards.json"), include_str!("decks.json"), include_str!("arena_tiers.json"))
+                .expect("the built-in bot library")
+        })
     }
 
-    /// As `load`, with the decks from another directory (tests: packs/classic/decks).
-    pub fn load_from(root: &Path, dir: &Path) -> Result<Library, String> {
+    pub fn from_json(cards_json: &str, decks_json: &str, tiers_json: &str) -> Result<Library, String> {
         let rs = ruleset::classic();
         let mut names = HashMap::new();
-        let data: Value = serde_json::from_str(&std::fs::read_to_string(root.join("data/cards.json")).map_err(|e| format!("data/cards.json: {e}"))?)
-            .map_err(|e| format!("data/cards.json: {e}"))?;
+        let data: Value = serde_json::from_str(cards_json).map_err(|e| format!("cards.json: {e}"))?;
         let list: Vec<&Value> = match &data {
             Value::Array(a) => a.iter().collect(),
             Value::Object(o) => o.values().collect(),
@@ -96,38 +98,32 @@ impl Library {
         };
         for c in list {
             let id = c["id"].as_str().unwrap_or_default();
-            let n = c["name"]["ruRU"].as_str().or(c["name"]["enUS"].as_str()).unwrap_or(id);
+            let n = c["name"]["enUS"].as_str().or(c["name"]["ruRU"].as_str()).unwrap_or(id);
             names.insert(id.to_string(), n.to_string());
             // the game's own ids: the vanilla copies are "VAN_" + the original id
             names.entry(format!("VAN_{id}")).or_insert_with(|| n.to_string());
         }
         let mut decks = vec![];
-        let dir = dir.to_path_buf();
-        let mut files: Vec<_> = std::fs::read_dir(&dir).map_err(|e| format!("{}: {e}", dir.display()))?.flatten().map(|f| f.path()).collect();
-        files.sort();
-        for f in files.into_iter().filter(|f| f.extension().is_some_and(|x| x == "json")) {
-            let v: Value = serde_json::from_str(&std::fs::read_to_string(&f).unwrap_or_default()).map_err(|e| format!("{}: {e}", f.display()))?;
-            let hero = v["hero"].as_str().or(v["champion"].as_str()).unwrap_or_default().to_string();
+        let dv: Value = serde_json::from_str(decks_json).map_err(|e| format!("decks.json: {e}"))?;
+        for v in dv.as_array().into_iter().flatten() {
+            let hero = v["hero"].as_str().unwrap_or_default().to_string();
             let cards: Vec<String> = v["cards"].as_array().map_or(vec![], |a| a.iter().filter_map(|c| c.as_str().map(String::from)).collect());
-            if cards.len() == 30 && rs.has(&hero) && cards.iter().all(|c| rs.has(c)) {
-                decks.push(Deck { name: v["name"].as_str().unwrap_or("?").to_string(), hero, cards });
-            } else {
-                return Err(format!("{}: not a 30-card Classic deck", f.display()));
+            if cards.len() != 30 || !rs.has(&hero) || !cards.iter().all(|c| rs.has(c)) {
+                return Err(format!("decks.json: {} is not a 30-card Classic deck", v["name"]));
             }
+            decks.push(Deck { name: v["name"].as_str().unwrap_or("?").to_string(), hero, cards });
         }
         if decks.is_empty() {
-            return Err(format!("no decks in {}", dir.display()));
+            return Err("decks.json: no decks".into());
         }
         let mut tiers = HashMap::new();
-        if let Ok(t) = std::fs::read_to_string(root.join("bots/arena_tiers.json")) {
-            let v: Value = serde_json::from_str(&t).map_err(|e| format!("bots/arena_tiers.json: {e}"))?;
-            if let Some(m) = v["cards"].as_object() {
-                for (id, c) in m {
-                    let by: HashMap<String, f64> = c["by_class"].as_object().map_or(HashMap::new(), |m| {
-                        m.iter().filter_map(|(k, v)| v.as_f64().map(|x| (k.clone(), x))).collect()
-                    });
-                    tiers.insert(id.clone(), (c["score"].as_f64().unwrap_or(50.0), by));
-                }
+        let v: Value = serde_json::from_str(tiers_json).map_err(|e| format!("arena_tiers.json: {e}"))?;
+        if let Some(m) = v["cards"].as_object() {
+            for (id, c) in m {
+                let by: HashMap<String, f64> = c["by_class"].as_object().map_or(HashMap::new(), |m| {
+                    m.iter().filter_map(|(k, v)| v.as_f64().map(|x| (k.clone(), x))).collect()
+                });
+                tiers.insert(id.clone(), (c["score"].as_f64().unwrap_or(50.0), by));
             }
         }
         let classes = ["WARRIOR", "SHAMAN", "ROGUE", "PALADIN", "HUNTER", "DRUID", "WARLOCK", "MAGE", "PRIEST"];
@@ -145,7 +141,7 @@ impl Library {
             for id in &all {
                 // decks of the library first, every other card of the class a little
                 lp.add(id, counts.get(id).copied().unwrap_or(0.0) + 0.05);
-                let s = tiers.get(*id).map_or_else(|| heuristic_score(rs, id), |(s, by)| by.get(class).copied().unwrap_or(*s));
+                let s = tiers.get(*id).map_or_else(|| heuristic_score(rs, id), |(s, by): &(f64, HashMap<String, f64>)| by.get(class).copied().unwrap_or(*s));
                 ap.add(id, (s / 100.0).powi(2));
             }
             ladder_pools.insert(class.to_string(), lp);

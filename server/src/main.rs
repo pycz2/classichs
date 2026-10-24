@@ -21,6 +21,7 @@ default pack (the admin panel sets it); until one is set, the newest enabled ser
 pack with the manifest id --default-pack becomes it, else the built-in Classic rules.";
 
 fn main() {
+    let _ = rustls::crypto::ring::default_provider().install_default(); // (the bots' wss:// adapter)
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| "info".into()))
         .init();
@@ -104,6 +105,13 @@ fn main() {
         classichs_server::spawn_background(app.clone());
         let listener = tokio::net::TcpListener::bind(addr).await.unwrap_or_else(|e| die(&format!("cannot listen on {addr}: {e}")));
         println!("classichs-server listening on ws://{addr} (admin panel: http://{addr}/admin, database: {db_path})");
+        // the server's bots (the admin's Bots page) play in this process
+        let a = app.clone();
+        tokio::spawn(async move {
+            if let Err(e) = classichs_server::bots::sync(&a).await {
+                tracing::error!("bots: {e}");
+            }
+        });
         axum::serve(listener, classichs_server::router(app).into_make_service_with_connect_info::<SocketAddr>())
             .await
             .unwrap_or_else(|e| die(&format!("server error: {e}")));

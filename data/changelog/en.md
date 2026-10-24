@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.29.0] - 2026-10-24
+
+### Added
+- Bots on the server: the server runs its own players of Classic — ranked, casual and Arena — so there is always someone to play. The server admin has a new Bots page: how many, how strong (easy, medium, hard), which games, the schedule and pauses; start and stop them live; what each one does, its game as it sees it, its last decision and its log.
+- Bots play fair: like any player, through the same protocol, and see only their own side; they weigh the opponent's hidden cards by probability.
+
 ## [0.28.4] - 2026-10-24
 
 ### Added

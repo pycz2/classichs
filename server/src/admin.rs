@@ -58,6 +58,10 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/games/{id}", get(game_page))
         .route("/admin/api/packs", get(packs_list).post(packs_upload))
         .route("/admin/api/packs/{id}/{action}", post(pack_action))
+        .route("/admin/api/bots", get(bots_list).post(bots_create))
+        .route("/admin/api/bots/all/{action}", post(bots_all))
+        .route("/admin/api/bots/{id}", get(bot_page))
+        .route("/admin/api/bots/{id}/{action}", post(bot_action))
         .route("/admin/ws", get(feed))
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
@@ -87,6 +91,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "games.js",
     "messages.js",
     "packs.js",
+    "bots.js",
     "style.css",
     "vendor/preact.module.js",
     "vendor/hooks.module.js",
@@ -1128,6 +1133,184 @@ async fn pack_action(State(app): State<AppRef>, Extension(a): Extension<Admin>, 
         if let Ok(m) = packs::packs_msg(db, o).await {
             app.hub().send(o, &m);
         }
+    }
+    Json(json!({"ok": true, "text": text})).into_response()
+}
+
+
+// --- the server's bots (the Bots page) ----------------------------------------------------------
+
+fn bot_json(app: &App, b: &crate::bots::BotConfig, log: usize) -> Value {
+    let st = app.bots.status.get(b.id).unwrap_or_default();
+    json!({
+        "id": b.id, "account": b.account, "name": b.name, "level": b.level, "modes": b.modes, "enabled": b.enabled,
+        "from": b.from_min, "to": b.to_min, "pause_min": b.pause_min, "pause_max": b.pause_max,
+        "running": app.bots.is_running(b.id), "status": st.json(log),
+    })
+}
+
+async fn bots_list(State(app): State<AppRef>) -> Response {
+    match crate::bots::all(&app).await {
+        Ok(list) => {
+            let rows: Vec<Value> = list.iter().map(|b| bot_json(&app, b, 0)).collect();
+            let sum = |f: &dyn Fn(&Value) -> bool| rows.iter().filter(|r| f(r)).count();
+            let games: u64 = rows.iter().map(|r| r["status"]["games"].as_u64().unwrap_or(0)).sum();
+            let wins: u64 = rows.iter().map(|r| r["status"]["wins"].as_u64().unwrap_or(0)).sum();
+            let errors: u64 = rows.iter().map(|r| r["status"]["errors"].as_u64().unwrap_or(0)).sum();
+            Json(json!({
+                "bots": rows,
+                "summary": {"total": rows.len(), "enabled": sum(&|r| r["enabled"] == true),
+                    "online": sum(&|r| r["status"]["online"] == true), "playing": sum(&|r| r["status"]["game"].as_str().is_some_and(|g| !g.is_empty())),
+                    "games": games, "wins": wins, "errors": errors},
+                "levels": crate::bots::LEVELS, "modes": crate::bots::MODES,
+                "thinkers": std::thread::available_parallelism().map_or(1, |n| n.get()).saturating_sub(1).max(1),
+                "decks": crate::bots::cards::Library::get().decks.len(),
+                "utc_minute": crate::bots::runtime::minute_of_day(),
+            }))
+            .into_response()
+        }
+        Err(e) => db_err(e),
+    }
+}
+
+async fn bot_page(State(app): State<AppRef>, Path(id): Path<i64>) -> Response {
+    match crate::bots::config(&app, id).await {
+        Some(b) => Json(bot_json(&app, &b, 300)).into_response(),
+        None => err(StatusCode::NOT_FOUND, "No such bot"),
+    }
+}
+
+#[derive(Deserialize, Default)]
+struct BotIn {
+    count: Option<usize>,
+    level: Option<String>,
+    modes: Option<String>,
+    from: Option<i64>,
+    to: Option<i64>,
+    pause_min: Option<i64>,
+    pause_max: Option<i64>,
+}
+
+/// The settings checked: (level, modes, (from, to), (pause min, max)), or what is wrong.
+fn bot_settings(f: &BotIn, base: Option<&crate::bots::BotConfig>) -> Result<(String, String, (i64, i64), (i64, i64)), &'static str> {
+    let level = f.level.clone().or(base.map(|b| b.level.clone())).unwrap_or_else(|| "medium".into());
+    let modes = f.modes.clone().or(base.map(|b| b.modes.clone())).unwrap_or_else(|| "ladder".into());
+    let from = f.from.or(base.map(|b| b.from_min)).unwrap_or(0);
+    let to = f.to.or(base.map(|b| b.to_min)).unwrap_or(0);
+    let lo = f.pause_min.or(base.map(|b| b.pause_min)).unwrap_or(5);
+    let hi = f.pause_max.or(base.map(|b| b.pause_max)).unwrap_or(15);
+    if !crate::bots::LEVELS.contains(&level.as_str()) {
+        return Err("The level is easy, medium or hard");
+    }
+    if !crate::bots::MODES.contains(&modes.as_str()) {
+        return Err("The games are ladder, ranked, casual or arena");
+    }
+    if !(0..1440).contains(&from) || !(0..1440).contains(&to) {
+        return Err("The window is minutes of the day, 0 to 1439");
+    }
+    if lo < 0 || hi < lo || hi > 3600 {
+        return Err("The pause is 0 to 3600 seconds, the shortest first");
+    }
+    Ok((level, modes, (from, to), (lo, hi)))
+}
+
+/// New bots: `count` of them (1-50; at most 200 in all) with these settings.
+async fn bots_create(State(app): State<AppRef>, Extension(a): Extension<Admin>, Json(f): Json<BotIn>) -> Response {
+    let count = f.count.unwrap_or(1);
+    if !(1..=50).contains(&count) {
+        return err(StatusCode::BAD_REQUEST, "Add 1 to 50 bots at a time");
+    }
+    let (level, modes, window, pause) = match bot_settings(&f, None) {
+        Ok(s) => s,
+        Err(e) => return err(StatusCode::BAD_REQUEST, e),
+    };
+    match crate::bots::all(&app).await {
+        Ok(l) if l.len() + count > 200 => return err(StatusCode::BAD_REQUEST, "At most 200 bots"),
+        Err(e) => return db_err(e),
+        _ => {}
+    }
+    match crate::bots::create(&app, count, &level, &modes, window, pause).await {
+        Ok(names) => {
+            let text = format!("{} added {} {level} bot(s) for {modes}: {}", a.me.name, names.len(), names.join(", "));
+            app.event(a.ev(text.clone()).data(json!({"action": "bots_add", "bots": names, "level": level, "modes": modes})));
+            if let Err(e) = crate::bots::sync(&app).await {
+                return db_err(e);
+            }
+            Json(json!({"ok": true, "names": names, "text": text})).into_response()
+        }
+        Err(e) => db_err(e),
+    }
+}
+
+async fn bot_action(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path((id, action)): Path<(i64, String)>, body: axum::body::Bytes) -> Response {
+    use crate::entity::bot;
+    let Some(b) = crate::bots::config(&app, id).await else { return err(StatusCode::NOT_FOUND, "No such bot") };
+    let db = &app.db;
+    let (text, r) = match action.as_str() {
+        "start" | "stop" => {
+            let on = action == "start";
+            let r = bot::ActiveModel { id: Unchanged(id), enabled: Set(on), ..Default::default() }.update(db).await.map(|_| ());
+            (format!("{} {} the bot {}", a.me.name, if on { "started" } else { "stopped" }, b.name), r)
+        }
+        "update" => {
+            let f: BotIn = if body.is_empty() { BotIn::default() } else {
+                match serde_json::from_slice(&body) {
+                    Ok(f) => f,
+                    Err(e) => return err(StatusCode::BAD_REQUEST, &e.to_string()),
+                }
+            };
+            let (level, modes, (from, to), (lo, hi)) = match bot_settings(&f, Some(&b)) {
+                Ok(s) => s,
+                Err(e) => return err(StatusCode::BAD_REQUEST, e),
+            };
+            let r = bot::ActiveModel {
+                id: Unchanged(id),
+                level: Set(level.clone()),
+                modes: Set(modes.clone()),
+                from_min: Set(from),
+                to_min: Set(to),
+                pause_min: Set(lo),
+                pause_max: Set(hi),
+                ..Default::default()
+            }
+            .update(db)
+            .await
+            .map(|_| ());
+            (format!("{} set the bot {}: {level}, {modes}, {:02}:{:02}–{:02}:{:02} UTC, pause {lo}–{hi} s", a.me.name, b.name, from / 60, from % 60, to / 60, to % 60), r)
+        }
+        "delete" => {
+            // the account stays (its games and ranks); it is no longer a bot
+            let r = bot::Entity::delete_by_id(id).exec(db).await.map(|_| ());
+            app.bots.status.remove(id);
+            (format!("{} deleted the bot {} (its account stays)", a.me.name, b.name), r)
+        }
+        _ => return err(StatusCode::NOT_FOUND, "No such action"),
+    };
+    if let Err(e) = r {
+        return db_err(e);
+    }
+    app.event(a.ev(text.clone()).other(&b.name).data(json!({"action": format!("bot_{action}"), "bot": id})));
+    if let Err(e) = crate::bots::sync(&app).await {
+        return db_err(e);
+    }
+    Json(json!({"ok": true, "text": text})).into_response()
+}
+
+/// Start or stop every bot.
+async fn bots_all(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path(action): Path<String>) -> Response {
+    use crate::entity::bot;
+    let on = match action.as_str() {
+        "start" => true,
+        "stop" => false,
+        _ => return err(StatusCode::NOT_FOUND, "No such action"),
+    };
+    if let Err(e) = bot::Entity::update_many().col_expr(bot::Column::Enabled, Expr::value(on)).exec(&app.db).await {
+        return db_err(e);
+    }
+    let text = format!("{} {} all bots", a.me.name, if on { "started" } else { "stopped" });
+    app.event(a.ev(text.clone()).data(json!({"action": format!("bots_{action}")})));
+    if let Err(e) = crate::bots::sync(&app).await {
+        return db_err(e);
     }
     Json(json!({"ok": true, "text": text})).into_response()
 }
