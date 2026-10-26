@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-10-26
+
+### Dodano
+- Gra przez kody (bezpośrednio, bez serwera) działa teraz nie tylko w przeglądarce, ale też na Windows, macOS, Linux i Android. Także między różnymi platformami, na przykład przeglądarka przeciw Androidowi.
+
+### Naprawiono
+- Firefox: Ctrl+V i Cmd+V nie wklejały tekstu do pól, a kliknięcie pola otwierało menu „Wklej”. Wklejanie działa, a menu już się nie pojawia.
+
 ## [0.29.2] - 2026-10-25
 
 ### Naprawiono

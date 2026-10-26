@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-10-26
+
+### Hinzugefügt
+- Das Spiel per Code (direkt, ohne Server) funktioniert jetzt nicht nur im Browser, sondern auch unter Windows, macOS, Linux und Android. Auch plattformübergreifend, zum Beispiel Browser gegen Android.
+
+### Behoben
+- Firefox: Strg+V und Cmd+V fügten keinen Text in Felder ein, und ein Klick auf ein Feld öffnete ein „Einfügen“-Menü. Einfügen funktioniert jetzt, und das Menü erscheint nicht mehr.
+
 ## [0.29.2] - 2026-10-25
 
 ### Behoben

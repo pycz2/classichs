@@ -5,5 +5,6 @@
 set -e
 cd "$(dirname "$0")"
 tools/build_packs.sh  # res://packs/*.cardpack: the game reads its cards from them
+tools/fetch_webrtc.sh  # the WebRTC plugin of the native builds (code play)
 godot --headless --path . --import >/dev/null 2>&1 || true
 exec godot --headless --path . --script res://tests/run.gd "$@"

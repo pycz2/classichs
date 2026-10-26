@@ -18,9 +18,6 @@ func _ready() -> void:
 		add_child(KeyboardLift.new())  # a field under the on-screen keyboard rises above it
 	if Settings.data.fullscreen and not OS.has_feature("web"):  # the browser needs a click first
 		Settings.set_fullscreen(true)
-	get_viewport().gui_focus_changed.connect(func(c: Control):
-		if c is LineEdit or c is TextEdit:
-			_fresh_clipboard())
 	_start_server_link()
 	if not await _wait_for_rules():
 		return
@@ -61,14 +58,6 @@ func show_language_picker() -> void:
 		Settings.apply()
 		show_menu())
 	_set_screen(l)
-
-
-## In the browser Godot gets the clipboard late: a paste uses the text read on
-## the paste before. Reading it when a text field is focused (and when the tab
-## comes back) makes the first Cmd/Ctrl+V paste what was just copied.
-func _fresh_clipboard() -> void:
-	if OS.has_feature("web"):
-		DisplayServer.clipboard_get()
 
 
 func _set_screen(s: Control) -> void:
@@ -374,7 +363,3 @@ func start_match(req: Dictionary, bots: Array, debug := false) -> MatchView:
 	v.bind(m)
 	return v
 
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_IN:
-		_fresh_clipboard()

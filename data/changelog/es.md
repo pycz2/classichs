@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-10-26
+
+### Añadido
+- El juego por códigos (directo, sin servidor) ahora funciona no solo en el navegador, sino también en Windows, macOS, Linux y Android. También entre plataformas distintas, por ejemplo navegador contra Android.
+
+### Corregido
+- Firefox: Ctrl+V y Cmd+V no pegaban texto en los campos, y un clic en un campo abría un menú «Pegar». Ahora pegar funciona y el menú ya no aparece.
+
 ## [0.29.2] - 2026-10-25
 
 ### Corregido

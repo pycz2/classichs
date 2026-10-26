@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-10-26
+
+### Aggiunto
+- Il gioco tramite codici (diretto, senza server) ora funziona non solo nel browser ma anche su Windows, macOS, Linux e Android. Anche tra piattaforme diverse, per esempio browser contro Android.
+
+### Corretto
+- Firefox: Ctrl+V e Cmd+V non incollavano il testo nei campi, e un clic su un campo apriva un menu «Incolla». Ora incollare funziona e il menu non compare più.
+
 ## [0.29.2] - 2026-10-25
 
 ### Corretto

@@ -1,6 +1,7 @@
 class_name WebRtcTransport
 extends Transport
-## WebRTC data channel (browser build). Signaling is manual: the host makes an
+## WebRTC data channel: the browser's in the Web build, the webrtc-native plugin (addons/webrtc_native,
+## tools/fetch_webrtc.sh) on Windows, macOS, Linux and Android; both speak the same WebRTC. Signaling is manual: the host makes an
 ## invite code, the guest answers with an answer code. All ICE candidates are
 ## gathered before a code is shown, so each side sends exactly one code. Without a
 ## server two messages are always needed (offer there, answer back).
@@ -40,7 +41,16 @@ var _round := 0
 
 
 static func available() -> bool:
-	return OS.has_feature("web")
+	return OS.has_feature("web") or ClassDB.class_exists("WebRTCLibPeerConnection")
+
+
+## The ICE servers for this build: the native plugin (libjuice) has TURN over UDP only.
+static func ice_config() -> Dictionary:
+	var config := ICE.duplicate(true)
+	if not OS.has_feature("web"):
+		for s in config.iceServers:
+			s.urls = s.urls.filter(func(u: String): return not u.contains("transport=tcp"))
+	return config
 
 
 ## The SDP with the gathered candidates written in as a=candidate lines. Browsers
@@ -92,7 +102,7 @@ static func _relay_only() -> bool:
 
 func _setup_peer() -> bool:
 	pc = WebRTCPeerConnection.new()
-	var config := ICE.duplicate(true)
+	var config := ice_config()
 	if _relay_only():  # ?relay=1: only through TURN, to test the relay
 		config["iceTransportPolicy"] = "relay"
 	if pc.initialize(config) != OK:

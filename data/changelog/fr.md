@@ -4,6 +4,14 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-10-26
+
+### Ajouté
+- Le jeu par codes (en direct, sans serveur) fonctionne désormais non seulement dans le navigateur, mais aussi sous Windows, macOS, Linux et Android. On peut aussi jouer entre plateformes, par exemple navigateur contre Android.
+
+### Corrigé
+- Firefox : Ctrl+V et Cmd+V ne collaient pas le texte dans les champs, et un clic sur un champ ouvrait un menu « Coller ». Le collage fonctionne, et le menu n’apparaît plus.
+
 ## [0.29.2] - 2026-10-25
 
 ### Corrigé

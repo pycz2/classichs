@@ -2,8 +2,11 @@ class_name WebPaste
 extends Node
 ## Paste in the browser. Godot's web build keeps its own copy of the clipboard and refreshes it from
 ## the browser's paste event, which comes after the key: Ctrl+V pasted the previous text, or nothing
-## (Firefox gives a page the clipboard only inside a paste event). So in a text field this node takes
-## the paste key from Godot and puts in the text of the paste event itself. main adds it on the web.
+## (Firefox gives a page the clipboard only inside a paste event). So this node keeps the paste key
+## from Godot and puts in the text of the paste event itself. Godot cancels every key it gets
+## (preventDefault), and a cancelled Ctrl+V/Cmd+V makes no paste event: the key stops on window
+## before Godot's handler. Nothing here reads the clipboard (navigator.clipboard.readText): Firefox
+## answers that with its own "Paste" menu at the pointer. main adds this node on the web.
 
 var _cb: JavaScriptObject  # the callback lives as long as this node
 
@@ -16,6 +19,9 @@ func _ready() -> void:
 			var t = e.target;  // the virtual keyboard's own field (phones) pastes by itself
 			if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
 			if (window.chsPaste) window.chsPaste((e.clipboardData || window.clipboardData).getData('text'));
+		}, true);
+		window.addEventListener('keydown', function (e) {
+			if ((e.ctrlKey || e.metaKey) && !e.altKey && e.code === 'KeyV') e.stopImmediatePropagation();
 		}, true);""", true)
 	JavaScriptBridge.get_interface("window").chsPaste = _cb
 

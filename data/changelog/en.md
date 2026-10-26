@@ -4,6 +4,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-10-26
+
+### Added
+- Code play (direct, without a server) now works not only in the browser but also on Windows, macOS, Linux and Android. Players on different platforms can play each other, for example a browser against Android.
+
+### Fixed
+- Firefox: Ctrl+V and Cmd+V did not paste into text fields, and a click on a field opened a "Paste" menu. Pasting works now, and the menu no longer appears.
+
 ## [0.29.2] - 2026-10-25
 
 ### Fixed

@@ -15,6 +15,7 @@ WANT=${*:-web windows linux macos android}
 mkdir -p "$OUT"
 touch build/.gdignore
 tools/build_packs.sh  # res://packs/*.cardpack: the built-in game packs
+tools/fetch_webrtc.sh  # addons/webrtc_native/lib: WebRTC (code play) for the native builds
 godot --headless --path . --import >/dev/null 2>&1 || true
 
 rules_lib() {  # the rules engine library a platform's export needs
@@ -75,6 +76,7 @@ for p in $WANT; do
 		rm -rf "$OUT/windows" && mkdir -p "$OUT/windows/ClassicHS"
 		export_preset "Windows Desktop" "$OUT/windows/ClassicHS/ClassicHS.exe"
 		[ -s "$OUT/windows/ClassicHS/$(basename "$(rules_lib windows)")" ] || { echo "the export did not put the rules .dll next to the .exe" >&2; exit 1; }
+		ls "$OUT"/windows/ClassicHS/libwebrtc_native.*.dll >/dev/null 2>&1 || { echo "the export did not put the WebRTC .dll next to the .exe" >&2; exit 1; }
 		(cd "$OUT/windows" && rm -f "../ClassicHS-$VER-windows-x86_64.zip" && zip -qr "../ClassicHS-$VER-windows-x86_64.zip" ClassicHS)
 		;;
 	linux)
@@ -82,11 +84,13 @@ for p in $WANT; do
 		export_preset "Linux" "$OUT/linux/ClassicHS.x86_64"
 		SO="$OUT/linux/$(basename "$(rules_lib linux)")"  # the rules engine, next to the binary
 		[ -s "$SO" ] || { echo "the export did not put the rules .so next to the binary" >&2; exit 1; }
+		RTC=$(ls "$OUT"/linux/libwebrtc_native.*.so 2>/dev/null | head -1)  # WebRTC (code play)
+		[ -s "$RTC" ] || { echo "the export did not put the WebRTC .so next to the binary" >&2; exit 1; }
 		if command -v appimagetool >/dev/null; then
 			APP="$OUT/linux/AppDir"
 			rm -rf "$APP"
 			mkdir -p "$APP/usr/bin"
-			cp "$OUT/linux/ClassicHS.x86_64" "$SO" "$APP/usr/bin/"
+			cp "$OUT/linux/ClassicHS.x86_64" "$SO" "$RTC" "$APP/usr/bin/"
 			cp icons/icon_512.png "$APP/classichs.png"
 			printf '[Desktop Entry]\nType=Application\nName=Classic HS\nExec=ClassicHS.x86_64\nIcon=classichs\nCategories=Game;CardGame;\n' > "$APP/classichs.desktop"
 			printf '#!/bin/sh\nexec "$(dirname "$(readlink -f "$0")")/usr/bin/ClassicHS.x86_64" "$@"\n' > "$APP/AppRun"
@@ -94,15 +98,17 @@ for p in $WANT; do
 			ARCH=x86_64 appimagetool "$APP" "$OUT/ClassicHS-$VER-linux-x86_64.AppImage"
 		else
 			echo "appimagetool not found: a .tar.gz of the binary and the rules .so instead" >&2
-			tar -czf "$OUT/ClassicHS-$VER-linux-x86_64.tar.gz" -C "$OUT/linux" ClassicHS.x86_64 "$(basename "$SO")"
+			tar -czf "$OUT/ClassicHS-$VER-linux-x86_64.tar.gz" -C "$OUT/linux" ClassicHS.x86_64 "$(basename "$SO")" "$(basename "$RTC")"
 		fi
 		;;
 	macos)
 		export_preset "macOS" "$OUT/ClassicHS-$VER-macos.zip"
+		unzip -l "$OUT/ClassicHS-$VER-macos.zip" | grep -q 'Frameworks/libwebrtc_native' || { echo "the macOS app has no WebRTC framework" >&2; exit 1; }
 		;;
 	android)
 		export_preset "Android" "$OUT/ClassicHS-$VER-android-arm64.apk"
 		android_store_packs "$OUT/ClassicHS-$VER-android-arm64.apk"  # (also drops the v4 .idsig the release does not need)
+		unzip -l "$OUT/ClassicHS-$VER-android-arm64.apk" | grep -q 'lib/arm64-v8a/libwebrtc_native' || { echo "the APK has no WebRTC library" >&2; exit 1; }
 		;;
 	*)
 		echo "unknown platform: $p" >&2

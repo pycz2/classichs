@@ -4,6 +4,14 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.30.0] - 2026-10-26
+
+### Adicionado
+- O jogo por códigos (direto, sem servidor) agora funciona não só no navegador, mas também no Windows, macOS, Linux e Android. Também entre plataformas diferentes, por exemplo navegador contra Android.
+
+### Corrigido
+- Firefox: Ctrl+V e Cmd+V não colavam texto nos campos, e um clique num campo abria um menu "Colar". Colar funciona agora, e o menu não aparece mais.
+
 ## [0.29.2] - 2026-10-25
 
 ### Corrigido

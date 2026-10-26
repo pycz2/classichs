@@ -53,3 +53,21 @@ func test_takes_the_paste_key_only_in_a_text_field() -> void:
 	key.keycode = KEY_C
 	check(not WebPaste.is_paste_key(key, le), "not Cmd+C")
 	le.free()
+
+
+## Firefox answers navigator.clipboard.readText (Godot's clipboard_get on the web) with its own "Paste"
+## menu at the pointer: the game never reads the clipboard by itself, the paste event brings the text.
+func test_the_game_never_reads_the_clipboard() -> void:
+	for dir in ["res://ui", "res://game", "res://net"]:
+		for f in DirAccess.get_files_at(dir):
+			if f.ends_with(".gd"):
+				var src := FileAccess.get_file_as_string(dir + "/" + f)
+				check(not src.contains("clipboard_get"), "%s/%s reads no clipboard" % [dir, f])
+
+
+## Godot cancels the keys it gets, and a cancelled Ctrl+V/Cmd+V makes no paste event (Firefox):
+## the paste key stops on window, before Godot's canvas handler.
+func test_the_paste_key_never_reaches_godot_in_the_browser() -> void:
+	var src := FileAccess.get_file_as_string("res://ui/web_paste.gd")
+	check(src.contains("addEventListener('keydown'") and src.contains("e.code === 'KeyV'") and src.contains("stopImmediatePropagation"),
+		"a capture keydown listener on window stops Ctrl/Cmd+V")

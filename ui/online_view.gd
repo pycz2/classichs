@@ -87,7 +87,7 @@ func _ready() -> void:
 		b.pressed.connect(spec[2])
 		col.add_child(b)
 		var codes: bool = spec[1] == "ViaCodes"
-		b.disabled = codes and not WebRtcTransport.available()  # WebRTC: only in the browser
+		b.disabled = codes and not WebRtcTransport.available()  # WebRTC: the browser, or the webrtc-native plugin
 		var why := Palette.label(tr("Direct play works only in the browser version of the game") if b.disabled else spec[3], 18)
 		why.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		why.custom_minimum_size.x = 480
