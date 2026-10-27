@@ -76,7 +76,7 @@ func _ready() -> void:
 	vias.position = Vector2(140, 150)
 	vias.add_theme_constant_override("separation", 40)
 	_stages.via.add_child(vias)
-	for spec in [[tr("Directly, with codes"), "ViaCodes", func(): show_stage("name"), tr("Two browsers connect directly; you exchange codes in any messenger")],
+	for spec in [[tr("Directly, with codes"), "ViaCodes", func(): show_stage("name"), tr("Two players connect directly; you exchange codes in any messenger")],
 			[tr("Through a game server"), "ViaServer", func(): server.emit(), tr("An account, ranked games, the Arena, friends and messages (the address is in the settings)")]]:
 		var col := VBoxContainer.new()
 		col.add_theme_constant_override("separation", 10)
