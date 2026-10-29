@@ -1,10 +1,8 @@
 //! Greedy one-step bot (game/bot.gd): tries every legal action on a clone and
 //! keeps the best one if it beats ending the turn. Sees hidden information.
 
-use crate::entity::int;
-use crate::game::Action;
+use crate::game::{Act, Action};
 use crate::state::Game;
-use serde_json::Value;
 
 pub const WIN: f64 = 100000.0;
 pub const MULLIGAN_MAX_COST: i64 = 3;
@@ -47,13 +45,13 @@ fn side(g: &Game, p: usize, own: bool) -> f64 {
 }
 
 /// p's actions the bot considers: no concede, a minion only to the rightmost slot.
-fn options(g: &Game, p: usize) -> Vec<Action> {
+fn options(g: &Game, p: usize) -> Vec<Act> {
     let last = g.players[p].board.len() as i64;
-    g.legal_actions()
+    g.legal()
         .into_iter()
-        .filter(|a| int(a.get("player")) == p as i64 && a["type"] != "concede")
+        .filter(|a| a.player() == p as i64 && !matches!(a, Act::Concede { .. }))
         // ponytail: rightmost slot only; adjacency-aware placement if the bot needs it
-        .filter(|a| !(a["type"] == "play" && int(a.get("pos")) >= 0 && int(a.get("pos")) != last))
+        .filter(|a| !matches!(*a, Act::Play { pos, .. } if pos >= 0 && pos != last))
         .collect()
 }
 
@@ -64,18 +62,18 @@ pub fn choose(g: &Game, p: usize) -> Option<Action> {
         return None;
     }
     if g.phase == "MULLIGAN" {
-        return Some(mulligan(g, p, legal));
+        return Some(mulligan(g, p, legal).to_map());
     }
     let (best, score) = greedy(g, p, &legal);
-    if g.rs.bot_depth < 2 || best.as_ref().is_none_or(|a| a["type"] != "end_turn") {
-        return best;
+    if g.rs.bot_depth < 2 || best.as_ref().is_none_or(|a| !matches!(a, Act::EndTurn { .. })) {
+        return best.map(|a| a.to_map());
     }
     // bot.depth 2: before ending the turn, an action that pays off only with the next one
     // (a temporary Mana card, then a minion)
-    let mut two: Option<(Action, f64)> = None;
-    for a in legal.into_iter().filter(|a| a["type"] != "end_turn") {
+    let mut two: Option<(Act, f64)> = None;
+    for a in legal.into_iter().filter(|a| !matches!(a, Act::EndTurn { .. })) {
         let mut c = g.clone_state();
-        if !c.apply(&Value::Object(a.clone())).ok || c.game_over {
+        if !c.apply_legal(a.clone()) || c.game_over {
             continue;
         }
         let s = greedy(&c, p, &options(&c, p)).1;
@@ -83,15 +81,15 @@ pub fn choose(g: &Game, p: usize) -> Option<Action> {
             two = Some((a, s));
         }
     }
-    two.map(|t| t.0).or(best)
+    two.map(|t| t.0).or(best).map(|a| a.to_map())
 }
 
 /// The best of these actions one step ahead (ending the turn wins ties) and its value.
-fn greedy(g: &Game, p: usize, legal: &[Action]) -> (Option<Action>, f64) {
-    let mut best: Option<Action> = None;
+fn greedy(g: &Game, p: usize, legal: &[Act]) -> (Option<Act>, f64) {
+    let mut best: Option<Act> = None;
     let mut best_score = f64::NEG_INFINITY;
     for a in legal {
-        if a["type"] == "end_turn" {
+        if matches!(a, Act::EndTurn { .. }) {
             let v = value(g, p);
             if v > best_score {
                 best = Some(a.clone());
@@ -100,7 +98,7 @@ fn greedy(g: &Game, p: usize, legal: &[Action]) -> (Option<Action>, f64) {
             continue;
         }
         let mut c = g.clone_state();
-        if !c.apply(&Value::Object(a.clone())).ok {
+        if !c.apply_legal(a.clone()) {
             continue;
         }
         let s = value(&c, p);
@@ -112,9 +110,8 @@ fn greedy(g: &Game, p: usize, legal: &[Action]) -> (Option<Action>, f64) {
     (best, best_score)
 }
 
-fn mulligan(g: &Game, p: usize, legal: Vec<Action>) -> Action {
+fn mulligan(g: &Game, p: usize, legal: Vec<Act>) -> Act {
     let mut replace: Vec<i64> = g.players[p].hand.iter().copied().filter(|&e| g.cost(e) > MULLIGAN_MAX_COST).collect();
     replace.sort();
-    let want = serde_json::json!(replace);
-    legal.iter().find(|a| a.get("replace") == Some(&want)).cloned().unwrap_or_else(|| legal[0].clone())
+    legal.iter().find(|a| matches!(a, Act::Mulligan { replace: r, .. } if *r == replace)).cloned().unwrap_or_else(|| legal[0].clone())
 }

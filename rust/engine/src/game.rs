@@ -30,10 +30,68 @@ pub fn mulligan_seed(seed: u64, p: usize) -> u64 {
     z ^ (z >> 31)
 }
 
-fn obj(v: Value) -> Action {
-    match v {
-        Value::Object(m) => m,
-        _ => unreachable!(),
+/// A legal action, typed (`legal_actions` gives them as JSON objects).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Act {
+    Mulligan { player: i64, replace: Vec<Id> },
+    EndTurn { player: i64 },
+    Concede { player: i64 },
+    Play { player: i64, entity: Id, target: Id, pos: i64, choice: i64 },
+    HeroPower { player: i64, target: Id },
+    Attack { player: i64, attacker: Id, defender: Id },
+    Choose { player: i64, option: Id },
+}
+
+impl Act {
+    pub fn player(&self) -> i64 {
+        match *self {
+            Act::Mulligan { player, .. }
+            | Act::EndTurn { player }
+            | Act::Concede { player }
+            | Act::Play { player, .. }
+            | Act::HeroPower { player, .. }
+            | Act::Attack { player, .. }
+            | Act::Choose { player, .. } => player,
+        }
+    }
+
+    pub fn to_map(&self) -> Action {
+        let v = match self {
+            Act::Mulligan { player, replace } => json!({"type": "mulligan", "player": player, "replace": replace}),
+            Act::EndTurn { player } => json!({"type": "end_turn", "player": player}),
+            Act::Concede { player } => json!({"type": "concede", "player": player}),
+            Act::Play { player, entity, target, pos, choice } => {
+                json!({"type": "play", "player": player, "entity": entity, "target": target, "pos": pos, "choice": choice})
+            }
+            Act::HeroPower { player, target } => json!({"type": "hero_power", "player": player, "target": target}),
+            Act::Attack { player, attacker, defender } => {
+                json!({"type": "attack", "player": player, "attacker": attacker, "defender": defender})
+            }
+            Act::Choose { player, option } => json!({"type": "choose", "player": player, "option": option}),
+        };
+        match v {
+            Value::Object(m) => m,
+            _ => unreachable!(),
+        }
+    }
+
+    /// The action a normalized JSON action is, if it has exactly the fields of one.
+    pub fn from_map(a: &Action) -> Option<Act> {
+        let i = |k: &str| a.get(k).and_then(Value::as_i64);
+        let (n, player) = (a.len(), i("player")?);
+        Some(match a.get("type")?.as_str()? {
+            "mulligan" if n == 3 => {
+                let replace = a.get("replace")?.as_array()?.iter().map(Value::as_i64).collect::<Option<Vec<Id>>>()?;
+                Act::Mulligan { player, replace }
+            }
+            "end_turn" if n == 2 => Act::EndTurn { player },
+            "concede" if n == 2 => Act::Concede { player },
+            "play" if n == 6 => Act::Play { player, entity: i("entity")?, target: i("target")?, pos: i("pos")?, choice: i("choice")? },
+            "hero_power" if n == 3 => Act::HeroPower { player, target: i("target")? },
+            "attack" if n == 4 => Act::Attack { player, attacker: i("attacker")?, defender: i("defender")? },
+            "choose" if n == 3 => Act::Choose { player, option: i("option")? },
+            _ => return None,
+        })
     }
 }
 
@@ -86,23 +144,13 @@ impl Game {
             self.history.push(json!({"turn": self.turn, "player": self.current, "action": a, "events": ev_values}));
             return Applied { ok: true, error: String::new(), events };
         }
-        if a.is_empty() || !self.legal_actions().contains(&a) {
+        // the whole legal list even for a malformed action: its read-only hooks may fail (a script error)
+        let act = if a.is_empty() { None } else { Some(self.legal()).and_then(|l| Act::from_map(&a).filter(|x| l.contains(x))) };
+        let Some(act) = act else {
             return Applied { ok: false, error: format!("illegal action {}", json::stringify(&Value::Object(a))), events: vec![] };
-        }
-        self.event_log.clear();
+        };
         let who = self.current;
-        let p = int(a.get("player")) as usize;
-        match a["type"].as_str().unwrap() {
-            "mulligan" => {
-                let replace: Vec<Id> = a["replace"].as_array().unwrap().iter().map(|x| int(Some(x))).collect();
-                self.do_mulligan(p, replace)
-            }
-            "end_turn" => self.end_turn(),
-            "concede" => self.concede(p),
-            _ => self.apply_play_action(&a),
-        }
-        self.resolve();
-        self.prune_pending();
+        self.run(act);
         let events = self.event_log.clone();
         let ev_values: Vec<Value> = events.iter().cloned().map(Value::Object).collect();
         let player = a.get("player").cloned().unwrap_or(json!(who));
@@ -110,7 +158,43 @@ impl Game {
         Applied { ok: true, error: String::new(), events }
     }
 
+    /// `apply` of an action known to be legal here (one of `legal()` of this very state):
+    /// no legality check, no history, no events for a caller (the bot's look-ahead copies).
+    pub(crate) fn apply_legal(&mut self, act: Act) -> bool {
+        if self.script_error.get().is_some() {
+            if self.game_over {
+                return false;
+            }
+            self.event_log.clear();
+            self.end_by_script_error();
+            return true;
+        }
+        self.run(act);
+        true
+    }
+
+    /// Runs a legal action (one of `legal()` of this state).
+    pub(crate) fn run(&mut self, act: Act) {
+        self.event_log.clear();
+        match act {
+            Act::Mulligan { player, replace } => self.do_mulligan(player as usize, replace),
+            Act::EndTurn { .. } => self.end_turn(),
+            Act::Concede { player } => self.concede(player as usize),
+            Act::Play { entity, target, pos, choice, .. } => self.do_play(entity, target, pos, choice),
+            Act::Attack { attacker, defender, .. } => self.do_attack(attacker, defender),
+            Act::HeroPower { target, .. } => self.do_hero_power(target),
+            Act::Choose { option, .. } => self.do_choose(option),
+        }
+        self.resolve();
+        self.prune_pending();
+    }
+
     pub fn legal_actions(&self) -> Vec<Action> {
+        self.legal().iter().map(Act::to_map).collect()
+    }
+
+    /// The legal actions, typed, in the order `legal_actions` gives them.
+    pub fn legal(&self) -> Vec<Act> {
         let mut out = vec![];
         if self.game_over || self.script_error.get().is_some() {
             return out;
@@ -119,16 +203,16 @@ impl Game {
             for p in &self.players {
                 if !p.mulliganed {
                     for ids in subsets(&p.hand) {
-                        out.push(obj(json!({"type": "mulligan", "player": p.index, "replace": ids})));
+                        out.push(Act::Mulligan { player: p.index as i64, replace: ids });
                     }
                 }
             }
         } else {
-            out.push(obj(json!({"type": "end_turn", "player": self.current})));
+            out.push(Act::EndTurn { player: self.current as i64 });
             self.legal_play_actions(&mut out);
         }
         for p in 0..2 {
-            out.push(obj(json!({"type": "concede", "player": p})));
+            out.push(Act::Concede { player: p });
         }
         out
     }
@@ -241,26 +325,16 @@ impl Game {
         self.log_event(json!({"type": "game_over", "winner": self.winner}));
     }
 
-    fn apply_play_action(&mut self, a: &Action) {
-        let i = |k: &str| int(a.get(k));
-        match a["type"].as_str().unwrap() {
-            "play" => self.do_play(i("entity"), i("target"), i("pos"), i("choice")),
-            "attack" => self.do_attack(i("attacker"), i("defender")),
-            "hero_power" => self.do_hero_power(i("target")),
-            "choose" => self.do_choose(i("option")),
-            _ => {}
-        }
-    }
-
-    fn legal_play_actions(&self, out: &mut Vec<Action>) {
+    fn legal_play_actions(&self, out: &mut Vec<Act>) {
         if let Some(p) = &self.pending {
             out.clear();
             for id in self.pending_options() {
-                out.push(obj(json!({"type": "choose", "player": p.player, "option": id})));
+                out.push(Act::Choose { player: p.player as i64, option: id });
             }
             return;
         }
         let cur = self.current;
+        let player = cur as i64;
         let p = &self.players[cur];
         for &e in &p.hand {
             if self.cost(e) > p.mana || !self.can_play(e) {
@@ -270,8 +344,7 @@ impl Game {
             for &choice in choices {
                 for t in self.play_targets(e, choice) {
                     for pos in self.positions(e) {
-                        out.push(obj(json!({"type": "play", "player": cur, "entity": e, "target": t, "pos": pos,
-                            "choice": choice})));
+                        out.push(Act::Play { player, entity: e, target: t, pos, choice });
                     }
                 }
             }
@@ -283,14 +356,14 @@ impl Game {
             let hh = &hpe.card.hooks;
             if hh.power.is_some() && hh.can_play.is_none_or(|f| self.fx_can_play(f, hp)) {
                 for t in self.spec_targets(hp, hh.target, true, false) {
-                    out.push(obj(json!({"type": "hero_power", "player": cur, "target": t})));
+                    out.push(Act::HeroPower { player, target: t });
                 }
             }
         }
         for a in self.chars(cur) {
             if self.can_attack(a) {
                 for d in self.defenders(a) {
-                    out.push(obj(json!({"type": "attack", "player": cur, "attacker": a, "defender": d})));
+                    out.push(Act::Attack { player, attacker: a, defender: d });
                 }
             }
         }
