@@ -3,7 +3,7 @@
 //! Cards it cannot see (the opponent's hand and Secrets, both decks) become a
 //! filler card; RNG, history and start decks are not restored. Not for parity.
 
-use crate::entity::{int, truthy, Entity, Id};
+use crate::entity::{int, truthy, Entity, Id, Obj};
 use crate::ruleset::{self, Ruleset};
 use crate::scenario::ints;
 use crate::state::{Game, Pending};
@@ -52,6 +52,7 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
         return Err("not a snapshot".into());
     }
     let mut g = Game::blank(rs, 0);
+    let intern = |s: &str| rs.intern(s);
     let next_id = int(s.get("next_id")).max(1);
     let mut hidden: Vec<Id> = vec![];
     for id in 1..next_id {
@@ -67,10 +68,10 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
         if card != filler || d["card"] == filler {
             e.damage = int(d.get("dmg"));
             if let Some(t) = d["tags"].as_object() {
-                e.tags = t.clone();
+                e.tags = Obj::of(t, &intern);
             }
-            e.enchantments = d["ench"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_object().cloned()).collect());
-            e.eot_tags = d["eot"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_str().map(String::from)).collect());
+            e.enchantments = d["ench"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_object().map(|o| Obj::of(o, &intern))).collect());
+            e.eot_tags = d["eot"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_str().map(intern)).collect());
             e.silenced = truthy(d.get("sil"));
         }
         g.entities.push(e);
@@ -91,7 +92,7 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
         pl.fatigue = int(p.get("fatigue"));
         pl.cards_played_this_turn = int(p.get("played"));
         pl.minions_played_this_turn = int(p.get("minions_played"));
-        pl.cost_mods = p["cost_mods"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_object().cloned()).collect());
+        pl.cost_mods = p["cost_mods"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_object().map(|o| Obj::of(o, &intern))).collect());
         pl.mulliganed = truthy(p.get("mulliganed"));
         pl.mulligan_replace = ids(&p["mulligan_replace"]);
         // a view has no deck lists: its hidden ids stand in, so draws still draw

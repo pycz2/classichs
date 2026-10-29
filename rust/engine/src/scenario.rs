@@ -1,7 +1,7 @@
 //! Builds a Game in PLAY phase from a position description, and back
 //! (engine/scenario.gd). Used by the debug table, card tests and bug reports.
 
-use crate::entity::{int, Entity, Id};
+use crate::entity::{int, Entity, Id, Obj};
 use crate::ruleset::{self, Names, Ruleset};
 use crate::state::Game;
 use serde_json::{json, Map, Value};
@@ -50,8 +50,8 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
     let hero = g.players[i].hero;
     let n = g.n();
     g.em(hero).damage = num(d, "damage");
-    g.em(hero).set_tag(n.armor, json!(num(d, "armor")));
-    g.em(hero).set_tag(n.attacks, json!(num(d, "hero_attacks")));
+    g.em(hero).set_tag(n.armor, num(d, "armor"));
+    g.em(hero).set_tag(n.attacks, num(d, "hero_attacks"));
     let p = &mut g.players[i];
     p.mana = num(d, "mana");
     p.max_mana = num(d, "max_mana");
@@ -60,7 +60,9 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
     p.fatigue = num(d, "fatigue");
     p.cards_played_this_turn = num(d, "cards_played");
     p.minions_played_this_turn = num(d, "minions_played");
-    p.cost_mods = list(d, "cost_mods").iter().filter_map(|m| ints(m).as_object().cloned()).collect();
+    let rs = g.rs;
+    let p = &mut g.players[i];
+    p.cost_mods = list(d, "cost_mods").iter().filter_map(|m| ints(m).as_object().map(|o| Obj::of(o, &|s| rs.intern(s)))).collect();
     let hp = p.hero_power;
     if crate::entity::truthy(d.get("hero_power_used")) {
         g.em(hp).give_tag(n.used, false);
@@ -72,21 +74,21 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
         let s = spec(item);
         let e = g.new_entity(card_of(&s), i);
         g.em(e).zone = "DECK";
-        apply_spec(g.em(e), &s, n);
+        apply_spec(g.em(e), &s, rs);
         g.players[i].deck.push(e);
     }
     for item in list(d, "hand") {
         let s = spec(item);
         let e = g.new_entity(card_of(&s), i);
         g.em(e).zone = "HAND";
-        apply_spec(g.em(e), &s, n);
+        apply_spec(g.em(e), &s, rs);
         g.players[i].hand.push(e);
     }
     for item in list(d, "board") {
         let s = spec(item);
         let e = g.new_entity(card_of(&s), i);
         g.place_on_board(e, -1);
-        apply_spec(g.em(e), &s, n);
+        apply_spec(g.em(e), &s, rs);
         if s.get("exhausted").is_some_and(|v| crate::entity::truthy(Some(v))) {
             g.em(e).give_tag(n.exhausted, false);
         }
@@ -97,12 +99,12 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
         g.players[i].weapon = Some(e);
         g.enter_play(e);
         if let Some(dur) = s.get("durability") {
-            g.em(e).set_tag(n.durability, json!(int(Some(dur))));
+            g.em(e).set_tag(n.durability, int(Some(dur)));
         }
-        apply_spec(g.em(e), &s, n);
+        apply_spec(g.em(e), &s, rs);
     }
     if let Some(hs) = d.get("hero_state") {
-        apply_spec(g.em(hero), hs, n);
+        apply_spec(g.em(hero), hs, rs);
     }
     for item in list(d, "secrets") {
         let e = g.new_entity(card_of(&spec(item)), i);
@@ -124,27 +126,29 @@ fn card_of(s: &Value) -> &str {
     s["card"].as_str().unwrap()
 }
 
-fn apply_spec(e: &mut Entity, s: &Value, n: &Names) {
+fn apply_spec(e: &mut Entity, s: &Value, rs: &'static Ruleset) {
+    let n = &rs.names;
+    let intern = |s: &str| rs.intern(s);
     if s.get("silenced").is_some_and(|v| crate::entity::truthy(Some(v))) {
         e.silence(&n.silenced);
     }
     if let Some(Value::Object(t)) = s.get("tags_exact").map(ints) {
-        e.tags = t;
+        e.tags = Obj::of(&t, &intern);
     }
     for t in list(s, "tags").iter().filter_map(Value::as_str) {
-        e.give_tag(t, false);
+        e.give_tag(rs.intern(t), false);
     }
     for t in list(s, "eot_tags").iter().filter_map(Value::as_str) {
-        e.give_tag(t, true);
+        e.give_tag(rs.intern(t), true);
     }
     for ench in list(s, "enchantments") {
         if let Value::Object(m) = ints(ench) {
-            e.enchantments.push(m);
+            e.enchantments.push(Obj::of(&m, &intern));
         }
     }
     e.damage = int(s.get("damage"));
     if let Some(a) = s.get("attacks") {
-        e.set_tag(n.attacks, json!(int(Some(a))));
+        e.set_tag(n.attacks, int(Some(a)));
     }
 }
 
@@ -280,8 +284,7 @@ pub fn validate_in(rs: &Ruleset, sc: &Value) -> Result<(), String> {
 
 fn dump_entity(e: &Entity, n: &Names) -> Value {
     let skip = [n.to_destroy, n.died_pos];
-    let tags: Map<String, Value> =
-        e.tags.iter().filter(|(k, _)| !skip.contains(&k.as_str())).map(|(k, v)| (k.clone(), v.clone())).collect();
+    let tags: Map<String, Value> = e.tags.iter().filter(|(k, _)| !skip.contains(k)).map(|(k, v)| (k.to_string(), v.to_value())).collect();
     let mut d = json!({"card": e.card_id, "damage": e.damage, "tags_exact": tags, "enchantments": e.enchantments,
         "silenced": e.silenced, "eot_tags": e.eot_tags});
     if e.is_weapon() {

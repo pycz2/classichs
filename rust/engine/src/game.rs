@@ -1,7 +1,7 @@
 //! Match setup, turns, actions and legality (engine/game.gd).
 
 use crate::hooks::TSpec;
-use crate::entity::{int, truthy, Id, NONE};
+use crate::entity::{vint, vtruthy, Id, NONE};
 use crate::json;
 use crate::rng::Rng;
 use crate::ruleset::{self, Ruleset};
@@ -282,7 +282,7 @@ impl Game {
         for c in self.chars(cur) {
             let e = self.em(c);
             e.erase_tag(n.exhausted);
-            e.set_tag(n.attacks, json!(0));
+            e.set_tag(n.attacks, 0i64);
         }
         self.emit(json!({"type": "turn_start", "player": cur, "turn": self.turn}));
         self.resolve();
@@ -303,12 +303,12 @@ impl Game {
         }
         let turn = self.turn;
         for pl in &mut self.players {
-            pl.cost_mods.retain(|m| int(m.get("turn")) > turn);
+            pl.cost_mods.retain(|m| vint(m.get("turn")) > turn);
         }
         let n = self.n();
         for c in self.chars(cur) {
             let e = self.em(c);
-            if e.has(n.frozen) && !(truthy(e.tags.get(n.frozen_this_turn)) && e.tag(n.attacks) > 0) {
+            if e.has(n.frozen) && !(vtruthy(e.tags.get(n.frozen_this_turn)) && e.tag(n.attacks) > 0) {
                 e.erase_tag(n.frozen);
             }
             e.erase_tag(n.frozen_this_turn);
@@ -575,7 +575,7 @@ impl Game {
     fn do_attack(&mut self, a: Id, d: Id) {
         let names = self.n();
         let n = self.e(a).tag(names.attacks) + 1;
-        self.em(a).set_tag(names.attacks, json!(n));
+        self.em(a).set_tag(names.attacks, n);
         self.em(a).erase_tag(names.stealth);
         let c = self.ctrl(a);
         let ev = self.emit(json!({"type": "attack", "attacker": a, "defender": d, "player": c}));
@@ -607,7 +607,7 @@ impl Game {
                 };
                 if lose {
                     let dur = self.e(w).tag(names.durability) - 1;
-                    self.em(w).set_tag(names.durability, json!(dur));
+                    self.em(w).set_tag(names.durability, dur);
                 }
             }
         }

@@ -16,7 +16,7 @@
 //! never a panic.
 
 use crate::hooks::{Base, HookFn, HookSet, TSpec, TrapHook};
-use crate::entity::{Id, NONE};
+use crate::entity::{vint, Id, Obj, Str, NONE, V};
 use crate::ruleset::{leak, Ruleset};
 use crate::state::{Ev, Game};
 use classichs_script::{call, compile_bytes, load, Args, Chunk, Error, Host, Value as L, Vm};
@@ -589,8 +589,8 @@ fn card_arg(g: &Game, a: &Args, i: usize, kind: &str) -> Result<String, Error> {
     }
 }
 
-fn tag_arg(g: &Game, a: &Args, i: usize) -> Result<String, Error> {
-    Ok(g.rs.names.tag(&a.string(i)?).to_string())
+fn tag_arg(g: &Game, a: &Args, i: usize) -> Result<Str, Error> {
+    Ok(g.rs.intern(g.rs.names.tag(&a.string(i)?)))
 }
 
 fn zone_name(g: &Game, z: &str) -> &'static str {
@@ -669,7 +669,7 @@ q!(q_has, |g, a| one(g.e(ent(g, &a, 0)?).has(&tag_arg(g, &a, 1)?)));
 q!(q_tag, |g, a| {
     let (e, t) = (ent(g, &a, 0)?, tag_arg(g, &a, 1)?);
     let x = g.e(e);
-    one(x.tag(&t) + crate::entity::int(x.aura.tags.get(&t)))
+    one(x.tag(&t) + vint(x.aura.tags.get(&t)))
 });
 q!(q_silenced, |g, a| one(g.e(ent(g, &a, 0)?).silenced));
 q!(q_is_minion, |g, a| one(g.e(ent(g, &a, 0)?).is_minion()));
@@ -936,9 +936,12 @@ fn a_set_tag(g: &mut Game, a: Args) -> R {
     let (e, t) = (ent(g, &a, 0)?, tag_arg(g, &a, 1)?);
     match a.get(2) {
         L::Nil => g.em(e).erase_tag(&t),
-        L::Bool(b) => g.em(e).set_tag(&t, json!(b)),
-        L::Int(n) => g.em(e).set_tag(&t, json!(n.clamp(-LIMIT, LIMIT))),
-        L::Str(_) => g.em(e).set_tag(&t, json!(a.string(2)?)),
+        L::Bool(b) => g.em(e).set_tag(t, b),
+        L::Int(n) => g.em(e).set_tag(t, n.clamp(-LIMIT, LIMIT)),
+        L::Str(_) => {
+            let v = V::Str(g.rs.intern(&a.string(2)?));
+            g.em(e).set_tag(t, v)
+        }
         _ => return Err(a.bad(2, "a boolean, number, string or nil expected")),
     }
     none()
@@ -947,7 +950,7 @@ fn a_give_tag(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (e, t) = (opt_ent(g, &a, 0)?, tag_arg(g, &a, 1)?);
     if e != NONE {
-        g.em(e).give_tag(&t, a.get(2).truthy());
+        g.em(e).give_tag(t, a.get(2).truthy());
     }
     none()
 }
@@ -963,7 +966,7 @@ fn a_add_tag(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (e, t, n) = (opt_ent(g, &a, 0)?, tag_arg(g, &a, 1)?, num(&a, 2, 1)?);
     if e != NONE {
-        g.add_tag_int(e, &t, n);
+        g.add_tag_int(e, t, n);
     }
     none()
 }
@@ -978,7 +981,10 @@ fn a_enchant(g: &mut Game, a: Args) -> R {
     let e = ent(g, &a, 0)?;
     let v = to_json(g.vm(), &a.table(1)?, 0)?;
     match v {
-        Value::Object(m) => g.em(e).enchantments.push(m),
+        Value::Object(m) => {
+            let rs = g.rs;
+            g.em(e).enchantments.push(Obj::of(&m, &|s| rs.intern(s)))
+        }
         _ => return Err(a.bad(1, "a table with named fields expected")),
     }
     none()
@@ -991,23 +997,22 @@ fn a_remove_enchant(g: &mut Game, a: Args) -> R {
         _ => Some(player(&a, 2)? as i64),
     };
     g.em(e).enchantments.retain(|x| {
-        x.get("hooks").and_then(Value::as_str) != Some(hooks.as_str())
-            || p.is_some_and(|p| crate::entity::int(x.get("player")) != p)
+        x.get("hooks").and_then(V::as_str) != Some(hooks.as_str()) || p.is_some_and(|p| vint(x.get("player")) != p)
     });
     none()
 }
 fn a_aura_add(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (t, at, hp) = (ent(g, &a, 0)?, num(&a, 1, 0)?, num(&a, 2, 0)?);
-    let mut tags: Vec<(String, Value)> = vec![];
+    let mut tags: Vec<(Str, V)> = vec![];
     if let L::Table(_) = a.get(3) {
+        let rs = g.rs;
         for (k, v) in g.vm().pairs(&a.get(3))? {
-            let name = g.rs.names.tag(k.as_str().ok_or_else(|| a.bad(3, "tag names must be strings"))?).to_string();
-            tags.push((name, to_json(g.vm(), &v, 0)?));
+            let name = rs.intern(rs.names.tag(k.as_str().ok_or_else(|| a.bad(3, "tag names must be strings"))?));
+            tags.push((name, V::of(&to_json(g.vm(), &v, 0)?, &|s| rs.intern(s))));
         }
     }
-    let tags: Vec<(&str, Value)> = tags.iter().map(|(k, v)| (k.as_str(), v.clone())).collect();
-    g.aura_add(t, at, hp, &tags);
+    g.aura_add(t, at, hp, tags);
     none()
 }
 fn a_replace_hero(g: &mut Game, a: Args) -> R {
@@ -1050,7 +1055,7 @@ fn a_add_cost_mod(g: &mut Game, a: Args) -> R {
     let Some(turn) = m.as_object().map(|o| o.get("turn").cloned()) else { return Err(a.bad(1, "a table expected")) };
     g.add_cost_mod(p, m);
     if let (Some(t), Some(last)) = (turn, g.players[p].cost_mods.last_mut()) {
-        last.insert("turn".into(), t); // add_cost_mod stamps this turn; a given one wins (say, next turn)
+        last.insert("turn", V::of(&t, &|s| g.rs.intern(s))); // add_cost_mod stamps this turn; a given one wins (say, next turn)
     }
     none()
 }

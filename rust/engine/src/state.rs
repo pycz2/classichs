@@ -2,7 +2,7 @@
 //! hooks use (engine/game_state.gd). Turns, actions and legality: game.rs.
 
 use crate::hooks::{Base, HookFn, HookSet, TSpec, TrapHook};
-use crate::entity::{int, truthy, Entity, Id, NONE};
+use crate::entity::{int, truthy, vint, vtruthy, Entity, Id, Obj, Str, V, NONE};
 use crate::json;
 use crate::lua::LuaSlot;
 use crate::player::Player;
@@ -305,7 +305,7 @@ impl Game {
     /// The hooks of e's enchantments, in order.
     fn ench_hooks(&self, e: Id) -> Vec<&'static HookSet> {
         let rs = self.rs;
-        self.e(e).enchantments.iter().filter_map(|x| x.get("hooks").and_then(Value::as_str)).map(|h| rs.hooks(h)).collect()
+        self.e(e).enchantments.iter().filter_map(|x| x.get("hooks").and_then(V::as_str)).map(|h| rs.hooks(h)).collect()
     }
 
     /// Calls matching "now" hooks (card and enchantment) at once. Used for
@@ -369,13 +369,13 @@ impl Game {
         for p in &self.players {
             for &m in &p.board {
                 let e = self.e(m);
-                if e.health() <= 0 || truthy(e.tags.get(n.to_destroy)) {
+                if e.health() <= 0 || vtruthy(e.tags.get(n.to_destroy)) {
                     dead.push(m);
                 }
             }
             if let Some(w) = p.weapon {
                 let e = self.e(w);
-                if e.tag(n.durability) <= 0 || truthy(e.tags.get(n.to_destroy)) {
+                if e.tag(n.durability) <= 0 || vtruthy(e.tags.get(n.to_destroy)) {
                     dead.push(w);
                 }
             }
@@ -385,7 +385,7 @@ impl Game {
             let c = self.ctrl(d);
             if self.e(d).is_minion() {
                 let pos = self.players[c].board.iter().position(|&x| x == d).map_or(-1, |i| i as i64);
-                self.em(d).set_tag(n.died_pos, json!(pos));
+                self.em(d).set_tag(n.died_pos, pos);
                 self.players[c].board.retain(|&x| x != d);
             } else {
                 self.players[c].weapon = None;
@@ -409,7 +409,7 @@ impl Game {
         let mut heroes_dead = vec![];
         for p in &self.players {
             let h = self.e(p.hero);
-            if h.health() <= 0 || truthy(h.tags.get(n.to_destroy)) {
+            if h.health() <= 0 || vtruthy(h.tags.get(n.to_destroy)) {
                 heroes_dead.push(p.index);
             }
         }
@@ -462,22 +462,27 @@ impl Game {
         }
     }
 
-    pub fn aura_add(&mut self, t: Id, atk: i64, hp: i64, tags: &[(&str, Value)]) {
+    pub fn aura_add(&mut self, t: Id, atk: i64, hp: i64, tags: Vec<(Str, V)>) {
         let src = self.source_card;
         let n = self.n();
         let a = &mut self.em(t).aura;
         a.atk += atk;
         a.hp += hp;
         if !src.is_empty() && (atk != 0 || hp != 0) {
-            let was = a.src.get(src).cloned().unwrap_or(json!([0, 0]));
-            a.src.insert(src.to_string(), json!([int(was.get(0)) + atk, int(was.get(1)) + hp]));
+            match a.src.binary_search_by(|(k, _)| (*k).cmp(src)) {
+                Ok(i) => {
+                    a.src[i].1[0] += atk;
+                    a.src[i].1[1] += hp;
+                }
+                Err(i) => a.src.insert(i, (src, [atk, hp])),
+            }
         }
         for (k, v) in tags {
-            if *k == n.spell_power || *k == n.power_multiplier {
-                let n = int(a.tags.get(*k)) + int(Some(v));
-                a.tags.insert(k.to_string(), json!(n));
+            if k == n.spell_power || k == n.power_multiplier {
+                let n = vint(a.tags.get(&k)) + v.int();
+                a.tags.insert(k, n);
             } else {
-                a.tags.insert(k.to_string(), v.clone());
+                a.tags.insert(k, v);
             }
         }
     }
@@ -507,7 +512,7 @@ impl Game {
         if self.e(t).is_champion() {
             let armor = self.e(t).tag(n.armor);
             let absorbed = armor.min(amount);
-            self.em(t).set_tag(n.armor, json!(armor - absorbed));
+            self.em(t).set_tag(n.armor, armor - absorbed);
             amount -= absorbed;
             if amount <= 0 {
                 self.log_event(json!({"type": "armor_lost", "target": t, "amount": absorbed}));
@@ -542,7 +547,7 @@ impl Game {
     pub fn destroy(&mut self, e: Id) {
         if self.alive_in_play(e) {
             let t = self.n().to_destroy;
-            self.em(e).set_tag(t, json!(true));
+            self.em(e).set_tag(t, true);
         }
     }
 
@@ -639,26 +644,29 @@ impl Game {
     }
 
     pub fn buff(&mut self, e: Id, atk: i64, hp: i64, eot: bool) {
-        let mut ench = json!({"atk": atk, "hp": hp, "eot": eot});
+        let mut ench = Obj::new();
+        ench.insert("atk", atk);
+        ench.insert("eot", eot);
+        ench.insert("hp", hp);
         if !self.source_card.is_empty() {
-            ench["src"] = json!(self.source_card);
+            ench.insert("src", self.source_card);
         }
-        self.em(e).add_enchant(ench);
+        self.em(e).enchantments.push(ench);
         self.log_event(json!({"type": "buff", "target": e, "atk": atk, "hp": hp}));
     }
 
     /// Sets Attack and/or Health (-1 keeps the value). Setting Health clears damage.
     pub fn set_stats(&mut self, e: Id, atk: i64, hp: i64) {
-        let mut ench = Map::new();
+        let mut ench = Obj::new();
         if atk >= 0 {
-            ench.insert("set_atk".into(), json!(atk));
+            ench.insert("set_atk", atk);
         }
         if hp >= 0 {
-            ench.insert("set_hp".into(), json!(hp));
+            ench.insert("set_hp", hp);
             self.em(e).damage = 0;
         }
         if !self.source_card.is_empty() {
-            ench.insert("src".into(), json!(self.source_card));
+            ench.insert("src", self.source_card);
         }
         self.em(e).enchantments.push(ench);
         self.log_event(json!({"type": "buff", "target": e, "set_atk": atk, "set_hp": hp}));
@@ -676,9 +684,9 @@ impl Game {
         }
         let (cur, n) = (self.current, self.n());
         let x = self.em(e);
-        x.set_tag(n.frozen, json!(true));
+        x.set_tag(n.frozen, true);
         if x.controller == cur {
-            x.set_tag(n.frozen_this_turn, json!(true));
+            x.set_tag(n.frozen_this_turn, true);
         }
         self.log_event(json!({"type": "freeze", "target": e}));
     }
@@ -728,7 +736,7 @@ impl Game {
         let n = self.n();
         let x = self.em(e);
         x.give_tag(n.exhausted, false);
-        x.set_tag(n.attacks, json!(0));
+        x.set_tag(n.attacks, 0i64);
         self.log_event(json!({"type": "take_control", "target": e, "player": p}));
     }
 
@@ -753,7 +761,7 @@ impl Game {
     pub fn gain_armor(&mut self, p: usize, n: i64) {
         let (h, t) = (self.hero(p), self.n().armor);
         let a = self.e(h).tag(t);
-        self.em(h).set_tag(t, json!(a + n));
+        self.em(h).set_tag(t, a + n);
         self.log_event(json!({"type": "armor", "player": p, "amount": n}));
     }
 
@@ -780,7 +788,7 @@ impl Game {
         if k != "SPELL" && k != "POWER" {
             return 1;
         }
-        1 << int(self.e(self.hero(self.ctrl(me))).aura.tags.get(self.n().power_multiplier)).clamp(0, 20)
+        1 << vint(self.e(self.hero(self.ctrl(me))).aura.tags.get(self.n().power_multiplier)).clamp(0, 20)
     }
 
     pub fn spell_dmg(&self, me: Id, n: i64) -> i64 {
@@ -899,12 +907,13 @@ impl Game {
     pub fn add_cost_mod(&mut self, p: usize, mut m: Value) {
         m["turn"] = json!(self.turn);
         let Value::Object(m) = m else { unreachable!() };
-        self.players[p].cost_mods.push(m);
+        let rs = self.rs;
+        self.players[p].cost_mods.push(Obj::of(&m, &|s| rs.intern(s)));
     }
 
-    fn mod_applies(&self, m: &Map<String, Value>, e: Id) -> bool {
+    fn mod_applies(&self, m: &Obj, e: Id) -> bool {
         let x = self.e(e);
-        match m.get("kind").and_then(Value::as_str).unwrap_or("") {
+        match m.get("kind").and_then(V::as_str).unwrap_or("") {
             "any" => true,
             "minion" => x.is_minion(),
             "spell" => x.kind() == "SPELL",
@@ -920,7 +929,7 @@ impl Game {
             c += self.fx_cost_mod(f, e);
         }
         for ench in &x.enchantments {
-            c += int(ench.get("cost"));
+            c += vint(ench.get("cost"));
         }
         for src in self.in_play() {
             if let Some(f) = self.hooks_of(src).cost_aura {
@@ -930,8 +939,8 @@ impl Game {
             }
         }
         for m in &self.players[x.controller].cost_mods {
-            if int(m.get("turn")) == self.turn && self.mod_applies(m, e) {
-                c = if m.contains_key("set") { int(m.get("set")) } else { c + int(m.get("delta")) };
+            if vint(m.get("turn")) == self.turn && self.mod_applies(m, e) {
+                c = if m.contains_key("set") { vint(m.get("set")) } else { c + vint(m.get("delta")) };
             }
         }
         c.max(0)
@@ -944,7 +953,7 @@ impl Game {
         let keep = mods
             .into_iter()
             .filter(|m| {
-                !(m.get("until").and_then(Value::as_str) == Some("use") && int(m.get("turn")) == self.turn && self.mod_applies(m, e))
+                !(m.get("until").and_then(V::as_str) == Some("use") && vint(m.get("turn")) == self.turn && self.mod_applies(m, e))
             })
             .collect();
         self.players[c].cost_mods = keep;
@@ -1047,17 +1056,14 @@ impl Game {
         1 - self.ctrl(me)
     }
 
-    pub fn add_tag_int(&mut self, e: Id, tag: &str, n: i64) {
-        let v = self.e(e).tag(tag) + n;
-        self.em(e).set_tag(tag, json!(v));
+    pub fn add_tag_int(&mut self, e: Id, tag: Str, n: i64) {
+        let v = self.e(e).tag(&tag) + n;
+        self.em(e).set_tag(tag, v);
     }
 
     /// DIED_POS of a dead minion (-1 if it has none).
     pub fn died_pos(&self, e: Id) -> i64 {
-        match self.e(e).tags.get(self.n().died_pos) {
-            Some(v) => int(Some(v)),
-            None => -1,
-        }
+        self.e(e).tags.get(self.n().died_pos).map_or(-1, V::int)
     }
 }
 
