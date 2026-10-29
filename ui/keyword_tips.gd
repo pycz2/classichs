@@ -1,9 +1,12 @@
 class_name KeywordTips
 extends VBoxContainer
 ## Small parchment boxes beside a big card, one per keyword on it, explaining
-## what the keyword does (the active pack's locales `mechanics`, in the interface language).
+## what the keyword does (the active pack's locales `mechanics`, in the interface language),
+## then small cards of what the card can bring into the game (CardDb.related).
 
 const WIDTH := 210.0
+## The related cards' size: two in a row fill WIDTH.
+const RELATED_SCALE := 0.85
 
 static var _data := {}  # client mechanic name -> {name: {lang: text}, text: {lang: tip}}
 
@@ -95,6 +98,19 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 	for m in keywords_of(card_id):
 		if kw.has(m):
 			tips.add_child(_box("Title" + m, kw[m].name.get(lang, kw[m].name.en), kw[m].text.get(lang, kw[m].text.en), Color("efe0bd")))
+	var related := CardDb.related(card_id)
+	if not related.is_empty():
+		var grid := GridContainer.new()
+		grid.name = "Related"
+		grid.columns = 2
+		grid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		grid.add_theme_constant_override("h_separation", int(WIDTH - 2 * CardView.SIZE.x * RELATED_SCALE))
+		grid.add_theme_constant_override("v_separation", 6)
+		for id: String in related:
+			var cv := CardView.make(id, RELATED_SCALE)
+			cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			grid.add_child(cv)
+		tips.add_child(grid)
 	return tips
 
 
@@ -124,7 +140,7 @@ static func _box(title_name: String, title_text: String, body: String, color: Co
 	return box
 
 
-## Places the boxes beside rect (right of it, or left when there is no room).
+## Places the boxes beside rect (right of it, or left when there is no room), on the screen.
 func beside(rect: Rect2) -> void:
 	var x := rect.end.x + 8 if rect.end.x + 8 + WIDTH < 1280 else rect.position.x - WIDTH - 8
-	position = Vector2(x, rect.position.y + 6)
+	position = Vector2(x, maxf(8, minf(rect.position.y + 6, 712 - get_combined_minimum_size().y)))

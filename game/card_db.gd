@@ -18,11 +18,21 @@ const INT_FIELDS := ["dbfId", "legacyDbfId", "cost", "attack", "health", "durabi
 
 static var _cards: Dictionary = {}
 static var _by_dbf: Dictionary = {}
+static var _related = null  # card id -> the cards it can bring (related()), null until asked
+
+## related(): at most this many cards.
+const RELATED_MAX := 6
+## A top-level line of a script that starts a card block (1) or a named helper: a local
+## function or value (2, 3) or a lib function (4, 5).
+static var _start := RegEx.create_from_string("^(?:cards\\.(\\w+)\\s*=|local\\s+function\\s+(\\w+)|local\\s+(\\w+)\\s*=|function\\s+(lib\\.\\w+)|(lib\\.\\w+)\\s*=)")
+static var _quoted := RegEx.create_from_string("\"([^\"\\\\]*)\"")
+static var _word := RegEx.create_from_string("[A-Za-z_]\\w*(?:\\.[A-Za-z_]\\w*)?")
 
 
 static func reset() -> void:
 	_cards = {}
 	_by_dbf = {}
+	_related = null
 
 
 static func _ensure_loaded() -> void:
@@ -108,3 +118,75 @@ static func collectible() -> Array[String]:
 static func all_ids() -> Array:
 	_ensure_loaded()
 	return _cards.keys()
+
+
+## The cards a card can bring into the game, for its hover (summoned, made, transformed
+## into, its Choose One cards, a champion's power), in a stable order, at most RELATED_MAX.
+## Taken from the pack: card ids quoted in the card's script block (from `cards.<key> =` to
+## the next top-level definition) and in the helpers it names (the file's local functions
+## and values, lib.lua's lib.*, followed further), then the card's `power`.
+static func related(id: String) -> Array:
+	_ensure_loaded()
+	if _related == null:
+		_related = _find_related()
+	return _related.get(id, [])
+
+
+static func _find_related() -> Dictionary:
+	var out := {}
+	var p := Packs.active()
+	if p == null:
+		return out
+	var lib: Dictionary = _script_chunks(p, "scripts/lib.lua")[1]
+	var files := {}  # script file -> [card blocks, named helpers]
+	for c: Dictionary in p.cards():
+		var found := []
+		var s := str(c.get("script", ""))
+		if s.contains("#"):
+			var f := s.get_slice("#", 0)
+			if not files.has(f):
+				files[f] = _script_chunks(p, f)
+			var named: Dictionary = lib.merged(files[f][1], true)
+			var todo: Array = [files[f][0].get(s.get_slice("#", 1), "")]
+			var seen := {}
+			while not todo.is_empty():
+				var text: String = todo.pop_front()
+				for m in _quoted.search_all(text):
+					var x := m.get_string(1)
+					if _cards.has(x) and x != c.id and not found.has(x):
+						found.append(x)
+				for m in _word.search_all(text):
+					var w := m.get_string()
+					if named.has(w) and not seen.has(w):
+						seen[w] = true
+						todo.append(named[w])
+		var power := str(c.get("power", ""))
+		if _cards.has(power) and power != c.id and not found.has(power):
+			found.append(power)
+		if not found.is_empty():
+			out[c.id] = found.slice(0, RELATED_MAX)
+	return out
+
+
+## A script file cut at its top-level definitions: [{card key: text}, {helper name: text}],
+## without comments.
+static func _script_chunks(p: Pack, file: String) -> Array:
+	var blocks := {}
+	var named := {}
+	var cur = null
+	for line in p.read(file).get_string_from_utf8().split("\n"):
+		var m := _start.search(line)
+		if m:
+			var key := m.get_string(1)
+			if key != "":
+				cur = blocks.get_or_add(key, [])
+			else:
+				for i in range(2, 6):
+					if m.get_string(i) != "":
+						cur = named.get_or_add(m.get_string(i), [])
+		if cur != null:
+			cur.append(line.get_slice("--", 0))
+	for d in [blocks, named]:
+		for k in d:
+			d[k] = "\n".join(d[k])
+	return [blocks, named]
