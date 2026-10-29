@@ -161,7 +161,7 @@ impl Table {
         assert!(r.ok, "the mirror refused {action}: {}", r.error);
         for q in 0..2 {
             let s = self.p[q].c.want("state").await;
-            check_state(&s, &self.mirror, &r.events, q);
+            check_state(&s, &self.mirror, &r.events(), q);
         }
     }
 
@@ -364,7 +364,7 @@ async fn timeout_moves() {
         let r = t.mirror.apply(&a);
         assert!(r.ok);
         for q in 0..2 {
-            check_state(&t.p[q].c.want("state").await, &t.mirror, &r.events, q);
+            check_state(&t.p[q].c.want("state").await, &t.mirror, &r.events(), q);
         }
     }
     assert_eq!(t.mirror.phase, "PLAY");
@@ -373,7 +373,7 @@ async fn timeout_moves() {
         let r = t.mirror.apply(&json!({"type": "end_turn", "player": cur}));
         for q in 0..2 {
             let s = t.p[q].c.want("state").await;
-            check_state(&s, &t.mirror, &r.events, q);
+            check_state(&s, &t.mirror, &r.events(), q);
             assert_eq!(s["result"]["current"], 1 - cur);
         }
     }

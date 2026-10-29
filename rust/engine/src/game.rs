@@ -18,7 +18,14 @@ pub type Action = Map<String, Value>;
 pub struct Applied {
     pub ok: bool,
     pub error: String,
-    pub events: Vec<Ev>,
+    log: Vec<Obj>,
+}
+
+impl Applied {
+    /// The events of the action, as JSON objects.
+    pub fn events(&self) -> Vec<Ev> {
+        self.log.iter().map(Obj::to_map).collect()
+    }
 }
 
 /// splitmix64(seed + (p + 1) * golden): the seed of player p's mulligan shuffle.
@@ -141,21 +148,20 @@ impl Game {
             self.event_log.clear();
             self.end_by_script_error();
             let log = std::mem::take(&mut self.event_log);
-            let events = log.iter().map(Obj::to_map).collect();
-            self.history.push(Hist { turn: self.turn, player: json!(self.current), action: a, events: log });
-            return Applied { ok: true, error: String::new(), events };
+            self.history.push(Hist { turn: self.turn, player: json!(self.current), action: a, events: log.clone() });
+            return Applied { ok: true, error: String::new(), log };
         }
         // the whole legal list even for a malformed action: its read-only hooks may fail (a script error)
         let act = if a.is_empty() { None } else { Some(self.legal()).and_then(|l| Act::from_map(&a).filter(|x| l.contains(x))) };
         let Some(act) = act else {
-            return Applied { ok: false, error: format!("illegal action {}", json::stringify(&Value::Object(a))), events: vec![] };
+            return Applied { ok: false, error: format!("illegal action {}", json::stringify(&Value::Object(a))), log: vec![] };
         };
         let who = self.current;
         self.run(act);
-        let events = self.event_log.iter().map(Obj::to_map).collect();
+        let log = std::mem::take(&mut self.event_log);
         let player = a.get("player").cloned().unwrap_or(json!(who));
-        self.history.push(Hist { turn: self.turn, player, action: a, events: self.event_log.clone() });
-        Applied { ok: true, error: String::new(), events }
+        self.history.push(Hist { turn: self.turn, player, action: a, events: log.clone() });
+        Applied { ok: true, error: String::new(), log }
     }
 
     /// `apply` of an action known to be legal here (one of `legal()` of this very state):
@@ -336,8 +342,9 @@ impl Game {
         let cur = self.current;
         let player = cur as i64;
         let p = &self.players[cur];
+        let auras = self.cost_auras();
         for &e in &p.hand {
-            if self.cost(e) > p.mana || !self.can_play(e) {
+            if self.cost_in(e, &auras) > p.mana || !self.can_play(e) {
                 continue;
             }
             let choices: &[i64] = if self.e(e).card.hooks.choice.is_some() { &[0, 1] } else { &[-1] };
@@ -352,7 +359,7 @@ impl Game {
         let hp = p.hero_power;
         let hpe = self.e(hp);
         let n = self.n();
-        if !hpe.has(n.used) && !hpe.has(n.locked) && self.cost(hp) <= p.mana {
+        if !hpe.has(n.used) && !hpe.has(n.locked) && self.cost_in(hp, &auras) <= p.mana {
             let hh = &hpe.card.hooks;
             if hh.power.is_some() && hh.can_play.is_none_or(|f| self.fx_can_play(f, hp)) {
                 for t in self.spec_targets(hp, hh.target, true, false) {

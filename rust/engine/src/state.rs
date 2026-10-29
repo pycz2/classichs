@@ -965,6 +965,16 @@ impl Game {
     }
 
     pub fn cost(&self, e: Id) -> i64 {
+        self.cost_in(e, &self.cost_auras())
+    }
+
+    /// Entities in play with a cost aura, in play order (for `cost_in`).
+    pub(crate) fn cost_auras(&self) -> Vec<Id> {
+        self.in_play().into_iter().filter(|&s| self.hooks_of(s).cost_aura.is_some()).collect()
+    }
+
+    /// `cost` with the cost auras given.
+    pub(crate) fn cost_in(&self, e: Id, auras: &[Id]) -> i64 {
         let x = self.e(e);
         let mut c = x.card.cost;
         if let Some(f) = x.card.hooks.cost_mod {
@@ -973,7 +983,7 @@ impl Game {
         for ench in &x.enchantments {
             c += vint(ench.get("cost"));
         }
-        for src in self.in_play() {
+        for &src in auras {
             if let Some(f) = self.hooks_of(src).cost_aura {
                 if self.e(src).zone == "PLAY" {
                     c = self.fx_cost_aura(f, src, e, c);

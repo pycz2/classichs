@@ -208,6 +208,7 @@ impl Ctx {
         if !r.ok {
             return Step::Refused(r.error);
         }
+        let events = r.events();
         clock.update(g, &self.timers);
         if let Some(lg) = self.app.hub().games.get_mut(&self.id) {
             lg.turn = g.turn;
@@ -219,8 +220,8 @@ impl Ctx {
         }
         self.app.event(self.ev(p, "game_action", text).data(json!({
             "p": p, "action": a, "turn": g.turn, "current": g.current, "phase": g.phase, "hash": g.state_hash(),
-            "over": g.game_over, "timeout": timeout, "events": r.events})));
-        self.states(g, &r.events, clock);
+            "over": g.game_over, "timeout": timeout, "events": events})));
+        self.states(g, &events, clock);
         Step::Done
     }
 

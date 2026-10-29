@@ -258,7 +258,7 @@ fn game_op(op: &str, id: &str, slot: &mut Slot, req: &Value, view: i64) -> Value
             let res = g.apply(action);
             let mut r = state(id, g);
             r["ok"] = json!(res.ok);
-            r["events"] = events_for(g, &res.events, view);
+            r["events"] = events_for(g, &res.events(), view);
             if !res.ok {
                 r["error"] = json!(res.error);
             }
