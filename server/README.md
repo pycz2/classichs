@@ -228,12 +228,30 @@ it, its last decision and its log; their errors also go to the event log (kind `
   client gets, `ws::serve`) or over the network (`Transport::net`, `ws://` or `wss://`) — and sees
   only its own player's view. Hidden cards are guessed many times over (its own deck list minus the
   cards seen; the opponent's class pool), each guess with its own random seed (`brain`).
-- **Levels** (against the engine's greedy bot, which sees every card, 18 games each): easy 8 won,
-  medium 13, hard 15 (`cargo test --release --test bot_levels -- --ignored --nocapture`).
-- **Data built in:** 35 validated decks, 3-5 a class (`src/bots/decks.json`, `DECKS.md`), the
-  Arena draft scores (`arena_tiers.json`, `ARENA_TIERS.md`), the card names (`data/cards.json`).
-- **CPU:** bots think one less at a time than the server has CPUs (at least one); a hard bot takes
-  up to a second a decision.
+- **Thinking** (`rust/brain`, crate `classichs-brain`, shared with the game's own offline bot):
+  a minion only to the rightmost slot unless a card whose effect depends on its neighbours is in play
+  or in hand; a one-step look orders the actions (easy and medium keep the best 8 and 10); sequential
+  halving over the guesses (easy 1, medium 2-3, hard 4-10); a hard time limit of twice the budget
+  plus 0.2 s (medium 300 ms, hard 1 s), checked inside each guess too.
+- **Levels** (48 games against the engine's greedy bot, which sees every card): easy 18-21 won,
+  medium 39-41, hard 38; hard against medium 26-22 (`cargo test --release --test bot_levels --
+  --ignored --nocapture`, `LEVEL_GAMES=48`).
+- **Late moves:** a bot decides on the newest state only and drops a decision when a new state came
+  meanwhile; the server refuses a move made when it is not the player's move (it crossed the clock)
+  without a strike.
+- **Auto-bots** (`bots::auto`): a player alone in a Classic queue (ranked, casual, Arena) for 30 s
+  gets a bot for one game: the level by the player's hidden MMR (under 1350 easy, up to 1650 medium,
+  else hard; Arena: the run's wins, 0-2 easy, 3-5 medium, 6+ hard), from a pool of accounts
+  `AutoBot_<Level>_1..3` and `AutoBot_Arena_1..3` (made when first needed), paired with that player
+  whatever the window, no human-pace pauses, a fresh Arena draft each game. All busy: the player
+  waits on. The event log shows them (kind `auto_bot`).
+- **The Arena draft** (all bots): a random hero of the three; easy takes any card, medium the best
+  one 7 times in 10, hard always the best by draft score and mana curve.
+- **Data built in:** 35 validated decks, 3-5 a class (`rust/brain/src/decks.json`, `DECKS.md`), the
+  Arena draft scores (`arena_tiers.json`, `ARENA_TIERS.md`), the card names (`data/cards.json`,
+  the crate's `names` feature).
+- **CPU:** at most max(4, CPUs) bots think at once, the one whose turn ends first goes first
+  (`bots::think`). Background: `docs/bots-performance.md`.
 
 ## Deploy to a Docker host behind Caddy
 

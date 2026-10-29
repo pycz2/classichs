@@ -163,7 +163,7 @@ export const KINDS = {
   match: 'game', game_start: 'game', game_action: 'game', game_left: 'game', game_back: 'game', game_end: 'game',
   pack_upload: 'pack', pack_import: 'pack', pack_default: 'pack', pack_enable: 'pack', pack_disable: 'pack', pack_delete: 'pack', pack_download: 'pack', pack_rejected: 'error',
   admin: 'admin',
-  bot: 'error'
+  bot: 'error', auto_bot: 'queue'
 }
 
 export const kindCat = (k) => KINDS[k] || 'admin'
