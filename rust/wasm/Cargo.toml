@@ -10,3 +10,5 @@ crate-type = ["cdylib"]
 
 [dependencies]
 classichs-engine = { path = "../engine" }
+classichs-brain = { path = "../brain" }
+serde_json = "1"

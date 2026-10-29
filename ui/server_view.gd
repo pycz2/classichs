@@ -634,7 +634,7 @@ func _build_draft() -> void:
 		var tier := ArenaDraft.tier(offer[0])
 		_centered({"common": tr("Common"), "rare": tr("Rare"), "epic": tr("Epic"), "legendary": tr("Legendary")}.get(tier, ""),
 			18, Vector2(40, 422), LIST_X - 80, Palette.of_rarity(tier.to_upper()))
-	var curve := ArenaView._Curve.new()
+	var curve := ManaCurve.new()
 	curve.name = "Curve"
 	var d := arena_deck()
 	var counts := [0, 0, 0, 0, 0, 0, 0, 0]

@@ -8,7 +8,7 @@ extends RefCounted
 const DEFAULT_PATH := "user://settings.json"
 const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "shake": true, "fullscreen": false,
 	"tracker": false, "anim_speed": 1, "art": "generated", "card_back": "classic", "tracker_deck": true, "tracker_opp": true,
-	"music_set": "generated", "servers": [],
+	"music_set": "generated", "servers": [], "bot_level": "medium",
 	"pack": {}, "pack_sets": {}}
 const BUSES := ["Music", "SFX"]
 
@@ -59,6 +59,9 @@ static func load_settings() -> void:
 						data[k] = v
 				elif k == "music_set":
 					if v is String and v != "":  # a music set of the Classic pack
+						data[k] = v
+				elif k == "bot_level":
+					if v is String and BotBrain.LEVELS.has(v):
 						data[k] = v
 				elif v is String and (v == "" or Locale.LANGS.has(v)):
 					data[k] = v

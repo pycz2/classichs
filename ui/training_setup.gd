@@ -1,6 +1,6 @@
 class_name TrainingSetup
 extends Control
-## Training in two steps: pick your deck, then the bot's hero.
+## Training in two steps: pick your deck, then the bot's hero and how well it plays (Settings bot_level).
 
 signal start(my_deck: Deck, bot_class: String)
 signal back
@@ -72,6 +72,28 @@ func _ready() -> void:
 				play())
 		grid.add_child(t)
 		tiles.append(t)
+	# how well the bot plays (BotBrain; it sees only its own cards)
+	var levels := HBoxContainer.new()
+	levels.name = "Levels"
+	levels.position = Vector2(476, 64)  # (ends at the grid's right edge)
+	levels.add_theme_constant_override("separation", 10)
+	_step2.add_child(levels)
+	var ll := Palette.label(tr("Bot difficulty"), 22)
+	ll.custom_minimum_size.x = 180
+	ll.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	levels.add_child(ll)
+	var lg := ButtonGroup.new()
+	for lvl in BotBrain.LEVELS:
+		var b := Palette.button({"easy": tr("Easy"), "medium": tr("Medium"), "hard": tr("Hard")}[lvl], "Level_" + lvl)
+		b.custom_minimum_size = Vector2(150, 44)
+		b.toggle_mode = true
+		b.button_group = lg
+		b.button_pressed = Settings.data.get("bot_level", "medium") == lvl
+		b.toggled.connect(func(on):
+			if on:
+				Settings.data.bot_level = lvl
+				Settings.save())
+		levels.add_child(b)
 	var row := HBoxContainer.new()
 	row.position = Vector2(140, 642)
 	row.add_theme_constant_override("separation", 16)

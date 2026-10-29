@@ -1,6 +1,9 @@
 //! The rules engine for the browser (web/rules.js): the host writes a UTF-8 request
 //! into memory from `alloc`, calls `call(ptr, len)`, frees it with `dealloc`, and
 //! reads the reply at `out_ptr()` / `out_len()` (valid until the next call).
+//! `think(ptr, len)` is the game's own bot (classichs_brain::think); web/rules.js runs it in a Web
+//! Worker with its own instance, so the page does not stop while the bot thinks. The module
+//! imports `env.chs_now_ms` (performance.now()).
 use classichs_engine::Engine;
 use std::cell::RefCell;
 
@@ -41,4 +44,16 @@ pub extern "C" fn out_ptr() -> *const u8 {
 #[no_mangle]
 pub extern "C" fn out_len() -> usize {
     OUT.with(|o| o.borrow().len())
+}
+
+/// # Safety
+/// `p` must point at `n` readable bytes.
+#[no_mangle]
+pub unsafe extern "C" fn think(p: *const u8, n: usize) {
+    let req = String::from_utf8_lossy(std::slice::from_raw_parts(p, n));
+    let reply = match serde_json::from_str(&req) {
+        Ok(v) => classichs_brain::think(&v),
+        Err(e) => serde_json::json!({"ok": false, "error": format!("bad json: {e}")}),
+    };
+    OUT.with(|o| *o.borrow_mut() = reply.to_string());
 }

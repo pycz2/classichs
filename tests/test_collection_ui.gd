@@ -62,6 +62,25 @@ func test_builder_add_limits_and_remove() -> void:
 	_store_restore()
 
 
+## The deck being built shows its mana curve above its list, as the Arena draft does.
+func test_builder_shows_the_mana_curve() -> void:
+	_store_reset()
+	var v := DeckListView.new()
+	root().add_child(v)
+	v.new_deck("HERO_08")
+	var curve := v.find_child("Curve", true, false) as ManaCurve
+	check(curve != null and curve.is_visible_in_tree(), "a curve in the editor")
+	eq(curve.counts, [0, 0, 0, 0, 0, 0, 0, 0], "an empty deck")
+	v.browser.click_card("VAN_CS2_029")  # Fireball, 4
+	v.browser.click_card("VAN_CS2_029")
+	v.browser.click_card("VAN_CS2_024")  # Frostbolt, 2
+	eq(curve.counts, [0, 0, 1, 0, 2, 0, 0, 0], "costs 2 and 4")
+	v.remove_card("VAN_CS2_029")
+	eq(curve.counts[4], 1, "and back")
+	v.free()
+	_store_restore()
+
+
 func test_deck_list_new_import_export_delete_persist() -> void:
 	_store_reset()
 	var v := DeckListView.new()

@@ -17,7 +17,7 @@ var session: ArenaSession
 ## "rules", "hero", "draft", "lobby", "decide" (after a game: a new deck or the
 ## same) or "end" (the Arena is won, lost or broken)
 var stage := ""
-var curve: _Curve
+var curve: ManaCurve
 var _body := Control.new()  # what the stage shows; rebuilt on every change
 var _title: Label
 var _subtitle: Label
@@ -322,7 +322,7 @@ func _build_deck_side() -> void:
 		var t := DeckTiles.DeckTile.new(it[0], it[1])
 		t.custom_minimum_size.x = 280
 		list.add_child(t)
-	curve = _Curve.new()
+	curve = ManaCurve.new()
 	curve.name = "Curve"
 	curve.counts = session.draft.curve()
 	curve.position = Vector2(40, 520)
@@ -452,25 +452,3 @@ func _hide_tips() -> void:
 	if _tips and is_instance_valid(_tips):
 		_tips.queue_free()
 	_tips = null
-
-
-## The mana curve: how many cards of each cost (0 … 6, 7+), as bars.
-class _Curve:
-	extends Control
-	var counts: Array = [0, 0, 0, 0, 0, 0, 0, 0]
-
-	func _draw() -> void:
-		var top := maxi(4, counts.max())
-		var bw := size.x / 8.0
-		var base := size.y - 26
-		var font := get_theme_default_font()
-		draw_style_box(Palette.box(Color(0.08, 0.06, 0.04, 0.7), 10, Color("6b5320"), 2), Rect2(Vector2(-12, -34), size + Vector2(24, 40)))
-		draw_string(font, Vector2(0, -12), tr("Mana curve"), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Palette.ATTACK)
-		for i in 8:
-			var h: float = (base - 20) * counts[i] / float(top)
-			var r := Rect2(i * bw + 6, base - h, bw - 12, h)
-			if counts[i] > 0:
-				draw_rect(r, Color("3b82c4"))
-				draw_rect(Rect2(r.position, Vector2(r.size.x, 3)), Color("9fd0ff"))
-				draw_string(font, Vector2(i * bw, r.position.y - 4), str(counts[i]), HORIZONTAL_ALIGNMENT_CENTER, bw, 15, Palette.TEXT)
-			draw_string(font, Vector2(i * bw, size.y - 6), "7+" if i == 7 else str(i), HORIZONTAL_ALIGNMENT_CENTER, bw, 16, Color("9fd0ff"))

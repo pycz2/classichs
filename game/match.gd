@@ -28,6 +28,11 @@ var bots: Array = [false, true]
 var remote := -1
 ## Seconds between bot actions; 0 = the bot moves at once (tests).
 var bot_delay := 0.6
+## The bot's level ("easy" | "medium" | "hard": BotBrain, it sees only its own view); "" = the
+## engine's greedy bot (tutorial, debug, other packs).
+var bot_level := ""
+## Each player's 30 cards (the bot knows its own deck list).
+var decks: Array = [[], []]
 ## The table may still be animating: the bot waits until this returns false.
 var busy: Callable = func() -> bool: return false
 ## A server game: sends a message to the server ({"t": "act", "action": …}).
@@ -46,6 +51,9 @@ var _finished := false
 ## ({decks, seed, first?, check?} | {scenario} | {mission}). "" or why it failed.
 func setup(req: Dictionary, bot_players: Array) -> String:
 	bots = bot_players
+	for p in 2:
+		if req.has("decks") and req.decks.size() > p:
+			decks[p] = Array(req.decks[p].get("cards", []))
 	id = Rules.new_id()
 	var r := Rules.request(req.merged({"op": "new", "game": id}, true))
 	if not r.ok:
@@ -310,6 +318,9 @@ func _after() -> void:
 		return
 	if not is_inside_tree():
 		return  # the screen was left; nobody plays this match any more
+	if uses_brain():
+		_bot_think()
+		return
 	_bot_scheduled = true
 	get_tree().create_timer(bot_delay).timeout.connect(func():
 		_bot_scheduled = false
@@ -321,9 +332,53 @@ func _after() -> void:
 			_after())
 
 
+## Whether the bot thinks with BotBrain (a level, the built-in Classic rules it knows, a build that has it).
+func uses_brain() -> bool:
+	return bot_level != "" and not is_server() and Packs.active() != null and Packs.active().id() == Packs.CLASSIC \
+		and BotBrain.available()
+
+
+## The bot thinks off the main thread, at least bot_delay long; its move is made if the game is
+## still where it was (the player may have conceded, the clock may have ended the turn).
+func _bot_think() -> void:
+	_bot_scheduled = true
+	var p := actor()
+	var key := state_hash
+	var brain := BotBrain.new()
+	brain.start(BotBrain.request(id, p, decks[p], bot_level))
+	var started := Time.get_ticks_msec()
+	var check := func(again: Callable) -> void:
+		if not is_inside_tree():
+			brain.abandon()
+			return
+		if not brain.done() or Time.get_ticks_msec() - started < bot_delay * 1000.0 or busy.call():
+			get_tree().create_timer(0.05).timeout.connect(again.bind(again))
+			return
+		_bot_scheduled = false
+		if state_hash == key and is_bot_turn() and actor() == p:
+			var r := brain.reply()
+			_bot_move(p, r.action if r.get("ok", false) and r.get("action") != null else null)
+		_after()
+	get_tree().create_timer(0.05).timeout.connect(check.bind(check))
+
+
 func _bot_step() -> void:
 	var p := actor()
-	var r := _apply(Rules.request({"op": "bot", "game": id, "player": p}).get("action"))
+	var action = null
+	if uses_brain() and ClassDB.class_exists("RulesBrain"):
+		var r := BotBrain.think_now(BotBrain.request(id, p, decks[p], bot_level))
+		if r.get("ok", false):
+			action = r.get("action")
+	_bot_move(p, action)
+
+
+## Plays the bot's action (null, or refused: the engine's greedy bot chooses).
+func _bot_move(p: int, action: Variant) -> void:
+	var r := _apply(action) if action != null else {"ok": false, "error": ""}
+	if not r.ok:
+		if action != null:
+			push_warning("the bot's move was refused (%s): the greedy bot moves" % r.error)
+		r = _apply(Rules.request({"op": "bot", "game": id, "player": p}).get("action"))
 	if not r.ok:
 		push_error("bot made an illegal move: " + r.error)
 		_apply({"type": "concede", "player": p})

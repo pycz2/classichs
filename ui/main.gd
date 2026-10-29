@@ -108,7 +108,8 @@ func show_training_setup() -> void:
 	t.edit_decks.connect(show_collection)
 	t.start.connect(func(deck: Deck, bot: String):
 		start_match({"decks": [{"hero": deck.hero, "cards": Array(deck.cards)},
-			{"hero": Decks.hero(bot), "cards": Decks.basic(bot)}], "seed": randi()}, [false, true], false))
+			{"hero": Decks.hero(bot), "cards": Decks.basic(bot)}], "seed": randi()}, [false, true], false,
+			str(Settings.data.get("bot_level", "medium"))))
 	_set_screen(t)
 
 
@@ -349,9 +350,10 @@ func start_card_test(test: Dictionary) -> MatchView:
 	return v
 
 
-## A local game: req is the engine's `new` request ({decks, seed} or {scenario}).
-func start_match(req: Dictionary, bots: Array, debug := false) -> MatchView:
+## A local game: req is the engine's `new` request ({decks, seed} or {scenario}); bot_level: Match.bot_level.
+func start_match(req: Dictionary, bots: Array, debug := false, bot_level := "") -> MatchView:
 	var m := Match.new()
+	m.bot_level = bot_level
 	var why := m.setup(req, bots)
 	if why != "":
 		push_error("cannot start the game: " + why)

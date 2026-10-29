@@ -47,8 +47,10 @@ dependencies = [
 name = "classichs-godot"
 version = "0.1.0"
 dependencies = [
+ "classichs-brain",
  "classichs-engine",
  "godot",
+ "serde_json",
 ]
 
 [[package]]
@@ -59,7 +61,9 @@ version = "0.1.0"
 name = "classichs-wasm"
 version = "0.1.0"
 dependencies = [
+ "classichs-brain",
  "classichs-engine",
+ "serde_json",
 ]
 
 [[package]]

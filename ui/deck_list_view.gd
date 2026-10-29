@@ -26,6 +26,8 @@ var _name_edit := LineEdit.new()
 ## How full the open deck is, behind the "n / 30" count.
 var _bar := DeckTiles.Bar.new()
 var _count: Label
+## The deck's mana curve above its list (as in the Arena draft).
+var _curve := ManaCurve.new()
 var _panel := Panel.new()
 
 
@@ -103,9 +105,14 @@ func _ready() -> void:
 	_count.position = _bar.position
 	_count.size = _bar.size
 	_edit_box.add_child(_count)
+	_curve.name = "Curve"
+	_curve.compact = true
+	_curve.position = inner.position + Vector2(0, 80)
+	_curve.size = Vector2(inner.size.x, 62)
+	_edit_box.add_child(_curve)
 	var tiles := ScrollContainer.new()
-	tiles.position = inner.position + Vector2(0, 82)
-	tiles.size = Vector2(inner.size.x, 430)
+	tiles.position = inner.position + Vector2(0, 148)
+	tiles.size = Vector2(inner.size.x, 364)
 	tiles.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_edit_box.add_child(tiles)
 	_deck_list.name = "Tiles"
@@ -232,6 +239,7 @@ func _refresh_deck() -> void:
 		_deck_list.add_child(b)
 	var n := editing.cards.size()
 	_count.text = "%d / %d" % [n, Deck.SIZE]
+	_curve.counts = ManaCurve.of(editing.cards)
 	_bar.ratio = n / float(Deck.SIZE)
 	_count.add_theme_color_override("font_color", Palette.BUFFED if n == Deck.SIZE else Palette.TEXT)
 
