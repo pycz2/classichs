@@ -57,12 +57,13 @@ impl Level {
         }
     }
 
-    /// (fewest worlds, most worlds, the turn played on, the opponent's turn simulated, first actions kept: 0 = all)
-    fn search(self) -> (usize, usize, bool, bool, usize) {
+    /// (fewest worlds, most worlds, the turn played on, the opponent's turn simulated, first actions kept
+    /// (0 = all), worlds before the first half drops out)
+    fn search(self) -> (usize, usize, bool, bool, usize, usize) {
         match self {
-            Level::Easy => (1, 1, false, false, 8),
-            Level::Medium => (2, 3, true, false, 10),
-            Level::Hard => (4, 10, true, true, 0),
+            Level::Easy => (1, 1, false, false, 8, 1),
+            Level::Medium => (2, 3, true, false, 10, 1),
+            Level::Hard => (4, 10, true, true, 0, 2),
         }
     }
 
@@ -129,7 +130,7 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
     let deadline = t0 + Level::limit(budget);
     let hidden = hidden_ids(view_json);
     let mut rng = rand::rngs::StdRng::from_entropy();
-    let (fewest, most, play_on, reply, keep) = level.search();
+    let (fewest, most, play_on, reply, keep, settle) = level.search();
     // a quick look (one step) in the first world orders the actions: the time limit then cuts the weak ones
     let first = determinize(&base, view_json, &hidden, k, &mut rng);
     let quick: Vec<f64> = legal.iter().map(|a| score_first(&first, me, a, false, false, deadline)).collect();
@@ -159,7 +160,9 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
         if alive.len() <= 1 {
             break;
         }
-        alive.truncate(alive.len().div_ceil(2).max(2));
+        if worlds >= settle {
+            alive.truncate(alive.len().div_ceil(2).max(2));
+        }
     }
     // the best average of the last ones in; nothing tried in time: the quick look decides
     let mut order: Vec<usize> = if alive.is_empty() { (0..legal.len()).collect() } else { alive.clone() };

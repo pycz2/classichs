@@ -1,5 +1,5 @@
 //! The three bot levels against the engine's built-in greedy bot (which sees every card; the bots
-//! see only their player's view): the levels must be stronger in that order.
+//! see only their player's view), and Hard against Medium.
 //! `cargo test --release --test bot_levels -- --ignored --nocapture` (a few minutes).
 
 use classichs_engine::{api, bot};
@@ -53,7 +53,7 @@ fn play(lib: &'static Library, a: usize, b: usize, seed: i64, seat: usize, level
 #[ignore]
 fn levels_get_stronger() {
     let lib = Library::get();
-    let n = 18;
+    let n = std::env::var("LEVEL_GAMES").ok().and_then(|v| v.parse().ok()).unwrap_or(18);
     let mut rate = vec![];
     for level in [Level::Easy, Level::Medium, Level::Hard] {
         let (mut won, mut lost) = (0, 0);
@@ -69,5 +69,53 @@ fn levels_get_stronger() {
         println!("{:?} vs the greedy bot: {won} won, {lost} lost of {n}", level);
         rate.push(won);
     }
-    assert!(rate[0] <= rate[1] && rate[1] <= rate[2], "stronger in order: {rate:?}");
+    // Medium and Hard both beat the greedy bot most of the time; Hard against Medium: `hard_beats_medium`
+    assert!(rate[0] < rate[1] && rate[0] < rate[2], "Easy the weakest: {rate:?}");
+}
+
+/// Hard against Medium, both seeing only their own player's view: Hard must win more.
+/// `LEVEL_GAMES=24 cargo test --release --test bot_levels duel -- --ignored --nocapture`
+#[test]
+#[ignore]
+fn hard_beats_medium() {
+    let lib = Library::get();
+    let n: usize = std::env::var("LEVEL_GAMES").ok().and_then(|v| v.parse().ok()).unwrap_or(18);
+    let (mut hard, mut medium) = (0, 0);
+    for i in 0..n {
+        // each pair of decks twice: Hard with one, then with the other (same seed, the seats swapped)
+        let j = i / 2;
+        let (a, b) = ((j * 7) % lib.decks.len(), (j * 11 + 3) % lib.decks.len());
+        let seat = i % 2; // Hard's seat
+        let (d0, d1) = (&lib.decks[a], &lib.decks[b]);
+        let mut g = Game::new_in(lib.rs, &d0.hero, &d0.cards, &d1.hero, &d1.cards, 7000 + j as i64, -1, true);
+        let knows = |p: usize| Knowledge { lib, seat: p, my_deck: if p == 0 { d0.cards.clone() } else { d1.cards.clone() }, arena: false };
+        for _ in 0..400 {
+            if g.game_over {
+                break;
+            }
+            let movers: Vec<usize> = if g.phase == "MULLIGAN" {
+                (0..2).filter(|&p| !g.players[p].mulliganed).collect()
+            } else if let Some(p) = &g.pending {
+                vec![p.player]
+            } else {
+                vec![g.current]
+            };
+            for p in movers {
+                let (level, budget) = if p == seat { (Level::Hard, 1000) } else { (Level::Medium, 300) };
+                let action = match decide(&api::snapshot(&g, p as i64), &knows(p), level, Duration::from_millis(budget)).expect("decide") {
+                    Some(d) => d.action,
+                    None => continue,
+                };
+                let r = g.apply(&Value::Object(action.clone()));
+                assert!(r.ok, "seat {p}: an illegal move {action:?}: {}", r.error);
+            }
+        }
+        match g.winner {
+            w if w == seat as i64 => hard += 1,
+            -1 => {}
+            _ => medium += 1,
+        }
+    }
+    println!("Hard {hard} : Medium {medium} of {n}");
+    assert!(hard > medium, "Hard {hard} : Medium {medium}");
 }
