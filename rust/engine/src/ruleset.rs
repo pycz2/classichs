@@ -10,7 +10,7 @@ use crate::missions::Mission;
 use crate::pack::{self, Files};
 use serde::Deserialize;
 use serde_json::{json, Map, Value};
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::sync::{Mutex, OnceLock};
 
 /// The engine's vocabulary (docs/packs/schema/keywords.json).
@@ -260,6 +260,9 @@ pub struct Ruleset {
     /// Hook sets by card id or hook name ("ench:…").
     pub hooks: HashMap<String, HookSet>,
     pub lua: Option<LuaRules>,
+    /// Cards whose effect depends on their neighbours on the board (their script calls
+    /// `g.adjacent(me)`): where such a minion stands, or what stands next to it, matters.
+    pub neighbours: HashSet<String>,
 }
 
 fn i(v: &Value, k: &str, def: i64) -> i64 {
@@ -431,6 +434,7 @@ impl Ruleset {
             missions,
             hooks: HashMap::new(),
             lua: None,
+            neighbours: HashSet::new(),
         };
         rs.data_hash = rs.rules_hash.clone();
         for c in rs.cards.values() {
@@ -449,8 +453,27 @@ impl Ruleset {
             return Err(format!("missions/{}.json: no hooks {}", m.id, m.script));
         }
         rs.hooks = hooks;
+        rs.neighbours = neighbours(&rs.cards, &scripts);
         Ok(rs)
     }
+}
+
+/// The cards whose script (`scripts/<file>.lua#<key>`, the block `cards.<key> = …`) uses its own neighbours.
+fn neighbours(cards: &HashMap<String, Card>, scripts: &[(&String, &Vec<u8>)]) -> HashSet<String> {
+    let mut out = HashSet::new();
+    for c in cards.values() {
+        let Some((file, key)) = c.script.split_once('#') else { continue };
+        let Some((_, src)) = scripts.iter().find(|(p, _)| p.as_str() == file) else { continue };
+        let text = String::from_utf8_lossy(src);
+        if let Some(i) = text.find(&format!("cards.{key} =")) {
+            let block = &text[i + 1..];
+            let block = &block[..block.find("\ncards.").unwrap_or(block.len())];
+            if block.contains("adjacent(me)") {
+                out.insert(c.id.clone());
+            }
+        }
+    }
+    out
 }
 
 fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, String> {

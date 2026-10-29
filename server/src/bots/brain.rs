@@ -4,10 +4,14 @@
 //! 2. **Worlds** (determinization): each world puts a plausible card in every hidden place — the own
 //!    deck from the own deck list minus the cards already seen, the opponent's hand, deck and secrets
 //!    from its class pool — and a new random seed. Probabilities count; the future is not known.
-//! 3. In each world every legal first action is tried: the rest of the turn is played greedily by
-//!    the evaluation, then **the opponent's whole turn** is played (the engine's bot with the sampled
-//!    hand), and the position after it is scored. Lethal is ±1 000 000.
-//! 4. The action with the best average over the worlds is played; after it the bot looks again.
+//! 3. The actions worth trying (`options`): a minion goes only to the rightmost slot unless a card whose
+//!    effect depends on its neighbours is on the board or in hand; identical copies count once. A quick
+//!    look (one step) orders them; Easy and Medium keep only the best few.
+//! 4. Sequential halving: every remaining action is tried in a new world — the rest of the turn played
+//!    greedily by the evaluation, then (Hard) **the opponent's whole turn** (the engine's bot with the
+//!    sampled hand) — and the worse half drops out; again in the next world. Lethal is ±1 000 000.
+//! 5. A hard time limit (twice the budget plus 0.2 s) stops the search anywhere, even inside a world;
+//!    the best action found so far is played. After it the bot looks again.
 
 use crate::bots::cards::{class_of, Library, Pool};
 use classichs_engine::entity::Entity;
@@ -29,9 +33,9 @@ pub enum Level {
     /// One guess of the hidden cards, the position right after the action only, a wrong pick now and
     /// then (30%: a random one of the best three), the opening hand kept.
     Easy,
-    /// 2-3 worlds, the rest of the turn played on, the opponent's reply not looked at.
+    /// 2-3 worlds, the best 10 first actions, the rest of the turn played on, the opponent's reply not looked at.
     Medium,
-    /// 4-24 worlds within the time, the turn played on and the opponent's whole turn simulated.
+    /// 4-10 worlds within the time, the turn played on and the opponent's whole turn simulated.
     Hard,
 }
 
@@ -53,13 +57,18 @@ impl Level {
         }
     }
 
-    /// (fewest worlds, most worlds, the turn played on, the opponent's turn simulated)
-    fn search(self) -> (usize, usize, bool, bool) {
+    /// (fewest worlds, most worlds, the turn played on, the opponent's turn simulated, first actions kept: 0 = all)
+    fn search(self) -> (usize, usize, bool, bool, usize) {
         match self {
-            Level::Easy => (1, 1, false, false),
-            Level::Medium => (2, 3, true, false),
-            Level::Hard => (4, 24, true, true),
+            Level::Easy => (1, 1, false, false, 8),
+            Level::Medium => (2, 3, true, false, 10),
+            Level::Hard => (4, 10, true, true, 0),
         }
+    }
+
+    /// The hard stop for one decision: twice the budget plus 0.2 s.
+    pub fn limit(budget: Duration) -> Duration {
+        budget * 2 + Duration::from_millis(200)
     }
 }
 
@@ -109,8 +118,7 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
         let label = format!("mulligan: replace {}", a["replace"].as_array().map_or(0, |r| r.len()));
         return Ok(Some(Decision { action: a, label, worlds: 0, ms: t0.elapsed().as_millis(), top: vec![] }));
     }
-    let mine = |a: &Action| a.get("player").and_then(Value::as_i64) == Some(me as i64) && a["type"] != "concede";
-    let legal: Vec<Action> = base.legal_actions().into_iter().filter(|a| mine(a)).collect();
+    let legal = options(&base, me);
     if legal.is_empty() {
         return Ok(None);
     }
@@ -118,22 +126,45 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
         let a = legal[0].clone();
         return Ok(Some(Decision { label: label(k, &base, &a), action: a, worlds: 0, ms: t0.elapsed().as_millis(), top: vec![] }));
     }
+    let deadline = t0 + Level::limit(budget);
     let hidden = hidden_ids(view_json);
     let mut rng = rand::rngs::StdRng::from_entropy();
+    let (fewest, most, play_on, reply, keep) = level.search();
+    // a quick look (one step) in the first world orders the actions: the time limit then cuts the weak ones
+    let first = determinize(&base, view_json, &hidden, k, &mut rng);
+    let quick: Vec<f64> = legal.iter().map(|a| score_first(&first, me, a, false, false, deadline)).collect();
+    let mut alive: Vec<usize> = (0..legal.len()).collect();
+    alive.sort_by(|&x, &y| quick[y].partial_cmp(&quick[x]).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y)));
+    if keep > 0 {
+        alive.truncate(keep);
+    }
+    // sequential halving: each world tries every action still in; then the worse half drops out
     let mut sums = vec![0.0f64; legal.len()];
+    let mut counts = vec![0usize; legal.len()];
     let mut worlds = 0usize;
-    // the level's fewest worlds, then more while the time lasts
-    let (fewest, most, play_on, reply) = level.search();
-    while worlds < most && (worlds < fewest || t0.elapsed() < budget) {
-        let w = determinize(&base, view_json, &hidden, k, &mut rng);
-        for (i, a) in legal.iter().enumerate() {
-            sums[i] += score_first(&w, me, a, play_on, reply);
+    let mut world = Some(first);
+    while worlds < most && (worlds < fewest || t0.elapsed() < budget) && Instant::now() < deadline && !alive.is_empty() {
+        let w = world.take().unwrap_or_else(|| determinize(&base, view_json, &hidden, k, &mut rng));
+        for &i in &alive {
+            if Instant::now() >= deadline {
+                break;
+            }
+            sums[i] += score_first(&w, me, &legal[i], play_on, reply, deadline);
+            counts[i] += 1;
         }
         worlds += 1;
+        alive.retain(|&i| counts[i] > 0);
+        let mean = |i: usize| sums[i] / counts[i] as f64;
+        alive.sort_by(|&x, &y| mean(y).partial_cmp(&mean(x)).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y)));
+        if alive.len() <= 1 {
+            break;
+        }
+        alive.truncate(alive.len().div_ceil(2).max(2));
     }
-    let mut order: Vec<usize> = (0..legal.len()).collect();
-    // the best average; on a tie the earlier action (the engine lists ending the turn first)
-    order.sort_by(|&x, &y| sums[y].partial_cmp(&sums[x]).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y)));
+    // the best average of the last ones in; nothing tried in time: the quick look decides
+    let mut order: Vec<usize> = if alive.is_empty() { (0..legal.len()).collect() } else { alive.clone() };
+    let mean = |i: usize| if counts[i] > 0 { sums[i] / counts[i] as f64 } else { quick[i] };
+    order.sort_by(|&x, &y| mean(y).partial_cmp(&mean(x)).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y)));
     let mut best = order[0];
     if level == Level::Easy && rand::Rng::gen_bool(&mut rng, 0.3) {
         best = order[rand::Rng::gen_range(&mut rng, 0..order.len().min(3))]; // (the easy bot errs)
@@ -141,9 +172,37 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
     let top = order
         .iter()
         .take(6)
-        .map(|&i| Candidate { label: label(k, &base, &legal[i]), score: sums[i] / worlds as f64 })
+        .map(|&i| Candidate { label: label(k, &base, &legal[i]), score: mean(i) })
         .collect();
     Ok(Some(Decision { action: legal[best].clone(), label: label(k, &base, &legal[best]), worlds, ms: t0.elapsed().as_millis(), top }))
+}
+
+/// me's actions worth trying: no concede; a minion only to the rightmost slot unless a card whose effect
+/// depends on its neighbours (`Ruleset::neighbours`) is on me's board or in me's hand (then where a
+/// minion stands may matter: a big one now, Defender of Argus next to it later); plays of identical
+/// copies (same card and cost, no enchantments) once.
+pub fn options(g: &Game, me: usize) -> Vec<Action> {
+    let p = &g.players[me];
+    let places = p.board.iter().chain(p.hand.iter()).any(|&e| g.rs.neighbours.contains(&g.e(e).card_id));
+    let last = p.board.len() as i64;
+    let mut seen = HashSet::new();
+    let num = |a: &Action, f: &str| a.get(f).and_then(Value::as_i64).unwrap_or(-1);
+    g.legal_actions()
+        .into_iter()
+        .filter(|a| num(a, "player") == me as i64 && a["type"] != "concede")
+        .filter(|a| {
+            if a["type"] != "play" {
+                return true;
+            }
+            let pos = num(a, "pos");
+            if pos >= 0 && pos != last && !places {
+                return false;
+            }
+            let e = g.e(num(a, "entity"));
+            !e.enchantments.is_empty()
+                || seen.insert((e.card_id.clone(), g.cost(e.id), num(a, "target"), pos, num(a, "choice")))
+        })
+        .collect()
 }
 
 /// Entities the view hides: its "card": "" ones (the opponent's hand and secrets) and the ids it
@@ -256,33 +315,34 @@ impl rand::RngCore for RngWrap<'_> {
 
 /// A first action in one world: (play_on) the turn played on greedily, (reply) then the opponent's
 /// turn, then the score.
-fn score_first(w: &Game, me: usize, a: &Action, play_on: bool, reply: bool) -> f64 {
+fn score_first(w: &Game, me: usize, a: &Action, play_on: bool, reply: bool, deadline: Instant) -> f64 {
     let mut g = w.clone_state();
     if !g.apply(&Value::Object(a.clone())).ok {
         return -WIN; // (not legal in this world: should not happen, its cards are the same)
     }
     if play_on && a["type"] != "end_turn" {
-        finish_turn(&mut g, me);
+        finish_turn(&mut g, me, deadline);
     }
     if reply {
         if !g.game_over && g.current == me && g.phase == "PLAY" {
             g.apply(&json!({"type": "end_turn", "player": me}));
         }
-        opponent_turn(&mut g, me);
+        opponent_turn(&mut g, me, deadline);
     }
     eval(&g, me)
 }
 
-/// The rest of the bot's turn: the best action by the evaluation while it beats ending the turn.
-fn finish_turn(g: &mut Game, me: usize) {
+/// The rest of the bot's turn: the best action by the evaluation while it beats ending the turn
+/// (until the time limit).
+fn finish_turn(g: &mut Game, me: usize, deadline: Instant) {
     for _ in 0..25 {
-        if g.game_over || g.current != me || g.phase != "PLAY" {
-            return;
+        if g.game_over || g.current != me || g.phase != "PLAY" || Instant::now() >= deadline {
+            break;
         }
         let here = eval(g, me);
         let mut best: Option<(Action, f64)> = None;
-        for a in g.legal_actions() {
-            if a.get("player").and_then(Value::as_i64) != Some(me as i64) || a["type"] == "concede" || a["type"] == "end_turn" {
+        for a in options(g, me) {
+            if a["type"] == "end_turn" {
                 continue;
             }
             let mut c = g.clone_state();
@@ -307,10 +367,10 @@ fn finish_turn(g: &mut Game, me: usize) {
 }
 
 /// The opponent's turn in this world, played by the engine's bot (greedy, it sees this world).
-fn opponent_turn(g: &mut Game, me: usize) {
+fn opponent_turn(g: &mut Game, me: usize, deadline: Instant) {
     let opp = 1 - me;
     for _ in 0..30 {
-        if g.game_over || g.current != opp {
+        if g.game_over || g.current != opp || Instant::now() >= deadline {
             return;
         }
         if let Some(p) = &g.pending {

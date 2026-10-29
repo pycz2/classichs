@@ -15,7 +15,7 @@ use rand::Rng;
 use serde_json::{json, Value};
 use std::sync::Arc;
 use std::time::Duration;
-use tokio::sync::Semaphore;
+use std::collections::VecDeque;
 use tokio::time::{sleep, Instant};
 
 pub type BoxFut<T> = std::pin::Pin<Box<dyn std::future::Future<Output = T> + Send>>;
@@ -37,10 +37,12 @@ pub struct Ctx {
     pub id: i64,
     pub name: String,
     pub status: Statuses,
-    /// thinking at once (CPU): the server's players come first
-    pub think: Arc<Semaphore>,
+    /// the places to think (CPU)
+    pub think: Arc<crate::bots::think::Think>,
     /// the server's event log (None: a bot of another server)
     pub app: Option<AppRef>,
+    /// a human pace: a short pause before each move (the bots of the admin page; auto-bots answer at once)
+    pub pace: bool,
 }
 
 impl Ctx {
@@ -353,6 +355,14 @@ async fn wait_match(ctx: &Ctx, c: &mut Conn, wait: Duration) -> Result<Option<Va
     }
 }
 
+/// Reads the messages already waiting (it never waits for one).
+async fn read_ahead(c: &mut Conn, ahead: &mut VecDeque<Value>) -> Result<(), String> {
+    while let Some(m) = c.next(Duration::ZERO).await? {
+        ahead.push_back(m);
+    }
+    Ok(())
+}
+
 /// One game until `game_over`; returns the Arena part of the result (Arena games).
 async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool, level: Level) -> Result<Option<Value>, String> {
     let lib = Library::get();
@@ -367,12 +377,24 @@ async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool,
     let mut last_acted = (-1i64, -1i64); // (history length, current) of the state acted on
     // both players change cards at once: a state made before ours arrived must not make a second mulligan
     let mut mulligan_sent = false;
+    // messages read ahead (while looking for the newest state), in order
+    let mut ahead: VecDeque<Value> = VecDeque::new();
     loop {
-        let Some(msg) = c.next(Duration::from_secs(300)).await? else {
-            return Err("the game went silent for 5 minutes".into());
+        let msg = match ahead.pop_front() {
+            Some(m) => m,
+            None => match c.next(Duration::from_secs(300)).await? {
+                Some(m) => m,
+                None => return Err("the game went silent for 5 minutes".into()),
+            },
         };
         match msg["t"].as_str().unwrap_or("") {
             "state" => {
+                // only the newest state counts: older ones waited in the queue while the bot thought
+                // (the messages between are still read, in order)
+                read_ahead(c, &mut ahead).await?;
+                if ahead.iter().any(|m| m["t"] == "state" || m["t"] == "game_over") {
+                    continue;
+                }
                 let v = msg["view"].clone();
                 let res = msg["result"].clone();
                 let my_move = res["over"] != true
@@ -389,10 +411,11 @@ async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool,
                 if key == last_acted || (res["phase"] == "MULLIGAN" && mulligan_sent) {
                     continue; // (the same position again, or our mulligan is on its way)
                 }
-                let permit = ctx.think.clone().acquire_owned().await.map_err(|e| e.to_string())?;
+                let left = Duration::from_secs(res["deadline"].as_u64().unwrap_or(75));
+                let place = ctx.think.enter(Instant::now() + left).await;
                 let deck2 = deck.clone();
                 let d = tokio::task::spawn_blocking(move || {
-                    let _permit = permit;
+                    let _place = place;
                     let k = Knowledge { lib, seat, my_deck: deck2, arena };
                     brain::decide(&v, &k, level, budget)
                 })
@@ -406,8 +429,17 @@ async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool,
                             b.decision = json!({"action": d.label, "worlds": d.worlds, "ms": d.ms,
                                 "top": d.top.iter().map(|x| json!({"label": x.label, "score": (x.score * 10.0).round() / 10.0})).collect::<Vec<_>>()});
                         });
-                        let ms = rand::thread_rng().gen_range(500..1300);
-                        sleep(Duration::from_millis(ms)).await;
+                        // a human pace, when the turn has time for it
+                        let ends = Instant::now() + left.saturating_sub(Duration::from_millis(d.ms as u64));
+                        if ctx.pace && ends.saturating_duration_since(Instant::now()) > Duration::from_secs(10) {
+                            let ms = rand::thread_rng().gen_range(500..1300);
+                            sleep(Duration::from_millis(ms)).await;
+                        }
+                        // a new state came while the bot thought (the turn ended, a card came): look again
+                        read_ahead(c, &mut ahead).await?;
+                        if ahead.iter().any(|m| m["t"] == "state" || m["t"] == "game_over") {
+                            continue;
+                        }
                         last_acted = key;
                         mulligan_sent |= d.action["type"] == "mulligan";
                         c.send(json!({"t": "act", "game": game, "action": d.action})).await?;

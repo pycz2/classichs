@@ -224,3 +224,12 @@ fn games_and_engines_go_between_threads() {
     send_sync::<classichs_engine::Game>();
     send_sync::<Engine>();
 }
+
+
+/// The cards whose script uses their own neighbours (the bots try every board position for them).
+#[test]
+fn classic_knows_the_neighbour_cards() {
+    let mut got: Vec<&str> = classichs_engine::ruleset::classic().neighbours.iter().map(String::as_str).collect();
+    got.sort();
+    assert_eq!(got, ["VAN_EX1_093", "VAN_EX1_162", "VAN_EX1_304", "VAN_EX1_565", "VAN_EX1_584", "VAN_EX1_058"].iter().copied().collect::<std::collections::BTreeSet<_>>().into_iter().collect::<Vec<_>>());
+}

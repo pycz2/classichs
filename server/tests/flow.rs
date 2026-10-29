@@ -316,9 +316,19 @@ async fn refused_actions_and_three_strikes() {
     // A legal move still works after two refusals.
     t.act(0, json!({"type": "mulligan", "player": 0, "replace": []})).await;
     t.act(1, json!({"type": "mulligan", "player": 1, "replace": []})).await;
-    // The other player's refusals count for them alone.
-    t.send(1, json!({"type": "mulligan", "player": 1, "replace": []})).await;
-    assert!(t.p[1].c.want("act_error").await["error"].as_str().unwrap().contains("illegal"));
+    // A move when it is not the player's move (as one sent just before the clock ended the turn):
+    // refused without a strike, again and again.
+    let other = 1 - t.mirror.current;
+    for _ in 0..4 {
+        t.send(other, json!({"type": "end_turn", "player": other})).await;
+        let e = t.p[other].c.want("act_error").await;
+        assert!(e["late"] == true && e["error"].as_str().unwrap().contains("not your move"), "{e}");
+    }
+    // Player 0's move (player 1 ends the turn first if it goes first).
+    let first = t.mirror.current;
+    if first == 1 {
+        t.act(1, json!({"type": "end_turn", "player": 1})).await;
+    }
     // The third refusal ends the game: player 0 loses, both get the message.
     t.send(0, json!({"type": "attack", "player": 0, "attacker": 999, "defender": 1})).await;
     t.p[0].c.want("act_error").await;
@@ -331,11 +341,13 @@ async fn refused_actions_and_three_strikes() {
     // The event log: every applied action with turn and hash, the end with the refused moves.
     let evs = game_events(&app, &t.game).await;
     let kinds: Vec<&str> = evs.iter().map(|e| e.kind.as_str()).collect();
-    assert_eq!(kinds, ["match", "game_start", "game_action", "game_action", "game_end"]);
+    let mut want = vec!["match", "game_start", "game_action", "game_action"];
+    want.extend(if first == 1 { vec!["game_action", "game_end"] } else { vec!["game_end"] });
+    assert_eq!(kinds, want);
     let act: Value = serde_json::from_str(evs[2].data.as_deref().unwrap()).unwrap();
     assert!(act["hash"].as_str().unwrap().len() == 64 && act["turn"].is_i64() && act["events"].is_array(), "{act}");
     assert!(evs[2].text.ends_with(": mulligan replaces 0"), "{}", evs[2].text);
-    let end: Value = serde_json::from_str(evs[4].data.as_deref().unwrap()).unwrap();
+    let end: Value = serde_json::from_str(evs.last().unwrap().data.as_deref().unwrap()).unwrap();
     assert_eq!(end["reason"], "illegal");
     assert_eq!(end["refused"].as_array().unwrap().len(), 3);
     assert_eq!(end["message"]["type"], "attack");

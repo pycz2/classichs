@@ -8,6 +8,7 @@ pub mod brain;
 pub mod cards;
 pub mod runtime;
 pub mod status;
+pub mod think;
 pub mod transport;
 
 use crate::db::{self, DbResult};
@@ -18,7 +19,6 @@ use sea_orm::{ActiveModelTrait, EntityTrait, Set};
 use status::Statuses;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use tokio::sync::Semaphore;
 use transport::Transport;
 
 pub const LEVELS: [&str; 3] = ["easy", "medium", "hard"];
@@ -43,14 +43,15 @@ pub struct BotConfig {
 pub struct Manager {
     running: Mutex<HashMap<i64, tokio::task::AbortHandle>>,
     pub status: Statuses,
-    /// bots thinking at once: one less than the CPUs (at least one); the players come first
-    think: Arc<Semaphore>,
+    /// bots thinking at once: the CPUs, at least 4 (a long decision does not stop the others);
+    /// the bot whose turn ends first goes first
+    think: Arc<think::Think>,
 }
 
 impl Default for Manager {
     fn default() -> Manager {
         let cpus = std::thread::available_parallelism().map_or(1, |n| n.get());
-        Manager { running: Mutex::default(), status: Statuses::default(), think: Arc::new(Semaphore::new(cpus.saturating_sub(1).max(1))) }
+        Manager { running: Mutex::default(), status: Statuses::default(), think: think::Think::new(cpus.max(4)) }
     }
 }
 
@@ -142,7 +143,7 @@ fn spawn(app: &AppRef, b: BotConfig, k: u64) -> (i64, tokio::task::AbortHandle) 
                 return;
             }
         };
-        let ctx = Ctx { id, name, status: app.bots.status.clone(), think: app.bots.think.clone(), app: Some(app.clone()) };
+        let ctx = Ctx { id, name, status: app.bots.status.clone(), think: app.bots.think.clone(), app: Some(app.clone()), pace: true };
         let a1 = app.clone();
         let connect: ConnectFn = Arc::new(move || {
             let a = a1.clone();

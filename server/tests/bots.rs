@@ -102,7 +102,7 @@ async fn a_bot_over_the_network_plays_a_server_bot() {
         let c = cfg.clone();
         Box::pin(async move { Some(c) })
     });
-    let ctx = Ctx { id: 999, name: "NetBot".into(), status: app.bots.status.clone(), think: Arc::new(tokio::sync::Semaphore::new(1)), app: None };
+    let ctx = Ctx { id: 999, name: "NetBot".into(), status: app.bots.status.clone(), think: classichs_server::bots::think::Think::new(1), app: None, pace: true };
     tokio::spawn(runtime::run(ctx, connect, Auth::Password("NetBot".into(), "netbotpassword".into()), load));
     wait_games(&app, &[local, 999], 1, 240).await;
 }

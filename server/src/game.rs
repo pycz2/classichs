@@ -257,6 +257,20 @@ impl Ctx {
     }
 }
 
+/// Whether player p has a move now: a mulligan not made yet, a choice to make, or the turn.
+fn moves(g: &Game, p: usize) -> bool {
+    if g.game_over {
+        return false;
+    }
+    if g.phase == "MULLIGAN" {
+        return !g.players[p].mulliganed;
+    }
+    match &g.pending {
+        Some(c) => c.player == p,
+        None => g.current == p,
+    }
+}
+
 /// What ended a game early: who, and what they sent.
 struct Cause {
     p: usize,
@@ -305,6 +319,11 @@ async fn run(ctx: Ctx, mut g: Game, mut rx: mpsc::UnboundedReceiver<Ev>) {
                 m["rejoin"] = json!(true);
                 ctx.send(p, &m);
                 ctx.send(p, &state_msg(&ctx.id, &g, &[], p, clock.left()));
+            }
+            Some(Ev::Act(p, _)) if !moves(&g, p) => {
+                // not p's move now: most often a move sent just before the clock ended p's turn
+                // (it crossed the timeout); refused, but no strike: nobody's game differs
+                ctx.send(p, &json!({"t": "act_error", "game": ctx.id, "error": "not your move now (the turn may have ended)", "late": true}));
             }
             Some(Ev::Act(p, a)) => {
                 let r = if a["player"].as_f64() != Some(p as f64) {
