@@ -63,7 +63,7 @@ pub struct Game {
     pub(crate) next_id: Id,
     pub(crate) next_order: i64,
     /// The card whose effect is running now (buffs and auras remember it; display only).
-    pub source_card: String,
+    pub source_card: &'static str,
     pub source_id: Id,
     /// The deck lists the match started with (the deck tracker shows them).
     pub start_decks: [Vec<String>; 2],
@@ -77,7 +77,7 @@ impl Game {
     pub(crate) fn blank(rs: &'static Ruleset, seed: i64) -> Game {
         Game { rs, rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
             phase: "MULLIGAN", pending: None, game_over: false, winner: -1, event_log: vec![], history: vec![],
-            queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: String::new(), source_id: NONE,
+            queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: "", source_id: NONE,
             start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new() }
     }
 
@@ -242,7 +242,7 @@ impl Game {
 
     pub fn hooks_of(&self, id: Id) -> &'static HookSet {
         let e = self.e(id);
-        self.rs.hooks(if e.silenced { "" } else { &e.card_id })
+        if e.silenced { self.rs.hooks("") } else { &e.card.hooks }
     }
 
     // --- events and resolution --------------------------------------------------
@@ -429,7 +429,7 @@ impl Game {
         let was = std::mem::take(&mut self.source_card);
         let was_id = self.source_id;
         if e != NONE {
-            self.source_card = self.e(e).card_id.clone();
+            self.source_card = self.e(e).card_id;
             self.source_id = e;
         } else {
             self.source_id = NONE;
@@ -463,14 +463,14 @@ impl Game {
     }
 
     pub fn aura_add(&mut self, t: Id, atk: i64, hp: i64, tags: &[(&str, Value)]) {
-        let src = self.source_card.clone();
+        let src = self.source_card;
         let n = self.n();
         let a = &mut self.em(t).aura;
         a.atk += atk;
         a.hp += hp;
         if !src.is_empty() && (atk != 0 || hp != 0) {
-            let was = a.src.get(&src).cloned().unwrap_or(json!([0, 0]));
-            a.src.insert(src, json!([int(was.get(0)) + atk, int(was.get(1)) + hp]));
+            let was = a.src.get(src).cloned().unwrap_or(json!([0, 0]));
+            a.src.insert(src.to_string(), json!([int(was.get(0)) + atk, int(was.get(1)) + hp]));
         }
         for (k, v) in tags {
             if *k == n.spell_power || *k == n.power_multiplier {
@@ -563,7 +563,7 @@ impl Game {
         self.place_on_board(e, pos);
         let t = self.n().exhausted;
         self.em(e).give_tag(t, false);
-        let card = self.e(e).card_id.clone();
+        let card = self.e(e).card_id;
         self.emit(json!({"type": "summon", "entity": e, "player": c, "card": card}));
         self.emit(json!({"type": "after_summon", "entity": e, "player": c, "card": card}));
         e
@@ -583,7 +583,7 @@ impl Game {
                 self.damage(NONE, self.players[p].hero, f);
                 continue;
             };
-            let card = self.e(e).card_id.clone();
+            let card = self.e(e).card_id;
             if self.players[p].hand.len() >= self.rs.hand {
                 self.em(e).zone = "GRAVEYARD";
                 self.log_event(json!({"type": "burn", "player": p, "entity": e, "card": card}));
@@ -602,7 +602,7 @@ impl Game {
         let pl = &mut self.players[p];
         let Some(i) = pl.deck.iter().position(|&x| x == e) else { return };
         pl.deck.remove(i);
-        let card = self.e(e).card_id.clone();
+        let card = self.e(e).card_id;
         if self.players[p].hand.len() >= self.rs.hand {
             self.em(e).zone = "GRAVEYARD";
             self.log_event(json!({"type": "burn", "player": p, "entity": e, "card": card}));
@@ -633,7 +633,7 @@ impl Game {
             }
             self.players[p].hand.retain(|&x| x != e);
             self.em(e).zone = "GRAVEYARD";
-            let card = self.e(e).card_id.clone();
+            let card = self.e(e).card_id;
             self.emit(json!({"type": "discard", "player": p, "entity": e, "card": card}));
         }
     }
@@ -706,7 +706,7 @@ impl Game {
         }
         self.players[c].board.retain(|&x| x != e);
         self.em(e).zone = "SETASIDE";
-        let card = self.e(e).card_id.clone();
+        let card = self.e(e).card_id;
         let n = self.add_to_hand(c, &card);
         self.log_event(json!({"type": "return_to_hand", "entity": e, "new": n}));
         n
@@ -745,7 +745,7 @@ impl Game {
         }
         self.players[c].weapon = Some(w);
         self.enter_play(w);
-        let card = self.e(w).card_id.clone();
+        let card = self.e(w).card_id;
         self.emit(json!({"type": "equip", "player": c, "entity": w, "card": card}));
         w
     }
@@ -885,7 +885,7 @@ impl Game {
         let c = self.ctrl(me);
         self.players[c].secrets.retain(|&x| x != me);
         self.em(me).zone = "GRAVEYARD";
-        let card = self.e(me).card_id.clone();
+        let card = self.e(me).card_id;
         self.emit(json!({"type": "secret_revealed", "entity": me, "player": c, "card": card}));
     }
 
@@ -916,7 +916,7 @@ impl Game {
     pub fn cost(&self, e: Id) -> i64 {
         let x = self.e(e);
         let mut c = x.card.cost;
-        if let Some(f) = self.rs.hooks(&x.card_id).cost_mod {
+        if let Some(f) = x.card.hooks.cost_mod {
             c += self.fx_cost_mod(f, e);
         }
         for ench in &x.enchantments {
@@ -976,7 +976,7 @@ impl Game {
         Game { rs: self.rs, rng: self.rng.clone(), players: self.players.clone(), entities: self.entities.clone(),
             turn: self.turn, current: self.current, phase: self.phase, pending: self.pending.clone(),
             game_over: self.game_over, winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(),
-            next_id: self.next_id, next_order: self.next_order, source_card: String::new(), source_id: NONE,
+            next_id: self.next_id, next_order: self.next_order, source_card: "", source_id: NONE,
             start_decks: [vec![], vec![]], lua: self.lua.share(), script_error: self.script_error.clone() }
     }
 
@@ -991,7 +991,7 @@ impl Game {
     /// enchantments, keywords and Silence. Auras are not copied; the copy is a new
     /// minion (summoning sickness, not Frozen).
     pub fn copy_minion(&mut self, me: Id, t: Id) -> Id {
-        let card = self.e(t).card_id.clone();
+        let card = self.e(t).card_id;
         let n = self.transform(me, &card);
         if n == NONE {
             return NONE;

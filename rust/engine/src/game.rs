@@ -266,7 +266,7 @@ impl Game {
             if self.cost(e) > p.mana || !self.can_play(e) {
                 continue;
             }
-            let choices: &[i64] = if self.rs.hooks(&self.e(e).card_id).choice.is_some() { &[0, 1] } else { &[-1] };
+            let choices: &[i64] = if self.e(e).card.hooks.choice.is_some() { &[0, 1] } else { &[-1] };
             for &choice in choices {
                 for t in self.play_targets(e, choice) {
                     for pos in self.positions(e) {
@@ -280,7 +280,7 @@ impl Game {
         let hpe = self.e(hp);
         let n = self.n();
         if !hpe.has(n.used) && !hpe.has(n.locked) && self.cost(hp) <= p.mana {
-            let hh = self.rs.hooks(&hpe.card_id);
+            let hh = &hpe.card.hooks;
             if hh.power.is_some() && hh.can_play.is_none_or(|f| self.fx_can_play(f, hp)) {
                 for t in self.spec_targets(hp, hh.target, true, false) {
                     out.push(obj(json!({"type": "hero_power", "player": cur, "target": t})));
@@ -305,7 +305,7 @@ impl Game {
         if x.card.trap && p.secrets.iter().any(|&s| self.e(s).card_id == x.card_id) {
             return false;
         }
-        self.rs.hooks(&x.card_id).can_play.is_none_or(|f| self.fx_can_play(f, e))
+        x.card.hooks.can_play.is_none_or(|f| self.fx_can_play(f, e))
     }
 
     pub fn combo_active(&self, e: Id) -> bool {
@@ -321,7 +321,7 @@ impl Game {
 
     /// The target spec that applies when e is played with this choice and combo state.
     pub fn target_spec(&self, e: Id, choice: i64, combo: bool) -> Option<TSpec> {
-        let h = self.rs.hooks(&self.e(e).card_id);
+        let h = &self.e(e).card.hooks;
         if h.combo_target.is_some() {
             return if combo { h.combo_target } else { None };
         }
@@ -402,7 +402,7 @@ impl Game {
     }
 
     fn run_effect(&mut self, e: Id, key: &str, t: Id, choice: i64, combo: bool) {
-        let h = self.rs.hooks(&self.e(e).card_id);
+        let h = &self.e(e).card.hooks;
         if t == NONE && self.target_spec(e, choice, combo).is_some() {
             return; // targeted effect with no target (none was valid, or it left play)
         }
@@ -422,7 +422,7 @@ impl Game {
 
     fn play_minion(&mut self, e: Id, mut t: Id, pos: i64, choice: i64, combo: bool) {
         let c = self.ctrl(e);
-        let card = self.e(e).card_id.clone();
+        let card = self.e(e).card_id;
         self.players[c].minions_played_this_turn += 1;
         self.place_on_board(e, pos);
         let ex = self.n().exhausted;
@@ -447,7 +447,7 @@ impl Game {
 
     fn play_spell(&mut self, e: Id, t: Id, choice: i64, combo: bool) {
         let c = self.ctrl(e);
-        let card = self.e(e).card_id.clone();
+        let card = self.e(e).card_id;
         let is_trap = self.e(e).card.trap;
         self.em(e).zone = "SETASIDE";
         let ev = self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_trap,
@@ -484,7 +484,7 @@ impl Game {
 
     fn play_weapon(&mut self, e: Id, t: Id, combo: bool) {
         let c = self.ctrl(e);
-        let card = self.e(e).card_id.clone();
+        let card = self.e(e).card_id;
         self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "weapon", "target": t, "card": card}));
         self.resolve();
         if self.game_over {
@@ -515,7 +515,7 @@ impl Game {
             return;
         }
         let weapon = if self.e(a).is_champion() { self.players[self.ctrl(a)].weapon } else { None };
-        let immune = weapon.is_some_and(|w| self.rs.hooks(&self.e(w).card_id).immune_while_attacking);
+        let immune = weapon.is_some_and(|w| self.e(w).card.hooks.immune_while_attacking);
         if immune {
             self.em(a).give_tag(names.immune, false);
         }
@@ -528,7 +528,7 @@ impl Game {
         }
         if let Some(w) = weapon {
             if self.e(w).zone == "PLAY" {
-                let lose = match self.rs.hooks(&self.e(w).card_id).durability_on_attack {
+                let lose = match self.e(w).card.hooks.durability_on_attack {
                     Some(f) => self.fx_dur(f, w, d),
                     None => true,
                 };
@@ -551,7 +551,7 @@ impl Game {
         self.players[cur].mana -= cost;
         let used = self.n().used;
         self.em(hp).give_tag(used, false);
-        if let Some(f) = self.rs.hooks(&self.e(hp).card_id).power {
+        if let Some(f) = self.e(hp).card.hooks.power {
             self.from(hp, |g| g.fx_effect(f, hp, t));
         }
         self.emit(json!({"type": "hero_power", "player": cur, "entity": hp, "target": t}));
@@ -567,7 +567,7 @@ impl Game {
         let src = self.pending.as_ref().unwrap().source;
         let still = self.pending_options();
         self.pending = None;
-        if let Some(f) = self.rs.hooks(&self.e(src).card_id).on_choose {
+        if let Some(f) = self.e(src).card.hooks.on_choose {
             self.from(src, |g| g.fx_choose(f, src, option, still));
         }
     }

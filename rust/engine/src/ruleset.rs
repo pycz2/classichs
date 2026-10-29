@@ -59,6 +59,8 @@ pub struct Card {
     pub trap: bool,
     /// The tags an entity of this card starts with.
     pub start_tags: Map<String, Value>,
+    /// Its hooks (set once the scripts are loaded).
+    pub hooks: HookSet,
 }
 
 #[derive(Deserialize)]
@@ -448,6 +450,11 @@ impl Ruleset {
         if let Some(m) = rs.missions.iter().find(|m| !m.script.is_empty() && !hooks.contains_key(&m.script)) {
             return Err(format!("missions/{}.json: no hooks {}", m.id, m.script));
         }
+        for c in rs.cards.values_mut() {
+            if let Some(h) = hooks.get(&c.id) {
+                c.hooks = h.clone();
+            }
+        }
         rs.hooks = hooks;
         Ok(rs)
     }
@@ -495,6 +502,7 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
         power: c.power,
         script: c.script,
         start_tags: tags,
+        hooks: HookSet::default(),
     })
 }
 

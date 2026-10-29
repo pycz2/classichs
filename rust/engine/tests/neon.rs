@@ -58,10 +58,10 @@ impl T {
         self.g.players[p].board.clone()
     }
     fn cards(&self, p: usize) -> Vec<String> {
-        self.board(p).iter().map(|&m| self.g.e(m).card_id.clone()).collect()
+        self.board(p).iter().map(|&m| self.g.e(m).card_id.to_string()).collect()
     }
     fn hand(&self, p: usize) -> Vec<String> {
-        self.g.players[p].hand.iter().map(|&m| self.g.e(m).card_id.clone()).collect()
+        self.g.players[p].hand.iter().map(|&m| self.g.e(m).card_id.to_string()).collect()
     }
     fn hero(&self, p: usize) -> Id {
         self.g.players[p].hero
@@ -412,7 +412,7 @@ fn exec_cards() {
     let mut t = game(json!({"hero": "director_vale"}), json!({}));
     t.power(NONE);
     let s = t.nth(0, 0);
-    assert_eq!((t.g.e(s).card_id.as_str(), t.atk(s), t.hp(s), t.has(s, "GUARD")), ("sentry_drone", 0, 2, true));
+    assert_eq!((t.g.e(s).card_id, t.atk(s), t.hp(s), t.has(s, "GUARD")), ("sentry_drone", 0, 2, true));
     let t = game(json!({"hero": "director_vale", "board": vec!["glitch"; 7]}), json!({}));
     assert!(!t.can_power());
 
@@ -689,10 +689,10 @@ fn play_game(c0: &str, d0: &[String], c1: &str, d1: &[String], seed: i64, first:
         let p = if g.phase == "MULLIGAN" { (0..2).find(|&p| !g.players[p].mulliganed).unwrap() } else { g.current };
         let Some(a) = bot::choose(&g, p) else { break };
         if a["type"] == "play" {
-            played[p].push(g.e(int(a.get("entity"))).card_id.clone());
+            played[p].push(g.e(int(a.get("entity"))).card_id.to_string());
         }
         if trace {
-            let name = |k: &str| a.get(k).map(|v| int(Some(v))).filter(|&x| x >= 0).map(|x| g.e(x).card_id.clone()).unwrap_or_default();
+            let name = |k: &str| a.get(k).map(|v| int(Some(v))).filter(|&x| x >= 0).map(|x| g.e(x).card_id.to_string()).unwrap_or_default();
             match a["type"].as_str().unwrap() {
                 "end_turn" => {
                     let side = |q: usize| {

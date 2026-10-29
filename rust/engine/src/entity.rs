@@ -41,7 +41,7 @@ pub struct Aura {
 #[derive(Clone, Debug)]
 pub struct Entity {
     pub id: Id,
-    pub card_id: String,
+    pub card_id: &'static str,
     pub card: &'static Card,
     pub controller: usize,
     pub zone: &'static str,
@@ -58,7 +58,7 @@ impl Entity {
     /// A new entity of a card: the card's start tags (its keywords, spell power,
     /// a weapon's durability, a champion's armor), out of play.
     pub fn new(id: Id, card: &'static Card, controller: usize) -> Entity {
-        Entity { id, card_id: card.id.clone(), card, controller, zone: "SETASIDE", play_order: 0, damage: 0,
+        Entity { id, card_id: &card.id, card, controller, zone: "SETASIDE", play_order: 0, damage: 0,
             tags: card.start_tags.clone(), enchantments: vec![], eot_tags: vec![], aura: Aura::default(), silenced: false }
     }
 

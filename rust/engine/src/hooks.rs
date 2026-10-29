@@ -18,7 +18,7 @@ pub enum Base {
 }
 
 /// A target spec: a base plus an optional filter hook.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct TSpec {
     pub base: Base,
     pub filter: Option<HookFn>,
@@ -26,7 +26,7 @@ pub struct TSpec {
 
 /// A TRAP: fires on `event` in the opponent's turn when `cond` holds (None: always);
 /// the trap is revealed, then `effect` runs.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct TrapHook {
     pub event: &'static str,
     pub cond: Option<HookFn>,
@@ -34,7 +34,7 @@ pub struct TrapHook {
 }
 
 /// The hooks of a card or of an enchantment, as the engine calls them.
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Debug)]
 pub struct HookSet {
     pub target: Option<TSpec>,
     pub on_play: Option<HookFn>,

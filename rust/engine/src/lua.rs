@@ -655,7 +655,7 @@ ql!(q_adjacent, |g, a| g.adjacent(ent(g, &a, 0)?));
 ql!(q_hand, |g, a| g.players[player(&a, 0)?].hand.clone());
 ql!(q_deck, |g, a| g.players[player(&a, 0)?].deck.clone());
 ql!(q_traps, |g, a| g.players[player(&a, 0)?].secrets.clone());
-q!(q_card, |g, a| one(g.e(ent(g, &a, 0)?).card_id.as_str()));
+q!(q_card, |g, a| one(g.e(ent(g, &a, 0)?).card_id));
 q!(q_type, |g, a| one(g.e(ent(g, &a, 0)?).kind()));
 q!(q_race, |g, a| one(g.e(ent(g, &a, 0)?).race()));
 q!(q_class, |g, a| one(g.e(ent(g, &a, 0)?).card.card_class.as_str()));
@@ -834,7 +834,7 @@ fn a_discard(g: &mut Game, a: Args) -> R {
     if g.players[p].hand.contains(&e) {
         g.players[p].hand.retain(|&x| x != e);
         g.em(e).zone = "GRAVEYARD";
-        let card = g.e(e).card_id.clone();
+        let card = g.e(e).card_id;
         g.emit(json!({"type": "discard", "player": p, "entity": e, "card": card}));
     }
     none()

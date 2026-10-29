@@ -105,7 +105,7 @@ fn replay(line: &Value, st: &mut Stats) {
             }
         }
         if s["a"]["type"] == "hero_power" && res.ok {
-            st.played.insert(g.e(g.players[int(s["a"].get("player")) as usize].hero_power).card_id.clone());
+            st.played.insert(g.e(g.players[int(s["a"].get("player")) as usize].hero_power).card_id.to_string());
         }
         if !events_match(&s["e"], &res.events) {
             let got = Value::Array(res.events.iter().cloned().map(Value::Object).collect());
