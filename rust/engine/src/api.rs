@@ -234,10 +234,7 @@ impl Engine {
             Game::new_in(rs, &pair[0].hero, &pair[0].cards, &pair[1].hero, &pair[1].cards, seed, first, true)
         };
         let mut reply = state(id, &game);
-        let start: Vec<Ev> = game.history.first().map_or(&Value::Null, |h| &h["events"])
-            .as_array()
-            .map(|a| a.iter().filter_map(|e| e.as_object().cloned()).collect())
-            .unwrap_or_default();
+        let start: Vec<Ev> = game.history.first().map_or(vec![], |h| h.events());
         reply["events"] = events_for(&game, &start, view);
         self.games.insert(id.to_string(), Slot { game, mission });
         reply
@@ -292,11 +289,9 @@ fn game_op(op: &str, id: &str, slot: &mut Slot, req: &Value, view: i64) -> Value
                 .iter()
                 .skip(from)
                 .map(|h| {
-                    let mut h = h.clone();
-                    let evs: Vec<Ev> =
-                        h["events"].as_array().map(|a| a.iter().filter_map(|e| e.as_object().cloned()).collect()).unwrap_or_default();
-                    h["events"] = events_for(g, &evs, view);
-                    h
+                    let mut v = h.to_value();
+                    v["events"] = events_for(g, &h.events(), view);
+                    v
                 })
                 .collect();
             json!({"ok": true, "game": id, "history": entries, "start_decks": g.start_decks})

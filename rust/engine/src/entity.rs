@@ -91,7 +91,30 @@ impl V {
             _ => None,
         }
     }
+    /// == the JSON value v (as serde_json compares values).
+    pub fn same(&self, v: &Value) -> bool {
+        match (self, v) {
+            (V::Bool(a), Value::Bool(b)) => a == b,
+            (V::Int(a), Value::Number(_)) => Value::from(*a) == *v,
+            (V::Str(a), Value::String(b)) => a == b,
+            (V::Json(a), _) => a == v,
+            _ => false,
+        }
+    }
+    pub fn is_null(&self) -> bool {
+        matches!(self, V::Json(Value::Null))
+    }
 }
+
+/// An `Obj` from JSON-like pairs: `obj!{"type": "damage", "target": t}`.
+macro_rules! obj {
+    ($($k:literal: $v:expr),* $(,)?) => {{
+        let mut o = $crate::entity::Obj::new();
+        $(o.insert($k, $crate::entity::V::from($v));)*
+        o
+    }};
+}
+pub(crate) use obj;
 
 impl From<i64> for V {
     fn from(v: i64) -> V {
@@ -106,6 +129,26 @@ impl From<bool> for V {
 impl From<&'static str> for V {
     fn from(v: &'static str) -> V {
         V::Str(Cow::Borrowed(v))
+    }
+}
+impl From<i32> for V {
+    fn from(v: i32) -> V {
+        V::Int(v as i64)
+    }
+}
+impl From<usize> for V {
+    fn from(v: usize) -> V {
+        V::Int(v as i64)
+    }
+}
+impl From<String> for V {
+    fn from(v: String) -> V {
+        V::Str(Cow::Owned(v))
+    }
+}
+impl From<Vec<Id>> for V {
+    fn from(v: Vec<Id>) -> V {
+        V::Json(json!(v))
     }
 }
 impl From<Value> for V {

@@ -269,7 +269,7 @@ async fn run(ctx: Ctx, mut g: Game, mut rx: mpsc::UnboundedReceiver<Ev>) {
     let mut clock = Clock { key: ("", -1, 9), at: Instant::now() };
     clock.update(&g, &t);
     let opening: Vec<Events> =
-        g.history[0]["events"].as_array().map(|a| a.iter().filter_map(|e| e.as_object().cloned()).collect()).unwrap_or_default();
+        g.history[0].events();
     ctx.app.event(ctx.ev(g.current, "game_start", format!("The game started: {} goes first", ctx.names[g.current]))
         .data(json!({"first": g.current, "turn": g.turn, "hash": g.state_hash(), "events": opening})));
     ctx.states(&g, &opening, &clock);

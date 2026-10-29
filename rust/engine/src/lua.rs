@@ -16,9 +16,9 @@
 //! never a panic.
 
 use crate::hooks::{Base, HookFn, HookSet, TSpec, TrapHook};
-use crate::entity::{vint, Id, Obj, Str, NONE, V};
+use crate::entity::{obj, vint, Id, Obj, Str, NONE, V};
 use crate::ruleset::{leak, Ruleset};
-use crate::state::{Ev, Game};
+use crate::state::Game;
 use classichs_script::{call, compile_bytes, load, Args, Chunk, Error, Host, Value as L, Vm};
 use serde_json::{json, Map, Value};
 use std::collections::HashMap;
@@ -369,19 +369,33 @@ fn to_json<H>(vm: &Vm<H>, v: &L, depth: u32) -> Result<Value, Error> {
     })
 }
 
+/// An event → Lua (as `to_lua` of its JSON).
+fn obj_to_lua<H>(vm: &mut Vm<H>, o: &Obj) -> Result<L, Error> {
+    let t = vm.new_table();
+    for (k, x) in o.iter() {
+        let x = match x {
+            V::Bool(b) => L::Bool(*b),
+            V::Int(i) => L::Int(*i),
+            V::Str(s) => L::from(s.as_ref()),
+            V::Json(v) => to_lua(vm, v, 1)?,
+        };
+        vm.set(&t, k, x)?;
+    }
+    Ok(t)
+}
+
 fn empty(v: &Value) -> bool {
     matches!(v, Value::Array(a) if a.is_empty()) || matches!(v, Value::Object(o) if o.is_empty())
 }
 
 /// Copies the fields a hook changed in its event table back to the event.
-fn write_back(g: &mut Game, t: &L, ev: &mut Ev) -> Result<(), Error> {
+fn write_back(g: &mut Game, t: &L, ev: &mut Obj) -> Result<(), Error> {
     let Value::Object(b) = to_json(g.vm(), t, 0)? else { return Ok(()) };
+    let rs = g.rs;
     for (k, v) in &b {
         match ev.get(k) {
-            Some(old) if old == v || (empty(old) && empty(v)) => {}
-            _ => {
-                ev.insert(k.clone(), v.clone());
-            }
+            Some(old) if old.same(v) || (matches!(old, V::Json(o) if empty(o)) && empty(v)) => {}
+            _ => ev.insert(rs.intern(k), V::of(v, &|s| rs.intern(s))),
         }
     }
     ev.retain(|k, v| b.contains_key(k) || v.is_null());
@@ -462,7 +476,7 @@ impl Game {
         self.phase = "OVER";
         self.winner = -1;
         self.queue.clear();
-        self.log_event(json!({"type": "game_over", "winner": -1, "reason": "script_error", "error": msg}));
+        self.log_event(obj!{"type": "game_over", "winner": -1, "reason": "script_error", "error": msg});
     }
 
     pub(crate) fn fx_effect(&mut self, f: HookFn, me: Id, t: Id) {
@@ -478,8 +492,8 @@ impl Game {
         self.lua(
             f,
             |g| {
-                let e = Value::Object(g.event_log[ev].clone());
-                Ok(vec![L::Int(me), to_lua(g.vm(), &e, 0)?])
+                let e = g.event_log[ev].clone();
+                Ok(vec![L::Int(me), obj_to_lua(g.vm(), &e)?])
             },
             |g, _, a| {
                 let mut e = std::mem::take(&mut g.event_log[ev]);
@@ -490,17 +504,17 @@ impl Game {
         );
     }
 
-    pub(crate) fn fx_now(&mut self, f: HookFn, me: Id, ev: &mut Ev) {
-        let src = Value::Object(ev.clone());
-        self.lua(f, |g| Ok(vec![L::Int(me), to_lua(g.vm(), &src, 0)?]), |g, _, a| write_back(g, &a[2], ev));
+    pub(crate) fn fx_now(&mut self, f: HookFn, me: Id, ev: &mut Obj) {
+        let src = ev.clone();
+        self.lua(f, |g| Ok(vec![L::Int(me), obj_to_lua(g.vm(), &src)?]), |g, _, a| write_back(g, &a[2], ev));
     }
 
     pub(crate) fn fx_cond(&mut self, f: HookFn, me: Id, ev: usize) -> bool {
         self.lua(
             f,
             |g| {
-                let e = Value::Object(g.event_log[ev].clone());
-                Ok(vec![L::Int(me), to_lua(g.vm(), &e, 0)?])
+                let e = g.event_log[ev].clone();
+                Ok(vec![L::Int(me), obj_to_lua(g.vm(), &e)?])
             },
             |_, r, _| Ok(r.first().is_some_and(L::truthy)),
         )
@@ -843,7 +857,7 @@ fn a_discard(g: &mut Game, a: Args) -> R {
         g.players[p].hand.retain(|&x| x != e);
         g.em(e).zone = "GRAVEYARD";
         let card = g.e(e).card_id;
-        g.emit(json!({"type": "discard", "player": p, "entity": e, "card": card}));
+        g.emit(obj!{"type": "discard", "player": p, "entity": e, "card": card});
     }
     none()
 }
@@ -1067,21 +1081,22 @@ fn a_add_cost_mod(g: &mut Game, a: Args) -> R {
     }
     none()
 }
+fn event_arg(g: &mut Game, a: &Args) -> Result<Obj, Error> {
+    let v = to_json(g.vm(), &a.table(0)?, 0)?;
+    match v {
+        Value::Object(m) if m.get("type").is_some_and(Value::is_string) => Ok(Obj::of(&m, &|s| g.rs.intern(s))),
+        _ => Err(a.bad(0, "an event needs a string 'type'")),
+    }
+}
 fn a_log(g: &mut Game, a: Args) -> R {
     live(g)?;
-    let v = to_json(g.vm(), &a.table(0)?, 0)?;
-    if !v.get("type").is_some_and(Value::is_string) {
-        return Err(a.bad(0, "an event needs a string 'type'"));
-    }
-    one(g.log_event(v) as i64)
+    let ev = event_arg(g, &a)?;
+    one(g.log_event(ev) as i64)
 }
 fn a_emit(g: &mut Game, a: Args) -> R {
     live(g)?;
-    let v = to_json(g.vm(), &a.table(0)?, 0)?;
-    if !v.get("type").is_some_and(Value::is_string) {
-        return Err(a.bad(0, "an event needs a string 'type'"));
-    }
-    g.emit(v);
+    let ev = event_arg(g, &a)?;
+    g.emit(ev);
     none()
 }
 fn a_remove(g: &mut Game, a: Args) -> R {

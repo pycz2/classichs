@@ -141,7 +141,7 @@ impl Table {
         let rs = ruleset::get(ma["pack"].as_str().unwrap()).expect("the game's pack is loaded");
         let mirror = Game::new_in(rs, &h0, &c0, &h1, &c1, seed, -1, true);
         let mut t = Table { game, p: [P { c: p0.0, deck: p0.1 }, P { c: p1.0, deck: p1.1 }], mirror };
-        let opening: Vec<Events> = t.mirror.history[0]["events"].as_array().unwrap().iter().map(|e| e.as_object().unwrap().clone()).collect();
+        let opening: Vec<Events> = t.mirror.history[0].events();
         for q in 0..2 {
             let s = t.p[q].c.want("state").await;
             check_state(&s, &t.mirror, &opening, q);

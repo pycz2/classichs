@@ -1,11 +1,11 @@
 //! Match setup, turns, actions and legality (engine/game.gd).
 
 use crate::hooks::TSpec;
-use crate::entity::{vint, vtruthy, Id, NONE};
+use crate::entity::{obj, vint, vtruthy, Id, Obj, NONE};
 use crate::json;
 use crate::rng::Rng;
 use crate::ruleset::{self, Ruleset};
-use crate::state::Game;
+use crate::state::{Game, Hist};
 use serde_json::{json, Map, Value};
 
 pub use crate::state::Ev;
@@ -126,8 +126,9 @@ impl Game {
             g.draw(g.current, a);
             g.draw(g.opponent(g.current), b);
         }
-        let events: Vec<Value> = std::mem::take(&mut g.event_log).into_iter().map(Value::Object).collect();
-        g.history.push(json!({"turn": 0, "player": g.current, "action": {"type": "start"}, "events": events}));
+        let events = std::mem::take(&mut g.event_log);
+        let action = Action::from_iter([("type".to_string(), json!("start"))]);
+        g.history.push(Hist { turn: 0, player: json!(g.current), action, events });
         g
     }
 
@@ -139,9 +140,9 @@ impl Game {
         if self.script_error.get().is_some() && !self.game_over {
             self.event_log.clear();
             self.end_by_script_error();
-            let events = std::mem::take(&mut self.event_log);
-            let ev_values: Vec<Value> = events.iter().cloned().map(Value::Object).collect();
-            self.history.push(entry(self.turn, json!(self.current), a, ev_values));
+            let log = std::mem::take(&mut self.event_log);
+            let events = log.iter().map(Obj::to_map).collect();
+            self.history.push(Hist { turn: self.turn, player: json!(self.current), action: a, events: log });
             return Applied { ok: true, error: String::new(), events };
         }
         // the whole legal list even for a malformed action: its read-only hooks may fail (a script error)
@@ -151,10 +152,9 @@ impl Game {
         };
         let who = self.current;
         self.run(act);
-        let events = self.event_log.clone();
-        let ev_values: Vec<Value> = events.iter().cloned().map(Value::Object).collect();
+        let events = self.event_log.iter().map(Obj::to_map).collect();
         let player = a.get("player").cloned().unwrap_or(json!(who));
-        self.history.push(entry(self.turn, player, a, ev_values));
+        self.history.push(Hist { turn: self.turn, player, action: a, events: self.event_log.clone() });
         Applied { ok: true, error: String::new(), events }
     }
 
@@ -225,7 +225,7 @@ impl Game {
     fn do_mulligan(&mut self, p: usize, replace: Vec<Id>) {
         self.players[p].mulliganed = true;
         self.players[p].mulligan_replace = replace.clone();
-        self.log_event(json!({"type": "mulligan_chosen", "player": p}));
+        self.log_event(obj!{"type": "mulligan_chosen", "player": p});
         self.run_mulligan(p, &replace);
         if self.players[0].mulliganed && self.players[1].mulliganed {
             self.finish_mulligan();
@@ -255,7 +255,7 @@ impl Game {
         }
         let mut own = Rng::new(mulligan_seed(self.rng.seed(), p));
         Game::shuffle(&mut self.players[p].deck, &mut own);
-        self.log_event(json!({"type": "mulligan", "player": p, "count": old.len()}));
+        self.log_event(obj!{"type": "mulligan", "player": p, "count": old.len()});
     }
 
     fn finish_mulligan(&mut self) {
@@ -284,7 +284,7 @@ impl Game {
             e.erase_tag(n.exhausted);
             e.set_tag(n.attacks, 0i64);
         }
-        self.emit(json!({"type": "turn_start", "player": cur, "turn": self.turn}));
+        self.emit(obj!{"type": "turn_start", "player": cur, "turn": self.turn});
         self.resolve();
         if !self.game_over && (self.turn > 1 || self.rs.first_player_draws) {
             self.draw(cur, 1);
@@ -293,7 +293,7 @@ impl Game {
 
     fn end_turn(&mut self) {
         let cur = self.current;
-        self.emit(json!({"type": "turn_end", "player": cur}));
+        self.emit(obj!{"type": "turn_end", "player": cur});
         self.resolve();
         if self.game_over {
             return;
@@ -313,7 +313,7 @@ impl Game {
             }
             e.erase_tag(n.frozen_this_turn);
         }
-        self.log_event(json!({"type": "turn_end", "player": cur}));
+        self.log_event(obj!{"type": "turn_end", "player": cur});
         self.current = self.opponent(cur);
         self.start_turn();
     }
@@ -322,7 +322,7 @@ impl Game {
         self.game_over = true;
         self.phase = "OVER";
         self.winner = self.opponent(p) as i64;
-        self.log_event(json!({"type": "game_over", "winner": self.winner}));
+        self.log_event(obj!{"type": "game_over", "winner": self.winner});
     }
 
     fn legal_play_actions(&self, out: &mut Vec<Act>) {
@@ -500,8 +500,8 @@ impl Game {
         self.place_on_board(e, pos);
         let ex = self.n().exhausted;
         self.em(e).give_tag(ex, false);
-        self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "minion", "target": t, "card": card}));
-        self.emit(json!({"type": "summon", "entity": e, "player": c, "card": card}));
+        self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "minion", "target": t, "card": card});
+        self.emit(obj!{"type": "summon", "entity": e, "player": c, "card": card});
         self.resolve();
         if self.game_over || self.e(e).zone != "PLAY" {
             return;
@@ -515,7 +515,7 @@ impl Game {
             return;
         }
         let c = self.ctrl(e);
-        self.emit(json!({"type": "after_summon", "entity": e, "player": c, "card": card, "played": true}));
+        self.emit(obj!{"type": "after_summon", "entity": e, "player": c, "card": card, "played": true});
     }
 
     fn play_spell(&mut self, e: Id, t: Id, choice: i64, combo: bool) {
@@ -523,8 +523,8 @@ impl Game {
         let card = self.e(e).card_id;
         let is_trap = self.e(e).card.trap;
         self.em(e).zone = "SETASIDE";
-        let ev = self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_trap,
-            "target": t, "card": card, "countered": false}));
+        let ev = self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_trap,
+            "target": t, "card": card, "countered": false});
         self.resolve();
         if self.game_over {
             return;
@@ -538,7 +538,7 @@ impl Game {
                 self.enter_play(e);
                 self.em(e).zone = self.rs.names.trap;
             }
-            self.emit(json!({"type": "after_spell", "entity": e, "player": c, "card": card}));
+            self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
             return;
         }
         if !countered {
@@ -551,14 +551,14 @@ impl Game {
         }
         self.em(e).zone = "GRAVEYARD";
         if !self.game_over {
-            self.emit(json!({"type": "after_spell", "entity": e, "player": c, "card": card}));
+            self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
         }
     }
 
     fn play_weapon(&mut self, e: Id, t: Id, combo: bool) {
         let c = self.ctrl(e);
         let card = self.e(e).card_id;
-        self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "weapon", "target": t, "card": card}));
+        self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "weapon", "target": t, "card": card});
         self.resolve();
         if self.game_over {
             return;
@@ -578,7 +578,7 @@ impl Game {
         self.em(a).set_tag(names.attacks, n);
         self.em(a).erase_tag(names.stealth);
         let c = self.ctrl(a);
-        let ev = self.emit(json!({"type": "attack", "attacker": a, "defender": d, "player": c}));
+        let ev = self.emit(obj!{"type": "attack", "attacker": a, "defender": d, "player": c});
         self.resolve();
         if self.game_over || self.e(a).zone != "PLAY" || self.ctrl(a) != self.current {
             return;
@@ -612,7 +612,7 @@ impl Game {
             }
         }
         let c = self.ctrl(a);
-        self.emit(json!({"type": "after_attack", "attacker": a, "defender": d, "player": c}));
+        self.emit(obj!{"type": "after_attack", "attacker": a, "defender": d, "player": c});
     }
 
     // --- hero power and choice --------------------------------------------------
@@ -627,7 +627,7 @@ impl Game {
         if let Some(f) = self.e(hp).card.hooks.power {
             self.from(hp, |g| g.fx_effect(f, hp, t));
         }
-        self.emit(json!({"type": "hero_power", "player": cur, "entity": hp, "target": t}));
+        self.emit(obj!{"type": "hero_power", "player": cur, "entity": hp, "target": t});
     }
 
     /// Offered options that are still in the zone they were offered from.
@@ -650,21 +650,11 @@ impl Game {
         if let Some(p) = &self.pending {
             if self.pending_options().is_empty() {
                 let player = p.player;
-                self.log_event(json!({"type": "choice_cancelled", "player": player}));
+                self.log_event(obj!{"type": "choice_cancelled", "player": player});
                 self.pending = None;
             }
         }
     }
-}
-
-/// A history entry ({"turn", "player", "action", "events"}).
-fn entry(turn: i64, player: Value, action: Action, events: Vec<Value>) -> Value {
-    let mut m = Map::new();
-    m.insert("action".into(), Value::Object(action));
-    m.insert("events".into(), Value::Array(events));
-    m.insert("player".into(), player);
-    m.insert("turn".into(), json!(turn));
-    Value::Object(m)
 }
 
 fn subsets(ids: &[Id]) -> Vec<Vec<Id>> {

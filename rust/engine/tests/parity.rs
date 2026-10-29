@@ -71,7 +71,7 @@ fn replay(line: &Value, st: &mut Stats) {
         bad(st, "start hash".into());
         return;
     }
-    let start: Vec<_> = g.history[0]["events"].as_array().unwrap().iter().map(|e| e.as_object().unwrap().clone()).collect();
+    let start = g.history[0].events();
     if !events_match(&line["e0"], &start) {
         bad(st, "start events".into());
         return;

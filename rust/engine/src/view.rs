@@ -8,6 +8,7 @@ use crate::ruleset::{self, Ruleset};
 use crate::scenario::ints;
 use crate::state::{Game, Pending};
 use serde_json::{Map, Value};
+use std::sync::Arc;
 
 /// A minion standing in for a hidden card: the pack's cheapest (collectible first) minion without
 /// hooks or keywords (then the lowest id).
@@ -58,7 +59,7 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
     for id in 1..next_id {
         let Some(d) = ents.get(&id.to_string()) else {
             hidden.push(id);
-            g.entities.push(Entity::new(id, rs.card(filler), 0));
+            g.entities.push(Arc::new(Entity::new(id, rs.card(filler), 0)));
             continue;
         };
         let card = d["card"].as_str().filter(|c| rs.has(c)).unwrap_or(filler);
@@ -74,7 +75,7 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
             e.eot_tags = d["eot"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_str().map(intern)).collect());
             e.silenced = truthy(d.get("sil"));
         }
-        g.entities.push(e);
+        g.entities.push(Arc::new(e));
     }
     for (i, p) in ps.iter().enumerate() {
         let mut pl = crate::player::Player::new(i);
