@@ -141,7 +141,7 @@ impl Game {
             self.end_by_script_error();
             let events = std::mem::take(&mut self.event_log);
             let ev_values: Vec<Value> = events.iter().cloned().map(Value::Object).collect();
-            self.history.push(json!({"turn": self.turn, "player": self.current, "action": a, "events": ev_values}));
+            self.history.push(entry(self.turn, json!(self.current), a, ev_values));
             return Applied { ok: true, error: String::new(), events };
         }
         // the whole legal list even for a malformed action: its read-only hooks may fail (a script error)
@@ -154,7 +154,7 @@ impl Game {
         let events = self.event_log.clone();
         let ev_values: Vec<Value> = events.iter().cloned().map(Value::Object).collect();
         let player = a.get("player").cloned().unwrap_or(json!(who));
-        self.history.push(json!({"turn": self.turn, "player": player, "action": a, "events": ev_values}));
+        self.history.push(entry(self.turn, player, a, ev_values));
         Applied { ok: true, error: String::new(), events }
     }
 
@@ -655,6 +655,16 @@ impl Game {
             }
         }
     }
+}
+
+/// A history entry ({"turn", "player", "action", "events"}).
+fn entry(turn: i64, player: Value, action: Action, events: Vec<Value>) -> Value {
+    let mut m = Map::new();
+    m.insert("action".into(), Value::Object(action));
+    m.insert("events".into(), Value::Array(events));
+    m.insert("player".into(), player);
+    m.insert("turn".into(), json!(turn));
+    Value::Object(m)
 }
 
 fn subsets(ids: &[Id]) -> Vec<Vec<Id>> {

@@ -717,15 +717,23 @@ fn q_enchants<C: Ctx>(h: &mut C, a: Args) -> R {
 }
 
 fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
-    let v = {
-        let g = h.game()?;
-        let c = g.rs.card(&card_arg(g, &a, 0, "")?);
-        json!({"id": c.id, "type": c.kind, "class": c.card_class, "rarity": c.rarity, "set": c.set,
-            "cost": c.cost, "attack": c.attack, "health": c.health, "durability": c.durability, "race": c.race,
-            "mana_lock": c.mana_lock, "spell_power": c.spell_power.unwrap_or(0), "collectible": c.collectible,
-            "keywords": c.keywords, "trap": c.trap})
-    };
-    one(to_lua(h.vm(), &v, 0)?)
+    let rs = h.game()?.rs;
+    let c = rs.card(&card_arg(h.game()?, &a, 0, "")?);
+    let vm = h.vm();
+    let t = vm.new_table();
+    // in key order, as a JSON object gave them
+    let s = |x: &str| L::from(x);
+    for (k, v) in [("attack", L::Int(c.attack)), ("class", s(&c.card_class)), ("collectible", L::Bool(c.collectible)),
+        ("cost", L::Int(c.cost)), ("durability", L::Int(c.durability)), ("health", L::Int(c.health)), ("id", s(&c.id))] {
+        vm.set(&t, k, v)?;
+    }
+    let keywords = vm.list(c.keywords.iter().map(|k| s(k)).collect())?;
+    vm.set(&t, "keywords", keywords)?;
+    for (k, v) in [("mana_lock", L::Int(c.mana_lock)), ("race", s(&c.race)), ("rarity", s(&c.rarity)), ("set", s(&c.set)),
+        ("spell_power", L::Int(c.spell_power.unwrap_or(0))), ("trap", L::Bool(c.trap)), ("type", s(&c.kind))] {
+        vm.set(&t, k, v)?;
+    }
+    one(t)
 }
 
 fn q_collectible<C: Ctx>(h: &mut C, _a: Args) -> R {

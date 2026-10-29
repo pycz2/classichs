@@ -162,20 +162,28 @@ impl Game {
     }
 
     pub fn all_minions(&self) -> Vec<Id> {
-        let mut v = self.minions(0);
-        v.extend(self.minions(1));
+        let (a, b) = (&self.players[0].board, &self.players[1].board);
+        let mut v = Vec::with_capacity(a.len() + b.len());
+        v.extend(a);
+        v.extend(b);
         self.by_order(v)
     }
 
     pub fn chars(&self, p: usize) -> Vec<Id> {
-        let mut v = vec![self.players[p].hero];
-        v.extend(&self.players[p].board);
+        let board = &self.players[p].board;
+        let mut v = Vec::with_capacity(board.len() + 1);
+        v.push(self.players[p].hero);
+        v.extend(board);
         v
     }
 
     pub fn all_chars(&self) -> Vec<Id> {
-        let mut v = self.chars(0);
-        v.extend(self.chars(1));
+        let (a, b) = (&self.players[0], &self.players[1]);
+        let mut v = Vec::with_capacity(a.board.len() + b.board.len() + 2);
+        v.push(a.hero);
+        v.extend(&a.board);
+        v.push(b.hero);
+        v.extend(&b.board);
         self.by_order(v)
     }
 
@@ -222,7 +230,7 @@ impl Game {
 
     /// All entities whose hooks can trigger: heroes, hero powers, weapons, minions, secrets.
     pub fn in_play(&self) -> Vec<Id> {
-        let mut out = vec![];
+        let mut out = Vec::with_capacity(self.players.iter().map(|p| 3 + p.board.len() + p.secrets.len()).sum());
         for p in &self.players {
             out.push(p.hero);
             out.push(p.hero_power);
