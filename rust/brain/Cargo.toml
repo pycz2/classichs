@@ -1,0 +1,20 @@
+[package]
+name = "classichs-brain"
+version = "0.1.0"
+edition = "2021"
+description = "The Classic HS bots' thinking (only what a player sees): the game server's bots and the game's own bot (GDExtension, WASM)."
+license = "MIT"
+
+[lib]
+name = "classichs_brain"
+crate-type = ["rlib"]
+
+[features]
+# card names (data/cards.json, 0.8 MB) for the decision labels the server's admin shows
+names = []
+
+[dependencies]
+classichs-engine = { path = "../engine" }
+serde_json = "1"
+# no getrandom (wasm32-unknown-unknown has none): the caller gives the seed
+rand = { version = "0.8", default-features = false, features = ["alloc", "std_rng"] }

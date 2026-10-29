@@ -3,9 +3,7 @@
 //! it speaks the same protocol through an adapter (`transport`: in this process, or over the network)
 //! and sees only its own player's view; how it thinks: `brain`.
 
-pub mod arena;
-pub mod brain;
-pub mod cards;
+pub use classichs_brain::{arena, brain, cards};
 pub mod runtime;
 pub mod status;
 pub mod think;

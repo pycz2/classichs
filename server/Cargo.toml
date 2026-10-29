@@ -8,6 +8,7 @@ argon2 = "0.5"
 axum = { version = "0.8.9", features = ["ws"] }
 base64 = "0.22"
 classichs-engine = { path = "../rust/engine" }
+classichs-brain = { path = "../rust/brain", features = ["names"] }
 futures-util = "0.3.34"
 object_store = { version = "0.14", features = ["aws", "fs"] }
 rand = "0.8"
@@ -34,4 +35,7 @@ tower = { version = "0.5.3", features = ["util"] }
 strip = true  # the released server binaries ship without debug symbols (28.8 → 22.2 MB on Linux)
 
 [profile.dev.package.classichs-engine]
+opt-level = 2
+
+[profile.dev.package.classichs-brain]
 opt-level = 2

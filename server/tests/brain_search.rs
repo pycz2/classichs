@@ -64,7 +64,7 @@ fn a_full_board_decides_within_the_limit() {
     let lib = Library::get();
     let hand = ["VAN_CS2_189", "VAN_CS2_188", "VAN_EX1_019", "VAN_CS2_203", "VAN_EX1_046", "VAN_CS2_150", "VAN_CS2_029"];
     let g = game(&hand, 5, 7);
-    let k = Knowledge { lib, seat: 0, my_deck: vec![YETI.into(); 30], arena: false };
+    let k = Knowledge { lib, seat: 0, my_deck: vec![YETI.into(); 30], arena: false, seed: 7 };
     for (level, budget) in [(Level::Easy, 0), (Level::Medium, 300), (Level::Hard, 1000)] {
         let budget = Duration::from_millis(budget);
         let t = Instant::now();
@@ -81,7 +81,7 @@ fn a_full_board_decides_within_the_limit() {
 fn hard_thinks_in_ten_worlds_at_most() {
     let lib = Library::get();
     let g = game(&[YETI], 1, 1);
-    let k = Knowledge { lib, seat: 0, my_deck: vec![YETI.into(); 30], arena: false };
+    let k = Knowledge { lib, seat: 0, my_deck: vec![YETI.into(); 30], arena: false, seed: 7 };
     let d = decide(&api::snapshot(&g, 0), &k, Level::Hard, Duration::from_secs(5)).unwrap().unwrap();
     assert!(d.worlds >= 1 && d.worlds <= 10, "{} worlds", d.worlds);
 }

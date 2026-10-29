@@ -414,9 +414,10 @@ async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool,
                 let left = Duration::from_secs(res["deadline"].as_u64().unwrap_or(75));
                 let place = ctx.think.enter(Instant::now() + left).await;
                 let deck2 = deck.clone();
+                let seed: u64 = rand::thread_rng().gen();
                 let d = tokio::task::spawn_blocking(move || {
                     let _place = place;
-                    let k = Knowledge { lib, seat, my_deck: deck2, arena };
+                    let k = Knowledge { lib, seat, my_deck: deck2, arena, seed };
                     brain::decide(&v, &k, level, budget)
                 })
                 .await

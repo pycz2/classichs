@@ -13,7 +13,7 @@ fn play(lib: &'static Library, a: usize, b: usize, seed: i64, seat: usize, level
     let (da, db) = (&lib.decks[a], &lib.decks[b]);
     let (d0, d1) = if seat == 0 { (da, db) } else { (db, da) };
     let mut g = Game::new_in(lib.rs, &d0.hero, &d0.cards, &d1.hero, &d1.cards, seed, -1, true);
-    let k = Knowledge { lib, seat, my_deck: da.cards.clone(), arena: false };
+    let k = Knowledge { lib, seat, my_deck: da.cards.clone(), arena: false, seed: seed as u64 };
     let budget = match level {
         Level::Easy => Duration::ZERO,
         Level::Medium => Duration::from_millis(300),
@@ -88,7 +88,7 @@ fn hard_beats_medium() {
         let seat = i % 2; // Hard's seat
         let (d0, d1) = (&lib.decks[a], &lib.decks[b]);
         let mut g = Game::new_in(lib.rs, &d0.hero, &d0.cards, &d1.hero, &d1.cards, 7000 + j as i64, -1, true);
-        let knows = |p: usize| Knowledge { lib, seat: p, my_deck: if p == 0 { d0.cards.clone() } else { d1.cards.clone() }, arena: false };
+        let knows = |p: usize, seed: u64| Knowledge { lib, seat: p, my_deck: if p == 0 { d0.cards.clone() } else { d1.cards.clone() }, arena: false, seed };
         for _ in 0..400 {
             if g.game_over {
                 break;
@@ -102,7 +102,7 @@ fn hard_beats_medium() {
             };
             for p in movers {
                 let (level, budget) = if p == seat { (Level::Hard, 1000) } else { (Level::Medium, 300) };
-                let action = match decide(&api::snapshot(&g, p as i64), &knows(p), level, Duration::from_millis(budget)).expect("decide") {
+                let action = match decide(&api::snapshot(&g, p as i64), &knows(p, (i * 1000 + g.history.len()) as u64), level, Duration::from_millis(budget)).expect("decide") {
                     Some(d) => d.action,
                     None => continue,
                 };

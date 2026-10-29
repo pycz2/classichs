@@ -1,7 +1,7 @@
 //! Arena drafting: the hero by the class's Arena strength, each card by its draft score
 //! (bots/arena_tiers.json, per class) corrected for the mana curve.
 
-use crate::bots::cards::{class_of, Library};
+use crate::cards::{class_of, Library};
 
 /// Classic Arena classes, strongest first (the 2014 class tier lists).
 pub const CLASS_ORDER: [&str; 9] = ["MAGE", "PALADIN", "ROGUE", "DRUID", "HUNTER", "WARLOCK", "SHAMAN", "WARRIOR", "PRIEST"];

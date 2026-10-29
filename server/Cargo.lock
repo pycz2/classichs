@@ -541,6 +541,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "classichs-brain"
+version = "0.1.0"
+dependencies = [
+ "classichs-engine",
+ "rand 0.8.8",
+ "serde_json",
+]
+
+[[package]]
 name = "classichs-engine"
 version = "0.1.0"
 dependencies = [
@@ -562,6 +571,7 @@ dependencies = [
  "argon2",
  "axum",
  "base64 0.22.1",
+ "classichs-brain",
  "classichs-engine",
  "futures-util",
  "object_store",

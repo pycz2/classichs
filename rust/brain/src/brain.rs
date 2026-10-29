@@ -13,7 +13,7 @@
 //! 5. A hard time limit (twice the budget plus 0.2 s) stops the search anywhere, even inside a world;
 //!    the best action found so far is played. After it the bot looks again.
 
-use crate::bots::cards::{class_of, Library, Pool};
+use crate::cards::{class_of, Library, Pool};
 use classichs_engine::entity::Entity;
 use classichs_engine::game::Action;
 use classichs_engine::rng::Rng;
@@ -23,7 +23,8 @@ use rand::seq::SliceRandom;
 use rand::SeedableRng;
 use serde_json::{json, Value};
 use std::collections::{HashMap, HashSet};
-use std::time::{Duration, Instant};
+use crate::clock;
+use std::time::Duration;
 
 pub const WIN: f64 = 1_000_000.0;
 
@@ -79,6 +80,8 @@ pub struct Knowledge<'a> {
     pub seat: usize,
     /// the 30 cards the bot queued with
     pub my_deck: Vec<String>,
+    /// the seed of its guesses (the caller's randomness: the browser's WASM has none)
+    pub seed: u64,
     /// an Arena game: the opponent drafted (weights by draft scores), else a constructed deck
     pub arena: bool,
 }
@@ -101,7 +104,7 @@ pub struct Decision {
 
 /// The move for this view, or None when it is not the bot's move.
 pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) -> Result<Option<Decision>, String> {
-    let t0 = Instant::now();
+    let t0 = clock::now();
     let base = view::from_snapshot_in(k.lib.rs, view_json)?;
     let me = k.seat;
     if base.game_over {
@@ -117,7 +120,7 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
             mulligan(&base, me)
         };
         let label = format!("mulligan: replace {}", a["replace"].as_array().map_or(0, |r| r.len()));
-        return Ok(Some(Decision { action: a, label, worlds: 0, ms: t0.elapsed().as_millis(), top: vec![] }));
+        return Ok(Some(Decision { action: a, label, worlds: 0, ms: (clock::now() - t0).as_millis(), top: vec![] }));
     }
     let legal = options(&base, me);
     if legal.is_empty() {
@@ -125,11 +128,11 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
     }
     if legal.len() == 1 {
         let a = legal[0].clone();
-        return Ok(Some(Decision { label: label(k, &base, &a), action: a, worlds: 0, ms: t0.elapsed().as_millis(), top: vec![] }));
+        return Ok(Some(Decision { label: label(k, &base, &a), action: a, worlds: 0, ms: (clock::now() - t0).as_millis(), top: vec![] }));
     }
     let deadline = t0 + Level::limit(budget);
     let hidden = hidden_ids(view_json);
-    let mut rng = rand::rngs::StdRng::from_entropy();
+    let mut rng = rand::rngs::StdRng::seed_from_u64(k.seed);
     let (fewest, most, play_on, reply, keep, settle) = level.search();
     // a quick look (one step) in the first world orders the actions: the time limit then cuts the weak ones
     let first = determinize(&base, view_json, &hidden, k, &mut rng);
@@ -144,10 +147,10 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
     let mut counts = vec![0usize; legal.len()];
     let mut worlds = 0usize;
     let mut world = Some(first);
-    while worlds < most && (worlds < fewest || t0.elapsed() < budget) && Instant::now() < deadline && !alive.is_empty() {
+    while worlds < most && (worlds < fewest || clock::now() - t0 < budget) && clock::now() < deadline && !alive.is_empty() {
         let w = world.take().unwrap_or_else(|| determinize(&base, view_json, &hidden, k, &mut rng));
         for &i in &alive {
-            if Instant::now() >= deadline {
+            if clock::now() >= deadline {
                 break;
             }
             sums[i] += score_first(&w, me, &legal[i], play_on, reply, deadline);
@@ -177,7 +180,7 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
         .take(6)
         .map(|&i| Candidate { label: label(k, &base, &legal[i]), score: mean(i) })
         .collect();
-    Ok(Some(Decision { action: legal[best].clone(), label: label(k, &base, &legal[best]), worlds, ms: t0.elapsed().as_millis(), top }))
+    Ok(Some(Decision { action: legal[best].clone(), label: label(k, &base, &legal[best]), worlds, ms: (clock::now() - t0).as_millis(), top }))
 }
 
 /// me's actions worth trying: no concede; a minion only to the rightmost slot unless a card whose effect
@@ -318,7 +321,7 @@ impl rand::RngCore for RngWrap<'_> {
 
 /// A first action in one world: (play_on) the turn played on greedily, (reply) then the opponent's
 /// turn, then the score.
-fn score_first(w: &Game, me: usize, a: &Action, play_on: bool, reply: bool, deadline: Instant) -> f64 {
+fn score_first(w: &Game, me: usize, a: &Action, play_on: bool, reply: bool, deadline: Duration) -> f64 {
     let mut g = w.clone_state();
     if !g.apply(&Value::Object(a.clone())).ok {
         return -WIN; // (not legal in this world: should not happen, its cards are the same)
@@ -337,9 +340,9 @@ fn score_first(w: &Game, me: usize, a: &Action, play_on: bool, reply: bool, dead
 
 /// The rest of the bot's turn: the best action by the evaluation while it beats ending the turn
 /// (until the time limit).
-fn finish_turn(g: &mut Game, me: usize, deadline: Instant) {
+fn finish_turn(g: &mut Game, me: usize, deadline: Duration) {
     for _ in 0..25 {
-        if g.game_over || g.current != me || g.phase != "PLAY" || Instant::now() >= deadline {
+        if g.game_over || g.current != me || g.phase != "PLAY" || clock::now() >= deadline {
             break;
         }
         let here = eval(g, me);
@@ -370,10 +373,10 @@ fn finish_turn(g: &mut Game, me: usize, deadline: Instant) {
 }
 
 /// The opponent's turn in this world, played by the engine's bot (greedy, it sees this world).
-fn opponent_turn(g: &mut Game, me: usize, deadline: Instant) {
+fn opponent_turn(g: &mut Game, me: usize, deadline: Duration) {
     let opp = 1 - me;
     for _ in 0..30 {
-        if g.game_over || g.current != opp || Instant::now() >= deadline {
+        if g.game_over || g.current != opp || clock::now() >= deadline {
             return;
         }
         if let Some(p) = &g.pending {

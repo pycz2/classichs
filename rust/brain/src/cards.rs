@@ -47,6 +47,12 @@ impl Pool {
     }
 }
 
+/// The cards' names for the decision labels (the server's admin); the game's own bot needs none.
+#[cfg(feature = "names")]
+const CARD_NAMES: &str = include_str!("../../../data/cards.json");
+#[cfg(not(feature = "names"))]
+const CARD_NAMES: &str = "[]";
+
 pub struct Library {
     pub rs: &'static Ruleset,
     pub names: HashMap<String, String>,
@@ -82,7 +88,7 @@ impl Library {
     pub fn get() -> &'static Library {
         static LIB: std::sync::OnceLock<Library> = std::sync::OnceLock::new();
         LIB.get_or_init(|| {
-            Library::from_json(include_str!("../../../data/cards.json"), include_str!("decks.json"), include_str!("arena_tiers.json"))
+            Library::from_json(CARD_NAMES, include_str!("decks.json"), include_str!("arena_tiers.json"))
                 .expect("the built-in bot library")
         })
     }
