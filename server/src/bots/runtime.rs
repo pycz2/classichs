@@ -189,7 +189,7 @@ async fn session(ctx: &Ctx, connect: &ConnectFn, auth: &Auth, load: &LoadFn, lad
         let level = Level::parse(&cfg.level).unwrap_or(Level::Medium);
         pause(ctx, &mut c, cfg.pause_min.max(0) as u64, cfg.pause_max.max(cfg.pause_min).max(0) as u64).await?;
         if cfg.modes == "arena" {
-            arena_game(ctx, &mut c, &pack, level).await?;
+            arena_game(ctx, &mut c, &pack, level, false, Duration::from_secs(1800)).await?;
             continue;
         }
         *ladder_turn += 1;
@@ -252,14 +252,14 @@ fn strs(v: &Value) -> Vec<String> {
     v.as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_str().map(String::from)).collect())
 }
 
-/// One Arena game: a run is started (and drafted) when there is none.
-async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level) -> Result<(), String> {
+/// One Arena game: a run is started (and drafted) when there is none (`fresh`: always a new one).
+async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level, fresh: bool, wait: Duration) -> Result<(), String> {
     let lib = Library::get();
     c.send(with_pack(json!({"t": "me"}), pack)).await?;
     let me = c.want("me", Duration::from_secs(20)).await?;
     let mut st = me["me"]["arena"].clone();
     let other_game = pack.as_ref().is_some_and(|p| st["pack"].as_str().is_some_and(|q| q != p));
-    if st.is_null() || other_game {
+    if st.is_null() || other_game || fresh {
         if !st.is_null() {
             c.send(json!({"t": "arena_retire"})).await?;
             c.want("arena", Duration::from_secs(20)).await?;
@@ -276,16 +276,18 @@ async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level
         ctx.state("Arena: drafting");
         if st["hero"].as_str().unwrap_or("").is_empty() {
             let heroes = strs(&st["heroes"]);
-            let k = arena::pick_hero(lib, &heroes);
+            let k = arena::pick_hero(&heroes, &mut rand::thread_rng());
             ctx.log(format!("Arena hero: {}", lib.name(&heroes.get(k).cloned().unwrap_or_default())));
             c.send(json!({"t": "arena_hero", "i": k})).await?;
         } else {
             let class = class_of(lib.rs, st["hero"].as_str().unwrap_or(""));
-            let k = arena::pick_card(lib, &class, &strs(&st["cards"]), &strs(&st["offer"]));
+            let k = arena::pick_card(lib, &class, &strs(&st["cards"]), &strs(&st["offer"]), level, &mut rand::thread_rng());
             c.send(json!({"t": "arena_pick", "i": k})).await?;
         }
-        let ms = rand::thread_rng().gen_range(200..600);
-        sleep(Duration::from_millis(ms)).await;
+        if ctx.pace {
+            let ms = rand::thread_rng().gen_range(200..600);
+            sleep(Duration::from_millis(ms)).await;
+        }
         st = c.want("arena", Duration::from_secs(20)).await?["state"].clone();
     }
     if st["done"] != true {
@@ -300,7 +302,7 @@ async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level
     c.send(json!({"t": "arena_queue"})).await?;
     c.want("queued", Duration::from_secs(20)).await?;
     ctx.state("queued: arena");
-    let Some(m) = wait_match(ctx, c, Duration::from_secs(1800)).await? else {
+    let Some(m) = wait_match(ctx, c, wait).await? else {
         c.send(json!({"t": "unqueue"})).await?;
         return Ok(());
     };
@@ -312,6 +314,39 @@ async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level
             ctx.log(format!("the Arena run ended: {w} wins, {l} losses"));
         }
     }
+    Ok(())
+}
+
+/// An auto-bot's one game (bots::auto): log in, queue in `mode` (Arena: a fresh draft), play it, go.
+/// Nobody pairs with it within 90 s: it goes without a game.
+pub async fn one_game(ctx: &Ctx, connect: &ConnectFn, auth: &Auth, mode: &str, pack: Option<String>, level: Level) -> Result<(), String> {
+    let lib = Library::get();
+    let mut c = Conn { t: connect().await? };
+    match auth {
+        Auth::Token(t) => c.send(json!({"t": "resume", "token": t})).await?,
+        Auth::Password(u, p) => c.send(json!({"t": "login", "user": u, "password": p})).await?,
+    }
+    c.want("auth", Duration::from_secs(20)).await?;
+    ctx.log(format!("auto-bot ({}) for a {mode} game", level.name()));
+    // a game left by a restart comes back first: that one is the game then
+    if let Some(m) = wait_match(ctx, &mut c, Duration::from_secs(2)).await? {
+        let arena = m["mode"] == "arena";
+        let deck = if arena { arena_cards(&mut c, &pack).await? } else { vec![] };
+        play(ctx, &mut c, m, deck, arena, level).await?;
+        return Ok(());
+    }
+    let wait = Duration::from_secs(90);
+    if mode == "arena" {
+        return arena_game(ctx, &mut c, &pack, level, true, wait).await;
+    }
+    let deck = lib.decks[rand::thread_rng().gen_range(0..lib.decks.len())].clone();
+    c.send(with_pack(json!({"t": "queue", "mode": mode, "deck": {"hero": deck.hero, "cards": deck.cards, "name": deck.name}}), &pack)).await?;
+    c.want("queued", Duration::from_secs(20)).await?;
+    let Some(m) = wait_match(ctx, &mut c, wait).await? else {
+        c.send(json!({"t": "unqueue"})).await?;
+        return Ok(());
+    };
+    play(ctx, &mut c, m, deck.cards.clone(), false, level).await?;
     Ok(())
 }
 

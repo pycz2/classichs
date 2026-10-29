@@ -4,6 +4,7 @@
 //! and sees only its own player's view; how it thinks: `brain`.
 
 pub use classichs_brain::{arena, brain, cards};
+pub mod auto;
 pub mod runtime;
 pub mod status;
 pub mod think;
@@ -44,12 +45,14 @@ pub struct Manager {
     /// bots thinking at once: the CPUs, at least 4 (a long decision does not stop the others);
     /// the bot whose turn ends first goes first
     think: Arc<think::Think>,
+    /// the auto-bots playing now
+    pub auto: auto::Auto,
 }
 
 impl Default for Manager {
     fn default() -> Manager {
         let cpus = std::thread::available_parallelism().map_or(1, |n| n.get());
-        Manager { running: Mutex::default(), status: Statuses::default(), think: think::Think::new(cpus.max(4)) }
+        Manager { running: Mutex::default(), status: Statuses::default(), think: think::Think::new(cpus.max(4)), auto: auto::Auto::default() }
     }
 }
 

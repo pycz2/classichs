@@ -165,6 +165,8 @@ pub struct Hub {
     pub invites: HashMap<(i64, i64), (Value, Arc<GameRules>)>,
     /// The last presence status sent to each account's friends (absent = offline).
     shown: HashMap<i64, &'static str>,
+    /// An auto-bot → the player it queues for (bots::auto): only those two pair, whatever the window.
+    pub auto_for: HashMap<i64, i64>,
 }
 
 impl Hub {
@@ -270,11 +272,17 @@ impl Hub {
                 continue;
             }
             let sa = &self.queue[&a];
+            let auto = |x: i64, y: i64| self.auto_for.get(&x) == Some(&y) || self.auto_for.get(&y) == Some(&x);
             let best = order
                 .iter()
                 .filter(|&&b| b != a && !taken.contains(&b) && self.queue[&b].mode == sa.mode && self.queue[&b].rules.rules_hash == sa.rules.rules_hash)
+                // an auto-bot plays only the player it came for
+                .filter(|&&b| auto(a, b) || !(self.auto_for.contains_key(&a) || self.auto_for.contains_key(&b)))
                 .filter_map(|&b| {
                     let sb = &self.queue[&b];
+                    if auto(a, b) {
+                        return Some((f64::NEG_INFINITY, b));
+                    }
                     ranked::fits(sa.mode, &sa.key, waited(sa), &sb.key, waited(sb)).map(|g| (g, b))
                 })
                 .min_by(|x, y| x.0.total_cmp(&y.0));
@@ -345,6 +353,7 @@ pub fn spawn_background(app: AppRef) {
             for (mode, rules, players) in pairs {
                 tokio::spawn(game::start(app.clone(), mode, rules, players));
             }
+            bots::auto::tick(&app).await;
             app.logins.lock().unwrap_or_else(|e| e.into_inner()).sweep(now);
             let live = app.hub().live_json();
             let text = live.to_string();
