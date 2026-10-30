@@ -4,6 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.31.0] - 2026-10-30
+
+### Adicionado
+- Treino contra um bot inteligente no nível escolhido: fácil, médio ou difícil. É o mesmo bot do servidor; ele vê só as próprias cartas. Funciona em todas as plataformas e sem internet; o bot pensa em segundo plano e o jogo não trava.
+- Servidor: quem espera sozinho 30 segundos na fila ranqueada, casual ou de arena recebe um autobot para uma partida. A força dele segue a classificação oculta do jogador; na arena, as vitórias da campanha.
+- Os bots de arena escolhem um herói aleatório entre os três; o bot fácil escolhe cartas ao acaso, o médio quase sempre as melhores, o difícil sempre as melhores para a curva de mana.
+- Ao passar o mouse sobre uma carta aparecem as cartas que ela cria ou evoca (fichas, transformações, cartas de Escolha Um, o poder heroico).
+- O editor de baralho mostra a curva de mana acima da lista de cartas.
+
+### Corrigido
+- Os bots do servidor não travam mais por minutos com a mesa cheia nem perdem por jogadas atrasadas. Uma jogada que chega depois do fim do turno é recusada sem penalidade, o que também protege jogadores com conexão lenta.
+- O motor de regras ficou mais rápido: copiar uma partida cerca de 10 vezes, uma jogada 3,5 vezes.
+
 ## [0.30.0] - 2026-10-26
 
 ### Adicionado

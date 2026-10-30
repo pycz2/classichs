@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.31.0] - 2026-10-30
+
+### Hinzugefügt
+- Training gegen einen klugen Bot in wählbarer Stärke: leicht, mittel oder schwer. Es ist derselbe Bot wie auf dem Server; er sieht nur seine eigenen Karten. Er läuft auf allen Plattformen und offline; der Bot denkt im Hintergrund, das Spiel hängt nicht.
+- Server: Wer 30 Sekunden allein in der Warteschlange für Gewertet, Ungewertet oder Arena wartet, bekommt einen Auto-Bot für ein Spiel. Seine Stärke richtet sich nach der verborgenen Wertung des Spielers, in der Arena nach den Siegen des Laufs.
+- Arena-Bots nehmen einen zufälligen der drei Helden; der leichte Bot wählt Karten zufällig, der mittlere meist die besten, der schwere immer die besten für seine Manakurve.
+- Beim Zeigen auf eine Karte erscheinen die Karten, die sie erschafft oder herbeiruft (Spielsteine, Verwandlungen, Wahlkarten, die Heldenfähigkeit).
+- Der Deck-Editor zeigt die Manakurve über der Kartenliste.
+
+### Behoben
+- Server-Bots hängen bei vollem Spielfeld nicht mehr minutenlang und verlieren nicht mehr wegen verspäteter Züge. Ein Zug, der nach dem Zugende ankommt, wird ohne Strafe abgelehnt – das schützt auch Spieler mit langsamer Verbindung.
+- Die Regel-Engine ist schneller: Kopien einer Partie etwa 10-mal, ein Zug 3,5-mal.
+
 ## [0.30.0] - 2026-10-26
 
 ### Hinzugefügt

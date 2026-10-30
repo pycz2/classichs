@@ -4,6 +4,19 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.31.0] - 2026-10-30
+
+### Aggiunto
+- Allenamento contro un bot intelligente del livello scelto: facile, medio o difficile. È lo stesso bot del server; vede solo le proprie carte. Funziona su tutte le piattaforme e offline; il bot pensa in sottofondo e il gioco non si blocca.
+- Server: chi aspetta da solo 30 secondi nella coda classificata, normale o dell'arena riceve un auto-bot per una partita. La sua forza segue il punteggio nascosto del giocatore; nell'arena, le vittorie della run.
+- I bot dell'arena prendono un eroe a caso tra i tre; il bot facile sceglie le carte a caso, il medio quasi sempre le migliori, il difficile sempre le migliori per la curva di mana.
+- Passando sopra una carta si vedono le carte che crea o evoca (pedine, trasformazioni, carte Scegli uno, il potere eroe).
+- L'editor dei mazzi mostra la curva di mana sopra la lista delle carte.
+
+### Corretto
+- I bot del server non si bloccano più per minuti con il tavolo pieno e non perdono più per mosse in ritardo. Una mossa arrivata dopo la fine del turno viene rifiutata senza penalità, e questo protegge anche i giocatori con connessione lenta.
+- Il motore delle regole è più veloce: copiare una partita circa 10 volte, una mossa 3,5 volte.
+
 ## [0.30.0] - 2026-10-26
 
 ### Aggiunto

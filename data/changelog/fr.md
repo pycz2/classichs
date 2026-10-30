@@ -4,6 +4,19 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.31.0] - 2026-10-30
+
+### Ajouté
+- Entraînement contre un bot intelligent au niveau choisi : facile, moyen ou difficile. C'est le même bot que sur le serveur ; il ne voit que ses propres cartes. Il fonctionne sur toutes les plateformes et hors ligne ; le bot réfléchit en arrière-plan, le jeu ne se fige pas.
+- Serveur : un joueur qui attend seul 30 secondes en file classée, normale ou d'arène reçoit un auto-bot pour une partie. Sa force suit la cote cachée du joueur ; en arène, les victoires de la session.
+- Les bots d'arène prennent un héros au hasard parmi les trois ; le bot facile choisit les cartes au hasard, le moyen surtout les meilleures, le difficile toujours les meilleures selon sa courbe de mana.
+- Survoler une carte montre les cartes qu'elle crée ou invoque (jetons, transformations, cartes Choix des armes, pouvoir héroïque).
+- L'éditeur de deck affiche la courbe de mana au-dessus de la liste des cartes.
+
+### Corrigé
+- Les bots du serveur ne se figent plus pendant des minutes sur un plateau plein et ne perdent plus à cause de coups en retard. Un coup arrivé après la fin du tour est refusé sans pénalité, ce qui protège aussi les joueurs à connexion lente.
+- Le moteur de règles est plus rapide : copier une partie environ 10 fois, un coup 3,5 fois.
+
 ## [0.30.0] - 2026-10-26
 
 ### Ajouté

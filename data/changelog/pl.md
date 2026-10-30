@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.31.0] - 2026-10-30
+
+### Dodano
+- Trening z mądrym botem na wybranym poziomie: łatwy, średni lub trudny. To ten sam bot co na serwerze; widzi tylko swoje karty. Działa na wszystkich platformach i bez internetu; bot myśli w tle, a gra się nie zacina.
+- Serwer: gracz, który czeka sam 30 sekund w kolejce rankingowej, zwykłej lub areny, dostaje autobota na jedną grę. Jego siła zależy od ukrytego rankingu gracza, na arenie — od zwycięstw w serii.
+- Boty na arenie biorą losowego bohatera z trzech; łatwy bot wybiera karty losowo, średni zwykle najlepsze, trudny zawsze najlepsze pod krzywą many.
+- Po najechaniu na kartę widać karty, które tworzy lub przywołuje (żetony, przemiany, karty Wybierz jedno, moc bohatera).
+- Edytor talii pokazuje krzywą many nad listą kart.
+
+### Naprawiono
+- Boty serwera nie zawieszają się już na minuty przy pełnym stole i nie przegrywają przez spóźnione ruchy. Ruch, który przyjdzie po końcu tury, serwer odrzuca bez kary — to chroni też graczy z wolnym łączem.
+- Silnik zasad jest szybszy: kopia partii około 10 razy, ruch 3,5 razy.
+
 ## [0.30.0] - 2026-10-26
 
 ### Dodano

@@ -4,6 +4,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.31.0] - 2026-10-30
+
+### Added
+- Training against a smart bot at a level of your choice: easy, medium or hard. It is the same bot as on the server and sees only its own cards. It works on every platform and offline; the bot thinks in the background, so the game does not freeze.
+- Server: a player who waits 30 seconds alone in a ranked, casual or Arena queue gets an auto-bot for one game. Its strength follows the player's hidden rating; in the Arena, the wins of the run.
+- Arena bots take a random one of the three heroes; the easy bot picks cards at random, the medium one mostly the best, the hard one always the best for its mana curve.
+- Hovering a card shows the cards it creates or summons (tokens, transformations, Choose One cards, the hero power).
+- The deck editor shows the mana curve above the card list.
+
+### Fixed
+- Server bots no longer stop for minutes on a full board and no longer lose because of late moves. A move that arrives after the turn has ended is refused without a penalty, which also protects players on slow connections.
+- The rules engine is faster: copying a game about 10 times, a move 3.5 times.
+
 ## [0.30.0] - 2026-10-26
 
 ### Added
