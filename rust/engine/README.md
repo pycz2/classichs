@@ -68,10 +68,15 @@ tutorial's end-of-turn block is a reason key).
 | `api.rs` | `net/referee.gd` and more: the JSON API |
 
 A card hook is a Lua function (`hooks::HookFn`, an index into the ruleset's
-script functions); entities are ids (`-1` = none); events are JSON objects in
+script functions); entities are ids (`-1` = none); events are objects in
 `Game::event_log`, and triggers get the index of their event, so a hook that
 changes an event (a counter, a redirect) changes the logged one, as in GDScript
 (the hook gets the event as a table; changed fields are copied back).
+Inside the engine tags, enchantments, cost changes and events are `entity::Obj`
+(keys sorted as in a JSON object, mechanic names and card ids not copied),
+legal actions are `game::Act`, and entities are shared with look-ahead copies
+until one changes (`Game::em`); JSON is made only for callers
+(`legal_actions`, `Applied::events`, `Hist::events`, snapshots).
 
 Lua runs on two interpreters per ruleset (`lua.rs`): the main one (a game
 checks it out for a call and shares it with its look-ahead copies, so the bot
