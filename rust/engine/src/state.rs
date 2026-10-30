@@ -1105,12 +1105,19 @@ impl Game {
     }
 
     pub fn to_dict(&self) -> Value {
-        let ents: Map<String, Value> = self.entities.iter().map(|e| (e.id.to_string(), e.snapshot())).collect();
-        let ps: Vec<Value> = self.players.iter().map(|p| p.snapshot()).collect();
-        json!({"turn": self.turn, "current": self.current, "phase": self.phase,
+        let mut d = self.dict_base();
+        d["entities"] = Value::Object(self.entities.iter().map(|e| (e.id.to_string(), e.snapshot())).collect());
+        d
+    }
+
+    /// `to_dict` without "entities".
+    pub(crate) fn dict_base(&self) -> Value {
+        let mut d = json!({"turn": self.turn, "current": self.current, "phase": self.phase,
             "rng": (self.rng.state as i64).to_string(), "next_id": self.next_id, "next_order": self.next_order,
-            "pending": self.pending_value(), "game_over": self.game_over, "winner": self.winner,
-            "entities": ents, "players": ps})
+            "game_over": self.game_over, "winner": self.winner});
+        d["pending"] = self.pending_value();
+        d["players"] = Value::Array(self.players.iter().map(|p| p.snapshot()).collect());
+        d
     }
 
     pub fn state_hash(&self) -> String {

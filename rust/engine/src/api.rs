@@ -384,8 +384,9 @@ fn client_type(kind: &str) -> &str {
 /// (GDScript to_dict() plus computed stats); view 0/1: that player's view
 /// (no RNG state, no deck contents, the opponent's hand and traps hidden).
 pub fn snapshot(g: &Game, view: i64) -> Value {
-    let mut d = g.to_dict();
+    let mut d = g.dict_base();
     let mut ents = Map::new();
+    let auras = g.cost_auras();
     for e in &g.entities {
         if !visible(g, e.id, view) {
             if e.zone == "DECK" {
@@ -399,7 +400,7 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
         s["atk"] = json!(if e.is_champion() { g.hero_atk(e.id) } else { e.atk() });
         s["health"] = json!(e.health());
         s["max_health"] = json!(e.max_health());
-        s["cost"] = json!(g.cost(e.id));
+        s["cost"] = json!(g.cost_in(e.id, &auras));
         let src: Map<String, Value> = e.aura.src.iter().map(|(k, v)| (k.to_string(), json!(v))).collect();
         s["aura"] = json!({"atk": e.aura.atk, "hp": e.aura.hp, "tags": e.aura.tags.to_value(), "src": src});
         ents.insert(e.id.to_string(), s);

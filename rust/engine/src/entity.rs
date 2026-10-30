@@ -381,9 +381,10 @@ impl Entity {
     }
 
     pub fn snapshot(&self) -> Value {
-        json!({"card": self.card_id, "ctrl": self.controller, "zone": self.zone, "order": self.play_order,
-            "dmg": self.damage, "tags": self.tags.to_value(), "ench": self.enchantments.iter().map(Obj::to_value).collect::<Vec<_>>(),
-            "eot": self.eot_tags,
-            "sil": self.silenced})
+        let mut s = json!({"card": self.card_id, "ctrl": self.controller, "zone": self.zone, "order": self.play_order,
+            "dmg": self.damage, "eot": self.eot_tags, "sil": self.silenced});
+        s["tags"] = self.tags.to_value();
+        s["ench"] = Value::Array(self.enchantments.iter().map(Obj::to_value).collect());
+        s
     }
 }
