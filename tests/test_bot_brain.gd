@@ -51,6 +51,8 @@ func test_training_picks_the_level() -> void:
 		check(t.find_child("Level_" + lvl, true, false) is Button, lvl)
 	(t.find_child("Level_hard", true, false) as Button).button_pressed = true
 	eq(Settings.data.bot_level, "hard", "the choice is kept")
+	eq((t.find_child("Level_hard", true, false) as Button).modulate, Color.WHITE, "the chosen level stands out")
+	check((t.find_child("Level_easy", true, false) as Button).modulate.r < 1.0, "the others are dimmed")
 	Settings.load_settings()
 	eq(Settings.data.bot_level, "hard", "and saved")
 	Settings.data.bot_level = was

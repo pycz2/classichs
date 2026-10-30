@@ -92,8 +92,10 @@ func _ready() -> void:
 		b.toggled.connect(func(on):
 			if on:
 				Settings.data.bot_level = lvl
-				Settings.save())
+				Settings.save()
+			_mark_levels(levels))
 		levels.add_child(b)
+	_mark_levels(levels)
 	var row := HBoxContainer.new()
 	row.position = Vector2(140, 642)
 	row.add_theme_constant_override("separation", 16)
@@ -116,6 +118,17 @@ func _title(parent: Control, text: String, sub: String) -> Label:
 	s.position = Vector2(142, 80)
 	parent.add_child(s)
 	return s
+
+
+## The chosen level stands out: bright with gold letters; the others dimmed.
+static func _mark_levels(row: Control) -> void:
+	for b in row.get_children():
+		if b is Button:
+			b.modulate = Color.WHITE if b.button_pressed else Color(0.62, 0.62, 0.62)
+			if b.button_pressed:
+				b.add_theme_color_override("font_color", Palette.ATTACK)
+			else:
+				b.remove_theme_color_override("font_color")
 
 
 func show_step(n: int) -> void:
