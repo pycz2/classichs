@@ -97,6 +97,8 @@ pub struct Game {
     pub(crate) lua: LuaSlot,
     /// Why a card script failed (the game then ended as a draw).
     pub script_error: OnceLock<String>,
+    /// Calls of script actions that may change the game (all but `g.aura_add`).
+    pub(crate) writes: u64,
 }
 
 impl Game {
@@ -104,7 +106,7 @@ impl Game {
         Game { rs, rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
             phase: "MULLIGAN", pending: None, game_over: false, winner: -1, event_log: vec![], history: vec![],
             queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: "", source_id: NONE,
-            start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new() }
+            start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new(), writes: 0 }
     }
 
     /// A game with no cards: the host that loads a pack's scripts.
@@ -392,8 +394,13 @@ impl Game {
                 });
                 self.end_by_script_error();
             }
-            self.update_auras();
+            let pure = self.auras();
+            let over = self.game_over;
             if !self.death_phase() {
+                // no deaths changed nothing: auras again would give the same (card scripts keep no state)
+                if pure && over == self.game_over {
+                    return;
+                }
                 break;
             }
         }
@@ -477,6 +484,14 @@ impl Game {
     }
 
     pub fn update_auras(&mut self) {
+        self.auras();
+    }
+
+    /// `update_auras`; true if the hooks only added auras and no Health was lost, so that
+    /// running it again on the same state changes nothing.
+    fn auras(&mut self) -> bool {
+        let was = (self.writes, self.rng.state, self.script_error.get().is_some());
+        let mut same = true;
         let all = self.in_play();
         let before: Vec<(i64, i64)> = all.iter().map(|&e| (self.e(e).max_health(), self.e(e).health())).collect();
         for &e in &all {
@@ -499,9 +514,12 @@ impl Game {
         for (i, &e) in all.iter().enumerate() {
             // fix_health changes nothing unless max Health dropped
             if self.e(e).max_health() < before[i].0 {
+                let d = self.e(e).damage;
                 self.em(e).fix_health(before[i].0, before[i].1);
+                same &= self.e(e).damage == d;
             }
         }
+        same && was == (self.writes, self.rng.state, self.script_error.get().is_some())
     }
 
     pub fn aura_add(&mut self, t: Id, atk: i64, hp: i64, tags: Vec<(Str, V)>) {
@@ -1038,7 +1056,7 @@ impl Game {
             turn: self.turn, current: self.current, phase: self.phase, pending: self.pending.clone(),
             game_over: self.game_over, winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(),
             next_id: self.next_id, next_order: self.next_order, source_card: "", source_id: NONE,
-            start_decks: [vec![], vec![]], lua: self.lua.share(), script_error: self.script_error.clone() }
+            start_decks: [vec![], vec![]], lua: self.lua.share(), script_error: self.script_error.clone(), writes: 0 }
     }
 
     /// clone_state with its own copy of the scripts' interpreter (a game of its own: `new {copy}`).

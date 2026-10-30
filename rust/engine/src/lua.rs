@@ -623,10 +623,17 @@ fn ids<C: Ctx>(h: &mut C, v: Vec<Id>) -> R {
     Ok(vec![h.vm().list(v.into_iter().map(L::Int).collect())?])
 }
 
-fn live(g: &Game) -> Result<(), Error> {
+fn check(g: &Game) -> Result<(), Error> {
     if g.script_error.get().is_some() {
         return Err(Error::fatal("the game ended: a card script failed"));
     }
+    Ok(())
+}
+
+/// Before an action that may change the game (counted: `Game::writes`).
+fn live(g: &mut Game) -> Result<(), Error> {
+    check(g)?;
+    g.writes += 1;
     Ok(())
 }
 
@@ -1024,7 +1031,7 @@ fn a_remove_enchant(g: &mut Game, a: Args) -> R {
     none()
 }
 fn a_aura_add(g: &mut Game, a: Args) -> R {
-    live(g)?;
+    check(g)?;
     let (t, at, hp) = (ent(g, &a, 0)?, num(&a, 1, 0)?, num(&a, 2, 0)?);
     let mut tags: Vec<(Str, V)> = vec![];
     if let L::Table(_) = a.get(3) {
