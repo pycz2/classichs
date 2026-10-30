@@ -189,7 +189,7 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
 /// copies (same card and cost, no enchantments) once.
 pub fn options(g: &Game, me: usize) -> Vec<Action> {
     let p = &g.players[me];
-    let places = p.board.iter().chain(p.hand.iter()).any(|&e| g.rs.neighbours.contains(&g.e(e).card_id));
+    let places = p.board.iter().chain(p.hand.iter()).any(|&e| g.rs.neighbours.contains(g.e(e).card_id));
     let last = p.board.len() as i64;
     let mut seen = HashSet::new();
     let num = |a: &Action, f: &str| a.get(f).and_then(Value::as_i64).unwrap_or(-1);

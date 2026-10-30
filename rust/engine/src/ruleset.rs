@@ -4,7 +4,9 @@
 //! process (`&'static`), so entities and games can point into it.
 //! The built-in one is the Classic pack, made from the repo's sources at build time.
 
+use crate::entity::{Obj, Str};
 use crate::hooks::HookSet;
+use std::borrow::Cow;
 use crate::lua::LuaRules;
 use crate::missions::Mission;
 use crate::pack::{self, Files};
@@ -58,7 +60,9 @@ pub struct Card {
     /// A TRAP spell.
     pub trap: bool,
     /// The tags an entity of this card starts with.
-    pub start_tags: Map<String, Value>,
+    pub start_tags: Obj,
+    /// Its hooks (set once the scripts are loaded).
+    pub hooks: HookSet,
 }
 
 #[derive(Deserialize)]
@@ -129,6 +133,8 @@ pub struct Names {
     by_engine: HashMap<String, &'static str>,
     /// Pack name → engine id.
     pub engine_of: HashMap<String, String>,
+    /// Every tag name above, the pack's mechanic names and the engine's field names (`entity::KEYS`).
+    known: HashSet<&'static str>,
 }
 
 impl Names {
@@ -148,7 +154,7 @@ impl Names {
             engine_of.insert(name.clone(), eid.to_string());
         }
         let n = |id: &str| -> &'static str { by_engine.get(id).copied().unwrap_or_else(|| leak(id)) };
-        Ok(Names {
+        let mut names = Names {
             guard: n("GUARD"),
             haste: n("HASTE"),
             barrier: n("BARRIER"),
@@ -175,7 +181,15 @@ impl Names {
             silenced: SILENCED.iter().map(|id| n(id)).collect(),
             by_engine: by_engine.clone(),
             engine_of,
-        })
+            known: HashSet::new(),
+        };
+        let mut known: HashSet<&'static str> = by_engine.values().copied().chain(crate::entity::KEYS).collect();
+        known.extend([names.guard, names.haste, names.barrier, names.double_attack, names.stealth, names.spellproof,
+            names.cant_attack, names.immune, names.spell_power, names.frozen, names.frozen_this_turn, names.exhausted,
+            names.attacks, names.armor, names.durability, names.used, names.locked, names.guarded, names.to_destroy,
+            names.died_pos, names.power_multiplier, names.heal_is_damage, names.trap]);
+        names.known = known;
+        Ok(names)
     }
 
     /// The tag name for a name a script gives: a pack name as is; an engine
@@ -185,6 +199,11 @@ impl Names {
             return s;
         }
         self.by_engine.get(s).copied().unwrap_or(s)
+    }
+
+    /// A known name (see `known`) without a copy.
+    pub fn known(&self, s: &str) -> Option<&'static str> {
+        self.known.get(s).copied()
     }
 
     /// The engine id of a pack name (the name itself if the pack does not map it).
@@ -289,6 +308,20 @@ impl Ruleset {
 
     pub fn has(&self, id: &str) -> bool {
         self.cards.contains_key(id)
+    }
+
+    /// A string kept without a copy if the ruleset knows it (a mechanic or field name, card id, hook name).
+    pub fn intern(&'static self, s: &str) -> Str {
+        if let Some(k) = self.names.known(s) {
+            return Cow::Borrowed(k);
+        }
+        if let Some((k, _)) = self.cards.get_key_value(s) {
+            return Cow::Borrowed(k.as_str());
+        }
+        if let Some((k, _)) = self.hooks.get_key_value(s) {
+            return Cow::Borrowed(k.as_str());
+        }
+        Cow::Owned(s.to_string())
     }
 
     /// The hooks of a card id or hook name (none if it has none).
@@ -452,6 +485,11 @@ impl Ruleset {
         if let Some(m) = rs.missions.iter().find(|m| !m.script.is_empty() && !hooks.contains_key(&m.script)) {
             return Err(format!("missions/{}.json: no hooks {}", m.id, m.script));
         }
+        for c in rs.cards.values_mut() {
+            if let Some(h) = hooks.get(&c.id) {
+                c.hooks = h.clone();
+            }
+        }
         rs.hooks = hooks;
         rs.neighbours = neighbours(&rs.cards, &scripts);
         Ok(rs)
@@ -481,23 +519,23 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
         "MINION" | "SPELL" | "WEAPON" | "CHAMPION" | "POWER" | "ENCHANTMENT" => c.kind.clone(),
         k => return Err(format!("{}: unknown type {k}", c.id)),
     };
-    let mut tags = Map::new();
+    let mut tags = Obj::new();
     let mut trap = false;
     for k in &c.keywords {
         let eid = names.engine_of.get(k).ok_or(format!("{}: keyword {k} is not in rules.json mechanics", c.id))?;
         if START_TAGS.contains(&eid.as_str()) {
-            tags.insert(k.clone(), Value::Bool(true));
+            tags.insert(names.known(k).unwrap_or_else(|| leak(k)), true);
         }
         trap |= eid == "TRAP";
     }
     if let Some(n) = c.spell_power {
-        tags.insert(names.spell_power.into(), json!(n));
+        tags.insert(names.spell_power, n);
     }
     if kind == "WEAPON" {
-        tags.insert(names.durability.into(), json!(c.durability));
+        tags.insert(names.durability, c.durability);
     }
     if kind == "CHAMPION" {
-        tags.insert(names.armor.into(), json!(0));
+        tags.insert(names.armor, 0i64);
     }
     Ok(Card {
         trap: trap && kind == "SPELL",
@@ -518,6 +556,7 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
         power: c.power,
         script: c.script,
         start_tags: tags,
+        hooks: HookSet::default(),
     })
 }
 

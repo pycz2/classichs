@@ -50,7 +50,7 @@ fn main() {
             let _hash = g.state_hash();
             let t2 = Instant::now();
             for q in 0..2 {
-                let s = state_msg("0123456789abcdef", &g, &r.events, q, 75).to_string();
+                let s = state_msg("0123456789abcdef", &g, &r.events(), q, 75).to_string();
                 bytes += s.len();
                 biggest = biggest.max(s.len());
             }

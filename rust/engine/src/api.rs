@@ -234,10 +234,7 @@ impl Engine {
             Game::new_in(rs, &pair[0].hero, &pair[0].cards, &pair[1].hero, &pair[1].cards, seed, first, true)
         };
         let mut reply = state(id, &game);
-        let start: Vec<Ev> = game.history.first().map_or(&Value::Null, |h| &h["events"])
-            .as_array()
-            .map(|a| a.iter().filter_map(|e| e.as_object().cloned()).collect())
-            .unwrap_or_default();
+        let start: Vec<Ev> = game.history.first().map_or(vec![], |h| h.events());
         reply["events"] = events_for(&game, &start, view);
         self.games.insert(id.to_string(), Slot { game, mission });
         reply
@@ -261,7 +258,7 @@ fn game_op(op: &str, id: &str, slot: &mut Slot, req: &Value, view: i64) -> Value
             let res = g.apply(action);
             let mut r = state(id, g);
             r["ok"] = json!(res.ok);
-            r["events"] = events_for(g, &res.events, view);
+            r["events"] = events_for(g, &res.events(), view);
             if !res.ok {
                 r["error"] = json!(res.error);
             }
@@ -292,11 +289,9 @@ fn game_op(op: &str, id: &str, slot: &mut Slot, req: &Value, view: i64) -> Value
                 .iter()
                 .skip(from)
                 .map(|h| {
-                    let mut h = h.clone();
-                    let evs: Vec<Ev> =
-                        h["events"].as_array().map(|a| a.iter().filter_map(|e| e.as_object().cloned()).collect()).unwrap_or_default();
-                    h["events"] = events_for(g, &evs, view);
-                    h
+                    let mut v = h.to_value();
+                    v["events"] = events_for(g, &h.events(), view);
+                    v
                 })
                 .collect();
             json!({"ok": true, "game": id, "history": entries, "start_decks": g.start_decks})
@@ -389,8 +384,9 @@ fn client_type(kind: &str) -> &str {
 /// (GDScript to_dict() plus computed stats); view 0/1: that player's view
 /// (no RNG state, no deck contents, the opponent's hand and traps hidden).
 pub fn snapshot(g: &Game, view: i64) -> Value {
-    let mut d = g.to_dict();
+    let mut d = g.dict_base();
     let mut ents = Map::new();
+    let auras = g.cost_auras();
     for e in &g.entities {
         if !visible(g, e.id, view) {
             if e.zone == "DECK" {
@@ -404,8 +400,9 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
         s["atk"] = json!(if e.is_champion() { g.hero_atk(e.id) } else { e.atk() });
         s["health"] = json!(e.health());
         s["max_health"] = json!(e.max_health());
-        s["cost"] = json!(g.cost(e.id));
-        s["aura"] = json!({"atk": e.aura.atk, "hp": e.aura.hp, "tags": e.aura.tags, "src": e.aura.src});
+        s["cost"] = json!(g.cost_in(e.id, &auras));
+        let src: Map<String, Value> = e.aura.src.iter().map(|(k, v)| (k.to_string(), json!(v))).collect();
+        s["aura"] = json!({"atk": e.aura.atk, "hp": e.aura.hp, "tags": e.aura.tags.to_value(), "src": src});
         ents.insert(e.id.to_string(), s);
     }
     d["entities"] = Value::Object(ents);

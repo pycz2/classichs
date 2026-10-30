@@ -1,11 +1,11 @@
 //! Match setup, turns, actions and legality (engine/game.gd).
 
 use crate::hooks::TSpec;
-use crate::entity::{int, truthy, Id, NONE};
+use crate::entity::{obj, vint, vtruthy, Id, Obj, NONE};
 use crate::json;
 use crate::rng::Rng;
 use crate::ruleset::{self, Ruleset};
-use crate::state::Game;
+use crate::state::{Game, Hist};
 use serde_json::{json, Map, Value};
 
 pub use crate::state::Ev;
@@ -18,7 +18,14 @@ pub type Action = Map<String, Value>;
 pub struct Applied {
     pub ok: bool,
     pub error: String,
-    pub events: Vec<Ev>,
+    log: Vec<Obj>,
+}
+
+impl Applied {
+    /// The events of the action, as JSON objects.
+    pub fn events(&self) -> Vec<Ev> {
+        self.log.iter().map(Obj::to_map).collect()
+    }
 }
 
 /// splitmix64(seed + (p + 1) * golden): the seed of player p's mulligan shuffle.
@@ -30,10 +37,68 @@ pub fn mulligan_seed(seed: u64, p: usize) -> u64 {
     z ^ (z >> 31)
 }
 
-fn obj(v: Value) -> Action {
-    match v {
-        Value::Object(m) => m,
-        _ => unreachable!(),
+/// A legal action, typed (`legal_actions` gives them as JSON objects).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Act {
+    Mulligan { player: i64, replace: Vec<Id> },
+    EndTurn { player: i64 },
+    Concede { player: i64 },
+    Play { player: i64, entity: Id, target: Id, pos: i64, choice: i64 },
+    HeroPower { player: i64, target: Id },
+    Attack { player: i64, attacker: Id, defender: Id },
+    Choose { player: i64, option: Id },
+}
+
+impl Act {
+    pub fn player(&self) -> i64 {
+        match *self {
+            Act::Mulligan { player, .. }
+            | Act::EndTurn { player }
+            | Act::Concede { player }
+            | Act::Play { player, .. }
+            | Act::HeroPower { player, .. }
+            | Act::Attack { player, .. }
+            | Act::Choose { player, .. } => player,
+        }
+    }
+
+    pub fn to_map(&self) -> Action {
+        let v = match self {
+            Act::Mulligan { player, replace } => json!({"type": "mulligan", "player": player, "replace": replace}),
+            Act::EndTurn { player } => json!({"type": "end_turn", "player": player}),
+            Act::Concede { player } => json!({"type": "concede", "player": player}),
+            Act::Play { player, entity, target, pos, choice } => {
+                json!({"type": "play", "player": player, "entity": entity, "target": target, "pos": pos, "choice": choice})
+            }
+            Act::HeroPower { player, target } => json!({"type": "hero_power", "player": player, "target": target}),
+            Act::Attack { player, attacker, defender } => {
+                json!({"type": "attack", "player": player, "attacker": attacker, "defender": defender})
+            }
+            Act::Choose { player, option } => json!({"type": "choose", "player": player, "option": option}),
+        };
+        match v {
+            Value::Object(m) => m,
+            _ => unreachable!(),
+        }
+    }
+
+    /// The action a normalized JSON action is, if it has exactly the fields of one.
+    pub fn from_map(a: &Action) -> Option<Act> {
+        let i = |k: &str| a.get(k).and_then(Value::as_i64);
+        let (n, player) = (a.len(), i("player")?);
+        Some(match a.get("type")?.as_str()? {
+            "mulligan" if n == 3 => {
+                let replace = a.get("replace")?.as_array()?.iter().map(Value::as_i64).collect::<Option<Vec<Id>>>()?;
+                Act::Mulligan { player, replace }
+            }
+            "end_turn" if n == 2 => Act::EndTurn { player },
+            "concede" if n == 2 => Act::Concede { player },
+            "play" if n == 6 => Act::Play { player, entity: i("entity")?, target: i("target")?, pos: i("pos")?, choice: i("choice")? },
+            "hero_power" if n == 3 => Act::HeroPower { player, target: i("target")? },
+            "attack" if n == 4 => Act::Attack { player, attacker: i("attacker")?, defender: i("defender")? },
+            "choose" if n == 3 => Act::Choose { player, option: i("option")? },
+            _ => return None,
+        })
     }
 }
 
@@ -68,8 +133,9 @@ impl Game {
             g.draw(g.current, a);
             g.draw(g.opponent(g.current), b);
         }
-        let events: Vec<Value> = std::mem::take(&mut g.event_log).into_iter().map(Value::Object).collect();
-        g.history.push(json!({"turn": 0, "player": g.current, "action": {"type": "start"}, "events": events}));
+        let events = std::mem::take(&mut g.event_log);
+        let action = Action::from_iter([("type".to_string(), json!("start"))]);
+        g.history.push(Hist { turn: 0, player: json!(g.current), action, events });
         g
     }
 
@@ -81,36 +147,60 @@ impl Game {
         if self.script_error.get().is_some() && !self.game_over {
             self.event_log.clear();
             self.end_by_script_error();
-            let events = std::mem::take(&mut self.event_log);
-            let ev_values: Vec<Value> = events.iter().cloned().map(Value::Object).collect();
-            self.history.push(json!({"turn": self.turn, "player": self.current, "action": a, "events": ev_values}));
-            return Applied { ok: true, error: String::new(), events };
+            let log = std::mem::take(&mut self.event_log);
+            self.history.push(Hist { turn: self.turn, player: json!(self.current), action: a, events: log.clone() });
+            return Applied { ok: true, error: String::new(), log };
         }
-        if a.is_empty() || !self.legal_actions().contains(&a) {
-            return Applied { ok: false, error: format!("illegal action {}", json::stringify(&Value::Object(a))), events: vec![] };
-        }
-        self.event_log.clear();
+        // the whole legal list even for a malformed action: its read-only hooks may fail (a script error)
+        let act = if a.is_empty() { None } else { Some(self.legal()).and_then(|l| Act::from_map(&a).filter(|x| l.contains(x))) };
+        let Some(act) = act else {
+            return Applied { ok: false, error: format!("illegal action {}", json::stringify(&Value::Object(a))), log: vec![] };
+        };
         let who = self.current;
-        let p = int(a.get("player")) as usize;
-        match a["type"].as_str().unwrap() {
-            "mulligan" => {
-                let replace: Vec<Id> = a["replace"].as_array().unwrap().iter().map(|x| int(Some(x))).collect();
-                self.do_mulligan(p, replace)
+        self.run(act);
+        let log = std::mem::take(&mut self.event_log);
+        let player = a.get("player").cloned().unwrap_or(json!(who));
+        self.history.push(Hist { turn: self.turn, player, action: a, events: log.clone() });
+        Applied { ok: true, error: String::new(), log }
+    }
+
+    /// `apply` of an action known to be legal here (one of `legal()` of this very state):
+    /// no legality check, no history, no events for a caller (the bot's look-ahead copies).
+    pub(crate) fn apply_legal(&mut self, act: Act) -> bool {
+        if self.script_error.get().is_some() {
+            if self.game_over {
+                return false;
             }
-            "end_turn" => self.end_turn(),
-            "concede" => self.concede(p),
-            _ => self.apply_play_action(&a),
+            self.event_log.clear();
+            self.end_by_script_error();
+            return true;
+        }
+        self.run(act);
+        true
+    }
+
+    /// Runs a legal action (one of `legal()` of this state).
+    pub(crate) fn run(&mut self, act: Act) {
+        self.event_log.clear();
+        match act {
+            Act::Mulligan { player, replace } => self.do_mulligan(player as usize, replace),
+            Act::EndTurn { .. } => self.end_turn(),
+            Act::Concede { player } => self.concede(player as usize),
+            Act::Play { entity, target, pos, choice, .. } => self.do_play(entity, target, pos, choice),
+            Act::Attack { attacker, defender, .. } => self.do_attack(attacker, defender),
+            Act::HeroPower { target, .. } => self.do_hero_power(target),
+            Act::Choose { option, .. } => self.do_choose(option),
         }
         self.resolve();
         self.prune_pending();
-        let events = self.event_log.clone();
-        let ev_values: Vec<Value> = events.iter().cloned().map(Value::Object).collect();
-        let player = a.get("player").cloned().unwrap_or(json!(who));
-        self.history.push(json!({"turn": self.turn, "player": player, "action": a, "events": ev_values}));
-        Applied { ok: true, error: String::new(), events }
     }
 
     pub fn legal_actions(&self) -> Vec<Action> {
+        self.legal().iter().map(Act::to_map).collect()
+    }
+
+    /// The legal actions, typed, in the order `legal_actions` gives them.
+    pub fn legal(&self) -> Vec<Act> {
         let mut out = vec![];
         if self.game_over || self.script_error.get().is_some() {
             return out;
@@ -119,16 +209,16 @@ impl Game {
             for p in &self.players {
                 if !p.mulliganed {
                     for ids in subsets(&p.hand) {
-                        out.push(obj(json!({"type": "mulligan", "player": p.index, "replace": ids})));
+                        out.push(Act::Mulligan { player: p.index as i64, replace: ids });
                     }
                 }
             }
         } else {
-            out.push(obj(json!({"type": "end_turn", "player": self.current})));
+            out.push(Act::EndTurn { player: self.current as i64 });
             self.legal_play_actions(&mut out);
         }
         for p in 0..2 {
-            out.push(obj(json!({"type": "concede", "player": p})));
+            out.push(Act::Concede { player: p });
         }
         out
     }
@@ -141,7 +231,7 @@ impl Game {
     fn do_mulligan(&mut self, p: usize, replace: Vec<Id>) {
         self.players[p].mulliganed = true;
         self.players[p].mulligan_replace = replace.clone();
-        self.log_event(json!({"type": "mulligan_chosen", "player": p}));
+        self.log_event(obj!{"type": "mulligan_chosen", "player": p});
         self.run_mulligan(p, &replace);
         if self.players[0].mulliganed && self.players[1].mulliganed {
             self.finish_mulligan();
@@ -171,7 +261,7 @@ impl Game {
         }
         let mut own = Rng::new(mulligan_seed(self.rng.seed(), p));
         Game::shuffle(&mut self.players[p].deck, &mut own);
-        self.log_event(json!({"type": "mulligan", "player": p, "count": old.len()}));
+        self.log_event(obj!{"type": "mulligan", "player": p, "count": old.len()});
     }
 
     fn finish_mulligan(&mut self) {
@@ -198,9 +288,9 @@ impl Game {
         for c in self.chars(cur) {
             let e = self.em(c);
             e.erase_tag(n.exhausted);
-            e.set_tag(n.attacks, json!(0));
+            e.set_tag(n.attacks, 0i64);
         }
-        self.emit(json!({"type": "turn_start", "player": cur, "turn": self.turn}));
+        self.emit(obj!{"type": "turn_start", "player": cur, "turn": self.turn});
         self.resolve();
         if !self.game_over && (self.turn > 1 || self.rs.first_player_draws) {
             self.draw(cur, 1);
@@ -209,7 +299,7 @@ impl Game {
 
     fn end_turn(&mut self) {
         let cur = self.current;
-        self.emit(json!({"type": "turn_end", "player": cur}));
+        self.emit(obj!{"type": "turn_end", "player": cur});
         self.resolve();
         if self.game_over {
             return;
@@ -219,17 +309,17 @@ impl Game {
         }
         let turn = self.turn;
         for pl in &mut self.players {
-            pl.cost_mods.retain(|m| int(m.get("turn")) > turn);
+            pl.cost_mods.retain(|m| vint(m.get("turn")) > turn);
         }
         let n = self.n();
         for c in self.chars(cur) {
             let e = self.em(c);
-            if e.has(n.frozen) && !(truthy(e.tags.get(n.frozen_this_turn)) && e.tag(n.attacks) > 0) {
+            if e.has(n.frozen) && !(vtruthy(e.tags.get(n.frozen_this_turn)) && e.tag(n.attacks) > 0) {
                 e.erase_tag(n.frozen);
             }
             e.erase_tag(n.frozen_this_turn);
         }
-        self.log_event(json!({"type": "turn_end", "player": cur}));
+        self.log_event(obj!{"type": "turn_end", "player": cur});
         self.current = self.opponent(cur);
         self.start_turn();
     }
@@ -238,40 +328,30 @@ impl Game {
         self.game_over = true;
         self.phase = "OVER";
         self.winner = self.opponent(p) as i64;
-        self.log_event(json!({"type": "game_over", "winner": self.winner}));
+        self.log_event(obj!{"type": "game_over", "winner": self.winner});
     }
 
-    fn apply_play_action(&mut self, a: &Action) {
-        let i = |k: &str| int(a.get(k));
-        match a["type"].as_str().unwrap() {
-            "play" => self.do_play(i("entity"), i("target"), i("pos"), i("choice")),
-            "attack" => self.do_attack(i("attacker"), i("defender")),
-            "hero_power" => self.do_hero_power(i("target")),
-            "choose" => self.do_choose(i("option")),
-            _ => {}
-        }
-    }
-
-    fn legal_play_actions(&self, out: &mut Vec<Action>) {
+    fn legal_play_actions(&self, out: &mut Vec<Act>) {
         if let Some(p) = &self.pending {
             out.clear();
             for id in self.pending_options() {
-                out.push(obj(json!({"type": "choose", "player": p.player, "option": id})));
+                out.push(Act::Choose { player: p.player as i64, option: id });
             }
             return;
         }
         let cur = self.current;
+        let player = cur as i64;
         let p = &self.players[cur];
+        let auras = self.cost_auras();
         for &e in &p.hand {
-            if self.cost(e) > p.mana || !self.can_play(e) {
+            if self.cost_in(e, &auras) > p.mana || !self.can_play(e) {
                 continue;
             }
-            let choices: &[i64] = if self.rs.hooks(&self.e(e).card_id).choice.is_some() { &[0, 1] } else { &[-1] };
+            let choices: &[i64] = if self.e(e).card.hooks.choice.is_some() { &[0, 1] } else { &[-1] };
             for &choice in choices {
                 for t in self.play_targets(e, choice) {
                     for pos in self.positions(e) {
-                        out.push(obj(json!({"type": "play", "player": cur, "entity": e, "target": t, "pos": pos,
-                            "choice": choice})));
+                        out.push(Act::Play { player, entity: e, target: t, pos, choice });
                     }
                 }
             }
@@ -279,18 +359,18 @@ impl Game {
         let hp = p.hero_power;
         let hpe = self.e(hp);
         let n = self.n();
-        if !hpe.has(n.used) && !hpe.has(n.locked) && self.cost(hp) <= p.mana {
-            let hh = self.rs.hooks(&hpe.card_id);
+        if !hpe.has(n.used) && !hpe.has(n.locked) && self.cost_in(hp, &auras) <= p.mana {
+            let hh = &hpe.card.hooks;
             if hh.power.is_some() && hh.can_play.is_none_or(|f| self.fx_can_play(f, hp)) {
                 for t in self.spec_targets(hp, hh.target, true, false) {
-                    out.push(obj(json!({"type": "hero_power", "player": cur, "target": t})));
+                    out.push(Act::HeroPower { player, target: t });
                 }
             }
         }
         for a in self.chars(cur) {
             if self.can_attack(a) {
                 for d in self.defenders(a) {
-                    out.push(obj(json!({"type": "attack", "player": cur, "attacker": a, "defender": d})));
+                    out.push(Act::Attack { player, attacker: a, defender: d });
                 }
             }
         }
@@ -305,7 +385,7 @@ impl Game {
         if x.card.trap && p.secrets.iter().any(|&s| self.e(s).card_id == x.card_id) {
             return false;
         }
-        self.rs.hooks(&x.card_id).can_play.is_none_or(|f| self.fx_can_play(f, e))
+        x.card.hooks.can_play.is_none_or(|f| self.fx_can_play(f, e))
     }
 
     pub fn combo_active(&self, e: Id) -> bool {
@@ -321,7 +401,7 @@ impl Game {
 
     /// The target spec that applies when e is played with this choice and combo state.
     pub fn target_spec(&self, e: Id, choice: i64, combo: bool) -> Option<TSpec> {
-        let h = self.rs.hooks(&self.e(e).card_id);
+        let h = &self.e(e).card.hooks;
         if h.combo_target.is_some() {
             return if combo { h.combo_target } else { None };
         }
@@ -402,7 +482,7 @@ impl Game {
     }
 
     fn run_effect(&mut self, e: Id, key: &str, t: Id, choice: i64, combo: bool) {
-        let h = self.rs.hooks(&self.e(e).card_id);
+        let h = &self.e(e).card.hooks;
         if t == NONE && self.target_spec(e, choice, combo).is_some() {
             return; // targeted effect with no target (none was valid, or it left play)
         }
@@ -422,13 +502,13 @@ impl Game {
 
     fn play_minion(&mut self, e: Id, mut t: Id, pos: i64, choice: i64, combo: bool) {
         let c = self.ctrl(e);
-        let card = self.e(e).card_id.clone();
+        let card = self.e(e).card_id;
         self.players[c].minions_played_this_turn += 1;
         self.place_on_board(e, pos);
         let ex = self.n().exhausted;
         self.em(e).give_tag(ex, false);
-        self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "minion", "target": t, "card": card}));
-        self.emit(json!({"type": "summon", "entity": e, "player": c, "card": card}));
+        self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "minion", "target": t, "card": card});
+        self.emit(obj!{"type": "summon", "entity": e, "player": c, "card": card});
         self.resolve();
         if self.game_over || self.e(e).zone != "PLAY" {
             return;
@@ -442,16 +522,16 @@ impl Game {
             return;
         }
         let c = self.ctrl(e);
-        self.emit(json!({"type": "after_summon", "entity": e, "player": c, "card": card, "played": true}));
+        self.emit(obj!{"type": "after_summon", "entity": e, "player": c, "card": card, "played": true});
     }
 
     fn play_spell(&mut self, e: Id, t: Id, choice: i64, combo: bool) {
         let c = self.ctrl(e);
-        let card = self.e(e).card_id.clone();
+        let card = self.e(e).card_id;
         let is_trap = self.e(e).card.trap;
         self.em(e).zone = "SETASIDE";
-        let ev = self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_trap,
-            "target": t, "card": card, "countered": false}));
+        let ev = self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_trap,
+            "target": t, "card": card, "countered": false});
         self.resolve();
         if self.game_over {
             return;
@@ -465,7 +545,7 @@ impl Game {
                 self.enter_play(e);
                 self.em(e).zone = self.rs.names.trap;
             }
-            self.emit(json!({"type": "after_spell", "entity": e, "player": c, "card": card}));
+            self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
             return;
         }
         if !countered {
@@ -478,14 +558,14 @@ impl Game {
         }
         self.em(e).zone = "GRAVEYARD";
         if !self.game_over {
-            self.emit(json!({"type": "after_spell", "entity": e, "player": c, "card": card}));
+            self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
         }
     }
 
     fn play_weapon(&mut self, e: Id, t: Id, combo: bool) {
         let c = self.ctrl(e);
-        let card = self.e(e).card_id.clone();
-        self.emit(json!({"type": "play", "entity": e, "player": c, "kind": "weapon", "target": t, "card": card}));
+        let card = self.e(e).card_id;
+        self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "weapon", "target": t, "card": card});
         self.resolve();
         if self.game_over {
             return;
@@ -502,10 +582,10 @@ impl Game {
     fn do_attack(&mut self, a: Id, d: Id) {
         let names = self.n();
         let n = self.e(a).tag(names.attacks) + 1;
-        self.em(a).set_tag(names.attacks, json!(n));
+        self.em(a).set_tag(names.attacks, n);
         self.em(a).erase_tag(names.stealth);
         let c = self.ctrl(a);
-        let ev = self.emit(json!({"type": "attack", "attacker": a, "defender": d, "player": c}));
+        let ev = self.emit(obj!{"type": "attack", "attacker": a, "defender": d, "player": c});
         self.resolve();
         if self.game_over || self.e(a).zone != "PLAY" || self.ctrl(a) != self.current {
             return;
@@ -515,7 +595,7 @@ impl Game {
             return;
         }
         let weapon = if self.e(a).is_champion() { self.players[self.ctrl(a)].weapon } else { None };
-        let immune = weapon.is_some_and(|w| self.rs.hooks(&self.e(w).card_id).immune_while_attacking);
+        let immune = weapon.is_some_and(|w| self.e(w).card.hooks.immune_while_attacking);
         if immune {
             self.em(a).give_tag(names.immune, false);
         }
@@ -528,18 +608,18 @@ impl Game {
         }
         if let Some(w) = weapon {
             if self.e(w).zone == "PLAY" {
-                let lose = match self.rs.hooks(&self.e(w).card_id).durability_on_attack {
+                let lose = match self.e(w).card.hooks.durability_on_attack {
                     Some(f) => self.fx_dur(f, w, d),
                     None => true,
                 };
                 if lose {
                     let dur = self.e(w).tag(names.durability) - 1;
-                    self.em(w).set_tag(names.durability, json!(dur));
+                    self.em(w).set_tag(names.durability, dur);
                 }
             }
         }
         let c = self.ctrl(a);
-        self.emit(json!({"type": "after_attack", "attacker": a, "defender": d, "player": c}));
+        self.emit(obj!{"type": "after_attack", "attacker": a, "defender": d, "player": c});
     }
 
     // --- hero power and choice --------------------------------------------------
@@ -551,10 +631,10 @@ impl Game {
         self.players[cur].mana -= cost;
         let used = self.n().used;
         self.em(hp).give_tag(used, false);
-        if let Some(f) = self.rs.hooks(&self.e(hp).card_id).power {
+        if let Some(f) = self.e(hp).card.hooks.power {
             self.from(hp, |g| g.fx_effect(f, hp, t));
         }
-        self.emit(json!({"type": "hero_power", "player": cur, "entity": hp, "target": t}));
+        self.emit(obj!{"type": "hero_power", "player": cur, "entity": hp, "target": t});
     }
 
     /// Offered options that are still in the zone they were offered from.
@@ -567,7 +647,7 @@ impl Game {
         let src = self.pending.as_ref().unwrap().source;
         let still = self.pending_options();
         self.pending = None;
-        if let Some(f) = self.rs.hooks(&self.e(src).card_id).on_choose {
+        if let Some(f) = self.e(src).card.hooks.on_choose {
             self.from(src, |g| g.fx_choose(f, src, option, still));
         }
     }
@@ -577,7 +657,7 @@ impl Game {
         if let Some(p) = &self.pending {
             if self.pending_options().is_empty() {
                 let player = p.player;
-                self.log_event(json!({"type": "choice_cancelled", "player": player}));
+                self.log_event(obj!{"type": "choice_cancelled", "player": player});
                 self.pending = None;
             }
         }

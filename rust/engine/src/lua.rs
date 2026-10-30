@@ -16,9 +16,9 @@
 //! never a panic.
 
 use crate::hooks::{Base, HookFn, HookSet, TSpec, TrapHook};
-use crate::entity::{Id, NONE};
+use crate::entity::{obj, vint, Id, Obj, Str, NONE, V};
 use crate::ruleset::{leak, Ruleset};
-use crate::state::{Ev, Game};
+use crate::state::Game;
 use classichs_script::{call, compile_bytes, load, Args, Chunk, Error, Host, Value as L, Vm};
 use serde_json::{json, Map, Value};
 use std::collections::HashMap;
@@ -369,19 +369,33 @@ fn to_json<H>(vm: &Vm<H>, v: &L, depth: u32) -> Result<Value, Error> {
     })
 }
 
+/// An event → Lua (as `to_lua` of its JSON).
+fn obj_to_lua<H>(vm: &mut Vm<H>, o: &Obj) -> Result<L, Error> {
+    let t = vm.new_table();
+    for (k, x) in o.iter() {
+        let x = match x {
+            V::Bool(b) => L::Bool(*b),
+            V::Int(i) => L::Int(*i),
+            V::Str(s) => L::from(s.as_ref()),
+            V::Json(v) => to_lua(vm, v, 1)?,
+        };
+        vm.set(&t, k, x)?;
+    }
+    Ok(t)
+}
+
 fn empty(v: &Value) -> bool {
     matches!(v, Value::Array(a) if a.is_empty()) || matches!(v, Value::Object(o) if o.is_empty())
 }
 
 /// Copies the fields a hook changed in its event table back to the event.
-fn write_back(g: &mut Game, t: &L, ev: &mut Ev) -> Result<(), Error> {
+fn write_back(g: &mut Game, t: &L, ev: &mut Obj) -> Result<(), Error> {
     let Value::Object(b) = to_json(g.vm(), t, 0)? else { return Ok(()) };
+    let rs = g.rs;
     for (k, v) in &b {
         match ev.get(k) {
-            Some(old) if old == v || (empty(old) && empty(v)) => {}
-            _ => {
-                ev.insert(k.clone(), v.clone());
-            }
+            Some(old) if old.same(v) || (matches!(old, V::Json(o) if empty(o)) && empty(v)) => {}
+            _ => ev.insert(rs.intern(k), V::of(v, &|s| rs.intern(s))),
         }
     }
     ev.retain(|k, v| b.contains_key(k) || v.is_null());
@@ -462,7 +476,7 @@ impl Game {
         self.phase = "OVER";
         self.winner = -1;
         self.queue.clear();
-        self.log_event(json!({"type": "game_over", "winner": -1, "reason": "script_error", "error": msg}));
+        self.log_event(obj!{"type": "game_over", "winner": -1, "reason": "script_error", "error": msg});
     }
 
     pub(crate) fn fx_effect(&mut self, f: HookFn, me: Id, t: Id) {
@@ -478,8 +492,8 @@ impl Game {
         self.lua(
             f,
             |g| {
-                let e = Value::Object(g.event_log[ev].clone());
-                Ok(vec![L::Int(me), to_lua(g.vm(), &e, 0)?])
+                let e = g.event_log[ev].clone();
+                Ok(vec![L::Int(me), obj_to_lua(g.vm(), &e)?])
             },
             |g, _, a| {
                 let mut e = std::mem::take(&mut g.event_log[ev]);
@@ -490,17 +504,17 @@ impl Game {
         );
     }
 
-    pub(crate) fn fx_now(&mut self, f: HookFn, me: Id, ev: &mut Ev) {
-        let src = Value::Object(ev.clone());
-        self.lua(f, |g| Ok(vec![L::Int(me), to_lua(g.vm(), &src, 0)?]), |g, _, a| write_back(g, &a[2], ev));
+    pub(crate) fn fx_now(&mut self, f: HookFn, me: Id, ev: &mut Obj) {
+        let src = ev.clone();
+        self.lua(f, |g| Ok(vec![L::Int(me), obj_to_lua(g.vm(), &src)?]), |g, _, a| write_back(g, &a[2], ev));
     }
 
     pub(crate) fn fx_cond(&mut self, f: HookFn, me: Id, ev: usize) -> bool {
         self.lua(
             f,
             |g| {
-                let e = Value::Object(g.event_log[ev].clone());
-                Ok(vec![L::Int(me), to_lua(g.vm(), &e, 0)?])
+                let e = g.event_log[ev].clone();
+                Ok(vec![L::Int(me), obj_to_lua(g.vm(), &e)?])
             },
             |_, r, _| Ok(r.first().is_some_and(L::truthy)),
         )
@@ -589,8 +603,8 @@ fn card_arg(g: &Game, a: &Args, i: usize, kind: &str) -> Result<String, Error> {
     }
 }
 
-fn tag_arg(g: &Game, a: &Args, i: usize) -> Result<String, Error> {
-    Ok(g.rs.names.tag(&a.string(i)?).to_string())
+fn tag_arg(g: &Game, a: &Args, i: usize) -> Result<Str, Error> {
+    Ok(g.rs.intern(g.rs.names.tag(&a.string(i)?)))
 }
 
 fn zone_name(g: &Game, z: &str) -> &'static str {
@@ -609,10 +623,17 @@ fn ids<C: Ctx>(h: &mut C, v: Vec<Id>) -> R {
     Ok(vec![h.vm().list(v.into_iter().map(L::Int).collect())?])
 }
 
-fn live(g: &Game) -> Result<(), Error> {
+fn check(g: &Game) -> Result<(), Error> {
     if g.script_error.get().is_some() {
         return Err(Error::fatal("the game ended: a card script failed"));
     }
+    Ok(())
+}
+
+/// Before an action that may change the game (counted: `Game::writes`).
+fn live(g: &mut Game) -> Result<(), Error> {
+    check(g)?;
+    g.writes += 1;
     Ok(())
 }
 
@@ -655,7 +676,7 @@ ql!(q_adjacent, |g, a| g.adjacent(ent(g, &a, 0)?));
 ql!(q_hand, |g, a| g.players[player(&a, 0)?].hand.clone());
 ql!(q_deck, |g, a| g.players[player(&a, 0)?].deck.clone());
 ql!(q_traps, |g, a| g.players[player(&a, 0)?].secrets.clone());
-q!(q_card, |g, a| one(g.e(ent(g, &a, 0)?).card_id.as_str()));
+q!(q_card, |g, a| one(g.e(ent(g, &a, 0)?).card_id));
 q!(q_type, |g, a| one(g.e(ent(g, &a, 0)?).kind()));
 q!(q_race, |g, a| one(g.e(ent(g, &a, 0)?).race()));
 q!(q_class, |g, a| one(g.e(ent(g, &a, 0)?).card.card_class.as_str()));
@@ -669,7 +690,7 @@ q!(q_has, |g, a| one(g.e(ent(g, &a, 0)?).has(&tag_arg(g, &a, 1)?)));
 q!(q_tag, |g, a| {
     let (e, t) = (ent(g, &a, 0)?, tag_arg(g, &a, 1)?);
     let x = g.e(e);
-    one(x.tag(&t) + crate::entity::int(x.aura.tags.get(&t)))
+    one(x.tag(&t) + vint(x.aura.tags.get(&t)))
 });
 q!(q_silenced, |g, a| one(g.e(ent(g, &a, 0)?).silenced));
 q!(q_is_minion, |g, a| one(g.e(ent(g, &a, 0)?).is_minion()));
@@ -717,15 +738,23 @@ fn q_enchants<C: Ctx>(h: &mut C, a: Args) -> R {
 }
 
 fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
-    let v = {
-        let g = h.game()?;
-        let c = g.rs.card(&card_arg(g, &a, 0, "")?);
-        json!({"id": c.id, "type": c.kind, "class": c.card_class, "rarity": c.rarity, "set": c.set,
-            "cost": c.cost, "attack": c.attack, "health": c.health, "durability": c.durability, "race": c.race,
-            "mana_lock": c.mana_lock, "spell_power": c.spell_power.unwrap_or(0), "collectible": c.collectible,
-            "keywords": c.keywords, "trap": c.trap})
-    };
-    one(to_lua(h.vm(), &v, 0)?)
+    let rs = h.game()?.rs;
+    let c = rs.card(&card_arg(h.game()?, &a, 0, "")?);
+    let vm = h.vm();
+    let t = vm.new_table();
+    // in key order, as a JSON object gave them
+    let s = |x: &str| L::from(x);
+    for (k, v) in [("attack", L::Int(c.attack)), ("class", s(&c.card_class)), ("collectible", L::Bool(c.collectible)),
+        ("cost", L::Int(c.cost)), ("durability", L::Int(c.durability)), ("health", L::Int(c.health)), ("id", s(&c.id))] {
+        vm.set(&t, k, v)?;
+    }
+    let keywords = vm.list(c.keywords.iter().map(|k| s(k)).collect())?;
+    vm.set(&t, "keywords", keywords)?;
+    for (k, v) in [("mana_lock", L::Int(c.mana_lock)), ("race", s(&c.race)), ("rarity", s(&c.rarity)), ("set", s(&c.set)),
+        ("spell_power", L::Int(c.spell_power.unwrap_or(0))), ("trap", L::Bool(c.trap)), ("type", s(&c.kind))] {
+        vm.set(&t, k, v)?;
+    }
+    one(t)
 }
 
 fn q_collectible<C: Ctx>(h: &mut C, _a: Args) -> R {
@@ -834,8 +863,8 @@ fn a_discard(g: &mut Game, a: Args) -> R {
     if g.players[p].hand.contains(&e) {
         g.players[p].hand.retain(|&x| x != e);
         g.em(e).zone = "GRAVEYARD";
-        let card = g.e(e).card_id.clone();
-        g.emit(json!({"type": "discard", "player": p, "entity": e, "card": card}));
+        let card = g.e(e).card_id;
+        g.emit(obj!{"type": "discard", "player": p, "entity": e, "card": card});
     }
     none()
 }
@@ -936,9 +965,12 @@ fn a_set_tag(g: &mut Game, a: Args) -> R {
     let (e, t) = (ent(g, &a, 0)?, tag_arg(g, &a, 1)?);
     match a.get(2) {
         L::Nil => g.em(e).erase_tag(&t),
-        L::Bool(b) => g.em(e).set_tag(&t, json!(b)),
-        L::Int(n) => g.em(e).set_tag(&t, json!(n.clamp(-LIMIT, LIMIT))),
-        L::Str(_) => g.em(e).set_tag(&t, json!(a.string(2)?)),
+        L::Bool(b) => g.em(e).set_tag(t, b),
+        L::Int(n) => g.em(e).set_tag(t, n.clamp(-LIMIT, LIMIT)),
+        L::Str(_) => {
+            let v = V::Str(g.rs.intern(&a.string(2)?));
+            g.em(e).set_tag(t, v)
+        }
         _ => return Err(a.bad(2, "a boolean, number, string or nil expected")),
     }
     none()
@@ -947,7 +979,7 @@ fn a_give_tag(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (e, t) = (opt_ent(g, &a, 0)?, tag_arg(g, &a, 1)?);
     if e != NONE {
-        g.em(e).give_tag(&t, a.get(2).truthy());
+        g.em(e).give_tag(t, a.get(2).truthy());
     }
     none()
 }
@@ -963,7 +995,7 @@ fn a_add_tag(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (e, t, n) = (opt_ent(g, &a, 0)?, tag_arg(g, &a, 1)?, num(&a, 2, 1)?);
     if e != NONE {
-        g.add_tag_int(e, &t, n);
+        g.add_tag_int(e, t, n);
     }
     none()
 }
@@ -978,7 +1010,10 @@ fn a_enchant(g: &mut Game, a: Args) -> R {
     let e = ent(g, &a, 0)?;
     let v = to_json(g.vm(), &a.table(1)?, 0)?;
     match v {
-        Value::Object(m) => g.em(e).enchantments.push(m),
+        Value::Object(m) => {
+            let rs = g.rs;
+            g.em(e).enchantments.push(Obj::of(&m, &|s| rs.intern(s)))
+        }
         _ => return Err(a.bad(1, "a table with named fields expected")),
     }
     none()
@@ -991,23 +1026,22 @@ fn a_remove_enchant(g: &mut Game, a: Args) -> R {
         _ => Some(player(&a, 2)? as i64),
     };
     g.em(e).enchantments.retain(|x| {
-        x.get("hooks").and_then(Value::as_str) != Some(hooks.as_str())
-            || p.is_some_and(|p| crate::entity::int(x.get("player")) != p)
+        x.get("hooks").and_then(V::as_str) != Some(hooks.as_str()) || p.is_some_and(|p| vint(x.get("player")) != p)
     });
     none()
 }
 fn a_aura_add(g: &mut Game, a: Args) -> R {
-    live(g)?;
+    check(g)?;
     let (t, at, hp) = (ent(g, &a, 0)?, num(&a, 1, 0)?, num(&a, 2, 0)?);
-    let mut tags: Vec<(String, Value)> = vec![];
+    let mut tags: Vec<(Str, V)> = vec![];
     if let L::Table(_) = a.get(3) {
+        let rs = g.rs;
         for (k, v) in g.vm().pairs(&a.get(3))? {
-            let name = g.rs.names.tag(k.as_str().ok_or_else(|| a.bad(3, "tag names must be strings"))?).to_string();
-            tags.push((name, to_json(g.vm(), &v, 0)?));
+            let name = rs.intern(rs.names.tag(k.as_str().ok_or_else(|| a.bad(3, "tag names must be strings"))?));
+            tags.push((name, V::of(&to_json(g.vm(), &v, 0)?, &|s| rs.intern(s))));
         }
     }
-    let tags: Vec<(&str, Value)> = tags.iter().map(|(k, v)| (k.as_str(), v.clone())).collect();
-    g.aura_add(t, at, hp, &tags);
+    g.aura_add(t, at, hp, tags);
     none()
 }
 fn a_replace_hero(g: &mut Game, a: Args) -> R {
@@ -1050,25 +1084,26 @@ fn a_add_cost_mod(g: &mut Game, a: Args) -> R {
     let Some(turn) = m.as_object().map(|o| o.get("turn").cloned()) else { return Err(a.bad(1, "a table expected")) };
     g.add_cost_mod(p, m);
     if let (Some(t), Some(last)) = (turn, g.players[p].cost_mods.last_mut()) {
-        last.insert("turn".into(), t); // add_cost_mod stamps this turn; a given one wins (say, next turn)
+        last.insert("turn", V::of(&t, &|s| g.rs.intern(s))); // add_cost_mod stamps this turn; a given one wins (say, next turn)
     }
     none()
 }
+fn event_arg(g: &mut Game, a: &Args) -> Result<Obj, Error> {
+    let v = to_json(g.vm(), &a.table(0)?, 0)?;
+    match v {
+        Value::Object(m) if m.get("type").is_some_and(Value::is_string) => Ok(Obj::of(&m, &|s| g.rs.intern(s))),
+        _ => Err(a.bad(0, "an event needs a string 'type'")),
+    }
+}
 fn a_log(g: &mut Game, a: Args) -> R {
     live(g)?;
-    let v = to_json(g.vm(), &a.table(0)?, 0)?;
-    if !v.get("type").is_some_and(Value::is_string) {
-        return Err(a.bad(0, "an event needs a string 'type'"));
-    }
-    one(g.log_event(v) as i64)
+    let ev = event_arg(g, &a)?;
+    one(g.log_event(ev) as i64)
 }
 fn a_emit(g: &mut Game, a: Args) -> R {
     live(g)?;
-    let v = to_json(g.vm(), &a.table(0)?, 0)?;
-    if !v.get("type").is_some_and(Value::is_string) {
-        return Err(a.bad(0, "an event needs a string 'type'"));
-    }
-    g.emit(v);
+    let ev = event_arg(g, &a)?;
+    g.emit(ev);
     none()
 }
 fn a_remove(g: &mut Game, a: Args) -> R {

@@ -1,7 +1,7 @@
 //! One side of the match (engine/player.gd). Entities are referenced by id.
 
-use crate::entity::{Id, NONE};
-use serde_json::{json, Map, Value};
+use crate::entity::{Id, Obj, NONE};
+use serde_json::{json, Value};
 
 #[derive(Clone, Debug, Default)]
 pub struct Player {
@@ -25,7 +25,7 @@ pub struct Player {
     pub minions_played_this_turn: i64,
     /// One-shot or timed cost changes: {"kind": "spell"|"secret"|"minion"|"any",
     /// "set": int or "delta": int, "until": "use"|"turn_end", "turn": int}
-    pub cost_mods: Vec<Map<String, Value>>,
+    pub cost_mods: Vec<Obj>,
     pub mulliganed: bool,
     pub mulligan_replace: Vec<Id>,
 }
@@ -40,7 +40,7 @@ impl Player {
             "hand": self.hand, "deck": self.deck, "board": self.board, "secrets": self.secrets,
             "mana": self.mana, "max_mana": self.max_mana, "ol_owed": self.mana_lock_owed,
             "ol_locked": self.mana_locked, "fatigue": self.fatigue, "played": self.cards_played_this_turn,
-            "minions_played": self.minions_played_this_turn, "cost_mods": self.cost_mods,
+            "minions_played": self.minions_played_this_turn, "cost_mods": self.cost_mods.iter().map(Obj::to_value).collect::<Vec<_>>(),
             "mulliganed": self.mulliganed, "mulligan_replace": self.mulligan_replace})
     }
 }

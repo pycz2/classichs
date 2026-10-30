@@ -208,6 +208,7 @@ impl Ctx {
         if !r.ok {
             return Step::Refused(r.error);
         }
+        let events = r.events();
         clock.update(g, &self.timers);
         if let Some(lg) = self.app.hub().games.get_mut(&self.id) {
             lg.turn = g.turn;
@@ -219,8 +220,8 @@ impl Ctx {
         }
         self.app.event(self.ev(p, "game_action", text).data(json!({
             "p": p, "action": a, "turn": g.turn, "current": g.current, "phase": g.phase, "hash": g.state_hash(),
-            "over": g.game_over, "timeout": timeout, "events": r.events})));
-        self.states(g, &r.events, clock);
+            "over": g.game_over, "timeout": timeout, "events": events})));
+        self.states(g, &events, clock);
         Step::Done
     }
 
@@ -283,7 +284,7 @@ async fn run(ctx: Ctx, mut g: Game, mut rx: mpsc::UnboundedReceiver<Ev>) {
     let mut clock = Clock { key: ("", -1, 9), at: Instant::now() };
     clock.update(&g, &t);
     let opening: Vec<Events> =
-        g.history[0]["events"].as_array().map(|a| a.iter().filter_map(|e| e.as_object().cloned()).collect()).unwrap_or_default();
+        g.history[0].events();
     ctx.app.event(ctx.ev(g.current, "game_start", format!("The game started: {} goes first", ctx.names[g.current]))
         .data(json!({"first": g.current, "turn": g.turn, "hash": g.state_hash(), "events": opening})));
     ctx.states(&g, &opening, &clock);

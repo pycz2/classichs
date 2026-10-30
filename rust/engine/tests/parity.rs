@@ -71,7 +71,7 @@ fn replay(line: &Value, st: &mut Stats) {
         bad(st, "start hash".into());
         return;
     }
-    let start: Vec<_> = g.history[0]["events"].as_array().unwrap().iter().map(|e| e.as_object().unwrap().clone()).collect();
+    let start = g.history[0].events();
     if !events_match(&line["e0"], &start) {
         bad(st, "start events".into());
         return;
@@ -92,11 +92,12 @@ fn replay(line: &Value, st: &mut Stats) {
             }
         }
         let res = g.apply(&s["a"]);
+        let events = res.events();
         if res.ok != s["ok"].as_bool().unwrap() || (!res.ok && res.error != s["err"].as_str().unwrap_or("")) {
             bad(st, format!("step {i}: ok {} err {:?} want {}", res.ok, res.error, stringify(s)));
             return;
         }
-        for ev in &res.events {
+        for ev in &events {
             if let Some(c) = ev.get("card").and_then(Value::as_str) {
                 st.seen.insert(c.to_string());
                 if ev.get("type") == Some(&json!("play")) {
@@ -105,10 +106,10 @@ fn replay(line: &Value, st: &mut Stats) {
             }
         }
         if s["a"]["type"] == "hero_power" && res.ok {
-            st.played.insert(g.e(g.players[int(s["a"].get("player")) as usize].hero_power).card_id.clone());
+            st.played.insert(g.e(g.players[int(s["a"].get("player")) as usize].hero_power).card_id.to_string());
         }
-        if !events_match(&s["e"], &res.events) {
-            let got = Value::Array(res.events.iter().cloned().map(Value::Object).collect());
+        if !events_match(&s["e"], &events) {
+            let got = Value::Array(events.iter().cloned().map(Value::Object).collect());
             bad(st, format!("step {i} {}: events differ: {}", stringify(&s["a"]), stringify(&got)));
             return;
         }
