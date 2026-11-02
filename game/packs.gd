@@ -116,10 +116,47 @@ static func active() -> Pack:
 static func set_active(p: Pack) -> void:
 	if p == _active:
 		return
+	server_sets = {}  # (another game: its own choices)
 	Settings.data.pack = {"id": p.id(), "hash": content_hash(p)}
 	Settings.save()
 	_active = p
 	_changed()
+
+
+## The client shows its own screens (the main menu, the settings, the game library, the
+## connections): no pack styles them (look() is null; main sets it). Inside a game the active
+## pack gives the look, the menu music and pictures.
+static var shell := false
+## A game played through a server: the art and music choice the server keeps for it ({art, music}).
+static var server_sets := {}
+
+
+## The pack whose look the screens have now: the active one inside a game, none in the shell.
+static func look() -> Pack:
+	return null if shell else active()
+
+
+static func set_shell(on: bool) -> void:
+	if on == shell:
+		return
+	shell = on
+	_pictures = {}
+	Fonts.restyle()
+
+
+## Opens a game: p becomes the active pack (sets: the server's art and music choice for it, {}
+## on this device) and styles the screens from now on.
+static func enter(p: Pack, sets := {}) -> void:
+	shell = false
+	if p != _active:
+		set_active(p)  # (its caches start again; server_sets {})
+	else:
+		Fonts.restyle()
+	var was := server_sets
+	server_sets = sets
+	for kind in ["art", "music"]:
+		if str(was.get(kind, "")) != str(sets.get(kind, "")):
+			_set_changed(kind)
 
 
 static func find(content_hash_: String) -> Pack:
@@ -155,34 +192,33 @@ static func _changed() -> void:
 			f.call()
 
 
-## The set the player chose for a pack ("art", "sound", "music", "back"); the pack's default otherwise.
-## Classic keeps the choices made before packs (settings "art", "music_set").
+## The set the player chose for a pack ("art", "sound", "music"); the pack's default otherwise.
+## In a game played through a server the server keeps the art and music choice (server_sets).
 static func choice(p: Pack, kind: String) -> String:
+	if p == _active and server_sets.has(kind):
+		return str(server_sets[kind])
 	var mine: Dictionary = Settings.data.get("pack_sets", {}).get(p.id(), {}) if Settings.data.get("pack_sets") is Dictionary else {}
 	if mine.has(kind):
 		return str(mine[kind])
-	if p.id() == CLASSIC:
-		match kind:
-			"art": return str(Settings.data.get("art", p.default_set("art")))
-			"music": return str(Settings.data.get("music_set", p.default_set("music")))
 	return p.default_set(kind)
 
 
+## Keeps a set choice on this device (a server game's are kept on the server: ServerLink.set_game_setting).
 static func set_choice(p: Pack, kind: String, value: String) -> void:
 	if not Settings.data.get("pack_sets") is Dictionary:
 		Settings.data.pack_sets = {}
 	var mine: Dictionary = Settings.data.pack_sets.get(p.id(), {})
 	mine[kind] = value
 	Settings.data.pack_sets[p.id()] = mine
-	if p.id() == CLASSIC and kind == "art":
-		Settings.data.art = value
-	if p.id() == CLASSIC and kind == "music":
-		Settings.data.music_set = value
 	Settings.save()
-	if p == _active:
-		match kind:
-			"art": Art.reset()
-			"sound", "music": Sound.reset()
+	if p == _active and not server_sets.has(kind):
+		_set_changed(kind)
+
+
+static func _set_changed(kind: String) -> void:
+	match kind:
+		"art": Art.reset()
+		"sound", "music": Sound.reset()
 
 
 ## Why a pack can't be installed (English keys, translated where shown; i18n_keys.gd reads them).
@@ -246,7 +282,8 @@ static func install_file(file: String) -> Dictionary:
 	return install(FileAccess.get_file_as_bytes(file), "imported")
 
 
-## Deletes a downloaded, imported or received pack (never a built-in one).
+## Deletes a downloaded, imported or received pack (never a built-in one), and the decks made in
+## it on this device when no other pack of that id stays.
 static func remove(p: Pack) -> bool:
 	if p.builtin():
 		return false
@@ -257,6 +294,8 @@ static func remove(p: Pack) -> bool:
 	p.close()
 	DirAccess.remove_absolute(p.path)
 	_list.erase(p)
+	if not all().any(func(x: Pack): return x.id() == p.id()):  # its decks on this device go with it
+		DeckStore.delete_for(p.id())
 	if p == _active:
 		_active = null
 		Settings.data.erase("pack")
@@ -325,10 +364,10 @@ static func renames() -> Dictionary:
 static var _pictures := {}  # "<pack path>|<name>" -> Texture2D or null
 
 
-## A picture of the active pack's ui/ folder by name (ui/menu.jpg, ui/board.jpg, ui/library.jpg…),
+## A picture of the styling pack's (look()) ui/ folder by name (ui/menu.jpg, ui/board.jpg, ui/library.jpg…),
 ## or the manifest's logo / card_back ("logo", "card_back"); null when it has none.
 static func picture(name: String) -> Texture2D:
-	var p := active()
+	var p := look()
 	if p == null:
 		return null
 	var key := p.path + "|" + name

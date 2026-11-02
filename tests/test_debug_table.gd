@@ -33,15 +33,23 @@ func test_example_position_builds() -> void:
 	check(Rules.scenario_error({"players": [{"hero": "HERO_08", "board": ["VAN_CS2_029"]}, {"hero": "HERO_01"}]}).contains("not a minion"), "a broken scene says why")
 
 
+## Debug tools only inside a game: the global settings have none, a game's settings open its table.
 func test_settings_open_the_debug_tools_and_back() -> void:
 	var m := _main()
 	m.show_settings()
+	check(m.screen.find_child("DebugTools", true, false) == null, "none in the main menu's settings")
+	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
+	check(m.screen is MainMenu and m.screen.pack == null, "back to the main menu")
+	m.enter_game(Packs.active())
+	(m.screen.find_child("Settings", true, false) as Button).pressed.emit()
 	var b := m.screen.find_child("DebugTools", true, false) as Button
-	check(b != null, "a Debug tools button in the settings")
+	check(b != null, "a Debug tools button in the game's settings")
 	b.pressed.emit()
 	check(m.screen is DebugTable, "the debug screen")
 	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
 	check(m.screen is SettingsView, "back to the settings")
+	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
+	check(m.screen is MainMenu and m.screen.pack == Packs.active(), "back to the game's menu")
 	m.free()
 	var overlay := SettingsView.new()  # the settings over a match: no debug tools
 	root().add_child(overlay)

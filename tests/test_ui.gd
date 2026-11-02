@@ -12,23 +12,61 @@ func _main() -> Node:
 	return m
 
 
-func test_main_shows_menu() -> void:
-	var m := _main()
-	check(m.screen is MainMenu, "menu first")
-	check(m.screen.find_child("Training", true, false) == null, "training is inside Play")
-	(m.screen.find_child("Play", true, false) as Button).pressed.emit()
-	for n in ["OnlineGame", "Training", "Tutorial", "Back"]:
-		check(m.screen.find_child(n, true, false) != null, n + " in the Play submenu")
-	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
-	check(m.screen.find_child("Collection", true, false) != null, "back to the first level")
-	check(m.screen.find_child("DebugTable", true, false) == null, "the debug tools are in the settings")
-	m.free()
+## The buttons of the menu shown now, by name.
+static func _items(m: Node) -> Array:
+	return m.screen.find_children("*", "Button", true, false).filter(func(b): return b.name != "Version").map(func(b): return str(b.name))
 
 
-func test_menu_collection_button_enabled() -> void:
+func _press(m: Node, button: String) -> void:
+	(m.screen.find_child(button, true, false) as Button).pressed.emit()
+
+
+## The whole tree: main menu → Play → Direct → the library → a game's menu → back up again.
+func test_the_menu_tree() -> void:
 	var m := _main()
+	check(m.screen is MainMenu and m.screen.pack == null, "the client's main menu first")
+	eq(_items(m), ["Play", "Settings", "Exit"] if not OS.has_feature("web") else ["Play", "Settings"], "Play, Settings, Exit")
+	check(Packs.shell and Packs.look() == null, "no game styles it")
+	_press(m, "Play")
+	eq(_items(m), ["Direct", "Server", "Back"], "without a server or through one")
+	_press(m, "Back")
+	eq(_items(m), ["Play", "Settings", "Exit"] if not OS.has_feature("web") else ["Play", "Settings"], "back to the first level")
+	_press(m, "Play")
+	_press(m, "Direct")
+	check(m.screen is GamesView, "the game library")
+	(m.screen as GamesView).activate(Packs.active())
+	check(m.screen is MainMenu and m.screen.pack == Packs.active(), "the game's menu")
+	check(not Packs.shell and Packs.look() == Packs.active(), "in the game's look")
+	var items := _items(m)
+	for n in ["Collection", "Training", "CodePlay", "Tutorial", "Settings", "LeaveTheGame"]:
+		check(items.has(n), n + " in the game's menu")
+	check(not items.has("Play"), "no server Play without a server")
 	check(not (m.screen.find_child("Collection", true, false) as Button).disabled, "collection enabled")
+	_press(m, "Training")
+	check(m.screen is TrainingSetup, "training")
+	(m.screen as TrainingSetup).back.emit()
+	check(m.screen is MainMenu and m.screen.pack != null, "back to the game's menu")
+	_press(m, "LeaveTheGame")
+	check(m.screen is GamesView, "leaving the game: the library")
+	(m.screen as GamesView).back.emit()
+	check(m.screen is MainMenu and m.screen.find_child("Direct", true, false) != null, "back: the Play submenu")
 	m.free()
+
+
+## A pack without missions has no Tutorial in its menu.
+func test_tutorial_only_when_the_pack_has_one() -> void:
+	var menu := MainMenu.new()
+	menu.pack = Packs.active()
+	root().add_child(menu)
+	check(menu.find_child("Tutorial", true, false) != null, "Classic has a tutorial")
+	menu.free()
+	for p: Pack in Packs.all():
+		if not p.files().any(func(f): return f.begins_with("missions/")):
+			menu = MainMenu.new()
+			menu.pack = p
+			root().add_child(menu)
+			check(menu.find_child("Tutorial", true, false) == null, p.id() + ": no tutorial")
+			menu.free()
 
 
 func test_menu_to_training_setup_and_back() -> void:
@@ -265,12 +303,9 @@ func test_first_run_asks_for_the_language() -> void:
 ## Codes need WebRTC (the browser, or the webrtc-native plugin in the other builds); the server works everywhere.
 func test_online_without_webrtc_offers_the_server() -> void:
 	var m := _main()
-	(m.screen.find_child("Play", true, false) as Button).pressed.emit()
-	check(not (m.screen.find_child("OnlineGame", true, false) as Button).disabled, "Online Game enabled everywhere")
-	var o := OnlineView.new()
-	root().add_child(o)
-	var codes := o.find_child("ViaCodes", true, false) as Button
-	eq(codes.disabled, not WebRtcTransport.available(), "codes need WebRTC (the browser)")
-	check(not (o.find_child("ViaServer", true, false) as Button).disabled, "the server works everywhere")
-	o.free()
+	_press(m, "Play")
+	check(not (m.screen.find_child("Server", true, false) as Button).disabled, "through a server everywhere")
+	m.enter_game(Packs.active())
+	var codes := m.screen.find_child("CodePlay", true, false) as Button
+	eq(codes.disabled, not WebRtcTransport.available(), "code play needs WebRTC (the browser)")
 	m.free()

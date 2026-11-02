@@ -15,12 +15,14 @@ static func _tag(t: String) -> int:
 	return TextServerManager.get_primary_interface().name_to_tag(t)
 
 
-## A font file of a pack's theme ("body" or "title"; the active pack by default), or null.
+## A font file of a pack's theme ("body" or "title"; the styling pack, Packs.look(), by default), or null.
 static func _pack_font(kind: String, p: Pack = null) -> Font:
 	if p == null:
-		p = Packs.active()
+		p = Packs.look()
+	if p == null:
+		return null
 	var file = Palette.UI.fonts.get(kind, "")
-	if p != Packs.active():
+	if p != Packs.look():
 		var t = p.json("ui/theme.json") if p.has("ui/theme.json") else null
 		file = t.get("fonts", {}).get(kind, "") if t is Dictionary and t.get("fonts") is Dictionary else ""
 	if not file is String or file == "" or p == null:
@@ -241,9 +243,9 @@ static func button_box(state: String) -> StyleBox:
 		Palette.tc("button.glow_hover" if lit else "button.glow"), int(b.glow_hover_size if lit else b.glow_size))
 
 
-## A picture of the active pack (a theme's button or panel texture), or null.
+## A picture of the styling pack (a theme's button or panel texture), or null.
 static func _picture(file: Variant) -> Texture2D:
-	var p := Packs.active()
+	var p := Packs.look()
 	return p.texture(file) if file is String and file != "" and p and p.has(file) else null
 
 

@@ -2,8 +2,9 @@ class_name Sound
 extends Node
 ## Music and event sounds from the active pack: sounds/<set>/<name>.(ogg|wav|mp3) and
 ## music/<set>/<name> (menu, battle_1 … battle_N), the sets chosen per pack
-## (Packs.choice "sound", "music"). Main adds one instance; without it every call is
-## silent (tests, tools).
+## (Packs.choice "sound", "music"). The client's own screens (Packs.shell) play one neutral
+## menu track of the client (SHELL_MENU), never a pack's. Main adds one instance; without it
+## every call is silent (tests, tools).
 
 ## Event type -> sound name.
 const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "death": "death",
@@ -11,6 +12,8 @@ const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "d
 	"equip": "equip", "secret_revealed": "secret", "freeze": "freeze", "divine_shield_lost": "shield"}
 const POOL := 6
 const AUDIO := ["ogg", "wav", "mp3"]
+## The client's own menu music (the main menu, the settings, the library, the connections).
+const SHELL_MENU := "res://audio/shell/menu.wav"
 
 static var instance: Sound
 
@@ -68,6 +71,8 @@ static func battle_tracks(p: Pack = null) -> Array:
 
 
 func _stream(file: String) -> AudioStream:
+	if file == "shell":
+		return load(SHELL_MENU)
 	var path := path_for(file)
 	if not _streams.has(path):
 		_streams[path] = Packs.active().stream(path) if path != "" else null
@@ -111,6 +116,8 @@ func last_player() -> AudioStreamPlayer:
 ## Loops track; "battle" starts a battle track other than the last one (a new one
 ## every match) and moves on to another when it ends.
 static func music(track: String) -> void:
+	if track == "menu" and Packs.shell:
+		track = "shell"
 	if instance == null or (instance._track == track and track != "battle"):
 		return
 	instance._track = track

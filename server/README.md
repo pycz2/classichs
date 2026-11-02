@@ -386,8 +386,8 @@ Full details: the design doc.
 
 ### Decks
 
-A player's decks kept on the server (the client's deck list ticks which: "Keep on the
-server"), per pack (its manifest `id`, as ranks, so a new version keeps them). A deck is
+A player's decks kept on the server (a game played through the server: its Collection
+works on them; "Copy local decks" copies the device's there), per pack (its manifest `id`, as ranks, so a new version keeps them). A deck is
 `{id, pack, name, hero, cards, created, updated}` (`id`: the server's, a whole number;
 times: unix seconds).
 

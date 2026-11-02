@@ -16,7 +16,7 @@ func _press(parent: Node, button_name: String) -> void:
 func test_deck_chooser_lists_decks_and_buttons() -> void:
 	var c := DeckChooser.new()
 	root().add_child(c)
-	eq(c.rows.size(), TrainingSetup.available_decks().size(), "a tile per deck")
+	eq(c.rows.size(), DeckStore.load_all().size(), "a tile per deck")
 	var got := []
 	c.chosen.connect(func(d): got.append(d))
 	c.edit_decks.connect(func(): got.append("edit"))
@@ -63,9 +63,7 @@ func test_online_stages() -> void:
 	var o := OnlineView.new()
 	o.transport_factory = func(): return pair[0]
 	root().add_child(o)
-	eq(o.stage, "via", "directly or through a server first")
-	_press(o, "ViaCodes")
-	eq(o.stage, "name", "then the name")
+	eq(o.stage, "name", "the name first, right before code play")
 	o.name_edit.text_submitted.emit("Alice")
 	eq(o.stage, "kind", "Enter goes on to a normal game or the Arena")
 	_press(o.find_child("Stage_kind", true, false), "Back")
@@ -104,9 +102,7 @@ func test_online_stages() -> void:
 	o.chooser.back.emit()
 	_press(o.find_child("Stage_kind", true, false), "Back")
 	_press(o.find_child("Stage_name", true, false), "Back")
-	eq(o.stage, "via", "Back from the name")
-	_press(o.find_child("Stage_via", true, false), "Back")
-	eq(left.size(), 1, "Back on the first step leaves")
+	eq(left.size(), 1, "Back on the first step (the name) leaves")
 	o.show_stage("kind")
 	_press(o, "KindArena")
 	eq(o.stage, "mode", "the Arena has no deck step")
@@ -143,3 +139,19 @@ func test_guest_waits_longer_than_the_host() -> void:
 	g.free()
 	DirAccess.remove_absolute(Profile.path)
 	Profile.path = Profile.DEFAULT_PATH
+
+
+## No deck in this game yet: the chooser says so, offers to create one, and Training can't start.
+func test_training_without_decks_offers_to_create_one() -> void:
+	DirAccess.remove_absolute(DeckStore.file())
+	var t := TrainingSetup.new()
+	root().add_child(t)
+	check(t.chooser.find_child("NoDecks", true, false) != null, "says there is no deck")
+	eq((t.chooser.find_child("EditDecks", true, false) as Button).text, "Create a deck", "offers to create one")
+	var asked := []
+	t.edit_decks.connect(func(): asked.append(true))
+	t.start.connect(func(_d, _b): asked.append("started"))
+	_press(t.chooser, "EditDecks")
+	t.play()
+	eq(asked, [true], "the Collection is asked for; no game without a deck")
+	t.free()

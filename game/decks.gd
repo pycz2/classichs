@@ -66,6 +66,23 @@ static func basic(card_class: String) -> Array:
 	return deck
 
 
+## The pack's deck templates (decks/*.json), of one class or all: [{key, name, description, deck}];
+## a new deck may start as a copy of one (DeckListView). The name: the pack's `decks` term of the
+## file name, else the file's `name`; the description: its `description` ({lang: text} or a text).
+static func templates(card_class := "") -> Array:
+	var out := []
+	for r in ready():
+		var d := Deck.from_dict({"name": "", "hero": r.champion, "cards": r.cards})
+		if d == null or (card_class != "" and d.card_class() != card_class):
+			continue
+		d.name = CardText.term("decks", r.key)
+		if d.name == "":
+			d.name = str(r.get("name", r.key))
+		out.append({"key": r.key, "name": d.name, "deck": d,
+			"description": Packs.active().text_of(r.get("description", ""), Settings.language())})
+	return out
+
+
 ## The pack's ready decks (decks/*.json, by file name): [{name, champion, cards, code?, key}].
 static func ready() -> Array:
 	var p := Packs.active()

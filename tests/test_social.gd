@@ -13,7 +13,7 @@ static func root() -> Window:
 	return (Engine.get_main_loop() as SceneTree).root
 
 
-## main with a fake connection (logged in unless told otherwise).
+## main with a fake connection, in the server mode (logged in unless told otherwise).
 func _main(logged_in := true) -> Node:
 	if Settings.data.servers.is_empty():  # one server (none by default)
 		Settings.data.servers = [{"url": "ws://localhost:7377", "name": "localhost"}]
@@ -21,6 +21,7 @@ func _main(logged_in := true) -> Node:
 	var m: Node = load("res://ui/main.tscn").instantiate()
 	m.server_link = FakeLink.new()
 	root().add_child(m)
+	m.show_connections()
 	if logged_in:
 		_login(m)
 	return m
@@ -44,15 +45,25 @@ func test_shown_only_when_logged_in_and_on_every_screen() -> void:
 	_login(m)
 	eq(s.visible, true, "shown after login")
 	eq(s.button.text, "1", "one friend online")
-	eq(s.button.position, Vector2(12, 668), "bottom left in the menu")
-	for show in [m.show_collection, m.show_settings, m.show_training_setup, m.show_server]:
+	eq(s.button.position, Vector2(12, 668), "bottom left")
+	m.show_server_home()
+	m.enter_game(Packs.active())
+	for show in [m.show_collection, m.show_settings, m.show_training_setup, m.show_server, m.show_game_menu, m.show_server_home]:
 		show.call()
 		s._process(0.0)
 		check(m.social == s and s.visible, "still there on " + str(m.screen.get_class()))
 	m.start_match({"decks": [{"hero": "HERO_08", "cards": Decks.basic("MAGE")}, {"hero": "HERO_01", "cards": Decks.basic("WARRIOR")}], "seed": 1}, [false, true])
 	eq([s.in_match, s.button.position], [true, Vector2(1188, 4)], "beside the gear in a game")
-	m.show_menu()
+	m.show_server()
 	eq(s.in_match, false, "back to the corner")
+	m.show_menu()
+	s._process(0.0)
+	eq(s.visible, false, "no friends outside the server mode")
+	m.show_library()
+	s._process(0.0)
+	eq(s.visible, false, "nor without a server")
+	m.show_connections()
+	_login(m)
 	m.server_link.dispatch({"t": "logged_out"})
 	m.server_link.token = ""
 	s._process(0.0)
@@ -165,7 +176,7 @@ func test_invite_from_anywhere_starts_the_game() -> void:
 	m.free()
 
 
-## A saved session connects and logs in again at the start, without asking.
+## A saved session connects and logs in again when the server mode opens, without asking.
 func test_main_resumes_a_saved_session() -> void:
 	Settings.data.servers = [{"url": "ws://saved:7377", "name": "saved"}]
 	Settings.save()  # main reads the settings

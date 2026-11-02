@@ -235,9 +235,13 @@ valign: "top", dy}`. Without it the client lays text out itself.
 
 ## 8. Decks and missions
 
-`decks/<name>.json`: `{name, champion, cards: [ids], code?, arena?}`. `check`
+`decks/<name>.json`: `{name, champion, cards: [ids], code?, arena?, description?}`. `check`
 validates every deck by the pack's rules (size, class, copies by rarity, the
-mode's sets, collectible). File names sort the list (`01_…`).
+mode's sets, collectible). File names sort the list (`01_…`). They are the game's deck
+templates: a player's list starts empty, and a new deck (a class, then "From a template")
+may start as a copy of one; the client shows its name (the locales' `decks.<file name>`
+term, else `name`), its mana curve and `description` (a short text, at most 300
+characters: one string or `{lang: text}`). The server's trial game plays the first two.
 
 `missions/<n>.json`: a scripted game against a boss:
 

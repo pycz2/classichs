@@ -124,14 +124,14 @@ func test_the_active_pack_drives_the_whole_client() -> void:
 		check(Packs.picture("logo") != null and Packs.picture("board") != null, "its logo and board")
 		eq(CardBacks.current(), "pack", "its card back")
 		check(DeckStore.file() != DeckStore.path, "its own decks file")
-		eq(DeckStore.starter().size(), 3, "its three ready decks")
-		check(DeckStore.starter().all(func(d: Deck): return d.cards.size() == 30), "full decks")
+		eq(Decks.templates().size(), 3, "its three deck templates")
+		check(Decks.templates().all(func(t): return t.deck.cards.size() == 30 and t.description != ""), "full decks, described")
 		eq(Sound.battle_tracks(), ["battle_1", "battle_2"], "its playlist")
 		var e := GameView.Ent.new()
 		e.set_from(1, {"card": "sentry_drone", "zone": "TRAP", "tags": {"GUARD": 1}, "aura": {"tags": {"BARRIER": 1}}})
 		check(e.has("TAUNT") and e.has("DIVINE_SHIELD") and e.zone == "SECRET", "snapshots in the pack's words read as the client's"))
 	eq(Decks.classes().size(), 9, "back to Classic")
-	eq(CardBacks.current(), "classic", "the Classic back again")
+	eq(CardBacks.current(), Settings.data.card_back, "the back of the settings again")
 	check(CardDb.has("VAN_CS2_029"), "Classic cards again")
 
 
@@ -139,8 +139,11 @@ func test_sets_are_chosen_per_pack() -> void:
 	var classic := _pack(Packs.CLASSIC)
 	eq(Packs.choice(classic, "music"), "generated", "default")
 	Packs.set_choice(classic, "music", "open")
-	eq(Settings.data.music_set, "open", "Classic keeps the old setting")
+	eq(Settings.data.pack_sets[Packs.CLASSIC].music, "open", "kept per game")
 	eq(Packs.choice(_pack("neon"), "music"), "default", "another pack keeps its own")
+	Packs.server_sets = {"music": "generated"}
+	eq(Packs.choice(classic, "music"), "generated", "a server game: the server's choice")
+	Packs.server_sets = {}
 	Packs.set_choice(classic, "music", "generated")
 
 
@@ -153,11 +156,18 @@ func test_games_screen_lists_selects_activates_and_deletes() -> void:
 	eq(tiles.size(), 3, "a tile per pack")
 	eq(v.selected.origin, "imported", "the imported pack is selected")
 	check(v.find_child("DeletePack", true, false) != null, "it can be deleted")
+	var entered := []
+	v.entered.connect(func(p): entered.append(p))
 	(v.find_child("Activate", true, false) as Button).pressed.emit()
-	eq(Packs.active(), v.selected, "made active")
+	eq(entered, [v.selected], "Play this game opens it")
+	Packs.set_active(v.selected)
+	DeckStore.save_all([Decks.templates()[0].deck])  # a deck made in it
+	Packs.set_active(_pack(Packs.CLASSIC))
 	(v.find_child("DeletePack", true, false) as Button).pressed.emit()
+	eq(v.find_child("DecksGoToo", true, false) == null, true, "another pack of its id keeps the decks: no warning")
 	(v.find_child("ConfirmDelete", true, false) as Button).pressed.emit()
-	eq(Packs.active().id(), Packs.CLASSIC, "deleting the active pack falls back to Classic")
+	eq(Packs.active().id(), Packs.CLASSIC, "Classic stays active")
+	eq(DeckStore.count_local("neon"), 1, "the built-in Neonfall keeps the decks of its id")
 	eq(v.find_children("Pack_*", "Button", true, false).size(), 2, "its tile is gone")
 	v.select(_pack("neon"))
 	check(v.find_child("DeletePack", true, false) == null, "a built-in pack can't be deleted")
@@ -245,30 +255,54 @@ func _repacked(bytes: PackedByteArray, change: Dictionary) -> PackedByteArray:
 	return data
 
 
-func test_games_screen_shows_and_downloads_a_servers_games() -> void:
+## Deleting the last pack of an id deletes its decks on this device (the confirmation warns).
+func test_deleting_a_game_deletes_its_decks() -> void:
+	var manifest: Dictionary = _pack("neon").manifest.duplicate(true)
+	manifest.id = "neon-copy"
+	var p: Pack = Packs.install(_repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"),
+		{"manifest.json": JSON.stringify(manifest).to_utf8_buffer()}), "imported").get("pack")
+	check(p != null, "installed")
+	Packs.set_active(p)
+	DeckStore.save_all([Decks.templates()[0].deck])
+	Packs.set_active(_pack(Packs.CLASSIC))
+	eq(DeckStore.count_local("neon-copy"), 1, "a deck made in it")
+	var v := GamesView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(v)
+	v.select(p)
+	(v.find_child("DeletePack", true, false) as Button).pressed.emit()
+	check(v.find_child("DecksGoToo", true, false) != null, "the confirmation says its decks go too")
+	(v.find_child("ConfirmDelete", true, false) as Button).pressed.emit()
+	eq(DeckStore.count_local("neon-copy"), 0, "its decks are gone")
+	check(not FileAccess.file_exists(DeckStore.file("neon-copy")), "the file too")
+	v.free()
+
+
+func test_server_home_shows_and_downloads_a_servers_games() -> void:
 	var l := FakeLink.new()
 	l.url = "ws://h.test:7377"
 	(Engine.get_main_loop() as SceneTree).root.add_child(l)
-	var v := GamesView.new()
-	v.links = [l]
-	(Engine.get_main_loop() as SceneTree).root.add_child(v)
-	check(v.find_child("Get_*", true, false) == null, "logged out: no games listed")
 	l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"user": "me"}})
+	var v := ServerHome.new()
+	v.link = l
+	(Engine.get_main_loop() as SceneTree).root.add_child(v)
+	check(v.find_child("Game_classic-2014", true, false) != null, "no games of its own yet: its built-in Classic")
 	var bytes := _other_rules(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"))
 	var hs := _hashes(bytes)
 	var h: String = hs[1]
 	l.dispatch({"t": "packs", "server": [{"id": "neon", "name": {"en": "Neonfall"}, "version": "1.0.0", "rules_hash": hs[0],
 		"content_hash": h, "size": bytes.size(), "url": "/packs/%s.cardpack" % h}], "mine": []})
-	var get := v.find_child("Get_" + h.left(12), true, false) as Button
-	check(get != null and get.text == tr("Download"), "the server's game, to download")
-	get.pressed.emit()
+	var row := v.find_child("Game_neon", true, false)
+	var dl := row.find_child("Download", true, false) as Button
+	check(dl != null, "the server's game, to download")
+	dl.pressed.emit()
 	eq(l.http.size(), 1, "downloading")
 	l.http[0].done.call(200, bytes)
-	check(str(v.message.text).begins_with("Added"), "installed: " + v.message.text)
-	get = v.find_child("Get_" + h.left(12), true, false) as Button
-	eq(get.text, tr("Use"), "now it can be used")
-	get.pressed.emit()
-	eq(Packs.active().origin, "downloaded", "made active")
-	Packs.remove(Packs.active())
+	check(str((v.find_child("Note", true, false) as Label).text).begins_with("Downloaded"), "installed")
+	var entered := []
+	v.entered.connect(func(p): entered.append(p))
+	(v.find_child("Game_neon", true, false).find_child("Play", true, false) as Button).pressed.emit()
+	eq(entered.size(), 1, "now it can be played")
+	eq(entered[0].origin, "downloaded", "the downloaded one")
+	Packs.remove(entered[0])
 	v.free()
 	l.free()

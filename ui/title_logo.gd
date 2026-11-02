@@ -2,10 +2,14 @@ class_name TitleLogo
 extends Control
 ## The game title drawn as a vector logo: a gold dragon crest, "Classic HS" in
 ## Cinzel Decorative with shadow and two outlines, and a shine that sweeps
-## across the letters (clipped to them). A pack with a logo (manifest `logo`) shows it instead.
+## across the letters (clipped to them). A game's menu shows the game's name (text) the same way,
+## or the pack's logo (manifest `logo`) when it has one.
 
 const TEXT := "Classic HS"
 const FONT_SIZE := 86
+
+## The title (a game's name in its menu).
+var text := TEXT
 ## The coiled dragon above the title (preloaded: a texture first loaded while
 ## drawing shows white in the web build).
 const DRAGON := preload("res://ui/dragon_title.png")
@@ -37,9 +41,17 @@ func _ready() -> void:
 		tw.tween_callback(func(): _shine.position.x = -200)
 
 
-static func baseline(s: Vector2) -> Vector2:
-	var w := Fonts.title().get_string_size(TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x
-	return Vector2((s.x - w) / 2.0, s.y - 46)
+## The font size that fits the text in the logo's width.
+func font_size() -> int:
+	var fs := FONT_SIZE
+	while fs > 40 and Fonts.title().get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > size.x - 40:
+		fs -= 4
+	return fs
+
+
+func baseline() -> Vector2:
+	var w := Fonts.title().get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size()).x
+	return Vector2((size.x - w) / 2.0, size.y - 46)
 
 
 func _draw() -> void:
@@ -49,26 +61,28 @@ func _draw() -> void:
 		draw_texture_rect_region(logo, Rect2(Vector2.ZERO, size), Rect2(0, (logo.get_height() - h) / 2.0, logo.get_width(), h))
 		return
 	var f := Fonts.title()
-	var at := baseline(size)
+	var at := baseline()
+	var fs := font_size()
 	var dragon: Texture2D = DRAGON
 	var dw := 250.0
 	var dh := dw * dragon.get_height() / dragon.get_width()
 	draw_texture_rect(dragon, Rect2(Vector2((size.x - dw) / 2.0, 34 - dh * 0.35), Vector2(dw, dh)), false)
-	draw_string(f, at + Vector2(5, 7), TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color(0, 0, 0, 0.55))
-	draw_string_outline(f, at, TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 20, Color("1b0f06"))
-	draw_string_outline(f, at, TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 10, Color("8a6d2a"))
-	draw_string_outline(f, at, TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, 4, Color("f7dc7a"))
+	draw_string(f, at + Vector2(5, 7), text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(0, 0, 0, 0.55))
+	draw_string_outline(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 20, Color("1b0f06"))
+	draw_string_outline(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 10, Color("8a6d2a"))
+	draw_string_outline(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 4, Color("f7dc7a"))
 
 
 class _Letters:
 	extends Control
 
 	func _draw() -> void:
+		var logo: TitleLogo = get_parent()
 		var f := Fonts.title()
-		var at := TitleLogo.baseline(size)
-		draw_string(f, at, TitleLogo.TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, TitleLogo.FONT_SIZE, Color("e8b830"))
+		var at := logo.baseline()
+		draw_string(f, at, logo.text, HORIZONTAL_ALIGNMENT_LEFT, -1, logo.font_size(), Color("e8b830"))
 		# a lighter top half of the letters, like polished gold
-		draw_string(f, at + Vector2(0, -2), TitleLogo.TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, TitleLogo.FONT_SIZE, Color(1, 0.93, 0.6, 0.35))
+		draw_string(f, at + Vector2(0, -2), logo.text, HORIZONTAL_ALIGNMENT_LEFT, -1, logo.font_size(), Color(1, 0.93, 0.6, 0.35))
 
 
 class _Shine:

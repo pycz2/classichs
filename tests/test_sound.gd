@@ -86,13 +86,28 @@ func test_without_sound_node_everything_is_silent() -> void:
 
 func test_music_sets() -> void:
 	eq(Sound.path_for("menu"), "music/generated/menu.wav", "generated menu music")
-	Settings.data.music_set = "open"
+	Packs.set_choice(Packs.active(), "music", "open")
 	eq(Sound.path_for("menu"), "music/open/menu.ogg", "open menu music")
 	eq(Sound.path_for("battle_2"), "music/open/battle_2.ogg", "open battle music")
 	eq(Sound.path_for("attack"), "sounds/generated/attack.wav", "sounds stay the generated ones")
 	for slot in ["menu", "battle_1", "battle_2", "battle_3"]:
 		check(Packs.active().stream(Sound.path_for(slot)) != null, "the open track is there: " + slot)
-	Settings.data.music_set = "generated"
+	Packs.set_choice(Packs.active(), "music", "generated")
+
+
+## The client's own screens play one neutral menu track of the client, a game's menu the game's.
+func test_the_shell_plays_its_own_menu_music() -> void:
+	var s := Sound.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(s)
+	Packs.set_shell(true)
+	Sound.music("menu")
+	eq(s.music_file, "shell", "the client's menu track")
+	check(s._music.stream != null and s._music.stream.resource_path == Sound.SHELL_MENU, "of the client, no pack's")
+	Packs.set_shell(false)
+	Sound.music("menu")
+	eq(s.music_file, "menu", "a game's menu: its own")
+	check(s._music.stream != null and s._music.stream.resource_path != Sound.SHELL_MENU, "the pack's")
+	s.free()
 
 
 func test_a_pack_brings_its_own_sounds_and_playlist() -> void:
