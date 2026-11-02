@@ -150,6 +150,7 @@ func _ready() -> void:
 	if link:
 		link.message.connect(_on_server)
 		link.closed.connect(refresh.unbind(1))
+		link.packs_changed.connect(refresh)
 		if link.logged_in():
 			link.send({"t": "decks"})
 
@@ -319,9 +320,9 @@ func export_code(i: int) -> String:
 # --- decks kept on the server (server/README.md, "Decks") ----------------------------------------
 
 ## Whether decks can be kept on the server now (else the ticks are hidden): logged in on one
-## that keeps decks and has this game.
+## that keeps decks and has this game (its packs known).
 func server_on() -> bool:
-	return link != null and _server_ok and link.logged_in() and link.has_game(Packs.active(), true)
+	return link != null and _server_ok and link.logged_in() and link.has_packs and link.has_game(Packs.active(), true)
 
 
 ## The deck's id on the server (0 = not kept there).
@@ -361,7 +362,8 @@ func _push(d: Deck) -> void:
 		_refs += 1
 		msg["ref"] = str(_refs)
 		_pending[msg.ref] = d
-	link.send(link.with_pack(msg))
+	msg["pack"] = Packs.active().rules_hash()  # (a server that keeps decks knows packs)
+	link.send(msg)
 
 
 static func _same(d: Deck, sd: Dictionary) -> bool:
@@ -399,7 +401,7 @@ func _on_server(msg: Dictionary) -> void:
 				_push(d)
 			refresh()
 		"error":
-			if msg.get("code") in ["deck", "bad_name", "decks_full"]:
+			if msg.get("code") in ["deck", "bad_name", "decks_full", "pack"]:
 				if not _pending.is_empty():  # (answers come in order: the oldest new deck)
 					_pending.erase(_pending.keys()[0])
 				message.text = Rules.tr_error(str(msg.get("text", "")))

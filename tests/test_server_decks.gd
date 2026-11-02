@@ -27,6 +27,7 @@ func _view(local: Array, logged_in := true, list := []) -> DeckListView:
 	root().add_child(v)
 	if logged_in:
 		l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"user": "anna"}})
+		l.dispatch({"t": "packs", "server": [], "mine": []})
 		l.dispatch({"t": "decks", "list": list})
 	return v
 
@@ -58,6 +59,8 @@ func test_no_tick_without_a_server_session() -> void:
 	eq(_sent(v, "decks").size(), 1, "the login asks for the server's decks")
 	check(_tick(v, 0) == null, "no tick before the server says it keeps decks")
 	v.link.dispatch({"t": "decks", "list": []})
+	check(_tick(v, 0) == null, "nor before its packs are known")
+	v.link.dispatch({"t": "packs", "server": [], "mine": []})
 	check(_tick(v, 0) != null and not _tick(v, 0).button_pressed, "then a tick, off")
 	(v.link as FakeLink).up = false
 	v.refresh()
@@ -70,7 +73,7 @@ func test_tick_saves_to_the_server_and_untick_deletes_there() -> void:
 	_tick(v, 1).button_pressed = true
 	var s: Array = _sent(v, "deck_save")
 	eq(s.size(), 1, "ticked: saved to the server")
-	eq([s[0].deck.name, s[0].deck.cards.size(), s[0].has("id")], ["B", 30, false], "a new deck there")
+	eq([s[0].deck.name, s[0].deck.cards.size(), s[0].has("id"), s[0].pack], ["B", 30, false, Packs.active().rules_hash()], "a new deck there, in this game")
 	check(_tick(v, 1).button_pressed, "the tick stays on while the answer is on the way")
 	v.link.dispatch({"t": "deck_saved", "ref": s[0].ref, "deck": {"id": 42, "pack": Packs.CLASSIC, "name": "B",
 		"hero": "HERO_08", "cards": s[0].deck.cards, "updated": 1000}})
