@@ -1,0 +1,62 @@
+{
+  "id": 5,
+  "champion": "iris_null",
+  "boss": "boss_archon",
+  "boss_power": "deploy",
+  "powers_locked": false,
+  "boss_guarded": false,
+  "end_turn_block": {
+    "while_can_play": false,
+    "while_can_attack": false
+  },
+  "player": {
+    "mana": 2,
+    "hand": [
+      "zero_day",
+      "cache_raid",
+      "signal_leech"
+    ],
+    "deck": [
+      "bitrot_daemon",
+      "lattice_diver",
+      "packet_storm",
+      "firmware_rot",
+      "recursive_hound",
+      "zero_day",
+      "static_lock",
+      "lattice_phantom",
+      "hard_reset",
+      "packet_storm",
+      "billboard_leviathan",
+      "corrupt",
+      "rooftop_sniper",
+      "compiler_wyrm",
+      "cache_raid"
+    ]
+  },
+  "boss_deck": [
+    "courier_drone",
+    "scrap_drone",
+    "medic_drone",
+    "grid_overseer",
+    "swarm_wrangler",
+    "knockoff_mech",
+    "medic_drone",
+    "enforcement_mech",
+    "scrap_drone",
+    "grid_overseer",
+    "swarm_wrangler",
+    "knockoff_mech",
+    "enforcement_mech",
+    "courier_drone"
+  ],
+  "mulligan": false,
+  "reward": "packet_storm",
+  "hints": [
+    "power",
+    "chain",
+    "wipe",
+    "attack"
+  ],
+  "script": null
+}

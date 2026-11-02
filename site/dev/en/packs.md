@@ -344,7 +344,11 @@ A mission (`missions/<n>.json`) is a scripted game against a boss. See the next 
 
 ## Tutorial
 
-What exists today: **missions in the pack**. The Tutorial item appears in the game's menu when the active pack has `missions/` files; Classic's six missions (Hogger, Millhouse, Lorewalker Cho, King Mukla, Hemet, Illidan) are such files. A mission has:
+The Tutorial item appears in the game's menu when the active pack has a `tutorial.json`: the missions in order, the pages shown before each, when each hint shows ([format](../ref/format.html#12-tutorial-tutorialjson-and-scene-effects)). The missions themselves are `missions/<n>.json` files.
+
+**A worked example: Neonfall's tutorial** (`packs/neon/tutorial.json`, `packs/neon/missions/`). Six missions from the flooded streets up to the corporate towers, each a boss of the setting with its own lines: Brick the bouncer (a card, combat, champions), Sharkey the pawnbroker (Mana, spells with a target, Jam), Glass Mira (Boot, Flatline, minions first), Dr. Varga (Firewall, Overclock and Heat, Cloak), ARCHON (Champion Powers, Chain, Wipe and Glitch) and Director Vale with the real Hostile Merger deck (Protocols, Hardlight, Encrypted). The bosses are `CHAMPION` cards of the pack (`boss_*`, set `token`); the first two missions use the pack's `scripts/tutorial.lua#ench:tutorial_guard`; rain falls over the list and the first and last boards; the texts are in all eight `locales/<lang>.json` (`tutorial`, `missions`, `hints`).
+
+A mission has:
 
 | Field | Meaning |
 |---|---|

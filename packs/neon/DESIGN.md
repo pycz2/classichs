@@ -3,8 +3,8 @@
 Pack id `neon`, name **Neonfall** (all languages). Phase A4 of
 `docs/superpowers/plans/2026-10-16-game-packs.md`: an original cyberpunk pack for
 the same engine that runs Classic. 3 champions, 60 collectible cards (13 per
-class + 21 neutral), 7 tokens, 3 starter decks, 8 languages, own art, sounds and
-music. Every name, card, picture and sound is new; nothing refers to an existing
+class + 21 neutral), 7 tokens, 5 tutorial bosses, 3 starter decks, a six-mission
+tutorial, 8 languages, own art, sounds and music. Every name, card, picture and sound is new; nothing refers to an existing
 game, book, film or brand.
 
 The card tables, curves and deck lists below are generated from `cards.json`,
@@ -213,7 +213,7 @@ similar terms; the hackers are *ghosts*, the net is *the Lattice*).
 
 ### Ghost (GHOST)
 
-Curve: 0: 0 | 1: 2 | 2: 3 | 3: 3 | 4: 2 | 5: 1 | 6: 1 | 7+: 1 | total 13
+Curve: 0: 0 | 1: 2 | 2: 2 | 3: 4 | 4: 2 | 5: 1 | 6: 1 | 7+: 1 | total 13
 
 | Card | Type | Rarity | Cost | Stats | Text | Engine primitives | Value note |
 |---|---|---|---|---|---|---|---|
@@ -221,14 +221,14 @@ Curve: 0: 0 | 1: 2 | 2: 3 | 3: 3 | 4: 2 | 5: 1 | 6: 1 | 7+: 1 | total 13
 | **Zero-Day** `zero_day` | Spell | Common | 1 | - | Deal 1 damage to a minion and **Jam** it. **Chain:** Deal 3 damage instead. | combo, damage, freeze, spell, targets | 1 damage + Jam (~2.5) for 1; Chain makes it 3 + Jam (~4.5), premium only after another card. |
 | **Cache Raid** `cache_raid` | Spell | Common | 2 | - | Draw a card. **Chain:** Draw 2 cards instead. | combo, draw, spell | Alone it only replaces itself (weak on purpose); with Chain +1 card for 2 mana. |
 | **Signal Leech** `signal_leech` | Minion (Daemon) | Common | 2 | 1/2 | **Bandwidth +1**. After you cast a spell, deal 1 damage to the enemy champion. | SPELL_POWER, damage, on:after_spell | 1/2 (3) + Bandwidth (1) + 1 face damage per spell (~1) = 5 = budget. |
-| **Static Lock** `static_lock` | Spell | Common | 3 | - | **Jam** a minion and the minions next to it. Draw a card. | draw, freeze, spell, targets | Jam up to 3 minions (~2) and replace itself (2). |
 | **Corrupt** `corrupt` | Spell | Common | 3 | - | Transform an enemy minion into a 0/3 Glitch with **Firewall**. | spell, targets, transform | Hard removal at 3, but leaves the opponent a 0/3 Firewall wall that costs you tempo. |
 | **Firmware Rot** `firmware_rot` | Spell | Rare | 3 | - | **Wipe** a minion, then deal 2 damage to it. | damage, silence, spell, targets | Wipe (2) + 2 damage (3) = 5; answers buffed or Firewall minions. |
-| **Lattice Diver** `lattice_diver` | Minion | Common | 3 | 3/2 | **Cloak**. **Chain:** Return an enemy minion that costs (3) or less to its owner's hand. | STEALTH, combo, return_to_hand, targets | 3/3 (6) + Cloak (1) = 7 = budget (balance pass: 3/2); Chain bounce (~2) for tempo turns. |
+| **Lattice Diver** `lattice_diver` | Minion | Common | 3 | 3/2 | **Cloak**. **Chain:** Return an enemy minion that costs (3) or less to its owner's hand. | STEALTH, combo, return_to_hand, targets | 3/2 (5) + Cloak (1) = 6 of 7; Chain bounce (~2) for tempo turns (3/3 in phase E1, back to 3/2 once the bot plays Chain and Jumpstart, bot.depth 2). |
+| **Static Lock** `static_lock` | Spell | Common | 3 | - | **Jam** a minion and the minions next to it. Draw a card. | draw, freeze, spell, targets | Jam up to 3 minions (~2) and replace itself (2); (3) since bot.depth 2: Iris's best card at (2). |
 | **Packet Storm** `packet_storm` | Spell | Rare | 4 | - | Deal 2 damage to all enemy minions. **Chain:** Deal 3 damage instead. | combo, damage, spell | One-sided 2 AoE for 4 (fair), 3 with Chain (strong, needs 5+ mana in practice). |
 | **Recursive Hound** `recursive_hound` | Minion (Daemon) | Rare | 4 | 4/3 | **Flatline:** Add a 2/1 Hound Shard to your hand. | add_to_hand, on_death | 4/3 (7) + a 2/1 in hand (~2) = 9 = budget. |
 | **Root Access** `root_access` | Spell | Epic | 5 | - | Take control of a random enemy minion. Your opponent draws 2 cards. | draw, random, spell, take_control | Steal a random minion (~6-10) but give 2 cards (-5): a swing card, not a value card. |
-| **Compiler Wyrm** `compiler_wyrm` | Minion (Daemon) | Epic | 6 | 4/5 | Your spells cost (1) less. | cost_aura | 4/5 (9) + spells cost (1) less (~2-3) = 11-12 of 13 (4/6 before the second balance pass). |
+| **Compiler Wyrm** `compiler_wyrm` | Minion (Daemon) | Epic | 6 | 4/5 | Your spells cost (1) less. | cost_aura | 4/5 (9) + spells cost (1) less (~2-3) = 11-12 of 13; was 4/6, Iris too strong with a bot that plays Chain (bot.depth 2). |
 | **SABLE, the Unwritten** `sable` | Minion (Daemon) | Legendary | 7 | 6/6 | **Boot:** **Wipe** all enemy minions. | on_play, silence | 6/6 (12) of 15; mass Wipe of the enemy board pays the rest when they have buffs, Firewall or Flatline. |
 
 ### Chromehead (CHROME)
@@ -316,6 +316,11 @@ Curve: 0: 0 | 1: 3 | 2: 4 | 3: 4 | 4: 3 | 5: 3 | 6: 2 | 7+: 2 | total 21
 | **Hound Shard** `hound_shard` | Minion (GHOST) | 1 | 2/1 |  |  |
 | **Hard Reset** `hard_reset` | Spell (EXEC) | 2 | - | **Wipe** a minion. | silence, spell, targets |
 | **Retention Bonus** `retention_bonus` | Spell (EXEC) | 2 | - | Give a minion +2 Health and **Firewall**. | buff, set_tag, spell, targets |
+| **Brick** `boss_brick` | Champion (NEUTRAL) | - | 10 HP | Bouncer of the Halo Room. Nobody gets past the rope without his nod. |  |
+| **Sharkey** `boss_sharkey` | Champion (NEUTRAL) | - | 20 HP | Pawnbroker of the night market. Everything has a price, and his is higher. |  |
+| **Glass Mira** `boss_mira` | Champion (GHOST) | - | 25 HP | Leader of the Glasshounds. You never catch her, only her crew. |  |
+| **Dr. Lucent Varga** `boss_varga` | Champion (NEUTRAL) | - | 26 HP | Back-alley surgeon of the Undertow. Her patients leave changed. |  |
+| **ARCHON** `boss_archon` | Champion (EXEC) | - | 20 HP | Sunvault's executive intelligence. It never sleeps and never stops deploying. |  |
 
 ### Starter decks
 
@@ -327,7 +332,7 @@ Curve: 0: 0 | 1: 10 | 2: 8 | 3: 1 | 4: 4 | 5: 4 | 6: 2 | 7+: 1 | minions 22, spe
 
 Curve: 0: 0 | 1: 8 | 2: 9 | 3: 7 | 4: 3 | 5: 1 | 6: 1 | 7+: 1 | minions 18, spells 7, weapons 5
 
-**Zero Trace** (`decks/zero_trace.json`, Iris Null): 1x Ghostwalk (1), 2x Zero-Day (1), 2x Courier Drone (1), 2x Cache Raid (2), 2x Signal Leech (2), 2x Static Lock (3), 2x Chrome Stray (2), 2x Corrupt (3), 1x Firmware Rot (3), 2x Lattice Diver (3), 2x Bit-Rot Daemon (3), 2x Packet Storm (4), 1x Recursive Hound (4), 1x Lattice Phantom (4), 2x Rooftop Sniper (4), 1x Root Access (5), 1x Billboard Leviathan (5), 1x Compiler Wyrm (6), 1x SABLE, the Unwritten (7)
+**Zero Trace** (`decks/zero_trace.json`, Iris Null): 1x Ghostwalk (1), 2x Zero-Day (1), 2x Courier Drone (1), 2x Cache Raid (2), 2x Signal Leech (2), 2x Chrome Stray (2), 2x Corrupt (3), 1x Firmware Rot (3), 2x Lattice Diver (3), 2x Static Lock (3), 2x Bit-Rot Daemon (3), 2x Packet Storm (4), 1x Recursive Hound (4), 1x Lattice Phantom (4), 2x Rooftop Sniper (4), 1x Root Access (5), 1x Billboard Leviathan (5), 1x Compiler Wyrm (6), 1x SABLE, the Unwritten (7)
 
 Curve: 0: 0 | 1: 5 | 2: 6 | 3: 9 | 4: 6 | 5: 2 | 6: 1 | 7+: 1 | minions 17, spells 13, weapons 0
 
@@ -351,7 +356,8 @@ Curve: 0: 0 | 1: 5 | 2: 6 | 3: 9 | 4: 6 | 5: 2 | 6: 1 | 7+: 1 | minions 17, spel
   digital painting — rain-soaked neon megacity at night, wet reflective
   surfaces, chrome and glass, magenta / cyan / amber neon, haze and rain, high
   contrast, one clear subject, no text. Each card has its own concept (`look`).
-- Pictures: every card, token, champion and power (73), plus `card_back`
+- Pictures: every card, token, champion and power (73; the five tutorial bosses reuse
+  the pictures of the cards they are: Club Bouncer, Pawn Shark, Glasshound Runner, Varga, ARCHON), plus `card_back`
   (2:3), `logo`, `board` (table) and `menu` backgrounds (16:9).
 - Sounds: the client's event names (`game/sound.gd`), synthesized: FM bells,
   bit-crushed hits, detuned saws, filtered noise (`tools/neon_audio.py`).
@@ -520,3 +526,29 @@ Billboard Leviathan 59 %; lowest Asset Seizure 37 %, Chrome Up 41 %. The
 Protocols (Asset Seizure, Lockout, Golden Parachute: 34–43 %) are the weakest
 cards as the bot plays them (leftover Mana, no timing); a person may find
 them better. Watch next: Billboard Leviathan, Lattice Phantom, the Protocols.
+
+## 10. Tutorial
+
+`tutorial.json` and `missions/1–6.json` (format: docs/packs/format.md §8, §12). A run up
+the city, from the Undertow to the Crown; the player takes each champion in turn, and each
+mission adds what the one before did not show. The bosses are `CHAMPION` cards in the
+`token` set (`boss_*`); the last one is Director Vale himself.
+
+| # | Boss (HP) | You | Teaches (intro pages) | Hints | Reward |
+|---|---|---|---|---|---|
+| 1 | Brick, the Halo Room's bouncer (10) | Mother Rust | a minion card, combat, champions | play, attack, end turn | Club Bouncer |
+| 2 | Sharkey, the night market's pawnbroker (20) | Iris Null | Mana, spells with a target (Jam) | mana, play, spell, jam, attack | Zero-Day |
+| 3 | Glass Mira of the Glasshounds (25, can't be attacked while she has minions) | Director Vale | Boot, Flatline, minions first | trade, boot, flatline, attack | Recursive Hound |
+| 4 | Dr. Lucent Varga (26) | Mother Rust | Firewall, Overclock and Heat, Cloak and Dual-Core | tooltip, firewall, overclock, cloak | Hot Courier |
+| 5 | ARCHON (20, Deploy every turn) | Iris Null | Champion Powers (all three) and Plating, Chain, Wipe and Glitch | power, chain, wipe, attack | Packet Storm |
+| 6 | Director Vale (30) with the real Hostile Merger deck | Mother Rust with Redline Rush | Protocols, Hardlight and Encrypted, all together | power, plating, protocol, hardlight, encrypted | Vulka |
+
+Missions 1–4 lock both powers; 1–2 keep the player's champion above 0 Health
+(`scripts/tutorial.lua#ench:tutorial_guard`) and keep the turn open while a card can be played
+or a minion can attack; 3 keeps it open while a minion can attack. The bosses start with an
+empty hand and draw one card a turn, so every mission is won by playing on curve: the
+engine's bot playing the player's side wins all six (turns 9–19). The decks are in a fixed
+order, top card first; mission 6 is both starter decks, reordered. Rain falls over the
+mission list and the first and last boards. The boss lines are in character: the bouncer's
+list, the pawnbroker's interest, Mira's taunts, Varga's surgery, ARCHON's capital letters
+and Vale's corporate euphemisms.

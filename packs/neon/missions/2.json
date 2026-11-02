@@ -1,0 +1,59 @@
+{
+  "id": 2,
+  "champion": "iris_null",
+  "boss": "boss_sharkey",
+  "boss_power": "shakedown",
+  "powers_locked": true,
+  "boss_guarded": false,
+  "end_turn_block": {
+    "while_can_play": true,
+    "while_can_attack": true
+  },
+  "player": {
+    "mana": 1,
+    "hand": [
+      "hound_shard",
+      "zero_day"
+    ],
+    "deck": [
+      "chrome_stray",
+      "bitrot_daemon",
+      "zero_day",
+      "holo_busker",
+      "static_lock",
+      "swarm_wrangler",
+      "packet_storm",
+      "chrome_stray",
+      "vat_clone",
+      "zero_day",
+      "bitrot_daemon",
+      "swarm_wrangler",
+      "packet_storm",
+      "vat_clone"
+    ]
+  },
+  "boss_deck": [
+    "scrap_drone",
+    "knockoff_mech",
+    "hound_shard",
+    "chrome_stray",
+    "pawn_shark",
+    "knockoff_mech",
+    "scrap_drone",
+    "chrome_stray",
+    "pawn_shark",
+    "hound_shard",
+    "knockoff_mech",
+    "scrap_drone"
+  ],
+  "mulligan": false,
+  "reward": "zero_day",
+  "hints": [
+    "mana",
+    "play",
+    "spell",
+    "jam",
+    "attack"
+  ],
+  "script": "scripts/tutorial.lua#ench:tutorial_guard"
+}
