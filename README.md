@@ -97,7 +97,7 @@ Every folder in `art/` is a picture set, selectable in Settings → Card art:
 | Folder | What is there |
 |---|---|
 | `rust/engine/` | The rules engine in Rust: every rule and card, the bot, the Arena draft, deck rules, tutorial missions; a JSON API. The same crate runs in the game server, in the game through GDExtension (`rust/godot`, desktop and Android) and in the browser as WebAssembly (`rust/wasm` + `web/rules.js`). See [its README](rust/engine/README.md) and [the design](docs/superpowers/specs/2026-10-15-thin-client-design.md). |
-| `game/` | `Rules` (the bridge to the engine), `GameView` (the game as the table draws it), the match controller, decks and deck codes, tutorial texts, settings, locale, sound, deck tracker. |
+| `game/` | `Rules` (the bridge to the engine), `GameView` (the game as the table draws it), the match controller, decks and deck codes, the active pack's tutorial (`Missions`, `Tutorial`: its missions, intro pages and hints come from the pack's `tutorial.json`, docs/packs/format.md §12), settings, locale, sound, deck tracker. |
 | `net/` | Transport (WebRTC data channel), signalling codes, session protocol (hello, start, actions with state hashes, emotes). |
 | `ui/` | All screens, built in code; procedural art. |
 | `tests/` | GDScript tests of the screens, flows, network protocols and helpers (through the engine). The rules are tested in Rust (`cd rust && cargo test`). |

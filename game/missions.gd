@@ -1,63 +1,47 @@
 class_name Missions
 extends RefCounted
-## The six tutorial missions as the screens show them (boss, intro, lines, reward,
-## hints). Their decks and rules live in the engine (rust/engine/src/missions.rs):
-## a mission's game is the engine's `new` with `mission`.
+## The tutorial of the active pack (its tutorial.json, docs/packs/format.md §12): the missions in
+## order, the unlock rule, each mission's boss, reward, hints, texts and intro pages. A mission's
+## decks and rules are the engine's (missions/<n>.json; its game is the engine's `new` with `mission`).
 
-const JAINA := "HERO_08"
-const FIREBLAST := "VAN_HERO_08bp"
 
-const LIST := [
-	{
-		"boss": "TU4a_001",
-		"intro": "Play minions and use them to attack Hogger. Deal enough damage and you win!",
-		"lines": {"start": "Grrr! Hogger smash puny mage!", "hurt": "Rrraaagh! Hogger angry!", "defeat": "Nooo... Hogger... tired..."},
-		"reward": "VAN_CS2_023", "reward_line": "Oh yeah!",
-		"hints": ["play", "attack", "end_turn"],
-	},
-	{
-		"boss": "TU4b_001",
-		"intro": "Expend your Mana each turn to crush this annoying gnome!",
-		"lines": {"start": "Millhouse Manastorm is here! Prepare to be amazed!", "hurt": "Hey, that hurt! Wait till you see my big spell!",
-			"defeat": "No fair! I was just getting to the good part!"},
-		"reward": "VAN_EX1_015", "reward_line": "This is quite impressive.",
-		"hints": ["mana", "play", "attack", "raid_leader"],
-	},
-	{
-		"boss": "TU4f_001",
-		"intro": "When minions fight each other, they both take damage.",
-		"lines": {"start": "Greetings, traveler. Let us learn together.", "hurt": "A wise move. But balance must be kept.",
-			"defeat": "Your skill honors the path. Go well."},
-		"reward": "VAN_CS2_124", "reward_line": "Hot hot hot!",
-		"hints": ["trade", "heal", "battlecry", "attack"],
-	},
-	{
-		"boss": "TU4c_001",
-		"intro": "Don't understand a card? Mouse-over it!",
-		"lines": {"start": "Mukla want bananas! You no take!", "hurt": "Ooh ooh! Mukla call big brother!", "defeat": "Mukla... share bananas..."},
-		"reward": "VAN_CS2_022", "reward_line": "You are on a roll!",
-		"hints": ["tooltip", "taunt", "charge", "buff"],
-	},
-	{
-		"boss": "TU4d_001",
-		"intro": "Kill his minions or he'll overwhelm you!",
-		"lines": {"start": "Fresh game! Let the hunt begin!", "hurt": "You're a tough one to bag!", "defeat": "Well, I'll be... the hunter becomes the hunted."},
-		"reward": "VAN_CS2_213", "reward_line": "That was incredible.",
-		"hints": ["hero_power", "attack"],
-	},
-	{
-		"boss": "TU4e_001",
-		"intro": "This fight is totally not fair. Blame the terrible game designers.",
-		"lines": {"start": "You are not prepared!", "hurt": "I will not be stopped!", "defeat": "Impossible... beaten by a novice?"},
-		"reward": "VAN_EX1_277", "reward_line": "Magnificent!",
-		"hints": ["weapon", "hero_power"],
-	},
-]
+## The active pack's tutorial.json ({} when it has none).
+static func tutorial() -> Dictionary:
+	var p := Packs.active()
+	return p.tutorial() if p else {}
+
+
+## The mission ids in the order the tutorial plays them.
+static func ids() -> Array:
+	return tutorial().get("missions", []).map(func(m): return int(m.get("id", 0)) if m is Dictionary else 0)
 
 
 static func count() -> int:
-	return LIST.size()
+	return ids().size()
 
 
+## The mission after n in the tutorial (0 = n is the last).
+static func next(n: int) -> int:
+	var l := ids()
+	var i := l.find(n)
+	return l[i + 1] if i >= 0 and i + 1 < l.size() else 0
+
+
+## Mission n: {id, boss, reward, hints, intro, lines {start, hurt, defeat}, reward_line, pages, effect},
+## its texts in the interface language.
 static func get_mission(n: int) -> Dictionary:
-	return LIST[n - 1]
+	var p := Packs.active()
+	var m = p.json("missions/%d.json" % n) if p else null
+	if not m is Dictionary:
+		m = {}
+	var t: Dictionary = {}
+	for x in tutorial().get("missions", []):
+		if x is Dictionary and int(x.get("id", 0)) == n:
+			t = x
+	var say := func(path: Array) -> String: return p.text(["missions", str(n)] + path) if p else ""
+	var lines := {}
+	for k in ["start", "hurt", "defeat"]:
+		lines[k] = say.call(["lines", k])
+	return {"id": n, "boss": str(m.get("boss", "")), "reward": str(m.get("reward", "")), "hints": m.get("hints", []),
+		"intro": say.call(["intro"]), "lines": lines, "reward_line": say.call(["reward_line"]),
+		"pages": t.get("intro", []) if t.get("intro") is Array else [], "effect": t.get("effect")}

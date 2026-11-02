@@ -21,7 +21,7 @@ var _twice := false  # a file is in the zip twice
 const MIB := 1024 * 1024
 ## docs/packs/format.md, "Size limits".
 const LIMITS := {"pack": 128 * MIB, "unpacked": 256 * MIB, "files": 10000, "file": 16 * MIB, "image": 2 * MIB}
-const TOP_FILES := ["manifest.json", "rules.json", "cards.json", "README.md", "CREDITS.md", "LICENSE.txt"]
+const TOP_FILES := ["manifest.json", "rules.json", "cards.json", "tutorial.json", "README.md", "CREDITS.md", "LICENSE.txt"]
 const DIRS := ["scripts", "locales", "layout", "decks", "missions", "ui", "art", "sounds", "music", "voice"]
 const PRESENTATION := ["fx", "sounds", "voice"]
 const IMAGE_EXT := ["png", "jpg", "jpeg", "webp"]
@@ -131,6 +131,29 @@ func lang_for(lang: String) -> String:
 		if str(l).get_slice("_", 0) == lang.get_slice("_", 0):
 			return l
 	return default_locale()
+
+
+## A text of the pack's locales by its path (["tutorial", key], ["missions", "1", "intro"]) in a
+## language (the interface's by default), else in the default language; "" when neither has it.
+func text(path: Array, lang := "") -> String:
+	for code in [lang_for(lang if lang != "" else TranslationServer.get_locale()), default_locale()]:
+		var v: Variant = locale(code)
+		for k in path:
+			v = v.get(k) if v is Dictionary else null
+		if v is String:
+			return v
+	return ""
+
+
+## tutorial.json (docs/packs/format.md §12): {missions, unlock, hints, effect?}; {} when the pack has none.
+func tutorial() -> Dictionary:
+	var t = json("tutorial.json")
+	return t if t is Dictionary and t.get("missions") is Array else {}
+
+
+## Whether the pack has a tutorial to show (at least one mission).
+func has_tutorial() -> bool:
+	return not tutorial().get("missions", []).is_empty()
 
 
 ## A {lang: text} of the manifest in a language (the default language, then any).
