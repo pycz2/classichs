@@ -3,6 +3,7 @@
 
 - the guides, written in Markdown in English and Russian: site/dev/<lang>/<page>.md
   -> dev/<lang>/<page>.html;
+- the architecture map, made by tools/arch_page.py from tools/arch_data.py -> dev/<lang>/architecture.html;
 - the API reference, made from the engine itself (tools/lua_api.py: rust/engine/src/lua.rs,
   with the words of docs/packs/api.md) -> dev/<lang>/api.html;
 - the format reference, docs/packs/*.md as they are (English) -> dev/ref/<page>.html.
@@ -34,6 +35,7 @@ PAGES = {
     "lua": {"en": "Card scripts in Lua", "ru": "Скрипты карт на Lua"},
     "api": {"en": "Engine API (g.*)", "ru": "API движка (g.*)"},
     "testing": {"en": "Testing and validating", "ru": "Проверка и тесты"},
+    "architecture": {"en": "Architecture", "ru": "Архитектура"},
 }
 ## docs/packs/<name>.md rendered as the reference (English).
 REFERENCE = {"format": "Pack format", "rules": "rules.json", "cards": "cards.json", "fx": "Visual effects",
@@ -331,7 +333,7 @@ def page(title, body, toc, lang, here, depth, nm, other=None):
 <link rel="stylesheet" href="{up}style.css">
 <link rel="stylesheet" href="{up}dev.css">
 </head>
-<body class="docs">
+<body class="docs{" wide" if here == "architecture" else ""}">
 <header class="top">
   <a class="brand" href="{up}">{html.escape(nm['name'])}<span class="brand-sub">dev</span></a>
   <nav>
@@ -377,6 +379,11 @@ def build(out):
             if key == "api":
                 body, toc = api_page(lang, Ctx(api_links))
                 title = API_TEXT[lang]["title"]
+            elif key == "architecture":
+                import arch_page  # here, not at the top: it imports this module
+                body, toc = arch_page.body(lang)
+                title = PAGES[key][lang]
+                body += f'\n<p class="src"><a href="{GITHUB}tools/arch_data.py">{WORDS[lang]["edit"]}</a></p>'
             else:
                 src = SITE / "dev" / lang / f"{key}.md"
                 body, toc = markdown(fill(src.read_text(encoding="utf-8"), nm), Ctx(api_links))
@@ -403,6 +410,7 @@ def build(out):
 </head><body style="background:#070a14;color:#e8f4ff;font-family:sans-serif"><p><a href="en/index.html" style="color:#3ee8ff">English</a> · <a href="ru/index.html" style="color:#3ee8ff">Русский</a></p></body></html>
 """, encoding="utf-8")
     shutil.copy(SITE / "dev.css", out.parent / "dev.css")
+    shutil.copy(SITE / "dev" / "arch.js", out / "arch.js")
     print(f"site docs: {len(written)} pages in {out}")
     return written
 

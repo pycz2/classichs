@@ -122,6 +122,8 @@
     "k3.d": "Cada hook y cada función g.* con sus argumentos, generados a partir del código fuente del propio motor.",
     "k4.t": "Pruebas",
     "k4.d": "Qué informa pack.py check, partidas bot contra bot con un solo comando, las herramientas de depuración del juego.",
+    "k5.t": "Arquitectura",
+    "k5.d": "Cómo está construido todo el juego: un diagrama de bloques y luego cada parte por dentro — el cliente, el motor de reglas y su Lua, los bots, el juego por código, el servidor, el sitio y el despliegue — con flujos paso a paso enlazados al código.",
     "makers.open": "Abrir la documentación",
     "makers.lang": "Las guías están en inglés y ruso.",
     "shot.games.tab": "Juegos",
