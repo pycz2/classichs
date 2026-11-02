@@ -15,9 +15,11 @@ godot --path . --script res://tools/make_splash.gd  # the splash shows the versi
 godot --headless --path . --import >/dev/null
 godot --headless --path . --export-release "Web" "$OUT/play/index.html"
 tools/web_finish.sh "$OUT/play"  # the rules engine, version.json, always the newest build
-cp -R site/index.html site/style.css site/main.js site/favicon.svg site/og.jpg site/i18n "$OUT/"  # og.jpg: the link preview (media/screens/en/match.png as JPEG)
+cp -R site/index.html site/style.css site/main.js site/name.js site/favicon.svg site/og.jpg site/i18n "$OUT/"  # og.jpg: the link preview (media/screens/en/match.png as JPEG)
 cp -R media/screens/en media/screens/ru "$OUT/screens/"
 python3 tools/site_data.py "$OUT"
+python3 tools/lua_api.py --check  # the API reference must match the engine's g.* functions and hooks
+python3 tools/site_docs.py "$OUT"  # dev/: the pages for game makers (site/dev/<lang>/*.md, docs/packs/*.md, the API)
 godot --path . --script res://tools/site_cards.gd -- "$OUT"  # the cards as the game draws them (needs a window)
 touch "$OUT/.nojekyll"
 echo "Site built in $OUT"
