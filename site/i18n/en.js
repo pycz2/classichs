@@ -81,7 +81,7 @@
     "q8.a": "Open an issue on GitHub (the link is below): tell what you did, what you expected and what happened, and add a screenshot if you can.",
     "dev.title": "Open source",
     "d1.t": "Godot 4.7 and GDScript",
-    "d1.d": "The whole game — the rules engine, the screens, the card frames and the effects — is written in GDScript on Godot 4.7.2 and exported to the web.",
+    "d1.d": "The client runs on Godot 4.7.2 — in the browser, on Windows, macOS, Linux and Android; the rules engine and the game server are Rust; each game's cards are data and Lua scripts in its pack.",
     "d2.t": "MIT license",
     "d2.d": "Read the code, change it, build your own version. The card names and texts belong to Blizzard Entertainment.",
     "d3.t": "Tested",

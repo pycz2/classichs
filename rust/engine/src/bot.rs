@@ -1,4 +1,4 @@
-//! Greedy one-step bot (game/bot.gd): tries every legal action on a clone and
+//! Greedy one-step bot: tries every legal action on a clone and
 //! keeps the best one if it beats ending the turn. Sees hidden information.
 
 use crate::game::{Act, Action};

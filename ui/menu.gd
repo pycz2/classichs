@@ -118,7 +118,7 @@ func _show_game() -> void:
 	_fill(items + [["Settings", settings, true], ["Leave the game", leave, true]])
 	var codes := _box.find_child("CodePlay", false, false) as Button
 	if codes and ok and codes.disabled:
-		codes.tooltip_text = tr("Direct play works only in the browser version of the game")
+		codes.tooltip_text = tr("Code play needs WebRTC, which this build does not have")
 	if not ok:
 		var note := Palette.label(tr(why), 18, Color("ffb070"))
 		note.name = "CannotPlay"

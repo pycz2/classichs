@@ -81,7 +81,7 @@
     "q8.a": "Załóż issue na GitHubie (link poniżej): opisz, co zrobiłeś, czego oczekiwałeś i co się stało, i dołącz zrzut ekranu, jeśli możesz.",
     "dev.title": "Otwarty kod",
     "d1.t": "Godot 4.7 i GDScript",
-    "d1.d": "Cała gra — silnik zasad, ekrany, ramki kart i efekty — jest napisana w GDScript w Godot 4.7.2 i wyeksportowana do przeglądarki.",
+    "d1.d": "Klient działa na Godot 4.7.2 — w przeglądarce, na Windows, macOS, Linux i Android; silnik zasad i serwer gry są w Rust; karty każdej gry to dane i skrypty Lua w jej paczce.",
     "d2.t": "Licencja MIT",
     "d2.d": "Czytaj kod, zmieniaj go, buduj własną wersję. Nazwy i teksty kart należą do Blizzard Entertainment.",
     "d3.t": "Przetestowana",
