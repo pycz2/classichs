@@ -91,7 +91,7 @@ for p in $WANT; do
 			mkdir -p "$APP/usr/bin"
 			cp "$OUT/linux/ClassicHS.x86_64" "$SO" "$RTC" "$APP/usr/bin/"
 			cp icons/icon_512.png "$APP/classichs.png"
-			printf '[Desktop Entry]\nType=Application\nName=Classic HS\nExec=ClassicHS.x86_64\nIcon=classichs\nCategories=Game;CardGame;\n' > "$APP/classichs.desktop"
+			printf '[Desktop Entry]\nType=Application\nName=Classic Heroes Showdown\nExec=ClassicHS.x86_64\nIcon=classichs\nCategories=Game;CardGame;\n' > "$APP/classichs.desktop"
 			printf '#!/bin/sh\nexec "$(dirname "$(readlink -f "$0")")/usr/bin/ClassicHS.x86_64" "$@"\n' > "$APP/AppRun"
 			chmod +x "$APP/AppRun"
 			ARCH=x86_64 appimagetool "$APP" "$OUT/ClassicHS-$VER-linux-x86_64.AppImage"

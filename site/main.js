@@ -5,7 +5,7 @@ const LANGS = {en: "English", ru: "Русский", de: "Deutsch", fr: "Françai
 const TEXT = window.TEXT;
 // Neonfall's screens first (the default game), then Classic's
 const SHOTS = ["match", "games", "history", "tracker", "collection", "arena", "rules", "lobby", "result", "online", "debug", "settings", "menu", "classic", "tutorial"];
-const NAME = window.SITE_NAME || {name: "Classic HS", full_name: "Classic HS"};  // site/name.js
+const NAME = window.SITE_NAME || {name: "Classic HS", full_name: "Classic Heroes Showdown"};  // site/name.js
 const $ = (s) => document.querySelector(s);
 
 // A supported language for a browser locale ("de-AT" -> "de", "pt-PT" -> "pt_BR"); English otherwise.
@@ -36,6 +36,7 @@ function applyLang() {
   });
   $("#lang").value = lang;
   document.querySelectorAll("[data-name]").forEach((el) => { el.textContent = NAME.name; });
+  document.querySelectorAll("[data-full-name]").forEach((el) => { el.textContent = NAME.full_name; });
   $("#game").title = NAME.name;
   // the developer pages are in English and Russian
   const dev = lang === "ru" ? "ru" : "en";

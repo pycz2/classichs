@@ -235,7 +235,7 @@ jobs:
         run: ls -l dist
       - uses: softprops/action-gh-release@v3
         with:
-          name: Classic HS ${{ github.ref_name }}
+          name: Classic Heroes Showdown ${{ github.ref_name }}
           body: |
             Builds of ${{ github.ref_name }}. Changes: see CHANGELOG.md (data/changelog/<lang>.md for other languages).
             - Web: unzip and serve the folder over HTTP, or play at https://pycz2.github.io/classichs/

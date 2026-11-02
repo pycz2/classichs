@@ -1,4 +1,4 @@
-# Classic HS
+# Classic Heroes Showdown (Classic HS)
 
 A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas: all 382 Basic and Classic cards, nine classes, the original tutorial, a bot, and online play with a friend straight from the browser — without a game server.
 
