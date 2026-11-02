@@ -65,6 +65,9 @@ func _process(_d: float) -> bool:
 		print("site cards in ", out)
 		for p in [Settings.path, Profile.path, DeckStore.path, Progress.path, ServerLink.session_path]:
 			DirAccess.remove_absolute(p)
+		for f in DirAccess.get_files_at(Packs.user_dir):  # the packs' index the switches wrote
+			DirAccess.remove_absolute(Packs.user_dir + "/" + f)
+		DirAccess.remove_absolute(Packs.user_dir)
 		quit()
 		return true
 	_show()
