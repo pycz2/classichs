@@ -1,6 +1,7 @@
 {
   "name": "Zoolock",
   "champion": "HERO_07",
+  "description": {"en": "Cheap minions flood the board; Life Tap refills your hand.", "ru": "Дешёвые существа заполняют стол, а «Жизнеотвод» пополняет руку.", "de": "Billige Diener fluten das Brett; Lebensentzug füllt die Hand.", "fr": "Des serviteurs peu chers envahissent le plateau ; Connexion remplit la main.", "es": "Esbirros baratos inundan el tablero; Transfusión de vida rellena la mano.", "pt_BR": "Lacaios baratos lotam a mesa; Drenar Vida reabastece a mão.", "it": "Servitori economici invadono il campo; Tocco Vitale riempie la mano.", "pl": "Tanie stronniki zalewają stół, a Czerpanie Życia uzupełnia rękę."},
   "code": "AAEDAf0GBK6hBMOhBNyhBMWjBA33lQT7lQTVlgTtlgSBoQSyoQS9oQTToQTuoQSdogSjogTUogTDowQAAA==",
   "cards": ["VAN_CS2_062", "VAN_CS2_062", "VAN_CS2_065", "VAN_CS2_065", "VAN_CS2_188", "VAN_CS2_188", "VAN_EX1_004", "VAN_EX1_008", "VAN_EX1_008", "VAN_EX1_019", "VAN_EX1_019", "VAN_EX1_029", "VAN_EX1_029", "VAN_EX1_046", "VAN_EX1_093", "VAN_EX1_093", "VAN_EX1_116", "VAN_EX1_162", "VAN_EX1_162", "VAN_EX1_308", "VAN_EX1_308", "VAN_EX1_310", "VAN_EX1_310", "VAN_EX1_319", "VAN_EX1_319", "VAN_EX1_556", "VAN_EX1_556", "VAN_NEW1_019", "VAN_NEW1_019", "VAN_NEW1_021"]
 }

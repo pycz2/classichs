@@ -1,6 +1,7 @@
 {
   "name": "Handlock",
   "champion": "HERO_07",
+  "description": {"en": "Life Tap for cards, then giants and taunts when your health runs low.", "ru": "Жизнеотвод ради карт, а когда здоровья мало — великаны и провокация.", "de": "Lebensentzug für Karten, dann Riesen und Spott, wenn das Leben knapp wird.", "fr": "Connexion pour piocher, puis géants et provocations quand vos PV baissent.", "es": "Transfusión de vida para robar y luego gigantes y provocar cuando te queda poca vida.", "pt_BR": "Drenar Vida por cartas, depois gigantes e provocar quando a vida estiver baixa.", "it": "Tocco Vitale per pescare, poi giganti e provocazioni quando la salute è bassa.", "pl": "Czerpanie Życia po karty, a przy niskim zdrowiu olbrzymy i prowokacja."},
   "code": "AAEDAf0GCvuVBK6XBIKhBK+hBNahBNyhBJqiBJyiBKWiBNyiBAr3lQTrlgTtlgT6oATAoQTCoQTJoQTToQTaoQSqowQAAA==",
   "cards": ["VAN_CS2_062", "VAN_CS2_062", "VAN_CS2_065", "VAN_CS2_117", "VAN_CS2_117", "VAN_CS2_203", "VAN_EX1_005", "VAN_EX1_043", "VAN_EX1_043", "VAN_EX1_045", "VAN_EX1_045", "VAN_EX1_058", "VAN_EX1_058", "VAN_EX1_093", "VAN_EX1_093", "VAN_EX1_097", "VAN_EX1_105", "VAN_EX1_105", "VAN_EX1_116", "VAN_EX1_302", "VAN_EX1_302", "VAN_EX1_303", "VAN_EX1_308", "VAN_EX1_308", "VAN_EX1_309", "VAN_EX1_323", "VAN_EX1_564", "VAN_EX1_620", "VAN_EX1_620", "VAN_NEW1_003"]
 }
