@@ -4,6 +4,20 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-11-03
+
+### Modifié
+- Le jeu s'appelle **Classic Heroes Showdown** (en bref Classic HS). C'est maintenant un moteur de jeux de cartes : chaque jeu est un pack avec ses règles, ses cartes, son style, sa musique, son tutoriel et ses modèles de decks.
+- Un nouveau menu : Jouer, Paramètres, Quitter. Jouer → Direct (la bibliothèque de jeux, puis le menu du jeu choisi dans son style) ou Serveur (connexions, identification, l'accueil du serveur avec amis et jeux du serveur).
+- Paramètres généraux : langue, volume, dos de carte, vitesse d'animation, tremblement, plein écran. Les jeux d'images et de musique se choisissent par jeu (gardés sur le serveur en mode serveur) ; les outils de débogage sont dans les paramètres à l'intérieur d'un jeu.
+- Les decks sont gardés par jeu ; sur un serveur ce sont les decks serveur de ce jeu, et les decks locaux peuvent y être copiés. Plus de decks tout faits dans la liste : un nouveau deck part de zéro ou d'un modèle du pack.
+- Le tutoriel et les effets de scène (pluie, neige, braises) font maintenant partie du pack. Le style taverne est passé dans le pack Classic ; le client lui-même a un style neutre.
+
+### Ajouté
+- Outils de pack dans la bibliothèque : construire un jeu depuis un dossier, le vérifier (fichiers, JSON, scripts Lua avec numéro de ligne, images, traductions, tutoriel), jouer des parties d'essai entre bots, l'installer.
+- Le site a une section « Pour les développeurs » : créer son jeu, scripts de cartes en Lua, référence de l'API du moteur, vérifier et tester, une carte interactive de l'architecture. La page d'accueil est au style Neonfall.
+- À la mise à jour, les paramètres se déplacent seuls : jeux d'images et de musique vers Classic, serveurs vers les connexions, vos decks vers leur jeu.
+
 ## [0.32.0] - 2026-11-02
 
 ### Ajouté

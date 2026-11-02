@@ -33,16 +33,30 @@ func _use_test_files() -> void:
 	Progress.path = "user://test_runner_tutorial.json"
 	ServerLink.session_path = "user://test_runner_server_session.json"
 	DirAccess.remove_absolute(ServerLink.session_path)  # no saved session: main never connects by itself
+	Packs.set_shell(false)  # (main shows its own screens in the client's look; tests see the active pack's)
+	Packs.server_sets = {}
+	DeckStore.link = null
 	if Packs.user_dir != "user://test_runner_packs" or Packs.active() == null or Packs.active().id() != Packs.CLASSIC:
 		Packs.user_dir = "user://test_runner_packs"  # downloaded and imported packs of the tests; Classic active
 		Settings.data.erase("pack")
 		Packs.rescan()
+	_player_decks()
+
+
+## The tests' player has saved Classic's ten template decks (no game puts ready decks into a
+## list any more: a test of an empty list deletes the file).
+func _player_decks() -> void:
+	DirAccess.remove_absolute("user://test_runner_decks.neon.json")
+	DeckStore.write(DeckStore.file(), Decks.templates().map(func(t):
+		var d: Dictionary = t.deck.to_dict()
+		d.name = t.name
+		return d))
 
 
 func _fresh_settings() -> void:
 	Settings.path = "user://test_runner_settings.json"
 	var sf := FileAccess.open(Settings.path, FileAccess.WRITE)
-	sf.store_string(JSON.stringify({"language": "en", "music": 0.0, "sfx": 0.0}))
+	sf.store_string(JSON.stringify({"language": "en", "music": 0.0, "sfx": 0.0, "layout": Migration.LAYOUT}))
 	sf.close()
 
 

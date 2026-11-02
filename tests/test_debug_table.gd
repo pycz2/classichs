@@ -33,15 +33,23 @@ func test_example_position_builds() -> void:
 	check(Rules.scenario_error({"players": [{"hero": "HERO_08", "board": ["VAN_CS2_029"]}, {"hero": "HERO_01"}]}).contains("not a minion"), "a broken scene says why")
 
 
+## Debug tools only inside a game: the global settings have none, a game's settings open its table.
 func test_settings_open_the_debug_tools_and_back() -> void:
 	var m := _main()
 	m.show_settings()
+	check(m.screen.find_child("DebugTools", true, false) == null, "none in the main menu's settings")
+	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
+	check(m.screen is MainMenu and m.screen.pack == null, "back to the main menu")
+	m.enter_game(Packs.active())
+	(m.screen.find_child("Settings", true, false) as Button).pressed.emit()
 	var b := m.screen.find_child("DebugTools", true, false) as Button
-	check(b != null, "a Debug tools button in the settings")
+	check(b != null, "a Debug tools button in the game's settings")
 	b.pressed.emit()
 	check(m.screen is DebugTable, "the debug screen")
 	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
 	check(m.screen is SettingsView, "back to the settings")
+	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
+	check(m.screen is MainMenu and m.screen.pack == Packs.active(), "back to the game's menu")
 	m.free()
 	var overlay := SettingsView.new()  # the settings over a match: no debug tools
 	root().add_child(overlay)
@@ -176,3 +184,19 @@ func test_scene_editor_sets_secrets_weapon_turn_and_tokens() -> void:
 	list.set_tab("PALADIN")
 	check(list.filtered().has("VAN_CS2_101t"), "and are listed")
 	d.free()
+
+
+## Debug tools inside Neonfall: every tab opens without errors and shows only that pack's cards.
+func test_debug_tools_of_another_game() -> void:
+	var neon: Pack = Packs.all().filter(func(p: Pack): return p.id() == "neon")[0]
+	var m := _main()
+	m.enter_game(neon)
+	(m.screen.find_child("Settings", true, false) as Button).pressed.emit()
+	(m.screen.find_child("DebugTools", true, false) as Button).pressed.emit()
+	var d := m.screen as DebugTable
+	check(d != null, "the debug screen of Neonfall")
+	for i in 4:
+		(d.find_child("Tab%d" % i, true, false) as Button).pressed.emit()
+		eq(d.tab, i, "tab %d open" % i)
+	check(d.tests.keys().all(func(id): return CardDb.has(id)), "only tests of its cards")
+	m.free()

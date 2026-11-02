@@ -6,3 +6,4 @@ __pycache__/
 art/original/
 .DS_Store
 packs/*.cardpack
+packs/schema/

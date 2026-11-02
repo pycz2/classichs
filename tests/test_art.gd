@@ -77,24 +77,22 @@ func test_art_sets_are_folders_and_switch_pictures() -> void:
 	Art.root = root
 	Art.reset()
 	eq(Art.sets(), ["generated", "cartoon", "simple", "photo", "original", "my_set"], "the pack's sets first, then the player's folders")
-	Settings.data.art = "original"
-	Art.reset()
+	Packs.set_choice(Packs.active(), "art", "original")
 	check(Art.texture("HERO_08") != null, "original picture used")
 	check(Art.texture("HERO_01") != null, "no picture in this set: the pack's default set's (docs/packs/format.md §7)")
-	Settings.data.art = "my_set"
-	Art.reset()
+	Packs.set_choice(Packs.active(), "art", "my_set")
 	check(Art.texture("HERO_09") != null, "the player's own set")
-	Settings.data.art = "no_such_set"
-	Art.reset()
+	Packs.set_choice(Packs.active(), "art", "no_such_set")
 	check(Art.texture("HERO_01") != null, "an unknown set falls back to the generated pictures")
-	Settings.data.art = "generated"
+	Packs.set_choice(Packs.active(), "art", "generated")
 	Art.root = was
 	Art.reset()
 	for path in ["/cards/HERO_01.jpg", "/original/HERO_08.jpg", "/my_set/HERO_09.jpg", "/cards", "/original", "/my_set", ""]:
 		DirAccess.remove_absolute(root + path)
 
 
-func test_settings_screen_offers_art_sets() -> void:
+## The art set is chosen per game in the library (no longer in the settings).
+func test_library_offers_art_sets() -> void:
 	var root := "user://test_art_root2"
 	for d in ["cards", "original"]:
 		DirAccess.make_dir_recursive_absolute(root + "/" + d)
@@ -106,13 +104,17 @@ func test_settings_screen_offers_art_sets() -> void:
 	Art.reset()
 	var s := SettingsView.new()
 	(Engine.get_main_loop() as SceneTree).root.add_child(s)
-	var pick := s.find_child("ArtSet", true, false) as OptionButton
+	check(s.find_child("ArtSet", true, false) == null and s.find_child("MusicSet", true, false) == null, "not in the settings")
+	s.free()
+	var g := GamesView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(g)
+	var pick := g.find_child("ArtSet", true, false) as OptionButton
 	eq(pick.item_count, Art.sets().size(), "every picture set")
 	pick.item_selected.emit(4)  # generated, cartoon, simple, photo (the pack's sets), then the player's folder
-	eq(Settings.data.art, "original", "stored")
+	eq(Packs.choice(Packs.active(), "art"), "original", "stored for this game")
 	pick.item_selected.emit(0)
-	eq(Settings.data.art, "generated", "back")
-	s.free()
+	eq(Settings.data.pack_sets[Packs.CLASSIC].art, "generated", "back")
+	g.free()
 	Art.root = was
 	Art.reset()
 	for d in ["/original/HERO_08.jpg", "/cards", "/original", ""]:
@@ -120,12 +122,14 @@ func test_settings_screen_offers_art_sets() -> void:
 
 
 func test_card_backs_are_chosen_in_the_settings() -> void:
-	eq(Settings.data.card_back, "classic", "default back")
+	eq(Settings.data.card_back, CardBacks.DEFAULT, "default back")
 	var s := SettingsView.new()
 	(Engine.get_main_loop() as SceneTree).root.add_child(s)
 	var pick := s.find_child("CardBack", true, false) as OptionButton
 	eq(pick.item_count, CardBacks.NAMES.size(), "every back offered")
-	check(CardBacks.NAMES.size() >= 5, "several backs")
+	check(CardBacks.NAMES.size() >= 3, "several neutral backs")
+	for n in ["classic", "horde", "druid"]:
+		check(not CardBacks.NAMES.has(n), n + ": a game's back, not offered")
 	pick.item_selected.emit(2)
 	eq(Settings.data.card_back, CardBacks.NAMES[2], "stored")
 	Settings.load_settings()
@@ -134,9 +138,9 @@ func test_card_backs_are_chosen_in_the_settings() -> void:
 	s.free()
 
 
-func test_unknown_card_back_falls_back_to_classic() -> void:
+func test_unknown_card_back_falls_back_to_the_default() -> void:
 	var f := FileAccess.open(Settings.path, FileAccess.WRITE)
 	f.store_string('{"card_back": "no_such_back"}')
 	f.close()
 	Settings.load_settings()
-	eq(Settings.data.card_back, "classic", "unknown back ignored")
+	eq(Settings.data.card_back, CardBacks.DEFAULT, "unknown back ignored")

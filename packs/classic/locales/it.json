@@ -26,5 +26,141 @@
       "name": "Non può attaccare",
       "tip": "Non può attaccare."
     }
+  },
+  "missions": {
+    "1": {
+      "intro": "Gioca servitori e usali per attaccare Hogger. Infliggi abbastanza danni e vincerai!",
+      "lines": {
+        "start": "Grrr! Hogger spaccare piccolo mago!",
+        "hurt": "Rrraaagh! Hogger arrabbiato!",
+        "defeat": "Noooo... Hogger... stanco..."
+      },
+      "reward_line": "Oh sì!"
+    },
+    "2": {
+      "intro": "Spendi tutto il tuo Mana a ogni turno per schiacciare questo gnomo fastidioso!",
+      "lines": {
+        "start": "Millhouse Manatempesta è qui! Preparati a restare a bocca aperta!",
+        "hurt": "Ehi, che male! Aspetta di vedere il mio grande incantesimo!",
+        "defeat": "Non vale! Stavo arrivando alla parte bella!"
+      },
+      "reward_line": "Davvero impressionante."
+    },
+    "3": {
+      "intro": "Quando i servitori combattono tra loro, entrambi subiscono danni.",
+      "lines": {
+        "start": "Salute, viandante. Impariamo insieme.",
+        "hurt": "Una mossa saggia. Ma l'equilibrio va preservato.",
+        "defeat": "La tua abilità onora il sentiero. Va' in pace."
+      },
+      "reward_line": "Che caldo, che caldo!"
+    },
+    "4": {
+      "intro": "Non capisci una carta? Passaci sopra con il mouse!",
+      "lines": {
+        "start": "Mukla volere banane! Tu non prendere!",
+        "hurt": "Uh uh! Mukla chiamare fratellone!",
+        "defeat": "Mukla... dividere banane..."
+      },
+      "reward_line": "Sei in gran forma!"
+    },
+    "5": {
+      "intro": "Elimina i suoi servitori o ti sommergerà!",
+      "lines": {
+        "start": "Partita nuova! Che la caccia abbia inizio!",
+        "hurt": "Sei una preda dura da catturare!",
+        "defeat": "Be', guarda un po'... il cacciatore diventa la preda."
+      },
+      "reward_line": "È stato incredibile."
+    },
+    "6": {
+      "intro": "Questo scontro è davvero ingiusto. Dai la colpa ai terribili game designer.",
+      "lines": {
+        "start": "Non siete preparati!",
+        "hurt": "Nessuno mi fermerà!",
+        "defeat": "Impossibile... sconfitto da un novellino?"
+      },
+      "reward_line": "Magnifico!"
+    }
+  },
+  "hints": {
+    "play": "Clicca una carta nella tua mano per giocarla. I servitori vanno sul campo.",
+    "attack": "Clicca un servitore che può attaccare, poi clicca un nemico per attaccarlo.",
+    "end_turn": "Non hai altro da fare? Premi Fine turno.",
+    "mana": "Ottieni un Cristallo di Mana in più a ogni turno. Spendili tutti!",
+    "raid_leader": "Il Capo Incursione dà +1 Attacco agli altri tuoi servitori.",
+    "trade": "Elimina i servitori nemici prima che diventino un problema!",
+    "battlecry": "Un Grido di Battaglia si attiva quando giochi la carta dalla mano.",
+    "tooltip": "Passa il mouse su una carta per leggerla.",
+    "taunt": "I servitori con Provocazione vanno attaccati per primi. Giocane uno per proteggere il tuo eroe!",
+    "heal": "Alcune carte ripristinano Integrità. Usale su un eroe o un servitore danneggiato.",
+    "buff": "Alcune carte rendono più forti i tuoi servitori.",
+    "charge": "I servitori con Carica possono attaccare subito.",
+    "hero_power": "Il tuo Potere Eroe infligge 1 danno. Puoi usarlo una volta per turno.",
+    "weapon": "Le armi permettono agli eroi di attaccare. Ogni attacco costa 1 Durabilità."
+  },
+  "tutorial": {
+    "minion_card.title": "Una carta servitore",
+    "minion_card.text": "Ogni carta costa Mana per essere giocata. I servitori hanno anche Attacco e Salute.",
+    "minion_card.mana_cost_what": "Costo in Mana: quanto serve per giocare la carta",
+    "minion_card.attack_damage_it": "Attacco: i danni che infligge",
+    "minion_card.health_at_0": "Salute: a 0 il servitore muore",
+    "combat.title": "Combattimento",
+    "combat.text": "Quando i servitori combattono, ognuno infligge all'altro danni pari al suo Attacco. Un servitore con 0 Salute muore.",
+    "combat.survives_with_3": "Sopravvive con 3 di Salute",
+    "combat.dies": "Muore",
+    "heroes.title": "Eroi",
+    "heroes.text": "Il tuo eroe ha 30 di Salute. Attacca l'eroe nemico con i tuoi servitori: portalo a 0 Salute per vincere!",
+    "heroes.you": "Tu",
+    "heroes.enemy_hero": "L'eroe nemico",
+    "mana.title": "Mana",
+    "mana.text": "Ottieni un Cristallo di Mana in più a ogni turno, fino a 10. Giocare una carta ne spende il costo. Cerca di spendere tutto il tuo Mana a ogni turno!",
+    "mana.turn_1": "Turno 1",
+    "mana.turn_2": "Turno 2",
+    "mana.turn_3": "Turno 3",
+    "mana.turn_4": "Turno 4",
+    "mana.costs_1": "Costa 1",
+    "mana.costs_2": "Costa 2",
+    "spells.title": "Magie",
+    "spells.text": "Un incantesimo ha effetto una volta e poi sparisce. Millhouse adora gli incantesimi! Un personaggio congelato salta il suo prossimo attacco.",
+    "spells.mana_cost": "Costo in Mana",
+    "spells.what_spell_does": "Cosa fa l'incantesimo",
+    "spells.no_attack_no": "Niente Attacco, niente Salute",
+    "battlecry.title": "Grido di Battaglia",
+    "battlecry.text": "Un Grido di Battaglia si attiva una volta, quando giochi la carta dalla mano.",
+    "battlecry.battlecry_deals_1": "Grido di Battaglia: infligge 1 danno quando viene giocato",
+    "battlecry.battlecry_restores_health": "Grido di Battaglia: rigenera Salute quando viene giocato",
+    "minions_first.title": "Prima i servitori",
+    "minions_first.text": "Finché Cho ha servitori, non può essere attaccato. I danni restano su un servitore finché non viene curato, quindi finiscili!",
+    "minions_first.cho_hides_behind": "Cho si nasconde dietro i suoi servitori",
+    "minions_first.kill_them_first": "Eliminali per primi",
+    "taunt.title": "Provocazione",
+    "taunt.text": "I nemici devono attaccare un servitore con Provocazione prima di ogni altra cosa. Mettine uno davanti al tuo eroe!",
+    "taunt.taunt_attack_this": "Provocazione: attacca prima lui",
+    "charge.title": "Carica",
+    "charge.text": "Un servitore non può attaccare nel turno in cui viene giocato. I servitori con Carica possono attaccare subito.",
+    "charge.played_this_turn": "Giocato in questo turno: deve aspettare",
+    "charge.charge_attacks_at": "Carica: attacca subito",
+    "deathrattle.title": "Rantolo di Morte",
+    "deathrattle.text": "Un Rantolo di Morte si attiva quando il servitore muore. I barili di Re Mukla nascondono sorprese: rompine uno per vedere cosa c'è dentro!",
+    "deathrattle.when_it_dies": "Quando muore...",
+    "deathrattle.out_comes_gnome": "...ne esce uno gnomo!",
+    "hero_power.title": "Potere Eroe",
+    "hero_power.text": "Ogni eroe ha un Potere Eroe. Costa 2 Mana e si può usare una volta per turno.",
+    "hero_power.your_hero_power": "Il tuo Potere Eroe",
+    "hero_power.hemet_s_hero": "Potere Eroe di Hemet",
+    "hero_power.mana_cost": "Costo in Mana",
+    "freeze.title": "Congelamento",
+    "freeze.text": "Un personaggio congelato salta il suo prossimo attacco. Congela i cacciatori di Hemet ed eliminali prima che ti sommergano!",
+    "freeze.freezes_whatever_it": "Congela qualunque cosa danneggi",
+    "weapons.title": "Armi",
+    "weapons.text": "Un'arma permette a un eroe di attaccare. Illidan impugna lame da guerra! Un eroe che attacca un servitore subisce danni a sua volta.",
+    "weapons.attack_damage_hero": "Attacco: i danni che infligge l'eroe",
+    "weapons.durability_drops_by": "Durabilità: cala di 1 a ogni attacco; a 0 l'arma si rompe",
+    "putting_it_all_together.title": "Tutto insieme",
+    "putting_it_all_together.text": "Illidan è forte. Usa tutto ciò che hai imparato: proteggi il tuo eroe con Provocazione e spazza via i suoi servitori con gli incantesimi.",
+    "putting_it_all_together.his_hero_power": "Il suo Potere Eroe: due servitori a ogni turno",
+    "putting_it_all_together.taunt_guards_your": "Provocazione protegge il tuo eroe",
+    "putting_it_all_together.hits_all_enemy": "Colpisce tutti i servitori nemici"
   }
 }

@@ -1,6 +1,7 @@
 class_name TrainingSetup
 extends Control
-## Training in two steps: pick your deck, then the bot's hero and how well it plays (Settings bot_level).
+## Training in two steps: pick your deck (of the active game; none yet: create one first),
+## then the bot's hero and how well it plays (Settings bot_level).
 
 signal start(my_deck: Deck, bot_class: String)
 signal back
@@ -16,23 +17,13 @@ var _step2 := Control.new()
 var _deck_line: Label
 
 
-## The player's saved decks, then the ready decks (DeckStore.starter) not among them.
-static func available_decks() -> Array[Deck]:
-	var out := DeckStore.load_all()
-	var have := out.map(func(d: Deck): return [d.hero, d.sorted_counts()])
-	for d in DeckStore.starter():
-		if not have.has([d.hero, d.sorted_counts()]):
-			out.append(d)
-	return out
-
-
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
-	Palette.backdrop(self, "library_bg")
+	Palette.backdrop(self, "library")
 	for s in [_step1, _step2]:
 		s.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		add_child(s)

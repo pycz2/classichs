@@ -1,10 +1,10 @@
 class_name Fonts
 extends RefCounted
-## The game's look: Alegreya (OFL; Latin, Cyrillic, Greek) for the interface with
-## lining figures, Cinzel Decorative (OFL) for the title, and tavern-style wooden
-## buttons with a gold frame. main.gd puts theme() on the root window. A pack's
-## ui/theme.json (Palette.UI) may bring its own fonts (ui/fonts/) and buttons; the
-## theme is rebuilt in place when the active pack changes.
+## The interface's look: Alegreya (OFL; Latin, Cyrillic, Greek), the client's font, for the
+## interface (lining figures) and the cards; the buttons and fonts of the styling pack's
+## ui/theme.json (Palette.UI: its fonts in ui/fonts/; Classic's wooden planks and Cinzel
+## Decorative title), else the client's flat ones. main.gd puts theme() on the root window; the
+## theme is rebuilt in place when the look changes.
 
 static var _title: Font
 static var _theme: Theme
@@ -15,12 +15,14 @@ static func _tag(t: String) -> int:
 	return TextServerManager.get_primary_interface().name_to_tag(t)
 
 
-## A font file of a pack's theme ("body" or "title"; the active pack by default), or null.
+## A font file of a pack's theme ("body" or "title"; the styling pack, Packs.look(), by default), or null.
 static func _pack_font(kind: String, p: Pack = null) -> Font:
 	if p == null:
-		p = Packs.active()
+		p = Packs.look()
+	if p == null:
+		return null
 	var file = Palette.UI.fonts.get(kind, "")
-	if p != Packs.active():
+	if p != Packs.look():
 		var t = p.json("ui/theme.json") if p.has("ui/theme.json") else null
 		file = t.get("fonts", {}).get(kind, "") if t is Dictionary and t.get("fonts") is Dictionary else ""
 	if not file is String or file == "" or p == null:
@@ -59,13 +61,13 @@ static func own_weight(base: Font, weight: int) -> Font:
 	return f
 
 
-## The title font: the theme's (bold) or Cinzel Decorative; of the active pack, or of p.
+## The title font: the theme's (bold) or the client's Alegreya (bold); of the styling pack, or of p.
 static func title(p: Pack = null) -> Font:
 	var own := _pack_font("title", p)
 	if own:
 		return own_weight(own, 800)
 	if _title == null:
-		_title = load("res://fonts/CinzelDecorative-Black.ttf")
+		_title = card(800)
 	return _title
 
 
@@ -204,7 +206,7 @@ static func _labels(t: Theme) -> void:
 		t.set_color("font_color", v[0], v[1])
 		t.set_color("font_outline_color", v[0], Palette.tc("outline"))
 		t.set_constant("outline_size", v[0], int(Palette.UI.outline_size))
-	if _pack_font("title"):
+	if _pack_font("title") and not Palette.CLASSIC:  # (Classic's headings are in its body font)
 		t.set_font("font", "HeadingLabel", title())
 	elif t.get_font_list("HeadingLabel").has("font"):
 		t.clear_font("font", "HeadingLabel")
@@ -241,9 +243,9 @@ static func button_box(state: String) -> StyleBox:
 		Palette.tc("button.glow_hover" if lit else "button.glow"), int(b.glow_hover_size if lit else b.glow_size))
 
 
-## A picture of the active pack (a theme's button or panel texture), or null.
+## A picture of the styling pack (a theme's button or panel texture), or null.
 static func _picture(file: Variant) -> Texture2D:
-	var p := Packs.active()
+	var p := Packs.look()
 	return p.texture(file) if file is String and file != "" and p and p.has(file) else null
 
 

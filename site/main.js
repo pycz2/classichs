@@ -1,9 +1,11 @@
-// Landing page: texts in the game's 8 languages, screenshot gallery, reveal on scroll, parallax cards, game start.
+// Landing page: texts in the game's 8 languages, Neonfall's champions, screenshot gallery, reveal on scroll, parallax cards, neon rain, game start.
 "use strict";
 
 const LANGS = {en: "English", ru: "Русский", de: "Deutsch", fr: "Français", es: "Español", pt_BR: "Português (Brasil)", it: "Italiano", pl: "Polski"};
 const TEXT = window.TEXT;
-const SHOTS = ["match", "rules", "arena", "lobby", "result", "history", "tracker", "collection", "tutorial", "intro", "online", "debug", "settings", "menu"];
+// Neonfall's screens first (the default game), then Classic's
+const SHOTS = ["match", "games", "history", "tracker", "collection", "arena", "rules", "lobby", "result", "online", "debug", "settings", "menu", "classic", "tutorial"];
+const NAME = window.SITE_NAME || {name: "Classic HS", full_name: "Classic Heroes Showdown"};  // site/name.js
 const $ = (s) => document.querySelector(s);
 
 // A supported language for a browser locale ("de-AT" -> "de", "pt-PT" -> "pt_BR"); English otherwise.
@@ -24,7 +26,8 @@ const touch = matchMedia("(hover: none)").matches;  // phones: no hover, so tap 
 const t = (key) => ((TEXT[lang] && TEXT[lang][key]) || TEXT.en[key] || "")
   .replace(/\{mb\} ?/, (m) => (DATA.download_mb || 61) + (m.length > 4 ? "\u00a0" : ""))
   .replace("{tests}", DATA.tests || 757)
-  .replace("{v}", DATA.version || "").replace("{date}", DATA.date || "");
+  .replace("{v}", DATA.version || "").replace("{date}", DATA.date || "")
+  .replace(/\{name\}/g, NAME.name).replace(/\{full_name\}/g, NAME.full_name);
 
 function applyLang() {
   document.documentElement.lang = lang.replace("_", "-");
@@ -32,6 +35,13 @@ function applyLang() {
     el.textContent = t(touch && el.dataset.i18n === "cards.sub" ? "cards.sub_touch" : el.dataset.i18n);
   });
   $("#lang").value = lang;
+  document.querySelectorAll("[data-name]").forEach((el) => { el.textContent = NAME.name; });
+  document.querySelectorAll("[data-full-name]").forEach((el) => { el.textContent = NAME.full_name; });
+  $("#game").title = NAME.name;
+  // the developer pages are in English and Russian
+  const dev = lang === "ru" ? "ru" : "en";
+  document.querySelectorAll(".dev-link").forEach((a) => { a.href = `dev/${dev}/index.html`; });
+  document.querySelectorAll("[data-doc]").forEach((a) => { a.href = `dev/${dev}/${a.dataset.doc}`; });
   // the changelog in the page language (Russian is the main CHANGELOG.md)
   const log = lang === "ru" ? "CHANGELOG.md" : `data/changelog/${lang}.md`;
   document.querySelectorAll(".changelog-link").forEach((a) => { a.href = `https://github.com/pycz2/classichs/blob/main/${log}`; });
@@ -39,6 +49,31 @@ function applyLang() {
   buildNews();
   buildGallery();
   buildCards();
+  buildNeon();
+}
+
+// Neonfall, the default game: its name, description and champions from the pack (tools/site_data.py).
+const NEON_COLORS = {GHOST: "#1098ad", CHROME: "#c2410c", EXEC: "#6741d9"};
+function buildNeon() {
+  const n = DATA.neon;
+  if (!n) return;
+  const pick = (v) => v[lang] || v.en;
+  $("#neonName").textContent = pick(n.name);
+  $("#neonDesc").textContent = pick(n.description);
+  const row = $("#champRow");
+  row.innerHTML = "";
+  n.champions.forEach((c) => {
+    const tile = document.createElement("div");
+    tile.className = "champ";
+    tile.style.setProperty("--cls", NEON_COLORS[c.cls] || "#3ee8ff");
+    tile.innerHTML = '<div class="portrait"><img alt="" loading="lazy"></div><div class="name"></div><div class="cls"></div><div class="power"></div>';
+    tile.querySelector("img").src = `art/${c.id}.jpg`;
+    tile.querySelector("img").alt = pick(c.name);
+    tile.querySelector(".name").textContent = pick(c.name);
+    tile.querySelector(".cls").textContent = pick(c.class);
+    tile.querySelector(".power").textContent = `${pick(n.power_term)}: ${pick(c.power)}`;
+    row.append(tile);
+  });
 }
 
 // --- cards: pictures drawn by the game itself (tools/site_cards.gd), in the page language ---
@@ -78,7 +113,7 @@ function buildCards() {
   if (!DATA.cards.length) return;
   const hc = $("#heroCards");
   hc.innerHTML = "";
-  DATA.cards.slice(0, 6).forEach((c, i) => {
+  ((DATA.neon && DATA.neon.cards) || DATA.cards).slice(0, 6).forEach((c, i) => {
     const el = cardEl(c);
     el.dataset.depth = [18, 30, 12, 24, 36, 20][i];
     hc.append(el);
@@ -206,26 +241,31 @@ const counted = new IntersectionObserver((list) => list.forEach((en) => {
 }), { threshold: 0.5 });
 document.querySelectorAll("[data-count]").forEach((el) => counted.observe(el));
 
-// Embers drift up behind the page.
-(function embers() {
-  const cv = $("#embers"), ctx = cv.getContext("2d");
+// Neon rain falls behind the page (Neonfall's menu: streaks in the accent colours).
+(function rain() {
+  const cv = $("#rain"), ctx = cv.getContext("2d");
   if (!ctx || reduced) return;
-  let w, h, parts = [];
+  let w, h;
+  const drops = [];
   const resize = () => { w = cv.width = innerWidth; h = cv.height = innerHeight; };
   resize();
   addEventListener("resize", resize);
-  for (let i = 0; i < 70; i++) parts.push({x: Math.random() * w, y: Math.random() * h, r: 0.6 + Math.random() * 2.2, v: 0.2 + Math.random() * 0.7, s: Math.random() * 6});
+  const colors = ["62, 232, 255", "255, 62, 200", "143, 166, 196"];
+  for (let i = 0; i < 90; i++) {
+    drops.push({x: Math.random() * w, y: Math.random() * h, l: 8 + Math.random() * 22, v: 4 + Math.random() * 7,
+      c: colors[i % 3], a: 0.12 + Math.random() * 0.3});
+  }
   const tick = () => {
     ctx.clearRect(0, 0, w, h);
-    for (const p of parts) {
-      p.y -= p.v; p.s += 0.02; p.x += Math.sin(p.s) * 0.4;
-      if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
-      const a = 0.35 + 0.35 * Math.sin(p.s * 1.7);
+    ctx.lineWidth = 1.2;
+    for (const d of drops) {
+      d.y += d.v; d.x -= d.v * 0.18;
+      if (d.y > h + 30) { d.y = -30; d.x = Math.random() * (w + 80); }
+      ctx.strokeStyle = `rgba(${d.c}, ${d.a})`;
       ctx.beginPath();
-      ctx.fillStyle = `rgba(255, ${150 + (p.r * 30) | 0}, 60, ${a})`;
-      ctx.shadowColor = "rgba(255,170,60,.8)"; ctx.shadowBlur = 8;
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.moveTo(d.x, d.y);
+      ctx.lineTo(d.x + d.l * 0.18, d.y - d.l);
+      ctx.stroke();
     }
     requestAnimationFrame(tick);
   };

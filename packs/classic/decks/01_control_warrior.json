@@ -1,6 +1,7 @@
 {
   "name": "Control Warrior",
   "champion": "HERO_01",
+  "description": {"en": "Armor up, trade and outlast: big removal and late threats win the long game.", "ru": "Броня, размены и выдержка: сильное устранение и поздние угрозы выигрывают долгую игру.", "de": "Rüstung, Abtausch, Ausdauer: starke Entfernung und späte Bedrohungen gewinnen das lange Spiel.", "fr": "Armure, échanges et endurance : de gros sorts de retrait et des menaces tardives gagnent la partie longue.", "es": "Armadura, intercambios y aguante: buena eliminación y amenazas tardías ganan la partida larga.", "pt_BR": "Armadura, trocas e resistência: remoções fortes e ameaças tardias vencem o jogo longo.", "it": "Armatura, scambi e resistenza: rimozioni forti e minacce tardive vincono la partita lunga.", "pl": "Pancerz, wymiany i cierpliwość: mocne usuwanie i późne zagrożenia wygrywają długą grę."},
   "code": "AAEDAQcIraEEr6EE3KEExKIExqIE1qIE2aIExKoEC5eWBJiWBP+WBLCXBLGhBMShBNChBLmiBL6iBMCiBMOiBAAA",
   "cards": ["VAN_CS2_106", "VAN_CS2_106", "VAN_CS2_108", "VAN_CS2_108", "VAN_EX1_002", "VAN_EX1_005", "VAN_EX1_007", "VAN_EX1_007", "VAN_EX1_048", "VAN_EX1_048", "VAN_EX1_085", "VAN_EX1_085", "VAN_EX1_116", "VAN_EX1_391", "VAN_EX1_391", "VAN_EX1_402", "VAN_EX1_402", "VAN_EX1_407", "VAN_EX1_407", "VAN_EX1_410", "VAN_EX1_410", "VAN_EX1_411", "VAN_EX1_414", "VAN_EX1_558", "VAN_EX1_561", "VAN_EX1_572", "VAN_EX1_606", "VAN_EX1_606", "VAN_NEW1_011", "VAN_NEW1_011"]
 }

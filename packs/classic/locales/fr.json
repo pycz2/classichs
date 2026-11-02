@@ -26,5 +26,141 @@
       "name": "Ne peut pas attaquer",
       "tip": "Ne peut pas attaquer."
     }
+  },
+  "missions": {
+    "1": {
+      "intro": "Jouez des serviteurs et attaquez Hogger avec. Infligez assez de dégâts et vous gagnez !",
+      "lines": {
+        "start": "Grrr ! Hogger écraser minable mage !",
+        "hurt": "Rrraaagh ! Hogger en colère !",
+        "defeat": "Nooon... Hogger... fatigué..."
+      },
+      "reward_line": "Ouais !"
+    },
+    "2": {
+      "intro": "Dépensez tout votre Mana à chaque tour pour écraser ce gnome agaçant !",
+      "lines": {
+        "start": "Millhouse Tempête-de-mana est là ! Préparez-vous à être émerveillés !",
+        "hurt": "Hé, ça fait mal ! Attends de voir mon gros sort !",
+        "defeat": "Pas juste ! J'arrivais justement à la partie intéressante !"
+      },
+      "reward_line": "C'est assez impressionnant."
+    },
+    "3": {
+      "intro": "Quand des serviteurs s'affrontent, ils subissent tous deux des dégâts.",
+      "lines": {
+        "start": "Salutations, voyageur. Apprenons ensemble.",
+        "hurt": "Un choix sage. Mais l'équilibre doit être préservé.",
+        "defeat": "Votre talent honore la voie. Allez en paix."
+      },
+      "reward_line": "Chaud chaud chaud !"
+    },
+    "4": {
+      "intro": "Vous ne comprenez pas une carte ? Survolez-la !",
+      "lines": {
+        "start": "Mukla vouloir bananes ! Toi pas prendre !",
+        "hurt": "Ouh ouh ! Mukla appeler grand frère !",
+        "defeat": "Mukla... partager bananes..."
+      },
+      "reward_line": "Vous êtes en pleine forme !"
+    },
+    "5": {
+      "intro": "Tuez ses serviteurs ou il va vous submerger !",
+      "lines": {
+        "start": "De la chair fraîche ! Que la chasse commence !",
+        "hurt": "Tu es un gibier coriace !",
+        "defeat": "Eh bien... le chasseur devient la proie."
+      },
+      "reward_line": "C'était incroyable."
+    },
+    "6": {
+      "intro": "Ce combat est totalement injuste. Blâmez les affreux concepteurs du jeu.",
+      "lines": {
+        "start": "Vous n'êtes pas préparés !",
+        "hurt": "Rien ne m'arrêtera !",
+        "defeat": "Impossible... vaincu par un novice ?"
+      },
+      "reward_line": "Magnifique !"
+    }
+  },
+  "hints": {
+    "play": "Cliquez sur une carte de votre main pour la jouer. Les serviteurs vont sur le plateau.",
+    "attack": "Cliquez sur un serviteur qui peut attaquer, puis sur un ennemi pour l'attaquer.",
+    "end_turn": "Plus rien à faire ? Appuyez sur Fin du tour.",
+    "mana": "Vous gagnez un cristal de Mana supplémentaire à chaque tour. Dépensez-les tous !",
+    "raid_leader": "Le chef de raid donne +1 ATQ à vos autres serviteurs.",
+    "trade": "Tuez les serviteurs ennemis avant qu'ils ne deviennent un problème !",
+    "battlecry": "Un Cri de guerre se déclenche quand vous jouez la carte depuis votre main.",
+    "tooltip": "Survolez une carte pour la lire.",
+    "taunt": "Les serviteurs avec Provocation doivent être attaqués en premier. Jouez-en un pour protéger votre héros !",
+    "heal": "Certaines cartes rendent des PV. Utilisez-les sur un héros ou un serviteur blessé.",
+    "buff": "Certaines cartes renforcent vos serviteurs.",
+    "charge": "Les serviteurs avec Charge peuvent attaquer immédiatement.",
+    "hero_power": "Votre Pouvoir héroïque inflige 1 dégât. Vous pouvez l'utiliser une fois par tour.",
+    "weapon": "Les armes permettent aux héros d'attaquer. Chaque attaque coûte 1 point de Durabilité."
+  },
+  "tutorial": {
+    "minion_card.title": "Une carte de serviteur",
+    "minion_card.text": "Chaque carte coûte du Mana pour être jouée. Les serviteurs ont aussi une Attaque et des PV.",
+    "minion_card.mana_cost_what": "Coût en Mana : ce qu'il faut pour jouer la carte",
+    "minion_card.attack_damage_it": "Attaque : les dégâts qu'il inflige",
+    "minion_card.health_at_0": "PV : à 0, le serviteur meurt",
+    "combat.title": "Combat",
+    "combat.text": "Quand des serviteurs combattent, chacun inflige à l'autre des dégâts égaux à son Attaque. Un serviteur à 0 PV meurt.",
+    "combat.survives_with_3": "Survit avec 3 PV",
+    "combat.dies": "Meurt",
+    "heroes.title": "Héros",
+    "heroes.text": "Votre héros a 30 PV. Attaquez le héros ennemi avec vos serviteurs : faites tomber ses PV à 0 pour gagner !",
+    "heroes.you": "Vous",
+    "heroes.enemy_hero": "Le héros ennemi",
+    "mana.title": "Mana",
+    "mana.text": "Vous gagnez un cristal de Mana de plus à chaque tour, jusqu'à 10. Jouer une carte dépense son coût. Essayez de dépenser tout votre Mana à chaque tour !",
+    "mana.turn_1": "Tour 1",
+    "mana.turn_2": "Tour 2",
+    "mana.turn_3": "Tour 3",
+    "mana.turn_4": "Tour 4",
+    "mana.costs_1": "Coûte 1",
+    "mana.costs_2": "Coûte 2",
+    "spells.title": "Sorts",
+    "spells.text": "Un sort fait son effet une fois, puis disparaît. Milhouse adore les sorts ! Un personnage gelé perd sa prochaine attaque.",
+    "spells.mana_cost": "Coût en Mana",
+    "spells.what_spell_does": "Ce que fait le sort",
+    "spells.no_attack_no": "Ni Attaque, ni PV",
+    "battlecry.title": "Cri de guerre",
+    "battlecry.text": "Un Cri de guerre se déclenche une fois, quand vous jouez la carte depuis votre main.",
+    "battlecry.battlecry_deals_1": "Cri de guerre : inflige 1 dégât quand il est joué",
+    "battlecry.battlecry_restores_health": "Cri de guerre : rend des PV quand il est joué",
+    "minions_first.title": "Les serviteurs d'abord",
+    "minions_first.text": "Tant que Cho a des serviteurs, il ne peut pas être attaqué. Les dégâts restent sur un serviteur jusqu'à ce qu'il soit soigné, alors achevez-les !",
+    "minions_first.cho_hides_behind": "Cho se cache derrière ses serviteurs",
+    "minions_first.kill_them_first": "Tuez-les d'abord",
+    "taunt.title": "Provocation",
+    "taunt.text": "Les ennemis doivent attaquer un serviteur avec Provocation avant tout le reste. Placez-en un devant votre héros !",
+    "taunt.taunt_attack_this": "Provocation : attaquez-le en premier",
+    "charge.title": "Charge",
+    "charge.text": "Un serviteur ne peut pas attaquer le tour où il est joué. Les serviteurs avec Charge peuvent attaquer tout de suite.",
+    "charge.played_this_turn": "Joué ce tour-ci : doit attendre",
+    "charge.charge_attacks_at": "Charge : attaque tout de suite",
+    "deathrattle.title": "Râle d’agonie",
+    "deathrattle.text": "Un Râle d’agonie se déclenche quand le serviteur meurt. Les tonneaux du roi Mukla cachent des surprises : cassez-en un pour voir ce qu'il contient !",
+    "deathrattle.when_it_dies": "Quand il meurt...",
+    "deathrattle.out_comes_gnome": "...un gnome en sort !",
+    "hero_power.title": "Pouvoir héroïque",
+    "hero_power.text": "Chaque héros a un Pouvoir héroïque. Il coûte 2 Mana et s'utilise une fois par tour.",
+    "hero_power.your_hero_power": "Votre Pouvoir héroïque",
+    "hero_power.hemet_s_hero": "Pouvoir héroïque de Hemet",
+    "hero_power.mana_cost": "Coût en Mana",
+    "freeze.title": "Gel",
+    "freeze.text": "Un personnage gelé perd sa prochaine attaque. Gelez les chasseurs de Hemet et tuez-les avant qu'ils vous submergent !",
+    "freeze.freezes_whatever_it": "Gèle tout ce qu'il blesse",
+    "weapons.title": "Armes",
+    "weapons.text": "Une arme permet à un héros d'attaquer. Illidan manie des glaives de guerre ! Un héros qui attaque un serviteur subit des dégâts en retour.",
+    "weapons.attack_damage_hero": "Attaque : les dégâts infligés par le héros",
+    "weapons.durability_drops_by": "Durabilité : baisse de 1 à chaque attaque ; à 0, l'arme se brise",
+    "putting_it_all_together.title": "Tout ensemble",
+    "putting_it_all_together.text": "Illidan est puissant. Utilisez tout ce que vous avez appris : protégez votre héros avec Provocation et balayez ses serviteurs avec des sorts.",
+    "putting_it_all_together.his_hero_power": "Son Pouvoir héroïque : deux serviteurs à chaque tour",
+    "putting_it_all_together.taunt_guards_your": "Provocation protège votre héros",
+    "putting_it_all_together.hits_all_enemy": "Touche tous les serviteurs ennemis"
   }
 }

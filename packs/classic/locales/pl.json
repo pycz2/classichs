@@ -26,5 +26,141 @@
       "name": "Nie może atakować",
       "tip": "Nie może atakować."
     }
+  },
+  "missions": {
+    "1": {
+      "intro": "Zagrywaj stronników i atakuj nimi Hoggera. Zadaj mu dość obrażeń, a wygrasz!",
+      "lines": {
+        "start": "Grrr! Hogger zmiażdżyć marnego maga!",
+        "hurt": "Rrraaagh! Hogger zły!",
+        "defeat": "Nieee... Hogger... zmęczony..."
+      },
+      "reward_line": "O tak!"
+    },
+    "2": {
+      "intro": "Wydawaj całą Manę w każdej turze, by zmiażdżyć tego upierdliwego gnoma!",
+      "lines": {
+        "start": "Millhouse Manastorm już tu jest! Szykujcie się na zachwyt!",
+        "hurt": "Hej, to bolało! Zaczekaj, aż zobaczysz moje wielkie zaklęcie!",
+        "defeat": "Nie fair! Właśnie zaczynałem najlepszą część!"
+      },
+      "reward_line": "Całkiem imponujące."
+    },
+    "3": {
+      "intro": "Gdy stronnicy walczą ze sobą, obaj otrzymują obrażenia.",
+      "lines": {
+        "start": "Witaj, wędrowcze. Uczmy się razem.",
+        "hurt": "Mądry ruch. Ale równowaga musi zostać zachowana.",
+        "defeat": "Twoje umiejętności czczą ścieżkę. Idź w pokoju."
+      },
+      "reward_line": "Gorąco, gorąco, gorąco!"
+    },
+    "4": {
+      "intro": "Nie rozumiesz karty? Najedź na nią kursorem!",
+      "lines": {
+        "start": "Mukla chcieć banany! Ty nie brać!",
+        "hurt": "Uu uu! Mukla zawołać wielki brat!",
+        "defeat": "Mukla... dzielić się bananami..."
+      },
+      "reward_line": "Idzie ci znakomicie!"
+    },
+    "5": {
+      "intro": "Zabij jego stronników, bo cię przytłoczy!",
+      "lines": {
+        "start": "Świeża zwierzyna! Niech się zacznie polowanie!",
+        "hurt": "Trudno cię złapać!",
+        "defeat": "No proszę... łowca stał się zwierzyną."
+      },
+      "reward_line": "To było niesamowite."
+    },
+    "6": {
+      "intro": "Ta walka jest totalnie nie fair. Winić okropnych projektantów gry.",
+      "lines": {
+        "start": "Nie jesteście przygotowani!",
+        "hurt": "Nic mnie nie powstrzyma!",
+        "defeat": "Niemożliwe... pokonany przez nowicjusza?"
+      },
+      "reward_line": "Wspaniale!"
+    }
+  },
+  "hints": {
+    "play": "Kliknij kartę na ręce, aby ją zagrać. Stronnicy trafiają na planszę.",
+    "attack": "Kliknij stronnika, który może atakować, a potem wroga, którego chcesz zaatakować.",
+    "end_turn": "Nie masz już nic do zrobienia? Naciśnij Koniec tury.",
+    "mana": "W każdej turze zyskujesz kolejny kryształ many. Wydawaj całą Manę!",
+    "raid_leader": "Przywódca rajdu daje twoim pozostałym stronnikom +1 do Ataku.",
+    "trade": "Zabijaj stronników wroga, zanim staną się problemem!",
+    "battlecry": "Okrzyk bojowy działa, gdy zagrasz kartę z ręki.",
+    "tooltip": "Najedź na dowolną kartę, aby ją przeczytać.",
+    "taunt": "Stronników z Prowokacją trzeba zaatakować w pierwszej kolejności. Zagraj jednego, by ochronić bohatera!",
+    "heal": "Niektóre karty przywracają zdrowie. Użyj ich na rannym bohaterze lub stronniku.",
+    "buff": "Niektóre karty wzmacniają twoich stronników.",
+    "charge": "Stronnicy z Szarżą mogą atakować od razu.",
+    "hero_power": "Twoja Moc specjalna zadaje 1 obrażenie. Możesz jej użyć raz na turę.",
+    "weapon": "Broń pozwala bohaterom atakować. Każdy atak kosztuje 1 Wytrzymałości."
+  },
+  "tutorial": {
+    "minion_card.title": "Karta stronnika",
+    "minion_card.text": "Każda karta kosztuje Manę. Stronnicy mają też Atak i Zdrowie.",
+    "minion_card.mana_cost_what": "Koszt many: tyle trzeba, by zagrać kartę",
+    "minion_card.attack_damage_it": "Atak: obrażenia, które zadaje",
+    "minion_card.health_at_0": "Zdrowie: przy 0 stronnik ginie",
+    "combat.title": "Walka",
+    "combat.text": "Gdy stronnicy walczą, każdy zadaje drugiemu obrażenia równe swojemu Atakowi. Stronnik z 0 Zdrowia ginie.",
+    "combat.survives_with_3": "Przeżywa z 3 Zdrowia",
+    "combat.dies": "Ginie",
+    "heroes.title": "Bohaterowie",
+    "heroes.text": "Twój bohater ma 30 Zdrowia. Atakuj wrogiego bohatera stronnikami: sprowadź jego Zdrowie do 0, by wygrać!",
+    "heroes.you": "Ty",
+    "heroes.enemy_hero": "Wrogi bohater",
+    "mana.title": "Mana",
+    "mana.text": "W każdej turze zyskujesz kolejny kryształ many, aż do 10. Zagranie karty kosztuje tyle, ile na niej napisano. Staraj się wydawać całą Manę w każdej turze!",
+    "mana.turn_1": "Tura 1",
+    "mana.turn_2": "Tura 2",
+    "mana.turn_3": "Tura 3",
+    "mana.turn_4": "Tura 4",
+    "mana.costs_1": "Kosztuje 1",
+    "mana.costs_2": "Kosztuje 2",
+    "spells.title": "Zaklęcia",
+    "spells.text": "Zaklęcie działa raz i znika. Mełko uwielbia zaklęcia! Zamrożona postać traci następny atak.",
+    "spells.mana_cost": "Koszt many",
+    "spells.what_spell_does": "Co robi zaklęcie",
+    "spells.no_attack_no": "Bez Ataku i Zdrowia",
+    "battlecry.title": "Okrzyk bojowy",
+    "battlecry.text": "Okrzyk bojowy działa raz, gdy zagrywasz kartę z ręki.",
+    "battlecry.battlecry_deals_1": "Okrzyk bojowy: zadaje 1 obrażenie po zagraniu",
+    "battlecry.battlecry_restores_health": "Okrzyk bojowy: przywraca Zdrowie po zagraniu",
+    "minions_first.title": "Najpierw stronnicy",
+    "minions_first.text": "Dopóki Czo ma stronników, nie można go atakować. Obrażenia zostają na stronniku, dopóki go nie uleczą, więc dobijaj ich!",
+    "minions_first.cho_hides_behind": "Czo chowa się za stronnikami",
+    "minions_first.kill_them_first": "Zabij ich najpierw",
+    "taunt.title": "Prowokacja",
+    "taunt.text": "Wrogowie muszą najpierw atakować stronnika z Prowokacją. Postaw takiego przed swoim bohaterem!",
+    "taunt.taunt_attack_this": "Prowokacja: atakuj go najpierw",
+    "charge.title": "Szarża",
+    "charge.text": "Stronnik nie może atakować w turze, w której go zagrano. Stronnicy z Szarżą atakują od razu.",
+    "charge.played_this_turn": "Zagrany w tej turze: musi poczekać",
+    "charge.charge_attacks_at": "Szarża: atakuje od razu",
+    "deathrattle.title": "Agonia",
+    "deathrattle.text": "Agonia działa, gdy stronnik ginie. Beczki Króla Mukli kryją niespodzianki: rozbij jedną i zobacz, co jest w środku!",
+    "deathrattle.when_it_dies": "Gdy ginie...",
+    "deathrattle.out_comes_gnome": "...wyskakuje gnom!",
+    "hero_power.title": "Moc specjalna",
+    "hero_power.text": "Każdy bohater ma Moc specjalną. Kosztuje 2 Many i można jej użyć raz na turę.",
+    "hero_power.your_hero_power": "Twoja Moc specjalna",
+    "hero_power.hemet_s_hero": "Moc specjalna Hemeta",
+    "hero_power.mana_cost": "Koszt many",
+    "freeze.title": "Zamrożenie",
+    "freeze.text": "Zamrożona postać traci następny atak. Zamrażaj łowców Hemeta i zabijaj ich, zanim cię zaleją!",
+    "freeze.freezes_whatever_it": "Zamraża wszystko, co zrani",
+    "weapons.title": "Bronie",
+    "weapons.text": "Broń pozwala bohaterowi atakować. Illidan dzierży glewie wojenne! Bohater, który atakuje stronnika, otrzymuje obrażenia zwrotne.",
+    "weapons.attack_damage_hero": "Atak: obrażenia, które zadaje bohater",
+    "weapons.durability_drops_by": "Wytrzymałość: spada o 1 z każdym atakiem; przy 0 broń się łamie",
+    "putting_it_all_together.title": "Wszystko razem",
+    "putting_it_all_together.text": "Illidan jest silny. Wykorzystaj wszystko, czego się nauczyłeś: chroń bohatera Prowokacją i oczyszczaj stół z jego stronników zaklęciami.",
+    "putting_it_all_together.his_hero_power": "Jego Moc specjalna: dwóch stronników co turę",
+    "putting_it_all_together.taunt_guards_your": "Prowokacja chroni bohatera",
+    "putting_it_all_together.hits_all_enemy": "Trafia wszystkich wrogich stronników"
   }
 }

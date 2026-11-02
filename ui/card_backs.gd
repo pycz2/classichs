@@ -1,24 +1,21 @@
 class_name CardBacks
 extends RefCounted
 ## Card backs, drawn in code so they scale to any card size (deck piles, the
-## opponent's hand, cards turning over). The player picks one in the settings.
+## opponent's hand, cards turning over). The player picks one in the settings: a neutral
+## set of no game in particular; a pack with its own back (manifest `card_back`) shows that.
 
-const NAMES := ["classic", "horde", "druid", "arcane", "gold", "night"]
-const LABELS := {"classic": "Classic", "horde": "Horde", "druid": "Druid", "arcane": "Arcane", "gold": "Gold", "night": "Night"}
+const NAMES := ["arcane", "gold", "night"]
+const LABELS := {"arcane": "Arcane", "gold": "Gold", "night": "Night"}
+const DEFAULT := "arcane"
 
 
 static var _pack_tex: Texture2D
 static var _pack_tex_of: Pack
 
 
-## The back in use: the one chosen for the active pack; a pack with its own back (manifest
-## `card_back`) shows it ("pack") until another is chosen; else the settings' back.
+## The back in use: the active pack's own ("pack"), else the one in the settings.
 static func current() -> String:
-	var p := Packs.active()
-	var mine = Settings.data.get("pack_sets", {}).get(p.id(), {}).get("back") if p and Settings.data.get("pack_sets") is Dictionary else null
-	if mine is String and (mine != "pack" or pack_texture()):
-		return mine
-	return "pack" if pack_texture() else Settings.data.get("card_back", "classic")
+	return "pack" if pack_texture() else str(Settings.data.get("card_back", DEFAULT))
 
 
 ## The active pack's own card back picture (null when it has none).
@@ -41,29 +38,7 @@ static func draw(ci: CanvasItem, r: Rect2, back := "") -> void:
 		ci.draw_style_box(Palette.raw_box(Color("1b140f"), int(8 * k), Frames.GOLD.darkened(0.2), maxi(2, int(3 * k))), r)
 		ci.draw_texture_rect(pack_texture(), r.grow(-3 * k), false)
 		return
-	match back:
-		"horde":
-			_frame(ci, r, k, Color("7a1410"), Color("4a0a08"), Color("3a3a3a"), Color("9a9a9a"))
-			for i in 8:  # an iron sun with spikes
-				var a := i * TAU / 8.0
-				var d := Vector2(cos(a), sin(a))
-				var n := Vector2(-d.y, d.x)
-				ci.draw_colored_polygon(PackedVector2Array([c + d * 9 * k + n * 4 * k, c + d * 22 * k, c + d * 9 * k - n * 4 * k]), Color("5c5c5c"))
-			ci.draw_circle(c, 11 * k, Color("2a2a2a"))
-			ci.draw_circle(c, 8 * k, Color("b3261e"))
-			_lines(ci, [c + Vector2(-4, -4) * k, c + Vector2(4, 4) * k], Color("2a2a2a"), 2 * k)
-			_lines(ci, [c + Vector2(4, -4) * k, c + Vector2(-4, 4) * k], Color("2a2a2a"), 2 * k)
-		"druid":
-			_frame(ci, r, k, Color("2f5d2a"), Color("1d3d1a"), Color("8a6a3a"), Color("c9a74a"))
-			for i in 6:  # leaves around a ring of bark
-				var a := i * TAU / 6.0 + 0.3
-				var d := Vector2(cos(a), sin(a))
-				var n := Vector2(-d.y, d.x)
-				var p := c + d * 16 * k
-				ci.draw_colored_polygon(PackedVector2Array([p - d * 7 * k, p + n * 4 * k, p + d * 7 * k, p - n * 4 * k]), Color("7fc15a"))
-				_lines(ci, [p - d * 6 * k, p + d * 6 * k], Color("3d6b2a"), 1 * k)
-			ci.draw_arc(c, 10 * k, 0, TAU, 32, Color("8a6a3a"), 3 * k, true)
-			ci.draw_circle(c, 4 * k, Color("f2e394"))
+	match back if LABELS.has(back) else DEFAULT:
 		"arcane":
 			_frame(ci, r, k, Color("3b2470"), Color("23154a"), Color("9b7be0"), Color("d8c8ff"))
 			var star := PackedVector2Array()
@@ -94,11 +69,6 @@ static func draw(ci: CanvasItem, r: Rect2, back := "") -> void:
 					ci.draw_circle(c + p * k, (0.8 + (i % 3) * 0.4) * k, Color("dfe6ff", 0.8))
 			ci.draw_circle(c, 13 * k, Color("f2eccf"))  # a crescent moon
 			ci.draw_circle(c + Vector2(5, -3) * k, 11 * k, Color("0b0e1c"))
-		_:  # classic
-			_frame(ci, r, k, Color("2b4a8b"), Color("1f3a68"), Color("7a5c1e"), Color("c9a74a"))
-			ci.draw_circle(c, r.size.x * 0.2, Color("c9a74a"))
-			ci.draw_circle(c, r.size.x * 0.14, Color("1f3a68"))
-			ci.draw_colored_polygon(PackedVector2Array([c + Vector2(0, -9) * k, c + Vector2(7, 0) * k, c + Vector2(0, 9) * k, c + Vector2(-7, 0) * k]), Color("f2c94c"))
 
 
 ## The card's body, an inner panel and their two borders.
@@ -107,14 +77,10 @@ static func _frame(ci: CanvasItem, r: Rect2, k: float, body: Color, inner: Color
 	ci.draw_style_box(Palette.raw_box(inner, int(6 * k), inner_edge, maxi(1, int(2 * k))), r.grow(-8 * k))
 
 
-static func _lines(ci: CanvasItem, pts: Array, col: Color, w: float) -> void:
-	ci.draw_line(pts[0], pts[1], col, w, true)
-
-
 ## A small picture of a back, for the settings.
 class Preview:
 	extends Control
-	var back := "classic"
+	var back := CardBacks.DEFAULT
 
 	func _init() -> void:
 		custom_minimum_size = Vector2(26, 36)

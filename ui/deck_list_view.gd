@@ -3,14 +3,16 @@ extends Control
 ## The collection screen: all cards on the left (CollectionView), the player's
 ## decks on the right. A click on a deck opens it in the right panel: then a
 ## click on a card adds it and a click on a line removes one copy.
-## Every change is saved to DeckStore at once. Logged in on a server, a tick on each deck
-## keeps it there too (deck_save on every change, deck_delete when unticked); the server's
-## decks from another device join the list (server/README.md, "Decks").
+## The decks are the active game's: on this device (every change is saved to DeckStore at
+## once), or in a game played through a server the server's (link: deck_save on every change,
+## deck_delete; server/README.md, "Decks"), where "Copy local decks" copies decks of this device
+## made in a game of the same rules. A new deck: a class, then from scratch or from one of the
+## pack's templates (its name, mana curve and description).
 
 signal back
 
 ## Button labels and tooltips (English keys); the translation tool reads this list.
-const BUTTONS := ["New Deck", "Import Code", "Done", "Back", "Copy", "Export Code", "Delete"]
+const BUTTONS := ["New Deck", "Import Code", "Done", "Back", "Copy", "Export Code", "Delete", "Copy local decks"]
 ## The server's answers about decks the player is told (English keys, translated).
 const SERVER_TEXTS := ["You have 100 decks on this server: delete one first", "A deck name is at most 60 characters",
 	"This deck has cards this game does not have", "Arena decks are not kept"]
@@ -34,10 +36,8 @@ var _count: Label
 ## The deck's mana curve above its list (as in the Arena draft).
 var _curve := ManaCurve.new()
 var _panel := Panel.new()
-## The server the decks can be kept on (the lobby's chosen one; main sets it; null = none).
-var link: ServerLink
-## The server answered `decks`: it keeps decks (an older one does not, and shows no ticks).
-var _server_ok := false
+## A game played through a server: the decks are this connection's (DeckStore.link; null = this device's).
+var link: ServerLink = DeckStore.link
 ## Decks whose first deck_save is on the way, by the ref it carries.
 var _pending := {}
 var _refs := 0
@@ -50,7 +50,7 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
-	Palette.backdrop(self, "library_bg")
+	Palette.backdrop(self, "library")
 	browser.name = "Cards"
 	browser.changed.connect(_on_deck_changed)
 	add_child(browser)
@@ -88,8 +88,8 @@ func _ready() -> void:
 	buttons.size = Vector2(inner.size.x, 46)
 	buttons.add_theme_constant_override("separation", 8)
 	_list_box.add_child(buttons)
-	for spec in [["New Deck", _choose_hero], ["Import Code", _show_import]]:
-		var b := Palette.button(tr(spec[0]), spec[0].replace(" ", ""))
+	for spec in [["New Deck", _choose_hero], ["Import Code", _show_import]] + ([["Copy local decks", show_copy_local]] if link else []):
+		var b := Palette.button(tr(spec[0]), spec[0].capitalize().replace(" ", ""))
 		b.custom_minimum_size = Vector2(0, 46)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.add_theme_font_size_override("font_size", 17)
@@ -149,10 +149,6 @@ func _ready() -> void:
 		message.text = DeckStore.last_load_error
 	if link:
 		link.message.connect(_on_server)
-		link.closed.connect(refresh.unbind(1))
-		link.packs_changed.connect(refresh)
-		if link.logged_in():
-			link.send({"t": "decks"})
 
 
 func refresh() -> void:
@@ -174,12 +170,6 @@ func refresh() -> void:
 		acts.offset_top = -34
 		acts.offset_bottom = -8
 		row.add_child(acts)
-		if server_on():
-			var tick := DeckTiles.Action.new("server", tr("Keep on the server"))
-			tick.toggle_mode = true
-			tick.button_pressed = on_server(decks[i])
-			tick.toggled.connect(func(on): set_on_server(idx, on))
-			acts.add_child(tick)
 		for spec in [["copy", "Copy", copy_deck], ["export", "Export Code", show_export], ["delete", "Delete", _confirm_delete]]:
 			var b := DeckTiles.Action.new(spec[0], tr(spec[1]))
 			var act: Callable = spec[2]
@@ -197,12 +187,13 @@ func _show_mode() -> void:
 	_panel.add_theme_stylebox_override("panel", Palette.box(Palette.PANEL, 12, edge, 3 if editing else 2))
 
 
-## Saves the decks; changed: the deck that changed, sent to the server too when kept there.
+## Saves the decks; changed: the deck that changed (a server game: sent to the server).
 func _save(changed: Deck = null) -> void:
-	if not DeckStore.save_all(decks):
+	if link:
+		if changed:
+			_push(changed)
+	elif not DeckStore.save_all(decks):
 		message.text = tr("Could not save the decks")
-	if changed and server_on() and on_server(changed):
-		_push(changed)
 	refresh()
 
 
@@ -211,7 +202,17 @@ func new_deck(hero: String) -> Deck:
 	d.hero = hero
 	d.name = tr("Custom %s") % CardText.name(hero)
 	decks.append(d)
-	_save()
+	_save(d)
+	edit_deck(decks.size() - 1)
+	return d
+
+
+## A new deck as a copy of a template (Decks.templates), open to change.
+func new_from(template: Dictionary) -> Deck:
+	var d: Deck = Deck.from_dict(template.deck.to_dict())
+	d.name = template.name
+	decks.append(d)
+	_save(d)
 	edit_deck(decks.size() - 1)
 	return d
 
@@ -278,19 +279,17 @@ func copy_deck(i: int) -> void:
 		return
 	var d := Deck.from_dict(decks[i].to_dict())
 	d.name = tr("%s (copy)") % d.name
-	d.servers = {}  # a new deck: kept here only until ticked
+	d.servers = {}  # a new deck (a server game: a new one there)
 	decks.append(d)
-	_save()
+	_save(d)
 
 
 func delete_deck(i: int) -> void:
 	if i >= 0 and i < decks.size():
 		if decks[i] == editing:
 			close_deck()
-		if server_on() and server_id(decks[i]) > 0:
-			link.send({"t": "deck_delete", "id": server_id(decks[i])})
-		# ponytail: a deck kept on a server and deleted while not logged in there comes back
-		# from it at the next login; keep the deleted ids if that ever bothers anyone.
+		if link and server_id(decks[i]) > 0:
+			link.send({"t": "deck_delete", "id": server_id(decks[i])})  # (a first save on the way: deleted when its id comes)
 		decks.remove_at(i)
 		_save()
 
@@ -302,7 +301,7 @@ func import_code(text: String) -> String:
 		message.text = r.error
 		return r.error
 	decks.append(r.deck)
-	_save()
+	_save(r.deck)
 	message.text = tr("Deck imported: %s") % r.deck.name
 	return ""
 
@@ -317,38 +316,11 @@ func export_code(i: int) -> String:
 	return DeckCode.encode(decks[i])
 
 
-# --- decks kept on the server (server/README.md, "Decks") ----------------------------------------
+# --- a game played through a server: the server's decks (server/README.md, "Decks") ----------
 
-## Whether decks can be kept on the server now (else the ticks are hidden): logged in on one
-## that keeps decks and has this game (its packs known).
-func server_on() -> bool:
-	return link != null and _server_ok and link.logged_in() and link.has_packs and link.has_game(Packs.active(), true)
-
-
-## The deck's id on the server (0 = not kept there).
+## The deck's id on the server (0 = its first save is on the way).
 func server_id(d: Deck) -> int:
 	return int(d.servers.get(link.url, {}).get("id", 0)) if link else 0
-
-
-## Ticked: kept on the server, or its first save is on the way.
-func on_server(d: Deck) -> bool:
-	return server_id(d) > 0 or _pending.values().has(d)
-
-
-## The tick: on saves the deck to the server, off deletes it there (it stays here).
-func set_on_server(i: int, on: bool) -> void:
-	if i < 0 or i >= decks.size() or not server_on() or on == on_server(decks[i]):
-		return
-	var d := decks[i]
-	if on:
-		_push(d)
-	else:
-		if server_id(d) > 0:
-			link.send({"t": "deck_delete", "id": server_id(d)})
-		d.servers.erase(link.url)
-		for r in _pending.keys().filter(func(k): return _pending[k] == d):
-			_pending.erase(r)  # its id, when it comes, is deleted there (_on_server)
-	_save()
 
 
 ## Sends the deck to the server (an update by its id, or a new one with a ref).
@@ -362,8 +334,7 @@ func _push(d: Deck) -> void:
 		_refs += 1
 		msg["ref"] = str(_refs)
 		_pending[msg.ref] = d
-	msg["pack"] = Packs.active().rules_hash()  # (a server that keeps decks knows packs)
-	link.send(msg)
+	link.send(link.with_pack(msg))
 
 
 static func _same(d: Deck, sd: Dictionary) -> bool:
@@ -372,14 +343,10 @@ static func _same(d: Deck, sd: Dictionary) -> bool:
 
 func _on_server(msg: Dictionary) -> void:
 	match msg.get("t"):
-		"auth":
-			if msg.get("ok", false):
-				link.send({"t": "decks"})
-		"logged_out":
-			refresh()
-		"decks":
-			_server_ok = true
-			merge(msg.get("list") if msg.get("list") is Array else [])
+		"decks":  # (the list came after the screen opened)
+			if editing == null and _pending.is_empty():
+				decks = DeckStore.load_all()
+				refresh()
 		"deck_saved":
 			var sd: Dictionary = msg.get("deck") if msg.get("deck") is Dictionary else {}
 			var id := int(sd.get("id", 0))
@@ -387,7 +354,7 @@ func _on_server(msg: Dictionary) -> void:
 			var d: Deck = _pending.get(r) if r is String else null
 			if r is String:
 				_pending.erase(r)
-				if d == null or not decks.has(d):  # unticked or deleted meanwhile
+				if d == null or not decks.has(d):  # deleted meanwhile
 					link.send({"t": "deck_delete", "id": id})
 					return
 			for x in decks:
@@ -396,57 +363,78 @@ func _on_server(msg: Dictionary) -> void:
 			if d == null:
 				return
 			d.servers[link.url] = {"id": id, "at": int(sd.get("updated", 0))}
-			DeckStore.save_all(decks)
 			if not _same(d, sd):  # changed while its first save was on the way
 				_push(d)
 			refresh()
 		"error":
 			if msg.get("code") in ["deck", "bad_name", "decks_full", "pack"]:
 				if not _pending.is_empty():  # (answers come in order: the oldest new deck)
+					decks.erase(_pending[_pending.keys()[0]])
 					_pending.erase(_pending.keys()[0])
 				message.text = Rules.tr_error(str(msg.get("text", "")))
 				refresh()
 
 
-## The server's decks after login: the active game's ones from another device join the list;
-## one changed there since this copy matched it replaces it; one changed only here is sent;
-## one gone from there (deleted or unticked elsewhere) stays here only.
-func merge(list: Array) -> void:
-	var there := {}  # server id -> the server's deck
-	for sd in list:
-		if sd is Dictionary and str(sd.get("pack", "")) == Packs.active().id():
-			there[int(sd.get("id", 0))] = sd
-	var changed := false
-	for d in decks:
-		var id := server_id(d)
-		if id <= 0:
-			continue
-		var sd = there.get(id)
-		there.erase(id)
-		if sd == null:
-			d.servers.erase(link.url)
-			changed = true
-		elif int(sd.get("updated", 0)) > int(d.servers[link.url].at):
-			# ponytail: changed on both sides: the server's copy wins
-			var nd := Deck.from_dict(sd)
-			if nd:
-				d.name = nd.name
-				d.hero = nd.hero
-				d.cards = nd.cards
-				d.servers[link.url].at = int(sd.updated)
-				changed = true
-		elif not _same(d, sd):
-			_push(d)
-	for id in there:
-		var nd := Deck.from_dict(there[id])
-		if nd:
-			nd.servers[link.url] = {"id": id, "at": int(there[id].get("updated", 0))}
-			decks.append(nd)
-			changed = true
-	if changed:
-		_save()
-	else:
-		refresh()
+## The decks of this device made in a game of the same rules as this one (a pack with the same
+## rules hash): [{pack: id, deck}] (read with this game's cards: the same ones).
+func local_decks() -> Array:
+	var out := []
+	var seen := {}
+	for p: Pack in Packs.all():
+		if p.rules_hash() == Packs.active().rules_hash() and not seen.has(p.id()):
+			seen[p.id()] = true
+			for d in DeckStore.load_local(p.id()):
+				out.append({"pack": p.id(), "deck": d})
+	return out
+
+
+## Copies decks of this device to the server (new decks there).
+func copy_local(chosen: Array) -> void:
+	for d: Deck in chosen:
+		var c := Deck.from_dict(d.to_dict())
+		c.servers = {}
+		decks.append(c)
+		_push(c)
+	message.text = tr("Copied: %d") % chosen.size()
+	refresh()
+
+
+## "Copy local decks": a tick per deck of this device in this game (any version of it), then Copy.
+func show_copy_local() -> void:
+	var box := _popup(tr("Copy local decks"), true)
+	var all := local_decks()
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(620, mini(400, 44 * maxi(1, all.size())))
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	box.add_child(scroll)
+	var list := VBoxContainer.new()
+	list.name = "LocalDecks"
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(list)
+	if all.is_empty():
+		list.add_child(Palette.label(tr("No decks of this game on this device"), 18, Palette.MUTED))
+	var ticks := []
+	for i in all.size():
+		var d: Deck = all[i].deck
+		var cb := CheckBox.new()
+		cb.name = "Local%d" % i
+		cb.text = "%s  ·  %s  ·  %d / %d" % [d.name, CardText.name(d.hero), d.cards.size(), Deck.SIZE]
+		cb.add_theme_font_size_override("font_size", 18)
+		list.add_child(cb)
+		ticks.append([cb, d])
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	box.add_child(row)
+	var ok := Palette.button(tr("Copy"), "DoCopy")
+	ok.disabled = all.is_empty()
+	ok.pressed.connect(func():
+		var chosen := ticks.filter(func(t): return t[0].button_pressed).map(func(t): return t[1])
+		_close()
+		copy_local(chosen))
+	row.add_child(ok)
+	var no := Palette.button(tr("Cancel"), "Cancel")
+	no.pressed.connect(_close)
+	row.add_child(no)
 
 
 # --- popups ---------------------------------------------------------------------
@@ -458,7 +446,8 @@ func _close() -> void:
 		_overlay = null
 
 
-func _popup(title: String) -> VBoxContainer:
+## A popup over the screen: its title, then what the caller puts in the box (framed: on a panel).
+func _popup(title: String, framed := false) -> VBoxContainer:
 	_close()
 	_overlay = Control.new()
 	_overlay.name = "Popup"
@@ -472,7 +461,13 @@ func _popup(title: String) -> VBoxContainer:
 	_overlay.add_child(center)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 12)
-	center.add_child(box)
+	if framed:
+		var panel := PanelContainer.new()
+		panel.add_theme_stylebox_override("panel", Palette.frame())
+		center.add_child(panel)
+		panel.add_child(box)
+	else:
+		center.add_child(box)
 	box.add_child(Palette.label(title, 26, Palette.ATTACK))
 	add_child(_overlay)
 	return box
@@ -491,15 +486,80 @@ func _choose_hero() -> void:
 		st.content_margin_left = 46
 		b.add_theme_stylebox_override("normal", st)
 		Icons.attach(b, cls, 34)
-		var hero := Decks.hero(cls)
 		b.pressed.connect(func():
 			_close()
-			new_deck(hero))
+			choose_start(cls))
 		grid.add_child(b)
 	box.add_child(grid)
 	var cancel := Palette.button(tr("Cancel"), "Cancel")
 	cancel.pressed.connect(_close)
 	box.add_child(cancel)
+
+
+## After the class: from scratch, or a copy of one of the pack's templates of that class.
+func choose_start(cls: String) -> void:
+	var templates := Decks.templates(cls)
+	if templates.is_empty():
+		new_deck(Decks.hero(cls))
+		return
+	var box := _popup(tr("A new deck: %s") % CardText.name(Decks.hero(cls)), true)
+	var scratch := Palette.button(tr("From scratch"), "FromScratch")
+	scratch.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	scratch.pressed.connect(func():
+		_close()
+		new_deck(Decks.hero(cls)))
+	box.add_child(scratch)
+	box.add_child(Palette.label(tr("From a template"), 20, Palette.ATTACK))
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(760, mini(420, 110 * templates.size()))
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	box.add_child(scroll)
+	var list := VBoxContainer.new()
+	list.name = "Templates"
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 6)
+	scroll.add_child(list)
+	for t in templates:
+		list.add_child(_template_row(t))
+	var cancel := Palette.button(tr("Cancel"), "Cancel")
+	cancel.size_flags_horizontal = Control.SIZE_SHRINK_END
+	cancel.pressed.connect(_close)
+	box.add_child(cancel)
+
+
+## A template: its name, description and mana curve; a click copies it into a new deck.
+func _template_row(t: Dictionary) -> Control:
+	var b := Button.new()
+	b.name = "Template_" + str(t.key)
+	b.custom_minimum_size = Vector2(740, 100)
+	b.focus_mode = Control.FOCUS_NONE
+	b.add_theme_stylebox_override("normal", Palette.box(Color(0.08, 0.06, 0.04), 10, Color("6b5320"), 1))
+	b.add_theme_stylebox_override("hover", Palette.box(Color(0.16, 0.11, 0.06), 10, Color("c9a74a"), 2))
+	b.add_theme_stylebox_override("pressed", Palette.box(Color(0.16, 0.11, 0.06), 10, Color("c9a74a"), 2))
+	b.pressed.connect(func():
+		_close()
+		new_from(t))
+	var name_l := Palette.label(t.name, 20, Palette.ATTACK)
+	name_l.position = Vector2(14, 8)
+	name_l.size = Vector2(500, 28)
+	name_l.clip_text = true
+	name_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(name_l)
+	var desc := Palette.label(t.description, 15, Palette.MUTED)
+	desc.position = Vector2(14, 38)
+	desc.size = Vector2(500, 56)
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	desc.clip_text = true
+	desc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(desc)
+	var curve := ManaCurve.new()
+	curve.compact = true
+	curve.counts = ManaCurve.of(t.deck.cards)
+	curve.position = Vector2(530, 12)
+	curve.size = Vector2(196, 76)
+	curve.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(curve)
+	return b
 
 
 func _confirm_delete(i: int) -> void:

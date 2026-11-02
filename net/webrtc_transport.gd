@@ -106,7 +106,7 @@ func _setup_peer() -> bool:
 	if _relay_only():  # ?relay=1: only through TURN, to test the relay
 		config["iceTransportPolicy"] = "relay"
 	if pc.initialize(config) != OK:
-		error.emit(tr("Online play needs the browser version of the game"))
+		error.emit(tr("Code play needs WebRTC, which this build does not have"))
 		return false
 	channel = pc.create_data_channel("game", {"negotiated": true, "id": 1})
 	pc.session_description_created.connect(func(type: String, sdp: String):

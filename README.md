@@ -1,4 +1,4 @@
-# Classic HS
+# Classic Heroes Showdown (Classic HS)
 
 A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas: all 382 Basic and Classic cards, nine classes, the original tutorial, a bot, and online play with a friend straight from the browser — without a game server.
 
@@ -15,7 +15,7 @@ A fan remake of **Hearthstone Classic** as it was in June 2014, before Naxxramas
 - **Tutorial** like the original: six missions as Jaina against Hogger, Millhouse Manastorm, Lorewalker Cho, King Mukla, Hemet Nesingwary and Illidan Stormrage.
 - **Collection and decks:** every card unlocked, unlimited decks saved in the browser, ten well-known Classic decks ready to play, Hearthstone-compatible deck codes (import and export).
 - **Deck tracker** (your deck, cards left with the chance to draw each one, what the opponent played) and the **move history** by turns: a tile for every move, hover it to see what it did; the full text history on a click.
-- **Debug tools** (Settings): build any position with the mouse (or in JSON) and play it against the bot or for both sides; a test scene for each of the 534 cards and tokens; any card with any effect.
+- **Debug tools** (a game's Settings): build any position with the mouse (or in JSON) and play it against the bot or for both sides; a test scene for each of the 534 cards and tokens; any card with any effect.
 - **8 languages** (English, Русский, Deutsch, Français, Español, Português (Brasil), Italiano, Polski), synthesized sound and music, 6 emotes in the heroes' own words (speech bubbles) and mute, six card backs, animation speed, screen shake toggle, fullscreen.
 - **Web app:** the browser version can be installed as an app (PWA); after the first runs the browser keeps the game files, so it starts faster and opens offline; a newly published version loads by itself (no hard reload).
 - **Card art:** generated illustrations for every card and hero (see *Card art sets* below); frames, gems and table effects are drawn by code.
@@ -44,8 +44,8 @@ cargo run --release -- admin admin        # once: create the superuser (asks for
 cargo run --release                        # listens on 127.0.0.1:7377
 ```
 
-Then in the game: Online Game → Through a game server (the address is in Settings → Game server,
-`ws://localhost:7377` by default); the admin panel is at http://localhost:7377/admin.
+Then in the game: Play → Server → add a connection (`ws://localhost:7377`) → Open, log in or
+register → the server's games; the admin panel is at http://localhost:7377/admin.
 Release builds of the server for Windows, Linux and macOS come with every version tag.
 Details, security notes and the protocol: [server/README.md](server/README.md) and
 [the design](docs/superpowers/specs/2026-10-15-thin-client-design.md).
@@ -79,25 +79,27 @@ Other tools: `tools/extract_cards.py` rebuilds `data/cards.json` from Hearthston
 
 ## Music sets
 
-Settings → Music set chooses the music; the sounds are always the generated ones:
+Play → Direct → a game's details choose its music set (through a server: the server's home, kept
+on the server); the sounds are always the generated ones. The client's own screens play one
+neutral track, `audio/shell/menu.wav` (`tools/gen_shell_music.py`):
 
 - **Generated** — `audio/*.wav`, synthesized by `tools/gen_audio.py`.
 - **Open (CC0)** — `audio/open/*.ogg`, tracks by RandomMind from OpenGameArt, public domain (CC0): menu — [Minstrel Dance](https://opengameart.org/content/medieval-minstrel-dance); battle — [The Old Tower Inn](https://opengameart.org/content/medieval-the-old-tower-inn), [King's Feast](https://opengameart.org/content/medieval-kings-feast), [The Bard's Tale](https://opengameart.org/content/medieval-the-bards-tale). `tools/fetch_open_music.py` downloads and encodes them.
 
 ## Card art sets
 
-Every folder in `art/` is a picture set, selectable in Settings → Card art:
+Every folder in `art/` is a picture set, selectable in Play → Direct → Classic's details → Card art:
 
 - `art/cards/` — illustrations generated with the local Codex CLI (`tools/gen_card_art.py`).
 - `art/original/` — the original art from [HearthstoneJSON](https://hearthstonejson.com/docs/images.html) (`tools/fetch_original_art.py`). It belongs to Blizzard, so it stays out of git and out of the published web build: local play only.
-- Your own set: create `art/<any name>/` and put pictures named by card id (`CS2_029.jpg`, `VAN_EX1_298.png`, `HERO_08.webp`…). The next build picks the folder up and the set appears in the settings. Cards without a picture in the set use the drawn art.
+- Your own set: create `art/<any name>/` and put pictures named by card id (`CS2_029.jpg`, `VAN_EX1_298.png`, `HERO_08.webp`…). The next build picks the folder up and the set appears in the game's details. Cards without a picture in the set use the drawn art.
 
 ## How it is built
 
 | Folder | What is there |
 |---|---|
 | `rust/engine/` | The rules engine in Rust: every rule and card, the bot, the Arena draft, deck rules, tutorial missions; a JSON API. The same crate runs in the game server, in the game through GDExtension (`rust/godot`, desktop and Android) and in the browser as WebAssembly (`rust/wasm` + `web/rules.js`). See [its README](rust/engine/README.md) and [the design](docs/superpowers/specs/2026-10-15-thin-client-design.md). |
-| `game/` | `Rules` (the bridge to the engine), `GameView` (the game as the table draws it), the match controller, decks and deck codes, tutorial texts, settings, locale, sound, deck tracker. |
+| `game/` | `Rules` (the bridge to the engine), `GameView` (the game as the table draws it), the match controller, decks and deck codes, the active pack's tutorial (`Missions`, `Tutorial`: its missions, intro pages and hints come from the pack's `tutorial.json`, docs/packs/format.md §12), settings, locale, sound, deck tracker. |
 | `net/` | Transport (WebRTC data channel), signalling codes, session protocol (hello, start, actions with state hashes, emotes). |
 | `ui/` | All screens, built in code; procedural art. |
 | `tests/` | GDScript tests of the screens, flows, network protocols and helpers (through the engine). The rules are tested in Rust (`cd rust && cargo test`). |

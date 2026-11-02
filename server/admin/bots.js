@@ -10,7 +10,7 @@ const LEVEL = { easy: 'Easy', medium: 'Medium', hard: 'Hard' }
 const LEVEL_TIP = {
   easy: 'One guess of the hidden cards, looks one action ahead, errs now and then (30%)',
   medium: '2–3 guesses of the hidden cards, plays its turn on, ignores the reply',
-  hard: 'Up to 24 guesses within a second, plays its turn on and the opponent\'s whole reply'
+  hard: 'Up to 10 guesses within a second, plays its turn on and the opponent\'s whole reply'
 }
 const MODES = { ladder: 'Ranked + casual', ranked: 'Ranked', casual: 'Casual', arena: 'Arena' }
 

@@ -26,5 +26,141 @@
       "name": "Não pode atacar",
       "tip": "Não pode atacar."
     }
+  },
+  "missions": {
+    "1": {
+      "intro": "Jogue lacaios e use-os para atacar Hogger. Cause dano suficiente e você vence!",
+      "lines": {
+        "start": "Grrr! Hogger esmagar magrela fraca!",
+        "hurt": "Rrraaagh! Hogger com raiva!",
+        "defeat": "Nããão... Hogger... cansado..."
+      },
+      "reward_line": "Isso aí!"
+    },
+    "2": {
+      "intro": "Gaste sua Mana a cada turno para esmagar esse gnomo irritante!",
+      "lines": {
+        "start": "Millhouse Manastorm chegou! Preparem-se para se maravilhar!",
+        "hurt": "Ei, isso doeu! Espere até ver meu grande feitiço!",
+        "defeat": "Não vale! Eu estava chegando na melhor parte!"
+      },
+      "reward_line": "Isso é bastante impressionante."
+    },
+    "3": {
+      "intro": "Quando lacaios lutam entre si, ambos sofrem dano.",
+      "lines": {
+        "start": "Saudações, viajante. Vamos aprender juntos.",
+        "hurt": "Uma escolha sábia. Mas o equilíbrio deve ser mantido.",
+        "defeat": "Sua habilidade honra o caminho. Vá em paz."
+      },
+      "reward_line": "Quente, quente, quente!"
+    },
+    "4": {
+      "intro": "Não entendeu uma carta? Passe o mouse sobre ela!",
+      "lines": {
+        "start": "Mukla querer bananas! Você não pegar!",
+        "hurt": "Uh uh! Mukla chamar irmão grande!",
+        "defeat": "Mukla... dividir bananas..."
+      },
+      "reward_line": "Você está arrasando!"
+    },
+    "5": {
+      "intro": "Mate os lacaios dele ou ele vai te dominar!",
+      "lines": {
+        "start": "Caça nova! Que comece a caçada!",
+        "hurt": "Você é osso duro de roer!",
+        "defeat": "Pois é... o caçador virou a caça."
+      },
+      "reward_line": "Isso foi incrível."
+    },
+    "6": {
+      "intro": "Esta luta é totalmente injusta. Culpe os terríveis designers do jogo.",
+      "lines": {
+        "start": "Vocês não estão preparados!",
+        "hurt": "Eu não serei detido!",
+        "defeat": "Impossível... derrotado por um novato?"
+      },
+      "reward_line": "Magnífico!"
+    }
+  },
+  "hints": {
+    "play": "Clique em uma carta da sua mão para jogá-la. Lacaios vão para a mesa.",
+    "attack": "Clique em um lacaio que possa atacar e depois em um inimigo para atacá-lo.",
+    "end_turn": "Nada mais a fazer? Pressione Finalizar Turno.",
+    "mana": "Você ganha mais um Cristal de Mana a cada turno. Gaste tudo!",
+    "raid_leader": "O Líder da Raide dá +1 de Ataque aos seus outros lacaios.",
+    "trade": "Mate os lacaios inimigos antes que virem um problema!",
+    "battlecry": "O Grito de Guerra acontece quando você joga a carta da sua mão.",
+    "tooltip": "Passe o mouse sobre qualquer carta para lê-la.",
+    "taunt": "Lacaios com Provocar devem ser atacados primeiro. Jogue um para proteger seu herói!",
+    "heal": "Algumas cartas restauram Vida. Use-as em um herói ou lacaio ferido.",
+    "buff": "Algumas cartas fortalecem seus lacaios.",
+    "charge": "Lacaios com Investida podem atacar imediatamente.",
+    "hero_power": "Seu Poder Heroico causa 1 de dano. Você pode usá-lo uma vez por turno.",
+    "weapon": "Armas permitem que heróis ataquem. Cada ataque custa 1 de Durabilidade."
+  },
+  "tutorial": {
+    "minion_card.title": "Uma carta de lacaio",
+    "minion_card.text": "Toda carta custa Mana para ser jogada. Lacaios também têm Ataque e Vida.",
+    "minion_card.mana_cost_what": "Custo de Mana: o que é preciso para jogar a carta",
+    "minion_card.attack_damage_it": "Ataque: o dano que ele causa",
+    "minion_card.health_at_0": "Vida: em 0 o lacaio morre",
+    "combat.title": "Combate",
+    "combat.text": "Quando lacaios lutam, cada um causa ao outro dano igual ao seu Ataque. Um lacaio com 0 de Vida morre.",
+    "combat.survives_with_3": "Sobrevive com 3 de Vida",
+    "combat.dies": "Morre",
+    "heroes.title": "Heróis",
+    "heroes.text": "Seu herói tem 30 de Vida. Ataque o herói inimigo com seus lacaios: leve a Vida dele a 0 para vencer!",
+    "heroes.you": "Você",
+    "heroes.enemy_hero": "O herói inimigo",
+    "mana.title": "Mana",
+    "mana.text": "Você ganha mais um Cristal de Mana a cada turno, até 10. Jogar uma carta gasta o custo dela. Tente gastar toda a sua Mana a cada turno!",
+    "mana.turn_1": "Turno 1",
+    "mana.turn_2": "Turno 2",
+    "mana.turn_3": "Turno 3",
+    "mana.turn_4": "Turno 4",
+    "mana.costs_1": "Custa 1",
+    "mana.costs_2": "Custa 2",
+    "spells.title": "Feitiços",
+    "spells.text": "Um feitiço faz efeito uma vez e some. Millhouse adora feitiços! Um personagem congelado perde o próximo ataque.",
+    "spells.mana_cost": "Custo de Mana",
+    "spells.what_spell_does": "O que o feitiço faz",
+    "spells.no_attack_no": "Sem Ataque, sem Vida",
+    "battlecry.title": "Grito de Guerra",
+    "battlecry.text": "Um Grito de Guerra acontece uma vez, quando você joga a carta da mão.",
+    "battlecry.battlecry_deals_1": "Grito de Guerra: causa 1 de dano ao ser jogado",
+    "battlecry.battlecry_restores_health": "Grito de Guerra: restaura Vida ao ser jogado",
+    "minions_first.title": "Primeiro os lacaios",
+    "minions_first.text": "Enquanto Cho tiver lacaios, ele não pode ser atacado. O dano fica no lacaio até ele ser curado, então acabe com eles!",
+    "minions_first.cho_hides_behind": "Cho se esconde atrás dos lacaios",
+    "minions_first.kill_them_first": "Mate-os primeiro",
+    "taunt.title": "Provocar",
+    "taunt.text": "Os inimigos precisam atacar um lacaio com Provocar antes de tudo. Coloque um na frente do seu herói!",
+    "taunt.taunt_attack_this": "Provocar: ataque este primeiro",
+    "charge.title": "Investida",
+    "charge.text": "Um lacaio não pode atacar no turno em que é jogado. Lacaios com Investida podem atacar na hora.",
+    "charge.played_this_turn": "Jogado neste turno: precisa esperar",
+    "charge.charge_attacks_at": "Investida: ataca na hora",
+    "deathrattle.title": "Último Suspiro",
+    "deathrattle.text": "Um Último Suspiro acontece quando o lacaio morre. Os barris do Rei Mukla escondem surpresas: quebre um para ver o que tem dentro!",
+    "deathrattle.when_it_dies": "Quando ele morre...",
+    "deathrattle.out_comes_gnome": "...sai um gnomo!",
+    "hero_power.title": "Poder Heroico",
+    "hero_power.text": "Todo herói tem um Poder Heroico. Ele custa 2 de Mana e pode ser usado uma vez por turno.",
+    "hero_power.your_hero_power": "Seu Poder Heroico",
+    "hero_power.hemet_s_hero": "Poder Heroico do Rosarães",
+    "hero_power.mana_cost": "Custo de Mana",
+    "freeze.title": "Congelar",
+    "freeze.text": "Um personagem congelado perde o próximo ataque. Congele os caçadores do Rosarães e mate-os antes que eles te dominem!",
+    "freeze.freezes_whatever_it": "Congela tudo o que ele ferir",
+    "weapons.title": "Armas",
+    "weapons.text": "Uma arma permite que o herói ataque. Illidan empunha glaives de guerra! Um herói que ataca um lacaio leva dano de volta.",
+    "weapons.attack_damage_hero": "Ataque: o dano que o herói causa",
+    "weapons.durability_drops_by": "Durabilidade: cai 1 a cada ataque; em 0 a arma quebra",
+    "putting_it_all_together.title": "Juntando tudo",
+    "putting_it_all_together.text": "Illidan é forte. Use tudo o que aprendeu: proteja seu herói com Provocar e acabe com os lacaios dele usando feitiços.",
+    "putting_it_all_together.his_hero_power": "O Poder Heroico dele: dois lacaios a cada turno",
+    "putting_it_all_together.taunt_guards_your": "Provocar protege seu herói",
+    "putting_it_all_together.hits_all_enemy": "Atinge todos os lacaios inimigos"
   }
 }

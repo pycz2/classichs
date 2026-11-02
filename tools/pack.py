@@ -37,7 +37,7 @@ PATH_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_.-]*(/[A-Za-z0-9_][A-Za-z0-9_.-]*
 IMAGES = (".png", ".jpg", ".jpeg", ".webp")
 AUDIO = (".ogg", ".wav", ".mp3")
 # Top-level files and, per directory, the extensions it may hold and how deep it goes.
-TOP_FILES = {"manifest.json", "rules.json", "cards.json", "README.md", "CREDITS.md", "LICENSE.txt"}
+TOP_FILES = {"manifest.json", "rules.json", "cards.json", "tutorial.json", "README.md", "CREDITS.md", "LICENSE.txt"}
 DIRS = {  # dir -> (extensions, depth below dir: 1 = files right in it, 2 = in a sub-folder (a set / a language))
     "scripts": ((".lua", ".md"), None),
     "locales": ((".json",), 1),
@@ -382,6 +382,8 @@ def check_files(files):
         card(rules["start"]["coin"], "rules.json start.coin", "SPELL")
     if "default_power" in rules:
         card(rules["default_power"], "rules.json default_power", "POWER")
+    elif any(c["type"] == "CHAMPION" for c in card_list):
+        r.error("rules.json: default_power is missing (the engine needs it whenever the pack has champions)")
     modes = rules["modes"]
     for mname, mode in modes.items():
         for s in mode["sets"]:
@@ -462,7 +464,8 @@ def check_files(files):
     if "ui/theme.json" in files:
         theme = _json(files, "ui/theme.json", r, "theme.schema.json")
         refs = [] if theme is None else [theme.get(k, {}).get(f) for k, f in
-                                         (("fonts", "title"), ("fonts", "body"), ("button", "texture"), ("panel", "texture"))]
+                                         (("fonts", "title"), ("fonts", "body"), ("button", "texture"), ("panel", "texture"),
+                                          ("menu", "crest"))]
         for f in refs:
             if f and f not in files:
                 r.error(f"ui/theme.json: {f} is not in the pack")
@@ -538,7 +541,85 @@ def check_files(files):
             card(cid, p)
         if m.get("script") and m["script"].split("#")[0] not in files:
             r.error(f"{p}: script {m['script']} is not in the pack")
+    check_tutorial(files, r, man, rules, card)
     return r
+
+
+def check_tutorial(files, r, man, rules, card):
+    """tutorial.json (format.md §12): its missions exist, its cards, champions and pictures are in the pack,
+    every text it names is in the default locale (other languages: warnings), every hint a mission uses has a rule."""
+    has_missions = any(p.startswith("missions/") for p in files)
+    if "tutorial.json" not in files:
+        if has_missions:
+            r.warn("missions/ without tutorial.json: the client shows no tutorial")
+        return
+    t = _json(files, "tutorial.json", r, "tutorial.schema.json")
+    if t is None:
+        return
+    base = man["default_locale"]
+    locs = {}
+    for lang in man["locales"]:
+        try:
+            locs[lang] = load_json(files[f"locales/{lang}.json"])
+        except (KeyError, PackError):
+            pass  # reported with the locales
+
+    def text(path, where, required=True):
+        for lang, loc in locs.items():
+            v = loc
+            for k in path:
+                v = v.get(k) if isinstance(v, dict) else None
+            if not isinstance(v, str) or not v.strip():
+                (r.error if lang == base and required else r.warn)(
+                    f"{where}: no text {'.'.join(path)} in locales/{lang}.json")
+
+    seen = set()
+    for i, ms in enumerate(t["missions"]):
+        at = f"tutorial.json missions[{i}]"
+        n = ms["id"]
+        if n in seen:
+            r.error(f"{at}: mission {n} twice")
+        seen.add(n)
+        p = f"missions/{n}.json"
+        if p not in files:
+            r.error(f"{at}: {p} is not in the pack")
+            continue
+        try:
+            m = load_json(files[p], p)
+        except PackError:
+            continue  # reported with the missions
+        text(["missions", str(n), "intro"], at)
+        for k in ("start", "hurt", "defeat"):
+            text(["missions", str(n), "lines", k], at, required=False)
+        if m.get("reward"):
+            text(["missions", str(n), "reward_line"], at, required=False)
+        for h in m.get("hints", []):
+            if h not in t.get("hints", {}):
+                r.error(f"{p}: hint {h} has no rule in tutorial.json hints")
+            text(["hints", h], p)
+        for j, page in enumerate(ms.get("intro", [])):
+            where = f"{at}.intro[{j}]"
+            text(["tutorial", page["title"]], where)
+            text(["tutorial", page["text"]], where)
+            cards = 0
+            for it in page.get("items", []):
+                if "card" in it:
+                    card(it["card"], where)
+                    cards += 1
+                elif "hero" in it:
+                    card(it["hero"], where, "CHAMPION")
+                elif "picture" in it and it["picture"] not in files:
+                    r.error(f"{where}: picture {it['picture']} is not in the pack")
+                elif "note" in it:
+                    text(["tutorial", it["note"]], where)
+                    if isinstance(it.get("to"), dict) and it["to"]["card"] >= cards:
+                        r.error(f"{where}: note {it['note']} points at card {it['to']['card']}, the page has {cards} before it")
+    for h, conds in t.get("hints", {}).items():
+        for c in conds:
+            for cid in c.get("cards", []):
+                card(cid, f"tutorial.json hints.{h}")
+            if c.get("keyword") and c["keyword"] not in rules.get("mechanics", {}):
+                r.warn(f"tutorial.json hints.{h}: keyword {c['keyword']} is not in rules.json mechanics")
 
 
 # --- zip ---------------------------------------------------------------------------------------

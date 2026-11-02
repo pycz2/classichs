@@ -1,0 +1,29 @@
+{
+ "about": "Classic's tavern look (docs/packs/format.md, 'UI theme'): wooden planks with gold frames, dark wood panels in gold rims, cream text, gold headings, embers over the tavern; the title in Cinzel Decorative under the gold dragon crest.",
+ "colors": {
+  "text": "f4ead5",
+  "muted": "c9b48a",
+  "accent": "f2c200",
+  "table": "3b2f22",
+  "panel": "1c130bf5",
+  "panel_border": "a8863a",
+  "backdrop": "665c54",
+  "button": "6b4428",
+  "button_hover": "7a5030",
+  "button_pressed": "4a2c18",
+  "button_disabled": "3a2a1e",
+  "button_border": "d9b44a",
+  "button_text": "f4ead5",
+  "button_text_hover": "fff3c4",
+  "button_text_pressed": "e0c890",
+  "button_text_disabled": "a89c88",
+  "outline": "000000",
+  "danger": "ff5a36",
+  "ok": "3fd14b"
+ },
+ "outline_size": 4,
+ "button": {"style": "wood", "radius": 11, "border": 2, "glow": "00000000", "glow_size": 0, "glow_hover": "00000000", "glow_hover_size": 0},
+ "panel": {"radius": 14, "border": 3, "glow": "0000008c", "glow_size": 14},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "menu": {"shade": "140d0859", "particles": "embers", "crest": "ui/crest.png"}
+}

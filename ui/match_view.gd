@@ -138,8 +138,8 @@ func _ready() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
-	var board := TextureRect.new()  # the game board on a tavern table (generated)
-	board.texture = Packs.picture("board") if Packs.picture("board") else load("res://ui/board_bg.jpg")
+	var board := TextureRect.new()  # the game's board (Classic's: on a tavern table), else the client's backdrop
+	board.texture = Packs.picture("board") if Packs.picture("board") else Palette.shell_picture()
 	board.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	board.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	board.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -215,6 +215,10 @@ func _ready() -> void:
 func bind(m: Match) -> void:
 	controller = m
 	m.busy = func() -> bool: return _busy
+	var fx := SceneFx.make(tutorial.mission.effect) if tutorial else null  # the pack's effect over the board
+	if fx:
+		add_child(fx)
+		move_child(fx, 2)
 	add_child(m)
 	m.changed.connect(_on_changed)
 	m.finished.connect(func(_w): refresh())
@@ -2713,13 +2717,12 @@ func _refresh_overlay() -> void:
 
 
 ## The result screen: the picture of the result dimmed behind a big title that
-## grows in (the pack's ui/result_<kind> picture, or ui/sprites/result_<kind> from tools/gen_ui_art.py).
+## grows in (the pack's ui/result_<kind> picture, if it has one).
 func _result_look(box: VBoxContainer, kind: String) -> void:
 	var art := TextureRect.new()
 	art.name = "ResultArt"
 	art.set_meta("kind", kind)
-	var own := Packs.picture("result_" + kind)  # the active pack's ui/result_<kind>, else Classic's
-	art.texture = own if own != null else Sprites.get_tex("result_" + kind)
+	art.texture = Packs.picture("result_" + kind)
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -2766,11 +2769,12 @@ func _tutorial_result(box: VBoxContainer) -> void:
 		Progress.complete(n)
 		var row := _card_row(box)
 		row.add_child(CardView.make(tutorial.mission.reward, 1.4))
-		var line := Palette.label(tr(tutorial.mission.reward_line), 24)
+		var line := Palette.label(tutorial.mission.reward_line, 24)
 		line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		box.add_child(line)
-		if n < Missions.count():
-			_centered_button(box, tr("Next Mission"), "NextMission", func(): tutorial_next.emit(n + 1))  # main shows its intro first
+		var after := Missions.next(n)
+		if after > 0:
+			_centered_button(box, tr("Next Mission"), "NextMission", func(): tutorial_next.emit(after))  # main shows its intro first
 	else:
 		_centered_button(box, tr("Try Again"), "TryAgain", func(): tutorial_retry.emit(n))
 	_centered_button(box, tr("Back"), "BackToMenu", _leave)

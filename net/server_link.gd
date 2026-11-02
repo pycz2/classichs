@@ -17,8 +17,9 @@ signal pack_downloaded(content_hash: String, result: Dictionary)
 ## An upload ended: {pack} (the server's entry) or {error (translated), code}.
 signal pack_uploaded(result: Dictionary)
 
-## The saved sessions (user://, per player), one per server (D14):
-## {"servers": {url: {token, deck: {name, hero}, mode, tab, kicked?}}, "last": url}.
+## The saved sessions (user://, per player), one per connection (D14; by the connection's id:
+## its address for the first one to it, so sessions saved before 0.40 stay):
+## {"servers": {id: {token, deck: {name, hero}, mode, tab, kicked?}}, "last": id}.
 ## Tests point it at their own file.
 const SESSION_DEFAULT_PATH := "user://server_session.json"
 static var session_path := SESSION_DEFAULT_PATH
@@ -29,6 +30,10 @@ static var send_pack := true
 const GROUP := "server_links"
 
 var url := ""
+## The connection's id in the list (Settings servers; "" = its address): its saved session is kept by it.
+var id := "":
+	get:
+		return id if id != "" else url
 var socket := WebSocketPeer.new()
 var token := ""  # the session after login (also saved: the player stays logged in)
 var me := {}  # the player's profile from the server
@@ -38,6 +43,14 @@ var resuming := false
 var has_chats := false
 ## Whether the server knows game packs (`packs`; asked after `chats`).
 var has_packs := false
+## Whether it keeps decks (`decks`; asked after `packs`) and settings per game (`game_settings`, then).
+var has_decks := false
+var has_settings := false
+## The player's decks kept there (all games: {id, pack, name, hero, cards, created, updated}),
+## kept up to date from `decks`, `deck_saved` and `deck_deleted`.
+var decks: Array = []
+## The player's settings per game kept there: {<pack id>: {art?, music?}} (`game_settings`).
+var game_settings := {}
 ## Another login took the account (`kicked`): no resume by itself until the player logs in.
 var kicked := false
 ## The server's packs: {server: [pack], mine: [pack + enabled]}; a pack is
@@ -49,6 +62,8 @@ var downloading := {}
 var game_deck: Deck
 var _probing := false
 var _probing_packs := false
+var _probing_decks := false
+var _probing_settings := false
 var _was_open := false
 var _closed := true  # nothing to close before open()
 var _games := {}  # game id -> ServerSession
@@ -121,18 +136,18 @@ static func remember_last(address: String) -> void:
 	_save_all(d)
 
 
-## This server's saved session.
+## This connection's saved session.
 func saved() -> Dictionary:
-	return saved_for(url)
+	return saved_for(id)
 
 
 func remember(values: Dictionary) -> void:
-	remember_for(url, values)
+	remember_for(id, values)
 
 
-## The server's name in the list (its host when not there).
+## The connection's name in the list (its host when not there).
 func display_name() -> String:
-	return Settings.server_name(url)
+	return Settings.server_name(id)
 
 
 ## Logged in on an open connection.
@@ -142,7 +157,7 @@ func logged_in() -> bool:
 
 ## Whether a saved session would log in by itself (a token, not kicked out by another login).
 func can_resume() -> bool:
-	var s := saved_for(url)
+	var s := saved_for(id)
 	return str(s.get("token", "")) != "" and not s.get("kicked", false)
 
 
@@ -274,6 +289,12 @@ func dispatch(msg: Dictionary) -> void:
 				_probing_packs = false
 				has_packs = false
 				return
+			elif _probing_decks and msg.get("code") == "bad_request":  # a server without decks (before 0.32)
+				_probing_decks = false
+				return
+			elif _probing_settings and msg.get("code") == "bad_request":  # without settings per game (before 0.40)
+				_probing_settings = false
+				return
 		"chats":
 			if _probing:
 				_probing = false
@@ -281,10 +302,30 @@ func dispatch(msg: Dictionary) -> void:
 				send({"t": "packs"})
 			has_chats = true
 		"packs":
+			if _probing_packs:
+				_probing_decks = true
+				send({"t": "decks"})
 			_probing_packs = false
 			has_packs = true
 			packs = {"server": _list(msg.get("server")), "mine": _list(msg.get("mine"))}
 			packs_changed.emit()
+		"decks":
+			if _probing_decks:
+				_probing_decks = false
+				_probing_settings = true
+				send({"t": "game_settings"})
+			has_decks = true
+			decks = _list(msg.get("list"))
+		"deck_saved":
+			var d = msg.get("deck")
+			if d is Dictionary:
+				decks = decks.filter(func(x): return int(x.get("id", 0)) != int(d.get("id", 0))) + [d]
+		"deck_deleted":
+			decks = decks.filter(func(x): return int(x.get("id", 0)) != int(msg.get("id", 0)))
+		"game_settings":
+			_probing_settings = false
+			has_settings = true
+			game_settings = msg.get("games") if msg.get("games") is Dictionary else {}
 		"kicked":  # another login took the account; the server closes this connection
 			token = ""
 			kicked = true
@@ -314,8 +355,42 @@ func _clear_packs() -> void:
 	packs = {"server": [], "mine": []}
 	has_packs = false
 	_probing_packs = false
+	has_decks = false
+	has_settings = false
+	_probing_decks = false
+	_probing_settings = false
+	decks = []
+	game_settings = {}
 	if had:
 		packs_changed.emit()
+
+
+# --- decks and settings per game kept on the server (server/README.md, "Decks", "Game settings")
+
+## The player's decks of a game kept here (each knows its id here: Deck.servers[url]).
+func decks_of(p: Pack) -> Array[Deck]:
+	var out: Array[Deck] = []
+	for sd in decks:
+		if p and str(sd.get("pack", "")) == p.id():
+			var d := Deck.from_dict(sd)
+			if d:
+				d.servers[url] = {"id": int(sd.get("id", 0)), "at": int(sd.get("updated", 0))}
+				out.append(d)
+	return out
+
+
+## The player's choice for a game kept here ("art", "music"; "" = none yet).
+func game_setting(p: Pack, kind: String) -> String:
+	var mine = game_settings.get(p.id(), {}) if p else {}
+	return str(mine.get(kind, "")) if mine is Dictionary else ""
+
+
+## Keeps a choice for a game here (`game_settings_set`; the answer brings them all back).
+func set_game_setting(p: Pack, kind: String, value: String) -> void:
+	var mine: Dictionary = game_settings.get(p.id(), {}) if game_settings.get(p.id()) is Dictionary else {}
+	mine[kind] = value
+	game_settings[p.id()] = mine
+	send(with_pack({"t": "game_settings_set", "settings": {kind: value}}, p))
 
 
 # --- game packs on the server (server/README.md, "Game packs") ---------------------------

@@ -26,6 +26,7 @@ def tiny():
         "limits": {"max_mana": 10, "hand": 10, "board": 7, "deck_size": 3, "copies": 2, "copies_by_rarity": {"L": 1}},
         "start": {"hand": [3, 4], "coin": "COIN"},
         "timers": {"turn": 75, "mulligan": 45},
+        "default_power": "P_A",
         "classes": [{"id": "RED", "champion": "C_A"}, {"id": "GREY", "neutral": True}],
         "rarities": [{"id": "C", "tier": "common"}, {"id": "L", "tier": "legendary"}],
         "sets": ["CORE"],
@@ -125,6 +126,13 @@ class Check(unittest.TestCase):
         s["cards.json"][0]["power"] = "M1"
         self.assertTrue(any("not a POWER" in e for e in errors(s)))
 
+    def test_default_power_needed_with_champions(self):  # the engine refuses such a pack
+        s = tiny()
+        del s["rules.json"]["default_power"]
+        self.assertTrue(any("default_power is missing" in e for e in errors(s)), errors(s))
+        s["cards.json"] = [c for c in s["cards.json"] if c["type"] not in ("CHAMPION", "POWER")]
+        self.assertFalse(any("default_power" in e for e in errors(s)))
+
     def test_deck_rules(self):
         s = tiny()
         s["decks/red.json"]["cards"] = ["M1", "M2", "M2"]
@@ -154,10 +162,63 @@ class Check(unittest.TestCase):
         s = tiny()
         s["ui/theme.json"] = {"button": {"style": "glass"}}
         self.assertTrue(errors(s))
+        s = tiny()
+        s["ui/theme.json"] = {"menu": {"crest": "ui/crest.png"}}
+        self.assertTrue(any("ui/crest.png is not in the pack" in e for e in errors(s)))
         for p in ["ui/other.json", "ui/fonts/x.exe", "ui/fonts/a/b.ttf"]:
             s = tiny()
             s[p] = b"x"
             self.assertTrue(errors(s), p)
+
+    def test_tutorial(self):
+        def with_tutorial():
+            s = tiny()
+            s["manifest.json"]["locales"] = ["en", "ru"]
+            s["missions/1.json"] = {"id": 1, "champion": "C_A", "boss": "C_A", "player": {"hand": ["M1"], "deck": []},
+                                    "boss_deck": [], "reward": "M2", "hints": ["play"]}
+            s["tutorial.json"] = {"unlock": "in_order", "effect": {"effect": "rain", "intensity": 0.5},
+                                  "missions": [{"id": 1, "effect": "snow", "intro": [{"title": "a.title", "text": "a.text", "items": [
+                                      {"card": "M1", "at": [100, 100], "scale": 2},
+                                      {"note": "a.cost", "box": [0, 0, 100, 50], "to": {"card": 0, "part": "cost"}},
+                                      {"hero": "C_A", "at": [600, 300], "health": 30},
+                                      {"picture": "ui/hogger.png", "at": [0, 0], "size": [100, 100]}]}]}],
+                                  "hints": {"play": [{"if": "can_play"}, {"if": "in_hand", "cards": ["M1"], "keyword": "WALL"}]}}
+            s["ui/hogger.png"] = b"png"
+            texts = {"tutorial": {"a.title": "A", "a.text": "B", "a.cost": "C"}, "hints": {"play": "Play!"},
+                     "missions": {"1": {"intro": "Go", "lines": {"start": "Hi", "hurt": "Ow", "defeat": "Bye"}, "reward_line": "Yay"}}}
+            s["locales/en.json"].update(json.loads(json.dumps(texts)))
+            s["locales/ru.json"] = json.loads(json.dumps(texts))
+            return s
+
+        self.assertEqual(pack.check_files(as_files(with_tutorial())).errors, [])
+        broken = [
+            (lambda s: s["tutorial.json"].update({"stray": 1}), "unknown field 'stray'"),
+            (lambda s: s["tutorial.json"]["missions"].append({"id": 2}), "missions/2.json is not in the pack"),
+            (lambda s: s["tutorial.json"]["missions"].append({"id": 1}), "mission 1 twice"),
+            (lambda s: s["tutorial.json"].update({"effect": "fog"}), "effect"),
+            (lambda s: s["tutorial.json"]["missions"][0]["intro"][0]["items"].append({"card": "NOPE", "at": [0, 0]}), "unknown card NOPE"),
+            (lambda s: s["tutorial.json"]["missions"][0]["intro"][0]["items"].append({"hero": "M1", "at": [0, 0]}), "not a CHAMPION"),
+            (lambda s: s.pop("ui/hogger.png"), "picture ui/hogger.png is not in the pack"),
+            (lambda s: s["tutorial.json"]["missions"][0]["intro"][0]["items"][1]["to"].update({"card": 1}), "points at card 1"),
+            (lambda s: s["locales/en.json"]["tutorial"].pop("a.cost"), "no text tutorial.a.cost in locales/en.json"),
+            (lambda s: s["locales/en.json"]["hints"].pop("play"), "no text hints.play in locales/en.json"),
+            (lambda s: s["tutorial.json"]["hints"].pop("play"), "hint play has no rule"),
+            (lambda s: s["tutorial.json"]["hints"]["play"].append({"if": "raining"}), "hints.play"),
+        ]
+        for spoil, want in broken:
+            s = with_tutorial()
+            spoil(s)
+            errs = errors(s)
+            self.assertTrue(any(want in e for e in errs), (want, errs))
+        s = with_tutorial()
+        del s["locales/ru.json"]["tutorial"]["a.title"]
+        r = pack.check_files(as_files(s))
+        self.assertEqual(r.errors, [])
+        self.assertTrue(any("tutorial.a.title in locales/ru.json" in w for w in r.warnings), r.warnings)
+        s = with_tutorial()
+        del s["tutorial.json"]
+        r = pack.check_files(as_files(s))
+        self.assertTrue(any("without tutorial.json" in w for w in r.warnings), r.warnings)
 
     def test_stale_rules_hash(self):
         s = tiny()

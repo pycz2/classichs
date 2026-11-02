@@ -4,6 +4,20 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-11-03
+
+### Cambiado
+- El juego se llama **Classic Heroes Showdown** (abreviado Classic HS). Ahora es un motor de juegos de cartas: cada juego es un paquete con sus reglas, cartas, aspecto, música, tutorial y plantillas de mazos.
+- Un menú nuevo: Jugar, Ajustes, Salir. Jugar → Directo (la biblioteca de juegos, luego el menú del juego elegido con su aspecto) o Servidor (conexiones, inicio de sesión, la portada del servidor con amigos y los juegos del servidor).
+- Ajustes generales: idioma, volumen, dorso de carta, velocidad de animación, temblor, pantalla completa. Los juegos de imágenes y de música se eligen por juego (guardados en el servidor en modo servidor); las herramientas de depuración están en los ajustes dentro de un juego.
+- Los mazos se guardan por juego; en un servidor son los mazos del servidor de ese juego y se pueden copiar allí los locales. Ya no hay mazos ya hechos en la lista: un mazo nuevo empieza desde cero o desde una plantilla del paquete.
+- El tutorial y los efectos de escena (lluvia, nieve, brasas) ahora forman parte del paquete. El aspecto de taberna pasó al paquete Classic; el cliente en sí tiene un aspecto neutro.
+
+### Añadido
+- Herramientas de paquete en la biblioteca: construir un juego desde una carpeta, revisarlo (archivos, JSON, scripts Lua con número de línea, imágenes, traducciones, tutorial), jugar partidas de prueba entre bots e instalarlo.
+- El sitio tiene una sección «Para desarrolladores»: crear tu propio juego, scripts de cartas en Lua, referencia de la API del motor, revisión y pruebas, un mapa interactivo de la arquitectura. La portada tiene el estilo de Neonfall.
+- Al actualizar, los ajustes se trasladan solos: juegos de imágenes y música a Classic, servidores a conexiones, tus mazos a su juego.
+
 ## [0.32.0] - 2026-11-02
 
 ### Añadido
