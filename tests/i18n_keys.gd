@@ -24,6 +24,7 @@ static func collect() -> Array:
 	var tables: Array = []
 	tables.append_array(MainMenu.ITEMS)
 	tables.append_array(DeckListView.BUTTONS)
+	tables.append_array(DeckListView.SERVER_TEXTS)
 	tables.append_array(DebugTable.TABS)
 	tables.append_array(DebugTable.ZONES.map(func(z): return z[0]))
 	tables.append_array(DebugTable.STATS.map(func(z): return z[0]))

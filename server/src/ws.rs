@@ -2,13 +2,14 @@
 
 use crate::auth::{self, RateLimit};
 use crate::db::{self, Account, DbError, DbResult};
-use crate::entity::{account, arena, block, friend, message, request};
+use crate::entity::{account, arena, block, deck, friend, message, request};
 use crate::events::Event;
 use crate::game::{self, rank_json};
 use crate::packs::{self, GameRules};
 use crate::ranked::{self, Key, Mode};
 use crate::{presence, AppRef, Out, Seeker};
 use axum::extract::ws::{CloseFrame, Message, WebSocket};
+use classichs_engine::deck::Deck;
 use futures_util::{SinkExt, StreamExt};
 use rand::Rng;
 use sea_orm::sea_query::Expr;
@@ -28,6 +29,8 @@ use tokio::sync::mpsc::{self, UnboundedSender};
 const MAX_ERRORS: u32 = 20;
 const MAX_FRIENDS: u64 = 200;
 const HISTORY: u64 = 200;
+/// Decks an account keeps on the server (all packs together).
+pub const MAX_DECKS: u64 = 100;
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -118,6 +121,21 @@ enum In {
     },
     Packs {},
     PackDelete { content_hash: String },
+    Decks {
+        #[serde(default)]
+        pack: Option<String>,
+    },
+    DeckSave {
+        #[serde(default)]
+        id: Option<f64>,
+        deck: DeckIn,
+        #[serde(default)]
+        pack: Option<String>,
+        /// echoed in deck_saved (the client finds which of its decks it was)
+        #[serde(default, rename = "ref")]
+        tag: Option<String>,
+    },
+    DeckDelete { id: f64 },
 }
 
 /// An error reply: code and text (and, for server errors, what went wrong, for the event log).
@@ -147,6 +165,7 @@ struct Session {
     conn: u64,
     errors: u32,
     chat: RateLimit,
+    decks: RateLimit,
 }
 
 pub async fn run(app: AppRef, socket: WebSocket, ip: IpAddr) {
@@ -198,6 +217,7 @@ where
         conn: 0,
         errors: 0,
         chat: RateLimit::new(10, Duration::from_secs(10)),
+        decks: RateLimit::new(60, Duration::from_secs(10)),
     };
     let mut general = RateLimit::new(300, Duration::from_secs(10));
     let mut writer_done = false;
@@ -420,6 +440,43 @@ fn deck_value(d: &DeckIn, arena: bool) -> Result<Value, E> {
     Ok(json!({"hero": d.hero, "cards": d.cards, "arena": arena}))
 }
 
+/// A deck to keep (`deck_save`): its name, if every card is one the pack's rules allow in it.
+/// An unfinished deck (fewer cards than a full one) is kept too: the builder saves every change.
+fn deck_to_keep(d: &DeckIn, rules: &GameRules) -> Result<String, E> {
+    let name = d.name.clone().unwrap_or_default();
+    if name.chars().count() > 60 {
+        return Err(e("bad_name", "A deck name is at most 60 characters"));
+    }
+    if d.arena == Some(true) {
+        return Err(e("deck", "Arena decks are not kept"));
+    }
+    let v = deck_value(d, false)?;
+    let rs = rules.rs;
+    let kept = Deck::from_value_in(rs, &v).ok_or_else(|| e("deck", "This deck is not valid"))?;
+    if kept.cards.len() != d.cards.len() {
+        return Err(e("deck", "This deck has cards this game does not have"));
+    }
+    let why = kept.validate_in(rs);
+    if why.is_empty() || (d.cards.len() < rs.deck_size && why.starts_with("A deck needs exactly")) {
+        Ok(name)
+    } else {
+        Err(E("deck", why, None))
+    }
+}
+
+fn deck_json(d: &deck::Model) -> Value {
+    let cards: Value = serde_json::from_str(&d.cards).unwrap_or_else(|_| json!([]));
+    json!({"id": d.id, "pack": d.pack, "name": d.name, "hero": d.hero, "cards": cards, "created": d.created, "updated": d.updated})
+}
+
+fn deck_id(i: f64) -> Result<i64, E> {
+    if i.fract() == 0.0 && i >= 1.0 && i < 9e15 {
+        Ok(i as i64)
+    } else {
+        Err(e("not_found", "No such deck of yours"))
+    }
+}
+
 fn index(i: f64, n: usize) -> Result<usize, E> {
     if i.fract() == 0.0 && i >= 0.0 && (i as usize) < n {
         Ok(i as usize)
@@ -596,6 +653,63 @@ impl Session {
                     return Err(e("not_found", "No such pack of yours"));
                 }
                 self.ok(crate::packs::packs_msg(db, me).await?)
+            }
+            In::Decks { pack } => {
+                let mut q = deck::Entity::find().filter(deck::Column::Account.eq(me));
+                if let Some(p) = pack {
+                    q = q.filter(deck::Column::Pack.eq(self.game_of(Some(&p), Some(me)).await?.0.id.clone()));
+                }
+                let list: Vec<Value> = q.order_by_asc(deck::Column::Id).all(db).await?.iter().map(deck_json).collect();
+                self.ok(json!({"t": "decks", "list": list}))
+            }
+            In::DeckSave { id, deck: d, pack, tag } => {
+                if tag.as_ref().is_some_and(|t| t.len() > 64) {
+                    return Err(e("bad_request", "ref: 64 characters at most"));
+                }
+                if !self.decks.allow("", Instant::now()) {
+                    return Err(e("rate_limited", "Too many deck changes: wait a little"));
+                }
+                let (rules, _) = self.game_of(pack.as_deref(), Some(me)).await?;
+                let name = deck_to_keep(&d, &rules)?;
+                let (now, cards) = (ranked::now(), json!(d.cards).to_string());
+                let row = match id {
+                    Some(i) => {
+                        let i = deck_id(i)?;
+                        let old = deck::Entity::find_by_id(i).one(db).await?.filter(|x| x.account == me);
+                        let old = old.ok_or_else(|| e("not_found", "No such deck of yours"))?;
+                        if old.pack != rules.id {
+                            return Err(e("pack", "This deck is of another game"));
+                        }
+                        deck::ActiveModel { id: Unchanged(i), name: Set(name), hero: Set(d.hero), cards: Set(cards), updated: Set(now), ..Default::default() }
+                            .update(db)
+                            .await?
+                    }
+                    None => {
+                        if deck::Entity::find().filter(deck::Column::Account.eq(me)).count(db).await? >= MAX_DECKS {
+                            return Err(e("decks_full", "You have 100 decks on this server: delete one first"));
+                        }
+                        let row = deck::ActiveModel {
+                            account: Set(me),
+                            pack: Set(rules.id.clone()),
+                            name: Set(name),
+                            hero: Set(d.hero),
+                            cards: Set(cards),
+                            created: Set(now),
+                            updated: Set(now),
+                            ..Default::default()
+                        };
+                        row.insert(db).await?
+                    }
+                };
+                self.ok(json!({"t": "deck_saved", "deck": deck_json(&row), "ref": tag}))
+            }
+            In::DeckDelete { id } => {
+                let i = deck_id(id)?;
+                let gone = deck::Entity::delete_many().filter(deck::Column::Id.eq(i)).filter(deck::Column::Account.eq(me)).exec(db).await?;
+                if gone.rows_affected == 0 {
+                    return Err(e("not_found", "No such deck of yours"));
+                }
+                self.ok(json!({"t": "deck_deleted", "id": i}))
             }
             In::Register { .. } | In::Login { .. } | In::Resume { .. } => Err(e("bad_request", "Already logged in")),
             In::Ping {} => self.ok(json!({"t": "pong"})),

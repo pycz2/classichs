@@ -881,3 +881,116 @@ async fn arena_run_in_a_pack() {
     assert_eq!((g0["arena"]["over"].as_bool(), g0["arena"]["losses"].as_i64()), (Some(false), Some(1)));
     assert_eq!((g1["arena"]["over"].as_bool(), g1["arena"]["wins"].as_i64()), (Some(true), Some(1)), "one win ends this pack's run");
 }
+
+// --- decks kept on the server ---------------------------------------------------------------------
+
+/// deck_save creates and updates, decks lists (per pack too), deck_delete removes; unfinished
+/// decks are kept, bad ones, long names and other accounts' decks are refused; 100 at most,
+/// 60 changes in 10 s.
+#[tokio::test]
+async fn decks_on_the_server() {
+    use classichs_server::entity::deck as stored;
+    let (addr, app) = server(std_server()).await;
+    let quick = install(&app, &quick_pack(), None).await;
+    let mut a = C::register(addr, "dka").await;
+    let mut b = C::register(addr, "dkb").await;
+    a.send(json!({"t": "decks"})).await;
+    assert_eq!(a.want("decks").await["list"], json!([]));
+    // A full deck and an unfinished one (the builder saves every change).
+    a.send(json!({"t": "deck_save", "deck": deck("MAGE"), "ref": "r1"})).await;
+    let s = a.want("deck_saved").await;
+    assert_eq!((s["ref"].as_str(), s["deck"]["pack"].as_str(), s["deck"]["name"].as_str()), (Some("r1"), Some("classic-2014"), Some("Test")));
+    assert_eq!(s["deck"]["cards"], deck("MAGE")["cards"]);
+    let id = s["deck"]["id"].as_i64().unwrap();
+    a.send(json!({"t": "deck_save", "deck": part_of("WARRIOR", 10), "pack": quick.rules_hash})).await;
+    let s = a.want("deck_saved").await;
+    assert_eq!((s["deck"]["pack"].as_str(), s["ref"].is_null()), (Some("org.test.quick"), true));
+    let id2 = s["deck"]["id"].as_i64().unwrap();
+    // An update by id (the id as a float, as Godot's JSON may send it).
+    let mut renamed = part_of("MAGE", 29);
+    renamed["name"] = json!("Fire");
+    a.send(json!({"t": "deck_save", "id": id as f64, "deck": renamed})).await;
+    let s = a.want("deck_saved").await;
+    assert_eq!((s["deck"]["id"].as_i64(), s["deck"]["name"].as_str(), s["deck"]["cards"].as_array().map(|c| c.len())), (Some(id), Some("Fire"), Some(29)));
+    a.send(json!({"t": "decks"})).await;
+    let l = a.want("decks").await;
+    assert_eq!(l["list"].as_array().unwrap().iter().map(|d| d["id"].as_i64().unwrap()).collect::<Vec<_>>(), vec![id, id2]);
+    a.send(json!({"t": "decks", "pack": quick.rules_hash})).await;
+    let l = a.want("decks").await;
+    assert_eq!(l["list"].as_array().unwrap().len(), 1, "one in that pack: {l}");
+    assert_eq!(l["list"][0]["id"].as_i64(), Some(id2));
+    // The other pack's deck is not this game's.
+    a.send(json!({"t": "deck_save", "id": id2, "deck": deck("WARRIOR")})).await;
+    assert_eq!(a.want("error").await["code"], "pack");
+    // Refused: too many copies, an unknown card, 31 cards, a long name, an Arena deck, a bad id.
+    let mut bad = deck("MAGE");
+    bad["cards"][1] = bad["cards"][0].clone();
+    bad["cards"][2] = bad["cards"][0].clone();
+    a.send(json!({"t": "deck_save", "deck": bad})).await;
+    assert_eq!(a.want("error").await["code"], "deck");
+    let mut bad = deck("MAGE");
+    bad["cards"][0] = json!("NO_SUCH_CARD");
+    a.send(json!({"t": "deck_save", "deck": bad})).await;
+    assert_eq!(a.want("error").await["code"], "deck");
+    let mut bad = deck("MAGE");
+    bad["cards"].as_array_mut().unwrap().push(json!("VAN_CS2_182"));
+    a.send(json!({"t": "deck_save", "deck": bad})).await;
+    assert_eq!(a.want("error").await["code"], "deck");
+    let mut bad = deck("MAGE");
+    bad["name"] = json!("x".repeat(61));
+    a.send(json!({"t": "deck_save", "deck": bad})).await;
+    assert_eq!(a.want("error").await["code"], "bad_name");
+    let mut bad = deck("MAGE");
+    bad["arena"] = json!(true);
+    a.send(json!({"t": "deck_save", "deck": bad})).await;
+    assert_eq!(a.want("error").await["code"], "deck");
+    a.send(json!({"t": "deck_save", "id": 0.5, "deck": deck("MAGE")})).await;
+    assert_eq!(a.want("error").await["code"], "not_found");
+    a.send(json!({"t": "deck_save", "deck": deck("MAGE"), "extra": 1})).await;
+    assert_eq!(a.want("error").await["code"], "bad_request");
+    // Another account sees none of them and cannot change or delete them.
+    b.send(json!({"t": "decks"})).await;
+    assert_eq!(b.want("decks").await["list"], json!([]));
+    b.send(json!({"t": "deck_save", "id": id, "deck": deck("MAGE")})).await;
+    assert_eq!(b.want("error").await["code"], "not_found");
+    b.send(json!({"t": "deck_delete", "id": id})).await;
+    assert_eq!(b.want("error").await["code"], "not_found");
+    // Delete.
+    a.send(json!({"t": "deck_delete", "id": id})).await;
+    assert_eq!(a.want("deck_deleted").await["id"].as_i64(), Some(id));
+    a.send(json!({"t": "deck_delete", "id": id})).await;
+    assert_eq!(a.want("error").await["code"], "not_found");
+    let rows = stored::Entity::find().all(&app.db).await.unwrap();
+    assert_eq!(rows.iter().map(|r| r.id).collect::<Vec<_>>(), vec![id2]);
+    // 100 decks at most.
+    let bid = db::id_by_name(&app.db, "dkb").await.unwrap().unwrap();
+    let row = |n: i64| stored::ActiveModel {
+        account: sea_orm::Set(bid),
+        pack: sea_orm::Set("classic-2014".into()),
+        name: sea_orm::Set(format!("d{n}")),
+        hero: sea_orm::Set("HERO_08".into()),
+        cards: sea_orm::Set("[]".into()),
+        created: sea_orm::Set(0),
+        updated: sea_orm::Set(0),
+        ..Default::default()
+    };
+    stored::Entity::insert_many((0..100).map(row)).exec(&app.db).await.unwrap();
+    b.send(json!({"t": "deck_save", "deck": deck("MAGE")})).await;
+    assert_eq!(b.want("error").await["code"], "decks_full");
+    // Too many changes at once: rate limited.
+    let mut c = C::register(addr, "dkc").await;
+    for _ in 0..61 {
+        c.send(json!({"t": "deck_save", "deck": part_of("MAGE", 3)})).await;
+    }
+    for _ in 0..60 {
+        c.want("deck_saved").await;
+    }
+    assert_eq!(c.want("error").await["code"], "rate_limited");
+}
+
+/// A Basic deck's first n cards.
+fn part_of(class: &str, n: usize) -> Value {
+    let mut d = deck(class);
+    d["cards"] = json!(d["cards"].as_array().unwrap()[..n]);
+    d
+}

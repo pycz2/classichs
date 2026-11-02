@@ -71,7 +71,7 @@ class DeckTile:
 ## in the lower right corner (ACTIONS_W wide).
 class DeckRow:
 	extends Button
-	const ACTIONS_W := 100.0
+	const ACTIONS_W := 132.0
 	var deck: Deck
 
 	func _init(d: Deck) -> void:
@@ -121,7 +121,8 @@ class Bar:
 			draw_style_box(Palette.box(fill, 13), Rect2(r.position + Vector2(2, 2), Vector2((r.size.x - 4) * ratio, r.size.y - 4)))
 
 
-## A small square button with a drawn sign: "copy", "export" or "delete".
+## A small square button with a drawn sign: "copy", "export", "delete" or "server" (a tick:
+## a cloud, lit with a check mark while the deck is kept on the server).
 class Action:
 	extends Button
 	var kind := ""
@@ -144,6 +145,14 @@ class Action:
 		var c := r.get_center()
 		var ink := Color("ffb4a2") if red and is_hovered() else Color("f4ead5")
 		match kind:
+			"server":
+				var lit := button_pressed
+				var col := Frames.GOLD if lit else Color(ink, 0.4)
+				for p in [[c + Vector2(-4, 1), 4.0], [c + Vector2(0, -2), 5.0], [c + Vector2(5, 1), 4.0]]:
+					draw_circle(p[0], p[1], col, true, -1.0, true)
+				draw_rect(Rect2(c + Vector2(-8, 1), Vector2(17, 4)), col)
+				if lit:
+					draw_polyline(PackedVector2Array([c + Vector2(-3, 0), c + Vector2(-0.5, 3), c + Vector2(4, -3)]), Color(0.08, 0.05, 0.03), 2.0, true)
 			"delete":  # a cross
 				draw_line(c + Vector2(-5, -5), c + Vector2(5, 5), ink, 2.0, true)
 				draw_line(c + Vector2(5, -5), c + Vector2(-5, 5), ink, 2.0, true)

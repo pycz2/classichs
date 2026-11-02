@@ -10,6 +10,9 @@ var hero := "HERO_08"
 var cards: Array[String] = []
 ## An Arena deck: drafted, so any number of copies of a card.
 var arena := false
+## The servers it is kept on too: server url -> {id: the server's deck id, at: its time there
+## when this copy last matched it} (DeckListView keeps them in sync).
+var servers := {}
 
 
 func card_class() -> String:
@@ -67,6 +70,8 @@ func to_dict() -> Dictionary:
 	var d := {"name": name, "hero": hero, "cards": cards.duplicate()}
 	if arena:
 		d["arena"] = true
+	if not servers.is_empty():
+		d["servers"] = servers.duplicate(true)
 	return d
 
 
@@ -82,6 +87,11 @@ static func from_dict(d: Variant) -> Deck:
 	deck.name = str(d.get("name", "")).left(NAME_MAX)
 	deck.hero = d.hero
 	deck.arena = d.get("arena", false) == true
+	var on = d.get("servers")
+	if on is Dictionary:
+		for url in on:
+			if on[url] is Dictionary and int(on[url].get("id", 0)) > 0:
+				deck.servers[str(url)] = {"id": int(on[url].id), "at": int(on[url].get("at", 0))}
 	for id in d.cards:
 		if not id is String:
 			return null

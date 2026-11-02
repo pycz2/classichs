@@ -209,7 +209,8 @@ SQLite through SeaORM: the tables are the entities in `src/entity/`, the schema 
 they are). Ranks and MMRs are in `standings` per (account, pack manifest id, season) — a
 new version of a pack keeps them, a new season starts from the last one's (M4 moved the
 ranks earned before packs to `classic-2014`); a game row and an Arena run keep their pack's
-`rules_hash` (`""` = the built-in Classic rules, before packs).
+`rules_hash` (`""` = the built-in Classic rules, before packs). Players' decks kept on the
+server are in `decks` (M6) per account and pack manifest id, like the standings.
 
 ### Connect the game
 
@@ -296,6 +297,7 @@ not answer, 2 images kept. The headers of these scripts tell the details.
 | Names | user 3–20 `[A-Za-z0-9_]`; tag 3–16 letters/digits, unique ignoring case |
 | Passwords | 8–128 characters |
 | Friends | 200 |
+| Decks kept on the server | 100 per account (all packs); a name 0–60 characters; 60 `deck_save` per 10 s |
 | Back after a disconnect in a game | the pack's `timers.away` (30 s), then the game is lost |
 | A turn (the mulligan) | the pack's `timers` (Classic and Neonfall: 75 s (45 s) + 5 s), then the timeout moves |
 | Refused actions | 3 per player in a game, then the game is lost |
@@ -379,6 +381,25 @@ Full details: the design doc.
     `message` "Something does not add up: …"), `disconnect`, `aborted` (a rules
     engine failure). Older games in the database may show `left`, `desync`, `cheat`,
     `protocol`.
+
+### Decks
+
+A player's decks kept on the server (the client's deck list ticks which: "Keep on the
+server"), per pack (its manifest `id`, as ranks, so a new version keeps them). A deck is
+`{id, pack, name, hero, cards, created, updated}` (`id`: the server's, a whole number;
+times: unix seconds).
+
+- `decks {pack?}` → `decks {list: [deck]}`: all of mine, or one game's (`pack`: a rules_hash,
+  as `queue`), oldest first.
+- `deck_save {deck: {name, hero, cards}, id?, pack?, ref?}` → `deck_saved {deck, ref}`:
+  without `id` a new deck in the game of `pack` (a rules_hash; none: the default game; the
+  player's own packs count too), with `id` an update of mine (`error not_found`; of another
+  game: `error pack`). `ref` (≤ 64 characters) comes back as given (the client finds which of
+  its decks it was). The cards are checked with the game's rules (`error deck`): every card
+  one the deck may take; an unfinished deck (fewer cards than a full one) is kept too, an
+  Arena deck is not. A name over 60 characters: `error bad_name`; the 101st deck:
+  `error decks_full`; too fast: `error rate_limited`.
+- `deck_delete {id}` → `deck_deleted {id}` (or `error not_found`: no such deck of mine).
 
 ### Game packs
 

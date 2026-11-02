@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6)]
     }
 }
 
@@ -486,5 +486,51 @@ impl MigrationTrait for M5 {
                 .to_owned(),
         )
         .await
+    }
+}
+
+
+/// Players' decks kept on the server (0.32): per account and pack (the manifest id, as standings).
+struct M6;
+
+impl MigrationName for M6 {
+    fn name(&self) -> &str {
+        "m20261102_000006_decks"
+    }
+}
+
+#[derive(DeriveIden)]
+enum Decks {
+    Table,
+    Id,
+    Account,
+    Pack,
+    Name,
+    Hero,
+    Cards,
+    Created,
+    Updated,
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M6 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let text = |c: Decks| ColumnDef::new(c).text().not_null().to_owned();
+        m.create_table(
+            Table::create()
+                .table(Decks::Table)
+                .col(ColumnDef::new(Decks::Id).integer().not_null().primary_key())
+                .col(int(Decks::Account))
+                .col(text(Decks::Pack))
+                .col(text(Decks::Name))
+                .col(text(Decks::Hero))
+                .col(text(Decks::Cards))
+                .col(int(Decks::Created))
+                .col(int(Decks::Updated))
+                .foreign_key(&mut fk(Decks::Table, Decks::Account))
+                .to_owned(),
+        )
+        .await?;
+        m.create_index(Index::create().name("decks_account").table(Decks::Table).col(Decks::Account).to_owned()).await
     }
 }
