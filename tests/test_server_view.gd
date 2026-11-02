@@ -140,8 +140,13 @@ func test_arena_tab_shows_the_run() -> void:
 	eq(v.queued, "arena", "searching")
 	check(v.link.game_deck.arena and v.link.game_deck.hero == "HERO_08", "the Arena deck goes to the game")
 	check(v.find_child("QueueTime", true, false) != null, "the search time")
+	for n in ["TabPlay", "TabArena", "Logout", "Back", "GamesButton", "ArenaRetire"]:
+		var b := v.find_child(n, true, false) as BaseButton
+		check(b == null or b.disabled, "%s waits while searching" % n)
+	check(not (v.find_child("Unqueue", true, false) as BaseButton).disabled, "Cancel works")
 	_press(v, "Unqueue")
 	eq(v.queued, "", "cancelled")
+	check(not (v.find_child("Logout", true, false) as BaseButton).disabled, "everything works again")
 	_press(v, "ArenaRetire")
 	eq((v.link as FakeLink).of("arena_retire").size(), 0, "the first press only asks")
 	_press(v, "ArenaRetire")

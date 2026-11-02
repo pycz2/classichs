@@ -366,6 +366,20 @@ func _build_lobby() -> void:
 	else:
 		_build_play()
 	_back_button(false)
+	_lock_while_searching()
+
+
+## While a search runs only Cancel works here: no other queue, tab, game, deck, server, Arena step,
+## logout or going back until the search is cancelled (friends and chat stay: they are not here).
+func _lock_while_searching() -> void:
+	if queued == "":
+		return
+	var stack: Array = [_body]
+	while not stack.is_empty():
+		var n: Node = stack.pop_back()
+		stack.append_array(n.get_children())
+		if n is BaseButton and n.name != "Unqueue":
+			(n as BaseButton).disabled = true
 
 
 func log_out() -> void:
