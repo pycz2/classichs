@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-11-03
+
+### Adicionado
+- Um tutorial para Neonfall: seis missões com seus chefes, da primeira carta a todas as mecânicas do jogo, em oito idiomas.
+- Adicionar um jogo de um arquivo mostra o que acontece: a leitura do arquivo com uma barra de progresso e depois a verificação.
+
+### Corrigido
+- As letras russas não apareciam no pacote Classic: a fonte de títulos dele não tem cirílico. As letras que faltam vêm agora da fonte do cliente, e o título do menu do jogo fica em maiúsculas.
+- Um lacaio com Grito de Guerra primeiro pousa na mesa (os outros abrem espaço), depois vem o Grito de Guerra, depois ele se assenta.
+- Uma carta comprada por outra carta (Engenheira Novata) vem do baralho, não do lacaio.
+- O conjunto de imagens próprio de um pacote importado (montado da pasta do autor) agora pode ser escolhido.
+
 ## [0.40.0] - 2026-11-03
 
 ### Alterado

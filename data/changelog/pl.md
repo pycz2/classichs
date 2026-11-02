@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-11-03
+
+### Dodano
+- Samouczek do Neonfall: sześć misji z bossami, od pierwszej karty do wszystkich mechanik gry, w ośmiu językach.
+- Dodawanie gry z pliku pokazuje, co się dzieje: czytanie pliku z paskiem postępu, potem sprawdzanie.
+
+### Naprawiono
+- W paczce Classic nie było widać rosyjskich liter: jej czcionka tytułów nie ma cyrylicy. Brakujące litery biorą się teraz z czcionki klienta, a tytuł w menu gry jest pisany wielkimi literami.
+- Stronnik z Okrzykiem bojowym najpierw ląduje na stole (pozostali robią mu miejsce), potem działa Okrzyk, potem stronnik się ustawia.
+- Karta dobrana przez inną kartę (Początkujący inżynier) przylatuje z talii, a nie od stronnika.
+- Własny zestaw grafik zaimportowanej paczki (zbudowany z folderu twórcy) można teraz wybrać.
+
 ## [0.40.0] - 2026-11-03
 
 ### Zmieniono

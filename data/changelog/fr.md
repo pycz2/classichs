@@ -4,6 +4,18 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-11-03
+
+### Ajouté
+- Un tutoriel pour Neonfall : six missions avec leurs boss, de la première carte à toutes les mécaniques du jeu, en huit langues.
+- Ajouter un jeu depuis un fichier montre ce qui se passe : lecture du fichier avec une barre de progression, puis les vérifications.
+
+### Corrigé
+- Les lettres russes ne s'affichaient pas dans le pack Classic : sa police de titre n'a pas le cyrillique. Les lettres manquantes viennent maintenant de la police du client, et le titre du menu du jeu est écrit en capitales.
+- Un serviteur avec un Cri de guerre se pose d'abord sur le plateau (les autres s'écartent), puis son Cri de guerre agit, puis il s'installe.
+- Une carte piochée par une autre carte (Ingénieur novice) vient du deck, pas du serviteur.
+- Le jeu d'images propre à un pack importé (construit depuis le dossier de son auteur) peut maintenant être choisi.
+
 ## [0.40.0] - 2026-11-03
 
 ### Modifié

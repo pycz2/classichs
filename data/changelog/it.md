@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-11-03
+
+### Aggiunto
+- Un tutorial per Neonfall: sei missioni con i loro boss, dalla prima carta a tutte le meccaniche del gioco, in otto lingue.
+- Aggiungere un gioco da un file mostra cosa succede: la lettura del file con una barra di avanzamento, poi i controlli.
+
+### Corretto
+- Le lettere russe non si vedevano nel pacchetto Classic: il suo font dei titoli non ha il cirillico. Le lettere mancanti arrivano ora dal font del client e il titolo del menu del gioco è scritto in maiuscolo.
+- Un servitore con Grido di battaglia prima si posa sul tavolo (gli altri gli fanno spazio), poi agisce il Grido di battaglia, poi si sistema.
+- Una carta pescata da un'altra carta (Ingegnere novizio) arriva dal mazzo, non dal servitore.
+- Il set di immagini proprio di un pacchetto importato (costruito dalla cartella del suo autore) ora si può scegliere.
+
 ## [0.40.0] - 2026-11-03
 
 ### Modificato

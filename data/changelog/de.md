@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-11-03
+
+### Hinzugefügt
+- Ein Tutorial für Neonfall: sechs Missionen mit ihren Bossen, von der ersten Karte bis zu allen Mechaniken des Spiels, in acht Sprachen.
+- Beim Hinzufügen eines Spiels aus einer Datei sieht man, was passiert: Lesen der Datei mit Fortschrittsbalken, dann die Prüfung.
+
+### Behoben
+- Im Classic-Paket fehlten russische Buchstaben: Seine Titelschrift kennt kein Kyrillisch. Fehlende Buchstaben kommen jetzt aus der Schrift des Clients, und der Titel im Spielmenü steht in Großbuchstaben.
+- Ein Diener mit Kampfschrei landet zuerst auf dem Feld (die anderen rücken zur Seite), dann wirkt der Kampfschrei, dann steht er fest.
+- Eine Karte, die eine andere Karte zieht (Novize Ingenieur), kommt aus dem Deck, nicht vom Diener.
+- Der eigene Bildersatz eines importierten Pakets (aus dem Ordner seines Erstellers gebaut) ist jetzt wählbar.
+
 ## [0.40.0] - 2026-11-03
 
 ### Geändert

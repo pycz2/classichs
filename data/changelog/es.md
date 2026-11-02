@@ -4,6 +4,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-11-03
+
+### Añadido
+- Un tutorial para Neonfall: seis misiones con sus jefes, desde la primera carta hasta todas las mecánicas del juego, en ocho idiomas.
+- Añadir un juego desde un archivo muestra lo que pasa: la lectura del archivo con una barra de progreso y luego la comprobación.
+
+### Corregido
+- Las letras rusas no se veían en el paquete Classic: su fuente de títulos no tiene cirílico. Las letras que faltan salen ahora de la fuente del cliente y el título del menú del juego se escribe en mayúsculas.
+- Un esbirro con Grito de batalla primero se coloca en el tablero (los demás le hacen sitio), luego actúa su Grito de batalla y luego queda en su sitio.
+- Una carta robada por otra carta (Ingeniera novata) llega desde el mazo, no desde el esbirro.
+- El juego de imágenes propio de un paquete importado (hecho con la carpeta de su autor) ya se puede elegir.
+
 ## [0.40.0] - 2026-11-03
 
 ### Cambiado

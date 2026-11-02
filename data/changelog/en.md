@@ -4,6 +4,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-11-03
+
+### Added
+- A tutorial for Neonfall: six missions with their bosses, from the first card to all of the game's mechanics, in eight languages.
+- Adding a game from a file shows what happens: reading the file with a progress bar, then the checks.
+
+### Fixed
+- Russian letters did not show in the Classic pack: its title font has no Cyrillic. Missing letters now come from the client's font, and the game menu's title is written in capitals.
+- A minion with a Battlecry first lands on the board (the others make room), then its Battlecry happens, then it settles.
+- A card drawn by another card (Novice Engineer) comes from the deck, not from the minion.
+- An imported pack's own picture set (built from its maker's folder) can now be chosen.
+
 ## [0.40.0] - 2026-11-03
 
 ### Changed
