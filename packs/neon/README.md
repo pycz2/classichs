@@ -12,6 +12,7 @@ and the full card list: [DESIGN.md](DESIGN.md).
 | `scripts/*.lua` | Card logic (docs/packs/api.md): one file per class, `neutral.lua`, `lib.lua` |
 | `decks/*.json` | Starter decks: `zero_trace` (Iris Null), `redline_rush` (Mother Rust), `hostile_merger` (Director Vale) |
 | `art/default/<id>.jpg` | One picture per card (512×512), `card_back` (512×768), `logo` (1280×720), `board` and `menu` (1920×1080) |
+| `art/simple/<id>.webp` | The "Simple 2D" art set: one simplified flat picture per card (384×384) |
 | `sounds/default/<event>.ogg` | The event sounds `game/sound.gd` plays (`play_card`, `attack`, `damage`, `spell`, `death`, `heal`, `turn_start`, `victory`, `defeat`, `click`, …) |
 | `music/default/{menu,battle_1,battle_2}.ogg` | Synthwave loops |
 | `ui/theme.json` | The interface look (docs/packs/format.md §11): dark glass panels, neon rims, glowing buttons, rain in the menu |
@@ -35,6 +36,9 @@ the balance simulation: `rust/engine/tests/neon.rs` (DESIGN.md §9).
   per call, 3 calls at a time, one shared style prompt plus each card's `look`;
   cropped and scaled with `sips`, JPEG quality 80. Existing pictures are kept,
   so a rerun only redraws missing ones.
+- The Simple 2D set: `python3 tools/gen_art_styles.py --styles simple --pack neon`
+  (Classic's "simple" style with the pack's `PACK_SETTING`: neon palette, flat
+  shapes, a plain dark background), WebP q80; run `tools/codex_guard.sh` beside it.
 - Sounds and music: `python3 tools/neon_audio.py` — pure-Python synthesis on
   top of `tools/gen_audio.py` (oscillators, envelopes, reverb), deterministic,
   encoded to Ogg Vorbis with `ffmpeg`.

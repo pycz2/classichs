@@ -7,6 +7,9 @@ Usage: python3 tools/gen_art_styles.py [--styles cartoon simple photo] [--worker
        python3 tools/gen_art_styles.py --styles cartoon --all [--limit N]   # every card (art/cards)
 With --all the order is every second card first (an even half), then the rest;
 --limit draws at most N new pictures. Existing pictures are kept (delete one to draw it again).
+       python3 tools/gen_art_styles.py --styles simple --pack neon   # every card of packs/neon
+--pack draws a pack's own cards (cards.json "look" + locales/en.json names) in the pack's palette
+(PACK_SETTING) straight into packs/<pack>/art/<style>/<id>.webp, 384 px like Classic's sets.
 """
 import argparse
 import concurrent.futures as cf
@@ -45,33 +48,62 @@ STYLES = {
              "simple composition, no clutter; fantasy creatures and magic rendered as if photographed. " + COMMON,
 }
 
+## A pack's setting and palette, appended to the style for --pack runs.
+PACK_SETTING = {
+    "neon": "This pack is cyberpunk, so instead of warm colours use a night neon palette: deep blue-black and indigo, "
+            "with glowing magenta, cyan and amber accents and a touch of chrome. Make it a simplified 2D picture, far "
+            "simpler than a detailed painting: large flat shapes, stylised (not realistic) faces and forms, at most "
+            "one soft shade per colour, a few clean glow lines. The background is only a smooth dark gradient with a "
+            "soft neon glow behind the subject: no city, no buildings, no skyline, no signs, no rain scenery. "
+            "Humour over grimdark, no gore.",
+}
+KIND = {"MINION": "character or creature", "SPELL": "visible effect of an action or program", "WEAPON": "weapon",
+        "CHAMPION": "champion portrait, head and shoulders", "POWER": "ability effect"}
 
-def prompt_for(style, batch, cards):
+
+def pack_cards(pack):
+    """{id: description} for every card of packs/<pack>: its name, kind and art concept ("look")."""
+    d = os.path.join(ROOT, "packs", pack)
+    names = json.load(open(os.path.join(d, "locales", "en.json")))["cards"]
+    return {c["id"]: f'"{names[c["id"]]["name"]}"; {KIND[c["type"]]}; {c["look"]}'
+            for c in json.load(open(os.path.join(d, "cards.json")))}
+
+
+def prompt_for(style, batch, cards, pack=None):
     """The Codex prompt for these card ids in a style (tools/art_styles_page.py shows it per card)."""
-    lines = "\n".join(f"- ID {i}: {describe(cards[i])}" for i in batch)
+    lines = "\n".join(f"- ID {i}: {cards[i] if pack else describe(cards[i])}" for i in batch)
     return (
         f"Use your built-in image generation tool (not code, not other tools) to create {len(batch)} images, "
         "one per card listed below, in the given order. For each card, show what the card is: the creature "
         "or character, the weapon, or the visible magic of the spell.\n"
-        f"{STYLES[style]}\n"
+        f"{STYLES[style]}{' ' + PACK_SETTING[pack] if pack else ''}\n"
         "After generating each image, copy the generated PNG file to ./out/<ID>.png (use the exact ID). "
         "Do not create any other files. Cards:\n" + lines
     )
 
 
-def run_batch(style, batch, cards):
-    work = os.path.join(OUT, "_work", style)
+def out_dir(style, pack):
+    return os.path.join(ROOT, "packs", pack, "art", style) if pack else os.path.join(OUT, style)
+
+
+def run_batch(style, batch, cards, pack=None):
+    work = os.path.join(OUT, "_work", (pack + "_" if pack else "") + style)
     os.makedirs(os.path.join(work, "out"), exist_ok=True)
-    prompt = prompt_for(style, batch, cards)
+    prompt = prompt_for(style, batch, cards, pack)
     subprocess.run([CODEX, "exec", "--skip-git-repo-check", "--ephemeral", "-s", "workspace-write", "-C", work, prompt],
                    stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=2400)
     done = []
     for i in batch:
         src = os.path.join(work, "out", i + ".png")
         if os.path.exists(src):
-            dst = os.path.join(OUT, style, i + ".jpg")
-            subprocess.run(["sips", "-Z", str(SIZE), "-s", "format", "jpeg", "-s", "formatOptions", "82", src, "--out", dst],
-                           capture_output=True)
+            if pack:
+                dst = os.path.join(out_dir(style, pack), i + ".webp")
+                subprocess.run(["magick", src, "-resize", "384x384^", "-gravity", "center", "-extent", "384x384",
+                                "-quality", "80", dst], capture_output=True)
+            else:
+                dst = os.path.join(OUT, style, i + ".jpg")
+                subprocess.run(["sips", "-Z", str(SIZE), "-s", "format", "jpeg", "-s", "formatOptions", "82", src,
+                                "--out", dst], capture_output=True)
             if os.path.exists(dst):
                 done.append(i)
     return style, done
@@ -84,23 +116,29 @@ def main():
     ap.add_argument("--batch", type=int, default=5)
     ap.add_argument("--all", action="store_true", help="every card that has art in art/cards")
     ap.add_argument("--limit", type=int, default=0, help="at most N new pictures per style")
+    ap.add_argument("--pack", help="draw every card of packs/<pack> into packs/<pack>/art/<style>/<id>.webp")
     a = ap.parse_args()
     ids = CARDS
-    if a.all:
+    if a.pack:
+        cards = pack_cards(a.pack)
+        ids = list(cards)
+    elif a.all:
         every = sorted(f[:-4] for f in os.listdir(os.path.join(ROOT, "art", "cards")) if f.endswith(".jpg"))
         ids = every[::2] + every[1::2]  # an even half first
-    data = json.load(open(os.path.join(ROOT, "data", "cards.json")))
-    cards = {c["id"]: c for c in (data if isinstance(data, list) else data.values())}
+    if not a.pack:
+        data = json.load(open(os.path.join(ROOT, "data", "cards.json")))
+        cards = {c["id"]: c for c in (data if isinstance(data, list) else data.values())}
+    ext = ".webp" if a.pack else ".jpg"
     jobs = []
     for style in a.styles:
-        os.makedirs(os.path.join(OUT, style), exist_ok=True)
-        todo = [i for i in ids if not os.path.exists(os.path.join(OUT, style, i + ".jpg"))]
+        os.makedirs(out_dir(style, a.pack), exist_ok=True)
+        todo = [i for i in ids if not os.path.exists(os.path.join(out_dir(style, a.pack), i + ext))]
         if a.limit:
             todo = todo[:a.limit]
         jobs += [(style, todo[k:k + a.batch]) for k in range(0, len(todo), a.batch)]
     print(f"{len(jobs)} batches", flush=True)
     with cf.ThreadPoolExecutor(a.workers) as ex:
-        for style, done in ex.map(lambda j: run_batch(j[0], j[1], cards), jobs):
+        for style, done in ex.map(lambda j: run_batch(j[0], j[1], cards, a.pack), jobs):
             print(style, "done:", done, flush=True)
 
 
