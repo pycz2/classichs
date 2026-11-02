@@ -4,6 +4,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-11-03
+
+### Geändert
+- Das Spiel heißt **Classic Heroes Showdown** (kurz Classic HS). Es ist jetzt eine Engine für Kartenspiele: Jedes Spiel ist ein Paket mit eigenen Regeln, Karten, Aussehen, Musik, Tutorial und Deckvorlagen.
+- Ein neues Menü: Spielen, Einstellungen, Beenden. Spielen → Direkt (die Spielbibliothek, dann das Menü des gewählten Spiels in seinem Stil) oder Server (Verbindungen, Anmeldung, die Startseite des Servers mit Freunden und den Spielen des Servers).
+- Allgemeine Einstellungen: Sprache, Lautstärke, Kartenrücken, Animationstempo, Bildschirmwackeln, Vollbild. Bilder- und Musiksätze werden pro Spiel gewählt (im Servermodus auf dem Server gespeichert); die Debug-Werkzeuge sind in den Einstellungen innerhalb eines Spiels.
+- Decks gehören zu ihrem Spiel; auf einem Server sind es die Server-Decks dieses Spiels, lokale Decks lassen sich dorthin kopieren. Keine fertigen Decks mehr in der Liste: Ein neues Deck beginnt leer oder mit einer Vorlage des Pakets.
+- Tutorial und Szeneneffekte (Regen, Schnee, Glut) gehören jetzt zum Paket. Das Tavernen-Aussehen ist ins Classic-Paket umgezogen; der Client selbst sieht neutral aus.
+
+### Hinzugefügt
+- Paket-Werkzeuge in der Spielbibliothek: ein Spiel aus einem Ordner bauen, prüfen (Dateien, JSON, Lua-Skripte mit Zeilennummer, Bilder, Übersetzungen, Tutorial), Probepartien der Bots spielen, installieren.
+- Die Website hat einen Bereich „Für Entwickler“: ein eigenes Spiel erstellen, Kartenskripte in Lua, die API der Engine, Prüfen und Testen, eine interaktive Architekturkarte. Die Startseite ist im Neonfall-Stil.
+- Beim Update ziehen die Einstellungen von selbst um: Bilder- und Musiksätze zu Classic, Server zu Verbindungen, deine Decks zu ihrem Spiel.
+
 ## [0.32.0] - 2026-11-02
 
 ### Hinzugefügt

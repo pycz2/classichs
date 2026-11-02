@@ -4,6 +4,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-11-03
+
+### Changed
+- The game is called **Classic Heroes Showdown** (short Classic HS). It is now an engine for card games: each game is a pack with its own rules, cards, look, music, tutorial and deck templates.
+- A new menu: Play, Settings, Exit. Play → Direct (the game library, then the chosen game's menu in its own look) or Server (connections, login, the server's home with friends and the server's games).
+- Global settings: language, volume, card back, animation speed, screen shake, fullscreen. Art and music sets are chosen per game (kept on the server in server mode); Debug tools are in the settings inside a game.
+- Decks are kept per game; on a server they are the server's decks of that game, and local decks can be copied there. No ready-made decks in the list any more: a new deck starts from scratch or from one of the pack's templates.
+- The tutorial and scene effects (rain, snow, embers) are now part of the pack. The tavern look moved into the Classic pack; the client itself looks neutral.
+
+### Added
+- Pack tools in the game library: build a game from a folder, check it (files, JSON, Lua scripts with line numbers, art, translations, tutorial), play trial bot games, install it.
+- The site has a "For developers" section: making your own game, card scripts in Lua, the engine API reference, checking and testing, an interactive architecture map. The landing page is in the Neonfall style.
+- Settings move over by themselves on update: art and music sets to Classic, servers to connections, your decks to their game.
+
 ## [0.32.0] - 2026-11-02
 
 ### Added

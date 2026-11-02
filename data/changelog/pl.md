@@ -4,6 +4,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-11-03
+
+### Zmieniono
+- Gra nazywa się **Classic Heroes Showdown** (w skrócie Classic HS). To teraz silnik gier karcianych: każda gra to paczka z własnymi zasadami, kartami, wyglądem, muzyką, samouczkiem i szablonami talii.
+- Nowe menu: Graj, Ustawienia, Wyjście. Graj → Bezpośrednio (biblioteka gier, potem menu wybranej gry w jej stylu) lub Serwer (połączenia, logowanie, strona serwera ze znajomymi i grami serwera).
+- Ustawienia ogólne: język, głośność, rewers kart, szybkość animacji, drżenie ekranu, pełny ekran. Zestawy grafik i muzyki wybiera się dla każdej gry (w trybie serwera zapisywane na serwerze); narzędzia debugowania są w ustawieniach wewnątrz gry.
+- Talie są przypisane do gry; na serwerze to talie serwera dla tej gry, a lokalne można tam skopiować. Na liście nie ma już gotowych talii: nowa talia zaczyna się od zera albo od szablonu z paczki.
+- Samouczek i efekty sceny (deszcz, śnieg, iskry) są teraz częścią paczki. Wygląd karczmy przeniósł się do paczki Classic; sam klient wygląda neutralnie.
+
+### Dodano
+- Narzędzia paczek w bibliotece gier: zbudować grę z folderu, sprawdzić ją (pliki, JSON, skrypty Lua z numerem wiersza, grafiki, tłumaczenia, samouczek), rozegrać próbne partie botów, zainstalować.
+- Strona ma dział „Dla twórców”: własna gra, skrypty kart w Lua, opis API silnika, sprawdzanie i testy, interaktywna mapa architektury. Strona główna jest w stylu Neonfall.
+- Przy aktualizacji ustawienia przenoszą się same: zestawy grafik i muzyki do Classic, serwery do połączeń, twoje talie do ich gry.
+
 ## [0.32.0] - 2026-11-02
 
 ### Dodano
