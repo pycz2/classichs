@@ -49,17 +49,17 @@ func _initialize() -> void:
 	_clean()
 	for lang in langs:
 		steps.append([_open.bind(lang, NEON), "menu"])
-		steps.append([func(): m.show_games(), "games"])
-		steps.append([func():
-			m.show_menu()
-			m.screen.show_play(), ""])
+		steps.append([func(): m.show_library(), "games"])
+		steps.append([func(): m.enter_game(Packs.active()), ""])
 		steps.append([_match, "match"])
 		steps.append([_moves, ""])
 		for i in 4:
 			steps.append([func(): pass, ""])  # the moves' animations
 		steps.append([_history, "history"])
 		steps.append([_tracker, "tracker"])
-		steps.append([func(): m.show_collection(), ""])
+		steps.append([func():  # the player's decks: the pack's templates (a list starts empty)
+			DeckStore.write(DeckStore.file(), Decks.templates().map(func(t): return t.deck.to_dict().merged({"name": t.name}, true)))
+			m.show_collection(), ""])
 		steps.append([func(): m.screen.edit_deck(0), "collection"])
 		steps.append([func():
 			m.show_online()
@@ -89,7 +89,7 @@ func _clean() -> void:
 		DirAccess.remove_absolute(Packs.user_dir)
 
 
-## A fresh game in this language with this game pack active, at the menu.
+## A fresh game in this language with this game pack active, at its game menu.
 func _open(lang: String, pack_id: String) -> void:
 	_drop_arena()
 	if m:
@@ -103,6 +103,8 @@ func _open(lang: String, pack_id: String) -> void:
 			Packs.set_active(p)
 	m = load("res://ui/main.tscn").instantiate()
 	root.add_child(m)
+	m.show_library()
+	m.enter_game(Packs.active())
 
 
 func _match() -> void:

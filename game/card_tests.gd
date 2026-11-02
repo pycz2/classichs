@@ -7,7 +7,7 @@ extends RefCounted
 const DIR := "res://data/card_tests"
 
 
-## card id -> [test, ...] from every file in data/card_tests.
+## card id -> [test, ...] from every file in data/card_tests, for the cards of the active pack.
 static func load_all() -> Dictionary:
 	var out := {}
 	var d := DirAccess.open(DIR)
@@ -21,7 +21,8 @@ static func load_all() -> Dictionary:
 			push_warning("card tests: cannot read " + f)
 			continue
 		for id in j.data:
-			out[id] = (out.get(id, []) as Array) + (j.data[id] as Array)
+			if CardDb.has(id):  # (the tests are written for Classic's cards)
+				out[id] = (out.get(id, []) as Array) + (j.data[id] as Array)
 	return out
 
 

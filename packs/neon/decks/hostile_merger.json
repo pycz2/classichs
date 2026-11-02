@@ -1,6 +1,7 @@
 {
  "id": "hostile_merger",
  "champion": "director_vale",
+ "description": {"en": "Drone walls, Protocols and healing: outlast the opponent and win on value.", "ru": "Стены дронов, протоколы и лечение: переживите противника и победите выгодой.", "de": "Drohnenwälle, Protokolle und Heilung: den Gegner überdauern und mit Mehrwert siegen.", "fr": "Murs de drones, Protocoles et soins : survivez à l’adversaire et gagnez à la valeur.", "es": "Muros de drones, Protocolos y curación: aguanta más que el rival y gana por valor.", "pt_BR": "Muralhas de drones, Protocolos e cura: resista ao oponente e vença no valor.", "it": "Muri di droni, Protocolli e cure: resisti all’avversario e vinci con il valore.", "pl": "Ściany dronów, Protokoły i leczenie: przetrwaj przeciwnika i wygraj wartością."},
  "cards": [
   "field_auditor",
   "field_auditor",

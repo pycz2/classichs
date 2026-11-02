@@ -29,6 +29,8 @@ var link: ServerLink:
 		return _cur.link if _cur else null
 	set(v):
 		_select(v)
+## Shown at all (main: only while playing through a server; without one there are no friends).
+var enabled := true
 ## The screen is a game: the button sits beside the gear, chats don't open by themselves.
 var in_match := false
 ## The screen is the server's lobby: errors show in its status line, not as toasts.
@@ -170,7 +172,7 @@ func logged_in() -> Array[Server]:
 
 func _process(delta: float) -> void:
 	var on_list := logged_in()
-	var on := not on_list.is_empty()
+	var on := enabled and not on_list.is_empty()
 	if on and not on_list.has(_cur):
 		_cur = on_list[0]
 		rebuild_panel()

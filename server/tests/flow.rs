@@ -988,6 +988,41 @@ async fn decks_on_the_server() {
     assert_eq!(c.want("error").await["code"], "rate_limited");
 }
 
+/// game_settings lists an account's choices per game (by the manifest id); game_settings_set merges
+/// changes into one game's (null removes a key) and answers with them all; bad keys and values,
+/// unknown games and too many keys are refused; another account has its own.
+#[tokio::test]
+async fn game_settings_per_account_and_game() {
+    let (addr, app) = server(std_server()).await;
+    let quick = install(&app, &quick_pack(), None).await;
+    let mut a = C::register(addr, "gsa").await;
+    let mut b = C::register(addr, "gsb").await;
+    a.send(json!({"t": "game_settings"})).await;
+    assert_eq!(a.want("game_settings").await["games"], json!({}));
+    a.send(json!({"t": "game_settings_set", "settings": {"art": "cartoon", "music": "open"}})).await;
+    assert_eq!(a.want("game_settings").await["games"], json!({"classic-2014": {"art": "cartoon", "music": "open"}}));
+    a.send(json!({"t": "game_settings_set", "pack": quick.rules_hash, "settings": {"art": "simple"}})).await;
+    a.want("game_settings").await;
+    a.send(json!({"t": "game_settings_set", "settings": {"art": null, "music": "generated"}})).await;
+    assert_eq!(
+        a.want("game_settings").await["games"],
+        json!({"classic-2014": {"music": "generated"}, "org.test.quick": {"art": "simple"}})
+    );
+    for bad in [json!({"Art": "x"}), json!({"art": 3}), json!({"art": "x".repeat(65)}), json!({"": "x"})] {
+        a.send(json!({"t": "game_settings_set", "settings": bad})).await;
+        assert_eq!(a.want("error").await["code"], "bad_request", "{bad}");
+    }
+    let many: serde_json::Map<String, Value> = (0..17).map(|i| (format!("k{i}"), json!("v"))).collect();
+    a.send(json!({"t": "game_settings_set", "settings": many})).await;
+    assert_eq!(a.want("error").await["code"], "bad_request");
+    a.send(json!({"t": "game_settings_set", "pack": "no-such-rules", "settings": {"art": "x"}})).await;
+    assert_eq!(a.want("error").await["code"], "pack");
+    b.send(json!({"t": "game_settings"})).await;
+    assert_eq!(b.want("game_settings").await["games"], json!({}), "another account's are its own");
+    a.send(json!({"t": "game_settings"})).await;
+    assert_eq!(a.want("game_settings").await["games"]["classic-2014"], json!({"music": "generated"}), "kept");
+}
+
 /// A Basic deck's first n cards.
 fn part_of(class: &str, n: usize) -> Value {
     let mut d = deck(class);

@@ -1,19 +1,32 @@
 class_name MainMenu
 extends Control
-## Main menu: Play (a submenu with online play, training and the tutorial),
-## Collection, Games (the game packs), Settings (with the debug tools), Exit.
+## The client's main menu (pack null; no game styles it, Packs.shell): Play (a submenu:
+## Direct, without a server, or Server, through one), Settings, Exit (not on the web).
+## A game's menu (pack set: main made it the active pack, so the screen has its look, menu
+## music, pictures and logo): Collection, Training, Code play (Direct) or Play (Server: the
+## server's ranked, casual and Arena games), Tutorial (when the pack has one), Settings (with
+## the debug tools of this game), Leave the game.
 
-signal training
-signal collection
-signal online
-signal tutorial
+signal direct
+signal server
 signal settings
-signal games
 signal quit
+signal collection
+signal training
+signal code_play
+signal play
+signal tutorial
+signal leave
 
 ## Button labels (English keys); the translation tool reads this list.
-const ITEMS := ["Play", "Online Game", "Training", "Tutorial", "Back", "Collection", "Games", "Settings", "Exit"]
+const ITEMS := ["Play", "Direct", "Server", "Back", "Settings", "Exit", "Collection", "Training", "Code play",
+	"Tutorial", "Leave the game", "Without a server: the games on this device, training, code play",
+	"Through a server: an account, ranked games, the Arena, friends"]
 
+## The game whose menu this is (null: the client's main menu).
+var pack: Pack
+## The game is played through a server (Play opens its lobby).
+var through_server := false
 var _box: VBoxContainer
 
 
@@ -46,6 +59,8 @@ func _ready() -> void:
 	center.add_child(box)
 	var title := TitleLogo.new()
 	title.name = "Title"
+	if pack:
+		title.text = pack.title()
 	box.add_child(title)
 	if not Anim.instant:
 		pic.pivot_offset = Vector2(640, 360)
@@ -65,22 +80,46 @@ func _ready() -> void:
 	add_child(version)
 
 
-## The first level: Play, Collection, Games, Settings, Exit.
+## The first level: the client's Play, Settings, Exit; a game's items.
 func show_main() -> void:
-	var items := [["Play", show_play, true], ["Collection", collection, true], ["Games", games, true], ["Settings", settings, true]]
+	if pack:
+		_show_game()
+		return
+	var items := [["Play", show_play, true], ["Settings", settings, true]]
 	if not OS.has_feature("web"):
 		items.append(["Exit", quit, true])
 	_fill(items)
 
 
-## The Play submenu: online play, training, the tutorial, and Back.
+## The client's Play: without a server or through one, and Back.
 func show_play() -> void:
-	var why := Rules.can_play()  # a pack this rules engine can't play yet: its games can't start
-	var items := [["Online Game", online, why == ""], ["Training", training, why == ""]]
-	if Packs.active().has_tutorial():
-		items.append(["Tutorial", tutorial, why == ""])
-	_fill(items + [["Back", show_main, true]])
-	if why != "":
+	_fill([["Direct", direct, true], ["Server", server, true], ["Back", show_main, true]])
+	for spec in [["Direct", "Without a server: the games on this device, training, code play"],
+			["Server", "Through a server: an account, ranked games, the Arena, friends"]]:
+		var b := _box.find_child(spec[0], false, false) as Button
+		b.tooltip_text = tr(spec[1])
+		var l := Palette.label(tr(spec[1]), 15, Palette.MUTED)
+		l.name = spec[0] + "Note"
+		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_box.add_child(l)
+		_box.move_child(l, b.get_index() + 1)
+
+
+## A game's menu: what can be done in it (a pack this rules engine can't play: its games can't start).
+func _show_game() -> void:
+	var why := Rules.can_play(pack)
+	var ok := why == ""
+	var items := [["Play", play, ok]] if through_server else []
+	items += [["Collection", collection, true], ["Training", training, ok]]
+	if not through_server:  # WebRTC: the browser, or the webrtc-native plugin
+		items.append(["Code play", code_play, ok and WebRtcTransport.available()])
+	if pack.has_tutorial():
+		items.append(["Tutorial", tutorial, ok])
+	_fill(items + [["Settings", settings, true], ["Leave the game", leave, true]])
+	var codes := _box.find_child("CodePlay", false, false) as Button
+	if codes and ok and codes.disabled:
+		codes.tooltip_text = tr("Direct play works only in the browser version of the game")
+	if not ok:
 		var note := Palette.label(tr(why), 18, Color("ffb070"))
 		note.name = "CannotPlay"
 		note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -93,7 +132,7 @@ func _fill(items: Array) -> void:
 			_box.remove_child(c)
 			c.queue_free()
 	for it in items:
-		var b := Palette.button(tr(it[0]), it[0].replace(" ", ""))
+		var b := Palette.button(tr(it[0]), it[0].capitalize().replace(" ", ""))
 		b.disabled = not it[2]
 		if it[1] is Signal:
 			var sig: Signal = it[1]
@@ -104,6 +143,8 @@ func _fill(items: Array) -> void:
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		b.custom_minimum_size = Vector2(300, 52)
 		_animate_button(b, _box.get_child_count() - 2)
+		if it[0] == "Leave the game":
+			b.modulate = Color(1, 1, 1, 0.85)
 
 
 ## Buttons come in one after another and grow a little under the mouse.

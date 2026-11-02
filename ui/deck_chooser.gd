@@ -1,7 +1,8 @@
 class_name DeckChooser
 extends Control
-## A scrollable list of the player's decks with their heroes' pictures:
-## a click on a finished deck picks it at once; unfinished ones are greyed out.
+## A scrollable list of the player's decks of the active game with their heroes' pictures:
+## a click on a finished deck picks it at once; unfinished ones are greyed out. With no deck
+## yet it says so and offers to create one (edit_decks).
 
 signal chosen(deck: Deck)
 signal edit_decks
@@ -27,7 +28,11 @@ func _ready() -> void:
 	grid.add_theme_constant_override("h_separation", 12)
 	grid.add_theme_constant_override("v_separation", 8)
 	scroll.add_child(grid)
-	decks = TrainingSetup.available_decks()
+	decks = DeckStore.load_all()
+	if decks.is_empty():
+		var none := Palette.label(tr("You have no deck for this game yet: create one first"), 24)
+		none.name = "NoDecks"
+		grid.add_child(none)
 	for i in decks.size():
 		var d := decks[i]
 		var row := DeckTiles.DeckRow.new(d)
@@ -46,7 +51,7 @@ func _ready() -> void:
 	var buttons := HBoxContainer.new()
 	buttons.add_theme_constant_override("separation", 16)
 	box.add_child(buttons)
-	var edit := Palette.button(tr("Edit decks"), "EditDecks")
+	var edit := Palette.button(tr("Create a deck") if decks.is_empty() else tr("Edit decks"), "EditDecks")
 	edit.pressed.connect(func(): edit_decks.emit())
 	buttons.add_child(edit)
 	var bk := Palette.button(tr("Back"), "Back")

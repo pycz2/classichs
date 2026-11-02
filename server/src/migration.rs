@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7)]
     }
 }
 
@@ -532,5 +532,41 @@ impl MigrationTrait for M6 {
         )
         .await?;
         m.create_index(Index::create().name("decks_account").table(Decks::Table).col(Decks::Account).to_owned()).await
+    }
+}
+
+/// A player's choices per game (0.40: the art and music sets), per account and pack (the manifest id).
+struct M7;
+
+impl MigrationName for M7 {
+    fn name(&self) -> &str {
+        "m20261102_000007_game_settings"
+    }
+}
+
+#[derive(DeriveIden)]
+enum GameSettings {
+    Table,
+    Account,
+    Pack,
+    Value,
+    Updated,
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M7 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        m.create_table(
+            Table::create()
+                .table(GameSettings::Table)
+                .col(int(GameSettings::Account))
+                .col(ColumnDef::new(GameSettings::Pack).text().not_null())
+                .col(ColumnDef::new(GameSettings::Value).text().not_null())
+                .col(int(GameSettings::Updated))
+                .primary_key(Index::create().col(GameSettings::Account).col(GameSettings::Pack))
+                .foreign_key(&mut fk(GameSettings::Table, GameSettings::Account))
+                .to_owned(),
+        )
+        .await
     }
 }

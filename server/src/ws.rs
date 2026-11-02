@@ -2,7 +2,7 @@
 
 use crate::auth::{self, RateLimit};
 use crate::db::{self, Account, DbError, DbResult};
-use crate::entity::{account, arena, block, deck, friend, message, request};
+use crate::entity::{account, arena, block, deck, friend, game_setting, message, request};
 use crate::events::Event;
 use crate::game::{self, rank_json};
 use crate::packs::{self, GameRules};
@@ -136,6 +136,39 @@ enum In {
         tag: Option<String>,
     },
     DeckDelete { id: f64 },
+    GameSettings {},
+    GameSettingsSet {
+        #[serde(default)]
+        pack: Option<String>,
+        settings: serde_json::Map<String, Value>,
+    },
+}
+
+/// A game's settings an account keeps: this many keys at most, each 1–32 of `a-z 0-9 _`, a text of
+/// at most 64 characters.
+pub const MAX_GAME_SETTINGS: usize = 16;
+
+/// The stored settings with the changes merged in (a null removes a key), or why not.
+fn merge_game_settings(old: &str, changes: serde_json::Map<String, Value>) -> Result<String, E> {
+    let mut v: serde_json::Map<String, Value> = serde_json::from_str(old).unwrap_or_default();
+    for (k, x) in changes {
+        if k.is_empty() || k.len() > 32 || !k.bytes().all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_') {
+            return Err(e("bad_request", "settings: a key is 1-32 of a-z 0-9 _"));
+        }
+        match x {
+            Value::Null => {
+                v.remove(&k);
+            }
+            Value::String(s) if s.chars().count() <= 64 => {
+                v.insert(k, Value::String(s));
+            }
+            _ => return Err(e("bad_request", "settings: a value is a text of 64 characters at most")),
+        }
+    }
+    if v.len() > MAX_GAME_SETTINGS {
+        return Err(e("bad_request", "settings: 16 keys at most"));
+    }
+    Ok(Value::Object(v).to_string())
 }
 
 /// An error reply: code and text (and, for server errors, what went wrong, for the event log).
@@ -464,6 +497,14 @@ fn deck_to_keep(d: &DeckIn, rules: &GameRules) -> Result<String, E> {
     }
 }
 
+/// `game_settings {games: {<pack id>: {key: text}}}`: every game's settings of an account.
+async fn game_settings_msg<C: ConnectionTrait>(db: &C, me: i64) -> Result<Value, DbError> {
+    let rows = game_setting::Entity::find().filter(game_setting::Column::Account.eq(me)).all(db).await?;
+    let games: serde_json::Map<String, Value> =
+        rows.into_iter().map(|r| (r.pack, serde_json::from_str(&r.value).unwrap_or_else(|_| json!({})))).collect();
+    Ok(json!({"t": "game_settings", "games": games}))
+}
+
 fn deck_json(d: &deck::Model) -> Value {
     let cards: Value = serde_json::from_str(&d.cards).unwrap_or_else(|_| json!([]));
     json!({"id": d.id, "pack": d.pack, "name": d.name, "hero": d.hero, "cards": cards, "created": d.created, "updated": d.updated})
@@ -710,6 +751,22 @@ impl Session {
                     return Err(e("not_found", "No such deck of yours"));
                 }
                 self.ok(json!({"t": "deck_deleted", "id": i}))
+            }
+            In::GameSettings {} => self.ok(game_settings_msg(db, me).await?),
+            In::GameSettingsSet { pack, settings } => {
+                if !self.decks.allow("", Instant::now()) {
+                    return Err(e("rate_limited", "Too many changes: wait a little"));
+                }
+                let (rules, _) = self.game_of(pack.as_deref(), Some(me)).await?;
+                let old = game_setting::Entity::find_by_id((me, rules.id.clone())).one(db).await?;
+                let value = merge_game_settings(old.as_ref().map_or("{}", |o| o.value.as_str()), settings)?;
+                let row = game_setting::ActiveModel { account: Set(me), pack: Set(rules.id.clone()), value: Set(value), updated: Set(ranked::now()) };
+                if old.is_some() {
+                    row.update(db).await?;
+                } else {
+                    row.insert(db).await?;
+                }
+                self.ok(game_settings_msg(db, me).await?)
             }
             In::Register { .. } | In::Login { .. } | In::Resume { .. } => Err(e("bad_request", "Already logged in")),
             In::Ping {} => self.ok(json!({"t": "pong"})),

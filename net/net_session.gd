@@ -336,7 +336,7 @@ func _switch(p: Pack) -> void:
 		_fail(_tr(Rules.NEEDS_ENGINE), "pack")
 		return
 	deck = null
-	for d: Deck in DeckStore.load_all() + DeckStore.starter():
+	for d: Deck in DeckStore.load_all():
 		if d.validate() == "":
 			deck = d
 			break

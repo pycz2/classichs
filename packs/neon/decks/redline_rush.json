@@ -1,6 +1,7 @@
 {
  "id": "redline_rush",
  "champion": "mother_rust",
+ "description": {"en": "Weapons and Redline minions hit hard and fast; Plating keeps you standing.", "ru": "Оружие и существа «на пределе» бьют быстро и больно, а броня держит вас на ногах.", "de": "Waffen und Diener am Limit schlagen schnell und hart; Panzerung hält dich aufrecht.", "fr": "Armes et serviteurs à la limite frappent vite et fort ; le Blindage vous garde debout.", "es": "Armas y esbirros al límite golpean rápido y fuerte; el Blindaje te mantiene en pie.", "pt_BR": "Armas e lacaios no limite batem rápido e forte; a Blindagem mantém você de pé.", "it": "Armi e servitori al limite colpiscono forte e in fretta; la Corazza ti tiene in piedi.", "pl": "Broń i stronniki na granicy biją szybko i mocno, a Pancerz trzyma cię przy życiu."},
  "cards": [
   "rust_shiv",
   "rust_shiv",

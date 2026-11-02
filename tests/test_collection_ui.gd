@@ -370,3 +370,35 @@ func test_pager_moves_pages() -> void:
 	(c.find_child("Cost7", true, false) as Button).pressed.emit()
 	eq(c.page, 0, "a filter goes back to the first page")
 	c.free()
+
+
+## A new deck: a class, then from scratch or a copy of one of the pack's templates (its name,
+## mana curve and description shown).
+func test_new_deck_from_scratch_or_a_template() -> void:
+	_store_reset()
+	var v := DeckListView.new()
+	root().add_child(v)
+	(v.find_child("NewDeck", true, false) as Button).pressed.emit()
+	(v.find_child("HeroMAGE", true, false) as Button).pressed.emit()
+	var t := v.find_child("Template_08_freeze_mage", true, false) as Button
+	check(t != null and v.find_child("FromScratch", true, false) != null, "from scratch or a template")
+	eq(v.find_child("Templates", true, false).get_child_count(), 1, "the class's templates only")
+	check(t.find_children("*", "ManaCurve", true, false).size() == 1, "its mana curve")
+	var labels: Array = t.find_children("*", "Label", true, false).map(func(l): return l.text)
+	check(labels.has("Freeze Mage") and labels.any(func(x): return x.begins_with("Freeze everything")), "its name and description: %s" % [labels])
+	t.pressed.emit()
+	eq(v.decks.map(func(d): return d.name), ["Freeze Mage"], "a copy of it")
+	eq(v.editing, v.decks[0], "open to change")
+	eq(v.decks[0].sorted_counts(), Decks.templates("MAGE")[0].deck.sorted_counts(), "its cards")
+	eq(v.decks[0].validate(), "", "ready to play")
+	v.close_deck()
+	(v.find_child("NewDeck", true, false) as Button).pressed.emit()
+	(v.find_child("HeroWARRIOR", true, false) as Button).pressed.emit()
+	(v.find_child("FromScratch", true, false) as Button).pressed.emit()
+	eq([v.decks.size(), v.editing.cards.size(), v.editing.hero], [2, 0, "HERO_01"], "an empty one")
+	v.close_deck()
+	Decks.templates("MAGE")[0].deck.cards.clear()
+	eq(Decks.templates("MAGE")[0].deck.cards.size(), 30, "the template stays as it was")
+	v.free()
+	eq(DeckStore.load_all().size(), 2, "saved")
+	_store_restore()

@@ -14,7 +14,7 @@ static func root() -> Window:
 
 
 func _two_servers() -> void:
-	Settings.data.servers = [{"url": A, "name": "Alpha"}, {"url": B, "name": "Beta"}]
+	Settings.data.servers = [{"id": A, "url": A, "name": "Alpha"}, {"id": B, "url": B, "name": "Beta"}]
 	Settings.save()  # main reads the settings
 
 
@@ -42,34 +42,39 @@ func test_settings_migrate_the_old_server_and_check_the_list() -> void:
 	f.store_string(JSON.stringify({"language": "en", "server": "wss://old.example:9000"}))
 	f.close()
 	Settings.load_settings()
-	eq(Settings.data.servers, [{"url": "wss://old.example:9000", "name": "old.example"}], "the old address becomes the list")
+	eq(Settings.data.servers, [{"id": "wss://old.example:9000", "url": "wss://old.example:9000", "name": "old.example"}], "the old address becomes the list")
 	f = FileAccess.open(Settings.path, FileAccess.WRITE)
-	f.store_string(JSON.stringify({"language": "en", "servers": [{"url": A, "name": " Alpha "}, {"url": "http://bad"}, {"url": A}, {"url": B}]}))
+	f.store_string(JSON.stringify({"language": "en", "servers": [{"url": A, "name": " Alpha "}, {"url": "http://bad"}, {"url": A},
+		{"id": A + "#2", "url": A, "name": "Alpha 2"}, {"url": B}]}))
 	f.close()
 	Settings.load_settings()
-	eq(Settings.data.servers, [{"url": A, "name": "Alpha"}, {"url": B, "name": "b.test"}], "bad and repeated addresses dropped, names trimmed")
-	eq(Settings.server_name(B), "b.test")
+	eq(Settings.data.servers, [{"id": A, "url": A, "name": "Alpha"}, {"id": A + "#2", "url": A, "name": "Alpha 2"}, {"id": B, "url": B, "name": "b.test"}],
+		"each server becomes a connection by its address (its saved login stays); bad ones and a repeated id dropped; the same address with another id stays")
+	eq([Settings.server_name(B), Settings.server_name(A + "#2")], ["b.test", "Alpha 2"])
+	eq(Settings.new_server_id(A), A + "#3", "another login to A gets its own id")
 	DirAccess.remove_absolute(Settings.path)
 	Settings.load_settings()
 	eq(Settings.data.servers, [], "no server by default: the game plays without one, a server is added later")
 
 
-## A first start with no server: the menu opens, nothing connects; the lobby button leads
-## to the list where a server is added, and main makes its connection then.
+## A first start with no server: the menu opens, nothing connects; Server leads to the empty
+## connections where one is added, and main makes its connection then.
 func test_main_starts_without_a_server_and_one_is_added_later() -> void:
 	var f := FileAccess.open(Settings.path, FileAccess.WRITE)  # no "servers": the default list
-	f.store_string(JSON.stringify({"language": "en"}))
+	f.store_string(JSON.stringify({"language": "en", "layout": Migration.LAYOUT}))
 	f.close()
 	Settings.load_settings()
 	var m := _main()
 	eq(m.server_links, [], "no connection")
-	check(m.server_link == null, "no lobby server")
+	check(m.server_link == null, "no server")
 	check(m.screen is MainMenu, "the menu, not a wait for a server")
 	eq(m.show_server(), null, "no server: no lobby")
-	check(m.screen is SettingsView and m.screen.find_child("ServerList", true, false) != null, "the list to add one")
+	check(m.screen is ConnectionsView, "the connections, to add one")
+	check(m.screen.find_child("ServerRows", true, false).get_child(0) is Label, "none yet")
 	check(m.screen.add_server("Mine", "wss://mine.example"), "added")
-	eq(m.show_server().link.url, "wss://mine.example", "its lobby")
-	eq(m.server_links.map(func(l): return l.url), ["wss://mine.example"], "and its connection")
+	m.show_connections()
+	eq(m.server_links.map(func(l): return l.url), ["wss://mine.example"], "its connection")
+	eq(m.server_link.url, "wss://mine.example", "chosen")
 	m.free()
 
 
@@ -85,10 +90,11 @@ func test_old_saved_session_is_read_as_its_server() -> void:
 	eq(ServerLink.saved_for(A), {}, "forgotten")
 
 
-## Each server gets its own connection and resumes its own session; a kicked one waits.
+## Each connection resumes its own session when the server mode opens; a kicked one waits;
+## leaving the mode closes them; the same address twice is two connections.
 func test_main_keeps_a_connection_per_server() -> void:
 	_two_servers()
-	Settings.data.servers.append({"url": "ws://c.test", "name": "Gamma"})
+	Settings.data.servers.append({"id": "ws://c.test", "url": "ws://c.test", "name": "Gamma"})
 	Settings.save()
 	ServerLink.remember_for(A, {"token": "ta"})
 	ServerLink.remember_for(B, {"token": "tb"})
@@ -97,28 +103,33 @@ func test_main_keeps_a_connection_per_server() -> void:
 	var m := _main()
 	var ls: Array = m.server_links
 	eq(ls.map(func(l): return l.url), [A, B, "ws://c.test"], "a connection per server")
-	eq(ls.map(func(l): return l.resuming), [true, true, false], "each resumes its own session; the kicked one does not")
-	eq(m.server_link, ls[1], "the server chosen last is the lobby's")
+	eq(ls.map(func(l): return l.resuming), [false, false, false], "nothing connects in the main menu")
+	m.show_connections()
+	eq(ls.map(func(l): return l.resuming), [true, true, false], "the server mode: each resumes its own session; the kicked one does not")
+	eq(m.server_link, ls[1], "the server chosen last")
 	ls[0].opened.emit()
 	eq(ls[0].of("resume"), [{"t": "resume", "token": "ta"}], "A's token to A")
 	var c: FakeLink = ls[2]
 	Settings.data.servers.remove_at(2)
-	m.show_menu()
+	m.show_connections()
 	eq([m.server_links.size(), c.up], [2, false], "a removed server's connection is closed")
-	Settings.data.servers.append({"url": "ws://d.test", "name": "Delta"})
+	Settings.data.servers.append({"id": A + "#2", "url": A, "name": "Alpha again"})
+	m.show_connections()
+	eq(m.server_links.map(func(l): return l.id), [A, B, A + "#2"], "the same address twice: two connections")
+	m.open_connection(A)
+	check(m.screen is ServerView and (m.screen as ServerView).login_only, "not logged in: its login")
+	eq([m.server_link, ServerLink.last()], [ls[0], A], "chosen")
+	_login(ls[0])
+	check(m.screen is ServerHome, "logged in: the server's home")
 	m.show_menu()
-	eq(m.server_links.back().url, "ws://d.test", "an added one gets its connection")
-	var v: ServerView = m.show_server()
-	check(v.find_child("ServerPick", true, false) != null, "several servers: a picker in the lobby")
-	(v.find_child("ServerPick", true, false) as OptionButton).item_selected.emit(0)
-	eq([m.server_link, ServerLink.last(), (m.screen as ServerView).link], [ls[0], A, ls[0]], "another server picked")
+	check(not ls[0].up and not ls[1].up, "leaving the server mode closes the connections")
 	m.free()
 
 
 ## D15: a second login elsewhere kicks this one: the session is kept but marked, no resume
 ## by itself, a notice; logging in again clears it.
 func test_kicked_marks_the_session_and_waits_for_the_player() -> void:
-	Settings.data.servers = [{"url": A, "name": "Alpha"}]
+	Settings.data.servers = [{"id": A, "url": A, "name": "Alpha"}]
 	Settings.save()
 	var m := _main()
 	var l: FakeLink = m.server_link
@@ -257,7 +268,7 @@ func test_upload_answers() -> void:
 
 
 ## `pack` stays out of the messages until the server takes it (phase D); a game the server
-## does not play is not queued.
+## does not play is not queued; the server's home lists its games (play, download, delete own).
 func test_pack_field_and_games_panel() -> void:
 	var v := ServerView.new()
 	var l := FakeLink.new()
@@ -283,57 +294,114 @@ func test_pack_field_and_games_panel() -> void:
 	v.unqueue()
 	l.dispatch({"t": "packs", "server": [entry], "mine": [{"id": "own", "name": {"en": "Mine"}, "version": "2", "rules_hash": "q", "content_hash": "c0ffee", "size": 10, "enabled": true}]})
 	eq(l.game_problem(Packs.all()[0]), tr("This server does not have this game"), "a server with packs, without Classic")
-	(v.find_child("GamesButton", true, false) as Button).pressed.emit()
-	var panel := v.find_child("GamesPanel", true, false)
-	check(panel != null, "the server's games")
-	var row := panel.find_child("Game_" + entry.content_hash.left(12), true, false)
-	(row.find_child("Use", true, false) as Button).pressed.emit()
-	eq(Packs.active().id(), neon.id(), "Use switches the active game")
-	eq(l.of("me").back(), {"t": "me", "pack": neon.rules_hash()}, "and asks for the rank in it")
-	check(v.find_child("GamesPanel", true, false).find_child("Game_" + entry.content_hash.left(12), true, false).find_child("Use", true, false) == null, "in use now")
-	eq(l.game_problem(neon), "", "listed: played here")
 	v.queue("casual")
-	eq(l.of("queue").back().get("pack"), neon.rules_hash(), "queued in it")
-	v.unqueue()
-	var mine := v.find_child("Game_c0ffee", true, false)
+	eq(l.of("queue").size(), 2, "a game the server does not play is not queued")
+	check((v.find_child("Status", true, false) as Label).text == tr("This server does not have this game"), "it says why")
+	v.free()
+	var h := ServerHome.new()
+	h.link = l
+	root().add_child(h)
+	check(h.find_child("Game_classic-2014", true, false) == null, "a server with games of its own: no built-in Classic")
+	var entered := []
+	h.entered.connect(func(p): entered.append(p))
+	(h.find_child("Game_neon", true, false).find_child("Play", true, false) as Button).pressed.emit()
+	eq(entered, [neon], "the player's Neonfall plays the server's (the same rules)")
+	var mine := h.find_child("Game_own", true, false)
 	check(mine.find_child("Download", true, false) != null, "not installed: Download")
 	(mine.find_child("Delete", true, false) as Button).pressed.emit()
 	eq(l.of("pack_delete").size(), 0, "the first press only asks")
-	(v.find_child("Game_c0ffee", true, false).find_child("Delete", true, false) as Button).pressed.emit()
+	(h.find_child("Game_own", true, false).find_child("Delete", true, false) as Button).pressed.emit()
 	eq(l.of("pack_delete"), [{"t": "pack_delete", "content_hash": "c0ffee"}], "the second deletes")
+	h.show_upload()
+	check(h.find_child("Upload_classic-2014", true, false) != null and h.find_child("Upload_neon", true, false) == null, "Upload offers the games it lacks")
+	(h.find_child("Upload_classic-2014", true, false) as Button).pressed.emit()
+	eq(l.http.size(), 1, "uploading")
+	h.free()
+	Packs.enter(neon)
+	l.request_me()
+	eq(l.of("me").back(), {"t": "me", "pack": neon.rules_hash()}, "the rank asked for in the game played")
+	eq(l.game_problem(neon), "", "listed: played here")
+	DeckStore.save_all([Decks.templates()[0].deck])  # a deck of it
+	var v2 := ServerView.new()
+	v2.link = l
+	root().add_child(v2)
+	v2.queue("casual")
+	eq(l.of("queue").back().get("pack"), neon.rules_hash(), "queued in it")
+	v2.free()
 	Packs.set_active(Packs.all()[0])
-	v.free()
 	l.free()
 
 
-## The settings' server list: add, rename, log out, remove.
+## The connections: add (the same address twice too), rename, log out, remove.
 func test_settings_server_list() -> void:
-	Settings.data.servers = [{"url": "ws://localhost:7377", "name": "localhost"}]
-	var s := SettingsView.new()
+	Settings.data.servers = [{"id": "ws://localhost:7377", "url": "ws://localhost:7377", "name": "localhost"}]
+	var s := ConnectionsView.new()
 	root().add_child(s)
-	(s.find_child("Servers", true, false) as Button).pressed.emit()
-	var box := s.find_child("ServerList", true, false)
-	check(box != null, "the list opens")
 	eq((s.find_child("NewUrl", true, false) as LineEdit).virtual_keyboard_type, LineEdit.KEYBOARD_TYPE_URL, "an address keyboard")
 	var note := s.find_child("ServersNote", true, false) as Control
-	check(not note.get_rect().intersects((s.find_child("CloseServers", true, false) as Control).get_rect()), "the note wraps before the Close button")
+	check(not note.get_rect().intersects((s.find_child("Back", true, false) as Control).get_rect()), "the note wraps before the Back button")
 	eq(s.add_server("Mine", "http://nope"), false, "only ws:// or wss://")
 	eq(s.add_server("Mine", "wss://mine.example"), true)
-	eq(Settings.data.servers.map(func(e): return e.name), ["localhost", "Mine"], "added")
+	eq(s.add_server("Mine 2", "wss://mine.example"), true, "the same address again: another login there")
+	eq(Settings.data.servers.map(func(e): return e.name), ["localhost", "Mine", "Mine 2"], "added")
+	eq(Settings.data.servers.map(func(e): return e.id), ["ws://localhost:7377", "wss://mine.example", "wss://mine.example#2"], "each its own id")
 	var row := s.find_child("Server1", true, false)
 	var name_ed := row.find_child("Name", true, false) as LineEdit
 	name_ed.text = "Home"
 	name_ed.text_submitted.emit("Home")
 	eq(Settings.data.servers[1].name, "Home", "renamed")
 	ServerLink.remember_for("wss://mine.example", {"token": "t"})
-	s.show_servers()
+	s._build()
 	row = s.find_child("Server1", true, false)
 	eq((row.find_child("Who", true, false) as Label).text, tr("Logged in"))
+	eq((s.find_child("Server2", true, false).find_child("Who", true, false) as Label).text, tr("Not logged in"), "the other login is its own")
+	var opened := []
+	s.chosen.connect(func(id): opened.append(id))
+	(s.find_child("Server2", true, false).find_child("Open", true, false) as Button).pressed.emit()
+	eq(opened, ["wss://mine.example#2"], "Open: that connection")
 	(row.find_child("Logout", true, false) as Button).pressed.emit()
 	eq(ServerLink.saved_for("wss://mine.example").get("token"), null, "logged out")
 	row = s.find_child("Server1", true, false)
 	(row.find_child("Remove", true, false) as Button).pressed.emit()
-	eq(Settings.data.servers.size(), 2, "the first press only asks")
+	eq(Settings.data.servers.size(), 3, "the first press only asks")
 	(row.find_child("Remove", true, false) as Button).pressed.emit()
-	eq(Settings.data.servers.map(func(e): return e.url), ["ws://localhost:7377"], "removed")
+	eq(Settings.data.servers.map(func(e): return e.id), ["ws://localhost:7377", "wss://mine.example#2"], "removed")
 	s.free()
+
+
+
+## Through a server a game's art and music are the player's choice kept on the server (per
+## account and game): the home's pickers send it, entering the game uses it; this device's
+## choice is its own.
+func test_the_art_and_music_choice_is_kept_on_the_server() -> void:
+	_two_servers()
+	var m := _main()
+	var l: FakeLink = m.server_links[0]
+	m.show_connections()
+	m.open_connection(A)
+	_login(l)
+	for msg in [{"t": "chats", "list": []}, {"t": "packs", "server": [], "mine": []}, {"t": "decks", "list": []},
+			{"t": "game_settings", "games": {Packs.CLASSIC: {"music": "open"}}}]:
+		l.dispatch(msg)
+	check(m.screen is ServerHome, "the server's home")
+	var row: Node = m.screen.find_child("Game_classic-2014", true, false)
+	var music := row.find_child("MusicSet", true, false) as OptionButton
+	eq(music.get_item_text(music.selected), "Open (CC0)", "the server's choice shown")
+	var art := row.find_child("ArtSet", true, false) as OptionButton
+	art.item_selected.emit(1)
+	eq(l.of("game_settings_set").back(), {"t": "game_settings_set", "settings": {"art": "cartoon"}}, "kept on the server")
+	eq(l.game_setting(Packs.active(), "art"), "cartoon", "known at once")
+	eq(Packs.choice(Packs.active(), "art"), "generated", "this device's choice is its own")
+	(row.find_child("Play", true, false) as Button).pressed.emit()
+	check(m.screen is MainMenu and m.screen.through_server, "the game's menu, through the server")
+	eq([Packs.choice(Packs.active(), "art"), Packs.choice(Packs.active(), "music")], ["cartoon", "open"], "in the game: the server's choice")
+	check(m.screen.find_child("Play", true, false) != null and m.screen.find_child("CodePlay", true, false) == null, "Play is the server's")
+	(m.screen.find_child("Play", true, false) as Button).pressed.emit()
+	check(m.screen is ServerView and (m.screen as ServerView).stage == "lobby", "its lobby")
+	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
+	check(m.screen is MainMenu and m.screen.pack != null, "back to the game's menu")
+	eq(DeckStore.link, l, "its decks are the server's")
+	(m.screen.find_child("LeaveTheGame", true, false) as Button).pressed.emit()
+	check(m.screen is ServerHome, "leaving: the server's home")
+	eq(DeckStore.link, null, "out of the game")
+	m.free()

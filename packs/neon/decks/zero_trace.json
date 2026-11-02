@@ -1,6 +1,7 @@
 {
  "id": "zero_trace",
  "champion": "iris_null",
+ "description": {"en": "Cheap spells and Chain bonuses: jam the board, draw, and steal late.", "ru": "Дешёвые заклинания и бонусы цепочки: глушите стол, берите карты, крадите в конце.", "de": "Billige Zauber und Ketten-Boni: das Brett stören, ziehen und spät stehlen.", "fr": "Sorts peu chers et bonus de Chaîne : brouillez le plateau, piochez, volez en fin de partie.", "es": "Hechizos baratos y bonos de Cadena: bloquea el tablero, roba cartas y roba al final.", "pt_BR": "Feitiços baratos e bônus de Corrente: trave a mesa, compre e roube no fim.", "it": "Magie economiche e bonus Catena: blocca il campo, pesca e ruba nel finale.", "pl": "Tanie zaklęcia i premie Łańcucha: zagłuszaj stół, dobieraj i kradnij pod koniec."},
  "cards": [
   "zero_day",
   "zero_day",

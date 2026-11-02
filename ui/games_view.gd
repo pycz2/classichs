@@ -1,12 +1,13 @@
 class_name GamesView
 extends Control
-## The "Games" screen: the game packs the player has (built-in, downloaded, imported,
-## received from a player) as big tiles, the active one marked; the selected one's
-## details with its art, sound and music sets, "Play this game", Delete (not for a
-## built-in one) and Import a pack file. Below the tiles, per game server: the games
-## that server offers (download, use).
+## The game library (Play without a server): the game packs on this device (built-in,
+## downloaded, imported, received from a player) as big tiles, the last played one marked; the
+## selected one's details with its art, sound and music sets, "Play this game" (its game menu),
+## Delete (not a built-in one; its decks on this device go too) and Import a pack file.
 
 signal back
+## A game was chosen (main opens its menu).
+signal entered(p: Pack)
 
 const GRID := Rect2(Vector2(36, 84), Vector2(780, 620))
 const PANEL := Rect2(Vector2(836, 84), Vector2(410, 620))
@@ -14,8 +15,6 @@ const TILE := Vector2(376, 212)
 ## Origin -> label (English keys; i18n_keys.gd reads this table).
 const ORIGINS := {"builtin": "Built-in", "downloaded": "Downloaded", "imported": "Imported", "p2p": "Received from a player"}
 
-## The game servers whose games are listed (main gives its links).
-var links: Array = []
 var selected: Pack
 var message: Label
 var _list := VBoxContainer.new()
@@ -30,26 +29,6 @@ func _ready() -> void:
 	Sound.music("menu")
 	selected = Packs.active()
 	_build()
-	for l: ServerLink in links:
-		l.packs_changed.connect(_build_list)
-		l.pack_progress.connect(_on_progress)
-		l.pack_downloaded.connect(_on_downloaded)
-		if l.logged_in():
-			l.request_packs()
-
-
-func _on_progress(content_hash: String, done: int, total: int) -> void:
-	var b := find_child("Get_" + content_hash.left(12), true, false) as Button
-	if b and total > 0:
-		b.text = "%d%%" % (100 * done / total)
-
-
-func _on_downloaded(_content_hash: String, result: Dictionary) -> void:
-	if result.has("error"):
-		show_message(str(result.error))
-	else:
-		show_message(tr("Added: %s") % (result.pack as Pack).title(), true)
-	_build_list()
 
 
 func _build() -> void:
@@ -100,7 +79,7 @@ func _build() -> void:
 	_build_details()
 
 
-## The tiles, then each server's games.
+## The tiles.
 func _build_list() -> void:
 	for c in _list.get_children():
 		_list.remove_child(c)
@@ -119,54 +98,6 @@ func _build_list() -> void:
 			if ev is InputEventMouseButton and ev.double_click:
 				activate(p))
 		grid.add_child(t)
-	for l in links:
-		_server_section(l)
-
-
-## A server's games: what it offers (its own and the player's uploads), with Download / Use.
-func _server_section(link: ServerLink) -> void:
-	var entries: Array = link.packs.get("server", []) + link.packs.get("mine", [])
-	var head := Palette.label(tr("On the server %s") % link.display_name(), 22, Palette.ATTACK)
-	head.name = "Server_" + link.url.md5_text().left(8)
-	_list.add_child(head)
-	if not link.logged_in():
-		_list.add_child(Palette.label(tr("Log in on this server to see its games."), 16))
-		return
-	if entries.is_empty():
-		_list.add_child(Palette.label(tr("This server offers no games yet."), 16))
-		return
-	for e in entries:
-		_list.add_child(_server_row(link, e))
-
-
-func _server_row(link: ServerLink, e: Dictionary) -> Control:
-	var row := PanelContainer.new()
-	row.name = "ServerPack_" + str(e.get("id", ""))
-	var st := Palette.box(Color(0.1, 0.07, 0.04, 0.9), 10, Color("6b5320"), 2)
-	st.set_content_margin_all(10)
-	row.add_theme_stylebox_override("panel", st)
-	var h := HBoxContainer.new()
-	h.add_theme_constant_override("separation", 12)
-	row.add_child(h)
-	var l := Palette.label("%s  %s  ·  %s" % [ServerView.entry_title(e), str(e.get("version", "")), Packs.size_text(int(e.get("size", 0)))], 18)
-	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	l.clip_text = true
-	h.add_child(l)
-	var have := ServerLink.local_pack(e)
-	var b := Palette.button(tr("Use") if have else tr("Download"), "Get_" + str(e.get("content_hash", "")).left(12))
-	b.custom_minimum_size = Vector2(150, 40)
-	b.disabled = have != null and have == Packs.active()
-	if have and have == Packs.active():
-		b.text = tr("Active")
-	b.pressed.connect(func():
-		if have:
-			activate(have)
-		else:
-			b.disabled = true
-			b.text = tr("Downloading…")
-			link.download_pack(e))
-	h.add_child(b)
-	return row
 
 
 func select(p: Pack) -> void:
@@ -177,11 +108,10 @@ func select(p: Pack) -> void:
 	_build_details()
 
 
-## Makes a pack the active one: the whole game shows and plays it from now on.
+## Plays a game: its menu (main makes it the active pack).
 func activate(p: Pack) -> void:
 	selected = p
-	Packs.set_active(p)
-	_build()
+	entered.emit(p)
 
 
 func show_message(text: String, good := false) -> void:
@@ -228,26 +158,14 @@ func _build_details() -> void:
 	box.add_child(grid)
 	for row in [["Card art", "art", "ArtSet"], ["Sounds", "sound", "SoundSet"], ["Music set", "music", "MusicSet"]]:
 		var kind: String = row[1]
-		var sets := p.sets(kind).filter(func(x): return not x.get("local", false) or p.builtin())
-		if p == Packs.active() and kind == "art":  # the player's own picture folders too
-			for f in Art.sets():
-				if not sets.any(func(x): return x.id == f):
-					sets.append({"id": f, "name": {"en": {"original": "Original"}.get(f, f.capitalize())}})
-		var pick := OptionButton.new()
+		var pick := set_picker(p, kind, Packs.choice(p, kind), func(v): Packs.set_choice(p, kind, v))
 		pick.name = row[2]
-		pick.custom_minimum_size = Vector2(220, 36)
-		for x in sets:
-			pick.add_item(SettingsView.pack_set_name(p, x))
-		pick.select(maxi(0, sets.map(func(x): return str(x.id)).find(Packs.choice(p, kind))) if not sets.is_empty() else -1)  # a pack may have no music
-		pick.disabled = sets.size() < 2
-		pick.item_selected.connect(func(i): Packs.set_choice(p, kind, str(sets[i].id)))
 		grid.add_child(Palette.label(tr(row[0]), 17))
 		grid.add_child(pick)
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	box.add_child(spacer)
-	var play := Palette.button(tr("Active") if p == Packs.active() else tr("Play this game"), "Activate")
-	play.disabled = p == Packs.active()
+	var play := Palette.button(tr("Play this game"), "Activate")
 	play.pressed.connect(activate.bind(p))
 	box.add_child(play)
 	if not p.builtin():
@@ -256,9 +174,31 @@ func _build_details() -> void:
 		box.add_child(del)
 
 
+## A choice of a pack's art, sound or music sets (the player's own picture folders too for the
+## active pack's art); picked(id) gets the chosen one. Disabled with fewer than two.
+static func set_picker(p: Pack, kind: String, current: String, picked: Callable) -> OptionButton:
+	var sets := p.sets(kind).filter(func(x): return not x.get("local", false) or p.builtin())
+	if p == Packs.active() and kind == "art":
+		for f in Art.sets():
+			if not sets.any(func(x): return x.id == f):
+				sets.append({"id": f, "name": {"en": {"original": "Original"}.get(f, f.capitalize())}})
+	var pick := OptionButton.new()
+	pick.custom_minimum_size = Vector2(220, 36)
+	for x in sets:
+		pick.add_item(SettingsView.pack_set_name(p, x))
+	pick.select(maxi(0, sets.map(func(x): return str(x.id)).find(current)) if not sets.is_empty() else -1)  # a pack may have no music
+	pick.disabled = sets.size() < 2
+	pick.item_selected.connect(func(i): picked.call(str(sets[i].id)))
+	return pick
+
+
 func _confirm_delete(p: Pack) -> void:
 	var box := _popup(tr("Delete \"%s\"?") % p.title())
 	box.add_child(Palette.label(tr("The game file is removed from this device; you can get it again."), 17))
+	if DeckStore.count_local(p.id()) > 0 and Packs.all().filter(func(x: Pack): return x.id() == p.id()).size() == 1:
+		var decks := Palette.label(tr("The decks made in this game on this device are deleted too."), 17, Palette.DANGER)
+		decks.name = "DecksGoToo"
+		box.add_child(decks)
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 16)

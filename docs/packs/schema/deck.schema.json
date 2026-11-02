@@ -9,6 +9,8 @@
     "champion": {"type": "string", "pattern": "^[A-Za-z0-9_]{1,64}$"},
     "code": {"type": "string", "maxLength": 400, "pattern": "^[A-Za-z0-9+/]+={0,2}$"},
     "arena": {"type": "boolean"},
+    "description": {"anyOf": [{"type": "string", "maxLength": 300},
+      {"type": "object", "propertyNames": {"type": "string", "pattern": "^[a-z]{2,3}(_[A-Z]{2})?$"}, "additionalProperties": {"type": "string", "maxLength": 300}}]},
     "cards": {"type": "array", "maxItems": 200, "items": {"type": "string", "pattern": "^[A-Za-z0-9_]{1,64}$"}}
   }
 }

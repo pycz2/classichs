@@ -64,9 +64,10 @@ static var _for: Pack
 static var _frames: Array = []  # [WeakRef StyleBoxFlat, fill, radius]: frames restyled in place
 
 
-## The active pack's theme (loaded once per active pack).
+## The styling pack's theme (Packs.look(): the active pack inside a game, none in the client's
+## own screens; loaded once per pack).
 static func load_theme() -> void:
-	var p := Packs.active()
+	var p := Packs.look()
 	if p == _for and p != null:
 		return
 	_for = p

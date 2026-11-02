@@ -1,5 +1,6 @@
 extends TestCase
-## Decks kept on the server: the tick on each deck in the deck list (DeckListView).
+## A game played through a server: its decks are the server's (ServerLink keeps them, DeckStore
+## gives them, DeckListView changes them there); "Copy local decks"; an older server.
 
 const URL := "ws://decks.test:7377"
 
@@ -8,27 +9,29 @@ static func root() -> Window:
 	return (Engine.get_main_loop() as SceneTree).root
 
 
-static func _deck(name: String, n := 30) -> Deck:
-	var d := Deck.new()
-	d.name = name
-	d.cards.assign(Decks.basic("MAGE").slice(0, n))
-	return d
+static func _cards(n := 30) -> Array:
+	return Decks.basic("MAGE").slice(0, n)
 
 
-## The deck list over a fake server with these local decks; logged_in: the server has
-## answered `decks` with list.
-func _view(local: Array, logged_in := true, list := []) -> DeckListView:
-	DeckStore.save_all(local)
-	var v := DeckListView.new()
+## A logged-in fake server through the probes after login (chats, packs, decks, game_settings),
+## with these decks there.
+func _link(list := []) -> FakeLink:
 	var l := FakeLink.new()
 	l.url = URL
 	root().add_child(l)
-	v.link = l
+	l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"user": "anna"}})
+	l.dispatch({"t": "chats", "list": []})
+	l.dispatch({"t": "packs", "server": [], "mine": []})
+	l.dispatch({"t": "decks", "list": list})
+	l.dispatch({"t": "game_settings", "games": {}})
+	return l
+
+
+## The deck list of a server game.
+func _view(list := []) -> DeckListView:
+	DeckStore.link = _link(list)
+	var v := DeckListView.new()
 	root().add_child(v)
-	if logged_in:
-		l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"user": "anna"}})
-		l.dispatch({"t": "packs", "server": [], "mine": []})
-		l.dispatch({"t": "decks", "list": list})
 	return v
 
 
@@ -36,120 +39,127 @@ func _free(v: DeckListView) -> void:
 	var l := v.link
 	v.free()
 	l.free()
-
-
-func _tick(v: DeckListView, i: int) -> Button:
-	var row := v.list.get_child(i)
-	return row.find_child("Server", true, false) as Button if row else null
+	DeckStore.link = null
 
 
 func _sent(v: DeckListView, t: String) -> Array:
 	return (v.link as FakeLink).of(t)
 
 
-func test_no_tick_without_a_server_session() -> void:
-	DeckStore.save_all([_deck("A")])
-	var alone := DeckListView.new()
-	root().add_child(alone)
-	check(alone.list.get_child_count() == 1 and _tick(alone, 0) == null, "no server: no tick")
-	alone.free()
-	var v := _view([_deck("A")], false)
-	check(_tick(v, 0) == null, "not logged in: no tick")
-	v.link.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"user": "anna"}})
-	eq(_sent(v, "decks").size(), 1, "the login asks for the server's decks")
-	check(_tick(v, 0) == null, "no tick before the server says it keeps decks")
-	v.link.dispatch({"t": "decks", "list": []})
-	check(_tick(v, 0) == null, "nor before its packs are known")
-	v.link.dispatch({"t": "packs", "server": [], "mine": []})
-	check(_tick(v, 0) != null and not _tick(v, 0).button_pressed, "then a tick, off")
-	(v.link as FakeLink).up = false
-	v.refresh()
-	check(_tick(v, 0) == null, "the connection gone: no tick")
-	_free(v)
+func test_the_probes_after_login_learn_what_the_server_keeps() -> void:
+	var l := _link([{"id": 1, "pack": Packs.CLASSIC, "name": "Mine", "hero": "HERO_08", "cards": _cards(), "updated": 5},
+		{"id": 2, "pack": "org.other.game", "name": "Other", "hero": "HERO_08", "cards": _cards(), "updated": 5}])
+	eq(l.sent.map(func(m): return m.t), ["chats", "packs", "decks", "game_settings"], "asked one after another")
+	check(l.has_decks and l.has_settings, "it keeps decks and settings per game")
+	eq(l.decks_of(Packs.active()).map(func(d): return [d.name, d.servers[URL].id]), [["Mine", 1]], "this game's, with their ids")
+	DeckStore.link = l
+	eq(DeckStore.load_all().map(func(d): return d.name), ["Mine"], "a server game's decks are the server's")
+	DeckStore.link = null
+	eq(DeckStore.load_all().size(), 10, "this device's are its own")
+	l.dispatch({"t": "deck_saved", "deck": {"id": 3, "pack": Packs.CLASSIC, "name": "New", "hero": "HERO_08", "cards": [], "updated": 9}})
+	l.dispatch({"t": "deck_deleted", "id": 1})
+	eq(l.decks_of(Packs.active()).map(func(d): return d.name), ["New"], "kept up to date")
+	l.free()
 
 
-func test_tick_saves_to_the_server_and_untick_deletes_there() -> void:
-	var v := _view([_deck("A"), _deck("B")])
-	_tick(v, 1).button_pressed = true
-	var s: Array = _sent(v, "deck_save")
-	eq(s.size(), 1, "ticked: saved to the server")
-	eq([s[0].deck.name, s[0].deck.cards.size(), s[0].has("id"), s[0].pack], ["B", 30, false, Packs.active().rules_hash()], "a new deck there, in this game")
-	check(_tick(v, 1).button_pressed, "the tick stays on while the answer is on the way")
-	v.link.dispatch({"t": "deck_saved", "ref": s[0].ref, "deck": {"id": 42, "pack": Packs.CLASSIC, "name": "B",
-		"hero": "HERO_08", "cards": s[0].deck.cards, "updated": 1000}})
-	eq(v.server_id(v.decks[1]), 42, "the local copy keeps the server id")
-	eq(DeckStore.load_all()[1].servers, {URL: {"id": 42, "at": 1000}}, "and saves it")
-	eq(_sent(v, "deck_save").size(), 1, "nothing more to send")
-	_tick(v, 1).button_pressed = false
-	eq(_sent(v, "deck_delete"), [{"t": "deck_delete", "id": 42}], "unticked: deleted there")
-	eq(DeckStore.load_all()[1].servers, {}, "kept here only")
-	eq(DeckStore.load_all().size(), 2, "both decks stay")
-	_free(v)
+## An older server: no decks (before 0.32), no settings per game (before 0.40); the probes' refusals are silent.
+func test_an_older_server_keeps_no_decks() -> void:
+	var l := FakeLink.new()
+	l.url = URL
+	root().add_child(l)
+	var heard := []
+	l.message.connect(func(m): heard.append(m.t))
+	l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"user": "anna"}})
+	l.dispatch({"t": "chats", "list": []})
+	l.dispatch({"t": "packs", "server": [], "mine": []})
+	l.dispatch({"t": "error", "code": "bad_request", "text": "unknown variant decks"})
+	check(not l.has_decks and not l.has_settings, "no decks there (before 0.32), so no settings either")
+	eq(l.sent.back().t, "decks", "nothing more asked")
+	var l2 := FakeLink.new()  # 0.32: decks, no settings per game
+	l2.url = URL
+	root().add_child(l2)
+	l2.message.connect(func(m): heard.append(m.t))
+	for msg in [{"t": "auth", "ok": true, "token": "x", "me": {"user": "anna"}}, {"t": "chats", "list": []},
+			{"t": "packs", "server": [], "mine": []}, {"t": "decks", "list": []},
+			{"t": "error", "code": "bad_request", "text": "unknown variant game_settings"}]:
+		l2.dispatch(msg)
+	check(l2.has_decks and not l2.has_settings, "decks, no settings")
+	check(not heard.has("error"), "nobody is told about the probes: %s" % [heard])
+	l2.free()
+	var m: Node = load("res://ui/main.tscn").instantiate()
+	m.server_link = l
+	root().add_child(m)
+	m.mode = "server"
+	l.has_decks = false
+	m.enter_game(Packs.active())
+	check(DeckStore.link == null, "a server without decks: the game's decks stay on this device")
+	m.free()
+	DeckStore.link = null
 
 
-func test_every_change_of_a_kept_deck_goes_to_the_server() -> void:
-	var a := _deck("A", 10)
-	a.servers = {URL: {"id": 7, "at": 50}}
-	var b := _deck("B", 10)
-	var v := _view([a, b], true, [{"id": 7, "pack": Packs.CLASSIC, "name": "A", "hero": "HERO_08", "cards": Array(a.cards), "updated": 50}])
-	eq(_sent(v, "deck_save"), [], "the same on both sides: nothing sent")
+func test_every_change_goes_to_the_server() -> void:
+	var v := _view([{"id": 7, "pack": Packs.CLASSIC, "name": "A", "hero": "HERO_08", "cards": _cards(10), "updated": 50}])
+	var local := DeckStore.count_local(Packs.CLASSIC)
+	eq(v.decks.map(func(d): return d.name), ["A"], "the server's decks of this game")
+	check(v.find_child("Server", true, false) == null, "no ticks: every deck is the server's")
 	v.edit_deck(0)
 	v.browser.click_card("VAN_CS2_029")
 	var s: Array = _sent(v, "deck_save")
-	eq(s.size(), 1, "a card added: saved there")
-	eq([s[-1].id, s[-1].deck.cards.size()], [7, 11], "by its id")
+	eq([s[-1].id, s[-1].deck.cards.size(), s[-1].get("pack")], [7, 11, null], "a card added: saved there by its id")
 	v.remove_card("VAN_CS2_029")
 	eq(_sent(v, "deck_save")[-1].deck.cards.size(), 10, "a card removed")
 	v._name_edit.text_changed.emit("Fire")
 	eq(_sent(v, "deck_save")[-1].deck.name, "Fire", "renamed")
 	v.close_deck()
-	var n := _sent(v, "deck_save").size()
-	v.edit_deck(1)
-	v.browser.click_card("VAN_CS2_029")
-	eq(_sent(v, "deck_save").size(), n, "an unticked deck stays here")
+	var d := v.new_deck("HERO_01")
+	var new: Dictionary = _sent(v, "deck_save")[-1]
+	check(not new.has("id") and new.has("ref"), "a new deck: a new one there")
+	v.link.dispatch({"t": "deck_saved", "ref": new.ref, "deck": {"id": 8, "pack": Packs.CLASSIC, "name": d.name,
+		"hero": "HERO_01", "cards": [], "updated": 60}})
+	eq(v.server_id(d), 8, "with its id there")
 	v.close_deck()
 	v.delete_deck(0)
-	eq(_sent(v, "deck_delete"), [{"t": "deck_delete", "id": 7}], "a kept deck deleted: deleted there too")
+	eq(_sent(v, "deck_delete"), [{"t": "deck_delete", "id": 7}], "deleted there")
+	eq(DeckStore.count_local(Packs.CLASSIC), local, "this device's decks untouched")
 	_free(v)
 
 
-## After login: a deck from another device joins the list, one changed there replaces this
-## copy, one changed only here is sent, one gone from there stays here only, other games' stay out.
-func test_merge_after_login() -> void:
-	var same := _deck("Same")
-	same.servers = {URL: {"id": 1, "at": 100}}
-	var theirs := _deck("Old name")
-	theirs.servers = {URL: {"id": 2, "at": 100}}
-	var mine := _deck("Changed here", 20)
-	mine.servers = {URL: {"id": 3, "at": 100}}
-	var gone := _deck("Gone there")
-	gone.servers = {URL: {"id": 4, "at": 100}, "ws://other:1": {"id": 9, "at": 5}}
-	var local := _deck("Local")
-	var cards := Array(_deck("x").cards)
-	var list := [
-		{"id": 1, "pack": Packs.CLASSIC, "name": "Same", "hero": "HERO_08", "cards": cards, "updated": 100},
-		{"id": 2, "pack": Packs.CLASSIC, "name": "New name", "hero": "HERO_08", "cards": cards.slice(0, 5), "updated": 200},
-		{"id": 3, "pack": Packs.CLASSIC, "name": "Changed here", "hero": "HERO_08", "cards": cards, "updated": 100},
-		{"id": 5, "pack": Packs.CLASSIC, "name": "From the phone", "hero": "HERO_01", "cards": Decks.basic("WARRIOR"), "updated": 300},
-		{"id": 6, "pack": "org.other.game", "name": "Another game", "hero": "HERO_08", "cards": cards, "updated": 300},
-	]
-	var v := _view([same, theirs, mine, gone, local], true, list)
-	var names := v.decks.map(func(d): return d.name)
-	eq(names, ["Same", "New name", "Changed here", "Gone there", "Local", "From the phone"], "merged by server id")
-	eq(v.decks[1].cards.size(), 5, "changed there: the server's copy")
-	eq(v.decks[1].servers[URL].at, 200, "now matching it")
-	eq(_sent(v, "deck_save").map(func(m): return [m.id, m.deck.cards.size()]), [[3, 20]], "changed only here: sent")
-	eq(v.decks[3].servers, {"ws://other:1": {"id": 9, "at": 5}}, "gone there: kept here, other servers untouched")
-	eq([v.decks[5].hero, v.server_id(v.decks[5])], ["HERO_01", 5], "from another device, with its id")
-	eq(DeckStore.load_all().size(), 6, "saved")
-	check(_tick(v, 5).button_pressed and not _tick(v, 4).button_pressed, "ticks show which are kept")
-	_free(v)
-
-
-func test_a_refused_save_unticks_and_says_why() -> void:
-	var v := _view([_deck("A")])
-	_tick(v, 0).button_pressed = true
+func test_a_refused_save_says_why() -> void:
+	var v := _view()
+	v.new_deck("HERO_08")
+	v.close_deck()
 	v.link.dispatch({"t": "error", "code": "decks_full", "text": "You have 100 decks on this server: delete one first"})
-	check(not _tick(v, 0).button_pressed and not v.on_server(v.decks[0]), "not kept")
+	eq(v.decks.size(), 0, "not kept")
 	eq(v.message.text, "You have 100 decks on this server: delete one first", "the reason")
+	_free(v)
+
+
+## "Copy local decks": the decks of this device made in a game of the same rules, ticked, copied there.
+func test_copy_local_decks() -> void:
+	var v := _view()
+	check(v.find_child("CopyLocalDecks", true, false) != null, "the button in a server game")
+	v.show_copy_local()
+	var ticks := v.find_child("LocalDecks", true, false).get_children()
+	eq(ticks.size(), 10, "this device's ten decks of this game")
+	(ticks[0] as CheckBox).button_pressed = true
+	(ticks[7] as CheckBox).button_pressed = true
+	(v.find_child("DoCopy", true, false) as Button).pressed.emit()
+	var s: Array = _sent(v, "deck_save")
+	eq(s.map(func(m): return m.deck.name), ["Control Warrior", "Freeze Mage"], "the ticked ones, copied")
+	check(s.all(func(m): return m.has("ref") and not m.has("id")), "as new decks there")
+	eq(v.decks.size(), 2, "in the list")
+	eq(DeckStore.count_local(Packs.CLASSIC), 10, "still here too")
+	_free(v)
+	var alone := DeckListView.new()
+	root().add_child(alone)
+	check(alone.find_child("CopyLocalDecks", true, false) == null, "not without a server")
+	alone.free()
+
+
+## The pack's decks of the same rules are offered, another game's are not.
+func test_copy_offers_only_the_same_rules() -> void:
+	var v := _view()
+	DeckStore.write(DeckStore.file("neon"), [{"name": "Neon deck", "hero": "iris_null", "cards": []}])
+	eq(v.local_decks().size(), 10, "Classic's only")
+	DirAccess.remove_absolute(DeckStore.file("neon"))
 	_free(v)
