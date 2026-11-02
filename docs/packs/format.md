@@ -29,9 +29,10 @@ art/<set>/<card id>.jpg|png|webp     one folder per art set
 sounds/<set>/<name>.wav|ogg|mp3      one folder per sound set (+ .md credits)
 music/<set>/<name>.wav|ogg|mp3       one folder per music set (+ .md credits)
 voice/<lang>/…                       optional recorded voice lines (.wav|ogg|mp3)
-ui/<name>.png|jpg|webp               optional pictures: logo, card back, rank emblems; by name the client also
-                                     shows ui/menu (menu and screen backdrops), ui/board (the game board), ui/library
-                                     (collection), ui/result_victory|result_defeat|result_draw (the result screen)
+ui/<name>.png|jpg|webp               optional pictures: logo, card back, rank emblems, the theme's crest; by name the
+                                     client also shows ui/menu (the game's menu and screen backdrops), ui/board (the
+                                     game board), ui/library (collection), ui/result_victory|result_defeat|result_draw
+                                     (the result screen); without them the client's own backdrop, no result picture
 ui/theme.json                        optional: the look of the interface (§11)
 ui/fonts/<name>.ttf|otf              optional: the theme's fonts, with their licences (.txt|.md)
 decks/<name>.json        ready decks
@@ -323,12 +324,14 @@ against `schema/tutorial.schema.json` and its cross references (§12).
 
 ## 11. UI theme (`ui/theme.json`)
 
-An optional file that styles the interface while the pack is active: buttons, panels,
-headings, text, fields, popups, the End Turn button, mana crystals and rarity gems.
-Without it the interface looks exactly like Classic (wooden planks, tavern panels,
-Alegreya and Cinzel Decorative). Every key is optional; a missing one keeps Classic's
-value. The client reads it when the pack becomes active and restyles every open screen
-at once (no restart). Presentation only: not in `rules_hash`. Schema:
+An optional file that styles the interface inside the game (its menu, collection, table…):
+buttons, panels, headings, text, fields, popups, the End Turn button, mana crystals, rarity
+gems and the menu's title. The client's own screens (the main menu, Play, the settings, the game
+library, the connections, a server's home) never take a pack's look: they have the client's
+neutral one (dark slate, flat buttons, Alegreya, a backdrop made in code), and so does a pack
+without this file. Every key is optional; a missing one keeps the client's value. The client
+reads it when the game is entered and restyles every open screen at once (no restart).
+Classic's (`packs/classic/ui/theme.json`) is its tavern look. Presentation only: not in `rules_hash`. Schema:
 [schema/theme.schema.json](schema/theme.schema.json). Colours are `"rrggbb"` or
 `"rrggbbaa"` (lowercase hex).
 
@@ -336,7 +339,7 @@ at once (no restart). Presentation only: not in `rules_hash`. Schema:
 |---|---|
 | `about` | Free text for people. |
 | `colors.text`, `colors.muted` | Interface text, secondary text. |
-| `colors.accent` | Classic's gold: headings, titles, highlights, focused fields, slider fill. |
+| `colors.accent` | Headings, titles, highlights, focused fields, slider fill (Classic's gold). |
 | `colors.table` | Behind the screens' pictures. |
 | `colors.panel`, `colors.panel_border` | Fill (alpha for translucent glass) and rim of panels, popups, fields and menus. |
 | `colors.backdrop` | Tint of the screen backdrops (`ui/menu`, `ui/library`). |
@@ -345,27 +348,31 @@ at once (no restart). Presentation only: not in `rules_hash`. Schema:
 | `colors.button_text`, `button_text_hover`, `button_text_pressed`, `button_text_disabled` | Button labels. |
 | `colors.outline`, `outline_size` | The dark edge around interface text (0–8 px). |
 | `colors.danger`, `colors.ok` | Errors and confirmations. |
-| `button.style` | `wood` (Classic's planks), `flat` (flat boxes), `neon` (flat boxes that glow). |
+| `button.style` | `wood` (Classic's tavern: wooden planks, dark wood panels in gold rims, Classic's own colours where the screens draw them, headings in the body font), `flat` (flat boxes), `neon` (flat boxes that glow). |
 | `button.radius`, `button.border` | Corner radius and rim width in px. |
 | `button.glow`, `glow_size`, `glow_hover`, `glow_hover_size` | `neon`: the soft light around a button, and under the mouse. |
 | `button.texture`, `button.texture_margin` | A 9-slice picture in `ui/` for every button (tinted for hover, pressed, disabled); wins over `style`. |
 | `panel.radius`, `panel.border`, `panel.glow`, `panel.glow_size` | Panels: corners, rim width, the glow around them. |
 | `panel.texture`, `panel.texture_margin` | A 9-slice picture in `ui/` for popups, tooltips and plain panels (the frames screens draw stay flat). |
-| `fonts.title`, `fonts.body` | `ui/fonts/<file>.ttf|otf`: headings and pack titles; all other interface text. A variable font with a `wght` axis gets the weights the interface asks for. It must cover every language of the pack (Latin with diacritics, Cyrillic…). Card texts keep the client's own font (the card layout is measured with it). |
+| `fonts.title`, `fonts.body` | `ui/fonts/<file>.ttf|otf`: headings and the game's name (its tile in the library, its menu's title); all other interface text (default: the client's Alegreya, bold for titles). A variable font with a `wght` axis gets the weights the interface asks for. It must cover every language of the pack (Latin with diacritics, Cyrillic…). Card texts keep the client's own font (the card layout is measured with it). |
 | `end_turn.button`, `border`, `text`, `ready`, `ready_border` | End Turn while moves are left and when none are (default: the button colours and `ok`). |
 | `mana` | The mana crystals of the game screen. |
 | `rarities` | `{rarity id: colour}`: the rarity gems; wins over `manifest.json` `colors.rarities`. |
-| `menu.shade`, `menu.particles` | The main menu: a tint over its picture, and a scene effect by name (§12): `embers` (Classic), `rain` (streaks in the accent colours), `snow` or `none`. |
+| `menu.shade`, `menu.particles` | The game's menu: a tint over its picture, and a scene effect by name (§12): `embers` (Classic), `rain` (streaks in the accent colours), `snow` or `none`. |
+| `menu.crest` | A picture in `ui/` drawn above the game's name in the menu, the name in embossed gold letters with a sweeping shine (Classic: `ui/crest.png`, its gold dragon). A `logo` in the manifest wins over it; without either the name is plain, in the title font and the accent colour. |
 
 Fonts must allow redistribution (SIL OFL, Apache…); put their licence next to them
-(`ui/fonts/<Name>-OFL.txt`). Neonfall (`packs/neon/ui/`) is the example: dark glass
+(`ui/fonts/<Name>-OFL.txt`). Classic (`packs/classic/ui/`): the tavern's colours, `wood`
+buttons, embers, Cinzel Decorative for its name under `ui/crest.png`, and its pictures
+`ui/menu`, `ui/library`, `ui/board`, `ui/result_*`. Neonfall (`packs/neon/ui/`): dark glass
 panels with thin cyan rims, glowing magenta-rimmed buttons, Tektur for titles and
 Exo 2 for text (both OFL, subset to Latin, Latin Extended-A and Cyrillic).
 
-In the client: `ui/palette.gd` loads the theme (`Palette.UI`, `TEXT`, `ATTACK`, `MUTED`,
-`DANGER`, `OK`, `Palette.ui()` maps Classic's interface colours to the theme's roles, so
-screens that pass Classic's colours restyle by themselves), `ui/fonts.gd` builds the one
-Godot `Theme` from it and refills it in place on a pack switch.
+In the client: `ui/palette.gd` loads the theme over the client's own (`Palette.SHELL_THEME`;
+`Palette.UI`, `TEXT`, `ATTACK`, `MUTED`, `DANGER`, `OK`, `Palette.ui()` maps Classic's interface
+colours to the theme's roles, so screens that pass Classic's colours restyle by themselves; `wood`
+keeps them), `ui/fonts.gd` builds the one Godot `Theme` from it and refills it in place when the
+look changes; `Packs.look()` is the styling pack (none in the client's own screens).
 
 ## 12. Tutorial (`tutorial.json`) and scene effects
 

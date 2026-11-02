@@ -40,7 +40,7 @@ func _ready() -> void:
 		if not is_visible_in_tree() and TranslationServer.get_locale() != _was_lang:
 			set_language(_was_lang))
 	var bg := TextureRect.new()
-	bg.texture = load("res://ui/board_bg.jpg")
+	bg.texture = Packs.picture("board") if Packs.picture("board") else Palette.shell_picture()
 	bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

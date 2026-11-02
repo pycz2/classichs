@@ -37,7 +37,7 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
-	Palette.backdrop(self, "library_bg")
+	Palette.backdrop(self, "library")
 	_title = Palette.label(tr("Arena"), 40, Palette.ATTACK)
 	_title.position = Vector2(40, 18)
 	add_child(_title)

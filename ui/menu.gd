@@ -37,15 +37,15 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
-	var pic := TextureRect.new()  # a quiet tavern behind the menu, slowly drifting closer
-	pic.texture = Packs.picture("menu") if Packs.picture("menu") else load("res://ui/menu_bg.jpg")
+	var pic := TextureRect.new()  # the game's picture (Classic's quiet tavern) slowly drifting closer
+	pic.texture = Packs.picture("menu") if Packs.picture("menu") else Palette.shell_picture()
 	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	pic.modulate = Color(0.78, 0.74, 0.7)
+	pic.modulate = Color(0.78, 0.74, 0.7) if Packs.picture("menu") else Color.WHITE
 	add_child(pic)
 	var shade := ColorRect.new()
-	shade.color = Color(0.08, 0.05, 0.03, 0.35) if Palette.CLASSIC else Palette.tc("menu.shade")
+	shade.color = Palette.tc("menu.shade")
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
 	var fx := SceneFx.make(str(Palette.UI.menu.particles))
