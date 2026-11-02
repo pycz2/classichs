@@ -1127,6 +1127,7 @@ func _reconcile(want: Dictionary) -> void:
 
 
 func _glide(v: Control, pos: Vector2, s := 1.0, rot := 0.0, dur := 0.3) -> void:
+	v.set_meta("home", pos + v.size * s / 2.0)  # the centre it goes to (_home_of)
 	if v.has_meta("tw"):
 		var old: Tween = v.get_meta("tw")
 		if old and old.is_valid():
@@ -1623,6 +1624,8 @@ func _play_step(st: Dictionary) -> void:
 					TableFx.spawn(_fx, "destroy", at[e.entity][0])
 				elif mark != "none" and Rules.hooks(e.card).has("deathrattle") and not (was and was.silenced):
 					TableFx.spawn(_fx, "skull", at[e.entity][0])
+				elif not e.get("minion", true):  # a weapon destroyed (an Ooze) or broken
+					TableFx.spawn(_fx, "destroy", at[e.entity][0])
 			await _wait(0.4)
 		"summon":
 			for e in st.evs:
@@ -1640,9 +1643,9 @@ func _play_step(st: Dictionary) -> void:
 					continue
 				var on_play := TableFx.named(e.card, "play")
 				if e.has("by") or on_play == "portal":
-					TableFx.spawn(_fx, "portal", _center_of(e.entity))
+					TableFx.spawn(_fx, "portal", _home_of(e.entity))
 				elif on_play != "none" and _stage_events.slice(st.at + 1).any(func(x): return x.get("by_id", -1) == e.entity):
-					TableFx.spawn(_fx, "battlecry", _center_of(e.entity))
+					TableFx.spawn(_fx, "battlecry", _home_of(e.entity))
 			await _wait(0.3)
 		"bounce":
 			if _views.has(ev.entity):
@@ -1690,6 +1693,7 @@ func _play_step(st: Dictionary) -> void:
 			if _mulligan_waiting(_mull_wait):
 				_mulligan_down()  # the hand first, then the first turn's card
 				_stage_refresh()
+				await _wait(0.35)
 			if ev.get("player", -1) == viewer() and ev.has("turn"):
 				_banner(tr("Your Turn"))
 		_:
@@ -2002,6 +2006,7 @@ func _coin_in(ev: Dictionary) -> void:
 		cv.show_entity(e, g)
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cv.set_glow(Palette.SELECTED)
+	cv.z_index = 110  # over the mulligan screen, if it still shows
 	_fx.add_child(cv)
 	cv.pivot_offset = cv.size / 2.0
 	cv.position = Vector2(640, 430 if own else 150) - cv.size / 2.0
@@ -2230,6 +2235,12 @@ func _wait(t: float) -> void:
 func _center_of(id: int) -> Vector2:
 	var v: EntityView = _views.get(id)
 	return v.position + v.size * v.scale / 2.0 if v else Vector2(640, 330)
+
+
+## Where a view is going (its centre once it has glided to its place).
+func _home_of(id: int) -> Vector2:
+	var v: EntityView = _views.get(id)
+	return v.get_meta("home", _center_of(id)) if v else Vector2(640, 330)
 
 
 ## Where a played card is shown big (its centre): left of the boards, clear of the targets.
