@@ -40,6 +40,7 @@ static func collect() -> Array:
 	tables.append_array(Rules.MESSAGES)
 	tables.append_array(Packs.ERRORS)
 	tables.append_array(GamesView.ORIGINS.values())
+	tables.append_array(PackTools.LEVELS.values())
 	tables.append_array(Social.STATUS.values().map(func(v): return v[1]))
 	tables.append_array(ServerLink.UPLOAD_ERRORS.values())
 	for k in tables:

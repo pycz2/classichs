@@ -315,11 +315,17 @@ the schemas in `schema/` (a small subset of JSON Schema: `type`, `enum`, `const`
 `uniqueItems`, `properties`, `required`, `additionalProperties`,
 `propertyNames`, `items`, `anyOf`, local `$ref`) and the cross references:
 classes, rarities, races, sets and mechanics of every card; mechanics → engine
-vocabulary; champions → `POWER` cards; scripts exist; art/sound/music folders ↔
+vocabulary; champions → `POWER` cards; `default_power` (a `POWER` card; the engine needs it whenever the pack has champions); scripts exist; art/sound/music folders ↔
 manifest; every locale file present and every card named in the default one;
 decks legal; mission cards exist; emblems exist; `rules_hash` current; `ui/theme.json`
 against `schema/theme.schema.json` and the fonts and pictures it names present; `tutorial.json`
 against `schema/tutorial.schema.json` and its cross references (§12).
+
+The game has the same build and check inside (*Games → Pack tools*, `game/pack_check.gd`, `ui/pack_tools.gd`):
+a source folder (or a `.zip` of it, or a `.cardpack`) is built without its `recipe.json` steps, checked as
+`check` does, loaded into the engine and played by bots with its ready decks (as `tools/pack_try.gd`); what it
+cannot check is listed in `site/dev/en/testing.md` §3. It reads the schemas from `res://packs/schema/`
+(`tools/build_packs.sh` copies `schema/` there).
 
 ## 11. UI theme (`ui/theme.json`)
 
