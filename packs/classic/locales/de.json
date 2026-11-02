@@ -26,5 +26,141 @@
       "name": "Kann nicht angreifen",
       "tip": "Kann nicht angreifen."
     }
+  },
+  "missions": {
+    "1": {
+      "intro": "Spielt Diener aus und greift damit Hogger an. Fügt genug Schaden zu, und Ihr gewinnt!",
+      "lines": {
+        "start": "Grrr! Hogger zerquetschen winzige Magierin!",
+        "hurt": "Rrraaagh! Hogger wütend!",
+        "defeat": "Neeein... Hogger... müde..."
+      },
+      "reward_line": "Oh ja!"
+    },
+    "2": {
+      "intro": "Verbraucht jede Runde Euer ganzes Mana, um diesen lästigen Gnom zu zermalmen!",
+      "lines": {
+        "start": "Millhouse Manastorm ist da! Macht Euch bereit zu staunen!",
+        "hurt": "Hey, das hat wehgetan! Wartet, bis Ihr meinen großen Zauber seht!",
+        "defeat": "Unfair! Ich war gerade beim besten Teil!"
+      },
+      "reward_line": "Das ist durchaus beeindruckend."
+    },
+    "3": {
+      "intro": "Wenn Diener gegeneinander kämpfen, erleiden beide Schaden.",
+      "lines": {
+        "start": "Seid gegrüßt, Reisender. Lasst uns gemeinsam lernen.",
+        "hurt": "Ein weiser Zug. Aber das Gleichgewicht muss gewahrt bleiben.",
+        "defeat": "Euer Können ehrt den Pfad. Geht in Frieden."
+      },
+      "reward_line": "Heiß, heiß, heiß!"
+    },
+    "4": {
+      "intro": "Ihr versteht eine Karte nicht? Fahrt mit der Maus darüber!",
+      "lines": {
+        "start": "Mukla wollen Bananen! Du nix nehmen!",
+        "hurt": "Uh uh! Mukla rufen großen Bruder!",
+        "defeat": "Mukla... Bananen teilen..."
+      },
+      "reward_line": "Ihr seid in Fahrt!"
+    },
+    "5": {
+      "intro": "Tötet seine Diener, sonst überwältigt er Euch!",
+      "lines": {
+        "start": "Ein neues Spiel! Lasst die Jagd beginnen!",
+        "hurt": "Ihr seid ein harter Brocken!",
+        "defeat": "Na so was... der Jäger wird zum Gejagten."
+      },
+      "reward_line": "Das war unglaublich."
+    },
+    "6": {
+      "intro": "Dieser Kampf ist völlig unfair. Gebt den schrecklichen Spieldesignern die Schuld.",
+      "lines": {
+        "start": "Ihr seid nicht bereit!",
+        "hurt": "Mich hält niemand auf!",
+        "defeat": "Unmöglich... von einem Neuling besiegt?"
+      },
+      "reward_line": "Großartig!"
+    }
+  },
+  "hints": {
+    "play": "Klickt auf eine Karte in Eurer Hand, um sie auszuspielen. Diener kommen aufs Spielfeld.",
+    "attack": "Klickt auf einen Diener, der angreifen kann, und dann auf einen Gegner, um ihn anzugreifen.",
+    "end_turn": "Nichts mehr zu tun? Drückt auf „Zug beenden“.",
+    "mana": "Ihr erhaltet jede Runde einen weiteren Manakristall. Gebt alles aus!",
+    "raid_leader": "Der Schlachtzugsleiter gibt Euren anderen Dienern +1 Angriff.",
+    "trade": "Tötet gegnerische Diener, bevor sie zum Problem werden!",
+    "battlecry": "Ein Kampfschrei wird ausgelöst, wenn Ihr die Karte aus Eurer Hand ausspielt.",
+    "tooltip": "Fahrt mit der Maus über eine Karte, um sie zu lesen.",
+    "taunt": "Diener mit Spott müssen zuerst angegriffen werden. Spielt einen aus, um Euren Helden zu schützen!",
+    "heal": "Manche Karten stellen Leben wieder her. Setzt sie bei einem verletzten Helden oder Diener ein.",
+    "buff": "Manche Karten machen Eure Diener stärker.",
+    "charge": "Diener mit Ansturm können sofort angreifen.",
+    "hero_power": "Eure Heldenfähigkeit fügt 1 Schaden zu. Sie kann einmal pro Runde eingesetzt werden.",
+    "weapon": "Mit Waffen können Helden angreifen. Jeder Angriff kostet 1 Haltbarkeit."
+  },
+  "tutorial": {
+    "minion_card.title": "Eine Dienerkarte",
+    "minion_card.text": "Jede Karte kostet Mana zum Ausspielen. Diener haben außerdem Angriff und Leben.",
+    "minion_card.mana_cost_what": "Manakosten: so viel braucht Ihr, um die Karte auszuspielen",
+    "minion_card.attack_damage_it": "Angriff: der Schaden, den er zufügt",
+    "minion_card.health_at_0": "Leben: bei 0 stirbt der Diener",
+    "combat.title": "Kampf",
+    "combat.text": "Wenn Diener kämpfen, fügt jeder dem anderen Schaden in Höhe seines Angriffs zu. Ein Diener mit 0 Leben stirbt.",
+    "combat.survives_with_3": "Überlebt mit 3 Leben",
+    "combat.dies": "Stirbt",
+    "heroes.title": "Helden",
+    "heroes.text": "Euer Held hat 30 Leben. Greift den feindlichen Helden mit Euren Dienern an: Bringt ihn auf 0 Leben, um zu gewinnen!",
+    "heroes.you": "Ihr",
+    "heroes.enemy_hero": "Der feindliche Held",
+    "mana.title": "Mana",
+    "mana.text": "Ihr erhaltet jede Runde einen weiteren Manakristall, bis zu 10. Eine Karte auszuspielen kostet ihre Manakosten. Versucht, jede Runde Euer ganzes Mana auszugeben!",
+    "mana.turn_1": "Zug 1",
+    "mana.turn_2": "Zug 2",
+    "mana.turn_3": "Zug 3",
+    "mana.turn_4": "Zug 4",
+    "mana.costs_1": "Kostet 1",
+    "mana.costs_2": "Kostet 2",
+    "spells.title": "Zauber",
+    "spells.text": "Ein Zauber wirkt einmal und ist dann weg. Millhaus liebt Zauber! Ein eingefrorener Charakter verpasst seinen nächsten Angriff.",
+    "spells.mana_cost": "Manakosten",
+    "spells.what_spell_does": "Was der Zauber bewirkt",
+    "spells.no_attack_no": "Kein Angriff, kein Leben",
+    "battlecry.title": "Kampfschrei",
+    "battlecry.text": "Ein Kampfschrei wird einmal ausgelöst, wenn Ihr die Karte aus der Hand ausspielt.",
+    "battlecry.battlecry_deals_1": "Kampfschrei: fügt beim Ausspielen 1 Schaden zu",
+    "battlecry.battlecry_restores_health": "Kampfschrei: stellt beim Ausspielen Leben wieder her",
+    "minions_first.title": "Zuerst die Diener",
+    "minions_first.text": "Solange Cho Diener hat, kann er nicht angegriffen werden. Schaden bleibt an einem Diener, bis er geheilt wird, also erledigt sie!",
+    "minions_first.cho_hides_behind": "Cho versteckt sich hinter seinen Dienern",
+    "minions_first.kill_them_first": "Tötet sie zuerst",
+    "taunt.title": "Spott",
+    "taunt.text": "Gegner müssen einen Diener mit Spott vor allem anderen angreifen. Stellt einen vor Euren Helden!",
+    "taunt.taunt_attack_this": "Spott: diesen zuerst angreifen",
+    "charge.title": "Ansturm",
+    "charge.text": "Ein Diener kann in der Runde, in der er ausgespielt wird, nicht angreifen. Diener mit Ansturm können sofort angreifen.",
+    "charge.played_this_turn": "In dieser Runde ausgespielt: muss warten",
+    "charge.charge_attacks_at": "Ansturm: greift sofort an",
+    "deathrattle.title": "Todesröcheln",
+    "deathrattle.text": "Todesröcheln wird ausgelöst, wenn der Diener stirbt. König Muklas Fässer bergen Überraschungen: Zerschlagt eines und seht, was drin ist!",
+    "deathrattle.when_it_dies": "Wenn es stirbt...",
+    "deathrattle.out_comes_gnome": "...kommt ein Gnom heraus!",
+    "hero_power.title": "Heldenfähigkeit",
+    "hero_power.text": "Jeder Held hat eine Heldenfähigkeit. Sie kostet 2 Mana und kann einmal pro Runde eingesetzt werden.",
+    "hero_power.your_hero_power": "Eure Heldenfähigkeit",
+    "hero_power.hemet_s_hero": "Hemets Heldenfähigkeit",
+    "hero_power.mana_cost": "Manakosten",
+    "freeze.title": "Einfrieren",
+    "freeze.text": "Ein eingefrorener Charakter verpasst seinen nächsten Angriff. Friert Hemets Jäger ein und tötet sie, bevor sie Euch überrennen!",
+    "freeze.freezes_whatever_it": "Friert alles ein, dem er Schaden zufügt",
+    "weapons.title": "Waffen",
+    "weapons.text": "Mit einer Waffe kann ein Held angreifen. Illidan führt Kriegsgleven! Ein Held, der einen Diener angreift, erleidet Gegenschaden.",
+    "weapons.attack_damage_hero": "Angriff: der Schaden, den der Held zufügt",
+    "weapons.durability_drops_by": "Haltbarkeit: sinkt mit jedem Angriff um 1, bei 0 zerbricht die Waffe",
+    "putting_it_all_together.title": "Alles zusammen",
+    "putting_it_all_together.text": "Illidan ist stark. Nutzt alles, was Ihr gelernt habt: Schützt Euren Helden mit Spott und räumt seine Diener mit Zaubern ab.",
+    "putting_it_all_together.his_hero_power": "Seine Heldenfähigkeit: zwei Diener jede Runde",
+    "putting_it_all_together.taunt_guards_your": "Spott schützt Euren Helden",
+    "putting_it_all_together.hits_all_enemy": "Trifft alle feindlichen Diener"
   }
 }
