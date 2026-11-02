@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Делайте карточные игры для Classic HS — Classic HS for developers</title>
+<meta name="description" content="Classic Heroes Showdown: how to make your own card game — the game pack format, Lua card scripts, the engine API, testing.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@500;700;800&family=Exo+2:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../dev.css">
+</head>
+<body class="docs">
+<header class="top">
+  <a class="brand" href="../../">Classic HS<span class="brand-sub">dev</span></a>
+  <nav>
+    <a href="../../">Главная</a>
+    <a href="../../play/" class="nav-play">Играть</a>
+    <a href="https://github.com/pycz2/classichs" target="_blank" rel="noopener">GitHub</a>
+    <a class="lang-link" href="../en/index.html" hreflang="en">English</a>
+  </nav>
+</header>
+<div class="docs-wrap">
+  <aside class="side">
+    <p class="side-h">Руководства</p><ul><li><a href="../ru/index.html" aria-current=page>Обзор</a></li><li><a href="../ru/packs.html">Своя игра</a></li><li><a href="../ru/lua.html">Скрипты карт на Lua</a></li><li><a href="../ru/api.html">API движка (g.*)</a></li><li><a href="../ru/testing.html">Проверка и тесты</a></li><li><a href="../ru/architecture.html">Архитектура</a></li></ul>
+    <p class="side-h">Справочник (English)</p><ul><li><a href="../ref/format.html">Pack format</a></li><li><a href="../ref/rules.html">rules.json</a></li><li><a href="../ref/cards.html">cards.json</a></li><li><a href="../ref/fx.html">Visual effects</a></li><li><a href="../ref/lua.html">The Lua subset</a></li><li><a href="../ref/api.html">Hooks and g.* (source)</a></li></ul>
+  </aside>
+  <main class="doc">
+  <details class="side-m"><summary>Меню</summary>
+    <p class="side-h">Руководства</p><ul><li><a href="../ru/index.html" aria-current=page>Обзор</a></li><li><a href="../ru/packs.html">Своя игра</a></li><li><a href="../ru/lua.html">Скрипты карт на Lua</a></li><li><a href="../ru/api.html">API движка (g.*)</a></li><li><a href="../ru/testing.html">Проверка и тесты</a></li><li><a href="../ru/architecture.html">Архитектура</a></li></ul>
+    <p class="side-h">Справочник (English)</p><ul><li><a href="../ref/format.html">Pack format</a></li><li><a href="../ref/rules.html">rules.json</a></li><li><a href="../ref/cards.html">cards.json</a></li><li><a href="../ref/fx.html">Visual effects</a></li><li><a href="../ref/lua.html">The Lua subset</a></li><li><a href="../ref/api.html">Hooks and g.* (source)</a></li></ul>
+  </details>
+<h1 id="делайте-карточные-игры-для-classic-hs">Делайте карточные игры для Classic HS</h1>
+<p>Classic HS — движок для карточных игр в духе Hearthstone: два чемпиона, мана, которой каждый ход больше, существа на столе, заклинания, оружие, секреты. Сам движок знает только эти общие правила. <b>Игра</b> — её карты, что делает каждая карта, чемпионы, названия, арты, звуки, музыка, оформление и ранги — лежит в одном файле, <b>паке игры</b> (<code>.cardpack</code>). Classic 2014 — один такой пак; <b>Neonfall</b>, дождливый киберпанк с тремя чемпионами и 60 картами, — другой. Следующим может стать ваш.</p>
+<aside class="note"><p>Пак работает везде, где работает Classic HS: в браузере, на Windows, macOS, Linux и Android и на игровом сервере. Один и тот же пак с одними и теми же ходами даёт одну и ту же партию на любой из этих платформ.</p></aside>
+<h2 id="что-понадобится">Что понадобится<a class="anchor" href="#что-понадобится" aria-hidden="true">#</a></h2>
+<ul><li>Текстовый редактор. Пак — это JSON-файлы и короткие скрипты на Lua; ни компилятор, ни игровой движок ставить не нужно.</li><li>Python 3 для <code>tools/pack.py</code> (он собирает и проверяет пак; только стандартная библиотека). Он лежит в исходниках: <code>git clone https://github.com/pycz2/classichs</code>.</li><li>Сам Classic HS, чтобы сыграть в свою игру: хватит браузерной версии на этом сайте. Для быстрой проверки из командной строки (<code>tools/pack_try.gd</code>) нужны ещё Godot 4.7 и движок правил (см. <a href="testing.html">Проверка и тесты</a>).</li></ul>
+<h2 id="путь-от-идеи-до-игры">Путь от идеи до игры<a class="anchor" href="#путь-от-идеи-до-игры" aria-hidden="true">#</a></h2>
+<ol><li><b>Опишите правила и карты.</b> <code>rules.json</code> задаёт размер колоды, сколько карт помещается в руку, кто чемпионы; <code>cards.json</code> перечисляет все карты с их числами. Карте без особого текста больше ничего не нужно. → <a href="packs.html">Своя игра</a></li><li><b>Дайте особым картам скрипт.</b> «При розыгрыше нанести 1 урона», «другие ваши существа получают +1 к атаке», «когда погибает — призвать Волчонка» — каждое из этого несколько строк на Lua поверх библиотеки движка <code>g</code>. → <a href="lua.html">Скрипты карт на Lua</a>, <a href="api.html">API движка</a></li><li><b>Назовите всё на каждом языке.</b> Названия и тексты карт, ваши собственные имена механик (в Neonfall «Провокация» называется <i>Firewall</i>, а «Боевой клич» — <i>Boot</i>), классы, колоды.</li><li><b>Соберите и проверьте.</b> <code>tools/pack.py build</code> делает <code>.cardpack</code>, отказывается собирать пак со сломанными ссылками и записывает хэши; <code>tools/pack_try.gd</code> играет вашу игру бот против бота и показывает любую ошибку скрипта с файлом и строкой. → <a href="testing.html">Проверка и тесты</a></li><li><b>Играйте.</b> В игре: <i>Игры → Добавить файл игры*</i>. Поделитесь файлом с друзьями или загрузите его на игровой сервер.</li></ol>
+<h2 id="начните-с-примера">Начните с примера<a class="anchor" href="#начните-с-примера" aria-hidden="true">#</a></h2>
+<div class="table"><table><thead><tr><th>Пример</th><th>Что в нём есть</th></tr></thead><tbody><tr><td><b>Tiny Duel</b> (на странице <a href="packs.html#целый-пак-в-десяти-файлах">Своя игра</a>)</td><td>Самая маленькая настоящая игра: два чемпиона, восемь карт, две колоды, три файла скриптов. Скопируйте и растите.</td></tr><tr><td><b>Neonfall</b> (<code>packs/neon</code> в исходниках)</td><td>Полная оригинальная игра: 73 карты, три стартовые колоды, восемь языков, свои арты, звуки, синтвейв-музыка и тема оформления (<code>ui/theme.json</code>). Все примеры скриптов на этих страницах — её карты.</td></tr><tr><td><b>Classic 2014</b> (<code>packs/classic</code>)</td><td>534 карты, все механики Hearthstone Classic на Lua, шесть миссий обучения, рейтинговая лестница 2014 года. Её <code>recipe.json</code> собирает пак из данных, которые лежат в других местах репозитория.</td></tr></tbody></table></div>
+<h2 id="эти-страницы">Эти страницы<a class="anchor" href="#эти-страницы" aria-hidden="true">#</a></h2>
+<div class="table"><table><thead><tr><th>Страница</th><th></th></tr></thead><tbody><tr><td><a href="packs.html">Своя игра</a></td><td>Что такое пак, все файлы и их поля, сборка, загрузка в игру и на сервер, версии и хэши, ограничения, обучение.</td></tr><tr><td><a href="lua.html">Скрипты карт на Lua</a></td><td>Язык таким, каким его исполняет движок (и чего в нём нет), как и когда срабатывает каждый хук, разобранные примеры от простого существа до секрета, отладка.</td></tr><tr><td><a href="api.html">API движка (g.*)</a></td><td>Все хуки и все функции <code>g.*</code> с аргументами — собрано из исходного кода самого движка, поэтому никогда не устаревает.</td></tr><tr><td><a href="testing.html">Проверка и тесты</a></td><td>Что сообщает <code>pack.py check</code>, быстрый прогон бот против бота, инструменты отладки в игре, проверка пака на сервере.</td></tr><tr><td><a href="architecture.html">Архитектура</a></td><td>Как устроен весь Classic HS: интерактивная блок-схема системы, каждый блок изнутри (его части, данные и протоколы) и пошаговые потоки — розыгрыш карты, партия на сервере, бот выбирает ход, загрузка пакета, игра по коду, обновление веб-версии, развёртывание, — и каждый шаг ведёт на свою строку кода.</td></tr><tr><td>Справочник (English)</td><td>Формат таким, каким его читают движок и инструменты, раздел за разделом: формат пака, <code>rules.json</code>, <code>cards.json</code>, визуальные эффекты, подмножество Lua, хуки и <code>g</code>.</td></tr></tbody></table></div>
+<p class="src"><a href="https://github.com/pycz2/classichs/blob/main/site/dev/ru/index.md">Исходник страницы</a></p>
+  </main>
+  <aside class="toc"><p class="side-h">На этой странице</p><ul><li class="l2"><a href="#что-понадобится">Что понадобится</a></li><li class="l2"><a href="#путь-от-идеи-до-игры">Путь от идеи до игры</a></li><li class="l2"><a href="#начните-с-примера">Начните с примера</a></li><li class="l2"><a href="#эти-страницы">Эти страницы</a></li></ul></aside>
+</div>
+<footer><p>Classic Heroes Showdown · MIT · <a href="https://github.com/pycz2/classichs">GitHub</a></p></footer>
+</body>
+</html>

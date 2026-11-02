@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card scripts in Lua — Classic HS for developers</title>
+<meta name="description" content="Classic Heroes Showdown: how to make your own card game — the game pack format, Lua card scripts, the engine API, testing.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@500;700;800&family=Exo+2:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../dev.css">
+</head>
+<body class="docs">
+<header class="top">
+  <a class="brand" href="../../">Classic HS<span class="brand-sub">dev</span></a>
+  <nav>
+    <a href="../../">Home</a>
+    <a href="../../play/" class="nav-play">Play</a>
+    <a href="https://github.com/pycz2/classichs" target="_blank" rel="noopener">GitHub</a>
+    <a class="lang-link" href="../ru/lua.html" hreflang="ru">Русский</a>
+  </nav>
+</header>
+<div class="docs-wrap">
+  <aside class="side">
+    <p class="side-h">Guides</p><ul><li><a href="../en/index.html">Overview</a></li><li><a href="../en/packs.html">Make your own game</a></li><li><a href="../en/lua.html" aria-current=page>Card scripts in Lua</a></li><li><a href="../en/api.html">Engine API (g.*)</a></li><li><a href="../en/testing.html">Testing and validating</a></li><li><a href="../en/architecture.html">Architecture</a></li></ul>
+    <p class="side-h">Reference (English)</p><ul><li><a href="../ref/format.html">Pack format</a></li><li><a href="../ref/rules.html">rules.json</a></li><li><a href="../ref/cards.html">cards.json</a></li><li><a href="../ref/fx.html">Visual effects</a></li><li><a href="../ref/lua.html">The Lua subset</a></li><li><a href="../ref/api.html">Hooks and g.* (source)</a></li></ul>
+  </aside>
+  <main class="doc">
+  <details class="side-m"><summary>Menu</summary>
+    <p class="side-h">Guides</p><ul><li><a href="../en/index.html">Overview</a></li><li><a href="../en/packs.html">Make your own game</a></li><li><a href="../en/lua.html" aria-current=page>Card scripts in Lua</a></li><li><a href="../en/api.html">Engine API (g.*)</a></li><li><a href="../en/testing.html">Testing and validating</a></li><li><a href="../en/architecture.html">Architecture</a></li></ul>
+    <p class="side-h">Reference (English)</p><ul><li><a href="../ref/format.html">Pack format</a></li><li><a href="../ref/rules.html">rules.json</a></li><li><a href="../ref/cards.html">cards.json</a></li><li><a href="../ref/fx.html">Visual effects</a></li><li><a href="../ref/lua.html">The Lua subset</a></li><li><a href="../ref/api.html">Hooks and g.* (source)</a></li></ul>
+  </details>
+<h1 id="card-scripts-in-lua">Card scripts in Lua</h1>
+<p>A card with special text gets its behaviour from a small Lua script. The engine of Classic HS runs the scripts with its own interpreter (<code>rust/script</code>), the same on the server, on desktop and Android and in the browser, so a script with the same game always does the same thing everywhere. The language is <b>a safe subset of Lua 5.4</b>: plain Lua, with integers only and no access to anything outside the game.</p>
+<h2 id="a-script-file">A script file<a class="anchor" href="#a-script-file" aria-hidden="true">#</a></h2>
+<p>A file in <code>scripts/</code> runs once when the pack loads and returns a table: <b>card id → the card's hooks</b>. A card uses a hook set when <code>cards.json</code> points at it: <code>&quot;script&quot;: &quot;scripts/exec.lua#grid_overseer&quot;</code> (file <code>#</code> key).</p>
+<pre class="code"><span class="code-lang">lua</span><code><span class="tc">-- scripts/exec.lua (Neonfall)</span>
+<span class="tk">local</span> cards = {}
+
+<span class="tc">-- Grid Overseer: your Drones have +1 Attack.</span>
+cards.grid_overseer = {
+  aura = <span class="tk">function</span>(g, me)
+    <span class="tk">for</span> _, m <span class="tk">in</span> ipairs(<span class="tf"><a href="api.html#g.minions">g.minions</a></span>(<span class="tf"><a href="api.html#g.ctrl">g.ctrl</a></span>(me))) <span class="tk">do</span>
+      <span class="tk">if</span> <span class="tf"><a href="api.html#g.race">g.race</a></span>(m) == <span class="ts">&quot;DRONE&quot;</span> <span class="tk">then</span>
+        <span class="tf"><a href="api.html#g.aura_add">g.aura_add</a></span>(m, <span class="tn">1</span>, <span class="tn">0</span>)
+      <span class="tk">end</span>
+    <span class="tk">end</span>
+  <span class="tk">end</span>,
+}
+
+<span class="tk">return</span> cards</code></pre>
+<p>Every hook gets <code>g</code> (the engine's library, <a href="api.html">Engine API</a>) and <code>me</code>, the entity whose hook runs (the minion, the spell, the trap, the power). Entities, players and numbers are plain integers; card ids and mechanic names are strings.</p>
+<ul><li><code>scripts/lib.lua</code> (optional) loads first; the table it returns is the global <b><code>lib</code></b> in every other file: shared helpers.</li><li>Several cards may point at one key; keys that are not card ids name hook sets for enchantments (<code>&quot;ench:tutorial_guard&quot;</code>).</li><li><b>Scripts keep no state of their own.</b> File-level locals are for constants and helper functions only: the bot plays look-ahead copies of the game on the same interpreter. Keep state in the game — tags (<code><a href="api.html#g.set_tag">g.set_tag</a></code>), enchantments (<code><a href="api.html#g.enchant">g.enchant</a></code>), stats. After loading, the tables a file returned are read-only.</li><li>Everything loads or fails at once: a syntax error, an unknown global, an unknown hook name (<code>spel = …</code>), a card whose <code>script</code> points nowhere — the pack is refused with the file and line.</li></ul>
+<h2 id="the-language">The language<a class="anchor" href="#the-language" aria-hidden="true">#</a></h2>
+<h3 id="values-and-types">Values and types<a class="anchor" href="#values-and-types" aria-hidden="true">#</a></h3>
+<div class="table"><table><thead><tr><th>Type</th><th></th></tr></thead><tbody><tr><td><code>nil</code></td><td>Nothing. A missing table key, a missing argument.</td></tr><tr><td><code>boolean</code></td><td><code>true</code>, <code>false</code>. Only <code>nil</code> and <code>false</code> are false: <b><code>0</code> and <code>&quot;&quot;</code> are true</b>.</td></tr><tr><td><code>number</code></td><td>A 64-bit <b>integer</b>. <code>42</code>, <code>0x2A</code>. There are no fractions: <code>1.5</code>, <code>1e3</code> are errors.</td></tr><tr><td><code>string</code></td><td>Bytes, immutable; UTF-8 text is fine. <code>&quot;double&quot;</code>, <code>&#x27;single&#x27;</code>, <code>[[long]]</code>.</td></tr><tr><td><code>table</code></td><td>The only data structure: arrays <code>{1, 2, 3}</code>, records <code>{x = 1}</code>, maps <code>{[key] = v}</code>.</td></tr><tr><td><code>function</code></td><td>Functions and closures.</td></tr></tbody></table></div>
+<p><code>type(v)</code> returns these names. Comments: <code>-- to the end of the line</code> and <code>--[[ long ]]</code>.</p>
+<h3 id="variables-and-scope">Variables and scope<a class="anchor" href="#variables-and-scope" aria-hidden="true">#</a></h3>
+<ul><li><code>local x = 1</code>, <code>local a, b = f()</code>. A local is visible to the end of its block.</li><li><b>No global variables of your own.</b> <code>x = 1</code> or <code>function f() end</code> at the top is a compile error: <code>assignment to undeclared global &#x27;x&#x27; (declare it with &#x27;local&#x27;)</code>. Write <code>local x</code>, <code>local function f()</code>. Assigning to a field is fine: <code>cards.X = {}</code>, <code>t.n = 1</code>.</li><li>Globals are the standard library and the engine's names (<code>g</code>, <code>lib</code>, <code>list</code>); a typo in one (<code>ipars</code>) is an error when the pack loads, with its file and line.</li><li>Closures see the locals around them; two closures that see the same local share it; each loop iteration gets its own copy of the loop variables.</li><li><code>_G</code> and <code>_ENV</code> do not exist.</li></ul>
+<h3 id="statements">Statements<a class="anchor" href="#statements" aria-hidden="true">#</a></h3>
+<p><code>local</code>, assignment (<code>a, b = b, a</code> swaps), calls, <code>do … end</code>, <code>if … then … elseif … else … end</code>, <code>while … do … end</code>, <code>repeat … until c</code> (the condition sees the body's locals), numeric <code>for i = a, b [, step]</code> (integers; <code>step</code> 0 is an error), generic <code>for k, v in pairs(t)</code> / <code>ipairs(t)</code> / <code>next</code>, <code>break</code>, <code>return</code> (last in its block), <code>function a.b.c() end</code>, <code>function a.b:m() end</code>.</p>
+<h3 id="operators">Operators<a class="anchor" href="#operators" aria-hidden="true">#</a></h3>
+<p>From low to high: <code>or</code>, <code>and</code>, <code>&lt; &gt; &lt;= &gt;= ~= ==</code>, <code>..</code> (concatenation, also of numbers), <code>+ -</code>, <code>* // %</code>, unary <code>not # -</code>.</p>
+<ul><li><code>//</code> is <b>floor division</b>: <code>7 // 2 == 3</code>, <code>-7 // 2 == -4</code>. <code>%</code> has the sign of the divisor: <code>-7 % 3 == 2</code>.</li><li><code>+ - *</code> stop with <code>integer overflow in &#x27;+&#x27;</code> when the result does not fit (standard Lua would wrap around). Dividing by zero is an error.</li><li>Strings are never turned into numbers: <code>&quot;10&quot; + 1</code> is an error; use <code>tonumber</code>.</li><li><code>&lt;</code> compares two numbers or two strings; anything else is an error. <code>==</code> never fails: tables and functions are equal only to themselves.</li></ul>
+<h3 id="functions-and-tables">Functions and tables<a class="anchor" href="#functions-and-tables" aria-hidden="true">#</a></h3>
+<ul><li>Missing arguments are <code>nil</code>, extra ones are dropped. <code>...</code> varargs, <code>select(&quot;#&quot;, ...)</code>, several results with <code>return a, b</code>.</li><li>Methods: <code>obj:m(x)</code> is <code>obj.m(obj, x)</code>; strings have the <code>string</code> functions as methods: <code>s:sub(1, 3)</code>.</li><li><code>t.name</code> is <code>t[&quot;name&quot;]</code>; assigning <code>nil</code> removes a key; <code>#t</code> is the length of an array without holes.</li><li><b><code>pairs</code> visits keys in the order they were added</b> (standard Lua leaves the order open). Changing a value keeps its place; a removed and re-added key goes to the end. Don't add keys while iterating.</li></ul>
+<h3 id="the-standard-library">The standard library<a class="anchor" href="#the-standard-library" aria-hidden="true">#</a></h3>
+<div class="table"><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Base</td><td><code>type</code>, <code>tostring</code>, <code>tonumber(v [, base])</code>, <code>ipairs</code>, <code>pairs</code>, <code>next</code>, <code>select</code>, <code>error(v [, level])</code>, <code>assert</code>, <code>pcall</code></td></tr><tr><td><code>table</code></td><td><code>insert</code>, <code>remove</code>, <code>sort</code> (stable), <code>concat</code>, <code>unpack</code></td></tr><tr><td><code>string</code></td><td><code>len</code>, <code>sub</code>, <code>upper</code>, <code>lower</code>, <code>rep</code>, <code>byte</code>, <code>char</code>, <code>format</code> (only <code>%d</code>, <code>%s</code>, <code>%%</code>), <code>find</code> (plain text only; no patterns)</td></tr><tr><td><code>math</code></td><td><code>min</code>, <code>max</code>, <code>abs</code>, <code>clamp(x, lo, hi)</code>, <code>floor</code>, <code>maxinteger</code>, <code>mininteger</code></td></tr><tr><td><code>list</code></td><td>Array helpers that never change their argument: <code>filter(t, f)</code>, <code>map(t, f)</code>, <code>count(t [, f])</code>, <code>any(t, f)</code>, <code>all(t, f)</code>, <code>sum(t [, f])</code>, <code>sort_by(t, key)</code></td></tr></tbody></table></div>
+<p>There is no <code>math.random</code>: randomness comes from the game (<code><a href="api.html#g.random">g.random</a></code>, <code><a href="api.html#g.pick">g.pick</a></code>, <code><a href="api.html#g.random_alive">g.random_alive</a></code>, <code><a href="api.html#g.shuffle">g.shuffle</a></code>), so both players, the server and replays agree.</p>
+<h3 id="not-supported">Not supported<a class="anchor" href="#not-supported" aria-hidden="true">#</a></h3>
+<div class="table"><table><thead><tr><th>Feature</th><th>What happens</th></tr></thead><tbody><tr><td>Fractions, <code>/</code>, <code>^</code></td><td>Compile error: <code>&#x27;/&#x27; is not supported (no floats); use &#x27;//&#x27; for integer division</code></td></tr><tr><td>Bitwise <code>&amp; | ~ &lt;&lt; &gt;&gt;</code></td><td>Compile error</td></tr><tr><td><code>goto</code>, labels, <code>&lt;const&gt;</code>, <code>&lt;close&gt;</code></td><td>Compile error</td></tr><tr><td>Global assignment, <code>_G</code>, <code>_ENV</code></td><td>Compile error</td></tr><tr><td>Metatables (<code>setmetatable</code>, <code>getmetatable</code>, <code>rawget</code>, <code>rawset</code>, …), <code>coroutine</code></td><td>Load error: not available</td></tr><tr><td><code>load</code>, <code>require</code>, <code>dofile</code>, <code>io</code>, <code>os</code>, <code>debug</code>, <code>print</code>, <code>utf8</code></td><td>Load error: scripts can't load code or reach the outside</td></tr><tr><td>String patterns (<code>gsub</code>, <code>match</code>, <code>gmatch</code>), <code>string.dump</code>, <code>table.pack</code>, <code>math.random</code>, <code>math.sqrt</code></td><td>Not present (<code>nil</code>)</td></tr><tr><td><code>continue</code></td><td>Not in Lua at all; use <code>if … then … end</code> around the rest of the body</td></tr><tr><td>Changing a library table</td><td>Runtime error: <code>attempt to modify a read-only table</code></td></tr></tbody></table></div>
+<h3 id="limits">Limits<a class="anchor" href="#limits" aria-hidden="true">#</a></h3>
+<p>Each hook call has a budget; hooks that the engine runs inside it (a damage that triggers another card) share it.</p>
+<div class="table"><table><thead><tr><th>Limit</th><th>Default</th></tr></thead><tbody><tr><td>Steps (1 per statement, loop iteration, call; built-ins 1 per element)</td><td>200 000</td></tr><tr><td>Call depth</td><td>200</td></tr><tr><td>Entries in one table</td><td>10 000</td></tr><tr><td>Bytes in one string</td><td>64 KiB</td></tr><tr><td>Memory allocated in one call</td><td>16 MiB</td></tr></tbody></table></div>
+<p>An ordinary card hook uses tens to a few hundred steps. <code>pcall</code> catches script errors, not limit errors.</p>
+<h2 id="how-a-card-script-runs">How a card script runs<a class="anchor" href="#how-a-card-script-runs" aria-hidden="true">#</a></h2>
+<div class="table"><table><thead><tr><th>Hook</th><th>When it runs</th></tr></thead><tbody><tr><td><code>target</code></td><td>Not a function: the card needs a target. <code>&quot;any&quot;</code>, <code>&quot;minion&quot;</code>, <code>&quot;enemy_minion&quot;</code>, <code>&quot;friendly_minion&quot;</code>, <code>&quot;enemy_char&quot;</code>, <code>&quot;friendly_char&quot;</code>, <code>&quot;enemy_hero&quot;</code>, or <code>{base = …, filter = fn(g, me, t)}</code>. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required.</td></tr><tr><td><code>battlecry</code></td><td>A minion or weapon is played from the hand: after the minion is on the board, before the weapon is equipped. Not when it is summoned by another card.</td></tr><tr><td><code>spell</code></td><td>A spell is cast (not if a trap countered it).</td></tr><tr><td><code>combo</code></td><td>Instead of <code>battlecry</code>/<code>spell</code> when another card was played before it this turn (Neonfall's <i>Chain</i>).</td></tr><tr><td><code>choose_one</code></td><td><code>{&quot;OPTION_A&quot;, &quot;OPTION_B&quot;}</code>: two option cards; the player picks one and that card's <code>target</code> and <code>effect</code> are used.</td></tr><tr><td><code>hero_power</code></td><td>A champion's power is used.</td></tr><tr><td><code>deathrattle</code></td><td>It died (minion or weapon); <code><a href="api.html#g.died_pos">g.died_pos(me)</a></code> is where it stood.</td></tr><tr><td><code>on = {event = fn}</code></td><td>Any event of that type while <code>me</code> is in play. <b>Queued</b>: it runs after the action that caused it, in order.</td></tr><tr><td><code>now = {predamage = fn}</code></td><td>A replacement: runs at once inside <code><a href="api.html#g.damage">g.damage</a></code>, before the damage; set <code>ev.amount</code>.</td></tr><tr><td><code>secret</code></td><td>A trap: <code>{event, cond, effect}</code>. On <code>event</code> during the <b>opponent's</b> turn, if <code>cond</code> holds, it is revealed and <code>effect</code> runs.</td></tr><tr><td><code>aura</code></td><td>Recomputed after every change while <code>me</code> is in play: call <code><a href="api.html#g.aura_add">g.aura_add</a></code> for what it gives <i>now</i>. When <code>me</code> leaves, its aura is simply gone.</td></tr><tr><td><code>can_play</code>, <code>cost_mod</code>, <code>cost_aura</code></td><td>Read-only questions: can it be played now, its cost change, the cost of other cards while it is in play.</td></tr></tbody></table></div>
+<p>Every hook with its exact signature: <a href="api.html#hooks">Engine API</a>.</p>
+<p><b>Determinism.</b> Everything a script can see is decided by the script and the game: integers only, <code>pairs</code> in insertion order, stable sorting, no clock, no randomness of its own, <code>tostring</code> of a table is a counter, not an address. That is why two players' games stay in step in an online match, the server can replay any game, and the bot can copy the game to look ahead.</p>
+<p><b>Errors.</b> A script error or a limit ends the game as a draw ("a card script failed: …" with the file and line), never a crash. Read-only hooks must not change the game; calling an action there is an error.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-hidden="true">#</a></h2>
+<p>All from Neonfall (<code>packs/neon/scripts/</code>) unless marked; the card's line from <code>cards.json</code> first, then its hooks.</p>
+<h3 id="1-a-vanilla-minion-no-script">1. A vanilla minion: no script<a class="anchor" href="#1-a-vanilla-minion-no-script" aria-hidden="true">#</a></h3>
+<p>Glasshound Runner, a 2/2 with Hardlight and Cloak. Keywords that are tags work by themselves:</p>
+<pre class="code"><span class="code-lang">json</span><code>{<span class="tp">&quot;id&quot;</span>: <span class="ts">&quot;glasshound_runner&quot;</span>, <span class="tp">&quot;type&quot;</span>: <span class="ts">&quot;MINION&quot;</span>, <span class="tp">&quot;class&quot;</span>: <span class="ts">&quot;NEUTRAL&quot;</span>, <span class="tp">&quot;rarity&quot;</span>: <span class="ts">&quot;COMMON&quot;</span>, <span class="tp">&quot;set&quot;</span>: <span class="ts">&quot;core&quot;</span>,
+ <span class="tp">&quot;collectible&quot;</span>: <span class="tk">true</span>, <span class="tp">&quot;cost&quot;</span>: <span class="tn">3</span>, <span class="tp">&quot;attack&quot;</span>: <span class="tn">2</span>, <span class="tp">&quot;health&quot;</span>: <span class="tn">2</span>, <span class="tp">&quot;keywords&quot;</span>: [<span class="ts">&quot;BARRIER&quot;</span>, <span class="ts">&quot;STEALTH&quot;</span>]}</code></pre>
+<p>Neonfall's mechanic names are the engine ids themselves (<code>&quot;BARRIER&quot;: {&quot;engine&quot;: &quot;BARRIER&quot;}</code>); players see <i>Hardlight</i> and <i>Cloak</i> from the locale files.</p>
+<h3 id="2-a-battlecry-with-a-target">2. A battlecry with a target<a class="anchor" href="#2-a-battlecry-with-a-target" aria-hidden="true">#</a></h3>
+<p>Signal Jammer — <i>Boot: Jam an enemy minion.</i> <code>target</code> says which characters can be chosen; the battlecry gets the chosen one as <code>t</code>:</p>
+<pre class="code"><span class="code-lang">json</span><code>{<span class="tp">&quot;id&quot;</span>: <span class="ts">&quot;signal_jammer&quot;</span>, <span class="tp">&quot;type&quot;</span>: <span class="ts">&quot;MINION&quot;</span>, <span class="tp">&quot;class&quot;</span>: <span class="ts">&quot;NEUTRAL&quot;</span>, <span class="tp">&quot;rarity&quot;</span>: <span class="ts">&quot;COMMON&quot;</span>, <span class="tp">&quot;set&quot;</span>: <span class="ts">&quot;core&quot;</span>, <span class="tp">&quot;collectible&quot;</span>: <span class="tk">true</span>,
+ <span class="tp">&quot;cost&quot;</span>: <span class="tn">1</span>, <span class="tp">&quot;attack&quot;</span>: <span class="tn">0</span>, <span class="tp">&quot;health&quot;</span>: <span class="tn">3</span>, <span class="tp">&quot;race&quot;</span>: <span class="ts">&quot;DRONE&quot;</span>, <span class="tp">&quot;keywords&quot;</span>: [<span class="ts">&quot;ON_PLAY&quot;</span>], <span class="tp">&quot;refs&quot;</span>: [<span class="ts">&quot;FREEZE&quot;</span>],
+ <span class="tp">&quot;script&quot;</span>: <span class="ts">&quot;scripts/neutral.lua#signal_jammer&quot;</span>}</code></pre>
+<pre class="code"><span class="code-lang">lua</span><code>cards.signal_jammer = {
+  target = <span class="ts">&quot;enemy_minion&quot;</span>,
+  battlecry = <span class="tk">function</span>(g, me, t) <span class="tf"><a href="api.html#g.freeze">g.freeze</a></span>(t) <span class="tk">end</span>,
+}</code></pre>
+<p>A narrower target with a filter — Field Auditor, <i>Boot: give a friendly Drone Hardlight</i>:</p>
+<pre class="code"><span class="code-lang">lua</span><code>cards.field_auditor = {
+  target = {
+    base = <span class="ts">&quot;friendly_minion&quot;</span>,
+    filter = <span class="tk">function</span>(g, me, t) <span class="tk">return</span> <span class="tf"><a href="api.html#g.race">g.race</a></span>(t) == <span class="ts">&quot;DRONE&quot;</span> <span class="tk">end</span>,
+  },
+  battlecry = <span class="tk">function</span>(g, me, t) <span class="tf"><a href="api.html#g.give_tag">g.give_tag</a></span>(t, <span class="ts">&quot;BARRIER&quot;</span>) <span class="tk">end</span>,
+}</code></pre>
+<p>With no friendly Drone on the board the card is still played, without a target.</p>
+<h3 id="3-an-aura">3. An aura<a class="anchor" href="#3-an-aura" aria-hidden="true">#</a></h3>
+<p>Grid Overseer — <i>Your Drones have +1 Attack.</i> The aura says what it gives now; the engine takes it back when the Overseer dies or a Drone leaves:</p>
+<pre class="code"><span class="code-lang">lua</span><code>cards.grid_overseer = {
+  aura = <span class="tk">function</span>(g, me)
+    <span class="tk">for</span> _, m <span class="tk">in</span> ipairs(<span class="tf"><a href="api.html#g.minions">g.minions</a></span>(<span class="tf"><a href="api.html#g.ctrl">g.ctrl</a></span>(me))) <span class="tk">do</span>
+      <span class="tk">if</span> <span class="tf"><a href="api.html#g.race">g.race</a></span>(m) == <span class="ts">&quot;DRONE&quot;</span> <span class="tk">then</span>
+        <span class="tf"><a href="api.html#g.aura_add">g.aura_add</a></span>(m, <span class="tn">1</span>, <span class="tn">0</span>)
+      <span class="tk">end</span>
+    <span class="tk">end</span>
+  <span class="tk">end</span>,
+}</code></pre>
+<p><code><a href="api.html#g.aura_add">g.aura_add(m, atk, hp[, tags])</a></code> can also give keywords: <code><a href="api.html#g.aura_add">g.aura_add(me, 0, 0, {DOUBLE_ATTACK = true})</a></code> is Neonfall's <i>Redline: Dual-Core</i> (<code>lib.redline</code>).</p>
+<h3 id="4-a-deathrattle-that-summons">4. A deathrattle that summons<a class="anchor" href="#4-a-deathrattle-that-summons" aria-hidden="true">#</a></h3>
+<p>Enforcement Mech — <i>Firewall. Flatline: summon two 0/2 Sentry Drones.</i> Positions are 0-based; summoning at <code><a href="api.html#g.died_pos">g.died_pos(me)</a></code> twice puts both where the Mech stood:</p>
+<pre class="code"><span class="code-lang">lua</span><code>cards.enforcement_mech = {
+  deathrattle = <span class="tk">function</span>(g, me)
+    <span class="tk">local</span> p, pos = <span class="tf"><a href="api.html#g.ctrl">g.ctrl</a></span>(me), <span class="tf"><a href="api.html#g.died_pos">g.died_pos</a></span>(me)
+    <span class="tk">for</span> _ = <span class="tn">1</span>, <span class="tn">2</span> <span class="tk">do</span>
+      <span class="tf"><a href="api.html#g.summon">g.summon</a></span>(p, <span class="ts">&quot;sentry_drone&quot;</span>, pos)
+    <span class="tk">end</span>
+  <span class="tk">end</span>,
+}</code></pre>
+<p><code><a href="api.html#g.summon">g.summon</a></code> returns the new minion, or <code>nil</code> when the board is full — no check needed here, a full board just summons fewer.</p>
+<h3 id="5-a-trap-secret">5. A trap (secret)<a class="anchor" href="#5-a-trap-secret" aria-hidden="true">#</a></h3>
+<p>Protocol: Lockout — <i>When your opponent plays a minion, deal 1 damage to it and Jam it.</i> The card has the <code>TRAP</code> keyword; its hook is <code>secret</code>:</p>
+<pre class="code"><span class="code-lang">lua</span><code>cards.lockout = {
+  secret = {
+    event = <span class="ts">&quot;after_summon&quot;</span>,
+    cond = <span class="tk">function</span>(g, me, ev) <span class="tk">return</span> ev.played == <span class="tk">true</span> <span class="tk">and</span> <span class="tk">not</span> <span class="tf"><a href="api.html#g.mine">g.mine</a></span>(me, ev) <span class="tk">end</span>,
+    effect = <span class="tk">function</span>(g, me, ev)
+      <span class="tf"><a href="api.html#g.damage">g.damage</a></span>(me, ev.entity, <span class="tf"><a href="api.html#g.spell_dmg">g.spell_dmg</a></span>(me, <span class="tn">1</span>))
+      <span class="tf"><a href="api.html#g.freeze">g.freeze</a></span>(ev.entity)
+    <span class="tk">end</span>,
+  },
+}</code></pre>
+<p><code>ev</code> is the event table (<a href="api.html#events">events</a>): <code>after_summon</code> has <code>entity</code>, <code>player</code>, <code>card</code> and <code>played</code> (true when it came from the hand, not from another card's summon). <code><a href="api.html#g.mine">g.mine(me, ev)</a></code> is "the event's player is my controller". <code><a href="api.html#g.spell_dmg">g.spell_dmg</a></code> adds spell power, since a trap is a spell.</p>
+<h3 id="6-an-event-hook-with-a-helper-from-liblua">6. An event hook, with a helper from lib.lua<a class="anchor" href="#6-an-event-hook-with-a-helper-from-liblua" aria-hidden="true">#</a></h3>
+<p>Medic Drone — <i>At the end of your turn, restore 2 Health to a random damaged friendly character.</i> <code>lib.on_mine</code> (Neonfall's <code>scripts/lib.lua</code>) builds an <code>on</code> hook that runs only on its controller's events:</p>
+<pre class="code"><span class="code-lang">lua</span><code><span class="tc">-- scripts/lib.lua</span>
+<span class="tk">function</span> <span class="tf">lib.on_mine</span>(ty, f)
+  <span class="tk">return</span> {
+    on = {
+      [ty] = <span class="tk">function</span>(g, me, ev)
+        <span class="tk">if</span> <span class="tf"><a href="api.html#g.mine">g.mine</a></span>(me, ev) <span class="tk">then</span> f(g, me, ev) <span class="tk">end</span>
+      <span class="tk">end</span>,
+    },
+  }
+<span class="tk">end</span>
+
+<span class="tc">-- scripts/exec.lua</span>
+cards.medic_drone = <span class="tf">lib.on_mine</span>(<span class="ts">&quot;turn_end&quot;</span>, <span class="tk">function</span>(g, me)
+  <span class="tk">local</span> hurt = <span class="tf">list.filter</span>(<span class="tf"><a href="api.html#g.chars">g.chars</a></span>(<span class="tf"><a href="api.html#g.ctrl">g.ctrl</a></span>(me)), <span class="tk">function</span>(c) <span class="tk">return</span> <span class="tf"><a href="api.html#g.dmg">g.dmg</a></span>(c) &gt; <span class="tn">0</span> <span class="tk">end</span>)
+  <span class="tk">local</span> t = <span class="tf"><a href="api.html#g.pick">g.pick</a></span>(hurt)
+  <span class="tk">if</span> t <span class="tk">then</span>
+    <span class="tf"><a href="api.html#g.heal">g.heal</a></span>(me, t, <span class="tf"><a href="api.html#g.heal_amt">g.heal_amt</a></span>(me, <span class="tn">2</span>))
+  <span class="tk">end</span>
+<span class="tk">end</span>)</code></pre>
+<p><code><a href="api.html#g.pick">g.pick</a></code> takes the random choice from the game's own generator. Classic's <code>scripts/lib.lua</code> has more helpers of this kind (<code>lib.hit(target, n, spell)</code>, <code>lib.others_aura(atk, hp)</code>, <code>lib.draw_battlecry(n)</code>…).</p>
+<h3 id="7-chain-combo-and-fork-choose-one">7. Chain (combo) and Fork (choose one)<a class="anchor" href="#7-chain-combo-and-fork-choose-one" aria-hidden="true">#</a></h3>
+<pre class="code"><span class="code-lang">lua</span><code><span class="tc">-- Zero-Day: deal 1 damage to a minion and Jam it. Chain: 3 damage instead.</span>
+<span class="tk">local</span> <span class="tk">function</span> zero_day(n)
+  <span class="tk">return</span> <span class="tk">function</span>(g, me, t)
+    <span class="tf"><a href="api.html#g.damage">g.damage</a></span>(me, t, <span class="tf"><a href="api.html#g.spell_dmg">g.spell_dmg</a></span>(me, n))
+    <span class="tf"><a href="api.html#g.freeze">g.freeze</a></span>(t)
+  <span class="tk">end</span>
+<span class="tk">end</span>
+cards.zero_day = { target = <span class="ts">&quot;minion&quot;</span>, spell = zero_day(<span class="tn">1</span>), combo = zero_day(<span class="tn">3</span>) }
+
+<span class="tc">-- Executive Decision: Fork — Hard Reset (Wipe a minion) or Retention Bonus (+2 Health and Firewall).</span>
+cards.executive_decision = { choose_one = { <span class="ts">&quot;hard_reset&quot;</span>, <span class="ts">&quot;retention_bonus&quot;</span> } }
+cards.hard_reset = { target = <span class="ts">&quot;minion&quot;</span>, effect = <span class="tk">function</span>(g, me, t) <span class="tf"><a href="api.html#g.silence">g.silence</a></span>(t) <span class="tk">end</span> }
+cards.retention_bonus = {
+  target = <span class="ts">&quot;minion&quot;</span>,
+  effect = <span class="tk">function</span>(g, me, t)
+    <span class="tf"><a href="api.html#g.buff">g.buff</a></span>(t, <span class="tn">0</span>, <span class="tn">2</span>)
+    <span class="tf"><a href="api.html#g.give_tag">g.give_tag</a></span>(t, <span class="ts">&quot;GUARD&quot;</span>)
+  <span class="tk">end</span>,
+}</code></pre>
+<p>The two options are cards of their own in <code>cards.json</code> (not collectible), with their texts in the locales.</p>
+<h2 id="debugging">Debugging<a class="anchor" href="#debugging" aria-hidden="true">#</a></h2>
+<ul><li><b>The pack doesn't load.</b> The engine names the file and line: <code>scripts/moon.lua:3: assignment to undeclared global &#x27;foo&#x27; (declare it with &#x27;local&#x27;)</code>. Unknown globals, unknown hook names and scripts that point nowhere are caught here, before any card is played. <code>tools/pack_try.gd</code> and the game's <i>Import</i> show this message.</li><li><b>A card fails in a game.</b> The game ends as a draw with the error and a traceback: <code>scripts/sun.lua:16: attempt to call a nil value (field &#x27;damge&#x27;) (scripts/sun.lua:16: in function &#x27;battlecry&#x27;)</code>.</li><li><b>Build the position.</b> <i>Settings → Debug tools → Scene</i> (with your game active): put any cards into each player's hand, board, deck, traps and weapon with the mouse, set mana and health, and play it against the bot or for both sides. The scene is also plain JSON (the <i>JSON</i> button): copy it, change it, apply it again.</li><li><b>Common mistakes:</b> <code>0</code> is true (<code>if g.room(p) then</code> is always true; write <code><a href="api.html#g.room">g.room(p) &gt; 0</a></code>); positions are 0-based but arrays 1-based; an event field the event lacks is <code>nil</code> (<code>ev.target &gt;= 0</code> fails on <code>nil</code>); <code>until</code>, <code>end</code>, <code>and</code> are keywords (<code>{[&quot;until&quot;] = &quot;use&quot;}</code>); no <code>/</code>.</li></ul>
+<p>More on testing: <a href="testing.html">Testing and validating</a>. The language in full detail (escapes, <code>tostring</code>, every library function, the step accounting): <a href="../ref/lua.html">The Lua subset</a>.</p>
+<p class="src"><a href="https://github.com/pycz2/classichs/blob/main/site/dev/en/lua.md">Source of this page</a></p>
+  </main>
+  <aside class="toc"><p class="side-h">On this page</p><ul><li class="l2"><a href="#a-script-file">A script file</a></li><li class="l2"><a href="#the-language">The language</a></li><li class="l3"><a href="#values-and-types">Values and types</a></li><li class="l3"><a href="#variables-and-scope">Variables and scope</a></li><li class="l3"><a href="#statements">Statements</a></li><li class="l3"><a href="#operators">Operators</a></li><li class="l3"><a href="#functions-and-tables">Functions and tables</a></li><li class="l3"><a href="#the-standard-library">The standard library</a></li><li class="l3"><a href="#not-supported">Not supported</a></li><li class="l3"><a href="#limits">Limits</a></li><li class="l2"><a href="#how-a-card-script-runs">How a card script runs</a></li><li class="l2"><a href="#worked-examples">Worked examples</a></li><li class="l3"><a href="#1-a-vanilla-minion-no-script">1. A vanilla minion: no script</a></li><li class="l3"><a href="#2-a-battlecry-with-a-target">2. A battlecry with a target</a></li><li class="l3"><a href="#3-an-aura">3. An aura</a></li><li class="l3"><a href="#4-a-deathrattle-that-summons">4. A deathrattle that summons</a></li><li class="l3"><a href="#5-a-trap-secret">5. A trap (secret)</a></li><li class="l3"><a href="#6-an-event-hook-with-a-helper-from-liblua">6. An event hook, with a helper from lib.lua</a></li><li class="l3"><a href="#7-chain-combo-and-fork-choose-one">7. Chain (combo) and Fork (choose one)</a></li><li class="l2"><a href="#debugging">Debugging</a></li></ul></aside>
+</div>
+<footer><p>Classic Heroes Showdown · MIT · <a href="https://github.com/pycz2/classichs">GitHub</a></p></footer>
+</body>
+</html>

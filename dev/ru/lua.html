@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Скрипты карт на Lua — Classic HS for developers</title>
+<meta name="description" content="Classic Heroes Showdown: how to make your own card game — the game pack format, Lua card scripts, the engine API, testing.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@500;700;800&family=Exo+2:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../dev.css">
+</head>
+<body class="docs">
+<header class="top">
+  <a class="brand" href="../../">Classic HS<span class="brand-sub">dev</span></a>
+  <nav>
+    <a href="../../">Главная</a>
+    <a href="../../play/" class="nav-play">Играть</a>
+    <a href="https://github.com/pycz2/classichs" target="_blank" rel="noopener">GitHub</a>
+    <a class="lang-link" href="../en/lua.html" hreflang="en">English</a>
+  </nav>
+</header>
+<div class="docs-wrap">
+  <aside class="side">
+    <p class="side-h">Руководства</p><ul><li><a href="../ru/index.html">Обзор</a></li><li><a href="../ru/packs.html">Своя игра</a></li><li><a href="../ru/lua.html" aria-current=page>Скрипты карт на Lua</a></li><li><a href="../ru/api.html">API движка (g.*)</a></li><li><a href="../ru/testing.html">Проверка и тесты</a></li><li><a href="../ru/architecture.html">Архитектура</a></li></ul>
+    <p class="side-h">Справочник (English)</p><ul><li><a href="../ref/format.html">Pack format</a></li><li><a href="../ref/rules.html">rules.json</a></li><li><a href="../ref/cards.html">cards.json</a></li><li><a href="../ref/fx.html">Visual effects</a></li><li><a href="../ref/lua.html">The Lua subset</a></li><li><a href="../ref/api.html">Hooks and g.* (source)</a></li></ul>
+  </aside>
+  <main class="doc">
+  <details class="side-m"><summary>Меню</summary>
+    <p class="side-h">Руководства</p><ul><li><a href="../ru/index.html">Обзор</a></li><li><a href="../ru/packs.html">Своя игра</a></li><li><a href="../ru/lua.html" aria-current=page>Скрипты карт на Lua</a></li><li><a href="../ru/api.html">API движка (g.*)</a></li><li><a href="../ru/testing.html">Проверка и тесты</a></li><li><a href="../ru/architecture.html">Архитектура</a></li></ul>
+    <p class="side-h">Справочник (English)</p><ul><li><a href="../ref/format.html">Pack format</a></li><li><a href="../ref/rules.html">rules.json</a></li><li><a href="../ref/cards.html">cards.json</a></li><li><a href="../ref/fx.html">Visual effects</a></li><li><a href="../ref/lua.html">The Lua subset</a></li><li><a href="../ref/api.html">Hooks and g.* (source)</a></li></ul>
+  </details>
+<h1 id="скрипты-карт-на-lua">Скрипты карт на Lua</h1>
+<p>Карта с особым текстом получает поведение из небольшого скрипта на Lua. Движок Classic HS исполняет скрипты своим интерпретатором (<code>rust/script</code>) — одним и тем же на сервере, на компьютере и Android и в браузере, поэтому скрипт в одной и той же партии везде делает одно и то же. Язык — <b>безопасное подмножество Lua 5.4</b>: обычный Lua, только с целыми числами и без доступа к чему-либо за пределами игры.</p>
+<h2 id="файл-скрипта">Файл скрипта<a class="anchor" href="#файл-скрипта" aria-hidden="true">#</a></h2>
+<p>Файл в <code>scripts/</code> выполняется один раз при загрузке пака и возвращает таблицу: <b>id карты → хуки карты</b>. Карта берёт набор хуков, если на него указывает <code>cards.json</code>: <code>&quot;script&quot;: &quot;scripts/exec.lua#grid_overseer&quot;</code> (файл <code>#</code> ключ).</p>
+<pre class="code"><span class="code-lang">lua</span><code><span class="tc">-- scripts/exec.lua (Neonfall)</span>
+<span class="tk">local</span> cards = {}
+
+<span class="tc">-- Grid Overseer: ваши Дроны получают +1 к атаке.</span>
+cards.grid_overseer = {
+  aura = <span class="tk">function</span>(g, me)
+    <span class="tk">for</span> _, m <span class="tk">in</span> ipairs(<span class="tf"><a href="api.html#g.minions">g.minions</a></span>(<span class="tf"><a href="api.html#g.ctrl">g.ctrl</a></span>(me))) <span class="tk">do</span>
+      <span class="tk">if</span> <span class="tf"><a href="api.html#g.race">g.race</a></span>(m) == <span class="ts">&quot;DRONE&quot;</span> <span class="tk">then</span>
+        <span class="tf"><a href="api.html#g.aura_add">g.aura_add</a></span>(m, <span class="tn">1</span>, <span class="tn">0</span>)
+      <span class="tk">end</span>
+    <span class="tk">end</span>
+  <span class="tk">end</span>,
+}
+
+<span class="tk">return</span> cards</code></pre>
+<p>Каждый хук получает <code>g</code> (библиотеку движка, <a href="api.html">API движка</a>) и <code>me</code> — сущность, чей хук сработал (существо, заклинание, секрет, сила чемпиона). Сущности, игроки и числа — просто целые числа; id карт и названия механик — строки.</p>
+<ul><li><code>scripts/lib.lua</code> (необязательный) загружается первым; таблица, которую он возвращает, видна во всех остальных файлах как глобальная <b><code>lib</code></b>: общие помощники.</li><li>На один ключ могут указывать несколько карт; ключи, которые не являются id карт, — это наборы хуков для зачарований (<code>&quot;ench:tutorial_guard&quot;</code>).</li><li><b>У скриптов нет своего состояния.</b> Локальные переменные на уровне файла — только для констант и вспомогательных функций: бот играет копии партии для просчёта на том же интерпретаторе. Состояние держите в игре — в тегах (<code><a href="api.html#g.set_tag">g.set_tag</a></code>), зачарованиях (<code><a href="api.html#g.enchant">g.enchant</a></code>), характеристиках. После загрузки таблицы, которые вернул файл, доступны только для чтения.</li><li>Всё загружается или не загружается целиком: синтаксическая ошибка, неизвестная глобальная переменная, неизвестное имя хука (<code>spel = …</code>), карта, чей <code>script</code> никуда не ведёт, — пак отклоняется с указанием файла и строки.</li></ul>
+<h2 id="язык">Язык<a class="anchor" href="#язык" aria-hidden="true">#</a></h2>
+<h3 id="значения-и-типы">Значения и типы<a class="anchor" href="#значения-и-типы" aria-hidden="true">#</a></h3>
+<div class="table"><table><thead><tr><th>Тип</th><th></th></tr></thead><tbody><tr><td><code>nil</code></td><td>Ничего. Отсутствующий ключ таблицы, не переданный аргумент.</td></tr><tr><td><code>boolean</code></td><td><code>true</code>, <code>false</code>. Ложны только <code>nil</code> и <code>false</code>: <b><code>0</code> и <code>&quot;&quot;</code> — истина</b>.</td></tr><tr><td><code>number</code></td><td>64-битное <b>целое</b>. <code>42</code>, <code>0x2A</code>. Дробей нет: <code>1.5</code>, <code>1e3</code> — ошибки.</td></tr><tr><td><code>string</code></td><td>Байты, неизменяемые; UTF-8 подходит. <code>&quot;двойные&quot;</code>, <code>&#x27;одинарные&#x27;</code>, <code>[[длинные]]</code>.</td></tr><tr><td><code>table</code></td><td>Единственная структура данных: массивы <code>{1, 2, 3}</code>, записи <code>{x = 1}</code>, словари <code>{[key] = v}</code>.</td></tr><tr><td><code>function</code></td><td>Функции и замыкания.</td></tr></tbody></table></div>
+<p><code>type(v)</code> возвращает эти имена. Комментарии: <code>-- до конца строки</code> и <code>--[[ длинный ]]</code>.</p>
+<h3 id="переменные-и-видимость">Переменные и видимость<a class="anchor" href="#переменные-и-видимость" aria-hidden="true">#</a></h3>
+<ul><li><code>local x = 1</code>, <code>local a, b = f()</code>. Локальная переменная видна до конца своего блока.</li><li><b>Своих глобальных переменных нет.</b> <code>x = 1</code> или <code>function f() end</code> на верхнем уровне — ошибка компиляции: <code>assignment to undeclared global &#x27;x&#x27; (declare it with &#x27;local&#x27;)</code>. Пишите <code>local x</code>, <code>local function f()</code>. Присваивать полям можно: <code>cards.X = {}</code>, <code>t.n = 1</code>.</li><li>Глобальные имена — это стандартная библиотека и имена движка (<code>g</code>, <code>lib</code>, <code>list</code>); опечатка в них (<code>ipars</code>) — ошибка при загрузке пака, с файлом и строкой.</li><li>Замыкания видят окружающие локальные переменные; два замыкания, видящие одну переменную, делят её; у каждой итерации цикла свои копии переменных цикла.</li><li><code>_G</code> и <code>_ENV</code> нет.</li></ul>
+<h3 id="операторы-языка">Операторы языка<a class="anchor" href="#операторы-языка" aria-hidden="true">#</a></h3>
+<p><code>local</code>, присваивание (<code>a, b = b, a</code> меняет местами), вызовы, <code>do … end</code>, <code>if … then … elseif … else … end</code>, <code>while … do … end</code>, <code>repeat … until c</code> (условие видит локальные переменные тела), числовой <code>for i = a, b [, step]</code> (целые; шаг 0 — ошибка), общий <code>for k, v in pairs(t)</code> / <code>ipairs(t)</code> / <code>next</code>, <code>break</code>, <code>return</code> (последним в блоке), <code>function a.b.c() end</code>, <code>function a.b:m() end</code>.</p>
+<h3 id="операции">Операции<a class="anchor" href="#операции" aria-hidden="true">#</a></h3>
+<p>От низшего приоритета к высшему: <code>or</code>, <code>and</code>, <code>&lt; &gt; &lt;= &gt;= ~= ==</code>, <code>..</code> (склейка, в том числе чисел), <code>+ -</code>, <code>* // %</code>, унарные <code>not # -</code>.</p>
+<ul><li><code>//</code> — <b>деление с округлением вниз</b>: <code>7 // 2 == 3</code>, <code>-7 // 2 == -4</code>. Знак <code>%</code> — как у делителя: <code>-7 % 3 == 2</code>.</li><li><code>+ - *</code> останавливаются с <code>integer overflow in &#x27;+&#x27;</code>, если результат не помещается (стандартный Lua перескочил бы через край). Деление на ноль — ошибка.</li><li>Строки никогда не превращаются в числа: <code>&quot;10&quot; + 1</code> — ошибка; используйте <code>tonumber</code>.</li><li><code>&lt;</code> сравнивает два числа или две строки; остальное — ошибка. <code>==</code> никогда не падает: таблицы и функции равны только самим себе.</li></ul>
+<h3 id="функции-и-таблицы">Функции и таблицы<a class="anchor" href="#функции-и-таблицы" aria-hidden="true">#</a></h3>
+<ul><li>Недостающие аргументы — <code>nil</code>, лишние отбрасываются. <code>...</code> — переменное число аргументов, <code>select(&quot;#&quot;, ...)</code>, несколько результатов — <code>return a, b</code>.</li><li>Методы: <code>obj:m(x)</code> — это <code>obj.m(obj, x)</code>; у строк функции <code>string</code> есть как методы: <code>s:sub(1, 3)</code>.</li><li><code>t.name</code> — это <code>t[&quot;name&quot;]</code>; присваивание <code>nil</code> удаляет ключ; <code>#t</code> — длина массива без дыр.</li><li><b><code>pairs</code> обходит ключи в порядке добавления</b> (стандартный Lua порядок не обещает). Изменение значения не двигает ключ; удалённый и добавленный заново ключ уходит в конец. Не добавляйте ключи во время обхода.</li></ul>
+<h3 id="стандартная-библиотека">Стандартная библиотека<a class="anchor" href="#стандартная-библиотека" aria-hidden="true">#</a></h3>
+<div class="table"><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Базовые</td><td><code>type</code>, <code>tostring</code>, <code>tonumber(v [, base])</code>, <code>ipairs</code>, <code>pairs</code>, <code>next</code>, <code>select</code>, <code>error(v [, level])</code>, <code>assert</code>, <code>pcall</code></td></tr><tr><td><code>table</code></td><td><code>insert</code>, <code>remove</code>, <code>sort</code> (устойчивая), <code>concat</code>, <code>unpack</code></td></tr><tr><td><code>string</code></td><td><code>len</code>, <code>sub</code>, <code>upper</code>, <code>lower</code>, <code>rep</code>, <code>byte</code>, <code>char</code>, <code>format</code> (только <code>%d</code>, <code>%s</code>, <code>%%</code>), <code>find</code> (только простой текст, без шаблонов)</td></tr><tr><td><code>math</code></td><td><code>min</code>, <code>max</code>, <code>abs</code>, <code>clamp(x, lo, hi)</code>, <code>floor</code>, <code>maxinteger</code>, <code>mininteger</code></td></tr><tr><td><code>list</code></td><td>Помощники для массивов, никогда не меняющие аргумент: <code>filter(t, f)</code>, <code>map(t, f)</code>, <code>count(t [, f])</code>, <code>any(t, f)</code>, <code>all(t, f)</code>, <code>sum(t [, f])</code>, <code>sort_by(t, key)</code></td></tr></tbody></table></div>
+<p><code>math.random</code> нет: случайность берётся из игры (<code><a href="api.html#g.random">g.random</a></code>, <code><a href="api.html#g.pick">g.pick</a></code>, <code><a href="api.html#g.random_alive">g.random_alive</a></code>, <code><a href="api.html#g.shuffle">g.shuffle</a></code>), чтобы оба игрока, сервер и записи партий совпадали.</p>
+<h3 id="чего-нет">Чего нет<a class="anchor" href="#чего-нет" aria-hidden="true">#</a></h3>
+<div class="table"><table><thead><tr><th>Возможность</th><th>Что будет</th></tr></thead><tbody><tr><td>Дроби, <code>/</code>, <code>^</code></td><td>Ошибка компиляции: <code>&#x27;/&#x27; is not supported (no floats); use &#x27;//&#x27; for integer division</code></td></tr><tr><td>Битовые <code>&amp; | ~ &lt;&lt; &gt;&gt;</code></td><td>Ошибка компиляции</td></tr><tr><td><code>goto</code>, метки, <code>&lt;const&gt;</code>, <code>&lt;close&gt;</code></td><td>Ошибка компиляции</td></tr><tr><td>Присваивание глобальной, <code>_G</code>, <code>_ENV</code></td><td>Ошибка компиляции</td></tr><tr><td>Метатаблицы (<code>setmetatable</code>, <code>getmetatable</code>, <code>rawget</code>, <code>rawset</code>, …), <code>coroutine</code></td><td>Ошибка загрузки: недоступно</td></tr><tr><td><code>load</code>, <code>require</code>, <code>dofile</code>, <code>io</code>, <code>os</code>, <code>debug</code>, <code>print</code>, <code>utf8</code></td><td>Ошибка загрузки: скрипты не могут загружать код и выходить наружу</td></tr><tr><td>Шаблоны строк (<code>gsub</code>, <code>match</code>, <code>gmatch</code>), <code>string.dump</code>, <code>table.pack</code>, <code>math.random</code>, <code>math.sqrt</code></td><td>Отсутствуют (<code>nil</code>)</td></tr><tr><td><code>continue</code></td><td>Его нет в Lua вообще; оберните остаток тела в <code>if … then … end</code></td></tr><tr><td>Изменение таблицы библиотеки</td><td>Ошибка выполнения: <code>attempt to modify a read-only table</code></td></tr></tbody></table></div>
+<h3 id="ограничения">Ограничения<a class="anchor" href="#ограничения" aria-hidden="true">#</a></h3>
+<p>У каждого вызова хука свой бюджет; хуки, которые движок вызывает внутри него (урон, на который срабатывает другая карта), делят его.</p>
+<div class="table"><table><thead><tr><th>Ограничение</th><th>По умолчанию</th></tr></thead><tbody><tr><td>Шаги (1 за оператор, итерацию цикла, вызов; встроенные функции — 1 за элемент)</td><td>200 000</td></tr><tr><td>Глубина вызовов</td><td>200</td></tr><tr><td>Записей в одной таблице</td><td>10 000</td></tr><tr><td>Байт в одной строке</td><td>64 КиБ</td></tr><tr><td>Памяти за один вызов</td><td>16 МиБ</td></tr></tbody></table></div>
+<p>Обычный хук карты тратит от десятков до нескольких сотен шагов. <code>pcall</code> ловит ошибки скрипта, но не превышение ограничений.</p>
+<h2 id="как-работает-скрипт-карты">Как работает скрипт карты<a class="anchor" href="#как-работает-скрипт-карты" aria-hidden="true">#</a></h2>
+<div class="table"><table><thead><tr><th>Хук</th><th>Когда срабатывает</th></tr></thead><tbody><tr><td><code>target</code></td><td>Не функция: карте нужна цель. <code>&quot;any&quot;</code>, <code>&quot;minion&quot;</code>, <code>&quot;enemy_minion&quot;</code>, <code>&quot;friendly_minion&quot;</code>, <code>&quot;enemy_char&quot;</code>, <code>&quot;friendly_char&quot;</code>, <code>&quot;enemy_hero&quot;</code> или <code>{base = …, filter = fn(g, me, t)}</code>. Цель боевого клича существа необязательна (нет подходящей — разыгрывается без цели); цель заклинания обязательна.</td></tr><tr><td><code>battlecry</code></td><td>Существо или оружие разыграно из руки: после того как существо встало на стол, до того как оружие экипировано. Не срабатывает, если его призвала другая карта.</td></tr><tr><td><code>spell</code></td><td>Заклинание сыграно (если его не отменил секрет).</td></tr><tr><td><code>combo</code></td><td>Вместо <code>battlecry</code>/<code>spell</code>, если в этот ход перед ней уже сыграли другую карту (<i>Chain</i> в Neonfall).</td></tr><tr><td><code>choose_one</code></td><td><code>{&quot;OPTION_A&quot;, &quot;OPTION_B&quot;}</code>: две карты-варианта; игрок выбирает одну, и берутся её <code>target</code> и <code>effect</code>.</td></tr><tr><td><code>hero_power</code></td><td>Использована сила чемпиона.</td></tr><tr><td><code>deathrattle</code></td><td>Погибло (существо или оружие); <code><a href="api.html#g.died_pos">g.died_pos(me)</a></code> — где стояло.</td></tr><tr><td><code>on = {event = fn}</code></td><td>Любое событие этого типа, пока <code>me</code> в игре. <b>В очереди</b>: выполняется после действия, которое его вызвало, по порядку.</td></tr><tr><td><code>now = {predamage = fn}</code></td><td>Замена: срабатывает сразу внутри <code><a href="api.html#g.damage">g.damage</a></code>, до урона; меняйте <code>ev.amount</code>.</td></tr><tr><td><code>secret</code></td><td>Секрет: <code>{event, cond, effect}</code>. На <code>event</code> в ход <b>противника</b>, если <code>cond</code> верно, секрет раскрывается и выполняется <code>effect</code>.</td></tr><tr><td><code>aura</code></td><td>Пересчитывается после каждого изменения, пока <code>me</code> в игре: вызывайте <code><a href="api.html#g.aura_add">g.aura_add</a></code> для того, что аура даёт <i>сейчас</i>. Когда <code>me</code> уходит, аура просто исчезает.</td></tr><tr><td><code>can_play</code>, <code>cost_mod</code>, <code>cost_aura</code></td><td>Вопросы только для чтения: можно ли сыграть карту сейчас, изменение её стоимости, стоимость других карт, пока эта в игре.</td></tr></tbody></table></div>
+<p>Все хуки с точными сигнатурами: <a href="api.html#hooks">API движка</a>.</p>
+<p><b>Детерминизм.</b> Всё, что видит скрипт, задано скриптом и партией: только целые числа, <code>pairs</code> в порядке добавления, устойчивая сортировка, нет часов, нет своей случайности, <code>tostring</code> таблицы — счётчик, а не адрес. Поэтому партии двух игроков в сетевой игре идут в ногу, сервер может переиграть любую партию, а бот — копировать партию для просчёта.</p>
+<p><b>Ошибки.</b> Ошибка скрипта или превышение ограничения заканчивает партию ничьей («скрипт карты упал: …» с файлом и строкой), игра не падает. Хуки только для чтения не должны менять игру; вызов действия в них — ошибка.</p>
+<h2 id="разобранные-примеры">Разобранные примеры<a class="anchor" href="#разобранные-примеры" aria-hidden="true">#</a></h2>
+<p>Все из Neonfall (<code>packs/neon/scripts/</code>), если не сказано иное; сначала строка карты из <code>cards.json</code>, потом её хуки.</p>
+<h3 id="1-простое-существо-без-скрипта">1. Простое существо: без скрипта<a class="anchor" href="#1-простое-существо-без-скрипта" aria-hidden="true">#</a></h3>
+<p>Glasshound Runner, 2/2 с Hardlight и Cloak. Ключевые слова-теги работают сами:</p>
+<pre class="code"><span class="code-lang">json</span><code>{<span class="tp">&quot;id&quot;</span>: <span class="ts">&quot;glasshound_runner&quot;</span>, <span class="tp">&quot;type&quot;</span>: <span class="ts">&quot;MINION&quot;</span>, <span class="tp">&quot;class&quot;</span>: <span class="ts">&quot;NEUTRAL&quot;</span>, <span class="tp">&quot;rarity&quot;</span>: <span class="ts">&quot;COMMON&quot;</span>, <span class="tp">&quot;set&quot;</span>: <span class="ts">&quot;core&quot;</span>,
+ <span class="tp">&quot;collectible&quot;</span>: <span class="tk">true</span>, <span class="tp">&quot;cost&quot;</span>: <span class="tn">3</span>, <span class="tp">&quot;attack&quot;</span>: <span class="tn">2</span>, <span class="tp">&quot;health&quot;</span>: <span class="tn">2</span>, <span class="tp">&quot;keywords&quot;</span>: [<span class="ts">&quot;BARRIER&quot;</span>, <span class="ts">&quot;STEALTH&quot;</span>]}</code></pre>
+<p>В Neonfall имена механик совпадают с id движка (<code>&quot;BARRIER&quot;: {&quot;engine&quot;: &quot;BARRIER&quot;}</code>); игроки видят <i>Hardlight</i> и <i>Cloak</i> из файлов локализации.</p>
+<h3 id="2-боевой-клич-с-целью">2. Боевой клич с целью<a class="anchor" href="#2-боевой-клич-с-целью" aria-hidden="true">#</a></h3>
+<p>Signal Jammer — <i>Boot: заморозить (Jam) вражеское существо.</i> <code>target</code> говорит, кого можно выбрать; боевой клич получает выбранного как <code>t</code>:</p>
+<pre class="code"><span class="code-lang">json</span><code>{<span class="tp">&quot;id&quot;</span>: <span class="ts">&quot;signal_jammer&quot;</span>, <span class="tp">&quot;type&quot;</span>: <span class="ts">&quot;MINION&quot;</span>, <span class="tp">&quot;class&quot;</span>: <span class="ts">&quot;NEUTRAL&quot;</span>, <span class="tp">&quot;rarity&quot;</span>: <span class="ts">&quot;COMMON&quot;</span>, <span class="tp">&quot;set&quot;</span>: <span class="ts">&quot;core&quot;</span>, <span class="tp">&quot;collectible&quot;</span>: <span class="tk">true</span>,
+ <span class="tp">&quot;cost&quot;</span>: <span class="tn">1</span>, <span class="tp">&quot;attack&quot;</span>: <span class="tn">0</span>, <span class="tp">&quot;health&quot;</span>: <span class="tn">3</span>, <span class="tp">&quot;race&quot;</span>: <span class="ts">&quot;DRONE&quot;</span>, <span class="tp">&quot;keywords&quot;</span>: [<span class="ts">&quot;ON_PLAY&quot;</span>], <span class="tp">&quot;refs&quot;</span>: [<span class="ts">&quot;FREEZE&quot;</span>],
+ <span class="tp">&quot;script&quot;</span>: <span class="ts">&quot;scripts/neutral.lua#signal_jammer&quot;</span>}</code></pre>
+<pre class="code"><span class="code-lang">lua</span><code>cards.signal_jammer = {
+  target = <span class="ts">&quot;enemy_minion&quot;</span>,
+  battlecry = <span class="tk">function</span>(g, me, t) <span class="tf"><a href="api.html#g.freeze">g.freeze</a></span>(t) <span class="tk">end</span>,
+}</code></pre>
+<p>Цель уже, с фильтром, — Field Auditor, <i>Boot: дать дружественному Дрону Hardlight</i>:</p>
+<pre class="code"><span class="code-lang">lua</span><code>cards.field_auditor = {
+  target = {
+    base = <span class="ts">&quot;friendly_minion&quot;</span>,
+    filter = <span class="tk">function</span>(g, me, t) <span class="tk">return</span> <span class="tf"><a href="api.html#g.race">g.race</a></span>(t) == <span class="ts">&quot;DRONE&quot;</span> <span class="tk">end</span>,
+  },
+  battlecry = <span class="tk">function</span>(g, me, t) <span class="tf"><a href="api.html#g.give_tag">g.give_tag</a></span>(t, <span class="ts">&quot;BARRIER&quot;</span>) <span class="tk">end</span>,
+}</code></pre>
+<p>Если на столе нет дружественного Дрона, карта всё равно разыгрывается — без цели.</p>
+<h3 id="3-аура">3. Аура<a class="anchor" href="#3-аура" aria-hidden="true">#</a></h3>
+<p>Grid Overseer — <i>Ваши Дроны получают +1 к атаке.</i> Аура говорит, что даёт сейчас; движок забирает это, когда Overseer гибнет или Дрон уходит:</p>
+<pre class="code"><span class="code-lang">lua</span><code>cards.grid_overseer = {
+  aura = <span class="tk">function</span>(g, me)
+    <span class="tk">for</span> _, m <span class="tk">in</span> ipairs(<span class="tf"><a href="api.html#g.minions">g.minions</a></span>(<span class="tf"><a href="api.html#g.ctrl">g.ctrl</a></span>(me))) <span class="tk">do</span>
+      <span class="tk">if</span> <span class="tf"><a href="api.html#g.race">g.race</a></span>(m) == <span class="ts">&quot;DRONE&quot;</span> <span class="tk">then</span>
+        <span class="tf"><a href="api.html#g.aura_add">g.aura_add</a></span>(m, <span class="tn">1</span>, <span class="tn">0</span>)
+      <span class="tk">end</span>
+    <span class="tk">end</span>
+  <span class="tk">end</span>,
+}</code></pre>
+<p><code><a href="api.html#g.aura_add">g.aura_add(m, atk, hp[, tags])</a></code> может давать и ключевые слова: <code><a href="api.html#g.aura_add">g.aura_add(me, 0, 0, {DOUBLE_ATTACK = true})</a></code> — это <i>Redline: Dual-Core</i> из Neonfall (<code>lib.redline</code>).</p>
+<h3 id="4-предсмертный-хрип-который-призывает">4. Предсмертный хрип, который призывает<a class="anchor" href="#4-предсмертный-хрип-который-призывает" aria-hidden="true">#</a></h3>
+<p>Enforcement Mech — <i>Firewall. Flatline: призвать двух Sentry Drone 0/2.</i> Позиции считаются с нуля; два призыва в <code><a href="api.html#g.died_pos">g.died_pos(me)</a></code> ставят обоих туда, где стоял Mech:</p>
+<pre class="code"><span class="code-lang">lua</span><code>cards.enforcement_mech = {
+  deathrattle = <span class="tk">function</span>(g, me)
+    <span class="tk">local</span> p, pos = <span class="tf"><a href="api.html#g.ctrl">g.ctrl</a></span>(me), <span class="tf"><a href="api.html#g.died_pos">g.died_pos</a></span>(me)
+    <span class="tk">for</span> _ = <span class="tn">1</span>, <span class="tn">2</span> <span class="tk">do</span>
+      <span class="tf"><a href="api.html#g.summon">g.summon</a></span>(p, <span class="ts">&quot;sentry_drone&quot;</span>, pos)
+    <span class="tk">end</span>
+  <span class="tk">end</span>,
+}</code></pre>
+<p><code><a href="api.html#g.summon">g.summon</a></code> возвращает новое существо или <code>nil</code>, если стол полон, — проверять не нужно: на полном столе просто призовётся меньше.</p>
+<h3 id="5-секрет">5. Секрет<a class="anchor" href="#5-секрет" aria-hidden="true">#</a></h3>
+<p>Protocol: Lockout — <i>Когда противник разыгрывает существо, нанести ему 1 урона и заморозить.</i> У карты ключевое слово <code>TRAP</code>, хук — <code>secret</code>:</p>
+<pre class="code"><span class="code-lang">lua</span><code>cards.lockout = {
+  secret = {
+    event = <span class="ts">&quot;after_summon&quot;</span>,
+    cond = <span class="tk">function</span>(g, me, ev) <span class="tk">return</span> ev.played == <span class="tk">true</span> <span class="tk">and</span> <span class="tk">not</span> <span class="tf"><a href="api.html#g.mine">g.mine</a></span>(me, ev) <span class="tk">end</span>,
+    effect = <span class="tk">function</span>(g, me, ev)
+      <span class="tf"><a href="api.html#g.damage">g.damage</a></span>(me, ev.entity, <span class="tf"><a href="api.html#g.spell_dmg">g.spell_dmg</a></span>(me, <span class="tn">1</span>))
+      <span class="tf"><a href="api.html#g.freeze">g.freeze</a></span>(ev.entity)
+    <span class="tk">end</span>,
+  },
+}</code></pre>
+<p><code>ev</code> — таблица события (<a href="api.html#events">события</a>): у <code>after_summon</code> есть <code>entity</code>, <code>player</code>, <code>card</code> и <code>played</code> (true, если существо пришло из руки, а не призвано другой картой). <code><a href="api.html#g.mine">g.mine(me, ev)</a></code> — «игрок события — мой владелец». <code><a href="api.html#g.spell_dmg">g.spell_dmg</a></code> добавляет силу заклинаний: секрет — тоже заклинание.</p>
+<h3 id="6-хук-на-событие-с-помощником-из-liblua">6. Хук на событие с помощником из lib.lua<a class="anchor" href="#6-хук-на-событие-с-помощником-из-liblua" aria-hidden="true">#</a></h3>
+<p>Medic Drone — <i>В конце вашего хода восстановить 2 здоровья случайному раненому дружественному персонажу.</i> <code>lib.on_mine</code> (из <code>scripts/lib.lua</code> Neonfall) строит хук <code>on</code>, срабатывающий только на события своего владельца:</p>
+<pre class="code"><span class="code-lang">lua</span><code><span class="tc">-- scripts/lib.lua</span>
+<span class="tk">function</span> <span class="tf">lib.on_mine</span>(ty, f)
+  <span class="tk">return</span> {
+    on = {
+      [ty] = <span class="tk">function</span>(g, me, ev)
+        <span class="tk">if</span> <span class="tf"><a href="api.html#g.mine">g.mine</a></span>(me, ev) <span class="tk">then</span> f(g, me, ev) <span class="tk">end</span>
+      <span class="tk">end</span>,
+    },
+  }
+<span class="tk">end</span>
+
+<span class="tc">-- scripts/exec.lua</span>
+cards.medic_drone = <span class="tf">lib.on_mine</span>(<span class="ts">&quot;turn_end&quot;</span>, <span class="tk">function</span>(g, me)
+  <span class="tk">local</span> hurt = <span class="tf">list.filter</span>(<span class="tf"><a href="api.html#g.chars">g.chars</a></span>(<span class="tf"><a href="api.html#g.ctrl">g.ctrl</a></span>(me)), <span class="tk">function</span>(c) <span class="tk">return</span> <span class="tf"><a href="api.html#g.dmg">g.dmg</a></span>(c) &gt; <span class="tn">0</span> <span class="tk">end</span>)
+  <span class="tk">local</span> t = <span class="tf"><a href="api.html#g.pick">g.pick</a></span>(hurt)
+  <span class="tk">if</span> t <span class="tk">then</span>
+    <span class="tf"><a href="api.html#g.heal">g.heal</a></span>(me, t, <span class="tf"><a href="api.html#g.heal_amt">g.heal_amt</a></span>(me, <span class="tn">2</span>))
+  <span class="tk">end</span>
+<span class="tk">end</span>)</code></pre>
+<p><code><a href="api.html#g.pick">g.pick</a></code> делает случайный выбор генератором самой партии. В <code>scripts/lib.lua</code> Classic таких помощников больше (<code>lib.hit(target, n, spell)</code>, <code>lib.others_aura(atk, hp)</code>, <code>lib.draw_battlecry(n)</code>…).</p>
+<h3 id="7-chain-серия-приёмов-и-fork-выберите-одно">7. Chain (серия приёмов) и Fork (выберите одно)<a class="anchor" href="#7-chain-серия-приёмов-и-fork-выберите-одно" aria-hidden="true">#</a></h3>
+<pre class="code"><span class="code-lang">lua</span><code><span class="tc">-- Zero-Day: 1 урона существу и заморозить. Chain: 3 урона вместо 1.</span>
+<span class="tk">local</span> <span class="tk">function</span> zero_day(n)
+  <span class="tk">return</span> <span class="tk">function</span>(g, me, t)
+    <span class="tf"><a href="api.html#g.damage">g.damage</a></span>(me, t, <span class="tf"><a href="api.html#g.spell_dmg">g.spell_dmg</a></span>(me, n))
+    <span class="tf"><a href="api.html#g.freeze">g.freeze</a></span>(t)
+  <span class="tk">end</span>
+<span class="tk">end</span>
+cards.zero_day = { target = <span class="ts">&quot;minion&quot;</span>, spell = zero_day(<span class="tn">1</span>), combo = zero_day(<span class="tn">3</span>) }
+
+<span class="tc">-- Executive Decision: Fork — Hard Reset (Wipe существа) или Retention Bonus (+2 здоровья и Firewall).</span>
+cards.executive_decision = { choose_one = { <span class="ts">&quot;hard_reset&quot;</span>, <span class="ts">&quot;retention_bonus&quot;</span> } }
+cards.hard_reset = { target = <span class="ts">&quot;minion&quot;</span>, effect = <span class="tk">function</span>(g, me, t) <span class="tf"><a href="api.html#g.silence">g.silence</a></span>(t) <span class="tk">end</span> }
+cards.retention_bonus = {
+  target = <span class="ts">&quot;minion&quot;</span>,
+  effect = <span class="tk">function</span>(g, me, t)
+    <span class="tf"><a href="api.html#g.buff">g.buff</a></span>(t, <span class="tn">0</span>, <span class="tn">2</span>)
+    <span class="tf"><a href="api.html#g.give_tag">g.give_tag</a></span>(t, <span class="ts">&quot;GUARD&quot;</span>)
+  <span class="tk">end</span>,
+}</code></pre>
+<p>Два варианта — отдельные карты в <code>cards.json</code> (не коллекционные), со своими текстами в локализациях.</p>
+<h2 id="отладка">Отладка<a class="anchor" href="#отладка" aria-hidden="true">#</a></h2>
+<ul><li><b>Пак не загружается.</b> Движок называет файл и строку: <code>scripts/moon.lua:3: assignment to undeclared global &#x27;foo&#x27; (declare it with &#x27;local&#x27;)</code>. Неизвестные глобальные имена, неизвестные хуки и скрипты, которые никуда не ведут, ловятся здесь, до того как сыграна хоть одна карта. Это сообщение покажут и <code>tools/pack_try.gd</code>, и <i>Добавить файл игры</i> в самой игре.</li><li><b>Карта падает в партии.</b> Партия заканчивается ничьей с ошибкой и стеком вызовов: <code>scripts/sun.lua:16: attempt to call a nil value (field &#x27;damge&#x27;) (scripts/sun.lua:16: in function &#x27;battlecry&#x27;)</code>.</li><li><b>Соберите позицию.</b> <i>Настройки → Инструменты отладки → Сцена</i> (при активной вашей игре): положите мышью любые карты в руку, на стол, в колоду, в секреты и в слот оружия каждого игрока, задайте ману и здоровье и сыграйте против бота или за обе стороны. Сцена — это ещё и обычный JSON (кнопка <i>JSON</i>): скопируйте, поменяйте, примените снова.</li><li><b>Частые ошибки:</b> <code>0</code> — истина (<code>if g.room(p) then</code> верно всегда; пишите <code><a href="api.html#g.room">g.room(p) &gt; 0</a></code>); позиции на столе считаются с нуля, а массивы — с единицы; поле, которого нет в событии, — <code>nil</code> (<code>ev.target &gt;= 0</code> падает на <code>nil</code>); <code>until</code>, <code>end</code>, <code>and</code> — ключевые слова (<code>{[&quot;until&quot;] = &quot;use&quot;}</code>); <code>/</code> нет.</li></ul>
+<p>Ещё о проверке: <a href="testing.html">Проверка и тесты</a>. Язык во всех подробностях (экранирование, <code>tostring</code>, каждая функция библиотеки, подсчёт шагов): <a href="../ref/lua.html">The Lua subset</a>.</p>
+<p class="src"><a href="https://github.com/pycz2/classichs/blob/main/site/dev/ru/lua.md">Исходник страницы</a></p>
+  </main>
+  <aside class="toc"><p class="side-h">На этой странице</p><ul><li class="l2"><a href="#файл-скрипта">Файл скрипта</a></li><li class="l2"><a href="#язык">Язык</a></li><li class="l3"><a href="#значения-и-типы">Значения и типы</a></li><li class="l3"><a href="#переменные-и-видимость">Переменные и видимость</a></li><li class="l3"><a href="#операторы-языка">Операторы языка</a></li><li class="l3"><a href="#операции">Операции</a></li><li class="l3"><a href="#функции-и-таблицы">Функции и таблицы</a></li><li class="l3"><a href="#стандартная-библиотека">Стандартная библиотека</a></li><li class="l3"><a href="#чего-нет">Чего нет</a></li><li class="l3"><a href="#ограничения">Ограничения</a></li><li class="l2"><a href="#как-работает-скрипт-карты">Как работает скрипт карты</a></li><li class="l2"><a href="#разобранные-примеры">Разобранные примеры</a></li><li class="l3"><a href="#1-простое-существо-без-скрипта">1. Простое существо: без скрипта</a></li><li class="l3"><a href="#2-боевой-клич-с-целью">2. Боевой клич с целью</a></li><li class="l3"><a href="#3-аура">3. Аура</a></li><li class="l3"><a href="#4-предсмертный-хрип-который-призывает">4. Предсмертный хрип, который призывает</a></li><li class="l3"><a href="#5-секрет">5. Секрет</a></li><li class="l3"><a href="#6-хук-на-событие-с-помощником-из-liblua">6. Хук на событие с помощником из lib.lua</a></li><li class="l3"><a href="#7-chain-серия-приёмов-и-fork-выберите-одно">7. Chain (серия приёмов) и Fork (выберите одно)</a></li><li class="l2"><a href="#отладка">Отладка</a></li></ul></aside>
+</div>
+<footer><p>Classic Heroes Showdown · MIT · <a href="https://github.com/pycz2/classichs">GitHub</a></p></footer>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make card games for Classic HS — Classic HS for developers</title>
+<meta name="description" content="Classic Heroes Showdown: how to make your own card game — the game pack format, Lua card scripts, the engine API, testing.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@500;700;800&family=Exo+2:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../dev.css">
+</head>
+<body class="docs">
+<header class="top">
+  <a class="brand" href="../../">Classic HS<span class="brand-sub">dev</span></a>
+  <nav>
+    <a href="../../">Home</a>
+    <a href="../../play/" class="nav-play">Play</a>
+    <a href="https://github.com/pycz2/classichs" target="_blank" rel="noopener">GitHub</a>
+    <a class="lang-link" href="../ru/index.html" hreflang="ru">Русский</a>
+  </nav>
+</header>
+<div class="docs-wrap">
+  <aside class="side">
+    <p class="side-h">Guides</p><ul><li><a href="../en/index.html" aria-current=page>Overview</a></li><li><a href="../en/packs.html">Make your own game</a></li><li><a href="../en/lua.html">Card scripts in Lua</a></li><li><a href="../en/api.html">Engine API (g.*)</a></li><li><a href="../en/testing.html">Testing and validating</a></li><li><a href="../en/architecture.html">Architecture</a></li></ul>
+    <p class="side-h">Reference (English)</p><ul><li><a href="../ref/format.html">Pack format</a></li><li><a href="../ref/rules.html">rules.json</a></li><li><a href="../ref/cards.html">cards.json</a></li><li><a href="../ref/fx.html">Visual effects</a></li><li><a href="../ref/lua.html">The Lua subset</a></li><li><a href="../ref/api.html">Hooks and g.* (source)</a></li></ul>
+  </aside>
+  <main class="doc">
+  <details class="side-m"><summary>Menu</summary>
+    <p class="side-h">Guides</p><ul><li><a href="../en/index.html" aria-current=page>Overview</a></li><li><a href="../en/packs.html">Make your own game</a></li><li><a href="../en/lua.html">Card scripts in Lua</a></li><li><a href="../en/api.html">Engine API (g.*)</a></li><li><a href="../en/testing.html">Testing and validating</a></li><li><a href="../en/architecture.html">Architecture</a></li></ul>
+    <p class="side-h">Reference (English)</p><ul><li><a href="../ref/format.html">Pack format</a></li><li><a href="../ref/rules.html">rules.json</a></li><li><a href="../ref/cards.html">cards.json</a></li><li><a href="../ref/fx.html">Visual effects</a></li><li><a href="../ref/lua.html">The Lua subset</a></li><li><a href="../ref/api.html">Hooks and g.* (source)</a></li></ul>
+  </details>
+<h1 id="make-card-games-for-classic-hs">Make card games for Classic HS</h1>
+<p>Classic HS is an engine for card games of the Hearthstone kind: two champions, mana that grows every turn, minions on a board, spells, weapons, traps. The engine knows only these general rules. A <b>game</b> — its cards, what each card does, its champions, names, art, sounds, music, look and ranks — comes in one file, a <b>game pack</b> (<code>.cardpack</code>). Classic 2014 is one pack; <b>Neonfall</b>, a rainy cyberpunk game with three champions and 60 cards, is another. Yours can be the next.</p>
+<aside class="note"><p>A pack runs everywhere Classic HS runs: in the browser, on Windows, macOS, Linux and Android, and on a game server. The same pack with the same moves gives the same game on every one of them.</p></aside>
+<h2 id="what-you-need">What you need<a class="anchor" href="#what-you-need" aria-hidden="true">#</a></h2>
+<ul><li>A text editor. A pack is JSON files and small Lua scripts; no compiler, no game engine to install.</li><li>Python 3 for <code>tools/pack.py</code> (it builds and checks a pack; standard library only). Get it with the source code: <code>git clone https://github.com/pycz2/classichs</code>.</li><li>Classic HS itself to play your game: the browser version on this site is enough. For the quick command-line test run (<code>tools/pack_try.gd</code>) you also need Godot 4.7 and the rules engine (see <a href="testing.html">Testing</a>).</li></ul>
+<h2 id="the-path-from-an-idea-to-a-game">The path from an idea to a game<a class="anchor" href="#the-path-from-an-idea-to-a-game" aria-hidden="true">#</a></h2>
+<ol><li><b>Write the rules and cards.</b> <code>rules.json</code> says how big a deck is, how many cards a hand holds, what the champions are; <code>cards.json</code> lists every card with its numbers. A card without special text needs nothing else. → <a href="packs.html">Make your own game</a></li><li><b>Give the special cards a script.</b> "When played, deal 1 damage", "your other minions have +1 Attack", "when this dies, summon a Cub" — each is a few lines of Lua against the engine's <code>g</code> library. → <a href="lua.html">Card scripts in Lua</a>, <a href="api.html">Engine API</a></li><li><b>Name everything in every language.</b> Card names and texts, your own names for the mechanics (Neonfall calls Taunt <i>Firewall</i> and Battlecry <i>Boot</i>), classes, decks.</li><li><b>Build and check.</b> <code>tools/pack.py build</code> makes the <code>.cardpack</code>, refuses broken references and writes the hashes; <code>tools/pack_try.gd</code> plays your game bot against bot and shows any script error with its file and line. → <a href="testing.html">Testing and validating</a></li><li><b>Play it.</b> In the game: <i>Games → Import a game file</i>. Share the file with friends, or upload it to a game server.</li></ol>
+<h2 id="start-from-an-example">Start from an example<a class="anchor" href="#start-from-an-example" aria-hidden="true">#</a></h2>
+<div class="table"><table><thead><tr><th>Example</th><th>What it shows</th></tr></thead><tbody><tr><td><b>Tiny Duel</b> (on <a href="packs.html#a-whole-pack-in-ten-files">Make your own game</a>)</td><td>The smallest real game: two champions, eight cards, two decks, three script files. Copy it and grow it.</td></tr><tr><td><b>Neonfall</b> (<code>packs/neon</code> in the source)</td><td>A complete original game: 73 cards, three starter decks, eight languages, its own art, sounds, synthwave music and interface theme (<code>ui/theme.json</code>). Every script example on these pages is one of its cards.</td></tr><tr><td><b>Classic 2014</b> (<code>packs/classic</code>)</td><td>534 cards, every Hearthstone Classic mechanic in Lua, six tutorial missions, the 2014 ranked ladder. Its <code>recipe.json</code> builds the pack from data kept elsewhere in the repository.</td></tr></tbody></table></div>
+<h2 id="these-pages">These pages<a class="anchor" href="#these-pages" aria-hidden="true">#</a></h2>
+<div class="table"><table><thead><tr><th>Page</th><th></th></tr></thead><tbody><tr><td><a href="packs.html">Make your own game</a></td><td>What a pack is, every file and its fields, building it, loading it into the game or a server, versions and hashes, limits, the tutorial.</td></tr><tr><td><a href="lua.html">Card scripts in Lua</a></td><td>The language as the engine runs it (and what it leaves out), how and when each hook runs, worked examples from a vanilla minion to a trap, debugging.</td></tr><tr><td><a href="api.html">Engine API (g.*)</a></td><td>Every hook and every <code>g.*</code> function with its arguments, made from the engine's own source, so it is never out of date.</td></tr><tr><td><a href="testing.html">Testing and validating</a></td><td>What <code>pack.py check</code> reports, a quick bot-vs-bot run, the Debug tools in the game, the server's check of an uploaded pack.</td></tr><tr><td><a href="architecture.html">Architecture</a></td><td>How the whole of Classic HS is built: an interactive block diagram of the system, every block opened up (its parts, data and protocols), and step-by-step flows — a card is played, a server game, a bot decides, a pack loads, code play, the web update, deploy — each step linked to its line of code.</td></tr><tr><td>Reference (English)</td><td>The format as the engine and tools implement it, section by section: the pack format, <code>rules.json</code>, <code>cards.json</code>, visual effects, the Lua subset, hooks and <code>g</code>.</td></tr></tbody></table></div>
+<p class="src"><a href="https://github.com/pycz2/classichs/blob/main/site/dev/en/index.md">Source of this page</a></p>
+  </main>
+  <aside class="toc"><p class="side-h">On this page</p><ul><li class="l2"><a href="#what-you-need">What you need</a></li><li class="l2"><a href="#the-path-from-an-idea-to-a-game">The path from an idea to a game</a></li><li class="l2"><a href="#start-from-an-example">Start from an example</a></li><li class="l2"><a href="#these-pages">These pages</a></li></ul></aside>
+</div>
+<footer><p>Classic Heroes Showdown · MIT · <a href="https://github.com/pycz2/classichs">GitHub</a></p></footer>
+</body>
+</html>
