@@ -67,8 +67,7 @@ for p in $WANT; do
 	web)
 		rm -rf "$OUT/web"
 		export_preset "Web" "$OUT/web/index.html"
-		cp web/rules.js rules/bin/rules.wasm "$OUT/web/"  # the rules engine, loaded by index.html (html/head_include)
-		perl -pi -e 's/const CACHEABLE_FILES = \[/const CACHEABLE_FILES = ["rules.js","rules.wasm",/' "$OUT/web/index.service.worker.js"  # offline play (PWA) keeps the engine too
+		tools/web_finish.sh "$OUT/web"  # the rules engine, version.json, always the newest build
 		(cd "$OUT/web" && zip -qr "../ClassicHS-$VER-web.zip" .)
 		;;
 	windows)
