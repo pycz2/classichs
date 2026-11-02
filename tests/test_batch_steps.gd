@@ -65,7 +65,7 @@ func test_a_battlecry_lands_then_aims_then_hits() -> void:
 	var yeti: int = v.g.players[1].board[0].id
 	var item := _batch(v, ARCHER, yeti)
 	var steps := MatchView.steps(item.events)
-	eq(_kinds(steps), ["play", "summon", "aim", "hit"], "the card, the minion on the board, its arrow, the hit")
+	eq(_kinds(steps), ["play", "summon", "aim", "hit", "settle"], "the card, the minion on the board, its arrow, the hit, then it settles")
 	var archer: int = item.events[0].entity
 	eq([steps[2].src, steps[2].to], [archer, yeti], "the arrow goes from the Archer to the Yeti")
 	v._begin_batch(item)
@@ -143,3 +143,18 @@ func test_mulligan_cards_go_down_in_the_order_shown() -> void:
 	check(v._overlay == null, "the mulligan screen is closed")
 	check(hand.all(func(id): return v._views.has(id)), "all in the hand")
 	v.free()
+
+
+## A card drawn by a card's effect (Novice Engineer) comes from the deck, not from the minion; a
+## minion without a Battlecry effect has no settle step.
+func test_a_drawn_card_comes_from_the_deck() -> void:
+	var evs := [{"type": "play", "player": 0, "entity": 5, "kind": "minion", "target": -1},
+		{"type": "summon", "player": 0, "entity": 5},
+		{"type": "draw", "player": 0, "entity": 9, "by_id": 5},
+		{"type": "after_summon", "entity": 5}]
+	eq(MatchView.steps(evs).map(func(s): return s.k), ["play", "summon", "card", "settle"])
+	var src := FileAccess.get_file_as_string("res://ui/match_view.gd")
+	check(src.contains('ev.type == "add_to_hand" and _views.has(ev.get("by_id", -1))'), "only a made card comes from the card that made it")
+	var plain := [{"type": "play", "player": 0, "entity": 5, "kind": "minion", "target": -1},
+		{"type": "summon", "player": 0, "entity": 5}, {"type": "after_summon", "entity": 5}]
+	eq(MatchView.steps(plain).map(func(s): return s.k), ["play", "summon"])

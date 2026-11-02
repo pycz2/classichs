@@ -1536,6 +1536,11 @@ static func steps(events: Array) -> Array:
 				k = "equip"
 			"secret_revealed":
 				k = "secret"
+			"after_summon":
+				# a played minion whose Battlecry did something: it settles on the board after it
+				var played: bool = events.slice(0, i).any(func(e): return e.type == "play" and e.entity == ev.get("entity", -2))
+				var did: bool = events.slice(0, i).any(func(e): return e.get("by_id", -1) == ev.get("entity", -2))
+				k = "settle" if played and did else ""
 			"after_spell":
 				k = "spell_done"
 			"fatigue", "burn":
@@ -1632,16 +1637,41 @@ func _play_step(st: Dictionary) -> void:
 					TableFx.spawn(_fx, "destroy", at[e.entity][0])
 			await _wait(0.4)
 		"summon":
+			# the played minion: first the board makes room, then the big card flies into its slot and
+			# becomes the minion (its Battlecry comes next; "settle" at the end)
+			var landing := {}  # entity id -> the big card that lands there
 			for e in st.evs:
 				var cv: CardView = _flying.get(e.entity)
-				if cv:  # the played minion goes from the big card to its place
-					_moved[e.entity] = cv.position + cv.size * cv.scale / 2.0
+				if cv:
+					landing[e.entity] = cv
 					_flying.erase(e.entity)
-					cv.queue_free()
 				elif _landing.has(e.entity):
 					_moved[e.entity] = _landing[e.entity]
 			_step_apply(st)
 			_step_sounds(st)
+			if not landing.is_empty():
+				for id in landing:
+					if _views.has(id):
+						_views[id].modulate.a = 0.0  # (it grows in its slot unseen while the others move aside)
+				await _wait(0.28)
+				for id in landing:
+					var cv: CardView = landing[id]
+					var v = _views.get(id)
+					if v == null:
+						cv.queue_free()
+						continue
+					var to: Vector2 = _home_of(id) - cv.size / 2.0
+					var tw := cv.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+					tw.tween_property(cv, "position", to, Anim.d(0.22))
+					tw.parallel().tween_property(cv, "scale", Vector2(0.55, 0.55), Anim.d(0.22))
+				await _wait(0.22)
+				for id in landing:
+					landing[id].queue_free()
+					var v = _views.get(id)
+					if v:
+						v.modulate.a = 1.0
+						v.scale = Vector2(1.12, 1.12)
+						v.create_tween().tween_property(v, "scale", Vector2.ONE, Anim.d(0.15))
 			for e in st.evs:
 				if not _views.has(e.entity):
 					continue
@@ -1651,6 +1681,14 @@ func _play_step(st: Dictionary) -> void:
 				elif on_play != "none" and _stage_events.slice(st.at + 1).any(func(x): return x.get("by_id", -1) == e.entity):
 					TableFx.spawn(_fx, "battlecry", _home_of(e.entity))
 			await _wait(0.3)
+		"settle":
+			var v = _views.get(ev.get("entity", -1))
+			if v:
+				var tw: Tween = v.create_tween()
+				tw.tween_property(v, "scale", Vector2(1.08, 1.08), Anim.d(0.1))
+				tw.tween_property(v, "scale", Vector2.ONE, Anim.d(0.14)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+				TableFx.spawn(_fx, "smoke", _home_of(ev.entity) + Vector2(0, 40))  # (a little dust at its feet)
+			await _wait(0.25)
 		"bounce":
 			if _views.has(ev.entity):
 				TableFx.spawn(_fx, "whoosh", _center_of(ev.entity))
@@ -1663,8 +1701,9 @@ func _play_step(st: Dictionary) -> void:
 					await _mulligan_coin(ev)  # beside the cards still shown
 				else:
 					await _coin_in(ev)
-			elif _views.has(ev.get("by_id", -1)) and not _views.has(ev.entity):
+			elif ev.type == "add_to_hand" and _views.has(ev.get("by_id", -1)) and not _views.has(ev.entity):
 				_moved[ev.entity] = _center_of(ev.by_id)  # made by a card on the table (Antonidas): it comes from there
+			# (a card drawn, also by a card's effect, comes from its deck)
 			_step_apply(st)
 			_step_sounds(st)
 			await _wait(0.22)
