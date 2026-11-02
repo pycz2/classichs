@@ -175,7 +175,7 @@ nav .nav-play { color: var(--magenta); }
 /* features: dark glass with a thin rim, lit where the mouse is */
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
 #features .grid, #match .grid, #dev .grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }  /* 9, 6 and 3 cards: rows of three */
-#makers .grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+#makers .grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }  /* five doc cards in a row */
 .feature {
   --mx: 50%; --my: 50%;
   background: radial-gradient(300px circle at var(--mx) var(--my), rgba(62, 232, 255, .12), transparent 60%), var(--panel);

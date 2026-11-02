@@ -122,6 +122,8 @@
     "k3.d": "Every hook and every g.* function with its arguments, made from the engine's own source code.",
     "k4.t": "Testing",
     "k4.d": "What pack.py check reports, a bot-vs-bot run in one command, the Debug tools inside the game.",
+    "k5.t": "Architecture",
+    "k5.d": "How the whole game is built: one block diagram, then every part opened up — the client, the rules engine and its Lua, the bots, code play, the server, the site and deploy — with step-by-step flows linked to the code.",
     "makers.open": "Open the developer docs",
     "makers.lang": "The guides are in English and Russian.",
     "shot.games.tab": "Games",

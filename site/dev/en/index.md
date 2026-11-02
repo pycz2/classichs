@@ -34,4 +34,5 @@
 | [Card scripts in Lua](lua.html) | The language as the engine runs it (and what it leaves out), how and when each hook runs, worked examples from a vanilla minion to a trap, debugging. |
 | [Engine API (g.*)](api.html) | Every hook and every `g.*` function with its arguments, made from the engine's own source, so it is never out of date. |
 | [Testing and validating](testing.html) | What `pack.py check` reports, a quick bot-vs-bot run, the Debug tools in the game, the server's check of an uploaded pack. |
+| [Architecture](architecture.html) | How the whole of {name} is built: an interactive block diagram of the system, every block opened up (its parts, data and protocols), and step-by-step flows — a card is played, a server game, a bot decides, a pack loads, code play, the web update, deploy — each step linked to its line of code. |
 | Reference (English) | The format as the engine and tools implement it, section by section: the pack format, `rules.json`, `cards.json`, visual effects, the Lua subset, hooks and `g`. |
