@@ -43,6 +43,7 @@
       }
     },
     "hints": {"type": "object", "propertyNames": {"$ref": "#/$defs/key"}, "additionalProperties": {"$ref": "#/$defs/long"}},
+    "tutorial": {"type": "object", "propertyNames": {"type": "string", "pattern": "^[a-z0-9_.]{1,64}$"}, "additionalProperties": {"$ref": "#/$defs/long"}},
     "voice": {
       "type": "object",
       "propertyNames": {"$ref": "#/$defs/id"},
