@@ -34,8 +34,25 @@ static func _pack_font(kind: String, p: Pack = null) -> Font:
 		if not bytes.is_empty():
 			f = FontFile.new()
 			f.data = bytes
+			# letters the pack's font lacks (Cinzel Decorative has no Cyrillic) come from the client's
+			f.fallbacks = [load("res://fonts/Alegreya.ttf")]
 		_pack_fonts[key] = f
 	return _pack_fonts[key]
+
+
+## Whether the styling pack's own title font has every letter of `text` (without the client's
+## fallback font), true when the pack has none.
+static func title_covers(text: String) -> bool:
+	var f := _pack_font("title")
+	if f == null:
+		return true
+	var own := FontFile.new()
+	own.data = (f as FontFile).data
+	for i in text.length():
+		var c := text.unicode_at(i)
+		if c > 32 and not own.has_char(c):
+			return false
+	return true
 
 
 ## The interface font (a weight for buttons, lining figures): the theme's body font or Alegreya.

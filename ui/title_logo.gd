@@ -23,6 +23,10 @@ func _ready() -> void:
 		m.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 		material = m
 		return
+	# a title font without some of the name's letters (Cinzel Decorative has no Cyrillic) shows them
+	# in the client's font: capitals then, as the title font's own letters look
+	if not Fonts.title_covers(text):
+		text = text.to_upper()
 	var crest = Palette.UI.menu.get("crest", "")
 	_crest = Packs.look().texture(crest) if crest is String and crest != "" and Packs.look() and Packs.look().has(crest) else null
 	if _crest == null:
