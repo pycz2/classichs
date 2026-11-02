@@ -177,7 +177,7 @@ func test_hints_wait_their_turn() -> void:
 	var v := _view(4)
 	eq(v._hint.text, Missions.get_mission(4).intro, "intro first")
 	v._process(8.0)  # the intro has been read
-	var tooltip := str(TranslationServer.translate(Tutorial.HINTS.tooltip))
+	var tooltip := Packs.active().text(["hints", "tooltip"])
 	eq(v._hint.text, tooltip, "next hint after the intro")
 	v.click_entity(v.g.players[0].hand[0].id)  # Goldshire Footman
 	v.click_board(0)

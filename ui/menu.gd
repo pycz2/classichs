@@ -48,9 +48,9 @@ func _ready() -> void:
 	shade.color = Color(0.08, 0.05, 0.03, 0.35) if Palette.CLASSIC else Palette.tc("menu.shade")
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(shade)
-	match str(Palette.UI.menu.particles):
-		"embers": add_child(_embers())
-		"rain": add_child(_rain())
+	var fx := SceneFx.make(str(Palette.UI.menu.particles))
+	if fx:
+		add_child(fx)
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
@@ -113,7 +113,7 @@ func _show_game() -> void:
 	items += [["Collection", collection, true], ["Training", training, ok]]
 	if not through_server:  # WebRTC: the browser, or the webrtc-native plugin
 		items.append(["Code play", code_play, ok and WebRtcTransport.available()])
-	if pack.files().any(func(f): return f.begins_with("missions/")):
+	if pack.has_tutorial():
 		items.append(["Tutorial", tutorial, ok])
 	_fill(items + [["Settings", settings, true], ["Leave the game", leave, true]])
 	var codes := _box.find_child("CodePlay", false, false) as Button
@@ -159,59 +159,3 @@ func _animate_button(b: Button, i: int) -> void:
 	tw.tween_property(b, "scale", Vector2.ONE, Anim.d(0.35)).set_delay(Anim.d(0.08 * i)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	b.mouse_entered.connect(func(): b.create_tween().tween_property(b, "scale", Vector2(1.06, 1.06), 0.12))
 	b.mouse_exited.connect(func(): b.create_tween().tween_property(b, "scale", Vector2.ONE, 0.12))
-
-
-## Embers drifting up from the bottom of the screen.
-func _embers() -> CPUParticles2D:
-	var p := CPUParticles2D.new()
-	p.position = Vector2(640, 740)
-	p.amount = 46
-	p.lifetime = 9.0
-	p.preprocess = 9.0
-	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-	p.emission_rect_extents = Vector2(680, 10)
-	p.direction = Vector2(0, -1)
-	p.spread = 18.0
-	p.gravity = Vector2(0, -6)
-	p.initial_velocity_min = 30.0
-	p.initial_velocity_max = 70.0
-	p.scale_amount_min = 1.5
-	p.scale_amount_max = 3.5
-	var ramp := Gradient.new()
-	ramp.set_color(0, Color(1.0, 0.7, 0.3, 0.9))
-	ramp.set_color(1, Color(1.0, 0.45, 0.1, 0.0))
-	p.color_ramp = ramp
-	p.emitting = not Anim.instant
-	return p
-
-
-## Thin streaks of rain in the theme's accent colours, falling at a slant (a theme's "rain").
-func _rain() -> CPUParticles2D:
-	var p := CPUParticles2D.new()
-	p.position = Vector2(700, -40)
-	p.amount = 160
-	p.lifetime = 1.6
-	p.preprocess = 2.0
-	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-	p.emission_rect_extents = Vector2(760, 10)
-	p.direction = Vector2(-0.18, 1)
-	p.spread = 2.0
-	p.gravity = Vector2.ZERO
-	p.initial_velocity_min = 520.0
-	p.initial_velocity_max = 760.0
-	p.particle_flag_align_y = true
-	var img := Image.create(2, 40, false, Image.FORMAT_RGBA8)
-	for y in 40:
-		for x in 2:
-			img.set_pixel(x, y, Color(1, 1, 1, float(y) / 39.0))
-	p.texture = ImageTexture.create_from_image(img)
-	var ramp := Gradient.new()
-	ramp.set_color(0, Color(Palette.ATTACK, 0.0))
-	ramp.add_point(0.15, Color(Palette.ATTACK, 0.8))
-	ramp.add_point(0.6, Color(Palette.tc("button_border", Palette.ATTACK), 0.7))
-	ramp.set_color(ramp.get_point_count() - 1, Color(Palette.ATTACK, 0.0))
-	p.color_ramp = ramp
-	p.scale_amount_min = 0.7
-	p.scale_amount_max = 1.4
-	p.emitting = not Anim.instant
-	return p

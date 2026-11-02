@@ -162,7 +162,8 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.is_minion(e)`, `g.is_champion(e)`, `g.is_weapon(e)`, `g.is_spell(e)` | |
 | `g.turn()`, `g.current()` | The turn number, whose turn it is. |
 | `g.mana(p)`, `g.max_mana(p)` | Mana now, crystals. |
-| `g.cards_played(p)`, `g.minions_played(p)` | This turn (Combo: `g.combo(e)` = a card was played before). |
+| `g.cards_played(p)`, `g.minions_played(p)` | Cards and minions `p` played this turn. |
+| `g.combo(e)` | Combo is active for `e`: its controller played another card before it this turn. |
 | `g.room(p)` | Free board slots (`g.room(p) > 0`: room for one; note `0` is true in Lua). |
 | `g.board_pos(m)` | Its 0-based position, or `nil`. |
 | `g.died_pos(m)` | Where a dead minion stood (0-based), or `-1`. |

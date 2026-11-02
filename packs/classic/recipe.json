@@ -7,7 +7,7 @@
      "rename": {"HERO": "CHAMPION", "HERO_POWER": "POWER"}},
     {"do": "keywords", "from": "data/keywords.json"},
     {"do": "voice", "from": "data/voice_lines.json"},
-    {"do": "translate", "from": "data/i18n", "sections": ["rarities", "ranks", "missions", "hints"]},
+    {"do": "translate", "from": "data/i18n", "sections": ["rarities", "ranks"]},
     {"do": "rank_names"},
     {"do": "copy", "from": "data/card_layout", "to": "layout", "files": ["*.json"]},
     {"do": "copy", "from": "art/cards", "to": "art/generated", "files": ["*.jpg"]},

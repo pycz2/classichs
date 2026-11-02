@@ -1,7 +1,8 @@
 class_name TutorialIntro
 extends Control
-## What a tutorial mission teaches, shown before it starts: a few panels of real
-## cards with notes and arrows pointing at their parts. Next / Play, Skip, Back.
+## What a tutorial mission teaches, shown before it starts: the pages of the active pack's tutorial
+## (cards, champions, mana, pictures, notes with arrows pointing at a card's parts, attack arrows,
+## big numbers, a scene effect). Next / Play, Skip, Back.
 
 signal done
 signal back
@@ -35,7 +36,7 @@ func _ready() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	Palette.backdrop(self)
-	var head := Palette.label("%d. %s" % [number, CardText.name(Missions.get_mission(number).boss)], 22, Palette.TEXT)
+	var head := Palette.label("%d. %s" % [Missions.ids().find(number) + 1, CardText.name(Missions.get_mission(number).boss)], 22, Palette.TEXT)
 	head.position = Vector2(40, 22)
 	add_child(head)
 	_title = Palette.label("", 38, Palette.ATTACK)
@@ -74,7 +75,10 @@ func _ready() -> void:
 	_count.size = Vector2(200, 30)
 	add_child(_count)
 	_panels = panels()
-	_show(0)
+	if _panels.is_empty():
+		done.emit.call_deferred()  # a mission without intro pages starts at once
+	else:
+		_show(0)
 
 
 ## The next panel, or done after the last one.
@@ -101,12 +105,24 @@ func _show(i: int) -> void:
 			cv.position = it.at
 			cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_stage.add_child(cv)
+		elif it.has("picture"):
+			var pic := TextureRect.new()
+			pic.texture = Packs.active().texture(it.picture)
+			pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			pic.position = it.at
+			pic.size = it.size
+			pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			_stage.add_child(pic)
 		elif it.has("mana"):
 			var mb := ManaBar.new()
 			mb.set_values(it.mana, it.mana, 0)
 			mb.position = it.at
 			mb.scale = Vector2(1.6, 1.6)
 			_stage.add_child(mb)
+	var fx := SceneFx.make(p.get("effect"))
+	if fx:
+		_stage.add_child(fx)
 	_marks = Control.new()
 	_marks.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_marks.size = Vector2(1280, 720)
@@ -186,130 +202,53 @@ static func part(at: Vector2, k: float, p: String, from := Vector2.ZERO, back :=
 	return pt + (from - pt).normalized() * back if back > 0.0 else pt
 
 
-static func _card(id: String, at: Vector2, k: float) -> Dictionary:
-	return {"card": id, "at": at, "k": k}
-
-
-## A note in box; with `to`, an arrow from the box's side to that point.
-static func _note(text: String, box: Rect2, to: Variant = null) -> Dictionary:
-	return {"note": text, "box": box, "to": to}
-
-
-## A note pointing at part p of the card at `at` (scale k), the arrow stopping short of gems.
-static func _note_at(text: String, box: Rect2, at: Vector2, k: float, p: String) -> Dictionary:
-	var gem := p in ["cost", "attack", "health"]
-	return _note(text, box, part(at, k, p, box.get_center(), 18.0 * k if gem else 0.0))
-
-
-## The panels of this mission: {title, text, items}.
+## The panels of this mission from the active pack's tutorial.json (docs/packs/format.md §12), in the
+## form the screen draws: {title, text, effect, items} with points, boxes and colours as Godot values.
 func panels() -> Array:
-	var c := Vector2(520, 150)  # one big card in the middle (scale 2)
-	match number:
-		1:
-			var yeti := Vector2(250, 160)
-			var gnoll := Vector2(820, 160)
-			return [
-				{"title": tr("A minion card"), "text": tr("Every card costs Mana to play. Minions also have Attack and Health."),
-					"items": [_card("VAN_CS2_172", c, 2.0),
-						_note_at(tr("Mana cost: what it takes to play the card"), Rect2(130, 136, 320, 100), c, 2.0, "cost"),
-						_note_at(tr("Attack: the damage it deals"), Rect2(130, 404, 320, 100), c, 2.0, "attack"),
-						_note_at(tr("Health: at 0 the minion dies"), Rect2(830, 404, 320, 100), c, 2.0, "health")]},
-				{"title": tr("Combat"), "text": tr("When minions fight, each deals its Attack as damage to the other. A minion with 0 Health dies."),
-					"items": [_card("VAN_CS2_182", yeti, 1.8), _card("TU4a_002", gnoll, 1.8),
-						{"attack": [yeti + Vector2(232, 150), gnoll + Vector2(-16, 150)]},
-						{"big": "-2", "at": part(yeti, 1.8, "health") + Vector2(0, -70), "color": Color("ff6b6b")},
-						{"big": "-4", "at": part(gnoll, 1.8, "health") + Vector2(0, -70), "color": Color("ff6b6b")},
-						_note(tr("Survives with 3 Health"), Rect2(yeti.x - 20, 480, 256, 50)),
-						_note(tr("Dies"), Rect2(gnoll.x - 20, 480, 256, 50))]},
-				{"title": tr("Heroes"), "text": tr("Your hero has 30 Health. Attack the enemy hero with your minions: bring it to 0 Health to win!"),
-					"items": [{"hero": Missions.JAINA, "at": Vector2(260, 300), "health": 30},
-						{"hero": "TU4a_001", "at": Vector2(1020, 300), "health": 10},
-						_card("VAN_CS2_168", Vector2(556, 200), 1.4),
-						{"attack": [Vector2(740, 320), Vector2(912, 320)]},
-						_note(tr("You"), Rect2(130, 430, 260, 50)),
-						_note(tr("The enemy hero"), Rect2(890, 430, 260, 50))]},
-			]
-		2:
-			var raider := Vector2(780, 190)
-			var raptor := Vector2(980, 190)
-			var items: Array = []
-			for t in 4:
-				items.append(_note(tr("Turn %d") % (t + 1), Rect2(60, 170 + t * 80, 150, 50)))
-				items.append({"mana": t + 1, "at": Vector2(230, 160 + t * 80)})
-			items.append_array([_card("VAN_CS2_168", raider, 1.3), _card("VAN_CS2_172", raptor, 1.3),
-				_note(tr("Costs 1"), Rect2(raider.x - 20, 430, 200, 40)), _note(tr("Costs 2"), Rect2(raptor.x - 20, 430, 200, 40))])
-			return [
-				{"title": tr("Mana"), "text": tr("You get one more Mana Crystal every turn, up to 10. Playing a card spends its cost. Try to spend all your Mana every turn!"),
-					"items": items},
-				{"title": tr("Spells"), "text": tr("A spell does its effect once and is gone. Millhouse loves spells! A Frozen character misses its next attack."),
-					"items": [_card("VAN_CS2_024", c, 2.0),
-						_note_at(tr("Mana cost"), Rect2(130, 136, 320, 100), c, 2.0, "cost"),
-						_note_at(tr("What the spell does"), Rect2(830, 356, 290, 100), c, 2.0, "text_r"),
-						_note(tr("No Attack, no Health"), Rect2(500, 494, 280, 40))]},
-			]
-		3:
-			var a := Vector2(360, 150)
-			var b := Vector2(680, 150)
-			return [
-				{"title": tr("Battlecry"), "text": tr("A Battlecry happens once, when you play the card from your hand."),
-					"items": [_card("VAN_CS2_189", a, 2.0), _card("VAN_EX1_011", b, 2.0),
-						_note_at(tr("Battlecry: deals 1 damage when played"), Rect2(20, 346, 300, 120), a, 2.0, "text_l"),
-						_note_at(tr("Battlecry: restores Health when played"), Rect2(960, 346, 300, 120), b, 2.0, "text_r")]},
-				{"title": tr("Minions first"), "text": tr("While Cho has minions, he can't be attacked. Damage stays on a minion until it is healed, so finish them off!"),
-					"items": [_card("TU4f_006", a, 2.0), _card("TU4f_003", b, 2.0),
-						_note_at(tr("Cho hides behind his minions"), Rect2(20, 346, 300, 120), a, 2.0, "text_l"),
-						_note(tr("Kill them first"), Rect2(960, 346, 300, 120), part(b, 2.0, "text_r"))]},
-			]
-		4:
-			var monkey := Vector2(170, 130)
-			var foot := Vector2(560, 260)
-			var yeti := Vector2(360, 150)
-			var boar := Vector2(680, 150)
-			var barrel := Vector2(250, 150)
-			var gnome := Vector2(790, 150)
-			return [
-				{"title": tr("Taunt"), "text": tr("Enemies must attack a minion with Taunt before anything else. Put one in front of your hero!"),
-					"items": [_card("TU4f_007", monkey, 1.4), _card("VAN_CS1_042", foot, 1.4),
-						{"hero": Missions.JAINA, "at": Vector2(1050, 280), "health": 30},
-						{"attack": [monkey + Vector2(178, 170), foot + Vector2(-8, 80)]},
-						{"attack": [monkey + Vector2(178, 70), Vector2(950, 230)], "blocked": true},
-						_note_at(tr("Taunt: attack this one first"), Rect2(800, 420, 300, 70), foot, 1.4, "text_r")]},
-				{"title": tr("Charge"), "text": tr("A minion can't attack on the turn it is played. Minions with Charge can attack right away."),
-					"items": [_card("VAN_CS2_182", yeti, 2.0), _card("VAN_CS2_171", boar, 2.0),
-						{"big": "Zzz", "at": part(yeti, 2.0, "top") + Vector2(80, -10), "color": Color("a5d8ff")},
-						_note(tr("Played this turn: has to wait"), Rect2(20, 346, 300, 120), part(yeti, 2.0, "text_l")),
-						_note_at(tr("Charge: attacks at once"), Rect2(960, 346, 300, 120), boar, 2.0, "text_r")]},
-				{"title": tr("Deathrattle"), "text": tr("A Deathrattle happens when the minion dies. King Mukla's barrels hide surprises: break one to see what's inside!"),
-					"items": [_card("TU4c_003", barrel, 2.0), _card("TU4c_005", gnome, 2.0),
-						{"attack": [barrel + Vector2(256, 170), gnome + Vector2(-16, 170)]},
-						_note(tr("When it dies..."), Rect2(barrel.x - 10, 494, 260, 40)),
-						_note(tr("...out comes a gnome!"), Rect2(gnome.x - 10, 494, 260, 40))]},
-			]
-		5:
-			var fire := Vector2(300, 150)
-			var shot := Vector2(740, 150)
-			return [
-				{"title": tr("Hero Power"), "text": tr("Every hero has a Hero Power. It costs 2 Mana and can be used once each turn."),
-					"items": [_card(Missions.FIREBLAST, fire, 2.0), _card("TU4d_003", shot, 2.0),
-						_note(tr("Your Hero Power"), Rect2(fire.x - 10, 494, 260, 40)),
-						_note(tr("Hemet's Hero Power"), Rect2(shot.x - 10, 494, 260, 40)),
-						_note_at(tr("Mana cost"), Rect2(20, 120, 230, 80), fire, 2.0, "cost")]},
-				{"title": tr("Freeze"), "text": tr("A Frozen character misses its next attack. Freeze Hemet's hunters and kill them before they swarm you!"),
-					"items": [_card("VAN_CS2_033", c, 2.0),
-						_note_at(tr("Freezes whatever it damages"), Rect2(830, 356, 290, 100), c, 2.0, "text_r")]},
-			]
-		_:
-			var a := Vector2(170, 170)
-			var b := Vector2(550, 170)
-			var d := Vector2(930, 170)
-			return [
-				{"title": tr("Weapons"), "text": tr("A weapon lets a hero attack. Illidan wields warglaives! A hero who attacks a minion takes damage back."),
-					"items": [_card("TU4e_004", c, 2.0),
-						_note_at(tr("Attack: the damage the hero deals"), Rect2(130, 404, 320, 100), c, 2.0, "attack"),
-						_note_at(tr("Durability: drops by 1 with each attack; at 0 the weapon breaks"), Rect2(820, 404, 340, 100), c, 2.0, "health")]},
-				{"title": tr("Putting it all together"), "text": tr("Illidan is strong. Use everything you have learned: guard your hero with Taunt and clear his minions with spells."),
-					"items": [_card("TU4e_002", a, 1.5), _card("VAN_CS2_027", b, 1.5), _card("VAN_CS2_032", d, 1.5),
-						_note(tr("His Hero Power: two minions every turn"), Rect2(a.x - 40, 440, 260, 80)),
-						_note(tr("Taunt guards your hero"), Rect2(b.x - 40, 440, 260, 80)),
-						_note(tr("Hits all enemy minions"), Rect2(d.x - 40, 440, 260, 80))]},
-			]
+	var p := Packs.active()
+	var say := func(key: Variant) -> String: return p.text(["tutorial", str(key)]) if p else ""
+	var out := []
+	for page in Missions.get_mission(number).pages:
+		if not page is Dictionary:
+			continue
+		var cards := []  # [at, scale] of the page's cards, in order (a note points at one by its index)
+		var items := []
+		for it in page.get("items", []):
+			if not it is Dictionary:
+				continue
+			var at := _vec(it.get("at"))
+			if it.has("card"):
+				var k := float(it.get("scale", 1.0))
+				cards.append([at, k])
+				items.append({"card": str(it.card), "at": at, "k": k})
+			elif it.has("note"):
+				var b: Array = it.box if it.get("box") is Array and it.box.size() == 4 else [0, 0, 0, 0]
+				var box := Rect2(b[0], b[1], b[2], b[3])
+				var to: Variant = null
+				var t = it.get("to")
+				if t is Array:
+					to = _vec(t)
+				elif t is Dictionary and int(t.get("card", -1)) in range(cards.size()) and PARTS.has(t.get("part")):
+					var c: Array = cards[int(t.card)]
+					var gem: bool = t.part in ["cost", "attack", "health"]  # the arrow stops at a gem's edge
+					to = part(c[0], c[1], t.part, box.get_center(), 18.0 * c[1] if gem else 0.0)
+				items.append({"note": say.call(it.note), "box": box, "to": to})
+			elif it.has("hero"):
+				items.append({"hero": str(it.hero), "at": at, "health": int(it.get("health", 30))})
+			elif it.has("mana"):
+				items.append({"mana": int(it.mana), "at": at})
+			elif it.has("attack") and it.attack is Array and it.attack.size() == 2:
+				items.append({"attack": [_vec(it.attack[0]), _vec(it.attack[1])], "blocked": it.get("blocked", false) == true})
+			elif it.has("big"):
+				items.append({"big": str(it.big), "at": at, "color": Color.from_string(str(it.get("color", "ffffff")), Color.WHITE)})
+			elif it.has("picture"):
+				items.append({"picture": str(it.picture), "at": at, "size": _vec(it.get("size", [256, 256]))})
+		out.append({"title": say.call(page.get("title", "")), "text": say.call(page.get("text", "")),
+			"effect": page.get("effect"), "items": items})
+	return out
+
+
+static func _vec(v: Variant) -> Vector2:
+	return Vector2(float(v[0]), float(v[1])) if v is Array and v.size() == 2 else Vector2.ZERO
+
+

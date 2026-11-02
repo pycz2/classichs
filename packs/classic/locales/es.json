@@ -26,5 +26,141 @@
       "name": "No puede atacar",
       "tip": "No puede atacar."
     }
+  },
+  "missions": {
+    "1": {
+      "intro": "Juega esbirros y úsalos para atacar a Hogger. ¡Inflige suficiente daño y ganarás!",
+      "lines": {
+        "start": "¡Grrr! ¡Hogger aplastar a mago enclenque!",
+        "hurt": "¡Rrraaagh! ¡Hogger enfadado!",
+        "defeat": "¡Noooo... Hogger... cansado..."
+      },
+      "reward_line": "¡Oh, sí!"
+    },
+    "2": {
+      "intro": "¡Gasta tu Maná cada turno para aplastar a este gnomo molesto!",
+      "lines": {
+        "start": "¡Millhouse Tormenta de Maná está aquí! ¡Prepárate para quedar maravillado!",
+        "hurt": "¡Eh, eso dolió! ¡Espera a ver mi gran hechizo!",
+        "defeat": "¡No es justo! ¡Justo llegaba a lo mejor!"
+      },
+      "reward_line": "Esto es bastante impresionante."
+    },
+    "3": {
+      "intro": "Cuando los esbirros luchan entre sí, ambos sufren daño.",
+      "lines": {
+        "start": "Saludos, viajero. Aprendamos juntos.",
+        "hurt": "Una decisión sabia. Pero hay que mantener el equilibrio.",
+        "defeat": "Tu destreza honra el camino. Ve en paz."
+      },
+      "reward_line": "¡Qué calor, qué calor!"
+    },
+    "4": {
+      "intro": "¿No entiendes una carta? ¡Pasa el ratón por encima!",
+      "lines": {
+        "start": "¡Mukla querer plátanos! ¡Tú no coger!",
+        "hurt": "¡Uh uh! ¡Mukla llamar a hermano mayor!",
+        "defeat": "Mukla... compartir plátanos..."
+      },
+      "reward_line": "¡Estás en racha!"
+    },
+    "5": {
+      "intro": "¡Mata a sus esbirros o te abrumará!",
+      "lines": {
+        "start": "¡Presa fresca! ¡Que comience la caza!",
+        "hurt": "¡Eres duro de cazar!",
+        "defeat": "Vaya, vaya... el cazador se convierte en presa."
+      },
+      "reward_line": "Eso fue increíble."
+    },
+    "6": {
+      "intro": "Este combate es totalmente injusto. Culpa a los terribles diseñadores del juego.",
+      "lines": {
+        "start": "¡No estáis preparados!",
+        "hurt": "¡Nadie me detendrá!",
+        "defeat": "Imposible... ¿derrotado por un novato?"
+      },
+      "reward_line": "¡Magnífico!"
+    }
+  },
+  "hints": {
+    "play": "Haz clic en una carta de tu mano para jugarla. Los esbirros van al tablero.",
+    "attack": "Haz clic en un esbirro que pueda atacar y luego en un enemigo para atacarlo.",
+    "end_turn": "¿Nada más que hacer? Pulsa «Terminar turno».",
+    "mana": "Cada turno obtienes un cristal de maná más. ¡Gástalos todos!",
+    "raid_leader": "El Líder de la banda da +1 de Ataque a tus otros esbirros.",
+    "trade": "¡Mata a los esbirros enemigos antes de que se conviertan en un problema!",
+    "battlecry": "Un Grito de batalla se activa cuando juegas la carta desde tu mano.",
+    "tooltip": "Pasa el ratón sobre cualquier carta para leerla.",
+    "taunt": "Los esbirros con Provocar deben ser atacados primero. ¡Juega uno para proteger a tu héroe!",
+    "heal": "Algunas cartas restauran Salud. Úsalas con un héroe o esbirro dañado.",
+    "buff": "Algunas cartas hacen más fuertes a tus esbirros.",
+    "charge": "Los esbirros con Cargar pueden atacar de inmediato.",
+    "hero_power": "Tu Poder de héroe inflige 1 de daño. Puedes usarlo una vez por turno.",
+    "weapon": "Las armas permiten atacar a los héroes. Cada ataque cuesta 1 de Durabilidad."
+  },
+  "tutorial": {
+    "minion_card.title": "Una carta de esbirro",
+    "minion_card.text": "Jugar una carta cuesta maná. Los esbirros también tienen Ataque y Salud.",
+    "minion_card.mana_cost_what": "Coste de maná: lo que cuesta jugar la carta",
+    "minion_card.attack_damage_it": "Ataque: el daño que inflige",
+    "minion_card.health_at_0": "Salud: a 0 el esbirro muere",
+    "combat.title": "Combate",
+    "combat.text": "Cuando los esbirros luchan, cada uno inflige al otro tanto daño como su Ataque. Un esbirro con 0 de Salud muere.",
+    "combat.survives_with_3": "Sobrevive con 3 de Salud",
+    "combat.dies": "Muere",
+    "heroes.title": "Héroes",
+    "heroes.text": "Tu héroe tiene 30 de Salud. Ataca al héroe enemigo con tus esbirros: ¡déjalo a 0 de Salud para ganar!",
+    "heroes.you": "Tú",
+    "heroes.enemy_hero": "El héroe enemigo",
+    "mana.title": "Maná",
+    "mana.text": "Cada turno obtienes un cristal de maná más, hasta 10. Jugar una carta gasta su coste. ¡Intenta gastar todo tu maná cada turno!",
+    "mana.turn_1": "Turno 1",
+    "mana.turn_2": "Turno 2",
+    "mana.turn_3": "Turno 3",
+    "mana.turn_4": "Turno 4",
+    "mana.costs_1": "Cuesta 1",
+    "mana.costs_2": "Cuesta 2",
+    "spells.title": "Hechizos",
+    "spells.text": "Un hechizo hace su efecto una vez y desaparece. ¡A Molino le encantan los hechizos! Un personaje congelado pierde su siguiente ataque.",
+    "spells.mana_cost": "Coste de maná",
+    "spells.what_spell_does": "Lo que hace el hechizo",
+    "spells.no_attack_no": "Sin Ataque ni Salud",
+    "battlecry.title": "Grito de batalla",
+    "battlecry.text": "Un Grito de batalla se activa una vez, cuando juegas la carta desde tu mano.",
+    "battlecry.battlecry_deals_1": "Grito de batalla: inflige 1 de daño al jugarse",
+    "battlecry.battlecry_restores_health": "Grito de batalla: restaura Salud al jugarse",
+    "minions_first.title": "Primero los esbirros",
+    "minions_first.text": "Mientras Cho tenga esbirros, no puede ser atacado. El daño se queda en un esbirro hasta que lo curan, ¡así que remátalos!",
+    "minions_first.cho_hides_behind": "Cho se esconde tras sus esbirros",
+    "minions_first.kill_them_first": "Mátalos primero",
+    "taunt.title": "Provocar",
+    "taunt.text": "Los enemigos deben atacar a un esbirro con Provocar antes que a nada más. ¡Pon uno delante de tu héroe!",
+    "taunt.taunt_attack_this": "Provocar: atácalo primero",
+    "charge.title": "Cargar",
+    "charge.text": "Un esbirro no puede atacar en el turno en que se juega. Los esbirros con Cargar pueden atacar al instante.",
+    "charge.played_this_turn": "Jugado este turno: debe esperar",
+    "charge.charge_attacks_at": "Cargar: ataca al instante",
+    "deathrattle.title": "Último aliento",
+    "deathrattle.text": "Un Último aliento se activa cuando el esbirro muere. Los barriles del rey Mukla esconden sorpresas: ¡rompe uno para ver qué hay dentro!",
+    "deathrattle.when_it_dies": "Cuando muere...",
+    "deathrattle.out_comes_gnome": "...¡sale un gnomo!",
+    "hero_power.title": "Poder de héroe",
+    "hero_power.text": "Cada héroe tiene un Poder de héroe. Cuesta 2 de maná y se puede usar una vez por turno.",
+    "hero_power.your_hero_power": "Tu Poder de héroe",
+    "hero_power.hemet_s_hero": "Poder de héroe de Hemet",
+    "hero_power.mana_cost": "Coste de maná",
+    "freeze.title": "Congelar",
+    "freeze.text": "Un personaje congelado pierde su siguiente ataque. ¡Congela a los cazadores de Hemet y mátalos antes de que te abrumen!",
+    "freeze.freezes_whatever_it": "Congela todo lo que daña",
+    "weapons.title": "Armas",
+    "weapons.text": "Un arma permite atacar a un héroe. ¡Illidan empuña gujas de guerra! Un héroe que ataca a un esbirro recibe daño de vuelta.",
+    "weapons.attack_damage_hero": "Ataque: el daño que inflige el héroe",
+    "weapons.durability_drops_by": "Durabilidad: baja 1 con cada ataque; a 0 el arma se rompe",
+    "putting_it_all_together.title": "Todo junto",
+    "putting_it_all_together.text": "Illidan es fuerte. Usa todo lo que has aprendido: protege a tu héroe con Provocar y elimina a sus esbirros con hechizos.",
+    "putting_it_all_together.his_hero_power": "Su Poder de héroe: dos esbirros cada turno",
+    "putting_it_all_together.taunt_guards_your": "Provocar protege a tu héroe",
+    "putting_it_all_together.hits_all_enemy": "Golpea a todos los esbirros enemigos"
   }
 }

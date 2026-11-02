@@ -61,7 +61,7 @@ func test_tutorial_only_when_the_pack_has_one() -> void:
 	check(menu.find_child("Tutorial", true, false) != null, "Classic has a tutorial")
 	menu.free()
 	for p: Pack in Packs.all():
-		if not p.files().any(func(f): return f.begins_with("missions/")):
+		if not p.has_tutorial():
 			menu = MainMenu.new()
 			menu.pack = p
 			root().add_child(menu)
