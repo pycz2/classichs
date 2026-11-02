@@ -50,7 +50,7 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
-	Palette.backdrop(self, "library_bg")
+	Palette.backdrop(self, "library")
 	browser.name = "Cards"
 	browser.changed.connect(_on_deck_changed)
 	add_child(browser)

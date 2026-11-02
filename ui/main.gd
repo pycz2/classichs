@@ -22,8 +22,9 @@ func _ready() -> void:
 	Settings.load_settings()
 	Migration.run()  # the player's files of before 0.40, once
 	Settings.apply()
+	get_window().title = App.NAME
 	Packs.set_shell(true)  # the main menu: no game styles it
-	theme = Fonts.theme()  # the medieval font and tavern buttons everywhere below (the active pack's look)
+	theme = Fonts.theme()  # the look everywhere below: the client's own, or the game's inside a game
 	add_child(Sound.new())
 	if OS.has_feature("web"):
 		add_child(WebPaste.new())  # Ctrl+V pastes the clipboard of now, not the one before

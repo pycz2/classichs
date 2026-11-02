@@ -1,10 +1,10 @@
 class_name Fonts
 extends RefCounted
-## The game's look: Alegreya (OFL; Latin, Cyrillic, Greek) for the interface with
-## lining figures, Cinzel Decorative (OFL) for the title, and tavern-style wooden
-## buttons with a gold frame. main.gd puts theme() on the root window. A pack's
-## ui/theme.json (Palette.UI) may bring its own fonts (ui/fonts/) and buttons; the
-## theme is rebuilt in place when the active pack changes.
+## The interface's look: Alegreya (OFL; Latin, Cyrillic, Greek), the client's font, for the
+## interface (lining figures) and the cards; the buttons and fonts of the styling pack's
+## ui/theme.json (Palette.UI: its fonts in ui/fonts/; Classic's wooden planks and Cinzel
+## Decorative title), else the client's flat ones. main.gd puts theme() on the root window; the
+## theme is rebuilt in place when the look changes.
 
 static var _title: Font
 static var _theme: Theme
@@ -61,13 +61,13 @@ static func own_weight(base: Font, weight: int) -> Font:
 	return f
 
 
-## The title font: the theme's (bold) or Cinzel Decorative; of the active pack, or of p.
+## The title font: the theme's (bold) or the client's Alegreya (bold); of the styling pack, or of p.
 static func title(p: Pack = null) -> Font:
 	var own := _pack_font("title", p)
 	if own:
 		return own_weight(own, 800)
 	if _title == null:
-		_title = load("res://fonts/CinzelDecorative-Black.ttf")
+		_title = card(800)
 	return _title
 
 
@@ -206,7 +206,7 @@ static func _labels(t: Theme) -> void:
 		t.set_color("font_color", v[0], v[1])
 		t.set_color("font_outline_color", v[0], Palette.tc("outline"))
 		t.set_constant("outline_size", v[0], int(Palette.UI.outline_size))
-	if _pack_font("title"):
+	if _pack_font("title") and not Palette.CLASSIC:  # (Classic's headings are in its body font)
 		t.set_font("font", "HeadingLabel", title())
 	elif t.get_font_list("HeadingLabel").has("font"):
 		t.clear_font("font", "HeadingLabel")

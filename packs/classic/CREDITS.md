@@ -5,3 +5,4 @@
 - Card art (`art/generated`): generated for Classic HS (`tools/gen_card_art.py`).
 - Sounds and the generated music (`sounds/generated`, `music/generated`): generated for Classic HS (`tools/gen_audio.py`).
 - Open music (`music/open`): RandomMind, CC0, see `music/open/CREDITS.md`.
+- The interface look (`ui/`): the tavern, library, board and result pictures and the dragon crest were generated for Classic HS (`tools/gen_ui_art.py` and earlier); the title font Cinzel Decorative is by Natanael Gama, SIL Open Font License 1.1 (`ui/fonts/CinzelDecorative-OFL.txt`).

@@ -462,7 +462,8 @@ def check_files(files):
     if "ui/theme.json" in files:
         theme = _json(files, "ui/theme.json", r, "theme.schema.json")
         refs = [] if theme is None else [theme.get(k, {}).get(f) for k, f in
-                                         (("fonts", "title"), ("fonts", "body"), ("button", "texture"), ("panel", "texture"))]
+                                         (("fonts", "title"), ("fonts", "body"), ("button", "texture"), ("panel", "texture"),
+                                          ("menu", "crest"))]
         for f in refs:
             if f and f not in files:
                 r.error(f"ui/theme.json: {f} is not in the pack")

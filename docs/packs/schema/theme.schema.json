@@ -79,7 +79,8 @@
     "menu": {
       "type": "object",
       "additionalProperties": false,
-      "properties": {"shade": {"$ref": "#/$defs/color"}, "particles": {"enum": ["embers", "rain", "none"]}}
+      "properties": {"shade": {"$ref": "#/$defs/color"}, "particles": {"enum": ["embers", "rain", "snow", "none"]},
+        "crest": {"$ref": "#/$defs/picture"}}
     }
   },
   "$defs": {

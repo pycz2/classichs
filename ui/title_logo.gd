@@ -1,20 +1,17 @@
 class_name TitleLogo
 extends Control
-## The game title drawn as a vector logo: a gold dragon crest, "Classic HS" in
-## Cinzel Decorative with shadow and two outlines, and a shine that sweeps
-## across the letters (clipped to them). A game's menu shows the game's name (text) the same way,
-## or the pack's logo (manifest `logo`) when it has one.
+## The title of a menu: the client's name (App.NAME) in the client's menu, a game's name in its
+## menu. The styling pack's logo picture (manifest `logo`) when it has one; with a crest (theme
+## `menu.crest`, Classic's gold dragon) the crest above the name in embossed gold letters with a
+## shine that sweeps across them (clipped to them); else the name, plain, in the theme's title font.
 
-const TEXT := "Classic HS"
 const FONT_SIZE := 86
 
 ## The title (a game's name in its menu).
-var text := TEXT
-## The coiled dragon above the title (preloaded: a texture first loaded while
-## drawing shows white in the web build).
-const DRAGON := preload("res://ui/dragon_title.png")
+var text := App.NAME
 
 var _shine: Control
+var _crest: Texture2D
 
 
 func _ready() -> void:
@@ -25,6 +22,10 @@ func _ready() -> void:
 		var m := CanvasItemMaterial.new()
 		m.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 		material = m
+		return
+	var crest = Palette.UI.menu.get("crest", "")
+	_crest = Packs.look().texture(crest) if crest is String and crest != "" and Packs.look() and Packs.look().has(crest) else null
+	if _crest == null:
 		return
 	var mask := _Letters.new()  # the gold letters; the shine is drawn only inside them
 	mask.size = size
@@ -43,7 +44,7 @@ func _ready() -> void:
 
 ## The font size that fits the text in the logo's width.
 func font_size() -> int:
-	var fs := FONT_SIZE
+	var fs := FONT_SIZE if _crest else 72
 	while fs > 40 and Fonts.title().get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > size.x - 40:
 		fs -= 4
 	return fs
@@ -63,10 +64,14 @@ func _draw() -> void:
 	var f := Fonts.title()
 	var at := baseline()
 	var fs := font_size()
-	var dragon: Texture2D = DRAGON
+	if _crest == null:  # plain: the name in the accent colour on a soft shadow
+		draw_string(f, at + Vector2(0, 4), text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(0, 0, 0, 0.45))
+		draw_string_outline(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 4, Palette.tc("outline"))
+		draw_string(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Palette.ATTACK)
+		return
 	var dw := 250.0
-	var dh := dw * dragon.get_height() / dragon.get_width()
-	draw_texture_rect(dragon, Rect2(Vector2((size.x - dw) / 2.0, 34 - dh * 0.35), Vector2(dw, dh)), false)
+	var dh := dw * _crest.get_height() / _crest.get_width()
+	draw_texture_rect(_crest, Rect2(Vector2((size.x - dw) / 2.0, 34 - dh * 0.35), Vector2(dw, dh)), false)
 	draw_string(f, at + Vector2(5, 7), text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(0, 0, 0, 0.55))
 	draw_string_outline(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 20, Color("1b0f06"))
 	draw_string_outline(f, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 10, Color("8a6d2a"))

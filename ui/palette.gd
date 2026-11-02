@@ -2,8 +2,9 @@ class_name Palette
 extends RefCounted
 ## Colours of the interface, and of the classes and rarities (the active pack may give its own).
 ## The interface colours (TABLE, PANEL, TEXT, ATTACK, MUTED, DANGER, OK) and every panel, frame,
-## button and heading follow the active pack's ui/theme.json (docs/packs/format.md, "UI theme");
-## a pack without one looks like Classic. Fonts.theme() reloads them when the active pack changes.
+## button and heading follow the styling pack's ui/theme.json (docs/packs/format.md, "UI theme");
+## the client's own screens and a pack without one have the client's neutral look (SHELL_THEME).
+## Fonts.theme() reloads them when the look changes.
 
 const CLASS := {
 	"WARRIOR": Color("8e1002"), "SHAMAN": Color("0070de"), "ROGUE": Color("4c4d48"),
@@ -25,24 +26,25 @@ const COMBO := Color("ffc21a")  # a playable Combo card whose Combo is on
 const OPPONENT := Color("ff3030")  # what the online opponent points at
 const CARD_BACK := Color("27408b")
 
-## Classic's look: every key ui/theme.json may set (format.md, "UI theme"). Colours are
-## "rrggbb" or "rrggbbaa".
-const CLASSIC_THEME := {
-	"colors": {"text": "f4ead5", "muted": "c9b48a", "accent": "f2c200", "table": "3b2f22",
-		"panel": "1c130bf5", "panel_border": "a8863a", "backdrop": "665c54",
-		"button": "6b4428", "button_hover": "7a5030", "button_pressed": "4a2c18", "button_disabled": "3a2a1e",
-		"button_border": "d9b44a", "button_text": "f4ead5", "button_text_hover": "fff3c4",
-		"button_text_pressed": "e0c890", "button_text_disabled": "a89c88", "outline": "000000",
-		"danger": "ff5a36", "ok": "3fd14b"},
-	"outline_size": 4,
-	"button": {"style": "wood", "radius": 11, "border": 2, "glow": "00000000", "glow_size": 0,
+## The client's own look (its screens: the main menu, the settings, the game library, the
+## connections; and a pack without ui/theme.json): dark and calm, flat buttons, no particles.
+## Every key ui/theme.json may set (format.md, "UI theme"); colours are "rrggbb" or "rrggbbaa".
+const SHELL_THEME := {
+	"colors": {"text": "e8ebf2", "muted": "9aa4b5", "accent": "a9c4f5", "table": "0c0e13",
+		"panel": "141821f0", "panel_border": "3b4456", "backdrop": "ffffff",
+		"button": "1d2330", "button_hover": "283041", "button_pressed": "151a24", "button_disabled": "161a2299",
+		"button_border": "475266", "button_text": "e8ebf2", "button_text_hover": "ffffff",
+		"button_text_pressed": "c6d4ee", "button_text_disabled": "697386", "outline": "05060a",
+		"danger": "ff6b6b", "ok": "5fd39a"},
+	"outline_size": 2,
+	"button": {"style": "flat", "radius": 6, "border": 1, "glow": "00000000", "glow_size": 0,
 		"glow_hover": "00000000", "glow_hover_size": 0, "texture": "", "texture_margin": 13},
-	"panel": {"radius": 14, "border": 3, "glow": "0000008c", "glow_size": 14, "texture": "", "texture_margin": 16},
-	"fonts": {"title": "", "body": "", "title_size": 1.0},
+	"panel": {"radius": 8, "border": 1, "glow": "00000066", "glow_size": 10, "texture": "", "texture_margin": 16},
+	"fonts": {"title": "", "body": ""},
 	"end_turn": {"button": "", "border": "", "text": "", "ready": "", "ready_border": ""},
 	"mana": "",
 	"rarities": {},
-	"menu": {"shade": "140d0859", "particles": "embers"},
+	"menu": {"shade": "00000000", "particles": "none", "crest": ""},
 }
 
 static var TABLE := Color("3b2f22")
@@ -53,10 +55,11 @@ static var ATTACK := Color("f2c200")
 static var MUTED := Color("c9b48a")
 static var DANGER := Color("ff5a36")
 static var OK := Color("3fd14b")
-## The active look: CLASSIC_THEME with the active pack's ui/theme.json over it.
-static var UI: Dictionary = CLASSIC_THEME
-## True while the active pack has no ui/theme.json: everything looks exactly as Classic always did.
-static var CLASSIC := true
+## The active look: SHELL_THEME with the styling pack's ui/theme.json over it.
+static var UI: Dictionary = SHELL_THEME
+## True while the look is Classic's tavern (a theme with `wood` buttons: Classic's): the screens
+## keep their own tavern colours, as Classic always looked.
+static var CLASSIC := false
 ## Classic's own interface colours ("rrggbb") -> a role of the theme; empty for Classic,
 ## so a themed pack restyles the screens that pass Classic's colours (ui()).
 static var _roles := {}
@@ -72,8 +75,8 @@ static func load_theme() -> void:
 		return
 	_for = p
 	var own = p.json("ui/theme.json") if p and p.has("ui/theme.json") else null
-	UI = _merge(CLASSIC_THEME, own) if own is Dictionary else CLASSIC_THEME
-	CLASSIC = not own is Dictionary
+	UI = _merge(SHELL_THEME, own) if own is Dictionary else SHELL_THEME
+	CLASSIC = UI.button.style == "wood"
 	TABLE = tc("table")
 	TEXT = tc("text")
 	ATTACK = tc("accent")
@@ -192,18 +195,38 @@ static func button(text: String, name := "") -> Button:
 	return b
 
 
-## A generated picture (the tavern by default), darkened, behind a screen. A pack with
-## its own pictures (ui/menu, ui/library) shows them instead.
-static func backdrop(parent: Control, picture := "menu_bg") -> void:
+## The styling pack's picture behind a screen (ui/library, else ui/menu), darkened; the client's
+## own calm backdrop without one.
+static func backdrop(parent: Control, picture := "menu") -> void:
 	var pic := TextureRect.new()
-	var own := Packs.picture(picture.trim_suffix("_bg"))
-	pic.texture = own if own else (Packs.picture("menu") if Packs.picture("menu") else load("res://ui/%s.jpg" % picture))
+	var own := Packs.picture(picture)
+	pic.texture = own if own else (Packs.picture("menu") if Packs.picture("menu") else shell_picture())
 	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	pic.modulate = Color(0.4, 0.36, 0.33) if CLASSIC else tc("backdrop")
 	pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(pic)
+
+
+static var _shell_pic: Texture2D
+
+
+## The client's own backdrop, made in code: a soft slate glow above the middle fading into the dark.
+static func shell_picture() -> Texture2D:
+	if _shell_pic == null:
+		var g := Gradient.new()
+		g.offsets = PackedFloat32Array([0.0, 0.55, 1.0])
+		g.colors = PackedColorArray([Color("252d3c"), Color("12161e"), Color("07080b")])
+		var t := GradientTexture2D.new()
+		t.gradient = g
+		t.fill = GradientTexture2D.FILL_RADIAL
+		t.fill_from = Vector2(0.5, 0.38)
+		t.fill_to = Vector2(1.15, 1.1)
+		t.width = 640
+		t.height = 360
+		_shell_pic = t
+	return _shell_pic
 
 
 ## A panel of the game: dark wood inside a gold rim, with a soft shadow (the theme's panel

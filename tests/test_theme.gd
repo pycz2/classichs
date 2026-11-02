@@ -1,6 +1,7 @@
 extends TestCase
 ## Pack UI themes (ui/theme.json, docs/packs/format.md "UI theme"): Classic keeps its look,
-## Neonfall restyles the interface, and a switch of the active pack restyles in place.
+## Neonfall restyles the interface, a switch of the active pack restyles in place, and the
+## client's own screens have its neutral look.
 
 
 static func _pack(id: String) -> Pack:
@@ -12,7 +13,7 @@ static func _pack(id: String) -> Pack:
 
 func test_classic_has_its_wooden_look() -> void:
 	var t := Fonts.theme()
-	check(Palette.CLASSIC, "Classic has no theme.json")
+	check(Palette.CLASSIC, "Classic's theme.json is its tavern")
 	eq(Palette.TEXT, Color("f4ead5"), "cream text")
 	eq(Palette.ui(Color("c9a74a")), Color("c9a74a"), "gold stays gold")
 	check(t.get_stylebox("normal", "Button") is StyleBoxTexture, "wooden planks")
@@ -47,3 +48,25 @@ func test_neonfall_restyles_and_switching_back_restores() -> void:
 	eq(heading.get_theme_color("font_color"), Color("f2c200"), "the heading is gold again")
 	owner.free()
 	bare.free()
+
+
+func test_the_shell_has_its_own_neutral_look() -> void:
+	var t := Fonts.theme()
+	Packs.set_shell(true)
+	check(not Palette.CLASSIC, "no tavern in the client's screens")
+	eq(Palette.ATTACK, Color(Palette.SHELL_THEME.colors.accent), "the client's accent")
+	check(t.get_stylebox("normal", "Button") is StyleBoxFlat, "flat buttons")
+	eq(str(Palette.UI.menu.particles), "none", "no particles")
+	check(Packs.picture("menu") == null and Packs.picture("board") == null, "no game's pictures")
+	check(Fonts.title().has_char("Я".unicode_at(0)), "the client's title font has Cyrillic")
+	var logo := TitleLogo.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(logo)
+	eq(logo.text, App.NAME, "the client's name")
+	eq(logo.get_child_count(), 0, "a plain title: no crest, no shine")
+	logo.free()
+	Packs.set_shell(false)
+	check(Palette.CLASSIC and Packs.picture("menu") != null, "Classic's tavern again inside the game")
+	var crest := TitleLogo.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(crest)
+	eq(crest.get_child_count(), 1, "Classic's crest title with its shine")
+	crest.free()

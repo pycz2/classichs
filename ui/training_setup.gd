@@ -23,7 +23,7 @@ func _ready() -> void:
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
-	Palette.backdrop(self, "library_bg")
+	Palette.backdrop(self, "library")
 	for s in [_step1, _step2]:
 		s.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		add_child(s)

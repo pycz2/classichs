@@ -154,6 +154,9 @@ class Check(unittest.TestCase):
         s = tiny()
         s["ui/theme.json"] = {"button": {"style": "glass"}}
         self.assertTrue(errors(s))
+        s = tiny()
+        s["ui/theme.json"] = {"menu": {"crest": "ui/crest.png"}}
+        self.assertTrue(any("ui/crest.png is not in the pack" in e for e in errors(s)))
         for p in ["ui/other.json", "ui/fonts/x.exe", "ui/fonts/a/b.ttf"]:
             s = tiny()
             s[p] = b"x"
