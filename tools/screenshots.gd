@@ -1,7 +1,7 @@
 extends SceneTree
 ## Screenshots of the game for the site and the README, taken from the real
-## screens: media/screens/<lang>/<name>.png (1280x720). Neonfall is the active game;
-## the last two shots (classic, tutorial) are Classic's. Needs a window.
+## screens: media/screens/<lang>/<name>.png (1280x720). Neonfall is the active game (its
+## tutorial too: the mission list and an intro page); the last shot (classic) is Classic's. Needs a window.
 ## Every user file goes to user://uitest_shots_* (never the player's own).
 ## Usage: godot --path . --script res://tools/screenshots.gd -- <lang> [<lang> ...]
 
@@ -65,6 +65,8 @@ func _initialize() -> void:
 			m.show_online()
 			m.screen.show_stage("kind"), "online"])
 		steps.append([func(): m.show_settings(), "settings"])
+		steps.append([func(): m.show_tutorial(), "tutorial"])
+		steps.append([func(): m.show_tutorial_intro(4), "intro"])  # Firewall, the first page of mission 4
 		steps.append([func():
 			DebugTable.last_scene = JSON.stringify(SCENE, "  ")
 			m.show_debug_table(), "debug"])
@@ -76,7 +78,6 @@ func _initialize() -> void:
 		steps.append([func(): pass, "result"])  # the losing hero shatters first
 		steps.append([_open.bind(lang, CLASSIC), ""])
 		steps.append([func(): m.start_match({"scenario": CLASSIC_SCENE}, [false, false], false), "classic"])
-		steps.append([func(): m.show_tutorial(), "tutorial"])
 
 
 ## Removes every file of the run (the driver's own user files and its packs folder).

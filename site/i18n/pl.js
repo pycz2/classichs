@@ -27,7 +27,7 @@
     "shot.tracker.tab": "Śledzenie", "shot.tracker.cap": "Śledzenie talii: twoja talia z szansą dobrania każdej karty i to, co zagrał przeciwnik",
     "shot.history.tab": "Historia", "shot.history.cap": "Historia według tur: najedź na ruch, by zobaczyć, co zrobił",
     "shot.collection.tab": "Kolekcja", "shot.collection.cap": "Kolekcja i talie na jednym ekranie",
-    "shot.tutorial.tab": "Samouczek", "shot.tutorial.cap": "Samouczek: sześć misji jak w oryginale",
+    "shot.tutorial.tab": "Samouczek", "shot.tutorial.cap": "Samouczek Neonfall: sześć misji, od pierwszej karty po Protokoły",
     "shot.online.tab": "Sieć", "shot.online.cap": "Gra sieciowa: zwykła lub Arena, potem utwórz grę albo dołącz",
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu główne",
     "shot.settings.tab": "Ustawienia", "shot.settings.cap": "Ustawienia: język, imię, muzyka i dźwięki, grafiki kart, rewers, szybkość animacji, narzędzia debugowania",

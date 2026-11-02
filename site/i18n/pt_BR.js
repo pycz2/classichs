@@ -27,7 +27,7 @@
     "shot.tracker.tab": "Rastreador", "shot.tracker.cap": "Rastreador de deck: seu deck com a chance de comprar cada carta e o que o oponente jogou",
     "shot.history.tab": "Histórico", "shot.history.cap": "Histórico por turnos: passe o mouse numa ação para ver o que ela fez",
     "shot.collection.tab": "Coleção", "shot.collection.cap": "Coleção e decks numa só tela",
-    "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "Tutorial: seis missões, como o original",
+    "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "O tutorial de Neonfall: seis missões, do primeiro card aos Protocolos",
     "shot.online.tab": "Online", "shot.online.cap": "Jogo online: normal ou Arena, depois crie um jogo ou entre num",
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu principal",
     "shot.settings.tab": "Configurações", "shot.settings.cap": "Configurações: idioma, nome, música e sons, artes, verso, velocidade de animação, ferramentas de depuração",
