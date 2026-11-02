@@ -17,12 +17,15 @@ var link: ServerLink
 var _list: VBoxContainer
 var _note: Label
 var _delete_armed := ""
+var _body := Control.new()  # rebuilt as the server's lists change (an open Upload panel stays)
 
 
 func _ready() -> void:
 	name = "ServerHome"
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	Sound.music("menu")
+	_body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(_body)
 	link.packs_changed.connect(_build)
 	link.pack_progress.connect(_on_progress)
 	link.pack_downloaded.connect(func(_h, res):
@@ -58,32 +61,32 @@ func entries() -> Array:
 
 func _build() -> void:
 	var keep := _note.text if _note else ""
-	for c in get_children():
-		remove_child(c)
+	for c in _body.get_children():
+		_body.remove_child(c)
 		c.queue_free()
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(bg)
-	Palette.backdrop(self, "library_bg")
+	_body.add_child(bg)
+	Palette.backdrop(_body, "library_bg")
 	var title := Palette.label(link.display_name(), 34, Palette.ATTACK)
 	title.name = "Title"
 	title.position = Vector2(40, 18)
 	title.size = Vector2(560, 48)
 	title.clip_text = true
-	add_child(title)
+	_body.add_child(title)
 	var me := Palette.label(ServerView.player_label(link.me), 22, Palette.TEXT)
 	me.name = "PlayerName"
 	me.position = Vector2(40, 66)
 	me.size = Vector2(560, 30)
 	me.clip_text = true
-	add_child(me)
+	_body.add_child(me)
 	var row := HBoxContainer.new()
 	row.position = Vector2(640, 24)
 	row.size = Vector2(600, 48)
 	row.alignment = BoxContainer.ALIGNMENT_END
 	row.add_theme_constant_override("separation", 10)
-	add_child(row)
+	_body.add_child(row)
 	for spec in [["Friends", "Friends", func(): friends.emit()], ["Log out", "Logout", log_out], ["Back", "Back", func(): back.emit()]]:
 		var b := Palette.button(tr(spec[0]), spec[1])
 		b.custom_minimum_size = Vector2(150, 46)
@@ -91,17 +94,17 @@ func _build() -> void:
 		row.add_child(b)
 	var head := Palette.label(tr("Games on this server"), 26, Palette.ATTACK)
 	head.position = Vector2(40, 112)
-	add_child(head)
+	_body.add_child(head)
 	var panel := Panel.new()
 	panel.position = Vector2(30, 152)
 	panel.size = Vector2(1220, 486)
 	panel.add_theme_stylebox_override("panel", Palette.frame())
-	add_child(panel)
+	_body.add_child(panel)
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(46, 166)
 	scroll.size = Vector2(1188, 458)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	add_child(scroll)
+	_body.add_child(scroll)
 	_list = VBoxContainer.new()
 	_list.name = "Games"
 	_list.custom_minimum_size.x = 1176
@@ -119,13 +122,13 @@ func _build() -> void:
 	up.custom_minimum_size = Vector2(260, 50)
 	up.disabled = not link.has_packs
 	up.pressed.connect(show_upload)
-	add_child(up)
+	_body.add_child(up)
 	_note = Palette.label(keep, 17, Palette.MUTED)
 	_note.name = "Note"
 	_note.position = Vector2(430, 666)
 	_note.size = Vector2(810, 30)
 	_note.clip_text = true
-	add_child(_note)
+	_body.add_child(_note)
 
 
 ## One game: its name, version and size; its art and music set; Download, Play, Delete.
