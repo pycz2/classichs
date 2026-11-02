@@ -382,6 +382,8 @@ def check_files(files):
         card(rules["start"]["coin"], "rules.json start.coin", "SPELL")
     if "default_power" in rules:
         card(rules["default_power"], "rules.json default_power", "POWER")
+    elif any(c["type"] == "CHAMPION" for c in card_list):
+        r.error("rules.json: default_power is missing (the engine needs it whenever the pack has champions)")
     modes = rules["modes"]
     for mname, mode in modes.items():
         for s in mode["sets"]:

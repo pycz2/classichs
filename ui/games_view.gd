@@ -8,6 +8,8 @@ extends Control
 signal back
 ## A game was chosen (main opens its menu).
 signal entered(p: Pack)
+## Pack tools: build, check and test a pack (main opens PackTools).
+signal tools
 
 const GRID := Rect2(Vector2(36, 84), Vector2(780, 620))
 const PANEL := Rect2(Vector2(836, 84), Vector2(410, 620))
@@ -49,6 +51,11 @@ func _build() -> void:
 	import.position = Vector2(GRID.end.x - 250, 20)
 	import.pressed.connect(import_pack)
 	add_child(import)
+	var tools_b := Palette.button(tr("Pack tools"), "PackTools")
+	tools_b.custom_minimum_size = Vector2(260, 46)
+	tools_b.position = Vector2(import.position.x - 276, 20)
+	tools_b.pressed.connect(func(): tools.emit())
+	add_child(tools_b)
 	var back_b := Palette.button(tr("Back"), "Back")
 	back_b.custom_minimum_size = Vector2(150, 46)
 	back_b.position = Vector2(PANEL.end.x - 150, 20)

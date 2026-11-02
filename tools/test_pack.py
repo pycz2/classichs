@@ -26,6 +26,7 @@ def tiny():
         "limits": {"max_mana": 10, "hand": 10, "board": 7, "deck_size": 3, "copies": 2, "copies_by_rarity": {"L": 1}},
         "start": {"hand": [3, 4], "coin": "COIN"},
         "timers": {"turn": 75, "mulligan": 45},
+        "default_power": "P_A",
         "classes": [{"id": "RED", "champion": "C_A"}, {"id": "GREY", "neutral": True}],
         "rarities": [{"id": "C", "tier": "common"}, {"id": "L", "tier": "legendary"}],
         "sets": ["CORE"],
@@ -124,6 +125,13 @@ class Check(unittest.TestCase):
         s = tiny()
         s["cards.json"][0]["power"] = "M1"
         self.assertTrue(any("not a POWER" in e for e in errors(s)))
+
+    def test_default_power_needed_with_champions(self):  # the engine refuses such a pack
+        s = tiny()
+        del s["rules.json"]["default_power"]
+        self.assertTrue(any("default_power is missing" in e for e in errors(s)), errors(s))
+        s["cards.json"] = [c for c in s["cards.json"] if c["type"] not in ("CHAMPION", "POWER")]
+        self.assertFalse(any("default_power" in e for e in errors(s)))
 
     def test_deck_rules(self):
         s = tiny()

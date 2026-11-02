@@ -126,8 +126,23 @@ func show_library() -> GamesView:
 	var g := GamesView.new()
 	g.back.connect(show_menu.bind(true))
 	g.entered.connect(enter_game)
+	g.tools.connect(show_pack_tools)
 	_set_screen(g)
 	return g
+
+
+## Pack tools: build, check and try a pack; a test game opens Training with it (a player without
+## decks of that game gets its ready decks, so there is one to play).
+func show_pack_tools() -> PackTools:
+	var t := PackTools.new()
+	t.back.connect(show_library)
+	t.play.connect(func(p: Pack):
+		enter_game(p)
+		if DeckStore.count_local(p.id()) == 0:
+			DeckStore.save_all(Decks.templates().map(func(x): return x.deck))
+		show_training_setup())
+	_set_screen(t)
+	return t
 
 
 ## Opens a game: it becomes the active pack and its menu shows, in its look. Through a server
