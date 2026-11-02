@@ -215,6 +215,10 @@ func _ready() -> void:
 func bind(m: Match) -> void:
 	controller = m
 	m.busy = func() -> bool: return _busy
+	var fx := SceneFx.make(tutorial.mission.effect) if tutorial else null  # the pack's effect over the board
+	if fx:
+		add_child(fx)
+		move_child(fx, 2)
 	add_child(m)
 	m.changed.connect(_on_changed)
 	m.finished.connect(func(_w): refresh())
@@ -2766,11 +2770,12 @@ func _tutorial_result(box: VBoxContainer) -> void:
 		Progress.complete(n)
 		var row := _card_row(box)
 		row.add_child(CardView.make(tutorial.mission.reward, 1.4))
-		var line := Palette.label(tr(tutorial.mission.reward_line), 24)
+		var line := Palette.label(tutorial.mission.reward_line, 24)
 		line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		box.add_child(line)
-		if n < Missions.count():
-			_centered_button(box, tr("Next Mission"), "NextMission", func(): tutorial_next.emit(n + 1))  # main shows its intro first
+		var after := Missions.next(n)
+		if after > 0:
+			_centered_button(box, tr("Next Mission"), "NextMission", func(): tutorial_next.emit(after))  # main shows its intro first
 	else:
 		_centered_button(box, tr("Try Again"), "TryAgain", func(): tutorial_retry.emit(n))
 	_centered_button(box, tr("Back"), "BackToMenu", _leave)

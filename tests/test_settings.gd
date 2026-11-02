@@ -66,9 +66,10 @@ func test_broken_settings_file_uses_defaults() -> void:
 
 func test_key_collector_finds_literals_and_tables() -> void:
 	var keys := I18nKeys.collect()
-	for k in ["Training", "End Turn", "You draw %s", "Greetings!", "Not yet! You have more cards to play!",
-			"Play minions and use them to attack Hogger. Deal enough damage and you win!", "Oh yeah!", "Hand", "New Deck"]:
+	for k in ["Training", "End Turn", "You draw %s", "Greetings!", "Not yet! You have more cards to play!", "Hand", "New Deck"]:
 		check(keys.has(k), "collected: " + k)
+	for k in ["Play minions and use them to attack Hogger. Deal enough damage and you win!", "Oh yeah!", "A minion card"]:
+		check(not keys.has(k), "the pack's tutorial text, not the client's: " + k)
 
 
 func test_collector_finds_paired_history_strings() -> void:

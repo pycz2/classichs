@@ -1,6 +1,7 @@
 class_name TutorialView
 extends Control
-## Tutorial missions as tiles with the boss's portrait: each opens after the previous
+## The active pack's tutorial (Missions; a pack without one has none to show: Pack.has_tutorial()).
+## Its missions as tiles with the boss's portrait: each opens after the previous
 ## one is won; won missions can be replayed. A mission's intro comes before it starts.
 
 signal start(n: int)
@@ -14,6 +15,9 @@ func _ready() -> void:
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	Palette.backdrop(self)
+	var fx := SceneFx.make(Missions.tutorial().get("effect"))
+	if fx:
+		add_child(fx)
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
@@ -30,10 +34,10 @@ func _ready() -> void:
 	box.add_child(grid)
 	var done := Progress.completed()
 	var next := -1  # the first open mission not won yet
-	for n in range(1, Missions.count() + 1):
+	for n in Missions.ids():
 		if next < 0 and Progress.unlocked(n) and not done.has(n):
 			next = n
-	for n in range(1, Missions.count() + 1):
+	for n in Missions.ids():
 		grid.add_child(_tile(n, done.has(n), n == next))
 	var bk := Palette.button(tr("Back"), "Back")
 	bk.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -74,7 +78,7 @@ func _tile(n: int, won: bool, is_next: bool) -> Button:
 		Art.paint_in(pic, r, boss, "arch")
 		Frames.ring(pic, Art.outline("arch", r), Frames.GOLD, 3))
 	col.add_child(pic)
-	var name_l := Palette.label("%d. %s" % [n, CardText.name(boss)], 22)
+	var name_l := Palette.label("%d. %s" % [Missions.ids().find(n) + 1, CardText.name(boss)], 22)
 	name_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	col.add_child(name_l)
