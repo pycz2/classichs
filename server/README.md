@@ -210,7 +210,8 @@ they are). Ranks and MMRs are in `standings` per (account, pack manifest id, sea
 new version of a pack keeps them, a new season starts from the last one's (M4 moved the
 ranks earned before packs to `classic-2014`); a game row and an Arena run keep their pack's
 `rules_hash` (`""` = the built-in Classic rules, before packs). Players' decks kept on the
-server are in `decks` (M6) per account and pack manifest id, like the standings.
+server are in `decks` (M6) per account and pack manifest id, like the standings; their
+choices per game (art and music sets) in `game_settings` (M7), the same way.
 
 ### Connect the game
 
@@ -298,6 +299,7 @@ not answer, 2 images kept. The headers of these scripts tell the details.
 | Passwords | 8–128 characters |
 | Friends | 200 |
 | Decks kept on the server | 100 per account (all packs); a name 0–60 characters; 60 `deck_save` per 10 s |
+| Settings per game | 16 keys, a text of 64 characters each; shares the decks' 60 changes per 10 s |
 | Back after a disconnect in a game | the pack's `timers.away` (30 s), then the game is lost |
 | A turn (the mulligan) | the pack's `timers` (Classic and Neonfall: 75 s (45 s) + 5 s), then the timeout moves |
 | Refused actions | 3 per player in a game, then the game is lost |
@@ -400,6 +402,19 @@ times: unix seconds).
   Arena deck is not. A name over 60 characters: `error bad_name`; the 101st deck:
   `error decks_full`; too fast: `error rate_limited`.
 - `deck_delete {id}` → `deck_deleted {id}` (or `error not_found`: no such deck of mine).
+
+### Game settings
+
+A player's choices for each game (the client keeps the art and music sets there: `art`,
+`music`), per pack (its manifest `id`, as decks), in the table `game_settings`
+(account, pack, value: a JSON object).
+
+- `game_settings {}` → `game_settings {games: {<pack id>: {key: text}}}`: every game's.
+- `game_settings_set {settings: {key: text | null}, pack?}` (`pack`: a rules_hash, as
+  `queue`; none: the default game; the player's own packs count too) merges the changes into
+  that game's (null removes a key) → `game_settings {games}`. A key is 1–32 of `a-z 0-9 _`,
+  a text at most 64 characters, 16 keys a game at most (else `error bad_request`); an unknown
+  game `error pack`; it shares the decks' 60 changes per 10 s (`error rate_limited`).
 
 ### Game packs
 
