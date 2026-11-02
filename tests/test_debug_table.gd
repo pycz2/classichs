@@ -184,3 +184,19 @@ func test_scene_editor_sets_secrets_weapon_turn_and_tokens() -> void:
 	list.set_tab("PALADIN")
 	check(list.filtered().has("VAN_CS2_101t"), "and are listed")
 	d.free()
+
+
+## Debug tools inside Neonfall: every tab opens without errors and shows only that pack's cards.
+func test_debug_tools_of_another_game() -> void:
+	var neon: Pack = Packs.all().filter(func(p: Pack): return p.id() == "neon")[0]
+	var m := _main()
+	m.enter_game(neon)
+	(m.screen.find_child("Settings", true, false) as Button).pressed.emit()
+	(m.screen.find_child("DebugTools", true, false) as Button).pressed.emit()
+	var d := m.screen as DebugTable
+	check(d != null, "the debug screen of Neonfall")
+	for i in 4:
+		(d.find_child("Tab%d" % i, true, false) as Button).pressed.emit()
+		eq(d.tab, i, "tab %d open" % i)
+	check(d.tests.keys().all(func(id): return CardDb.has(id)), "only tests of its cards")
+	m.free()

@@ -401,7 +401,7 @@ func copy_local(chosen: Array) -> void:
 
 ## "Copy local decks": a tick per deck of this device in this game (any version of it), then Copy.
 func show_copy_local() -> void:
-	var box := _popup(tr("Copy local decks"))
+	var box := _popup(tr("Copy local decks"), true)
 	var all := local_decks()
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(620, mini(400, 44 * maxi(1, all.size())))
@@ -446,7 +446,8 @@ func _close() -> void:
 		_overlay = null
 
 
-func _popup(title: String) -> VBoxContainer:
+## A popup over the screen: its title, then what the caller puts in the box (framed: on a panel).
+func _popup(title: String, framed := false) -> VBoxContainer:
 	_close()
 	_overlay = Control.new()
 	_overlay.name = "Popup"
@@ -460,7 +461,13 @@ func _popup(title: String) -> VBoxContainer:
 	_overlay.add_child(center)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 12)
-	center.add_child(box)
+	if framed:
+		var panel := PanelContainer.new()
+		panel.add_theme_stylebox_override("panel", Palette.frame())
+		center.add_child(panel)
+		panel.add_child(box)
+	else:
+		center.add_child(box)
 	box.add_child(Palette.label(title, 26, Palette.ATTACK))
 	add_child(_overlay)
 	return box
@@ -495,8 +502,9 @@ func choose_start(cls: String) -> void:
 	if templates.is_empty():
 		new_deck(Decks.hero(cls))
 		return
-	var box := _popup(tr("A new deck: %s") % CardText.name(Decks.hero(cls)))
+	var box := _popup(tr("A new deck: %s") % CardText.name(Decks.hero(cls)), true)
 	var scratch := Palette.button(tr("From scratch"), "FromScratch")
+	scratch.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	scratch.pressed.connect(func():
 		_close()
 		new_deck(Decks.hero(cls)))
@@ -514,6 +522,7 @@ func choose_start(cls: String) -> void:
 	for t in templates:
 		list.add_child(_template_row(t))
 	var cancel := Palette.button(tr("Cancel"), "Cancel")
+	cancel.size_flags_horizontal = Control.SIZE_SHRINK_END
 	cancel.pressed.connect(_close)
 	box.add_child(cancel)
 
@@ -524,9 +533,9 @@ func _template_row(t: Dictionary) -> Control:
 	b.name = "Template_" + str(t.key)
 	b.custom_minimum_size = Vector2(740, 100)
 	b.focus_mode = Control.FOCUS_NONE
-	b.add_theme_stylebox_override("normal", Palette.box(Color(0, 0, 0, 0.35), 10, Color("6b5320", 0.8), 1))
-	b.add_theme_stylebox_override("hover", Palette.box(Color(1, 1, 1, 0.06), 10, Color("c9a74a"), 2))
-	b.add_theme_stylebox_override("pressed", Palette.box(Color(1, 1, 1, 0.1), 10, Color("c9a74a"), 2))
+	b.add_theme_stylebox_override("normal", Palette.box(Color(0.08, 0.06, 0.04), 10, Color("6b5320"), 1))
+	b.add_theme_stylebox_override("hover", Palette.box(Color(0.16, 0.11, 0.06), 10, Color("c9a74a"), 2))
+	b.add_theme_stylebox_override("pressed", Palette.box(Color(0.16, 0.11, 0.06), 10, Color("c9a74a"), 2))
 	b.pressed.connect(func():
 		_close()
 		new_from(t))

@@ -115,15 +115,15 @@ func _build() -> void:
 	for e in all:
 		_list.add_child(_game_row(e))
 	var up := Palette.button(tr("Upload a game"), "UploadPack")
-	up.position = Vector2(40, 654)
+	up.position = Vector2(150, 654)  # (the friends button has the corner)
 	up.custom_minimum_size = Vector2(260, 50)
 	up.disabled = not link.has_packs
 	up.pressed.connect(show_upload)
 	add_child(up)
 	_note = Palette.label(keep, 17, Palette.MUTED)
 	_note.name = "Note"
-	_note.position = Vector2(320, 666)
-	_note.size = Vector2(900, 30)
+	_note.position = Vector2(430, 666)
+	_note.size = Vector2(810, 30)
 	_note.clip_text = true
 	add_child(_note)
 
@@ -155,11 +155,14 @@ func _game_row(e: Dictionary) -> Control:
 	if have:
 		for spec in [["art", "ArtSet", "Card art"], ["music", "MusicSet", "Music set"]]:
 			var kind: String = spec[0]
+			var col := VBoxContainer.new()
+			col.add_theme_constant_override("separation", 0)
+			col.add_child(Palette.label(tr(spec[2]), 13, Palette.MUTED))
 			var pick := GamesView.set_picker(have, kind, choice(have, kind), func(v): set_choice(have, kind, v))
 			pick.name = spec[1]
-			pick.tooltip_text = tr(spec[2])
-			pick.custom_minimum_size = Vector2(190, 40)
-			hb.add_child(pick)
+			pick.custom_minimum_size = Vector2(190, 36)
+			col.add_child(pick)
+			hb.add_child(col)
 	if have:
 		var play := Palette.button(tr("Play"), "Play")
 		play.custom_minimum_size = Vector2(130, 44)

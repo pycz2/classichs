@@ -30,7 +30,7 @@ func _ready() -> void:
 	scroll.add_child(grid)
 	decks = DeckStore.load_all()
 	if decks.is_empty():
-		var none := Palette.label(tr("You have no deck for this game yet: create one first"), 22, Palette.MUTED)
+		var none := Palette.label(tr("You have no deck for this game yet: create one first"), 24)
 		none.name = "NoDecks"
 		grid.add_child(none)
 	for i in decks.size():

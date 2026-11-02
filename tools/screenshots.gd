@@ -39,8 +39,11 @@ func _initialize() -> void:
 			steps.append([func(): pass, ""])  # the moves' animations
 		steps.append([_history, "history"])
 		steps.append([_tracker, "tracker"])
-		steps.append([func(): m.show_collection(), ""])
-		steps.append([func(): m.screen.edit_deck(16), "collection"])
+		steps.append([func():
+			DeckStore.write(DeckStore.file(), Decks.templates().map(func(t): return t.deck.to_dict().merged({"name": t.name}, true)))
+			m.enter_game(Packs.active())
+			m.show_collection(), ""])
+		steps.append([func(): m.screen.edit_deck(7), "collection"])
 		steps.append([func(): m.show_tutorial(), "tutorial"])
 		steps.append([func(): m.show_tutorial_intro(4), "intro"])
 		steps.append([func():
