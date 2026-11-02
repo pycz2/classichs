@@ -52,9 +52,12 @@ var lobby := false
 ## Set for a tutorial mission (hints, turn-end rules, reward screen).
 var tutorial: Tutorial
 var controller: Match
+## What the table shows: the game after the batch of events now playing (the controller's
+## game may be further on while the table still animates); refresh() catches it up.
 var g: GameView:
 	get:
-		return controller.game
+		return _shown
+var _shown := GameView.new()
 
 var _layer := Control.new()
 var _fx := Control.new()
@@ -92,8 +95,16 @@ var _layouts := 0
 ## Nothing is left to do this turn: the End Turn button glows green.
 var end_turn_ready := false
 ## Event batches waiting for their animation; while one plays the table is busy.
-var _queue: Array = []
+var _queue: Array = []  # [{events, snap, hist}]: the batch and the game right after it
 var _busy := false
+## While a batch plays, step by step: what stands where ({board, hand, secrets: [ids, ids],
+## weapon: [id, id]}); {} = everything as in g.
+var _stage := {}
+var _stage_events: Array = []
+var _stage_at := -1  # the batch's last event the table shows
+var _flying := {}  # entity id -> CardView: a played card shown big beside the table
+var _landing := {}  # entity id -> where a played minion comes from (it stood on the board aiming)
+var _cast_arrow := TargetArrow.new()  # what a played card, a Battlecry or a hero power aims at
 ## The local player's orders given while the table still animates: carried out
 ## one by one after the animations, in order (not in the tutorial).
 var _pending_acts: Array = []
@@ -181,6 +192,8 @@ func _ready() -> void:
 	add_child(_strip)
 	_strip.open_history.connect(func(): _history.visible = not _history.visible)
 	add_child(_arrow)
+	_cast_arrow.z_index = 65  # over the card shown big and the hand
+	add_child(_cast_arrow)
 	_opp_arrow.tint = Color("e03131")
 	add_child(_opp_arrow)
 	_hint = Palette.label("", 20, Palette.SELECTED)
@@ -323,7 +336,7 @@ func bubble_text(p: int) -> String:
 
 
 func _on_connection_lost(reason: String) -> void:
-	if g.game_over:
+	if controller.game.game_over:
 		return
 	var box := _open_overlay(tr("Out of sync") if session and session.failure_kind == "desync" else tr("Connection lost"))
 	_overlay.name = "ConnectionLost"
@@ -343,7 +356,7 @@ func _leave() -> void:
 		arena_back.emit()  # the Arena's connection stays: its lobby decides what next
 		return
 	if lobby:
-		if session and not g.game_over:
+		if session and not controller.game.game_over:
 			session.leave()  # leaving a running game on a server loses it
 		lobby_back.emit()
 		return
@@ -742,26 +755,26 @@ func _on_right_click(v: EntityView) -> void:
 ## player's turn ends by itself (Match.timeout).
 func tick(delta: float) -> void:
 	_update_clock(delta)
-	if not timer_enabled or controller == null or g.game_over:
+	if not timer_enabled or controller == null or controller.game.game_over:
 		_rope.visible = false
 		return
 	_reset_timer()  # a new turn gets its full time even while the table is animating
 	_time_left -= delta
 	if controller.is_server() and controller.time_left() >= 0.0:
 		_time_left = controller.time_left()  # the server's clock (it plays the timeout moves itself)
-	var mull := g.phase == "MULLIGAN"
+	var mull := controller.game.phase == "MULLIGAN"
 	_rope.visible = _time_left <= timer("fuse") and not mull  # the mulligan has its numbers instead
 	_rope.left = _time_left / timer("fuse")
 	var count := find_child("MulliganTimer", true, false) as Label
 	if count:
-		count.visible = mull and _time_left <= MULLIGAN_WARN and not g.players[viewer()].mulliganed
+		count.visible = mull and _time_left <= MULLIGAN_WARN and not controller.game.players[viewer()].mulliganed
 		count.text = str(int(ceil(maxf(0.0, _time_left))))
-	if mull and g.players[viewer()].mulliganed and not g.players[1 - viewer()].mulliganed and not _mulligan_waiting(viewer()):
+	if mull and controller.game.players[viewer()].mulliganed and not controller.game.players[1 - viewer()].mulliganed and not _mulligan_waiting(viewer()):
 		show_hint(tr("Waiting for the opponent…"), 0.5)  # (the mulligan screen says it while it stays)
 	if _time_left > 0.0:
 		return
 	var me := viewer()
-	if (g.phase == "MULLIGAN" and not g.players[me].mulliganed) or (g.phase != "MULLIGAN" and g.current == me):
+	if (controller.game.phase == "MULLIGAN" and not controller.game.players[me].mulliganed) or (controller.game.phase != "MULLIGAN" and controller.game.current == me):
 		_end_drag()
 		_sel = {}
 		controller.timeout(me)
@@ -772,10 +785,10 @@ func tick(delta: float) -> void:
 func _update_clock(delta: float) -> void:
 	if controller == null:
 		return
-	if not g.game_over:
+	if not controller.game.game_over:
 		_match_time += delta
 	var t := tr("Game %s") % _mmss(_match_time)
-	if timer_enabled and not g.game_over:
+	if timer_enabled and not controller.game.game_over:
 		t += "\n" + tr("Turn %s") % _mmss(maxf(0.0, _time_left))
 	_clock.text = t
 	_clock.add_theme_color_override("font_color", Color("ff8a5b") if timer_enabled and _time_left <= timer("fuse") else Color("f4ead5"))
@@ -787,10 +800,10 @@ static func _mmss(seconds: float) -> String:
 
 
 func _reset_timer() -> void:
-	var key := "M" if g.phase == "MULLIGAN" else "%d:%d" % [g.turn, g.current]
+	var key := "M" if controller.game.phase == "MULLIGAN" else "%d:%d" % [controller.game.turn, controller.game.current]
 	if key != _turn_key:
 		_turn_key = key
-		_time_left = timer("mulligan") if g.phase == "MULLIGAN" else timer("turn")
+		_time_left = timer("mulligan") if controller.game.phase == "MULLIGAN" else timer("turn")
 
 
 ## Shows the next tutorial hint only when nothing else is on the banner (an
@@ -811,7 +824,7 @@ func viewer() -> int:
 
 ## True when the local human may act now.
 func my_action() -> bool:
-	return not g.game_over and not controller.bots[controller.actor()] and controller.actor() == viewer()
+	return not controller.game.game_over and not controller.bots[controller.actor()] and controller.actor() == viewer()
 
 
 func _legal() -> Array:
@@ -909,12 +922,16 @@ func refresh() -> void:
 		_apply_glows()  # the layout changes when the running animation ends
 		_return_dragged()
 		return
+	if not _busy:
+		_show(controller.game.snapshot, controller.game.history.size())
 	var me := viewer()
 	var opp := g.opponent(me)
 	var want := {}
 	_layout_side(opp, false, want)
 	_layout_side(me, true, want)
 	_reconcile(want)
+	_moved.clear()
+	_quiet.clear()
 	_layouts += 1
 	_laid_out = true
 	for i in 2:
@@ -972,11 +989,14 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	want[pl.hero.id] = {"kind": "hero", "pos": hero_pos}
 	if not pl.hero_power.has("LOCKED"):
 		want[pl.hero_power.id] = {"kind": "power", "pos": hero_pos + Vector2(150, 30)}
-	if pl.weapon:
-		want[pl.weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
-	for i in pl.secrets.size():
-		want[pl.secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own}  # on the top of the portrait, both sides
-	var board: Array = pl.board.duplicate()
+	var staged := not _stage.is_empty()
+	var weapon: GameView.Ent = g.ent(_stage.weapon[p]) if staged else pl.weapon
+	if weapon:
+		want[weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
+	var secrets: Array = _ents(_stage.secrets[p]) if staged else pl.secrets
+	for i in secrets.size():
+		want[secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own}  # on the top of the portrait, both sides
+	var board: Array = _ents(_stage.board[p]) if staged else pl.board.duplicate()
 	var placing := _placing() if own else -1
 	if placing >= 0:  # a minion waiting for its Battlecry target already stands in its place
 		board.insert(clampi(_placing_pos(), 0, board.size()), g.ent(placing))
@@ -984,8 +1004,8 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	var gap := _gap if own and placing < 0 else -1
 	for i in n:
 		want[board[i].id] = {"kind": "minion", "pos": Vector2(TableLayout.board_x(i, n, gap), OWN_BOARD_Y if own else ENEMY_BOARD_Y)}
-	var hand: Array = pl.hand.filter(func(e): return e.id != placing)
-	if own and (g.phase == "MULLIGAN" or _mulligan_waiting(p)) and not Anim.instant:
+	var hand: Array = (_ents(_stage.hand[p]) if staged else pl.hand).filter(func(e): return e.id != placing)
+	if own and (g.phase == "MULLIGAN" or (_overlay != null and _overlay.name == "Mulligan")) and not Anim.instant:
 		hand = []  # the cards are on the mulligan screen; they come down into the hand after it
 	var hover := -1
 	if own:
@@ -1001,6 +1021,10 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 			f.scale = 0.62
 			f.z = 20
 		want[hand[i].id] = {"kind": "hand", "pos": f.pos, "scale": f.scale, "rot": f.rot, "z": f.z, "own": own}
+
+
+func _ents(ids: Array) -> Array:
+	return ids.map(func(id): return g.ent(id)).filter(func(e): return e != null)
 
 
 ## The minion card waiting for its Battlecry target (it stands on the board), or -1.
@@ -1054,7 +1078,7 @@ func _reconcile(want: Dictionary) -> void:
 			from[id] = v.position + v.size * v.scale / 2.0
 			_drop(v, false)
 		else:
-			if v.has_method("sync"):
+			if v.has_method("sync") and _stage.is_empty():
 				v.sync()  # a dying minion fades out with its last numbers
 			_drop(v, not _quiet.has(id))
 	for id in want:
@@ -1080,12 +1104,15 @@ func _reconcile(want: Dictionary) -> void:
 				start = spec.pos + v.size * 0.35
 			v.position = start
 			v.scale = Vector2(s0, s0)
+			if not _stage.is_empty():
+				_rewind(v)
+		elif v is MinionView or v is HeroView or v is PowerView:
+			if _stage.is_empty() or v is PowerView:
+				v.sync()  # (while a batch plays, its steps change the numbers)
 		if v is CardView:
 			v.face_up = spec.own
 			if spec.own:
 				v.show_entity(e, g)
-		elif v is MinionView or v is HeroView or v is PowerView:
-			v.sync()
 		if _hold.has(id):
 			continue  # an attacker in mid-leap
 		if not (_dragging and id == _press.get("id", -1)):
@@ -1100,6 +1127,7 @@ func _reconcile(want: Dictionary) -> void:
 
 
 func _glide(v: Control, pos: Vector2, s := 1.0, rot := 0.0, dur := 0.3) -> void:
+	v.set_meta("home", pos + v.size * s / 2.0)  # the centre it goes to (_home_of)
 	if v.has_meta("tw"):
 		var old: Tween = v.get_meta("tw")
 		if old and old.is_valid():
@@ -1371,11 +1399,13 @@ func _on_hover(v: EntityView, on: bool) -> void:
 # --- events and effects ---------------------------------------------------------
 
 func _on_changed(events: Array) -> void:
+	var item := {"events": events, "snap": controller.game.snapshot, "hist": controller.game.history.size()}
 	if Anim.instant or not is_inside_tree():
+		_show(item.snap, item.hist)
 		_effects_now(events)
 		_release_orders()
 		return
-	_queue.append(events)
+	_queue.append(item)
 	if not _busy:
 		_play_queue()
 
@@ -1389,54 +1419,580 @@ func _play_queue() -> void:
 	_release_orders()  # the next queued order starts its own animation
 
 
-## Plays one batch: what happens before the change (cards shown, attacks,
-## spells flying), then the change itself — the layout, numbers and sounds — at
-## the moment of the hit (the attacker touches its target, the bolt arrives), or
-## at the end when nothing hits.
-func _animate(events: Array) -> void:
-	var me := viewer()
-	var hit := {"done": false}
-	var your_turn := false
-	var land := func() -> void:
-		if hit.done:
-			return
-		hit.done = true
-		_final_refresh = true
-		_effects_now(events)
-		_final_refresh = false
+## The table shows the game as it was right after a batch (its snapshot) and the history up to it.
+func _show(snap: Dictionary, hist: int) -> void:
+	var live := controller.game
+	if not is_same(_shown.snapshot, snap):
+		_shown.start_decks = live.start_decks
+		_shown.update(snap)
+	if _shown.history.size() != hist:
+		_shown.history = live.history.slice(0, hist)
+
+
+## Plays one batch as its steps, one after another (steps()): each card played, each
+## hit, heal, buff, summon, death, draw… The board shows the game between the steps (the
+## events tell what changed); at the end it is laid out from the game after the batch.
+func _animate(item: Dictionary) -> void:
+	_begin_batch(item)
+	for st in steps(item.events):
+		await _play_step(st)
+	_end_batch()
+	if item.events.any(func(e): return e.type == "game_over"):
+		_shatter_losers()
+	await _wait(0.15)
+
+
+## Before the steps: the table still shows the game before the batch (the lists of what stands
+## where come from it); g becomes the game after it (its cards are known there).
+func _begin_batch(item: Dictionary) -> void:
+	var st := {"board": [], "hand": [], "secrets": [], "weapon": []}
+	var ids := func(list: Array) -> Array: return list.map(func(e): return e.id)
+	for p in 2:
+		var pl := g.players[p]
+		st.board.append(ids.call(pl.board))
+		st.hand.append(ids.call(pl.hand))
+		st.secrets.append(ids.call(pl.secrets))
+		st.weapon.append(pl.weapon.id if pl.weapon else -1)
+	_show(item.snap, item.hist)
+	_stage = st
+	_stage_events = item.events
+	_stage_at = -1
+	if item.events.any(func(e): return e.type == "game_over"):
+		_ending = true  # the result waits for the losing hero to shatter
+
+
+## After the steps: everything as in the game after the batch.
+func _end_batch() -> void:
+	_stage = {}
+	_stage_events = []
+	_landing.clear()
+	_cast_arrow.visible = false
+	for id in _flying:
+		_fade_card(_flying[id])
+	_flying.clear()
+	_final_refresh = true
+	refresh()
+	_final_refresh = false
+
+
+## The batch's events as the steps the table shows one after another: [{k, evs, at}], at =
+## the index of the step's last event. Simultaneous things are one step (an attack's two hits,
+## a Flamestrike's hits, a death phase); a card's random hits are one step each.
+static func steps(events: Array) -> Array:
+	var out := []
+	var aims := {}  # a minion played with a target: it aims once it stands on the board
+	var secrets := {}  # Secrets played: they go up to the hero when their spell is done
+	var bounced := {}  # the cards a bounce makes (the bounce step brings them in)
 	for ev in events:
+		if ev.type == "return_to_hand":
+			bounced[ev.get("new", -1)] = true
+	var power: int = events.find_custom(func(e): return e.type == "hero_power")
+	if power >= 0:  # its effects come before it in the events
+		out.append({"k": "power", "evs": [events[power]], "at": -1})
+		if int(events[power].get("target", -1)) >= 0:
+			out.append({"k": "aim", "src": events[power].entity, "to": events[power].target, "evs": [], "at": -1})
+	var i := 0
+	while i < events.size():
+		var ev: Dictionary = events[i]
+		var j := i + 1  # the first event after this step
+		var k := ""
 		match ev.type:
 			"play":
-				await _show_played(ev, land)
+				k = "play"
+			"summon":
+				k = "summon"
+				j = _run(events, i, func(e): return e.type == "summon" and e.get("by_id", -1) == ev.get("by_id", -1) and ev.has("by_id"))
 			"attack":
-				await _lunge(ev.attacker, ev.defender, land)
-			"hero_power":
-				await _pulse(ev.entity, ev.get("target", -1), land)
+				k = "attack"
+				while j < events.size() and events[j].type == "damage" and not events[j].has("by") \
+						and events[j].get("source", -1) in [ev.attacker, ev.defender]:
+					j += 1
+			"damage", "heal", "buff", "freeze", "silence", "divine_shield_lost", "destroy", "armor":
+				k = "hit"
+				if not (ev.type == "damage" and _one_by_one(ev)):
+					var seen := {}
+					j = _run(events, i, func(e):
+						var t = e.get("target", e.get("player"))
+						if e.type != ev.type or e.get("by_id", e.get("source", -2)) != ev.get("by_id", ev.get("source", -2)) or seen.has(t):
+							return false
+						seen[t] = true
+						return true)
+			"transform", "take_control":
+				k = "hit"
+			"return_to_hand":
+				k = "bounce"
+			"death":
+				k = "death"
+				j = _run(events, i, func(e): return e.type == "death")
+			"draw", "add_to_hand":
+				k = "" if bounced.has(ev.entity) else "card"
+			"discard":
+				k = "discard"
+			"equip":
+				k = "equip"
 			"secret_revealed":
-				await _reveal(ev.card)
-			"mulligan":
-				if ev.player == _mull_wait and _overlay and _overlay.name == "Mulligan":
-					await _mulligan_result(events, ev.player)
-			"fatigue":
-				await _fatigue(ev)
-			"burn":
-				await _burn(ev)
-			"add_to_hand":
-				if ev.get("card", "") == GameView.COIN and not ev.get("shown", false):
-					if _mulligan_waiting(ev.player):
-						await _mulligan_coin(ev)  # beside the cards still shown
-					else:
-						await _coin_in(ev)
+				k = "secret"
+			"after_spell":
+				k = "spell_done"
+			"fatigue", "burn":
+				k = ev.type
+			"mulligan_chosen":
+				k = "mulligan"
+				while j < events.size() and not (events[j].type == "mulligan" and events[j].player == ev.player):
+					j += 1
+				j = mini(j + 1, events.size())
 			"turn_start":
-				if _mulligan_waiting(_mull_wait):
-					_mulligan_down()  # the hand first, then the first turn's card
-				your_turn = your_turn or (ev.get("player", -1) == me and ev.has("turn"))
-	if not hit.done:
-		await _travel(events)  # end of turn effects first, then the new turn
-	land.call()
-	if your_turn:
-		_banner(tr("Your Turn"))
-	await _wait(0.32)
+				k = "turn"
+		if k == "":
+			i = j
+			continue
+		var st := {"k": k, "evs": events.slice(i, j), "at": j - 1}
+		if k == "spell_done":
+			st["secret"] = secrets.has(ev.entity)
+		out.append(st)
+		if k == "play":
+			if ev.get("secret", false):
+				secrets[ev.entity] = true
+			if int(ev.get("target", -1)) >= 0:
+				if ev.get("kind", "") == "minion":
+					aims[ev.entity] = ev.target
+				else:
+					out.append({"k": "aim", "src": ev.entity, "to": ev.target, "evs": [], "at": i})
+		if k == "summon":
+			for e in st.evs:
+				if aims.has(e.entity):
+					out.append({"k": "aim", "src": e.entity, "to": aims[e.entity], "evs": [], "at": j - 1})
+		i = j
+	return out
+
+
+## The end of a run of events from i on that all pass ok (the first one always belongs).
+static func _run(events: Array, i: int, ok: Callable) -> int:
+	ok.call(events[i])
+	var j := i + 1
+	while j < events.size() and ok.call(events[j]):
+		j += 1
+	return j
+
+
+## A card that hits random targets several times (Arcane Missiles, Avenging Wrath, Mad
+## Bomber…): its hits come one after another.
+static func _one_by_one(ev: Dictionary) -> bool:
+	var by: String = ev.get("by", "")
+	if by == "":
+		return false
+	var cast := TableFx.named(by, "cast")
+	if cast != "":
+		return cast == "missiles"
+	var text = CardDb.card(by).get("text", {})
+	return text is Dictionary and str(text.get("enUS", "")).to_lower().contains("random")
+
+
+## One step: what leads up to it (a card flying out, an arrow, a bolt), the change on the
+## table, and what follows it (numbers, effects, sounds).
+func _play_step(st: Dictionary) -> void:
+	var ev: Dictionary = st.evs[0] if not st.evs.is_empty() else {}
+	match st.k:
+		"play":
+			await _show_played(st)
+		"aim":
+			await _aim(st)
+		"power":
+			await _pulse(ev.entity)
+		"attack":
+			var done := {"v": false}
+			await _lunge(ev.attacker, ev.defender, func():
+				done.v = true
+				_step_fx(st, _step_apply(st)))
+			if not done.v:
+				_step_fx(st, _step_apply(st))
+		"hit":
+			await _hit(st)
+		"death":
+			var at := {}
+			for e in st.evs:
+				if _views.has(e.entity):
+					at[e.entity] = [_center_of(e.entity), _views[e.entity].get("s")]
+			_step_apply(st)  # their views fade out
+			_step_sounds(st)
+			for e in st.evs:
+				if not at.has(e.entity):
+					continue
+				var mark := TableFx.named(e.card, "death")  # skull (with an unsilenced death hook), destroy, none
+				var was: GameView.Ent = at[e.entity][1]
+				if mark == "destroy":
+					TableFx.spawn(_fx, "destroy", at[e.entity][0])
+				elif mark != "none" and Rules.hooks(e.card).has("deathrattle") and not (was and was.silenced):
+					TableFx.spawn(_fx, "skull", at[e.entity][0])
+				elif not e.get("minion", true):  # a weapon destroyed (an Ooze) or broken
+					TableFx.spawn(_fx, "destroy", at[e.entity][0])
+			await _wait(0.4)
+		"summon":
+			for e in st.evs:
+				var cv: CardView = _flying.get(e.entity)
+				if cv:  # the played minion goes from the big card to its place
+					_moved[e.entity] = cv.position + cv.size * cv.scale / 2.0
+					_flying.erase(e.entity)
+					cv.queue_free()
+				elif _landing.has(e.entity):
+					_moved[e.entity] = _landing[e.entity]
+			_step_apply(st)
+			_step_sounds(st)
+			for e in st.evs:
+				if not _views.has(e.entity):
+					continue
+				var on_play := TableFx.named(e.card, "play")
+				if e.has("by") or on_play == "portal":
+					TableFx.spawn(_fx, "portal", _home_of(e.entity))
+				elif on_play != "none" and _stage_events.slice(st.at + 1).any(func(x): return x.get("by_id", -1) == e.entity):
+					TableFx.spawn(_fx, "battlecry", _home_of(e.entity))
+			await _wait(0.3)
+		"bounce":
+			if _views.has(ev.entity):
+				TableFx.spawn(_fx, "whoosh", _center_of(ev.entity))
+			_step_apply(st)
+			_step_sounds(st)
+			await _wait(0.35)
+		"card":
+			if ev.get("card", "") == GameView.COIN and not ev.get("shown", false) and ev.type == "add_to_hand":
+				if _mulligan_waiting(ev.player):
+					await _mulligan_coin(ev)  # beside the cards still shown
+				else:
+					await _coin_in(ev)
+			elif _views.has(ev.get("by_id", -1)) and not _views.has(ev.entity):
+				_moved[ev.entity] = _center_of(ev.by_id)  # made by a card on the table (Antonidas): it comes from there
+			_step_apply(st)
+			_step_sounds(st)
+			await _wait(0.22)
+		"equip", "spell_done":
+			var cv: CardView = _flying.get(ev.entity)
+			if cv:
+				_flying.erase(ev.entity)
+				if st.k == "equip" or st.get("secret", false):  # the card goes to its hero: the weapon or the Secret comes from it
+					_moved[ev.entity] = cv.position + cv.size * cv.scale / 2.0
+					cv.queue_free()
+				else:
+					_fade_card(cv)
+			_step_apply(st)
+			_step_sounds(st)
+			await _wait(0.2)
+		"secret":
+			await _reveal(ev.card)
+			show_hint(tr("Secret: %s") % CardText.name(ev.card), 2.5)
+			_step_apply(st)
+		"fatigue":
+			await _fatigue(ev)
+		"burn":
+			await _burn(ev)
+		"mulligan":
+			var p: int = st.evs.back().player
+			if p == _mull_wait and _overlay and _overlay.name == "Mulligan":
+				await _mulligan_result(st.evs, p)
+			_step_apply(st)
+		"turn":
+			if _mulligan_waiting(_mull_wait):
+				_mulligan_down()  # the hand first, then the first turn's card
+				_stage_refresh()
+				await _wait(0.35)
+			if ev.get("player", -1) == viewer() and ev.has("turn"):
+				_banner(tr("Your Turn"))
+		_:
+			_step_apply(st)
+
+
+## The change of a step on the table, without waiting: the lists of what stands where and the
+## numbers the views show. Returns what the changed minions and heroes showed before it.
+func _step_apply(st: Dictionary) -> Dictionary:
+	_stage_at = st.at
+	var before := {}
+	var moved := false
+	if st.k == "mulligan":  # the new cards take the places of the replaced ones
+		var p: int = st.evs.back().player
+		var drawn: Array = st.evs.filter(func(e): return e.type == "draw").map(func(e): return e.entity)
+		var now: Array = g.players[p].hand.map(func(e): return e.id)
+		var hand := []
+		for id in _stage.hand[p]:
+			if now.has(id) or drawn.is_empty():
+				hand.append(id)
+			else:
+				hand.append(drawn.pop_front())
+		_stage.hand[p] = hand + drawn
+		_stage_refresh()
+		return before
+	for ev in st.evs:
+		match ev.type:
+			"play", "discard":
+				_stage.hand[ev.player].erase(ev.entity)
+				moved = true
+			"summon":
+				_stage_insert(ev.player, ev.entity)
+				moved = true
+			"take_control":
+				_stage_insert(ev.player, ev.target)
+				moved = true
+			"death":
+				for p in 2:
+					_stage.board[p].erase(ev.entity)
+					if _stage.weapon[p] == ev.entity:
+						_stage.weapon[p] = -1
+				moved = true
+			"draw", "add_to_hand":
+				if not _stage.hand[ev.player].has(ev.entity):
+					_stage.hand[ev.player].append(ev.entity)
+				moved = true
+			"return_to_hand":
+				var n := g.ent(ev.get("new", -1))
+				if n:
+					if _views.has(ev.entity):
+						_moved[n.id] = _center_of(ev.entity)
+						_quiet[ev.entity] = true
+					_stage.hand[n.controller].append(n.id)
+				for p in 2:
+					_stage.board[p].erase(ev.entity)
+				moved = true
+			"transform":
+				for p in 2:
+					var k: int = _stage.board[p].find(ev.from)
+					if k >= 0:
+						_stage.board[p][k] = ev.to
+				if _views.has(ev.from):
+					_moved[ev.to] = _center_of(ev.from)
+					_quiet[ev.from] = true
+				moved = true
+			"equip":
+				_stage.weapon[ev.player] = ev.entity
+				moved = true
+			"secret_revealed":
+				for p in 2:
+					_stage.secrets[p].erase(ev.entity)
+				moved = true
+			"after_spell":
+				if st.get("secret", false) and not _stage.secrets[ev.player].has(ev.entity):
+					_stage.secrets[ev.player].append(ev.entity)
+					moved = true
+			"damage", "heal", "buff", "freeze", "silence", "divine_shield_lost", "armor":
+				var id: int = g.players[ev.player].hero.id if ev.type == "armor" else ev.get("target", -1)
+				var v = _views.get(id)
+				if v is MinionView or v is HeroView:
+					if not before.has(id):
+						before[id] = v.s.copy()
+					_change(v.s, ev, 1)
+					v.queue_redraw()
+	if moved:
+		_stage_refresh()
+	for id in before:  # a number that changed grows for a moment
+		var v = _views.get(id)
+		if v and v.s.health() != before[id].health():
+			v.pop("hp")
+		if v and v.s.atk() != before[id].atk():
+			v.pop("atk")
+		if v is HeroView and int(v.s.tags.get("ARMOR", 0)) != int(before[id].tags.get("ARMOR", 0)):
+			v.pop("armor")
+	return before
+
+
+## Lays out the table from the step lists (the numbers stay as the steps set them).
+func _stage_refresh() -> void:
+	var want := {}
+	var me := viewer()
+	_layout_side(g.opponent(me), false, want)
+	_layout_side(me, true, want)
+	_reconcile(want)
+	_moved.clear()
+	_quiet.clear()
+	_apply_glows()
+
+
+## A minion arrives on player p's board: in its place among the others as the game has them
+## at the end of the batch (at the right end if it is gone by then).
+func _stage_insert(p: int, id: int) -> void:
+	for side in 2:
+		_stage.board[side].erase(id)
+	var list: Array = _stage.board[p]
+	var final: Array = g.players[p].board.map(func(e): return e.id)
+	var k := final.find(id)
+	var at := list.size()
+	if k >= 0:
+		at = 0
+		for i in list.size():
+			var f := final.find(list[i])
+			if f >= 0 and f < k:
+				at = i + 1
+	list.insert(at, id)
+
+
+## What one event does to the numbers a view shows (sign -1 takes it back).
+static func _change(s: GameView.Ent, ev: Dictionary, sign: int) -> void:
+	var t := int(ev.get("target", -1))
+	if ev.type == "armor":
+		if s.is_hero():
+			s.tags["ARMOR"] = maxi(0, int(s.tags.get("ARMOR", 0)) + int(ev.amount) * sign)
+		return
+	if t != s.id:
+		return
+	match ev.type:
+		"damage":
+			var hit: int = ev.amount
+			if sign > 0 and s.is_hero():
+				var armor := int(s.tags.get("ARMOR", 0))
+				s.tags["ARMOR"] = maxi(0, armor - hit)
+				hit = maxi(0, hit - armor)
+			s.damage += hit * sign
+		"heal":
+			s.damage = maxi(0, s.damage - int(ev.amount) * sign)
+		"buff":
+			if ev.has("set_atk") or ev.has("set_hp"):
+				if sign > 0 and ev.get("set_atk") != null:
+					s._atk = int(ev.set_atk)
+				if sign > 0 and ev.get("set_hp") != null:
+					s._max_health = int(ev.set_hp)
+					s.damage = 0
+			else:
+				s._atk += int(ev.get("atk", 0)) * sign
+				s._max_health += int(ev.get("hp", 0)) * sign
+		"freeze":
+			if sign > 0:
+				s.tags["FROZEN"] = true
+		"silence":
+			if sign > 0:
+				s.silenced = true
+				for k in ["TAUNT", "DIVINE_SHIELD", "WINDFURY", "STEALTH", "CHARGE", "FROZEN"]:
+					s.tags.erase(k)
+		"divine_shield_lost":
+			if sign > 0:
+				s.tags.erase("DIVINE_SHIELD")
+			else:
+				s.tags["DIVINE_SHIELD"] = true
+
+
+## A view made in the middle of a batch (a minion summoned) shows the game at the end of it:
+## the changes of the steps still to come are taken back (they come with their steps).
+func _rewind(v: EntityView) -> void:
+	if not v is MinionView:
+		return
+	for i in range(_stage_at + 1, _stage_events.size()):
+		_change(v.s, _stage_events[i], -1)
+	v.queue_redraw()
+
+
+## Damage, healing, buffs and the like: a bolt from the source to each target (from the card
+## shown big, the minion, the hero power), then the numbers change.
+func _hit(st: Dictionary) -> void:
+	var shots := 0
+	for ev in st.evs:
+		var t := _target_id(ev)
+		var src: int = ev.get("by_id", ev.get("source", -1))
+		var from = _flying[src].position + _flying[src].size * _flying[src].scale / 2.0 if _flying.has(src) \
+			else (_center_of(src) if _views.has(src) and src != t else null)
+		if t >= 0 and _views.has(t) and from != null and TableFx.named(ev.get("by", ""), "cast") != "none":
+			_shoot(from, _center_of(t), _fx_color(ev))
+			shots += 1
+	if shots > 0:
+		await _wait(0.3)
+	for ev in st.evs:  # a transform's smoke, a destroy mark where the minion stood
+		var t := _target_id(ev)
+		if _views.has(t) and ev.type in ["transform", "destroy", "take_control"]:
+			TableFx.spawn(_fx, {"transform": "smoke", "destroy": "destroy", "take_control": "control"}[ev.type], _center_of(t))
+	_step_fx(st, _step_apply(st))
+	await _wait(0.25 if st.evs.size() == 1 and st.evs[0].type == "damage" and _one_by_one(st.evs[0]) else 0.3)
+
+
+## The entity a step's event happens to (a hero for armor), -1 for none.
+func _target_id(ev: Dictionary) -> int:
+	if ev.type == "armor":
+		return g.players[ev.player].hero.id
+	return _event_target(ev)
+
+
+## After a step's change: the effects on the minions and heroes it changed, the numbers that
+## fly up, its sounds, the table shaking under a heavy blow.
+func _step_fx(st: Dictionary, before: Dictionary) -> void:
+	_step_sounds(st)
+	var col_of := {}
+	var hit_of := {}
+	for ev in st.evs:
+		var t := _target_id(ev)
+		if t >= 0 and ev.has("by"):
+			col_of[t] = _fx_color(ev)
+			hit_of[t] = TableFx.named(ev.by, "hit")
+	for id in before:
+		var v = _views.get(id)
+		if v == null:
+			continue
+		var kinds := TableFx.kinds(before[id], v.s)
+		var hit: String = hit_of.get(id, "")  # the card's own hit effect (fx.hit), besides what the change shows; "none": nothing
+		if hit == "none":
+			kinds = []
+		elif hit != "" and not kinds.is_empty() and not kinds.has(hit):
+			kinds.append(hit)
+		for k in kinds:
+			TableFx.spawn(_fx, k, _center_of(id), col_of.get(id, Color.TRANSPARENT) if k == "hurt" else Color.TRANSPARENT)
+	var big := false
+	var hero_hit := 0  # 1: a hero took damage, 2: more than 5
+	for ev in st.evs:
+		match ev.type:
+			"damage":
+				var on_hero := g.ent(ev.target) != null and g.ent(ev.target).is_hero()
+				var heavy: bool = on_hero and ev.amount > 5
+				_float_text(ev.target, "-%d" % ev.amount, Palette.HEALTH, {}, 58 if heavy else (44 if on_hero else 30))
+				if on_hero:
+					hero_hit = maxi(hero_hit, 2 if heavy else 1)
+				big = big or ev.amount >= 5
+			"heal":
+				_float_text(ev.target, "+%d" % ev.amount, Palette.BUFFED, {})
+			"armor":
+				_float_text(g.players[ev.player].hero.id, "+%d" % ev.amount, Palette.ARMOR, {})
+			"divine_shield_lost":
+				_float_text(ev.target, tr("Shield!"), Palette.ATTACK, {})
+	var went_off := {}  # minions whose own trigger or poison acted: their mark pops, with a chime
+	for ev in st.evs:
+		var src: int = ev.get("by_id", -1)
+		if src < 0 or went_off.has(src) or not _views.get(src) is MinionView or _stage_events.any(func(e): return e.type == "play" and e.entity == src):
+			continue
+		var m := g.ent(src)
+		if m and not m.silenced and (Rules.hooks(m.card_id).has("on") or KeywordTips.keywords_of(m.card_id).has("POISONOUS")):
+			went_off[src] = true
+			(_views[src] as MinionView).pop("mark")
+	if not went_off.is_empty():
+		Sound.play("trigger")
+	if hero_hit == 2:
+		Sound.play("hit_big")
+	if Match.shake_enabled and (big or hero_hit > 0):
+		_shake(2.0 if hero_hit == 2 else 1.0)
+
+
+## One copy of each sound of a step.
+func _step_sounds(st: Dictionary) -> void:
+	var heard := {}
+	for ev in st.evs:
+		var sfx := Sound.sound_for(ev, g, viewer())
+		if not heard.has(sfx):
+			heard[sfx] = true
+			Sound.play(sfx)
+
+
+## The arrow of a played card, a Battlecry or a hero power to its target, for a moment.
+func _aim(st: Dictionary) -> void:
+	var src: int = st.src
+	if not _views.has(st.to) or not (_flying.has(src) or _views.has(src)):
+		return
+	var from: Vector2 = _flying[src].position + _flying[src].size * _flying[src].scale / 2.0 if _flying.has(src) else _center_of(src)
+	_cast_arrow.aim(from, _center_of(st.to), true)
+	await _wait(0.4)
+	_cast_arrow.visible = false
+
+
+## A card shown big goes away.
+func _fade_card(cv: CardView) -> void:
+	if not is_instance_valid(cv):
+		return
+	if Anim.instant or not is_inside_tree():
+		cv.queue_free()
+		return
+	var tw := cv.create_tween().set_parallel()
+	tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
+	tw.tween_property(cv, "scale", cv.scale * 1.2, Anim.d(0.25))
+	tw.chain().tween_callback(cv.queue_free)
 
 
 ## The Coin comes for the second player whenever the mulligan ends (also when
@@ -1450,6 +2006,7 @@ func _coin_in(ev: Dictionary) -> void:
 		cv.show_entity(e, g)
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cv.set_glow(Palette.SELECTED)
+	cv.z_index = 110  # over the mulligan screen, if it still shows
 	_fx.add_child(cv)
 	cv.pivot_offset = cv.size / 2.0
 	cv.position = Vector2(640, 430 if own else 150) - cv.size / 2.0
@@ -1463,24 +2020,23 @@ func _coin_in(ev: Dictionary) -> void:
 	cv.queue_free()
 
 
-## The mulligan comes back: new cards fly from the deck into the places of the
-## replaced ones, the Coin appears for the second player, then the whole hand
-## goes down to its place.
-func _mulligan_result(events: Array, p: int) -> void:
+## The mulligan comes back: the new cards fly from the deck into the places of the replaced
+## ones, in the order the hand has them (the engine puts the k-th new card where the k-th
+## replaced card was), so the cards go down into the hand just as they stand here.
+func _mulligan_result(evs: Array, p: int) -> void:
 	var slots: Dictionary = _overlay.get_meta("slots", {})
 	var views: Array = _overlay.get_meta("views", [])
 	var replaced: Array = _overlay.get_meta("replaced", [])
-	var at := events.find_custom(func(e): return e.type == "mulligan" and e.player == p)
-	var drawn := []
-	for i in at:
-		if events[i].type == "draw" and events[i].player == p:
-			drawn.append(events[i].entity)
-	var shown := []  # [entity id, view]
-	for cv in views:
-		if not replaced.has(cv.entity_id):
-			shown.append([cv.entity_id, cv])
-	for i in mini(drawn.size(), replaced.size()):
-		var e := g.ent(drawn[i])
+	var drawn: Array = evs.filter(func(e): return e.type == "draw" and e.player == p).map(func(e): return e.entity)
+	var shown := []  # [entity id, view], left to right
+	var k := 0
+	for old in views:
+		if not replaced.has(old.entity_id):
+			shown.append([old.entity_id, old])
+			continue
+		if k >= drawn.size():
+			continue
+		var e := g.ent(drawn[k])
 		var cv := CardView.make(e.card_id, 1.3)
 		cv.show_entity(e, g)
 		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1488,22 +2044,21 @@ func _mulligan_result(events: Array, p: int) -> void:
 		cv.global_position = _piles[0].global_position
 		cv.scale = Vector2(0.4, 0.4)
 		var tw := cv.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		tw.tween_property(cv, "global_position", slots[replaced[i]], Anim.d(0.45)).set_delay(Anim.d(0.12 * i))
-		tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.45)).set_delay(Anim.d(0.12 * i))
-		shown.append([drawn[i], cv])
+		tw.tween_property(cv, "global_position", slots.get(old.entity_id, old.global_position), Anim.d(0.45)).set_delay(Anim.d(0.12 * k))
+		tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.45)).set_delay(Anim.d(0.12 * k))
+		shown.append([drawn[k], cv])
+		k += 1
 	_overlay.set_meta("shown", shown)
-	if not drawn.is_empty():
-		await _wait(0.5 + 0.12 * drawn.size())
-	if g.phase == "MULLIGAN" and controller.remote >= 0:
-		# online, the opponent still chooses: the cards stay here; the Coin and the way
-		# down into the hand come with the opponent's choice
-		var title: Label = _overlay.get_meta("title")
-		title.text = tr("Waiting for the opponent…")
-		return
-	for ev in events:
-		if ev.type == "add_to_hand" and ev.player == p and ev.card == GameView.COIN and not ev.get("shown", false):
-			await _mulligan_coin(ev)
-	_mulligan_down()
+	if k > 0:
+		await _wait(0.5 + 0.12 * k)
+	if g.phase == "MULLIGAN":
+		if controller.remote >= 0:
+			# online, the opponent still chooses: the cards stay here; the Coin and the way
+			# down into the hand come with the opponent's choice
+			var title: Label = _overlay.get_meta("title")
+			title.text = tr("Waiting for the opponent…")
+			return
+		_mulligan_down()  # two players at one screen: the other one chooses now
 
 
 ## The mulligan screen still open after the choice (online, waiting for the opponent).
@@ -1638,61 +2193,6 @@ func _burn(ev: Dictionary) -> void:
 	await _wait(1.15)
 
 
-## Before a change that nothing hit: the effects fly from their source (a spell,
-## a Battlecry, a minion's trigger at the end or start of a turn) to each target.
-func _travel(events: Array) -> void:
-	var seen := {}
-	await _missiles(events, seen)
-	for ev in events:
-		var src: int = ev.get("by_id", -1)
-		var t := _event_target(ev)
-		if src < 0 or t < 0 or t == src or not _views.has(t) or seen.has([src, t]):
-			continue
-		seen[[src, t]] = true
-		var from := _center_of(src) if _views.has(src) else Vector2(640, 330)
-		_shoot(from, _center_of(t), _fx_color(ev))
-	if not seen.is_empty():
-		await _wait(0.34)
-
-
-## A card that hits random targets several times (Arcane Missiles, Avenging Wrath,
-## Mad Bomber, Multi-Shot…): its hits fly one after another, each target's number
-## dropping as it is hit. Deaths come after, with the rest of the change.
-func _missiles(events: Array, seen: Dictionary) -> void:
-	var count := {}
-	for ev in events:
-		if ev.type == "damage" and ev.has("by_id"):
-			count[ev.by_id] = count.get(ev.by_id, 0) + 1
-	for ev in events:
-		var src: int = ev.get("by_id", -1)
-		if ev.type != "damage" or count.get(src, 0) < 2 or not _views.has(ev.target):
-			continue
-		var text: Dictionary = CardDb.card(ev.by).get("text", {}) if CardDb.card(ev.by).get("text") is Dictionary else {}
-		var cast := TableFx.named(ev.by, "cast")
-		if cast != "missiles" and (cast != "" or not str(text.get("enUS", "")).to_lower().contains("random")):
-			continue
-		seen[[src, ev.target]] = true  # no second bolt for it in _travel
-		var from := _center_of(src) if _views.has(src) else Vector2(640, 330)
-		var to := _center_of(ev.target)
-		_shoot(from, to, _fx_color(ev))
-		await _wait(0.3)
-		var v = _views.get(ev.target)
-		if v is MinionView or v is HeroView:  # the number drops at once (the real state comes after)
-			var hit: int = ev.amount
-			if v is HeroView:
-				var armor := int(v.s.tags.get("ARMOR", 0))
-				v.s.tags.ARMOR = maxi(0, armor - hit)
-				hit = maxi(0, hit - armor)
-			v.s.damage += hit
-			v.pop("hp")
-			v.queue_redraw()
-		TableFx.spawn(_fx, "hurt", to, _fx_color(ev))
-		_float_text(ev.target, "-%d" % ev.amount, Palette.HEALTH, {})
-		ev["shown"] = true  # its number already flew
-		Sound.play("damage")
-		await _wait(0.12)
-
-
 ## The entity an event happens to (-1 for none).
 static func _event_target(ev: Dictionary) -> int:
 	match ev.type:
@@ -1727,74 +2227,6 @@ func _shoot(a: Vector2, b: Vector2, col: Color) -> void:
 	tw.tween_callback(orb.burst)
 
 
-## At the change: an effect on every minion and hero by what happened to it, and
-## for the things that leave or arrive (deaths with a Deathrattle, transforms,
-## summons, Battlecries, bounces).
-func _impact_fx(events: Array, before: Dictionary, old: Dictionary) -> void:
-	var col_of := {}
-	var hit_of := {}
-	for ev in events:
-		var t := _event_target(ev)
-		if t >= 0 and ev.has("by"):
-			col_of[t] = _fx_color(ev)
-			hit_of[t] = TableFx.named(ev.by, "hit")
-	for id in before:
-		var now := g.ent(id)
-		if now == null or now.zone != "PLAY" or not _views.has(id):
-			continue
-		var kinds := TableFx.kinds(before[id], now)
-		var hit: String = hit_of.get(id, "")  # the card's own hit effect (fx.hit), besides what the change shows; "none": nothing
-		if hit == "none":
-			kinds = []
-		elif hit != "" and not kinds.is_empty() and not kinds.has(hit):
-			kinds.append(hit)
-		for k in kinds:
-			TableFx.spawn(_fx, k, _center_of(id), col_of.get(id, Color.TRANSPARENT) if k == "hurt" else Color.TRANSPARENT)
-	var played := -1
-	for ev in events:
-		match ev.type:
-			"play":
-				played = ev.entity
-			"death":
-				var b: GameView.Ent = before.get(ev.entity)
-				var mark := TableFx.named(ev.card, "death")  # skull (with an unsilenced death hook), destroy, none
-				if old.has(ev.entity) and mark == "destroy":
-					TableFx.spawn(_fx, "destroy", old[ev.entity])
-				elif old.has(ev.entity) and mark != "none" and Rules.hooks(ev.card).has("deathrattle") and not (b and b.silenced):
-					TableFx.spawn(_fx, "skull", old[ev.entity])
-			"destroy":
-				if old.has(ev.target):
-					TableFx.spawn(_fx, "destroy", old[ev.target])
-			"transform":
-				if old.has(ev.from):
-					TableFx.spawn(_fx, "smoke", old[ev.from])
-			"return_to_hand":
-				if old.has(ev.entity):
-					TableFx.spawn(_fx, "whoosh", old[ev.entity])
-			"take_control":
-				if _views.has(ev.target):
-					TableFx.spawn(_fx, "control", _center_of(ev.target))
-			"summon":
-				if ev.has("by") and _views.has(ev.entity):
-					TableFx.spawn(_fx, "portal", _center_of(ev.entity))
-	var on_play := TableFx.named(g.ent(played).card_id, "play") if played >= 0 and g.ent(played) else ""
-	if played >= 0 and _views.has(played) and on_play == "portal":
-		TableFx.spawn(_fx, "portal", _center_of(played))
-	elif played >= 0 and _views.has(played) and on_play != "none" and events.any(func(e): return e.get("by_id", -1) == played and e.type != "play"):
-		TableFx.spawn(_fx, "battlecry", _center_of(played))
-	var went_off := {}  # minions whose own trigger or poison acted: their mark pops, with a chime
-	for ev in events:
-		var src: int = ev.get("by_id", -1)
-		if src < 0 or src == played or went_off.has(src) or not _views.get(src) is MinionView:
-			continue
-		var m := g.ent(src)
-		if m and not m.silenced and (Rules.hooks(m.card_id).has("on") or KeywordTips.keywords_of(m.card_id).has("POISONOUS")):
-			went_off[src] = true
-			(_views[src] as MinionView).pop("mark")
-	if not went_off.is_empty():
-		Sound.play("trigger")
-
-
 func _wait(t: float) -> void:
 	if Anim.d(t) > 0.0 and is_inside_tree():
 		await get_tree().create_timer(Anim.d(t)).timeout
@@ -1805,50 +2237,77 @@ func _center_of(id: int) -> Vector2:
 	return v.position + v.size * v.scale / 2.0 if v else Vector2(640, 330)
 
 
-## A card is played: the opponent's card turns over in the middle of the table;
-## your spells fly up and glow; a spell with a target sends its bolt.
-func _show_played(ev: Dictionary, land: Callable) -> void:
-	var e := g.ent(ev.entity)
-	var v: EntityView = _views.get(ev.entity)
-	if e == null or not v is CardView:
-		return
+## Where a view is going (its centre once it has glided to its place).
+func _home_of(id: int) -> Vector2:
+	var v: EntityView = _views.get(id)
+	return v.get_meta("home", _center_of(id)) if v else Vector2(640, 330)
+
+
+## Where a played card is shown big (its centre): left of the boards, clear of the targets.
+const SHOW_AT := Vector2(180, 330)
+
+
+## A card is played: it leaves the hand (the opponent's turns face up as it goes, but a
+## Secret) and shows big beside the table. A spell stays there while its effects play
+## (spell_done takes it away), a minion goes on to its place (summon), a weapon to its hero.
+func _show_played(st: Dictionary) -> void:
+	var ev: Dictionary = st.evs[0]
 	var own: bool = ev.get("player", -1) == viewer()
-	var cv := v as CardView
+	var e := g.ent(ev.entity)
+	var card: String = ev.get("card", "")
+	if card == "" and e:
+		card = e.card_id
+	var hv: EntityView = _views.get(ev.entity)
+	if hv and not hv is CardView:  # a minion that stood on the board while its Battlecry aimed
+		_landing[ev.entity] = _center_of(ev.entity)
+	var hidden: bool = card == "" or (not own and ev.get("secret", false))
+	var cv := CardView.make(card)
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.pivot_offset = cv.size / 2.0
 	cv.z_index = 60
-	if not own:
-		if not ev.get("secret", false):
-			cv.face_up = true
-			cv.show_entity(e, g)
-		_glide(cv, Vector2(560, 210) - cv.pivot_offset * 0.0, 1.2, 0.0, 0.35)
-		await _wait(0.9)
-	elif not e.is_minion():
-		_glide(cv, Vector2(580, 200), 1.1, 0.0, 0.25)
-		await _wait(0.35)
-	if not e.is_minion() and ev.get("target", -1) >= 0:
-		if TableFx.named(e.card_id, "cast") != "none":
-			await _bolt(_center_of(ev.entity), _center_of(ev.target), _element_color(e.card_id))
-		land.call()  # the spell touches its target
-	if not e.is_minion() and not e.is_weapon():
-		var tw := cv.create_tween().set_parallel()
-		tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
-		tw.tween_property(cv, "scale", cv.scale * 1.3, Anim.d(0.25))
-		await _wait(0.25)  # not tw.finished: the card's view may be gone by then
+	cv.face_up = own and not hidden
+	var start := Vector2(640, 700 if own else 20)
+	var s0 := 0.6
+	var rot := 0.0
+	if hv:
+		start = hv.position + hv.size * hv.scale / 2.0
+		s0 = hv.scale.x
+		rot = hv.rotation
+		_views.erase(ev.entity)
+		_layer.remove_child(hv)
+		hv.queue_free()
+	if _landing.has(ev.entity):
+		cv.free()
+	else:
+		_fx.add_child(cv)
+		cv.position = start - cv.size / 2.0
+		cv.scale = Vector2(s0, s0)
+		cv.rotation = rot
+		_flying[ev.entity] = cv
+	_step_apply(st)  # the hand closes up
+	_step_sounds(st)
+	if not _flying.has(ev.entity) or Anim.instant or not is_inside_tree():
+		if _flying.has(ev.entity):
+			cv.position = SHOW_AT - cv.size / 2.0
+			cv.scale = Vector2(1.4, 1.4)
+			cv.rotation = 0.0
+			cv.face_up = not hidden
+		return
+	var tw := cv.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(cv, "position", SHOW_AT - cv.size / 2.0, Anim.d(0.28))
+	tw.tween_property(cv, "rotation", 0.0, Anim.d(0.28))
+	if own or hidden:
+		tw.tween_property(cv, "scale", Vector2(1.4, 1.4), Anim.d(0.28))
+	else:  # the opponent's card turns over on the way
+		var flip := cv.create_tween()
+		flip.tween_property(cv, "scale", Vector2(0.05, 1.05), Anim.d(0.14))
+		flip.tween_callback(func(): cv.face_up = true)
+		flip.tween_property(cv, "scale", Vector2(1.4, 1.4), Anim.d(0.14))
+	await _wait(0.28 + 0.32)
 
 
 func _element_color(card_id: String) -> Color:
 	return TableFx.element_color(card_id)
-
-
-## A glowing bolt flies from a to b.
-func _bolt(a: Vector2, b: Vector2, col: Color) -> void:
-	var orb := _Orb.new()
-	orb.color = col
-	orb.position = a
-	_fx.add_child(orb)
-	var tw := orb.create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tw.tween_property(orb, "position", b, Anim.d(0.32))
-	await tw.finished
-	orb.burst()
 
 
 ## The attacker leaps at its target and back; the hit lands when it touches.
@@ -1877,8 +2336,8 @@ func _lunge(attacker: int, defender: int, land: Callable) -> void:
 	v.z_index = 0
 
 
-## The hero power button flashes; a targeted power sends its bolt.
-func _pulse(id: int, target: int, land: Callable) -> void:
+## The hero power button flashes (its arrow and effects are the next steps).
+func _pulse(id: int) -> void:
 	var v: EntityView = _views.get(id)
 	if v == null:
 		return
@@ -1886,11 +2345,7 @@ func _pulse(id: int, target: int, land: Callable) -> void:
 	var tw := v.create_tween()
 	tw.tween_property(v, "scale", Vector2(1.3, 1.3), Anim.d(0.14))
 	tw.tween_property(v, "scale", Vector2.ONE, Anim.d(0.14))
-	await tw.finished
-	if target >= 0:
-		if TableFx.named(g.ent(id).card_id, "cast") != "none":
-			await _bolt(_center_of(id), _center_of(target), _element_color(g.ent(id).card_id))
-		land.call()
+	await _wait(0.3)
 
 
 ## A revealed Secret shows big in the middle for a moment.
@@ -2093,15 +2548,11 @@ class _Orb:
 		draw_circle(Vector2.ZERO, r * 0.45, Color(1, 1, 1, 0.9))
 
 
+## The whole batch at once (tests, a table not on the screen).
 func _effects_now(events: Array) -> void:
-	if is_inside_tree() and not Anim.instant and events.any(func(e): return e.type == "game_over"):
-		_ending = true  # the result waits for the losing hero to shatter
 	var old := {}
-	var before := {}  # what the minion and hero views showed before the change
 	for id in _views:
 		old[id] = _views[id].position + _views[id].size / 2.0
-		if _views[id] is MinionView or _views[id] is HeroView:
-			before[id] = _views[id].s
 	for ev in events:  # a card made by a card on the table (Antonidas, Ysera) comes from it, not from the deck
 		if ev.type == "add_to_hand" and _views.has(ev.get("by_id", -1)) and not _views.has(ev.entity) and not _moved.has(ev.entity):
 			_moved[ev.entity] = _center_of(ev.by_id)
@@ -2111,12 +2562,6 @@ func _effects_now(events: Array) -> void:
 			_moved[pair[1]] = _center_of(pair[0])
 			_quiet[pair[0]] = true
 	refresh()
-	_moved.clear()
-	_quiet.clear()
-	if is_inside_tree() and not Anim.instant:
-		_impact_fx(events, before, old)
-		if events.any(func(e): return e.type == "game_over"):
-			_shatter_losers()
 	var big := false
 	var hero_hit := 0  # 1: a hero took damage, 2: more than 5
 	var heard := {}
@@ -2127,8 +2572,6 @@ func _effects_now(events: Array) -> void:
 			Sound.play(sfx)
 		match ev.type:
 			"damage":
-				if ev.get("shown", false):
-					continue  # shown missile by missile already
 				var on_hero := g.ent(ev.target) != null and g.ent(ev.target).is_hero()
 				var heavy: bool = on_hero and ev.amount > 5
 				# a hero's damage shows bigger; a blow of more than 5 hits harder
