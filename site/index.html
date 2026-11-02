@@ -20,34 +20,36 @@
 <meta name="twitter:image" content="https://pycz2.github.io/classichs/og.jpg">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@500;700;800;900&family=Exo+2:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
-<canvas id="embers" aria-hidden="true"></canvas>
+<canvas id="rain" aria-hidden="true"></canvas>
 <header class="top">
-  <a class="brand" href="#">Classic&nbsp;HS</a>
+  <a class="brand" href="#" data-name>Classic HS</a>
   <nav>
+    <a href="#neonfall" data-i18n="nav.neon">Neonfall</a>
     <a href="#heroes" data-i18n="nav.heroes">Heroes</a>
     <a href="#features" data-i18n="nav.features">Features</a>
     <a href="#screens" data-i18n="nav.screens">Screenshots</a>
     <a href="#faq" data-i18n="nav.faq">FAQ</a>
+    <a href="dev/" class="dev-link" data-i18n="nav.dev">Developers</a>
     <a href="#play" class="nav-play" data-i18n="nav.play">Play</a>
     <a href="https://github.com/pycz2/classichs" target="_blank" rel="noopener">GitHub</a>
     <select id="lang" class="lang" aria-label="Language / Язык"></select>
   </nav>
 </header>
 
-<section class="hero">
+<section class="hero" style="--backdrop: url('art/neon_menu.jpg')">
   <div class="hero-cards" id="heroCards" aria-hidden="true"></div>
   <div class="hero-text reveal">
     <p class="eyebrow" data-i18n="hero.eyebrow">Fan remake · June 2014 · Classic</p>
-    <h1 class="shine">Classic&nbsp;HS</h1>
+    <h1 class="shine" data-name>Classic HS</h1>
     <p class="lead" data-i18n="hero.lead">Hearthstone as it was before Naxxramas: all 382 cards, nine classes, the original tutorial — and online play with a friend straight from the browser, without a game server.</p>
     <div class="cta">
       <a class="btn gold" href="#play" data-i18n="hero.play">Play now</a>
-      <a class="btn ghost" href="https://github.com/pycz2/classichs" target="_blank" rel="noopener" data-i18n="hero.source">Source code</a>
+      <a class="btn ghost dev-link" href="dev/" data-i18n="hero.dev">Make your own game</a>
     </div>
     <p class="note" data-i18n="hero.note">Free. No account. Download: about 61 MB.</p>
     <p class="version"><a href="#news" id="version"></a></p>
@@ -62,9 +64,18 @@
   <div class="stat reveal"><b data-count="0">0</b><span data-i18n="stats.servers">Game servers</span></div>
 </section>
 
+<section id="neonfall" class="neonfall">
+  <p class="eyebrow reveal" data-i18n="neon.tag">The default game</p>
+  <h2 class="reveal neon-title" id="neonName">Neonfall</h2>
+  <p class="sub reveal" id="neonDesc"></p>
+  <div class="champ-row" id="champRow"></div>
+  <p class="more reveal"><span data-i18n="neon.more"></span> <a href="#play" data-i18n="neon.play">Play Neonfall</a></p>
+</section>
+
 <div class="divider" aria-hidden="true"><span></span></div>
 
 <section id="heroes" class="heroes">
+  <p class="eyebrow reveal" data-i18n="classic.tag">Classic 2014</p>
   <h2 class="reveal" data-i18n="heroes.title">Nine heroes</h2>
   <p class="sub reveal" data-i18n="heroes.sub">Every class with its Hero Power.</p>
   <div class="hero-row" id="heroRow"></div>
@@ -131,7 +142,7 @@
 <section id="play" class="play">
   <h2 class="reveal" data-i18n="play.title">Play right here</h2>
   <div class="frame reveal">
-    <iframe id="game" title="Classic HS" allow="fullscreen; autoplay; clipboard-read; clipboard-write" hidden></iframe>
+    <iframe id="game" title="Classic HS" data-name-title allow="fullscreen; autoplay; clipboard-read; clipboard-write" hidden></iframe>
     <button id="start" class="start">
       <span class="big" data-i18n="play.start">▶ Start the game</span>
       <span class="small" data-i18n="play.size">Download: about 61 MB</span>
@@ -163,6 +174,19 @@
   </div>
 </section>
 
+<section id="makers" class="makers">
+  <h2 class="reveal" data-i18n="makers.title">For developers</h2>
+  <p class="sub reveal" data-i18n="makers.sub"></p>
+  <div class="grid">
+    <a class="feature doc-card reveal" data-doc="packs.html" href="dev/en/packs.html"><div class="ico">📦</div><h3 data-i18n="k1.t"></h3><p data-i18n="k1.d"></p></a>
+    <a class="feature doc-card reveal" data-doc="lua.html" href="dev/en/lua.html"><div class="ico">🌙</div><h3 data-i18n="k2.t"></h3><p data-i18n="k2.d"></p></a>
+    <a class="feature doc-card reveal" data-doc="api.html" href="dev/en/api.html"><div class="ico">⚙️</div><h3 data-i18n="k3.t"></h3><p data-i18n="k3.d"></p></a>
+    <a class="feature doc-card reveal" data-doc="testing.html" href="dev/en/testing.html"><div class="ico">🧪</div><h3 data-i18n="k4.t"></h3><p data-i18n="k4.d"></p></a>
+  </div>
+  <p class="more reveal"><a class="btn neon dev-link" href="dev/" data-i18n="makers.open">Open the developer docs</a></p>
+  <p class="note center reveal" data-i18n="makers.lang"></p>
+</section>
+
 <section id="dev" class="dev">
   <h2 class="reveal" data-i18n="dev.title">Open source</h2>
   <div class="grid">
@@ -175,10 +199,11 @@
 
 <footer>
   <p data-i18n="footer.legal"></p>
-  <p><a href="https://github.com/pycz2/classichs">GitHub</a> · <a class="changelog-link" href="https://github.com/pycz2/classichs/blob/main/data/changelog/en.md" data-i18n="footer.changes">Changelog</a> · MIT</p>
+  <p><a href="https://github.com/pycz2/classichs">GitHub</a> · <a class="dev-link" href="dev/" data-i18n="footer.dev">For developers</a> · <a class="changelog-link" href="https://github.com/pycz2/classichs/blob/main/data/changelog/en.md" data-i18n="footer.changes">Changelog</a> · MIT</p>
 </footer>
 
 <div id="lightbox" class="lightbox" hidden><img alt=""></div>
+<script src="name.js"></script>
 <script src="i18n/en.js"></script>
 <script src="i18n/ru.js"></script>
 <script src="i18n/de.js"></script>
