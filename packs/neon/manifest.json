@@ -27,6 +27,19 @@
     "ru": "Неонопад"
    },
    "default": true
+  },
+  {
+   "id": "simple",
+   "name": {
+    "en": "Simple 2D",
+    "ru": "Простой 2D",
+    "de": "Einfach 2D",
+    "fr": "2D simple",
+    "es": "2D simple",
+    "pt_BR": "2D simples",
+    "it": "2D semplice",
+    "pl": "Prosty 2D"
+   }
   }
  ],
  "sound_sets": [
