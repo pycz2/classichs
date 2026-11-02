@@ -227,9 +227,9 @@ figcaption { text-align: center; color: var(--muted); margin-top: 14px; font-siz
 .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .start {
   position: absolute; inset: 0; width: 100%; border: 0; cursor: pointer; color: var(--text);
-  background: rgba(5, 3, 16, 0.55); display: grid; place-content: center; gap: 6px; transition: background 0.2s;
+  background: rgba(5, 3, 16, 0.5); backdrop-filter: blur(3px); display: grid; place-content: center; gap: 6px; transition: background 0.2s; font-family: var(--body);
 }
-.start:hover { background: rgba(5, 3, 16, 0.35); }
+.start:hover { background: rgba(5, 3, 16, 0.45); }
 .start .big { font: 800 clamp(24px, 4vw, 40px) var(--title); color: #fff; text-shadow: 0 0 14px var(--magenta), 0 0 30px rgba(255, 62, 200, 0.6); }
 .start .small { font-size: 14px; color: var(--muted); }
 
