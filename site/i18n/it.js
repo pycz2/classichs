@@ -27,7 +27,7 @@
     "shot.tracker.tab": "Tracker", "shot.tracker.cap": "Tracker del mazzo: il tuo mazzo con la probabilità di pescare ogni carta e cosa ha giocato l'avversario",
     "shot.history.tab": "Cronologia", "shot.history.cap": "Cronologia per turni: passa su un'azione per vedere cosa ha fatto",
     "shot.collection.tab": "Collezione", "shot.collection.cap": "Collezione e mazzi in un'unica schermata",
-    "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "Tutorial: sei missioni come l'originale",
+    "shot.tutorial.tab": "Tutorial", "shot.tutorial.cap": "Il tutorial di Neonfall: sei missioni, dalla prima carta ai Protocolli",
     "shot.online.tab": "Online", "shot.online.cap": "Gioco online: partita normale o Arena, poi crea una partita o unisciti",
     "shot.menu.tab": "Menu", "shot.menu.cap": "Menu principale",
     "shot.settings.tab": "Impostazioni", "shot.settings.cap": "Impostazioni: lingua, nome, musica e suoni, illustrazioni, dorso, velocità delle animazioni, strumenti di debug",

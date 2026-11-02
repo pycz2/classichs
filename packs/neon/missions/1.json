@@ -1,0 +1,55 @@
+{
+  "id": 1,
+  "champion": "mother_rust",
+  "boss": "boss_brick",
+  "boss_power": "shakedown",
+  "powers_locked": true,
+  "boss_guarded": false,
+  "end_turn_block": {
+    "while_can_play": true,
+    "while_can_attack": true
+  },
+  "player": {
+    "mana": 1,
+    "hand": [
+      "hound_shard"
+    ],
+    "deck": [
+      "chrome_stray",
+      "scrap_drone",
+      "bitrot_daemon",
+      "hound_shard",
+      "swarm_wrangler",
+      "chrome_stray",
+      "scrap_drone",
+      "vat_clone",
+      "bitrot_daemon",
+      "hound_shard",
+      "swarm_wrangler",
+      "holo_busker",
+      "vat_clone"
+    ]
+  },
+  "boss_deck": [
+    "scrap_drone",
+    "hound_shard",
+    "scrap_drone",
+    "chrome_stray",
+    "hound_shard",
+    "scrap_drone",
+    "chrome_stray",
+    "hound_shard",
+    "scrap_drone",
+    "chrome_stray",
+    "hound_shard",
+    "scrap_drone"
+  ],
+  "mulligan": false,
+  "reward": "club_bouncer",
+  "hints": [
+    "play",
+    "attack",
+    "end_turn"
+  ],
+  "script": "scripts/tutorial.lua#ench:tutorial_guard"
+}

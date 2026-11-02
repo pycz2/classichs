@@ -1,7 +1,7 @@
 # Neonfall (`packs/neon`)
 
 Source of the cyberpunk pack "Neonfall": 3 champions, 60 collectible cards,
-7 tokens, 3 starter decks, 8 languages, art, sounds and music. Design, balance
+7 tokens, a six-mission tutorial, 3 starter decks, 8 languages, art, sounds and music. Design, balance
 and the full card list: [DESIGN.md](DESIGN.md).
 
 | Path | What |
@@ -9,7 +9,8 @@ and the full card list: [DESIGN.md](DESIGN.md).
 | `DESIGN.md` | Setting, champions, mechanic names, effect spec, balance, card tables (generated), decks |
 | `cards.json` | Every card (champions, powers and tokens included): stats, `keywords`/`refs` (engine ids), `effects` (machine-readable logic for the Lua scripts), `note` (value), `look` (art concept) |
 | `locales/{en,ru,de,fr,es,pt_BR,it,pl}.json` | Pack name and description, classes, races, rarities, terms, mechanic names and tips, deck names, card names and texts (`$N` spell damage, `#N` healing) |
-| `scripts/*.lua` | Card logic (docs/packs/api.md): one file per class, `neutral.lua`, `lib.lua` |
+| `scripts/*.lua` | Card logic (docs/packs/api.md): one file per class, `neutral.lua`, `lib.lua`, `tutorial.lua` (the missions' hooks) |
+| `tutorial.json`, `missions/<n>.json` | The tutorial (DESIGN.md §10): six missions, their intro pages, hints, scene effects; the bosses are `boss_*` cards; texts in `locales/*.json` `tutorial`, `missions`, `hints` |
 | `decks/*.json` | Starter decks: `zero_trace` (Iris Null), `redline_rush` (Mother Rust), `hostile_merger` (Director Vale) |
 | `art/default/<id>.jpg` | One picture per card (512×512), `card_back` (512×768), `logo` (1280×720), `board` and `menu` (1920×1080) |
 | `art/simple/<id>.webp` | The "Simple 2D" art set: one simplified flat picture per card (384×384) |

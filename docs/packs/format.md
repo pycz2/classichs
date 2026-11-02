@@ -383,9 +383,11 @@ look changes; `Packs.look()` is the styling pack (none in the client's own scree
 ## 12. Tutorial (`tutorial.json`) and scene effects
 
 An optional file at the top of the pack. With it the game shows a Tutorial (only for this pack);
-without it (Neonfall) there is none, even if the pack has `missions/`. Presentation only: not in
+without it there is none, even if the pack has `missions/`. Presentation only: not in
 `rules_hash` (the missions it names are). Schema: [schema/tutorial.schema.json](schema/tutorial.schema.json).
-Classic's (`packs/classic/tutorial.json`) is the full example: six missions, fourteen hints.
+Two full examples: Classic's (`packs/classic/tutorial.json`: six missions, fourteen hints) and
+Neonfall's (`packs/neon/tutorial.json`: six missions, twenty hints; its bosses are `CHAMPION` cards of
+the pack in the `token` set, the last one plays a starter deck, and every page and line is in eight languages).
 
 | Key | Meaning |
 |---|---|

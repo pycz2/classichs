@@ -4,7 +4,7 @@
 const LANGS = {en: "English", ru: "Русский", de: "Deutsch", fr: "Français", es: "Español", pt_BR: "Português (Brasil)", it: "Italiano", pl: "Polski"};
 const TEXT = window.TEXT;
 // Neonfall's screens first (the default game), then Classic's
-const SHOTS = ["match", "games", "history", "tracker", "collection", "arena", "rules", "lobby", "result", "online", "debug", "settings", "menu", "classic", "tutorial"];
+const SHOTS = ["match", "games", "history", "tracker", "collection", "arena", "rules", "lobby", "result", "online", "debug", "settings", "menu", "tutorial", "classic"];
 const NAME = window.SITE_NAME || {name: "Classic HS", full_name: "Classic Heroes Showdown"};  // site/name.js
 const $ = (s) => document.querySelector(s);
 

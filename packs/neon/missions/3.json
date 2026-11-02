@@ -1,0 +1,59 @@
+{
+  "id": 3,
+  "champion": "director_vale",
+  "boss": "boss_mira",
+  "boss_power": "siphon",
+  "powers_locked": true,
+  "boss_guarded": true,
+  "end_turn_block": {
+    "while_can_play": false,
+    "while_can_attack": true
+  },
+  "player": {
+    "mana": 1,
+    "hand": [
+      "signal_jammer",
+      "courier_drone"
+    ],
+    "deck": [
+      "chrome_stray",
+      "medic_drone",
+      "night_market_cook",
+      "rooftop_sniper",
+      "recursive_hound",
+      "swarm_wrangler",
+      "chrome_stray",
+      "vat_clone",
+      "rapid_response_medic",
+      "recursive_hound",
+      "enforcement_mech",
+      "night_market_cook",
+      "swarm_wrangler",
+      "vat_clone",
+      "maglev_juggernaut"
+    ]
+  },
+  "boss_deck": [
+    "courier_drone",
+    "chrome_stray",
+    "hound_shard",
+    "black_market_broker",
+    "recursive_hound",
+    "chrome_stray",
+    "courier_drone",
+    "bitrot_daemon",
+    "black_market_broker",
+    "recursive_hound",
+    "hound_shard",
+    "bitrot_daemon"
+  ],
+  "mulligan": false,
+  "reward": "recursive_hound",
+  "hints": [
+    "trade",
+    "boot",
+    "flatline",
+    "attack"
+  ],
+  "script": null
+}

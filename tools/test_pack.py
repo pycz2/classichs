@@ -293,5 +293,22 @@ class Classic(unittest.TestCase):
         self.assertEqual(en["mechanics"]["TAUNT"]["name"], "Taunt")
 
 
+class Neonfall(unittest.TestCase):
+    def test_neonfall_source_builds_clean_with_its_tutorial(self):
+        files, r = pack.build(pack.REPO / "packs/neon")
+        self.assertEqual(r.errors, [])
+        self.assertEqual(r.warnings, [])
+        t = json.loads(files["tutorial.json"])
+        self.assertEqual([m["id"] for m in t["missions"]], [1, 2, 3, 4, 5, 6])
+        self.assertEqual(len([p for p in files if p.startswith("missions/")]), 6)
+        locs = {p: json.loads(b) for p, b in files.items() if p.startswith("locales/")}
+        self.assertEqual(len(locs), 8)
+        en = locs["locales/en.json"]
+        for p, loc in locs.items():  # every language has every tutorial text of English
+            for sec in ("tutorial", "hints", "missions"):
+                self.assertEqual(set(loc[sec]), set(en[sec]), f"{p} {sec}")
+            self.assertTrue(all(v.strip() for v in loc["tutorial"].values()), p)
+
+
 if __name__ == "__main__":
     unittest.main()
