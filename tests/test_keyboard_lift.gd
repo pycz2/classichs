@@ -17,7 +17,8 @@ func test_a_field_above_the_keyboard_stays() -> void:
 func test_a_covered_field_rises_above_the_keyboard() -> void:
 	# the keyboard's top in the game: (1116 - 632) / 1.55 = 312.26; the field ends at 570, and 12 under
 	var lift := KeyboardLift.lift_for(Rect2(300, 512, 400, 58), 632.0, WIN_H, XF)
-	check(absf(lift - (570.0 + KeyboardLift.MARGIN - 312.26)) < 0.1, "lifted by %s" % lift)
+	check(absf(lift - (570.0 + KeyboardLift.MARGIN - 312.26)) < 0.1 or absf(lift - (512.0 - KeyboardLift.TOP)) < 0.1, "lifted by %s" % lift)
+	check(512.0 - lift <= KeyboardLift.TOP + 0.1, "near the top: the reported height leaves out the tool strip")
 
 
 func test_never_above_the_top_of_the_screen() -> void:
@@ -43,3 +44,27 @@ func test_lifts_the_layer_of_the_field() -> void:
 	eq(root.canvas_transform, Transform2D.IDENTITY, "all back when the keyboard is gone")
 	for n in [lift, plain, layer]:
 		n.free()
+
+
+## A phone has no right click: a long press opens the field's menu, and Paste puts the clipboard in
+## (a secret field too: the password copied from a password manager).
+func test_the_menu_of_a_field_pastes() -> void:
+	var root := (Engine.get_main_loop() as SceneTree).root
+	var pw := LineEdit.new()
+	pw.secret = true
+	root.add_child(pw)
+	if DisplayServer.has_feature(DisplayServer.FEATURE_CLIPBOARD):
+		DisplayServer.clipboard_set("s3cret-pass")
+	var m := KeyboardLift.show_menu(pw, Vector2(10, 10))
+	eq(m.item_count, 1, "an empty field: only Paste")
+	eq(m.get_item_text(0), "Paste")
+	if DisplayServer.has_feature(DisplayServer.FEATURE_CLIPBOARD):  # (not in a headless run)
+		m.id_pressed.emit(m.get_item_id(0))
+		eq(pw.text, "s3cret-pass", "pasted")
+	else:
+		m.free()
+	pw.text = "s3cret-pass"
+	var m2 := KeyboardLift.show_menu(pw, Vector2(10, 10))
+	eq(m2.item_count, 2, "a secret field with text: Paste and Select all, nothing to copy")
+	m2.free()
+	pw.free()

@@ -235,6 +235,22 @@ func _build_login() -> void:
 		e.custom_minimum_size = Vector2(420, 52)
 		e.add_theme_font_size_override("font_size", 22)
 		box.add_child(e)
+	# a phone: the clipboard in one tap (a password manager's copy; a long press opens the field's menu too)
+	if DisplayServer.is_touchscreen_available() and not OS.has_feature("web"):  # (the browser pastes by itself)
+		pw.custom_minimum_size.x = 300
+		box.remove_child(pw)
+		var pw_row := HBoxContainer.new()
+		pw_row.add_theme_constant_override("separation", 12)
+		pw_row.add_child(pw)
+		var paste := Palette.button(tr("Paste"), "PastePassword")
+		paste.custom_minimum_size = Vector2(108, 52)
+		paste.add_theme_font_size_override("font_size", 20)
+		paste.focus_mode = Control.FOCUS_NONE
+		paste.pressed.connect(func():
+			pw.clear()
+			pw.menu_option(LineEdit.MENU_PASTE))
+		pw_row.add_child(paste)
+		box.add_child(pw_row)
 	user.text_submitted.connect(func(_t): pw.grab_focus())
 	pw.text_submitted.connect(func(_t): log_in("login", user.text.strip_edges(), pw.text))
 	var row := HBoxContainer.new()
