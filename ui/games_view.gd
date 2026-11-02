@@ -184,7 +184,7 @@ func _build_details() -> void:
 ## A choice of a pack's art, sound or music sets (the player's own picture folders too for the
 ## active pack's art); picked(id) gets the chosen one. Disabled with fewer than two.
 static func set_picker(p: Pack, kind: String, current: String, picked: Callable) -> OptionButton:
-	var sets := p.sets(kind).filter(func(x): return not x.get("local", false) or p.builtin())
+	var sets := p.sets(kind).filter(func(x): return p.set_usable(kind, x))
 	if p == Packs.active() and kind == "art":
 		for f in Art.sets():
 			if not sets.any(func(x): return x.id == f):
@@ -251,6 +251,34 @@ func _popup(title: String) -> VBoxContainer:
 	return box
 
 
+## A progress box: a title, the file, what happens now and a bar (indeterminate while a step has no
+## measure). Returns its parts for _progress_set.
+func _progress(title: String, file_name: String) -> Dictionary:
+	var box := _popup(title)
+	_overlay.name = "Progress"
+	box.custom_minimum_size.x = 560
+	if file_name != "":
+		box.add_child(Palette.label(file_name, 17, Color("c9b48a")))
+	var what := Palette.label("", 19)
+	what.name = "What"
+	box.add_child(what)
+	var bar := ProgressBar.new()
+	bar.name = "Bar"
+	bar.custom_minimum_size = Vector2(560, 26)
+	bar.max_value = 1.0
+	bar.step = 0.001
+	box.add_child(bar)
+	return {"what": what, "bar": bar}
+
+
+func _progress_set(p: Dictionary, text: String, value: float, busy := false) -> void:
+	if not is_instance_valid(p.get("bar")):
+		return
+	p.what.text = text
+	p.bar.indeterminate = busy
+	p.bar.value = value
+
+
 func _close() -> void:
 	if _overlay:
 		_overlay.queue_free()
@@ -269,8 +297,8 @@ func import_pack() -> void:
 	d.use_native_dialog = true
 	d.filters = PackedStringArray(["*.cardpack ; " + tr("Game packs")])
 	d.file_selected.connect(func(path: String):
-		import_bytes(FileAccess.get_file_as_bytes(path), path.get_file())
-		d.queue_free())
+		d.queue_free()
+		import_file(path))
 	d.canceled.connect(d.queue_free)
 	add_child(d)
 	d.popup_centered(Vector2i(900, 600))
@@ -305,9 +333,39 @@ func _import_web() -> void:
 	})();""", true)
 
 
-## Installs a pack file's bytes and selects it (not active until the player says so).
-func import_bytes(bytes: PackedByteArray, file_name := "") -> void:
+## A file chosen natively: read in parts with a progress bar (a game file is tens of MB), then installed.
+func import_file(path: String) -> void:
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		show_message(tr("Could not read the file") + " (%s)" % path.get_file())
+		return
+	var size := f.get_length()
+	var bar := _progress(tr("Adding a game"), path.get_file())
+	var bytes := PackedByteArray()
+	var chunk := 4 << 20
+	while f.get_position() < size:
+		bytes.append_array(f.get_buffer(mini(chunk, size - f.get_position())))
+		_progress_set(bar, tr("Reading the file… %s of %s") % [Packs.size_text(bytes.size()), Packs.size_text(size)], 0.6 * bytes.size() / maxf(size, 1))
+		if is_inside_tree() and not Anim.instant:
+			await get_tree().process_frame
+	f.close()
+	await import_bytes(bytes, path.get_file(), bar)
+
+
+## Installs a pack file's bytes and selects it (not active until the player says so), with a box
+## saying what happens.
+func import_bytes(bytes: PackedByteArray, file_name := "", bar: Dictionary = {}) -> void:
+	if bar.is_empty():
+		bar = _progress(tr("Adding a game"), file_name)
+	_progress_set(bar, tr("Checking the game (%s)…") % Packs.size_text(bytes.size()), 0.6)
+	# ponytail: the checks run on the main thread (the rules engine's GDExtension is single-threaded):
+	# the box shows what happens, but its bar stands still during this one long step
+	if is_inside_tree() and not Anim.instant:
+		for i in 2:
+			await get_tree().process_frame
 	var r := Packs.install(bytes, "imported")
+	_progress_set(bar, tr("Done"), 1.0)
+	_close()
 	if r.has("error"):
 		show_message(tr(str(r.error)) + (": " + str(r.detail) if r.has("detail") else "") + (" (%s)" % file_name if file_name != "" else ""))
 		return

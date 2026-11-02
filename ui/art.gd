@@ -383,14 +383,14 @@ static func _load(path: String, ext: String) -> Texture2D:
 static var _sets: Array = []
 
 
-## The picture sets there are: the pack's (not the local ones a build marked), then the
+## The picture sets there are: the pack's (a local one a build marked when its pictures are in it), then the
 ## player's folders that have pictures of the pack's cards.
 static func sets() -> Array:
 	if _sets.is_empty():
 		var p := Packs.active()
 		var out := []
 		for s in p.sets("art") if p else []:
-			if not s.get("local", false) or p.builtin():
+			if p.set_usable("art", s):
 				out.append(str(s.id))
 		var dirs := Array(DirAccess.get_directories_at(root)) if DirAccess.dir_exists_absolute(root) else []
 		dirs.sort()

@@ -81,6 +81,16 @@ func has(file: String) -> bool:
 	return _files.has(file)
 
 
+## Whether a set ("art", "sound", "music") of this pack can be used here: a local set (made from the
+## builder's own folder, tools/pack.py --art-set) only when its files came along.
+func set_usable(kind: String, s: Dictionary) -> bool:
+	if not s.get("local", false) or builtin():
+		return true
+	var top: String = {"art": "art", "sound": "sounds", "music": "music"}.get(kind, kind)
+	var prefix := "%s/%s/" % [top, str(s.get("id", ""))]
+	return _files.keys().any(func(f: String): return f.begins_with(prefix))
+
+
 func files() -> Array:
 	var out := _files.keys()
 	out.sort()  # code point order = UTF-8 byte order (format.md, "Hashes")

@@ -306,3 +306,45 @@ func test_server_home_shows_and_downloads_a_servers_games() -> void:
 	Packs.remove(entered[0])
 	v.free()
 	l.free()
+
+
+## A local picture set (tools/pack.py --art-set: the builder's own pictures) of an imported pack can be
+## chosen when its pictures are in the pack, and not when they are not.
+func test_a_local_art_set_with_its_pictures_can_be_chosen() -> void:
+	var neon := _pack("neon")
+	var manifest: Dictionary = neon.manifest.duplicate(true)
+	manifest.art_sets.append({"id": "mine", "local": true})
+	manifest.art_sets.append({"id": "gone", "local": true})
+	var pic: String = neon.files().filter(func(f: String): return f.begins_with("art/") and f.ends_with(".webp"))[0]
+	var bytes := _repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"),
+		{"manifest.json": JSON.stringify(manifest).to_utf8_buffer(), "art/mine/" + pic.get_file(): neon.read(pic)})
+	var r := Packs.install(bytes, "imported")
+	check(not r.has("error"), str(r))
+	var p: Pack = r.pack
+	check(p.set_usable("art", {"id": "mine", "local": true}), "its pictures came along")
+	check(not p.set_usable("art", {"id": "gone", "local": true}), "no pictures: not offered")
+	var pick := GamesView.set_picker(p, "art", "default", func(_v): pass)
+	var items := range(pick.item_count).map(func(i): return pick.get_item_text(i))
+	check(items.size() == p.sets("art").size() - 1, "every set but the empty local one: %s" % [items])
+	pick.free()
+	Packs.remove(p)
+
+
+## A file is read in parts with a progress bar, then checked and added.
+func test_importing_a_file_shows_progress_and_adds_it() -> void:
+	var path := "user://test_import.cardpack"
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	f.store_buffer(_repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"), {"README.md": "x".to_utf8_buffer()}))
+	f.close()
+	var v := GamesView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(v)
+	var bar := v._progress("Adding a game", "test_import.cardpack")
+	check(v.find_child("Bar", true, false) is ProgressBar, "a progress bar")
+	v._progress_set(bar, "Reading", 0.3)
+	eq((v.find_child("What", true, false) as Label).text, "Reading", "what happens now")
+	await v.import_file(path)
+	eq(v.selected.origin, "imported", "added and selected")
+	check(v.find_child("Progress", true, false) == null, "the progress box closed")
+	Packs.remove(v.selected)
+	v.free()
+	DirAccess.remove_absolute(path)
