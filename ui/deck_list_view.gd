@@ -3,12 +3,17 @@ extends Control
 ## The collection screen: all cards on the left (CollectionView), the player's
 ## decks on the right. A click on a deck opens it in the right panel: then a
 ## click on a card adds it and a click on a line removes one copy.
-## Every change is saved to DeckStore at once.
+## Every change is saved to DeckStore at once. Logged in on a server, a tick on each deck
+## keeps it there too (deck_save on every change, deck_delete when unticked); the server's
+## decks from another device join the list (server/README.md, "Decks").
 
 signal back
 
 ## Button labels and tooltips (English keys); the translation tool reads this list.
 const BUTTONS := ["New Deck", "Import Code", "Done", "Back", "Copy", "Export Code", "Delete"]
+## The server's answers about decks the player is told (English keys, translated).
+const SERVER_TEXTS := ["You have 100 decks on this server: delete one first", "A deck name is at most 60 characters",
+	"This deck has cards this game does not have", "Arena decks are not kept"]
 ## The right panel (the deck list or the open deck).
 const RIGHT := Rect2(916, 66, 348, 642)
 
@@ -29,6 +34,13 @@ var _count: Label
 ## The deck's mana curve above its list (as in the Arena draft).
 var _curve := ManaCurve.new()
 var _panel := Panel.new()
+## The server the decks can be kept on (the lobby's chosen one; main sets it; null = none).
+var link: ServerLink
+## The server answered `decks`: it keeps decks (an older one does not, and shows no ticks).
+var _server_ok := false
+## Decks whose first deck_save is on the way, by the ref it carries.
+var _pending := {}
+var _refs := 0
 
 
 func _ready() -> void:
@@ -93,7 +105,7 @@ func _ready() -> void:
 	_name_edit.text_changed.connect(func(t):
 		if editing:
 			editing.name = t
-			_save())
+			_save(editing))
 	_edit_box.add_child(_name_edit)
 	_bar.position = inner.position + Vector2(0, 48)
 	_bar.size = Vector2(inner.size.x, 26)
@@ -135,6 +147,11 @@ func _ready() -> void:
 	refresh()
 	if DeckStore.last_load_error != "":
 		message.text = DeckStore.last_load_error
+	if link:
+		link.message.connect(_on_server)
+		link.closed.connect(refresh.unbind(1))
+		if link.logged_in():
+			link.send({"t": "decks"})
 
 
 func refresh() -> void:
@@ -156,6 +173,12 @@ func refresh() -> void:
 		acts.offset_top = -34
 		acts.offset_bottom = -8
 		row.add_child(acts)
+		if server_on():
+			var tick := DeckTiles.Action.new("server", tr("Keep on the server"))
+			tick.toggle_mode = true
+			tick.button_pressed = on_server(decks[i])
+			tick.toggled.connect(func(on): set_on_server(idx, on))
+			acts.add_child(tick)
 		for spec in [["copy", "Copy", copy_deck], ["export", "Export Code", show_export], ["delete", "Delete", _confirm_delete]]:
 			var b := DeckTiles.Action.new(spec[0], tr(spec[1]))
 			var act: Callable = spec[2]
@@ -173,9 +196,12 @@ func _show_mode() -> void:
 	_panel.add_theme_stylebox_override("panel", Palette.box(Palette.PANEL, 12, edge, 3 if editing else 2))
 
 
-func _save() -> void:
+## Saves the decks; changed: the deck that changed, sent to the server too when kept there.
+func _save(changed: Deck = null) -> void:
 	if not DeckStore.save_all(decks):
 		message.text = tr("Could not save the decks")
+	if changed and server_on() and on_server(changed):
+		_push(changed)
 	refresh()
 
 
@@ -206,22 +232,23 @@ func edit_deck(i: int) -> void:
 func close_deck() -> void:
 	if editing == null:
 		return
-	if editing.name.strip_edges() == "":
-		editing.name = tr("Custom %s") % CardText.name(editing.hero)
+	var d := editing
+	if d.name.strip_edges() == "":
+		d.name = tr("Custom %s") % CardText.name(d.hero)
 	editing = null
 	browser.set_deck(null)
 	_show_mode()
-	_save()
+	_save(d)
 
 
 func _on_deck_changed() -> void:
 	message.text = ""
-	_save()
+	_save(editing)
 
 
 func remove_card(id: String) -> void:
 	if editing and editing.remove(id):
-		_save()
+		_save(editing)
 	browser.show_hint("")
 	browser._fill()
 
@@ -250,6 +277,7 @@ func copy_deck(i: int) -> void:
 		return
 	var d := Deck.from_dict(decks[i].to_dict())
 	d.name = tr("%s (copy)") % d.name
+	d.servers = {}  # a new deck: kept here only until ticked
 	decks.append(d)
 	_save()
 
@@ -258,6 +286,10 @@ func delete_deck(i: int) -> void:
 	if i >= 0 and i < decks.size():
 		if decks[i] == editing:
 			close_deck()
+		if server_on() and server_id(decks[i]) > 0:
+			link.send({"t": "deck_delete", "id": server_id(decks[i])})
+		# ponytail: a deck kept on a server and deleted while not logged in there comes back
+		# from it at the next login; keep the deleted ids if that ever bothers anyone.
 		decks.remove_at(i)
 		_save()
 
@@ -282,6 +314,137 @@ func export_code(i: int) -> String:
 		message.text = why
 		return ""
 	return DeckCode.encode(decks[i])
+
+
+# --- decks kept on the server (server/README.md, "Decks") ----------------------------------------
+
+## Whether decks can be kept on the server now (else the ticks are hidden): logged in on one
+## that keeps decks and has this game.
+func server_on() -> bool:
+	return link != null and _server_ok and link.logged_in() and link.has_game(Packs.active(), true)
+
+
+## The deck's id on the server (0 = not kept there).
+func server_id(d: Deck) -> int:
+	return int(d.servers.get(link.url, {}).get("id", 0)) if link else 0
+
+
+## Ticked: kept on the server, or its first save is on the way.
+func on_server(d: Deck) -> bool:
+	return server_id(d) > 0 or _pending.values().has(d)
+
+
+## The tick: on saves the deck to the server, off deletes it there (it stays here).
+func set_on_server(i: int, on: bool) -> void:
+	if i < 0 or i >= decks.size() or not server_on() or on == on_server(decks[i]):
+		return
+	var d := decks[i]
+	if on:
+		_push(d)
+	else:
+		if server_id(d) > 0:
+			link.send({"t": "deck_delete", "id": server_id(d)})
+		d.servers.erase(link.url)
+		for r in _pending.keys().filter(func(k): return _pending[k] == d):
+			_pending.erase(r)  # its id, when it comes, is deleted there (_on_server)
+	_save()
+
+
+## Sends the deck to the server (an update by its id, or a new one with a ref).
+func _push(d: Deck) -> void:
+	var msg := {"t": "deck_save", "deck": {"name": d.name, "hero": d.hero, "cards": Array(d.cards)}}
+	if server_id(d) > 0:
+		msg["id"] = server_id(d)
+	elif _pending.values().has(d):
+		return  # its first save is on the way: the answer brings the id, then the changes follow
+	else:
+		_refs += 1
+		msg["ref"] = str(_refs)
+		_pending[msg.ref] = d
+	link.send(link.with_pack(msg))
+
+
+static func _same(d: Deck, sd: Dictionary) -> bool:
+	return JSON.stringify([d.name, d.hero, d.cards]) == JSON.stringify([sd.get("name"), sd.get("hero"), sd.get("cards")])
+
+
+func _on_server(msg: Dictionary) -> void:
+	match msg.get("t"):
+		"auth":
+			if msg.get("ok", false):
+				link.send({"t": "decks"})
+		"logged_out":
+			refresh()
+		"decks":
+			_server_ok = true
+			merge(msg.get("list") if msg.get("list") is Array else [])
+		"deck_saved":
+			var sd: Dictionary = msg.get("deck") if msg.get("deck") is Dictionary else {}
+			var id := int(sd.get("id", 0))
+			var r = msg.get("ref")
+			var d: Deck = _pending.get(r) if r is String else null
+			if r is String:
+				_pending.erase(r)
+				if d == null or not decks.has(d):  # unticked or deleted meanwhile
+					link.send({"t": "deck_delete", "id": id})
+					return
+			for x in decks:
+				if d == null and server_id(x) == id:
+					d = x
+			if d == null:
+				return
+			d.servers[link.url] = {"id": id, "at": int(sd.get("updated", 0))}
+			DeckStore.save_all(decks)
+			if not _same(d, sd):  # changed while its first save was on the way
+				_push(d)
+			refresh()
+		"error":
+			if msg.get("code") in ["deck", "bad_name", "decks_full"]:
+				if not _pending.is_empty():  # (answers come in order: the oldest new deck)
+					_pending.erase(_pending.keys()[0])
+				message.text = Rules.tr_error(str(msg.get("text", "")))
+				refresh()
+
+
+## The server's decks after login: the active game's ones from another device join the list;
+## one changed there since this copy matched it replaces it; one changed only here is sent;
+## one gone from there (deleted or unticked elsewhere) stays here only.
+func merge(list: Array) -> void:
+	var there := {}  # server id -> the server's deck
+	for sd in list:
+		if sd is Dictionary and str(sd.get("pack", "")) == Packs.active().id():
+			there[int(sd.get("id", 0))] = sd
+	var changed := false
+	for d in decks:
+		var id := server_id(d)
+		if id <= 0:
+			continue
+		var sd = there.get(id)
+		there.erase(id)
+		if sd == null:
+			d.servers.erase(link.url)
+			changed = true
+		elif int(sd.get("updated", 0)) > int(d.servers[link.url].at):
+			# ponytail: changed on both sides: the server's copy wins
+			var nd := Deck.from_dict(sd)
+			if nd:
+				d.name = nd.name
+				d.hero = nd.hero
+				d.cards = nd.cards
+				d.servers[link.url].at = int(sd.updated)
+				changed = true
+		elif not _same(d, sd):
+			_push(d)
+	for id in there:
+		var nd := Deck.from_dict(there[id])
+		if nd:
+			nd.servers[link.url] = {"id": id, "at": int(there[id].get("updated", 0))}
+			decks.append(nd)
+			changed = true
+	if changed:
+		_save()
+	else:
+		refresh()
 
 
 # --- popups ---------------------------------------------------------------------

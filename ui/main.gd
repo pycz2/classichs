@@ -317,6 +317,7 @@ func start_arena_match(s: ArenaSession, game: NetSession, m: Match) -> MatchView
 
 func show_collection() -> void:
 	var c := DeckListView.new()
+	c.link = server_link  # logged in there: the decks can be kept on it too
 	c.back.connect(show_menu)
 	_set_screen(c)
 
