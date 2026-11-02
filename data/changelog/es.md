@@ -4,6 +4,20 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.32.0] - 2026-11-02
+
+### Añadido
+- Los mazos pueden guardarse en el servidor de juego: la marca de nube en un mazo. El mazo se guarda en cada cambio y aparece en tus otros dispositivos al iniciar sesión.
+- Un nuevo juego de imágenes «2D simple» para Neonfall.
+- Teléfonos: una pulsación larga en un campo de texto abre un menú (Pegar, Seleccionar todo, Copiar, Cortar); la contraseña de inicio de sesión tiene un botón Pegar.
+
+### Corregido
+- Las jugadas se muestran en orden y paso a paso: la carta del rival sale de su mano, una flecha muestra su objetivo y cada efecto se muestra por separado (Proyectiles arcanos y Bombardero loco golpean uno a uno). Funciona en ambos sentidos y también con animación rápida.
+- Mulligan: las cartas cambiadas vuelven al mazo, las nuevas ocupan sus lugares, luego aparece la Moneda y las cartas pasan a la mano en el mismo orden.
+- Android: no se podía pegar una contraseña copiada en el campo de inicio de sesión.
+- Mientras se busca una partida en el servidor solo funciona Cancelar: otros modos, la Arena, cerrar sesión y cambiar de juego esperan a que se cancele la búsqueda.
+- La versión web ya no carga una versión antigua desde la caché: una versión nueva se toma con una recarga normal.
+
 ## [0.31.0] - 2026-10-30
 
 ### Añadido

@@ -4,6 +4,20 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.32.0] - 2026-11-02
+
+### Adicionado
+- Os baralhos podem ficar no servidor de jogo: a marca de nuvem no baralho. O baralho é salvo a cada mudança e aparece nos seus outros dispositivos depois do login.
+- Um novo conjunto de imagens "2D simples" para Neonfall.
+- Celulares: um toque longo num campo de texto abre um menu (Colar, Selecionar tudo, Copiar, Recortar); a senha do login tem um botão Colar.
+
+### Corrigido
+- As jogadas aparecem em ordem, passo a passo: a carta do oponente sai da mão, uma seta mostra o alvo e cada efeito aparece separado (Mísseis Arcanos e Bombardeiro Louco acertam um por um). Funciona nos dois sentidos e também com animação rápida.
+- Mulligan: as cartas trocadas vão para o baralho, as novas ocupam os lugares delas, depois aparece a Moeda e as cartas vão para a mão na mesma ordem.
+- Android: não dava para colar uma senha copiada no campo de login.
+- Enquanto procura uma partida no servidor só Cancelar funciona: outros modos, a Arena, sair e trocar de jogo esperam até a busca ser cancelada.
+- A versão web não carrega mais uma versão antiga do cache: uma versão nova é usada num recarregamento normal.
+
 ## [0.31.0] - 2026-10-30
 
 ### Adicionado

@@ -4,6 +4,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.32.0] - 2026-11-02
+
+### Dodano
+- Talie można trzymać na serwerze gry: znak chmury przy talii. Talia zapisuje się przy każdej zmianie i pojawia się na innych urządzeniach po zalogowaniu.
+- Nowy zestaw obrazów „Prosty 2D” dla Neonfall.
+- Telefony: długie przytrzymanie pola tekstowego otwiera menu (Wklej, Zaznacz wszystko, Kopiuj, Wytnij); przy haśle logowania jest przycisk Wklej.
+
+### Naprawiono
+- Ruchy są widoczne po kolei i krok po kroku: karta przeciwnika wylatuje z ręki, strzałka pokazuje cel, a każdy efekt widać osobno (Tajemne pociski i Szalony bombowiec trafiają po jednym). Działa to w obie strony i przy szybkiej animacji.
+- Mulligan: wymienione karty wracają do talii, nowe stają na ich miejscach, potem pojawia się Moneta, a karty trafiają do ręki w tej samej kolejności.
+- Android: nie dało się wkleić skopiowanego hasła w pole logowania.
+- Podczas szukania gry na serwerze działa tylko Anuluj: inne tryby, arena, wylogowanie i zmiana gry czekają, aż wyszukiwanie zostanie anulowane.
+- Wersja przeglądarkowa nie ładuje już starej wersji z pamięci podręcznej: nowa wersja wczytuje się przy zwykłym odświeżeniu.
+
 ## [0.31.0] - 2026-10-30
 
 ### Dodano

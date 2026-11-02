@@ -4,6 +4,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.32.0] - 2026-11-02
+
+### Added
+- Decks can be kept on the game server: the cloud mark on a deck. The deck is saved on every change and appears on your other devices after login.
+- A new "Simple 2D" picture set for Neonfall.
+- Phones: a long press on a text field opens a menu (Paste, Select all, Copy, Cut); the login password has a Paste button.
+
+### Fixed
+- Moves play in order, step by step: the opponent's card flies out of the hand, an arrow shows its target, and each effect is shown on its own (Arcane Missiles and Mad Bomber hit one by one). This works both ways and at a faster animation speed too.
+- Mulligan: replaced cards go to the deck, new ones take their places, then the Coin appears, and the cards go into the hand in the same order.
+- Android: a copied password could not be pasted into the login field.
+- While searching for a server game only Cancel works: other modes, the Arena, logout and changing the game wait until the search is cancelled.
+- The web version no longer loads an old cached version: a new version is taken on a normal reload.
+
 ## [0.31.0] - 2026-10-30
 
 ### Added

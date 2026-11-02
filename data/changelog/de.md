@@ -4,6 +4,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.32.0] - 2026-11-02
+
+### Hinzugefügt
+- Decks lassen sich auf dem Spielserver speichern: das Wolken-Symbol am Deck. Das Deck wird bei jeder Änderung gespeichert und erscheint nach dem Anmelden auf deinen anderen Geräten.
+- Ein neuer Bildersatz „Einfach 2D“ für Neonfall.
+- Telefone: Langes Drücken auf ein Textfeld öffnet ein Menü (Einfügen, Alles auswählen, Kopieren, Ausschneiden); beim Anmelden gibt es neben dem Passwort eine Schaltfläche „Einfügen“.
+
+### Behoben
+- Züge laufen der Reihe nach und Schritt für Schritt ab: Die Karte des Gegners fliegt aus der Hand, ein Pfeil zeigt ihr Ziel, jeder Effekt wird einzeln gezeigt (Arkane Geschosse und Verrückter Bomber treffen nacheinander). Das gilt in beide Richtungen und auch bei schneller Animation.
+- Mulligan: Ersetzte Karten gehen ins Deck, neue nehmen ihren Platz ein, dann erscheint die Münze, und die Karten kommen in derselben Reihenfolge in die Hand.
+- Android: Ein kopiertes Passwort ließ sich nicht ins Anmeldefeld einfügen.
+- Während der Suche nach einem Serverspiel funktioniert nur „Abbrechen“: andere Modi, die Arena, Abmelden und Spielwechsel warten, bis die Suche abgebrochen ist.
+- Die Webversion lädt keine alte Version mehr aus dem Cache: Eine neue Version wird beim normalen Neuladen übernommen.
+
 ## [0.31.0] - 2026-10-30
 
 ### Hinzugefügt

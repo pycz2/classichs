@@ -4,6 +4,20 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.32.0] - 2026-11-02
+
+### Ajouté
+- Les decks peuvent être gardés sur le serveur de jeu : le symbole nuage sur un deck. Le deck est enregistré à chaque modification et apparaît sur vos autres appareils après connexion.
+- Un nouveau jeu d'images « 2D simple » pour Neonfall.
+- Téléphones : un appui long sur un champ ouvre un menu (Coller, Tout sélectionner, Copier, Couper) ; le mot de passe de connexion a un bouton Coller.
+
+### Corrigé
+- Les coups se jouent dans l'ordre, étape par étape : la carte de l'adversaire sort de sa main, une flèche montre sa cible, chaque effet est montré à part (Projectiles des arcanes et Bombardier fou touchent un par un). Cela marche dans les deux sens et en animation rapide.
+- Mulligan : les cartes remplacées vont au deck, les nouvelles prennent leur place, puis la Pièce apparaît, et les cartes vont en main dans le même ordre.
+- Android : un mot de passe copié ne pouvait pas être collé dans le champ de connexion.
+- Pendant la recherche d'une partie serveur, seul Annuler fonctionne : les autres modes, l'Arène, la déconnexion et le changement de jeu attendent l'annulation.
+- La version web ne charge plus une ancienne version en cache : une nouvelle version est prise lors d'un rechargement normal.
+
 ## [0.31.0] - 2026-10-30
 
 ### Ajouté
