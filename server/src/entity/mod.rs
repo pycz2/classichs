@@ -5,6 +5,7 @@ pub mod account;
 pub mod arena;
 pub mod block;
 pub mod bot;
+pub mod deck;
 pub mod event;
 pub mod friend;
 pub mod game;
