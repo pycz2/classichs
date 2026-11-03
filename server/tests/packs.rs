@@ -129,6 +129,20 @@ async fn kinds(app: &AppRef, kind: &str, want: usize) -> Vec<event::Model> {
     panic!("fewer than {want} {kind} events");
 }
 
+/// The same game (rules) with other files, its own pictures: a new upload, not "exists".
+#[tokio::test]
+async fn the_same_rules_with_other_pictures_upload() {
+    let (addr, _app, http) = server().await;
+    let pia = C::register(addr, "pia").await;
+    let zip = pack_zip("org.test.mine", "1.0.0", 0);
+    let other = common::pack_bytes("org.test.mine", "1.0.0", &[("/limits/queue_steps", json!(5000))], &[("art/x/a.webp", b"art"), ("art/mine/a.webp", b"my art")]);
+    assert_eq!(common::rules_hash(&zip), common::rules_hash(&other));
+    assert_eq!(call(&http, upload(Some(&pia.token), &zip)).await.status, StatusCode::CREATED);
+    let r = call(&http, upload(Some(&pia.token), &other)).await;
+    assert_eq!(r.status, StatusCode::CREATED, "{}", String::from_utf8_lossy(&r.body));
+    assert_eq!(r.json()["pack"]["content_hash"].as_str(), Some(content(&other).as_str()));
+}
+
 #[tokio::test]
 async fn players_upload_list_download_and_delete() {
     let (addr, app, http) = server().await;

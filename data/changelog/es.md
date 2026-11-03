@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.41.1] - 2026-11-03
+
+### Corregido
+- «Subir un juego» a un servidor ahora también ofrece tu propia versión de un juego que el servidor ya tiene (las mismas reglas, tus propias imágenes): por ejemplo, Classic con tu propio conjunto de arte.
+
 ## [0.41.0] - 2026-11-03
 
 ### Añadido

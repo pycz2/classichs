@@ -225,7 +225,9 @@ func log_out() -> void:
 	back.emit()
 
 
-## Upload a game: the packs of this device the server has not got (the same rules), one click each.
+## Upload a game: the packs of this device the server has not got, one click each. A pack of
+## rules the server has is offered too when it is an imported one with other files (its own
+## pictures, say); a built-in one of those rules is the server's game already.
 func show_upload() -> void:
 	var dim := ColorRect.new()
 	dim.name = "UploadPanel"
@@ -242,7 +244,9 @@ func show_upload() -> void:
 	box.add_theme_constant_override("separation", 10)
 	panel.add_child(box)
 	box.add_child(Palette.label(tr("Upload a game"), 26, Palette.ATTACK))
-	var mine := Packs.all().filter(func(p: Pack): return link.server_pack_for(p).is_empty())
+	var has: Array = (link.packs.server + link.packs.mine).map(func(e): return str(e.get("content_hash", "")))
+	var mine := Packs.all().filter(func(p: Pack): return (link.server_pack_for(p).is_empty()
+		or not p.builtin() and not has.has(Packs.content_hash(p))))
 	if mine.is_empty():
 		box.add_child(Palette.label(tr("The server has every game of this device"), 18, Palette.MUTED))
 	for p: Pack in mine:

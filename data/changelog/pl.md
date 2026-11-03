@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.41.1] - 2026-11-03
+
+### Naprawiono
+- „Wyślij grę” na serwer proponuje teraz także twoją własną wersję gry, którą serwer już ma (te same zasady, własne obrazki): na przykład Classic z twoim zestawem grafik.
+
 ## [0.41.0] - 2026-11-03
 
 ### Dodano

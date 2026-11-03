@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.41.1] - 2026-11-03
+
+### Behoben
+- „Ein Spiel hochladen“ auf einen Server bietet jetzt auch deinen eigenen Build eines Spiels an, das der Server schon hat (gleiche Regeln, eigene Bilder): etwa Classic mit deinem eigenen Bildersatz.
+
 ## [0.41.0] - 2026-11-03
 
 ### Hinzugefügt

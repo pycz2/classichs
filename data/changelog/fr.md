@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.41.1] - 2026-11-03
+
+### Corrigé
+- « Envoyer un jeu » sur un serveur propose maintenant aussi ta propre version d’un jeu que le serveur a déjà (mêmes règles, tes propres images) : par exemple Classic avec ton propre jeu d’illustrations.
+
 ## [0.41.0] - 2026-11-03
 
 ### Ajouté

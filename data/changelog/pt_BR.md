@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.41.1] - 2026-11-03
+
+### Corrigido
+- “Enviar um jogo” para um servidor agora também oferece sua própria versão de um jogo que o servidor já tem (as mesmas regras, suas próprias imagens): por exemplo, Classic com seu próprio conjunto de arte.
+
 ## [0.41.0] - 2026-11-03
 
 ### Adicionado

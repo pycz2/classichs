@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.41.1] - 2026-11-03
+
+### Fixed
+- Upload a game to a server now offers your own build of a game the server has (the same rules, your own pictures): Classic with your own art set, say.
+
 ## [0.41.0] - 2026-11-03
 
 ### Added

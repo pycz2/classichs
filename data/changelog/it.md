@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.41.1] - 2026-11-03
+
+### Corretto
+- «Carica un gioco» su un server ora propone anche la tua versione di un gioco che il server ha già (stesse regole, immagini tue): per esempio Classic con il tuo set di illustrazioni.
+
 ## [0.41.0] - 2026-11-03
 
 ### Aggiunto

@@ -348,3 +348,32 @@ func test_importing_a_file_shows_progress_and_adds_it() -> void:
 	Packs.remove(v.selected)
 	v.free()
 	DirAccess.remove_absolute(path)
+
+
+## Upload a game offers an imported pack with the server's rules but other files (its own
+## pictures); a built-in pack of rules the server has, or a file it has, is not offered.
+func test_a_pack_with_the_servers_rules_and_other_pictures_can_be_uploaded() -> void:
+	var neon := _pack("neon")
+	var r := Packs.install(_repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"), {"README.md": "mine".to_utf8_buffer()}), "imported")
+	check(not r.has("error"), str(r))
+	var own: Pack = r.pack
+	var l := FakeLink.new()
+	l.url = "ws://localhost:1"
+	l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"name": "A"}})
+	var entry := func(p: Pack) -> Dictionary:
+		return {"id": p.id(), "name": {"en": p.id()}, "version": "1", "rules_hash": p.rules_hash(), "content_hash": Packs.content_hash(p), "size": 1}
+	l.dispatch({"t": "packs", "server": [entry.call(neon), entry.call(_pack(Packs.CLASSIC))], "mine": []})
+	var h := ServerHome.new()
+	h.link = l
+	(Engine.get_main_loop() as SceneTree).root.add_child(h)
+	h.show_upload()
+	var offered := func() -> Array:
+		return h.find_child("UploadPanel", true, false).find_children("Upload_*", "Button", true, false)
+	eq(offered.call().size(), 1, "only the pack with other files")
+	h.find_child("UploadPanel", true, false).free()
+	l.dispatch({"t": "packs", "server": [entry.call(neon), entry.call(_pack(Packs.CLASSIC))], "mine": [entry.call(own)]})
+	h.show_upload()
+	eq(offered.call().size(), 0, "uploaded: no longer offered")
+	h.free()
+	l.free()
+	Packs.remove(own)
