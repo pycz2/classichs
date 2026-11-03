@@ -273,6 +273,7 @@ func _build_draft() -> void:
 		cv.name = "Offer%d" % i
 		cv.position = Vector2(x0 + i * (w + gap), 120)
 		cv.clicked.connect(func(_v): pick(i))
+		TouchInput.act_on_tap(cv, pick.bind(i))  # a long press only shows its keyword tips
 		cv.hovered.connect(func(v, on): _on_hover(v, on))
 		_body.add_child(cv)
 		if not Anim.instant:  # the three cards come in one after another
