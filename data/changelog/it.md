@@ -4,6 +4,21 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-11-03
+
+### Aggiunto
+- Touchscreen (Android e browser): la mano aspetta piccola in basso a destra; un tocco la apre, un tocco fuori la chiude.
+- Touchscreen: toccare una carta della mano la mostra soltanto. Una carta si gioca solo se la trascini sopra il terzo inferiore dello schermo; lasciata più in basso, torna nella mano.
+- Touchscreen: tutte le liste (mazzi, collezione, giochi, server, amici, chat, cronologia e altre) scorrono con il dito, anche se il gesto parte da un pulsante; un gesto veloce continua per inerzia.
+- Touchscreen: una pressione lunga mostra il suggerimento (le carte di un mazzo, il tuo e quello dell’avversario; perché un mazzo non si può giocare; cosa fanno i pulsanti) e funziona come clic destro (le emote del tuo eroe).
+- Touchscreen: nella collezione e nel draft dell’Arena un tocco aggiunge la carta; una pressione lunga la mostra soltanto.
+
+### Modificato
+- Il mazzo sul tavolo è molto più spesso con tante carte e più sottile con poche.
+
+### Corretto
+- Un servitore che metti giù resta nello spazio scelto mentre agisce il suo Grido di battaglia, e dopo non si muove più (prima tornava per un attimo verso la mano e poi rientrava).
+
 ## [0.41.1] - 2026-11-03
 
 ### Corretto

@@ -4,6 +4,21 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-11-03
+
+### Dodano
+- Ekran dotykowy (Android i przeglądarki): ręka czeka mała w prawym dolnym rogu; dotknięcie ją otwiera, dotknięcie obok zamyka.
+- Ekran dotykowy: dotknięcie karty w ręce tylko ją pokazuje. Karta zostaje zagrana tylko, gdy przeciągniesz ją ponad dolną jedną trzecią ekranu; puszczona niżej wraca do ręki.
+- Ekran dotykowy: wszystkie listy (talie, kolekcja, gry, serwer, znajomi, czat, historia i inne) przewijają się palcem, także gdy ruch zaczyna się na przycisku; szybkie przesunięcie przewija dalej siłą rozpędu.
+- Ekran dotykowy: długie przytrzymanie pokazuje podpowiedź (karty w talii, twojej i przeciwnika; dlaczego talii nie można zagrać; co robią przyciski) i działa jak prawy przycisk (emotki twojego bohatera).
+- Ekran dotykowy: w kolekcji i w drafcie Areny dotknięcie dodaje kartę; długie przytrzymanie tylko ją pokazuje.
+
+### Zmieniono
+- Talia na stole jest wyraźnie grubsza, gdy ma dużo kart, i cieńsza, gdy ma mało.
+
+### Naprawiono
+- Stronnik, którego kładziesz, stoi w wybranym miejscu, gdy działa jego Okrzyk bojowy, i potem się nie rusza (wcześniej na chwilę wracał do ręki i przylatywał z powrotem).
+
 ## [0.41.1] - 2026-11-03
 
 ### Naprawiono

@@ -4,6 +4,21 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-11-03
+
+### Ajouté
+- Écran tactile (Android et navigateurs) : la main attend, petite, en bas à droite ; un toucher l’ouvre, un toucher à côté la referme.
+- Écran tactile : toucher une carte de la main ne fait que la montrer. Une carte n’est jouée que si tu la glisses au-dessus du tiers inférieur de l’écran ; lâchée plus bas, elle retourne dans la main.
+- Écran tactile : toutes les listes (decks, collection, jeux, serveur, amis, chat, historique, etc.) défilent au doigt, même si le geste commence sur un bouton ; un geste rapide continue sur sa lancée.
+- Écran tactile : un appui long montre l’info-bulle (les cartes d’un deck, le tien et celui de l’adversaire ; pourquoi un deck n’est pas jouable ; à quoi servent les boutons) et sert de clic droit (les émotes de ton héros).
+- Écran tactile : dans la collection et le draft de l’Arène, un toucher ajoute la carte ; un appui long ne fait que la montrer.
+
+### Modifié
+- Le deck sur la table est nettement plus épais avec beaucoup de cartes et plus mince avec peu.
+
+### Corrigé
+- Un serviteur que tu poses reste à la place choisie pendant que son Cri de guerre agit, et ne bouge plus après (avant, il repartait un instant vers la main puis revenait).
+
 ## [0.41.1] - 2026-11-03
 
 ### Corrigé

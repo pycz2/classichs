@@ -68,14 +68,7 @@ func test_deck_pile_shows_count_on_hover() -> void:
 func test_a_finger_on_a_deck_shows_its_count() -> void:
 	var v := _view({"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]})
 	var pile := v.find_child("Deck1", true, false) as DeckPile
-	var t := InputEventScreenTouch.new()
-	t.pressed = true
-	pile._gui_input(t)
-	var bubble := pile.find_child("Count", true, false)
-	check(bubble != null and (bubble.get_child(0) as Label).text == pile.tooltip_text, "the opponent's deck too: %s" % pile.tooltip_text)
-	t.pressed = false
-	pile._gui_input(t)
-	check(pile.find_child("Count", true, false) != null, "it stays a moment after the finger goes")
+	eq(TouchInput.tooltip_at(pile, pile.get_global_rect().get_center()), pile.tooltip_text, "a finger held on it shows the numbers")
 	var y30 := 0.0
 	pile.count = 30
 	y30 = pile.top().y

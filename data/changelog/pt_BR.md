@@ -4,6 +4,21 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-11-03
+
+### Adicionado
+- Tela sensível ao toque (Android e navegadores): a mão fica pequena no canto inferior direito; um toque a abre, um toque fora a fecha.
+- Tela sensível ao toque: tocar uma carta da mão só a mostra. Uma carta só é jogada se você arrastá-la acima do terço inferior da tela; solta mais abaixo, ela volta para a mão.
+- Tela sensível ao toque: todas as listas (decks, coleção, jogos, servidor, amigos, chat, histórico e outras) rolam com o dedo, também quando o gesto começa num botão; um gesto rápido continua rolando.
+- Tela sensível ao toque: um toque longo mostra a dica (as cartas de um deck, o seu e o do oponente; por que um deck não pode ser jogado; o que os botões fazem) e funciona como clique direito (os emotes do seu herói).
+- Tela sensível ao toque: na coleção e no draft da Arena um toque adiciona a carta; um toque longo só a mostra.
+
+### Alterado
+- O deck na mesa fica bem mais grosso com muitas cartas e mais fino com poucas.
+
+### Corrigido
+- Um lacaio que você coloca fica no espaço escolhido enquanto o Grito de Guerra age, e não se move depois (antes ele voltava por um instante para a mão e voava de volta).
+
 ## [0.41.1] - 2026-11-03
 
 ### Corrigido

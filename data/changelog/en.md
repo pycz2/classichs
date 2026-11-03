@@ -4,6 +4,21 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-11-03
+
+### Added
+- Touchscreen (Android and browsers): the hand waits small in the bottom right; a tap opens it, a tap beside it closes it.
+- Touchscreen: a tap on a hand card only shows it. A card is played only when you drag it above the bottom third of the screen; let go lower, it goes back to the hand.
+- Touchscreen: every list (decks, collection, games, server, friends, chat, history and more) scrolls with a finger, also when the drag starts on a button; a quick swipe flings on.
+- Touchscreen: a long press shows the tooltip (the cards in a deck, yours and the opponent's; why a deck cannot be played; what the buttons do) and is the right click (your hero's emotes).
+- Touchscreen: in the collection and the Arena draft a tap adds the card; a long press only shows it.
+
+### Changed
+- The deck on the table is clearly thicker with many cards and thinner with few.
+
+### Fixed
+- A minion you put down stands in the slot you chose while its Battlecry acts, and does not move after it (it used to go back to the hand for a moment and fly back).
+
 ## [0.41.1] - 2026-11-03
 
 ### Fixed

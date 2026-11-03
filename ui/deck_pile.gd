@@ -1,12 +1,11 @@
 class_name DeckPile
 extends Control
 ## A player's deck beside the hero: the pile is thicker with more cards; the
-## exact number, and the cards in that player's hand, show on hover (a finger held on it).
+## exact number, and the cards in that player's hand, show on hover (on touch: a finger held on
+## it, TouchInput).
 
 const SIZE := Vector2(84, 120)
 const STEP := Vector2(-0.9, -1.2)  # one layer of the pile (2 cards): a full deck stands 18 px high
-
-var _bubble: PanelContainer
 
 var count := -1:
 	set(v):
@@ -27,33 +26,6 @@ func _tip() -> void:
 	tooltip_text = TranslationServer.translate("Cards in deck: %d") % count
 	if hand >= 0:
 		tooltip_text += "\n" + TranslationServer.translate("Cards in hand: %d") % hand
-	if _bubble:
-		(_bubble.get_child(0) as Label).text = tooltip_text
-
-
-## A finger shows what the mouse shows on hover (a touchscreen has no hover): held, then a moment more.
-func _gui_input(ev: InputEvent) -> void:
-	if not ev is InputEventScreenTouch:
-		return
-	if ev.pressed:
-		if _bubble == null:
-			_bubble = PanelContainer.new()
-			_bubble.name = "Count"
-			_bubble.add_theme_stylebox_override("panel", Palette.frame())
-			_bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			_bubble.z_index = 80
-			_bubble.add_child(Palette.label("", 18))
-			add_child(_bubble)
-			_tip()
-		_bubble.reset_size()
-		_bubble.position = Vector2(-_bubble.size.x - 10, (SIZE.y - _bubble.size.y) / 2.0)
-		_bubble.set_meta("until", INF)
-	elif _bubble:
-		_bubble.set_meta("until", Time.get_ticks_msec() + 1200)
-		get_tree().create_timer(1.25).timeout.connect(func():
-			if _bubble and Time.get_ticks_msec() >= int(_bubble.get_meta("until")):
-				_bubble.queue_free()
-				_bubble = null)
 
 
 func _init() -> void:

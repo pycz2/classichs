@@ -4,6 +4,21 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-11-03
+
+### Añadido
+- Pantalla táctil (Android y navegadores): la mano espera pequeña abajo a la derecha; un toque la abre y un toque fuera la cierra.
+- Pantalla táctil: tocar una carta de la mano solo la muestra. Una carta se juega solo si la arrastras por encima del tercio inferior de la pantalla; si la sueltas más abajo, vuelve a la mano.
+- Pantalla táctil: todas las listas (mazos, colección, juegos, servidor, amigos, chat, historial y más) se desplazan con el dedo, también si el gesto empieza en un botón; un gesto rápido sigue por inercia.
+- Pantalla táctil: una pulsación larga muestra la descripción (las cartas de un mazo, el tuyo y el del rival; por qué un mazo no se puede jugar; qué hacen los botones) y funciona como clic derecho (las emociones de tu héroe).
+- Pantalla táctil: en la colección y en el draft de la Arena un toque añade la carta; una pulsación larga solo la muestra.
+
+### Cambiado
+- El mazo de la mesa es claramente más grueso con muchas cartas y más fino con pocas.
+
+### Corregido
+- Un esbirro que colocas se queda en el hueco elegido mientras actúa su Grito de batalla, y no se mueve después (antes volvía un momento a la mano y regresaba volando).
+
 ## [0.41.1] - 2026-11-03
 
 ### Corregido

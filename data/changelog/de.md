@@ -4,6 +4,21 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-11-03
+
+### Hinzugefügt
+- Touchscreen (Android und Browser): Die Hand liegt klein unten rechts; ein Tippen öffnet sie, ein Tippen daneben schließt sie.
+- Touchscreen: Ein Tippen auf eine Handkarte zeigt sie nur. Gespielt wird eine Karte nur, wenn du sie über das untere Drittel des Bildschirms ziehst; tiefer losgelassen, geht sie zurück in die Hand.
+- Touchscreen: Alle Listen (Decks, Sammlung, Spiele, Server, Freunde, Chat, Verlauf und mehr) scrollen mit dem Finger, auch wenn der Zug auf einer Schaltfläche beginnt; ein schnelles Wischen scrollt weiter.
+- Touchscreen: Langes Drücken zeigt den Tooltip (die Karten im Deck, deinem und dem des Gegners; warum ein Deck nicht spielbar ist; was die Schaltflächen tun) und wirkt wie ein Rechtsklick (Emotes deines Helden).
+- Touchscreen: In der Sammlung und im Arena-Draft fügt ein Tippen die Karte hinzu; langes Drücken zeigt sie nur.
+
+### Geändert
+- Das Deck auf dem Tisch ist mit vielen Karten deutlich dicker und mit wenigen dünner.
+
+### Behoben
+- Ein Diener, den du ablegst, steht im gewählten Platz, während sein Kampfschrei wirkt, und bewegt sich danach nicht mehr (früher ging er kurz zur Hand zurück und flog wieder heran).
+
 ## [0.41.1] - 2026-11-03
 
 ### Behoben
