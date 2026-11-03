@@ -253,6 +253,7 @@ func _fill() -> void:
 	for id in ids.slice(page * PER_PAGE, (page + 1) * PER_PAGE):
 		var cv := CardView.make(id, CARD_SCALE)
 		cv.clicked.connect(func(v): click_card(v.card_id))
+		TouchInput.act_on_tap(cv, click_card.bind(id))  # a long press only shows it big
 		cv.hovered.connect(_on_hover)
 		if deck and deck.count(id) > 0:
 			var badge := Palette.label("×%d" % deck.count(id), 22, Palette.ATTACK)
