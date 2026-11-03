@@ -6,6 +6,10 @@ signal clicked(view: EntityView)
 signal hovered(view: EntityView, on: bool)
 signal right_clicked(view: EntityView)
 
+const LONG_PRESS_MS := 550
+var _held := {}  # a finger on the view: {n (which press), at}
+var _presses := 0
+
 var entity_id := -1
 var glow := Color.TRANSPARENT
 ## The online opponent points at it: red when it has no glow of its own, else a
@@ -47,6 +51,23 @@ func _gui_input(ev: InputEvent) -> void:
 	elif ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_RIGHT:
 		right_clicked.emit(self)
 		accept_event()
+	elif ev is InputEventScreenTouch:
+		_presses += 1
+		var n := _presses
+		_held = {"n": n, "at": ev.position} if ev.pressed else {}
+		if ev.pressed and is_inside_tree():
+			get_tree().create_timer(LONG_PRESS_MS / 1000.0).timeout.connect(func():
+				if _held.get("n", -1) == n:
+					long_press())
+	elif ev is InputEventScreenDrag and not _held.is_empty() and ev.position.distance_to(_held.at) > 12.0:
+		_held = {}
+
+
+## A finger held still on the view for a moment: the right click (touch has none).
+func long_press() -> void:
+	if not _held.is_empty():
+		_held = {}
+		right_clicked.emit(self)
 
 
 func set_glow(c: Color) -> void:

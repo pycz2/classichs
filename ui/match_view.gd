@@ -76,6 +76,13 @@ var _menu: PanelContainer
 var _wheel: Control
 var _enemy_menu: PanelContainer
 var _hover_hand := -1
+## Touch play (the last input was a finger, not a mouse): the hand waits small in the corner
+## until tapped open (a tap elsewhere closes it), a tap on a hand card only shows it, and a
+## card is played only when dragged above PLAY_LINE (the bottom third is the hand's).
+var touch := DisplayServer.is_touchscreen_available()
+var _hand_open := false
+var _pointer := Vector2.ZERO  # where the last mouse event (a finger's too) was, on the table
+const PLAY_LINE := 480.0
 var _laid_out := false
 var _gap := -1
 ## A press on a view that may become a drag: {id, at}.
@@ -103,7 +110,7 @@ var _stage := {}
 var _stage_events: Array = []
 var _stage_at := -1  # the batch's last event the table shows
 var _flying := {}  # entity id -> CardView: a played card shown big beside the table
-var _landing := {}  # entity id -> where a played minion comes from (it stood on the board aiming)
+var _placed := {}  # entity id -> board slot: a minion the player put down stands there until its summon
 var _cast_arrow := TargetArrow.new()  # what a played card, a Battlecry or a hero power aims at
 ## The local player's orders given while the table still animates: carried out
 ## one by one after the animations, in order (not in the tutorial).
@@ -260,6 +267,7 @@ func bind_online(m: Match, s: Node) -> void:
 func _on_refused(_error: String) -> void:
 	_pending_acts.clear()
 	_plan_cache = {}
+	_placed.clear()
 	show_hint(tr("You can't do that now"), 2.5)
 	refresh()
 
@@ -439,19 +447,37 @@ func apply_intent(i: Dictionary) -> void:
 # --- drag and drop ------------------------------------------------------------------
 
 func _on_press(v: EntityView) -> void:
+	if _hand_small() and _own_hand(v.entity_id):
+		_hand_open = true  # the first tap opens the hand; nothing is played by it
+		refresh()
+		return
 	if not my_action() or _overlay != null or (_busy and tutorial != null):
 		return
 	if _sel.get("stage", "") in ["target", "position"]:
 		click_entity(v.entity_id)  # finishing a click-mode choice
 		return
-	_press = {"id": v.entity_id, "at": get_local_mouse_position()}
+	_press = {"id": v.entity_id, "at": _pointer}
 
 
 func _input(ev: InputEvent) -> void:
+	if ev is InputEventMouse:
+		_pointer = (make_input_local(ev) as InputEventMouse).position
+	if ev is InputEventScreenTouch or (ev is InputEventMouse and ev.device == InputEvent.DEVICE_ID_EMULATION):
+		if not touch:  # (a finger's mouse events come before its touch event)
+			touch = true
+			refresh()
+	elif ev is InputEventMouseMotion and touch:
+		touch = false  # a real mouse: the usual hand
+		_hand_open = false
+		refresh()
+	if ev is InputEventMouseButton and ev.device == InputEvent.DEVICE_ID_EMULATION and ev.pressed and _hand_open \
+			and not _dragging and not _in_hand(ev.position):
+		_hand_open = false  # a tap beside the open hand closes it
+		refresh()
 	if _press.is_empty() or controller == null:
 		return
 	if ev is InputEventMouseMotion:
-		var m := get_local_mouse_position()
+		var m := _pointer
 		if not _dragging and m.distance_to(_press.at) > 12.0:
 			_start_drag()
 		if _dragging:
@@ -463,8 +489,8 @@ func _input(ev: InputEvent) -> void:
 		_dragging = false
 		_arrow.visible = false
 		if was:
-			_drop_at(get_local_mouse_position(), id)
-		else:
+			_drop_at(_pointer, id)
+		elif not (touch and _own_hand(id)):  # (a tap on a hand card only shows it)
 			click_entity(id)
 
 
@@ -515,7 +541,7 @@ func _drag_to(m: Vector2) -> void:
 	var hot := over != null and targets.has(over.entity_id)
 	if e.zone == "HAND":
 		var is_minion := e.is_minion()
-		var aiming := not is_minion and not targets.is_empty() and m.y < TableLayout.HAND_Y - 40
+		var aiming := not is_minion and not targets.is_empty() and m.y < (PLAY_LINE if touch else TableLayout.HAND_Y - 40)
 		if v:
 			v.z_index = 50
 			v.rotation = 0.0
@@ -551,7 +577,7 @@ func _drop_at(m: Vector2, id: int) -> void:
 	var over := _view_at(m)
 	var targets := _targets(_sel.actions)
 	if e.zone == "HAND":
-		if m.y > TableLayout.HAND_Y - 20:
+		if m.y > (PLAY_LINE if touch else TableLayout.HAND_Y - 20):
 			cancel()  # back into the hand
 			return
 		var positions := []
@@ -630,7 +656,7 @@ func _track_hand_hover() -> void:
 	var hand := g.players[viewer()].hand
 	var m := get_local_mouse_position()
 	var id := -1
-	if m.y > TableLayout.HAND_Y - (TableLayout.HOVER_LIFT if _hover_hand >= 0 else 10.0) and not hand.is_empty():
+	if m.y > TableLayout.HAND_Y - (TableLayout.HOVER_LIFT if _hover_hand >= 0 else 10.0) and not hand.is_empty() and not _hand_small():
 		var fan := TableLayout.hand(hand.size(), true)
 		var best := INF
 		for i in hand.size():
@@ -749,6 +775,7 @@ func _on_right_click(v: EntityView) -> void:
 	if e == null or not e.is_hero():
 		cancel()
 		return
+	_end_drag()  # (a long press on a hero: the press is no attack)
 	if e.controller == viewer():
 		_wheel.visible = emotes_allowed() and not _wheel.visible
 	elif session:
@@ -859,7 +886,11 @@ func _act(a: Dictionary) -> void:
 		_return_dragged()
 		_apply_glows()
 		return
-	controller.submit(a)
+	var e := g.ent(a.get("entity", -1))
+	if a.type == "play" and a.get("pos", -1) >= 0 and e and e.is_minion():
+		_placed[e.id] = a.pos  # it stays where it was put while the game plays it
+	if not controller.submit(a).get("ok", true):
+		_placed.erase(a.get("entity", -1))
 
 
 ## The orders waiting for the animations, in order; an order that is no longer
@@ -928,6 +959,9 @@ func refresh() -> void:
 		return
 	if not _busy:
 		_show(controller.game.snapshot, controller.game.history.size())
+	for id in _placed.keys():  # played (or no longer playable): the game has it now
+		if g.ent(id) == null or g.ent(id).zone != "HAND":
+			_placed.erase(id)
 	var me := viewer()
 	var opp := g.opponent(me)
 	var want := {}
@@ -1001,14 +1035,17 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	for i in secrets.size():
 		want[secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own}  # on the top of the portrait, both sides
 	var board: Array = _ents(_stage.board[p]) if staged else pl.board.duplicate()
-	var placing := _placing() if own else -1
-	if placing >= 0:  # a minion waiting for its Battlecry target already stands in its place
-		board.insert(clampi(_placing_pos(), 0, board.size()), g.ent(placing))
+	var placed := _placed.duplicate() if own else {}  # minions put down: they stand in their places
+	if own and _placing() >= 0:  # (one waiting for its Battlecry target too)
+		placed[_placing()] = _placing_pos()
+	for id in placed:
+		if g.ent(id) and not board.any(func(b): return b.id == id):
+			board.insert(clampi(placed[id], 0, board.size()), g.ent(id))
 	var n := board.size()
-	var gap := _gap if own and placing < 0 else -1
+	var gap := _gap if own and placed.is_empty() else -1
 	for i in n:
 		want[board[i].id] = {"kind": "minion", "pos": Vector2(TableLayout.board_x(i, n, gap), OWN_BOARD_Y if own else ENEMY_BOARD_Y)}
-	var hand: Array = (_ents(_stage.hand[p]) if staged else pl.hand).filter(func(e): return e.id != placing)
+	var hand: Array = (_ents(_stage.hand[p]) if staged else pl.hand).filter(func(e): return not placed.has(e.id))
 	if own and (g.phase == "MULLIGAN" or (_overlay != null and _overlay.name == "Mulligan")) and not Anim.instant:
 		hand = []  # the cards are on the mulligan screen; they come down into the hand after it
 	var hover := -1
@@ -1016,7 +1053,7 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 		for i in hand.size():
 			if hand[i].id == _hover_hand:
 				hover = i
-	var fan := TableLayout.hand(hand.size(), own, hover)
+	var fan := TableLayout.hand_small(hand.size()) if own and _hand_small() else TableLayout.hand(hand.size(), own, hover)
 	for i in hand.size():
 		var f: Dictionary = fan[i]
 		if not own and i == _opp_hover:  # the card the opponent is looking at
@@ -1025,6 +1062,25 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 			f.scale = 0.62
 			f.z = 20
 		want[hand[i].id] = {"kind": "hand", "pos": f.pos, "scale": f.scale, "rot": f.rot, "z": f.z, "own": own}
+
+
+func _hand_small() -> bool:
+	return touch and not _hand_open and not _dragging
+
+
+func _own_hand(id: int) -> bool:
+	var e := g.ent(id)
+	return e != null and e.zone == "HAND" and e.controller == viewer()
+
+
+## Whether a point is on the open hand (its fan, the raised card too).
+func _in_hand(at: Vector2) -> bool:
+	var n := g.players[viewer()].hand.size()
+	if n == 0:
+		return false
+	var fan := TableLayout.hand(n, true)
+	var top := TableLayout.HAND_Y - (TableLayout.HOVER_LIFT if _hover_hand >= 0 else 30.0)
+	return at.y > top and at.x > fan[0].pos.x - 40.0 and at.x < fan[n - 1].pos.x + TableLayout.CARD.x + 40.0
 
 
 func _ents(ids: Array) -> Array:
@@ -1469,7 +1525,6 @@ func _begin_batch(item: Dictionary) -> void:
 func _end_batch() -> void:
 	_stage = {}
 	_stage_events = []
-	_landing.clear()
 	_cast_arrow.visible = false
 	for id in _flying:
 		_fade_card(_flying[id])
@@ -1536,11 +1591,6 @@ static func steps(events: Array) -> Array:
 				k = "equip"
 			"secret_revealed":
 				k = "secret"
-			"after_summon":
-				# a played minion whose Battlecry did something: it settles on the board after it
-				var played: bool = events.slice(0, i).any(func(e): return e.type == "play" and e.entity == ev.get("entity", -2))
-				var did: bool = events.slice(0, i).any(func(e): return e.get("by_id", -1) == ev.get("entity", -2))
-				k = "settle" if played and did else ""
 			"after_spell":
 				k = "spell_done"
 			"fatigue", "burn":
@@ -1638,15 +1688,13 @@ func _play_step(st: Dictionary) -> void:
 			await _wait(0.4)
 		"summon":
 			# the played minion: first the board makes room, then the big card flies into its slot and
-			# becomes the minion (its Battlecry comes next; "settle" at the end)
+			# becomes the minion (its Battlecry comes next); one the player put down already stands there
 			var landing := {}  # entity id -> the big card that lands there
 			for e in st.evs:
 				var cv: CardView = _flying.get(e.entity)
 				if cv:
 					landing[e.entity] = cv
 					_flying.erase(e.entity)
-				elif _landing.has(e.entity):
-					_moved[e.entity] = _landing[e.entity]
 			_step_apply(st)
 			_step_sounds(st)
 			if not landing.is_empty():
@@ -1681,14 +1729,6 @@ func _play_step(st: Dictionary) -> void:
 				elif on_play != "none" and _stage_events.slice(st.at + 1).any(func(x): return x.get("by_id", -1) == e.entity):
 					TableFx.spawn(_fx, "battlecry", _home_of(e.entity))
 			await _wait(0.3)
-		"settle":
-			var v = _views.get(ev.get("entity", -1))
-			if v:
-				var tw: Tween = v.create_tween()
-				tw.tween_property(v, "scale", Vector2(1.08, 1.08), Anim.d(0.1))
-				tw.tween_property(v, "scale", Vector2.ONE, Anim.d(0.14)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-				TableFx.spawn(_fx, "smoke", _home_of(ev.entity) + Vector2(0, 40))  # (a little dust at its feet)
-			await _wait(0.25)
 		"bounce":
 			if _views.has(ev.entity):
 				TableFx.spawn(_fx, "whoosh", _center_of(ev.entity))
@@ -1769,6 +1809,7 @@ func _step_apply(st: Dictionary) -> Dictionary:
 				moved = true
 			"summon":
 				_stage_insert(ev.player, ev.entity)
+				_placed.erase(ev.entity)
 				moved = true
 			"take_control":
 				_stage_insert(ev.player, ev.target)
@@ -2300,9 +2341,11 @@ func _show_played(st: Dictionary) -> void:
 	var card: String = ev.get("card", "")
 	if card == "" and e:
 		card = e.card_id
+	if _placed.has(ev.entity):  # the player put it down: it stands in its place, no card shown
+		_step_apply(st)
+		_step_sounds(st)
+		return
 	var hv: EntityView = _views.get(ev.entity)
-	if hv and not hv is CardView:  # a minion that stood on the board while its Battlecry aimed
-		_landing[ev.entity] = _center_of(ev.entity)
 	var hidden: bool = card == "" or (not own and ev.get("secret", false))
 	var cv := CardView.make(card)
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2319,22 +2362,18 @@ func _show_played(st: Dictionary) -> void:
 		_views.erase(ev.entity)
 		_layer.remove_child(hv)
 		hv.queue_free()
-	if _landing.has(ev.entity):
-		cv.free()
-	else:
-		_fx.add_child(cv)
-		cv.position = start - cv.size / 2.0
-		cv.scale = Vector2(s0, s0)
-		cv.rotation = rot
-		_flying[ev.entity] = cv
+	_fx.add_child(cv)
+	cv.position = start - cv.size / 2.0
+	cv.scale = Vector2(s0, s0)
+	cv.rotation = rot
+	_flying[ev.entity] = cv
 	_step_apply(st)  # the hand closes up
 	_step_sounds(st)
-	if not _flying.has(ev.entity) or Anim.instant or not is_inside_tree():
-		if _flying.has(ev.entity):
-			cv.position = SHOW_AT - cv.size / 2.0
-			cv.scale = Vector2(1.4, 1.4)
-			cv.rotation = 0.0
-			cv.face_up = not hidden
+	if Anim.instant or not is_inside_tree():
+		cv.position = SHOW_AT - cv.size / 2.0
+		cv.scale = Vector2(1.4, 1.4)
+		cv.rotation = 0.0
+		cv.face_up = not hidden
 		return
 	var tw := cv.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	tw.tween_property(cv, "position", SHOW_AT - cv.size / 2.0, Anim.d(0.28))

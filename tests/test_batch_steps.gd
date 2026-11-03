@@ -65,7 +65,7 @@ func test_a_battlecry_lands_then_aims_then_hits() -> void:
 	var yeti: int = v.g.players[1].board[0].id
 	var item := _batch(v, ARCHER, yeti)
 	var steps := MatchView.steps(item.events)
-	eq(_kinds(steps), ["play", "summon", "aim", "hit", "settle"], "the card, the minion on the board, its arrow, the hit, then it settles")
+	eq(_kinds(steps), ["play", "summon", "aim", "hit"], "the card, the minion on the board, its arrow, the hit (then nothing: it stands there)")
 	var archer: int = item.events[0].entity
 	eq([steps[2].src, steps[2].to], [archer, yeti], "the arrow goes from the Archer to the Yeti")
 	v._begin_batch(item)
@@ -145,16 +145,39 @@ func test_mulligan_cards_go_down_in_the_order_shown() -> void:
 	v.free()
 
 
-## A card drawn by a card's effect (Novice Engineer) comes from the deck, not from the minion; a
-## minion without a Battlecry effect has no settle step.
+## A card drawn by a card's effect (Novice Engineer) comes from the deck, not from the minion.
 func test_a_drawn_card_comes_from_the_deck() -> void:
 	var evs := [{"type": "play", "player": 0, "entity": 5, "kind": "minion", "target": -1},
 		{"type": "summon", "player": 0, "entity": 5},
 		{"type": "draw", "player": 0, "entity": 9, "by_id": 5},
 		{"type": "after_summon", "entity": 5}]
-	eq(MatchView.steps(evs).map(func(s): return s.k), ["play", "summon", "card", "settle"])
+	eq(MatchView.steps(evs).map(func(s): return s.k), ["play", "summon", "card"])
 	var src := FileAccess.get_file_as_string("res://ui/match_view.gd")
 	check(src.contains('ev.type == "add_to_hand" and _views.has(ev.get("by_id", -1))'), "only a made card comes from the card that made it")
 	var plain := [{"type": "play", "player": 0, "entity": 5, "kind": "minion", "target": -1},
 		{"type": "summon", "player": 0, "entity": 5}, {"type": "after_summon", "entity": 5}]
 	eq(MatchView.steps(plain).map(func(s): return s.k), ["play", "summon"])
+
+
+## A minion the player puts down stands in its slot from then on: while the game plays it (a
+## server answers later), as its Battlecry aims and after; no big card, no move back to the hand.
+func test_a_minion_put_down_stands_in_its_place() -> void:
+	var v := _view({"hero": "HERO_08", "hand": [ARCHER], "board": [YETI, YETI]}, {"hero": "HERO_01", "board": [YETI]})
+	var archer: int = v.g.players[0].hand[0].id
+	var enemy: int = v.g.players[1].board[0].id
+	var slot0 := func() -> bool:
+		var av = v._views.get(archer)
+		return av is MinionView and is_equal_approx(v._home_of(archer).x, TableLayout.board_x(0, 3) + MinionView.SIZE.x / 2.0)
+	v._placed[archer] = 0  # put down, the game not played yet (an online answer on its way)
+	v.refresh()
+	check(slot0.call(), "it stands in slot 0 at once")
+	check(not v.g.players[0].hand.is_empty() and not v._views.get(archer) is CardView, "not in the hand")
+	v._placed.clear()
+	v.refresh()
+	v._select(archer)
+	v.click_board(0)
+	check(slot0.call(), "waiting for its target: in slot 0")
+	v.click_entity(enemy)
+	check(slot0.call() and v._placed.is_empty(), "played: still in slot 0")
+	eq(v.g.ent(enemy).health(), 4, "the Battlecry hit")
+	v.free()

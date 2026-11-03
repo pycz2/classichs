@@ -25,6 +25,23 @@ func test_right_click_own_hero_opens_emotes() -> void:
 	v.free()
 
 
+func test_a_long_press_on_own_hero_opens_emotes() -> void:
+	var v := _view({"hero": "HERO_08"})
+	var hero: EntityView = v._views[v.g.hero(0).id]
+	var t := InputEventScreenTouch.new()
+	t.pressed = true
+	hero._gui_input(t)
+	t.pressed = false
+	hero._gui_input(t)
+	hero.long_press()
+	eq(v.find_child("EmoteWheel", true, false).visible, false, "let go before: a tap")
+	t.pressed = true
+	hero._gui_input(t)
+	hero.long_press()  # (what its timer calls while the finger is still there)
+	eq(v.find_child("EmoteWheel", true, false).visible, true, "held: as a right click")
+	v.free()
+
+
 func test_menu_holds_settings_history_and_concede() -> void:
 	var v := _view({"hero": "HERO_08"})
 	var menu := v.find_child("GameMenu", true, false) as Control
@@ -43,6 +60,69 @@ func test_deck_pile_shows_count_on_hover() -> void:
 	eq(pile.tooltip_text, "Cards in deck: 3\nCards in hand: 0", "exact numbers on hover: deck and hand")
 	var enemy := v.find_child("Deck1", true, false) as DeckPile
 	check(enemy.tooltip_text.ends_with("Cards in hand: %d" % v.g.players[1].hand.size()), "the opponent's hand by the opponent's deck")
+	v.free()
+
+
+## A finger held on a deck shows the numbers the mouse shows on hover (touch has no hover);
+## the pile is higher with more cards.
+func test_a_finger_on_a_deck_shows_its_count() -> void:
+	var v := _view({"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]})
+	var pile := v.find_child("Deck1", true, false) as DeckPile
+	var t := InputEventScreenTouch.new()
+	t.pressed = true
+	pile._gui_input(t)
+	var bubble := pile.find_child("Count", true, false)
+	check(bubble != null and (bubble.get_child(0) as Label).text == pile.tooltip_text, "the opponent's deck too: %s" % pile.tooltip_text)
+	t.pressed = false
+	pile._gui_input(t)
+	check(pile.find_child("Count", true, false) != null, "it stays a moment after the finger goes")
+	var y30 := 0.0
+	pile.count = 30
+	y30 = pile.top().y
+	pile.count = 2
+	check(pile.top().y - y30 >= 15.0, "a full deck stands higher than an almost empty one: %s" % (pile.top().y - y30))
+	v.free()
+
+
+## On a touchscreen the hand waits small in the corner; a tap opens it, a tap beside it closes it;
+## a tap on a card never plays it; a card dragged and let go in the bottom third goes back.
+func test_touch_hand_opens_and_plays_only_when_dragged_up() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_023", "VAN_CS2_182"], "deck": ["VAN_CS2_182", "VAN_CS2_182"]})  # Arcane Intellect: no target
+	v.touch = true
+	v.refresh()
+	var spell: int = v.g.players[0].hand[0].id
+	var cv: CardView = v._views[spell]
+	check(cv.scale.x < 0.5 and cv.position.x > 800.0, "small, on the right: %s %s" % [cv.scale.x, cv.position])
+	v._on_press(cv)
+	check(v._hand_open and is_equal_approx(v._views[spell].scale.x, 0.9), "a tap opens it")
+	check(v._press.is_empty(), "that tap is not a press on the card")
+	v._on_press(v._views[spell])
+	var up := InputEventMouseButton.new()
+	up.button_index = MOUSE_BUTTON_LEFT
+	up.pressed = false
+	v._input(up)
+	eq([v.g.players[0].hand.size(), v._sel], [2, {}], "a tap on a card only shows it")
+	v._on_press(v._views[spell])
+	v._start_drag()
+	v._dragging = false  # (as the finger goes up)
+	v._drop_at(Vector2(640, 520), spell)
+	eq([v.g.players[0].hand.size(), v._sel], [2, {}], "let go in the bottom third: back, nothing chosen")
+	v._on_press(v._views[spell])
+	v._start_drag()
+	v._dragging = false  # (as the finger goes up)
+	v._drop_at(Vector2(640, 300), spell)
+	eq(v.g.players[0].hand.size(), 3, "let go higher: played (2 cards drawn)")
+	var tap := InputEventMouseButton.new()  # (a finger's own mouse event)
+	tap.device = InputEvent.DEVICE_ID_EMULATION
+	tap.button_index = MOUSE_BUTTON_LEFT
+	tap.pressed = true
+	tap.position = Vector2(640, 200)
+	v._input(tap)
+	check(not v._hand_open and v._views[v.g.players[0].hand[0].id].scale.x < 0.5, "a tap beside it closes it")
+	var mouse := InputEventMouseMotion.new()
+	mouse.relative = Vector2(3, 0)
+	v._input(mouse)
+	check(not v.touch and v._views[v.g.players[0].hand[0].id].scale.x > 0.8, "a real mouse: the usual hand")
 	v.free()
 
 

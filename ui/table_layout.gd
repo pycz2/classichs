@@ -53,3 +53,15 @@ static func hand(n: int, own: bool, hover := -1) -> Array:
 			x = clampf(640.0 + c * step - CARD.x * s / 2.0, 0.0, 1280.0 - CARD.x * s)
 		out.append({"pos": Vector2(x, y), "rot": rot, "scale": s, "z": 20 if i == hover else i})
 	return out
+
+
+## The hand on a touchscreen while the player does not play from it: small, low on the right
+## (a tap opens it to the usual fan).
+static func hand_small(n: int) -> Array:
+	var out := []
+	var k := 0.45
+	var step := minf(34.0, 300.0 / maxf(1, n))
+	for i in n:
+		var c := i - (n - 1) / 2.0
+		out.append({"pos": Vector2(930.0 + c * step - CARD.x * k / 2.0, 598.0 + c * c * 1.0), "rot": deg_to_rad(c * 3.0), "scale": k, "z": i})
+	return out
