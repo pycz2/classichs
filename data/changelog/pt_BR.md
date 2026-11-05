@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.42.1] - 2026-11-05
+
+### Corrigido
+- A busca por partida num servidor com um deck guardado no servidor nunca terminava: o servidor recusava o deck por causa de um campo de anotações. Agora o cliente não o envia, o servidor aceita esses decks e uma recusa encerra a busca.
+- Partidas num servidor (Arena, ranqueada, casual) travavam quando um lacaio entrava no tabuleiro: os números da resposta do servidor não batiam com os da mesa.
+- Um deck cheio não cobre mais o cronômetro da partida: a pilha cresce para baixo.
+- Um lacaio solto no tabuleiro durante uma animação fica logo no seu espaço e espera ali, em vez de voltar para a mão.
+- Tela sensível ao toque: você pode puxar uma carta da mão pequena na hora, sem tocar antes para abri-la.
+
 ## [0.42.0] - 2026-11-03
 
 ### Adicionado

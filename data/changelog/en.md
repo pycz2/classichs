@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.42.1] - 2026-11-05
+
+### Fixed
+- Searching for a server game with a deck kept on the server never ended: the server refused the deck because of a note field. Now the client does not send it, the server takes such decks, and a refusal stops the search.
+- Server games (Arena, ranked, casual) froze when a minion came onto the board: the numbers in the server's answer did not match the ones on the table.
+- A full deck no longer covers the game timer: the pile grows down.
+- A minion let go on the board during an animation stands in its slot at once and waits there, instead of going back to the hand.
+- Touchscreen: you can drag a card out of the small hand at once, without a tap to open it first.
+
 ## [0.42.0] - 2026-11-03
 
 ### Added

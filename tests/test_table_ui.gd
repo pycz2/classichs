@@ -74,6 +74,10 @@ func test_a_finger_on_a_deck_shows_its_count() -> void:
 	y30 = pile.top().y
 	pile.count = 2
 	check(pile.top().y - y30 >= 15.0, "a full deck stands higher than an almost empty one: %s" % (pile.top().y - y30))
+	var clock := v.find_child("Clock", true, false) as Label
+	var own := v.find_child("Deck0", true, false) as DeckPile
+	own.count = 30
+	check(own.top().y >= clock.position.y + clock.size.y, "a full deck stays below the clock (its turn line too): %s" % own.top().y)
 	v.free()
 
 
@@ -88,7 +92,8 @@ func test_touch_hand_opens_and_plays_only_when_dragged_up() -> void:
 	check(cv.scale.x < 0.5 and cv.position.x > 800.0, "small, on the right: %s %s" % [cv.scale.x, cv.position])
 	v._on_press(cv)
 	check(v._hand_open and is_equal_approx(v._views[spell].scale.x, 0.9), "a tap opens it")
-	check(v._press.is_empty(), "that tap is not a press on the card")
+	check(not v._press.is_empty(), "that press can drag the card at once")
+	v._press = {}
 	v._on_press(v._views[spell])
 	var up := InputEventMouseButton.new()
 	up.button_index = MOUSE_BUTTON_LEFT
@@ -116,6 +121,22 @@ func test_touch_hand_opens_and_plays_only_when_dragged_up() -> void:
 	mouse.relative = Vector2(3, 0)
 	v._input(mouse)
 	check(not v.touch and v._views[v.g.players[0].hand[0].id].scale.x > 0.8, "a real mouse: the usual hand")
+	v.free()
+
+
+## A minion let go while the table still animates waits in its slot for its turn, not in the hand
+## (it looked refused, and players dragged it again).
+func test_a_minion_dropped_during_an_animation_waits_in_its_slot() -> void:
+	var v := _view({"hero": "HERO_08", "hand": ["VAN_CS2_182"], "deck": ["VAN_CS2_182"]})
+	var yeti: int = v.g.players[0].hand[0].id
+	v._busy = true
+	v._act({"type": "play", "player": 0, "entity": yeti, "pos": 0, "target": -1, "choice": -1})
+	eq([v._pending_acts.size(), v._placed], [1, {yeti: 0}], "queued, put in slot 0")
+	v._busy = false
+	v.refresh()
+	check(v._views[yeti] is MinionView, "it stands on the board")
+	v._release_orders()
+	eq(v.g.players[0].board.size(), 1, "then played")
 	v.free()
 
 

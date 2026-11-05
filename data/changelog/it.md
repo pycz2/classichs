@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.42.1] - 2026-11-05
+
+### Corretto
+- La ricerca di una partita su un server con un mazzo salvato sul server non finiva mai: il server rifiutava il mazzo per un campo di note. Ora il client non lo invia, il server accetta questi mazzi e un rifiuto ferma la ricerca.
+- Le partite su un server (Arena, classificata, normale) si bloccavano quando un servitore entrava sul tabellone: i numeri della risposta del server non corrispondevano a quelli sul tavolo.
+- Un mazzo pieno non copre più il timer della partita: la pila cresce verso il basso.
+- Un servitore lasciato sul tabellone durante un’animazione si mette subito nel suo spazio e aspetta lì, invece di tornare nella mano.
+- Touchscreen: puoi trascinare subito una carta dalla mano piccola, senza toccarla prima per aprirla.
+
 ## [0.42.0] - 2026-11-03
 
 ### Aggiunto

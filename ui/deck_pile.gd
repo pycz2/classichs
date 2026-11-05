@@ -4,8 +4,9 @@ extends Control
 ## exact number, and the cards in that player's hand, show on hover (on touch: a finger held on
 ## it, TouchInput).
 
-const SIZE := Vector2(84, 120)
+const SIZE := Vector2(84, 138)
 const STEP := Vector2(-0.9, -1.2)  # one layer of the pile (2 cards): a full deck stands 18 px high
+const BASE := Vector2(6, 26)  # the bottom card: a full deck's top is where an empty one's was (clear of the clock)
 
 var count := -1:
 	set(v):
@@ -36,7 +37,7 @@ func _init() -> void:
 
 ## Where the top card is (cards are drawn from here).
 func top() -> Vector2:
-	return position + Vector2(6, 8) + STEP * ceili(maxi(count, 0) / 2.0)
+	return position + BASE + STEP * ceili(maxi(count, 0) / 2.0)
 
 
 static func draw_back(ci: CanvasItem, r: Rect2) -> void:
@@ -44,7 +45,7 @@ static func draw_back(ci: CanvasItem, r: Rect2) -> void:
 
 
 func _draw() -> void:
-	var card := Rect2(Vector2(6, 8), Vector2(72, 104))
+	var card := Rect2(BASE, Vector2(72, 104))
 	if count <= 0:
 		draw_style_box(Palette.box(Color(0, 0, 0, 0.3), 8, Color(1, 1, 1, 0.2), 2), card)
 		return

@@ -4,6 +4,15 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.42.1] - 2026-11-05
+
+### Corrigé
+- La recherche d’une partie sur un serveur avec un deck gardé sur le serveur ne finissait jamais : le serveur refusait le deck à cause d’un champ de notes. Le client ne l’envoie plus, le serveur accepte ces decks, et un refus arrête la recherche.
+- Les parties sur un serveur (Arène, classée, non classée) se figeaient quand un serviteur arrivait sur le plateau : les numéros de la réponse du serveur ne correspondaient pas à ceux de la table.
+- Un deck plein ne cache plus le minuteur de la partie : la pile grandit vers le bas.
+- Un serviteur lâché sur le plateau pendant une animation se place tout de suite à sa place et y attend, au lieu de retourner dans la main.
+- Écran tactile : tu peux tirer une carte de la petite main tout de suite, sans toucher d’abord pour l’ouvrir.
+
 ## [0.42.0] - 2026-11-03
 
 ### Ajouté

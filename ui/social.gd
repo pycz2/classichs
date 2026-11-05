@@ -521,7 +521,7 @@ func invite(user: String) -> void:
 		toast(link.game_problem(Packs.active(), true))
 		return
 	link.game_deck = d
-	link.send(link.with_pack({"t": "invite", "to": user, "deck": d.to_dict()}))
+	link.send(link.with_pack({"t": "invite", "to": user, "deck": d.to_message()}))
 	toast(tr("Invitation sent to %s") % user)
 
 
@@ -753,7 +753,7 @@ func answer_invite(accept: bool) -> void:
 		return
 	if accept and d:
 		l.game_deck = d
-		var msg := {"t": "invite_accept", "from": srv.invite_from, "deck": d.to_dict()}
+		var msg := {"t": "invite_accept", "from": srv.invite_from, "deck": d.to_message()}
 		if srv.invite_pack.has("rules_hash"):
 			msg["pack"] = srv.invite_pack.rules_hash
 		l.send(msg)

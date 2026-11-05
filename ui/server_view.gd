@@ -28,6 +28,7 @@ var mode := "casual"  # Play: casual or ranked
 var deck: Deck  # the deck for casual, ranked and friendly games
 var arena := {}  # the Arena run from the server
 var queued := ""  # the mode being searched ("" = none)
+var _queue_asked := false  # a queue sent, its answer (queued, or an error) not here yet
 var waited := 0.0
 var _status: Label
 var _body := Control.new()
@@ -516,7 +517,8 @@ func queue(m: String) -> void:
 	if not _game_here():
 		return
 	link.game_deck = deck
-	link.send(link.with_pack({"t": "queue", "mode": m, "deck": deck.to_dict()}))
+	link.send(link.with_pack({"t": "queue", "mode": m, "deck": deck.to_message()}))
+	_queue_asked = true
 	queued = m
 	waited = 0.0
 	say("")
@@ -793,7 +795,8 @@ func _on_message(msg: Dictionary) -> void:
 			if stage == "connecting":  # a refused saved session: log in by hand
 				_go("login")
 			say(str(msg.get("text", msg.get("code", "error"))))
-			if msg.get("code", "") in ["queue", "deck"]:
+			if msg.get("code", "") in ["queue", "deck"] or (_queue_asked and queued != ""):
+				_queue_asked = false  # the search was refused: it does not go on
 				queued = ""
 				_go("lobby")
 		"me":
@@ -802,6 +805,7 @@ func _on_message(msg: Dictionary) -> void:
 			if stage == "lobby":
 				_go("lobby")
 		"queued":
+			_queue_asked = false
 			queued = str(msg.get("mode", queued))
 		"queue_status":
 			waited = float(msg.get("waited", waited))

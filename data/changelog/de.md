@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.42.1] - 2026-11-05
+
+### Behoben
+- Die Suche nach einem Serverspiel mit einem auf dem Server gespeicherten Deck endete nie: Der Server lehnte das Deck wegen eines Notizfelds ab. Jetzt sendet der Client es nicht mehr, der Server nimmt solche Decks an, und eine Ablehnung beendet die Suche.
+- Serverspiele (Arena, gewertet, ungewertet) froren ein, wenn ein Diener aufs Feld kam: Die Nummern in der Antwort des Servers passten nicht zu denen auf dem Tisch.
+- Ein volles Deck verdeckt den Spieltimer nicht mehr: Der Stapel wächst nach unten.
+- Ein Diener, der während einer Animation aufs Feld gezogen wird, steht sofort auf seinem Platz und wartet dort, statt in die Hand zurückzugehen.
+- Touchscreen: Du kannst eine Karte sofort aus der kleinen Hand ziehen, ohne sie erst mit einem Tippen zu öffnen.
+
 ## [0.42.0] - 2026-11-03
 
 ### Hinzugefügt

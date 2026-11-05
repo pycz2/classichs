@@ -262,6 +262,7 @@ func on_state(msg: Dictionary) -> void:
 
 
 func _take_state(msg: Dictionary) -> void:
+	Rules.ints(msg)  # (JSON: the ids would be floats, and the table keys its views by ints)
 	_legal = null
 	game.update(msg.get("view", {}))
 	if game.history.is_empty():

@@ -173,6 +173,7 @@ func _ready() -> void:
 	_clock.add_theme_color_override("font_outline_color", Color.BLACK)
 	_clock.add_theme_constant_override("outline_size", 5)
 	_clock.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_clock.z_index = 5  # (over the deck below it)
 	add_child(_clock)
 	_end_halo.position = _end_turn.position
 	_end_halo.size = _end_turn.custom_minimum_size
@@ -448,9 +449,8 @@ func apply_intent(i: Dictionary) -> void:
 
 func _on_press(v: EntityView) -> void:
 	if _hand_small() and _own_hand(v.entity_id):
-		_hand_open = true  # the first tap opens the hand; nothing is played by it
+		_hand_open = true  # the first tap opens the hand (a tap plays nothing), a drag takes the card at once
 		refresh()
-		return
 	if not my_action() or _overlay != null or (_busy and tutorial != null):
 		return
 	if _sel.get("stage", "") in ["target", "position"]:
@@ -880,14 +880,24 @@ func _planned() -> Dictionary:
 func _act(a: Dictionary) -> void:
 	if a.is_empty():
 		return
+	var e := g.ent(a.get("entity", -1))
+	var minion: bool = a.type == "play" and a.get("pos", -1) >= 0 and e != null and e.is_minion()
 	if (_busy or controller.waiting() or not _pending_acts.is_empty()) and tutorial == null:
 		_pending_acts.append(a)
 		_plan_cache = {}
-		_return_dragged()
+		if minion:  # it waits in its place for the table, not in the hand (it looked refused)
+			_placed[e.id] = a.pos
+			_drag_home = []
+			var v: EntityView = _views.get(e.id)
+			if v:  # (the layout waits for the table: the card goes down on its slot by hand)
+				var n := g.players[viewer()].board.size()
+				var at := Vector2(TableLayout.board_x(mini(a.pos, n), n + 1), OWN_BOARD_Y) + TableLayout.MINION / 2.0
+				_glide(v, at - v.pivot_offset - (v.size / 2.0 - v.pivot_offset) * 0.6, 0.6)
+		else:
+			_return_dragged()
 		_apply_glows()
 		return
-	var e := g.ent(a.get("entity", -1))
-	if a.type == "play" and a.get("pos", -1) >= 0 and e and e.is_minion():
+	if minion:
 		_placed[e.id] = a.pos  # it stays where it was put while the game plays it
 	if not controller.submit(a).get("ok", true):
 		_placed.erase(a.get("entity", -1))
@@ -902,6 +912,8 @@ func _release_orders() -> void:
 		var r := controller.submit(a)
 		if not r.ok:
 			_pending_acts.clear()
+			_placed.clear()
+			refresh()
 			show_hint(tr("The queued moves were cancelled: they are no longer possible"), 3.0)
 	_apply_glows()
 
@@ -1714,7 +1726,8 @@ func _play_step(st: Dictionary) -> void:
 					tw.parallel().tween_property(cv, "scale", Vector2(0.55, 0.55), Anim.d(0.22))
 				await _wait(0.22)
 				for id in landing:
-					landing[id].queue_free()
+					if is_instance_valid(landing[id]):
+						landing[id].queue_free()
 					var v = _views.get(id)
 					if v:
 						v.modulate.a = 1.0

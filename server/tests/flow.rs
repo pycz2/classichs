@@ -261,6 +261,18 @@ async fn play_out(t: &mut Table) -> [Value; 2] {
     [g0, g1]
 }
 
+/// A deck with fields the server does not use (0.40-0.42 clients sent `servers` with a deck kept
+/// on the server) is queued: the search used to fail with "unknown field" and never end.
+#[tokio::test]
+async fn a_deck_with_other_fields_is_queued() {
+    let (addr, _app) = server(std_server()).await;
+    let mut c = C::register(addr, "alice").await;
+    let mut d = deck("MAGE");
+    d["servers"] = json!({"wss://example.org": {"id": 3, "at": 1}});
+    c.send(json!({"t": "queue", "mode": "ranked", "deck": d})).await;
+    c.want("queued").await;
+}
+
 #[tokio::test]
 async fn casual_game_played_out_by_bots() {
     let (addr, app) = server(std_server()).await;

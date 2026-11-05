@@ -163,3 +163,23 @@ func test_copy_offers_only_the_same_rules() -> void:
 	eq(v.local_decks().size(), 10, "Classic's only")
 	DirAccess.remove_absolute(DeckStore.file("neon"))
 	_free(v)
+
+
+## A deck kept on the server is queued without this device's notes about it (servers: the
+## server refused the field, and the search never ended); a refused queue stops the search.
+func test_a_server_deck_is_queued_and_a_refusal_stops_the_search() -> void:
+	var l := _link([{"id": 4, "pack": Packs.CLASSIC, "name": "Mine", "hero": "HERO_08", "cards": _cards(), "updated": 5}])
+	var v := ServerView.new()
+	v.link = l
+	root().add_child(v)
+	var classic: Pack = Packs.all().filter(func(p): return p.id() == Packs.CLASSIC)[0]
+	v.deck = l.decks_of(classic)[0]
+	check(not v.deck.servers.is_empty(), "the deck knows its server")
+	v.queue("ranked")
+	var sent: Dictionary = l.of("queue").back().deck
+	eq(sent.keys(), ["name", "hero", "cards"], "only what the server takes")
+	eq(v.queued, "ranked", "searching")
+	l.dispatch({"t": "error", "code": "bad_request", "text": "unknown field"})
+	eq(v.queued, "", "refused: no longer searching")
+	v.free()
+	l.free()

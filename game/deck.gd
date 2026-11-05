@@ -75,6 +75,13 @@ func to_dict() -> Dictionary:
 	return d
 
 
+## The deck as a server takes it to play (queue, invite): no notes of this device (servers).
+func to_message() -> Dictionary:
+	var d := to_dict()
+	d.erase("servers")
+	return d
+
+
 ## A deck from saved data; unknown fields are ignored. Card ids that no longer
 ## exist are dropped (they could never be played); a bad structure or an
 ## unknown hero gives null.

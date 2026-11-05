@@ -4,6 +4,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.42.1] - 2026-11-05
+
+### Naprawiono
+- Szukanie gry na serwerze z talią zapisaną na serwerze nigdy się nie kończyło: serwer odrzucał talię z powodu pola z notatkami. Teraz klient go nie wysyła, serwer przyjmuje takie talie, a odmowa kończy szukanie.
+- Gry na serwerze (Arena, rankingowe, zwykłe) zawieszały się, gdy stronnik wchodził na stół: numery z odpowiedzi serwera nie zgadzały się z numerami na stole.
+- Pełna talia nie zasłania już zegara gry: stos rośnie w dół.
+- Stronnik puszczony na stół podczas animacji od razu staje na swoim miejscu i tam czeka, zamiast wracać do ręki.
+- Ekran dotykowy: kartę można od razu wyciągnąć z małej ręki, bez osobnego dotknięcia, by ją otworzyć.
+
 ## [0.42.0] - 2026-11-03
 
 ### Dodano

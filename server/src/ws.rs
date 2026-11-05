@@ -32,8 +32,8 @@ const HISTORY: u64 = 200;
 /// Decks an account keeps on the server (all packs together).
 pub const MAX_DECKS: u64 = 100;
 
+/// Other fields are ignored (0.40-0.42 clients sent their own notes, `servers`, with a server deck).
 #[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct DeckIn {
     hero: String,
     cards: Vec<String>,

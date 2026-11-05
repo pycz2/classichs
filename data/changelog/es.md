@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.42.1] - 2026-11-05
+
+### Corregido
+- La búsqueda de partida en un servidor con un mazo guardado en el servidor no terminaba nunca: el servidor rechazaba el mazo por un campo de notas. Ahora el cliente no lo envía, el servidor acepta esos mazos y un rechazo detiene la búsqueda.
+- Las partidas en un servidor (Arena, clasificatoria, normal) se congelaban cuando un esbirro llegaba al tablero: los números de la respuesta del servidor no coincidían con los de la mesa.
+- Un mazo lleno ya no tapa el temporizador de la partida: la pila crece hacia abajo.
+- Un esbirro soltado en el tablero durante una animación se coloca enseguida en su hueco y espera allí, en vez de volver a la mano.
+- Pantalla táctil: puedes sacar una carta de la mano pequeña enseguida, sin tocarla antes para abrirla.
+
 ## [0.42.0] - 2026-11-03
 
 ### Añadido

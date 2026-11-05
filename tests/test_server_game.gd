@@ -22,8 +22,9 @@ class Fake:
 
 	func state(events: Array, deadline := 75) -> Dictionary:
 		var s: Dictionary = Rules.request({"op": "snapshot", "game": id, "view": you}).state
-		return {"t": "state", "game": GAME, "view": s, "events": events,
+		var msg := {"t": "state", "game": GAME, "view": s, "events": events,
 			"result": {"over": s.game_over, "winner": s.winner, "turn": s.turn, "current": s.current, "phase": s.phase, "deadline": deadline}}
+		return JSON.parse_string(JSON.stringify(msg))  # as it comes from a server: its numbers are floats
 
 	## Plays what the client sent (act), then the opponent's moves (the engine's bot) until it is the client's turn.
 	func serve(opponent := true) -> void:
@@ -109,6 +110,18 @@ func test_a_whole_game_through_the_server() -> void:
 	eq(g.game_over, f.snapshot().game_over, "the same end as the server")
 	check(g.history.size() > 10, "a history from the states")
 	check(v.find_child("GameOver", true, false) != null, "the result shows")
+	v.free()
+
+
+## A state comes as JSON, its numbers floats: the events' ids are whole numbers again (the table
+## keys its views by them; a float id found none, and a played minion stopped the table).
+func test_a_states_ids_are_whole_numbers() -> void:
+	var f := Fake.new()
+	var v := _table(f)
+	var got := []
+	v.controller.changed.connect(func(evs): got.append_array(evs))
+	f.link.dispatch(f.state([{"type": "test_only", "player": 1, "entity": 33}]))
+	eq([typeof(got[0].entity), typeof(got[0].player)], [TYPE_INT, TYPE_INT], "ints")
 	v.free()
 
 
