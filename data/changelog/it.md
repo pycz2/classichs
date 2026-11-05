@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.42.2] - 2026-11-05
+
+### Modificato
+- Touchscreen: non si può più trascinare una carta direttamente dalla mano piccola. Il primo tocco apre solo la mano (come nella 0.42.0).
+
 ## [0.42.1] - 2026-11-05
 
 ### Corretto

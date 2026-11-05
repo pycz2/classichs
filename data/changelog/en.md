@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.42.2] - 2026-11-05
+
+### Changed
+- Touchscreen: a card can no longer be dragged straight out of the small hand. The first tap only opens the hand (as in 0.42.0).
+
 ## [0.42.1] - 2026-11-05
 
 ### Fixed

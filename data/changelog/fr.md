@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.42.2] - 2026-11-05
+
+### Modifié
+- Écran tactile : on ne peut plus tirer une carte directement de la petite main. Le premier toucher ouvre seulement la main (comme en 0.42.0).
+
 ## [0.42.1] - 2026-11-05
 
 ### Corrigé

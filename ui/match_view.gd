@@ -449,8 +449,9 @@ func apply_intent(i: Dictionary) -> void:
 
 func _on_press(v: EntityView) -> void:
 	if _hand_small() and _own_hand(v.entity_id):
-		_hand_open = true  # the first tap opens the hand (a tap plays nothing), a drag takes the card at once
+		_hand_open = true  # the first tap opens the hand; nothing is played by it
 		refresh()
+		return
 	if not my_action() or _overlay != null or (_busy and tutorial != null):
 		return
 	if _sel.get("stage", "") in ["target", "position"]:

@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.42.2] - 2026-11-05
+
+### Alterado
+- Tela sensível ao toque: não dá mais para puxar uma carta direto da mão pequena. O primeiro toque só abre a mão (como na 0.42.0).
+
 ## [0.42.1] - 2026-11-05
 
 ### Corrigido

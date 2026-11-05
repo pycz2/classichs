@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.42.2] - 2026-11-05
+
+### Cambiado
+- Pantalla táctil: ya no se puede sacar una carta directamente de la mano pequeña. El primer toque solo abre la mano (como en 0.42.0).
+
 ## [0.42.1] - 2026-11-05
 
 ### Corregido

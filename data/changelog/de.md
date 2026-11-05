@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.42.2] - 2026-11-05
+
+### Geändert
+- Touchscreen: Aus der kleinen Hand lässt sich keine Karte mehr direkt ziehen. Das erste Tippen öffnet nur die Hand (wie in 0.42.0).
+
 ## [0.42.1] - 2026-11-05
 
 ### Behoben

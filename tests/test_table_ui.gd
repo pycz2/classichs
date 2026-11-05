@@ -92,8 +92,7 @@ func test_touch_hand_opens_and_plays_only_when_dragged_up() -> void:
 	check(cv.scale.x < 0.5 and cv.position.x > 800.0, "small, on the right: %s %s" % [cv.scale.x, cv.position])
 	v._on_press(cv)
 	check(v._hand_open and is_equal_approx(v._views[spell].scale.x, 0.9), "a tap opens it")
-	check(not v._press.is_empty(), "that press can drag the card at once")
-	v._press = {}
+	check(v._press.is_empty(), "that press only opens the hand: no card is taken from the small hand")
 	v._on_press(v._views[spell])
 	var up := InputEventMouseButton.new()
 	up.button_index = MOUSE_BUTTON_LEFT

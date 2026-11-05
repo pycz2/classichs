@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.42.2] - 2026-11-05
+
+### Zmieniono
+- Ekran dotykowy: z małej ręki nie da się już od razu wyciągnąć karty. Pierwsze dotknięcie tylko otwiera rękę (jak w 0.42.0).
+
 ## [0.42.1] - 2026-11-05
 
 ### Naprawiono
