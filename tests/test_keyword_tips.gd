@@ -44,6 +44,20 @@ func test_a_buffed_minion_lists_its_changes() -> void:
 	eq(KeywordTips.changes(g.players[1].board[0]), [], "an untouched minion has none")
 
 
+## Corruption leaves no number changed: the minion gets a mark, its card view says what waits.
+func test_a_hidden_effect_is_marked_and_listed() -> void:
+	var m := H.scene({"hero": "HERO_07", "hand": ["VAN_CS2_063"]}, {"hero": "HERO_01", "board": ["VAN_CS2_182"]})
+	var yeti: GameView.Ent = m.game.players[1].board[0]
+	check(not MinionView.hidden_effects(yeti), "nothing on it yet")
+	H.play(m, m.game.players[0].hand[0], yeti)
+	yeti = m.game.players[1].board[0]
+	check(MinionView.hidden_effects(yeti), "Corruption: a mark")
+	var lines := KeywordTips.changes(yeti)
+	check(lines.size() == 1 and lines[0].begins_with(CardText.name("VAN_CS2_063") + ": "), "the card that cast it and its text: %s" % [lines])
+	yeti.silenced = true
+	check(not MinionView.hidden_effects(yeti), "a silenced minion has none")
+
+
 func test_collection_shows_keyword_tips() -> void:
 	var c := CollectionView.new()
 	root().add_child(c)

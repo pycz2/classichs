@@ -9,6 +9,12 @@ const WIDTH := 210.0
 const RELATED_SCALE := 0.85
 
 static var _data := {}  # client mechanic name -> {name: {lang: text}, text: {lang: tip}}
+## The cards whose scripts put these hidden enchantments on (g.enchant {hooks}): the Changes box
+## names them with their text. ponytail: the Classic pack's; another pack's show the hook's name.
+const ENCH_SOURCES := {"ench:corruption": "VAN_CS2_063", "ench:shadow_madness": "VAN_EX1_334",
+	"ench:power_overwhelming": "VAN_EX1_316", "ench:ancestral_spirit": "VAN_CS2_038", "ench:soul_of_the_forest": "VAN_EX1_158",
+	"ench:blessing_of_wisdom": "VAN_EX1_363", "ench:nightmare": "VAN_DREAM_05", "ench:conceal": "VAN_EX1_128",
+	"ench:headcrack": "VAN_EX1_137", "ench:commanding_shout": "VAN_NEW1_036", "ench:transcendence": "TU4f_006"}
 
 
 static func reset() -> void:
@@ -65,6 +71,10 @@ static func changes(e: GameView.Ent) -> Array:
 			line = (line + ", " if line != "" else "") + tr.call("Health set to %d") % ench.set_hp
 		if line == "" and (int(ench.get("atk", 0)) != 0 or int(ench.get("hp", 0)) != 0):
 			line = "%+d/%+d" % [int(ench.get("atk", 0)), int(ench.get("hp", 0))]
+		if line == "" and ench.has("hooks"):  # a hidden effect: the card that cast it, and what it does
+			var by: String = ENCH_SOURCES.get(ench.hooks, "")
+			line = "%s: %s" % [CardText.name(by), CardText.text(by)] if CardDb.has(by) \
+				else str(ench.hooks).trim_prefix("ench:").capitalize()
 		if line != "":
 			if ench.get("eot", false):
 				line += " (%s)" % tr.call("this turn")

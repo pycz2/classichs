@@ -42,6 +42,7 @@ var state_hash := ""
 var _deadline := -1.0  # server game: seconds left to move when the last state came
 var _deadline_ms := 0
 var _waiting := false
+var _sent := {}  # server game: the last action sent (its attack target, which a Secret may change)
 var _legal = null  # cached legal actions (null: ask again)
 var _bot_scheduled := false
 var _finished := false
@@ -195,6 +196,7 @@ func submit(action: Dictionary) -> Dictionary:
 		if game.game_over:
 			return {"ok": false, "error": "the game is over", "events": []}
 		_waiting = true
+		_sent = action
 		server.call({"t": "act", "action": action})
 		return {"ok": true, "error": "", "events": []}
 	var r := _apply(action)
@@ -270,6 +272,9 @@ func on_state(msg: Dictionary) -> void:
 	var events: Array = msg.get("events", [])
 	if not events.is_empty():
 		var a := _guess_action(events, who)
+		if a.type == "attack" and _sent.get("type", "") == "attack" and int(_sent.get("attacker", -1)) == int(a.attacker):
+			a.defender = int(_sent.get("defender", a.defender))  # what was asked (Misdirection changes the target)
+		_sent = {}
 		game.history.append({"turn": game.turn, "player": a.player, "action": a, "events": events})
 		if a.player == 1 - remote:
 			_waiting = false  # the state of this player's move (not one of the opponent's in between)

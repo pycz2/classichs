@@ -14,6 +14,14 @@ const BUFFED := Color("4dff5a")
 const DAMAGED := Color("ff3b3b")
 
 
+## A weapon's Durability: red below its card's, green above (as a minion's Health).
+## ponytail: the card's value stands for the maximum (the engine keeps none); a weapon given
+## Durability (Upgrade!) and then used down to the card's value shows white, not red.
+static func durability_color(dur: int, card: Dictionary) -> Color:
+	var full := int(card.get("durability", card.get("health", 0)))
+	return DAMAGED if dur < full else (BUFFED if dur > full else Color.WHITE)
+
+
 static func _number(ci: CanvasItem, c: Vector2, value: int, size: float, col := Color.WHITE) -> void:
 	var font := ThemeDB.fallback_font
 	var fs := int(size * 1.08)

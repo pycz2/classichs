@@ -6,6 +6,7 @@ extends EntityView
 
 const SIZE := Vector2(96, 116)
 const OVAL := Rect2(Vector2(12, 8), Vector2(72, 92))
+const SLEEP_Z := Color("69f07a")  # a sleeping minion's green z's (as in the original)
 
 var e: GameView.Ent  # the live entity
 var g: GameView
@@ -51,9 +52,40 @@ func _sleeping() -> bool:
 
 func _process(delta: float) -> void:
 	super(delta)
+	_show_arcane(s != null and s.spellpower() > 0 and not s.silenced)
 	if s and _animated():
 		_t += delta
 		queue_redraw()
+
+
+const ARCANE_SHADER := preload("res://ui/arcane.gdshader")
+const ARCANE_PAD := 16.0  # the sparkles drift this far out of the view
+static var _arcane_mat: ShaderMaterial  # one for all: each minion's seed is its rect's colour
+var _arcane: ColorRect
+
+
+## Spell Damage: an arcane glow and sparkles around the portrait (arcane.gdshader).
+func _show_arcane(on: bool) -> void:
+	if on == (_arcane != null):
+		return
+	if not on:
+		_arcane.queue_free()
+		_arcane = null
+		return
+	if _arcane_mat == null:
+		_arcane_mat = ShaderMaterial.new()
+		_arcane_mat.shader = ARCANE_SHADER
+		_arcane_mat.set_shader_parameter("size", SIZE + Vector2.ONE * ARCANE_PAD * 2.0)
+		_arcane_mat.set_shader_parameter("center", OVAL.get_center() + Vector2.ONE * ARCANE_PAD)
+		_arcane_mat.set_shader_parameter("radii", OVAL.size / 2.0)
+	_arcane = ColorRect.new()
+	_arcane.name = "Arcane"
+	_arcane.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_arcane.position = -Vector2.ONE * ARCANE_PAD
+	_arcane.size = SIZE + Vector2.ONE * ARCANE_PAD * 2.0
+	_arcane.color = Color(randf(), 1, 1, 1)
+	_arcane.material = _arcane_mat
+	add_child(_arcane)
 
 
 func _draw() -> void:
@@ -124,10 +156,6 @@ func _draw() -> void:
 		Frames.ring(self, Art.outline("oval", OVAL.grow(8 + 2 * sin(_t * 2))), Color(0.5, 0.9, 1.0, 0.45), 2)
 	if not s.silenced and KeywordTips.keywords_of(s.card_id).has("ENRAGED") and s.damage > 0:
 		Frames.ring(self, Art.outline("oval", OVAL.grow(4)), Color("ff4d4d"), 3)
-	if s.spellpower() > 0 and not s.silenced:
-		for i in 3:
-			var p := center + Vector2(-20 + i * 20, -40 + 4 * sin(_t * 3 + i))
-			draw_colored_polygon(PackedVector2Array([p + Vector2(0, -5), p + Vector2(1.5, -1.5), p + Vector2(5, 0), p + Vector2(1.5, 1.5), p + Vector2(0, 5), p + Vector2(-1.5, 1.5), p + Vector2(-5, 0), p + Vector2(-1.5, -1.5)]), Color("e5dbff"))
 	var marks := []
 	if not s.silenced and h.has("deathrattle"):
 		marks.append("deathrattle")
@@ -137,6 +165,8 @@ func _draw() -> void:
 		marks.append("trigger")
 	if s.silenced:
 		marks.append("silenced")
+	if hidden_effects(s):
+		marks.append("enchant")
 	for i in marks.size():
 		_draw_icon(marks[i], Vector2(48 + (i - (marks.size() - 1) / 2.0) * 18, 98))
 	if _sleeping():
@@ -146,7 +176,7 @@ func _draw() -> void:
 			var p := Vector2(60 + ph * 16, 50 - ph * 40)
 			var fs := 12 + i * 3
 			draw_string_outline(font, p, "z", HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 3, Color(0, 0, 0, 1.0 - ph))
-			draw_string(font, p, "z", HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(1, 1, 1, 1.0 - ph))
+			draw_string(font, p, "z", HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color(SLEEP_Z, 1.0 - ph))
 	var base_atk := int(c.get("attack", 0))
 	var base_hp := int(c.get("health", 0))
 	Frames.attack(self, Vector2(16, 98), s.atk(), 15 * bump("atk"), Frames.BUFFED if s.atk() > base_atk else Color.WHITE)
@@ -289,4 +319,16 @@ func _draw_icon(kind: String, at: Vector2) -> void:
 		"silenced":
 			draw_arc(c, 5, 0, TAU, 16, Color("ff6b6b"), 2.0)
 			draw_line(c + Vector2(-4, 4), c + Vector2(4, -4), Color("ff6b6b"), 2.0)
+		"enchant":  # a violet rune: something cast on it acts later (Corruption…)
+			draw_circle(c, 6, Color.BLACK)
+			draw_circle(c, 5, Color("7048e8"))
+			var r := 4.0
+			draw_colored_polygon(PackedVector2Array([c + Vector2(0, -r), c + Vector2(1.1, -1.1), c + Vector2(r, 0), c + Vector2(1.1, 1.1),
+				c + Vector2(0, r), c + Vector2(-1.1, 1.1), c + Vector2(-r, 0), c + Vector2(-1.1, -1.1)]), Color("f3f0ff"))
 	draw_set_transform(Vector2.ZERO)
+
+
+## Something cast on the minion acts later and shows nowhere else (Corruption, Shadow Madness…):
+## an enchantment with hooks. (Buffs show in its numbers, keywords in their looks.)
+static func hidden_effects(m: GameView.Ent) -> bool:
+	return not m.silenced and m.enchantments.any(func(x): return x is Dictionary and x.has("hooks"))

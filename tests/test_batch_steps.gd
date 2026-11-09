@@ -181,3 +181,178 @@ func test_a_minion_put_down_stands_in_its_place() -> void:
 	check(slot0.call() and v._placed.is_empty(), "played: still in slot 0")
 	eq(v.g.ent(enemy).health(), 4, "the Battlecry hit")
 	v.free()
+
+
+# --- attacks: what happens on the way plays at the middle of the leap (0.51) -------------
+
+const EXPLOSIVE := "VAN_EX1_610"
+const FREEZING := "VAN_EX1_611"
+const MISDIRECTION := "VAN_EX1_533"
+const NOBLE := "VAN_EX1_130"
+const VAPORIZE := "VAN_EX1_594"
+const TRUESILVER := "VAN_CS2_097"
+const SQUIRE := "VAN_EX1_008"  # Argent Squire: 1/1 Divine Shield
+
+
+## Player 0's first minion (its hero when it has none) attacks player 1's hero (or first minion):
+## the batch (its action is in the history).
+func _attack(v: MatchView, at_hero := true) -> Dictionary:
+	var m := v.controller
+	var b0: Array = m.game.players[0].board
+	var a: int = b0[0].id if not b0.is_empty() else m.game.hero(0).id
+	var d: int = m.game.hero(1).id if at_hero else m.game.players[1].board[0].id
+	var r := m._apply({"type": "attack", "player": 0, "attacker": a, "defender": d})
+	check(r.ok, "attacked")
+	return {"events": r.events, "snap": m.game.snapshot, "hist": m.game.history.size(), "a": a, "d": d}
+
+
+func test_a_plain_attack_is_one_step() -> void:
+	var v := _view({"hero": "HERO_08", "board": [YETI]}, {"hero": "HERO_01", "board": [YETI]})
+	var steps := MatchView.steps(_attack(v, false).events)
+	eq(_kinds(steps), ["attack"], "the leap and both hits")
+	eq(steps[0].evs.size(), 3, "the attack and its two hits")
+	check(not steps[0].get("pause", false), "no stop on the way")
+	v.free()
+
+
+func test_divine_shield_pops_with_the_hit() -> void:
+	var v := _view({"hero": "HERO_08", "board": [SQUIRE]}, {"hero": "HERO_01", "board": [YETI]})
+	var steps := MatchView.steps(_attack(v, false).events)
+	eq(_kinds(steps), ["attack"], "one moment")
+	eq(steps[0].evs.map(func(e): return e.type), ["attack", "damage", "divine_shield_lost"], "the shield goes with the blow")
+	var v2 := _view({"hero": "HERO_08", "board": [YETI]}, {"hero": "HERO_01", "board": [SQUIRE]})
+	steps = MatchView.steps(_attack(v2, false).events)
+	eq(steps[0].evs.map(func(e): return e.type), ["attack", "divine_shield_lost", "damage"], "the defender's shield too")
+	v.free()
+	v2.free()
+
+
+func test_explosive_trap_goes_off_half_way() -> void:
+	var v := _view({"hero": "HERO_08", "board": [YETI]}, {"hero": "HERO_05", "secrets": [EXPLOSIVE]})
+	var item := _attack(v)
+	var steps := MatchView.steps(item.events, v._aimed(item))
+	eq(_kinds(steps), ["attack", "secret", "hit", "strike"], "the leap stops, the Secret, its blast, then the blow")
+	check(steps[0].pause, "the attack stops on its way")
+	eq(steps[0].aimed, item.d, "towards the hero")
+	eq(steps[2].evs.size(), 2, "the blast hits both at once")
+	eq(steps[3].evs.size(), 1, "the Yeti's blow")
+	var health := []
+	v._begin_batch(item)
+	for st in steps:
+		v._step_apply(st)
+		health.append(v._views[item.a].s.health())
+	v._end_batch()
+	eq(health, [5, 5, 3, 3], "the Yeti is burnt half-way")
+	v.free()
+
+
+func test_freezing_trap_sends_the_attacker_back_from_half_way() -> void:
+	var v := _view({"hero": "HERO_08", "board": [YETI]}, {"hero": "HERO_05", "secrets": [FREEZING]})
+	var item := _attack(v)
+	var steps := MatchView.steps(item.events)
+	eq(_kinds(steps), ["attack", "secret", "bounce", "strike"], "no blow: the strike step only ends the leap")
+	check(steps[3].evs.is_empty(), "nothing lands")
+	v.free()
+
+
+func test_vaporize_destroys_it_on_its_way() -> void:
+	var v := _view({"hero": "HERO_08", "board": [YETI]}, {"hero": "HERO_08", "secrets": [VAPORIZE]})
+	var item := _attack(v)
+	eq(_kinds(MatchView.steps(item.events)), ["attack", "secret", "death", "strike"])
+	v.free()
+
+
+func test_noble_sacrifice_takes_the_blow() -> void:
+	var v := _view({"hero": "HERO_08", "board": [YETI]}, {"hero": "HERO_04", "secrets": [NOBLE]})
+	var item := _attack(v)
+	var steps := MatchView.steps(item.events, v._aimed(item))
+	eq(_kinds(steps), ["attack", "secret", "summon", "strike", "death"], "the Defender comes, takes the blow, dies")
+	eq(steps[0].aimed, item.d, "it set off at the hero")
+	var defender: int = steps[2].evs[0].entity
+	eq(steps[3].defender, defender, "and strikes the Defender")
+	v._begin_batch(item)
+	for i in 3:
+		v._step_apply(steps[i])
+	check(v._views.get(defender) is MinionView, "the Defender stands there before the blow")
+	v._end_batch()
+	v.free()
+
+
+func test_misdirection_turns_the_attack() -> void:
+	var v := _view({"hero": "HERO_08", "board": [YETI, YETI]}, {"hero": "HERO_05", "secrets": [MISDIRECTION], "board": [YETI]})
+	var item := _attack(v)
+	var steps := MatchView.steps(item.events, v._aimed(item))
+	eq(_kinds(steps), ["attack", "secret", "strike"])
+	eq(steps[0].aimed, item.d, "it set off at the hero (the order: the event has the new target)")
+	check(steps[2].defender != item.d, "the blow goes elsewhere")
+	v.free()
+
+
+func test_truesilver_heals_half_way() -> void:
+	var v := _view({"hero": "HERO_04", "weapon": TRUESILVER, "hero_state": {"damage": 10}}, {"hero": "HERO_05", "board": [YETI]})
+	var item := _attack(v, false)
+	var steps := MatchView.steps(item.events)
+	eq(_kinds(steps), ["attack", "hit", "strike"], "the leap stops, the heal, the blow")
+	eq(steps[1].evs[0].type, "heal")
+	v.free()
+
+
+## An online game: the server's events have the new target; the attack sent keeps the one asked.
+func test_an_online_attack_keeps_its_target_in_the_history() -> void:
+	var m := H.scene({"hero": "HERO_08"})
+	m._sent = {"type": "attack", "player": 0, "attacker": 5, "defender": 3}
+	m.on_state({"view": m.game.snapshot, "events": [{"type": "attack", "attacker": 5, "defender": 1, "player": 0}]})
+	eq(m.game.history.back().action.defender, 3, "the target asked for")
+	check(m._sent.is_empty(), "used once")
+
+
+## Mind Vision's copy comes out of the opponent's hand (the top of the table), not a deck.
+func test_a_copied_card_comes_from_the_opponents_hand() -> void:
+	var v := _view({"hero": "HERO_06", "hand": ["VAN_CS2_003"]}, {"hero": "HERO_01", "hand": [YETI, YETI, YETI]})
+	var item := _batch(v, "VAN_CS2_003")
+	var ev: Dictionary = item.events.filter(func(e): return e.type == "add_to_hand")[0]
+	v._begin_batch(item)
+	var at = v._copy_origin(ev)
+	var mid: int = v.g.players[1].hand[1].id
+	eq(at, v._center_of(mid), "from the middle of the opponent's hand (its cards are hidden)")
+	check(v._copy_origin({"type": "add_to_hand", "player": 0, "entity": 99, "by": ARCHER}) == null, "a card that copies nothing: no")
+	v._end_batch()
+	v.free()
+
+
+## The looks of 0.51: a used weapon's Durability is red, a Spell Damage minion sparkles (a
+## shader), sleeping z's are green.
+func test_table_looks() -> void:
+	var bow := {"durability": 2}
+	eq([Frames.durability_color(1, bow), Frames.durability_color(2, bow), Frames.durability_color(3, bow)],
+		[Frames.DAMAGED, Color.WHITE, Frames.BUFFED], "below the card's Durability: red")
+	check(MinionView.SLEEP_Z.g > 0.8 and MinionView.SLEEP_Z.r < 0.6, "green z's")
+	var v := _view({"hero": "HERO_08", "board": ["VAN_CS2_142", YETI]})  # Kobold Geomancer: Spell Damage +1
+	var kobold: MinionView = v._views[v.g.players[0].board[0].id]
+	var yeti: MinionView = v._views[v.g.players[0].board[1].id]
+	kobold._process(0.0)
+	yeti._process(0.0)
+	check(kobold.get_node_or_null("Arcane") is ColorRect and kobold.get_node("Arcane").material is ShaderMaterial, "the arcane shader")
+	check(yeti.get_node_or_null("Arcane") == null, "not on a minion without Spell Damage")
+	kobold.s.silenced = true
+	kobold._process(0.0)
+	check(kobold._arcane == null, "silenced: gone")
+	v.free()
+
+
+## A discarded card leaves the hand by itself, face up, and burns (it rises: see _discard).
+func test_a_discarded_card_rises_and_burns() -> void:
+	var v := _view({"hero": "HERO_07", "hand": ["VAN_EX1_308", YETI]}, {"hero": "HERO_01"})
+	var yeti: int = v.g.players[0].hand[1].id
+	var item := _batch(v, "VAN_EX1_308", v.g.hero(1).id)
+	var steps := MatchView.steps(item.events)
+	eq(_kinds(steps), ["play", "aim", "hit", "discard", "spell_done"], "Soulfire: the hit, then the discard")
+	v._begin_batch(item)
+	for i in 3:
+		v._step_apply(steps[i])
+	v._discard(steps[3])
+	check(not v._views.has(yeti), "out of the hand")
+	var burning: Array = v._fx.get_children().filter(func(c): return c is CardView and c.card_id == YETI)
+	check(burning.size() == 1 and burning[0].face_up and burning[0].material is ShaderMaterial, "shown and burning")
+	v._end_batch()
+	v.free()

@@ -78,8 +78,10 @@ func _draw() -> void:
 				return
 			Art.paint_in(self, art, s.card_id, "circle")
 			Frames.ring(self, Art.outline("circle", art), Color("8a7a5c"), 3)
-			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12 * bump("atk"))
-			Frames.shield(self, Vector2(size.x - 12, size.y - 12), int(s.tags.get("DURABILITY", 0)), 11 * bump("hp"), Color.WHITE, "durability")
+			var c0 := s.card()
+			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12 * bump("atk"), Frames.BUFFED if s.atk() > int(c0.get("attack", 0)) else Color.WHITE)
+			var dur := int(s.tags.get("DURABILITY", 0))
+			Frames.shield(self, Vector2(size.x - 12, size.y - 12), dur, 11 * bump("hp"), Frames.durability_color(dur, c0), "durability")
 
 
 ## Turns the hero power over when it becomes used or ready again (a flip animation).

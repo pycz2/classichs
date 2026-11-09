@@ -7,12 +7,12 @@ extends Control
 
 const LIFE := {"hurt": 0.55, "heal": 0.8, "buff": 0.8, "debuff": 0.7, "gain": 0.6, "freeze": 0.8,
 	"silence": 0.7, "smoke": 0.8, "destroy": 0.7, "portal": 0.8, "skull": 1.1, "battlecry": 0.6,
-	"whoosh": 0.6, "control": 0.8, "armor": 0.7}
+	"whoosh": 0.6, "control": 0.8, "armor": 0.7, "pop": 0.5}
 ## The colour of an effect when its card has no element of its own.
 const COLORS := {"hurt": Color("ff7b2e"), "heal": Color("8ce99a"), "buff": Color("ffd43b"), "debuff": Color("b197fc"),
 	"gain": Color("ffffff"), "freeze": Color("a5d8ff"), "silence": Color("b197fc"), "smoke": Color("f783ac"),
 	"destroy": Color("343a40"), "portal": Color("ffd43b"), "skull": Color("f1f3f5"), "battlecry": Color("ffd43b"),
-	"whoosh": Color("ffffff"), "control": Color("9775fa"), "armor": Color("ced4da")}
+	"whoosh": Color("ffffff"), "control": Color("9775fa"), "armor": Color("ced4da"), "pop": Color("ffe066")}
 
 ## The named effects a pack's cards may ask for in their `fx` (decision D16, docs/packs/fx.md,
 ## docs/packs/schema/fx.json); a name not in it plays the slot's default.
@@ -142,6 +142,16 @@ func _draw() -> void:
 			for i in 12:
 				var a := t * 8.0 + i * 0.5
 				draw_circle(Vector2(cos(a), sin(a)) * (10 + i * 3.5), 3, Color(color, fade))
+		"pop":  # a Divine Shield bursts: the golden bubble swells and breaks into flying shards
+			var r := Vector2(42, 52) * (1.0 + 0.25 * t)
+			if t < 0.35:
+				draw_colored_polygon(Art.outline("oval", Rect2(-r, r * 2.0)), Color(color, 0.35 * (1.0 - t / 0.35)))
+			for i in 12:
+				var a := i * TAU / 12.0 + 0.2
+				var d := Vector2(cos(a) * r.x, sin(a) * r.y) / r.x
+				var p := d * (r.x + 30.0 * t)
+				var n := Vector2(-d.y, d.x) * 5.0
+				draw_colored_polygon(PackedVector2Array([p - n, p + d * 9.0 * fade, p + n]), Color(color.lightened(0.3), fade))
 		"armor":  # a grey shield popping up
 			var s := 1.0 + 0.3 * sin(t * PI)
 			var pts := PackedVector2Array([Vector2(-14, -16), Vector2(14, -16), Vector2(12, 4), Vector2(0, 18), Vector2(-12, 4)])
@@ -172,6 +182,8 @@ static func kinds(before: GameView.Ent, now: GameView.Ent) -> Array:
 		out.append("buff")
 	elif down and not up and not (now.silenced and not before.silenced):  # Silence takes buffs away
 		out.append("debuff")
+	if before.has("DIVINE_SHIELD") and not now.has("DIVINE_SHIELD") and not now.silenced:
+		out.append("pop")
 	for k in ["TAUNT", "DIVINE_SHIELD", "STEALTH", "WINDFURY", "CHARGE", "IMMUNE"]:
 		if now.has(k) and not before.has(k):
 			out.append("gain")

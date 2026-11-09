@@ -1606,12 +1606,23 @@ func _show(snap: Dictionary, hist: int) -> void:
 ## events tell what changed); at the end it is laid out from the game after the batch.
 func _animate(item: Dictionary) -> void:
 	_begin_batch(item)
-	for st in steps(item.events):
+	for st in steps(item.events, _aimed(item)):
 		await _play_step(st)
 	_end_batch()
 	if item.events.any(func(e): return e.type == "game_over"):
 		_shatter_losers()
 	await _wait(0.15)
+
+
+## The target the batch's attack was ordered at (its action in the history), -1 = not known
+## (an online opponent's attack: the server sends what happened, not what was asked).
+func _aimed(item: Dictionary) -> int:
+	var hist: Array = controller.game.history if controller else []
+	var n: int = item.get("hist", 0)
+	if n < 1 or n > hist.size():
+		return -1
+	var a: Dictionary = hist[n - 1].get("action", {})
+	return int(a.get("defender", -1)) if a.get("type", "") == "attack" else -1
 
 
 ## Before the steps: the table still shows the game before the batch (the lists of what stands
@@ -1647,10 +1658,15 @@ func _end_batch() -> void:
 
 
 ## The batch's events as the steps the table shows one after another: [{k, evs, at}], at =
-## the index of the step's last event. Simultaneous things are one step (an attack's two hits,
-## a Flamestrike's hits, a death phase); a card's random hits are one step each.
-static func steps(events: Array) -> Array:
+## the index of the step's last event. Simultaneous things are one step (an attack's two hits
+## with a Divine Shield popping, a Flamestrike's hits, a death phase); a card's random hits are
+## one step each. An attack with something on its way (a Secret, Truesilver's heal) stops
+## half-way ("attack" with pause), those steps play, then "strike" lands the hits (it has no
+## events when the attack came to nothing). aimed: the target the attack was ordered at (a
+## Secret may change it: Misdirection, Noble Sacrifice), -1 = not known.
+static func steps(events: Array, aimed := -1) -> Array:
 	var out := []
+	var strike := {}  # a paused attack: {at (the index of its hits or where it ends), a, d}
 	var aims := {}  # a minion played with a target: it aims once it stands on the board
 	var secrets := {}  # Secrets played: they go up to the hero when their spell is done
 	var bounced := {}  # the cards a bounce makes (the bounce step brings them in)
@@ -1667,6 +1683,13 @@ static func steps(events: Array) -> Array:
 		var ev: Dictionary = events[i]
 		var j := i + 1  # the first event after this step
 		var k := ""
+		if not strike.is_empty() and i == strike.at:
+			var hit := func(e): return _attack_hit(e, strike.a, strike.d)
+			j = _run(events, i, hit) if hit.call(ev) else i
+			out.append({"k": "strike", "evs": events.slice(i, j), "at": maxi(i, j) - 1, "attacker": strike.a, "defender": strike.d})
+			strike = {}
+			i = maxi(i, j)  # (no hits: the event here is a step of its own)
+			continue
 		match ev.type:
 			"play":
 				k = "play"
@@ -1675,9 +1698,14 @@ static func steps(events: Array) -> Array:
 				j = _run(events, i, func(e): return e.type == "summon" and e.get("by_id", -1) == ev.get("by_id", -1) and ev.has("by_id"))
 			"attack":
 				k = "attack"
-				while j < events.size() and events[j].type == "damage" and not events[j].has("by") \
-						and events[j].get("source", -1) in [ev.attacker, ev.defender]:
-					j += 1
+				var h := j  # the attack's hits (or its end: after_attack, the batch's end)
+				while h < events.size() and not _attack_hit(events[h], ev.attacker, ev.defender) and events[h].type != "after_attack":
+					h += 1
+				if h > j:
+					strike = {"at": h, "a": ev.attacker, "d": ev.defender}
+				else:
+					while j < events.size() and _attack_hit(events[j], ev.attacker, ev.defender):
+						j += 1
 			"damage", "heal", "buff", "freeze", "silence", "divine_shield_lost", "destroy", "armor":
 				k = "hit"
 				if not (ev.type == "damage" and _one_by_one(ev)):
@@ -1720,6 +1748,9 @@ static func steps(events: Array) -> Array:
 		var st := {"k": k, "evs": events.slice(i, j), "at": j - 1}
 		if k == "spell_done":
 			st["secret"] = secrets.has(ev.entity)
+		if k == "attack" and not strike.is_empty():
+			st["pause"] = true
+			st["aimed"] = aimed if aimed >= 0 else ev.defender
 		out.append(st)
 		if k == "play":
 			if ev.get("secret", false):
@@ -1734,7 +1765,21 @@ static func steps(events: Array) -> Array:
 				if aims.has(e.entity):
 					out.append({"k": "aim", "src": e.entity, "to": aims[e.entity], "evs": [], "at": j - 1})
 		i = j
+	if not strike.is_empty():  # the attack ended on the way (the attacker or its target gone)
+		out.append({"k": "strike", "evs": [], "at": events.size() - 1, "attacker": strike.a, "defender": strike.d})
 	return out
+
+
+## An event of an attack's blow: the two hits, a Divine Shield or armor taking one.
+static func _attack_hit(e: Dictionary, a: int, d: int) -> bool:
+	if e.has("by"):
+		return false
+	match e.type:
+		"damage":
+			return e.get("source", -1) in [a, d]
+		"divine_shield_lost", "armor_lost":
+			return e.get("target", -1) in [a, d]
+	return false
 
 
 ## The end of a run of events from i on that all pass ok (the first one always belongs).
@@ -1770,12 +1815,19 @@ func _play_step(st: Dictionary) -> void:
 			await _aim(st)
 		"power":
 			await _pulse(ev.entity)
-		"attack":
+		"attack", "strike":
+			if st.get("pause", false):
+				_step_apply(st)
+				var to: int = st.aimed if _views.has(st.aimed) else g.players[1 - int(ev.player)].hero.id  # (Noble Sacrifice's Defender is not there yet)
+				await _lunge_half(ev.attacker, to)
+				return
 			var done := {"v": false}
-			await _lunge(ev.attacker, ev.defender, func():
+			var land := func():
 				done.v = true
-				_step_fx(st, _step_apply(st)))
-			if not done.v:
+				if not st.evs.is_empty():
+					_step_fx(st, _step_apply(st))
+			await _lunge(st.get("attacker", ev.get("attacker", -1)), st.get("defender", ev.get("defender", -1)), land)
+			if not done.v and not st.evs.is_empty():
 				_step_fx(st, _step_apply(st))
 		"hit":
 			await _hit(st)
@@ -1791,7 +1843,7 @@ func _play_step(st: Dictionary) -> void:
 					continue
 				var mark := TableFx.named(e.card, "death")  # skull (with an unsilenced death hook), destroy, none
 				var was: GameView.Ent = at[e.entity][1]
-				if mark == "destroy":
+				if mark == "destroy" or _hold.has(e.entity):  # (or destroyed on its way to attack: Vaporize)
 					TableFx.spawn(_fx, "destroy", at[e.entity][0])
 				elif mark != "none" and Rules.hooks(e.card).has("deathrattle") and not (was and was.silenced):
 					TableFx.spawn(_fx, "skull", at[e.entity][0])
@@ -1854,6 +1906,8 @@ func _play_step(st: Dictionary) -> void:
 					await _mulligan_coin(ev)  # beside the cards still shown
 				else:
 					await _coin_in(ev)
+			elif ev.type == "add_to_hand" and _copy_origin(ev) != null and not _views.has(ev.entity):
+				_moved[ev.entity] = _copy_origin(ev)  # a copy of the opponent's card (Mind Vision): from their hand
 			elif ev.type == "add_to_hand" and _views.has(ev.get("by_id", -1)) and not _views.has(ev.entity):
 				_moved[ev.entity] = _center_of(ev.by_id)  # made by a card on the table (Antonidas): it comes from there
 			# (a card drawn, also by a card's effect, comes from its deck)
@@ -1876,6 +1930,8 @@ func _play_step(st: Dictionary) -> void:
 			await _reveal(ev.card)
 			show_hint(tr("Secret: %s") % CardText.name(ev.card), 2.5)
 			_step_apply(st)
+		"discard":
+			await _discard(st)
 		"fatigue":
 			await _fatigue(ev)
 		"burn":
@@ -1967,7 +2023,7 @@ func _step_apply(st: Dictionary) -> Dictionary:
 				if st.get("secret", false) and not _stage.secrets[ev.player].has(ev.entity):
 					_stage.secrets[ev.player].append(ev.entity)
 					moved = true
-			"damage", "heal", "buff", "freeze", "silence", "divine_shield_lost", "armor":
+			"damage", "heal", "buff", "freeze", "silence", "divine_shield_lost", "armor", "armor_lost":
 				var id: int = g.players[ev.player].hero.id if ev.type == "armor" else ev.get("target", -1)
 				var v = _views.get(id)
 				if v is MinionView or v is HeroView:
@@ -2028,6 +2084,8 @@ static func _change(s: GameView.Ent, ev: Dictionary, sign: int) -> void:
 	if t != s.id:
 		return
 	match ev.type:
+		"armor_lost":  # a blow the armor took whole (no damage event)
+			s.tags["ARMOR"] = maxi(0, int(s.tags.get("ARMOR", 0)) - int(ev.amount) * sign)
 		"damage":
 			var hit: int = ev.amount
 			if sign > 0 and s.is_hero():
@@ -2379,17 +2437,84 @@ func _burn(ev: Dictionary) -> void:
 	tw.tween_property(cv, "position", Vector2(900, 210 if own else 120), Anim.d(0.35))
 	tw.parallel().tween_property(cv, "scale", Vector2.ONE, Anim.d(0.35))
 	await _wait(0.6)
-	var burn := ShaderMaterial.new()  # the card burns away from its edges, with a glowing rim
+	_burn_away(cv)
+	show_hint(tr("Hand is full: %s burns") % CardText.name(ev.card), 1.6)
+	await _wait(1.15)
+
+
+## The card burns away from its edges, with a glowing rim (not waited for).
+func _burn_away(cv: CardView, seconds := 1.1) -> void:
+	var burn := ShaderMaterial.new()
 	burn.shader = BURN_SHADER
 	burn.set_shader_parameter("noise", MinionView._smoke())
 	burn.set_shader_parameter("size", cv.size)
 	burn.set_shader_parameter("progress", 0.0)
 	cv.material = burn
 	var out := cv.create_tween()
-	out.tween_method(func(v: float): burn.set_shader_parameter("progress", v), 0.0, 1.0, Anim.d(1.1))
+	out.tween_method(func(v: float): burn.set_shader_parameter("progress", v), 0.0, 1.0, Anim.d(seconds))
 	out.tween_callback(cv.queue_free)
-	show_hint(tr("Hand is full: %s burns") % CardText.name(ev.card), 1.6)
-	await _wait(1.15)
+
+
+## Where a card that copies one of the opponent's comes from: their hand (Mind Vision: the very
+## card when it shows, else the middle of their hand) or their deck (Thoughtsteal); null if
+## it copies none (the card's English text says).
+func _copy_origin(ev: Dictionary) -> Variant:
+	var text = CardDb.card(ev.get("by", "")).get("text", {}) if CardDb.has(ev.get("by", "")) else {}
+	var en: String = str(text.get("enUS", "")).to_lower() if text is Dictionary else ""
+	if not en.contains("cop"):
+		return null
+	var foe: int = 1 - int(ev.player)
+	if en.contains("opponent's deck"):
+		return _piles[0 if foe == viewer() else 1].top()
+	if not en.contains("opponent's hand"):
+		return null
+	var hand: Array = _stage.hand[foe] if not _stage.is_empty() else g.players[foe].hand.map(func(e): return e.id)
+	var shown := hand.filter(func(id): return _views.has(id))
+	if shown.is_empty():
+		return Vector2(640, 700 if foe == viewer() else 20)
+	var same := shown.filter(func(id): return _views[id] is CardView and _views[id].face_up and _views[id].card_id == ev.get("card", ""))
+	return _center_of(same[0] if not same.is_empty() else shown[shown.size() / 2])
+
+
+## A discarded card rises out of the hand (the opponent's comes down out of theirs) face up,
+## then burns away.
+func _discard(st: Dictionary) -> void:
+	var ev: Dictionary = st.evs[0]
+	var own: bool = ev.player == viewer()
+	var hv: EntityView = _views.get(ev.entity)
+	var cv := CardView.make(ev.get("card", ""))
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.pivot_offset = cv.size / 2.0
+	cv.z_index = 60
+	var start := Vector2(640, 700 if own else 20)
+	var s0 := 0.6
+	if hv:
+		start = hv.position + hv.size * hv.scale / 2.0
+		s0 = hv.scale.x
+		cv.rotation = hv.rotation
+		_views.erase(ev.entity)  # (the layout would fade it where it is)
+		_layer.remove_child(hv)
+		hv.queue_free()
+	cv.face_up = own or replay or full_view
+	_fx.add_child(cv)
+	cv.position = start - cv.size / 2.0
+	cv.scale = Vector2(s0, s0)
+	_step_apply(st)  # the hand closes up
+	_step_sounds(st)
+	var to := start + Vector2(0, -190 if own else 170)
+	var tw := cv.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(cv, "position", to - cv.size / 2.0, Anim.d(0.3))
+	tw.tween_property(cv, "rotation", 0.0, Anim.d(0.3))
+	if cv.face_up:
+		tw.tween_property(cv, "scale", Vector2(1.2, 1.2), Anim.d(0.3))
+	else:  # the opponent's card turns over on the way
+		var flip := cv.create_tween()
+		flip.tween_property(cv, "scale", Vector2(0.05, 1.2), Anim.d(0.15))
+		flip.tween_callback(func(): cv.face_up = true)
+		flip.tween_property(cv, "scale", Vector2(1.2, 1.2), Anim.d(0.15))
+	await _wait(0.45)
+	_burn_away(cv, 0.8)
+	await _wait(0.55)
 
 
 ## The entity an event happens to (-1 for none).
@@ -2507,21 +2632,25 @@ func _element_color(card_id: String) -> Color:
 	return TableFx.element_color(card_id)
 
 
-## The attacker leaps at its target and back; the hit lands when it touches.
+## The attacker leaps at its target and back; the hit lands when it touches. One that stopped
+## half-way (_lunge_half) goes on from there; with its target gone it only goes back.
 func _lunge(attacker: int, defender: int, land: Callable) -> void:
 	var v: EntityView = _views.get(attacker)
 	if v == null:
+		_hold.erase(attacker)  # (bounced or destroyed on its way)
 		return
-	var home := v.position
-	var target := _center_of(defender) - v.size * v.scale / 2.0
+	var home: Vector2 = v.get_meta("leap_home", v.position)
+	v.remove_meta("leap_home")
 	v.z_index = 40
-	var tw := v.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-	tw.tween_property(v, "position", home.lerp(target, 0.82), Anim.d(0.22))
-	await tw.finished
-	Sound.play("attack")
-	if Match.shake_enabled:
-		_shake()
 	_hold[attacker] = true  # the layout leaves it to the leap back
+	if _views.has(defender):
+		var target := _home_of(defender) - v.size * v.scale / 2.0  # (a Defender just summoned is on its way there)
+		var tw := v.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+		tw.tween_property(v, "position", home.lerp(target, 0.82), Anim.d(0.22))
+		await tw.finished
+		Sound.play("attack")
+		if Match.shake_enabled:
+			_shake()
 	land.call()
 	if _views.get(attacker) != v:  # killed by the hit: it fades out where it is
 		_hold.erase(attacker)
@@ -2531,6 +2660,23 @@ func _lunge(attacker: int, defender: int, land: Callable) -> void:
 	await back.finished
 	_hold.erase(attacker)
 	v.z_index = 0
+
+
+## The attacker sets off at its target and stops half-way: something happens on its way
+## (a Secret is revealed, a trigger goes off); _lunge goes on from there.
+func _lunge_half(attacker: int, toward: int) -> void:
+	var v: EntityView = _views.get(attacker)
+	if v == null:
+		return
+	v.set_meta("leap_home", v.position)
+	v.z_index = 40
+	_hold[attacker] = true
+	# not far: the rows touch, and what comes on the way (a Defender, Snakes) must show beside it
+	var target := _center_of(toward) - v.size * v.scale / 2.0
+	var go := minf(0.45, 90.0 / maxf(1.0, v.position.distance_to(target)))
+	var tw := v.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(v, "position", v.position.lerp(target, go), Anim.d(0.24))
+	await tw.finished
 
 
 ## The hero power button flashes (its arrow and effects are the next steps).
@@ -2545,11 +2691,12 @@ func _pulse(id: int) -> void:
 	await _wait(0.3)
 
 
-## A revealed Secret shows big in the middle for a moment.
+## A revealed Secret shows big for a moment where played cards show (the middle of the table
+## stays clear: an attack may wait there half-way).
 func _reveal(card_id: String) -> void:
 	var cv := CardView.make(card_id, 1.4)
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	cv.position = Vector2(640, 330) - cv.size / 2.0
+	cv.position = SHOW_AT - cv.size / 2.0
 	cv.pivot_offset = cv.size / 2.0
 	cv.scale = Vector2(0.2, 0.2)
 	_fx.add_child(cv)

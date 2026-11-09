@@ -130,7 +130,7 @@ func _draw() -> void:
 		if type == "MINION":
 			Frames.health(self, Vector2(103, 154) * k, h, 15 * k)
 		else:
-			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k, Color.WHITE, "durability")
+			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k, Frames.durability_color(h, c), "durability")
 	if marked:  # to be replaced: the card darkens and a red seal with a white cross sits on it
 		draw_style_box(Palette.raw_box(Color(0, 0, 0, 0.45), int(12 * k)), r)
 		var mc := Vector2(60, 70) * k
