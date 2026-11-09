@@ -2,6 +2,7 @@
 """Builds, checks and hashes .cardpack game packs (docs/packs/format.md). Stdlib only.
 
   tools/pack.py build packs/classic -o build/packs/classic.cardpack [--art-set id=path ...]
+                [--sound-set id=path ...] [--voice path]   (local: the builder's own, never distributed)
   tools/pack.py check build/packs/classic.cardpack
   tools/pack.py info  build/packs/classic.cardpack
   tools/pack.py hash  build/packs/classic.cardpack
@@ -814,7 +815,7 @@ STEPS = {"source": step_source, "copy": step_copy, "hsjson": step_hsjson, "keywo
          "translate": step_translate, "rank_names": step_rank_names}
 
 
-def build(src, out=None, art_sets=()):
+def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
     """Builds the pack in folder src; writes it to out if given. Returns (files, report)."""
     src = Path(src)
     b = Build(src)
@@ -837,21 +838,36 @@ def build(src, out=None, art_sets=()):
             if s["do"] not in STEPS:
                 raise PackError(f"recipe.json: unknown step {s['do']}")
             STEPS[s["do"]](b, root, s)
-    for spec in art_sets:
-        set_id, _, folder = spec.partition("=")
-        folder = Path(folder).resolve()
-        if not re.match(r"^[a-z0-9_]{1,32}$", set_id) or not folder.is_dir():
-            raise PackError(f"--art-set {spec}: want id=folder")
-        if folder == (REPO / "art/original").resolve():
-            raise PackError("art/original never goes into a pack")
+    for opt, top, kind, exts, specs in (("--art-set", "art", "art_sets", IMAGES, art_sets),
+                                        ("--sound-set", "sounds", "sound_sets", AUDIO, sound_sets)):
+        for spec in specs:
+            set_id, _, folder = spec.partition("=")
+            folder = Path(folder).expanduser().resolve()
+            if not re.match(r"^[a-z0-9_]{1,32}$", set_id) or not folder.is_dir():
+                raise PackError(f"{opt} {spec}: want id=folder")
+            if folder == (REPO / "art/original").resolve():
+                raise PackError("art/original never goes into a pack")
+            n = 0
+            for f in sorted(folder.iterdir()):
+                if f.is_file() and f.suffix.lower() in exts and PATH_RE.match(f.name):
+                    b.files[f"{top}/{set_id}/{f.name}"] = f.read_bytes()
+                    n += 1
+            if not n:
+                raise PackError(f"{opt} {spec}: no files")
+            b.manifest.setdefault(kind, []).append({"id": set_id, "local": True})
+    if voice:  # voice/<lang>/<card id>_<kind>.ogg; the note marks them local, as the sets above
+        folder = Path(voice).expanduser().resolve()
+        langs = [d for d in sorted(folder.iterdir()) if d.is_dir()] if folder.is_dir() else []
         n = 0
-        for f in sorted(folder.iterdir()):
-            if f.is_file() and f.suffix.lower() in IMAGES:
-                b.files[f"art/{set_id}/{f.name}"] = f.read_bytes()
-                n += 1
+        for d in langs:
+            for f in sorted(d.iterdir()):
+                if f.is_file() and f.suffix.lower() in AUDIO and PATH_RE.match(f.name):
+                    b.files[f"voice/{d.name}/{f.name}"] = f.read_bytes()
+                    n += 1
         if not n:
-            raise PackError(f"--art-set {spec}: no pictures")
-        b.manifest.setdefault("art_sets", []).append({"id": set_id, "local": True})
+            raise PackError(f"--voice {voice}: want a folder of <lang>/<card id>_<kind>.ogg")
+        b.files["voice/LOCAL.md"] = (b"Local recordings added by tools/pack.py --voice: the builder's own files, "
+                                     b"never to be uploaded or sent.\n")
     if b.cards is not None:
         b.files["cards.json"] = pretty(b.cards)
     for lang, loc in b.locales.items():
@@ -917,12 +933,16 @@ def main(argv=None):
     pb.add_argument("-o", "--out", required=True)
     pb.add_argument("--art-set", action="append", default=[], metavar="ID=FOLDER",
                     help="add a local art set (never for distribution; art/original is refused)")
+    pb.add_argument("--sound-set", action="append", default=[], metavar="ID=FOLDER",
+                    help="add a local sound set (never for distribution)")
+    pb.add_argument("--voice", metavar="FOLDER",
+                    help="add local voice recordings: FOLDER/<lang>/<card id>_<kind>.ogg (never for distribution)")
     for name, text in (("check", "validate a pack"), ("info", "sizes, counts, hashes"), ("hash", "rules_hash and content_hash")):
         sub.add_parser(name, help=text).add_argument("pack")
     a = ap.parse_args(argv)
     try:
         if a.cmd == "build":
-            files, r = build(a.src, a.out, a.art_set)
+            files, r = build(a.src, a.out, a.art_set, a.sound_set, a.voice)
             _print_report(r, "build")
             if r.errors:
                 return 1

@@ -228,13 +228,27 @@ valign: "top", dy}`. Without it the client lays text out itself.
 - `sounds/<set>/<name>`: event sounds by name (Classic: `play_card`, `attack`,
   `damage`, `death`, `hero_power`, `turn_start`, `heal`, `armor`, `equip`,
   `secret`, `freeze`, `shield`, `spell`, `trigger`, `hit_big`, `victory`,
-  `defeat`, `click`). A card may name its own (`sounds: {play, attack, death}`).
+  `defeat`, `click`; the client also plays `draw`, `summon` (a minion lands), `spell_<element>` and
+  `hit_<element>` (a spell's cast and impact by its `fx.element`) when the set has them). A card's own
+  sounds: what its `sounds: {play, attack, death, hit}` names, else the set's file `<card id>_<slot>`:
+  `play` when a minion or weapon comes into play or a spell is cast, `attack` as the attacker leaps
+  (the set's `attack` is the blow when it lands), `death` at its death step, `hit` a spell's impact.
+  A sound the chosen set lacks comes from the pack's default set.
 - `music/<set>/<name>`: `menu`, `battle_1` … `battle_N` (a shuffled playlist).
 - `voice/<lang>/<card id>_<kind>.<ogg|wav|mp3>`: optional recordings of the voice
-  lines whose words are in `locales/<lang>.json` `voice`.
-- A local art set (`tools/pack.py build … --art-set mine=path`) is marked
-  `local: true` and must never be uploaded or sent; the original Blizzard art
-  (`art/original`) is refused by the tool.
+  lines whose words are in `locales/<lang>.json` `voice` (the player's language, else the
+  default one). Minions and weapons: `play` (as it lands), `attack` (as it leaps), `death`.
+  Heroes: `start` (the game begins), the emotes `greetings`, `well_played`, `thanks`, `wow`, `oops`,
+  `threaten`, `time` (the rope starts burning), `error_need_mana`, `error_play`,
+  `error_minion_attacked`, `error_i_attacked`, `error_summon_sickness`, `error_need_weapon`,
+  `error_generic` (what the player tried can't be done), and `sorry`, `concede`, `thinking1`–`3`,
+  `low_cards`, `no_cards`, `error_hand_full`, `error_full_minions`, `error_stealth`,
+  `error_target`, `error_taunt` (kept for later). A card's `voice` field names whose lines it speaks.
+- Local sets (`tools/pack.py build … --art-set mine=path`, `--sound-set mine=path`) are marked
+  `local: true`, local recordings (`--voice path`, a folder of `<lang>/<card id>_<kind>.ogg`) come
+  with `voice/LOCAL.md`; they must never be uploaded or sent; the original Blizzard art
+  (`art/original`) is refused by the tool. The owner's local Classic pack takes them from
+  `tools/fetch_2014_art.py` and `tools/fetch_original_sounds.py` (the files stay outside git).
 
 ## 8. Decks and missions
 
@@ -303,6 +317,7 @@ A pack source is a folder with the pack's own files (`manifest.json`,
 
 ```sh
 tools/pack.py build packs/classic -o build/packs/classic.cardpack [--art-set mine=art/custom]
+    [--sound-set original=~/ClassicHS-local/sounds/classic/set] [--voice ~/ClassicHS-local/sounds/classic/voice]
 tools/pack.py check build/packs/classic.cardpack     # exit 1 on any error
 tools/pack.py info  build/packs/classic.cardpack     # sizes, counts, hashes
 tools/pack.py hash  build/packs/classic.cardpack     # rules_hash, content_hash

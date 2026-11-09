@@ -396,6 +396,7 @@ func show_emote(p: int, id: String) -> void:
 	var hero := g.players[p].hero.card_id
 	var own := VoiceLines.text(hero, id)
 	show_line(p, own if own != "" else tr(EMOTES[id]))
+	Sound.say(hero, id)  # the hero's recorded line, when the pack has it
 
 
 ## A speech bubble next to player p's hero (emotes, tutorial boss lines).
@@ -896,7 +897,10 @@ func tick(delta: float) -> void:
 	if controller.is_server() and controller.time_left() >= 0.0:
 		_time_left = controller.time_left()  # the server's clock (it plays the timeout moves itself)
 	var mull := controller.game.phase == "MULLIGAN"
-	_rope.visible = _time_left <= timer("fuse") and not mull  # the mulligan has its numbers instead
+	var roped := _time_left <= timer("fuse") and not mull
+	if roped and not _rope.visible and controller.game.current == viewer() and not watching:
+		Sound.say(controller.game.players[viewer()].hero.card_id, "time")  # the rope starts burning
+	_rope.visible = roped  # the mulligan has its numbers instead
 	_rope.left = _time_left / timer("fuse")
 	var count := find_child("MulliganTimer", true, false) as Label
 	if count:
@@ -957,6 +961,24 @@ func _reset_timer() -> void:
 		_short = false
 		_time_left += timer("turn") - _turn_limit
 		_turn_limit = timer("turn")
+
+
+var _started_lines := false
+
+
+## At the start the two heroes say their opening lines, one's own first.
+func _start_lines() -> void:
+	if _started_lines or g.players.size() < 2:
+		return
+	_started_lines = true
+	Sound.say(g.players[viewer()].hero.card_id, "start")
+	if is_inside_tree():
+		get_tree().create_timer(2.6).timeout.connect(_enemy_start_line)
+
+
+func _enemy_start_line() -> void:
+	if not g.game_over:
+		Sound.say(g.players[1 - viewer()].hero.card_id, "start")
 
 
 ## Shows the next tutorial hint only when nothing else is on the banner (an
@@ -1474,13 +1496,28 @@ func _select(id: int) -> void:
 		return false)
 	if acts.is_empty():
 		var e := g.ent(id)
+		var hero := g.players[viewer()].hero.card_id
 		if e and e.zone == "HAND" and e.controller == viewer():
-			show_hint(tr("Not enough mana") if g.cost(e) > g.players[viewer()].mana else tr("You can't play this card now"))
+			var poor := g.cost(e) > g.players[viewer()].mana
+			show_hint(tr("Not enough mana") if poor else tr("You can't play this card now"))
+			Sound.say(hero, "error_need_mana" if poor else "error_play")
 		elif e and e.controller == viewer() and (e.is_minion() or e.is_hero()):
 			show_hint(tr("This character can't attack now"))
+			Sound.say(hero, error_of(e))
 		return
 	_sel = {"id": id, "actions": acts}
 	_advance()
+
+
+## Why one's own minion or hero can't attack, as the hero's error line (voice kind).
+static func error_of(e: GameView.Ent) -> String:
+	if int(e.tags.get("ATTACKS", 0)) > 0:
+		return "error_i_attacked" if e.is_hero() else "error_minion_attacked"
+	if e.is_hero() and e.atk() <= 0:
+		return "error_need_weapon"
+	if e.is_minion() and e.has("EXHAUSTED") and not e.has("CHARGE"):
+		return "error_summon_sickness"
+	return "error_generic"
 
 
 func _target_of(a: Dictionary) -> int:
@@ -1844,6 +1881,9 @@ func _play_step(st: Dictionary) -> void:
 		"power":
 			await _pulse(ev.entity)
 		"attack", "strike":
+			if st.k == "attack":  # its own sound and line as it leaps (a strike goes on from the pause)
+				var attacker := g.ent(st.get("attacker", ev.get("attacker", -1)))
+				Sound.attack_start(attacker.card_id if attacker else "")
 			if st.get("pause", false):
 				_step_apply(st)
 				var to: int = st.aimed if _views.has(st.aimed) else g.players[1 - int(ev.player)].hero.id  # (Noble Sacrifice's Defender is not there yet)
@@ -2243,7 +2283,8 @@ func _step_fx(st: Dictionary, before: Dictionary) -> void:
 		_shake(2.0 if hero_hit == 2 else 1.0)
 
 
-## One copy of each sound of a step.
+## One copy of each sound of a step (an attack's impact comes here, as the attacker lands its blow),
+## and the lines its cards say (a minion or weapon coming into play, a death).
 func _step_sounds(st: Dictionary) -> void:
 	var heard := {}
 	for ev in st.evs:
@@ -2251,6 +2292,9 @@ func _step_sounds(st: Dictionary) -> void:
 		if not heard.has(sfx):
 			heard[sfx] = true
 			Sound.play(sfx)
+		var line := Sound.line_for(ev, g)
+		if not line.is_empty():
+			Sound.say(line[0], line[1])
 
 
 ## The arrow of a played card, a Battlecry or a hero power to its target, for a moment.
@@ -2675,7 +2719,6 @@ func _lunge(attacker: int, defender: int, land: Callable) -> void:
 		var tw := v.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 		tw.tween_property(v, "position", home.lerp(target, 0.82), Anim.d(0.22))
 		await tw.finished
-		Sound.play("attack")
 		if Match.shake_enabled:
 			_shake()
 	land.call()
@@ -2941,6 +2984,11 @@ func _effects_now(events: Array) -> void:
 		if not heard.has(sfx):  # one copy of each sound per action
 			heard[sfx] = true
 			Sound.play(sfx)
+		var line := Sound.line_for(ev, g)
+		if ev.type == "attack" and g.ent(ev.attacker):
+			Sound.attack_start(g.ent(ev.attacker).card_id)
+		elif not line.is_empty():
+			Sound.say(line[0], line[1])
 		match ev.type:
 			"damage":
 				var on_hero := g.ent(ev.target) != null and g.ent(ev.target).is_hero()
@@ -3156,6 +3204,7 @@ func _tutorial_result(box: VBoxContainer) -> void:
 
 func _show_mulligan() -> void:
 	var p := controller.actor()
+	_start_lines()
 	var box := _open_overlay(tr("Choose cards to replace"))
 	_overlay.name = "Mulligan"
 	_overlay.set_meta("title", box.get_child(0))
