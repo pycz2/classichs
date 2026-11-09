@@ -227,3 +227,63 @@ class _Pen:
 	func i_cross() -> void:  # a cross (decline, unblock)
 		line(0.25, 0.25, 0.75, 0.75, Color("ff7a5c"), 0.12)
 		line(0.75, 0.25, 0.25, 0.75, Color("ff7a5c"), 0.12)
+
+	# --- replay controls (and its list) --------------------------------------------
+
+	func _tri(x0: float, x1: float, h := 0.32) -> void:  # a triangle pointing from x0 to x1
+		poly([x0, 0.5 - h, x1, 0.5, x0, 0.5 + h], Icons.GOLD)
+
+	func _bar(x: float) -> void:
+		poly([x - 0.045, 0.2, x + 0.045, 0.2, x + 0.045, 0.8, x - 0.045, 0.8], Icons.GOLD)
+
+	func i_play() -> void:
+		_tri(0.3, 0.8, 0.34)
+
+	func i_pause() -> void:
+		for x in [0.36, 0.64]:
+			poly([x - 0.08, 0.2, x + 0.08, 0.2, x + 0.08, 0.8, x - 0.08, 0.8], Icons.GOLD)
+
+	func i_step_back() -> void:  # one action back
+		_bar(0.28)
+		_tri(0.76, 0.34)
+
+	func i_step_fwd() -> void:
+		_tri(0.24, 0.66)
+		_bar(0.72)
+
+	func i_turn_back() -> void:  # a turn back: two triangles
+		_tri(0.52, 0.14, 0.27)
+		_tri(0.88, 0.5, 0.27)
+
+	func i_turn_fwd() -> void:
+		_tri(0.12, 0.5, 0.27)
+		_tri(0.48, 0.86, 0.27)
+
+	func i_to_start() -> void:
+		_bar(0.18)
+		_tri(0.56, 0.24, 0.27)
+		_tri(0.86, 0.54, 0.27)
+
+	func i_to_end() -> void:
+		_tri(0.14, 0.46, 0.27)
+		_tri(0.44, 0.76, 0.27)
+		_bar(0.82)
+
+	func i_export() -> void:  # an arrow up out of a tray
+		line(0.5, 0.64, 0.5, 0.16, Icons.GOLD, 0.1)
+		poly([0.28, 0.36, 0.5, 0.12, 0.72, 0.36], Icons.GOLD)
+		line(0.16, 0.58, 0.16, 0.84, Icons.GOLD, 0.08)
+		line(0.16, 0.84, 0.84, 0.84, Icons.GOLD, 0.08)
+		line(0.84, 0.84, 0.84, 0.58, Icons.GOLD, 0.08)
+
+	func i_import() -> void:  # an arrow down into a tray
+		line(0.5, 0.12, 0.5, 0.58, Icons.GOLD, 0.1)
+		poly([0.28, 0.42, 0.5, 0.68, 0.72, 0.42], Icons.GOLD)
+		line(0.16, 0.58, 0.16, 0.84, Icons.GOLD, 0.08)
+		line(0.16, 0.84, 0.84, 0.84, Icons.GOLD, 0.08)
+		line(0.84, 0.84, 0.84, 0.58, Icons.GOLD, 0.08)
+
+	func i_film() -> void:  # a film frame (a replay)
+		poly([0.14, 0.22, 0.86, 0.22, 0.86, 0.78, 0.14, 0.78], Icons.GOLD)
+		poly([0.26, 0.32, 0.74, 0.32, 0.74, 0.68, 0.26, 0.68], Icons.DARK)
+		_tri(0.42, 0.62, 0.12)

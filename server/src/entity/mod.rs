@@ -13,6 +13,7 @@ pub mod game_setting;
 pub mod message;
 pub mod pack;
 pub mod pack_import;
+pub mod replay;
 pub mod request;
 pub mod server_setting;
 pub mod session;

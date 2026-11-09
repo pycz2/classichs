@@ -45,6 +45,7 @@ func _initialize() -> void:
 	DeckStore.path = "user://uitest_shots_decks.json"
 	Profile.path = "user://uitest_shots_profile.json"
 	ServerLink.session_path = "user://uitest_shots_session.json"
+	Replay.dir = "user://uitest_shots_replays"  # never the player's replays
 	Packs.user_dir = "user://uitest_shots_packs"
 	_clean()
 	for lang in langs:

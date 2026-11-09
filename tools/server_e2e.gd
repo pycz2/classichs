@@ -23,6 +23,7 @@ var pack: Pack
 
 func _initialize() -> void:
 	ServerLink.session_path = "user://e2e_session.json"  # never the player's saved login
+	Replay.dir = "user://e2e_replays"  # nor the player's replays
 	var args := OS.get_cmdline_user_args()
 	if args.size() > 0:
 		mode = args[0]
@@ -129,8 +130,20 @@ func _process(delta: float) -> bool:
 				m.submit(Rules.request({"op": "bot", "game": tmp, "player": me}).get("action", {}))
 				Rules.request({"op": "drop", "game": tmp})
 		if matches.all(func(m): return m.game.game_over) and results.all(func(r): return not r.is_empty()):
-			DirAccess.remove_absolute(ServerLink.session_path)
-			print("E2E OK: winner %d, turns %d, results %s / %s" % [matches[0].game.winner, matches[0].game.turn, results[0].get("result"), results[1].get("result")])
-			quit(0)
-			return true
+			step = 3
+	if step == 3 and links.all(func(l): return l._replays.is_empty()):  # the game's replay came (or a server before 0.50 has none)
+		var kept := Replay.kept()
+		var rep := "no replay"
+		if not kept.is_empty():
+			var r: Replay = kept[0]
+			if r.hash_at(r.size()) != str(r.data.hash):
+				_fail("the replay does not rebuild to its hash")
+				return true
+			rep = "replay of %d actions rebuilt" % r.size()
+			for x in kept:
+				Replay.forget(x)
+		DirAccess.remove_absolute(ServerLink.session_path)
+		print("E2E OK: winner %d, turns %d, results %s / %s, %s" % [matches[0].game.winner, matches[0].game.turn, results[0].get("result"), results[1].get("result"), rep])
+		quit(0)
+		return true
 	return false

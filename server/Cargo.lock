@@ -573,6 +573,7 @@ dependencies = [
  "base64 0.22.1",
  "classichs-brain",
  "classichs-engine",
+ "flate2",
  "futures-util",
  "object_store",
  "rand 0.8.8",

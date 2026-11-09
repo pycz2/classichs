@@ -146,6 +146,8 @@ enum In {
     },
     DeckDelete { id: f64 },
     GameSettings {},
+    Replays {},
+    Replay { game: String },
     GameSettingsSet {
         #[serde(default)]
         pack: Option<String>,
@@ -784,6 +786,12 @@ impl Session {
                 self.ok(json!({"t": "deck_deleted", "id": i}))
             }
             In::GameSettings {} => self.ok(game_settings_msg(db, me).await?),
+            In::Replays {} => self.ok(crate::replays::list(db, me).await?),
+            In::Replay { game } => {
+                let data = if crate::replays::can_view(&app, me, &game).await { crate::replays::data(db, &game).await? } else { None };
+                let data = data.ok_or_else(|| e("not_found", "No such replay"))?;
+                self.ok(json!({"t": "replay", "game": game, "data": data}))
+            }
             In::GameSettingsSet { pack, settings } => {
                 if !self.decks.allow("", Instant::now()) {
                     return Err(e("rate_limited", "Too many changes: wait a little"));

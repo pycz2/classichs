@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M10)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10)]
     }
 }
 
@@ -805,5 +805,47 @@ impl MigrationTrait for M10 {
         )
         .await?;
         m.create_index(Index::create().name("t_games_match").table(TGames::Table).col(TGames::MatchId).to_owned()).await
+    }
+}
+
+/// Every finished game's replay (0.50): the setup and the actions, deflated JSON (`crate::replays`).
+struct M9;
+
+impl MigrationName for M9 {
+    fn name(&self) -> &str {
+        "m20261109_000009_replays"
+    }
+}
+
+#[derive(DeriveIden)]
+enum Replays {
+    Table,
+    Game,
+    Pack,
+    P0,
+    P1,
+    Ended,
+    Data,
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M9 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        m.create_table(
+            Table::create()
+                .table(Replays::Table)
+                .col(ColumnDef::new(Replays::Game).text().not_null().primary_key())
+                .col(ColumnDef::new(Replays::Pack).text().not_null())
+                .col(ColumnDef::new(Replays::P0).integer())
+                .col(ColumnDef::new(Replays::P1).integer())
+                .col(int(Replays::Ended))
+                .col(ColumnDef::new(Replays::Data).blob().not_null())
+                .to_owned(),
+        )
+        .await?;
+        for (name, col) in [("replays_p0", Replays::P0), ("replays_p1", Replays::P1)] {
+            m.create_index(Index::create().name(name).table(Replays::Table).col(col).to_owned()).await?;
+        }
+        Ok(())
     }
 }

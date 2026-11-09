@@ -175,10 +175,38 @@ func show_game_menu() -> MainMenu:
 	m.play.connect(show_server)
 	m.tournaments.connect(show_tournaments)
 	m.tutorial.connect(show_tutorial)
+	m.replays.connect(show_replays)
 	m.settings.connect(show_settings)
 	m.leave.connect(leave_game)
 	_set_screen(m)
 	return m
+
+
+## The game's Replays: the last games on this device (and, through a server, the player's games there).
+func show_replays() -> ReplaysView:
+	var r := ReplaysView.new()
+	r.link = server_link if mode == "server" and server_link and server_link.logged_in() else null
+	r.back.connect(show_game_menu)
+	r.watch.connect(func(x: Replay): show_replay(x))
+	_set_screen(r)
+	return r
+
+
+## Watches a replay (its game becomes the active one, as a server game's does); back_to: where
+## Back goes (default: the Replays list).
+func show_replay(r: Replay, back_to := Callable()) -> ReplayView:
+	var have := r.pack()
+	if have == null:
+		social.toast(r.missing())
+		return null
+	if Packs.active() != have:
+		Packs.set_active(have)
+	Packs.set_shell(false)
+	var v := ReplayView.new()
+	v.replay = r
+	v.back.connect(back_to if back_to.is_valid() else show_replays)
+	_set_screen(v)
+	return v
 
 
 ## Leaves the game: the library, or the server's home.
@@ -534,16 +562,18 @@ func show_tournaments(id: Variant = null) -> TournamentsView:
 	t.link = server_link
 	t.page_id = id
 	t.back.connect(show_game_menu)
-	t.replay_ready.connect(open_replay)
+	t.replay_ready.connect(func(data: Dictionary): open_replay(data, t.page_id))
 	_set_screen(t)
 	return t
 
 
-## A finished game's replay data (`replay {game}` answered).
-## STUB(part B): B's ReplayView opens here (game/replay.gd, ui/replay_view.gd); until it lands, a note.
-func open_replay(data: Dictionary) -> void:
-	push_warning("replay of %s: the replay view is part B's" % str(data.get("game", "")))
-	social.toast(tr("Replays are not in this version yet"))
+## A tournament game's replay (`replay {game}` answered): watched, then back to that tournament.
+func open_replay(data: Dictionary, tournament: Variant = null) -> ReplayView:
+	var r := Replay.from_data(data)
+	if r == null:
+		social.toast(tr("The server has no replay of this game"))
+		return null
+	return show_replay(r, func(): show_tournaments(tournament))
 
 
 ## The active game's decks (the server's in a server game).

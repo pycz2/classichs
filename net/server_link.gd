@@ -72,6 +72,7 @@ var _probing_settings := false
 var _was_open := false
 var _closed := true  # nothing to close before open()
 var _games := {}  # game id -> ServerSession
+var _replays := {}  # game id -> the player's seat: its replay is asked for after game_over, to keep
 
 
 static func _tr(text: String) -> String:
@@ -330,6 +331,9 @@ func dispatch(msg: Dictionary) -> void:
 			elif _probing_settings and msg.get("code") == "bad_request":  # without settings per game (before 0.40)
 				_probing_settings = false
 				return
+			elif not _replays.is_empty() and msg.get("code") in ["bad_request", "not_found"]:  # no replays (before 0.50)
+				_replays.erase(_replays.keys()[0])
+				return
 		"signup_info":
 			_probing_signup = false
 			invite_only = msg.get("invite_only", false) == true
@@ -372,6 +376,15 @@ func dispatch(msg: Dictionary) -> void:
 		"logged_out":
 			token = ""
 			_clear_packs()
+		"replay":  # a finished game of this player's, kept among the last replays
+			var id := str(msg.get("game", ""))
+			if _replays.has(id):
+				var r := Replay.from_data(msg.get("data"))
+				if r:
+					r.data.me = _replays[id]
+					Replay.keep(r)
+				_replays.erase(id)
+				return
 	if msg.t in ["state", "act_error", "emote", "intent", "game_over", "spectate_state", "spectate_end"]:
 		var id := str(msg.get("game", ""))
 		var s = _games.get(id)
@@ -379,6 +392,9 @@ func dispatch(msg: Dictionary) -> void:
 			_games.erase(id)
 		elif s != null:
 			s.on_message(msg)
+			if msg.t == "game_over" and not s.watch:
+				_replays[id] = s.you
+				send({"t": "replay", "game": id})
 		if not msg.t in ["game_over", "spectate_end"]:
 			return
 	message.emit(msg)

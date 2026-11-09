@@ -45,6 +45,10 @@ var _waiting := false
 var _legal = null  # cached legal actions (null: ask again)
 var _bot_scheduled := false
 var _finished := false
+## The engine's `new` request of a game with decks and a seed (a replay is kept of it); {} else.
+var setup_req := {}
+## When the game began (unix seconds).
+var started := int(Time.get_unix_time_from_system())
 
 
 ## A game in the local engine: req is the engine's `new` request without op and game
@@ -60,8 +64,22 @@ func setup(req: Dictionary, bot_players: Array) -> String:
 		id = ""
 		return str(r.get("error", "?"))
 	state_hash = r.hash
+	if req.has("decks") and req.has("seed"):
+		setup_req = req.duplicate(true)
 	_sync()
 	return ""
+
+
+## Plays actions at once, without events (a replay seeking): false when one is refused.
+func fast_forward(actions: Array) -> bool:
+	for a in actions:
+		var r := Rules.request({"op": "act", "game": id, "action": a})
+		if not r.get("ok", false):
+			_sync()
+			return false
+		state_hash = r.hash
+	_sync()
+	return true
 
 
 ## A game on a server, from its first state (match + state messages).

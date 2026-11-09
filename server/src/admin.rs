@@ -57,6 +57,7 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/conversations/{a}/{b}", get(conversation))
         .route("/admin/api/games", get(games))
         .route("/admin/api/games/{id}", get(game_page))
+        .route("/admin/api/games/{id}/replay", get(game_replay))
         .route("/admin/api/packs", get(packs_list).post(packs_upload))
         .route("/admin/api/packs/{id}/{action}", post(pack_action))
         .route("/admin/api/bots", get(bots_list).post(bots_create))
@@ -988,7 +989,9 @@ async fn game_page(State(app): State<AppRef>, Path(id): Path<String>) -> Respons
             event::Entity::find().filter(event::Column::Game.eq(&id)).order_by_asc(event::Column::Id).limit(20_000).all(db).await?;
         let live = app.hub().live_json()["games"].as_array().and_then(|g| g.iter().find(|g| g["id"] == id.as_str()).cloned());
         let done = played::Entity::find_by_id(&id).one(db).await?;
-        if live.is_none() && done.is_none() && timeline.is_empty() {
+        // the replay's actions (they outlive the event log)
+        let replay = crate::replays::data(db, &id).await?.map(|r| json!({"actions": r["actions"], "hash": r["hash"], "first": r["first"]}));
+        if live.is_none() && done.is_none() && timeline.is_empty() && replay.is_none() {
             return Ok(None);
         }
         let matched = timeline.iter().find(|e| e.kind == "match").and_then(|e| e.data.as_deref()).and_then(|d| serde_json::from_str::<Value>(d).ok());
@@ -1005,11 +1008,24 @@ async fn game_page(State(app): State<AppRef>, Path(id): Path<String>) -> Respons
             }
             (None, None) => json!({"id": id, "live": false, "players": matched.as_ref().map(|m| m["players"].clone())}),
         };
-        Ok::<_, sea_orm::DbErr>(Some(json!({"game": summary, "match": matched, "events": timeline.iter().map(event_json).collect::<Vec<_>>()})))
+        Ok::<_, sea_orm::DbErr>(Some(json!({"game": summary, "match": matched, "replay": replay, "events": timeline.iter().map(event_json).collect::<Vec<_>>()})))
     };
     match r.await {
         Ok(Some(v)) => Json(v).into_response(),
         Ok(None) => err(StatusCode::NOT_FOUND, "No such game"),
+        Err(e) => db_err(e),
+    }
+}
+
+/// A finished game's replay as a .chsreplay file (the replay JSON the client imports).
+async fn game_replay(State(app): State<AppRef>, Path(id): Path<String>) -> Response {
+    match crate::replays::data(&app.db, &id).await {
+        Ok(Some(v)) => {
+            let name: String = id.chars().filter(char::is_ascii_alphanumeric).collect();
+            let disposition = format!("attachment; filename=\"{name}.chsreplay\"");
+            ([(header::CONTENT_TYPE, "application/json".to_string()), (header::CONTENT_DISPOSITION, disposition)], v.to_string()).into_response()
+        }
+        Ok(None) => err(StatusCode::NOT_FOUND, "No replay of this game"),
         Err(e) => db_err(e),
     }
 }

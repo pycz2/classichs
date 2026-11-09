@@ -367,3 +367,20 @@ async fn next<S: futures_util::Stream<Item = Result<tokio_tungstenite::tungsteni
         m => panic!("{m:?}"),
     }
 }
+
+/// A kept replay: the game page lists its actions, "Download replay" gives the .chsreplay file.
+#[tokio::test]
+async fn replay_download() {
+    let (state, app, victim) = setup().await;
+    let (cookie, _) = log_in(&app).await;
+    let data = json!({"format": "classichs-replay", "v": 1, "game": "g1", "actions": [{"type": "end_turn", "player": 0}], "hash": "h"});
+    classichs_server::replays::save(&state.db, "g1", "rh", [victim, victim], 5, &data).await.unwrap();
+    let r = call(&app, get("/admin/api/games/g1/replay", &cookie)).await;
+    assert_eq!(r.status, StatusCode::OK);
+    assert_eq!(r.json(), data);
+    assert!(r.headers[header::CONTENT_DISPOSITION].to_str().unwrap().contains("g1.chsreplay"));
+    let page = call(&app, get("/admin/api/games/g1", &cookie)).await.json();
+    assert_eq!(page["replay"]["actions"], data["actions"]);
+    assert_eq!(call(&app, get("/admin/api/games/nope/replay", &cookie)).await.status, StatusCode::NOT_FOUND);
+    assert_eq!(call(&app, get("/admin/api/games/g1/replay", "")).await.status, StatusCode::UNAUTHORIZED);
+}

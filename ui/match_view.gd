@@ -53,6 +53,10 @@ var lobby := false
 ## but look, and Leave; full_view: both hands face up.
 var watching := false
 var full_view := false
+## A replay (ReplayView): nothing can be done at the table, both hands are face up, no end screen;
+## replay_side is the player at the bottom. Set before the view enters the tree.
+var replay := false
+var replay_side := 0
 ## Set for a tutorial mission (hints, turn-end rules, reward screen).
 var tutorial: Tutorial
 var controller: Match
@@ -184,6 +188,9 @@ func _ready() -> void:
 	_end_halo.visible = false
 	add_child(_end_halo)  # behind the button
 	add_child(_end_turn)
+	if replay:
+		for n: Control in [_end_turn, _end_halo, _clock]:
+			n.visible = false
 	for i in 2:
 		var bar := ManaBar.new()
 		bar.name = "Mana%d" % i
@@ -233,7 +240,9 @@ func bind(m: Match) -> void:
 		move_child(fx, 2)
 	add_child(m)
 	m.changed.connect(_on_changed)
-	m.finished.connect(func(_w): refresh())
+	m.finished.connect(func(_w):
+		_keep_replay()
+		refresh())
 	if player_names == ["", ""] and m.bots[0] != m.bots[1]:
 		var me := m.viewer()
 		player_names[me] = Profile.load_name()
@@ -241,6 +250,16 @@ func bind(m: Match) -> void:
 			_bot_side = 1 - me  # named in _side_name, so the name follows the language
 	m.start()
 	refresh()
+
+
+## A local game with decks that ended is kept among the last replays (Replay.keep).
+func _keep_replay() -> void:
+	var m := controller
+	if replay or tutorial or debug_mode or m.is_server() or m.setup_req.is_empty():
+		return
+	var me := 1 - m.remote if m.remote >= 0 else maxi(0, m.bots.find(false))
+	var mode := "arena" if arena else ("code" if m.remote >= 0 else ("training" if m.bots.has(true) else "hotseat"))
+	Replay.keep(Replay.from_match(m, [_side_name(0), _side_name(1)], mode, me))
 
 
 ## An online match: the session (and its transport) now live under this view.
@@ -785,7 +804,8 @@ func _build_menu() -> void:
 		["Settings", "SettingsButton", open_settings]]
 	if debug_mode:
 		items.append(["Position -> JSON", "JsonButton", show_json])
-	items.append(["Concede", "Concede", _on_concede])
+	if not replay:  # (a replay is left by its own bar)
+		items.append(["Concede", "Concede", _on_concede])
 	for it in items:
 		var b := Palette.button(tr(it[0]), it[1])
 		b.custom_minimum_size = Vector2(220, 42)
@@ -839,7 +859,7 @@ func _build_emote_wheel() -> void:
 
 ## Emotes may be sent (not in the tutorial, only by a human side).
 func emotes_allowed() -> bool:
-	return tutorial == null and not watching and controller != null and not controller.bots[viewer()]
+	return tutorial == null and not watching and not replay and controller != null and not controller.bots[viewer()]
 
 
 ## Right click: your hero opens the emotes, the online opponent's hero the mute option.
@@ -923,12 +943,12 @@ func _try_tutorial_hint() -> void:
 # --- state helpers ----------------------------------------------------------
 
 func viewer() -> int:
-	return controller.viewer()
+	return replay_side if replay else controller.viewer()
 
 
 ## True when the local human may act now.
 func my_action() -> bool:
-	return not watching and not controller.game.game_over and not controller.bots[controller.actor()] and controller.actor() == viewer()
+	return not watching and not replay and not controller.game.game_over and not controller.bots[controller.actor()] and controller.actor() == viewer()
 
 
 func _legal() -> Array:
@@ -1132,7 +1152,7 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	for i in n:
 		want[board[i].id] = {"kind": "minion", "pos": Vector2(TableLayout.board_x(i, n, gap), OWN_BOARD_Y if own else ENEMY_BOARD_Y)}
 	var hand: Array = (_ents(_stage.hand[p]) if staged else pl.hand).filter(func(e): return not placed.has(e.id))
-	if own and (g.phase == "MULLIGAN" or (_overlay != null and _overlay.name == "Mulligan")) and not Anim.instant:
+	if own and not replay and (g.phase == "MULLIGAN" or (_overlay != null and _overlay.name == "Mulligan")) and not Anim.instant:
 		hand = []  # the cards are on the mulligan screen; they come down into the hand after it
 	var hover := -1
 	if own:
@@ -1142,6 +1162,8 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	var fan := TableLayout.hand_small(hand.size()) if own and _hand_small() else TableLayout.hand(hand.size(), own, hover)
 	if full_view and not own:
 		fan = TableLayout.open_hand(hand.size())
+	elif replay and not own:
+		fan = TableLayout.hand_open_top(hand.size())
 	for i in hand.size():
 		var f: Dictionary = fan[i]
 		if not own and i == _opp_hover:  # the card the opponent is looking at
@@ -1202,7 +1224,7 @@ func _make_view(e: GameView.Ent, spec: Dictionary) -> EntityView:
 			v = MinionView.make(e, g)
 		"hand":
 			var cv := CardView.make(e.card_id)
-			cv.face_up = spec.own or (full_view and e.card_id != "")
+			cv.face_up = spec.own or replay or (full_view and e.card_id != "")
 			cv.pivot_offset = Vector2(CardView.SIZE.x / 2.0, CardView.SIZE.y)
 			v = cv
 	v.set_meta("kind", spec.kind)
@@ -1258,7 +1280,7 @@ func _reconcile(want: Dictionary) -> void:
 			if _stage.is_empty() or v is PowerView:
 				v.sync()  # (while a batch plays, its steps change the numbers)
 		if v is CardView:
-			v.face_up = spec.own or (full_view and e.card_id != "")
+			v.face_up = spec.own or replay or (full_view and e.card_id != "")
 			if v.face_up:
 				v.show_entity(e, g)
 		if _hold.has(id):
@@ -2849,6 +2871,9 @@ func _centered_button(box: VBoxContainer, text: String, name: String, fn: Callab
 
 
 func _refresh_overlay() -> void:
+	if replay:
+		_close_overlay()  # the replay's bar shows the result
+		return
 	if _overlay and _overlay.name == "ConnectionLost":
 		return
 	if g.game_over:
