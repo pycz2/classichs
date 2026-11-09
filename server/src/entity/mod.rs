@@ -18,3 +18,4 @@ pub mod server_setting;
 pub mod session;
 pub mod signup_key;
 pub mod standing;
+pub mod tournament;

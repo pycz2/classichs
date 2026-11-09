@@ -55,14 +55,21 @@ struct Ctx {
 
 /// Starts a game between two players ([account, deck]) in a pack; the seats are drawn at random.
 pub async fn start(app: AppRef, mode: Mode, rules: Arc<GameRules>, players: [(i64, Value); 2]) {
+    start_with(app, mode, rules, players, json!({})).await;
+}
+
+/// `start` with more fields in the `match` message (a tournament's); the game's id, or None
+/// when it could not start.
+pub async fn start_with(app: AppRef, mode: Mode, rules: Arc<GameRules>, players: [(i64, Value); 2], extra: Value) -> Option<String> {
     let ids = [players[0].0, players[1].0];
-    begin(app.clone(), mode, rules, players).await;
+    let id = begin(app.clone(), mode, rules, players, extra).await;
     for id in ids {
         presence(&app, id).await;
     }
+    id
 }
 
-async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i64, Value); 2]) {
+async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i64, Value); 2], extra: Value) -> Option<String> {
     if rand::thread_rng().gen_bool(0.5) {
         players.swap(0, 1);
     }
@@ -72,6 +79,7 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
         for id in ids {
             hub.send(id, &json!({"t": "error", "code": "queue", "text": why}));
         }
+        None
     };
     {
         let hub = app.hub();
@@ -98,7 +106,11 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
     let accs = [a0, a1];
     let hello: [Value; 2] = std::array::from_fn(|p| {
         let o = &accs[1 - p];
-        json!({"t": "match", "game": id, "mode": mode, "opponent": {"user": o.name, "tag": o.tag}, "you": p, "pack": rules.rules_hash})
+        let mut m = json!({"t": "match", "game": id, "mode": mode, "opponent": {"user": o.name, "tag": o.tag}, "you": p, "pack": rules.rules_hash});
+        for (k, v) in extra.as_object().into_iter().flatten() {
+            m[k] = v.clone();
+        }
+        m
     });
     let (tx, rx) = mpsc::unbounded_channel();
     let names = [accs[0].name.clone(), accs[1].name.clone()];
@@ -136,8 +148,9 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
                          "pack_name": pack_name})),
     );
     let timers = app.timers.unwrap_or(rules.timers);
-    let ctx = Ctx { app, id, mode, rules, timers, ids, names, started: ranked::now(), hello };
+    let ctx = Ctx { app, id: id.clone(), mode, rules, timers, ids, names, started: ranked::now(), hello };
     tokio::spawn(run(ctx, game, rx));
+    Some(id)
 }
 
 /// The end of a game: (winner, reason); winner −1 = nobody.
@@ -453,6 +466,9 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
     for id in ctx.ids {
         presence(&ctx.app, id).await;
     }
+    if ctx.mode == Mode::Tournament {
+        ctx.app.tour.wake.notify_one(); // the scheduler reads the result from `games`
+    }
 }
 
 pub async fn rank_json(c: &impl ConnectionTrait, s: &Standing) -> DbResult<Value> {
@@ -462,7 +478,7 @@ pub async fn rank_json(c: &impl ConnectionTrait, s: &Standing) -> DbResult<Value
 /// MMR, ranked stars (both in the game's pack) and the Arena record; returns what each
 /// player's game_over adds.
 async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, ids: [i64; 2], winner: i64) -> DbResult<[Value; 2]> {
-    if winner < 0 || mode == Mode::Friendly {
+    if winner < 0 || matches!(mode, Mode::Friendly | Mode::Tournament) {
         return Ok([json!({}), json!({})]);
     }
     let w = winner as usize;
@@ -501,6 +517,6 @@ async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, 
             }
             Ok(out)
         }
-        Mode::Friendly => unreachable!(),
+        Mode::Friendly | Mode::Tournament => unreachable!(),
     }
 }

@@ -31,7 +31,7 @@ export function Games ({ query }) {
     </${Card}>
     <div class="filters">
       <label class="search"><${Icon} name="search" size=${16} /><input placeholder="Player" value=${draft} onInput=${(e) => { setDraft(e.target.value); commit(e.target.value) }} /></label>
-      <div class="seg text">${['', 'casual', 'ranked', 'arena', 'friendly'].map((m) => html`<button key=${m} class=${f.mode === m ? 'on' : ''} onClick=${() => set({ mode: m })}>${m ? m[0].toUpperCase() + m.slice(1) : 'All modes'}</button>`)}</div>
+      <div class="seg text">${['', 'casual', 'ranked', 'arena', 'friendly', 'tournament'].map((m) => html`<button key=${m} class=${f.mode === m ? 'on' : ''} onClick=${() => set({ mode: m })}>${m ? m[0].toUpperCase() + m.slice(1) : 'All modes'}</button>`)}</div>
       <select value=${f.reason} onChange=${(e) => set({ reason: e.target.value })} aria-label="How it ended"><option value="">Any ending</option>${REASONS.map((r) => html`<option>${r}</option>`)}</select>
     </div>
     <${ErrorBox} error=${error} onRetry=${reload} />

@@ -190,6 +190,8 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `GET signup_keys` | `{keys: [{id, key, note, uses_total, uses_left, created, created_by, created_by_name, revoked, accounts: [{id, user, created}]}], invite_only}`, newest first |
 | `POST signup_keys {note?, uses?}` | a new uuid v4 key (note ≤ 200 characters, uses 1–1000, default 1) → `{id, key, text}` |
 | `POST signup_keys/{id}/revoke` | the key registers nobody more (its accounts stay) |
+| `GET tournaments?status` · `GET tournaments/{id}` | the list (summaries + `top` [{place, name}]) · one tournament as the players' `full`, every deck shown |
+| `POST tournaments/{id}/cancel` | cancels one that is not over (409 otherwise) |
 
 `/admin/ws` (the cookie, same origin) sends `hello {live}`, then `event {e}` for every
 event, `live {live}` when the online list, queues or games change and `resync {}`
@@ -208,7 +210,8 @@ bundled pack installed), `pack_default`, `pack_enable`, `pack_disable`, `pack_de
 `pack_download`, `pack_rejected` (a refused upload or a stored pack turned off: the reason), `match` (with the seed), `game_start` (who goes first, the opening draws), `game_action`
 (every applied action, timeout moves marked `timeout`, with the turn, the state hash
 and the engine's events), `game_left`, `game_back`, `game_end` (reason, results, the
-final turn and hash, and for `illegal` the refused actions), `admin` (every admin
+final turn and hash, and for `illegal` the refused actions), `tournament` (created, joined,
+left, closed, seeded, started, finished, cancelled; `data.tournament`), `admin` (every admin
 action), `setting` (a setting changed: `data.key`, `data.value`), `signup_key` (a key made
 or revoked; `register` has `data.signup_key`), `error` (database failures and rules engine panics).
 
@@ -224,6 +227,10 @@ server are in `decks` (M6) per account and pack manifest id, like the standings;
 choices per game (art and music sets) in `game_settings` (M7), the same way. The admin's
 settings are `server_settings` (key → text; M8), the invite keys `signup_keys` and the key an
 account registered with `accounts.signup_key` (NULL: none, as every account before M8).
+Tournaments
+(M10): `tournaments`, `t_entrants` (with the copied decks, seed, team, place), `t_matches`
+(sides, the bracket sources, step, deadline, score, the series as JSON) and `t_games` (each
+game of a match, its decks and winner).
 
 ### Connect the game
 
@@ -316,6 +323,7 @@ not answer, 2 images kept. The headers of these scripts tell the details.
 | A turn (the mulligan) | the pack's `timers` (Classic and Neonfall: 75 s (45 s) + 5 s), then the timeout moves |
 | Refused actions | 3 per player in a game, then the game is lost |
 | Connections per account | 1: a new login closes the old connection (`kicked`) |
+| Tournaments | 3 not over per creator, 10 created a day; 2–128 players; start from now+11 min to now+14 days; 60 s for each accept, ban and pick |
 | A player's pack | 100 MB; 10 packs per player |
 | A server pack (admin upload) | 128 MB |
 | Inside a pack | docs/packs/format.md §1 (10 000 files, 256 MB unpacked, 16 MB a file, the rules part 8 MB, no zip bombs) |
@@ -435,6 +443,80 @@ times: unix seconds).
   Arena deck is not. A name over 60 characters: `error bad_name`; the 101st deck:
   `error decks_full`; too fast: `error rate_limited`.
 - `deck_delete {id}` → `deck_deleted {id}` (or `error not_found`: no such deck of mine).
+
+### Tournaments
+
+Any player creates one; players join with copied decks; the server (`src/tournament/`, a
+scheduler every 2 s and after each tournament game, all state in the database: a restart
+carries on) runs it. Times are unix **milliseconds**. Refusals: `error tournament` with a
+human `text` (`server` for a database error).
+
+- Life (server clock): `open` → at T−10 min `locked` (rules, decks and the start frozen; fewer
+  than `min_players` → `closed`, `reason` "not enough players") → at T−1 min `seeded` (random
+  seeds, Scheveningen teams, the bracket; joining and leaving end; again `closed` if too few
+  are left) → at T `running` → `finished` (places) | `cancelled` (the creator, any time before
+  the end; running games play on but no longer count).
+- `t_create {name (3–40), pack (a server pack's rules_hash), format, options, series, best_of,
+  bans, start_at (now+11 min … now+14 days), max_players (2–128), min_players (2…max, default
+  2), deck_reveal, spectators}` → `tournament`. `format`: `round_robin` (`options.rounds` 1|2),
+  `swiss` (`rounds` 1–10, null = ceil(log2 n) filled in at seeding; `drop_after` 0 = never,
+  1–5 match losses), `elimination` (`losses` 1 single | 2 double: a losers' bracket, then a
+  grand final, no reset), `scheveningen` (two random balanced teams, everyone plays everyone of
+  the other team). `series`: `conquest` | `lhs`; `best_of` 1|3|5|7 (wins needed = (bo+1)/2);
+  `bans` 0|1. Decks per entrant = wins needed + bans, each another class, each valid in the pack.
+  Limits: 3 not over (open … running) per creator, 10 created a day per account.
+- Only the creator: `t_edit {id, …}` (name, format, options, bans (not once someone joined),
+  max/min players (not below the entrants), deck_reveal, spectators, start_at (later only);
+  `pack`, `series`, `best_of` are fixed) until T−10; `t_reschedule {id, start_at}` (later only,
+  ≤ now+14 days) until T−10; `t_cancel {id}`.
+- Players: `t_join {id, decks: [{name, hero, cards}]}` (copied: deleting them later changes
+  nothing) and `t_leave {id}` until T−1; `t_decks {id, decks}` until T−10.
+  Each of these (and `t_create`) answers with `tournament` and makes the player a watcher.
+- `t_list {tab: "upcoming"|"finished"|"closed"}` → `t_list {tab, list: [summary]}` (100 at
+  most; upcoming = open … running by start, closed = closed and cancelled).
+  summary = `{id, name, creator, pack, pack_name, format, series, best_of, start_at, status,
+  entrants (count), max_players, joined}`.
+- `t_get {id}` → `tournament {tournament: full}` and watches it: every change pushes
+  `tournament {tournament: full}` (as the watcher sees it) until `t_unwatch {id}`; a player
+  with a match step waiting also gets its `t_match`. full = summary + `{options, bans,
+  min_players, deck_reveal, spectators, reason, created, ended, decks_per_entrant,
+  wins_needed, round, entrants: [{name, seed, team, eliminated, place, points, wins, losses,
+  buchholz, decks?}] (by place, then seed), matches: [{id, round, bracket ("w"|"l"|"gf" in
+  elimination, else ""), slot, p: [name|null, name|null], status, score: [a, b], winner,
+  games: [game ids], deadline}], can: {edit, cancel, reschedule, join, leave, decks,
+  spectate}}`. Decks: one's own always; others' only with `deck_reveal` from T−10 on.
+  The format's options are also at the top level (`rounds`, `drop_after`, `losses`).
+  Match `status`: `pending` (sides not known yet or not free), `accept`, `ban`, `pick`,
+  `playing`, `done` (forfeits too, `winner` set), `bye` (one side null: a match won by the
+  other; both null: nobody). `winner`: the entrant's name or null.
+- Matches: ready when both sides are free (no other match of theirs in this tournament is
+  under way). Each game: `accept` (60 s; who does not accept loses that game; both: one of
+  them at random), once a match `ban` (60 s, when bans: each bans one of the opponent's decks;
+  timeout = a random one), `pick` (60 s; timeout = the first usable deck), then the game: the
+  usual `match` (`mode: "tournament"`, plus `tournament`, `match`, `tournament_name`) and
+  game messages; no rating change; a side offline or in another game at the start loses that
+  game; a game without a winner (or lost in a server restart) is played again. Conquest: a deck
+  that won can't be used again in the match. LHS: the losing deck is out, the winner keeps its
+  deck for the next game (no pick), the loser picks from what is left. A match ends at the
+  wins needed.
+- The steps: `t_accept {match}`, `t_ban {match, deck: index into the opponent's decks}`,
+  `t_pick {match, deck: own index}`. Pushed to both sides on every change of their match:
+  `t_match {tournament, name, match, phase: "accept"|"ban"|"pick"|"wait"|"done", status,
+  deadline, opponent, score: [mine, theirs], mine: [{hero, name, state}], theirs: [{hero,
+  state}], pick (my deck for the coming game, or null), game (while playing), series,
+  best_of, bans, winner}`; deck `state`: `ok` | `banned` | `won` (Conquest: spent) | `lost`
+  (LHS: out).
+- Rounds: round robin (circle method, an odd count sits one out per round) and Scheveningen are
+  made at seeding; Swiss pairs a round when the previous one is over (same points first, no
+  rematch when avoidable, a bye = a match won for the lowest without one); elimination: a
+  bracket to the next power of two, the byes to the top seeds.
+- Places: round robin, Swiss, Scheveningen by match points, then game wins − losses, then
+  (Swiss) Buchholz; elimination by the stage one went out at (the semi-final losers share 3rd).
+  Equal ones share a place.
+- `t_spectate {match}`: the creator or an eliminated entrant, when `spectators` is on, watches
+  the match's game with both hands open (the spectator messages). Tournament games' replays:
+  everyone when `deck_reveal` is on or the tournament is over, else its two players and the
+  creator.
 
 ### Game settings
 

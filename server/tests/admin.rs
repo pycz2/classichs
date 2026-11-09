@@ -327,6 +327,39 @@ async fn live_feed_over_websocket() {
     }
 }
 
+#[tokio::test]
+async fn tournaments_page() {
+    use classichs_server::entity::tournament::{self as tour, entrant};
+    use sea_orm::{ActiveModelTrait, IntoActiveModel, NotSet};
+    let (state, app, victim) = setup().await;
+    let (session, csrf) = log_in(&app).await;
+    let t = tour::Model {
+        id: 0, name: "Spring cup".into(), creator: victim, pack: classichs_server::packs::GameRules::classic().rules_hash.clone(),
+        format: "elimination".into(), options: r#"{"losses":1}"#.into(), series: "conquest".into(), best_of: 1, bans: 0,
+        start_at: classichs_server::events::now_ms() + 3_600_000, max_players: 8, min_players: 2, deck_reveal: false, spectators: false,
+        status: "open".into(), reason: String::new(), created: 0, ended: 0,
+    };
+    let mut am = t.into_active_model().reset_all();
+    am.id = NotSet;
+    let t = am.insert(&state.db).await.unwrap();
+    let e = entrant::Model { tournament: t.id, account: victim, decks: r#"[{"name":"x","hero":"HERO_08","cards":[]}]"#.into(), seed: -1, team: -1, place: 0, joined: 1 };
+    e.into_active_model().reset_all().insert(&state.db).await.unwrap();
+    let r = call(&app, get("/admin/api/tournaments?status=open", &session)).await;
+    assert_eq!(r.status, StatusCode::OK, "{}", r.body);
+    let l = r.json();
+    assert_eq!((l["list"][0]["name"].as_str(), l["list"][0]["entrants"].as_u64(), l["list"][0]["creator"].as_str()), (Some("Spring cup"), Some(1), Some("victim")));
+    let r = call(&app, get(&format!("/admin/api/tournaments/{}", t.id), &session)).await;
+    assert_eq!(r.json()["entrants"][0]["decks"][0]["hero"], "HERO_08", "the admin sees every deck");
+    assert_eq!(call(&app, get("/admin/api/tournaments/999", &session)).await.status, StatusCode::NOT_FOUND);
+    let path = format!("/admin/api/tournaments/{}/cancel", t.id);
+    assert_eq!(call(&app, post(&path, &session, None, json!({}))).await.status, StatusCode::FORBIDDEN, "CSRF");
+    assert_eq!(call(&app, post(&path, &session, Some(&csrf), json!({}))).await.status, StatusCode::OK);
+    assert_eq!(call(&app, post(&path, &session, Some(&csrf), json!({}))).await.status, StatusCode::CONFLICT, "over");
+    let r = call(&app, get(&format!("/admin/api/tournaments/{}", t.id), &session)).await;
+    assert_eq!(r.json()["status"], "cancelled");
+    assert!(call(&app, get("/admin/static/tournaments.js", "")).await.body.contains("TournamentPage"));
+}
+
 async fn next<S: futures_util::Stream<Item = Result<tokio_tungstenite::tungstenite::Message, tokio_tungstenite::tungstenite::Error>> + Unpin>(ws: &mut S) -> Value {
     use futures_util::StreamExt;
     match tokio::time::timeout(Duration::from_secs(5), ws.next()).await.unwrap().unwrap().unwrap() {
