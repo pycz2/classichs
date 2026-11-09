@@ -383,6 +383,17 @@ Full details: the design doc.
     `message` "Something does not add up: …"), `disconnect`, `aborted` (a rules
     engine failure). Older games in the database may show `left`, `desync`, `cheat`,
     `protocol`.
+- Spectators (module `spectate`): a friend's entry in `friends` carries `in_game: {game,
+  mode}` (null when not in a game). `spectate {user}` (friends only: `error not_friends`;
+  `error not_in_game`; `error spectate` when the game has 20 spectators or the asker plays
+  one) → `spectating {game, mode, pack, players: [n0, n1], seat, full}` and at once a
+  `spectate_state {game, view, events: [], result}` with the current view, then one after every
+  change (the shape of `state`). `full: false`: the view of the friend's seat (the friend's
+  hand open, the opponent's hidden, as the friend sees it); `full: true` (tournaments,
+  `spectate::add`): both hands and Secrets open (never deck lists or the RNG). One game at a
+  time (watching another leaves the first). `unspectate {}` → `unspectated`; the end:
+  `spectate_end {game, winner (seat, -1 = nobody), reason}`. A disconnect or a game of one's
+  own stops it. The players are never told who watches; spectators get no emotes or intents.
 
 ### Decks
 

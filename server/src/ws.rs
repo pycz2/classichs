@@ -96,6 +96,8 @@ enum In {
         pack: Option<String>,
     },
     Unqueue {},
+    Spectate { user: String },
+    Unspectate {},
     ArenaStart {
         #[serde(default)]
         pack: Option<String>,
@@ -402,7 +404,10 @@ async fn friends_json(app: &AppRef, me: i64) -> Result<Value, E> {
     let plain = |l: &[Account]| l.iter().map(|a| json!({"user": a.name, "tag": a.tag})).collect::<Vec<_>>();
     let list: Vec<Value> = friends
         .iter()
-        .map(|a| json!({"user": a.name, "tag": a.tag, "online": hub.conns.contains_key(&a.id), "status": hub.status(a.id)}))
+        .map(|a| {
+            let game = hub.in_game.get(&a.id).and_then(|(g, _)| Some(json!({"game": g, "mode": hub.games.get(g)?.mode})));
+            json!({"user": a.name, "tag": a.tag, "online": hub.conns.contains_key(&a.id), "status": hub.status(a.id), "in_game": game})
+        })
         .collect();
     Ok(json!({"t": "friends", "list": list, "requests_in": plain(&ins), "requests_out": plain(&outs), "blocked": plain(&blocks)}))
 }
@@ -971,6 +976,21 @@ impl Session {
                     presence(&app, me).await;
                 }
                 self.ok(json!({"t": "unqueued"}))
+            }
+            In::Spectate { user } => {
+                let o = match db::account_by_name(db, &user).await? {
+                    Some(o) if are_friends(db, me, o.id).await? => o,
+                    _ => return Err(e("not_friends", "You can watch the games of friends only")),
+                };
+                let found = app.hub().in_game.get(&o.id).cloned();
+                let (g, seat) = found.ok_or_else(|| e("not_in_game", "The friend is not in a game"))?;
+                crate::spectate::join(&app, &g, me, seat, false).map_err(|t| e("spectate", t))?;
+                app.event(self.ev("spectate", format!("{my_name} watches the game of {}", o.name)).other(&o.name).game(&g));
+                Ok(())
+            }
+            In::Unspectate {} => {
+                crate::spectate::leave(&app, me);
+                self.ok(json!({"t": "unspectated"}))
             }
             In::ArenaStart { pack } => {
                 if arena::Entity::find_by_id(me).one(db).await?.is_some() {

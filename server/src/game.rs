@@ -7,7 +7,7 @@ use crate::entity::{arena, game as played};
 use crate::events::Event;
 use crate::packs::{self, GameRules};
 use crate::ranked::{self, Mode};
-use crate::{presence, AppRef, LiveGame, Timers};
+use crate::{presence, spectate, AppRef, LiveGame, Timers};
 use classichs_engine::api::{events_for, snapshot};
 use classichs_engine::deck::Deck;
 use classichs_engine::state::Ev as Events;
@@ -30,6 +30,8 @@ pub enum Ev {
     Gone(usize),
     /// Player p logged in again.
     Back(usize),
+    /// A new spectator (spectate::join): it gets the current state.
+    Watch(i64),
 }
 
 const INTENT_MAX: usize = 1024;
@@ -108,6 +110,7 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
         }
         for (p, a) in ids.iter().enumerate() {
             hub.queue.remove(a);
+            hub.watching.remove(a); // a player watches nothing
             hub.in_game.insert(*a, (id.clone(), p));
             hub.send(*a, &hello[p]);
         }
@@ -190,6 +193,7 @@ impl Ctx {
         for p in 0..2 {
             self.send(p, &state_msg(&self.id, g, events, p, left));
         }
+        spectate::states(&self.app, &self.id, g, events, left);
     }
 
     /// Applies player p's action: on success logs it and sends both players their state.
@@ -321,6 +325,7 @@ async fn run(ctx: Ctx, mut g: Game, mut rx: mpsc::UnboundedReceiver<Ev>) {
                 ctx.send(p, &m);
                 ctx.send(p, &state_msg(&ctx.id, &g, &[], p, clock.left()));
             }
+            Some(Ev::Watch(a)) => spectate::first(&ctx.app, &ctx.id, &g, a, clock.left()),
             Some(Ev::Act(p, a)) if !moves(&g, p) && a["type"] != "concede" => {
                 // not p's move now (conceding always is): most often a move sent just before the clock ended p's turn
                 // (it crossed the timeout); refused, but no strike: nobody's game differs
@@ -443,6 +448,7 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
             hub.send(*a, &m);
         }
     }
+    spectate::end(&ctx.app, &ctx.id, winner, reason);
     // Friends see both players back online (or offline).
     for id in ctx.ids {
         presence(&ctx.app, id).await;
