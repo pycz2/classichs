@@ -32,6 +32,7 @@ func _use_test_files() -> void:
 	DeckStore.path = "user://test_runner_decks.json"
 	Progress.path = "user://test_runner_tutorial.json"
 	ServerLink.session_path = "user://test_runner_server_session.json"
+	Replay.dir = "user://test_runner_replays"
 	DirAccess.remove_absolute(ServerLink.session_path)  # no saved session: main never connects by itself
 	Packs.set_shell(false)  # (main shows its own screens in the client's look; tests see the active pack's)
 	Packs.server_sets = {}

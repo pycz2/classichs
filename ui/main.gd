@@ -173,10 +173,38 @@ func show_game_menu() -> MainMenu:
 	m.code_play.connect(show_online)
 	m.play.connect(show_server)
 	m.tutorial.connect(show_tutorial)
+	m.replays.connect(show_replays)
 	m.settings.connect(show_settings)
 	m.leave.connect(leave_game)
 	_set_screen(m)
 	return m
+
+
+## The game's Replays: the last games on this device (and, through a server, the player's games there).
+func show_replays() -> ReplaysView:
+	var r := ReplaysView.new()
+	r.link = server_link if mode == "server" and server_link and server_link.logged_in() else null
+	r.back.connect(show_game_menu)
+	r.watch.connect(func(x: Replay): show_replay(x))
+	_set_screen(r)
+	return r
+
+
+## Watches a replay (its game becomes the active one, as a server game's does); back_to: where
+## Back goes (default: the Replays list).
+func show_replay(r: Replay, back_to := Callable()) -> ReplayView:
+	var have := r.pack()
+	if have == null:
+		social.toast(r.missing())
+		return null
+	if Packs.active() != have:
+		Packs.set_active(have)
+	Packs.set_shell(false)
+	var v := ReplayView.new()
+	v.replay = r
+	v.back.connect(back_to if back_to.is_valid() else show_replays)
+	_set_screen(v)
+	return v
 
 
 ## Leaves the game: the library, or the server's home.

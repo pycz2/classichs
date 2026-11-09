@@ -430,7 +430,8 @@ mulligans, choices, timeout moves, concede], result: {winner (-1 none), reason, 
 and `apply` of every action give that hash. The client's `.chsreplay` file is this JSON.
 
 - `replays {}` → `replays {list: [{game, mode, pack, pack_name, opponent, won, started, ended,
-  turns}]}`: the player's last 50 games, newest first.
+  turns, you (the player's seat), winner (seat, -1 none), heroes, players (names, by seat)}]}`: the player's last 50
+  games, newest first.
 - `replay {game}` → `replay {game, data}` for one who may watch it (`replays::can_view`: its
   players), else `error not_found`.
 

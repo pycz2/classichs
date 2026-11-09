@@ -22,6 +22,7 @@ func _initialize() -> void:
 	DeckStore.path = "user://uitest_site_decks.json"
 	Progress.path = "user://uitest_site_progress.json"
 	ServerLink.session_path = "user://uitest_site_session.json"
+	Replay.dir = "user://uitest_site_replays"  # never the player's replays
 	Packs.user_dir = "user://uitest_site_packs"
 	out = OS.get_cmdline_user_args()[0] + "/cards"
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(OS.get_cmdline_user_args()[0] + "/data.json"))

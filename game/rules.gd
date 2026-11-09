@@ -132,6 +132,11 @@ static func _rules_zip(p: Pack) -> PackedByteArray:
 	return bytes
 
 
+## The engine's name of a pack's rules (for a request's `pack`); "" = its built-in ones.
+static func engine_pack(p: Pack) -> String:
+	return str(_loaded.get(p.rules_hash(), "")) if can_play(p) == "" else ""
+
+
 ## Shown when a pack's games can't be played by this engine yet.
 const NEEDS_ENGINE := "This game needs a newer rules engine"
 

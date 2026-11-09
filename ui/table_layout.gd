@@ -55,6 +55,17 @@ static func hand(n: int, own: bool, hover := -1) -> Array:
 	return out
 
 
+## A replay's top hand: face up and low enough to read, left of the hero's portrait.
+static func hand_open_top(n: int) -> Array:
+	var out := []
+	var k := 0.62
+	var step := minf(70.0, 330.0 / maxf(1, n))
+	for i in n:
+		var c := i - (n - 1) / 2.0
+		out.append({"pos": Vector2(372.0 + c * step - CARD.x * k / 2.0, 2.0 + c * c * 1.2), "rot": deg_to_rad(-c * 2.0), "scale": k, "z": i})
+	return out
+
+
 ## The hand on a touchscreen while the player does not play from it: small, low on the right
 ## (a tap opens it to the usual fan).
 static func hand_small(n: int) -> Array:

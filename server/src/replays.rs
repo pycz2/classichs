@@ -70,7 +70,8 @@ pub async fn list(c: &impl ConnectionTrait, me: i64) -> DbResult<Value> {
             let seat = if r.p0 == Some(me) { 0 } else { 1 };
             Some(json!({"game": r.game, "mode": d["mode"], "pack": r.pack, "pack_name": d["pack_name"],
                         "opponent": d["players"][1 - seat]["name"], "won": d["result"]["winner"] == json!(seat),
-                        "started": d["started"], "ended": r.ended, "turns": d["result"]["turns"]}))
+                        "started": d["started"], "ended": r.ended, "turns": d["result"]["turns"],
+                        "you": seat, "winner": d["result"]["winner"], "heroes": [d["players"][0]["hero"], d["players"][1]["hero"]], "players": [d["players"][0]["name"], d["players"][1]["name"]]}))
         })
         .collect();
     Ok(json!({"t": "replays", "list": list}))

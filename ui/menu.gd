@@ -4,7 +4,7 @@ extends Control
 ## Direct, without a server, or Server, through one), Settings, Exit (not on the web).
 ## A game's menu (pack set: main made it the active pack, so the screen has its look, menu
 ## music, pictures and logo): Collection, Training, Code play (Direct) or Play (Server: the
-## server's ranked, casual and Arena games), Tutorial (when the pack has one), Settings (with
+## server's ranked, casual and Arena games), Tutorial (when the pack has one), Replays, Settings (with
 ## the debug tools of this game), Leave the game.
 
 signal direct
@@ -16,11 +16,12 @@ signal training
 signal code_play
 signal play
 signal tutorial
+signal replays
 signal leave
 
 ## Button labels (English keys); the translation tool reads this list.
 const ITEMS := ["Play", "Direct", "Server", "Back", "Settings", "Exit", "Collection", "Training", "Code play",
-	"Tutorial", "Leave the game", "Without a server: the games on this device, training, code play",
+	"Tutorial", "Replays", "Leave the game", "Without a server: the games on this device, training, code play",
 	"Through a server: an account, ranked games, the Arena, friends"]
 
 ## The game whose menu this is (null: the client's main menu).
@@ -115,7 +116,7 @@ func _show_game() -> void:
 		items.append(["Code play", code_play, ok and WebRtcTransport.available()])
 	if pack.has_tutorial():
 		items.append(["Tutorial", tutorial, ok])
-	_fill(items + [["Settings", settings, true], ["Leave the game", leave, true]])
+	_fill(items + [["Replays", replays, true], ["Settings", settings, true], ["Leave the game", leave, true]])
 	var codes := _box.find_child("CodePlay", false, false) as Button
 	if codes and ok and codes.disabled:
 		codes.tooltip_text = tr("Code play needs WebRTC, which this build does not have")
