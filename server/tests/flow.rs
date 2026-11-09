@@ -1190,6 +1190,8 @@ async fn spectators_limits_and_the_full_view() {
         tokio::time::sleep(Duration::from_millis(20)).await;
     }
     assert!(!app.hub().watching.contains_key(&xid), "dropped on disconnect");
+}
+
 /// Every finished game is kept as a replay: its players list and fetch it, the engine plays it
 /// again to the same final state, nobody else gets it.
 #[tokio::test]
