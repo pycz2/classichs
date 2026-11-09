@@ -384,7 +384,7 @@ python3 tools/pack.py hash  <file>.cardpack     # rules_hash and content_hash
 | `source` | A source in its own shape (Neonfall): drops source-only card fields (`drop_card_fields`), drops files (`drop_files`), moves files (`move`, e.g. pictures into `ui/`), takes each locale's `pack.name`/`pack.description` into the manifest and its `terms` into `ui`. |
 | `hsjson`, `keywords`, `voice`, `translate`, `rank_names` | Classic's: cards and texts from HearthstoneJSON data, mechanic names, voice lines, translations, rank names. |
 
-`--art-set id=folder` adds a picture set of your own that is marked `local` and never shared.
+`--art-set id=folder` adds a picture set of your own that is marked `local` and never shared; `--sound-set id=folder` does the same for sounds (each card's `<card id>_play|attack|death|hit` and the board's sounds by name), and `--voice folder` adds your recordings of the voice lines (`<lang>/<card id>_<kind>.ogg`, marked by `voice/LOCAL.md`).
 
 ## Load it into the game
 

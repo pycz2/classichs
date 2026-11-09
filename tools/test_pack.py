@@ -263,6 +263,28 @@ class BuildAndZip(unittest.TestCase):
             self.assertIn("art/mine/M1.png", files)
             self.assertEqual(json.loads(files["manifest.json"])["art_sets"], [{"id": "mine", "local": True}])
 
+    def test_local_sound_set_and_voice(self):
+        with tempfile.TemporaryDirectory() as t:
+            src = Path(t) / "src"
+            for p, v in as_files(tiny()).items():
+                (src / p).parent.mkdir(parents=True, exist_ok=True)
+                (src / p).write_bytes(v)
+            snd, vo = Path(t) / "snd", Path(t) / "vo"
+            snd.mkdir()
+            (snd / "M1_play.ogg").write_bytes(b"ogg")
+            (snd / "notes.txt").write_bytes(b"skipped")
+            (vo / "en").mkdir(parents=True)
+            (vo / "en" / "M1_attack.ogg").write_bytes(b"ogg")
+            files, r = pack.build(src, None, (), [f"original={snd}"], str(vo))
+            self.assertEqual(r.errors, [])
+            self.assertIn("sounds/original/M1_play.ogg", files)
+            self.assertNotIn("sounds/original/notes.txt", files)
+            self.assertIn("voice/en/M1_attack.ogg", files)
+            self.assertIn("voice/LOCAL.md", files)
+            self.assertEqual(json.loads(files["manifest.json"])["sound_sets"][-1], {"id": "original", "local": True})
+            with self.assertRaises(pack.PackError):
+                pack.build(src, None, (), (), str(Path(t) / "nothing"))
+
     def test_read_pack_refuses_duplicates(self):
         with tempfile.TemporaryDirectory() as t:
             p = Path(t) / "x.cardpack"

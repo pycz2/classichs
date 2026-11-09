@@ -25,6 +25,11 @@ var _last_battle := ""
 var _pool: Array[AudioStreamPlayer] = []
 var _next := 0
 var _streams := {}
+## The player of spoken lines: one at a time, a new line cuts the last.
+var _voice := AudioStreamPlayer.new()
+## The recording said last and the last sounds played, oldest first (tests, the driver).
+var said := ""
+var heard: Array[String] = []
 
 
 func _ready() -> void:
@@ -33,6 +38,8 @@ func _ready() -> void:
 	_music.bus = "Music"
 	_music.finished.connect(_on_music_finished)
 	add_child(_music)
+	_voice.bus = "SFX"
+	add_child(_voice)
 	for i in POOL:
 		var p := AudioStreamPlayer.new()
 		p.bus = "SFX"
@@ -106,6 +113,9 @@ static func play(file: String) -> void:
 	instance._next = (instance._next + 1) % POOL
 	p.stream = s
 	p.play()
+	instance.heard.append(file)
+	if instance.heard.size() > 50:
+		instance.heard.pop_front()
 
 
 ## The player that started the last sound (tests).
@@ -145,29 +155,110 @@ func _on_music_finished() -> void:
 		_music.play()
 
 
-## The sound of an engine event: a card's own (its `sounds` play, attack, death) or the event's.
+## The sound of an engine event at its step: a minion's or weapon's own sound when it comes into play
+## (its `<card id>_play`), a spell's cast (its own, else its element's `spell_<element>`, else
+## `spell`), a spell's hit (its own `_hit`, else `hit_<element>`), a death (its own `_death`), else the
+## event's. An attack's own sound comes as the attacker leaps (attack_start); here is its impact.
 static func sound_for(ev: Dictionary, g: GameView, viewer: int) -> String:
-	var own := func(id, slot: String) -> String:
-		var e := g.ent(int(id)) if id != null else null
-		return str(e.card().get("sounds", {}).get(slot, "")) if e and e.card().get("sounds") is Dictionary else ""
+	var id_of := func(key: String) -> String:
+		var e := g.ent(int(ev.get(key, -1)))
+		return e.card_id if e else str(ev.get("card", ""))
 	match ev.type:
 		"play":
-			var e := g.ent(ev.entity)
-			var mine: String = own.call(ev.entity, "play")
-			if mine != "":
-				return mine
-			if e and CardDb.card(e.card_id).get("type") == "SPELL":
-				return "spell"
-		"attack":
-			var mine: String = own.call(ev.get("attacker"), "attack")
-			if mine != "":
-				return mine
+			var id: String = id_of.call("entity")
+			if CardDb.card(id).get("type") == "SPELL":
+				return _first([card_sound(id, "play"), _element(id, "spell"), "spell"])
+			return "play_card"  # a minion or a weapon leaves the hand; its own sound when it lands
+		"summon":
+			return _first([card_sound(id_of.call("entity"), "play"), "summon"])
+		"equip":
+			return _first([card_sound(id_of.call("entity"), "play"), "equip"])
 		"death":
-			var mine: String = own.call(ev.get("entity"), "death")
-			if mine != "":
-				return mine
+			return _first([card_sound(id_of.call("entity"), "death"), "death"])
+		"damage", "heal", "buff", "freeze", "silence", "destroy":
+			var by := str(ev.get("by", ""))
+			if by != "" and CardDb.card(by).get("type") == "SPELL":
+				var own := _first([card_sound(by, "hit"), _element(by, "hit")])
+				if own != "":
+					return own
 		"game_over":
 			if ev.winner == viewer:
 				return "victory"
 			return "defeat"
 	return EVENTS.get(ev.type, "")
+
+
+## A card's own sound for slot (play, attack, death, hit): what its `sounds` field names, else the
+## chosen set's file `<card id>_<slot>`; "" when it has none.
+static func card_sound(card_id: String, slot: String) -> String:
+	if card_id == "":
+		return ""
+	var named = CardDb.card(card_id).get("sounds", {}) if CardDb.has(card_id) else {}
+	if named is Dictionary and str(named.get(slot, "")) != "":
+		return str(named[slot])
+	var own := "%s_%s" % [card_id, slot]
+	return own if path_for(own) != "" else ""
+
+
+## `<kind>_<element>` of a card's element (its fx.element) when the set has it, else "".
+static func _element(card_id: String, kind: String) -> String:
+	var el := TableFx.named(card_id, "element")
+	var f := "%s_%s" % [kind, el]
+	return f if el != "" and path_for(f) != "" else ""
+
+
+static func _first(names: Array) -> String:
+	for n in names:
+		if n != "":
+			return n
+	return ""
+
+
+## The attacker's own sound and line as it leaps (the impact is sound_for's "attack").
+static func attack_start(attacker: String) -> void:
+	play(card_sound(attacker, "attack"))
+	say(attacker, "attack")
+
+
+## What a step's event makes its card say: [card id, kind] for a minion or a weapon coming into play
+## and for a death, [] for nothing.
+static func line_for(ev: Dictionary, g: GameView) -> Array:
+	var kind: String = {"summon": "play", "equip": "play", "death": "death"}.get(ev.type, "")
+	var e := g.ent(int(ev.get("entity", -1)))
+	var id: String = e.card_id if e else str(ev.get("card", ""))
+	return [id, kind] if kind != "" and id != "" else []
+
+
+## The recording of a card's line (voice/<lang>/<who>_<kind>.ogg|wav|mp3): the interface language
+## first, then the pack's default; "" when the pack has none. `who` is the card's `voice` (whose lines
+## it speaks), else its id.
+static func voice_path(card_id: String, kind: String, p: Pack = null) -> String:
+	p = p if p else Packs.active()
+	if p == null or card_id == "" or kind == "":
+		return ""
+	var who: String = str(CardDb.card(card_id).get("voice", card_id)) if CardDb.has(card_id) else card_id
+	for lang in [p.lang_for(TranslationServer.get_locale()), p.default_locale()]:
+		var f := p.find("voice/" + lang, "%s_%s" % [who, kind], AUDIO)
+		if f != "":
+			return f
+	return ""
+
+
+## Says a card's line (a minion's, a weapon's, a hero's emote or error); a new line cuts the one
+## before. False when the pack has no recording of it (or no Sound node runs).
+static func say(card_id: String, kind: String) -> bool:
+	if instance == null:
+		return false
+	var path := voice_path(card_id, kind)
+	if path == "":
+		return false
+	if not instance._streams.has(path):
+		instance._streams[path] = Packs.active().stream(path)
+	if instance._streams[path] == null:
+		return false
+	instance._voice.stream = instance._streams[path]
+	instance._voice.play()
+	instance.said = path
+	return true
+
+
