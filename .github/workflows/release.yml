@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-14
+          - os: macos-15
             platforms: macos
             targets: aarch64-apple-darwin,x86_64-apple-darwin
             server: macos-arm64

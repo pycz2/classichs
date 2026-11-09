@@ -1,6 +1,6 @@
 # Manual: runs the server's integration tests many times on one runner, to catch a rare failure
 # (one that does not show on a developer's machine). Stops at the first failed run and prints its log.
-#   gh workflow run server-stress.yml -f runs=150 -f os=macos-14 -f test=flow
+#   gh workflow run server-stress.yml -f runs=150 -f os=macos-15 -f test=flow
 name: Server stress
 
 on:
@@ -11,7 +11,7 @@ on:
         default: "100"
       os:
         description: Runner
-        default: macos-14
+        default: macos-15
       test:
         description: Test file in server/tests (flow, admin, packs)
         default: flow
