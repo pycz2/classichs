@@ -604,6 +604,12 @@ impl Game {
         healed
     }
 
+    /// The shortest turn time (seconds) a minion in play asks for (card `turn_seconds`,
+    /// Nozdormu); None = turns have their usual time. Servers and clients time turns by it.
+    pub fn turn_seconds(&self) -> Option<i64> {
+        self.players.iter().flat_map(|p| p.board.iter()).map(|&m| self.e(m).card.turn_seconds).filter(|&s| s > 0).min()
+    }
+
     pub fn destroy(&mut self, e: Id) {
         if self.alive_in_play(e) {
             let t = self.n().to_destroy;

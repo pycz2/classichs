@@ -119,7 +119,7 @@ cards.VAN_EX1_596 = {
   end,
 }
 
-cards.VAN_EX1_306 = discard_battlecry(1) -- Felstalker
+cards.VAN_EX1_306 = discard_battlecry(1) -- Succubus (renamed Felstalker in 2019)
 
 -- Drain Life: 2 damage, restore 2 Health to your hero.
 cards.VAN_CS2_061 = {
@@ -209,19 +209,14 @@ cards.VAN_EX1_315 = {
   end,
 }
 
--- Bane of Doom: 3 damage (as the Rust engine had it); if that kills the character, summon a random Demon.
+-- Bane of Doom (2014): 2 damage; if that kills the character, summon one of six Demons
+-- (any collectible Demon only since patch 2.4.0.8311, 2015).
+local BANE_DEMONS = { "VAN_CS2_059", "VAN_CS2_065", "VAN_EX1_319", "VAN_CS2_064", "VAN_EX1_306", "VAN_EX1_301" }
 cards.VAN_EX1_320 = {
   target = "any",
   spell = function(g, me, t)
-    if kills(g, me, t, g.spell_dmg(me, 3)) then
-      local demons = {}
-      for _, id in ipairs(g.collectible()) do
-        local c = g.info(id)
-        if c.type == "MINION" and c.race == "DEMON" then
-          table.insert(demons, id)
-        end
-      end
-      g.summon(g.ctrl(me), g.pick(demons))
+    if kills(g, me, t, g.spell_dmg(me, 2)) then
+      g.summon(g.ctrl(me), g.pick(BANE_DEMONS))
     end
   end,
 }

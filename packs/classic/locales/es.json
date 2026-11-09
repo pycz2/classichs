@@ -162,5 +162,167 @@
     "putting_it_all_together.his_hero_power": "Su Poder de héroe: dos esbirros cada turno",
     "putting_it_all_together.taunt_guards_your": "Provocar protege a tu héroe",
     "putting_it_all_together.hits_all_enemy": "Golpea a todos los esbirros enemigos"
+  },
+  "cards": {
+    "EX1_625t": {
+      "text": "<b>Poder de héroe</b>\nInflige 2 p. de daño."
+    },
+    "EX1_625t2": {
+      "text": "<b>Poder de héroe</b>\nInflige 3 p. de daño."
+    },
+    "TU4d_003": {
+      "text": "<b>Poder de héroe</b>\nInflige 1 p. de daño."
+    },
+    "TU4e_002": {
+      "text": "<b>Poder de héroe</b>\nInvoca a dos esbirros 2/1."
+    },
+    "VAN_CS1_042": {
+      "name": "Lacayo de Villadorada"
+    },
+    "VAN_CS2_005": {
+      "text": "Otorga a tu héroe +2 p. de ataque este turno y 2 p. de armadura."
+    },
+    "VAN_CS2_039": {
+      "name": "Viento Furioso"
+    },
+    "VAN_CS2_187": {
+      "name": "Truhán de Bahía del Botín"
+    },
+    "VAN_DREAM_01": {
+      "text": "No puede ser objetivo de hechizos ni de poderes de héroe."
+    },
+    "VAN_DS1_184": {
+      "text": "Mira las tres cartas superiores de tu mazo. Roba una y descarta las demás."
+    },
+    "VAN_EX1_005": {
+      "text": "<b>Grito de batalla</b>: Destruye a un esbirro con 7 p. de ataque o más."
+    },
+    "VAN_EX1_033": {
+      "name": "Arpía Viento Furioso"
+    },
+    "VAN_EX1_136": {
+      "text": "<b>Secreto:</b> Cuando uno de tus esbirros muere, vuelve a la vida con 1 p. de salud."
+    },
+    "VAN_EX1_154a": {
+      "name": "Cólera"
+    },
+    "VAN_EX1_154b": {
+      "name": "Cólera"
+    },
+    "VAN_EX1_155a": {
+      "name": "Marca de la Naturaleza"
+    },
+    "VAN_EX1_155b": {
+      "name": "Marca de la Naturaleza"
+    },
+    "VAN_EX1_164a": {
+      "name": "Nutrir"
+    },
+    "VAN_EX1_164b": {
+      "name": "Nutrir"
+    },
+    "VAN_EX1_277": {
+      "text": "Inflige $3 p. de daño, divididos aleatoriamente entre los personajes enemigos."
+    },
+    "VAN_EX1_302": {
+      "text": "Inflige $1 p. de daño a un esbirro. Si eso lo mata, roba una carta."
+    },
+    "VAN_EX1_304": {
+      "name": "Terror del vacío",
+      "text": "<b>Grito de batalla:</b> Destruye a los esbirros adyacentes y obtiene su ataque y salud."
+    },
+    "VAN_EX1_306": {
+      "name": "Súcubo"
+    },
+    "VAN_EX1_317": {
+      "text": "Coloca a 2 demonios aleatorios de tu mazo en tu mano."
+    },
+    "VAN_EX1_320": {
+      "text": "Inflige $2 p. de daño a un personaje. Si eso lo mata, invoca a un demonio aleatorio."
+    },
+    "VAN_EX1_323": {
+      "text": "<b>Grito de batalla:</b> Destruye a tu héroe y lo reemplaza con Lord Jaraxxus."
+    },
+    "VAN_EX1_339": {
+      "text": "Copia 2 cartas del mazo de tu oponente y las coloca en tu mano."
+    },
+    "VAN_EX1_366": {
+      "text": "Cada vez que invocas a un esbirro, el esbirro obtiene +1/+1 y esta arma pierde 1 p. de durabilidad."
+    },
+    "VAN_EX1_379": {
+      "text": "<b>Secreto:</b> Cuando tu oponente juega un esbirro, reduce su salud a 1 p."
+    },
+    "VAN_EX1_384": {
+      "text": "Inflige $8 p. de daño, divididos aleatoriamente entre los personajes enemigos."
+    },
+    "VAN_EX1_407": {
+      "name": "Camorra"
+    },
+    "VAN_EX1_533": {
+      "text": "<b>Secreto:</b> Cuando un personaje vaya a atacar a tu héroe, en su lugar atacará a otro personaje aleatorio."
+    },
+    "VAN_EX1_536": {
+      "text": "Obtiene +1 p. de durabilidad cada vez que se revela un <b>secreto</b>."
+    },
+    "VAN_EX1_539": {
+      "text": "Inflige $3 p. de daño. Si tienes una bestia en juego, inflige $5 p. de daño."
+    },
+    "VAN_EX1_559": {
+      "text": "Cada vez que lanzas un hechizo, coloca un hechizo \"Bola de Fuego\" en tu mano."
+    },
+    "VAN_EX1_570": {
+      "text": "Otorga a tu héroe +4 p. de ataque este turno y 4 p. de armadura."
+    },
+    "VAN_EX1_572": {
+      "text": "Al final de tu turno, roba una carta de sueño."
+    },
+    "VAN_EX1_577": {
+      "text": "<b>Último aliento:</b> Invoca un Finkle Einhorn 3/3 para tu oponente."
+    },
+    "VAN_EX1_595": {
+      "text": "Cuando uno de tus otros esbirros muere, roba una carta."
+    },
+    "VAN_EX1_609": {
+      "text": "<b>Secreto:</b> Cuando tu oponente juega un esbirro, le inflige $4 p. de daño."
+    },
+    "VAN_EX1_611": {
+      "text": "<b>Secreto:</b> Cuando un esbirro enemigo vaya a atacar, lo devuelve a la mano de su dueño y cuesta (2) cristales más."
+    },
+    "VAN_EX1_622": {
+      "text": "Destruye a un esbirro con 5 p. de ataque o más."
+    },
+    "VAN_EX1_625": {
+      "text": "Tu poder de héroe se convierte en \"Inflige 2 p. de daño\". Si ya estás en Forma de las Sombras: 3 p. de daño."
+    },
+    "VAN_EX1_finkle": {
+      "name": "Finkle Einhorn"
+    },
+    "VAN_EX1_tk33": {
+      "name": "¡Inferno!"
+    },
+    "VAN_HERO_02bp": {
+      "text": "<b>Poder de héroe</b>\nInvoca un tótem aleatorio."
+    },
+    "VAN_HERO_04bp": {
+      "text": "<b>Poder de héroe</b>\nInvoca a un recluta Mano de Plata 1/1."
+    },
+    "VAN_NEW1_007a": {
+      "name": "Lluvia de estrellas"
+    },
+    "VAN_NEW1_007b": {
+      "name": "Lluvia de estrellas"
+    },
+    "VAN_NEW1_010": {
+      "text": "<b>Viento Furioso, Cargar, Escudo divino, Provocar</b>"
+    },
+    "VAN_NEW1_016": {
+      "text": "<b>Grito de batalla:</b> Coloca a un pirata aleatorio de tu mazo en tu mano."
+    },
+    "VAN_NEW1_023": {
+      "text": "No puede ser objetivo de hechizos ni de poderes de héroe."
+    },
+    "VAN_NEW1_033": {
+      "text": "Los demás esbirros amistosos obtienen +1 p. de ataque."
+    }
   }
 }

@@ -145,6 +145,10 @@ var _match_time := 0.0
 var _turn_key := ""
 var _bot_side := -1
 var _time_left := 0.0
+## This turn's time (seconds) and whether it started short (a `turn_seconds` minion in play:
+## Nozdormu). A short turn gets its usual time back when those minions leave play.
+var _turn_limit := 0.0
+var _short := false
 
 
 func _ready() -> void:
@@ -877,14 +881,17 @@ func _on_right_click(v: EntityView) -> void:
 		_enemy_menu.visible = not _enemy_menu.visible
 
 
-## Runs the online turn timer: the rope in the last seconds, then the local
-## player's turn ends by itself (Match.timeout).
+## Runs the turn timer (online games; local ones while Nozdormu shortens the turn): the rope
+## in the last seconds, then the turn ends by itself (Match.timeout).
 func tick(delta: float) -> void:
 	_update_clock(delta)
-	if not timer_enabled or controller == null or controller.game.game_over:
+	if controller == null or controller.game.game_over:
 		_rope.visible = false
 		return
 	_reset_timer()  # a new turn gets its full time even while the table is animating
+	if not _timed():
+		_rope.visible = false
+		return
 	_time_left -= delta
 	if controller.is_server() and controller.time_left() >= 0.0:
 		_time_left = controller.time_left()  # the server's clock (it plays the timeout moves itself)
@@ -900,10 +907,20 @@ func tick(delta: float) -> void:
 	if _time_left > 0.0:
 		return
 	var me := viewer()
+	if not timer_enabled and controller.game.phase != "MULLIGAN":
+		me = controller.game.current  # a local game: whoever's turn it is, a bot or the other person too
 	if (controller.game.phase == "MULLIGAN" and not controller.game.players[me].mulliganed) or (controller.game.phase != "MULLIGAN" and controller.game.current == me):
 		_end_drag()
 		_sel = {}
 		controller.timeout(me)
+
+
+## Whether turns are timed now: online games always; local ones (training, hotseat) while a
+## short turn runs (Nozdormu). Not in the tutorial, replays, watching or the debug table.
+func _timed() -> bool:
+	if timer_enabled:
+		return true
+	return _short and not controller.is_server() and tutorial == null and not replay and not watching and not debug_mode
 
 
 ## Under End Turn: the time since the match began (counting up) and, when the turn
@@ -913,11 +930,12 @@ func _update_clock(delta: float) -> void:
 		return
 	if not controller.game.game_over:
 		_match_time += delta
+	var timed := _timed() and not controller.game.game_over
 	var t := tr("Game %s") % _mmss(_match_time)
-	if timer_enabled and not controller.game.game_over:
+	if timed:
 		t += "\n" + tr("Turn %s") % _mmss(maxf(0.0, _time_left))
 	_clock.text = t
-	_clock.add_theme_color_override("font_color", Color("ff8a5b") if timer_enabled and _time_left <= timer("fuse") else Color("f4ead5"))
+	_clock.add_theme_color_override("font_color", Color("ff8a5b") if timed and _time_left <= timer("fuse") else Color("f4ead5"))
 
 
 static func _mmss(seconds: float) -> String:
@@ -927,9 +945,18 @@ static func _mmss(seconds: float) -> String:
 
 func _reset_timer() -> void:
 	var key := "M" if controller.game.phase == "MULLIGAN" else "%d:%d" % [controller.game.turn, controller.game.current]
+	var short: int = controller.game.turn_seconds if controller.game.phase != "MULLIGAN" else 0
 	if key != _turn_key:
 		_turn_key = key
-		_time_left = timer("mulligan") if controller.game.phase == "MULLIGAN" else timer("turn")
+		_short = short > 0
+		_turn_limit = timer("mulligan") if controller.game.phase == "MULLIGAN" else timer("turn")
+		if _short:
+			_turn_limit = minf(short, _turn_limit)
+		_time_left = _turn_limit
+	elif _short and short <= 0:  # Nozdormu left play: the turn's usual time is back
+		_short = false
+		_time_left += timer("turn") - _turn_limit
+		_turn_limit = timer("turn")
 
 
 ## Shows the next tutorial hint only when nothing else is on the banner (an

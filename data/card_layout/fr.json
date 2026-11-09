@@ -76,18 +76,18 @@
 	},
 	"EX1_625t": {
 		"lines": [
-			"Infliger",
-			"2 points",
-			"de dégâts."
+			"[b]Pouvoir héroïque[/b]",
+			"Inflige 2 points de",
+			"dégâts."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"EX1_625t2": {
 		"lines": [
-			"Infliger",
-			"3 points",
-			"de dégâts."
+			"[b]Pouvoir héroïque[/b]",
+			"Inflige 3 points de",
+			"dégâts."
 		],
 		"name": 12,
 		"text": 11
@@ -318,8 +318,9 @@
 	},
 	"TU4d_003": {
 		"lines": [
-			"Inflige 1 point",
-			"de dégâts."
+			"[b]Pouvoir héroïque[/b]",
+			"Inflige 1 point de",
+			"dégâts."
 		],
 		"name": 12,
 		"text": 11
@@ -330,6 +331,7 @@
 	},
 	"TU4e_002": {
 		"lines": [
+			"[b]Pouvoir héroïque[/b]",
 			"Invoque deux",
 			"serviteurs 2/1."
 		],
@@ -477,12 +479,12 @@
 	},
 	"VAN_CS2_005": {
 		"lines": [
-			"Donne +2 ATQ à votre",
-			"héros pendant ce tour.",
-			"+2 points d’armure."
+			"Confère à votre héros",
+			"+2 ATQ pendant ce",
+			"tour et +2 Armure."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9
 	},
 	"VAN_CS2_007": {
 		"lines": [
@@ -552,7 +554,7 @@
 			"Vous piochez",
 			"2 cartes."
 		],
-		"name": 10,
+		"name": 9,
 		"text": 11
 	},
 	"VAN_CS2_024": {
@@ -1382,10 +1384,12 @@
 	},
 	"VAN_DREAM_01": {
 		"lines": [
-			"[b]Insaisissable[/b]"
+			"Ne peut pas être la cible",
+			"de sorts ou de pouvoirs",
+			"héroïques."
 		],
 		"name": 12,
-		"text": 11
+		"text": 8
 	},
 	"VAN_DREAM_02": {
 		"lines": [
@@ -1465,10 +1469,10 @@
 	},
 	"VAN_DS1_184": {
 		"lines": [
-			"Affiche les 3 cartes",
-			"du dessus du deck.",
-			"Vous en piochez une et vous",
-			"vous défaussez des autres."
+			"Affiche les trois cartes du",
+			"dessus du deck. Vous en",
+			"piochez une et vous vous",
+			"défaussez des autres."
 		],
 		"name": 12,
 		"text": 8
@@ -2123,8 +2127,8 @@
 	},
 	"VAN_EX1_136": {
 		"lines": [
-			"[b]Secret :[/b] quand un",
-			"serviteur allié meurt, il",
+			"[b]Secret :[/b] quand un de",
+			"vos serviteurs meurt, il",
 			"est ressuscité avec 1 PV."
 		],
 		"name": 12,
@@ -2550,7 +2554,8 @@
 		"lines": [
 			"Inflige 3 points de dégâts",
 			"répartis de façon aléatoire",
-			"entre tous les adversaires."
+			"entre les personnages",
+			"adverses."
 		],
 		"name": 10,
 		"text": 8
@@ -2653,9 +2658,10 @@
 	},
 	"VAN_EX1_302": {
 		"lines": [
-			"Inflige 1 points de dégâts",
-			"à un serviteur. S’il meurt,",
-			"vous piochez une carte."
+			"Inflige 1 point de dégâts à",
+			"un serviteur. Vous piochez",
+			"une carte si ce serviteur",
+			"est tué."
 		],
 		"name": 12,
 		"text": 8
@@ -2672,13 +2678,13 @@
 	},
 	"VAN_EX1_304": {
 		"lines": [
-			"[b]Cri de guerre :[/b]",
-			"détruit les serviteurs",
-			"adjacents et gagne leur",
-			"ATQ et leurs PV."
+			"[b]Cri de guerre :[/b] détruit les",
+			"serviteurs adjacents et gagne",
+			"leurs points d’Attaque et de",
+			"Vie."
 		],
 		"name": 12,
-		"text": 8,
+		"text": 7,
 		"valign": "top"
 	},
 	"VAN_EX1_306": {
@@ -2759,12 +2765,12 @@
 	},
 	"VAN_EX1_317": {
 		"lines": [
-			"Vous piochez",
-			"2 Démons",
-			"de votre deck."
+			"Place dans votre main",
+			"2 démons aléatoires de",
+			"votre jeu."
 		],
 		"name": 10,
-		"text": 11
+		"text": 9
 	},
 	"VAN_EX1_319": {
 		"lines": [
@@ -2778,10 +2784,10 @@
 	},
 	"VAN_EX1_320": {
 		"lines": [
-			"Inflige 3 points de dégâts",
-			"à un personnage.",
-			"S’il meurt, invoque",
-			"un Démon aléatoire."
+			"Inflige 2 points de dégâts",
+			"à un personnage. S’il est",
+			"tué, invoque un démon",
+			"aléatoire."
 		],
 		"name": 12,
 		"text": 8
@@ -2826,12 +2832,12 @@
 	},
 	"VAN_EX1_339": {
 		"lines": [
-			"Copie 2 cartes du deck",
-			"de votre adversaire et les",
+			"Copie 2 cartes du jeu de",
+			"votre adversaire et les",
 			"place dans votre main."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_341": {
 		"lines": [
@@ -2934,9 +2940,10 @@
 	},
 	"VAN_EX1_366": {
 		"lines": [
-			"Après avoir invoqué un",
-			"serviteur, lui donne +1/+1 et",
-			"perd 1 Durabilité."
+			"Chaque fois que vous",
+			"invoquez un serviteur, lui",
+			"donne +1/+1 et perd 1",
+			"Durabilité."
 		],
 		"name": 12,
 		"text": 8
@@ -2952,10 +2959,10 @@
 	},
 	"VAN_EX1_379": {
 		"lines": [
-			"[b]Secret :[/b] une fois que",
-			"votre adversaire a joué",
-			"un serviteur, ses points",
-			"de vie sont réduits à 1."
+			"[b]Secret :[/b] quand votre",
+			"adversaire joue un",
+			"serviteur, ses points de vie",
+			"sont réduits à 1."
 		],
 		"name": 12,
 		"text": 8
@@ -2982,9 +2989,9 @@
 	"VAN_EX1_384": {
 		"lines": [
 			"Inflige 8 points de dégâts",
-			"répartis de façon",
-			"aléatoire entre tous les",
-			"personnages adverses."
+			"répartis de façon aléatoire",
+			"entre les personnages",
+			"adverses."
 		],
 		"name": 12,
 		"text": 8
@@ -3180,7 +3187,7 @@
 			"Murloc est invoqué,",
 			"gagne +1 ATQ."
 		],
-		"name": 12,
+		"name": 10,
 		"text": 9
 	},
 	"VAN_EX1_522": {
@@ -3203,10 +3210,10 @@
 	},
 	"VAN_EX1_533": {
 		"lines": [
-			"[b]Secret :[/b] quand un adversaire",
-			"attaque votre héros,",
-			"il attaque un autre personnage",
-			"aléatoire à la place."
+			"[b]Secret :[/b] quand un personnage",
+			"attaque votre héros, il attaque",
+			"un autre personnage aléatoire",
+			"à la place."
 		],
 		"name": 12,
 		"text": 7
@@ -3251,9 +3258,9 @@
 	"VAN_EX1_539": {
 		"lines": [
 			"Inflige 3 points de dégâts.",
-			"Si vous contrôlez une Bête,",
-			"inflige 5 points",
-			"de dégâts à la place."
+			"Si vous avez une bête,",
+			"inflige 5 points de dégâts à",
+			"la place."
 		],
 		"name": 12,
 		"text": 8
@@ -3330,13 +3337,14 @@
 	},
 	"VAN_EX1_559": {
 		"lines": [
-			"Chaque fois que vous lancez",
-			"un sort, ajoute un sort",
-			"« boule de feu » dans",
+			"Chaque fois que vous",
+			"lancez un sort, place un",
+			"sort « boule de feu » dans",
 			"votre main."
 		],
 		"name": 11,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_560": {
 		"lines": [
@@ -3404,12 +3412,12 @@
 	},
 	"VAN_EX1_570": {
 		"lines": [
-			"Donne +4 ATQ à votre",
-			"héros pendant ce tour.",
-			"Gagne 4 points d’armure."
+			"Confère +4 ATQ au",
+			"héros pendant ce",
+			"tour et +4 Armure."
 		],
 		"name": 12,
-		"text": 8
+		"text": 11
 	},
 	"VAN_EX1_571": {
 		"lines": [
@@ -3422,12 +3430,12 @@
 	},
 	"VAN_EX1_572": {
 		"lines": [
-			"À la fin de votre tour,",
-			"ajoute une carte Rêve",
-			"dans votre main."
+			"Vous piochez une",
+			"carte Rêve à la fin de",
+			"votre tour."
 		],
 		"name": 12,
-		"text": 8
+		"text": 10
 	},
 	"VAN_EX1_573": {
 		"lines": [
@@ -3468,13 +3476,12 @@
 	},
 	"VAN_EX1_577": {
 		"lines": [
-			"[b]Râle d’agonie :[/b]",
-			"invoque Bip Vifesprit 3/3",
-			"pour votre adversaire."
+			"[b]Râle d’agonie :[/b] invoque",
+			"Finkle Einhorn 3/3 pour",
+			"votre adversaire."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_EX1_578": {
 		"lines": [
@@ -3583,11 +3590,12 @@
 	"VAN_EX1_595": {
 		"lines": [
 			"Vous piochez une carte",
-			"une fois qu’un serviteur",
-			"allié meurt."
+			"quand un de vos autres",
+			"serviteurs meurt."
 		],
 		"name": 12,
-		"text": 9
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_EX1_596": {
 		"lines": [
@@ -3662,10 +3670,10 @@
 	},
 	"VAN_EX1_609": {
 		"lines": [
-			"[b]Secret :[/b] une fois que",
-			"votre adversaire a joué",
-			"un serviteur, ce dernier",
-			"subit 4 points de dégâts."
+			"[b]Secret :[/b] quand votre",
+			"adversaire joue un",
+			"serviteur, lui inflige 4",
+			"points de dégâts."
 		],
 		"name": 12,
 		"text": 8
@@ -3770,8 +3778,9 @@
 	},
 	"VAN_EX1_622": {
 		"lines": [
-			"Détruit un serviteur",
-			"avec 5 ATQ ou plus."
+			"Détruit un",
+			"serviteur avec 5 ou",
+			"plus à l’Attaque."
 		],
 		"name": 11,
 		"text": 11
@@ -3880,8 +3889,8 @@
 	"VAN_HERO_02bp": {
 		"lines": [
 			"[b]Pouvoir héroïque[/b]",
-			"Invoque un Totem",
-			"de base aléatoire."
+			"Invoque un totem",
+			"aléatoire."
 		],
 		"name": 12,
 		"text": 11
@@ -3916,11 +3925,11 @@
 	"VAN_HERO_04bp": {
 		"lines": [
 			"[b]Pouvoir héroïque[/b]",
-			"Invoque une recrue",
-			"de la Main d’argent ."
+			"Invoque une recrue de",
+			"la Main d’argent 1/1."
 		],
 		"name": 12,
-		"text": 11
+		"text": 9
 	},
 	"VAN_HERO_04bp2": {
 		"lines": [
@@ -4128,13 +4137,12 @@
 	},
 	"VAN_NEW1_010": {
 		"lines": [
-			"[b]Charge, Bouclier divin,[/b]",
-			"[b]Provocation,[/b]",
-			"[b]Furie des vents[/b]"
+			"[b]Furie des vents, Charge, [/b]",
+			"[b]Bouclier divin, [/b]",
+			"[b]Provocation[/b]"
 		],
 		"name": 9,
-		"text": 9,
-		"valign": "top"
+		"text": 8
 	},
 	"VAN_NEW1_011": {
 		"lines": [
@@ -4163,12 +4171,13 @@
 	},
 	"VAN_NEW1_016": {
 		"lines": [
-			"[b]Cri de guerre :[/b] vous",
-			"piochez un Pirate de",
-			"votre deck."
+			"[b]Cri de guerre :[/b] place un",
+			"pirate aléatoire de votre",
+			"deck dans votre main."
 		],
 		"name": 10,
-		"text": 11
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_NEW1_017": {
 		"lines": [
@@ -4233,10 +4242,12 @@
 	},
 	"VAN_NEW1_023": {
 		"lines": [
-			"[b]Insaisissable[/b]"
+			"Ne peut pas être la cible",
+			"de sorts ou de pouvoirs",
+			"héroïques."
 		],
 		"name": 12,
-		"text": 11
+		"text": 8
 	},
 	"VAN_NEW1_024": {
 		"lines": [
@@ -4320,8 +4331,8 @@
 	},
 	"VAN_NEW1_033": {
 		"lines": [
-			"Vos autres",
-			"serviteurs",
+			"Les autres",
+			"serviteurs alliés",
 			"ont +1 ATQ."
 		],
 		"name": 12,

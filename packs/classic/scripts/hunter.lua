@@ -194,13 +194,11 @@ cards.VAN_EX1_617 = {
   end,
 }
 
--- Eaglehorn Bow: whenever a friendly Secret is revealed, gain +1 Durability.
+-- Eaglehorn Bow: whenever a Secret is revealed (either side's, as before patch 1.1.0.6024), gain +1 Durability.
 cards.VAN_EX1_536 = {
   on = {
     secret_revealed = function(g, me, ev)
-      if g.mine(me, ev) then
-        g.add_tag(me, "DURABILITY", 1)
-      end
+      g.add_tag(me, "DURABILITY", 1)
     end,
   },
 }

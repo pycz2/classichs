@@ -162,5 +162,208 @@
     "putting_it_all_together.his_hero_power": "Jego Moc specjalna: dwóch stronników co turę",
     "putting_it_all_together.taunt_guards_your": "Prowokacja chroni bohatera",
     "putting_it_all_together.hits_all_enemy": "Trafia wszystkich wrogich stronników"
+  },
+  "cards": {
+    "EX1_625t": {
+      "text": "<b>Moc specjalna</b>\nZadaj 2 pkt. obrażeń."
+    },
+    "EX1_625t2": {
+      "text": "<b>Moc specjalna</b>\nZadaj 3 pkt. obrażeń."
+    },
+    "HERO_08": {
+      "name": "Jaina Dumnar"
+    },
+    "Mekka2": {
+      "name": "Bot naprawczy"
+    },
+    "TU4a_006": {
+      "name": "Jaina Dumnar"
+    },
+    "TU4d_003": {
+      "text": "<b>Moc specjalna</b>\nZadaj 1 pkt. obrażeń."
+    },
+    "TU4e_002": {
+      "text": "<b>Moc specjalna</b>\nPrzyzwij dwóch stronników 2/1."
+    },
+    "TU4f_003": {
+      "name": "Mnich z Shado-Pan"
+    },
+    "VAN_CS2_005": {
+      "text": "Daj swojemu bohaterowi +2 do ataku w tej turze i +2 do pancerza."
+    },
+    "VAN_CS2_037": {
+      "name": "Mroźne porażenie"
+    },
+    "VAN_CS2_089": {
+      "name": "Święta światłość"
+    },
+    "VAN_CS2_127": {
+      "name": "Wódz srebrnogrzbietych"
+    },
+    "VAN_CS2_196": {
+      "name": "Łowczyni z Brzytwoskórych"
+    },
+    "VAN_CS2_233": {
+      "name": "Nawałnica ostrzy"
+    },
+    "VAN_DREAM_01": {
+      "text": "Nie może stać się celem zaklęcia lub mocy specjalnej."
+    },
+    "VAN_DS1_184": {
+      "text": "Spójrz na trzy górne karty ze swojej talii. Jedną dobierz na rękę, a dwie pozostałe odrzuć."
+    },
+    "VAN_EX1_001": {
+      "name": "Strażniczka światłości"
+    },
+    "VAN_EX1_050": {
+      "name": "Wyrocznia Światłociemnych"
+    },
+    "VAN_EX1_103": {
+      "name": "Prorok Światłociemnych"
+    },
+    "VAN_EX1_136": {
+      "text": "<b>Sekret:</b> Kiedy jeden z twoich stronników zginie, przywróć go do życia z 1 pkt. zdrowia."
+    },
+    "VAN_EX1_154a": {
+      "name": "Gniew"
+    },
+    "VAN_EX1_154b": {
+      "name": "Gniew"
+    },
+    "VAN_EX1_155a": {
+      "name": "Znak natury"
+    },
+    "VAN_EX1_155b": {
+      "name": "Znak natury"
+    },
+    "VAN_EX1_160a": {
+      "name": "Przyzwij panterę"
+    },
+    "VAN_EX1_164a": {
+      "name": "Nasycenie"
+    },
+    "VAN_EX1_164b": {
+      "name": "Nasycenie"
+    },
+    "VAN_EX1_178": {
+      "name": "Drzewiec wojny"
+    },
+    "VAN_EX1_277": {
+      "text": "Zadaj $3 pkt. obrażeń, losowo rozdzielone pomiędzy wrogimi postaciami."
+    },
+    "VAN_EX1_298": {
+      "name": "Ragnaros Władca Ognia"
+    },
+    "VAN_EX1_302": {
+      "text": "Zadaj $1 pkt. obrażeń stronnikowi. Jeśli go zabijesz, dobierz kartę."
+    },
+    "VAN_EX1_304": {
+      "text": "<b>Okrzyk bojowy:</b> Zniszcz sąsiadujących z nim stronników, a zyska ich atak oraz zdrowie."
+    },
+    "VAN_EX1_306": {
+      "name": "Sukkub"
+    },
+    "VAN_EX1_317": {
+      "text": "Umieść w ręce 2 losowe demony ze swojej talii."
+    },
+    "VAN_EX1_320": {
+      "text": "Zadaj $2 pkt. obrażeń dowolnej postaci. Jeśli ją zabijesz, przyzwij losowego demona."
+    },
+    "VAN_EX1_323": {
+      "text": "<b>Okrzyk bojowy:</b> Zniszcz swojego bohatera i zastąp go Lordem Jaraxxusem."
+    },
+    "VAN_EX1_339": {
+      "text": "Skopiuj dwie karty z talii przeciwnika i umieść je w swojej ręce."
+    },
+    "VAN_EX1_366": {
+      "text": "Gdy przyzywasz stronnika, otrzymuje on +1/+1, zaś miecz traci 1 pkt. wytrzymałości."
+    },
+    "VAN_EX1_379": {
+      "text": "<b>Sekret:</b> Kiedy twój przeciwnik zagra stronnika, zmniejsz jego zdrowie do 1."
+    },
+    "VAN_EX1_384": {
+      "text": "Zadaj $8 pkt. obrażeń, losowo rozdzielone pomiędzy wrogimi postaciami."
+    },
+    "VAN_EX1_393": {
+      "name": "Berserker z Amani"
+    },
+    "VAN_EX1_399": {
+      "name": "Berserker z Gurubaszi"
+    },
+    "VAN_EX1_507": {
+      "name": "Nadmurlok"
+    },
+    "VAN_EX1_533": {
+      "text": "<b>Sekret:</b> Kiedy jakaś postać zaatakuje twojego bohatera, zamiast tego zaatakuje inną losową postać."
+    },
+    "VAN_EX1_536": {
+      "text": "Za każdym razem gdy ujawniony zostaje <b>Sekret</b>, zyskuje 1 pkt. wytrzymałości."
+    },
+    "VAN_EX1_539": {
+      "text": "Zadaj $3 pkt. obrażeń. Jeśli masz Bestię, zamiast tego zadaj $5 pkt. obrażeń."
+    },
+    "VAN_EX1_559": {
+      "text": "Za każdym razem kiedy rzucasz zaklęcie, weź do ręki zaklęcie „Kula ognia”."
+    },
+    "VAN_EX1_570": {
+      "text": "Daj swojemu bohaterowi +4 do ataku w tej turze i +4 do pancerza."
+    },
+    "VAN_EX1_572": {
+      "text": "Na koniec swojej tury dobierz Kartę Snu."
+    },
+    "VAN_EX1_577": {
+      "text": "<b>Agonia:</b> Przyzwij dla przeciwnika Finkosza Rogoźnika 3/3."
+    },
+    "VAN_EX1_593": {
+      "name": "Ostrze Nocy"
+    },
+    "VAN_EX1_595": {
+      "text": "Dobierz kartę za każdym razem, gdy zginie jeden z twoich stronników."
+    },
+    "VAN_EX1_609": {
+      "text": "<b>Sekret:</b> Kiedy twój przeciwnik zagra stronnika, zadaj mu $4 pkt. obrażeń."
+    },
+    "VAN_EX1_611": {
+      "text": "<b>Sekret:</b> Kiedy wrogi stronnik zaatakuje, cofnij go na rękę właściciela i zwiększ jego koszt o (2)."
+    },
+    "VAN_EX1_620": {
+      "name": "Ognisty olbrzym"
+    },
+    "VAN_EX1_622": {
+      "text": "Zniszcz stronnika z atakiem 5 lub większym."
+    },
+    "VAN_EX1_625": {
+      "text": "Twoja moc specjalna zmienia się w „Zadaj 2 pkt. obrażeń”. Jeśli posiadasz już postać cienia: 3 pkt. obrażeń."
+    },
+    "VAN_EX1_finkle": {
+      "name": "Finkosz Rogoźnik"
+    },
+    "VAN_HERO_02bp": {
+      "text": "<b>Moc specjalna</b>\nPrzyzwij losowy totem."
+    },
+    "VAN_HERO_04bp": {
+      "text": "<b>Moc specjalna</b>\nPrzyzwij rekruta Srebrnej Dłoni 1/1."
+    },
+    "VAN_NEW1_007a": {
+      "name": "Spadające gwiazdy"
+    },
+    "VAN_NEW1_007b": {
+      "name": "Spadające gwiazdy"
+    },
+    "VAN_NEW1_008": {
+      "name": "Drzewiec wiedzy"
+    },
+    "VAN_NEW1_010": {
+      "text": "<b>Furia wichru, Szarża, Boska tarcza, Prowokacja</b>"
+    },
+    "VAN_NEW1_016": {
+      "text": "<b>Okrzyk bojowy:</b> Umieść w ręce losowego Pirata ze swojej talii."
+    },
+    "VAN_NEW1_023": {
+      "text": "Nie może stać się celem zaklęcia lub mocy specjalnej."
+    },
+    "VAN_NEW1_033": {
+      "text": "Pozostali przyjaźni stronnicy otrzymują +1 do ataku."
+    }
   }
 }

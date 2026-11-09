@@ -162,5 +162,149 @@
     "putting_it_all_together.his_hero_power": "O Poder Heroico dele: dois lacaios a cada turno",
     "putting_it_all_together.taunt_guards_your": "Provocar protege seu herói",
     "putting_it_all_together.hits_all_enemy": "Atinge todos os lacaios inimigos"
+  },
+  "cards": {
+    "EX1_625t": {
+      "text": "<b>Poder Heroico</b>\nCause 2 de dano."
+    },
+    "EX1_625t2": {
+      "text": "<b>Poder Heroico</b>\nCause 3 de dano."
+    },
+    "TU4d_003": {
+      "text": "<b>Poder Heroico</b>\nCause 1 de dano."
+    },
+    "TU4e_002": {
+      "text": "<b>Poder Heroico</b>\nEvoque dois lacaios 2/1."
+    },
+    "VAN_CS2_005": {
+      "text": "Conceda +2 de Ataque ao seu herói neste turno e 2 de Armadura."
+    },
+    "VAN_CS2_045": {
+      "name": "Arma Trinca-pedra"
+    },
+    "VAN_CS2_231": {
+      "name": "Fogo-fátuo"
+    },
+    "VAN_DREAM_01": {
+      "text": "Não pode ser alvo de Feitiços nem de Poderes Heroicos."
+    },
+    "VAN_DS1_184": {
+      "text": "Olhe os três cards do topo do seu deck. Compre um e descarte os outros."
+    },
+    "VAN_EX1_131": {
+      "name": "Líder Défias"
+    },
+    "VAN_EX1_136": {
+      "text": "<b>Segredo:</b> Quando um de seus lacaios morrer, reviva-o com 1 de Vida."
+    },
+    "VAN_EX1_137": {
+      "name": "Quebra-crânio"
+    },
+    "VAN_EX1_154a": {
+      "name": "Ira"
+    },
+    "VAN_EX1_154b": {
+      "name": "Ira"
+    },
+    "VAN_EX1_155a": {
+      "name": "Marca da Natureza"
+    },
+    "VAN_EX1_155b": {
+      "name": "Marca da Natureza"
+    },
+    "VAN_EX1_160a": {
+      "name": "Evoque uma Pantera"
+    },
+    "VAN_EX1_164a": {
+      "name": "Nutrir"
+    },
+    "VAN_EX1_164b": {
+      "name": "Nutrir"
+    },
+    "VAN_EX1_277": {
+      "text": "Cause $3 de dano dividido aleatoriamente entre os personagens inimigos."
+    },
+    "VAN_EX1_304": {
+      "text": "<b>Grito de Guerra:</b> Destrua os lacaios dos dois lados deste e receba o Ataque e a Vida deles."
+    },
+    "VAN_EX1_306": {
+      "name": "Súcubo"
+    },
+    "VAN_EX1_317": {
+      "text": "Coloque 2 Demônios aleatórios do seu deck na sua mão."
+    },
+    "VAN_EX1_320": {
+      "text": "Cause $2 de dano a um personagem. Se ele morrer, evoque um Demônio aleatório."
+    },
+    "VAN_EX1_323": {
+      "text": "<b>Grito de Guerra:</b> Destrua seu herói e substitua-o pelo Lorde Jaraxxus."
+    },
+    "VAN_EX1_366": {
+      "text": "Toda vez que você evocar um lacaio, conceda-lhe +1/+1, e este item perderá 1 de Durabilidade."
+    },
+    "VAN_EX1_379": {
+      "text": "<b>Segredo:</b> Quando seu oponente jogar um lacaio, reduza a Vida dele para 1."
+    },
+    "VAN_EX1_384": {
+      "text": "Cause $8 de dano dividido aleatoriamente entre os personagens inimigos."
+    },
+    "VAN_EX1_405": {
+      "name": "Carrega-escudo"
+    },
+    "VAN_EX1_533": {
+      "text": "<b>Segredo:</b> Quando um personagem tentar atacar o seu herói, ele atacará outro personagem aleatório."
+    },
+    "VAN_EX1_539": {
+      "text": "Cause $3 de dano. Se você tiver uma Fera, cause $5 de dano em vez de $3."
+    },
+    "VAN_EX1_559": {
+      "text": "Sempre que você lançar um feitiço, coloque uma \"Bola de Fogo\" na sua mão."
+    },
+    "VAN_EX1_570": {
+      "name": "Morder",
+      "text": "Conceda +4 de Ataque ao seu herói neste turno e 4 de Armadura."
+    },
+    "VAN_EX1_572": {
+      "text": "No final do seu turno, compre um Card de Sonho."
+    },
+    "VAN_EX1_577": {
+      "text": "<b>Último Suspiro:</b> Evoque um Jonas Tiragosto 3/3 para o seu oponente."
+    },
+    "VAN_EX1_595": {
+      "text": "Quando um de seus outros lacaios morrer, compre um card."
+    },
+    "VAN_EX1_609": {
+      "text": "<b>Segredo:</b> Quando seu oponente jogar um lacaio, cause $4 de dano ao lacaio."
+    },
+    "VAN_EX1_finkle": {
+      "name": "Jonas Tiragosto"
+    },
+    "VAN_HERO_02bp": {
+      "text": "<b>Poder Heroico</b>\nEvoque um Totem aleatório."
+    },
+    "VAN_HERO_04bp": {
+      "text": "<b>Poder Heroico</b>\nEvoque um Recruta do Punho de Prata 1/1."
+    },
+    "VAN_HERO_05bp": {
+      "name": "Tiro firme"
+    },
+    "VAN_NEW1_007a": {
+      "name": "Chuva Estelar"
+    },
+    "VAN_NEW1_007b": {
+      "name": "Chuva Estelar"
+    },
+    "VAN_NEW1_010": {
+      "text": "<b>Fúria dos Ventos, Investida, Escudo Divino, Provocar</b>"
+    },
+    "VAN_NEW1_016": {
+      "text": "<b>Grito de Guerra:</b> Coloque um Pirata aleatório do seu deck na sua mão."
+    },
+    "VAN_NEW1_023": {
+      "text": "Não pode ser alvo de Feitiços nem de Poderes Heroicos."
+    },
+    "VAN_NEW1_033": {
+      "text": "Outros lacaios aliados têm +1 de Ataque."
+    }
   }
 }

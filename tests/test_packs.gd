@@ -52,12 +52,29 @@ func test_classic_cards_are_the_cards_the_game_always_had() -> void:
 	for c in j.data:
 		want[c.id] = c
 	eq(CardDb.all_ids().size(), want.size(), "every card")
+	# what the pack source changes on purpose (the cards as in June 2014): its patch's
+	# stats (null takes a field away) and its locales' 2014 names and texts
+	var patch: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://packs/classic/cards.patch.json"))
+	var texts := {}
+	for lang in CardLayout.LANGS:
+		var l: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://packs/classic/locales/%s.json" % lang))
+		texts[CardDb.HS[lang]] = l.get("cards", {})
 	var bad := []
 	for id in want:
 		var have := CardDb.card(id).duplicate()
 		for k in ["fx", "power", "sounds", "voice"]:  # presentation fields the pack adds
 			have.erase(k)
 		var w: Dictionary = want[id].duplicate(true)
+		for k in patch.get(id, {}):
+			if not CardDb.FIELDS.has(k) or k in ["fx", "power", "sounds", "voice"]:
+				continue
+			if patch[id][k] == null:
+				w.erase(CardDb.FIELDS[k])
+			else:
+				w[CardDb.FIELDS[k]] = patch[id][k]
+		for hs in texts:
+			for f in texts[hs].get(id, {}):
+				w[f][hs] = texts[hs][id][f]
 		for f in ["name", "text"]:  # the game's eight languages
 			for lang in w.get(f, {}).keys():
 				if not CardDb.HS.values().has(lang):

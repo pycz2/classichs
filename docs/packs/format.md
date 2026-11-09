@@ -293,7 +293,7 @@ A pack source is a folder with the pack's own files (`manifest.json`,
 | `do` | Fields | What it adds |
 |---|---|---|
 | `copy` | `from`, `to`, `files` (globs), `except` | Files of one folder (not recursive; `.import` skipped). |
-| `hsjson` | `from`, `patch`, `locales` (lang → HS locale), `rename` (type map) | `cards.json` from HearthstoneJSON data and card names/texts; `patch` (`<name>.patch.json`, card id → fields) adds or overrides fields such as `power` and `fx`. |
+| `hsjson` | `from`, `patch`, `locales` (lang → HS locale), `rename` (type map) | `cards.json` from HearthstoneJSON data and card names/texts; `patch` (`<name>.patch.json`, card id → fields) adds or overrides fields such as `power` and `fx` (`null` removes a field). |
 | `keywords` | `from` | Mechanic names and tips (`{NAME: {name: {lang}, text: {lang}}}`). |
 | `voice` | `from` | Voice line texts (`{card: {kind: {lang: text}}}`). |
 | `translate` | `from` (folder of `<lang>.json`: English → text), `sections` | Fills those sections of other languages from the default language's strings. |

@@ -723,6 +723,7 @@ def step_hsjson(b, root, s):
             if c.get(a) is not None and c[a] is not False and c[a] != []:
                 card[k] = c[a]
         card.update(patch.get(c["id"], {}))
+        card = {k: v for k, v in card.items() if v is not None}  # a patch's null removes a field
         out.append(card)
         for lang, hs in s["locales"].items():
             for field in ("name", "text"):

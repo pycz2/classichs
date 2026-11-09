@@ -46,6 +46,8 @@ pub struct Card {
     pub mana_lock: i64,
     /// SPELL_POWER amount.
     pub spell_power: Option<i64>,
+    /// While in play, turns last this many seconds (0 = no limit; Nozdormu).
+    pub turn_seconds: i64,
     pub race: String,
     /// The pack's keyword names.
     pub keywords: Vec<String>,
@@ -93,6 +95,8 @@ struct PackCard {
     spell_power: Option<i64>,
     #[serde(default)]
     mana_lock: i64,
+    #[serde(default)]
+    turn_seconds: i64,
     #[serde(default)]
     power: String,
     #[serde(default)]
@@ -547,6 +551,7 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
         durability: c.durability,
         mana_lock: c.mana_lock,
         spell_power: c.spell_power,
+        turn_seconds: c.turn_seconds,
         race: c.race,
         keywords: c.keywords,
         rarity: c.rarity,

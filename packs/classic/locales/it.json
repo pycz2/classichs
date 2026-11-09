@@ -162,5 +162,155 @@
     "putting_it_all_together.his_hero_power": "Il suo Potere Eroe: due servitori a ogni turno",
     "putting_it_all_together.taunt_guards_your": "Provocazione protegge il tuo eroe",
     "putting_it_all_together.hits_all_enemy": "Colpisce tutti i servitori nemici"
+  },
+  "cards": {
+    "EX1_625t": {
+      "text": "<b>Potere Eroe</b>\nInfligge 2 danni."
+    },
+    "EX1_625t2": {
+      "name": "Frantumazione Mentale",
+      "text": "<b>Potere Eroe</b>\nInfligge 3 danni."
+    },
+    "TU4d_003": {
+      "text": "<b>Potere Eroe</b>\nInfligge 1 danno."
+    },
+    "TU4e_002": {
+      "text": "<b>Potere Eroe</b>\nEvoca due servitori 2/1."
+    },
+    "VAN_CS2_005": {
+      "text": "+2 Attacco al tuo eroe per questo turno e +2 Armatura."
+    },
+    "VAN_CS2_074": {
+      "name": "Veleno Mortale"
+    },
+    "VAN_CS2_082": {
+      "name": "Coltello Perverso"
+    },
+    "VAN_CS2_232": {
+      "name": "Treant Legnoferreo"
+    },
+    "VAN_DREAM_01": {
+      "text": "Non può essere il bersaglio di Magie o Poteri Eroe."
+    },
+    "VAN_DS1_184": {
+      "text": "Guarda le prime tre carte del tuo mazzo. Pescane una e scarta le altre."
+    },
+    "VAN_EX1_136": {
+      "text": "<b>Segreto:</b> quando uno dei tuoi servitori muore, ritorna in vita con 1 Salute."
+    },
+    "VAN_EX1_154a": {
+      "name": "Ira Silvana"
+    },
+    "VAN_EX1_154b": {
+      "name": "Ira Silvana"
+    },
+    "VAN_EX1_155a": {
+      "name": "Marchio della Natura"
+    },
+    "VAN_EX1_155b": {
+      "name": "Marchio della Natura"
+    },
+    "VAN_EX1_164a": {
+      "name": "Nutrizione"
+    },
+    "VAN_EX1_164b": {
+      "name": "Nutrizione"
+    },
+    "VAN_EX1_178a": {
+      "name": "Immobilizzato"
+    },
+    "VAN_EX1_277": {
+      "text": "Infligge $3 danni suddivisi casualmente tra i personaggi nemici."
+    },
+    "VAN_EX1_302": {
+      "text": "Infligge $1 |4(danno,danni) a un servitore. Se il bersaglio muore, pesca una carta."
+    },
+    "VAN_EX1_304": {
+      "text": "<b>Grido di Battaglia:</b> distrugge i servitori adiacenti e ne ottiene l'Attacco e la Salute."
+    },
+    "VAN_EX1_306": {
+      "name": "Succube"
+    },
+    "VAN_EX1_317": {
+      "text": "Pesca 2 Demoni casuali dal tuo mazzo."
+    },
+    "VAN_EX1_320": {
+      "text": "Infligge $2 danni. Se il bersaglio muore, evoca un Demone casuale."
+    },
+    "VAN_EX1_332": {
+      "name": "Silenzio"
+    },
+    "VAN_EX1_339": {
+      "text": "Copia 2 carte del mazzo dell'avversario e le mette nella tua mano."
+    },
+    "VAN_EX1_366": {
+      "text": "Quando evochi un servitore, la Spada della Giustizia gli fornisce +1/+1 ma perde 1 Integrità."
+    },
+    "VAN_EX1_379": {
+      "text": "<b>Segreto:</b> quando l'avversario gioca un servitore, riduce la sua Salute a 1."
+    },
+    "VAN_EX1_384": {
+      "text": "Infligge $8 danni suddivisi casualmente tra i personaggi nemici."
+    },
+    "VAN_EX1_533": {
+      "text": "<b>Segreto:</b> quando un personaggio attacca il tuo eroe, attacca invece un altro personaggio casuale."
+    },
+    "VAN_EX1_539": {
+      "text": "Infligge $3 danni. Se controlli una Bestia, infligge $5 danni."
+    },
+    "VAN_EX1_559": {
+      "text": "Fornisce una carta Palla di Fuoco quando lanci una Magia."
+    },
+    "VAN_EX1_570": {
+      "text": "+4 Attacco al tuo eroe per questo turno e +4 Armatura."
+    },
+    "VAN_EX1_572": {
+      "text": "Alla fine del tuo turno, pesca una carta Sogno."
+    },
+    "VAN_EX1_577": {
+      "text": "<b>Rantolo di Morte:</b> evoca Finkle Cascorotto 3/3 sotto il controllo dell'avversario."
+    },
+    "VAN_EX1_595": {
+      "text": "Quando uno degli altri tuoi servitori muore, pesca una carta."
+    },
+    "VAN_EX1_609": {
+      "text": "<b>Segreto:</b> quando l'avversario gioca un servitore, questo subisce $4 danni."
+    },
+    "VAN_EX1_611": {
+      "text": "<b>Segreto:</b> quando un servitore nemico attacca, ritorna nella mano di chi lo controlla e costa (2) Mana in più."
+    },
+    "VAN_EX1_614": {
+      "name": "Illidan Grantempesta"
+    },
+    "VAN_EX1_finkle": {
+      "name": "Finkle Cascorotto"
+    },
+    "VAN_HERO_02bp": {
+      "text": "<b>Potere Eroe</b>\nEvoca un totem casuale."
+    },
+    "VAN_HERO_04bp": {
+      "text": "<b>Potere Eroe</b>\nEvoca una Recluta Mano d'Argento 1/1."
+    },
+    "VAN_NEW1_007a": {
+      "name": "Pioggia di Stelle"
+    },
+    "VAN_NEW1_007b": {
+      "name": "Pioggia di Stelle"
+    },
+    "VAN_NEW1_010": {
+      "text": "<b>Furia del Vento</b>. <b>Carica</b>. <b>Scudo Divino</b>. <b>Provocazione</b>"
+    },
+    "VAN_NEW1_016": {
+      "text": "<b>Grido di Battaglia:</b> pesca un Pirata casuale dal tuo mazzo."
+    },
+    "VAN_NEW1_023": {
+      "text": "Non può essere il bersaglio di Magie o Poteri Eroe."
+    },
+    "VAN_NEW1_033": {
+      "text": "Gli altri tuoi servitori hanno +1 Attacco."
+    },
+    "VAN_PRO_001c": {
+      "name": "Power of the Horde"
+    }
   }
 }

@@ -73,6 +73,7 @@
 	},
 	"EX1_625t": {
 		"lines": [
+			"[b]Potere Eroe[/b]",
 			"Infligge 2 danni."
 		],
 		"name": 12,
@@ -80,9 +81,10 @@
 	},
 	"EX1_625t2": {
 		"lines": [
+			"[b]Potere Eroe[/b]",
 			"Infligge 3 danni."
 		],
-		"name": 12,
+		"name": 9,
 		"text": 11
 	},
 	"GAME_005": {
@@ -304,6 +306,7 @@
 	},
 	"TU4d_003": {
 		"lines": [
+			"[b]Potere Eroe[/b]",
 			"Infligge 1 danno."
 		],
 		"name": 12,
@@ -315,6 +318,7 @@
 	},
 	"TU4e_002": {
 		"lines": [
+			"[b]Potere Eroe[/b]",
 			"Evoca due",
 			"servitori 2/1."
 		],
@@ -458,9 +462,9 @@
 	},
 	"VAN_CS2_005": {
 		"lines": [
-			"+2 Attacco al tuo eroe",
-			"per questo turno",
-			"e fornisce 2 Armatura."
+			"+2 Attacco al tuo",
+			"eroe per questo",
+			"turno e +2 Armatura."
 		],
 		"name": 12,
 		"text": 10
@@ -1334,10 +1338,12 @@
 	},
 	"VAN_DREAM_01": {
 		"lines": [
-			"[b]Elusività[/b]"
+			"Non può essere il",
+			"bersaglio di Magie o",
+			"Poteri Eroe."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_DREAM_02": {
 		"lines": [
@@ -1418,12 +1424,12 @@
 	},
 	"VAN_DS1_184": {
 		"lines": [
-			"Guarda le prime 3 carte",
+			"Guarda le prime tre carte",
 			"del tuo mazzo. Pescane",
 			"una e scarta le altre."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_DS1_185": {
 		"lines": [
@@ -2065,12 +2071,12 @@
 	},
 	"VAN_EX1_136": {
 		"lines": [
-			"[b]Segreto:[/b] quando un tuo",
-			"servitore muore, ritorna",
-			"in vita con 1 Salute."
+			"[b]Segreto:[/b] quando uno dei",
+			"tuoi servitori muore,",
+			"ritorna in vita con 1 Salute."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_137": {
 		"lines": [
@@ -2141,7 +2147,7 @@
 		"lines": [
 			"+4 Attacco."
 		],
-		"name": 12,
+		"name": 11,
 		"text": 11
 	},
 	"VAN_EX1_155b": {
@@ -2149,7 +2155,7 @@
 			"+4 Salute",
 			"e [b]Provocazione[/b]."
 		],
-		"name": 12,
+		"name": 11,
 		"text": 11
 	},
 	"VAN_EX1_158": {
@@ -2470,12 +2476,12 @@
 	},
 	"VAN_EX1_277": {
 		"lines": [
-			"Infligge 3 danni",
-			"suddivisi casualmente",
-			"tra i nemici."
+			"Infligge 3 danni suddivisi",
+			"casualmente tra i",
+			"personaggi nemici."
 		],
 		"name": 12,
-		"text": 10
+		"text": 8
 	},
 	"VAN_EX1_278": {
 		"lines": [
@@ -2573,12 +2579,12 @@
 	},
 	"VAN_EX1_302": {
 		"lines": [
-			"Infligge 1 danni a un",
-			"servitore. Se muore,",
-			"pesca una carta."
+			"Infligge 1 danno a un",
+			"servitore. Se il bersaglio",
+			"muore, pesca una carta."
 		],
 		"name": 12,
-		"text": 11
+		"text": 8
 	},
 	"VAN_EX1_303": {
 		"lines": [
@@ -2591,13 +2597,12 @@
 	},
 	"VAN_EX1_304": {
 		"lines": [
-			"[b]Grido di Battaglia:[/b]",
-			"distrugge i servitori",
-			"adiacenti e ne ottiene",
-			"Attacco e Salute."
+			"[b]Grido di Battaglia:[/b] distrugge i",
+			"servitori adiacenti e ne",
+			"ottiene l'Attacco e la Salute."
 		],
 		"name": 12,
-		"text": 8,
+		"text": 7,
 		"valign": "top"
 	},
 	"VAN_EX1_306": {
@@ -2674,8 +2679,9 @@
 	},
 	"VAN_EX1_317": {
 		"lines": [
-			"Pesca due Demoni",
-			"dal tuo mazzo."
+			"Pesca 2 Demoni",
+			"casuali dal tuo",
+			"mazzo."
 		],
 		"name": 12,
 		"text": 11
@@ -2691,13 +2697,12 @@
 	},
 	"VAN_EX1_320": {
 		"lines": [
-			"Infligge 3 danni",
-			"a un personaggio.",
-			"Se muore, evoca",
+			"Infligge 2 danni. Se il",
+			"bersaglio muore, evoca",
 			"un Demone casuale."
 		],
 		"name": 11,
-		"text": 8
+		"text": 9
 	},
 	"VAN_EX1_323": {
 		"lines": [
@@ -2737,12 +2742,12 @@
 	},
 	"VAN_EX1_339": {
 		"lines": [
-			"Copia 2 carte dal mazzo",
+			"Copia 2 carte del mazzo",
 			"dell'avversario e le mette",
 			"nella tua mano."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_341": {
 		"lines": [
@@ -2844,11 +2849,10 @@
 	},
 	"VAN_EX1_366": {
 		"lines": [
-			"Dopo che è stato evocato",
-			"un servitore sotto",
-			"il tuo controllo, gli fornisce",
-			"+1/+1, ma perde",
-			"1 Integrità."
+			"Quando evochi un servitore,",
+			"la Spada della Giustizia gli",
+			"fornisce +1/+1 ma perde 1",
+			"Integrità."
 		],
 		"name": 11,
 		"text": 7
@@ -2864,10 +2868,10 @@
 	},
 	"VAN_EX1_379": {
 		"lines": [
-			"[b]Segreto:[/b] dopo",
-			"che l'avversario",
-			"ha giocato un servitore,",
-			"riduce la sua Salute a 1."
+			"[b]Segreto:[/b] quando",
+			"l'avversario gioca un",
+			"servitore, riduce la sua",
+			"Salute a 1."
 		],
 		"name": 12,
 		"text": 8
@@ -2894,12 +2898,12 @@
 	},
 	"VAN_EX1_384": {
 		"lines": [
-			"Infligge 8 danni",
-			"suddivisi casualmente",
-			"tra i nemici."
+			"Infligge 8 danni suddivisi",
+			"casualmente tra i",
+			"personaggi nemici."
 		],
 		"name": 12,
-		"text": 10
+		"text": 8
 	},
 	"VAN_EX1_390": {
 		"lines": [
@@ -3110,10 +3114,10 @@
 	},
 	"VAN_EX1_533": {
 		"lines": [
-			"[b]Segreto:[/b] quando un nemico",
-			"attacca il tuo eroe,",
-			"attacca invece un altro",
-			"personaggio casuale."
+			"[b]Segreto:[/b] quando un",
+			"personaggio attacca il tuo",
+			"eroe, attacca invece un",
+			"altro personaggio casuale."
 		],
 		"name": 12,
 		"text": 8
@@ -3157,12 +3161,12 @@
 	},
 	"VAN_EX1_539": {
 		"lines": [
-			"Infligge 3 danni.",
-			"Se controlli una Bestia,",
-			"infligge invece 5 danni."
+			"Infligge 3 danni. Se",
+			"controlli una Bestia,",
+			"infligge 5 danni."
 		],
 		"name": 12,
-		"text": 9
+		"text": 10
 	},
 	"VAN_EX1_543": {
 		"lines": [
@@ -3235,12 +3239,12 @@
 	},
 	"VAN_EX1_559": {
 		"lines": [
-			"Quando lanci una Magia,",
-			"mette nella tua mano",
-			"una Palla di Fuoco."
+			"Fornisce una carta",
+			"Palla di Fuoco quando",
+			"lanci una Magia."
 		],
 		"name": 11,
-		"text": 8,
+		"text": 9,
 		"valign": "top"
 	},
 	"VAN_EX1_560": {
@@ -3308,9 +3312,9 @@
 	},
 	"VAN_EX1_570": {
 		"lines": [
-			"+4 Attacco al tuo eroe",
-			"per questo turno",
-			"e fornisce 4 Armatura."
+			"+4 Attacco al tuo",
+			"eroe per questo",
+			"turno e +4 Armatura."
 		],
 		"name": 12,
 		"text": 10
@@ -3326,13 +3330,12 @@
 	},
 	"VAN_EX1_572": {
 		"lines": [
-			"Alla fine del tuo turno,",
-			"mette una carta Sogno",
-			"nella tua mano."
+			"Alla fine del tuo",
+			"turno, pesca una",
+			"carta Sogno."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_EX1_573": {
 		"lines": [
@@ -3371,8 +3374,8 @@
 	},
 	"VAN_EX1_577": {
 		"lines": [
-			"[b]Rantolo di Morte:[/b]",
-			"evoca un Pip Genialit 3/3",
+			"[b]Rantolo di Morte:[/b] evoca",
+			"Finkle Cascorotto 3/3",
 			"sotto il controllo",
 			"dell'avversario."
 		],
@@ -3483,8 +3486,8 @@
 	},
 	"VAN_EX1_595": {
 		"lines": [
-			"Dopo che è morto",
-			"un tuo servitore,",
+			"Quando uno degli altri",
+			"tuoi servitori muore,",
 			"pesca una carta."
 		],
 		"name": 12,
@@ -3563,10 +3566,10 @@
 	},
 	"VAN_EX1_609": {
 		"lines": [
-			"[b]Segreto:[/b] dopo",
-			"che l'avversario",
-			"ha giocato un servitore,",
-			"questo subisce 4 danni."
+			"[b]Segreto:[/b] quando",
+			"l'avversario gioca un",
+			"servitore, questo subisce 4",
+			"danni."
 		],
 		"name": 12,
 		"text": 8
@@ -3582,13 +3585,13 @@
 	},
 	"VAN_EX1_611": {
 		"lines": [
-			"[b]Segreto:[/b] quando un",
-			"servitore nemico attacca,",
-			"ritorna nella mano di chi lo",
-			"controlla e costa (2) in più."
+			"[b]Segreto:[/b] quando un servitore",
+			"nemico attacca, ritorna nella",
+			"mano di chi lo controlla e",
+			"costa (2) Mana in più."
 		],
 		"name": 11,
-		"text": 8
+		"text": 7
 	},
 	"VAN_EX1_612": {
 		"lines": [
@@ -3617,7 +3620,7 @@
 			"evoca una Fiamma",
 			"di Azzinoth 2/1."
 		],
-		"name": 12,
+		"name": 11,
 		"text": 8
 	},
 	"VAN_EX1_616": {
@@ -3774,8 +3777,8 @@
 	"VAN_HERO_02bp": {
 		"lines": [
 			"[b]Potere Eroe[/b]",
-			"Evoca un Totem",
-			"base casuale."
+			"Evoca un totem",
+			"casuale."
 		],
 		"name": 11,
 		"text": 11
@@ -3811,10 +3814,10 @@
 		"lines": [
 			"[b]Potere Eroe[/b]",
 			"Evoca una Recluta",
-			"Mano d'Argento."
+			"Mano d'Argento 1/1."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_HERO_04bp2": {
 		"lines": [
@@ -4015,13 +4018,12 @@
 	},
 	"VAN_NEW1_010": {
 		"lines": [
-			"[b]Provocazione[/b].",
-			"[b]Scudo Divino[/b].",
-			"[b]Furia del Vento[/b]. [b]Carica[/b]."
+			"[b]Furia del Vento[/b].",
+			"[b]Carica[/b]. [b]Scudo Divino[/b].",
+			"[b]Provocazione[/b]"
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_NEW1_011": {
 		"lines": [
@@ -4052,7 +4054,7 @@
 	"VAN_NEW1_016": {
 		"lines": [
 			"[b]Grido di Battaglia:[/b]",
-			"pesca un Pirata",
+			"pesca un Pirata casuale",
 			"dal tuo mazzo."
 		],
 		"name": 11,
@@ -4119,10 +4121,12 @@
 	},
 	"VAN_NEW1_023": {
 		"lines": [
-			"[b]Elusività[/b]"
+			"Non può essere il",
+			"bersaglio di Magie o",
+			"Poteri Eroe."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_NEW1_024": {
 		"lines": [

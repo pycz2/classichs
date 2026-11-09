@@ -151,7 +151,8 @@ whose JSON is hashed) plus what a client needs to draw:
 
 - `turn`, `current`, `phase`, `rng` (state), `next_id`, `next_order`,
   `pending` (`{}` or `{player, source, options, zones}`), `game_over`, `winner`,
-  `start_decks`, `view`, `history_len`.
+  `start_decks`, `view`, `history_len`, and `turn_seconds` while a minion with that
+  card field is in play (Nozdormu: 15; servers and local games time turns by it).
 - `players[i]`: `hero`, `power`, `weapon` (ids, -1), `hand`, `deck` (top card
   last), `board` (left to right), `secrets`, `mana`, `max_mana`, `ol_owed`,
   `ol_locked` (overload), `fatigue`, `played`, `minions_played`, `cost_mods`,
