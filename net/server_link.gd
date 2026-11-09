@@ -234,6 +234,23 @@ func session(msg: Dictionary, d: Deck) -> ServerSession:
 	return s
 
 
+## A session for a game the player watches (`spectating`): read only, fed by `spectate_state`.
+func watch(msg: Dictionary) -> ServerSession:
+	var s := ServerSession.new()
+	s.watch = true
+	var names = msg.get("players", [])
+	var seat := clampi(int(msg.get("seat", 0)), 0, 1)
+	var name_of := func(p: int) -> String: return str(names[p]) if names is Array and names.size() == 2 else ""
+	s.setup(self, {"game": msg.get("game", ""), "mode": msg.get("mode", "casual"), "you": seat, "pack": msg.get("pack", ""),
+		"opponent": {"user": name_of.call(1 - seat)}}, name_of.call(seat), null)
+	s.full = msg.get("full", false) == true
+	for x in _games.values():  # the server shows one game per spectator: an older one is over
+		if is_instance_valid(x) and x.watch:
+			x._done = true
+	_games[s.game] = s
+	return s
+
+
 func _process(_d: float) -> void:
 	socket.poll()
 	var st := socket.get_ready_state()
@@ -334,14 +351,14 @@ func dispatch(msg: Dictionary) -> void:
 		"logged_out":
 			token = ""
 			_clear_packs()
-	if msg.t in ["state", "act_error", "emote", "intent", "game_over"]:
+	if msg.t in ["state", "act_error", "emote", "intent", "game_over", "spectate_state", "spectate_end"]:
 		var id := str(msg.get("game", ""))
 		var s = _games.get(id)
 		if s != null and not is_instance_valid(s):
 			_games.erase(id)
 		elif s != null:
 			s.on_message(msg)
-		if msg.t != "game_over":
+		if not msg.t in ["game_over", "spectate_end"]:
 			return
 	message.emit(msg)
 

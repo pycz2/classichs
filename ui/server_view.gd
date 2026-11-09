@@ -794,7 +794,7 @@ func _on_message(msg: Dictionary) -> void:
 		"error":
 			if stage == "connecting":  # a refused saved session: log in by hand
 				_go("login")
-			say(str(msg.get("text", msg.get("code", "error"))))
+			say(tr(str(msg.get("text", msg.get("code", "error")))))  # (texts the client knows come translated: Social.SERVER_TEXTS)
 			if msg.get("code", "") in ["queue", "deck"] or (_queue_asked and queued != ""):
 				_queue_asked = false  # the search was refused: it does not go on
 				queued = ""

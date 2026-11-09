@@ -55,6 +55,17 @@ static func hand(n: int, own: bool, hover := -1) -> Array:
 	return out
 
 
+## The opponent's hand face up for a spectator who sees both (watch with full): a row of small
+## cards in the top left corner, beside the opponent's hero, all of them readable.
+static func open_hand(n: int) -> Array:
+	var out := []
+	var k := 0.42
+	var step := minf(CARD.x * k + 4.0, 440.0 / maxf(1, n))
+	for i in n:
+		out.append({"pos": Vector2(64.0 + i * step, 4.0), "rot": 0.0, "scale": k, "z": i})
+	return out
+
+
 ## The hand on a touchscreen while the player does not play from it: small, low on the right
 ## (a tap opens it to the usual fan).
 static func hand_small(n: int) -> Array:

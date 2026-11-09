@@ -13,6 +13,9 @@ extends CanvasLayer
 const STATUS := {"online": [Color("5fd35a"), "Online"], "searching": [Color("f2c94c"), "Looking for a game"],
 	"in_game": [Color("ff9d3a"), "In a game"], "offline": [Color("7d7468"), "Offline"]}
 const ORDER := ["online", "searching", "in_game", "offline"]
+## The server's answers to `spectate` (server/README.md, "Spectators"), shown translated.
+const SERVER_TEXTS := ["You can watch the games of friends only", "The friend is not in a game",
+	"This game has the most spectators it can have", "You are in a game", "The game is over"]
 const MAX_CHATS := 3
 const PANEL_W := 360.0
 const CHAT_SIZE := Vector2(300, 380)
@@ -433,8 +436,20 @@ func rebuild_panel() -> void:
 		row.pressed.connect(open_chat.bind(who, true))
 		_list.add_child(row)
 		row.add_action("chat", tr("Message"), "Chat", open_chat.bind(who, true))
-		var inv := row.add_action("swords", tr("Invite to a friendly game"), "Invite", invite.bind(who))
-		inv.disabled = status.get(who, "offline") not in ["online", "searching"]
+		if status.get(who, "offline") == "in_game":  # (an invite can't reach them now; watching can)
+			var w := row.add_action("eye", tr("Watch the game"), "Watch", watch.bind(who))
+			w.text = tr("Watch")  # (the one thing to do now: a word beside the eye)
+			w.add_theme_font_size_override("font_size", 15)
+			for k in ["normal", "hover", "pressed"]:
+				var st := Palette.box(Color("ff9d3a", 0.22 if k == "normal" else 0.4), 8, Color("ff9d3a"), 1)
+				st.content_margin_left = 34
+				st.content_margin_right = 10
+				w.add_theme_stylebox_override(k, st)
+			w.reset_size()
+			row.actions.reset_size()
+		else:
+			var inv := row.add_action("swords", tr("Invite to a friendly game"), "Invite", invite.bind(who))
+			inv.disabled = status.get(who, "offline") not in ["online", "searching"]
 		row.add_action("more", tr("More"), "More", _more.bind(who, row))
 	var outs: Array = friends.get("requests_out", [])
 	var blocked: Array = friends.get("blocked", [])
@@ -509,6 +524,13 @@ func _more(who: String, row: Control) -> void:
 	m.popup_hide.connect(m.queue_free)
 	_root.add_child(m)
 	m.popup(Rect2i(Vector2i(row.global_position + Vector2(row.size.x - 120, row.size.y)), Vector2i(140, 0)))
+
+
+## Watches a friend's game on the panel's server: the server answers `spectating` (main
+## opens the table) or an error (a toast).
+func watch(user: String) -> void:
+	link.send({"t": "spectate", "user": user})
+	show_panel(false)
 
 
 ## A friendly game with a friend on the panel's server (the active game must be one it plays).
@@ -836,7 +858,7 @@ func _on_message(msg: Dictionary, srv: Server) -> void:
 			toast(_about(srv, tr("%s declined the invitation") % str(msg.get("by", ""))))
 		"error":
 			if not (on_lobby and srv == _cur) and not msg.get("resume", false):
-				toast(_about(srv, str(msg.get("text", msg.get("code", "error")))))
+				toast(_about(srv, tr(str(msg.get("text", msg.get("code", "error"))))))  # (SERVER_TEXTS come translated)
 
 
 ## The invite's game arrived (or did not): on to the deck and the answer.
@@ -970,7 +992,13 @@ class FriendRow:
 				line = tr("request sent")
 			"blocked":
 				line = tr("Blocked")
-		DeckTiles.text(self, Vector2(34, 46), line, 14, dot.lightened(0.2) if kind == "friend" else Color("c9b48a"), room)
+		if kind == "friend" and st == "in_game":  # a badge: the friend plays now (Watch is on the right)
+			var f := get_theme_font("font", "Label")
+			var w := minf(f.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x + 18, room)
+			draw_style_box(Palette.raw_box(dot, 8), Rect2(34, 33, w, 19))
+			draw_string(f, Vector2(43, 47), line, HORIZONTAL_ALIGNMENT_LEFT, w - 18, 13, Color("2a1606"))
+		else:
+			DeckTiles.text(self, Vector2(34, 46), line, 14, dot.lightened(0.2) if kind == "friend" else Color("c9b48a"), room)
 		var n := int(social.unread.get(user, 0))
 		if n > 0:
 			var c := Vector2(size.x - actions.size.x - 22, size.y / 2.0)

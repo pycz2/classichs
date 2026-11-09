@@ -211,6 +211,19 @@ class _Pen:
 		line(0.2, 0.52, 0.42, 0.74, Color("7be36f"), 0.13)
 		line(0.42, 0.74, 0.8, 0.26, Color("7be36f"), 0.13)
 
+	func i_eye() -> void:  # an open eye (watch a game)
+		var pts := []
+		for i in 13:  # the upper lid, then the lower one
+			var t := i / 12.0
+			pts.append_array([0.06 + 0.88 * t, 0.5 - sin(PI * t) * 0.3])
+		for i in range(11, 0, -1):
+			var t := i / 12.0
+			pts.append_array([0.06 + 0.88 * t, 0.5 + sin(PI * t) * 0.3])
+		poly(pts, Icons.GOLD)
+		circle(0.5, 0.5, 0.2, Icons.DARK)
+		circle(0.5, 0.5, 0.1, Icons.GOLD)
+		circle(0.45, 0.45, 0.04, Icons.DARK)
+
 	func i_cross() -> void:  # a cross (decline, unblock)
 		line(0.25, 0.25, 0.75, 0.75, Color("ff7a5c"), 0.12)
 		line(0.75, 0.25, 0.25, 0.75, Color("ff7a5c"), 0.12)
