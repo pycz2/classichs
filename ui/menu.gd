@@ -5,7 +5,7 @@ extends Control
 ## A game's menu (pack set: main made it the active pack, so the screen has its look, menu
 ## music, pictures and logo): Collection, Training, Code play (Direct) or Play (Server: the
 ## server's ranked, casual and Arena games), Tutorial (when the pack has one), Settings (with
-## the debug tools of this game), Leave the game.
+## the debug tools of this game), Leave the game. Through a server also Tournaments.
 
 signal direct
 signal server
@@ -15,12 +15,13 @@ signal collection
 signal training
 signal code_play
 signal play
+signal tournaments
 signal tutorial
 signal leave
 
 ## Button labels (English keys); the translation tool reads this list.
 const ITEMS := ["Play", "Direct", "Server", "Back", "Settings", "Exit", "Collection", "Training", "Code play",
-	"Tutorial", "Leave the game", "Without a server: the games on this device, training, code play",
+	"Tutorial", "Tournaments", "Leave the game", "Without a server: the games on this device, training, code play",
 	"Through a server: an account, ranked games, the Arena, friends"]
 
 ## The game whose menu this is (null: the client's main menu).
@@ -109,7 +110,7 @@ func show_play() -> void:
 func _show_game() -> void:
 	var why := Rules.can_play(pack)
 	var ok := why == ""
-	var items := [["Play", play, ok]] if through_server else []
+	var items := [["Play", play, ok], ["Tournaments", tournaments, ok]] if through_server else []
 	items += [["Collection", collection, true], ["Training", training, ok]]
 	if not through_server:  # WebRTC: the browser, or the webrtc-native plugin
 		items.append(["Code play", code_play, ok and WebRtcTransport.available()])
