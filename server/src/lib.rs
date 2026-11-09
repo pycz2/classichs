@@ -12,6 +12,7 @@ pub mod game;
 pub mod migration;
 pub mod packs;
 pub mod ranked;
+pub mod settings;
 pub mod storage;
 pub mod ws;
 
@@ -58,6 +59,8 @@ pub struct App {
     pub loading: tokio::sync::Mutex<()>,
     /// The server's bots (the admin's Bots page): the running ones and what they do.
     pub bots: bots::Manager,
+    /// The admin's settings read so far (`settings`).
+    pub settings: settings::Cache,
 }
 
 /// The game clocks (a pack's: rules.json `timers`, docs/packs/rules.md).
@@ -93,6 +96,7 @@ impl App {
             rules: Mutex::default(),
             loading: tokio::sync::Mutex::new(()),
             bots: bots::Manager::default(),
+            settings: settings::Cache::default(),
         })
     }
 

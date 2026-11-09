@@ -55,7 +55,14 @@ enum QMode {
 #[derive(Deserialize)]
 #[serde(tag = "t", rename_all = "snake_case", deny_unknown_fields)]
 enum In {
-    Register { user: String, password: String },
+    Register {
+        user: String,
+        password: String,
+        /// an invite key (`signup_info`)
+        #[serde(default)]
+        key: Option<String>,
+    },
+    SignupInfo {},
     Login { user: String, password: String },
     Resume { token: String },
     Logout {},
@@ -675,10 +682,11 @@ impl Session {
     async fn dispatch(&mut self, msg: In) -> R {
         let Some((me, my_name)) = self.me.clone() else {
             return match msg {
-                In::Register { user, password } => self.register(user, password).await,
+                In::Register { user, password, key } => self.register(user, password, key).await,
                 In::Login { user, password } => self.login(user, password).await,
                 In::Resume { token } => self.resume(token).await,
                 In::Ping {} => self.ok(json!({"t": "pong"})),
+                In::SignupInfo {} => self.signup_info().await,
                 _ => Err(e("auth_required", "Log in first")),
             };
         };
@@ -770,6 +778,7 @@ impl Session {
             }
             In::Register { .. } | In::Login { .. } | In::Resume { .. } => Err(e("bad_request", "Already logged in")),
             In::Ping {} => self.ok(json!({"t": "pong"})),
+            In::SignupInfo {} => self.signup_info().await,
             In::Logout {} => {
                 let t = std::mem::take(&mut self.token);
                 db::drop_session(db, &t).await?;
@@ -1055,7 +1064,13 @@ impl Session {
         Ok(())
     }
 
-    async fn register(&mut self, user: String, password: String) -> R {
+    async fn signup_info(&self) -> R {
+        self.ok(json!({"t": "signup_info", "invite_only": crate::settings::invite_only(&self.app).await?}))
+    }
+
+    /// Invite-only (the admin's setting): a valid key is needed. A key given anyway is checked,
+    /// recorded and spent.
+    async fn register(&mut self, user: String, password: String, key: Option<String>) -> R {
         if !(self.local || self.app.login_allowed(&format!("ip:{}", self.ip))) {
             return Err(e("rate_limited", "Too many attempts: wait a minute"));
         }
@@ -1065,10 +1080,22 @@ impl Session {
         if !auth::valid_password(&password) {
             return Err(e("bad_password", "A password is 8 to 128 characters"));
         }
+        let key = key.map(|k| k.trim().to_lowercase()).filter(|k| !k.is_empty());
+        if key.is_none() && crate::settings::invite_only(&self.app).await? {
+            return Err(e("invite_required", "Registration needs an invite key"));
+        }
+        if key.as_ref().is_some_and(|k| k.len() > 64) {
+            return Err(e("invite_invalid", "This invite key is not valid"));
+        }
         let hash = tokio::task::spawn_blocking(move || auth::hash_password(&password)).await.map_err(|_| e("server", "Server error"))?;
-        let id = db::create_account(&self.app.db, &user, &hash, "user").await?;
-        let id = id.ok_or_else(|| e("taken", "This name is taken"))?;
-        self.app.event(Event::new("register", format!("{user} registered")).user(id, &user).data(json!({"ip": self.ip.to_string()})));
+        let (id, key_id) = match db::register(&self.app.db, &user, &hash, key.as_deref()).await? {
+            Ok(r) => r,
+            Err("taken") => return Err(e("taken", "This name is taken")),
+            Err(_) => return Err(e("invite_invalid", "This invite key is not valid (unknown, used up or revoked)")),
+        };
+        self.app.event(
+            Event::new("register", format!("{user} registered")).user(id, &user).data(json!({"ip": self.ip.to_string(), "signup_key": key_id})),
+        );
         self.logged_in(id, None, "register").await
     }
 

@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8)]
     }
 }
 
@@ -30,6 +30,7 @@ enum Accounts {
     Stars,
     Streak,
     Season,
+    SignupKey,
 }
 
 #[derive(DeriveIden)]
@@ -568,5 +569,67 @@ impl MigrationTrait for M7 {
                 .to_owned(),
         )
         .await
+    }
+}
+
+/// Admin settings and invite keys (0.50): the server's settings (key → text), the keys a player
+/// registers with, and the key each account registered with (NULL: none, as every older account).
+struct M8;
+
+impl MigrationName for M8 {
+    fn name(&self) -> &str {
+        "m20261109_000008_settings_and_signup_keys"
+    }
+}
+
+#[derive(DeriveIden)]
+enum ServerSettings {
+    Table,
+    Key,
+    Value,
+}
+
+#[derive(DeriveIden)]
+enum SignupKeys {
+    Table,
+    Id,
+    Key,
+    Note,
+    UsesTotal,
+    UsesLeft,
+    Created,
+    CreatedBy,
+    CreatedByName,
+    Revoked,
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M8 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        m.create_table(
+            Table::create()
+                .table(ServerSettings::Table)
+                .col(ColumnDef::new(ServerSettings::Key).text().not_null().primary_key())
+                .col(ColumnDef::new(ServerSettings::Value).text().not_null())
+                .to_owned(),
+        )
+        .await?;
+        m.create_table(
+            Table::create()
+                .table(SignupKeys::Table)
+                .col(ColumnDef::new(SignupKeys::Id).integer().not_null().primary_key())
+                .col(ColumnDef::new(SignupKeys::Key).text().not_null().unique_key())
+                .col(ColumnDef::new(SignupKeys::Note).text())
+                .col(int(SignupKeys::UsesTotal))
+                .col(int(SignupKeys::UsesLeft))
+                .col(int(SignupKeys::Created))
+                .col(ColumnDef::new(SignupKeys::CreatedBy).integer())
+                .col(ColumnDef::new(SignupKeys::CreatedByName).text().not_null().default(""))
+                .col(int(SignupKeys::Revoked).default(0))
+                .to_owned(),
+        )
+        .await?;
+        m.alter_table(Table::alter().table(Accounts::Table).add_column(ColumnDef::new(Accounts::SignupKey).integer()).to_owned()).await?;
+        m.create_index(Index::create().name("accounts_signup_key").table(Accounts::Table).col(Accounts::SignupKey).to_owned()).await
     }
 }

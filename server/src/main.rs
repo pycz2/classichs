@@ -87,6 +87,9 @@ fn main() {
         tracing::info!("rules engine {} (cards {})", classichs_engine::api::VERSION, classichs_engine::card_db::data_hash());
         tracing::info!("pack storage: {}; bundled packs: {}", store.what, packs_dir.display());
         let app = App::new(db, trust_proxy, None, store);
+        if let Err(e) = classichs_server::settings::load(&app).await {
+            tracing::error!("settings: {e}");
+        }
         let n = packs::migrate_hashes(&app).await;
         if n > 0 {
             tracing::info!("{n} pack(s) moved to the hashes of docs/packs/format.md");

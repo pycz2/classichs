@@ -12,6 +12,7 @@ import { Games, GamePage } from './games.js'
 import { Messages } from './messages.js'
 import { Packs } from './packs.js'
 import { Bots } from './bots.js'
+import { Settings, InviteKeys } from './settings.js'
 
 const NAV = [
   ['', 'Dashboard', 'dashboard'],
@@ -20,7 +21,9 @@ const NAV = [
   ['packs', 'Games', 'packs'],
   ['bots', 'Bots', 'bots'],
   ['accounts', 'Accounts', 'accounts'],
-  ['messages', 'Messages', 'messages']
+  ['invites', 'Invite keys', 'key'],
+  ['messages', 'Messages', 'messages'],
+  ['settings', 'Settings', 'settings']
 ]
 
 // --- theme: system (default), light or dark; remembered -------------------------------
@@ -103,6 +106,8 @@ function Shell ({ me, onLogout }) {
     case 'accounts': page = route.path[1] ? html`<${AccountPage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Accounts} query=${route.query} key=${qkey} />`; break
     case 'packs': page = html`<${Packs} />`; break
     case 'bots': page = html`<${Bots} />`; break
+    case 'invites': page = html`<${InviteKeys} />`; break
+    case 'settings': page = html`<${Settings} />`; break
     case 'messages': page = html`<${Messages} a=${route.path[1]} b=${route.path[2]} query=${route.query} />`; break
     default: page = html`<div class="page"><h1>Not found</h1><p><a href="#/">Back to the dashboard</a></p></div>`
   }

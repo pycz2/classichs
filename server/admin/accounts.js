@@ -162,6 +162,9 @@ export function AccountPage ({ id }) {
           <dt>Win streak</dt><dd>${a.streak}</dd>
           <dt>Ranked MMR</dt><dd>${num(a.ranked_mmr)}</dd>
           <dt>Casual MMR</dt><dd>${num(a.casual_mmr)}</dd>
+          <dt>Joined</dt><dd>${data.signup_key
+            ? html`with the key <a class="mono" href="#/invites" title=${data.signup_key.key}>${data.signup_key.key.slice(0, 8)}…</a>${data.signup_key.note ? html` <span class="muted">(${data.signup_key.note})</span>` : ''}<br /><span class="muted small">made by </span><${UserLink} id=${data.signup_key.created_by} user=${data.signup_key.created_by_name} />`
+            : html`<span class="muted">without a key</span>`}</dd>
           <dt>Arena</dt><dd>${data.arena ? html`${data.arena.wins}–${data.arena.losses} <span class="muted small">${data.arena.picks} picked${data.arena.pack ? ' · ' + data.arena.pack.slice(0, 10) + '…' : ''}</span>` : html`<span class="muted">no run</span>`}</dd>
         </dl>
       </${Card}>

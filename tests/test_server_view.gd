@@ -51,6 +51,47 @@ func test_null_tag_and_arena_after_login() -> void:
 	_free(v)
 
 
+func test_invite_key_field_when_the_server_wants_one() -> void:
+	var v := _view()
+	var l := v.link as FakeLink
+	eq(l.of("signup_info").size(), 1, "the login form asks whether a key is needed")
+	var key := v.find_child("InviteKey", true, false) as LineEdit
+	check(not key.is_visible_in_tree(), "no key field on an open server")
+	(v.find_child("User", true, false) as LineEdit).text = "anna"
+	(v.find_child("Password", true, false) as LineEdit).text = "password123"
+	_press(v, "Register")
+	eq(l.of("register")[-1].has("key"), false, "no key sent to an open server (an older one refuses the field)")
+	l.dispatch({"t": "signup_info", "invite_only": true})
+	key = v.find_child("InviteKey", true, false) as LineEdit
+	check(key.is_visible_in_tree(), "the key field")
+	check((v.find_child("InviteKeyNote", true, false) as Label).is_visible_in_tree(), "with its hint")
+	eq((v.find_child("User", true, false) as LineEdit).text, "anna", "what was typed stays")
+	eq((v.find_child("Password", true, false) as LineEdit).text, "password123")
+	_press(v, "Register")
+	eq(l.of("register").size(), 1, "no register without a key")
+	eq(v._status.text, tr("Registration on this server needs an invite key"))
+	key.text = " 1b4e28ba-2fa1-4d3b-a3f5-ef19b5a7633b "
+	_press(v, "Register")
+	eq(l.of("register")[-1].get("key"), "1b4e28ba-2fa1-4d3b-a3f5-ef19b5a7633b")
+	_press(v, "Login")
+	eq(l.of("login")[-1].has("key"), false, "logging in needs no key")
+	l.dispatch({"t": "error", "code": "invite_invalid", "text": "This invite key is not valid"})
+	eq(v._status.text, tr("This invite key is unknown, used up or revoked"), "the player's language")
+	_free(v)
+
+
+func test_older_server_without_invite_keys() -> void:
+	var v := _view()
+	v.link.dispatch({"t": "error", "code": "bad_request", "text": "unknown variant `signup_info`"})
+	eq(v._status.text, "", "the refused question is not shown")
+	eq(v.link.invite_only, false)
+	# invite-only turned on after the form was made: the refusal brings the field
+	v.link.dispatch({"t": "error", "code": "invite_required", "text": "Registration needs an invite key"})
+	check((v.find_child("InviteKey", true, false) as LineEdit).is_visible_in_tree(), "the key field")
+	eq(v._status.text, tr("Registration on this server needs an invite key"))
+	_free(v)
+
+
 func test_player_label() -> void:
 	eq(ServerView.player_label({"user": "anna", "tag": null}), "anna")
 	eq(ServerView.player_label({"user": "anna", "tag": "Moon7"}), "anna#Moon7")

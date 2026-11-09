@@ -6,7 +6,8 @@
 
 use crate::auth;
 use crate::db::{self, Account, Standing};
-use crate::entity::{account, arena, block, event, game as played, message, pack, request, session, standing};
+use crate::entity::{account, arena, block, event, game as played, message, pack, request, session, signup_key, standing};
+use crate::settings;
 use crate::packs::{self, GameRules};
 use std::sync::Arc;
 use crate::events::{event_json, now_ms, Event};
@@ -62,6 +63,9 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/bots/all/{action}", post(bots_all))
         .route("/admin/api/bots/{id}", get(bot_page))
         .route("/admin/api/bots/{id}/{action}", post(bot_action))
+        .route("/admin/api/settings", get(settings_get).post(settings_set))
+        .route("/admin/api/signup_keys", get(keys_list).post(keys_create))
+        .route("/admin/api/signup_keys/{id}/{action}", post(key_action))
         .route("/admin/ws", get(feed))
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
@@ -92,6 +96,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "messages.js",
     "packs.js",
     "bots.js",
+    "settings.js",
     "style.css",
     "favicon.svg",
     "vendor/preact.module.js",
@@ -612,6 +617,11 @@ async fn account_page_json(app: &AppRef, admin: &Admin, id: i64) -> Result<Optio
         Some(s) => db::legend_number(db, s).await?,
         None => None,
     };
+    // the invite key it registered with (none: older accounts, open registration, admins' and bots')
+    let key = match t.signup_key {
+        Some(k) => signup_key::Entity::find_by_id(k).one(db).await?,
+        None => None,
+    };
     let hub = app.hub();
     let friends: Vec<Value> = friends.iter().map(|f| json!({"id": f.id, "user": f.name, "tag": f.tag, "status": hub.status(f.id)})).collect();
     let mut acc = account_json(&t, mine, &g, hub.status(t.id));
@@ -649,6 +659,7 @@ async fn account_page_json(app: &AppRef, admin: &Admin, id: i64) -> Result<Optio
         "arena": run.map(|r| json!({"wins": r.wins, "losses": r.losses, "hero": r.hero, "pack": r.pack,
                                     "picks": serde_json::from_str::<Value>(&r.picks).ok().and_then(|p| p.as_array().map(|a| a.len()))})),
         "events": recent,
+        "signup_key": key.map(|k| json!({"id": k.id, "key": k.key, "note": k.note, "created_by": k.created_by, "created_by_name": k.created_by_name})),
     })))
 }
 
@@ -1314,5 +1325,146 @@ async fn bots_all(State(app): State<AppRef>, Extension(a): Extension<Admin>, Pat
     if let Err(e) = crate::bots::sync(&app).await {
         return db_err(e);
     }
+    Json(json!({"ok": true, "text": text})).into_response()
+}
+
+// --- settings (the Settings page) and invite keys (the Invite keys page) ---------------------------
+
+async fn settings_get(State(app): State<AppRef>) -> Response {
+    let r = async { Ok::<_, sea_orm::DbErr>((settings::autobot_wait_ms(&app).await?, settings::invite_only(&app).await?)) }.await;
+    match r {
+        Ok((wait, invite_only)) => Json(json!({"autobot_wait_ms": wait, "signup_invite_only": invite_only})).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+#[derive(Deserialize)]
+struct SettingsIn {
+    autobot_wait_ms: Option<u64>,
+    signup_invite_only: Option<bool>,
+}
+
+/// Changes the settings given (the others stay); each change is logged (`setting`).
+async fn settings_set(State(app): State<AppRef>, Extension(a): Extension<Admin>, Json(f): Json<SettingsIn>) -> Response {
+    if f.autobot_wait_ms.is_some_and(|ms| ms > 600_000) {
+        return err(StatusCode::BAD_REQUEST, "The auto-bot wait is 0 to 600 seconds");
+    }
+    let mut changes = vec![];
+    if let Some(ms) = f.autobot_wait_ms {
+        changes.push((settings::AUTOBOT_WAIT_MS, ms.to_string(), format!("the auto-bot wait to {} s", ms as f64 / 1000.0)));
+    }
+    if let Some(on) = f.signup_invite_only {
+        let text = if on { "registration to invite keys only" } else { "registration open to anyone" };
+        changes.push((settings::INVITE_ONLY, (on as u8).to_string(), text.to_string()));
+    }
+    for (key, value, text) in changes {
+        if settings::get(&app, key).await.ok().as_ref() == Some(&value) {
+            continue;
+        }
+        if let Err(e) = settings::set(&app, key, &value).await {
+            return db_err(e);
+        }
+        app.event(Event::new("setting", format!("{} set {text}", a.me.name)).user(a.me.id, &a.me.name).data(json!({"key": key, "value": value})));
+    }
+    settings_get(State(app)).await
+}
+
+/// A random uuid v4 (lowercase).
+fn uuid4() -> String {
+    let mut b = [0u8; 16];
+    rand::rngs::OsRng.fill_bytes(&mut b);
+    b[6] = (b[6] & 0x0f) | 0x40;
+    b[8] = (b[8] & 0x3f) | 0x80;
+    let h: String = b.iter().map(|x| format!("{x:02x}")).collect();
+    format!("{}-{}-{}-{}-{}", &h[..8], &h[8..12], &h[12..16], &h[16..20], &h[20..])
+}
+
+/// Every key, newest first, with the accounts that joined with it.
+// ponytail: one page of all keys; paginate when there are thousands.
+async fn keys_list(State(app): State<AppRef>) -> Response {
+    let r = async {
+        let keys = signup_key::Entity::find().order_by_desc(signup_key::Column::Id).all(&app.db).await?;
+        let joined = account::Entity::find().filter(account::Column::SignupKey.is_not_null()).order_by_asc(account::Column::Id).all(&app.db).await?;
+        let mut by_key: HashMap<i64, Vec<Value>> = HashMap::new();
+        for a in &joined {
+            by_key.entry(a.signup_key.unwrap_or_default()).or_default().push(json!({"id": a.id, "user": a.name, "created": a.created}));
+        }
+        let list: Vec<Value> = keys
+            .iter()
+            .map(|k| {
+                json!({"id": k.id, "key": k.key, "note": k.note, "uses_total": k.uses_total, "uses_left": k.uses_left, "created": k.created,
+                       "created_by": k.created_by, "created_by_name": k.created_by_name, "revoked": k.revoked,
+                       "accounts": by_key.remove(&k.id).unwrap_or_default()})
+            })
+            .collect();
+        Ok::<_, sea_orm::DbErr>(json!({"keys": list, "invite_only": settings::invite_only(&app).await?}))
+    }
+    .await;
+    match r {
+        Ok(v) => Json(v).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+#[derive(Deserialize)]
+struct KeyIn {
+    #[serde(default)]
+    note: String,
+    uses: Option<i64>,
+}
+
+/// A new key: a uuid v4, an optional note (200 characters at most), 1-1000 uses (default 1).
+async fn keys_create(State(app): State<AppRef>, Extension(a): Extension<Admin>, Json(f): Json<KeyIn>) -> Response {
+    let uses = f.uses.unwrap_or(1);
+    if !(1..=1000).contains(&uses) {
+        return err(StatusCode::BAD_REQUEST, "A key has 1 to 1000 uses");
+    }
+    let note = f.note.trim().to_string();
+    if note.chars().count() > 200 {
+        return err(StatusCode::BAD_REQUEST, "A note is 200 characters at most");
+    }
+    let key = uuid4();
+    let row = signup_key::ActiveModel {
+        key: Set(key.clone()),
+        note: Set((!note.is_empty()).then(|| note.clone())),
+        uses_total: Set(uses),
+        uses_left: Set(uses),
+        created: Set(ranked::now()),
+        created_by: Set(Some(a.me.id)),
+        created_by_name: Set(a.me.name.clone()),
+        revoked: Set(false),
+        ..Default::default()
+    };
+    match signup_key::Entity::insert(row).exec(&app.db).await {
+        Ok(r) => {
+            let id = r.last_insert_id;
+            let text = format!("{} made an invite key for {uses} player(s){}", a.me.name, if note.is_empty() { String::new() } else { format!(": {note}") });
+            app.event(
+                Event::new("signup_key", text.clone())
+                    .user(a.me.id, &a.me.name)
+                    .data(json!({"action": "create", "id": id, "key": key, "uses": uses, "note": note})),
+            );
+            Json(json!({"ok": true, "id": id, "key": key, "text": text})).into_response()
+        }
+        Err(e) => db_err(e),
+    }
+}
+
+/// `revoke`: the key registers nobody more (the accounts made with it stay).
+async fn key_action(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path((id, action)): Path<(i64, String)>) -> Response {
+    if action != "revoke" {
+        return err(StatusCode::NOT_FOUND, "No such action");
+    }
+    let k = match signup_key::Entity::find_by_id(id).one(&app.db).await {
+        Ok(Some(k)) => k,
+        Ok(None) => return err(StatusCode::NOT_FOUND, "No such key"),
+        Err(e) => return db_err(e),
+    };
+    if let Err(e) = (signup_key::ActiveModel { id: Unchanged(id), revoked: Set(true), ..Default::default() }).update(&app.db).await {
+        return db_err(e);
+    }
+    let note = k.note.as_ref().map(|n| format!(" ({n})")).unwrap_or_default();
+    let text = format!("{} revoked the invite key {}…{note}", a.me.name, k.key.chars().take(8).collect::<String>());
+    app.event(Event::new("signup_key", text.clone()).user(a.me.id, &a.me.name).data(json!({"action": "revoke", "id": id, "key": k.key})));
     Json(json!({"ok": true, "text": text})).into_response()
 }

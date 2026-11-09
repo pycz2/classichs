@@ -19,7 +19,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
-/// How long a player waits before an auto-bot comes (ms; tests make it short).
+/// How long a player waits before an auto-bot comes (ms; 0 = at once): the admin's setting
+/// `autobot_wait_ms` (`settings`, at start and on every change; tests set it directly).
 pub static WAIT_MS: AtomicU64 = AtomicU64::new(30_000);
 /// Accounts per level (and for the Arena).
 pub const POOL: usize = 3;

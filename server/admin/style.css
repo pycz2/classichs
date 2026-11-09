@@ -593,3 +593,22 @@ g.s4, .leg.s4, .sw.s4 { --c: var(--s4); }
 .row-label { flex-direction: row !important; align-items: center; }
 td.actions { white-space: nowrap; text-align: right; }
 td.nowrap { white-space: nowrap; }
+
+/* settings and invite keys */
+.range-row { display: flex; align-items: center; gap: 14px; font-weight: 400; }
+.range-row input[type="range"] { flex: 1; padding: 0; border: 0; background: transparent; box-shadow: none; accent-color: var(--accent); }
+.unit-input { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.unit-input input { width: 80px; text-align: right; }
+.setting-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.setting-row .muted { margin-top: 4px; }
+.new-key { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.new-key label { display: flex; flex-direction: column; gap: 6px; font-weight: 550; font-size: 13px; }
+.new-key label .muted { font-weight: 400; }
+.new-key label.grow { flex: 1; min-width: 220px; }
+.new-key input[type="number"] { width: 100px; }
+.key-cell { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.key { font-size: 12px; padding: 2px 6px; border-radius: 6px; background: var(--surface-2); color: var(--text); user-select: all; }
+.table.keys tr.off td { color: var(--muted); }
+.table.keys tr.off .key { text-decoration: line-through; color: var(--muted); }
+.table.keys tr.fresh td { background: color-mix(in srgb, var(--ok) 10%, transparent); }
+.joined { display: inline-flex; flex-wrap: wrap; gap: 4px 10px; }

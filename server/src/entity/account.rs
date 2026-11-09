@@ -30,6 +30,8 @@ pub struct Model {
     pub streak: i64,
     /// The season the rank belongs to (months since year 0).
     pub season: i64,
+    /// The invite key (signup_keys.id) the account registered with; None: without one.
+    pub signup_key: Option<i64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
