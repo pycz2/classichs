@@ -575,7 +575,7 @@ func _entry_card(parent: Control) -> void:
 	if mine.is_empty():
 		var bring := tr("Bring %d decks of different classes from your decks of this game.") % decks_needed(t) if decks_needed(t) != 1 else tr("Bring one deck from your decks of this game.")
 		_wrap(_lbl(bring, 17, Palette.TEXT, v), 590)
-		var j := _btn(tr("Join"), "Join", pick_decks.bind(false), 590, 60, v)
+		var j := _btn(tr("Take part"), "Join", pick_decks.bind(false), 590, 60, v)
 		j.add_theme_font_size_override("font_size", 24)
 		return
 	var row := HFlowContainer.new()
@@ -656,7 +656,7 @@ func _players(at: Vector2, sz: Vector2) -> void:
 		var row := PlayerRow.new()
 		row.e = e
 		row.me = me()
-		row.scored = not TournamentBracket.matches_of(t).is_empty()
+		row.scored = str(t.get("status", "")) in ["running", "finished", "cancelled"] and not TournamentBracket.matches_of(t).is_empty()
 		row.name = "Player_" + str(e.get("name", "")).validate_node_name()
 		row.custom_minimum_size = Vector2(sz.x - 14, 64)
 		var decks = e.get("decks")
@@ -833,13 +833,14 @@ func pick_decks(change: bool) -> void:
 
 
 func _build_picker(change: bool, n: int, all: Array) -> void:
-	var v := _dialog(tr("Choose %d decks of different classes") % n if n != 1 else tr("Choose a deck"), Vector2(1100, 620), "DeckPicker")
+	var list_h := clampf(ceilf(all.size() / 4.0) * 94.0, 94.0, 420.0)  # a few decks: a small dialog, not a big empty one
+	var v := _dialog(tr("Choose %d decks of different classes") % n if n != 1 else tr("Choose a deck"), Vector2(1100, 200 + list_h), "DeckPicker")
 	if Packs.find_rules(str(page.get("pack", ""))) == null:
 		_wrap(_lbl(tr("You don't have this game: get it in the server's home first."), 20, Palette.DANGER, v), 1060)
 	elif all.is_empty():
 		_wrap(_lbl(tr("You have no finished decks of this game: build them in the Collection."), 20, Palette.DANGER, v), 1060)
 	var s := ScrollContainer.new()
-	s.custom_minimum_size = Vector2(1070, 420)
+	s.custom_minimum_size = Vector2(1070, list_h)
 	s.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	v.add_child(s)
 	var grid := GridContainer.new()
@@ -882,7 +883,7 @@ func _build_picker(change: bool, n: int, all: Array) -> void:
 	sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(sp)
 	_btn(tr("Cancel"), "PickCancel", close_overlay, 200, 56, row)
-	var ok := _btn(tr("Save decks") if change else tr("Join"), "PickOk", send_decks.bind(change), 240, 56, row)
+	var ok := _btn(tr("Save decks") if change else tr("Take part"), "PickOk", send_decks.bind(change), 240, 56, row)
 	ok.disabled = chosen.size() != n
 
 

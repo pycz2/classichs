@@ -209,6 +209,7 @@ func test_join_with_decks_of_different_classes() -> void:
 	_press(v, "Deck0")
 	_press(v, "Deck1")
 	check((v.find_child("PickOk", true, false) as Button).disabled, "2 of 3: not yet")
+	eq((v.find_child("PickOk", true, false) as Button).text, "Take part", "not \"Join\" (Russian: \"Войти\", log in)")
 	_press(v, "Deck1")
 	eq(v.chosen.size(), 1, "a second press takes a deck out")
 	_press(v, "Deck1")
@@ -431,7 +432,7 @@ func test_main_menu_and_panel() -> void:
 
 
 ## Found against the real server (0.50 check): seeds count from 0, no team is -1 (the rows said
-## "Team 0" for everyone and "Seed -1" before seeding); points wait for the bracket.
+## "Team 0" for everyone and "Seed -1" before seeding); points wait for the start.
 func test_seed_and_team_lines_follow_the_server() -> void:
 	eq(TournamentsView.seed_line({"seed": 0.0, "team": -1.0}), "Seed 1", "the first seed")
 	eq(TournamentsView.seed_line({"seed": -1.0, "team": -1.0}), "", "not seeded yet: nothing")
@@ -442,9 +443,13 @@ func test_seed_and_team_lines_follow_the_server() -> void:
 	v.link.dispatch({"t": "tournament", "tournament": t})
 	var row: TournamentsView.PlayerRow = v.find_child("Player_anna", true, false)
 	check(row != null and not row.scored, "no points before the bracket")
-	v.link.dispatch({"t": "tournament", "tournament": full("elimination", 4)})
+	t = full("elimination", 4, {"status": "seeded"})
+	v.link.dispatch({"t": "tournament", "tournament": t})
 	row = v.find_child("Player_anna", true, false)
-	check(row.scored, "points once there are matches")
+	check(not row.scored, "seeded: the bracket is drawn, nothing played yet")
+	v.link.dispatch({"t": "tournament", "tournament": full("elimination", 4, {"status": "running"})})
+	row = v.find_child("Player_anna", true, false)
+	check(row.scored, "points once it runs")
 	_free(v)
 
 
