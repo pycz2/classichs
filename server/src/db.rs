@@ -1,6 +1,6 @@
 //! SQLite through SeaORM: opening (with the migrations) and the account and session helpers.
 
-use crate::entity::{account, session, standing};
+use crate::entity::{account, session, signup_key, standing};
 use crate::ranked::Ladder;
 use crate::migration::Migrator;
 use crate::ranked;
@@ -58,6 +58,10 @@ pub async fn name_of(c: &impl ConnectionTrait, id: i64) -> DbResult<String> {
 
 /// Creates an account (the password is already hashed). None = the name is taken.
 pub async fn create_account(c: &impl ConnectionTrait, name: &str, pass_hash: &str, role: &str) -> DbResult<Option<i64>> {
+    insert_account(c, name, pass_hash, role, None).await
+}
+
+async fn insert_account(c: &impl ConnectionTrait, name: &str, pass_hash: &str, role: &str, key: Option<i64>) -> DbResult<Option<i64>> {
     let now = ranked::now();
     let a = account::ActiveModel {
         name: Set(name.into()),
@@ -66,12 +70,44 @@ pub async fn create_account(c: &impl ConnectionTrait, name: &str, pass_hash: &st
         created: Set(now),
         last_seen: Set(now),
         season: Set(ranked::season_of(now)),
+        signup_key: Set(key),
         ..Default::default()
     };
     match account::Entity::insert(a).on_conflict_do_nothing_on([account::Column::Name]).exec(c).await? {
         TryInsertResult::Inserted(r) => Ok(Some(r.last_insert_id)),
         _ => Ok(None),
     }
+}
+
+/// A player registers (the password is already hashed). With an invite key its use is taken in
+/// the same transaction as the insert, by one UPDATE that only takes a use that is there (two
+/// registrations never both get the last one), and a failed insert gives it back.
+/// Err: "invite_invalid" (unknown, used up or revoked) | "taken" (the name).
+pub async fn register(db: &Db, name: &str, pass_hash: &str, key: Option<&str>) -> DbResult<Result<(i64, Option<i64>), &'static str>> {
+    use sea_orm::sea_query::{Expr, ExprTrait};
+    use sea_orm::TransactionTrait;
+    let txn = db.begin().await?;
+    let mut key_id = None;
+    if let Some(k) = key {
+        let r = signup_key::Entity::update_many()
+            .col_expr(signup_key::Column::UsesLeft, Expr::col(signup_key::Column::UsesLeft).sub(1))
+            .filter(signup_key::Column::Key.eq(k))
+            .filter(signup_key::Column::UsesLeft.gt(0))
+            .filter(signup_key::Column::Revoked.eq(false))
+            .exec(&txn)
+            .await?;
+        if r.rows_affected != 1 {
+            txn.rollback().await?;
+            return Ok(Err("invite_invalid"));
+        }
+        key_id = signup_key::Entity::find().filter(signup_key::Column::Key.eq(k)).one(&txn).await?.map(|s| s.id);
+    }
+    let Some(id) = insert_account(&txn, name, pass_hash, "user", key_id).await? else {
+        txn.rollback().await?;
+        return Ok(Err("taken"));
+    };
+    txn.commit().await?;
+    Ok(Ok((id, key_id)))
 }
 
 pub async fn touch(c: &impl ConnectionTrait, id: i64) -> DbResult<()> {

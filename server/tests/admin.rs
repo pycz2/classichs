@@ -224,6 +224,72 @@ async fn static_files_and_csp() {
     assert_eq!(r.status, StatusCode::OK);
     assert!(r.body.len() > 1000);
     assert_eq!(call(&app, get("/admin/static/../Cargo.toml", "")).await.status, StatusCode::NOT_FOUND);
+    assert_eq!(call(&app, get("/admin/static/settings.js", "")).await.status, StatusCode::OK);
+}
+
+#[tokio::test]
+async fn settings_and_invite_keys() {
+    use classichs_server::bots::auto::WAIT_MS;
+    use std::sync::atomic::Ordering;
+    let (state, app, victim) = setup().await;
+    let (session, csrf) = log_in(&app).await;
+
+    // Settings: the defaults, a change applies at once (the auto-bots' wait), out of range is refused.
+    let s = call(&app, get("/admin/api/settings", &session)).await.json();
+    assert_eq!(s, json!({"autobot_wait_ms": 30000, "signup_invite_only": false}));
+    let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"autobot_wait_ms": 601_000}))).await;
+    assert_eq!(r.status, StatusCode::BAD_REQUEST);
+    let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"autobot_wait_ms": 0, "signup_invite_only": true}))).await;
+    assert_eq!(r.json(), json!({"autobot_wait_ms": 0, "signup_invite_only": true}), "{}", r.body);
+    assert_eq!(WAIT_MS.load(Ordering::Relaxed), 0);
+    let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"autobot_wait_ms": 600_000}))).await;
+    assert_eq!(r.json()["signup_invite_only"], true, "a setting not given stays");
+    assert_eq!(WAIT_MS.load(Ordering::Relaxed), 600_000);
+    // Kept in the database: a new process (empty cache) reads them back.
+    let row = classichs_server::entity::server_setting::Entity::find_by_id("autobot_wait_ms").one(&state.db).await.unwrap().unwrap();
+    assert_eq!(row.value, "600000");
+
+    // Keys: made with a note and uses (default 1, at most 1000), listed newest first, revoked.
+    let r = call(&app, post("/admin/api/signup_keys", &session, Some(&csrf), json!({"uses": 1001}))).await;
+    assert_eq!(r.status, StatusCode::BAD_REQUEST);
+    let one = call(&app, post("/admin/api/signup_keys", &session, Some(&csrf), json!({}))).await.json();
+    let two = call(&app, post("/admin/api/signup_keys", &session, Some(&csrf), json!({"note": " for Anna ", "uses": 3}))).await.json();
+    let key = two["key"].as_str().unwrap();
+    assert_eq!((key.len(), &key[14..15], key.matches('-').count()), (36, "4", 4), "a uuid v4: {key}");
+    // a player joins with the second key
+    let hash = auth::hash_password("password123");
+    let (anna, used) = db::register(&state.db, "anna", &hash, Some(key)).await.unwrap().unwrap();
+    assert_eq!(used, two["id"].as_i64());
+    let list = call(&app, get("/admin/api/signup_keys", &session)).await.json();
+    assert_eq!(list["invite_only"], true);
+    let keys = list["keys"].as_array().unwrap();
+    assert_eq!(keys.len(), 2);
+    assert_eq!(keys[0]["note"], "for Anna");
+    assert_eq!((keys[0]["uses_total"].as_i64(), keys[0]["uses_left"].as_i64()), (Some(3), Some(2)));
+    assert_eq!(keys[0]["created_by_name"], "root");
+    assert_eq!(keys[0]["accounts"], json!([{"id": anna, "user": "anna", "created": keys[0]["accounts"][0]["created"]}]));
+    assert_eq!((keys[1]["uses_total"].as_i64(), keys[1]["note"].clone()), (Some(1), Value::Null));
+    let r = call(&app, post(&format!("/admin/api/signup_keys/{}/revoke", one["id"]), &session, Some(&csrf), json!({}))).await;
+    assert_eq!(r.status, StatusCode::OK, "{}", r.body);
+    let list = call(&app, get("/admin/api/signup_keys", &session)).await.json();
+    assert_eq!(list["keys"][1]["revoked"], true);
+
+    // The account page: the key and who made it, or none (older accounts, made by an admin).
+    let page = call(&app, get(&format!("/admin/api/accounts/{anna}"), &session)).await.json();
+    assert_eq!(page["signup_key"]["key"], key);
+    assert_eq!(page["signup_key"]["created_by_name"], "root");
+    let page = call(&app, get(&format!("/admin/api/accounts/{victim}"), &session)).await;
+    assert_eq!(page.status, StatusCode::OK);
+    assert_eq!(page.json()["signup_key"], Value::Null);
+    assert_eq!(call(&app, get("/admin/api/accounts", &session)).await.status, StatusCode::OK);
+
+    // Logged: setting and signup_key events.
+    let ev = events(&app, &session, "kind=setting,signup_key", 5).await;
+    let texts: Vec<&str> = ev["list"].as_array().unwrap().iter().map(|e| e["text"].as_str().unwrap()).collect();
+    assert!(texts.contains(&"root set registration to invite keys only"), "{texts:?}");
+    assert!(texts.contains(&"root set the auto-bot wait to 600 s"), "{texts:?}");
+    assert!(texts.iter().any(|t| t.starts_with("root revoked the invite key")), "{texts:?}");
+    assert!(texts.contains(&"root made an invite key for 3 player(s): for Anna"), "{texts:?}");
 }
 
 #[tokio::test]

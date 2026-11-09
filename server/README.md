@@ -154,6 +154,11 @@ updates live over `/admin/ws`:
   sessions, recent games, messages, activity) with suspend, unsuspend, reset the
   password, make admin/player (superuser), delete (type the name); create accounts.
 - **Messages**: every conversation between players (with unread counts), live.
+- **Invite keys**: make a key (a note, how many players: 1 by default, at most 1000), copy
+  it, revoke it; each key's uses left, who made it and when, the accounts that joined with
+  it. An account's page says which key it joined with (and who made it) or "without a key".
+- **Settings** (for the whole server, at once): the auto-bots' wait (0–600 s; 0 = at once)
+  and invite-only registration.
 
 Light and dark themes (the system's by default; the switch is remembered).
 
@@ -181,6 +186,10 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `GET packs` | `{server: [pack], players: [pack], stats: {server, enabled, players, uploaders, files, bytes, downloads, storage, games, live, default_rules, builtin: {rules_hash, default}, limits: {player, server, per_player}}}`; a pack is `{id, pack_id, version, name, rules_hash, content_hash, size, enabled, default, created, downloads, games, live, owner: {id, user} \| null}` (`games`/`live`: finished and live games in its rules) |
 | `POST packs` (the `.cardpack` as the raw body, up to 128 MB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
 | `POST packs/{id}/{enable\|disable\|delete\|default}` | any pack, a player's too (the player's game gets a new `packs`); `default`: a server pack becomes the default game |
+| `GET settings` · `POST settings {autobot_wait_ms?, signup_invite_only?}` | `{autobot_wait_ms, signup_invite_only}`; the wait 0..600000 ms (default 30000), invite-only default false; the fields given change at once |
+| `GET signup_keys` | `{keys: [{id, key, note, uses_total, uses_left, created, created_by, created_by_name, revoked, accounts: [{id, user, created}]}], invite_only}`, newest first |
+| `POST signup_keys {note?, uses?}` | a new uuid v4 key (note ≤ 200 characters, uses 1–1000, default 1) → `{id, key, text}` |
+| `POST signup_keys/{id}/revoke` | the key registers nobody more (its accounts stay) |
 
 `/admin/ws` (the cookie, same origin) sends `hello {live}`, then `event {e}` for every
 event, `live {live}` when the online list, queues or games change and `resync {}`
@@ -200,7 +209,8 @@ bundled pack installed), `pack_default`, `pack_enable`, `pack_disable`, `pack_de
 (every applied action, timeout moves marked `timeout`, with the turn, the state hash
 and the engine's events), `game_left`, `game_back`, `game_end` (reason, results, the
 final turn and hash, and for `illegal` the refused actions), `admin` (every admin
-action), `error` (database failures and rules engine panics).
+action), `setting` (a setting changed: `data.key`, `data.value`), `signup_key` (a key made
+or revoked; `register` has `data.signup_key`), `error` (database failures and rules engine panics).
 
 ### The database
 
@@ -211,7 +221,9 @@ new version of a pack keeps them, a new season starts from the last one's (M4 mo
 ranks earned before packs to `classic-2014`); a game row and an Arena run keep their pack's
 `rules_hash` (`""` = the built-in Classic rules, before packs). Players' decks kept on the
 server are in `decks` (M6) per account and pack manifest id, like the standings; their
-choices per game (art and music sets) in `game_settings` (M7), the same way.
+choices per game (art and music sets) in `game_settings` (M7), the same way. The admin's
+settings are `server_settings` (key → text; M8), the invite keys `signup_keys` and the key an
+account registered with `accounts.signup_key` (NULL: none, as every account before M8).
 
 ### Connect the game
 
@@ -241,7 +253,7 @@ it, its last decision and its log; their errors also go to the event log (kind `
 - **Late moves:** a bot decides on the newest state only and drops a decision when a new state came
   meanwhile; the server refuses a move made when it is not the player's move (it crossed the clock)
   without a strike.
-- **Auto-bots** (`bots::auto`): a player alone in a Classic queue (ranked, casual, Arena) for 30 s
+- **Auto-bots** (`bots::auto`): a player alone in a Classic queue (ranked, casual, Arena) for 30 s (the admin's Settings page: 0–600 s)
   gets a bot for one game: the level by the player's hidden MMR (under 1350 easy, up to 1650 medium,
   else hard; Arena: the run's wins, 0-2 easy, 3-5 medium, 6+ hard), from a pool of accounts
   `AutoBot_<Level>_1..3` and `AutoBot_Arena_1..3` (made when first needed), paired with that player
@@ -315,7 +327,17 @@ not answer, 2 images kept. The headers of these scripts tell the details.
 JSON text frames, each an object with `"t"`; errors are `{"t":"error","code","text"}`.
 Full details: the design doc.
 
-- Auth: `register {user, password}`, `login {user, password}`, `resume {token}` →
+- Registration by invite (0.50): `signup_info {}` (before login too) →
+  `signup_info {invite_only}`; older servers answer `error bad_request` (the client shows no
+  key field). When the admin made registration invite-only, `register {user, password, key}`
+  needs a key: none (or blank) → `error invite_required`, an unknown, used-up or revoked one →
+  `error invite_invalid`. The key's use is taken in the same transaction as the account's
+  insert (`UPDATE signup_keys SET uses_left = uses_left - 1 WHERE key = ? AND uses_left > 0 AND
+  revoked = 0`, one row or nothing), so no race spends it twice and a failed insert (`taken`)
+  gives the use back. With open registration `key` is optional; a valid one is still spent
+  and recorded (`accounts.signup_key`). Keys are uuid v4, compared ignoring case and spaces
+  around them.
+- Auth: `register {user, password, key?}`, `login {user, password}`, `resume {token}` →
   `auth {ok, token, me}`; `logout {}` → `logged_out`. One connection per account: when
   an account logs in or resumes while it already has a connection, the old one gets
   `kicked {reason: "another_login"}` and is then closed with close code 4001 and reason

@@ -53,6 +53,11 @@ var decks: Array = []
 var game_settings := {}
 ## Another login took the account (`kicked`): no resume by itself until the player logs in.
 var kicked := false
+## Registering needs an invite key (`signup_info`, asked once per connection; an older server
+## refuses the question: no key).
+var invite_only := false
+var signup_asked := false
+var _probing_signup := false
 ## The server's packs: {server: [pack], mine: [pack + enabled]}; a pack is
 ## {id, name: {lang: text}, version, rules_hash, content_hash, size, url} (server/README.md).
 var packs := {"server": [], "mine": []}
@@ -197,6 +202,8 @@ func open(address: String) -> Error:
 	_was_open = false
 	resuming = false
 	token = ""
+	invite_only = false
+	signup_asked = false
 	socket = WebSocketPeer.new()
 	socket.inbound_buffer_size = 1 << 20
 	socket.outbound_buffer_size = 1 << 20
@@ -215,6 +222,13 @@ func is_open() -> bool:
 func send(msg: Dictionary) -> void:
 	if is_open():
 		socket.send_text(JSON.stringify(msg))
+
+
+## Whether registering needs an invite key: the answer comes as `signup_info` (invite_only).
+func request_signup_info() -> void:
+	signup_asked = true
+	_probing_signup = true
+	send({"t": "signup_info"})
 
 
 func close() -> void:
@@ -281,6 +295,10 @@ func dispatch(msg: Dictionary) -> void:
 				msg["resume"] = true  # the answer to the saved session: no one needs to be told
 				if msg.get("code") != "rate_limited":
 					remember({"token": null})
+			elif _probing_signup and msg.get("code") == "bad_request":  # before 0.50: no invite keys
+				_probing_signup = false
+				invite_only = false
+				return
 			elif _probing and msg.get("code") == "bad_request":  # an older server: no chats, no read
 				_probing = false
 				has_chats = false
@@ -295,6 +313,9 @@ func dispatch(msg: Dictionary) -> void:
 			elif _probing_settings and msg.get("code") == "bad_request":  # without settings per game (before 0.40)
 				_probing_settings = false
 				return
+		"signup_info":
+			_probing_signup = false
+			invite_only = msg.get("invite_only", false) == true
 		"chats":
 			if _probing:
 				_probing = false

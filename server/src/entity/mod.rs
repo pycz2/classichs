@@ -14,5 +14,7 @@ pub mod message;
 pub mod pack;
 pub mod pack_import;
 pub mod request;
+pub mod server_setting;
 pub mod session;
+pub mod signup_key;
 pub mod standing;

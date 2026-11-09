@@ -20,7 +20,7 @@ const toMin = (t) => { const [h, m] = (t || '0:0').split(':').map(Number); retur
 const pct = (w, g) => g ? Math.round(100 * w / g) + '%' : '—'
 const secs = (t) => Math.max(0, Math.floor(Date.now() / 1000) - t)
 
-function Switch ({ on, onChange, label, busy }) {
+export function Switch ({ on, onChange, label, busy }) {
   return html`<button role="switch" aria-checked=${on} aria-label=${label} title=${label} disabled=${busy}
     class=${'switch' + (on ? ' on' : '')} onClick=${(e) => { e.stopPropagation(); onChange(!on) }}><i></i></button>`
 }

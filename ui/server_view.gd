@@ -33,6 +33,7 @@ var waited := 0.0
 var _status: Label
 var _body := Control.new()
 var _retire_armed := false
+var _form_invite := false  # the login form shows the invite key field
 
 
 func _ready() -> void:
@@ -187,12 +188,16 @@ func _address() -> String:
 
 
 func _build_login() -> void:
-	_panel(Vector2(370, 110), Vector2(540, 470))
-	_centered(tr("Game server"), 40, Vector2(390, 132), 500, Palette.ATTACK)
+	# an invite-only server: one more field and its hint, the panel grows up and down
+	var invite := link.invite_only
+	_form_invite = invite
+	var lift := 56.0 if invite else 0.0
+	_panel(Vector2(370, 110 - lift), Vector2(540, 470 + lift * 2))
+	_centered(tr("Game server"), 40, Vector2(390, 132 - lift), 500, Palette.ATTACK)
 	var host := Settings.server_label(link.url)
-	_centered(_address() if link.display_name() == host else "%s · %s" % [link.display_name(), _address()], 18, Vector2(390, 186), 500, Color("c9b48a"))
+	_centered(_address() if link.display_name() == host else "%s · %s" % [link.display_name(), _address()], 18, Vector2(390, 186 - lift), 500, Color("c9b48a"))
 	var box := VBoxContainer.new()
-	box.position = Vector2(430, 232)
+	box.position = Vector2(430, 232 - lift)
 	box.custom_minimum_size.x = 420
 	box.add_theme_constant_override("separation", 14)
 	_body.add_child(box)
@@ -208,28 +213,30 @@ func _build_login() -> void:
 	pw.secret = true
 	pw.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_PASSWORD  # a phone's keyboard offers the saved password
 	pw.max_length = 128
-	for e in [user, pw]:
+	var key := LineEdit.new()
+	key.name = "InviteKey"
+	key.placeholder_text = tr("Invite key (to register)")
+	key.max_length = 64
+	key.visible = invite
+	for e in [user, pw, key]:
 		e.custom_minimum_size = Vector2(420, 52)
 		e.add_theme_font_size_override("font_size", 22)
 		box.add_child(e)
-	# a phone: the clipboard in one tap (a password manager's copy; a long press opens the field's menu too)
+	var key_note := Palette.label(tr("Registration here is by invite: paste the key you were given. Logging in needs no key."), 15, Color("c9b48a"))
+	key_note.name = "InviteKeyNote"
+	key_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	key_note.custom_minimum_size.x = 420
+	key_note.visible = invite
+	box.add_child(key_note)
+	box.move_child(key_note, key.get_index() + 1)
+	# a phone: the clipboard in one tap (a password manager's copy, a key sent in a message; a long
+	# press opens the field's menu too)
 	if DisplayServer.is_touchscreen_available() and not OS.has_feature("web"):  # (the browser pastes by itself)
-		pw.custom_minimum_size.x = 300
-		box.remove_child(pw)
-		var pw_row := HBoxContainer.new()
-		pw_row.add_theme_constant_override("separation", 12)
-		pw_row.add_child(pw)
-		var paste := Palette.button(tr("Paste"), "PastePassword")
-		paste.custom_minimum_size = Vector2(108, 52)
-		paste.add_theme_font_size_override("font_size", 20)
-		paste.focus_mode = Control.FOCUS_NONE
-		paste.pressed.connect(func():
-			pw.clear()
-			pw.menu_option(LineEdit.MENU_PASTE))
-		pw_row.add_child(paste)
-		box.add_child(pw_row)
+		_paste_row(box, pw, "PastePassword")
+		_paste_row(box, key, "PasteInviteKey")
 	user.text_submitted.connect(func(_t): pw.grab_focus())
 	pw.text_submitted.connect(func(_t): log_in("login", user.text.strip_edges(), pw.text))
+	key.text_submitted.connect(func(_t): log_in("register", user.text.strip_edges(), pw.text, key.text))
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 16)
 	box.add_child(row)
@@ -238,7 +245,7 @@ func _build_login() -> void:
 		b.custom_minimum_size = Vector2(202, 56)
 		b.add_theme_font_size_override("font_size", 24)
 		var op: String = spec[2]
-		b.pressed.connect(func(): log_in(op, user.text.strip_edges(), pw.text))
+		b.pressed.connect(func(): log_in(op, user.text.strip_edges(), pw.text, key.text if key.visible else ""))
 		row.add_child(b)
 	var stay := Palette.label(tr("You stay logged in on this device until you log out."), 16, Color("c9b48a"))
 	stay.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -251,14 +258,62 @@ func _build_login() -> void:
 	_back_button(true)
 	if link.saved().get("kicked", false) and str(link.saved().get("token", "")) != "":
 		var here := Palette.button(tr("Play here"), "PlayHere")
-		here.position = Vector2(520, 596)
-		here.custom_minimum_size = Vector2(240, 50)
+		# under the panel; the taller invite form leaves no room there: the bottom right, across from Back
+		here.position = Vector2(934, 664) if invite else Vector2(520, 596)
+		here.custom_minimum_size = Vector2(190, 46) if invite else Vector2(240, 50)
 		here.tooltip_text = tr("You logged in on another device")
 		here.pressed.connect(play_here)
 		_body.add_child(here)
 	var field := user if user.text == "" else pw
 	if field.is_inside_tree():
 		field.grab_focus()
+	if link.is_open() and not link.signup_asked:
+		link.request_signup_info()
+
+
+## The field in a row with a Paste button (the clipboard replaces its text), in its place in box.
+func _paste_row(box: VBoxContainer, field: LineEdit, button_name: String) -> void:
+	var at := field.get_index()
+	field.custom_minimum_size.x = 300
+	box.remove_child(field)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	row.visible = field.visible
+	field.visible = true
+	row.add_child(field)
+	var paste := Palette.button(tr("Paste"), button_name)
+	paste.custom_minimum_size = Vector2(108, 52)
+	paste.add_theme_font_size_override("font_size", 20)
+	paste.focus_mode = Control.FOCUS_NONE
+	paste.pressed.connect(func():
+		field.clear()
+		field.menu_option(LineEdit.MENU_PASTE))
+	row.add_child(paste)
+	box.add_child(row)
+	box.move_child(row, at)
+
+
+## The login form again (signup_info changed it), what was typed kept.
+func _rebuild_login() -> void:
+	var typed := {}
+	for n in ["User", "Password", "InviteKey"]:
+		var e := find_child(n, true, false) as LineEdit
+		if e:
+			typed[n] = e.text
+	_go("login")
+	for n in typed:
+		var e := find_child(n, true, false) as LineEdit
+		if e:
+			e.text = typed[n]
+
+
+func _error_text(msg: Dictionary) -> String:
+	match str(msg.get("code", "")):
+		"invite_required":
+			return tr("Registration on this server needs an invite key")
+		"invite_invalid":
+			return tr("This invite key is unknown, used up or revoked")
+	return str(msg.get("text", msg.get("code", "error")))
 
 
 ## Kicked out by another login: the saved session again (the other device gets kicked).
@@ -270,11 +325,19 @@ func play_here() -> void:
 	_go("connecting")
 
 
-func log_in(op: String, user: String, password: String) -> void:
+## key: the invite key (register only; sent when there is one: an older server refuses the field).
+func log_in(op: String, user: String, password: String, key := "") -> void:
 	if user.length() < 3 or password.length() < 8:
 		say(tr("An account name of 3 or more letters and a password of 8 or more characters"))
 		return
-	link.send({"t": op, "user": user, "password": password})
+	var msg := {"t": op, "user": user, "password": password}
+	key = key.strip_edges()
+	if op == "register" and key != "":
+		msg["key"] = key
+	elif op == "register" and link.invite_only:
+		say(tr("Registration on this server needs an invite key"))
+		return
+	link.send(msg)
 	say(tr("Connecting…"))
 
 
@@ -794,11 +857,17 @@ func _on_message(msg: Dictionary) -> void:
 		"error":
 			if stage == "connecting":  # a refused saved session: log in by hand
 				_go("login")
-			say(str(msg.get("text", msg.get("code", "error"))))
+			elif stage == "login" and msg.get("code") == "invite_required" and not link.invite_only:
+				link.invite_only = true  # turned on since the form was made: the key field now
+				_rebuild_login()
+			say(_error_text(msg))
 			if msg.get("code", "") in ["queue", "deck"] or (_queue_asked and queued != ""):
 				_queue_asked = false  # the search was refused: it does not go on
 				queued = ""
 				_go("lobby")
+		"signup_info":
+			if stage == "login" and _form_invite != link.invite_only:
+				_rebuild_login()
 		"me":
 			link.me = msg.get("me", msg)
 			_set_arena(link.me.get("arena"))
