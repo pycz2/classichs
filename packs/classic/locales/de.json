@@ -162,5 +162,139 @@
     "putting_it_all_together.his_hero_power": "Seine Heldenfähigkeit: zwei Diener jede Runde",
     "putting_it_all_together.taunt_guards_your": "Spott schützt Euren Helden",
     "putting_it_all_together.hits_all_enemy": "Trifft alle feindlichen Diener"
+  },
+  "cards": {
+    "EX1_625t": {
+      "text": "<b>Heldenfähigkeit</b>\nVerursacht 2 Schaden."
+    },
+    "EX1_625t2": {
+      "text": "<b>Heldenfähigkeit</b>\nVerursacht 3 Schaden."
+    },
+    "TU4d_003": {
+      "text": "<b>Heldenfähigkeit</b>\nVerursacht 1 Schaden."
+    },
+    "TU4e_002": {
+      "text": "<b>Heldenfähigkeit</b>\nBeschwört zwei Diener (2/1)."
+    },
+    "VAN_DREAM_01": {
+      "text": "Kann nicht als Ziel von Zaubern oder Heldenfähigkeiten gewählt werden."
+    },
+    "VAN_DS1_184": {
+      "text": "Schaut Euch die drei obersten Karten Eures Decks an. Zieht eine davon und werft die anderen beiden ab."
+    },
+    "VAN_EX1_136": {
+      "text": "<b>Geheimnis:</b> Wenn einer Eurer Diener stirbt, wird er mit 1 Leben wiederbelebt."
+    },
+    "VAN_EX1_154a": {
+      "name": "Zorn"
+    },
+    "VAN_EX1_154b": {
+      "name": "Zorn"
+    },
+    "VAN_EX1_155a": {
+      "name": "Mal der Natur"
+    },
+    "VAN_EX1_155b": {
+      "name": "Mal der Natur"
+    },
+    "VAN_EX1_164a": {
+      "name": "Pflege"
+    },
+    "VAN_EX1_164b": {
+      "name": "Pflege"
+    },
+    "VAN_EX1_178a": {
+      "name": "Festgewurzelt"
+    },
+    "VAN_EX1_277": {
+      "text": "Verursacht $3 Schaden, der zufällig auf feindliche Charaktere verteilt wird."
+    },
+    "VAN_EX1_302": {
+      "text": "Fügt einem Diener $1 Schaden zu. Zieht eine Karte, wenn er dadurch vernichtet wird."
+    },
+    "VAN_EX1_304": {
+      "text": "<b>Kampfschrei:</b> Vernichtet die benachbarten Diener und verleiht ihm deren Angriff und Leben."
+    },
+    "VAN_EX1_306": {
+      "name": "Sukkubus"
+    },
+    "VAN_EX1_317": {
+      "text": "Fügt Eurer Hand zwei zufällige Dämonen aus Eurem Deck hinzu."
+    },
+    "VAN_EX1_320": {
+      "text": "Fügt einem Charakter $2 Schaden zu. Beschwört einen zufälligen Dämon, wenn der Schaden tödlich ist."
+    },
+    "VAN_EX1_339": {
+      "text": "Kopiert 2 Karten aus dem Deck Eures Gegners und fügt sie Eurer Hand hinzu."
+    },
+    "VAN_EX1_366": {
+      "text": "Jedes Mal, wenn Ihr einen Diener herbeiruft, erhält dieser +1/+1 und diese Waffe verliert 1 Haltbarkeit."
+    },
+    "VAN_EX1_379": {
+      "text": "<b>Geheimnis:</b> Wenn Euer Gegner einen Diener ausspielt, wird dessen Leben auf 1 verringert."
+    },
+    "VAN_EX1_384": {
+      "text": "Verursacht $8 Schaden, der zufällig auf feindliche Charaktere verteilt wird."
+    },
+    "VAN_EX1_409": {
+      "name": "Aufwertung"
+    },
+    "VAN_EX1_533": {
+      "text": "<b>Geheimnis:</b> Wenn ein Charakter Euren Helden angreift, greift er stattdessen einen zufälligen anderen Charakter an."
+    },
+    "VAN_EX1_536": {
+      "text": "Erhält jedes Mal +1 Haltbarkeit, wenn ein <b>Geheimnis</b> aufgedeckt wird."
+    },
+    "VAN_EX1_539": {
+      "text": "Verursacht $3 Schaden. Verursacht stattdessen $5 Schaden, wenn Ihr ein Wildtier besitzt."
+    },
+    "VAN_EX1_559": {
+      "text": "Erhaltet jedes Mal einen „Feuerball“-Zauber auf Eure Hand, wenn Ihr einen Zauber wirkt."
+    },
+    "VAN_EX1_572": {
+      "text": "Zieht am Ende Eures Zuges eine Traumkarte."
+    },
+    "VAN_EX1_577": {
+      "text": "<b>Todesröcheln:</b> Ruft Finkle Einhorn (3/3) für Euren Gegner herbei."
+    },
+    "VAN_EX1_595": {
+      "text": "Zieht jedes Mal eine Karte, wenn einer Eurer anderen Diener stirbt."
+    },
+    "VAN_EX1_609": {
+      "text": "<b>Geheimnis:</b> Wenn Euer Gegner einen Diener ausspielt, werden diesem $4 Schaden zugefügt."
+    },
+    "VAN_EX1_611": {
+      "text": "<b>Geheimnis:</b> Wenn ein feindlicher Diener angreift, lasst ihn auf die Hand seines Besitzers zurückkehren. Zusätzlich kostet er (2) mehr."
+    },
+    "VAN_EX1_finkle": {
+      "name": "Finkle Einhorn"
+    },
+    "VAN_HERO_02bp": {
+      "text": "<b>Heldenfähigkeit</b>\nBeschwört ein zufälliges Totem."
+    },
+    "VAN_HERO_04bp": {
+      "text": "<b>Heldenfähigkeit</b>\nRuft einen Rekruten der Silbernen Hand (1/1) herbei."
+    },
+    "VAN_NEW1_007a": {
+      "name": "Sternenregen"
+    },
+    "VAN_NEW1_007b": {
+      "name": "Sternenregen"
+    },
+    "VAN_NEW1_010": {
+      "text": "<b>Windzorn</b>, <b>Ansturm</b>, <b>Gottesschild</b>, <b>Spott</b>"
+    },
+    "VAN_NEW1_016": {
+      "text": "<b>Kampfschrei:</b> Fügt Eurer Hand einen zufälligen Piraten aus Eurem Deck hinzu."
+    },
+    "VAN_NEW1_023": {
+      "text": "Kann nicht als Ziel von Zaubern oder Heldenfähigkeiten gewählt werden."
+    },
+    "VAN_NEW1_033": {
+      "text": "Andere befreundete Diener haben +1 Angriff."
+    },
+    "VAN_PRO_001c": {
+      "name": "„Power of the Horde“"
+    }
   }
 }

@@ -9,6 +9,8 @@
 //! hooks), or card ids (`VAN_CS2_029,VAN_EX1_287`); comma-separated, mixed.
 //! `PARITY_BIG=0` skips fixtures/big (the committed 1731 games only: a quick check).
 //! `PARITY_FIXTURES=<dir>` reads the fixtures from another folder.
+//! `PARITY_RERECORD=1` records the games that no longer match again (`record_again`):
+//! for a deliberate rules change (0.51: the cards as in 2014), with a review of the diff.
 
 use classichs_engine::api::Engine;
 use classichs_engine::entity::int;
@@ -125,6 +127,39 @@ fn replay(line: &Value, st: &mut Stats) {
     }
 }
 
+/// `PARITY_RERECORD=1`: a game that no longer matches (a card changed on purpose) is recorded
+/// again from its actions with this engine; None (dropped) when an action or a bot choice no
+/// longer goes as recorded. Review what it rewrote: it trusts the engine as it is now.
+fn record_again(line: &Value) -> Option<Value> {
+    let mut out = line.clone();
+    let mut g = setup(&line["setup"]);
+    let form = |want: &Value, got: Vec<serde_json::Map<String, Value>>| {
+        let got = Value::Array(got.into_iter().map(Value::Object).collect());
+        if want.is_string() { json!(short(&stringify(&got))) } else { got }
+    };
+    out["h0"] = json!(short(&g.state_hash()));
+    out["e0"] = form(&line["e0"], g.history[0].events());
+    for s in out["steps"].as_array_mut()? {
+        let legal = Value::Array(g.legal_actions().into_iter().map(Value::Object).collect());
+        s["l"] = json!(short(&stringify(&legal)));
+        if let Some(p) = s.get("b") {
+            if bot::choose(&g, int(Some(p)) as usize).map_or(json!({}), Value::Object) != s["a"] {
+                return None;
+            }
+        }
+        let res = g.apply(&s["a"]);
+        if res.ok != s["ok"].as_bool()? || (!res.ok && res.error != s["err"].as_str().unwrap_or("")) {
+            return None;
+        }
+        s["e"] = form(&s["e"], res.events());
+        s["h"] = json!(short(&g.state_hash()));
+    }
+    if out.get("dump").is_some() {
+        out["dump"] = json!(short(&stringify(&scenario::dump(&g))));
+    }
+    Some(out)
+}
+
 fn misc(line: &Value, st: &mut Stats) {
     match line["t"].as_str().unwrap() {
         "rng" => {
@@ -193,9 +228,13 @@ fn parity_with_gdscript() {
     let needles = filter();
     let t0 = std::time::Instant::now();
     let mut st = Stats::default();
+    let rerecord = std::env::var("PARITY_RERECORD").is_ok_and(|v| v == "1");
+    let (mut redone, mut dropped) = (0, 0);
     for f in &files {
         let text = std::fs::read_to_string(f).unwrap();
+        let mut out: Vec<String> = vec![];
         for line in text.lines().filter(|l| !l.trim().is_empty()) {
+            out.push(line.to_string());
             if let Some(n) = &needles {
                 if !n.iter().any(|x| line.contains(x.as_str())) {
                     continue;
@@ -208,9 +247,27 @@ fn parity_with_gdscript() {
             if v.get("t").is_some() {
                 misc(&v, &mut st);
             } else {
+                let bad = st.mismatches.len();
                 replay(&v, &mut st);
+                if rerecord && st.mismatches.len() > bad {
+                    st.mismatches.truncate(bad);
+                    out.pop();
+                    match record_again(&v) {
+                        Some(n) => {
+                            out.push(serde_json::to_string(&n).unwrap());
+                            redone += 1;
+                        }
+                        None => dropped += 1,
+                    }
+                }
             }
         }
+        if rerecord {
+            std::fs::write(f, out.join("\n") + "\n").unwrap();
+        }
+    }
+    if rerecord {
+        eprintln!("PARITY_RERECORD: {redone} games recorded again, {dropped} dropped");
     }
     let playable: Vec<&String> = card_db::collectible().iter().filter(|id| card_db::card(id).kind != "CHAMPION").collect();
     let missing: Vec<&&String> = playable.iter().filter(|id| !st.played.contains(**id)).collect();

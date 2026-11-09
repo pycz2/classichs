@@ -13,6 +13,8 @@ var current := 0
 var phase := "MULLIGAN"
 ## {} or {player, source, options, zones}: an open card choice (Tracking).
 var pending := {}
+## Seconds a turn lasts while a minion asks for it (card `turn_seconds`: Nozdormu); 0 = no limit.
+var turn_seconds := 0
 var game_over := false
 var winner := -1
 var players: Array[Seat] = []
@@ -162,6 +164,7 @@ func update(s: Dictionary) -> void:
 	current = int(s.get("current", 0))
 	phase = str(s.get("phase", "PLAY"))
 	pending = s.get("pending", {})
+	turn_seconds = int(s.get("turn_seconds", 0))
 	game_over = bool(s.get("game_over", false))
 	winner = int(s.get("winner", -1))
 	if s.has("start_decks"):

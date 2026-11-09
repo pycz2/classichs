@@ -74,16 +74,18 @@
 	},
 	"EX1_625t": {
 		"lines": [
-			"Zadaj",
-			"2 pkt. obrażeń."
+			"[b]Moc specjalna[/b]",
+			"Zadaj 2 pkt.",
+			"obrażeń."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"EX1_625t2": {
 		"lines": [
-			"Zadaj",
-			"3 pkt. obrażeń."
+			"[b]Moc specjalna[/b]",
+			"Zadaj 3 pkt.",
+			"obrażeń."
 		],
 		"name": 12,
 		"text": 11
@@ -310,8 +312,9 @@
 	},
 	"TU4d_003": {
 		"lines": [
-			"Zadaj",
-			"1 pkt. obrażeń."
+			"[b]Moc specjalna[/b]",
+			"Zadaj 1 pkt.",
+			"obrażeń."
 		],
 		"name": 12,
 		"text": 11
@@ -322,6 +325,7 @@
 	},
 	"TU4e_002": {
 		"lines": [
+			"[b]Moc specjalna[/b]",
 			"Przyzwij dwóch",
 			"stronników 2/1."
 		],
@@ -467,10 +471,9 @@
 	},
 	"VAN_CS2_005": {
 		"lines": [
-			"Daj twojemu",
-			"bohaterowi +2 do ataku",
-			"w tej turze. Otrzymujesz",
-			"2 pkt. pancerza."
+			"Daj swojemu bohaterowi",
+			"+2 do ataku w tej turze i",
+			"+2 do pancerza."
 		],
 		"name": 12,
 		"text": 8
@@ -1213,7 +1216,7 @@
 			"[b]Okrzyk bojowy:[/b]",
 			"Przyzwij Dzika 1/1."
 		],
-		"name": 9,
+		"name": 8,
 		"text": 11,
 		"valign": "top"
 	},
@@ -1358,10 +1361,13 @@
 	},
 	"VAN_DREAM_01": {
 		"lines": [
-			"[b]Nieuchwytność[/b]"
+			"Nie może stać się",
+			"celem zaklęcia lub",
+			"mocy specjalnej."
 		],
 		"name": 12,
-		"text": 11
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_DREAM_02": {
 		"lines": [
@@ -1443,10 +1449,10 @@
 	},
 	"VAN_DS1_184": {
 		"lines": [
-			"Spójrz na trzy górne",
-			"karty z twojej talii.",
-			"Jedną dobierz do ręki,",
-			"a dwie pozostałe odrzuć."
+			"Spójrz na trzy górne karty",
+			"ze swojej talii. Jedną",
+			"dobierz na rękę, a dwie",
+			"pozostałe odrzuć."
 		],
 		"name": 12,
 		"text": 8
@@ -1961,7 +1967,7 @@
 			"pozostałym Murlokom",
 			"+2 do zdrowia."
 		],
-		"name": 10,
+		"name": 9,
 		"text": 8,
 		"valign": "top"
 	},
@@ -2100,10 +2106,10 @@
 	},
 	"VAN_EX1_136": {
 		"lines": [
-			"[b]Sekret:[/b] Gdy zginie",
-			"przyjazny stronnik,",
-			"przywróć go do życia",
-			"z 1 pkt. zdrowia."
+			"[b]Sekret:[/b] Kiedy jeden z",
+			"twoich stronników zginie,",
+			"przywróć go do życia z 1",
+			"pkt. zdrowia."
 		],
 		"name": 12,
 		"text": 8
@@ -2518,12 +2524,13 @@
 	},
 	"VAN_EX1_277": {
 		"lines": [
-			"Rozdziel losowo",
-			"3 pkt. obrażeń między",
-			"wszystkich wrogów."
+			"Zadaj 3 pkt. obrażeń,",
+			"losowo rozdzielone",
+			"pomiędzy wrogimi",
+			"postaciami."
 		],
 		"name": 12,
-		"text": 10
+		"text": 8
 	},
 	"VAN_EX1_278": {
 		"lines": [
@@ -2620,11 +2627,11 @@
 	"VAN_EX1_302": {
 		"lines": [
 			"Zadaj 1 pkt. obrażeń",
-			"stronnikowi. Jeśli",
-			"zginie, dobierz kartę."
+			"stronnikowi. Jeśli go",
+			"zabijesz, dobierz kartę."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9
 	},
 	"VAN_EX1_303": {
 		"lines": [
@@ -2639,12 +2646,12 @@
 	"VAN_EX1_304": {
 		"lines": [
 			"[b]Okrzyk bojowy:[/b] Zniszcz",
-			"obu sąsiadujących z nim",
+			"sąsiadujących z nim",
 			"stronników, a zyska ich atak",
 			"oraz zdrowie."
 		],
 		"name": 12,
-		"text": 8,
+		"text": 7,
 		"valign": "top"
 	},
 	"VAN_EX1_306": {
@@ -2721,8 +2728,9 @@
 	},
 	"VAN_EX1_317": {
 		"lines": [
-			"Dobierz 2 Demony",
-			"z twojej talii."
+			"Umieść w ręce 2",
+			"losowe demony ze",
+			"swojej talii."
 		],
 		"name": 12,
 		"text": 11
@@ -2738,23 +2746,23 @@
 	},
 	"VAN_EX1_320": {
 		"lines": [
-			"Zadaj 3 pkt. obrażeń",
-			"dowolnej postaci.",
-			"Jeśli zginie, przyzwij",
-			"losowego Demona."
+			"Zadaj 2 pkt. obrażeń",
+			"dowolnej postaci. Jeśli ją",
+			"zabijesz, przyzwij",
+			"losowego demona."
 		],
 		"name": 12,
 		"text": 8
 	},
 	"VAN_EX1_323": {
 		"lines": [
-			"[b]Okrzyk bojowy:[/b]",
-			"Zniszcz twojego bohatera",
-			"i zastąp go Lordem",
-			"Jaraxxusem."
+			"[b]Okrzyk bojowy:[/b] Zniszcz",
+			"swojego bohatera i zastąp",
+			"go Lordem Jaraxxusem."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_332": {
 		"lines": [
@@ -2785,12 +2793,12 @@
 	},
 	"VAN_EX1_339": {
 		"lines": [
-			"Skopiuj 2 karty z talii",
-			"przeciwnika i dodaj je",
-			"do twojej ręki."
+			"Skopiuj dwie karty z",
+			"talii przeciwnika i",
+			"umieść je w swojej ręce."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9
 	},
 	"VAN_EX1_341": {
 		"lines": [
@@ -2895,13 +2903,12 @@
 	},
 	"VAN_EX1_366": {
 		"lines": [
-			"Kiedy przyzwiesz",
-			"stronnika, daj mu",
-			"+1/+1; miecz traci",
-			"1 wytrzymałości."
+			"Gdy przyzywasz stronnika,",
+			"otrzymuje on +1/+1, zaś miecz",
+			"traci 1 pkt. wytrzymałości."
 		],
 		"name": 10,
-		"text": 8,
+		"text": 7,
 		"valign": "top"
 	},
 	"VAN_EX1_371": {
@@ -2914,10 +2921,10 @@
 	},
 	"VAN_EX1_379": {
 		"lines": [
-			"[b]Sekret:[/b] Gdy twój",
+			"[b]Sekret:[/b] Kiedy twój",
 			"przeciwnik zagra",
-			"stronnika, zmniejsz",
-			"jego zdrowie do 1."
+			"stronnika, zmniejsz jego",
+			"zdrowie do 1."
 		],
 		"name": 12,
 		"text": 8
@@ -2944,12 +2951,13 @@
 	},
 	"VAN_EX1_384": {
 		"lines": [
-			"Rozdziel losowo",
-			"8 pkt. obrażeń między",
-			"wszystkich wrogów."
+			"Zadaj 8 pkt. obrażeń,",
+			"losowo rozdzielone",
+			"pomiędzy wrogimi",
+			"postaciami."
 		],
 		"name": 12,
-		"text": 10
+		"text": 8
 	},
 	"VAN_EX1_390": {
 		"lines": [
@@ -3165,7 +3173,7 @@
 	},
 	"VAN_EX1_533": {
 		"lines": [
-			"[b]Sekret:[/b] Gdy jakiś przeciwnik",
+			"[b]Sekret:[/b] Kiedy jakaś postać",
 			"zaatakuje twojego bohatera,",
 			"zamiast tego zaatakuje inną",
 			"losową postać."
@@ -3186,7 +3194,7 @@
 		"lines": [
 			"Za każdym razem gdy",
 			"ujawniony zostaje [b]Sekret[/b],",
-			"otrzymuje +1 pkt.",
+			"zyskuje 1 pkt.",
 			"wytrzymałości."
 		],
 		"name": 12,
@@ -3213,10 +3221,9 @@
 	},
 	"VAN_EX1_539": {
 		"lines": [
-			"Zadaj 3 pkt. obrażeń.",
-			"Jeśli kontrolujesz Bestię,",
-			"zamiast tego zadaj",
-			"5 pkt. obrażeń."
+			"Zadaj 3 pkt. obrażeń. Jeśli",
+			"masz Bestię, zamiast tego",
+			"zadaj 5 pkt. obrażeń."
 		],
 		"name": 12,
 		"text": 8
@@ -3293,10 +3300,9 @@
 	},
 	"VAN_EX1_559": {
 		"lines": [
-			"Za każdym razem",
-			"gdy rzucasz zaklęcie,",
-			"umieść w ręce zaklęcie",
-			"„Kula ognia”."
+			"Za każdym razem kiedy",
+			"rzucasz zaklęcie, weź do",
+			"ręki zaklęcie „Kula ognia”."
 		],
 		"name": 12,
 		"text": 8,
@@ -3366,10 +3372,9 @@
 	},
 	"VAN_EX1_570": {
 		"lines": [
-			"Daj twojemu",
-			"bohaterowi +4 do ataku",
-			"w tej turze. Otrzymujesz",
-			"4 pkt. pancerza."
+			"Daj swojemu bohaterowi",
+			"+4 do ataku w tej turze i",
+			"+4 do pancerza."
 		],
 		"name": 12,
 		"text": 8
@@ -3385,12 +3390,12 @@
 	},
 	"VAN_EX1_572": {
 		"lines": [
-			"Na koniec twojej tury",
-			"dodaj Kartę Snu do",
-			"twojej ręki."
+			"Na koniec swojej",
+			"tury dobierz Kartę",
+			"Snu."
 		],
 		"name": 12,
-		"text": 10
+		"text": 11
 	},
 	"VAN_EX1_573": {
 		"lines": [
@@ -3430,13 +3435,12 @@
 	},
 	"VAN_EX1_577": {
 		"lines": [
-			"[b]Agonia:[/b] Przyzwij",
-			"Pipa Wartkomyśla 3/3",
-			"twojemu przeciwnikowi."
+			"[b]Agonia:[/b] Przyzwij dla",
+			"przeciwnika Finkosza",
+			"Rogoźnika 3/3."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_578": {
 		"lines": [
@@ -3542,11 +3546,12 @@
 	},
 	"VAN_EX1_595": {
 		"lines": [
-			"Gdy zginie przyjazny",
-			"stronnik, dobierz kartę."
+			"Dobierz kartę za każdym",
+			"razem, gdy zginie jeden z",
+			"twoich stronników."
 		],
 		"name": 12,
-		"text": 9,
+		"text": 8,
 		"valign": "top"
 	},
 	"VAN_EX1_596": {
@@ -3624,10 +3629,10 @@
 	},
 	"VAN_EX1_609": {
 		"lines": [
-			"[b]Sekret:[/b] Gdy twój",
+			"[b]Sekret:[/b] Kiedy twój",
 			"przeciwnik zagra",
-			"stronnika, zadaj mu",
-			"4 pkt. obrażeń."
+			"stronnika, zadaj mu 4 pkt.",
+			"obrażeń."
 		],
 		"name": 12,
 		"text": 8
@@ -3644,10 +3649,10 @@
 	},
 	"VAN_EX1_611": {
 		"lines": [
-			"[b]Sekret:[/b] Gdy wrogi stronnik",
-			"zaatakuje, cofnij go",
-			"do ręki właściciela",
-			"Kosztuje (2) więcej."
+			"[b]Sekret:[/b] Kiedy wrogi",
+			"stronnik zaatakuje, cofnij",
+			"go na rękę właściciela i",
+			"zwiększ jego koszt o (2)."
 		],
 		"name": 11,
 		"text": 8
@@ -3756,9 +3761,9 @@
 	"VAN_EX1_625": {
 		"lines": [
 			"Twoja moc specjalna zmienia",
-			"się na „Zadaj 2 pkt. obrażeń”.",
-			"Jeśli jesteś już w postaci cienia:",
-			"3 pkt. obrażeń."
+			"się w „Zadaj 2 pkt. obrażeń”.",
+			"Jeśli posiadasz już postać",
+			"cienia: 3 pkt. obrażeń."
 		],
 		"name": 12,
 		"text": 7
@@ -3840,7 +3845,7 @@
 		"lines": [
 			"[b]Moc specjalna[/b]",
 			"Przyzwij losowy",
-			"podstawowy Totem."
+			"totem."
 		],
 		"name": 12,
 		"text": 11
@@ -3875,8 +3880,8 @@
 	"VAN_HERO_04bp": {
 		"lines": [
 			"[b]Moc specjalna[/b]",
-			"Przyzwij Rekruta",
-			"Srebrnej Dłoni ."
+			"Przyzwij rekruta",
+			"Srebrnej Dłoni 1/1."
 		],
 		"name": 12,
 		"text": 11
@@ -4089,13 +4094,12 @@
 	},
 	"VAN_NEW1_010": {
 		"lines": [
-			"[b]Szarża[/b]",
-			"[b]Boska tarcza[/b]",
-			"[b]Prowokacja[/b]",
-			"[b]Furia wichru[/b]"
+			"[b]Furia wichru, Szarża, [/b]",
+			"[b]Boska tarcza, [/b]",
+			"[b]Prowokacja[/b]"
 		],
 		"name": 9,
-		"text": 8
+		"text": 9
 	},
 	"VAN_NEW1_011": {
 		"lines": [
@@ -4125,12 +4129,12 @@
 	},
 	"VAN_NEW1_016": {
 		"lines": [
-			"[b]Okrzyk bojowy:[/b]",
-			"Dobierz Pirata",
-			"z twojej talii."
+			"[b]Okrzyk bojowy:[/b] Umieść w",
+			"ręce losowego Pirata ze",
+			"swojej talii."
 		],
 		"name": 12,
-		"text": 10
+		"text": 8
 	},
 	"VAN_NEW1_017": {
 		"lines": [
@@ -4191,10 +4195,13 @@
 	},
 	"VAN_NEW1_023": {
 		"lines": [
-			"[b]Nieuchwytność[/b]"
+			"Nie może stać się",
+			"celem zaklęcia lub",
+			"mocy specjalnej."
 		],
 		"name": 12,
-		"text": 11
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_NEW1_024": {
 		"lines": [
@@ -4276,13 +4283,12 @@
 	},
 	"VAN_NEW1_033": {
 		"lines": [
-			"Twoi pozostali",
-			"stronnicy mają",
+			"Pozostali przyjaźni",
+			"stronnicy otrzymują",
 			"+1 do ataku."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 10
 	},
 	"VAN_NEW1_034": {
 		"lines": [

@@ -31,6 +31,7 @@ array of card objects, one per card (tokens, champions and powers included).
 | `refs` | [mechanic name] | Mechanics the text mentions (tooltips only). |
 | `spell_power` | int | Its `SPELL_POWER` amount. |
 | `mana_lock` | int | Its `MANA_LOCK` amount (mana locked next turn). |
+| `turn_seconds` | int | A minion: while it is in play, a turn that starts lasts only this many seconds (the shortest of such minions counts); when they all leave play the turn gets its usual time back (Nozdormu). The snapshot's `turn_seconds`; servers and local games time turns by it. |
 | `unique` | bool | Legendary frame (a dragon). |
 | `power` | card id | `CHAMPION` only: its `POWER` card. |
 | `code_id`, `legacy_code_id` | int | Numbers for deck codes (Classic: Hearthstone `dbfId` and the legacy one, so Hearthstone deck codes keep working). |

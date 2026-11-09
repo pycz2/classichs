@@ -6126,7 +6126,7 @@
   "VAN_DREAM_01": [
     {
       "kind": "play",
-      "title": "Laughing Sister (3/5 Elusive, a Dream card from Ysera) is played from hand",
+      "title": "Laughing Sister (3 mana 3/5, can't be targeted by spells or Hero Powers; a Dream card from Ysera) is played from hand",
       "scene": {
         "current": 0,
         "players": [
@@ -6170,7 +6170,7 @@
     },
     {
       "kind": "other",
-      "title": "Elusive: Fireball can target the enemy Wisp but not the Laughing Sister next to it",
+      "title": "Can't be targeted by spells: Fireball can target the enemy Wisp but not the Laughing Sister next to it",
       "scene": {
         "current": 0,
         "players": [
@@ -9085,7 +9085,7 @@
   "VAN_EX1_131": [
     {
       "kind": "play",
-      "title": "Defias Ringleader without Combo: just a 3/2",
+      "title": "Defias Ringleader without Combo: just a 2/2",
       "scene": {
         "current": 0,
         "players": [
@@ -11111,7 +11111,7 @@
   "VAN_EX1_306": [
     {
       "kind": "battlecry",
-      "title": "Felstalker: Battlecry discards a random card from your hand",
+      "title": "Succubus: Battlecry discards a random card from your hand",
       "scene": {
         "current": 0,
         "players": [
@@ -11158,7 +11158,7 @@
     },
     {
       "kind": "attack",
-      "title": "Felstalker attacks the Boulderfist Ogre (6/7) and dies in the trade",
+      "title": "Succubus attacks the Boulderfist Ogre (6/7) and dies in the trade",
       "scene": {
         "current": 0,
         "players": [
@@ -11819,6 +11819,54 @@
             "zone": "hand",
             "index": 0
           }
+        }
+      ]
+    },
+    {
+      "kind": "trigger",
+      "title": "Shadow of Nothing destroys itself at the end of the turn (2014)",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_09",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_231",
+              "VAN_CS2_120",
+              "VAN_CS2_172",
+              "VAN_CS2_182"
+            ],
+            "hand": [
+              "VAN_EX1_345t"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 0,
+            "max_mana": 9,
+            "deck": [
+              "VAN_CS2_231",
+              "VAN_CS2_120",
+              "VAN_CS2_172",
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "pos": 0
+        },
+        {
+          "do": "end_turn"
         }
       ]
     }
@@ -13853,7 +13901,7 @@
   "VAN_EX1_560": [
     {
       "kind": "play",
-      "title": "Nozdormu (8/8) is played (the 15-second turn limit has no hook in this engine)",
+      "title": "Nozdormu (8/8) is played: from the next turn on, turns last 15 seconds",
       "scene": {
         "current": 0,
         "players": [
@@ -13947,6 +13995,45 @@
             "zone": "board",
             "index": 0
           }
+        }
+      ]
+    },
+    {
+      "kind": "other",
+      "title": "Nozdormu on the board: the next turns last 15 seconds (the rope burns at once, in training too)",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_231",
+              "VAN_CS2_120",
+              "VAN_CS2_172",
+              "VAN_CS2_182"
+            ],
+            "board": [
+              "VAN_EX1_560"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 0,
+            "max_mana": 9,
+            "deck": [
+              "VAN_CS2_231",
+              "VAN_CS2_120",
+              "VAN_CS2_172",
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "end_turn"
         }
       ]
     }
@@ -15565,7 +15652,7 @@
   "VAN_EX1_finkle": [
     {
       "kind": "other",
-      "title": "The Beast dies: its Deathrattle gives the opponent a 3/3 Pip Quickwit",
+      "title": "The Beast dies: its Deathrattle gives the opponent a 3/3 Finkle Einhorn",
       "scene": {
         "current": 0,
         "players": [
@@ -15620,7 +15707,7 @@
     },
     {
       "kind": "attack",
-      "title": "Pip Quickwit (3/3) attacks a Boulderfist Ogre and dies",
+      "title": "Finkle Einhorn (3/3) attacks a Boulderfist Ogre and dies",
       "scene": {
         "current": 0,
         "players": [

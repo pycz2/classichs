@@ -54,7 +54,11 @@ fn classic_cards(data: &[u8], patch: &[u8]) -> Vec<u8> {
             }
             if let Some(Value::Object(p)) = patch.get(c["id"].as_str().unwrap_or("")) {
                 for (k, v) in p {
-                    card.insert(k.clone(), v.clone());
+                    if v.is_null() {
+                        card.remove(k); // a patch's null removes a field
+                    } else {
+                        card.insert(k.clone(), v.clone());
+                    }
                 }
             }
             Value::Object(card)

@@ -291,6 +291,13 @@ class Classic(unittest.TestCase):
         en = json.loads(files["locales/en.json"])
         self.assertEqual(en["ranks"]["25"], "Angry Chicken")
         self.assertEqual(en["mechanics"]["TAUNT"]["name"], "Taunt")
+        # the cards as in June 2014: the patch's null takes the later Mech tribe away, the source
+        # locales give the 2014 names (Succubus, later Felstalker)
+        by_id = {c["id"]: c for c in cards}
+        self.assertNotIn("race", by_id["VAN_EX1_556"])
+        self.assertEqual(by_id["VAN_EX1_560"]["turn_seconds"], 15)
+        self.assertEqual(en["cards"]["VAN_EX1_306"]["name"], "Succubus")
+        self.assertEqual(json.loads(files["locales/ru.json"])["cards"]["VAN_EX1_306"]["name"], "Суккуб")
 
 
 class Neonfall(unittest.TestCase):

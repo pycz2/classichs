@@ -75,16 +75,18 @@
 	},
 	"EX1_625t": {
 		"lines": [
-			"Verursacht",
-			"2 Schaden."
+			"[b]Heldenfähigkeit[/b]",
+			"Verursacht 2",
+			"Schaden."
 		],
 		"name": 12,
 		"text": 11
 	},
 	"EX1_625t2": {
 		"lines": [
-			"Verursacht",
-			"3 Schaden."
+			"[b]Heldenfähigkeit[/b]",
+			"Verursacht 3",
+			"Schaden."
 		],
 		"name": 9,
 		"text": 11
@@ -314,8 +316,9 @@
 	},
 	"TU4d_003": {
 		"lines": [
-			"Verursacht",
-			"1 Schaden."
+			"[b]Heldenfähigkeit[/b]",
+			"Verursacht 1",
+			"Schaden."
 		],
 		"name": 12,
 		"text": 11
@@ -326,8 +329,9 @@
 	},
 	"TU4e_002": {
 		"lines": [
-			"Ruft 2 Diener",
-			"(2/1) herbei."
+			"[b]Heldenfähigkeit[/b]",
+			"Beschwört zwei",
+			"Diener (2/1)."
 		],
 		"name": 10,
 		"text": 11
@@ -1368,10 +1372,14 @@
 	},
 	"VAN_DREAM_01": {
 		"lines": [
-			"[b]Flüchtig[/b]"
+			"Kann nicht als Ziel von",
+			"Zaubern oder",
+			"Heldenfähigkeiten",
+			"gewählt werden."
 		],
 		"name": 11,
-		"text": 11
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_DREAM_02": {
 		"lines": [
@@ -1454,13 +1462,13 @@
 	},
 	"VAN_DS1_184": {
 		"lines": [
-			"Schaut Euch die 3 obersten",
-			"Karten Eures Decks an.",
-			"Zieht eine und werft",
-			"die anderen ab."
+			"Schaut Euch die drei obersten",
+			"Karten Eures Decks an. Zieht",
+			"eine davon und werft die",
+			"anderen beiden ab."
 		],
 		"name": 12,
-		"text": 8
+		"text": 7
 	},
 	"VAN_DS1_185": {
 		"lines": [
@@ -2107,10 +2115,10 @@
 	},
 	"VAN_EX1_136": {
 		"lines": [
-			"[b]Geheimnis:[/b] Wenn",
-			"ein befreundeter",
-			"Diener stirbt, wird er",
-			"mit 1 Leben wiederbelebt."
+			"[b]Geheimnis:[/b] Wenn einer",
+			"Eurer Diener stirbt, wird",
+			"er mit 1 Leben",
+			"wiederbelebt."
 		],
 		"name": 12,
 		"text": 8
@@ -2527,7 +2535,7 @@
 	"VAN_EX1_277": {
 		"lines": [
 			"Verursacht 3 Schaden, der",
-			"zufällig auf alle feindlichen",
+			"zufällig auf feindliche",
 			"Charaktere verteilt wird."
 		],
 		"name": 12,
@@ -2629,12 +2637,13 @@
 	},
 	"VAN_EX1_302": {
 		"lines": [
-			"Fügt einem Diener",
-			"1 Schaden zu. Zieht",
-			"eine Karte, falls er stirbt."
+			"Fügt einem Diener 1",
+			"Schaden zu. Zieht eine",
+			"Karte, wenn er dadurch",
+			"vernichtet wird."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_303": {
 		"lines": [
@@ -2649,14 +2658,13 @@
 	},
 	"VAN_EX1_304": {
 		"lines": [
-			"[b]Kampfschrei:[/b] Vernichtet",
-			"beide benachbarten Diener",
-			"und erhält deren Angriff",
+			"[b]Kampfschrei:[/b] Vernichtet die",
+			"benachbarten Diener und",
+			"verleiht ihm deren Angriff",
 			"und Leben."
 		],
 		"name": 11,
-		"text": 8,
-		"valign": "top"
+		"text": 7
 	},
 	"VAN_EX1_306": {
 		"lines": [
@@ -2733,11 +2741,12 @@
 	},
 	"VAN_EX1_317": {
 		"lines": [
-			"Zieht 2 Dämonen",
-			"aus Eurem Deck."
+			"Fügt Eurer Hand zwei",
+			"zufällige Dämonen aus",
+			"Eurem Deck hinzu."
 		],
 		"name": 10,
-		"text": 11
+		"text": 9
 	},
 	"VAN_EX1_319": {
 		"lines": [
@@ -2751,13 +2760,13 @@
 	},
 	"VAN_EX1_320": {
 		"lines": [
-			"Fügt einem Charakter",
-			"3 Schaden zu. Falls er stirbt,",
-			"ruft Ihr einen zufälligen",
-			"Dämon herbei."
+			"Fügt einem Charakter 2",
+			"Schaden zu. Beschwört einen",
+			"zufälligen Dämon, wenn der",
+			"Schaden tödlich ist."
 		],
 		"name": 10,
-		"text": 8
+		"text": 7
 	},
 	"VAN_EX1_323": {
 		"lines": [
@@ -2799,10 +2808,9 @@
 	},
 	"VAN_EX1_339": {
 		"lines": [
-			"Kopiert 2 Karten aus",
-			"dem Deck Eures Gegners",
-			"und erhaltet die Kopien",
-			"auf die Hand."
+			"Kopiert 2 Karten aus dem",
+			"Deck Eures Gegners und",
+			"fügt sie Eurer Hand hinzu."
 		],
 		"name": 12,
 		"text": 8
@@ -2912,13 +2920,12 @@
 	},
 	"VAN_EX1_366": {
 		"lines": [
-			"Nachdem Ihr einen Diener",
-			"herbeigerufen habt, erhält er",
-			"+1/+1 und diese Waffe verliert",
-			"1 Haltbarkeit."
+			"Jedes Mal, wenn Ihr einen Diener",
+			"herbeiruft, erhält dieser +1/+1 und",
+			"diese Waffe verliert 1 Haltbarkeit."
 		],
 		"name": 9,
-		"text": 7,
+		"text": 6,
 		"valign": "top"
 	},
 	"VAN_EX1_371": {
@@ -2932,13 +2939,13 @@
 	},
 	"VAN_EX1_379": {
 		"lines": [
-			"[b]Geheimnis:[/b] Nachdem",
-			"Euer Gegner einen Diener",
-			"ausgespielt hat, wird dessen",
+			"[b]Geheimnis:[/b] Wenn Euer",
+			"Gegner einen Diener",
+			"ausspielt, wird dessen",
 			"Leben auf 1 verringert."
 		],
 		"name": 12,
-		"text": 7
+		"text": 8
 	},
 	"VAN_EX1_382": {
 		"lines": [
@@ -2962,7 +2969,7 @@
 	"VAN_EX1_384": {
 		"lines": [
 			"Verursacht 8 Schaden, der",
-			"zufällig auf alle feindlichen",
+			"zufällig auf feindliche",
 			"Charaktere verteilt wird."
 		],
 		"name": 12,
@@ -3183,10 +3190,11 @@
 	},
 	"VAN_EX1_533": {
 		"lines": [
-			"[b]Geheimnis:[/b] Wenn ein Feind",
-			"Euren Helden angreift, greift",
-			"er stattdessen einen zufälligen",
-			"anderen Charakter an."
+			"[b]Geheimnis:[/b] Wenn ein",
+			"Charakter Euren Helden",
+			"angreift, greift er stattdessen",
+			"einen zufälligen anderen",
+			"Charakter an."
 		],
 		"name": 12,
 		"text": 7
@@ -3232,9 +3240,9 @@
 	"VAN_EX1_539": {
 		"lines": [
 			"Verursacht 3 Schaden.",
-			"Verursacht statt[lb]d]dessen",
-			"5 Schaden, wenn Ihr",
-			"ein Wildtier kontrolliert."
+			"Verursacht stattdessen 5",
+			"Schaden, wenn Ihr ein",
+			"Wildtier besitzt."
 		],
 		"name": 12,
 		"text": 8
@@ -3312,13 +3320,13 @@
 	},
 	"VAN_EX1_559": {
 		"lines": [
-			"Erhaltet jedes Mal",
-			"einen Feuerball auf",
-			"die Hand, wenn Ihr einen",
-			"Zauber wirkt."
+			"Erhaltet jedes Mal einen",
+			"„Feuerball“-Zauber auf Eure",
+			"Hand, wenn Ihr einen Zauber",
+			"wirkt."
 		],
 		"name": 11,
-		"text": 8,
+		"text": 7,
 		"valign": "top"
 	},
 	"VAN_EX1_560": {
@@ -3405,12 +3413,12 @@
 	},
 	"VAN_EX1_572": {
 		"lines": [
-			"Erhaltet am Ende Eures",
-			"Zuges eine Traumkarte",
-			"auf die Hand."
+			"Zieht am Ende Eures",
+			"Zuges eine",
+			"Traumkarte."
 		],
 		"name": 12,
-		"text": 9
+		"text": 10
 	},
 	"VAN_EX1_573": {
 		"lines": [
@@ -3451,12 +3459,12 @@
 	},
 	"VAN_EX1_577": {
 		"lines": [
-			"[b]Todesröcheln:[/b] Ruft Pip",
-			"Flitzwitz (3/3) für Euren",
+			"[b]Todesröcheln:[/b] Ruft Finkle",
+			"Einhorn (3/3) für Euren",
 			"Gegner herbei."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_578": {
 		"lines": [
@@ -3563,12 +3571,13 @@
 	},
 	"VAN_EX1_595": {
 		"lines": [
-			"Zieht eine Karte, nachdem",
-			"ein befreundeter Diener",
-			"gestorben ist."
+			"Zieht jedes Mal eine",
+			"Karte, wenn einer Eurer",
+			"anderen Diener stirbt."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_596": {
 		"lines": [
@@ -3642,10 +3651,10 @@
 	},
 	"VAN_EX1_609": {
 		"lines": [
-			"[b]Geheimnis:[/b] Nachdem",
-			"Euer Gegner einen Diener",
-			"ausgespielt hat, werden",
-			"diesem 4 Schaden zugefügt."
+			"[b]Geheimnis:[/b] Wenn Euer",
+			"Gegner einen Diener",
+			"ausspielt, werden diesem",
+			"4 Schaden zugefügt."
 		],
 		"name": 12,
 		"text": 8
@@ -3662,11 +3671,11 @@
 	},
 	"VAN_EX1_611": {
 		"lines": [
-			"[b]Geheimnis:[/b] Wenn",
-			"ein feindlicher Diener angreift,",
+			"[b]Geheimnis:[/b] Wenn ein",
+			"feindlicher Diener angreift,",
 			"lasst ihn auf die Hand seines",
 			"Besitzers zurückkehren.",
-			"Er kostet (2) mehr."
+			"Zusätzlich kostet er (2) mehr."
 		],
 		"name": 12,
 		"text": 7
@@ -3860,8 +3869,8 @@
 	"VAN_HERO_02bp": {
 		"lines": [
 			"[b]Heldenfähigkeit[/b]",
-			"Ruft ein zufälliges",
-			"Basistotem herbei."
+			"Beschwört ein",
+			"zufälliges Totem."
 		],
 		"name": 12,
 		"text": 11
@@ -3897,7 +3906,8 @@
 		"lines": [
 			"[b]Heldenfähigkeit[/b]",
 			"Ruft einen Rekruten der",
-			"Silbernen Hand () herbei."
+			"Silbernen Hand (1/1)",
+			"herbei."
 		],
 		"name": 12,
 		"text": 8
@@ -4110,12 +4120,12 @@
 	},
 	"VAN_NEW1_010": {
 		"lines": [
-			"[b]Ansturm[/b],",
-			"[b]Gottesschild[/b], [b]Spott[/b],",
-			"[b]Windzorn[/b]"
+			"[b]Windzorn[/b], [b]Ansturm[/b],",
+			"[b]Gottesschild[/b], [b]Spott[/b]"
 		],
 		"name": 11,
-		"text": 11
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_NEW1_011": {
 		"lines": [
@@ -4146,12 +4156,14 @@
 	},
 	"VAN_NEW1_016": {
 		"lines": [
-			"[b]Kampfschrei:[/b] Zieht",
-			"einen Piraten aus",
-			"Eurem Deck."
+			"[b]Kampfschrei:[/b] Fügt Eurer",
+			"Hand einen zufälligen",
+			"Piraten aus Eurem Deck",
+			"hinzu."
 		],
 		"name": 11,
-		"text": 10
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_NEW1_017": {
 		"lines": [
@@ -4214,10 +4226,14 @@
 	},
 	"VAN_NEW1_023": {
 		"lines": [
-			"[b]Flüchtig[/b]"
+			"Kann nicht als Ziel von",
+			"Zaubern oder",
+			"Heldenfähigkeiten",
+			"gewählt werden."
 		],
 		"name": 12,
-		"text": 11
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_NEW1_024": {
 		"lines": [
@@ -4299,12 +4315,12 @@
 	},
 	"VAN_NEW1_033": {
 		"lines": [
-			"Eure anderen",
-			"Diener haben",
-			"+1 Angriff."
+			"Andere befreundete",
+			"Diener haben +1",
+			"Angriff."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_NEW1_034": {
 		"lines": [
@@ -4377,7 +4393,7 @@
 			"zufälligen Krieger",
 			"der Horde herbei."
 		],
-		"name": 12,
+		"name": 11,
 		"text": 11
 	},
 	"VAN_TU4e_002t": {

@@ -162,5 +162,175 @@
     "putting_it_all_together.his_hero_power": "Son Pouvoir héroïque : deux serviteurs à chaque tour",
     "putting_it_all_together.taunt_guards_your": "Provocation protège votre héros",
     "putting_it_all_together.hits_all_enemy": "Touche tous les serviteurs ennemis"
+  },
+  "cards": {
+    "EX1_383t": {
+      "name": "Porte-cendres"
+    },
+    "EX1_625t": {
+      "text": "<b>Pouvoir héroïque</b>\nInflige 2 points de dégâts."
+    },
+    "EX1_625t2": {
+      "text": "<b>Pouvoir héroïque</b>\nInflige 3 points de dégâts."
+    },
+    "PRO_001a": {
+      "name": "Je suis murloc"
+    },
+    "TU4b_001": {
+      "name": "Millhouse Tempête-de-Mana"
+    },
+    "TU4d_003": {
+      "text": "<b>Pouvoir héroïque</b>\nInflige 1 point de dégâts."
+    },
+    "TU4e_002": {
+      "text": "<b>Pouvoir héroïque</b>\nInvoque deux serviteurs 2/1."
+    },
+    "VAN_CS2_005": {
+      "text": "Confère à votre héros +2 ATQ pendant ce tour et +2 Armure."
+    },
+    "VAN_CS2_023": {
+      "name": "Intelligence des Arcanes"
+    },
+    "VAN_CS2_082": {
+      "name": "Lame pernicieuse"
+    },
+    "VAN_CS2_147": {
+      "name": "Inventeur gnome"
+    },
+    "VAN_DREAM_01": {
+      "text": "Ne peut pas être la cible de sorts ou de pouvoirs héroïques."
+    },
+    "VAN_DS1_184": {
+      "text": "Affiche les trois cartes du dessus du deck. Vous en piochez une et vous vous défaussez des autres."
+    },
+    "VAN_EX1_005": {
+      "text": "<b>Cri de guerre :</b> détruit un serviteur avec 7 Attaque ou plus."
+    },
+    "VAN_EX1_136": {
+      "text": "<b>Secret :</b> quand un de vos serviteurs meurt, il est ressuscité avec 1 PV."
+    },
+    "VAN_EX1_154a": {
+      "name": "Colère"
+    },
+    "VAN_EX1_154b": {
+      "name": "Colère"
+    },
+    "VAN_EX1_155a": {
+      "name": "Marque de la nature"
+    },
+    "VAN_EX1_155b": {
+      "name": "Marque de la nature"
+    },
+    "VAN_EX1_164a": {
+      "name": "Nourrir"
+    },
+    "VAN_EX1_164b": {
+      "name": "Nourrir"
+    },
+    "VAN_EX1_277": {
+      "text": "Inflige $3 |4(point,points) de dégâts répartis de façon aléatoire entre les personnages adverses."
+    },
+    "VAN_EX1_302": {
+      "text": "Inflige $1 |4(point,points) de dégâts à un serviteur. Vous piochez une carte si ce serviteur est tué."
+    },
+    "VAN_EX1_304": {
+      "text": "<b>Cri de guerre :</b> détruit les serviteurs adjacents et gagne leurs points d’Attaque et de Vie."
+    },
+    "VAN_EX1_306": {
+      "name": "Succube"
+    },
+    "VAN_EX1_317": {
+      "text": "Place dans votre main 2 démons aléatoires de votre jeu."
+    },
+    "VAN_EX1_320": {
+      "text": "Inflige $2 |4(point,points) de dégâts à un personnage. S’il est tué, invoque un démon aléatoire."
+    },
+    "VAN_EX1_335": {
+      "name": "Rejeton de lumière"
+    },
+    "VAN_EX1_339": {
+      "text": "Copie 2 cartes du jeu de votre adversaire et les place dans votre main."
+    },
+    "VAN_EX1_366": {
+      "text": "Chaque fois que vous invoquez un serviteur, lui donne +1/+1 et perd 1 Durabilité."
+    },
+    "VAN_EX1_379": {
+      "text": "<b>Secret :</b> quand votre adversaire joue un serviteur, ses points de vie sont réduits à 1."
+    },
+    "VAN_EX1_384": {
+      "text": "Inflige $8 |4(point,points) de dégâts répartis de façon aléatoire entre les personnages adverses."
+    },
+    "VAN_EX1_509": {
+      "name": "Maître des flots murloc"
+    },
+    "VAN_EX1_533": {
+      "text": "<b>Secret :</b> quand un personnage attaque votre héros, il attaque un autre personnage aléatoire à la place."
+    },
+    "VAN_EX1_536": {
+      "text": "Chaque fois qu’un <b>Secret</b> est révélé, gagne +1 Durabilité."
+    },
+    "VAN_EX1_539": {
+      "text": "Inflige $3 |4(point,points) de dégâts. Si vous avez une bête, inflige $5 |4(point,points) de dégâts à la place."
+    },
+    "VAN_EX1_559": {
+      "text": "Chaque fois que vous lancez un sort, place un sort « boule de feu » dans votre main."
+    },
+    "VAN_EX1_570": {
+      "text": "Confère +4 ATQ au héros pendant ce tour et +4 Armure."
+    },
+    "VAN_EX1_572": {
+      "text": "Vous piochez une carte Rêve à la fin de votre tour."
+    },
+    "VAN_EX1_573b": {
+      "name": "Leçon de Shan’do"
+    },
+    "VAN_EX1_577": {
+      "text": "<b>Râle d’agonie :</b> invoque Finkle Einhorn 3/3 pour votre adversaire."
+    },
+    "VAN_EX1_595": {
+      "text": "Vous piochez une carte quand un de vos autres serviteurs meurt."
+    },
+    "VAN_EX1_609": {
+      "text": "<b>Secret :</b> quand votre adversaire joue un serviteur, lui inflige $4 |4(point,points) de dégâts."
+    },
+    "VAN_EX1_611": {
+      "text": "<b>Secret :</b> quand un serviteur adverse attaque, le renvoie dans la main de son propriétaire et il coûte désormais (2) cristaux de plus."
+    },
+    "VAN_EX1_622": {
+      "text": "Détruit un serviteur avec 5 ou plus à l’Attaque."
+    },
+    "VAN_EX1_625": {
+      "text": "Transforme votre pouvoir héroïque, qui inflige 2 points de dégâts. Si la forme d’Ombre est déjà adoptée : 3 points de dégâts."
+    },
+    "VAN_EX1_finkle": {
+      "name": "Finkle Einhorn"
+    },
+    "VAN_HERO_02bp": {
+      "text": "<b>Pouvoir héroïque</b>\nInvoque un totem aléatoire."
+    },
+    "VAN_HERO_04bp": {
+      "text": "<b>Pouvoir héroïque</b>\nInvoque une recrue de la Main d’argent 1/1."
+    },
+    "VAN_NEW1_007a": {
+      "name": "Météores"
+    },
+    "VAN_NEW1_007b": {
+      "name": "Météores"
+    },
+    "VAN_NEW1_010": {
+      "text": "<b>Furie des vents, Charge, Bouclier divin, Provocation</b>"
+    },
+    "VAN_NEW1_016": {
+      "text": "<b>Cri de guerre :</b> place un pirate aléatoire de votre deck dans votre main."
+    },
+    "VAN_NEW1_023": {
+      "text": "Ne peut pas être la cible de sorts ou de pouvoirs héroïques."
+    },
+    "VAN_NEW1_029": {
+      "name": "Millhouse Tempête-de-Mana"
+    },
+    "VAN_NEW1_033": {
+      "text": "Les autres serviteurs alliés ont +1 ATQ."
+    }
   }
 }

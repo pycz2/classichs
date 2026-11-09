@@ -421,5 +421,8 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
     }
     d["view"] = json!(view);
     d["history_len"] = json!(g.history.len());
+    if let Some(s) = g.turn_seconds() {
+        d["turn_seconds"] = json!(s);
+    }
     d
 }

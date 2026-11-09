@@ -161,17 +161,38 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
 type End = (i64, &'static str);
 
 /// The turn clock: a new deadline whenever the phase, the turn or the player to move changes.
+/// A turn that starts with a `turn_seconds` minion in play (Nozdormu) is that short; when those
+/// minions leave play, the turn gets its usual time back.
 struct Clock {
     key: (&'static str, i64, usize),
     at: Instant,
+    start: Instant,
+    short: bool,
 }
 
 impl Clock {
+    fn new(g: &Game, t: &crate::Timers) -> Clock {
+        let mut c = Clock { key: ("", -1, 9), at: Instant::now(), start: Instant::now(), short: false };
+        c.update(g, t);
+        c
+    }
+
     fn update(&mut self, g: &Game, t: &crate::Timers) {
         let key = (g.phase, g.turn, g.current);
+        let short = if g.phase == "MULLIGAN" { None } else { g.turn_seconds() };
         if key != self.key {
             self.key = key;
-            self.at = Instant::now() + if g.phase == "MULLIGAN" { t.mulligan } else { t.turn };
+            self.start = Instant::now();
+            self.short = short.is_some();
+            self.at = self.start
+                + match short {
+                    Some(s) => Duration::from_secs(s as u64).min(t.turn),
+                    None if g.phase == "MULLIGAN" => t.mulligan,
+                    None => t.turn,
+                };
+        } else if self.short && short.is_none() {
+            self.short = false;
+            self.at = self.start + t.turn;
         }
     }
 
@@ -302,8 +323,7 @@ struct Cause {
 
 async fn run(ctx: Ctx, mut g: Game, mut rx: mpsc::UnboundedReceiver<Ev>) {
     let t = ctx.timers;
-    let mut clock = Clock { key: ("", -1, 9), at: Instant::now() };
-    clock.update(&g, &t);
+    let mut clock = Clock::new(&g, &t);
     let opening: Vec<Events> =
         g.history[0].events();
     ctx.app.event(ctx.ev(g.current, "game_start", format!("The game started: {} goes first", ctx.names[g.current]))
@@ -537,5 +557,28 @@ async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, 
             Ok(out)
         }
         Mode::Friendly | Mode::Tournament => unreachable!(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use classichs_engine::scenario;
+
+    fn game(board: &[&str]) -> Game {
+        let side = |b: &[&str]| json!({"hero": "HERO_08", "deck": ["VAN_CS2_231"], "board": b});
+        scenario::build(&json!({"current": 0, "players": [side(board), side(&[])]})).unwrap()
+    }
+
+    #[test]
+    fn nozdormu_shortens_the_turn_and_its_leaving_gives_the_time_back() {
+        let t = crate::Timers::default();
+        let mut c = Clock::new(&game(&["VAN_EX1_560"]), &t);
+        assert_eq!(c.at - c.start, Duration::from_secs(15), "a turn that starts with Nozdormu in play");
+        c.update(&game(&[]), &t);
+        assert_eq!(c.at - c.start, t.turn, "Nozdormu left play: the usual time");
+        let mut c = Clock::new(&game(&[]), &t);
+        c.update(&game(&["VAN_EX1_560"]), &t);
+        assert_eq!(c.at - c.start, t.turn, "played during the turn: this turn keeps its time");
     }
 }

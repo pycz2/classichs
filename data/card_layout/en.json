@@ -73,6 +73,7 @@
 	},
 	"EX1_625t": {
 		"lines": [
+			"[b]Hero Power[/b]",
 			"Deal 2 damage."
 		],
 		"name": 12,
@@ -80,6 +81,7 @@
 	},
 	"EX1_625t2": {
 		"lines": [
+			"[b]Hero Power[/b]",
 			"Deal 3 damage."
 		],
 		"name": 12,
@@ -305,6 +307,7 @@
 	},
 	"TU4d_003": {
 		"lines": [
+			"[b]Hero Power[/b]",
 			"Deal 1 damage."
 		],
 		"name": 12,
@@ -316,8 +319,9 @@
 	},
 	"TU4e_002": {
 		"lines": [
-			"Summon two",
-			"2/1 minions."
+			"[b]Hero Power[/b]",
+			"Summon two 2/1",
+			"minions."
 		],
 		"name": 12,
 		"text": 11
@@ -458,9 +462,9 @@
 	},
 	"VAN_CS2_005": {
 		"lines": [
-			"Give your hero",
-			"+2 Attack this turn.",
-			"Gain 2 Armor."
+			"Give your hero +2",
+			"Attack this turn",
+			"and 2 Armor."
 		],
 		"name": 12,
 		"text": 11
@@ -1321,7 +1325,9 @@
 	},
 	"VAN_DREAM_01": {
 		"lines": [
-			"[b]Elusive[/b]"
+			"Can't be targeted",
+			"by Spells or Hero",
+			"Powers."
 		],
 		"name": 12,
 		"text": 11
@@ -1402,12 +1408,13 @@
 	},
 	"VAN_DS1_184": {
 		"lines": [
-			"Look at the top 3 cards",
-			"of your deck. Draw one",
-			"and discard the others."
+			"Look at the top three",
+			"cards of your deck. Draw",
+			"one and discard the",
+			"others."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_DS1_185": {
 		"lines": [
@@ -1464,13 +1471,12 @@
 	},
 	"VAN_EX1_005": {
 		"lines": [
-			"[b]Battlecry:[/b]",
-			"Destroy a minion with",
-			"7 or more Attack."
+			"[b]Battlecry:[/b] Destroy a",
+			"minion with an Attack",
+			"of 7 or more."
 		],
 		"name": 12,
-		"text": 9,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_006": {
 		"lines": [
@@ -2032,12 +2038,12 @@
 	},
 	"VAN_EX1_136": {
 		"lines": [
-			"[b]Secret:[/b] When a friendly",
-			"minion dies, return",
-			"it to life with 1 Health."
+			"[b]Secret:[/b] When one of your",
+			"minions dies, return it to",
+			"life with 1 Health."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_137": {
 		"lines": [
@@ -2436,10 +2442,10 @@
 		"lines": [
 			"Deal 3 damage",
 			"randomly split among",
-			"all enemy characters."
+			"enemy characters."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9
 	},
 	"VAN_EX1_278": {
 		"lines": [
@@ -2533,12 +2539,12 @@
 	},
 	"VAN_EX1_302": {
 		"lines": [
-			"Deal 1 damage",
-			"to a minion. If it",
-			"dies, draw a card."
+			"Deal 1 damage to a",
+			"minion. If that kills",
+			"it, draw a card."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_303": {
 		"lines": [
@@ -2551,12 +2557,13 @@
 	},
 	"VAN_EX1_304": {
 		"lines": [
-			"[b]Battlecry:[/b] Destroy both",
-			"adjacent minions and gain",
-			"their Attack and Health."
+			"[b]Battlecry:[/b] Destroy the",
+			"minions on either side of this",
+			"minion and gain their Attack",
+			"and Health."
 		],
 		"name": 12,
-		"text": 8,
+		"text": 7,
 		"valign": "top"
 	},
 	"VAN_EX1_306": {
@@ -2631,11 +2638,12 @@
 	},
 	"VAN_EX1_317": {
 		"lines": [
-			"Draw 2 Demons",
-			"from your deck."
+			"Put 2 random",
+			"Demons from your",
+			"deck into your hand."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_319": {
 		"lines": [
@@ -2648,10 +2656,10 @@
 	},
 	"VAN_EX1_320": {
 		"lines": [
-			"Deal 3 damage",
-			"to a character.",
-			"If it dies, summon",
-			"a random Demon."
+			"Deal 2 damage to a",
+			"character. If that kills it,",
+			"summon a random",
+			"Demon."
 		],
 		"name": 12,
 		"text": 8
@@ -2659,11 +2667,11 @@
 	"VAN_EX1_323": {
 		"lines": [
 			"[b]Battlecry:[/b] Destroy your",
-			"hero and replace it with",
+			"hero and replace him with",
 			"Lord Jaraxxus."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_332": {
 		"lines": [
@@ -2692,12 +2700,12 @@
 	},
 	"VAN_EX1_339": {
 		"lines": [
-			"Copy 2 cards in your",
-			"opponent's deck and add",
-			"them to your hand."
+			"Copy 2 cards from your",
+			"opponent's deck and put",
+			"them into your hand."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_EX1_341": {
 		"lines": [
@@ -2799,9 +2807,9 @@
 	},
 	"VAN_EX1_366": {
 		"lines": [
-			"After you summon",
-			"a minion, give it +1/+1",
-			"and this loses 1 Durability."
+			"Whenever you summon a",
+			"minion, give it +1/+1 and",
+			"this loses 1 Durability."
 		],
 		"name": 12,
 		"text": 8,
@@ -2817,7 +2825,7 @@
 	},
 	"VAN_EX1_379": {
 		"lines": [
-			"[b]Secret:[/b] After your",
+			"[b]Secret:[/b] When your",
 			"opponent plays a minion,",
 			"reduce its Health to 1."
 		],
@@ -2847,10 +2855,10 @@
 		"lines": [
 			"Deal 8 damage",
 			"randomly split among",
-			"all enemy characters."
+			"enemy characters."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9
 	},
 	"VAN_EX1_390": {
 		"lines": [
@@ -3058,9 +3066,9 @@
 	},
 	"VAN_EX1_533": {
 		"lines": [
-			"[b]Secret:[/b] When an enemy",
-			"attacks your hero,",
-			"instead it attacks another",
+			"[b]Secret:[/b] When a character",
+			"attacks your hero, instead",
+			"he attacks another",
 			"random character."
 		],
 		"name": 12,
@@ -3106,11 +3114,11 @@
 	"VAN_EX1_539": {
 		"lines": [
 			"Deal 3 damage. If you",
-			"control a Beast, deal",
-			"5 damage instead."
+			"have a Beast, deal 5",
+			"damage instead."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9
 	},
 	"VAN_EX1_543": {
 		"lines": [
@@ -3183,8 +3191,8 @@
 	"VAN_EX1_559": {
 		"lines": [
 			"Whenever you cast a spell,",
-			"add a 'Fireball' spell",
-			"to your hand."
+			"put a 'Fireball' spell into",
+			"your hand."
 		],
 		"name": 11,
 		"text": 8
@@ -3252,9 +3260,9 @@
 	},
 	"VAN_EX1_570": {
 		"lines": [
-			"Give your hero",
-			"+4 Attack this turn.",
-			"Gain 4 Armor."
+			"Give your hero +4",
+			"Attack this turn",
+			"and 4 Armor."
 		],
 		"name": 12,
 		"text": 11
@@ -3270,12 +3278,12 @@
 	},
 	"VAN_EX1_572": {
 		"lines": [
-			"At the end of your turn,",
-			"add a Dream Card",
-			"to your hand."
+			"At the end of your",
+			"turn, draw a Dream",
+			"Card."
 		],
 		"name": 12,
-		"text": 9
+		"text": 10
 	},
 	"VAN_EX1_573": {
 		"lines": [
@@ -3316,7 +3324,7 @@
 	"VAN_EX1_577": {
 		"lines": [
 			"[b]Deathrattle:[/b] Summon",
-			"a 3/3 Pip Quickwit for",
+			"a 3/3 Finkle Einhorn for",
 			"your opponent."
 		],
 		"name": 12,
@@ -3425,12 +3433,12 @@
 	},
 	"VAN_EX1_595": {
 		"lines": [
-			"After a friendly",
-			"minion dies,",
+			"Whenever one of your",
+			"other minions dies,",
 			"draw a card."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9
 	},
 	"VAN_EX1_596": {
 		"lines": [
@@ -3500,7 +3508,7 @@
 	},
 	"VAN_EX1_609": {
 		"lines": [
-			"[b]Secret:[/b] After your",
+			"[b]Secret:[/b] When your",
 			"opponent plays a minion,",
 			"deal 4 damage to it."
 		],
@@ -3519,9 +3527,9 @@
 	"VAN_EX1_611": {
 		"lines": [
 			"[b]Secret:[/b] When an enemy",
-			"minion attacks, return",
-			"it to its owner's hand.",
-			"It costs (2) more."
+			"minion attacks, return it",
+			"to its owner's hand and it",
+			"costs (2) more."
 		],
 		"name": 12,
 		"text": 8
@@ -3599,10 +3607,11 @@
 	"VAN_EX1_622": {
 		"lines": [
 			"Destroy a minion",
-			"with 5 or more Attack."
+			"with an Attack of 5",
+			"or more."
 		],
 		"name": 11,
-		"text": 10
+		"text": 11
 	},
 	"VAN_EX1_623": {
 		"lines": [
@@ -3625,7 +3634,7 @@
 	"VAN_EX1_625": {
 		"lines": [
 			"Your Hero Power becomes",
-			"'Deal 2 damage.' If already",
+			"'Deal 2 damage'. If already",
 			"in Shadowform: 3 damage."
 		],
 		"name": 12,
@@ -3704,8 +3713,8 @@
 	"VAN_HERO_02bp": {
 		"lines": [
 			"[b]Hero Power[/b]",
-			"Summon a random",
-			"basic Totem."
+			"Summon a",
+			"random Totem."
 		],
 		"name": 12,
 		"text": 11
@@ -3738,11 +3747,11 @@
 	"VAN_HERO_04bp": {
 		"lines": [
 			"[b]Hero Power[/b]",
-			"Summon a Silver",
+			"Summon a 1/1 Silver",
 			"Hand Recruit."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_HERO_04bp2": {
 		"lines": [
@@ -3942,11 +3951,12 @@
 	},
 	"VAN_NEW1_010": {
 		"lines": [
-			"[b]Charge, Divine Shield,[/b]",
-			"[b]Taunt, Windfury[/b]"
+			"[b]Windfury, Charge, [/b]",
+			"[b]Divine Shield, [/b]",
+			"[b]Taunt[/b]"
 		],
 		"name": 11,
-		"text": 9
+		"text": 11
 	},
 	"VAN_NEW1_011": {
 		"lines": [
@@ -3975,12 +3985,12 @@
 	},
 	"VAN_NEW1_016": {
 		"lines": [
-			"[b]Battlecry:[/b]",
-			"Draw a Pirate from",
-			"your deck."
+			"[b]Battlecry:[/b] Put a random",
+			"Pirate from your deck into",
+			"your hand."
 		],
 		"name": 12,
-		"text": 11
+		"text": 8
 	},
 	"VAN_NEW1_017": {
 		"lines": [
@@ -4043,7 +4053,9 @@
 	},
 	"VAN_NEW1_023": {
 		"lines": [
-			"[b]Elusive[/b]"
+			"Can't be targeted",
+			"by Spells or Hero",
+			"Powers."
 		],
 		"name": 12,
 		"text": 11
@@ -4124,12 +4136,12 @@
 	},
 	"VAN_NEW1_033": {
 		"lines": [
-			"Your other minions",
-			"have +1 Attack."
+			"Other friendly",
+			"minions have +1",
+			"Attack."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_NEW1_034": {
 		"lines": [

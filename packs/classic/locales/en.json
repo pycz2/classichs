@@ -173,5 +173,145 @@
     "putting_it_all_together.his_hero_power": "His Hero Power: two minions every turn",
     "putting_it_all_together.taunt_guards_your": "Taunt guards your hero",
     "putting_it_all_together.hits_all_enemy": "Hits all enemy minions"
+  },
+  "cards": {
+    "EX1_625t": {
+      "text": "<b>Hero Power</b>\nDeal 2 damage."
+    },
+    "EX1_625t2": {
+      "text": "<b>Hero Power</b>\nDeal 3 damage."
+    },
+    "TU4d_003": {
+      "text": "<b>Hero Power</b>\nDeal 1 damage."
+    },
+    "TU4e_002": {
+      "text": "<b>Hero Power</b>\nSummon two 2/1 minions."
+    },
+    "VAN_CS2_005": {
+      "text": "Give your hero +2 Attack this turn and 2 Armor."
+    },
+    "VAN_DREAM_01": {
+      "text": "Can't be targeted by Spells or Hero Powers."
+    },
+    "VAN_DS1_184": {
+      "text": "Look at the top three cards of your deck. Draw one and discard the others."
+    },
+    "VAN_EX1_005": {
+      "text": "<b>Battlecry:</b> Destroy a minion with an Attack of 7 or more."
+    },
+    "VAN_EX1_136": {
+      "text": "<b>Secret:</b> When one of your minions dies, return it to life with 1 Health."
+    },
+    "VAN_EX1_154a": {
+      "name": "Wrath"
+    },
+    "VAN_EX1_154b": {
+      "name": "Wrath"
+    },
+    "VAN_EX1_155a": {
+      "name": "Mark of Nature"
+    },
+    "VAN_EX1_155b": {
+      "name": "Mark of Nature"
+    },
+    "VAN_EX1_164a": {
+      "name": "Nourish"
+    },
+    "VAN_EX1_164b": {
+      "name": "Nourish"
+    },
+    "VAN_EX1_277": {
+      "text": "Deal $3 damage randomly split among enemy characters."
+    },
+    "VAN_EX1_302": {
+      "text": "Deal $1 damage to a minion. If that kills it, draw a card."
+    },
+    "VAN_EX1_304": {
+      "text": "<b>Battlecry:</b> Destroy the minions on either side of this minion and gain their Attack and Health."
+    },
+    "VAN_EX1_306": {
+      "name": "Succubus"
+    },
+    "VAN_EX1_317": {
+      "text": "Put 2 random Demons from your deck into your hand."
+    },
+    "VAN_EX1_320": {
+      "text": "Deal $2 damage to a character.  If that kills it, summon a random Demon."
+    },
+    "VAN_EX1_323": {
+      "text": "<b>Battlecry:</b> Destroy your hero and replace him with Lord Jaraxxus."
+    },
+    "VAN_EX1_339": {
+      "text": "Copy 2 cards from your opponent's deck and put them into your hand."
+    },
+    "VAN_EX1_366": {
+      "text": "Whenever you summon a minion, give it +1/+1 and this loses 1 Durability."
+    },
+    "VAN_EX1_379": {
+      "text": "<b>Secret:</b> When your opponent plays a minion, reduce its Health to 1."
+    },
+    "VAN_EX1_384": {
+      "text": "Deal $8 damage randomly split among enemy characters."
+    },
+    "VAN_EX1_533": {
+      "text": "<b>Secret:</b> When a character attacks your hero, instead he attacks another random character."
+    },
+    "VAN_EX1_539": {
+      "text": "Deal $3 damage.  If you have a Beast, deal $5 damage instead."
+    },
+    "VAN_EX1_559": {
+      "text": "Whenever you cast a spell, put a 'Fireball' spell into your hand."
+    },
+    "VAN_EX1_570": {
+      "text": "Give your hero +4 Attack this turn and 4 Armor."
+    },
+    "VAN_EX1_572": {
+      "text": "At the end of your turn, draw a Dream Card."
+    },
+    "VAN_EX1_577": {
+      "text": "<b>Deathrattle:</b> Summon a 3/3 Finkle Einhorn for your opponent."
+    },
+    "VAN_EX1_595": {
+      "text": "Whenever one of your other minions dies, draw a card."
+    },
+    "VAN_EX1_609": {
+      "text": "<b>Secret:</b> When your opponent plays a minion, deal $4 damage to it."
+    },
+    "VAN_EX1_611": {
+      "text": "<b>Secret:</b> When an enemy minion attacks, return it to its owner's hand and it costs (2) more."
+    },
+    "VAN_EX1_622": {
+      "text": "Destroy a minion with an Attack of 5 or more."
+    },
+    "VAN_EX1_625": {
+      "text": "Your Hero Power becomes 'Deal 2 damage'. If already in Shadowform: 3 damage."
+    },
+    "VAN_EX1_finkle": {
+      "name": "Finkle Einhorn"
+    },
+    "VAN_HERO_02bp": {
+      "text": "<b>Hero Power</b>\nSummon a random Totem."
+    },
+    "VAN_HERO_04bp": {
+      "text": "<b>Hero Power</b>\nSummon a 1/1 Silver Hand Recruit."
+    },
+    "VAN_NEW1_007a": {
+      "name": "Starfall"
+    },
+    "VAN_NEW1_007b": {
+      "name": "Starfall"
+    },
+    "VAN_NEW1_010": {
+      "text": "<b>Windfury, Charge, Divine Shield, Taunt</b>"
+    },
+    "VAN_NEW1_016": {
+      "text": "<b>Battlecry:</b> Put a random Pirate from your deck into your hand."
+    },
+    "VAN_NEW1_023": {
+      "text": "Can't be targeted by Spells or Hero Powers."
+    },
+    "VAN_NEW1_033": {
+      "text": "Other friendly minions have +1 Attack."
+    }
   }
 }

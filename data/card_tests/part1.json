@@ -14400,7 +14400,7 @@
   "VAN_EX1_320": [
     {
       "kind": "spell",
-      "title": "Bane of Doom kills an enemy Crocolisk (3 damage), so a random Demon is summoned for you",
+      "title": "Bane of Doom kills an enemy Bloodfen Raptor (2 damage), so one of six Demons is summoned for you",
       "scene": {
         "current": 0,
         "players": [
@@ -14429,7 +14429,7 @@
               "VAN_CS2_182"
             ],
             "board": [
-              "VAN_CS2_120"
+              "VAN_CS2_172"
             ]
           }
         ]
@@ -19946,6 +19946,69 @@
             "side": 0,
             "zone": "board",
             "index": 0
+          }
+        }
+      ]
+    },
+    {
+      "kind": "spell",
+      "title": "Sacrificial Pact destroys the enemy Lord Jaraxxus (a Demon hero): you win",
+      "scene": {
+        "current": 1,
+        "players": [
+          {
+            "hero": "HERO_07",
+            "mana": 0,
+            "max_mana": 9,
+            "deck": [
+              "VAN_CS2_231",
+              "VAN_CS2_120",
+              "VAN_CS2_172",
+              "VAN_CS2_182"
+            ],
+            "hand": [
+              "VAN_NEW1_003"
+            ]
+          },
+          {
+            "hero": "HERO_07",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_231",
+              "VAN_CS2_120",
+              "VAN_CS2_172",
+              "VAN_CS2_182"
+            ],
+            "hand": [
+              "VAN_EX1_323"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 1,
+            "zone": "hand",
+            "index": 0
+          },
+          "pos": 0
+        },
+        {
+          "do": "end_turn"
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
           }
         }
       ]

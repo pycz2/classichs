@@ -74,6 +74,7 @@
 	},
 	"EX1_625t": {
 		"lines": [
+			"[b]Poder Heroico[/b]",
 			"Cause 2 de dano."
 		],
 		"name": 12,
@@ -81,6 +82,7 @@
 	},
 	"EX1_625t2": {
 		"lines": [
+			"[b]Poder Heroico[/b]",
 			"Cause 3 de dano."
 		],
 		"name": 12,
@@ -307,6 +309,7 @@
 	},
 	"TU4d_003": {
 		"lines": [
+			"[b]Poder Heroico[/b]",
 			"Cause 1 de dano."
 		],
 		"name": 11,
@@ -318,8 +321,9 @@
 	},
 	"TU4e_002": {
 		"lines": [
-			"Evoque",
-			"um lacaio 2/1."
+			"[b]Poder Heroico[/b]",
+			"Evoque dois",
+			"lacaios 2/1."
 		],
 		"name": 11,
 		"text": 11
@@ -463,8 +467,8 @@
 	"VAN_CS2_005": {
 		"lines": [
 			"Conceda +2 de Ataque",
-			"ao seu herói neste turno.",
-			"Receba 2 de Armadura."
+			"ao seu herói neste",
+			"turno e 2 de Armadura."
 		],
 		"name": 12,
 		"text": 9
@@ -1353,10 +1357,12 @@
 	},
 	"VAN_DREAM_01": {
 		"lines": [
-			"[b]Elusivo[/b]"
+			"Não pode ser alvo de",
+			"Feitiços nem de Poderes",
+			"Heroicos."
 		],
 		"name": 12,
-		"text": 11
+		"text": 8
 	},
 	"VAN_DREAM_02": {
 		"lines": [
@@ -1437,12 +1443,12 @@
 	},
 	"VAN_DS1_184": {
 		"lines": [
-			"Olhe os 3 cards do topo",
-			"do seu deck. Compre",
-			"um e descarte os outros."
+			"Olhe os três cards do topo",
+			"do seu deck. Compre um e",
+			"descarte os outros."
 		],
 		"name": 12,
-		"text": 9
+		"text": 8
 	},
 	"VAN_DS1_185": {
 		"lines": [
@@ -2087,8 +2093,8 @@
 	},
 	"VAN_EX1_136": {
 		"lines": [
-			"[b]Segredo:[/b] Quando",
-			"um lacaio aliado morrer,",
+			"[b]Segredo:[/b] Quando um",
+			"de seus lacaios morrer,",
 			"reviva-o com 1 de Vida."
 		],
 		"name": 12,
@@ -2498,8 +2504,8 @@
 	"VAN_EX1_277": {
 		"lines": [
 			"Cause 3 de dano dividido",
-			"aleatoriamente entre todos",
-			"os personagens inimigos."
+			"aleatoriamente entre os",
+			"personagens inimigos."
 		],
 		"name": 12,
 		"text": 8
@@ -2618,12 +2624,13 @@
 	"VAN_EX1_304": {
 		"lines": [
 			"[b]Grito de Guerra:[/b] Destrua",
-			"os dois lacaios adjacentes",
-			"e receba o Ataque",
-			"e a Vida deles."
+			"os lacaios dos dois lados",
+			"deste e receba o Ataque e a",
+			"Vida deles."
 		],
 		"name": 12,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_306": {
 		"lines": [
@@ -2700,12 +2707,12 @@
 	},
 	"VAN_EX1_317": {
 		"lines": [
-			"Compre",
-			"2 Demônios",
-			"do seu deck."
+			"Coloque 2 Demônios",
+			"aleatórios do seu",
+			"deck na sua mão."
 		],
 		"name": 12,
-		"text": 11
+		"text": 10
 	},
 	"VAN_EX1_319": {
 		"lines": [
@@ -2718,10 +2725,10 @@
 	},
 	"VAN_EX1_320": {
 		"lines": [
-			"Cause 3 de dano",
-			"a um personagem.",
-			"Se ele morrer, evoque",
-			"um Demônio aleatório."
+			"Cause 2 de dano a um",
+			"personagem. Se ele",
+			"morrer, evoque um",
+			"Demônio aleatório."
 		],
 		"name": 12,
 		"text": 8
@@ -2730,7 +2737,7 @@
 		"lines": [
 			"[b]Grito de Guerra:[/b] Destrua",
 			"seu herói e substitua-o",
-			"por Lorde Jaraxxus."
+			"pelo Lorde Jaraxxus."
 		],
 		"name": 12,
 		"text": 8,
@@ -2873,10 +2880,10 @@
 	},
 	"VAN_EX1_366": {
 		"lines": [
-			"Depois que você evocar",
-			"um lacaio, conceda-lhe",
-			"+1/+1, e este item perderá",
-			"1 de Durabilidade."
+			"Toda vez que você evocar um",
+			"lacaio, conceda-lhe +1/+1, e",
+			"este item perderá 1 de",
+			"Durabilidade."
 		],
 		"name": 12,
 		"text": 7
@@ -2892,10 +2899,9 @@
 	},
 	"VAN_EX1_379": {
 		"lines": [
-			"[b]Segredo:[/b] Depois",
-			"que seu oponente jogar",
-			"um lacaio, reduza",
-			"a Vida dele para 1."
+			"[b]Segredo:[/b] Quando seu",
+			"oponente jogar um lacaio,",
+			"reduza a Vida dele para 1."
 		],
 		"name": 12,
 		"text": 8
@@ -2922,8 +2928,8 @@
 	"VAN_EX1_384": {
 		"lines": [
 			"Cause 8 de dano dividido",
-			"aleatoriamente entre todos",
-			"os personagens inimigos."
+			"aleatoriamente entre os",
+			"personagens inimigos."
 		],
 		"name": 12,
 		"text": 8
@@ -3145,13 +3151,13 @@
 	},
 	"VAN_EX1_533": {
 		"lines": [
-			"[b]Segredo:[/b] Quando",
-			"um inimigo tentar atacar o",
+			"[b]Segredo:[/b] Quando um",
+			"personagem tentar atacar o",
 			"seu herói, ele atacará outro",
 			"personagem aleatório."
 		],
 		"name": 12,
-		"text": 8
+		"text": 7
 	},
 	"VAN_EX1_534": {
 		"lines": [
@@ -3192,10 +3198,9 @@
 	},
 	"VAN_EX1_539": {
 		"lines": [
-			"Cause 3 de dano.",
-			"Se você controlar",
-			"uma Fera, em vez",
-			"disso cause 5 de dano."
+			"Cause 3 de dano. Se você",
+			"tiver uma Fera, cause 5 de",
+			"dano em vez de 3."
 		],
 		"name": 11,
 		"text": 8
@@ -3272,12 +3277,12 @@
 	"VAN_EX1_559": {
 		"lines": [
 			"Sempre que você lançar",
-			"um feitiço, adicione um",
-			"feitiço \"Bola de Fogo\"",
-			"à sua mão."
+			"um feitiço, coloque uma",
+			"\"Bola de Fogo\" na sua mão."
 		],
 		"name": 10,
-		"text": 8
+		"text": 8,
+		"valign": "top"
 	},
 	"VAN_EX1_560": {
 		"lines": [
@@ -3347,8 +3352,8 @@
 	"VAN_EX1_570": {
 		"lines": [
 			"Conceda +4 de Ataque",
-			"ao seu herói neste turno.",
-			"Receba 4 de Armadura."
+			"ao seu herói neste",
+			"turno e 4 de Armadura."
 		],
 		"name": 12,
 		"text": 9
@@ -3366,12 +3371,11 @@
 	"VAN_EX1_572": {
 		"lines": [
 			"No final do seu turno,",
-			"adicione um Card",
-			"de Sonho à sua mão."
+			"compre um Card de",
+			"Sonho."
 		],
 		"name": 12,
-		"text": 8,
-		"valign": "top"
+		"text": 9
 	},
 	"VAN_EX1_573": {
 		"lines": [
@@ -3414,7 +3418,7 @@
 	"VAN_EX1_577": {
 		"lines": [
 			"[b]Último Suspiro:[/b] Evoque",
-			"um Pipo Boacuca 3/3",
+			"um Jonas Tiragosto 3/3",
 			"para o seu oponente."
 		],
 		"name": 12,
@@ -3526,12 +3530,13 @@
 	},
 	"VAN_EX1_595": {
 		"lines": [
-			"Depois que um lacaio",
-			"aliado morrer, compre",
-			"um card."
+			"Quando um de seus",
+			"outros lacaios morrer,",
+			"compre um card."
 		],
 		"name": 12,
-		"text": 10
+		"text": 9,
+		"valign": "top"
 	},
 	"VAN_EX1_596": {
 		"lines": [
@@ -3607,10 +3612,9 @@
 	},
 	"VAN_EX1_609": {
 		"lines": [
-			"[b]Segredo:[/b] Depois",
-			"que seu oponente",
-			"jogar um lacaio, cause",
-			"4 de dano ao lacaio."
+			"[b]Segredo:[/b] Quando seu",
+			"oponente jogar um lacaio,",
+			"cause 4 de dano ao lacaio."
 		],
 		"name": 12,
 		"text": 8
@@ -3825,7 +3829,7 @@
 		"lines": [
 			"[b]Poder Heroico[/b]",
 			"Evoque um Totem",
-			"básico aleatório."
+			"aleatório."
 		],
 		"name": 11,
 		"text": 11
@@ -3859,11 +3863,11 @@
 	"VAN_HERO_04bp": {
 		"lines": [
 			"[b]Poder Heroico[/b]",
-			"Evoque um Recruta",
-			"do Punho de Prata ."
+			"Evoque um Recruta do",
+			"Punho de Prata 1/1."
 		],
 		"name": 12,
-		"text": 11
+		"text": 9
 	},
 	"VAN_HERO_04bp2": {
 		"lines": [
@@ -4066,11 +4070,12 @@
 	},
 	"VAN_NEW1_010": {
 		"lines": [
-			"[b]Investida, Escudo Divino,[/b]",
-			"[b]Provocar, Fúria dos Ventos[/b]"
+			"[b]Fúria dos Ventos, [/b]",
+			"[b]Investida, Escudo [/b]",
+			"[b]Divino, Provocar[/b]"
 		],
 		"name": 9,
-		"text": 8,
+		"text": 9,
 		"valign": "top"
 	},
 	"VAN_NEW1_011": {
@@ -4101,12 +4106,12 @@
 	},
 	"VAN_NEW1_016": {
 		"lines": [
-			"[b]Grito de Guerra:[/b]",
-			"Compre um Pirata",
-			"do seu deck."
+			"[b]Grito de Guerra:[/b] Coloque",
+			"um Pirata aleatório do seu",
+			"deck na sua mão."
 		],
 		"name": 11,
-		"text": 10
+		"text": 8
 	},
 	"VAN_NEW1_017": {
 		"lines": [
@@ -4169,10 +4174,12 @@
 	},
 	"VAN_NEW1_023": {
 		"lines": [
-			"[b]Elusivo[/b]"
+			"Não pode ser alvo de",
+			"Feitiços nem de Poderes",
+			"Heroicos."
 		],
 		"name": 12,
-		"text": 11
+		"text": 8
 	},
 	"VAN_NEW1_024": {
 		"lines": [
@@ -4253,12 +4260,12 @@
 	},
 	"VAN_NEW1_033": {
 		"lines": [
-			"Seus outros lacaios",
-			"têm +1 de Ataque."
+			"Outros lacaios",
+			"aliados têm +1 de",
+			"Ataque."
 		],
 		"name": 12,
-		"text": 11,
-		"valign": "top"
+		"text": 11
 	},
 	"VAN_NEW1_034": {
 		"lines": [

@@ -398,7 +398,9 @@ Full details: the design doc.
     opening draws) and after every applied action: `view` = the engine's `snapshot`
     for that player, `events` = that action's engine events for that player,
     `result = {over, winner, turn, current, phase, deadline}` (`deadline`: whole
-    seconds left to move; 0 when over).
+    seconds left to move; 0 when over). A turn that starts with a `turn_seconds` minion
+    in play (Nozdormu; the snapshot's `turn_seconds`) lasts that long; when it leaves
+    play the turn gets the usual time back.
   - C→S `act {game?, action}` (an engine action; `action.player` must be your seat).
     Refused → `act_error {game, error}` to the sender and nothing changes; a player's
     third refused action ends the game (reason `illegal`, that player loses).

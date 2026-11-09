@@ -215,11 +215,24 @@ cards.VAN_CS1_112 = {
   end,
 }
 
--- Cabal Shadow Priest: take control of an enemy minion with 2 or less Attack.
+-- Shadow of Nothing (Mindgames): destroys itself at the end of the turn (2014; not since patch 2.7.0.9166).
+cards.VAN_EX1_345t = {
+  on = {
+    turn_end = function(g, me)
+      g.destroy(me)
+    end,
+  },
+}
+
+-- Cabal Shadow Priest: take control of an enemy minion with 2 or less Attack. With no room left
+-- for it (2014, until patch 4.3.0.12266) the Battlecry has no target.
 cards.VAN_EX1_091 = {
-  target = by_atk("enemy_minion", function(a)
-    return a <= 2
-  end),
+  target = {
+    base = "enemy_minion",
+    filter = function(g, me, t)
+      return g.atk(t) <= 2 and g.room(g.ctrl(me)) >= (g.zone(me) == "PLAY" and 1 or 2)
+    end,
+  },
   battlecry = function(g, me, t)
     g.take_control(t, g.ctrl(me))
   end,
