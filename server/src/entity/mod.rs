@@ -16,3 +16,4 @@ pub mod pack_import;
 pub mod request;
 pub mod session;
 pub mod standing;
+pub mod tournament;

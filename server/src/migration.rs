@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M10)]
     }
 }
 
@@ -568,5 +568,179 @@ impl MigrationTrait for M7 {
                 .to_owned(),
         )
         .await
+    }
+}
+
+/// Tournaments (0.50): the tournament, its entrants (decks copied), its matches and their games.
+struct M10;
+
+impl MigrationName for M10 {
+    fn name(&self) -> &str {
+        "m20261109_000010_tournaments"
+    }
+}
+
+#[derive(DeriveIden)]
+enum Tournaments {
+    Table,
+    Id,
+    Name,
+    Creator,
+    Pack,
+    Format,
+    Options,
+    Series,
+    BestOf,
+    Bans,
+    StartAt,
+    MaxPlayers,
+    MinPlayers,
+    DeckReveal,
+    Spectators,
+    Status,
+    Reason,
+    Created,
+    Ended,
+}
+
+#[derive(DeriveIden)]
+enum TEntrants {
+    Table,
+    Tournament,
+    Account,
+    Decks,
+    Seed,
+    Team,
+    Place,
+    Joined,
+}
+
+#[derive(DeriveIden)]
+enum TMatches {
+    Table,
+    Id,
+    Tournament,
+    N,
+    Round,
+    Bracket,
+    Slot,
+    Out,
+    A,
+    B,
+    Src,
+    Status,
+    Deadline,
+    ScoreA,
+    ScoreB,
+    Winner,
+    State,
+}
+
+#[derive(DeriveIden)]
+enum TGames {
+    Table,
+    Game,
+    Tournament,
+    MatchId,
+    N,
+    DeckA,
+    DeckB,
+    Winner,
+    Reason,
+}
+
+/// A foreign key to tournaments (deleted with it).
+fn of_tournament<T: IntoIden, C: IntoIden>(table: T, col: C) -> ForeignKeyCreateStatement {
+    ForeignKey::create().from(table, col).to(Tournaments::Table, Tournaments::Id).on_delete(ForeignKeyAction::Cascade).to_owned()
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M10 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let text = |c: Tournaments| ColumnDef::new(c).text().not_null().to_owned();
+        m.create_table(
+            Table::create()
+                .table(Tournaments::Table)
+                .col(ColumnDef::new(Tournaments::Id).integer().not_null().primary_key())
+                .col(text(Tournaments::Name))
+                .col(int(Tournaments::Creator))
+                .col(text(Tournaments::Pack))
+                .col(text(Tournaments::Format))
+                .col(text(Tournaments::Options))
+                .col(text(Tournaments::Series))
+                .col(int(Tournaments::BestOf))
+                .col(int(Tournaments::Bans))
+                .col(int(Tournaments::StartAt))
+                .col(int(Tournaments::MaxPlayers))
+                .col(int(Tournaments::MinPlayers))
+                .col(int(Tournaments::DeckReveal))
+                .col(int(Tournaments::Spectators))
+                .col(text(Tournaments::Status))
+                .col(text(Tournaments::Reason).default(""))
+                .col(int(Tournaments::Created))
+                .col(int(Tournaments::Ended).default(0))
+                .foreign_key(&mut fk(Tournaments::Table, Tournaments::Creator))
+                .to_owned(),
+        )
+        .await?;
+        m.create_index(Index::create().name("tournaments_status").table(Tournaments::Table).col(Tournaments::Status).to_owned()).await?;
+        m.create_index(Index::create().name("tournaments_creator").table(Tournaments::Table).col(Tournaments::Creator).to_owned()).await?;
+        m.create_table(
+            Table::create()
+                .table(TEntrants::Table)
+                .col(int(TEntrants::Tournament))
+                .col(int(TEntrants::Account))
+                .col(ColumnDef::new(TEntrants::Decks).text().not_null())
+                .col(int(TEntrants::Seed).default(-1))
+                .col(int(TEntrants::Team).default(-1))
+                .col(int(TEntrants::Place).default(0))
+                .col(int(TEntrants::Joined))
+                .primary_key(Index::create().col(TEntrants::Tournament).col(TEntrants::Account))
+                .foreign_key(&mut of_tournament(TEntrants::Table, TEntrants::Tournament))
+                .foreign_key(&mut fk(TEntrants::Table, TEntrants::Account))
+                .to_owned(),
+        )
+        .await?;
+        let text = |c: TMatches| ColumnDef::new(c).text().not_null().to_owned();
+        m.create_table(
+            Table::create()
+                .table(TMatches::Table)
+                .col(ColumnDef::new(TMatches::Id).integer().not_null().primary_key())
+                .col(int(TMatches::Tournament))
+                .col(int(TMatches::N))
+                .col(int(TMatches::Round))
+                .col(text(TMatches::Bracket))
+                .col(int(TMatches::Slot))
+                .col(int(TMatches::Out).default(0))
+                .col(ColumnDef::new(TMatches::A).integer().null())
+                .col(ColumnDef::new(TMatches::B).integer().null())
+                .col(text(TMatches::Src))
+                .col(text(TMatches::Status))
+                .col(int(TMatches::Deadline).default(0))
+                .col(int(TMatches::ScoreA).default(0))
+                .col(int(TMatches::ScoreB).default(0))
+                .col(ColumnDef::new(TMatches::Winner).integer().null())
+                .col(text(TMatches::State))
+                .foreign_key(&mut of_tournament(TMatches::Table, TMatches::Tournament))
+                .to_owned(),
+        )
+        .await?;
+        m.create_index(Index::create().name("t_matches_tournament").table(TMatches::Table).col(TMatches::Tournament).to_owned()).await?;
+        m.create_table(
+            Table::create()
+                .table(TGames::Table)
+                .col(ColumnDef::new(TGames::Game).text().not_null().primary_key())
+                .col(int(TGames::Tournament))
+                .col(int(TGames::MatchId))
+                .col(int(TGames::N))
+                .col(int(TGames::DeckA))
+                .col(int(TGames::DeckB))
+                .col(ColumnDef::new(TGames::Winner).integer().null())
+                .col(ColumnDef::new(TGames::Reason).text().not_null().default(""))
+                .foreign_key(&mut of_tournament(TGames::Table, TGames::Tournament))
+                .to_owned(),
+        )
+        .await?;
+        m.create_index(Index::create().name("t_games_match").table(TGames::Table).col(TGames::MatchId).to_owned()).await
     }
 }

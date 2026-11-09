@@ -172,6 +172,8 @@ pub enum Mode {
     Ranked,
     Arena,
     Friendly,
+    /// A game of a tournament match (`crate::tournament`): no rating change.
+    Tournament,
 }
 
 impl Mode {
@@ -181,6 +183,7 @@ impl Mode {
             Mode::Ranked => "ranked",
             Mode::Arena => "arena",
             Mode::Friendly => "friendly",
+            Mode::Tournament => "tournament",
         }
     }
 }

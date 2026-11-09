@@ -62,6 +62,9 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/bots/all/{action}", post(bots_all))
         .route("/admin/api/bots/{id}", get(bot_page))
         .route("/admin/api/bots/{id}/{action}", post(bot_action))
+        .route("/admin/api/tournaments", get(tournaments))
+        .route("/admin/api/tournaments/{id}", get(tournament_page))
+        .route("/admin/api/tournaments/{id}/cancel", post(tournament_cancel))
         .route("/admin/ws", get(feed))
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
@@ -92,6 +95,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "messages.js",
     "packs.js",
     "bots.js",
+    "tournaments.js",
     "style.css",
     "favicon.svg",
     "vendor/preact.module.js",
@@ -1296,6 +1300,36 @@ async fn bot_action(State(app): State<AppRef>, Extension(a): Extension<Admin>, P
         return db_err(e);
     }
     Json(json!({"ok": true, "text": text})).into_response()
+}
+
+// --- tournaments ------------------------------------------------------------------------------
+
+#[derive(Deserialize)]
+struct TournamentsQ {
+    status: Option<String>,
+}
+
+async fn tournaments(State(app): State<AppRef>, Query(q): Query<TournamentsQ>) -> Response {
+    match crate::tournament::admin_list(&app, q.status.as_deref()).await {
+        Ok(v) => Json(v).into_response(),
+        Err(e) => db_err(e),
+    }
+}
+
+async fn tournament_page(State(app): State<AppRef>, Path(id): Path<i64>) -> Response {
+    match crate::tournament::admin_get(&app, id).await {
+        Ok(Some(v)) => Json(v).into_response(),
+        Ok(None) => err(StatusCode::NOT_FOUND, "No such tournament"),
+        Err(e) => db_err(e),
+    }
+}
+
+async fn tournament_cancel(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path(id): Path<i64>) -> Response {
+    match crate::tournament::admin_cancel(&app, id, &a.me.name).await {
+        Ok(true) => Json(json!({"ok": true, "text": "Cancelled"})).into_response(),
+        Ok(false) => err(StatusCode::CONFLICT, "No such tournament, or it is over"),
+        Err(e) => db_err(e),
+    }
 }
 
 /// Start or stop every bot.

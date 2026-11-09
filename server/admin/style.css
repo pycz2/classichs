@@ -316,6 +316,14 @@ a.tile:hover { border-color: var(--border-strong); color: inherit; }
 .mode { font-size: 12px; font-weight: 600; text-transform: capitalize; color: var(--text-2); }
 .mode::before { content: "●"; margin-right: 4px; font-size: 9px; vertical-align: 1px; }
 .m-casual::before { color: var(--s3); } .m-ranked::before { color: var(--s4); } .m-arena::before { color: var(--s5); } .m-friendly::before { color: var(--s7); }
+.m-tournament::before { color: var(--s1); }
+/* tournaments: places, the top 3 highlighted */
+.place { display: inline-block; min-width: 22px; text-align: center; font-weight: 700; border-radius: 99px; padding: 0 6px; }
+.place.top1 { background: color-mix(in srgb, var(--s4) 30%, transparent); }
+.place.top2 { background: color-mix(in srgb, var(--text-2) 22%, transparent); }
+.place.top3 { background: color-mix(in srgb, var(--s2) 22%, transparent); }
+.top-row td { font-weight: 600; }
+h3.sub { font-size: 13px; margin: 12px 14px 4px; color: var(--text-2); }
 .result { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
 .r-win { color: var(--ok); } .r-loss { color: var(--bad); } .r-draw { color: var(--muted); }
 .reason.odd { color: var(--warn); font-weight: 600; }

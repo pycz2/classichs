@@ -657,7 +657,10 @@ impl Session {
     async fn handle(&mut self, text: &str) {
         let parsed = serde_json::from_str::<Value>(text).and_then(|v| {
             let t = v["t"].as_str().unwrap_or("").chars().take(32).collect::<String>();
-            Ok((t, serde_json::from_value::<In>(v)?))
+            if t.starts_with("t_") {
+                return Ok((t, Err(v)));
+            }
+            Ok((t, Ok(serde_json::from_value::<In>(v)?)))
         });
         let (t, msg) = match parsed {
             Ok(m) => m,
@@ -668,8 +671,23 @@ impl Session {
                 return self.reply("", Err(E("bad_request", t, None)));
             }
         };
-        let r = self.dispatch(msg).await;
+        let r = match msg {
+            Ok(msg) => self.dispatch(msg).await,
+            Err(v) => self.tournament(&v).await,
+        };
         self.reply(&t, r);
+    }
+
+    /// The tournament messages (`t_*`, `crate::tournament`).
+    async fn tournament(&mut self, v: &Value) -> R {
+        let Some((me, _)) = self.me.clone() else { return Err(e("auth_required", "Log in first")) };
+        if !self.app.hub().conns.get(&me).is_some_and(|c| c.id == self.conn) {
+            return Ok(()); // kicked: another login has the account now
+        }
+        crate::tournament::handle(&self.app, me, v).await.map_err(|crate::tournament::TErr(code, text)| match code {
+            "server" => E("server", "Server error".into(), Some(text)),
+            c => E(c, text, None),
+        })
     }
 
     async fn dispatch(&mut self, msg: In) -> R {

@@ -12,11 +12,13 @@ import { Games, GamePage } from './games.js'
 import { Messages } from './messages.js'
 import { Packs } from './packs.js'
 import { Bots } from './bots.js'
+import { Tournaments, TournamentPage } from './tournaments.js'
 
 const NAV = [
   ['', 'Dashboard', 'dashboard'],
   ['events', 'Event log', 'events'],
   ['games', 'Matches', 'games'],
+  ['tournaments', 'Tournaments', 'tournaments'],
   ['packs', 'Games', 'packs'],
   ['bots', 'Bots', 'bots'],
   ['accounts', 'Accounts', 'accounts'],
@@ -101,6 +103,7 @@ function Shell ({ me, onLogout }) {
     case 'events': page = html`<${Events} query=${route.query} key=${qkey} />`; break
     case 'games': page = route.path[1] ? html`<${GamePage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Games} query=${route.query} key=${qkey} />`; break
     case 'accounts': page = route.path[1] ? html`<${AccountPage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Accounts} query=${route.query} key=${qkey} />`; break
+    case 'tournaments': page = route.path[1] ? html`<${TournamentPage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Tournaments} query=${route.query} key=${qkey} />`; break
     case 'packs': page = html`<${Packs} />`; break
     case 'bots': page = html`<${Bots} />`; break
     case 'messages': page = html`<${Messages} a=${route.path[1]} b=${route.path[2]} query=${route.query} />`; break

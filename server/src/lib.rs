@@ -12,7 +12,10 @@ pub mod game;
 pub mod migration;
 pub mod packs;
 pub mod ranked;
+pub mod replays;
+pub mod spectate;
 pub mod storage;
+pub mod tournament;
 pub mod ws;
 
 use auth::RateLimit;
@@ -58,6 +61,8 @@ pub struct App {
     pub loading: tokio::sync::Mutex<()>,
     /// The server's bots (the admin's Bots page): the running ones and what they do.
     pub bots: bots::Manager,
+    /// Tournaments: the lock of their changes, who watches which, the scheduler's wake-up.
+    pub tour: tournament::State,
 }
 
 /// The game clocks (a pack's: rules.json `timers`, docs/packs/rules.md).
@@ -93,6 +98,7 @@ impl App {
             rules: Mutex::default(),
             loading: tokio::sync::Mutex::new(()),
             bots: bots::Manager::default(),
+            tour: tournament::State::default(),
         })
     }
 
@@ -342,6 +348,7 @@ pub async fn presence(app: &AppRef, account: i64) {
 /// The matchmaking tick (every second), the rate-limit sweep, the admin panels' live
 /// snapshot (when it changed) and, hourly, the deletion of old events.
 pub fn spawn_background(app: AppRef) {
+    tournament::spawn(app.clone());
     tokio::spawn(async move {
         let mut tick = tokio::time::interval(Duration::from_secs(1));
         let mut last_live = String::new();
