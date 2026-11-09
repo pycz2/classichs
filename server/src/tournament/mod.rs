@@ -911,6 +911,9 @@ fn apply(t: &mut tour::Model, v: &Value) -> Res<()> {
     if v.get("min_players").is_some() {
         t.min_players = num(v, "min_players").ok_or_else(|| no("Players: 2 to 128"))?;
     }
+    if t.max_players > players_cap(&t.format) {
+        return Err(no(&format!("This format takes {} players at most", players_cap(&t.format))));
+    }
     if !(2..=t.max_players).contains(&t.min_players) {
         return Err(no("The minimum of players is 2 up to the maximum"));
     }
@@ -920,6 +923,16 @@ fn apply(t: &mut tour::Model, v: &Value) -> Res<()> {
         }
     }
     Ok(())
+}
+
+/// The most players a format takes: everyone-plays-everyone formats grow by the square (round robin
+/// of 128 twice: 16256 matches, a tournament too big to send); the others take 128.
+pub fn players_cap(format: &str) -> i64 {
+    match format {
+        "round_robin" => 32,
+        "scheveningen" => 64,
+        _ => 128,
+    }
 }
 
 fn check_start(start: i64, now: i64) -> Res<()> {

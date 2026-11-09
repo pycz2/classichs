@@ -40,7 +40,7 @@
 "-%d Armor": "-%d armure",
 "-%d Health": "-%d PV",
 "1st place": "1re place",
-"2 to 128": "De 2 à 128",
+"2 to %d": "De 2 à %d",
 "25 ranks and Legend, as in 2014: stars for wins, a new season every month": "25 rangs et Légende, comme en 2014 : des étoiles pour les victoires, une nouvelle saison chaque mois",
 "2nd place": "2e place",
 "3 to 40 letters; everyone sees it": "De 3 à 40 lettres ; visible par tous",

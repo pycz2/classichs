@@ -33,6 +33,9 @@ const PRESETS := [
 	["Swiss 16 · Bo3", {"format": "swiss", "swiss_rounds": 0, "drop_after": 0, "max_players": 16, "series": "conquest", "best_of": 3, "bans": 0}],
 	["Round robin 6 · Bo1", {"format": "round_robin", "rr_rounds": 1, "max_players": 6, "series": "conquest", "best_of": 1, "bans": 0}],
 	["Team battle 8 · Bo5 LHS", {"format": "scheveningen", "max_players": 8, "series": "lhs", "best_of": 5, "bans": 1}]]
+## The most players a format takes (the server's tournament::players_cap): everyone-plays-everyone
+## formats grow by the square.
+const PLAYERS_CAP := {"round_robin": 32, "scheveningen": 64}
 
 ## Words translated through a variable (the translation tool reads this list and the tables above).
 const WORDS := ["No tournaments yet — create one", "No finished tournaments yet", "No closed or cancelled tournaments",
@@ -1031,7 +1034,10 @@ func _build_form() -> void:
 			"swiss":
 				_field(left, tr("Rounds"), tr("Auto: enough rounds for one clear winner"), _stepper("swiss_rounds", 0, 10, tr("Auto")))
 				_field(left, tr("Out after losses"), tr("A player with this many lost matches stops playing"), _segment("drop_after", [[0, tr("Never")], [1, "1"], [2, "2"], [3, "3"], [4, "4"], [5, "5"]]))
-		_field(left, tr("Players at most"), tr("2 to 128"), _stepper("max_players", 2, 128))
+		var cap: int = PLAYERS_CAP.get(str(form.format), 128)
+		form.max_players = mini(int(form.max_players), cap)
+		form.min_players = mini(int(form.min_players), int(form.max_players))
+		_field(left, tr("Players at most"), tr("2 to %d") % cap, _stepper("max_players", 2, cap))
 		_field(left, tr("Players at least"), tr("Fewer by 10 minutes before the start: it is closed"), _stepper("min_players", 2, int(form.max_players)))
 		var series := _segment("series", [["conquest", tr("Conquest")], ["lhs", tr("Last Hero Standing")]], fixed)
 		_field(right, tr("Series"), tr("Conquest: win once with each deck. Last Hero Standing: a losing deck is out") if not fixed else tr("Fixed after creation"), series)

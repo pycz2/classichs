@@ -485,6 +485,8 @@ async fn limits_and_checks() {
     assert!(a.refused(base(json!({"start_at": now_ms() + 15 * 24 * 60 * MIN}))).await.contains("14 days"));
     assert!(a.refused(base(json!({"name": "ab"}))).await.contains("3 to 40"));
     assert!(a.refused(base(json!({"max_players": 129}))).await.contains("2 to 128"));
+    assert!(a.refused(base(json!({"format": "round_robin", "max_players": 33}))).await.contains("32 players at most"));
+    assert!(a.refused(base(json!({"format": "scheveningen", "max_players": 65}))).await.contains("64 players at most"));
     assert!(a.refused(base(json!({"min_players": 3}))).await.contains("minimum"));
     assert!(a.refused(base(json!({"best_of": 2}))).await.contains("Best of"));
     assert!(a.refused(base(json!({"series": "x"}))).await.contains("conquest"));
