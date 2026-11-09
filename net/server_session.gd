@@ -29,6 +29,10 @@ var match_: Match
 ## Why the session ended: "left", "connection", "desync" (the server's game differs).
 var failure_kind := ""
 var transport = null  # (a NetSession has one; MatchView asks)
+## A game the player watches (ServerLink.watch): `spectate_state`s, nothing is sent but
+## `unspectate`; full: both hands are open.
+var watch := false
+var full := false
 var _done := false
 ## The game's pack (`match.pack`, a rules hash) while this device still has to get it; its
 ## states wait in _held (a state is the whole view: the last one is enough).
@@ -102,6 +106,8 @@ func _fail_pack(reason: String) -> void:
 
 
 func send(msg: Dictionary) -> void:
+	if watch and msg.get("t") != "unspectate":
+		return  # a spectator never acts
 	if link:
 		msg["game"] = game
 		link.send(msg)
@@ -112,7 +118,9 @@ func on_message(msg: Dictionary) -> void:
 	if _done:
 		return
 	match msg.get("t"):
-		"state":
+		"state", "spectate_state":
+			if (msg.t == "spectate_state") != watch:
+				return
 			if not msg.get("view") is Dictionary or not msg.get("result") is Dictionary:
 				return
 			if _want_pack != "":
@@ -135,6 +143,13 @@ func on_message(msg: Dictionary) -> void:
 			var i := NetSession.clean_intent(msg.get("i"))
 			if match_ and not i.is_empty() and int(msg.get("from", you)) != you:
 				intent_received.emit(i)
+		"spectate_end":
+			_done = true
+			if not (match_ and match_.game.game_over):  # (a game that ended by its moves shows its result)
+				failure_kind = "ended"
+				var w := int(msg.get("winner", -1))
+				var names := [player_name if you == 0 else remote_name, remote_name if you == 0 else player_name]
+				failed.emit(TranslationServer.translate("No winner") if w < 0 or w > 1 else TranslationServer.translate("%s wins") % names[w])
 		"game_over":
 			_done = true
 			var reason := str(msg.get("reason", "over"))
@@ -163,8 +178,14 @@ func send_intent(intent: Dictionary) -> void:
 		send({"t": "intent", "i": intent})
 
 
-## Leaving a running game on a server loses it (the concede action).
+## Leaving a running game on a server loses it (the concede action); a spectator just stops watching.
 func leave() -> void:
+	if watch:
+		if not _done:
+			send({"t": "unspectate"})
+		_done = true
+		failure_kind = "left"
+		return
 	if not _done and match_ and not match_.game.game_over:
 		send({"t": "act", "action": {"type": "concede", "player": you}})
 	failure_kind = "left"

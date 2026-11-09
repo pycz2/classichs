@@ -313,7 +313,7 @@ func _error_text(msg: Dictionary) -> String:
 			return tr("Registration on this server needs an invite key")
 		"invite_invalid":
 			return tr("This invite key is unknown, used up or revoked")
-	return str(msg.get("text", msg.get("code", "error")))
+	return tr(str(msg.get("text", msg.get("code", "error"))))  # (texts the client knows come translated: Social.SERVER_TEXTS)
 
 
 ## Kicked out by another login: the saved session again (the other device gets kicked).

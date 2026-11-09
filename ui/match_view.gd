@@ -49,6 +49,10 @@ var session: Node
 var arena: ArenaSession
 ## A game on a game server: the result leads back to the server's lobby.
 var lobby := false
+## A game watched, not played (a spectator on a server): nothing can be done on the table
+## but look, and Leave; full_view: both hands face up.
+var watching := false
+var full_view := false
 ## Set for a tutorial mission (hints, turn-end rules, reward screen).
 var tutorial: Tutorial
 var controller: Match
@@ -260,8 +264,72 @@ func bind_online(m: Match, s: Node) -> void:
 	s.failed.connect(_on_connection_lost)
 	s.intent_received.connect(apply_intent)
 	m.refused.connect(_on_refused)
-	(find_child("MuteButton", true, false) as Button).visible = true
+	watching = s.get("watch") == true
+	full_view = watching and s.full
+	(find_child("MuteButton", true, false) as Button).visible = not watching
+	if watching:
+		_build_watch_bar()
 	bind(m)
+
+
+## The spectator's table: a banner (who plays whom, an eye: watching) and a big Leave in the
+## place of End Turn; the player's own controls (End Turn, emotes, the deck tracker) are gone.
+func _build_watch_bar() -> void:
+	var bar := PanelContainer.new()
+	bar.name = "WatchBar"
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.z_index = 60
+	var st := Palette.box(Color(0.07, 0.05, 0.03, 0.88), 22, Color("c9a74a"), 2)
+	st.content_margin_left = 12
+	st.content_margin_right = 18
+	st.content_margin_top = 1
+	st.content_margin_bottom = 1
+	bar.add_theme_stylebox_override("panel", st)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(row)
+	var eye := IconView.new()
+	eye.kind = "eye"
+	eye.custom_minimum_size = Vector2(32, 32)
+	eye.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(eye)
+	var mark := Palette.label(tr("Spectator").to_upper(), 17, Palette.ATTACK)
+	mark.name = "SpectatorMark"
+	mark.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(mark)
+	var sep := ColorRect.new()
+	sep.color = Color("c9a74a", 0.6)
+	sep.custom_minimum_size = Vector2(2, 26)
+	sep.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(sep)
+	var who := Palette.label("", 22)
+	who.name = "WatchTitle"
+	who.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	row.add_child(who)
+	add_child(bar)
+	var leave_b := Palette.button(tr("Leave"), "LeaveWatch")
+	leave_b.custom_minimum_size = _end_turn.custom_minimum_size
+	leave_b.position = _end_turn.position
+	leave_b.add_theme_font_size_override("font_size", 22)
+	Icons.attach(leave_b, "cross", 22)
+	leave_b.pressed.connect(_leave)
+	add_child(leave_b)
+	for n in ["TrackerButton", "EmoteWheel"]:
+		(find_child(n, true, false) as Control).visible = false
+	_tracker.visible = false
+	_end_turn.visible = false
+
+
+## The banner's text and place: "Watching <friend> vs <opponent>", centred on the middle line.
+func _update_watch_bar() -> void:
+	var bar := find_child("WatchBar", false, false) as Control
+	if bar == null or controller == null:
+		return
+	(bar.find_child("WatchTitle", true, false) as Label).text = tr("Watching %s vs %s") % [_side_name(viewer()), _side_name(1 - viewer())]
+	bar.visible = _overlay == null  # (a result or a message over the table: the banner steps back)
+	bar.reset_size()
+	bar.position = Vector2(roundf(640.0 - bar.size.x / 2.0), roundf((ENEMY_BOARD_Y + TableLayout.MINION.y + OWN_BOARD_Y) / 2.0 - bar.size.y / 2.0))
 
 
 ## The server refused a move (the table showed an old state): the queue goes too.
@@ -351,12 +419,16 @@ func bubble_text(p: int) -> String:
 func _on_connection_lost(reason: String) -> void:
 	if controller.game.game_over:
 		return
-	var box := _open_overlay(tr("Out of sync") if session and session.failure_kind == "desync" else tr("Connection lost"))
+	var kind: String = session.failure_kind if session else ""
+	var box := _open_overlay({"desync": tr("Out of sync"), "ended": tr("The game is over")}.get(kind, tr("Connection lost")))
 	_overlay.name = "ConnectionLost"
 	var why := Palette.label(reason, 20)
 	why.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(why)
-	if arena:
+	if watching:
+		timer_enabled = false  # (nobody's turn runs out any more)
+		_centered_button(box, tr("Leave"), "LeaveWatch", _leave)
+	elif arena:
 		_centered_button(box, tr("Back to the Arena"), "BackToArena", _leave)
 	elif lobby:
 		_centered_button(box, tr("Back to the lobby"), "BackToLobby", _leave)
@@ -767,7 +839,7 @@ func _build_emote_wheel() -> void:
 
 ## Emotes may be sent (not in the tutorial, only by a human side).
 func emotes_allowed() -> bool:
-	return tutorial == null and controller != null and not controller.bots[viewer()]
+	return tutorial == null and not watching and controller != null and not controller.bots[viewer()]
 
 
 ## Right click: your hero opens the emotes, the online opponent's hero the mute option.
@@ -779,7 +851,7 @@ func _on_right_click(v: EntityView) -> void:
 	_end_drag()  # (a long press on a hero: the press is no attack)
 	if e.controller == viewer():
 		_wheel.visible = emotes_allowed() and not _wheel.visible
-	elif session:
+	elif session and not watching:
 		_enemy_menu.visible = not _enemy_menu.visible
 
 
@@ -801,7 +873,7 @@ func tick(delta: float) -> void:
 	if count:
 		count.visible = mull and _time_left <= MULLIGAN_WARN and not controller.game.players[viewer()].mulliganed
 		count.text = str(int(ceil(maxf(0.0, _time_left))))
-	if mull and controller.game.players[viewer()].mulliganed and not controller.game.players[1 - viewer()].mulliganed and not _mulligan_waiting(viewer()):
+	if mull and not watching and controller.game.players[viewer()].mulliganed and not controller.game.players[1 - viewer()].mulliganed and not _mulligan_waiting(viewer()):
 		show_hint(tr("Waiting for the opponent…"), 0.5)  # (the mulligan screen says it while it stays)
 	if _time_left > 0.0:
 		return
@@ -856,7 +928,7 @@ func viewer() -> int:
 
 ## True when the local human may act now.
 func my_action() -> bool:
-	return not controller.game.game_over and not controller.bots[controller.actor()] and controller.actor() == viewer()
+	return not watching and not controller.game.game_over and not controller.bots[controller.actor()] and controller.actor() == viewer()
 
 
 func _legal() -> Array:
@@ -1002,7 +1074,8 @@ func refresh() -> void:
 	_end_turn.text = tr("End Turn") if my_action() or g.game_over else tr("Enemy Turn")
 	var concede := find_child("Concede", true, false) as Button
 	if concede:
-		concede.text = tr("Menu") if g.game_over else tr("Concede")
+		concede.text = tr("Leave") if watching else (tr("Menu") if g.game_over else tr("Concede"))
+	_update_watch_bar()
 	_apply_glows()
 	_history.update_from(g, me)
 	_strip.update_from(g, me)
@@ -1046,7 +1119,7 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 		want[weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
 	var secrets: Array = _ents(_stage.secrets[p]) if staged else pl.secrets
 	for i in secrets.size():
-		want[secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own}  # on the top of the portrait, both sides
+		want[secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own and not full_view}  # on the top of the portrait, both sides
 	var board: Array = _ents(_stage.board[p]) if staged else pl.board.duplicate()
 	var placed := _placed.duplicate() if own else {}  # minions put down: they stand in their places
 	if own and _placing() >= 0:  # (one waiting for its Battlecry target too)
@@ -1067,6 +1140,8 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 			if hand[i].id == _hover_hand:
 				hover = i
 	var fan := TableLayout.hand_small(hand.size()) if own and _hand_small() else TableLayout.hand(hand.size(), own, hover)
+	if full_view and not own:
+		fan = TableLayout.open_hand(hand.size())
 	for i in hand.size():
 		var f: Dictionary = fan[i]
 		if not own and i == _opp_hover:  # the card the opponent is looking at
@@ -1127,7 +1202,7 @@ func _make_view(e: GameView.Ent, spec: Dictionary) -> EntityView:
 			v = MinionView.make(e, g)
 		"hand":
 			var cv := CardView.make(e.card_id)
-			cv.face_up = spec.own
+			cv.face_up = spec.own or (full_view and e.card_id != "")
 			cv.pivot_offset = Vector2(CardView.SIZE.x / 2.0, CardView.SIZE.y)
 			v = cv
 	v.set_meta("kind", spec.kind)
@@ -1183,8 +1258,8 @@ func _reconcile(want: Dictionary) -> void:
 			if _stage.is_empty() or v is PowerView:
 				v.sync()  # (while a batch plays, its steps change the numbers)
 		if v is CardView:
-			v.face_up = spec.own
-			if spec.own:
+			v.face_up = spec.own or (full_view and e.card_id != "")
+			if v.face_up:
 				v.show_entity(e, g)
 		if _hold.has(id):
 			continue  # an attacker in mid-leap
@@ -1418,7 +1493,7 @@ func _on_end_turn() -> void:
 
 
 func _on_concede() -> void:
-	if g.game_over:
+	if g.game_over or watching:
 		_leave()
 		return
 	var box := _open_overlay(tr("Concede the match?"))
@@ -2215,6 +2290,8 @@ func losers() -> Array:
 func result() -> Array:
 	if g.winner < 0:
 		return ["draw", tr("Draw")]
+	if watching:
+		return ["victory", tr("%s wins") % _side_name(g.winner)]
 	if controller.remote < 0 and controller.bots[0] == controller.bots[1]:
 		return ["victory", tr("Player %d wins") % (g.winner + 1)]
 	return ["victory", tr("Victory!")] if g.winner == viewer() else ["defeat", tr("Defeat")]
@@ -2729,6 +2806,7 @@ func _close_overlay() -> void:
 		remove_child(_overlay)
 		_overlay.queue_free()
 		_overlay = null
+		_update_watch_bar()
 
 
 func _open_overlay(title: String) -> VBoxContainer:
@@ -2749,6 +2827,7 @@ func _open_overlay(title: String) -> VBoxContainer:
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(t)
 	add_child(_overlay)
+	_update_watch_bar()
 	return box
 
 
@@ -2784,6 +2863,8 @@ func _refresh_overlay() -> void:
 				_tutorial_result(box)
 			elif arena:
 				_arena_result(box)
+			elif watching:
+				_centered_button(box, tr("Leave"), "LeaveWatch", _leave)
 			elif lobby:
 				_centered_button(box, tr("Back to the lobby"), "BackToLobby", _leave)
 			else:
@@ -2796,7 +2877,7 @@ func _refresh_overlay() -> void:
 		return
 	if _mull_wait >= 0 and _overlay and _overlay.name == "Mulligan":
 		return  # chosen: the new cards come in
-	if g.phase == "MULLIGAN" and g.players[viewer()].mulliganed and not g.players[1 - viewer()].mulliganed:
+	if g.phase == "MULLIGAN" and not watching and g.players[viewer()].mulliganed and not g.players[1 - viewer()].mulliganed:
 		show_hint(tr("Waiting for the opponent…"), 2.0)  # (the turn timer keeps it on online)
 	if not g.pending.is_empty() and my_action():
 		if _overlay == null or _overlay.name != "Choice":

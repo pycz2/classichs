@@ -76,6 +76,7 @@ func show_language_picker() -> void:
 
 
 func _set_screen(s: Control) -> void:
+	close_watch(false)  # (a game of one's own starts while watching one, say)
 	if screen:
 		screen.queue_free()
 		remove_child(screen)
@@ -415,6 +416,68 @@ func _on_server_message(msg: Dictionary, l: ServerLink) -> void:
 				l.set_meta("game_over", msg)
 		"match":
 			start_server_game(msg, l)
+		"spectating":
+			start_watch(msg, l)
+
+
+# --- watching a friend's game ------------------------------------------------------------
+
+## The spectator table, over the screen the player was on (hidden meanwhile: Leave or the
+## game's end brings it back as it was), and that screen's game and look.
+var watch_view: MatchView
+var _before_watch := {}
+
+
+## The server lets us watch a game (`spectating`): its first state opens the table.
+func start_watch(msg: Dictionary, l: ServerLink) -> ServerSession:
+	var s := l.watch(msg)
+	l.add_child(s)
+	if watch_view == null:
+		_before_watch = {"pack": Packs.active(), "sets": Packs.server_sets, "shell": Packs.shell}
+	s.started.connect(func(m: Match): _show_watch(s, m))
+	s.failed.connect(func(reason):
+		if s.match_ == null:
+			social.toast(reason))
+	return s
+
+
+func _show_watch(s: ServerSession, m: Match) -> MatchView:
+	close_watch(false)
+	Packs.set_shell(false)
+	var v := MatchView.new()
+	v.name = "WatchView"
+	v.leave.connect(close_watch)
+	watch_view = v
+	if screen:
+		screen.visible = false
+	add_child(v)
+	v.bind_online(m, s)
+	social.screen_changed(v)
+	return v
+
+
+## Leaves the spectator table (the server is told by the session); back: the screen before it.
+func close_watch(back := true) -> void:
+	if watch_view == null:
+		return
+	var v := watch_view
+	watch_view = null
+	if v.session and is_instance_valid(v.session):
+		v.session.leave()
+	v.queue_free()
+	remove_child(v)
+	if not back:
+		return
+	var was: Pack = _before_watch.get("pack")
+	if was and was != Packs.active():
+		Packs.set_active(was)
+		Packs.server_sets = _before_watch.get("sets", {})
+	Packs.set_shell(_before_watch.get("shell", Packs.shell))
+	if screen:
+		screen.visible = true
+		if not screen is MatchView:
+			Sound.music("menu")
+		social.screen_changed(screen)
 
 
 ## The server matched us (a queue, the Arena or an invite, from any screen, or

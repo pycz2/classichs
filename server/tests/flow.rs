@@ -1041,3 +1041,153 @@ fn part_of(class: &str, n: usize) -> Value {
     d["cards"] = json!(d["cards"].as_array().unwrap()[..n]);
     d
 }
+
+// --- spectators ---------------------------------------------------------------------------------
+
+impl C {
+    /// The very next message (nothing skipped): it must be of type `t`.
+    async fn next(&mut self, t: &str) -> Value {
+        loop {
+            let m = tokio::time::timeout(Duration::from_secs(10), self.ws.next()).await.expect("no message").unwrap().unwrap();
+            if let Message::Text(s) = m {
+                let v: Value = serde_json::from_str(s.as_str()).unwrap();
+                assert_eq!(v["t"], t, "{v}");
+                return v;
+            }
+        }
+    }
+}
+
+/// A new account f becomes a friend of the seat-0 player of t; returns the player's name.
+async fn befriend(t: &mut Table, f: &mut C, tag: &str) -> String {
+    f.send(json!({"t": "set_tag", "tag": tag})).await;
+    f.want("me").await;
+    t.p[0].c.send(json!({"t": "me"})).await;
+    let name = t.p[0].c.want("me").await["me"]["user"].as_str().unwrap().to_string();
+    t.p[0].c.send(json!({"t": "friend_add", "tag": tag})).await;
+    f.want("friends").await;
+    f.send(json!({"t": "friend_accept", "user": name})).await;
+    let fr = f.want("friends").await;
+    assert_eq!(fr["list"][0]["in_game"], json!({"game": t.game, "mode": "casual"}), "{fr}");
+    assert_eq!(f.want("presence").await["status"], "in_game");
+    name
+}
+
+/// Everything c gets until a pong: none of it tells about spectators.
+async fn nothing_about_spectators(c: &mut C) {
+    c.send(json!({"t": "ping"})).await;
+    loop {
+        let m = tokio::time::timeout(Duration::from_secs(5), c.ws.next()).await.unwrap().unwrap().unwrap();
+        let s = m.to_text().unwrap().to_string();
+        assert!(!s.contains("spectat"), "{s}");
+        if s.contains("\"pong\"") {
+            return;
+        }
+    }
+}
+
+/// A friend watches a game from its middle: the friend's view now, then every change (each
+/// exactly the engine's view of that seat: the opponent's hand never shows), then the end.
+/// The players hear nothing of it; the spectator gets none of their emotes or intents.
+#[tokio::test]
+async fn a_friend_watches_a_game() {
+    let (addr, app) = server(std_server()).await;
+    let mut f = C::register(addr, "watcher").await;
+    let mut t = Table::queue(addr, &app, "sam", "tess", "casual").await;
+    let name = befriend(&mut t, &mut f, "Watcher").await;
+    for _ in 0..12 {
+        let (p, a) = t.next();
+        t.act(p, a).await;
+    }
+    f.send(json!({"t": "spectate", "user": name})).await;
+    let s = f.next("spectating").await;
+    assert_eq!((s["game"].as_str(), s["seat"].as_u64(), s["full"].as_bool(), s["mode"].as_str()), (Some(t.game.as_str()), Some(0), Some(false), Some("casual")));
+    assert_eq!(s["players"][0], name.as_str());
+    let first = f.next("spectate_state").await;
+    check_state(&first, &t.mirror, &[], 0);
+    nothing_about_spectators(&mut t.p[0].c).await;
+    nothing_about_spectators(&mut t.p[1].c).await;
+    t.p[1].c.send(json!({"t": "emote", "game": t.game, "id": "greetings"})).await;
+    t.p[1].c.send(json!({"t": "intent", "i": {"k": "hover", "i": 0}})).await;
+    t.p[0].c.want("intent").await;
+    let mut n = 0;
+    while !t.mirror.game_over {
+        let (p, a) = if n == 80 { (1, json!({"type": "concede", "player": 1})) } else { t.next() };
+        t.send(p, a.clone()).await;
+        let r = t.mirror.apply(&a);
+        assert!(r.ok, "{a}: {}", r.error);
+        for q in 0..2 {
+            let s = t.p[q].c.want("state").await;
+            check_state(&s, &t.mirror, &r.events(), q);
+        }
+        let s = f.next("spectate_state").await;
+        assert_eq!(s["game"], t.game.as_str());
+        check_state(&s, &t.mirror, &r.events(), 0);
+        n += 1;
+    }
+    let end = f.next("spectate_end").await;
+    assert_eq!((end["winner"].as_i64(), end["reason"].as_str()), (Some(t.mirror.winner), Some("over")));
+    assert!(app.hub().watching.is_empty());
+}
+
+/// Who may watch: friends only, 20 spectators a game; `spectate::add` (tournaments) opens both
+/// hands; unspectate and a disconnect stop the states.
+#[tokio::test]
+async fn spectators_limits_and_the_full_view() {
+    let (addr, app) = server(std_server()).await;
+    let mut f = C::register(addr, "fan").await;
+    let mut x = C::register(addr, "stranger").await;
+    let mut t = Table::queue(addr, &app, "uli", "vera", "casual").await;
+    let name = befriend(&mut t, &mut f, "Fan").await;
+    x.send(json!({"t": "spectate", "user": name})).await;
+    assert_eq!(x.want("error").await["code"], "not_friends");
+    t.act(0, json!({"type": "mulligan", "player": 0, "replace": []})).await;
+    t.act(1, json!({"type": "mulligan", "player": 1, "replace": []})).await;
+    // 20 spectators at most: the friend and 19 more (ids of nobody connected count too)
+    f.send(json!({"t": "spectate", "user": name})).await;
+    f.next("spectating").await;
+    f.next("spectate_state").await;
+    for i in 0..19 {
+        classichs_server::spectate::add(&app, &t.game, 1000 + i, false).unwrap();
+    }
+    assert!(classichs_server::spectate::add(&app, &t.game, 2000, true).is_err(), "the 21st");
+    assert!(classichs_server::spectate::add(&app, &t.game, 1000, true).is_ok(), "one already watching may change its view");
+    let pid = db::id_by_name(&app.db, &name).await.unwrap().unwrap();
+    assert!(classichs_server::spectate::add(&app, &t.game, pid, true).is_err(), "a player does not watch");
+    // the full view: both hands open, still no deck lists and no RNG
+    let fid = db::id_by_name(&app.db, "fan").await.unwrap().unwrap();
+    classichs_server::spectate::add(&app, &t.game, fid, true).unwrap();
+    let s = f.next("spectating").await;
+    assert_eq!((s["full"].as_bool(), s["seat"].as_u64()), (Some(true), Some(0)));
+    let s = f.next("spectate_state").await;
+    for p in 0..2 {
+        assert!(!t.mirror.players[p].hand.is_empty());
+        for id in &t.mirror.players[p].hand {
+            assert_eq!(s["view"]["entities"][id.to_string()]["card"], t.mirror.ent(*id).unwrap().card_id, "hand card {id} of {p}");
+        }
+        assert_eq!(s["view"]["players"][p]["deck"], json!([]));
+    }
+    assert!(s["view"].get("rng").is_none());
+    let (p, a) = t.next();
+    t.act(p, a).await;
+    f.next("spectate_state").await;
+    // unspectate: no more states
+    f.send(json!({"t": "unspectate"})).await;
+    f.next("unspectated").await;
+    let (p, a) = t.next();
+    t.act(p, a).await;
+    f.send(json!({"t": "ping"})).await;
+    f.next("pong").await;
+    // a spectator that goes away is dropped
+    let xid = db::id_by_name(&app.db, "stranger").await.unwrap().unwrap();
+    classichs_server::spectate::add(&app, &t.game, xid, false).unwrap();
+    x.next("spectating").await;
+    drop(x);
+    for _ in 0..100 {
+        if !app.hub().watching.contains_key(&xid) {
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(20)).await;
+    }
+    assert!(!app.hub().watching.contains_key(&xid), "dropped on disconnect");
+}

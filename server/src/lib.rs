@@ -13,6 +13,7 @@ pub mod migration;
 pub mod packs;
 pub mod ranked;
 pub mod settings;
+pub mod spectate;
 pub mod storage;
 pub mod ws;
 
@@ -171,6 +172,8 @@ pub struct Hub {
     shown: HashMap<i64, &'static str>,
     /// An auto-bot → the player it queues for (bots::auto): only those two pair, whatever the window.
     pub auto_for: HashMap<i64, i64>,
+    /// Spectator account → the game it watches (spectate).
+    pub watching: HashMap<i64, spectate::Watch>,
 }
 
 impl Hub {
@@ -229,6 +232,7 @@ impl Hub {
     pub fn attach(&mut self, account: i64, name: &str, tx: UnboundedSender<Out>) -> (u64, bool) {
         self.next_conn += 1;
         let old = self.conns.insert(account, Conn { id: self.next_conn, name: name.into(), tx });
+        self.watching.remove(&account); // a new connection watches nothing yet
         if let Some(old) = &old {
             // The message first, then the close frame tells it again (a client may lose a
             // message that arrives right before the close).
@@ -255,6 +259,7 @@ impl Hub {
         }
         self.conns.remove(&account);
         self.queue.remove(&account);
+        self.watching.remove(&account);
         self.invites.retain(|(a, b), _| *a != account && *b != account);
         if let Some((g, p)) = self.in_game.get(&account) {
             if let Some(lg) = self.games.get(g) {
