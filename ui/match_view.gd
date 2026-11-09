@@ -1560,6 +1560,7 @@ func _on_hover(v: EntityView, on: bool) -> void:
 		return
 	_tooltip = CardView.make(e.card_id, 1.8)
 	_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_tooltip.z_index = 70  # over the clock and the decks
 	if e.zone != "SECRET":
 		_tooltip.show_entity(e, g)
 		_tooltip.silenced = e.silenced
@@ -1927,8 +1928,7 @@ func _play_step(st: Dictionary) -> void:
 			_step_sounds(st)
 			await _wait(0.2)
 		"secret":
-			await _reveal(ev.card)
-			show_hint(tr("Secret: %s") % CardText.name(ev.card), 2.5)
+			await _reveal(ev.card)  # (the card itself shows big: no hint over the board)
 			_step_apply(st)
 		"discard":
 			await _discard(st)
