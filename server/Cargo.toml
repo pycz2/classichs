@@ -10,6 +10,8 @@ base64 = "0.22"
 classichs-engine = { path = "../rust/engine" }
 classichs-brain = { path = "../rust/brain", features = ["names"] }
 futures-util = "0.3.34"
+# the replays' deflate (the one zip already uses)
+flate2 = { version = "1.1.10", default-features = false, features = ["zlib-rs"] }
 object_store = { version = "0.14", features = ["aws", "fs"] }
 rand = "0.8"
 # the bots' network adapter (wss:// needs one rustls crypto provider)

@@ -177,7 +177,8 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `POST accounts/{id}/{suspend\|unsuspend\|password\|role\|delete}` | `{password}`, `{role: "admin"\|"user"}`, `{confirm: <name>}` |
 | `GET events?kind=a,b&user&game&from&to&q&sort&dir&page&size` | `{list, total, page, size}`; from/to in ms; sort: time (default), kind, user |
 | `GET conversations?user&page` · `GET conversations/{a}/{b}` | conversations, the latest first · one conversation |
-| `GET games?user&mode&reason&page&size` · `GET games/{id}` | finished games · one game with its timeline |
+| `GET games?user&mode&reason&page&size` · `GET games/{id}` | finished games · one game with its timeline and its replay's actions (`replay: {actions, hash, first}` or null) |
+| `GET games/{id}/replay` | the game's replay as a `<id>.chsreplay` download (the replay JSON) |
 | `GET packs` | `{server: [pack], players: [pack], stats: {server, enabled, players, uploaders, files, bytes, downloads, storage, games, live, default_rules, builtin: {rules_hash, default}, limits: {player, server, per_player}}}`; a pack is `{id, pack_id, version, name, rules_hash, content_hash, size, enabled, default, created, downloads, games, live, owner: {id, user} \| null}` (`games`/`live`: finished and live games in its rules) |
 | `POST packs` (the `.cardpack` as the raw body, up to 128 MB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
 | `POST packs/{id}/{enable\|disable\|delete\|default}` | any pack, a player's too (the player's game gets a new `packs`); `default`: a server pack becomes the default game |
@@ -211,7 +212,9 @@ new version of a pack keeps them, a new season starts from the last one's (M4 mo
 ranks earned before packs to `classic-2014`); a game row and an Arena run keep their pack's
 `rules_hash` (`""` = the built-in Classic rules, before packs). Players' decks kept on the
 server are in `decks` (M6) per account and pack manifest id, like the standings; their
-choices per game (art and music sets) in `game_settings` (M7), the same way.
+choices per game (art and music sets) in `game_settings` (M7), the same way. Every finished
+game's replay is in `replays` (M9: game, pack, p0, p1, ended, data = the replay JSON
+deflate-compressed), kept for good.
 
 ### Connect the game
 
@@ -415,6 +418,21 @@ A player's choices for each game (the client keeps the art and music sets there:
   that game's (null removes a key) → `game_settings {games}`. A key is 1–32 of `a-z 0-9 _`,
   a text at most 64 characters, 16 keys a game at most (else `error bad_request`); an unknown
   game `error pack`; it shares the decks' 60 changes per 10 s (`error rate_limited`).
+
+### Replays
+
+Every finished game (any mode, any ending) is kept as a replay: the JSON the rules engine plays
+again, `{format: "classichs-replay", v: 1, game, mode, pack (rules_hash), pack_id, pack_name,
+started, ended (unix s), players: [{name, hero, cards: [30 ids]}] (by seat), seed, first (the
+engine's `new` first: -1 = drawn from the seed), actions: [every applied action in order:
+mulligans, choices, timeout moves, concede], result: {winner (-1 none), reason, turns}, hash
+(the final state hash)}`. `Game::new_in(pack, hero0, cards0, hero1, cards1, seed, first, true)`
+and `apply` of every action give that hash. The client's `.chsreplay` file is this JSON.
+
+- `replays {}` → `replays {list: [{game, mode, pack, pack_name, opponent, won, started, ended,
+  turns}]}`: the player's last 50 games, newest first.
+- `replay {game}` → `replay {game, data}` for one who may watch it (`replays::can_view`: its
+  players), else `error not_found`.
 
 ### Game packs
 

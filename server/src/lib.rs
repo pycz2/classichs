@@ -12,6 +12,7 @@ pub mod game;
 pub mod migration;
 pub mod packs;
 pub mod ranked;
+pub mod replays;
 pub mod storage;
 pub mod ws;
 

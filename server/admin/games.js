@@ -129,6 +129,13 @@ export function GamePage ({ id }) {
             ${lg && html`<span class="small">${lg.current === i ? '▶ to move' : ''} ${p.online === false ? html`<span class="badge warn">away</span>` : ''}</span>`}
           </div>`)}
         </${Card}>
+        ${data.replay && html`<${Card} title=${`Replay · ${num(data.replay.actions.length)} actions`}
+          actions=${html`<a class="btn ghost sm" href=${'/admin/api/games/' + encodeURIComponent(id) + '/replay'} download=${id + '.chsreplay'}>Download replay</a>`}>
+          <ol class="replay-actions">${data.replay.actions.map((a, i) => {
+            const rest = Object.entries(a).filter(([k]) => k !== 'type' && k !== 'player').map(([k, v]) => k + ' ' + JSON.stringify(v)).join(', ')
+            return html`<li key=${i} class=${'p' + a.player}><span class="muted mono">${i + 1}</span> <b>${players[a.player] ? players[a.player].user : 'P' + a.player}</b> ${a.type} <span class="muted small mono">${rest}</span></li>`
+          })}</ol>
+        </${Card}>`}
         ${data.match && html`<${Card} title="Match">
           <dl class="kv">
             <dt>Started</dt><dd>${clock(t0)}</dd>

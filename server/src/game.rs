@@ -7,7 +7,7 @@ use crate::entity::{arena, game as played};
 use crate::events::Event;
 use crate::packs::{self, GameRules};
 use crate::ranked::{self, Mode};
-use crate::{presence, AppRef, LiveGame, Timers};
+use crate::{presence, replays, AppRef, LiveGame, Timers};
 use classichs_engine::api::{events_for, snapshot};
 use classichs_engine::deck::Deck;
 use classichs_engine::state::Ev as Events;
@@ -49,6 +49,9 @@ struct Ctx {
     started: i64,
     /// The `match` message for each player (sent again on a rejoin).
     hello: [Value; 2],
+    /// The replay's setup: {name, hero, cards} by seat, and the seed.
+    players: [Value; 2],
+    seed: u32,
 }
 
 /// Starts a game between two players ([account, deck]) in a pack; the seats are drawn at random.
@@ -133,7 +136,8 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
                          "pack_name": pack_name})),
     );
     let timers = app.timers.unwrap_or(rules.timers);
-    let ctx = Ctx { app, id, mode, rules, timers, ids, names, started: ranked::now(), hello };
+    let players: [Value; 2] = std::array::from_fn(|p| json!({"name": names[p], "hero": decks[p].hero, "cards": decks[p].cards}));
+    let ctx = Ctx { app, id, mode, rules, timers, ids, names, started: ranked::now(), hello, players, seed };
     tokio::spawn(run(ctx, game, rx));
 }
 
@@ -406,6 +410,11 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
         tx.commit().await?;
         Ok::<_, DbError>(extra)
     };
+    let ended = ranked::now();
+    if let Err(e) = replays::save(&ctx.app.db, &ctx.id, &ctx.rules.rules_hash, ctx.ids, ended, &replay(ctx, g, winner, reason, ended)).await {
+        tracing::error!("game {}: replay not saved: {e}", ctx.id);
+        ctx.app.event(Event::new("error", format!("The replay of game {} was not saved: {e}", ctx.id)).game(&ctx.id));
+    }
     let extra = saved.await.unwrap_or_else(|e| {
         tracing::error!("game {}: results not saved: {e}", ctx.id);
         ctx.app.event(Event::new("error", format!("The results of game {} were not saved: {e}", ctx.id)).game(&ctx.id));
@@ -447,6 +456,16 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
     for id in ctx.ids {
         presence(&ctx.app, id).await;
     }
+}
+
+/// A finished game's replay (server/README.md, "Replays"): the engine plays it again from the
+/// setup and the actions (every applied one, the timeouts' too: the game's history).
+fn replay(ctx: &Ctx, g: &Game, winner: i64, reason: &str, ended: i64) -> Value {
+    let actions: Vec<Value> = g.history.iter().skip(1).map(|h| Value::Object(h.action.clone())).collect();
+    json!({"format": "classichs-replay", "v": 1, "game": ctx.id, "mode": ctx.mode.as_str(), "pack": ctx.rules.rules_hash,
+           "pack_id": ctx.rules.id, "pack_name": packs::short_name(&ctx.rules), "started": ctx.started, "ended": ended,
+           "players": ctx.players, "seed": ctx.seed, "first": -1, "actions": actions,
+           "result": {"winner": winner, "reason": reason, "turns": g.turn}, "hash": g.state_hash()})
 }
 
 pub async fn rank_json(c: &impl ConnectionTrait, s: &Standing) -> DbResult<Value> {

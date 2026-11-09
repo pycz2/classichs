@@ -1041,3 +1041,39 @@ fn part_of(class: &str, n: usize) -> Value {
     d["cards"] = json!(d["cards"].as_array().unwrap()[..n]);
     d
 }
+
+/// Every finished game is kept as a replay: its players list and fetch it, the engine plays it
+/// again to the same final state, nobody else gets it.
+#[tokio::test]
+async fn replays_of_finished_games() {
+    let (addr, app) = server(std_server()).await;
+    let mut t = Table::queue(addr, &app, "alice", "bob", "casual").await;
+    play_out(&mut t).await;
+    t.p[0].c.send(json!({"t": "replays"})).await;
+    let l = t.p[0].c.want("replays").await;
+    let e = &l["list"][0];
+    assert_eq!((e["game"].as_str(), e["mode"].as_str(), e["turns"].as_i64()), (Some(t.game.as_str()), Some("casual"), Some(t.mirror.turn)), "{l}");
+    assert_eq!(e["won"], json!(t.mirror.winner == 0));
+    t.p[1].c.send(json!({"t": "replay", "game": t.game})).await;
+    let r = t.p[1].c.want("replay").await["data"].clone();
+    assert_eq!((r["format"].as_str(), r["v"].as_i64()), (Some("classichs-replay"), Some(1)));
+    assert_eq!(r["hash"], json!(t.mirror.state_hash()));
+    // Rebuilt from the replay alone.
+    let rs = ruleset::get(r["pack"].as_str().unwrap()).unwrap();
+    let pl = |p: usize| (r["players"][p]["hero"].as_str().unwrap().to_string(), cards(&r["players"][p]));
+    let ((h0, c0), (h1, c1)) = (pl(0), pl(1));
+    let mut g = Game::new_in(rs, &h0, &c0, &h1, &c1, r["seed"].as_i64().unwrap(), r["first"].as_i64().unwrap(), true);
+    for a in r["actions"].as_array().unwrap() {
+        assert!(g.apply(a).ok, "{a}");
+    }
+    assert_eq!(g.state_hash(), r["hash"].as_str().unwrap());
+    assert_eq!((g.winner, g.turn), (r["result"]["winner"].as_i64().unwrap(), r["result"]["turns"].as_i64().unwrap()));
+    // Not a player of it: not found (as a game that does not exist).
+    let mut eve = C::register(addr, "eve").await;
+    for game in [t.game.as_str(), "nosuchgame"] {
+        eve.send(json!({"t": "replay", "game": game})).await;
+        assert_eq!(eve.want("error").await["code"], "not_found");
+    }
+    eve.send(json!({"t": "replays"})).await;
+    assert_eq!(eve.want("replays").await["list"], json!([]));
+}
