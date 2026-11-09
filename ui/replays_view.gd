@@ -62,7 +62,7 @@ func _ready() -> void:
 	_list.custom_minimum_size.x = 1020
 	_scroll.add_child(_list)
 	var bk := _button(tr("Back"), "Back", "", func(): back.emit(), Vector2(200, 52))
-	bk.position = Vector2(120, 656)
+	bk.position = Vector2(150, 656)  # (right of the friends button, bottom left)
 	add_child(bk)
 	_note = Palette.label("", 18)
 	_note.name = "Note"

@@ -433,6 +433,8 @@ func start_server_match(session: ServerSession, m: Match, mode_: String) -> Matc
 	var v := MatchView.new()
 	v.lobby = true
 	var tid = session.link.get_meta("tournament", null) if mode_ == "tournament" else null
+	if mode_ == "tournament":
+		v.lobby_label = tr("Back to the tournament")
 	v.lobby_back.connect(func():
 		if session.link is ServerLink and server_links.has(session.link):
 			server_link = session.link

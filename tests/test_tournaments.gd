@@ -335,6 +335,10 @@ func test_match_panel_steps() -> void:
 	m.score = [2.0, 1.0]
 	p.show_match(m, l)
 	eq((p.find_child("Step", true, false) as Label).text, "You won the match!")
+	m.status = "pick"  # the tournament stopped mid-match (cancelled): not a result
+	m.score = [0.0, 0.0]
+	p.show_match(m, l)
+	eq((p.find_child("Step", true, false) as Label).text, "The tournament was cancelled")
 	p._process(9.0)
 	check(not p.visible, "the result goes away by itself")
 	p.free()
@@ -419,6 +423,10 @@ func test_main_menu_and_panel() -> void:
 	m.server_link.dispatch({"t": "match", "game": "g9", "mode": "tournament", "tournament": 7.0, "match": 3.0, "you": 0, "opponent": {"user": "bob"}})
 	check(not m.tournament_panel.visible, "the game hides it")
 	eq(m.server_link.get_meta("tournament"), 7.0, "the game knows its tournament (back to its page)")
+	FakeLink.engine_game("tour_eng")
+	m.server_link.dispatch(JSON.parse_string(JSON.stringify(FakeLink.state("g9", "tour_eng", 0))))
+	check(m.screen is MatchView and m.screen.lobby_label == "Back to the tournament", "its end leads back to the tournament, so it says")
+	Rules.request({"op": "drop", "game": "tour_eng"})
 	m.free()
 
 
@@ -447,3 +455,9 @@ func test_single_elimination_names_its_rounds() -> void:
 		check(titles.has(want), "%s in %s" % [want, titles])
 	b.free()
 
+
+
+## Bo1 without bans: one deck, said so (not "1 decks of different classes").
+func test_one_deck_is_said_in_the_singular() -> void:
+	var t := full("swiss", 4, {"best_of": 1.0, "bans": 0.0})
+	check(TournamentsView.rules_lines(t).any(func(r): return r[0] == "One deck"), "the rules say one deck")

@@ -201,4 +201,7 @@ func test_the_friends_button_leaves_the_replay_bar_free() -> void:
 	var back := (v.find_child("ReplayBack", true, false) as Control).get_global_rect()
 	var b: Control = m.social.button
 	check(not back.intersects(Rect2(b.position, b.size)), "Back is not under the friends button")
+	var list: ReplaysView = m.show_replays()
+	b = m.social.button
+	check(not (list.find_child("Back", true, false) as Control).get_global_rect().intersects(Rect2(b.position, b.size)), "nor the list's Back")
 	m.free()

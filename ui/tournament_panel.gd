@@ -99,6 +99,8 @@ func _step_title() -> String:
 		"wait":
 			return tr("Waiting for %s") % str(cur.get("opponent", ""))
 		"done":
+			if str(cur.get("status", "done")) not in ["done", "bye"]:  # the tournament stopped (cancelled) mid-match
+				return tr("The tournament was cancelled")
 			var s := TournamentBracket.score(cur)
 			return tr("You won the match!") if s[0] > s[1] else tr("The match is lost")
 	return ""

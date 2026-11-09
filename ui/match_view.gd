@@ -49,6 +49,8 @@ var session: Node
 var arena: ArenaSession
 ## A game on a game server: the result leads back to the server's lobby.
 var lobby := false
+## The lobby button's words when it leads elsewhere (a tournament game: its page); "" = the lobby.
+var lobby_label := ""
 ## A game watched, not played (a spectator on a server): nothing can be done on the table
 ## but look, and Leave; full_view: both hands face up.
 var watching := false
@@ -450,7 +452,7 @@ func _on_connection_lost(reason: String) -> void:
 	elif arena:
 		_centered_button(box, tr("Back to the Arena"), "BackToArena", _leave)
 	elif lobby:
-		_centered_button(box, tr("Back to the lobby"), "BackToLobby", _leave)
+		_centered_button(box, lobby_label if lobby_label != "" else tr("Back to the lobby"), "BackToLobby", _leave)
 	else:
 		_centered_button(box, tr("Back to Menu"), "BackToMenuLost", _leave)
 
@@ -2891,7 +2893,7 @@ func _refresh_overlay() -> void:
 			elif watching:
 				_centered_button(box, tr("Leave"), "LeaveWatch", _leave)
 			elif lobby:
-				_centered_button(box, tr("Back to the lobby"), "BackToLobby", _leave)
+				_centered_button(box, lobby_label if lobby_label != "" else tr("Back to the lobby"), "BackToLobby", _leave)
 			else:
 				_centered_button(box, tr("Back to Menu"), "BackToMenu", _leave)
 		return

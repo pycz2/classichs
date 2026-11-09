@@ -73,11 +73,10 @@ export function TournamentPage ({ id }) {
     ${back}
     <header class="page-head">
       <div><h1>${t.name}</h1>
-        <div class="muted">${statusBadge(t.status)} ${t.reason ? html` <span class="muted">(${t.reason})</span>` : ''} · ${formatText(t)} · ${SERIES[t.series]} Bo${t.best_of}${t.bans ? ', 1 ban' : ''}
-          · ${t.pack_name} · by ${t.creator} · starts ${fullDate(t.start_at)}${t.deck_reveal ? ' · decks revealed' : ''}${t.spectators ? ' · spectators' : ''}</div></div>
+        <div class="muted">${statusBadge(t.status)} ${t.reason ? html` <span class="muted">(${t.reason})</span>` : ''} · ${formatText(t)} · ${SERIES[t.series]} Bo${t.best_of}${t.bans ? ', 1 ban' : ''}${' · '}${t.pack_name} · by ${t.creator} · starts ${fullDate(t.start_at)}${t.deck_reveal ? ' · decks revealed' : ''}${t.spectators ? ' · spectators' : ''}</div></div>
       ${ACTIVE.includes(t.status) && html`<button class="btn danger" onClick=${() => setAsk(true)}><${Icon} name="x" size=${16} />Cancel</button>`}
     </header>
-    <div class="grid two-one">
+    <div class="grid two">
       <${Card} title=${`Matches (${t.matches.length})`} pad=${false}>
         ${t.matches.length ? order.map((k) => {
           const [b, r] = k.split(':')
@@ -97,7 +96,7 @@ export function TournamentPage ({ id }) {
             <td class="num">${place(e.place)}</td><td>${e.name}${e.eliminated && html` <span class="badge warn">out</span>`}</td>
             <td class="num">${e.seed >= 0 ? e.seed + 1 : '—'}</td>${t.format === 'scheveningen' && html`<td>${e.team >= 0 ? 'ABC'[e.team] : '—'}</td>`}
             <td class="num">${e.points}</td><td class="num mono">${e.wins}–${e.losses}</td>
-            <td class="small muted">${(e.decks || []).map((d) => d.hero).join(', ')}</td></tr>`)}</tbody>
+            <td class="small muted">${(e.decks || []).map((d) => html`<div title=${d.hero} style="white-space: nowrap">${d.name || d.hero}</div>`)}</td></tr>`)}</tbody>
         </table></div>
         ${!t.entrants.length && html`<${Empty}>Nobody has joined</${Empty}>`}
       </${Card}>

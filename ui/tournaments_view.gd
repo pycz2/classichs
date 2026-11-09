@@ -239,7 +239,7 @@ static func rules_lines(t: Dictionary) -> Array:
 	else:
 		out.append([series_name(t), _tr("Win once with each deck: a deck that won can't play again in the match")])
 	var bans := int(opt(t, "bans", 0))
-	out.append([_tr("%d decks of different classes") % decks_needed(t),
+	out.append([_tr("%d decks of different classes") % decks_needed(t) if decks_needed(t) != 1 else _tr("One deck"),
 		_tr("Each player bans one of the opponent's decks") if bans > 0 else _tr("No bans")])
 	out.append([_tr("%d–%d players") % [int(opt(t, "min_players", 2)), int(opt(t, "max_players", 8))],
 		_tr("Fewer than %d ten minutes before the start: the tournament is closed") % int(opt(t, "min_players", 2))])
@@ -573,7 +573,8 @@ func _entry_card(parent: Control) -> void:
 	var v := _section(parent, (tr("Your decks") if over else tr("You are in")) if not mine.is_empty() else tr("Join this tournament"))
 	v.get_parent().name = "EntryCard"
 	if mine.is_empty():
-		_wrap(_lbl(tr("Bring %d decks of different classes from your decks of this game.") % decks_needed(t), 17, Palette.TEXT, v), 590)
+		var bring := tr("Bring %d decks of different classes from your decks of this game.") % decks_needed(t) if decks_needed(t) != 1 else tr("Bring one deck from your decks of this game.")
+		_wrap(_lbl(bring, 17, Palette.TEXT, v), 590)
 		var j := _btn(tr("Join"), "Join", pick_decks.bind(false), 590, 60, v)
 		j.add_theme_font_size_override("font_size", 24)
 		return
@@ -832,7 +833,7 @@ func pick_decks(change: bool) -> void:
 
 
 func _build_picker(change: bool, n: int, all: Array) -> void:
-	var v := _dialog(tr("Choose %d decks of different classes") % n, Vector2(1100, 620), "DeckPicker")
+	var v := _dialog(tr("Choose %d decks of different classes") % n if n != 1 else tr("Choose a deck"), Vector2(1100, 620), "DeckPicker")
 	if Packs.find_rules(str(page.get("pack", ""))) == null:
 		_wrap(_lbl(tr("You don't have this game: get it in the server's home first."), 20, Palette.DANGER, v), 1060)
 	elif all.is_empty():
@@ -1050,7 +1051,7 @@ func _build_form() -> void:
 		_field(right, tr("Length"), tr("Wins needed: %d") % ((int(form.best_of) + 1) / 2) if not fixed else tr("Fixed after creation"),
 			_segment("best_of", [[1, tr("Bo1")], [3, tr("Bo3")], [5, tr("Bo5")], [7, tr("Bo7")]], fixed))
 		_field(right, tr("Bans"), tr("Each player bans one of the opponent's decks before the games"), _segment("bans", [[0, tr("No bans")], [1, tr("One ban")]]))
-		var need := _lbl(tr("Each player brings %d decks of different classes") % decks_needed(form), 19, Palette.SELECTED, right)
+		var need := _lbl(tr("Each player brings %d decks of different classes") % decks_needed(form) if decks_needed(form) != 1 else tr("Each player brings one deck"), 19, Palette.SELECTED, right)
 		need.name = "DecksNeeded"
 		_field(right, tr("Decklists"), tr("Open: everyone sees every deck from 10 minutes before the start"), _segment("deck_reveal", [[false, tr("Hidden")], [true, tr("Open")]]))
 		_field(right, tr("Spectators"), tr("The creator and eliminated players may watch running matches"), _segment("spectators", [[true, tr("Allowed")], [false, tr("No")]]))
@@ -1084,7 +1085,7 @@ func _summary() -> String:
 	var parts: Array = []
 	if form_mode != "reschedule":
 		parts.append(tr("%d players") % int(form.max_players))
-		parts.append(tr("%d decks each") % decks_needed(form))
+		parts.append(tr("%d decks each") % decks_needed(form) if decks_needed(form) != 1 else tr("One deck each"))
 	if form_mode != "edit":
 		parts.append(tr("starts %s") % local_text(int(form.start_at)))
 	return " · ".join(parts)
@@ -1393,7 +1394,8 @@ class PageHead:
 		var y := 44.0
 		x = TournamentsView.pill(self, Vector2(74, y), TournamentsView.format_name(t), Color("c9a74a"), 14) + 8
 		x = TournamentsView.pill(self, Vector2(x, y), TournamentsView.series_name(t), Color("c9a74a"), 14) + 8
-		TournamentsView.pill(self, Vector2(x, y), TournamentsView._tr("%d decks each") % TournamentsView.decks_needed(t), Color("9fc4e8"), 14)
+		var k := TournamentsView.decks_needed(t)
+		TournamentsView.pill(self, Vector2(x, y), TournamentsView._tr("%d decks each") % k if k != 1 else TournamentsView._tr("One deck each"), Color("9fc4e8"), 14)
 
 
 ## A player in the list: the place (a medal, added as a child), the avatar, the name (the
@@ -1419,10 +1421,10 @@ class PlayerRow:
 		TournamentBracket.avatar(self, Vector2(74 + dx, size.y / 2.0), 18, who)
 		var out: bool = e.get("eliminated", false) == true
 		var col := Palette.SELECTED if mine else (Color(0.6, 0.56, 0.5) if out else Palette.TEXT)
-		DeckTiles.text(self, Vector2(102 + dx, 30), who, 20, col, 240)
 		var sub := TournamentsView.seed_line(e)
 		if out:
 			sub += ("  ·  " if sub != "" else "") + TournamentsView._tr("out")
+		DeckTiles.text(self, Vector2(102 + dx, 30 if sub != "" else size.y / 2.0 + 7), who, 20, col, 240)  # alone: in the middle
 		DeckTiles.text(self, Vector2(102 + dx, 52), sub, 14, Palette.MUTED, 240)
 		var x := 350.0
 		var decks = e.get("decks")
@@ -1463,18 +1465,23 @@ class DeckChip:
 		var side := minf(size.y - 24, 52.0)
 		Icons.paint(self, cls, Rect2(Vector2(10, (size.y - side) / 2.0), Vector2(side, side)))
 		var tx := 18.0 + side
-		var fs := 18 if size.y >= 70 else 15  # a small tile: the deck's name still fits
-		DeckTiles.text(self, Vector2(tx, size.y / 2.0 - 2), title, fs, Color("f4ead5"), size.x - tx - 12)
-		DeckTiles.text(self, Vector2(tx, size.y / 2.0 + fs + 2), TournamentsView.class_name_of(hero), fs - 4, col.lightened(0.5), size.x - tx - 12)
+		var small := size.y < 70
+		var fs := 15 if small else 18  # a small tile: the deck's name still fits
+		var f := get_theme_font("font", "Label")
+		var word: String = TournamentsView._tr({"banned": "Banned", "won": "Won", "lost": "Lost"}.get(state, state))
+		var ps := 13 if small else 14
+		var pw := f.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, ps).x + 22 if state != "ok" else 0.0
+		# a small tile's state sits at its right, beside the name (not over it)
+		var tw := size.x - tx - 12 - (pw + 6 if small and state != "ok" else 0.0)
+		DeckTiles.text(self, Vector2(tx, size.y / 2.0 - 2), title, fs, Color("f4ead5"), tw)
+		DeckTiles.text(self, Vector2(tx, size.y / 2.0 + fs + 2), TournamentsView.class_name_of(hero), fs - 4, col.lightened(0.5), tw)
 		if state != "ok":
 			draw_rect(r, Color(0, 0, 0, 0.6))
-			var word: String = {"banned": "Banned", "won": "Won", "lost": "Lost"}.get(state, state)
 			var tc: Color = {"banned": Color("ff6b5a"), "won": TournamentBracket.WIN, "lost": Color("b0a090")}.get(state, Palette.MUTED)
 			if state == "banned":
 				draw_line(r.position + Vector2(10, 10), r.end - Vector2(10, 10), Color(tc, 0.8), 4)
-			var f := get_theme_font("font", "Label")
-			var pw := f.get_string_size(TournamentsView._tr(word), HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x + 22
-			TournamentsView.pill(self, Vector2(size.x - pw - 10, size.y - 36), TournamentsView._tr(word), tc, 14, true)
+			var at := Vector2(size.x - pw - 8, (size.y - ps - 13) / 2.0) if small else Vector2(size.x - pw - 10, size.y - 36)
+			TournamentsView.pill(self, at, word, tc, ps, true)
 		var edge := Palette.SELECTED if selected else (Color("c9a74a", 0.8) if is_hovered() and not disabled else Color(0, 0, 0, 0))
 		draw_style_box(Palette.raw_box(Color(0, 0, 0, 0), 12, edge, 4 if selected else 2), r)
 		if selected:

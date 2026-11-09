@@ -247,6 +247,11 @@ func _build_login() -> void:
 		var op: String = spec[2]
 		b.pressed.connect(func(): log_in(op, user.text.strip_edges(), pw.text, key.text if key.visible else ""))
 		row.add_child(b)
+		var f := b.get_theme_font("font")  # a long word ("Зарегистрироваться") shrinks, not the form widens
+		var fs := 24
+		while fs > 16 and f.get_string_size(b.text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > 202 - 24:
+			fs -= 1
+		b.add_theme_font_size_override("font_size", fs)
 	var stay := Palette.label(tr("You stay logged in on this device until you log out."), 16, Color("c9b48a"))
 	stay.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stay.custom_minimum_size.x = 420
