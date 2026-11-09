@@ -173,6 +173,7 @@ func show_game_menu() -> MainMenu:
 	m.training.connect(show_training_setup)
 	m.code_play.connect(show_online)
 	m.play.connect(show_server)
+	m.tournaments.connect(show_tournaments)
 	m.tutorial.connect(show_tutorial)
 	m.settings.connect(show_settings)
 	m.leave.connect(leave_game)
@@ -279,6 +280,8 @@ func show_arena(s: ArenaSession) -> ArenaView:
 var server_links: Array[ServerLink] = []
 var server_link: ServerLink
 var social: Social
+## The player's tournament match over any screen (`t_match`).
+var tournament_panel: TournamentPanel
 
 
 ## The connections and the overlay (closed until the server mode).
@@ -291,6 +294,8 @@ func _start_server_link() -> void:
 	social = Social.new()
 	social.name = "Social"
 	add_child(social)
+	tournament_panel = TournamentPanel.new()
+	add_child(tournament_panel)
 	sync_server_links()
 
 
@@ -399,10 +404,14 @@ func show_server() -> ServerView:
 func start_server_match(session: ServerSession, m: Match, mode_: String) -> MatchView:
 	var v := MatchView.new()
 	v.lobby = true
+	var tid = session.link.get_meta("tournament", null) if mode_ == "tournament" else null
 	v.lobby_back.connect(func():
 		if session.link is ServerLink and server_links.has(session.link):
 			server_link = session.link
-		show_server())
+		if mode_ == "tournament":  # back to the tournament's page, not the lobby
+			show_tournaments(tid)
+		else:
+			show_server())
 	session.link.set_meta("mode", mode_)
 	_set_screen(v)
 	v.bind_online(m, session)
@@ -412,10 +421,14 @@ func start_server_match(session: ServerSession, m: Match, mode_: String) -> Matc
 func _on_server_message(msg: Dictionary, l: ServerLink) -> void:
 	match msg.get("t"):
 		"game_over":  # the result arrives during the game: kept for the lobby after it
-			if not (screen is ServerView and l == server_link):
+			if not (screen is ServerView and l == server_link) and l.get_meta("mode", "") != "tournament":
 				l.set_meta("game_over", msg)
 		"match":
+			if str(msg.get("mode", "")) == "tournament" and tournament_panel:
+				tournament_panel.hide_panel()
 			start_server_game(msg, l)
+		"t_match":
+			tournament_panel.show_match(msg, l)
 		"spectating":
 			start_watch(msg, l)
 
@@ -490,6 +503,8 @@ func start_server_game(msg: Dictionary, l: ServerLink = null) -> ServerSession:
 	server_link = l
 	DeckStore.link = l if l.has_decks else null
 	var mode_ := str(msg.get("mode", "casual"))
+	if mode_ == "tournament":
+		l.set_meta("tournament", msg.get("tournament"))
 	var s := l.session(msg, l.game_deck)
 	l.add_child(s)
 	s.started.connect(func(m: Match):
@@ -508,6 +523,27 @@ func start_arena_match(s: ArenaSession, game: NetSession, m: Match) -> MatchView
 	_set_screen(v)
 	v.bind_online(m, game)
 	return v
+
+
+## The server's tournaments (the game menu's Tournaments); id: open that tournament's page.
+func show_tournaments(id: Variant = null) -> TournamentsView:
+	if server_link == null or not server_link.logged_in():
+		show_connections()
+		return null
+	var t := TournamentsView.new()
+	t.link = server_link
+	t.page_id = id
+	t.back.connect(show_game_menu)
+	t.replay_ready.connect(open_replay)
+	_set_screen(t)
+	return t
+
+
+## A finished game's replay data (`replay {game}` answered).
+## STUB(part B): B's ReplayView opens here (game/replay.gd, ui/replay_view.gd); until it lands, a note.
+func open_replay(data: Dictionary) -> void:
+	push_warning("replay of %s: the replay view is part B's" % str(data.get("game", "")))
+	social.toast(tr("Replays are not in this version yet"))
 
 
 ## The active game's decks (the server's in a server game).
