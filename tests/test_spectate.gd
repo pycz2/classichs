@@ -95,7 +95,7 @@ func test_the_spectator_table_is_read_only_and_leaves_back_to_the_screen() -> vo
 	m.server_link.dispatch(_state(0))
 	check(v.controller.game.players[0].mulliganed, "the next state")
 	(v.find_child("LeaveWatch", true, false) as Button).pressed.emit()
-	eq(m.server_link.of("unspectate").size(), 1, "the server is told")
+	eq(m.server_link.of("unspectate"), [{"t": "unspectate"}], "the server is told (no fields: the server refuses any)")
 	check(m.watch_view == null and m.screen == home and home.visible, "back where the player was")
 	m.free()
 

@@ -191,3 +191,14 @@ func test_server_game_over_keeps_its_replay() -> void:
 	s.free()
 	link.free()
 	_clear_store()
+
+
+## Found in the 0.50 check: the friends button sat over the replay bar's Back (bottom left).
+func test_the_friends_button_leaves_the_replay_bar_free() -> void:
+	var m: Node = load("res://ui/main.tscn").instantiate()
+	root().add_child(m)
+	var v: ReplayView = m.show_replay(_played(4)[1])
+	var back := (v.find_child("ReplayBack", true, false) as Control).get_global_rect()
+	var b: Control = m.social.button
+	check(not back.intersects(Rect2(b.position, b.size)), "Back is not under the friends button")
+	m.free()

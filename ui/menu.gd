@@ -123,8 +123,19 @@ func _motes() -> CPUParticles2D:
 	p.gravity = Vector2.ZERO
 	p.initial_velocity_min = 4.0
 	p.initial_velocity_max = 12.0
-	p.scale_amount_min = 2.5
-	p.scale_amount_max = 6.0
+	var dot := GradientTexture2D.new()  # a soft round speck (without a texture they are hard squares)
+	dot.width = 32
+	dot.height = 32
+	dot.fill = GradientTexture2D.FILL_RADIAL
+	dot.fill_from = Vector2(0.5, 0.5)
+	dot.fill_to = Vector2(0.5, 0.0)
+	var soft := Gradient.new()
+	soft.offsets = PackedFloat32Array([0.0, 0.35, 1.0])
+	soft.colors = PackedColorArray([Color.WHITE, Color(1, 1, 1, 0.55), Color(1, 1, 1, 0)])
+	dot.gradient = soft
+	p.texture = dot
+	p.scale_amount_min = 0.15
+	p.scale_amount_max = 0.45
 	var fade := Gradient.new()
 	fade.set_color(0, Color(1, 0.92, 0.75, 0.0))
 	fade.set_color(1, Color(1, 0.92, 0.75, 0.0))

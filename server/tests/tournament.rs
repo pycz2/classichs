@@ -292,6 +292,12 @@ async fn round_robin_three_bo1() {
     assert_eq!(ms.len(), 3, "every pair once");
     let pts: Vec<i64> = fin["entrants"].as_array().unwrap().iter().map(|e| e["points"].as_i64().unwrap()).collect();
     assert_eq!(pts, [2, 1, 0]);
+    // the Finished tab's row names the winner (the client shows it)
+    let mut c = out.into_iter().next().unwrap().0;
+    c.send(json!({"t": "t_list", "tab": "finished"})).await;
+    let l = c.want("t_list").await;
+    let row = l["list"].as_array().unwrap().iter().find(|r| r["id"] == id).unwrap().clone();
+    assert_eq!(row["winner"], "rr0", "{row}");
 }
 
 #[tokio::test]

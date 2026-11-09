@@ -198,7 +198,8 @@ func _process(delta: float) -> void:
 func screen_changed(s: Node) -> void:
 	in_match = s is MatchView
 	on_lobby = s is ServerView
-	corner = Vector2(1188, 4) if in_match else (Vector2(912, 14) if s is ArenaView else Vector2(-1, -1))
+	# a replay: the corner right of its table (its bar's Back is where the button sits elsewhere)
+	corner = Vector2(1188, 4) if in_match or s is ReplayView else (Vector2(912, 14) if s is ArenaView else Vector2(-1, -1))
 	if in_match:  # a game starts: the chats fold to their headers, out of its way
 		for k in open_chats:
 			minimized[k] = true

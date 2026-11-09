@@ -181,6 +181,8 @@ func _build() -> void:
 			body.add_child(a)
 			if answered:
 				_note(body, tr("Accepted: waiting for %s") % str(cur.get("opponent", "")))
+			_small(body, tr("Your decks"), cur.get("mine", []))
+			_small(body, tr("%s's decks") % str(cur.get("opponent", "")), cur.get("theirs", []))
 		"ban":
 			_note(body, tr("Ban one of %s's decks: it won't play in this match.") % str(cur.get("opponent", "")))
 			_tiles(body, cur.get("theirs", []), "Theirs", true, ban)

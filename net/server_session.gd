@@ -109,7 +109,8 @@ func send(msg: Dictionary) -> void:
 	if watch and msg.get("t") != "unspectate":
 		return  # a spectator never acts
 	if link:
-		msg["game"] = game
+		if msg.get("t") != "unspectate":  # (the server's `unspectate {}` takes no fields: one game per spectator)
+			msg["game"] = game
 		link.send(msg)
 
 

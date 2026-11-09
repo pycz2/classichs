@@ -55,7 +55,8 @@ static func full(format: String, n: int, opts := {}, me_in := true) -> Dictionar
 	var ents: Array = []
 	for i in n:
 		var who := "anna" if i == 0 and me_in else "p%d" % (i + 1)
-		ents.append({"name": who, "seed": float(i + 1), "team": float(i % 2) if format == "scheveningen" else null,
+		# as the server sends them: seeds from 0, team -1 outside Scheveningen
+		ents.append({"name": who, "seed": float(i), "team": float(i % 2) if format == "scheveningen" else -1.0,
 			"eliminated": false, "place": null, "points": float(n - i), "wins": float(n - i), "losses": float(i)})
 	var t := {"id": 7.0, "name": "Friday cup", "creator": "bob", "pack": Packs.active().rules_hash(), "pack_name": "Classic",
 		"format": format, "series": "conquest", "best_of": 3.0, "bans": 0.0, "start_at": float(TournamentsView.now_ms() + 3600000),
@@ -419,3 +420,30 @@ func test_main_menu_and_panel() -> void:
 	check(not m.tournament_panel.visible, "the game hides it")
 	eq(m.server_link.get_meta("tournament"), 7.0, "the game knows its tournament (back to its page)")
 	m.free()
+
+
+## Found against the real server (0.50 check): seeds count from 0, no team is -1 (the rows said
+## "Team 0" for everyone and "Seed -1" before seeding); points wait for the bracket.
+func test_seed_and_team_lines_follow_the_server() -> void:
+	eq(TournamentsView.seed_line({"seed": 0.0, "team": -1.0}), "Seed 1", "the first seed")
+	eq(TournamentsView.seed_line({"seed": -1.0, "team": -1.0}), "", "not seeded yet: nothing")
+	eq(TournamentsView.seed_line({"seed": 3.0, "team": 1.0}), "Team 2", "Scheveningen: the team")
+	var v := _view(7.0)
+	var t := full("elimination", 4)
+	t.matches = []
+	v.link.dispatch({"t": "tournament", "tournament": t})
+	var row: TournamentsView.PlayerRow = v.find_child("Player_anna", true, false)
+	check(row != null and not row.scored, "no points before the bracket")
+	v.link.dispatch({"t": "tournament", "tournament": full("elimination", 4)})
+	row = v.find_child("Player_anna", true, false)
+	check(row.scored, "points once there are matches")
+	_free(v)
+
+
+func test_single_elimination_names_its_rounds() -> void:
+	var b := TournamentBracket.make(full("elimination", 8), "anna")
+	var titles: Array = b.get_children().filter(func(c): return c is Label).map(func(c): return c.text)
+	for want in ["Quarter-finals", "Semi-finals", "Final"]:
+		check(titles.has(want), "%s in %s" % [want, titles])
+	b.free()
+

@@ -995,12 +995,17 @@ async fn list(app: &AppRef, me: i64, tab: &str) -> Res<()> {
     };
     let rows = q.limit(100).all(&app.db).await?;
     let es = entrant::Entity::find().filter(entrant::Column::Tournament.is_in(rows.iter().map(|r| r.id))).all(&app.db).await?;
-    let names = names(&app.db, rows.iter().map(|r| r.creator)).await?;
+    let names = names(&app.db, rows.iter().map(|r| r.creator).chain(es.iter().filter(|e| e.place == 1).map(|e| e.account))).await?;
     let mut list = vec![];
     for r in &rows {
         let n = es.iter().filter(|e| e.tournament == r.id).count();
         let joined = es.iter().any(|e| e.tournament == r.id && e.account == me);
-        list.push(summary(r, n, joined, names.get(&r.creator).map_or("?", |s| s), &pack_name(app, &r.pack).await));
+        let mut v = summary(r, n, joined, names.get(&r.creator).map_or("?", |s| s), &pack_name(app, &r.pack).await);
+        // a finished one: its winner (the list's rows show it)
+        if let Some(w) = es.iter().find(|e| e.tournament == r.id && e.place == 1) {
+            v["winner"] = json!(names.get(&w.account));
+        }
+        list.push(v);
     }
     send(app, me, json!({"t": "t_list", "tab": tab, "list": list}));
     Ok(())

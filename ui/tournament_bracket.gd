@@ -29,6 +29,19 @@ var _last := {}  # a bracket ("w", "l") -> the boxes of its last round
 var _lines: Array = []  # the tree's connectors: [from, to, the match it comes from]
 
 
+func _ready() -> void:
+	_fit.call_deferred()
+
+
+## The minimum size covers every child as laid out (a table's real size is known only in the tree).
+func _fit() -> void:
+	var end := custom_minimum_size
+	for c in get_children():
+		if c is Control:
+			end = end.max(c.position + c.size + Vector2(8, 8))
+	custom_minimum_size = end
+
+
 static func make(data: Dictionary, me_name: String) -> TournamentBracket:
 	var b := TournamentBracket.new()
 	b.name = "Bracket"
@@ -244,6 +257,10 @@ func _columns(rounds: Dictionary, at: Vector2, br: String, double: bool) -> Rect
 		var title := tr("Round %d") % int(keys[c])
 		if c == keys.size() - 1 and keys.size() > 1:
 			title = tr("Losers final") if br == "l" else (tr("Winners final") if double else tr("Final"))
+		elif br == "w" and not double and c == keys.size() - 2:
+			title = tr("Semi-finals")
+		elif br == "w" and not double and c == keys.size() - 3:
+			title = tr("Quarter-finals")
 		elif br == "l":
 			title = tr("Losers round %d") % int(keys[c])
 		_label(title, Vector2(x, at.y))
@@ -372,13 +389,17 @@ func _cell_button(m: Dictionary, who: String) -> Button:
 	var c: int = s[1] if mine else s[0]
 	b.text = tr("live") if is_live(m) else ("%d:%d" % [a, c] if is_done(m) else "–")
 	b.custom_minimum_size = Vector2(76, 48)
-	b.add_theme_font_size_override("font_size", 18)
+	b.add_theme_font_size_override("font_size", 20)
 	b.focus_mode = Control.FOCUS_NONE
-	if is_done(m):
-		var w := winner(m)
-		b.add_theme_color_override("font_color", WIN if w == who else (LOSS if w != "" else Palette.TEXT))
-	elif is_live(m):
-		b.add_theme_color_override("font_color", Palette.SELECTED)
+	# a dark cell tinted by the result (bright text on it: wood buttons made red text unreadable)
+	var w := winner(m)
+	var col := Palette.SELECTED if is_live(m) else (Color(0.6, 0.55, 0.48) if not is_done(m) or w == "" else (WIN if w == who else LOSS))
+	var fill := Color(0.12, 0.09, 0.06, 0.95) if not is_done(m) or w == "" else (Color("1d3a1b") if w == who else Color("40191a"))
+	for k in ["normal", "hover", "pressed", "focus"]:
+		var st := Palette.raw_box(fill.lightened(0.12) if k == "hover" else fill, 8, col.darkened(0.15), 2)
+		b.add_theme_stylebox_override(k, st)
+	for k in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		b.add_theme_color_override(k, col.lightened(0.35) if is_done(m) and w != "" else col)
 	b.pressed.connect(func(): match_pressed.emit(m))
 	var k := key(m.get("id"))
 	if not drawn.has(k):
@@ -554,7 +575,7 @@ class MatchBox:
 			if p[i] != "":
 				TournamentBracket.avatar(self, Vector2(22, base - 6), 10, p[i])
 			DeckTiles.text(self, Vector2(40, base), nm, 18, col, size.x - 86)
-			if p[i] != "" and (TournamentBracket.is_done(m) or live):
+			if p[i] != "" and not bye and (TournamentBracket.is_done(m) or live):
 				var sc := str(s[i])
 				var f := get_theme_font("font", "Label")
 				DeckTiles.text(self, Vector2(size.x - 14 - f.get_string_size(sc, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x, base), sc, 20, col)

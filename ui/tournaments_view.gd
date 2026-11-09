@@ -569,7 +569,8 @@ func _entry_card(parent: Control) -> void:
 	var mine := _my_entrant()
 	if mine.is_empty() and not can.get("join", false):
 		return
-	var v := _section(parent, tr("You are in") if not mine.is_empty() else tr("Join this tournament"))
+	var over: bool = str(t.get("status", "")) in ["finished", "cancelled", "closed"]
+	var v := _section(parent, (tr("Your decks") if over else tr("You are in")) if not mine.is_empty() else tr("Join this tournament"))
 	v.get_parent().name = "EntryCard"
 	if mine.is_empty():
 		_wrap(_lbl(tr("Bring %d decks of different classes from your decks of this game.") % decks_needed(t), 17, Palette.TEXT, v), 590)
@@ -596,7 +597,7 @@ func _entry_card(parent: Control) -> void:
 		_btn(tr("Change decks"), "ChangeDecks", pick_decks.bind(true), 290, 52, acts)
 	if can.get("leave", false):
 		_btn(tr("Withdraw"), "Leave", func(): link.send({"t": "t_leave", "id": wire_id(page_id)}), 290, 52, acts)
-	if not can.get("decks", false):
+	if not can.get("decks", false) and not over:
 		_wrap(_lbl(tr("Decks are locked: they can't be changed any more."), 16, Palette.MUTED, v), 590)
 
 
@@ -623,7 +624,8 @@ func _creator_card(parent: Control) -> void:
 				c.add_theme_color_override("font_color", Palette.DANGER)
 				return
 			link.send({"t": "t_cancel", "id": wire_id(page_id)}))
-	_wrap(_lbl(tr("Rules and the start can be changed until %s; the start only to later.") % local_text(int(opt(page, "start_at", 0)) - LOCK_MS), 16, Palette.MUTED, v), 590)
+	if can.get("edit", false) or can.get("reschedule", false):
+		_wrap(_lbl(tr("Rules and the start can be changed until %s; the start only to later.") % local_text(int(opt(page, "start_at", 0)) - LOCK_MS), 16, Palette.MUTED, v), 590)
 
 
 func _my_entrant() -> Dictionary:
@@ -653,6 +655,7 @@ func _players(at: Vector2, sz: Vector2) -> void:
 		var row := PlayerRow.new()
 		row.e = e
 		row.me = me()
+		row.scored = not TournamentBracket.matches_of(t).is_empty()
 		row.name = "Player_" + str(e.get("name", "")).validate_node_name()
 		row.custom_minimum_size = Vector2(sz.x - 14, 64)
 		var decks = e.get("decks")
@@ -677,7 +680,10 @@ func _build_bracket_tab() -> void:
 	var s := _scroll(Vector2(16, 166), Vector2(1248, 500), "BracketScroll", true)
 	var b := TournamentBracket.make(t, me())
 	b.match_pressed.connect(show_match)
-	s.add_child(b)
+	var mid := CenterContainer.new()  # a small bracket in the middle, not in a corner
+	mid.custom_minimum_size = s.size - Vector2(14, 14)
+	mid.add_child(b)
+	s.add_child(mid)
 
 
 # --- dialogs ------------------------------------------------------------------------------
@@ -1048,6 +1054,16 @@ func _build_form() -> void:
 		need.name = "DecksNeeded"
 		_field(right, tr("Decklists"), tr("Open: everyone sees every deck from 10 minutes before the start"), _segment("deck_reveal", [[false, tr("Hidden")], [true, tr("Open")]]))
 		_field(right, tr("Spectators"), tr("The creator and eliminated players may watch running matches"), _segment("spectators", [[true, tr("Allowed")], [false, tr("No")]]))
+	var foot := Panel.new()  # the summary and the button on a footer, as the top bar
+	foot.name = "FormFoot"
+	foot.position = Vector2(0, 588)
+	foot.size = Vector2(1280, 80)
+	var fst := Palette.box(Color(0.07, 0.045, 0.025, 0.94), 0)
+	fst.border_color = Color("a8863a")
+	fst.border_width_top = 2
+	foot.add_theme_stylebox_override("panel", fst)
+	foot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_body.add_child(foot)
 	var bar := HBoxContainer.new()
 	bar.name = "FormBar"
 	bar.position = Vector2(150, 596)
@@ -1268,6 +1284,8 @@ func _on_message(msg: Dictionary) -> void:
 				open_page(t.get("id"))
 			elif page_id != null and TournamentBracket.key(page_id) == k:
 				page = t
+				if _status.text == tr("Sent…"):
+					say("")
 				if tab == "page":
 					var keep := _overlay != null and _overlay.name in ["DeckPicker", "DeckDialog", "DecksOf"]
 					if not keep:
@@ -1295,6 +1313,15 @@ static func pill(ci: Control, at: Vector2, text: String, col: Color, font_size :
 	ci.draw_style_box(st, r)
 	ci.draw_string(f, at + Vector2(11, h / 2.0 + font_size * 0.36), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color("1a1208") if solid else col.lightened(0.25))
 	return r.end.x
+
+
+## A player's team (Scheveningen) or seed, as the server numbers them from 0 (-1: none yet).
+static func seed_line(e: Dictionary) -> String:
+	var team := TournamentBracket.n(e.get("team")) if e.get("team") != null else -1
+	var seed := TournamentBracket.n(e.get("seed")) if e.get("seed") != null else -1
+	if team >= 0:
+		return _tr("Team %d") % (team + 1)
+	return _tr("Seed %d") % (seed + 1) if seed >= 0 else ""
 
 
 ## A tournament in a list: a trophy, the name, who made it and the game, chips for the format,
@@ -1375,6 +1402,8 @@ class PlayerRow:
 	extends Button
 	var e := {}
 	var me := ""
+	## Points and W–L shown (not before the bracket: nothing is played yet).
+	var scored := true
 
 	func _init() -> void:
 		flat = true
@@ -1391,11 +1420,7 @@ class PlayerRow:
 		var out: bool = e.get("eliminated", false) == true
 		var col := Palette.SELECTED if mine else (Color(0.6, 0.56, 0.5) if out else Palette.TEXT)
 		DeckTiles.text(self, Vector2(102 + dx, 30), who, 20, col, 240)
-		var sub := ""
-		if e.get("team") != null and str(e.get("team")) != "":
-			sub = TournamentsView._tr("Team %d") % (int(e.team) + 1 if (e.team is float or e.team is int) else 1)
-		elif e.get("seed") != null:
-			sub = TournamentsView._tr("Seed %d") % int(e.seed)
+		var sub := TournamentsView.seed_line(e)
 		if out:
 			sub += ("  ·  " if sub != "" else "") + TournamentsView._tr("out")
 		DeckTiles.text(self, Vector2(102 + dx, 52), sub, 14, Palette.MUTED, 240)
@@ -1407,7 +1432,7 @@ class PlayerRow:
 				draw_circle(Vector2(x + 14, size.y / 2.0), 16, Palette.of_class(cls).darkened(0.3))
 				Icons.paint(self, cls, Rect2(Vector2(x, size.y / 2.0 - 14), Vector2(28, 28)))
 				x += 34
-		if e.get("points") != null or e.get("wins") != null:
+		if scored and (e.get("points") != null or e.get("wins") != null):
 			var pts := TournamentBracket._num(e.get("points"))
 			var f := get_theme_font("font", "Label")
 			DeckTiles.text(self, Vector2(size.x - 16 - f.get_string_size(pts, HORIZONTAL_ALIGNMENT_LEFT, -1, 22).x, 30), pts, 22, Palette.ATTACK)
@@ -1438,8 +1463,9 @@ class DeckChip:
 		var side := minf(size.y - 24, 52.0)
 		Icons.paint(self, cls, Rect2(Vector2(10, (size.y - side) / 2.0), Vector2(side, side)))
 		var tx := 18.0 + side
-		DeckTiles.text(self, Vector2(tx, size.y / 2.0 - 2), title, 18, Color("f4ead5"), size.x - tx - 12)
-		DeckTiles.text(self, Vector2(tx, size.y / 2.0 + 20), TournamentsView.class_name_of(hero), 14, col.lightened(0.5), size.x - tx - 12)
+		var fs := 18 if size.y >= 70 else 15  # a small tile: the deck's name still fits
+		DeckTiles.text(self, Vector2(tx, size.y / 2.0 - 2), title, fs, Color("f4ead5"), size.x - tx - 12)
+		DeckTiles.text(self, Vector2(tx, size.y / 2.0 + fs + 2), TournamentsView.class_name_of(hero), fs - 4, col.lightened(0.5), size.x - tx - 12)
 		if state != "ok":
 			draw_rect(r, Color(0, 0, 0, 0.6))
 			var word: String = {"banned": "Banned", "won": "Won", "lost": "Lost"}.get(state, state)
@@ -1557,21 +1583,20 @@ class Podium:
 		var w := size.x / 3.0
 		for spot in [[2, 0, 70.0], [1, 1, 110.0], [3, 2, 46.0]]:
 			var place: int = spot[0]
-			var e := {}
-			for x in list:
-				if TournamentBracket.place_of(x) == place:
-					e = x
+			# a shared place (elimination's two semi-final losers): side by side on its step
+			var here: Array = list.filter(func(x): return TournamentBracket.place_of(x) == place).slice(0, 2)
 			var col: Color = TournamentBracket.MEDALS[place - 1]
 			var step := Rect2(Vector2(w * spot[1] + 8, size.y - spot[2]), Vector2(w - 16, spot[2]))
 			draw_style_box(Palette.raw_box(col.darkened(0.55), 8, col, 2), step)
 			var n := str(place)
 			var nw := f.get_string_size(n, HORIZONTAL_ALIGNMENT_LEFT, -1, 30).x
 			DeckTiles.text(self, Vector2(step.get_center().x - nw / 2.0, step.position.y + minf(38, spot[2] - 6)), n, 30, col)
-			if e.is_empty():
-				continue
-			var who := str(e.get("name", ""))
-			var c := Vector2(step.get_center().x, step.position.y - 66)
-			TournamentBracket.avatar(self, c, 28 if place == 1 else 24, who)
-			draw_arc(c, (28 if place == 1 else 24) + 3, 0, TAU, 36, col, 3, true)
-			var tw := minf(f.get_string_size(who, HORIZONTAL_ALIGNMENT_LEFT, -1, 19).x, w - 20)
-			DeckTiles.text(self, Vector2(c.x - tw / 2.0, step.position.y - 14), who, 19, Palette.SELECTED if who == me else Palette.TEXT, w - 20)
+			var share := step.size.x / maxf(here.size(), 1)
+			for k in here.size():
+				var who := str(here[k].get("name", ""))
+				var c := Vector2(step.position.x + share * (k + 0.5), step.position.y - 66)
+				var r := 28 if place == 1 else 24
+				TournamentBracket.avatar(self, c, r, who)
+				draw_arc(c, r + 3, 0, TAU, 36, col, 3, true)
+				var tw := minf(f.get_string_size(who, HORIZONTAL_ALIGNMENT_LEFT, -1, 19).x, share - 8)
+				DeckTiles.text(self, Vector2(c.x - tw / 2.0, step.position.y - 14), who, 19, Palette.SELECTED if who == me else Palette.TEXT, share - 8)
