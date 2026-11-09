@@ -4,6 +4,16 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.50.0] - 2026-11-09
+
+### Aggiunto
+- **Tornei** su un server: chiunque ne crea uno da «Tornei» nel menu del gioco. Formati: eliminazione (una o due vite, con tabellone dei perdenti), sistema svizzero, girone all’italiana, squadre (Scheveningen). Serie Conquest o Last Hero Standing, da Bo1 a Bo7, con o senza ban. Iscrizione, mazzi di classi diverse, il tabellone, i piazzamenti con le medaglie per i primi 3, schede In arrivo, Conclusi, Chiusi. Un minuto per ogni passo di un incontro (accettare la partita, ban, scelta del mazzo).
+- **Replay**: ogni partita sul server viene conservata; le ultime 10 sono in «Replay» nel menu del gioco. Si guardano scorrendo per turno e per azione, con entrambe le mani scoperte. Esportazione e importazione di un file di replay.
+- **Guardare** la partita di un amico: «Guarda» nella lista degli amici. Nei tornei il creatore e i giocatori eliminati possono guardare gli incontri a mani scoperte, se il creatore lo consente.
+- **Registrazione con chiave d’invito**: l’admin la attiva nel pannello di amministrazione, crea le chiavi (una nota, quanti utilizzi) e vede chi è arrivato con quale chiave.
+- Nel pannello di amministrazione: l’attesa prima che un bot sostituisca un avversario reale (da 0 a 10 minuti), le pagine delle chiavi d’invito e dei tornei, il download del replay di una partita.
+- Parallasse nel menu principale: l’immagine, le particelle e la polvere seguono il mouse o l’inclinazione del telefono.
+
 ## [0.42.2] - 2026-11-05
 
 ### Modificato

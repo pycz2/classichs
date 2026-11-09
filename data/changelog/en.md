@@ -4,6 +4,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.50.0] - 2026-11-09
+
+### Added
+- **Tournaments** on a server: anyone creates one from the game menu's Tournaments. Formats: elimination (one or two lives, with a losers bracket), Swiss, round robin, teams (Scheveningen). Conquest or Last Hero Standing series, Bo1 to Bo7, with or without bans. Sign-up, decks of different classes, the bracket, places with medals for the top 3, tabs Upcoming, Finished, Closed. A minute for each match step (accept the game, ban, pick a deck).
+- **Replays**: every server game is kept; the last 10 games are in the game menu's Replays. Watch them with seeking by turn and action, both hands face up. Export and import a replay file.
+- **Watching** a friend's game: Watch in the friends list. In tournaments the creator and the players who are out may watch matches with both hands open, when the creator allows it.
+- **Registration by invite key**: the admin turns it on in the admin panel, makes keys (a note, how many uses) and sees who came with which key.
+- In the admin panel: the wait before a bot comes instead of a live opponent (0 to 10 minutes), the invite keys and tournaments pages, a game's replay download.
+- Parallax in the main menu: the picture, the particles and dust move with the mouse or the phone's tilt.
+
 ## [0.42.2] - 2026-11-05
 
 ### Changed

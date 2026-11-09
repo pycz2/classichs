@@ -4,6 +4,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.50.0] - 2026-11-09
+
+### Hinzugefügt
+- **Turniere** auf einem Server: Jeder erstellt eins im Spielmenü unter „Turniere“. Formate: K.-o. (ein oder zwei Leben, mit Verliererrunde), Schweizer System, Jeder gegen jeden, Teams (Scheveningen). Serien Conquest oder Last Hero Standing, Bo1 bis Bo7, mit oder ohne Bans. Anmeldung, Decks verschiedener Klassen, der Turnierbaum, Plätze mit Medaillen für die ersten 3, Tabs Bevorstehend, Beendet, Geschlossen. Eine Minute für jeden Schritt eines Matches (Spiel annehmen, Bann, Deckwahl).
+- **Wiederholungen**: Jedes Serverspiel wird gespeichert; die letzten 10 Spiele stehen im Spielmenü unter „Wiederholungen“. Ansehen mit Spulen nach Zug und Aktion, beide Hände offen. Export und Import einer Wiederholungsdatei.
+- **Zuschauen** beim Spiel eines Freundes: „Zuschauen“ in der Freundesliste. In Turnieren dürfen der Ersteller und ausgeschiedene Spieler Matches mit offenen Händen ansehen, wenn der Ersteller es erlaubt.
+- **Registrierung mit Einladungsschlüssel**: Der Admin schaltet sie im Admin-Panel ein, erstellt Schlüssel (Notiz, Anzahl der Nutzungen) und sieht, wer mit welchem Schlüssel kam.
+- Im Admin-Panel: die Wartezeit, bis statt eines echten Gegners ein Bot kommt (0 bis 10 Minuten), die Seiten für Einladungsschlüssel und Turniere, der Download einer Wiederholung.
+- Parallaxe im Hauptmenü: Bild, Partikel und Staub folgen der Maus oder der Neigung des Handys.
+
 ## [0.42.2] - 2026-11-05
 
 ### Geändert

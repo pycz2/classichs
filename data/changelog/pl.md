@@ -4,6 +4,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.50.0] - 2026-11-09
+
+### Dodano
+- **Turnieje** na serwerze: każdy tworzy turniej w menu gry „Turnieje”. Formaty: pucharowy (jedno lub dwa życia, z drabinką przegranych), system szwajcarski, każdy z każdym, drużynowy (Scheveningen). Serie Conquest lub Last Hero Standing, od Bo1 do Bo7, z banami lub bez. Zapisy, talie różnych klas, drabinka, miejsca z medalami dla pierwszej trójki, zakładki Nadchodzące, Zakończone, Zamknięte. Minuta na każdy krok meczu (przyjęcie gry, ban, wybór talii).
+- **Powtórki**: każda gra na serwerze jest zapisywana; ostatnie 10 gier jest w menu gry „Powtórki”. Ogląda się je z przewijaniem po turach i akcjach, obie ręce odkryte. Eksport i import pliku powtórki.
+- **Oglądanie** gry znajomego: „Oglądaj” na liście znajomych. W turniejach twórca i wyeliminowani gracze mogą oglądać mecze z odkrytymi rękami, jeśli twórca na to pozwala.
+- **Rejestracja z kluczem zaproszenia**: admin włącza ją w panelu administracyjnym, tworzy klucze (notatka, liczba użyć) i widzi, kto przyszedł z jakim kluczem.
+- W panelu administracyjnym: czas, po którym zamiast żywego przeciwnika przychodzi bot (od 0 do 10 minut), strony kluczy zaproszeń i turniejów, pobieranie powtórki gry.
+- Paralaksa w menu głównym: obraz, cząsteczki i pył przesuwają się za myszą lub przechyleniem telefonu.
+
 ## [0.42.2] - 2026-11-05
 
 ### Zmieniono

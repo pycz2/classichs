@@ -4,6 +4,16 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.50.0] - 2026-11-09
+
+### Añadido
+- **Torneos** en un servidor: cualquiera crea uno desde «Torneos» en el menú del juego. Formatos: eliminación (una o dos vidas, con cuadro de perdedores), sistema suizo, todos contra todos, equipos (Scheveningen). Series Conquest o Last Hero Standing, de Bo1 a Bo7, con o sin vetos. Inscripción, mazos de clases distintas, el cuadro, puestos con medallas para los 3 primeros, pestañas Próximos, Terminados, Cerrados. Un minuto para cada paso de un enfrentamiento (aceptar la partida, vetar, elegir mazo).
+- **Repeticiones**: cada partida del servidor se guarda; las 10 últimas están en «Repeticiones» del menú del juego. Se ven avanzando por turno y por acción, con las dos manos a la vista. Exportar e importar un archivo de repetición.
+- **Ver** la partida de un amigo: «Ver» en la lista de amigos. En los torneos, el creador y los jugadores eliminados pueden ver los enfrentamientos con las manos a la vista, si el creador lo permite.
+- **Registro con clave de invitación**: el admin lo activa en el panel de administración, crea claves (una nota, cuántos usos) y ve quién llegó con cada clave.
+- En el panel de administración: la espera hasta que un bot sustituye a un rival real (de 0 a 10 minutos), las páginas de claves de invitación y de torneos, la descarga de la repetición de una partida.
+- Paralaje en el menú principal: la imagen, las partículas y el polvo siguen al ratón o a la inclinación del teléfono.
+
 ## [0.42.2] - 2026-11-05
 
 ### Cambiado

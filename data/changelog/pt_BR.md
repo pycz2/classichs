@@ -4,6 +4,16 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.50.0] - 2026-11-09
+
+### Adicionado
+- **Torneios** num servidor: qualquer pessoa cria um em «Torneios» no menu do jogo. Formatos: eliminação (uma ou duas vidas, com chave dos perdedores), sistema suíço, todos contra todos, equipes (Scheveningen). Séries Conquest ou Last Hero Standing, de Bo1 a Bo7, com ou sem banimentos. Inscrição, decks de classes diferentes, a chave, colocações com medalhas para os 3 primeiros, abas Próximos, Encerrados, Fechados. Um minuto para cada etapa de uma partida (aceitar o jogo, banir, escolher o deck).
+- **Replays**: toda partida no servidor é guardada; as 10 últimas ficam em «Replays» no menu do jogo. Assista avançando por turno e por ação, com as duas mãos visíveis. Exportar e importar um arquivo de replay.
+- **Assistir** ao jogo de um amigo: «Assistir» na lista de amigos. Nos torneios, o criador e os jogadores eliminados podem assistir às partidas com as mãos visíveis, se o criador permitir.
+- **Cadastro por chave de convite**: o admin liga isso no painel de administração, cria chaves (uma nota, quantos usos) e vê quem entrou com qual chave.
+- No painel de administração: a espera até um bot entrar no lugar de um oponente real (de 0 a 10 minutos), as páginas de chaves de convite e de torneios, o download do replay de uma partida.
+- Paralaxe no menu principal: a imagem, as partículas e a poeira seguem o mouse ou a inclinação do celular.
+
 ## [0.42.2] - 2026-11-05
 
 ### Alterado
