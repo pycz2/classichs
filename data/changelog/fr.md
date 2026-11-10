@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.65.0] - 2026-11-10
+
+### Ajouté
+- Très difficile sur le serveur : les bots de l’admin peuvent jouer à ce niveau, et une Légende en partie classée qui attend longtemps un adversaire reçoit un bot automatique Très difficile au lieu de Difficile (3 secondes par décision sur le serveur).
+
 ## [0.64.0] - 2026-11-10
 
 ### Modifié

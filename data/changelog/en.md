@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.65.0] - 2026-11-10
+
+### Added
+- Super hard on the server: the admin's bots can play at it, and a ranked Legend who waits long for an opponent gets a Super hard auto-bot instead of a Hard one (3 seconds a decision on the server).
+
 ## [0.64.0] - 2026-11-10
 
 ### Changed

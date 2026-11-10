@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.65.0] - 2026-11-10
+
+### Aggiunto
+- Difficilissimo sul server: i bot dell’admin possono giocare a quel livello, e una Leggenda in classificata che aspetta a lungo un avversario riceve un bot automatico Difficilissimo invece di Difficile (3 secondi per decisione sul server).
+
 ## [0.64.0] - 2026-11-10
 
 ### Modificato

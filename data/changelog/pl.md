@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.65.0] - 2026-11-10
+
+### Dodano
+- Bardzo trudny na serwerze: boty admina mogą grać na tym poziomie, a Legenda w rankingu, która długo czeka na przeciwnika, dostaje bota automatycznego Bardzo trudnego zamiast Trudnego (3 sekundy na decyzję na serwerze).
+
 ## [0.64.0] - 2026-11-10
 
 ### Zmieniono

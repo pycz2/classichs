@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.65.0] - 2026-11-10
+
+### Añadido
+- Muy difícil en el servidor: los bots del admin pueden jugar a ese nivel, y una Leyenda en clasificatoria que espera mucho a un rival recibe un bot automático Muy difícil en vez de Difícil (3 segundos por decisión en el servidor).
+
 ## [0.64.0] - 2026-11-10
 
 ### Cambiado

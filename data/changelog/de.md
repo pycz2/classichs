@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.65.0] - 2026-11-10
+
+### Hinzugefügt
+- Superschwer auf dem Server: Die Bots des Admins können so spielen, und eine Legende im gewerteten Modus, die lange auf einen Gegner wartet, bekommt einen superschweren Auto-Bot statt eines schweren (3 Sekunden je Entscheidung auf dem Server).
+
 ## [0.64.0] - 2026-11-10
 
 ### Geändert
