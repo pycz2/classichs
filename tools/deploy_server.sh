@@ -2,9 +2,10 @@
 # Deploys a released game server to a Docker host behind Caddy (set up once by deploy/docker-host/setup.sh).
 #   DEPLOY_HOST=user@host DEPLOY_URL=https://hs.example.com tools/deploy_server.sh 0.28.2
 # Makes the image from the release (deploy/docker-host/Dockerfile: the stripped Linux binary on
-# scratch, no build), uploads it and the release's packs (~/classichs/packs on the host, only the
-# changed ones; mounted at /packs), runs classichs-deploy there (it checks the new server, rolls
-# back when it does not answer and keeps the 2 newest images), then checks the URL.
+# scratch, no build; with the admin panel's replay player of ClassicHS-X.Y.Z-replay-viewer.zip),
+# uploads it and the release's packs (~/classichs/packs on the host, only the changed ones; mounted
+# at /packs), runs classichs-deploy there (it checks the new server, rolls back when it does not
+# answer and keeps the 2 newest images), then checks the URL.
 # Without a version: copies the scripts of deploy/docker-host to the host (for setup.sh).
 set -euo pipefail
 : "${DEPLOY_HOST:?set DEPLOY_HOST (the ssh host)}"
@@ -25,17 +26,21 @@ curl -fsSL "$API" | python3 -c '
 import sys, json
 for a in json.load(sys.stdin)["assets"]:
     n = a["name"]
-    if n.endswith(".cardpack") or n.startswith("ClassicHS-server-") and n.endswith("-linux-x86_64"):
+    if n.endswith((".cardpack", "-replay-viewer.zip")) or n.startswith("ClassicHS-server-") and n.endswith("-linux-x86_64"):
         print(n, a["browser_download_url"])' > "$W/assets"
 grep -q -- "-linux-x86_64 " "$W/assets" || { echo "release v$V has no Linux server binary" >&2; exit 1; }
 while read -r name url; do
   case $name in
     *.cardpack) out=$W/packs/${name#ClassicHS-$V-} ;;
+    *-replay-viewer.zip) out=$W/replay-viewer.zip ;;
     *) out=$W/img/classichs-server ;;
   esac
   curl -fsSL -o "$out" "$url"
 done < "$W/assets"
 chmod 755 "$W/img/classichs-server"
+# the replay player (/admin/replay/); a release before 0.62 has none: the panel says it is missing
+mkdir "$W/img/replay-viewer"
+if [ -f "$W/replay-viewer.zip" ]; then unzip -q "$W/replay-viewer.zip" -d "$W/img/replay-viewer"; else echo "release v$V has no replay viewer"; fi
 shopt -s nullglob
 packs=("$W"/packs/*.cardpack)
 cp "$ROOT/deploy/docker-host/Dockerfile" "$W/img/"

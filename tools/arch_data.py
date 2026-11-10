@@ -1895,7 +1895,7 @@ COMPS.append(dict(
         P("export", ("Web export", "Веб-экспорт"), 0, 1, sub="export_presets.cfg · web_finish.sh",
           text=("Godot's Web preset (a PWA; the head includes `update.js` and `rules.js`), then the engine, `version.json`, the start gate and the service worker patches.",
                 "Пресет Web у Godot (PWA; в head подключаются `update.js` и `rules.js`), затем движок, `version.json`, задержка старта и правки сервис-воркера."),
-          files=[("export_presets.cfg", "html/head_include="), "tools/web_finish.sh"]),
+          files=[("export_presets.cfg", 'html/head_include="<script src=\\"update.js'), "tools/web_finish.sh"]),
         P("build", "build_site.sh", 1, 1, text=("Packs, splash, rules.wasm, the web export, the landing, data, the API check, the dev pages, the cards; `--publish` pushes gh-pages.",
                                                 "Пакеты, заставка, rules.wasm, веб-экспорт, лендинг, данные, проверка API, страницы разработчика, карты; `--publish` отправляет gh-pages."),
           files=[("tools/build_site.sh", "python3 tools/site_docs.py \"$OUT\"")]),

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'preact/hooks'
 import { api } from './api.js'
+import { StorageCard } from './extra.js'
 import { html, useLive, useEvents, useLoad, useTick, Card, Kind, NameLink, GameLink, Status, UserLink, ErrorBox, Empty, clock, dur, num } from './ui.js'
 
 const HOUR = 3600000
@@ -91,6 +92,7 @@ export function Dashboard () {
           <${Status} status=${o.status} label=${false} />${o.user}</a>`)}</div>` : html`<${Empty}>Nobody online</${Empty}>`}
       </${Card}>
     </div>
+    <${StorageCard} />
     <${Card} title="Recent events" pad=${false} actions=${html`<a class="btn ghost sm" href="#/events">Event log</a>`}>
       ${recent.length ? html`<ul class="feed">${recent.map((e) => html`<${FeedRow} key=${e.id} e=${e} />`)}</ul>` : html`<${Empty}>Nothing yet</${Empty}>`}
     </${Card}>

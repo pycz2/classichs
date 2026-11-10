@@ -1,6 +1,7 @@
 # Builds the game for every platform on each push to main (a check) and, on a
 # version tag vX.Y.Z, publishes a GitHub release with the builds:
-#   Web (zip), Windows (.exe), Linux (.AppImage), macOS (.zip with the app), Android (.apk).
+#   Web (zip), Windows (.exe), Linux (.AppImage), macOS (.zip with the app), Android (.apk), and the
+#   admin panel's replay player (ClassicHS-x.y.z-replay-viewer.zip; tools/deploy_server.sh puts it into the server's image).
 # The rust job builds, per OS, the rules engine (rust/, tools/build_rules.sh: macOS universal
 # on macOS, Windows on Windows, Linux + Android + WebAssembly on Linux) and the game server
 # (server/) in one target directory, so the engine and the shared crates compile once; the
@@ -202,7 +203,7 @@ jobs:
         # one platform at a time; a failure shows the end of its log as an annotation (readable without login)
         run: |
           fail=0
-          for p in web windows linux macos android; do
+          for p in web windows linux macos android replay; do
             if ! RULES_PREBUILT=1 tools/export_all.sh "$p" > "/tmp/export_$p.log" 2>&1; then
               fail=1
               echo "::error title=Export $p failed::$(grep -v '^\s*$' "/tmp/export_$p.log" | tail -n 25 | tr '\n' '|' | tr -d '%' | cut -c1-6000)"
@@ -243,5 +244,6 @@ jobs:
             - Linux: ClassicHS-*-linux-x86_64.AppImage (chmod +x, then run)
             - macOS: unzip ClassicHS-*-macos.zip; the app is not notarized: right-click → Open the first time
             - Android: ClassicHS-*-android-arm64.apk (allow installing from this source)
+            - Replay player of the server's admin panel: ClassicHS-*-replay-viewer.zip (unzip into the folder of --replay-dir)
             - Game server: ClassicHS-server-* for Linux, Windows, macOS (see server/README.md); put ClassicHS-*-classic.cardpack, ClassicHS-*-neon.cardpack and ClassicHS-*-naxx.cardpack into a folder and pass it as --packs-dir
           files: dist/*

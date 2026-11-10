@@ -3,6 +3,7 @@
 //! Protocol: docs/superpowers/specs/2026-10-15-server-design.md.
 
 pub mod admin;
+pub mod admin_extra;
 pub mod auth;
 pub mod bots;
 pub mod db;
@@ -38,6 +39,9 @@ use std::net::{IpAddr, SocketAddr};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use tokio::sync::mpsc::UnboundedSender;
+
+/// The release version (project.godot; server/build.rs).
+pub const VERSION: &str = env!("CLASSICHS_VERSION");
 
 pub const MAX_FRAME: usize = 64 * 1024;
 

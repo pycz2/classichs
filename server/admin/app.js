@@ -14,6 +14,7 @@ import { Packs } from './packs.js'
 import { Bots } from './bots.js'
 import { Settings, InviteKeys } from './settings.js'
 import { Tournaments, TournamentPage } from './tournaments.js'
+import { VersionTag, ReplayDock } from './extra.js'
 
 const NAV = [
   ['', 'Dashboard', 'dashboard'],
@@ -134,6 +135,7 @@ function Shell ({ me, onLogout }) {
       </aside>
       <main class="main">${page}</main>
     </div>
+    <${VersionTag} /><${ReplayDock} />
     <${Toasts} />
   </${LiveContext.Provider}></${MeContext.Provider}>`
 }

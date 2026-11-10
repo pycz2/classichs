@@ -107,6 +107,17 @@ impl Storage {
         Ok((r.meta.size, r.into_stream()))
     }
 
+    /// (bytes, files) of everything stored.
+    pub async fn usage(&self) -> Result<(u64, u64), Error> {
+        let mut s = self.store.list(None);
+        let (mut bytes, mut files) = (0, 0);
+        while let Some(m) = s.next().await {
+            bytes += m?.size;
+            files += 1;
+        }
+        Ok((bytes, files))
+    }
+
     /// Gone already is fine.
     pub async fn delete(&self, content_hash: &str) -> Result<(), Error> {
         match self.store.delete(&key(content_hash)).await {

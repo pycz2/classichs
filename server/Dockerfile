@@ -13,6 +13,7 @@ COPY docs/packs/schema/keywords.json docs/packs/schema/keywords.json
 COPY packs/classic packs/classic
 COPY rust/script rust/script
 COPY rust/engine rust/engine
+COPY project.godot project.godot
 COPY server server
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/src/server/target \

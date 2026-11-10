@@ -1,8 +1,8 @@
 #!/bin/sh
 # Exports the game for every platform into build/release/:
 #   ClassicHS-<version>-web.zip, -windows-x86_64.zip (the .exe and the rules .dll), -linux-x86_64.AppImage,
-#   -macos.zip, -android-arm64.apk
-# Usage: tools/export_all.sh [platform ...]   (web windows linux macos android; all by default)
+#   -macos.zip, -android-arm64.apk, -replay-viewer.zip (the admin panel's replay player: ui/replay_app.tscn)
+# Usage: tools/export_all.sh [platform ...]   (web windows linux macos android replay; all by default)
 # Needs Godot 4.7.2 with its export templates on PATH as `godot`. The AppImage needs
 # appimagetool on PATH (Linux); Android needs the SDK and a keystore (see .github/workflows/release.yml).
 # The rules engine is built first (tools/build_rules.sh) for each platform; with
@@ -11,7 +11,7 @@ set -e
 cd "$(dirname "$0")/.."
 VER=$(sed -n 's/^config\/version="\(.*\)"/\1/p' project.godot)
 OUT=build/release
-WANT=${*:-web windows linux macos android}
+WANT=${*:-web windows linux macos android replay}
 mkdir -p "$OUT"
 touch build/.gdignore
 tools/build_packs.sh  # res://packs/*.cardpack: the built-in game packs
@@ -20,7 +20,7 @@ godot --headless --path . --import >/dev/null 2>&1 || true
 
 rules_lib() {  # the rules engine library a platform's export needs
 	case $1 in
-	web) echo rules/bin/rules.wasm ;;
+	web | replay) echo rules/bin/rules.wasm ;;
 	windows) echo rules/bin/classichs_godot.windows.x86_64.dll ;;
 	linux) echo rules/bin/libclassichs_godot.linux.x86_64.so ;;
 	macos) echo rules/bin/libclassichs_godot.macos.dylib ;;
@@ -69,6 +69,14 @@ for p in $WANT; do
 		export_preset "Web" "$OUT/web/index.html"
 		tools/web_finish.sh "$OUT/web"  # the rules engine, version.json, always the newest build
 		(cd "$OUT/web" && zip -qr "../ClassicHS-$VER-web.zip" .)
+		;;
+	replay)
+		# the replay player of the admin panel (server/src/admin_extra.rs serves it at /admin/replay/;
+		# tools/deploy_server.sh bakes it into the server's image): no game packs in it
+		rm -rf "$OUT/replay-viewer"
+		export_preset "Replay viewer" "$OUT/replay-viewer/index.html"
+		cp web/rules.js rules/bin/rules.wasm "$OUT/replay-viewer/"
+		(cd "$OUT/replay-viewer" && rm -f "../ClassicHS-$VER-replay-viewer.zip" && zip -qr "../ClassicHS-$VER-replay-viewer.zip" .)
 		;;
 	windows)
 		# Godot puts the rules engine (.dll) next to the .exe: both go into the zip

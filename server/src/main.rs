@@ -6,6 +6,7 @@ use std::path::PathBuf;
 const USAGE: &str = "usage:
   classichs-server [--listen 127.0.0.1:7377] [--db classichs.db] [--trust-proxy]
                    [--packs-dir <dir>] [--default-pack neon] [--store-dir store]
+                   [--replay-dir <dir>]
                    [--s3-bucket <name> --s3-endpoint <url> --s3-region <r>
                     --s3-access-key <key> --s3-secret-key <secret>]
   classichs-server admin <name> [--db classichs.db]
@@ -18,7 +19,10 @@ S3_BUCKET, S3_ENDPOINT, S3_REGION, S3_ACCESS_KEY, S3_SECRET_KEY), else in --stor
 Bundled packs (*.cardpack in --packs-dir; default: the first of packs/ next to the binary,\n./packs, ../packs or a packs/ folder above the binary that has a .cardpack) are
 installed as server packs at start, each once. Games without a pack are played in the
 default pack (the admin panel sets it); until one is set, the newest enabled server
-pack with the manifest id --default-pack becomes it, else the built-in Classic rules.";
+pack with the manifest id --default-pack becomes it, else the built-in Classic rules.
+The admin panel's replay player (the release's ClassicHS-*-replay-viewer.zip, unpacked) is
+served from --replay-dir; default: replay-viewer/ next to the binary or
+../share/classichs/replay-viewer above it.";
 
 fn main() {
     let _ = rustls::crypto::ring::default_provider().install_default(); // (the bots' wss:// adapter)
@@ -51,6 +55,7 @@ fn main() {
             "--store-dir" => store_dir = val("--store-dir"),
             "--packs-dir" => packs_dir = Some(val("--packs-dir").into()),
             "--default-pack" => default_pack = val("--default-pack"),
+            "--replay-dir" => classichs_server::admin_extra::set_replay_dir(val("--replay-dir").into()),
             "--s3-bucket" => s3.bucket = val("--s3-bucket"),
             "--s3-endpoint" => s3.endpoint = val("--s3-endpoint"),
             "--s3-region" => s3.region = val("--s3-region"),
@@ -84,6 +89,7 @@ fn main() {
         })
     });
     rt.block_on(async move {
+        tracing::info!("classichs-server {}", classichs_server::VERSION);
         tracing::info!("rules engine {} (cards {})", classichs_engine::api::VERSION, classichs_engine::card_db::data_hash());
         tracing::info!("pack storage: {}; bundled packs: {}", store.what, packs_dir.display());
         let app = App::new(db, trust_proxy, None, store);

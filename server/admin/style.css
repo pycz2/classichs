@@ -624,3 +624,13 @@ td.nowrap { white-space: nowrap; }
 .table.keys tr.off .key { text-decoration: line-through; color: var(--muted); }
 .table.keys tr.fresh td { background: color-mix(in srgb, var(--ok) 10%, transparent); }
 .joined { display: inline-flex; flex-wrap: wrap; gap: 4px 10px; }
+
+/* extra.js: the version, the replay player */
+.version-tag { position: fixed; top: 6px; right: 10px; z-index: 30; font-size: 11px; color: var(--muted); background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; pointer-events: none; font-variant-numeric: tabular-nums; }
+.replay-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; height: min(62vh, calc(56.25vw + 36px)); display: flex; flex-direction: column;
+  background: var(--surface); border-top: 1px solid var(--border-strong); box-shadow: 0 -8px 24px rgba(0, 0, 0, .25); }
+.replay-dock header { display: flex; align-items: center; gap: 10px; padding: 4px 8px 4px 14px; }
+.replay-dock header button { margin-left: auto; }
+.replay-dock iframe { flex: 1; width: 100%; border: 0; background: #0d0a07; }
+body:has(.replay-dock) .main { padding-bottom: calc(62vh + 24px); }

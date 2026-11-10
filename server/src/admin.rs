@@ -71,6 +71,7 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/tournaments/{id}", get(tournament_page))
         .route("/admin/api/tournaments/{id}/cancel", post(tournament_cancel))
         .route("/admin/ws", get(feed))
+        .merge(crate::admin_extra::routes())
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
         .route("/admin", get(index))
@@ -102,6 +103,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "bots.js",
     "settings.js",
     "tournaments.js",
+    "extra.js",
     "style.css",
     "favicon.svg",
     "vendor/preact.module.js",
@@ -116,28 +118,35 @@ const INDEX: &str = include_str!("../admin/index.html");
 fn csp() -> &'static str {
     static CSP: OnceLock<String> = OnceLock::new();
     CSP.get_or_init(|| {
-        let mut hashes = String::new();
-        let mut rest = INDEX;
-        while let Some(i) = rest.find("<script") {
-            let tag_end = i + rest[i..].find('>').unwrap_or(0) + 1;
-            let end = tag_end + rest[tag_end..].find("</script>").unwrap_or(0);
-            if !rest[i..tag_end].contains("src=") {
-                hashes += &format!(" 'sha256-{}'", STANDARD.encode(Sha256::digest(&rest.as_bytes()[tag_end..end])));
-            }
-            rest = &rest[end..];
-        }
+        let hashes = script_hashes(INDEX);
+        // frame-src: the replay player (/admin/replay, admin_extra.rs) opens in a frame
         format!(
             "default-src 'none'; script-src 'self'{hashes}; style-src 'self'; img-src 'self' data:; connect-src 'self'; \
-             base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+             frame-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
         )
     })
+}
+
+/// " 'sha256-…'" for each inline script of a page (for its CSP).
+pub(crate) fn script_hashes(html: &str) -> String {
+    let mut hashes = String::new();
+    let mut rest = html;
+    while let Some(i) = rest.find("<script") {
+        let tag_end = i + rest[i..].find('>').unwrap_or(0) + 1;
+        let end = tag_end + rest[tag_end..].find("</script>").unwrap_or(0);
+        if !rest[i..tag_end].contains("src=") {
+            hashes += &format!(" 'sha256-{}'", STANDARD.encode(Sha256::digest(&rest.as_bytes()[tag_end..end])));
+        }
+        rest = &rest[end..];
+    }
+    hashes
 }
 
 async fn security_headers(mut res: Response) -> Response {
     let h = res.headers_mut();
     h.insert(header::X_CONTENT_TYPE_OPTIONS, HeaderValue::from_static("nosniff"));
     h.insert(header::REFERRER_POLICY, HeaderValue::from_static("no-referrer"));
-    h.insert(header::X_FRAME_OPTIONS, HeaderValue::from_static("DENY"));
+    h.entry(header::X_FRAME_OPTIONS).or_insert(HeaderValue::from_static("DENY")); // (the replay player: SAMEORIGIN)
     h.entry(header::CACHE_CONTROL).or_insert(HeaderValue::from_static("no-store"));
     res
 }
@@ -300,7 +309,7 @@ async fn login(State(app): State<AppRef>, ConnectInfo(addr): ConnectInfo<SocketA
 }
 
 async fn me(Extension(a): Extension<Admin>) -> Json<Value> {
-    Json(json!({"id": a.me.id, "user": a.me.name, "role": a.me.role, "csrf": a.csrf}))
+    Json(json!({"id": a.me.id, "user": a.me.name, "role": a.me.role, "csrf": a.csrf, "version": crate::VERSION}))
 }
 
 async fn logout(State(app): State<AppRef>, Extension(a): Extension<Admin>, headers: HeaderMap) -> Response {

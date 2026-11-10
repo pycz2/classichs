@@ -2,7 +2,9 @@
 # The smallest game server image, made from a release without a build (tools/deploy_server.sh puts
 # the released Linux binary next to this file): scratch + the 4 libraries the binary links
 # (ld-linux, libc, libm, libgcc_s from Debian 13: it needs glibc 2.38+) + the stripped binary,
-# about 26 MB (10 MB compressed). The packs are not in it: classichs-deploy mounts them at /packs.
+# about 26 MB (10 MB compressed), and the admin panel's replay player (replay-viewer/: the release's
+# ClassicHS-X.Y.Z-replay-viewer.zip unpacked, 43 MB, 13 MB compressed; the server finds it at
+# ../share/classichs/replay-viewer from its binary). The packs are not in it: classichs-deploy mounts them at /packs.
 # No CA certificates: the server here keeps packs in /data/store; S3 over https would need them.
 FROM debian:trixie-slim AS tools
 RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends binutils >/dev/null \
@@ -16,6 +18,7 @@ RUN strip /classichs-server
 FROM scratch
 COPY --from=tools /root-fs/ /
 COPY --from=tools /classichs-server /usr/local/bin/classichs-server
+COPY replay-viewer /usr/local/share/classichs/replay-viewer
 USER 65532:65532
 WORKDIR /data
 EXPOSE 7377

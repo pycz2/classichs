@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { api, qs } from './api.js'
+import { playReplay } from './extra.js'
 import { html, useLive, useEvents, useLoad, useDebounced, useTick, setQuery, go, Card, Kind, UserLink, Pager, ErrorBox, Empty, Icon, Json, clock, fullDate, dur, ago, num } from './ui.js'
 
 const REASONS = ['over', 'left', 'disconnect', 'illegal', 'desync', 'cheat', 'protocol', 'aborted']
@@ -130,7 +131,8 @@ export function GamePage ({ id }) {
           </div>`)}
         </${Card}>
         ${data.replay && html`<${Card} title=${`Replay · ${num(data.replay.actions.length)} actions`}
-          actions=${html`<a class="btn ghost sm" href=${'/admin/api/games/' + encodeURIComponent(id) + '/replay'} download=${id + '.chsreplay'}>Download replay</a>`}>
+          actions=${html`<button class="btn sm" onClick=${() => playReplay(id)}><${Icon} name="play" size=${14} /> Play</button>
+            <a class="btn ghost sm" href=${'/admin/api/games/' + encodeURIComponent(id) + '/replay'} download=${id + '.chsreplay'}>Download replay</a>`}>
           <ol class="replay-actions">${data.replay.actions.map((a, i) => {
             const rest = Object.entries(a).filter(([k]) => k !== 'type' && k !== 'player').map(([k, v]) => k + ' ' + JSON.stringify(v)).join(', ')
             return html`<li key=${i} class=${'p' + a.player}><span class="muted mono">${i + 1}</span> <b>${players[a.player] ? players[a.player].user : 'P' + a.player}</b> ${a.type} <span class="muted small mono">${rest}</span></li>`

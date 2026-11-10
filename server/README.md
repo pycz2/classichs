@@ -138,11 +138,18 @@ updates live over `/admin/ws`:
 
 - **Dashboard**: online now, searching per mode, live games, today's games,
   registrations, logins, messages and errors, a 24-hour activity chart, game actions
-  per hour, the queues, who is online, the latest events.
+  per hour, the queues, who is online, the latest events, and the storage: the SQLite file
+  and its WAL, the pack store. The server's version is in the top right corner of every page.
 - **Event log**: everything the server does (below), filtered by kind, user, game,
   time and text, sorted, paged, with a live tail; a row opens its details.
 - **Matches**: live and finished games; a game's page is its timeline (every action,
-  grouped by turn, live while it runs) and what ended it.
+  grouped by turn, live while it runs) and what ended it. **Play** opens the replay player
+  at the bottom of the page: the game's own replay view (a cut-down web build of the client,
+  `ui/replay_app.tscn`, the export preset "Replay viewer"; the release's
+  `ClassicHS-X.Y.Z-replay-viewer.zip`) served at `/admin/replay/` from `--replay-dir`
+  (default: `replay-viewer/` next to the binary, else `../share/classichs/replay-viewer` above
+  it, where tools/deploy_server.sh puts it). It fetches the replay and its pack from the API
+  below; another page, its Back or ✕ closes it.
 - **Games** (game packs): the server packs (the default game's star — click another to
   make it the default —, name, id, version, size, rules and content hashes, games played
   and live in its rules, downloads, enabled switch, delete with confirmation), upload by
@@ -173,7 +180,9 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | Call | What |
 |---|---|
 | `POST login {user, password}` | sets the cookie → `{id, user, role, csrf}` |
-| `GET me` · `POST logout` | the admin and the CSRF token · end the session |
+| `GET me` · `POST logout` | the admin, the CSRF token and the server's `version` (the release's, e.g. `0.62.0`) · end the session |
+| `GET storage` | `{db: {path, file, wal, total}, packs: {bytes, files, what}}` (bytes) |
+| `GET pack_files/{hash}` | the newest stored `.cardpack` with this content hash or rules hash (any owner, enabled or not) |
 | `GET dashboard?day=<local midnight, ms>` | `{today: {kind: n}, totals, chart: {start, series}, recent, live}` |
 | `GET live` | `{online: [{id, user, status}], queue: [{id, user, mode, waited, window}], games: [{id, mode, players, started, turn, current, actions}]}` |
 | `GET accounts?q&status&role&sort&dir&page&size` | `{list, total, page, size}`; sort: id, user, created, last_seen, rank, ranked_mmr, casual_mmr |
@@ -193,6 +202,10 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `POST signup_keys/{id}/revoke` | the key registers nobody more (its accounts stay) |
 | `GET tournaments?status` · `GET tournaments/{id}` | the list (summaries + `top` [{place, name}]) · one tournament as the players' `full`, every deck shown |
 | `POST tournaments/{id}/cancel` | cancels one that is not over (409 otherwise) |
+
+`/admin/replay/{file}` (the cookie) serves the replay player's files with a CSP of their own
+(`'wasm-unsafe-eval'`, `blob:` workers, framed by the panel only); the panel's CSP allows that
+frame and nothing else.
 
 `/admin/ws` (the cookie, same origin) sends `hello {live}`, then `event {e}` for every
 event, `live {live}` when the online list, queues or games change and `resync {}`
@@ -282,7 +295,8 @@ it, its last decision and its log; their errors also go to the event log (kind `
 
 `deploy/docker-host/setup.sh` sets a host up once (its own domain in the host's Caddy, HTTPS on 443,
 no new ports); then `DEPLOY_HOST=… DEPLOY_URL=https://… tools/deploy_server.sh X.Y.Z` deploys a
-release: an image of about 26 MB (the stripped binary on scratch, 11 MB to upload), the packs only
+release: an image of about 70 MB (the stripped binary and the admin panel's replay player on
+scratch, about 24 MB to upload), the packs only
 when they change, a database copy, a check through Caddy and a rollback when the new version does
 not answer, 2 images kept. The headers of these scripts tell the details.
 
