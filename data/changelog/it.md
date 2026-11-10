@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-11-10
+
+### Aggiunto
+- Pannello di amministrazione, statistiche: una matrice classe contro classe (vittorie della riga contro la colonna, partite, dal rosso al verde, specchi sulla diagonale, totale di ogni classe); periodi passati da scegliere — ieri, qualsiasi giorno passato, settimana, mese, anno. Le statistiche giornaliere di mazzi e carte restano 400 giorni; le statistiche occupano quasi metà dello spazio di prima.
+
 ## [0.62.0] - 2026-11-10
 
 ### Aggiunto

@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-11-10
+
+### Ajouté
+- Panneau d’administration, statistiques : une matrice classe contre classe (taux de victoire de la ligne contre la colonne, parties, du rouge au vert, miroirs sur la diagonale, total de chaque classe) ; des périodes passées au choix — hier, tout jour passé, semaine, mois, année. Les statistiques journalières des decks et des cartes sont gardées 400 jours ; les statistiques prennent presque deux fois moins de place.
+
 ## [0.62.0] - 2026-11-10
 
 ### Ajouté

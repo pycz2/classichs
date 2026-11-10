@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-11-10
+
+### Adicionado
+- Painel de administração, estatísticas: uma matriz classe contra classe (taxa de vitória da linha contra a coluna, partidas, do vermelho ao verde, espelhos na diagonal, total de cada classe); períodos anteriores para escolher — ontem, qualquer dia passado, semana, mês, ano. As estatísticas diárias de decks e cartas ficam 400 dias; as estatísticas ocupam quase metade do espaço de antes.
+
 ## [0.62.0] - 2026-11-10
 
 ### Adicionado

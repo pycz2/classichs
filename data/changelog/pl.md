@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-11-10
+
+### Dodano
+- Panel administracyjny, statystyki: macierz klasa przeciw klasie (skuteczność wiersza przeciw kolumnie, liczba gier, od czerwieni do zieleni, lustra na przekątnej, suma każdej klasy); wybór wcześniejszych okresów — wczoraj, dowolny miniony dzień, tydzień, miesiąc, rok. Dzienne statystyki talii i kart są trzymane 400 dni; statystyki zajmują prawie o połowę mniej miejsca.
+
 ## [0.62.0] - 2026-11-10
 
 ### Dodano

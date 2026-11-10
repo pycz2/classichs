@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-11-10
+
+### Hinzugefügt
+- Admin-Panel, Statistik: eine Matrix Klasse gegen Klasse (Siegquote der Zeile gegen die Spalte, Spiele, Rot bis Grün, Spiegelduelle auf der Diagonale, Summe je Klasse); frühere Zeiträume wählbar — gestern, jeder frühere Tag, Woche, Monat, Jahr. Tagesstatistiken von Decks und Karten bleiben 400 Tage; die Statistik braucht fast nur noch halb so viel Platz.
+
 ## [0.62.0] - 2026-11-10
 
 ### Hinzugefügt

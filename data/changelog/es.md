@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-11-10
+
+### Añadido
+- Panel de administración, estadísticas: una matriz clase contra clase (tasa de victorias de la fila contra la columna, partidas, de rojo a verde, espejos en la diagonal, total de cada clase); periodos anteriores a elegir — ayer, cualquier día pasado, semana, mes, año. Las estadísticas diarias de mazos y cartas se guardan 400 días; las estadísticas ocupan casi la mitad que antes.
+
 ## [0.62.0] - 2026-11-10
 
 ### Añadido

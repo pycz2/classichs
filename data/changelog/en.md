@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-11-10
+
+### Added
+- Admin panel, statistics: a class-versus-class matrix (the row's win rate against the column, the games, red to green, mirrors on the diagonal, each class's total); earlier periods to choose — yesterday, any past day, week, month, year. Day statistics of decks and cards are kept 400 days; the statistics take almost half the space they did.
+
 ## [0.62.0] - 2026-11-10
 
 ### Added
