@@ -417,3 +417,14 @@ fn deck_templates_play_bot_games() {
     }
     assert!(over >= decks.len(), "most games end");
 }
+
+/// Eaglehorn Bow as at the Naxxramas release (patch 1.1.0.6024, 2014-07-22): only a friendly
+/// Secret revealed gives +1 Durability (in the June 2014 Classic pack, any Secret did).
+#[test]
+fn eaglehorn_bow_counts_only_friendly_secrets() {
+    let mut t = scene!({"hero": "HERO_05", "weapon": "VAN_EX1_536"}, {"hero": "HERO_08", "secrets": ["VAN_EX1_289"]});
+    let bow = t.g.players[0].weapon.expect("the bow is equipped");
+    let (me, them) = (t.hero(0), t.hero(1));
+    t.attack(me, them);
+    assert_eq!(t.g.e(bow).tag("DURABILITY"), 1, "the enemy's Ice Barrier gives nothing: 2 - 1 (the attack)");
+}

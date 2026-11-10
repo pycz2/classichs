@@ -326,4 +326,10 @@ cards.FP1_031 = {
   end,
 }
 
+-- Eaglehorn Bow as at this release (patch 1.1.0.6024, 2014-07-22): only a friendly Secret
+-- revealed gives +1 Durability (Classic's June 2014 bow counts any Secret).
+cards.VAN_EX1_536 = on_mine("secret_revealed", function(g, me, ev)
+  g.add_tag(me, "DURABILITY", 1)
+end)
+
 return cards

@@ -30,5 +30,6 @@
   "FP1_028": {"race": null, "script": "scripts/naxx.lua#FP1_028"},
   "FP1_029": {"fx": {"death": "skull"}, "script": "scripts/naxx.lua#FP1_029"},
   "FP1_030": {"race": null, "fx": {"play": "battlecry"}, "script": "scripts/naxx.lua#FP1_030"},
-  "FP1_031": {"race": null, "script": "scripts/naxx.lua#FP1_031"}
+  "FP1_031": {"race": null, "script": "scripts/naxx.lua#FP1_031"},
+  "VAN_EX1_536": {"script": "scripts/naxx.lua#VAN_EX1_536"}
 }
