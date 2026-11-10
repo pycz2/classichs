@@ -4,6 +4,7 @@ import { useState, useEffect } from 'preact/hooks'
 import { api, qs } from './api.js'
 import { html, useLive, useMe, useEvents, useLoad, useDebounced, useTick, setQuery, go, toast, Card, Status, UserLink, Pager, SortTh, Modal, ErrorBox, Empty, Icon, rankText, ago, clock, fullDate, num } from './ui.js'
 import { FeedRow } from './dashboard.js'
+import { PlayerGames, ArenaButtons, TagModal } from './players.js'
 
 const FILTERS = [['', 'All'], ['online', 'Online'], ['in_game', 'In game'], ['searching', 'Searching'], ['offline', 'Offline'], ['suspended', 'Suspended']]
 const ACCOUNT_KINDS = ['register', 'admin', 'tag']
@@ -111,6 +112,7 @@ export function AccountPage ({ id }) {
   const statusOf = useStatusOf()
   const [data, error, reload] = useLoad(() => api('accounts/' + id), [id])
   const [modal, setModal] = useState(null)
+  const [sheet, setSheet] = useState(null) // a modal of players.js
   const [events, setEvents] = useState([])
   useEffect(() => { if (data) setEvents(data.events) }, [data])
   const later = useDebounced(reload, 600)
@@ -147,6 +149,7 @@ export function AccountPage ({ id }) {
       ${data.may_manage && html`<div class="head-actions">
         ${a.suspended ? html`<button class="btn" onClick=${() => act('unsuspend')}>Unsuspend</button>` : html`<button class="btn warn" onClick=${() => setModal('suspend')}>Suspend</button>`}
         <button class="btn" onClick=${() => setModal('password')}>Reset password</button>
+        <button class="btn" onClick=${() => setSheet(html`<${TagModal} a=${a} onClose=${() => setSheet(null)} reload=${reload} />`)}>Change tag</button>
         ${data.can_role && html`<button class="btn" onClick=${() => act('role', { role: a.role === 'admin' ? 'user' : 'admin' })}>${a.role === 'admin' ? 'Make player' : 'Make admin'}</button>`}
         <button class="btn danger" onClick=${() => setModal('delete')}>Delete…</button>
       </div>`}
@@ -165,7 +168,8 @@ export function AccountPage ({ id }) {
           <dt>Joined</dt><dd>${data.signup_key
             ? html`with the key <a class="mono" href="#/invites" title=${data.signup_key.key}>${data.signup_key.key.slice(0, 8)}…</a>${data.signup_key.note ? html` <span class="muted">(${data.signup_key.note})</span>` : ''}<br /><span class="muted small">made by </span><${UserLink} id=${data.signup_key.created_by} user=${data.signup_key.created_by_name} />`
             : html`<span class="muted">without a key</span>`}</dd>
-          <dt>Arena</dt><dd>${data.arena ? html`${data.arena.wins}–${data.arena.losses} <span class="muted small">${data.arena.picks} picked${data.arena.pack ? ' · ' + data.arena.pack.slice(0, 10) + '…' : ''}</span>` : html`<span class="muted">no run</span>`}</dd>
+          <dt>Arena</dt><dd>${data.arena ? html`${data.arena.wins}–${data.arena.losses} <span class="muted small">${data.arena.picks} picked${data.arena.pack ? ' · ' + data.arena.pack.slice(0, 10) + '…' : ''}</span>
+            ${data.may_manage && html` <${ArenaButtons} a=${a} run=${data.arena} games=${data.per_game} reload=${reload} setModal=${setSheet} />`}` : html`<span class="muted">no run</span>`}</dd>
         </dl>
       </${Card}>
       <${Card} title=${`Friends (${data.friends.length})`} pad=${false}>
@@ -185,6 +189,7 @@ export function AccountPage ({ id }) {
           <span class="muted small right" title=${'since ' + fullDate(s.created * 1000)}>until ${new Date(s.expires * 1000).toLocaleDateString()}</span></li>`)}</ul>` : html`<${Empty}>Logged out everywhere</${Empty}>`}
       </${Card}>
     </div>
+    <${PlayerGames} a=${a} games=${data.per_game} may=${data.may_manage} reload=${reload} setModal=${setSheet} />
     <div class="grid two">
       <${Card} title="Recent games" pad=${false} actions=${html`<a class="btn ghost sm" href=${'#/games?user=' + encodeURIComponent(a.user)}>All</a>`}>
         ${data.games.length ? html`<div class="table-wrap"><table class="table compact"><tbody>${data.games.map((g) => html`<tr key=${g.id} class="clickable" onClick=${() => go('games/' + g.id)}>
@@ -206,6 +211,7 @@ export function AccountPage ({ id }) {
     <${Card} title="Activity" pad=${false} actions=${html`<a class="btn ghost sm" href=${'#/events?user=' + encodeURIComponent(a.user)}>Event log</a>`}>
       ${events.length ? html`<ul class="feed">${events.map((e) => html`<${FeedRow} key=${e.id} e=${e} />`)}</ul>` : html`<${Empty}>Nothing logged</${Empty}>`}
     </${Card}>
+    ${sheet}
     ${modal === 'suspend' && html`<${Confirm} title=${'Suspend ' + a.user + '?'} text="The player is logged out at once and cannot log in or play until unsuspended."
       button="Suspend" kind="warn" onClose=${() => setModal(null)} onYes=${() => act('suspend')} />`}
     ${modal === 'password' && html`<${PasswordModal} user=${a.user} onClose=${() => setModal(null)} onSet=${(password) => act('password', { password })} />`}

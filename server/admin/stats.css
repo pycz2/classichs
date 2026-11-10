@@ -40,21 +40,7 @@
 .decks td { font-size: 13px; }
 .deck-name { color: var(--text-2); }
 .decks tr.details td { background: var(--surface-2); padding: 8px 12px 12px; }
-.decklist { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 3px 14px; }
-.dl-card { display: flex; align-items: center; gap: 6px; font-size: 12.5px; }
-.dl-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.dl-n { margin-left: auto; color: var(--accent); font-weight: 650; }
-.cost {
-  display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; flex: none;
-  font-size: 11px; font-weight: 700; color: #fff; background: #2f6fd0; vertical-align: middle;
-}
 .cards-table td { font-size: 13px; white-space: nowrap; }
-
-/* class chips: the class's usual colour */
-.cls { display: inline-block; font-size: 11.5px; font-weight: 650; padding: 1px 8px; border-radius: 99px; color: var(--text);
-  background: color-mix(in srgb, var(--cc, var(--muted)) 22%, transparent); border: 1px solid color-mix(in srgb, var(--cc, var(--muted)) 55%, transparent); }
-.c-druid { --cc: #ff7d0a; } .c-hunter { --cc: #abd473; } .c-mage { --cc: #40c7eb; } .c-paladin { --cc: #f58cba; } .c-priest { --cc: #b8b8b8; }
-.c-rogue { --cc: #fff569; } .c-shaman { --cc: #0070de; } .c-warlock { --cc: #8787ed; } .c-warrior { --cc: #c79c6e; }
 
 @media (max-width: 900px) {
   .deck-grid { grid-template-columns: 1fr; }

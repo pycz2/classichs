@@ -3,7 +3,7 @@
 
 import { useState } from 'preact/hooks'
 import { api, qs } from './api.js'
-import { html, useLoad, useEvents, useDebounced, go, toast, Card, ErrorBox, Empty, Icon, GameLink, fullDate } from './ui.js'
+import { html, useLoad, useEvents, useDebounced, go, toast, Card, ErrorBox, Empty, Icon, GameLink, CopyCode, fullDate } from './ui.js'
 import { Confirm } from './accounts.js'
 
 const STATUSES = ['', 'open', 'locked', 'seeded', 'running', 'finished', 'cancelled', 'closed']
@@ -96,7 +96,7 @@ export function TournamentPage ({ id }) {
             <td class="num">${place(e.place)}</td><td>${e.name}${e.eliminated && html` <span class="badge warn">out</span>`}</td>
             <td class="num">${e.seed >= 0 ? e.seed + 1 : '—'}</td>${t.format === 'scheveningen' && html`<td>${e.team >= 0 ? 'ABC'[e.team] : '—'}</td>`}
             <td class="num">${e.points}</td><td class="num mono">${e.wins}–${e.losses}</td>
-            <td class="small muted">${(e.decks || []).map((d) => html`<div title=${d.hero} style="white-space: nowrap">${d.name || d.hero}</div>`)}</td></tr>`)}</tbody>
+            <td class="small muted">${(e.decks || []).map((d) => html`<div title=${d.class_name || d.hero} style="white-space: nowrap">${d.name || d.class_name || d.hero} <${CopyCode} code=${d.code} label="" /></div>`)}</td></tr>`)}</tbody>
         </table></div>
         ${!t.entrants.length && html`<${Empty}>Nobody has joined</${Empty}>`}
       </${Card}>

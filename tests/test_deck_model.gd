@@ -242,3 +242,19 @@ func test_decks_are_per_pack() -> void:
 	for f in [DeckStore.file(), DeckStore.file("neon")]:
 		DirAccess.remove_absolute(f)
 	DeckStore.path = DeckStore.DEFAULT_PATH
+
+
+## A pack without code numbers (Neonfall): a card's number is its id's hash. The server writes the
+## same code for this deck (server/tests/admin_players.rs NEON_CODE): codes copied from the admin
+## panel import here, and the client's export imports there.
+func test_neon_code_matches_the_server() -> void:
+	const NEON_CODE := "AAEDAYjD6UUKj4CH6wP6+dPrA8bV57sIhMG5gQm8/fSKCbeor+UKl8ju9gvt2Y7cDeDLqZMP65OY1Q8KhJ3m0wHYivTPAuSJ76QE/vPw6gWQvKGvB9X+4s0I4Imclg6hnc3ZDp606NsOoP6R9Q4A"
+	var classic := Packs.active()
+	Packs.set_active(Packs.all().filter(func(p: Pack): return p.id() == "neon")[0])
+	var t: Dictionary = Decks.templates().filter(func(x): return x.key == "hostile_merger")[0]
+	eq(DeckCode.encode(t.deck), NEON_CODE, "the server's code")
+	var r := DeckCode.decode(NEON_CODE)
+	eq(r.error, "", "imported")
+	eq(r.deck.sorted_counts(), t.deck.sorted_counts(), "the same cards")
+	eq(r.deck.hero, t.deck.hero, "the same champion")
+	Packs.set_active(classic)

@@ -342,6 +342,10 @@ async fn the_admin_api_reads_the_rows() {
     assert!(mage["cards"].as_array().unwrap().iter().any(|c| c["name"] == "Fireball"), "{mage}");
     let costs: Vec<i64> = mage["cards"].as_array().unwrap().iter().map(|c| c["cost"].as_i64().unwrap()).collect();
     assert!(costs.windows(2).all(|w| w[0] <= w[1]));
+    // its deck code (copied from the page) reads back as the same deck
+    let d = classichs_server::deck_code::decode(rules.rs, mage["code"].as_str().unwrap()).unwrap();
+    assert_eq!(d.hero, mage["hero"].as_str().unwrap());
+    assert_eq!(d.cards.len(), 30);
     let fireball = v["cards"].as_array().unwrap().iter().find(|c| c["name"] == "Fireball").unwrap().clone();
     assert_eq!((fireball["decks"].as_i64(), fireball["copies"].as_i64()), (Some(3), Some(6)));
     // without bots, one mode, one bracket, one class, a minimum of games

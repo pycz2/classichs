@@ -4,9 +4,11 @@
 
 pub mod admin;
 pub mod admin_extra;
+pub mod admin_players;
 pub mod auth;
 pub mod bots;
 pub mod db;
+pub mod deck_code;
 pub mod entity;
 pub mod events;
 pub mod game;
@@ -138,6 +140,8 @@ pub struct Conn {
     pub id: u64,
     pub name: String,
     pub tx: UnboundedSender<Out>,
+    /// The game (rules_hash) of its last `me` (None: the default): an admin's change pushes that `me`.
+    pub me_pack: Option<String>,
 }
 
 pub struct Seeker {
@@ -241,7 +245,7 @@ impl Hub {
     /// `kicked {reason: "another_login"}` and is closed. Returns (connection id, kicked one).
     pub fn attach(&mut self, account: i64, name: &str, tx: UnboundedSender<Out>) -> (u64, bool) {
         self.next_conn += 1;
-        let old = self.conns.insert(account, Conn { id: self.next_conn, name: name.into(), tx });
+        let old = self.conns.insert(account, Conn { id: self.next_conn, name: name.into(), tx, me_pack: None });
         self.watching.remove(&account); // a new connection watches nothing yet
         if let Some(old) = &old {
             // The message first, then the close frame tells it again (a client may lose a

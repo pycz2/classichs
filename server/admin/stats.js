@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useMemo } from 'preact/hooks'
 import { api, qs } from './api.js'
-import { html, useLoad, useEvents, useDebounced, setQuery, Card, ErrorBox, Empty, SortTh, Icon, num } from './ui.js'
+import { html, useLoad, useEvents, useDebounced, setQuery, Card, ErrorBox, Empty, SortTh, Icon, CopyCode, DeckList, num } from './ui.js'
 
 // The page's own styles (kept in their own file).
 if (!document.querySelector('link[href$="/stats.css"]')) {
@@ -164,11 +164,6 @@ function TimeBars ({ series, hourly, per }) {
 
 // --- decks ---------------------------------------------------------------------------------------
 
-function DeckList ({ d }) {
-  return html`<div class="decklist">${d.cards.map((c) => html`<div key=${c.id} class="dl-card" title=${c.id}>
-    <span class="cost">${c.cost ?? '?'}</span><span class="dl-name">${c.name}</span>${c.n > 1 && html`<span class="dl-n">×${c.n}</span>`}</div>`)}</div>`
-}
-
 function DeckRows ({ decks, names, rank, head = true }) {
   const [open, setOpen] = useState(null)
   return html`<table class="table compact decks">
@@ -178,7 +173,7 @@ function DeckRows ({ decks, names, rank, head = true }) {
       return html`<tr key=${d.deck} class="clickable" onClick=${() => setOpen(open === d.deck ? null : d.deck)}>
           ${rank && html`<td class="num muted">${i + 1}</td>`}
           <td>${rank && html`<span class=${'cls c-' + d.class.toLowerCase()}>${names[d.class] || cap(d.class.toLowerCase())}</span> `}<span class="deck-name">${d.cards.slice(-2).map((c) => c.name).join(', ')}</span>
-            <span class="mono muted small"> ${d.deck.slice(0, 8)}</span></td>
+            <span class="mono muted small"> ${d.deck.slice(0, 8)}</span> <${CopyCode} code=${d.code} label="" /></td>
           <td class="num">${num(d.games)}</td>
           <td><${WrBar} wr=${wr} /></td>
         </tr>

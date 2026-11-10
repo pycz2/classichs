@@ -351,7 +351,7 @@ pub async fn names(app: &AppRef, rules: &GameRules) -> DbResult<()> {
 }
 
 /// A stored pack's locales/en.json.
-async fn locale(app: &AppRef, rules_hash: &str) -> Option<Value> {
+pub(crate) async fn locale(app: &AppRef, rules_hash: &str) -> Option<Value> {
     let row = pack::Entity::find().filter(pack::Column::RulesHash.eq(rules_hash)).order_by_asc(pack::Column::Owner).one(&app.db).await.ok()??;
     let bytes = app.store.read(&row.content_hash, packs::MAX_SERVER_PACK).await.ok()?;
     tokio::task::spawn_blocking(move || {
@@ -667,6 +667,7 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
     let deck_json = |r: &QueryResult| {
         let id = s(r, "deck");
         let (hero, cards) = lists.get(&id).cloned().unwrap_or_default();
+        let code = rs.and_then(|rs| crate::deck_code::encode(rs, &hero, &cards));
         let mut counted: BTreeMap<&str, i64> = BTreeMap::new();
         for c in &cards {
             *counted.entry(c).or_default() += 1;
@@ -676,7 +677,7 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
             .map(|(c, n)| json!({"id": c, "name": card_names.get(c).cloned().unwrap_or_else(|| c.to_string()), "n": n, "cost": cost(c)}))
             .collect();
         cards.sort_by_key(|c| (c["cost"].as_i64().unwrap_or(99), c["name"].as_str().unwrap_or_default().to_string()));
-        json!({"deck": id, "class": s(r, "class"), "hero": hero, "games": i(r, "games"), "wins": i(r, "wins"), "cards": cards})
+        json!({"deck": id, "class": s(r, "class"), "hero": hero, "games": i(r, "games"), "wins": i(r, "wins"), "cards": cards, "code": code})
     };
     let top: Vec<Value> = top.iter().map(deck_json).collect();
     let mut by_class: BTreeMap<String, Vec<Value>> = BTreeMap::new();
