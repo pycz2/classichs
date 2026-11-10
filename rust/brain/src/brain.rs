@@ -12,10 +12,14 @@
 //!    sampled hand) — and the worse half drops out; again in the next world. Lethal is ±1 000 000.
 //! 5. A hard time limit (twice the budget plus 0.2 s) stops the search anywhere, even inside a world;
 //!    the best action found so far is played. After it the bot looks again.
+//!
+//! Super hard (`super_hard`) searches whole turns instead: a beam over the turn's positions in one world
+//! gives plans; the best ones are played in many worlds through the opponent's turn and one more round,
+//! and judged by a chance to win learned from Hard's games (`eval_sh`).
 
 use crate::cards::{class_of, Library, Pool};
 use classichs_engine::entity::Entity;
-use classichs_engine::game::Action;
+use classichs_engine::game::{Act, Action};
 use classichs_engine::rng::Rng;
 use classichs_engine::state::Game;
 use classichs_engine::{bot, view};
@@ -38,9 +42,9 @@ pub enum Level {
     Medium,
     /// 4-10 worlds within the time, the turn played on and the opponent's whole turn simulated.
     Hard,
-    /// The first Hard (before 0.31) made deeper: every action in every world (no halving), the turn
-    /// played on and the opponent's whole turn simulated, 4-200 worlds (24 took seconds then and take
-    /// ~30 ms now) while its time lasts. The caller bounds that time (training: the turn's end less 10 s).
+    /// Its own search (`super_hard`): whole-turn plans, each played in up to 400 worlds through the
+    /// opponent's turn and one more round, judged by a learned chance to win. The caller bounds the time
+    /// (training: the turn's end less 10 s).
     SuperHard,
 }
 
@@ -71,7 +75,7 @@ impl Level {
             Level::Easy => (1, 1, false, false, 8, 1),
             Level::Medium => (2, 3, true, false, 10, 1),
             Level::Hard => (4, 10, true, true, 0, 2),
-            Level::SuperHard => (4, 200, true, true, 0, 200),
+            Level::SuperHard => unreachable!("Super hard searches with super_hard"),
         }
     }
 
@@ -140,6 +144,9 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
     let deadline = t0 + Level::limit(budget);
     let hidden = hidden_ids(view_json);
     let mut rng = rand::rngs::StdRng::seed_from_u64(k.seed);
+    if level == Level::SuperHard {
+        return Ok(Some(super_hard(&base, view_json, &hidden, k, &legal, budget, t0, deadline, &mut rng)));
+    }
     let (fewest, most, play_on, reply, keep, settle) = level.search();
     // a quick look (one step) in the first world orders the actions: the time limit then cuts the weak ones
     let first = determinize(&base, view_json, &hidden, k, &mut rng);
@@ -188,6 +195,152 @@ pub fn decide(view_json: &Value, k: &Knowledge, level: Level, budget: Duration) 
         .map(|&i| Candidate { label: label(k, &base, &legal[i]), score: mean(i) })
         .collect();
     Ok(Some(Decision { action: legal[best].clone(), label: label(k, &base, &legal[best]), worlds, ms: (clock::now() - t0).as_millis(), top }))
+}
+
+/// A plan of the bot's turn: its actions from the start, the position after them (in the world it was made in).
+struct Plan {
+    seq: Vec<Action>,
+    g: Game,
+    score: f64,
+}
+
+/// A cheap fingerprint of a position (two plans that reach it are one).
+fn sig(g: &Game) -> u64 {
+    use std::hash::{Hash, Hasher};
+    let n = g.n();
+    let mut h = std::collections::hash_map::DefaultHasher::new();
+    (g.current, g.game_over, g.pending.as_ref().map(|p| p.source)).hash(&mut h);
+    for p in &g.players {
+        (p.mana, &p.hand, &p.board, p.secrets.len(), p.weapon, p.deck.len()).hash(&mut h);
+        for &e in p.board.iter().chain([p.hero, p.hero_power].iter()).chain(p.weapon.iter()) {
+            let e = g.e(e);
+            (e.atk(), e.health(), e.tag(n.armor), e.tag(n.attacks), e.has(n.exhausted), e.has(n.barrier), e.has(n.frozen), e.has(n.used), e.tag(n.durability)).hash(&mut h);
+        }
+    }
+    h.finish()
+}
+
+/// Super hard: the whole turn searched as plans (a beam by the evaluation in one world), the best plans then
+/// played in many worlds with the opponent's reply (sequential halving); the first action of the best one.
+#[allow(clippy::too_many_arguments)]
+fn super_hard(base: &Game, view_json: &Value, hidden: &HashSet<i64>, k: &Knowledge, legal: &[Action], budget: Duration,
+    t0: Duration, deadline: Duration, rng: &mut rand::rngs::StdRng) -> Decision {
+    const BEAM: usize = 24;
+    const KEEP: usize = 32;
+    // a plain position settles in a few hundred worlds (1 s or 6 s of them played alike against Hard)
+    const MOST_WORLDS: usize = 400;
+    let me = k.seat;
+    // one step of a simulation may take a few ms past a check: the hard stop keeps a margin
+    let deadline = deadline.saturating_sub(Duration::from_millis(100));
+    let first = determinize(base, view_json, hidden, k, rng);
+    // the beam: every position the turn can reach (each once), the best BEAM of each depth expanded
+    let mut plans: Vec<Plan> = vec![Plan { seq: vec![], score: eval_sh(&first, me), g: first.clone_state() }];
+    let mut seen: HashSet<u64> = HashSet::from([sig(&first)]);
+    let mut frontier: Vec<usize> = vec![0];
+    for _ in 0..20 {
+        if clock::now() >= deadline {
+            break;
+        }
+        let mut next: Vec<Plan> = vec![];
+        for &i in &frontier {
+            let p = &plans[i];
+            if p.g.game_over || p.g.current != me {
+                continue;
+            }
+            for a in options(&p.g, me) {
+                if a["type"] == "end_turn" {
+                    continue;
+                }
+                let mut c = p.g.clone_state();
+                if !c.apply(&Value::Object(a.clone())).ok || !seen.insert(sig(&c)) {
+                    continue;
+                }
+                let mut seq = p.seq.clone();
+                seq.push(a);
+                next.push(Plan { seq, score: eval_sh(&c, me), g: c });
+            }
+        }
+        if next.is_empty() {
+            break;
+        }
+        next.sort_by(|x, y| y.score.partial_cmp(&x.score).unwrap_or(std::cmp::Ordering::Equal));
+        let start = plans.len();
+        frontier = (start..start + next.len().min(BEAM)).collect();
+        plans.extend(next);
+    }
+    // the plans to try: the best KEEP by the evaluation, and the best of each first action
+    let mut order: Vec<usize> = (0..plans.len()).collect();
+    order.sort_by(|&x, &y| plans[y].score.partial_cmp(&plans[x].score).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y)));
+    let mut alive: Vec<usize> = order.iter().copied().take(KEEP).collect();
+    let mut firsts: HashSet<String> = alive.iter().map(|&i| first_key(&plans[i].seq)).collect();
+    for &i in &order {
+        if firsts.insert(first_key(&plans[i].seq)) {
+            alive.push(i);
+        }
+    }
+    let mut sums = vec![0.0f64; plans.len()];
+    let mut counts = vec![0usize; plans.len()];
+    let mut worlds = 0usize;
+    let mut world = Some(first);
+    while worlds < MOST_WORLDS && (worlds < 2 || clock::now() - t0 < budget) && clock::now() < deadline && alive.len() > 1 {
+        let w = world.take().unwrap_or_else(|| determinize(base, view_json, hidden, k, rng));
+        for &i in &alive {
+            if clock::now() >= deadline || (worlds >= 2 && clock::now() - t0 >= budget) {
+                break;
+            }
+            sums[i] += play_plan(&w, me, &plans[i].seq, deadline);
+            counts[i] += 1;
+        }
+        worlds += 1;
+        alive.retain(|&i| counts[i] > 0);
+        let mean = |i: usize| sums[i] / counts[i] as f64;
+        alive.sort_by(|&x, &y| mean(y).partial_cmp(&mean(x)).unwrap_or(std::cmp::Ordering::Equal).then(x.cmp(&y)));
+        if worlds >= 4 {
+            let half = alive.len().div_ceil(2).max(2);
+            alive.truncate(half);
+        }
+        // the plans left all start alike: that first action is the move
+        if alive.iter().all(|&i| first_key(&plans[i].seq) == first_key(&plans[alive[0]].seq)) {
+            alive.truncate(1);
+        }
+    }
+    let mean = |i: usize| if counts[i] > 0 { sums[i] / counts[i] as f64 } else { plans[i].score };
+    let best = alive.first().copied().unwrap_or(order[0]);
+    let end = json!({"type": "end_turn", "player": me}).as_object().unwrap().clone();
+    let act = plans[best].seq.first().cloned().unwrap_or(end);
+    // the action as the base position lists it (else the first legal one: should not happen)
+    let act = legal.iter().find(|a| Act::from_map(a) == Act::from_map(&act)).cloned().unwrap_or_else(|| legal[0].clone());
+    let top = alive.iter().take(6).map(|&i| Candidate { label: label(k, base, plans[i].seq.first().unwrap_or(&act)), score: mean(i) }).collect();
+    Decision { label: label(k, base, &act), action: act, worlds, ms: (clock::now() - t0).as_millis(), top }
+}
+
+fn first_key(seq: &[Action]) -> String {
+    seq.first().map_or("end".into(), |a| Value::Object(a.clone()).to_string())
+}
+
+/// A plan in one world: its actions while they are legal (then the turn played on greedily), the opponent's turn,
+/// then one more round (the bot's next turn greedily, the opponent's), the score.
+fn play_plan(w: &Game, me: usize, seq: &[Action], deadline: Duration) -> f64 {
+    let mut g = w.clone_state();
+    let mut broke = false;
+    for a in seq {
+        if g.game_over || !g.apply(&Value::Object(a.clone())).ok {
+            broke = true;
+            break;
+        }
+    }
+    if broke || g.pending.as_ref().is_some_and(|p| p.player == me) {
+        finish_turn(&mut g, me, deadline, eval_sh);
+    }
+    if !g.game_over && g.current == me && g.phase == "PLAY" {
+        g.apply(&json!({"type": "end_turn", "player": me}));
+    }
+    opponent_turn(&mut g, me, deadline);
+    if !g.game_over && g.current == me {
+        finish_turn(&mut g, me, deadline, eval_sh);
+        opponent_turn(&mut g, me, deadline);
+    }
+    eval_sh(&g, me)
 }
 
 /// me's actions worth trying: no concede; a minion only to the rightmost slot unless a card whose effect
@@ -334,7 +487,7 @@ fn score_first(w: &Game, me: usize, a: &Action, play_on: bool, reply: bool, dead
         return -WIN; // (not legal in this world: should not happen, its cards are the same)
     }
     if play_on && a["type"] != "end_turn" {
-        finish_turn(&mut g, me, deadline);
+        finish_turn(&mut g, me, deadline, eval);
     }
     if reply {
         if !g.game_over && g.current == me && g.phase == "PLAY" {
@@ -345,14 +498,14 @@ fn score_first(w: &Game, me: usize, a: &Action, play_on: bool, reply: bool, dead
     eval(&g, me)
 }
 
-/// The rest of the bot's turn: the best action by the evaluation while it beats ending the turn
+/// The rest of the bot's turn: the best action by the evaluation `ev` while it beats ending the turn
 /// (until the time limit).
-fn finish_turn(g: &mut Game, me: usize, deadline: Duration) {
+fn finish_turn(g: &mut Game, me: usize, deadline: Duration, ev: fn(&Game, usize) -> f64) {
     for _ in 0..25 {
         if g.game_over || g.current != me || g.phase != "PLAY" || clock::now() >= deadline {
             break;
         }
-        let here = eval(g, me);
+        let here = ev(g, me);
         let mut best: Option<(Action, f64)> = None;
         for a in options(g, me) {
             if a["type"] == "end_turn" {
@@ -362,7 +515,7 @@ fn finish_turn(g: &mut Game, me: usize, deadline: Duration) {
             if !c.apply(&Value::Object(a.clone())).ok {
                 continue;
             }
-            let s = eval(&c, me);
+            let s = ev(&c, me);
             if best.as_ref().is_none_or(|b| s > b.1) {
                 best = Some((a, s));
             }
@@ -408,6 +561,85 @@ pub fn eval(g: &Game, me: usize) -> f64 {
         return if g.winner == me as i64 { WIN } else if g.winner == -1 { 0.0 } else { -WIN };
     }
     side(g, me, true) - side(g, 1 - me, false)
+}
+
+/// Super hard's evaluation: the chance to win, from -100 (lost) to 100 (won), by a logistic model of `features`
+/// fitted on 2000 Hard-against-Hard games with the library's decks (rust/brain/tests/duel.rs `fit`; 305 288
+/// positions, log loss 0.52). An average over worlds is then an expected result, not swamped by ±WIN.
+pub fn eval_sh(g: &Game, me: usize) -> f64 {
+    if g.game_over {
+        return if g.winner == me as i64 { 100.0 } else if g.winner == -1 { 0.0 } else { -100.0 };
+    }
+    let z: f64 = LEARNED[0] + features(g, me).iter().zip(&LEARNED[1..]).map(|(a, b)| a * b).sum::<f64>();
+    100.0 * (2.0 / (1.0 + (-z).exp()) - 1.0)
+}
+
+/// The bias, then a weight per feature.
+const LEARNED: [f64; FEATURES + 1] = [
+    0.36826, 0.87498, -0.78050, -0.02078, 0.18191, 0.32895, 0.42099, -0.05036, 0.34565, 0.13907, 0.10905, 0.29581,
+    0.40985, 0.50443, 0.37821, 0.88284, -0.08550, -0.87546, 0.78120, 0.02133, -0.18180, -0.32872, -0.42080, 0.05060,
+    -0.34571, -0.13886, -0.10623, -0.29602, -0.41003, -0.50352, -0.38356, -0.88183, 0.09769, -0.69598,
+];
+
+pub const FEATURES: usize = 2 * SIDE_FEATURES + 1;
+const SIDE_FEATURES: usize = 16;
+
+/// What the learned evaluation looks at: each side's numbers (me first), whose turn it is.
+pub fn features(g: &Game, me: usize) -> Vec<f64> {
+    let mut f = Vec::with_capacity(FEATURES);
+    for p in [me, 1 - me] {
+        let n = g.n();
+        let pl = &g.players[p];
+        let foe = &g.players[1 - p];
+        let hero = g.e(pl.hero);
+        let life = (hero.health() + hero.tag(n.armor)) as f64;
+        let (mut atk, mut hp, mut taunt, mut shield, mut big) = (0.0, 0.0, 0.0, 0.0, 0.0);
+        for &m in &pl.board {
+            let e = g.e(m);
+            let (a, h) = (e.atk() as f64, e.health() as f64);
+            if !e.has(n.cant_attack) {
+                atk += a * if e.has(n.double_attack) { 2.0 } else { 1.0 };
+            }
+            hp += h;
+            if e.has(n.guard) {
+                taunt += h;
+            }
+            if e.has(n.barrier) {
+                shield += 1.0;
+            }
+            big += (a * h).sqrt();
+        }
+        let weapon = pl.weapon.map_or(0.0, |w| (g.e(w).atk() * g.e(w).tag(n.durability).max(0)) as f64);
+        let wa = pl.weapon.map_or(0.0, |w| g.e(w).atk() as f64);
+        let threat: f64 = foe.board.iter().map(|&m| {
+            let e = g.e(m);
+            if e.has(n.cant_attack) { 0.0 } else { (e.atk() * if e.has(n.double_attack) { 2 } else { 1 }) as f64 }
+        }).sum::<f64>() + foe.weapon.map_or(0.0, |w| g.e(w).atk() as f64);
+        let guards = pl.board.iter().any(|&m| g.e(m).has(n.guard));
+        let hand = pl.hand.len() as f64;
+        let cost: f64 = pl.hand.iter().map(|&c| g.cost(c).min(10) as f64).sum();
+        f.extend([
+            life / 10.0,
+            (15.0 - life).max(0.0).powi(2) / 100.0,
+            if threat >= life && !guards { 1.0 } else { 0.0 },
+            pl.board.len() as f64,
+            (atk + wa) / 5.0,
+            hp / 5.0,
+            taunt / 5.0,
+            shield,
+            big / 5.0,
+            weapon / 5.0,
+            hand.min(10.0),
+            cost / 10.0,
+            pl.max_mana as f64,
+            (pl.deck.len() as f64).min(5.0),
+            pl.secrets.len() as f64,
+            if pl.deck.is_empty() { (pl.fatigue + 1) as f64 } else { 0.0 },
+        ]);
+    }
+    f.push(if g.current == me { 1.0 } else { 0.0 });
+    debug_assert_eq!(f.len(), FEATURES);
+    f
 }
 
 fn side(g: &Game, p: usize, own: bool) -> f64 {
