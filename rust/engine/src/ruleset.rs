@@ -61,6 +61,9 @@ pub struct Card {
     pub script: String,
     /// A TRAP spell.
     pub trap: bool,
+    /// Numbers for deck codes (Classic: Hearthstone's dbfId and the legacy one; docs/packs/cards.md).
+    pub code_id: Option<i64>,
+    pub legacy_code_id: Option<i64>,
     /// The tags an entity of this card starts with.
     pub start_tags: Obj,
     /// Its hooks (set once the scripts are loaded).
@@ -101,6 +104,8 @@ struct PackCard {
     power: String,
     #[serde(default)]
     script: String,
+    code_id: Option<i64>,
+    legacy_code_id: Option<i64>,
 }
 
 /// Tag names (the pack's names of the engine's mechanics, D7): the engine
@@ -584,6 +589,8 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
         set: c.set,
         power: c.power,
         script: c.script,
+        code_id: c.code_id,
+        legacy_code_id: c.legacy_code_id,
         start_tags: tags,
         hooks: HookSet::default(),
     })

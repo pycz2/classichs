@@ -118,9 +118,28 @@ pub async fn touch(c: &impl ConnectionTrait, id: i64) -> DbResult<()> {
 /// A player's standing in a pack (by manifest id) this season: made from the last season's
 /// (its rank carried over by the ladder's resets, the MMRs kept) or the ladder's start.
 pub async fn standing(c: &impl ConnectionTrait, account: i64, pack: &str, ladder: &Ladder) -> DbResult<Standing> {
+    let (s, kept) = standing_now(c, account, pack, ladder).await?;
+    if !kept {
+        let row = standing::ActiveModel {
+            account: Set(s.account),
+            pack: Set(s.pack.clone()),
+            season: Set(s.season),
+            rank: Set(s.rank),
+            stars: Set(s.stars),
+            streak: Set(s.streak),
+            ranked_mmr: Set(s.ranked_mmr),
+            casual_mmr: Set(s.casual_mmr),
+        };
+        standing::Entity::insert(row).on_conflict_do_nothing().exec_without_returning(c).await?;
+    }
+    Ok(s)
+}
+
+/// The standing this season as `standing` gives it, without saving it: (it, whether it is kept).
+pub async fn standing_now(c: &impl ConnectionTrait, account: i64, pack: &str, ladder: &Ladder) -> DbResult<(Standing, bool)> {
     let season = ranked::season_of(ranked::now());
     if let Some(s) = standing::Entity::find_by_id((account, pack.to_string(), season)).one(c).await? {
-        return Ok(s);
+        return Ok((s, true));
     }
     let last = standing::Entity::find()
         .filter(standing::Column::Account.eq(account))
@@ -145,18 +164,7 @@ pub async fn standing(c: &impl ConnectionTrait, account: i64, pack: &str, ladder
             casual_mmr: 1500.0,
         },
     };
-    let row = standing::ActiveModel {
-        account: Set(s.account),
-        pack: Set(s.pack.clone()),
-        season: Set(s.season),
-        rank: Set(s.rank),
-        stars: Set(s.stars),
-        streak: Set(s.streak),
-        ranked_mmr: Set(s.ranked_mmr),
-        casual_mmr: Set(s.casual_mmr),
-    };
-    standing::Entity::insert(row).on_conflict_do_nothing().exec_without_returning(c).await?;
-    Ok(s)
+    Ok((s, false))
 }
 
 /// Saves the rank and MMRs of a standing.

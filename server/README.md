@@ -159,7 +159,16 @@ updates live over `/admin/ws`:
 - **Accounts**: search, filters (online, in game, searching, offline, suspended,
   role), sorting; an account's page (profile, rank, friends, requests, blocks,
   sessions, recent games, messages, activity) with suspend, unsuspend, reset the
-  password, make admin/player (superuser), delete (type the name); create accounts.
+  password, make admin/player (superuser), change the tag, delete (type the name); create accounts.
+  **Games** on the page: a tab per game (every server pack's id, the built-in Classic rules)
+  with its ranked standing this season (edit rank, stars, Legend, win streak, both hidden MMRs;
+  reset to the season's start), its settings (the art and music sets: any key) and its decks
+  (each with its cards by cost and English name; copy the deck code, rename, copy to another
+  account, delete; add one from a code). The Arena run: set wins and losses, or end it. Each
+  change is checked (the message says why not), logged (`admin`) and pushed to the player at
+  once when online. Admins change players; the superuser admins too (as every account action).
+  Every deck the panel shows (an account's, Statistics' top decks, a game's players' from its
+  replay, a tournament's entrants') has **Copy code** (below, "Deck codes").
 - **Messages**: every conversation between players (with unread counts), live.
 - **Invite keys**: make a key (a note, how many players: 1 by default, at most 1000), copy
   it, revoke it; each key's uses left, who made it and when, the accounts that joined with
@@ -187,8 +196,14 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `GET live` | `{online: [{id, user, status}], queue: [{id, user, mode, waited, window}], games: [{id, mode, players, started, turn, current, actions}]}` |
 | `GET accounts?q&status&role&sort&dir&page&size` | `{list, total, page, size}`; sort: id, user, created, last_seen, rank, ranked_mmr, casual_mmr |
 | `POST accounts {user, password, role}` | creates → `{id}` |
-| `GET accounts/{id}` | the account page's data |
+| `GET accounts/{id}` | the account page's data; `per_game: [{pack, rules_hash, name, ranked, ladder: {ranks: [{rank, stars}], legend, start}, arena: {wins, losses} (its end), standing: {season, kept, rank, stars, streak, legend, ranked_mmr, casual_mmr}, settings, decks: [{id, name, hero, updated, code, class, class_name, count, valid, problem, cards: [{id, name, cost, n}]}]}]` |
 | `POST accounts/{id}/{suspend\|unsuspend\|password\|role\|delete}` | `{password}`, `{role: "admin"\|"user"}`, `{confirm: <name>}` |
+| `POST accounts/{id}/standing {pack, rank?, stars?, legend?, streak?, ranked_mmr?, casual_mmr?}` | the standing this season in a game (`pack`: its manifest id): the fields given; `legend: true` = Legend; a rank of the ladder, its stars, streak 0–1000, MMR 0–10000; a game without a ladder takes the MMRs only. `{pack, reset: true}`: back to the season's start. Pushes `me` |
+| `POST accounts/{id}/arena {action: "set", wins, losses}` \| `{action: "end"}` | the run goes on with fewer wins and losses than its game's end, or ends; 409 while the player is in an Arena game or queue. Pushes `arena` and `me` |
+| `POST accounts/{id}/game_settings {pack, settings: {key: text \| null}}` | as `game_settings_set`. Pushes `game_settings` |
+| `POST accounts/{id}/tag {tag}` | a tag (3–16 letters or digits, unique: 409), `""` removes it. Pushes `me` |
+| `POST accounts/{id}/decks {pack, code, name?}` | a deck from a code (or Hearthstone's copied text), a complete legal deck of the game; the name: given, else "### Name", else "Imported deck"; 100 decks a player (409) |
+| `POST accounts/{id}/decks/{deck}/{rename\|delete\|copy}` | `{name}` (≤ 60), —, `{to: <account name>}` (one the admin may change; the same game). Pushes `decks {list}` to the owner (copy: to the receiver) |
 | `GET events?kind=a,b&user&game&from&to&q&sort&dir&page&size` | `{list, total, page, size}`; from/to in ms; sort: time (default), kind, user |
 | `GET conversations?user&page` · `GET conversations/{a}/{b}` | conversations, the latest first · one conversation |
 | `GET games?user&mode&reason&page&size` · `GET games/{id}` | finished games · one game with its timeline and its replay's actions (`replay: {actions, hash, first}` or null) |
@@ -227,7 +242,8 @@ bundled pack installed), `pack_default`, `pack_enable`, `pack_disable`, `pack_de
 and the engine's events), `game_left`, `game_back`, `game_end` (reason, results, the
 final turn and hash, and for `illegal` the refused actions), `tournament` (created, joined,
 left, closed, seeded, started, finished, cancelled; `data.tournament`), `admin` (every admin
-action), `setting` (a setting changed: `data.key`, `data.value`), `signup_key` (a key made
+action; the player changes `data.action` standing, arena, game_settings, tag, deck_add, deck_rename,
+deck_delete, deck_copy with `data.target` and before/after), `setting` (a setting changed: `data.key`, `data.value`), `signup_key` (a key made
 or revoked; `register` has `data.signup_key`), `error` (database failures and rules engine panics).
 
 ### The database
@@ -562,6 +578,21 @@ human `text` (`server` for a database error).
   the match's game with both hands open (the spectator messages). Tournament games' replays:
   everyone when `deck_reveal` is on or the tournament is over, else its two players and the
   creator.
+
+### Deck codes
+
+The client's (Collection → Export Code / Import Code, `game/deck_code.gd`) and the admin panel's
+(`src/deck_code.rs`): a Hearthstone deckstring for every game. Base64 (standard, padded) of varints
+`0, 1, format, 1, hero, n1, single cards…, n2, double cards…, n3, (card, count)…`; the server and the
+client write format 3 (Classic) and read 1–3 (Wild, Standard). A card's number is its `code_id`
+(Classic and Naxxramas: Hearthstone's dbfId, so codes from Hearthstone and deck sites import;
+`legacy_code_id` where no card has that number), else — a pack without code numbers, such as
+Neonfall — the Godot `String.hash()` of its id (djb2 over the code points, 32 bits), as the client's
+CardDb gives it. A code names no game: it is read in the game it is imported into (an unknown number:
+"The deck has a card this game does not have"). A hero that is no class champion (a Hearthstone skin)
+becomes the champion of the cards' class. Hearthstone's copied text works too ("### Name" gives the
+name, `#` lines are skipped). `server/tests/admin_players.rs` and the client's `test_deck_model.gd`
+check the same Neonfall code.
 
 ### Game settings
 

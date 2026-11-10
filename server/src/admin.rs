@@ -73,6 +73,7 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/tournaments/{id}/cancel", post(tournament_cancel))
         .route("/admin/ws", get(feed))
         .merge(crate::admin_extra::routes())
+        .merge(crate::admin_players::routes())
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
         .route("/admin", get(index))
@@ -106,6 +107,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "tournaments.js",
     "extra.js",
     "stats.js",
+    "players.js",
     "stats.css",
     "style.css",
     "favicon.svg",
@@ -205,20 +207,20 @@ fn origin_ok(app: &App, h: &HeaderMap) -> bool {
     host.is_some() && origin.split_once("://").map(|(_, rest)| rest) == host
 }
 
-fn err(status: StatusCode, text: &str) -> Response {
+pub(crate) fn err(status: StatusCode, text: &str) -> Response {
     (status, Json(json!({"error": text}))).into_response()
 }
 
 /// The admin making a request (put there by `guard`).
 #[derive(Clone)]
 pub struct Admin {
-    me: Account,
+    pub(crate) me: Account,
     csrf: String,
     token: String,
 }
 
 impl Admin {
-    fn ev(&self, text: String) -> Event {
+    pub(crate) fn ev(&self, text: String) -> Event {
         Event::new("admin", text).user(self.me.id, &self.me.name)
     }
 }
@@ -385,7 +387,7 @@ async fn dashboard(State(app): State<AppRef>, Query(q): Query<DashQ>) -> Respons
     }
 }
 
-fn db_err(e: sea_orm::DbErr) -> Response {
+pub(crate) fn db_err(e: sea_orm::DbErr) -> Response {
     tracing::error!("admin: {e}");
     err(StatusCode::INTERNAL_SERVER_ERROR, "Database error")
 }
@@ -562,7 +564,7 @@ async fn accounts(State(app): State<AppRef>, Query(q): Query<ListQ>) -> Response
 }
 
 /// May this admin change that account? Superusers are changed from the command line only.
-fn may_manage(a: &Admin, t: &Account) -> bool {
+pub(crate) fn may_manage(a: &Admin, t: &Account) -> bool {
     t.role != "super" && t.id != a.me.id && (a.me.role == "super" || t.role == "user")
 }
 
@@ -639,6 +641,7 @@ async fn account_page_json(app: &AppRef, admin: &Admin, id: i64) -> Result<Optio
         Some(k) => signup_key::Entity::find_by_id(k).one(db).await?,
         None => None,
     };
+    let per_game = crate::admin_players::games_json(app, id).await?; // (before the hub lock: not across an await)
     let hub = app.hub();
     let friends: Vec<Value> = friends.iter().map(|f| json!({"id": f.id, "user": f.name, "tag": f.tag, "status": hub.status(f.id)})).collect();
     let mut acc = account_json(&t, mine, &g, hub.status(t.id));
@@ -676,6 +679,7 @@ async fn account_page_json(app: &AppRef, admin: &Admin, id: i64) -> Result<Optio
         "arena": run.map(|r| json!({"wins": r.wins, "losses": r.losses, "hero": r.hero, "pack": r.pack,
                                     "picks": serde_json::from_str::<Value>(&r.picks).ok().and_then(|p| p.as_array().map(|a| a.len()))})),
         "events": recent,
+        "per_game": per_game,
         "signup_key": key.map(|k| json!({"id": k.id, "key": k.key, "note": k.note, "created_by": k.created_by, "created_by_name": k.created_by_name})),
     })))
 }
@@ -1002,7 +1006,13 @@ async fn game_page(State(app): State<AppRef>, Path(id): Path<String>) -> Respons
         let live = app.hub().live_json()["games"].as_array().and_then(|g| g.iter().find(|g| g["id"] == id.as_str()).cloned());
         let done = played::Entity::find_by_id(&id).one(db).await?;
         // the replay's actions (they outlive the event log)
-        let replay = crate::replays::data(db, &id).await?.map(|r| json!({"actions": r["actions"], "hash": r["hash"], "first": r["first"]}));
+        let data = crate::replays::data(db, &id).await?;
+        let replay = data.as_ref().map(|r| json!({"actions": r["actions"], "hash": r["hash"], "first": r["first"]}));
+        // the players' decks with their codes
+        let mut decks: Vec<Value> = data.as_ref().and_then(|r| r["players"].as_array().cloned()).unwrap_or_default();
+        if let Some(r) = &data {
+            crate::admin_players::add_codes(&app, r["pack"].as_str().unwrap_or_default(), &mut decks).await;
+        }
         if live.is_none() && done.is_none() && timeline.is_empty() && replay.is_none() {
             return Ok(None);
         }
@@ -1020,7 +1030,7 @@ async fn game_page(State(app): State<AppRef>, Path(id): Path<String>) -> Respons
             }
             (None, None) => json!({"id": id, "live": false, "players": matched.as_ref().map(|m| m["players"].clone())}),
         };
-        Ok::<_, sea_orm::DbErr>(Some(json!({"game": summary, "match": matched, "replay": replay, "events": timeline.iter().map(event_json).collect::<Vec<_>>()})))
+        Ok::<_, sea_orm::DbErr>(Some(json!({"game": summary, "match": matched, "replay": replay, "decks": decks, "events": timeline.iter().map(event_json).collect::<Vec<_>>()})))
     };
     match r.await {
         Ok(Some(v)) => Json(v).into_response(),
@@ -1357,7 +1367,15 @@ async fn tournaments(State(app): State<AppRef>, Query(q): Query<TournamentsQ>) -
 
 async fn tournament_page(State(app): State<AppRef>, Path(id): Path<i64>) -> Response {
     match crate::tournament::admin_get(&app, id).await {
-        Ok(Some(v)) => Json(v).into_response(),
+        Ok(Some(mut v)) => {
+            let pack = v["pack"].as_str().unwrap_or_default().to_string();
+            for e in v["entrants"].as_array_mut().into_iter().flatten() {
+                if let Some(d) = e["decks"].as_array_mut() {
+                    crate::admin_players::add_codes(&app, &pack, d).await;
+                }
+            }
+            Json(v).into_response()
+        }
         Ok(None) => err(StatusCode::NOT_FOUND, "No such tournament"),
         Err(e) => db_err(e),
     }

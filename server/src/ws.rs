@@ -160,7 +160,7 @@ enum In {
 pub const MAX_GAME_SETTINGS: usize = 16;
 
 /// The stored settings with the changes merged in (a null removes a key), or why not.
-fn merge_game_settings(old: &str, changes: serde_json::Map<String, Value>) -> Result<String, E> {
+pub(crate) fn merge_game_settings(old: &str, changes: serde_json::Map<String, Value>) -> Result<String, E> {
     let mut v: serde_json::Map<String, Value> = serde_json::from_str(old).unwrap_or_default();
     for (k, x) in changes {
         if k.is_empty() || k.len() > 32 || !k.bytes().all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'_') {
@@ -183,7 +183,7 @@ fn merge_game_settings(old: &str, changes: serde_json::Map<String, Value>) -> Re
 }
 
 /// An error reply: code and text (and, for server errors, what went wrong, for the event log).
-pub struct E(&'static str, String, Option<String>);
+pub struct E(pub &'static str, pub String, Option<String>);
 
 impl From<DbError> for E {
     fn from(err: DbError) -> E {
@@ -374,7 +374,7 @@ pub async fn friends_of(c: &impl ConnectionTrait, me: i64) -> DbResult<Vec<Accou
     Ok(v)
 }
 
-async fn arena_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Value> {
+pub(crate) async fn arena_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Value> {
     Ok(match arena::Entity::find_by_id(me).one(c).await? {
         None => Value::Null,
         Some(a) => {
@@ -391,7 +391,7 @@ async fn arena_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Value> {
 }
 
 /// The profile: the rank (and season) in a pack (`pack`: its rules_hash) and the Arena run.
-async fn me_json(c: &impl ConnectionTrait, me: i64, rules: &GameRules) -> DbResult<Value> {
+pub(crate) async fn me_json(c: &impl ConnectionTrait, me: i64, rules: &GameRules) -> DbResult<Value> {
     let a = db::account_by_id(c, me).await?.ok_or_else(|| not_found("account"))?;
     let s = db::standing(c, me, &rules.id, &rules.ladder).await?;
     Ok(json!({"user": a.name, "tag": a.tag, "rank": rank_json(c, &s).await?, "arena": arena_json(c, me).await?,
@@ -512,14 +512,14 @@ fn deck_to_keep(d: &DeckIn, rules: &GameRules) -> Result<String, E> {
 }
 
 /// `game_settings {games: {<pack id>: {key: text}}}`: every game's settings of an account.
-async fn game_settings_msg<C: ConnectionTrait>(db: &C, me: i64) -> Result<Value, DbError> {
+pub(crate) async fn game_settings_msg<C: ConnectionTrait>(db: &C, me: i64) -> Result<Value, DbError> {
     let rows = game_setting::Entity::find().filter(game_setting::Column::Account.eq(me)).all(db).await?;
     let games: serde_json::Map<String, Value> =
         rows.into_iter().map(|r| (r.pack, serde_json::from_str(&r.value).unwrap_or_else(|_| json!({})))).collect();
     Ok(json!({"t": "game_settings", "games": games}))
 }
 
-fn deck_json(d: &deck::Model) -> Value {
+pub(crate) fn deck_json(d: &deck::Model) -> Value {
     let cards: Value = serde_json::from_str(&d.cards).unwrap_or_else(|_| json!([]));
     json!({"id": d.id, "pack": d.pack, "name": d.name, "hero": d.hero, "cards": cards, "created": d.created, "updated": d.updated})
 }
@@ -821,6 +821,9 @@ impl Session {
             }
             In::Me { pack } => {
                 let (rules, _) = self.game_of(pack.as_deref(), None).await?;
+                if let Some(c) = app.hub().conns.get_mut(&me) {
+                    c.me_pack = pack;
+                }
                 self.ok(json!({"t": "me", "me": me_json(db, me, &rules).await?}))
             }
             In::SetTag { tag } => {

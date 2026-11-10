@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { api, qs } from './api.js'
 import { playReplay } from './extra.js'
-import { html, useLive, useEvents, useLoad, useDebounced, useTick, setQuery, go, Card, Kind, UserLink, Pager, ErrorBox, Empty, Icon, Json, clock, fullDate, dur, ago, num } from './ui.js'
+import { html, useLive, useEvents, useLoad, useDebounced, useTick, setQuery, go, Card, Kind, UserLink, Pager, ErrorBox, Empty, Icon, Json, CopyCode, DeckList, clock, fullDate, dur, ago, num } from './ui.js'
 
 const REASONS = ['over', 'left', 'disconnect', 'illegal', 'desync', 'cheat', 'protocol', 'aborted']
 
@@ -128,6 +128,9 @@ export function GamePage ({ id }) {
             <b>${p.id != null ? html`<${UserLink} ...${p} />` : p.user}</b>
             ${heroes[i] && html`<span class="muted small mono">${heroes[i]}</span>`}
             ${lg && html`<span class="small">${lg.current === i ? '▶ to move' : ''} ${p.online === false ? html`<span class="badge warn">away</span>` : ''}</span>`}
+            ${data.decks && data.decks[i] && html`<details class="deck-details"><summary>
+              ${data.decks[i].class_name || data.decks[i].class} deck · ${data.decks[i].count} cards</summary>
+              <${DeckList} d=${data.decks[i]} /></details><${CopyCode} code=${data.decks[i].code} />`}
           </div>`)}
         </${Card}>
         ${data.replay && html`<${Card} title=${`Replay · ${num(data.replay.actions.length)} actions`}

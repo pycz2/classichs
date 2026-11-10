@@ -304,3 +304,34 @@ export function Toasts () {
 export function Json ({ value }) {
   return html`<pre class="json">${JSON.stringify(value, null, 2)}</pre>`
 }
+
+// --- decks ------------------------------------------------------------------------------------
+
+/** Copies a text; where the Clipboard API is missing or refuses (plain http), through a hidden field. */
+export async function copyText (value, done = 'Copied') {
+  try {
+    await navigator.clipboard.writeText(value)
+  } catch (err) {
+    const t = Object.assign(document.createElement('textarea'), { value })
+    t.style.cssText = 'position: fixed; opacity: 0'
+    document.body.append(t)
+    t.select()
+    const ok = document.execCommand('copy')
+    t.remove()
+    if (!ok) return toast('Copy failed: ' + err.message, 'err')
+  }
+  toast(done)
+}
+
+/** "Copy code": a deck's code (the game's Import Code reads it) to the clipboard. */
+export function CopyCode ({ code, label = 'Copy code' }) {
+  if (!code) return html`<span class="muted small" title="A card of it is not in this game">no code</span>`
+  return html`<button class="btn ghost sm copy-code" title=${'Deck code: ' + code} onClick=${(e) => { e.stopPropagation(); copyText(code, 'Deck code copied') }}>
+    <${Icon} name="copy" size=${14} />${label}</button>`
+}
+
+/** A deck's cards: cost, English name, copies ({cards: [{id, name, cost, n}]}). */
+export function DeckList ({ d }) {
+  return html`<div class="decklist">${d.cards.map((c) => html`<div key=${c.id} class="dl-card" title=${c.id}>
+    <span class="cost">${c.cost ?? '?'}</span><span class="dl-name">${c.name}</span>${c.n > 1 && html`<span class="dl-n">×${c.n}</span>`}</div>`)}</div>`
+}
