@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.66.0] - 2026-11-10
+
+### Ajouté
+- Panneau d’administration, page d’un joueur : par jeu — le rang (rang, étoiles, Légende, série, MMR cachés ; retour au début de saison), les réglages du jeu, les decks (leurs cartes, copier le code, ajouter depuis un code vérifié par les règles, renommer, supprimer, copier vers un autre joueur) ; la course d’Arène (victoires, défaites, remise à zéro, fin) ; le tag. Les changements parviennent tout de suite au joueur s’il est en ligne et vont au journal. Le code d’un deck (format Hearthstone) peut être copié partout où le panneau montre des decks : statistiques, page d’un match, participants d’un tournoi.
+
 ## [0.65.0] - 2026-11-10
 
 ### Ajouté

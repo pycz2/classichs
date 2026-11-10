@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.66.0] - 2026-11-10
+
+### Dodano
+- Panel administracyjny, strona gracza: dla każdej gry — ranga (ranga, gwiazdki, Legenda, seria, ukryte MMR; powrót do początku sezonu), ustawienia gry, talie (karty, kopiowanie kodu, dodanie z kodu sprawdzonego regułami, zmiana nazwy, usunięcie, kopiowanie innemu graczowi); przebieg Areny (wygrane, przegrane, reset, zakończenie); tag. Zmiany od razu docierają do gracza, jeśli jest online, i trafiają do dziennika. Kod talii (format Hearthstone) można skopiować wszędzie, gdzie panel pokazuje talie: w statystykach, na stronie meczu, u uczestników turnieju.
+
 ## [0.65.0] - 2026-11-10
 
 ### Dodano

@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.66.0] - 2026-11-10
+
+### Añadido
+- Panel de administración, página de un jugador: por juego — el rango (rango, estrellas, Leyenda, racha, MMR ocultos; volver al inicio de temporada), los ajustes del juego, los mazos (sus cartas, copiar el código, añadir desde un código comprobado con las reglas, renombrar, borrar, copiar a otro jugador); la racha de Arena (victorias, derrotas, reinicio, fin); la etiqueta. Los cambios llegan al momento al jugador si está conectado y van al registro. El código de un mazo (formato de Hearthstone) se puede copiar donde el panel muestre mazos: estadísticas, la página de una partida, los participantes de un torneo.
+
 ## [0.65.0] - 2026-11-10
 
 ### Añadido

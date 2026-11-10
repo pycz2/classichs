@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.66.0] - 2026-11-10
+
+### Aggiunto
+- Pannello di amministrazione, pagina di un giocatore: per ogni gioco — il grado (grado, stelle, Leggenda, serie, MMR nascosti; ritorno all’inizio della stagione), le impostazioni del gioco, i mazzi (le carte, copia del codice, aggiunta da un codice verificato con le regole, rinomina, eliminazione, copia a un altro giocatore); la corsa dell’Arena (vittorie, sconfitte, azzeramento, fine); il tag. Le modifiche arrivano subito al giocatore se è online e finiscono nel registro. Il codice di un mazzo (formato di Hearthstone) si può copiare ovunque il pannello mostri dei mazzi: statistiche, pagina di un incontro, partecipanti di un torneo.
+
 ## [0.65.0] - 2026-11-10
 
 ### Aggiunto

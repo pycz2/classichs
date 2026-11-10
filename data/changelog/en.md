@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.66.0] - 2026-11-10
+
+### Added
+- Admin panel, a player's page: per game — the rank (rank, stars, Legend, streak, hidden MMRs; reset to the season's start), the game settings, the decks (their cards, copy the code, add from a code checked by the rules, rename, delete, copy to another player); the Arena run (wins, losses, reset, end); the tag. Changes reach the player at once when online and go to the log. A deck code (Hearthstone format) can be copied wherever the admin panel shows decks: statistics, a match's page, tournament entrants.
+
 ## [0.65.0] - 2026-11-10
 
 ### Added

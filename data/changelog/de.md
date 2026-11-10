@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.66.0] - 2026-11-10
+
+### Hinzugefügt
+- Admin-Panel, Spielerseite: je Spiel — der Rang (Rang, Sterne, Legende, Serie, versteckte MMR; Zurücksetzen auf den Saisonstart), die Spieleinstellungen, die Decks (Karten, Code kopieren, aus einem Code hinzufügen mit Regelprüfung, umbenennen, löschen, an einen anderen Spieler kopieren); der Arena-Lauf (Siege, Niederlagen, zurücksetzen, beenden); das Kürzel. Änderungen erreichen den Spieler sofort, wenn er online ist, und kommen ins Protokoll. Ein Deckcode (Hearthstone-Format) lässt sich überall kopieren, wo das Admin-Panel Decks zeigt: Statistik, Seite eines Matches, Turnierteilnehmer.
+
 ## [0.65.0] - 2026-11-10
 
 ### Hinzugefügt

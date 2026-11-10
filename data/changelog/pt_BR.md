@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.66.0] - 2026-11-10
+
+### Adicionado
+- Painel de administração, página de um jogador: por jogo — a patente (patente, estrelas, Lenda, sequência, MMR ocultos; voltar ao início da temporada), as configurações do jogo, os decks (cartas, copiar o código, adicionar por um código conferido pelas regras, renomear, apagar, copiar para outro jogador); a corrida da Arena (vitórias, derrotas, reiniciar, encerrar); a tag. As mudanças chegam na hora ao jogador se ele estiver online e vão para o registro. O código de um deck (formato do Hearthstone) pode ser copiado onde o painel mostra decks: estatísticas, página de uma partida, participantes de um torneio.
+
 ## [0.65.0] - 2026-11-10
 
 ### Adicionado
