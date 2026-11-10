@@ -1,0 +1,12 @@
+{
+ "mechanics": {
+  "POISONOUS": {
+   "name": "Veneno",
+   "tip": "Destruye a cualquier esbirro al que inflija daño."
+  }
+ },
+ "sets": {
+  "VANILLA": "Clásico",
+  "NAXX": "La maldición de Naxxramas"
+ }
+}

@@ -10,6 +10,7 @@
     {"id": "SPELLPROOF", "kind": "keyword", "silenced": true, "about": "Cannot be targeted by spells or powers."},
     {"id": "CANT_ATTACK", "kind": "keyword", "silenced": true, "about": "Cannot attack."},
     {"id": "IMMUNE", "kind": "keyword", "silenced": true, "about": "Takes no damage."},
+    {"id": "POISON", "kind": "keyword", "silenced": true, "about": "Destroys any minion it damages."},
     {"id": "SPELL_POWER", "kind": "keyword", "silenced": true, "about": "Its number is added to the damage of its owner's spells (card field spell_power)."},
     {"id": "MANA_LOCK", "kind": "keyword", "silenced": false, "about": "Locks that many of its owner's mana next turn (card field mana_lock)."},
     {"id": "TRAP", "kind": "keyword", "silenced": false, "about": "A hidden spell that goes off on an event in the opponent's turn. The zone that holds traps is named after the pack's TRAP mechanic."},
@@ -38,7 +39,9 @@
     {"id": "TO_DESTROY", "kind": "state", "silenced": false, "about": "Dies in the next death phase."},
     {"id": "DIED_POS", "kind": "state", "silenced": false, "about": "The board position it died at."},
     {"id": "POWER_MULTIPLIER", "kind": "state", "silenced": false, "about": "Doubles the damage and healing of its owner's spells and power (an aura tag)."},
-    {"id": "HEAL_IS_DAMAGE", "kind": "state", "silenced": false, "about": "Its owner's healing deals damage instead (an aura tag)."}
+    {"id": "HEAL_IS_DAMAGE", "kind": "state", "silenced": false, "about": "Its owner's healing deals damage instead (an aura tag)."},
+    {"id": "DOUBLE_ON_DEATH", "kind": "state", "silenced": false, "about": "Its owner's minions run their ON_DEATH hooks twice (an aura tag on the champion)."},
+    {"id": "DIED_TURN", "kind": "state", "silenced": false, "about": "The turn a minion died. Written only by packs that name it in rules.json mechanics (a new tag changes the state)."}
   ],
   "types": ["MINION", "SPELL", "WEAPON", "CHAMPION", "POWER"],
   "zones": ["DECK", "HAND", "PLAY", "TRAP", "GRAVEYARD", "SETASIDE"],

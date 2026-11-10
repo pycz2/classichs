@@ -351,9 +351,12 @@ func _after() -> void:
 			_after())
 
 
-## Whether the bot thinks with BotBrain (a level, the built-in Classic rules it knows, a build that has it).
+## Whether the bot thinks with BotBrain (a level, Classic or a pack whose rules ask for it — rules.json
+## bot.brain, Naxxramas — and a build that has it).
 func uses_brain() -> bool:
-	return bot_level != "" and not is_server() and Packs.active() != null and Packs.active().id() == Packs.CLASSIC \
+	var p := Packs.active()
+	return bot_level != "" and not is_server() and p != null \
+		and (p.id() == Packs.CLASSIC or (p.rules().get("bot", {}) is Dictionary and p.rules().get("bot", {}).get("brain") == true)) \
 		and BotBrain.available()
 
 

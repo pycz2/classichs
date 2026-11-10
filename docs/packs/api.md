@@ -175,6 +175,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.enchants(e, hooks)` | The `player` fields of `e`'s enchantments with these hooks. |
 | `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`. |
 | `g.collectible()` | Collectible card ids of the constructed sets, sorted. |
+| `g.graveyard(p)` | `p`'s cards in the GRAVEYARD zone, in play order: dead minions and weapons, played spells, discarded and burned cards. A minion that died on the board has `DIED_POS` (`g.died_pos(e) >= 0`), and `DIED_TURN` (the turn) in a pack that names that mechanic (Naxxramas: Kel'Thuzad, Feugen and Stalagg). |
 
 ### Actions (not in read-only hooks)
 
@@ -222,6 +223,8 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.pick(list)` | A random item (or `nil` for an empty list). |
 | `g.random_alive(list)` | A random item that is in play and not dying, or `nil`. |
 | `g.shuffle(list)` | Shuffles the list in place (and returns it). |
+| `g.put_trap(e)` | Puts a trap card of its owner's hand or deck into play, as if played but without the `play` event (logs `trap_put`); `false` when `e` is no trap there or the same trap is already in play (Mad Scientist). |
+| `g.resolve()` | Runs the queued triggers and the death phase now, inside the hook (Poison Seeds and Reincarnate: the destroyed minions die and their Deathrattles go before the Treants or the copy come). |
 
 Randomness must come from these (the game's seeded generator): every
 platform, the server and replays then agree.

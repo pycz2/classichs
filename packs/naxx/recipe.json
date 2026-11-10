@@ -1,0 +1,24 @@
+{
+  "about": "How tools/pack.py builds Naxxramas 2014 (docs/packs/format.md, 'Build recipes'): Classic's cards, patch, scripts, texts and pictures by reference (a fix to Classic reaches this pack at its next build), then the Naxxramas cards (data/naxx_cards.json, tools/extract_cards.py --naxx) with their release-time texts (data/naxx_texts.json) and this pack's own patch (cards.patch.json: the release stats and tribes, the scripts of scripts/naxx.lua). Paths in steps are relative to root.",
+  "root": "../..",
+  "steps": [
+    {"do": "locales", "from": "packs/classic/locales", "sections": ["classes", "races", "rarities", "mechanics", "ranks", "cards"]},
+    {"do": "hsjson", "from": ["data/cards.json", "data/naxx_cards.json"], "patch": ["../classic/cards.patch.json", "cards.patch.json"],
+     "texts": ["data/naxx_texts.json"],
+     "locales": {"en": "enUS", "ru": "ruRU", "de": "deDE", "fr": "frFR", "es": "esES", "pt_BR": "ptBR", "it": "itIT", "pl": "plPL"},
+     "rename": {"HERO": "CHAMPION", "HERO_POWER": "POWER"}},
+    {"do": "keywords", "from": "data/keywords.json"},
+    {"do": "voice", "from": "data/voice_lines.json"},
+    {"do": "translate", "from": "data/i18n", "sections": ["rarities", "ranks"]},
+    {"do": "rank_names"},
+    {"do": "copy", "from": "packs/classic/scripts", "to": "scripts", "files": ["*.lua"]},
+    {"do": "copy", "from": "packs/classic/ui/fonts", "to": "ui/fonts", "files": ["*.ttf", "*.txt"]},
+    {"do": "copy", "from": "art/cards", "to": "art/generated", "files": ["*.jpg"]},
+    {"do": "copy", "from": "art/cartoon", "to": "art/cartoon", "files": ["*.webp"]},
+    {"do": "copy", "from": "art/simple", "to": "art/simple", "files": ["*.webp"]},
+    {"do": "copy", "from": "art/photo", "to": "art/photo", "files": ["*.webp"]},
+    {"do": "copy", "from": "audio", "to": "sounds/generated", "files": ["*.wav"], "except": ["menu.wav", "battle_*.wav"]},
+    {"do": "copy", "from": "audio", "to": "music/generated", "files": ["menu.wav", "battle_*.wav"]},
+    {"do": "copy", "from": "audio/open", "to": "music/open", "files": ["*.ogg", "CREDITS.md"]}
+  ]
+}

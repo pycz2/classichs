@@ -189,7 +189,7 @@ func test_tiny_duel_builds_checks_loads_and_plays() -> void:
 
 
 func test_the_built_in_packs_check_clean_as_with_the_pack_tool() -> void:
-	for f in ["classic", "neon"]:
+	for f in ["classic", "neon", "naxx"]:
 		var c := PackCheck.open_file(FileAccess.get_file_as_bytes("res://packs/%s.cardpack" % f), f + ".cardpack")
 		c.check()
 		eq(_bad(c), [], f + ": tools/pack.py check finds nothing either")

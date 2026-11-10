@@ -162,6 +162,7 @@ does not map is written as the engine id.
 | `SPELLPROOF` | keyword | Can't be targeted by spells and powers | `ELUSIVE` |
 | `CANT_ATTACK` | keyword | Can't attack | `CANT_ATTACK` |
 | `IMMUNE` | keyword | Takes no damage | `IMMUNE` |
+| `POISON` | keyword | Destroys any minion it damages | — (Naxxramas: `POISONOUS`, Maexxna) |
 | `SPELL_POWER` | keyword | +N spell damage (card field `spell_power`) | `SPELLPOWER` |
 | `MANA_LOCK` | keyword | Locks N mana next turn (card field `mana_lock`) | `OVERLOAD` |
 | `TRAP` | keyword | Hidden spell that fires on an event | `SECRET` |
@@ -175,6 +176,8 @@ does not map is written as the engine id.
 | `SPELL_SCALED`, `NO_SPELL_POWER` | marker | Spell power changes / does not change its numbers | `AFFECTED_BY_SPELL_POWER`, `ImmuneToSpellpower` |
 | `FROZEN`, `FROZEN_THIS_TURN`, `EXHAUSTED`, `ATTACKS`, `ARMOR`, `DURABILITY`, `USED`, `LOCKED`, `GUARDED`, `TO_DESTROY`, `DIED_POS`, `HEAL_IS_DAMAGE` | state | Tags the engine sets during a game | same |
 | `POWER_MULTIPLIER` | state | Doubles spell and power damage and healing (aura tag) | `DOUBLE_HEAL_DAMAGE` |
+| `DOUBLE_ON_DEATH` | state | Its owner's minions run their death hooks twice (aura tag on the champion; not while its source dies with them) | — (Naxxramas: `DOUBLE_DEATHRATTLE`, Baron Rivendare) |
+| `DIED_TURN` | state | The turn a minion died; written only by a pack that names it (a new tag would change Classic's recorded states) | — (Naxxramas: `DIED_TURN`, Kel'Thuzad) |
 
 Kinds: *keyword* — a tag a card carries from its data and the engine reads;
 *hook* — the card has a hook of that kind (shown to players, no tag); *marker* —
@@ -293,7 +296,8 @@ A pack source is a folder with the pack's own files (`manifest.json`,
 | `do` | Fields | What it adds |
 |---|---|---|
 | `copy` | `from`, `to`, `files` (globs), `except` | Files of one folder (not recursive; `.import` skipped). |
-| `hsjson` | `from`, `patch`, `locales` (lang → HS locale), `rename` (type map) | `cards.json` from HearthstoneJSON data and card names/texts; `patch` (`<name>.patch.json`, card id → fields) adds or overrides fields such as `power` and `fx`. |
+| `hsjson` | `from`, `patch`, `texts`, `locales` (lang → HS locale), `rename` (type map) | `cards.json` from HearthstoneJSON data and card names/texts; `patch` (`<name>.patch.json`, card id → fields, relative to the source folder) adds or overrides fields such as `power` and `fx` (`null` removes one). `from`, `patch` and `texts` may be lists: the cards of every file; patches in order, a later one wins for a field it names (Naxxramas: Classic's patch, then its own); `texts` (card id → `{name?, text?}` in HS locales) replace HearthstoneJSON's. |
+| `locales` | `from` (a folder of `<lang>.json`), `sections` | Another pack's hand-written texts of these sections, under this pack's own (Naxxramas takes Classic's `classes`, `races`, `mechanics`, …). |
 | `keywords` | `from` | Mechanic names and tips (`{NAME: {name: {lang}, text: {lang}}}`). |
 | `voice` | `from` | Voice line texts (`{card: {kind: {lang: text}}}`). |
 | `translate` | `from` (folder of `<lang>.json`: English → text), `sections` | Fills those sections of other languages from the default language's strings. |

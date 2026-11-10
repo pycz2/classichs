@@ -122,6 +122,8 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 					str(ev.set_atk) if ev.set_atk >= 0 else "-", str(ev.set_hp) if ev.set_hp >= 0 else "-"]
 		"secret_revealed":
 			s = _t("Secret revealed: %s") % CardText.name(ev.card, loc)
+		"trap_put":
+			s = _say(p, viewer, "You put a Secret into play", "Opponent puts a Secret into play", [])
 		"add_to_hand":
 			s = _t("%s is added to your hand") % CardText.name(ev.card, loc) if _you(p, viewer) \
 				else _t("A card is added to Opponent's hand")

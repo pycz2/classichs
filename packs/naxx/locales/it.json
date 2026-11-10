@@ -1,0 +1,12 @@
+{
+ "mechanics": {
+  "POISONOUS": {
+   "name": "Veleno",
+   "tip": "Distrugge qualsiasi servitore a cui infligge danni."
+  }
+ },
+ "sets": {
+  "VANILLA": "Classico",
+  "NAXX": "La Maledizione di Naxxramas"
+ }
+}

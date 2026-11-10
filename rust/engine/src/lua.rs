@@ -757,6 +757,12 @@ fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
     one(t)
 }
 
+ql!(q_graveyard, |g, a| {
+    let p = player(&a, 0)?;
+    let v: Vec<Id> = g.entities.iter().filter(|e| e.zone == "GRAVEYARD" && e.controller == p).map(|e| e.id).collect();
+    g.by_order(v)
+});
+
 fn q_collectible<C: Ctx>(h: &mut C, _a: Args) -> R {
     let v: Vec<L> = h.game()?.rs.collectible.iter().map(|s| L::from(s.as_str())).collect();
     one(h.vm().list(v)?)
@@ -782,6 +788,7 @@ macro_rules! queries {
             ("g.trap_ready", q_trap_ready::<$t>), ("g.spell_dmg", q_spell_dmg::<$t>), ("g.heal_amt", q_heal_amt::<$t>),
             ("g.hp_dmg", q_hp_dmg::<$t>), ("g.rule", q_rule::<$t>), ("g.combo", q_combo::<$t>), ("g.mine", q_mine::<$t>),
             ("g.enchants", q_enchants::<$t>), ("g.info", q_info::<$t>), ("g.collectible", q_collectible::<$t>),
+            ("g.graveyard", q_graveyard::<$t>),
         ]
     };
 }
@@ -1161,6 +1168,16 @@ fn a_shuffle(g: &mut Game, a: Args) -> R {
     }
     one(t)
 }
+fn a_put_trap(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let e = ent(g, &a, 0)?;
+    one(g.put_trap(e))
+}
+fn a_resolve(g: &mut Game, _a: Args) -> R {
+    live(g)?;
+    g.resolve();
+    none()
+}
 fn a_cost(g: &mut Game, a: Args) -> R {
     let e = ent(g, &a, 0)?;
     one(g.cost(e))
@@ -1179,5 +1196,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.aura_add", a_aura_add), ("g.replace_hero", a_replace_hero), ("g.set_power", a_set_power), ("g.reveal", a_reveal),
     ("g.request_choice", a_request_choice), ("g.add_cost_mod", a_add_cost_mod), ("g.log", a_log), ("g.emit", a_emit),
     ("g.remove", a_remove), ("g.random", a_random), ("g.pick", a_pick), ("g.random_alive", a_random_alive),
-    ("g.shuffle", a_shuffle), ("g.cost", a_cost),
+    ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
 ];

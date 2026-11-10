@@ -38,7 +38,8 @@
       "additionalProperties": false,
       "properties": {
         "trap": {"type": "integer", "minimum": 0, "maximum": 99},
-        "depth": {"type": "integer", "minimum": 1, "maximum": 2}
+        "depth": {"type": "integer", "minimum": 1, "maximum": 2},
+        "brain": {"type": "boolean"}
       }
     },
     "fatigue": {

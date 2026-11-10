@@ -34,9 +34,9 @@ func test_canonical_json_and_hashes_match_the_pack_tool() -> void:
 
 func test_built_in_packs_are_whole_and_classic_is_active() -> void:
 	var ids := Packs.all().map(func(p): return p.id())
-	eq(ids.slice(0, 2), [Packs.CLASSIC, "neon"], "Classic first, then Neonfall")
+	eq(ids.slice(0, 3), [Packs.CLASSIC, "naxx-2014", "neon"], "Classic first, then the others by id")
 	eq(Packs.active().id(), Packs.CLASSIC, "Classic by default")
-	for id in ["classic-2014", "neon"]:
+	for id in ["classic-2014", "naxx-2014", "neon"]:
 		var p := _pack(id)
 		eq(p.problems(), [], id + " is a valid pack")
 		eq(p.computed_rules_hash(), p.rules_hash(), id + ": the files match the manifest")
@@ -153,7 +153,7 @@ func test_games_screen_lists_selects_activates_and_deletes() -> void:
 	(Engine.get_main_loop() as SceneTree).root.add_child(v)
 	v.import_bytes(other, "mine.cardpack")
 	var tiles := v.find_children("Pack_*", "Button", true, false)
-	eq(tiles.size(), 3, "a tile per pack")
+	eq(tiles.size(), 4, "a tile per pack")
 	eq(v.selected.origin, "imported", "the imported pack is selected")
 	check(v.find_child("DeletePack", true, false) != null, "it can be deleted")
 	var entered := []
@@ -168,7 +168,7 @@ func test_games_screen_lists_selects_activates_and_deletes() -> void:
 	(v.find_child("ConfirmDelete", true, false) as Button).pressed.emit()
 	eq(Packs.active().id(), Packs.CLASSIC, "Classic stays active")
 	eq(DeckStore.count_local("neon"), 1, "the built-in Neonfall keeps the decks of its id")
-	eq(v.find_children("Pack_*", "Button", true, false).size(), 2, "its tile is gone")
+	eq(v.find_children("Pack_*", "Button", true, false).size(), 3, "its tile is gone")
 	v.select(_pack("neon"))
 	check(v.find_child("DeletePack", true, false) == null, "a built-in pack can't be deleted")
 	v.free()
@@ -362,7 +362,7 @@ func test_a_pack_with_the_servers_rules_and_other_pictures_can_be_uploaded() -> 
 	l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"name": "A"}})
 	var entry := func(p: Pack) -> Dictionary:
 		return {"id": p.id(), "name": {"en": p.id()}, "version": "1", "rules_hash": p.rules_hash(), "content_hash": Packs.content_hash(p), "size": 1}
-	l.dispatch({"t": "packs", "server": [entry.call(neon), entry.call(_pack(Packs.CLASSIC))], "mine": []})
+	l.dispatch({"t": "packs", "server": [entry.call(neon), entry.call(_pack(Packs.CLASSIC)), entry.call(_pack("naxx-2014"))], "mine": []})
 	var h := ServerHome.new()
 	h.link = l
 	(Engine.get_main_loop() as SceneTree).root.add_child(h)
@@ -371,7 +371,7 @@ func test_a_pack_with_the_servers_rules_and_other_pictures_can_be_uploaded() -> 
 		return h.find_child("UploadPanel", true, false).find_children("Upload_*", "Button", true, false)
 	eq(offered.call().size(), 1, "only the pack with other files")
 	h.find_child("UploadPanel", true, false).free()
-	l.dispatch({"t": "packs", "server": [entry.call(neon), entry.call(_pack(Packs.CLASSIC))], "mine": [entry.call(own)]})
+	l.dispatch({"t": "packs", "server": [entry.call(neon), entry.call(_pack(Packs.CLASSIC)), entry.call(_pack("naxx-2014"))], "mine": [entry.call(own)]})
 	h.show_upload()
 	eq(offered.call().size(), 0, "uploaded: no longer offered")
 	h.free()

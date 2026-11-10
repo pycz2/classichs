@@ -1,0 +1,12 @@
+{
+ "mechanics": {
+  "POISONOUS": {
+   "name": "Venenoso",
+   "tip": "Destrói qualquer lacaio que ele danifique."
+  }
+ },
+ "sets": {
+  "VANILLA": "Clássico",
+  "NAXX": "A Maldição de Naxxramas"
+ }
+}

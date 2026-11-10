@@ -960,7 +960,7 @@ mod tests {
     /// The built packs of the repository (tools/build_packs.sh) pass the whole check.
     #[test]
     fn built_packs_pass_the_trial() {
-        for f in ["classic", "neon"] {
+        for f in ["classic", "neon", "naxx"] {
             let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(format!("../packs/{f}.cardpack"));
             let Ok(bytes) = std::fs::read(&path) else {
                 eprintln!("{}: not built (tools/build_packs.sh), skipped", path.display());

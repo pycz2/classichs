@@ -1,0 +1,31 @@
+{
+ "about": "Naxxramas's interface (docs/packs/format.md, 'UI theme'): the necropolis — cold dark stone panels with a sickly green rim, buttons that glow plague green, bone-white text, frost drifting over the menu; the title in Classic's Cinzel Decorative, in green.",
+ "colors": {
+  "text": "e9efe4",
+  "muted": "a3b39c",
+  "accent": "9be35a",
+  "table": "0d120f",
+  "panel": "101611f0",
+  "panel_border": "5f8f4a",
+  "backdrop": "56645a",
+  "button": "1c2a21f0",
+  "button_hover": "26392b",
+  "button_pressed": "121b15",
+  "button_disabled": "141a16a6",
+  "button_border": "7fcf4f",
+  "button_text": "eef5e8",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "c5f29b",
+  "button_text_disabled": "6c7a68",
+  "outline": "040605",
+  "danger": "ff5a4f",
+  "ok": "8ef06a"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 6, "border": 1, "glow": "7fcf4f33", "glow_size": 4, "glow_hover": "9be35a99", "glow_hover_size": 12},
+ "panel": {"radius": 8, "border": 2, "glow": "3d7a2a40", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "1f3324", "border": "9be35a", "text": "f2fbe9", "ready": "2c4a1e", "ready_border": "c5f29b"},
+ "mana": "4cc3ff",
+ "menu": {"shade": "05080659", "particles": "snow"}
+}
