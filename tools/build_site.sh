@@ -48,5 +48,6 @@ cp -R "$OUT"/. "$WT"/
 git -C "$WT" add -A
 git -C "$WT" commit -q -m "Site from $REV" || echo "No changes"
 git -C "$WT" push origin gh-pages
+gh workflow run pages.yml  # the deploy to Pages (.github/workflows/pages.yml: our own, with a longer limit)
 git worktree remove "$WT"
 echo "Published: https://pycz2.github.io/classichs/"

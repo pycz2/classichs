@@ -1,0 +1,32 @@
+# Deploys the site (the gh-pages branch, built by tools/build_site.sh --publish) to GitHub Pages.
+# Our own deploy instead of the built-in one: its 10-minute limit for syncing the files ran out
+# with the web build's large index.pck (2026-11-10); here the deploy may take 30 minutes.
+# tools/build_site.sh --publish starts it; by hand: gh workflow run pages.yml
+name: Pages
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+      - run: rm -rf .git
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+      - id: deploy
+        uses: actions/deploy-pages@v5
+        with:
+          timeout: 1800000
