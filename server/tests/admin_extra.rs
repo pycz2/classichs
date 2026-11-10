@@ -87,7 +87,7 @@ async fn version_and_storage_sizes() {
     assert_eq!((s["packs"]["bytes"].as_u64(), s["packs"]["files"].as_u64()), (Some(1234), Some(2)));
     assert!(s["packs"]["what"].as_str().unwrap().starts_with("dir "));
     assert_eq!(call(&app, get("/admin/api/storage", "")).await.status, StatusCode::UNAUTHORIZED);
-    std::fs::remove_dir_all(&dir).unwrap();
+    let _ = std::fs::remove_dir_all(&dir);  // (Windows: the database may still be open)
 }
 
 #[tokio::test]
@@ -107,7 +107,7 @@ async fn pack_file_by_content_or_rules_hash() {
     }
     assert_eq!(call(&app, get(&format!("/admin/api/pack_files/{}", "0".repeat(64)), &cookie)).await.status, StatusCode::NOT_FOUND);
     assert_eq!(call(&app, get("/admin/api/pack_files/..%2Fx", &cookie)).await.status, StatusCode::NOT_FOUND);
-    std::fs::remove_dir_all(&dir).unwrap();
+    let _ = std::fs::remove_dir_all(&dir);  // (Windows: the database may still be open)
 }
 
 #[tokio::test]
@@ -153,5 +153,5 @@ async fn replay_player_files_guard_and_headers() {
     let csp = r.header(header::CONTENT_SECURITY_POLICY);
     assert!(csp.contains("default-src 'none'") && csp.contains("frame-src 'self'") && csp.contains("frame-ancestors 'none'") && !csp.contains("wasm"), "{csp}");
     assert_eq!(r.header(header::X_FRAME_OPTIONS), "DENY");
-    std::fs::remove_dir_all(&dir).unwrap();
+    let _ = std::fs::remove_dir_all(&dir);  // (Windows: the database may still be open)
 }
