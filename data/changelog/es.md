@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.64.0] - 2026-11-10
+
+### Cambiado
+- El bot Muy difícil del entrenamiento es más fuerte: busca un plan para todo el turno (búsqueda en haz), mira la respuesta del rival y su propio turno siguiente, y juzga las posiciones con un modelo aprendido de 2000 partidas. Gana el 60 % de las partidas contra Difícil (400 partidas con 19 mazos) y el 72 % contra Medio. Como antes, piensa hasta 6 segundos por decisión y termina 10 segundos antes del final de su turno.
+
 ## [0.63.0] - 2026-11-10
 
 ### Añadido

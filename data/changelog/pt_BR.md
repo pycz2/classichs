@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.64.0] - 2026-11-10
+
+### Alterado
+- O bot Muito difícil do treino está mais forte: ele busca um plano para o turno inteiro (busca em feixe), olha a resposta do oponente e o próprio turno seguinte, e julga as posições com um modelo aprendido em 2000 partidas. Vence 60% das partidas contra o Difícil (400 partidas com 19 decks) e 72% contra o Médio. Como antes, pensa até 6 segundos por decisão e termina 10 segundos antes do fim do turno.
+
 ## [0.63.0] - 2026-11-10
 
 ### Adicionado

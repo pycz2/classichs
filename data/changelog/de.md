@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.64.0] - 2026-11-10
+
+### Geändert
+- Der superschwere Bot im Training ist stärker: Er sucht einen Plan für den ganzen Zug (Strahlsuche), sieht die Antwort des Gegners und seinen eigenen nächsten Zug und bewertet Stellungen mit einem aus 2000 Spielen gelernten Modell. Gegen Schwer gewinnt er 60 % der Spiele (400 Spiele mit 19 Decks), gegen Mittel 72 %. Wie bisher denkt er bis zu 6 Sekunden je Entscheidung und ist 10 Sekunden vor dem Ende seines Zuges fertig.
+
 ## [0.63.0] - 2026-11-10
 
 ### Hinzugefügt

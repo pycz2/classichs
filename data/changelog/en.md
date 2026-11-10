@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.64.0] - 2026-11-10
+
+### Changed
+- The Super hard bot in training is stronger: it searches a plan for the whole turn (a beam search), looks at the opponent's answer and its own next turn, and judges positions with a model learned from 2000 games. It wins 60% of games against Hard (400 games over 19 decks) and 72% against Medium. As before, it thinks up to 6 seconds a decision and is done 10 seconds before its turn ends.
+
 ## [0.63.0] - 2026-11-10
 
 ### Added

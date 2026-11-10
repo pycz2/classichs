@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.64.0] - 2026-11-10
+
+### Zmieniono
+- Bardzo trudny bot na treningu jest silniejszy: szuka planu na całą turę (przeszukiwanie wiązkowe), patrzy na odpowiedź przeciwnika i własną następną turę, a pozycje ocenia modelem wyuczonym na 2000 gier. Wygrywa 60% gier z Trudnym (400 gier na 19 taliach) i 72% ze Średnim. Jak dotąd myśli do 6 sekund na decyzję i kończy 10 sekund przed końcem swojej tury.
+
 ## [0.63.0] - 2026-11-10
 
 ### Dodano

@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.64.0] - 2026-11-10
+
+### Modificato
+- Il bot Difficilissimo dell’allenamento è più forte: cerca un piano per tutto il turno (ricerca a fascio), guarda la risposta dell’avversario e il proprio turno successivo, e giudica le posizioni con un modello appreso da 2000 partite. Vince il 60% delle partite contro Difficile (400 partite con 19 mazzi) e il 72% contro Medio. Come prima, pensa fino a 6 secondi per decisione e finisce 10 secondi prima della fine del suo turno.
+
 ## [0.63.0] - 2026-11-10
 
 ### Aggiunto
