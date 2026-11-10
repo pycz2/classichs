@@ -36,7 +36,7 @@ func test_every_effect_event_has_a_sound_file() -> void:
 
 func test_every_music_track_has_a_file() -> void:
 	for name in ["menu"] + Sound.battle_tracks():
-		check(Packs.active().has("music/generated/%s.wav" % name), "music file " + name)
+		check(Packs.active().has("music/generated/%s.mp3" % name), "music file " + name)
 	eq(Sound.battle_tracks().size(), 3, "three battle tracks")
 
 
@@ -85,7 +85,7 @@ func test_without_sound_node_everything_is_silent() -> void:
 
 
 func test_music_sets() -> void:
-	eq(Sound.path_for("menu"), "music/generated/menu.wav", "generated menu music")
+	eq(Sound.path_for("menu"), "music/generated/menu.mp3", "generated menu music (mp3: the web build stays under GitHub's 100 MB a file)")
 	Packs.set_choice(Packs.active(), "music", "open")
 	eq(Sound.path_for("menu"), "music/open/menu.ogg", "open menu music")
 	eq(Sound.path_for("battle_2"), "music/open/battle_2.ogg", "open battle music")

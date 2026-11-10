@@ -18,7 +18,7 @@
     {"do": "copy", "from": "art/simple", "to": "art/simple", "files": ["*.webp"]},
     {"do": "copy", "from": "art/photo", "to": "art/photo", "files": ["*.webp"]},
     {"do": "copy", "from": "audio", "to": "sounds/generated", "files": ["*.wav"], "except": ["menu.wav", "battle_*.wav"]},
-    {"do": "copy", "from": "audio", "to": "music/generated", "files": ["menu.wav", "battle_*.wav"]},
+    {"do": "copy", "from": "audio", "to": "music/generated", "files": ["menu.mp3", "battle_*.mp3"]},
     {"do": "copy", "from": "audio/open", "to": "music/open", "files": ["*.ogg", "CREDITS.md"]}
   ]
 }
