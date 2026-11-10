@@ -202,7 +202,7 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `POST signup_keys/{id}/revoke` | the key registers nobody more (its accounts stay) |
 | `GET tournaments?status` · `GET tournaments/{id}` | the list (summaries + `top` [{place, name}]) · one tournament as the players' `full`, every deck shown |
 | `POST tournaments/{id}/cancel` | cancels one that is not over (409 otherwise) |
-| `GET stats?pack&mode&bracket&period&bots&min&class` | the Statistics page (below): `{packs: [{pack, name, games}], pack, period, bucket, modes, brackets, backfill, sides, classes: [{class, name, games, wins, mirrors}], series: {hour: [[bucket, sides]] ×48, day: ×30}, decks: {total, top: [deck] ×20, by_class: {class: [deck] ×5}}, cards: [{card, name, cost, decks, copies, deck_wins, played, played_wins, plays, kept, replaced, kept_wins}]}`; period hour\|day\|week\|month\|year\|all (default), `bots=0` leaves out games with a bot, `min` (default 20) the fewest games of a deck shown, `class` the cards of one class's decks; a deck is `{deck, class, hero, games, wins, cards: [{id, name, n, cost}]}` |
+| `GET stats?pack&mode&bracket&period&bucket&bots&min&class` | the Statistics page (below): `{packs: [{pack, name, games}], pack, period, bucket, current, buckets: [{bucket, sides}], kept, modes, brackets, backfill, sides, classes: [{class, name, games, wins, mirrors}], matchups: [{class, opp, games, wins}], series: {hour: [[bucket, sides]] ×48, day: ×30}, decks: {total, top: [deck] ×20, by_class: {class: [deck] ×5}}, cards: [{card, name, cost, decks, copies, deck_wins, played, played_wins, plays, kept, replaced, kept_wins}]}`; period hour\|day\|week\|month\|year\|all (default), `bucket` one of its buckets (default: the current one, `current`; `buckets`: the period's buckets with games, newest first, by the filters, the current and chosen ones always; `kept`: false when the bucket's deck and card rows are pruned), `bots=0` leaves out games with a bot, `min` (default 20) the fewest games of a deck shown, `class` the cards of one class's decks; a deck is `{deck, class, hero, games, wins, cards: [{id, name, n, cost}]}` |
 
 `/admin/replay/{file}` (the cookie) serves the replay player's files with a CSP of their own
 (`'wasm-unsafe-eval'`, `blob:` workers, framed by the panel only); the panel's CSP allows that
@@ -260,12 +260,16 @@ again in the engine). Every row has the pack (`rules_hash`), the period (`hour`,
 `stats_deck` (class, deck = the hash of the class and the sorted 30 cards: games, wins),
 `stats_card` (class, card: decks with it, copies, deck_wins, played = games it was played in,
 played_wins, plays = times, kept / replaced = its copies in the opening hand at the mulligan,
-kept_wins), `stats_decks` (a deck's hero and cards) and `stats_names` (English names of the
+kept_wins), `stats_matchup` (M12; class against opp: games, wins — the diagonal is the mirrors, with no
+wins; both players of a mirror are in its row), `stats_decks` (a deck's hero and cards) and `stats_names` (English names of the
 pack, its classes and cards: the pack's `locales/en.json`, else data/cards.json). Deck and card
-rows of hours older than 48 hours and days older than 40 days are deleted. At start, replays kept
-before the statistics are counted once in the background (`stats::backfill`, 20 at a time; its
-place is `server_settings.stats_backfill`, so a restart resumes); their ranked and Arena brackets
-are `unknown`.
+rows of hours older than 48 hours and days older than 400 days are deleted; weeks, months, years
+and all time stay, and the class and matchup rows of every period (the charts and past views).
+The tables are `WITHOUT ROWID` (M12: their key is most of a row; 1500 games over 30 days take
+18 MB instead of 34). At start, replays kept before the statistics are counted once in the
+background (`stats::backfill`, 20 at a time; its place is `server_settings.stats_backfill`, so a
+restart resumes); their ranked and Arena brackets are `unknown`. The same once for the matchup
+rows alone (`stats_matchup_backfill`) when a database has statistics but no matchups (from 0.62).
 
 ### Connect the game
 

@@ -15,10 +15,24 @@ const cap = (s) => s ? s[0].toUpperCase() + s.slice(1) : s
 const rate = (w, g) => g > 0 ? w / g : null
 const pct = (x, d = 1) => x == null ? '—' : (x * 100).toFixed(d) + '%'
 const wrClass = (x) => x == null ? 'muted' : x >= 0.5 ? 'wr up' : 'wr down'
+// "2026-11-10T14" → "Nov 10, 14:00"; the current bucket by the period's name ("Today"), the day before "Yesterday"
+function bucketLabel (period, b, current) {
+  if (period === 'all') return 'All time'
+  if (b === current) return PERIODS.find((p) => p[0] === period)[1]
+  const d = new Date(Date.parse(b.length === 4 ? b + '-01-01' : b.length === 7 ? b + '-01' : b.slice(0, 10)) + (period === 'hour' ? Number(b.slice(11)) * 36e5 : 0))
+  const o = (x) => d.toLocaleString('en', { timeZone: 'UTC', ...x })
+  switch (period) {
+    case 'hour': return o({ month: 'short', day: 'numeric' }) + ', ' + b.slice(11) + ':00 UTC'
+    case 'day': return Date.parse(current) - d === 864e5 ? 'Yesterday' : o({ weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+    case 'week': return 'Week of ' + o({ month: 'short', day: 'numeric', year: 'numeric' })
+    case 'month': return o({ month: 'long', year: 'numeric' })
+    default: return b
+  }
+}
 const bracketLabel = (b, mode) => b === 'unknown' ? 'Unknown (counted later)' : b === 'Legend' ? 'Legend' : mode === 'arena' ? b + ' wins' : 'Ranks ' + b
 
 export function Stats ({ query }) {
-  const [f, setF] = useState(() => ({ pack: '', mode: '', bracket: '', period: 'all', bots: '1', min: '20', class: '', ...query }))
+  const [f, setF] = useState(() => ({ pack: '', mode: '', bracket: '', period: 'all', bucket: '', bots: '1', min: '20', class: '', ...query }))
   const set = (p) => setF((x) => ({ ...x, ...p }))
   useEffect(() => { setQuery(f) }, [f])
   const [data, error, reload, loading] = useLoad(() => api('stats?' + qs(f)), [f])
@@ -26,6 +40,7 @@ export function Stats ({ query }) {
   useEvents((e) => { if (e.resync || e.kind === 'game_end') later() })
   const [minDraft, setMinDraft] = useState(f.min)
   const commitMin = useDebounced((min) => set({ min }), 400)
+  const [muMin, setMuMin] = useState(5)
 
   if (error && !data) return html`<div class="page"><header class="page-head"><h1>Statistics</h1></header><${ErrorBox} error=${error} onRetry=${reload} /></div>`
   if (!data) return html`<div class="page"><div class="skel-title"></div><div class="chart-skel"></div></div>`
@@ -45,7 +60,9 @@ export function Stats ({ query }) {
       <div class="seg text">${['', ...data.modes].map((m) => html`<button key=${m} class=${(data.mode || '') === m ? 'on' : ''} onClick=${() => set({ mode: m, bracket: '' })}>${m ? cap(m) : 'All modes'}</button>`)}</div>
       ${brackets.length > 0 && html`<select value=${data.bracket || ''} onChange=${(e) => set({ bracket: e.target.value })} aria-label="Bracket">
         <option value="">All brackets</option>${brackets.map((b) => html`<option value=${b}>${bracketLabel(b, data.mode)}</option>`)}</select>`}
-      <div class="seg text">${PERIODS.map(([k, label]) => html`<button key=${k} class=${data.period === k ? 'on' : ''} onClick=${() => set({ period: k })}>${label}</button>`)}</div>
+      <div class="seg text">${PERIODS.map(([k, label]) => html`<button key=${k} class=${data.period === k ? 'on' : ''} onClick=${() => set({ period: k, bucket: '' })}>${label}</button>`)}</div>
+      ${data.period !== 'all' && html`<select value=${data.bucket} onChange=${(e) => set({ bucket: e.target.value === data.current ? '' : e.target.value })} aria-label="Which ${data.period}">
+        ${data.buckets.map((b) => html`<option value=${b.bucket}>${bucketLabel(data.period, b.bucket, data.current)} · ${num(b.sides / (data.bracket ? 1 : 2))} ${data.bracket ? 'players' : 'games'}</option>`)}</select>`}
       <label class="check"><input type="checkbox" checked=${data.bots} onChange=${(e) => set({ bots: e.target.checked ? '1' : '0' })} />Games with bots</label>
       <label class="field-inline">Min. deck games <input class="num-input" type="number" min="1" value=${minDraft}
         onInput=${(e) => { setMinDraft(e.target.value); if (Number(e.target.value) >= 1) commitMin(e.target.value) }} /></label>
@@ -53,7 +70,7 @@ export function Stats ({ query }) {
     <div class=${'stack' + (loading ? ' loading' : '')}>
       <div class="tiles">
         <div class="tile accent"><span class="tile-label">${data.bracket ? 'Players in the bracket' : 'Games'}</span><span class="tile-value">${num(games)}</span>
-          <span class="tile-sub">${PERIODS.find((p) => p[0] === data.period)[1]}${data.period !== 'all' ? ' · ' + data.bucket : ''}</span></div>
+          <span class="tile-sub">${bucketLabel(data.period, data.bucket, data.current)}</span></div>
         <div class="tile"><span class="tile-label">Classes played</span><span class="tile-value">${data.classes.length}</span><span class="tile-sub">mirrors: ${num(data.classes.reduce((a, c) => a + c.mirrors, 0) / 2)} games</span></div>
         <div class="tile"><span class="tile-label">Decks with ≥ ${data.min} games</span><span class="tile-value">${num(data.decks.total)}</span><span class="tile-sub">by their exact 30 cards</span></div>
         <div class="tile"><span class="tile-label">Cards in decks</span><span class="tile-value">${num(data.cards.length)}</span><span class="tile-sub">${data.class ? classNames[data.class] || data.class : 'all classes'}</span></div>
@@ -63,6 +80,9 @@ export function Stats ({ query }) {
         <${Card} title=${data.period === 'hour' || data.period === 'day' ? 'Games per hour, last 48 hours' : 'Games per day, last 30 days'}>
           <${TimeBars} series=${data.period === 'hour' || data.period === 'day' ? data.series.hour : data.series.day} hourly=${data.period === 'hour' || data.period === 'day'} per=${data.bracket ? 1 : 2} /></${Card}>
       </div>
+      <${Card} title="Matchups" pad=${false} actions=${html`<label class="field-inline">Min. games <input class="num-input" type="number" min="1" value=${muMin}
+          onInput=${(e) => setMuMin(Math.max(1, Number(e.target.value) || 1))} /></label>`}><${Matchups} data=${data} min=${muMin} /></${Card}>
+      ${!data.kept && html`<p class="muted small stats-note">The deck and card rows of ${data.period === 'hour' ? 'hours older than 48 hours' : 'days older than 400 days'} are not kept: this ${data.period} shows the classes and matchups only.</p>`}
       <${Decks} decks=${data.decks} min=${data.min} names=${classNames} />
       <${Cards} data=${data} names=${classNames} onClass=${(c) => set({ class: c })} />
     </div>
@@ -249,4 +269,50 @@ function Cards ({ data, names, onClass }) {
     ${shown.length > 50 && html`<div class="table-foot"><span class="muted small">${all ? 'All' : '50 of'} ${num(shown.length)}</span>
       <button class="btn ghost sm" onClick=${() => setAll(!all)}>${all ? 'Show 50' : 'Show all'}</button></div>`}
   </${Card}>`
+}
+
+// --- matchups ------------------------------------------------------------------------------------
+
+// A win rate's colour: red under 50%, green over, full at 25% and 75%.
+const wrColor = (wr) => {
+  const t = Math.max(-1, Math.min(1, (wr - 0.5) / 0.25))
+  return `color-mix(in srgb, var(${t >= 0 ? '--ok' : '--bad'}) ${Math.round(Math.abs(t) * 60)}%, var(--surface))`
+}
+
+/** Rows: a class; columns: its opponent; a cell: the row's win rate against it (a mirror: its games). */
+function Matchups ({ data, min }) {
+  const per = data.bracket ? 1 : 2 // a mirror's row has both players (but in a bracket: its players)
+  const names = Object.fromEntries(data.classes.map((c) => [c.class, c.name]))
+  const name = (c) => names[c] || cap(c.toLowerCase())
+  const at = {}
+  for (const m of data.matchups) at[m.class + ' ' + m.opp] = m
+  const classes = [...new Set(data.matchups.flatMap((m) => [m.class, m.opp]))].sort((a, b) => name(a).localeCompare(name(b)))
+  if (!classes.length) return html`<${Empty}>No games in this selection</${Empty}>`
+  // phones: 3 letters, 4 where two classes share them (Warlock, Warrior)
+  const short = (c) => name(c).slice(0, classes.some((d) => d !== c && name(d).slice(0, 3) === name(c).slice(0, 3)) ? 4 : 3)
+  const head = (c) => html`<span class=${'cls c-' + c.toLowerCase()}><span class="long">${name(c)}</span><span class="short">${short(c)}</span></span>`
+  return html`<div class="table-wrap"><table class="mu-grid">
+    <thead><tr><th class="mu-corner"><span class="muted small">vs →</span></th>${classes.map((c) => html`<th key=${c} title=${name(c)}>${head(c)}</th>`)}<th class="mu-total">All</th></tr></thead>
+    <tbody>${classes.map((a) => {
+      const row = classes.filter((b) => b !== a).map((b) => at[a + ' ' + b]).filter(Boolean)
+      const games = row.reduce((x, m) => x + m.games, 0)
+      const wins = row.reduce((x, m) => x + m.wins, 0)
+      const mirror = (at[a + ' ' + a]?.games || 0) / per
+      return html`<tr key=${a}><th title=${name(a)}>${head(a)}</th>
+        ${classes.map((b) => {
+          const m = at[a + ' ' + b]
+          if (a === b) {
+            return html`<td key=${b} class=${'mu mirror' + (mirror < min ? ' few' : '')} title=${`${name(a)} mirror: ${num(mirror)} games`}><b>—</b><span>${num(mirror)}</span></td>`
+          }
+          if (!m) return html`<td key=${b} class="mu few" title=${`${name(a)} vs ${name(b)}: no games`}><b></b><span>0</span></td>`
+          const wr = m.wins / m.games
+          return html`<td key=${b} class=${'mu' + (m.games < min ? ' few' : '')} style=${m.games < min ? null : { background: wrColor(wr) }}
+            title=${`${name(a)} vs ${name(b)}: ${pct(wr)} — ${num(m.wins)} won, ${num(m.games - m.wins)} lost of ${num(m.games)} games`}><b>${pct(wr, 0)}</b><span>${num(m.games)}</span></td>`
+        })}
+        <td class="mu mu-total" style=${games >= min ? { background: wrColor(wins / games) } : null}
+          title=${`${name(a)} against the other classes: ${pct(rate(wins, games))} — ${num(wins)} won of ${num(games)} games; ${num(mirror)} mirror games`}><b>${pct(rate(wins, games), 1)}</b><span>${num(games)}</span></td>
+      </tr>`
+    })}</tbody></table></div>
+    <div class="mu-legend small muted"><span>25%</span><i class="mu-scale"></i><span>75%</span>
+      <span>Row: the class, column: its opponent; the row's win rate, then the ${per === 1 ? 'players' : 'games'}. Diagonal: mirror games. Faded: under ${min} games.</span></div>`
 }

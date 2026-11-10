@@ -1,7 +1,8 @@
 /* The Statistics page (stats.js). */
 
 .stats .stack.loading { opacity: .7; transition: opacity .2s .15s; }
-.stats-filters .num-input { width: 72px; }
+.stats .num-input { width: 72px; }
+.stats-filters .seg { flex-wrap: wrap; }
 .stats-note { margin: 8px 0 0; }
 
 .hscroll { overflow-x: auto; }
@@ -58,4 +59,34 @@
 @media (max-width: 900px) {
   .deck-grid { grid-template-columns: 1fr; }
   .deck-grid > div + div { border-left: 0; border-top: 1px solid var(--border); }
+}
+
+/* matchups: a class (row) against each opponent (column) */
+.mu-grid { border-collapse: separate; border-spacing: 2px; margin: 10px auto 4px; font-variant-numeric: tabular-nums; }
+.mu-grid th { font-weight: 600; font-size: 12px; padding: 2px 4px; white-space: nowrap; }
+.mu-grid tbody th { text-align: right; position: sticky; left: 0; background: var(--surface); z-index: 1; }
+.mu-grid .short { display: none; }
+.mu { min-width: 58px; height: 44px; text-align: center; border-radius: 6px; background: var(--surface-2); color: var(--text); padding: 2px 4px; cursor: default; }
+.mu b { display: block; font-size: 13px; font-weight: 650; }
+.mu span { display: block; font-size: 11px; color: var(--text-2); }
+.mu.mirror { background: repeating-linear-gradient(135deg, var(--surface-2) 0 6px, var(--surface-3) 6px 12px); }
+.mu.mirror b { color: var(--muted); }
+.mu.few { opacity: .45; }
+.mu.few b { font-weight: 500; }
+td.mu-total { min-width: 64px; box-shadow: inset 0 0 0 1px var(--border-strong); }
+.mu-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; padding: 6px 16px 14px; }
+.mu-scale { width: 120px; height: 8px; border-radius: 4px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--bad) 60%, var(--surface)), var(--surface-2) 50%, color-mix(in srgb, var(--ok) 60%, var(--surface))); }
+.mu-legend span:last-child { flex-basis: 100%; }
+
+@media (max-width: 600px) {
+  .mu-grid { border-spacing: 1px; margin: 8px 0 4px; }
+  .mu-grid .long { display: none; }
+  .mu-grid .short { display: inline; }
+  .mu-grid th { font-size: 11px; padding: 1px; }
+  .mu-grid .cls { padding: 1px 3px; font-size: 10px; }
+  .mu { min-width: 0; width: 29px; height: 36px; padding: 1px; border-radius: 4px; }
+  .mu b { font-size: 10px; }
+  .mu span { font-size: 9.5px; }
+  td.mu-total { width: 36px; min-width: 0; }
 }

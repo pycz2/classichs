@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12)]
     }
 }
 
@@ -889,6 +889,41 @@ impl MigrationTrait for M11 {
                 .into(),
         ] {
             m.get_connection().execute_unprepared(&sql).await?;
+        }
+        Ok(())
+    }
+}
+
+/// The admin's class-versus-class matchups (`crate::stats`): one row per player of a game, the
+/// player's class against the opponent's (games, wins; a mirror adds no win). The games counted
+/// before it are added once from their replays (`stats::backfill`).
+struct M12;
+
+impl MigrationName for M12 {
+    fn name(&self) -> &str {
+        "m20261110_000012_stats_matchup"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M12 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        c.execute_unprepared(
+            "CREATE TABLE stats_matchup (pack TEXT NOT NULL, period TEXT NOT NULL, bucket TEXT NOT NULL, mode TEXT NOT NULL, \
+             bracket TEXT NOT NULL, bots INTEGER NOT NULL, class TEXT NOT NULL, opp TEXT NOT NULL, games INTEGER NOT NULL DEFAULT 0, \
+             wins INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (pack, period, bucket, mode, bracket, bots, class, opp)) WITHOUT ROWID",
+        )
+        .await?;
+        // M11's tables WITHOUT ROWID: their key is all their text, a rowid table keeps it twice
+        // (the table and its key's index; stats_card of 1500 games 27 → 13 MB)
+        for t in ["stats_class", "stats_deck", "stats_card"] {
+            let sql = c.query_one_raw(sea_orm::Statement::from_string(c.get_database_backend(), format!("SELECT sql FROM sqlite_schema WHERE name = '{t}'"))).await?;
+            let sql: String = sql.ok_or_else(|| DbErr::Custom(format!("no table {t}")))?.try_get("", "sql")?;
+            c.execute_unprepared(&format!("{} WITHOUT ROWID", sql.replacen(&format!("CREATE TABLE {t} "), &format!("CREATE TABLE {t}_new "), 1))).await?;
+            for sql in [format!("INSERT INTO {t}_new SELECT * FROM {t}"), format!("DROP TABLE {t}"), format!("ALTER TABLE {t}_new RENAME TO {t}")] {
+                c.execute_unprepared(&sql).await?;
+            }
         }
         Ok(())
     }

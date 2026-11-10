@@ -1,5 +1,5 @@
 //! HSReplay-like statistics (the admin's Statistics page): every finished game with a winner adds
-//! to aggregated rows (M11: stats_class, stats_deck, stats_card, stats_decks, stats_names); the
+//! to aggregated rows (M11: stats_class, stats_deck, stats_card, stats_decks, stats_names; M12: stats_matchup); the
 //! page only reads them. A game's facts come from its replay, played again in the rules engine:
 //! the classes, the decks, the cards played and the opening hands kept or replaced.
 //! Dimensions: the pack (rules_hash), the mode, the player's bracket at the game's start, whether a
@@ -35,11 +35,14 @@ pub const PERIODS: [&str; 6] = ["hour", "day", "week", "month", "year", "all"];
 /// (a replay has no rank or run record).
 pub const ALL: &str = "all";
 pub const UNKNOWN: &str = "unknown";
-/// Deck and card rows of hours and days older than this are deleted (the class rows stay: the charts).
-const KEEP_HOURS: i64 = 48;
-const KEEP_DAYS: i64 = 40;
+/// Deck and card rows of hours and days older than this are deleted (weeks, months, years and all
+/// time stay, and the class and matchup rows of every period: the charts and past views).
+pub const KEEP_HOURS: i64 = 48;
+pub const KEEP_DAYS: i64 = 400;
 /// server_settings: "done", or the backfill's place "until ended game" (it resumes after a restart).
 pub const BACKFILL: &str = "stats_backfill";
+/// The same for the matchup rows (M12) of the games counted before them.
+pub const MATCHUP_BACKFILL: &str = "stats_matchup_backfill";
 const BATCH: u64 = 20;
 
 // --- dimensions -----------------------------------------------------------------------------
@@ -240,7 +243,8 @@ impl Rows {
 const CLASS_KEY: &[&str] = &["pack", "period", "bucket", "mode", "bracket", "bots", "class"];
 const DECK_KEY: &[&str] = &["pack", "period", "bucket", "mode", "bracket", "bots", "class", "deck"];
 const CARD_KEY: &[&str] = &["pack", "period", "bucket", "mode", "bracket", "bots", "class", "card"];
-const CARD_VALS: &[&str] = &["decks", "copies", "deck_wins", "played", "played_wins", "plays", "kept", "replaced", "kept_wins"];
+const MATCHUP_KEY: &[&str] = &["pack", "period", "bucket", "mode", "bracket", "bots", "class", "opp"];
+const CARD_VALS: &[&str] =&["decks", "copies", "deck_wins", "played", "played_wins", "plays", "kept", "replaced", "kept_wins"];
 
 /// Whether deck and card rows of this bucket are still kept (`prune`).
 fn fresh(period: &str, bucket: &str, now: i64) -> bool {
@@ -253,9 +257,30 @@ fn fresh(period: &str, bucket: &str, now: i64) -> bool {
 
 /// Adds one game (both players) to the statistics.
 pub async fn write(c: &impl ConnectionTrait, f: &Facts, brackets: &[String; 2]) -> DbResult<()> {
+    add(c, f, brackets, true).await
+}
+
+/// The matchup rows of one game only (the matchup backfill).
+async fn write_matchups(c: &impl ConnectionTrait, f: &Facts, brackets: &[String; 2]) -> DbResult<()> {
+    let mut m = Rows::new("stats_matchup", MATCHUP_KEY, &["games", "wins"]);
+    let (mirror, bots) = (f.sides[0].class == f.sides[1].class, i64::from(f.bots()));
+    for (period, bucket) in PERIODS.iter().zip(buckets(f.ended)) {
+        for (p, s) in f.sides.iter().enumerate() {
+            let key = vec![f.pack.clone().into(), (*period).into(), bucket.clone().into(), f.mode.clone().into(), brackets[p].clone().into(), bots.into(),
+                           s.class.clone().into(), f.sides[1 - p].class.clone().into()];
+            m.add(key, &[1, if mirror { 0 } else { i64::from(s.won) }]);
+        }
+    }
+    m.write(c).await
+}
+
+async fn add(c: &impl ConnectionTrait, f: &Facts, brackets: &[String; 2], matchups: bool) -> DbResult<()> {
     let now = ranked::now();
     let (mut class, mut deck, mut card) =
         (Rows::new("stats_class", CLASS_KEY, &["games", "wins", "mirrors"]), Rows::new("stats_deck", DECK_KEY, &["games", "wins"]), Rows::new("stats_card", CARD_KEY, CARD_VALS));
+    if matchups {
+        write_matchups(c, f, brackets).await?;
+    }
     let mirror = f.sides[0].class == f.sides[1].class;
     let bots = i64::from(f.bots());
     let ids: Vec<String> = f.sides.iter().map(|s| deck_id(&s.class, &s.cards)).collect();
@@ -338,13 +363,17 @@ async fn locale(app: &AppRef, rules_hash: &str) -> Option<Value> {
     .ok()?
 }
 
-/// Deletes the deck and card rows of old hours and days, at most once an hour.
-async fn prune(c: &impl ConnectionTrait) {
+/// `prune` at most once an hour.
+async fn prune_hourly(c: &impl ConnectionTrait) {
     static LAST: AtomicI64 = AtomicI64::new(-1);
     let now = ranked::now();
-    if LAST.swap(now / 3600, Ordering::Relaxed) == now / 3600 {
-        return;
+    if LAST.swap(now / 3600, Ordering::Relaxed) != now / 3600 {
+        prune(c, now).await;
     }
+}
+
+/// Deletes the deck and card rows of hours and days older than kept at `now`.
+pub async fn prune(c: &impl ConnectionTrait, now: i64) {
     let (h, d) = (buckets(now - KEEP_HOURS * 3600)[0].clone(), buckets(now - KEEP_DAYS * 86_400)[1].clone());
     for t in ["stats_deck", "stats_card"] {
         let sql = format!("DELETE FROM {t} WHERE (period = 'hour' AND bucket < ?) OR (period = 'day' AND bucket < ?)");
@@ -373,7 +402,7 @@ pub async fn record(app: AppRef, rules: Arc<GameRules>, replay: Value, brackets:
     if let Err(e) = saved.await {
         failed(&app, &game, &e.to_string());
     }
-    prune(&app.db).await;
+    prune_hourly(&app.db).await;
 }
 
 fn failed(app: &AppRef, game: &str, why: &str) {
@@ -394,28 +423,40 @@ async fn set_setting(c: &impl ConnectionTrait, key: &str, value: &str) -> DbResu
     Ok(())
 }
 
+async fn empty(c: &impl ConnectionTrait, table: &str) -> DbResult<bool> {
+    Ok(query(c, &format!("SELECT 1 AS x FROM {table} LIMIT 1"), vec![]).await?.is_empty())
+}
+
 /// Counts the replays kept before the statistics existed, once (at start, when the stats tables
 /// are empty): those that ended before the first run of it, oldest first, BATCH at a time, each
 /// batch with its place in one transaction (a restart resumes there). Ranked and Arena games get
-/// the bracket "unknown". Returns the games counted.
+/// the bracket "unknown". Then the same for the matchup rows alone (M12), once, when the matchup
+/// table is empty but the others are not. Returns the games counted (by both).
 pub async fn backfill(app: &AppRef) -> DbResult<usize> {
-    let (until, mut ended, mut game) = match setting(&app.db, BACKFILL).await? {
-        Some(v) if v == "done" => return Ok(0),
-        Some(v) => {
-            let mut it = v.splitn(3, ' ');
-            let mut n = || it.next().unwrap_or_default().to_string();
-            (n().parse().unwrap_or(0), n().parse().unwrap_or(0), n())
-        }
-        None => {
-            if !query(&app.db, "SELECT 1 AS x FROM stats_class LIMIT 1", vec![]).await?.is_empty() {
-                set_setting(&app.db, BACKFILL, "done").await?;
-                return Ok(0);
-            }
-            let until = ranked::now();
-            set_setting(&app.db, BACKFILL, &format!("{until} 0 ")).await?;
-            (until, 0i64, String::new())
-        }
-    };
+    // the matchups' mark first, before this start's games add matchup rows
+    if setting(&app.db, MATCHUP_BACKFILL).await?.is_none() {
+        let start = empty(&app.db, "stats_matchup").await? && !empty(&app.db, "stats_class").await?;
+        set_setting(&app.db, MATCHUP_BACKFILL, &if start { format!("{} 0 ", ranked::now()) } else { "done".into() }).await?;
+    }
+    if setting(&app.db, BACKFILL).await?.is_none() {
+        let start = empty(&app.db, "stats_class").await?;
+        set_setting(&app.db, BACKFILL, &if start { format!("{} 0 ", ranked::now()) } else { "done".into() }).await?;
+    }
+    // a backfill stopped before M12 leaves its games' matchups to the matchup backfill
+    let matchups = setting(&app.db, MATCHUP_BACKFILL).await?.as_deref() == Some("done");
+    Ok(run_backfill(app, BACKFILL, matchups).await? + run_backfill(app, MATCHUP_BACKFILL, true).await?)
+}
+
+/// One backfill from its mark `key` ("done" or "until ended game"): all the rows (`matchups`:
+/// with the matchup rows), or for MATCHUP_BACKFILL the matchup rows alone.
+async fn run_backfill(app: &AppRef, key: &str, matchups: bool) -> DbResult<usize> {
+    let v = setting(&app.db, key).await?.unwrap_or_else(|| "done".into());
+    if v == "done" {
+        return Ok(0);
+    }
+    let mut it = v.splitn(3, ' ');
+    let mut next = || it.next().unwrap_or_default().to_string();
+    let (until, mut ended, mut game): (i64, i64, String) = (next().parse().unwrap_or(0), next().parse().unwrap_or(0), next());
     let mut counted = 0;
     loop {
         let rows = replay::Entity::find()
@@ -431,9 +472,9 @@ pub async fn backfill(app: &AppRef) -> DbResult<usize> {
             .all(&app.db)
             .await?;
         let Some(last) = rows.last() else {
-            set_setting(&app.db, BACKFILL, "done").await?;
+            set_setting(&app.db, key, "done").await?;
             if counted > 0 {
-                tracing::info!("stats: {counted} earlier game(s) counted");
+                tracing::info!("stats: {counted} earlier game(s) counted ({key})");
             }
             return Ok(counted);
         };
@@ -451,9 +492,9 @@ pub async fn backfill(app: &AppRef) -> DbResult<usize> {
         }
         let tx = app.db.begin().await?;
         for (f, b) in &batch {
-            write(&tx, f, b).await?;
+            if key == MATCHUP_BACKFILL { write_matchups(&tx, f, b).await? } else { add(&tx, f, b, matchups).await? }
         }
-        set_setting(&tx, BACKFILL, &format!("{until} {ended} {game}")).await?;
+        set_setting(&tx, key, &format!("{until} {ended} {game}")).await?;
         tx.commit().await?;
         counted += batch.len();
         tokio::time::sleep(std::time::Duration::from_millis(20)).await; // the games' writes first
@@ -495,6 +536,8 @@ pub struct ViewQuery {
     pub min: Option<i64>,
     /// The cards of one class's decks.
     pub class: Option<String>,
+    /// A past bucket of the period ("2026-11-09" of a day); none: the current one.
+    pub bucket: Option<String>,
 }
 
 pub async fn api(State(app): State<AppRef>, Query(q): Query<ViewQuery>) -> Response {
@@ -518,11 +561,16 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
     .map(|r| json!({"pack": s(r, "pack"), "name": s(r, "name"), "games": i(r, "sides") / 2}))
     .collect();
     let pack = q.pack.filter(|p| packs.iter().any(|x| x["pack"] == *p)).or_else(|| packs.first().and_then(|p| p["pack"].as_str().map(String::from)));
-    let backfill = setting(c, BACKFILL).await?.map(|v| if v == "done" { v } else { "running".into() }).unwrap_or_else(|| "not started".into());
+    let backfill = match (setting(c, BACKFILL).await?, setting(c, MATCHUP_BACKFILL).await?) {
+        (None, _) => "not started",
+        (Some(a), b) if a == "done" && b.as_deref().is_none_or(|b| b == "done") => "done",
+        _ => "running",
+    };
     let Some(pack) = pack else { return Ok(json!({"packs": [], "backfill": backfill})) };
     let period = q.period.filter(|p| PERIODS.contains(&p.as_str())).unwrap_or_else(|| ALL.into());
     let now = ranked::now();
-    let bucket = buckets(now)[PERIODS.iter().position(|p| *p == period).unwrap_or(5)].clone();
+    let current = buckets(now)[PERIODS.iter().position(|p| *p == period).unwrap_or(5)].clone();
+    let bucket = q.bucket.filter(|b| !b.is_empty() && period != ALL).unwrap_or_else(|| current.clone());
     let (mode, bracket) = (q.mode.filter(|m| !m.is_empty()), q.bracket.filter(|b| !b.is_empty()));
     let bots = q.bots.as_deref() != Some("0");
     let class = q.class.filter(|c| !c.is_empty());
@@ -572,6 +620,22 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
             json!({"class": id, "name": class_names.get(&id).cloned().unwrap_or_else(|| id.clone()), "games": i(r, "games"), "wins": i(r, "wins"), "mirrors": i(r, "mirrors")})
         })
         .collect();
+    let (w, v) = base(&period, &bucket);
+    let matchups: Vec<Value> = query(c, &format!("SELECT class, opp, SUM(games) AS games, SUM(wins) AS wins FROM stats_matchup{w} GROUP BY class, opp ORDER BY class, opp"), v)
+        .await?
+        .iter()
+        .map(|r| json!({"class": s(r, "class"), "opp": s(r, "opp"), "games": i(r, "games"), "wins": i(r, "wins")}))
+        .collect();
+
+    // the period's buckets with games (newest first), the current and the chosen one always
+    let mut sql = " WHERE pack = ? AND period = ?".to_string();
+    let mut v: Vec<sea_orm::Value> = vec![pack.clone().into(), period.clone().into()];
+    filter(&mut sql, &mut v);
+    let mut list: BTreeMap<String, i64> =
+        query(c, &format!("SELECT bucket, SUM(games) AS sides FROM stats_class{sql} GROUP BY bucket ORDER BY bucket DESC LIMIT 1000"), v).await?.iter().map(|r| (s(r, "bucket"), i(r, "sides"))).collect();
+    list.entry(current.clone()).or_default();
+    list.entry(bucket.clone()).or_default();
+    let bucket_list: Vec<Value> = list.iter().rev().map(|(b, n)| json!({"bucket": b, "sides": n})).collect();
 
     // games over time: the last 48 hours and 30 days (sides: two a game)
     let mut series = json!({});
@@ -646,8 +710,9 @@ pub async fn view(app: &AppRef, q: ViewQuery) -> DbResult<Value> {
     }
     let sides = i(&query(c, &format!("SELECT COALESCE(SUM(games), 0) AS n FROM stats_class{w}"), v).await?[0], "n");
     Ok(json!({
-        "packs": packs, "pack": pack, "period": period, "bucket": bucket, "mode": mode, "bracket": bracket, "bots": bots, "min": min, "class": class,
-        "modes": modes, "brackets": brackets, "backfill": backfill, "sides": sides, "classes": classes, "series": series,
+        "packs": packs, "pack": pack, "period": period, "bucket": bucket, "current": current, "buckets": bucket_list, "kept": fresh(&period, &bucket, now),
+        "mode": mode, "bracket": bracket, "bots": bots, "min": min, "class": class,
+        "modes": modes, "brackets": brackets, "backfill": backfill, "sides": sides, "classes": classes, "matchups": matchups, "series": series,
         "decks": {"total": total_decks, "top": top, "by_class": by_class}, "cards": cards,
     }))
 }
