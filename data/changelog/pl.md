@@ -4,6 +4,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.60.0] - 2026-11-10
+
+### Dodano
+- **Nowa gra, Naxxramas 2014**: wszystkie karty Podstawowe i Klasyczne oraz 30 kart Klątwy Naxxramas z ich żetonami, każda jak w dniu premiery przygody (22 lipca 2014): Grabarz +1/+1, Szlamobekacz 3/5, Reinkarnacja za 2, bez rasy Nieumarły, Łuk z Orlego Rogu rośnie tylko od twoich Sekretów (łatka 1.1.0.6024).
+- Nowe mechaniki w silniku: podwójne Agonie (Baron Rivendare), Trucizna (Maexxna), stronnicy polegli w tej turze wracają (Kel'Thuzad), zaklęcia przeciwnika kosztują więcej (Loatheb), Feugen i Stalagg, Szalony Naukowiec, Zatrute Nasiona, Reinkarnacja i inne.
+- 10 szablonów talii mety z 2014, boty, które grają w Naxxramas, własny wygląd (menu, stół, ekrany wyników) i uproszczone grafiki 2D dla nowych kart; instaluje się jak zwykły pakiet i jest na serwerze.
+
 ## [0.51.0] - 2026-11-10
 
 ### Zmieniono

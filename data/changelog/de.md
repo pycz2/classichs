@@ -4,6 +4,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.60.0] - 2026-11-10
+
+### Hinzugefügt
+- **Ein neues Spiel, Naxxramas 2014**: alle Basis- und Klassik-Karten und alle 30 Karten des Fluchs von Naxxramas mit ihren Spielsteinen, jede wie bei der Veröffentlichung des Abenteuers (22. Juli 2014): Totengräber +1/+1, Schlammrülpser 3/5, Reinkarnation für 2, kein Volk Untote, der Adlerhornbogen wächst nur mit eigenen Geheimnissen (Patch 1.1.0.6024).
+- Neue Mechaniken in der Engine: doppelte Todesröcheln (Baron Totenschwur), Giftig (Maexxna), in diesem Zug gestorbene Diener kehren zurück (Kel'Thuzad), gegnerische Zauber kosten mehr (Loatheb), Feugen und Stalagg, Verrückter Wissenschaftler, Giftsaat, Reinkarnation und mehr.
+- 10 Deckvorlagen der Meta von 2014, Bots, die Naxxramas spielen, ein eigenes Aussehen (Menü, Spielfeld, Ergebnisbildschirme) und vereinfachte 2D-Bilder für die neuen Karten; es wird wie ein normales Paket installiert und ist auf dem Server.
+
 ## [0.51.0] - 2026-11-10
 
 ### Geändert

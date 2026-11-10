@@ -4,6 +4,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.60.0] - 2026-11-10
+
+### Añadido
+- **Un juego nuevo, Naxxramas 2014**: todas las cartas Básicas y Clásicas y las 30 cartas de La maldición de Naxxramas con sus fichas, cada una como en el lanzamiento de la aventura (22 de julio de 2014): Enterrador +1/+1, Eructalodos 3/5, Reencarnación a 2, sin raza No muerto, el Arco de cuerno de águila crece solo con tus Secretos (parche 1.1.0.6024).
+- Nuevas mecánicas en el motor: Estertores dobles (Barón Osahendido), Veneno (Maexxna), los esbirros muertos este turno vuelven (Kel'Thuzad), los hechizos rivales cuestan más (Loatheb), Feugen y Stalagg, Científico loco, Semillas venenosas, Reencarnación y más.
+- 10 plantillas de mazos del meta de 2014, bots que juegan a Naxxramas, su propio aspecto (menú, tablero, pantallas de resultado) e ilustraciones 2D simplificadas para las cartas nuevas; se instala como un paquete normal y está en el servidor.
+
 ## [0.51.0] - 2026-11-10
 
 ### Cambiado

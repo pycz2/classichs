@@ -4,6 +4,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.60.0] - 2026-11-10
+
+### Added
+- **A new game, Naxxramas 2014**: every Basic and Classic card and all 30 Curse of Naxxramas cards with their tokens, each as at the adventure's release (July 22, 2014): Undertaker +1/+1, Sludge Belcher 3/5, Reincarnate for 2, no Undead tribe, Eaglehorn Bow grows only with friendly Secrets (patch 1.1.0.6024).
+- New mechanics in the engine: double Deathrattles (Baron Rivendare), Poisonous (Maexxna), the minions that died this turn come back (Kel'Thuzad), the opponent's spells cost more (Loatheb), Feugen and Stalagg, Mad Scientist, Poison Seeds, Reincarnate and more.
+- 10 deck templates of the 2014 meta, bots that play Naxxramas, its own look (menu, board, result screens) and simplified 2D art for the new cards; it installs as a normal pack and is on the server.
+
 ## [0.51.0] - 2026-11-10
 
 ### Changed

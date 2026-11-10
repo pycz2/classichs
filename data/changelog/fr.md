@@ -4,6 +4,13 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.60.0] - 2026-11-10
+
+### Ajouté
+- **Un nouveau jeu, Naxxramas 2014** : toutes les cartes De base et Classique et les 30 cartes de la Malédiction de Naxxramas avec leurs jetons, chacune comme à la sortie de l’aventure (22 juillet 2014) : Croque-mort +1/+1, Crache-vase 3/5, Réincarnation à 2, pas de type Mort-vivant, l’Arc de l’aigle ne grandit qu’avec vos Secrets (patch 1.1.0.6024).
+- Nouvelles mécaniques dans le moteur : Râles d’agonie doublés (Baron Vaillefendre), Toxicité (Maexxna), les serviteurs morts ce tour reviennent (Kel’Thuzad), les sorts adverses coûtent plus (Horreb), Feugen et Stalagg, Savant fou, Graines empoisonnées, Réincarnation et d’autres.
+- 10 modèles de decks de la méta 2014, des bots qui jouent à Naxxramas, son propre style (menu, plateau, écrans de résultat) et des illustrations 2D simplifiées pour les nouvelles cartes ; il s’installe comme un pack normal et est sur le serveur.
+
 ## [0.51.0] - 2026-11-10
 
 ### Modifié

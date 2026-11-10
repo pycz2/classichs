@@ -4,6 +4,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.60.0] - 2026-11-10
+
+### Aggiunto
+- **Un nuovo gioco, Naxxramas 2014**: tutte le carte Base e Classiche e le 30 carte della Maledizione di Naxxramas con le loro pedine, ognuna com’era all’uscita dell’avventura (22 luglio 2014): Becchino +1/+1, Rigurgitatore di Melma 3/5, Reincarnazione a 2, nessuna razza Non Morto, l’Arco di Corno d’Aquila cresce solo con i tuoi Segreti (patch 1.1.0.6024).
+- Nuove meccaniche nel motore: Rantoli di Morte doppi (Barone Rivendare), Velenoso (Maexxna), i servitori morti nel turno tornano (Kel'Thuzad), gli incantesimi avversari costano di più (Loatheb), Feugen e Stalagg, Scienziato Pazzo, Semi Velenosi, Reincarnazione e altro.
+- 10 modelli di mazzo della meta del 2014, bot che giocano a Naxxramas, un aspetto proprio (menu, tabellone, schermate dei risultati) e illustrazioni 2D semplificate per le nuove carte; si installa come un pacchetto normale ed è sul server.
+
 ## [0.51.0] - 2026-11-10
 
 ### Modificato
