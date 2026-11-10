@@ -106,6 +106,7 @@ fn main() {
         let d = packs::playable(&app, None, None).await.map(|r| packs::short_name(&r.0)).unwrap_or_else(|e| e.1);
         tracing::info!("games without a pack: {d}");
         classichs_server::spawn_background(app.clone());
+        classichs_server::stats::spawn_backfill(app.clone()); // the replays kept before the statistics
         let listener = tokio::net::TcpListener::bind(addr).await.unwrap_or_else(|e| die(&format!("cannot listen on {addr}: {e}")));
         println!("classichs-server listening on ws://{addr} (admin panel: http://{addr}/admin, database: {db_path})");
         // the server's bots (the admin's Bots page) play in this process

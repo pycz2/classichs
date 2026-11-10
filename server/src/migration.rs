@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11)]
     }
 }
 
@@ -845,6 +845,50 @@ impl MigrationTrait for M9 {
         .await?;
         for (name, col) in [("replays_p0", Replays::P0), ("replays_p1", Replays::P1)] {
             m.create_index(Index::create().name(name).table(Replays::Table).col(col).to_owned()).await?;
+        }
+        Ok(())
+    }
+}
+
+/// The admin's statistics (`crate::stats`): rows added to per finished game, only read when viewed.
+struct M11;
+
+impl MigrationName for M11 {
+    fn name(&self) -> &str {
+        "m20261110_000011_stats"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M11 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        // Every stats row: the pack (rules_hash), the period (hour|day|week|month|year|all) and its
+        // UTC bucket ("2026-11-10T14", "2026-11-10", the week's Monday, "2026-11", "2026", "all"),
+        // the mode, the player's bracket at the game's start, bots (1: a bot played in the game).
+        const DIMS: &str =
+            "pack TEXT NOT NULL, period TEXT NOT NULL, bucket TEXT NOT NULL, mode TEXT NOT NULL, bracket TEXT NOT NULL, bots INTEGER NOT NULL";
+        const KEY: &str = "pack, period, bucket, mode, bracket, bots";
+        let cols = |cs: &[&str]| cs.iter().map(|c| format!("{c} INTEGER NOT NULL DEFAULT 0")).collect::<Vec<_>>().join(", ");
+        for sql in [
+            // a class's games (one per player), wins, and mirror games (no win or loss)
+            format!("CREATE TABLE stats_class ({DIMS}, class TEXT NOT NULL, {}, PRIMARY KEY ({KEY}, class))", cols(&["games", "wins", "mirrors"])),
+            // a deck (its cards: stats_decks)
+            format!("CREATE TABLE stats_deck ({DIMS}, class TEXT NOT NULL, deck TEXT NOT NULL, {}, PRIMARY KEY ({KEY}, class, deck))", cols(&["games", "wins"])),
+            // a card in the decks of a class: decks with it, their copies and wins, the games it was
+            // played in (and won), the times played, its copies in the opening hand kept or replaced
+            format!(
+                "CREATE TABLE stats_card ({DIMS}, class TEXT NOT NULL, card TEXT NOT NULL, {}, PRIMARY KEY ({KEY}, class, card))",
+                cols(&["decks", "copies", "deck_wins", "played", "played_wins", "plays", "kept", "replaced", "kept_wins"])
+            ),
+            "CREATE TABLE stats_decks (pack TEXT NOT NULL, deck TEXT NOT NULL, class TEXT NOT NULL, hero TEXT NOT NULL, \
+             cards TEXT NOT NULL, PRIMARY KEY (pack, deck))"
+                .into(),
+            // English names: the pack's (kind "pack", id ""), its classes' and cards'
+            "CREATE TABLE stats_names (pack TEXT NOT NULL, kind TEXT NOT NULL, id TEXT NOT NULL, name TEXT NOT NULL, \
+             PRIMARY KEY (pack, kind, id))"
+                .into(),
+        ] {
+            m.get_connection().execute_unprepared(&sql).await?;
         }
         Ok(())
     }

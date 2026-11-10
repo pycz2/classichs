@@ -15,6 +15,7 @@ pub mod ranked;
 pub mod settings;
 pub mod replays;
 pub mod spectate;
+pub mod stats;
 pub mod storage;
 pub mod tournament;
 pub mod ws;
