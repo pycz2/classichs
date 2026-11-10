@@ -2,7 +2,7 @@
 # The game server. The rules engine (../rust/engine, ../rust/script) and what it embeds
 # (../data/cards.json, ../docs/packs/schema/keywords.json, the Classic pack source ../packs/classic) are outside server/, so
 # build from the repository root, after building the packs (tools/build_packs.sh: the
-# image bundles packs/*.cardpack, Neonfall the default game, Classic too):
+# image bundles packs/*.cardpack, Neonfall the default game, Classic and Naxxramas too):
 #   tools/build_packs.sh && docker build -f server/Dockerfile -t classichs-server .
 # (docker-compose.yml in this directory does that.)
 

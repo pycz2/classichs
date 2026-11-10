@@ -232,7 +232,7 @@ fn determinize(base: &Game, view_json: &Value, hidden: &HashSet<i64>, k: &Knowle
         for d in ents.values() {
             let c = d["card"].as_str().unwrap_or_default();
             let ctrl = d["ctrl"].as_i64().unwrap_or(0).clamp(0, 1) as usize;
-            if !c.is_empty() && c.starts_with("VAN_") {
+            if rs.has(c) && rs.card(c).collectible {
                 *seen[ctrl].entry(c.to_string()).or_default() += 1;
             }
         }

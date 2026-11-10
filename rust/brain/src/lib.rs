@@ -7,12 +7,30 @@ pub mod brain;
 pub mod cards;
 pub mod clock;
 
+use classichs_engine::{pack, ruleset};
 use serde_json::{json, Value};
 use std::time::Duration;
 
 /// The game's bot move as JSON: {view (the bot player's snapshot), seat, deck (its 30 card ids),
-/// level ("easy" | "medium" | "hard"), budget_ms?, seed?} → {ok, action (null: nothing to do), label, ms}.
+/// level ("easy" | "medium" | "hard"), budget_ms?, seed?, pack? (a pack's rules_hash: its rules, loaded in this
+/// process by the engine's `load_pack`; else the built-in Classic), pack_data? (the pack's rules files as a zip in
+/// base64, for a process that has not loaded it: the browser's bot worker)} → {ok, action (null: nothing to do),
+/// label, ms}; an unknown pack without pack_data → {ok: false, error: "unknown pack", need_pack: true}.
 pub fn think(req: &Value) -> Value {
+    let lib = match req["pack"].as_str() {
+        Some(h) if h != ruleset::classic().rules_hash => {
+            let rs = match (ruleset::get(h), req["pack_data"].as_str()) {
+                (Some(rs), _) => rs,
+                (None, Some(d)) => match pack::base64(d).and_then(|b| pack::read_zip(&b)).and_then(|f| ruleset::load(&f)) {
+                    Ok(rs) => rs,
+                    Err(e) => return json!({"ok": false, "error": format!("bad pack: {e}")}),
+                },
+                (None, None) => return json!({"ok": false, "error": "unknown pack", "need_pack": true}),
+            };
+            cards::Library::for_pack(rs)
+        }
+        _ => cards::Library::get(),
+    };
     let level = brain::Level::parse(req["level"].as_str().unwrap_or("medium")).unwrap_or(brain::Level::Medium);
     let budget = req["budget_ms"].as_u64().map(Duration::from_millis).unwrap_or(match level {
         brain::Level::Easy => Duration::ZERO,
@@ -21,7 +39,7 @@ pub fn think(req: &Value) -> Value {
     });
     let my_deck: Vec<String> = req["deck"].as_array().map_or(vec![], |a| a.iter().filter_map(|c| c.as_str().map(String::from)).collect());
     let k = brain::Knowledge {
-        lib: cards::Library::get(),
+        lib,
         seat: req["seat"].as_u64().unwrap_or(1) as usize,
         my_deck,
         arena: req["arena"] == true,

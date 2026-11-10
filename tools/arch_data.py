@@ -1052,9 +1052,9 @@ FLOWS.append(dict(
 COMPS.append(dict(
     id="packs", name=("Game packs", "Пакеты игр"), sub=".cardpack · packs/", layer="content", x=40, y=170,
     short=("Everything that makes a game a game, in one zip file: rules, cards and their Lua scripts, mechanic names, texts in every language, "
-           "art, sound and music sets, the menu look and music, deck templates, the tutorial. Built in: Classic 2014 and Neonfall.",
+           "art, sound and music sets, the menu look and music, deck templates, the tutorial. Built in: Classic 2014, Naxxramas 2014 and Neonfall.",
            "Всё, что делает игру игрой, в одном zip-файле: правила, карты и их скрипты на Lua, имена механик, тексты на всех языках, наборы арта, "
-           "звуков и музыки, вид и музыка меню, шаблоны колод, обучение. Встроены «Классика 2014» и Neonfall."),
+           "звуков и музыки, вид и музыка меню, шаблоны колод, обучение. Встроены «Классика 2014», «Наксрамас 2014» и Neonfall."),
     text=("The engine knows only general mechanics (its vocabulary — `docs/packs/schema/keywords.json`: GUARD, HASTE, BARRIER…); a pack names them its own way "
           "(Classic: Taunt; Neonfall: Firewall) and fills them with cards. **Two hashes:** `rules_hash` covers only what changes the game (rules, cards without "
           "looks, missions, scripts; JSON canonicalised) — games, servers and code-play peers compare it; `content_hash` covers every file — caches, downloads "
@@ -1117,8 +1117,10 @@ COMPS.append(dict(
     ],
     data=[
         (("Built-in packs", "Встроенные пакеты"), ("**Classic 2014** (`classic-2014`): 534 cards, every Classic mechanic in Lua, 6 tutorial missions, 10 deck templates, the 2014 ladder. "
+                                                   "**Naxxramas 2014** (`naxx-2014`): Classic's cards by reference (its patch, scripts and pictures) and the 30 Curse of Naxxramas cards as at the July 2014 release, 10 deck templates. "
                                                    "**Neonfall** (`neon`): a rainy cyberpunk game, 3 champions, 60 cards and 7 tokens, its own art, sounds, synthwave, theme and fonts — the default game.",
                                                    "**«Классика 2014»** (`classic-2014`): 534 карты, все механики Classic на Lua, 6 миссий обучения, 10 шаблонов колод, лестница 2014 года. "
+                                                   "**«Наксрамас 2014»** (`naxx-2014`): карты Classic по ссылке (её патч, скрипты и картинки) и 30 карт «Проклятия Наксрамаса» как на выходе в июле 2014, 10 шаблонов колод. "
                                                    "**Neonfall** (`neon`): дождливый киберпанк, 3 чемпиона, 60 карт и 7 жетонов, свой арт, звуки, синтвейв, тема и шрифты — игра по умолчанию.")),
         (("Where packs come from", "Откуда пакеты"), ("Built in (`res://packs`), imported from a file, downloaded from a server, received from a code-play peer; on a server — uploaded by players or the admin, or bundled (`--packs-dir`).",
                                                      "Встроенные (`res://packs`), импорт из файла, скачанные с сервера, полученные от соперника по коду; на сервере — загруженные игроками или админом либо встроенные (`--packs-dir`).")),
@@ -1175,7 +1177,7 @@ FLOWS.append(dict(
     lanes=[L("dev", ("Pack author", "Автор пакета"), "tools"), L("packpy", "pack.py", "packs", "tools/pack.py"), L("schema", ("Schemas", "Схемы"), "packs", "docs/packs/schema"),
            L("zip", ".cardpack", "packs")],
     steps=[
-        ("dev", "packpy", "build <src> -o <out>", ("`tools/build_packs.sh` does it for Classic and Neonfall.", "`tools/build_packs.sh` делает это для Classic и Neonfall."),
+        ("dev", "packpy", "build <src> -o <out>", ("`tools/build_packs.sh` does it for Classic, Naxxramas and Neonfall.", "`tools/build_packs.sh` делает это для Classic, Naxxramas и Neonfall."),
          [("tools/pack.py", "def main(argv=None):"), "tools/build_packs.sh"]),
         ("packpy", "packpy", ("recipe steps", "шаги рецепта"),
          ("`hsjson`, `keywords`, `voice`, `translate`, `rank_names`, `copy`; the source's own texts go over the generated ones.",

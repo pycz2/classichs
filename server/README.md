@@ -93,7 +93,7 @@ distroless Debian 13 runtime, user 65532, no shell; it bundles `packs/*.cardpack
 the packs first) and [SeaweedFS](https://github.com/seaweedfs/seaweedfs) as the S3 store:
 
 ```sh
-tools/build_packs.sh                  # packs/classic.cardpack, packs/neon.cardpack
+tools/build_packs.sh                  # packs/classic.cardpack, packs/neon.cardpack, packs/naxx.cardpack
 cd server
 docker compose up -d --build          # game: ws://localhost:7377, admin: http://localhost:7377/admin
 docker compose exec server classichs-server admin root --db /data/classichs.db   # the superuser

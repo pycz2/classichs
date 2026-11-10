@@ -22,10 +22,24 @@ static func available() -> bool:
 	return false
 
 
-## The bot's request for player p of a local game: its view, its own 30 cards, the level.
+## The packs whose rules the browser's bot worker was sent (its own engine instance loads them once).
+static var _web_sent := {}
+
+
+## The bot's request for player p of a local game: its view, its own 30 cards, the level; a pack other
+## than Classic by its rules hash (the native bot shares the engine's loaded packs; the browser's worker
+## gets the rules once, and again after it asked: `need_pack`).
 static func request(game_id: String, p: int, deck: Array, level: String) -> Dictionary:
 	var view: Dictionary = Rules.request({"op": "snapshot", "game": game_id, "view": p}).get("state", {})
-	return {"view": view, "seat": p, "deck": deck, "level": level, "seed": randi()}
+	var req := {"view": view, "seat": p, "deck": deck, "level": level, "seed": randi()}
+	var pk := Packs.active()
+	var h := Rules.engine_pack(pk) if pk != null and pk.id() != Packs.CLASSIC else ""
+	if h != "":
+		req.pack = h
+		if OS.has_feature("web") and not _web_sent.has(h):
+			req.pack_data = Marshalls.raw_to_base64(Rules._rules_zip(pk))
+			_web_sent[h] = true
+	return req
 
 
 ## The answer at once: {ok, action (null: nothing to do), label} (native only: the browser's bot
@@ -38,6 +52,8 @@ static func think_now(req: Dictionary) -> Dictionary:
 
 static func _parse(s: Variant) -> Dictionary:
 	var out = JSON.parse_string(str(s))
+	if out is Dictionary and out.get("need_pack") == true:
+		_web_sent = {}  # (a new worker: the next request sends the rules again)
 	return Rules.ints(out) if out is Dictionary else {"ok": false, "error": "bad reply from the bot"}
 
 

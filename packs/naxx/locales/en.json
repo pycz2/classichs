@@ -1,0 +1,12 @@
+{
+ "mechanics": {
+  "POISONOUS": {
+   "name": "Poisonous",
+   "tip": "Destroys any minion it damages."
+  }
+ },
+ "sets": {
+  "VANILLA": "Classic",
+  "NAXX": "Curse of Naxxramas"
+ }
+}

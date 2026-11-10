@@ -425,24 +425,36 @@ impl Game {
             }
         }
         let dead = self.by_order(dead);
+        let turn = self.turn;
         for &d in &dead {
             let c = self.ctrl(d);
             if self.e(d).is_minion() {
                 let pos = self.players[c].board.iter().position(|&x| x == d).map_or(-1, |i| i as i64);
                 self.em(d).set_tag(n.died_pos, pos);
+                if let Some(t) = n.died_turn {
+                    self.em(d).set_tag(t, turn);
+                }
                 self.players[c].board.retain(|&x| x != d);
             } else {
                 self.players[c].weapon = None;
             }
             self.em(d).zone = "GRAVEYARD";
         }
+        // DOUBLE_ON_DEATH (Baron Rivendare): only while its source is still on the board after these deaths
+        let twice = self.players.iter().any(|p| self.e(p.hero).aura.tags.contains_key(n.double_on_death));
+        if twice {
+            self.auras();
+        }
         for &d in &dead {
-            if let Some(f) = self.hooks_of(d).on_death {
-                self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: d, ev: None, needs_in_play: false });
-            }
-            for hooks in self.ench_hooks(d) {
-                if let Some(f) = hooks.on_death {
+            let times = if twice && self.e(d).is_minion() && self.e(self.hero(self.ctrl(d))).has(n.double_on_death) { 2 } else { 1 };
+            for _ in 0..times {
+                if let Some(f) = self.hooks_of(d).on_death {
                     self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: d, ev: None, needs_in_play: false });
+                }
+                for hooks in self.ench_hooks(d) {
+                    if let Some(f) = hooks.on_death {
+                        self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: d, ev: None, needs_in_play: false });
+                    }
                 }
             }
             let e = self.e(d);
@@ -582,6 +594,9 @@ impl Game {
         self.em(t).damage += amount;
         if src != NONE && self.e(src).is_minion() && self.e(src).has(n.stealth) {
             self.em(src).erase_tag(n.stealth);
+        }
+        if src != NONE && self.e(t).is_minion() && self.e(src).has(n.poison) {
+            self.em(t).set_tag(n.to_destroy, true);
         }
         let player = self.ctrl(t);
         self.emit(obj!{"type": "damage", "source": src, "target": t, "amount": amount, "player": player});
@@ -961,6 +976,25 @@ impl Game {
         self.em(me).zone = "GRAVEYARD";
         let card = self.e(me).card_id;
         self.emit(obj!{"type": "secret_revealed", "entity": me, "player": c, "card": card});
+    }
+
+    /// Puts a trap card of its owner's hand or deck into play as if it were played (Mad Scientist);
+    /// false if it is not a trap there or the same trap is already in play.
+    pub fn put_trap(&mut self, e: Id) -> bool {
+        let c = self.ctrl(e);
+        let x = self.e(e);
+        let card = x.card_id;
+        if !x.card.trap || !(x.zone == "HAND" || x.zone == "DECK") || self.players[c].secrets.iter().any(|&s| self.e(s).card_id == card) {
+            return false;
+        }
+        let pl = &mut self.players[c];
+        pl.hand.retain(|&y| y != e);
+        pl.deck.retain(|&y| y != e);
+        pl.secrets.push(e);
+        self.enter_play(e);
+        self.em(e).zone = self.rs.names.trap;
+        self.log_event(obj!{"type": "trap_put", "entity": e, "player": c, "card": card});
+        true
     }
 
     pub fn request_choice(&mut self, me: Id, options: Vec<Id>) {

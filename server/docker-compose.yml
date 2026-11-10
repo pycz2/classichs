@@ -1,6 +1,6 @@
 # The game server with an S3-compatible pack store (SeaweedFS, `weed mini`).
 #   tools/build_packs.sh && cd server && docker compose up -d --build
-# The image bundles packs/*.cardpack (Neonfall, the default game, and Classic).
+# The image bundles packs/*.cardpack (Neonfall, the default game, Classic and Naxxramas).
 # Game: ws://localhost:7377 · admin panel: http://localhost:7377/admin
 # The superuser: docker compose exec server classichs-server admin root --db /data/classichs.db
 # Change S3_ACCESS_KEY / S3_SECRET_KEY (in .env next to this file) for anything but a test.

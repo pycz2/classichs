@@ -10,6 +10,8 @@ With --all the order is every second card first (an even half), then the rest;
        python3 tools/gen_art_styles.py --styles simple --pack neon   # every card of packs/neon
 --pack draws a pack's own cards (cards.json "look" + locales/en.json names) in the pack's palette
 (PACK_SETTING) straight into packs/<pack>/art/<style>/<id>.webp, 384 px like Classic's sets.
+       python3 tools/gen_art_styles.py --styles simple --pack naxx   # the new cards of data/naxx_art.json
+(a pack made from HearthstoneJSON draws only its new cards, from data/<pack>_art.json, in Classic's style).
 """
 import argparse
 import concurrent.futures as cf
@@ -56,6 +58,9 @@ PACK_SETTING = {
             "one soft shade per colour, a few clean glow lines. The background is only a smooth dark gradient with a "
             "soft neon glow behind the subject: no city, no buildings, no skyline, no signs, no rain scenery. "
             "Humour over grimdark, no gore.",
+    # the same look as Classic's simple set (its cards sit next to these), only the setting is the necropolis
+    "naxx": "The setting is Naxxramas, a haunted necropolis of undead and spiders: keep exactly the same warm "
+            "hand-painted look, with only a touch of eerie green or violet light. Spooky but friendly, no gore.",
 }
 KIND = {"MINION": "character or creature", "SPELL": "visible effect of an action or program", "WEAPON": "weapon",
         "CHAMPION": "champion portrait, head and shoulders", "POWER": "ability effect"}
@@ -64,6 +69,9 @@ KIND = {"MINION": "character or creature", "SPELL": "visible effect of an action
 def pack_cards(pack):
     """{id: description} for every card of packs/<pack>: its name, kind and art concept ("look")."""
     d = os.path.join(ROOT, "packs", pack)
+    looks = os.path.join(ROOT, "data", pack + "_art.json")  # a pack built from HearthstoneJSON (naxx): its new cards
+    if os.path.exists(looks):
+        return {i: f'"{n}"; {kind}; {look}' for i, (n, kind, look) in json.load(open(looks))["cards"].items()}
     names = json.load(open(os.path.join(d, "locales", "en.json")))["cards"]
     return {c["id"]: f'"{names[c["id"]]["name"]}"; {KIND[c["type"]]}; {c["look"]}'
             for c in json.load(open(os.path.join(d, "cards.json")))}

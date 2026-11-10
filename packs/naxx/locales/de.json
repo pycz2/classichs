@@ -1,0 +1,12 @@
+{
+ "mechanics": {
+  "POISONOUS": {
+   "name": "Giftig",
+   "tip": "Vernichtet jeden Diener, dem es Schaden zufügt."
+  }
+ },
+ "sets": {
+  "VANILLA": "Klassisch",
+  "NAXX": "Der Fluch von Naxxramas"
+ }
+}

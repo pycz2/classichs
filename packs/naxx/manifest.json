@@ -1,0 +1,61 @@
+{
+  "format": 1,
+  "id": "naxx-2014",
+  "version": "1.0.0",
+  "engine": "0.60.0",
+  "name": {
+    "en": "Naxxramas 2014",
+    "ru": "Наксрамас 2014",
+    "de": "Naxxramas 2014",
+    "fr": "Naxxramas 2014",
+    "es": "Naxxramas 2014",
+    "pt_BR": "Naxxramas 2014",
+    "it": "Naxxramas 2014",
+    "pl": "Naxxramas 2014"
+  },
+  "description": {
+    "en": "The game as it was played after July 22, 2014: the Basic and Classic cards and the 30 cards of the Curse of Naxxramas, each as at the release — Deathrattles everywhere, Undertaker at +1/+1, Loatheb, Kel'Thuzad, Feugen and Stalagg.",
+    "ru": "Игра, как в неё играли после 22 июля 2014 года: базовые и классические карты и 30 карт «Проклятия Наксрамаса», каждая как на выходе — предсмертные хрипы повсюду, Гробовщик с +1/+1, Лотхиб, Кел'Тузад, Фойген и Сталагг.",
+    "de": "Das Spiel, wie es nach dem 22. Juli 2014 gespielt wurde: die Basis- und Klassik-Karten und die 30 Karten aus „Der Fluch von Naxxramas“, jede wie zur Veröffentlichung — Todesröcheln überall, Totengräber mit +1/+1, Loatheb, Kel'Thuzad, Feugen und Stalagg.",
+    "fr": "Le jeu tel qu’on le jouait après le 22 juillet 2014 : les cartes de base et classiques et les 30 cartes de « La malédiction de Naxxramas », chacune telle qu’à sa sortie — des râles d’agonie partout, le Croque-mort à +1/+1, Horreb, Kel’Thuzad, Feugen et Stalagg.",
+    "es": "El juego tal como se jugaba después del 22 de julio de 2014: las cartas básicas y clásicas y las 30 cartas de «La maldición de Naxxramas», cada una como en su lanzamiento: últimos alientos por todas partes, el Enterrador con +1/+1, Loatheb, Kel'Thuzad, Feugen y Stalagg.",
+    "pt_BR": "O jogo como era jogado depois de 22 de julho de 2014: os cards Básicos e Clássicos e os 30 cards de “A Maldição de Naxxramas”, cada um como no lançamento — Últimos Suspiros por toda parte, o Agente Funerário com +1/+1, Loatheb, Kel'Thuzad, Feugen e Stalagg.",
+    "it": "Il gioco come si giocava dopo il 22 luglio 2014: le carte Base e Classiche e le 30 carte de “La Maledizione di Naxxramas”, ognuna come all’uscita — Rantoli di Morte ovunque, il Becchino con +1/+1, Loatheb, Kel'Thuzad, Feugen e Stalagg.",
+    "pl": "Gra w wersji sprzed lat, po 22 lipca 2014: karty podstawowe i klasyczne oraz 30 kart z „Klątwy Naxxramas”, każda jak w dniu premiery — wszędzie Agonia, Grabarz z +1/+1, Loatheb, Kel'Thuzad, Feugen i Stalagg."
+  },
+  "authors": ["Classic HS"],
+  "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+  "redistributable": true,
+  "default_locale": "en",
+  "locales": ["en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"],
+  "art_sets": [
+    {"id": "simple", "name": {"en": "Simple painted", "ru": "Простой рисованный", "de": "Einfach gemalt", "fr": "Peint simple", "es": "Pintado simple", "pt_BR": "Pintura simples", "it": "Dipinto semplice", "pl": "Prosty malowany"}, "default": true},
+    {"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированный"}},
+    {"id": "cartoon", "name": {"en": "Cartoon 2D", "ru": "Мультяшный 2D", "de": "Cartoon 2D", "fr": "Dessin animé 2D", "es": "Dibujos 2D", "pt_BR": "Desenho 2D", "it": "Cartone 2D", "pl": "Kreskówka 2D"}},
+    {"id": "photo", "name": {"en": "Photoreal", "ru": "Фотореалистичный", "de": "Fotorealistisch", "fr": "Photoréaliste", "es": "Fotorrealista", "pt_BR": "Fotorrealista", "it": "Fotorealistico", "pl": "Fotorealistyczny"}}
+  ],
+  "sound_sets": [{"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированные"}, "default": true}],
+  "music_sets": [
+    {"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированная"}, "default": true},
+    {"id": "open", "name": {"en": "Open (CC0)", "ru": "Открытая (CC0)"}}
+  ],
+  "card_back": null,
+  "logo": null,
+  "colors": {
+    "classes": {
+      "DRUID": "703606",
+      "HUNTER": "016e01",
+      "MAGE": "0092ab",
+      "PALADIN": "aa8f00",
+      "PRIEST": "b8b090",
+      "ROGUE": "4c4d48",
+      "SHAMAN": "0070de",
+      "WARLOCK": "7624ad",
+      "WARRIOR": "8e1002",
+      "NEUTRAL": "6b6b6b",
+      "DREAM": "6b6b6b",
+      "DEMONHUNTER": "6b6b6b"
+    },
+    "rarities": {"FREE": "e8e8e8", "COMMON": "e8e8e8", "RARE": "2f7cff", "EPIC": "a335ee", "LEGENDARY": "ff8000"}
+  }
+}
