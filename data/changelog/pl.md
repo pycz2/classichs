@@ -4,6 +4,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.62.0] - 2026-11-10
+
+### Dodano
+- Panel administracyjny: wersja serwera w rogu każdej strony; pulpit pokazuje, ile miejsca zajmują baza danych i magazyn pakietów.
+- Panel administracyjny: powtórka każdej gry wprost na jej stronie — Play otwiera ją na dole jak w kliencie (okrojona wersja webowa tylko z odtwarzaczem powtórek; pakiet gry pobiera z serwera). Zamyka się krzyżykiem albo przy zmianie strony.
+- Panel administracyjny: statystyki w stylu HSReplay dla każdej gry — skuteczność klas według trybu i rangi, 20 najlepszych talii i 5 najlepszych każdej klasy, karty (w ilu taliach, kopie, skuteczność talii, jak często zagrywane i skuteczność po zagraniu, mulligan: zostawiona czy wymieniona), za tę godzinę, dzień, tydzień, miesiąc, rok i cały czas, z wykresami i angielskimi nazwami kart. Aktualizowane po każdej grze; wcześniejsze gry pochodzą z ich powtórek.
+
 ## [0.61.0] - 2026-11-10
 
 ### Dodano

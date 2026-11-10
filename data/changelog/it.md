@@ -4,6 +4,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.62.0] - 2026-11-10
+
+### Aggiunto
+- Pannello di amministrazione: la versione del server nell’angolo di ogni pagina; la panoramica mostra quanto spazio occupano il database e l’archivio dei pacchetti.
+- Pannello di amministrazione: il replay di qualsiasi partita sulla sua pagina — Play lo apre in basso come nel client (una versione web ridotta con il solo visore dei replay; prende il pacchetto del gioco dal server). Si chiude con la sua X o cambiando pagina.
+- Pannello di amministrazione: statistiche in stile HSReplay per gioco — percentuale di vittorie delle classi per modalità e grado, i 20 mazzi migliori e i 5 migliori di ogni classe, le carte (in quanti mazzi, copie, vittorie dei mazzi, quanto vengono giocate e le vittorie quando giocate, il mulligan: tenuta o sostituita), per quest’ora, oggi, questa settimana, questo mese, quest’anno e da sempre, con grafici e i nomi inglesi delle carte. Aggiornate dopo ogni partita; le partite precedenti arrivano dai loro replay.
+
 ## [0.61.0] - 2026-11-10
 
 ### Aggiunto

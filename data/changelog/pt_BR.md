@@ -4,6 +4,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.62.0] - 2026-11-10
+
+### Adicionado
+- Painel de administração: a versão do servidor no canto de cada página; o painel principal mostra quanto espaço ocupam o banco de dados e o armazenamento de pacotes.
+- Painel de administração: o replay de qualquer partida na própria página dela — Play o abre embaixo como no cliente (uma versão web reduzida só com o visualizador de replays; ela busca o pacote do jogo no servidor). Fecha no X ou ao mudar de página.
+- Painel de administração: estatísticas no estilo do HSReplay por jogo — taxa de vitória das classes por modo e patente, os 20 melhores decks e os 5 melhores de cada classe, as cartas (em quantos decks, cópias, taxa de vitória dos decks, quanto são jogadas e a taxa quando jogadas, o mulligan: mantida ou trocada), para esta hora, dia, semana, mês, ano e todo o tempo, com gráficos e os nomes das cartas em inglês. Atualizadas após cada partida; as partidas anteriores vêm dos replays.
+
 ## [0.61.0] - 2026-11-10
 
 ### Adicionado

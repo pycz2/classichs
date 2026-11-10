@@ -4,6 +4,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.62.0] - 2026-11-10
+
+### Añadido
+- Panel de administración: la versión del servidor en la esquina de cada página; el panel principal muestra cuánto ocupan la base de datos y el almacén de paquetes.
+- Panel de administración: la repetición de cualquier partida en su propia página — Play la abre abajo como en el cliente (una versión web reducida solo con el visor de repeticiones; toma el paquete del juego del servidor). Se cierra con su aspa o al cambiar de página.
+- Panel de administración: estadísticas al estilo de HSReplay por juego — tasa de victorias de las clases por modo y rango, los 20 mejores mazos y los 5 mejores de cada clase, las cartas (en cuántos mazos, copias, tasa de victorias de los mazos, cuánto se juegan y la tasa al jugarlas, el mulligan: conservada o cambiada), para esta hora, día, semana, mes, año y desde siempre, con gráficos y los nombres de las cartas en inglés. Se actualizan tras cada partida; las partidas anteriores salen de sus repeticiones.
+
 ## [0.61.0] - 2026-11-10
 
 ### Añadido

@@ -4,6 +4,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.62.0] - 2026-11-10
+
+### Hinzugefügt
+- Admin-Panel: die Version des Servers in der Ecke jeder Seite; die Übersicht zeigt, wie viel Platz Datenbank und Paketspeicher belegen.
+- Admin-Panel: die Wiederholung jedes Spiels direkt auf seiner Seite — „Play“ öffnet sie unten wie im Client (ein verkleinerter Web-Build nur mit der Wiederholungsansicht; das Paket des Spiels holt er vom Server). Sie schließt mit ihrem Kreuz oder auf einer anderen Seite.
+- Admin-Panel: Statistiken wie bei HSReplay je Spiel — Siegquoten der Klassen nach Modus und Rang, die 20 besten Decks und die 5 besten jeder Klasse, Karten (in wie vielen Decks, Kopien, Siegquote der Decks, wie oft gespielt und die Siegquote gespielt, die Mulligan-Wahl: behalten oder getauscht), für diese Stunde, diesen Tag, diese Woche, diesen Monat, dieses Jahr und insgesamt, mit Diagrammen und englischen Kartennamen. Nach jedem Spiel aktualisiert; frühere Spiele kommen aus ihren Wiederholungen.
+
 ## [0.61.0] - 2026-11-10
 
 ### Hinzugefügt

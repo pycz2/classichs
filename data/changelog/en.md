@@ -4,6 +4,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.62.0] - 2026-11-10
+
+### Added
+- Admin panel: the server's version in the corner of every page; the dashboard shows how much space the database and the pack store take.
+- Admin panel: any game's replay right on its page — Play opens the replay at the bottom as in the client (a cut-down web build with only the replay view; it gets the game's pack from the server). It closes with its cross or on another page.
+- Admin panel: HSReplay-like statistics per game — class win rates by mode and rank, the top 20 decks and the top 5 of each class, cards (in how many decks, copies, deck win rate, how often played and the played win rate, the mulligan: kept or replaced), for this hour, day, week, month, year and all time, with charts and the cards' English names. Updated after every game; the games played before come from their replays.
+
 ## [0.61.0] - 2026-11-10
 
 ### Added
