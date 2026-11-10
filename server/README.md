@@ -304,7 +304,7 @@ it, its last decision and its log; their errors also go to the event log (kind `
   gets a bot for one game, which plays with that game's cards: its deck is one of the pack's templates
   (`decks/*.json`) that is legal by the pack's rules, else a starter deck of a class; a pack with neither
   gets no auto-bot (Arena games always do). The bot: the level by the player's hidden MMR (under 1350 easy, up to 1650 medium,
-  else hard; Arena: the run's wins, 0-2 easy, 3-5 medium, 6+ hard), from a pool of accounts
+  else hard; a ranked Legend: superhard, 3 s a decision on the server; Arena: the run's wins, 0-2 easy, 3-5 medium, 6+ hard), from a pool of accounts
   `AutoBot_<Level>_1..3` and `AutoBot_Arena_1..3` (made when first needed), paired with that player
   whatever the window, no human-pace pauses, a fresh Arena draft each game. All busy: the player
   waits on. The event log shows them (kind `auto_bot`).

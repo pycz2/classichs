@@ -6,11 +6,12 @@ import { api } from './api.js'
 import { html, useLoad, useTick, toast, Card, ErrorBox, Empty, Icon, Modal, num, dur } from './ui.js'
 import { Confirm } from './accounts.js'
 
-const LEVEL = { easy: 'Easy', medium: 'Medium', hard: 'Hard' }
+const LEVEL = { easy: 'Easy', medium: 'Medium', hard: 'Hard', superhard: 'Super hard' }
 const LEVEL_TIP = {
   easy: 'One guess of the hidden cards, looks one action ahead, errs now and then (30%)',
   medium: '2–3 guesses of the hidden cards, plays its turn on, ignores the reply',
-  hard: 'Up to 10 guesses within a second, plays its turn on and the opponent\'s whole reply'
+  hard: 'Up to 10 guesses within a second, plays its turn on and the opponent\'s whole reply',
+  superhard: 'Plans its whole turn (a beam search), looks at the reply and its next turn, a learned evaluation; 3 s a decision'
 }
 const MODES = { ladder: 'Ranked + casual', ranked: 'Ranked', casual: 'Casual', arena: 'Arena' }
 

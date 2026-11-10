@@ -151,6 +151,26 @@ async fn a_lonely_player_of_another_game_gets_an_auto_bot() {
     let _ = app;
 }
 
+/// A ranked Legend who waits alone gets the real test: a Super hard auto-bot (not a Hard one).
+#[tokio::test]
+async fn a_legend_gets_a_super_hard_auto_bot() {
+    use sea_orm::{ActiveModelTrait, IntoActiveModel, Set};
+    let (addr, app) = server().await;
+    let mut c = C::register(addr, "legend").await;
+    let id = db::id_by_name(&app.db, "legend").await.unwrap().unwrap();
+    let rules = classichs_server::packs::GameRules::classic();
+    let st = db::standing(&app.db, id, &rules.id, &rules.ladder).await.unwrap();
+    let mut row = st.into_active_model();
+    row.rank = Set(0); // Legend
+    row.update(&app.db).await.unwrap();
+    c.send(json!({"t": "queue", "mode": "ranked", "deck": deck("MAGE")})).await;
+    c.want("queued", 10).await;
+    let m = c.want("match", 30).await;
+    assert_eq!(m["opponent"]["user"], "AutoBot_Superhard_1", "{m}");
+    c.send(json!({"t": "act", "game": m["game"], "action": {"type": "concede", "player": m["you"]}})).await;
+    c.want("game_over", 30).await;
+}
+
 /// Two players find each other first: no auto-bot.
 #[tokio::test]
 async fn players_pair_with_players_first() {

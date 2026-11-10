@@ -20,7 +20,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use transport::Transport;
 
-pub const LEVELS: [&str; 3] = ["easy", "medium", "hard"];
+pub const LEVELS: [&str; 4] = ["easy", "medium", "hard", "superhard"];
 pub const MODES: [&str; 4] = ["ladder", "ranked", "casual", "arena"];
 
 /// A bot's settings (the `bots` row and its account's name).

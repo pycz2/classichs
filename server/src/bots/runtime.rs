@@ -401,6 +401,10 @@ async fn read_ahead(c: &mut Conn, ahead: &mut VecDeque<Value>) -> Result<(), Str
     Ok(())
 }
 
+/// A Super hard decision's time on the server: half the game's 6 s (classichs_brain::SUPER_HARD_MS), as the
+/// server's host may have one core for every game.
+pub const SERVER_SUPER_HARD_MS: u64 = 3000;
+
 /// One game until `game_over`; returns the Arena part of the result (Arena games).
 async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool, level: Level) -> Result<Option<Value>, String> {
     let lib = Library::of_pack(m["pack"].as_str());  // the game's own cards
@@ -411,7 +415,7 @@ async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool,
         Level::Easy => Duration::ZERO,
         Level::Medium => Duration::from_millis(300),
         Level::Hard => Duration::from_millis(1000),
-        Level::SuperHard => Duration::from_millis(classichs_brain::SUPER_HARD_MS),
+        Level::SuperHard => Duration::from_millis(SERVER_SUPER_HARD_MS),
     };
     let mut last_acted = (-1i64, -1i64); // (history length, current) of the state acted on
     // both players change cards at once: a state made before ours arrived must not make a second mulligan

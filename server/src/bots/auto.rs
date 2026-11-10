@@ -3,7 +3,8 @@
 //! them whatever the window), plays the one game at once (no human-pace pauses) and goes. The
 //! accounts are a pool: "AutoBot_<Level>_<n>" (POOL per level) and "AutoBot_Arena_<n>" (POOL; the
 //! level per game), made when first needed. All busy: the player waits on.
-//! The level: ranked and casual by the player's hidden MMR, the Arena by the run's wins.
+//! The level: ranked and casual by the player's hidden MMR (a ranked Legend: Super hard), the Arena by the
+//! run's wins.
 
 use crate::bots::brain::Level;
 use crate::bots::cards::Library;
@@ -61,7 +62,7 @@ pub fn is_bot_name(name: &str) -> bool {
 
 /// Who waits for an auto-bot now (the matchmaking tick calls it every second).
 pub async fn tick(app: &AppRef) {
-    let want: Vec<(i64, Mode, f64, String)> = {
+    let want: Vec<(i64, Mode, f64, bool, String)> = {
         let hub = app.hub();
         let now = std::time::Instant::now();
         let taken: HashSet<i64> = hub.auto_for.values().copied().collect();
@@ -74,11 +75,13 @@ pub async fn tick(app: &AppRef) {
                     && !taken.contains(id)
                     && !is_bot_name(&s.name)
             })
-            .map(|(id, s)| (*id, s.mode, s.key.mmr, s.rules.rules_hash.clone()))
+            .map(|(id, s)| (*id, s.mode, s.key.mmr, s.key.legend, s.rules.rules_hash.clone()))
             .collect()
     };
-    for (player, mode, mmr, pack) in want {
-        let level = if mode == Mode::Arena {
+    for (player, mode, mmr, legend, pack) in want {
+        let level = if mode == Mode::Ranked && legend {
+            Level::SuperHard // a Legend's long wait ends with the real test
+        } else if mode == Mode::Arena {
             let wins = crate::entity::arena::Entity::find_by_id(player).one(&app.db).await.ok().flatten().map_or(0, |r| r.wins);
             level_for_wins(wins)
         } else {

@@ -1245,7 +1245,7 @@ fn bot_settings(f: &BotIn, base: Option<&crate::bots::BotConfig>) -> Result<(Str
     let lo = f.pause_min.or(base.map(|b| b.pause_min)).unwrap_or(5);
     let hi = f.pause_max.or(base.map(|b| b.pause_max)).unwrap_or(15);
     if !crate::bots::LEVELS.contains(&level.as_str()) {
-        return Err("The level is easy, medium or hard");
+        return Err("The level is easy, medium, hard or superhard");
     }
     if !crate::bots::MODES.contains(&modes.as_str()) {
         return Err("The games are ladder, ranked, casual or arena");

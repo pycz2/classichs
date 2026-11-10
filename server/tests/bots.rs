@@ -144,7 +144,13 @@ async fn the_admin_adds_changes_stops_and_deletes_bots() {
     assert_eq!(st, StatusCode::OK, "{v}");
     assert_eq!(v["names"], json!(["Bot_Hard_1", "Bot_Hard_2"]));
     let (st, v) = call(&app, r("POST", "/admin/api/bots", json!({"count": 1, "level": "genius"}))).await;
-    assert_eq!((st, v["error"].as_str()), (StatusCode::BAD_REQUEST, Some("The level is easy, medium or hard")));
+    assert_eq!((st, v["error"].as_str()), (StatusCode::BAD_REQUEST, Some("The level is easy, medium, hard or superhard")));
+    let (st, v) = call(&app, r("POST", "/admin/api/bots", json!({"count": 1, "level": "superhard", "modes": "ladder"}))).await;
+    assert_eq!((st, v["names"].clone()), (StatusCode::OK, json!(["Bot_Superhard_1"])), "a Super hard bot can be added");
+    let (_, list) = call(&app, r("GET", "/admin/api/bots", json!(null))).await;
+    let sh = list["bots"].as_array().unwrap().iter().find(|b| b["name"] == "Bot_Superhard_1").unwrap()["id"].clone();
+    let (st, _) = call(&app, r("POST", &format!("/admin/api/bots/{sh}/delete"), json!(null))).await;
+    assert_eq!(st, StatusCode::OK);
     let (_, list) = call(&app, r("GET", "/admin/api/bots", json!(null))).await;
     assert_eq!(list["summary"]["total"], 2);
     let b = &list["bots"][0];
