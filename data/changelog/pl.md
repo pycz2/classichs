@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.51.0] - 2026-11-10
+
+### Zmieniono
+- Karty Klasyczne i Podstawowe są jak w czerwcu 2014 (ostatnia łatka przed Naxxramas), według ówczesnych danych gry i historii w Hearthstone Wiki: Przywódca Defiasów 2/2; Zguba Zagłady zadaje 2 i przyzywa jednego z sześciu demonów z 2014; Łuk z Orlego Rogu rośnie od każdego ujawnionego Sekretu; Roześmiana Siostra kosztuje 3; wraca Sukkub (nie Spaczony Tropiciel); Cień Niczego znika na koniec tury; Mechy i Nieumarli z 2014 nie mają rasy; 37 tekstów i ponad 40 nazw jak w 2014 we wszystkich językach.
+- Nozdormu działa: dopóki jest na stole, tura trwa 15 sekund — na serwerze, na treningu z botem i w grze przez kod (z lontem).
+
+### Dodano
+- Oryginalne głosy kart i bohaterów w twoim lokalnym pakiecie: dźwięk i kwestia stronnika, gdy wchodzi, atakuje i ginie, dźwięki zaklęć, emotki i kwestie bohaterów (za mało many, nie może atakować, początek gry). Pakiet buduje się lokalnie (tools/fetch_original_sounds.py, pack.py --sound-set i --voice) i nigdzie nie jest wysyłany.
+- W twoim lokalnym pakiecie grafik: grafiki z 2014 kart, których grafika później się zmieniła (Sukkub, Harpia Wichrogniewu, Strażniczka Sekretów, Wypatroszenie, Ugryzienie, Śmiertelny Strzał, Rozłupanie Czaszki).
+
+### Naprawiono
+- Efekty w trakcie ataku dzieją się w połowie drogi: atak staje, Sekret się ujawnia i działa w pełni (Szlachetne Poświęcenie — atak trafia w Obrońcę, Zmylenie — w nowy cel, Lodowa Pułapka — atakujący wraca do ręki, Wyparowanie — atakujący ginie w locie, Wybuchowa Pułapka), a leczenie Czempionki z Prawdziwego Srebra też w połowie drogi.
+- Boska Tarcza pęka w tej samej chwili, w której atakujący otrzymuje obrażenia.
+- Wytrzymałość broni poniżej tej z karty jest czerwona, jak zranione zdrowie.
+- Obrażenia od zaklęć na stronniku mają nowy magiczny efekt; śpiący stronnik wypuszcza zielone z; ukryte efekty (Zepsucie i inne) są oznaczone na stronniku i opisane na jego dużej karcie.
+- Odrzucone karty wylatują w górę i płoną; karta skopiowana z ręki przeciwnika przylatuje z tej ręki.
+- Pakiet gracza na serwerze może ważyć do 128 MiB (jak w kliencie).
+
 ## [0.50.0] - 2026-11-09
 
 ### Dodano

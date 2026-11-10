@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.51.0] - 2026-11-10
+
+### Changed
+- Classic and Basic cards are as in June 2014 (the last patch before Naxxramas), from the game's data of the time and the Hearthstone Wiki's history: Defias Ringleader 2/2; Bane of Doom deals 2 and summons one of the six demons of 2014; Eaglehorn Bow grows with any revealed Secret; Laughing Sister costs 3; Succubus is back (not Felstalker); Shadow of Nothing goes at the end of the turn; the 2014 Mechs and Undead have no race; 37 card texts and 40+ names as in 2014 in every language.
+- Nozdormu works: while he is on the board a turn lasts 15 seconds — on a server, in training with the bot and in code play (with the rope).
+
+### Added
+- The original card and hero voice in your own local pack: a minion's sound and line when it lands, attacks and dies, spell sounds, the heroes' emotes and lines (not enough mana, can't attack, the start). The pack is built locally (tools/fetch_original_sounds.py, pack.py --sound-set and --voice) and never sent anywhere.
+- In your own local art pack: the 2014 art of the cards whose art changed later (Succubus, Windfury Harpy, Secretkeeper, Eviscerate, Bite, Deadly Shot, Headcrack).
+
+### Fixed
+- Effects during an attack happen half-way: the attack pauses, the Secret reveals and acts fully (Noble Sacrifice — the attack goes into the Defender, Misdirection — to the new target, Freezing Trap — the attacker flies back to the hand, Vaporize — the attacker dies on its way, Explosive Trap), Truesilver Champion's heal half-way too.
+- Divine Shield pops at the same moment the attacker takes its damage.
+- A weapon's durability below its card's is red, like damaged health.
+- Spell Damage on a minion has a new magical effect; a sleeping minion lets out green z; hidden effects (Corruption and others) are marked on the minion and described in its big card.
+- Discarded cards fly up and burn; a card copied from the opponent's hand comes from that hand.
+- A player's pack on a server may weigh up to 128 MiB (as in the client).
+
 ## [0.50.0] - 2026-11-09
 
 ### Added

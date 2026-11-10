@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.51.0] - 2026-11-10
+
+### Cambiado
+- Las cartas Clásicas y Básicas son como en junio de 2014 (el último parche antes de Naxxramas), según los datos del juego de entonces y el historial de la Hearthstone Wiki: Cabecilla de los Defias 2/2; Perdición inflige 2 y invoca a uno de los seis demonios de 2014; el Arco de cuerno de águila crece con cualquier Secreto revelado; la Hermana risueña cuesta 3; vuelve la Súcubo (no el Acechador vil); la Sombra de nada desaparece al final del turno; los Mecas y No muertos de 2014 no tienen raza; 37 textos y más de 40 nombres como en 2014 en todos los idiomas.
+- Nozdormu funciona: mientras está en el tablero, un turno dura 15 segundos — en un servidor, en el entrenamiento contra el bot y en la partida por código (con la mecha).
+
+### Añadido
+- Las voces originales de cartas y héroes en tu paquete local: el sonido y la frase de un esbirro al llegar, atacar y morir, los sonidos de los hechizos, los emotes y frases de los héroes (no hay maná suficiente, no puede atacar, inicio). El paquete se construye localmente (tools/fetch_original_sounds.py, pack.py --sound-set y --voice) y no se envía a ninguna parte.
+- En tu paquete local de ilustraciones: las ilustraciones de 2014 de las cartas que cambiaron después (Súcubo, Arpía Furia del Viento, Guardiana de secretos, Eviscerar, Mordisco, Disparo mortal, Rompecráneos).
+
+### Corregido
+- Los efectos durante un ataque ocurren a mitad de camino: el ataque se detiene, el Secreto se revela y actúa por completo (Sacrificio noble — el ataque va al Defensor, Redirección — al nuevo objetivo, Trampa congelante — el atacante vuelve a la mano, Vaporizar — el atacante muere en el camino, Trampa explosiva), y la curación de la Campeona de veraplata también a mitad de camino.
+- El Escudo divino se rompe en el mismo momento en que el atacante recibe su daño.
+- La durabilidad de un arma por debajo de la de su carta es roja, como la salud herida.
+- El daño con hechizos en un esbirro tiene un nuevo efecto mágico; un esbirro dormido suelta z verdes; los efectos ocultos (Corrupción y otros) se marcan en el esbirro y se describen en su carta grande.
+- Las cartas descartadas salen volando hacia arriba y arden; una carta copiada de la mano del rival sale de esa mano.
+- El paquete de un jugador en un servidor puede pesar hasta 128 MiB (como en el cliente).
+
 ## [0.50.0] - 2026-11-09
 
 ### Añadido

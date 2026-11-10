@@ -36,7 +36,7 @@ use std::time::{Duration, Instant};
 use tokio::io::AsyncWriteExt;
 
 /// A player's pack, at most.
-pub const MAX_PLAYER_PACK: u64 = 100 << 20;
+pub const MAX_PLAYER_PACK: u64 = 128 << 20;  // as the client takes (game/pack.gd): a local pack with its own art and voice is ~110 MB
 /// A server pack (the admin's), at most: the format's limit (docs/packs/format.md §1).
 pub const MAX_SERVER_PACK: u64 = 128 << 20;
 /// Own packs per player.

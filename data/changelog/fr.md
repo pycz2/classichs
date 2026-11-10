@@ -4,6 +4,24 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.51.0] - 2026-11-10
+
+### Modifié
+- Les cartes Classique et De base sont comme en juin 2014 (le dernier patch avant Naxxramas), d’après les données du jeu de l’époque et l’historique du Hearthstone Wiki : Chef des Défias 2/2 ; Plaie funeste inflige 2 et invoque l’un des six démons de 2014 ; l’Arc de l’aigle grandit avec tout Secret révélé ; la Sœur hilare coûte 3 ; la Succube est de retour (et non le Traqueur gangrené) ; l’Ombre du néant disparaît en fin de tour ; les Méca et Morts-vivants de 2014 n’ont pas de type ; 37 textes et plus de 40 noms comme en 2014 dans toutes les langues.
+- Nozdormu fonctionne : tant qu’il est sur le plateau, un tour dure 15 secondes — sur un serveur, en entraînement contre le bot et en partie par code (avec la mèche).
+
+### Ajouté
+- Les voix originales des cartes et des héros dans votre pack local : le son et la réplique d’un serviteur quand il arrive, attaque et meurt, les sons des sorts, les émotes et répliques des héros (pas assez de mana, ne peut pas attaquer, début de partie). Le pack est construit localement (tools/fetch_original_sounds.py, pack.py --sound-set et --voice) et n’est envoyé nulle part.
+- Dans votre pack local d’illustrations : les illustrations de 2014 des cartes qui ont changé depuis (Succube, Harpie Furie-des-vents, Gardienne des secrets, Éviscération, Morsure, Tir mortel, Fracassement de crâne).
+
+### Corrigé
+- Les effets pendant une attaque se produisent à mi-chemin : l’attaque s’arrête, le Secret se révèle et agit entièrement (Noble sacrifice — l’attaque va dans le Défenseur, Détournement — vers la nouvelle cible, Piège givrant — l’attaquant revient en main, Vaporisation — l’attaquant meurt en chemin, Piège explosif), et le soin de la Championne en vrai-argent aussi à mi-chemin.
+- Le Bouclier divin éclate au même moment où l’attaquant subit ses dégâts.
+- La durabilité d’une arme sous celle de sa carte est rouge, comme une santé blessée.
+- Les dégâts des sorts sur un serviteur ont un nouvel effet magique ; un serviteur endormi émet des z verts ; les effets cachés (Corruption et autres) sont marqués sur le serviteur et décrits dans sa grande carte.
+- Les cartes défaussées s’envolent vers le haut et brûlent ; une carte copiée de la main adverse vient de cette main.
+- Le pack d’un joueur sur un serveur peut peser jusqu’à 128 Mio (comme dans le client).
+
 ## [0.50.0] - 2026-11-09
 
 ### Ajouté

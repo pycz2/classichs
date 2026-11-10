@@ -4,6 +4,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.51.0] - 2026-11-10
+
+### Geändert
+- Classic- und Basic-Karten sind wie im Juni 2014 (der letzte Patch vor Naxxramas), nach den Spieldaten jener Zeit und der Historie im Hearthstone Wiki: Rädelsführer der Defias 2/2; Verdammnis verursacht 2 Schaden und ruft einen der sechs Dämonen von 2014; der Adlerhornbogen wächst mit jedem aufgedeckten Geheimnis; die Lachende Schwester kostet 3; die Sukkubus ist zurück (nicht der Teufelspirscher); Schatten des Nichts verschwindet am Ende des Zuges; die Mechs und Untoten von 2014 haben kein Volk; 37 Kartentexte und über 40 Namen wie 2014 in jeder Sprache.
+- Nozdormu wirkt: Solange er auf dem Feld ist, dauert ein Zug 15 Sekunden — auf einem Server, im Training gegen den Bot und im Codespiel (mit Lunte).
+
+### Hinzugefügt
+- Die originale Vertonung von Karten und Helden im eigenen lokalen Paket: Klang und Satz eines Dieners beim Landen, Angreifen und Sterben, Zauberklänge, Emotes und Sätze der Helden (nicht genug Mana, kann nicht angreifen, Spielbeginn). Das Paket wird lokal gebaut (tools/fetch_original_sounds.py, pack.py --sound-set und --voice) und nirgends hingeschickt.
+- Im eigenen lokalen Bildpaket: die Bilder von 2014 der Karten, deren Bild sich später änderte (Sukkubus, Windzornharpyie, Geheimnishüterin, Ausweiden, Biss, Tödlicher Schuss, Schädelbruch).
+
+### Behoben
+- Effekte während eines Angriffs geschehen auf halbem Weg: Der Angriff hält an, das Geheimnis wird aufgedeckt und wirkt vollständig (Edles Opfer — der Angriff geht in den Verteidiger, Irreführung — zum neuen Ziel, Eiskältefalle — der Angreifer fliegt zurück auf die Hand, Verdampfen — der Angreifer stirbt unterwegs, Explosive Falle), auch die Heilung des Echtsilberchampions auf halbem Weg.
+- Gottesschild platzt im selben Moment, in dem der Angreifer seinen Schaden nimmt.
+- Die Haltbarkeit einer Waffe unter dem Kartenwert ist rot, wie verletztes Leben.
+- Zauberschaden an einem Diener hat einen neuen magischen Effekt; ein schlafender Diener lässt grüne z aufsteigen; versteckte Effekte (Verderbnis und andere) sind am Diener markiert und in seiner großen Karte beschrieben.
+- Abgeworfene Karten fliegen nach oben und verbrennen; eine aus der gegnerischen Hand kopierte Karte kommt aus dieser Hand.
+- Das Paket eines Spielers auf einem Server darf bis zu 128 MiB groß sein (wie im Client).
+
 ## [0.50.0] - 2026-11-09
 
 ### Hinzugefügt

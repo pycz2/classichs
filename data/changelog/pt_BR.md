@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.51.0] - 2026-11-10
+
+### Alterado
+- As cartas Clássicas e Básicas estão como em junho de 2014 (o último patch antes de Naxxramas), segundo os dados do jogo da época e o histórico da Hearthstone Wiki: Líder dos Défias 2/2; Ruína Funesta causa 2 e evoca um dos seis demônios de 2014; o Arco de Chifre de Águia cresce com qualquer Segredo revelado; a Irmã Risonha custa 3; a Súcubo voltou (não o Espreitador Vil); a Sombra do Nada some no fim do turno; os Mecanoides e Mortos-vivos de 2014 não têm raça; 37 textos e mais de 40 nomes como em 2014 em todos os idiomas.
+- Nozdormu funciona: enquanto ele está no tabuleiro, um turno dura 15 segundos — num servidor, no treino contra o bot e no jogo por código (com o pavio).
+
+### Adicionado
+- As vozes originais das cartas e heróis no seu pacote local: o som e a fala de um lacaio ao chegar, atacar e morrer, os sons dos feitiços, os emotes e falas dos heróis (mana insuficiente, não pode atacar, início). O pacote é montado localmente (tools/fetch_original_sounds.py, pack.py --sound-set e --voice) e não é enviado a lugar nenhum.
+- No seu pacote local de artes: as artes de 2014 das cartas que mudaram depois (Súcubo, Harpia Fúria-dos-ventos, Guardiã de Segredos, Eviscerar, Mordida, Tiro Mortal, Racha-crânio).
+
+### Corrigido
+- Os efeitos durante um ataque acontecem no meio do caminho: o ataque para, o Segredo é revelado e age por inteiro (Sacrifício Nobre — o ataque vai para o Defensor, Despiste — para o novo alvo, Armadilha Congelante — o atacante volta para a mão, Vaporizar — o atacante morre no caminho, Armadilha Explosiva), e a cura da Campeã de Veraprata também no meio do caminho.
+- O Escudo Divino estoura no mesmo instante em que o atacante recebe o dano.
+- A durabilidade de uma arma abaixo da da carta fica vermelha, como vida ferida.
+- O Dano Mágico num lacaio tem um novo efeito mágico; um lacaio dormindo solta z verdes; efeitos ocultos (Corrupção e outros) são marcados no lacaio e descritos na carta grande.
+- Cartas descartadas voam para cima e queimam; uma carta copiada da mão do oponente sai dessa mão.
+- O pacote de um jogador num servidor pode ter até 128 MiB (como no cliente).
+
 ## [0.50.0] - 2026-11-09
 
 ### Adicionado

@@ -4,6 +4,24 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.51.0] - 2026-11-10
+
+### Modificato
+- Le carte Classiche e Base sono come a giugno 2014 (l’ultima patch prima di Naxxramas), secondo i dati di gioco dell’epoca e la cronologia della Hearthstone Wiki: Capobanda dei Defias 2/2; Flagello Funesto infligge 2 ed evoca uno dei sei demoni del 2014; l’Arco di Corno d’Aquila cresce con qualunque Segreto rivelato; la Sorella Ridente costa 3; torna la Succube (non il Vilsegugio); l’Ombra del Nulla sparisce a fine turno; i Robot e i Non Morti del 2014 non hanno razza; 37 testi e oltre 40 nomi come nel 2014 in tutte le lingue.
+- Nozdormu funziona: finché è sul tabellone, un turno dura 15 secondi — su un server, nell’allenamento contro il bot e nella partita con codice (con la miccia).
+
+### Aggiunto
+- Le voci originali di carte ed eroi nel tuo pacchetto locale: il suono e la battuta di un servitore quando arriva, attacca e muore, i suoni degli incantesimi, le emote e le battute degli eroi (mana insufficiente, non può attaccare, inizio). Il pacchetto si costruisce in locale (tools/fetch_original_sounds.py, pack.py --sound-set e --voice) e non viene inviato da nessuna parte.
+- Nel tuo pacchetto locale di illustrazioni: le illustrazioni del 2014 delle carte cambiate in seguito (Succube, Arpia Furiavento, Custode dei Segreti, Sventramento, Morso, Colpo Mortale, Spaccacrani).
+
+### Corretto
+- Gli effetti durante un attacco avvengono a metà strada: l’attacco si ferma, il Segreto si rivela e agisce del tutto (Nobile Sacrificio — l’attacco va sul Difensore, Depistaggio — verso il nuovo bersaglio, Trappola Congelante — l’attaccante torna in mano, Vaporizzazione — l’attaccante muore per strada, Trappola Esplosiva), e anche la cura della Campionessa di Verargento a metà strada.
+- Lo Scudo Divino si rompe nello stesso istante in cui l’attaccante subisce i danni.
+- La resistenza di un’arma sotto quella della carta è rossa, come la salute ferita.
+- Il Danno Magico su un servitore ha un nuovo effetto magico; un servitore che dorme emette z verdi; gli effetti nascosti (Corruzione e altri) sono segnati sul servitore e descritti nella sua carta grande.
+- Le carte scartate volano in alto e bruciano; una carta copiata dalla mano avversaria arriva da quella mano.
+- Il pacchetto di un giocatore su un server può pesare fino a 128 MiB (come nel client).
+
 ## [0.50.0] - 2026-11-09
 
 ### Aggiunto

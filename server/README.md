@@ -325,7 +325,7 @@ not answer, 2 images kept. The headers of these scripts tell the details.
 | Refused actions | 3 per player in a game, then the game is lost |
 | Connections per account | 1: a new login closes the old connection (`kicked`) |
 | Tournaments | 3 not over per creator, 10 created a day; 2–128 players; start from now+11 min to now+14 days; 60 s for each accept, ban and pick |
-| A player's pack | 100 MB; 10 packs per player |
+| A player's pack | 128 MiB (as the client takes); 10 packs per player |
 | A server pack (admin upload) | 128 MB |
 | Inside a pack | docs/packs/format.md §1 (10 000 files, 256 MB unpacked, 16 MB a file, the rules part 8 MB, no zip bombs) |
 | The check of a new pack's rules | a trial game of at most 600 actions and 20 s; one check at a time |
@@ -567,7 +567,7 @@ A pack is `{id, name: {lang: text}, version, rules_hash, content_hash, size, def
   for its owner and (while enabled) the owner's friends. Otherwise 404; no or a bad token 401.
 - `POST /packs` with the token, the `.cardpack` as the raw body → `201 {pack}`; refusals
   are `{error, code}`: 401 `auth_required`/`bad_token`, 409 `exists` (already yours) or
-  `too_many` (10), 413 `too_large` (100 MB), 422 `invalid` (the reason), 400 `empty`.
+  `too_many` (10), 413 `too_large` (128 MiB), 422 `invalid` (the reason), 400 `empty`.
 - Both answer CORS (`Access-Control-Allow-Origin: *`, preflight included) for the web build.
 
 The check (`packs::inspect` and `packs::trial`, on every upload and bundled pack): the zip
