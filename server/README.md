@@ -202,6 +202,7 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `POST signup_keys/{id}/revoke` | the key registers nobody more (its accounts stay) |
 | `GET tournaments?status` · `GET tournaments/{id}` | the list (summaries + `top` [{place, name}]) · one tournament as the players' `full`, every deck shown |
 | `POST tournaments/{id}/cancel` | cancels one that is not over (409 otherwise) |
+| `GET stats?pack&mode&bracket&period&bots&min&class` | the Statistics page (below): `{packs: [{pack, name, games}], pack, period, bucket, modes, brackets, backfill, sides, classes: [{class, name, games, wins, mirrors}], series: {hour: [[bucket, sides]] ×48, day: ×30}, decks: {total, top: [deck] ×20, by_class: {class: [deck] ×5}}, cards: [{card, name, cost, decks, copies, deck_wins, played, played_wins, plays, kept, replaced, kept_wins}]}`; period hour\|day\|week\|month\|year\|all (default), `bots=0` leaves out games with a bot, `min` (default 20) the fewest games of a deck shown, `class` the cards of one class's decks; a deck is `{deck, class, hero, games, wins, cards: [{id, name, n, cost}]}` |
 
 `/admin/replay/{file}` (the cookie) serves the replay player's files with a CSP of their own
 (`'wasm-unsafe-eval'`, `blob:` workers, framed by the panel only); the panel's CSP allows that
@@ -245,6 +246,26 @@ Every finished game's replay is in `replays` (M9: game, pack, p0, p1, ended, dat
 replay JSON deflate-compressed), kept for good. Tournaments (M10): `tournaments`, `t_entrants` (with the copied decks, seed, team, place), `t_matches`
 (sides, the bracket sources, step, deadline, score, the series as JSON) and `t_games` (each
 game of a match, its decks and winner).
+
+#### Statistics
+
+The admin's Statistics page (`src/stats.rs`, M11) reads only aggregated rows; each finished
+game with a winner adds to them as it ends (`game.rs` → `stats::record`: the replay played
+again in the engine). Every row has the pack (`rules_hash`), the period (`hour`, `day`, `week`,
+`month`, `year`, `all`) and its UTC bucket (`2026-11-10T14`, `2026-11-10`, the week's Monday,
+`2026-11`, `2026`, `all`), the mode, the player's bracket at the game's start (ranked: `Legend`,
+`1-5`, `6-10`, …; Arena by the run's wins: `0-2`, `3-5`, `6+`; other modes `all`) and `bots` (1: an
+`AutoBot_`/`Bot_` account played). Tables, one row per player of a game:
+`stats_class` (class: games, wins, mirrors — a mirror counts no win or loss for the class),
+`stats_deck` (class, deck = the hash of the class and the sorted 30 cards: games, wins),
+`stats_card` (class, card: decks with it, copies, deck_wins, played = games it was played in,
+played_wins, plays = times, kept / replaced = its copies in the opening hand at the mulligan,
+kept_wins), `stats_decks` (a deck's hero and cards) and `stats_names` (English names of the
+pack, its classes and cards: the pack's `locales/en.json`, else data/cards.json). Deck and card
+rows of hours older than 48 hours and days older than 40 days are deleted. At start, replays kept
+before the statistics are counted once in the background (`stats::backfill`, 20 at a time; its
+place is `server_settings.stats_backfill`, so a restart resumes); their ranked and Arena brackets
+are `unknown`.
 
 ### Connect the game
 

@@ -67,6 +67,7 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/settings", get(settings_get).post(settings_set))
         .route("/admin/api/signup_keys", get(keys_list).post(keys_create))
         .route("/admin/api/signup_keys/{id}/{action}", post(key_action))
+        .route("/admin/api/stats", get(crate::stats::api))
         .route("/admin/api/tournaments", get(tournaments))
         .route("/admin/api/tournaments/{id}", get(tournament_page))
         .route("/admin/api/tournaments/{id}/cancel", post(tournament_cancel))
@@ -104,6 +105,8 @@ const ASSETS: &[(&str, &str)] = assets![
     "settings.js",
     "tournaments.js",
     "extra.js",
+    "stats.js",
+    "stats.css",
     "style.css",
     "favicon.svg",
     "vendor/preact.module.js",

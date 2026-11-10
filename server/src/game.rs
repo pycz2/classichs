@@ -430,6 +430,8 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
             hub.in_game.remove(&a);
         }
     }
+    // the statistics' brackets: the ranks and Arena runs before this game's result
+    let brackets = crate::stats::brackets(&ctx.app.db, ctx.mode, &ctx.rules, ctx.ids).await.unwrap_or_else(|_| [0, 1].map(|_| crate::stats::UNKNOWN.to_string()));
     let saved = async {
         let tx = ctx.app.db.begin().await?;
         let extra = apply_results(&tx, &ctx.rules, ctx.mode, ctx.ids, winner).await?;
@@ -449,10 +451,12 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
         Ok::<_, DbError>(extra)
     };
     let ended = ranked::now();
-    if let Err(e) = replays::save(&ctx.app.db, &ctx.id, &ctx.rules.rules_hash, ctx.ids, ended, &replay(ctx, g, winner, reason, ended)).await {
+    let data = replay(ctx, g, winner, reason, ended);
+    if let Err(e) = replays::save(&ctx.app.db, &ctx.id, &ctx.rules.rules_hash, ctx.ids, ended, &data).await {
         tracing::error!("game {}: replay not saved: {e}", ctx.id);
         ctx.app.event(Event::new("error", format!("The replay of game {} was not saved: {e}", ctx.id)).game(&ctx.id));
     }
+    tokio::spawn(crate::stats::record(ctx.app.clone(), ctx.rules.clone(), data, brackets));
     let extra = saved.await.unwrap_or_else(|e| {
         tracing::error!("game {}: results not saved: {e}", ctx.id);
         ctx.app.event(Event::new("error", format!("The results of game {} were not saved: {e}", ctx.id)).game(&ctx.id));
