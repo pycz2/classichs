@@ -5,6 +5,7 @@ tools/key_green.gd cuts out.
 
 Usage: python3 tools/gen_ui_art.py [--only name ...] [--workers 3]
 Result: ui/sprites/<name>.png. Existing files are kept (delete one to redo it).
+       python3 tools/gen_ui_art.py --pack naxx   # a pack's screen pictures (PACK_PICTURES) into packs/<pack>/ui/
 """
 import argparse
 import concurrent.futures as cf
@@ -63,6 +64,25 @@ SPRITES = {
     "ice": (256, "FULL: a seamless square texture of thick frost and ice crystals on glass, white and pale blue, "
                  "feathery frost patterns and small cracks, evenly spread over the whole square, no object, no text."),
 }
+## A pack's own screen pictures (docs/packs/format.md §1: ui/menu, board, library, result_*), 1280x720 JPEG.
+NAXX_LOOK = ("in the warm hand-painted style of a fantasy card game, the haunted necropolis of Naxxramas: dark stone "
+             "halls and arches, cold green and violet light, cobwebs, frost; spooky but friendly, no gore. ")
+PACK_PICTURES = {"naxx": {
+    "menu": (1280, "FULL: a wide 16:9 painting " + NAXX_LOOK + "The floating necropolis seen from below at night over a snowy "
+                   "valley, green light glowing from its windows, a pale moon. Calm space in the middle. Wide landscape 16:9, no text."),
+    "board": (1280, "FULL: a wide 16:9 top-down view of a game table " + NAXX_LOOK + "A large flat slab of dark carved stone "
+                    "with a faint green rune circle, worn bone and iron edges, plain and even in the middle so cards read on it. "
+                    "Wide landscape 16:9, no cards, no people, no text."),
+    "library": (1280, "FULL: a wide 16:9 painting " + NAXX_LOOK + "A crypt library: shelves of old tomes and scrolls, candles "
+                      "with green flames, spider webs. Wide landscape 16:9, no people, no text."),
+    "result_victory": (1280, "FULL: a wide 16:9 painting " + NAXX_LOOK + "Triumph: dawn light bursting through a broken crypt "
+                             "door, a raised sword glowing gold, the undead fleeing as dust. Wide landscape 16:9, no faces, no text."),
+    "result_defeat": (1280, "FULL: a wide 16:9 painting " + NAXX_LOOK + "Defeat: a broken shield on cold crypt stairs, green mist "
+                            "rising, skeletal shadows on the walls. Wide landscape 16:9, no people, no text."),
+    "result_draw": (1280, "FULL: a wide 16:9 painting " + NAXX_LOOK + "A draw: two crossed swords both broken in the middle on a "
+                          "stone altar, half lit warm gold and half cold green. Wide landscape 16:9, no people, no text."),
+}}
+
 ## Pictures that keep their background: resized, not cut out.
 FULL = {n for n, v in SPRITES.items() if v[1].startswith("FULL: ")}
 
@@ -102,7 +122,14 @@ def main():
     ap.add_argument("--only", nargs="*")
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--batch", type=int, default=4)
+    ap.add_argument("--pack", choices=sorted(PACK_PICTURES))
     a = ap.parse_args()
+    if a.pack:
+        global SPRITES, FULL, OUT, WORK
+        SPRITES = PACK_PICTURES[a.pack]
+        FULL = set(SPRITES)
+        OUT = os.path.join(ROOT, "packs", a.pack, "ui")
+        WORK = os.path.join(ROOT, "build", "ui_art_" + a.pack)
     os.makedirs(OUT, exist_ok=True)
     todo = [n for n in (a.only or SPRITES) if not any(os.path.exists(os.path.join(OUT, n + e)) for e in (".png", ".jpg"))]
     batches = [todo[i:i + a.batch] for i in range(0, len(todo), a.batch)]

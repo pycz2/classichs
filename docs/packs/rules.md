@@ -50,6 +50,7 @@ this pack. Optional; Classic leaves it out, and its bot stays the recorded one
 |---|---|---|
 | `trap` | 0 | What the bot counts for each of its own traps in play (a card in hand counts 1). At 0 it never plays a trap; at 2 it plays one when nothing better is left to do (Neonfall). |
 | `depth` | 1 | 2: before ending its turn, the bot also tries two actions in a row, so it plays a card that pays off only with the next one (the coin, then a minion; a spell to turn on a Chain). Turn ends cost about as many look-aheads as there are actions squared. |
+| `brain` | (always) | true: the game's bot at a level (easy, medium, hard) thinks with `rust/brain` (Classic's bot: it guesses the hidden cards and looks ahead) instead of the engine's greedy bot. Classic gets it by its id; Naxxramas sets it. |
 
 ## `fatigue`
 
@@ -78,7 +79,8 @@ See [format.md](format.md) §5. Classic: nine playable classes (`DRUID` …
 `DEMONHUNTER` (special cards only); races `BEAST DEMON DRAGON MECHANICAL MURLOC
 PIRATE TOTEM UNDEAD`; rarities `FREE` and `COMMON` (tier common), `RARE`, `EPIC`,
 `LEGENDARY`; sets `VANILLA` (the collection), `MISSIONS`, `EXPERT1`, `LEGACY`,
-`HERO_SKINS`, `CORE`.
+`HERO_SKINS`, `CORE`. Naxxramas (`packs/naxx`): the same and `NAXX`, both collections (`VANILLA`, `NAXX`) in
+its constructed and Arena modes.
 
 ## `mechanics`
 

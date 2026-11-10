@@ -19,11 +19,11 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-const START_TAGS: [&str; 10] =
-    ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE", "FROZEN_THIS_TURN"];
+const START_TAGS: [&str; 11] =
+    ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE", "FROZEN_THIS_TURN", "POISON"];
 /// Engine ids of the tags Silence removes.
-const SILENCED: [&str; 11] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
-    "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER"];
+const SILENCED: [&str; 12] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
+    "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON"];
 /// Rarity tiers in the order the Arena draws them.
 pub const TIERS: [&str; 4] = ["common", "rare", "epic", "legendary"];
 
@@ -129,6 +129,10 @@ pub struct Names {
     pub died_pos: &'static str,
     pub power_multiplier: &'static str,
     pub heal_is_damage: &'static str,
+    pub poison: &'static str,
+    pub double_on_death: &'static str,
+    /// DIED_TURN: written at a death only when the pack names it (Classic does not: its states stay as recorded).
+    pub died_turn: Option<&'static str>,
     /// The TRAP mechanic's name: also the zone that holds traps.
     pub trap: &'static str,
     /// Tags Silence removes.
@@ -181,6 +185,9 @@ impl Names {
             died_pos: n("DIED_POS"),
             power_multiplier: n("POWER_MULTIPLIER"),
             heal_is_damage: n("HEAL_IS_DAMAGE"),
+            poison: n("POISON"),
+            double_on_death: n("DOUBLE_ON_DEATH"),
+            died_turn: by_engine.get("DIED_TURN").copied(),
             trap: n("TRAP"),
             silenced: SILENCED.iter().map(|id| n(id)).collect(),
             by_engine: by_engine.clone(),
@@ -191,7 +198,7 @@ impl Names {
         known.extend([names.guard, names.haste, names.barrier, names.double_attack, names.stealth, names.spellproof,
             names.cant_attack, names.immune, names.spell_power, names.frozen, names.frozen_this_turn, names.exhausted,
             names.attacks, names.armor, names.durability, names.used, names.locked, names.guarded, names.to_destroy,
-            names.died_pos, names.power_multiplier, names.heal_is_damage, names.trap]);
+            names.died_pos, names.power_multiplier, names.heal_is_damage, names.trap, names.poison, names.double_on_death]);
         names.known = known;
         Ok(names)
     }

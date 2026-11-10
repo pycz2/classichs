@@ -1,0 +1,12 @@
+{
+ "mechanics": {
+  "POISONOUS": {
+   "name": "Trucizna",
+   "tip": "Niszczy każdego stronnika, któremu zada obrażenia."
+  }
+ },
+ "sets": {
+  "VANILLA": "Klasyczny",
+  "NAXX": "Klątwa Naxxramas"
+ }
+}

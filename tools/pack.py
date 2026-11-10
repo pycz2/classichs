@@ -709,9 +709,19 @@ def step_copy(b, root, s):
 
 
 def step_hsjson(b, root, s):
-    """Cards and their names and texts from HearthstoneJSON (data/cards.json)."""
-    data = load_json((root / s["from"]).read_bytes(), s["from"])
-    patch = load_json((b.src / s["patch"]).read_bytes(), s["patch"]) if s.get("patch") else {}
+    """Cards and their names and texts from HearthstoneJSON (data/cards.json). `from`, `patch` and `texts` may
+    be lists (packs/naxx: Classic's cards and patch, then its own; a later patch wins for a field it names).
+    `texts` (relative to root): card id -> {name?, text?: {HS locale: text}}, over HearthstoneJSON's."""
+    many = lambda v: v if isinstance(v, list) else [v] if v else []  # noqa: E731
+    data = [c for f in many(s["from"]) for c in load_json((root / f).read_bytes(), f)]
+    patch = {}
+    for f in many(s.get("patch")):
+        for cid, fields in load_json((b.src / f).read_bytes(), f).items():
+            patch.setdefault(cid, {}).update(fields)
+    texts = {}
+    for f in many(s.get("texts")):
+        texts.update(load_json((root / f).read_bytes(), f))
+    data = [{**c, **texts.get(c["id"], {})} for c in data]
     rename = s.get("rename", {})
     fields = [("cardClass", "class"), ("rarity", "rarity"), ("set", "set"), ("collectible", "collectible"),
               ("cost", "cost"), ("attack", "attack"), ("health", "health"), ("durability", "durability"),
@@ -733,7 +743,7 @@ def step_hsjson(b, root, s):
                     b.put(lang, t, "cards", c["id"], field)
     unknown = sorted(set(patch) - {c["id"] for c in out})
     if unknown:
-        raise PackError(f"{s['patch']}: unknown cards {unknown[:5]}")
+        raise PackError(f"{s["patch"]}: unknown cards {unknown[:5]}")
     b.cards = out
 
 
@@ -771,6 +781,20 @@ def step_translate(b, root, s):
         table = load_json(f.read_bytes(), str(f))
         for sec in s["sections"]:
             walk(b.loc(base).get(sec, {}), [sec], table, lang)
+
+
+def step_locales(b, root, s):
+    """Another pack's hand-written texts (`from`: a folder of <lang>.json; only `sections`), under this pack's own:
+    packs/naxx takes Classic's classes, races, mechanics… so a fix there reaches both."""
+    def fill(dst, src):
+        for k, v in src.items():
+            if isinstance(v, dict):
+                fill(dst.setdefault(k, {}), v)
+            else:
+                dst.setdefault(k, v)
+    for f in sorted((root / s["from"]).glob("*.json")):
+        loc = load_json(f.read_bytes(), str(f))
+        fill(b.loc(f.stem), {k: v for k, v in loc.items() if k in s["sections"]})
 
 
 def step_rank_names(b, root, s):
@@ -812,6 +836,7 @@ def step_source(b, root, s):
 
 
 STEPS = {"source": step_source, "copy": step_copy, "hsjson": step_hsjson, "keywords": step_keywords, "voice": step_voice,
+         "locales": step_locales,
          "translate": step_translate, "rank_names": step_rank_names}
 
 

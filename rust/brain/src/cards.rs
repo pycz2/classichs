@@ -156,6 +156,32 @@ impl Library {
         Ok(Library { rs, names, decks, tiers, ladder_pools, arena_pools })
     }
 
+    /// The library for a pack's ruleset (Naxxramas): no deck library and no draft scores of its own: a hidden
+    /// card of a class is any collectible card of the class or neutral, all alike; draft scores are guessed.
+    /// Built once per ruleset.
+    /// ponytail: uniform pools; the pack's deck templates as weights would guess the opponent's hand better.
+    pub fn for_pack(rs: &'static Ruleset) -> &'static Library {
+        static LIBS: std::sync::OnceLock<std::sync::Mutex<HashMap<String, &'static Library>>> = std::sync::OnceLock::new();
+        let mut m = LIBS.get_or_init(Default::default).lock().unwrap_or_else(|e| e.into_inner());
+        m.entry(rs.rules_hash.clone()).or_insert_with(|| {
+            let mut ladder_pools = HashMap::new();
+            let mut arena_pools = HashMap::new();
+            for class in rs.classes.iter().filter(|c| c.playable && !c.champion.is_empty()) {
+                let (mut lp, mut ap) = (Pool::default(), Pool::default());
+                for id in rs.collectible.iter().filter(|id| {
+                    let c = rs.card(id);
+                    c.kind != "CHAMPION" && c.kind != "POWER" && (c.card_class == class.id || rs.is_neutral(&c.card_class))
+                }) {
+                    lp.add(id, 1.0);
+                    ap.add(id, (heuristic_score(rs, id) / 100.0).powi(2));
+                }
+                ladder_pools.insert(class.id.clone(), lp);
+                arena_pools.insert(class.id.clone(), ap);
+            }
+            Box::leak(Box::new(Library { rs, names: HashMap::new(), decks: vec![], tiers: HashMap::new(), ladder_pools, arena_pools }))
+        })
+    }
+
     pub fn name(&self, id: &str) -> String {
         self.names.get(id).cloned().unwrap_or_else(|| id.to_string())
     }

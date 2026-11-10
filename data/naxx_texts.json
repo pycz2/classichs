@@ -1,0 +1,122 @@
+{
+ "FP1_008": {
+  "text": {
+   "deDE": "Kann nicht als Ziel von Zaubern oder Heldenfähigkeiten gewählt werden.",
+   "enUS": "Can't be targeted by spells or Hero Powers.",
+   "esES": "No puede ser objetivo de hechizos ni de poderes de héroe.",
+   "esMX": "No puede ser objetivo de hechizos ni Poderes de héroe.",
+   "frFR": "Ne peut pas être la cible de sorts ou de pouvoirs héroïques.",
+   "itIT": "Non può essere il bersaglio di Magie o Poteri Eroe.",
+   "jaJP": "呪文とヒーローパワーの標的にならない。",
+   "koKR": "주문이나 영웅 능력의 대상으로 지정되지 않음",
+   "plPL": "Nie można wybrać jako cel zaklęć lub mocy specjalnych.",
+   "ptBR": "Não pode ser alvo de feitiços nem de Poderes Heroicos.",
+   "ruRU": "Не может быть целью заклинаний или силы героя.",
+   "thTH": "ไม่ตกเป็นเป้าหมายของ[b]เวทมนตร์หรือพลังฮีโร่",
+   "zhCN": "无法成为法术或英雄技能的\n目标。",
+   "zhTW": "無法被法術或英雄能力指定"
+  }
+ },
+ "FP1_010": {
+  "text": {
+   "deDE": "Vernichtet jeden Diener, der von diesem Diener verletzt wurde.",
+   "enUS": "Destroy any minion damaged by this minion.",
+   "esES": "Destruye a cualquier esbirro dañado por\neste esbirro.",
+   "esMX": "Destruye cualquier esbirro dañado por este esbirro.",
+   "frFR": "Détruit tout serviteur blessé par ce serviteur.",
+   "itIT": "Distrugge qualsiasi servitore a cui infligge danni.",
+   "jaJP": "[x]このミニオンから\nダメージを受けた\n   ミニオンを破壊する。",
+   "koKR": "이 하수인에게 피해를 입은 하수인은 무조건 죽습니다.",
+   "plPL": "Zniszcz każdego stronnika zranionego przez tego stronnika.",
+   "ptBR": "Destrua qualquer\nlacaio que receber\ndano deste lacaio.",
+   "ruRU": "Уничтожает любое существо, которому наносит урон.",
+   "thTH": "ทำลายมินเนี่ยน[b]ที่ได้รับความเสียหาย[b]จากมินเนี่ยนตัวนี้",
+   "zhCN": "消灭任何受到本随从伤害的随从。",
+   "zhTW": "摧毀任何被此手下傷害的手下"
+  }
+ },
+ "FP1_011": {
+  "text": {
+   "deDE": "<b>Todesröcheln:</b> Fügt Eurer Hand eine zufällige Wildtierkarte hinzu.",
+   "enUS": "<b>Deathrattle:</b> Add a random Beast card to your hand.",
+   "esES": "<b>Último aliento:</b> añade una carta de bestia aleatoria a tu mano.",
+   "frFR": "<b>Râle d’agonie :</b> ajoute une carte Bête aléatoire dans votre main.",
+   "itIT": "<b>Rantolo di Morte:</b> aggiunge una carta Bestia casuale alla tua mano.",
+   "plPL": "<b>Agonia:</b> Dodaje do twojej ręki losową kartę bestii.",
+   "ptBR": "<b>Último Suspiro:</b> Adiciona um card de Fera aleatório à sua mão.",
+   "ruRU": "<b>Предсмертный хрип:</b> вы получаете случайную карту зверя."
+  }
+ },
+ "FP1_012t": {
+  "name": {
+   "deDE": "Schleim",
+   "enUS": "Slime",
+   "esES": "Babosa",
+   "esMX": "Babosa",
+   "frFR": "Gelée",
+   "itIT": "Melma",
+   "jaJP": "スライム",
+   "koKR": "수액괴물",
+   "plPL": "Śluz",
+   "ptBR": "Visgo",
+   "ruRU": "Слизь",
+   "thTH": "สไลม์",
+   "zhCN": "泥浆怪",
+   "zhTW": "軟泥怪"
+  }
+ },
+ "FP1_025": {
+  "text": {
+   "deDE": "Vernichtet einen Diener und belebt ihn dann mit vollem Leben wieder.",
+   "enUS": "Destroy a minion,\nthen return it to life with full Health.",
+   "esES": "Destruye a un esbirro y lo devuelve a la vida con toda su salud.",
+   "esMX": "Destruye un esbirro y luego devuélvelo a la vida con toda la Salud.",
+   "frFR": "Détruit un serviteur, puis le ramène à la vie avec tous ses PV.",
+   "itIT": "Distrugge un servitore e poi lo riporta in vita con la Salute al massimo.",
+   "jaJP": "[x]ミニオン1体を\n破壊した後\nそのミニオンを\n体力が最大の状態で\n復活させる。",
+   "koKR": "하수인을 처치하고, 그 하수인을 최대 생명력으로 다시 소환합니다.",
+   "plPL": "Zniszcz stronnika, a następnie przywróć go do życia z pełnym zdrowiem.",
+   "ptBR": "Destrua um lacaio, depois ressuscite-o com a Vida completa.",
+   "ruRU": "[x]Уничтожает существо,\nа затем возрождает его\nс полным здоровьем.",
+   "thTH": "ทำลายมินเนี่ยนหนึ่งตัว จากนั้นชุบชีวิตมัน[b]พร้อมพลังชีวิตเต็ม",
+   "zhCN": "消灭一个随从，然后将其复活，并具有所有生命值。",
+   "zhTW": "摧毀一個手下，再將其復活並使生命值恢復全滿"
+  }
+ },
+ "VAN_CS2_038": {
+  "text": {
+   "deDE": "Verleiht einem Diener „<b>Todesröcheln:</b> Ruft diesen Diener erneut herbei“.",
+   "enUS": "Give a minion \"<b>Deathrattle:</b> Resummon this minion.\"",
+   "esES": "Otorga a un esbirro: «<b>Último aliento:</b> Vuelve a invocar a este esbirro».",
+   "esMX": "Otorga \"<b>Estertor:</b> reinvoca a este esbirro\" a un esbirro.",
+   "frFR": "Confère à un serviteur « <b>Râle d’agonie :</b> réinvoque ce serviteur. »",
+   "itIT": "Fornisce \"<b>Rantolo di Morte:</b> rievoca questo servitore\" a un servitore.",
+   "jaJP": "[x]ミニオン1体に\n「<b>断末魔:</b> このミニオン\nを再度召喚する」を\n付与する。",
+   "koKR": "하수인에게 \"<b>죽음의 메아리:</b> 이 하수인을 다시 소환함\" 능력을 부여합니다.",
+   "plPL": "Daj stronnikowi opis „<b>Agonia:</b> Przywróć tego stronnika na pole bitwy”.",
+   "ptBR": "Conceda a um lacaio: \"<b>Último Suspiro:</b> Evoque este lacaio novamente.\"",
+   "ruRU": "Существо получает «<b>Предсмертный хрип:</b> снова призывает это существо».",
+   "thTH": "มอบ \"<b>เสียงสุดท้าย:</b> เรียก มินเนี่ยนตัวนี้อีกครั้ง\" ให้มินเนี่ยนหนึ่งตัว",
+   "zhCN": "使一个随从获得“<b>亡语</b>：再次召唤本随从。”",
+   "zhTW": "賦予一個手下「<b>死亡之聲：</b>重新召喚這個手下」"
+  }
+ },
+ "VAN_EX1_536": {
+  "text": {
+   "deDE": "Erhält jedes Mal +1 Haltbarkeit, wenn ein eigenes <b>Geheimnis</b> aufgedeckt wird.",
+   "enUS": "[x]Whenever a friendly\n<b>Secret</b> is revealed,\ngain +1 Durability.",
+   "esES": "[x]Obtiene +1 p. de durabilidad\ncada vez que se revela\nun <b>secreto</b> amistoso.",
+   "esMX": "Cada vez que se revela un <b>Secreto</b> aliado, obtiene +1 de Durabilidad.",
+   "frFR": "Chaque fois qu’un <b>Secret</b> allié est révélé, gagne +1 Durabilité.",
+   "itIT": "Ottiene +1 Integrità quando viene rivelato un tuo <b>Segreto</b>.",
+   "jaJP": "[x]味方の<b>秘策</b>が\n発動する度\n耐久度+1を\n獲得する。",
+   "koKR": "[x]내 <b>비밀</b>이 밝혀질\n때마다 내구도를\n+1 얻습니다.",
+   "plPL": "Za każdym razem gdy ujawniony zostaje przyjazny\n<b>Sekret</b>, otrzymuje +1 pkt. wytrzymałości.",
+   "ptBR": "Sempre que um\n<b>Segredo</b> aliado for revelado, receba\n+1 de Durabilidade.",
+   "ruRU": "Когда открывается\nваш <b>секрет</b>, это оружие\n[x]получает\n+1 к прочности.",
+   "thTH": "ทุกครั้งที่ <b>กับดัก</b> ฝ่ายคุณทำงาน ได้รับ[b] ความทนทาน +1",
+   "zhCN": "每当一个友方<b>奥秘</b>被揭示时，便获得+1耐久度。",
+   "zhTW": "每當友方的<b>秘密</b>揭露，獲得+1耐久度"
+  }
+ }
+}
