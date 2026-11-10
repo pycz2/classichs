@@ -94,6 +94,63 @@ async fn a_lonely_player_gets_an_auto_bot() {
     assert_eq!(app.hub().conns.len(), 1, "the auto-bot logged out");
 }
 
+/// Any game the server has gets auto-bots, not only Classic: alone in Neonfall's casual queue, a bot
+/// comes with one of the pack's own decks and plays its turns.
+#[tokio::test]
+async fn a_lonely_player_of_another_game_gets_an_auto_bot() {
+    let (addr, app) = server().await;
+    let dir = std::env::temp_dir().join(format!("chs-auto-packs-{}", rand::random::<u64>()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let built = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../packs/neon.cardpack");
+    if !built.exists() {
+        eprintln!("no packs/neon.cardpack (tools/build_packs.sh): skipped");
+        return;
+    }
+    std::fs::copy(&built, dir.join("neon.cardpack")).unwrap();
+    assert_eq!(classichs_server::packs::import_bundled(&app, &dir).await, 1);
+    let mut c = C::register(addr, "neonfan").await;
+    c.send(json!({"t": "packs"})).await;
+    let list = c.want("packs", 10).await;
+    let neon = list["server"].as_array().unwrap().iter().find(|p| p["id"] == "neon").expect("neon on the server").clone();
+    let rules = neon["rules_hash"].as_str().unwrap().to_string();
+    let file = std::fs::read_dir(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../packs/neon/decks")).unwrap().next().unwrap().unwrap().path();
+    let d: Value = serde_json::from_str(&std::fs::read_to_string(file).unwrap()).unwrap();
+    c.send(json!({"t": "queue", "mode": "casual", "pack": rules, "deck": {"name": "Mine", "hero": d["champion"], "cards": d["cards"]}})).await;
+    c.want("queued", 10).await;
+    let m = c.want("match", 30).await;
+    assert!(m["opponent"]["user"].as_str().unwrap().starts_with("AutoBot_"), "{m}");
+    assert_eq!(m["pack"], json!(rules), "the game is Neonfall's");
+    let (game, me) = (m["game"].as_str().unwrap().to_string(), m["you"].as_u64().unwrap());
+    // keep the hand, then end each turn of ours: the bot must play its own turns back
+    let mut bot_turns = 0;
+    let mut last_turn = -1;
+    while bot_turns < 2 {
+        let st = c.want("state", 60).await;
+        let r = &st["result"];
+        if r["over"] == true {
+            break;
+        }
+        if r["phase"] == "MULLIGAN" {
+            if st["view"]["players"][me as usize]["mulliganed"] != true {
+                c.send(json!({"t": "act", "game": game, "action": {"type": "mulligan", "player": me, "replace": []}})).await;
+            }
+            continue;
+        }
+        let turn = r["turn"].as_i64().unwrap_or(0);
+        if r["current"].as_u64() == Some(me) && turn != last_turn {
+            last_turn = turn;
+            if turn > 2 {
+                bot_turns += 1;
+            }
+            c.send(json!({"t": "act", "game": game, "action": {"type": "end_turn", "player": me}})).await;
+        }
+    }
+    assert!(bot_turns >= 2, "the bot played its turns");
+    c.send(json!({"t": "act", "game": game, "action": {"type": "concede", "player": me}})).await;
+    c.want("game_over", 30).await;
+    let _ = app;
+}
+
 /// Two players find each other first: no auto-bot.
 #[tokio::test]
 async fn players_pair_with_players_first() {

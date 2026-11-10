@@ -27,7 +27,7 @@ pub fn is_rules_file(p: &str) -> bool {
 }
 
 fn wanted(p: &str) -> bool {
-    p == "manifest.json" || is_rules_file(p)
+    p == "manifest.json" || is_rules_file(p) || (p.starts_with("decks/") && p.ends_with(".json"))  // (decks: the bots' templates)
 }
 
 /// Path rules of format.md §1: segments `[A-Za-z0-9_][A-Za-z0-9_.-]*`, at most 200 characters.

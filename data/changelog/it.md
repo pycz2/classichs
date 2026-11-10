@@ -4,6 +4,12 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.61.0] - 2026-11-10
+
+### Aggiunto
+- I bot del server giocano a tutti i giochi del server, non solo a Classico: qualunque gioco incluso o caricato. Se nel tempo impostato nel pannello di amministrazione non si trova un avversario, arriva un bot con un mazzo dai modelli di quel gioco (o il mazzo iniziale di una classe) e gioca con le sue carte.
+- Nell’allenamento torna il bot Difficilissimo — il primo bot difficile: valuta ogni azione in fino a 200 ipotesi sulle carte nascoste e l’intero turno dell’avversario. Pensa finché al suo turno restano più di 10 secondi, poi prende il meglio trovato e chiude il turno in fretta, così non si blocca mai e non salta turni.
+
 ## [0.60.0] - 2026-11-10
 
 ### Aggiunto

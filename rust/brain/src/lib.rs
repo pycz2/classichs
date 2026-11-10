@@ -16,6 +16,9 @@ use std::time::Duration;
 /// process by the engine's `load_pack`; else the built-in Classic), pack_data? (the pack's rules files as a zip in
 /// base64, for a process that has not loaded it: the browser's bot worker)} → {ok, action (null: nothing to do),
 /// label, ms}; an unknown pack without pack_data → {ok: false, error: "unknown pack", need_pack: true}.
+/// A Super hard decision's own time (its hard stop is twice that plus 0.2 s); the caller may give less.
+pub const SUPER_HARD_MS: u64 = 6000;
+
 pub fn think(req: &Value) -> Value {
     let lib = match req["pack"].as_str() {
         Some(h) if h != ruleset::classic().rules_hash => {
@@ -36,6 +39,7 @@ pub fn think(req: &Value) -> Value {
         brain::Level::Easy => Duration::ZERO,
         brain::Level::Medium => Duration::from_millis(300),
         brain::Level::Hard => Duration::from_millis(1000),
+        brain::Level::SuperHard => Duration::from_millis(SUPER_HARD_MS),
     });
     let my_deck: Vec<String> = req["deck"].as_array().map_or(vec![], |a| a.iter().filter_map(|c| c.as_str().map(String::from)).collect());
     let k = brain::Knowledge {

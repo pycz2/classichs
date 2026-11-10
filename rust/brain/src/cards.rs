@@ -178,8 +178,17 @@ impl Library {
                 ladder_pools.insert(class.id.clone(), lp);
                 arena_pools.insert(class.id.clone(), ap);
             }
-            Box::leak(Box::new(Library { rs, names: HashMap::new(), decks: vec![], tiers: HashMap::new(), ladder_pools, arena_pools }))
+            Box::leak(Box::new(Library { rs, names: HashMap::new(), decks: pack_decks(rs), tiers: HashMap::new(), ladder_pools, arena_pools }))
         })
+    }
+
+    /// The library of a game by its rules hash: Classic's own (None, Classic, or rules not loaded
+    /// here), else the pack's.
+    pub fn of_pack(rules_hash: Option<&str>) -> &'static Library {
+        match rules_hash.filter(|h| *h != ruleset::classic().rules_hash).and_then(ruleset::get) {
+            Some(rs) => Library::for_pack(rs),
+            None => Library::get(),
+        }
     }
 
     pub fn name(&self, id: &str) -> String {
@@ -194,6 +203,28 @@ impl Library {
     pub fn tier(&self, id: &str, class: &str) -> f64 {
         self.tiers.get(id).map_or_else(|| heuristic_score(self.rs, id), |(s, by)| by.get(class).copied().unwrap_or(*s))
     }
+}
+
+/// The decks a bot plays a pack with: its templates that are legal by its rules, else a starter deck
+/// of every playable class (classichs_engine::deck::basic_in) that is legal.
+pub fn pack_decks(rs: &Ruleset) -> Vec<Deck> {
+    use classichs_engine::deck::{basic_in, Deck as Legal};
+    let legal = |hero: &str, cards: &[String]| Legal { hero: hero.to_string(), cards: cards.to_vec(), arena: false }.validate_in(rs).is_empty();
+    let mut out: Vec<Deck> = rs
+        .templates
+        .iter()
+        .filter(|t| legal(&t.hero, &t.cards))
+        .map(|t| Deck { name: t.name.clone(), hero: t.hero.clone(), cards: t.cards.clone() })
+        .collect();
+    if out.is_empty() {
+        for class in rs.classes.iter().filter(|c| c.playable && !c.champion.is_empty()) {
+            let cards = basic_in(rs, &class.id);
+            if legal(&class.champion, &cards) {
+                out.push(Deck { name: format!("{} starter", class.id), hero: class.champion.clone(), cards });
+            }
+        }
+    }
+    out
 }
 
 /// A rough 0-100 draft score from cost and stats, for cards the tier list misses.

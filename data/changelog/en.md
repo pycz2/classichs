@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.61.0] - 2026-11-10
+
+### Added
+- The server's bots play every game on the server, not only Classic: any bundled or uploaded game. When no opponent is found within the time set in the admin panel, a bot comes with a deck from that game's templates (or a class's starter deck) and plays with its cards.
+- Training has the Super hard bot back — the first hard bot: it weighs every action in each of up to 200 guesses of the hidden cards and the opponent's whole turn. It thinks while more than 10 seconds of its turn are left, then takes the best it found and plays the turn out quickly, so it never hangs or misses a turn.
+
 ## [0.60.0] - 2026-11-10
 
 ### Added

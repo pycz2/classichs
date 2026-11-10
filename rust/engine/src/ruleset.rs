@@ -247,7 +247,17 @@ pub struct Arena {
     pub neutral_weight: i64,
 }
 
+/// A deck template of the pack (`decks/<name>.json`: name, champion, cards).
+#[derive(Clone, Debug)]
+pub struct DeckTemplate {
+    pub name: String,
+    pub hero: String,
+    pub cards: Vec<String>,
+}
+
 pub struct Ruleset {
+    /// The pack's deck templates as given (not checked; not part of the rules hash).
+    pub templates: Vec<DeckTemplate>,
     pub id: String,
     pub version: String,
     pub rules_hash: String,
@@ -422,7 +432,14 @@ impl Ruleset {
             missions.push(Mission::from_json(&pack::strict_json(b, p)?).map_err(|e| format!("{p}: {e}"))?);
         }
         missions.sort_by_key(|m| m.id);
+        let templates = files
+            .iter()
+            .filter(|(p, _)| p.starts_with("decks/") && p.ends_with(".json"))
+            .filter_map(|(_, b)| serde_json::from_slice::<Value>(b).ok())
+            .map(|d| DeckTemplate { name: if s(&d, "name").is_empty() { s(&d, "id") } else { s(&d, "name") }, hero: s(&d, "champion"), cards: strs(&d, "cards") })
+            .collect();
         let mut rs = Ruleset {
+            templates,
             id: s(&manifest, "id"),
             version: s(&manifest, "version"),
             rules_hash: pack::rules_hash(files)?,

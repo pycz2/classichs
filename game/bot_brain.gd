@@ -5,7 +5,7 @@ extends RefCounted
 ## stop: a thread of the GDExtension class RulesBrain on desktop and Android, a Web Worker in the
 ## browser (web/rules.js). `think_now` waits for the answer (tests, instant games).
 
-const LEVELS := ["easy", "medium", "hard"]
+const LEVELS := ["easy", "medium", "hard", "superhard"]
 
 var _native: Object
 var _web_id := -1

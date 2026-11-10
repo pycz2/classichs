@@ -18,6 +18,7 @@ fn play(lib: &'static Library, a: usize, b: usize, seed: i64, seat: usize, level
         Level::Easy => Duration::ZERO,
         Level::Medium => Duration::from_millis(300),
         Level::Hard => Duration::from_millis(1000),
+        Level::SuperHard => Duration::from_millis(classichs_brain::SUPER_HARD_MS),
     };
     for _ in 0..400 {
         if g.game_over {

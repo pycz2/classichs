@@ -4,6 +4,12 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.61.0] - 2026-11-10
+
+### Ajouté
+- Les bots du serveur jouent à tous les jeux du serveur, pas seulement Classique : tout jeu fourni ou envoyé. Si aucun adversaire n’est trouvé dans le délai fixé dans le panneau d’administration, un bot arrive avec un deck des modèles de ce jeu (ou le deck de départ d’une classe) et joue avec ses cartes.
+- L’entraînement retrouve le bot Très difficile — le premier bot difficile : il pèse chaque action dans jusqu’à 200 hypothèses sur les cartes cachées et tout le tour adverse. Il réfléchit tant qu’il reste plus de 10 secondes à son tour, puis prend le meilleur trouvé et finit le tour vite : il ne bloque jamais et ne saute aucun tour.
+
 ## [0.60.0] - 2026-11-10
 
 ### Ajouté

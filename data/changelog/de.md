@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.61.0] - 2026-11-10
+
+### Hinzugefügt
+- Die Bots des Servers spielen jedes Spiel auf dem Server, nicht nur Classic: jedes mitgelieferte oder hochgeladene Spiel. Findet sich in der im Admin-Panel eingestellten Zeit kein Gegner, kommt ein Bot mit einem Deck aus den Vorlagen dieses Spiels (oder dem Startdeck einer Klasse) und spielt mit dessen Karten.
+- Im Training ist der superschwere Bot zurück — der erste schwere Bot: Er wägt jede Aktion in bis zu 200 Annahmen über die verdeckten Karten und den ganzen Zug des Gegners ab. Er denkt, solange von seinem Zug mehr als 10 Sekunden übrig sind, nimmt dann das Beste, das er fand, und spielt den Zug schnell zu Ende — so hängt er nie und verpasst keinen Zug.
+
 ## [0.60.0] - 2026-11-10
 
 ### Hinzugefügt

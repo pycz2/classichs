@@ -1,4 +1,4 @@
-//! Auto-bots: a player waits in a queue (ranked, casual, Arena) of the Classic pack for WAIT_MS and
+//! Auto-bots: a player waits in a queue (ranked, casual, Arena) of any game for WAIT_MS and
 //! nobody comes: a bot of a fitting level joins that queue for this player (the matchmaking pairs
 //! them whatever the window), plays the one game at once (no human-pace pauses) and goes. The
 //! accounts are a pool: "AutoBot_<Level>_<n>" (POOL per level) and "AutoBot_Arena_<n>" (POOL; the
@@ -6,6 +6,7 @@
 //! The level: ranked and casual by the player's hidden MMR, the Arena by the run's wins.
 
 use crate::bots::brain::Level;
+use crate::bots::cards::Library;
 use crate::bots::runtime::{self, Auth, Ctx};
 use crate::bots::transport::Transport;
 use crate::db;
@@ -69,7 +70,7 @@ pub async fn tick(app: &AppRef) {
             .filter(|(id, s)| {
                 now.duration_since(s.since) >= Duration::from_millis(WAIT_MS.load(Ordering::Relaxed))
                     && s.mode != Mode::Friendly
-                    && s.rules.id == CLASSIC
+                    && (s.mode == Mode::Arena || !Library::for_pack(s.rules.rs).decks.is_empty() || s.rules.id == CLASSIC)
                     && !taken.contains(id)
                     && !is_bot_name(&s.name)
             })

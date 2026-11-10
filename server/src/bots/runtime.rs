@@ -254,7 +254,7 @@ fn strs(v: &Value) -> Vec<String> {
 
 /// One Arena game: a run is started (and drafted) when there is none (`fresh`: always a new one).
 async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level, fresh: bool, wait: Duration) -> Result<(), String> {
-    let lib = Library::get();
+    let lib = Library::of_pack(pack.as_deref());
     c.send(with_pack(json!({"t": "me"}), pack)).await?;
     let me = c.want("me", Duration::from_secs(20)).await?;
     let mut st = me["me"]["arena"].clone();
@@ -320,7 +320,10 @@ async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level
 /// An auto-bot's one game (bots::auto): log in, queue in `mode` (Arena: a fresh draft), play it, go.
 /// Nobody pairs with it within 90 s: it goes without a game.
 pub async fn one_game(ctx: &Ctx, connect: &ConnectFn, auth: &Auth, mode: &str, pack: Option<String>, level: Level) -> Result<(), String> {
-    let lib = Library::get();
+    let lib = Library::of_pack(pack.as_deref());
+    if lib.decks.is_empty() && mode != "arena" {
+        return Err("no legal deck for this game (its templates and starter decks)".into());
+    }
     let mut c = Conn { t: connect().await? };
     match auth {
         Auth::Token(t) => c.send(json!({"t": "resume", "token": t})).await?,
@@ -400,7 +403,7 @@ async fn read_ahead(c: &mut Conn, ahead: &mut VecDeque<Value>) -> Result<(), Str
 
 /// One game until `game_over`; returns the Arena part of the result (Arena games).
 async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool, level: Level) -> Result<Option<Value>, String> {
-    let lib = Library::get();
+    let lib = Library::of_pack(m["pack"].as_str());  // the game's own cards
     let seat = m["you"].as_u64().unwrap_or(0) as usize;
     let game = m["game"].as_str().unwrap_or("").to_string();
     let mode = m["mode"].as_str().unwrap_or("").to_string();
@@ -408,6 +411,7 @@ async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool,
         Level::Easy => Duration::ZERO,
         Level::Medium => Duration::from_millis(300),
         Level::Hard => Duration::from_millis(1000),
+        Level::SuperHard => Duration::from_millis(classichs_brain::SUPER_HARD_MS),
     };
     let mut last_acted = (-1i64, -1i64); // (history length, current) of the state acted on
     // both players change cards at once: a state made before ours arrived must not make a second mulligan

@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.61.0] - 2026-11-10
+
+### Dodano
+- Boty serwera grają we wszystkie gry na serwerze, nie tylko w Klasykę: w każdą dołączoną lub wysłaną grę. Gdy w czasie ustawionym w panelu administracyjnym nie znajdzie się przeciwnik, przychodzi bot z talią z szablonów tej gry (albo talią startową klasy) i gra jej kartami.
+- Na trening wraca bot Bardzo trudny — pierwszy trudny bot: waży każdą akcję w nawet 200 przypuszczeniach co do ukrytych kart i całą turę przeciwnika. Myśli, dopóki z jego tury zostało ponad 10 sekund, potem bierze najlepsze, co znalazł, i szybko kończy turę, więc nigdy się nie zawiesza i nie traci tury.
+
 ## [0.60.0] - 2026-11-10
 
 ### Dodano

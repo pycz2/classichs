@@ -38,6 +38,10 @@ pub enum Level {
     Medium,
     /// 4-10 worlds within the time, the turn played on and the opponent's whole turn simulated.
     Hard,
+    /// The first Hard (before 0.31) made deeper: every action in every world (no halving), the turn
+    /// played on and the opponent's whole turn simulated, 4-200 worlds (24 took seconds then and take
+    /// ~30 ms now) while its time lasts. The caller bounds that time (training: the turn's end less 10 s).
+    SuperHard,
 }
 
 impl Level {
@@ -46,6 +50,7 @@ impl Level {
             "easy" => Some(Level::Easy),
             "medium" => Some(Level::Medium),
             "hard" => Some(Level::Hard),
+            "superhard" => Some(Level::SuperHard),
             _ => None,
         }
     }
@@ -55,6 +60,7 @@ impl Level {
             Level::Easy => "easy",
             Level::Medium => "medium",
             Level::Hard => "hard",
+            Level::SuperHard => "superhard",
         }
     }
 
@@ -65,6 +71,7 @@ impl Level {
             Level::Easy => (1, 1, false, false, 8, 1),
             Level::Medium => (2, 3, true, false, 10, 1),
             Level::Hard => (4, 10, true, true, 0, 2),
+            Level::SuperHard => (4, 200, true, true, 0, 200),
         }
     }
 

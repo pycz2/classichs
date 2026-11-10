@@ -31,6 +31,12 @@ var bot_delay := 0.6
 ## The bot's level ("easy" | "medium" | "hard": BotBrain, it sees only its own view); "" = the
 ## engine's greedy bot (tutorial, debug, other packs).
 var bot_level := ""
+## Super hard thinks until this many seconds before its turn would end (a turn as long as the pack's
+## turn timer, or a Nozdormu turn), then takes the best it found; each decision at most SUPER_HARD_MS.
+const SUPER_HARD_SPARE := 10.0
+const SUPER_HARD_MS := 6000
+var _bot_turn := Vector2i(-1, -1)  # (turn, player) of the bot's turn being timed, and when it began
+var _bot_turn_ms := 0
 ## Each player's 30 cards (the bot knows its own deck list).
 var decks: Array = [[], []]
 ## The table may still be animating: the bot waits until this returns false.
@@ -372,7 +378,7 @@ func _bot_think() -> void:
 	var p := actor()
 	var key := state_hash
 	var brain := BotBrain.new()
-	brain.start(BotBrain.request(id, p, decks[p], bot_level))
+	brain.start(brain_request(p))
 	var started := Time.get_ticks_msec()
 	var check := func(again: Callable) -> void:
 		if not is_inside_tree():
@@ -393,10 +399,31 @@ func _bot_step() -> void:
 	var p := actor()
 	var action = null
 	if uses_brain() and ClassDB.class_exists("RulesBrain"):
-		var r := BotBrain.think_now(BotBrain.request(id, p, decks[p], bot_level))
+		var r := BotBrain.think_now(brain_request(p))
 		if r.get("ok", false):
 			action = r.get("action")
 	_bot_move(p, action)
+
+
+## The bot's request for player p; Super hard gets the time left of its turn (less SUPER_HARD_SPARE),
+## half of it per decision (its hard stop is twice that), and plays on as Medium when it is nearly out.
+func brain_request(p: int) -> Dictionary:
+	var req := BotBrain.request(id, p, decks[p], bot_level)
+	if bot_level != "superhard":
+		return req
+	var key := Vector2i(game.turn, p)
+	if key != _bot_turn:
+		_bot_turn = key
+		_bot_turn_ms = Time.get_ticks_msec()
+	var t = Packs.active().rules().get("timers", {}).get("turn") if Packs.active() else null
+	var turn: float = game.turn_seconds if game.turn_seconds > 0 else (float(t) if t is float or t is int else 75.0)
+	var left := (turn - SUPER_HARD_SPARE) * 1000.0 - (Time.get_ticks_msec() - _bot_turn_ms)
+	if left < 1500.0:
+		req.level = "medium"
+		req.budget_ms = 100
+	else:
+		req.budget_ms = int(clampf(left / 2.0 - 100.0, 100.0, SUPER_HARD_MS))
+	return req
 
 
 ## Plays the bot's action (null, or refused: the engine's greedy bot chooses).

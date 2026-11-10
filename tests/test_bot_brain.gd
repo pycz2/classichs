@@ -57,3 +57,21 @@ func test_training_picks_the_level() -> void:
 	eq(Settings.data.bot_level, "hard", "and saved")
 	Settings.data.bot_level = was
 	t.free()
+
+
+## Super hard (the first Hard: up to 24 worlds, every action in every world) thinks until 10 s
+## before its turn would end: half the time left per decision (its hard stop is twice that), at most
+## 6 s; nearly out of time it plays on as Medium, so it never misses its turn.
+func test_super_hard_keeps_to_its_turn() -> void:
+	var m := H.decks("MAGE", "WARRIOR", 3)
+	m.bot_level = "superhard"
+	var req := m.brain_request(1)
+	eq([req.level, req.budget_ms], ["superhard", Match.SUPER_HARD_MS], "a fresh turn: the full 6 s")
+	m._bot_turn_ms -= 61000  # 61 s of a 75 s turn gone: 4 s left before the spare 10
+	req = m.brain_request(1)
+	check(req.budget_ms * 2 + 200 <= 4000 and req.budget_ms > 1000, "it stops before the spare: %s" % req.budget_ms)
+	m._bot_turn_ms -= 3000
+	req = m.brain_request(1)
+	eq(req.level, "medium", "nearly out: quick decisions to end the turn")
+	var r := BotBrain.think_now(m.brain_request(1))
+	check(r.get("ok", false), "the brain knows the level: %s" % r)

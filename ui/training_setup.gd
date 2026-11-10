@@ -75,7 +75,7 @@ func _ready() -> void:
 	levels.add_child(ll)
 	var lg := ButtonGroup.new()
 	for lvl in BotBrain.LEVELS:
-		var b := Palette.button({"easy": tr("Easy"), "medium": tr("Medium"), "hard": tr("Hard")}[lvl], "Level_" + lvl)
+		var b := Palette.button({"easy": tr("Easy"), "medium": tr("Medium"), "hard": tr("Hard"), "superhard": tr("Super hard")}[lvl], "Level_" + lvl)
 		b.custom_minimum_size = Vector2(150, 44)
 		b.toggle_mode = true
 		b.button_group = lg
