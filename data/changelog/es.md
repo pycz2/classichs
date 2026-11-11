@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.67.0] - 2026-11-11
+
+### Añadido
+- Bots en los torneos: el creador añade bots de un nivel elegido (Fácil, Medio, Difícil, Muy difícil — dos de cada uno en el servidor) hasta el límite de jugadores y puede quitarlos. Los bots traen mazos del juego, aceptan sus enfrentamientos, vetan, eligen mazo y juegan cada partida hasta el final; sus enfrentamientos van a la vez. El creador siempre puede ver los enfrentamientos del torneo; las repeticiones se guardan. Un bot ocupado en otro torneo solo queda libre cuando este acaba.
+
 ## [0.66.0] - 2026-11-10
 
 ### Añadido

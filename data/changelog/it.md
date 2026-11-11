@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.67.0] - 2026-11-11
+
+### Aggiunto
+- Bot nei tornei: il creatore aggiunge bot di un livello scelto (Facile, Medio, Difficile, Difficilissimo — due per livello sul server) fino al limite di giocatori e può toglierli. I bot portano mazzi del gioco, accettano i loro incontri, bannano, scelgono un mazzo e giocano ogni partita fino alla fine; i loro incontri si svolgono insieme. Il creatore può sempre guardare gli incontri del torneo; i replay vengono conservati. Un bot impegnato in un altro torneo è libero solo quando quello finisce.
+
 ## [0.66.0] - 2026-11-10
 
 ### Aggiunto

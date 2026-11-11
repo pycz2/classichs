@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.67.0] - 2026-11-11
+
+### Added
+- Bots in tournaments: the creator adds bots of a chosen level (Easy, Medium, Hard, Super hard — two of each on the server) up to the player limit and can remove them. Bots bring decks of the game, accept their matches, ban, pick a deck and play every game to the end; their matches run at the same time. The creator can always watch the tournament's matches; replays are kept. A bot busy in another tournament is free only when that one is over.
+
 ## [0.66.0] - 2026-11-10
 
 ### Added

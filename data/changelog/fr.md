@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.67.0] - 2026-11-11
+
+### Ajouté
+- Des bots dans les tournois : le créateur ajoute des bots d’un niveau choisi (Facile, Moyen, Difficile, Très difficile — deux de chaque sur le serveur) jusqu’à la limite de joueurs et peut les retirer. Les bots apportent des decks du jeu, acceptent leurs matchs, bannissent, choisissent un deck et jouent chaque partie jusqu’au bout ; leurs matchs ont lieu en même temps. Le créateur peut toujours regarder les matchs du tournoi ; les replays sont gardés. Un bot pris dans un autre tournoi n’est libre qu’à la fin de celui-ci.
+
 ## [0.66.0] - 2026-11-10
 
 ### Ajouté

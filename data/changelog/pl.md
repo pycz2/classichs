@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.67.0] - 2026-11-11
+
+### Dodano
+- Boty w turniejach: twórca dodaje boty wybranego poziomu (Łatwy, Średni, Trudny, Bardzo trudny — po dwa na serwerze) do limitu graczy i może je usunąć. Boty przynoszą talie gry, przyjmują mecze, banują, wybierają talię i rozgrywają każdą grę do końca; ich mecze idą jednocześnie. Twórca zawsze może oglądać mecze turnieju; powtórki są zapisywane. Bot zajęty w innym turnieju jest wolny dopiero po jego końcu.
+
 ## [0.66.0] - 2026-11-10
 
 ### Dodano

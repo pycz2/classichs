@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.67.0] - 2026-11-11
+
+### Adicionado
+- Bots nos torneios: o criador adiciona bots de um nível escolhido (Fácil, Médio, Difícil, Muito difícil — dois de cada no servidor) até o limite de jogadores e pode tirá-los. Os bots trazem decks do jogo, aceitam suas partidas, banem, escolhem um deck e jogam cada jogo até o fim; suas partidas correm ao mesmo tempo. O criador sempre pode assistir às partidas do torneio; os replays ficam guardados. Um bot ocupado em outro torneio só fica livre quando aquele termina.
+
 ## [0.66.0] - 2026-11-10
 
 ### Adicionado

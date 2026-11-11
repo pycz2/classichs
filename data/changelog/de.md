@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.67.0] - 2026-11-11
+
+### Hinzugefügt
+- Bots in Turnieren: Der Ersteller fügt Bots einer Stufe hinzu (Leicht, Mittel, Schwer, Superschwer — je zwei auf dem Server) bis zur Spielergrenze und kann sie entfernen. Bots bringen Decks des Spiels mit, nehmen ihre Matches an, bannen, wählen ein Deck und spielen jedes Spiel zu Ende; ihre Matches laufen gleichzeitig. Der Ersteller kann die Matches des Turniers immer ansehen; Wiederholungen bleiben erhalten. Ein Bot, der in einem anderen Turnier spielt, ist erst nach dessen Ende frei.
+
 ## [0.66.0] - 2026-11-10
 
 ### Hinzugefügt
