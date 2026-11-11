@@ -9,7 +9,7 @@
     "f1.t": "Alle 382 Karten", "f1.d": "Jede Basis- und Classic-Karte mit ihren originalen Werten und Mechaniken: Geheimnisse, Wählt aus, Überladung, Kombo, Wutanfall, Todesröcheln.",
     "f2.t": "Training gegen den Bot", "f2.d": "Wähle dein Deck — ein Basis-Deck jeder Klasse, eines von zehn bekannten Classic-Decks oder dein eigenes — und den Helden des Bots. Ist das Spiel geladen, braucht das Training kein Internet.",
     "f3.t": "Online ohne Spielserver", "f3.d": "WebRTC verbindet zwei Browser direkt: Schicke einen Textcode über einen beliebigen Messenger — und spiel. Blockieren Netze die direkte Verbindung, leitet ein öffentliches Relais die Züge weiter. 75-Sekunden-Züge mit brennender Lunte.",
-    "f4.t": "Das originale Tutorial", "f4.d": "Sechs Missionen als Jaina: Hogger, Millhaus Manasturm, Lehrensucher Cho, König Mukla, Hemet Nesingwary und Illidan Sturmgrimm.",
+    "f4.t": "Ein Tutorial in jedem Spiel", "f4.d": "Jedes Spiel bringt eigene Missionen mit: in Classic sechs als Jaina, von Hogger bis Illidan; in Neonfall sechs gegen die Bosse seiner Stadt.",
     "f5.t": "Sammlung und Decks", "f5.d": "Alle Karten freigeschaltet. Deine Decks werden im Browser gespeichert; zehn bekannte Classic-Decks sind spielbereit; Deckcodes funktionieren mit Hearthstone (Import und Export).",
     "f6.t": "Decktracker und Verlauf", "f6.d": "Dein Deck mit Kartenbildern und der Ziehchance jeder Karte, die Karten des Gegners und ein Verlauf nach Zügen — zeig auf einen Zug, um zu sehen, wen er traf.",
     "f7.t": "Debug-Werkzeuge", "f7.d": "In den Einstellungen: Baue jede Stellung mit der Maus und spiele sie gegen den Bot oder für beide Seiten, spiele eine fertige Testszene für jede der 534 Karten und Token, sieh dir jede Karte mit jedem Effekt an.",
