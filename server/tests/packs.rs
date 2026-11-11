@@ -129,6 +129,22 @@ async fn kinds(app: &AppRef, kind: &str, want: usize) -> Vec<event::Model> {
     panic!("fewer than {want} {kind} events");
 }
 
+/// A stored pack is read through a temp file of its own (a pack is up to 1 GiB): the same bytes,
+/// within the limit, and the file reader inspects as the bytes reader does.
+#[tokio::test]
+async fn a_stored_pack_is_read_through_a_temp_file() {
+    use std::io::Read;
+    let store = Storage::dir(&temp_dir()).unwrap();
+    let zip = pack_zip("org.test.file", "1.0.0", 0);
+    store.put_bytes("abc", zip.clone()).await.unwrap();
+    let mut back = vec![];
+    store.read_file("abc", zip.len() as u64).await.unwrap().read_to_end(&mut back).unwrap();
+    assert_eq!(back, zip);
+    assert!(store.read_file("abc", zip.len() as u64 - 1).await.is_err(), "over the limit");
+    let f = store.read_file("abc", packs::MAX_SERVER_PACK).await.unwrap();
+    assert_eq!(packs::inspect_from(f).unwrap().info, packs::inspect(&zip).unwrap().info);
+}
+
 /// The same game (rules) with other files, its own pictures: a new upload, not "exists".
 #[tokio::test]
 async fn the_same_rules_with_other_pictures_upload() {
@@ -239,7 +255,7 @@ async fn limits() {
     }
     let r = call(&http, upload(Some(&c.token), &pack_zip("org.test.many", "2.0.0", 0))).await;
     assert_eq!((r.status, r.json()["code"].as_str()), (StatusCode::CONFLICT, Some("too_many")));
-    // 100 MB: refused by the declared length, and while streaming.
+    // Over the limit: refused by the declared length, and while streaming.
     let mut big = upload(Some(&c.token), b"x");
     big.headers_mut().insert(header::CONTENT_LENGTH, (packs::MAX_PLAYER_PACK + 1).to_string().parse().unwrap());
     let r = call(&http, big).await;

@@ -82,7 +82,7 @@ trial game). `startupProbe` allows 2 minutes, for a slow S3 or a big uploaded pa
   per day**: 10 Gi is enough for ~2 500 games a day; 10 000 games a day need ~40 Gi.
   Back it up with `sqlite3 classichs.db ".backup x.db"` or a volume snapshot.
 - Packs: in S3 when the secret sets `S3_BUCKET`, else in `/data/store` (Classic 43 MB +
-  Neonfall 16 MB bundled, plus what players and admins upload: 100 MB per player pack, 10
+  Neonfall 16 MB bundled, plus what players and admins upload: 1 GiB per player pack, 10
   per player).
 
 ## S3
@@ -99,7 +99,7 @@ so S3 latency matters only then.
 One replica, so no sticky sessions. Set the read/send timeouts high (the example: 1 hour):
 the server and the game do not ping idle connections, and ingress-nginx closes a proxied
 connection after 60 s without data by default, which would disconnect every player in the
-menu. Pack uploads need `proxy-body-size: 128m`. The server runs with `--trust-proxy`: it
+menu. Pack uploads need `proxy-body-size: 1024m`. The server runs with `--trust-proxy`: it
 takes the client address (for the login rate limits and the event log) from the last
 `X-Forwarded-For` entry, which ingress-nginx sets to the address it saw; behind a cloud L4
 load balancer use `externalTrafficPolicy: Local` (or the PROXY protocol) on the ingress

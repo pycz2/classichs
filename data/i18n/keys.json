@@ -629,7 +629,7 @@
   "The game file is removed from this device; you can get it again.",
   "The game is over",
   "The game is too big for this server",
-  "The game pack is bigger than 128 MiB",
+  "The game pack is bigger than 1 GiB",
   "The game pack is damaged",
   "The game pack that came is damaged",
   "The game pack was not accepted",

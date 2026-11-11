@@ -645,7 +645,7 @@
 "The game file is removed from this device; you can get it again.": "El archivo del juego se borra de este dispositivo; podrás volver a obtenerlo.",
 "The game is over": "La partida ha terminado",
 "The game is too big for this server": "El juego es demasiado grande para este servidor",
-"The game pack is bigger than 128 MiB": "El paquete de juego supera los 128 MiB",
+"The game pack is bigger than 1 GiB": "El paquete de juego supera 1 GiB",
 "The game pack is damaged": "El paquete de juego está dañado",
 "The game pack that came is damaged": "El paquete de juego recibido está dañado",
 "The game pack was not accepted": "El paquete de juego no fue aceptado",

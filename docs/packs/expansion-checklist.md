@@ -20,9 +20,10 @@ pack `packs/<s>/`, built on the previous one. Do the items in order; the next se
 - [ ] `packs/<s>/cards.patch.json`: the release stats, tribes, `script` of each card, `fx`; `null` takes a later field away.
 - [ ] `packs/<s>/cards.texts.json` (card id → `{name?, text?: {enUS, ruRU, deDE, frFR, esES, ptBR, itIT, plPL}}`): the
       texts of that day where today's differ (hsdata's CardDefs.xml at the build has them all).
-- [ ] `packs/<s>/recipe.json`: `"base": "../<previous>"`, `"root": "../.."`, `"skip": ["art/*"]`,
+- [ ] `packs/<s>/recipe.json`: `"base": "../<previous>"`, `"root": "../.."`, `"skip": ["layout"]` (as Naxxramas; the
+      base's pictures stay: a pack stands alone),
       `"bundle_in_client": false`, one step `{"do": "hsjson", "from": ["data/<s>_cards.json"], "patch": ["cards.patch.json"], "texts": ["packs/<s>/cards.texts.json"]}`.
-- [ ] `manifest.json` (id `<s>-<year>`, names and description in 8 languages, no `art_sets`, `set_marks` for every set
+- [ ] `manifest.json` (id `<s>-<year>`, names and description in 8 languages, the base's `art_sets`, `set_marks` for every set
       with an icon in `ui/set_<x>.png`), `rules.json` (the previous one plus the new set in `sets` and in the modes'
       sets, new races and mechanics), `locales/<lang>.json` (8 languages: `sets` names, new `mechanics` names and tips).
 - [ ] `python3 tools/pack.py build packs/<s> -o /tmp/<s>.cardpack`: 0 errors, 0 warnings.
@@ -57,12 +58,12 @@ pack `packs/<s>/`, built on the previous one. Do the items in order; the next se
 
 ## 7. The local pack
 
-- [ ] `python3 tools/fetch_set_assets.py --set <s> --build` → `~/ClassicHS-local/<s>-custom-art.cardpack` (its own pictures;
-      the earlier sets' pictures come from the owner's earlier local packs; every level's sounds and voice).
+- [ ] `python3 tools/fetch_set_assets.py --set <s> --build` → `~/ClassicHS-local/<s>-custom-art.cardpack` (the `custom`
+      pictures, sounds and voice of every level, Classic's to this set's: the pack needs no other pack).
 
 ## 8. The play check
 
 - [ ] A real bot-vs-bot game with the pack (`tools/pack_try.gd`, and a server game on a free port with a temp DB), the
-      new mechanics seen on the table; the client with the local pack: pictures (yours and borrowed), sounds,
+      new mechanics seen on the table; the client with the local pack: pictures (every level's), sounds,
       legendary music, voice in Russian and English, set marks, the collection's set filter.
 - [ ] `tools/build_packs.sh` puts the pack into `build/packs/` (not into the game's builds); commit on the branch.

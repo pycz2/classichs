@@ -93,6 +93,29 @@ impl Storage {
         Ok(out)
     }
 
+    /// The file (at most `limit` bytes) as a temp file of its own, already unlinked: gone when closed.
+    /// It never comes into memory whole (a pack is up to 1 GiB, the server runs in a few hundred MB).
+    /// ponytail: unlink-while-open, so on Windows the temp file stays behind.
+    pub async fn read_file(&self, content_hash: &str, limit: u64) -> Result<std::io::BufReader<std::fs::File>, Error> {
+        let io = |e: std::io::Error| Error::Generic { store: "temp file", source: Box::new(e) };
+        let (size, mut s) = self.get(content_hash).await?;
+        if size > limit {
+            return Err(Error::Generic { store: "read", source: format!("{size} bytes, more than {limit}").into() });
+        }
+        let mut name = [0u8; 12];
+        rand::RngCore::fill_bytes(&mut rand::rngs::OsRng, &mut name);
+        let path = std::env::temp_dir().join(format!("chs-read-{}.cardpack", name.iter().map(|b| format!("{b:02x}")).collect::<String>()));
+        let mut f = tokio::fs::File::options().read(true).write(true).create_new(true).open(&path).await.map_err(io)?;
+        let _ = std::fs::remove_file(&path);
+        while let Some(c) = s.next().await {
+            f.write_all(&c?).await.map_err(io)?;
+        }
+        f.flush().await.map_err(io)?;
+        let mut f = f.into_std().await;
+        std::io::Seek::rewind(&mut f).map_err(io)?;
+        Ok(std::io::BufReader::new(f))
+    }
+
     pub async fn exists(&self, content_hash: &str) -> Result<bool, Error> {
         match self.store.head(&key(content_hash)).await {
             Ok(_) => Ok(true),

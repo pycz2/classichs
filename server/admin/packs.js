@@ -168,7 +168,7 @@ export function Packs () {
       ${data && html`<${PackTable} list=${data.server} busy=${busy} onToggle=${toggle} onDelete=${setDel} onDefault=${makeDefault} />`}
     </${Card}>
     <${Card} title=${`Players' packs${data ? ' (' + data.players.length + ')' : ''}`} pad=${false} cls=${loading ? 'loading' : ''}
-      actions=${html`<span class="muted small">For friendly games with friends; ${s ? bytes(s.limits.player) : '100 MB'} each · off = not shared</span>`}>
+      actions=${html`<span class="muted small">For friendly games with friends; ${s ? bytes(s.limits.player) : '1 GiB'} each · off = not shared</span>`}>
       ${data && html`<${PackTable} list=${data.players} players busy=${busy} onToggle=${toggle} onDelete=${setDel} />`}
     </${Card}>
     <${Card} title="Pack activity" pad=${false} actions=${html`<a class="btn ghost sm" href=${'#/events?kind=' + PACK_KINDS.join(',')}>All, with downloads</a>`}>

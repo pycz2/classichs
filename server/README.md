@@ -210,7 +210,7 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `GET games?user&mode&reason&page&size` · `GET games/{id}` | finished games · one game with its timeline and its replay's actions (`replay: {actions, hash, first}` or null) |
 | `GET games/{id}/replay` | the game's replay as a `<id>.chsreplay` download (the replay JSON) |
 | `GET packs` | `{server: [pack], players: [pack], stats: {server, enabled, players, uploaders, files, bytes, downloads, storage, games, live, default_rules, builtin: {rules_hash, default}, limits: {player, server, per_player}}}`; a pack is `{id, pack_id, version, name, rules_hash, content_hash, size, enabled, default, created, downloads, games, live, owner: {id, user} \| null}` (`games`/`live`: finished and live games in its rules) |
-| `POST packs` (the `.cardpack` as the raw body, up to 128 MB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
+| `POST packs` (the `.cardpack` as the raw body, up to 1 GiB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
 | `POST packs/{id}/{enable\|disable\|delete\|default}` | any pack, a player's too (the player's game gets a new `packs`); `default`: a server pack becomes the default game |
 | `GET settings` · `POST settings {autobot_wait_ms?, signup_invite_only?}` | `{autobot_wait_ms, signup_invite_only}`; the wait 0..600000 ms (default 30000), invite-only default false; the fields given change at once |
 | `GET signup_keys` | `{keys: [{id, key, note, uses_total, uses_left, created, created_by, created_by_name, revoked, accounts: [{id, user, created}]}], invite_only}`, newest first |
@@ -384,9 +384,9 @@ not answer, 2 images kept. The headers of these scripts tell the details.
 | Refused actions | 3 per player in a game, then the game is lost |
 | Connections per account | 1: a new login closes the old connection (`kicked`) |
 | Tournaments | 3 not over per creator, 10 created a day; 2–128 players; start from now+11 min to now+14 days; 60 s for each accept, ban and pick |
-| A player's pack | 128 MiB (as the client takes); 10 packs per player |
-| A server pack (admin upload) | 128 MB |
-| Inside a pack | docs/packs/format.md §1 (10 000 files, 256 MB unpacked, 16 MB a file, the rules part 8 MB, no zip bombs) |
+| A player's pack | 1 GiB (as the client takes); 10 packs per player |
+| A server pack (admin upload) | 1 GiB |
+| Inside a pack | docs/packs/format.md §1 (50 000 files, 2 GiB unpacked, 16 MB a file, the rules part 8 MB, no zip bombs) |
 | The check of a new pack's rules | a trial game of at most 600 actions and 20 s; one check at a time |
 | Different rule sets in the engine | 48 per process (then new ones are refused until a restart) |
 
@@ -660,7 +660,7 @@ A pack is `{id, name: {lang: text}, version, rules_hash, content_hash, size, def
   for its owner and (while enabled) the owner's friends. Otherwise 404; no or a bad token 401.
 - `POST /packs` with the token, the `.cardpack` as the raw body → `201 {pack}`; refusals
   are `{error, code}`: 401 `auth_required`/`bad_token`, 409 `exists` (already yours) or
-  `too_many` (10), 413 `too_large` (128 MiB), 422 `invalid` (the reason), 400 `empty`.
+  `too_many` (10), 413 `too_large` (1 GiB), 422 `invalid` (the reason), 400 `empty`.
 - Both answer CORS (`Access-Control-Allow-Origin: *`, preflight included) for the web build.
 
 The check (`packs::inspect` and `packs::trial`, on every upload and bundled pack): the zip

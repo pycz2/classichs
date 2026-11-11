@@ -15,11 +15,10 @@ icc, loot, gil). Result in <out>/<set>/:
   SOURCES.md
 Downloads stay in <out>/sounds/cache (shared with tools/fetch_original_sounds.py) and <out>/sounds/cache/art.
 
---build makes <out>/<set>-custom-art.cardpack from packs/<set> (tools/pack.py build) with the art set `custom`
-(this set's pictures only: the game takes a card's picture from any installed pack with the same card id, so
-the local Classic pack lends its pictures to every later one; Classic and Naxxramas keep theirs), the sound
-set `original` and the voice of every pack it is built on (sounds have no such fallback). An existing file is
-kept as <set>-custom-art.before-<date>.cardpack. Needs ImageMagick (`magick`) and ffmpeg.
+--build makes <out>/<set>-custom-art.cardpack from packs/<set> (tools/pack.py build) with the art set `custom`,
+the sound set `original` and the voice of every pack it is built on and its own (classic, naxx, …, <set>): a pack
+stands alone, it never takes pictures or sounds from another installed pack. An existing file is kept as
+<set>-custom-art.before-<date>.cardpack. Needs ImageMagick (`magick`) and ffmpeg.
 """
 import argparse
 import concurrent.futures as cf
@@ -90,8 +89,10 @@ def chain(name):
 
 def build(name, out):
     dst = out / f"{name}-custom-art.cardpack"
-    local = ["--art-set", f"custom={out / name / 'art'}"]
-    for level in chain(name):
+    local = []
+    for level in chain(name):  # every level's pictures, sounds and voice (a later level wins)
+        if (out / level / "art").is_dir():
+            local += ["--art-set", f"custom={out / level / 'art'}"]
         if (out / level / "set").is_dir():
             local += ["--sound-set", f"original={out / level / 'set'}"]
         if (out / level / "voice").is_dir():

@@ -35,11 +35,13 @@ card state, and include all the set's collectible cards and the tokens they make
   (docs/packs/api.md, tools/lua_api.py --check). Classic's and Naxxramas's behaviour and parity must not change.
 - Every card has a card test (data/card_tests style; tools/check_card_tests.gd per pack: 0 problems).
 - Deck templates (several strong decks of that set's meta), bots able to play (Library::of_pack / templates).
-- **Art:** no generated card art this time. The distributed packs carry no card pictures; the client finds a
-  card's picture in any installed pack with the same card id (shared Basic/Classic/… ids), else draws its
-  procedural art. Each pack gets generated backgrounds only (menu, board, results, library — Codex, with
-  tools/codex_guard.sh). The owner's Blizzard art and sounds are downloaded locally, never committed, never in a
-  distributed pack (`local` sets), into ~/ClassicHS-local/, and his local custom packs are built from them.
+- **Every pack is self-contained:** it never needs another installed pack to work or to show its pictures
+  (duplicated pictures inside packs are fine; the size limits are 1 GiB per pack, 2 GiB unpacked).
+- **Art:** no generated card art this time. A distributed pack carries its base chain's pictures (Classic's sets
+  by reference through `base`); its new cards get the procedural drawn art. Each pack gets generated backgrounds
+  only (menu, board, results, library — Codex, with tools/codex_guard.sh). The owner's Blizzard art and sounds are downloaded locally, never committed, never in a
+  distributed pack (`local` sets), into ~/ClassicHS-local/, and his local custom packs are built from them (each
+  holds the `custom` pictures, sounds and voice of every level of its chain).
 - **Assets small:** card pictures as WebP (also convert the existing local custom art); sounds and voice
   compressed (mono, low bitrate OGG Vorbis or MP3 — what Godot and pack.py take); legendary play music downloaded
   and played when the legendary is played (besides its voice line). Voice in English and Russian as before.
@@ -59,7 +61,7 @@ card state, and include all the set's collectible cards and the tokens they make
 
 ## Order of work
 
-0. Foundation: the pack chain in pack.py, the cross-pack picture fallback, the asset tools (WebP, compressed
+0. Foundation: the pack chain in pack.py, the asset tools (WebP, compressed
    sounds, legendary music; per set download of art/sound/voice EN+RU into ~/ClassicHS-local/), the condition
    glow, the rope direction, the set mark and the collection filter, distribution (not in client builds; release
    assets; server bundle).

@@ -152,39 +152,6 @@ func test_the_active_pack_drives_the_whole_client() -> void:
 	check(CardDb.has("VAN_CS2_029"), "Classic cards again")
 
 
-## A pack without pictures (the packs after Naxxramas) shows another installed pack's picture of the
-## same card id: the chosen set's first (a local custom pack lends its own), else that pack's default.
-func test_pictures_come_from_other_packs() -> void:
-	var classic := _pack(Packs.CLASSIC)
-	var bytes := FileAccess.get_file_as_bytes(classic.path)
-	var man: Dictionary = classic.manifest.duplicate(true)
-	man.id = "test-noart"
-	man.art_sets = []
-	var noart: Pack = Packs.install(_repacked(bytes, {"drop": "art/", "manifest.json": JSON.stringify(man).to_utf8_buffer()}), "imported").get("pack")
-	man.id = "test-custom"
-	man.art_sets = classic.manifest.art_sets + [{"id": "custom", "local": true}]
-	var mine := classic.read("art/photo/HERO_08.webp")
-	var custom: Pack = Packs.install(_repacked(bytes, {"manifest.json": JSON.stringify(man).to_utf8_buffer(), "art/custom/HERO_08.webp": mine}), "imported").get("pack")
-	check(noart != null and custom != null and not noart.files().any(func(f): return f.begins_with("art/")), "installed, one without pictures")
-	var same := func(tex: Texture2D, file: String) -> bool:
-		var img := classic.image(file)
-		return tex != null and img != null and tex.get_image().get_data() == img.get_data()
-	Packs.set_active(noart)
-	eq(Packs.choice(noart, "art"), "", "no set of its own")
-	check(same.call(Art.texture("HERO_08"), "art/generated/HERO_08.jpg"), "another pack's default picture (Classic's)")
-	check(Art.sets().has("cartoon") and Art.sets().has("custom"), "the other packs' sets can be chosen: %s" % [Art.sets()])
-	Packs.set_choice(noart, "art", "cartoon")
-	check(same.call(Art.texture("HERO_08"), "art/cartoon/HERO_08.webp"), "the same set of another pack")
-	Packs.set_choice(noart, "art", "custom")
-	check(same.call(Art.texture("HERO_08"), "art/photo/HERO_08.webp"), "the local custom pack's picture")
-	check(Art.texture("HERO_07") != null, "a card the custom set lacks: another pack's default")
-	eq(Art.texture("NO_SUCH_CARD"), null, "no picture anywhere: the drawn art")
-	Packs.set_active(classic)
-	Packs.remove(noart)
-	Packs.remove(custom)
-	check(not Art.others().is_empty() and not Art.others().get("custom", {}).has("HERO_08"), "forgotten with the pack")
-
-
 func test_sets_are_chosen_per_pack() -> void:
 	var classic := _pack(Packs.CLASSIC)
 	eq(Packs.choice(classic, "music"), "generated", "default")

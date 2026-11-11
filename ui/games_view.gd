@@ -187,9 +187,8 @@ static func set_picker(p: Pack, kind: String, current: String, picked: Callable)
 	var sets := p.sets(kind).filter(func(x): return p.set_usable(kind, x))
 	if p == Packs.active() and kind == "art":
 		for f in Art.sets():
-			if not sets.any(func(x): return x.id == f):  # another pack's set (its name), else a player's folder
-				var other := Art.other_set(f)
-				sets.append(other if not other.is_empty() else {"id": f, "name": {"en": {"original": "Original"}.get(f, f.capitalize())}})
+			if not sets.any(func(x): return x.id == f):
+				sets.append({"id": f, "name": {"en": {"original": "Original"}.get(f, f.capitalize())}})
 	var pick := OptionButton.new()
 	pick.custom_minimum_size = Vector2(220, 36)
 	for x in sets:

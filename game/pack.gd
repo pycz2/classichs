@@ -20,7 +20,7 @@ var _twice := false  # a file is in the zip twice
 
 const MIB := 1024 * 1024
 ## docs/packs/format.md, "Size limits".
-const LIMITS := {"pack": 128 * MIB, "unpacked": 256 * MIB, "files": 10000, "file": 16 * MIB, "image": 2 * MIB}
+const LIMITS := {"pack": 1024 * MIB, "unpacked": 2048 * MIB, "files": 50000, "file": 16 * MIB, "image": 2 * MIB}
 const TOP_FILES := ["manifest.json", "rules.json", "cards.json", "tutorial.json", "README.md", "CREDITS.md", "LICENSE.txt"]
 const DIRS := ["scripts", "locales", "layout", "decks", "missions", "ui", "art", "sounds", "music", "voice"]
 const PRESENTATION := ["fx", "sounds", "voice"]
@@ -355,7 +355,7 @@ static func sha256(bytes: PackedByteArray) -> String:
 func problems() -> Array:
 	var out := []
 	if size > LIMITS.pack:
-		out.append("the file is bigger than 128 MiB")
+		out.append("the file is bigger than 1 GiB")
 	if _twice:
 		out.append("a file is in it twice")
 	if _files.size() > LIMITS.files:

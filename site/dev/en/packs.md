@@ -390,7 +390,7 @@ python3 tools/pack.py hash  <file>.cardpack     # rules_hash and content_hash
 
 - **On your device:** *Games → Import a game file* (the system's file dialog; the browser's file picker on the web). The game checks the pack (paths, sizes, the format, `rules_hash`), keeps it as `packs/<content_hash>.cardpack` in its user folder and lists it. *Play this game* makes it active; its decks, art, sounds, music and look switch at once. *Delete* removes an imported one.
 - **Online with a friend (codes):** if the friend has a pack with the same `rules_hash`, the game switches to it; if not and the pack is `redistributable`, the friend is offered to download it from you.
-- **On a game server:** a player uploads it in the server's *Games* window (*Upload my game*: up to 10 packs of 100 MB each); an admin uploads in the admin panel, or puts `.cardpack` files into the server's `--packs-dir`. The server checks every new pack: the engine loads the rules, compiles every script and plays a trial game with your first two ready decks, trying every legal move; a script error, an engine failure, a stuck game or more than 20 seconds refuses it.
+- **On a game server:** a player uploads it in the server's *Games* window (*Upload my game*: up to 10 packs of 1 GiB each); an admin uploads in the admin panel, or puts `.cardpack` files into the server's `--packs-dir`. The server checks every new pack: the engine loads the rules, compiles every script and plays a trial game with your first two ready decks, trying every legal move; a script error, an engine failure, a stuck game or more than 20 seconds refuses it.
 
 ## Versions and hashes
 
@@ -406,9 +406,9 @@ So you can fix a typo, redraw art, add a language or a sound set and still play 
 
 | What | Limit |
 |---|---|
-| The `.cardpack` file | 128 MiB (a player's upload to a server: 100 MB) |
-| All files unpacked | 256 MiB |
-| Number of files | 10 000 |
+| The `.cardpack` file | 1 GiB |
+| All files unpacked | 2 GiB |
+| Number of files | 50 000 |
 | One file / one picture | 16 MiB / 2 MiB |
 | The rules part (`rules.json`, `cards.json`, `missions/`, `scripts/`) | 8 MiB unpacked |
 | The text part (`locales/`, `layout/`) | 32 MiB unpacked |

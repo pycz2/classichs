@@ -312,6 +312,23 @@ class BuildAndZip(unittest.TestCase):
                 pack.read_pack(p)
 
 
+class Limits(unittest.TestCase):
+    def test_the_same_everywhere(self):  # format.md "Size limits": 1 GiB a pack, 2 GiB unpacked, 50 000 files
+        self.assertEqual((pack.LIMITS["pack"], pack.LIMITS["unpacked"], pack.LIMITS["files"]), (1 << 30, 2 << 30, 50000))
+        gd = '{"pack": 1024 * MIB, "unpacked": 2048 * MIB, "files": 50000,'
+        for f in ("game/pack.gd", "game/pack_check.gd"):
+            self.assertIn(gd, (pack.REPO / f).read_text(), f)
+        rs = (pack.REPO / "rust/engine/src/pack.rs").read_text()
+        for line in ("MAX_PACK: usize = 1024 * MIB;", "MAX_UNPACKED: usize = 2048 * MIB;", "MAX_FILES: usize = 50_000;"):
+            self.assertIn(line, rs)
+        server = (pack.REPO / "server/src/packs.rs").read_text()
+        for line in ("MAX_PLAYER_PACK: u64 = 1 << 30;", "MAX_SERVER_PACK: u64 = 1 << 30;"):
+            self.assertIn(line, server)
+        doc = (pack.REPO / "docs/packs/format.md").read_text()
+        for row in ("| The `.cardpack` file | 1 GiB |", "| All files unpacked | 2 GiB |", "| Number of files | 50 000 |"):
+            self.assertIn(row, doc)
+
+
 class Classic(unittest.TestCase):
     def test_classic_source_builds_clean(self):
         files, r = pack.build(pack.REPO / "packs/classic")
@@ -399,7 +416,7 @@ class Chain(unittest.TestCase):
             self.assertEqual(files["scripts/x.lua"], b"-- b\nreturn {}\n")  # the nearer pack's script wins
             self.assertIn("scripts/a.lua", files)
             self.assertIn("ui/fonts/F.ttf", files)
-            self.assertFalse([p for p in files if p.startswith("art/")])  # skip: no pictures
+            self.assertFalse([p for p in files if p.startswith("art/")])  # skip leaves the base's copy step out
             en = json.loads(files["locales/en.json"])
             self.assertEqual(en["classes"], {"RED": "Red of B", "GREY": "Grey of A"})
             self.assertEqual(en["sets"], {"CORE": "Core of C"})  # its own texts first

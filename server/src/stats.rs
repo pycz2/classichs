@@ -353,9 +353,9 @@ pub async fn names(app: &AppRef, rules: &GameRules) -> DbResult<()> {
 /// A stored pack's locales/en.json.
 pub(crate) async fn locale(app: &AppRef, rules_hash: &str) -> Option<Value> {
     let row = pack::Entity::find().filter(pack::Column::RulesHash.eq(rules_hash)).order_by_asc(pack::Column::Owner).one(&app.db).await.ok()??;
-    let bytes = app.store.read(&row.content_hash, packs::MAX_SERVER_PACK).await.ok()?;
+    let file = app.store.read_file(&row.content_hash, packs::MAX_SERVER_PACK).await.ok()?;
     tokio::task::spawn_blocking(move || {
-        let mut z = zip::ZipArchive::new(std::io::Cursor::new(bytes)).ok()?;
+        let mut z = zip::ZipArchive::new(file).ok()?;
         let en = serde_json::from_reader(z.by_name("locales/en.json").ok()?).ok();
         en
     })

@@ -58,9 +58,9 @@ refuse a pack that breaks them):
 
 | What | Limit |
 |---|---|
-| The `.cardpack` file | 128 MiB |
-| All files unpacked | 256 MiB |
-| Number of files | 10 000 |
+| The `.cardpack` file | 1 GiB |
+| All files unpacked | 2 GiB |
+| Number of files | 50 000 |
 | One file | 16 MiB |
 | One picture | 2 MiB |
 | Rules part (`rules.json`, `cards.json`, `missions/`, `scripts/`) unpacked | 8 MiB |
@@ -227,12 +227,10 @@ valign: "top", dy}`. Without it the client lays text out itself.
 ## 7. Art, sounds, music, voice
 
 - `art/<set>/<card id>.<jpg|png|webp>`, 512 px recommended, ≤ 2 MiB. A card
-  without a picture in the chosen set takes the picture of the same card id from another
-  installed pack's set of that name (a local one too: the owner's local Classic pack lends its
-  `custom` pictures to every later pack), then from the pack's default set, then from another
-  pack's default set, then the client draws its procedural art. The packs after Naxxramas carry
-  no card pictures of their own: the shared ids (Basic, Classic, …) find theirs this way, and the
-  player may pick any set another installed pack has.
+  without a picture in the chosen set takes the one of the pack's default set, else the client
+  draws its procedural art. A pack stands alone: it never takes pictures (or anything else) from
+  another installed pack. The packs after Naxxramas carry their base's pictures (Classic's sets,
+  by reference through `base`) and none of their own new cards: those get the procedural art.
 - `sounds/<set>/<name>`: event sounds by name (Classic: `play_card`, `attack`,
   `damage`, `death`, `hero_power`, `turn_start`, `heal`, `armor`, `equip`,
   `secret`, `freeze`, `shield`, `spell`, `trigger`, `hit_big`, `victory`,
@@ -261,7 +259,8 @@ valign: "top", dy}`. Without it the client lays text out itself.
   one wins), `--voice` may come several times. The owner's local packs take them from
   `tools/fetch_set_assets.py --set <classic|naxx|gvg|…>` (pictures as 256 px WebP, sounds and voice mono at a low bit
   rate, a legendary's play music) into `~/ClassicHS-local/<set>/`, and `--build` makes
-  `~/ClassicHS-local/<set>-custom-art.cardpack` (the files stay outside git).
+  `~/ClassicHS-local/<set>-custom-art.cardpack` with the pictures, sounds and voice of every level of its chain
+  (`--art-set custom=` once per level; the files stay outside git).
 
 ## 8. Decks and missions
 
@@ -332,7 +331,7 @@ A pack source is a folder with the pack's own files (`manifest.json`,
 **A pack built on another** (Naxxramas on Classic, GvG on Naxxramas, … to any depth): `recipe.json` names its
 `base`, the base pack's source folder relative to this one. The build then runs every step of the base's recipe
 (and of its base, recursively), except the base's `copy` steps whose `to` matches a glob of `skip`
-(`"skip": ["art/*"]`: no pictures; Naxxramas skips Classic's `layout`). The pack's own `hsjson` step adds to the
+(Naxxramas skips Classic's `layout`; the pictures stay: a pack stands alone). The pack's own `hsjson` step adds to the
 base's one: its `from` data, its `patch` and its `texts` come after the base's, in order (a later patch wins for a
 field it names); its other steps follow the base's. The base's own files `scripts/**/*.lua` and `ui/fonts/*` and
 its own texts (the sections `classes`, `races`, `rarities`, `mechanics`, `ranks`, `cards`, `sets` of its

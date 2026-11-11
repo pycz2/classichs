@@ -29,16 +29,16 @@ use serde::Deserialize;
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use std::collections::HashMap;
-use std::io::Read;
+use std::io::{Read, Seek};
 use std::path::{Path as FsPath, PathBuf};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::io::AsyncWriteExt;
 
 /// A player's pack, at most.
-pub const MAX_PLAYER_PACK: u64 = 128 << 20;  // as the client takes (game/pack.gd): a local pack with its own art and voice is ~110 MB
+pub const MAX_PLAYER_PACK: u64 = 1 << 30;  // as the client takes (game/pack.gd): a local pack with every level's art and voice is up to ~700 MB
 /// A server pack (the admin's), at most: the format's limit (docs/packs/format.md §1).
-pub const MAX_SERVER_PACK: u64 = 128 << 20;
+pub const MAX_SERVER_PACK: u64 = 1 << 30;
 /// Own packs per player.
 pub const MAX_PER_PLAYER: u64 = 10;
 /// Pack formats this server understands.
@@ -81,7 +81,12 @@ fn hex(d: impl AsRef<[u8]>) -> String {
 
 /// `content_hash` of docs/packs/format.md §3 over every file of the zip (directories ignored).
 pub fn content_hash(bytes: &[u8]) -> Result<String, String> {
-    let mut z = zip::ZipArchive::new(std::io::Cursor::new(bytes)).map_err(|e| format!("not a zip file: {e}"))?;
+    content_hash_from(std::io::Cursor::new(bytes))
+}
+
+/// The same from a file (any seekable reader), a file at a time.
+pub fn content_hash_from(r: impl Read + Seek) -> Result<String, String> {
+    let mut z = zip::ZipArchive::new(r).map_err(|e| format!("not a zip file: {e}"))?;
     let mut items: Vec<(String, String)> = Vec::with_capacity(z.len());
     for i in 0..z.len() {
         let mut f = z.by_index(i).map_err(|e| format!("bad zip entry: {e}"))?;
@@ -106,7 +111,12 @@ pub fn content_hash(bytes: &[u8]) -> Result<String, String> {
 /// (`classichs_engine::pack::read_zip`, format.md §1), the manifest, both hashes (the
 /// manifest's `rules_hash` must be the files'), and the ready decks.
 pub fn inspect(bytes: &[u8]) -> Result<Inspected, String> {
-    let files = engine_pack::read_zip(bytes)?;
+    inspect_from(std::io::Cursor::new(bytes))
+}
+
+/// The same from a file (any seekable reader): the pack never comes into memory whole.
+pub fn inspect_from(mut r: impl Read + Seek) -> Result<Inspected, String> {
+    let files = engine_pack::read_zip_from(&mut r)?;
     let manifest = engine_pack::strict_json(files.get("manifest.json").ok_or("no manifest.json at the top of the zip")?, "manifest.json")?;
     let format = manifest["format"].as_i64().ok_or("manifest.json: format must be a whole number")?;
     if !FORMATS.contains(&format) {
@@ -137,9 +147,9 @@ pub fn inspect(bytes: &[u8]) -> Result<Inspected, String> {
         Some(_) => return Err("manifest.json: rules_hash does not match the rules files (build the pack again)".into()),
         None => return Err("manifest.json: no rules_hash (build the pack with tools/pack.py)".into()),
     }
-    let content_hash = content_hash(bytes)?;
+    let content_hash = content_hash_from(&mut r)?;
     let mut decks = vec![];
-    let mut z = zip::ZipArchive::new(std::io::Cursor::new(bytes)).map_err(|e| format!("not a zip file: {e}"))?;
+    let mut z = zip::ZipArchive::new(r).map_err(|e| format!("not a zip file: {e}"))?;
     let mut names: Vec<String> =
         z.file_names().flatten().filter(|n| n.starts_with("decks/") && n.ends_with(".json") && n.matches('/').count() == 1).map(|n| n.to_string()).collect();
     names.sort();
@@ -315,9 +325,9 @@ pub async fn rules_for(app: &AppRef, rules_hash: &str) -> Result<Arc<GameRules>,
         .await
         .map_err(|e| format!("database: {e}"))?
         .ok_or("no such pack")?;
-    let bytes = app.store.read(&row.content_hash, MAX_SERVER_PACK).await.map_err(|e| format!("storage: {e}"))?;
+    let mut file = app.store.read_file(&row.content_hash, MAX_SERVER_PACK).await.map_err(|e| format!("storage: {e}"))?;
     let r = tokio::task::spawn_blocking(move || -> Result<GameRules, String> {
-        let files = engine_pack::read_zip(&bytes)?;
+        let files = engine_pack::read_zip_from(&mut file)?;
         Ok(GameRules::of(load_rules(&files)?, &files))
     })
     .await
@@ -453,9 +463,9 @@ fn hash_file(path: &FsPath) -> std::io::Result<(String, u64)> {
 /// The whole check of a pack file (`inspect`, then `trial` unless a pack with the same rules
 /// passed it before), off the async workers, within TRIAL_TIME and a bit.
 pub async fn check_file(app: &AppRef, path: &FsPath) -> Result<PackInfo, PackErr> {
-    let bytes = tokio::fs::read(path).await.map_err(store_err)?;
+    let file = std::fs::File::open(path).map_err(store_err)?;
     let invalid = |e: String| PackErr::new(StatusCode::UNPROCESSABLE_ENTITY, "invalid", e);
-    let p = tokio::task::spawn_blocking(move || inspect(&bytes))
+    let p = tokio::task::spawn_blocking(move || inspect_from(std::io::BufReader::new(file)))
         .await
         .map_err(|_| PackErr::new(StatusCode::INTERNAL_SERVER_ERROR, "server", "Server error"))?
         .map_err(invalid)?;

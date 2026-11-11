@@ -9,7 +9,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-body-size: "128m"        # pack uploads (players 100 MB, admins 128 MB)
+    nginx.ingress.kubernetes.io/proxy-body-size: "1024m"       # pack uploads (players and admins: 1 GiB)
     nginx.ingress.kubernetes.io/proxy-request-buffering: "off" # stream them to the server
 spec:
   ingressClassName: nginx

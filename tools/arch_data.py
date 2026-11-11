@@ -1073,8 +1073,8 @@ COMPS.append(dict(
                 "Выполняет рецепт, проверяет схемы и все перекрёстные ссылки, записывает хэши и детерминированный zip — или отказывает."),
           files=[("tools/pack.py", "def build(src, out=None, art_sets=(), sound_sets=(), voice=None):"), ("tools/pack.py", "def check_files(files):"), ("tools/pack.py", "def write_pack(files, out):")]),
         P("file", ".cardpack", 2, 0, sub="zip",
-          text=("Up to 128 MB, 256 MB unpacked, 10 000 files; no zip bombs, links or encryption; only the format's folders.",
-                "До 128 МБ, 256 МБ в распакованном виде, 10 000 файлов; без zip-бомб, ссылок и шифрования; только папки формата."),
+          text=("Up to 1 GiB, 2 GiB unpacked, 50 000 files; no zip bombs, links or encryption; only the format's folders.",
+                "До 1 ГиБ, 2 ГиБ в распакованном виде, 50 000 файлов; без zip-бомб, ссылок и шифрования; только папки формата."),
           files=["docs/packs/format.md"]),
         P("packsgd", ("Packs in the client", "Пакеты в клиенте"), 3, 0, sub="game/packs.gd · pack.gd",
           text=("The built-in `res://packs` and the player's `user://packs`; the active pack; install with checks; the shell switch; a pack read straight from its zip.",
@@ -1578,8 +1578,8 @@ COMPS.append(dict(
                                                  "`match {game, mode, opponent, you, pack, rejoin?}`, `state {game, view, events, result}`, `act_error`, `game_over {result, reason, rank?, arena?}`; `packs {server, mine}`, `decks`, `deck_saved`, `game_settings`.",
                                                  "`auth`, `error {code, text}`, `me`, `kicked`; `friends`, `presence`; `msg`, `history`, `chats`; `invite`, `invite_declined`; `queued`, `queue_status`; `arena {state}`; "
                                                  "`match {game, mode, opponent, you, pack, rejoin?}`, `state {game, view, events, result}`, `act_error`, `game_over {result, reason, rank?, arena?}`; `packs {server, mine}`, `decks`, `deck_saved`, `game_settings`.")),
-        ("HTTP", ("`GET /` — the WebSocket; `POST /packs` (bearer token, 100 MB, 10 per player) → 201 or 401 / 409 / 413 / 422; `GET /packs/<content_hash>.cardpack` with ETag and long caching; CORS open for the web build.",
-                  "`GET /` — WebSocket; `POST /packs` (токен, 100 МБ, 10 на игрока) → 201 или 401 / 409 / 413 / 422; `GET /packs/<content_hash>.cardpack` с ETag и долгим кэшем; CORS открыт для веб-сборки.")),
+        ("HTTP", ("`GET /` — the WebSocket; `POST /packs` (bearer token, 1 GiB, 10 per player) → 201 or 401 / 409 / 413 / 422; `GET /packs/<content_hash>.cardpack` with ETag and long caching; CORS open for the web build.",
+                  "`GET /` — WebSocket; `POST /packs` (токен, 1 ГиБ, 10 на игрока) → 201 или 401 / 409 / 413 / 422; `GET /packs/<content_hash>.cardpack` с ETag и долгим кэшем; CORS открыт для веб-сборки.")),
     ],
     flows=["server-game", "pack-upload", "server-login"],
 ))
@@ -1638,7 +1638,7 @@ FLOWS.append(dict(
     steps=[
         ("client", "packs", "POST /packs", ("The Upload panel lists the local packs the server lacks; the bearer token; at most 10 own packs.", "Панель загрузки показывает локальные пакеты, которых нет на сервере; токен; не больше 10 своих пакетов."),
          [("ui/server_home.gd", "func show_upload() -> void:"), ("net/server_link.gd", "func upload_pack(p: Pack) -> void:")]),
-        ("packs", "packs", ("stream to a file", "поток в файл"), ("SHA-256 on the way, over 100 MB → 413.", "SHA-256 по дороге, больше 100 МБ — 413."),
+        ("packs", "packs", ("stream to a file", "поток в файл"), ("SHA-256 on the way, over 1 GiB → 413.", "SHA-256 по дороге, больше 1 ГиБ — 413."),
          [("server/src/packs.rs", "pub async fn receive(")]),
         ("packs", "engine", ("inspect", "inspect"), ("The zip by the format's rules, the manifest, `rules_hash` must match, `content_hash`.", "Zip по правилам формата, манифест, совпадение `rules_hash`, `content_hash`."),
          [("server/src/packs.rs", "pub fn inspect(bytes: &[u8]) -> Result<Inspected, String> {")]),

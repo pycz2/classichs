@@ -6,17 +6,20 @@ use serde::de::{self, Deserialize, Deserializer, MapAccess, SeqAccess, Visitor};
 use serde_json::{Map, Value};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
+use std::io::{Read, Seek, SeekFrom};
 
 /// Path → bytes of the files of a pack that the engine reads.
 pub type Files = BTreeMap<String, Vec<u8>>;
 
 const MIB: usize = 1 << 20;
-const MAX_PACK: usize = 128 * MIB;
-const MAX_UNPACKED: usize = 256 * MIB;
-const MAX_FILES: usize = 10_000;
+const MAX_PACK: usize = 1024 * MIB;
+const MAX_UNPACKED: usize = 2048 * MIB;
+const MAX_FILES: usize = 50_000;
 const MAX_FILE: usize = 16 * MIB;
 const MAX_RULES: usize = 8 * MIB;
 const MAX_RATIO: usize = 200;
+/// The zip's central directory, at most (50 000 entries of a 200-character path take ~13 MiB).
+const MAX_DIR: usize = 32 * MIB;
 
 /// Files that `rules_hash` covers (and the only ones the engine needs, with the manifest).
 pub fn is_rules_file(p: &str) -> bool {
@@ -48,22 +51,46 @@ fn u32_at(b: &[u8], i: usize) -> Result<usize, String> {
     b.get(i..i + 4).map(|x| u32::from_le_bytes([x[0], x[1], x[2], x[3]]) as usize).ok_or_else(|| "truncated zip".to_string())
 }
 
-/// The rules files and the manifest of a `.cardpack`, checking the limits of format.md §1.
-/// ponytail: no CRC check (the hashes of the files catch corruption that matters); no zip64.
-pub fn read_zip(b: &[u8]) -> Result<Files, String> {
-    if b.len() > MAX_PACK {
-        return Err(format!("the pack is {} bytes, more than {MAX_PACK}", b.len()));
+/// `n` bytes of `r` from `at` ("truncated zip" when it has fewer).
+fn read_at<R: Read + Seek>(r: &mut R, at: usize, n: usize) -> Result<Vec<u8>, String> {
+    let mut v = vec![];
+    r.seek(SeekFrom::Start(at as u64)).map_err(|e| format!("cannot read the pack: {e}"))?;
+    r.take(n as u64).read_to_end(&mut v).map_err(|e| format!("cannot read the pack: {e}"))?;
+    if v.len() != n {
+        return Err("truncated zip".into());
     }
-    let from = b.len().saturating_sub(22 + 65_535);
-    let eocd = (from..b.len().saturating_sub(21))
+    Ok(v)
+}
+
+/// The rules files and the manifest of a `.cardpack`, checking the limits of format.md §1.
+pub fn read_zip(b: &[u8]) -> Result<Files, String> {
+    read_zip_from(&mut std::io::Cursor::new(b))
+}
+
+/// The same from a file (any seekable reader): only the zip's directory and the files the engine
+/// reads come into memory, never the whole pack (up to MAX_PACK).
+/// ponytail: no CRC check (the hashes of the files catch corruption that matters); no zip64.
+pub fn read_zip_from<R: Read + Seek>(r: &mut R) -> Result<Files, String> {
+    let len = r.seek(SeekFrom::End(0)).map_err(|e| format!("cannot read the pack: {e}"))? as usize;
+    if len > MAX_PACK {
+        return Err(format!("the pack is {len} bytes, more than {MAX_PACK}"));
+    }
+    let from = len.saturating_sub(22 + 65_535);
+    let tail = read_at(r, from, len - from)?;
+    let eocd = (0..tail.len().saturating_sub(21))
         .rev()
-        .find(|&i| b[i..i + 4] == [0x50, 0x4b, 0x05, 0x06])
+        .find(|&i| tail[i..i + 4] == [0x50, 0x4b, 0x05, 0x06])
         .ok_or("not a zip file")?;
-    let count = u16_at(b, eocd + 10)?;
-    let mut at = u32_at(b, eocd + 16)?;
+    let count = u16_at(&tail, eocd + 10)?;
+    let (dir_size, dir_at) = (u32_at(&tail, eocd + 12)?, u32_at(&tail, eocd + 16)?);
     if count > MAX_FILES {
         return Err(format!("{count} files, more than {MAX_FILES}"));
     }
+    if dir_size > MAX_DIR {
+        return Err("bad zip central directory".into());
+    }
+    let b = &read_at(r, dir_at, dir_size)?[..]; // the central directory
+    let mut at = 0;
     let (mut out, mut seen) = (Files::new(), std::collections::BTreeSet::new());
     let (mut unpacked, mut rules) = (0usize, 0usize);
     for _ in 0..count {
@@ -96,7 +123,7 @@ pub fn read_zip(b: &[u8]) -> Result<Files, String> {
         if csize == 0xFFFF_FFFF || usize_ == 0xFFFF_FFFF {
             return Err(format!("{name}: zip64 is not supported"));
         }
-        if usize_ > MAX_FILE || (csize > 0 && usize_ / csize > MAX_RATIO) {
+        if usize_ > MAX_FILE || csize > MAX_FILE || (csize > 0 && usize_ / csize > MAX_RATIO) {
             return Err(format!("{name}: too big or too compressed"));
         }
         unpacked += usize_;
@@ -110,14 +137,14 @@ pub fn read_zip(b: &[u8]) -> Result<Files, String> {
         if rules > MAX_RULES {
             return Err(format!("the rules part is more than {MAX_RULES} bytes"));
         }
-        if u32_at(b, local)? != 0x0403_4b50 {
+        let head = read_at(r, local, 30)?;
+        if u32_at(&head, 0)? != 0x0403_4b50 {
             return Err(format!("{name}: bad local header"));
         }
-        let start = local + 30 + u16_at(b, local + 26)? + u16_at(b, local + 28)?;
-        let data = b.get(start..start + csize).ok_or("truncated zip")?;
+        let data = read_at(r, local + 30 + u16_at(&head, 26)? + u16_at(&head, 28)?, csize)?;
         let bytes = match method {
-            0 => data.to_vec(),
-            8 => miniz_oxide::inflate::decompress_to_vec_with_limit(data, usize_)
+            0 => data,
+            8 => miniz_oxide::inflate::decompress_to_vec_with_limit(&data, usize_)
                 .map_err(|_| format!("{name}: bad deflate data"))?,
             m => return Err(format!("{name}: compression method {m} is not supported")),
         };

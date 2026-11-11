@@ -280,14 +280,14 @@ Beyond Large, the hub mutex, not the core count, limits one process (see 5.3).
   player per day. Other tables (accounts, friends, messages ≤ 200 per pair, games,
   standings) stay small (5 000 accounts with friends: 4.7 MB).
 - Pack store (S3 or `/data/store`): the bundled Classic 43 MB + Neonfall 16 MB, plus
-  uploads (≤ 100 MB per player pack, ≤ 10 per player; admin packs ≤ 128 MB).
+  uploads (≤ 1 GiB per player pack, ≤ 10 per player; admin packs ≤ 1 GiB).
 - WAL a few MB; leave free space for SQLite to rebuild indexes if ever vacuumed (~2× the file).
 - Write rate: ~0.2 KB per action (~100 KB/s at 500 games at test pace; 2.3 MB/s at the
   4 000 actions/s peak), batched; any SSD-backed volume is enough.
 
 **Network**: ~14 KB out per action (two `state`s), ~110 B in; ~46 kbit/s per player at the
 test pace, ~15 kbit/s at human pace; 1 000 players ≈ 15–46 Mbit/s out. Pack downloads
-(player packs, ≤ 100 MB each, streamed from the store) come on top. Each open admin panel
+(player packs, ≤ 1 GiB each, streamed from the store) come on top. Each open admin panel
 ≈ 1.2 KB per action.
 
 ## Recommendations (not applied: measured, then left for the owner)

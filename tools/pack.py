@@ -25,9 +25,9 @@ SCHEMAS = REPO / "docs/packs/schema"
 
 MiB = 1024 * 1024
 LIMITS = {
-    "pack": 128 * MiB,       # the .cardpack file
-    "unpacked": 256 * MiB,   # all files, uncompressed
-    "files": 10000,
+    "pack": 1024 * MiB,      # the .cardpack file (a local pack with every level's art, sounds and voice)
+    "unpacked": 2048 * MiB,  # all files, uncompressed
+    "files": 50000,
     "file": 16 * MiB,        # any one file
     "image": 2 * MiB,        # one picture
     "rules": 8 * MiB,        # rules.json + cards.json + missions/ + scripts/, uncompressed
@@ -868,7 +868,7 @@ def recipe_steps(src, _seen=()):
     """(steps, bases) of the pack source src: the steps to run as [(root, step)] and the source folders of the packs
     it is built on, the nearest first. A recipe with `base` (the base pack's folder, relative to this one) runs the
     base's steps (all of them, recursively), but `skip` (globs) leaves out the base's `copy` steps whose `to` matches
-    (`art/*`: no pictures); its own `hsjson` step adds to the base's one (`from`, `patch`, `texts` appended in order:
+    (`layout`); its own `hsjson` step adds to the base's one (`from`, `patch`, `texts` appended in order:
     a later patch wins) and its other steps come after (a step the base already has is not run twice)."""
     src = Path(src).resolve()
     if src in _seen:

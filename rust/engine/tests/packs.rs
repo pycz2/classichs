@@ -46,6 +46,8 @@ fn builtin_rules_hash_matches_pack_py() {
     assert_eq!(r["id"], "classic-2014");
     let bytes = std::fs::read(&out).unwrap();
     assert_eq!(e.load_pack_bytes(&bytes).unwrap().rules_hash, want);
+    let from_file = classichs_engine::pack::read_zip_from(&mut std::fs::File::open(&out).unwrap()).unwrap();
+    assert_eq!(from_file, classichs_engine::pack::read_zip(&bytes).unwrap(), "the file reader reads what the bytes reader does");
     let d = json!({"hero": "HERO_08", "cards": classichs_engine::deck::basic("MAGE")});
     let a = call(&mut e, json!({"op": "new", "game": "a", "decks": [d, d], "seed": 3}));
     let b = call(&mut e, json!({"op": "new", "game": "b", "decks": [d, d], "seed": 3, "pack": want}));

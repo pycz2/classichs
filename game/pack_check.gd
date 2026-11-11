@@ -15,7 +15,7 @@ const PASS := "ok"
 const SCHEMAS := "res://packs/schema"
 const MAX_ACTIONS := 2000
 const MIB := 1024 * 1024
-const LIMITS := {"pack": 128 * MIB, "unpacked": 256 * MIB, "files": 10000, "file": 16 * MIB, "image": 2 * MIB,
+const LIMITS := {"pack": 1024 * MIB, "unpacked": 2048 * MIB, "files": 50000, "file": 16 * MIB, "image": 2 * MIB,
 	"rules": 8 * MIB, "text": 32 * MIB}
 const IMAGES := ["png", "jpg", "jpeg", "webp"]
 const AUDIO := ["ogg", "wav", "mp3"]
@@ -68,7 +68,7 @@ static func open_file(bytes: PackedByteArray, file_name: String) -> PackCheck:
 	c.source = file_name
 	c.from_source = not file_name.to_lower().ends_with(".cardpack")
 	if bytes.size() > LIMITS.pack:
-		c._item(ERROR, "the file is bigger than 128 MiB")
+		c._item(ERROR, "the file is bigger than 1 GiB")
 		return c
 	var tmp := _tmp()
 	var f := FileAccess.open(tmp, FileAccess.WRITE)

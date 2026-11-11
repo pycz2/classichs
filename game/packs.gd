@@ -88,7 +88,6 @@ static func rescan() -> void:
 		if p != _active:
 			p.close()
 	_list = []
-	Art.reset()  # (pictures of the other packs)
 	var was := _active
 	_active = null
 	if active() != was:
@@ -223,7 +222,7 @@ static func _set_changed(kind: String) -> void:
 
 
 ## Why a pack can't be installed (English keys, translated where shown; i18n_keys.gd reads them).
-const ERRORS := ["The game pack is bigger than 128 MiB", "Cannot write the game pack", "This is not a game pack",
+const ERRORS := ["The game pack is bigger than 1 GiB", "Cannot write the game pack", "This is not a game pack",
 	"The game pack is damaged", "Cannot read the file"]
 
 
@@ -273,7 +272,6 @@ static func install(bytes: PackedByteArray, origin: String, extra := {}, want_ha
 	out.server = str(extra.get("server", ""))
 	if not _list.is_empty():
 		_list.append(out)
-	Art.reset()  # its pictures may fill in another pack's
 	return {"pack": out}
 
 
@@ -296,7 +294,6 @@ static func remove(p: Pack) -> bool:
 	p.close()
 	DirAccess.remove_absolute(p.path)
 	_list.erase(p)
-	Art.reset()
 	if not all().any(func(x: Pack): return x.id() == p.id()):  # its decks on this device go with it
 		DeckStore.delete_for(p.id())
 	if p == _active:
