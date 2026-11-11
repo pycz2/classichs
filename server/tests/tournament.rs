@@ -684,6 +684,8 @@ async fn the_creator_and_three_bots() {
             }
             "spectating" => assert_eq!(v["full"], true),
             "tournament" if v["tournament"]["status"] == "finished" => break,
+            // (asked to watch while still in its own game: refused, as it should be; it tries again later)
+            "error" if v["text"] == "You are in a game" => watched = false,
             "error" => panic!("{v}"),
             _ => {}
         }
