@@ -9,7 +9,7 @@
     "f1.t": "All 382 cards", "f1.d": "Every Basic and Classic card with its original values and mechanics: Secrets, Choose One, Overload, Combo, Enrage, Deathrattle.",
     "f2.t": "Training with a bot", "f2.d": "Choose your deck — a Basic deck of any class, one of ten well-known Classic decks or your own — and the bot's hero. Once the game is loaded, training needs no internet.",
     "f3.t": "Online without a game server", "f3.d": "WebRTC connects two browsers directly: send a text code through any messenger — and play. When networks block a direct link, a public relay passes the moves. 75-second turns with a burning fuse.",
-    "f4.t": "The original tutorial", "f4.d": "Six missions as Jaina: Hogger, Millhouse, Lorewalker Cho, King Mukla, Hemet and Illidan.",
+    "f4.t": "A tutorial in every game", "f4.d": "Each game brings its own missions: in Classic, six as Jaina, from Hogger to Illidan; in Neonfall, six against the bosses of its city.",
     "f5.t": "Collection and decks", "f5.d": "All cards unlocked. Your decks are saved in the browser; ten well-known Classic decks are ready to play; deck codes work with Hearthstone (import and export).",
     "f6.t": "Deck tracker and history", "f6.d": "Your deck with card pictures and the chance to draw each one, the cards the opponent played, and a move history split by turns — hover a move to see whom it hit.",
     "f7.t": "Debug tools", "f7.d": "In Settings: build any position with the mouse and play it against the bot or for both sides, play a ready test scene for each of the 534 cards and tokens, and see any card with any effect on it.",

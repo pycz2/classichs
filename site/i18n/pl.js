@@ -9,7 +9,7 @@
     "f1.t": "Wszystkie 382 karty", "f1.d": "Każda karta Podstawowa i Classic z oryginalnymi wartościami i mechanikami: Sekrety, Wybierz jedno, Przeciążenie, Combo, Furia, Agonia.",
     "f2.t": "Trening z botem", "f2.d": "Wybierz talię — podstawową talię dowolnej klasy, jedną z dziesięciu znanych talii Classic albo własną — i bohatera bota. Gdy gra jest wczytana, trening nie potrzebuje internetu.",
     "f3.t": "Sieć bez serwera gry", "f3.d": "WebRTC łączy dwie przeglądarki bezpośrednio: wyślij kod tekstowy dowolnym komunikatorem — i graj. Gdy sieci blokują połączenie bezpośrednie, ruchy przekazuje publiczny przekaźnik. Tury po 75 sekund z płonącym lontem.",
-    "f4.t": "Oryginalny samouczek", "f4.d": "Sześć misji jako Jaina: Wyżer, Mełko Gromiłło, Wiedziciel Czo, Król Mukla, Hemet Nesingwary i Illidan Burzogniewny.",
+    "f4.t": "Samouczek w każdej grze", "f4.d": "Każda gra ma własne misje: w Klasyce sześć jako Jaina, od Wyżera do Illidana; w Neonfall sześć przeciw bossom jego miasta.",
     "f5.t": "Kolekcja i talie", "f5.d": "Wszystkie karty odblokowane. Twoje talie są zapisane w przeglądarce; dziesięć znanych talii Classic jest gotowych do gry; kody talii działają z Hearthstone (import i eksport).",
     "f6.t": "Śledzenie talii i historia", "f6.d": "Twoja talia z obrazkami i szansą dobrania każdej karty, karty zagrane przez przeciwnika i historia według tur — najedź na ruch, by zobaczyć, kogo trafił.",
     "f7.t": "Narzędzia debugowania", "f7.d": "W ustawieniach: zbuduj dowolną pozycję myszą i zagraj ją z botem lub za obie strony, zagraj gotową scenę testową dla każdej z 534 kart i żetonów, obejrzyj dowolną kartę z dowolnym efektem.",

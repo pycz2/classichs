@@ -9,7 +9,7 @@
     "f1.t": "Todas as 382 cartas", "f1.d": "Todas as cartas Básicas e Clássicas com seus valores e mecânicas originais: Segredos, Escolha Um, Sobrecarga, Combo, Enfurecer, Último Suspiro.",
     "f2.t": "Treino com um bot", "f2.d": "Escolha seu deck — um deck básico de qualquer classe, um de dez decks Classic famosos ou o seu — e o herói do bot. Com o jogo carregado, o treino não precisa de internet.",
     "f3.t": "Online sem servidor de jogo", "f3.d": "O WebRTC liga dois navegadores diretamente: envie um código de texto por qualquer mensageiro — e jogue. Se as redes bloqueiam a ligação direta, um repetidor público passa as jogadas. Turnos de 75 segundos com um pavio aceso.",
-    "f4.t": "O tutorial original", "f4.d": "Seis missões como Jaina: Hogger, Millhouse Manavento, Andarilho das Lendas Cho, Rei Mukla, Rosarães Guima e Illidan Tempesfúria.",
+    "f4.t": "Um tutorial em cada jogo", "f4.d": "Cada jogo traz as próprias missões: no Clássico, seis como Jaina, de Hogger a Illidan; no Neonfall, seis contra os chefes da sua cidade.",
     "f5.t": "Coleção e baralhos", "f5.d": "Todas as cartas liberadas. Seus decks ficam salvos no navegador; dez decks Classic famosos estão prontos para jogar; os códigos de deck funcionam com o Hearthstone (importar e exportar).",
     "f6.t": "Rastreador de deck e histórico", "f6.d": "Seu deck com imagens e a chance de comprar cada carta, as cartas jogadas pelo oponente e um histórico por turnos — passe o mouse numa ação para ver quem ela atingiu.",
     "f7.t": "Ferramentas de depuração", "f7.d": "Nas Configurações: monte qualquer posição com o mouse e jogue contra o bot ou pelos dois lados, jogue uma cena de teste pronta para cada uma das 534 cartas e fichas, e veja qualquer carta com qualquer efeito.",
