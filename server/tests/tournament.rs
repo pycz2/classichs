@@ -431,7 +431,8 @@ async fn lock_close_and_the_steps_of_time() {
     // too few at T−10: closed
     let t = create(&mut a, json!({"min_players": 3})).await;
     let id = t["id"].as_i64().unwrap();
-    assert_eq!(t["can"], json!({"edit": true, "reschedule": true, "cancel": true, "join": true, "leave": false, "decks": false, "spectate": false}));
+    assert_eq!(t["can"], json!({"edit": true, "reschedule": true, "cancel": true, "join": true, "leave": false, "decks": false, "spectate": false,
+                                   "add_bots": true, "remove_bots": true}));
     join(&mut a, id, 1).await;
     join(&mut b, id, 1).await;
     start_at(&app, id, now_ms() + 9 * MIN).await;
@@ -601,6 +602,253 @@ async fn a_restart_carries_on() {
     tournament::tick(&app2).await;
     let m = tmatch::Entity::find_by_id(ms[0].id).one(&app2.db).await.unwrap().unwrap();
     assert_eq!((m.status.as_str(), m.score_a, m.score_b), ("accept", 0, 0));
+    drop(_lock);
+    let _ = std::fs::remove_file(&path);
+}
+
+// --- tournament bots -----------------------------------------------------------------------------
+
+/// The creator adds `n` bots of a level; the push once `total` bots are in.
+async fn add_bots(c: &mut C, id: i64, level: &str, n: usize, total: usize) -> Value {
+    c.send(json!({"t": "t_add_bots", "id": id, "level": level, "count": n})).await;
+    let bots = move |v: &Value| v["tournament"]["entrants"].as_array().unwrap().iter().filter(|e| e["bot"] == true).count();
+    c.until("tournament", move |v| v["tournament"]["id"] == id && bots(v) == total).await["tournament"].clone()
+}
+
+/// Waits (up to `secs`) for the tournament to end; its full data as the admin sees it.
+async fn ended(app: &AppRef, id: i64, secs: u64) -> Value {
+    let t0 = std::time::Instant::now();
+    loop {
+        let t = status(app, id).await;
+        if !matches!(t.status.as_str(), "open" | "locked" | "seeded" | "running") {
+            return tournament::admin_get(app, id).await.unwrap().unwrap();
+        }
+        assert!(t0.elapsed() < Duration::from_secs(secs), "the tournament did not end in {secs} s");
+        tokio::time::sleep(Duration::from_millis(200)).await;
+    }
+}
+
+/// The free bots a level (the `bots_free` the creator's page shows).
+async fn free(app: &AppRef) -> Value {
+    tournament::bots::free_json(app).await.unwrap()
+}
+
+/// The creator plays with 3 bots: it concedes its games, the bots play theirs to the end;
+/// meanwhile the creator (spectators off) watches a bot match. The bots are free after it.
+#[tokio::test]
+async fn the_creator_and_three_bots() {
+    let (addr, app) = server().await;
+    let mut c = C::register(addr, "cb0").await;
+    let t = create(&mut c, json!({"max_players": 4})).await;
+    let id = t["id"].as_i64().unwrap();
+    assert_eq!(t["bots_free"], json!({"easy": 2, "medium": 2, "hard": 2, "superhard": 2}), "{t}");
+    assert_eq!((t["can"]["add_bots"].as_bool(), t["can"]["remove_bots"].as_bool()), (Some(true), Some(true)));
+    join(&mut c, id, 1).await;
+    add_bots(&mut c, id, "easy", 2, 2).await;
+    assert!(c.refused(json!({"t": "t_add_bots", "id": id, "level": "easy", "count": 1})).await.contains("Only 0 bots"));
+    let t = add_bots(&mut c, id, "medium", 1, 3).await;
+    assert_eq!(t["bots_free"], json!({"easy": 0, "medium": 1, "hard": 2, "superhard": 2}));
+    assert_eq!(t["can"]["add_bots"], false, "full");
+    let all = tournament::admin_get(&app, id).await.unwrap().unwrap(); // (the bots' decks are hidden from the creator)
+    for e in all["entrants"].as_array().unwrap().iter().filter(|e| e["bot"] == true) {
+        assert!(e["name"].as_str().unwrap().starts_with("TBot_"), "{e}");
+        assert_eq!(e["decks"].as_array().unwrap().len(), 1, "a deck by the rules");
+    }
+    start_at(&app, id, now_ms() - 1000).await;
+    let mut acted = HashSet::new();
+    let mut watched = false;
+    loop {
+        let v = c.next().await;
+        match v["t"].as_str().unwrap() {
+            "t_match" => {
+                let m = v["match"].as_i64().unwrap();
+                let phase = v["phase"].as_str().unwrap().to_string();
+                let first = |side: &str| v[side].as_array().unwrap().iter().position(|d| d["state"] == "ok").unwrap() as i64;
+                if acted.insert((m, phase.clone())) {
+                    match phase.as_str() {
+                        "accept" => c.send(json!({"t": "t_accept", "match": m})).await,
+                        "pick" => c.send(json!({"t": "t_pick", "match": m, "deck": first("mine")})).await,
+                        _ => {}
+                    }
+                }
+            }
+            "match" => c.send(json!({"t": "act", "game": v["game"], "action": {"type": "concede", "player": v["you"]}})).await,
+            "tournament" if v["tournament"]["status"] == "running" && !watched => {
+                let live = v["tournament"]["matches"].as_array().unwrap().iter()
+                    .find(|m| m["status"] == "playing" && !m["p"].as_array().unwrap().contains(&json!("cb0"))).cloned();
+                if let Some(m) = live {
+                    assert_eq!(v["tournament"]["can"]["spectate"], true, "the creator always may watch");
+                    c.send(json!({"t": "t_spectate", "match": m["id"]})).await;
+                    watched = true;
+                }
+            }
+            "spectating" => assert_eq!(v["full"], true),
+            "tournament" if v["tournament"]["status"] == "finished" => break,
+            "error" => panic!("{v}"),
+            _ => {}
+        }
+    }
+    let fin = ended(&app, id, 10).await;
+    let pl = places(&fin);
+    assert_eq!(pl.values().filter(|&&p| p == 1).count(), 1, "{fin}");
+    assert_eq!(pl["cb0"], 3, "the creator lost its semi-final");
+    let winner = fin["entrants"][0]["name"].as_str().unwrap();
+    assert!(winner.starts_with("TBot_"), "{fin}");
+    // the bots' games were played, not forfeited: in the games table with a winner
+    let games = played::Entity::find().all(&app.db).await.unwrap();
+    assert_eq!(games.len(), 3, "three matches, Bo1");
+    assert!(games.iter().all(|g| g.mode == "tournament" && (g.winner == 0 || g.winner == 1)));
+    assert!(watched, "a bot match was watched");
+    assert_eq!(free(&app).await, json!({"easy": 2, "medium": 2, "hard": 2, "superhard": 2}), "free after the end");
+}
+
+/// Eight bots, single elimination, Bo3 Conquest with a ban: every step is the bots' own.
+#[tokio::test]
+async fn eight_bots_play_it_all() {
+    let (addr, app) = server().await;
+    app.tour.bot_pool.store(8, std::sync::atomic::Ordering::Relaxed);
+    let mut c = C::register(addr, "eb0").await;
+    let id = create(&mut c, json!({"best_of": 3, "bans": 1, "max_players": 8})).await["id"].as_i64().unwrap();
+    add_bots(&mut c, id, "easy", 8, 8).await;
+    let t = tournament::admin_get(&app, id).await.unwrap().unwrap();
+    for e in t["entrants"].as_array().unwrap() {
+        let d = e["decks"].as_array().unwrap();
+        assert_eq!(d.len(), 3, "wins needed + bans");
+        let classes: HashSet<&str> = d.iter().map(|x| x["hero"].as_str().unwrap()).collect();
+        assert_eq!(classes.len(), 3, "of different classes");
+    }
+    let t0 = std::time::Instant::now();
+    start_at(&app, id, now_ms() - 1000).await;
+    let fin = ended(&app, id, 600).await;
+    eprintln!("eight Easy bots, Bo3: {:.1} s", t0.elapsed().as_secs_f64());
+    assert_eq!(fin["status"], "finished");
+    let ms = tmatch::Entity::find().filter(tmatch::Column::Tournament.eq(id)).all(&app.db).await.unwrap();
+    assert_eq!(ms.len(), 7);
+    let gs = tournament_games(&app, id).await;
+    for m in &ms {
+        assert_eq!(m.status, "done");
+        assert_eq!(m.score_a.max(m.score_b), 2, "{m:?}");
+        let s: Value = serde_json::from_str(&m.state).unwrap();
+        assert!(s["ban"][0].is_u64() && s["ban"][1].is_u64(), "both banned: {s}");
+        // no forfeits: every point is a game played and won
+        let won = gs.iter().filter(|g| g.match_id == m.id && g.winner.is_some()).count() as i64;
+        assert_eq!(won, m.score_a + m.score_b, "{m:?}");
+    }
+    let pl = places(&fin);
+    let mut p: Vec<i64> = pl.values().copied().collect();
+    p.sort();
+    assert_eq!(p, [1, 2, 3, 3, 5, 5, 5, 5]);
+    assert_eq!(free(&app).await["easy"], 8, "free after the end");
+}
+
+/// The load of the real pool: its 8 bots (2 a level) in one tournament (single elimination;
+/// TBOT_BO, default 1), each game's length and the whole. Run by hand:
+/// `CLASSICHS_TOUR_BOT_CPUS=1 cargo test --release --test tournament measure -- --ignored --nocapture`.
+#[tokio::test]
+#[ignore]
+async fn measure_the_pool() {
+    let (addr, app) = server().await;
+    let bo: i64 = std::env::var("TBOT_BO").ok().and_then(|v| v.parse().ok()).unwrap_or(1);
+    let mut c = C::register(addr, "ms0").await;
+    let id = create(&mut c, json!({"best_of": bo, "bans": if bo > 1 { 1 } else { 0 }, "max_players": 8})).await["id"].as_i64().unwrap();
+    let mut n = 0;
+    for l in ["easy", "medium", "hard", "superhard"] {
+        n += 2;
+        add_bots(&mut c, id, l, 2, n).await;
+    }
+    eprintln!("slots {} (games with a bot at once), think places: CLASSICHS_TOUR_BOT_CPUS / 2", app.tour.slots.available_permits());
+    let t0 = std::time::Instant::now();
+    start_at(&app, id, now_ms() - 1000).await;
+    let fin = ended(&app, id, 7200).await;
+    let total = t0.elapsed().as_secs_f64();
+    let mut games = played::Entity::find().all(&app.db).await.unwrap();
+    games.sort_by_key(|g| g.started);
+    for g in &games {
+        let (a, b) = (db::name_of(&app.db, g.p0.unwrap_or(0)).await.unwrap(), db::name_of(&app.db, g.p1.unwrap_or(0)).await.unwrap());
+        let r = classichs_server::replays::data(&app.db, &g.id).await.unwrap().unwrap_or_default();
+        let acts = r["actions"].as_array().map_or(0, |a| a.len());
+        eprintln!("{a} vs {b}: {} s, {} turns, {acts} actions, won by seat {} ({})", g.ended - g.started, r["result"]["turns"], g.winner, g.reason);
+    }
+    eprintln!("{} games, the whole tournament {:.0} s; winner {}", games.len(), total, fin["entrants"][0]["name"]);
+}
+
+async fn tournament_games(app: &AppRef, id: i64) -> Vec<classichs_server::entity::tournament::games::Model> {
+    use classichs_server::entity::tournament::games as tgame;
+    tgame::Entity::find().filter(tgame::Column::Tournament.eq(id)).all(&app.db).await.unwrap()
+}
+
+/// Busy bots can't be added elsewhere; a remove, a cancel and a close free them; only the creator adds.
+#[tokio::test]
+async fn busy_bots_and_free_again() {
+    let (addr, app) = server().await;
+    let mut a = C::register(addr, "bb0").await;
+    let mut b = C::register(addr, "bb1").await;
+    let t1 = create(&mut a, json!({})).await["id"].as_i64().unwrap();
+    assert!(b.refused(json!({"t": "t_add_bots", "id": t1, "level": "hard", "count": 1})).await.contains("Only the creator"));
+    assert!(a.refused(json!({"t": "t_add_bots", "id": t1, "level": "nope", "count": 1})).await.contains("level"));
+    assert!(a.refused(json!({"t": "t_add_bots", "id": t1, "level": "hard", "count": 9})).await.contains("Only 8 places"));
+    add_bots(&mut a, t1, "hard", 2, 2).await;
+    // another creator's tournament: none of them free
+    let t2 = create(&mut b, json!({})).await["id"].as_i64().unwrap();
+    b.send(json!({"t": "t_get", "id": t2})).await;
+    let t = b.until("tournament", |v| v["tournament"]["id"] == t2).await;
+    assert_eq!(t["tournament"]["bots_free"]["hard"], 0);
+    assert!(b.refused(json!({"t": "t_add_bots", "id": t2, "level": "hard", "count": 1})).await.contains("Only 0 bots of this level are free"));
+    // removed: free again
+    a.send(json!({"t": "t_remove_bot", "id": t1, "name": "TBot_Hard_1"})).await;
+    a.until("tournament", |v| v["tournament"]["id"] == t1 && v["tournament"]["entrants"].as_array().unwrap().len() == 1).await;
+    assert!(a.refused(json!({"t": "t_remove_bot", "id": t1, "name": "bb0"})).await.contains("No such bot"));
+    assert_eq!(free(&app).await["hard"], 1);
+    // cancelled: free again
+    a.send(json!({"t": "t_cancel", "id": t1})).await;
+    a.until("tournament", |v| v["tournament"]["status"] == "cancelled").await;
+    assert_eq!(free(&app).await["hard"], 2, "free after a cancel");
+    // closed (too few players at T−10): free again
+    add_bots(&mut b, t2, "hard", 2, 2).await;
+    assert_eq!(free(&app).await["hard"], 0);
+    b.send(json!({"t": "t_edit", "id": t2, "min_players": 3})).await;
+    b.until("tournament", |v| v["tournament"]["min_players"] == 3).await;
+    start_at(&app, t2, now_ms() + 9 * MIN).await;
+    assert_eq!(status(&app, t2).await.status, "closed");
+    assert_eq!(free(&app).await["hard"], 2, "free after a close");
+    // a player can't take a bot's name
+    let (ws, _) = tokio_tungstenite::connect_async(format!("ws://{addr}/")).await.unwrap();
+    let mut x = C { ws, name: "x".into() };
+    assert!(x.refused(json!({"t": "register", "user": "TBot_Easy_9", "password": "password123"})).await.contains("taken"));
+}
+
+/// A restart in the middle of a bot match: the new process plays it on to the end.
+#[tokio::test]
+async fn bots_carry_on_after_a_restart() {
+    let path = std::env::temp_dir().join(format!("chs-tbot-{}.db", rand::random::<u64>()));
+    let path = path.to_str().unwrap().to_string();
+    let (addr, app) = server_on(&path).await;
+    let mut c = C::register(addr, "rb0").await;
+    let id = create(&mut c, json!({"best_of": 3, "max_players": 2})).await["id"].as_i64().unwrap();
+    add_bots(&mut c, id, "easy", 2, 2).await;
+    start_at(&app, id, now_ms() - 1000).await;
+    // the first game is under way
+    let t0 = std::time::Instant::now();
+    loop {
+        let ms = tmatch::Entity::find().filter(tmatch::Column::Tournament.eq(id)).all(&app.db).await.unwrap();
+        if ms[0].status == "playing" {
+            break;
+        }
+        assert!(t0.elapsed() < Duration::from_secs(30), "no game started");
+        tokio::time::sleep(Duration::from_millis(100)).await;
+    }
+    // the first process stops: its scheduler is held, its bots go
+    let _lock = app.tour.lock.lock().await;
+    for h in app.tour.bot_tasks.lock().unwrap().values() {
+        h.abort();
+    }
+    let store = Storage::dir(&std::env::temp_dir().join(format!("chs-test-{}", rand::random::<u64>()))).unwrap();
+    let app2 = App::new(db::open(&path).await.unwrap(), false, Some(Timers::default()), store);
+    spawn_background(app2.clone());
+    let fin = ended(&app2, id, 300).await;
+    assert_eq!(fin["status"], "finished");
+    let ms = tmatch::Entity::find().filter(tmatch::Column::Tournament.eq(id)).all(&app2.db).await.unwrap();
+    assert_eq!(ms[0].score_a.max(ms[0].score_b), 2);
     drop(_lock);
     let _ = std::fs::remove_file(&path);
 }

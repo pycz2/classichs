@@ -134,13 +134,30 @@ static func medal(place: int) -> Control:
 	return m
 
 
-## A player's round badge: the first letter on a disc of a colour of their own (by the name).
+## A tournament bot (the server's pool: TBot_<Level>_<n>).
+static func is_bot(who: String) -> bool:
+	return who.begins_with("TBot_")
+
+
+## A player's round badge: the first letter on a disc of a colour of their own (by the name); a
+## bot's: a robot's head on steel.
 static func avatar(ci: CanvasItem, c: Vector2, r: float, who: String) -> void:
 	var col := Color.from_hsv(float(who.hash() % 360) / 360.0, 0.45, 0.62) if who != "" else Color(0.3, 0.28, 0.25)
+	if is_bot(who):
+		col = Color("51606e")
 	ci.draw_circle(c, r + 2, Color(0, 0, 0, 0.6))
 	ci.draw_circle(c, r, col)
 	ci.draw_arc(c, r, 0, TAU, 28, col.lightened(0.35), 1.5, true)
 	if who == "":
+		return
+	if is_bot(who):
+		var head := Color("e3eaf0")
+		ci.draw_line(c + Vector2(0, -r * 0.3), c + Vector2(0, -r * 0.66), head, maxf(1.5, r * 0.12))
+		ci.draw_circle(c + Vector2(0, -r * 0.7), r * 0.14, Color("ff7a6a"))
+		ci.draw_rect(Rect2(c + Vector2(-r * 0.58, -r * 0.34), Vector2(r * 1.16, r * 0.86)), head)
+		for dx in [-0.27, 0.27]:
+			ci.draw_circle(c + Vector2(r * dx, -r * 0.02), r * 0.14, Color("2a7fff"))
+		ci.draw_line(c + Vector2(-r * 0.28, r * 0.3), c + Vector2(r * 0.28, r * 0.3), Color("51606e"), maxf(1.0, r * 0.08))
 		return
 	var f: Font = (ci as Control).get_theme_font("font", "Label") if ci is Control else ThemeDB.fallback_font
 	var fs := int(r * 1.15)

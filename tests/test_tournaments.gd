@@ -466,3 +466,50 @@ func test_single_elimination_names_its_rounds() -> void:
 func test_one_deck_is_said_in_the_singular() -> void:
 	var t := full("swiss", 4, {"best_of": 1.0, "bans": 0.0})
 	check(TournamentsView.rules_lines(t).any(func(r): return r[0] == "One deck"), "the rules say one deck")
+
+
+## The creator adds bots: a level with its free count, how many (up to the free ones and the
+## places), and removes a bot entrant; bots carry a robot mark; others get no Add bots.
+func test_creator_adds_and_removes_bots() -> void:
+	var v := _view(7)
+	var t := full("elimination", 3, {"max_players": 4.0, "bots_free": {"easy": 0.0, "medium": 2.0, "hard": 1.0, "superhard": 2.0},
+		"can": {"join": false, "leave": true, "decks": true, "edit": true, "cancel": true, "reschedule": true, "spectate": false,
+			"add_bots": true, "remove_bots": true}})
+	t.entrants[2].name = "TBot_Medium_1"
+	t.entrants[2].bot = true
+	v.link.dispatch({"t": "tournament", "tournament": t})
+	_press(v, "AddBots")
+	check(v.find_child("AddBotsDialog", true, false) != null, "the dialog")
+	check((v.find_child("BotLevel_easy", true, false) as Button).disabled, "no free Easy bot: not offered")
+	eq(v.bot_level, "medium", "the first level with a free bot")
+	check((v.find_child("BotLevel_medium", true, false) as Button).text.contains("2"), "its free count shown")
+	check((v.find_child("BotCount_plus", true, false) as Button).disabled, "one place left: one bot at most")
+	_press(v, "BotLevel_superhard")
+	_press(v, "AddBotsGo")
+	eq(_sent(v, "t_add_bots"), [{"t": "t_add_bots", "id": 7, "level": "superhard", "count": 1}])
+	check(v.find_child("AddBotsDialog", true, false) == null, "closed once sent")
+	_press(v, "RemoveBot_TBot_Medium_1")
+	eq(_sent(v, "t_remove_bot"), [{"t": "t_remove_bot", "id": 7, "name": "TBot_Medium_1"}])
+	check(v.find_child("RemoveBot_p2", true, false) == null, "players are not removed")
+	check(TournamentBracket.is_bot("TBot_Hard_2") and not TournamentBracket.is_bot("anna"), "the robot mark's test")
+	# more room: the count goes up to the free bots of the level
+	t.max_players = 8.0
+	v.link.dispatch({"t": "tournament", "tournament": t})
+	v.bot_level = "medium"
+	v.show_add_bots()
+	_press(v, "BotCount_plus")
+	eq((v.find_child("BotCount", true, false) as Label).text, "2")
+	check((v.find_child("BotCount_plus", true, false) as Button).disabled, "no more than the free ones")
+	# a push while it is open: it stays, with the counts of now
+	t.bots_free.medium = 0.0
+	v.link.dispatch({"t": "tournament", "tournament": t})
+	check(v.find_child("AddBotsDialog", true, false) != null, "still open")
+	eq(v.bot_level, "hard", "the level of no free bot is left")
+	# not the creator: no Add bots, no Remove
+	t.can = {"join": false, "leave": true, "decks": true}
+	t.erase("bots_free")
+	v.close_overlay()
+	v.link.dispatch({"t": "tournament", "tournament": t})
+	check(v.find_child("AddBots", true, false) == null, "only the creator adds bots")
+	check(v.find_child("RemoveBot_TBot_Medium_1", true, false) == null, "and removes them")
+	_free(v)

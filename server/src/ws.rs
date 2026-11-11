@@ -1129,6 +1129,9 @@ impl Session {
         if !auth::valid_password(&password) {
             return Err(e("bad_password", "A password is 8 to 128 characters"));
         }
+        if user.to_lowercase().starts_with(&crate::tournament::bots::PREFIX.to_lowercase()) {
+            return Err(e("taken", "This name is taken")); // (the tournament bots' names)
+        }
         let key = key.map(|k| k.trim().to_lowercase()).filter(|k| !k.is_empty());
         if key.is_none() && crate::settings::invite_only(&self.app).await? {
             return Err(e("invite_required", "Registration needs an invite key"));

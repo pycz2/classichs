@@ -353,6 +353,34 @@ pub async fn one_game(ctx: &Ctx, connect: &ConnectFn, auth: &Auth, mode: &str, p
     Ok(())
 }
 
+/// A tournament bot (tournament::bots): logs in and plays every game its tournament starts for it
+/// (a game left by a restart too) while `keep` says so. `cards` gives its deck for a `match`.
+pub async fn tournament(
+    ctx: &Ctx,
+    connect: &ConnectFn,
+    auth: &Auth,
+    level: Level,
+    keep: Arc<dyn Fn() -> BoxFut<bool> + Send + Sync>,
+    cards: Arc<dyn Fn(Value) -> BoxFut<Vec<String>> + Send + Sync>,
+) -> Result<(), String> {
+    let mut c = Conn { t: connect().await? };
+    match auth {
+        Auth::Token(t) => c.send(json!({"t": "resume", "token": t})).await?,
+        Auth::Password(u, p) => c.send(json!({"t": "login", "user": u, "password": p})).await?,
+    }
+    c.want("auth", Duration::from_secs(20)).await?;
+    ctx.log(format!("tournament bot ({})", level.name()));
+    while keep().await {
+        ctx.state("tournament: waiting for a game");
+        if let Some(m) = wait_match(ctx, &mut c, Duration::from_secs(10)).await? {
+            let deck = cards(m.clone()).await;
+            play(ctx, &mut c, m, deck, false, level).await?;
+        }
+    }
+    ctx.state("stopped");
+    Ok(())
+}
+
 async fn pause(ctx: &Ctx, c: &mut Conn, lo: u64, hi: u64) -> Result<(), String> {
     let s = rand::thread_rng().gen_range(lo..=hi);
     ctx.state(&format!("pause {s} s"));
