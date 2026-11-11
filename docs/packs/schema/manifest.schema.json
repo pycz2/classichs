@@ -19,6 +19,11 @@
     "art_sets": {"$ref": "#/$defs/sets"},
     "sound_sets": {"$ref": "#/$defs/sets"},
     "music_sets": {"$ref": "#/$defs/sets"},
+    "set_marks": {
+      "type": "object",
+      "propertyNames": {"type": "string", "pattern": "^[A-Za-z0-9_]{1,64}(:[A-Za-z0-9_]{1,64})?$"},
+      "additionalProperties": {"type": "object", "additionalProperties": false, "properties": {"icon": {"$ref": "#/$defs/image"}}}
+    },
     "card_back": {"$ref": "#/$defs/image"},
     "logo": {"$ref": "#/$defs/image"},
     "colors": {

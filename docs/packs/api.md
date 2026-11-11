@@ -67,6 +67,7 @@ Return values are ignored unless said otherwise.
 | `effect` | `fn(g, me, t)` | On a Choose One option card: what the option does (`me` is the played card). |
 | `hero_power` (alias `power`) | `fn(g, me, t)` | On a POWER card: the power is used. |
 | `can_play` | `fn(g, me) → bool` | The card/power may be played now (read-only). |
+| `glow` | `fn(g, me) → bool` | The card in the hand glows yellow now: its condition holds ("if you're holding a Dragon", "if your deck has no duplicates"…; read-only, for clients: snapshots mark it `glow`, no rule reads it). Without it a card with a `combo` hook glows while its combo is on (`g.combo(me)`). |
 | `deathrattle` (alias `on_death`) | `fn(g, me)` | It died (minion or weapon; `g.died_pos(me)` is where). |
 | `on` | `{<event type> = fn(g, me, ev)}` | Any event of that type while `me` is in play (or a trap). Queued: runs after the action that caused it. |
 | `now` | `{predamage = fn(g, me, ev)}` | Replacement effects: runs at once, inside `g.damage`, before damage applies; set `ev.amount` to change it. |
@@ -79,7 +80,7 @@ Return values are ignored unless said otherwise.
 | `immune_while_attacking` | `true` | A weapon: its champion is IMMUNE while attacking with it. |
 | `durability_on_attack` | `fn(g, w, defender) → bool` | A weapon: whether attacking costs durability (default yes). |
 
-**Read-only hooks** (`target.filter`, `can_play`, `cost_mod`, `cost_aura`) run
+**Read-only hooks** (`target.filter`, `can_play`, `glow`, `cost_mod`, `cost_aura`) run
 while the engine only looks at the game (legal actions, costs in snapshots).
 Their `g` has only the query functions; calling an action there is an error.
 They must not depend on anything but the game.
@@ -278,7 +279,7 @@ ruleset against `tools/pack.py`.
 - Positions are 0-based (`g.summon(p, card, g.died_pos(me))`), lists 1-based.
 - `until`, `end`, `and`, `or`, `not` are keywords: `{ ["until"] = "use" }`.
 - No `continue`, no `/` (use `//`), no floats, no global variables.
-- Read-only hooks (`target.filter`, `can_play`, `cost_mod`, `cost_aura`) see
+- Read-only hooks (`target.filter`, `can_play`, `glow`, `cost_mod`, `cost_aura`) see
   only queries: no `g.cost`, no actions.
 - `g.tag` adds aura values (`SPELLPOWER` from an aura counts); `g.add_tag`
   changes only the entity's own tag.

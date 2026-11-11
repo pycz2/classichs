@@ -26,8 +26,10 @@ FROM gcr.io/distroless/cc-debian13:nonroot
 COPY --from=build /classichs-server /usr/local/bin/classichs-server
 COPY --from=build --chown=65532:65532 /out/ /
 # Bundled packs, installed once as server packs at start (--default-pack neon: Neonfall is the
-# default game). More: mount files into /packs (docker-compose.yml).
+# default game), and the packs the game's builds do not carry (build/packs: the expansions after
+# Naxxramas, recipe bundle_in_client false). More: mount files into /packs (docker-compose.yml).
 COPY packs/*.cardpack /packs/
+COPY build/packs/ /packs/
 VOLUME /data
 WORKDIR /data
 EXPOSE 7377

@@ -79,6 +79,33 @@ fn player_view_hides_secrets_of_the_other_side() {
     assert_eq!(draw["card"], "", "{r}");
 }
 
+/// Classic's Combo cards glow in the hand once a card was played this turn (the snapshot's `glow`), until the turn ends.
+#[test]
+fn combo_cards_glow_while_their_combo_is_on() {
+    let mut e = Engine::new();
+    let sc = json!({"current": 0, "players": [
+        {"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_134", "VAN_CS2_072", "VAN_CS2_120"], "deck": ["VAN_CS2_120"]},
+        {"hero": "HERO_01", "deck": ["VAN_CS2_172"], "board": ["VAN_CS2_182"]}]});
+    call(&mut e, json!({"op": "new", "game": "c", "scenario": sc}));
+    let lit = |e: &mut Engine| -> Vec<String> {
+        let st = call(e, json!({"op": "snapshot", "game": "c", "view": 0}))["state"].clone();
+        st["players"][0]["hand"].as_array().unwrap().iter()
+            .map(|id| st["entities"][id.to_string()].clone())
+            .filter(|x| x.get("glow") == Some(&json!(true)))
+            .map(|x| x["card"].as_str().unwrap().to_string())
+            .collect()
+    };
+    assert!(lit(&mut e).is_empty(), "no card played yet");
+    let st = call(&mut e, json!({"op": "snapshot", "game": "c"}))["state"].clone();
+    let stab = st["players"][0]["hand"][1].as_i64().unwrap();
+    let target = st["players"][1]["board"][0].as_i64().unwrap();
+    let a = json!({"type": "play", "player": 0, "entity": stab, "target": target, "pos": -1, "choice": -1});
+    assert_eq!(call(&mut e, json!({"op": "act", "game": "c", "action": a}))["ok"], true);
+    assert_eq!(lit(&mut e), ["VAN_EX1_134"], "SI:7 Agent's combo is on; the Yeti has none");
+    call(&mut e, json!({"op": "act", "game": "c", "action": {"type": "end_turn", "player": 0}}));
+    assert!(lit(&mut e).is_empty(), "a new turn");
+}
+
 #[test]
 fn bad_requests_are_refused() {
     let mut e = Engine::new();

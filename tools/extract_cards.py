@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Download HearthstoneJSON and write data/cards.json.
 
-With --naxx [file]: data/naxx_cards.json and data/naxx_texts.json for packs/naxx (see naxx()).
+With --set <name> [file]: data/<name>_cards.json, the cards of a set after Classic (SETS: naxx, gvg, brm, …;
+--naxx = --set naxx, which also writes data/naxx_texts.json).
 
 Keeps: set == VANILLA (no enchantments, FX dummies, puzzles), all TU4* tutorial
 cards, and EXTRA ids (heroes, The Coin, tokens that VANILLA references by their
@@ -87,35 +88,74 @@ WEBSPINNER = {
 }
 
 
-def naxx(cards):
-    """data/naxx_cards.json: every Naxxramas card (FP1_*, the 30 collectible and the tokens they make) as
-    HearthstoneJSON has it today; data/naxx_texts.json: the release-time names and texts (packs/naxx's
-    recipe applies them over these; its cards.patch.json restores the release stats and tribes)."""
-    by_id = {c["id"]: c for c in cards}
-    local = {c["id"]: c for c in json.loads(OUT.read_text())}
-    out = [{k: c[k] for k in FIELDS if k in c} for c in cards
-           if c["id"].startswith("FP1_") and c["type"] != "ENCHANTMENT"
-           and (c.get("collectible") or c["id"] in NAXX_TOKENS)]
+## The sets after Classic, one pack each, in order (docs/superpowers/plans/2026-11-11-expansions.md): pack name ->
+## (HearthstoneJSON set, card id prefixes, tokens). The cards of a set: every collectible card whose id has one of the
+## prefixes, and its tokens: the listed ids, or (None) every other card of that HearthstoneJSON set with a prefix
+## (not enchantments). tools/fetch_set_assets.py downloads the art and sounds of the same cards.
+SETS = {
+    "naxx": ("NAXX", ["FP1_"], NAXX_TOKENS),
+    "gvg": ("GVG", ["GVG_", "PART_"], None),
+    "brm": ("BRM", ["BRM_"], None),
+    "tgt": ("TGT", ["AT_"], None),
+    "loe": ("LOE", ["LOE_"], None),
+    "og": ("OG", ["OG_"], None),
+    "kara": ("KARA", ["KAR_"], None),
+    "msg": ("GANGS", ["CFM_"], None),
+    "ungoro": ("UNGORO", ["UNG_"], None),
+    "icc": ("ICECROWN", ["ICC_"], None),
+    "loot": ("LOOTAPALOOZA", ["LOOT_"], None),
+    "gil": ("GILNEAS", ["GIL_"], None),
+}
+
+
+def set_cards(cards, name):
+    """The cards of set `name` (SETS) in data/cards.json's shape, sorted by id."""
+    code, prefixes, tokens = SETS[name]
+    prefixes = tuple(prefixes)
+
+    def keep(c):
+        if not c["id"].startswith(prefixes) or c["type"] == "ENCHANTMENT" or "puzzle" in c["id"].lower():
+            return False  # (puzzles are Boomsday's puzzle lab copies)
+        if c.get("collectible"):
+            return True
+        return c["id"] in tokens if tokens is not None else c.get("set") == code
+
+    out = [{k: c[k] for k in FIELDS if k in c} for c in cards if keep(c)]
     for c in out:
-        if c["type"] == "WEAPON" and "health" in c:
+        if c["type"] == "WEAPON" and "health" in c:  # HearthstoneJSON keeps durability in "health"
             c["durability"] = c.pop("health")
-    out.sort(key=lambda c: c["id"])
-    texts = {cid: {f: (local.get(src) or by_id[src])[f] for f, src in fields.items()} for cid, fields in NAXX_DONORS.items()}
-    texts["FP1_011"] = {"text": WEBSPINNER}
-    (OUT.parent / "naxx_cards.json").write_text(json.dumps(out, ensure_ascii=False, indent=0, sort_keys=True) + "\n")
-    (OUT.parent / "naxx_texts.json").write_text(json.dumps(texts, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
-    print(f"wrote {len(out)} Naxxramas cards and {len(texts)} release texts")
+    return sorted(out, key=lambda c: c["id"])
+
+
+def extract_set(cards, name):
+    """data/<name>_cards.json: every card of the set as HearthstoneJSON has it today (the pack's cards.patch.json
+    restores the stats and tribes of the release day, its *.texts.json the texts). Naxxramas also writes
+    data/naxx_texts.json (its release-time names and texts, taken from cards that still carry them)."""
+    out = set_cards(cards, name)
+    (OUT.parent / f"{name}_cards.json").write_text(json.dumps(out, ensure_ascii=False, indent=0, sort_keys=True) + "\n")
+    print(f"wrote {len(out)} cards of {name} ({SETS[name][0]})")
+    if name == "naxx":
+        by_id = {c["id"]: c for c in cards}
+        local = {c["id"]: c for c in json.loads(OUT.read_text())}
+        texts = {cid: {f: (local.get(src) or by_id[src])[f] for f, src in fields.items()} for cid, fields in NAXX_DONORS.items()}
+        texts["FP1_011"] = {"text": WEBSPINNER}
+        (OUT.parent / "naxx_texts.json").write_text(json.dumps(texts, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
+        print(f"wrote {len(texts)} Naxxramas release texts")
+
+
+def hsjson():
+    req = urllib.request.Request(URL, headers={"User-Agent": "classic-hs-extract/1.0"})
+    with urllib.request.urlopen(req) as r:
+        return json.load(r)
 
 
 if __name__ == "__main__":
     import sys
-    if "--naxx" in sys.argv:  # python3 tools/extract_cards.py --naxx [HearthstoneJSON cards.json]
-        args = [a for a in sys.argv[1:] if a != "--naxx"]
-        if args:
-            naxx(json.loads(pathlib.Path(args[0]).read_text()))
-        else:
-            req = urllib.request.Request(URL, headers={"User-Agent": "classic-hs-extract/1.0"})
-            with urllib.request.urlopen(req) as r:
-                naxx(json.load(r))
+    # python3 tools/extract_cards.py --set gvg [HearthstoneJSON cards.json]   (--naxx = --set naxx)
+    args = ["--set", "naxx"] + [a for a in sys.argv[1:] if a != "--naxx"] if "--naxx" in sys.argv else sys.argv[1:]
+    if args[:1] == ["--set"]:
+        if len(args) < 2 or args[1] not in SETS:
+            raise SystemExit(f"--set wants one of: {', '.join(SETS)}")
+        extract_set(json.loads(pathlib.Path(args[2]).read_text()) if args[2:] else hsjson(), args[1])
     else:
         main()

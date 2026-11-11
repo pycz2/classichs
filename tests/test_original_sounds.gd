@@ -30,7 +30,7 @@ func _install() -> void:
 	var manifest: Dictionary = classic.manifest.duplicate(true)
 	manifest.sound_sets.append({"id": "original", "local": true})
 	var change := {"manifest.json": JSON.stringify(manifest).to_utf8_buffer()}
-	for f in ["%s_play" % LEEROY, "%s_attack" % LEEROY, "%s_death" % LEEROY, "%s_hit" % FIREBALL,
+	for f in ["%s_play" % LEEROY, "%s_attack" % LEEROY, "%s_death" % LEEROY, "%s_music" % LEEROY, "%s_hit" % FIREBALL,
 			"summon", "spell_fire", "hit_fire", "attack", "draw"]:
 		change["sounds/original/%s.wav" % f] = wav
 	for f in ["en/%s_play" % LEEROY, "ru/%s_play" % LEEROY, "en/%s_attack" % LEEROY, "en/%s_death" % LEEROY,
@@ -100,6 +100,9 @@ func test_card_sounds_come_from_the_set_with_the_generated_ones_behind() -> void
 	eq(Sound.line_for({"type": "summon", "entity": id.call(LEEROY)}, g), [LEEROY, "play"], "it says its play line")
 	eq(Sound.line_for({"type": "death", "entity": id.call(LEEROY)}, g), [LEEROY, "death"], "and its death line")
 	eq(Sound.line_for({"type": "damage", "target": 1}, g), [], "a hit says nothing")
+	eq(Sound.card_sound(LEEROY, "music"), LEEROY + "_music", "a legendary's play music")
+	check(not Sound.card_music(YETI) and not Sound.music_for({"type": "summon", "entity": id.call(LEEROY)}, g), "none for others, only when played")
+	check(Sound.music_for({"type": "play", "entity": id.call(LEEROY)}, g), "played: it plays")
 	Packs.set_choice(_pack, "sound", "generated")
 	eq(Sound.sound_for({"type": "summon", "entity": id.call(LEEROY)}, g, 0), "summon", "the generated set: no card sounds")
 	eq(Sound.path_for("summon"), "", "(and no summon sound: silent)")
@@ -137,7 +140,10 @@ func test_lines_come_at_their_steps() -> void:
 	_sound.said = ""
 	v._play_step(steps[0])  # the card leaves the hand
 	eq(_sound.said, "", "no line while it is shown")
-	eq(_sound.heard.back(), "play_card", "the card's whoosh")
+	check(_sound.heard.has("play_card"), "the card's whoosh")
+	eq(_sound.heard.back(), LEEROY + "_music", "and the legendary's play music")
+	check(_sound._stinger.playing and _sound._stinger.bus == "Music", "on the music bus")
+	check(_sound._ducking != null and _sound._ducking.is_running(), "the music ducks under it")
 	v._play_step(steps[1])  # it lands
 	eq(steps[1].k, "summon", "(the summon step)")
 	eq(_sound.said, "voice/en/%s_play.wav" % LEEROY, "Leeroy shouts as he lands")

@@ -64,3 +64,13 @@ func test_no_timer_against_the_bot() -> void:
 	eq(v.g.phase, "MULLIGAN", "nothing happens without the timer")
 	eq((v.find_child("Rope", true, false) as Control).visible, false, "no rope")
 	v.free()
+
+
+## The rope burns from its far end towards the End Turn button (on the right), as in Hearthstone.
+func test_rope_burns_towards_the_end_turn_button() -> void:
+	var f := Fuse.new()
+	f.left = 1.0
+	eq(f._tip().x, Fuse.FROM.x, "a whole rope: the ember at its far (left) end")
+	f.left = 0.25
+	eq(f._tip().x, Fuse.FROM.x + Fuse.LENGTH * 0.75, "three quarters burnt: the ember near the button")
+	f.free()

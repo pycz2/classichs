@@ -8,7 +8,8 @@ Result (per game: classic = data/cards.json, naxx = the FP1_* cards of Hearthsto
   <out>/<game>/set/<name>.ogg            a sound set for `tools/pack.py build … --sound-set original=<out>/<game>/set`:
       the board's sounds by name (play_card, attack, death, draw, turn_start, …, spell_<element>,
       hit_<element>) and each card's own: <card id>_play (a minion entering, a spell cast, a weapon),
-      <card id>_attack, <card id>_death, <card id>_hit (a spell's impact)
+      <card id>_attack, <card id>_death, <card id>_hit (a spell's impact), <card id>_music (a legendary's play
+      music: the wiki's `BASIC_play_stinger`, Pegasus_Stinger_*.wav and the like)
   <out>/<game>/voice/<lang>/<card id>_<kind>.ogg   spoken lines for `--voice <out>/<game>/voice`:
       minions and weapons: play, attack, death; heroes: start, greetings, well_played, thanks, wow,
       oops, threaten, sorry, concede, attack, death, time, thinking1-3, low_cards, no_cards, error_*
@@ -17,13 +18,14 @@ Result (per game: classic = data/cards.json, naxx = the FP1_* cards of Hearthsto
 
 Sources:
 - hearthstone.wiki.gg: the Cargo table `Sound` (the sound files of each card: BASIC_play, _attack,
-  _death, their underlays, VO for heroes) and the files themselves (https://hearthstone.wiki.gg/images/<file>).
+  _death, their underlays, BASIC_play_stinger, VO for heroes) and the files themselves (https://hearthstone.wiki.gg/images/<file>).
   Cards whose sounds changed after 2014 get the 2014 files the wiki keeps (ORIGINAL below).
   The board's sounds and spell sounds: hand-picked files of the wiki (GENERIC, ELEMENTS, SPELLS).
 - Russian voice: a public Google Drive collection of the Russian client's files (RU_DRIVE, linked from
   the Russian Blizzard forum thread "Файлы звуков карт из Hearthstone"); the files carry the same names
   as the English ones. No public source was found for de, fr, es, pt_BR, it, pl (they fall back to English).
-Needs ffmpeg for the .wav conversion: Ogg Vorbis (libvorbis), else MP3 (libmp3lame), --ffmpeg picks the binary. wiki.gg rejects browser user agents.
+Needs ffmpeg for the .wav conversion: mono, 32 kbit/s voice, 48 sounds, 64 music, Ogg Vorbis (libvorbis), else MP3 (libmp3lame), --ffmpeg
+picks the binary. A later set (GvG, …): tools/fetch_set_assets.py --set <name>. wiki.gg rejects browser user agents.
 """
 import argparse
 import concurrent.futures as cf
@@ -127,6 +129,10 @@ ERRORS = ["need_weapon", "need_mana", "minion_attacked", "i_attacked", "summon_s
 # The Russian collection: the root folder and the folders of it searched (by name).
 RU_DRIVE = "1jwjkNVFcfyBiWZ8Yx_Bp5FuNWqlUz1W3"
 RU_FOLDERS = ("Классика", "Зал Славы", "Герои", "Обучение", "Core Set", "[2014.07.22] Проклятие Наксрамаса")
+# The folder of each later set (tools/extract_cards.py SETS), by the start of its name (its release date).
+RU_SETS = {"gvg": "[2014.12.8] ", "brm": "[2015.04.2] ", "tgt": "[2015.08.24] ", "loe": "[2015.11.12] ",
+           "og": "[2016.04.27] ", "kara": "[2016.08.11] ", "msg": "[2016.12.1] ", "ungoro": "[2017.04.6] ",
+           "icc": "[2017.08.11] ", "loot": "[2017.12.8] ", "gil": "[2018.04.12] "}
 
 
 def get(url, ua=UA, tries=4):
@@ -156,8 +162,9 @@ def wiki_sounds(ids):
     want = sorted(set(ids) | {i.removeprefix("VAN_") for i in ids})
     rows = {}
     for i in range(0, len(want), 50):
-        for r in cargo("Sound", "id,BASIC_play,BASIC_play_underlay,BASIC_attack,BASIC_attack_underlay,"
-                       "BASIC_death,BASIC_death_underlay,VO", "id in (%s)" % ",".join("'%s'" % x for x in want[i:i + 50])):
+        for r in cargo("Sound", "id,BASIC_play,BASIC_play_underlay,BASIC_play_stinger,BASIC_attack,"
+                       "BASIC_attack_underlay,BASIC_death,BASIC_death_underlay,VO",
+                       "id in (%s)" % ",".join("'%s'" % x for x in want[i:i + 50])):
             rows[r["id"]] = r
     return {cid: rows.get(cid) or rows.get(cid.removeprefix("VAN_")) or {} for cid in ids}
 
@@ -170,12 +177,14 @@ def plan_card(cid, row, card_type):
     for slot in ("play", "attack", "death"):
         main = [old[slot]] if slot in old else files_of(row.get("BASIC " + slot))
         under = files_of(row.get("BASIC %s underlay" % slot))
-        vo = [f for f in main if f.startswith("VO_")]
+        vo = [f for f in main if f.startswith("VO_")]  # (not BASIC_play_VO: later hero skins' spell lines)
         sfx = [f for f in main if not f.startswith("VO_")] or under
         if vo:
             out.append(("voice", f"{cid}_{slot}", vo[0]))
         if sfx:
             out.append(("set", f"{cid}_{slot}", sfx[0]))
+    for f in files_of(row.get("BASIC play stinger"))[:1]:  # a legendary's play music (Pegasus_Stinger_…)
+        out.append(("set", f"{cid}_music", f))
     if card_type == "HERO":
         for f in files_of(row.get("VO")):
             m = re.match(r"VO_[A-Za-z0-9]+_[A-Za-z0-9]+_(.+?)_\d+\.wav$", f)
@@ -212,9 +221,10 @@ def drive_ls(folder):
     return out
 
 
-def ru_index(cache):
-    """file name (lowercase, spaces as _) -> Drive file id, for the folders RU_FOLDERS (cached)."""
-    p = cache / "ru_index.json"
+def ru_index(cache, folders=RU_FOLDERS, file="ru_index.json"):
+    """file name (lowercase, spaces as _) -> Drive file id, for the folders whose names start with one of `folders`
+    (cached in cache/file)."""
+    p = cache / file
     if p.exists():
         return json.loads(p.read_text())
     index = {}
@@ -227,10 +237,17 @@ def ru_index(cache):
             else:
                 index.setdefault(name.lower().replace(" ", "_"), cid)
     for is_dir, cid, name in drive_ls(RU_DRIVE):
-        if is_dir and name in RU_FOLDERS:
+        if is_dir and name.startswith(tuple(folders)):
             walk(cid)
     p.write_text(json.dumps(index, ensure_ascii=False))
     return index
+
+
+def ru_for(game, cache):
+    """The Russian files of a game: Classic's and Naxxramas's folders (RU_FOLDERS), else its set's folder (RU_SETS)."""
+    if game in ("classic", "naxx"):
+        return ru_index(cache)
+    return ru_index(cache, (RU_SETS[game],), f"ru_index_{game}.json")
 
 
 FFMPEG = ["ffmpeg"]
@@ -267,20 +284,30 @@ def fetch(src_url, raw, dst):
         raw.parent.mkdir(parents=True, exist_ok=True)
         raw.write_bytes(data)
     dst.parent.mkdir(parents=True, exist_ok=True)
-    codec = ["-c:a", "libvorbis", "-q:a", "3"] if EXT == ".ogg" else ["-c:a", "libmp3lame", "-q:a", "5"]
-    r = subprocess.run(FFMPEG + ["-v", "error", "-y", "-i", str(raw)] + codec + [str(dst)])
+    return encode(raw, dst)
+
+
+def encode(src, dst):
+    """Small sound files: mono, a low bit rate (voice 32 kbit/s, sounds 48, a legendary's music 64), Ogg Vorbis or MP3 (EXT)."""
+    kbps = 64 if dst.stem.endswith("_music") else 32 if "voice" in dst.parts else 48
+    codec = ["-c:a", "libvorbis" if EXT == ".ogg" else "libmp3lame", "-b:a", f"{kbps}k"]
+    r = subprocess.run(FFMPEG + ["-v", "error", "-y", "-i", str(src), "-ac", "1"] + codec + [str(dst)])
     return r.returncode == 0
 
 
 def cards_of(game):
+    """[(id, type)] of a game: Classic's data/cards.json, else a set of tools/extract_cards.py SETS."""
     if game == "classic":
         return [(c["id"], c["type"]) for c in json.loads((ROOT / "data/cards.json").read_text())]
-    data = json.loads(get(HSJSON))
-    return [(c["id"], c["type"]) for c in data if c["id"].startswith("FP1_") and c.get("set") == "NAXX"]
+    import extract_cards
+    return [(c["id"], c["type"]) for c in extract_cards.set_cards(json.loads(get(HSJSON)), game)]
 
 
-def run(game, out, ru):
-    cache = out / "cache"
+def run(game, out, ru, cache=None, dest=None):
+    """Fetches a game's sounds into dest (default out/game: set/, voice/<lang>/, SOURCES.md), the downloads into
+    cache (default out/cache)."""
+    cache = cache or out / "cache"
+    dest = dest or out / game
     cards = cards_of(game)
     rows = wiki_sounds([c for c, _ in cards])
     jobs = []  # (url, raw, dst, lang)
@@ -288,20 +315,20 @@ def run(game, out, ru):
         for kind, name, f in plan_card(cid, rows[cid], ctype):
             raw = cache / "wiki" / f
             if kind == "set":
-                jobs.append((FILES + urllib.parse.quote(f), raw, out / game / "set" / f"{name}.ogg", "set"))
+                jobs.append((FILES + urllib.parse.quote(f), raw, dest / "set" / f"{name}.ogg", "set"))
             else:
-                jobs.append((FILES + urllib.parse.quote(f), raw, out / game / "voice" / "en" / f"{name}.ogg", "en"))
+                jobs.append((FILES + urllib.parse.quote(f), raw, dest / "voice" / "en" / f"{name}.ogg", "en"))
                 if ru:
                     rid = ru.get(f.lower().replace(" ", "_")) or ru.get(f.lower().replace("wellplayed", "well_played"))
                     if rid and not f.endswith("_Original.wav"):
                         jobs.append(("https://drive.google.com/uc?export=download&id=" + rid, cache / "ru" / f,
-                                     out / game / "voice" / "ru" / f"{name}.ogg", "ru"))
+                                     dest / "voice" / "ru" / f"{name}.ogg", "ru"))
     if game == "classic":
         for name, f in GENERIC.items():
-            jobs.append((FILES + urllib.parse.quote(f), cache / "wiki" / f, out / game / "set" / f"{name}.ogg", "set"))
+            jobs.append((FILES + urllib.parse.quote(f), cache / "wiki" / f, dest / "set" / f"{name}.ogg", "set"))
         for el, (cast, hit) in ELEMENTS.items():
             for name, f in ((f"spell_{el}", cast), (f"hit_{el}", hit)):
-                jobs.append((FILES + urllib.parse.quote(f), cache / "wiki" / f, out / game / "set" / f"{name}.ogg", "set"))
+                jobs.append((FILES + urllib.parse.quote(f), cache / "wiki" / f, dest / "set" / f"{name}.ogg", "set"))
     counts, missing = {}, []
     with cf.ThreadPoolExecutor(6) as pool:
         for job, ok in zip(jobs, pool.map(lambda j: fetch(*j[:3]), jobs)):
@@ -313,15 +340,15 @@ def run(game, out, ru):
              "", "| Part | Files |", "|---|---|"] + [f"| {k} | {v} |" for k, v in sorted(counts.items())]
     lines += ["", "Sources: hearthstone.wiki.gg (Cargo `Sound`, files), Russian: Google Drive " + RU_DRIVE, "",
               f"Not found: {len(missing)}"] + [f"- {m}" for m in missing]
-    (out / game).mkdir(parents=True, exist_ok=True)
-    (out / game / "SOURCES.md").write_text("\n".join(lines) + "\n")
+    (dest).mkdir(parents=True, exist_ok=True)
+    (dest / "SOURCES.md").write_text("\n".join(lines) + "\n")
     print(game, counts, "missing", len(missing))
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", default="~/ClassicHS-local/sounds")
-    ap.add_argument("--only", choices=["classic", "naxx"])
+    ap.add_argument("--only", choices=["classic", "naxx"])  # (a later set: tools/fetch_set_assets.py --set <name>)
     ap.add_argument("--no-ru", action="store_true", help="English only")
     ap.add_argument("--ffmpeg", default="ffmpeg", help="the ffmpeg binary (with libvorbis or libmp3lame)")
     a = ap.parse_args()
@@ -330,9 +357,8 @@ def main():
     if (ROOT in out.resolve().parents) or out.resolve() == ROOT:
         raise SystemExit("--out must be outside the repository (these files never go into git)")
     (out / "cache").mkdir(parents=True, exist_ok=True)
-    ru = {} if a.no_ru else ru_index(out / "cache")
     for game in ([a.only] if a.only else ["classic", "naxx"]):
-        run(game, out, ru)
+        run(game, out, {} if a.no_ru else ru_for(game, out / "cache"))
 
 
 if __name__ == "__main__":

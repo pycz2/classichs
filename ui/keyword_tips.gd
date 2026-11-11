@@ -102,6 +102,9 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 	tips.add_theme_constant_override("separation", 6)
 	var lang := TranslationServer.get_locale()
 	var kw := _keywords()
+	var mark := Packs.set_mark(CardText.set_key(card_id))
+	if mark and CardText.card_set(card_id) != "":  # the card's set (the packs after Classic)
+		tips.add_child(_set_box(mark, CardText.card_set(card_id)))
 	var lines := changes(e)
 	if not lines.is_empty():
 		tips.add_child(_box("Changes", TranslationServer.translate("Changes"), "\n".join(lines), Color("dcefd2")))
@@ -122,6 +125,35 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 			grid.add_child(cv)
 		tips.add_child(grid)
 	return tips
+
+
+## A line with the card's set: its mark and its name.
+static func _set_box(mark: Texture2D, title: String) -> PanelContainer:
+	var box := PanelContainer.new()
+	box.name = "SetMark"
+	var st := Palette.box(Color("efe0bd"), 10, Color("8a6d3b"), 2)
+	st.set_content_margin_all(6)
+	box.add_theme_stylebox_override("panel", st)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	box.add_child(row)
+	var icon := TextureRect.new()
+	icon.texture = mark
+	icon.custom_minimum_size = Vector2(22, 22)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.modulate = Color("5a3d17")
+	row.add_child(icon)
+	var label := Label.new()
+	label.name = "SetName"
+	label.text = title
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.custom_minimum_size.x = WIDTH - 46
+	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_color_override("font_color", Color("2a1a08"))
+	row.add_child(label)
+	return box
 
 
 static func _box(title_name: String, title_text: String, body: String, color: Color) -> PanelContainer:

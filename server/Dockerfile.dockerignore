@@ -4,6 +4,7 @@
 !docs/packs/schema/keywords.json
 !packs/classic
 !packs/*.cardpack
+!build/packs
 !rust/engine
 !rust/script
 rust/engine/target

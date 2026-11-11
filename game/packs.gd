@@ -88,6 +88,7 @@ static func rescan() -> void:
 		if p != _active:
 			p.close()
 	_list = []
+	Art.reset()  # (pictures of the other packs)
 	var was := _active
 	_active = null
 	if active() != was:
@@ -272,6 +273,7 @@ static func install(bytes: PackedByteArray, origin: String, extra := {}, want_ha
 	out.server = str(extra.get("server", ""))
 	if not _list.is_empty():
 		_list.append(out)
+	Art.reset()  # its pictures may fill in another pack's
 	return {"pack": out}
 
 
@@ -294,6 +296,7 @@ static func remove(p: Pack) -> bool:
 	p.close()
 	DirAccess.remove_absolute(p.path)
 	_list.erase(p)
+	Art.reset()
 	if not all().any(func(x: Pack): return x.id() == p.id()):  # its decks on this device go with it
 		DeckStore.delete_for(p.id())
 	if p == _active:
@@ -359,6 +362,20 @@ static func pack_name(client: String) -> String:
 static func renames() -> Dictionary:
 	_names()
 	return _to_client
+
+
+## The icon of a set mark (CardText.set_key) of the active pack: manifest `set_marks.<key>.icon`. Null
+## when it has none: Classic shows no marks, the packs after it mark each card with its set.
+static func set_mark(key: String) -> Texture2D:
+	var p := active()
+	var marks = p.manifest.get("set_marks", {}) if p else {}
+	var icon = marks.get(key, {}).get("icon") if marks is Dictionary and marks.get(key) is Dictionary else null
+	if not icon is String or icon == "":
+		return null
+	var cache: String = p.path + "|mark|" + str(icon)
+	if not _pictures.has(cache):
+		_pictures[cache] = p.texture(icon)
+	return _pictures[cache]
 
 
 static var _pictures := {}  # "<pack path>|<name>" -> Texture2D or null

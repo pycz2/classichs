@@ -65,6 +65,22 @@ static func term(section: String, key: String, locale := "") -> String:
 	return ""
 
 
+## The key of a card's set as players know it: "<set>:<rarity>" when the pack names or marks that
+## (Classic's Basic cards: VANILLA:FREE), else its set ("" for none).
+static func set_key(id: String) -> String:
+	var c := CardDb.card(id)
+	var s: String = c.get("set", "")
+	var k := "%s:%s" % [s, c.get("rarity", "")]
+	var marks = Packs.active().manifest.get("set_marks", {}) if Packs.active() else {}
+	return k if s != "" and (term("sets", k) != "" or (marks is Dictionary and marks.has(k))) else s
+
+
+## The name of a card's set (set_key) in a language ("" when the pack names none; not `set_name`: scripts have that).
+static func card_set(id: String, locale := "") -> String:
+	var k := set_key(id)
+	return term("sets", k, locale) if k != "" else ""
+
+
 ## The card's race in a language ("" for none).
 static func race(id: String, locale := "") -> String:
 	var r: String = CardDb.card(id).get("race", "")

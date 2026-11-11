@@ -462,6 +462,9 @@ def check_files(files):
     for key in ("card_back", "logo"):
         if man.get(key) and man[key] not in files:
             r.error(f"manifest.json: {key} {man[key]} is not in the pack")
+    for key, mark in man.get("set_marks", {}).items():
+        if mark.get("icon") and mark["icon"] not in files:
+            r.error(f"manifest.json: set_marks.{key} icon {mark['icon']} is not in the pack")
     if "ui/theme.json" in files:
         theme = _json(files, "ui/theme.json", r, "theme.schema.json")
         refs = [] if theme is None else [theme.get(k, {}).get(f) for k, f in
@@ -839,6 +842,78 @@ STEPS = {"source": step_source, "copy": step_copy, "hsjson": step_hsjson, "keywo
          "locales": step_locales,
          "translate": step_translate, "rank_names": step_rank_names}
 
+# --- packs built on another pack (recipe `base`: classic -> naxx -> gvg -> …) -----------------------
+
+## The sections of a base pack's own texts (locales/<lang>.json) a pack built on it takes, under its own.
+INHERITED_SECTIONS = ["classes", "races", "rarities", "mechanics", "ranks", "cards", "sets"]
+## The files of a base pack's source folder a pack built on it takes (its own win): card scripts and fonts.
+INHERITED_FILES = ("scripts/**/*.lua", "ui/fonts/*.ttf", "ui/fonts/*.otf", "ui/fonts/*.txt")
+
+
+def _many(v):
+    return v if isinstance(v, list) else [v] if v else []
+
+
+def _abs_hsjson(s, root, src):
+    """An hsjson step with absolute paths (`from`, `texts` from root, `patch` from the pack's folder), so steps of
+    several packs' recipes can be merged into one."""
+    s = dict(s)
+    for k, base in (("from", root), ("texts", root), ("patch", src)):
+        if k in s:
+            s[k] = [str((base / f).resolve()) for f in _many(s[k])]
+    return s
+
+
+def recipe_steps(src, _seen=()):
+    """(steps, bases) of the pack source src: the steps to run as [(root, step)] and the source folders of the packs
+    it is built on, the nearest first. A recipe with `base` (the base pack's folder, relative to this one) runs the
+    base's steps (all of them, recursively), but `skip` (globs) leaves out the base's `copy` steps whose `to` matches
+    (`art/*`: no pictures); its own `hsjson` step adds to the base's one (`from`, `patch`, `texts` appended in order:
+    a later patch wins) and its other steps come after (a step the base already has is not run twice)."""
+    src = Path(src).resolve()
+    if src in _seen:
+        raise PackError(f"{src}/recipe.json: the bases go round in a circle")
+    f = src / "recipe.json"
+    r = load_json(f.read_bytes(), str(f)) if f.exists() else {}
+    root = (src / r.get("root", ".")).resolve()
+    for s in r.get("steps", []):
+        if s.get("do") not in STEPS:
+            raise PackError(f"{f}: unknown step {s.get('do')}")
+    own = [(root, _abs_hsjson(s, root, src) if s["do"] == "hsjson" else s) for s in r.get("steps", [])]
+    if not r.get("base"):
+        return own, []
+    base = (src / r["base"]).resolve()
+    if not base.is_dir():
+        raise PackError(f"{f}: base {r['base']} is not a folder")
+    steps, bases = recipe_steps(base, _seen + (src,))
+    steps = [x for x in steps if not (x[1]["do"] == "copy" and _match(x[1]["to"], _many(r.get("skip"))))]
+    for root_, s in own:
+        hs = next((i for i, (_, y) in enumerate(steps) if y["do"] == "hsjson"), None)
+        if s["do"] == "hsjson" and hs is not None:
+            was = steps[hs][1]
+            merged = {**was, **s, **{k: _many(was.get(k)) + _many(s.get(k)) for k in ("from", "patch", "texts")}}
+            steps[hs] = (steps[hs][0], merged)
+        elif (root_, s) not in steps:
+            steps.append((root_, s))
+    return steps, [base] + bases
+
+
+def inherit(b, base):
+    """The base pack's own files (INHERITED_FILES) and texts (INHERITED_SECTIONS) under what the pack has already."""
+    for pat in INHERITED_FILES:
+        for f in sorted(base.glob(pat)):
+            if f.is_file() and not f.name.startswith("."):
+                b.files.setdefault(f.relative_to(base).as_posix(), f.read_bytes())
+    if (base / "locales").is_dir():
+        step_locales(b, base, {"from": "locales", "sections": INHERITED_SECTIONS})
+
+
+def bundle_in_client(src):
+    """Whether the game's builds carry this pack (recipe `bundle_in_client`, default true). The expansions after
+    Naxxramas do not: they are release files and the server's (tools/build_packs.sh)."""
+    f = Path(src) / "recipe.json"
+    return load_json(f.read_bytes(), str(f)).get("bundle_in_client", True) is not False if f.exists() else True
+
 
 def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
     """Builds the pack in folder src; writes it to out if given. Returns (files, report)."""
@@ -847,7 +922,7 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
     skip = {"recipe.json"}
     for f in sorted(src.rglob("*")):
         rel = f.relative_to(src).as_posix()
-        if not f.is_file() or rel in skip or rel.endswith(".patch.json") or f.name.startswith(".") \
+        if not f.is_file() or rel in skip or rel.endswith((".patch.json", ".texts.json")) or f.name.startswith(".") \
                 or f.name.endswith(".import"):
             continue
         if rel.startswith("locales/") and rel.endswith(".json"):
@@ -856,13 +931,11 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
         b.files[rel] = f.read_bytes()
     b.manifest = load_json(b.files.get("manifest.json", b"{}"), "manifest.json")
     b.rules = load_json(b.files.get("rules.json", b"{}"), "rules.json")
-    if (src / "recipe.json").exists():
-        recipe = load_json((src / "recipe.json").read_bytes(), "recipe.json")
-        root = (src / recipe.get("root", ".")).resolve()
-        for s in recipe["steps"]:
-            if s["do"] not in STEPS:
-                raise PackError(f"recipe.json: unknown step {s['do']}")
-            STEPS[s["do"]](b, root, s)
+    steps, bases = recipe_steps(src)
+    for base in bases:  # the nearest base first: what the pack has wins, then the nearer base
+        inherit(b, base)
+    for root, s in steps:
+        STEPS[s["do"]](b, root, s)
     for opt, top, kind, exts, specs in (("--art-set", "art", "art_sets", IMAGES, art_sets),
                                         ("--sound-set", "sounds", "sound_sets", AUDIO, sound_sets)):
         for spec in specs:
@@ -879,9 +952,10 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
                     n += 1
             if not n:
                 raise PackError(f"{opt} {spec}: no files")
-            b.manifest.setdefault(kind, []).append({"id": set_id, "local": True})
-    if voice:  # voice/<lang>/<card id>_<kind>.ogg; the note marks them local, as the sets above
-        folder = Path(voice).expanduser().resolve()
+            if not any(s["id"] == set_id for s in b.manifest.get(kind, [])):  # (one set from several folders)
+                b.manifest.setdefault(kind, []).append({"id": set_id, "local": True})
+    for v in [voice] if isinstance(voice, (str, Path)) else voice or []:  # voice/<lang>/<card id>_<kind>.ogg, marked local
+        folder = Path(v).expanduser().resolve()
         langs = [d for d in sorted(folder.iterdir()) if d.is_dir()] if folder.is_dir() else []
         n = 0
         for d in langs:
@@ -890,7 +964,7 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
                     b.files[f"voice/{d.name}/{f.name}"] = f.read_bytes()
                     n += 1
         if not n:
-            raise PackError(f"--voice {voice}: want a folder of <lang>/<card id>_<kind>.ogg")
+            raise PackError(f"--voice {v}: want a folder of <lang>/<card id>_<kind>.ogg")
         b.files["voice/LOCAL.md"] = (b"Local recordings added by tools/pack.py --voice: the builder's own files, "
                                      b"never to be uploaded or sent.\n")
     if b.cards is not None:
@@ -960,11 +1034,16 @@ def main(argv=None):
                     help="add a local art set (never for distribution; art/original is refused)")
     pb.add_argument("--sound-set", action="append", default=[], metavar="ID=FOLDER",
                     help="add a local sound set (never for distribution)")
-    pb.add_argument("--voice", metavar="FOLDER",
-                    help="add local voice recordings: FOLDER/<lang>/<card id>_<kind>.ogg (never for distribution)")
+    pb.add_argument("--voice", metavar="FOLDER", action="append", default=[],
+                    help="add local voice recordings: FOLDER/<lang>/<card id>_<kind>.ogg (never for distribution; "
+                         "several folders: a later one wins); an --art-set or --sound-set id given twice takes both folders")
     for name, text in (("check", "validate a pack"), ("info", "sizes, counts, hashes"), ("hash", "rules_hash and content_hash")):
         sub.add_parser(name, help=text).add_argument("pack")
+    sub.add_parser("bundled", help="yes/no: the game's builds carry this pack source (recipe bundle_in_client)").add_argument("src")
     a = ap.parse_args(argv)
+    if a.cmd == "bundled":
+        print("yes" if bundle_in_client(a.src) else "no")
+        return 0
     try:
         if a.cmd == "build":
             files, r = build(a.src, a.out, a.art_set, a.sound_set, a.voice)

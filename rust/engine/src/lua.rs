@@ -263,6 +263,7 @@ impl Parse<'_> {
                 "on_choose" => h.on_choose = Some(f!(false)),
                 "durability_on_attack" => h.durability_on_attack = Some(f!(false)),
                 "can_play" => h.can_play = Some(f!(true)),
+                "glow" => h.glow = Some(f!(true)),
                 "cost_mod" => h.cost_mod = Some(f!(true)),
                 "cost_aura" => h.cost_aura = Some(f!(true)),
                 "immune_while_attacking" => h.immune_while_attacking = v.truthy(),

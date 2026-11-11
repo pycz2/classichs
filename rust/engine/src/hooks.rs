@@ -48,6 +48,9 @@ pub struct HookSet {
     /// A POWER's effect.
     pub power: Option<HookFn>,
     pub can_play: Option<HookFn>,
+    /// The card glows in the hand while this holds (read-only; clients only). Without it a COMBO card glows
+    /// while its combo is on.
+    pub glow: Option<HookFn>,
     pub on_death: Option<HookFn>,
     pub on: Vec<(&'static str, HookFn)>,
     pub trap: Option<TrapHook>,
@@ -91,6 +94,7 @@ pub fn summary(h: &HookSet) -> serde_json::Value {
     flag("effect", h.effect.is_some());
     flag("hero_power", h.power.is_some());
     flag("can_play", h.can_play.is_some());
+    flag("glow", h.glow.is_some());
     flag("deathrattle", h.on_death.is_some());
     flag("aura", h.aura.is_some() || h.aura_final.is_some());
     flag("cost_mod", h.cost_mod.is_some() || h.cost_aura.is_some());

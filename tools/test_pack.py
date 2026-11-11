@@ -284,6 +284,20 @@ class BuildAndZip(unittest.TestCase):
             self.assertEqual(json.loads(files["manifest.json"])["sound_sets"][-1], {"id": "original", "local": True})
             with self.assertRaises(pack.PackError):
                 pack.build(src, None, (), (), str(Path(t) / "nothing"))
+            # one set and the voice from several folders (the local packs of a chain: every level's sounds)
+            snd2, vo2 = Path(t) / "snd2", Path(t) / "vo2"
+            snd2.mkdir()
+            (snd2 / "M2_play.mp3").write_bytes(b"mp3")
+            (snd2 / "M1_play.ogg").write_bytes(b"later")
+            (vo2 / "ru").mkdir(parents=True)
+            (vo2 / "ru" / "M2_play.mp3").write_bytes(b"mp3")
+            files, r = pack.build(src, None, (), [f"original={snd}", f"original={snd2}"], [str(vo), str(vo2)])
+            self.assertEqual(r.errors, [])
+            self.assertEqual(files["sounds/original/M1_play.ogg"], b"later")
+            self.assertIn("sounds/original/M2_play.mp3", files)
+            self.assertEqual([s["id"] for s in json.loads(files["manifest.json"])["sound_sets"]].count("original"), 1)
+            self.assertIn("voice/en/M1_attack.ogg", files)
+            self.assertIn("voice/ru/M2_play.mp3", files)
 
     def test_read_pack_refuses_duplicates(self):
         with tempfile.TemporaryDirectory() as t:
@@ -320,6 +334,124 @@ class Classic(unittest.TestCase):
         self.assertEqual(by_id["VAN_EX1_560"]["turn_seconds"], 15)
         self.assertEqual(en["cards"]["VAN_EX1_306"]["name"], "Succubus")
         self.assertEqual(json.loads(files["locales/ru.json"])["cards"]["VAN_EX1_306"]["name"], "Суккуб")
+
+
+class Chain(unittest.TestCase):
+    """Packs built on packs (recipe `base`), as classic -> naxx -> gvg -> … (docs/packs/format.md §10)."""
+
+    def write(self, root, path, v):
+        p = root / path
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(v if isinstance(v, bytes) else json.dumps(v).encode())
+
+    def hs(self, cid, typ, cls, **kw):
+        return {"id": cid, "type": typ, "cardClass": cls, "name": {"enUS": cid.lower()}, **kw}
+
+    def three(self, t):
+        """Packs a (root), b (on a), c (on b), each with its own card data, patch, scripts and texts."""
+        t = Path(t)
+        spec = tiny()
+        self.write(t, "data/a.json", [self.hs("C_A", "HERO", "RED", health=30), self.hs("P_A", "HERO_POWER", "RED", cost=2),
+                                      self.hs("COIN", "SPELL", "GREY", cost=0),
+                                      self.hs("M1", "MINION", "GREY", rarity="C", set="CORE", collectible=True, cost=1,
+                                              attack=1, health=2, mechanics=["WALL"])])
+        self.write(t, "data/b.json", [self.hs("M2", "MINION", "RED", rarity="L", set="CORE", collectible=True, cost=5,
+                                              attack=5, health=5)])
+        self.write(t, "data/c.json", [self.hs("M3", "MINION", "GREY", rarity="C", set="CORE", collectible=True, cost=3,
+                                              attack=3, health=3)])
+        self.write(t, "data/c_texts.json", {"M1": {"name": {"enUS": "Wall of C"}}})
+        self.write(t, "art/pics/M1.png", b"png")
+        hsjson = {"do": "hsjson", "locales": {"en": "enUS"}, "rename": {"HERO": "CHAMPION", "HERO_POWER": "POWER"}}
+        for name in "abc":
+            for p in ("manifest.json", "rules.json", "decks/red.json"):
+                self.write(t / name, p, spec[p])
+        self.write(t, "b/manifest.json", {**spec["manifest.json"], "art_sets": [{"id": "pics"}]})
+        self.write(t, "a/cards.patch.json", {"C_A": {"power": "P_A"}, "M1": {"cost": 1, "fx": {"play": "battlecry"}}})
+        self.write(t, "b/cards.patch.json", {"M1": {"cost": 2}})
+        self.write(t, "c/cards.patch.json", {"M1": {"attack": 9}})
+        self.write(t, "a/recipe.json", {"root": "..", "steps": [
+            {**hsjson, "from": "data/a.json", "patch": "cards.patch.json"},
+            {"do": "copy", "from": "art/pics", "to": "art/pics", "files": ["*.png"]}]})
+        self.write(t, "b/recipe.json", {"base": "../a", "root": "..", "steps": [
+            {"do": "hsjson", "from": ["data/b.json"], "patch": ["cards.patch.json"]}]})
+        self.write(t, "c/recipe.json", {"base": "../b", "root": "..", "skip": ["art/*"], "bundle_in_client": False,
+                                        "steps": [{"do": "hsjson", "from": ["data/c.json"], "patch": ["cards.patch.json"],
+                                                   "texts": ["data/c_texts.json"]}]})
+        self.write(t, "a/scripts/a.lua", b"return {}\n")
+        self.write(t, "a/scripts/x.lua", b"-- a\nreturn {}\n")
+        self.write(t, "b/scripts/x.lua", b"-- b\nreturn {}\n")
+        self.write(t, "a/ui/fonts/F.ttf", b"font")
+        self.write(t, "a/locales/en.json", {"classes": {"RED": "Red of A", "GREY": "Grey of A"}, "decks": {"red": "A's deck"},
+                                            "mechanics": {"WALL": {"name": "Wall", "tip": "Attack it first."}}})
+        self.write(t, "b/locales/en.json", {"classes": {"RED": "Red of B"}, "sets": {"CORE": "Core of B"}})
+        self.write(t, "c/locales/en.json", {"sets": {"CORE": "Core of C"}})
+        return t
+
+    def test_three_levels(self):
+        with tempfile.TemporaryDirectory() as t:
+            t = self.three(t)
+            files, r = pack.build(t / "c")
+            self.assertEqual(r.errors, [])
+            cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+            self.assertEqual(sorted(cards), ["COIN", "C_A", "M1", "M2", "M3", "P_A"])  # every pack's data
+            self.assertEqual((cards["M1"]["cost"], cards["M1"]["attack"]), (2, 9))  # patches in order, a later one wins
+            self.assertEqual(cards["M1"]["fx"], {"play": "battlecry"})  # ... only for the fields it names
+            self.assertEqual(files["scripts/x.lua"], b"-- b\nreturn {}\n")  # the nearer pack's script wins
+            self.assertIn("scripts/a.lua", files)
+            self.assertIn("ui/fonts/F.ttf", files)
+            self.assertFalse([p for p in files if p.startswith("art/")])  # skip: no pictures
+            en = json.loads(files["locales/en.json"])
+            self.assertEqual(en["classes"], {"RED": "Red of B", "GREY": "Grey of A"})
+            self.assertEqual(en["sets"], {"CORE": "Core of C"})  # its own texts first
+            self.assertNotIn("decks", en)  # only the shared sections
+            self.assertEqual(en["cards"]["M1"]["name"], "Wall of C")  # its release-time texts
+            self.assertFalse([p for p in files if "recipe" in p or "patch" in p or "texts" in p])
+            files_b, r = pack.build(t / "b")  # the middle one keeps its art
+            self.assertEqual(r.errors, [])
+            self.assertIn("art/pics/M1.png", files_b)
+            self.assertEqual(json.loads(files_b["cards.json"])[2]["cost"], 2)
+            self.assertFalse(pack.bundle_in_client(t / "c"))
+            self.assertTrue(pack.bundle_in_client(t / "b"))
+
+    def test_bases_in_a_circle_are_refused(self):
+        with tempfile.TemporaryDirectory() as t:
+            t = self.three(t)
+            self.write(t, "a/recipe.json", {"base": "../c", "root": "..", "steps": []})
+            with self.assertRaises(pack.PackError):
+                pack.build(t / "c")
+
+    def test_naxxramas_is_built_on_classic(self):
+        steps, bases = pack.recipe_steps(pack.REPO / "packs/naxx")
+        self.assertEqual(bases, [(pack.REPO / "packs/classic").resolve()])
+        hs = [s for _, s in steps if s["do"] == "hsjson"]
+        self.assertEqual(len(hs), 1)
+        self.assertEqual([Path(f).name for f in hs[0]["patch"]], ["cards.patch.json", "cards.patch.json"])
+        self.assertEqual([Path(f).parent.name for f in hs[0]["patch"]], ["classic", "naxx"])
+        self.assertFalse([s for _, s in steps if s.get("to") == "layout"])
+        files, r = pack.build(pack.REPO / "packs/naxx")
+        self.assertEqual(r.errors, [])
+        self.assertIn("scripts/naxx.lua", files)
+        self.assertIn("scripts/rogue.lua", files)
+        self.assertEqual(len(json.loads(files["cards.json"])), 569)
+        self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
+                         "e47ac05550ae07647fcb8726d04b5a6cdbb28501c37420723e14c5cb690a90e7")
+
+
+class ExtractSets(unittest.TestCase):
+    def test_a_set_is_its_prefixed_cards_and_their_tokens(self):
+        import extract_cards
+        cards = [{"id": "GVG_001", "type": "SPELL", "set": "GVG", "collectible": True},
+                 {"id": "GVG_110t", "type": "MINION", "set": "GVG"},
+                 {"id": "PART_001", "type": "SPELL", "set": "GVG"},
+                 {"id": "GVG_076_Puzzle", "type": "MINION", "set": "GVG"},
+                 {"id": "GVG_010b", "type": "ENCHANTMENT", "set": "GVG"},
+                 {"id": "GVG_999", "type": "MINION", "set": "HERO_SKINS"},
+                 {"id": "GVG_043", "type": "WEAPON", "set": "GVG", "collectible": True, "health": 3},
+                 {"id": "FP1_001", "type": "MINION", "set": "NAXX", "collectible": True}]
+        got = extract_cards.set_cards(cards, "gvg")
+        self.assertEqual([c["id"] for c in got], ["GVG_001", "GVG_043", "GVG_110t", "PART_001"])
+        self.assertEqual(got[1]["durability"], 3)
+        self.assertEqual([c["id"] for c in extract_cards.set_cards(cards, "naxx")], ["FP1_001"])
 
 
 class Neonfall(unittest.TestCase):

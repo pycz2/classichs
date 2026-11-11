@@ -80,7 +80,9 @@ const CARDS: &str = r#"[
  {"id": "CHEAP", "type": "MINION", "class": "ANY", "set": "CORE", "collectible": true, "rarity": "C", "cost": 5,
   "attack": 1, "health": 1, "script": "scripts/red.lua#CHEAP"},
  {"id": "BADCOST", "type": "MINION", "class": "ANY", "set": "CORE", "collectible": true, "rarity": "C", "cost": 1,
-  "attack": 1, "health": 1, "script": "scripts/red.lua#BADCOST"}
+  "attack": 1, "health": 1, "script": "scripts/red.lua#BADCOST"},
+ {"id": "SHINY", "type": "SPELL", "class": "RED", "set": "CORE", "collectible": true, "rarity": "C", "cost": 1,
+  "script": "scripts/red.lua#SHINY"}
 ]"#;
 
 const RED: &str = r#"
@@ -96,6 +98,7 @@ cards.BOLT = {
 cards.OOPS = { spell = function(g, me) g.nope(me) end }
 cards.LOOP = { spell = function(g, me) while true do end end }
 cards.CHEAP = { cost_mod = function(g, me) return -#g.hand(g.ctrl(me)) end }
+cards.SHINY = { glow = function(g, me) return #g.hand(g.ctrl(me)) >= 3 end, spell = function(g, me) end }
 cards.BADCOST = { cost_mod = function(g, me) return g.damage(me, me, 1) end }
 return cards
 "#;
@@ -166,6 +169,27 @@ fn a_pack_plays_with_its_own_names_and_lua_hooks() {
     let hooks = call(&mut e, json!({"op": "hooks", "pack": pack}))["hooks"].clone();
     assert_eq!(hooks["BOLT"], json!({"spell": true, "target": true}));
     assert_eq!(call(&mut e, json!({"op": "validate", "pack": pack, "deck": {"hero": "RED_HERO", "cards": ["WALL", "BOLT", "BOLT", "WALL"]}}))["ok"], true);
+}
+
+/// A card's `glow` hook: the snapshot marks the card in the hand while its condition holds (here: three cards
+/// in the hand), and only for who may see it.
+#[test]
+fn a_glow_hook_marks_the_card_in_the_hand() {
+    let dir = tmp("glow");
+    mini_pack(&dir, RED);
+    let mut e = Engine::new();
+    let pack = call(&mut e, json!({"op": "load_pack", "path": dir}))["pack"].clone();
+    assert_eq!(call(&mut e, json!({"op": "hooks", "pack": pack}))["hooks"]["SHINY"], json!({"glow": true, "spell": true}));
+    for (hand, lit) in [(vec!["SHINY", "BOLT"], false), (vec!["SHINY", "BOLT", "WALL"], true)] {
+        call(&mut e, json!({"op": "new", "game": "g", "pack": pack, "scenario": scenario(&hand)}));
+        let st = call(&mut e, json!({"op": "snapshot", "game": "g"}))["state"].clone();
+        let (id, c) = entity_of(&st, "SHINY", 0);
+        assert_eq!(c.get("glow").is_some(), lit, "{hand:?}");
+        let mine = call(&mut e, json!({"op": "snapshot", "game": "g", "view": 0}))["state"].clone();
+        assert_eq!(mine["entities"][id.to_string()].get("glow").is_some(), lit);
+        let theirs = call(&mut e, json!({"op": "snapshot", "game": "g", "view": 1}))["state"].clone();
+        assert!(theirs["entities"][id.to_string()].get("glow").is_none(), "hidden from the other side");
+    }
 }
 
 fn play_first(e: &mut Engine, game: &str, card: &str) -> Value {

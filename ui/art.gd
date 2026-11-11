@@ -346,8 +346,10 @@ static func shapes(card_id: String, rect: Rect2) -> Array:
 	return out
 
 
-## The card's illustration, or null when it has none (the drawn art is used then): the
-## chosen set, else the pack's default set.
+## The card's illustration, or null when it has none (the drawn art is used then): the chosen
+## set, else the same set of another installed pack (a picture of the same card id: the packs
+## after Naxxramas carry no pictures of their own, and the owner's local custom packs lend theirs),
+## else the pack's default set, else another pack's default set.
 static func texture(card_id: String) -> Texture2D:
 	if not _textures.has(card_id):
 		var p := Packs.active()
@@ -358,12 +360,52 @@ static func texture(card_id: String) -> Texture2D:
 				tex = _load("%s/%s/%s.%s" % [root, chosen, card_id, ext], ext)
 				if tex:
 					break
-		for set_id in [chosen, p.default_set("art") if p else ""]:
-			if tex == null and p and set_id != "":
-				var f := p.find("art/" + set_id, card_id, EXTENSIONS)
+		# [this pack's set, the set of the other packs]: the chosen one, then the defaults ("": each pack's own)
+		for look in [[chosen, chosen], [p.default_set("art") if p else "", ""]]:
+			if tex == null and p and look[0] != "":
+				var f := p.find("art/" + look[0], card_id, EXTENSIONS)
 				tex = p.texture(f) if f != "" else null
+			if tex == null and p:
+				var other: Array = others().get(look[1], {}).get(card_id, [])
+				tex = other[0].texture(other[1]) if not other.is_empty() else null
 		_textures[card_id] = tex
 	return _textures[card_id]
+
+
+static var _others = null  # null until asked: set id ("" = each pack's default set) -> {card id: [Pack, file]}
+
+
+## The pictures of every installed pack but the active one: set id -> {card id: [pack, file]}, and
+## under "" each pack's default set. The first pack (Packs.all() order) with a picture wins. Made once
+## (one pass over the zips' file lists); reset() forgets it (another pack, set or install).
+static func others() -> Dictionary:
+	if _others == null:
+		_others = {"": {}}
+		var active := Packs.active()
+		for p: Pack in Packs.all():
+			if p == active:
+				continue
+			var default := p.default_set("art")
+			for f: String in p._files:
+				var parts := f.split("/")
+				if parts.size() != 3 or parts[0] != "art" or not EXTENSIONS.has(parts[2].get_extension().to_lower()):
+					continue
+				var cid := parts[2].get_basename()
+				var by_set: Dictionary = _others.get_or_add(parts[1], {})
+				if not by_set.has(cid):
+					by_set[cid] = [p, f]
+				if parts[1] == default and not _others[""].has(cid):
+					_others[""][cid] = [p, f]
+	return _others
+
+
+## The manifest entry ({id, name?}) of an art set another installed pack has ({} when none has it).
+static func other_set(set_id: String) -> Dictionary:
+	for p: Pack in Packs.all():
+		for s in p.sets("art"):
+			if str(s.get("id", "")) == set_id:
+				return s
+	return {}
 
 
 ## Loads a picture: raw bytes when the file is there as it is, else Godot's
@@ -392,6 +434,9 @@ static func sets() -> Array:
 		for s in p.sets("art") if p else []:
 			if p.set_usable("art", s):
 				out.append(str(s.id))
+		for set_id: String in others():  # another installed pack's set with pictures of this pack's cards
+			if set_id != "" and not out.has(set_id) and others()[set_id].keys().any(func(c): return CardDb.has(c)):
+				out.append(set_id)
 		var dirs := Array(DirAccess.get_directories_at(root)) if DirAccess.dir_exists_absolute(root) else []
 		dirs.sort()
 		if dirs.has("original"):  # the original art first among the folders, as before
@@ -416,6 +461,7 @@ static func _has_pack_cards(dir: String) -> bool:
 static func reset() -> void:
 	_textures = {}
 	_sets = []
+	_others = null
 
 
 ## Forgets everything of the pack (after the active pack changes): pictures and picture plans.

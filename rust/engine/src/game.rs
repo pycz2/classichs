@@ -392,6 +392,20 @@ impl Game {
         self.players[self.ctrl(e)].cards_played_this_turn > 0
     }
 
+    /// Whether a card in a hand glows yellow (its condition holds now, as Hearthstone shows it): its
+    /// script's `glow(g, me)` hook says so, else a card with a COMBO hook glows while its combo is on.
+    /// Only on its owner's turn. For clients only (snapshots); nothing in the rules reads it.
+    pub fn glows(&self, e: Id) -> bool {
+        let x = self.e(e);
+        if x.zone != "HAND" || x.controller != self.current || self.game_over {
+            return false;
+        }
+        match x.card.hooks.glow {
+            Some(f) => self.fx_can_play(f, e),
+            None => x.card.hooks.combo.is_some() && self.combo_active(e),
+        }
+    }
+
     /// Target ids for playing e with the given choice. [-1] means "no target";
     /// an empty list means e cannot be played.
     fn play_targets(&self, e: Id, choice: i64) -> Vec<Id> {

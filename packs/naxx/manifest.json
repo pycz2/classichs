@@ -39,6 +39,11 @@
     {"id": "generated", "name": {"en": "Generated", "ru": "Сгенерированная"}, "default": true},
     {"id": "open", "name": {"en": "Open (CC0)", "ru": "Открытая (CC0)"}}
   ],
+  "set_marks": {
+    "VANILLA:FREE": {"icon": "ui/set_basic.png"},
+    "VANILLA": {"icon": "ui/set_classic.png"},
+    "NAXX": {"icon": "ui/set_naxx.png"}
+  },
   "card_back": null,
   "logo": null,
   "colors": {

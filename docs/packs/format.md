@@ -85,6 +85,7 @@ The Lua limits (steps, depth, table and string size) are in `lua.md` (D5).
 | `locales` | [lang] | Languages the pack has; each has `locales/<lang>.json`. Lang: `en`, `ru`, `pt_BR` (Godot style). |
 | `art_sets`, `sound_sets`, `music_sets` | [{`id`, `name`?, `default`?, `local`?}] | One entry per folder of `art/`, `sounds/`, `music/`. At most one `default`. `local: true` = added by `--art-set`, never distributed. |
 | `card_back`, `logo` | `"ui/<file>"` or null | Optional pictures; null = the client's own. |
+| `set_marks` | `{<set>[:<rarity>]: {icon: "ui/<file>"}}` | Optional: each card shows its set's icon faintly behind its text and its set's name beside the big card (the packs after Classic; Classic has none). A key `<set>:<rarity>` wins for that rarity (`VANILLA:FREE` = Basic). The names are `locales/<lang>.json` `sets` under the same keys; the collection filters by them. |
 | `colors` | `{classes: {id: "rrggbb"}, rarities: {id: "rrggbb"}}` | Frame and gem colours. |
 | `fx` | [name] | Written by the build: every effect name and element the cards use (the client can tell what it lacks). |
 | `rules_hash` | 64 hex | Written by the build; `check` recomputes it. |
@@ -212,7 +213,7 @@ All in `rules.json` ([rules.md](rules.md)); their player names in
 
 `locales/<lang>.json` holds every text a player sees ([cards.md](cards.md) §2):
 `cards` (`name`, `text`), `mechanics` (`name`, `tip`), `classes`, `races`,
-`rarities`, `sets`, `ranks` (`"25"` … `"1"`, `"0"` = Legend), `decks`,
+`rarities`, `sets` (a set's name, or `<set>:<rarity>`'s: Classic's `VANILLA:FREE` is "Basic"), `ranks` (`"25"` … `"1"`, `"0"` = Legend), `decks`,
 `missions` (`name`, `intro`, `lines`, `reward_line`), `hints`, `tutorial` (the texts of
 `tutorial.json`, §12), `voice`
 (card id → `{greetings, attack, play, death, …}`), `ui` (the pack's own UI
@@ -226,16 +227,22 @@ valign: "top", dy}`. Without it the client lays text out itself.
 ## 7. Art, sounds, music, voice
 
 - `art/<set>/<card id>.<jpg|png|webp>`, 512 px recommended, ≤ 2 MiB. A card
-  without a picture in the chosen set falls back to the default set, then to the
-  client's procedural art.
+  without a picture in the chosen set takes the picture of the same card id from another
+  installed pack's set of that name (a local one too: the owner's local Classic pack lends its
+  `custom` pictures to every later pack), then from the pack's default set, then from another
+  pack's default set, then the client draws its procedural art. The packs after Naxxramas carry
+  no card pictures of their own: the shared ids (Basic, Classic, …) find theirs this way, and the
+  player may pick any set another installed pack has.
 - `sounds/<set>/<name>`: event sounds by name (Classic: `play_card`, `attack`,
   `damage`, `death`, `hero_power`, `turn_start`, `heal`, `armor`, `equip`,
   `secret`, `freeze`, `shield`, `spell`, `trigger`, `hit_big`, `victory`,
   `defeat`, `click`; the client also plays `draw`, `summon` (a minion lands), `spell_<element>` and
   `hit_<element>` (a spell's cast and impact by its `fx.element`) when the set has them). A card's own
-  sounds: what its `sounds: {play, attack, death, hit}` names, else the set's file `<card id>_<slot>`:
+  sounds: what its `sounds: {play, attack, death, hit, music}` names, else the set's file `<card id>_<slot>`:
   `play` when a minion or weapon comes into play or a spell is cast, `attack` as the attacker leaps
-  (the set's `attack` is the blow when it lands), `death` at its death step, `hit` a spell's impact.
+  (the set's `attack` is the blow when it lands), `death` at its death step, `hit` a spell's impact,
+  `music` (a legendary's play music, Hearthstone's stinger) when it is played from the hand: on the Music bus,
+  the music ducks under it, its voice line plays as well.
   A sound the chosen set lacks comes from the pack's default set.
 - `music/<set>/<name>`: `menu`, `battle_1` … `battle_N` (a shuffled playlist).
 - `voice/<lang>/<card id>_<kind>.<ogg|wav|mp3>`: optional recordings of the voice
@@ -250,8 +257,11 @@ valign: "top", dy}`. Without it the client lays text out itself.
 - Local sets (`tools/pack.py build … --art-set mine=path`, `--sound-set mine=path`) are marked
   `local: true`, local recordings (`--voice path`, a folder of `<lang>/<card id>_<kind>.ogg`) come
   with `voice/LOCAL.md`; they must never be uploaded or sent; the original Blizzard art
-  (`art/original`) is refused by the tool. The owner's local Classic pack takes them from
-  `tools/fetch_2014_art.py` and `tools/fetch_original_sounds.py` (the files stay outside git).
+  (`art/original`) is refused by the tool. An `--art-set`/`--sound-set` id given twice takes both folders (a later
+  one wins), `--voice` may come several times. The owner's local packs take them from
+  `tools/fetch_set_assets.py --set <classic|naxx|gvg|…>` (pictures as 256 px WebP, sounds and voice mono at a low bit
+  rate, a legendary's play music) into `~/ClassicHS-local/<set>/`, and `--build` makes
+  `~/ClassicHS-local/<set>-custom-art.cardpack` (the files stay outside git).
 
 ## 8. Decks and missions
 
@@ -317,7 +327,26 @@ A pack source is a folder with the pack's own files (`manifest.json`,
 | `translate` | `from` (folder of `<lang>.json`: English → text), `sections` | Fills those sections of other languages from the default language's strings. |
 | `rank_names` | | A rank whose emblem is a card is named after that card. |
 
-`recipe.json` and `*.patch.json` are not copied into the pack.
+`recipe.json`, `*.patch.json` and `*.texts.json` are not copied into the pack.
+
+**A pack built on another** (Naxxramas on Classic, GvG on Naxxramas, … to any depth): `recipe.json` names its
+`base`, the base pack's source folder relative to this one. The build then runs every step of the base's recipe
+(and of its base, recursively), except the base's `copy` steps whose `to` matches a glob of `skip`
+(`"skip": ["art/*"]`: no pictures; Naxxramas skips Classic's `layout`). The pack's own `hsjson` step adds to the
+base's one: its `from` data, its `patch` and its `texts` come after the base's, in order (a later patch wins for a
+field it names); its other steps follow the base's. The base's own files `scripts/**/*.lua` and `ui/fonts/*` and
+its own texts (the sections `classes`, `races`, `rarities`, `mechanics`, `ranks`, `cards`, `sets` of its
+`locales/<lang>.json`) come along under the pack's own (the pack's file or text wins, then the nearer base's). So a
+new set needs only its folder: `recipe.json` (`base`, `skip`, one `hsjson` step with its data from
+`tools/extract_cards.py --set <name>` and its `*.texts.json` of the release day), `cards.patch.json`, `scripts/`,
+`decks/`, `locales/` (its sets' names, its texts), `manifest.json`, `rules.json`, `ui/` (its backgrounds:
+`tools/pack_backgrounds.py`). Example: packs/naxx/recipe.json.
+
+`"bundle_in_client": false` in `recipe.json`: the game's builds (web, desktop, Android) do not carry the pack.
+`tools/build_packs.sh` writes it to `build/packs/` instead of `packs/`; the release has it as a file
+(`ClassicHS-<version>-<pack>.cardpack`) and the server bundles it (`server/Dockerfile`, `tools/deploy_server.sh`):
+players download it from a server or install the file. The expansions after Naxxramas are such packs
+(`tools/pack.py bundled <src>` says yes or no).
 
 ```sh
 tools/pack.py build packs/classic -o build/packs/classic.cardpack [--art-set mine=art/custom]

@@ -46,6 +46,8 @@ class Ent:
 	var eot_tags := []
 	var aura := {"atk": 0, "hp": 0, "tags": {}, "src": {}}
 	var silenced := false
+	## A card in the hand whose condition holds now (the engine's `glow`: Combo on, a Dragon held…): it glows yellow.
+	var glow := false
 	var _atk := 0
 	var _max_health := 0
 	var _cost := 0
@@ -117,6 +119,7 @@ class Ent:
 		_atk = int(d.get("atk", 0))
 		_max_health = int(d.get("max_health", 0))
 		_cost = int(d.get("cost", card().get("cost", 0)))
+		glow = bool(d.get("glow", false))
 
 
 static func renamed(d: Dictionary, names: Dictionary) -> Dictionary:

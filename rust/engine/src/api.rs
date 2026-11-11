@@ -401,6 +401,9 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
         s["health"] = json!(e.health());
         s["max_health"] = json!(e.max_health());
         s["cost"] = json!(g.cost_in(e.id, &auras));
+        if g.glows(e.id) {
+            s["glow"] = json!(true); // its condition holds now: the client lights it yellow
+        }
         let src: Map<String, Value> = e.aura.src.iter().map(|(k, v)| (k.to_string(), json!(v))).collect();
         s["aura"] = json!({"atk": e.aura.atk, "hp": e.aura.hp, "tags": e.aura.tags.to_value(), "src": src});
         ents.insert(e.id.to_string(), s);

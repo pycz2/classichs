@@ -3,6 +3,8 @@ extends EntityView
 ## A card face (or back). Stats can show current values from the game.
 
 const SIZE := Vector2(120, 170)
+## The tint of a set mark (Packs.set_mark) behind the card text.
+const SET_MARK := Color(0.42, 0.29, 0.12, 0.2)
 
 var card_id := ""
 var face_up := true
@@ -99,6 +101,9 @@ func _draw() -> void:
 		Frames.crest(self, Vector2(60, 5) * k, 104 * k)  # along the card's top edge
 	# text box (parchment) and the name banner across it
 	draw_style_box(Palette.raw_box(Color("efe0bd"), int(6 * k), Color("8a6d3b"), int(2 * k)), Rect2(Vector2(11, 100) * k, Vector2(98, 56) * k))
+	var mark := Packs.set_mark(CardText.set_key(card_id))
+	if mark:  # the card's set, faint behind its text (the packs after Classic)
+		draw_texture_rect(mark, Rect2(Vector2(42, 111) * k, Vector2(36, 36) * k), false, SET_MARK)
 	var bend := 4.0 * k if type == "MINION" else 0.0
 	var banner := PackedVector2Array([Vector2(4, 86) * k, Vector2(60 * k, 86 * k - bend), Vector2(116, 86) * k, Vector2(116, 102) * k, Vector2(60 * k, 102 * k - bend), Vector2(4, 102) * k])
 	draw_colored_polygon(banner, frame.darkened(0.15))

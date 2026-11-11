@@ -245,5 +245,5 @@ jobs:
             - macOS: unzip ClassicHS-*-macos.zip; the app is not notarized: right-click → Open the first time
             - Android: ClassicHS-*-android-arm64.apk (allow installing from this source)
             - Replay player of the server's admin panel: ClassicHS-*-replay-viewer.zip (unzip into the folder of --replay-dir)
-            - Game server: ClassicHS-server-* for Linux, Windows, macOS (see server/README.md); put ClassicHS-*-classic.cardpack, ClassicHS-*-neon.cardpack and ClassicHS-*-naxx.cardpack into a folder and pass it as --packs-dir
+            - Game server: ClassicHS-server-* for Linux, Windows, macOS (see server/README.md); put the ClassicHS-*-<pack>.cardpack files (classic, neon, naxx and the expansion packs, which the game's builds do not carry: install them from a server or as a file) into a folder and pass it as --packs-dir
           files: dist/*

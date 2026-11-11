@@ -1410,12 +1410,11 @@ func _own_glows() -> void:
 					_views[id].set_glow(Palette.TARGET)
 		return
 	var plan := _plan()
-	var combo: bool = plan.players[viewer()].cards_played_this_turn > 0  # a card played this turn
 	for a in legal:
 		var id: int = {"play": a.get("entity", -1), "attack": a.get("attacker", -1),
 			"hero_power": g.players[viewer()].hero_power.id}.get(a.type, -1)
-		if _views.has(id):
-			var lit: bool = a.type == "play" and combo and plan.ent(id) != null and plan.ent(id).card().get("mechanics", []).has("COMBO")
+		if _views.has(id):  # a card whose condition holds now (the engine's glow: Combo on…) yellow, else green
+			var lit: bool = a.type == "play" and plan.ent(id) != null and plan.ent(id).glow
 			_views[id].set_glow(Palette.COMBO if lit else Palette.PLAYABLE)
 
 
@@ -2292,6 +2291,7 @@ func _step_sounds(st: Dictionary) -> void:
 		if not heard.has(sfx):
 			heard[sfx] = true
 			Sound.play(sfx)
+		Sound.music_for(ev, g)  # a legendary's play music
 		var line := Sound.line_for(ev, g)
 		if not line.is_empty():
 			Sound.say(line[0], line[1])
@@ -2984,6 +2984,7 @@ func _effects_now(events: Array) -> void:
 		if not heard.has(sfx):  # one copy of each sound per action
 			heard[sfx] = true
 			Sound.play(sfx)
+		Sound.music_for(ev, g)  # a legendary's play music
 		var line := Sound.line_for(ev, g)
 		if ev.type == "attack" and g.ent(ev.attacker):
 			Sound.attack_start(g.ent(ev.attacker).card_id)

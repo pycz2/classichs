@@ -587,6 +587,11 @@ func check() -> void:
 	for key in ["card_back", "logo"]:
 		if man.get(key) and not files.has(man[key]):
 			_at(ERROR, "%s %s is not in the pack" % [key, man[key]], "manifest.json", key)
+	var marks = man.get("set_marks", {})
+	for key in marks if marks is Dictionary else {}:
+		var icon = marks[key].get("icon") if marks[key] is Dictionary else null
+		if icon and not files.has(icon):
+			_at(ERROR, "set_marks.%s icon %s is not in the pack" % [key, icon], "manifest.json", "set_marks")
 	if files.has("ui/theme.json"):
 		var theme = _json("ui/theme.json", "theme.schema.json")
 		if theme is Dictionary:

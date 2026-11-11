@@ -1,4 +1,5 @@
 {
+  "sets": {"VANILLA": "Klassisch", "VANILLA:FREE": "Basis"},
   "classes": {
     "DRUID": "Druide",
     "HUNTER": "Jäger",

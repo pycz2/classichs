@@ -27,6 +27,10 @@ var _next := 0
 var _streams := {}
 ## The player of spoken lines: one at a time, a new line cuts the last.
 var _voice := AudioStreamPlayer.new()
+## The player of a card's play music (a legendary's stinger); the music ducks to DUCK_DB under it.
+var _stinger := AudioStreamPlayer.new()
+const DUCK_DB := -14.0
+var _ducking: Tween
 ## The recording said last and the last sounds played, oldest first (tests, the driver).
 var said := ""
 var heard: Array[String] = []
@@ -40,6 +44,9 @@ func _ready() -> void:
 	add_child(_music)
 	_voice.bus = "SFX"
 	add_child(_voice)
+	_stinger.bus = "Music"
+	_stinger.finished.connect(func(): _duck(0.0, 0.8))
+	add_child(_stinger)
 	for i in POOL:
 		var p := AudioStreamPlayer.new()
 		p.bus = "SFX"
@@ -212,6 +219,37 @@ static func _first(names: Array) -> String:
 		if n != "":
 			return n
 	return ""
+
+
+## A card's play music (a legendary's stinger: its `sounds.music`, else the set's `<card id>_music`) when
+## it is played from the hand ("play" event), over the music, which ducks meanwhile. True when it plays.
+static func music_for(ev: Dictionary, g: GameView) -> bool:
+	if ev.get("type") != "play":
+		return false
+	var e := g.ent(int(ev.get("entity", -1)))
+	return card_music(e.card_id if e else str(ev.get("card", "")))
+
+
+static func card_music(card_id: String) -> bool:
+	if instance == null:
+		return false
+	var file := card_sound(card_id, "music")
+	var s := instance._stream(file) if file != "" else null
+	if s == null:
+		return false
+	instance._stinger.stream = s
+	instance._stinger.play()
+	instance._duck(DUCK_DB, 0.25)
+	instance.heard.append(file)
+	return true
+
+
+## Turns the music down (a stinger plays) or back up (0 dB), over secs.
+func _duck(db: float, secs: float) -> void:
+	if _ducking:
+		_ducking.kill()
+	_ducking = create_tween()
+	_ducking.tween_property(_music, "volume_db", db, secs)
 
 
 ## The attacker's own sound and line as it leaps (the impact is sound_for's "attack").

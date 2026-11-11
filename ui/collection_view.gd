@@ -26,6 +26,8 @@ var query := ""
 var rarity_filter := ""
 ## "" = any type; else MINION, SPELL or WEAPON.
 var type_filter := ""
+## "" = every set; else a set as players know it (CardText.set_key: VANILLA:FREE is Basic).
+var set_filter := ""
 ## Only these cards (a Dictionary with the ids as keys); null = all.
 var only: Variant = null
 ## Debug tools: tokens and other uncollectible cards are listed too (not heroes or hero powers).
@@ -84,6 +86,20 @@ func _ready() -> void:
 		page = 0
 		_fill())
 	row1.add_child(search)
+	var sets := set_keys()
+	if sets.size() > 1:  # the set filter (Basic, Classic, Curse of Naxxramas, …)
+		var pick := OptionButton.new()
+		pick.name = "SetFilter"
+		pick.custom_minimum_size = Vector2(190, 40)
+		pick.focus_mode = Control.FOCUS_NONE
+		pick.add_item(tr("All sets"))
+		for k in sets:
+			pick.add_item(CardText.term("sets", k))
+		pick.item_selected.connect(func(i):
+			set_filter = "" if i == 0 else str(sets[i - 1])
+			page = 0
+			_fill())
+		row1.add_child(pick)
 	for t in TYPES:  # a second click clears
 		var b := chip("Type" + t[0], Vector2(120, 40))
 		b.text = tr(t[1])
@@ -192,6 +208,23 @@ func set_deck(d: Deck) -> void:
 	_fill()
 
 
+## The sets of the pack's collectible cards that the pack names (locales `sets`), in the order of its
+## rules.json sets, a rarity's part first (Basic before Classic).
+static func set_keys() -> Array:
+	var order: Array = Packs.active().rules().get("sets", [])
+	var keys := {}
+	for id in CardDb.collectible():
+		var k := CardText.set_key(id)
+		if not keys.has(k) and CardText.term("sets", k) != "":
+			keys[k] = true
+	var out := keys.keys()
+	out.sort_custom(func(a: String, b: String):
+		var ia := order.find(a.get_slice(":", 0))
+		var ib := order.find(b.get_slice(":", 0))
+		return ia < ib or (ia == ib and a.length() > b.length()))
+	return out
+
+
 func tabs() -> Array:
 	return [deck.card_class(), "NEUTRAL"] if deck else Decks.classes_and_neutral()
 
@@ -218,6 +251,8 @@ func filtered() -> Array:
 		if rarity_filter != "" and c.get("rarity", "") != rarity_filter:
 			continue
 		if type_filter != "" and c.get("type", "") != type_filter:
+			continue
+		if set_filter != "" and CardText.set_key(id) != set_filter:
 			continue
 		if q != "" and not CardText.name(id).to_lower().contains(q) and not CardText.text(id).to_lower().contains(q):
 			continue

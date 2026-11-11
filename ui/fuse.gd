@@ -1,7 +1,8 @@
 class_name Fuse
 extends Control
 ## The burning rope of the turn timer: a twisted cord across the table that burns
-## down from the right, a glowing ember at its end throwing sparks and smoke.
+## from its far (left) end towards the End Turn button, as in Hearthstone, a glowing
+## ember at its burning end throwing sparks and smoke.
 ## left: 1.0 = whole, 0.0 = burnt out.
 
 const FROM := Vector2(170, 322)
@@ -24,7 +25,7 @@ func _init() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_sparks.amount = 28
 	_sparks.lifetime = 0.55
-	_sparks.direction = Vector2(0.3, -1)
+	_sparks.direction = Vector2(-0.3, -1)  # thrown back over the burnt part
 	_sparks.spread = 70.0
 	_sparks.initial_velocity_min = 40.0
 	_sparks.initial_velocity_max = 110.0
@@ -38,7 +39,7 @@ func _init() -> void:
 	add_child(_sparks)
 	_smoke.amount = 14
 	_smoke.lifetime = 1.4
-	_smoke.direction = Vector2(-0.2, -1)
+	_smoke.direction = Vector2(0.2, -1)
 	_smoke.spread = 20.0
 	_smoke.initial_velocity_min = 12.0
 	_smoke.initial_velocity_max = 24.0
@@ -52,8 +53,9 @@ func _init() -> void:
 	add_child(_smoke)
 
 
+## The ember: it walks from the cord's far end towards the End Turn button (on the right), as in Hearthstone.
 func _tip() -> Vector2:
-	return FROM + Vector2(LENGTH * left, 0)
+	return FROM + Vector2(LENGTH * (1.0 - left), 0)
 
 
 func _process(delta: float) -> void:
@@ -68,17 +70,19 @@ func _draw() -> void:
 	var tip := _tip()
 	if left <= 0.0:
 		return
-	# the cord: dark edge, hemp colour, and diagonal twists along it
-	draw_line(FROM, tip, Color("2a1d10"), 13.0)
-	draw_line(FROM, tip, Color("b08850"), 9.0)
-	var x := FROM.x
-	while x < tip.x - 3.0:
+	# the cord (what is left: from the ember to the end at the End Turn button): dark edge, hemp colour,
+	# and diagonal twists along it (fixed to the table, so they do not crawl as it burns)
+	var end := FROM + Vector2(LENGTH, 0)
+	draw_line(tip, end, Color("2a1d10"), 13.0)
+	draw_line(tip, end, Color("b08850"), 9.0)
+	var x := end.x - 9.0
+	while x > tip.x + 3.0:
 		draw_line(Vector2(x, FROM.y + 4), Vector2(x + 6.0, FROM.y - 4), Color("7a5a30"), 2.5, true)
 		draw_line(Vector2(x + 1.5, FROM.y + 3), Vector2(x + 4.5, FROM.y - 2), Color("e2c08a", 0.7), 1.2, true)
-		x += 9.0
+		x -= 9.0
 	# charred end and the ember
-	draw_line(tip - Vector2(18, 0), tip, Color("1a1208"), 10.0)
-	draw_line(tip - Vector2(8, 0), tip, Color(0.9, 0.3, 0.05, 0.8), 5.0)
+	draw_line(tip + Vector2(18, 0), tip, Color("1a1208"), 10.0)
+	draw_line(tip + Vector2(8, 0), tip, Color(0.9, 0.3, 0.05, 0.8), 5.0)
 	var flick := 0.75 + 0.25 * sin(_t * 23.0) * sin(_t * 7.0)
 	draw_circle(tip, 22.0 * flick, Color(1.0, 0.45, 0.05, 0.16))
 	draw_circle(tip, 12.0 * flick, Color(1.0, 0.55, 0.1, 0.45))

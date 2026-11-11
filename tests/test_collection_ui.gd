@@ -402,3 +402,38 @@ func test_new_deck_from_scratch_or_a_template() -> void:
 	v.free()
 	eq(DeckStore.load_all().size(), 2, "saved")
 	_store_restore()
+
+
+## The collection filters by set (the pack's set names: Classic's Basic and Classic, Naxxramas's
+## too), and the packs after Classic mark each card with its set.
+func test_set_filter_and_set_marks() -> void:
+	var c := CollectionView.new()
+	root().add_child(c)
+	var pick := c.find_child("SetFilter", true, false) as OptionButton
+	check(pick != null, "a set filter")
+	eq(range(pick.item_count).map(func(i): return pick.get_item_text(i)), ["All sets", "Basic", "Classic"], "Classic's sets")
+	c.set_tab("NEUTRAL")
+	pick.item_selected.emit(1)
+	check(not c.shown_cards().is_empty() and c.shown_cards().all(func(id): return CardDb.card(id).get("rarity") == "FREE"), "Basic: the free cards")
+	pick.item_selected.emit(2)
+	check(c.shown_cards().all(func(id): return CardDb.card(id).get("rarity") != "FREE"), "Classic: the others")
+	eq(Packs.set_mark(CardText.set_key("VAN_CS2_182")), null, "Classic marks no card")
+	c.free()
+	var naxx: Pack = Packs.all().filter(func(p): return p.id() == "naxx-2014")[0]
+	Packs.set_active(naxx)
+	c = CollectionView.new()
+	root().add_child(c)
+	pick = c.find_child("SetFilter", true, false) as OptionButton
+	eq(range(pick.item_count).map(func(i): return pick.get_item_text(i)), ["All sets", "Basic", "Classic", "Curse of Naxxramas"], "Naxxramas's sets")
+	c.set_tab("NEUTRAL")
+	pick.item_selected.emit(3)
+	check(not c.shown_cards().is_empty() and c.shown_cards().all(func(id: String): return id.begins_with("FP1_")), "its own cards")
+	eq(CardText.set_key("FP1_001"), "NAXX", "a Naxxramas card")
+	eq(CardText.set_key("VAN_CS2_182"), "VANILLA:FREE", "a Basic card")
+	check(Packs.set_mark("NAXX") != null and Packs.set_mark("VANILLA:FREE") != null, "marks of every set")
+	var tips := KeywordTips.make("FP1_001")
+	var box := tips.find_child("SetName", true, false) as Label
+	eq(box.text if box else "", "Curse of Naxxramas", "the big card names its set")
+	tips.free()
+	c.free()
+	Packs.set_active(Packs.all().filter(func(p): return p.id() == Packs.CLASSIC)[0])

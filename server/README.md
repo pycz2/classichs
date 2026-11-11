@@ -89,11 +89,12 @@ the new key at start; one whose file is gone or no longer valid is turned off (`
 ### Docker
 
 `docker-compose.yml` runs the server (built by `Dockerfile`: a Rust build stage and a
-distroless Debian 13 runtime, user 65532, no shell; it bundles `packs/*.cardpack`, so build
+distroless Debian 13 runtime, user 65532, no shell; it bundles `packs/*.cardpack` and `build/packs/*.cardpack`
+(the expansion packs the game's builds do not carry), so build
 the packs first) and [SeaweedFS](https://github.com/seaweedfs/seaweedfs) as the S3 store:
 
 ```sh
-tools/build_packs.sh                  # packs/classic.cardpack, packs/neon.cardpack, packs/naxx.cardpack
+tools/build_packs.sh                  # packs/classic.cardpack, neon, naxx; build/packs/<expansion>.cardpack
 cd server
 docker compose up -d --build          # game: ws://localhost:7377, admin: http://localhost:7377/admin
 docker compose exec server classichs-server admin root --db /data/classichs.db   # the superuser
@@ -103,7 +104,7 @@ docker compose down                   # keeps the data (volumes server-data, s3-
 
 The build context is the repository root (the engine is `../rust/engine`);
 `Dockerfile.dockerignore` sends only `data/cards.json`, `docs/packs/schema/keywords.json`,
-`packs/classic` (source), `packs/*.cardpack`, `rust/engine`, `rust/script` and `server`.
+`packs/classic` (source), `packs/*.cardpack`, `build/packs`, `rust/engine`, `rust/script` and `server`.
 The image has Neonfall (the default game) and Classic in `/packs`; more: mount files there
 (see the compose file).
 Set `S3_ACCESS_KEY` and `S3_SECRET_KEY` (an `.env` file next to the compose file) for
