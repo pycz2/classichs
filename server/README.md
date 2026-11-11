@@ -558,7 +558,26 @@ human `text` (`server` for a database error).
 - Places: round robin, Swiss, Scheveningen by match points, then game wins − losses, then
   (Swiss) Buchholz; elimination by the stage one went out at (the semi-final losers share 3rd).
   Equal ones share a place.
-- `t_spectate {match}`: the creator or an eliminated entrant, when `spectators` is on, watches
+- Tournament bots (`src/tournament/bots.rs`): a pool of accounts `TBot_<Level>_1..2` (easy,
+  medium, hard, superhard: 8, made when first needed; the names can't be registered). They never
+  queue and are not the Bots page's or the auto-bots: they play only in tournaments. The creator,
+  while joining is open (until T−1), adds them: `t_add_bots {id, level, count}` (up to
+  `max_players`; fewer free than asked: `error tournament` "Only N bots of this level are free
+  now") and `t_remove_bot {id, name}`; both answer with `tournament`. A bot is busy while it is
+  an entrant of a tournament that is not over (open … running), free again when it is finished,
+  cancelled or closed. Its decks: the tournament's count, of different classes, at random from
+  the game's bot decks (Classic's library, a pack's templates), else starter decks; copied as a
+  player's (hidden as a player's). Bots count toward `min_players`. In full: entrants carry
+  `bot: true`; `can.add_bots`, `can.remove_bots`, and for the creator while joining is open
+  `bots_free: {easy, medium, hard, superhard}`. The scheduler does a bot's match steps at once
+  (accept; ban: Easy a random deck, the others the opponent's deck with the best mean draft score;
+  pick: a random usable deck); a connection of its own in the server (`bots::runtime::tournament`,
+  started for every running tournament, also after a restart) plays its games at its level and
+  never concedes. A match with a bot starts when a slot is free: games with a bot at once = half
+  the CPUs, at least 2; the bots think in their own places (half the CPUs, at least 1;
+  `CLASSICHS_TOUR_BOT_CPUS` sets the CPU count used); a bot never loses by a deadline (it waits
+  for its slot and connection), its human opponent still has the usual 60 s steps.
+- `t_spectate {match}`: the creator (always) or an eliminated entrant, when `spectators` is on, watches
   the match's game with both hands open (the spectator messages). Tournament games' replays:
   everyone when `deck_reveal` is on or the tournament is over, else its two players and the
   creator.

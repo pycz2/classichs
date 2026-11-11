@@ -67,6 +67,10 @@ var _status: Label
 var _clocks: Array = []  # [Label, start ms, prefix]: counting down
 var _tick := 0.0
 var _scroll_keep := {}  # a rebuilt scroll's place: name -> Vector2
+## The Add bots dialog's choice: the level and how many.
+const BOT_LEVELS := ["easy", "medium", "hard", "superhard"]
+var bot_level := "easy"
+var bot_count := 1
 
 
 func _ready() -> void:
@@ -605,10 +609,13 @@ func _entry_card(parent: Control) -> void:
 ## The creator's tools: Edit, Reschedule (later only), Cancel (pressed twice), with when they lock.
 func _creator_card(parent: Control) -> void:
 	var can: Dictionary = page.get("can", {}) if page.get("can") is Dictionary else {}
-	if not (can.get("edit", false) or can.get("reschedule", false) or can.get("cancel", false)):
+	if not (can.get("edit", false) or can.get("reschedule", false) or can.get("cancel", false) or can.get("add_bots", false)):
 		return
 	var v := _section(parent, tr("Your tournament"))
 	v.get_parent().name = "CreatorCard"
+	if can.get("add_bots", false):
+		var ab := _btn(tr("Add bots"), "AddBots", show_add_bots, 590, 56, v)
+		ab.add_theme_font_size_override("font_size", 22)
 	var acts := HBoxContainer.new()
 	acts.add_theme_constant_override("separation", 10)
 	v.add_child(acts)
@@ -667,6 +674,13 @@ func _players(at: Vector2, sz: Vector2) -> void:
 		var m := TournamentBracket.medal(place)
 		m.position = Vector2(8, 12)
 		row.add_child(m)
+		var can: Dictionary = t.get("can", {}) if t.get("can") is Dictionary else {}
+		if can.get("remove_bots", false) and e.get("bot", false) == true:
+			var who := str(e.get("name", ""))
+			var rm := _btn(tr("Remove"), "RemoveBot_" + who.validate_node_name(), func():
+				link.send({"t": "t_remove_bot", "id": wire_id(page_id), "name": who})
+				say(tr("Sent…")), 130, 48, row)
+			rm.position = Vector2(sz.x - 14 - 140, 8)
 
 
 func _build_bracket_tab() -> void:
@@ -771,6 +785,68 @@ func show_match(m: Dictionary) -> void:
 	v.add_child(spacer)
 	var c := _btn(tr("Close"), "Close", close_overlay, 200, 52, v)
 	c.size_flags_horizontal = Control.SIZE_SHRINK_END
+
+
+## The creator adds bots (`t_add_bots`): a level, with how many of it are free now (a bot in a
+## tournament that is not over is busy), and how many, up to the free ones and the places left.
+func show_add_bots() -> void:
+	var free: Dictionary = page.get("bots_free", {}) if page.get("bots_free") is Dictionary else {}
+	var ents: Array = page.get("entrants", []) if page.get("entrants") is Array else []
+	var room := int(opt(page, "max_players", 0)) - ents.size()
+	if TournamentBracket.n(free.get(bot_level)) == 0:
+		for l in BOT_LEVELS:
+			if TournamentBracket.n(free.get(l)) > 0:
+				bot_level = l
+				break
+	var most := mini(TournamentBracket.n(free.get(bot_level)), room)
+	bot_count = clampi(bot_count, 1, maxi(most, 1))
+	var v := _dialog(tr("Add bots"), Vector2(760, 500), "AddBotsDialog")
+	_wrap(_lbl(tr("Bots play their own matches at their level: they bring decks of this game, ban, pick and play every game to the end."), 17, Palette.MUTED, v), 730)
+	_lbl(tr("Level"), 20, Palette.TEXT, v)
+	var row := HFlowContainer.new()
+	row.add_theme_constant_override("h_separation", 8)
+	row.add_theme_constant_override("v_separation", 8)
+	v.add_child(row)
+	var names := {"easy": tr("Easy"), "medium": tr("Medium"), "hard": tr("Hard"), "superhard": tr("Super hard")}
+	for l in BOT_LEVELS:
+		var n := TournamentBracket.n(free.get(l))
+		var b := _btn("%s\n%s" % [names[l], tr("%d free") % n], "BotLevel_" + l, func():
+			bot_level = l
+			show_add_bots(), 176, 70, row)
+		mark(b, l == bot_level)
+		b.disabled = n == 0
+	_lbl(tr("How many"), 20, Palette.TEXT, v)
+	var cnt := HBoxContainer.new()
+	cnt.add_theme_constant_override("separation", 6)
+	v.add_child(cnt)
+	var minus := _btn("−", "BotCount_minus", func():
+		bot_count -= 1
+		show_add_bots(), 64, 56, cnt)
+	minus.disabled = bot_count <= 1
+	var val := _lbl(str(bot_count), 26, Palette.ATTACK, cnt)
+	val.name = "BotCount"
+	val.custom_minimum_size = Vector2(90, 56)
+	val.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	val.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var plus := _btn("+", "BotCount_plus", func():
+		bot_count += 1
+		show_add_bots(), 64, 56, cnt)
+	plus.disabled = bot_count >= most
+	if most <= 0:
+		_lbl(tr("No bots are free now: they come back when their tournaments end.") if room > 0 else tr("This tournament is full"), 17, Palette.DANGER, v)
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	v.add_child(spacer)
+	var acts := HBoxContainer.new()
+	acts.add_theme_constant_override("separation", 10)
+	acts.alignment = BoxContainer.ALIGNMENT_END
+	v.add_child(acts)
+	_btn(tr("Close"), "Close", close_overlay, 200, 56, acts)
+	var go := _btn(tr("Add"), "AddBotsGo", func():
+		link.send({"t": "t_add_bots", "id": wire_id(page_id), "level": bot_level, "count": bot_count})
+		say(tr("Sent…"))
+		close_overlay(), 260, 56, acts)
+	go.disabled = most <= 0
 
 
 ## Asks the server for a game's replay (part B's `replay {game}`); replay_ready brings it.
@@ -1290,8 +1366,11 @@ func _on_message(msg: Dictionary) -> void:
 					say("")
 				if tab == "page":
 					var keep := _overlay != null and _overlay.name in ["DeckPicker", "DeckDialog", "DecksOf"]
+					var bots := _overlay != null and _overlay.name == "AddBotsDialog"
 					if not keep:
 						_build_page()
+					if bots and page.get("can", {}) is Dictionary and page.can.get("add_bots", false):
+						show_add_bots()  # (the free counts of now)
 		"error":
 			if msg.get("code") == "tournament" or tab == "create" or tab == "page":
 				_creating = false

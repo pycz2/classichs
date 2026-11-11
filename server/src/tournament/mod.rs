@@ -5,6 +5,7 @@
 //! `game::start_with` (mode `tournament`, no rating change). Everything is in the database, so
 //! a restart carries on. Pairings and places: `format`. Protocol: server/README.md, "Tournaments".
 
+pub mod bots;
 pub mod format;
 
 use crate::entity::game as played;
@@ -48,11 +49,39 @@ pub struct State {
     pub wake: tokio::sync::Notify,
     /// This process: a match whose game was started by another one lost it in a restart.
     pub boot: i64,
+    /// Tournament bots a level (`bots`; tests take more).
+    pub bot_pool: std::sync::atomic::AtomicUsize,
+    /// The pool's accounts, once made.
+    pub pool: std::sync::Mutex<Vec<(i64, String, crate::bots::brain::Level)>>,
+    /// The tournament bots' connections playing now (by account).
+    pub bot_tasks: std::sync::Mutex<HashMap<i64, tokio::task::AbortHandle>>,
+    /// Games with a bot at once (half the CPUs, at least 2): a bot match waits for a slot.
+    pub slots: std::sync::Arc<tokio::sync::Semaphore>,
+    /// The slots of the bot games playing now (by game; freed when it ends).
+    pub held: std::sync::Mutex<HashMap<String, tokio::sync::OwnedSemaphorePermit>>,
+    /// The tournament bots' places to think (half the CPUs, at least 1).
+    pub think: std::sync::Arc<crate::bots::think::Think>,
 }
 
 impl Default for State {
     fn default() -> State {
-        State { lock: Default::default(), watchers: Default::default(), wake: Default::default(), boot: rand::thread_rng().gen_range(1..i64::MAX) }
+        // the CPUs bot games may count on; CLASSICHS_TOUR_BOT_CPUS tells another (a host shared with more)
+        let cpus = std::env::var("CLASSICHS_TOUR_BOT_CPUS")
+            .ok()
+            .and_then(|v| v.parse::<usize>().ok())
+            .unwrap_or_else(|| std::thread::available_parallelism().map_or(1, |n| n.get()));
+        State {
+            lock: Default::default(),
+            watchers: Default::default(),
+            wake: Default::default(),
+            boot: rand::thread_rng().gen_range(1..i64::MAX),
+            bot_pool: 2.into(),
+            pool: Default::default(),
+            bot_tasks: Default::default(),
+            slots: std::sync::Arc::new(tokio::sync::Semaphore::new((cpus / 2).max(2))),
+            held: Default::default(),
+            think: crate::bots::think::Think::new((cpus / 2).max(1)),
+        }
     }
 }
 
@@ -168,6 +197,8 @@ struct T {
     t: tour::Model,
     es: Vec<entrant::Model>,
     ms: Vec<tmatch::Model>,
+    /// The entrants that are tournament bots, with their level.
+    bots: HashMap<i64, crate::bots::brain::Level>,
 }
 
 impl T {
@@ -225,7 +256,9 @@ async fn load(c: &impl ConnectionTrait, id: i64) -> Res<T> {
     let t = tour::Entity::find_by_id(id).one(c).await?.ok_or_else(|| no("No such tournament"))?;
     let es = entrant::Entity::find().filter(entrant::Column::Tournament.eq(id)).order_by_asc(entrant::Column::Joined).all(c).await?;
     let ms = tmatch::Entity::find().filter(tmatch::Column::Tournament.eq(id)).order_by_asc(tmatch::Column::N).all(c).await?;
-    Ok(T { t, es, ms })
+    let ids: Vec<i64> = es.iter().map(|e| e.account).collect();
+    let bots = crate::ws::accounts_in_order(c, &ids).await?.into_iter().filter_map(|a| Some((a.id, bots::level_of(&a.name)?))).collect();
+    Ok(T { t, es, ms, bots })
 }
 
 /// Writes what changed since `orig`.
@@ -286,7 +319,7 @@ async fn full_json(app: &AppRef, t: &T, viewer: Option<i64>) -> Res<Value> {
         .map(|e| {
             let s = st.get(&e.account).cloned().unwrap_or_default();
             let mut v = json!({"name": name(Some(e.account)), "seed": e.seed, "team": e.team, "eliminated": t.eliminated(e.account, &st, &outs),
-                               "place": e.place, "points": s.points, "wins": s.wins, "losses": s.losses, "buchholz": s.buchholz});
+                               "bot": t.bots.contains_key(&e.account), "place": e.place, "points": s.points, "wins": s.wins, "losses": s.losses, "buchholz": s.buchholz});
             if viewer.is_none_or(|me| me == e.account) || revealed {
                 v["decks"] = serde_json::from_str(&e.decks).unwrap_or(json!([]));
             }
@@ -312,9 +345,13 @@ async fn full_json(app: &AppRef, t: &T, viewer: Option<i64>) -> Res<Value> {
     let can = json!({
         "edit": creator && open, "reschedule": creator && open, "cancel": creator && ACTIVE.contains(&t.t.status.as_str()),
         "join": !mine && joinable && (t.es.len() as i64) < t.t.max_players, "leave": mine && joinable, "decks": mine && open,
-        "spectate": may_spectate(t, me, &st, &outs),
+        "spectate": may_spectate(t, me, &st, &outs), "add_bots": creator && joinable && (t.es.len() as i64) < t.t.max_players,
+        "remove_bots": creator && joinable,
     });
     let mut v = summary(&t.t, t.es.len(), mine, &name(Some(t.t.creator)).unwrap_or_default(), &pack_name(app, &t.t.pack).await);
+    if creator && joinable {
+        v["bots_free"] = bots::free_json(app).await?;
+    }
     let extra = json!({
         "options": serde_json::from_str::<Value>(&t.t.options).unwrap_or(json!({})), "bans": t.t.bans, "min_players": t.t.min_players,
         "deck_reveal": t.t.deck_reveal, "spectators": t.t.spectators, "reason": t.t.reason, "created": t.t.created, "ended": t.t.ended,
@@ -330,8 +367,9 @@ async fn full_json(app: &AppRef, t: &T, viewer: Option<i64>) -> Res<Value> {
     Ok(v)
 }
 
+/// The creator always; an eliminated entrant when `spectators` is on.
 fn may_spectate(t: &T, me: i64, st: &HashMap<i64, format::Stand>, outs: &HashMap<i64, i64>) -> bool {
-    t.t.spectators && t.t.status == "running" && (me == t.t.creator || (t.entrant(me).is_some() && t.eliminated(me, st, outs)))
+    t.t.status == "running" && (me == t.t.creator || (t.t.spectators && t.entrant(me).is_some() && t.eliminated(me, st, outs)))
 }
 
 /// `t_match` for one side of a match.
@@ -424,6 +462,10 @@ pub async fn tick(app: &AppRef) {
             tracing::error!("tournament {id}: {e}");
         }
     }
+    // (a slot whose game ended before it was kept)
+    let live: HashSet<String> = app.hub().games.keys().cloned().collect();
+    app.tour.held.lock().unwrap_or_else(|e| e.into_inner()).retain(|g, _| live.contains(g));
+    bots::supervise(app).await;
 }
 
 /// After a change (or none: a tick): the lifecycle and the matches move on, the changes are
@@ -563,6 +605,7 @@ async fn progress(app: &AppRef, t: &mut T, now: i64, changed: &mut HashSet<i64>)
         let mut moved = false;
         for i in 0..t.ms.len() {
             let before = t.ms[i].clone();
+            bots::steps(t, i, now);
             step(app, t, i, now).await?;
             if t.ms[i] != before {
                 moved = true;
@@ -755,15 +798,27 @@ async fn start(app: &AppRef, t: &mut T, i: usize, now: i64) -> Res<()> {
     let wins = wins_needed(t.t.best_of);
     let m = t.ms[i].clone();
     let (Some(a), Some(b)) = (m.a, m.b) else { return Ok(()) };
-    let away: Vec<usize> = {
+    let bot = |p: &i64| t.bots.contains_key(p);
+    let (away, bot_waits): (Vec<usize>, bool) = {
         let hub = app.hub();
-        [a, b].iter().enumerate().filter(|(_, p)| !hub.conns.contains_key(p) || hub.in_game.contains_key(p)).map(|(x, _)| x).collect()
+        let gone = |p: &i64| !hub.conns.contains_key(p) || hub.in_game.contains_key(p);
+        let away = [a, b].iter().enumerate().filter(|(_, p)| !bot(p) && gone(p)).map(|(x, _)| x).collect();
+        (away, [a, b].iter().any(|p| bot(p) && gone(p)))
     };
     if let Some(&x) = away.choose(&mut rand::thread_rng()) {
         tracing::info!("tournament {}: match {}: side {x} is away at the start", t.t.id, m.id);
         forfeit(t, i, x, now, conquest, wins);
         return Ok(());
     }
+    // a bot never loses by a deadline: it waits for its connection and a free slot (the next tick tries again)
+    let slot = if bot(&a) || bot(&b) {
+        match app.tour.slots.clone().try_acquire_owned() {
+            Ok(p) if !bot_waits => Some(p),
+            _ => return Ok(()),
+        }
+    } else {
+        None
+    };
     let mut s = Series::of(&m);
     let (da, db) = (s.pick[0].unwrap_or(0), s.pick[1].unwrap_or(0));
     let deck = |p: i64, d: usize| {
@@ -776,6 +831,9 @@ async fn start(app: &AppRef, t: &mut T, i: usize, now: i64) -> Res<()> {
     let extra = json!({"tournament": t.t.id, "match": m.id, "tournament_name": t.t.name});
     match game::start_with(app.clone(), Mode::Tournament, rules, [(a, deck(a, da)), (b, deck(b, db))], extra).await {
         Some(g) => {
+            if let Some(p) = slot {
+                app.tour.held.lock().unwrap_or_else(|e| e.into_inner()).insert(g.clone(), p);
+            }
             s.n += 1;
             s.game = Some(g.clone());
             s.boot = app.tour.boot;
@@ -980,7 +1038,7 @@ pub async fn handle(app: &AppRef, me: i64, v: &Value) -> Res<()> {
             crate::spectate::add(app, &g, me, true).map_err(no)
         }
         "t_accept" | "t_ban" | "t_pick" => match_step(app, me, kind, v, now).await,
-        "t_edit" | "t_reschedule" | "t_cancel" | "t_join" | "t_decks" | "t_leave" => change(app, me, kind, v, id()?, now).await,
+        "t_edit" | "t_reschedule" | "t_cancel" | "t_join" | "t_decks" | "t_leave" | "t_add_bots" | "t_remove_bot" => change(app, me, kind, v, id()?, now).await,
         _ => Err(TErr("bad_request", format!("Unknown message {}", kind.chars().take(32).collect::<String>()))),
     }
 }
@@ -1027,6 +1085,13 @@ async fn match_step(app: &AppRef, me: i64, kind: &str, v: &Value, now: i64) -> R
     let side = [m.a, m.b].iter().position(|p| *p == Some(me)).ok_or_else(|| no("Not your match"))?;
     let mut s = Series::of(m);
     let deck = num(v, "deck").filter(|d| *d >= 0).map(|d| d as usize);
+    act(m, &mut s, side, kind, deck, bans, now)?;
+    m.state = serde_json::to_string(&s).unwrap_or_default();
+    commit(app, &mut t, &orig, HashSet::from([mid])).await.map(|_| ())
+}
+
+/// A step of one side (a player's message, or a bot's): `s` is the match's series (the caller saves it).
+fn act(m: &mut tmatch::Model, s: &mut Series, side: usize, kind: &str, deck: Option<usize>, bans: i64, now: i64) -> Res<()> {
     match (kind, m.status.as_str()) {
         ("t_accept", "accept") => {
             s.acc[side] = true;
@@ -1044,7 +1109,7 @@ async fn match_step(app: &AppRef, me: i64, kind: &str, v: &Value, now: i64) -> R
                 return Err(no("You already banned a deck"));
             }
             let d = deck.filter(|d| s.usable(1 - side).contains(d)).ok_or_else(|| no("No such deck to ban"))?;
-            ban(&mut s, side, d);
+            ban(s, side, d);
             if s.ban.iter().all(Option::is_some) {
                 to_pick(m, now);
             }
@@ -1057,8 +1122,20 @@ async fn match_step(app: &AppRef, me: i64, kind: &str, v: &Value, now: i64) -> R
         }
         _ => return Err(no("Not now: the match is at another step")),
     }
-    m.state = serde_json::to_string(&s).unwrap_or_default();
-    commit(app, &mut t, &orig, HashSet::from([mid])).await.map(|_| ())
+    Ok(())
+}
+
+/// A tournament bot's deck for the game of a match (its pick), for what it knows of its own cards.
+pub async fn bot_cards(app: &AppRef, match_id: i64, account: i64) -> Vec<String> {
+    let r = async {
+        let m = tmatch::Entity::find_by_id(match_id).one(&app.db).await?.ok_or_else(|| no("No such match"))?;
+        let side = [m.a, m.b].iter().position(|p| *p == Some(account)).ok_or_else(|| no("Not its match"))?;
+        let e = entrant::Entity::find_by_id((m.tournament, account)).one(&app.db).await?.ok_or_else(|| no("Not an entrant"))?;
+        let decks: Vec<Value> = serde_json::from_str(&e.decks).unwrap_or_default();
+        let d = Series::of(&m).pick[side].and_then(|i| decks.get(i).cloned()).unwrap_or_default();
+        Ok::<_, TErr>(d["cards"].as_array().map_or(vec![], |c| c.iter().filter_map(|x| x.as_str().map(String::from)).collect()))
+    };
+    r.await.unwrap_or_default()
 }
 
 /// The creator's changes (`t_edit`, `t_reschedule`, `t_cancel`) and the players' (`t_join`,
@@ -1073,7 +1150,7 @@ async fn change(app: &AppRef, me: i64, kind: &str, v: &Value, id: i64, now: i64)
     let mine = t.entrant(me).is_some();
     let name = crate::db::name_of(&app.db, me).await?;
     let pev = |text: String| Event::new("tournament", text).user(me, &name).data(json!({"tournament": id}));
-    if matches!(kind, "t_edit" | "t_reschedule" | "t_cancel") && !creator {
+    if matches!(kind, "t_edit" | "t_reschedule" | "t_cancel" | "t_add_bots" | "t_remove_bot") && !creator {
         return Err(no("Only the creator changes a tournament"));
     }
     let rules = || async { packs::rules_for(app, &t.t.pack).await.map_err(|_| no("The game of this tournament is no longer on the server")) };
@@ -1146,6 +1223,37 @@ async fn change(app: &AppRef, me: i64, kind: &str, v: &Value, id: i64, now: i64)
             if let Some(e) = t.es.iter_mut().find(|e| e.account == me) {
                 e.decks = decks;
             }
+        }
+        "t_add_bots" => {
+            if !joinable {
+                return Err(no("Joining ended a minute before the start"));
+            }
+            let level = v["level"].as_str().filter(|l| crate::bots::LEVELS.contains(l)).ok_or_else(|| no("level: easy, medium, hard or superhard"))?;
+            let count = num(v, "count").filter(|n| *n >= 1).ok_or_else(|| no("count: 1 or more"))? as usize;
+            let room = (t.t.max_players - t.es.len() as i64).max(0) as usize;
+            if count > room {
+                return Err(TErr("tournament", format!("Only {room} places are left")));
+            }
+            let rules = rules().await?;
+            let picked = bots::take(app, level, count).await?;
+            for (account, bot) in picked {
+                let e = entrant::Model { tournament: id, account, decks: bots::decks(&rules, &t.t)?, seed: -1, team: -1, place: 0, joined: now };
+                e.clone().into_active_model().reset_all().insert(&app.db).await?;
+                t.es.push(e);
+                t.bots.insert(account, bots::level_of(&bot).unwrap_or(crate::bots::brain::Level::Medium));
+                app.event(pev(format!("{name} added the bot {bot} to the tournament {}", t.t.name)));
+            }
+        }
+        "t_remove_bot" => {
+            if !joinable {
+                return Err(no("Leaving ended a minute before the start"));
+            }
+            let who = v["name"].as_str().unwrap_or("");
+            let account = crate::db::id_by_name(&app.db, who).await?.filter(|a| t.bots.contains_key(a)).ok_or_else(|| no("No such bot in this tournament"))?;
+            entrant::Entity::delete_by_id((id, account)).exec(&app.db).await?;
+            t.es.retain(|e| e.account != account);
+            t.bots.remove(&account);
+            app.event(pev(format!("{name} removed the bot {who} from the tournament {}", t.t.name)));
         }
         _ => {
             if !mine {

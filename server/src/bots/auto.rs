@@ -55,9 +55,9 @@ pub fn level_for_wins(wins: i64) -> Level {
     }
 }
 
-/// An account of no player: the admin's bots and the auto-bots.
+/// An account of no player: the admin's bots, the auto-bots and the tournament bots.
 pub fn is_bot_name(name: &str) -> bool {
-    name.starts_with("Bot_") || name.starts_with("AutoBot_")
+    name.starts_with("Bot_") || name.starts_with("AutoBot_") || name.starts_with("TBot_")
 }
 
 /// Who waits for an auto-bot now (the matchmaking tick calls it every second).
@@ -131,7 +131,7 @@ fn cap(s: &str) -> String {
 }
 
 /// A new pool account (a password nobody knows).
-async fn make(app: &AppRef, name: &str) -> Option<i64> {
+pub(crate) async fn make(app: &AppRef, name: &str) -> Option<i64> {
     let pw: String = {
         use rand::Rng;
         let mut r = rand::thread_rng();

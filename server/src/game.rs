@@ -500,6 +500,7 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
         presence(&ctx.app, id).await;
     }
     if ctx.mode == Mode::Tournament {
+        ctx.app.tour.held.lock().unwrap_or_else(|e| e.into_inner()).remove(&ctx.id); // a bot game's slot
         ctx.app.tour.wake.notify_one(); // the scheduler reads the result from `games`
     }
 }
