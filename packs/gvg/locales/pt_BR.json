@@ -1,0 +1,15 @@
+{
+ "mechanics": {
+  "SPARE_PART": {
+   "name": "Peça Sobressalente",
+   "tip": "Um de sete feitiços de 1 de mana com um efeito pequeno, escolhido aleatoriamente."
+  },
+  "MEGA_WINDFURY": {
+   "name": "Mega-Fúria dos Ventos",
+   "tip": "Pode atacar quatro vezes em um turno."
+  }
+ },
+ "sets": {
+  "GVG": "Goblins vs Gnomos"
+ }
+}

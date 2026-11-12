@@ -1,0 +1,157 @@
+{
+  "format": 1,
+  "id": "gvg-2014",
+  "version": "1.0.0",
+  "engine": "0.60.0",
+  "name": {
+    "en": "Goblins vs Gnomes 2014",
+    "ru": "Гоблины и гномы 2014",
+    "de": "Goblins gegen Gnome 2014",
+    "fr": "Gobelins et Gnomes 2014",
+    "es": "Goblins y Gnomos 2014",
+    "pt_BR": "Goblins vs Gnomos 2014",
+    "it": "Goblin vs Gnomi 2014",
+    "pl": "Gobliny kontra gnomy 2014"
+  },
+  "description": {
+    "en": "The game as it was played after December 8, 2014: the Basic, Classic and Naxxramas cards and the 123 cards of Goblins vs Gnomes, each as at the release — Mechs, Spare Parts, Dr. Boom, Piloted Shredder, Mal'Ganis and Mimiron's Head; Leeroy at 5 mana, Auctioneer at 6, Undertaker still +1/+1.",
+    "ru": "Игра, как в неё играли после 8 декабря 2014 года: базовые, классические карты, карты Наксрамаса и 123 карты «Гоблинов и гномов», каждая как на выходе — механизмы, запчасти, Доктор Бум, Крошшредер с пилотом, Мал'Ганис и Голова Мимирона; Лирой за 5 маны, Аукционист за 6, Гробовщик ещё с +1/+1.",
+    "de": "Das Spiel, wie es nach dem 8. Dezember 2014 gespielt wurde: die Basis-, Klassik- und Naxxramas-Karten und die 123 Karten von „Goblins gegen Gnome“, jede wie zur Veröffentlichung — Mechs, Ersatzteile, Dr. Bumm, Pilotierter Schredder, Mal'Ganis und Mimirons Kopf; Leeroy für 5 Mana, der Auktionator für 6, der Totengräber noch mit +1/+1.",
+    "fr": "Le jeu tel qu’on le jouait après le 8 décembre 2014 : les cartes de base, classiques et de Naxxramas et les 123 cartes de « Gobelins et Gnomes », chacune telle qu’à sa sortie — des Méca, des pièces détachées, le Dr Boum, le Déchiqueteur piloté, Mal’Ganis et la Tête de Mimiron ; Leeroy à 5 mana, le Commissaire-priseur à 6, le Croque-mort encore à +1/+1.",
+    "es": "El juego tal como se jugaba después del 8 de diciembre de 2014: las cartas básicas, clásicas y de Naxxramas y las 123 cartas de «Goblins y Gnomos», cada una como en su lanzamiento: robots, piezas de repuesto, el Dr. Bum, la Trituradora pilotada, Mal'Ganis y la Cabeza de Mimiron; Leeroy a 5 de maná, el Subastador a 6, el Enterrador aún con +1/+1.",
+    "pt_BR": "O jogo como era jogado depois de 8 de dezembro de 2014: os cards Básicos, Clássicos e de Naxxramas e os 123 cards de “Goblins vs Gnomos”, cada um como no lançamento — Mecanoides, Peças Sobressalentes, Dr. Cabum, Retalhador Pilotado, Mal'Ganis e a Cabeça de Mimiron; Leeroy por 5 de mana, o Leiloeiro por 6, o Agente Funerário ainda com +1/+1.",
+    "it": "Il gioco come si giocava dopo l’8 dicembre 2014: le carte Base, Classiche e di Naxxramas e le 123 carte di “Goblin vs Gnomi”, ognuna come all’uscita — Robot, Gadget, il Dottor Boom, il Tritarottami Pilotato, Mal'Ganis e la Testa di Mimiron; Leeroy a 5 Mana, il Banditore a 6, il Becchino ancora con +1/+1.",
+    "pl": "Gra w wersji sprzed lat, po 8 grudnia 2014: karty podstawowe, klasyczne i z Naxxramas oraz 123 karty z „Goblinów kontra gnomów”, każda jak w dniu premiery — mechy, części zamienne, Dr Bum, Pilotowany niszczarz, Mal'Ganis i Głowa Mimirona; Leeroy za 5 many, Licytator za 6, Grabarz jeszcze z +1/+1."
+  },
+  "authors": [
+    "Classic HS"
+  ],
+  "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+  "redistributable": true,
+  "default_locale": "en",
+  "locales": [
+    "en",
+    "ru",
+    "de",
+    "fr",
+    "es",
+    "pt_BR",
+    "it",
+    "pl"
+  ],
+  "art_sets": [
+    {
+      "id": "simple",
+      "name": {
+        "en": "Simple painted",
+        "ru": "Простой рисованный",
+        "de": "Einfach gemalt",
+        "fr": "Peint simple",
+        "es": "Pintado simple",
+        "pt_BR": "Pintura simples",
+        "it": "Dipinto semplice",
+        "pl": "Prosty malowany"
+      },
+      "default": true
+    },
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированный"
+      }
+    },
+    {
+      "id": "cartoon",
+      "name": {
+        "en": "Cartoon 2D",
+        "ru": "Мультяшный 2D",
+        "de": "Cartoon 2D",
+        "fr": "Dessin animé 2D",
+        "es": "Dibujos 2D",
+        "pt_BR": "Desenho 2D",
+        "it": "Cartone 2D",
+        "pl": "Kreskówka 2D"
+      }
+    },
+    {
+      "id": "photo",
+      "name": {
+        "en": "Photoreal",
+        "ru": "Фотореалистичный",
+        "de": "Fotorealistisch",
+        "fr": "Photoréaliste",
+        "es": "Fotorrealista",
+        "pt_BR": "Fotorrealista",
+        "it": "Fotorealistico",
+        "pl": "Fotorealistyczny"
+      }
+    }
+  ],
+  "sound_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированные"
+      },
+      "default": true
+    }
+  ],
+  "music_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированная"
+      },
+      "default": true
+    },
+    {
+      "id": "open",
+      "name": {
+        "en": "Open (CC0)",
+        "ru": "Открытая (CC0)"
+      }
+    }
+  ],
+  "set_marks": {
+    "VANILLA:FREE": {
+      "icon": "ui/set_basic.png"
+    },
+    "VANILLA": {
+      "icon": "ui/set_classic.png"
+    },
+    "NAXX": {
+      "icon": "ui/set_naxx.png"
+    },
+    "GVG": {
+      "icon": "ui/set_gvg.png"
+    }
+  },
+  "card_back": null,
+  "logo": null,
+  "colors": {
+    "classes": {
+      "DRUID": "703606",
+      "HUNTER": "016e01",
+      "MAGE": "0092ab",
+      "PALADIN": "aa8f00",
+      "PRIEST": "b8b090",
+      "ROGUE": "4c4d48",
+      "SHAMAN": "0070de",
+      "WARLOCK": "7624ad",
+      "WARRIOR": "8e1002",
+      "NEUTRAL": "6b6b6b",
+      "DREAM": "6b6b6b",
+      "DEMONHUNTER": "6b6b6b"
+    },
+    "rarities": {
+      "FREE": "e8e8e8",
+      "COMMON": "e8e8e8",
+      "RARE": "2f7cff",
+      "EPIC": "a335ee",
+      "LEGENDARY": "ff8000"
+    }
+  }
+}

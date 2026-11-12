@@ -1,0 +1,15 @@
+{
+ "mechanics": {
+  "SPARE_PART": {
+   "name": "Gadget",
+   "tip": "Uno di sette incantesimi da 1 Mana con un piccolo effetto, scelto a caso."
+  },
+  "MEGA_WINDFURY": {
+   "name": "Super Furia del Vento",
+   "tip": "Può attaccare quattro volte in un turno."
+  }
+ },
+ "sets": {
+  "GVG": "Goblin vs Gnomi"
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "mechanics": {
+  "SPARE_PART": {
+   "name": "Pièce détachée",
+   "tip": "L’un des sept sorts à 1 mana à petit effet, choisi au hasard."
+  },
+  "MEGA_WINDFURY": {
+   "name": "Méga furie des vents",
+   "tip": "Peut attaquer quatre fois par tour."
+  }
+ },
+ "sets": {
+  "GVG": "Gobelins et Gnomes"
+ }
+}

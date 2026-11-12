@@ -1,0 +1,15 @@
+{
+ "mechanics": {
+  "SPARE_PART": {
+   "name": "Spare Part",
+   "tip": "One of seven 1-mana spells with a small effect, chosen at random."
+  },
+  "MEGA_WINDFURY": {
+   "name": "Mega-Windfury",
+   "tip": "Can attack four times a turn."
+  }
+ },
+ "sets": {
+  "GVG": "Goblins vs Gnomes"
+ }
+}

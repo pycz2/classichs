@@ -1,0 +1,15 @@
+{
+ "mechanics": {
+  "SPARE_PART": {
+   "name": "Pieza de repuesto",
+   "tip": "Uno de siete hechizos de 1 de maná con un efecto pequeño, elegido al azar."
+  },
+  "MEGA_WINDFURY": {
+   "name": "Megaviento Furioso",
+   "tip": "Puede atacar cuatro veces por turno."
+  }
+ },
+ "sets": {
+  "GVG": "Goblins y Gnomos"
+ }
+}

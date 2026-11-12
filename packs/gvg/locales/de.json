@@ -1,0 +1,15 @@
+{
+ "mechanics": {
+  "SPARE_PART": {
+   "name": "Ersatzteil",
+   "tip": "Einer von sieben Zaubern für 1 Mana mit kleiner Wirkung, zufällig gewählt."
+  },
+  "MEGA_WINDFURY": {
+   "name": "Super-Windzorn",
+   "tip": "Kann 4-mal pro Zug angreifen."
+  }
+ },
+ "sets": {
+  "GVG": "Goblins gegen Gnome"
+ }
+}

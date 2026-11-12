@@ -1,0 +1,15 @@
+{
+ "mechanics": {
+  "SPARE_PART": {
+   "name": "Część zamienna",
+   "tip": "Jedno z siedmiu zaklęć za 1 manę o niewielkim efekcie, wybierane losowo."
+  },
+  "MEGA_WINDFURY": {
+   "name": "Mega furia wichru",
+   "tip": "Może atakować cztery razy w ciągu tury."
+  }
+ },
+ "sets": {
+  "GVG": "Gobliny kontra gnomy"
+ }
+}
