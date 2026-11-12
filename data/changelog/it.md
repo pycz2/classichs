@@ -4,8 +4,16 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.71.0] - 2026-11-12
+
 ### Aggiunto
 - Un contatore dei fotogrammi al secondo: l’interruttore «Contatore FPS» nelle impostazioni (spento di default) li mostra in piccolo nell’angolo in alto a sinistra di ogni schermata.
+- Audio Opus: tutti i suoni, le battute e la musica dei pacchetti ora sono in Opus, e il gioco li riproduce su ogni piattaforma, browser compreso. Qualità più alta: voce 48 kbps, suoni 96 kbps, musica 128 kbps.
+- I pacchetti possono dare alle carte suoni per ruolo: mira (suona mentre si sceglie un bersaglio), proiettile, impatto, attivazione, rivelazione di un segreto, avanzamento di una missione, rottura di un'arma; musica per la mano iniziale, la vittoria e la sconfitta. Una carta senza un suono suo usa quello comune.
+
+### Corretto
+- La musica del menu è di nuovo nel gioco compilato: mancava nelle versioni.
+- Il Potere Eroe, la rivelazione di un segreto, l'avanzamento di una missione e l'inizio del turno si sentono di nuovo in partita; il suono "tocca a te" si sente solo nel tuo turno.
 
 ## [0.70.0] - 2026-11-12
 

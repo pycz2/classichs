@@ -4,8 +4,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.71.0] - 2026-11-12
+
 ### Hinzugefügt
 - Eine FPS-Anzeige: Der Schalter „FPS-Anzeige“ in den Einstellungen (standardmäßig aus) zeigt die Bilder pro Sekunde klein in der linken oberen Ecke jedes Bildschirms.
+- Opus-Ton: Alle Klänge, Sprachzeilen und die Musik der Pakete sind jetzt Opus, und das Spiel gibt sie auf jeder Plattform wieder, auch im Browser. Bessere Qualität: Sprache 48 kbit/s, Klänge 96 kbit/s, Musik 128 kbit/s.
+- Pakete können Karten Klänge nach Rolle geben: Zielen (klingt, solange ein Ziel gewählt wird), Geschoss, Treffer, Auslösen, Aufdecken eines Geheimnisses, Fortschritt einer Quest, Zerbrechen einer Waffe; Musik für die Mulligan-Phase, Sieg und Niederlage. Eine Karte ohne eigenen Klang spielt den allgemeinen.
+
+### Behoben
+- Die Menümusik ist wieder im gebauten Spiel: Sie fehlte in den Builds.
+- Heldenfähigkeiten, das Aufdecken eines Geheimnisses, der Fortschritt einer Quest und der Zugbeginn sind im Spiel wieder zu hören; der Klang „Ihr Zug“ ertönt nur in Ihrem Zug.
 
 ## [0.70.0] - 2026-11-12
 

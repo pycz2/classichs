@@ -4,8 +4,16 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.71.0] - 2026-11-12
+
 ### Adicionado
 - Um contador de quadros por segundo: a opção "Contador de FPS" nas configurações (desligada por padrão) mostra os quadros em letra pequena no canto superior esquerdo de cada tela.
+- Som Opus: todos os sons, falas e músicas dos pacotes agora são Opus, e o jogo os toca em todas as plataformas, inclusive no navegador. Mais qualidade: voz 48 kbps, sons 96 kbps, música 128 kbps.
+- Os pacotes podem dar às cartas sons por função: mirar (toca enquanto se escolhe um alvo), projétil, impacto, ativação, revelação de um segredo, progresso de uma missão, quebra de uma arma; música para a mão inicial, a vitória e a derrota. Uma carta sem som próprio usa o comum.
+
+### Corrigido
+- A música do menu voltou ao jogo compilado: ela ficava fora das versões.
+- O Poder Heroico, a revelação de um segredo, o progresso de uma missão e o início do turno voltaram a soar na partida; o som "seu turno" toca só no seu turno.
 
 ## [0.70.0] - 2026-11-12
 

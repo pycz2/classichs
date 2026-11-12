@@ -4,8 +4,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.71.0] - 2026-11-12
+
 ### Dodano
 - Licznik klatek na sekundę: przełącznik „Licznik FPS” w ustawieniach (domyślnie wyłączony) pokazuje je małym drukiem w lewym górnym rogu każdego ekranu.
+- Dźwięk Opus: wszystkie dźwięki, kwestie i muzyka pakietów są teraz w Opus, a gra odtwarza je na każdej platformie, także w przeglądarce. Wyższa jakość: głos 48 kb/s, dźwięki 96 kb/s, muzyka 128 kb/s.
+- Pakiety mogą dawać kartom dźwięki według roli: celowanie (gra, gdy wybiera się cel), pocisk, trafienie, aktywacja, ujawnienie sekretu, postęp zadania, złamanie broni; muzyka wymiany kart, zwycięstwa i porażki. Karta bez własnego dźwięku gra wspólny.
+
+### Naprawiono
+- Muzyka menu znów jest w zbudowanej grze: brakowało jej w wydaniach.
+- Moc bohatera, ujawnienie sekretu, postęp zadania i początek tury znów słychać w meczu; dźwięk „Twoja tura” gra tylko w twojej turze.
 
 ## [0.70.0] - 2026-11-12
 

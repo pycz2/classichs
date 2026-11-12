@@ -4,8 +4,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.71.0] - 2026-11-12
+
 ### Added
 - An FPS counter: the "FPS counter" switch in the settings (off by default) shows the frames per second in small print in the top left corner of every screen.
+- Opus sound: all sounds, voice lines and music of the packs are now Opus, and the client plays it on every platform, the browser included. Higher quality: voice 48 kbps, sounds 96 kbps, music 128 kbps.
+- Packs can give a card sounds by role: aiming (plays while a target is chosen), missile, impact, trigger, a secret's reveal, a quest's progress, a weapon breaking; music for the mulligan, victory and defeat. A card without its own sound plays the common one.
+
+### Fixed
+- The menu music is in the built game again: it was left out of the builds.
+- Hero Powers, a secret's reveal, a quest's progress and the start of a turn sound again in a match; the "your turn" sound plays only on your turn.
 
 ## [0.70.0] - 2026-11-12
 
