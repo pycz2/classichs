@@ -18,5 +18,19 @@
    "name": "Spielbeginn",
    "tip": "Wirkt zu Spielbeginn aus Eurem Deck."
   }
+ },
+ "cards": {
+  "VAN_EX1_302": {
+   "text": "[x]Fügt einem Diener\n$1 Schaden zu. Zieht\neine Karte, wenn\ner dabei stirbt."
+  },
+  "VAN_EX1_320": {
+   "text": "[x]Fügt einem Charakter\n$2 Schaden zu. Beschwört\neinen zufälligen Dämon,\nwenn er dabei stirbt."
+  },
+  "VAN_EX1_366": {
+   "text": "[x]Nachdem Ihr einen Diener\nherbeigerufen habt, erhält er\n+1/+1 und diese Waffe\nverliert 1 Haltbarkeit."
+  },
+  "VAN_EX1_595": {
+   "text": "Zieht eine Karte, nachdem ein befreundeter Diener gestorben ist."
+  }
  }
 }

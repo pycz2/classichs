@@ -55,6 +55,7 @@
     {"id": "DIED_POS", "kind": "state", "silenced": false, "about": "The board position it died at."},
     {"id": "POWER_MULTIPLIER", "kind": "state", "silenced": false, "about": "Doubles the damage and healing of its owner's spells and power (an aura tag)."},
     {"id": "HEAL_IS_DAMAGE", "kind": "state", "silenced": false, "about": "Its owner's healing deals damage instead (an aura tag)."},
+    {"id": "POWER_DOUBLE", "kind": "state", "silenced": false, "about": "Doubles its owner's power damage and healing once per count (an aura tag on the champion, after POWER_MULTIPLIER's doublings); only in a pack that names it."},
     {"id": "DOUBLE_ON_DEATH", "kind": "state", "silenced": false, "about": "Its owner's minions run their ON_DEATH hooks twice (an aura tag on the champion)."},
     {"id": "RANDOM_TARGETS", "kind": "state", "silenced": false, "about": "Its owner plays, attacks and uses the power on a random one of the valid targets instead of the chosen one (an aura tag on the champion; only in a pack that names it)."},
     {"id": "DOUBLE_ON_PLAY", "kind": "state", "silenced": false, "about": "Its owner's ON_PLAY hooks (not COMBO, not CHOICE) run twice, on the same target (an aura tag on the champion)."},

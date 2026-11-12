@@ -1,23 +1,28 @@
 {
- "about": "How tools/pack.py builds The Witchwood 2018 (docs/packs/format.md, 'Build recipes'): on Kobolds & Catacombs (base), so on Knights of the Frozen Throne, Journey to Un'Goro, Mean Streets of Gadgetzan, One Night in Karazhan, Whispers of the Old Gods, The League of Explorers, The Grand Tournament, Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 135 cards of The Witchwood and their tokens as the release build 23966 has them (patch 11.0.0.23966 of 2018-04-10, two days before the release; data/gil_cards.json, tools/extract_cards.py --set gil, with Deathstalker Rexxar's new Zombeast parts of that patch) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/gil*.lua, the keywords, the older cards that changed by then).",
- "base": "../loot",
- "root": "../..",
- "skip": [
-  "layout"
- ],
- "bundle_in_client": false,
- "steps": [
-  {
-   "do": "hsjson",
-   "from": [
-    "data/gil_cards.json"
-   ],
-   "patch": [
-    "cards.patch.json"
-   ],
-   "texts": [
-    "packs/gil/cards.texts.json"
-   ]
-  }
- ]
+  "about": "How tools/pack.py builds The Witchwood 2018 (docs/packs/format.md, 'Build recipes'): on Kobolds & Catacombs (base), so on Knights of the Frozen Throne, Journey to Un'Goro, Mean Streets of Gadgetzan, One Night in Karazhan, Whispers of the Old Gods, The League of Explorers, The Grand Tournament, Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 135 cards of The Witchwood and their tokens as the release build 23966 has them (patch 11.0.0.23966 of 2018-04-10, two days before the release; data/gil_cards.json, tools/extract_cards.py --set gil, with Deathstalker Rexxar's new Zombeast parts of that patch) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/gil*.lua, the keywords, the older cards that changed by then).",
+  "base": "../loot",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/gil_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json",
+        "../../data/gil_wip/patch_dhm.json",
+        "../../data/gil_wip/patch_ppr.json",
+        "../../data/gil_wip/patch_ssw.json",
+        "../../data/gil_wip/patch_n1.json",
+        "../../data/gil_wip/patch_n2.json"
+      ],
+      "texts": [
+        "packs/gil/cards.texts.json"
+      ]
+    }
+  ]
 }

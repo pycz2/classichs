@@ -5,7 +5,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 ## [Unreleased]
 
 ### Hinzugefügt
-- **Elf neue Spiele, die Erweiterungen nach Naxxramas.** Jedes enthält alle Karten der Spiele davor (Basis, Klassik, Naxxramas und so weiter der Reihe nach), und jede Karte ist so, wie sie am Erscheinungstag der Erweiterung war: Kosten, Werte, Volk, Texte in 8 Sprachen. Jedes Spiel hat eigene Deckvorlagen der damaligen Meta (10 bis 17), Bots, die es spielen, ein eigenes Aussehen und ein Set-Symbol.
+- **Elf neue Spiele, die Erweiterungen nach Naxxramas.** Jedes enthält alle Karten der Spiele davor (Basis, Klassik, Naxxramas und so weiter der Reihe nach), und jede Karte ist so, wie sie am Erscheinungstag der Erweiterung war: Kosten, Werte, Volk, Texte in 8 Sprachen. Jedes Spiel hat eigene Deckvorlagen der damaligen Meta (10 bis 19), Bots, die es spielen, ein eigenes Aussehen und ein Set-Symbol.
 - Goblins gegen Gnome 2014 (Karten vom 8. Dezember 2014): Mechs, Ersatzteile, Mega-Windzorn, Mimirons Kopf.
 - Der Schwarzfels 2015 (2. April 2015): Drachen und Karten „wenn Ihr einen Drachen auf der Hand habt“, Imperator Thaurissan, Nefarian.
 - Das Große Turnier 2015 (24. August 2015): Inspiration, Tjoste, verbesserte Heldenfähigkeiten.
@@ -16,7 +16,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Reise nach Un'Goro 2017 (6. April 2017): Quests und ihre Belohnungen, Mutieren, Elementare, ruhende Diener.
 - Ritter des Frostthrons 2017 (10. August 2017): die Heldenkarten der Todesritter, Lebensentzug, eine Zombiebestie aus zwei Wildtieren.
 - Kobolde & Katakomben 2017 (7. Dezember 2017): Diener direkt aus dem Deck aufs Spielfeld, wachsende Zaubersteine, legendäre Waffen.
-- Der Hexenwald 2018 (12. April 2018): Echo, Ansturm, Karten für Decks nur mit geraden oder nur mit ungeraden Kosten (Genn und Baku).
+- Der Hexenwald 2018 (12. April 2018): Echo, Eifer, Karten für Decks nur mit geraden oder nur mit ungeraden Kosten (Genn und Baku).
 - Die neuen Spiele sind nicht in den Client-Builds, daher sind die Apps für Desktop, Android und Web nicht größer geworden. Ein Spiel lädt man von einem Server herunter oder installiert die Datei ClassicHS-x.y.z-<Spiel>.cardpack von der Release-Seite. Jedes Spiel steht für sich und braucht kein anderes: Es bringt die Bilder der älteren Karten mit, die neuen Karten haben einfache gezeichnete Bilder.
 - Karten auf der Hand, deren Bedingung gerade erfüllt ist, leuchten gelb: Combo, „wenn Euer Deck keine doppelten Karten enthält“, „wenn Ihr einen Drachen auf der Hand habt“ und mehr.
 - Karten der Erweiterungen zeigen ihr Set-Symbol, auch neben der großen Karte; die Sammlung hat einen Set-Filter.

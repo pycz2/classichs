@@ -18,5 +18,10 @@
    "name": "Start of Game",
    "tip": "Happens when the game starts, from your deck."
   }
+ },
+ "cards": {
+  "VAN_EX1_595": {
+   "text": "After a friendly minion dies, draw a card."
+  }
  }
 }

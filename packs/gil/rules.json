@@ -349,6 +349,9 @@
   },
   "START_OF_GAME": {
    "engine": "AT_GAME_START"
+  },
+  "HERO_POWER_DOUBLE": {
+   "engine": "POWER_DOUBLE"
   }
  },
  "modes": {

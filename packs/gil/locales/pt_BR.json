@@ -18,5 +18,10 @@
    "name": "Início da Partida",
    "tip": "Acontece no início da partida, a partir do seu deck."
   }
+ },
+ "cards": {
+  "VAN_EX1_595": {
+   "text": "Depois que um lacaio aliado morrer, compre um card."
+  }
  }
 }

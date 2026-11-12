@@ -635,7 +635,8 @@ impl Game {
             }
         }
         for (k, v) in tags {
-            if k == n.spell_power || k == n.power_multiplier || k == n.power_damage || Some(k.as_ref()) == n.double_turn_end {
+            if k == n.spell_power || k == n.power_multiplier || k == n.power_damage || Some(k.as_ref()) == n.double_turn_end
+                || Some(k.as_ref()) == n.power_double {
                 let n = vint(a.tags.get(&k)) + v.int();
                 a.tags.insert(k, n);
             } else {
@@ -1174,7 +1175,13 @@ impl Game {
         if k != "SPELL" && k != "POWER" {
             return 1;
         }
-        1 << vint(self.e(self.hero(self.ctrl(me))).aura.tags.get(self.n().power_multiplier)).clamp(0, 20)
+        let tags = &self.e(self.hero(self.ctrl(me))).aura.tags;
+        // POWER_DOUBLE: the power's alone (Clockwork Automaton), on top
+        let own = match self.n().power_double {
+            Some(t) if k == "POWER" => vint(tags.get(t)),
+            _ => 0,
+        };
+        1 << (vint(tags.get(self.n().power_multiplier)) + own).clamp(0, 20)
     }
 
     pub fn spell_dmg(&self, me: Id, n: i64) -> i64 {

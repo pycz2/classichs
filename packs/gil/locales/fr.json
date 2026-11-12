@@ -18,5 +18,13 @@
    "name": "Début de partie",
    "tip": "Se déclenche au début de la partie, depuis votre deck."
   }
+ },
+ "cards": {
+  "VAN_EX1_317": {
+   "text": "Vous piochez 2 démons de votre deck."
+  },
+  "VAN_EX1_595": {
+   "text": "Vous piochez une carte une fois qu’un serviteur allié meurt."
+  }
  }
 }

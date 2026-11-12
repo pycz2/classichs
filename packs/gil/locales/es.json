@@ -18,5 +18,13 @@
    "name": "Inicio de partida",
    "tip": "Se activa al inicio de la partida, desde tu mazo."
   }
+ },
+ "cards": {
+  "VAN_EX1_304": {
+   "name": "Terror del Vacío"
+  },
+  "VAN_EX1_595": {
+   "text": "Cuando muere un esbirro amistoso, roba una carta."
+  }
  }
 }

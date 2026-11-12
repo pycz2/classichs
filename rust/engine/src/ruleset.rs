@@ -179,6 +179,9 @@ pub struct Names {
     /// QUICK: a minion that may attack minions (not champions) while it is exhausted (a pack that names it: The
     /// Witchwood's Rush).
     pub quick: Option<&'static str>,
+    /// POWER_DOUBLE: doubles its owner's power damage and healing, once per count (an aura tag on the champion: The
+    /// Witchwood's Clockwork Automaton); only when the pack names it.
+    pub power_double: Option<&'static str>,
     /// DOUBLE_TURN_END: its owner's "at the end of your turn" hooks run twice (an aura tag on the champion: Drakkari
     /// Enchanter); only when the pack names it.
     pub double_turn_end: Option<&'static str>,
@@ -254,6 +257,7 @@ impl Names {
             lifesteal: by_engine.get("LIFESTEAL").copied(),
             foe_spellproof: by_engine.get("FOE_SPELLPROOF").copied(),
             quick: by_engine.get("QUICK").copied(),
+            power_double: by_engine.get("POWER_DOUBLE").copied(),
             double_turn_end: by_engine.get("DOUBLE_TURN_END").copied(),
             task_progress: by_engine.get("TASK_PROGRESS").copied(),
             task_goal: by_engine.get("TASK_GOAL").copied(),
