@@ -31,7 +31,7 @@ Each file here is a JSON object: card id → list of tests. All files are merged
   Give both decks a few cards so draws work.
 - `steps`, played in order (each must be legal at that moment): `{"do": "play", "card": ref, "target": ref,
   "pos": n, "choice": n}`, `{"do": "attack", "attacker": ref, "defender": ref}`, `{"do": "hero_power",
-  "target": ref}`, `{"do": "end_turn"}`, `{"do": "choose", "option": n}`.
+  "target": ref}`, `{"do": "end_turn"}`, `{"do": "choose", "option": n}` (an offered entity id, else the n-th offered card, 0-based: Tracking, Totemic Slam).
   A ref is `{"side": 0|1, "zone": "hand"|"board"|"secret", "index": n}` or `{"side": s, "zone": "hero"|"weapon"|"power"}`.
   Refs are read at the moment of the step (after earlier steps changed the table).
 - Check: `godot --headless --path . --script res://tools/check_card_tests.gd` must print 0 problems.

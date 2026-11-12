@@ -59,7 +59,7 @@ def art(name, out, custom):
         return
     cache = out / "sounds/cache/art"
     cache.mkdir(parents=True, exist_ok=True)
-    ids = [c["id"] for c in extract_cards.set_cards(json.loads(snd.get(snd.HSJSON)), name)]
+    ids = [c["id"] for c in extract_cards.pack_cards(json.loads(snd.get(snd.HSJSON)), name)]
 
     def one(cid):
         dst, raw = dest / f"{cid}.webp", cache / f"{cid}.jpg"

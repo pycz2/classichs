@@ -52,7 +52,7 @@ static func entity(g: GameView, ref) -> int:
 ## The legal game action for a step, or {"error": "..."}.
 ## Steps: {"do": "play", "card": ref, "target": ref?, "pos": n?, "choice": n?},
 ## {"do": "attack", "attacker": ref, "defender": ref}, {"do": "hero_power", "target": ref?},
-## {"do": "end_turn"}, {"do": "choose", "option": n} (Tracking's card choice).
+## {"do": "end_turn"}, {"do": "choose", "option": n} (an offered entity id, else the n-th offered card, 0-based).
 static func action(m: Match, step: Dictionary) -> Dictionary:
 	var g := m.game
 	var me: int = g.pending.player if not g.pending.is_empty() else g.current
@@ -69,8 +69,10 @@ static func action(m: Match, step: Dictionary) -> Dictionary:
 			want = {"type": "hero_power", "target": entity(g, step.get("target"))}
 		"end_turn":
 			want = {"type": "end_turn"}
-		"choose":
-			want = {"type": "choose", "option": int(step.get("option", 0))}
+		"choose":  # option n: an offered entity id, else the n-th offered card (0-based)
+			var opts: Array = g.pending.get("options", []).map(func(o): return int(o))
+			var n := int(step.get("option", 0))
+			want = {"type": "choose", "option": n if opts.has(n) else (opts[n] if n < opts.size() else -1)}
 		_:
 			return {"error": "unknown step %s" % str(step)}
 	var legal := m.legal()

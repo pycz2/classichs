@@ -101,7 +101,12 @@ BRM_TOKENS = "BRM_006t BRM_010a BRM_010b BRM_010t BRM_010t2 BRM_022t BRM_027h BR
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786}
+## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
+## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
+## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
+## (dbfId, elite, the TRIGGER_VISUAL mark; referencedTags where the English text is unchanged).
+FROM_RELEASE = {"tgt"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 
 
@@ -118,7 +123,15 @@ def release_texts(name, then):
     Treant, EX1_tk9 was Force of Nature's. A later set's card keeps its id: its text of that day counts even when
     today's has none (Druid of the Flame's options were spells)."""
     old = {c["id"]: c for c in then}
-    chain = [OUT] + [OUT.parent / f"{s}_cards.json" for s in list(SETS)[:list(SETS).index(name) + 1]]
+    sets = list(SETS)[:list(SETS).index(name) + 1]
+    chain = [OUT] + [OUT.parent / f"{s}_cards.json" for s in sets]
+    # what an earlier pack of the chain overrides (its texts of an older day) is restated with this day's, even
+    # where this day's equals today's: the later texts file wins only for the cards it names
+    earlier = {}
+    for f in [OUT.parent / "naxx_texts.json"] + [OUT.parent.parent / "packs" / s / "cards.texts.json" for s in sets[:-1]]:
+        if f.exists():
+            for cid, fields in json.loads(f.read_text()).items():
+                earlier.setdefault(cid, set()).update(fields)
     out = {}
     for f in chain:
         for c in json.loads(f.read_text()):
@@ -129,7 +142,7 @@ def release_texts(name, then):
                 c = dict(c, text={})  # the same card, whose text today's data lost (Druid of the Flame's options)
             for field in ("name", "text"):
                 now, was = c.get(field) or {}, o.get(field) or {}
-                if was and any(_norm(now.get(l)) != _norm(was.get(l)) for l in LANGS):
+                if was and (field in earlier.get(c["id"], ()) or any(_norm(now.get(l)) != _norm(was.get(l)) for l in LANGS)):
                     out.setdefault(c["id"], {})[field] = {l: was.get(l) or now.get(l, "") for l in LANGS}
     dst = OUT.parent.parent / "packs" / name / "cards.texts.json"
     dst.write_text(json.dumps(out, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
@@ -175,11 +188,41 @@ def set_cards(cards, name):
     return sorted(out, key=lambda c: c["id"])
 
 
+def pack_cards(cards, name):
+    """The cards of set `name` as its pack has them: data/<name>_cards.json for a FROM_RELEASE set (today's data lacks
+    some of its ids), else set_cards of today's data (tools/fetch_set_assets.py: the art and sounds to fetch)."""
+    if name in FROM_RELEASE:
+        return json.loads((OUT.parent / f"{name}_cards.json").read_text())
+    return set_cards(cards, name)
+
+
+def release_cards(then, now):
+    """The release build's cards in today's shape (FROM_RELEASE): cardClass for playerClass (NEUTRAL when none),
+    and from today's data the dbfId, elite, TRIGGER_VISUAL and (same English text only) referencedTags."""
+    today = {c["id"]: c for c in now}
+    out = []
+    for c in then:
+        c = dict(c, cardClass=c.get("cardClass") or c.get("playerClass") or "NEUTRAL")
+        t = today.get(c["id"], {})
+        for k in ("dbfId", "elite"):
+            if k in t:
+                c[k] = t[k]
+        if "TRIGGER_VISUAL" in t.get("mechanics", []):
+            c["mechanics"] = c.get("mechanics", []) + ["TRIGGER_VISUAL"]
+        if t.get("referencedTags") and _norm((t.get("text") or {}).get("enUS")) == _norm((c.get("text") or {}).get("enUS")):
+            c["referencedTags"] = t["referencedTags"]
+        out.append(c)
+    return out
+
+
 def extract_set(cards, name, then=None):
     """data/<name>_cards.json: every card of the set as HearthstoneJSON has it today (the pack's cards.patch.json
-    restores the stats and tribes of the release day, its *.texts.json the texts). Naxxramas also writes
-    data/naxx_texts.json (its release-time names and texts, taken from cards that still carry them)."""
-    out = set_cards(cards, name)
+    restores the stats and tribes of the release day, its *.texts.json the texts), or as the release build has it
+    (FROM_RELEASE). Naxxramas also writes data/naxx_texts.json (its release-time names and texts, taken from cards
+    that still carry them)."""
+    if name in FROM_RELEASE:
+        then = then if then is not None else hsjson(RELEASE_BUILDS[name])
+    out = set_cards(release_cards(then, cards) if name in FROM_RELEASE else cards, name)
     (OUT.parent / f"{name}_cards.json").write_text(json.dumps(out, ensure_ascii=False, indent=0, sort_keys=True) + "\n")
     print(f"wrote {len(out)} cards of {name} ({SETS[name][0]})")
     if name == "naxx":

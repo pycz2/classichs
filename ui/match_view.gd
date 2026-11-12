@@ -1795,6 +1795,8 @@ static func steps(events: Array, aimed := -1) -> Array:
 				k = "equip"
 			"secret_revealed":
 				k = "secret"
+			"joust":
+				k = "joust"
 			"after_spell":
 				k = "spell_done"
 			"fatigue", "burn":
@@ -1995,6 +1997,9 @@ func _play_step(st: Dictionary) -> void:
 			await _wait(0.2)
 		"secret":
 			await _reveal(ev.card)  # (the card itself shows big: no hint over the board)
+			_step_apply(st)
+		"joust":
+			await _joust(ev)
 			_step_apply(st)
 		"discard":
 			await _discard(st)
@@ -2776,6 +2781,30 @@ func _reveal(card_id: String) -> void:
 	tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
 	tw.tween_callback(cv.queue_free)
 	await _wait(0.9)
+
+
+## A Joust: the minion revealed from each deck side by side (the one who jousts on the left); the loser's darkens.
+func _joust(ev: Dictionary) -> void:
+	var cards := [str(ev.get("card", "")), str(ev.get("foe_card", ""))]
+	for i in 2:
+		if cards[i] == "":
+			continue
+		var cv := CardView.make(cards[i], 1.2)
+		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cv.position = SHOW_AT + Vector2(230 * i, 0) - cv.size / 2.0
+		cv.pivot_offset = cv.size / 2.0
+		cv.scale = Vector2(0.2, 0.2)
+		_fx.add_child(cv)
+		var tw := cv.create_tween()
+		tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.2)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_interval(Anim.d(0.5))
+		var won: bool = ev.get("won", false)
+		var dim := Color(0.45, 0.45, 0.45) if won == (i == 1) else Color.WHITE
+		tw.tween_property(cv, "modulate", dim, Anim.d(0.2))
+		tw.tween_interval(Anim.d(0.6))
+		tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
+		tw.tween_callback(cv.queue_free)
+	await _wait(1.4)
 
 
 func _banner(text: String) -> void:

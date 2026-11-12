@@ -300,7 +300,7 @@ def cards_of(game):
     if game == "classic":
         return [(c["id"], c["type"]) for c in json.loads((ROOT / "data/cards.json").read_text())]
     import extract_cards
-    return [(c["id"], c["type"]) for c in extract_cards.set_cards(json.loads(get(HSJSON)), game)]
+    return [(c["id"], c["type"]) for c in extract_cards.pack_cards(json.loads(get(HSJSON)), game)]
 
 
 def run(game, out, ru, cache=None, dest=None):

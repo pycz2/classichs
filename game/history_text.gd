@@ -4,7 +4,7 @@ extends RefCounted
 ## see (the opponent's draws and hand additions, the opponent's Secrets) stay hidden.
 
 ## Event types that produce no line (they repeat other events).
-const SILENT := ["after_summon", "after_spell", "after_attack", "turn_end", "mulligan_chosen"]
+const SILENT := ["after_summon", "after_spell", "after_attack", "turn_end", "mulligan_chosen", "create"]
 
 
 static func _t(s: String) -> String:
@@ -145,6 +145,14 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 			s = _t("%s Health is set to %d") % [n.call(ev.target), ev.health]
 		"hero_power_changed":
 			s = _say(p, viewer, "Your Hero Power becomes %s", "Opponent's Hero Power becomes %s", [CardText.name(ev.card, loc)])
+		"joust":
+			var foe: String = CardText.name(ev.foe_card, loc) if str(ev.get("foe_card", "")) != "" else _t("no minion")
+			if str(ev.get("card", "")) == "":
+				s = _say(p, viewer, "Your Joust: no minion to reveal, lost", "Opponent's Joust: no minion to reveal, lost", [])
+			elif ev.get("won", false):
+				s = _say(p, viewer, "Your Joust: %s against %s, won", "Opponent's Joust: %s against %s, won", [CardText.name(ev.card, loc), foe])
+			else:
+				s = _say(p, viewer, "Your Joust: %s against %s, lost", "Opponent's Joust: %s against %s, lost", [CardText.name(ev.card, loc), foe])
 		"hero_replaced":
 			s = _say(p, viewer, "Your hero becomes %s", "Opponent's hero becomes %s", [CardText.name(ev.card, loc)])
 		_:
