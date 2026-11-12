@@ -13,6 +13,7 @@ use crate::events::Event;
 use crate::AppRef;
 use rand::Rng;
 use serde_json::{json, Value};
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
 use std::time::Duration;
 use std::collections::VecDeque;
@@ -23,6 +24,15 @@ pub type BoxFut<T> = std::pin::Pin<Box<dyn std::future::Future<Output = T> + Sen
 pub type ConnectFn = Arc<dyn Fn() -> BoxFut<Result<Transport, String>> + Send + Sync>;
 /// Reads the bot's settings (None: the bot is gone).
 pub type LoadFn = Arc<dyn Fn() -> BoxFut<Option<BotConfig>> + Send + Sync>;
+
+/// The human pace's pauses in percent of their length (the tests shorten them: 1).
+pub static PACE_PCT: AtomicU64 = AtomicU64::new(100);
+
+/// A human pause of lo..hi ms (PACE_PCT of it).
+async fn pace_pause(lo: u64, hi: u64) {
+    let ms = rand::thread_rng().gen_range(lo..hi) * PACE_PCT.load(Ordering::Relaxed) / 100;
+    sleep(Duration::from_millis(ms)).await;
+}
 
 /// How a bot gets in: a token (the server's own bots), or a name and password (any server).
 #[derive(Clone)]
@@ -285,8 +295,7 @@ async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level
             c.send(json!({"t": "arena_pick", "i": k})).await?;
         }
         if ctx.pace {
-            let ms = rand::thread_rng().gen_range(200..600);
-            sleep(Duration::from_millis(ms)).await;
+            pace_pause(200, 600).await;
         }
         st = c.want("arena", Duration::from_secs(20)).await?["state"].clone();
     }
@@ -504,8 +513,7 @@ async fn play(ctx: &Ctx, c: &mut Conn, m: Value, deck: Vec<String>, arena: bool,
                         // a human pace, when the turn has time for it
                         let ends = Instant::now() + left.saturating_sub(Duration::from_millis(d.ms as u64));
                         if ctx.pace && ends.saturating_duration_since(Instant::now()) > Duration::from_secs(10) {
-                            let ms = rand::thread_rng().gen_range(500..1300);
-                            sleep(Duration::from_millis(ms)).await;
+                            pace_pause(500, 1300).await;
                         }
                         // a new state came while the bot thought (the turn ended, a card came): look again
                         read_ahead(c, &mut ahead).await?;

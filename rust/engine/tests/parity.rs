@@ -2,7 +2,8 @@
 //! removed in 0.27: the fixtures are frozen) and checks that the Rust engine gives
 //! the same legal actions, bot choices, events and state hashes at every step.
 //! Fixtures: tests/fixtures/*.jsonl (committed) and tests/fixtures/big/*.jsonl
-//! (generated earlier, gitignored).
+//! (generated earlier, gitignored). The games replay on every core at once; the report keeps the
+//! files' order.
 //!
 //! `PARITY_FILTER` replays only the games that mention some cards (in their
 //! setup, actions or events): a class (`MAGE`), `lua` (every card with
@@ -21,7 +22,8 @@ use classichs_engine::state::{hex, Game};
 use classichs_engine::{bot, card_db, missions, ruleset, scenario};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
-use std::collections::BTreeSet;
+use std::collections::{BTreeSet, HashMap};
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::path::Path;
 
 fn short(s: &str) -> String {
@@ -46,6 +48,25 @@ struct Stats {
     seen: BTreeSet<String>,
 }
 
+impl Stats {
+    fn add(&mut self, o: Stats) {
+        self.games += o.games;
+        self.steps += o.steps;
+        self.bot_checks += o.bot_checks;
+        self.played.extend(o.played);
+        self.seen.extend(o.seen);
+    }
+}
+
+/// One thread's share of the lines: its counts, its mismatches and the games it recorded again
+/// (None: dropped), each by the line's number (the report keeps the files' order).
+#[derive(Default)]
+struct Part {
+    st: Stats,
+    bad: Vec<(usize, String)>,
+    redo: Vec<(usize, Option<String>)>,
+}
+
 fn setup(s: &Value) -> Game {
     match s["kind"].as_str().unwrap() {
         "new" => {
@@ -63,12 +84,7 @@ fn replay(line: &Value, st: &mut Stats) {
     let id = line["id"].as_str().unwrap().to_string();
     st.games += 1;
     let mut g = setup(&line["setup"]);
-    let bad = |st: &mut Stats, what: String| {
-        if st.mismatches.len() < 40 {
-            eprintln!("MISMATCH {id}: {what}");
-        }
-        st.mismatches.push(format!("{id}: {what}"));
-    };
+    let bad = |st: &mut Stats, what: String| st.mismatches.push(format!("{id}: {what}"));
     if short(&g.state_hash()) != line["h0"].as_str().unwrap()[..16] {
         bad(st, "start hash".into());
         return;
@@ -229,45 +245,68 @@ fn parity_with_gdscript() {
     let t0 = std::time::Instant::now();
     let mut st = Stats::default();
     let rerecord = std::env::var("PARITY_RERECORD").is_ok_and(|v| v == "1");
-    let (mut redone, mut dropped) = (0, 0);
-    for f in &files {
-        let text = std::fs::read_to_string(f).unwrap();
-        let mut out: Vec<String> = vec![];
-        for line in text.lines().filter(|l| !l.trim().is_empty()) {
-            out.push(line.to_string());
-            if let Some(n) = &needles {
-                if !n.iter().any(|x| line.contains(x.as_str())) {
-                    continue;
-                }
-            }
-            let Ok(v) = serde_json::from_str::<Value>(line) else {
-                eprintln!("skipping a broken line in {}", f.display());
-                continue;
-            };
-            if v.get("t").is_some() {
-                misc(&v, &mut st);
-            } else {
-                let bad = st.mismatches.len();
-                replay(&v, &mut st);
-                if rerecord && st.mismatches.len() > bad {
-                    st.mismatches.truncate(bad);
-                    out.pop();
-                    match record_again(&v) {
-                        Some(n) => {
-                            out.push(serde_json::to_string(&n).unwrap());
-                            redone += 1;
-                        }
-                        None => dropped += 1,
+    let texts: Vec<String> = files.iter().map(|f| std::fs::read_to_string(f).unwrap()).collect();
+    let lines: Vec<(usize, &str)> =
+        texts.iter().enumerate().flat_map(|(k, t)| t.lines().filter(|l| !l.trim().is_empty()).map(move |l| (k, l))).collect();
+    // the games are independent: every core takes the next line until none is left
+    let next = AtomicUsize::new(0);
+    let threads = std::thread::available_parallelism().map_or(1, |n| n.get());
+    let parts: Vec<Part> = std::thread::scope(|s| {
+        let work = || {
+            let mut p = Part::default();
+            loop {
+                let i = next.fetch_add(1, Ordering::Relaxed);
+                let Some(&(k, line)) = lines.get(i) else { break };
+                if let Some(n) = &needles {
+                    if !n.iter().any(|x| line.contains(x.as_str())) {
+                        continue;
                     }
                 }
+                let Ok(v) = serde_json::from_str::<Value>(line) else {
+                    eprintln!("skipping a broken line in {}", files[k].display());
+                    continue;
+                };
+                if v.get("t").is_some() {
+                    misc(&v, &mut p.st);
+                } else {
+                    replay(&v, &mut p.st);
+                    if rerecord && !p.st.mismatches.is_empty() {
+                        p.st.mismatches.clear();
+                        p.redo.push((i, record_again(&v).map(|n| serde_json::to_string(&n).unwrap())));
+                    }
+                }
+                p.bad.extend(p.st.mismatches.drain(..).map(|m| (i, m)));
             }
-        }
-        if rerecord {
-            std::fs::write(f, out.join("\n") + "\n").unwrap();
-        }
+            p
+        };
+        let hs: Vec<_> = (0..threads).map(|_| s.spawn(work)).collect();
+        hs.into_iter().map(|h| h.join().unwrap()).collect()
+    });
+    let (mut bad, mut redo) = (vec![], HashMap::new());
+    for p in parts {
+        bad.extend(p.bad);
+        redo.extend(p.redo);
+        st.add(p.st);
+    }
+    bad.sort_by_key(|b| b.0); // (stable: a line's own mismatches stay in order)
+    st.mismatches = bad.into_iter().map(|b| b.1).collect();
+    for m in st.mismatches.iter().take(40) {
+        eprintln!("MISMATCH {m}");
     }
     if rerecord {
-        eprintln!("PARITY_RERECORD: {redone} games recorded again, {dropped} dropped");
+        let mut out: Vec<Vec<String>> = vec![vec![]; files.len()];
+        for (i, &(k, line)) in lines.iter().enumerate() {
+            match redo.get(&i) {
+                None => out[k].push(line.to_string()),
+                Some(Some(n)) => out[k].push(n.clone()),
+                Some(None) => {}
+            }
+        }
+        for (f, o) in files.iter().zip(out) {
+            std::fs::write(f, o.join("\n") + "\n").unwrap();
+        }
+        let redone = redo.values().filter(|n| n.is_some()).count();
+        eprintln!("PARITY_RERECORD: {redone} games recorded again, {} dropped", redo.len() - redone);
     }
     let playable: Vec<&String> = card_db::collectible().iter().filter(|id| card_db::card(id).kind != "CHAMPION").collect();
     let missing: Vec<&&String> = playable.iter().filter(|id| !st.played.contains(**id)).collect();

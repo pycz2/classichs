@@ -83,6 +83,11 @@ files. A process is stopped after `TEST_TIMEOUT` seconds (600) or 200 MB of outp
 the test it was on. The run's folders are removed when all passed, else their paths are printed.
 `tools/build_packs.sh` rebuilds only the packs whose sources changed (`tools/pack.py build --if-changed`).
 
+The Rust tests: `cd rust && cargo test --release` and `cd server && cargo test --release` (what the CI runs).
+`cargo test` runs the test files one after another; [cargo-nextest](https://nexte.st/) (`brew install cargo-nextest`)
+runs every test in its own process, all at once (`server/` on 10 cores: about 12 s instead of 30 s):
+`cargo nextest run --release` in `rust/` and in `server/`. It skips doc tests: `cd rust && cargo test --release --doc`.
+
 Other tools: `tools/extract_cards.py` rebuilds `data/cards.json` from HearthstoneJSON; `tools/gen_audio.py` synthesizes `audio/*.wav`.
 
 ## Music sets

@@ -507,6 +507,8 @@ async fn the_backfill_resumes_after_a_restart_and_skips_counted_databases() {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn a_finished_server_game_is_counted() {
     let state = app().await;
+    // the bots' human pace a hundred times shorter: the game takes seconds, not a minute
+    classichs_server::bots::runtime::PACE_PCT.store(1, std::sync::atomic::Ordering::Relaxed);
     classichs_server::spawn_background(state.clone());
     classichs_server::bots::create(&state, 2, "easy", "ranked", (0, 0), (0, 1)).await.unwrap();
     classichs_server::bots::sync(&state).await.unwrap();
