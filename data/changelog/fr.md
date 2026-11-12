@@ -4,6 +4,35 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+### Ajouté
+- **Onze nouveaux jeux, les extensions après Naxxramas.** Chacun contient toutes les cartes des jeux précédents (De base, Classique, Naxxramas et ainsi de suite dans l’ordre), et chaque carte est telle qu’au jour de sortie de l’extension : coût, caractéristiques, type, textes en 8 langues. Chaque jeu a ses modèles de decks de la méta de l’époque (10 à 17), des bots qui y jouent, son propre style et un symbole d’extension.
+- Gobelins et Gnomes 2014 (cartes au 8 décembre 2014) : Méca, pièces détachées, Méga-furie des vents, Tête de Mimiron.
+- Mont Rochenoire 2015 (2 avril 2015) : Dragons et cartes « si vous avez un Dragon en main », Empereur Thaurissan, Nefarian.
+- Le Grand Tournoi 2015 (24 août 2015) : Exaltation, Joutes, pouvoirs héroïques améliorés.
+- La Ligue des explorateurs 2015 (12 novembre 2015) : Découverte, Reno Jackson, Brann Barbe-de-Bronze.
+- Les murmures des Dieux très anciens 2016 (26 avril 2016) : C’Thun et ses rituels, N’Zoth, Yogg-Saron et les douze changements de cartes Classiques de ce jour-là.
+- Une nuit à Karazhan 2016 (11 août 2016, la première aile) : les Portails, Medivh, le Gardien et Atiesh, Prince Malchezaar, Barnes.
+- Main basse sur Gadgetzan 2016 (1er décembre 2016) : Golems de jade, Kazakus, cartes de trois classes à la fois.
+- Voyage au centre d’Un’Goro 2017 (6 avril 2017) : Quêtes et leurs récompenses, Adaptation, Élémentaires, serviteurs en sommeil.
+- Chevaliers du Trône de glace 2017 (10 août 2017) : les cartes de héros Chevalier de la mort, Vol de vie, une Zombête faite de deux Bêtes.
+- Kobolds et Catacombes 2017 (7 décembre 2017) : serviteurs posés directement du deck sur le plateau, pierres de sort qui grandissent, armes légendaires.
+- Le Bois Maudit 2018 (12 avril 2018) : Écho, Ruée, cartes pour les decks aux coûts uniquement pairs ou impairs (Genn et Baku).
+- Les nouveaux jeux ne sont pas dans les versions du client : les applications pour ordinateur, Android et navigateur n’ont pas grossi. Téléchargez un jeu depuis un serveur ou installez le fichier ClassicHS-x.y.z-<jeu>.cardpack de la page de la version. Chaque jeu est autonome et n’a besoin d’aucun autre : il porte les images des anciennes cartes, et les nouvelles cartes ont des images dessinées simples.
+- Les cartes en main dont la condition est remplie en ce moment brillent en jaune : Combo, « si votre deck ne contient pas de cartes en double », « si vous avez un Dragon en main » et d’autres.
+- Les cartes des extensions montrent leur symbole d’extension, aussi à côté de la grande carte ; la collection a un filtre par extension.
+- Le plateau et l’historique du match montrent les nouvelles mécaniques : une Joute avec une carte de chaque deck, la progression d’une Quête à côté de son héros, les serviteurs en sommeil, un tour supplémentaire, les cartes de héros avec leur Armure, le Vol de vie, les cartes de plusieurs classes.
+- Dans votre propre pack local avec les sons, les cartes légendaires ont leur musique : elle joue quand la carte est jouée, et la musique de fond baisse pendant ce temps.
+
+### Modifié
+- La mèche du tour brûle vers le bouton Fin du tour, comme dans Hearthstone.
+- Chaque camp a au plus 5 Secrets, comme dans Hearthstone depuis 2014. Un sixième Secret ne peut pas être joué depuis la main, le Savant fou laisse son Secret dans le deck quand il y en a cinq, et la Mystique de Kezan détruit un Secret au lieu de le prendre.
+- Un pack peut peser jusqu’à 1 Gio (2 Gio décompressé), dans le client et sur un serveur, le pack d’un joueur aussi. Le serveur lit un pack sur le disque par morceaux et ne le garde jamais entier en mémoire.
+- Le serveur installe ses jeux fournis en arrière-plan : après une mise à jour, il accepte les joueurs tout de suite, et un nouveau jeu apparaît dans la liste dès qu’il a passé sa vérification.
+
+### Corrigé
+- Un bot qui ne peut pas jouer son coup (par exemple après une erreur dans le script d’une carte) ne le répète plus sans fin : il s’arrête avec une seule erreur.
+- Le texte allemand du pouvoir héroïque amélioré du Paladin dans Classique n’affiche plus de crochets vides.
+
 ## [0.67.0] - 2026-11-11
 
 ### Ajouté

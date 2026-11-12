@@ -4,6 +4,35 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+### Añadido
+- **Once juegos nuevos, las expansiones después de Naxxramas.** Cada uno tiene todas las cartas de los juegos anteriores (Básicas, Clásicas, Naxxramas y los siguientes en orden), y cada carta es como era el día del lanzamiento de la expansión: coste, estadísticas, raza, textos en 8 idiomas. Cada juego tiene sus plantillas de mazos del meta de la época (de 10 a 17), bots que lo juegan, su propio aspecto y un símbolo de expansión.
+- Goblins y Gnomos 2014 (cartas al 8 de diciembre de 2014): mecas, piezas de repuesto, Megaviento furioso, Cabeza de Mimiron.
+- La Montaña Roca Negra 2015 (2 de abril de 2015): dragones y cartas «si tienes un dragón en la mano», Emperador Thaurissan, Nefarian.
+- El Gran Torneo 2015 (24 de agosto de 2015): Inspirar, Justas, poderes de héroe mejorados.
+- La Liga de Expedicionarios 2015 (12 de noviembre de 2015): Descubrir, Reno Jackson, Brann Barbabronce.
+- Susurros de los Dioses Antiguos 2016 (26 de abril de 2016): C'Thun y sus rituales, N'Zoth, Yogg-Saron y los doce cambios de cartas Clásicas de ese día.
+- Una noche en Karazhan 2016 (11 de agosto de 2016, la primera ala): los portales, Medivh, el Guardián y Atiesh, Príncipe Malchezaar, Barnes.
+- Mafias de Gadgetzan 2016 (1 de diciembre de 2016): gólems de jade, Kazakus, cartas de tres clases a la vez.
+- Viaje a Un'Goro 2017 (6 de abril de 2017): misiones y sus recompensas, Adaptación, elementales, esbirros latentes.
+- Caballeros del Trono Helado 2017 (10 de agosto de 2017): las cartas de héroe de los caballeros de la Muerte, Robo de vida, una zombestia hecha de dos bestias.
+- Kóbolds y Catacumbas 2017 (7 de diciembre de 2017): esbirros directamente del mazo al tablero, piedras de hechizo que crecen, armas legendarias.
+- El Bosque Embrujado 2018 (12 de abril de 2018): Eco, Embestida, cartas para mazos solo de coste par o solo de coste impar (Genn y Baku).
+- Los juegos nuevos no están en las versiones del cliente, así que las aplicaciones de escritorio, Android y navegador no han crecido. Descarga un juego desde un servidor o instala el archivo ClassicHS-x.y.z-<juego>.cardpack de la página de la versión. Cada juego es independiente y no necesita ningún otro: lleva las imágenes de las cartas antiguas, y las cartas nuevas tienen imágenes dibujadas sencillas.
+- Las cartas en la mano cuya condición se cumple ahora brillan en amarillo: Combo, «si tu mazo no tiene cartas repetidas», «si tienes un dragón en la mano» y más.
+- Las cartas de las expansiones muestran su símbolo de expansión, también junto a la carta grande; la colección tiene un filtro por expansión.
+- El tablero y el historial de la partida muestran las mecánicas nuevas: una Justa con una carta de cada mazo, el progreso de una misión junto a su héroe, esbirros latentes, un turno extra, cartas de héroe con su armadura, Robo de vida, cartas de varias clases.
+- En tu propio paquete local con sonidos, las cartas legendarias tienen su música: suena cuando se juega la carta, y la música de fondo baja mientras tanto.
+
+### Cambiado
+- La mecha del turno arde hacia el botón Terminar turno, como en Hearthstone.
+- Cada lado tiene como máximo 5 Secretos, como en Hearthstone desde 2014. Un sexto Secreto no se puede jugar desde la mano, el Científico loco con cinco deja su Secreto en el mazo, y la Mística de Kezan destruye un Secreto en vez de robarlo.
+- Un paquete puede pesar hasta 1 GiB (2 GiB descomprimido), en el cliente y en un servidor, también el paquete de un jugador. El servidor lee un paquete del disco por partes y nunca lo guarda entero en memoria.
+- El servidor instala sus juegos incluidos en segundo plano: tras una actualización acepta jugadores al momento, y un juego nuevo aparece en la lista en cuanto pasa su comprobación.
+
+### Corregido
+- Un bot que no puede hacer su jugada (por ejemplo, tras un error en el script de una carta) ya no la repite sin fin: se detiene con un solo error.
+- El texto alemán del poder de héroe mejorado del Paladín en Clásico ya no muestra corchetes vacíos.
+
 ## [0.67.0] - 2026-11-11
 
 ### Añadido

@@ -4,6 +4,35 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+### Dodano
+- **Jedenaście nowych gier, dodatki po Naxxramas.** Każda ma wszystkie karty gier przed nią (Podstawowe, Klasyczne, Naxxramas i kolejne po kolei), a każda karta jest taka, jaka była w dniu premiery dodatku: koszt, statystyki, rasa, teksty w 8 językach. Każda gra ma własne szablony talii mety z tamtego czasu (od 10 do 17), boty, które w nią grają, własny wygląd i symbol dodatku.
+- Gobliny kontra gnomy 2014 (karty z 8 grudnia 2014): Mechy, części zamienne, Mega-Furia Wichru, Głowa Mimirona.
+- Czarna Góra 2015 (2 kwietnia 2015): Smoki i karty „jeśli masz w ręce Smoka”, Imperator Thaurissan, Nefarian.
+- Wielki Turniej 2015 (24 sierpnia 2015): Inspiracja, Pojedynki, ulepszone Moce Bohatera.
+- Liga Odkrywców 2015 (12 listopada 2015): Odkrycie, Reno Jackson, Brann Miedziobrody.
+- Szepty Pradawnych Bogów 2016 (26 kwietnia 2016): C'Thun i jego rytuały, N'Zoth, Yogg-Saron oraz dwanaście zmian kart Klasycznych z tego dnia.
+- Noc w Karazhanie 2016 (11 sierpnia 2016, pierwsze skrzydło): portale, Strażnik Medivh i Atiesz, Książę Malkezar, Barnes.
+- Ciemne zaułki Gadżetonu 2016 (1 grudnia 2016): Jadeitowe Golemy, Kozakus, karty trzech klas naraz.
+- Podróż do Un'Goro 2017 (6 kwietnia 2017): Zadania i ich nagrody, Adaptacja, Żywiołaki, uśpieni stronnicy.
+- Rycerze Mroźnego Tronu 2017 (10 sierpnia 2017): karty bohaterów Rycerzy Śmierci, Kradzież życia, Zombiebestia z dwóch Bestii.
+- Koboldy i Katakumby 2017 (7 grudnia 2017): stronnicy prosto z talii na stół, rosnące Kamienie Zaklęć, legendarna broń.
+- Wiedźmi Las 2018 (12 kwietnia 2018): Echo, stronnicy, którzy od razu atakują stronników, karty do talii tylko o parzystych albo tylko o nieparzystych kosztach (Genn i Baku).
+- Nowych gier nie ma w kompilacjach klienta, więc aplikacje na komputer, Androida i przeglądarkę nie urosły. Grę można pobrać z serwera albo zainstalować plik ClassicHS-x.y.z-<gra>.cardpack ze strony wydania. Każda gra jest samodzielna i nie potrzebuje innych: ma przy sobie obrazki starszych kart, a nowe karty mają proste rysowane obrazki.
+- Karty w ręce, których warunek jest teraz spełniony, świecą na żółto: Kombinacja, „jeśli w twojej talii nie ma duplikatów”, „jeśli masz w ręce Smoka” i inne.
+- Karty dodatków pokazują symbol dodatku, także obok dużej karty; kolekcja ma filtr dodatków.
+- Stół i historia meczu pokazują nowe mechaniki: Pojedynek z kartą z każdej talii, postęp Zadania obok bohatera, uśpionych stronników, dodatkową turę, karty bohaterów z ich Pancerzem, Kradzież życia, karty kilku klas.
+- We własnym lokalnym pakiecie z dźwiękami legendarne karty mają swoją muzykę: gra, gdy karta zostaje zagrana, a muzyka w tle w tym czasie cichnie.
+
+### Zmieniono
+- Lont tury pali się w stronę przycisku Koniec tury, jak w Hearthstone.
+- Każda strona ma najwyżej 5 Sekretów, jak w Hearthstone od 2014 roku. Szóstego Sekretu nie da się zagrać z ręki, Szalony naukowiec przy pięciu zostawia Sekret w talii, a Mistyczka z Kezanu niszczy Sekret zamiast go przejąć.
+- Pakiet może ważyć do 1 GiB (2 GiB po rozpakowaniu), w kliencie i na serwerze, także pakiet gracza. Serwer czyta pakiet z dysku po kawałku i nigdy nie trzyma go w pamięci w całości.
+- Serwer instaluje dołączone gry w tle: po aktualizacji od razu przyjmuje graczy, a nowa gra pojawia się na liście, gdy tylko przejdzie sprawdzenie.
+
+### Naprawiono
+- Bot, który nie może wykonać ruchu (na przykład po błędzie w skrypcie karty), nie powtarza go już bez końca: zatrzymuje się z jednym błędem.
+- Niemiecki tekst ulepszonej Mocy Bohatera Paladyna w Classic nie pokazuje już pustych nawiasów.
+
 ## [0.67.0] - 2026-11-11
 
 ### Dodano

@@ -4,6 +4,35 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+### Aggiunto
+- **Undici nuovi giochi, le espansioni dopo Naxxramas.** Ognuno ha tutte le carte dei giochi precedenti (Base, Classiche, Naxxramas e i successivi in ordine), e ogni carta è com’era il giorno dell’uscita dell’espansione: costo, statistiche, razza, testi in 8 lingue. Ogni gioco ha i suoi modelli di mazzo della meta di allora (da 10 a 17), bot che lo giocano, un aspetto proprio e un simbolo dell’espansione.
+- Goblin vs Gnomi 2014 (carte all’8 dicembre 2014): Robot, pezzi di ricambio, Mega Furia del Vento, Testa di Mimiron.
+- Massiccio Roccianera 2015 (2 aprile 2015): Draghi e carte «se hai un Drago in mano», Thaurissan, Nefarian.
+- Il Gran Torneo 2015 (24 agosto 2015): Ispirazione, Giostre, Poteri Eroe migliorati.
+- La Lega degli Esploratori 2015 (12 novembre 2015): Rinvenire, Reno Jackson, Brann Barbabronzea.
+- Sussurri degli Dei Antichi 2016 (26 aprile 2016): C'thun e i suoi rituali, N'zoth, Yogg-Saron e le dodici modifiche alle carte Classiche di quel giorno.
+- Una Notte a Karazhan 2016 (11 agosto 2016, la prima ala): i portali, Medivh il Guardiano e Atiesh, Principe Malchezaar, Barnes.
+- I Bassifondi di Meccania 2016 (1º dicembre 2016): Golem di Giada, Kazakus, carte di tre classi insieme.
+- Viaggio a Un'Goro 2017 (6 aprile 2017): Missioni e le loro ricompense, Adattamento, Elementali, servitori dormienti.
+- Cavalieri del Trono di Ghiaccio 2017 (10 agosto 2017): le carte eroe dei Cavalieri della Morte, Furto Vitale, una Bestia Zombi fatta di due Bestie.
+- Coboldi & Catacombe 2017 (7 dicembre 2017): servitori direttamente dal mazzo al tabellone, Pietre Magiche che crescono, armi leggendarie.
+- Il Bosco Tetro 2018 (12 aprile 2018): Eco, Assalto, carte per mazzi solo di costo pari o solo di costo dispari (Genn e Baku).
+- I nuovi giochi non sono nelle build del client, quindi le app per computer, Android e browser non sono cresciute. Scarica un gioco da un server o installa il file ClassicHS-x.y.z-<gioco>.cardpack dalla pagina della versione. Ogni gioco è indipendente e non ne richiede altri: porta con sé le immagini delle carte più vecchie, e le nuove carte hanno semplici immagini disegnate.
+- Le carte in mano la cui condizione vale in questo momento brillano di giallo: Combo, «se il tuo mazzo non ha carte doppie», «se hai un Drago in mano» e altre.
+- Le carte delle espansioni mostrano il simbolo dell’espansione, anche accanto alla carta grande; la collezione ha un filtro per espansione.
+- Il tabellone e la cronologia della partita mostrano le nuove meccaniche: una Giostra con una carta di ogni mazzo, il progresso di una Missione accanto al suo eroe, servitori dormienti, un turno extra, carte eroe con la loro Armatura, Furto Vitale, carte di più classi.
+- Nel tuo pacchetto locale con i suoni, le carte leggendarie hanno una musica propria: suona quando la carta viene giocata, e intanto la musica di sottofondo si abbassa.
+
+### Modificato
+- La miccia del turno brucia verso il pulsante Fine turno, come in Hearthstone.
+- Ogni lato ha al massimo 5 Segreti, come in Hearthstone dal 2014. Un sesto Segreto non si può giocare dalla mano, lo Scienziato Pazzo con cinque lascia il suo Segreto nel mazzo, e la Mistica di Kezan distrugge un Segreto invece di prenderlo.
+- Un pacchetto può pesare fino a 1 GiB (2 GiB decompresso), nel client e su un server, anche il pacchetto di un giocatore. Il server legge un pacchetto dal disco a pezzi e non lo tiene mai tutto in memoria.
+- Il server installa i suoi giochi inclusi in background: dopo un aggiornamento accetta subito i giocatori, e un nuovo gioco compare nell’elenco appena supera il controllo.
+
+### Corretto
+- Un bot che non riesce a fare la sua mossa (per esempio dopo un errore nello script di una carta) non la ripete più all’infinito: si ferma con un solo errore.
+- Il testo tedesco del Potere Eroe migliorato del Paladino in Classico non mostra più parentesi vuote.
+
 ## [0.67.0] - 2026-11-11
 
 ### Aggiunto

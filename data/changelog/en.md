@@ -4,6 +4,35 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+### Added
+- **Eleven new games, the expansions after Naxxramas.** Each holds every card of the games before it (Basic, Classic, Naxxramas and on in order), and every card is as it was on the expansion's release day: cost, stats, tribe, texts in 8 languages. Each game has its own deck templates of that time's meta (10 to 17), bots that play it, its own look and a set mark.
+- Goblins vs Gnomes 2014 (cards as of December 8, 2014): Mechs, Spare Parts, Mega-Windfury, Mimiron's Head.
+- Blackrock Mountain 2015 (April 2, 2015): Dragons and "if you're holding a Dragon" cards, Emperor Thaurissan, Nefarian.
+- The Grand Tournament 2015 (August 24, 2015): Inspire, Jousts, upgraded Hero Powers.
+- The League of Explorers 2015 (November 12, 2015): Discover, Reno Jackson, Brann Bronzebeard.
+- Whispers of the Old Gods 2016 (April 26, 2016): C'Thun and his rituals, N'Zoth, Yogg-Saron and the twelve Classic card changes of that day.
+- One Night in Karazhan 2016 (August 11, 2016, the first wing): the Portals, Medivh and Atiesh, Prince Malchezaar, Barnes.
+- Mean Streets of Gadgetzan 2016 (December 1, 2016): Jade Golems, Kazakus, cards of three classes at once.
+- Journey to Un'Goro 2017 (April 6, 2017): Quests and their rewards, Adapt, Elementals, Dormant minions.
+- Knights of the Frozen Throne 2017 (August 10, 2017): the Death Knight hero cards, Lifesteal, a Zombeast made of two Beasts.
+- Kobolds & Catacombs 2017 (December 7, 2017): minions straight from the deck onto the board, Spellstones that grow, Legendary weapons.
+- The Witchwood 2018 (April 12, 2018): Echo, Rush, cards for decks of only even or only odd costs (Genn and Baku).
+- The new games are not in the client builds, so the desktop, Android and web apps did not grow. Download a game from a server or install the file ClassicHS-x.y.z-<game>.cardpack from the release page. Each game stands alone and needs no other: it carries the pictures of the older cards, and the new cards have simple drawn pictures.
+- Cards in the hand whose condition holds right now glow yellow: Combo, "if your deck has no duplicates", "if you're holding a Dragon" and more.
+- Expansion cards show their set mark, also beside the big card; the collection has a set filter.
+- The board and the match history show the new mechanics: a Joust with a card of each deck, a Quest's progress beside its hero, Dormant minions, an extra turn, hero cards with their Armor, Lifesteal, cards of several classes.
+- In your own local pack with sounds, Legendary cards have their own music: it plays when the card is played, and the background music goes quiet meanwhile.
+
+### Changed
+- The turn's fuse burns towards the End Turn button, as in Hearthstone.
+- Each side has at most 5 Secrets, as in Hearthstone since 2014. A sixth Secret can't be played from the hand, Mad Scientist with five leaves his Secret in the deck, and Kezan Mystic destroys a Secret instead of taking it.
+- A pack may weigh up to 1 GiB (2 GiB unpacked), in the client and on a server, a player's pack too. The server reads a pack from disk in parts and never holds it in memory whole.
+- The server installs its bundled games in the background: after an update it takes players at once, and a new game shows up in the list as soon as it passes its check.
+
+### Fixed
+- A bot that can't make its move (for example, after an error in a card's script) no longer repeats it endlessly: it stops with one error.
+- The German text of Classic's upgraded Paladin Hero Power no longer shows empty brackets.
+
 ## [0.67.0] - 2026-11-11
 
 ### Added

@@ -4,6 +4,35 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+### Adicionado
+- **Onze jogos novos, as expansões depois de Naxxramas.** Cada um tem todas as cartas dos jogos anteriores (Básicas, Clássicas, Naxxramas e os seguintes, em ordem), e cada carta é como era no dia do lançamento da expansão: custo, atributos, raça, textos em 8 idiomas. Cada jogo tem seus modelos de deck do meta da época (de 10 a 17), bots que o jogam, visual próprio e um símbolo de expansão.
+- Goblins vs Gnomos 2014 (cartas de 8 de dezembro de 2014): Mecanoides, peças sobressalentes, Megafúria dos Ventos, Cabeça de Mimiron.
+- Montanha Rocha Negra 2015 (2 de abril de 2015): Dragões e cartas "se você tiver um Dragão na mão", Imperador Thaurissan, Nefarian.
+- O Grande Torneio 2015 (24 de agosto de 2015): Inspirar, Justas, Poderes Heroicos aprimorados.
+- A Liga dos Exploradores 2015 (12 de novembro de 2015): Descobrir, Reno Jackson, Brann Barbabronze.
+- Sussurros dos Deuses Antigos 2016 (26 de abril de 2016): C'Thun e seus rituais, N'Zoth, Yogg-Saron e as doze mudanças de cartas Clássicas daquele dia.
+- Uma Noite em Karazhan 2016 (11 de agosto de 2016, a primeira ala): os portais, Medivh, o Guardião e Atiesh, Príncipe Malquezaar, Barnes.
+- Gangues de Geringontzan 2016 (1º de dezembro de 2016): Golens de Jade, Kazakus, cartas de três classes ao mesmo tempo.
+- Jornada a Un'Goro 2017 (6 de abril de 2017): Missões e suas recompensas, Adaptar, Elementais, lacaios dormentes.
+- Cavaleiros do Trono de Gelo 2017 (10 de agosto de 2017): as cartas de herói dos Cavaleiros da Morte, Roubar Vida, uma Zumbifera feita de duas Feras.
+- Kobolds e Catacumbas 2017 (7 de dezembro de 2017): lacaios direto do deck para o tabuleiro, Pedras de Feitiço que crescem, armas lendárias.
+- O Bosque das Bruxas 2018 (12 de abril de 2018): Eco, Investida, cartas para decks só de custo par ou só de custo ímpar (Genn e Baku).
+- Os jogos novos não estão nas versões do cliente, então os aplicativos para computador, Android e navegador não cresceram. Baixe um jogo de um servidor ou instale o arquivo ClassicHS-x.y.z-<jogo>.cardpack da página da versão. Cada jogo é independente e não precisa de nenhum outro: ele traz as imagens das cartas antigas, e as cartas novas têm imagens desenhadas simples.
+- Cartas na mão cuja condição vale agora brilham em amarelo: Combo, "se o seu deck não tiver cartas repetidas", "se você tiver um Dragão na mão" e outras.
+- As cartas das expansões mostram o símbolo da expansão, também ao lado da carta grande; a coleção tem um filtro por expansão.
+- O tabuleiro e o histórico da partida mostram as mecânicas novas: uma Justa com uma carta de cada deck, o progresso de uma Missão ao lado do herói, lacaios dormentes, um turno extra, cartas de herói com a sua Armadura, Roubar Vida, cartas de várias classes.
+- No seu próprio pacote local com sons, as cartas lendárias têm música própria: ela toca quando a carta é jogada, e a música de fundo abaixa enquanto isso.
+
+### Alterado
+- O pavio do turno queima em direção ao botão Finalizar Turno, como no Hearthstone.
+- Cada lado tem no máximo 5 Segredos, como no Hearthstone desde 2014. Um sexto Segredo não pode ser jogado da mão, o Cientista Louco com cinco deixa o Segredo no deck, e a Mística de Kezan destrói um Segredo em vez de roubá-lo.
+- Um pacote pode ter até 1 GiB (2 GiB descompactado), no cliente e num servidor, inclusive o pacote de um jogador. O servidor lê o pacote do disco em partes e nunca o guarda inteiro na memória.
+- O servidor instala os jogos que traz em segundo plano: depois de uma atualização ele aceita jogadores na hora, e um jogo novo aparece na lista assim que passa na verificação.
+
+### Corrigido
+- Um bot que não consegue fazer a jogada (por exemplo, depois de um erro no script de uma carta) não a repete mais sem fim: ele para com um único erro.
+- O texto alemão do Poder Heroico aprimorado do Paladino no Clássico não mostra mais colchetes vazios.
+
 ## [0.67.0] - 2026-11-11
 
 ### Adicionado

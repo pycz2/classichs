@@ -4,6 +4,35 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+### Hinzugefügt
+- **Elf neue Spiele, die Erweiterungen nach Naxxramas.** Jedes enthält alle Karten der Spiele davor (Basis, Klassik, Naxxramas und so weiter der Reihe nach), und jede Karte ist so, wie sie am Erscheinungstag der Erweiterung war: Kosten, Werte, Volk, Texte in 8 Sprachen. Jedes Spiel hat eigene Deckvorlagen der damaligen Meta (10 bis 17), Bots, die es spielen, ein eigenes Aussehen und ein Set-Symbol.
+- Goblins gegen Gnome 2014 (Karten vom 8. Dezember 2014): Mechs, Ersatzteile, Mega-Windzorn, Mimirons Kopf.
+- Der Schwarzfels 2015 (2. April 2015): Drachen und Karten „wenn Ihr einen Drachen auf der Hand habt“, Imperator Thaurissan, Nefarian.
+- Das Große Turnier 2015 (24. August 2015): Inspiration, Tjoste, verbesserte Heldenfähigkeiten.
+- Die Forscherliga 2015 (12. November 2015): Entdecken, Reno Jackson, Brann Bronzebart.
+- Das Flüstern der Alten Götter 2016 (26. April 2016): C'Thun und seine Rituale, N'Zoth, Yogg-Saron und die zwölf Änderungen an Klassik-Karten von diesem Tag.
+- Eine Nacht in Karazhan 2016 (11. August 2016, der erste Flügel): die Portale, Medivh der Wächter und Atiesh, Prinz Malchezaar, Barnes.
+- Die Straßen von Gadgetzan 2016 (1. Dezember 2016): Jadegolems, Kazakus, Karten für drei Klassen zugleich.
+- Reise nach Un'Goro 2017 (6. April 2017): Quests und ihre Belohnungen, Mutieren, Elementare, ruhende Diener.
+- Ritter des Frostthrons 2017 (10. August 2017): die Heldenkarten der Todesritter, Lebensentzug, eine Zombiebestie aus zwei Wildtieren.
+- Kobolde & Katakomben 2017 (7. Dezember 2017): Diener direkt aus dem Deck aufs Spielfeld, wachsende Zaubersteine, legendäre Waffen.
+- Der Hexenwald 2018 (12. April 2018): Echo, Ansturm, Karten für Decks nur mit geraden oder nur mit ungeraden Kosten (Genn und Baku).
+- Die neuen Spiele sind nicht in den Client-Builds, daher sind die Apps für Desktop, Android und Web nicht größer geworden. Ein Spiel lädt man von einem Server herunter oder installiert die Datei ClassicHS-x.y.z-<Spiel>.cardpack von der Release-Seite. Jedes Spiel steht für sich und braucht kein anderes: Es bringt die Bilder der älteren Karten mit, die neuen Karten haben einfache gezeichnete Bilder.
+- Karten auf der Hand, deren Bedingung gerade erfüllt ist, leuchten gelb: Combo, „wenn Euer Deck keine doppelten Karten enthält“, „wenn Ihr einen Drachen auf der Hand habt“ und mehr.
+- Karten der Erweiterungen zeigen ihr Set-Symbol, auch neben der großen Karte; die Sammlung hat einen Set-Filter.
+- Spielfeld und Spielverlauf zeigen die neuen Mechaniken: eine Tjoste mit einer Karte aus jedem Deck, den Fortschritt einer Quest neben ihrem Helden, ruhende Diener, einen Extrazug, Heldenkarten mit ihrer Rüstung, Lebensentzug, Karten mehrerer Klassen.
+- In Eurem eigenen lokalen Paket mit Klängen haben legendäre Karten eigene Musik: Sie spielt, wenn die Karte ausgespielt wird, und die Hintergrundmusik wird so lange leiser.
+
+### Geändert
+- Die Lunte des Zuges brennt zur Schaltfläche „Zug beenden“ hin, wie in Hearthstone.
+- Jede Seite hat höchstens 5 Geheimnisse, wie in Hearthstone seit 2014. Ein sechstes Geheimnis lässt sich nicht von der Hand ausspielen, der Irre Wissenschaftler lässt sein Geheimnis bei fünf im Deck, und die Mystikerin von Kezan zerstört ein Geheimnis, statt es zu übernehmen.
+- Ein Paket darf bis zu 1 GiB groß sein (2 GiB entpackt), im Client und auf einem Server, auch das Paket eines Spielers. Der Server liest ein Paket stückweise von der Festplatte und hält es nie ganz im Speicher.
+- Der Server installiert seine mitgelieferten Spiele im Hintergrund: Nach einem Update nimmt er sofort Spieler an, und ein neues Spiel erscheint in der Liste, sobald es seine Prüfung bestanden hat.
+
+### Behoben
+- Ein Bot, der seinen Zug nicht machen kann (etwa nach einem Fehler im Skript einer Karte), wiederholt ihn nicht mehr endlos, sondern hält mit einem Fehler an.
+- Der deutsche Text der verbesserten Heldenfähigkeit des Paladins in Klassik zeigt keine leeren Klammern mehr.
+
 ## [0.67.0] - 2026-11-11
 
 ### Hinzugefügt
