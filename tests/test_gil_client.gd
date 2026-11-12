@@ -22,14 +22,17 @@ static func root() -> Window:
 
 
 func _gil() -> bool:
-	if _pack == null:
+	# The pack is built once per process; it is installed again for each test (each test starts with the
+	# built-in packs only: tests/run.gd removes the others).
+	if _pack == null or not Packs.all().has(_pack):
 		var out := OS.get_user_data_dir() + "/gil_test.cardpack"
-		var log := []
-		var code := OS.execute("python3", [ProjectSettings.globalize_path("res://tools/pack.py"), "build",
-			ProjectSettings.globalize_path("res://packs/gil"), "-o", out], log, true)
-		if code != 0:
-			check(false, "packs/gil builds: " + "".join(log).right(600))
-			return false
+		if not FileAccess.file_exists(out):
+			var log := []
+			var code := OS.execute("python3", [ProjectSettings.globalize_path("res://tools/pack.py"), "build",
+				ProjectSettings.globalize_path("res://packs/gil"), "-o", out], log, true)
+			if code != 0:
+				check(false, "packs/gil builds: " + "".join(log).right(600))
+				return false
 		var r := Packs.install_file(out)
 		if r.has("error"):
 			check(false, "packs/gil installs: " + str(r.error))
