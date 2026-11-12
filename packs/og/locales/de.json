@@ -1,0 +1,52 @@
+{
+ "sets": {
+  "OG": "Das Flüstern der Alten Götter"
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Heldenfähigkeit</b>\nVerursacht $2 Schaden."
+  },
+  "EX1_625t2": {
+   "text": "<b>Heldenfähigkeit</b>\nVerursacht $3 Schaden."
+  },
+  "VAN_DS1_184": {
+   "text": "Schaut Euch die drei obersten Karten Eures Decks an. Zieht eine und werft die anderen ab."
+  },
+  "VAN_EX1_277": {
+   "text": "Verursacht $3 Schaden, der zufällig auf alle Feinde verteilt wird."
+  },
+  "VAN_EX1_366": {
+   "text": "Nachdem Ihr einen Diener herbeigerufen habt, erhält dieser +1/+1 und diese Waffe verliert 1 Haltbarkeit."
+  },
+  "VAN_EX1_379": {
+   "text": "<b>Geheimnis:</b> Nachdem Euer Gegner einen Diener ausgespielt hat, wird dessen Leben auf 1 verringert."
+  },
+  "VAN_EX1_384": {
+   "text": "Verursacht $8 Schaden, der zufällig auf alle Feinde verteilt wird."
+  },
+  "VAN_EX1_536": {
+   "text": "Erhält jedes Mal +1 Haltbarkeit, wenn ein eigenes <b>Geheimnis</b> aufgedeckt wird."
+  },
+  "VAN_EX1_539": {
+   "text": "Verursacht $3 Schaden. Verursacht stattdessen $5 Schaden, wenn Ihr ein Wildtier kontrolliert."
+  },
+  "VAN_EX1_559": {
+   "text": "Erhaltet jedes Mal einen „Feuerball“-Zauber auf die Hand, wenn Ihr einen Zauber wirkt."
+  },
+  "VAN_EX1_572": {
+   "text": "Erhaltet am Ende Eures Zuges eine Traumkarte auf die Hand."
+  },
+  "VAN_EX1_609": {
+   "text": "<b>Geheimnis:</b> Nachdem Euer Gegner einen Diener ausgespielt hat, werden diesem $4 Schaden zugefügt."
+  },
+  "VAN_EX1_611": {
+   "text": "<b>Geheimnis:</b> Wenn ein feindlicher Diener angreift, lasst ihn auf die Hand seines Besitzers zurückkehren. Er kostet (2) mehr."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Kampfschrei:</b> Erhaltet einen zufälligen Piraten aus Eurem Deck auf die Hand."
+  },
+  "VAN_NEW1_033": {
+   "text": "Eure anderen Diener haben +1 Angriff."
+  }
+ }
+}

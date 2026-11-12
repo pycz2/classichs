@@ -10709,6 +10709,7 @@
   "VAN_EX1_089": [
     {
       "kind": "charge",
+      "script": "scripts/neutral.lua#VAN_EX1_089",
       "title": "Arcane Golem: Battlecry gives the opponent a Mana Crystal (5 -> 6), Charge: attacks at once",
       "scene": {
         "current": 0,

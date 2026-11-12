@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds Whispers of the Old Gods 2016 (docs/packs/format.md, 'Build recipes'): on The League of Explorers (base), so on The Grand Tournament, Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 134 cards of Whispers of the Old Gods and their 31 tokens as the release build 12574 has them (patch 5.0.0.12574 of 2016-04-24, two days before the release; data/og_cards.json, tools/extract_cards.py --set og) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/og.lua, the keywords, the older cards that changed by then).",
+  "base": "../loe",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/og_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/og/cards.texts.json"
+      ]
+    }
+  ]
+}

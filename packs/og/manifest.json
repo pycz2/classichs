@@ -1,0 +1,169 @@
+{
+  "format": 1,
+  "id": "og-2016",
+  "version": "1.0.0",
+  "engine": "0.60.0",
+  "name": {
+    "en": "Whispers of the Old Gods 2016",
+    "ru": "Пробуждение древних богов 2016",
+    "de": "Das Flüstern der Alten Götter 2016",
+    "fr": "Les murmures des Dieux très anciens 2016",
+    "es": "Susurros de los Dioses Antiguos 2016",
+    "pt_BR": "Sussurros dos Deuses Antigos 2016",
+    "it": "Sussurri degli Dei Antichi 2016",
+    "pl": "Szepty Pradawnych Bogów 2016"
+  },
+  "description": {
+    "en": "The game as it was played after April 26, 2016: the Basic, Classic, Naxxramas, Goblins vs Gnomes, Blackrock Mountain, Grand Tournament and League of Explorers cards and the 134 cards of Whispers of the Old Gods, each as on that day. Your C'Thun grows wherever it is, N'Zoth brings back your fallen Deathrattle minions, Yogg-Saron casts a random spell for every spell you've cast, the Forbidden spells use up all your Mana and Evolve turns your minions into new ones. Twelve Classic cards were changed that day: Force of Nature, Ancient of Lore, Keeper of the Grove, Ironbeak Owl, Big Game Hunter, Hunter's Mark, Blade Flurry, Knife Juggler, Leper Gnome, Arcane Golem, Molten Giant and Master of Disguise.",
+    "ru": "Игра, как в неё играли после 26 апреля 2016 года: базовые и классические карты, карты Наксрамаса, «Гоблинов и гномов», Чёрной горы, Большого турнира, Лиги исследователей и 134 карты «Пробуждения древних богов», каждая как в тот день. Ваш К'Тун растёт, где бы он ни был, Н'Зот возвращает павших существ с «Предсмертным хрипом», Йогг-Сарон применяет случайное заклинание за каждое ваше заклинание, запретные заклинания тратят всю ману, а «Эволюция» превращает ваших существ в новых. В тот же день изменили двенадцать классических карт: «Силу природы», Древо мудрости, Хранителя чащи, Железноклюва, Опытного охотника, «Метку охотника», «Шквал клинков», Жонглёра кинжалами, Лепрогнома, Чародейского голема, Огненного великана и Мастера маскировки.",
+    "de": "Das Spiel, wie es nach dem 26. April 2016 gespielt wurde: die Basis-, Klassik-, Naxxramas-, „Goblins gegen Gnome“-, Schwarzfels-, Turnier- und Forscherliga-Karten und die 134 Karten von „Das Flüstern der Alten Götter“, jede wie an jenem Tag. Euer C’Thun wächst, wo auch immer er ist, N’Zoth ruft Eure gefallenen Diener mit Todesröcheln zurück, Yogg-Saron wirkt für jeden Zauber, den Ihr gewirkt habt, einen zufälligen Zauber, die verbotenen Zauber verbrauchen Euer ganzes Mana und Evolution verwandelt Eure Diener in neue. Zwölf Klassikkarten wurden an jenem Tag geändert, darunter Naturgewalt, Urtum der Lehren, Großwildjäger, Klingenwirbel, Messerjongleur und Geschmolzener Riese.",
+    "fr": "Le jeu tel qu’on le jouait après le 26 avril 2016 : les cartes de base, classiques, de Naxxramas, de « Gobelins et Gnomes », du Mont Rochenoire, du Grand Tournoi et de la Ligue des explorateurs et les 134 cartes des « Murmures des Dieux très anciens », chacune telle que ce jour-là. Votre C’Thun grandit où qu’il soit, N’Zoth ramène vos serviteurs morts avec Râle d’agonie, Yogg-Saron lance un sort aléatoire pour chaque sort que vous avez lancé, les sorts interdits dépensent tout votre mana et Évolution transforme vos serviteurs. Douze cartes classiques ont changé ce jour-là, dont Force de la nature, Ancien du savoir, Chasseur de gros gibier, Déluge de lames, Jongleur de couteaux et Géant de lave.",
+    "es": "El juego tal como se jugaba después del 26 de abril de 2016: las cartas básicas, clásicas, de Naxxramas, de «Goblins y Gnomos», de la Montaña Roca Negra, del Gran Torneo y de La Liga de Expedicionarios y las 134 cartas de «Susurros de los Dioses Antiguos», cada una como aquel día. Tu C’Thun crece dondequiera que esté, N’Zoth trae de vuelta a tus esbirros caídos con Último aliento, Yogg-Saron lanza un hechizo aleatorio por cada hechizo que hayas lanzado, los hechizos prohibidos gastan todo tu maná y Evolucionar transforma a tus esbirros. Ese día cambiaron doce cartas clásicas, entre ellas Fuerza de la Naturaleza, Anciano del Conocimiento, Cazador de fieras, Aluvión de acero, Malabarista de cuchillos y Gigante fundido.",
+    "pt_BR": "O jogo como era jogado depois de 26 de abril de 2016: os cards Básicos, Clássicos, de Naxxramas, de “Goblins vs Gnomos”, da Montanha Rocha Negra, do Grande Torneio e da Liga dos Exploradores e os 134 cards de “Sussurros dos Deuses Antigos”, cada um como naquele dia. Seu C’Thun cresce onde quer que esteja, N’Zoth traz de volta seus lacaios mortos com Último Suspiro, Yogg-Saron lança um feitiço aleatório para cada feitiço que você lançou, os feitiços proibidos gastam toda a sua mana e Evoluir transforma seus lacaios. Doze cards Clássicos mudaram naquele dia, entre eles Força da Natureza, Anciente da Tradição, Caçador Profissional, Rajada de Lâminas, Malabarista de Facas e Gigante Derretido.",
+    "it": "Il gioco come si giocava dopo il 26 aprile 2016: le carte Base, Classiche, di Naxxramas, di “Goblin vs Gnomi”, del Massiccio Roccianera, del Gran Torneo e della Lega degli Esploratori e le 134 carte di “Sussurri degli Dei Antichi”, ognuna com’era quel giorno. Il vostro C’Thun cresce ovunque si trovi, N’Zoth riporta in campo i servitori caduti con Rantolo di Morte, Yogg-Saron lancia una magia casuale per ogni magia che avete lanciato, le magie proibite spendono tutto il vostro mana ed Evoluzione trasforma i vostri servitori. Quel giorno cambiarono dodici carte Classiche, tra cui Forza della Natura, Antico del Sapere, Esperto di Caccia, Vortice di Lame, Lanciatore di Coltelli e Gigante di Magma.",
+    "pl": "Gra w wersji po 26 kwietnia 2016: karty podstawowe, klasyczne, z Naxxramas, z „Goblinów kontra gnomów”, z Czarnej Góry, z Wielkiego Turnieju i z Ligi Odkrywców oraz 134 karty „Szeptów Pradawnych Bogów”, każda jak tamtego dnia. Twój C’Thun rośnie, gdziekolwiek jest, N’Zoth przywołuje poległych stronników z Agonią, Yogg-Saron rzuca losowe zaklęcie za każde zaklęcie, które rzuciłeś, zakazane zaklęcia zużywają całą manę, a Przekształcenie zmienia twoich stronników w nowych. Tego dnia zmieniono dwanaście kart klasycznych, w tym Siłę natury, Drzewca wiedzy, Łowcę grubego zwierza, Nawałnicę ostrzy, Nożownika i Ognistego olbrzyma."
+  },
+  "authors": [
+    "Classic HS"
+  ],
+  "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+  "redistributable": true,
+  "default_locale": "en",
+  "locales": [
+    "en",
+    "ru",
+    "de",
+    "fr",
+    "es",
+    "pt_BR",
+    "it",
+    "pl"
+  ],
+  "art_sets": [
+    {
+      "id": "simple",
+      "name": {
+        "en": "Simple painted",
+        "ru": "Простой рисованный",
+        "de": "Einfach gemalt",
+        "fr": "Peint simple",
+        "es": "Pintado simple",
+        "pt_BR": "Pintura simples",
+        "it": "Dipinto semplice",
+        "pl": "Prosty malowany"
+      },
+      "default": true
+    },
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированный"
+      }
+    },
+    {
+      "id": "cartoon",
+      "name": {
+        "en": "Cartoon 2D",
+        "ru": "Мультяшный 2D",
+        "de": "Cartoon 2D",
+        "fr": "Dessin animé 2D",
+        "es": "Dibujos 2D",
+        "pt_BR": "Desenho 2D",
+        "it": "Cartone 2D",
+        "pl": "Kreskówka 2D"
+      }
+    },
+    {
+      "id": "photo",
+      "name": {
+        "en": "Photoreal",
+        "ru": "Фотореалистичный",
+        "de": "Fotorealistisch",
+        "fr": "Photoréaliste",
+        "es": "Fotorrealista",
+        "pt_BR": "Fotorrealista",
+        "it": "Fotorealistico",
+        "pl": "Fotorealistyczny"
+      }
+    }
+  ],
+  "sound_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированные"
+      },
+      "default": true
+    }
+  ],
+  "music_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированная"
+      },
+      "default": true
+    },
+    {
+      "id": "open",
+      "name": {
+        "en": "Open (CC0)",
+        "ru": "Открытая (CC0)"
+      }
+    }
+  ],
+  "set_marks": {
+    "VANILLA:FREE": {
+      "icon": "ui/set_basic.png"
+    },
+    "VANILLA": {
+      "icon": "ui/set_classic.png"
+    },
+    "NAXX": {
+      "icon": "ui/set_naxx.png"
+    },
+    "GVG": {
+      "icon": "ui/set_gvg.png"
+    },
+    "BRM": {
+      "icon": "ui/set_brm.png"
+    },
+    "TGT": {
+      "icon": "ui/set_tgt.png"
+    },
+    "LOE": {
+      "icon": "ui/set_loe.png"
+    },
+    "OG": {
+      "icon": "ui/set_og.png"
+    }
+  },
+  "card_back": null,
+  "logo": null,
+  "colors": {
+    "classes": {
+      "DRUID": "703606",
+      "HUNTER": "016e01",
+      "MAGE": "0092ab",
+      "PALADIN": "aa8f00",
+      "PRIEST": "b8b090",
+      "ROGUE": "4c4d48",
+      "SHAMAN": "0070de",
+      "WARLOCK": "7624ad",
+      "WARRIOR": "8e1002",
+      "NEUTRAL": "6b6b6b",
+      "DREAM": "6b6b6b",
+      "DEMONHUNTER": "6b6b6b"
+    },
+    "rarities": {
+      "FREE": "e8e8e8",
+      "COMMON": "e8e8e8",
+      "RARE": "2f7cff",
+      "EPIC": "a335ee",
+      "LEGENDARY": "ff8000"
+    }
+  }
+}

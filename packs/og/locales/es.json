@@ -1,0 +1,37 @@
+{
+ "sets": {
+  "OG": "Susurros de los Dioses Antiguos"
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Poder de héroe</b>\nInflige $2 p. de daño."
+  },
+  "EX1_625t2": {
+   "text": "<b>Poder de héroe</b>\nInflige $3 p. de daño."
+  },
+  "VAN_EX1_277": {
+   "text": "Inflige $3 p. de daño que se dividen aleatoriamente entre todos los enemigos."
+  },
+  "VAN_EX1_323": {
+   "text": "<b>Grito de batalla:</b> Destruye a tu héroe y lo reemplaza por Lord Jaraxxus."
+  },
+  "VAN_EX1_366": {
+   "text": "Cuando invocas a un esbirro, el esbirro obtiene +1/+1 y esta arma pierde 1 p. de durabilidad."
+  },
+  "VAN_EX1_384": {
+   "text": "Inflige $8 p. de daño que se dividen aleatoriamente entre todos los enemigos."
+  },
+  "VAN_EX1_536": {
+   "text": "Obtiene +1 p. de durabilidad cada vez que se revela un <b>secreto</b> amistoso."
+  },
+  "VAN_EX1_559": {
+   "text": "Cada vez que lanzas un hechizo, añade un hechizo \"Bola de Fuego\" a tu mano."
+  },
+  "VAN_EX1_572": {
+   "text": "Al final de tu turno, añade una carta de sueño a tu mano."
+  },
+  "VAN_NEW1_033": {
+   "text": "Tus demás esbirros tienen +1 p. de ataque."
+  }
+ }
+}

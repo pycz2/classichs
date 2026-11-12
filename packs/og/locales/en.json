@@ -1,0 +1,46 @@
+{
+ "sets": {
+  "OG": "Whispers of the Old Gods"
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Hero Power</b>\nDeal $2 damage."
+  },
+  "EX1_625t2": {
+   "text": "<b>Hero Power</b>\nDeal $3 damage."
+  },
+  "VAN_DREAM_01": {
+   "text": "Can't be targeted by spells or Hero Powers."
+  },
+  "VAN_EX1_277": {
+   "text": "Deal $3 damage randomly split among all enemies."
+  },
+  "VAN_EX1_323": {
+   "text": "<b>Battlecry:</b> Destroy your hero and replace it with Lord Jaraxxus."
+  },
+  "VAN_EX1_366": {
+   "text": "After you summon a minion, give it +1/+1 and this loses 1 Durability."
+  },
+  "VAN_EX1_379": {
+   "text": "<b>Secret:</b> After your opponent plays a minion, reduce its Health to 1."
+  },
+  "VAN_EX1_384": {
+   "text": "Deal $8 damage randomly split among all enemies."
+  },
+  "VAN_EX1_559": {
+   "text": "Whenever you cast a spell, add a 'Fireball' spell to your hand."
+  },
+  "VAN_EX1_572": {
+   "text": "At the end of your turn, add a Dream Card to your hand."
+  },
+  "VAN_EX1_609": {
+   "text": "<b>Secret:</b> After your opponent plays a minion, deal $4 damage to it."
+  },
+  "VAN_NEW1_023": {
+   "text": "Can't be targeted by spells or Hero Powers."
+  },
+  "VAN_NEW1_033": {
+   "text": "Your other minions have +1 Attack."
+  }
+ }
+}

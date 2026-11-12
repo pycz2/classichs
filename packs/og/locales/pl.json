@@ -1,0 +1,121 @@
+{
+ "sets": {
+  "OG": "Szepty Pradawnych Bogów"
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń."
+  },
+  "EX1_625t2": {
+   "text": "<b>Moc specjalna</b>\nZadaj $3 pkt. obrażeń."
+  },
+  "Mekka2": {
+   "name": "Reperobot"
+  },
+  "VAN_CS2_005": {
+   "text": "Daj twojemu bohaterowi +2 do ataku w tej turze oraz +2 pkt. pancerza."
+  },
+  "VAN_CS2_037": {
+   "name": "Wstrząs mrozu"
+  },
+  "VAN_CS2_089": {
+   "name": "Święta Światłość"
+  },
+  "VAN_CS2_127": {
+   "name": "Wódz Srebrnogrzbietych"
+  },
+  "VAN_DREAM_01": {
+   "text": "Nie może zostać wybrana jako cel zaklęć lub mocy specjalnych."
+  },
+  "VAN_DS1_184": {
+   "text": "Spójrz na trzy górne karty z twojej talii. Jedną dobierz do ręki, a dwie pozostałe odrzuć."
+  },
+  "VAN_EX1_001": {
+   "name": "Strażniczka Światłości"
+  },
+  "VAN_EX1_050": {
+   "name": "Wyrocznia Światłozimnych"
+  },
+  "VAN_EX1_103": {
+   "name": "Prorok Światłozimnych"
+  },
+  "VAN_EX1_136": {
+   "text": "<b>Sekret:</b> Gdy jeden z twoich stronników zginie, przywróć go do życia z 1 pkt. zdrowia."
+  },
+  "VAN_EX1_160a": {
+   "name": "Przyzwij Panterę"
+  },
+  "VAN_EX1_277": {
+   "text": "Zadaj $3 pkt. obrażeń rozdzielonych losowo pomiędzy wszystkimi wrogami."
+  },
+  "VAN_EX1_317": {
+   "text": "Umieść w ręce\n2 losowe Demony\nz twojej talii."
+  },
+  "VAN_EX1_320": {
+   "text": "Zadaj $2 pkt. obrażeń dowolnej postaci. Jeśli ją tym zabijesz, przyzwij losowego Demona."
+  },
+  "VAN_EX1_323": {
+   "text": "<b>Okrzyk bojowy:</b> Zniszcz twojego bohatera i zastąp go Lordem Jaraxxusem."
+  },
+  "VAN_EX1_339": {
+   "text": "Skopiuj dwie karty z talii przeciwnika i umieść je w twojej ręce."
+  },
+  "VAN_EX1_366": {
+   "text": "Kiedy przyzwiesz stronnika, daj mu +1/+1, zaś miecz traci 1 pkt. wytrzymałości."
+  },
+  "VAN_EX1_379": {
+   "text": "<b>Sekret:</b> Gdy twój przeciwnik zagra stronnika, zmniejsz\njego zdrowie do 1."
+  },
+  "VAN_EX1_384": {
+   "text": "Zadaj $8 pkt. obrażeń rozdzielonych losowo pomiędzy wszystkimi wrogami."
+  },
+  "VAN_EX1_507": {
+   "name": "Dowódca murloków"
+  },
+  "VAN_EX1_533": {
+   "text": "<b>Sekret:</b> Gdy jakaś postać zaatakuje twojego bohatera, zamiast tego zaatakuje inną losową postać."
+  },
+  "VAN_EX1_536": {
+   "text": "Za każdym razem gdy ujawniony zostaje przyjazny <b>Sekret</b>, otrzymuje 1 pkt. wytrzymałości."
+  },
+  "VAN_EX1_539": {
+   "text": "Zadaj $3 pkt. obrażeń. Jeśli kontrolujesz Bestię, zamiast tego zadaj $5 pkt. obrażeń."
+  },
+  "VAN_EX1_559": {
+   "text": "Za każdym razem gdy rzucasz zaklęcie, umieść\nw ręce zaklęcie „Kula ognia”."
+  },
+  "VAN_EX1_570": {
+   "text": "Daj twojemu bohaterowi +4 do ataku w tej turze oraz +4 pkt. pancerza."
+  },
+  "VAN_EX1_572": {
+   "text": "Na koniec twojej tury dodaj Kartę Snu do twojej ręki."
+  },
+  "VAN_EX1_577": {
+   "text": "<b>Agonia:</b> Przyzwij Finkosza Rogoźnika 3/3 twojemu przeciwnikowi."
+  },
+  "VAN_EX1_595": {
+   "text": "Dobierz kartę za każdym razem, gdy zginie jeden z twoich pozostałych stronników."
+  },
+  "VAN_EX1_609": {
+   "text": "<b>Sekret:</b> Gdy twój przeciwnik zagra stronnika, zadaj mu\n$4 pkt. obrażeń."
+  },
+  "VAN_EX1_611": {
+   "text": "<b>Sekret:</b> Gdy wrogi stronnik zaatakuje, cofnij go do ręki właściciela\ni zwiększ jego koszt o (2)."
+  },
+  "VAN_EX1_625": {
+   "text": "Twoja moc specjalna zmienia się na „Zadaj 2 pkt. obrażeń”. Jeśli jesteś już\nw postaci cienia:\n3 pkt. obrażeń."
+  },
+  "VAN_NEW1_010": {
+   "text": "<b>Furia wichru. Szarża. Boska tarcza. Prowokacja.</b>"
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Okrzyk bojowy:</b> Umieść w ręce losowego Pirata z twojej talii."
+  },
+  "VAN_NEW1_023": {
+   "text": "Nie może zostać wybrany jako cel zaklęć lub mocy specjalnych."
+  },
+  "VAN_NEW1_033": {
+   "text": "Twoi pozostali stronnicy otrzymują +1 do ataku."
+  }
+ }
+}

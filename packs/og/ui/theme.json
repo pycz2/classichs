@@ -1,0 +1,31 @@
+{
+ "about": "Whispers of the Old Gods' interface (docs/packs/format.md, 'UI theme'): the Old Gods' corruption over Ahn'Qiraj, Darkshire and Stormwind — near-black violet panels like old chitin with sickly green rims, buttons of deep purple stone that glow green under the mouse, pale bone-coloured text, sparks drifting over the menu; the title in Classic's Cinzel Decorative, in a pale eldritch green.",
+ "colors": {
+  "text": "efe6f4",
+  "muted": "b4a2c4",
+  "accent": "a8e05a",
+  "table": "120a18",
+  "panel": "1e1228f0",
+  "panel_border": "7fc23c",
+  "backdrop": "4a2a5e",
+  "button": "4b2a63f0",
+  "button_hover": "5e357a",
+  "button_pressed": "361d48",
+  "button_disabled": "2a1c36a6",
+  "button_border": "9a6cc8",
+  "button_text": "f4ecfa",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "c6f28c",
+  "button_text_disabled": "7e6e8c",
+  "outline": "0a050e",
+  "danger": "ff5a6a",
+  "ok": "a8e05a"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 6, "border": 1, "glow": "9a6cc833", "glow_size": 4, "glow_hover": "8fe04a99", "glow_hover_size": 12},
+ "panel": {"radius": 8, "border": 2, "glow": "7fc23c40", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "4b2a63", "border": "a8e05a", "text": "f4ecfa", "ready": "3f7a1c", "ready_border": "c6f28c"},
+ "mana": "6fa8ff",
+ "menu": {"shade": "120a1859", "particles": "embers"}
+}

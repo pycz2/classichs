@@ -8143,6 +8143,7 @@
     },
     {
       "kind": "battlecry",
+      "script": "scripts/priest.lua#VAN_EX1_091",
       "title": "Cabal Shadow Priest with six friendly minions: no room for the stolen one, so the Battlecry has no target (2014)",
       "scene": {
         "current": 0,
@@ -13321,6 +13322,7 @@
   "VAN_EX1_571": [
     {
       "kind": "spell",
+      "script": "scripts/druid.lua#VAN_EX1_571",
       "title": "Force of Nature: three 2/2 Charge Treants attack, then die at the end of the turn",
       "scene": {
         "current": 0,
@@ -14498,6 +14500,7 @@
   "VAN_EX1_620": [
     {
       "kind": "other",
+      "script": "scripts/neutral.lua#VAN_EX1_620",
       "title": "Molten Giant: our hero took 15 damage, it costs (5): played with 5 mana",
       "scene": {
         "current": 0,

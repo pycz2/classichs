@@ -1,0 +1,49 @@
+{
+ "sets": {
+  "OG": "Sussurros dos Deuses Antigos"
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Poder Heroico</b>\nCause $2 de dano."
+  },
+  "EX1_625t2": {
+   "text": "<b>Poder Heroico</b>\nCause $3 de dano."
+  },
+  "VAN_DREAM_01": {
+   "text": "Não pode ser alvo de feitiços nem de Poderes Heroicos."
+  },
+  "VAN_EX1_277": {
+   "text": "Cause $3 de dano dividido aleatoriamente entre todos os inimigos."
+  },
+  "VAN_EX1_323": {
+   "text": "<b>Grito de Guerra:</b> Destrua seu herói e substitua-o por Lorde Jaraxxus."
+  },
+  "VAN_EX1_366": {
+   "text": "Depois que você evocar um lacaio, conceda-lhe +1/+1, e este item perderá 1 de Durabilidade."
+  },
+  "VAN_EX1_379": {
+   "text": "<b>Segredo:</b> Depois que seu oponente jogar um lacaio, reduza a Vida dele para 1."
+  },
+  "VAN_EX1_384": {
+   "text": "Cause $8 de dano dividido aleatoriamente entre todos os inimigos."
+  },
+  "VAN_EX1_559": {
+   "text": "Sempre que você lançar um feitiço, adicione um feitiço \"Bola de Fogo\" à sua mão."
+  },
+  "VAN_EX1_572": {
+   "text": "No final do seu turno, adicione um Card de Sonho à sua mão."
+  },
+  "VAN_EX1_595": {
+   "text": "Sempre que um de seus outros lacaios morrer, compre um card."
+  },
+  "VAN_EX1_609": {
+   "text": "<b>Segredo:</b> Depois que seu oponente jogar um lacaio, cause $4 de dano ao lacaio."
+  },
+  "VAN_NEW1_023": {
+   "text": "Não pode ser alvo de feitiços nem de Poderes Heroicos."
+  },
+  "VAN_NEW1_033": {
+   "text": "Seus outros lacaios têm +1 de Ataque."
+  }
+ }
+}

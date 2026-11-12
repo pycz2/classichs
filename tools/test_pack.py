@@ -555,6 +555,29 @@ class Chain(unittest.TestCase):
         self.assertEqual(en["LOE_110t"]["text"], "When you draw this, take 7 damage and draw a card.")
         self.assertEqual(cards["VAN_EX1_315"]["script"], "scripts/loe.lua#VAN_EX1_315")  # Summoning Portal comes first
 
+    def test_whispers_of_the_old_gods_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/og")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/LOE" in p or "/OG_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe", "og"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/gvg.lua", "scripts/brm.lua", "scripts/tgt.lua", "scripts/loe.lua", "scripts/og.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/og"))
+        rules = json.loads(files["rules.json"])
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True,
+                                              "cost_in_order": True})
+        self.assertEqual((rules["player_hooks"], rules["mechanics"]["CHOOSE_BOTH"]), ("player:og", {"engine": "BOTH_CHOICES"}))
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        self.assertEqual(len([c for c in cards.values() if c.get("set") == "OG" and c.get("collectible")]), 134)
+        self.assertEqual((cards["OG_280"]["cost"], cards["VAN_EX1_620"]["cost"], cards["VAN_NEW1_019"]["attack"]), (10, 25, 2))
+        self.assertEqual(cards["VAN_NEW1_014"]["script"], "scripts/og.lua#VAN_NEW1_014")  # Master of Disguise (5.0)
+        en = json.loads(files["locales/en.json"])["cards"]
+        self.assertEqual(en["OG_302"]["text"], "Whenever a friendly minion dies, give your C'Thun +1/+1\n<i>(wherever it is).</i>")
+        # Classic's own 2014 text of Sword of Justice gives way to that day's
+        self.assertEqual(en["VAN_EX1_366"]["text"], "After you summon a minion, give it +1/+1 and this loses 1 Durability.")
+        self.assertEqual(len([p for p in files if p.startswith("decks/")]), 16)
+
 
 class ExtractSets(unittest.TestCase):
     def test_a_set_is_its_prefixed_cards_and_their_tokens(self):

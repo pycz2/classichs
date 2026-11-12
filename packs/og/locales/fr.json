@@ -1,0 +1,49 @@
+{
+ "sets": {
+  "OG": "Les murmures des Dieux très anciens"
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts."
+  },
+  "EX1_625t2": {
+   "text": "<b>Pouvoir héroïque</b>\nInflige $3 points de dégâts."
+  },
+  "VAN_CS2_147": {
+   "name": "Inventrice gnome"
+  },
+  "VAN_EX1_277": {
+   "text": "Inflige $3 |4(point,points) de dégâts répartis de façon aléatoire entre tous les adversaires."
+  },
+  "VAN_EX1_366": {
+   "text": "Après avoir invoqué un serviteur, lui donne +1/+1 et perd 1 Durabilité."
+  },
+  "VAN_EX1_379": {
+   "text": "<b>Secret :</b> une fois que votre adversaire a joué un serviteur, ses points de vie sont réduits à 1."
+  },
+  "VAN_EX1_384": {
+   "text": "Inflige $8 |4(point,points) de dégâts répartis de façon aléatoire entre tous les adversaires."
+  },
+  "VAN_EX1_509": {
+   "name": "Mande-flots murloc"
+  },
+  "VAN_EX1_536": {
+   "text": "Chaque fois qu’un <b>Secret</b> allié est révélé, gagne +1 Durabilité."
+  },
+  "VAN_EX1_559": {
+   "text": "Chaque fois que vous lancez un sort, ajoute un sort « boule de feu » dans votre main."
+  },
+  "VAN_EX1_572": {
+   "text": "À la fin de votre tour, ajoute une carte Rêve dans votre main."
+  },
+  "VAN_EX1_609": {
+   "text": "<b>Secret :</b> une fois que votre adversaire a joué un serviteur, ce dernier subit $4 |4(point,points) de dégâts."
+  },
+  "VAN_EX1_622": {
+   "text": "Détruit un serviteur avec 5 Attaque ou plus."
+  },
+  "VAN_NEW1_033": {
+   "text": "Vos autres serviteurs ont +1 ATQ."
+  }
+ }
+}
