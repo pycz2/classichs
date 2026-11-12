@@ -430,6 +430,28 @@ class Chain(unittest.TestCase):
             self.assertFalse(pack.bundle_in_client(t / "c"))
             self.assertTrue(pack.bundle_in_client(t / "b"))
 
+    def test_up_to_date_sees_the_whole_chain(self):  # build --if-changed (tools/build_packs.sh)
+        import os
+        with tempfile.TemporaryDirectory() as t:
+            t = self.three(t)
+            out = t / "c.cardpack"
+            self.assertFalse(pack.up_to_date(t / "c", out))  # not built yet
+            out.write_bytes(b"x")
+            old = out.stat().st_mtime - 100
+            for f in t.rglob("*"):
+                if f != out:
+                    os.utime(f, (old, old))
+            self.assertTrue(pack.up_to_date(t / "c", out))
+            for src, changed in (("c", "a/scripts/a.lua"), ("c", "data/a.json"), ("c", "data/c_texts.json"), ("c", "a"),
+                                 ("b", "art/pics/M1.png")):
+                # the base's base, a data file, a texts file, a file gone (its folder), a folder a step copies
+                os.utime(t / changed)
+                self.assertFalse(pack.up_to_date(t / src, out), changed)
+                os.utime(t / changed, (old, old))
+            self.assertTrue(pack.up_to_date(t / "c", out))
+            os.utime(t / "art/pics/M1.png")
+            self.assertTrue(pack.up_to_date(t / "c", out))  # (c leaves out the base's art: skip)
+
     def test_bases_in_a_circle_are_refused(self):
         with tempfile.TemporaryDirectory() as t:
             t = self.three(t)

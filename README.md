@@ -69,11 +69,19 @@ and [Rust](https://rustup.rs/) for the rules engine (built into `rules/bin/`, no
 ```sh
 tools/build_rules.sh           # the rules engine for this machine (+ Android with an NDK, + web)
 godot --path .                 # run the game
-./run_tests.sh                 # run all tests (headless)
-./run_tests.sh -- deck_code    # only tests whose "file:method" contains the text
+./run_tests.sh                 # run all tests (headless, in parallel godot processes)
+./run_tests.sh -- code_        # only tests whose "file:method" contains the text
+./run_tests.sh -j 1            # in one godot process (-j N: N processes; default the cores less 2, or TEST_JOBS)
 tools/build_site.sh            # web build + landing page into build/site
 tools/build_site.sh --publish  # ... and publish to the gh-pages branch
 ```
+
+`./run_tests.sh` (`tools/run_tests.py`) first runs `tests/test_smoke.gd` (15 s at most: a hung or broken start
+stops the run with a hint), then gives each godot process a share of the tests, balanced by the last full run's
+times, and its own `user://` under the OS's data folder (`classichs-tests/<run>/`), so parallel runs never share
+files. A process is stopped after `TEST_TIMEOUT` seconds (600) or 200 MB of output (`TEST_MAX_LOG_MB`), naming
+the test it was on. The run's folders are removed when all passed, else their paths are printed.
+`tools/build_packs.sh` rebuilds only the packs whose sources changed (`tools/pack.py build --if-changed`).
 
 Other tools: `tools/extract_cards.py` rebuilds `data/cards.json` from HearthstoneJSON; `tools/gen_audio.py` synthesizes `audio/*.wav`.
 

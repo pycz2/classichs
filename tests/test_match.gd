@@ -22,6 +22,34 @@ func test_human_vs_bot_turns() -> void:
 	m.free()
 
 
+## An engine that refuses every move of player 1 (and its greedy move, and its concede).
+class RefusesBot:
+	var real: Object
+
+	func call_json(s: String) -> String:
+		var req: Dictionary = JSON.parse_string(s)
+		if req.op == "bot" or (req.op == "act" and req.action is Dictionary and int(req.action.get("player", -1)) == 1):
+			return JSON.stringify({"ok": false, "error": "refused"})
+		return real.call_json(s)
+
+
+func test_a_bot_turn_that_does_not_move_on_stops() -> void:
+	var m := Match.new()
+	m.bot_delay = 0.0
+	_setup(m, [false, true])
+	m.start()
+	m.submit({"type": "mulligan", "player": 0, "replace": []})
+	var real := Rules._engine
+	var fake := RefusesBot.new()
+	fake.real = real
+	Rules._engine = fake
+	m.submit({"type": "end_turn", "player": 0})  # (it used to loop here for ever, printing the error each time)
+	Rules._engine = real
+	eq(m.actor(), 1, "still the bot's turn")
+	allowed_errors = 2  # "bot made an illegal move", then "the bot's turn does not move on"
+	m.free()
+
+
 func test_bot_vs_bot_finishes_once() -> void:
 	var m := Match.new()
 	m.bot_delay = 0.0

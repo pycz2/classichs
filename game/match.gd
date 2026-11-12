@@ -343,7 +343,11 @@ func _after() -> void:
 		return
 	if bot_delay <= 0.0:
 		while is_bot_turn():
+			var before := state_hash
 			_bot_step()
+			if state_hash == before:  # (no engine, or a script error: else it loops for ever)
+				push_error("the bot's turn does not move on: the bot stops")
+				return
 		_after()
 		return
 	if not is_inside_tree():

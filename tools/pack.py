@@ -14,6 +14,7 @@ import fnmatch
 import hashlib
 import io
 import json
+import os
 import re
 import stat
 import sys
@@ -668,7 +669,9 @@ def write_pack(files, out):
             zi.external_attr = (stat.S_IFREG | 0o644) << 16
             zi.compress_type = zipfile.ZIP_STORED if p.lower().endswith(NO_COMPRESS) else zipfile.ZIP_DEFLATED
             z.writestr(zi, files[p], compresslevel=9)
-    out.write_bytes(buf.getvalue())
+    tmp = out.with_name(f"{out.name}.{os.getpid()}.tmp")  # (whole or not at all: a reader never sees half a pack)
+    tmp.write_bytes(buf.getvalue())
+    tmp.replace(out)
 
 
 # --- building from a source folder -------------------------------------------------------------
@@ -915,6 +918,30 @@ def bundle_in_client(src):
     return load_json(f.read_bytes(), str(f)).get("bundle_in_client", True) is not False if f.exists() else True
 
 
+def up_to_date(src, out):
+    """Whether out is newer than everything a build of src reads: its folder, its bases' folders, the files and
+    folders its steps name (data/*.json, art/…), the schemas and this script (build --if-changed)."""
+    out = Path(out)
+    if not out.exists():
+        return False
+    steps, bases = recipe_steps(src)
+    paths = [Path(src), *bases, SCHEMAS, Path(__file__)]
+    paths += [root / p for root, s in steps for k in ("from", "texts", "patch") for p in _many(s.get(k))]
+    built = out.stat().st_mtime
+
+    def stamped(p):  # a folder's own time changes when a file in it is added or removed
+        if p.is_dir():
+            for d, _, files in os.walk(p):
+                yield Path(d)
+                yield from (Path(d, f) for f in files)
+        else:
+            yield p
+    try:
+        return all(f.stat().st_mtime < built for p in paths for f in stamped(p))
+    except OSError:  # (a missing input: build, and let the build say what is wrong)
+        return False
+
+
 def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
     """Builds the pack in folder src; writes it to out if given. Returns (files, report)."""
     src = Path(src)
@@ -1030,6 +1057,7 @@ def main(argv=None):
     pb = sub.add_parser("build", help="build a pack from a source folder")
     pb.add_argument("src")
     pb.add_argument("-o", "--out", required=True)
+    pb.add_argument("--if-changed", action="store_true", help="do nothing if the pack is newer than all it is built from")
     pb.add_argument("--art-set", action="append", default=[], metavar="ID=FOLDER",
                     help="add a local art set (never for distribution; art/original is refused)")
     pb.add_argument("--sound-set", action="append", default=[], metavar="ID=FOLDER",
@@ -1046,6 +1074,9 @@ def main(argv=None):
         return 0
     try:
         if a.cmd == "build":
+            if a.if_changed and not (a.art_set or a.sound_set or a.voice) and up_to_date(a.src, a.out):
+                print(f"{a.out}: up to date")
+                return 0
             files, r = build(a.src, a.out, a.art_set, a.sound_set, a.voice)
             _print_report(r, "build")
             if r.errors:

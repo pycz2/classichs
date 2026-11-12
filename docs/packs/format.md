@@ -345,7 +345,9 @@ new set needs only its folder: `recipe.json` (`base`, `skip`, one `hsjson` step 
 `tools/build_packs.sh` writes it to `build/packs/` instead of `packs/`; the release has it as a file
 (`ClassicHS-<version>-<pack>.cardpack`) and the server bundles it (`server/Dockerfile`, `tools/deploy_server.sh`):
 players download it from a server or install the file. The expansions after Naxxramas are such packs
-(`tools/pack.py bundled <src>` says yes or no).
+(`tools/pack.py bundled <src>` says yes or no). `tools/build_packs.sh` builds the packs at once and leaves a pack as
+it is when it is newer than all it is built from (`build --if-changed`: its folder, its bases' folders, the files and
+folders its recipe's steps name, the schemas, `tools/pack.py`).
 
 ```sh
 tools/pack.py build packs/classic -o build/packs/classic.cardpack [--art-set mine=art/custom]

@@ -20,6 +20,8 @@ func _played(seed := 4) -> Array:
 
 
 func _clear_store() -> void:
+	if not DirAccess.dir_exists_absolute(Replay.dir):  # (no game kept a replay yet in this user://)
+		return
 	for f in DirAccess.get_files_at(Replay.dir):
 		DirAccess.remove_absolute(Replay.dir.path_join(f))
 
