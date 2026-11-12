@@ -1,0 +1,46 @@
+{
+  "about": "Shots of One Night in Karazhan for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps), the shots the distributed pack repeats.",
+  "tab": "NEUTRAL",
+  "signature": ["KAR_097", "KAR_096", "KAR_076"],
+  "scenes": [
+    {
+      "name": "medivh",
+      "caption": {"ru": "Медив и Атиеш: «Портал: Огненные Просторы» бьёт на 5 и призывает случайное существо за 5, а посох Атиеш добавляет ещё одно за 7; Лакей Медива светится жёлтым (есть секрет)", "en": "Medivh and Atiesh: Firelands Portal deals 5 and summons a random 5-Cost minion, Atiesh adds a random 7-Cost one; Medivh's Valet glows (a Secret is up)"},
+      "scene": {"current": 0, "turn": 11, "players": [
+        {"hero": "HERO_08", "mana": 10, "max_mana": 10, "damage": 11,
+         "hand": ["KAR_097", "KAR_076", "KAR_092", "KAR_711"],
+         "board": ["KAR_044", "KAR_036"],
+         "secrets": ["VAN_EX1_289"],
+         "deck": ["KAR_009", "KAR_009", "KAR_009", "KAR_009"]},
+        {"hero": "HERO_01", "mana": 10, "max_mana": 10, "damage": 6, "armor": 4,
+         "board": ["KAR_011", "KAR_114", "VAN_CS2_182"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "end_turn"},
+        {"do": "end_turn"},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 2}}
+      ],
+      "hover": {"side": 0, "zone": "weapon"},
+      "history": true
+    },
+    {
+      "name": "silvermoon",
+      "caption": {"ru": "Портал: Луносвет даёт +2/+2 и призывает случайное существо за 2; дракон в руке, поэтому Страж Ночной Погибели, Книгозмей и Сумеречный дракончик светятся жёлтым", "en": "Silvermoon Portal gives +2/+2 and summons a random 2-Cost minion; a Dragon is in hand, so Nightbane Templar, Book Wyrm and Twilight Whelp glow"},
+      "scene": {"current": 0, "turn": 8, "players": [
+        {"hero": "HERO_04", "mana": 10, "max_mana": 10, "damage": 8,
+         "hand": ["KAR_077", "KAR_010", "KAR_033", "BRM_004", "VAN_EX1_563"],
+         "board": ["KAR_030a", "KAR_710", "KAR_300", "KAR_029"],
+         "deck": ["KAR_057", "KAR_057", "KAR_057", "KAR_057"]},
+        {"hero": "HERO_07", "mana": 8, "max_mana": 8, "damage": 10,
+         "board": ["KAR_205", "KAR_089", "VAN_CS2_182", "KAR_712"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 4},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_KAR_097", "medivh"]
+}

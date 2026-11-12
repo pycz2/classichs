@@ -1,0 +1,66 @@
+{
+  "about": "Shots of Journey to Un'Goro for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps format), the shots the distributed pack repeats.",
+  "tab": "DRUID",
+  "signature": ["UNG_116", "UNG_211", "UNG_002"],
+  "scenes": [
+    {
+      "name": "quest",
+      "caption": {"ru": "Задание: «Исполины джунглей» стоит у героя со счётчиком 3/5 (сыграны Хищный саблезуб, Зеленое длинношеее и огр). Древнее длинношеее в руке светится жёлтым: в руке есть существо с атакой 5 и больше", "en": "Quest: Jungle Giants sits by the hero at 3/5 (Sabretooth Stalker, Verdant Longneck and an Ogre played). Elder Longneck glows: a minion with 5+ Attack is in hand"},
+      "scene": {"current": 0, "turn": 8, "players": [
+        {"hero": "HERO_06", "mana": 22, "max_mana": 8, "damage": 9,
+         "hand": ["UNG_116", "UNG_812", "UNG_100", "VAN_CS2_200", "UNG_109", "UNG_852", "UNG_108"],
+         "board": ["UNG_078"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_01", "max_mana": 8, "damage": 11, "armor": 4,
+         "board": ["UNG_928", "UNG_810", "UNG_926"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "choose", "option": 1},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "secret", "index": 0}
+    },
+    {
+      "name": "adapt",
+      "caption": {"ru": "Адаптация: Коварный птенец ударил героя и адаптировался, теперь Искрящий острозуб адаптирует Самоцветного ару. На выбор три улучшения", "en": "Adapt: Vicious Fledgling hit the hero and adapted; now Crackling Razormaw adapts Jeweled Macaw. Three upgrades to pick from"},
+      "scene": {"current": 0, "turn": 7, "players": [
+        {"hero": "HERO_05", "mana": 7, "max_mana": 7, "damage": 12,
+         "hand": ["UNG_915", "UNG_009", "UNG_910", "UNG_002"],
+         "board": ["UNG_912", "UNG_808", "UNG_075"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_09", "max_mana": 7, "damage": 7,
+         "board": ["UNG_022", "UNG_034"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 2}, "defender": {"side": 1, "zone": "hero"}},
+        {"do": "choose", "option": 2},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}
+      ]
+    },
+    {
+      "name": "elementals",
+      "caption": {"ru": "Элементали: в прошлый ход сыгран Огневичок, поэтому элементали в руке светятся жёлтым. Шеразин погиб и впал в спячку семенем, четыре карты за один ход его оживят", "en": "Elementals: Fire Fly was played last turn, so the Elementals in hand glow. Sherazin died and went Dormant as a seed; four cards in one turn revive it"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_02", "mana": 10, "max_mana": 10, "damage": 10,
+         "hand": ["UNG_809", "UNG_211", "UNG_847", "UNG_070", "UNG_082", "UNG_021"],
+         "board": ["UNG_813", "UNG_928", "UNG_019"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_03", "mana": 10, "max_mana": 10, "damage": 13,
+         "board": ["UNG_058", "UNG_063"], "hand": ["UNG_065", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "end_turn"},
+        {"do": "play", "card": {"side": 1, "zone": "hand", "index": 0}},
+        {"do": "end_turn"},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}
+      ],
+      "hover": {"side": 1, "zone": "board", "index": 0},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_UNG_116", "quest"]
+}

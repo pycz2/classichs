@@ -1,0 +1,39 @@
+{
+  "about": "Shots of The League of Explorers for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps), the shots the distributed pack repeats.",
+  "tab": "MAGE",
+  "signature": ["LOE_011", "LOE_077", "LOE_092"],
+  "scenes": [
+    {
+      "name": "discover",
+      "caption": {"ru": "Раскопка: Кудесник-эфириал предлагает выбрать одно из трёх заклинаний", "en": "Discover: Ethereal Conjurer offers a choice of three spells"},
+      "scene": {"current": 0, "turn": 10, "players": [
+        {"hero": "HERO_08", "mana": 10, "max_mana": 10, "damage": 12,
+         "hand": ["LOE_003", "LOE_002", "LOE_119"],
+         "board": ["LOE_086", "LOE_053", "LOE_029"],
+         "deck": ["VAN_CS2_029", "VAN_CS2_182", "VAN_CS2_120", "VAN_CS2_231"]},
+        {"hero": "HERO_01", "max_mana": 10, "damage": 8, "armor": 4,
+         "board": ["LOE_009", "LOE_022", "LOE_009t"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 3}
+      ]
+    },
+    {
+      "name": "reno",
+      "caption": {"ru": "В колоде нет повторов, и Рено Джексон в руке светится жёлтым (вылечит героя полностью); Искательница Реликвария тоже светится (на поле шесть других существ)", "en": "No duplicates in the deck: Reno Jackson glows (he would fully heal the hero); so does Reliquary Seeker (six other minions in play)"},
+      "scene": {"current": 0, "turn": 12, "players": [
+        {"hero": "HERO_07", "mana": 10, "max_mana": 10, "damage": 22,
+         "hand": ["LOE_011", "LOE_116", "LOE_023"],
+         "board": ["LOE_077", "LOE_110", "LOE_089", "LOE_061", "LOE_107", "LOE_046"],
+         "deck": ["VAN_CS2_029", "VAN_CS2_182", "VAN_CS2_120", "VAN_CS2_231", "LOE_079"]},
+        {"hero": "HERO_05", "max_mana": 10, "damage": 6,
+         "board": ["LOE_073", "LOE_020", "LOE_010"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "hero_power"}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0}
+    }
+  ],
+  "dist": ["menu", "collection", "card_LOE_011", "discover"]
+}

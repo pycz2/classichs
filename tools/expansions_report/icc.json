@@ -1,0 +1,69 @@
+{
+  "about": "Shots of Knights of the Frozen Throne for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps format), the shots the distributed pack repeats.",
+  "tab": "MAGE",
+  "signature": ["ICC_833", "ICC_314", "ICC_828"],
+  "scenes": [
+    {
+      "name": "frost_lich_jaina",
+      "caption": {"ru": "Рыцарь смерти: Ледяной лич Джайна заменила героя (5 брони, сила «Ледяное касание») и призвала элементаля воды. Все элементали получили «Похищение жизни» (красная капля)", "en": "Death Knight: Frost Lich Jaina replaced the hero (5 Armor, Icy Touch) and summoned a Water Elemental. All Elementals have Lifesteal (the red drop)"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_08", "mana": 20, "max_mana": 9, "damage": 16,
+         "hand": ["ICC_833", "ICC_836", "ICC_252", "ICC_838"],
+         "board": ["ICC_068", "UNG_809", "UNG_027"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_09", "max_mana": 9, "damage": 9,
+         "board": ["VAN_CS2_231", "ICC_212", "ICC_210", "VAN_CS2_235"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "hero_power", "target": {"side": 1, "zone": "board", "index": 0}},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 0},
+      "history": 3
+    },
+    {
+      "name": "deathstalker_rexxar",
+      "caption": {"ru": "Рыцарь смерти: Ловчий смерти Рексар нанёс 2 урона всем существам противника и дал 5 брони. Сила «Зверодел» собрала из двух зверей Зомбозверя, он в руке", "en": "Death Knight: Deathstalker Rexxar dealt 2 damage to all enemy minions and gave 5 Armor. Build-A-Beast stitched two Beasts into a Zombeast, now in hand"},
+      "scene": {"current": 0, "turn": 8, "players": [
+        {"hero": "HERO_05", "mana": 10, "max_mana": 10, "damage": 11,
+         "hand": ["ICC_828", "ICC_049", "ICC_825"],
+         "board": ["ICC_419", "ICC_243", "ICC_021"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_04", "max_mana": 10, "damage": 6,
+         "board": ["ICC_038", "ICC_858", "VAN_CS2_231", "ICC_034"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "hero_power"},
+        {"do": "choose", "option": 0},
+        {"do": "choose", "option": 0}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 2},
+      "history": 1
+    },
+    {
+      "name": "lifesteal",
+      "caption": {"ru": "Похищение жизни: Утер Черный Клинок дал герою оружие «Возмездие смерти». Оно и Кровавый червь лечат героя, когда бьют; Рыцарь Ледяного Клинка с «Рывком» ударил сразу. Каратель с топором светится: в руке есть карта с «Похищением жизни»", "en": "Lifesteal: Uther of the Ebon Blade equips Grave Vengeance; it and Bloodworm heal the hero as they hit, Chillblade Champion (Charge) hits at once. Deathaxe Punisher glows: a Lifesteal minion is in hand"},
+      "scene": {"current": 0, "turn": 10, "players": [
+        {"hero": "HERO_04", "mana": 20, "max_mana": 10, "damage": 19,
+         "hand": ["ICC_829", "ICC_820", "ICC_810", "ICC_245", "ICC_214"],
+         "board": ["ICC_212", "ICC_905", "ICC_220", "ICC_841"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_07", "max_mana": 10, "damage": 8,
+         "board": ["ICC_075", "ICC_218", "ICC_407"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "hero"}},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 2}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}
+      ],
+      "hover": {"side": 0, "zone": "weapon"},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_ICC_833", "frost_lich_jaina"]
+}

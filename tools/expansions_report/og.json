@@ -1,0 +1,50 @@
+{
+  "about": "Shots of Whispers of the Old Gods for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps), the shots the distributed pack repeats.",
+  "tab": "NEUTRAL",
+  "signature": ["OG_280", "OG_134", "OG_133"],
+  "scenes": [
+    {
+      "name": "cthun",
+      "caption": {"ru": "Культ К'Туна: Поборник, Сумеречный предок и Зовущая Зло растят К'Туна в руке до 11/11; Император Век'лор и Прядильщик клакси светятся жёлтым (у К'Туна не меньше 10 атаки)", "en": "The C'Thun cult: Disciple of C'Thun, Twilight Elder and Beckoner of Evil grow C'Thun in hand to 11/11; Twin Emperor Vek'lor and Klaxxi Amber-Weaver glow (C'Thun has at least 10 Attack)"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_06", "mana": 10, "max_mana": 10, "damage": 9,
+         "hand": ["OG_162", "OG_281", "OG_280", "OG_131", "OG_188"],
+         "board": ["OG_286", "OG_284", "OG_321"],
+         "deck": ["OG_283", "OG_283", "OG_283", "OG_283"]},
+        {"hero": "HERO_01", "mana": 9, "max_mana": 9, "damage": 12, "armor": 3,
+         "board": ["OG_153", "OG_326", "OG_150"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 1}},
+        {"do": "end_turn"},
+        {"do": "end_turn"},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
+    },
+    {
+      "name": "nzoth",
+      "caption": {"ru": "Н'Зот: Порождение Н'Зота, Заражённый таурен, Сумеречный призыватель и Собиратель сокровищ погибли в атаке на Болотного ползуна, Н'Зот возвращает всех четверых", "en": "N'Zoth: Spawn of N'Zoth, Infested Tauren, Twilight Summoner and Loot Hoarder died attacking a Bog Creeper; N'Zoth brings all four back"},
+      "scene": {"current": 0, "turn": 11, "players": [
+        {"hero": "HERO_04", "mana": 10, "max_mana": 10, "damage": 14,
+         "hand": ["OG_133", "OG_222", "OG_223"],
+         "board": ["OG_256", "OG_249", "OG_272", "VAN_EX1_096"],
+         "deck": ["OG_221", "OG_221", "OG_221", "OG_221"]},
+        {"hero": "HERO_09", "mana": 10, "max_mana": 10, "damage": 7,
+         "board": ["OG_153", "OG_142", "OG_334"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 2}, "defender": {"side": 1, "zone": "board", "index": 0}},
+        {"do": "end_turn"},
+        {"do": "end_turn"},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_OG_280", "cthun"]
+}
