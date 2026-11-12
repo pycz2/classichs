@@ -1,0 +1,187 @@
+{
+ "format": 1,
+ "id": "gil-2018",
+ "version": "1.0.0",
+ "engine": "0.60.0",
+ "name": {
+  "en": "The Witchwood 2018",
+  "ru": "Ведьмин лес 2018",
+  "de": "Der Hexenwald 2018",
+  "fr": "Le Bois Maudit 2018",
+  "es": "El Bosque Embrujado 2018",
+  "pt_BR": "O Bosque das Bruxas 2018",
+  "it": "Boscotetro 2018",
+  "pl": "Wiedźmi Las 2018"
+ },
+ "description": {
+  "en": "The game as it was played after April 12, 2018: the Basic, Classic, Naxxramas, Goblins vs Gnomes, Blackrock Mountain, Grand Tournament, League of Explorers, Old Gods, Karazhan, Gadgetzan, Un'Goro, Frozen Throne and Kobolds & Catacombs cards and the 135 cards of The Witchwood, each as on that day. Echo cards can be played again the same turn, Rush minions attack other minions at once, Baku and Genn reward a deck of only odd or only even costs from the start of the game, and the worgen swap their Attack and Health each turn in your hand. By then Molten Giant cost 20 again, Corridor Creeper was a 2/5, Patches had lost Charge and Bonemare cost 8.",
+  "ru": "Игра, как в неё играли после 12 апреля 2018 года: базовые и классические карты, карты Наксрамаса, «Гоблинов и гномов», Чёрной горы, Большого турнира, Лиги исследователей, «Пробуждения древних богов», «Вечеринки в Каражане», «Злачного города Прибамбасска», «Экспедиции в Ун'Горо», «Рыцарей Ледяного Трона», «Кобольдов и катакомб» и 135 карт «Ведьмина леса», каждая как в тот день. Карты с эхом можно разыграть ещё раз в тот же ход, существа с натиском сразу атакуют других существ, Баку и Генн с начала матча награждают колоду только из нечётных или только из чётных карт, а ворген в руке каждый ход меняет атаку и здоровье местами. К тому времени Огненный великан снова стоил 20, Коридорный ужас стал 2/5, Пират Глазастик потерял «Рывок», а Костяная кобыла стоила 8.",
+  "de": "Das Spiel, wie es nach dem 12. April 2018 gespielt wurde: die Basis-, Klassik-, Naxxramas-, „Goblins gegen Gnome“-, Schwarzfels-, Turnier-, Forscherliga-, Alte-Götter-, Karazhan-, Gadgetzan-, Un'Goro-, Frostthron- und „Kobolde & Katakomben“-Karten und die 135 Karten des Hexenwalds, jede wie an jenem Tag. Echo-Karten lassen sich im selben Zug erneut ausspielen, Diener mit Eifer greifen sofort andere Diener an, Baku und Genn belohnen ab Spielbeginn ein Deck nur mit ungeraden oder nur mit geraden Kosten, und die Worgen tauschen jeden Zug auf der Hand Angriff und Leben. Damals kostete der Geschmolzene Riese wieder 20, der Katakombenkriecher war ein 2/5, Käpt'n Glubschauge hatte keinen Ansturm mehr und das Knochenross kostete 8.",
+  "fr": "Le jeu tel qu'on le jouait après le 12 avril 2018 : les cartes de base, classiques, de Naxxramas, de Gobelins et Gnomes, du Mont Rochenoire, du Grand Tournoi, de la Ligue des explorateurs, des Murmures des Dieux très anciens, de Karazhan, de Gadgetzan, d'Un'Goro, du Trône de glace et de Kobolds et Catacombes, et les 135 cartes du Bois Maudit, chacune comme ce jour-là. Les cartes avec Écho peuvent être rejouées le même tour, les serviteurs avec Ruée attaquent aussitôt d'autres serviteurs, Baku et Genn récompensent dès le début de partie un deck de cartes au coût uniquement impair ou pair, et les worgens échangent chaque tour leur Attaque et leur Vie dans votre main. À cette date, le Géant de lave coûtait de nouveau 20, le Ver tunnelier était un 2/5, Neunœil le pirate avait perdu Charge et le Palefroi d’os coûtait 8.",
+  "es": "El juego tal como se jugaba después del 12 de abril de 2018: las cartas básicas y clásicas, las de Naxxramas, Goblins contra Gnomos, la Montaña Roca Negra, el Gran Torneo, la Liga de Expedicionarios, los Dioses Antiguos, Karazhan, Gadgetzan, Un'Goro, el Trono Helado y Kóbolds & Catacumbas, y las 135 cartas del Bosque Embrujado, cada una como aquel día. Las cartas con Eco se pueden volver a jugar en el mismo turno, los esbirros con Embestir atacan enseguida a otros esbirros, Baku y Genn premian desde el inicio de partida un mazo solo de coste impar o solo de coste par, y los huargen intercambian cada turno su ataque y su salud en tu mano. Para entonces el Gigante fundido volvía a costar 20, el Trepacavernas era un 2/5, Parches el Pirata había perdido Cargar y la Pesadilla ósea costaba 8.",
+  "pt_BR": "O jogo como era jogado depois de 12 de abril de 2018: os cards básicos e clássicos, os de Naxxramas, Goblins vs. Gnomos, Montanha Rocha Negra, O Grande Torneio, Liga dos Exploradores, Deuses Antigos, Karazhan, Gadgetzan, Un'Goro, Trono de Gelo e Kobolds & Catacumbas, e os 135 cards de O Bosque das Bruxas, cada um como naquele dia. Cards com Eco podem ser jogados de novo no mesmo turno, lacaios com Rapidez atacam outros lacaios na hora, Baku e Genn recompensam desde o início da partida um deck só de custos ímpares ou só de pares, e os worgens trocam Ataque e Vida a cada turno na sua mão. Naquela época, o Gigante Derretido voltou a custar 20, o Rastejante do Corredor era um 2/5, Remendo, o Pirata, tinha perdido Investida e a Égua Esquelética custava 8.",
+  "it": "Il gioco come si giocava dopo il 12 aprile 2018: le carte Base e Classiche, quelle di Naxxramas, Goblin vs Gnomi, Massiccio Roccianera, Gran Torneo, Lega degli Esploratori, Antichi Dei, Karazhan, Meccania, Un'Goro, Trono di Ghiaccio e Coboldi & Catacombe, e le 135 carte di Boscotetro, ognuna com'era quel giorno. Le carte con Eco si possono rigiocare nello stesso turno, i servitori con Assalto attaccano subito gli altri servitori, Baku e Genn premiano dall'inizio della partita un mazzo di sole carte a costo dispari o pari, e i worgen scambiano ogni turno Attacco e Salute nella tua mano. A quel tempo il Gigante di Magma costava di nuovo 20, l'Orrore dei Cunicoli era un 2/5, Sghigno il Pirata aveva perso Carica e l'Incubo d'Ossa costava 8.",
+  "pl": "Gra taka, jak po 12 kwietnia 2018 roku: karty podstawowe i klasyczne, karty z Naxxramas, Gobliny kontra Gnomy, Czarnej Góry, Wielkiego Turnieju, Ligi Odkrywców, Pradawnych Bogów, Karazhanu, Gadżetonu, Un'Goro, Mroźnego Tronu i Koboldów i katakumb oraz 135 kart z Wiedźmiego Lasu, każda taka jak tamtego dnia. Karty z Echem można zagrać ponownie w tej samej turze, stronnicy ze Zrywem od razu atakują innych stronników, Baku i Genn od początku gry nagradzają talię z samymi nieparzystymi albo parzystymi kosztami, a worgeni w ręce co turę zamieniają atak ze zdrowiem. Wtedy Ognisty olbrzym znów kosztował 20, Tunelowy czerw był 2/5, Kaprawe Oczko stracił Szarżę, a Kościana mara kosztowała 8."
+ },
+ "authors": [
+  "Classic HS"
+ ],
+ "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+ "redistributable": true,
+ "default_locale": "en",
+ "locales": [
+  "en",
+  "ru",
+  "de",
+  "fr",
+  "es",
+  "pt_BR",
+  "it",
+  "pl"
+ ],
+ "art_sets": [
+  {
+   "id": "simple",
+   "name": {
+    "en": "Simple painted",
+    "ru": "Простой рисованный",
+    "de": "Einfach gemalt",
+    "fr": "Peint simple",
+    "es": "Pintado simple",
+    "pt_BR": "Pintura simples",
+    "it": "Dipinto semplice",
+    "pl": "Prosty malowany"
+   },
+   "default": true
+  },
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированный"
+   }
+  },
+  {
+   "id": "cartoon",
+   "name": {
+    "en": "Cartoon 2D",
+    "ru": "Мультяшный 2D",
+    "de": "Cartoon 2D",
+    "fr": "Dessin animé 2D",
+    "es": "Dibujos 2D",
+    "pt_BR": "Desenho 2D",
+    "it": "Cartone 2D",
+    "pl": "Kreskówka 2D"
+   }
+  },
+  {
+   "id": "photo",
+   "name": {
+    "en": "Photoreal",
+    "ru": "Фотореалистичный",
+    "de": "Fotorealistisch",
+    "fr": "Photoréaliste",
+    "es": "Fotorrealista",
+    "pt_BR": "Fotorrealista",
+    "it": "Fotorealistico",
+    "pl": "Fotorealistyczny"
+   }
+  }
+ ],
+ "sound_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированные"
+   },
+   "default": true
+  }
+ ],
+ "music_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированная"
+   },
+   "default": true
+  },
+  {
+   "id": "open",
+   "name": {
+    "en": "Open (CC0)",
+    "ru": "Открытая (CC0)"
+   }
+  }
+ ],
+ "set_marks": {
+  "VANILLA:FREE": {
+   "icon": "ui/set_basic.png"
+  },
+  "VANILLA": {
+   "icon": "ui/set_classic.png"
+  },
+  "NAXX": {
+   "icon": "ui/set_naxx.png"
+  },
+  "GVG": {
+   "icon": "ui/set_gvg.png"
+  },
+  "BRM": {
+   "icon": "ui/set_brm.png"
+  },
+  "TGT": {
+   "icon": "ui/set_tgt.png"
+  },
+  "LOE": {
+   "icon": "ui/set_loe.png"
+  },
+  "OG": {
+   "icon": "ui/set_og.png"
+  },
+  "KARA": {
+   "icon": "ui/set_kara.png"
+  },
+  "GANGS": {
+   "icon": "ui/set_msg.png"
+  },
+  "UNGORO": {
+   "icon": "ui/set_ungoro.png"
+  },
+  "ICECROWN": {
+   "icon": "ui/set_icc.png"
+  },
+  "LOOTAPALOOZA": {
+   "icon": "ui/set_loot.png"
+  },
+  "GILNEAS": {
+   "icon": "ui/set_gil.png"
+  }
+ },
+ "card_back": null,
+ "logo": null,
+ "colors": {
+  "classes": {
+   "DRUID": "703606",
+   "HUNTER": "016e01",
+   "MAGE": "0092ab",
+   "PALADIN": "aa8f00",
+   "PRIEST": "b8b090",
+   "ROGUE": "4c4d48",
+   "SHAMAN": "0070de",
+   "WARLOCK": "7624ad",
+   "WARRIOR": "8e1002",
+   "NEUTRAL": "6b6b6b",
+   "DREAM": "6b6b6b",
+   "DEMONHUNTER": "6b6b6b"
+  },
+  "rarities": {
+   "FREE": "e8e8e8",
+   "COMMON": "e8e8e8",
+   "RARE": "2f7cff",
+   "EPIC": "a335ee",
+   "LEGENDARY": "ff8000"
+  }
+ }
+}

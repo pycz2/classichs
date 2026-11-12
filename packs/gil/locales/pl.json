@@ -1,0 +1,22 @@
+{
+ "sets": {
+  "GILNEAS": "Wiedźmi Las"
+ },
+ "races": {
+  "ALL": "Wszystkie"
+ },
+ "mechanics": {
+  "RUSH": {
+   "name": "Zryw",
+   "tip": "Może od razu atakować stronników."
+  },
+  "ECHO": {
+   "name": "Echo",
+   "tip": "Można zagrać ponownie w tej turze."
+  },
+  "START_OF_GAME": {
+   "name": "Początek gry",
+   "tip": "Działa na początku gry, prosto z talii."
+  }
+ }
+}

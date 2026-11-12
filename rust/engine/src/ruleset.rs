@@ -19,8 +19,8 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-const START_TAGS: [&str; 16] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
-    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL", "FOE_SPELLPROOF"];
+const START_TAGS: [&str; 17] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
+    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL", "FOE_SPELLPROOF", "QUICK"];
 /// Engine ids of the tags Silence removes.
 const SILENCED: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
     "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
@@ -176,6 +176,9 @@ pub struct Names {
     /// FOE_SPELLPROOF: the opponent's spells and powers cannot target it (a pack that names it: Kobolds & Catacombs'
     /// Shimmering Courser).
     pub foe_spellproof: Option<&'static str>,
+    /// QUICK: a minion that may attack minions (not champions) while it is exhausted (a pack that names it: The
+    /// Witchwood's Rush).
+    pub quick: Option<&'static str>,
     /// DOUBLE_TURN_END: its owner's "at the end of your turn" hooks run twice (an aura tag on the champion: Drakkari
     /// Enchanter); only when the pack names it.
     pub double_turn_end: Option<&'static str>,
@@ -250,13 +253,14 @@ impl Names {
             task: by_engine.get("TASK").copied(),
             lifesteal: by_engine.get("LIFESTEAL").copied(),
             foe_spellproof: by_engine.get("FOE_SPELLPROOF").copied(),
+            quick: by_engine.get("QUICK").copied(),
             double_turn_end: by_engine.get("DOUBLE_TURN_END").copied(),
             task_progress: by_engine.get("TASK_PROGRESS").copied(),
             task_goal: by_engine.get("TASK_GOAL").copied(),
             trap: n("TRAP"),
-            // LIFESTEAL and FOE_SPELLPROOF only where the pack names them (no older pack's Silence looks for them)
+            // LIFESTEAL, FOE_SPELLPROOF and QUICK only where the pack names them (no older pack's Silence looks for them)
             silenced: SILENCED.iter().map(|id| n(id)).chain(by_engine.get("LIFESTEAL").copied())
-                .chain(by_engine.get("FOE_SPELLPROOF").copied()).collect(),
+                .chain(by_engine.get("FOE_SPELLPROOF").copied()).chain(by_engine.get("QUICK").copied()).collect(),
             by_engine: by_engine.clone(),
             engine_of,
             known: HashSet::new(),
@@ -375,6 +379,9 @@ pub struct Ruleset {
     /// `player_hooks`: a named hook set whose `on` hooks see every event once for each player (`me` is that player's
     /// champion): counts of the game ("spells you've cast this game"). None: no such hooks.
     pub player_hooks: Option<String>,
+    /// `every_race`: a card of this race is of every race: the scripts' `g.race` and `g.info(c).race` give a value
+    /// `==` to every race name (The Witchwood's Nightmare Amalgam, `ALL`). None: no such race.
+    pub every_race: Option<String>,
     /// `bot.trap`: what the bot counts for each of its own traps in play (a card in hand is 1; Classic: 0).
     pub bot_trap: f64,
     /// `bot.depth`: 2 = before ending its turn the bot also tries two actions in a row (Classic: 1).
@@ -575,6 +582,7 @@ impl Ruleset {
             lifesteal_one_heal: rules["behaviour"].get("lifesteal_one_heal") == Some(&json!(true)),
             after_spell_from_before: rules["behaviour"].get("after_spell_from_before") == Some(&json!(true)),
             player_hooks: rules.get("player_hooks").and_then(Value::as_str).map(String::from),
+            every_race: rules.get("every_race").and_then(Value::as_str).map(String::from),
             bot_trap: i(&rules["bot"], "trap", 0) as f64,
             bot_depth: i(&rules["bot"], "depth", 1),
             fatigue: (fat.get("enabled") != Some(&json!(false)), i(fat, "first", 1), i(fat, "step", 1)),

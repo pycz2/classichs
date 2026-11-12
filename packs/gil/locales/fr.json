@@ -1,0 +1,22 @@
+{
+ "sets": {
+  "GILNEAS": "Le Bois Maudit"
+ },
+ "races": {
+  "ALL": "Tout"
+ },
+ "mechanics": {
+  "RUSH": {
+   "name": "Ruée",
+   "tip": "Peut attaquer des serviteurs immédiatement."
+  },
+  "ECHO": {
+   "name": "Écho",
+   "tip": "Peut être rejouée pendant ce tour."
+  },
+  "START_OF_GAME": {
+   "name": "Début de partie",
+   "tip": "Se déclenche au début de la partie, depuis votre deck."
+  }
+ }
+}

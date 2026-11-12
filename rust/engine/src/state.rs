@@ -589,7 +589,9 @@ impl Game {
         let mut same = true;
         let all = self.in_play();
         let before: Vec<(i64, i64)> = all.iter().map(|&e| (self.e(e).max_health(), self.e(e).health())).collect();
-        for &e in &all {
+        // (a card in a hand has an aura only from an aura hook that gives one there: Glinda Crowskin's Echo)
+        let hands: Vec<Id> = self.players.iter().flat_map(|p| p.hand.iter().copied()).collect();
+        for &e in all.iter().chain(&hands) {
             let a = &self.e(e).aura;
             if a.atk != 0 || a.hp != 0 || !a.tags.is_empty() || !a.src.is_empty() {
                 self.em(e).aura = Default::default();
@@ -934,8 +936,14 @@ impl Game {
     }
 
     pub fn transform(&mut self, e: Id, card_id: &str) -> Id {
+        self.transform_keep(e, card_id, false)
+    }
+
+    /// `transform`; `keep`: a card in the hand or the deck keeps its enchantments and the tags it was given (the
+    /// cards that transform in the hand before patch 12.0.0.25770 of 2018: The Witchwood's worgen, Chameleos).
+    pub fn transform_keep(&mut self, e: Id, card_id: &str, keep: bool) -> Id {
         let c = self.ctrl(e);
-        let Some(i) = self.players[c].board.iter().position(|&x| x == e) else { return self.transform_card(e, card_id) };
+        let Some(i) = self.players[c].board.iter().position(|&x| x == e) else { return self.transform_card(e, card_id, keep) };
         let n = self.new_entity(card_id, c);
         self.players[c].board[i] = n;
         let (order, t, choice) = (self.e(e).play_order, self.n().exhausted, self.e(e).choice);
@@ -951,7 +959,7 @@ impl Game {
 
     /// Transforms a card in its owner's hand or deck into another card, in its place (Shifter Zerus, Renounce
     /// Darkness); NONE if it is in neither. Only its owner sees which card it became (the event's `entity`).
-    fn transform_card(&mut self, e: Id, card_id: &str) -> Id {
+    fn transform_card(&mut self, e: Id, card_id: &str, keep: bool) -> Id {
         let c = self.ctrl(e);
         let pl = &self.players[c];
         let (hand, i) = match (pl.hand.iter().position(|&x| x == e), pl.deck.iter().position(|&x| x == e)) {
@@ -962,6 +970,17 @@ impl Game {
         let n = self.new_entity(card_id, c);
         let zone = self.e(e).zone;
         self.em(n).zone = zone;
+        if keep {
+            let o = self.e(e);
+            let given: Vec<(String, V)> = o.tags.iter().filter(|(k, v)| o.card.start_tags.get(k) != Some(*v))
+                .map(|(k, v)| (k.to_string(), v.clone())).collect();
+            let ench = o.enchantments.clone();
+            let x = self.em(n);
+            x.enchantments = ench;
+            for (k, v) in given {
+                x.tags.insert(k, v);
+            }
+        }
         if hand {
             self.players[c].hand[i] = n;
         } else {
@@ -1368,7 +1387,8 @@ impl Game {
 
     fn mod_applies(&self, m: &Obj, e: Id) -> bool {
         let x = self.e(e);
-        if m.get("race").and_then(V::as_str).is_some_and(|r| r != x.card.race) {
+        let every = self.rs.every_race.as_deref() == Some(x.card.race.as_str()); // (a card of every race: rules.md)
+        if m.get("race").and_then(V::as_str).is_some_and(|r| r != x.card.race && !every) {
             return false;
         }
         match m.get("kind").and_then(V::as_str).unwrap_or("") {

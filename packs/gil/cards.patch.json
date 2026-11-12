@@ -1,0 +1,72 @@
+{
+ "VAN_EX1_620": {
+  "cost": 20
+ },
+ "LOOT_149": {
+  "attack": 2
+ },
+ "CFM_637": {
+  "keywords": null
+ },
+ "CFM_020": {
+  "script": "scripts/gil.lua#CFM_020"
+ },
+ "ICC_705": {
+  "cost": 8
+ },
+ "KAR_096": {
+  "keywords": [
+   "START_OF_GAME"
+  ]
+ },
+ "AT_051": {
+  "keywords": [
+   "OVERLOAD"
+  ]
+ },
+ "VAN_CS2_221": {
+  "keywords": [
+   "ENRAGED"
+  ]
+ },
+ "VAN_EX1_009": {
+  "keywords": [
+   "ENRAGED"
+  ]
+ },
+ "VAN_EX1_390": {
+  "keywords": [
+   "ENRAGED",
+   "TAUNT"
+  ]
+ },
+ "VAN_EX1_393": {
+  "keywords": [
+   "ENRAGED"
+  ]
+ },
+ "VAN_EX1_412": {
+  "keywords": [
+   "ENRAGED"
+  ]
+ },
+ "VAN_EX1_414": {
+  "keywords": [
+   "CHARGE",
+   "ENRAGED"
+  ]
+ },
+ "ICC_828p": {
+  "script": "scripts/gil.lua#ICC_828p"
+ },
+ "GIL_692": {
+  "keywords": [
+   "START_OF_GAME"
+  ]
+ },
+ "GIL_826": {
+  "keywords": [
+   "START_OF_GAME"
+  ]
+ }
+}

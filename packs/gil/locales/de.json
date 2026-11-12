@@ -1,0 +1,22 @@
+{
+ "sets": {
+  "GILNEAS": "Der Hexenwald"
+ },
+ "races": {
+  "ALL": "Alle"
+ },
+ "mechanics": {
+  "RUSH": {
+   "name": "Eifer",
+   "tip": "Kann sofort Diener angreifen."
+  },
+  "ECHO": {
+   "name": "Echo",
+   "tip": "Kann in diesem Zug wiederholt gespielt werden."
+  },
+  "START_OF_GAME": {
+   "name": "Spielbeginn",
+   "tip": "Wirkt zu Spielbeginn aus Eurem Deck."
+  }
+ }
+}
