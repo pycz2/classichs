@@ -1069,6 +1069,9 @@ impl Game {
 
     fn mod_applies(&self, m: &Obj, e: Id) -> bool {
         let x = self.e(e);
+        if m.get("race").and_then(V::as_str).is_some_and(|r| r != x.card.race) {
+            return false;
+        }
         match m.get("kind").and_then(V::as_str).unwrap_or("") {
             "any" => true,
             "minion" => x.is_minion(),
@@ -1105,7 +1108,7 @@ impl Game {
             }
         }
         for m in &self.players[x.controller].cost_mods {
-            if vint(m.get("turn")) == self.turn && self.mod_applies(m, e) {
+            if (vint(m.get("turn")) == self.turn || lasting(m)) && self.mod_applies(m, e) {
                 c = if m.contains_key("set") { vint(m.get("set")) } else { c + vint(m.get("delta")) };
             }
         }
@@ -1119,10 +1122,20 @@ impl Game {
         let keep = mods
             .into_iter()
             .filter(|m| {
-                !(m.get("until").and_then(V::as_str) == Some("use") && vint(m.get("turn")) == self.turn && self.mod_applies(m, e))
+                !(m.get("until").and_then(V::as_str) == Some("use")
+                    && (vint(m.get("turn")) == self.turn || lasting(m))
+                    && self.mod_applies(m, e))
             })
             .collect();
         self.players[c].cost_mods = keep;
+    }
+
+    /// p's Overloaded crystals unlocked: the ones locked this turn are mana again, nothing is owed next turn.
+    pub fn unlock_mana(&mut self, p: usize) {
+        let pl = &mut self.players[p];
+        pl.mana = pl.max_mana.min(pl.mana + pl.mana_locked);
+        pl.mana_locked = 0;
+        pl.mana_lock_owed = 0;
     }
 
     /// Hero attack: weapon attack counts only on the controller's own turn.
@@ -1242,4 +1255,9 @@ impl Game {
 
 pub fn hex(b: &[u8]) -> String {
     b.iter().map(|x| format!("{:02x}", x)).collect()
+}
+
+/// A cost mod that holds on any turn until a card it applies to is played (`lasting = true`: Dragon Consort).
+pub(crate) fn lasting(m: &Obj) -> bool {
+    vtruthy(m.get("lasting"))
 }

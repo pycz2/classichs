@@ -93,10 +93,15 @@ WEBSPINNER = {
 GVG_TOKENS = """GVG_028t GVG_030a GVG_030b GVG_032a GVG_032b GVG_041a GVG_041b GVG_045t GVG_056t GVG_080t GVG_092t
 GVG_110t GVG_111t PART_001 PART_002 PART_003 PART_004 PART_005 PART_006 PART_007""".split()
 
+## Blackrock Mountain's tokens at its release (build 8311, patch 2.4.0.8311 of 2015-03-31, two days before the first
+## wing): the Imp, Druid of the Flame's options and forms, the Black Whelp, Ragnaros the hero and his power, Tail Swipe
+## (Nefarian against a hero without a class). Not the boss cards (BRM_004t, BRM_027pH: the adventure's).
+BRM_TOKENS = "BRM_006t BRM_010a BRM_010b BRM_010t BRM_010t2 BRM_022t BRM_027h BRM_027p BRM_030t".split()
+
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 
 
@@ -110,15 +115,18 @@ def release_texts(name, then):
     {name?, text?: {lang: text}} for every card of the chain (data/cards.json, the earlier sets' data files and
     this set's) whose name or text that day differs from today's in some language. A Classic card (VAN_<id>) is
     matched to <id> only when both are the same kind of card (type, with or without a text): VAN_EX1_tk9 is a plain
-    Treant, EX1_tk9 was Force of Nature's."""
+    Treant, EX1_tk9 was Force of Nature's. A later set's card keeps its id: its text of that day counts even when
+    today's has none (Druid of the Flame's options were spells)."""
     old = {c["id"]: c for c in then}
     chain = [OUT] + [OUT.parent / f"{s}_cards.json" for s in list(SETS)[:list(SETS).index(name) + 1]]
     out = {}
     for f in chain:
         for c in json.loads(f.read_text()):
             o = old.get(c["id"][4:] if c["id"].startswith("VAN_") else c["id"])
-            if not o or o["type"] != c["type"] or bool(o.get("text")) != bool(c.get("text")):
+            if not o or (c["id"].startswith("VAN_") and (o["type"] != c["type"] or bool(o.get("text")) != bool(c.get("text")))):
                 continue
+            if not c["id"].startswith("VAN_") and o.get("text") and not c.get("text"):
+                c = dict(c, text={})  # the same card, whose text today's data lost (Druid of the Flame's options)
             for field in ("name", "text"):
                 now, was = c.get(field) or {}, o.get(field) or {}
                 if was and any(_norm(now.get(l)) != _norm(was.get(l)) for l in LANGS):
@@ -135,7 +143,7 @@ def release_texts(name, then):
 SETS = {
     "naxx": ("NAXX", ["FP1_"], NAXX_TOKENS),
     "gvg": ("GVG", ["GVG_", "PART_"], GVG_TOKENS),
-    "brm": ("BRM", ["BRM_"], None),
+    "brm": ("BRM", ["BRM_"], BRM_TOKENS),
     "tgt": ("TGT", ["AT_"], None),
     "loe": ("LOE", ["LOE_"], None),
     "og": ("OG", ["OG_"], None),

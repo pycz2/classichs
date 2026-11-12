@@ -309,7 +309,7 @@ impl Game {
         }
         let turn = self.turn;
         for pl in &mut self.players {
-            pl.cost_mods.retain(|m| vint(m.get("turn")) > turn);
+            pl.cost_mods.retain(|m| vint(m.get("turn")) > turn || crate::state::lasting(m));
         }
         let n = self.n();
         for c in self.chars(cur) {
