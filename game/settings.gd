@@ -9,7 +9,7 @@ extends RefCounted
 
 const DEFAULT_PATH := "user://settings.json"
 const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "shake": true, "fullscreen": false,
-	"tracker": false, "fps": false, "anim_speed": 1, "card_back": CardBacks.DEFAULT, "tracker_deck": true, "tracker_opp": true,
+	"tracker": false, "fps": false, "perf": false, "anim_speed": 1, "card_back": CardBacks.DEFAULT, "tracker_deck": true, "tracker_opp": true,
 	"servers": [], "bot_level": "medium", "pack": {}, "pack_sets": {}, "layout": 0}
 const BUSES := ["Music", "SFX"]
 

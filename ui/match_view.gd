@@ -1139,6 +1139,12 @@ func relabel() -> void:
 
 
 func refresh() -> void:
+	var t0 := Time.get_ticks_usec()
+	_refresh()
+	PerfLog.time("layout", t0)
+
+
+func _refresh() -> void:
 	if _busy and not _final_refresh:
 		_apply_glows()  # the layout changes when the running animation ends
 		_return_dragged()
@@ -1674,6 +1680,12 @@ func _on_hover(v: EntityView, on: bool) -> void:
 # --- events and effects ---------------------------------------------------------
 
 func _on_changed(events: Array) -> void:
+	var t0 := Time.get_ticks_usec()
+	_on_changed_now(events)
+	PerfLog.time("on_changed", t0)
+
+
+func _on_changed_now(events: Array) -> void:
 	var item := {"events": events, "snap": controller.game.snapshot, "hist": controller.game.history.size()}
 	if Anim.instant or not is_inside_tree():
 		_show(item.snap, item.hist)

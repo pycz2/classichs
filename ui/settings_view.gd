@@ -18,7 +18,7 @@ signal art_changed
 ## Row labels (English keys); the translation tool reads these lists.
 const SLIDERS := [["Music", "music"], ["Sounds", "sfx"]]
 const TOGGLES := [["Screen shake", "Shake", "shake"], ["Fullscreen", "Fullscreen", "fullscreen"],
-	["FPS counter", "Fps", "fps"]]
+	["FPS counter", "Fps", "fps"], ["Performance log", "PerfLog", "perf"]]
 
 
 func _ready() -> void:
@@ -115,7 +115,9 @@ func _build() -> void:
 		cb.toggled.connect(func(on):
 			if key == "fullscreen":
 				Settings.set_fullscreen(on)  # runs inside the click: the browser allows it
-			_store(key, on))
+			_store(key, on)
+			if key == "perf":
+				_build.call_deferred())  # (its Save log button)
 		_row(grid, tr(t[0]), cb)
 
 	var row := HBoxContainer.new()
@@ -126,6 +128,10 @@ func _build() -> void:
 		var d := Palette.button(tr("Debug tools"), "DebugTools")
 		d.pressed.connect(func(): debug.emit())
 		row.add_child(d)
+	if (PerfLog.on or Settings.data.get("perf", false)) and PerfLog.instance:  # the log so far: a download, or where its file is
+		var save := Palette.button(tr("Save log"), "SavePerfLog")
+		save.pressed.connect(func(): save.text = PerfLog.instance.save().get_file())
+		row.add_child(save)
 	var b := Palette.button(tr("Back"), "Back")
 	b.pressed.connect(func(): back.emit())
 	row.add_child(b)

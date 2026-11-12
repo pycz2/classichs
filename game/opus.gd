@@ -10,10 +10,15 @@ extends RefCounted
 static func stream(bytes: PackedByteArray) -> AudioStream:
 	if bytes.is_empty():
 		return null
+	var t0 := Time.get_ticks_usec()
+	var out: AudioStream = null
 	if ClassDB.class_exists("OpusDecoder"):
-		return ClassDB.class_call_static("OpusDecoder", "decode", bytes)
-	var api = _web()
-	return _wav(api.decode_opus(Marshalls.raw_to_base64(bytes)), api) if api else null
+		out = ClassDB.class_call_static("OpusDecoder", "decode", bytes)
+	else:
+		var api = _web()
+		out = _wav(api.decode_opus(Marshalls.raw_to_base64(bytes)), api) if api else null
+	PerfLog.time("opus", t0)
+	return out
 
 
 ## The same in a thread of its own (a Web Worker in the browser); the game goes on meanwhile.
@@ -33,7 +38,10 @@ static func stream_later(bytes: PackedByteArray) -> AudioStream:
 	var id = api.opus_start(Marshalls.raw_to_base64(bytes))
 	while not api.opus_done(id):
 		await tree.process_frame
-	return _wav(api.opus_take(id), api)
+	var t0 := Time.get_ticks_usec()  # (the samples come over to the engine here, on the main thread)
+	var out := _wav(api.opus_take(id), api)
+	PerfLog.time("opus", t0)
+	return out
 
 
 ## A file of the game itself (res://), say the client's menu music.

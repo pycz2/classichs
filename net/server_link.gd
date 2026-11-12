@@ -222,7 +222,10 @@ func is_open() -> bool:
 
 func send(msg: Dictionary) -> void:
 	if is_open():
-		socket.send_text(JSON.stringify(msg))
+		var text := JSON.stringify(msg)
+		PerfLog.count("ws_out")
+		PerfLog.count("ws_out_kb", text.length() / 1024.0)
+		socket.send_text(text)
 
 
 ## Whether registering needs an invite key: the answer comes as `signup_info` (invite_only).
@@ -273,8 +276,12 @@ func _process(_d: float) -> void:
 		_was_open = true
 		opened.emit()
 	while socket.get_available_packet_count() > 0:
+		var t0 := Time.get_ticks_usec()
 		var text := socket.get_packet().get_string_from_utf8()
 		var msg = JSON.parse_string(text)
+		PerfLog.time("ws_parse", t0)
+		PerfLog.count("ws_in")
+		PerfLog.count("ws_in_kb", text.length() / 1024.0)
 		if msg is Dictionary and msg.get("t") is String:
 			dispatch(msg)
 	for h in downloading:

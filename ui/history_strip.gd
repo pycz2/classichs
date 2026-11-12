@@ -40,6 +40,12 @@ static func _height(it: Array) -> float:
 
 ## Rebuilds the tiles from the game history, seen by viewer.
 func update_from(g: GameView, viewer: int) -> void:
+	var t0 := Time.get_ticks_usec()
+	_update_from(g, viewer)
+	PerfLog.time("strip", t0)
+
+
+func _update_from(g: GameView, viewer: int) -> void:
 	_g = g
 	_viewer = viewer
 	var rows := []  # [turn, mine, tile], newest first
