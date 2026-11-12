@@ -70,7 +70,7 @@ Return values are ignored unless said otherwise.
 | `glow` | `fn(g, me) → bool` | The card in the hand glows yellow now: its condition holds ("if you're holding a Dragon", "if your deck has no duplicates"…; read-only, for clients: snapshots mark it `glow`, no rule reads it). Without it a card with a `combo` hook glows while its combo is on (`g.combo(me)`). |
 | `deathrattle` (alias `on_death`) | `fn(g, me)` | It died (minion or weapon; `g.died_pos(me)` is where). |
 | `on` | `{<event type> = fn(g, me, ev)}` | Any event of that type while `me` is in play (or a trap). Queued: runs after the action that caused it. |
-| `hand` | `{<event type> = fn(g, me, ev)}` | Like `on`, while the card is in its owner's hand (not during the mulligan; skipped if it left the hand before its turn in the queue): "when you draw this" (`draw` with `ev.entity == me`: Flame Leviathan, Burrowing Mine), "while this is in your hand" (Bolvar Fordragon). |
+| `hand` | `{<event type> = fn(g, me, ev)}` | Like `on`, while the card is in its owner's hand (not during the mulligan; skipped if it left the hand before its turn in the queue): "when you draw this" (`draw` with `ev.entity == me`: Flame Leviathan, Burrowing Mine), "while this is in your hand" (Bolvar Fordragon). `hand.discard` also runs for the discarded card itself, which has left the hand: "when you discard this" (Fist of Jaraxxus). |
 | `now` | `{predamage = fn(g, me, ev)}` | Replacement effects: runs at once, inside `g.damage`, before damage applies; set `ev.amount` to change it. |
 | `secret` (alias `trap`) | `{event = "<type>", cond = fn(g, me, ev) → bool, effect = fn(g, me, ev)}` | A trap: on `event` during the opponent's turn, if `cond` (omitted: always) holds, the trap is revealed, then `effect` runs. |
 | `aura` | `fn(g, me)` | Recomputed after every change while `me` is in play: call `g.aura_add` for what it gives now. |
@@ -118,7 +118,7 @@ amounts replace the damage).
 | `discard` | `player`, `entity`, `card` | |
 | `equip` | `player`, `entity`, `card` | |
 | `armor` | `player`, `amount` | A champion gained Armor (Siege Engine). |
-| `hero_power` | `player`, `entity`, `target` | After the power's effect. |
+| `hero_power` | `player`, `entity`, `target` | After the power's effect: Inspire (an `on` hook; the pack names it ON_POWER). Events logged during the power's effect carry `by_id` = the power (a draw "from your Hero Power": Wilfred Fizzlebang). |
 | `secret_revealed` | `entity`, `player`, `card` | |
 | `turn_start`, `turn_end` | `player` (+ `turn`) | `turn_end` hooks run before "this turn" effects end. |
 
@@ -172,7 +172,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.died_pos(m)` | Where a dead minion stood (0-based), or `-1`. |
 | `g.trap_ready(me)` | `me` is a trap in play and it is the opponent's turn. |
 | `g.spell_dmg(me, n)` | `n` plus `me`'s side spell power, doubled per POWER_MULTIPLIER (spells and powers). |
-| `g.heal_amt(me, n)`, `g.hp_dmg(me, n)` | Healing / power damage `n` after POWER_MULTIPLIER. |
+| `g.heal_amt(me, n)`, `g.hp_dmg(me, n)` | Healing / power damage `n` after POWER_MULTIPLIER; a power's damage first adds POWER_DAMAGE (an aura tag on its champion: Fallen Hero). |
 | `g.rule(name)` | `hand`, `board`, `max_mana`, `deck_size`, `champion_health` from rules.json. |
 | `g.mine(me, ev)` | `ev.player` is `me`'s controller. |
 | `g.enchants(e, hooks)` | The `player` fields of `e`'s enchantments with these hooks. |
@@ -196,6 +196,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.draw(p[, n])` | Draws `n` (default 1): fatigue, burns on a full hand. Returns the drawn ids. |
 | `g.draw_entity(p, e)` | Draws that card of `p`'s deck. |
 | `g.add_to_hand(p, card)` | A new card in hand (or `nil` if full). |
+| `g.create(p, card)` | A new card entity of `p`'s, set aside (zone `SETASIDE`, logs `create`): an option for `g.request_choice` that is in no zone (Totemic Slam's totems). |
 | `g.discard_random(p[, n])`, `g.discard(e)` | Discards (emits `discard`). |
 | `g.buff(e, atk, hp[, this_turn])` | An enchantment +atk/+hp (`true`: until the end of the turn). |
 | `g.set_stats(e, atk, hp)` | Sets attack and/or health (`nil` keeps one); setting health heals. |
@@ -221,7 +222,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.replace_hero(p, card)`, `g.set_power(p, card)` | A new champion / power. |
 | `g.reveal(me)` | Reveals a trap (for `now` hooks; `secret` hooks are revealed for you). |
 | `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. |
-| `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n][, race = r][, lasting = true]}`; `turn` defaults to now. `race`: only cards of that race (Dragon Consort: `"DRAGON"`). `lasting`: it holds on any turn, kept until a card it applies to is played (with `until = "use"`: "the next Dragon you play costs (2) less"). |
+| `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"power"|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n][, race = r][, lasting = true]}`; `turn` defaults to now. `race`: only cards of that race (Dragon Consort: `"DRAGON"`). `"power"`: the champion's power (a `"use"` mod goes when the power is used: Fencing Coach; Saboteur: `turn = g.turn() + 1`). `lasting`: it holds on any turn, kept until a card it applies to is played (with `until = "use"`: "the next Dragon you play costs (2) less"). |
 | `g.log(ev)`, `g.emit(ev)` | Logs an event table (`emit` also triggers `on` hooks). |
 | `g.remove(e[, zone])` | Takes `e` out of its hand/deck/board/trap list (and the weapon slot), optionally setting its zone. |
 | `g.cost(e)` | A card's cost now (cost hooks included). |

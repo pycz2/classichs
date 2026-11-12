@@ -350,6 +350,14 @@ impl Game {
                     }
                 }
             }
+            // the discarded card's own `hand.discard` hook, although it left the hand ("when you discard this":
+            // Fist of Jaraxxus; no Classic card has one)
+            if ty == "discard" {
+                let e = vint(self.event_log[i].get("entity"));
+                if let Some(f) = self.ent(e).and_then(|x| x.card.hooks.hand("discard")) {
+                    self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: false });
+                }
+            }
         }
         i
     }
@@ -568,7 +576,7 @@ impl Game {
             }
         }
         for (k, v) in tags {
-            if k == n.spell_power || k == n.power_multiplier {
+            if k == n.spell_power || k == n.power_multiplier || k == n.power_damage {
                 let n = vint(a.tags.get(&k)) + v.int();
                 a.tags.insert(k, n);
             } else {
@@ -715,6 +723,13 @@ impl Game {
         self.em(e).zone = "HAND";
         self.players[p].hand.push(e);
         self.emit(obj!{"type": "draw", "player": p, "entity": e, "card": card});
+    }
+
+    /// A new card entity for p, set aside (an option of `g.request_choice`: Totemic Slam).
+    pub fn create(&mut self, p: usize, card_id: &str) -> Id {
+        let e = self.new_entity(card_id, p);
+        self.log_event(obj!{"type": "create", "player": p, "entity": e, "card": self.e(e).card_id});
+        e
     }
 
     pub fn add_to_hand(&mut self, p: usize, card_id: &str) -> Id {
@@ -937,8 +952,14 @@ impl Game {
         (n + sp) * self.power_multiplier(me)
     }
 
+    /// A power's damage: n plus POWER_DAMAGE (an aura tag on the champion: Fallen Hero), then POWER_MULTIPLIER.
     pub fn hp_dmg(&self, me: Id, n: i64) -> i64 {
-        n * self.power_multiplier(me)
+        let bonus = if self.e(me).kind() == "POWER" {
+            vint(self.e(self.hero(self.ctrl(me))).aura.tags.get(self.n().power_damage))
+        } else {
+            0
+        };
+        (n + bonus) * self.power_multiplier(me)
     }
 
     pub fn heal_amt(&self, me: Id, n: i64) -> i64 {
@@ -951,6 +972,11 @@ impl Game {
         self.em(old).zone = "SETASIDE";
         let h = self.new_entity(card_id, p);
         self.enter_play(h);
+        if let Some(t) = self.n().powers_used {
+            if let Some(v) = self.e(old).tags.get(t).cloned() {
+                self.em(h).set_tag(t, v); // the count is the player's: a new champion keeps it
+            }
+        }
         self.players[p].hero = h;
         self.log_event(obj!{"type": "hero_replaced", "player": p, "entity": h, "card": self.e(h).card_id});
         h
@@ -1088,6 +1114,7 @@ impl Game {
             "minion" => x.is_minion(),
             "spell" => x.kind() == "SPELL",
             "secret" | "trap" => x.card.trap,
+            "power" => x.kind() == "POWER",
             _ => false,
         }
     }

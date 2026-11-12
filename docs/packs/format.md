@@ -162,6 +162,7 @@ does not map is written as the engine id.
 | `STEALTH` | keyword | Can't be attacked or targeted until it attacks | `STEALTH` |
 | `SPELLPROOF` | keyword | Can't be targeted by spells and powers | `ELUSIVE` |
 | `CANT_ATTACK` | keyword | Can't attack | `CANT_ATTACK` |
+| `CANT_ATTACK_HEROES` | keyword | Can attack only minions (a forced redirect still may hit a champion) | — (The Grand Tournament: `CANNOT_ATTACK_HEROES`, Icehowl) |
 | `IMMUNE` | keyword | Takes no damage | `IMMUNE` |
 | `POISON` | keyword | Destroys any minion it damages | — (Naxxramas: `POISONOUS`, Maexxna) |
 | `SPELL_POWER` | keyword | +N spell damage (card field `spell_power`) | `SPELLPOWER` |
@@ -172,6 +173,7 @@ does not map is written as the engine id.
 | `COMBO` | hook | Bonus if a card was played before it this turn | `COMBO` |
 | `CHOICE` | hook | Pick one of two effects | `CHOOSE_ONE` |
 | `WOUNDED` | hook | Bonus while damaged | `ENRAGED` |
+| `ON_POWER` | hook | Effect after its owner uses the champion's power (an `on` hook on `hero_power`) | — (The Grand Tournament: `INSPIRE`) |
 | `FREEZE`, `SILENCE`, `COUNTER` | marker | The card freezes / silences / counters (the effect is its hook) | same |
 | `AURA`, `TRIGGER`, `ADJACENT` | marker | Client hints | `AURA`, `TRIGGER_VISUAL`, `ADJACENT_BUFF` |
 | `SPELL_SCALED`, `NO_SPELL_POWER` | marker | Spell power changes / does not change its numbers | `AFFECTED_BY_SPELL_POWER`, `ImmuneToSpellpower` |
@@ -180,6 +182,8 @@ does not map is written as the engine id.
 | `DOUBLE_ON_DEATH` | state | Its owner's minions run their death hooks twice (aura tag on the champion; not while its source dies with them) | — (Naxxramas: `DOUBLE_DEATHRATTLE`, Baron Rivendare) |
 | `PLAYED_COST` | state | The mana a card cost when it was played from the hand (Sorcerer's Apprentice, Preparation, Loatheb counted); written only by a pack that names it | — (Goblins vs Gnomes: `PLAYED_COST`, Gazlowe) |
 | `DIED_TURN` | state | The turn a minion died; written only by a pack that names it (a new tag would change Classic's recorded states) | — (Naxxramas: `DIED_TURN`, Kel'Thuzad) |
+| `POWER_DAMAGE` | state | Added to its owner's power damage before `POWER_MULTIPLIER` (aura tag on the champion, a count: `g.hp_dmg`) | — (The Grand Tournament: `HEROPOWER_DAMAGE`, Fallen Hero) |
+| `POWER_USES`, `POWERS_USED` | state | Uses of the power this turn (on the power) and of any power this game (on the champion, kept by a new one); written only by a pack that names them | — (The Grand Tournament: `HEROPOWER_ACTIVATIONS_THIS_TURN`, Garrison Commander; `NUM_TIMES_HERO_POWER_USED_THIS_GAME`, Frost Giant) |
 
 Kinds: *keyword* — a tag a card carries from its data and the engine reads;
 *hook* — the card has a hook of that kind (shown to players, no tag); *marker* —

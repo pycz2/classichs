@@ -19,11 +19,11 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-const START_TAGS: [&str; 11] =
-    ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE", "FROZEN_THIS_TURN", "POISON"];
+const START_TAGS: [&str; 12] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
+    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES"];
 /// Engine ids of the tags Silence removes.
-const SILENCED: [&str; 12] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
-    "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON"];
+const SILENCED: [&str; 13] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
+    "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES"];
 /// Rarity tiers in the order the Arena draws them.
 pub const TIERS: [&str; 4] = ["common", "rare", "epic", "legendary"];
 
@@ -119,6 +119,7 @@ pub struct Names {
     pub stealth: &'static str,
     pub spellproof: &'static str,
     pub cant_attack: &'static str,
+    pub cant_attack_heroes: &'static str,
     pub immune: &'static str,
     pub spell_power: &'static str,
     pub frozen: &'static str,
@@ -136,6 +137,12 @@ pub struct Names {
     pub heal_is_damage: &'static str,
     pub poison: &'static str,
     pub double_on_death: &'static str,
+    /// POWER_DAMAGE: added to the damage of a power (an aura tag on the champion: Fallen Hero).
+    pub power_damage: &'static str,
+    /// POWER_USES (uses of the power this turn) and POWERS_USED (of any power this game, on the champion): written
+    /// only when the pack names them (Garrison Commander, Frost Giant).
+    pub power_uses: Option<&'static str>,
+    pub powers_used: Option<&'static str>,
     /// DIED_TURN: written at a death only when the pack names it (Classic does not: its states stay as recorded).
     pub died_turn: Option<&'static str>,
     /// PLAYED_COST: the mana a card cost when it was played, written only when the pack names it (Gazlowe).
@@ -177,6 +184,7 @@ impl Names {
             stealth: n("STEALTH"),
             spellproof: n("SPELLPROOF"),
             cant_attack: n("CANT_ATTACK"),
+            cant_attack_heroes: n("CANT_ATTACK_HEROES"),
             immune: n("IMMUNE"),
             spell_power: n("SPELL_POWER"),
             frozen: n("FROZEN"),
@@ -194,6 +202,9 @@ impl Names {
             heal_is_damage: n("HEAL_IS_DAMAGE"),
             poison: n("POISON"),
             double_on_death: n("DOUBLE_ON_DEATH"),
+            power_damage: n("POWER_DAMAGE"),
+            power_uses: by_engine.get("POWER_USES").copied(),
+            powers_used: by_engine.get("POWERS_USED").copied(),
             died_turn: by_engine.get("DIED_TURN").copied(),
             played_cost: by_engine.get("PLAYED_COST").copied(),
             trap: n("TRAP"),
@@ -206,7 +217,8 @@ impl Names {
         known.extend([names.guard, names.haste, names.barrier, names.double_attack, names.stealth, names.spellproof,
             names.cant_attack, names.immune, names.spell_power, names.frozen, names.frozen_this_turn, names.exhausted,
             names.attacks, names.armor, names.durability, names.used, names.locked, names.guarded, names.to_destroy,
-            names.died_pos, names.power_multiplier, names.heal_is_damage, names.trap, names.poison, names.double_on_death]);
+            names.died_pos, names.power_multiplier, names.heal_is_damage, names.trap, names.poison, names.double_on_death,
+            names.cant_attack_heroes, names.power_damage]);
         names.known = known;
         Ok(names)
     }

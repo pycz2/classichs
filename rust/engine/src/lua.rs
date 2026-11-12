@@ -862,6 +862,11 @@ fn a_add_to_hand(g: &mut Game, a: Args) -> R {
     let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "")?);
     opt_id(g.add_to_hand(p, &c))
 }
+fn a_create(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "")?);
+    one(g.create(p, &c))
+}
 fn a_discard_random(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (p, n) = (player(&a, 0)?, num(&a, 1, 1)?.clamp(0, 100));
@@ -1215,7 +1220,7 @@ fn a_cost(g: &mut Game, a: Args) -> R {
 const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.damage", a_damage), ("g.heal", a_heal), ("g.destroy", a_destroy), ("g.summon", a_summon),
     ("g.summon_right", a_summon_right), ("g.summon_entity", a_summon_entity), ("g.draw", a_draw),
-    ("g.draw_entity", a_draw_entity), ("g.add_to_hand", a_add_to_hand), ("g.discard_random", a_discard_random),
+    ("g.draw_entity", a_draw_entity), ("g.add_to_hand", a_add_to_hand), ("g.create", a_create), ("g.discard_random", a_discard_random),
     ("g.discard", a_discard), ("g.buff", a_buff), ("g.set_stats", a_set_stats), ("g.silence", a_silence),
     ("g.freeze", a_freeze), ("g.transform", a_transform), ("g.return_to_hand", a_return_to_hand),
     ("g.take_control", a_take_control), ("g.copy_minion", a_copy_minion), ("g.equip", a_equip),

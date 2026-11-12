@@ -285,6 +285,9 @@ impl Game {
         p.minions_played_this_turn = 0;
         let hp = p.hero_power;
         self.em(hp).erase_tag(n.used);
+        if let Some(t) = n.power_uses {
+            self.em(hp).erase_tag(t);
+        }
         for c in self.chars(cur) {
             let e = self.em(c);
             e.erase_tag(n.exhausted);
@@ -466,9 +469,10 @@ impl Game {
         let mut taunts = vec![];
         let foe = self.opponent(self.ctrl(a));
         let n = self.n();
+        let no_heroes = self.e(a).has(n.cant_attack_heroes);
         for t in self.chars(foe) {
             let te = self.e(t);
-            if te.has(n.stealth) {
+            if te.has(n.stealth) || (no_heroes && te.is_champion()) {
                 continue;
             }
             if te.is_champion() && te.has(n.guarded) && !self.players[foe].board.is_empty() {
@@ -654,8 +658,16 @@ impl Game {
         let hp = self.players[cur].hero_power;
         let cost = self.cost(hp);
         self.players[cur].mana -= cost;
-        let used = self.n().used;
-        self.em(hp).give_tag(used, false);
+        self.consume_cost_mods(hp);
+        let n = self.n();
+        self.em(hp).give_tag(n.used, false);
+        if let Some(t) = n.power_uses {
+            self.add_tag_int(hp, t.into(), 1);
+        }
+        if let Some(t) = n.powers_used {
+            let h = self.players[cur].hero;
+            self.add_tag_int(h, t.into(), 1);
+        }
         if let Some(f) = self.e(hp).card.hooks.power {
             self.from(hp, |g| g.fx_effect(f, hp, t));
         }
