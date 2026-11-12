@@ -509,3 +509,51 @@ fn deck_templates_play_bot_games() {
         extra turns {extra}, turns after an Elemental {elem_turns}", played.len());
     assert!(quests > 0 && !done.is_empty() && adapts > 0 && elem_turns > 0);
 }
+
+#[test]
+fn crystal_core_reaches_every_minion_that_comes_later() {
+    let mut t = scene!({"hero": "HERO_03", "mana": 30, "hand": [CORE, "UNG_809", "UNG_022", "VAN_CS1_113"], "board": [YETI]},
+        {"board": ["VAN_CS2_200"]});
+    t.play(CORE, NONE);
+    t.play("UNG_809", NONE); // Fire Fly: its Flame Elemental comes to the hand later
+    let flame = t.hand_id("UNG_809t1");
+    assert_eq!(t.stats(flame), (5, 5), "a card added to the hand");
+    let y = t.on_board(0, YETI);
+    t.play("UNG_022", y); // Mirage Caller: the copy is 5/5, not 1/1
+    let copies: Vec<Id> = t.g.players[0].board.iter().copied().filter(|&m| card_of(&t, m) == YETI).collect();
+    assert_eq!(copies.len(), 2);
+    assert_eq!(t.stats(copies[1]), (5, 5), "Mirage Caller's copy");
+    let ogre = t.nth(1, 0);
+    t.play("VAN_CS1_113", ogre); // a minion taken
+    assert_eq!(t.stats(ogre), (5, 5), "Mind Control's Ogre");
+}
+
+#[test]
+fn jungle_giants_counts_attack_from_auras() {
+    let mut t = scene!({"hero": "HERO_06", "hand": ["UNG_116", YETI, "VAN_CS2_120"], "board": ["VAN_CS2_222"]}, {});
+    t.play("UNG_116", NONE);
+    let q = t.g.players[0].secrets[0];
+    t.play(YETI, NONE); // 4 Attack, 5 with Stormwind Champion's aura
+    assert_eq!(t.tag(q, "QUEST_PROGRESS"), 1, "an aura counts as it enters (2017)");
+    t.play("VAN_CS2_120", NONE); // River Crocolisk: 2 (+1) Attack
+    assert_eq!(t.tag(q, "QUEST_PROGRESS"), 1);
+}
+
+#[test]
+fn spiritsinger_umbra_triggers_only_a_minions_own_deathrattle() {
+    // a copy keeps Spikeridged Steed's Deathrattle (a spell gave it): Umbra does not trigger it
+    let mut t = scene!({"hero": "HERO_04", "mana": 30, "hand": ["UNG_952", "UNG_948", "VAN_EX1_556", "LOE_019"],
+        "board": ["UNG_900", WISP]}, {});
+    let w = t.nth(0, 1);
+    t.play("UNG_952", w);
+    t.play("UNG_948", w);
+    assert!(!t.cards(0).contains(&"UNG_810".to_string()), "no Stegodon: {:?}", t.cards(0));
+    // its card's own: Harvest Golem's Damaged Golem
+    t.play("VAN_EX1_556", NONE);
+    let golems = |t: &T| t.cards(0).iter().filter(|c| c.as_str() == "VAN_skele21").count();
+    assert_eq!(golems(&t), 1, "{:?}", t.cards(0));
+    // one a Battlecry copied onto it: Unearthed Raptor with Harvest Golem's
+    let g = t.on_board(0, "VAN_EX1_556");
+    t.play("LOE_019", g);
+    assert_eq!(golems(&t), 2, "{:?}", t.cards(0));
+}

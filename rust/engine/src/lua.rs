@@ -1006,8 +1006,13 @@ fn a_deathrattle(g: &mut Game, a: Args) -> R {
     live(g)?;
     let e = opt_ent(g, &a, 0)?;
     if e != NONE {
-        g.run_death_hooks(e);
+        g.run_death_hooks_of(e, a.get(1).truthy());
     }
+    none()
+}
+fn a_update_auras(g: &mut Game, _a: Args) -> R {
+    live(g)?;
+    g.update_auras();
     none()
 }
 fn a_equip(g: &mut Game, a: Args) -> R {
@@ -1332,5 +1337,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
     ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
     ("g.cast", a_cast), ("g.cast_random", a_cast_random), ("g.add_count", a_add_count), ("g.extra_turn", a_extra_turn),
-    ("g.force_attack", a_force_attack),
+    ("g.force_attack", a_force_attack), ("g.update_auras", a_update_auras),
 ];

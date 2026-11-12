@@ -2089,6 +2089,120 @@
      }
     }
    ]
+  },
+  {
+   "kind": "spell",
+   "title": "Crystal Core, then Fire Fly: the Flame Elemental that comes to the hand is 5/5 too",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_067t1",
+       "UNG_809"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "spell",
+   "title": "Crystal Core, then Mirage Caller: its copy is 5/5, not 1/1",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_067t1",
+       "UNG_022"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
   }
  ],
  "UNG_070": [
@@ -3734,6 +3848,62 @@
       "hand": [
        "UNG_116",
        "VAN_CS2_200"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "spell",
+   "title": "Jungle Giants: a Yeti next to Stormwind Champion has 5 Attack as it enters, so it counts",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_116",
+       "VAN_CS2_182"
+      ],
+      "board": [
+       "VAN_CS2_222"
       ]
      },
      {
@@ -6629,6 +6799,73 @@
       "side": 0,
       "zone": "hand",
       "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "trigger",
+   "title": "Spiritsinger Umbra: a copy of a minion with Spikeridged Steed's Deathrattle (a spell gave it): Umbra does not trigger it",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_952",
+       "UNG_948"
+      ],
+      "board": [
+       "UNG_900",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
      }
     }
    ]

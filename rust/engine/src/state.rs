@@ -784,7 +784,7 @@ impl Game {
         let e = self.new_entity(card_id, p);
         self.em(e).zone = "HAND";
         self.players[p].hand.push(e);
-        self.log_event(obj!{"type": "add_to_hand", "player": p, "entity": e, "card": self.e(e).card_id});
+        self.emit(obj!{"type": "add_to_hand", "player": p, "entity": e, "card": self.e(e).card_id});
         e
     }
 
@@ -861,7 +861,7 @@ impl Game {
         ne.play_order = order;
         ne.give_tag(t, false);
         self.em(e).zone = "SETASIDE";
-        self.log_event(obj!{"type": "transform", "from": e, "to": n, "card": self.e(n).card_id});
+        self.emit(obj!{"type": "transform", "from": e, "to": n, "card": self.e(n).card_id});
         n
     }
 
@@ -885,7 +885,7 @@ impl Game {
         }
         self.em(e).zone = "SETASIDE";
         self.em(e).created = true; // set aside from a hidden zone: still only its owner sees which card it was
-        self.log_event(obj!{"type": "transform", "from": e, "entity": n, "player": c, "card": self.e(n).card_id});
+        self.emit(obj!{"type": "transform", "from": e, "entity": n, "player": c, "card": self.e(n).card_id});
         n
     }
 
@@ -919,7 +919,7 @@ impl Game {
             }
             self.em(e).controller = p;
             self.players[p].secrets.push(e);
-            self.log_event(obj!{"type": "take_control", "target": e, "player": p});
+            self.emit(obj!{"type": "take_control", "target": e, "player": p});
             return;
         }
         if c == p || !self.players[c].board.contains(&e) {
@@ -937,7 +937,7 @@ impl Game {
         let x = self.em(e);
         x.give_tag(n.exhausted, false);
         x.set_tag(n.attacks, 0i64);
-        self.log_event(obj!{"type": "take_control", "target": e, "player": p});
+        self.emit(obj!{"type": "take_control", "target": e, "player": p});
     }
 
     /// A new card shuffled into p's deck at a random place (`g.add_to_deck`).
@@ -954,8 +954,21 @@ impl Game {
     /// Runs m's death hooks now (its card's, unless silenced, then its enchantments'), as if it died:
     /// Feign Death.
     pub fn run_death_hooks(&mut self, m: Id) {
+        self.run_death_hooks_of(m, false);
+    }
+
+    /// `run_death_hooks`; `own`: only its card's Deathrattle and the ones copied onto it (`{deathrattle = card}`:
+    /// Unearthed Raptor), not the hook sets other cards gave it (Spikeridged Steed's, Spirit Echo's: Spiritsinger Umbra).
+    pub fn run_death_hooks_of(&mut self, m: Id, own: bool) {
         let mut fs: Vec<HookFn> = self.hooks_of(m).on_death.into_iter().collect();
-        fs.extend(self.ench_deaths(m));
+        if own {
+            let rs = self.rs;
+            let copied = self.e(m).enchantments.iter().filter_map(|x| x.get("deathrattle").and_then(V::as_str));
+            let copied: Vec<HookFn> = copied.filter_map(|h| rs.hooks(h).on_death).collect();
+            fs.extend(copied);
+        } else {
+            fs.extend(self.ench_deaths(m));
+        }
         for f in fs {
             if self.game_over {
                 return;

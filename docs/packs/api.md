@@ -119,6 +119,9 @@ amounts replace the damage).
 | `death` | `entity`, `player`, `card`, `minion` (bool) | |
 | `draw` | `player`, `entity`, `card` | |
 | `discard` | `player`, `entity`, `card` | |
+| `add_to_hand` | `player`, `entity`, `card` | A new card came to the hand (`g.add_to_hand`, a minion returned): only its player sees which. |
+| `transform` | `from`, `to`, `card` (in play); `from`, `entity`, `player`, `card` (in a hand or deck) | `g.transform`. |
+| `take_control` | `target`, `player` | A minion or a trap changed sides. |
 | `equip` | `player`, `entity`, `card` | |
 | `armor` | `player`, `amount` | A champion gained Armor (Siege Engine). |
 | `hero_power` | `player`, `entity`, `target` | After the power's effect: Inspire (an `on` hook; the pack names it ON_POWER). Events logged during the power's effect carry `by_id` = the power (a draw "from your Hero Power": Wilfred Fizzlebang). |
@@ -214,7 +217,8 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.copy_minion(me, t)` | Turns `me` into a copy of `t` (stats, enchantments, tags, silence). |
 | `g.equip(p, card)` | A new weapon (the old one is destroyed). |
 | `g.add_to_deck(p, card)` | A new card shuffled into `p`'s deck at a random place (logs `add_to_deck`); returns it. |
-| `g.deathrattle(m)` | Runs `m`'s death hooks now, as if it died, without killing it: its card's (unless silenced), then its enchantments' (Feign Death). |
+| `g.deathrattle(m[, own])` | Runs `m`'s death hooks now, as if it died, without killing it: its card's (unless silenced), then its enchantments' (Feign Death). `own`: only its card's and the ones copied onto it (`{deathrattle = card}`: Unearthed Raptor), not the hook sets other cards gave it (Spiritsinger Umbra). |
+| `g.update_auras()` | Recomputes every aura now, so a hook sees them on a minion just summoned (Jungle Giants: its Attack with auras as it enters). |
 | `g.gain_armor(p, n)` | |
 | `g.gain_mana(p, n[, empty])` | Crystals up to max mana (`empty`: empty crystals). |
 | `g.add_mana(p, n)` | Mana this turn (up to max mana; The Coin). |

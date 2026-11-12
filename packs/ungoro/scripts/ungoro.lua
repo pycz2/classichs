@@ -432,10 +432,12 @@ cards.UNG_829t2 = {
   },
 }
 
--- Jungle Giants (Druid): summon 5 minions with 5 or more Attack.
+-- Jungle Giants (Druid): summon 5 minions with 5 or more Attack: as each enters play, before its Battlecry, auras
+-- counted (until patch 11.2 of 2018).
 cards.UNG_116 = quest(5, "UNG_116t", {
   summon = function(g, me, ev)
     return my_summon(g, me, ev, function(m)
+      g.update_auras()
       return g.atk(m) >= 5
     end)
   end,
@@ -627,6 +629,25 @@ cards["player:ungoro"] = {
         core(g, ev.entity)
       end
     end,
+    -- Crystal Core reaches a minion that comes to the hand, one transformed in the hand or in play, one taken
+    add_to_hand = function(g, me, ev)
+      if g.mine(me, ev) and g.count(g.ctrl(me), "CRYSTAL_CORE") > 0 and g.is_minion(ev.entity) then
+        core(g, ev.entity)
+      end
+    end,
+    transform = function(g, me, ev)
+      local e = ev.to or ev.entity
+      local p = g.ctrl(me)
+      if e and e > 0 and g.ctrl(e) == p and g.count(p, "CRYSTAL_CORE") > 0 and g.is_minion(e) and g.zone(e) ~= "DECK" then
+        core(g, e)
+      end
+    end,
+    take_control = function(g, me, ev)
+      local p = g.ctrl(me)
+      if ev.player == p and g.count(p, "CRYSTAL_CORE") > 0 and g.is_minion(ev.target) and g.zone(ev.target) == "PLAY" then
+        core(g, ev.target)
+      end
+    end,
     turn_start = function(g, me, ev)
       local p = g.ctrl(me)
       if ev.player == p then
@@ -795,6 +816,9 @@ cards.UNG_022 = {
     local c = copy_right(g, t)
     if c then
       g.set_stats(c, 1, 1)
+      if g.count(g.ctrl(me), "CRYSTAL_CORE") > 0 then
+        g.enchant(c, { set_atk = 5, set_hp = 5 }) -- Crystal Core wins over the copy's 1/1 (patch 8.2's fix of a bug)
+      end
     end
   end,
 }
@@ -2058,12 +2082,13 @@ cards.UNG_851t1 = {
   end,
 }
 
--- Spiritsinger Umbra: after you summon a minion, trigger its Deathrattle.
+-- Spiritsinger Umbra: after you summon a minion, trigger its Deathrattle: its card's and one a Battlecry copied onto it
+-- (Unearthed Raptor), not one a spell gave it (Spikeridged Steed, Spirit Echo).
 cards.UNG_900 = {
   on = {
     after_summon = function(g, me, ev)
       if g.mine(me, ev) and ev.entity ~= me and alive(g, ev.entity) then
-        g.deathrattle(ev.entity)
+        g.deathrattle(ev.entity, true)
       end
     end,
   },
