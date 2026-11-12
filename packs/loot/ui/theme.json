@@ -1,0 +1,31 @@
+{
+ "about": "Kobolds & Catacombs' interface (docs/packs/format.md, 'UI theme'): torch-lit catacombs under the mountain — dark panels of earth-brown rock with candle-orange rims, buttons of deep amethyst purple that flare candle orange under the mouse, warm wax-yellow parchment text, the gold of the kobolds' treasure hoards for headings, ember red for danger and the cool green of cave crystals for confirmations, embers drifting up from the candles over the menu; the title in Classic's Cinzel Decorative, in treasure gold.",
+ "colors": {
+  "text": "f6e8cf",
+  "muted": "bfae9a",
+  "accent": "f2b142",
+  "table": "120c0a",
+  "panel": "21161af0",
+  "panel_border": "d07a2c",
+  "backdrop": "2b1d2e",
+  "button": "3f2352f0",
+  "button_hover": "55306e",
+  "button_pressed": "2c1839",
+  "button_disabled": "2a2129a6",
+  "button_border": "f08a2e",
+  "button_text": "fbf1de",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "ffd59e",
+  "button_text_disabled": "8a7d78",
+  "outline": "0a0605",
+  "danger": "e0482a",
+  "ok": "6fd39a"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 8, "border": 1, "glow": "f08a2e33", "glow_size": 4, "glow_hover": "ffa94a99", "glow_hover_size": 12},
+ "panel": {"radius": 10, "border": 2, "glow": "d07a2c40", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "3f2352", "border": "f2b142", "text": "fbf1de", "ready": "c0601c", "ready_border": "ffc56e"},
+ "mana": "5fb8ff",
+ "menu": {"shade": "120c0a59", "particles": "embers"}
+}

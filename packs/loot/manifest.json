@@ -1,0 +1,177 @@
+{
+ "format": 1,
+ "id": "loot-2017",
+ "version": "1.0.0",
+ "engine": "0.60.0",
+ "name": {
+  "en": "Kobolds & Catacombs 2017",
+  "ru": "Кобольды и катакомбы 2017",
+  "de": "Kobolde & Katakomben 2017",
+  "fr": "Kobolds et Catacombes 2017",
+  "es": "Kóbolds y Catacumbas 2017",
+  "pt_BR": "Kobolds e Catacumbas 2017",
+  "it": "Coboldi e Catacombe 2017",
+  "pl": "Koboldy i Katakumby 2017"
+ },
+ "description": {
+  "en": "TODO"
+ },
+ "authors": [
+  "Classic HS"
+ ],
+ "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+ "redistributable": true,
+ "default_locale": "en",
+ "locales": [
+  "en",
+  "ru",
+  "de",
+  "fr",
+  "es",
+  "pt_BR",
+  "it",
+  "pl"
+ ],
+ "art_sets": [
+  {
+   "id": "simple",
+   "name": {
+    "en": "Simple painted",
+    "ru": "Простой рисованный",
+    "de": "Einfach gemalt",
+    "fr": "Peint simple",
+    "es": "Pintado simple",
+    "pt_BR": "Pintura simples",
+    "it": "Dipinto semplice",
+    "pl": "Prosty malowany"
+   },
+   "default": true
+  },
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированный"
+   }
+  },
+  {
+   "id": "cartoon",
+   "name": {
+    "en": "Cartoon 2D",
+    "ru": "Мультяшный 2D",
+    "de": "Cartoon 2D",
+    "fr": "Dessin animé 2D",
+    "es": "Dibujos 2D",
+    "pt_BR": "Desenho 2D",
+    "it": "Cartone 2D",
+    "pl": "Kreskówka 2D"
+   }
+  },
+  {
+   "id": "photo",
+   "name": {
+    "en": "Photoreal",
+    "ru": "Фотореалистичный",
+    "de": "Fotorealistisch",
+    "fr": "Photoréaliste",
+    "es": "Fotorrealista",
+    "pt_BR": "Fotorrealista",
+    "it": "Fotorealistico",
+    "pl": "Fotorealistyczny"
+   }
+  }
+ ],
+ "sound_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированные"
+   },
+   "default": true
+  }
+ ],
+ "music_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированная"
+   },
+   "default": true
+  },
+  {
+   "id": "open",
+   "name": {
+    "en": "Open (CC0)",
+    "ru": "Открытая (CC0)"
+   }
+  }
+ ],
+ "set_marks": {
+  "VANILLA:FREE": {
+   "icon": "ui/set_basic.png"
+  },
+  "VANILLA": {
+   "icon": "ui/set_classic.png"
+  },
+  "NAXX": {
+   "icon": "ui/set_naxx.png"
+  },
+  "GVG": {
+   "icon": "ui/set_gvg.png"
+  },
+  "BRM": {
+   "icon": "ui/set_brm.png"
+  },
+  "TGT": {
+   "icon": "ui/set_tgt.png"
+  },
+  "LOE": {
+   "icon": "ui/set_loe.png"
+  },
+  "OG": {
+   "icon": "ui/set_og.png"
+  },
+  "KARA": {
+   "icon": "ui/set_kara.png"
+  },
+  "GANGS": {
+   "icon": "ui/set_msg.png"
+  },
+  "UNGORO": {
+   "icon": "ui/set_ungoro.png"
+  },
+  "ICECROWN": {
+   "icon": "ui/set_icc.png"
+  },
+  "LOOTAPALOOZA": {
+   "icon": "ui/set_loot.png"
+  }
+ },
+ "card_back": null,
+ "logo": null,
+ "colors": {
+  "classes": {
+   "DRUID": "703606",
+   "HUNTER": "016e01",
+   "MAGE": "0092ab",
+   "PALADIN": "aa8f00",
+   "PRIEST": "b8b090",
+   "ROGUE": "4c4d48",
+   "SHAMAN": "0070de",
+   "WARLOCK": "7624ad",
+   "WARRIOR": "8e1002",
+   "NEUTRAL": "6b6b6b",
+   "DREAM": "6b6b6b",
+   "DEMONHUNTER": "6b6b6b"
+  },
+  "rarities": {
+   "FREE": "e8e8e8",
+   "COMMON": "e8e8e8",
+   "RARE": "2f7cff",
+   "EPIC": "a335ee",
+   "LEGENDARY": "ff8000"
+  }
+ }
+}

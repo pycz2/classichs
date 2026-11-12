@@ -780,9 +780,10 @@ impl Game {
             h.spell
         };
         if let Some(f) = f {
-            // DOUBLE_ON_PLAY (Brann Bronzebeard, in play as the Battlecry starts): a Battlecry (not a Combo, not a
-            // Choose One) runs twice, on the same target, with no death phase between
-            let twice = battlecry && self.e(self.hero(self.ctrl(e))).aura.tags.contains_key(self.n().double_on_play);
+            // DOUBLE_ON_PLAY (Brann Bronzebeard, in play as the Battlecry starts; or the champion's own tag, a script's:
+            // Murmuring Elemental's "your next Battlecry"): a Battlecry (not a Combo, not a Choose One) runs twice, on the
+            // same target, with no death phase between
+            let twice = battlecry && self.e(self.hero(self.ctrl(e))).has(self.n().double_on_play);
             for i in 0..1 + twice as usize {
                 if i > 0 && self.game_over {
                     break;

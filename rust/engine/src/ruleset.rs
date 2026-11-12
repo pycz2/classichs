@@ -19,8 +19,8 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-const START_TAGS: [&str; 15] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
-    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL"];
+const START_TAGS: [&str; 16] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
+    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL", "FOE_SPELLPROOF"];
 /// Engine ids of the tags Silence removes.
 const SILENCED: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
     "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
@@ -173,6 +173,9 @@ pub struct Names {
     pub task: Option<&'static str>,
     /// LIFESTEAL: the damage it deals also heals its champion (a pack that names it: Knights of the Frozen Throne).
     pub lifesteal: Option<&'static str>,
+    /// FOE_SPELLPROOF: the opponent's spells and powers cannot target it (a pack that names it: Kobolds & Catacombs'
+    /// Shimmering Courser).
+    pub foe_spellproof: Option<&'static str>,
     /// DOUBLE_TURN_END: its owner's "at the end of your turn" hooks run twice (an aura tag on the champion: Drakkari
     /// Enchanter); only when the pack names it.
     pub double_turn_end: Option<&'static str>,
@@ -246,12 +249,14 @@ impl Names {
             dormant: by_engine.get("DORMANT").copied(),
             task: by_engine.get("TASK").copied(),
             lifesteal: by_engine.get("LIFESTEAL").copied(),
+            foe_spellproof: by_engine.get("FOE_SPELLPROOF").copied(),
             double_turn_end: by_engine.get("DOUBLE_TURN_END").copied(),
             task_progress: by_engine.get("TASK_PROGRESS").copied(),
             task_goal: by_engine.get("TASK_GOAL").copied(),
             trap: n("TRAP"),
-            // LIFESTEAL only where the pack names it (no older pack's Silence looks for it)
-            silenced: SILENCED.iter().map(|id| n(id)).chain(by_engine.get("LIFESTEAL").copied()).collect(),
+            // LIFESTEAL and FOE_SPELLPROOF only where the pack names them (no older pack's Silence looks for them)
+            silenced: SILENCED.iter().map(|id| n(id)).chain(by_engine.get("LIFESTEAL").copied())
+                .chain(by_engine.get("FOE_SPELLPROOF").copied()).collect(),
             by_engine: by_engine.clone(),
             engine_of,
             known: HashSet::new(),
@@ -360,6 +365,9 @@ pub struct Ruleset {
     /// `behaviour.replaced_weapon_dies`: a weapon replaced by a new one is destroyed as any other (its Deathrattle, the
     /// `death` event: hearthstone.wiki.gg, Weapon). Off: it is set aside to the graveyard without them.
     pub replaced_weapon_dies: bool,
+    /// `behaviour.lifesteal_one_heal`: the Lifesteal damage of one hook (a spell, a Battlecry…) heals its champion once,
+    /// when the hook ends, for all it dealt (patch 10.0.0.22611 of 2017). Off: each hit heals at once.
+    pub lifesteal_one_heal: bool,
     /// `player_hooks`: a named hook set whose `on` hooks see every event once for each player (`me` is that player's
     /// champion): counts of the game ("spells you've cast this game"). None: no such hooks.
     pub player_hooks: Option<String>,
@@ -560,6 +568,7 @@ impl Ruleset {
             full_hand_return_dies: rules["behaviour"].get("full_hand_return_dies") == Some(&json!(true)),
             cost_in_order: rules["behaviour"].get("cost_in_order") == Some(&json!(true)),
             replaced_weapon_dies: rules["behaviour"].get("replaced_weapon_dies") == Some(&json!(true)),
+            lifesteal_one_heal: rules["behaviour"].get("lifesteal_one_heal") == Some(&json!(true)),
             player_hooks: rules.get("player_hooks").and_then(Value::as_str).map(String::from),
             bot_trap: i(&rules["bot"], "trap", 0) as f64,
             bot_depth: i(&rules["bot"], "depth", 1),

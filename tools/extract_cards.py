@@ -122,7 +122,7 @@ KARA_TOKENS = "KAR_004a KAR_005a KAR_010a KAR_025a KAR_025b KAR_025c KAR_026t KA
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590, "ungoro": 18336, "icc": 20457}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590, "ungoro": 18336, "icc": 20457, "loot": 22611}
 ## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
 ## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
 ## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
@@ -133,7 +133,9 @@ RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 125
 ## One Night in Karazhan too: reworked in 2021-22 (Barnes 5, The Curator 5, Ivory Knight 4, Firelands Portal 6 damage…).
 ## Mean Streets of Gadgetzan too: nerfed and reworked since (Small-Time Buccaneer, Patches, Jade Spirit, Kazakus…).
 ## Journey to Un'Goro and Knights of the Frozen Throne too (Spreading Plague 6, Shadow Essence 7, Leeching Poison 1 since).
-FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg", "ungoro", "icc"}
+## Kobolds & Catacombs too (build 22611, patch 10.0.0.22611): Corridor Creeper, Kobold Illusionist, Cataclysm, Twig of the
+## World Tree, Sleepy Dragon, Elven Minstrel, Arcane Artificer changed later; Ixlid lost its Elemental tribe, others got one.
+FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 ## Classic's Hero Powers had other ids in the old builds (VAN_HERO_06bp was CS2_017; the upgraded ones AT_132_*).
 _CLASSES = ["WARRIOR", "SHAMAN", "ROGUE", "PALADIN", "HUNTER", "DRUID", "WARLOCK", "MAGE", "PRIEST"]
@@ -201,13 +203,17 @@ SETS = {
 }
 
 
+## Cards of the data that are no card of the game: Val'anyr's re-equip dummy (Kobolds & Catacombs).
+DUMMIES = {"LOOT_500d"}
+
+
 def set_cards(cards, name):
     """The cards of set `name` (SETS) in data/cards.json's shape, sorted by id."""
     code, prefixes, tokens = SETS[name]
     prefixes = tuple(prefixes)
 
     def keep(c):
-        if not c["id"].startswith(prefixes) or c["type"] == "ENCHANTMENT" or "puzzle" in c["id"].lower():
+        if not c["id"].startswith(prefixes) or c["type"] == "ENCHANTMENT" or "puzzle" in c["id"].lower() or c["id"] in DUMMIES:
             return False  # (puzzles are Boomsday's puzzle lab copies)
         if c.get("collectible"):
             return True
