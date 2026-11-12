@@ -362,7 +362,7 @@ impl Game {
         if !hpe.has(n.used) && !hpe.has(n.locked) && self.cost_in(hp, &auras) <= p.mana {
             let hh = &hpe.card.hooks;
             if hh.power.is_some() && hh.can_play.is_none_or(|f| self.fx_can_play(f, hp)) {
-                for t in self.spec_targets(hp, hh.target, true, false) {
+                for t in self.spec_targets(hp, self.live_spec(hp, hh.target), true, false) {
                     out.push(Act::HeroPower { player, target: t });
                 }
             }
@@ -416,13 +416,19 @@ impl Game {
     /// The target spec that applies when e is played with this choice and combo state.
     pub fn target_spec(&self, e: Id, choice: i64, combo: bool) -> Option<TSpec> {
         let h = &self.e(e).card.hooks;
-        if h.combo_target.is_some() {
-            return if combo { h.combo_target } else { None };
-        }
-        if choice >= 0 {
-            return self.rs.hooks(h.choice.unwrap()[choice as usize]).target;
-        }
-        h.target
+        let spec = if h.combo_target.is_some() {
+            if combo { h.combo_target } else { None }
+        } else if choice >= 0 {
+            self.rs.hooks(h.choice.unwrap()[choice as usize]).target
+        } else {
+            h.target
+        };
+        self.live_spec(e, spec)
+    }
+
+    /// A target spec as it applies now: none while its `when` hook does not hold.
+    fn live_spec(&self, e: Id, spec: Option<TSpec>) -> Option<TSpec> {
+        spec.filter(|s| s.when.is_none_or(|f| self.fx_can_play(f, e)))
     }
 
     fn spec_targets(&self, e: Id, spec: Option<TSpec>, is_spell: bool, optional: bool) -> Vec<Id> {

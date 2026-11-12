@@ -22,6 +22,9 @@ pub enum Base {
 pub struct TSpec {
     pub base: Base,
     pub filter: Option<HookFn>,
+    /// The spec applies only while this read-only hook holds; otherwise the card or power has no target
+    /// (Steamwheedle Sniper: Steady Shot targets only while it is in play).
+    pub when: Option<HookFn>,
 }
 
 /// A TRAP: fires on `event` in the opponent's turn when `cond` holds (None: always);
@@ -53,6 +56,9 @@ pub struct HookSet {
     pub glow: Option<HookFn>,
     pub on_death: Option<HookFn>,
     pub on: Vec<(&'static str, HookFn)>,
+    /// Like `on`, while the card is in its owner's hand (not in the mulligan): "when you draw this",
+    /// "while this is in your hand".
+    pub hand: Vec<(&'static str, HookFn)>,
     pub trap: Option<TrapHook>,
     /// Called at once (replacement effects): only "predamage".
     pub now: Vec<(&'static str, HookFn)>,
@@ -69,6 +75,9 @@ pub struct HookSet {
 impl HookSet {
     pub fn on(&self, ev_type: &str) -> Option<HookFn> {
         self.on.iter().find(|(t, _)| *t == ev_type).map(|(_, f)| *f)
+    }
+    pub fn hand(&self, ev_type: &str) -> Option<HookFn> {
+        self.hand.iter().find(|(t, _)| *t == ev_type).map(|(_, f)| *f)
     }
     pub fn now(&self, ev_type: &str) -> Option<HookFn> {
         self.now.iter().find(|(t, _)| *t == ev_type).map(|(_, f)| *f)
@@ -107,6 +116,9 @@ pub fn summary(h: &HookSet) -> serde_json::Value {
         m.insert("secret".into(), serde_json::Value::Bool(true));
     }
     on.extend(h.now.iter().map(|(t, _)| *t));
+    if !h.hand.is_empty() {
+        m.insert("hand".into(), serde_json::json!(h.hand.iter().map(|(t, _)| *t).collect::<Vec<_>>()));
+    }
     if !on.is_empty() {
         m.insert("on".into(), serde_json::json!(on));
     }

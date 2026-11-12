@@ -454,6 +454,18 @@ class Chain(unittest.TestCase):
                          "e47ac05550ae07647fcb8726d04b5a6cdbb28501c37420723e14c5cb690a90e7")
 
 
+    def test_goblins_vs_gnomes_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/gvg")
+        self.assertEqual((r.errors, r.warnings), ([], []))  # its new cards are drawn: no picture warning for them
+        self.assertIn("art/simple/FP1_001.webp", files)  # Naxxramas's own pictures come along
+        self.assertIn("art/simple/VAN_CS2_029.webp", files)  # Classic's by its recipe
+        self.assertFalse([p for p in files if p.startswith("art/") and "/GVG_" in p])
+        for s in ("basic", "classic", "naxx", "gvg"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        self.assertIn("scripts/gvg.lua", files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/gvg"))
+
+
 class ExtractSets(unittest.TestCase):
     def test_a_set_is_its_prefixed_cards_and_their_tokens(self):
         import extract_cards

@@ -19,7 +19,9 @@ pack `packs/<s>/`, built on the previous one. Do the items in order; the next se
 - [ ] `python3 tools/extract_cards.py --set <s>` → `data/<s>_cards.json` (collectible cards and their tokens).
 - [ ] `packs/<s>/cards.patch.json`: the release stats, tribes, `script` of each card, `fx`; `null` takes a later field away.
 - [ ] `packs/<s>/cards.texts.json` (card id → `{name?, text?: {enUS, ruRU, deDE, frFR, esES, ptBR, itIT, plPL}}`): the
-      texts of that day where today's differ (hsdata's CardDefs.xml at the build has them all).
+      texts of that day where today's differ (hsdata's CardDefs.xml at the build has them all), for every card of the
+      chain: `extract_cards.py --set <s>` writes it from the build in its `RELEASE_BUILDS` (HearthstoneJSON keeps every
+      build: `api.hearthstonejson.com/v1/<build>/all/cards.json`, also the stats of that day to compare with).
 - [ ] `packs/<s>/recipe.json`: `"base": "../<previous>"`, `"root": "../.."`, `"skip": ["layout"]` (as Naxxramas; the
       base's pictures stay: a pack stands alone),
       `"bundle_in_client": false`, one step `{"do": "hsjson", "from": ["data/<s>_cards.json"], "patch": ["cards.patch.json"], "texts": ["packs/<s>/cards.texts.json"]}`.

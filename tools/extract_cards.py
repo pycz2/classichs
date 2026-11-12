@@ -88,13 +88,53 @@ WEBSPINNER = {
 }
 
 
+## Goblins vs Gnomes' tokens at its release (build 7234): the options, Gallywix's Coin, the Mine, the Boom Bot,
+## V-07-TR-0N, … and the seven Spare Parts (today's set also has GVG_COIN, a later coin skin).
+GVG_TOKENS = """GVG_028t GVG_030a GVG_030b GVG_032a GVG_032b GVG_041a GVG_041b GVG_045t GVG_056t GVG_080t GVG_092t
+GVG_110t GVG_111t PART_001 PART_002 PART_003 PART_004 PART_005 PART_006 PART_007""".split()
+
+## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
+## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
+## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
+RELEASE_BUILDS = {"gvg": 7234}
+LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
+
+
+def _norm(t):
+    """A text without what only lays it out today ([x], no-break spaces, runs of spaces)."""
+    return re.sub(r"\s+", " ", (t or "").replace(" ", " ").replace("[x]", "")).strip()
+
+
+def release_texts(name, then):
+    """packs/<name>/cards.texts.json from `then` (HearthstoneJSON of RELEASE_BUILDS[name]): card id ->
+    {name?, text?: {lang: text}} for every card of the chain (data/cards.json, the earlier sets' data files and
+    this set's) whose name or text that day differs from today's in some language. A Classic card (VAN_<id>) is
+    matched to <id> only when both are the same kind of card (type, with or without a text): VAN_EX1_tk9 is a plain
+    Treant, EX1_tk9 was Force of Nature's."""
+    old = {c["id"]: c for c in then}
+    chain = [OUT] + [OUT.parent / f"{s}_cards.json" for s in list(SETS)[:list(SETS).index(name) + 1]]
+    out = {}
+    for f in chain:
+        for c in json.loads(f.read_text()):
+            o = old.get(c["id"][4:] if c["id"].startswith("VAN_") else c["id"])
+            if not o or o["type"] != c["type"] or bool(o.get("text")) != bool(c.get("text")):
+                continue
+            for field in ("name", "text"):
+                now, was = c.get(field) or {}, o.get(field) or {}
+                if was and any(_norm(now.get(l)) != _norm(was.get(l)) for l in LANGS):
+                    out.setdefault(c["id"], {})[field] = {l: was.get(l) or now.get(l, "") for l in LANGS}
+    dst = OUT.parent.parent / "packs" / name / "cards.texts.json"
+    dst.write_text(json.dumps(out, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
+    print(f"wrote {len(out)} cards' texts of build {RELEASE_BUILDS[name]} to {dst}")
+
+
 ## The sets after Classic, one pack each, in order (docs/superpowers/plans/2026-11-11-expansions.md): pack name ->
 ## (HearthstoneJSON set, card id prefixes, tokens). The cards of a set: every collectible card whose id has one of the
 ## prefixes, and its tokens: the listed ids, or (None) every other card of that HearthstoneJSON set with a prefix
 ## (not enchantments). tools/fetch_set_assets.py downloads the art and sounds of the same cards.
 SETS = {
     "naxx": ("NAXX", ["FP1_"], NAXX_TOKENS),
-    "gvg": ("GVG", ["GVG_", "PART_"], None),
+    "gvg": ("GVG", ["GVG_", "PART_"], GVG_TOKENS),
     "brm": ("BRM", ["BRM_"], None),
     "tgt": ("TGT", ["AT_"], None),
     "loe": ("LOE", ["LOE_"], None),
@@ -127,7 +167,7 @@ def set_cards(cards, name):
     return sorted(out, key=lambda c: c["id"])
 
 
-def extract_set(cards, name):
+def extract_set(cards, name, then=None):
     """data/<name>_cards.json: every card of the set as HearthstoneJSON has it today (the pack's cards.patch.json
     restores the stats and tribes of the release day, its *.texts.json the texts). Naxxramas also writes
     data/naxx_texts.json (its release-time names and texts, taken from cards that still carry them)."""
@@ -141,21 +181,24 @@ def extract_set(cards, name):
         texts["FP1_011"] = {"text": WEBSPINNER}
         (OUT.parent / "naxx_texts.json").write_text(json.dumps(texts, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
         print(f"wrote {len(texts)} Naxxramas release texts")
+    if name in RELEASE_BUILDS:
+        release_texts(name, then if then is not None else hsjson(RELEASE_BUILDS[name]))
 
 
-def hsjson():
-    req = urllib.request.Request(URL, headers={"User-Agent": "classic-hs-extract/1.0"})
+def hsjson(build="latest"):
+    req = urllib.request.Request(URL.replace("latest", str(build)), headers={"User-Agent": "classic-hs-extract/1.0"})
     with urllib.request.urlopen(req) as r:
         return json.load(r)
 
 
 if __name__ == "__main__":
     import sys
-    # python3 tools/extract_cards.py --set gvg [HearthstoneJSON cards.json]   (--naxx = --set naxx)
+    # python3 tools/extract_cards.py --set gvg [HearthstoneJSON cards.json [the release build's]]   (--naxx = --set naxx)
     args = ["--set", "naxx"] + [a for a in sys.argv[1:] if a != "--naxx"] if "--naxx" in sys.argv else sys.argv[1:]
     if args[:1] == ["--set"]:
         if len(args) < 2 or args[1] not in SETS:
             raise SystemExit(f"--set wants one of: {', '.join(SETS)}")
-        extract_set(json.loads(pathlib.Path(args[2]).read_text()) if args[2:] else hsjson(), args[1])
+        read = lambda i: json.loads(pathlib.Path(args[i]).read_text()) if args[i:] else None  # noqa: E731
+        extract_set(read(2) or hsjson(), args[1], read(3))
     else:
         main()

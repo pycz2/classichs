@@ -482,12 +482,14 @@ def check_files(files):
             r.error(f"{top}/{s}/ is not listed in manifest.json {kind}")
         if len([s for s in man.get(kind, []) if s.get("default")]) > 1:
             r.error(f"manifest.json: more than one default in {kind}")
+    # a card with no picture in any set is drawn on purpose (the cards after Naxxramas): no warning for it
+    pictured = {p.split("/")[2].rsplit(".", 1)[0] for p in files if p.startswith("art/") and p.count("/") == 2}
     for s in man.get("art_sets", []):
         stems = {p.split("/")[2].rsplit(".", 1)[0] for p in files if p.startswith(f"art/{s['id']}/") and not p.endswith(".md")}
         unknown = sorted(stems - cards.keys())
         if unknown:
             r.warn(f"art/{s['id']}/: {len(unknown)} pictures of no card ({', '.join(unknown[:5])})")
-        missing = sorted(cards.keys() - stems)
+        missing = sorted((cards.keys() & pictured) - stems)
         if missing and s.get("default"):
             r.warn(f"art/{s['id']}/: no picture for {len(missing)} cards ({', '.join(missing[:5])})")
 
@@ -846,8 +848,10 @@ STEPS = {"source": step_source, "copy": step_copy, "hsjson": step_hsjson, "keywo
 
 ## The sections of a base pack's own texts (locales/<lang>.json) a pack built on it takes, under its own.
 INHERITED_SECTIONS = ["classes", "races", "rarities", "mechanics", "ranks", "cards", "sets"]
-## The files of a base pack's source folder a pack built on it takes (its own win): card scripts and fonts.
-INHERITED_FILES = ("scripts/**/*.lua", "ui/fonts/*.ttf", "ui/fonts/*.otf", "ui/fonts/*.txt")
+## The files of a base pack's source folder a pack built on it takes (its own win): card scripts, fonts, the
+## pictures of its own cards (packs/naxx/art: a pack stands alone) and its set marks.
+INHERITED_FILES = ("scripts/**/*.lua", "ui/fonts/*.ttf", "ui/fonts/*.otf", "ui/fonts/*.txt", "art/*/*.webp", "art/*/*.jpg",
+                   "art/*/*.png", "ui/set_*.png")
 
 
 def _many(v):

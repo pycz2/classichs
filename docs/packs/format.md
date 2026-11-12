@@ -333,7 +333,8 @@ A pack source is a folder with the pack's own files (`manifest.json`,
 (and of its base, recursively), except the base's `copy` steps whose `to` matches a glob of `skip`
 (Naxxramas skips Classic's `layout`; the pictures stay: a pack stands alone). The pack's own `hsjson` step adds to the
 base's one: its `from` data, its `patch` and its `texts` come after the base's, in order (a later patch wins for a
-field it names); its other steps follow the base's. The base's own files `scripts/**/*.lua` and `ui/fonts/*` and
+field it names); its other steps follow the base's. The base's own files `scripts/**/*.lua`, `ui/fonts/*`, the
+pictures of its own cards (`art/<set>/*`: Naxxramas's) and its set marks (`ui/set_*.png`) and
 its own texts (the sections `classes`, `races`, `rarities`, `mechanics`, `ranks`, `cards`, `sets` of its
 `locales/<lang>.json`) come along under the pack's own (the pack's file or text wins, then the nearer base's). So a
 new set needs only its folder: `recipe.json` (`base`, `skip`, one `hsjson` step with its data from
