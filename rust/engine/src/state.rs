@@ -822,10 +822,9 @@ impl Game {
     pub fn take_control(&mut self, e: Id, p: usize) {
         let c = self.ctrl(e);
         if c != p && self.players[c].secrets.contains(&e) {
-            // a trap changes sides; one its new owner already has is destroyed (Kezan Mystic)
+            // a trap changes sides; one its new owner already has, or one over their limit, is destroyed (Kezan Mystic)
             self.players[c].secrets.retain(|&x| x != e);
-            let card = self.e(e).card_id;
-            if self.players[p].secrets.iter().any(|&s| self.e(s).card_id == card) {
+            if !self.trap_room(p, self.e(e).card_id) {
                 self.em(e).zone = "GRAVEYARD";
                 self.log_event(obj!{"type": "destroy", "target": e});
                 return;
@@ -1021,6 +1020,13 @@ impl Game {
             .collect()
     }
 
+    /// Whether player `p` may get trap `card` into play: fewer than `limits.secrets` traps and not
+    /// this one already. Every way in checks it (played from the hand, `put_trap`, `take_control`).
+    pub fn trap_room(&self, p: usize, card: &str) -> bool {
+        let s = &self.players[p].secrets;
+        s.len() < self.rs.secrets && !s.iter().any(|&x| self.e(x).card_id == card)
+    }
+
     pub fn trap_ready(&self, me: Id) -> bool {
         let e = self.e(me);
         e.zone == self.n().trap && self.current != e.controller
@@ -1035,12 +1041,13 @@ impl Game {
     }
 
     /// Puts a trap card of its owner's hand or deck into play as if it were played (Mad Scientist);
-    /// false if it is not a trap there or the same trap is already in play.
+    /// false (and it stays where it is) if it is not a trap there, the same trap is already in play
+    /// or its owner has `limits.secrets` traps.
     pub fn put_trap(&mut self, e: Id) -> bool {
         let c = self.ctrl(e);
         let x = self.e(e);
         let card = x.card_id;
-        if !x.card.trap || !(x.zone == "HAND" || x.zone == "DECK") || self.players[c].secrets.iter().any(|&s| self.e(s).card_id == card) {
+        if !x.card.trap || !(x.zone == "HAND" || x.zone == "DECK") || !self.trap_room(c, card) {
             return false;
         }
         let pl = &mut self.players[c];

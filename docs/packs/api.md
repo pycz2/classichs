@@ -202,7 +202,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.silence(e)`, `g.freeze(e)` | |
 | `g.transform(e, card)` | Replaces a minion with a new one; returns it. |
 | `g.return_to_hand(e)` | Returns a minion as a fresh card; returns the new card or `nil`. |
-| `g.take_control(e, p)` | A minion, or a trap (it moves to `p`'s traps; if `p` has that trap already, it is destroyed: Kezan Mystic). |
+| `g.take_control(e, p)` | A minion, or a trap (it moves to `p`'s traps; if `p` has that trap already or `limits.secrets` traps, it is destroyed: Kezan Mystic). |
 | `g.copy_minion(me, t)` | Turns `me` into a copy of `t` (stats, enchantments, tags, silence). |
 | `g.equip(p, card)` | A new weapon (the old one is destroyed). |
 | `g.add_to_deck(p, card)` | A new card shuffled into `p`'s deck at a random place (logs `add_to_deck`); returns it. |
@@ -228,7 +228,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.pick(list)` | A random item (or `nil` for an empty list). |
 | `g.random_alive(list)` | A random item that is in play and not dying, or `nil`. |
 | `g.shuffle(list)` | Shuffles the list in place (and returns it). |
-| `g.put_trap(e)` | Puts a trap card of its owner's hand or deck into play, as if played but without the `play` event (logs `trap_put`); `false` when `e` is no trap there or the same trap is already in play (Mad Scientist). |
+| `g.put_trap(e)` | Puts a trap card of its owner's hand or deck into play, as if played but without the `play` event (logs `trap_put`); `false` (it stays where it is) when `e` is no trap there, the same trap is already in play or its owner has `limits.secrets` traps (Mad Scientist). |
 | `g.remove_dead()` | The death phase now: the dead leave the board (room for a summon) and their Deathrattles and `death` events are queued, to run after the hook (Mimiron's Head: V-07-TR-0N comes before the Mechs' Deathrattles). |
 | `g.resolve()` | Runs the queued triggers and the death phase now, inside the hook (Poison Seeds and Reincarnate: the destroyed minions die and their Deathrattles go before the Treants or the copy come). |
 

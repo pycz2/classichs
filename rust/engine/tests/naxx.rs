@@ -207,6 +207,24 @@ fn mad_scientist_puts_a_secret_into_play() {
     assert_eq!((t.g.players[0].secrets.len(), t.g.players[0].deck.len()), (1, 2));
 }
 
+const FIVE_SECRETS: [&str; 5] = ["VAN_EX1_289", "VAN_EX1_294", "VAN_EX1_295", "VAN_EX1_594", "VAN_tt_010"];
+
+#[test]
+fn at_most_five_secrets() {
+    // played from the hand: a sixth Secret is not playable, a fifth is
+    let mut t = scene!({"hand": ["VAN_EX1_287"], "secrets": FIVE_SECRETS}, {});
+    let e = t.hand_id("VAN_EX1_287");
+    assert!(!t.g.legal_actions().iter().any(|a| a["type"] == "play" && int(a.get("entity")) == e), "a sixth Secret");
+    let mut t = scene!({"hand": ["VAN_EX1_287"], "secrets": FIVE_SECRETS[..4]}, {});
+    t.play("VAN_EX1_287", NONE);
+    assert_eq!(t.g.players[0].secrets.len(), 5);
+    // Mad Scientist with five: the Secret stays in the deck
+    let mut t = scene!({"board": ["FP1_004"], "hand": [FIREBALL], "deck": [WISP, "VAN_EX1_287"], "secrets": FIVE_SECRETS}, {});
+    let m = t.nth(0, 0);
+    t.play(FIREBALL, m);
+    assert_eq!((t.g.players[0].secrets.len(), t.g.players[0].deck.len()), (5, 2));
+}
+
 #[test]
 fn shade_stoneskin_and_stealth() {
     let mut t = scene!({"board": ["FP1_005", {"card": "FP1_027", "damage": 3}]}, {"hand": [FIREBALL]});
