@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds Blackrock Mountain 2015 (docs/packs/format.md, 'Build recipes'): on Goblins vs Gnomes (base), so on Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the Blackrock Mountain cards and their tokens (data/brm_cards.json, tools/extract_cards.py --set brm) with the names and texts of build 8311 (patch 2.4.0.8311, 2015-03-31, two days before the first wing) for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the release stats, the scripts of scripts/brm.lua, the older cards that patch fixed).",
+  "base": "../gvg",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/brm_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/brm/cards.texts.json"
+      ]
+    }
+  ]
+}

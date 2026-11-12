@@ -486,6 +486,24 @@ class Chain(unittest.TestCase):
             self.assertIn(f"ui/set_{s}.png", files)
         self.assertIn("scripts/gvg.lua", files)
         self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/gvg"))
+        self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
+                         "009e0b6b761bd7425781d3d80dfe497eea9cfb9e822fde78aaddf2d0ab540153")
+
+    def test_blackrock_mountain_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/brm")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertIn("art/simple/FP1_001.webp", files)
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/GVG_" in p or "/BRM_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/gvg.lua", "scripts/brm.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/brm"))
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        self.assertEqual(len([c for c in cards.values() if c["id"].startswith("BRM_") and c.get("collectible")]), 31)
+        self.assertEqual(cards["FP1_028"]["script"], "scripts/brm.lua#FP1_028")  # Undertaker: +1 Attack (2.1.0.7628)
+        en = json.loads(files["locales/en.json"])["cards"]
+        self.assertEqual(en["BRM_010a"]["text"], "Transform into a 5/2 minion.")  # the option's text of build 8311
 
 
 class ExtractSets(unittest.TestCase):
