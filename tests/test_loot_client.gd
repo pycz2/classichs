@@ -16,7 +16,8 @@ func _add_cards() -> void:
 	CardDb._cards[STONE] = {"id": STONE, "type": "SPELL", "cardClass": "WARRIOR", "set": "VANILLA", "cost": 1,
 		"name": {"enUS": "Lesser Jasper Spellstone"},
 		"text": {"enUS": "Deal $2 damage to a minion. @<i>(Gain 3 Armor to upgrade.)</i>",
-			"ruRU": "Наносит $2 ед. урона выбранному существу. @<i>(Получите 3 ед. брони для улучшения.)</i>"}}
+			"ruRU": "Наносит $2 ед. урона выбранному существу. @<i>(Получите 3 ед. брони для улучшения.)</i>",
+			"deDE": "Kein Ziel von Helden[d]fähigkeiten."}}
 	CardDb._cards[DARK] = {"id": DARK, "type": "MINION", "cardClass": "NEUTRAL", "set": "VANILLA", "cost": 4,
 		"attack": 20, "health": 20, "name": {"enUS": "The Darkness"}, "text": {"enUS": "@"}}
 	CardDb._cards[FATE] = {"id": FATE, "type": "MINION", "cardClass": "DRUID", "set": "VANILLA", "cost": 4,
@@ -37,6 +38,7 @@ func test_a_spellstone_shows_its_whole_text_and_variants_still_split() -> void:
 	_add_cards()
 	eq(CardText.text(STONE, "en"), "Deal 2 damage to a minion. (Gain 3 Armor to upgrade.)", "no @, the hint kept")
 	eq(CardText.text(STONE, "ru"), "Наносит 2 ед. урона выбранному существу. (Получите 3 ед. брони для улучшения.)", "Russian")
+	eq(CardText.text(STONE, "de"), "Kein Ziel von Heldenfähigkeiten.", "a German hyphenation point is not shown")
 	check(CardText.rich(STONE, "en").contains("[i](Gain 3 Armor to upgrade.)[/i]"), "the hint in italics")
 	eq(CardText.text(DARK, "en"), "", "The Darkness's dormant form: no text, no @")
 	eq(CardText.text(FATE, "en"), "Both.", "Fatespinner: the variant both players see")
@@ -64,6 +66,8 @@ func test_history_lines_of_the_new_events() -> void:
 	var candle := {"type": "cast_when_drawn", "player": 1, "entity": 70, "card": CANDLE}
 	eq(rows.call([candle], 0), ["Opponent draws Darkness Candle: it casts itself"], "shown to both players")
 	eq(rows.call([candle.merged({"player": 0}, true)], 0), ["You draw Darkness Candle: it casts itself"], "mine")
+	eq(rows.call([{"type": "draw", "player": 1, "entity": 70, "card": CANDLE}, candle], 0),
+		["Opponent draws Darkness Candle: it casts itself"], "one line for its draw and cast")
 	var kingsbane := {"type": "to_deck", "player": 0, "entity": 40, "card": "", "by": YETI, "by_id": 40}
 	eq(rows.call([kingsbane], 1), ["Chillwind Yeti is shuffled into Opponent's deck"], "a card that shuffles itself back")
 	var swap := []

@@ -50,7 +50,10 @@ static func rows(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Arra
 	var played := {}
 	var chosen: bool = entry.action.get("type", "") == "choose"
 	var run := {}  # hidden cards shuffled into one deck one after another (King Togwaggle's swap): one row
+	var cast: Array = entry.events.filter(func(e): return e.type == "cast_when_drawn").map(func(e): return e.entity)
 	for ev: Dictionary in entry.events:
+		if ev.type == "draw" and cast.has(ev.entity):
+			continue  # (its own line says it: drawn and cast)
 		if ev.type == "to_deck" and _deck_card(ev) == "":
 			if run.get("player") == ev.player and run.row == out.size() - 1:
 				run.n += 1

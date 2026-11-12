@@ -130,7 +130,7 @@ static func name_font() -> Font:
 static func spans(card_id: String, lang: String, args := []) -> Array:
 	var e := of(card_id, lang)
 	if e.has("lines") and args.is_empty():
-		return _spans_of("\n".join(e.lines))
+		return _spans_of("\n".join(e.lines).replace("[lb]d]", ""))  # (Hearthstone's German hyphenation point, as CardText.raw)
 	return _spans_of(CardText.rich(card_id, CardText.hs_locale(lang), 0, args))
 
 
@@ -246,7 +246,7 @@ static func problems(card_id: String, lang: String) -> Array:
 	var want := _plain(CardText.rich(card_id, CardText.hs_locale(lang)))
 	if want == "":
 		return out
-	if _plain("\n".join(e.get("lines", []))) != want:
+	if _plain("\n".join(e.get("lines", [])).replace("[lb]d]", "")) != want:
 		out.append("text differs")
 	var p := paragraph(card_id, lang)
 	if height(p) > TEXT_BOX.size.y:

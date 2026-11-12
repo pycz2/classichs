@@ -350,7 +350,7 @@ end
 
 -- A card shown to both players (Seeping Oozeling's minion, Dragon's Fury's spell); it stays where it is.
 local function reveal(g, p, e)
-  g.log({ type = "reveal", player = p, entity = e, card = g.card(e) })
+  g.log({ type = "reveal", player = p, card = g.card(e) }) -- (no entity: a card in a deck stays hidden by it)
 end
 
 -- --- Druid ---------------------------------------------------------------------------------------------------------------
@@ -534,6 +534,9 @@ local COMPANIONS = { "VAN_NEW1_032", "VAN_NEW1_033", "VAN_NEW1_034" }
 cards.LOOT_217 = {
   can_play = function(g, me)
     return g.room(g.ctrl(me)) > 0
+  end,
+  glow = function(g, me)
+    return no_minions_in_deck(g, g.ctrl(me))
   end,
   glow = function(g, me)
     return no_minions_in_deck(g, g.ctrl(me))

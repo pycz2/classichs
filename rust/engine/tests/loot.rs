@@ -1633,3 +1633,39 @@ fn deck_templates_play_bot_games() {
     assert!(played.len() >= 40, "the decks play the set");
     assert!(seen.get("spellstone upgrades").is_some_and(|&n| n > 0), "{seen:?}");
 }
+
+#[test]
+fn random_cards_never_fail() {
+    let Some(rs) = rs() else { return };
+    let loot: Vec<String> = {
+        let mut v: Vec<String> = rs.cards.values().filter(|c| c.set == "LOOTAPALOOZA" && c.kind != "POWER").map(|c| c.id.clone()).collect();
+        v.sort();
+        v
+    };
+    for seed in 0..160 {
+        let hand: Vec<&String> = loot.iter().skip((seed * 7) % loot.len()).take(8).collect();
+        let hero = ["HERO_01", "HERO_03", "HERO_06", "HERO_08", "HERO_09", "HERO_05", "HERO_07", "HERO_02", "HERO_04"][seed as usize % 9];
+        let sc = json!({"current": 0, "seed": seed, "players": [
+            {"hero": hero, "mana": 10, "max_mana": 10, "weapon": "VAN_CS2_106",
+             "deck": [YETI, "LOOT_285", "LOOT_278", WISP, "LOOT_026e", FIREBALL, "VAN_EX1_554", "LOOT_309"], "hand": hand,
+             "board": [WISP, "VAN_EX1_506", "LOOT_131"]},
+            {"hero": "HERO_05", "mana": 10, "max_mana": 10, "deck": [WISP, "LOOT_526t", YETI, "LOOT_106t"], "board": [YETI, "LOOT_134"]}]});
+        let mut g = scenario::build_in(rs, &sc).unwrap();
+        for _ in 0..30 {
+            if g.game_over {
+                break;
+            }
+            g.players[g.current].mana = 10;
+            let acts = g.legal_actions();
+            let n = (seed as usize + g.turn as usize) % 3;
+            let a = acts.iter().find(|a| a["type"] == "choose")
+                .or_else(|| acts.iter().filter(|a| a["type"] == "play").nth(n).or_else(|| acts.iter().find(|a| a["type"] == "play")))
+                .or_else(|| acts.iter().find(|a| a["type"] == "hero_power"))
+                .or_else(|| acts.iter().find(|a| a["type"] == "attack"))
+                .or_else(|| acts.iter().find(|a| a["type"] == "end_turn")).cloned();
+            let Some(a) = a else { break };
+            assert!(g.apply(&Value::Object(a.clone())).ok, "{a:?}");
+            assert_eq!(g.script_error.get(), None, "seed {seed}");
+        }
+    }
+}

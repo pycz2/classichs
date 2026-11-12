@@ -462,14 +462,18 @@ cards.LOOT_506 = {
 }
 
 -- Windshear Stormcaller: if you control the four basic Totems, Al'Akir the Windlord right of it.
+local function all_basic_totems(g, me)
+  local mine = g.minions(g.ctrl(me))
+  return list.all(BASIC_TOTEMS, function(c)
+    return list.any(mine, function(m)
+      return g.card(m) == c
+    end)
+  end)
+end
 cards.LOOT_518 = {
+  glow = all_basic_totems,
   battlecry = function(g, me)
-    local mine = g.minions(g.ctrl(me))
-    if list.all(BASIC_TOTEMS, function(c)
-      return list.any(mine, function(m)
-        return g.card(m) == c
-      end)
-    end) then
+    if all_basic_totems(g, me) then
       g.summon_right(me, "VAN_NEW1_010")
     end
   end,
@@ -505,6 +509,9 @@ cards.LOOT_017 = {
 
 -- Hooked Reaver: with 15 Health or less, +3/+3 and Taunt.
 cards.LOOT_018 = {
+  glow = function(g, me)
+    return g.health(g.hero(g.ctrl(me))) <= 15
+  end,
   battlecry = function(g, me)
     if g.health(g.hero(g.ctrl(me))) <= 15 then
       g.buff(me, 3, 3)
