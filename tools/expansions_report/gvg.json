@@ -1,0 +1,26 @@
+{
+  "about": "Shots of Goblins vs Gnomes for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps), the shots the distributed pack repeats.",
+  "tab": "MAGE",
+  "signature": ["GVG_110", "GVG_096", "GVG_111"],
+  "scenes": [
+    {
+      "name": "spare_parts",
+      "caption": {"ru": "Механизмы: Заводной гном погиб и дал запчасть, Механик из Шестерёнска взял ещё одну; Гоблин-взрывомаг в руке светится жёлтым (есть механизм)", "en": "Mechs: Clockwork Gnome and Tinkertown Technician give Spare Parts; Goblin Blastmage glows (a Mech is in play)"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_08", "mana": 10, "max_mana": 10, "damage": 6,
+         "hand": ["GVG_102", "GVG_004", "VAN_CS2_029"],
+         "board": ["GVG_110", "GVG_110t", "GVG_110t", "GVG_082", "GVG_006", "GVG_085"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]},
+        {"hero": "HERO_01", "max_mana": 9, "damage": 8, "armor": 2,
+         "board": ["VAN_CS2_182", "GVG_096"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 3}, "defender": {"side": 1, "zone": "board", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 1},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_GVG_110", "spare_parts"]
+}

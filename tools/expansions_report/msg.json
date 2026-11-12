@@ -1,0 +1,65 @@
+{
+  "about": "Shots of Mean Streets of Gadgetzan for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps), the shots the distributed pack repeats.",
+  "tab": "NEUTRAL",
+  "signature": ["CFM_621", "CFM_902", "CFM_685"],
+  "scenes": [
+    {
+      "name": "jade",
+      "caption": {"ru": "Нефритовый лотос: два Нефритовых идола и Нефритовый дух призывают големов 1/1, 2/2 и 3/3; в тексте Нефритового чудища и Айи Чёрной Лапы уже голем 4/4; Небесная провидица светится жёлтым (у Воргена-стиляги 6 атаки)", "en": "Jade Lotus: two Jade Idols and Jade Spirit summon 1/1, 2/2 and 3/3 Jade Golems; Jade Behemoth and Aya Blackpaw now say 4/4; Celestial Dreamer glows (Worgen Greaser has 6 Attack)"},
+      "scene": {"current": 0, "turn": 10, "players": [
+        {"hero": "HERO_06", "mana": 10, "max_mana": 10, "damage": 7, "armor": 2,
+         "hand": ["CFM_602", "CFM_602", "CFM_715", "CFM_343", "CFM_902", "CFM_617", "CFM_852"],
+         "board": ["CFM_665"],
+         "deck": ["CFM_713", "CFM_713", "CFM_713", "CFM_713"]},
+        {"hero": "HERO_03", "mana": 10, "max_mana": 10, "damage": 9,
+         "board": ["CFM_634", "CFM_693", "CFM_854"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 0},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 0},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
+    },
+    {
+      "name": "kazakus",
+      "caption": {"ru": "Кабал: в колоде нет одинаковых карт, Казакус варит своё зелье; Раза Плененный светится жёлтым по тому же условию", "en": "Kabal: no duplicates in the deck, so Kazakus brews a custom potion; Raza the Chained glows for the same reason"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_09", "mana": 10, "max_mana": 10, "damage": 13,
+         "hand": ["CFM_621", "CFM_020", "CFM_649", "CFM_604"],
+         "board": ["CFM_626", "CFM_606"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_182", "VAN_CS2_231", "VAN_CS2_172", "VAN_EX1_096"]},
+        {"hero": "HERO_01", "mana": 9, "max_mana": 9, "damage": 5, "armor": 6,
+         "board": ["CFM_756", "CFM_754", "CFM_653"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "choose", "option": 1},
+        {"do": "choose", "option": 0},
+        {"do": "choose", "option": 0}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 3},
+      "history": true
+    },
+    {
+      "name": "goons",
+      "caption": {"ru": "Шайка: Торговец из трущоб даёт +1/+1 всем существам в руке, Дон Хан'Чо добавляет +5/+5 одному из них", "en": "Grimy Goons: Grimestreet Outfitter gives the minions in hand +1/+1, Don Han'Cho gives one of them +5/+5"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_04", "mana": 10, "max_mana": 10, "damage": 6,
+         "hand": ["CFM_753", "CFM_685", "CFM_062", "CFM_305"],
+         "board": ["CFM_639", "CFM_815"],
+         "deck": ["CFM_759", "CFM_759", "CFM_759", "CFM_759"]},
+        {"hero": "HERO_05", "mana": 9, "max_mana": 9, "damage": 11,
+         "board": ["CFM_333", "CFM_316"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_CFM_621", "jade"]
+}

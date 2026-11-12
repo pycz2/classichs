@@ -1,0 +1,43 @@
+{
+  "about": "Shots of The Grand Tournament for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps), the shots the distributed pack repeats.",
+  "tab": "PALADIN",
+  "signature": ["AT_132", "AT_112", "AT_125"],
+  "scenes": [
+    {
+      "name": "joust",
+      "caption": {"ru": "Поединок: Великий бретер открывает по существу из каждой колоды; его существо дороже, и он получает «Провокацию» и «Божественный щит»", "en": "Joust: Master Jouster reveals a minion from each deck; his costs more, so he gains Taunt and Divine Shield"},
+      "scene": {"current": 0, "turn": 12, "players": [
+        {"hero": "HERO_04", "mana": 10, "max_mana": 10, "damage": 7,
+         "hand": ["AT_112", "AT_074", "AT_073", "AT_100"],
+         "board": ["AT_076", "AT_075", "VAN_CS2_101t"],
+         "deck": ["AT_102", "AT_102", "AT_102", "AT_102"]},
+        {"hero": "HERO_08", "max_mana": 10, "damage": 11,
+         "board": ["AT_092", "AT_006", "VAN_CS2_182"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}
+      ],
+      "wait": 2.4,
+      "hover": {"side": 0, "zone": "board", "index": 1},
+      "history": true
+    },
+    {
+      "name": "inspire",
+      "caption": {"ru": "Воодушевление: сила героя запустила Защитника Муклы (+1/+1 остальным), Паладина-регента и Всадницу на кодо; Сумеречный страж в руке светится жёлтым (в руке дракон Ледяная Пасть)", "en": "Inspire: the Hero Power sets off Mukla's Champion (+1/+1 to the others), Silver Hand Regent and Kodorider; Twilight Guardian glows (Chillmaw, a Dragon, is in hand)"},
+      "scene": {"current": 0, "turn": 14, "players": [
+        {"hero": "HERO_04", "mana": 10, "max_mana": 10, "damage": 10,
+         "hand": ["AT_017", "AT_123", "AT_125"],
+         "board": ["AT_100", "AT_090", "AT_099"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]},
+        {"hero": "HERO_03", "max_mana": 10, "damage": 9,
+         "board": ["AT_028", "AT_036"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "hero_power"}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 1},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_AT_132", "joust"]
+}

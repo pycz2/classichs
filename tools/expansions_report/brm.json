@@ -1,0 +1,44 @@
+{
+  "about": "Shots of Blackrock Mountain for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps), the shots the distributed pack repeats.",
+  "tab": "WARRIOR",
+  "signature": ["BRM_030", "BRM_019", "BRM_034"],
+  "scenes": [
+    {
+      "name": "dragons",
+      "caption": {"ru": "Драконы: Сумеречный дракончик получил +2 к здоровью, потому что в руке есть дракон; Техник и Губитель Крыла Тьмы в руке светятся жёлтым (в руке Вулканический дракон); Мрачный завсегдатай пережил бой и позвал второго", "en": "Dragons: Twilight Whelp gets +2 Health while a Dragon is in hand; Blackwing Technician and Blackwing Corruptor glow (Volcanic Drake is in hand); Grim Patron survives a fight and calls another"},
+      "scene": {"current": 0, "turn": 11, "players": [
+        {"hero": "HERO_09", "mana": 10, "max_mana": 10, "damage": 9,
+         "hand": ["BRM_004", "BRM_034", "BRM_033", "BRM_025"],
+         "board": ["BRM_020", "BRM_019", "BRM_022", "BRM_028"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]},
+        {"hero": "HERO_01", "max_mana": 10, "damage": 12, "armor": 3,
+         "board": ["VAN_CS2_120", "BRM_016", "BRM_006"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
+    },
+    {
+      "name": "patrons",
+      "caption": {"ru": "Мрачный завсегдатай пережил два Вихря и позвал друзей, Главарь банды бесов призвал беса; Возмездие светится жёлтым (у героя 12 здоровья или меньше), Драконид-сокрушитель тоже (у противника 15 или меньше)", "en": "Grim Patron survives two Whirlwinds and calls more Patrons, Imp Gang Boss summons an Imp; Revenge glows (the hero has 12 Health or less), so does Drakonid Crusher (the opponent has 15 or less)"},
+      "scene": {"current": 0, "turn": 13, "players": [
+        {"hero": "HERO_01", "mana": 10, "max_mana": 10, "damage": 19,
+         "hand": ["VAN_EX1_400", "VAN_EX1_400", "BRM_015", "BRM_025", "BRM_024"],
+         "board": ["BRM_019", "BRM_006", "BRM_016"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]},
+        {"hero": "HERO_08", "max_mana": 10, "damage": 14,
+         "board": ["BRM_022", "VAN_CS2_182", "BRM_002"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 0},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_BRM_030", "dragons"]
+}
