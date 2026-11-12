@@ -14,8 +14,8 @@ and the full card list: [DESIGN.md](DESIGN.md).
 | `decks/*.json` | Starter decks: `zero_trace` (Iris Null), `redline_rush` (Mother Rust), `hostile_merger` (Director Vale) |
 | `art/default/<id>.jpg` | One picture per card (512×512), `card_back` (512×768), `logo` (1280×720), `board` and `menu` (1920×1080) |
 | `art/simple/<id>.webp` | The "Simple 2D" art set: one simplified flat picture per card (384×384) |
-| `sounds/default/<event>.ogg` | The event sounds `game/sound.gd` plays (`play_card`, `attack`, `damage`, `spell`, `death`, `heal`, `turn_start`, `victory`, `defeat`, `click`, …) |
-| `music/default/{menu,battle_1,battle_2}.ogg` | Synthwave loops |
+| `sounds/default/<event>.opus` | The event sounds `game/sound.gd` plays (`play_card`, `attack`, `damage`, `spell`, `death`, `heal`, `turn_start`, `victory`, `defeat`, `click`, …) |
+| `music/default/{menu,battle_1,battle_2}.opus` | Synthwave loops |
 | `ui/theme.json` | The interface look (docs/packs/format.md §11): dark glass panels, neon rims, glowing buttons, rain in the menu |
 | `ui/fonts/` | Tektur (titles) and Exo 2 (text), SIL OFL 1.1 (licences beside them), subset to Latin, Latin Extended-A and Cyrillic with `pyftsubset` |
 
@@ -42,7 +42,8 @@ the balance simulation: `rust/engine/tests/neon.rs` (DESIGN.md §9).
   shapes, a plain dark background), WebP q80; run `tools/codex_guard.sh` beside it.
 - Sounds and music: `python3 tools/neon_audio.py` — pure-Python synthesis on
   top of `tools/gen_audio.py` (oscillators, envelopes, reverb), deterministic,
-  encoded to Ogg Vorbis with `ffmpeg`.
+  encoded to Ogg Opus by `tools/audio_codec.py` (`ffmpeg` with libopus: sounds
+  96 kbit/s, music 128). The script is the source: the WAVs are not kept.
 
 `packs/neon/.gdignore` keeps Godot from importing the source files; the game
 reads the built `.cardpack`.

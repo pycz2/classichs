@@ -90,14 +90,19 @@ runs every test in its own process, all at once (`server/` on 10 cores: about 12
 
 Other tools: `tools/extract_cards.py` rebuilds `data/cards.json` from HearthstoneJSON; `tools/gen_audio.py` synthesizes `audio/*.wav`.
 
+Audio: every sound and track the game plays is Ogg Opus (`.opus`, 48 kHz, the source's channels), encoded by
+`tools/audio_codec.py` (ffmpeg with libopus), the one place for the settings: voice 48 kbit/s, sounds 96, music 128.
+The sources stay as they are: the generated WAVs in the repository, the open music's MP3s and the original sounds in
+`~/ClassicHS-local` (never in the repository). The `.opus` files have no Godot importer: the client reads them as files.
+
 ## Music sets
 
 Play → Direct → a game's details choose its music set (through a server: the server's home, kept
 on the server); the sounds are always the generated ones. The client's own screens play one
-neutral track, `audio/shell/menu.wav` (`tools/gen_shell_music.py`):
+neutral track, `audio/shell/menu.opus` (from `menu.wav`, `tools/gen_shell_music.py`):
 
-- **Generated** — `audio/*.wav`, synthesized by `tools/gen_audio.py`.
-- **Open (CC0)** — `audio/open/*.ogg`, tracks by RandomMind from OpenGameArt, public domain (CC0): menu — [Minstrel Dance](https://opengameart.org/content/medieval-minstrel-dance); battle — [The Old Tower Inn](https://opengameart.org/content/medieval-the-old-tower-inn), [King's Feast](https://opengameart.org/content/medieval-kings-feast), [The Bard's Tale](https://opengameart.org/content/medieval-the-bards-tale). `tools/fetch_open_music.py` downloads and encodes them.
+- **Generated** — `audio/*.opus`, encoded from `audio/*.wav`, both made by `tools/gen_audio.py`.
+- **Open (CC0)** — `audio/open/*.opus`, tracks by RandomMind from OpenGameArt, public domain (CC0): menu — [Minstrel Dance](https://opengameart.org/content/medieval-minstrel-dance); battle — [The Old Tower Inn](https://opengameart.org/content/medieval-the-old-tower-inn), [King's Feast](https://opengameart.org/content/medieval-kings-feast), [The Bard's Tale](https://opengameart.org/content/medieval-the-bards-tale). `tools/fetch_open_music.py` downloads them (once, into `~/ClassicHS-local/audio-src/open`) and encodes them.
 
 ## Card art sets
 

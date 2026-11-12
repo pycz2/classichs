@@ -215,9 +215,9 @@ godot --headless --path . --script res://tools/pack_try.gd -- tiny.cardpack 4
 | `locales/<lang>.json` | Все тексты, которые видит игрок, по файлу на язык | по одному на язык из манифеста |
 | `layout/<lang>.json` | Ручная раскладка текста на картах | нет |
 | `art/<set>/<card id>.jpg\|png\|webp` | Картинки карт, папка на каждый набор артов (512 px хватит) | нет: карта без арта получает нарисованную картинку |
-| `sounds/<set>/<name>.wav\|ogg\|mp3` | Звуки событий, папка на каждый набор | нет |
-| `music/<set>/<name>.wav\|ogg\|mp3` | `menu`, `battle_1` … `battle_N` | нет |
-| `voice/<lang>/<card id>_<kind>.ogg` | Записанные реплики | нет |
+| `sounds/<set>/<name>.opus\|ogg\|wav\|mp3` | Звуки событий, папка на каждый набор | нет |
+| `music/<set>/<name>.opus\|ogg\|wav\|mp3` | `menu`, `battle_1` … `battle_N` | нет |
+| `voice/<lang>/<card id>_<kind>.opus` | Записанные реплики | нет |
 | `ui/…` | Картинки `card_back`, `logo`, `menu`, `board`, `library`, `result_victory`/`_defeat`/`_draw`; `theme.json` и `fonts/` | нет |
 | `decks/<name>.json` | Готовые колоды (порядок — по именам файлов) | желательно |
 | `missions/<n>.json` | Миссии обучения или сюжета | нет |
@@ -333,7 +333,8 @@ godot --headless --path . --script res://tools/pack_try.gd -- tiny.cardpack 4
 
 - **Арты:** `art/<set>/<card id>.jpg` (или `.png`, `.webp`), не больше 2 МиБ на картинку. У Neonfall два набора — `default` (живопись) и `simple` (плоский 2D); если картинки нет, берётся набор по умолчанию, потом нарисованная.
 - **Звуки:** по имени события — `play_card`, `attack`, `damage`, `death`, `hero_power`, `turn_start`, `heal`, `armor`, `equip`, `secret`, `freeze`, `shield`, `spell`, `trigger`, `hit_big`, `draw`, `victory`, `defeat`, `click`. Карта может назвать свои (`"sounds": {"play": "…"}`).
-- **Музыка:** `music/<set>/menu.ogg`, `battle_1.ogg`, `battle_2.ogg`, … (в матче — перемешанный плейлист).
+- **Музыка:** `music/<set>/menu.opus`, `battle_1.opus`, `battle_2.opus`, … (в матче — перемешанный плейлист).
+- **Звуковые файлы:** лучше всего `.opus` (Ogg Opus, 48 кГц); `.ogg` (Ogg Vorbis), `.wav` и `.mp3` тоже подходят.
 - **Оформление:** `ui/theme.json` перекрашивает весь интерфейс, пока ваша игра активна: цвета, стиль кнопок (`wood`, `flat`, `neon`), панели, шрифты (`ui/fonts/*.ttf` с лицензией), частицы в меню (`embers`, `rain`, `none`). Тёмное стекло и пурпурное свечение Neonfall — это его `ui/theme.json`; все ключи: [UI theme](../ref/format.html#11-ui-theme-uithemejson).
 
 ## Колоды и миссии
@@ -384,7 +385,7 @@ python3 tools/pack.py hash  <файл>.cardpack     # rules_hash и content_hash
 | `source` | Исходник в собственной форме (Neonfall): убирает служебные поля карт (`drop_card_fields`), убирает файлы (`drop_files`), переносит файлы (`move`, например картинки в `ui/`), переносит `pack.name`/`pack.description` каждого языка в манифест, а `terms` — в `ui`. |
 | `hsjson`, `keywords`, `voice`, `translate`, `rank_names` | Шаги Classic: карты и тексты из данных HearthstoneJSON, имена механик, реплики, переводы, имена рангов. |
 
-`--art-set id=папка` добавляет ваш собственный набор картинок; он помечается `local` и никогда не передаётся другим; `--sound-set id=папка` делает то же для звуков (свои звуки карт `<id карты>_play|attack|death|hit` и звуки стола по именам), а `--voice папка` добавляет ваши записи реплик (`<язык>/<id карты>_<вид>.ogg`, с пометкой `voice/LOCAL.md`).
+`--art-set id=папка` добавляет ваш собственный набор картинок; он помечается `local` и никогда не передаётся другим; `--sound-set id=папка` делает то же для звуков (свои звуки карт `<id карты>_play|attack|death|hit` и звуки стола по именам), `--music-set id=папка` — для музыки, а `--voice папка` добавляет ваши записи реплик (`<язык>/<id карты>_<вид>.opus`, с пометкой `voice/LOCAL.md`).
 
 ## Загрузка в игру
 

@@ -2,7 +2,8 @@
 """Builds, checks and hashes .cardpack game packs (docs/packs/format.md). Stdlib only.
 
   tools/pack.py build packs/classic -o build/packs/classic.cardpack [--art-set id=path ...]
-                [--sound-set id=path ...] [--voice path]   (local: the builder's own, never distributed)
+                [--sound-set id=path ...] [--music-set id=path ...] [--voice path]
+                (local: the builder's own, never distributed; audio: .opus preferred, .ogg/.wav/.mp3 too)
   tools/pack.py check build/packs/classic.cardpack
   tools/pack.py info  build/packs/classic.cardpack
   tools/pack.py hash  build/packs/classic.cardpack
@@ -37,7 +38,7 @@ LIMITS = {
 }
 PATH_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_.-]*(/[A-Za-z0-9_][A-Za-z0-9_.-]*)*$")
 IMAGES = (".png", ".jpg", ".jpeg", ".webp")
-AUDIO = (".ogg", ".wav", ".mp3")
+AUDIO = (".opus", ".ogg", ".wav", ".mp3")  # .opus (48 kHz Ogg Opus) preferred
 # Top-level files and, per directory, the extensions it may hold and how deep it goes.
 TOP_FILES = {"manifest.json", "rules.json", "cards.json", "tutorial.json", "README.md", "CREDITS.md", "LICENSE.txt"}
 DIRS = {  # dir -> (extensions, depth below dir: 1 = files right in it, 2 = in a sub-folder (a set / a language))
@@ -55,7 +56,7 @@ DIRS = {  # dir -> (extensions, depth below dir: 1 = files right in it, 2 = in a
 FONT_FILES = (".ttf", ".otf", ".txt", ".md")  # ui/fonts/: the theme's fonts and their licences
 # Card fields that only change how a card looks or sounds: left out of rules_hash.
 PRESENTATION = ("fx", "sounds", "voice")
-NO_COMPRESS = IMAGES + (".ogg", ".mp3")
+NO_COMPRESS = IMAGES + (".opus", ".ogg", ".mp3")
 ZIP_TIME = (1980, 1, 1, 0, 0, 0)
 
 
@@ -953,7 +954,7 @@ def up_to_date(src, out):
         return False
 
 
-def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
+def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):
     """Builds the pack in folder src; writes it to out if given. Returns (files, report)."""
     src = Path(src)
     b = Build(src)
@@ -975,7 +976,8 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
     for root, s in steps:
         STEPS[s["do"]](b, root, s)
     for opt, top, kind, exts, specs in (("--art-set", "art", "art_sets", IMAGES, art_sets),
-                                        ("--sound-set", "sounds", "sound_sets", AUDIO, sound_sets)):
+                                        ("--sound-set", "sounds", "sound_sets", AUDIO, sound_sets),
+                                        ("--music-set", "music", "music_sets", AUDIO, music_sets)):
         for spec in specs:
             set_id, _, folder = spec.partition("=")
             folder = Path(folder).expanduser().resolve()
@@ -992,7 +994,7 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
                 raise PackError(f"{opt} {spec}: no files")
             if not any(s["id"] == set_id for s in b.manifest.get(kind, [])):  # (one set from several folders)
                 b.manifest.setdefault(kind, []).append({"id": set_id, "local": True})
-    for v in [voice] if isinstance(voice, (str, Path)) else voice or []:  # voice/<lang>/<card id>_<kind>.ogg, marked local
+    for v in [voice] if isinstance(voice, (str, Path)) else voice or []:  # voice/<lang>/<card id>_<kind>.opus, marked local
         folder = Path(v).expanduser().resolve()
         langs = [d for d in sorted(folder.iterdir()) if d.is_dir()] if folder.is_dir() else []
         n = 0
@@ -1002,7 +1004,7 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None):
                     b.files[f"voice/{d.name}/{f.name}"] = f.read_bytes()
                     n += 1
         if not n:
-            raise PackError(f"--voice {v}: want a folder of <lang>/<card id>_<kind>.ogg")
+            raise PackError(f"--voice {v}: want a folder of <lang>/<card id>_<kind>.opus")
         b.files["voice/LOCAL.md"] = (b"Local recordings added by tools/pack.py --voice: the builder's own files, "
                                      b"never to be uploaded or sent.\n")
     if b.cards is not None:
@@ -1073,9 +1075,11 @@ def main(argv=None):
                     help="add a local art set (never for distribution; art/original is refused)")
     pb.add_argument("--sound-set", action="append", default=[], metavar="ID=FOLDER",
                     help="add a local sound set (never for distribution)")
+    pb.add_argument("--music-set", action="append", default=[], metavar="ID=FOLDER",
+                    help="add a local music set (never for distribution)")
     pb.add_argument("--voice", metavar="FOLDER", action="append", default=[],
-                    help="add local voice recordings: FOLDER/<lang>/<card id>_<kind>.ogg (never for distribution; "
-                         "several folders: a later one wins); an --art-set or --sound-set id given twice takes both folders")
+                    help="add local voice recordings: FOLDER/<lang>/<card id>_<kind>.opus (never for distribution; "
+                         "several folders: a later one wins); an --art-set, --sound-set or --music-set id given twice takes both folders")
     for name, text in (("check", "validate a pack"), ("info", "sizes, counts, hashes"), ("hash", "rules_hash and content_hash")):
         sub.add_parser(name, help=text).add_argument("pack")
     sub.add_parser("bundled", help="yes/no: the game's builds carry this pack source (recipe bundle_in_client)").add_argument("src")
@@ -1085,10 +1089,10 @@ def main(argv=None):
         return 0
     try:
         if a.cmd == "build":
-            if a.if_changed and not (a.art_set or a.sound_set or a.voice) and up_to_date(a.src, a.out):
+            if a.if_changed and not (a.art_set or a.sound_set or a.music_set or a.voice) and up_to_date(a.src, a.out):
                 print(f"{a.out}: up to date")
                 return 0
-            files, r = build(a.src, a.out, a.art_set, a.sound_set, a.voice)
+            files, r = build(a.src, a.out, a.art_set, a.sound_set, a.voice, a.music_set)
             _print_report(r, "build")
             if r.errors:
                 return 1

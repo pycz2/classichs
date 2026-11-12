@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
 """Downloads the open music set (CC0 tracks by RandomMind from OpenGameArt) and
-encodes it for the game: audio/open/<slot>.ogg, chosen in Settings → Music.
+encodes it for the game: audio/open/<slot>.opus (tools/audio_codec.py, music), chosen in Settings → Music.
+The originals (MP3) stay out of git, cached in ~/ClassicHS-local/audio-src/open/ (downloaded once).
 The generated set is audio/<slot>.wav (tools/gen_audio.py).
 
-Usage: python3 tools/fetch_open_music.py   (needs curl and ffmpeg)
+Usage: python3 tools/fetch_open_music.py   (needs curl and ffmpeg with libopus)
 """
 import os
 import subprocess
-import tempfile
+import sys
+import time
+
+sys.path.insert(0, os.path.dirname(__file__))
+import audio_codec  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 OUT = os.path.join(ROOT, "audio", "open")
+CACHE = os.path.expanduser("~/ClassicHS-local/audio-src/open")
 FILES = "https://opengameart.org/sites/default/files/"
 # slot: (title, page, file)
 TRACKS = {
@@ -23,18 +29,20 @@ TRACKS = {
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    with tempfile.TemporaryDirectory() as tmp:
-        for slot, (_title, _page, file) in TRACKS.items():
-            src = os.path.join(tmp, file)
-            subprocess.run(["curl", "-sSL", "-o", src, FILES + file], check=True)
-            # Vorbis quality 1 (about 80 kbit/s): background music, a small download
-            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-vn", "-c:a", "libvorbis", "-q:a", "1",
-                            os.path.join(OUT, slot + ".ogg")], check=True)
-            print("wrote", slot)
+    os.makedirs(CACHE, exist_ok=True)
+    for slot, (_title, _page, file) in TRACKS.items():
+        src = os.path.join(CACHE, file)
+        if not os.path.exists(src):
+            subprocess.run(["curl", "-sSL", "--retry", "3", "-o", src + ".part", FILES + file], check=True)
+            os.replace(src + ".part", src)
+            time.sleep(1)
+        if not audio_codec.encode_opus(src, os.path.join(OUT, slot + ".opus"), "music"):
+            raise SystemExit(f"ffmpeg could not encode {slot}.opus (it needs libopus)")
+        print("wrote", slot)
     with open(os.path.join(OUT, "CREDITS.md"), "w") as f:
         f.write("# Open music set\n\nAll tracks by **RandomMind**, released under **CC0** (public domain) on OpenGameArt.\n\n")
         for slot, (title, page, _file) in TRACKS.items():
-            f.write(f"- `{slot}.ogg` — {title}: {page}\n")
+            f.write(f"- `{slot}.opus` — {title}: {page}\n")
 
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ icc, loot, gil). Result in <out>/<set>/:
   art/<card id>.webp     256x256 like art/custom, WebP: the set's cards and tokens from HearthstoneJSON
                          (art.hearthstonejson.com/v1/256x/<id>.jpg); classic: art/custom converted, naxx:
                          ~/ClassicHS-local/art-naxx converted (tools/fetch_2014_art.py made both)
-  set/<name>.mp3|ogg     card sounds and a legendary's play music (<card id>_music), mono, low bit rate
+  set/<name>.opus        card sounds and a legendary's play music (<card id>_music), Ogg Opus (tools/audio_codec.py)
   voice/<lang>/…         English and Russian lines, heroes' too (tools/fetch_original_sounds.py does the work)
   SOURCES.md
 Downloads stay in <out>/sounds/cache (shared with tools/fetch_original_sounds.py) and <out>/sounds/cache/art.
@@ -59,7 +59,7 @@ def art(name, out, custom):
         return
     cache = out / "sounds/cache/art"
     cache.mkdir(parents=True, exist_ok=True)
-    ids = [c["id"] for c in extract_cards.pack_cards(json.loads(snd.get(snd.HSJSON)), name)]
+    ids = [c["id"] for c in extract_cards.pack_cards(snd.hsjson(), name)]
 
     def one(cid):
         dst, raw = dest / f"{cid}.webp", cache / f"{cid}.jpg"
