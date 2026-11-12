@@ -13,7 +13,11 @@
         "data/loot_cards.json"
       ],
       "patch": [
-        "cards.patch.json"
+        "cards.patch.json",
+        "../../data/loot_wip/patch_neutral.json",
+        "../../data/loot_wip/patch_dhm.json",
+        "../../data/loot_wip/patch_ppr.json",
+        "../../data/loot_wip/patch_ssw.json"
       ],
       "texts": [
         "packs/loot/cards.texts.json"

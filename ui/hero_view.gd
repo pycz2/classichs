@@ -63,6 +63,9 @@ func _draw() -> void:
 		Frames.ring(self, outline, Color(0.85, 0.96, 1.0, 0.95), 4)
 	if s.has("IMMUNE"):
 		Frames.ring(self, Art.outline("arch", r.grow(4)), Color(1, 0.9, 0.3), 3)
+	if s.has("ELUSIVE"):  # spells and hero powers can't pick it (Kobold Monk): a golden haze, as on an Elusive minion
+		draw_colored_polygon(outline, Color(1.0, 0.85, 0.3, 0.22))
+		Frames.ring(self, Art.outline("arch", r.grow(1)), Color(1.0, 0.85, 0.35, 0.8), 2.5)
 	Icons.paint(self, cls if Icons.CLASSES.has(cls) else "NEUTRAL", Rect2(Vector2(SIZE.x / 2 - 13, SIZE.y - 26), Vector2(26, 26)))
 	Frames.health(self, Vector2(112, 108), s.health(), 18 * bump("hp"), Frames.DAMAGED if s.damage > 0 else Color.WHITE)
 	if int(s.tags.get("ARMOR", 0)) > 0:

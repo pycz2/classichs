@@ -368,6 +368,10 @@ pub struct Ruleset {
     /// `behaviour.lifesteal_one_heal`: the Lifesteal damage of one hook (a spell, a Battlecry…) heals its champion once,
     /// when the hook ends, for all it dealt (patch 10.0.0.22611 of 2017). Off: each hit heals at once.
     pub lifesteal_one_heal: bool,
+    /// `behaviour.after_spell_from_before`: a spell's `after_spell` event is heard only by what was in play before the
+    /// spell was played (patch 9.2.0.21517 of 2017: Wild Pyromancer no longer triggers from the Mindgames that summoned
+    /// it). Off: by all in play when it resolved.
+    pub after_spell_from_before: bool,
     /// `player_hooks`: a named hook set whose `on` hooks see every event once for each player (`me` is that player's
     /// champion): counts of the game ("spells you've cast this game"). None: no such hooks.
     pub player_hooks: Option<String>,
@@ -569,6 +573,7 @@ impl Ruleset {
             cost_in_order: rules["behaviour"].get("cost_in_order") == Some(&json!(true)),
             replaced_weapon_dies: rules["behaviour"].get("replaced_weapon_dies") == Some(&json!(true)),
             lifesteal_one_heal: rules["behaviour"].get("lifesteal_one_heal") == Some(&json!(true)),
+            after_spell_from_before: rules["behaviour"].get("after_spell_from_before") == Some(&json!(true)),
             player_hooks: rules.get("player_hooks").and_then(Value::as_str).map(String::from),
             bot_trap: i(&rules["bot"], "trap", 0) as f64,
             bot_depth: i(&rules["bot"], "depth", 1),

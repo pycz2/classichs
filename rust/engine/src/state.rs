@@ -348,7 +348,12 @@ impl Game {
                 _ => 0,
             }
         };
+        // an `after_spell` with `since` (behaviour.after_spell_from_before): only what was in play before the spell
+        let since = if ty == "after_spell" { self.event_log[i].get("since").map(|v| v.int()) } else { None };
         for e in self.in_play() {
+            if since.is_some_and(|s| self.e(e).play_order >= s) {
+                continue;
+            }
             let h = self.hooks_of(e);
             let times = 1 + extra(self, e);
             if let Some(f) = h.on(&ty) {

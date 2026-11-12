@@ -885,5 +885,11 @@
 "%s is removed from your deck": "«%s» убирается из вашей колоды",
 "%s is removed from Opponent's deck": "«%s» убирается из колоды соперника",
 "You steal %s": "Вы забираете «%s»",
-"Opponent steals %s": "Соперник забирает «%s»"
+"Opponent steals %s": "Соперник забирает «%s»",
+"%s is summoned from your deck": "«%s» призывается из вашей колоды",
+"%s is summoned from Opponent's deck": "«%s» призывается из колоды соперника",
+"You draw %s: it casts itself": "Вы берёте карту «%s», и она срабатывает сама",
+"Opponent draws %s: it casts itself": "Соперник берёт карту «%s», и она срабатывает сама",
+"%d cards are shuffled into your deck": "Карт замешано в вашу колоду: %d",
+"%d cards are shuffled into Opponent's deck": "Карт замешано в колоду соперника: %d"
 }

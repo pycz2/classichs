@@ -4,6 +4,7 @@
   "CFM_900": {"script": "scripts/loot.lua#CFM_900"},
   "GVG_052": {"script": "scripts/loot.lua#GVG_052"},
   "ICC_054": {"cost": 6},
+  "LOE_027": {"script": "scripts/loot.lua#LOE_027"},
   "LOE_113": {"script": "scripts/loot.lua#LOE_113"},
   "LOOT_043": {"script": "scripts/loot.lua#LOOT_043", "fx": {"element": "shadow", "cast": "bolt", "hit": "hurt"}},
   "LOOT_043t2": {"script": "scripts/loot.lua#LOOT_043t2", "fx": {"element": "shadow", "cast": "bolt", "hit": "hurt"}},
@@ -55,5 +56,7 @@
   "VAN_CS2_106": {"cost": 3},
   "VAN_EX1_169": {"script": "scripts/loot.lua#VAN_EX1_169"},
   "VAN_EX1_246": {"cost": 4},
-  "VAN_EX1_507": {"script": "scripts/loot.lua#VAN_EX1_507"}
+  "VAN_EX1_379": {"script": "scripts/loot.lua#VAN_EX1_379"},
+  "VAN_EX1_507": {"script": "scripts/loot.lua#VAN_EX1_507"},
+  "VAN_EX1_609": {"script": "scripts/loot.lua#VAN_EX1_609"}
 }

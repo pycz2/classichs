@@ -161,6 +161,7 @@ does not map is written as the engine id.
 | `DOUBLE_ATTACK` | keyword | Two attacks a turn | `WINDFURY` |
 | `STEALTH` | keyword | Can't be attacked or targeted until it attacks | `STEALTH` |
 | `SPELLPROOF` | keyword | Can't be targeted by spells and powers | `ELUSIVE` |
+| `FOE_SPELLPROOF` | keyword | Can't be targeted by the opponent's spells and powers (its own player's can). Silence takes it. Only in a pack that names it | — (Kobolds & Catacombs: `CANT_BE_TARGETED_BY_OPPONENTS`, Shimmering Courser) |
 | `CANT_ATTACK` | keyword | Can't attack | `CANT_ATTACK` |
 | `CANT_ATTACK_HEROES` | keyword | Can attack only minions (a forced redirect still may hit a champion) | — (The Grand Tournament: `CANNOT_ATTACK_HEROES`, Icehowl); a weapon's keeps its champion off champions too |
 | `UNLIMITED_ATTACKS` | keyword | Any number of attacks a turn; a weapon's: its champion's (One Night in Karazhan: Fool's Bane) | — (One Night in Karazhan: `UNLIMITED_ATTACKS`) |
@@ -170,7 +171,7 @@ does not map is written as the engine id.
 | `MANA_LOCK` | keyword | Locks N mana next turn (card field `mana_lock`) | `OVERLOAD` |
 | `TRAP` | keyword | Hidden spell that fires on an event | `SECRET` |
 | `TASK` | keyword | A spell that, played, waits in its player's trap zone in sight of both players while its hooks count toward a goal, then gives its reward (its scripts); one at a time, within `limits.secrets`; a deck's task cards start in the opening hand; not a trap (`g.traps` leaves it out, `g.tasks` lists it), never made at random (`g.collectible` leaves it out) | — (Journey to Un'Goro: `QUEST`) |
-| `LIFESTEAL` | keyword | The damage it deals also restores that much Health to its owner's champion, Armor's share and a hit on several targets (one heal each) too; a champion's weapon's when it attacks; healing that is damage (HEAL_IS_DAMAGE) hurts the champion once, without Lifesteal again. Silence takes it. Only in a pack that names it | — (Knights of the Frozen Throne: `LIFESTEAL`; Mistress of Pain, Wickerflame Burnbristle) |
+| `LIFESTEAL` | keyword | The damage it deals also restores that much Health to its owner's champion, Armor's share and a hit on several targets (one heal each; with `behaviour.lifesteal_one_heal` one heal for all a hook dealt, rules.md) too; a champion's weapon's when it attacks; healing that is damage (HEAL_IS_DAMAGE) hurts the champion once, without Lifesteal again. Silence takes it. Only in a pack that names it | — (Knights of the Frozen Throne: `LIFESTEAL`; Mistress of Pain, Wickerflame Burnbristle) |
 | `DORMANT` | keyword | A minion that only holds its place on the board: no target, attacker or defender, takes no damage, can't be destroyed, in no list of minions or characters (`g.minions`, `g.all_chars`, …); its own hooks still run, `g.transform` wakes it | — (Journey to Un'Goro: `UNTOUCHABLE`, Sherazin's seed, Nether Portal) |
 | `ON_PLAY` | hook | Effect when played from hand | `BATTLECRY` |
 | `ON_DEATH` | hook | Effect when it dies | `DEATHRATTLE` |
@@ -181,13 +182,15 @@ does not map is written as the engine id.
 | `FREEZE`, `SILENCE`, `COUNTER` | marker | The card freezes / silences / counters (the effect is its hook) | same |
 | `GROWING_SUMMON` | marker | The card summons a token that grows each time its player summons one (its hook; the count `g.add_count`) | — (Mean Streets of Gadgetzan: `JADE_GOLEM`) |
 | `ADAPT` | marker | The card offers its player three of a list of upgrades for minions (its hook; only that player sees them) | — (Journey to Un'Goro: `ADAPT`) |
+| `SUMMON_FROM_DECK` | marker | The card summons a random matching minion of its player's deck at the right end (its hook: `g.summon_entity`; no Battlecry) | — (Kobolds & Catacombs: `RECRUIT`) |
+| `CAST_WHEN_DRAWN` | marker | The card casts itself when its player draws it (its `hand.draw` hook), then that player draws another | — (Kobolds & Catacombs: `TOPDECK`) |
 | `OFFER` | marker | The card offers its player a choice of cards (`g.create`, `g.request_choice`: only that player sees them) | — (The League of Explorers: `DISCOVER`) |
 | `AURA`, `TRIGGER`, `ADJACENT` | marker | Client hints | `AURA`, `TRIGGER_VISUAL`, `ADJACENT_BUFF` |
 | `SPELL_SCALED`, `NO_SPELL_POWER` | marker | Spell power changes / does not change its numbers | `AFFECTED_BY_SPELL_POWER`, `ImmuneToSpellpower` |
 | `FROZEN`, `FROZEN_THIS_TURN`, `EXHAUSTED`, `ATTACKS`, `ARMOR`, `DURABILITY`, `USED`, `LOCKED`, `GUARDED`, `TO_DESTROY`, `DIED_POS`, `HEAL_IS_DAMAGE` | state | Tags the engine sets during a game | same |
 | `POWER_MULTIPLIER` | state | Doubles spell and power damage and healing (aura tag) | `DOUBLE_HEAL_DAMAGE` |
 | `DOUBLE_ON_DEATH` | state | Its owner's minions run their death hooks twice (aura tag on the champion; not while its source dies with them) | — (Naxxramas: `DOUBLE_DEATHRATTLE`, Baron Rivendare) |
-| `DOUBLE_ON_PLAY` | state | Its owner's Battlecries (`ON_PLAY` hooks; not a Combo or a Choose One) run twice, on the same target, with no death phase between (aura tag on the champion, read as the Battlecry starts) | — (The League of Explorers: `DOUBLE_BATTLECRY`, Brann Bronzebeard) |
+| `DOUBLE_ON_PLAY` | state | Its owner's Battlecries (`ON_PLAY` hooks; not a Combo or a Choose One) run twice, on the same target, with no death phase between (aura tag on the champion, or the champion's own tag a script gives, read as the Battlecry starts) | — (The League of Explorers: `DOUBLE_BATTLECRY`, Brann Bronzebeard; Kobolds & Catacombs: Murmuring Elemental's own tag for its player's next Battlecry this turn) |
 | `BOTH_CHOICES` | state | Its owner's CHOICE cards have both effects: one play with `choice` 2, the first option's target (else the second's), then the card's `both` hook or the two options' effects in card order (aura tag on the champion) | — (Whispers of the Old Gods: `CHOOSE_BOTH`, Fandral Staghelm) |
 | `RANDOM_TARGETS` | state | Its owner's chosen targets become random ones: a card played, the power used and an attack go to a random one of their valid targets (an attack: any enemy character, past Taunt and Stealth; the chosen one may come again; logs `retarget`). An aura tag on the champion; only in a pack that names it | — (Mean Streets of Gadgetzan: `RANDOM_TARGETS`, Mayor Noggenfogger) |
 | `DOUBLE_TURN_END` | state | The `turn_end` hooks of its owner's entities (cards and enchantments; not the player hooks) run once more, at the end of either player's turn (an aura count on the champion). Only in a pack that names it | — (Knights of the Frozen Throne: `EXTRA_END_TURN_EFFECT`, Drakkari Enchanter) |

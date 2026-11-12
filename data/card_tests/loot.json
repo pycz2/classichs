@@ -1,0 +1,3674 @@
+{
+ "LOOT_051": [
+  {
+   "kind": "spell",
+   "title": "Lesser Jasper Spellstone: 2 damage; gain 3 Armor (Shield Block) and it becomes Jasper Spellstone",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_051",
+       "VAN_EX1_606",
+       "LOOT_051"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_051t1": [
+  {
+   "kind": "spell",
+   "title": "Jasper Spellstone: 4 damage to a minion; 3 more Armor makes it Greater",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_051t1",
+       "VAN_EX1_606"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_051t2": [
+  {
+   "kind": "spell",
+   "title": "Greater Jasper Spellstone: 6 damage to a minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_051t2"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_080": [
+  {
+   "kind": "spell",
+   "title": "Lesser Emerald Spellstone: two 3/3 Wolves; a Secret played makes it Emerald",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_080",
+       "VAN_EX1_554",
+       "LOOT_080"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_080t2": [
+  {
+   "kind": "spell",
+   "title": "Emerald Spellstone: three Wolves; a Secret makes it Greater",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_080t2",
+       "VAN_EX1_554"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_080t3": [
+  {
+   "kind": "spell",
+   "title": "Greater Emerald Spellstone: four 3/3 Wolves",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_080t3"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_077t": [
+  {
+   "kind": "play",
+   "title": "Wolf: a 3/3 Beast (Lesser Emerald Spellstone summons two)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_080"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_103": [
+  {
+   "kind": "spell",
+   "title": "Lesser Ruby Spellstone: a random Mage spell; two Elementals played make it Ruby",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_103",
+       "LOOT_117",
+       "LOOT_117",
+       "LOOT_103"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_103t1": [
+  {
+   "kind": "spell",
+   "title": "Ruby Spellstone: two random Mage spells; two Elementals make it Greater",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_103t1",
+       "LOOT_117",
+       "LOOT_117"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_103t2": [
+  {
+   "kind": "spell",
+   "title": "Greater Ruby Spellstone: three random Mage spells",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_103t2"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_091": [
+  {
+   "kind": "spell",
+   "title": "Lesser Pearl Spellstone: a 2/2 Taunt Spirit; restoring 3 Health makes it Pearl",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "LOOT_091",
+       "VAN_CS2_007",
+       "LOOT_091"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_091t1": [
+  {
+   "kind": "spell",
+   "title": "Pearl Spellstone: a 4/4 Taunt Spirit; 3 Health restored makes it Greater",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "LOOT_091t1",
+       "VAN_CS2_007"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     },
+     "target": {
+      "side": 0,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_091t2": [
+  {
+   "kind": "spell",
+   "title": "Greater Pearl Spellstone: a 6/6 Taunt Spirit",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_091t2"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_091t": [
+  {
+   "kind": "taunt",
+   "title": "Guardian Spirit: a 2/2 with Taunt (from the Pearl Spellstone)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_091"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_091t1t": [
+  {
+   "kind": "taunt",
+   "title": "Guardian Spirit: a 4/4 with Taunt (from the Pearl Spellstone)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_091t1"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_091t2t": [
+  {
+   "kind": "taunt",
+   "title": "Guardian Spirit: a 6/6 with Taunt (from the Pearl Spellstone)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_091t2"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_507": [
+  {
+   "kind": "spell",
+   "title": "Lesser Diamond Spellstone: two different friendly minions that died come back; 4 spells make it Diamond",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_507",
+       "VAN_CS2_029",
+       "VAN_CS2_029",
+       "VAN_CS2_029",
+       "VAN_CS2_029",
+       "LOOT_507"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231",
+       "VAN_CS2_120"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_507t": [
+  {
+   "kind": "spell",
+   "title": "Diamond Spellstone: three different dead friendly minions (four spells make it Greater)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "VAN_CS2_029",
+       "VAN_CS2_029",
+       "LOOT_507t"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231",
+       "VAN_CS2_120"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_507t2": [
+  {
+   "kind": "spell",
+   "title": "Greater Diamond Spellstone: four different dead friendly minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "VAN_CS2_029",
+       "VAN_CS2_029",
+       "VAN_CS2_029",
+       "LOOT_507t2"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231",
+       "VAN_CS2_120",
+       "VAN_CS2_168"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_503": [
+  {
+   "kind": "spell",
+   "title": "Lesser Onyx Spellstone: destroy 1 random enemy minion; 3 Deathrattle cards make it Onyx",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_503",
+       "FP1_001",
+       "FP1_001",
+       "FP1_001",
+       "LOOT_503"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_503t": [
+  {
+   "kind": "spell",
+   "title": "Onyx Spellstone: destroy up to 2 random enemy minions; 3 Deathrattle cards make it Greater",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_503t",
+       "FP1_001",
+       "FP1_001",
+       "FP1_001"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_503t2": [
+  {
+   "kind": "spell",
+   "title": "Greater Onyx Spellstone: destroy up to 3 random enemy minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_503t2"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_064": [
+  {
+   "kind": "spell",
+   "title": "Lesser Sapphire Spellstone: a copy of a friendly minion; Overloading 3 crystals makes it Sapphire",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_064",
+       "VAN_EX1_259",
+       "VAN_EX1_259",
+       "LOOT_064"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_064t1": [
+  {
+   "kind": "spell",
+   "title": "Sapphire Spellstone: 2 copies of a friendly minion; Overload 3 makes it Greater",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_064t1",
+       "VAN_EX1_259",
+       "VAN_EX1_259"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_064t2": [
+  {
+   "kind": "spell",
+   "title": "Greater Sapphire Spellstone: 3 copies of a friendly minion (with its buffs)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_087",
+       "LOOT_064t2"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_043": [
+  {
+   "kind": "spell",
+   "title": "Lesser Amethyst Spellstone: Lifesteal 3 damage; damage from your cards (Flame Imp) makes it Amethyst",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "LOOT_043",
+       "VAN_EX1_319",
+       "LOOT_043"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_043t2": [
+  {
+   "kind": "spell",
+   "title": "Amethyst Spellstone: Lifesteal 5 damage; Life Tap makes it Greater",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "LOOT_043t2"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_043t3": [
+  {
+   "kind": "spell",
+   "title": "Greater Amethyst Spellstone: Lifesteal 7 damage to a minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "LOOT_043t3"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_203": [
+  {
+   "kind": "spell",
+   "title": "Lesser Mithril Spellstone: a 5/5 Mithril Golem; equipping a weapon makes it Mithril",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_203",
+       "VAN_CS2_106",
+       "LOOT_203"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_203t2": [
+  {
+   "kind": "spell",
+   "title": "Mithril Spellstone: two 5/5 Golems; a weapon makes it Greater",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_203t2",
+       "VAN_CS2_106"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_203t3": [
+  {
+   "kind": "spell",
+   "title": "Greater Mithril Spellstone: three 5/5 Mithril Golems",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_203t3"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_203t4": [
+  {
+   "kind": "play",
+   "title": "Mithril Golem: a 5/5 (from the Lesser Mithril Spellstone)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_203"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_278": [
+  {
+   "kind": "spell",
+   "title": "Unidentified Elixir: drawn, it becomes one of the four Elixirs; played as is: +2/+2",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "LOOT_278",
+       "LOOT_278"
+      ],
+      "hand": [
+       "LOOT_278"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_278t1": [
+  {
+   "kind": "spell",
+   "title": "Elixir of Life: +2/+2 and Lifesteal",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_278t1"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_278t2": [
+  {
+   "kind": "spell",
+   "title": "Elixir of Purity: +2/+2 and Divine Shield",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_278t2"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_278t3": [
+  {
+   "kind": "spell",
+   "title": "Elixir of Shadows: +2/+2 and a 1/1 copy of it",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_278t3"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_278t4": [
+  {
+   "kind": "spell",
+   "title": "Elixir of Hope: +2/+2 and 'Deathrattle: return it to your hand'",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_278t4"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_286": [
+  {
+   "kind": "weapon",
+   "title": "Unidentified Maul: drawn, it becomes one of four Mauls; played as is: a 2/2 weapon",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "LOOT_286",
+       "LOOT_286"
+      ],
+      "hand": [
+       "LOOT_286"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_286t1": [
+  {
+   "kind": "battlecry",
+   "title": "LOOT_286t1: a 2/2 weapon, Battlecry: two 1/1 Silver Hand Recruits",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_286t1"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_286t2": [
+  {
+   "kind": "battlecry",
+   "title": "LOOT_286t2: a 2/2 weapon, Battlecry: your minions get Taunt",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_286t2"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_286t3": [
+  {
+   "kind": "battlecry",
+   "title": "LOOT_286t3: a 2/2 weapon, Battlecry: your minions +1 Attack",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_286t3"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_286t4": [
+  {
+   "kind": "battlecry",
+   "title": "LOOT_286t4: a 2/2 weapon, Battlecry: your minions Divine Shield",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_286t4"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_285": [
+  {
+   "kind": "spell",
+   "title": "Unidentified Shield: drawn, it becomes one of four Shields; played as is: 5 Armor",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "LOOT_285",
+       "LOOT_285"
+      ],
+      "hand": [
+       "LOOT_285"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_285t": [
+  {
+   "kind": "spell",
+   "title": "Tower Shield +10: 5 Armor and 10 more",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_285t"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_285t2": [
+  {
+   "kind": "spell",
+   "title": "Serrated Shield: 5 Armor and 5 damage",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_285t2"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_285t3": [
+  {
+   "kind": "spell",
+   "title": "Runed Shield: 5 Armor and a 5/5 Iron Golem",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_285t3"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_285t3t": [
+  {
+   "kind": "play",
+   "title": "Iron Golem: a 5/5 (from Runed Shield)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_285t3"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_285t4": [
+  {
+   "kind": "spell",
+   "title": "Spiked Shield: 5 Armor and a 5/2 weapon",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_285t4"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_285t4t": [
+  {
+   "kind": "weapon",
+   "title": "Spiked Shield (weapon): a 5/2, attack with it",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_285t4"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_517": [
+  {
+   "kind": "battlecry",
+   "title": "Murmuring Elemental: the next Battlecry this turn (Elven Archer) triggers twice, the one after once",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_517",
+       "VAN_CS2_189",
+       "VAN_CS2_189"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "VAN_EX1_169": [
+  {
+   "kind": "spell",
+   "title": "Innervate (patch 9.1): 1 Mana Crystal this turn only",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 2,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_169",
+       "VAN_EX1_554"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#VAN_EX1_169"
+  }
+ ],
+ "VAN_EX1_507": [
+  {
+   "kind": "aura",
+   "title": "Murloc Warleader (patch 9.1): your other Murlocs have +2 Attack only",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_507"
+      ],
+      "board": [
+       "VAN_CS2_168"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#VAN_EX1_507"
+  }
+ ],
+ "CFM_900": [
+  {
+   "kind": "trigger",
+   "title": "Unlicensed Apothecary (patch 9.2): after you summon a minion, 5 damage to your hero",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "CFM_900",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#CFM_900"
+  }
+ ],
+ "GVG_052": [
+  {
+   "kind": "spell",
+   "title": "Crush (patch 9.4): costs (4) less with a damaged minion of yours, after Naga Sea Witch's (5)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 1,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "GVG_052"
+      ],
+      "board": [
+       "LOE_038",
+       {
+        "card": "VAN_CS2_182",
+        "damage": 1
+       }
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#GVG_052"
+  }
+ ],
+ "BRM_003": [
+  {
+   "kind": "spell",
+   "title": "Dragon's Breath (patch 9.2): (1) less per minion that died this turn, after the other cost changes",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "BRM_003"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#BRM_003"
+  }
+ ],
+ "BRM_001": [
+  {
+   "kind": "spell",
+   "title": "Solemn Vigil (patch 9.2): draw 2; (1) less per minion that died this turn",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "BRM_001"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#BRM_001"
+  }
+ ],
+ "LOE_113": [
+  {
+   "kind": "spell",
+   "title": "Everyfin is Awesome (patch 9.2): your minions +2/+2; (1) less per Murloc you control",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOE_113"
+      ],
+      "board": [
+       "VAN_CS2_168",
+       "VAN_CS2_168"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#LOE_113"
+  }
+ ],
+ "UNG_061": [
+  {
+   "kind": "weapon",
+   "title": "Obsidian Shard (patch 9.2): (1) less per card you played from another class",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "UNG_061"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#UNG_061"
+  }
+ ],
+ "VAN_EX1_379": [
+  {
+   "kind": "secret",
+   "title": "Repentance (patch 9.2): the next enemy minion played has 1 Health; Lord Jaraxxus does not set it off",
+   "scene": {
+    "current": 1,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "secrets": [
+       "VAN_EX1_379"
+      ]
+     },
+     {
+      "hero": "HERO_07",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_323",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#VAN_EX1_379"
+  }
+ ],
+ "VAN_EX1_609": [
+  {
+   "kind": "secret",
+   "title": "Snipe (patch 9.2): 4 damage to the next enemy minion played (not Lord Jaraxxus)",
+   "scene": {
+    "current": 1,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "secrets": [
+       "VAN_EX1_609"
+      ]
+     },
+     {
+      "hero": "HERO_07",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_323",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#VAN_EX1_609"
+  }
+ ],
+ "LOE_027": [
+  {
+   "kind": "secret",
+   "title": "Sacred Trial (patch 9.2): destroys the 4th enemy minion played; not Lord Jaraxxus",
+   "scene": {
+    "current": 1,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "secrets": [
+       "LOE_027"
+      ]
+     },
+     {
+      "hero": "HERO_07",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_323",
+       "VAN_CS2_182"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/loot.lua#LOE_027"
+  }
+ ]
+}

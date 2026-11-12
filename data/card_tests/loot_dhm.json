@@ -1,0 +1,1939 @@
+{
+ "LOOT_047": [
+  {
+   "kind": "spell",
+   "title": "Barkskin: your Wisp +3 Health, and 3 Armor",
+   "script": "scripts/loot_dhm.lua#LOOT_047",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_047"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_048": [
+  {
+   "kind": "attack",
+   "title": "Ironwood Golem can't attack with no Armor; after Shield Block's 5 Armor it attacks",
+   "script": "scripts/loot_dhm.lua#LOOT_048",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_606"
+      ],
+      "board": [
+       "LOOT_048"
+      ]
+     },
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_054": [
+  {
+   "kind": "spell",
+   "title": "Branching Paths: choose twice (here 6 Armor, then your minions +1 Attack)",
+   "script": "scripts/loot_dhm.lua#LOOT_054",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_054"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 2
+    },
+    {
+     "do": "choose",
+     "option": 1
+    }
+   ]
+  },
+  {
+   "kind": "spell",
+   "title": "Branching Paths: the same path twice (12 Armor)",
+   "script": "scripts/loot_dhm.lua#LOOT_054",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_054"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 2
+    },
+    {
+     "do": "choose",
+     "option": 2
+    }
+   ]
+  }
+ ],
+ "LOOT_054b": [
+  {
+   "kind": "spell",
+   "title": "Explore the Darkness (a path of Branching Paths): your minions +1 Attack",
+   "script": "scripts/loot_dhm.lua#LOOT_054b",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_054b"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_120"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_054c": [
+  {
+   "kind": "spell",
+   "title": "Loot the Chest (a path of Branching Paths): 6 Armor",
+   "script": "scripts/loot_dhm.lua#LOOT_054c",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_054c"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_054d": [
+  {
+   "kind": "spell",
+   "title": "Eat the Mushroom (a path of Branching Paths): draw a card",
+   "script": "scripts/loot_dhm.lua#LOOT_054d",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_054d"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_056": [
+  {
+   "kind": "death",
+   "title": "Astral Tiger dies: a copy of it is shuffled into your deck",
+   "script": "scripts/loot_dhm.lua#LOOT_056",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ],
+      "board": [
+       "LOOT_056"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_077": [
+  {
+   "kind": "spell",
+   "title": "Flanking Strike: 3 damage to the Yeti and a 3/3 Wolf",
+   "script": "scripts/loot_dhm.lua#LOOT_077",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_077"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_077t": [
+  {
+   "kind": "play",
+   "title": "Wolf (Flanking Strike's token): a 3/3 Beast",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_077t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_078": [
+  {
+   "kind": "attack",
+   "title": "Cave Hydra attacks the Yeti: the Wisps next to it are hit too",
+   "script": "scripts/loot_dhm.lua#LOOT_078",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "LOOT_078"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_079": [
+  {
+   "kind": "secret",
+   "title": "Wandering Monster: the Yeti attacks your hero; a random 3-Cost minion is summoned and attacked instead",
+   "script": "scripts/loot_dhm.lua#LOOT_079",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_079"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 0,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_085": [
+  {
+   "kind": "weapon",
+   "title": "Rhok'delar with no minions in your deck: your hand fills with Hunter spells",
+   "script": "scripts/loot_dhm.lua#LOOT_085",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_029",
+       "VAN_EX1_277",
+       "VAN_CS2_029"
+      ],
+      "hand": [
+       "LOOT_085"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_101": [
+  {
+   "kind": "secret",
+   "title": "Explosive Runes: the Yeti played takes 6 and dies, 1 more hits its hero",
+   "script": "scripts/loot_dhm.lua#LOOT_101",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_101"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "secret",
+   "title": "Explosive Runes: Argent Squire's Divine Shield takes the 6, nothing hits the hero",
+   "script": "scripts/loot_dhm.lua#LOOT_101",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_101"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_008"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_104": [
+  {
+   "kind": "other",
+   "title": "Shifting Scroll can't be played; at the start of your turn it becomes a random Mage spell (that keeps shifting)",
+   "script": "scripts/loot_dhm.lua#LOOT_104",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_104"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_106": [
+  {
+   "kind": "spell",
+   "title": "Deck of Wonders: 5 Scrolls of Wonder are shuffled into your deck",
+   "script": "scripts/loot_dhm.lua#LOOT_106",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_106"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_106t": [
+  {
+   "kind": "other",
+   "title": "Scroll of Wonder drawn: it casts a random spell (random targets), then you draw a card",
+   "script": "scripts/loot_dhm.lua#LOOT_106t",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "LOOT_106t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_108": [
+  {
+   "kind": "trigger",
+   "title": "Aluneth: at the end of your turn, draw 3 cards",
+   "script": "scripts/loot_dhm.lua#LOOT_108",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "LOOT_108"
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "LOOT_170": [
+  {
+   "kind": "battlecry",
+   "title": "Raven Familiar: your Fireball against their Arcane Missiles: you win and draw the Fireball",
+   "script": "scripts/loot_dhm.lua#LOOT_170",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_029",
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "LOOT_170"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_EX1_277",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_172": [
+  {
+   "kind": "spell",
+   "title": "Dragon's Fury reveals the Fireball of your deck: 4 damage to all minions",
+   "script": "scripts/loot_dhm.lua#LOOT_172",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_029",
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "LOOT_172"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_217": [
+  {
+   "kind": "spell",
+   "title": "To My Side! with no minions in your deck: two different Animal Companions",
+   "script": "scripts/loot_dhm.lua#LOOT_217",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_029",
+       "VAN_EX1_277",
+       "VAN_CS2_029"
+      ],
+      "hand": [
+       "LOOT_217"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "spell",
+   "title": "To My Side! with minions in your deck: one Animal Companion",
+   "script": "scripts/loot_dhm.lua#LOOT_217",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_217"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_222": [
+  {
+   "kind": "weapon",
+   "title": "Candleshot: your hero attacks the Yeti and takes no damage (Immune while attacking)",
+   "script": "scripts/loot_dhm.lua#LOOT_222",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "LOOT_222"
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_231": [
+  {
+   "kind": "trigger",
+   "title": "Arcane Artificer: you cast Fireball (4): 4 Armor",
+   "script": "scripts/loot_dhm.lua#LOOT_231",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ],
+      "board": [
+       "LOOT_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_309": [
+  {
+   "kind": "spell",
+   "title": "Oaken Summons: 6 Armor and the Yeti from your deck (War Golems cost more than 4)",
+   "script": "scripts/loot_dhm.lua#LOOT_309",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_186",
+       "VAN_CS2_182",
+       "VAN_CS2_186"
+      ],
+      "hand": [
+       "LOOT_309"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_314": [
+  {
+   "kind": "death",
+   "title": "Grizzled Guardian dies: the Yeti and the Crocolisk come from your deck, not the War Golem",
+   "script": "scripts/loot_dhm.lua#LOOT_314",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_186",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ],
+      "board": [
+       "LOOT_314"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_329": [
+  {
+   "kind": "trigger",
+   "title": "Ixlid: the Elven Archer you play gets a copy (whose Battlecry does not fire)",
+   "script": "scripts/loot_dhm.lua#LOOT_329",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_189"
+      ],
+      "board": [
+       "LOOT_329"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_351": [
+  {
+   "kind": "death",
+   "title": "Greedy Sprite dies: an empty Mana Crystal (5 crystals become 6)",
+   "script": "scripts/loot_dhm.lua#LOOT_351",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 5,
+      "max_mana": 5,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ],
+      "board": [
+       "LOOT_351"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_392": [
+  {
+   "kind": "weapon",
+   "title": "Twig of the World Tree breaks: 10 full Mana Crystals",
+   "script": "scripts/loot_dhm.lua#LOOT_392",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 0,
+      "max_mana": 7,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": {
+       "card": "LOOT_392",
+       "durability": 1
+      }
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_511": [
+  {
+   "kind": "battlecry",
+   "title": "Kathrena Winterwisp: Battlecry: a Beast (a Crocolisk) from your deck",
+   "script": "scripts/loot_dhm.lua#LOOT_511",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_120",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "LOOT_511"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "death",
+   "title": "Kathrena Winterwisp dies: a Beast (a Crocolisk) from your deck",
+   "script": "scripts/loot_dhm.lua#LOOT_511",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_120",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ],
+      "board": [
+       "LOOT_511"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_520": [
+  {
+   "kind": "battlecry",
+   "title": "Seeping Oozeling gains Leper Gnome's Deathrattle from your deck; killed, it hits the enemy hero for 2",
+   "script": "scripts/loot_dhm.lua#LOOT_520",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_EX1_029",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "LOOT_520",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_522": [
+  {
+   "kind": "spell",
+   "title": "Crushing Walls: the enemy's left- and right-most minions are destroyed, the Yeti stays",
+   "script": "scripts/loot_dhm.lua#LOOT_522",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_522"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_535": [
+  {
+   "kind": "battlecry",
+   "title": "Dragoncaller Alanna after a Flamestrike (7) this game: one 5/5 Fire Dragon",
+   "script": "scripts/loot_dhm.lua#LOOT_535",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_032",
+       "LOOT_535"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_535t": [
+  {
+   "kind": "play",
+   "title": "Fire Dragon (Dragoncaller Alanna's token): a 5/5 Dragon",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "LOOT_535t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOOT_537": [
+  {
+   "kind": "battlecry",
+   "title": "Leyline Manipulator: the Fireball in your hand (that didn't start in your deck) costs (2) less",
+   "script": "scripts/loot_dhm.lua#LOOT_537",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "LOOT_537"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ]
+}

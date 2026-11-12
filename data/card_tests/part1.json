@@ -12594,6 +12594,7 @@
     {
       "kind": "spell",
       "title": "Innervate: 2 Mana becomes 4 this turn, then a Chillwind Yeti is played",
+      "script": "scripts/druid.lua#VAN_EX1_169",
       "scene": {
         "current": 0,
         "players": [

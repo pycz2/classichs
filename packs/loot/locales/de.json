@@ -1,0 +1,20 @@
+{
+ "sets": {
+  "LOOTAPALOOZA": "Kobolde & Katakomben"
+ },
+ "mechanics": {
+  "RECRUIT": {
+   "name": "Rekrutieren",
+   "tip": "Ruft einen Diener aus Eurem Deck herbei."
+  },
+  "CANT_BE_TARGETED_BY_OPPONENTS": {
+   "name": "Nur vom Besitzer wählbar",
+   "tip": "Nur sein Besitzer kann ihn als Ziel von Zaubern und Heldenfähigkeiten wählen."
+  }
+ },
+ "cards": {
+  "VAN_NEW1_010": {
+   "text": "<b>Ansturm</b>, <b>Gottesschild</b>, <b>Spott</b>, <b>Windzorn</b>"
+  }
+ }
+}

@@ -692,6 +692,43 @@ class Chain(unittest.TestCase):
         self.assertEqual(pack.deck_error(deck, cards, rules), "")
         self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
 
+    def test_kobolds_and_catacombs_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/loot")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/ICC_" in p or "/LOOT_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/ungoro.lua", "scripts/icc.lua", "scripts/loot.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/loot"))
+        rules = json.loads(files["rules.json"])
+        # patch 9.2: a countered spell is cast for after-spell hooks again, a minion a spell summons does not hear its
+        # after-spell; patch 10.0: Lifesteal on several targets heals once
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": False, "full_hand_return_dies": True,
+                                              "cost_in_order": True, "replaced_weapon_dies": True,
+                                              "lifesteal_one_heal": True, "after_spell_from_before": True})
+        self.assertEqual(rules["player_hooks"], "player:loot")
+        self.assertEqual({k: rules["mechanics"][k]["engine"] for k in ("RECRUIT", "TOPDECK", "CANT_BE_TARGETED_BY_OPPONENTS")},
+                         {"RECRUIT": "SUMMON_FROM_DECK", "TOPDECK": "CAST_WHEN_DRAWN", "CANT_BE_TARGETED_BY_OPPONENTS": "FOE_SPELLPROOF"})
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        loot = [c for c in cards.values() if c.get("set") == "LOOTAPALOOZA"]
+        self.assertEqual(len([c for c in loot if c.get("collectible")]), 135)
+        weapons = [c for c in loot if c.get("collectible") and c["type"] == "WEAPON" and c.get("rarity") == "LEGENDARY"]
+        self.assertEqual(len(weapons), 9)  # one Legendary weapon per class
+        self.assertEqual(cards["LOOT_306"]["cost"], 5)  # Possessed Lackey: 6 only from 2018-05
+        for lang in ("en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"):
+            loc = json.loads(files[f"locales/{lang}.json"])
+            self.assertTrue(loc["sets"]["LOOTAPALOOZA"])
+            self.assertTrue(all(loc["mechanics"][k].get("name") and loc["mechanics"][k].get("tip")
+                                for k in ("RECRUIT", "CANT_BE_TARGETED_BY_OPPONENTS")), lang)
+        en = json.loads(files["locales/en.json"])
+        self.assertEqual((en["sets"]["LOOTAPALOOZA"], en["mechanics"]["RECRUIT"]["name"]), ("Kobolds & Catacombs", "Recruit"))
+        self.assertEqual(en["cards"]["LOOT_051"]["text"], "Deal $2 damage to a minion. @<i>(Gain 3 Armor to upgrade.)</i>")
+        self.assertEqual(en["cards"]["VAN_NEW1_010"]["text"], "<b>Charge, Divine Shield, Taunt, Windfury</b>")  # build 22611
+        for f in [p for p in files if p.startswith("decks/")]:
+            self.assertEqual(pack.deck_error(json.loads(files[f]), cards, rules), "", f)
+        self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
+
     def test_an_expansion_shows_the_texts_of_its_release_build(self):
         import extract_cards
         for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:

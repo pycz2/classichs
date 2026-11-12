@@ -702,6 +702,31 @@ cards.CFM_900 = on_mine("after_summon", function(g, me, ev)
   end
 end)
 
+-- Repentance, Snipe, Sacred Trial (patch 9.2.0.21517: "Lord Jaraxxus no longer triggers Repentance, Sacred Trial or
+-- Snipe"): only a minion still in play after its Battlecry sets them off.
+local function after_enemy_minion(cond, effect)
+  return {
+    secret = {
+      event = "after_summon",
+      cond = function(g, me, ev)
+        return ev.played and not g.mine(me, ev) and g.zone(ev.entity) == "PLAY" and (not cond or cond(g, me, ev))
+      end,
+      effect = effect,
+    },
+  }
+end
+cards.VAN_EX1_379 = after_enemy_minion(nil, function(g, me, ev) -- Repentance
+  g.set_stats(ev.entity, nil, 1)
+end)
+cards.VAN_EX1_609 = after_enemy_minion(nil, function(g, me, ev) -- Snipe
+  g.damage(me, ev.entity, g.spell_dmg(me, 4))
+end)
+cards.LOE_027 = after_enemy_minion(function(g, me, ev) -- Sacred Trial
+  return #g.others(ev.entity) >= 3
+end, function(g, me, ev)
+  g.destroy(ev.entity)
+end)
+
 -- Their own cost change after every other one (cost_last; patch 9.2.0.21517: Dragon's Breath, Solemn Vigil, Everyfin
 -- is Awesome, Obsidian Shard; patch 9.4.0.22115: Crush): Naga Sea Witch's (5), then theirs.
 local function died_this_turn(g)
@@ -947,6 +972,15 @@ cards["player:loot"] = {
         g.add_count(p, "ELEM_NOW", -g.count(p, "ELEM_NOW"))
         g.add_count(p, "TURN_SPELLS", -g.count(p, "TURN_SPELLS"))
       end
+      -- Temporus (loot_ppr.lua): the extra turns its player owes, one at a turn start after the other player's turn
+      if g.count(p, "TEMPORUS") > 0 then
+        local last = g.count(p, "TEMPORUS_LAST") - 1
+        g.add_count(p, "TEMPORUS_LAST", ev.player - last)
+        if last ~= ev.player then
+          g.extra_turn(ev.player)
+          g.add_count(p, "TEMPORUS", -1)
+        end
+      end
     end,
     -- Dreadsteeds owed (patch 9.0): at the end of the turn (either player's), each comes back for its player; twice
     -- with Drakkari Enchanter (its player's end of turn effects; only the player hooks of that player see it twice)
@@ -995,5 +1029,6 @@ cards["player:loot"] = {
       end
     end,
   },
+}
 
 return cards

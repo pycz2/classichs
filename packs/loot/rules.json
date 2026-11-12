@@ -29,7 +29,8 @@
   "full_hand_return_dies": true,
   "cost_in_order": true,
   "replaced_weapon_dies": true,
-  "lifesteal_one_heal": true
+  "lifesteal_one_heal": true,
+  "after_spell_from_before": true
  },
  "fatigue": {
   "enabled": true,

@@ -93,8 +93,11 @@ func _draw() -> void:
 				Frames.ring(self, Art.outline("circle", art), Frames.GOLD.darkened(0.45), 3)
 				return
 			Art.paint_in(self, art, s.card_id, "circle")
-			Frames.ring(self, Art.outline("circle", art), Color("8a7a5c"), 3)
 			var c0 := s.card()
+			var legendary: bool = c0.get("rarity", "") == "LEGENDARY"  # (Kobolds & Catacombs: one per class) as a minion's
+			Frames.ring(self, Art.outline("circle", art), Frames.GOLD if legendary else Color("8a7a5c"), 3)
+			if legendary:
+				Frames.crest_around(self, art.grow(2), 9, PI + PI / 6.0, TAU - PI / 6.0)
 			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12 * bump("atk"), Frames.BUFFED if s.atk() > int(c0.get("attack", 0)) else Color.WHITE)
 			var dur := int(s.tags.get("DURABILITY", 0))
 			Frames.shield(self, Vector2(size.x - 12, size.y - 12), dur, 11 * bump("hp"), Frames.durability_color(dur, c0), "durability")
