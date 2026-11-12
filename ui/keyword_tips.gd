@@ -85,7 +85,7 @@ static func changes(e: GameView.Ent) -> Array:
 	var base: Array = e.card().get("mechanics", [])
 	var kw := _keywords()
 	var lang := TranslationServer.get_locale()
-	for k in ["TAUNT", "CHARGE", "DIVINE_SHIELD", "STEALTH", "WINDFURY", "IMMUNE"]:
+	for k in ["TAUNT", "CHARGE", "DIVINE_SHIELD", "STEALTH", "WINDFURY", "IMMUNE", "LIFESTEAL", "POISONOUS"]:
 		if e.has(k) and not base.has(k) and kw.has(k):
 			out.append(kw[k].name.get(lang, kw[k].name.en))
 	if e.has("FROZEN"):

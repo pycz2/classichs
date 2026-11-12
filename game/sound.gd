@@ -261,7 +261,7 @@ static func attack_start(attacker: String) -> void:
 ## What a step's event makes its card say: [card id, kind] for a minion or a weapon coming into play
 ## and for a death, [] for nothing.
 static func line_for(ev: Dictionary, g: GameView) -> Array:
-	var kind: String = {"summon": "play", "equip": "play", "death": "death"}.get(ev.type, "")
+	var kind: String = {"summon": "play", "equip": "play", "death": "death", "hero_replaced": "play"}.get(ev.type, "")  # (a hero card: its line as it takes over)
 	var e := g.ent(int(ev.get("entity", -1)))
 	var id: String = e.card_id if e else str(ev.get("card", ""))
 	return [id, kind] if kind != "" and id != "" else []

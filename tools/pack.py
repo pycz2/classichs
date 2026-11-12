@@ -314,7 +314,8 @@ def deck_error(deck, cards, rules):
     counts = {}
     for cid in deck["cards"]:
         c = cards.get(cid)
-        if c is None or not c.get("collectible") or c.get("set") not in mode["sets"] or c["type"] == "CHAMPION":
+        # (a collectible CHAMPION of a mode's sets is a hero card: Knights of the Frozen Throne's Death Knights)
+        if c is None or not c.get("collectible") or c.get("set") not in mode["sets"]:
             return f"{cid} can't be put in a deck"
         if (cls not in c["classes"]) if c.get("classes") else (c["class"] not in neutral and c["class"] != cls):
             return f"{cid} belongs to another class"
@@ -448,6 +449,8 @@ def check_files(files):
                 r.error(f"{at}: a champion needs a power (or rules.json default_power)")
         elif "power" in c:
             r.error(f"{at}: only a CHAMPION has a power")
+        if "armor" in c and c["type"] != "CHAMPION":
+            r.error(f"{at}: only a CHAMPION (a hero card) has armor")
         if "script" in c and c["script"].split("#")[0] not in files:
             r.error(f"{at}: script {c['script'].split('#')[0]} is not in the pack")
         for slot, name in c.get("fx", {}).items():

@@ -129,6 +129,10 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 			s = _t("Secret revealed: %s") % CardText.name(ev.card, loc)
 		"quest_done":
 			s = _t("Quest completed: %s") % CardText.name(ev.card, loc)
+		"removed_from_deck":  # (Keening Banshee, Gnomeferatu, Army of the Dead): not drawn, not burned
+			s = _say(p, viewer, "%s is removed from your deck", "%s is removed from Opponent's deck", [CardText.name(ev.card, loc)])
+		"stolen":  # (Death Grip): a minion taken from the other player's deck
+			s = _say(p, viewer, "You steal %s", "Opponent steals %s", [CardText.name(ev.card, loc)])
 		"extra_turn":
 			s = _say(p, viewer, "You take an extra turn", "Opponent takes an extra turn", [])
 		"trap_put":

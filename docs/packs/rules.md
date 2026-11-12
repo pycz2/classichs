@@ -60,14 +60,16 @@ this pack. Optional; Classic leaves it out, and its bot stays the recorded one
 
 ## `behaviour`
 
-Rules Hearthstone changed over the years; a pack names the ones it plays by (both off when missing: Classic,
-Naxxramas and Goblins vs Gnomes keep their recorded games).
+Rules Hearthstone changed over the years; a pack names the ones it plays by (all off when missing: Classic,
+Naxxramas and Goblins vs Gnomes keep their recorded games; a later pack keeps the earlier pack's flags unless a patch
+changed that behaviour).
 
 | Field | Classic | Meaning |
 |---|---|---|
 | `countered_no_after_spell` | false | true: a countered spell is not cast for "after you cast a spell" hooks (no `after_spell` event: Wild Pyromancer, Flamewaker; Hearthstone until patch 9.2.0.21517 of 2017). "Whenever you cast a spell" (`play`) still sees it. |
 | `full_hand_return_dies` | false | true: a minion returned to a full hand (Sap, Youthful Brewmaster…) dies as any other: its Deathrattle, the graveyard, `DIED_TURN` (Kel'Thuzad, Feugen and Stalagg, Resurrect; patch 2.4.0.8311). false: it is set aside. |
-| `cost_in_order` | false | true: a card's cost changes apply in the order they came — its cost enchantments when given, the cost auras when their source came into play, its player's cost mods when made — after its own `cost_mod`, a `cost_first` aura before all (Summoning Portal); 0 at least at the end (the 2016 rulebook, rule M5: Emperor Thaurissan after Naga Sea Witch makes a card cost 4; Hearthstone until patch 9.0.0.20457 of 2017). false: enchantments, then auras, then cost mods. |
+| `cost_in_order` | false | true: a card's cost changes apply in the order they came — its cost enchantments when given, the cost auras when their source came into play, its player's cost mods when made — after its own `cost_mod`, the `cost_first` auras before all (by rank: Summoning Portal 1); 0 at least at the end (the 2016 rulebook, rule M5: Emperor Thaurissan after Naga Sea Witch makes a card cost 4; from patch 9.0.0.20457 of 2017 Naga Sea Witch, Corpse Widow and Emerald Hive Queen come right after Summoning Portal: their scripts' `cost_first = 2` in Knights of the Frozen Throne). false: enchantments, then auras, then cost mods. |
+| `replaced_weapon_dies` | false | true: a weapon replaced by a new one is destroyed as any other: its Deathrattle and a `death` event (Death's Bite, Grave Shambler; hearthstone.wiki.gg, Weapon). false: it goes to the graveyard without them. |
 
 ## `player_hooks`
 

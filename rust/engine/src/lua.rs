@@ -270,7 +270,10 @@ impl Parse<'_> {
                 "cost_mod" => h.cost_mod = Some(f!(true)),
                 "cost_aura" => h.cost_aura = Some(f!(true)),
                 "immune_while_attacking" => h.immune_while_attacking = v.truthy(),
-                "cost_first" => h.cost_first = v.truthy(),
+                "cost_first" => h.cost_first = match v {
+                    L::Int(n) => n.clamp(0, 100),
+                    _ => v.truthy() as i64,
+                },
                 "both" => h.both = Some(f!(false)),
                 "choose_one" | "choice" => {
                     let o = self.m.list_items(&v).map_err(err)?;
@@ -743,6 +746,7 @@ q!(q_rule, |g, a| {
     })
 });
 q!(q_combo, |g, a| one(g.combo_active(ent(g, &a, 0)?)));
+q!(q_choice, |g, a| one(g.e(ent(g, &a, 0)?).choice));
 q!(q_count, |g, a| one(vint(g.players[player(&a, 0)?].counts.get(&a.string(1)?))));
 
 fn q_mine<C: Ctx>(h: &mut C, a: Args) -> R {
@@ -774,6 +778,9 @@ fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
         // a multi-class card's classes (only then: older packs' tables stay as they were)
         let classes = vm.list(c.classes.iter().map(|k| s(k)).collect())?;
         vm.set(&t, "classes", classes)?;
+    }
+    if c.armor > 0 {
+        vm.set(&t, "armor", L::Int(c.armor))?; // a hero card's Armor (only then: older packs' tables stay as they were)
     }
     if c.task {
         vm.set(&t, "task", L::Bool(true))?; // a task card (a Quest; only then: older packs' tables stay as they were)
@@ -818,7 +825,7 @@ macro_rules! queries {
             ("g.cards_played", q_cards_played::<$t>), ("g.minions_played", q_minions_played::<$t>),
             ("g.room", q_room::<$t>), ("g.board_pos", q_board_pos::<$t>), ("g.died_pos", q_died_pos::<$t>),
             ("g.trap_ready", q_trap_ready::<$t>), ("g.spell_dmg", q_spell_dmg::<$t>), ("g.heal_amt", q_heal_amt::<$t>),
-            ("g.hp_dmg", q_hp_dmg::<$t>), ("g.rule", q_rule::<$t>), ("g.combo", q_combo::<$t>), ("g.mine", q_mine::<$t>),
+            ("g.hp_dmg", q_hp_dmg::<$t>), ("g.rule", q_rule::<$t>), ("g.combo", q_combo::<$t>), ("g.choice", q_choice::<$t>), ("g.mine", q_mine::<$t>),
             ("g.enchants", q_enchants::<$t>), ("g.info", q_info::<$t>), ("g.collectible", q_collectible::<$t>),
             ("g.graveyard", q_graveyard::<$t>), ("g.count", q_count::<$t>),
         ]
@@ -1008,6 +1015,13 @@ fn a_deathrattle(g: &mut Game, a: Args) -> R {
     if e != NONE {
         g.run_death_hooks_of(e, a.get(1).truthy());
     }
+    none()
+}
+fn a_set_hooks(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (e, c) = (ent(g, &a, 0)?, card_arg(g, &a, 1, "")?);
+    let card = g.rs.card(&c);
+    g.em(e).borrowed = Some(card); // e has card's hooks from now on (a Zombeast: its first Beast's text)
     none()
 }
 fn a_update_auras(g: &mut Game, _a: Args) -> R {
@@ -1337,5 +1351,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
     ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
     ("g.cast", a_cast), ("g.cast_random", a_cast_random), ("g.add_count", a_add_count), ("g.extra_turn", a_extra_turn),
-    ("g.force_attack", a_force_attack), ("g.update_auras", a_update_auras),
+    ("g.force_attack", a_force_attack), ("g.update_auras", a_update_auras), ("g.set_hooks", a_set_hooks),
 ];

@@ -74,6 +74,7 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
             e.enchantments = d["ench"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_object().map(|o| Obj::of(o, &intern))).collect());
             e.eot_tags = d["eot"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_str().map(intern)).collect());
             e.silenced = truthy(d.get("sil"));
+            e.borrowed = d["hooks"].as_str().filter(|c| rs.has(c)).map(|c| rs.card(c)); // (`g.set_hooks`: a Zombeast)
         }
         g.entities.push(Arc::new(e));
     }

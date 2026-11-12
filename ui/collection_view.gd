@@ -241,7 +241,7 @@ func filtered() -> Array:
 	var q := query.strip_edges().to_lower()
 	for id in (CardDb.all_ids() if include_tokens else CardDb.collectible()):
 		var c := CardDb.card(id)
-		if include_tokens and c.get("type", "") in ["HERO", "HERO_POWER", "ENCHANTMENT"]:
+		if include_tokens and c.get("type", "") in ["HERO", "HERO_POWER", "ENCHANTMENT"] and not (c.get("type", "") == "HERO" and c.get("collectible", false)):
 			continue
 		var classes: Array = c.get("classes", [])  # a multi-class card: under each of its classes, not Neutral
 		if (not classes.has(tab) if not classes.is_empty() else c.cardClass != tab) or (only != null and not only.has(id)):

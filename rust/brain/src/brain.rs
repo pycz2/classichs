@@ -688,6 +688,14 @@ fn side(g: &Game, p: usize, own: bool) -> f64 {
     if pl.deck.is_empty() {
         v -= (pl.fatigue + 1) as f64;
     }
+    if hero.card.armor > 0 {
+        // a hero card's champion (Knights of the Frozen Throne): its Hero Power, better than a class's, for the rest of
+        // the game; its choice pending (Build-A-Beast, Plague Lord) is the card or the Armor to come
+        v += 5.0;
+        if own && g.pending.as_ref().is_some_and(|q| q.player == p && q.source == pl.hero_power) {
+            v += 3.0;
+        }
+    }
     v + g.task_value(p) + 8.0 * pl.extra_turns as f64 // a Quest in play (more as it nears its goal), an extra turn owed
 }
 

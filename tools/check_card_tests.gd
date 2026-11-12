@@ -1,7 +1,8 @@
 extends SceneTree
 ## Plays every card test (data/card_tests) and lists those that fail, then how many
 ## cards have tests. Usage: godot --headless --path . --script res://tools/check_card_tests.gd [-- <pack id>]
-## A built-in pack's id (naxx-2014) plays the tests of that pack's cards (this run only: not saved).
+## A built-in pack's id (naxx-2014) plays the tests of that pack's cards (this run only: not saved); a .cardpack file
+## (build/packs/icc.cardpack: an expansion) is installed into the run's user dir and played (use TEST_USER_DIR).
 ## TEST_USER_DIR (a folder under the data dir, as tests/run.gd takes it) keeps user:// apart from the game's.
 
 
@@ -15,6 +16,14 @@ func _init() -> void:
 
 func _process(_d: float) -> bool:
 	var want := OS.get_cmdline_user_args()
+	for a in want:  # a .cardpack file (an expansion of build/packs) is installed into this run's user dir first
+		if a.ends_with(".cardpack"):
+			var r := Packs.install_file(a)
+			if r.has("error"):
+				print("%s: %s" % [a, r.error])
+				quit(1)
+				return true
+			want.append(r.pack.id())
 	for p in Packs.all():
 		if want.has(p.id()):
 			Packs._active = p

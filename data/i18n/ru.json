@@ -881,5 +881,9 @@
 "Opponent's Extra Turn": "Дополнительный ход противника",
 "Quest completed: %s": "Задача выполнена: %s",
 "You take an extra turn": "Вы получаете дополнительный ход",
-"Opponent takes an extra turn": "Противник получает дополнительный ход"
+"Opponent takes an extra turn": "Противник получает дополнительный ход",
+"%s is removed from your deck": "«%s» убирается из вашей колоды",
+"%s is removed from Opponent's deck": "«%s» убирается из колоды соперника",
+"You steal %s": "Вы забираете «%s»",
+"Opponent steals %s": "Соперник забирает «%s»"
 }

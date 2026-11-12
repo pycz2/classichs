@@ -20,6 +20,8 @@ var show_boxes := false
 var silenced := false
 ## The values of its text's "{0}", "{1}"… in a game (the engine's `text_args`: a Jade card's next Golem).
 var text_args := []
+## The card whose picture it shows ("" = its own: a Zombeast shows its first Beast's).
+var art_id := ""
 
 
 static func make(id: String, scale_factor := 1.0) -> CardView:
@@ -36,6 +38,9 @@ func show_entity(e: GameView.Ent, g: GameView) -> void:
 	entity_id = e.id
 	card_id = e.card_id
 	text_args = e.text_args
+	art_id = e.art_id
+	if e.choice >= 0 and CardText.raw(e.card_id).contains("@"):
+		text_args = ["@%d" % (e.choice + 1)]  # the text variant of its option (Fatespinner: only its player knows it)
 	cost = g.cost(e) if e.zone == "HAND" else int(e.card().get("cost", 0))
 	if was >= 0 and was != cost:
 		pop("cost")
@@ -112,8 +117,11 @@ func _draw() -> void:
 	art = Rect2(art.position * k, art.size * k)
 	var outline := Art.outline(shape, art)
 	draw_colored_polygon(Art.outline(shape, art.grow(3 * k)), Frames.GOLD.darkened(0.35))
-	Art.paint_in(self, art, card_id, shape)
+	Art.paint_in(self, art, art_id if art_id != "" else card_id, shape)
 	Frames.ring(self, outline, Frames.GOLD.darkened(0.1), 2 * k)
+	if type == "HERO":  # a hero card (Knights of the Frozen Throne): a portrait in a double steel-and-gold rim
+		Frames.ring(self, Art.outline(shape, art.grow(3 * k)), Color("aeb8c2"), 2.5 * k)
+		Frames.ring(self, Art.outline(shape, art.grow(5 * k)), Frames.GOLD, 1.5 * k)
 	if c.get("rarity", "") == "LEGENDARY":
 		Frames.crest(self, Vector2(60, 5) * k, 104 * k)  # along the card's top edge
 	# text box (parchment) and the name banner across it
@@ -152,6 +160,8 @@ func _draw() -> void:
 	var shown_cost := cost if cost >= 0 else base_cost
 	var cost_color := Color.WHITE if shown_cost == base_cost else (Frames.BUFFED if shown_cost < base_cost else Frames.DAMAGED)
 	Frames.mana(self, Vector2(17, 17) * k, shown_cost, 15 * k * bump("cost"), cost_color)
+	if type == "HERO" and int(c.get("armor", 0)) > 0:  # the Armor it gives, on the shield where a minion's Health goes
+		Frames.shield(self, Vector2(103, 154) * k, int(c.armor), 14 * k)
 	if type == "MINION" or type == "WEAPON":
 		var a := attack if attack >= 0 else int(c.get("attack", 0))
 		var h := health if health >= 0 else int(c.get("health", c.get("durability", 0)))

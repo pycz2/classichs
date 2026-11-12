@@ -881,5 +881,9 @@
 "Opponent's Extra Turn": "Turno extra do oponente",
 "Quest completed: %s": "Missão cumprida: %s",
 "You take an extra turn": "Você joga um turno extra",
-"Opponent takes an extra turn": "O oponente joga um turno extra"
+"Opponent takes an extra turn": "O oponente joga um turno extra",
+"%s is removed from your deck": "%s é removido do seu deck",
+"%s is removed from Opponent's deck": "%s é removido do deck do oponente",
+"You steal %s": "Você rouba %s",
+"Opponent steals %s": "O oponente rouba %s"
 }

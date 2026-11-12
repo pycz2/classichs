@@ -50,12 +50,20 @@ class Ent:
 	var glow := false
 	## The values of its text's "{0}", "{1}"… now (the engine's `text_args`: a Jade card's next Golem, a potion's effects).
 	var text_args := []
+	## The card whose picture it shows ("" = its own): a Zombeast shows its first Beast's (the engine's `hooks`).
+	var art_id := ""
+	## The Choose One option it was played with (-1: none, or the view doesn't tell: the opponent's).
+	var choice := -1
 	var _atk := 0
 	var _max_health := 0
 	var _cost := 0
 
 	func card() -> Dictionary:
 		return CardDb.card(card_id)
+
+	## The card id of its picture.
+	func art() -> String:
+		return art_id if art_id != "" else card_id
 
 	func type() -> String:
 		return card().get("type", "")
@@ -91,7 +99,7 @@ class Ent:
 	func copy() -> Ent:
 		var e := Ent.new()
 		e.set_from(id, {})
-		for k in ["card_id", "controller", "zone", "play_order", "damage", "silenced", "_atk", "_max_health", "_cost", "text_args"]:
+		for k in ["card_id", "controller", "zone", "play_order", "damage", "silenced", "_atk", "_max_health", "_cost", "text_args", "art_id", "choice"]:
 			e.set(k, get(k))
 		e.tags = tags.duplicate(true)
 		e.enchantments = enchantments.duplicate(true)
@@ -123,6 +131,8 @@ class Ent:
 		_cost = int(d.get("cost", card().get("cost", 0)))
 		glow = bool(d.get("glow", false))
 		text_args = d.get("text_args", [])
+		art_id = str(d.get("hooks", ""))
+		choice = int(d.get("choice", -1))
 
 
 static func renamed(d: Dictionary, names: Dictionary) -> Dictionary:

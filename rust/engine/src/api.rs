@@ -405,6 +405,9 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
         if g.glows(e.id) {
             s["glow"] = json!(true); // its condition holds now: the client lights it yellow
         }
+        if e.choice >= 0 && e.zone == "PLAY" && (view < 0 || view == e.controller as i64) {
+            s["choice"] = json!(e.choice); // its Choose One option: only its player (Fatespinner's secret Deathrattle)
+        }
         if let Some(f) = e.card.hooks.text {
             s["text_args"] = json!(g.fx_text(f, e.id)); // its text's {0}, {1}… now (a Jade card's next Golem)
         }

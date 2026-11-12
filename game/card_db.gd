@@ -13,9 +13,9 @@ const FIELDS := {"class": "cardClass", "rarity": "rarity", "set": "set", "collec
 	"attack": "attack", "health": "health", "durability": "durability", "race": "race", "keywords": "mechanics",
 	"refs": "referencedTags", "spell_power": "spellDamage", "mana_lock": "overload", "unique": "elite",
 	"code_id": "dbfId", "legacy_code_id": "legacyDbfId", "fx": "fx", "sounds": "sounds", "voice": "voice", "power": "power",
-	"classes": "classes"}
+	"classes": "classes", "armor": "armor"}
 const TYPES := {"CHAMPION": "HERO", "POWER": "HERO_POWER"}
-const INT_FIELDS := ["dbfId", "legacyDbfId", "cost", "attack", "health", "durability", "overload", "spellDamage"]
+const INT_FIELDS := ["dbfId", "legacyDbfId", "cost", "attack", "health", "durability", "overload", "spellDamage", "armor"]
 
 static var _cards: Dictionary = {}
 static var _by_dbf: Dictionary = {}
@@ -110,7 +110,7 @@ static func collectible() -> Array[String]:
 	var out: Array[String] = []
 	for id: String in _cards:
 		var c: Dictionary = _cards[id]
-		if c.get("collectible", false) and sets.has(c.get("set", "")) and c.type != "HERO":
+		if c.get("collectible", false) and sets.has(c.get("set", "")):  # (a hero card too)
 			out.append(id)
 	out.sort()
 	return out

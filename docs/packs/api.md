@@ -59,7 +59,7 @@ Return values are ignored unless said otherwise.
 | Hook | Signature | When |
 |---|---|---|
 | `target` | `"any"` \| `{base = …, filter = fn(g, me, t) → bool, when = fn(g, me) → bool}` | The card (or power) needs a target. Bases: `any`, `minion`, `enemy_minion`, `friendly_minion`, `enemy_char`, `friendly_char`, `enemy_hero` (alias `enemy_champion`). Enemy STEALTH is never a target; SPELLPROOF blocks spells and powers. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required. `filter` is read-only. `when` (read-only): the spec applies only while it holds, else the card or power has no target (`t` is `nil`): Steady Shot with Steamwheedle Sniper. |
-| `battlecry` (alias `on_play`) | `fn(g, me, t)` | A minion or weapon is played from the hand (after it is on the board / before it is equipped). |
+| `battlecry` (alias `on_play`) | `fn(g, me, t)` | A minion or weapon is played from the hand (after it is on the board / before it is equipped), or a hero card (a CHAMPION played from the hand: after it became its player's champion, with its Armor and power). |
 | `spell` | `fn(g, me, t)` | A spell is cast (not if countered). A TASK card's (a Quest's) runs once it waits in the trap zone: it sets its goal (`TASK_GOAL`); its `on` hooks then count (`TASK_PROGRESS`) and fulfil it (`g.remove`, the reward to the hand). |
 | `combo` | `fn(g, me, t)` | Instead of `battlecry`/`spell` when another card was played before it this turn. |
 | `combo_target` | like `target` | The target spec while combo is active (no target without combo). |
@@ -82,7 +82,7 @@ Return values are ignored unless said otherwise.
 | `immune_while_attacking` | `true` | A weapon: its champion is IMMUNE while attacking with it. |
 | `durability_on_attack` | `fn(g, w, defender) → bool` | A weapon: whether attacking costs durability (default yes). |
 | `both` | `fn(g, me, t)` | A Choose One card played with both options (BOTH_CHOICES, Fandral Staghelm: `choice` 2): this instead of the two options' `effect`s in card order (Druid of the Claw's combined form; Keeper of the Grove silences first). |
-| `cost_first` | `true` | Its `cost_aura` comes before every other cost change in a pack with `behaviour.cost_in_order` (Summoning Portal). |
+| `cost_first` | `true` or a rank (1, 2, …) | Its `cost_aura` comes before every other cost change in a pack with `behaviour.cost_in_order` (Summoning Portal); the lower rank first (`true` is 1; Knights of the Frozen Throne: Naga Sea Witch, Corpse Widow and Emerald Hive Queen 2, after Summoning Portal), then by when they came into play. |
 
 **Read-only hooks** (`target.filter`, `can_play`, `glow`, `text`, `cost_mod`, `cost_aura`) run
 while the engine only looks at the game (legal actions, costs in snapshots).
@@ -107,7 +107,7 @@ amounts replace the damage).
 
 | `type` | Fields | Notes |
 |---|---|---|
-| `play` | `entity`, `player`, `card`, `kind` (`minion`/`spell`/`weapon`), `target`; spells: `secret`, `countered`, `task` (only a TASK card's: true) | Before the card's effect. `countered = true` (spells) stops it. Changing `target` redirects a spell. |
+| `play` | `entity`, `player`, `card`, `kind` (`minion`/`spell`/`weapon`/`champion`: a hero card), `target`; spells: `secret`, `countered`, `task` (only a TASK card's: true) | Before the card's effect. `countered = true` (spells) stops it. Changing `target` redirects a spell. A hero card's `play` comes before it becomes the champion. |
 | `summon` | `entity`, `player`, `card` | A minion entered the board (played or summoned). |
 | `after_summon` | `entity`, `player`, `card`, `played` (true if played from hand) | After its battlecry. |
 | `after_spell` | `entity`, `player`, `card` | After a spell resolved. |
@@ -116,7 +116,9 @@ amounts replace the damage).
 | `damage` | `source`, `target`, `amount`, `player` (the target's controller) | Damage dealt (after armor). |
 | `predamage` (`now` only) | `source`, `target`, `amount` | Before damage; set `amount`. |
 | `heal` | `source`, `target`, `amount` | |
-| `death` | `entity`, `player`, `card`, `minion` (bool) | |
+| `death` | `entity`, `player`, `card`, `minion` (bool) | A minion or a weapon (a weapon replaced by a new one too, in a pack with `behaviour.replaced_weapon_dies`). |
+| `freeze` | `target` | A character was Frozen (again too). |
+| `divine_shield_lost` | `target` | A Divine Shield (BARRIER) took a hit and broke. |
 | `draw` | `player`, `entity`, `card` | |
 | `discard` | `player`, `entity`, `card` | |
 | `add_to_hand` | `player`, `entity`, `card` | A new card came to the hand (`g.add_to_hand`, a minion returned): only its player sees which. |
@@ -176,6 +178,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.locked(p)` | `p`'s crystals Overload locked this turn (Kun the Forgotten King refreshes the others). |
 | `g.cards_played(p)`, `g.minions_played(p)` | Cards and minions `p` played this turn. |
 | `g.combo(e)` | Combo is active for `e`: its controller played another card before it this turn. |
+| `g.choice(e)` | The Choose One option `e` was played with: 0 or 1, 2 for both (BOTH_CHOICES), -1 for none. Not in a snapshot: only the game that played it knows it, so its opponent never learns it (Fatespinner's secret Deathrattle); a copy (`g.copy_minion`) keeps it. |
 | `g.room(p)` | Free board slots (`g.room(p) > 0`: room for one; note `0` is true in Lua). |
 | `g.board_pos(m)` | Its 0-based position, or `nil`. |
 | `g.died_pos(m)` | Where a dead minion stood (0-based), or `-1`. |
@@ -185,8 +188,8 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.rule(name)` | `hand`, `board`, `max_mana`, `deck_size`, `champion_health` from rules.json. |
 | `g.mine(me, ev)` | `ev.player` is `me`'s controller. |
 | `g.enchants(e, hooks)` | The `player` fields of `e`'s enchantments with these hooks. |
-| `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`, and `classes` (a list) for a multi-class card (cards.md: a card of each of its classes; its `class` is neutral), `task = true` for a TASK card (a Quest). |
-| `g.collectible()` | Collectible card ids of the constructed sets, sorted; no TASK card (a Quest is never made at random nor Discovered). |
+| `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`, and `classes` (a list) for a multi-class card (cards.md: a card of each of its classes; its `class` is neutral), `task = true` for a TASK card (a Quest), `armor` for a hero card (a CHAMPION that gives Armor when played). |
+| `g.collectible()` | Collectible card ids of the constructed sets, sorted; no TASK card (a Quest is never made at random nor Discovered). A hero card is one of them (Knights of the Frozen Throne: "Hero cards can be randomly generated and Discovered, just like any other collectible card"). |
 | `g.count(p, name)` | A count of the game `g.add_count` keeps for `p` (0 if none). |
 | `g.graveyard(p)` | `p`'s cards in the GRAVEYARD zone, in play order: dead minions and weapons, played spells, discarded and burned cards. A minion that died on the board has `DIED_POS` (`g.died_pos(e) >= 0`), and `DIED_TURN` (the turn) in a pack that names that mechanic (Naxxramas: Kel'Thuzad, Feugen and Stalagg). |
 
@@ -219,6 +222,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.add_to_deck(p, card)` | A new card shuffled into `p`'s deck at a random place (logs `add_to_deck`); returns it. |
 | `g.deathrattle(m[, own])` | Runs `m`'s death hooks now, as if it died, without killing it: its card's (unless silenced), then its enchantments' (Feign Death). `own`: only its card's and the ones copied onto it (`{deathrattle = card}`: Unearthed Raptor), not the hook sets other cards gave it (Spiritsinger Umbra). |
 | `g.update_auras()` | Recomputes every aura now, so a hook sees them on a minion just summoned (Jungle Giants: its Attack with auras as it enters). |
+| `g.set_hooks(e, card)` | From now on `e` has `card`'s hooks instead of its own card's (its Battlecry, target, Deathrattle, `on`, aura…; Silence still takes them; its own card's `text` hook still words it). Snapshots show `hooks` (clients draw that card's picture); a copy keeps it (Deathstalker Rexxar's Zombeast: the first Beast's text). |
 | `g.gain_armor(p, n)` | |
 | `g.gain_mana(p, n[, empty])` | Crystals up to max mana (`empty`: empty crystals). |
 | `g.add_mana(p, n)` | Mana this turn (up to max mana; The Coin). |
@@ -246,7 +250,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.pick(list)` | A random item (or `nil` for an empty list). |
 | `g.random_alive(list)` | A random item that is in play and not dying, or `nil`. |
 | `g.shuffle(list)` | Shuffles the list in place (and returns it). |
-| `g.put_trap(e)` | Puts a trap card of its owner's hand or deck into play, as if played but without the `play` event (logs `trap_put`); `false` (it stays where it is) when `e` is no trap there, the same trap is already in play or its owner has `limits.secrets` traps (Mad Scientist). |
+| `g.put_trap(e)` | Puts a trap card of its owner's hand or deck (or one made by `g.create`) into play, as if played but without the `play` event (logs `trap_put`); `false` (it stays where it is) when `e` is no trap there, the same trap is already in play or its owner has `limits.secrets` traps (Mad Scientist, Professor Putricide). |
 | `g.remove_dead()` | The death phase now: the dead leave the board (room for a summon) and their Deathrattles and `death` events are queued, to run after the hook (Mimiron's Head: V-07-TR-0N comes before the Mechs' Deathrattles). |
 | `g.resolve()` | Runs the queued triggers and the death phase now, inside the hook (Poison Seeds and Reincarnate: the destroyed minions die and their Deathrattles go before the Treants or the copy come). |
 

@@ -881,5 +881,9 @@
 "Opponent's Extra Turn": "Zusätzlicher Zug des Gegners",
 "Quest completed: %s": "Quest erfüllt: %s",
 "You take an extra turn": "Ihr bekommt einen zusätzlichen Zug",
-"Opponent takes an extra turn": "Der Gegner bekommt einen zusätzlichen Zug"
+"Opponent takes an extra turn": "Der Gegner bekommt einen zusätzlichen Zug",
+"%s is removed from your deck": "%s wird aus Eurem Deck entfernt",
+"%s is removed from Opponent's deck": "%s wird aus dem Deck des Gegners entfernt",
+"You steal %s": "Ihr stehlt %s",
+"Opponent steals %s": "Der Gegner stiehlt %s"
 }

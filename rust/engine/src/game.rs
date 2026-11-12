@@ -206,7 +206,7 @@ impl Game {
             }
             Act::HeroPower { target, .. } => {
                 let hp = self.players[self.current].hero_power;
-                let t = self.random_target(target, |g| g.spec_targets(hp, g.live_spec(hp, g.e(hp).card.hooks.target), true, false));
+                let t = self.random_target(target, |g| g.spec_targets(hp, g.live_spec(hp, g.e(hp).hooks().target), true, false));
                 self.do_hero_power(t)
             }
             Act::Choose { option, .. } => self.do_choose(option),
@@ -390,7 +390,7 @@ impl Game {
             if !affordable || !self.can_play(e) {
                 continue;
             }
-            let choices: &[i64] = match self.e(e).card.hooks.choice {
+            let choices: &[i64] = match self.e(e).hooks().choice {
                 Some(_) if self.both_choices(cur) => &[BOTH],
                 Some(_) => &[0, 1],
                 None => &[-1],
@@ -407,7 +407,7 @@ impl Game {
         let hpe = self.e(hp);
         let n = self.n();
         if !hpe.has(n.used) && !hpe.has(n.locked) && self.cost_in(hp, &auras) <= p.mana {
-            let hh = &hpe.card.hooks;
+            let hh = hpe.hooks();
             if hh.power.is_some() && hh.can_play.is_none_or(|f| self.fx_can_play(f, hp)) {
                 for t in self.spec_targets(hp, self.live_spec(hp, hh.target), true, false) {
                     out.push(Act::HeroPower { player, target: t });
@@ -435,7 +435,7 @@ impl Game {
         if x.card.task && !self.task_room(x.controller) {
             return false;
         }
-        x.card.hooks.can_play.is_none_or(|f| self.fx_can_play(f, e))
+        x.hooks().can_play.is_none_or(|f| self.fx_can_play(f, e))
     }
 
     pub fn combo_active(&self, e: Id) -> bool {
@@ -450,9 +450,9 @@ impl Game {
         if x.zone != "HAND" || x.controller != self.current || self.game_over {
             return false;
         }
-        match x.card.hooks.glow {
+        match x.hooks().glow {
             Some(f) => self.fx_can_play(f, e),
-            None => x.card.hooks.combo.is_some() && self.combo_active(e),
+            None => x.hooks().combo.is_some() && self.combo_active(e),
         }
     }
 
@@ -465,7 +465,7 @@ impl Game {
 
     /// The target spec that applies when e is played with this choice and combo state.
     pub fn target_spec(&self, e: Id, choice: i64, combo: bool) -> Option<TSpec> {
-        let h = &self.e(e).card.hooks;
+        let h = self.e(e).hooks();
         let spec = if h.combo_target.is_some() {
             if combo { h.combo_target } else { None }
         } else if choice == BOTH {
@@ -598,7 +598,63 @@ impl Game {
             "MINION" => self.play_minion(e, t, pos, choice, combo),
             "SPELL" => self.play_spell(e, t, choice, combo),
             "WEAPON" => self.play_weapon(e, t, combo),
+            "CHAMPION" => self.play_champion(e, t, choice, combo),
             _ => {}
+        }
+    }
+
+    /// A hero card (a CHAMPION played from the hand: Knights of the Frozen Throne's Death Knights): the `play` event
+    /// (kind `champion`), then it becomes its player's champion (`become_champion`), its `armor` is gained (added to
+    /// the Armor it had) and its `power` replaces the power (a fresh one, usable this turn), then its Battlecry.
+    fn play_champion(&mut self, e: Id, t: Id, choice: i64, combo: bool) {
+        let c = self.ctrl(e);
+        let card = self.e(e).card_id;
+        self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "champion", "target": t, "card": card});
+        self.resolve();
+        if self.game_over {
+            return;
+        }
+        self.become_champion(e);
+        let armor = self.e(e).card.armor;
+        if armor > 0 {
+            self.gain_armor(c, armor);
+        }
+        let t = if t != NONE && self.e(t).zone != "PLAY" { NONE } else { t };
+        self.run_effect(e, "on_play", t, choice, combo);
+    }
+
+    /// Makes the card e (a CHAMPION) its controller's champion in the old one's place (hearthstone.wiki.gg, Hero card):
+    /// it keeps the old one's Health and maximum Health, Armor, attacks made this turn (patch 9.0: a new champion does
+    /// not "refresh" the weapon swing) and the rest of its state (buffs, "this turn" tags), but not Frozen (a hero card
+    /// thaws). Its power (if it names one) becomes a fresh power. Logs `hero_replaced`.
+    pub fn become_champion(&mut self, e: Id) {
+        let p = self.ctrl(e);
+        let old = self.players[p].hero;
+        let (n, rs) = (self.n(), self.rs);
+        let o = self.e(old).clone();
+        self.em(old).zone = "SETASIDE";
+        self.enter_play(e);
+        let x = self.em(e);
+        x.enchantments = o.enchantments.clone();
+        x.eot_tags = o.eot_tags.clone();
+        for (k, v) in o.tags.iter() {
+            if k != n.frozen && k != n.frozen_this_turn {
+                x.tags.insert(rs.intern(k), v.clone());
+            }
+        }
+        let old_max = o.max_health() - o.aura.hp;
+        if x.max_health() != old_max {
+            let mut base = Obj::new();
+            base.insert("base", true);
+            base.insert("set_hp", old_max - (x.max_health() - x.card.health));
+            x.enchantments.insert(0, base); // its maximum Health is the old champion's
+        }
+        x.damage = o.damage;
+        self.players[p].hero = e;
+        self.log_event(obj!{"type": "hero_replaced", "player": p, "entity": e, "card": self.e(e).card_id});
+        let power = self.e(e).card.power.as_str();
+        if !power.is_empty() {
+            self.set_hero_power(p, power);
         }
     }
 
@@ -607,7 +663,7 @@ impl Game {
     pub fn cast_copy(&mut self, src: Id, orig: Id, t: Id) {
         let (p, o) = (self.ctrl(src), self.e(orig));
         let (card, choice, combo) = (o.card_id, o.choice, o.comboed);
-        let h = &o.card.hooks;
+        let h = o.hooks();
         let fs = if choice >= 0 && h.choice.is_some() {
             self.choice_effects(h, choice)
         } else if combo && h.combo.is_some() {
@@ -635,7 +691,7 @@ impl Game {
         let p = self.ctrl(src);
         let e = self.new_entity(card, p);
         let card = self.e(e).card_id;
-        let h = &self.e(e).card.hooks;
+        let h = self.e(e).hooks();
         let choice = match h.choice {
             Some(_) if self.both_choices(p) => BOTH,
             Some(_) => self.rng.randi_range(0, 1),
@@ -644,7 +700,7 @@ impl Game {
         let combo = self.players[p].cards_played_this_turn > 1;
         let x = self.em(e);
         (x.choice, x.comboed, x.auto_choice) = (choice, combo, true);
-        if self.e(e).card.hooks.can_play.is_some_and(|f| !self.fx_can_play(f, e)) {
+        if self.e(e).hooks().can_play.is_some_and(|f| !self.fx_can_play(f, e)) {
             // what it needs is missing (Blade Flurry without a weapon): it fizzles
             self.log_event(obj!{"type": "fizzle", "player": p, "entity": e, "card": card});
             self.em(e).zone = "GRAVEYARD";
@@ -702,7 +758,7 @@ impl Game {
     }
 
     fn run_effect(&mut self, e: Id, key: &str, t: Id, choice: i64, combo: bool) {
-        let h = &self.e(e).card.hooks;
+        let h = self.e(e).hooks();
         if t == NONE && self.target_spec(e, choice, combo).is_some() {
             return; // targeted effect with no target (none was valid, or it left play)
         }
@@ -853,7 +909,7 @@ impl Game {
             return;
         }
         let weapon = if self.e(a).is_champion() { self.players[self.ctrl(a)].weapon } else { None };
-        let immune = weapon.is_some_and(|w| self.e(w).card.hooks.immune_while_attacking);
+        let immune = weapon.is_some_and(|w| self.e(w).hooks().immune_while_attacking);
         if immune {
             self.em(a).give_tag(names.immune, false);
         }
@@ -866,7 +922,7 @@ impl Game {
         }
         if let Some(w) = weapon {
             if self.e(w).zone == "PLAY" {
-                let lose = match self.e(w).card.hooks.durability_on_attack {
+                let lose = match self.e(w).hooks().durability_on_attack {
                     Some(f) => self.fx_dur(f, w, d),
                     None => true,
                 };
@@ -897,7 +953,7 @@ impl Game {
             let h = self.players[cur].hero;
             self.add_tag_int(h, t.into(), 1);
         }
-        if let Some(f) = self.e(hp).card.hooks.power {
+        if let Some(f) = self.e(hp).hooks().power {
             self.from(hp, |g| g.fx_effect(f, hp, t));
         }
         self.emit(obj!{"type": "hero_power", "player": cur, "entity": hp, "target": t});
@@ -913,7 +969,7 @@ impl Game {
         let src = self.pending.as_ref().unwrap().source;
         let still = self.pending_options();
         self.pending = None;
-        if let Some(f) = self.e(src).card.hooks.on_choose {
+        if let Some(f) = self.e(src).hooks().on_choose {
             self.from(src, |g| g.fx_choose(f, src, option, still));
         }
     }

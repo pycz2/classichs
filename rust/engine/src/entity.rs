@@ -260,6 +260,9 @@ pub struct Entity {
     pub comboed: bool,
     /// Cast with every choice made at random (`g.cast_random`: Yogg-Saron): a choice it asks for is picked at once.
     pub auto_choice: bool,
+    /// The card whose hooks it has instead of its own card's (`g.set_hooks`: a Zombeast has its first Beast's text);
+    /// its own card's `text` hook still words it.
+    pub borrowed: Option<&'static Card>,
 }
 
 impl Entity {
@@ -268,7 +271,12 @@ impl Entity {
     pub fn new(id: Id, card: &'static Card, controller: usize) -> Entity {
         Entity { id, card_id: &card.id, card, controller, zone: "SETASIDE", play_order: 0, damage: 0,
             tags: card.start_tags.clone(), enchantments: vec![], eot_tags: vec![], aura: Aura::default(), silenced: false,
-            created: false, choice: -1, comboed: false, auto_choice: false }
+            created: false, choice: -1, comboed: false, auto_choice: false, borrowed: None }
+    }
+
+    /// Its hooks: its card's, or the ones it borrowed (`borrowed`), silenced or not.
+    pub fn hooks(&self) -> &'static crate::hooks::HookSet {
+        &self.borrowed.unwrap_or(self.card).hooks
     }
 
     pub fn kind(&self) -> &'static str {
@@ -395,6 +403,9 @@ impl Entity {
             "dmg": self.damage, "eot": self.eot_tags, "sil": self.silenced});
         s["tags"] = self.tags.to_value();
         s["ench"] = Value::Array(self.enchantments.iter().map(Obj::to_value).collect());
+        if let Some(c) = self.borrowed {
+            s["hooks"] = json!(c.id); // only then: older games' states stay as they were
+        }
         s
     }
 }

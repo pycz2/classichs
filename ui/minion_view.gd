@@ -41,7 +41,7 @@ func sync() -> void:
 
 
 func _animated() -> bool:
-	var h := Rules.hooks(s.card_id)
+	var h := Rules.hooks(s.art())
 	return glow.a > 0.0 or s.has("UNTOUCHABLE") or s.silenced or s.spellpower() > 0 or s.has("ELUSIVE") or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
 		or (not s.silenced and (h.has("on") or h.has("aura")))
 
@@ -90,7 +90,7 @@ func _show_arcane(on: bool) -> void:
 
 func _draw() -> void:
 	var c := s.card()
-	var h := Rules.hooks(s.card_id)
+	var h := Rules.hooks(s.art())
 	var oval := Art.outline("oval", OVAL)
 	var center := OVAL.get_center()
 	var gl := shown_glow()
@@ -110,7 +110,7 @@ func _draw() -> void:
 			draw_colored_polygon(shield, Color("7d7f7d"))
 			Frames.ring(self, shield, Color("3b3d3b"), 3)
 	draw_colored_polygon(Art.outline("oval", OVAL.grow(3)), Color("2a2118"))
-	Art.paint_in(self, OVAL, s.card_id, "oval")
+	Art.paint_in(self, OVAL, s.art(), "oval")
 	if s.silenced:
 		draw_colored_polygon(oval, Color(0.45, 0.35, 0.5, 0.18))
 	if s.has("STEALTH"):  # drifting smoke: two layers of noise moving apart; the portrait shows faintly
@@ -162,6 +162,8 @@ func _draw() -> void:
 	var marks := []
 	if not s.silenced and h.has("deathrattle"):
 		marks.append("deathrattle")
+	if s.has("LIFESTEAL"):  # (Knights of the Frozen Throne; Frost Lich Jaina's aura too)
+		marks.append("lifesteal")
 	if not s.silenced and KeywordTips.keywords_of(s.card_id).has("POISONOUS"):
 		marks.append("poison")
 	elif not s.silenced and h.has("on"):
@@ -238,7 +240,7 @@ static func _scaled(pts: PackedVector2Array, c: Vector2, k: float) -> PackedVect
 func _reach() -> float:
 	if s.has("IMMUNE"):
 		return 9.0
-	if Rules.hooks(s.card_id).has("aura") and not s.silenced:
+	if Rules.hooks(s.art()).has("aura") and not s.silenced:
 		return 9.0
 	if s.has("DIVINE_SHIELD"):
 		return 6.0
@@ -336,6 +338,14 @@ func _draw_icon(kind: String, at: Vector2) -> void:
 			var bolt := PackedVector2Array([c + Vector2(1, -7), c + Vector2(-4, 1), c + Vector2(0, 1), c + Vector2(-1, 7), c + Vector2(4, -1), c + Vector2(0, -1)])
 			draw_colored_polygon(bolt, Color("ffd43b"))
 			draw_polyline(bolt + PackedVector2Array([bolt[0]]), Color.BLACK, 1.0)
+		"lifesteal":  # a red drop: the damage it deals heals its hero
+			var drop := PackedVector2Array([c + Vector2(0, -7)])
+			for i in 13:
+				var ang := PI * i / 12.0
+				drop.append(c + Vector2(cos(ang) * 4.5, 1.5 + sin(ang) * 4.5) * Vector2(-1, 1))
+			draw_colored_polygon(drop, Color("e03131"))
+			draw_polyline(drop + PackedVector2Array([drop[0]]), Color.BLACK, 1.0)
+			draw_circle(c + Vector2(-1.5, 1.5), 1.2, Color(1, 1, 1, 0.7))
 		"silenced":
 			draw_arc(c, 5, 0, TAU, 16, Color("ff6b6b"), 2.0)
 			draw_line(c + Vector2(-4, 4), c + Vector2(4, -4), Color("ff6b6b"), 2.0)

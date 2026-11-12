@@ -35,6 +35,7 @@ array of card objects, one per card (tokens, champions and powers included).
 | `turn_seconds` | int | A minion: while it is in play, a turn that starts lasts only this many seconds (the shortest of such minions counts); when they all leave play the turn gets its usual time back (Nozdormu). The snapshot's `turn_seconds`; servers and local games time turns by it. |
 | `unique` | bool | Legendary frame (a dragon). |
 | `power` | card id | `CHAMPION` only: its `POWER` card. |
+| `armor` | int 0–999 | `CHAMPION` only: a hero card's Armor, gained when it is played from the hand (format.md §5: a collectible CHAMPION of a mode's sets goes into decks). |
 | `code_id`, `legacy_code_id` | int | Numbers for deck codes (Classic: Hearthstone `dbfId` and the legacy one, so Hearthstone deck codes keep working). |
 | `script` | `scripts/<file>.lua#<id>` | Its hooks ([format.md](format.md) §9). None: no hooks. |
 | `fx` | object | Visual effects by name ([fx.md](fx.md)). Not in `rules_hash`. |

@@ -22,7 +22,7 @@ pub fn pool(rs: &Ruleset, card_class: &str, t: &str) -> Vec<(String, f64)> {
     let mut out = vec![];
     for id in &rs.arena_pool {
         let c = rs.card(id);
-        if c.kind == "CHAMPION" || rs.tier(id) != t {
+        if rs.tier(id) != t { // (a hero card of the pool too: the Death Knights were drafted until November 2017)
             continue;
         }
         if c.card_class == card_class || c.classes.iter().any(|k| k == card_class) {

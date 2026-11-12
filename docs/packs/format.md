@@ -170,6 +170,7 @@ does not map is written as the engine id.
 | `MANA_LOCK` | keyword | Locks N mana next turn (card field `mana_lock`) | `OVERLOAD` |
 | `TRAP` | keyword | Hidden spell that fires on an event | `SECRET` |
 | `TASK` | keyword | A spell that, played, waits in its player's trap zone in sight of both players while its hooks count toward a goal, then gives its reward (its scripts); one at a time, within `limits.secrets`; a deck's task cards start in the opening hand; not a trap (`g.traps` leaves it out, `g.tasks` lists it), never made at random (`g.collectible` leaves it out) | — (Journey to Un'Goro: `QUEST`) |
+| `LIFESTEAL` | keyword | The damage it deals also restores that much Health to its owner's champion, Armor's share and a hit on several targets (one heal each) too; a champion's weapon's when it attacks; healing that is damage (HEAL_IS_DAMAGE) hurts the champion once, without Lifesteal again. Silence takes it. Only in a pack that names it | — (Knights of the Frozen Throne: `LIFESTEAL`; Mistress of Pain, Wickerflame Burnbristle) |
 | `DORMANT` | keyword | A minion that only holds its place on the board: no target, attacker or defender, takes no damage, can't be destroyed, in no list of minions or characters (`g.minions`, `g.all_chars`, …); its own hooks still run, `g.transform` wakes it | — (Journey to Un'Goro: `UNTOUCHABLE`, Sherazin's seed, Nether Portal) |
 | `ON_PLAY` | hook | Effect when played from hand | `BATTLECRY` |
 | `ON_DEATH` | hook | Effect when it dies | `DEATHRATTLE` |
@@ -189,6 +190,7 @@ does not map is written as the engine id.
 | `DOUBLE_ON_PLAY` | state | Its owner's Battlecries (`ON_PLAY` hooks; not a Combo or a Choose One) run twice, on the same target, with no death phase between (aura tag on the champion, read as the Battlecry starts) | — (The League of Explorers: `DOUBLE_BATTLECRY`, Brann Bronzebeard) |
 | `BOTH_CHOICES` | state | Its owner's CHOICE cards have both effects: one play with `choice` 2, the first option's target (else the second's), then the card's `both` hook or the two options' effects in card order (aura tag on the champion) | — (Whispers of the Old Gods: `CHOOSE_BOTH`, Fandral Staghelm) |
 | `RANDOM_TARGETS` | state | Its owner's chosen targets become random ones: a card played, the power used and an attack go to a random one of their valid targets (an attack: any enemy character, past Taunt and Stealth; the chosen one may come again; logs `retarget`). An aura tag on the champion; only in a pack that names it | — (Mean Streets of Gadgetzan: `RANDOM_TARGETS`, Mayor Noggenfogger) |
+| `DOUBLE_TURN_END` | state | The `turn_end` hooks of its owner's entities (cards and enchantments; not the player hooks) run once more, at the end of either player's turn (an aura count on the champion). Only in a pack that names it | — (Knights of the Frozen Throne: `EXTRA_END_TURN_EFFECT`, Drakkari Enchanter) |
 | `PLAYED_COST` | state | The mana a card cost when it was played from the hand (Sorcerer's Apprentice, Preparation, Loatheb counted); written only by a pack that names it | — (Goblins vs Gnomes: `PLAYED_COST`, Gazlowe) |
 | `TASK_PROGRESS`, `TASK_GOAL` | state | A task's count and goal: its scripts keep them, clients show them ("2/4") and the bots weigh them | — (Journey to Un'Goro: `QUEST_PROGRESS`, `QUEST_PROGRESS_TOTAL`) |
 | `DIED_TURN` | state | The turn a minion died; written only by a pack that names it (a new tag would change Classic's recorded states) | — (Naxxramas: `DIED_TURN`, Kel'Thuzad) |
@@ -218,6 +220,13 @@ All in `rules.json` ([rules.md](rules.md)); their player names in
 - A **champion** is a card of type `CHAMPION` with `health` and a `power`: the id
   of a `POWER` card (its cost and hook are the power's). `default_power` in
   `rules.json` serves champions without one.
+- A **hero card** is a collectible `CHAMPION` of a mode's sets (Knights of the Frozen Throne's Death Knights): it goes
+  into decks and the Arena, and it is played from the hand for its `cost`. Played, its `play` event (kind `champion`)
+  comes first; then it becomes its player's champion in the old one's place: the Health and maximum Health stay, the
+  old champion's Armor, buffs, "this turn" tags and attacks made this turn stay (a new champion does not get its weapon
+  swing back), Frozen goes; it gains its `armor` (card field) and its `power` replaces the power (a fresh one, usable
+  this turn); then its Battlecry (`battlecry` hook, a Choose One's options, Brann Bronzebeard twice). The weapon, the
+  Secrets and the hand stay. The client shows its portrait, name and power on the table and the Armor on the card.
 - `races`: the tribe ids a minion may have (`race` in a card).
 - `rarities`: `{id, tier}`; `tier` is one of `common`, `rare`, `epic`,
   `legendary` (arena offers, frames). Cards without rarity count as

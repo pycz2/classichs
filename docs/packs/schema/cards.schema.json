@@ -19,6 +19,7 @@
       "attack": {"$ref": "#/$defs/n"},
       "health": {"$ref": "#/$defs/n"},
       "durability": {"$ref": "#/$defs/n"},
+      "armor": {"$ref": "#/$defs/n"},
       "race": {"$ref": "#/$defs/id"},
       "keywords": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
       "refs": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},

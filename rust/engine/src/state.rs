@@ -291,7 +291,7 @@ impl Game {
 
     pub fn hooks_of(&self, id: Id) -> &'static HookSet {
         let e = self.e(id);
-        if e.silenced { self.rs.hooks("") } else { &e.card.hooks }
+        if e.silenced { self.rs.hooks("") } else { e.hooks() }
     }
 
     // --- events and resolution --------------------------------------------------
@@ -335,10 +335,23 @@ impl Game {
             _ => Str::Borrowed(""),
         };
         let rs = self.rs;
+        // DOUBLE_TURN_END (an aura count on the champion: Drakkari Enchanter): the `turn_end` hooks of its owner's
+        // entities run that many more times, at the end of either player's turn (Gruul grows twice each turn)
+        let extra = |g: &Game, e: Id| -> usize {
+            match g.n().double_turn_end {
+                Some(t) if ty == "turn_end" => {
+                    vint(g.e(g.hero(g.ctrl(e))).aura.tags.get(t)).clamp(0, 10) as usize
+                }
+                _ => 0,
+            }
+        };
         for e in self.in_play() {
             let h = self.hooks_of(e);
+            let times = 1 + extra(self, e);
             if let Some(f) = h.on(&ty) {
-                self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: true });
+                for _ in 0..times {
+                    self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: true });
+                }
             }
             if let Some(s) = h.trap {
                 if s.event == ty {
@@ -347,7 +360,9 @@ impl Game {
             }
             for x in &self.entities[(e - 1) as usize].enchantments {
                 if let Some(f) = x.get("hooks").and_then(V::as_str).and_then(|h| rs.hooks(h).on(&ty)) {
-                    self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: true });
+                    for _ in 0..times {
+                        self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: true });
+                    }
                 }
             }
         }
@@ -364,7 +379,7 @@ impl Game {
             for p in 0..self.players.len() {
                 for k in 0..self.players[p].hand.len() {
                     let e = self.players[p].hand[k];
-                    if let Some(f) = self.e(e).card.hooks.hand(&ty) {
+                    if let Some(f) = self.e(e).hooks().hand(&ty) {
                         self.queue.push_back(QItem { f: Trigger::Hand(f), me: e, ev: Some(i), needs_in_play: false });
                     }
                     for x in &self.entities[(e - 1) as usize].enchantments {
@@ -378,7 +393,7 @@ impl Game {
             // Fist of Jaraxxus; no Classic card has one)
             if ty == "discard" {
                 let e = vint(self.event_log[i].get("entity"));
-                if let Some(f) = self.ent(e).and_then(|x| x.card.hooks.hand("discard")) {
+                if let Some(f) = self.ent(e).and_then(|x| x.hooks().hand("discard")) {
                     self.queue.push_back(QItem { f: Trigger::On(f), me: e, ev: Some(i), needs_in_play: false });
                 }
             }
@@ -610,7 +625,7 @@ impl Game {
             }
         }
         for (k, v) in tags {
-            if k == n.spell_power || k == n.power_multiplier || k == n.power_damage {
+            if k == n.spell_power || k == n.power_multiplier || k == n.power_damage || Some(k.as_ref()) == n.double_turn_end {
                 let n = vint(a.tags.get(&k)) + v.int();
                 a.tags.insert(k, n);
             } else {
@@ -626,6 +641,12 @@ impl Game {
     }
 
     pub fn damage(&mut self, src: Id, t: Id, amount: i64) -> i64 {
+        self.damage_from(src, t, amount, true)
+    }
+
+    /// `damage`; `steal`: a LIFESTEAL source heals its champion (not the damage a Lifesteal heal turned into: it
+    /// hurts the champion once, Auchenai Soulpriest in Knights of the Frozen Throne).
+    fn damage_from(&mut self, src: Id, t: Id, amount: i64, steal: bool) -> i64 {
         if !self.alive_in_play(t) || amount <= 0 || !self.awake(t) {
             return 0;
         }
@@ -638,9 +659,13 @@ impl Game {
         }
         if self.e(t).has(n.barrier) {
             self.em(t).erase_tag(n.barrier);
-            self.log_event(obj!{"type": "divine_shield_lost", "target": t});
+            // an event a pack's hooks may hear ("after a friendly minion loses Divine Shield": Bolvar, Fireblood); no
+            // older pack listens to it
+            self.emit(obj!{"type": "divine_shield_lost", "target": t});
             return 0;
         }
+        let dealt = amount; // Lifesteal heals what was dealt, Armor or not
+        let stealer = if steal { self.lifesteal_of(src) } else { None };
         if self.e(t).is_champion() {
             let armor = self.e(t).tag(n.armor);
             let absorbed = armor.min(amount);
@@ -648,6 +673,9 @@ impl Game {
             amount -= absorbed;
             if amount <= 0 {
                 self.log_event(obj!{"type": "armor_lost", "target": t, "amount": absorbed});
+                if let Some(p) = stealer {
+                    self.lifesteal_heal(src, p, dealt);
+                }
                 return 0;
             }
         }
@@ -665,7 +693,31 @@ impl Game {
         }
         let player = self.ctrl(t);
         self.emit(obj!{"type": "damage", "source": src, "target": t, "amount": amount, "player": player});
+        if let Some(p) = stealer {
+            self.lifesteal_heal(src, p, dealt);
+        }
         amount
+    }
+
+    /// The player whose champion src's damage heals (LIFESTEAL, a pack that names it): src has it, or src is a
+    /// champion attacking with a LIFESTEAL weapon on its turn.
+    fn lifesteal_of(&self, src: Id) -> Option<usize> {
+        let t = self.n().lifesteal?;
+        let s = self.ent(src)?;
+        let weapon = s.is_champion() && s.controller == self.current
+            && self.players[s.controller].weapon.is_some_and(|w| self.e(w).has(t));
+        (s.has(t) || weapon).then_some(s.controller)
+    }
+
+    /// A Lifesteal heal of p's champion by n from src; healing that is damage (HEAL_IS_DAMAGE: Auchenai Soulpriest)
+    /// hurts it, once.
+    fn lifesteal_heal(&mut self, src: Id, p: usize, n: i64) {
+        let h = self.hero(p);
+        if self.e(h).has(self.n().heal_is_damage) {
+            self.damage_from(src, h, n, false);
+        } else {
+            self.heal(src, h, n);
+        }
     }
 
     pub fn heal(&mut self, src: Id, t: Id, amount: i64) -> i64 {
@@ -847,7 +899,8 @@ impl Game {
         if x.controller == cur {
             x.set_tag(n.frozen_this_turn, true);
         }
-        self.log_event(obj!{"type": "freeze", "target": e});
+        // an event a pack's hooks may hear ("whenever another minion is Frozen": Moorabi); no older pack listens to it
+        self.emit(obj!{"type": "freeze", "target": e});
     }
 
     pub fn transform(&mut self, e: Id, card_id: &str) -> Id {
@@ -855,10 +908,11 @@ impl Game {
         let Some(i) = self.players[c].board.iter().position(|&x| x == e) else { return self.transform_card(e, card_id) };
         let n = self.new_entity(card_id, c);
         self.players[c].board[i] = n;
-        let (order, t) = (self.e(e).play_order, self.n().exhausted);
+        let (order, t, choice) = (self.e(e).play_order, self.n().exhausted, self.e(e).choice);
         let ne = self.em(n);
         ne.zone = "PLAY";
         ne.play_order = order;
+        ne.choice = choice; // the option it was played with (`g.choice`: Fatespinner becomes its in-play form)
         ne.give_tag(t, false);
         self.em(e).zone = "SETASIDE";
         self.emit(obj!{"type": "transform", "from": e, "to": n, "card": self.e(n).card_id});
@@ -987,6 +1041,14 @@ impl Game {
         if let Some(old) = self.players[c].weapon {
             self.em(old).zone = "GRAVEYARD";
             self.log_event(obj!{"type": "destroy", "target": old});
+            if self.rs.replaced_weapon_dies {
+                // destroyed as any other (behaviour.replaced_weapon_dies): its Deathrattle, the `death` event
+                for f in self.hooks_of(old).on_death.into_iter().chain(self.ench_deaths(old)) {
+                    self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: old, ev: None, needs_in_play: false });
+                }
+                let card = self.e(old).card_id;
+                self.emit(obj!{"type": "death", "entity": old, "player": c, "card": card, "minion": false});
+            }
         }
         self.players[c].weapon = Some(w);
         self.enter_play(w);
@@ -1190,7 +1252,9 @@ impl Game {
         let c = self.ctrl(e);
         let x = self.e(e);
         let card = x.card_id;
-        if !x.card.trap || !(x.zone == "HAND" || x.zone == "DECK") || !self.trap_room(c, card) {
+        // (a card made by `g.create`, set aside, too: "put a random Secret into the battlefield", Professor Putricide)
+        let made = x.zone == "SETASIDE" && x.created;
+        if !x.card.trap || !(x.zone == "HAND" || x.zone == "DECK" || made) || !self.trap_room(c, card) {
             return false;
         }
         let pl = &mut self.players[c];
@@ -1207,7 +1271,7 @@ impl Game {
         if self.e(me).auto_choice {
             // cast with random choices (g.cast_random): one option at random, at once
             let opt = self.random_choice(&options);
-            if let Some(f) = self.e(me).card.hooks.on_choose {
+            if let Some(f) = self.e(me).hooks().on_choose {
                 self.from(me, |g| g.fx_choose(f, me, opt, options));
             }
             return;
@@ -1264,7 +1328,7 @@ impl Game {
         }
         let x = self.e(e);
         let mut c = x.card.cost;
-        if let Some(f) = x.card.hooks.cost_mod {
+        if let Some(f) = x.hooks().cost_mod {
             c += self.fx_cost_mod(f, e);
         }
         for ench in &x.enchantments {
@@ -1300,7 +1364,7 @@ impl Game {
         }
         let x = self.e(e);
         let mut c = x.card.cost;
-        if let Some(f) = x.card.hooks.cost_mod {
+        if let Some(f) = x.hooks().cost_mod {
             c += self.fx_cost_mod(f, e);
         }
         let mut items: Vec<(i64, It)> = vec![];
@@ -1310,7 +1374,8 @@ impl Game {
         for &src in auras {
             let s = self.e(src);
             if s.zone == "PLAY" && self.hooks_of(src).cost_aura.is_some() {
-                items.push((if self.hooks_of(src).cost_first { i64::MIN } else { s.play_order }, It::Aura(src)));
+                let first = self.hooks_of(src).cost_first; // its rank among the ones before all others
+                items.push((if first > 0 { i64::MIN + first } else { s.play_order }, It::Aura(src)));
             }
         }
         for m in &self.players[x.controller].cost_mods {
@@ -1428,6 +1493,8 @@ impl Game {
         ne.give_tag(names.exhausted, false);
         ne.enchantments = src.enchantments;
         ne.damage = src.damage;
+        ne.borrowed = src.borrowed; // the hooks it borrowed (a Zombeast's first Beast's)
+        ne.choice = src.choice; // its Choose One option (`g.choice`: a copy of Fatespinner keeps its secret Deathrattle)
         n
     }
 

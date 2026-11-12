@@ -101,6 +101,10 @@ static var _double := RegEx.create_from_string("  +")
 static func raw(id: String, locale := "", args := []) -> String:
 	var t: Dictionary = CardDb.card(id).get("text", {})
 	var s: String = t.get(_loc(locale), t.get("enUS", ""))
+	if s.contains("@"):  # Hearthstone's text variants ("a@b@c": Fatespinner in play): the first, the one both players
+		# see, or the one args name ["@1"] (its Choose One option, which only its player knows)
+		var v := int(str(args[0]).substr(1)) if args.size() == 1 and str(args[0]).begins_with("@") else 0
+		s = s.get_slice("@", v if v < s.get_slice_count("@") else 0)
 	if not s.contains("{"):
 		return s
 	var out := ""

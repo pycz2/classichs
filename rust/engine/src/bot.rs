@@ -38,6 +38,14 @@ fn side(g: &Game, p: usize, own: bool) -> f64 {
     if let Some(w) = pl.weapon {
         v += 0.5 * g.e(w).atk() as f64 * g.e(w).tag(n.durability) as f64;
     }
+    if hero.card.armor > 0 {
+        // a hero card's champion: its better Hero Power for the rest of the game; its choice pending (Build-A-Beast,
+        // Plague Lord) is what is to come (no older pack has hero cards)
+        v += 5.0;
+        if own && g.pending.as_ref().is_some_and(|q| q.player == p && q.source == pl.hero_power) {
+            v += 3.0;
+        }
+    }
     if own {
         v += 1.0 * pl.hand.len() as f64 + g.rs.bot_trap * pl.secrets.len() as f64;
         v += g.task_value(p) + 8.0 * pl.extra_turns as f64; // a Quest in play, an extra turn owed (none in older packs)

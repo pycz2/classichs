@@ -186,11 +186,19 @@ def plan_card(cid, row, card_type):
     for f in files_of(row.get("BASIC play stinger"))[:1]:  # a legendary's play music (Pegasus_Stinger_…)
         out.append(("set", f"{cid}_music", f))
     if card_type == "HERO":
+        thinking = 0
         for f in files_of(row.get("VO")):
             m = re.match(r"VO_[A-Za-z0-9]+_[A-Za-z0-9]+_(.+?)_\d+\.wav$", f)
             if not m:
                 continue
             key = m.group(1).lower()
+            if key not in HERO_KINDS and not re.fullmatch(r"error\d\d", key):
+                # a hero card's lines (VO_JainaDeathknight_Female_Human_Greetings_01.wav): the last word; the
+                # Thinking lines in order
+                key = re.search(r"_([A-Za-z]+(?: [A-Za-z]+)?)_\d+\.wav$", f).group(1).lower()
+                if key == "thinking":
+                    thinking += 1
+                    key = f"thinking{thinking}"
             if re.fullmatch(r"error\d\d", key):
                 n = int(key[5:])
                 if 1 <= n <= len(ERRORS):

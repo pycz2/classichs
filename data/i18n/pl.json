@@ -881,5 +881,9 @@
 "Opponent's Extra Turn": "Dodatkowa tura przeciwnika",
 "Quest completed: %s": "Zadanie wykonane: %s",
 "You take an extra turn": "Rozgrywasz dodatkową turę",
-"Opponent takes an extra turn": "Przeciwnik rozgrywa dodatkową turę"
+"Opponent takes an extra turn": "Przeciwnik rozgrywa dodatkową turę",
+"%s is removed from your deck": "%s zostaje usunięta z twojej talii",
+"%s is removed from Opponent's deck": "%s zostaje usunięta z talii przeciwnika",
+"You steal %s": "Kradniesz kartę %s",
+"Opponent steals %s": "Przeciwnik kradnie kartę %s"
 }

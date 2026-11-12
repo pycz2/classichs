@@ -19,8 +19,8 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-const START_TAGS: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
-    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT"];
+const START_TAGS: [&str; 15] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
+    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL"];
 /// Engine ids of the tags Silence removes.
 const SILENCED: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
     "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
@@ -42,6 +42,8 @@ pub struct Card {
     pub attack: i64,
     pub health: i64,
     pub durability: i64,
+    /// CHAMPION: the Armor its player gains when it is played from the hand (a hero card).
+    pub armor: i64,
     /// MANA_LOCK amount.
     pub mana_lock: i64,
     /// SPELL_POWER amount.
@@ -98,6 +100,8 @@ struct PackCard {
     health: i64,
     #[serde(default)]
     durability: i64,
+    #[serde(default)]
+    armor: i64,
     #[serde(default)]
     race: String,
     #[serde(default)]
@@ -167,6 +171,11 @@ pub struct Names {
     pub dormant: Option<&'static str>,
     /// TASK: the trap zone's name of a task card in it (Un'Goro's Quests); only when the pack names it.
     pub task: Option<&'static str>,
+    /// LIFESTEAL: the damage it deals also heals its champion (a pack that names it: Knights of the Frozen Throne).
+    pub lifesteal: Option<&'static str>,
+    /// DOUBLE_TURN_END: its owner's "at the end of your turn" hooks run twice (an aura tag on the champion: Drakkari
+    /// Enchanter); only when the pack names it.
+    pub double_turn_end: Option<&'static str>,
     /// TASK_PROGRESS and TASK_GOAL: a task's count and goal (its scripts keep them; the bots read them).
     pub task_progress: Option<&'static str>,
     pub task_goal: Option<&'static str>,
@@ -236,10 +245,13 @@ impl Names {
             played_cost: by_engine.get("PLAYED_COST").copied(),
             dormant: by_engine.get("DORMANT").copied(),
             task: by_engine.get("TASK").copied(),
+            lifesteal: by_engine.get("LIFESTEAL").copied(),
+            double_turn_end: by_engine.get("DOUBLE_TURN_END").copied(),
             task_progress: by_engine.get("TASK_PROGRESS").copied(),
             task_goal: by_engine.get("TASK_GOAL").copied(),
             trap: n("TRAP"),
-            silenced: SILENCED.iter().map(|id| n(id)).collect(),
+            // LIFESTEAL only where the pack names it (no older pack's Silence looks for it)
+            silenced: SILENCED.iter().map(|id| n(id)).chain(by_engine.get("LIFESTEAL").copied()).collect(),
             by_engine: by_engine.clone(),
             engine_of,
             known: HashSet::new(),
@@ -345,6 +357,9 @@ pub struct Ruleset {
     /// auras by when their source came into play, cost mods when made), after its own `cost_mod` (Hearthstone until
     /// 2017: Naga Sea Witch, then Emperor Thaurissan: 4). Off: enchantments, then auras, then cost mods.
     pub cost_in_order: bool,
+    /// `behaviour.replaced_weapon_dies`: a weapon replaced by a new one is destroyed as any other (its Deathrattle, the
+    /// `death` event: hearthstone.wiki.gg, Weapon). Off: it is set aside to the graveyard without them.
+    pub replaced_weapon_dies: bool,
     /// `player_hooks`: a named hook set whose `on` hooks see every event once for each player (`me` is that player's
     /// champion): counts of the game ("spells you've cast this game"). None: no such hooks.
     pub player_hooks: Option<String>,
@@ -544,6 +559,7 @@ impl Ruleset {
             countered_no_after_spell: rules["behaviour"].get("countered_no_after_spell") == Some(&json!(true)),
             full_hand_return_dies: rules["behaviour"].get("full_hand_return_dies") == Some(&json!(true)),
             cost_in_order: rules["behaviour"].get("cost_in_order") == Some(&json!(true)),
+            replaced_weapon_dies: rules["behaviour"].get("replaced_weapon_dies") == Some(&json!(true)),
             player_hooks: rules.get("player_hooks").and_then(Value::as_str).map(String::from),
             bot_trap: i(&rules["bot"], "trap", 0) as f64,
             bot_depth: i(&rules["bot"], "depth", 1),
@@ -658,6 +674,7 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
         cost: c.cost,
         attack: c.attack,
         durability: c.durability,
+        armor: c.armor,
         mana_lock: c.mana_lock,
         spell_power: c.spell_power,
         turn_seconds: c.turn_seconds,
