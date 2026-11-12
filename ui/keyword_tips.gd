@@ -17,6 +17,12 @@ const ENCH_SOURCES := {"ench:corruption": "VAN_CS2_063", "ench:shadow_madness": 
 	"ench:headcrack": "VAN_EX1_137", "ench:commanding_shout": "VAN_NEW1_036", "ench:transcendence": "TU4f_006"}
 
 
+## Keywords whose box shows only when the card's text names them in bold: patch 11.0 (The Witchwood) took the word
+## Enrage off the cards' texts ("Has +3 Attack while damaged"), which keep the keyword for its damaged look. ponytail:
+## only Enrage; the other hook keywords keep their boxes (Fatespinner's Choose One, which its text does not name).
+const TEXT_ONLY := ["ENRAGED"]
+
+
 static func reset() -> void:
 	_data = {}
 
@@ -85,7 +91,7 @@ static func changes(e: GameView.Ent) -> Array:
 	var base: Array = e.card().get("mechanics", [])
 	var kw := _keywords()
 	var lang := TranslationServer.get_locale()
-	for k in ["TAUNT", "CHARGE", "DIVINE_SHIELD", "STEALTH", "WINDFURY", "IMMUNE", "LIFESTEAL", "POISONOUS"]:
+	for k in ["TAUNT", "CHARGE", "DIVINE_SHIELD", "STEALTH", "WINDFURY", "IMMUNE", "LIFESTEAL", "POISONOUS", "RUSH", "ECHO"]:
 		if e.has(k) and not base.has(k) and kw.has(k):
 			out.append(kw[k].name.get(lang, kw[k].name.en))
 	if e.has("FROZEN"):
@@ -117,7 +123,13 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 	var lines := changes(e)
 	if not lines.is_empty():
 		tips.add_child(_box("Changes", TranslationServer.translate("Changes"), "\n".join(lines), Color("dcefd2")))
-	for m in keywords_of(card_id):
+	var ms := keywords_of(card_id)
+	if e and e.has("ECHO") and not ms.has("ECHO"):  # (a hand card under Glinda Crowskin's aura)
+		ms.append("ECHO")
+	var en: String = str(CardDb.card(card_id).get("text", {}).get("enUS", "")) if CardDb.card(card_id).get("text") is Dictionary else ""
+	for m in ms:
+		if TEXT_ONLY.has(m) and kw.has(m) and not en.contains("<b>" + String(kw[m].name.en)):
+			continue
 		if kw.has(m):
 			tips.add_child(_box("Title" + m, kw[m].name.get(lang, kw[m].name.en), kw[m].text.get(lang, kw[m].text.en), Color("efe0bd")))
 	var related := CardDb.related(card_id)

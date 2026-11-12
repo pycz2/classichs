@@ -163,6 +163,7 @@ does not map is written as the engine id.
 | `SPELLPROOF` | keyword | Can't be targeted by spells and powers | `ELUSIVE` |
 | `FOE_SPELLPROOF` | keyword | Can't be targeted by the opponent's spells and powers (its own player's can). Silence takes it. Only in a pack that names it | — (Kobolds & Catacombs: `CANT_BE_TARGETED_BY_OPPONENTS`, Shimmering Courser) |
 | `CANT_ATTACK` | keyword | Can't attack | `CANT_ATTACK` |
+| `QUICK` | keyword | Can attack minions (not champions) the turn it comes into play or under a new player's control (with `HASTE`: anything); Silence takes it. Only in a pack that names it | — (The Witchwood: `RUSH`) |
 | `CANT_ATTACK_HEROES` | keyword | Can attack only minions (a forced redirect still may hit a champion) | — (The Grand Tournament: `CANNOT_ATTACK_HEROES`, Icehowl); a weapon's keeps its champion off champions too |
 | `UNLIMITED_ATTACKS` | keyword | Any number of attacks a turn; a weapon's: its champion's (One Night in Karazhan: Fool's Bane) | — (One Night in Karazhan: `UNLIMITED_ATTACKS`) |
 | `IMMUNE` | keyword | Takes no damage | `IMMUNE` |
@@ -183,12 +184,15 @@ does not map is written as the engine id.
 | `GROWING_SUMMON` | marker | The card summons a token that grows each time its player summons one (its hook; the count `g.add_count`) | — (Mean Streets of Gadgetzan: `JADE_GOLEM`) |
 | `ADAPT` | marker | The card offers its player three of a list of upgrades for minions (its hook; only that player sees them) | — (Journey to Un'Goro: `ADAPT`) |
 | `SUMMON_FROM_DECK` | marker | The card summons a random matching minion of its player's deck at the right end (its hook: `g.summon_entity`; no Battlecry) | — (Kobolds & Catacombs: `RECRUIT`) |
+| `REPEATABLE` | marker | Played from the hand, the card gives its player a new copy of itself that goes away at the end of the turn (the pack's player hooks; the copy is `GHOSTLY`) | — (The Witchwood: `ECHO`) |
+| `AT_GAME_START` | marker | The card does something from its player's deck when the game starts (the pack's player hooks: `game_start`) | — (The Witchwood: `START_OF_GAME`; Prince Malchezaar since patch 11.0) |
 | `CAST_WHEN_DRAWN` | marker | The card casts itself when its player draws it (its `hand.draw` hook), then that player draws another | — (Kobolds & Catacombs: `TOPDECK`) |
 | `OFFER` | marker | The card offers its player a choice of cards (`g.create`, `g.request_choice`: only that player sees them) | — (The League of Explorers: `DISCOVER`) |
 | `AURA`, `TRIGGER`, `ADJACENT` | marker | Client hints | `AURA`, `TRIGGER_VISUAL`, `ADJACENT_BUFF` |
 | `SPELL_SCALED`, `NO_SPELL_POWER` | marker | Spell power changes / does not change its numbers | `AFFECTED_BY_SPELL_POWER`, `ImmuneToSpellpower` |
 | `FROZEN`, `FROZEN_THIS_TURN`, `EXHAUSTED`, `ATTACKS`, `ARMOR`, `DURABILITY`, `USED`, `LOCKED`, `GUARDED`, `TO_DESTROY`, `DIED_POS`, `HEAL_IS_DAMAGE` | state | Tags the engine sets during a game | same |
 | `POWER_MULTIPLIER` | state | Doubles spell and power damage and healing (aura tag) | `DOUBLE_HEAL_DAMAGE` |
+| `POWER_DOUBLE` | state | Doubles its owner's power damage and healing (not spells'), once per count (aura tag on the champion; `g.hp_dmg`, `g.heal_amt`). Only in a pack that names it | — (The Witchwood: `HERO_POWER_DOUBLE`, Clockwork Automaton) |
 | `DOUBLE_ON_DEATH` | state | Its owner's minions run their death hooks twice (aura tag on the champion; not while its source dies with them) | — (Naxxramas: `DOUBLE_DEATHRATTLE`, Baron Rivendare) |
 | `DOUBLE_ON_PLAY` | state | Its owner's Battlecries (`ON_PLAY` hooks; not a Combo or a Choose One) run twice, on the same target, with no death phase between (aura tag on the champion, or the champion's own tag a script gives, read as the Battlecry starts) | — (The League of Explorers: `DOUBLE_BATTLECRY`, Brann Bronzebeard; Kobolds & Catacombs: Murmuring Elemental's own tag for its player's next Battlecry this turn) |
 | `BOTH_CHOICES` | state | Its owner's CHOICE cards have both effects: one play with `choice` 2, the first option's target (else the second's), then the card's `both` hook or the two options' effects in card order (aura tag on the champion) | — (Whispers of the Old Gods: `CHOOSE_BOTH`, Fandral Staghelm) |

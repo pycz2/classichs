@@ -47,7 +47,7 @@ func _animated() -> bool:
 
 
 func _sleeping() -> bool:
-	return s.has("EXHAUSTED") and not s.has("CHARGE") and s.controller == _current
+	return s.has("EXHAUSTED") and not s.has("CHARGE") and not s.has("RUSH") and s.controller == _current  # (Rush: it may attack minions)
 
 
 func _process(delta: float) -> void:

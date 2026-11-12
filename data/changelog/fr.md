@@ -5,7 +5,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 ## [Unreleased]
 
 ### Ajouté
-- **Onze nouveaux jeux, les extensions après Naxxramas.** Chacun contient toutes les cartes des jeux précédents (De base, Classique, Naxxramas et ainsi de suite dans l’ordre), et chaque carte est telle qu’au jour de sortie de l’extension : coût, caractéristiques, type, textes en 8 langues. Chaque jeu a ses modèles de decks de la méta de l’époque (10 à 17), des bots qui y jouent, son propre style et un symbole d’extension.
+- **Onze nouveaux jeux, les extensions après Naxxramas.** Chacun contient toutes les cartes des jeux précédents (De base, Classique, Naxxramas et ainsi de suite dans l’ordre), et chaque carte est telle qu’au jour de sortie de l’extension : coût, caractéristiques, type, textes en 8 langues. Chaque jeu a ses modèles de decks de la méta de l’époque (10 à 19), des bots qui y jouent, son propre style et un symbole d’extension.
 - Gobelins et Gnomes 2014 (cartes au 8 décembre 2014) : Méca, pièces détachées, Méga-furie des vents, Tête de Mimiron.
 - Mont Rochenoire 2015 (2 avril 2015) : Dragons et cartes « si vous avez un Dragon en main », Empereur Thaurissan, Nefarian.
 - Le Grand Tournoi 2015 (24 août 2015) : Exaltation, Joutes, pouvoirs héroïques améliorés.

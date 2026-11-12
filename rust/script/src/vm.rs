@@ -1384,12 +1384,23 @@ fn eval_table<H: Host>(h: &mut H, fr: &Frame, fields: &[Field]) -> R<Value> {
     Ok(t)
 }
 
+/// `==`: raw equality, and `crate::EVERY` equals every non-empty string.
+fn same(x: &Value, y: &Value) -> bool {
+    match (x, y) {
+        (Value::Str(a), Value::Str(b)) => {
+            let every = |s: &[u8], o: &[u8]| s == crate::EVERY.as_bytes() && !o.is_empty();
+            a == b || every(a, b) || every(b, a)
+        }
+        _ => x == y,
+    }
+}
+
 #[inline(never)]
 fn binary<H>(vm: &mut Vm<H>, fr: &Frame, op: Bin, x: Value, y: Value, b: &(Expr, Expr)) -> R<Value> {
     use Value::Int;
     Ok(match (op, &x, &y) {
-        (Bin::Eq, ..) => Value::Bool(x == y),
-        (Bin::Ne, ..) => Value::Bool(x != y),
+        (Bin::Eq, ..) => Value::Bool(same(&x, &y)),
+        (Bin::Ne, ..) => Value::Bool(!same(&x, &y)),
         (Bin::Add, Int(a), Int(c)) => Int(a.checked_add(*c).ok_or_else(|| overflow(vm, op))?),
         (Bin::Sub, Int(a), Int(c)) => Int(a.checked_sub(*c).ok_or_else(|| overflow(vm, op))?),
         (Bin::Mul, Int(a), Int(c)) => Int(a.checked_mul(*c).ok_or_else(|| overflow(vm, op))?),

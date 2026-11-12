@@ -1,0 +1,33 @@
+{
+ "sets": {
+  "GILNEAS": "Wiedźmi Las"
+ },
+ "races": {
+  "ALL": "Wszystkie"
+ },
+ "mechanics": {
+  "RUSH": {
+   "name": "Zryw",
+   "tip": "Może od razu atakować stronników."
+  },
+  "ECHO": {
+   "name": "Echo",
+   "tip": "Można zagrać ponownie w tej turze."
+  },
+  "START_OF_GAME": {
+   "name": "Początek gry",
+   "tip": "Działa na początku gry, prosto z talii."
+  }
+ },
+ "cards": {
+  "VAN_EX1_302": {
+   "text": "Zadaj $1 pkt. obrażeń stronnikowi. Jeśli zginie, dobierz kartę."
+  },
+  "VAN_EX1_320": {
+   "text": "Zadaj $2 pkt. obrażeń dowolnej postaci. Jeśli zginie, przyzwij losowego Demona."
+  },
+  "VAN_EX1_595": {
+   "text": "Gdy zginie przyjazny stronnik, dobierz kartę."
+  }
+ }
+}

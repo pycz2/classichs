@@ -896,5 +896,10 @@
 "Opponent reveals %s": "El oponente revela %s",
 "%s awakens": "%s despierta",
 "%s is removed from your hand": "%s se retira de tu mano",
-"%s is removed from Opponent's hand": "%s se retira de la mano del oponente"
+"%s is removed from Opponent's hand": "%s se retira de la mano del oponente",
+"%s fades from your hand": "%s desaparece de tu mano",
+"%s fades from Opponent's hand": "%s desaparece de la mano del oponente",
+"Start of Game: your %s": "Inicio de partida: tu carta %s",
+"Start of Game: Opponent's %s": "Inicio de partida: %s del oponente",
+"%s repeats the Battlecry of %s": "%s repite el Grito de batalla de %s"
 }

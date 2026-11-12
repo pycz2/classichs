@@ -1,0 +1,27 @@
+{
+ "sets": {
+  "GILNEAS": "The Witchwood"
+ },
+ "races": {
+  "ALL": "All"
+ },
+ "mechanics": {
+  "RUSH": {
+   "name": "Rush",
+   "tip": "Can attack minions immediately."
+  },
+  "ECHO": {
+   "name": "Echo",
+   "tip": "Repeatable this turn."
+  },
+  "START_OF_GAME": {
+   "name": "Start of Game",
+   "tip": "Happens when the game starts, from your deck."
+  }
+ },
+ "cards": {
+  "VAN_EX1_595": {
+   "text": "After a friendly minion dies, draw a card."
+  }
+ }
+}

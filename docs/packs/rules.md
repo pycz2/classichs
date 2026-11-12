@@ -80,6 +80,13 @@ The name of a hook set of the pack's scripts (`"player:og"`) whose `on` hooks se
 you've cast this game", "Totems you've summoned this game"; `g.add_count`, `g.count`), and what happens "when the game
 starts" (an `on.game_start` hook: after the mulligan, before the coin; api.md, events). Optional; none in Classic.
 
+## `every_race`
+
+A race (of `races`) that is every race: a card of it counts as a Beast, a Murloc, a Pirate… for every script (`g.race`
+and `g.info(card).race` give a value `==` to every race name, not to `""`; a cost mod of a race applies to it). Optional;
+The Witchwood names `ALL` (Nightmare Amalgam: "This is an Elemental, Mech, Demon, Murloc, Dragon, Beast, Pirate and
+Totem").
+
 ## `timers` (seconds)
 
 | Field | Classic | Meaning |

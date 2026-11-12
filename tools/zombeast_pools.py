@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """The Beasts Deathstalker Rexxar's Build-A-Beast offers (Knights of the Frozen Throne), written into
-packs/icc/scripts/icc.lua between `-- @@ZOMBEAST_POOLS@@` and `-- @@END@@`.
+packs/icc/scripts/icc.lua between `-- @@ZOMBEAST_POOLS@@` and `-- @@END@@` (packs/gil: scripts/gil.lua, the Beasts of
+Kobolds & Catacombs and The Witchwood too since patch 11.0.0.23966).
 
 hearthstone.wiki.gg (Deathstalker Rexxar, Notes): the collectible Hunter and neutral Beasts of 5 Mana or less; the
 first Discover offers the ones with card text (an effect), the second the ones with only keywords or no text; a Beast with
 both a keyword and an effect is in neither. The Beasts of the pack's constructed sets (the cards as the built pack has them,
-English text of that day). Usage: python3 tools/zombeast_pools.py [packs/icc]"""
+English text of that day). Usage: python3 tools/zombeast_pools.py [packs/icc | packs/gil]"""
 import json
 import pathlib
 import re
@@ -18,7 +19,7 @@ import pack  # noqa: E402
 KEYWORD_TEXT = {"TAUNT": r"<b>Taunt</b>", "CHARGE": r"<b>Charge</b>", "STEALTH": r"<b>Stealth</b>",
                 "WINDFURY": r"<b>Windfury</b>", "DIVINE_SHIELD": r"<b>Divine Shield</b>", "POISONOUS": r"<b>Poisonous</b>",
                 "LIFESTEAL": r"<b>Lifesteal</b>", "ELUSIVE": r"Can't be targeted by spells or Hero Powers\.",
-                "SPELLPOWER": r"<b>Spell Damage \+\d</b>"}
+                "SPELLPOWER": r"<b>Spell Damage \+\d</b>", "RUSH": r"<b>Rush</b>", "ECHO": r"<b>Echo</b>"}
 
 
 def kind(text, keywords):
@@ -72,7 +73,7 @@ def lua_list(name, ids):
 def main():
     src = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "packs/icc")
     first, second = pools(src)
-    lua = src / "scripts" / "icc.lua"
+    lua = src / "scripts" / f"{src.name}.lua"
     text = lua.read_text()
     a, b = text.index("-- @@ZOMBEAST_POOLS@@\n"), text.index("-- @@END@@")
     block = "-- @@ZOMBEAST_POOLS@@\n" + lua_list("ZOMBEAST_FIRST", first) + "\n" + lua_list("ZOMBEAST_SECOND", second) + "\n"

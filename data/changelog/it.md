@@ -5,7 +5,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 ## [Unreleased]
 
 ### Aggiunto
-- **Undici nuovi giochi, le espansioni dopo Naxxramas.** Ognuno ha tutte le carte dei giochi precedenti (Base, Classiche, Naxxramas e i successivi in ordine), e ogni carta è com’era il giorno dell’uscita dell’espansione: costo, statistiche, razza, testi in 8 lingue. Ogni gioco ha i suoi modelli di mazzo della meta di allora (da 10 a 17), bot che lo giocano, un aspetto proprio e un simbolo dell’espansione.
+- **Undici nuovi giochi, le espansioni dopo Naxxramas.** Ognuno ha tutte le carte dei giochi precedenti (Base, Classiche, Naxxramas e i successivi in ordine), e ogni carta è com’era il giorno dell’uscita dell’espansione: costo, statistiche, razza, testi in 8 lingue. Ogni gioco ha i suoi modelli di mazzo della meta di allora (da 10 a 19), bot che lo giocano, un aspetto proprio e un simbolo dell’espansione.
 - Goblin vs Gnomi 2014 (carte all’8 dicembre 2014): Robot, pezzi di ricambio, Mega Furia del Vento, Testa di Mimiron.
 - Massiccio Roccianera 2015 (2 aprile 2015): Draghi e carte «se hai un Drago in mano», Thaurissan, Nefarian.
 - Il Gran Torneo 2015 (24 agosto 2015): Ispirazione, Giostre, Poteri Eroe migliorati.

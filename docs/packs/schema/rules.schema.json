@@ -44,6 +44,7 @@
       }
     },
     "player_hooks": {"type": "string", "pattern": "^[A-Za-z0-9_:.-]{1,64}$"},
+    "every_race": {"type": "string", "pattern": "^[A-Z_]{1,32}$"},
     "behaviour": {
       "type": "object",
       "additionalProperties": false,

@@ -771,7 +771,7 @@ func _track_hand_hover() -> void:
 		if e:  # beside where the raised card ends up
 			var i := hand.find(e)
 			var f: Dictionary = TableLayout.hand(hand.size(), true, i)[i]
-			_show_tips(e.card_id, Rect2(f.pos, CardView.SIZE * f.scale))
+			_show_tips(e.card_id, Rect2(f.pos, CardView.SIZE * f.scale), e)  # (with what changed on it: Echo by an aura)
 		elif _tooltip == null:
 			_show_tips("", Rect2())
 
@@ -1814,8 +1814,13 @@ static func steps(events: Array, aimed := -1) -> Array:
 				k = "secret"
 			"cast_when_drawn":  # from the deck to where played cards show, for both players, as a spell played
 				k = "topdeck"
-			"reveal":  # a deck's card shown to both players, staying where it is (Seeping Oozeling, Dragon's Fury)
-				k = "reveal"
+			"reveal", "start_of_game":  # a deck's card shown to both players, staying where it is (Seeping Oozeling,
+				k = "reveal"  # Dragon's Fury; Baku the Mooneater and Genn Greymane as the game starts)
+			"battlecry":  # a Battlecry repeated (Shudderwock): its card shows for a moment, an arrow to its target
+				k = "replay"
+			"faded":  # Echo copies go away at the end of the turn, together
+				k = "fade"
+				j = _run(events, i, func(e): return e.type == "faded")
 			"joust":
 				k = "joust"
 			"after_spell":
@@ -1854,6 +1859,8 @@ static func steps(events: Array, aimed := -1) -> Array:
 					aims[ev.entity] = ev.target
 				else:
 					out.append({"k": "aim", "src": ev.entity, "to": ev.target, "evs": [], "at": i})
+		if k == "replay" and int(ev.get("target", -1)) >= 0:
+			out.append({"k": "aim", "src": ev.entity, "to": ev.target, "evs": [], "at": i})
 		if k == "summon":
 			for e in st.evs:
 				if aims.has(e.entity):
@@ -2029,6 +2036,15 @@ func _play_step(st: Dictionary) -> void:
 			if str(ev.card) != "":
 				await _reveal(ev.card)  # (the card itself shows big: no hint over the board; a Quest fulfilled; a deck's card shown)
 			_step_apply(st)
+		"replay":
+			await _reveal(ev.card, 0.3)
+			_step_apply(st)
+		"fade":  # the copies turn violet and fade out of the hand
+			for e in st.evs:
+				if _views.has(e.entity):
+					_views[e.entity].modulate = Color(CardView.ECHO, _views[e.entity].modulate.a)
+			_step_apply(st)
+			await _wait(0.45)
 		"joust":
 			await _joust(ev)
 			_step_apply(st)
@@ -2077,7 +2093,7 @@ func _step_apply(st: Dictionary) -> Dictionary:
 		return before
 	for ev in st.evs:
 		match ev.type:
-			"play", "discard":
+			"play", "discard", "faded":
 				_stage.hand[ev.player].erase(ev.entity)
 				moved = true
 			"summon":
@@ -2803,7 +2819,7 @@ func _pulse(id: int) -> void:
 
 ## A revealed Secret shows big for a moment where played cards show (the middle of the table
 ## stays clear: an attack may wait there half-way).
-func _reveal(card_id: String) -> void:
+func _reveal(card_id: String, hold := 0.8) -> void:
 	var cv := CardView.make(card_id, 1.4)
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	cv.position = SHOW_AT - cv.size / 2.0
@@ -2812,10 +2828,10 @@ func _reveal(card_id: String) -> void:
 	_fx.add_child(cv)
 	var tw := cv.create_tween()
 	tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.2)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tw.tween_interval(Anim.d(0.8))
+	tw.tween_interval(Anim.d(hold))
 	tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
 	tw.tween_callback(cv.queue_free)
-	await _wait(0.9)
+	await _wait(hold + 0.1)
 
 
 ## A Joust: the minion revealed from each deck side by side (the one who jousts on the left); the loser's darkens.

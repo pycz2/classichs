@@ -1,0 +1,30 @@
+{
+ "sets": {
+  "GILNEAS": "El Bosque Embrujado"
+ },
+ "races": {
+  "ALL": "Todos"
+ },
+ "mechanics": {
+  "RUSH": {
+   "name": "Embestir",
+   "tip": "Puede atacar a esbirros de inmediato."
+  },
+  "ECHO": {
+   "name": "Eco",
+   "tip": "Se puede volver a jugar este turno."
+  },
+  "START_OF_GAME": {
+   "name": "Inicio de partida",
+   "tip": "Se activa al inicio de la partida, desde tu mazo."
+  }
+ },
+ "cards": {
+  "VAN_EX1_304": {
+   "name": "Terror del Vacío"
+  },
+  "VAN_EX1_595": {
+   "text": "Cuando muere un esbirro amistoso, roba una carta."
+  }
+ }
+}
