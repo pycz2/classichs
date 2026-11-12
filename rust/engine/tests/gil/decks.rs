@@ -2,28 +2,7 @@
 //! end with no script error; the bots play the set's cards, Echo copies, Baku's and Genn's Start of Game. Needs
 //! python3 (skipped without it).
 
-use classichs_engine::ruleset::{self, Ruleset};
-use classichs_engine::{bot, pack, Game};
-use serde_json::Value;
-use std::path::PathBuf;
-use std::sync::OnceLock;
-
-fn repo() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
-}
-
-/// The pack, built once (its recipe needs tools/pack.py); None without python3.
-fn rs() -> Option<&'static Ruleset> {
-    static R: OnceLock<Option<&'static Ruleset>> = OnceLock::new();
-    *R.get_or_init(|| {
-        let out = std::env::temp_dir().join(format!("gil-decks-{}.cardpack", std::process::id()));
-        let build = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", "packs/gil", "-o"]).arg(&out).output().ok()?;
-        assert!(build.status.success(), "pack.py build: {}", String::from_utf8_lossy(&build.stdout));
-        let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
-        let _ = std::fs::remove_file(&out);
-        Some(ruleset::load(&files).expect("the built pack loads"))
-    })
-}
+use super::*;
 
 #[test]
 fn deck_templates_play_bot_games() {

@@ -8,7 +8,7 @@
 
 use classichs_engine::entity::{int, Id};
 use classichs_engine::ruleset::{self, Ruleset};
-use classichs_engine::{api, bot, pack, scenario, Game};
+use classichs_engine::{bot, pack, scenario, Game};
 use serde_json::{json, Map, Value};
 use std::path::PathBuf;
 use std::sync::OnceLock;
@@ -288,3 +288,18 @@ fn stand_against_darkness_needs_room_since_patch_11() {
     t.play("OG_273", NONE);
     assert_eq!(t.cards(0).len(), 7);
 }
+
+// --- the cards, by group ------------------------------------------------------------------------------------
+
+#[path = "gil/dhm.rs"]
+mod dhm;
+#[path = "gil/ppr.rs"]
+mod ppr;
+#[path = "gil/ssw.rs"]
+mod ssw;
+#[path = "gil/n1.rs"]
+mod n1;
+#[path = "gil/n2.rs"]
+mod n2;
+#[path = "gil/decks.rs"]
+mod decks;

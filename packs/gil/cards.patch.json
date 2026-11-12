@@ -1,28 +1,726 @@
 {
- "VAN_EX1_620": {
-  "cost": 20
- },
- "LOOT_149": {
-  "attack": 2
- },
- "CFM_637": {
-  "keywords": null
+ "AT_051": {
+  "keywords": [
+   "OVERLOAD"
+  ]
  },
  "CFM_020": {
   "script": "scripts/gil.lua#CFM_020"
  },
+ "CFM_637": {
+  "keywords": null
+ },
+ "GIL_116": {
+  "script": "scripts/gil_dhm.lua#GIL_116",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_117": {
+  "script": "scripts/gil_n2.lua#GIL_117"
+ },
+ "GIL_118": {
+  "script": "scripts/gil_n2.lua#GIL_118",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "GIL_119": {
+  "script": "scripts/gil_n2.lua#GIL_119"
+ },
+ "GIL_124": {
+  "script": "scripts/gil_n2.lua#GIL_124",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_125": {
+  "script": "scripts/gil_n1.lua#GIL_125",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_128": {
+  "script": "scripts/gil_dhm.lua#GIL_128",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_130": {
+  "script": "scripts/gil_dhm.lua#GIL_130",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_134": {
+  "script": "scripts/gil_ppr.lua#GIL_134",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "GIL_142": {
+  "script": "scripts/gil_ppr.lua#GIL_142"
+ },
+ "GIL_145": {
+  "script": "scripts/gil_ppr.lua#GIL_145",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "GIL_147": {
+  "script": "scripts/gil_dhm.lua#GIL_147",
+  "fx": {
+   "element": "fire",
+   "cast": "missiles",
+   "hit": "hurt"
+  }
+ },
+ "GIL_152": {
+  "script": "scripts/gil_ssw.lua#GIL_152"
+ },
+ "GIL_155": {
+  "script": "scripts/gil_ssw.lua#GIL_155"
+ },
+ "GIL_156": {
+  "script": "scripts/gil_ppr.lua#GIL_156"
+ },
+ "GIL_188": {
+  "script": "scripts/gil_dhm.lua#GIL_188"
+ },
+ "GIL_188a": {
+  "script": "scripts/gil_dhm.lua#GIL_188a",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "smoke"
+  }
+ },
+ "GIL_188b": {
+  "script": "scripts/gil_dhm.lua#GIL_188b",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "smoke"
+  }
+ },
+ "GIL_190": {
+  "script": "scripts/gil_ppr.lua#GIL_190"
+ },
+ "GIL_191": {
+  "script": "scripts/gil_ssw.lua#GIL_191",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "GIL_198": {
+  "script": "scripts/gil_n2.lua#GIL_198",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_200": {
+  "script": "scripts/gil_dhm.lua#GIL_200"
+ },
+ "GIL_200t": {
+  "script": "scripts/gil_dhm.lua#GIL_200t"
+ },
+ "GIL_201": {
+  "script": "scripts/gil_n1.lua#GIL_201"
+ },
+ "GIL_201t": {
+  "script": "scripts/gil_n1.lua#GIL_201t"
+ },
+ "GIL_202": {
+  "script": "scripts/gil_n2.lua#GIL_202"
+ },
+ "GIL_202t": {
+  "script": "scripts/gil_n2.lua#GIL_202t"
+ },
+ "GIL_203": {
+  "script": "scripts/gil_ppr.lua#GIL_203",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "GIL_212": {
+  "script": "scripts/gil_n1.lua#GIL_212",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_213": {
+  "script": "scripts/gil_n1.lua#GIL_213",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_504": {
+  "script": "scripts/gil_ssw.lua#GIL_504",
+  "fx": {
+   "play": "battlecry"
+  },
+  "armor": 5,
+  "power": "GIL_504h"
+ },
+ "GIL_504h": {
+  "script": "scripts/gil_ssw.lua#GIL_504h"
+ },
+ "GIL_506": {
+  "script": "scripts/gil_ppr.lua#GIL_506",
+  "fx": {
+   "element": "steel",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "GIL_507": {
+  "script": "scripts/gil_dhm.lua#GIL_507",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_508": {
+  "script": "scripts/gil_ssw.lua#GIL_508",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_510": {
+  "script": "scripts/gil_ppr.lua#GIL_510"
+ },
+ "GIL_513": {
+  "script": "scripts/gil_n1.lua#GIL_513"
+ },
+ "GIL_515": {
+  "script": "scripts/gil_ssw.lua#GIL_515",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_518": {
+  "script": "scripts/gil_dhm.lua#GIL_518",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "GIL_526": {
+  "script": "scripts/gil_n2.lua#GIL_526",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_528": {
+  "script": "scripts/gil_n1.lua#GIL_528"
+ },
+ "GIL_528t": {
+  "script": "scripts/gil_n1.lua#GIL_528t"
+ },
+ "GIL_529": {
+  "script": "scripts/gil_n1.lua#GIL_529"
+ },
+ "GIL_529t": {
+  "script": "scripts/gil_n1.lua#GIL_529t"
+ },
+ "GIL_530": {
+  "script": "scripts/gil_ssw.lua#GIL_530",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_531": {
+  "script": "scripts/gil_ssw.lua#GIL_531",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_534": {
+  "script": "scripts/gil_n1.lua#GIL_534"
+ },
+ "GIL_537": {
+  "script": "scripts/gil_ssw.lua#GIL_537",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "GIL_543": {
+  "script": "scripts/gil_ssw.lua#GIL_543",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "GIL_547": {
+  "script": "scripts/gil_ssw.lua#GIL_547"
+ },
+ "GIL_548": {
+  "script": "scripts/gil_dhm.lua#GIL_548",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "GIL_549": {
+  "script": "scripts/gil_dhm.lua#GIL_549",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_553": {
+  "script": "scripts/gil_dhm.lua#GIL_553",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "GIL_557": {
+  "script": "scripts/gil_ppr.lua#GIL_557"
+ },
+ "GIL_561": {
+  "script": "scripts/gil_n1.lua#GIL_561",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_565": {
+  "script": "scripts/gil_ssw.lua#GIL_565",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_571": {
+  "script": "scripts/gil_dhm.lua#GIL_571",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "GIL_577": {
+  "script": "scripts/gil_dhm.lua#GIL_577",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "GIL_578": {
+  "script": "scripts/gil_n2.lua#GIL_578",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_580": {
+  "script": "scripts/gil_ssw.lua#GIL_580",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_581": {
+  "script": "scripts/gil_n1.lua#GIL_581",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_583": {
+  "script": "scripts/gil_ssw.lua#GIL_583",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_584": {
+  "script": "scripts/gil_n1.lua#GIL_584",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_586": {
+  "script": "scripts/gil_ssw.lua#GIL_586",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "GIL_596": {
+  "script": "scripts/gil_ppr.lua#GIL_596"
+ },
+ "GIL_598": {
+  "script": "scripts/gil_ppr.lua#GIL_598",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_600": {
+  "script": "scripts/gil_ssw.lua#GIL_600",
+  "fx": {
+   "element": "lightning",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "GIL_601": {
+  "script": "scripts/gil_n1.lua#GIL_601",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_607": {
+  "script": "scripts/gil_dhm.lua#GIL_607"
+ },
+ "GIL_608": {
+  "script": "scripts/gil_ssw.lua#GIL_608"
+ },
+ "GIL_614": {
+  "script": "scripts/gil_n1.lua#GIL_614",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_616": {
+  "script": "scripts/gil_n2.lua#GIL_616",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "GIL_616t": {
+  "script": "scripts/gil_n2.lua#GIL_616t",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "GIL_618": {
+  "script": "scripts/gil_ssw.lua#GIL_618"
+ },
+ "GIL_620": {
+  "script": "scripts/gil_n2.lua#GIL_620"
+ },
+ "GIL_622": {
+  "script": "scripts/gil_n1.lua#GIL_622",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_623": {
+  "script": "scripts/gil_n2.lua#GIL_623",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_624": {
+  "script": "scripts/gil_n1.lua#GIL_624",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_634": {
+  "script": "scripts/gil_ppr.lua#GIL_634",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_635": {
+  "script": "scripts/gil_ppr.lua#GIL_635",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_637": {
+  "script": "scripts/gil_dhm.lua#GIL_637",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "armor"
+  }
+ },
+ "GIL_640": {
+  "script": "scripts/gil_dhm.lua#GIL_640"
+ },
+ "GIL_645": {
+  "script": "scripts/gil_dhm.lua#GIL_645",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_646": {
+  "script": "scripts/gil_n2.lua#GIL_646"
+ },
+ "GIL_648": {
+  "script": "scripts/gil_n2.lua#GIL_648",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_650": {
+  "script": "scripts/gil_dhm.lua#GIL_650"
+ },
+ "GIL_653": {
+  "script": "scripts/gil_ssw.lua#GIL_653"
+ },
+ "GIL_654": {
+  "script": "scripts/gil_ssw.lua#GIL_654",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "GIL_655": {
+  "script": "scripts/gil_ssw.lua#GIL_655"
+ },
+ "GIL_658": {
+  "script": "scripts/gil_dhm.lua#GIL_658",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_661": {
+  "script": "scripts/gil_ppr.lua#GIL_661",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "heal"
+  }
+ },
+ "GIL_663": {
+  "script": "scripts/gil_dhm.lua#GIL_663",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "GIL_664": {
+  "script": "scripts/gil_dhm.lua#GIL_664"
+ },
+ "GIL_665": {
+  "script": "scripts/gil_ssw.lua#GIL_665",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "debuff"
+  }
+ },
+ "GIL_667": {
+  "script": "scripts/gil_n2.lua#GIL_667",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "GIL_672": {
+  "script": "scripts/gil_ppr.lua#GIL_672"
+ },
+ "GIL_677": {
+  "script": "scripts/gil_ppr.lua#GIL_677",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_682": {
+  "script": "scripts/gil_n2.lua#GIL_682",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_683": {
+  "script": "scripts/gil_n1.lua#GIL_683",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_685": {
+  "script": "scripts/gil_ppr.lua#GIL_685"
+ },
+ "GIL_687": {
+  "script": "scripts/gil_ppr.lua#GIL_687",
+  "fx": {
+   "element": "steel",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "GIL_691": {
+  "script": "scripts/gil_dhm.lua#GIL_691"
+ },
+ "GIL_692": {
+  "keywords": [
+   "START_OF_GAME"
+  ]
+ },
+ "GIL_693": {
+  "script": "scripts/gil_ssw.lua#GIL_693"
+ },
+ "GIL_694": {
+  "script": "scripts/gil_ppr.lua#GIL_694",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_696": {
+  "script": "scripts/gil_ppr.lua#GIL_696",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "GIL_800": {
+  "script": "scripts/gil_dhm.lua#GIL_800"
+ },
+ "GIL_801": {
+  "script": "scripts/gil_dhm.lua#GIL_801",
+  "fx": {
+   "element": "ice",
+   "cast": "bolt",
+   "hit": "freeze"
+  }
+ },
+ "GIL_803": {
+  "script": "scripts/gil_ssw.lua#GIL_803",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_805": {
+  "script": "scripts/gil_ppr.lua#GIL_805"
+ },
+ "GIL_807": {
+  "script": "scripts/gil_ssw.lua#GIL_807"
+ },
+ "GIL_813": {
+  "script": "scripts/gil_ppr.lua#GIL_813",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "portal"
+  }
+ },
+ "GIL_815": {
+  "script": "scripts/gil_n1.lua#GIL_815",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_816": {
+  "script": "scripts/gil_n1.lua#GIL_816"
+ },
+ "GIL_817": {
+  "script": "scripts/gil_ppr.lua#GIL_817"
+ },
+ "GIL_819": {
+  "script": "scripts/gil_n1.lua#GIL_819"
+ },
+ "GIL_820": {
+  "script": "scripts/gil_ssw.lua#GIL_820",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_825": {
+  "script": "scripts/gil_ssw.lua#GIL_825",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_826": {
+  "keywords": [
+   "START_OF_GAME"
+  ]
+ },
+ "GIL_827": {
+  "script": "scripts/gil_ppr.lua#GIL_827",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_828": {
+  "script": "scripts/gil_dhm.lua#GIL_828",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "GIL_833": {
+  "script": "scripts/gil_dhm.lua#GIL_833"
+ },
+ "GIL_835": {
+  "script": "scripts/gil_ppr.lua#GIL_835",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_836": {
+  "script": "scripts/gil_ssw.lua#GIL_836",
+  "fx": {
+   "element": "fire",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "GIL_837": {
+  "script": "scripts/gil_ppr.lua#GIL_837",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_838": {
+  "script": "scripts/gil_dhm.lua#GIL_838",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_840": {
+  "script": "scripts/gil_ppr.lua#GIL_840",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_902": {
+  "script": "scripts/gil_ppr.lua#GIL_902",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "GIL_903": {
+  "script": "scripts/gil_ppr.lua#GIL_903"
+ },
+ "GIL_905": {
+  "script": "scripts/gil_dhm.lua#GIL_905",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
  "ICC_705": {
   "cost": 8
+ },
+ "ICC_828p": {
+  "script": "scripts/gil.lua#ICC_828p"
  },
  "KAR_096": {
   "keywords": [
    "START_OF_GAME"
   ]
  },
- "AT_051": {
-  "keywords": [
-   "OVERLOAD"
-  ]
+ "LOOT_149": {
+  "attack": 2
+ },
+ "OG_273": {
+  "script": "scripts/gil.lua#OG_273"
  },
  "VAN_CS2_221": {
   "keywords": [
@@ -56,20 +754,7 @@
    "ENRAGED"
   ]
  },
- "OG_273": {
-  "script": "scripts/gil.lua#OG_273"
- },
- "ICC_828p": {
-  "script": "scripts/gil.lua#ICC_828p"
- },
- "GIL_692": {
-  "keywords": [
-   "START_OF_GAME"
-  ]
- },
- "GIL_826": {
-  "keywords": [
-   "START_OF_GAME"
-  ]
+ "VAN_EX1_620": {
+  "cost": 20
  }
 }

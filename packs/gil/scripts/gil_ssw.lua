@@ -530,11 +530,7 @@ cards.GIL_820 = {
     local p = g.ctrl(me)
     local ids = {}
     for i = 1, g.count(p, "BATTLECRIES") do
-      -- (the brief names them BATTLECRY_<i>; gil.lua's remember() writes BATTLECRIES_<i>)
-      local id = g.count(p, "BATTLECRY_" .. i)
-      if id <= 0 then
-        id = g.count(p, "BATTLECRIES_" .. i)
-      end
+      local id = g.count(p, "BATTLECRIES_" .. i)
       if id > 0 then
         ids[#ids + 1] = id
       end

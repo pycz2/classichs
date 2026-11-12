@@ -575,8 +575,8 @@ cards.ICC_828p = {
 -- --- the game's counts and its start (rules.json player_hooks) -------------------------------------------------------
 -- Kobolds & Catacombs' (and the packs' before it: loot.lua), and The Witchwood's: Echo (ECHOING, the copies, GHOSTLY),
 -- the last turn p's champion took damage (HURT_TURN: Duskbat, Deathweb Spider), the Battlecries p played this game
--- (BATTLECRIES and BATTLECRY_<n>: the entity played; Shudderwock), the cards of another class p played this game
--- (OTHER_CARDS and OTHER_CARD_<n>: the entity played; Tess Greymane) and Start of Game.
+-- (BATTLECRIES and BATTLECRIES_<n>: the entity played; Shudderwock), the cards of another class p played this game
+-- (OTHER_CARDS and OTHER_CARDS_<n>: the entity played; Tess Greymane) and Start of Game.
 
 local LANATHEL = "ICC_841"
 local function lanathel(g, e)
