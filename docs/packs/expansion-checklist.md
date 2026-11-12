@@ -8,7 +8,7 @@ pack `packs/<s>/`, built on the previous one. Do the items in order; the next se
 - [ ] The release day: hearthstone.wiki.gg, the set's page (e.g. "Goblins vs Gnomes"); an adventure: its first wing.
 - [ ] The patch of that day: the wiki's "Patch x.y.z.BUILD" page; HearthSim hsdata at that build
       (`github.com/HearthSim/hsdata`, tag = the build). Likely builds, confirm each on the wiki: GvG 7234, BRM 8036,
-      TGT 9786, LoE 10833, OG 12574, Kara 13921, MSG 15590, Un'Goro 18336, ICC 20457, LOOT 22611 (22115 is the pre-purchase build of 9.4), GIL 23576.
+      TGT 9786, LoE 10833, OG 12574, Kara 13921, MSG 15590, Un'Goro 18336, ICC 20457, LOOT 22611 (22115 is the pre-purchase build of 9.4), GIL 23966 (23576 is the pre-purchase build of 10.4: no GIL_ card).
 - [ ] Every card of the set (and of the packs before it) as on that day: each card page's "Patch changes", the
       "Balance changes" pages and the patches between the previous set and this one (cost, stats, text in every
       language, tribe, rarity). The wiki shows today's card: always take that day's.

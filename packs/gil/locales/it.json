@@ -1,0 +1,27 @@
+{
+ "sets": {
+  "GILNEAS": "Il Bosco Tetro"
+ },
+ "races": {
+  "ALL": "Tutti"
+ },
+ "mechanics": {
+  "RUSH": {
+   "name": "Assalto",
+   "tip": "Può attaccare subito i servitori."
+  },
+  "ECHO": {
+   "name": "Eco",
+   "tip": "Si può rigiocare in questo turno."
+  },
+  "START_OF_GAME": {
+   "name": "Inizio Partita",
+   "tip": "Si attiva all'inizio della partita, dal tuo mazzo."
+  }
+ },
+ "cards": {
+  "VAN_EX1_595": {
+   "text": "Dopo che è morto un tuo servitore, pesca una carta."
+  }
+ }
+}

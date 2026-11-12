@@ -711,7 +711,7 @@ ql!(q_traps, |g, a| g.traps(player(&a, 0)?));
 ql!(q_tasks, |g, a| g.tasks(player(&a, 0)?));
 q!(q_card, |g, a| one(g.e(ent(g, &a, 0)?).card_id));
 q!(q_type, |g, a| one(g.e(ent(g, &a, 0)?).kind()));
-q!(q_race, |g, a| one(g.e(ent(g, &a, 0)?).race()));
+q!(q_race, |g, a| one(race_name(g.rs, g.e(ent(g, &a, 0)?).race())));
 q!(q_class, |g, a| one(g.e(ent(g, &a, 0)?).card.card_class.as_str()));
 q!(q_zone, |g, a| one(g.e(ent(g, &a, 0)?).zone));
 q!(q_atk, |g, a| one(g.e(ent(g, &a, 0)?).atk()));
@@ -773,6 +773,11 @@ fn q_enchants<C: Ctx>(h: &mut C, a: Args) -> R {
     ids(h, v)
 }
 
+/// A race as the scripts see it: the pack's `every_race` is `classichs_script::EVERY` (`==` to every race).
+fn race_name<'a>(rs: &crate::ruleset::Ruleset, race: &'a str) -> &'a str {
+    if rs.every_race.as_deref() == Some(race) { classichs_script::EVERY } else { race }
+}
+
 fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
     let rs = h.game()?.rs;
     let c = rs.card(&card_arg(h.game()?, &a, 0, "")?);
@@ -797,7 +802,7 @@ fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
     }
     let keywords = vm.list(c.keywords.iter().map(|k| s(k)).collect())?;
     vm.set(&t, "keywords", keywords)?;
-    for (k, v) in [("mana_lock", L::Int(c.mana_lock)), ("race", s(&c.race)), ("rarity", s(&c.rarity)), ("set", s(&c.set)),
+    for (k, v) in [("mana_lock", L::Int(c.mana_lock)), ("race", s(race_name(rs, &c.race))), ("rarity", s(&c.rarity)), ("set", s(&c.set)),
         ("spell_power", L::Int(c.spell_power.unwrap_or(0))), ("trap", L::Bool(c.trap)), ("type", s(&c.kind))] {
         vm.set(&t, k, v)?;
     }
@@ -966,7 +971,7 @@ fn a_transform(g: &mut Game, a: Args) -> R {
     if e != NONE && g.e(e).zone == "PLAY" && g.rs.card(&c).kind != "MINION" {
         return Err(a.bad(1, &format!("'{c}' is not a MINION")));
     }
-    opt_id(if e == NONE { NONE } else { g.transform(e, &c) })
+    opt_id(if e == NONE { NONE } else { g.transform_keep(e, &c, a.get(2).truthy()) })
 }
 fn a_return_to_hand(g: &mut Game, a: Args) -> R {
     live(g)?;
@@ -1041,6 +1046,12 @@ fn a_set_hooks(g: &mut Game, a: Args) -> R {
     let (e, c) = (ent(g, &a, 0)?, card_arg(g, &a, 1, "")?);
     let card = g.rs.card(&c);
     g.em(e).borrowed = Some(card); // e has card's hooks from now on (a Zombeast: its first Beast's text)
+    none()
+}
+fn a_battlecry(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (src, c) = (ent(g, &a, 0)?, card_arg(g, &a, 1, "")?);
+    g.battlecry_random(src, &c);
     none()
 }
 fn a_update_auras(g: &mut Game, _a: Args) -> R {
@@ -1371,4 +1382,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.add_to_deck", a_add_to_deck), ("g.to_deck", a_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
     ("g.cast", a_cast), ("g.cast_random", a_cast_random), ("g.add_count", a_add_count), ("g.extra_turn", a_extra_turn),
     ("g.force_attack", a_force_attack), ("g.update_auras", a_update_auras), ("g.set_hooks", a_set_hooks),
+    ("g.battlecry", a_battlecry),
 ];

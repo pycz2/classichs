@@ -4,8 +4,10 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.70.0] - 2026-11-12
+
 ### Adicionado
-- **Onze jogos novos, as expansões depois de Naxxramas.** Cada um tem todas as cartas dos jogos anteriores (Básicas, Clássicas, Naxxramas e os seguintes, em ordem), e cada carta é como era no dia do lançamento da expansão: custo, atributos, raça, textos em 8 idiomas. Cada jogo tem seus modelos de deck do meta da época (de 10 a 17), bots que o jogam, visual próprio e um símbolo de expansão.
+- **Onze jogos novos, as expansões depois de Naxxramas.** Cada um tem todas as cartas dos jogos anteriores (Básicas, Clássicas, Naxxramas e os seguintes, em ordem), e cada carta é como era no dia do lançamento da expansão: custo, atributos, raça, textos em 8 idiomas. Cada jogo tem seus modelos de deck do meta da época (de 10 a 19), bots que o jogam, visual próprio e um símbolo de expansão.
 - Goblins vs Gnomos 2014 (cartas de 8 de dezembro de 2014): Mecanoides, peças sobressalentes, Megafúria dos Ventos, Cabeça de Mimiron.
 - Montanha Rocha Negra 2015 (2 de abril de 2015): Dragões e cartas "se você tiver um Dragão na mão", Imperador Thaurissan, Nefarian.
 - O Grande Torneio 2015 (24 de agosto de 2015): Inspirar, Justas, Poderes Heroicos aprimorados.
@@ -15,8 +17,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Gangues de Geringontzan 2016 (1º de dezembro de 2016): Golens de Jade, Kazakus, cartas de três classes ao mesmo tempo.
 - Jornada a Un'Goro 2017 (6 de abril de 2017): Missões e suas recompensas, Adaptar, Elementais, lacaios dormentes.
 - Cavaleiros do Trono de Gelo 2017 (10 de agosto de 2017): as cartas de herói dos Cavaleiros da Morte, Roubar Vida, uma Zumbifera feita de duas Feras.
-- Kobolds e Catacumbas 2017 (7 de dezembro de 2017): lacaios direto do deck para o tabuleiro, Pedras de Feitiço que crescem, armas lendárias.
-- O Bosque das Bruxas 2018 (12 de abril de 2018): Eco, Investida, cartas para decks só de custo par ou só de custo ímpar (Genn e Baku).
+- Kobolds & Catacumbas 2017 (7 de dezembro de 2017): lacaios direto do deck para o tabuleiro, Pedras de Feitiço que crescem, armas lendárias.
+- O Bosque das Bruxas 2018 (12 de abril de 2018): Eco, Rapidez, cartas para decks só de custo par ou só de custo ímpar (Genn e Baku).
 - Os jogos novos não estão nas versões do cliente, então os aplicativos para computador, Android e navegador não cresceram. Baixe um jogo de um servidor ou instale o arquivo ClassicHS-x.y.z-<jogo>.cardpack da página da versão. Cada jogo é independente e não precisa de nenhum outro: ele traz as imagens das cartas antigas, e as cartas novas têm imagens desenhadas simples.
 - Cartas na mão cuja condição vale agora brilham em amarelo: Combo, "se o seu deck não tiver cartas repetidas", "se você tiver um Dragão na mão" e outras.
 - As cartas das expansões mostram o símbolo da expansão, também ao lado da carta grande; a coleção tem um filtro por expansão.

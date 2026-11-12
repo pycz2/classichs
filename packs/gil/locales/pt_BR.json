@@ -1,0 +1,27 @@
+{
+ "sets": {
+  "GILNEAS": "O Bosque das Bruxas"
+ },
+ "races": {
+  "ALL": "Todos"
+ },
+ "mechanics": {
+  "RUSH": {
+   "name": "Rapidez",
+   "tip": "Pode atacar lacaios imediatamente."
+  },
+  "ECHO": {
+   "name": "Eco",
+   "tip": "Pode ser jogado de novo neste turno."
+  },
+  "START_OF_GAME": {
+   "name": "Início da Partida",
+   "tip": "Acontece no início da partida, a partir do seu deck."
+  }
+ },
+ "cards": {
+  "VAN_EX1_595": {
+   "text": "Depois que um lacaio aliado morrer, compre um card."
+  }
+ }
+}
