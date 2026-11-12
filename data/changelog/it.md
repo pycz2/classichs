@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.70.0] - 2026-11-12
+
 ### Aggiunto
 - **Undici nuovi giochi, le espansioni dopo Naxxramas.** Ognuno ha tutte le carte dei giochi precedenti (Base, Classiche, Naxxramas e i successivi in ordine), e ogni carta è com’era il giorno dell’uscita dell’espansione: costo, statistiche, razza, testi in 8 lingue. Ogni gioco ha i suoi modelli di mazzo della meta di allora (da 10 a 19), bot che lo giocano, un aspetto proprio e un simbolo dell’espansione.
 - Goblin vs Gnomi 2014 (carte all’8 dicembre 2014): Robot, pezzi di ricambio, Mega Furia del Vento, Testa di Mimiron.

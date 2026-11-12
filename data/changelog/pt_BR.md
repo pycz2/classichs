@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.70.0] - 2026-11-12
+
 ### Adicionado
 - **Onze jogos novos, as expansões depois de Naxxramas.** Cada um tem todas as cartas dos jogos anteriores (Básicas, Clássicas, Naxxramas e os seguintes, em ordem), e cada carta é como era no dia do lançamento da expansão: custo, atributos, raça, textos em 8 idiomas. Cada jogo tem seus modelos de deck do meta da época (de 10 a 19), bots que o jogam, visual próprio e um símbolo de expansão.
 - Goblins vs Gnomos 2014 (cartas de 8 de dezembro de 2014): Mecanoides, peças sobressalentes, Megafúria dos Ventos, Cabeça de Mimiron.

@@ -4,6 +4,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.70.0] - 2026-11-12
+
 ### Hinzugefügt
 - **Elf neue Spiele, die Erweiterungen nach Naxxramas.** Jedes enthält alle Karten der Spiele davor (Basis, Klassik, Naxxramas und so weiter der Reihe nach), und jede Karte ist so, wie sie am Erscheinungstag der Erweiterung war: Kosten, Werte, Volk, Texte in 8 Sprachen. Jedes Spiel hat eigene Deckvorlagen der damaligen Meta (10 bis 19), Bots, die es spielen, ein eigenes Aussehen und ein Set-Symbol.
 - Goblins gegen Gnome 2014 (Karten vom 8. Dezember 2014): Mechs, Ersatzteile, Mega-Windzorn, Mimirons Kopf.

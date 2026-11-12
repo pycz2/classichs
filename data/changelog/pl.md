@@ -4,6 +4,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.70.0] - 2026-11-12
+
 ### Dodano
 - **Jedenaście nowych gier, dodatki po Naxxramas.** Każda ma wszystkie karty gier przed nią (Podstawowe, Klasyczne, Naxxramas i kolejne po kolei), a każda karta jest taka, jaka była w dniu premiery dodatku: koszt, statystyki, rasa, teksty w 8 językach. Każda gra ma własne szablony talii mety z tamtego czasu (od 10 do 19), boty, które w nią grają, własny wygląd i symbol dodatku.
 - Gobliny kontra gnomy 2014 (karty z 8 grudnia 2014): Mechy, części zamienne, Mega-Furia Wichru, Głowa Mimirona.

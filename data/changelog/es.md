@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.70.0] - 2026-11-12
+
 ### Añadido
 - **Once juegos nuevos, las expansiones después de Naxxramas.** Cada uno tiene todas las cartas de los juegos anteriores (Básicas, Clásicas, Naxxramas y los siguientes en orden), y cada carta es como era el día del lanzamiento de la expansión: coste, estadísticas, raza, textos en 8 idiomas. Cada juego tiene sus plantillas de mazos del meta de la época (de 10 a 19), bots que lo juegan, su propio aspecto y un símbolo de expansión.
 - Goblins y Gnomos 2014 (cartas al 8 de diciembre de 2014): mecas, piezas de repuesto, Megaviento furioso, Cabeza de Mimiron.
