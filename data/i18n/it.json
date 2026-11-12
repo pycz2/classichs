@@ -296,6 +296,8 @@
 "Export Code": "Esporta codice",
 "Export a replay file": "Esporta un file di replay",
 "FPS counter": "Contatore FPS",
+"Performance log": "Registro prestazioni",
+"Save log": "Salva registro",
 "Fatigue": "Affaticamento",
 "Fatigue: %d damage": "Affaticamento: %d danni",
 "Fewer by 10 minutes before the start: it is closed": "Meno di così 10 minuti prima dell'inizio: viene chiuso",

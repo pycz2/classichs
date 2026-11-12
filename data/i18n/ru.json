@@ -296,6 +296,8 @@
 "Export Code": "Экспорт кода",
 "Export a replay file": "Экспортировать файл повтора",
 "FPS counter": "Счётчик FPS",
+"Performance log": "Журнал производительности",
+"Save log": "Сохранить журнал",
 "Fatigue": "Усталость",
 "Fatigue: %d damage": "Усталость: %d урона",
 "Fewer by 10 minutes before the start: it is closed": "Меньше за 10 минут до начала — турнир закрывается",

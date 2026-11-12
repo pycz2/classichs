@@ -418,6 +418,12 @@ func show_tab(id: String) -> void:
 
 
 func _build_list() -> void:
+	var t0 := Time.get_ticks_usec()
+	_build_list_now()
+	PerfLog.time("t_list", t0)
+
+
+func _build_list_now() -> void:
 	_clear()
 	_top_bar(tr("Tournaments"))
 	var x := _tab_buttons(TABS.map(func(t): return [t, tr(TAB_NAMES[t]), 150.0]), tab, 470, show_tab)
@@ -482,6 +488,12 @@ func open_page(id: Variant) -> void:
 
 
 func _build_page() -> void:
+	var t0 := Time.get_ticks_usec()
+	_build_page_now()
+	PerfLog.time("t_page", t0)
+
+
+func _build_page_now() -> void:
 	_clear()
 	var t := page
 	_top_bar(str(t.get("name", "")) if not t.is_empty() else tr("Tournament"))
@@ -1350,6 +1362,7 @@ func _on_message(msg: Dictionary) -> void:
 			if tab == t:
 				_build_list()
 		"tournament":
+			PerfLog.count("t_push")
 			var t := payload(msg)
 			if t.is_empty():
 				return
@@ -1417,6 +1430,7 @@ class ListRow:
 		custom_minimum_size = Vector2(1220, 104)
 
 	func _draw() -> void:
+		PerfLog.count("listrow_draw")
 		var r := Rect2(Vector2.ZERO, size)
 		var joined: bool = e.get("joined", false) == true
 		draw_style_box(Palette.box(Color(0.1, 0.07, 0.045, 0.94) if not is_hovered() else Color(0.15, 0.1, 0.06, 0.96), 12,

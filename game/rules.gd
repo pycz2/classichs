@@ -63,8 +63,11 @@ static func request(req: Dictionary) -> Dictionary:
 				push_warning("rules engine: " + bad)
 		if _pack != "":
 			req["pack"] = _pack
+	var t0 := Time.get_ticks_usec()
 	var out = JSON.parse_string(str(_engine.call_json(JSON.stringify(req))))
-	return ints(out) if out is Dictionary else {"ok": false, "error": "bad reply from the rules engine"}
+	out = ints(out) if out is Dictionary else {"ok": false, "error": "bad reply from the rules engine"}
+	PerfLog.time("rules", t0)
+	return out
 
 
 ## JSON gives floats: whole numbers become ints (ids are dictionary keys and are compared).

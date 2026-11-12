@@ -291,6 +291,7 @@ func on_state(msg: Dictionary) -> void:
 
 
 func _take_state(msg: Dictionary) -> void:
+	var t0 := Time.get_ticks_usec()
 	Rules.ints(msg)  # (JSON: the ids would be floats, and the table keys its views by ints)
 	_legal = null
 	game.update(msg.get("view", {}))
@@ -299,6 +300,7 @@ func _take_state(msg: Dictionary) -> void:
 	var res: Dictionary = msg.get("result", {})
 	_deadline = float(res.get("deadline", -1))
 	_deadline_ms = Time.get_ticks_msec()
+	PerfLog.time("take_state", t0)
 
 
 func on_act_error(msg: Dictionary) -> void:

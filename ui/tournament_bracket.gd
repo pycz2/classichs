@@ -182,6 +182,12 @@ static func _tr(s: String) -> String:
 # --- building ---------------------------------------------------------------------------
 
 func _build() -> void:
+	var t0 := Time.get_ticks_usec()
+	_build_now()
+	PerfLog.time("bracket", t0)
+
+
+func _build_now() -> void:
 	match str(t.get("format", "")):
 		"elimination":
 			_build_tree()
