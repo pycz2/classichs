@@ -42,7 +42,7 @@ func sync() -> void:
 
 func _animated() -> bool:
 	var h := Rules.hooks(s.card_id)
-	return glow.a > 0.0 or s.silenced or s.spellpower() > 0 or s.has("ELUSIVE") or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
+	return glow.a > 0.0 or s.has("UNTOUCHABLE") or s.silenced or s.spellpower() > 0 or s.has("ELUSIVE") or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
 		or (not s.silenced and (h.has("on") or h.has("aura")))
 
 
@@ -137,6 +137,9 @@ func _draw() -> void:
 		_silence_ribbons()
 	if c.get("rarity", "") == "LEGENDARY":
 		Frames.crest_around(self, OVAL.grow(2), 15, PI + PI / 6.0, TAU - PI / 6.0)  # around the top quarter of the oval
+	if s.has("UNTOUCHABLE"):  # Dormant: it only holds its place; no numbers, a sleeping veil
+		_dormant(oval, center)
+		return
 	if s.has("IMMUNE"):  # a white light around it with sparks turning (not the golden bubble)
 		var halo := Art.outline("oval", OVAL.grow(9))
 		draw_colored_polygon(halo, Color(1, 1, 1, 0.16 + 0.08 * sin(_t * 5)))
@@ -186,6 +189,23 @@ func _draw() -> void:
 	elif s.max_health() > base_hp:
 		hp_color = Frames.BUFFED
 	Frames.health(self, Vector2(80, 98), s.health(), 15 * bump("hp"), hp_color)
+
+
+## A Dormant minion (Sherazin's seed, Nether Portal): dim, behind a slowly breathing green rim, its word under it.
+func _dormant(oval: PackedVector2Array, center: Vector2) -> void:
+	draw_colored_polygon(oval, Color(0.04, 0.07, 0.05, 0.55))
+	var pulse := 0.5 + 0.5 * sin(_t * 1.6)
+	Frames.ring(self, Art.outline("oval", OVAL.grow(2 + 2 * pulse)), Color(0.5, 1.0, 0.6, 0.35 + 0.35 * pulse), 2.5)
+	var font := ThemeDB.fallback_font
+	var word := KeywordTips.name_of("UNTOUCHABLE")
+	var w := font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
+	var at := Vector2(center.x - w / 2.0, OVAL.end.y + 4)
+	draw_string_outline(font, at, word, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, 3, Color.BLACK)
+	draw_string(font, at, word, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color(0.75, 1.0, 0.8))
+	for i in 3:  # z's drifting up, as a sleeping minion's
+		var ph := fmod(_t * 0.4 + i / 3.0, 1.0)
+		var p := Vector2(center.x + 6 + ph * 14, center.y - 6 - ph * 34)
+		draw_string(font, p, "z", HORIZONTAL_ALIGNMENT_LEFT, -1, 11 + i * 3, Color(SLEEP_Z, 1.0 - ph))
 
 
 ## Where the Taunt shield picture goes (behind the oval, a little wider and longer).

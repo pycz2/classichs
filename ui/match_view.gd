@@ -1190,7 +1190,10 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 		want[weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
 	var secrets: Array = _ents(_stage.secrets[p]) if staged else pl.secrets
 	for i in secrets.size():
-		want[secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own and not full_view}  # on the top of the portrait, both sides
+		if KeywordTips.keywords_of(secrets[i].card_id).has("QUEST"):  # a Quest: in sight of both, with its progress
+			want[secrets[i].id] = {"kind": "quest", "pos": hero_pos + Vector2(-14 + 40 * i, -14)}
+		else:
+			want[secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own and not full_view}  # on the top of the portrait, both sides
 	var board: Array = _ents(_stage.board[p]) if staged else pl.board.duplicate()
 	var placed := _placed.duplicate() if own else {}  # minions put down: they stand in their places
 	if own and _placing() >= 0:  # (one waiting for its Battlecry target too)
@@ -1271,6 +1274,8 @@ func _make_view(e: GameView.Ent, spec: Dictionary) -> EntityView:
 			v = PowerView.make(e, g, PowerView.Kind.WEAPON)
 		"secret":
 			v = PowerView.make(e, g, PowerView.Kind.SECRET, spec.get("hide", false))
+		"quest":
+			v = PowerView.make(e, g, PowerView.Kind.QUEST)
 		"minion":
 			v = MinionView.make(e, g)
 		"hand":
@@ -1619,7 +1624,8 @@ func _on_hover(v: EntityView, on: bool) -> void:
 	_show_tips("", Rect2())
 	if not on or _dragging or _sel.get("stage", "") == "target":
 		return  # no card pop-ups while aiming
-	if e == null or (e.zone == "HAND" and e.controller != viewer()) or (e.zone == "SECRET" and e.controller != viewer()):
+	var quest: bool = v.get_meta("kind") == "quest"  # a Quest: both players see it
+	if e == null or (e.zone == "HAND" and e.controller != viewer()) or (e.zone == "SECRET" and e.controller != viewer() and not quest):
 		return
 	_tooltip = CardView.make(e.card_id, 1.8)
 	_tooltip.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1732,7 +1738,8 @@ static func steps(events: Array, aimed := -1) -> Array:
 	var out := []
 	var strike := {}  # a paused attack: {at (the index of its hits or where it ends), a, d}
 	var aims := {}  # a minion played with a target: it aims once it stands on the board
-	var secrets := {}  # Secrets played: they go up to the hero when their spell is done
+	var secrets := {}  # Secrets (and Quests) played: they go up to the hero when their spell is done
+	var extra := false  # an extra turn begins (Time Warp): its turn step says so
 	var bounced := {}  # the cards a bounce makes (the bounce step brings them in)
 	for ev in events:
 		if ev.type == "return_to_hand":
@@ -1808,18 +1815,25 @@ static func steps(events: Array, aimed := -1) -> Array:
 				j = mini(j + 1, events.size())
 			"turn_start":
 				k = "turn"
+			"extra_turn":
+				extra = true
+			"quest_done":
+				k = "quest"
 		if k == "":
 			i = j
 			continue
 		var st := {"k": k, "evs": events.slice(i, j), "at": j - 1}
 		if k == "spell_done":
 			st["secret"] = secrets.has(ev.entity)
+		if k == "turn" and extra:
+			st["extra"] = true
+			extra = false
 		if k == "attack" and not strike.is_empty():
 			st["pause"] = true
 			st["aimed"] = aimed if aimed >= 0 else ev.defender
 		out.append(st)
 		if k == "play":
-			if ev.get("secret", false):
+			if ev.get("secret", false) or ev.get("task", false):
 				secrets[ev.entity] = true
 			if int(ev.get("target", -1)) >= 0:
 				if ev.get("kind", "") == "minion":
@@ -1995,8 +2009,8 @@ func _play_step(st: Dictionary) -> void:
 			_step_apply(st)
 			_step_sounds(st)
 			await _wait(0.2)
-		"secret":
-			await _reveal(ev.card)  # (the card itself shows big: no hint over the board)
+		"secret", "quest":
+			await _reveal(ev.card)  # (the card itself shows big: no hint over the board; a Quest fulfilled too)
 			_step_apply(st)
 		"joust":
 			await _joust(ev)
@@ -2017,7 +2031,9 @@ func _play_step(st: Dictionary) -> void:
 				_mulligan_down()  # the hand first, then the first turn's card
 				_stage_refresh()
 				await _wait(0.35)
-			if ev.get("player", -1) == viewer() and ev.has("turn"):
+			if st.get("extra", false) and ev.has("turn"):
+				_banner(tr("Extra Turn") if ev.get("player", -1) == viewer() else tr("Opponent's Extra Turn"))
+			elif ev.get("player", -1) == viewer() and ev.has("turn"):
 				_banner(tr("Your Turn"))
 		_:
 			_step_apply(st)
@@ -2086,7 +2102,7 @@ func _step_apply(st: Dictionary) -> Dictionary:
 			"equip":
 				_stage.weapon[ev.player] = ev.entity
 				moved = true
-			"secret_revealed":
+			"secret_revealed", "quest_done":
 				for p in 2:
 					_stage.secrets[p].erase(ev.entity)
 				moved = true
@@ -3036,6 +3052,8 @@ func _effects_now(events: Array) -> void:
 				_float_text(ev.target, tr("Shield!"), Palette.ATTACK, old)
 			"secret_revealed":
 				show_hint(tr("Secret: %s") % CardText.name(ev.card), 2.5)
+			"quest_done":
+				show_hint(tr("Quest completed: %s") % CardText.name(ev.card), 3.0)
 	if hero_hit == 2:
 		Sound.play("hit_big")
 	if Match.shake_enabled and (big or hero_hit > 0):

@@ -688,7 +688,7 @@ fn side(g: &Game, p: usize, own: bool) -> f64 {
     if pl.deck.is_empty() {
         v -= (pl.fatigue + 1) as f64;
     }
-    v
+    v + g.task_value(p) + 8.0 * pl.extra_turns as f64 // a Quest in play (more as it nears its goal), an extra turn owed
 }
 
 /// The opening hand: keep the cheap cards (and the Coin), replace those costing 4 or more; a 3 stays

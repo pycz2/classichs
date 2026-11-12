@@ -95,6 +95,12 @@ static func changes(e: GameView.Ent) -> Array:
 	return out
 
 
+## A mechanic's name (client name: "UNTOUCHABLE") in the player's language, from the active pack ("" if it has none).
+static func name_of(m: String) -> String:
+	var kw := _keywords()
+	return str(kw[m].name.get(TranslationServer.get_locale(), kw[m].name.en)) if kw.has(m) else ""
+
+
 static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 	var tips := KeywordTips.new()
 	tips.name = "KeywordTips"

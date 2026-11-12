@@ -876,5 +876,10 @@
 "%s is shuffled into Opponent's deck": "%s viene mischiato nel mazzo dell'avversario",
 "A card is shuffled into your deck": "Una carta viene mischiata nel vostro mazzo",
 "A card is shuffled into Opponent's deck": "Una carta viene mischiata nel mazzo dell'avversario",
-"The target is chosen at random: %s": "Il bersaglio è scelto a caso: %s"
+"The target is chosen at random: %s": "Il bersaglio è scelto a caso: %s",
+"Extra Turn": "Turno extra",
+"Opponent's Extra Turn": "Turno extra dell’avversario",
+"Quest completed: %s": "Missione compiuta: %s",
+"You take an extra turn": "Giochi un turno extra",
+"Opponent takes an extra turn": "L’avversario gioca un turno extra"
 }

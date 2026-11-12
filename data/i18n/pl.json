@@ -876,5 +876,10 @@
 "%s is shuffled into Opponent's deck": "%s zostaje wtasowany do talii przeciwnika",
 "A card is shuffled into your deck": "Do twojej talii wtasowano kartę",
 "A card is shuffled into Opponent's deck": "Do talii przeciwnika wtasowano kartę",
-"The target is chosen at random: %s": "Cel zostaje wybrany losowo: %s"
+"The target is chosen at random: %s": "Cel zostaje wybrany losowo: %s",
+"Extra Turn": "Dodatkowa tura",
+"Opponent's Extra Turn": "Dodatkowa tura przeciwnika",
+"Quest completed: %s": "Zadanie wykonane: %s",
+"You take an extra turn": "Rozgrywasz dodatkową turę",
+"Opponent takes an extra turn": "Przeciwnik rozgrywa dodatkową turę"
 }

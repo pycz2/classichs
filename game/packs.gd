@@ -322,7 +322,8 @@ const ENGINE_TO_CLIENT := {"GUARD": "TAUNT", "HASTE": "CHARGE", "BARRIER": "DIVI
 	"TRAP": "SECRET", "ON_PLAY": "BATTLECRY", "ON_DEATH": "DEATHRATTLE", "CHOICE": "CHOOSE_ONE",
 	"WOUNDED": "ENRAGED", "TRIGGER": "TRIGGER_VISUAL", "ADJACENT": "ADJACENT_BUFF",
 	"SPELL_SCALED": "AFFECTED_BY_SPELL_POWER", "NO_SPELL_POWER": "ImmuneToSpellpower",
-	"POWER_MULTIPLIER": "DOUBLE_HEAL_DAMAGE"}
+	"POWER_MULTIPLIER": "DOUBLE_HEAL_DAMAGE", "TASK": "QUEST", "TASK_PROGRESS": "QUEST_PROGRESS",
+	"TASK_GOAL": "QUEST_PROGRESS_TOTAL", "DORMANT": "UNTOUCHABLE"}
 static var _to_client := {}  # pack name -> client name, only where they differ
 static var _to_pack := {}  # client name -> pack name
 static var _names_of: Pack

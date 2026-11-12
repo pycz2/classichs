@@ -189,23 +189,31 @@ impl Game {
         1 - p
     }
 
+    /// Not DORMANT (a pack that names it: Sherazin's seed, Nether Portal): a dormant minion holds its place on the
+    /// board but is no character for anything else (no target, no attack, no damage, in no list of minions).
+    pub fn awake(&self, m: Id) -> bool {
+        self.n().dormant.is_none_or(|t| !self.e(m).tags.contains_key(t))
+    }
+
+    /// p's minions that are awake (`awake`), left to right.
+    fn board_awake(&self, p: usize) -> impl Iterator<Item = &Id> {
+        self.players[p].board.iter().filter(|&&m| self.awake(m))
+    }
+
     pub fn minions(&self, p: usize) -> Vec<Id> {
-        self.players[p].board.clone()
+        self.board_awake(p).copied().collect()
     }
 
     pub fn all_minions(&self) -> Vec<Id> {
-        let (a, b) = (&self.players[0].board, &self.players[1].board);
-        let mut v = Vec::with_capacity(a.len() + b.len());
-        v.extend(a);
-        v.extend(b);
-        self.by_order(v)
+        let mut v: Vec<Id> = self.board_awake(0).chain(self.board_awake(1)).copied().collect();
+        v = self.by_order(v);
+        v
     }
 
     pub fn chars(&self, p: usize) -> Vec<Id> {
-        let board = &self.players[p].board;
-        let mut v = Vec::with_capacity(board.len() + 1);
+        let mut v = Vec::with_capacity(self.players[p].board.len() + 1);
         v.push(self.players[p].hero);
-        v.extend(board);
+        v.extend(self.board_awake(p));
         v
     }
 
@@ -213,9 +221,9 @@ impl Game {
         let (a, b) = (&self.players[0], &self.players[1]);
         let mut v = Vec::with_capacity(a.board.len() + b.board.len() + 2);
         v.push(a.hero);
-        v.extend(&a.board);
+        v.extend(self.board_awake(0));
         v.push(b.hero);
-        v.extend(&b.board);
+        v.extend(self.board_awake(1));
         self.by_order(v)
     }
 
@@ -229,7 +237,7 @@ impl Game {
 
     /// Friendly minions of me, without me.
     pub fn others(&self, me: Id) -> Vec<Id> {
-        self.players[self.ctrl(me)].board.iter().copied().filter(|&m| m != me).collect()
+        self.board_awake(self.ctrl(me)).copied().filter(|&m| m != me).collect()
     }
 
     /// Summons for me's controller right of me (left-to-right board order).
@@ -257,6 +265,7 @@ impl Game {
                 out.push(board[i + 1]);
             }
         }
+        out.retain(|&x| self.awake(x));
         out
     }
 
@@ -617,7 +626,7 @@ impl Game {
     }
 
     pub fn damage(&mut self, src: Id, t: Id, amount: i64) -> i64 {
-        if !self.alive_in_play(t) || amount <= 0 {
+        if !self.alive_in_play(t) || amount <= 0 || !self.awake(t) {
             return 0;
         }
         let mut pre = obj!{"type": "predamage", "source": src, "target": t, "amount": amount};
@@ -646,7 +655,12 @@ impl Game {
         if src != NONE && self.e(src).is_minion() && self.e(src).has(n.stealth) {
             self.em(src).erase_tag(n.stealth);
         }
-        if src != NONE && self.e(t).is_minion() && self.e(src).has(n.poison) {
+        // a champion attacking with a POISON weapon (Envenom Weapon) poisons as a POISON minion does
+        let weapon_poison = |g: &Game| {
+            let s = g.e(src);
+            s.is_champion() && s.controller == g.current && g.players[s.controller].weapon.is_some_and(|w| g.e(w).has(n.poison))
+        };
+        if src != NONE && self.e(t).is_minion() && (self.e(src).has(n.poison) || weapon_poison(self)) {
             self.em(t).set_tag(n.to_destroy, true);
         }
         let player = self.ctrl(t);
@@ -677,7 +691,7 @@ impl Game {
     }
 
     pub fn destroy(&mut self, e: Id) {
-        if self.alive_in_play(e) {
+        if self.alive_in_play(e) && self.awake(e) {
             let t = self.n().to_destroy;
             self.em(e).set_tag(t, true);
         }
@@ -1117,6 +1131,32 @@ impl Game {
         s.len() < self.rs.secrets && !s.iter().any(|&x| self.e(x).card_id == card)
     }
 
+    /// Whether player `p` may play a task card (a Quest): no task of theirs in play, and room in the trap zone.
+    pub fn task_room(&self, p: usize) -> bool {
+        let s = &self.players[p].secrets;
+        s.len() < self.rs.secrets && !s.iter().any(|&x| self.e(x).card.task)
+    }
+
+    /// p's traps in play, without its task (`g.traps`: a Quest is no Secret).
+    pub fn traps(&self, p: usize) -> Vec<Id> {
+        self.players[p].secrets.iter().copied().filter(|&x| !self.e(x).card.task).collect()
+    }
+
+    /// p's task in play (a Quest), if any (`g.tasks`).
+    pub fn tasks(&self, p: usize) -> Vec<Id> {
+        self.players[p].secrets.iter().copied().filter(|&x| self.e(x).card.task).collect()
+    }
+
+    /// What p's task in play is worth to a bot: 4, and up to 8 more as it nears its goal (0 without one).
+    pub fn task_value(&self, p: usize) -> f64 {
+        let n = self.n();
+        let (Some(tp), Some(tg)) = (n.task_progress, n.task_goal) else { return 0.0 };
+        self.tasks(p).iter().map(|&q| {
+            let (got, goal) = (self.e(q).tag(tp), self.e(q).tag(tg).max(1));
+            4.0 + 8.0 * got.min(goal) as f64 / goal as f64
+        }).sum()
+    }
+
     pub fn trap_ready(&self, me: Id) -> bool {
         let e = self.e(me);
         e.zone == self.n().trap && self.current != e.controller
@@ -1215,6 +1255,9 @@ impl Game {
             c += self.fx_cost_mod(f, e);
         }
         for ench in &x.enchantments {
+            if let Some(v) = ench.get("cost_set") {
+                c = v.int(); // "its cost becomes (n)" (Bright-Eyed Scout), then later changes
+            }
             c += vint(ench.get("cost"));
         }
         for &src in auras {
@@ -1248,7 +1291,7 @@ impl Game {
             c += self.fx_cost_mod(f, e);
         }
         let mut items: Vec<(i64, It)> = vec![];
-        for ench in x.enchantments.iter().filter(|m| m.contains_key("cost")) {
+        for ench in x.enchantments.iter().filter(|m| m.contains_key("cost") || m.contains_key("cost_set")) {
             items.push((vint(ench.get("order")), It::Ench(ench)));
         }
         for &src in auras {
@@ -1265,6 +1308,7 @@ impl Game {
         items.sort_by_key(|(o, _)| *o);
         for (_, it) in items {
             c = match it {
+                It::Ench(m) if m.contains_key("cost_set") => vint(m.get("cost_set")) + vint(m.get("cost")),
                 It::Ench(m) => c + vint(m.get("cost")),
                 It::Aura(src) => self.fx_cost_aura(self.hooks_of(src).cost_aura.unwrap(), src, e, c),
                 It::Mod(m) if m.contains_key("set") => vint(m.get("set")),

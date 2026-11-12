@@ -16,7 +16,7 @@
 //! never a panic.
 
 use crate::hooks::{Base, HookFn, HookSet, TSpec, TrapHook};
-use crate::entity::{obj, vint, Id, Obj, Str, NONE, V};
+use crate::entity::{obj, vint, vtruthy, Id, Obj, Str, NONE, V};
 use crate::ruleset::{leak, Ruleset};
 use crate::state::Game;
 use classichs_script::{call, compile_bytes, load, Args, Chunk, Error, Host, Value as L, Vm};
@@ -694,7 +694,8 @@ ql!(q_others, |g, a| g.others(ent(g, &a, 0)?));
 ql!(q_adjacent, |g, a| g.adjacent(ent(g, &a, 0)?));
 ql!(q_hand, |g, a| g.players[player(&a, 0)?].hand.clone());
 ql!(q_deck, |g, a| g.players[player(&a, 0)?].deck.clone());
-ql!(q_traps, |g, a| g.players[player(&a, 0)?].secrets.clone());
+ql!(q_traps, |g, a| g.traps(player(&a, 0)?));
+ql!(q_tasks, |g, a| g.tasks(player(&a, 0)?));
 q!(q_card, |g, a| one(g.e(ent(g, &a, 0)?).card_id));
 q!(q_type, |g, a| one(g.e(ent(g, &a, 0)?).kind()));
 q!(q_race, |g, a| one(g.e(ent(g, &a, 0)?).race()));
@@ -774,6 +775,9 @@ fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
         let classes = vm.list(c.classes.iter().map(|k| s(k)).collect())?;
         vm.set(&t, "classes", classes)?;
     }
+    if c.task {
+        vm.set(&t, "task", L::Bool(true))?; // a task card (a Quest; only then: older packs' tables stay as they were)
+    }
     let keywords = vm.list(c.keywords.iter().map(|k| s(k)).collect())?;
     vm.set(&t, "keywords", keywords)?;
     for (k, v) in [("mana_lock", L::Int(c.mana_lock)), ("race", s(&c.race)), ("rarity", s(&c.rarity)), ("set", s(&c.set)),
@@ -790,7 +794,9 @@ ql!(q_graveyard, |g, a| {
 });
 
 fn q_collectible<C: Ctx>(h: &mut C, _a: Args) -> R {
-    let v: Vec<L> = h.game()?.rs.collectible.iter().map(|s| L::from(s.as_str())).collect();
+    // no task card (a Quest): it is never made at random nor Discovered
+    let rs = h.game()?.rs;
+    let v: Vec<L> = rs.collectible.iter().filter(|s| !rs.card(s).task).map(|s| L::from(s.as_str())).collect();
     one(h.vm().list(v)?)
 }
 
@@ -802,7 +808,7 @@ macro_rules! queries {
             ("g.hero", q_hero::<$t>), ("g.power", q_power::<$t>), ("g.weapon", q_weapon::<$t>),
             ("g.minions", q_minions::<$t>), ("g.all_minions", q_all_minions::<$t>), ("g.chars", q_chars::<$t>),
             ("g.all_chars", q_all_chars::<$t>), ("g.others", q_others::<$t>), ("g.adjacent", q_adjacent::<$t>),
-            ("g.hand", q_hand::<$t>), ("g.deck", q_deck::<$t>), ("g.traps", q_traps::<$t>), ("g.card", q_card::<$t>),
+            ("g.hand", q_hand::<$t>), ("g.deck", q_deck::<$t>), ("g.traps", q_traps::<$t>), ("g.tasks", q_tasks::<$t>), ("g.card", q_card::<$t>),
             ("g.type", q_type::<$t>), ("g.race", q_race::<$t>), ("g.class", q_class::<$t>), ("g.zone", q_zone::<$t>),
             ("g.atk", q_atk::<$t>), ("g.attack", q_attack::<$t>), ("g.health", q_health::<$t>),
             ("g.max_health", q_max_health::<$t>), ("g.dmg", q_dmg::<$t>), ("g.has", q_has::<$t>), ("g.tag", q_tag::<$t>),
@@ -1102,7 +1108,7 @@ fn a_enchant(g: &mut Game, a: Args) -> R {
         Value::Object(m) => {
             let rs = g.rs;
             let mut x = Obj::of(&m, &|s| rs.intern(s));
-            if rs.cost_in_order && x.contains_key("cost") {
+            if rs.cost_in_order && (x.contains_key("cost") || x.contains_key("cost_set")) {
                 x.insert("order", g.stamp()); // its cost change comes in its turn (cost_in_order)
             }
             // `{deathrattle = card, from = t}`: the copied Deathrattle keeps what t's scripts stored on t (its tags no
@@ -1117,7 +1123,11 @@ fn a_enchant(g: &mut Game, a: Args) -> R {
                     }
                 }
             }
-            g.em(e).enchantments.push(x)
+            if vtruthy(x.get("base")) {
+                g.em(e).enchantments.insert(0, x) // new base stats: every other enchantment goes on top (Crystal Core)
+            } else {
+                g.em(e).enchantments.push(x)
+            }
         }
         _ => return Err(a.bad(1, "a table with named fields expected")),
     }
@@ -1271,6 +1281,25 @@ fn a_put_trap(g: &mut Game, a: Args) -> R {
     let e = ent(g, &a, 0)?;
     one(g.put_trap(e))
 }
+fn a_extra_turn(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let p = player(&a, 0)?;
+    g.players[p].extra_turns = 1; // two cast in one turn give one (Time Warp: they do not stack)
+    none()
+}
+fn a_force_attack(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (at, d) = (opt_ent(g, &a, 0)?, opt_ent(g, &a, 1)?);
+    // both must be characters in play (and awake), not dying; the attack goes past Taunt and Stealth
+    let ok = |g: &Game, x: Id| {
+        x != NONE && g.e(x).zone == "PLAY" && g.awake(x) && g.e(x).health() > 0 && !g.e(x).has(g.n().to_destroy)
+            && (g.e(x).is_minion() || g.e(x).is_champion())
+    };
+    if ok(g, at) && ok(g, d) && g.ctrl(at) != g.ctrl(d) {
+        g.attack_now(at, d, true);
+    }
+    none()
+}
 fn a_resolve(g: &mut Game, _a: Args) -> R {
     live(g)?;
     g.resolve();
@@ -1302,5 +1331,6 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.remove", a_remove), ("g.random", a_random), ("g.pick", a_pick), ("g.random_alive", a_random_alive),
     ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
     ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
-    ("g.cast", a_cast), ("g.cast_random", a_cast_random), ("g.add_count", a_add_count),
+    ("g.cast", a_cast), ("g.cast_random", a_cast_random), ("g.add_count", a_add_count), ("g.extra_turn", a_extra_turn),
+    ("g.force_attack", a_force_attack),
 ];

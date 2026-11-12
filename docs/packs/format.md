@@ -169,6 +169,8 @@ does not map is written as the engine id.
 | `SPELL_POWER` | keyword | +N spell damage (card field `spell_power`) | `SPELLPOWER` |
 | `MANA_LOCK` | keyword | Locks N mana next turn (card field `mana_lock`) | `OVERLOAD` |
 | `TRAP` | keyword | Hidden spell that fires on an event | `SECRET` |
+| `TASK` | keyword | A spell that, played, waits in its player's trap zone in sight of both players while its hooks count toward a goal, then gives its reward (its scripts); one at a time, within `limits.secrets`; a deck's task cards start in the opening hand; not a trap (`g.traps` leaves it out, `g.tasks` lists it), never made at random (`g.collectible` leaves it out) | — (Journey to Un'Goro: `QUEST`) |
+| `DORMANT` | keyword | A minion that only holds its place on the board: no target, attacker or defender, takes no damage, can't be destroyed, in no list of minions or characters (`g.minions`, `g.all_chars`, …); its own hooks still run, `g.transform` wakes it | — (Journey to Un'Goro: `UNTOUCHABLE`, Sherazin's seed, Nether Portal) |
 | `ON_PLAY` | hook | Effect when played from hand | `BATTLECRY` |
 | `ON_DEATH` | hook | Effect when it dies | `DEATHRATTLE` |
 | `COMBO` | hook | Bonus if a card was played before it this turn | `COMBO` |
@@ -177,6 +179,7 @@ does not map is written as the engine id.
 | `ON_POWER` | hook | Effect after its owner uses the champion's power (an `on` hook on `hero_power`) | — (The Grand Tournament: `INSPIRE`) |
 | `FREEZE`, `SILENCE`, `COUNTER` | marker | The card freezes / silences / counters (the effect is its hook) | same |
 | `GROWING_SUMMON` | marker | The card summons a token that grows each time its player summons one (its hook; the count `g.add_count`) | — (Mean Streets of Gadgetzan: `JADE_GOLEM`) |
+| `ADAPT` | marker | The card offers its player three of a list of upgrades for minions (its hook; only that player sees them) | — (Journey to Un'Goro: `ADAPT`) |
 | `OFFER` | marker | The card offers its player a choice of cards (`g.create`, `g.request_choice`: only that player sees them) | — (The League of Explorers: `DISCOVER`) |
 | `AURA`, `TRIGGER`, `ADJACENT` | marker | Client hints | `AURA`, `TRIGGER_VISUAL`, `ADJACENT_BUFF` |
 | `SPELL_SCALED`, `NO_SPELL_POWER` | marker | Spell power changes / does not change its numbers | `AFFECTED_BY_SPELL_POWER`, `ImmuneToSpellpower` |
@@ -187,6 +190,7 @@ does not map is written as the engine id.
 | `BOTH_CHOICES` | state | Its owner's CHOICE cards have both effects: one play with `choice` 2, the first option's target (else the second's), then the card's `both` hook or the two options' effects in card order (aura tag on the champion) | — (Whispers of the Old Gods: `CHOOSE_BOTH`, Fandral Staghelm) |
 | `RANDOM_TARGETS` | state | Its owner's chosen targets become random ones: a card played, the power used and an attack go to a random one of their valid targets (an attack: any enemy character, past Taunt and Stealth; the chosen one may come again; logs `retarget`). An aura tag on the champion; only in a pack that names it | — (Mean Streets of Gadgetzan: `RANDOM_TARGETS`, Mayor Noggenfogger) |
 | `PLAYED_COST` | state | The mana a card cost when it was played from the hand (Sorcerer's Apprentice, Preparation, Loatheb counted); written only by a pack that names it | — (Goblins vs Gnomes: `PLAYED_COST`, Gazlowe) |
+| `TASK_PROGRESS`, `TASK_GOAL` | state | A task's count and goal: its scripts keep them, clients show them ("2/4") and the bots weigh them | — (Journey to Un'Goro: `QUEST_PROGRESS`, `QUEST_PROGRESS_TOTAL`) |
 | `DIED_TURN` | state | The turn a minion died; written only by a pack that names it (a new tag would change Classic's recorded states) | — (Naxxramas: `DIED_TURN`, Kel'Thuzad) |
 | `POWER_DAMAGE` | state | Added to its owner's power damage before `POWER_MULTIPLIER` (aura tag on the champion, a count: `g.hp_dmg`) | — (The Grand Tournament: `HEROPOWER_DAMAGE`, Fallen Hero) |
 | `POWER_USES`, `POWERS_USED` | state | Uses of the power this turn (on the power) and of any power this game (on the champion, kept by a new one); written only by a pack that names them | — (The Grand Tournament: `HEROPOWER_ACTIVATIONS_THIS_TURN`, Garrison Commander; `NUM_TIMES_HERO_POWER_USED_THIS_GAME`, Frost Giant) |

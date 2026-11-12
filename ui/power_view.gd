@@ -1,8 +1,10 @@
 class_name PowerView
 extends EntityView
-## Hero power button, weapon or secret icon next to a hero.
+## Hero power button, weapon, secret or quest icon next to a hero.
 
-enum Kind { POWER, WEAPON, SECRET }
+enum Kind { POWER, WEAPON, SECRET, QUEST }
+
+const QUEST_RING := Color("f08c00")  # a Quest's amber rim (both players see it, with its progress)
 
 const SECRET_COLORS := {"MAGE": Color("9b4dff"), "HUNTER": Color("2fb344"), "PALADIN": Color("f2c230")}
 
@@ -25,7 +27,7 @@ static func make(ent: GameView.Ent, game: GameView, k: Kind, hide := false) -> P
 	v.kind = k
 	v.face_down = hide
 	v.entity_id = ent.id
-	var sz := Vector2(36, 36) if k == Kind.SECRET else Vector2(76, 76)
+	var sz := Vector2(36, 36) if k == Kind.SECRET else (Vector2(48, 48) if k == Kind.QUEST else Vector2(76, 76))
 	v.custom_minimum_size = sz
 	v.size = sz
 	v.s = ent.copy()
@@ -56,6 +58,20 @@ func _draw() -> void:
 			var font := ThemeDB.fallback_font
 			draw_string_outline(font, Vector2(c.x - 5, c.y + 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, 3, Color.BLACK)
 			draw_string(font, Vector2(c.x - 5, c.y + 7), "?", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
+		Kind.QUEST:  # the card's picture in an amber ring, its progress under it ("2/4")
+			draw_circle(c + Vector2(0, 2), r + 3, Color(0, 0, 0, 0.45))
+			draw_circle(c, r + 2, QUEST_RING.darkened(0.35))
+			Art.paint_in(self, art, s.card_id, "circle")
+			Frames.ring(self, Art.outline("circle", art), QUEST_RING, 3)
+			var total := int(s.tags.get("QUEST_PROGRESS_TOTAL", 0))
+			if total > 0:
+				var text := "%d/%d" % [int(s.tags.get("QUEST_PROGRESS", 0)), total]
+				var font := ThemeDB.fallback_font
+				var w := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x
+				var at := Vector2(c.x - w / 2.0, size.y + 2)
+				draw_rect(Rect2(at + Vector2(-4, -12), Vector2(w + 8, 16)), Color(0, 0, 0, 0.65))
+				draw_string_outline(font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, 3, Color.BLACK)
+				draw_string(font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("ffd8a8"))
 		Kind.POWER:
 			draw_circle(c, r + 3, Frames.GOLD.darkened(0.3))
 			if face_down_used:  # the back: dark stone with the class crest
@@ -96,7 +112,7 @@ func sync() -> void:
 	_cost = g.cost(e)
 	_active = e.controller == g.current
 	queue_redraw()
-	if kind == Kind.SECRET:
+	if kind == Kind.SECRET or kind == Kind.QUEST:
 		return
 	var used := e.has("USED") if kind == Kind.POWER else not _active  # a weapon turns over off its turn
 	if used == face_down_used:

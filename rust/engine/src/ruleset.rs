@@ -19,8 +19,8 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-const START_TAGS: [&str; 13] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
-    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
+const START_TAGS: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
+    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT"];
 /// Engine ids of the tags Silence removes.
 const SILENCED: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
     "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
@@ -64,6 +64,8 @@ pub struct Card {
     pub script: String,
     /// A TRAP spell.
     pub trap: bool,
+    /// A TASK spell (a Quest): played, it waits in the trap zone in sight of both players until its script fulfils it.
+    pub task: bool,
     /// Numbers for deck codes (Classic: Hearthstone's dbfId and the legacy one; docs/packs/cards.md).
     pub code_id: Option<i64>,
     pub legacy_code_id: Option<i64>,
@@ -161,6 +163,13 @@ pub struct Names {
     pub died_turn: Option<&'static str>,
     /// PLAYED_COST: the mana a card cost when it was played, written only when the pack names it (Gazlowe).
     pub played_cost: Option<&'static str>,
+    /// DORMANT: a minion that holds its board place and is nothing else (`Game::awake`); only when the pack names it.
+    pub dormant: Option<&'static str>,
+    /// TASK: the trap zone's name of a task card in it (Un'Goro's Quests); only when the pack names it.
+    pub task: Option<&'static str>,
+    /// TASK_PROGRESS and TASK_GOAL: a task's count and goal (its scripts keep them; the bots read them).
+    pub task_progress: Option<&'static str>,
+    pub task_goal: Option<&'static str>,
     /// The TRAP mechanic's name: also the zone that holds traps.
     pub trap: &'static str,
     /// Tags Silence removes.
@@ -225,6 +234,10 @@ impl Names {
             died_turn: by_engine.get("DIED_TURN").copied(),
             random_targets: by_engine.get("RANDOM_TARGETS").copied(),
             played_cost: by_engine.get("PLAYED_COST").copied(),
+            dormant: by_engine.get("DORMANT").copied(),
+            task: by_engine.get("TASK").copied(),
+            task_progress: by_engine.get("TASK_PROGRESS").copied(),
+            task_goal: by_engine.get("TASK_GOAL").copied(),
             trap: n("TRAP"),
             silenced: SILENCED.iter().map(|id| n(id)).collect(),
             by_engine: by_engine.clone(),
@@ -618,13 +631,14 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
         k => return Err(format!("{}: unknown type {k}", c.id)),
     };
     let mut tags = Obj::new();
-    let mut trap = false;
+    let (mut trap, mut task) = (false, false);
     for k in &c.keywords {
         let eid = names.engine_of.get(k).ok_or(format!("{}: keyword {k} is not in rules.json mechanics", c.id))?;
         if START_TAGS.contains(&eid.as_str()) {
             tags.insert(names.known(k).unwrap_or_else(|| leak(k)), true);
         }
         trap |= eid == "TRAP";
+        task |= eid == "TASK";
     }
     if let Some(n) = c.spell_power {
         tags.insert(names.spell_power, n);
@@ -637,6 +651,7 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
     }
     Ok(Card {
         trap: trap && kind == "SPELL",
+        task: task && kind == "SPELL",
         health: if kind == "CHAMPION" && c.health == 0 { champion_health } else { c.health },
         id: c.id,
         kind,

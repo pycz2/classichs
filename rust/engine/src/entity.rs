@@ -372,7 +372,8 @@ impl Entity {
     /// Silence: no enchantments, no "this turn" tags, none of `tags` (the ruleset's silenced tags).
     pub fn silence(&mut self, tags: &[&str]) {
         let (old_max, old_hp) = (self.max_health(), self.health());
-        self.enchantments.clear();
+        // a `base` enchantment (new base stats: Crystal Core) is no card text: Silence leaves it
+        self.enchantments.retain(|e| vtruthy(e.get("base")));
         self.eot_tags.clear();
         for k in tags {
             self.tags.remove(*k);

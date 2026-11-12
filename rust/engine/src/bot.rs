@@ -40,6 +40,7 @@ fn side(g: &Game, p: usize, own: bool) -> f64 {
     }
     if own {
         v += 1.0 * pl.hand.len() as f64 + g.rs.bot_trap * pl.secrets.len() as f64;
+        v += g.task_value(p) + 8.0 * pl.extra_turns as f64; // a Quest in play, an extra turn owed (none in older packs)
     }
     v
 }

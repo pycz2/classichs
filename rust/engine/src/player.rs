@@ -31,6 +31,9 @@ pub struct Player {
     /// Counts of the game a pack's scripts keep (`g.count`, `g.add_count`: spells cast, Totems summoned…), by name;
     /// in snapshots only when there are some.
     pub counts: Obj,
+    /// Turns this player takes after the current one before the opponent's (`g.extra_turn`: Time Warp); in snapshots
+    /// only when some are owed.
+    pub extra_turns: i64,
 }
 
 impl Player {
@@ -47,6 +50,9 @@ impl Player {
             "mulliganed": self.mulliganed, "mulligan_replace": self.mulligan_replace});
         if !self.counts.is_empty() {
             v["counts"] = self.counts.to_value();
+        }
+        if self.extra_turns > 0 {
+            v["extra_turns"] = json!(self.extra_turns);
         }
         v
     }

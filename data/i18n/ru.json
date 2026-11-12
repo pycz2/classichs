@@ -876,5 +876,10 @@
 "%s is shuffled into Opponent's deck": "«%s» замешивается в колоду соперника",
 "A card is shuffled into your deck": "Карта замешивается в вашу колоду",
 "A card is shuffled into Opponent's deck": "Карта замешивается в колоду соперника",
-"The target is chosen at random: %s": "Цель выбрана случайно: %s"
+"The target is chosen at random: %s": "Цель выбрана случайно: %s",
+"Extra Turn": "Дополнительный ход",
+"Opponent's Extra Turn": "Дополнительный ход противника",
+"Quest completed: %s": "Задача выполнена: %s",
+"You take an extra turn": "Вы получаете дополнительный ход",
+"Opponent takes an extra turn": "Противник получает дополнительный ход"
 }

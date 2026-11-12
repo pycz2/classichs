@@ -347,7 +347,7 @@ fn visible(g: &Game, id: Id, viewer: i64) -> bool {
     match e.zone {
         "DECK" => chooser,
         "HAND" => mine,
-        z if z == g.n().trap => mine,
+        z if z == g.n().trap => mine || e.card.task, // a task (a Quest) is in sight of both players
         "SETASIDE" if e.created => mine, // an offered option (Discover): the opponent never sees it
         _ => true,
     }

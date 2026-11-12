@@ -128,6 +128,11 @@ impl Game {
             }
             let mut d = std::mem::take(&mut g.players[i].deck);
             g.shuffle_ids(&mut d);
+            if d.iter().any(|&e| g.e(e).card.task) {
+                // a task card (a Quest) starts in the opening hand: it goes on top, in the order the shuffle gave
+                let (tasks, rest): (Vec<Id>, Vec<Id>) = d.iter().partition(|&&e| g.e(e).card.task);
+                d = rest.into_iter().chain(tasks).collect();
+            }
             g.players[i].deck = d;
         }
         g.current = if first >= 0 { first as usize } else { g.rng.randi_range(0, 1) as usize };
@@ -135,6 +140,7 @@ impl Game {
             let [a, b] = rs.start_hand;
             g.draw(g.current, a);
             g.draw(g.opponent(g.current), b);
+            g.queue.clear(); // the opening hands' draws set off nothing (a player hook on `draw`: Crystal Core)
         }
         let events = std::mem::take(&mut g.event_log);
         let action = Action::from_iter([("type".to_string(), json!("start"))]);
@@ -344,7 +350,13 @@ impl Game {
             e.erase_tag(n.frozen_this_turn);
         }
         self.log_event(obj!{"type": "turn_end", "player": cur});
-        self.current = self.opponent(cur);
+        // an extra turn it is owed (Time Warp) comes before the opponent's
+        if self.players[cur].extra_turns > 0 {
+            self.players[cur].extra_turns -= 1;
+            self.log_event(obj!{"type": "extra_turn", "player": cur});
+        } else {
+            self.current = self.opponent(cur);
+        }
         self.start_turn();
     }
 
@@ -418,6 +430,9 @@ impl Game {
             return false;
         }
         if x.card.trap && !self.trap_room(x.controller, x.card_id) {
+            return false;
+        }
+        if x.card.task && !self.task_room(x.controller) {
             return false;
         }
         x.card.hooks.can_play.is_none_or(|f| self.fx_can_play(f, e))
@@ -635,12 +650,16 @@ impl Game {
             self.em(e).zone = "GRAVEYARD";
             return NONE;
         }
-        if self.e(e).card.trap {
+        if self.e(e).card.trap || self.e(e).card.task {
             self.log_event(obj!{"type": "cast", "player": p, "entity": e, "card": card, "target": NONE, "random": true});
-            if self.trap_room(p, card) {
+            let task = self.e(e).card.task;
+            if if task { self.task_room(p) } else { self.trap_room(p, card) } {
                 self.players[p].secrets.push(e);
                 self.enter_play(e);
                 self.em(e).zone = self.rs.names.trap;
+                if task {
+                    self.run_effect(e, "spell", NONE, -1, false); // its start (the goal it shows)
+                }
             } else {
                 self.em(e).zone = "GRAVEYARD";
             }
@@ -745,22 +764,34 @@ impl Game {
     fn play_spell(&mut self, e: Id, t: Id, choice: i64, combo: bool) {
         let c = self.ctrl(e);
         let card = self.e(e).card_id;
-        let is_trap = self.e(e).card.trap;
+        let (is_trap, is_task) = (self.e(e).card.trap, self.e(e).card.task);
         self.em(e).zone = "SETASIDE";
-        let ev = self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_trap,
-            "target": t, "card": card, "countered": false});
+        let mut play = obj!{"type": "play", "entity": e, "player": c, "kind": "spell", "secret": is_trap,
+            "target": t, "card": card, "countered": false};
+        if is_task {
+            play.insert("task", true); // a Quest: it goes up to its champion too, in sight of both players
+        }
+        let ev = self.emit(play);
         self.resolve();
         if self.game_over {
             return;
         }
         let countered = self.ev_b(ev, "countered");
-        if is_trap {
+        if is_trap || is_task {
             if countered {
                 self.em(e).zone = "GRAVEYARD";
             } else {
                 self.players[c].secrets.push(e);
                 self.enter_play(e);
                 self.em(e).zone = self.rs.names.trap;
+                if is_task {
+                    // a task's `spell` hook runs once it waits in the trap zone: its goal (QUEST_PROGRESS_TOTAL)
+                    self.run_effect(e, "spell", NONE, -1, false);
+                    self.resolve();
+                    if self.game_over {
+                        return;
+                    }
+                }
             }
             if !(countered && self.rs.countered_no_after_spell) {
                 self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
@@ -799,14 +830,22 @@ impl Game {
     // --- attack -----------------------------------------------------------------
 
     fn do_attack(&mut self, a: Id, d: Id) {
+        self.attack_now(a, d, false);
+    }
+
+    /// An attack of a on d. `forced`: a card makes it attack (`g.force_attack`: Swamp King Dred) in any turn; it uses
+    /// none of its attacks.
+    pub(crate) fn attack_now(&mut self, a: Id, d: Id, forced: bool) {
         let names = self.n();
-        let n = self.e(a).tag(names.attacks) + 1;
-        self.em(a).set_tag(names.attacks, n);
+        if !forced {
+            let n = self.e(a).tag(names.attacks) + 1;
+            self.em(a).set_tag(names.attacks, n);
+        }
         self.em(a).erase_tag(names.stealth);
         let c = self.ctrl(a);
         let ev = self.emit(obj!{"type": "attack", "attacker": a, "defender": d, "player": c});
         self.resolve();
-        if self.game_over || self.e(a).zone != "PLAY" || self.ctrl(a) != self.current {
+        if self.game_over || self.e(a).zone != "PLAY" || (!forced && self.ctrl(a) != self.current) || self.ctrl(a) != c {
             return;
         }
         let d = self.ev_i(ev, "defender");

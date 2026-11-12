@@ -60,7 +60,7 @@ Return values are ignored unless said otherwise.
 |---|---|---|
 | `target` | `"any"` \| `{base = …, filter = fn(g, me, t) → bool, when = fn(g, me) → bool}` | The card (or power) needs a target. Bases: `any`, `minion`, `enemy_minion`, `friendly_minion`, `enemy_char`, `friendly_char`, `enemy_hero` (alias `enemy_champion`). Enemy STEALTH is never a target; SPELLPROOF blocks spells and powers. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required. `filter` is read-only. `when` (read-only): the spec applies only while it holds, else the card or power has no target (`t` is `nil`): Steady Shot with Steamwheedle Sniper. |
 | `battlecry` (alias `on_play`) | `fn(g, me, t)` | A minion or weapon is played from the hand (after it is on the board / before it is equipped). |
-| `spell` | `fn(g, me, t)` | A spell is cast (not if countered). |
+| `spell` | `fn(g, me, t)` | A spell is cast (not if countered). A TASK card's (a Quest's) runs once it waits in the trap zone: it sets its goal (`TASK_GOAL`); its `on` hooks then count (`TASK_PROGRESS`) and fulfil it (`g.remove`, the reward to the hand). |
 | `combo` | `fn(g, me, t)` | Instead of `battlecry`/`spell` when another card was played before it this turn. |
 | `combo_target` | like `target` | The target spec while combo is active (no target without combo). |
 | `choose_one` (alias `choice`) | `{"OPTION_A", "OPTION_B"}` | Two option *cards*; the player picks one (`choice` 0/1); the option card's `target` and `effect` are used. |
@@ -107,7 +107,7 @@ amounts replace the damage).
 
 | `type` | Fields | Notes |
 |---|---|---|
-| `play` | `entity`, `player`, `card`, `kind` (`minion`/`spell`/`weapon`), `target`; spells: `secret`, `countered` | Before the card's effect. `countered = true` (spells) stops it. Changing `target` redirects a spell. |
+| `play` | `entity`, `player`, `card`, `kind` (`minion`/`spell`/`weapon`), `target`; spells: `secret`, `countered`, `task` (only a TASK card's: true) | Before the card's effect. `countered = true` (spells) stops it. Changing `target` redirects a spell. |
 | `summon` | `entity`, `player`, `card` | A minion entered the board (played or summoned). |
 | `after_summon` | `entity`, `player`, `card`, `played` (true if played from hand) | After its battlecry. |
 | `after_spell` | `entity`, `player`, `card` | After a spell resolved. |
@@ -155,7 +155,8 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.others(me)` | `me`'s side's minions without `me`. |
 | `g.adjacent(m)` | The minions left and right of `m` (left first). |
 | `g.hand(p)`, `g.deck(p)` | Card entities; the deck's **last** item is its top. |
-| `g.traps(p)` | `p`'s traps (secrets) in play. |
+| `g.traps(p)` | `p`'s traps (secrets) in play (not its task: a Quest is no Secret). |
+| `g.tasks(p)` | `p`'s task in play (a TASK card: Journey to Un'Goro's Quests), as a list of none or one. |
 | `g.card(e)` | Its card id. |
 | `g.type(e)` | `MINION`, `SPELL`, `WEAPON`, `CHAMPION`, `POWER`. |
 | `g.race(e)`, `g.class(e)` | Card fields (`""` if none). |
@@ -181,8 +182,8 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.rule(name)` | `hand`, `board`, `max_mana`, `deck_size`, `champion_health` from rules.json. |
 | `g.mine(me, ev)` | `ev.player` is `me`'s controller. |
 | `g.enchants(e, hooks)` | The `player` fields of `e`'s enchantments with these hooks. |
-| `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`, and `classes` (a list) for a multi-class card (cards.md: a card of each of its classes; its `class` is neutral). |
-| `g.collectible()` | Collectible card ids of the constructed sets, sorted. |
+| `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`, and `classes` (a list) for a multi-class card (cards.md: a card of each of its classes; its `class` is neutral), `task = true` for a TASK card (a Quest). |
+| `g.collectible()` | Collectible card ids of the constructed sets, sorted; no TASK card (a Quest is never made at random nor Discovered). |
 | `g.count(p, name)` | A count of the game `g.add_count` keeps for `p` (0 if none). |
 | `g.graveyard(p)` | `p`'s cards in the GRAVEYARD zone, in play order: dead minions and weapons, played spells, discarded and burned cards. A minion that died on the board has `DIED_POS` (`g.died_pos(e) >= 0`), and `DIED_TURN` (the turn) in a pack that names that mechanic (Naxxramas: Kel'Thuzad, Feugen and Stalagg). |
 
@@ -222,7 +223,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.set_tag(e, tag, v)` | `v`: boolean, number, string; `nil` removes. |
 | `g.give_tag(e, tag[, this_turn])`, `g.erase_tag(e, tag)`, `g.add_tag(e, tag, n)` | |
 | `g.set_damage(e, n)` | Sets the damage taken (Alexstrasza). |
-| `g.enchant(e, t)` | Adds an enchantment table: `{hooks = name, player = p}`, `{cost = -2}`, `{atk = 1, hp = 1, eot = true}`, `{deathrattle = card}` (only that card's own Deathrattle hook, not its other hooks: Unearthed Raptor; with `from = t`, t's tags that no mechanic names come along to `e`, so the copy keeps what t's Deathrattle holds: Moat Lurker's minion), … |
+| `g.enchant(e, t)` | Adds an enchantment table: `{hooks = name, player = p}`, `{cost = -2}`, `{cost_set = 5}` (its cost becomes 5, then later changes apply: Bright-Eyed Scout; in the order it came with `behaviour.cost_in_order`), `{set_atk = 5, set_hp = 5, base = true}` (`base`: new base stats, put under every other enchantment, and Silence leaves it: Crystal Core), `{atk = 1, hp = 1, eot = true}`, `{deathrattle = card}` (only that card's own Deathrattle hook, not its other hooks: Unearthed Raptor; with `from = t`, t's tags that no mechanic names come along to `e`, so the copy keeps what t's Deathrattle holds: Moat Lurker's minion), … |
 | `g.remove_enchant(e, hooks[, p])` | Removes `e`'s enchantments with these hooks (`p` given: only those whose `player` is `p`; Conceal, Headcrack, Shadow Madness). |
 | `g.aura_add(e, atk, hp[, tags])` | In an `aura` hook: what `e` gets now (`{WINDFURY = true}`, `{SPELLPOWER = 1}`). |
 | `g.replace_hero(p, card)`, `g.set_power(p, card)` | A new champion / power. |
@@ -230,6 +231,8 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. Asked while another choice is pending (a doubled Battlecry: two Discovers), it comes once that one is answered. |
 | `g.cast(me, spell, t)` | Casts a copy of the spell entity `spell` for `me`'s player on `t` (or none), as `spell` was cast (its Choose One option, its Combo): only its effect, no `play` or `after_spell` event, no target check; logs `cast` (Djinni of Zephyrs). |
 | `g.cast_random(me, card[, overload])` | Casts a new spell `card` for `me`'s player with every choice made at random (Yogg-Saron): a random valid target (no enemy with Stealth or Immune; none, or its `can_play` fails: it fizzles, logs `fizzle`, returns `nil`), a random Choose One option (both with BOTH_CHOICES), its `g.request_choice` picked at once at random; Combo only if a card was played before `me` this turn; a trap goes into play if it may. Only its effect: no `play`/`after_spell` event, no Overload (`g.cast_random(me, card, true)`: its Overload too, owed by `me`'s player, cast or fizzled: Yogg-Saron since patch 6.2). Logs `cast` with `random`; returns the spell. |
+| `g.extra_turn(p)` | `p` takes one more turn after the current one, before the opponent's (Time Warp; two cast in one turn still give one): the turn ends as usual, logs `extra_turn` and the same player's turn starts (a mana crystal, a draw). In the player's snapshot `extra_turns` while some are owed. |
+| `g.force_attack(a, d)` | `a` attacks `d` now, in any turn (Swamp King Dred: "attack it"): the `attack` event (a redirect counts), the damage both ways, `after_attack`; past Taunt and Stealth, Frozen or exhausted, and it uses none of `a`'s attacks. Nothing happens unless both are characters of different sides in play, awake and not dying. |
 | `g.add_count(p, name[, n])` | Adds `n` (default 1) to `p`'s count `name` (in the player's snapshot `counts`; kept by a new champion): spells cast, Totems summoned this game. Returns the new count. |
 | `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"power"|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n][, race = r][, lasting = true]}`; `turn` defaults to now. `race`: only cards of that race (Dragon Consort: `"DRAGON"`). `"power"`: the champion's power (a `"use"` mod goes when the power is used: Fencing Coach; Saboteur: `turn = g.turn() + 1`). `lasting`: it holds on any turn, kept until a card it applies to is played (with `until = "use"`: "the next Dragon you play costs (2) less"). `health = true`: the cards it applies to cost Health instead of Mana (paid as damage to the champion, Armor first; playable only while Health and Armor are more than the cost: Cho'gall). |
 | `g.log(ev)`, `g.emit(ev)` | Logs an event table (`emit` also triggers `on` hooks). |

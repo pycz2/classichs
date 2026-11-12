@@ -876,5 +876,10 @@
 "%s is shuffled into Opponent's deck": "%s wird in das Deck des Gegners gemischt",
 "A card is shuffled into your deck": "Eine Karte wird in Euer Deck gemischt",
 "A card is shuffled into Opponent's deck": "Eine Karte wird in das Deck des Gegners gemischt",
-"The target is chosen at random: %s": "Das Ziel wird zufällig gewählt: %s"
+"The target is chosen at random: %s": "Das Ziel wird zufällig gewählt: %s",
+"Extra Turn": "Zusätzlicher Zug",
+"Opponent's Extra Turn": "Zusätzlicher Zug des Gegners",
+"Quest completed: %s": "Quest erfüllt: %s",
+"You take an extra turn": "Ihr bekommt einen zusätzlichen Zug",
+"Opponent takes an extra turn": "Der Gegner bekommt einen zusätzlichen Zug"
 }

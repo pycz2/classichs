@@ -128,6 +128,11 @@ func test_whispers_of_the_old_gods_events() -> void:
 	var shift := {"type": "transform", "from": wisp, "entity": wisp, "player": 0, "card": "VAN_CS2_182"}
 	eq(line.call(shift, 0), "Your Wisp becomes Chillwind Yeti", "a card in the hand changes")
 	eq(line.call(shift.merged({"card": ""}, true), 1), "A card of Opponent's changes", "hidden from the opponent")
+	# Journey to Un'Goro: a Quest fulfilled, an extra turn
+	eq(line.call({"type": "quest_done", "player": 0, "entity": -1, "card": "VAN_CS2_029"}, 1), "Quest completed: Fireball",
+		"both players see it")
+	eq(line.call({"type": "extra_turn", "player": 0}, 0), "You take an extra turn", "Time Warp")
+	eq(line.call({"type": "extra_turn", "player": 0}, 1), "Opponent takes an extra turn", "the opponent's")
 	eq(line.call({"type": "to_hand", "player": 0, "entity": wisp, "card": "VAN_CS2_231"}, 0), "Wisp is put into your hand", "")
 	eq(line.call({"type": "to_hand", "player": 0, "entity": wisp, "card": ""}, 1), "A card is put into Opponent's hand", "")
 	var shuffled := {"type": "add_to_deck", "player": 0, "entity": wisp, "card": ""}
