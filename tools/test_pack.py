@@ -729,6 +729,44 @@ class Chain(unittest.TestCase):
             self.assertEqual(pack.deck_error(json.loads(files[f]), cards, rules), "", f)
         self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
 
+    def test_the_witchwood_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/gil")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/LOOT_" in p or "/GIL_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/icc.lua", "scripts/loot.lua", "scripts/gil.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/gil"))
+        rules = json.loads(files["rules.json"])
+        # no behaviour changed between Kobolds & Catacombs and The Witchwood: the same flags
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": False, "full_hand_return_dies": True,
+                                              "cost_in_order": True, "replaced_weapon_dies": True,
+                                              "lifesteal_one_heal": True, "after_spell_from_before": True})
+        self.assertEqual((rules["player_hooks"], rules["every_race"]), ("player:gil", "ALL"))
+        self.assertEqual({k: rules["mechanics"][k]["engine"] for k in ("RUSH", "ECHO", "START_OF_GAME", "HERO_POWER_DOUBLE")},
+                         {"RUSH": "QUICK", "ECHO": "REPEATABLE", "START_OF_GAME": "AT_GAME_START",
+                          "HERO_POWER_DOUBLE": "POWER_DOUBLE"})
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        gil = [c for c in cards.values() if c.get("set") == "GILNEAS"]
+        self.assertEqual(len([c for c in gil if c.get("collectible")]), 135)
+        self.assertEqual(cards["GIL_191"]["cost"], 4)  # Fiendish Circle: 3 only from 2021
+        self.assertEqual(cards["VAN_EX1_620"]["cost"], 20)  # Molten Giant: patch 11.0
+        self.assertEqual((cards["LOOT_149"]["attack"], cards["ICC_705"]["cost"]), (2, 8))  # patch 10.2
+        self.assertNotIn("keywords", cards["CFM_637"])  # Patches without Charge (patch 10.2)
+        for lang in ("en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"):
+            loc = json.loads(files[f"locales/{lang}.json"])
+            self.assertTrue(loc["sets"]["GILNEAS"] and loc["races"]["ALL"])
+            self.assertTrue(all(loc["mechanics"][k].get("name") and loc["mechanics"][k].get("tip")
+                                for k in ("RUSH", "ECHO", "START_OF_GAME")), lang)
+        en = json.loads(files["locales/en.json"])
+        self.assertEqual((en["sets"]["GILNEAS"], en["mechanics"]["RUSH"]["name"]), ("The Witchwood", "Rush"))
+        self.assertEqual(en["cards"]["VAN_EX1_393"]["text"], "Has +3 Attack while damaged.")  # Enrage retired (11.0)
+        self.assertEqual(en["cards"]["VAN_EX1_595"]["text"], "After a friendly minion dies, draw a card.")
+        for f in [p for p in files if p.startswith("decks/")]:
+            self.assertEqual(pack.deck_error(json.loads(files[f]), cards, rules), "", f)
+        self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 12)
+
     def test_an_expansion_shows_the_texts_of_its_release_build(self):
         import extract_cards
         for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:

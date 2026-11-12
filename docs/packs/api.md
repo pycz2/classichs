@@ -165,7 +165,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.tasks(p)` | `p`'s task in play (a TASK card: Journey to Un'Goro's Quests), as a list of none or one. |
 | `g.card(e)` | Its card id. |
 | `g.type(e)` | `MINION`, `SPELL`, `WEAPON`, `CHAMPION`, `POWER`. |
-| `g.race(e)`, `g.class(e)` | Card fields (`""` if none). |
+| `g.race(e)`, `g.class(e)` | Card fields (`""` if none). A card of the pack's `every_race` (rules.md; The Witchwood's Nightmare Amalgam) has a race that is `==` to every race name (not to `""`), in `g.info(card).race` too. |
 | `g.zone(e)` | `DECK`, `HAND`, `PLAY`, the trap zone (the pack's TRAP name; Classic `SECRET`), `GRAVEYARD`, `SETASIDE`. |
 | `g.atk(e)` | Attack (with buffs and auras). |
 | `g.attack(e)` | What it hits for: a champion's includes the weapon on its own turn. |
@@ -215,7 +215,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.buff(e, atk, hp[, this_turn])` | An enchantment +atk/+hp (`true`: until the end of the turn). |
 | `g.set_stats(e, atk, hp)` | Sets attack and/or health (`nil` keeps one); setting health heals. |
 | `g.silence(e)`, `g.freeze(e)` | |
-| `g.transform(e, card)` | Replaces a minion in play with a new minion, or a card in its owner's hand or deck with any card in its place (Shifter Zerus, Renounce Darkness; only the owner sees the new card); returns it. |
+| `g.transform(e, card[, keep])` | Replaces a minion in play with a new minion, or a card in its owner's hand or deck with any card in its place (Shifter Zerus, Renounce Darkness; only the owner sees the new card); returns it. `keep` (a card in a hand or a deck): the new card keeps the old one's enchantments and the tags it was given (the cards that transform in the hand before patch 12.0.0.25770 of 2018: The Witchwood's worgen, Chameleos). |
 | `g.return_to_hand(e)` | Returns a minion as a fresh card; returns the new card or `nil`. |
 | `g.take_control(e, p)` | A minion, or a trap (it moves to `p`'s traps; if `p` has that trap already or `limits.secrets` traps, it is destroyed: Kezan Mystic). |
 | `g.copy_minion(me, t)` | Turns `me` into a copy of `t` (stats, enchantments, tags, silence). |
@@ -235,11 +235,12 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.set_damage(e, n)` | Sets the damage taken (Alexstrasza). |
 | `g.enchant(e, t)` | Adds an enchantment table: `{hooks = name, player = p}`, `{cost = -2}`, `{cost_set = 5}` (its cost becomes 5, then later changes apply: Bright-Eyed Scout; in the order it came with `behaviour.cost_in_order`), `{set_atk = 5, set_hp = 5, base = true}` (`base`: new base stats, put under every other enchantment, and Silence leaves it: Crystal Core), `{atk = 1, hp = 1, eot = true}`, `{deathrattle = card}` (only that card's own Deathrattle hook, not its other hooks: Unearthed Raptor; with `from = t`, t's tags that no mechanic names come along to `e`, so the copy keeps what t's Deathrattle holds: Moat Lurker's minion), … |
 | `g.remove_enchant(e, hooks[, p])` | Removes `e`'s enchantments with these hooks (`p` given: only those whose `player` is `p`; Conceal, Headcrack, Shadow Madness). |
-| `g.aura_add(e, atk, hp[, tags])` | In an `aura` hook: what `e` gets now (`{WINDFURY = true}`, `{SPELLPOWER = 1}`). |
+| `g.aura_add(e, atk, hp[, tags])` | In an `aura` hook: what `e` gets now (`{WINDFURY = true}`, `{SPELLPOWER = 1}`); `e` may be a card in a hand too (Glinda Crowskin: the minions in your hand have `{ECHO = true}`). |
 | `g.replace_hero(p, card)`, `g.set_power(p, card)` | A new champion / power. |
 | `g.reveal(me)` | Reveals a trap (for `now` hooks; `secret` hooks are revealed for you). |
 | `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. Asked while another choice is pending (a doubled Battlecry: two Discovers), it comes once that one is answered. |
 | `g.cast(me, spell, t)` | Casts a copy of the spell entity `spell` for `me`'s player on `t` (or none), as `spell` was cast (its Choose One option, its Combo): only its effect, no `play` or `after_spell` event, no target check; logs `cast` (Djinni of Zephyrs). |
+| `g.battlecry(me, card)` | Runs `card`'s Battlecry (its `battlecry` hook) as `me`'s own, every choice made at random (Shudderwock): a random valid target of its `target` spec but `me` itself (none valid: it does nothing), its `g.request_choice` picked at once at random; its conditions read the game now. Once (DOUBLE_ON_PLAY doubles the Battlecry of the card played, not these); no `play` event. Logs `battlecry` (`target`: -1 when it had none). |
 | `g.cast_random(me, card[, overload])` | Casts a new spell `card` for `me`'s player with every choice made at random (Yogg-Saron): a random valid target (no enemy with Stealth or Immune; none, or its `can_play` fails: it fizzles, logs `fizzle`, returns `nil`), a random Choose One option (both with BOTH_CHOICES), its `g.request_choice` picked at once at random; Combo only if a card was played before `me` this turn; a trap goes into play if it may. Only its effect: no `play`/`after_spell` event, no Overload (`g.cast_random(me, card, true)`: its Overload too, owed by `me`'s player, cast or fizzled: Yogg-Saron since patch 6.2). Logs `cast` with `random`; returns the spell. |
 | `g.extra_turn(p)` | `p` takes one more turn after the current one, before the opponent's (Time Warp; two cast in one turn still give one): the turn ends as usual, logs `extra_turn` and the same player's turn starts (a mana crystal, a draw). In the player's snapshot `extra_turns` while some are owed. |
 | `g.force_attack(a, d)` | `a` attacks `d` now, in any turn (Swamp King Dred: "attack it"): the `attack` event (a redirect counts), the damage both ways, `after_attack`; past Taunt and Stealth, Frozen or exhausted, and it uses none of `a`'s attacks. Nothing happens unless both are characters of different sides in play, awake and not dying. |

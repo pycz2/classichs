@@ -896,5 +896,10 @@
 "Opponent reveals %s": "Соперник показывает карту «%s»",
 "%s awakens": "«%s» пробуждается",
 "%s is removed from your hand": "«%s» убирается из вашей руки",
-"%s is removed from Opponent's hand": "«%s» убирается из руки соперника"
+"%s is removed from Opponent's hand": "«%s» убирается из руки соперника",
+"%s fades from your hand": "«%s» исчезает из вашей руки",
+"%s fades from Opponent's hand": "«%s» исчезает из руки соперника",
+"Start of Game: your %s": "Начало матча: ваша карта «%s»",
+"Start of Game: Opponent's %s": "Начало матча: карта соперника «%s»",
+"%s repeats the Battlecry of %s": "%s повторяет боевой клич карты «%s»"
 }

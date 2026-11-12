@@ -4,8 +4,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.70.0] - 2026-11-12
+
 ### Added
-- **Eleven new games, the expansions after Naxxramas.** Each holds every card of the games before it (Basic, Classic, Naxxramas and on in order), and every card is as it was on the expansion's release day: cost, stats, tribe, texts in 8 languages. Each game has its own deck templates of that time's meta (10 to 17), bots that play it, its own look and a set mark.
+- **Eleven new games, the expansions after Naxxramas.** Each holds every card of the games before it (Basic, Classic, Naxxramas and on in order), and every card is as it was on the expansion's release day: cost, stats, tribe, texts in 8 languages. Each game has its own deck templates of that time's meta (10 to 19), bots that play it, its own look and a set mark.
 - Goblins vs Gnomes 2014 (cards as of December 8, 2014): Mechs, Spare Parts, Mega-Windfury, Mimiron's Head.
 - Blackrock Mountain 2015 (April 2, 2015): Dragons and "if you're holding a Dragon" cards, Emperor Thaurissan, Nefarian.
 - The Grand Tournament 2015 (August 24, 2015): Inspire, Jousts, upgraded Hero Powers.

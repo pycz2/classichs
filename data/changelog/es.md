@@ -4,8 +4,10 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.70.0] - 2026-11-12
+
 ### Añadido
-- **Once juegos nuevos, las expansiones después de Naxxramas.** Cada uno tiene todas las cartas de los juegos anteriores (Básicas, Clásicas, Naxxramas y los siguientes en orden), y cada carta es como era el día del lanzamiento de la expansión: coste, estadísticas, raza, textos en 8 idiomas. Cada juego tiene sus plantillas de mazos del meta de la época (de 10 a 17), bots que lo juegan, su propio aspecto y un símbolo de expansión.
+- **Once juegos nuevos, las expansiones después de Naxxramas.** Cada uno tiene todas las cartas de los juegos anteriores (Básicas, Clásicas, Naxxramas y los siguientes en orden), y cada carta es como era el día del lanzamiento de la expansión: coste, estadísticas, raza, textos en 8 idiomas. Cada juego tiene sus plantillas de mazos del meta de la época (de 10 a 19), bots que lo juegan, su propio aspecto y un símbolo de expansión.
 - Goblins y Gnomos 2014 (cartas al 8 de diciembre de 2014): mecas, piezas de repuesto, Megaviento furioso, Cabeza de Mimiron.
 - La Montaña Roca Negra 2015 (2 de abril de 2015): dragones y cartas «si tienes un dragón en la mano», Emperador Thaurissan, Nefarian.
 - El Gran Torneo 2015 (24 de agosto de 2015): Inspirar, Justas, poderes de héroe mejorados.
@@ -15,8 +17,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 - Mafias de Gadgetzan 2016 (1 de diciembre de 2016): gólems de jade, Kazakus, cartas de tres clases a la vez.
 - Viaje a Un'Goro 2017 (6 de abril de 2017): misiones y sus recompensas, Adaptación, elementales, esbirros latentes.
 - Caballeros del Trono Helado 2017 (10 de agosto de 2017): las cartas de héroe de los caballeros de la Muerte, Robo de vida, una zombestia hecha de dos bestias.
-- Kóbolds y Catacumbas 2017 (7 de diciembre de 2017): esbirros directamente del mazo al tablero, piedras de hechizo que crecen, armas legendarias.
-- El Bosque Embrujado 2018 (12 de abril de 2018): Eco, Embestida, cartas para mazos solo de coste par o solo de coste impar (Genn y Baku).
+- Kóbolds & Catacumbas 2017 (7 de diciembre de 2017): esbirros directamente del mazo al tablero, piedras de hechizo que crecen, armas legendarias.
+- El Bosque Embrujado 2018 (12 de abril de 2018): Eco, Embestir, cartas para mazos solo de coste par o solo de coste impar (Genn y Baku).
 - Los juegos nuevos no están en las versiones del cliente, así que las aplicaciones de escritorio, Android y navegador no han crecido. Descarga un juego desde un servidor o instala el archivo ClassicHS-x.y.z-<juego>.cardpack de la página de la versión. Cada juego es independiente y no necesita ningún otro: lleva las imágenes de las cartas antiguas, y las cartas nuevas tienen imágenes dibujadas sencillas.
 - Las cartas en la mano cuya condición se cumple ahora brillan en amarillo: Combo, «si tu mazo no tiene cartas repetidas», «si tienes un dragón en la mano» y más.
 - Las cartas de las expansiones muestran su símbolo de expansión, también junto a la carta grande; la colección tiene un filtro por expansión.

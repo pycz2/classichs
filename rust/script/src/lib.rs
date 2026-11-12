@@ -28,6 +28,10 @@ pub use vm::{call, call_path, get_path, load, Vm};
 /// A Lua string: bytes, shared.
 pub type Str = Arc<[u8]>;
 
+/// A string that is equal (`==`) to every non-empty string and to itself, not to `""` (a host's "every race": a card
+/// of every type, The Witchwood's Nightmare Amalgam). Scripts cannot write it (it starts with a NUL byte).
+pub const EVERY: &str = "\0EVERY";
+
 /// A reference to a heap object of a [`Vm`]. Checked on use: a reference to
 /// an object the collector has freed gives an error, never another object.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

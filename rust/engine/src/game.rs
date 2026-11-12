@@ -527,7 +527,7 @@ impl Game {
         if self.attack_value(a) <= 0 || x.has(n.frozen) || x.has(n.cant_attack) {
             return false;
         }
-        if x.is_minion() && x.has(n.exhausted) && !x.has(n.haste) {
+        if x.is_minion() && x.has(n.exhausted) && !x.has(n.haste) && !n.quick.is_some_and(|q| x.has(q)) {
             return false;
         }
         let weapon = |t: &str| x.is_champion() && self.players[x.controller].weapon.is_some_and(|w| self.e(w).has(t));
@@ -538,13 +538,20 @@ impl Game {
         x.tag(n.attacks) < limit
     }
 
+    /// a may attack only minions now: a QUICK minion (Rush) in the turn it came into play (still exhausted, no HASTE).
+    fn only_minions_now(&self, a: Id) -> bool {
+        let (x, n) = (self.e(a), self.n());
+        x.is_minion() && x.has(n.exhausted) && !x.has(n.haste) && n.quick.is_some_and(|q| x.has(q))
+    }
+
     /// The enemy characters a may hit when its attack goes astray (RANDOM_TARGETS): every one, Taunt or Stealth or
     /// not, but a champion only if a may attack champions.
     fn any_defenders(&self, a: Id) -> Vec<Id> {
         let n = self.n();
         let (x, p) = (self.e(a), self.ctrl(a));
         let no_heroes = x.has(n.cant_attack_heroes)
-            || (x.is_champion() && self.players[p].weapon.is_some_and(|w| self.e(w).has(n.cant_attack_heroes)));
+            || (x.is_champion() && self.players[p].weapon.is_some_and(|w| self.e(w).has(n.cant_attack_heroes)))
+            || self.only_minions_now(a);
         self.chars(self.opponent(p)).into_iter().filter(|&t| !(no_heroes && self.e(t).is_champion())).collect()
     }
 
@@ -556,7 +563,8 @@ impl Game {
         // a champion's weapon that cannot attack champions keeps it off them too (Fool's Bane)
         let (x, p) = (self.e(a), self.ctrl(a));
         let no_heroes = x.has(n.cant_attack_heroes)
-            || (x.is_champion() && self.players[p].weapon.is_some_and(|w| self.e(w).has(n.cant_attack_heroes)));
+            || (x.is_champion() && self.players[p].weapon.is_some_and(|w| self.e(w).has(n.cant_attack_heroes)))
+            || self.only_minions_now(a);
         for t in self.chars(foe) {
             let te = self.e(t);
             if te.has(n.stealth) || (no_heroes && te.is_champion()) {
@@ -737,6 +745,29 @@ impl Game {
         self.run_effect(e, "spell", t, choice, combo);
         self.em(e).zone = "GRAVEYARD";
         e
+    }
+
+    /// Runs the Battlecry (ON_PLAY hook) of `card` as src's own (`g.battlecry`: Shudderwock), every choice made at
+    /// random: a random valid target of its target spec but src itself (none valid: it does nothing), the choices it
+    /// offers picked at once at random. Once: DOUBLE_ON_PLAY doubles the Battlecry of the card played, not these. Logs
+    /// `battlecry` (`target`: NONE when it did nothing).
+    pub fn battlecry_random(&mut self, src: Id, card: &str) {
+        let c = self.rs.card(card);
+        let (p, saved) = (self.ctrl(src), (self.e(src).borrowed, self.e(src).auto_choice));
+        (self.em(src).borrowed, self.em(src).auto_choice) = (Some(c), true);
+        let mut t = NONE;
+        let spec = self.target_spec(src, -1, false);
+        if let Some(spec) = &spec {
+            let valid: Vec<Id> = self.targets(src, spec, false).into_iter().filter(|&x| x != src).collect();
+            t = self.random_choice(&valid);
+        }
+        self.log_event(obj!{"type": "battlecry", "player": p, "entity": src, "card": c.id.as_str(), "target": t});
+        if spec.is_none() || t != NONE {
+            if let Some(f) = c.hooks.on_play {
+                self.from(src, |g| g.fx_effect(f, src, t));
+            }
+        }
+        (self.em(src).borrowed, self.em(src).auto_choice) = saved;
     }
 
     /// p's Choose One cards have both effects now (BOTH_CHOICES on the champion: Fandral Staghelm).
