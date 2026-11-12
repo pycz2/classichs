@@ -501,6 +501,18 @@ cards.CFM_020 = {
   end,
 }
 
+-- Stand Against Darkness (patch 11.0.0.23966: "can no longer be cast with a full board"): five 1/1 Recruits.
+cards.OG_273 = {
+  can_play = function(g, me)
+    return g.room(g.ctrl(me)) > 0
+  end,
+  spell = function(g, me)
+    for _ = 1, 5 do
+      g.summon(g.ctrl(me), "VAN_CS2_101t")
+    end
+  end,
+}
+
 -- Deathstalker Rexxar's Build-A-Beast (patch 11.0.0.23966): the Beasts of Kobolds & Catacombs and The Witchwood too
 -- (tools/zombeast_pools.py packs/gil writes the lists); a Zombeast made of an Echo or a Rush Beast has it.
 -- @@ZOMBEAST_POOLS@@

@@ -224,5 +224,56 @@
    ],
    "script": "scripts/loot_neutral.lua#LOOT_149"
   }
+ ],
+ "OG_273": [
+  {
+   "kind": "spell",
+   "title": "Stand Against Darkness (patch 11.0): five 1/1 Recruits; it can't be cast with a full board",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "OG_273"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "script": "scripts/gil.lua#OG_273"
+  }
  ]
 }

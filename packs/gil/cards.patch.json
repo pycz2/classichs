@@ -56,6 +56,9 @@
    "ENRAGED"
   ]
  },
+ "OG_273": {
+  "script": "scripts/gil.lua#OG_273"
+ },
  "ICC_828p": {
   "script": "scripts/gil.lua#ICC_828p"
  },

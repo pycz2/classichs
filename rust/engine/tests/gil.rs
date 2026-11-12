@@ -279,3 +279,12 @@ fn genn_makes_the_starting_hero_power_cost_one() {
     assert_eq!(g.cost(g.players[1].hero_power), 1);
     assert_eq!(g.cost(g.players[0].hero_power), 2, "the other player's: (2)");
 }
+
+#[test]
+fn stand_against_darkness_needs_room_since_patch_11() {
+    let t = scene!({"hand": ["OG_273"], "board": [WISP, WISP, WISP, WISP, WISP, WISP, WISP]}, {});
+    assert!(!t.can_play("OG_273"), "a full board: it can't be cast");
+    let mut t = scene!({"hand": ["OG_273"], "board": [WISP, WISP, WISP, WISP, WISP, WISP]}, {});
+    t.play("OG_273", NONE);
+    assert_eq!(t.cards(0).len(), 7);
+}

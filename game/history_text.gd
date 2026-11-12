@@ -183,6 +183,15 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 		"reveal":  # a deck's card shown to both players (Seeping Oozeling, Dragon's Fury); no line if the view hides it
 			if str(ev.get("card", "")) != "":
 				s = _say(p, viewer, "You reveal %s", "Opponent reveals %s", [CardText.name(ev.card, loc)])
+		"faded":  # an Echo copy goes away at the end of the turn; no line if the view hides it
+			if str(ev.get("card", "")) != "":
+				s = _say(p, viewer, "%s fades from your hand", "%s fades from Opponent's hand", [CardText.name(ev.card, loc)])
+		"start_of_game":  # (Baku the Mooneater, Genn Greymane): both players see it
+			s = _say(p, viewer, "Start of Game: your %s", "Start of Game: Opponent's %s", [CardText.name(ev.card, loc)])
+		"battlecry":  # a Battlecry repeated (Shudderwock)
+			s = _t("%s repeats the Battlecry of %s") % [n.call(ev.entity), CardText.name(ev.card, loc)]
+			if int(ev.get("target", -1)) >= 0:
+				s += " " + _t("on %s") % n.call(ev.target)
 		"hero_power":
 			s = _say(p, viewer, "You use %s", "Opponent uses %s", [n.call(ev.entity)])
 			if ev.get("target", -1) >= 0:

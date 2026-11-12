@@ -22,6 +22,10 @@ var silenced := false
 var text_args := []
 ## The card whose picture it shows ("" = its own: a Zombeast shows its first Beast's).
 var art_id := ""
+## A card in the hand with Echo (its keyword, or Glinda Crowskin's aura): a violet mark with rings in its top right corner.
+var echo := false
+## The Echo mark's colour; a GHOSTLY copy (it goes away at the end of the turn) is drawn in it, see-through.
+const ECHO := Color("b48cff")
 
 
 static func make(id: String, scale_factor := 1.0) -> CardView:
@@ -42,6 +46,8 @@ func show_entity(e: GameView.Ent, g: GameView) -> void:
 	if e.choice >= 0 and str(e.card().get("text", {}).get("enUS", "")).contains("@"):  # (raw() gives one variant)
 		text_args = ["@%d" % (e.choice + 1)]  # the text variant of its option (Fatespinner: only its player knows it)
 	cost = g.cost(e) if e.zone == "HAND" else int(e.card().get("cost", 0))
+	echo = e.zone == "HAND" and (e.has("ECHO") or KeywordTips.keywords_of(card_id).has("ECHO"))
+	self_modulate = Color(ECHO.lightened(0.4), 0.72) if e.has("GHOSTLY") else Color.WHITE
 	if was >= 0 and was != cost:
 		pop("cost")
 	if e.is_minion():
@@ -170,6 +176,13 @@ func _draw() -> void:
 			Frames.health(self, Vector2(103, 154) * k, h, 15 * k)
 		else:
 			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k, Frames.durability_color(h, c), "durability")
+	if echo:
+		var at := Vector2(103, 17) * k
+		draw_circle(at, 10 * k, Color("2b1846"))
+		draw_arc(at, 10 * k, 0, TAU, 28, Frames.GOLD.darkened(0.2), 1.5 * k, true)
+		draw_circle(at, 3 * k, ECHO)
+		for i in 2:
+			draw_arc(at, (5.5 + 2.5 * i) * k, 0, TAU, 24, Color(ECHO, 0.9 - 0.35 * i), 1.3 * k, true)
 	if marked:  # to be replaced: the card darkens and a red seal with a white cross sits on it
 		draw_style_box(Palette.raw_box(Color(0, 0, 0, 0.45), int(12 * k)), r)
 		var mc := Vector2(60, 70) * k
