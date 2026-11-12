@@ -10469,13 +10469,13 @@
  "VAN_EX1_620": [
   {
    "kind": "play",
-   "title": "Molten Giant (patch 11.0: 20 Mana again): our hero took 15 damage, it costs (5)",
+   "title": "Molten Giant (patch 11.0: 20 Mana again): our hero took 15 damage, it costs (5) (in the packs of 2016-17: (10))",
    "scene": {
     "current": 0,
     "players": [
      {
       "hero": "HERO_01",
-      "mana": 5,
+      "mana": 10,
       "max_mana": 10,
       "deck": [
        "VAN_CS2_120",
