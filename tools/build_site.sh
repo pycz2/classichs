@@ -22,8 +22,10 @@ python3 tools/lua_api.py --check  # the API reference must match the engine's g.
 python3 tools/site_docs.py "$OUT"  # dev/: the pages for game makers (site/dev/<lang>/*.md, docs/packs/*.md, the API)
 godot --path . --script res://tools/site_cards.gd -- "$OUT"  # the cards as the game draws them (needs a window)
 touch "$OUT/.nojekyll"
-BIG=$(find "$OUT" -type f -size +95M)  # GitHub refuses a file over 100 MB (the web build's .pck grows with its packs)
-if [ -n "$BIG" ]; then echo "too big for GitHub Pages (over 95 MB): $BIG" >&2; exit 1; fi
+# GitHub Pages takes a site of at most 1 GB; a file over 100 MB git refuses, so the publish splits it into
+# parts (below) and the Pages workflow (.github/workflows/pages.yml) joins them again before the deploy.
+SIZE=$(du -sk "$OUT" | cut -f1)
+if [ "$SIZE" -gt 950000 ]; then echo "too big for GitHub Pages (over 950 MB): ${SIZE} KB" >&2; exit 1; fi
 echo "Site built in $OUT"
 [ "$1" = "--publish" ] || exit 0
 REV=$(git rev-parse --short HEAD)
@@ -45,6 +47,9 @@ else
 fi
 find "$WT" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
 cp -R "$OUT"/. "$WT"/
+find "$WT" -path "$WT/.git" -prune -o -type f -size +90M -print | while read -r f; do  # git takes no file over 100 MB
+	split -b 90m "$f" "$f.part-" && rm "$f"
+done
 git -C "$WT" add -A
 git -C "$WT" commit -q -m "Site from $REV" || echo "No changes"
 git -C "$WT" push origin gh-pages
