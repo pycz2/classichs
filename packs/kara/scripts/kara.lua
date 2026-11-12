@@ -383,6 +383,26 @@ cards.KAR_097t = on_mine("after_spell", function(g, me, ev)
   g.add_tag(me, "DURABILITY", -1)
 end)
 
+-- --- older cards ---------------------------------------------------------------------------------------------------
+
+-- Unearthed Raptor: a copy of a friendly minion's Deathrattle that keeps what that Deathrattle holds (a Moat Lurker's
+-- minion comes back for the Raptor too, as the wiki says; `from`: docs/packs/api.md, g.enchant).
+cards.LOE_019 = {
+  target = {
+    base = "friendly_minion",
+    filter = function(g, me, t)
+      return t ~= me and not g.silenced(t) and list.any(g.info(g.card(t)).keywords, function(k)
+        return k == "DEATHRATTLE"
+      end)
+    end,
+  },
+  battlecry = function(g, me, t)
+    if t then
+      g.enchant(me, { deathrattle = g.card(t), from = t })
+    end
+  end,
+}
+
 -- --- Druid --------------------------------------------------------------------------------------
 
 -- Menagerie Warden: a copy of a friendly Beast (its stats, enchantments and damage), right of the Warden.

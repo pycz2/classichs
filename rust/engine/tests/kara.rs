@@ -398,6 +398,27 @@ fn moat_lurker_resummons_the_minion_on_its_side() {
     assert!(t.cards(1).is_empty(), "{:?}", t.cards(1));
 }
 
+#[test]
+fn unearthed_raptor_copies_what_moat_lurker_holds() {
+    let mut t = scene!({"hand": ["KAR_041", "LOE_019", SOULFIRE, SOULFIRE]}, {"board": [YETI, WISP]});
+    let y = t.nth(1, 0);
+    t.play("KAR_041", y);
+    let l = t.on_board(0, "KAR_041");
+    t.play("LOE_019", l);
+    let r = t.on_board(0, "LOE_019");
+    t.play(SOULFIRE, r);
+    assert!(!t.cards(0).contains(&"LOE_019".to_string()), "the Raptor died");
+    assert_eq!(t.cards(1), vec![WISP, YETI], "the Raptor's copy brought the Yeti back for its owner");
+    assert!(t.cards(0).contains(&"KAR_041".to_string()), "the Lurker still holds its own");
+    // the Raptor's copy of a Deathrattle with nothing stored: nothing
+    let mut t = scene!({"hand": ["LOE_019", SOULFIRE], "board": ["KAR_041"]}, {"board": [WISP]});
+    let l = t.nth(0, 0);
+    t.play("LOE_019", l);
+    let r = t.on_board(0, "LOE_019");
+    t.play(SOULFIRE, r);
+    assert_eq!(t.cards(1), vec![WISP]);
+}
+
 // --- weapons ---------------------------------------------------------------------------------------------------------
 
 #[test]

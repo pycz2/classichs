@@ -220,7 +220,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.set_tag(e, tag, v)` | `v`: boolean, number, string; `nil` removes. |
 | `g.give_tag(e, tag[, this_turn])`, `g.erase_tag(e, tag)`, `g.add_tag(e, tag, n)` | |
 | `g.set_damage(e, n)` | Sets the damage taken (Alexstrasza). |
-| `g.enchant(e, t)` | Adds an enchantment table: `{hooks = name, player = p}`, `{cost = -2}`, `{atk = 1, hp = 1, eot = true}`, `{deathrattle = card}` (only that card's own Deathrattle hook, not its other hooks: Unearthed Raptor), … |
+| `g.enchant(e, t)` | Adds an enchantment table: `{hooks = name, player = p}`, `{cost = -2}`, `{atk = 1, hp = 1, eot = true}`, `{deathrattle = card}` (only that card's own Deathrattle hook, not its other hooks: Unearthed Raptor; with `from = t`, t's tags that no mechanic names come along to `e`, so the copy keeps what t's Deathrattle holds: Moat Lurker's minion), … |
 | `g.remove_enchant(e, hooks[, p])` | Removes `e`'s enchantments with these hooks (`p` given: only those whose `player` is `p`; Conceal, Headcrack, Shadow Madness). |
 | `g.aura_add(e, atk, hp[, tags])` | In an `aura` hook: what `e` gets now (`{WINDFURY = true}`, `{SPELLPOWER = 1}`). |
 | `g.replace_hero(p, card)`, `g.set_power(p, card)` | A new champion / power. |

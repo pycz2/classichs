@@ -1081,6 +1081,18 @@ fn a_enchant(g: &mut Game, a: Args) -> R {
             if rs.cost_in_order && x.contains_key("cost") {
                 x.insert("order", g.stamp()); // its cost change comes in its turn (cost_in_order)
             }
+            // `{deathrattle = card, from = t}`: the copied Deathrattle keeps what t's scripts stored on t (its tags no
+            // mechanic names: Moat Lurker's minion), copied to e
+            if let (true, Some(from)) = (x.contains_key("deathrattle"), x.get("from").map(|v| vint(Some(v)))) {
+                x.remove("from");
+                if let Some(src) = g.ent(from) {
+                    let kept: Vec<(Str, V)> =
+                        src.tags.iter().filter(|(k, _)| rs.names.known(k).is_none()).map(|(k, v)| (rs.intern(k), v.clone())).collect();
+                    for (k, v) in kept {
+                        g.em(e).tags.insert(k, v);
+                    }
+                }
+            }
             g.em(e).enchantments.push(x)
         }
         _ => return Err(a.bad(1, "a table with named fields expected")),

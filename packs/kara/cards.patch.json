@@ -44,6 +44,7 @@
   "KAR_710": {"script": "scripts/kara.lua#KAR_710", "fx": {"play": "battlecry"}},
   "KAR_711": {"script": "scripts/kara.lua#KAR_711"},
   "KAR_712": {"script": "scripts/kara.lua#KAR_712"},
+  "LOE_019": {"script": "scripts/kara.lua#LOE_019"},
   "OG_034": {"race": "BEAST"},
   "OG_202c": {"cost": 2},
   "OG_249a": {"cost": 2},

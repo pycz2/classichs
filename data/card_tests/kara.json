@@ -1376,6 +1376,86 @@
           }
         }
       ]
+    },
+    {
+      "kind": "death",
+      "title": "Unearthed Raptor copies Moat Lurker's Deathrattle; Soulfire kills the Raptor and the destroyed Yeti comes back for the opponent",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_07",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_041",
+              "LOE_019",
+              "VAN_EX1_308"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "board": [
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "board",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 1
+          }
+        }
+      ]
     }
   ],
   "KAR_044": [
