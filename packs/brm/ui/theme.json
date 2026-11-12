@@ -1,0 +1,31 @@
+{
+ "about": "Blackrock Mountain's interface (docs/packs/format.md, 'UI theme'): the halls of the Dark Iron dwarves inside the volcano — black basalt and iron panels with ember rims, buttons of cooling lava that glow molten orange at the edge, warm fire-lit text, embers rising over the menu; the title in Classic's Cinzel Decorative, in molten orange.",
+ "colors": {
+  "text": "f4e4d4",
+  "muted": "b89a86",
+  "accent": "ff8a2a",
+  "table": "120c0a",
+  "panel": "18120ff0",
+  "panel_border": "a8481c",
+  "backdrop": "5a3a2c",
+  "button": "3a1410f0",
+  "button_hover": "52201a",
+  "button_pressed": "280d0a",
+  "button_disabled": "211816a6",
+  "button_border": "ff7a1f",
+  "button_text": "fbeee0",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "ffc078",
+  "button_text_disabled": "7a6a60",
+  "outline": "080404",
+  "danger": "ff4a3a",
+  "ok": "8fe06a"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 6, "border": 1, "glow": "ff5a1a33", "glow_size": 4, "glow_hover": "ff8a2a99", "glow_hover_size": 12},
+ "panel": {"radius": 8, "border": 2, "glow": "c8501e40", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "4a1a12", "border": "ff8a2a", "text": "fbf0e2", "ready": "7a2a10", "ready_border": "ffb04a"},
+ "mana": "4cc3ff",
+ "menu": {"shade": "0a050359", "particles": "embers"}
+}

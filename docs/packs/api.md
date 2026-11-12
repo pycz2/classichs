@@ -211,6 +211,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.gain_mana(p, n[, empty])` | Crystals up to max mana (`empty`: empty crystals). |
 | `g.add_mana(p, n)` | Mana this turn (up to max mana; The Coin). |
 | `g.set_mana(p, mana, max)` | Sets mana and/or crystals (`nil` keeps one). |
+| `g.unlock_mana(p)` | Unlocks `p`'s Overloaded crystals: those locked this turn are mana again (up to the crystals), nothing is owed next turn (Lava Shock). |
 | `g.set_tag(e, tag, v)` | `v`: boolean, number, string; `nil` removes. |
 | `g.give_tag(e, tag[, this_turn])`, `g.erase_tag(e, tag)`, `g.add_tag(e, tag, n)` | |
 | `g.set_damage(e, n)` | Sets the damage taken (Alexstrasza). |
@@ -220,7 +221,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.replace_hero(p, card)`, `g.set_power(p, card)` | A new champion / power. |
 | `g.reveal(me)` | Reveals a trap (for `now` hooks; `secret` hooks are revealed for you). |
 | `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. |
-| `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n]}`; `turn` defaults to now. |
+| `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n][, race = r][, lasting = true]}`; `turn` defaults to now. `race`: only cards of that race (Dragon Consort: `"DRAGON"`). `lasting`: it holds on any turn, kept until a card it applies to is played (with `until = "use"`: "the next Dragon you play costs (2) less"). |
 | `g.log(ev)`, `g.emit(ev)` | Logs an event table (`emit` also triggers `on` hooks). |
 | `g.remove(e[, zone])` | Takes `e` out of its hand/deck/board/trap list (and the weapon slot), optionally setting its zone. |
 | `g.cost(e)` | A card's cost now (cost hooks included). |

@@ -957,6 +957,12 @@ fn a_gain_armor(g: &mut Game, a: Args) -> R {
     g.gain_armor(p, n);
     none()
 }
+fn a_unlock_mana(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let p = player(&a, 0)?;
+    g.unlock_mana(p);
+    none()
+}
 fn a_gain_mana(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (p, n) = (player(&a, 0)?, num(&a, 1, 1)?.clamp(0, 100));
@@ -1214,6 +1220,7 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.freeze", a_freeze), ("g.transform", a_transform), ("g.return_to_hand", a_return_to_hand),
     ("g.take_control", a_take_control), ("g.copy_minion", a_copy_minion), ("g.equip", a_equip),
     ("g.gain_armor", a_gain_armor), ("g.gain_mana", a_gain_mana), ("g.add_mana", a_add_mana), ("g.set_mana", a_set_mana),
+    ("g.unlock_mana", a_unlock_mana),
     ("g.set_tag", a_set_tag), ("g.give_tag", a_give_tag), ("g.erase_tag", a_erase_tag), ("g.add_tag", a_add_tag),
     ("g.set_damage", a_set_damage), ("g.enchant", a_enchant), ("g.remove_enchant", a_remove_enchant),
     ("g.aura_add", a_aura_add), ("g.replace_hero", a_replace_hero), ("g.set_power", a_set_power), ("g.reveal", a_reveal),

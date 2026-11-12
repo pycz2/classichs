@@ -1,0 +1,160 @@
+{
+  "format": 1,
+  "id": "brm-2015",
+  "version": "1.0.0",
+  "engine": "0.60.0",
+  "name": {
+    "en": "Blackrock Mountain 2015",
+    "ru": "Чёрная гора 2015",
+    "de": "Der Schwarzfels 2015",
+    "fr": "Mont Rochenoire 2015",
+    "es": "La Montaña Roca Negra 2015",
+    "pt_BR": "Montanha Rocha Negra 2015",
+    "it": "Massiccio Roccianera 2015",
+    "pl": "Czarna Góra 2015"
+  },
+  "description": {
+    "en": "The game as it was played after April 2, 2015: the Basic, Classic, Naxxramas and Goblins vs Gnomes cards and the 31 cards of Blackrock Mountain, each as on that day — Dragons and the cards that want one in your hand, Grim Patron, Emperor Thaurissan, Majordomo Executus who turns you into Ragnaros, Nefarian and Chromaggus; Undertaker gains only Attack, Dark Iron Skulker costs 5.",
+    "ru": "Игра, как в неё играли после 2 апреля 2015 года: базовые, классические карты, карты Наксрамаса, «Гоблинов и гномов» и 31 карта Чёрной горы, каждая как в тот день: драконы и карты, которым нужен дракон в руке, Мрачный завсегдатай, Император Тауриссан, Мажордом Экзекутус, после которого вы играете за Рагнароса, Нефариан и Хромаггус. Могильщик получает только атаку, Тихоступ Черного Железа стоит 5 маны.",
+    "de": "Das Spiel, wie es nach dem 2. April 2015 gespielt wurde: die Basis-, Klassik-, Naxxramas- und „Goblins gegen Gnome“-Karten und die 31 Karten vom Schwarzfels, jede wie an jenem Tag — Drachen und die Karten, die einen auf der Hand wollen, Grimmiger Gast, Imperator Thaurissan, Majordomus Exekutus, der Euch zu Ragnaros macht, Nefarian und Chromaggus; der Totengräber erhält nur Angriff, der Dunkeleisenlauerer kostet 5.",
+    "fr": "Le jeu tel qu’on le jouait après le 2 avril 2015 : les cartes de base, classiques, de Naxxramas et de « Gobelins et Gnomes » et les 31 cartes du Mont Rochenoire, chacune telle que ce jour-là — les Dragons et les cartes qui en veulent un en main, le Client sinistre, l’empereur Thaurissan, le chambellan Executus qui vous change en Ragnaros, Nefarian et Chromaggus ; le Fossoyeur ne gagne que de l’Attaque, le Furtif sombrefer coûte 5.",
+    "es": "El juego tal como se jugaba después del 2 de abril de 2015: las cartas básicas, clásicas, de Naxxramas y de «Goblins y Gnomos» y las 31 cartas de la Montaña Roca Negra, cada una como aquel día: los dragones y las cartas que quieren uno en la mano, el Parroquiano lúgubre, el emperador Thaurissan, el Mayordomo Executus que te convierte en Ragnaros, Nefarian y Chromaggus; el Enterrador solo gana ataque, el Vagador Hierro Negro cuesta 5.",
+    "pt_BR": "O jogo como era jogado depois de 2 de abril de 2015: os cards Básicos, Clássicos, de Naxxramas e de “Goblins vs Gnomos” e os 31 cards da Montanha Rocha Negra, cada um como naquele dia — Dragões e os cards que querem um na mão, o Freguês Carrancudo, o Imperador Thaurissan, o Senescal Executus que transforma você em Ragnaros, Nefarian e Cromaggus; o Coveiro só ganha Ataque, o Ferro Negro Bisbilhoteiro custa 5.",
+    "it": "Il gioco come si giocava dopo il 2 aprile 2015: le carte Base, Classiche, di Naxxramas e di “Goblin vs Gnomi” e le 31 carte del Massiccio Roccianera, ognuna com’era quel giorno — i Draghi e le carte che ne vogliono uno in mano, il Cliente Torvo, l’Imperatore Thaurissan, Executus che vi trasforma in Ragnaros, Nefarian e Cromaggus; il Becchino ottiene solo Attacco, il Ferroscuro Furtivo costa 5.",
+    "pl": "Gra w wersji sprzed lat, po 2 kwietnia 2015: karty podstawowe, klasyczne, z Naxxramas i z „Goblinów kontra gnomów” oraz 31 kart z Czarnej Góry, każda jak tamtego dnia — smoki i karty, które chcą smoka w ręce, Ponury klient, imperator Thaurissan, Majordomus Egzekutus, który zmienia cię w Ragnarosa, Nefarian i Chromagus; Grabarz zyskuje tylko atak, Oprawca z Czarnorytnych kosztuje 5."
+  },
+  "authors": [
+    "Classic HS"
+  ],
+  "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+  "redistributable": true,
+  "default_locale": "en",
+  "locales": [
+    "en",
+    "ru",
+    "de",
+    "fr",
+    "es",
+    "pt_BR",
+    "it",
+    "pl"
+  ],
+  "art_sets": [
+    {
+      "id": "simple",
+      "name": {
+        "en": "Simple painted",
+        "ru": "Простой рисованный",
+        "de": "Einfach gemalt",
+        "fr": "Peint simple",
+        "es": "Pintado simple",
+        "pt_BR": "Pintura simples",
+        "it": "Dipinto semplice",
+        "pl": "Prosty malowany"
+      },
+      "default": true
+    },
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированный"
+      }
+    },
+    {
+      "id": "cartoon",
+      "name": {
+        "en": "Cartoon 2D",
+        "ru": "Мультяшный 2D",
+        "de": "Cartoon 2D",
+        "fr": "Dessin animé 2D",
+        "es": "Dibujos 2D",
+        "pt_BR": "Desenho 2D",
+        "it": "Cartone 2D",
+        "pl": "Kreskówka 2D"
+      }
+    },
+    {
+      "id": "photo",
+      "name": {
+        "en": "Photoreal",
+        "ru": "Фотореалистичный",
+        "de": "Fotorealistisch",
+        "fr": "Photoréaliste",
+        "es": "Fotorrealista",
+        "pt_BR": "Fotorrealista",
+        "it": "Fotorealistico",
+        "pl": "Fotorealistyczny"
+      }
+    }
+  ],
+  "sound_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированные"
+      },
+      "default": true
+    }
+  ],
+  "music_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированная"
+      },
+      "default": true
+    },
+    {
+      "id": "open",
+      "name": {
+        "en": "Open (CC0)",
+        "ru": "Открытая (CC0)"
+      }
+    }
+  ],
+  "set_marks": {
+    "VANILLA:FREE": {
+      "icon": "ui/set_basic.png"
+    },
+    "VANILLA": {
+      "icon": "ui/set_classic.png"
+    },
+    "NAXX": {
+      "icon": "ui/set_naxx.png"
+    },
+    "GVG": {
+      "icon": "ui/set_gvg.png"
+    },
+    "BRM": {
+      "icon": "ui/set_brm.png"
+    }
+  },
+  "card_back": null,
+  "logo": null,
+  "colors": {
+    "classes": {
+      "DRUID": "703606",
+      "HUNTER": "016e01",
+      "MAGE": "0092ab",
+      "PALADIN": "aa8f00",
+      "PRIEST": "b8b090",
+      "ROGUE": "4c4d48",
+      "SHAMAN": "0070de",
+      "WARLOCK": "7624ad",
+      "WARRIOR": "8e1002",
+      "NEUTRAL": "6b6b6b",
+      "DREAM": "6b6b6b",
+      "DEMONHUNTER": "6b6b6b"
+    },
+    "rarities": {
+      "FREE": "e8e8e8",
+      "COMMON": "e8e8e8",
+      "RARE": "2f7cff",
+      "EPIC": "a335ee",
+      "LEGENDARY": "ff8000"
+    }
+  }
+}

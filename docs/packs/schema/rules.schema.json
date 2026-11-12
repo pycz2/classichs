@@ -43,6 +43,14 @@
         "brain": {"type": "boolean"}
       }
     },
+    "behaviour": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "countered_no_after_spell": {"type": "boolean"},
+        "full_hand_return_dies": {"type": "boolean"}
+      }
+    },
     "fatigue": {
       "type": "object",
       "additionalProperties": false,

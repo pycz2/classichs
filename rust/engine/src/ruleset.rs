@@ -292,6 +292,12 @@ pub struct Ruleset {
     pub coin: Option<String>,
     /// `start.first_player_draws`: the first player draws on their first turn (Classic: yes).
     pub first_player_draws: bool,
+    /// `behaviour.countered_no_after_spell`: a countered spell is not "cast" for "after you cast a spell" hooks
+    /// (the `after_spell` event; Hearthstone until 2017). Off: Classic's recorded games.
+    pub countered_no_after_spell: bool,
+    /// `behaviour.full_hand_return_dies`: a minion returned to a full hand dies as any other (Deathrattles,
+    /// the graveyard: Kel'Thuzad, Feugen and Stalagg; patch 2.4.0.8311). Off: it is set aside.
+    pub full_hand_return_dies: bool,
     /// `bot.trap`: what the bot counts for each of its own traps in play (a card in hand is 1; Classic: 0).
     pub bot_trap: f64,
     /// `bot.depth`: 2 = before ending its turn the bot also tries two actions in a row (Classic: 1).
@@ -476,6 +482,8 @@ impl Ruleset {
             }),
             coin: start.get("coin").and_then(Value::as_str).map(String::from),
             first_player_draws: start.get("first_player_draws") != Some(&json!(false)),
+            countered_no_after_spell: rules["behaviour"].get("countered_no_after_spell") == Some(&json!(true)),
+            full_hand_return_dies: rules["behaviour"].get("full_hand_return_dies") == Some(&json!(true)),
             bot_trap: i(&rules["bot"], "trap", 0) as f64,
             bot_depth: i(&rules["bot"], "depth", 1),
             fatigue: (fat.get("enabled") != Some(&json!(false)), i(fat, "first", 1), i(fat, "step", 1)),
