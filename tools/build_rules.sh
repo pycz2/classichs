@@ -11,6 +11,8 @@
 # ANDROID_NDK_ROOT or the newest one in $ANDROID_HOME/ndk (or ~/Library/Android/sdk/ndk).
 set -e
 cd "$(dirname "$0")/.."
+. tools/log.sh
+log_init build_rules "$PWD" nofile
 # rustup's cargo first (a Homebrew Rust on PATH has no cross targets)
 for d in /opt/homebrew/opt/rustup/bin "$HOME/.cargo/bin"; do
 	[ -x "$d/cargo" ] && { PATH="$d:$PATH"; break; }
@@ -33,6 +35,7 @@ ndk() {
 }
 
 build() {
+	log_step "Rules engine: $1"
 	case $1 in
 	macos)
 		for t in aarch64-apple-darwin x86_64-apple-darwin; do
@@ -73,7 +76,7 @@ build() {
 		exit 1
 		;;
 	esac
-	echo "rules: $1 built"
+	log_info "rules: $1 built"
 }
 
 WANT=${*:-all}

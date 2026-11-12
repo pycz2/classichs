@@ -6,6 +6,9 @@
 #   (tools/export_all.sh, server/Dockerfile, tools/deploy_server.sh take both folders).
 set -e
 cd "$(dirname "$0")/.."
+. tools/log.sh
+log_init build_packs "$PWD" nofile
+log_step "Building the packs (packs/*/)"
 mkdir -p build/packs
 touch build/.gdignore
 # A pack newer than everything it is built from is left as it is (pack.py build --if-changed); the packs build at once.
@@ -16,12 +19,13 @@ for src in packs/*/; do
 	out=packs
 	[ "$(python3 tools/pack.py bundled "packs/$name")" = yes ] || out=build/packs
 	(log=$(python3 tools/pack.py build --if-changed "packs/$name" -o "$out/$name.cardpack" 2>&1) \
-		|| { printf '%s\n' "$log" >&2; echo "tools/build_packs.sh: packs/$name does not build" >&2; exit 1; }) &
+		|| { printf '%s\n' "$log" >&2; echo "tools/build_packs.sh: packs/$name does not build" >&2; exit 1; }
+		case $log in *"up to date"*) log_info "$name: up to date" ;; *) log_info "$name: built, $(log_fsize "$out/$name.cardpack")" ;; esac) &
 	pids="$pids $!"
 done
 fail=0
 for p in $pids; do wait "$p" || fail=1; done
-[ $fail = 0 ] || exit 1
+[ $fail = 0 ] || log_fail "a pack does not build (its errors are above)"
 # The schemas and vocabularies the client's pack tools check with (game/pack_check.gd; docs/ is not in the game).
 mkdir -p packs/schema
 cp docs/packs/schema/*.json packs/schema/

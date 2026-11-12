@@ -61,6 +61,21 @@ For a stable Android signature add the secrets `ANDROID_KEYSTORE_BASE64`, `ANDRO
 To check the three values before you paste them (or to make a new keystore): `python3 tools/android_keystore_check.py`
 opens a local page that runs the same checks as the CI and says what to fix.
 
+A whole release, once the version bump is pushed to `main`:
+
+```sh
+DEPLOY_HOST=user@host DEPLOY_URL=https://hs.example.com tools/release.sh 0.71.0
+tools/release.sh 0.71.0 --dry-run        # only print the steps
+tools/release.sh 0.71.0 --from deploy    # resume after a failure (steps: check ci site splash tag release deploy)
+```
+
+It waits for the CI run of `HEAD` (and runs failed jobs again when a runner was never acquired), publishes the site,
+commits the new splash, tags `vX.Y.Z`, waits for the release build, starts Docker Desktop if needed, deploys the
+server (`tools/deploy_server.sh`) and prints a summary with the links. It and the other build scripts print each step
+with its time, how it ended and, on a failure, where it stopped and the last lines of the output; the log of each
+run is kept in `build/logs/<script>-<UTC time>.log` (`tools/log.sh`). `tools/test_deploy_logs.sh` checks the
+deploy's output with stand-ins for ssh, scp, docker and curl.
+
 ## Build and run
 
 You need [Godot 4.7.2](https://godotengine.org/) (standard build, no C#) and its export templates for the web build,

@@ -2145,7 +2145,7 @@ FLOWS.append(dict(
                                                                      "До 20 попыток изнутри контейнера Caddy; при неудаче — журнал и снова запуск прежнего образа."),
          [("deploy/docker-host/classichs-deploy", "docker exec \"$CADDY\" wget -q -O /dev/null http://classichs:7377/admin")]),
         ("dev", "caddy", "curl $DEPLOY_URL/admin", ("OK — the game is at `wss://` on the domain.", "OK — игра доступна по `wss://` на домене."),
-         [("tools/deploy_server.sh", "curl -fsS -o /dev/null \"$DEPLOY_URL/admin\"")]),
+         [("tools/deploy_server.sh", "curl -sS -o /dev/null -w '%{http_code}' \"$DEPLOY_URL/admin\"")]),
     ],
 ))
 

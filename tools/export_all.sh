@@ -7,15 +7,23 @@
 # appimagetool on PATH (Linux); Android needs the SDK and a keystore (see .github/workflows/release.yml).
 # The rules engine is built first (tools/build_rules.sh) for each platform; with
 # RULES_PREBUILT=1 the libraries already in rules/bin are used (CI builds them per platform).
+# Prints each step with its time (tools/log.sh); the log is kept in build/logs/export_all-<time>.log (not under CI).
 set -e
 cd "$(dirname "$0")/.."
+. tools/log.sh
+log_init export_all "$PWD"
 VER=$(sed -n 's/^config\/version="\(.*\)"/\1/p' project.godot)
 OUT=build/release
 WANT=${*:-web windows linux macos android replay}
+log_steps $((5 + $(echo $WANT | wc -w)))
+log_info "version $VER, platforms: $WANT"
 mkdir -p "$OUT"
 touch build/.gdignore
+log_step "Packs"
 tools/build_packs.sh  # res://packs/*.cardpack: the built-in game packs
+log_step "WebRTC libraries"
 tools/fetch_webrtc.sh  # addons/webrtc_native/lib: WebRTC (code play) for the native builds
+log_step "Godot import"
 godot --headless --path . --import >/dev/null 2>&1 || true
 
 rules_lib() {  # the rules engine library a platform's export needs
@@ -28,6 +36,8 @@ rules_lib() {  # the rules engine library a platform's export needs
 	esac
 }
 
+log_step "Rules engine"
+[ "$RULES_PREBUILT" != 1 ] || log_info "RULES_PREBUILT=1: the libraries in rules/bin as they are"
 for p in $WANT; do
 	[ "$RULES_PREBUILT" = 1 ] || tools/build_rules.sh "$p"
 	[ -s "$(rules_lib "$p")" ] || { echo "the rules engine for $p is missing: $(rules_lib "$p") (tools/build_rules.sh $p)" >&2; exit 1; }
@@ -63,6 +73,7 @@ export_preset() {  # preset name, output path
 }
 
 for p in $WANT; do
+	log_step "Export: $p"
 	case $p in
 	web)
 		rm -rf "$OUT/web"
@@ -118,11 +129,11 @@ for p in $WANT; do
 		unzip -l "$OUT/ClassicHS-$VER-android-arm64.apk" | grep -q 'lib/arm64-v8a/libwebrtc_native' || { echo "the APK has no WebRTC library" >&2; exit 1; }
 		;;
 	*)
-		echo "unknown platform: $p" >&2
-		exit 1
+		log_fail "unknown platform: $p"
 		;;
 	esac
 done
+log_step "Release files"
 for f in packs/*.cardpack build/packs/*.cardpack; do  # the game packs (also those not in the game's builds), for servers (--packs-dir)
 	[ -f "$f" ] && cp "$f" "$OUT/ClassicHS-$VER-$(basename "$f" .cardpack).cardpack"
 done
