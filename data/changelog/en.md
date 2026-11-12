@@ -4,6 +4,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+### Added
+- An FPS counter: the "FPS counter" switch in the settings (off by default) shows the frames per second in small print in the top left corner of every screen.
+
 ## [0.70.0] - 2026-11-12
 
 ### Added

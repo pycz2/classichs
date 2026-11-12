@@ -4,6 +4,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+### Adicionado
+- Um contador de quadros por segundo: a opção "Contador de FPS" nas configurações (desligada por padrão) mostra os quadros em letra pequena no canto superior esquerdo de cada tela.
+
 ## [0.70.0] - 2026-11-12
 
 ### Adicionado

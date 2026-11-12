@@ -4,6 +4,9 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+### Ajouté
+- Un compteur d’images par seconde : l’interrupteur « Compteur de FPS » des paramètres (désactivé par défaut) les affiche en petit dans le coin supérieur gauche de chaque écran.
+
 ## [0.70.0] - 2026-11-12
 
 ### Ajouté

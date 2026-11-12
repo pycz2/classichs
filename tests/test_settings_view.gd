@@ -41,6 +41,33 @@ func test_menu_opens_settings_and_back() -> void:
 	_teardown()
 
 
+## The FPS counter: off by default; the toggle saves it and the overlay over every screen follows at once.
+func test_fps_counter_toggle() -> void:
+	_setup()
+	eq(Settings.data.fps, false, "off by default")
+	var m: Node = load("res://ui/main.tscn").instantiate()
+	root().add_child(m)
+	var fps := m.find_child("FpsCounter", false, false) as FpsCounter
+	check(fps != null, "main owns the counter")
+	fps._process(0.0)
+	check(not fps.visible, "hidden while off")
+	eq(fps.label.mouse_filter, Control.MOUSE_FILTER_IGNORE, "takes no clicks")
+	(m.screen.find_child("Settings", true, false) as Button).pressed.emit()
+	(m.screen.find_child("Fps", true, false) as CheckButton).button_pressed = true
+	fps._process(0.0)
+	check(fps.visible, "shown at once")
+	check(fps.label.text.ends_with(" FPS"), "frames per second: " + fps.label.text)
+	Settings.load_settings()
+	eq(Settings.data.fps, true, "saved")
+	(m.screen.find_child("Fps", true, false) as CheckButton).button_pressed = false
+	fps._process(0.0)
+	check(not fps.visible, "hidden again")
+	(m.screen.find_child("Back", true, false) as Button).pressed.emit()
+	check(m.find_child("FpsCounter", false, false) == fps, "stays across screens")
+	m.free()
+	_teardown()
+
+
 func test_language_switch_saves_and_rebuilds() -> void:
 	_setup()
 	var s := _settings()
@@ -76,7 +103,7 @@ func test_volume_shake_and_tts() -> void:
 func test_global_settings_only() -> void:
 	_setup()
 	var s := _settings()
-	for n in ["Language", "Music", "Sounds", "CardBack", "AnimSpeed", "Shake", "Fullscreen", "Back"]:
+	for n in ["Language", "Music", "Sounds", "CardBack", "AnimSpeed", "Shake", "Fullscreen", "Fps", "Back"]:
 		check(s.find_child(n, true, false) != null, n + " in the settings")
 	for n in ["MusicSet", "ArtSet", "Name", "Servers", "DebugTools"]:
 		check(s.find_child(n, true, false) == null, n + " not in the settings")

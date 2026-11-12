@@ -4,6 +4,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+### Hinzugefügt
+- Eine FPS-Anzeige: Der Schalter „FPS-Anzeige“ in den Einstellungen (standardmäßig aus) zeigt die Bilder pro Sekunde klein in der linken oberen Ecke jedes Bildschirms.
+
 ## [0.70.0] - 2026-11-12
 
 ### Hinzugefügt

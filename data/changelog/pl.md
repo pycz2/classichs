@@ -4,6 +4,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+### Dodano
+- Licznik klatek na sekundę: przełącznik „Licznik FPS” w ustawieniach (domyślnie wyłączony) pokazuje je małym drukiem w lewym górnym rogu każdego ekranu.
+
 ## [0.70.0] - 2026-11-12
 
 ### Dodano
