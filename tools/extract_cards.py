@@ -17,7 +17,7 @@ URL = "https://api.hearthstonejson.com/v1/latest/all/cards.json"
 OUT = pathlib.Path(__file__).resolve().parent.parent / "data" / "cards.json"
 FIELDS = ["id", "dbfId", "set", "type", "cardClass", "rarity", "cost", "attack", "health",
           "durability", "overload", "spellDamage", "race", "mechanics", "referencedTags",
-          "collectible", "elite", "name", "text"]
+          "collectible", "elite", "name", "text", "classes"]
 EXTRA = [f"HERO_0{i}" for i in range(1, 10)] + """
 EX1_323h EX1_323w EX1_383t GAME_005 CS2_013t EX1_317t EX1_131t EX1_625t EX1_625t2 EX1_014t
 NEW1_040t ds1_whelptoken EX1_116t hexfrog EX1_025t EX1_534t EX1_538t EX1_160t
@@ -122,7 +122,7 @@ KARA_TOKENS = "KAR_004a KAR_005a KAR_010a KAR_025a KAR_025b KAR_025c KAR_026t KA
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590}
 ## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
 ## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
 ## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
@@ -131,7 +131,8 @@ RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 125
 ## Ancient Curse "Casts When Drawn", tribes added later…).
 ## Whispers of the Old Gods too: C'Thun and its cards, Cho'gall, Usher of Souls, Addled Grizzly, Hallazeal… changed later.
 ## One Night in Karazhan too: reworked in 2021-22 (Barnes 5, The Curator 5, Ivory Knight 4, Firelands Portal 6 damage…).
-FROM_RELEASE = {"tgt", "loe", "og", "kara"}
+## Mean Streets of Gadgetzan too: nerfed and reworked since (Small-Time Buccaneer, Patches, Jade Spirit, Kazakus…).
+FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 ## Classic's Hero Powers had other ids in the old builds (VAN_HERO_06bp was CS2_017; the upgraded ones AT_132_*).
 _CLASSES = ["WARRIOR", "SHAMAN", "ROGUE", "PALADIN", "HUNTER", "DRUID", "WARLOCK", "MAGE", "PRIEST"]

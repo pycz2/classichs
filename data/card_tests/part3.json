@@ -3797,7 +3797,8 @@
             "zone": "hero"
           }
         }
-      ]
+      ],
+      "script": "scripts/warrior.lua#VAN_CS2_103"
     }
   ],
   "VAN_CS2_105": [

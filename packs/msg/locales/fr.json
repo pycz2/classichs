@@ -1,0 +1,34 @@
+{
+ "sets": {
+  "GANGS": "Main basse sur Gadgetzan"
+ },
+ "mechanics": {
+  "JADE_GOLEM": {
+   "name": "Golem de jade",
+   "tip": "Invoque un golem de jade : 1/1 au début, puis chaque nouveau de ce joueur a 1/1 de plus (30/30 au maximum)."
+  }
+ },
+ "cards": {
+  "VAN_CS2_005": {
+   "text": "Donne +2 ATQ à votre héros pendant ce tour. +2 points d’armure."
+  },
+  "VAN_DS1_184": {
+   "text": "Affiche les 3 cartes du dessus du deck. Vous en piochez une et vous vous défaussez des autres."
+  },
+  "VAN_EX1_339": {
+   "text": "Copie 2 cartes du deck de votre adversaire et les place dans votre main."
+  },
+  "VAN_EX1_533": {
+   "text": "<b>Secret :</b> quand un adversaire attaque votre héros, il attaque un autre personnage aléatoire à la place."
+  },
+  "VAN_EX1_539": {
+   "text": "Inflige $3 |4(point,points) de dégâts. Si vous contrôlez une Bête, inflige $5 |4(point,points) de dégâts à la place."
+  },
+  "VAN_EX1_570": {
+   "text": "Donne +4 ATQ au héros pendant ce tour. +4 points d’armure."
+  },
+  "VAN_EX1_622": {
+   "text": "Détruit un serviteur avec 5 ATQ ou plus."
+  }
+ }
+}

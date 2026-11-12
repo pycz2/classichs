@@ -1,0 +1,31 @@
+{
+ "sets": {
+  "GANGS": "Gangues de Geringontzan"
+ },
+ "mechanics": {
+  "JADE_GOLEM": {
+   "name": "Golem de Jade",
+   "tip": "Evoca um Golem de Jade: 1/1 no início, depois cada novo desse jogador fica 1/1 maior (no máximo 30/30)."
+  }
+ },
+ "cards": {
+  "VAN_CS2_005": {
+   "text": "Conceda +2 de Ataque ao seu herói neste turno. Receba 2 de Armadura."
+  },
+  "VAN_DS1_184": {
+   "text": "Olhe os 3 cards do topo do seu deck. Compre um e descarte os outros."
+  },
+  "VAN_EX1_304": {
+   "text": "[x]<b>Grito de Guerra:</b>\n Destrua os dois lacaios\n adjacentes a este e receba o\n Ataque e a Vida deles."
+  },
+  "VAN_EX1_317": {
+   "text": "Compre 2 Demônios\ndo seu deck."
+  },
+  "VAN_EX1_533": {
+   "text": "<b>Segredo:</b> Quando um inimigo tentar atacar o seu herói, ele atacará outro personagem aleatório."
+  },
+  "VAN_EX1_539": {
+   "text": "Cause $3 de dano.\nSe você tiver uma Fera, cause $5 de dano."
+  }
+ }
+}

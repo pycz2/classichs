@@ -1,0 +1,31 @@
+{
+ "sets": {
+  "GANGS": "Die Straßen von Gadgetzan"
+ },
+ "mechanics": {
+  "JADE_GOLEM": {
+   "name": "Jadegolem",
+   "tip": "Beschwört einen Jadegolem: zuerst 1/1, dann jeder weitere dieses Spielers um 1/1 größer (höchstens 30/30)."
+  }
+ },
+ "cards": {
+  "VAN_DS1_184": {
+   "text": "Schaut Euch die 3 obersten Karten Eures Decks an. Zieht eine und werft die anderen ab."
+  },
+  "VAN_EX1_304": {
+   "text": "<b>Kampfschrei:</b> Vernichtet beide benachbarten Diener und erhält deren Angriff und Leben."
+  },
+  "VAN_EX1_317": {
+   "text": "Zieht 2 Dämonen aus Eurem Deck."
+  },
+  "VAN_EX1_339": {
+   "text": "Kopiert 2 Karten aus dem Deck Eures Gegners und erhaltet die Kopien auf die Hand."
+  },
+  "VAN_EX1_533": {
+   "text": "<b>Geheimnis:</b> Wenn ein Feind Euren Helden angreift, greift er stattdessen einen zufälligen anderen Charakter an."
+  },
+  "VAN_EX1_559": {
+   "text": "Erhaltet jedes Mal einen Feuerball auf die Hand, wenn Ihr einen Zauber wirkt."
+  }
+ }
+}

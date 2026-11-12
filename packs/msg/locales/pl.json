@@ -1,0 +1,43 @@
+{
+ "sets": {
+  "GANGS": "Ciemne zaułki Gadżetonu"
+ },
+ "mechanics": {
+  "JADE_GOLEM": {
+   "name": "Nefrytowy golem",
+   "tip": "Przyzywa nefrytowego golema: najpierw 1/1, potem każdy kolejny tego gracza jest większy o 1/1 (najwyżej 30/30)."
+  }
+ },
+ "cards": {
+  "VAN_CS2_005": {
+   "text": "Daj twojemu bohaterowi +2 do ataku w tej turze. Otrzymujesz 2 pkt. pancerza."
+  },
+  "VAN_EX1_178": {
+   "name": "Pradrzewiec wojny"
+  },
+  "VAN_EX1_304": {
+   "text": "<b>Okrzyk bojowy:</b> Zniszcz obu sąsiadujących z nim stronników, a zyska ich atak oraz zdrowie."
+  },
+  "VAN_EX1_317": {
+   "text": "Dobierz 2 Demony z twojej talii."
+  },
+  "VAN_EX1_339": {
+   "text": "Skopiuj 2 karty z talii przeciwnika i dodaj je do twojej ręki."
+  },
+  "VAN_EX1_366": {
+   "text": "Kiedy przyzwiesz stronnika, daj mu +1/+1; miecz traci 1 wytrzymałości."
+  },
+  "VAN_EX1_533": {
+   "text": "<b>Sekret:</b> Gdy jakiś przeciwnik zaatakuje twojego bohatera, zamiast tego zaatakuje inną losową postać."
+  },
+  "VAN_EX1_536": {
+   "text": "Za każdym razem gdy ujawniony zostaje przyjazny\n<b>Sekret</b>, otrzymuje +1 pkt. wytrzymałości."
+  },
+  "VAN_EX1_611": {
+   "text": "<b>Sekret:</b> Gdy wrogi stronnik zaatakuje, cofnij go do ręki właściciela\nKosztuje (2) więcej."
+  },
+  "VAN_NEW1_008": {
+   "name": "Pradrzewiec wiedzy"
+  }
+ }
+}

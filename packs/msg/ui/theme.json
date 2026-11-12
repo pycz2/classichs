@@ -1,0 +1,31 @@
+{
+ "about": "Mean Streets of Gadgetzan's interface (docs/packs/format.md, 'UI theme'): the goblin city at night as a noir crime town — dark rain-wet panels like smoked glass with brass rims, buttons of Kabal purple that glow jade under the mouse, warm lamplight text, the jade-gold accent of the Jade Lotus and the rusty red of the Grimy Goons for danger, rain falling over the menu in neon colours; the title in Classic's Cinzel Decorative, in jade gold.",
+ "colors": {
+  "text": "f3ecdc",
+  "muted": "a9b8ae",
+  "accent": "d8c25a",
+  "table": "0a0d10",
+  "panel": "141a1ef0",
+  "panel_border": "b08d3c",
+  "backdrop": "1c2a26",
+  "button": "3b1f55f0",
+  "button_hover": "4c2a6e",
+  "button_pressed": "2a163d",
+  "button_disabled": "211c2aa6",
+  "button_border": "3fbf8a",
+  "button_text": "f6f0e2",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "c9f2d8",
+  "button_text_disabled": "7d7889",
+  "outline": "06080a",
+  "danger": "e0563a",
+  "ok": "5fd39a"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 6, "border": 1, "glow": "3fbf8a33", "glow_size": 4, "glow_hover": "5fe3a899", "glow_hover_size": 12},
+ "panel": {"radius": 8, "border": 2, "glow": "b08d3c40", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "3b1f55", "border": "d8c25a", "text": "f6f0e2", "ready": "1f6b4a", "ready_border": "9cf0c4"},
+ "mana": "5fb8ff",
+ "menu": {"shade": "0a0d1059", "particles": "rain"}
+}

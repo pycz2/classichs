@@ -601,6 +601,36 @@ class Chain(unittest.TestCase):
         self.assertEqual(en["OG_315"]["text"], "<b>Battlecry:</b> If you control another Pirate, give your weapon +1/+1.")
         self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
 
+    def test_mean_streets_of_gadgetzan_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/msg")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/KAR_" in p or "/CFM_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/og.lua", "scripts/kara.lua", "scripts/msg.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/msg"))
+        rules = json.loads(files["rules.json"])
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True,
+                                              "cost_in_order": True})
+        self.assertEqual((rules["player_hooks"], rules["mechanics"]["RANDOM_TARGETS"], rules["mechanics"]["JADE_GOLEM"]),
+                         ("player:msg", {"engine": "RANDOM_TARGETS"}, {"engine": "GROWING_SUMMON"}))
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        gangs = [c for c in cards.values() if c.get("set") == "GANGS"]
+        self.assertEqual(len([c for c in gangs if c.get("collectible")]), 132)
+        self.assertEqual((cards["CFM_621"]["class"], cards["CFM_621"]["classes"]), ("NEUTRAL", ["MAGE", "PRIEST", "WARLOCK"]))
+        self.assertEqual(len([c for c in gangs if c.get("classes")]), 9)
+        self.assertEqual((cards["VAN_CS2_103"]["cost"], cards["VAN_CS2_108"]["cost"], cards["VAN_CS2_188"]["attack"],
+                          cards["OG_211"]["cost"]), (1, 2, 1, 9))
+        en = json.loads(files["locales/en.json"])["cards"]
+        self.assertEqual(en["LOE_011"]["text"], "<b>Battlecry:</b> If your deck has no duplicates, fully heal your hero.")
+        self.assertEqual(en["VAN_EX1_317"]["text"], "Draw 2 Demons\nfrom your deck.")
+        # a deck of another class can't hold a tri-class card
+        deck = {"name": "x", "champion": "HERO_01", "cards": ["CFM_621"] + ["VAN_CS2_182"] * 2 + ["VAN_CS2_231"] * 2 + 25 * ["?"]}
+        self.assertEqual(pack.deck_error(dict(deck, cards=["CFM_621"]), cards, rules), "CFM_621 belongs to another class")
+        self.assertIn("exactly", pack.deck_error(dict(deck, champion="HERO_08", cards=["CFM_621"]), cards, rules))
+        self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
+
     def test_an_expansion_shows_the_texts_of_its_release_build(self):
         import extract_cards
         for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:

@@ -1,0 +1,37 @@
+{
+ "sets": {
+  "GANGS": "Mafias de Gadgetzan"
+ },
+ "mechanics": {
+  "JADE_GOLEM": {
+   "name": "Gólem de jade",
+   "tip": "Invoca un gólem de jade: 1/1 al principio y luego cada uno de ese jugador es 1/1 mayor (como mucho 30/30)."
+  }
+ },
+ "cards": {
+  "VAN_CS2_005": {
+   "text": "[x]Otorga a tu héroe\n+2 p. de ataque este turno.\nAdemás, obtiene\n2 p. de armadura."
+  },
+  "VAN_DS1_184": {
+   "text": "[x]Mira las 3 cartas superiores\nde tu mazo. Roba una\ny descarta las demás."
+  },
+  "VAN_EX1_304": {
+   "text": "[x]<b>Grito de batalla:</b> Destruye\na los dos esbirros adyacentes\ny obtiene su ataque\ny salud."
+  },
+  "VAN_EX1_317": {
+   "text": "[x]Roba 2 demonios\nde tu mazo."
+  },
+  "VAN_EX1_339": {
+   "text": "[x]Copia 2 cartas del mazo\nde tu oponente y las añade\na tu mano."
+  },
+  "VAN_EX1_533": {
+   "text": "[x]<b>Secreto:</b> Cuando un enemigo\nvaya a atacar a tu héroe,\nen su lugar atacará a otro\npersonaje aleatorio."
+  },
+  "VAN_EX1_539": {
+   "text": "[x]Inflige $3 p. de daño.\nSi controlas una bestia,\ninflige $5 p. de daño."
+  },
+  "VAN_EX1_611": {
+   "text": "[x]<b>Secreto:</b> Cuando un esbirro\nenemigo vaya a atacar, lo\ndevuelve a la mano de su dueño.\nCuesta (2) cristales más."
+  }
+ }
+}

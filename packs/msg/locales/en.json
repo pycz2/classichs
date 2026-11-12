@@ -1,0 +1,43 @@
+{
+ "sets": {
+  "GANGS": "Mean Streets of Gadgetzan"
+ },
+ "mechanics": {
+  "JADE_GOLEM": {
+   "name": "Jade Golem",
+   "tip": "Summons a Jade Golem: 1/1 at first, then 1/1 bigger with each one its player summons (at most 30/30)."
+  }
+ },
+ "cards": {
+  "VAN_CS2_005": {
+   "text": "Give your hero +2 Attack this turn. Gain 2 Armor."
+  },
+  "VAN_DS1_184": {
+   "text": "Look at the top 3 cards of your deck. Draw one and discard the others."
+  },
+  "VAN_EX1_005": {
+   "text": "<b>Battlecry:</b> Destroy a minion with 7 or more Attack."
+  },
+  "VAN_EX1_304": {
+   "text": "[x]<b>Battlecry:</b> Destroy both\nadjacent minions and gain\n their Attack and Health."
+  },
+  "VAN_EX1_317": {
+   "text": "Draw 2 Demons\nfrom your deck."
+  },
+  "VAN_EX1_339": {
+   "text": "Copy 2 cards in your opponent's deck and add them to your hand."
+  },
+  "VAN_EX1_533": {
+   "text": "<b>Secret:</b> When an enemy attacks your hero, instead it attacks another random character."
+  },
+  "VAN_EX1_539": {
+   "text": "Deal $3 damage. If you control a Beast, deal\n$5 damage instead."
+  },
+  "VAN_EX1_611": {
+   "text": "<b>Secret:</b> When an enemy minion attacks, return it to its owner's hand. It costs (2) more."
+  },
+  "VAN_EX1_622": {
+   "text": "Destroy a minion with 5 or more Attack."
+  }
+ }
+}

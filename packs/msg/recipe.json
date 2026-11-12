@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds Mean Streets of Gadgetzan 2016 (docs/packs/format.md, 'Build recipes'): on One Night in Karazhan (base), so on Whispers of the Old Gods, The League of Explorers, The Grand Tournament, Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 132 cards of Mean Streets of Gadgetzan and their tokens as the release build 15590 has them (patch 7.0.0.15590 of 2016-11-29, two days before the release; data/msg_cards.json, tools/extract_cards.py --set msg) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/msg.lua, the keywords, the older cards that changed by then).",
+  "base": "../kara",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/msg_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/msg/cards.texts.json"
+      ]
+    }
+  ]
+}

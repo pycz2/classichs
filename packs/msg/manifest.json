@@ -1,0 +1,175 @@
+{
+ "format": 1,
+ "id": "msg-2016",
+ "version": "1.0.0",
+ "engine": "0.60.0",
+ "name": {
+  "en": "Mean Streets of Gadgetzan 2016",
+  "ru": "Злачный город Прибамбасск 2016",
+  "de": "Die Straßen von Gadgetzan 2016",
+  "fr": "Main basse sur Gadgetzan 2016",
+  "es": "Mafias de Gadgetzan 2016",
+  "pt_BR": "Gangues de Geringontzan 2016",
+  "it": "I Bassifondi di Meccania 2016",
+  "pl": "Ciemne zaułki Gadżetonu 2016"
+ },
+ "description": {
+  "en": "The game as it was played after December 1, 2016: the Basic, Classic, Naxxramas, Goblins vs Gnomes, Blackrock Mountain, Grand Tournament, League of Explorers, Old Gods and Karazhan cards and the 132 cards of Mean Streets of Gadgetzan, each as on that day. Three gangs rule the city: the Grimy Goons buff the minions in your hand, the Jade Lotus summon Jade Golems that grow with every one, and the Kabal brew potions; Kazakus makes a spell of your choice. Their tri-class cards go into a deck of any of their three classes. By then Charge cost 1 and no longer let a minion hit heroes at once, Execute and Rockbiter Weapon cost 2, Abusive Sergeant was a 1/1, Call of the Wild cost 9, Tuskarr Totemic summoned only basic Totems, Yogg-Saron stopped casting once it died, and the Murloc lords helped only their own side.",
+  "ru": "Игра, как в неё играли после 1 декабря 2016 года: базовые и классические карты, карты Наксрамаса, «Гоблинов и гномов», Чёрной горы, Большого турнира, Лиги исследователей, «Пробуждения древних богов», «Вечеринки в Каражане» и 132 карты «Злачного города Прибамбасска», каждая как в тот день. Городом правят три банды: «Ржавые бугаи» усиливают существ в вашей руке, «Нефритовый лотос» призывает нефритовых големов, которые растут с каждым новым, а «Кабал» варит зелья; Казакус готовит заклинание на ваш выбор. Их карты трёх классов можно положить в колоду любого из этих классов. К тому времени «Рывок» стоил 1 и больше не позволял сразу бить героя, «Казнь» и «Камнедробитель» стоили 2, «Сержант-грубиян» стал 1/1, «Зов дикой природы» стоил 9, «Клыкарр-тотемист» призывал только базовые тотемы, Йогг-Сарон переставал читать заклинания после смерти, а вожаки мурлоков помогали только своей стороне.",
+  "de": "Das Spiel, wie es nach dem 1. Dezember 2016 gespielt wurde: die Basis-, Klassik-, Naxxramas-, „Goblins gegen Gnome“-, Schwarzfels-, Turnier-, Forscherliga-, Alte-Götter- und Karazhan-Karten und die 132 Karten von „Die Straßen von Gadgetzan“, jede wie an jenem Tag. Drei Banden beherrschen die Stadt: die Rüpelbande stärkt die Diener auf Eurer Hand, der Jadelotus beschwört Jadegolems, die mit jedem neuen wachsen, und die Kabale braut Tränke; Kazakus mischt einen Zauber nach Eurer Wahl. Ihre Drei-Klassen-Karten passen in ein Deck jeder ihrer drei Klassen. Bis dahin kostete Sturmangriff 1 und ließ einen Diener nicht mehr sofort Helden angreifen, Hinrichten und Felsbeißerwaffe kosteten 2, der Ruchlose Unteroffizier war ein 1/1, Ruf der Wildnis kostete 9, der Totemschnitzer der Stoßzahnarr beschwor nur noch Basistotems, Yogg-Saron hörte nach seinem Tod auf zu zaubern und die Murlocanführer halfen nur noch ihrer eigenen Seite.",
+  "fr": "Le jeu tel qu’on le jouait après le 1er décembre 2016 : les cartes de base, classiques, de Naxxramas, de Gobelins et Gnomes, du Mont Rochenoire, du Grand Tournoi, de la Ligue des explorateurs, des Murmures des Dieux très anciens et de Karazhan, et les 132 cartes de Main basse sur Gadgetzan, chacune comme ce jour-là. Trois gangs tiennent la ville : les Truands crasseux renforcent les serviteurs de votre main, le Lotus de jade invoque des golems de jade qui grandissent à chaque nouvel appel, et la Kabale prépare des potions ; Kazakus concocte un sort à votre goût. Leurs cartes tri-classe vont dans un deck de n’importe laquelle de leurs trois classes. À cette date, Charge coûtait 1 et ne permettait plus d’attaquer aussitôt les héros, Exécution et Arme croque-roc coûtaient 2, le Sergent grossier était un 1/1, L’appel de la nature coûtait 9, le Totémiste rochebrune n’invoquait que des totems de base, Yogg-Saron cessait de lancer des sorts après sa mort, et les chefs murlocs n’aidaient plus que leur propre camp.",
+  "es": "El juego tal y como se jugaba después del 1 de diciembre de 2016: las cartas básicas, clásicas, de Naxxramas, de Goblins contra Gnomos, de la Montaña Roca Negra, del Gran Torneo, de la Liga de Expedicionarios, de los Susurros de los Dioses Antiguos y de Karazhan, y las 132 cartas de Mafias de Gadgetzan, cada una como aquel día. Tres bandas dominan la ciudad: los Matones mugrientos mejoran los esbirros de tu mano, el Loto de Jade invoca gólems de jade que crecen con cada uno y la Kábala prepara pociones; Kazakus crea un hechizo a tu elección. Sus cartas de tres clases caben en un mazo de cualquiera de ellas. Para entonces, Cargar costaba 1 y ya no dejaba atacar a los héroes al instante, Ejecutar y Arma muerdepiedras costaban 2, el Sargento abusivo era un 1/1, La llamada de la naturaleza costaba 9, el Totemista colmillarr solo invocaba tótems básicos, Yogg-Saron dejaba de lanzar hechizos al morir y los líderes múrlocs solo ayudaban a su propio bando.",
+  "pt_BR": "O jogo como era jogado depois de 1º de dezembro de 2016: os cards básicos, clássicos, de Naxxramas, de Goblins vs. Gnomos, da Montanha Rocha Negra, do Grande Torneio, da Liga dos Exploradores, de Os Sussurros dos Deuses Antigos e de Karazhan e os 132 cards de Gangues de Geringontzan, cada um como naquele dia. Três gangues mandam na cidade: os Brutamontes Imundos fortalecem os lacaios da sua mão, o Lótus de Jade evoca golens de jade que crescem a cada novo, e a Cabala prepara poções; Kazakus cria um feitiço do seu jeito. Os cards de três classes entram no deck de qualquer uma delas. Nessa época, Investida custava 1 e já não deixava atacar heróis de imediato, Executar e Arma de Pedra custavam 2, o Sargento Abusado era um 1/1, Chamado da Natureza custava 9, o Totemista Presarr só evocava totens básicos, Yogg-Saron parava de lançar feitiços ao morrer e os líderes murlocs só ajudavam o próprio lado.",
+  "it": "Il gioco come si giocava dopo il 1° dicembre 2016: le carte Base, Classiche, di Naxxramas, di Goblin vs Gnomi, di Massiccio Roccianera, del Gran Torneo, della Lega degli Esploratori, dei Sussurri degli Dei Antichi e di Karazhan e le 132 carte de I Bassifondi di Meccania, ognuna com’era quel giorno. Tre bande comandano la città: i Teppisti Lerci potenziano i servitori nella tua mano, il Loto di Giada evoca Golem di Giada che crescono a ogni nuovo evocato e il Kabal prepara pozioni; Kazakus crea un incantesimo a tua scelta. Le loro carte di tre classi vanno in un mazzo di una qualsiasi delle tre. A quella data Carica costava 1 e non permetteva più di attaccare subito gli eroi, Esecuzione e Arma Spaccaroccia costavano 2, il Sergente Violento era un 1/1, Richiamo della Natura costava 9, il Totemista Zannuta evocava solo Totem base, Yogg-Saron smetteva di lanciare incantesimi alla sua morte e i capi Murloc aiutavano solo la propria parte.",
+  "pl": "Gra taka, jak po 1 grudnia 2016 roku: karty podstawowe, klasyczne, z Naxxramas, Goblinów i gnomów, Czarnej Góry, Wielkiego Turnieju, Ligi Odkrywców, Pradawnych Bogów i Karazhanu oraz 132 karty Ciemnych zaułków Gadżetonu, każda taka jak tamtego dnia. Miastem rządzą trzy gangi: Brudne Zbiry wzmacniają stronników w twojej ręce, Nefrytowy Lotos przyzywa nefrytowe golemy, które rosną z każdym kolejnym, a Kabała warzy mikstury; Kazakus tworzy zaklęcie według twojego wyboru. Ich karty trzech klas pasują do talii każdej z tych klas. Do tego czasu Szarża kosztowała 1 i nie pozwalała już od razu atakować bohaterów, Egzekucja i Kamieniołomna broń kosztowały 2, Brutalny sierżant był stronnikiem 1/1, Zew natury kosztował 9, Kłolud totemista przyzywał tylko podstawowe totemy, Yogg-Saron przestawał rzucać zaklęcia po śmierci, a przywódcy murloków pomagali tylko swojej stronie."
+ },
+ "authors": [
+  "Classic HS"
+ ],
+ "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+ "redistributable": true,
+ "default_locale": "en",
+ "locales": [
+  "en",
+  "ru",
+  "de",
+  "fr",
+  "es",
+  "pt_BR",
+  "it",
+  "pl"
+ ],
+ "art_sets": [
+  {
+   "id": "simple",
+   "name": {
+    "en": "Simple painted",
+    "ru": "Простой рисованный",
+    "de": "Einfach gemalt",
+    "fr": "Peint simple",
+    "es": "Pintado simple",
+    "pt_BR": "Pintura simples",
+    "it": "Dipinto semplice",
+    "pl": "Prosty malowany"
+   },
+   "default": true
+  },
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированный"
+   }
+  },
+  {
+   "id": "cartoon",
+   "name": {
+    "en": "Cartoon 2D",
+    "ru": "Мультяшный 2D",
+    "de": "Cartoon 2D",
+    "fr": "Dessin animé 2D",
+    "es": "Dibujos 2D",
+    "pt_BR": "Desenho 2D",
+    "it": "Cartone 2D",
+    "pl": "Kreskówka 2D"
+   }
+  },
+  {
+   "id": "photo",
+   "name": {
+    "en": "Photoreal",
+    "ru": "Фотореалистичный",
+    "de": "Fotorealistisch",
+    "fr": "Photoréaliste",
+    "es": "Fotorrealista",
+    "pt_BR": "Fotorrealista",
+    "it": "Fotorealistico",
+    "pl": "Fotorealistyczny"
+   }
+  }
+ ],
+ "sound_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированные"
+   },
+   "default": true
+  }
+ ],
+ "music_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированная"
+   },
+   "default": true
+  },
+  {
+   "id": "open",
+   "name": {
+    "en": "Open (CC0)",
+    "ru": "Открытая (CC0)"
+   }
+  }
+ ],
+ "set_marks": {
+  "VANILLA:FREE": {
+   "icon": "ui/set_basic.png"
+  },
+  "VANILLA": {
+   "icon": "ui/set_classic.png"
+  },
+  "NAXX": {
+   "icon": "ui/set_naxx.png"
+  },
+  "GVG": {
+   "icon": "ui/set_gvg.png"
+  },
+  "BRM": {
+   "icon": "ui/set_brm.png"
+  },
+  "TGT": {
+   "icon": "ui/set_tgt.png"
+  },
+  "LOE": {
+   "icon": "ui/set_loe.png"
+  },
+  "OG": {
+   "icon": "ui/set_og.png"
+  },
+  "KARA": {
+   "icon": "ui/set_kara.png"
+  },
+  "GANGS": {
+   "icon": "ui/set_msg.png"
+  }
+ },
+ "card_back": null,
+ "logo": null,
+ "colors": {
+  "classes": {
+   "DRUID": "703606",
+   "HUNTER": "016e01",
+   "MAGE": "0092ab",
+   "PALADIN": "aa8f00",
+   "PRIEST": "b8b090",
+   "ROGUE": "4c4d48",
+   "SHAMAN": "0070de",
+   "WARLOCK": "7624ad",
+   "WARRIOR": "8e1002",
+   "NEUTRAL": "6b6b6b",
+   "DREAM": "6b6b6b",
+   "DEMONHUNTER": "6b6b6b"
+  },
+  "rarities": {
+   "FREE": "e8e8e8",
+   "COMMON": "e8e8e8",
+   "RARE": "2f7cff",
+   "EPIC": "a335ee",
+   "LEGENDARY": "ff8000"
+  }
+ }
+}

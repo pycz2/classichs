@@ -1,0 +1,22 @@
+{
+ "sets": {
+  "GANGS": "I Bassifondi di Meccania"
+ },
+ "mechanics": {
+  "JADE_GOLEM": {
+   "name": "Golem di Giada",
+   "tip": "Evoca un Golem di Giada: 1/1 all’inizio, poi ogni nuovo di quel giocatore è più grande di 1/1 (al massimo 30/30)."
+  }
+ },
+ "cards": {
+  "VAN_DS1_184": {
+   "text": "Guarda le prime 3 carte del tuo mazzo. Pescane una e scarta le altre."
+  },
+  "VAN_EX1_339": {
+   "text": "Copia 2 carte casuali dal mazzo dell'avversario e le mette nella tua mano."
+  },
+  "VAN_EX1_533": {
+   "text": "<b>Segreto:</b> quando un nemico attacca il tuo eroe, attacca invece un altro personaggio casuale."
+  }
+ }
+}
