@@ -32,6 +32,8 @@ func test_every_effect_event_has_a_sound_file() -> void:
 	eq(Sound.sound_for({"type": "game_over", "winner": 0}, g, 0), "victory", "victory")
 	eq(Sound.sound_for({"type": "game_over", "winner": 0}, g, 1), "defeat", "defeat")
 	eq(Sound.sound_for({"type": "draw", "player": 0}, g, 0), "", "no sound for draw")
+	eq(Sound.sound_for({"type": "turn_start", "player": 0, "turn": 1}, g, 0), "turn_start", "my turn")
+	eq(Sound.sound_for({"type": "turn_start", "player": 1, "turn": 2}, g, 0), "", "no 'your turn' on the opponent's")
 
 
 func test_every_music_track_has_a_file() -> void:

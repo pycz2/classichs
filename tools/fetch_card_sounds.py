@@ -15,8 +15,8 @@ and the wiki's VO_<card id>_…Trigger… files.
 
 Result in <out>/<set>/:
   set/<card id>_<role>.opus      roles: aim (a loop while aiming), missile, hit, hit_2 … (impacts), trigger,
-                                 reveal (a Secret), complete (a Quest), choose; play for a spell, a hero power or
-                                 a Secret only when tools/fetch_original_sounds.py gave it none
+                                 reveal (a Secret), complete (a Quest), choose; play (and a minion.s attack, death) only
+                                 when tools/fetch_original_sounds.py gave the card none
   voice/<lang>/<card id>_trigger.opus   the card's line as its effect fires (en, ru when the Russian files have it)
   <out>/audio-src/<set>/manifest.json   card id -> role -> [wiki files] (what each new file came from)
 The originals are cached with the others in <out>/sounds/cache/wiki (a cached file is never downloaded again).
@@ -32,7 +32,6 @@ import urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import audio_codec  # noqa: E402
 import fetch_original_sounds as snd  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -55,7 +54,7 @@ ROLE_WORDS = {
 ORDER = ["aim", "missile", "reveal", "complete", "progress", "choose", "hit", "trigger", "death", "attack", "play"]
 # Words that say nothing of the role (or are the game's prefixes): allowed anywhere in a file's name.
 FILLER = {"sound", "sounds", "sfx", "fx", "spell", "spells", "event", "small", "medium", "large", "big", "single",
-          "v", "new", "a", "b", "c", "the", "of", "card", "custom", "custon", "base", "enter"}
+          "v", "new", "a", "b", "c", "the", "of", "card", "custom", "custon", "base", "enter", "tier", "lvl", "level"}
 # Names that are also the game's keywords: a file named so is the keyword's sound (Charge_Summon), not the card's.
 KEYWORD_NAMES = {"charge", "taunt", "freeze", "windfury", "stealth", "battlecry", "deathrattle", "poisonous",
                  "lifesteal", "rush", "echo", "discover", "adapt", "overload", "combo", "secret", "quest", "inspire",
@@ -212,6 +211,13 @@ def natural(f):
     return [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", f)]
 
 
+# Classic Secrets (ids without VAN_) -> their effect's sound, hand-picked from the wiki's files: it plays as the
+# Secret is revealed (`<id>_reveal`), not as it is cast (the board's secret_play sound does that).
+REVEAL = {"EX1_289": "Mage_IceBarrier_Impact_1.wav", "EX1_295": "Mage_IceBlock_Impact_1.wav",
+          "EX1_136": "Spell_Redemption_target_1.wav", "EX1_294": "Mirror_entity_cast.wav",
+          "EX1_533": "Misdirection_cast_01.wav", "EX1_287": "Mage_CounterSpell_Cast_1.wav",
+          "EX1_554": "Snake_trap_spread.wav"}
+
 PLAY_PICK = ["cast", "start", "launch", "precast", "birth", "play", "enterplay", "customsummon", "summon",
              "customspawn", "spawn", "equip"]
 
@@ -258,10 +264,16 @@ def plan(cards, files, have=frozenset(), max_hits=5, others=frozenset()):
                         if r == "play" else 0) for loose, f in lf}
             fs = sorted(pick, key=lambda f: (pick[f], natural(f)))  # exact names first
             if r == "hit":  # the variants of one family (Mage_ArcaneMissiles_Impact_1…3), the hand-picked one's first
-                picked = (snd.SPELLS.get(cid.removeprefix("VAN_")) or [None, None])[1]
+                cast, picked = snd.SPELLS.get(cid.removeprefix("VAN_")) or [None, None]
+                fs = [f for f in fs if f != cast]  # (a hand-picked cast that is the whole effect: not again)
+                if not fs and not picked:
+                    continue
                 fam = family(picked) if picked else family(fs[0])
                 fs = ([picked] if picked else []) + sorted((f for f in fs if family(f) == fam and f != picked), key=natural)
             got[r] = fs[:max_hits] if r == "hit" else fs[:1]
+        rev = REVEAL.get(cid.removeprefix("VAN_"))
+        if rev:  # (and not again as its impact or cast)
+            got = {r: fs for r, fs in got.items() if rev not in fs} | {"reveal": [rev]}
         if got:
             out[cid] = got
     return out
@@ -347,6 +359,37 @@ def cards_named(game):
     return out
 
 
+def inherited(ids, rows):
+    """card id -> {play, attack, death: [file]} for a numbered token without a `Sound` row of its own (Jade Golem
+    CFM_712_t05…t30): the sounds of the nearest lower-numbered sibling that has one (t04's JadeGolem_Tier2_*).
+    ponytail: a guess between the rows the wiki has (t01 Tier1, t04/t07 Tier2, t20 Tier3); a row per token wins."""
+    out = {}
+    for cid in ids:
+        m = re.fullmatch(r"(.*_t)(\d+)", cid)
+        if not m or any(snd.files_of((rows.get(cid) or {}).get("BASIC " + s)) for s in ("play", "attack", "death")):
+            continue
+        for n in range(int(m.group(2)) - 1, 0, -1):
+            sib = rows.get(f"{m.group(1)}{n:0{len(m.group(2))}d}") or {}
+            got = {s: [f for f in snd.files_of(sib.get("BASIC " + s)) if not f.startswith("VO_")][:1]
+                   for s in ("play", "attack", "death")}
+            if any(got.values()):
+                out[cid] = {s: fs for s, fs in got.items() if fs}
+                break
+    return out
+
+
+def files_of_manifest(manifest, dest):
+    """{our file (set/…opus, voice/en/…opus): its wiki file} of a manifest."""
+    out = {}
+    for cid, roles in manifest.items():
+        for name, f in set_names(cid, {r: fs for r, fs in roles.items() if r != "voice_trigger"}):
+            out[dest / "set" / f"{name}.opus"] = f
+        for f in roles.get("voice_trigger", []):
+            out[dest / "voice/en" / f"{cid}_trigger.opus"] = f
+            out[dest / "voice/ru" / f"{cid}_trigger.opus"] = f
+    return out
+
+
 def run(game, out, ru, dry=False):
     dest = out / game
     cache = out / "sounds" / "cache"
@@ -355,11 +398,18 @@ def run(game, out, ru, dry=False):
     rows = snd.wiki_sounds([c for c, _, _ in cards])  # what fetch_original_sounds gives each card (its plan_card)
     have = {name for c, t, _ in cards for k, name, _ in snd.plan_card(c, rows[c], t) if k == "set"}
     manifest = plan(cards, sorted(files), have, others=other_names())
+    for cid, roles in inherited([c for c, _, _ in cards], rows).items():
+        manifest.setdefault(cid, {}).update({r: fs for r, fs in roles.items() if f"{cid}_{r}" not in have})
     trig = {**vo_triggers([c for c, _, _ in cards], files), **custom_triggers([c for c, _, _ in cards])}
     for cid, f in trig.items():
         manifest.setdefault(cid, {})["voice_trigger"] = [f]
     mp = out / "audio-src" / game / "manifest.json"
     mp.parent.mkdir(parents=True, exist_ok=True)
+    if mp.exists() and not dry:  # a file whose source changed or went away since the last run: made again or removed
+        new = files_of_manifest(manifest, dest)
+        for dst, f in files_of_manifest(json.loads(mp.read_text()), dest).items():
+            if new.get(dst) != f:
+                dst.unlink(missing_ok=True)
     mp.write_text(json.dumps(manifest, indent=1, sort_keys=True))
     jobs = []  # (url, raw, dst, kind)
     for cid, roles in manifest.items():

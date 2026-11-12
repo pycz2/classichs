@@ -50,6 +50,10 @@ class Roles(unittest.TestCase):
         self.assertTrue(cs.role_agrees("death", "Minion_Death_01.wav"))
         self.assertTrue(cs.role_agrees("music", "YShaarj_Play_Stinger.wav"))
         self.assertTrue(cs.role_agrees("aim", "Some_Neutral_Name.wav"))
+        self.assertTrue(cs.role_agrees("trigger", "LeperGnome_DeathRattle_Cast_1.wav"))
+        self.assertTrue(cs.role_agrees("reveal", "WhiteEyes_SpawnToDeck_CustomReveal_Sound.wav"))
+        self.assertFalse(cs.role_agrees("trigger", "X_Attack_Underlay.wav"))
+        self.assertTrue(cs.role_agrees("hit", "Crush_CustomDeath_Sound_01.wav"))
 
     def test_voice_agreement(self):
         self.assertFalse(cs.role_agrees("death", "VO_CFM_810_Female_Quilboar_Attack_02.wav", voice=True))
@@ -63,6 +67,7 @@ class Owner(unittest.TestCase):
         self.assertEqual(owner("VO_EX1_116_Play_01.wav", "VAN_EX1_116", "Leeroy Jenkins"), "ok")
         self.assertEqual(owner("Pegasus_Stinger_Leeroy_Jenkins.wav", "VAN_EX1_116", "Leeroy Jenkins"), "ok")
         self.assertEqual(owner("YShaarj_Play_Stinger.wav", "OG_042", "Y'Shaarj, Rage Unbound"), "ok")
+        self.assertEqual(owner("Banana_Impact_Sound.wav", "EX1_014t", "Bananas"), "ok")
 
     def test_another_cards_voice_is_an_error(self):
         self.assertEqual(owner("VO_OG_133_Male_OldGod_Play_01.wav", "OG_042", "Y'Shaarj, Rage Unbound"), "error")

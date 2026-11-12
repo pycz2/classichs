@@ -45,7 +45,10 @@
       "sounds": {
         "type": "object",
         "additionalProperties": false,
-        "properties": {"play": {"$ref": "#/$defs/sound"}, "attack": {"$ref": "#/$defs/sound"}, "death": {"$ref": "#/$defs/sound"}}
+        "properties": {"play": {"$ref": "#/$defs/sound"}, "attack": {"$ref": "#/$defs/sound"}, "death": {"$ref": "#/$defs/sound"},
+          "hit": {"$ref": "#/$defs/sound"}, "music": {"$ref": "#/$defs/sound"}, "aim": {"$ref": "#/$defs/sound"},
+          "missile": {"$ref": "#/$defs/sound"}, "trigger": {"$ref": "#/$defs/sound"}, "reveal": {"$ref": "#/$defs/sound"},
+          "progress": {"$ref": "#/$defs/sound"}, "complete": {"$ref": "#/$defs/sound"}, "choose": {"$ref": "#/$defs/sound"}}
       },
       "voice": {"type": "string", "pattern": "^[A-Za-z0-9_]{1,64}$"}
     }

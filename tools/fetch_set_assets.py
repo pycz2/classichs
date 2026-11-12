@@ -35,6 +35,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import extract_cards  # noqa: E402
+import fetch_card_sounds  # noqa: E402
 import fetch_original_music  # noqa: E402
 import fetch_original_sounds as snd  # noqa: E402
 import pack  # noqa: E402

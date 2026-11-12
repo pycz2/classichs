@@ -87,7 +87,7 @@ SPELLS = {
     "CS2_046": ["Shaman_Bloodlust_PreCast.wav", "Shaman_Bloodlust_Impact.wav"], "EX1_407": ["Brawl_Start_01.wav", None],
     "EX1_621": ["CircleOfHealing_cast.wav", None], "NEW1_036": ["Rage_CommandingShout_Cast_Horn_Sound.wav", None],
     "EX1_275": ["Mage_ConeOfCold_Cast_1.wav", None], "CS2_093": ["Spell_Consecration_impact_1.wav", None],
-    "CS2_063": [None, "Warlock_Corruption_Impact_1.wav"], "EX1_287": ["Mage_CounterSpell_Cast_1.wav", None],
+    "CS2_063": [None, "Warlock_Corruption_Impact_1.wav"],
     "CS2_074": [None, "Rogue_DeadlyPoison_Impact_1.wav"], "CS2_061": ["Warlock_DrainLife_Cast_1.wav", None],
     "EX1_245": [None, "Shaman_EarthShock_Impact.wav"], "EX1_619": [None, "Spell_Equality_target_1.wav"],
     "EX1_124": ["Rogue_Eviscerate_Cast_1.wav", "Rogue_Eviscerate_Impact_1.wav"],
@@ -100,21 +100,20 @@ SPELLS = {
     "EX1_624": [None, "Spell_holyfire_target.wav"], "CS2_089": ["Spell_HolyLight_cast_1.wav", None],
     "CS1_112": ["Holy_Nova_cast.wav", None], "CS1_130": ["Holy_Smite_Cast_01.wav", "Holy_Smite_Impact_01.wav"],
     "EX1_360": [None, "Spell_Humility_target_1.wav"], "CS2_084": ["Hunters_Mark_cast.wav", None],
-    "EX1_289": ["Mage_IceBarrier_Impact_1.wav", None], "EX1_295": ["Mage_IceBlock_Impact_1.wav", None],
     "EX1_607": [None, "Shared_Rage_InnerRage_Impact_1.wav"], "EX1_354": [None, "Spell_LayOnHands_target_1.wav"],
     "EX1_626": ["Mass_Dispell_cast.wav", None], "CS1_113": [None, "Priest_MindControl_Impact_1.wav"],
-    "EX1_294": ["Mirror_entity_cast.wav", None], "EX1_533": ["Misdirection_cast_01.wav", None],
     "CS2_022": [None, "Shared_PolymorphHex_Impact.wav"], "EX1_246": [None, "Shared_PolymorphHex_Impact.wav"],
-    "EX1_316": [None, "Warlock_PowerOverwhelming_Impact_1.wav"], "EX1_136": ["Spell_Redemption_target_1.wav", None],
+    "EX1_316": [None, "Warlock_PowerOverwhelming_Impact_1.wav"],
     "CS2_057": ["Warlock_ShadowBolt_Cast_1.wav", "Warlock_ShadowBolt_Impact_1.wav"],
     "CS2_234": [None, "Priest_ShadowWordPain_Impact_1.wav"], "EX1_303": [None, "Shared_ShadowFlameAE_Impact_1.wav"],
     "EX1_625": ["Priest_Shadowform_Cast_1.wav", None], "EX1_332": [None, "Silence_target_1.wav"],
     "EX1_309": ["Warlock_SiphonSoul_Cast_1.wav", "Warlock_SiphonSoul_TargetImpact_1.wav"],
-    "EX1_554": ["Snake_trap_spread.wav", None], "GAME_005": ["The_coin_card.wav", None],
+    "GAME_005": ["The_coin_card.wav", None],
     "EX1_244": ["Shaman_TotemicMight_PreCast.wav", "Shaman_TotemicMight_Impact.wav"],
     "EX1_312": ["Warlock_TwistingNether_Impact_1.wav", None], "NEW1_004": ["Rogue_Vanish_Impact_1.wav", None],
     "CS2_039": [None, "Shaman_Windfury_Impact.wav"],
 }
+# (A Secret's effect sound plays as it is revealed: tools/fetch_card_sounds.py REVEAL, not here.)
 # Cards whose sounds changed after June 2014 -> their 2014 files (the wiki keeps them on the card's page).
 ORIGINAL = {
     "EX1_306": {"play": "VO_EX1_306_Play_01.wav", "attack": "VO_EX1_306_Attack_02.wav", "death": "VO_EX1_306_Death_03.wav"},

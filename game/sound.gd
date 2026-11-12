@@ -253,6 +253,8 @@ static func sound_for(ev: Dictionary, g: GameView, viewer: int, nth := 1) -> Str
 			return _first([card_sound(id, "reveal"), card_sound(id, "trigger"), "secret"])
 		"quest_done":
 			return card_sound(id_of.call("entity"), "complete")
+		"turn_start":  # "your turn": the viewer's own turns only, as in the original
+			return "turn_start" if int(ev.get("player", -1)) == viewer else ""
 		"game_over":
 			if ev.winner == viewer:
 				return "victory"

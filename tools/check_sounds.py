@@ -35,7 +35,8 @@ Checks, per file (error = surely wrong, flag = look at it, info = shared by desi
   length   impacts, missiles, triggers, reveals, play, attack, death <= 8 s; music 1-40 s; an aim loop >= 0.3 s;
            voice <= 15 s; and the file is as long as its source (else it was made from another file)
   silent   the loudest point is below -50 dB
-  same     one source (or identical bytes) on two different cards (shared underlays and table files: info)
+  same     one source on two different cards (shared underlays, table files and each card's own row: info); identical
+           bytes on two cards whose originals differ (an .opus file never matches: Ogg gives each a random serial)
   ru       a Russian line has the same source name as the English one, is as long as the downloaded Russian
            original, and has an English line next to it
   missing  a file the plan expects is not there (folders only)
@@ -75,17 +76,18 @@ ROLE_TAGS = {
     "play": {"play", "cast", "precast", "summon", "birth", "enter", "spawn", "start", "launch", "equip"},
     "attack": {"attack", "swing"},
     "death": {"death", "die", "dies", "destroy", "destruction", "break"},
-    "hit": {"impact", "hit", "target", "damage", "explode", "explosion", "ae"},
+    "hit": {"impact", "hit", "target", "damage", "explode", "explosion", "ae", "death", "destroy", "die"},  # (a kill)
     "music": {"stinger", "music"},
     "aim": {"loop", "aim", "channel", "target", "idle"},
     "missile": {"missile", "missle", "projectile", "launch", "travel"},
-    "trigger": {"trigger", "proc", "activate"},
-    "reveal": {"reveal", "trigger", "secret"},
+    "trigger": set(),  # (any effect: a cast, a spawn, a reveal, a deathrattle; see below)
+    "reveal": set(),
     "progress": {"progress", "quest"},
     "complete": {"complete", "quest", "reward"},
     "choose": {"choose", "discover", "adapt", "select", "choice"},
 }
 ALL_TAGS = set().union(*ROLE_TAGS.values())
+ROLE_TAGS["trigger"] = ROLE_TAGS["reveal"] = ALL_TAGS - {"attack", "swing"}  # (only an attack file is no effect)
 # Words too common in sound names to tie a file to a card whose name has them.
 COMMON = {"the", "of", "and", "play", "attack", "death", "impact", "cast", "shared", "minion", "spell", "fire", "frost",
           "holy", "shadow", "arcane", "nature", "underlay", "stinger", "pegasus", "male", "female", "human", "trigger",
@@ -187,7 +189,7 @@ def belongs(src, cid, name, ids_upper, names, tables=frozenset(), names_of=None)
         return ("error" if src.upper().startswith("VO_") else "flag"), "another card's file: " + ", ".join(others)
     if related:
         return "info", "the file of a related card: " + ", ".join(related)
-    if any(len(w) >= 4 and w not in COMMON and w in flat for w in own):
+    if any(len(w) >= 4 and w not in COMMON and (w in flat or (len(w) >= 5 and w.rstrip("s") in flat)) for w in own):
         return "ok", "part of the card name"
     if kind == "underlay":
         return "info", kind
@@ -314,19 +316,33 @@ def source_seconds(src, wiki_len, ru=False):
     return wav_seconds(CACHE / "wiki" / src)
 
 
+def source_md5(srcs):
+    """The md5 of a label's one downloaded original (Blizzard keeps the same sound under several names), else its
+    source names."""
+    p = CACHE / "wiki" / srcs[0] if srcs and len(srcs) == 1 else None
+    if p and p.is_file():
+        try:
+            with wave.open(str(p)) as w:  # (the samples: two copies may differ in their headers only)
+                return hashlib.md5(w.readframes(w.getnframes())).hexdigest()
+        except Exception:
+            return hashlib.md5(p.read_bytes()).hexdigest()
+    return srcs
+
+
 def gather(target, tmp):
     """[(kind, lang, name, path)] of the audio files, and the pack's cards [(id, type)] (None for a folder)."""
     files, cards = [], None
     if target.is_dir():
-        for p in sorted((target / "set").glob("*.opus")):
+        for p in sorted((target / "set").glob("*.opus")):  # (only .opus: an .ogg/.mp3 left there is stale)
             files.append(("set", None, p.stem, p))
         for p in sorted((target / "voice").glob("*/*.opus")):
             files.append(("voice", p.parent.name, p.stem, p))
         return files, cards
     with zipfile.ZipFile(target) as z:
-        cards = [(c["id"], c.get("type")) for c in json.loads(z.read("cards.json"))]
+        cards = [(c["id"], "HERO" if c.get("type") == "CHAMPION" else c.get("type"))  # (the engine's word for a hero)
+                 for c in json.loads(z.read("cards.json"))]
         for n in z.namelist():
-            m = re.fullmatch(r"(sounds|voice)/([^/]+)/([^/]+)\.opus", n)
+            m = re.fullmatch(r"(sounds|voice)/([^/]+)/([^/]+)\.(?:opus|ogg|mp3)", n)  # (packs built before Opus)
             if m:
                 z.extract(n, tmp)
                 files.append(("set" if m[1] == "sounds" else "voice", None if m[1] == "sounds" else m[2], m[3],
@@ -426,7 +442,7 @@ def check(target, set_name=None, manifests=(), audio=True):
     for md5, users in by_md5.items():
         cards_ = {b for b, _ in users}
         labels = sorted(lbl for _, lbl in users)
-        if len(cards_) > 1 and len({label_src.get(lbl) for lbl in labels}) > 1:
+        if len(cards_) > 1 and len({source_md5(label_src.get(lbl)) for lbl in labels}) > 1:
             add("flag", "same", ", ".join(labels), "identical bytes on different cards")
     missing = 0
     if target.is_dir():
