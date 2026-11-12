@@ -2,7 +2,7 @@ class_name SettingsView
 extends Control
 ## The client's settings, the same everywhere (the main menu, a game's menu, over a match):
 ## language, music and sound volume, the card back (a neutral one; a pack with its own back
-## shows that), animation speed, screen shake, fullscreen. Inside a game a "Debug tools" button
+## shows that), animation speed, screen shake, fullscreen, the FPS counter. Inside a game a "Debug tools" button
 ## opens that game's debug table. Every change is applied and saved at once. Works as a screen
 ## and as an overlay.
 
@@ -17,7 +17,8 @@ signal art_changed
 
 ## Row labels (English keys); the translation tool reads these lists.
 const SLIDERS := [["Music", "music"], ["Sounds", "sfx"]]
-const TOGGLES := [["Screen shake", "Shake", "shake"], ["Fullscreen", "Fullscreen", "fullscreen"]]
+const TOGGLES := [["Screen shake", "Shake", "shake"], ["Fullscreen", "Fullscreen", "fullscreen"],
+	["FPS counter", "Fps", "fps"]]
 
 
 func _ready() -> void:

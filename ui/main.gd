@@ -28,6 +28,7 @@ func _ready() -> void:
 	add_child(Sound.new())
 	if OS.has_feature("web"):
 		add_child(WebPaste.new())  # Ctrl+V pastes the clipboard of now, not the one before
+	add_child(FpsCounter.new())  # over every screen, when the settings say so
 	add_child(TouchInput.new())  # a finger drag scrolls any list, also over its buttons
 	if DisplayServer.has_feature(DisplayServer.FEATURE_VIRTUAL_KEYBOARD) and DisplayServer.is_touchscreen_available():
 		add_child(KeyboardLift.new())  # a field under the on-screen keyboard rises above it

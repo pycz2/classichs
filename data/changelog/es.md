@@ -4,6 +4,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+### Añadido
+- Un contador de fotogramas por segundo: el interruptor «Contador de FPS» de los ajustes (desactivado por defecto) los muestra en pequeño en la esquina superior izquierda de cada pantalla.
+
 ## [0.70.0] - 2026-11-12
 
 ### Añadido
