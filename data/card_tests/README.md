@@ -25,6 +25,8 @@ Each file here is a JSON object: card id → list of tests. All files are merged
   `aura`, `enrage`, `secret`, `weapon`, `hero_power`, `taunt`, `charge`, `divine_shield`, `stealth`,
   `windfury`, `freeze`, `spell_damage`, `overload`, `other`.
 - `title`: a short English line saying what to watch.
+- `script` (optional): the card's `script` the test was written for; packs whose card has another script (it changed
+  later: Warsong Commander in The League of Explorers) skip it.
 - `scene`: the Debug Table scenario (engine/scenario.gd): `current`, `turn`, `players` with `hero`, `mana`,
   `max_mana`, `damage`, `armor`, `weapon`, `hand`, `deck`, `board`, `secrets`; a card may be a string id or
   `{"card": id, "exhausted": false, "damage": n, …}`. Minions on the board are not exhausted unless asked.

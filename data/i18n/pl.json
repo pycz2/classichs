@@ -48,6 +48,7 @@
 "3rd place": "3. miejsce",
 "A bye: %s goes on": "Wolny los: %s przechodzi dalej",
 "A card is added to Opponent's hand": "Do ręki przeciwnika dodano kartę",
+"A copy of %s is cast on %s": "Kopia „%s” zostaje rzucona na: %s",
 "A deck name is at most 60 characters": "Nazwa talii ma najwyżej 60 znaków",
 "A deck needs exactly 30 cards. Cards now: %d": "Talia musi mieć dokładnie 30 kart. Obecnie kart: %d",
 "A deck needs exactly one hero": "Talia musi mieć dokładnie jednego bohatera",

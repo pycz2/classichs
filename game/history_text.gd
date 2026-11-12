@@ -137,6 +137,8 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 			s = _t("Draw") if ev.winner == -1 else _say(ev.winner, viewer, "You win", "Opponent wins", [])
 		"choice":
 			s = _say(p, viewer, "You choose a card", "Opponent chooses a card", [])
+		"cast":
+			s = _t("A copy of %s is cast on %s") % [CardText.name(ev.card, loc), n.call(ev.target)]
 		"choice_cancelled":
 			s = _t("The choice is cancelled: no options left")
 		"mana":

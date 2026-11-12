@@ -48,6 +48,7 @@
 "3rd place": "3-е место",
 "A bye: %s goes on": "Без соперника: %s проходит дальше",
 "A card is added to Opponent's hand": "В руку соперника добавлена карта",
+"A copy of %s is cast on %s": "Копия «%s» применяется к «%s»",
 "A deck name is at most 60 characters": "Название колоды — не больше 60 символов",
 "A deck needs exactly 30 cards. Cards now: %d": "В колоде должно быть ровно 30 карт. Сейчас карт: %d",
 "A deck needs exactly one hero": "В колоде должен быть ровно один герой",

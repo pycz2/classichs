@@ -48,6 +48,7 @@
 "3rd place": "3.er puesto",
 "A bye: %s goes on": "Pase libre: %s avanza",
 "A card is added to Opponent's hand": "Se añade una carta a la mano del oponente",
+"A copy of %s is cast on %s": "Se lanza una copia de %s sobre %s",
 "A deck name is at most 60 characters": "El nombre de un mazo tiene como máximo 60 caracteres",
 "A deck needs exactly 30 cards. Cards now: %d": "Un mazo necesita exactamente 30 cartas. Cartas ahora: %d",
 "A deck needs exactly one hero": "Un mazo necesita exactamente un héroe",

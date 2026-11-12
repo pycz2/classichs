@@ -7,12 +7,17 @@ extends RefCounted
 const DIR := "res://data/card_tests"
 
 
-## card id -> [test, ...] from every file in data/card_tests, for the cards of the active pack.
+## card id -> [test, ...] from every file in data/card_tests, for the cards of the active pack. A test that names
+## a "script" is for the packs whose card uses that script (a card a later pack changed: Warsong Commander).
 static func load_all() -> Dictionary:
 	var out := {}
 	var d := DirAccess.open(DIR)
 	if d == null:
 		return out
+	var scripts := {}
+	if Packs.active():
+		for c: Dictionary in Packs.active().cards():
+			scripts[c.id] = str(c.get("script", ""))
 	for f in d.get_files():
 		if not f.ends_with(".json"):
 			continue
@@ -22,7 +27,8 @@ static func load_all() -> Dictionary:
 			continue
 		for id in j.data:
 			if CardDb.has(id):  # (the tests are written for Classic's cards)
-				out[id] = (out.get(id, []) as Array) + (j.data[id] as Array)
+				var mine := (j.data[id] as Array).filter(func(t): return not t.has("script") or str(t.script) == scripts.get(id, ""))
+				out[id] = (out.get(id, []) as Array) + mine
 	return out
 
 

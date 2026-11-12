@@ -98,15 +98,24 @@ GVG_110t GVG_111t PART_001 PART_002 PART_003 PART_004 PART_005 PART_006 PART_007
 ## (Nefarian against a hero without a class). Not the boss cards (BRM_004t, BRM_027pH: the adventure's).
 BRM_TOKENS = "BRM_006t BRM_010a BRM_010b BRM_010t BRM_010t2 BRM_022t BRM_027h BRM_027p BRM_030t".split()
 
+## The League of Explorers' tokens at its release (build 10833, patch 4.0.0.10833 of 2015-11-10, two days before the
+## first wing): the Roaring Torch, Cursed!, the Scarab, the Map and the Golden Monkey, the Runts, the Ancient Curse,
+## Raven Idol's options and Arch-Thief Rafaam's three Artifacts (with Mirror of Doom's Mummy Zombie). Not the
+## adventure's boss cards (Eye of Hakkar, the Rock, the Rolling Boulder, LOE_030).
+LOE_TOKENS = """LOE_002t LOE_007t LOE_009t LOE_019t LOE_019t2 LOE_089t LOE_089t2 LOE_089t3 LOE_110t LOE_115a LOE_115b
+LOEA16_3 LOEA16_4 LOEA16_5 LOEA16_5t""".split()
+
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833}
 ## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
 ## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
 ## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
-## (dbfId, elite, the TRIGGER_VISUAL mark; referencedTags where the English text is unchanged).
-FROM_RELEASE = {"tgt"}
+## (dbfId, elite, the TRIGGER_VISUAL mark; referencedTags where the English text is unchanged). The League of
+## Explorers too: today's data changed a third of it (Naga Sea Witch 8 mana, Keeper of Uldaman 3, Tomb Pillager 6/4,
+## Ancient Curse "Casts When Drawn", tribes added later…).
+FROM_RELEASE = {"tgt", "loe"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 
 
@@ -158,7 +167,7 @@ SETS = {
     "gvg": ("GVG", ["GVG_", "PART_"], GVG_TOKENS),
     "brm": ("BRM", ["BRM_"], BRM_TOKENS),
     "tgt": ("TGT", ["AT_"], None),
-    "loe": ("LOE", ["LOE_"], None),
+    "loe": ("LOE", ["LOE_", "LOEA"], LOE_TOKENS),  # (LOEA10_3: Murloc Tinyfin; LOEA16_*: the Artifacts)
     "og": ("OG", ["OG_"], None),
     "kara": ("KARA", ["KAR_"], None),
     "msg": ("GANGS", ["CFM_"], None),

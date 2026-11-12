@@ -7927,6 +7927,7 @@
   ],
   "VAN_EX1_084": [
     {
+      "script": "scripts/warrior.lua#VAN_EX1_084",
       "kind": "trigger",
       "title": "Warsong Commander: a fresh Crocolisk (2 Attack) gets Charge and attacks",
       "scene": {

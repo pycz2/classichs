@@ -48,6 +48,7 @@
 "3rd place": "3. Platz",
 "A bye: %s goes on": "Freilos: %s kommt weiter",
 "A card is added to Opponent's hand": "Eine Karte wird der Hand des Gegners hinzugefügt",
+"A copy of %s is cast on %s": "Eine Kopie von %s wird auf %s gewirkt",
 "A deck name is at most 60 characters": "Ein Deckname hat höchstens 60 Zeichen",
 "A deck needs exactly 30 cards. Cards now: %d": "Ein Deck braucht genau 30 Karten. Aktuelle Karten: %d",
 "A deck needs exactly one hero": "Ein Deck braucht genau einen Helden",
