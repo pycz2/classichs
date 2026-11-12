@@ -1,0 +1,16 @@
+{
+ "sets": {
+  "KARA": "Una noche en Karazhan"
+ },
+ "mechanics": {
+  "UNLIMITED_ATTACKS": {
+   "name": "Ataques ilimitados",
+   "tip": "Puede atacar cualquier número de veces cada turno."
+  }
+ },
+ "cards": {
+  "VAN_EX1_005": {
+   "text": "<b>Grito de batalla:</b> Destruye a un esbirro con 7 p. de ataque o más."
+  }
+ }
+}

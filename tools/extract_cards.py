@@ -113,10 +113,16 @@ OG_TOKENS = """OG_006a OG_006b OG_031a OG_044a OG_044b OG_044c OG_047a OG_047b O
 OG_080f OG_114a OG_156a OG_173a OG_195a OG_195b OG_195c OG_202a OG_202b OG_202c OG_216a OG_241a OG_249a OG_272t OG_314b
 OG_318t OG_319""".split()
 
+## One Night in Karazhan's tokens at its release (build 13921, patch 6.0.0.13921 of 2016-08-09, two days before the
+## first wing): the Panther, the Big Bad Wolf, the Whelps, Kara Kazham!'s Candle, Broom and Teapot, the Pawn, the Cellar
+## Spider, the Steward, the Sharp Fork, Atiesh and the Animated Shield. Not the adventure's boss cards (KAR_A*, KAR_a10*)
+## nor the unused Moonglade Portal options (KAR_003a-b).
+KARA_TOKENS = "KAR_004a KAR_005a KAR_010a KAR_025a KAR_025b KAR_025c KAR_026t KAR_030 KAR_044a KAR_094a KAR_097t KAR_710m".split()
+
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921}
 ## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
 ## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
 ## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
@@ -124,7 +130,8 @@ RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 125
 ## Explorers too: today's data changed a third of it (Naga Sea Witch 8 mana, Keeper of Uldaman 3, Tomb Pillager 6/4,
 ## Ancient Curse "Casts When Drawn", tribes added later…).
 ## Whispers of the Old Gods too: C'Thun and its cards, Cho'gall, Usher of Souls, Addled Grizzly, Hallazeal… changed later.
-FROM_RELEASE = {"tgt", "loe", "og"}
+## One Night in Karazhan too: reworked in 2021-22 (Barnes 5, The Curator 5, Ivory Knight 4, Firelands Portal 6 damage…).
+FROM_RELEASE = {"tgt", "loe", "og", "kara"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 ## Classic's Hero Powers had other ids in the old builds (VAN_HERO_06bp was CS2_017; the upgraded ones AT_132_*).
 _CLASSES = ["WARRIOR", "SHAMAN", "ROGUE", "PALADIN", "HUNTER", "DRUID", "WARLOCK", "MAGE", "PRIEST"]
@@ -183,7 +190,7 @@ SETS = {
     "tgt": ("TGT", ["AT_"], None),
     "loe": ("LOE", ["LOE_", "LOEA"], LOE_TOKENS),  # (LOEA10_3: Murloc Tinyfin; LOEA16_*: the Artifacts)
     "og": ("OG", ["OG_"], OG_TOKENS),
-    "kara": ("KARA", ["KAR_"], None),
+    "kara": ("KARA", ["KAR_"], KARA_TOKENS),
     "msg": ("GANGS", ["CFM_"], None),
     "ungoro": ("UNGORO", ["UNG_"], None),
     "icc": ("ICECROWN", ["ICC_"], None),

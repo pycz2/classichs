@@ -578,6 +578,29 @@ class Chain(unittest.TestCase):
         self.assertEqual(en["VAN_EX1_366"]["text"], "After you summon a minion, give it +1/+1 and this loses 1 Durability.")
         self.assertEqual(len([p for p in files if p.startswith("decks/")]), 16)
 
+    def test_one_night_in_karazhan_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/kara")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/OG_" in p or "/KAR_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/loe.lua", "scripts/og.lua", "scripts/kara.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/kara"))
+        rules = json.loads(files["rules.json"])
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True,
+                                              "cost_in_order": True})
+        self.assertEqual((rules["player_hooks"], rules["mechanics"]["UNLIMITED_ATTACKS"]),
+                         ("player:kara", {"engine": "UNLIMITED_ATTACKS"}))
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        kara = [c for c in cards.values() if c.get("set") == "KARA"]
+        self.assertEqual((len([c for c in kara if c.get("collectible")]), len(kara)), (45, 57))
+        self.assertEqual((cards["KAR_114"]["cost"], cards["KAR_061"]["cost"], cards["KAR_076"]["cost"]), (4, 7, 7))
+        self.assertEqual((cards["VAN_CS2_tk1"]["cost"], cards["VAN_EX1_tk9"]["cost"], cards["OG_034"]["race"]), (1, 2, "BEAST"))
+        en = json.loads(files["locales/en.json"])["cards"]
+        self.assertEqual(en["OG_315"]["text"], "<b>Battlecry:</b> If you control another Pirate, give your weapon +1/+1.")
+        self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
+
     def test_an_expansion_shows_the_texts_of_its_release_build(self):
         import extract_cards
         for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:

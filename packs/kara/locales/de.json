@@ -1,0 +1,16 @@
+{
+ "sets": {
+  "KARA": "Eine Nacht in Karazhan"
+ },
+ "mechanics": {
+  "UNLIMITED_ATTACKS": {
+   "name": "Unbegrenzte Angriffe",
+   "tip": "Kann in jedem Zug beliebig oft angreifen."
+  }
+ },
+ "cards": {
+  "VAN_EX1_304": {
+   "text": "<b>Kampfschrei:</b> Vernichtet die benachbarten Diener und erhält deren Angriff und Leben."
+  }
+ }
+}

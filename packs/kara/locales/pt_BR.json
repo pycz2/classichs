@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "KARA": "Uma Noite em Karazhan"
+ },
+ "mechanics": {
+  "UNLIMITED_ATTACKS": {
+   "name": "Ataques ilimitados",
+   "tip": "Pode atacar quantas vezes quiser a cada turno."
+  }
+ }
+}

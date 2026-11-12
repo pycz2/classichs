@@ -1,0 +1,31 @@
+{
+ "about": "One Night in Karazhan's interface (docs/packs/format.md, 'UI theme'): Medivh's tower on the night of the masquerade — midnight-blue panels like velvet with gilded rims, buttons of deep amethyst that light up gold under the mouse, warm candle-white text, embers drifting over the menu like sparks from the ballroom's chandeliers; the title in Classic's Cinzel Decorative, in party gold.",
+ "colors": {
+  "text": "f6eedc",
+  "muted": "b9aed0",
+  "accent": "f2c45a",
+  "table": "0c0b1e",
+  "panel": "15163af0",
+  "panel_border": "d4a843",
+  "backdrop": "2c1f5a",
+  "button": "3e2470f0",
+  "button_hover": "523093",
+  "button_pressed": "2c1852",
+  "button_disabled": "24203aa6",
+  "button_border": "c9a24a",
+  "button_text": "fbf4e4",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "ffe29a",
+  "button_text_disabled": "807896",
+  "outline": "07061a",
+  "danger": "ff5a6a",
+  "ok": "8fd694"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 6, "border": 1, "glow": "c9a24a33", "glow_size": 4, "glow_hover": "f2c45a99", "glow_hover_size": 12},
+ "panel": {"radius": 8, "border": 2, "glow": "d4a84340", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "3e2470", "border": "f2c45a", "text": "fbf4e4", "ready": "8a6416", "ready_border": "ffe29a"},
+ "mana": "6fa8ff",
+ "menu": {"shade": "0c0b1e59", "particles": "embers"}
+}

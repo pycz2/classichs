@@ -1,0 +1,3051 @@
+{
+  "KAR_004": [
+    {
+      "kind": "secret",
+      "title": "Cat Trick: after the opponent casts a spell, a 4/2 Panther with Stealth",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_05",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_004"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_CS2_008"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "end_turn"
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 1,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_004a": [
+    {
+      "kind": "stealth",
+      "title": "Cat in a Hat: a 4/2 Beast with Stealth",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_05",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_004a"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_005": [
+    {
+      "kind": "death",
+      "title": "Kindly Grandmother dies: a 3/2 Big Bad Wolf takes her place",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_05",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_CS2_029"
+            ],
+            "board": [
+              "KAR_005"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_005a": [
+    {
+      "kind": "play",
+      "title": "Big Bad Wolf: a 3/2 Beast",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_05",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_005a"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_006": [
+    {
+      "kind": "aura",
+      "title": "Cloaked Huntress: the Secrets in your hand cost (0) (look at Cat Trick and Snake Trap)",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_05",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_006",
+              "KAR_004",
+              "VAN_EX1_554"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_009": [
+    {
+      "kind": "battlecry",
+      "title": "Babbling Book: a random Mage spell into your hand",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_009"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_010": [
+    {
+      "kind": "battlecry",
+      "title": "Nightbane Templar while holding a Dragon (Twilight Whelp): two 1/1 Whelps, one on each side",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_04",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_010",
+              "BRM_004"
+            ],
+            "board": [
+              "VAN_CS2_231"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "pos": 1
+        }
+      ]
+    }
+  ],
+  "KAR_010a": [
+    {
+      "kind": "play",
+      "title": "Whelp: a 1/1 Dragon",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_04",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_010a"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_011": [
+    {
+      "kind": "taunt",
+      "title": "Pompous Thespian: a 3/2 with Taunt",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_011"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_013": [
+    {
+      "kind": "spell",
+      "title": "Purify: silence your Taunt minion, draw a card",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_09",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_013"
+            ],
+            "board": [
+              "VAN_CS2_179"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_021": [
+    {
+      "kind": "trigger",
+      "title": "Wicked Witchdoctor: cast Moonfire, a random basic Totem appears",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_02",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_021",
+              "VAN_CS2_008"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_025": [
+    {
+      "kind": "spell",
+      "title": "Kara Kazham!: a 1/1 Candle, a 2/2 Broom and a 3/3 Teapot",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_07",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_025"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_025a": [
+    {
+      "kind": "play",
+      "title": "Candle: a 1/1",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_07",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_025a"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_025b": [
+    {
+      "kind": "play",
+      "title": "Broom: a 2/2",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_07",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_025b"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_025c": [
+    {
+      "kind": "play",
+      "title": "Teapot: a 3/3",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_07",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_025c"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_026": [
+    {
+      "kind": "spell",
+      "title": "Protect the King!: three enemy minions, three 1/1 Pawns with Taunt",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_026"
+            ]
+          },
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "board": [
+              "VAN_CS2_231",
+              "VAN_CS2_231",
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_026t": [
+    {
+      "kind": "taunt",
+      "title": "Pawn: a 1/1 with Taunt",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_026t"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_028": [
+    {
+      "kind": "weapon",
+      "title": "Fool's Bane: attack all three enemy minions in one turn; the enemy hero can't be attacked",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_028"
+            ]
+          },
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "board": [
+              "VAN_CS2_231",
+              "VAN_CS2_231",
+              "VAN_CS2_231"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "attack",
+          "attacker": {
+            "side": 0,
+            "zone": "hero"
+          },
+          "defender": {
+            "side": 1,
+            "zone": "board",
+            "index": 0
+          }
+        },
+        {
+          "do": "attack",
+          "attacker": {
+            "side": 0,
+            "zone": "hero"
+          },
+          "defender": {
+            "side": 1,
+            "zone": "board",
+            "index": 0
+          }
+        },
+        {
+          "do": "attack",
+          "attacker": {
+            "side": 0,
+            "zone": "hero"
+          },
+          "defender": {
+            "side": 1,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_029": [
+    {
+      "kind": "death",
+      "title": "Runic Egg dies: draw a card",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_CS2_029"
+            ],
+            "board": [
+              "KAR_029"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_030": [
+    {
+      "kind": "play",
+      "title": "Cellar Spider: a 1/3 Beast",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_030"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_030a": [
+    {
+      "kind": "battlecry",
+      "title": "Pantry Spider: a 1/3 Cellar Spider beside it",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_030a"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_033": [
+    {
+      "kind": "battlecry",
+      "title": "Book Wyrm while holding a Dragon: destroy the 3-Attack enemy minion",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_033",
+              "BRM_004"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "board": [
+              "VAN_CS2_124",
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_035": [
+    {
+      "kind": "trigger",
+      "title": "Priest of the Feast: cast Moonfire, your hero gets 3 Health back",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_09",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_035",
+              "VAN_CS2_008"
+            ],
+            "damage": 10
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_036": [
+    {
+      "kind": "trigger",
+      "title": "Arcane Anomaly: cast two spells, +2 Health",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_036",
+              "VAN_CS2_008",
+              "VAN_CS2_008"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_037": [
+    {
+      "kind": "battlecry",
+      "title": "Avian Watcher with a Secret: +1/+1 and Taunt",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_037"
+            ],
+            "secrets": [
+              "VAN_EX1_287"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_041": [
+    {
+      "kind": "battlecry",
+      "title": "Moat Lurker destroys the Yeti; Fireball kills the Lurker and the Yeti comes back for the opponent",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_041",
+              "VAN_CS2_029"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "board": [
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "board",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_044": [
+    {
+      "kind": "trigger",
+      "title": "Moroes (Stealth): at the end of your turn a 1/1 Steward",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_044"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "end_turn"
+        }
+      ]
+    }
+  ],
+  "KAR_044a": [
+    {
+      "kind": "play",
+      "title": "Steward: a 1/1",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_044a"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_057": [
+    {
+      "kind": "battlecry",
+      "title": "Ivory Knight: Discover a spell, your hero gets back as much Health as it costs",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_04",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_057"
+            ],
+            "damage": 15
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "choose",
+          "option": 0
+        }
+      ]
+    }
+  ],
+  "KAR_061": [
+    {
+      "kind": "battlecry",
+      "title": "The Curator (Taunt): draw a Beast, a Dragon and a Murloc from the deck",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_231",
+              "VAN_CS2_120",
+              "BRM_004",
+              "VAN_EX1_506",
+              "VAN_CS2_231"
+            ],
+            "hand": [
+              "KAR_061"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_062": [
+    {
+      "kind": "battlecry",
+      "title": "Netherspite Historian while holding a Dragon: Discover a Dragon",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_062",
+              "BRM_004"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "choose",
+          "option": 0
+        }
+      ]
+    }
+  ],
+  "KAR_063": [
+    {
+      "kind": "weapon",
+      "title": "Spirit Claws: 1 Attack, 3 while Kobold Geomancer gives Spell Damage",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_02",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_063",
+              "VAN_CS2_142"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_065": [
+    {
+      "kind": "battlecry",
+      "title": "Menagerie Warden: a copy of your buffed River Crocolisk",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_06",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_CS2_092",
+              "KAR_065"
+            ],
+            "board": [
+              "VAN_CS2_120"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_069": [
+    {
+      "kind": "battlecry",
+      "title": "Swashburglar: a random Warrior card into your hand (the opponent is a Warrior)",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_03",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_069"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_070": [
+    {
+      "kind": "battlecry",
+      "title": "Ethereal Peddler: Fireball costs (2) less, Backstab and the Yeti stay",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_03",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_070",
+              "VAN_CS2_029",
+              "VAN_CS2_072",
+              "VAN_CS2_182"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_073": [
+    {
+      "kind": "spell",
+      "title": "Maelstrom Portal: 1 damage to every enemy minion, then a random 1-Cost minion",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_02",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_073"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "board": [
+              "VAN_CS2_231",
+              "VAN_CS2_231",
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_075": [
+    {
+      "kind": "spell",
+      "title": "Moonglade Portal: your hero gets 6 Health back, then a random 6-Cost minion",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_06",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_075"
+            ],
+            "damage": 10
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_076": [
+    {
+      "kind": "spell",
+      "title": "Firelands Portal: 5 damage to the Yeti, then a random 5-Cost minion",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_076"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "board": [
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_077": [
+    {
+      "kind": "spell",
+      "title": "Silvermoon Portal: your Wisp +2/+2, then a random 2-Cost minion",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_04",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_077"
+            ],
+            "board": [
+              "VAN_CS2_231"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_089": [
+    {
+      "kind": "trigger",
+      "title": "Malchezaar's Imp: Soulfire discards a card, the Imp draws one",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_07",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_089",
+              "VAN_EX1_308",
+              "VAN_CS2_182"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_091": [
+    {
+      "kind": "spell",
+      "title": "Ironforge Portal: 4 Armor, then a random 4-Cost minion",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_091"
+            ]
+          },
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_092": [
+    {
+      "kind": "battlecry",
+      "title": "Medivh's Valet with a Secret: 3 damage to the enemy hero",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_092"
+            ],
+            "secrets": [
+              "VAN_EX1_287"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_094": [
+    {
+      "kind": "death",
+      "title": "Deadly Fork dies: a 3/2 Sharp Fork into your hand",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_03",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_CS2_029"
+            ],
+            "board": [
+              "KAR_094"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_094a": [
+    {
+      "kind": "weapon",
+      "title": "Sharp Fork: a 3/2 weapon",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_03",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_094a"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "attack",
+          "attacker": {
+            "side": 0,
+            "zone": "hero"
+          },
+          "defender": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_095": [
+    {
+      "kind": "battlecry",
+      "title": "Zoobot: the Crocolisk, the Twilight Drake and the Murloc +1/+1 each",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_095"
+            ],
+            "board": [
+              "VAN_CS2_120",
+              "VAN_EX1_043",
+              "VAN_EX1_506"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_096": [
+    {
+      "kind": "other",
+      "title": "Prince Malchezaar: a 5/6 Demon; his 5 Legendaries join the deck when a real game starts (after the mulligan), not in a scene",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_096"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_097": [
+    {
+      "kind": "battlecry",
+      "title": "Medivh, the Guardian equips Atiesh; Frostbolt (2) then summons a random 2-Cost minion",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_097",
+              "VAN_CS2_024"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_097t": [
+    {
+      "kind": "weapon",
+      "title": "Atiesh: Frostbolt (2) summons a random 2-Cost minion and Atiesh loses 1 Durability",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_CS2_024"
+            ],
+            "weapon": "KAR_097t"
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_114": [
+    {
+      "kind": "battlecry",
+      "title": "Barnes: a 1/1 copy of a random minion of the deck (Boulderfist Ogre or Yeti)",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_200",
+              "VAN_CS2_182",
+              "VAN_CS2_029"
+            ],
+            "hand": [
+              "KAR_114"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_204": [
+    {
+      "kind": "battlecry",
+      "title": "Onyx Bishop: the Yeti that died this game comes back, fresh",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_09",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_CS2_029",
+              "KAR_204"
+            ],
+            "board": [
+              "VAN_CS2_182"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 0,
+            "zone": "board",
+            "index": 0
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_205": [
+    {
+      "kind": "trigger",
+      "title": "Silverware Golem: Soulfire discards it and it summons itself",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_07",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_EX1_308",
+              "KAR_205"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_300": [
+    {
+      "kind": "play",
+      "title": "Enchanted Raven: a 2/2 Beast",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_06",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_300"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_702": [
+    {
+      "kind": "battlecry",
+      "title": "Menagerie Magician: the Crocolisk, the Twilight Drake and the Murloc +2/+2 each",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_702"
+            ],
+            "board": [
+              "VAN_CS2_120",
+              "VAN_EX1_043",
+              "VAN_EX1_506"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    },
+    {
+      "kind": "battlecry",
+      "title": "Silithid Swarmer is a Beast since patch 5.2.0.13619: Menagerie Magician gives it +2/+2",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_05",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_702"
+            ],
+            "board": [
+              "OG_034"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_710": [
+    {
+      "kind": "battlecry",
+      "title": "Arcanosmith: a 0/5 Animated Shield with Taunt beside it",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_710"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_710m": [
+    {
+      "kind": "taunt",
+      "title": "Animated Shield: a 0/5 with Taunt",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_710m"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_711": [
+    {
+      "kind": "other",
+      "title": "Arcane Giant: costs (1) less for each spell cast this game (look at it after two Moonfires)",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "VAN_CS2_008",
+              "VAN_CS2_008",
+              "KAR_711"
+            ]
+          },
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        },
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          },
+          "target": {
+            "side": 1,
+            "zone": "hero"
+          }
+        }
+      ]
+    }
+  ],
+  "KAR_712": [
+    {
+      "kind": "aura",
+      "title": "Violet Illusionist: your hero is Immune on your turn: attack the Yeti without damage",
+      "scene": {
+        "current": 0,
+        "players": [
+          {
+            "hero": "HERO_01",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "hand": [
+              "KAR_712"
+            ],
+            "weapon": "VAN_CS2_106"
+          },
+          {
+            "hero": "HERO_08",
+            "mana": 10,
+            "max_mana": 10,
+            "deck": [
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120",
+              "VAN_CS2_120"
+            ],
+            "board": [
+              "VAN_CS2_182"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "do": "play",
+          "card": {
+            "side": 0,
+            "zone": "hand",
+            "index": 0
+          }
+        },
+        {
+          "do": "attack",
+          "attacker": {
+            "side": 0,
+            "zone": "hero"
+          },
+          "defender": {
+            "side": 1,
+            "zone": "board",
+            "index": 0
+          }
+        }
+      ]
+    }
+  ]
+}

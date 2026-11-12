@@ -1,0 +1,25 @@
+{
+ "sets": {
+  "KARA": "Noc w Karazhanie"
+ },
+ "mechanics": {
+  "UNLIMITED_ATTACKS": {
+   "name": "Nieograniczone ataki",
+   "tip": "Może atakować dowolną liczbę razy w każdej turze."
+  }
+ },
+ "cards": {
+  "VAN_CS2_196": {
+   "name": "Łowczyni Brzytwoskórych"
+  },
+  "VAN_EX1_277": {
+   "text": "Rozdziel losowo $3 pkt. obrażeń między wszystkich wrogów."
+  },
+  "VAN_EX1_366": {
+   "text": "Kiedy przyzwiesz stronnika, daj mu +1/+1, zaś miecz traci 1 wytrzymałości."
+  },
+  "VAN_EX1_384": {
+   "text": "Rozdziel losowo $8 pkt. obrażeń między wszystkich wrogów."
+  }
+ }
+}

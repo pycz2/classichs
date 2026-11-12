@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds One Night in Karazhan 2016 (docs/packs/format.md, 'Build recipes'): on Whispers of the Old Gods (base), so on The League of Explorers, The Grand Tournament, Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 45 cards of One Night in Karazhan and their 12 tokens as the release build 13921 has them (patch 6.0.0.13921 of 2016-08-09, two days before the first wing; data/kara_cards.json, tools/extract_cards.py --set kara) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/kara.lua, the keywords, the older cards that changed by then).",
+  "base": "../og",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/kara_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/kara/cards.texts.json"
+      ]
+    }
+  ]
+}
