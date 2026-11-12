@@ -252,11 +252,14 @@ pub struct Entity {
     pub eot_tags: Vec<Str>,
     pub aura: Aura,
     pub silenced: bool,
-    /// Made by `g.create` (an offered option): only its controller may see it while it is set aside.
+    /// Made by `g.create` (an offered option), or a card transformed in the hand or the deck: only its controller may
+    /// see it while it is set aside.
     pub created: bool,
     /// How it was played from the hand: its Choose One option (-1: none) and whether its Combo was on (`g.cast`).
     pub choice: i64,
     pub comboed: bool,
+    /// Cast with every choice made at random (`g.cast_random`: Yogg-Saron): a choice it asks for is picked at once.
+    pub auto_choice: bool,
 }
 
 impl Entity {
@@ -265,7 +268,7 @@ impl Entity {
     pub fn new(id: Id, card: &'static Card, controller: usize) -> Entity {
         Entity { id, card_id: &card.id, card, controller, zone: "SETASIDE", play_order: 0, damage: 0,
             tags: card.start_tags.clone(), enchantments: vec![], eot_tags: vec![], aura: Aura::default(), silenced: false,
-            created: false, choice: -1, comboed: false }
+            created: false, choice: -1, comboed: false, auto_choice: false }
     }
 
     pub fn kind(&self) -> &'static str {

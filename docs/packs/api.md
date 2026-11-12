@@ -70,7 +70,7 @@ Return values are ignored unless said otherwise.
 | `glow` | `fn(g, me) → bool` | The card in the hand glows yellow now: its condition holds ("if you're holding a Dragon", "if your deck has no duplicates"…; read-only, for clients: snapshots mark it `glow`, no rule reads it). Without it a card with a `combo` hook glows while its combo is on (`g.combo(me)`). |
 | `deathrattle` (alias `on_death`) | `fn(g, me)` | It died (minion or weapon; `g.died_pos(me)` is where). |
 | `on` | `{<event type> = fn(g, me, ev)}` | Any event of that type while `me` is in play (or a trap). Queued: runs after the action that caused it. |
-| `hand` | `{<event type> = fn(g, me, ev)}` | Like `on`, while the card is in its owner's hand (not during the mulligan; skipped if it left the hand before its turn in the queue): "when you draw this" (`draw` with `ev.entity == me`: Flame Leviathan, Burrowing Mine), "while this is in your hand" (Bolvar Fordragon). `hand.discard` also runs for the discarded card itself, which has left the hand: "when you discard this" (Fist of Jaraxxus). |
+| `hand` | `{<event type> = fn(g, me, ev)}` | Like `on`, while the card is in its owner's hand (also an enchantment's `hooks` set's `hand` hooks: Shifter Zerus) (not during the mulligan; skipped if it left the hand before its turn in the queue): "when you draw this" (`draw` with `ev.entity == me`: Flame Leviathan, Burrowing Mine), "while this is in your hand" (Bolvar Fordragon). `hand.discard` also runs for the discarded card itself, which has left the hand: "when you discard this" (Fist of Jaraxxus). |
 | `now` | `{predamage = fn(g, me, ev)}` | Replacement effects: runs at once, inside `g.damage`, before damage applies; set `ev.amount` to change it. |
 | `secret` (alias `trap`) | `{event = "<type>", cond = fn(g, me, ev) → bool, effect = fn(g, me, ev)}` | A trap: on `event` during the opponent's turn, if `cond` (omitted: always) holds, the trap is revealed, then `effect` runs. |
 | `aura` | `fn(g, me)` | Recomputed after every change while `me` is in play: call `g.aura_add` for what it gives now. |
@@ -80,6 +80,8 @@ Return values are ignored unless said otherwise.
 | `on_choose` | `fn(g, me, option, still)` | The player chose `option` of a `g.request_choice` (`still`: the offered ids still where they were). |
 | `immune_while_attacking` | `true` | A weapon: its champion is IMMUNE while attacking with it. |
 | `durability_on_attack` | `fn(g, w, defender) → bool` | A weapon: whether attacking costs durability (default yes). |
+| `both` | `fn(g, me, t)` | A Choose One card played with both options (BOTH_CHOICES, Fandral Staghelm: `choice` 2): this instead of the two options' `effect`s in card order (Druid of the Claw's combined form; Keeper of the Grove silences first). |
+| `cost_first` | `true` | Its `cost_aura` comes before every other cost change in a pack with `behaviour.cost_in_order` (Summoning Portal). |
 
 **Read-only hooks** (`target.filter`, `can_play`, `glow`, `cost_mod`, `cost_aura`) run
 while the engine only looks at the game (legal actions, costs in snapshots).
@@ -178,6 +180,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.enchants(e, hooks)` | The `player` fields of `e`'s enchantments with these hooks. |
 | `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`. |
 | `g.collectible()` | Collectible card ids of the constructed sets, sorted. |
+| `g.count(p, name)` | A count of the game `g.add_count` keeps for `p` (0 if none). |
 | `g.graveyard(p)` | `p`'s cards in the GRAVEYARD zone, in play order: dead minions and weapons, played spells, discarded and burned cards. A minion that died on the board has `DIED_POS` (`g.died_pos(e) >= 0`), and `DIED_TURN` (the turn) in a pack that names that mechanic (Naxxramas: Kel'Thuzad, Feugen and Stalagg). |
 
 ### Actions (not in read-only hooks)
@@ -194,14 +197,14 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.summon_right(me, card)` | Summons for `me`'s side right of `me`. |
 | `g.summon_entity(e[, pos])` | Puts a minion card that is not in play (in the hand or deck: it leaves them) on the board as a summon. |
 | `g.draw(p[, n])` | Draws `n` (default 1): fatigue, burns on a full hand. Returns the drawn ids. |
-| `g.draw_entity(p, e)` | Draws that card of `p`'s deck. |
+| `g.draw_entity(p, e[, quiet])` | Draws that card of `p`'s deck (`quiet`: it is put into the hand, not drawn: no `draw` event, logs `to_hand`; Ancient Harbinger). |
 | `g.add_to_hand(p, card)` | A new card in hand (or `nil` if full). |
 | `g.create(p, card)` | A new card entity of `p`'s, set aside (zone `SETASIDE`, logs `create`): an option for `g.request_choice` that is in no zone (Totemic Slam's totems, Discover). Only `p` ever sees which card it is (snapshots and events of the other player show `""`). |
 | `g.discard_random(p[, n])`, `g.discard(e)` | Discards (emits `discard`). |
 | `g.buff(e, atk, hp[, this_turn])` | An enchantment +atk/+hp (`true`: until the end of the turn). |
 | `g.set_stats(e, atk, hp)` | Sets attack and/or health (`nil` keeps one); setting health heals. |
 | `g.silence(e)`, `g.freeze(e)` | |
-| `g.transform(e, card)` | Replaces a minion with a new one; returns it. |
+| `g.transform(e, card)` | Replaces a minion in play with a new minion, or a card in its owner's hand or deck with any card in its place (Shifter Zerus, Renounce Darkness; only the owner sees the new card); returns it. |
 | `g.return_to_hand(e)` | Returns a minion as a fresh card; returns the new card or `nil`. |
 | `g.take_control(e, p)` | A minion, or a trap (it moves to `p`'s traps; if `p` has that trap already or `limits.secrets` traps, it is destroyed: Kezan Mystic). |
 | `g.copy_minion(me, t)` | Turns `me` into a copy of `t` (stats, enchantments, tags, silence). |
@@ -223,7 +226,9 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.reveal(me)` | Reveals a trap (for `now` hooks; `secret` hooks are revealed for you). |
 | `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. Asked while another choice is pending (a doubled Battlecry: two Discovers), it comes once that one is answered. |
 | `g.cast(me, spell, t)` | Casts a copy of the spell entity `spell` for `me`'s player on `t` (or none), as `spell` was cast (its Choose One option, its Combo): only its effect, no `play` or `after_spell` event, no target check; logs `cast` (Djinni of Zephyrs). |
-| `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"power"|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n][, race = r][, lasting = true]}`; `turn` defaults to now. `race`: only cards of that race (Dragon Consort: `"DRAGON"`). `"power"`: the champion's power (a `"use"` mod goes when the power is used: Fencing Coach; Saboteur: `turn = g.turn() + 1`). `lasting`: it holds on any turn, kept until a card it applies to is played (with `until = "use"`: "the next Dragon you play costs (2) less"). |
+| `g.cast_random(me, card)` | Casts a new spell `card` for `me`'s player with every choice made at random (Yogg-Saron): a random valid target (no enemy with Stealth or Immune; none, or its `can_play` fails: it fizzles, logs `fizzle`, returns `nil`), a random Choose One option (both with BOTH_CHOICES), its `g.request_choice` picked at once at random; Combo only if a card was played before `me` this turn; a trap goes into play if it may. Only its effect: no `play`/`after_spell` event, no Overload. Logs `cast` with `random`; returns the spell. |
+| `g.add_count(p, name[, n])` | Adds `n` (default 1) to `p`'s count `name` (in the player's snapshot `counts`; kept by a new champion): spells cast, Totems summoned this game. Returns the new count. |
+| `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"power"|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n][, race = r][, lasting = true]}`; `turn` defaults to now. `race`: only cards of that race (Dragon Consort: `"DRAGON"`). `"power"`: the champion's power (a `"use"` mod goes when the power is used: Fencing Coach; Saboteur: `turn = g.turn() + 1`). `lasting`: it holds on any turn, kept until a card it applies to is played (with `until = "use"`: "the next Dragon you play costs (2) less"). `health = true`: the cards it applies to cost Health instead of Mana (paid as damage to the champion, Armor first; playable only while Health and Armor are more than the cost: Cho'gall). |
 | `g.log(ev)`, `g.emit(ev)` | Logs an event table (`emit` also triggers `on` hooks). |
 | `g.remove(e[, zone])` | Takes `e` out of its hand/deck/board/trap list (and the weapon slot), optionally setting its zone. |
 | `g.cost(e)` | A card's cost now (cost hooks included). |

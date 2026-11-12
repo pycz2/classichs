@@ -10,6 +10,9 @@ use serde_json::{json, Map, Value};
 
 pub use crate::state::Ev;
 
+/// The `choice` of a Choose One card played with both options (BOTH_CHOICES: Fandral Staghelm).
+pub const BOTH: i64 = 2;
+
 /// An action: {"type": ..., "player": ..., ...} with whole numbers as ints.
 pub type Action = Map<String, Value>;
 
@@ -347,10 +350,21 @@ impl Game {
         let p = &self.players[cur];
         let auras = self.cost_auras();
         for &e in &p.hand {
-            if self.cost_in(e, &auras) > p.mana || !self.can_play(e) {
+            let cost = self.cost_in(e, &auras);
+            let affordable = if self.pays_health(e) {
+                let h = self.e(p.hero);
+                h.health() + h.tag(self.n().armor) > cost // Health (and Armor) instead of Mana, more than it costs
+            } else {
+                cost <= p.mana
+            };
+            if !affordable || !self.can_play(e) {
                 continue;
             }
-            let choices: &[i64] = if self.e(e).card.hooks.choice.is_some() { &[0, 1] } else { &[-1] };
+            let choices: &[i64] = match self.e(e).card.hooks.choice {
+                Some(_) if self.both_choices(cur) => &[BOTH],
+                Some(_) => &[0, 1],
+                None => &[-1],
+            };
             for &choice in choices {
                 for t in self.play_targets(e, choice) {
                     for pos in self.positions(e) {
@@ -421,6 +435,10 @@ impl Game {
         let h = &self.e(e).card.hooks;
         let spec = if h.combo_target.is_some() {
             if combo { h.combo_target } else { None }
+        } else if choice == BOTH {
+            // both options on one target: the first option's target, else the second's
+            let [a, b] = h.choice.unwrap();
+            self.rs.hooks(a).target.or(self.rs.hooks(b).target)
         } else if choice >= 0 {
             self.rs.hooks(h.choice.unwrap()[choice as usize]).target
         } else {
@@ -491,7 +509,12 @@ impl Game {
     fn do_play(&mut self, e: Id, t: Id, pos: i64, choice: i64) {
         let c = self.ctrl(e);
         let cost = self.cost(e);
-        self.players[c].mana -= cost;
+        if self.pays_health(e) {
+            let h = self.hero(c);
+            self.damage(NONE, h, cost); // Cho'gall: the cost in Health, as damage (Armor first)
+        } else {
+            self.players[c].mana -= cost;
+        }
         if let Some(t) = self.n().played_cost {
             self.em(e).set_tag(t, cost);
         }
@@ -516,19 +539,93 @@ impl Game {
         let (p, o) = (self.ctrl(src), self.e(orig));
         let (card, choice, combo) = (o.card_id, o.choice, o.comboed);
         let h = &o.card.hooks;
-        let f = if choice >= 0 && h.choice.is_some() {
-            self.rs.hooks(h.choice.unwrap()[choice as usize]).effect
+        let fs = if choice >= 0 && h.choice.is_some() {
+            self.choice_effects(h, choice)
         } else if combo && h.combo.is_some() {
-            h.combo
+            h.combo.into_iter().collect()
         } else {
-            h.spell
+            h.spell.into_iter().collect()
         };
         let e = self.new_entity(card, p);
         self.log_event(obj!{"type": "cast", "player": p, "entity": e, "card": card, "target": t});
-        if let Some(f) = f {
+        for (i, f) in fs.into_iter().enumerate() {
+            if i > 0 && self.game_over {
+                break;
+            }
             self.from(e, |c| c.fx_effect(f, e, t));
         }
         self.em(e).zone = "GRAVEYARD";
+    }
+
+    /// Casts a new spell `card` for src's controller with every choice made at random (Yogg-Saron, Hope's End): a
+    /// random valid target (not an enemy with Stealth or Immune; none: it fizzles), a random Choose One option (both
+    /// with BOTH_CHOICES), its offered choices picked at random; its Combo only if its player played a card before
+    /// src this turn. A trap goes into play if it may. Only its effect: no `play` or `after_spell` event, no Overload.
+    /// Logs `cast` with `random`; returns the spell (NONE if it fizzled).
+    pub fn cast_random(&mut self, src: Id, card: &str) -> Id {
+        let p = self.ctrl(src);
+        let e = self.new_entity(card, p);
+        let card = self.e(e).card_id;
+        let h = &self.e(e).card.hooks;
+        let choice = match h.choice {
+            Some(_) if self.both_choices(p) => BOTH,
+            Some(_) => self.rng.randi_range(0, 1),
+            None => -1,
+        };
+        let combo = self.players[p].cards_played_this_turn > 1;
+        let x = self.em(e);
+        (x.choice, x.comboed, x.auto_choice) = (choice, combo, true);
+        if self.e(e).card.hooks.can_play.is_some_and(|f| !self.fx_can_play(f, e)) {
+            // what it needs is missing (Blade Flurry without a weapon): it fizzles
+            self.log_event(obj!{"type": "fizzle", "player": p, "entity": e, "card": card});
+            self.em(e).zone = "GRAVEYARD";
+            return NONE;
+        }
+        if self.e(e).card.trap {
+            self.log_event(obj!{"type": "cast", "player": p, "entity": e, "card": card, "target": NONE, "random": true});
+            if self.trap_room(p, card) {
+                self.players[p].secrets.push(e);
+                self.enter_play(e);
+                self.em(e).zone = self.rs.names.trap;
+            } else {
+                self.em(e).zone = "GRAVEYARD";
+            }
+            return e;
+        }
+        let mut t = NONE;
+        if let Some(spec) = self.target_spec(e, choice, combo) {
+            let (n, valid) = (self.n(), self.targets(e, &spec, true));
+            let valid: Vec<Id> = valid.into_iter().filter(|&x| !(self.ctrl(x) != p && self.e(x).has(n.immune))).collect();
+            t = self.random_choice(&valid);
+            if t == NONE {
+                self.log_event(obj!{"type": "fizzle", "player": p, "entity": e, "card": card});
+                self.em(e).zone = "GRAVEYARD";
+                return NONE;
+            }
+        }
+        self.log_event(obj!{"type": "cast", "player": p, "entity": e, "card": card, "target": t, "random": true});
+        self.em(e).zone = "SETASIDE";
+        self.run_effect(e, "spell", t, choice, combo);
+        self.em(e).zone = "GRAVEYARD";
+        e
+    }
+
+    /// p's Choose One cards have both effects now (BOTH_CHOICES on the champion: Fandral Staghelm).
+    pub fn both_choices(&self, p: usize) -> bool {
+        self.e(self.hero(p)).has(self.n().both_choices)
+    }
+
+    /// The effects of a CHOICE card played with this choice: the option's, or with BOTH the card's `both` hook, else
+    /// both options' in card order.
+    fn choice_effects(&self, h: &crate::hooks::HookSet, choice: i64) -> Vec<crate::hooks::HookFn> {
+        let [a, b] = h.choice.unwrap();
+        match choice {
+            BOTH => match h.both {
+                Some(f) => vec![f],
+                None => [a, b].iter().filter_map(|o| self.rs.hooks(o).effect).collect(),
+            },
+            c => self.rs.hooks([a, b][c as usize & 1]).effect.into_iter().collect(),
+        }
     }
 
     fn run_effect(&mut self, e: Id, key: &str, t: Id, choice: i64, combo: bool) {
@@ -538,7 +635,13 @@ impl Game {
         }
         let mut battlecry = false;
         let f = if choice >= 0 {
-            self.rs.hooks(h.choice.unwrap()[choice as usize]).effect
+            for (i, f) in self.choice_effects(h, choice).into_iter().enumerate() {
+                if i > 0 && self.game_over {
+                    break;
+                }
+                self.from(e, |x| x.fx_effect(f, e, t)); // (a Choose One: its option, or both)
+            }
+            None
         } else if combo && h.combo.is_some() {
             h.combo
         } else if key == "on_play" {

@@ -67,6 +67,13 @@ Naxxramas and Goblins vs Gnomes keep their recorded games).
 |---|---|---|
 | `countered_no_after_spell` | false | true: a countered spell is not cast for "after you cast a spell" hooks (no `after_spell` event: Wild Pyromancer, Flamewaker; Hearthstone until patch 9.2.0.21517 of 2017). "Whenever you cast a spell" (`play`) still sees it. |
 | `full_hand_return_dies` | false | true: a minion returned to a full hand (Sap, Youthful Brewmaster…) dies as any other: its Deathrattle, the graveyard, `DIED_TURN` (Kel'Thuzad, Feugen and Stalagg, Resurrect; patch 2.4.0.8311). false: it is set aside. |
+| `cost_in_order` | false | true: a card's cost changes apply in the order they came — its cost enchantments when given, the cost auras when their source came into play, its player's cost mods when made — after its own `cost_mod`, a `cost_first` aura before all (Summoning Portal); 0 at least at the end (the 2016 rulebook, rule M5: Emperor Thaurissan after Naga Sea Witch makes a card cost 4; Hearthstone until patch 9.0.0.20457 of 2017). false: enchantments, then auras, then cost mods. |
+
+## `player_hooks`
+
+The name of a hook set of the pack's scripts (`"player:og"`) whose `on` hooks see every event once for each player,
+`me` being that player's champion (a new champion takes over): the counts of a game no card in play keeps ("spells
+you've cast this game", "Totems you've summoned this game"; `g.add_count`, `g.count`). Optional; none in Classic.
 
 ## `timers` (seconds)
 

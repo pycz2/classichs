@@ -28,6 +28,9 @@ pub struct Player {
     pub cost_mods: Vec<Obj>,
     pub mulliganed: bool,
     pub mulligan_replace: Vec<Id>,
+    /// Counts of the game a pack's scripts keep (`g.count`, `g.add_count`: spells cast, Totems summoned…), by name;
+    /// in snapshots only when there are some.
+    pub counts: Obj,
 }
 
 impl Player {
@@ -36,11 +39,15 @@ impl Player {
     }
 
     pub fn snapshot(&self) -> Value {
-        json!({"hero": self.hero, "power": self.hero_power, "weapon": self.weapon.unwrap_or(NONE),
+        let mut v = json!({"hero": self.hero, "power": self.hero_power, "weapon": self.weapon.unwrap_or(NONE),
             "hand": self.hand, "deck": self.deck, "board": self.board, "secrets": self.secrets,
             "mana": self.mana, "max_mana": self.max_mana, "ol_owed": self.mana_lock_owed,
             "ol_locked": self.mana_locked, "fatigue": self.fatigue, "played": self.cards_played_this_turn,
             "minions_played": self.minions_played_this_turn, "cost_mods": self.cost_mods.iter().map(Obj::to_value).collect::<Vec<_>>(),
-            "mulliganed": self.mulliganed, "mulligan_replace": self.mulligan_replace})
+            "mulliganed": self.mulliganed, "mulligan_replace": self.mulligan_replace});
+        if !self.counts.is_empty() {
+            v["counts"] = self.counts.to_value();
+        }
+        v
     }
 }

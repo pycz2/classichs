@@ -182,6 +182,7 @@ does not map is written as the engine id.
 | `POWER_MULTIPLIER` | state | Doubles spell and power damage and healing (aura tag) | `DOUBLE_HEAL_DAMAGE` |
 | `DOUBLE_ON_DEATH` | state | Its owner's minions run their death hooks twice (aura tag on the champion; not while its source dies with them) | — (Naxxramas: `DOUBLE_DEATHRATTLE`, Baron Rivendare) |
 | `DOUBLE_ON_PLAY` | state | Its owner's Battlecries (`ON_PLAY` hooks; not a Combo or a Choose One) run twice, on the same target, with no death phase between (aura tag on the champion, read as the Battlecry starts) | — (The League of Explorers: `DOUBLE_BATTLECRY`, Brann Bronzebeard) |
+| `BOTH_CHOICES` | state | Its owner's CHOICE cards have both effects: one play with `choice` 2, the first option's target (else the second's), then the card's `both` hook or the two options' effects in card order (aura tag on the champion) | — (Whispers of the Old Gods: `CHOOSE_BOTH`, Fandral Staghelm) |
 | `PLAYED_COST` | state | The mana a card cost when it was played from the hand (Sorcerer's Apprentice, Preparation, Loatheb counted); written only by a pack that names it | — (Goblins vs Gnomes: `PLAYED_COST`, Gazlowe) |
 | `DIED_TURN` | state | The turn a minion died; written only by a pack that names it (a new tag would change Classic's recorded states) | — (Naxxramas: `DIED_TURN`, Kel'Thuzad) |
 | `POWER_DAMAGE` | state | Added to its owner's power damage before `POWER_MULTIPLIER` (aura tag on the champion, a count: `g.hp_dmg`) | — (The Grand Tournament: `HEROPOWER_DAMAGE`, Fallen Hero) |

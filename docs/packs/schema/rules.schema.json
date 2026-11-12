@@ -43,12 +43,14 @@
         "brain": {"type": "boolean"}
       }
     },
+    "player_hooks": {"type": "string", "pattern": "^[A-Za-z0-9_:.-]{1,64}$"},
     "behaviour": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "countered_no_after_spell": {"type": "boolean"},
-        "full_hand_return_dies": {"type": "boolean"}
+        "full_hand_return_dies": {"type": "boolean"},
+        "cost_in_order": {"type": "boolean"}
       }
     },
     "fatigue": {

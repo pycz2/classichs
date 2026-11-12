@@ -94,6 +94,7 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
         pl.cards_played_this_turn = int(p.get("played"));
         pl.minions_played_this_turn = int(p.get("minions_played"));
         pl.cost_mods = p["cost_mods"].as_array().map_or(vec![], |a| a.iter().filter_map(|x| x.as_object().map(|o| Obj::of(o, &intern))).collect());
+        pl.counts = p["counts"].as_object().map_or(Obj::new(), |o| Obj::of(o, &intern));
         pl.mulliganed = truthy(p.get("mulliganed"));
         pl.mulligan_replace = ids(&p["mulligan_replace"]);
         // a view has no deck lists: its hidden ids stand in, so draws still draw

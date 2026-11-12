@@ -770,4 +770,17 @@ cards.FP1_018 = {
   },
 }
 
+-- Summoning Portal: as Classic's, its aura before every other cost change (the 2016 rulebook: "a very early
+-- Priority"; with `behaviour.cost_in_order` the others come in the order they were played: Emperor Thaurissan after
+-- Naga Sea Witch makes a card cost 4).
+cards.VAN_EX1_315 = {
+  cost_first = true,
+  cost_aura = function(g, me, card, c)
+    if g.ctrl(card) ~= g.ctrl(me) or not g.is_minion(card) or g.zone(card) ~= "HAND" or c <= 1 then
+      return c
+    end
+    return math.max(1, c - 2)
+  end,
+}
+
 return cards

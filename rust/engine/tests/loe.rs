@@ -307,6 +307,30 @@ fn naga_sea_witch_and_giants() {
     assert_eq!(t.cost("LOE_113"), 5, "Everyfin is Awesome: (1) less per Murloc");
 }
 
+/// Cost changes in the order they came (behaviour.cost_in_order; the 2016 rulebook, rule M5): Emperor Thaurissan's
+/// discount after Naga Sea Witch is in play makes a card cost 4; Naga Sea Witch played after the discount sets 5.
+/// Summoning Portal's aura comes first of all.
+#[test]
+fn cost_changes_in_the_order_they_came() {
+    let mut t = scene!({"board": ["LOE_038", "BRM_028"], "hand": [YETI, "VAN_CS2_231"]}, {});
+    let yeti = t.hand_id(YETI);
+    t.end_turn();
+    assert_eq!(t.g.cost(yeti), 4, "Naga sets 5, then Thaurissan's -1");
+    let mut t = scene!({"board": ["BRM_028"], "hand": [YETI, "LOE_038"]}, {});
+    let yeti = t.hand_id(YETI);
+    t.end_turn().end_turn();
+    assert_eq!(t.g.cost(yeti), 3, "Thaurissan twice");
+    t.g.players[0].mana = 10;
+    t.play("LOE_038", NONE);
+    assert_eq!(t.g.cost(yeti), 5, "Thaurissan's -2, then Naga sets 5");
+    // Summoning Portal first: 4 - 2 = 2, then Thaurissan's -1 = 1 (in play order it would stay 2: not below 1)
+    let mut t = scene!({"board": ["BRM_028", "VAN_EX1_315"], "hand": [YETI]}, {});
+    let yeti = t.hand_id(YETI);
+    assert_eq!(t.g.cost(yeti), 2);
+    t.end_turn();
+    assert_eq!(t.g.cost(yeti), 1);
+}
+
 #[test]
 fn jungle_moonkin_gives_both_players_spell_damage() {
     let mut t = scene!({"board": ["LOE_051"], "hand": [FIREBALL]}, {"hand": [FIREBALL]});

@@ -26,7 +26,8 @@
  },
  "behaviour": {
   "countered_no_after_spell": true,
-  "full_hand_return_dies": true
+  "full_hand_return_dies": true,
+  "cost_in_order": true
  },
  "fatigue": {
   "enabled": true,

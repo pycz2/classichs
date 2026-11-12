@@ -139,6 +139,8 @@ pub struct Names {
     pub double_on_death: &'static str,
     /// DOUBLE_ON_PLAY: its owner's ON_PLAY hooks run twice (an aura tag on the champion: Brann Bronzebeard).
     pub double_on_play: &'static str,
+    /// BOTH_CHOICES: its owner's Choose One cards have both effects (an aura tag on the champion: Fandral Staghelm).
+    pub both_choices: &'static str,
     /// POWER_DAMAGE: added to the damage of a power (an aura tag on the champion: Fallen Hero).
     pub power_damage: &'static str,
     /// POWER_USES (uses of the power this turn) and POWERS_USED (of any power this game, on the champion): written
@@ -205,6 +207,7 @@ impl Names {
             poison: n("POISON"),
             double_on_death: n("DOUBLE_ON_DEATH"),
             double_on_play: n("DOUBLE_ON_PLAY"),
+            both_choices: n("BOTH_CHOICES"),
             power_damage: n("POWER_DAMAGE"),
             power_uses: by_engine.get("POWER_USES").copied(),
             powers_used: by_engine.get("POWERS_USED").copied(),
@@ -221,7 +224,7 @@ impl Names {
             names.cant_attack, names.immune, names.spell_power, names.frozen, names.frozen_this_turn, names.exhausted,
             names.attacks, names.armor, names.durability, names.used, names.locked, names.guarded, names.to_destroy,
             names.died_pos, names.power_multiplier, names.heal_is_damage, names.trap, names.poison, names.double_on_death,
-            names.cant_attack_heroes, names.power_damage, names.double_on_play]);
+            names.cant_attack_heroes, names.power_damage, names.double_on_play, names.both_choices]);
         names.known = known;
         Ok(names)
     }
@@ -313,6 +316,13 @@ pub struct Ruleset {
     /// `behaviour.full_hand_return_dies`: a minion returned to a full hand dies as any other (Deathrattles,
     /// the graveyard: Kel'Thuzad, Feugen and Stalagg; patch 2.4.0.8311). Off: it is set aside.
     pub full_hand_return_dies: bool,
+    /// `behaviour.cost_in_order`: a card's cost changes apply in the order they came (enchantments when given, cost
+    /// auras by when their source came into play, cost mods when made), after its own `cost_mod` (Hearthstone until
+    /// 2017: Naga Sea Witch, then Emperor Thaurissan: 4). Off: enchantments, then auras, then cost mods.
+    pub cost_in_order: bool,
+    /// `player_hooks`: a named hook set whose `on` hooks see every event once for each player (`me` is that player's
+    /// champion): counts of the game ("spells you've cast this game"). None: no such hooks.
+    pub player_hooks: Option<String>,
     /// `bot.trap`: what the bot counts for each of its own traps in play (a card in hand is 1; Classic: 0).
     pub bot_trap: f64,
     /// `bot.depth`: 2 = before ending its turn the bot also tries two actions in a row (Classic: 1).
@@ -499,6 +509,8 @@ impl Ruleset {
             first_player_draws: start.get("first_player_draws") != Some(&json!(false)),
             countered_no_after_spell: rules["behaviour"].get("countered_no_after_spell") == Some(&json!(true)),
             full_hand_return_dies: rules["behaviour"].get("full_hand_return_dies") == Some(&json!(true)),
+            cost_in_order: rules["behaviour"].get("cost_in_order") == Some(&json!(true)),
+            player_hooks: rules.get("player_hooks").and_then(Value::as_str).map(String::from),
             bot_trap: i(&rules["bot"], "trap", 0) as f64,
             bot_depth: i(&rules["bot"], "depth", 1),
             fatigue: (fat.get("enabled") != Some(&json!(false)), i(fat, "first", 1), i(fat, "step", 1)),
@@ -551,6 +563,9 @@ impl Ruleset {
             if let Some(h) = hooks.get(&c.id) {
                 c.hooks = h.clone();
             }
+        }
+        if let Some(h) = rs.player_hooks.as_ref().filter(|h| !hooks.contains_key(*h)) {
+            return Err(format!("rules.json: player_hooks: no hooks {h}"));
         }
         rs.hooks = hooks;
         rs.neighbours = neighbours(&rs.cards, &scripts);

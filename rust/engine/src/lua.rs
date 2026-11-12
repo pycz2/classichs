@@ -269,6 +269,8 @@ impl Parse<'_> {
                 "cost_mod" => h.cost_mod = Some(f!(true)),
                 "cost_aura" => h.cost_aura = Some(f!(true)),
                 "immune_while_attacking" => h.immune_while_attacking = v.truthy(),
+                "cost_first" => h.cost_first = v.truthy(),
+                "both" => h.both = Some(f!(false)),
                 "choose_one" | "choice" => {
                     let o = self.m.list_items(&v).map_err(err)?;
                     match (o.first().and_then(L::as_str), o.get(1).and_then(L::as_str), o.len()) {
@@ -727,6 +729,7 @@ q!(q_rule, |g, a| {
     })
 });
 q!(q_combo, |g, a| one(g.combo_active(ent(g, &a, 0)?)));
+q!(q_count, |g, a| one(vint(g.players[player(&a, 0)?].counts.get(&a.string(1)?))));
 
 fn q_mine<C: Ctx>(h: &mut C, a: Args) -> R {
     let p = h.vm().get(&a.table(1)?, "player")?;
@@ -793,7 +796,7 @@ macro_rules! queries {
             ("g.trap_ready", q_trap_ready::<$t>), ("g.spell_dmg", q_spell_dmg::<$t>), ("g.heal_amt", q_heal_amt::<$t>),
             ("g.hp_dmg", q_hp_dmg::<$t>), ("g.rule", q_rule::<$t>), ("g.combo", q_combo::<$t>), ("g.mine", q_mine::<$t>),
             ("g.enchants", q_enchants::<$t>), ("g.info", q_info::<$t>), ("g.collectible", q_collectible::<$t>),
-            ("g.graveyard", q_graveyard::<$t>),
+            ("g.graveyard", q_graveyard::<$t>), ("g.count", q_count::<$t>),
         ]
     };
 }
@@ -854,7 +857,7 @@ fn a_draw(g: &mut Game, a: Args) -> R {
 fn a_draw_entity(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (p, e) = (player(&a, 0)?, ent(g, &a, 1)?);
-    g.draw_entity(p, e);
+    g.draw_entity(p, e, a.get(2).truthy());
     none()
 }
 fn a_add_to_hand(g: &mut Game, a: Args) -> R {
@@ -917,7 +920,11 @@ fn a_freeze(g: &mut Game, a: Args) -> R {
 }
 fn a_transform(g: &mut Game, a: Args) -> R {
     live(g)?;
-    let (e, c) = (opt_ent(g, &a, 0)?, card_arg(g, &a, 1, "MINION")?);
+    let (e, c) = (opt_ent(g, &a, 0)?, card_arg(g, &a, 1, "")?);
+    // a minion in play becomes a minion; a card in the hand or the deck any card
+    if e != NONE && g.e(e).zone == "PLAY" && g.rs.card(&c).kind != "MINION" {
+        return Err(a.bad(1, &format!("'{c}' is not a MINION")));
+    }
     opt_id(if e == NONE { NONE } else { g.transform(e, &c) })
 }
 fn a_return_to_hand(g: &mut Game, a: Args) -> R {
@@ -951,6 +958,19 @@ fn a_cast(g: &mut Game, a: Args) -> R {
     }
     g.cast_copy(src, orig, t);
     none()
+}
+fn a_cast_random(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (src, c) = (ent(g, &a, 0)?, card_arg(g, &a, 1, "SPELL")?);
+    opt_id(g.cast_random(src, &c))
+}
+fn a_add_count(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (p, k, n) = (player(&a, 0)?, a.string(1)?, num(&a, 2, 1)?);
+    let v = vint(g.players[p].counts.get(&k)) + n;
+    let k = g.rs.intern(&k);
+    g.players[p].counts.insert(k, v);
+    one(v)
 }
 fn a_deathrattle(g: &mut Game, a: Args) -> R {
     live(g)?;
@@ -1057,7 +1077,11 @@ fn a_enchant(g: &mut Game, a: Args) -> R {
     match v {
         Value::Object(m) => {
             let rs = g.rs;
-            g.em(e).enchantments.push(Obj::of(&m, &|s| rs.intern(s)))
+            let mut x = Obj::of(&m, &|s| rs.intern(s));
+            if rs.cost_in_order && x.contains_key("cost") {
+                x.insert("order", g.stamp()); // its cost change comes in its turn (cost_in_order)
+            }
+            g.em(e).enchantments.push(x)
         }
         _ => return Err(a.bad(1, "a table with named fields expected")),
     }
@@ -1242,5 +1266,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.remove", a_remove), ("g.random", a_random), ("g.pick", a_pick), ("g.random_alive", a_random_alive),
     ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
     ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
-    ("g.cast", a_cast),
+    ("g.cast", a_cast), ("g.cast_random", a_cast_random), ("g.add_count", a_add_count),
 ];

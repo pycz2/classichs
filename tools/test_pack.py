@@ -542,7 +542,8 @@ class Chain(unittest.TestCase):
             self.assertIn(f, files)
         self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/loe"))
         rules = json.loads(files["rules.json"])
-        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True})
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True,
+                                              "cost_in_order": True})
         self.assertEqual(rules["mechanics"]["DISCOVER"], {"engine": "OFFER"})
         cards = {c["id"]: c for c in json.loads(files["cards.json"])}
         self.assertEqual(len([c for c in cards.values() if c.get("set") == "LOE" and c.get("collectible")]), 45)
@@ -552,6 +553,7 @@ class Chain(unittest.TestCase):
         en = json.loads(files["locales/en.json"])["cards"]
         self.assertEqual(en["VAN_EX1_084"]["text"], "Your <b>Charge</b> minions have +1 Attack.")
         self.assertEqual(en["LOE_110t"]["text"], "When you draw this, take 7 damage and draw a card.")
+        self.assertEqual(cards["VAN_EX1_315"]["script"], "scripts/loe.lua#VAN_EX1_315")  # Summoning Portal comes first
 
 
 class ExtractSets(unittest.TestCase):

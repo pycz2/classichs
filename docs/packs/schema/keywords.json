@@ -45,6 +45,7 @@
     {"id": "HEAL_IS_DAMAGE", "kind": "state", "silenced": false, "about": "Its owner's healing deals damage instead (an aura tag)."},
     {"id": "DOUBLE_ON_DEATH", "kind": "state", "silenced": false, "about": "Its owner's minions run their ON_DEATH hooks twice (an aura tag on the champion)."},
     {"id": "DOUBLE_ON_PLAY", "kind": "state", "silenced": false, "about": "Its owner's ON_PLAY hooks (not COMBO, not CHOICE) run twice, on the same target (an aura tag on the champion)."},
+    {"id": "BOTH_CHOICES", "kind": "state", "silenced": false, "about": "Its owner's CHOICE cards have both effects: one play with choice 2, the target of the first option that has one, then a `both` hook or the two options' effects in card order (an aura tag on the champion)."},
     {"id": "PLAYED_COST", "kind": "state", "silenced": false, "about": "The mana a card cost when it was played from the hand (cost changes included). Written only by packs that name it in rules.json mechanics (a new tag changes the state)."},
     {"id": "POWER_DAMAGE", "kind": "state", "silenced": false, "about": "Added to the damage of its owner's power before POWER_MULTIPLIER doubles it (an aura tag on the champion, a count: `g.hp_dmg`)."},
     {"id": "POWER_USES", "kind": "state", "silenced": false, "about": "How many times the power was used this turn, on the power. Written only by packs that name it in rules.json mechanics."},

@@ -342,13 +342,26 @@ impl Game {
                 }
             }
         }
+        // the pack's player hooks (rules.json `player_hooks`), once for each player, `me` = the champion
+        if let Some(f) = rs.player_hooks.as_deref().and_then(|h| rs.hooks(h).on(&ty)) {
+            for p in 0..self.players.len() {
+                let h = self.players[p].hero;
+                self.queue.push_back(QItem { f: Trigger::On(f), me: h, ev: Some(i), needs_in_play: true });
+            }
+        }
         if self.phase != "MULLIGAN" {
-            // cards in the hands with `hand` hooks (none in Classic: its queue is unchanged)
+            // cards in the hands with `hand` hooks, their card's and their enchantments' (none in Classic: its queue
+            // is unchanged)
             for p in 0..self.players.len() {
                 for k in 0..self.players[p].hand.len() {
                     let e = self.players[p].hand[k];
                     if let Some(f) = self.e(e).card.hooks.hand(&ty) {
                         self.queue.push_back(QItem { f: Trigger::Hand(f), me: e, ev: Some(i), needs_in_play: false });
+                    }
+                    for x in &self.entities[(e - 1) as usize].enchantments {
+                        if let Some(f) = x.get("hooks").and_then(V::as_str).and_then(|h| rs.hooks(h).hand(&ty)) {
+                            self.queue.push_back(QItem { f: Trigger::Hand(f), me: e, ev: Some(i), needs_in_play: false });
+                        }
                     }
                 }
             }
@@ -722,7 +735,7 @@ impl Game {
     }
 
     /// Draws a specific card from p's deck (burns it if the hand is full).
-    pub fn draw_entity(&mut self, p: usize, e: Id) {
+    pub fn draw_entity(&mut self, p: usize, e: Id, quiet: bool) {
         let pl = &mut self.players[p];
         let Some(i) = pl.deck.iter().position(|&x| x == e) else { return };
         pl.deck.remove(i);
@@ -734,6 +747,11 @@ impl Game {
         }
         self.em(e).zone = "HAND";
         self.players[p].hand.push(e);
+        if quiet {
+            // put into the hand, not drawn: no `draw` event (Ancient Harbinger)
+            self.log_event(obj!{"type": "to_hand", "player": p, "entity": e, "card": card});
+            return;
+        }
         self.emit(obj!{"type": "draw", "player": p, "entity": e, "card": card});
     }
 
@@ -820,7 +838,7 @@ impl Game {
 
     pub fn transform(&mut self, e: Id, card_id: &str) -> Id {
         let c = self.ctrl(e);
-        let Some(i) = self.players[c].board.iter().position(|&x| x == e) else { return NONE };
+        let Some(i) = self.players[c].board.iter().position(|&x| x == e) else { return self.transform_card(e, card_id) };
         let n = self.new_entity(card_id, c);
         self.players[c].board[i] = n;
         let (order, t) = (self.e(e).play_order, self.n().exhausted);
@@ -830,6 +848,30 @@ impl Game {
         ne.give_tag(t, false);
         self.em(e).zone = "SETASIDE";
         self.log_event(obj!{"type": "transform", "from": e, "to": n, "card": self.e(n).card_id});
+        n
+    }
+
+    /// Transforms a card in its owner's hand or deck into another card, in its place (Shifter Zerus, Renounce
+    /// Darkness); NONE if it is in neither. Only its owner sees which card it became (the event's `entity`).
+    fn transform_card(&mut self, e: Id, card_id: &str) -> Id {
+        let c = self.ctrl(e);
+        let pl = &self.players[c];
+        let (hand, i) = match (pl.hand.iter().position(|&x| x == e), pl.deck.iter().position(|&x| x == e)) {
+            (Some(i), _) => (true, i),
+            (None, Some(i)) => (false, i),
+            _ => return NONE,
+        };
+        let n = self.new_entity(card_id, c);
+        let zone = self.e(e).zone;
+        self.em(n).zone = zone;
+        if hand {
+            self.players[c].hand[i] = n;
+        } else {
+            self.players[c].deck[i] = n;
+        }
+        self.em(e).zone = "SETASIDE";
+        self.em(e).created = true; // set aside from a hidden zone: still only its owner sees which card it was
+        self.log_event(obj!{"type": "transform", "from": e, "entity": n, "player": c, "card": self.e(n).card_id});
         n
     }
 
@@ -1109,6 +1151,14 @@ impl Game {
     }
 
     pub fn request_choice(&mut self, me: Id, options: Vec<Id>) {
+        if self.e(me).auto_choice {
+            // cast with random choices (g.cast_random): one option at random, at once
+            let opt = self.random_choice(&options);
+            if let Some(f) = self.e(me).card.hooks.on_choose {
+                self.from(me, |g| g.fx_choose(f, me, opt, options));
+            }
+            return;
+        }
         let zones = options.iter().map(|&id| self.e(id).zone).collect();
         let player = self.ctrl(me);
         let p = Pending { player, source: me, options: options.clone(), zones };
@@ -1122,6 +1172,9 @@ impl Game {
 
     pub fn add_cost_mod(&mut self, p: usize, mut m: Value) {
         m["turn"] = json!(self.turn);
+        if self.rs.cost_in_order {
+            m["order"] = json!(self.stamp());
+        }
         let Value::Object(m) = m else { unreachable!() };
         let rs = self.rs;
         self.players[p].cost_mods.push(Obj::of(&m, &|s| rs.intern(s)));
@@ -1153,6 +1206,9 @@ impl Game {
 
     /// `cost` with the cost auras given.
     pub(crate) fn cost_in(&self, e: Id, auras: &[Id]) -> i64 {
+        if self.rs.cost_in_order {
+            return self.cost_in_order(e, auras);
+        }
         let x = self.e(e);
         let mut c = x.card.cost;
         if let Some(f) = x.card.hooks.cost_mod {
@@ -1174,6 +1230,63 @@ impl Game {
             }
         }
         c.max(0)
+    }
+
+    /// `cost_in` of a pack with `behaviour.cost_in_order` (Hearthstone until 2017): after the card's own `cost_mod`,
+    /// its cost enchantments, the cost auras and its player's cost mods apply in the order they came (an enchantment
+    /// or a mod by its `order`, stamped when it was made; an aura by when its source came into play), except a
+    /// `cost_first` aura, which comes before them all (Summoning Portal); 0 at least at the end.
+    fn cost_in_order(&self, e: Id, auras: &[Id]) -> i64 {
+        enum It<'a> {
+            Ench(&'a Obj),
+            Aura(Id),
+            Mod(&'a Obj),
+        }
+        let x = self.e(e);
+        let mut c = x.card.cost;
+        if let Some(f) = x.card.hooks.cost_mod {
+            c += self.fx_cost_mod(f, e);
+        }
+        let mut items: Vec<(i64, It)> = vec![];
+        for ench in x.enchantments.iter().filter(|m| m.contains_key("cost")) {
+            items.push((vint(ench.get("order")), It::Ench(ench)));
+        }
+        for &src in auras {
+            let s = self.e(src);
+            if s.zone == "PLAY" && self.hooks_of(src).cost_aura.is_some() {
+                items.push((if self.hooks_of(src).cost_first { i64::MIN } else { s.play_order }, It::Aura(src)));
+            }
+        }
+        for m in &self.players[x.controller].cost_mods {
+            if (vint(m.get("turn")) == self.turn || lasting(m)) && self.mod_applies(m, e) {
+                items.push((vint(m.get("order")), It::Mod(m)));
+            }
+        }
+        items.sort_by_key(|(o, _)| *o);
+        for (_, it) in items {
+            c = match it {
+                It::Ench(m) => c + vint(m.get("cost")),
+                It::Aura(src) => self.fx_cost_aura(self.hooks_of(src).cost_aura.unwrap(), src, e, c),
+                It::Mod(m) if m.contains_key("set") => vint(m.get("set")),
+                It::Mod(m) => c + vint(m.get("delta")),
+            };
+        }
+        c.max(0)
+    }
+
+    /// Whether e costs Health instead of Mana now: one of its player's cost mods with `health = true` applies to it
+    /// (Cho'gall). Its cost is then paid as damage to its champion (Armor first).
+    pub fn pays_health(&self, e: Id) -> bool {
+        let x = self.e(e);
+        self.players[x.controller].cost_mods.iter().any(|m| {
+            vtruthy(m.get("health")) && (vint(m.get("turn")) == self.turn || lasting(m)) && self.mod_applies(m, e)
+        })
+    }
+
+    /// The next stamp of `order` (an enchantment's or a cost mod's: `cost_in_order`); it shares the play order's count.
+    pub(crate) fn stamp(&mut self) -> i64 {
+        self.next_order += 1;
+        self.next_order - 1
     }
 
     /// Removes "until": "use" mods that applied to e (called when e is played).

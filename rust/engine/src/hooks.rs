@@ -70,6 +70,11 @@ pub struct HookSet {
     pub on_choose: Option<HookFn>,
     pub immune_while_attacking: bool,
     pub durability_on_attack: Option<HookFn>,
+    /// Its `cost_aura` comes before every other cost change (with `behaviour.cost_in_order`: Summoning Portal).
+    pub cost_first: bool,
+    /// A CHOICE card played with both options (BOTH_CHOICES): this effect instead of the two options' in turn
+    /// (Druid of the Claw's combined form).
+    pub both: Option<HookFn>,
 }
 
 impl HookSet {
@@ -110,6 +115,7 @@ pub fn summary(h: &HookSet) -> serde_json::Value {
     flag("on_choose", h.on_choose.is_some());
     flag("immune_while_attacking", h.immune_while_attacking);
     flag("durability_on_attack", h.durability_on_attack.is_some());
+    flag("both", h.both.is_some());
     let mut on: Vec<&str> = h.on.iter().map(|(t, _)| *t).collect();
     if let Some(s) = h.trap {
         on.push(s.event);
