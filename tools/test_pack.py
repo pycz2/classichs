@@ -767,5 +767,26 @@ class Neonfall(unittest.TestCase):
             self.assertTrue(all(v.strip() for v in loc["tutorial"].values()), p)
 
 
+class TestDistribution(unittest.TestCase):
+    """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
+
+    def test_only_the_three_first_games_are_in_the_client(self):
+        srcs = [d for d in sorted((pack.REPO / "packs").iterdir()) if (d / "manifest.json").exists()]
+        # without .gdignore Godot imports a source folder's pictures and every export carries them
+        self.assertEqual([d.name for d in srcs if not (d / ".gdignore").exists()], [])
+        # a bundled pack goes into res://packs and so into every build (the web .pck must stay under 95 MB)
+        self.assertEqual([d.name for d in srcs if pack.bundle_in_client(d)], ["classic", "naxx", "neon"])
+
+    def test_the_release_and_the_server_take_build_packs(self):
+        root = pack.REPO
+        self.assertIn("build/packs/*.cardpack", (root / "tools/export_all.sh").read_text())  # release assets
+        self.assertIn("COPY build/packs/ /packs/", (root / "server/Dockerfile").read_text())
+        ignore = (root / "server/Dockerfile.dockerignore").read_text().split()
+        for need in ("!build/packs", "!packs/*.cardpack", "!rust/brain", "!project.godot"):
+            self.assertIn(need, ignore)
+        filters = [ln for ln in (root / "export_presets.cfg").read_text().splitlines() if ln.startswith("include_filter")]
+        self.assertEqual([ln for ln in filters if "build/" in ln], [])  # no export takes the expansions
+
+
 if __name__ == "__main__":
     unittest.main()

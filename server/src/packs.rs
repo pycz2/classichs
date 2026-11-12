@@ -967,17 +967,23 @@ mod tests {
         assert!(bad(&[("manifest.json", wrong), ("scripts\\a.lua", "x")]).contains("may not have"));
     }
 
-    /// The built packs of the repository (tools/build_packs.sh) pass the whole check.
+    /// The built packs of the repository (tools/build_packs.sh) pass the whole check: the game's
+    /// packs/*.cardpack and the expansions of build/packs (the server bundles both).
     #[test]
     fn built_packs_pass_the_trial() {
-        for f in ["classic", "neon", "naxx"] {
-            let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(format!("../packs/{f}.cardpack"));
-            let Ok(bytes) = std::fs::read(&path) else {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("..");
+        let mut paths: Vec<PathBuf> = ["classic", "neon", "naxx"].iter().map(|f| root.join(format!("packs/{f}.cardpack"))).collect();
+        let mut expansions: Vec<PathBuf> = std::fs::read_dir(root.join("build/packs")).into_iter().flatten().flatten().map(|e| e.path()).collect();
+        expansions.retain(|p| p.extension().is_some_and(|x| x == "cardpack"));
+        expansions.sort();
+        paths.extend(expansions);
+        for path in paths {
+            let Ok(file) = std::fs::File::open(&path) else {
                 eprintln!("{}: not built (tools/build_packs.sh), skipped", path.display());
                 continue;
             };
-            let p = inspect(&bytes).unwrap_or_else(|e| panic!("{f}: {e}"));
-            trial(&p).unwrap_or_else(|e| panic!("{f}: {e}"));
+            let p = inspect_from(std::io::BufReader::new(file)).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+            trial(&p).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
         }
     }
 }

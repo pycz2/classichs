@@ -103,9 +103,9 @@ docker compose down                   # keeps the data (volumes server-data, s3-
 ```
 
 The build context is the repository root (the engine is `../rust/engine`);
-`Dockerfile.dockerignore` sends only `data/cards.json`, `docs/packs/schema/keywords.json`,
-`packs/classic` (source), `packs/*.cardpack`, `build/packs`, `rust/engine`, `rust/script` and `server`.
-The image has Neonfall (the default game) and Classic in `/packs`; more: mount files there
+`Dockerfile.dockerignore` sends only `data/cards.json`, `project.godot` (the version), `docs/packs/schema/keywords.json`,
+`packs/classic` (source), `packs/*.cardpack`, `build/packs`, `rust/engine`, `rust/script`, `rust/brain` and `server`.
+The image has Neonfall (the default game), Classic, Naxxramas and the expansion packs in `/packs`; more: mount files there
 (see the compose file).
 Set `S3_ACCESS_KEY` and `S3_SECRET_KEY` (an `.env` file next to the compose file) for
 anything but a test; the S3 port is not published.

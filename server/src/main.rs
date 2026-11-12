@@ -17,7 +17,7 @@ nothing else is needed.
 Game packs are stored in S3 when a bucket is given (flags, or the environment:
 S3_BUCKET, S3_ENDPOINT, S3_REGION, S3_ACCESS_KEY, S3_SECRET_KEY), else in --store-dir.
 Bundled packs (*.cardpack in --packs-dir; default: the first of packs/ next to the binary,\n./packs, ../packs or a packs/ folder above the binary that has a .cardpack) are
-installed as server packs at start, each once. Games without a pack are played in the
+installed as server packs at start (in the background: the server answers at once), each once. Games without a pack are played in the
 default pack (the admin panel sets it); until one is set, the newest enabled server
 pack with the manifest id --default-pack becomes it, else the built-in Classic rules.
 The admin panel's replay player (the release's ClassicHS-*-replay-viewer.zip, unpacked) is
@@ -100,24 +100,27 @@ fn main() {
         if n > 0 {
             tracing::info!("{n} pack(s) moved to the hashes of docs/packs/format.md");
         }
-        let n = packs::import_bundled(&app, &packs_dir).await;
-        if n > 0 {
-            tracing::info!("{n} bundled pack(s) installed");
-        }
-        match packs::set_default(&app, None, &default_pack).await {
-            Ok(Some(p)) => tracing::info!("default game: {}", packs::label(&p)),
-            Ok(None) => {}
-            Err(e) => tracing::error!("default game: {e}"),
-        }
-        let d = packs::playable(&app, None, None).await.map(|r| packs::short_name(&r.0)).unwrap_or_else(|e| e.1);
-        tracing::info!("games without a pack: {d}");
         classichs_server::spawn_background(app.clone());
         classichs_server::stats::spawn_backfill(app.clone()); // the replays kept before the statistics
         let listener = tokio::net::TcpListener::bind(addr).await.unwrap_or_else(|e| die(&format!("cannot listen on {addr}: {e}")));
         println!("classichs-server listening on ws://{addr} (admin panel: http://{addr}/admin, database: {db_path})");
-        // the server's bots (the admin's Bots page) play in this process
+        // The bundled packs install while the server already answers: each new pack's check (a trial
+        // game) takes seconds, a release with a dozen new packs about a minute, and a deploy waits 20 s
+        // for an answer (deploy/docker-host/classichs-deploy). A new pack is offered once it passed.
         let a = app.clone();
         tokio::spawn(async move {
+            let n = packs::import_bundled(&a, &packs_dir).await;
+            if n > 0 {
+                tracing::info!("{n} bundled pack(s) installed");
+            }
+            match packs::set_default(&a, None, &default_pack).await {
+                Ok(Some(p)) => tracing::info!("default game: {}", packs::label(&p)),
+                Ok(None) => {}
+                Err(e) => tracing::error!("default game: {e}"),
+            }
+            let d = packs::playable(&a, None, None).await.map(|r| packs::short_name(&r.0)).unwrap_or_else(|e| e.1);
+            tracing::info!("games without a pack: {d}");
+            // the server's bots (the admin's Bots page) play in this process, in the packs above
             if let Err(e) = classichs_server::bots::sync(&a).await {
                 tracing::error!("bots: {e}");
             }

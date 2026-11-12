@@ -1,12 +1,15 @@
 # The build context is the repository root: send only what the server build needs.
 *
 !data/cards.json
+!project.godot
 !docs/packs/schema/keywords.json
 !packs/classic
 !packs/*.cardpack
 !build/packs
 !rust/engine
 !rust/script
+!rust/brain
+rust/brain/tests
 rust/engine/target
 rust/engine/tests
 rust/script/target

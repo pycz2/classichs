@@ -433,6 +433,40 @@ async fn bundled_packs_are_installed_once() {
     assert_eq!((d.len(), d[0].version.as_str()), (1, "1.2.0"));
 }
 
+/// A real expansion pack (the biggest of build/packs, ~57 MB; tools/build_packs.sh) bundled with the
+/// server: installed at start, offered to players, listed in the admin panel, downloaded whole.
+#[tokio::test]
+async fn a_built_expansion_pack_is_bundled_listed_and_downloaded() {
+    let built = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../build/packs");
+    let mut files: Vec<PathBuf> = std::fs::read_dir(&built).into_iter().flatten().flatten().map(|e| e.path()).collect();
+    files.retain(|p| p.extension().is_some_and(|x| x == "cardpack"));
+    let Some(src) = files.into_iter().max_by_key(|p| std::fs::metadata(p).map_or(0, |m| m.len())) else {
+        eprintln!("no build/packs/*.cardpack (tools/build_packs.sh): skipped");
+        return;
+    };
+    let (addr, app, http) = server().await;
+    let dir = temp_dir();
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::copy(&src, dir.join(src.file_name().unwrap())).unwrap();
+    assert_eq!(packs::import_bundled(&app, &dir).await, 1, "{}", src.display());
+    let row = pack::Entity::find().one(&app.db).await.unwrap().unwrap();
+    let bytes = std::fs::read(&src).unwrap();
+    assert_eq!((row.owner, row.enabled, row.size as usize), (None, true, bytes.len()));
+    assert!(row.pack_id.starts_with(src.file_stem().unwrap().to_str().unwrap()), "{}", row.pack_id);
+
+    let mut c = C::register(addr, "exp").await;
+    c.send(json!({"t": "packs"})).await;
+    let m = c.want("packs").await;
+    assert_eq!(m["server"][0]["content_hash"].as_str(), Some(row.content_hash.as_str()));
+    let (cookie, _) = admin_session(&app, &http).await;
+    let v = call(&http, Request::get("/admin/api/packs").header(header::COOKIE, &cookie).body(Body::empty()).unwrap()).await.json();
+    assert_eq!((v["server"][0]["pack_id"].as_str(), v["server"][0]["size"].as_u64()), (Some(row.pack_id.as_str()), Some(bytes.len() as u64)));
+
+    let r = call(&http, download(&row.content_hash, Some(&c.token)).body(Body::empty()).unwrap()).await;
+    assert_eq!((r.status, r.headers[header::CONTENT_LENGTH].to_str().unwrap()), (StatusCode::OK, bytes.len().to_string().as_str()));
+    assert!(r.body == bytes, "the downloaded pack is the file");
+}
+
 /// D11: the engine loads the pack and compiles every script; a broken one is refused with the
 /// reason (also in the event log), and so is a pack whose manifest lies about its rules.
 #[tokio::test]

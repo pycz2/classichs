@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# The game server. The rules engine (../rust/engine, ../rust/script) and what it embeds
+# The game server. The rules engine (../rust/engine, ../rust/script), the bots (../rust/brain) and what they embed
 # (../data/cards.json, ../docs/packs/schema/keywords.json, the Classic pack source ../packs/classic) are outside server/, so
 # build from the repository root, after building the packs (tools/build_packs.sh: the
 # image bundles packs/*.cardpack, Neonfall the default game, Classic and Naxxramas too):
@@ -13,6 +13,7 @@ COPY docs/packs/schema/keywords.json docs/packs/schema/keywords.json
 COPY packs/classic packs/classic
 COPY rust/script rust/script
 COPY rust/engine rust/engine
+COPY rust/brain rust/brain
 COPY project.godot project.godot
 COPY server server
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
