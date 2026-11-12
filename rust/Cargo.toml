@@ -1,5 +1,5 @@
 [workspace]
-members = ["engine", "brain", "godot", "wasm", "script"]
+members = ["engine", "brain", "godot", "wasm", "script", "opus"]
 resolver = "2"
 
 [profile.release]

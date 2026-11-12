@@ -25,7 +25,7 @@ const TOP_FILES := ["manifest.json", "rules.json", "cards.json", "tutorial.json"
 const DIRS := ["scripts", "locales", "layout", "decks", "missions", "ui", "art", "sounds", "music", "voice"]
 const PRESENTATION := ["fx", "sounds", "voice"]
 const IMAGE_EXT := ["png", "jpg", "jpeg", "webp"]
-const AUDIO_EXT := ["ogg", "wav", "mp3"]
+const AUDIO_EXT := ["opus", "ogg", "wav", "mp3"]
 
 static var _segment := RegEx.create_from_string("^[A-Za-z0-9_][A-Za-z0-9_.-]*$")
 static var _id_re := RegEx.create_from_string("^[a-z0-9][a-z0-9._-]{0,63}$")
@@ -226,6 +226,7 @@ func stream(file: String) -> AudioStream:
 	if bytes.is_empty():
 		return null
 	match file.get_extension().to_lower():
+		"opus": return Opus.stream(bytes)
 		"ogg": return AudioStreamOggVorbis.load_from_buffer(bytes)
 		"wav": return AudioStreamWAV.load_from_buffer(bytes)
 		"mp3":

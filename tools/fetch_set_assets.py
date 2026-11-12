@@ -2,7 +2,7 @@
 """A set's Blizzard art and sounds for the owner's LOCAL packs, and those packs (never for git, never for a
 distributed pack: they belong to Blizzard Entertainment).
 
-Usage: python3 tools/fetch_set_assets.py --set gvg [--out ~/ClassicHS-local] [--only art|sounds] [--no-ru]
+Usage: python3 tools/fetch_set_assets.py --set gvg [--out ~/ClassicHS-local] [--only art|sounds|music] [--no-ru]
        python3 tools/fetch_set_assets.py --set gvg --build      the local pack ~/ClassicHS-local/<set>-custom-art.cardpack
 
 Sets: classic, naxx and the later ones of tools/extract_cards.py SETS (gvg, brm, tgt, loe, og, kara, msg, ungoro,
@@ -12,11 +12,14 @@ icc, loot, gil). Result in <out>/<set>/:
                          ~/ClassicHS-local/art-naxx converted (tools/fetch_2014_art.py made both)
   set/<name>.opus        card sounds and a legendary's play music (<card id>_music), Ogg Opus (tools/audio_codec.py)
   voice/<lang>/…         English and Russian lines, heroes' too (tools/fetch_original_sounds.py does the work)
+  music/<slot>.opus      the original music: menu, mulligan, battle_1 … N, victory, defeat, arena
+                         (tools/fetch_original_music.py does the work; its notes: <out>/audio-src/music/SOURCES.md)
   SOURCES.md
 Downloads stay in <out>/sounds/cache (shared with tools/fetch_original_sounds.py) and <out>/sounds/cache/art.
 
 --build makes <out>/<set>-custom-art.cardpack from packs/<set> (tools/pack.py build) with the art set `custom`,
-the sound set `original` and the voice of every pack it is built on and its own (classic, naxx, …, <set>): a pack
+the sound set `original` and the voice of every pack it is built on and its own (classic, naxx, …, <set>), and the
+music set `original` of the nearest level that has one (a whole playlist, never merged): a pack
 stands alone, it never takes pictures or sounds from another installed pack. An existing file is kept as
 <set>-custom-art.before-<date>.cardpack. Needs ImageMagick (`magick`) and ffmpeg.
 """
@@ -32,6 +35,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import extract_cards  # noqa: E402
+import fetch_original_music  # noqa: E402
 import fetch_original_sounds as snd  # noqa: E402
 import pack  # noqa: E402
 
@@ -78,7 +82,9 @@ def art(name, out, custom):
 
 
 def sounds(name, out, ru):
-    snd.run(name, out, snd.ru_for(name, out / "sounds/cache") if ru else {}, cache=out / "sounds/cache", dest=out / name)
+    ru = snd.ru_for(name, out / "sounds/cache") if ru else {}
+    snd.run(name, out, ru, cache=out / "sounds/cache", dest=out / name)
+    fetch_card_sounds.run(name, out, ru)  # each card's other moments: aim, missile, impacts, trigger, …
 
 
 def chain(name):
@@ -97,6 +103,9 @@ def build(name, out):
             local += ["--sound-set", f"original={out / level / 'set'}"]
         if (out / level / "voice").is_dir():
             local += ["--voice", str(out / level / "voice")]
+    music = [out / level / "music" for level in chain(name) if (out / level / "music").is_dir()]
+    if music:  # the nearest level's: each folder is a set's whole playlist
+        local += ["--music-set", f"original={music[-1]}"]
     before = dst.stat().st_size if dst.exists() else 0
     with tempfile.TemporaryDirectory() as t:
         tmp = Path(t) / dst.name
@@ -115,7 +124,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--set", required=True, choices=["classic"] + list(extract_cards.SETS))
     ap.add_argument("--out", default="~/ClassicHS-local")
-    ap.add_argument("--only", choices=["art", "sounds"])
+    ap.add_argument("--only", choices=["art", "sounds", "music"])
     ap.add_argument("--no-ru", action="store_true", help="English voice only")
     ap.add_argument("--ffmpeg", default="/opt/homebrew/bin/ffmpeg" if Path("/opt/homebrew/bin/ffmpeg").exists() else "ffmpeg")
     ap.add_argument("--build", action="store_true", help="build the local pack from what is there (no downloads)")
@@ -128,10 +137,12 @@ def main():
     if a.build:
         return build(a.set, out)
     snd.pick_encoder(a.ffmpeg)
-    if a.only != "sounds":
+    if a.only in (None, "art"):
         art(a.set, out, Path(a.custom).expanduser())
-    if a.only != "art":
+    if a.only in (None, "sounds"):
         sounds(a.set, out, not a.no_ru)
+    if a.only in (None, "music"):
+        fetch_original_music.run([a.set], out, a.ffmpeg)
 
 
 if __name__ == "__main__":

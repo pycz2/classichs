@@ -269,16 +269,27 @@ Audio files are `.opus` (preferred: Ogg Opus at 48 kHz), `.ogg` (Ogg Vorbis), `.
   `secret`, `freeze`, `shield`, `spell`, `trigger`, `hit_big`, `victory`,
   `defeat`, `click`; the client also plays `draw`, `summon` (a minion lands), `spell_<element>` and
   `hit_<element>` (a spell's cast and impact by its `fx.element`) when the set has them). A card's own
-  sounds: what its `sounds: {play, attack, death, hit, music}` names, else the set's file `<card id>_<slot>`:
-  `play` when a minion or weapon comes into play or a spell is cast, `attack` as the attacker leaps
-  (the set's `attack` is the blow when it lands), `death` at its death step, `hit` a spell's impact,
-  `music` (a legendary's play music, Hearthstone's stinger) when it is played from the hand: on the Music bus,
-  the music ducks under it, its voice line plays as well.
+  sounds: what its `sounds` field names for a slot, else the set's file `<card id>_<slot>`, all optional:
+  `play` when a minion or weapon comes into play, a spell, Secret, Quest or hero card is played, a hero
+  power is used; `attack` as the attacker leaps (the set's `attack` is the blow when it lands); `death` at
+  its death step (a weapon's: when it breaks or is destroyed); `aim` loops while the player aims with it
+  (a targeted spell, a hero power, a Battlecry; only one's own aiming); `missile` as its bolt flies to the
+  target (once a step); `hit`, `hit_2`, `hit_3` … the impact of its effect (a spell's, a hero power's, a
+  minion's, a weapon's): its hits one after another (Arcane Missiles) take them in turn; `trigger` when its
+  effect goes off (a trigger, a Deathrattle, a Battlecry; not a spell's or a hero power's); `reveal` a Secret
+  revealed (else its `trigger`); `complete` a Quest done; `progress` a Quest's progress goes up; `choose` a
+  Choose One or Discover it opens (one's own); `music` (a legendary's play music, Hearthstone's stinger)
+  when it is played from the hand: on the Music bus, the music ducks under it, its voice line plays as well.
+  A card without its own sound for a moment gets the event's sound as before.
   A sound the chosen set lacks comes from the pack's default set.
-- `music/<set>/<name>`: `menu`, `battle_1` … `battle_N` (a shuffled playlist).
+- `music/<set>/<name>`: `menu`, `battle_1` … `battle_N` (a shuffled playlist). Optional, taken only from the
+  chosen set (without one, the music that plays goes on): `mulligan` (loops during the mulligan, then the
+  battle playlist starts), `victory` and `defeat` (played once when the result shows, in place of the battle
+  music; the event sounds `victory`/`defeat` play as well), `arena` (loops on the Arena's screens).
 - `voice/<lang>/<card id>_<kind>.<opus|ogg|wav|mp3>`: optional recordings of the voice
   lines whose words are in `locales/<lang>.json` `voice` (the player's language, else the
-  default one). Minions and weapons: `play` (as it lands), `attack` (as it leaps), `death`.
+  default one). Minions and weapons: `play` (as it lands), `attack` (as it leaps), `death`, `trigger`
+  (with its `trigger` sound, as its effect goes off).
   Heroes: `start` (the game begins), the emotes `greetings`, `well_played`, `thanks`, `wow`, `oops`,
   `threaten`, `time` (the rope starts burning), `error_need_mana`, `error_play`,
   `error_minion_attacked`, `error_i_attacked`, `error_summon_sickness`, `error_need_weapon`,
@@ -293,7 +304,8 @@ Audio files are `.opus` (preferred: Ogg Opus at 48 kHz), `.ogg` (Ogg Vorbis), `.
   `tools/fetch_set_assets.py --set <classic|naxx|gvg|…>` (pictures as 256 px WebP, sounds and voice mono at a low bit
   rate, a legendary's play music) into `~/ClassicHS-local/<set>/`, and `--build` makes
   `~/ClassicHS-local/<set>-custom-art.cardpack` with the pictures, sounds and voice of every level of its chain
-  (`--art-set custom=` once per level; the files stay outside git).
+  (`--art-set custom=` once per level; the files stay outside git), and the music set `original`
+  (`tools/fetch_original_music.py`: the game's own tracks, `<set>/music/`) of the nearest level that has one.
 
 ## 8. Decks and missions
 

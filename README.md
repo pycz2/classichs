@@ -132,4 +132,4 @@ Every folder in `art/` is a picture set, selectable in Play → Direct → Class
 
 ## Legal
 
-Classic HS is a non-commercial fan project and is not affiliated with or endorsed by Blizzard Entertainment. Hearthstone and the card names and texts are trademarks and property of Blizzard Entertainment, Inc. Card data comes from [HearthstoneJSON](https://hearthstonejson.com/). The original card art belongs to Blizzard Entertainment. The code is under the [MIT License](LICENSE).
+Classic HS is a non-commercial fan project and is not affiliated with or endorsed by Blizzard Entertainment. Hearthstone and the card names and texts are trademarks and property of Blizzard Entertainment, Inc. Card data comes from [HearthstoneJSON](https://hearthstonejson.com/). The original card art belongs to Blizzard Entertainment. The code is under the [MIT License](LICENSE). The `.opus` decoder in the rules engine library is libopus 1.3.1 (translated to Rust as the `unsafe-libopus` crate) with the `ogg` crate, both under the BSD 3-Clause License: [rules/LICENSE.opus](rules/LICENSE.opus), shipped with every build.

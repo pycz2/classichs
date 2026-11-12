@@ -167,7 +167,9 @@ def cargo(table, fields, where):
 
 
 def files_of(field):
-    return [f.strip() for f in (field or "").split(",") if f.strip().lower().endswith(".wav")]
+    """The .wav names of a Cargo field, first letter capitalised as the wiki stores its files (a row may say
+    tt_004_FleshEating_Ghoul_Attack1.wav, the file is Tt_004_…)."""
+    return [f[:1].upper() + f[1:] for f in (f.strip() for f in (field or "").split(",")) if f.lower().endswith(".wav")]
 
 
 def wiki_sounds(ids):
@@ -191,7 +193,8 @@ def plan_card(cid, row, card_type):
         main = [old[slot]] if slot in old else files_of(row.get("BASIC " + slot))
         under = files_of(row.get("BASIC %s underlay" % slot))
         vo = [f for f in main if f.startswith("VO_")]  # (not BASIC_play_VO: later hero skins' spell lines)
-        sfx = [f for f in main if not f.startswith("VO_")] or under
+        # (a VO_ line in an underlay is no sound effect: the Classic Baron Geddon's is a 2015 boss line)
+        sfx = [f for f in main if not f.startswith("VO_")] or [f for f in under if not f.startswith("VO_")]
         if vo:
             out.append(("voice", f"{cid}_{slot}", vo[0]))
         if sfx:
