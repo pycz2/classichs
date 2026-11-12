@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TGT": "The Grand Tournament"
+ },
+ "mechanics": {
+  "INSPIRE": {
+   "name": "Inspire",
+   "tip": "Does something after you use your Hero Power."
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "name": "Can't attack heroes",
+   "tip": "Can attack only minions."
+  }
+ }
+}

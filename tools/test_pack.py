@@ -504,6 +504,31 @@ class Chain(unittest.TestCase):
         self.assertEqual(cards["FP1_028"]["script"], "scripts/brm.lua#FP1_028")  # Undertaker: +1 Attack (2.1.0.7628)
         en = json.loads(files["locales/en.json"])["cards"]
         self.assertEqual(en["BRM_010a"]["text"], "Transform into a 5/2 minion.")  # the option's text of build 8311
+        self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
+                         "c8c9cd0dafb0dcc47aac4b573536154beb9705ec36dce19a7d7ac7fcb080f6eb")
+
+    def test_the_grand_tournament_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/tgt")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/BRM_" in p or "/AT_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/gvg.lua", "scripts/brm.lua", "scripts/tgt.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/tgt"))
+        rules = json.loads(files["rules.json"])
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True})
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        self.assertEqual(len([c for c in cards.values() if c["id"].startswith("AT_") and c.get("collectible")]), 132)
+        self.assertEqual(len([c for c in cards.values() if c["id"].startswith("AT_") and not c.get("collectible")]), 26)
+        self.assertEqual((cards["AT_132"]["cost"], cards["AT_132"]["health"]), (6, 3))  # Justicar until 2024
+        self.assertEqual(cards["AT_132_MAGE"]["type"], "POWER")
+        self.assertEqual(cards["BRM_017"]["script"], "scripts/tgt.lua#BRM_017")  # Resurrect (patch 3.0.0.9786)
+        en = json.loads(files["locales/en.json"])["cards"]
+        self.assertEqual(en["AT_011"]["text"], "Whenever a character is healed, gain +2 Attack.")  # not the 2023 rework
+        # a text an earlier pack of the chain overrode comes back as that day's
+        self.assertEqual(en["BRM_020"]["text"], "Whenever <b>you</b> target this minion with a spell, gain +1/+1.")
+        self.assertEqual(en["GVG_016"]["text"], "Whenever your opponent plays a card, remove the top 3 cards of your deck.")
 
 
 class ExtractSets(unittest.TestCase):
@@ -521,6 +546,19 @@ class ExtractSets(unittest.TestCase):
         self.assertEqual([c["id"] for c in got], ["GVG_001", "GVG_043", "GVG_110t", "PART_001"])
         self.assertEqual(got[1]["durability"], 3)
         self.assertEqual([c["id"] for c in extract_cards.set_cards(cards, "naxx")], ["FP1_001"])
+
+    def test_a_release_build_set_takes_todays_ids_and_marks_only(self):
+        import extract_cards
+        then = [{"id": "AT_011", "type": "MINION", "set": "TGT", "playerClass": "PRIEST", "cost": 4, "collectible": True,
+                 "text": {"enUS": "Whenever a character is healed, gain +2 Attack."}},
+                {"id": "AT_005t", "type": "MINION", "set": "TGT", "cost": 3}]
+        now = [{"id": "AT_011", "type": "MINION", "set": "TGT", "cardClass": "PRIEST", "cost": 2, "dbfId": 2557,
+                "mechanics": ["TRIGGER_VISUAL"], "referencedTags": ["OVERHEAL"], "text": {"enUS": "<b>Overheal:</b> Gain +2 Attack."}}]
+        got = {c["id"]: c for c in extract_cards.release_cards(then, now)}
+        self.assertEqual((got["AT_011"]["cost"], got["AT_011"]["dbfId"], got["AT_011"]["cardClass"]), (4, 2557, "PRIEST"))
+        self.assertEqual(got["AT_011"]["mechanics"], ["TRIGGER_VISUAL"])
+        self.assertNotIn("referencedTags", got["AT_011"])  # today's text differs: its tags are today's
+        self.assertEqual(got["AT_005t"]["cardClass"], "NEUTRAL")
 
 
 class Neonfall(unittest.TestCase):

@@ -1,0 +1,31 @@
+{
+ "about": "The Grand Tournament's interface (docs/packs/format.md, 'UI theme'): the Argent Tournament grounds in Icecrown — deep royal-blue pavilion panels with polished silver rims, buttons of blue tourney silk edged in gold that brighten to a silver glint, cold clear text, snow drifting over the menu; the title in Classic's Cinzel Decorative, in gold.",
+ "colors": {
+  "text": "eef2f8",
+  "muted": "9fadc4",
+  "accent": "e8c25a",
+  "table": "0b1020",
+  "panel": "101a33f0",
+  "panel_border": "b9c4d6",
+  "backdrop": "34466e",
+  "button": "1a2c5af0",
+  "button_hover": "243d78",
+  "button_pressed": "131f40",
+  "button_disabled": "1a2033a6",
+  "button_border": "e2bb52",
+  "button_text": "f4f6fb",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "ffe39a",
+  "button_text_disabled": "6c768a",
+  "outline": "04060c",
+  "danger": "ff5a4a",
+  "ok": "8fe06a"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 6, "border": 1, "glow": "c9d6ee33", "glow_size": 4, "glow_hover": "e8c25a99", "glow_hover_size": 12},
+ "panel": {"radius": 8, "border": 2, "glow": "8fa6d040", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "1d3366", "border": "e8c25a", "text": "f6f3e8", "ready": "2b4c99", "ready_border": "ffd76a"},
+ "mana": "4cc3ff",
+ "menu": {"shade": "04081459", "particles": "snow"}
+}

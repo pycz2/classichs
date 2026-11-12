@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds The Grand Tournament 2015 (docs/packs/format.md, 'Build recipes'): on Blackrock Mountain (base), so on Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 132 cards of The Grand Tournament and their 26 tokens as the release build 9786 has them (patch 3.0.0.9786 of 2015-08-18, six days before the release; data/tgt_cards.json, tools/extract_cards.py --set tgt) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/tgt.lua, the keywords, the older cards that patch changed).",
+  "base": "../brm",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/tgt_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/tgt/cards.texts.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TGT": "Il Gran Torneo"
+ },
+ "mechanics": {
+  "INSPIRE": {
+   "name": "Ispirazione",
+   "tip": "Si attiva dopo che hai usato il tuo Potere Eroe."
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "name": "Non può attaccare gli eroi",
+   "tip": "Può attaccare solo i servitori."
+  }
+ }
+}

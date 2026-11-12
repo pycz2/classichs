@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TGT": "Le Grand Tournoi"
+ },
+ "mechanics": {
+  "INSPIRE": {
+   "name": "Exaltation",
+   "tip": "Se déclenche après que vous avez utilisé votre pouvoir héroïque."
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "name": "Ne peut pas attaquer les héros",
+   "tip": "Ne peut attaquer que des serviteurs."
+  }
+ }
+}

@@ -1,0 +1,163 @@
+{
+  "format": 1,
+  "id": "tgt-2015",
+  "version": "1.0.0",
+  "engine": "0.60.0",
+  "name": {
+    "en": "The Grand Tournament 2015",
+    "ru": "Большой турнир 2015",
+    "de": "Das Große Turnier 2015",
+    "fr": "Le Grand Tournoi 2015",
+    "es": "El Gran Torneo 2015",
+    "pt_BR": "O Grande Torneio 2015",
+    "it": "Il Gran Torneo 2015",
+    "pl": "Wielki Turniej 2015"
+  },
+  "description": {
+    "en": "The game as it was played after August 24, 2015: the Basic, Classic, Naxxramas, Goblins vs Gnomes and Blackrock Mountain cards and the 132 cards of The Grand Tournament, each as on that day — Inspire after your Hero Power, Jousts that reveal a minion from each deck, Justicar Trueheart's better Hero Powers, Mysterious Challenger's Secrets, Varian Wrynn, Aviana and Icehowl; Resurrect needs a friendly minion that died, Fel Reaver removes cards instead of discarding them.",
+    "ru": "Игра, как в неё играли после 24 августа 2015 года: базовые и классические карты, карты Наксрамаса, «Гоблинов и гномов», Чёрной горы и 132 карты Большого турнира, каждая как в тот день. Воодушевление срабатывает после силы героя, в поединке каждая колода показывает по существу, Мариэль Чистосердечная улучшает силу героя, Загадочный претендент выкладывает секреты из колоды, есть Вариан Ринн, Авиана и Ледяной Рев. «Воскрешение» нельзя разыграть, пока не погибло ваше существо, а Сквернобот убирает карты из колоды, а не сбрасывает их.",
+    "de": "Das Spiel, wie es nach dem 24. August 2015 gespielt wurde: die Basis-, Klassik-, Naxxramas-, „Goblins gegen Gnome“- und Schwarzfels-Karten und die 132 Karten des Großen Turniers, jede wie an jenem Tag — Inspiration nach Eurer Heldenfähigkeit, Tjoste, die aus jedem Deck einen Diener aufdecken, die besseren Heldenfähigkeiten der Justiziarin Treuherz, die Geheimnisse des Mysteriösen Ritters, Varian Wrynn, Aviana und Eisheuler; Auferstehung braucht einen gestorbenen eigenen Diener, der Teufelshäscher entfernt Karten, statt sie abzuwerfen.",
+    "fr": "Le jeu tel qu’on le jouait après le 24 août 2015 : les cartes de base, classiques, de Naxxramas, de « Gobelins et Gnomes » et du Mont Rochenoire et les 132 cartes du Grand Tournoi, chacune telle que ce jour-là — l’Exaltation après votre pouvoir héroïque, les joutes qui révèlent un serviteur de chaque deck, les pouvoirs améliorés de la Justicière Cœur-Vrai, les Secrets de l’Adversaire mystérieux, Varian Wrynn, Aviana et Glace-Hurlante ; Ressusciter demande un serviteur allié mort, le Saccageur gangrené retire les cartes au lieu de les défausser.",
+    "es": "El juego tal como se jugaba después del 24 de agosto de 2015: las cartas básicas, clásicas, de Naxxramas, de «Goblins y Gnomos» y de la Montaña Roca Negra y las 132 cartas del Gran Torneo, cada una como aquel día: Inspirar tras tu poder de héroe, justas que revelan un esbirro de cada mazo, los poderes mejorados de la Justicar Corazón Veraz, los secretos del Contrincante misterioso, Varian Wrynn, Aviana y Aullahielo; Resurrección necesita un esbirro aliado muerto, el Atracador vil retira cartas en vez de descartarlas.",
+    "pt_BR": "O jogo como era jogado depois de 24 de agosto de 2015: os cards Básicos, Clássicos, de Naxxramas, de “Goblins vs Gnomos” e da Montanha Rocha Negra e os 132 cards do Grande Torneio, cada um como naquele dia — Inspirar depois do seu Poder Heroico, Justas que revelam um lacaio de cada deck, os Poderes Heroicos melhores da Justicar Veras, os Segredos do Desafiante Misterioso, Varian Wrynn, Aviana e Uivagelo; Ressuscitar precisa de um lacaio aliado morto, o Aníquilus remove cards em vez de descartá-los.",
+    "it": "Il gioco come si giocava dopo il 24 agosto 2015: le carte Base, Classiche, di Naxxramas, di “Goblin vs Gnomi” e del Massiccio Roccianera e le 132 carte del Gran Torneo, ognuna com’era quel giorno — Ispirazione dopo il vostro Potere Eroe, Giostre che rivelano un servitore da ogni mazzo, i Poteri Eroe migliori della Giustiziera Cuorsincero, i Segreti dello Sfidante Misterioso, Varian Wrynn, Aviana e Urlogelido; Resurrezione vuole un servitore alleato morto, il Vilrazziatore rimuove le carte invece di scartarle.",
+    "pl": "Gra w wersji sprzed lat, po 24 sierpnia 2015: karty podstawowe, klasyczne, z Naxxramas, z „Goblinów kontra gnomów” i z Czarnej Góry oraz 132 karty z Wielkiego Turnieju, każda jak tamtego dnia — Inspiracja po użyciu mocy specjalnej, pojedynki, w których każda talia odkrywa stronnika, lepsze moce justycjariuszki Mariel, sekrety Tajemniczego pretendenta, Varian Wrynn, Aviana i Zmrożec; Wskrzeszenie wymaga martwego sojuszniczego stronnika, Grabieżca Spaczenia usuwa karty zamiast je odrzucać."
+  },
+  "authors": [
+    "Classic HS"
+  ],
+  "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+  "redistributable": true,
+  "default_locale": "en",
+  "locales": [
+    "en",
+    "ru",
+    "de",
+    "fr",
+    "es",
+    "pt_BR",
+    "it",
+    "pl"
+  ],
+  "art_sets": [
+    {
+      "id": "simple",
+      "name": {
+        "en": "Simple painted",
+        "ru": "Простой рисованный",
+        "de": "Einfach gemalt",
+        "fr": "Peint simple",
+        "es": "Pintado simple",
+        "pt_BR": "Pintura simples",
+        "it": "Dipinto semplice",
+        "pl": "Prosty malowany"
+      },
+      "default": true
+    },
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированный"
+      }
+    },
+    {
+      "id": "cartoon",
+      "name": {
+        "en": "Cartoon 2D",
+        "ru": "Мультяшный 2D",
+        "de": "Cartoon 2D",
+        "fr": "Dessin animé 2D",
+        "es": "Dibujos 2D",
+        "pt_BR": "Desenho 2D",
+        "it": "Cartone 2D",
+        "pl": "Kreskówka 2D"
+      }
+    },
+    {
+      "id": "photo",
+      "name": {
+        "en": "Photoreal",
+        "ru": "Фотореалистичный",
+        "de": "Fotorealistisch",
+        "fr": "Photoréaliste",
+        "es": "Fotorrealista",
+        "pt_BR": "Fotorrealista",
+        "it": "Fotorealistico",
+        "pl": "Fotorealistyczny"
+      }
+    }
+  ],
+  "sound_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированные"
+      },
+      "default": true
+    }
+  ],
+  "music_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированная"
+      },
+      "default": true
+    },
+    {
+      "id": "open",
+      "name": {
+        "en": "Open (CC0)",
+        "ru": "Открытая (CC0)"
+      }
+    }
+  ],
+  "set_marks": {
+    "VANILLA:FREE": {
+      "icon": "ui/set_basic.png"
+    },
+    "VANILLA": {
+      "icon": "ui/set_classic.png"
+    },
+    "NAXX": {
+      "icon": "ui/set_naxx.png"
+    },
+    "GVG": {
+      "icon": "ui/set_gvg.png"
+    },
+    "BRM": {
+      "icon": "ui/set_brm.png"
+    },
+    "TGT": {
+      "icon": "ui/set_tgt.png"
+    }
+  },
+  "card_back": null,
+  "logo": null,
+  "colors": {
+    "classes": {
+      "DRUID": "703606",
+      "HUNTER": "016e01",
+      "MAGE": "0092ab",
+      "PALADIN": "aa8f00",
+      "PRIEST": "b8b090",
+      "ROGUE": "4c4d48",
+      "SHAMAN": "0070de",
+      "WARLOCK": "7624ad",
+      "WARRIOR": "8e1002",
+      "NEUTRAL": "6b6b6b",
+      "DREAM": "6b6b6b",
+      "DEMONHUNTER": "6b6b6b"
+    },
+    "rarities": {
+      "FREE": "e8e8e8",
+      "COMMON": "e8e8e8",
+      "RARE": "2f7cff",
+      "EPIC": "a335ee",
+      "LEGENDARY": "ff8000"
+    }
+  }
+}

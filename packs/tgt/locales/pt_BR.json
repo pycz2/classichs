@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TGT": "O Grande Torneio"
+ },
+ "mechanics": {
+  "INSPIRE": {
+   "name": "Inspirar",
+   "tip": "Ativa depois que você usa seu Poder Heroico."
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "name": "Não pode atacar heróis",
+   "tip": "Só pode atacar lacaios."
+  }
+ }
+}

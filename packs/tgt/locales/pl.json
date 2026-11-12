@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TGT": "Wielki Turniej"
+ },
+ "mechanics": {
+  "INSPIRE": {
+   "name": "Inspiracja",
+   "tip": "Działa po użyciu twojej mocy specjalnej."
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "name": "Nie może atakować bohaterów",
+   "tip": "Może atakować tylko stronników."
+  }
+ }
+}

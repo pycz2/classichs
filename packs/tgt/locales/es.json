@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TGT": "El Gran Torneo"
+ },
+ "mechanics": {
+  "INSPIRE": {
+   "name": "Inspirar",
+   "tip": "Se activa después de que uses tu poder de héroe."
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "name": "No puede atacar a héroes",
+   "tip": "Solo puede atacar a esbirros."
+  }
+ }
+}

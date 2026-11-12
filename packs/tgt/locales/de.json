@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TGT": "Das Große Turnier"
+ },
+ "mechanics": {
+  "INSPIRE": {
+   "name": "Inspiration",
+   "tip": "Wirkt, nachdem Ihr Eure Heldenfähigkeit eingesetzt habt."
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "name": "Kann keine Helden angreifen",
+   "tip": "Kann nur Diener angreifen."
+  }
+ }
+}
