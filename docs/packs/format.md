@@ -162,7 +162,8 @@ does not map is written as the engine id.
 | `STEALTH` | keyword | Can't be attacked or targeted until it attacks | `STEALTH` |
 | `SPELLPROOF` | keyword | Can't be targeted by spells and powers | `ELUSIVE` |
 | `CANT_ATTACK` | keyword | Can't attack | `CANT_ATTACK` |
-| `CANT_ATTACK_HEROES` | keyword | Can attack only minions (a forced redirect still may hit a champion) | — (The Grand Tournament: `CANNOT_ATTACK_HEROES`, Icehowl) |
+| `CANT_ATTACK_HEROES` | keyword | Can attack only minions (a forced redirect still may hit a champion) | — (The Grand Tournament: `CANNOT_ATTACK_HEROES`, Icehowl); a weapon's keeps its champion off champions too |
+| `UNLIMITED_ATTACKS` | keyword | Any number of attacks a turn; a weapon's: its champion's (One Night in Karazhan: Fool's Bane) | — (One Night in Karazhan: `UNLIMITED_ATTACKS`) |
 | `IMMUNE` | keyword | Takes no damage | `IMMUNE` |
 | `POISON` | keyword | Destroys any minion it damages | — (Naxxramas: `POISONOUS`, Maexxna) |
 | `SPELL_POWER` | keyword | +N spell damage (card field `spell_power`) | `SPELLPOWER` |

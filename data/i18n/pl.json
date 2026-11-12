@@ -871,5 +871,9 @@
 "uploaded by you": "przesłana przez ciebie",
 "uploaded by you, turned off": "przesłana przez ciebie, wyłączona",
 "vs": "vs",
-"wants to be friends": "chce się zaprzyjaźnić"
+"wants to be friends": "chce się zaprzyjaźnić",
+"%s is shuffled into your deck": "%s zostaje wtasowany do twojej talii",
+"%s is shuffled into Opponent's deck": "%s zostaje wtasowany do talii przeciwnika",
+"A card is shuffled into your deck": "Do twojej talii wtasowano kartę",
+"A card is shuffled into Opponent's deck": "Do talii przeciwnika wtasowano kartę"
 }

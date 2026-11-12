@@ -19,11 +19,11 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-const START_TAGS: [&str; 12] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
-    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES"];
+const START_TAGS: [&str; 13] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
+    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
 /// Engine ids of the tags Silence removes.
-const SILENCED: [&str; 13] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
-    "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES"];
+const SILENCED: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
+    "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
 /// Rarity tiers in the order the Arena draws them.
 pub const TIERS: [&str; 4] = ["common", "rare", "epic", "legendary"];
 
@@ -120,6 +120,8 @@ pub struct Names {
     pub spellproof: &'static str,
     pub cant_attack: &'static str,
     pub cant_attack_heroes: &'static str,
+    /// UNLIMITED_ATTACKS: any number of attacks a turn (a weapon's: its champion's; Fool's Bane).
+    pub unlimited_attacks: &'static str,
     pub immune: &'static str,
     pub spell_power: &'static str,
     pub frozen: &'static str,
@@ -189,6 +191,7 @@ impl Names {
             spellproof: n("SPELLPROOF"),
             cant_attack: n("CANT_ATTACK"),
             cant_attack_heroes: n("CANT_ATTACK_HEROES"),
+            unlimited_attacks: n("UNLIMITED_ATTACKS"),
             immune: n("IMMUNE"),
             spell_power: n("SPELL_POWER"),
             frozen: n("FROZEN"),
@@ -224,7 +227,7 @@ impl Names {
             names.cant_attack, names.immune, names.spell_power, names.frozen, names.frozen_this_turn, names.exhausted,
             names.attacks, names.armor, names.durability, names.used, names.locked, names.guarded, names.to_destroy,
             names.died_pos, names.power_multiplier, names.heal_is_damage, names.trap, names.poison, names.double_on_death,
-            names.cant_attack_heroes, names.power_damage, names.double_on_play, names.both_choices]);
+            names.cant_attack_heroes, names.power_damage, names.double_on_play, names.both_choices, names.unlimited_attacks]);
         names.known = known;
         Ok(names)
     }

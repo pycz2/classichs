@@ -268,6 +268,13 @@ impl Game {
     }
 
     fn finish_mulligan(&mut self) {
+        // "when the game starts", after the mulligan (Prince Malchezaar): only for a pack whose player hooks listen, so
+        // no other game logs it
+        let rs = self.rs;
+        if rs.player_hooks.as_deref().is_some_and(|h| rs.hooks(h).on("game_start").is_some()) {
+            self.emit(obj!{"type": "game_start"});
+            self.resolve();
+        }
         if let Some(coin) = &self.rs.coin {
             self.add_to_hand(self.opponent(self.current), coin);
         }
@@ -477,8 +484,11 @@ impl Game {
         if x.is_minion() && x.has(n.exhausted) && !x.has(n.haste) {
             return false;
         }
-        let weapon_wf = x.is_champion() && self.players[x.controller].weapon.is_some_and(|w| self.e(w).has(n.double_attack));
-        let limit = if x.has(n.double_attack) || weapon_wf { 2 } else { 1 };
+        let weapon = |t: &str| x.is_champion() && self.players[x.controller].weapon.is_some_and(|w| self.e(w).has(t));
+        if x.has(n.unlimited_attacks) || weapon(n.unlimited_attacks) {
+            return true; // Fool's Bane: as many attacks as it has the weapon for
+        }
+        let limit = if x.has(n.double_attack) || weapon(n.double_attack) { 2 } else { 1 };
         x.tag(n.attacks) < limit
     }
 
@@ -487,7 +497,10 @@ impl Game {
         let mut taunts = vec![];
         let foe = self.opponent(self.ctrl(a));
         let n = self.n();
-        let no_heroes = self.e(a).has(n.cant_attack_heroes);
+        // a champion's weapon that cannot attack champions keeps it off them too (Fool's Bane)
+        let (x, p) = (self.e(a), self.ctrl(a));
+        let no_heroes = x.has(n.cant_attack_heroes)
+            || (x.is_champion() && self.players[p].weapon.is_some_and(|w| self.e(w).has(n.cant_attack_heroes)));
         for t in self.chars(foe) {
             let te = self.e(t);
             if te.has(n.stealth) || (no_heroes && te.is_champion()) {

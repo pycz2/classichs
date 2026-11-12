@@ -123,6 +123,7 @@ amounts replace the damage).
 | `hero_power` | `player`, `entity`, `target` | After the power's effect: Inspire (an `on` hook; the pack names it ON_POWER). Events logged during the power's effect carry `by_id` = the power (a draw "from your Hero Power": Wilfred Fizzlebang). |
 | `secret_revealed` | `entity`, `player`, `card` | |
 | `turn_start`, `turn_end` | `player` (+ `turn`) | `turn_end` hooks run before "this turn" effects end. |
+| `game_start` | | Once, when both players have finished the mulligan, before the coin and the first turn ("when the game starts": Prince Malchezaar). Only for a pack whose `player_hooks` set has an `on.game_start` hook (rules.md); the player hooks see it once for each player, `me` that player's champion (the decks are full, the hands drawn). |
 
 Events every hook can also log: `g.log{type = …}` (only logged) and
 `g.emit{type = …}` (logged and triggers `on` hooks).

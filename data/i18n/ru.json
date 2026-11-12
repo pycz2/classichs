@@ -871,5 +871,9 @@
 "uploaded by you": "загружена вами",
 "uploaded by you, turned off": "загружена вами, отключена",
 "vs": "против",
-"wants to be friends": "хочет дружить"
+"wants to be friends": "хочет дружить",
+"%s is shuffled into your deck": "«%s» замешивается в вашу колоду",
+"%s is shuffled into Opponent's deck": "«%s» замешивается в колоду соперника",
+"A card is shuffled into your deck": "Карта замешивается в вашу колоду",
+"A card is shuffled into Opponent's deck": "Карта замешивается в колоду соперника"
 }

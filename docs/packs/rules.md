@@ -73,7 +73,8 @@ Naxxramas and Goblins vs Gnomes keep their recorded games).
 
 The name of a hook set of the pack's scripts (`"player:og"`) whose `on` hooks see every event once for each player,
 `me` being that player's champion (a new champion takes over): the counts of a game no card in play keeps ("spells
-you've cast this game", "Totems you've summoned this game"; `g.add_count`, `g.count`). Optional; none in Classic.
+you've cast this game", "Totems you've summoned this game"; `g.add_count`, `g.count`), and what happens "when the game
+starts" (an `on.game_start` hook: after the mulligan, before the coin; api.md, events). Optional; none in Classic.
 
 ## `timers` (seconds)
 

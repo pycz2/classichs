@@ -4,7 +4,7 @@ extends RefCounted
 ## see (the opponent's draws and hand additions, the opponent's Secrets) stay hidden.
 
 ## Event types that produce no line (they repeat other events).
-const SILENT := ["after_summon", "after_spell", "after_attack", "turn_end", "mulligan_chosen", "create"]
+const SILENT := ["after_summon", "after_spell", "after_attack", "turn_end", "mulligan_chosen", "create", "game_start"]
 
 
 static func _t(s: String) -> String:
@@ -134,6 +134,11 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 				else _t("A card is added to Opponent's hand")
 		"discard":
 			s = _say(p, viewer, "You discard %s", "Opponent discards %s", [CardText.name(ev.card, loc)])
+		"add_to_deck":  # (Prince Malchezaar's Legendaries, Gang Up…): a card in a deck is hidden from both players
+			if str(ev.get("card", "")) == "":
+				s = _say(p, viewer, "A card is shuffled into your deck", "A card is shuffled into Opponent's deck", [])
+			else:
+				s = _say(p, viewer, "%s is shuffled into your deck", "%s is shuffled into Opponent's deck", [CardText.name(ev.card, loc)])
 		"hero_power":
 			s = _say(p, viewer, "You use %s", "Opponent uses %s", [n.call(ev.entity)])
 			if ev.get("target", -1) >= 0:

@@ -10,6 +10,7 @@
     {"id": "SPELLPROOF", "kind": "keyword", "silenced": true, "about": "Cannot be targeted by spells or powers."},
     {"id": "CANT_ATTACK", "kind": "keyword", "silenced": true, "about": "Cannot attack."},
     {"id": "CANT_ATTACK_HEROES", "kind": "keyword", "silenced": true, "about": "Cannot attack champions (only minions; a forced redirect still may)."},
+    {"id": "UNLIMITED_ATTACKS", "kind": "keyword", "silenced": true, "about": "Can attack any number of times each turn; a weapon's lets its champion (with a weapon's CANT_ATTACK_HEROES, only minions)."},
     {"id": "IMMUNE", "kind": "keyword", "silenced": true, "about": "Takes no damage."},
     {"id": "POISON", "kind": "keyword", "silenced": true, "about": "Destroys any minion it damages."},
     {"id": "SPELL_POWER", "kind": "keyword", "silenced": true, "about": "Its number is added to the damage of its owner's spells (card field spell_power)."},

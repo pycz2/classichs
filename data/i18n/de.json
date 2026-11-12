@@ -871,5 +871,9 @@
 "uploaded by you": "von dir hochgeladen",
 "uploaded by you, turned off": "von dir hochgeladen, abgeschaltet",
 "vs": "gegen",
-"wants to be friends": "möchte befreundet sein"
+"wants to be friends": "möchte befreundet sein",
+"%s is shuffled into your deck": "%s wird in Euer Deck gemischt",
+"%s is shuffled into Opponent's deck": "%s wird in das Deck des Gegners gemischt",
+"A card is shuffled into your deck": "Eine Karte wird in Euer Deck gemischt",
+"A card is shuffled into Opponent's deck": "Eine Karte wird in das Deck des Gegners gemischt"
 }

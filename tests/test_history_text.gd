@@ -128,3 +128,8 @@ func test_whispers_of_the_old_gods_events() -> void:
 	eq(line.call(shift.merged({"card": ""}, true), 1), "A card of Opponent's changes", "hidden from the opponent")
 	eq(line.call({"type": "to_hand", "player": 0, "entity": wisp, "card": "VAN_CS2_231"}, 0), "Wisp is put into your hand", "")
 	eq(line.call({"type": "to_hand", "player": 0, "entity": wisp, "card": ""}, 1), "A card is put into Opponent's hand", "")
+	var shuffled := {"type": "add_to_deck", "player": 0, "entity": wisp, "card": ""}
+	eq(line.call(shuffled, 0), "A card is shuffled into your deck", "Prince Malchezaar's Legendaries: hidden from both")
+	eq(line.call(shuffled, 1), "A card is shuffled into Opponent's deck", "")
+	eq(line.call(shuffled.merged({"card": "VAN_CS2_231"}, true), 0), "Wisp is shuffled into your deck", "")
+	check(HistoryText.event_lines({"type": "game_start"}, g, 0, "en").is_empty(), "the game's start says nothing")

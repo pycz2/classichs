@@ -871,5 +871,9 @@
 "uploaded by you": "enviado por você",
 "uploaded by you, turned off": "enviado por você, desativado",
 "vs": "contra",
-"wants to be friends": "quer ser seu amigo"
+"wants to be friends": "quer ser seu amigo",
+"%s is shuffled into your deck": "%s é embaralhado no seu deck",
+"%s is shuffled into Opponent's deck": "%s é embaralhado no deck do oponente",
+"A card is shuffled into your deck": "Uma carta é embaralhada no seu deck",
+"A card is shuffled into Opponent's deck": "Uma carta é embaralhada no deck do oponente"
 }
