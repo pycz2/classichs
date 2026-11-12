@@ -1,0 +1,31 @@
+{
+ "about": "The League of Explorers' interface (docs/packs/format.md, 'UI theme'): an explorers' museum and the sandstone ruins of Uldum — deep warm brown panels like old leather map cases with turquoise rims, buttons of sun-baked sandstone edged in gold that glow turquoise under the mouse, parchment-coloured text, desert sparks drifting over the menu; the title in Classic's Cinzel Decorative, in gold.",
+ "colors": {
+  "text": "f6ead2",
+  "muted": "c2ab86",
+  "accent": "f0c45a",
+  "table": "1a120a",
+  "panel": "2a1d10f0",
+  "panel_border": "3fbfb0",
+  "backdrop": "6e4a26",
+  "button": "7a5530f0",
+  "button_hover": "936839",
+  "button_pressed": "5a3d20",
+  "button_disabled": "3a2c1ea6",
+  "button_border": "e2b04a",
+  "button_text": "fff4dc",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "9ef0e2",
+  "button_text_disabled": "8a7a62",
+  "outline": "120a04",
+  "danger": "ff5a4a",
+  "ok": "8fe06a"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 6, "border": 1, "glow": "f0c45a33", "glow_size": 4, "glow_hover": "3fd6c499", "glow_hover_size": 12},
+ "panel": {"radius": 8, "border": 2, "glow": "3fbfb040", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "7a5530", "border": "f0c45a", "text": "fff4dc", "ready": "1f8f84", "ready_border": "7ff2e2"},
+ "mana": "3fd6c4",
+ "menu": {"shade": "1a0e0459", "particles": "embers"}
+}

@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "LOE": "Die Forscherliga"
+ },
+ "mechanics": {
+  "DISCOVER": {
+   "name": "Entdecken",
+   "tip": "Wählt eine von drei Karten und nehmt sie auf die Hand."
+  }
+ }
+}

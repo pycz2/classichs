@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "LOE": "The League of Explorers"
+ },
+ "mechanics": {
+  "DISCOVER": {
+   "name": "Discover",
+   "tip": "Choose one of three cards to add to your hand."
+  }
+ }
+}

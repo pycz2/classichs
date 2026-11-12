@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "LOE": "La Liga de Expedicionarios"
+ },
+ "mechanics": {
+  "DISCOVER": {
+   "name": "Descubrir",
+   "tip": "Elige una de tres cartas y añádela a tu mano."
+  }
+ }
+}

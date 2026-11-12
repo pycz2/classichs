@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "LOE": "La Ligue des explorateurs"
+ },
+ "mechanics": {
+  "DISCOVER": {
+   "name": "Découverte",
+   "tip": "Choisissez une carte parmi trois et ajoutez-la à votre main."
+  }
+ }
+}

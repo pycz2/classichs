@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "LOE": "Liga Odkrywców"
+ },
+ "mechanics": {
+  "DISCOVER": {
+   "name": "Odkrycie",
+   "tip": "Wybierz jedną z trzech kart i dodaj ją do ręki."
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "LOE": "La Lega degli Esploratori"
+ },
+ "mechanics": {
+  "DISCOVER": {
+   "name": "Rinvenire",
+   "tip": "Scegli una carta tra tre e aggiungila alla tua mano."
+  }
+ }
+}

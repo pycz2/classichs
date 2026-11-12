@@ -529,6 +529,29 @@ class Chain(unittest.TestCase):
         # a text an earlier pack of the chain overrode comes back as that day's
         self.assertEqual(en["BRM_020"]["text"], "Whenever <b>you</b> target this minion with a spell, gain +1/+1.")
         self.assertEqual(en["GVG_016"]["text"], "Whenever your opponent plays a card, remove the top 3 cards of your deck.")
+        self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
+                         "3a066714499915bc30a5625212e75033de81b391371cc85944c510159e0dfc9e")
+
+    def test_the_league_of_explorers_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/loe")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/AT_" in p or "/LOE" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/gvg.lua", "scripts/brm.lua", "scripts/tgt.lua", "scripts/loe.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/loe"))
+        rules = json.loads(files["rules.json"])
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True})
+        self.assertEqual(rules["mechanics"]["DISCOVER"], {"engine": "OFFER"})
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        self.assertEqual(len([c for c in cards.values() if c.get("set") == "LOE" and c.get("collectible")]), 45)
+        self.assertEqual(len([c for c in cards.values() if c.get("set") == "LOE" and not c.get("collectible")]), 15)
+        self.assertEqual(cards["LOE_038"]["cost"], 5)  # Naga Sea Witch until 2018
+        self.assertEqual(cards["VAN_EX1_084"]["script"], "scripts/loe.lua#VAN_EX1_084")  # Warsong (3.2.0.10604)
+        en = json.loads(files["locales/en.json"])["cards"]
+        self.assertEqual(en["VAN_EX1_084"]["text"], "Your <b>Charge</b> minions have +1 Attack.")
+        self.assertEqual(en["LOE_110t"]["text"], "When you draw this, take 7 damage and draw a card.")
 
 
 class ExtractSets(unittest.TestCase):

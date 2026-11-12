@@ -1,0 +1,166 @@
+{
+  "format": 1,
+  "id": "loe-2015",
+  "version": "1.0.0",
+  "engine": "0.60.0",
+  "name": {
+    "en": "The League of Explorers 2015",
+    "ru": "Лига исследователей 2015",
+    "de": "Die Forscherliga 2015",
+    "fr": "La Ligue des explorateurs 2015",
+    "es": "La Liga de Expedicionarios 2015",
+    "pt_BR": "A Liga dos Exploradores 2015",
+    "it": "La Lega degli Esploratori 2015",
+    "pl": "Liga Odkrywców 2015"
+  },
+  "description": {
+    "en": "The game as it was played after November 12, 2015: the Basic, Classic, Naxxramas, Goblins vs Gnomes, Blackrock Mountain and Grand Tournament cards and the 45 cards of The League of Explorers, each as on that day: Discover one of three cards, Reno Jackson heals you fully if your deck has no duplicates, Brann Bronzebeard doubles your Battlecries, Elise sends you after the Golden Monkey, Sir Finley gives you another Hero Power and Arch-Thief Rafaam an Artifact. Warsong Commander only gives your Charge minions +1 Attack.",
+    "ru": "Игра, как в неё играли после 12 ноября 2015 года: базовые и классические карты, карты Наксрамаса, «Гоблинов и гномов», Чёрной горы, Большого турнира и 45 карт Лиги исследователей, каждая как в тот день. Вы раскапываете одну карту из трёх, Рено Джексон полностью лечит героя, если в колоде нет одинаковых карт, Бранн Бронзобород удваивает боевые кличи, Элиза отправляет вас за Золотой обезьяной, сэр Финли меняет силу героя, а Великий вор Рафаам приносит артефакт. Командир Песни Войны теперь даёт существам с «Рывком» только +1 к атаке.",
+    "de": "Das Spiel, wie es nach dem 12. November 2015 gespielt wurde: die Basis-, Klassik-, Naxxramas-, „Goblins gegen Gnome“-, Schwarzfels- und Turnierkarten und die 45 Karten der Forscherliga, jede wie an jenem Tag — Entdeckt eine von drei Karten, Reno Jackson heilt Euren Helden vollständig, wenn Euer Deck keine Duplikate enthält, Brann Bronzebart verdoppelt Eure Kampfschreie, Elise schickt Euch auf die Suche nach dem Goldaffen, Sir Finley gibt Euch eine neue Heldenfähigkeit und Meisterdieb Rafaam ein Artefakt. Die Kriegshymnenanführerin gibt Euren Dienern mit Sturmangriff nur noch +1 Angriff.",
+    "fr": "Le jeu tel qu’on le jouait après le 12 novembre 2015 : les cartes de base, classiques, de Naxxramas, de « Gobelins et Gnomes », du Mont Rochenoire et du Grand Tournoi et les 45 cartes de la Ligue des explorateurs, chacune telle que ce jour-là — Découvrez une carte parmi trois, Reno Jackson rend tous ses points de vie à votre héros si votre deck ne contient pas de doublons, Brann Barbe-de-Bronze double vos Cris de guerre, Élise vous lance sur la piste du Singe doré, sir Finley vous donne un autre pouvoir héroïque et le Prince voleur Rafaam un artefact. L’Officier chanteguerre ne donne plus que +1 en Attaque à vos serviteurs avec Charge.",
+    "es": "El juego tal como se jugaba después del 12 de noviembre de 2015: las cartas básicas, clásicas, de Naxxramas, de «Goblins y Gnomos», de la Montaña Roca Negra y del Gran Torneo y las 45 cartas de La Liga de Expedicionarios, cada una como aquel día: Descubre una de tres cartas, Reno Jackson restaura toda la salud de tu héroe si tu mazo no tiene duplicados, Brann Barbabronce duplica tus gritos de batalla, Elise te manda tras el Mono dorado, Sir Finley te da otro poder de héroe y el Archiladrón Rafaam un artefacto. El Comandante Grito de Guerra solo da +1 de ataque a tus esbirros con Cargar.",
+    "pt_BR": "O jogo como era jogado depois de 12 de novembro de 2015: os cards Básicos, Clássicos, de Naxxramas, de “Goblins vs Gnomos”, da Montanha Rocha Negra e do Grande Torneio e os 45 cards da Liga dos Exploradores, cada um como naquele dia — Descubra um entre três cards, Reno Jackson recupera toda a Vida do seu herói se o seu deck não tiver cards repetidos, Brann Barbabronze dobra os seus Gritos de Guerra, Elise manda você atrás do Macaco Dourado, Dom Finlei dá a você outro Poder Heroico e o Arquiladrão Rafaam um Artefato. A Capitã do Brado Guerreiro só dá +1 de Ataque aos seus lacaios com Investida.",
+    "it": "Il gioco come si giocava dopo il 12 novembre 2015: le carte Base, Classiche, di Naxxramas, di “Goblin vs Gnomi”, del Massiccio Roccianera e del Gran Torneo e le 45 carte della Lega degli Esploratori, ognuna com’era quel giorno — Rinvenite una carta su tre, Reno Jackson cura del tutto il vostro eroe se il mazzo non ha doppioni, Brann Barbabronzea raddoppia i vostri Grido di Battaglia, Elise vi manda a cercare la Scimmia Dorata, Ser Pinnus vi dà un altro Potere Eroe e l’Arciladro Rafaam un Artefatto. Il Capitano Cantaguerra dà solo +1 Attacco ai vostri servitori con Carica.",
+    "pl": "Gra w wersji sprzed lat, po 12 listopada 2015: karty podstawowe, klasyczne, z Naxxramas, z „Goblinów kontra gnomów”, z Czarnej Góry i z Wielkiego Turnieju oraz 45 kart Ligi Odkrywców, każda jak tamtego dnia — Odkrywasz jedną z trzech kart, Reno Jackson w pełni leczy bohatera, jeśli w talii nie ma duplikatów, Brann Miedziobrody podwaja okrzyki bojowe, Eliza wysyła cię po Złotą Małpę, Sir Płetwin daje inną moc specjalną, a Arcyzłodziej Rafaam artefakt. Dowódca Wojennej Pieśni daje twoim stronnikom z Szarżą tylko +1 do ataku."
+  },
+  "authors": [
+    "Classic HS"
+  ],
+  "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+  "redistributable": true,
+  "default_locale": "en",
+  "locales": [
+    "en",
+    "ru",
+    "de",
+    "fr",
+    "es",
+    "pt_BR",
+    "it",
+    "pl"
+  ],
+  "art_sets": [
+    {
+      "id": "simple",
+      "name": {
+        "en": "Simple painted",
+        "ru": "Простой рисованный",
+        "de": "Einfach gemalt",
+        "fr": "Peint simple",
+        "es": "Pintado simple",
+        "pt_BR": "Pintura simples",
+        "it": "Dipinto semplice",
+        "pl": "Prosty malowany"
+      },
+      "default": true
+    },
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированный"
+      }
+    },
+    {
+      "id": "cartoon",
+      "name": {
+        "en": "Cartoon 2D",
+        "ru": "Мультяшный 2D",
+        "de": "Cartoon 2D",
+        "fr": "Dessin animé 2D",
+        "es": "Dibujos 2D",
+        "pt_BR": "Desenho 2D",
+        "it": "Cartone 2D",
+        "pl": "Kreskówka 2D"
+      }
+    },
+    {
+      "id": "photo",
+      "name": {
+        "en": "Photoreal",
+        "ru": "Фотореалистичный",
+        "de": "Fotorealistisch",
+        "fr": "Photoréaliste",
+        "es": "Fotorrealista",
+        "pt_BR": "Fotorrealista",
+        "it": "Fotorealistico",
+        "pl": "Fotorealistyczny"
+      }
+    }
+  ],
+  "sound_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированные"
+      },
+      "default": true
+    }
+  ],
+  "music_sets": [
+    {
+      "id": "generated",
+      "name": {
+        "en": "Generated",
+        "ru": "Сгенерированная"
+      },
+      "default": true
+    },
+    {
+      "id": "open",
+      "name": {
+        "en": "Open (CC0)",
+        "ru": "Открытая (CC0)"
+      }
+    }
+  ],
+  "set_marks": {
+    "VANILLA:FREE": {
+      "icon": "ui/set_basic.png"
+    },
+    "VANILLA": {
+      "icon": "ui/set_classic.png"
+    },
+    "NAXX": {
+      "icon": "ui/set_naxx.png"
+    },
+    "GVG": {
+      "icon": "ui/set_gvg.png"
+    },
+    "BRM": {
+      "icon": "ui/set_brm.png"
+    },
+    "TGT": {
+      "icon": "ui/set_tgt.png"
+    },
+    "LOE": {
+      "icon": "ui/set_loe.png"
+    }
+  },
+  "card_back": null,
+  "logo": null,
+  "colors": {
+    "classes": {
+      "DRUID": "703606",
+      "HUNTER": "016e01",
+      "MAGE": "0092ab",
+      "PALADIN": "aa8f00",
+      "PRIEST": "b8b090",
+      "ROGUE": "4c4d48",
+      "SHAMAN": "0070de",
+      "WARLOCK": "7624ad",
+      "WARRIOR": "8e1002",
+      "NEUTRAL": "6b6b6b",
+      "DREAM": "6b6b6b",
+      "DEMONHUNTER": "6b6b6b"
+    },
+    "rarities": {
+      "FREE": "e8e8e8",
+      "COMMON": "e8e8e8",
+      "RARE": "2f7cff",
+      "EPIC": "a335ee",
+      "LEGENDARY": "ff8000"
+    }
+  }
+}

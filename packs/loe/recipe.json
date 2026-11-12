@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds The League of Explorers 2015 (docs/packs/format.md, 'Build recipes'): on The Grand Tournament (base), so on Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 45 cards of The League of Explorers and their 15 tokens as the release build 10833 has them (patch 4.0.0.10833 of 2015-11-10, two days before the first wing; data/loe_cards.json, tools/extract_cards.py --set loe) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/loe.lua, the keywords, the older cards that changed by then).",
+  "base": "../tgt",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/loe_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/loe/cards.texts.json"
+      ]
+    }
+  ]
+}
