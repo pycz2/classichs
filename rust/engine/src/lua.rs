@@ -1196,6 +1196,11 @@ fn a_resolve(g: &mut Game, _a: Args) -> R {
     g.resolve();
     none()
 }
+fn a_remove_dead(g: &mut Game, _a: Args) -> R {
+    live(g)?;
+    g.death_phase();
+    none()
+}
 fn a_cost(g: &mut Game, a: Args) -> R {
     let e = ent(g, &a, 0)?;
     one(g.cost(e))
@@ -1215,5 +1220,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.request_choice", a_request_choice), ("g.add_cost_mod", a_add_cost_mod), ("g.log", a_log), ("g.emit", a_emit),
     ("g.remove", a_remove), ("g.random", a_random), ("g.pick", a_pick), ("g.random_alive", a_random_alive),
     ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
-    ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle),
+    ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
 ];

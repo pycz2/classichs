@@ -278,6 +278,33 @@ fn mimirons_head_forms_v07() {
     t.end_turn().end_turn();
     assert_eq!(t.cards(0), vec!["GVG_111t".to_string()]);
     assert_eq!(t.parts(0), 1, "the Gnome's Spare Part");
+    // a full board: the Mechs die at once to make room; V-07-TR-0N comes before their Deathrattles, so the
+    // Sheep's 2 damage hits it too
+    let mut t = scene!({"board": ["GVG_111", "GVG_085", "GVG_076", YETI, YETI, YETI, YETI]}, {});
+    t.end_turn().end_turn();
+    let v = t.on_board(0, "GVG_111t");
+    assert_eq!(t.stats(v), (4, 6));
+    assert_eq!(t.cards(0).len(), 5, "the four Yetis (3 Health left) and V-07-TR-0N");
+}
+
+#[test]
+fn gazlowe_counts_the_cost_when_cast() {
+    // Frostbolt (2) with Sorcerer's Apprentice costs 1: a Mech; Arcane Shot (1) under Loatheb costs 6: none
+    let mut t = scene!({"board": ["GVG_117", "VAN_EX1_608"], "hand": ["VAN_CS2_024"]}, {});
+    let foe = t.hero(1);
+    t.play("VAN_CS2_024", foe);
+    assert_eq!(t.hand(0).len(), 1);
+    assert_eq!(t.g.e(t.g.players[0].hand[0]).race(), "MECHANICAL");
+    let mut t = scene!({"board": ["GVG_117"], "hand": ["VAN_DS1_185"]}, {"hand": ["FP1_030"]});
+    t.end_turn().play("FP1_030", NONE).end_turn();
+    assert_eq!(t.cost("VAN_DS1_185"), 6);
+    let foe = t.hero(1);
+    t.play("VAN_DS1_185", foe);
+    assert!(t.g.players[0].hand.iter().all(|&e| t.g.e(e).race() != "MECHANICAL"), "Loatheb made it a 6-mana spell");
+    let mut t = scene!({"board": ["GVG_117"], "hand": ["VAN_DS1_185"]}, {});
+    let foe = t.hero(1);
+    t.play("VAN_DS1_185", foe);
+    assert_eq!(t.hand(0).len(), 1, "a 1-mana spell: a Mech");
 }
 
 #[test]

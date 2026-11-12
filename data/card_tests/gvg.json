@@ -6655,6 +6655,54 @@
      "do": "end_turn"
     }
    ]
+  },
+  {
+   "kind": "trigger",
+   "title": "Mimiron's Head on a full board: the Mechs die at once, V-07-TR-0N comes, then the Sheep's 2 damage hits it and the Yetis",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ],
+      "board": [
+       "GVG_111",
+       "GVG_085",
+       "GVG_076",
+       "VAN_CS2_182",
+       "VAN_CS2_182",
+       "VAN_CS2_182",
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
   }
  ],
  "GVG_111t": [
@@ -7042,6 +7090,58 @@
       ],
       "hand": [
        "VAN_DS1_185"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  },
+  {
+   "kind": "trigger",
+   "title": "Gazlowe: Frostbolt costs 1 with Sorcerer's Apprentice, a random Mech",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ],
+      "board": [
+       "GVG_117",
+       "VAN_EX1_608"
+      ],
+      "hand": [
+       "VAN_CS2_024"
       ]
      },
      {

@@ -229,6 +229,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.random_alive(list)` | A random item that is in play and not dying, or `nil`. |
 | `g.shuffle(list)` | Shuffles the list in place (and returns it). |
 | `g.put_trap(e)` | Puts a trap card of its owner's hand or deck into play, as if played but without the `play` event (logs `trap_put`); `false` when `e` is no trap there or the same trap is already in play (Mad Scientist). |
+| `g.remove_dead()` | The death phase now: the dead leave the board (room for a summon) and their Deathrattles and `death` events are queued, to run after the hook (Mimiron's Head: V-07-TR-0N comes before the Mechs' Deathrattles). |
 | `g.resolve()` | Runs the queued triggers and the death phase now, inside the hook (Poison Seeds and Reincarnate: the destroyed minions die and their Deathrattles go before the Treants or the copy come). |
 
 Randomness must come from these (the game's seeded generator): every

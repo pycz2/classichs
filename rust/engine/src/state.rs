@@ -423,7 +423,9 @@ impl Game {
         self.update_auras();
     }
 
-    fn death_phase(&mut self) -> bool {
+    /// Removes the dead (minions, weapons) and queues their death hooks and `death` events, without running
+    /// the queue (`g.remove_dead`); true if anything died.
+    pub(crate) fn death_phase(&mut self) -> bool {
         let mut dead = vec![];
         let n = self.n();
         for p in &self.players {

@@ -138,6 +138,8 @@ pub struct Names {
     pub double_on_death: &'static str,
     /// DIED_TURN: written at a death only when the pack names it (Classic does not: its states stay as recorded).
     pub died_turn: Option<&'static str>,
+    /// PLAYED_COST: the mana a card cost when it was played, written only when the pack names it (Gazlowe).
+    pub played_cost: Option<&'static str>,
     /// The TRAP mechanic's name: also the zone that holds traps.
     pub trap: &'static str,
     /// Tags Silence removes.
@@ -193,6 +195,7 @@ impl Names {
             poison: n("POISON"),
             double_on_death: n("DOUBLE_ON_DEATH"),
             died_turn: by_engine.get("DIED_TURN").copied(),
+            played_cost: by_engine.get("PLAYED_COST").copied(),
             trap: n("TRAP"),
             silenced: SILENCED.iter().map(|id| n(id)).collect(),
             by_engine: by_engine.clone(),

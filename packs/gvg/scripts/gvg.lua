@@ -1165,9 +1165,7 @@ cards.GVG_111 = on_mine("turn_start", function(g, me)
     for _, m in ipairs(all) do
       g.destroy(m)
     end
-    -- ponytail: the Mechs' Deathrattles go before V-07-TR-0N comes (in Hearthstone after); an engine "remove
-    -- the dead now, Deathrattles later" step would fix the order
-    g.resolve()
+    g.remove_dead() -- they die at once to make room; their Deathrattles go after V-07-TR-0N comes
     g.summon(p, "GVG_111t")
   end
 end)
@@ -1237,10 +1235,10 @@ cards.GVG_116 = {
   },
 }
 
--- Gazlowe: whenever you cast a 1-mana spell, a random Mech into your hand.
--- ponytail: the card's cost, not what was paid (Preparation, Loatheb); the play event would need the paid cost.
+-- Gazlowe: whenever you cast a 1-mana spell (its cost when cast: Preparation, Sorcerer's Apprentice, Loatheb
+-- count), a random Mech into your hand.
 cards.GVG_117 = on_mine("play", function(g, me, ev)
-  if ev.kind == "spell" and g.info(ev.card).cost == 1 then
+  if ev.kind == "spell" and g.tag(ev.entity, "PLAYED_COST") == 1 then
     g.add_to_hand(g.ctrl(me), g.pick(minions_where(g, function(i)
       return i.race == "MECHANICAL"
     end)))

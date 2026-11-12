@@ -250,6 +250,9 @@
   },
   "DOUBLE_DEATHRATTLE": {
    "engine": "DOUBLE_ON_DEATH"
+  },
+  "PLAYED_COST": {
+   "engine": "PLAYED_COST"
   }
  },
  "modes": {

@@ -488,6 +488,9 @@ impl Game {
         let c = self.ctrl(e);
         let cost = self.cost(e);
         self.players[c].mana -= cost;
+        if let Some(t) = self.n().played_cost {
+            self.em(e).set_tag(t, cost);
+        }
         self.consume_cost_mods(e);
         self.players[c].hand.retain(|&x| x != e);
         let combo = self.combo_active(e);
