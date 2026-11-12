@@ -1,0 +1,30 @@
+{
+ "sets": {
+  "UNGORO": "Journey to Un'Goro"
+ },
+ "races": {
+  "ELEMENTAL": "Elemental"
+ },
+ "mechanics": {
+  "QUEST": {
+   "name": "Quest",
+   "tip": "Starts in your opening hand. Played, it waits beside your hero, in sight of both players, until its goal is met; then its Reward goes to your hand. One Quest at a time."
+  },
+  "UNTOUCHABLE": {
+   "name": "Dormant",
+   "tip": "Holds its place on the board but can't attack, be attacked, targeted or harmed, and doesn't count as a minion."
+  },
+  "ADAPT": {
+   "name": "Adapt",
+   "tip": "Choose one of three random upgrades: +3 Attack, +3 Health, +1/+1, Taunt, Divine Shield, Windfury, Poisonous, Stealth until your next turn, can't be targeted by spells or Hero Powers, or \"Deathrattle: Summon two 1/1 Plants.\""
+  }
+ },
+ "cards": {
+  "VAN_EX1_136": {
+   "text": "<b>Secret:</b> When a friendly minion dies, return it to life with 1 Health."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Battlecry:</b> Draw a Pirate from your deck."
+  }
+ }
+}

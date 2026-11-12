@@ -1,0 +1,30 @@
+{
+ "sets": {
+  "UNGORO": "Voyage au centre d'Un'Goro"
+ },
+ "races": {
+  "ELEMENTAL": "Élémentaire"
+ },
+ "mechanics": {
+  "QUEST": {
+   "name": "Quête",
+   "tip": "Commence dans votre main de départ. Jouée, elle attend à côté de votre héros, visible des deux joueurs, jusqu’à ce que son objectif soit atteint ; sa récompense arrive alors dans votre main. Une seule quête à la fois."
+  },
+  "UNTOUCHABLE": {
+   "name": "En sommeil",
+   "tip": "Occupe une place sur le plateau mais ne peut ni attaquer, ni être attaqué, ciblé ou blessé, et ne compte pas comme un serviteur."
+  },
+  "ADAPT": {
+   "name": "Adaptation",
+   "tip": "Choisissez une amélioration parmi trois au hasard : +3 en attaque, +3 PV, +1/+1, Provocation, Bouclier divin, Furie des vents, Toxicité, Camouflage jusqu’à votre prochain tour, ne peut pas être la cible de sorts ou de pouvoirs héroïques, ou « Râle d’agonie : invoque deux plantes 1/1 »."
+  }
+ },
+ "cards": {
+  "VAN_EX1_136": {
+   "text": "<b>Secret :</b> quand un serviteur allié meurt, il est ressuscité avec 1 PV."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Cri de guerre :</b> vous piochez un pirate de votre deck."
+  }
+ }
+}

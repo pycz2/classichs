@@ -1,0 +1,36 @@
+{
+ "sets": {
+  "UNGORO": "Reise nach Un'Goro"
+ },
+ "races": {
+  "ELEMENTAL": "Elementar"
+ },
+ "mechanics": {
+  "QUEST": {
+   "name": "Quest",
+   "tip": "Beginnt in Eurer Starthand. Ausgespielt wartet sie neben Eurem Helden, für beide Spieler sichtbar, bis ihr Ziel erreicht ist; dann kommt ihre Belohnung auf Eure Hand. Immer nur eine Quest."
+  },
+  "UNTOUCHABLE": {
+   "name": "Ruhend",
+   "tip": "Belegt einen Platz auf dem Schlachtfeld, kann aber weder angreifen noch angegriffen, anvisiert oder verletzt werden und zählt nicht als Diener."
+  },
+  "ADAPT": {
+   "name": "Mutieren",
+   "tip": "Wählt eine von drei zufälligen Verbesserungen: +3 Angriff, +3 Leben, +1/+1, Spott, Gottesschild, Windzorn, Giftig, Verstohlenheit bis zu Eurem nächsten Zug, kann nicht als Ziel von Zaubern oder Heldenfähigkeiten gewählt werden, oder „Todesröcheln: Ruft zwei Pflanzen (1/1) herbei.“"
+  }
+ },
+ "cards": {
+  "VAN_EX1_136": {
+   "text": "<b>Geheimnis:</b> Wenn ein befreundeter Diener stirbt, wird er mit 1 Leben wiederbelebt."
+  },
+  "VAN_EX1_539": {
+   "text": "Verursacht $3 Schaden. Verursacht statt[d]dessen $5 Schaden, wenn Ihr ein Wildtier kontrolliert."
+  },
+  "VAN_EX1_595": {
+   "text": "Zieht jedes Mal eine Karte, wenn ein anderer befreundeter Diener stirbt."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Kampfschrei:</b> Zieht einen Piraten aus Eurem Deck."
+  }
+ }
+}

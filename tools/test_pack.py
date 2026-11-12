@@ -631,6 +631,34 @@ class Chain(unittest.TestCase):
         self.assertIn("exactly", pack.deck_error(dict(deck, champion="HERO_08", cards=["CFM_621"]), cards, rules))
         self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
 
+    def test_journey_to_ungoro_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/ungoro")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/CFM_" in p or "/UNG_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/kara.lua", "scripts/msg.lua", "scripts/ungoro.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/ungoro"))
+        rules = json.loads(files["rules.json"])
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True,
+                                              "cost_in_order": True})
+        self.assertEqual((rules["player_hooks"], rules["mechanics"]["QUEST"], rules["mechanics"]["UNTOUCHABLE"]),
+                         ("player:ungoro", {"engine": "TASK"}, {"engine": "DORMANT"}))
+        self.assertIn("ELEMENTAL", rules["races"])
+        self.assertEqual([r["rank"] for r in rules["ranked"]["ranks"] if r.get("floor")], [20, 15, 10, 5])  # patch 7.1
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        ungoro = [c for c in cards.values() if c.get("set") == "UNGORO"]
+        self.assertEqual(len([c for c in ungoro if c.get("collectible")]), 135)
+        self.assertEqual(len([c for c in ungoro if "QUEST" in c.get("keywords", [])]), 9)
+        self.assertEqual((cards["VAN_EX1_298"]["race"], cards["CFM_325"]["health"], cards["KAR_063"]["cost"]),
+                         ("ELEMENTAL", 1, 2))
+        self.assertNotIn("race", cards["CFM_715"])  # Jade Spirit: an Elemental only from July 2017
+        en = json.loads(files["locales/en.json"])["cards"]
+        self.assertEqual(en["UNG_067"]["text"], "[x]<b>Quest:</b> Play four minions\nwith the same name.\n<b>Reward:</b> Crystal Core.")
+        self.assertIn("Poisonous", en["FP1_010"]["text"])  # Maexxna: the keyword since patch 7.1
+        self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
+
     def test_an_expansion_shows_the_texts_of_its_release_build(self):
         import extract_cards
         for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:

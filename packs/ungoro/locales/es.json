@@ -1,0 +1,36 @@
+{
+ "sets": {
+  "UNGORO": "Viaje a Un'Goro"
+ },
+ "races": {
+  "ELEMENTAL": "Elemental"
+ },
+ "mechanics": {
+  "QUEST": {
+   "name": "Misión",
+   "tip": "Empieza en tu mano inicial. Jugada, espera junto a tu héroe, a la vista de ambos jugadores, hasta cumplir su objetivo; entonces su recompensa va a tu mano. Una misión a la vez."
+  },
+  "UNTOUCHABLE": {
+   "name": "Latente",
+   "tip": "Ocupa un lugar en el tablero, pero no puede atacar, ser atacado, elegido como objetivo ni dañado, y no cuenta como esbirro."
+  },
+  "ADAPT": {
+   "name": "Adaptación",
+   "tip": "Elige una de tres mejoras al azar: +3 de ataque, +3 de salud, +1/+1, Provocar, Escudo divino, Viento furioso, Venenoso, Sigilo hasta tu siguiente turno, no puede ser objetivo de hechizos ni poderes de héroe, o «Último aliento: invoca dos plantas 1/1»."
+  }
+ },
+ "cards": {
+  "VAN_EX1_136": {
+   "text": "<b>Secreto:</b> Cuando\nun esbirro amistoso\nmuere, vuelve a la vida con 1 p. de salud."
+  },
+  "VAN_EX1_559": {
+   "text": "[x]Cada vez que\nlanzas un hechizo, añade\nun hechizo «Bola de Fuego»\na tu mano."
+  },
+  "VAN_EX1_625": {
+   "text": "Tu poder de héroe se convierte en «Inflige 2 p. de daño». Si ya estás en Forma de las Sombras: 3 p. de daño."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Grito de batalla:</b> Roba un pirata de tu mazo."
+  }
+ }
+}

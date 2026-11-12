@@ -1,0 +1,31 @@
+{
+ "about": "Journey to Un'Goro's interface (docs/packs/format.md, 'UI theme'): the jungle crater of Un'Goro — dark mossy panels like wet stone with amber rims, buttons of deep fern green that glow lava orange under the mouse, warm parchment text from the explorers' camp, the amber of fossil resin for headings, lava red for danger and the green of the giant ferns for confirmations, embers drifting up from the volcano over the menu; the title in Classic's Cinzel Decorative, in amber.",
+ "colors": {
+  "text": "f4ead2",
+  "muted": "b7c2a4",
+  "accent": "f0a531",
+  "table": "0b1209",
+  "panel": "15201af0",
+  "panel_border": "c27a26",
+  "backdrop": "1f3320",
+  "button": "254a2af0",
+  "button_hover": "316236",
+  "button_pressed": "1a3a1f",
+  "button_disabled": "1f2a20a6",
+  "button_border": "e8742a",
+  "button_text": "f6efdc",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "ffd8a8",
+  "button_text_disabled": "7f8a78",
+  "outline": "070a06",
+  "danger": "e2481f",
+  "ok": "7ccf4c"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 8, "border": 1, "glow": "e8742a33", "glow_size": 4, "glow_hover": "ff9a3c99", "glow_hover_size": 12},
+ "panel": {"radius": 10, "border": 2, "glow": "c27a2640", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "254a2a", "border": "f0a531", "text": "f6efdc", "ready": "b8561c", "ready_border": "ffc078"},
+ "mana": "5fb8ff",
+ "menu": {"shade": "0b120959", "particles": "embers"}
+}

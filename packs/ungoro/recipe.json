@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds Journey to Un'Goro 2017 (docs/packs/format.md, 'Build recipes'): on Mean Streets of Gadgetzan (base), so on One Night in Karazhan, Whispers of the Old Gods, The League of Explorers, The Grand Tournament, Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 135 cards of Journey to Un'Goro and their tokens as the release build 18336 has them (patch 8.0.0.18336 of 2017-04-04, two days before the release; data/ungoro_cards.json, tools/extract_cards.py --set ungoro) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/ungoro.lua, the keywords, the older cards that changed by then).",
+  "base": "../msg",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/ungoro_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/ungoro/cards.texts.json"
+      ]
+    }
+  ]
+}

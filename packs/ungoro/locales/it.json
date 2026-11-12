@@ -1,0 +1,45 @@
+{
+ "sets": {
+  "UNGORO": "Viaggio a Un'Goro"
+ },
+ "races": {
+  "ELEMENTAL": "Elementale"
+ },
+ "mechanics": {
+  "QUEST": {
+   "name": "Missione",
+   "tip": "Inizia nella tua mano iniziale. Giocata, attende accanto al tuo eroe, visibile a entrambi i giocatori, finché l’obiettivo non è raggiunto; poi la ricompensa va nella tua mano. Una missione alla volta."
+  },
+  "UNTOUCHABLE": {
+   "name": "Dormiente",
+   "tip": "Occupa un posto sul campo ma non può attaccare, essere attaccato, bersagliato o ferito, e non conta come servitore."
+  },
+  "ADAPT": {
+   "name": "Adattamento",
+   "tip": "Scegli uno di tre potenziamenti casuali: +3 Attacco, +3 Salute, +1/+1, Provocazione, Scudo Divino, Furia del Vento, Velenoso, Furtività fino al tuo prossimo turno, non può essere bersaglio di incantesimi o Poteri Eroe, oppure \"Rantolo di Morte: evoca due Piante 1/1\"."
+  }
+ },
+ "cards": {
+  "VAN_EX1_317": {
+   "text": "Pesca due Demoni dal tuo mazzo."
+  },
+  "VAN_EX1_339": {
+   "text": "Copia 2 carte dal mazzo dell'avversario e le mette nella tua mano."
+  },
+  "VAN_EX1_366": {
+   "text": "Dopo che è stato evocato un servitore sotto il tuo controllo, gli fornisce +1/+1, ma perde 1 Integrità."
+  },
+  "VAN_EX1_379": {
+   "text": "<b>Segreto:</b> dopo che l'avversario ha giocato un servitore, riduce la sua Salute a 1."
+  },
+  "VAN_EX1_609": {
+   "text": "<b>Segreto:</b> dopo che l'avversario ha giocato un servitore, questo subisce $4 danni."
+  },
+  "VAN_NEW1_010": {
+   "text": "<b>Provocazione</b>. <b>Scudo Divino</b>. <b>Furia del Vento</b>. <b>Carica</b>."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Grido di Battaglia:</b> pesca un Pirata dal tuo mazzo."
+  }
+ }
+}

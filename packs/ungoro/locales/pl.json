@@ -1,0 +1,30 @@
+{
+ "sets": {
+  "UNGORO": "Podróż do Un'Goro"
+ },
+ "races": {
+  "ELEMENTAL": "Żywiołak"
+ },
+ "mechanics": {
+  "QUEST": {
+   "name": "Zadanie",
+   "tip": "Zaczyna w ręce startowej. Zagrane czeka przy twoim bohaterze, widoczne dla obu graczy, aż cel zostanie osiągnięty; wtedy nagroda trafia do ręki. Jedno zadanie naraz."
+  },
+  "UNTOUCHABLE": {
+   "name": "Uśpiony",
+   "tip": "Zajmuje miejsce na planszy, ale nie atakuje, nie może być atakowany, wybrany na cel ani raniony i nie liczy się jako stronnik."
+  },
+  "ADAPT": {
+   "name": "Adaptacja",
+   "tip": "Wybierz jedno z trzech losowych ulepszeń: +3 do ataku, +3 do zdrowia, +1/+1, Prowokacja, Boska tarcza, Furia wichru, Jadowitość, Ukrycie do twojej następnej tury, nie może być celem zaklęć ani mocy bohatera albo „Agonia: przyzwij dwie rośliny 1/1”."
+  }
+ },
+ "cards": {
+  "VAN_EX1_136": {
+   "text": "<b>Sekret:</b> Gdy zginie przyjazny stronnik, przywróć go do życia z 1 pkt. zdrowia."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Okrzyk bojowy:</b> Dobierz Pirata z twojej talii."
+  }
+ }
+}

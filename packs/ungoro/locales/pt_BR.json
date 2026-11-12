@@ -1,0 +1,30 @@
+{
+ "sets": {
+  "UNGORO": "Jornada a Un'Goro"
+ },
+ "races": {
+  "ELEMENTAL": "Elemental"
+ },
+ "mechanics": {
+  "QUEST": {
+   "name": "Missão",
+   "tip": "Começa na sua mão inicial. Jogada, espera ao lado do seu herói, à vista dos dois jogadores, até cumprir o objetivo; então a recompensa vai para a sua mão. Uma missão por vez."
+  },
+  "UNTOUCHABLE": {
+   "name": "Dormente",
+   "tip": "Ocupa um lugar no campo, mas não pode atacar, ser atacado, alvejado nem ferido, e não conta como lacaio."
+  },
+  "ADAPT": {
+   "name": "Adaptar",
+   "tip": "Escolha uma de três melhorias aleatórias: +3 de Ataque, +3 de Vida, +1/+1, Provocar, Escudo Divino, Fúria dos Ventos, Venenoso, Furtividade até o seu próximo turno, não pode ser alvo de feitiços nem Poderes Heroicos, ou \"Último Suspiro: Evoque duas Plantas 1/1\"."
+  }
+ },
+ "cards": {
+  "VAN_EX1_136": {
+   "text": "<b>Segredo:</b> Quando um lacaio aliado morrer, reviva-o com 1 de Vida."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Grito de Guerra:</b> Compre um Pirata do seu deck."
+  }
+ }
+}
