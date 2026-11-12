@@ -891,5 +891,10 @@
 "You draw %s: it casts itself": "Você compra %s e a carta se conjura sozinha",
 "Opponent draws %s: it casts itself": "O oponente compra %s e a carta se conjura sozinha",
 "%d cards are shuffled into your deck": "%d cartas são embaralhadas no seu deck",
-"%d cards are shuffled into Opponent's deck": "%d cartas são embaralhadas no deck do oponente"
+"%d cards are shuffled into Opponent's deck": "%d cartas são embaralhadas no deck do oponente",
+"You reveal %s": "Você revela %s",
+"Opponent reveals %s": "O oponente revela %s",
+"%s awakens": "%s desperta",
+"%s is removed from your hand": "%s é removido da sua mão",
+"%s is removed from Opponent's hand": "%s é removido da mão do oponente"
 }

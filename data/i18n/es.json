@@ -891,5 +891,10 @@
 "You draw %s: it casts itself": "Robas %s y la carta se lanza sola",
 "Opponent draws %s: it casts itself": "El oponente roba %s y la carta se lanza sola",
 "%d cards are shuffled into your deck": "Se barajan %d cartas en tu mazo",
-"%d cards are shuffled into Opponent's deck": "Se barajan %d cartas en el mazo del oponente"
+"%d cards are shuffled into Opponent's deck": "Se barajan %d cartas en el mazo del oponente",
+"You reveal %s": "Revelas %s",
+"Opponent reveals %s": "El oponente revela %s",
+"%s awakens": "%s despierta",
+"%s is removed from your hand": "%s se retira de tu mano",
+"%s is removed from Opponent's hand": "%s se retira de la mano del oponente"
 }

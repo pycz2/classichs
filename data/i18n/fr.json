@@ -891,5 +891,10 @@
 "You draw %s: it casts itself": "Vous piochez %s, la carte se lance d'elle-même",
 "Opponent draws %s: it casts itself": "L'adversaire pioche %s, la carte se lance d'elle-même",
 "%d cards are shuffled into your deck": "%d cartes sont mélangées dans votre deck",
-"%d cards are shuffled into Opponent's deck": "%d cartes sont mélangées dans le deck de l'adversaire"
+"%d cards are shuffled into Opponent's deck": "%d cartes sont mélangées dans le deck de l'adversaire",
+"You reveal %s": "Vous révélez %s",
+"Opponent reveals %s": "L'adversaire révèle %s",
+"%s awakens": "%s se réveille",
+"%s is removed from your hand": "%s est retiré de votre main",
+"%s is removed from Opponent's hand": "%s est retiré de la main de l'adversaire"
 }

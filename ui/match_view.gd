@@ -1814,6 +1814,8 @@ static func steps(events: Array, aimed := -1) -> Array:
 				k = "secret"
 			"cast_when_drawn":  # from the deck to where played cards show, for both players, as a spell played
 				k = "topdeck"
+			"reveal":  # a deck's card shown to both players, staying where it is (Seeping Oozeling, Dragon's Fury)
+				k = "reveal"
 			"joust":
 				k = "joust"
 			"after_spell":
@@ -2023,8 +2025,9 @@ func _play_step(st: Dictionary) -> void:
 			_step_apply(st)
 			_step_sounds(st)
 			await _wait(0.2)
-		"secret", "quest":
-			await _reveal(ev.card)  # (the card itself shows big: no hint over the board; a Quest fulfilled too)
+		"secret", "quest", "reveal":
+			if str(ev.card) != "":
+				await _reveal(ev.card)  # (the card itself shows big: no hint over the board; a Quest fulfilled; a deck's card shown)
 			_step_apply(st)
 		"joust":
 			await _joust(ev)

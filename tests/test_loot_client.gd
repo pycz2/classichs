@@ -72,6 +72,11 @@ func test_history_lines_of_the_new_events() -> void:
 	swap.append({"type": "to_deck", "player": 0, "entity": 60, "card": "", "by": YETI, "by_id": 7})
 	eq(rows.call(swap, 0), ["3 cards are shuffled into Opponent's deck", "A card is shuffled into your deck"],
 		"King Togwaggle's swap: one row per deck")
+	eq(rows.call([{"type": "reveal", "player": 1, "card": YETI}], 0), ["Opponent reveals Chillwind Yeti"], "Spiteful Summoner")
+	eq(rows.call([{"type": "reveal", "player": 1, "entity": 30, "card": ""}], 0), [], "a reveal the view hides: no line")
+	eq(rows.call([{"type": "awaken", "player": 1, "entity": 30, "card": DARK}], 0), ["The Darkness awakens"], "The Darkness")
+	eq(rows.call([{"type": "removed_from_hand", "player": 0, "entity": yeti, "card": YETI}], 0),
+		["Chillwind Yeti is removed from your hand"], "Unstable Evolution")
 	_remove_cards()
 
 

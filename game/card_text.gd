@@ -102,6 +102,7 @@ static func raw(id: String, locale := "", args := []) -> String:
 	var t: Dictionary = CardDb.card(id).get("text", {})
 	var s: String = t.get(_loc(locale), t.get("enUS", ""))
 	s = s.replace("@<i>", "<i>")  # a placeholder, not a variant: a Lesser Spellstone's upgrade hint (removed in patch 17.4.1)
+	s = s.replace("[d]", "")  # Hearthstone's hyphenation point in long German words ("Helden[d]fähigkeiten")
 	if s.contains("@"):  # Hearthstone's text variants ("a@b@c": Fatespinner in play): the first, the one both players
 		# see, or the one args name ["@1"] (its Choose One option, which only its player knows)
 		var v := int(str(args[0]).substr(1)) if args.size() == 1 and str(args[0]).begins_with("@") else 0
