@@ -109,3 +109,22 @@ func test_effects_hide_the_opponents_draws() -> void:
 	H.play(m, m.game.players[1].hand[0])
 	eq(_fx(m.game, 0), ["||Opponent draws a card", "||Opponent draws a card"], "hidden from me")
 	eq(_fx(m.game, 1), ["|Wisp|Drawn", "|Wisp|Drawn"], "shown to the one who draws")
+
+
+func test_whispers_of_the_old_gods_events() -> void:
+	var m := H.game([H.WISP])
+	var g := m.game
+	var line := func(ev: Dictionary, viewer: int) -> String: return HistoryText.event_lines(ev, g, viewer, "en")[0]
+	var cthun := {"type": "cthun", "player": 0, "atk": 10, "health": 12}
+	eq(line.call(cthun, 0), "Your C'Thun is now 10/12", "a ritual")
+	eq(line.call(cthun, 1), "Opponent's C'Thun is now 10/12", "both players see it")
+	eq(line.call({"type": "fizzle", "player": 0, "entity": -1, "card": "VAN_CS2_029"}, 0), "Fireball fizzles", "no target")
+	var hero: int = g.players[0].hero.id
+	eq(line.call({"type": "cast", "random": true, "player": 0, "by_id": hero, "card": "VAN_CS2_029", "target": hero}, 0),
+		"Jaina Proudmoore casts Fireball on Jaina Proudmoore", "Yogg-Saron's spell")
+	var wisp: int = g.players[0].hand[0].id
+	var shift := {"type": "transform", "from": wisp, "entity": wisp, "player": 0, "card": "VAN_CS2_182"}
+	eq(line.call(shift, 0), "Your Wisp becomes Chillwind Yeti", "a card in the hand changes")
+	eq(line.call(shift.merged({"card": ""}, true), 1), "A card of Opponent's changes", "hidden from the opponent")
+	eq(line.call({"type": "to_hand", "player": 0, "entity": wisp, "card": "VAN_CS2_231"}, 0), "Wisp is put into your hand", "")
+	eq(line.call({"type": "to_hand", "player": 0, "entity": wisp, "card": ""}, 1), "A card is put into Opponent's hand", "")

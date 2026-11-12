@@ -105,17 +105,26 @@ BRM_TOKENS = "BRM_006t BRM_010a BRM_010b BRM_010t BRM_010t2 BRM_022t BRM_027h BR
 LOE_TOKENS = """LOE_002t LOE_007t LOE_009t LOE_019t LOE_019t2 LOE_089t LOE_089t2 LOE_089t3 LOE_110t LOE_115a LOE_115b
 LOEA16_3 LOEA16_4 LOEA16_5 LOEA16_5t""".split()
 
+## Whispers of the Old Gods' tokens at its release (build 12574, patch 5.0.0.12574 of 2016-04-24, two days before the
+## release): the Choose One options, the Toxins, the Tentacles, Slimes, Wisps, the Ancient One, Vek'nilash, the Tidal Hand
+## and its Murloc, and Fandral Staghelm's combined forms (OG_044a-c, in older sets' data). Not OG_279 (C'Thun's stand-in
+## for the corner portrait) nor OG_270a (a Nerubian Soldier no card makes).
+OG_TOKENS = """OG_006a OG_006b OG_031a OG_044a OG_044b OG_044c OG_047a OG_047b OG_058 OG_061t OG_080b OG_080c OG_080d OG_080e
+OG_080f OG_114a OG_156a OG_173a OG_195a OG_195b OG_195c OG_202a OG_202b OG_202c OG_216a OG_241a OG_249a OG_272t OG_314b
+OG_318t OG_319""".split()
+
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574}
 ## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
 ## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
 ## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
 ## (dbfId, elite, the TRIGGER_VISUAL mark; referencedTags where the English text is unchanged). The League of
 ## Explorers too: today's data changed a third of it (Naga Sea Witch 8 mana, Keeper of Uldaman 3, Tomb Pillager 6/4,
 ## Ancient Curse "Casts When Drawn", tribes added later…).
-FROM_RELEASE = {"tgt", "loe"}
+## Whispers of the Old Gods too: C'Thun and its cards, Cho'gall, Usher of Souls, Addled Grizzly, Hallazeal… changed later.
+FROM_RELEASE = {"tgt", "loe", "og"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 
 
@@ -168,7 +177,7 @@ SETS = {
     "brm": ("BRM", ["BRM_"], BRM_TOKENS),
     "tgt": ("TGT", ["AT_"], None),
     "loe": ("LOE", ["LOE_", "LOEA"], LOE_TOKENS),  # (LOEA10_3: Murloc Tinyfin; LOEA16_*: the Artifacts)
-    "og": ("OG", ["OG_"], None),
+    "og": ("OG", ["OG_"], OG_TOKENS),
     "kara": ("KARA", ["KAR_"], None),
     "msg": ("GANGS", ["CFM_"], None),
     "ungoro": ("UNGORO", ["UNG_"], None),

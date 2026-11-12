@@ -2,6 +2,15 @@ extends SceneTree
 ## Plays every card test (data/card_tests) and lists those that fail, then how many
 ## cards have tests. Usage: godot --headless --path . --script res://tools/check_card_tests.gd [-- <pack id>]
 ## A built-in pack's id (naxx-2014) plays the tests of that pack's cards (this run only: not saved).
+## TEST_USER_DIR (a folder under the data dir, as tests/run.gd takes it) keeps user:// apart from the game's.
+
+
+func _init() -> void:
+	var own := OS.get_environment("TEST_USER_DIR")
+	if own != "":
+		ProjectSettings.set_setting("application/config/use_custom_user_dir", true)
+		ProjectSettings.set_setting("application/config/custom_user_dir_name", own)
+		DirAccess.make_dir_recursive_absolute(OS.get_user_data_dir())
 
 
 func _process(_d: float) -> bool:

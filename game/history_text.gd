@@ -105,7 +105,12 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 		"destroy":
 			s = _t("%s is destroyed") % n.call(ev.target)
 		"transform":
-			s = _t("%s becomes %s") % [n.call(ev.from), CardText.name(ev.card, loc)]
+			if not ev.has("entity"):
+				s = _t("%s becomes %s") % [n.call(ev.from), CardText.name(ev.card, loc)]
+			elif _you(p, viewer):  # a card in the hand or the deck (Shifter Zerus): only its owner sees it
+				s = _t("Your %s becomes %s") % [n.call(ev.from), CardText.name(ev.card, loc)]
+			else:
+				s = _t("A card of Opponent's changes")
 		"return_to_hand":
 			s = _t("%s returns to its owner's hand") % n.call(ev.entity)
 		"take_control":
@@ -138,7 +143,19 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 		"choice":
 			s = _say(p, viewer, "You choose a card", "Opponent chooses a card", [])
 		"cast":
-			s = _t("A copy of %s is cast on %s") % [CardText.name(ev.card, loc), n.call(ev.target)]
+			if ev.get("random", false):  # Yogg-Saron: a spell cast with random targets and choices
+				s = _t("%s casts %s") % [n.call(ev.get("by_id", -1)), CardText.name(ev.card, loc)]
+				if ev.get("target", -1) >= 0:
+					s += " " + _t("on %s") % n.call(ev.target)
+			else:
+				s = _t("A copy of %s is cast on %s") % [CardText.name(ev.card, loc), n.call(ev.target)]
+		"fizzle":
+			s = _t("%s fizzles") % CardText.name(ev.card, loc)
+		"cthun":
+			s = _say(p, viewer, "Your C'Thun is now %d/%d", "Opponent's C'Thun is now %d/%d", [ev.atk, ev.health])
+		"to_hand":
+			s = _t("%s is put into your hand") % CardText.name(ev.card, loc) if _you(p, viewer) \
+				else _t("A card is put into Opponent's hand")
 		"choice_cancelled":
 			s = _t("The choice is cancelled: no options left")
 		"mana":
@@ -249,7 +266,8 @@ static func _effect(ev: Dictionary, g: GameView, viewer: int, loc: String, main:
 		"equip":
 			return row.call(g.hero(ev.player).id, _t("Equips %s") % _name(g, ev.entity, loc), "good")
 		"transform":
-			return row.call(ev.from, _t("Becomes %s") % CardText.name(ev.card, loc))
+			if not ev.has("entity"):
+				return row.call(ev.from, _t("Becomes %s") % CardText.name(ev.card, loc))
 		"return_to_hand":
 			return row.call(ev.entity, _t("Returned to hand"))
 		"take_control":
