@@ -1,0 +1,85 @@
+{
+  "about": "Shots of Kobolds & Catacombs for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps), the shots the distributed pack repeats.",
+  "tab": "ROGUE",
+  "signature": ["LOOT_542", "LOOT_541", "LOOT_043"],
+  "scenes": [
+    {
+      "name": "spellstone",
+      "caption": {"ru": "Обереги: сыграны два элементаля, и «Оберег: малый рубин» в руке стал «Оберегом: рубин» (даёт уже два заклинания). У героя легендарное оружие Алунет с золотой каймой", "en": "Spellstones: two Elementals played, and the Lesser Ruby Spellstone in hand became a Ruby Spellstone (two spells now). The hero holds Aluneth, a legendary weapon with a golden rim"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_08", "mana": 10, "max_mana": 10, "damage": 9, "weapon": "LOOT_108",
+         "hand": ["LOOT_117", "UNG_809", "LOOT_103", "LOOT_172", "LOOT_101"],
+         "board": ["LOOT_537", "LOOT_231"],
+         "deck": ["VAN_CS2_029", "VAN_CS2_029", "VAN_CS2_029", "VAN_CS2_029"]},
+        {"hero": "HERO_07", "max_mana": 9, "damage": 7,
+         "board": ["LOOT_368", "LOOT_013", "LOOT_306"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 3}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
+    },
+    {
+      "name": "recruit",
+      "caption": {"ru": "Вербовка: Бедоруб ударил героя противника и завербовал существо из колоды, «Всей группой!» завербовал ещё одно. «Блок щитом» вытянул Неопознанный щит, и тот при взятии стал «Крепким щитом +10»", "en": "Recruit: Woecleaver hit the enemy hero and Recruited a minion from the deck, Gather Your Party Recruited another. Shield Block drew the Unidentified Shield, revealed as Tower Shield +10"},
+      "scene": {"current": 0, "turn": 10, "players": [
+        {"hero": "HERO_01", "mana": 10, "max_mana": 10, "damage": 12, "armor": 3, "weapon": "LOOT_380",
+         "hand": ["VAN_EX1_606", "LOOT_370"],
+         "board": ["LOOT_041", "LOOT_367"],
+         "deck": ["LOOT_365", "LOOT_519", "LOOT_383", "LOOT_153", "LOOT_285"]},
+        {"hero": "HERO_06", "max_mana": 10, "damage": 9,
+         "board": ["LOOT_329", "LOOT_056", "LOOT_351"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "hero"}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
+    },
+    {
+      "name": "darkness",
+      "caption": {"ru": "Тьма (20/20) в спячке и замешала три Свечи Тьмы в колоду противника: когда он вытянет все, она проснётся. Марин Лис дал противнику Большой сундук (0/8), кто его сломает, получит сокровище", "en": "The Darkness (20/20) lies Dormant and shuffled three Darkness Candles into the enemy deck: it wakes when they are all drawn. Marin the Fox gave the opponent a Master Chest (0/8) that gives a treasure when broken"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_09", "mana": 20, "max_mana": 9, "damage": 10,
+         "hand": ["LOOT_526", "LOOT_357", "LOOT_278"],
+         "board": ["LOOT_528", "LOOT_534"],
+         "deck": ["VAN_CS2_235", "VAN_CS2_235", "VAN_CS2_235", "VAN_CS2_235"]},
+        {"hero": "HERO_02", "max_mana": 9, "damage": 6,
+         "board": ["LOOT_518", "LOOT_517"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 3}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 2},
+      "history": 1
+    },
+    {
+      "name": "kingsbane",
+      "caption": {"ru": "Погибель королей: со «Смертоносным ядом» оружие сломалось о героя, вернулось в колоду со всеми усилениями, было взято и надето снова уже 3/3. У легендарного оружия золотая кайма", "en": "Kingsbane: with Deadly Poison it broke on the enemy hero, went back into the deck with its buffs, was drawn and equipped again as a 3/3. A legendary weapon has a golden rim"},
+      "scene": {"current": 0, "turn": 8, "players": [
+        {"hero": "HERO_03", "mana": 10, "max_mana": 9, "damage": 8,
+         "weapon": {"card": "LOOT_542", "durability": 1},
+         "hand": ["VAN_CS2_074", "LOOT_204", "LOOT_214"],
+         "board": ["LOOT_165", "LOOT_026", "LOOT_211"],
+         "deck": []},
+        {"hero": "HERO_08", "max_mana": 9, "damage": 5,
+         "board": ["LOOT_170", "LOOT_231"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "hero"}},
+        {"do": "end_turn"},
+        {"do": "end_turn"},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 2}}
+      ],
+      "hover": {"side": 0, "zone": "weapon"},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_LOOT_542", "kingsbane"]
+}
