@@ -25,6 +25,8 @@ const CLASSES: [&str; 9] = ["MAGE", "WARRIOR", "HUNTER", "PRIEST", "ROGUE", "SHA
 
 async fn server_on(path: &str) -> (SocketAddr, AppRef) {
     let _ = tracing_subscriber::fmt().with_env_filter(tracing_subscriber::EnvFilter::from_default_env()).with_test_writer().try_init();
+    // the tournament bots keep their human pace, a hundred times shorter (a loaded machine timed a bot game out)
+    classichs_server::bots::runtime::PACE_PCT.store(1, std::sync::atomic::Ordering::Relaxed);
     let store = Storage::dir(&std::env::temp_dir().join(format!("chs-test-{}", rand::random::<u64>()))).unwrap();
     let app = App::new(db::open(path).await.unwrap(), false, Some(Timers::default()), store);
     spawn_background(app.clone());
