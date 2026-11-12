@@ -134,6 +134,7 @@ var _hold := {}  # id -> true: views an animation moves (the layout leaves them 
 var _mull_wait := -1  # the player whose mulligan overlay waits for the new cards
 ## A card that changed its id in place (bounced, transformed): new id -> where it stood.
 var _moved := {}
+var _from_deck := {}  # the batch's minions summoned out of a deck (_begin_batch)
 var _quiet := {}
 var _names: Array[Label] = []
 var _hint: Label
@@ -1706,6 +1707,13 @@ func _begin_batch(item: Dictionary) -> void:
 		st.hand.append(ids.call(pl.hand))
 		st.secrets.append(ids.call(pl.secrets))
 		st.weapon.append(pl.weapon.id if pl.weapon else -1)
+	_from_deck = {}  # minions summoned out of a deck (Recruit, Deathlord): cards the table did not show (or showed in a deck)
+	var known := int(g.snapshot.get("next_id", 0))
+	for ev in item.events:
+		if ev.type == "summon":
+			var was := g.ent(int(ev.entity))
+			if (was == null and int(ev.entity) < known) or (was != null and was.zone == "DECK"):
+				_from_deck[int(ev.entity)] = true
 	_show(item.snap, item.hist)
 	_stage = st
 	_stage_events = item.events
@@ -1740,10 +1748,12 @@ static func steps(events: Array, aimed := -1) -> Array:
 	var aims := {}  # a minion played with a target: it aims once it stands on the board
 	var secrets := {}  # Secrets (and Quests) played: they go up to the hero when their spell is done
 	var extra := false  # an extra turn begins (Time Warp): its turn step says so
-	var bounced := {}  # the cards a bounce makes (the bounce step brings them in)
+	var bounced := {}  # the cards a bounce makes (the bounce step brings them in); cards cast when drawn (their own step)
 	for ev in events:
 		if ev.type == "return_to_hand":
 			bounced[ev.get("new", -1)] = true
+		elif ev.type == "cast_when_drawn":
+			bounced[ev.entity] = true
 	var power: int = events.find_custom(func(e): return e.type == "hero_power")
 	if power >= 0:  # its effects come before it in the events
 		out.append({"k": "power", "evs": [events[power]], "at": -1})
@@ -1802,6 +1812,10 @@ static func steps(events: Array, aimed := -1) -> Array:
 				k = "equip"
 			"secret_revealed":
 				k = "secret"
+			"cast_when_drawn":  # from the deck to where played cards show, for both players, as a spell played
+				k = "topdeck"
+			"reveal":  # a deck's card shown to both players, staying where it is (Seeping Oozeling, Dragon's Fury)
+				k = "reveal"
 			"joust":
 				k = "joust"
 			"after_spell":
@@ -1889,7 +1903,7 @@ static func _one_by_one(ev: Dictionary) -> bool:
 func _play_step(st: Dictionary) -> void:
 	var ev: Dictionary = st.evs[0] if not st.evs.is_empty() else {}
 	match st.k:
-		"play":
+		"play", "topdeck":
 			await _show_played(st)
 		"aim":
 			await _aim(st)
@@ -1942,6 +1956,8 @@ func _play_step(st: Dictionary) -> void:
 				if cv:
 					landing[e.entity] = cv
 					_flying.erase(e.entity)
+				elif _from_deck.has(e.entity):  # recruited: it comes out of its player's deck
+					_moved[e.entity] = _piles[0 if e.player == viewer() else 1].top()
 			_step_apply(st)
 			_step_sounds(st)
 			if not landing.is_empty():
@@ -2009,8 +2025,9 @@ func _play_step(st: Dictionary) -> void:
 			_step_apply(st)
 			_step_sounds(st)
 			await _wait(0.2)
-		"secret", "quest":
-			await _reveal(ev.card)  # (the card itself shows big: no hint over the board; a Quest fulfilled too)
+		"secret", "quest", "reveal":
+			if str(ev.card) != "":
+				await _reveal(ev.card)  # (the card itself shows big: no hint over the board; a Quest fulfilled; a deck's card shown)
 			_step_apply(st)
 		"joust":
 			await _joust(ev)
@@ -2091,12 +2108,14 @@ func _step_apply(st: Dictionary) -> Dictionary:
 					_stage.board[p].erase(ev.entity)
 				moved = true
 			"transform":
+				var to: int = ev.get("to", ev.get("entity", -1))  # (a card in the hand: `entity`, a Spellstone upgrading)
 				for p in 2:
-					var k: int = _stage.board[p].find(ev.from)
-					if k >= 0:
-						_stage.board[p][k] = ev.to
+					for list in [_stage.board[p], _stage.hand[p]]:
+						var k: int = list.find(ev.from)
+						if k >= 0:
+							list[k] = to
 				if _views.has(ev.from):
-					_moved[ev.to] = _center_of(ev.from)
+					_moved[to] = _center_of(ev.from)
 					_quiet[ev.from] = true
 				moved = true
 			"equip":
@@ -2233,7 +2252,7 @@ func _hit(st: Dictionary) -> void:
 		await _wait(0.3)
 	for ev in st.evs:  # a transform's smoke, a destroy mark where the minion stood
 		var t := _target_id(ev)
-		if _views.has(t) and ev.type in ["transform", "destroy", "take_control"]:
+		if _views.has(t) and ev.type in ["transform", "destroy", "take_control"] and ev.get("card", "?") != "":  # (not on a hidden card)
 			TableFx.spawn(_fx, {"transform": "smoke", "destroy": "destroy", "take_control": "control"}[ev.type], _center_of(t))
 	_step_fx(st, _step_apply(st))
 	await _wait(0.25 if st.evs.size() == 1 and st.evs[0].type == "damage" and _one_by_one(st.evs[0]) else 0.3)
@@ -2684,7 +2703,7 @@ func _show_played(st: Dictionary) -> void:
 	cv.pivot_offset = cv.size / 2.0
 	cv.z_index = 60
 	cv.face_up = own and not hidden
-	var start := Vector2(640, 700 if own else 20)
+	var start := Vector2(640, 700 if own else 20) if st.k == "play" else _piles[0 if own else 1].top()  # (cast when drawn)
 	var s0 := 0.6
 	var rot := 0.0
 	if hv:
@@ -3016,7 +3035,7 @@ func _effects_now(events: Array) -> void:
 		if ev.type == "add_to_hand" and _views.has(ev.get("by_id", -1)) and not _views.has(ev.entity) and not _moved.has(ev.entity):
 			_moved[ev.entity] = _center_of(ev.by_id)
 	for ev in events:  # the new card takes the old one's place instead of dying and arriving
-		var pair: Array = {"return_to_hand": [ev.get("entity", -1), ev.get("new", -1)], "transform": [ev.get("from", -1), ev.get("to", -1)]}.get(ev.type, [])
+		var pair: Array = {"return_to_hand": [ev.get("entity", -1), ev.get("new", -1)], "transform": [ev.get("from", -1), ev.get("to", ev.get("entity", -1))]}.get(ev.type, [])
 		if not pair.is_empty() and _views.has(pair[0]):
 			_moved[pair[1]] = _center_of(pair[0])
 			_quiet[pair[0]] = true

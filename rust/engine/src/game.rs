@@ -780,9 +780,10 @@ impl Game {
             h.spell
         };
         if let Some(f) = f {
-            // DOUBLE_ON_PLAY (Brann Bronzebeard, in play as the Battlecry starts): a Battlecry (not a Combo, not a
-            // Choose One) runs twice, on the same target, with no death phase between
-            let twice = battlecry && self.e(self.hero(self.ctrl(e))).aura.tags.contains_key(self.n().double_on_play);
+            // DOUBLE_ON_PLAY (Brann Bronzebeard, in play as the Battlecry starts; or the champion's own tag, a script's:
+            // Murmuring Elemental's "your next Battlecry"): a Battlecry (not a Combo, not a Choose One) runs twice, on the
+            // same target, with no death phase between
+            let twice = battlecry && self.e(self.hero(self.ctrl(e))).has(self.n().double_on_play);
             for i in 0..1 + twice as usize {
                 if i > 0 && self.game_over {
                     break;
@@ -819,6 +820,8 @@ impl Game {
 
     fn play_spell(&mut self, e: Id, t: Id, choice: i64, combo: bool) {
         let c = self.ctrl(e);
+        // behaviour.after_spell_from_before: only what was in play before it hears its `after_spell` (patch 9.2)
+        let since = self.next_order;
         let card = self.e(e).card_id;
         let (is_trap, is_task) = (self.e(e).card.trap, self.e(e).card.task);
         self.em(e).zone = "SETASIDE";
@@ -850,7 +853,7 @@ impl Game {
                 }
             }
             if !(countered && self.rs.countered_no_after_spell) {
-                self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
+                self.emit_after_spell(e, c, card, since);
             }
             return;
         }
@@ -864,8 +867,19 @@ impl Game {
         }
         self.em(e).zone = "GRAVEYARD";
         if !self.game_over && !(countered && self.rs.countered_no_after_spell) {
-            self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
+            self.emit_after_spell(e, c, card, since);
         }
+    }
+
+    /// The `after_spell` event of spell e of player c; with `behaviour.after_spell_from_before` it carries `since` (the
+    /// play order the spell was played at): what came into play during it does not hear it (patch 9.2.0.21517: Wild
+    /// Pyromancer summoned by Mindgames).
+    fn emit_after_spell(&mut self, e: Id, c: usize, card: &'static str, since: i64) {
+        let mut ev = obj!{"type": "after_spell", "entity": e, "player": c, "card": card};
+        if self.rs.after_spell_from_before {
+            ev.insert("since", since);
+        }
+        self.emit(ev);
     }
 
     fn play_weapon(&mut self, e: Id, t: Id, combo: bool) {

@@ -29,6 +29,13 @@ static func _name(g: GameView, id: int, loc: String) -> String:
 	return CardText.name(e.card_id, loc) if e else "?"
 
 
+## The card a to_deck event names: its own, or the one whose effect shuffles itself back (Kingsbane's Deathrattle: it
+## was in sight of both); "" = hidden.
+static func _deck_card(ev: Dictionary) -> String:
+	var c := str(ev.get("card", ""))
+	return c if c != "" or int(ev.get("by_id", -1)) != int(ev.get("entity", -2)) else str(ev.get("by", ""))
+
+
 ## Lines for one history entry ({"turn", "player", "action", "events"}).
 static func lines(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Array[String]:
 	var out: Array[String] = []
@@ -42,7 +49,17 @@ static func rows(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Arra
 	var out: Array = []
 	var played := {}
 	var chosen: bool = entry.action.get("type", "") == "choose"
+	var run := {}  # hidden cards shuffled into one deck one after another (King Togwaggle's swap): one row
+	var cast: Array = entry.events.filter(func(e): return e.type == "cast_when_drawn").map(func(e): return e.entity)
 	for ev: Dictionary in entry.events:
+		if ev.type == "draw" and cast.has(ev.entity):
+			continue  # (its own line says it: drawn and cast)
+		if ev.type == "to_deck" and _deck_card(ev) == "":
+			if run.get("player") == ev.player and run.row == out.size() - 1:
+				run.n += 1
+				out[run.row].text = _say(ev.player, viewer, "%d cards are shuffled into your deck", "%d cards are shuffled into Opponent's deck", [run.n])
+				continue
+			run = {"player": ev.player, "row": out.size(), "n": 1}
 		if ev.type == "play":
 			played[ev.entity] = true
 		if ev.type == "summon" and played.has(ev.entity):
@@ -81,7 +98,10 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 				if ev.get("target", -1) >= 0:
 					s += " " + _t("on %s") % n.call(ev.target)
 		"summon":
-			s = _t("%s is summoned") % n.call(ev.entity)
+			if CardDb.has(str(ev.get("by", ""))) and CardDb.card(ev.by).get("referencedTags", []).has("SUMMON_FROM_DECK"):  # Recruit
+				s = _say(p, viewer, "%s is summoned from your deck", "%s is summoned from Opponent's deck", [n.call(ev.entity)])
+			else:
+				s = _t("%s is summoned") % n.call(ev.entity)
 		"attack":
 			s = _t("%s attacks %s") % [n.call(ev.attacker), n.call(ev.defender)]
 		"damage":
@@ -147,6 +167,22 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 				s = _say(p, viewer, "A card is shuffled into your deck", "A card is shuffled into Opponent's deck", [])
 			else:
 				s = _say(p, viewer, "%s is shuffled into your deck", "%s is shuffled into Opponent's deck", [CardText.name(ev.card, loc)])
+		"to_deck":  # a card shuffled back (Kingsbane) or into the other deck (King Togwaggle): hidden in a deck
+			var c := _deck_card(ev)
+			if c == "":
+				s = _say(p, viewer, "A card is shuffled into your deck", "A card is shuffled into Opponent's deck", [])
+			else:
+				s = _say(p, viewer, "%s is shuffled into your deck", "%s is shuffled into Opponent's deck", [CardText.name(c, loc)])
+		"cast_when_drawn":  # (Spider Ambush!, Darkness Candle): both players see it
+			s = _say(p, viewer, "You draw %s: it casts itself", "Opponent draws %s: it casts itself", [CardText.name(ev.card, loc)])
+		"awaken":  # a Dormant minion wakes up (The Darkness, its candles snuffed)
+			s = _t("%s awakens") % CardText.name(ev.card, loc)
+		"removed_from_hand":  # (Unstable Evolution at the end of the turn); no line if the view hides it
+			if str(ev.get("card", "")) != "":
+				s = _say(p, viewer, "%s is removed from your hand", "%s is removed from Opponent's hand", [CardText.name(ev.card, loc)])
+		"reveal":  # a deck's card shown to both players (Seeping Oozeling, Dragon's Fury); no line if the view hides it
+			if str(ev.get("card", "")) != "":
+				s = _say(p, viewer, "You reveal %s", "Opponent reveals %s", [CardText.name(ev.card, loc)])
 		"hero_power":
 			s = _say(p, viewer, "You use %s", "Opponent uses %s", [n.call(ev.entity)])
 			if ev.get("target", -1) >= 0:

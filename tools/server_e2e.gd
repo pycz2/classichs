@@ -21,6 +21,16 @@ var stamp := str(int(Time.get_unix_time_from_system())).right(6)
 var pack: Pack
 
 
+## TEST_USER_DIR (a folder under the data dir, as tests/run.gd takes it) keeps user:// apart from the game's; a pack
+## installed there (tools/check_card_tests.gd with a .cardpack) can be named by its id.
+func _init() -> void:
+	var own := OS.get_environment("TEST_USER_DIR")
+	if own != "":
+		ProjectSettings.set_setting("application/config/use_custom_user_dir", true)
+		ProjectSettings.set_setting("application/config/custom_user_dir_name", own)
+		DirAccess.make_dir_recursive_absolute(OS.get_user_data_dir())
+
+
 func _initialize() -> void:
 	ServerLink.session_path = "user://e2e_session.json"  # never the player's saved login
 	Replay.dir = "user://e2e_replays"  # nor the player's replays
@@ -45,12 +55,14 @@ func _initialize() -> void:
 	print("e2e: %s on %s, pack %s %s (%s)" % [mode, url, pack.id(), pack.version(), pack.rules_hash()])
 
 
-## Player i's deck: the pack's ready decks in order, else a Basic Mage and Warrior.
+## Player i's deck: the pack's ready decks in order (E2E_DECKS="7,11": these two, 1-based), else a Basic Mage and Warrior.
 func _deck(i: int) -> Dictionary:
 	var ready := pack.files().filter(func(f): return f.begins_with("decks/") and f.ends_with(".json"))
 	ready.sort()
 	if ready.size() > 0:
-		var d: Dictionary = pack.json(ready[i % ready.size()])
+		var pick := OS.get_environment("E2E_DECKS").split(",", false)
+		var n := int(pick[i]) - 1 if pick.size() == 2 else i
+		var d: Dictionary = pack.json(ready[n % ready.size()])
 		return {"name": str(d.get("id", "deck")), "hero": str(d.get("champion", d.get("hero", ""))), "cards": d.get("cards", [])}
 	var cls: String = ["MAGE", "WARRIOR"][i]
 	return {"name": cls, "hero": Decks.hero(cls), "cards": Decks.basic(cls)}

@@ -51,7 +51,9 @@
         "countered_no_after_spell": {"type": "boolean"},
         "full_hand_return_dies": {"type": "boolean"},
         "cost_in_order": {"type": "boolean"},
-        "replaced_weapon_dies": {"type": "boolean"}
+        "replaced_weapon_dies": {"type": "boolean"},
+        "lifesteal_one_heal": {"type": "boolean"},
+        "after_spell_from_before": {"type": "boolean"}
       }
     },
     "fatigue": {

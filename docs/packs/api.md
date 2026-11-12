@@ -81,6 +81,7 @@ Return values are ignored unless said otherwise.
 | `on_choose` | `fn(g, me, option, still)` | The player chose `option` of a `g.request_choice` (`still`: the offered ids still where they were). |
 | `immune_while_attacking` | `true` | A weapon: its champion is IMMUNE while attacking with it. |
 | `durability_on_attack` | `fn(g, w, defender) → bool` | A weapon: whether attacking costs durability (default yes). |
+| `cost_last` | `true` | Its own `cost_mod` comes after every other cost change instead of before them, in a pack with `behaviour.cost_in_order` (patch 9.2.0.21517 of 2017: Dragon's Breath, Solemn Vigil, Everyfin is Awesome and Obsidian Shard after Naga Sea Witch; 9.4: Crush; Kobolds & Catacombs). |
 | `both` | `fn(g, me, t)` | A Choose One card played with both options (BOTH_CHOICES, Fandral Staghelm: `choice` 2): this instead of the two options' `effect`s in card order (Druid of the Claw's combined form; Keeper of the Grove silences first). |
 | `cost_first` | `true` or a rank (1, 2, …) | Its `cost_aura` comes before every other cost change in a pack with `behaviour.cost_in_order` (Summoning Portal); the lower rank first (`true` is 1; Knights of the Frozen Throne: Naga Sea Witch, Corpse Widow and Emerald Hive Queen 2, after Summoning Portal), then by when they came into play. |
 
@@ -110,7 +111,7 @@ amounts replace the damage).
 | `play` | `entity`, `player`, `card`, `kind` (`minion`/`spell`/`weapon`/`champion`: a hero card), `target`; spells: `secret`, `countered`, `task` (only a TASK card's: true) | Before the card's effect. `countered = true` (spells) stops it. Changing `target` redirects a spell. A hero card's `play` comes before it becomes the champion. |
 | `summon` | `entity`, `player`, `card` | A minion entered the board (played or summoned). |
 | `after_summon` | `entity`, `player`, `card`, `played` (true if played from hand) | After its battlecry. |
-| `after_spell` | `entity`, `player`, `card` | After a spell resolved. |
+| `after_spell` | `entity`, `player`, `card`, `since` (with `behaviour.after_spell_from_before`) | After a spell resolved; with `since`, only what was in play before the spell hears it (rules.md). |
 | `attack` | `attacker`, `defender`, `player` | Before damage. Changing `defender` redirects (Misdirection). |
 | `after_attack` | `attacker`, `defender`, `player` | |
 | `damage` | `source`, `target`, `amount`, `player` (the target's controller) | Damage dealt (after armor). |
@@ -205,7 +206,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.destroy(e)` | Marks it to die in the next death phase. |
 | `g.summon(p, card[, pos])` | A new minion; returns it, or `nil` if the board is full. |
 | `g.summon_right(me, card)` | Summons for `me`'s side right of `me`. |
-| `g.summon_entity(e[, pos])` | Puts a minion card that is not in play (in the hand or deck: it leaves them) on the board as a summon. |
+| `g.summon_entity(e[, pos])` | Puts a minion card that is not in play (in the hand or deck: it leaves them) on the board as a summon (no Battlecry): Recruit summons a minion of the deck at the right end. |
 | `g.draw(p[, n])` | Draws `n` (default 1): fatigue, burns on a full hand. Returns the drawn ids. |
 | `g.draw_entity(p, e[, quiet])` | Draws that card of `p`'s deck (`quiet`: it is put into the hand, not drawn: no `draw` event, logs `to_hand`; Ancient Harbinger). |
 | `g.add_to_hand(p, card)` | A new card in hand (or `nil` if full). |
@@ -220,6 +221,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.copy_minion(me, t)` | Turns `me` into a copy of `t` (stats, enchantments, tags, silence). |
 | `g.equip(p, card)` | A new weapon (the old one is destroyed). |
 | `g.add_to_deck(p, card)` | A new card shuffled into `p`'s deck at a random place (logs `add_to_deck`); returns it. |
+| `g.to_deck(e[, p])` | Shuffles a card that is not in play (a weapon that died, a card in a hand or a deck) into `p`'s deck (default its controller's) at a random place, as `p`'s: it keeps its enchantments and the tags it was given, not its damage, its lost durability or the marks of play (logs `to_deck`; only its new owner may see which card, and only once it is no longer in the deck); returns it (Kingsbane; King Togwaggle swaps the decks card by card). |
 | `g.deathrattle(m[, own])` | Runs `m`'s death hooks now, as if it died, without killing it: its card's (unless silenced), then its enchantments' (Feign Death). `own`: only its card's and the ones copied onto it (`{deathrattle = card}`: Unearthed Raptor), not the hook sets other cards gave it (Spiritsinger Umbra). |
 | `g.update_auras()` | Recomputes every aura now, so a hook sees them on a minion just summoned (Jungle Giants: its Attack with auras as it enters). |
 | `g.set_hooks(e, card)` | From now on `e` has `card`'s hooks instead of its own card's (its Battlecry, target, Deathrattle, `on`, aura…; Silence still takes them; its own card's `text` hook still words it). Snapshots show `hooks` (clients draw that card's picture); a copy keeps it (Deathstalker Rexxar's Zombeast: the first Beast's text). |

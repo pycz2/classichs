@@ -77,6 +77,9 @@ pub struct HookSet {
     /// Its rank among them, 1 first (`cost_first = true` is 1; Knights of the Frozen Throne: Summoning Portal 1, Naga Sea
     /// Witch, Corpse Widow and Emerald Hive Queen 2); 0: none.
     pub cost_first: i64,
+    /// Its own `cost_mod` comes after every other cost change instead of before them (with `behaviour.cost_in_order`;
+    /// patch 9.2.0.21517 of 2017: Dragon's Breath, Solemn Vigil, Everyfin is Awesome, Obsidian Shard; 9.4: Crush).
+    pub cost_last: bool,
     /// A CHOICE card played with both options (BOTH_CHOICES): this effect instead of the two options' in turn
     /// (Druid of the Claw's combined form).
     pub both: Option<HookFn>,

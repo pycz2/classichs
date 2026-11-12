@@ -103,6 +103,9 @@ pub struct Game {
     pub script_error: OnceLock<String>,
     /// Calls of script actions that may change the game (all but `g.aura_add`).
     pub(crate) writes: u64,
+    /// The Lifesteal heals of the hook running now, one per source and champion, given when it ends
+    /// (`behaviour.lifesteal_one_heal`); None outside a hook.
+    pub(crate) steal_batch: Option<Vec<(Id, usize, i64)>>,
 }
 
 impl Game {
@@ -110,7 +113,7 @@ impl Game {
         Game { rs, rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
             phase: "MULLIGAN", pending: None, pending_next: vec![], game_over: false, winner: -1, event_log: vec![], history: vec![],
             queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: "", source_id: NONE,
-            start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new(), writes: 0 }
+            start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new(), writes: 0, steal_batch: None }
     }
 
     /// A game with no cards: the host that loads a pack's scripts.
@@ -345,7 +348,12 @@ impl Game {
                 _ => 0,
             }
         };
+        // an `after_spell` with `since` (behaviour.after_spell_from_before): only what was in play before the spell
+        let since = if ty == "after_spell" { self.event_log[i].get("since").map(|v| v.int()) } else { None };
         for e in self.in_play() {
+            if since.is_some_and(|s| self.e(e).play_order >= s) {
+                continue;
+            }
             let h = self.hooks_of(e);
             let times = 1 + extra(self, e);
             if let Some(f) = h.on(&ty) {
@@ -712,6 +720,28 @@ impl Game {
     /// A Lifesteal heal of p's champion by n from src; healing that is damage (HEAL_IS_DAMAGE: Auchenai Soulpriest)
     /// hurts it, once.
     fn lifesteal_heal(&mut self, src: Id, p: usize, n: i64) {
+        if let Some(b) = self.steal_batch.as_mut() {
+            // one heal for all the damage of one effect (patch 10.0.0.22611: multi-target Lifesteal heals once)
+            match b.iter_mut().find(|(s, q, _)| *s == src && *q == p) {
+                Some(x) => x.2 += n,
+                None => b.push((src, p, n)),
+            }
+            return;
+        }
+        self.lifesteal_heal_now(src, p, n);
+    }
+
+    /// The Lifesteal heals a hook gathered (`steal_batch`), one per source and champion, in the order they came.
+    pub(crate) fn flush_steals(&mut self, batch: Vec<(Id, usize, i64)>) {
+        for (src, p, n) in batch {
+            if self.game_over {
+                return;
+            }
+            self.lifesteal_heal_now(src, p, n);
+        }
+    }
+
+    fn lifesteal_heal_now(&mut self, src: Id, p: usize, n: i64) {
         let h = self.hero(p);
         if self.e(h).has(self.n().heal_is_damage) {
             self.damage_from(src, h, n, false);
@@ -1005,6 +1035,44 @@ impl Game {
         e
     }
 
+    /// Shuffles a card that is not in play (a weapon that died, a card in a hand or a deck) into p's deck at a random
+    /// place, as p's (`g.to_deck`): it keeps its enchantments and the tags it was given, not its damage, its lost
+    /// durability or the marks of play (Kingsbane; King Togwaggle's swap of decks). NONE if it is in play.
+    pub fn to_deck(&mut self, e: Id, p: usize) -> Id {
+        if self.e(e).zone == "PLAY" {
+            return NONE;
+        }
+        let c = self.ctrl(e);
+        let pl = &mut self.players[c];
+        pl.hand.retain(|&x| x != e);
+        pl.deck.retain(|&x| x != e);
+        pl.secrets.retain(|&x| x != e);
+        if pl.weapon == Some(e) {
+            pl.weapon = None;
+        }
+        let n = self.n();
+        let dur = self.e(e).card.durability;
+        let x = self.em(e);
+        x.controller = p;
+        x.zone = "DECK";
+        x.damage = 0;
+        x.eot_tags.clear();
+        for t in [n.exhausted, n.attacks, n.to_destroy, n.died_pos, n.frozen, n.frozen_this_turn] {
+            x.erase_tag(t);
+        }
+        if let Some(t) = n.died_turn {
+            x.erase_tag(t);
+        }
+        if x.is_weapon() {
+            x.set_tag(n.durability, dur);
+        }
+        let len = self.players[p].deck.len() as i64;
+        let i = self.rng.randi_range(0, len) as usize;
+        self.players[p].deck.insert(i, e);
+        self.log_event(obj!{"type": "to_deck", "player": p, "entity": e, "card": self.e(e).card_id});
+        e
+    }
+
     /// Runs m's death hooks now (its card's, unless silenced, then its enchantments'), as if it died:
     /// Feign Death.
     pub fn run_death_hooks(&mut self, m: Id) {
@@ -1187,14 +1255,15 @@ impl Game {
     }
 
     /// Characters that src may target. Enemy Stealth is never targetable;
-    /// SPELLPROOF blocks spells and powers (is_spell=true).
+    /// SPELLPROOF blocks spells and powers (is_spell=true); FOE_SPELLPROOF the opponent's.
     pub fn targets(&self, src: Id, spec: &TSpec, is_spell: bool) -> Vec<Id> {
         let (me, n) = (self.ctrl(src), self.n());
         self.all_chars()
             .into_iter()
             .filter(|&t| {
                 let te = self.e(t);
-                !(te.controller != me && te.has(n.stealth)) && !(is_spell && te.has(n.spellproof)) && self.spec_ok(src, spec, t)
+                let foe_proof = n.foe_spellproof.is_some_and(|f| is_spell && te.controller != me && te.has(f));
+                !(te.controller != me && te.has(n.stealth)) && !(is_spell && te.has(n.spellproof)) && !foe_proof && self.spec_ok(src, spec, t)
             })
             .collect()
     }
@@ -1355,7 +1424,8 @@ impl Game {
     /// `cost_in` of a pack with `behaviour.cost_in_order` (Hearthstone until 2017): after the card's own `cost_mod`,
     /// its cost enchantments, the cost auras and its player's cost mods apply in the order they came (an enchantment
     /// or a mod by its `order`, stamped when it was made; an aura by when its source came into play), except a
-    /// `cost_first` aura, which comes before them all (Summoning Portal); 0 at least at the end.
+    /// `cost_first` aura, which comes before them all (Summoning Portal), and a `cost_last` card's own `cost_mod`, which
+    /// comes after them all; 0 at least at the end.
     fn cost_in_order(&self, e: Id, auras: &[Id]) -> i64 {
         enum It<'a> {
             Ench(&'a Obj),
@@ -1364,7 +1434,8 @@ impl Game {
         }
         let x = self.e(e);
         let mut c = x.card.cost;
-        if let Some(f) = x.hooks().cost_mod {
+        let last = x.hooks().cost_last; // its own cost change after all the others (patch 9.2: Dragon's Breath…)
+        if let Some(f) = x.hooks().cost_mod.filter(|_| !last) {
             c += self.fx_cost_mod(f, e);
         }
         let mut items: Vec<(i64, It)> = vec![];
@@ -1392,6 +1463,9 @@ impl Game {
                 It::Mod(m) if m.contains_key("set") => vint(m.get("set")),
                 It::Mod(m) => c + vint(m.get("delta")),
             };
+        }
+        if let Some(f) = x.hooks().cost_mod.filter(|_| last) {
+            c += self.fx_cost_mod(f, e);
         }
         c.max(0)
     }
@@ -1461,7 +1535,8 @@ impl Game {
             turn: self.turn, current: self.current, phase: self.phase, pending: self.pending.clone(), pending_next: self.pending_next.clone(),
             game_over: self.game_over, winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(),
             next_id: self.next_id, next_order: self.next_order, source_card: "", source_id: NONE,
-            start_decks: [vec![], vec![]], lua: self.lua.share(), script_error: self.script_error.clone(), writes: 0 }
+            start_decks: [vec![], vec![]], lua: self.lua.share(), script_error: self.script_error.clone(), writes: 0,
+            steal_batch: None }
     }
 
     /// clone_state with its own copy of the scripts' interpreter (a game of its own: `new {copy}`).

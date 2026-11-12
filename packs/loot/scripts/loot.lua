@@ -1,0 +1,1034 @@
+-- Kobolds & Catacombs (December 2017): the cards as at the release (patch 10.0.0.22611 of 2017-12-06, the day before the
+-- release; hearthstone.wiki.gg and its card notes; docs/packs/api.md). The older sets' cards are those packs' scripts,
+-- copied in by the recipe; the ones that changed by then are here and in cards.patch.json (patch 9.1.0.20970 of
+-- 2017-09-18: Innervate one crystal, Murloc Warleader +2 Attack; patch 9.2.0.21517: Unlicensed Apothecary "after you
+-- summon", Dragon's Breath, Solemn Vigil, Everyfin is Awesome and Obsidian Shard's own cost change after all the others;
+-- patch 9.4.0.22115: Crush's too).
+--
+-- This file: the helpers every loot file copies, the Spellstones (they upgrade in the hand), the Unidentified items (they
+-- become one of four cards in the hand), Murmuring Elemental, the older cards and the player hooks. The class and
+-- neutral cards are in loot_*.lua.
+local cards = {}
+
+-- --- helpers (the same in every loot*.lua) -------------------------------------------------------------------------
+
+-- --- helpers -----------------------------------------------------------------------------------
+
+local CLASSES = { "DRUID", "HUNTER", "MAGE", "PALADIN", "PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR" }
+local COIN = "GAME_005"
+
+local function playable(class)
+  return list.any(CLASSES, function(c)
+    return c == class
+  end)
+end
+
+-- A card (its g.info) of the class: a tri-class card is one of each of its classes (cards.md `classes`).
+local function of_class(i, cls)
+  if i.classes then
+    return list.any(i.classes, function(c)
+      return c == cls
+    end)
+  end
+  return i.class == cls
+end
+
+local function is_neutral(i)
+  return i.class == "NEUTRAL" and not i.classes
+end
+
+local function has_kw(i, k)
+  return list.any(i.keywords, function(x)
+    return x == k
+  end)
+end
+
+-- The collectible cards of the pack's constructed sets (a hero card too) whose data pass ok.
+local function pool(g, ok)
+  return list.filter(g.collectible(), function(c)
+    return ok(g.info(c))
+  end)
+end
+
+local function random_card(g, ok)
+  return g.pick(pool(g, ok))
+end
+
+local function random_class_card(g, cls)
+  return random_card(g, function(i)
+    return of_class(i, cls)
+  end)
+end
+
+local function minion_of(ok)
+  return function(i)
+    return i.type == "MINION" and (not ok or ok(i))
+  end
+end
+
+local function info(g, e)
+  return g.info(g.card(e))
+end
+
+local function alive(g, m)
+  return g.zone(m) == "PLAY" and g.health(m) > 0 and not g.has(m, "TO_DESTROY")
+end
+
+local function summon_here(g, me, card)
+  local pos = g.died_pos(me)
+  return g.summon(g.ctrl(me), card, pos >= 0 and pos or nil)
+end
+
+local function pick_n(g, items, n)
+  local left = {}
+  for _, x in ipairs(items) do
+    left[#left + 1] = x
+  end
+  local out = {}
+  for _ = 1, n do
+    if #left == 0 then
+      break
+    end
+    local i = g.random(1, #left)
+    out[#out + 1] = left[i]
+    table.remove(left, i)
+  end
+  return out
+end
+
+-- The different card ids of a list of entities (in order).
+local function distinct_cards(g, es)
+  local seen, out = {}, {}
+  for _, e in ipairs(es) do
+    local c = g.card(e)
+    if not seen[c] then
+      seen[c] = true
+      out[#out + 1] = c
+    end
+  end
+  return out
+end
+
+-- An `on` hook set for one event of me's player (`ev.player` is me's controller).
+local function on_mine(event, f)
+  return {
+    on = {
+      [event] = function(g, me, ev)
+        if g.mine(me, ev) then
+          f(g, me, ev)
+        end
+      end,
+    },
+  }
+end
+
+local function end_of_my_turn(f)
+  return on_mine("turn_end", f)
+end
+
+-- "If it's your opponent's turn" (a Deathrattle: the dead minion's controller is not the one whose turn it is).
+local function opponents_turn(g, me)
+  return g.current() ~= g.ctrl(me)
+end
+
+-- The minions of p that died this game, in the order they died (the player hooks' DIED_ORDER), passing ok.
+local function dead_minions(g, p, ok)
+  local dead = list.filter(g.graveyard(p), function(e)
+    return g.type(e) == "MINION" and g.died_pos(e) >= 0 and (not ok or ok(e))
+  end)
+  return list.sort_by(dead, function(e)
+    return g.tag(e, "DIED_ORDER")
+  end)
+end
+
+-- p's deck has no card of this Cost (the Princes: the cards' printed Cost).
+local function no_cost_in_deck(g, p, cost)
+  return not list.any(g.deck(p), function(e)
+    return info(g, e).cost == cost
+  end)
+end
+
+local function prince_glow(cost)
+  return function(g, me)
+    return no_cost_in_deck(g, g.ctrl(me), cost)
+  end
+end
+
+local function random_from_deck(g, p, ok)
+  return g.pick(list.filter(g.deck(p), ok))
+end
+
+-- Removes the top n cards of p's deck (not drawn: no draw, no fatigue; Keening Banshee, Gnomeferatu); returns them.
+local function remove_top(g, p, n)
+  local out = {}
+  for _ = 1, n do
+    local d = g.deck(p)
+    local top = d[#d]
+    if not top then
+      break
+    end
+    g.remove(top, "GRAVEYARD")
+    g.log({ type = "removed_from_deck", player = p, entity = top, card = g.card(top) })
+    out[#out + 1] = top
+  end
+  return out
+end
+
+local function damage_all_minions(g, me, n)
+  for _, m in ipairs(g.all_minions()) do
+    g.damage(me, m, n)
+  end
+end
+
+local function enemy_minions(g, me)
+  return g.minions(g.enemy(me))
+end
+
+local function frozen_enemy(g, me)
+  return list.any(g.chars(g.enemy(me)), function(c)
+    return g.has(c, "FROZEN")
+  end)
+end
+
+local function other_friendly(g, me, t)
+  return t ~= me
+end
+
+local function has_weapon(g, me)
+  return g.weapon(g.ctrl(me)) ~= nil
+end
+
+-- --- Discover (2017: the class cards four times as likely as the neutral ones) ----------------------------------
+
+local function offer(g, me, choices)
+  local p = g.ctrl(me)
+  local left = {}
+  for _, x in ipairs(choices) do
+    left[#left + 1] = x
+  end
+  local opts = {}
+  for _ = 1, 3 do
+    local total = list.sum(left, function(x)
+      return x[2]
+    end)
+    if total <= 0 then
+      break
+    end
+    local r = g.random(1, total)
+    for i, x in ipairs(left) do
+      r = r - x[2]
+      if r <= 0 then
+        opts[#opts + 1] = g.create(p, x[1])
+        table.remove(left, i)
+        break
+      end
+    end
+  end
+  if #opts > 0 then
+    g.request_choice(me, opts)
+  end
+  return #opts
+end
+
+-- Three different cards of a list (each as likely), offered to me's player.
+local function offer_cards(g, me, ids)
+  local p = g.ctrl(me)
+  local opts = {}
+  for _, c in ipairs(pick_n(g, ids, 3)) do
+    opts[#opts + 1] = g.create(p, c)
+  end
+  if #opts > 0 then
+    g.request_choice(me, opts)
+  end
+  return #opts
+end
+
+local function discover_class(g, me)
+  local c = g.class(g.hero(g.ctrl(me)))
+  if playable(c) then
+    return c
+  end
+  c = info(g, me).class
+  if playable(c) then
+    return c
+  end
+  return CLASSES[g.random(1, #CLASSES)]
+end
+
+-- The choices of a Discover of cards passing ok: the class's cards (tri-class ones of it too) and the neutral ones; a
+-- hero card too ("Hero cards can be randomly generated and Discovered, just like any other collectible card").
+local function discover_choices(g, cls, ok)
+  local choices = {}
+  for _, c in ipairs(g.collectible()) do
+    local i = g.info(c)
+    if ok(i) then
+      if of_class(i, cls) then
+        choices[#choices + 1] = { c, 4 }
+      elseif is_neutral(i) then
+        choices[#choices + 1] = { c, 1 }
+      end
+    end
+  end
+  return choices
+end
+
+local function discover(g, me, ok)
+  return offer(g, me, discover_choices(g, discover_class(g, me), ok))
+end
+
+local function to_hand(g, me, option)
+  return g.add_to_hand(g.ctrl(me), g.card(option))
+end
+
+-- --- Kobolds & Catacombs' helpers ------------------------------------------------------------------------------------
+
+-- Recruit (wiki: "Recruit"): a random minion of p's deck that passes ok (an entity of the deck: `g.cost(e) <= 4`) is
+-- summoned at the right end of the board (a summon, no Battlecry); none on a full board or when none matches (it stays in
+-- the deck). Returns the minion or nil.
+local function recruit(g, p, ok)
+  if g.room(p) <= 0 then
+    return nil
+  end
+  local e = g.pick(list.filter(g.deck(p), function(d)
+    return g.type(d) == "MINION" and (not ok or ok(d))
+  end))
+  if not e then
+    return nil
+  end
+  return g.summon_entity(e)
+end
+
+-- "Cast this when drawn" (TOPDECK): f(g, me) is the card's effect (with its "Draw a card"). Drawn, it leaves the hand,
+-- shows itself to both players and casts itself; played from the hand (a copy of it: Psionic Probe), the same. Not in
+-- the mulligan, not burnt on a full hand, not put into the hand otherwise (hand hooks: the `draw` event only).
+local function cast_when_drawn(f, rest)
+  local h = rest or {}
+  h.spell = function(g, me)
+    f(g, me)
+  end
+  h.hand = {
+    draw = function(g, me, ev)
+      if ev.entity == me then
+        local p = g.ctrl(me)
+        g.remove(me, "GRAVEYARD")
+        g.log({ type = "cast_when_drawn", player = p, entity = me, card = g.card(me) })
+        f(g, me)
+      end
+    end,
+  }
+  return h
+end
+
+-- A card that becomes another in its own player's hand (a Spellstone upgrades, an Unidentified item is identified,
+-- Shifting Scroll): a new card (its cost changes are gone: wiki, "Transform in hand"); one that started in the deck
+-- still did (Leyline Manipulator: a card that transforms itself keeps it).
+local function self_transform(g, me, card)
+  local started = g.has(me, "STARTED_IN_DECK")
+  local n = g.transform(me, card)
+  if n and started then
+    g.set_tag(n, "STARTED_IN_DECK", true)
+  end
+  return n
+end
+
+-- Copies of friendly minion t summoned right of it (its stats, enchantments and keywords: g.copy_minion); returns them.
+local function summon_copies(g, t, n)
+  local out = {}
+  for _ = 1, n do
+    local c = g.summon_right(t, g.card(t))
+    if not c then
+      break
+    end
+    out[#out + 1] = g.copy_minion(c, t) or c
+  end
+  return out
+end
+
+-- --- Spellstones -------------------------------------------------------------------------------------------------------
+-- wiki, "Spellstone": a Lesser one upgrades twice (Lesser, the stone, Greater), each time its player meets the condition
+-- while it is in the hand: a new card (a transform in the hand: progress back to 0, a cost change lost). Its progress is
+-- the SPELLSTONE tag; one event makes one step at most (wiki, Jasper: Branching Paths' 6 Armor upgrades it once).
+-- `step(g, me, ev, p)` is how far an event of `event` takes it (0: no progress).
+local function spellstone(event, need, upgrade, step, h)
+  h.hand = {
+    [event] = function(g, me, ev)
+      local n = step(g, me, ev, g.ctrl(me))
+      if n <= 0 then
+        return
+      end
+      local v = g.tag(me, "SPELLSTONE") + n
+      if v >= need then
+        self_transform(g, me, upgrade)
+      else
+        g.set_tag(me, "SPELLSTONE", v)
+      end
+    end,
+  }
+  return h
+end
+
+local function mine_played(ok)
+  return function(g, me, ev, p)
+    return (ev.player == p and ok(g, ev)) and 1 or 0
+  end
+end
+
+-- Jasper (Druid): gain 3 Armor (in one go or several).
+local function jasper_step(g, me, ev, p)
+  return ev.player == p and ev.amount or 0
+end
+local function jasper(n)
+  return {
+    target = "minion",
+    spell = function(g, me, t)
+      g.damage(me, t, g.spell_dmg(me, n))
+    end,
+  }
+end
+cards.LOOT_051 = spellstone("armor", 3, "LOOT_051t1", jasper_step, jasper(2))
+cards.LOOT_051t1 = spellstone("armor", 3, "LOOT_051t2", jasper_step, jasper(4))
+cards.LOOT_051t2 = jasper(6)
+
+-- Emerald (Hunter): play a Secret; two, three or four 3/3 Wolves.
+local WOLF = "LOOT_077t"
+local emerald_step = mine_played(function(g, ev)
+  return ev.kind == "spell" and ev.secret
+end)
+local function emerald(n)
+  return {
+    spell = function(g, me)
+      for _ = 1, n do
+        g.summon(g.ctrl(me), WOLF)
+      end
+    end,
+  }
+end
+cards.LOOT_080 = spellstone("play", 1, "LOOT_080t2", emerald_step, emerald(2))
+cards.LOOT_080t2 = spellstone("play", 1, "LOOT_080t3", emerald_step, emerald(3))
+cards.LOOT_080t3 = emerald(4)
+
+-- Ruby (Mage): play 2 Elementals; one, two or three random Mage spells.
+local ruby_step = mine_played(function(g, ev)
+  return ev.kind == "minion" and g.race(ev.entity) == "ELEMENTAL"
+end)
+local function ruby(n)
+  return {
+    spell = function(g, me)
+      for _ = 1, n do
+        local c = random_card(g, function(i)
+          return i.type == "SPELL" and of_class(i, "MAGE")
+        end)
+        if c then
+          g.add_to_hand(g.ctrl(me), c)
+        end
+      end
+    end,
+  }
+end
+cards.LOOT_103 = spellstone("play", 2, "LOOT_103t1", ruby_step, ruby(1))
+cards.LOOT_103t1 = spellstone("play", 2, "LOOT_103t2", ruby_step, ruby(2))
+cards.LOOT_103t2 = ruby(3)
+
+-- Pearl (Paladin): restore 3 Health (your cards' healing, any character, in one go or several); a 2/2, 4/4 or 6/6
+-- Spirit with Taunt.
+local function pearl_step(g, me, ev, p)
+  return (ev.source and ev.source > 0 and g.ctrl(ev.source) == p) and ev.amount or 0
+end
+local function pearl(spirit)
+  return {
+    spell = function(g, me)
+      g.summon(g.ctrl(me), spirit)
+    end,
+  }
+end
+cards.LOOT_091 = spellstone("heal", 3, "LOOT_091t1", pearl_step, pearl("LOOT_091t"))
+cards.LOOT_091t1 = spellstone("heal", 3, "LOOT_091t2", pearl_step, pearl("LOOT_091t1t"))
+cards.LOOT_091t2 = pearl("LOOT_091t2t")
+
+-- Diamond (Priest): cast 4 spells; resurrect two, three or four different friendly minions (wiki: copies of one card
+-- come back as one).
+local diamond_step = mine_played(function(g, ev)
+  return ev.kind == "spell"
+end)
+local function diamond(n)
+  return {
+    spell = function(g, me)
+      local p = g.ctrl(me)
+      for _, c in ipairs(pick_n(g, distinct_cards(g, dead_minions(g, p)), n)) do
+        g.summon(p, c)
+      end
+    end,
+  }
+end
+cards.LOOT_507 = spellstone("play", 4, "LOOT_507t", diamond_step, diamond(2))
+cards.LOOT_507t = spellstone("play", 4, "LOOT_507t2", diamond_step, diamond(3))
+cards.LOOT_507t2 = diamond(4)
+
+-- Onyx (Rogue): play 3 Deathrattle cards; destroy one, two or three random enemy minions (needs one).
+local onyx_step = mine_played(function(g, ev)
+  return has_kw(g.info(ev.card), "DEATHRATTLE")
+end)
+local function onyx(n)
+  return {
+    can_play = function(g, me)
+      return #g.minions(g.enemy(me)) > 0
+    end,
+    spell = function(g, me)
+      for _, m in ipairs(pick_n(g, enemy_minions(g, me), n)) do
+        g.destroy(m)
+      end
+    end,
+  }
+end
+cards.LOOT_503 = spellstone("play", 3, "LOOT_503t", onyx_step, onyx(1))
+cards.LOOT_503t = spellstone("play", 3, "LOOT_503t2", onyx_step, onyx(2))
+cards.LOOT_503t2 = onyx(3)
+
+-- Sapphire (Shaman): Overload 3 Mana Crystals (the Overload of the cards you play, in one go or several); one, two or
+-- three copies of a friendly minion.
+local function sapphire_step(g, me, ev, p)
+  return ev.player == p and g.info(ev.card).mana_lock or 0
+end
+local function sapphire(n)
+  return {
+    target = "friendly_minion",
+    spell = function(g, me, t)
+      summon_copies(g, t, n)
+    end,
+  }
+end
+cards.LOOT_064 = spellstone("play", 3, "LOOT_064t1", sapphire_step, sapphire(1))
+cards.LOOT_064t1 = spellstone("play", 3, "LOOT_064t2", sapphire_step, sapphire(2))
+cards.LOOT_064t2 = sapphire(3)
+
+-- Amethyst (Warlock): your hero takes damage from your cards (each time; wiki: a multi-hit card once per hit, Life Tap
+-- too; Armor that takes it all is no damage); Lifesteal (its keyword), 3, 5 or 7 damage to a minion.
+local function amethyst_step(g, me, ev, p)
+  return (ev.target == g.hero(p) and ev.amount > 0 and ev.source and ev.source > 0 and g.ctrl(ev.source) == p) and 1 or 0
+end
+local function amethyst(n)
+  return {
+    target = "minion",
+    spell = function(g, me, t)
+      g.damage(me, t, g.spell_dmg(me, n))
+    end,
+  }
+end
+cards.LOOT_043 = spellstone("damage", 1, "LOOT_043t2", amethyst_step, amethyst(3))
+cards.LOOT_043t2 = spellstone("damage", 1, "LOOT_043t3", amethyst_step, amethyst(5))
+cards.LOOT_043t3 = amethyst(7)
+
+-- Mithril (Warrior): equip a weapon (wiki: any way, a Hero Power's too); one, two or three 5/5 Mithril Golems.
+local mithril_step = mine_played(function()
+  return true
+end)
+local function mithril(n)
+  return {
+    spell = function(g, me)
+      for _ = 1, n do
+        g.summon(g.ctrl(me), "LOOT_203t4")
+      end
+    end,
+  }
+end
+cards.LOOT_203 = spellstone("equip", 1, "LOOT_203t2", mithril_step, mithril(1))
+cards.LOOT_203t2 = spellstone("equip", 1, "LOOT_203t3", mithril_step, mithril(2))
+cards.LOOT_203t3 = mithril(3)
+
+-- --- Unidentified items ------------------------------------------------------------------------------------------------
+-- wiki, "Unidentified": "gains one of several bonus effects once put into the player's hand": drawn or put into the hand
+-- it becomes one of its four cards (the build's entourage, each as likely); the opening hand's after the mulligan (the
+-- player hooks' game_start). Cast from the deck (Grand Archivist) or at random it is the plain card.
+local UNIDENTIFIED = {
+  LOOT_278 = { "LOOT_278t1", "LOOT_278t2", "LOOT_278t3", "LOOT_278t4" },
+  LOOT_286 = { "LOOT_286t1", "LOOT_286t2", "LOOT_286t3", "LOOT_286t4" },
+  LOOT_285 = { "LOOT_285t", "LOOT_285t2", "LOOT_285t3", "LOOT_285t4" },
+}
+
+local function identify(g, e)
+  local v = UNIDENTIFIED[g.card(e)]
+  if v and g.zone(e) == "HAND" then
+    self_transform(g, e, g.pick(v))
+  end
+end
+
+local function unidentified(h)
+  local function on_hand(g, me, ev)
+    if ev.entity == me then
+      identify(g, me)
+    end
+  end
+  h.hand = { draw = on_hand, add_to_hand = on_hand }
+  return h
+end
+
+-- Unidentified Elixir (Priest): +2/+2 to a minion; Life: and Lifesteal; Purity: and Divine Shield; Shadows: and a 1/1
+-- copy of it; Hope: and "Deathrattle: return this minion to your hand".
+local function elixir(f)
+  return {
+    target = "minion",
+    spell = function(g, me, t)
+      g.buff(t, 2, 2)
+      if f then
+        f(g, me, t)
+      end
+    end,
+  }
+end
+cards.LOOT_278 = unidentified(elixir())
+cards.LOOT_278t1 = elixir(function(g, me, t)
+  g.give_tag(t, "LIFESTEAL")
+end)
+cards.LOOT_278t2 = elixir(function(g, me, t)
+  g.give_tag(t, "DIVINE_SHIELD")
+end)
+cards.LOOT_278t3 = elixir(function(g, me, t)
+  local c = summon_copies(g, t, 1)[1]
+  if c then
+    g.set_stats(c, 1, 1)
+  end
+end)
+cards.LOOT_278t4 = elixir(function(g, me, t)
+  g.enchant(t, { hooks = "ench:elixir_of_hope", player = g.ctrl(me) })
+end)
+cards["ench:elixir_of_hope"] = {
+  deathrattle = function(g, me)
+    g.add_to_hand(g.ctrl(me), g.card(me))
+  end,
+}
+
+-- Unidentified Maul (Paladin, a 2/2 weapon): Champion's: two 1/1 Silver Hand Recruits; Sacred: your minions Taunt;
+-- Blessed: your minions +1 Attack; Purifier's: your minions Divine Shield.
+local RECRUIT = "VAN_CS2_101t"
+cards.LOOT_286 = unidentified({})
+cards.LOOT_286t1 = {
+  battlecry = function(g, me)
+    for _ = 1, 2 do
+      g.summon(g.ctrl(me), RECRUIT)
+    end
+  end,
+}
+local function maul_all(f)
+  return {
+    battlecry = function(g, me)
+      for _, m in ipairs(g.minions(g.ctrl(me))) do
+        f(g, m)
+      end
+    end,
+  }
+end
+cards.LOOT_286t2 = maul_all(function(g, m)
+  g.give_tag(m, "TAUNT")
+end)
+cards.LOOT_286t3 = maul_all(function(g, m)
+  g.buff(m, 1, 0)
+end)
+cards.LOOT_286t4 = maul_all(function(g, m)
+  g.give_tag(m, "DIVINE_SHIELD")
+end)
+
+-- Unidentified Shield (Warrior): 5 Armor; Tower Shield +10: 10 more Armor; Serrated: 5 damage; Runed: a 5/5 Golem;
+-- Spiked: a 5/2 weapon.
+local function shield(f, target)
+  return {
+    target = target,
+    spell = function(g, me, t)
+      g.gain_armor(g.ctrl(me), 5)
+      if f then
+        f(g, me, t)
+      end
+    end,
+  }
+end
+cards.LOOT_285 = unidentified(shield())
+cards.LOOT_285t = shield(function(g, me)
+  g.gain_armor(g.ctrl(me), 10)
+end)
+cards.LOOT_285t2 = shield(function(g, me, t)
+  g.damage(me, t, 5)
+end, "any")
+cards.LOOT_285t3 = shield(function(g, me)
+  g.summon(g.ctrl(me), "LOOT_285t3t")
+end)
+cards.LOOT_285t4 = shield(function(g, me)
+  g.equip(g.ctrl(me), "LOOT_285t4t")
+end)
+
+-- --- Murmuring Elemental -----------------------------------------------------------------------------------------------
+-- "Your next Battlecry this turn triggers twice": its player's champion has DOUBLE_BATTLECRY this turn (the engine runs a
+-- Battlecry twice while the champion has it) until a card with a Battlecry has been played (the player hooks take it
+-- away; MURMUR: the Elemental that gave it, whose own Battlecry it is not).
+cards.LOOT_517 = {
+  battlecry = function(g, me)
+    local h = g.hero(g.ctrl(me))
+    g.give_tag(h, "DOUBLE_BATTLECRY", true)
+    g.set_tag(h, "MURMUR", me)
+  end,
+}
+
+local function murmur_used(g, p, e)
+  local h = g.hero(p)
+  if g.tag(h, "MURMUR") > 0 and g.tag(h, "MURMUR") ~= e and has_kw(info(g, e), "BATTLECRY") then
+    g.erase_tag(h, "DOUBLE_BATTLECRY")
+    g.set_tag(h, "MURMUR", nil)
+  end
+end
+
+-- --- the older cards of patches 9.1, 9.2 and 9.4 -----------------------------------------------------------------------
+
+-- Innervate (patch 9.1.0.20970): "Gain 1 Mana Crystal this turn only."
+cards.VAN_EX1_169 = {
+  spell = function(g, me)
+    g.add_mana(g.ctrl(me), 1)
+  end,
+}
+
+-- Murloc Warleader (patch 9.1.0.20970): "Your other Murlocs have +2 Attack."
+cards.VAN_EX1_507 = {
+  aura = function(g, me)
+    for _, m in ipairs(g.others(me)) do
+      if g.race(m) == "MURLOC" then
+        g.aura_add(m, 2, 0)
+      end
+    end
+  end,
+}
+
+-- Unlicensed Apothecary (patch 9.2.0.21517): "After you summon a minion, deal 5 damage to your hero" (after its
+-- Battlecry; no longer from a transform).
+cards.CFM_900 = on_mine("after_summon", function(g, me, ev)
+  if ev.entity ~= me then
+    g.damage(me, g.hero(g.ctrl(me)), 5)
+  end
+end)
+
+-- Repentance, Snipe, Sacred Trial (patch 9.2.0.21517: "Lord Jaraxxus no longer triggers Repentance, Sacred Trial or
+-- Snipe"): only a minion still in play after its Battlecry sets them off.
+local function after_enemy_minion(cond, effect)
+  return {
+    secret = {
+      event = "after_summon",
+      cond = function(g, me, ev)
+        return ev.played and not g.mine(me, ev) and g.zone(ev.entity) == "PLAY" and (not cond or cond(g, me, ev))
+      end,
+      effect = effect,
+    },
+  }
+end
+cards.VAN_EX1_379 = after_enemy_minion(nil, function(g, me, ev) -- Repentance
+  g.set_stats(ev.entity, nil, 1)
+end)
+cards.VAN_EX1_609 = after_enemy_minion(nil, function(g, me, ev) -- Snipe
+  g.damage(me, ev.entity, g.spell_dmg(me, 4))
+end)
+cards.LOE_027 = after_enemy_minion(function(g, me, ev) -- Sacred Trial
+  return #g.others(ev.entity) >= 3
+end, function(g, me, ev)
+  g.destroy(ev.entity)
+end)
+
+-- Their own cost change after every other one (cost_last; patch 9.2.0.21517: Dragon's Breath, Solemn Vigil, Everyfin
+-- is Awesome, Obsidian Shard; patch 9.4.0.22115: Crush): Naga Sea Witch's (5), then theirs.
+local function died_this_turn(g)
+  local n = 0
+  for p = 0, 1 do
+    for _, e in ipairs(g.graveyard(p)) do
+      if g.died_pos(e) >= 0 and g.tag(e, "DIED_TURN") == g.turn() then
+        n = n + 1
+      end
+    end
+  end
+  return n
+end
+local function vigil_cost(g, me)
+  return -died_this_turn(g)
+end
+local function damaged_friend(g, me)
+  return list.any(g.minions(g.ctrl(me)), function(m)
+    return g.dmg(m) > 0
+  end)
+end
+cards.GVG_052 = { -- Crush
+  target = "minion",
+  cost_last = true,
+  cost_mod = function(g, me)
+    return damaged_friend(g, me) and -4 or 0
+  end,
+  glow = damaged_friend,
+  spell = function(g, me, t)
+    g.destroy(t)
+  end,
+}
+cards.BRM_003 = { -- Dragon's Breath
+  target = "any",
+  cost_last = true,
+  cost_mod = vigil_cost,
+  spell = function(g, me, t)
+    g.damage(me, t, g.spell_dmg(me, 4))
+  end,
+}
+cards.BRM_001 = { -- Solemn Vigil
+  cost_last = true,
+  cost_mod = vigil_cost,
+  spell = function(g, me)
+    g.draw(g.ctrl(me), 2)
+  end,
+}
+cards.LOE_113 = { -- Everyfin is Awesome
+  cost_last = true,
+  cost_mod = function(g, me)
+    return -list.count(g.minions(g.ctrl(me)), function(m)
+      return g.race(m) == "MURLOC"
+    end)
+  end,
+  spell = function(g, me)
+    for _, m in ipairs(g.minions(g.ctrl(me))) do
+      g.buff(m, 2, 2)
+    end
+  end,
+}
+cards.UNG_061 = { -- Obsidian Shard
+  cost_last = true,
+  cost_mod = function(g, me)
+    return -g.count(g.ctrl(me), "OTHER_CLASS")
+  end,
+}
+
+-- --- the game's counts and its start (rules.json player_hooks) -------------------------------------------------------
+-- Knights of the Frozen Throne's (and the packs' before it), and Kobolds & Catacombs': the spells played this turn
+-- (TURN_SPELLS, from 0 at its player's turn start: Dragon Soul), the spells of Cost 5 or more played this game (BIG_SPELLS:
+-- Dragoncaller Alanna) and the last turn one was (BIG_SPELL_TURN: Arcane Tyrant), the spells played on one's own minion
+-- (ON_OWN_MINION on the spell: Lynessa Sunsorrow), the weapons that were destroyed (WEAPON_DESTROYED on the weapon:
+-- Rummaging Kobold), Murmuring Elemental's next Battlecry, and the Unidentified items of the opening hand.
+
+local LANATHEL = "ICC_841"
+local function lanathel(g, e)
+  if g.card(e) ~= LANATHEL or g.silenced(e) then
+    return
+  end
+  local n = g.count(g.ctrl(e), "DISCARDS") - g.tag(e, "LANATHEL")
+  if n > 0 then
+    g.buff(e, n, 0)
+    g.add_tag(e, "LANATHEL", n)
+  end
+end
+
+-- Sanguine Reveler: destroy a friendly minion, +2/+2.
+
+local MALCHEZAAR = "KAR_096"
+local PATCHES = "CFM_637"
+
+local function malchezaar(g, p)
+  local hero_class = g.class(g.hero(p))
+  local n = 0
+  for _, zone in ipairs({ g.deck(p), g.hand(p) }) do
+    n = n + #list.filter(zone, function(e)
+      return g.card(e) == MALCHEZAAR
+    end)
+  end
+  for _ = 1, 5 * n do
+    local have = {}
+    for _, zone in ipairs({ g.deck(p), g.hand(p) }) do
+      for _, e in ipairs(zone) do
+        have[g.card(e)] = true
+      end
+    end
+    local c = g.pick(pool(g, function(i)
+      return i.type == "MINION" and i.rarity == "LEGENDARY" and (of_class(i, hero_class) or is_neutral(i))
+        and not have[i.id]
+    end))
+    if c then
+      g.add_to_deck(p, c)
+    end
+  end
+end
+
+-- A card of a class other than its player's (a neutral card is of none; a tri-class card of its classes).
+local function other_class(g, e, p)
+  local i = info(g, e)
+  if is_neutral(i) then
+    return false
+  end
+  return not of_class(i, g.class(g.hero(p)))
+end
+
+local function core(g, m)
+  if not g.has(m, "CORED") then
+    g.enchant(m, { set_atk = 5, set_hp = 5, base = true })
+    g.set_tag(m, "CORED", true)
+  end
+end
+
+cards["player:loot"] = {
+  on = {
+    after_spell = function(g, me, ev)
+      if g.mine(me, ev) then
+        g.add_count(g.ctrl(me), "SPELLS")
+      end
+    end,
+    summon = function(g, me, ev)
+      if g.mine(me, ev) then
+        local p = g.ctrl(me)
+        lanathel(g, ev.entity)
+        if g.race(ev.entity) == "TOTEM" then
+          g.add_count(p, "TOTEMS")
+        end
+        if g.count(p, "CRYSTAL_CORE") > 0 and g.is_minion(ev.entity) then
+          core(g, ev.entity)
+        end
+      end
+    end,
+    death = function(g, me, ev)
+      if ev.minion and g.mine(me, ev) then
+        g.set_tag(ev.entity, "DIED_ORDER", g.add_count(g.ctrl(me), "DEATHS"))
+      end
+      if not ev.minion and g.mine(me, ev) and g.is_weapon(ev.entity) then
+        g.set_tag(ev.entity, "WEAPON_DESTROYED", true)
+      end
+    end,
+    play = function(g, me, ev)
+      if not g.mine(me, ev) then
+        return
+      end
+      local p = g.ctrl(me)
+      if ev.kind == "spell" and ev.secret then
+        g.add_count(p, "SECRETS")
+      end
+      if ev.kind == "spell" then
+        g.add_count(p, "TURN_SPELLS")
+        if g.tag(ev.entity, "PLAYED_COST") >= 5 then
+          g.add_count(p, "BIG_SPELLS")
+          g.add_count(p, "BIG_SPELL_TURN", g.turn() - g.count(p, "BIG_SPELL_TURN"))
+        end
+        if ev.target and ev.target > 0 and g.is_minion(ev.target) and g.ctrl(ev.target) == p then
+          g.set_tag(ev.entity, "ON_OWN_MINION", true)
+        end
+      end
+      if ev.kind == "minion" and g.race(ev.entity) == "ELEMENTAL" then
+        g.add_count(p, "ELEM_NOW")
+      end
+      if other_class(g, ev.entity, p) then
+        g.add_count(p, "OTHER_CLASS")
+      end
+      local lock = g.info(ev.card).mana_lock
+      if lock > 0 then
+        g.add_count(p, "OVERLOADED", lock)
+      end
+    end,
+    discard = function(g, me, ev)
+      if g.mine(me, ev) then
+        local p = g.ctrl(me)
+        g.set_tag(ev.entity, "DISCARDED", true)
+        g.add_count(p, "DISCARDS")
+        for _, zone in ipairs({ g.hand(p), g.deck(p), g.minions(p) }) do
+          for _, e in ipairs(zone) do
+            lanathel(g, e)
+          end
+        end
+      end
+    end,
+    heal = function(g, me, ev)
+      local p = g.ctrl(me)
+      if ev.target == g.hero(p) and ev.amount > 0 then
+        g.add_count(p, "HEALED_TURN", g.turn() - g.count(p, "HEALED_TURN"))
+      end
+    end,
+    draw = function(g, me, ev)
+      if g.mine(me, ev) then
+        lanathel(g, ev.entity) -- (one shuffled in later: Dead Man's Hand, Archbishop Benedictus)
+      end
+      if g.mine(me, ev) and g.count(g.ctrl(me), "CRYSTAL_CORE") > 0 and g.is_minion(ev.entity) then
+        core(g, ev.entity)
+      end
+    end,
+    add_to_hand = function(g, me, ev)
+      if g.mine(me, ev) then
+        lanathel(g, ev.entity)
+      end
+      if g.mine(me, ev) and g.count(g.ctrl(me), "CRYSTAL_CORE") > 0 and g.is_minion(ev.entity) then
+        core(g, ev.entity)
+      end
+    end,
+    transform = function(g, me, ev)
+      local e = ev.to or ev.entity
+      local p = g.ctrl(me)
+      if e and e > 0 and g.ctrl(e) == p then
+        lanathel(g, e)
+      end
+      if e and e > 0 and g.ctrl(e) == p and g.count(p, "CRYSTAL_CORE") > 0 and g.is_minion(e) and g.zone(e) ~= "DECK" then
+        core(g, e)
+      end
+    end,
+    take_control = function(g, me, ev)
+      local p = g.ctrl(me)
+      if ev.player == p and g.count(p, "CRYSTAL_CORE") > 0 and g.is_minion(ev.target) and g.zone(ev.target) == "PLAY" then
+        core(g, ev.target)
+      end
+    end,
+    turn_start = function(g, me, ev)
+      local p = g.ctrl(me)
+      if ev.player == p then
+        g.add_count(p, "ELEM_LAST", g.count(p, "ELEM_NOW") - g.count(p, "ELEM_LAST"))
+        g.add_count(p, "ELEM_NOW", -g.count(p, "ELEM_NOW"))
+        g.add_count(p, "TURN_SPELLS", -g.count(p, "TURN_SPELLS"))
+      end
+      -- Temporus (loot_ppr.lua): the extra turns its player owes, one at a turn start after the other player's turn
+      if g.count(p, "TEMPORUS") > 0 then
+        local last = g.count(p, "TEMPORUS_LAST") - 1
+        g.add_count(p, "TEMPORUS_LAST", ev.player - last)
+        if last ~= ev.player then
+          g.extra_turn(ev.player)
+          g.add_count(p, "TEMPORUS", -1)
+        end
+      end
+    end,
+    -- Dreadsteeds owed (patch 9.0): at the end of the turn (either player's), each comes back for its player; twice
+    -- with Drakkari Enchanter (its player's end of turn effects; only the player hooks of that player see it twice)
+    turn_end = function(g, me, ev)
+      local p = g.ctrl(me)
+      g.set_tag(g.hero(p), "MURMUR", nil) -- (DOUBLE_BATTLECRY was given for this turn only)
+      local n = g.count(p, "DREADSTEEDS")
+      if n <= 0 then
+        return
+      end
+      g.add_count(p, "DREADSTEEDS", -n)
+      local times = g.tag(g.hero(p), "EXTRA_END_TURN_EFFECT") > 0 and 2 or 1
+      for _ = 1, n * times do
+        g.summon(p, "AT_019")
+      end
+    end,
+    equip = function(g, me, ev)
+      if g.mine(me, ev) then
+        murmur_used(g, g.ctrl(me), ev.entity)
+      end
+    end,
+    after_summon = function(g, me, ev)
+      local p = g.ctrl(me)
+      if ev.played and g.mine(me, ev) then
+        murmur_used(g, p, ev.entity)
+      end
+      if ev.played and g.mine(me, ev) and g.race(ev.entity) == "PIRATE" and g.room(p) > 0 then
+        local e = list.filter(g.deck(p), function(d)
+          return g.card(d) == PATCHES
+        end)[1]
+        if e then
+          g.summon_entity(e)
+        end
+      end
+    end,
+    game_start = function(g, me)
+      local p = g.ctrl(me)
+      for _, zone in ipairs({ g.deck(p), g.hand(p) }) do
+        for _, e in ipairs(zone) do
+          g.set_tag(e, "STARTED_IN_DECK", true)
+        end
+      end
+      malchezaar(g, p)
+      for _, e in ipairs(g.hand(p)) do
+        identify(g, e)
+      end
+    end,
+  },
+}
+
+return cards

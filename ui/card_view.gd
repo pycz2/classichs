@@ -39,7 +39,7 @@ func show_entity(e: GameView.Ent, g: GameView) -> void:
 	card_id = e.card_id
 	text_args = e.text_args
 	art_id = e.art_id
-	if e.choice >= 0 and CardText.raw(e.card_id).contains("@"):
+	if e.choice >= 0 and str(e.card().get("text", {}).get("enUS", "")).contains("@"):  # (raw() gives one variant)
 		text_args = ["@%d" % (e.choice + 1)]  # the text variant of its option (Fatespinner: only its player knows it)
 	cost = g.cost(e) if e.zone == "HAND" else int(e.card().get("cost", 0))
 	if was >= 0 and was != cost:

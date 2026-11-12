@@ -885,5 +885,16 @@
 "%s is removed from your deck": "%s zostaje usunięta z twojej talii",
 "%s is removed from Opponent's deck": "%s zostaje usunięta z talii przeciwnika",
 "You steal %s": "Kradniesz kartę %s",
-"Opponent steals %s": "Przeciwnik kradnie kartę %s"
+"Opponent steals %s": "Przeciwnik kradnie kartę %s",
+"%s is summoned from your deck": "Z twojej talii przyzwano: %s",
+"%s is summoned from Opponent's deck": "Z talii przeciwnika przyzwano: %s",
+"You draw %s: it casts itself": "Dobierasz kartę %s, która rzuca się sama",
+"Opponent draws %s: it casts itself": "Przeciwnik dobiera kartę %s, która rzuca się sama",
+"%d cards are shuffled into your deck": "Kart wtasowanych do twojej talii: %d",
+"%d cards are shuffled into Opponent's deck": "Kart wtasowanych do talii przeciwnika: %d",
+"You reveal %s": "Odkrywasz kartę: %s",
+"Opponent reveals %s": "Przeciwnik odkrywa kartę: %s",
+"%s awakens": "Przebudzenie: %s",
+"%s is removed from your hand": "%s znika z twojej ręki",
+"%s is removed from Opponent's hand": "%s znika z ręki przeciwnika"
 }

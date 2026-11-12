@@ -270,6 +270,7 @@ impl Parse<'_> {
                 "cost_mod" => h.cost_mod = Some(f!(true)),
                 "cost_aura" => h.cost_aura = Some(f!(true)),
                 "immune_while_attacking" => h.immune_while_attacking = v.truthy(),
+                "cost_last" => h.cost_last = v.truthy(),
                 "cost_first" => h.cost_first = match v {
                     L::Int(n) => n.clamp(0, 100),
                     _ => v.truthy() as i64,
@@ -428,6 +429,11 @@ impl Game {
         if top {
             self.lua.cur = Some(self.lua.checkout(lr));
         }
+        // the hook's Lifesteal heals come as one when it ends (behaviour.lifesteal_one_heal)
+        let batch = self.rs.lifesteal_one_heal && self.steal_batch.is_none();
+        if batch {
+            self.steal_batch = Some(vec![]);
+        }
         let r = (|| {
             let mut a = vec![lr.g_main.clone()];
             a.extend(args(self)?);
@@ -438,6 +444,10 @@ impl Game {
             if let Some(vm) = self.lua.cur.take() {
                 self.lua.checkin(vm);
             }
+        }
+        if batch {
+            let b = self.steal_batch.take().unwrap_or_default();
+            self.flush_steals(b);
         }
         match r {
             Ok(v) => Some(v),
@@ -981,6 +991,15 @@ fn a_add_to_deck(g: &mut Game, a: Args) -> R {
     let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "")?);
     one(g.add_to_deck(p, &c))
 }
+fn a_to_deck(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let e = ent(g, &a, 0)?;
+    let p = if a.get(1).is_nil() { g.ctrl(e) } else { player(&a, 1)? };
+    if g.e(e).zone == "PLAY" {
+        return Err(a.bad(0, "a card that is not in play expected"));
+    }
+    opt_id(g.to_deck(e, p))
+}
 fn a_cast(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (src, orig, t) = (ent(g, &a, 0)?, ent(g, &a, 1)?, opt_ent(g, &a, 2)?);
@@ -1349,7 +1368,7 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.request_choice", a_request_choice), ("g.add_cost_mod", a_add_cost_mod), ("g.log", a_log), ("g.emit", a_emit),
     ("g.remove", a_remove), ("g.random", a_random), ("g.pick", a_pick), ("g.random_alive", a_random_alive),
     ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
-    ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
+    ("g.add_to_deck", a_add_to_deck), ("g.to_deck", a_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
     ("g.cast", a_cast), ("g.cast_random", a_cast_random), ("g.add_count", a_add_count), ("g.extra_turn", a_extra_turn),
     ("g.force_attack", a_force_attack), ("g.update_auras", a_update_auras), ("g.set_hooks", a_set_hooks),
 ];

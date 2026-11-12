@@ -1,0 +1,20 @@
+{
+ "sets": {
+  "LOOTAPALOOZA": "Kobolds & Catacumbas"
+ },
+ "mechanics": {
+  "RECRUIT": {
+   "name": "Recruta",
+   "tip": "Evoque um lacaio do seu deck."
+  },
+  "CANT_BE_TARGETED_BY_OPPONENTS": {
+   "name": "Só você pode alvejar",
+   "tip": "Só o dono pode alvejá-lo com feitiços e Poderes Heroicos."
+  }
+ },
+ "cards": {
+  "VAN_NEW1_010": {
+   "text": "<b>Investida, Escudo Divino, Provocar, Fúria dos Ventos</b>"
+  }
+ }
+}

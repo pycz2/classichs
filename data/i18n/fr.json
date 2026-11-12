@@ -885,5 +885,16 @@
 "%s is removed from your deck": "%s est retiré de votre deck",
 "%s is removed from Opponent's deck": "%s est retiré du deck de l’adversaire",
 "You steal %s": "Vous volez %s",
-"Opponent steals %s": "L’adversaire vole %s"
+"Opponent steals %s": "L’adversaire vole %s",
+"%s is summoned from your deck": "%s est invoqué depuis votre deck",
+"%s is summoned from Opponent's deck": "%s est invoqué depuis le deck de l'adversaire",
+"You draw %s: it casts itself": "Vous piochez %s, la carte se lance d'elle-même",
+"Opponent draws %s: it casts itself": "L'adversaire pioche %s, la carte se lance d'elle-même",
+"%d cards are shuffled into your deck": "%d cartes sont mélangées dans votre deck",
+"%d cards are shuffled into Opponent's deck": "%d cartes sont mélangées dans le deck de l'adversaire",
+"You reveal %s": "Vous révélez %s",
+"Opponent reveals %s": "L'adversaire révèle %s",
+"%s awakens": "%s se réveille",
+"%s is removed from your hand": "%s est retiré de votre main",
+"%s is removed from Opponent's hand": "%s est retiré de la main de l'adversaire"
 }
