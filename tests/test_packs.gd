@@ -384,13 +384,15 @@ func test_a_pack_with_the_servers_rules_and_other_pictures_can_be_uploaded() -> 
 	h.link = l
 	(Engine.get_main_loop() as SceneTree).root.add_child(h)
 	h.show_upload()
+	# (the names only: a pack another test of this process left installed may be offered too)
 	var offered := func() -> Array:
-		return h.find_child("UploadPanel", true, false).find_children("Upload_*", "Button", true, false)
-	eq(offered.call().size(), 1, "only the pack with other files")
+		return h.find_child("UploadPanel", true, false).find_children("Upload_*", "Button", true, false).map(func(b): return str(b.name)) \
+			.filter(func(n): return n in ["Upload_" + own.id().replace(".", "_"), "Upload_" + Packs.CLASSIC.replace(".", "_"), "Upload_naxx-2014"])
+	eq(offered.call(), ["Upload_" + own.id().replace(".", "_")], "only the pack with other files")
 	h.find_child("UploadPanel", true, false).free()
 	l.dispatch({"t": "packs", "server": [entry.call(neon), entry.call(_pack(Packs.CLASSIC)), entry.call(_pack("naxx-2014"))], "mine": [entry.call(own)]})
 	h.show_upload()
-	eq(offered.call().size(), 0, "uploaded: no longer offered")
+	eq(offered.call(), [], "uploaded: no longer offered")
 	h.free()
 	l.free()
 	Packs.remove(own)

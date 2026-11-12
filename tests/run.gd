@@ -60,6 +60,11 @@ func _use_test_files() -> void:
 		Packs.user_dir = "user://test_runner_packs"  # downloaded and imported packs of the tests; Classic active
 		Settings.data.erase("pack")
 		Packs.rescan()
+	# Every test starts with the built-in packs only: a pack an earlier test of this process left installed
+	# changed what the next one saw (which tests share a process depends on the run's balance).
+	for p in Packs.all():
+		if p.origin != "builtin":
+			Packs.remove(p)
 	_player_decks()
 
 
