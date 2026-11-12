@@ -249,6 +249,11 @@ fn kezan_mystic_steals_a_secret() {
     let mut t = scene!({"hand": ["GVG_074"], "secrets": ["VAN_EX1_289"]}, {"secrets": ["VAN_EX1_289"]});
     t.play("GVG_074", NONE);
     assert_eq!((t.g.players[0].secrets.len(), t.g.players[1].secrets.len()), (1, 0));
+    // five Secrets already: the stolen one is destroyed (the limit is 5)
+    let five = ["VAN_EX1_289", "VAN_EX1_294", "VAN_EX1_295", "VAN_EX1_594", "VAN_tt_010"];
+    let mut t = scene!({"hand": ["GVG_074"], "secrets": five}, {"secrets": ["VAN_EX1_287"]});
+    t.play("GVG_074", NONE);
+    assert_eq!((t.g.players[0].secrets.len(), t.g.players[1].secrets.len()), (5, 0));
 }
 
 #[test]

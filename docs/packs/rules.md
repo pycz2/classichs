@@ -19,6 +19,7 @@ no starter rarities).
 | `max_mana` | 10 | Mana crystals at most. |
 | `hand` | 10 | Cards in hand; a card drawn into a full hand burns. |
 | `board` | 7 | Minions per side. |
+| `secrets` | 5 (default; not in the file) | Traps (Secrets) in play per side. At the limit a trap cannot be played from the hand, `g.put_trap` leaves it where it is and `g.take_control` destroys it. The same trap is never in play twice on one side. |
 | `deck_size` | 30 | Cards in a constructed or Arena deck. |
 | `copies` | 2 | Copies of one card in a constructed deck … |
 | `copies_by_rarity` | `{"LEGENDARY": 1}` | … except these rarities. |

@@ -382,7 +382,7 @@ impl Game {
         if x.is_minion() && p.board.len() >= self.rs.board {
             return false;
         }
-        if x.card.trap && p.secrets.iter().any(|&s| self.e(s).card_id == x.card_id) {
+        if x.card.trap && !self.trap_room(x.controller, x.card_id) {
             return false;
         }
         x.card.hooks.can_play.is_none_or(|f| self.fx_can_play(f, e))

@@ -280,6 +280,8 @@ pub struct Ruleset {
     pub names: Names,
     pub hand: usize,
     pub board: usize,
+    /// `limits.secrets`: traps in play per side (Hearthstone: 5).
+    pub secrets: usize,
     pub max_mana: i64,
     pub deck_size: usize,
     pub copies: usize,
@@ -459,6 +461,7 @@ impl Ruleset {
             names,
             hand: i(lim, "hand", 10) as usize,
             board: i(lim, "board", 7) as usize,
+            secrets: i(lim, "secrets", 5) as usize,
             max_mana: i(lim, "max_mana", 10),
             deck_size: i(lim, "deck_size", 30) as usize,
             copies: i(lim, "copies", 2) as usize,
