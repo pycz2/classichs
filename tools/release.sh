@@ -13,7 +13,7 @@
 # then prints a summary: the CI runs, the release (files, size), the site's and the server's versions.
 # --from STEP resumes after a failure (tools/release.sh 0.71.0 --from deploy); --dry-run only prints the steps.
 # Everything printed is kept in build/logs/release-<UTC time>.log (with the site's and the deploy's output).
-# RELEASE_TRAILERS: the lines that end the splash commit's message (the default below; empty: none).
+# RELEASE_TRAILERS: lines that end the splash commit's message (none by default).
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 . "$ROOT/tools/log.sh"
@@ -31,8 +31,7 @@ while [ $# -gt 0 ]; do
 done
 [[ $V =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || usage
 [[ " $STEPS " == *" $FROM "* ]] || { echo "no step '$FROM'" >&2; usage; }
-TRAILERS=${RELEASE_TRAILERS-"Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01EiXgp8TjHJ4tufzuCLnDgH"}
+TRAILERS=${RELEASE_TRAILERS-}
 SITE=https://pycz2.github.io/classichs/
 CI_URL= REL_URL=
 
