@@ -170,7 +170,7 @@ impl Library {
                 let (mut lp, mut ap) = (Pool::default(), Pool::default());
                 for id in rs.collectible.iter().filter(|id| {
                     let c = rs.card(id);
-                    c.kind != "CHAMPION" && c.kind != "POWER" && (c.card_class == class.id || rs.is_neutral(&c.card_class))
+                    c.kind != "CHAMPION" && c.kind != "POWER" && rs.fits_class(c, Some(&class.id)) // (a tri-class card: its classes)
                 }) {
                     lp.add(id, 1.0);
                     ap.add(id, (heuristic_score(rs, id) / 100.0).powi(2));

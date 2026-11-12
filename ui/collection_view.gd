@@ -243,7 +243,8 @@ func filtered() -> Array:
 		var c := CardDb.card(id)
 		if include_tokens and c.get("type", "") in ["HERO", "HERO_POWER", "ENCHANTMENT"]:
 			continue
-		if c.cardClass != tab or (only != null and not only.has(id)):
+		var classes: Array = c.get("classes", [])  # a multi-class card: under each of its classes, not Neutral
+		if (not classes.has(tab) if not classes.is_empty() else c.cardClass != tab) or (only != null and not only.has(id)):
 			continue
 		var cost := int(c.get("cost", 0))
 		if cost_filter >= 0 and (cost != cost_filter if cost_filter < 7 else cost < 7):

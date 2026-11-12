@@ -90,10 +90,38 @@ static func race(id: String, locale := "") -> String:
 	return t if t != "" else r.capitalize()
 
 
-## Card text as BBCode: keywords (<b>) bold, <i> italic, spaces collapsed.
-static func rich(id: String, locale := "", spellpower := 0) -> String:
+static var _placeholder := RegEx.create_from_string("\\{(\\d+)\\}")
+static var _before_stop := RegEx.create_from_string("[ \\x{a0}]+(?=[.,;])")
+static var _double := RegEx.create_from_string("  +")
+
+
+## The raw text of a card in a language, its "{0}", "{1}"… filled in with args (the engine's `text_args` of a card in a
+## game: a Jade card's next Golem, a potion's two effects; an arg that is a card id stands for that card's text), or
+## left out without them (in the collection: "Summon a Jade Golem.").
+static func raw(id: String, locale := "", args := []) -> String:
 	var t: Dictionary = CardDb.card(id).get("text", {})
 	var s: String = t.get(_loc(locale), t.get("enUS", ""))
+	if not s.contains("{"):
+		return s
+	var out := ""
+	var last := 0
+	for m in _placeholder.search_all(s):
+		out += s.substr(last, m.get_start() - last)
+		var i := int(m.get_string(1))
+		var a := str(args[i]) if i < args.size() else ""
+		if a != "" and a != id and CardDb.has(a):
+			a = raw(a, locale).replace("[x]", "")
+		out += a
+		last = m.get_end()
+	out += s.substr(last)
+	if args.is_empty():  # the spaces and brackets around what was left out
+		out = _double.sub(_before_stop.sub(out.replace("( )", "").replace("()", ""), "", true), " ", true)
+	return out
+
+
+## Card text as BBCode: keywords (<b>) bold, <i> italic, spaces collapsed; args: raw().
+static func rich(id: String, locale := "", spellpower := 0, args := []) -> String:
+	var s := raw(id, locale, args)
 	s = s.replace("[x]", "").replace("[", "[lb]")
 	s = s.replace("<b>", "[b]").replace("</b>", "[/b]").replace("<i>", "[i]").replace("</i>", "[/i]")
 	s = _tags.sub(s, "", true)
@@ -114,9 +142,8 @@ static func plain_rich(r: String) -> String:
 
 
 ## Card text without markup. spellpower > 0 shows boosted "$n" values as *n*.
-static func text(id: String, locale := "", spellpower := 0) -> String:
-	var t: Dictionary = CardDb.card(id).get("text", {})
-	var s: String = t.get(_loc(locale), t.get("enUS", ""))
+static func text(id: String, locale := "", spellpower := 0, args := []) -> String:
+	var s := raw(id, locale, args)
 	s = _tags.sub(s, "", true)
 	var out := ""
 	var last := 0

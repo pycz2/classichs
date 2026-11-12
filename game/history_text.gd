@@ -156,6 +156,8 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 				s = _t("A copy of %s is cast on %s") % [CardText.name(ev.card, loc), n.call(ev.target)]
 		"fizzle":
 			s = _t("%s fizzles") % CardText.name(ev.card, loc)
+		"retarget":  # (Mayor Noggenfogger): the chosen target became a random one
+			s = _t("The target is chosen at random: %s") % n.call(ev.get("to", -1))
 		"cthun":
 			s = _say(p, viewer, "Your C'Thun is now %d/%d", "Opponent's C'Thun is now %d/%d", [ev.atk, ev.health])
 		"to_hand":

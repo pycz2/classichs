@@ -875,5 +875,6 @@
 "%s is shuffled into your deck": "«%s» замешивается в вашу колоду",
 "%s is shuffled into Opponent's deck": "«%s» замешивается в колоду соперника",
 "A card is shuffled into your deck": "Карта замешивается в вашу колоду",
-"A card is shuffled into Opponent's deck": "Карта замешивается в колоду соперника"
+"A card is shuffled into Opponent's deck": "Карта замешивается в колоду соперника",
+"The target is chosen at random: %s": "Цель выбрана случайно: %s"
 }

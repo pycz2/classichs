@@ -875,5 +875,6 @@
 "%s is shuffled into your deck": "%s zostaje wtasowany do twojej talii",
 "%s is shuffled into Opponent's deck": "%s zostaje wtasowany do talii przeciwnika",
 "A card is shuffled into your deck": "Do twojej talii wtasowano kartę",
-"A card is shuffled into Opponent's deck": "Do talii przeciwnika wtasowano kartę"
+"A card is shuffled into Opponent's deck": "Do talii przeciwnika wtasowano kartę",
+"The target is chosen at random: %s": "Cel zostaje wybrany losowo: %s"
 }

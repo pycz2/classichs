@@ -266,6 +266,7 @@ impl Parse<'_> {
                 "durability_on_attack" => h.durability_on_attack = Some(f!(false)),
                 "can_play" => h.can_play = Some(f!(true)),
                 "glow" => h.glow = Some(f!(true)),
+                "text" => h.text = Some(f!(true)),
                 "cost_mod" => h.cost_mod = Some(f!(true)),
                 "cost_aura" => h.cost_aura = Some(f!(true)),
                 "immune_while_attacking" => h.immune_while_attacking = v.truthy(),
@@ -447,6 +448,11 @@ impl Game {
     /// Runs a read-only hook (`&self`): the first result, or None if it failed
     /// (the error ends the game at the next step).
     fn probe(&self, f: u32, args: &[L]) -> Option<L> {
+        self.probe_all(f, args).map(|v| v.into_iter().next().unwrap_or_default())
+    }
+
+    /// `probe` with every result.
+    fn probe_all(&self, f: u32, args: &[L]) -> Option<Vec<L>> {
         if self.script_error.get().is_some() {
             return None;
         }
@@ -460,7 +466,7 @@ impl Game {
         p.game = std::ptr::null();
         lr.pool.lock().unwrap_or_else(|e| e.into_inner()).push(p);
         match r {
-            Ok(v) => Some(v.into_iter().next().unwrap_or_default()),
+            Ok(v) => Some(v),
             Err(e) => {
                 let _ = self.script_error.set(script_message(&e));
                 None
@@ -538,6 +544,12 @@ impl Game {
 
     pub(crate) fn fx_can_play(&self, f: HookFn, me: Id) -> bool {
         self.probe(f, &[L::Int(me)]).is_some_and(|v| v.truthy())
+    }
+
+    /// A `text` hook's values as strings (numbers written out; anything else "").
+    pub(crate) fn fx_text(&self, f: HookFn, me: Id) -> Vec<String> {
+        let v = self.probe_all(f, &[L::Int(me)]).unwrap_or_default();
+        v.iter().map(|x| x.as_str().map(String::from).or(x.as_int().map(|n| n.to_string())).unwrap_or_default()).collect()
     }
 
     pub(crate) fn fx_filter(&self, f: HookFn, me: Id, t: Id) -> bool {
@@ -708,6 +720,7 @@ q!(q_turn, |g, _a| one(g.turn));
 q!(q_current, |g, _a| one(g.current as i64));
 q!(q_mana, |g, a| one(g.players[player(&a, 0)?].mana));
 q!(q_max_mana, |g, a| one(g.players[player(&a, 0)?].max_mana));
+q!(q_locked, |g, a| one(g.players[player(&a, 0)?].mana_locked));
 q!(q_cards_played, |g, a| one(g.players[player(&a, 0)?].cards_played_this_turn));
 q!(q_minions_played, |g, a| one(g.players[player(&a, 0)?].minions_played_this_turn));
 q!(q_room, |g, a| one(g.rs.board.saturating_sub(g.players[player(&a, 0)?].board.len()) as i64));
@@ -756,6 +769,11 @@ fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
         ("cost", L::Int(c.cost)), ("durability", L::Int(c.durability)), ("health", L::Int(c.health)), ("id", s(&c.id))] {
         vm.set(&t, k, v)?;
     }
+    if !c.classes.is_empty() {
+        // a multi-class card's classes (only then: older packs' tables stay as they were)
+        let classes = vm.list(c.classes.iter().map(|k| s(k)).collect())?;
+        vm.set(&t, "classes", classes)?;
+    }
     let keywords = vm.list(c.keywords.iter().map(|k| s(k)).collect())?;
     vm.set(&t, "keywords", keywords)?;
     for (k, v) in [("mana_lock", L::Int(c.mana_lock)), ("race", s(&c.race)), ("rarity", s(&c.rarity)), ("set", s(&c.set)),
@@ -790,7 +808,7 @@ macro_rules! queries {
             ("g.max_health", q_max_health::<$t>), ("g.dmg", q_dmg::<$t>), ("g.has", q_has::<$t>), ("g.tag", q_tag::<$t>),
             ("g.silenced", q_silenced::<$t>), ("g.is_minion", q_is_minion::<$t>), ("g.is_champion", q_is_champion::<$t>),
             ("g.is_weapon", q_is_weapon::<$t>), ("g.is_spell", q_is_spell::<$t>), ("g.turn", q_turn::<$t>),
-            ("g.current", q_current::<$t>), ("g.mana", q_mana::<$t>), ("g.max_mana", q_max_mana::<$t>),
+            ("g.current", q_current::<$t>), ("g.mana", q_mana::<$t>), ("g.max_mana", q_max_mana::<$t>), ("g.locked", q_locked::<$t>),
             ("g.cards_played", q_cards_played::<$t>), ("g.minions_played", q_minions_played::<$t>),
             ("g.room", q_room::<$t>), ("g.board_pos", q_board_pos::<$t>), ("g.died_pos", q_died_pos::<$t>),
             ("g.trap_ready", q_trap_ready::<$t>), ("g.spell_dmg", q_spell_dmg::<$t>), ("g.heal_amt", q_heal_amt::<$t>),
@@ -962,7 +980,13 @@ fn a_cast(g: &mut Game, a: Args) -> R {
 fn a_cast_random(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (src, c) = (ent(g, &a, 0)?, card_arg(g, &a, 1, "SPELL")?);
-    opt_id(g.cast_random(src, &c))
+    let e = g.cast_random(src, &c);
+    if a.get(2).truthy() {
+        // its Overload too (Yogg-Saron since patch 6.2): its player owes the spell's MANA_LOCK, cast or fizzled
+        let p = g.ctrl(src);
+        g.players[p].mana_lock_owed += g.rs.card(&c).mana_lock;
+    }
+    opt_id(e)
 }
 fn a_add_count(g: &mut Game, a: Args) -> R {
     live(g)?;

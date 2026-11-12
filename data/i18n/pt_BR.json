@@ -875,5 +875,6 @@
 "%s is shuffled into your deck": "%s é embaralhado no seu deck",
 "%s is shuffled into Opponent's deck": "%s é embaralhado no deck do oponente",
 "A card is shuffled into your deck": "Uma carta é embaralhada no seu deck",
-"A card is shuffled into Opponent's deck": "Uma carta é embaralhada no deck do oponente"
+"A card is shuffled into Opponent's deck": "Uma carta é embaralhada no deck do oponente",
+"The target is chosen at random: %s": "O alvo é escolhido aleatoriamente: %s"
 }

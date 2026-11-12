@@ -120,6 +120,8 @@ func test_whispers_of_the_old_gods_events() -> void:
 	eq(line.call(cthun, 1), "Opponent's C'Thun is now 10/12", "both players see it")
 	eq(line.call({"type": "fizzle", "player": 0, "entity": -1, "card": "VAN_CS2_029"}, 0), "Fireball fizzles", "no target")
 	var hero: int = g.players[0].hero.id
+	eq(line.call({"type": "retarget", "from": -1, "to": hero}, 0), "The target is chosen at random: Jaina Proudmoore",
+		"Mayor Noggenfogger")
 	eq(line.call({"type": "cast", "random": true, "player": 0, "by_id": hero, "card": "VAN_CS2_029", "target": hero}, 0),
 		"Jaina Proudmoore casts Fireball on Jaina Proudmoore", "Yogg-Saron's spell")
 	var wisp: int = g.players[0].hand[0].id

@@ -25,9 +25,9 @@ pub fn pool(rs: &Ruleset, card_class: &str, t: &str) -> Vec<(String, f64)> {
         if c.kind == "CHAMPION" || rs.tier(id) != t {
             continue;
         }
-        if c.card_class == card_class {
-            out.push((id.clone(), cw));
-        } else if rs.is_neutral(&c.card_class) {
+        if c.card_class == card_class || c.classes.iter().any(|k| k == card_class) {
+            out.push((id.clone(), cw)); // (a multi-class card: a class card of each of its classes)
+        } else if rs.is_neutral(&c.card_class) && c.classes.is_empty() {
             out.push((id.clone(), 1.0));
         }
     }

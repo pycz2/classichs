@@ -18,6 +18,8 @@ var locale := ""
 var show_boxes := false
 ## A silenced minion's card (when hovered): a red cross over its text.
 var silenced := false
+## The values of its text's "{0}", "{1}"… in a game (the engine's `text_args`: a Jade card's next Golem).
+var text_args := []
 
 
 static func make(id: String, scale_factor := 1.0) -> CardView:
@@ -33,6 +35,7 @@ func show_entity(e: GameView.Ent, g: GameView) -> void:
 	var was := cost if entity_id == e.id else -1
 	entity_id = e.id
 	card_id = e.card_id
+	text_args = e.text_args
 	cost = g.cost(e) if e.zone == "HAND" else int(e.card().get("cost", 0))
 	if was >= 0 and was != cost:
 		pop("cost")
@@ -62,7 +65,7 @@ func _draw_words(k: float) -> void:
 	var at := Vector2(nb.get_center().x - nw / 2.0, nb.get_center().y + ns * 0.36)
 	draw_string_outline(nf, at, name, HORIZONTAL_ALIGNMENT_LEFT, -1, ns, maxi(2, int(3 * k)), Color.BLACK)
 	draw_string(nf, at, name, HORIZONTAL_ALIGNMENT_LEFT, -1, ns, Color("f4ead5"))
-	var p := CardLayout.paragraph(card_id, lg, k)
+	var p := CardLayout.paragraph(card_id, lg, k, text_args)
 	var rects := CardLayout.line_rects(card_id, lg, p, k)
 	for i in rects.size():
 		var r: Rect2 = rects[i]
@@ -88,6 +91,20 @@ func _draw() -> void:
 	var type: String = c.get("type", "MINION")
 	var frame := Palette.of_class(c.get("cardClass", "NEUTRAL"))
 	draw_style_box(Palette.raw_box(frame.darkened(0.25), int(12 * k), Frames.GOLD.darkened(0.2), int(3 * k)), r)
+	var classes: Array = c.get("classes", [])
+	if classes.size() > 1:  # a multi-class card: its frame in the colours of its classes, side by side
+		var band := r.grow(-3 * k)
+		var w := band.size.x / classes.size()
+		for i in classes.size():
+			var part := Rect2(band.position + Vector2(w * i, 0), Vector2(w, band.size.y))
+			var sb := StyleBoxFlat.new()
+			sb.bg_color = Palette.of_class(classes[i]).darkened(0.2)
+			var rad := int(10 * k)
+			sb.corner_radius_top_left = rad if i == 0 else 0
+			sb.corner_radius_bottom_left = rad if i == 0 else 0
+			sb.corner_radius_top_right = rad if i == classes.size() - 1 else 0
+			sb.corner_radius_bottom_right = rad if i == classes.size() - 1 else 0
+			draw_style_box(sb, part)
 	draw_style_box(Palette.raw_box(frame.darkened(0.55), int(8 * k)), r.grow(-6 * k))
 	var shape: String = {"MINION": "oval", "WEAPON": "circle", "SPELL": "arch", "HERO_POWER": "circle", "HERO": "arch"}.get(type, "arch")
 	var art := {"oval": Rect2(Vector2(22, 8), Vector2(76, 84)), "circle": Rect2(Vector2(25, 10), Vector2(70, 70)),
@@ -107,6 +124,13 @@ func _draw() -> void:
 	var bend := 4.0 * k if type == "MINION" else 0.0
 	var banner := PackedVector2Array([Vector2(4, 86) * k, Vector2(60 * k, 86 * k - bend), Vector2(116, 86) * k, Vector2(116, 102) * k, Vector2(60 * k, 102 * k - bend), Vector2(4, 102) * k])
 	draw_colored_polygon(banner, frame.darkened(0.15))
+	if classes.size() > 1:  # the name banner in the classes' colours too
+		var w := 112.0 * k / classes.size()
+		for i in classes.size():
+			var x0 := 4 * k + w * i
+			var slab := PackedVector2Array([Vector2(x0, 0), Vector2(x0 + w, 0), Vector2(x0 + w, size.y), Vector2(x0, size.y)])
+			for part in Geometry2D.intersect_polygons(banner, slab):
+				draw_colored_polygon(part, Palette.of_class(classes[i]).darkened(0.3))
 	Frames.ring(self, banner, Color("2a2118"), 1.5 * k)
 	Frames.rarity(self, Vector2(60, 101) * k, c.get("rarity", ""), 5 * k)
 	_draw_words(k)

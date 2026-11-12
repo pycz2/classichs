@@ -22,6 +22,7 @@ array of card objects, one per card (tokens, champions and powers included).
 | `id` | `[A-Za-z0-9_]{1,64}` | Unique in the pack; art files and texts use it. |
 | `type` | `MINION` `SPELL` `WEAPON` `CHAMPION` `POWER` | |
 | `class` | class id | One of `rules.json` `classes`. |
+| `classes` | [class id] | Optional, 2 or more: a multi-class card (Mean Streets of Gadgetzan's tri-class cards: Hearthstone's `multiClassGroup`). Its `class` is a neutral one; it counts as a card of each of these classes: a deck of any of them may hold it (and only those), the collection shows it under each, the Arena offers it to each as a class card, scripts see the list in `g.info(card).classes`. The client draws its frame in the classes' colours. |
 | `rarity` | rarity id | Optional (tokens have none). |
 | `set` | set id | One of `rules.json` `sets`. |
 | `collectible` | bool | Can go into decks (if its set is a mode's set). Default false. |

@@ -126,10 +126,12 @@ static func name_font() -> Font:
 
 
 ## The card text as spans [[text, bold], ...], the layout's lines joined by "\n"
-## (a card without lines yet: its own text, wrapped by paragraph()).
-static func spans(card_id: String, lang: String) -> Array:
+## (a card without lines yet: its own text, wrapped by paragraph(); args: its "{0}"… in a game, CardText.raw()).
+static func spans(card_id: String, lang: String, args := []) -> Array:
 	var e := of(card_id, lang)
-	return _spans_of("\n".join(e.lines) if e.has("lines") else CardText.rich(card_id, CardText.hs_locale(lang)))
+	if e.has("lines") and args.is_empty():
+		return _spans_of("\n".join(e.lines))
+	return _spans_of(CardText.rich(card_id, CardText.hs_locale(lang), 0, args))
 
 
 static func _spans_of(rich: String) -> Array:
@@ -153,16 +155,25 @@ static func _spans_of(rich: String) -> Array:
 	return out
 
 
-static func paragraph(card_id: String, lang: String, k := 1.0) -> TextParagraph:
-	var size := int(int(of(card_id, lang).text) * k)
+static func paragraph(card_id: String, lang: String, k := 1.0, args := []) -> TextParagraph:
+	var base := int(of(card_id, lang).text)
+	var p := _paragraph(card_id, lang, k, args, base)
+	while not args.is_empty() and base > 6 and height(p) > (TEXT_BOX.size.y - 2) * k:
+		base -= 1  # its text in a game may be longer than the one the size was found for (a potion's two effects)
+		p = _paragraph(card_id, lang, k, args, base)
+	return p
+
+
+static func _paragraph(card_id: String, lang: String, k: float, args: Array, base: int) -> TextParagraph:
+	var size := int(base * k)
 	var p := TextParagraph.new()
 	p.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	p.line_spacing = -LEADING_CUT * size  # the font's own lines are 1.5 sizes apart
 	p.break_flags = TextServer.BREAK_MANDATORY
-	if not of(card_id, lang).has("lines"):
+	if not of(card_id, lang).has("lines") or not args.is_empty():
 		p.width = (TEXT_BOX.size.x - (4 if _lang(lang).is_empty() else 0)) * k
 		p.break_flags |= TextServer.BREAK_WORD_BOUND
-	for s in spans(card_id, lang):
+	for s in spans(card_id, lang, args):
 		p.add_string(s[0], bold_font() if s[1] else body_font(), size)
 	return p
 

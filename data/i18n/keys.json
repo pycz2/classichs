@@ -679,6 +679,7 @@
   "The server refused the game: %s",
   "The start can be at most 14 days ahead",
   "The start must be at least 11 minutes from now",
+  "The target is chosen at random: %s",
   "The tournament",
   "The tournament is created",
   "The tournament was cancelled",

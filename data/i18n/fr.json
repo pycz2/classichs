@@ -875,5 +875,6 @@
 "%s is shuffled into your deck": "%s est mélangé dans votre deck",
 "%s is shuffled into Opponent's deck": "%s est mélangé dans le deck de l'adversaire",
 "A card is shuffled into your deck": "Une carte est mélangée dans votre deck",
-"A card is shuffled into Opponent's deck": "Une carte est mélangée dans le deck de l'adversaire"
+"A card is shuffled into Opponent's deck": "Une carte est mélangée dans le deck de l'adversaire",
+"The target is chosen at random: %s": "La cible est choisie au hasard : %s"
 }

@@ -316,7 +316,7 @@ def deck_error(deck, cards, rules):
         c = cards.get(cid)
         if c is None or not c.get("collectible") or c.get("set") not in mode["sets"] or c["type"] == "CHAMPION":
             return f"{cid} can't be put in a deck"
-        if c["class"] not in neutral and c["class"] != cls:
+        if (cls not in c["classes"]) if c.get("classes") else (c["class"] not in neutral and c["class"] != cls):
             return f"{cid} belongs to another class"
         counts[cid] = counts.get(cid, 0) + 1
         most = mode.get("copies", 0) if arena else limits.get("copies_by_rarity", {}).get(c.get("rarity"), limits["copies"])
@@ -429,6 +429,9 @@ def check_files(files):
         at = f"cards.json {c['id']}"
         if c["class"] not in classes:
             r.error(f"{at}: unknown class {c['class']}")
+        for k in c.get("classes", []):
+            if k not in classes:
+                r.error(f"{at}: unknown class {k} in classes")
         if "rarity" in c and c["rarity"] not in rarities:
             r.error(f"{at}: unknown rarity {c['rarity']}")
         if "set" in c and sets and c["set"] not in sets:
@@ -734,7 +737,8 @@ def step_hsjson(b, root, s):
     fields = [("cardClass", "class"), ("rarity", "rarity"), ("set", "set"), ("collectible", "collectible"),
               ("cost", "cost"), ("attack", "attack"), ("health", "health"), ("durability", "durability"),
               ("race", "race"), ("mechanics", "keywords"), ("referencedTags", "refs"), ("spellDamage", "spell_power"),
-              ("overload", "mana_lock"), ("elite", "unique"), ("dbfId", "code_id"), ("legacyDbfId", "legacy_code_id")]
+              ("overload", "mana_lock"), ("elite", "unique"), ("dbfId", "code_id"), ("legacyDbfId", "legacy_code_id"),
+              ("classes", "classes")]
     out = []
     for c in sorted(data, key=lambda c: c["id"]):
         card = {"id": c["id"], "type": rename.get(c["type"], c["type"])}

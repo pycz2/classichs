@@ -405,6 +405,9 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
         if g.glows(e.id) {
             s["glow"] = json!(true); // its condition holds now: the client lights it yellow
         }
+        if let Some(f) = e.card.hooks.text {
+            s["text_args"] = json!(g.fx_text(f, e.id)); // its text's {0}, {1}… now (a Jade card's next Golem)
+        }
         let src: Map<String, Value> = e.aura.src.iter().map(|(k, v)| (k.to_string(), json!(v))).collect();
         s["aura"] = json!({"atk": e.aura.atk, "hp": e.aura.hp, "tags": e.aura.tags.to_value(), "src": src});
         ents.insert(e.id.to_string(), s);

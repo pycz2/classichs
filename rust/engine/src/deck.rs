@@ -87,8 +87,7 @@ impl Deck {
         if !rs.has(id) || rs.collectible.binary_search(&id.to_string()).is_err() {
             return "This card can't be put in a deck".into();
         }
-        let cls = &rs.card(id).card_class;
-        if rs.own_and_neutral && !rs.is_neutral(cls) && Some(cls.as_str()) != rs.class_of_champion(&self.hero) {
+        if rs.own_and_neutral && !rs.fits_class(rs.card(id), rs.class_of_champion(&self.hero)) {
             return "This card belongs to another class".into();
         }
         if self.cards.len() >= rs.deck_size {

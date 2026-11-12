@@ -105,6 +105,9 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 	var mark := Packs.set_mark(CardText.set_key(card_id))
 	if mark and CardText.card_set(card_id) != "":  # the card's set (the packs after Classic)
 		tips.add_child(_set_box(mark, CardText.card_set(card_id)))
+	var classes: Array = CardDb.card(card_id).get("classes", [])
+	if classes.size() > 1:  # a multi-class card: the classes it belongs to
+		tips.add_child(_classes_box(classes))
 	var lines := changes(e)
 	if not lines.is_empty():
 		tips.add_child(_box("Changes", TranslationServer.translate("Changes"), "\n".join(lines), Color("dcefd2")))
@@ -125,6 +128,26 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 			grid.add_child(cv)
 		tips.add_child(grid)
 	return tips
+
+
+## A line with a multi-class card's classes, each name in its class's colour.
+static func _classes_box(classes: Array) -> PanelContainer:
+	var box := PanelContainer.new()
+	box.name = "Classes"
+	var st := Palette.box(Color("efe0bd"), 10, Color("8a6d3b"), 2)
+	st.set_content_margin_all(6)
+	box.add_theme_stylebox_override("panel", st)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 8)
+	box.add_child(row)
+	for cls: String in classes:
+		var name := CardText.term("classes", cls)
+		var l := Palette.label(name if name != "" else cls.capitalize(), 14, Palette.of_class(cls).darkened(0.35))
+		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(l)
+	return box
 
 
 ## A line with the card's set: its mark and its name.

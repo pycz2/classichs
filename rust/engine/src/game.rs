@@ -189,9 +189,20 @@ impl Game {
             Act::Mulligan { player, replace } => self.do_mulligan(player as usize, replace),
             Act::EndTurn { .. } => self.end_turn(),
             Act::Concede { player } => self.concede(player as usize),
-            Act::Play { entity, target, pos, choice, .. } => self.do_play(entity, target, pos, choice),
-            Act::Attack { attacker, defender, .. } => self.do_attack(attacker, defender),
-            Act::HeroPower { target, .. } => self.do_hero_power(target),
+            Act::Play { entity, target, pos, choice, .. } => {
+                let t = self.random_target(target, |g| g.play_targets(entity, choice));
+                self.do_play(entity, t, pos, choice)
+            }
+            Act::Attack { attacker, defender, .. } => {
+                // past Taunt and Stealth, never a friendly one (Mayor Noggenfogger's note on hearthstone.wiki.gg)
+                let d = self.random_target(defender, |g| g.any_defenders(attacker));
+                self.do_attack(attacker, d)
+            }
+            Act::HeroPower { target, .. } => {
+                let hp = self.players[self.current].hero_power;
+                let t = self.random_target(target, |g| g.spec_targets(hp, g.live_spec(hp, g.e(hp).card.hooks.target), true, false));
+                self.do_hero_power(t)
+            }
             Act::Choose { option, .. } => self.do_choose(option),
         }
         self.resolve();
@@ -454,6 +465,26 @@ impl Game {
         self.live_spec(e, spec)
     }
 
+    /// RANDOM_TARGETS (an aura tag on the acting player's champion: Mayor Noggenfogger): the chosen target of a
+    /// play, an attack or a power becomes a random one of its valid targets (`valid`, as `legal` lists them, the
+    /// chosen one too). Only in a pack that names the mechanic; no target chosen: none.
+    fn random_target(&mut self, t: Id, valid: impl Fn(&Game) -> Vec<Id>) -> Id {
+        let Some(tag) = self.n().random_targets else { return t };
+        if t == NONE || !self.e(self.hero(self.current)).aura.tags.contains_key(tag) {
+            return t;
+        }
+        let ids: Vec<Id> = valid(self).into_iter().filter(|&x| x != NONE).collect();
+        if ids.len() < 2 {
+            return t;
+        }
+        let i = self.rng.randi_range(0, ids.len() as i64 - 1) as usize;
+        let nt = ids[i];
+        if nt != t {
+            self.log_event(obj!{"type": "retarget", "from": t, "to": nt});
+        }
+        nt
+    }
+
     /// A target spec as it applies now: none while its `when` hook does not hold.
     fn live_spec(&self, e: Id, spec: Option<TSpec>) -> Option<TSpec> {
         spec.filter(|s| s.when.is_none_or(|f| self.fx_can_play(f, e)))
@@ -490,6 +521,16 @@ impl Game {
         }
         let limit = if x.has(n.double_attack) || weapon(n.double_attack) { 2 } else { 1 };
         x.tag(n.attacks) < limit
+    }
+
+    /// The enemy characters a may hit when its attack goes astray (RANDOM_TARGETS): every one, Taunt or Stealth or
+    /// not, but a champion only if a may attack champions.
+    fn any_defenders(&self, a: Id) -> Vec<Id> {
+        let n = self.n();
+        let (x, p) = (self.e(a), self.ctrl(a));
+        let no_heroes = x.has(n.cant_attack_heroes)
+            || (x.is_champion() && self.players[p].weapon.is_some_and(|w| self.e(w).has(n.cant_attack_heroes)));
+        self.chars(self.opponent(p)).into_iter().filter(|&t| !(no_heroes && self.e(t).is_champion())).collect()
     }
 
     fn defenders(&self, a: Id) -> Vec<Id> {

@@ -53,6 +53,9 @@ pub struct Card {
     pub keywords: Vec<String>,
     pub rarity: String,
     pub card_class: String,
+    /// A multi-class card's classes (docs/packs/cards.md): it is a card of each of them (its `card_class` is a
+    /// neutral one); empty for a card of one class.
+    pub classes: Vec<String>,
     pub collectible: bool,
     pub set: String,
     /// CHAMPION: its POWER card ("" = none).
@@ -77,6 +80,8 @@ struct PackCard {
     kind: String,
     #[serde(default)]
     class: String,
+    #[serde(default)]
+    classes: Vec<String>,
     #[serde(default)]
     rarity: String,
     #[serde(default)]
@@ -149,6 +154,9 @@ pub struct Names {
     /// only when the pack names them (Garrison Commander, Frost Giant).
     pub power_uses: Option<&'static str>,
     pub powers_used: Option<&'static str>,
+    /// RANDOM_TARGETS: a player whose champion has it plays, attacks and uses the power on a random valid target
+    /// (an aura tag; only when the pack names it: Mayor Noggenfogger).
+    pub random_targets: Option<&'static str>,
     /// DIED_TURN: written at a death only when the pack names it (Classic does not: its states stay as recorded).
     pub died_turn: Option<&'static str>,
     /// PLAYED_COST: the mana a card cost when it was played, written only when the pack names it (Gazlowe).
@@ -215,6 +223,7 @@ impl Names {
             power_uses: by_engine.get("POWER_USES").copied(),
             powers_used: by_engine.get("POWERS_USED").copied(),
             died_turn: by_engine.get("DIED_TURN").copied(),
+            random_targets: by_engine.get("RANDOM_TARGETS").copied(),
             played_cost: by_engine.get("PLAYED_COST").copied(),
             trap: n("TRAP"),
             silenced: SILENCED.iter().map(|id| n(id)).collect(),
@@ -407,6 +416,15 @@ impl Ruleset {
 
     pub fn is_neutral(&self, class: &str) -> bool {
         self.classes.iter().any(|c| c.id == class && c.neutral)
+    }
+
+    /// Whether a deck of class `class` may hold the card (`class_cards: own_and_neutral`): a card of that class
+    /// (a multi-class card: one of its classes) or a neutral one.
+    pub fn fits_class(&self, card: &Card, class: Option<&str>) -> bool {
+        if !card.classes.is_empty() {
+            return class.is_some_and(|k| card.classes.iter().any(|c| c == k));
+        }
+        self.is_neutral(&card.card_class) || Some(card.card_class.as_str()) == class
     }
 
     /// The power a class champion starts with (None for other champions).
@@ -632,6 +650,7 @@ fn make_card(c: PackCard, names: &Names, champion_health: i64) -> Result<Card, S
         keywords: c.keywords,
         rarity: c.rarity,
         card_class: c.class,
+        classes: c.classes,
         collectible: c.collectible,
         set: c.set,
         power: c.power,

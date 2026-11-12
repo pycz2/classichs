@@ -68,6 +68,7 @@ Return values are ignored unless said otherwise.
 | `hero_power` (alias `power`) | `fn(g, me, t)` | On a POWER card: the power is used. |
 | `can_play` | `fn(g, me) → bool` | The card/power may be played now (read-only). |
 | `glow` | `fn(g, me) → bool` | The card in the hand glows yellow now: its condition holds ("if you're holding a Dragon", "if your deck has no duplicates"…; read-only, for clients: snapshots mark it `glow`, no rule reads it). Without it a card with a `combo` hook glows while its combo is on (`g.combo(me)`). |
+| `text` | `fn(g, me) → string, …` | The values of the card text's `{0}`, `{1}`, … now (read-only, for clients: snapshots carry them as `text_args`; no rule reads them): a Jade card's next Golem (`"4/4"`, and `"n"` for English's "a{1}" before 8, 11, 18), a made potion's two effects (a value that is a card id stands for that card's text in the player's language). Without it the client leaves the placeholders out. |
 | `deathrattle` (alias `on_death`) | `fn(g, me)` | It died (minion or weapon; `g.died_pos(me)` is where). |
 | `on` | `{<event type> = fn(g, me, ev)}` | Any event of that type while `me` is in play (or a trap). Queued: runs after the action that caused it. |
 | `hand` | `{<event type> = fn(g, me, ev)}` | Like `on`, while the card is in its owner's hand (also an enchantment's `hooks` set's `hand` hooks: Shifter Zerus) (not during the mulligan; skipped if it left the hand before its turn in the queue): "when you draw this" (`draw` with `ev.entity == me`: Flame Leviathan, Burrowing Mine), "while this is in your hand" (Bolvar Fordragon). `hand.discard` also runs for the discarded card itself, which has left the hand: "when you discard this" (Fist of Jaraxxus). |
@@ -83,7 +84,7 @@ Return values are ignored unless said otherwise.
 | `both` | `fn(g, me, t)` | A Choose One card played with both options (BOTH_CHOICES, Fandral Staghelm: `choice` 2): this instead of the two options' `effect`s in card order (Druid of the Claw's combined form; Keeper of the Grove silences first). |
 | `cost_first` | `true` | Its `cost_aura` comes before every other cost change in a pack with `behaviour.cost_in_order` (Summoning Portal). |
 
-**Read-only hooks** (`target.filter`, `can_play`, `glow`, `cost_mod`, `cost_aura`) run
+**Read-only hooks** (`target.filter`, `can_play`, `glow`, `text`, `cost_mod`, `cost_aura`) run
 while the engine only looks at the game (legal actions, costs in snapshots).
 Their `g` has only the query functions; calling an action there is an error.
 They must not depend on anything but the game.
@@ -168,6 +169,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.is_minion(e)`, `g.is_champion(e)`, `g.is_weapon(e)`, `g.is_spell(e)` | |
 | `g.turn()`, `g.current()` | The turn number, whose turn it is. |
 | `g.mana(p)`, `g.max_mana(p)` | Mana now, crystals. |
+| `g.locked(p)` | `p`'s crystals Overload locked this turn (Kun the Forgotten King refreshes the others). |
 | `g.cards_played(p)`, `g.minions_played(p)` | Cards and minions `p` played this turn. |
 | `g.combo(e)` | Combo is active for `e`: its controller played another card before it this turn. |
 | `g.room(p)` | Free board slots (`g.room(p) > 0`: room for one; note `0` is true in Lua). |
@@ -179,7 +181,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.rule(name)` | `hand`, `board`, `max_mana`, `deck_size`, `champion_health` from rules.json. |
 | `g.mine(me, ev)` | `ev.player` is `me`'s controller. |
 | `g.enchants(e, hooks)` | The `player` fields of `e`'s enchantments with these hooks. |
-| `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`. |
+| `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`, and `classes` (a list) for a multi-class card (cards.md: a card of each of its classes; its `class` is neutral). |
 | `g.collectible()` | Collectible card ids of the constructed sets, sorted. |
 | `g.count(p, name)` | A count of the game `g.add_count` keeps for `p` (0 if none). |
 | `g.graveyard(p)` | `p`'s cards in the GRAVEYARD zone, in play order: dead minions and weapons, played spells, discarded and burned cards. A minion that died on the board has `DIED_POS` (`g.died_pos(e) >= 0`), and `DIED_TURN` (the turn) in a pack that names that mechanic (Naxxramas: Kel'Thuzad, Feugen and Stalagg). |
@@ -227,7 +229,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.reveal(me)` | Reveals a trap (for `now` hooks; `secret` hooks are revealed for you). |
 | `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. Asked while another choice is pending (a doubled Battlecry: two Discovers), it comes once that one is answered. |
 | `g.cast(me, spell, t)` | Casts a copy of the spell entity `spell` for `me`'s player on `t` (or none), as `spell` was cast (its Choose One option, its Combo): only its effect, no `play` or `after_spell` event, no target check; logs `cast` (Djinni of Zephyrs). |
-| `g.cast_random(me, card)` | Casts a new spell `card` for `me`'s player with every choice made at random (Yogg-Saron): a random valid target (no enemy with Stealth or Immune; none, or its `can_play` fails: it fizzles, logs `fizzle`, returns `nil`), a random Choose One option (both with BOTH_CHOICES), its `g.request_choice` picked at once at random; Combo only if a card was played before `me` this turn; a trap goes into play if it may. Only its effect: no `play`/`after_spell` event, no Overload. Logs `cast` with `random`; returns the spell. |
+| `g.cast_random(me, card[, overload])` | Casts a new spell `card` for `me`'s player with every choice made at random (Yogg-Saron): a random valid target (no enemy with Stealth or Immune; none, or its `can_play` fails: it fizzles, logs `fizzle`, returns `nil`), a random Choose One option (both with BOTH_CHOICES), its `g.request_choice` picked at once at random; Combo only if a card was played before `me` this turn; a trap goes into play if it may. Only its effect: no `play`/`after_spell` event, no Overload (`g.cast_random(me, card, true)`: its Overload too, owed by `me`'s player, cast or fizzled: Yogg-Saron since patch 6.2). Logs `cast` with `random`; returns the spell. |
 | `g.add_count(p, name[, n])` | Adds `n` (default 1) to `p`'s count `name` (in the player's snapshot `counts`; kept by a new champion): spells cast, Totems summoned this game. Returns the new count. |
 | `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"power"|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n][, race = r][, lasting = true]}`; `turn` defaults to now. `race`: only cards of that race (Dragon Consort: `"DRAGON"`). `"power"`: the champion's power (a `"use"` mod goes when the power is used: Fencing Coach; Saboteur: `turn = g.turn() + 1`). `lasting`: it holds on any turn, kept until a card it applies to is played (with `until = "use"`: "the next Dragon you play costs (2) less"). `health = true`: the cards it applies to cost Health instead of Mana (paid as damage to the champion, Armor first; playable only while Health and Armor are more than the cost: Cho'gall). |
 | `g.log(ev)`, `g.emit(ev)` | Logs an event table (`emit` also triggers `on` hooks). |
@@ -293,7 +295,7 @@ ruleset against `tools/pack.py`.
 - Positions are 0-based (`g.summon(p, card, g.died_pos(me))`), lists 1-based.
 - `until`, `end`, `and`, `or`, `not` are keywords: `{ ["until"] = "use" }`.
 - No `continue`, no `/` (use `//`), no floats, no global variables.
-- Read-only hooks (`target.filter`, `can_play`, `glow`, `cost_mod`, `cost_aura`) see
+- Read-only hooks (`target.filter`, `can_play`, `glow`, `text`, `cost_mod`, `cost_aura`) see
   only queries: no `g.cost`, no actions.
 - `g.tag` adds aura values (`SPELLPOWER` from an aura counts); `g.add_tag`
   changes only the entity's own tag.

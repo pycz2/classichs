@@ -11,6 +11,7 @@
       "id": {"$ref": "#/$defs/id"},
       "type": {"enum": ["MINION", "SPELL", "WEAPON", "CHAMPION", "POWER"]},
       "class": {"$ref": "#/$defs/id"},
+      "classes": {"type": "array", "minItems": 2, "maxItems": 16, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
       "rarity": {"$ref": "#/$defs/id"},
       "set": {"$ref": "#/$defs/id"},
       "collectible": {"type": "boolean"},

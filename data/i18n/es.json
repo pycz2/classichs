@@ -875,5 +875,6 @@
 "%s is shuffled into your deck": "%s se baraja en tu mazo",
 "%s is shuffled into Opponent's deck": "%s se baraja en el mazo del oponente",
 "A card is shuffled into your deck": "Se baraja una carta en tu mazo",
-"A card is shuffled into Opponent's deck": "Se baraja una carta en el mazo del oponente"
+"A card is shuffled into Opponent's deck": "Se baraja una carta en el mazo del oponente",
+"The target is chosen at random: %s": "El objetivo se elige al azar: %s"
 }

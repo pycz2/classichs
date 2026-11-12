@@ -48,6 +48,8 @@ class Ent:
 	var silenced := false
 	## A card in the hand whose condition holds now (the engine's `glow`: Combo on, a Dragon held…): it glows yellow.
 	var glow := false
+	## The values of its text's "{0}", "{1}"… now (the engine's `text_args`: a Jade card's next Golem, a potion's effects).
+	var text_args := []
 	var _atk := 0
 	var _max_health := 0
 	var _cost := 0
@@ -89,7 +91,7 @@ class Ent:
 	func copy() -> Ent:
 		var e := Ent.new()
 		e.set_from(id, {})
-		for k in ["card_id", "controller", "zone", "play_order", "damage", "silenced", "_atk", "_max_health", "_cost"]:
+		for k in ["card_id", "controller", "zone", "play_order", "damage", "silenced", "_atk", "_max_health", "_cost", "text_args"]:
 			e.set(k, get(k))
 		e.tags = tags.duplicate(true)
 		e.enchantments = enchantments.duplicate(true)
@@ -120,6 +122,7 @@ class Ent:
 		_max_health = int(d.get("max_health", 0))
 		_cost = int(d.get("cost", card().get("cost", 0)))
 		glow = bool(d.get("glow", false))
+		text_args = d.get("text_args", [])
 
 
 static func renamed(d: Dictionary, names: Dictionary) -> Dictionary:

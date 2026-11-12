@@ -54,6 +54,9 @@ pub struct HookSet {
     /// The card glows in the hand while this holds (read-only; clients only). Without it a COMBO card glows
     /// while its combo is on.
     pub glow: Option<HookFn>,
+    /// The values of the card text's `{0}`, `{1}`, … now (read-only; clients only): a Jade card's next Golem, a
+    /// made potion's two effects (a value that is a card id stands for that card's text).
+    pub text: Option<HookFn>,
     pub on_death: Option<HookFn>,
     pub on: Vec<(&'static str, HookFn)>,
     /// Like `on`, while the card is in its owner's hand (not in the mulligan): "when you draw this",
@@ -109,6 +112,7 @@ pub fn summary(h: &HookSet) -> serde_json::Value {
     flag("hero_power", h.power.is_some());
     flag("can_play", h.can_play.is_some());
     flag("glow", h.glow.is_some());
+    flag("text", h.text.is_some());
     flag("deathrattle", h.on_death.is_some());
     flag("aura", h.aura.is_some() || h.aura_final.is_some());
     flag("cost_mod", h.cost_mod.is_some() || h.cost_aura.is_some());

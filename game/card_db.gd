@@ -12,7 +12,8 @@ const HS := {"en": "enUS", "ru": "ruRU", "de": "deDE", "fr": "frFR", "es": "esES
 const FIELDS := {"class": "cardClass", "rarity": "rarity", "set": "set", "collectible": "collectible", "cost": "cost",
 	"attack": "attack", "health": "health", "durability": "durability", "race": "race", "keywords": "mechanics",
 	"refs": "referencedTags", "spell_power": "spellDamage", "mana_lock": "overload", "unique": "elite",
-	"code_id": "dbfId", "legacy_code_id": "legacyDbfId", "fx": "fx", "sounds": "sounds", "voice": "voice", "power": "power"}
+	"code_id": "dbfId", "legacy_code_id": "legacyDbfId", "fx": "fx", "sounds": "sounds", "voice": "voice", "power": "power",
+	"classes": "classes"}
 const TYPES := {"CHAMPION": "HERO", "POWER": "HERO_POWER"}
 const INT_FIELDS := ["dbfId", "legacyDbfId", "cost", "attack", "health", "durability", "overload", "spellDamage"]
 

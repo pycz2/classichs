@@ -176,6 +176,7 @@ does not map is written as the engine id.
 | `WOUNDED` | hook | Bonus while damaged | `ENRAGED` |
 | `ON_POWER` | hook | Effect after its owner uses the champion's power (an `on` hook on `hero_power`) | — (The Grand Tournament: `INSPIRE`) |
 | `FREEZE`, `SILENCE`, `COUNTER` | marker | The card freezes / silences / counters (the effect is its hook) | same |
+| `GROWING_SUMMON` | marker | The card summons a token that grows each time its player summons one (its hook; the count `g.add_count`) | — (Mean Streets of Gadgetzan: `JADE_GOLEM`) |
 | `OFFER` | marker | The card offers its player a choice of cards (`g.create`, `g.request_choice`: only that player sees them) | — (The League of Explorers: `DISCOVER`) |
 | `AURA`, `TRIGGER`, `ADJACENT` | marker | Client hints | `AURA`, `TRIGGER_VISUAL`, `ADJACENT_BUFF` |
 | `SPELL_SCALED`, `NO_SPELL_POWER` | marker | Spell power changes / does not change its numbers | `AFFECTED_BY_SPELL_POWER`, `ImmuneToSpellpower` |
@@ -184,6 +185,7 @@ does not map is written as the engine id.
 | `DOUBLE_ON_DEATH` | state | Its owner's minions run their death hooks twice (aura tag on the champion; not while its source dies with them) | — (Naxxramas: `DOUBLE_DEATHRATTLE`, Baron Rivendare) |
 | `DOUBLE_ON_PLAY` | state | Its owner's Battlecries (`ON_PLAY` hooks; not a Combo or a Choose One) run twice, on the same target, with no death phase between (aura tag on the champion, read as the Battlecry starts) | — (The League of Explorers: `DOUBLE_BATTLECRY`, Brann Bronzebeard) |
 | `BOTH_CHOICES` | state | Its owner's CHOICE cards have both effects: one play with `choice` 2, the first option's target (else the second's), then the card's `both` hook or the two options' effects in card order (aura tag on the champion) | — (Whispers of the Old Gods: `CHOOSE_BOTH`, Fandral Staghelm) |
+| `RANDOM_TARGETS` | state | Its owner's chosen targets become random ones: a card played, the power used and an attack go to a random one of their valid targets (an attack: any enemy character, past Taunt and Stealth; the chosen one may come again; logs `retarget`). An aura tag on the champion; only in a pack that names it | — (Mean Streets of Gadgetzan: `RANDOM_TARGETS`, Mayor Noggenfogger) |
 | `PLAYED_COST` | state | The mana a card cost when it was played from the hand (Sorcerer's Apprentice, Preparation, Loatheb counted); written only by a pack that names it | — (Goblins vs Gnomes: `PLAYED_COST`, Gazlowe) |
 | `DIED_TURN` | state | The turn a minion died; written only by a pack that names it (a new tag would change Classic's recorded states) | — (Naxxramas: `DIED_TURN`, Kel'Thuzad) |
 | `POWER_DAMAGE` | state | Added to its owner's power damage before `POWER_MULTIPLIER` (aura tag on the champion, a count: `g.hp_dmg`) | — (The Grand Tournament: `HEROPOWER_DAMAGE`, Fallen Hero) |
