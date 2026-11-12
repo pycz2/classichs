@@ -1,0 +1,64 @@
+//! The game's bot (classichs_brain::think) plays Whispers of the Old Gods (packs/og, built by tools/pack.py; skipped
+//! without python3): Yogg-Saron, C'Thun, N'Zoth and Fandral Staghelm decks, from what each player sees, both seats,
+//! to the end.
+
+use classichs_engine::Engine;
+use serde_json::{json, Value};
+use std::path::PathBuf;
+
+fn call(e: &mut Engine, v: Value) -> Value {
+    serde_json::from_str(&e.call(&v.to_string())).unwrap()
+}
+
+fn deck(name: &str) -> Value {
+    let p = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packs/og/decks").join(name);
+    let d: Value = serde_json::from_str(&std::fs::read_to_string(p).unwrap()).unwrap();
+    json!({"hero": d["champion"], "cards": d["cards"]})
+}
+
+#[test]
+fn the_bot_plays_whispers_of_the_old_gods() {
+    let repo = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let out = std::env::temp_dir().join(format!("og-brain-{}.cardpack", std::process::id()));
+    let Ok(build) = std::process::Command::new("python3").current_dir(&repo).args(["tools/pack.py", "build", "packs/og", "-o"]).arg(&out).output() else {
+        eprintln!("no python3: skipped");
+        return;
+    };
+    assert!(build.status.success(), "{}", String::from_utf8_lossy(&build.stdout));
+    let mut e = Engine::new();
+    let rs = e.load_pack_bytes(&std::fs::read(&out).unwrap()).unwrap();
+    let _ = std::fs::remove_file(&out);
+    let h = rs.rules_hash.clone();
+    let pairs = [("09_yogg_token_druid.json", "01_cthun_warrior.json"), ("10_nzoth_paladin.json", "02_cthun_druid.json"),
+        ("15_yogg_tempo_mage.json", "13_nzoth_hunter.json")];
+    for (i, (a, b)) in pairs.iter().enumerate() {
+        let decks = [deck(a), deck(b)];
+        let g = format!("g{i}");
+        let r = call(&mut e, json!({"op": "new", "game": g, "pack": h, "seed": 3 + i as i64, "decks": decks}));
+        assert_eq!(r["ok"], true, "{r}");
+        for _ in 0..600 {
+            let st = call(&mut e, json!({"op": "snapshot", "game": g, "view": -1}))["state"].clone();
+            if st["game_over"] == true {
+                break;
+            }
+            let mut acted = false;
+            for seat in 0..2 {
+                let view = call(&mut e, json!({"op": "snapshot", "game": g, "view": seat}))["state"].clone();
+                let level = if seat == 0 { "medium" } else { "easy" };
+                let t = classichs_brain::think(&json!({"pack": h, "view": view, "seat": seat, "deck": decks[seat]["cards"],
+                    "level": level, "budget_ms": 30, "seed": 5}));
+                assert_eq!(t["ok"], true, "{t}");
+                if t["action"].is_object() {
+                    let r = call(&mut e, json!({"op": "act", "game": g, "action": t["action"]}));
+                    assert_eq!(r["ok"], true, "{r}");
+                    assert!(r.get("script_error").is_none(), "{r}");
+                    acted = true;
+                    break;
+                }
+            }
+            assert!(acted, "nobody could move");
+        }
+        let st = call(&mut e, json!({"op": "snapshot", "game": g, "view": -1}))["state"].clone();
+        assert_eq!(st["game_over"], true, "the game ends: {a} vs {b}");
+    }
+}
