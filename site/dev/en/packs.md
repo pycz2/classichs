@@ -215,9 +215,9 @@ Then *Games → Import a game file* in {name}, choose `tiny.cardpack`, *Play thi
 | `locales/<lang>.json` | Every text a player sees, one file per language | one per language in the manifest |
 | `layout/<lang>.json` | Hand-tuned card text layout | no |
 | `art/<set>/<card id>.jpg\|png\|webp` | Card pictures, one folder per art set (512 px is plenty) | no: cards without art get a drawn picture |
-| `sounds/<set>/<name>.wav\|ogg\|mp3` | Event sounds, one folder per sound set | no |
-| `music/<set>/<name>.wav\|ogg\|mp3` | `menu`, `battle_1` … `battle_N` | no |
-| `voice/<lang>/<card id>_<kind>.ogg` | Recorded voice lines | no |
+| `sounds/<set>/<name>.opus\|ogg\|wav\|mp3` | Event sounds, one folder per sound set | no |
+| `music/<set>/<name>.opus\|ogg\|wav\|mp3` | `menu`, `battle_1` … `battle_N` | no |
+| `voice/<lang>/<card id>_<kind>.opus` | Recorded voice lines | no |
 | `ui/…` | `card_back`, `logo`, `menu`, `board`, `library`, `result_victory`/`_defeat`/`_draw` pictures; `theme.json` and `fonts/` | no |
 | `decks/<name>.json` | Ready decks (file names sort the list) | recommended |
 | `missions/<n>.json` | Tutorial or story missions | no |
@@ -333,7 +333,8 @@ Card text markup: `<b>…</b>` and `<i>…</i>`; `$N` a number spell power raise
 
 - **Art:** `art/<set>/<card id>.jpg` (or `.png`, `.webp`), at most 2 MiB a picture. Neonfall has two sets, `default` (painted) and `simple` (flat 2D); a missing picture falls back to the default set, then to a drawn one.
 - **Sounds:** by event name — `play_card`, `attack`, `damage`, `death`, `hero_power`, `turn_start`, `heal`, `armor`, `equip`, `secret`, `freeze`, `shield`, `spell`, `trigger`, `hit_big`, `draw`, `victory`, `defeat`, `click`. A card may name its own (`"sounds": {"play": "…"}`).
-- **Music:** `music/<set>/menu.ogg`, `battle_1.ogg`, `battle_2.ogg`, … (a shuffled playlist in a match).
+- **Music:** `music/<set>/menu.opus`, `battle_1.opus`, `battle_2.opus`, … (a shuffled playlist in a match).
+- **Audio files:** `.opus` (Ogg Opus at 48 kHz) is the format to choose; `.ogg` (Ogg Vorbis), `.wav` and `.mp3` work too.
 - **Look:** `ui/theme.json` restyles the whole interface while your game is active: colours, button style (`wood`, `flat`, `neon`), panels, fonts (`ui/fonts/*.ttf` with their licence), the menu's particles (`embers`, `rain`, `none`). Neonfall's dark glass and magenta glow is its `ui/theme.json`; every key: [UI theme](../ref/format.html#11-ui-theme-uithemejson).
 
 ## Decks and missions
@@ -384,7 +385,7 @@ python3 tools/pack.py hash  <file>.cardpack     # rules_hash and content_hash
 | `source` | A source in its own shape (Neonfall): drops source-only card fields (`drop_card_fields`), drops files (`drop_files`), moves files (`move`, e.g. pictures into `ui/`), takes each locale's `pack.name`/`pack.description` into the manifest and its `terms` into `ui`. |
 | `hsjson`, `keywords`, `voice`, `translate`, `rank_names` | Classic's: cards and texts from HearthstoneJSON data, mechanic names, voice lines, translations, rank names. |
 
-`--art-set id=folder` adds a picture set of your own that is marked `local` and never shared; `--sound-set id=folder` does the same for sounds (each card's `<card id>_play|attack|death|hit` and the board's sounds by name), and `--voice folder` adds your recordings of the voice lines (`<lang>/<card id>_<kind>.ogg`, marked by `voice/LOCAL.md`).
+`--art-set id=folder` adds a picture set of your own that is marked `local` and never shared; `--sound-set id=folder` does the same for sounds (each card's `<card id>_play|attack|death|hit` and the board's sounds by name), `--music-set id=folder` for music, and `--voice folder` adds your recordings of the voice lines (`<lang>/<card id>_<kind>.opus`, marked by `voice/LOCAL.md`).
 
 ## Load it into the game
 

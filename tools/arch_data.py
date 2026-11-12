@@ -1071,7 +1071,7 @@ COMPS.append(dict(
         P("packpy", "tools/pack.py", 1, 0, sub="build · check · info · hash",
           text=("Runs the recipe, checks schemas and every cross reference, writes the hashes and a deterministic zip — or refuses.",
                 "Выполняет рецепт, проверяет схемы и все перекрёстные ссылки, записывает хэши и детерминированный zip — или отказывает."),
-          files=[("tools/pack.py", "def build(src, out=None, art_sets=(), sound_sets=(), voice=None):"), ("tools/pack.py", "def check_files(files):"), ("tools/pack.py", "def write_pack(files, out):")]),
+          files=[("tools/pack.py", "def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):"), ("tools/pack.py", "def check_files(files):"), ("tools/pack.py", "def write_pack(files, out):")]),
         P("file", ".cardpack", 2, 0, sub="zip",
           text=("Up to 1 GiB, 2 GiB unpacked, 50 000 files; no zip bombs, links or encryption; only the format's folders.",
                 "До 1 ГиБ, 2 ГиБ в распакованном виде, 50 000 файлов; без zip-бомб, ссылок и шифрования; только папки формата."),

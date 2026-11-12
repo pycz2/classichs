@@ -33,6 +33,7 @@ var _rules_pick := "one"  # the host's choice before Start
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	Sound.music("arena")  # the music set's Arena track, when it has one
 	var bg := ColorRect.new()
 	bg.color = Palette.TABLE
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

@@ -75,7 +75,7 @@ for p in $WANT; do
 		# tools/deploy_server.sh bakes it into the server's image): no game packs in it
 		rm -rf "$OUT/replay-viewer"
 		export_preset "Replay viewer" "$OUT/replay-viewer/index.html"
-		cp web/rules.js rules/bin/rules.wasm "$OUT/replay-viewer/"
+		cp web/rules.js rules/bin/rules.wasm rules/LICENSE.opus "$OUT/replay-viewer/"
 		(cd "$OUT/replay-viewer" && rm -f "../ClassicHS-$VER-replay-viewer.zip" && zip -qr "../ClassicHS-$VER-replay-viewer.zip" .)
 		;;
 	windows)

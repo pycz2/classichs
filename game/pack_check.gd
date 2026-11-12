@@ -18,12 +18,12 @@ const MIB := 1024 * 1024
 const LIMITS := {"pack": 1024 * MIB, "unpacked": 2048 * MIB, "files": 50000, "file": 16 * MIB, "image": 2 * MIB,
 	"rules": 8 * MIB, "text": 32 * MIB}
 const IMAGES := ["png", "jpg", "jpeg", "webp"]
-const AUDIO := ["ogg", "wav", "mp3"]
+const AUDIO := ["opus", "ogg", "wav", "mp3"]
 ## Folder -> [extensions, depth below it: 1 = files right in it, 2 = in a sub-folder (a set), 0 = any].
 const DIRS := {"scripts": [["lua", "md"], 0], "locales": [["json"], 1], "layout": [["json"], 1],
 	"decks": [["json"], 1], "missions": [["json"], 1], "ui": [["png", "jpg", "jpeg", "webp", "json"], 1],
-	"art": [["png", "jpg", "jpeg", "webp", "md"], 2], "sounds": [["ogg", "wav", "mp3", "md"], 2],
-	"music": [["ogg", "wav", "mp3", "md"], 2], "voice": [["ogg", "wav", "mp3", "md"], 0]}
+	"art": [["png", "jpg", "jpeg", "webp", "md"], 2], "sounds": [["opus", "ogg", "wav", "mp3", "md"], 2],
+	"music": [["opus", "ogg", "wav", "mp3", "md"], 2], "voice": [["opus", "ogg", "wav", "mp3", "md"], 0]}
 const FONT_FILES := ["ttf", "otf", "txt", "md"]
 
 static var _path_re := RegEx.create_from_string("^[A-Za-z0-9_][A-Za-z0-9_.-]*(/[A-Za-z0-9_][A-Za-z0-9_.-]*)*$")

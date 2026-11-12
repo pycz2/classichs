@@ -24,19 +24,21 @@ func test_every_effect_event_has_a_sound_file() -> void:
 	var g := H.scene({"hero": "HERO_08", "hand": ["VAN_CS2_029"]}).game
 	for type in Sound.EVENTS:
 		var name: String = Sound.EVENTS[type]
-		eq(Sound.path_for(name), "sounds/generated/%s.wav" % name, "file for " + type)
+		eq(Sound.path_for(name), "sounds/generated/%s.opus" % name, "file for " + type)
 	for name in ["spell", "victory", "defeat", "click"]:
-		check(Packs.active().has("sounds/generated/%s.wav" % name), "file " + name)
+		check(Packs.active().has("sounds/generated/%s.opus" % name), "file " + name)
 	var fireball: GameView.Ent = g.players[0].hand[0]
 	eq(Sound.sound_for({"type": "play", "player": 0, "entity": fireball.id}, g, 0), "spell", "spell sound")
 	eq(Sound.sound_for({"type": "game_over", "winner": 0}, g, 0), "victory", "victory")
 	eq(Sound.sound_for({"type": "game_over", "winner": 0}, g, 1), "defeat", "defeat")
 	eq(Sound.sound_for({"type": "draw", "player": 0}, g, 0), "", "no sound for draw")
+	eq(Sound.sound_for({"type": "turn_start", "player": 0, "turn": 1}, g, 0), "turn_start", "my turn")
+	eq(Sound.sound_for({"type": "turn_start", "player": 1, "turn": 2}, g, 0), "", "no 'your turn' on the opponent's")
 
 
 func test_every_music_track_has_a_file() -> void:
 	for name in ["menu"] + Sound.battle_tracks():
-		check(Packs.active().has("music/generated/%s.mp3" % name), "music file " + name)
+		check(Packs.active().has("music/generated/%s.opus" % name), "music file " + name)
 	eq(Sound.battle_tracks().size(), 3, "three battle tracks")
 
 
@@ -85,11 +87,11 @@ func test_without_sound_node_everything_is_silent() -> void:
 
 
 func test_music_sets() -> void:
-	eq(Sound.path_for("menu"), "music/generated/menu.mp3", "generated menu music (mp3: the web build stays under GitHub's 100 MB a file)")
+	eq(Sound.path_for("menu"), "music/generated/menu.opus", "generated menu music")
 	Packs.set_choice(Packs.active(), "music", "open")
-	eq(Sound.path_for("menu"), "music/open/menu.ogg", "open menu music")
-	eq(Sound.path_for("battle_2"), "music/open/battle_2.ogg", "open battle music")
-	eq(Sound.path_for("attack"), "sounds/generated/attack.wav", "sounds stay the generated ones")
+	eq(Sound.path_for("menu"), "music/open/menu.opus", "open menu music")
+	eq(Sound.path_for("battle_2"), "music/open/battle_2.opus", "open battle music")
+	eq(Sound.path_for("attack"), "sounds/generated/attack.opus", "sounds stay the generated ones")
 	for slot in ["menu", "battle_1", "battle_2", "battle_3"]:
 		check(Packs.active().stream(Sound.path_for(slot)) != null, "the open track is there: " + slot)
 	Packs.set_choice(Packs.active(), "music", "generated")
@@ -113,5 +115,5 @@ func test_the_shell_plays_its_own_menu_music() -> void:
 func test_a_pack_brings_its_own_sounds_and_playlist() -> void:
 	var neon: Pack = Packs.all().filter(func(p): return p.id() == "neon")[0]
 	eq(Sound.battle_tracks(neon), ["battle_1", "battle_2"], "Neonfall has two battle tracks")
-	eq(Sound.path_for("menu", neon), "music/default/menu.ogg", "its menu music")
-	eq(Sound.path_for("attack", neon), "sounds/default/attack.ogg", "its sounds")
+	eq(Sound.path_for("menu", neon), "music/default/menu.opus", "its menu music")
+	eq(Sound.path_for("attack", neon), "sounds/default/attack.opus", "its sounds")

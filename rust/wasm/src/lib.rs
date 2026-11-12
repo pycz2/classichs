@@ -10,6 +10,7 @@ use std::cell::RefCell;
 thread_local! {
     static ENGINE: RefCell<Engine> = RefCell::new(Engine::new());
     static OUT: RefCell<String> = const { RefCell::new(String::new()) };
+    static PCM: RefCell<Vec<i16>> = const { RefCell::new(Vec::new()) };
 }
 
 #[no_mangle]
@@ -56,4 +57,36 @@ pub unsafe extern "C" fn think(p: *const u8, n: usize) {
         Err(e) => serde_json::json!({"ok": false, "error": format!("bad json: {e}")}),
     };
     OUT.with(|o| *o.borrow_mut() = reply.to_string());
+}
+
+/// An Ogg Opus file (classichs_opus) to 16-bit PCM at 48 kHz: the channel count (1 or 2), its
+/// samples (interleaved, little-endian) at `pcm_ptr()` / `pcm_len()` bytes; 0 on a bad file, the
+/// reason at `out_ptr()` / `out_len()`. web/rules.js runs it in an instance of its own.
+///
+/// # Safety
+/// `p` must point at `n` readable bytes.
+#[no_mangle]
+pub unsafe extern "C" fn opus_decode(p: *const u8, n: usize) -> u32 {
+    PCM.with(|b| *b.borrow_mut() = Vec::new()); // (the last file's memory first)
+    let r = classichs_opus::decode(std::slice::from_raw_parts(p, n));
+    match r {
+        Ok(pcm) => {
+            PCM.with(|b| *b.borrow_mut() = pcm.samples);
+            pcm.channels as u32
+        }
+        Err(e) => {
+            OUT.with(|o| *o.borrow_mut() = e);
+            0
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn pcm_ptr() -> *const u8 {
+    PCM.with(|b| b.borrow().as_ptr() as *const u8)
+}
+
+#[no_mangle]
+pub extern "C" fn pcm_len() -> usize {
+    PCM.with(|b| b.borrow().len() * 2)
 }

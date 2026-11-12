@@ -202,10 +202,10 @@ def check_files(cards):
     if missing:
         err(f"art missing: {' '.join(missing)}")
     for s in SOUNDS:
-        if not os.path.exists(os.path.join(PACK, "sounds", "default", s + ".ogg")):
+        if not os.path.exists(os.path.join(PACK, "sounds", "default", s + ".opus")):
             err(f"sound missing: {s}")
     for m in MUSIC:
-        if not os.path.exists(os.path.join(PACK, "music", "default", m + ".ogg")):
+        if not os.path.exists(os.path.join(PACK, "music", "default", m + ".opus")):
             err(f"music missing: {m}")
 
 

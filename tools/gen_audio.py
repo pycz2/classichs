@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Synthesizes the game's sounds and music loops into audio/*.wav (pure Python, no dependencies).
+"""Synthesizes the game's sounds and music loops into audio/*.wav (pure Python), the sources kept in git, and
+encodes each to audio/*.opus (tools/audio_codec.py, needs ffmpeg with libopus): what the classic pack ships.
 
 Usage: python3 tools/gen_audio.py
 Output is deterministic: the same script gives the same files.
@@ -8,7 +9,11 @@ import math
 import os
 import random
 import struct
+import sys
 import wave
+
+sys.path.insert(0, os.path.dirname(__file__))
+import audio_codec  # noqa: E402
 
 RATE = 22050
 OUT = os.path.join(os.path.dirname(__file__), "..", "audio")
@@ -100,6 +105,14 @@ def save(name, samples):
         w.setsampwidth(2)
         w.setframerate(RATE)
         w.writeframes(b"".join(struct.pack("<h", int(max(-1, min(1, s * scale)) * 32767)) for s in samples))
+    opus(name)
+
+
+def opus(name):
+    """OUT/<name>.wav -> OUT/<name>.opus: menu and battle_* are music, the rest sounds."""
+    kind = "music" if name == "menu" or name.startswith("battle_") else "sound"
+    if not audio_codec.encode_opus(os.path.join(OUT, name + ".wav"), os.path.join(OUT, name + ".opus"), kind):
+        raise SystemExit(f"ffmpeg could not encode {name}.opus (it needs libopus)")
 
 
 # ---------------------------------------------------------------------------- music
@@ -592,5 +605,5 @@ def build():
 if __name__ == "__main__":
     build()
     for f in sorted(os.listdir(OUT)):
-        if f.endswith(".wav"):
+        if f.endswith((".wav", ".opus")):
             print(f, os.path.getsize(os.path.join(OUT, f)))

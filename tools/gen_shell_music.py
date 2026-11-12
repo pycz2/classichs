@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""The client's own menu music (audio/shell/menu.wav): a calm loop of soft pads and a few bell
-notes, of no game in particular (the main menu, the settings, the library, the connections).
+"""The client's own menu music (audio/shell/menu.wav, the source, and menu.opus, what the client plays): a calm
+loop of soft pads and a few bell notes, of no game in particular (the main menu, the settings, the library, the
+connections).
 Built with tools/gen_audio.py's instruments; deterministic.
 
 Usage: python3 tools/gen_shell_music.py

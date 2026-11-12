@@ -122,6 +122,9 @@ var _stage_at := -1  # the batch's last event the table shows
 var _flying := {}  # entity id -> CardView: a played card shown big beside the table
 var _placed := {}  # entity id -> board slot: a minion the player put down stands there until its summon
 var _cast_arrow := TargetArrow.new()  # what a played card, a Battlecry or a hero power aims at
+var _hits := {}  # source entity -> its impacts so far in the batch (the k-th plays its k-th `_hit` sound)
+var _aim_card := ""  # the card the local player aims with (its `_aim` loop plays), "" for none
+var _quests := {}  # Quest (or Secret) entity -> its QUEST_PROGRESS before the batch
 ## The local player's orders given while the table still animates: carried out
 ## one by one after the animations, in order (not in the tutorial).
 var _pending_acts: Array = []
@@ -256,6 +259,8 @@ func bind(m: Match) -> void:
 		if m.bots[1 - me]:
 			_bot_side = 1 - me  # named in _side_name, so the name follows the language
 	m.start()
+	if m.game.phase == "MULLIGAN" and not replay:
+		Sound.music("mulligan")  # the music set's mulligan track, when it has one (refresh: the battle's after it)
 	refresh()
 
 
@@ -484,11 +489,34 @@ func _process(delta: float) -> void:
 	if not _dragging:
 		_track_hand_hover()
 		_aim_click_mode()
+	_sync_aim()
 	if _hint_timer > 0.0:
 		_hint_timer -= delta
 		if _hint_timer <= 0.0:
 			_hint.text = ""
 			_try_tutorial_hint()
+
+
+## The aim loop follows the local player's arrow: the card it comes from (a targeted spell, a hero power,
+## a Battlecry; not an attack) loops its `_aim` sound while the arrow shows.
+func _sync_aim() -> void:
+	var id := ""
+	if _arrow.visible and not _sel.is_empty() and not _targets(_sel.actions).is_empty() and _sel.actions[0].type != "attack":
+		var e := g.ent(_sel.id)
+		id = e.card_id if e else ""
+	if id != _aim_card:
+		_aim_card = id
+		Sound.aim_start(id)  # ("" only stops the one before)
+
+
+func _stop_aim() -> void:
+	_aim_card = ""
+	Sound.aim_stop()
+
+
+func _exit_tree() -> void:
+	if _aim_card != "":
+		_stop_aim()
 
 
 # --- opponent intents (online) ----------------------------------------------------------
@@ -1025,6 +1053,7 @@ func _planned() -> Dictionary:
 func _act(a: Dictionary) -> void:
 	if a.is_empty():
 		return
+	_stop_aim()  # (the order goes: its effect comes next)
 	var e := g.ent(a.get("entity", -1))
 	var minion: bool = a.type == "play" and a.get("pos", -1) >= 0 and e != null and e.is_minion()
 	if (_busy or controller.waiting() or not _pending_acts.is_empty()) and tutorial == null:
@@ -1154,6 +1183,8 @@ func refresh() -> void:
 	_reset_timer()
 	if _tracker.visible:
 		_tracker.update_from(g, me)
+	if g.phase != "MULLIGAN":
+		Sound.mulligan_done()
 	_refresh_overlay()
 	if tutorial:
 		var line := tutorial.boss_line(g)
@@ -1444,6 +1475,7 @@ func _pos_from_x(x: float) -> int:
 
 
 func cancel() -> void:
+	_stop_aim()
 	_end_drag()
 	if not _sel.is_empty():
 		_sel = {}
@@ -1707,6 +1739,10 @@ func _begin_batch(item: Dictionary) -> void:
 		st.hand.append(ids.call(pl.hand))
 		st.secrets.append(ids.call(pl.secrets))
 		st.weapon.append(pl.weapon.id if pl.weapon else -1)
+	_hits = {}
+	_quests = {}  # a Quest's progress before the batch: when it goes up, its `_progress` sound at the end
+	for e in g.players[0].secrets + g.players[1].secrets:
+		_quests[e.id] = int(e.tags.get("QUEST_PROGRESS", 0))
 	_from_deck = {}  # minions summoned out of a deck (Recruit, Deathlord): cards the table did not show (or showed in a deck)
 	var known := int(g.snapshot.get("next_id", 0))
 	for ev in item.events:
@@ -1724,6 +1760,11 @@ func _begin_batch(item: Dictionary) -> void:
 
 ## After the steps: everything as in the game after the batch.
 func _end_batch() -> void:
+	for id in _quests:
+		var q := g.ent(id)
+		if q and q.zone == "SECRET" and int(q.tags.get("QUEST_PROGRESS", 0)) > _quests[id]:
+			Sound.play(Sound.card_sound(q.card_id, "progress"))
+	_quests = {}
 	_stage = {}
 	_stage_events = []
 	_cast_arrow.visible = false
@@ -1915,6 +1956,7 @@ func _play_step(st: Dictionary) -> void:
 		"aim":
 			await _aim(st)
 		"power":
+			_step_sounds(st)
 			await _pulse(ev.entity)
 		"attack", "strike":
 			if st.k == "attack":  # its own sound and line as it leaps (a strike goes on from the pause)
@@ -2033,6 +2075,7 @@ func _play_step(st: Dictionary) -> void:
 			_step_sounds(st)
 			await _wait(0.2)
 		"secret", "quest", "reveal":
+			_step_sounds(st)
 			if str(ev.card) != "":
 				await _reveal(ev.card)  # (the card itself shows big: no hint over the board; a Quest fulfilled; a deck's card shown)
 			_step_apply(st)
@@ -2064,6 +2107,7 @@ func _play_step(st: Dictionary) -> void:
 				_mulligan_down()  # the hand first, then the first turn's card
 				_stage_refresh()
 				await _wait(0.35)
+			_step_sounds(st)
 			if st.get("extra", false) and ev.has("turn"):
 				_banner(tr("Extra Turn") if ev.get("player", -1) == viewer() else tr("Opponent's Extra Turn"))
 			elif ev.get("player", -1) == viewer() and ev.has("turn"):
@@ -2256,6 +2300,7 @@ func _rewind(v: EntityView) -> void:
 ## shown big, the minion, the hero power), then the numbers change.
 func _hit(st: Dictionary) -> void:
 	var shots := 0
+	var missiles := {}
 	for ev in st.evs:
 		var t := _target_id(ev)
 		var src: int = ev.get("by_id", ev.get("source", -1))
@@ -2264,6 +2309,9 @@ func _hit(st: Dictionary) -> void:
 		if t >= 0 and _views.has(t) and from != null and TableFx.named(ev.get("by", ""), "cast") != "none":
 			_shoot(from, _center_of(t), _fx_color(ev))
 			shots += 1
+			missiles[Sound.card_sound(ev.get("by", ""), "missile")] = true
+	for f in missiles:  # the card's own bolt sound, once a step (its impact: _step_fx)
+		Sound.play(f)
 	if shots > 0:
 		await _wait(0.3)
 	for ev in st.evs:  # a transform's smoke, a destroy mark where the minion stood
@@ -2284,7 +2332,7 @@ func _target_id(ev: Dictionary) -> int:
 ## After a step's change: the effects on the minions and heroes it changed, the numbers that
 ## fly up, its sounds, the table shaking under a heavy blow.
 func _step_fx(st: Dictionary, before: Dictionary) -> void:
-	_step_sounds(st)
+	var own_trigger := _step_sounds(st)
 	var col_of := {}
 	var hit_of := {}
 	for ev in st.evs:
@@ -2330,8 +2378,8 @@ func _step_fx(st: Dictionary, before: Dictionary) -> void:
 		if m and not m.silenced and (Rules.hooks(m.card_id).has("on") or KeywordTips.keywords_of(m.card_id).has("POISONOUS")):
 			went_off[src] = true
 			(_views[src] as MinionView).pop("mark")
-	if not went_off.is_empty():
-		Sound.play("trigger")
+	if went_off.keys().any(func(s): return not own_trigger.get(s, false)):
+		Sound.play("trigger")  # (one with its own trigger sound played it)
 	if hero_hit == 2:
 		Sound.play("hit_big")
 	if Match.shake_enabled and (big or hero_hit > 0):
@@ -2339,11 +2387,25 @@ func _step_fx(st: Dictionary, before: Dictionary) -> void:
 
 
 ## One copy of each sound of a step (an attack's impact comes here, as the attacker lands its blow),
-## and the lines its cards say (a minion or weapon coming into play, a death).
-func _step_sounds(st: Dictionary) -> void:
+## the lines its cards say (a minion or weapon coming into play, a death), and first the trigger of each
+## card whose effect the step shows (Sound.trigger; not a spell's or a hero power's: they have their cast
+## and hits). Returns those cards' entities -> true when the card has its own trigger sound.
+func _step_sounds(st: Dictionary) -> Dictionary:
 	var heard := {}
+	var fired := {}
+	var counted := {}  # the sources whose impact this step counts (once per step)
 	for ev in st.evs:
-		var sfx := Sound.sound_for(ev, g, viewer())
+		var src: int = ev.get("by_id", -1)
+		var by := str(ev.get("by", ""))
+		if src >= 0 and not fired.has(src) and ev.type not in ["play", "death"] and str(CardDb.card(by).get("type", "")) not in ["SPELL", "HERO_POWER"]:
+			fired[src] = Sound.trigger(by)
+		var nth := 1
+		if src >= 0 and ev.type in Sound.HITS:
+			if not counted.has(src):
+				counted[src] = true
+				_hits[src] = _hits.get(src, 0) + 1
+			nth = _hits[src]
+		var sfx := Sound.sound_for(ev, g, viewer(), nth)
 		if not heard.has(sfx):
 			heard[sfx] = true
 			Sound.play(sfx)
@@ -2351,6 +2413,7 @@ func _step_sounds(st: Dictionary) -> void:
 		var line := Sound.line_for(ev, g)
 		if not line.is_empty():
 			Sound.say(line[0], line[1])
+	return fired
 
 
 ## The arrow of a played card, a Battlecry or a hero power to its target, for a moment.
@@ -3191,6 +3254,8 @@ func _refresh_overlay() -> void:
 			var box := _open_overlay(res[1])
 			_overlay.name = "GameOver"
 			_result_look(box, res[0])
+			if res[0] != "draw":
+				Sound.music(res[0])  # the music set's victory or defeat jingle, when it has one
 			if tutorial:
 				_tutorial_result(box)
 			elif arena:
@@ -3355,6 +3420,8 @@ func _show_mulligan() -> void:
 func _show_choice() -> void:
 	var box := _open_overlay(tr("Choose a card"))
 	_overlay.name = "Choice"
+	var source := g.ent(int(g.pending.get("source", -1)))  # the card that asks (a Discover, an Adapt)
+	Sound.play(Sound.card_sound(source.card_id if source else "", "choose"))
 	var row := _card_row(box)
 	for a in controller.legal().filter(func(x): return x.type == "choose" and x.player == viewer()):
 		var e := g.ent(a.option)
@@ -3372,6 +3439,7 @@ func _show_choose_one(choices: Array) -> void:
 	_overlay.name = "ChooseOne"
 	var row := _card_row(box)
 	var card := g.ent(_sel.id)
+	Sound.play(Sound.card_sound(card.card_id, "choose"))
 	var opts: Array = Rules.hooks(card.card_id).get("choose_one", [])
 	for c in choices:
 		var cv := CardView.make(opts[c], 1.3)

@@ -1,7 +1,7 @@
 class_name Sound
 extends Node
-## Music and event sounds from the active pack: sounds/<set>/<name>.(ogg|wav|mp3) and
-## music/<set>/<name> (menu, battle_1 … battle_N), the sets chosen per pack
+## Music and event sounds from the active pack: sounds/<set>/<name>.(opus|ogg|wav|mp3) and
+## music/<set>/<name> (menu, battle_1 … battle_N; optional: EXTRA_MUSIC), the sets chosen per pack
 ## (Packs.choice "sound", "music"). The client's own screens (Packs.shell) play one neutral
 ## menu track of the client (SHELL_MENU), never a pack's. Main adds one instance; without it
 ## every call is silent (tests, tools).
@@ -11,9 +11,12 @@ const EVENTS := {"play": "play_card", "attack": "attack", "damage": "damage", "d
 	"hero_power": "hero_power", "turn_start": "turn_start", "heal": "heal", "armor": "armor",
 	"equip": "equip", "secret_revealed": "secret", "freeze": "freeze", "divine_shield_lost": "shield"}
 const POOL := 6
-const AUDIO := ["ogg", "wav", "mp3"]
+const AUDIO := ["opus", "ogg", "wav", "mp3"]
 ## The client's own menu music (the main menu, the settings, the library, the connections).
-const SHELL_MENU := "res://audio/shell/menu.wav"
+const SHELL_MENU := "res://audio/shell/menu.opus"
+## A music set's optional tracks (format.md, "Music"), only from the chosen set: the mulligan's (the battle
+## playlist follows it), the result's (victory, defeat: once), the Arena's screen. Without one, what plays goes on.
+const EXTRA_MUSIC := ["mulligan", "victory", "defeat", "arena"]
 
 static var instance: Sound
 
@@ -25,12 +28,18 @@ var _last_battle := ""
 var _pool: Array[AudioStreamPlayer] = []
 var _next := 0
 var _streams := {}
+static var _shell: AudioStream
 ## The player of spoken lines: one at a time, a new line cuts the last.
 var _voice := AudioStreamPlayer.new()
 ## The player of a card's play music (a legendary's stinger); the music ducks to DUCK_DB under it.
 var _stinger := AudioStreamPlayer.new()
 const DUCK_DB := -14.0
 var _ducking: Tween
+## The player of the loop of the card the local player aims with (its `_aim`), and that card ("" for none).
+var _aim := AudioStreamPlayer.new()
+var _aim_card := ""
+## The events that hit something: a card's impact sound (`_hit`, `_hit_2` …) plays for them.
+const HITS := ["damage", "heal", "buff", "freeze", "silence", "destroy"]
 ## The recording said last and the last sounds played, oldest first (tests, the driver).
 var said := ""
 var heard: Array[String] = []
@@ -47,6 +56,11 @@ func _ready() -> void:
 	_stinger.bus = "Music"
 	_stinger.finished.connect(func(): _duck(0.0, 0.8))
 	add_child(_stinger)
+	_aim.bus = "SFX"
+	_aim.finished.connect(func():  # (it starts again: a loop for any kind of file)
+		if _aim_card != "":
+			_aim.play())
+	add_child(_aim)
 	for i in POOL:
 		var p := AudioStreamPlayer.new()
 		p.bus = "SFX"
@@ -84,13 +98,41 @@ static func battle_tracks(p: Pack = null) -> Array:
 	return out
 
 
-func _stream(file: String) -> AudioStream:
+## The file of an optional track (EXTRA_MUSIC) of the chosen music set, "" when it has none.
+static func music_path(slot: String, p: Pack = null) -> String:
+	p = p if p else Packs.active()
+	return p.find("music/" + Packs.choice(p, "music"), slot, AUDIO) if p else ""
+
+
+func _stream(file: String, extra := false) -> AudioStream:
 	if file == "shell":
-		return load(SHELL_MENU)
-	var path := path_for(file)
+		if _shell == null:  # (.opus has no Godot importer: decoded once from the file)
+			_shell = Opus.load_file(SHELL_MENU)
+			if _shell:
+				_shell.take_over_path(SHELL_MENU)
+		return _shell
+	var path := music_path(file) if extra else path_for(file)
 	if not _streams.has(path):
+		_trim_streams()
 		_streams[path] = Packs.active().stream(path) if path != "" else null
 	return _streams[path]
+
+
+## ponytail: a decoded .opus is PCM in memory (0.1–0.2 MB a second), so the cache empties once it holds
+## STREAMS_KEPT sounds; an LRU if a long session ever stutters on it.
+const STREAMS_KEPT := 150
+func _trim_streams() -> void:
+	if _streams.size() >= STREAMS_KEPT:
+		_streams = {}
+
+
+## A music track. An .opus decodes in the background (a 3-minute one takes a few hundred ms) and is not
+## kept (decoded it is 35 MB): only the one playing stays in memory.
+func _music_stream(file: String, extra := false) -> AudioStream:
+	var path := music_path(file) if extra else path_for(file)
+	if file == "shell" or path.get_extension() != "opus":
+		return _stream(file, extra)
+	return await Opus.stream_later(Packs.active().read(path))
 
 
 ## The pack or its sound or music set changed: sounds load again, the music starts again.
@@ -104,9 +146,11 @@ static func reset() -> void:
 ## The music set changed: the track playing now starts again from the new set.
 static func restart_music() -> void:
 	if instance and instance.music_file != "":
+		if instance._track == "mulligan" and music_path("mulligan") == "":
+			instance._track = "battle"  # (the new set has no mulligan track: its battle playlist)
 		if instance._track == "battle" and not battle_tracks().has(instance.music_file):
 			instance._start(instance._next_battle())
-		else:
+		elif not (EXTRA_MUSIC.has(instance._track) and music_path(instance._track) == ""):
 			instance._start(instance.music_file)
 
 
@@ -131,14 +175,23 @@ func last_player() -> AudioStreamPlayer:
 
 
 ## Loops track; "battle" starts a battle track other than the last one (a new one
-## every match) and moves on to another when it ends.
+## every match) and moves on to another when it ends; "victory" and "defeat" play once.
+## An optional track (EXTRA_MUSIC) the chosen set lacks changes nothing.
 static func music(track: String) -> void:
 	if track == "menu" and Packs.shell:
 		track = "shell"
 	if instance == null or (instance._track == track and track != "battle"):
 		return
+	if EXTRA_MUSIC.has(track) and music_path(track) == "":
+		return
 	instance._track = track
 	instance._start(instance._next_battle() if track == "battle" else track)
+
+
+## The mulligan is over: its track (if one plays) gives way to the battle playlist.
+static func mulligan_done() -> void:
+	if instance and instance._track == "mulligan":
+		music("battle")
 
 
 func _next_battle() -> String:
@@ -150,7 +203,10 @@ func _next_battle() -> String:
 
 func _start(file: String) -> void:
 	music_file = file
-	_music.stream = _stream(file)
+	var s := await _music_stream(file, EXTRA_MUSIC.has(file))
+	if music_file != file:  # (another track was asked for meanwhile)
+		return
+	_music.stream = s
 	if _music.stream:
 		_music.play()
 
@@ -158,18 +214,20 @@ func _start(file: String) -> void:
 func _on_music_finished() -> void:
 	if _track == "battle":
 		_start(_next_battle())
-	else:
+	elif _track != "victory" and _track != "defeat":  # (a result's jingle plays once, then quiet)
 		_music.play()
 
 
 ## The sound of an engine event at its step: a minion's or weapon's own sound when it comes into play
 ## (its `<card id>_play`), a spell's cast (its own, else its element's `spell_<element>`, else
-## `spell`), a spell's hit (its own `_hit`, else `hit_<element>`), a death (its own `_death`), else the
-## event's. An attack's own sound comes as the attacker leaps (attack_start); here is its impact.
-static func sound_for(ev: Dictionary, g: GameView, viewer: int) -> String:
+## `spell`), the hit of a card's effect (its own `_hit` … in turn, nth: the how-many-th impact of its
+## source; else a spell's `hit_<element>`), a death (its own `_death`, a weapon's too), a hero power used
+## (its `_play`), a Secret revealed (its `_reveal`, else `_trigger`), a Quest done (its `_complete`), else
+## the event's. An attack's own sound comes as the attacker leaps (attack_start); here is its impact.
+static func sound_for(ev: Dictionary, g: GameView, viewer: int, nth := 1) -> String:
 	var id_of := func(key: String) -> String:
 		var e := g.ent(int(ev.get(key, -1)))
-		return e.card_id if e else str(ev.get("card", ""))
+		return e.card_id if e and e.card_id != "" else str(ev.get("card", ""))  # (a hidden card: the event names it)
 	match ev.type:
 		"play":
 			var id: String = id_of.call("entity")
@@ -184,10 +242,19 @@ static func sound_for(ev: Dictionary, g: GameView, viewer: int) -> String:
 			return _first([card_sound(id_of.call("entity"), "death"), "death"])
 		"damage", "heal", "buff", "freeze", "silence", "destroy":
 			var by := str(ev.get("by", ""))
-			if by != "" and CardDb.card(by).get("type") == "SPELL":
-				var own := _first([card_sound(by, "hit"), _element(by, "hit")])
+			if by != "":
+				var own := _first([hit_sound(by, nth), _element(by, "hit") if CardDb.card(by).get("type") == "SPELL" else ""])
 				if own != "":
 					return own
+		"hero_power":
+			return _first([card_sound(id_of.call("entity"), "play"), "hero_power"])
+		"secret_revealed":
+			var id: String = id_of.call("entity")
+			return _first([card_sound(id, "reveal"), card_sound(id, "trigger"), "secret"])
+		"quest_done":
+			return card_sound(id_of.call("entity"), "complete")
+		"turn_start":  # "your turn": the viewer's own turns only, as in the original
+			return "turn_start" if int(ev.get("player", -1)) == viewer else ""
 		"game_over":
 			if ev.winner == viewer:
 				return "victory"
@@ -195,8 +262,9 @@ static func sound_for(ev: Dictionary, g: GameView, viewer: int) -> String:
 	return EVENTS.get(ev.type, "")
 
 
-## A card's own sound for slot (play, attack, death, hit): what its `sounds` field names, else the
-## chosen set's file `<card id>_<slot>`; "" when it has none.
+## A card's own sound for slot (play, attack, death, aim, missile, hit, hit_2 …, trigger, reveal, complete,
+## choose, music): what its `sounds` field names, else the chosen set's file `<card id>_<slot>`; "" when it
+## has none.
 static func card_sound(card_id: String, slot: String) -> String:
 	if card_id == "":
 		return ""
@@ -205,6 +273,17 @@ static func card_sound(card_id: String, slot: String) -> String:
 		return str(named[slot])
 	var own := "%s_%s" % [card_id, slot]
 	return own if path_for(own) != "" else ""
+
+
+## A card's own impact, the nth of a run (Arcane Missiles' missiles): its `_hit`, `_hit_2`, `_hit_3` … in
+## turn; "" when it has none.
+static func hit_sound(card_id: String, nth := 1) -> String:
+	var all := []
+	var f := card_sound(card_id, "hit")
+	while f != "":
+		all.append(f)
+		f = card_sound(card_id, "hit_%d" % (all.size() + 1))
+	return all[(maxi(nth, 1) - 1) % all.size()] if not all.is_empty() else ""
 
 
 ## `<kind>_<element>` of a card's element (its fx.element) when the set has it, else "".
@@ -258,6 +337,41 @@ static func attack_start(attacker: String) -> void:
 	say(attacker, "attack")
 
 
+## A card's effect goes off (its trigger, Deathrattle, Battlecry): its own `_trigger` and its `trigger` line.
+## False when it has no sound of its own (the generic one is the caller's to play).
+static func trigger(card_id: String) -> bool:
+	say(card_id, "trigger")
+	var own := card_sound(card_id, "trigger")
+	play(own)
+	return own != ""
+
+
+## The local player aims with a card (a targeted spell, a hero power, a Battlecry): its `_aim` loops until
+## aim_stop (the one before stops). False when it has none.
+static func aim_start(card_id: String) -> bool:
+	aim_stop()
+	var file := card_sound(card_id, "aim")
+	var s := instance._stream(file) if instance and file != "" else null
+	if s == null:
+		return false
+	instance._aim.stream = s
+	instance._aim.play()
+	instance._aim_card = card_id
+	instance.heard.append(file)
+	return true
+
+
+static func aim_stop() -> void:
+	if instance:
+		instance._aim_card = ""
+		instance._aim.stop()
+
+
+## The card whose aim loop plays now, "" for none.
+static func aiming() -> String:
+	return instance._aim_card if instance else ""
+
+
 ## What a step's event makes its card say: [card id, kind] for a minion or a weapon coming into play
 ## and for a death, [] for nothing.
 static func line_for(ev: Dictionary, g: GameView) -> Array:
@@ -267,7 +381,7 @@ static func line_for(ev: Dictionary, g: GameView) -> Array:
 	return [id, kind] if kind != "" and id != "" else []
 
 
-## The recording of a card's line (voice/<lang>/<who>_<kind>.ogg|wav|mp3): the interface language
+## The recording of a card's line (voice/<lang>/<who>_<kind>.opus|ogg|wav|mp3): the interface language
 ## first, then the pack's default; "" when the pack has none. `who` is the card's `voice` (whose lines
 ## it speaks), else its id.
 static func voice_path(card_id: String, kind: String, p: Pack = null) -> String:
@@ -291,6 +405,7 @@ static func say(card_id: String, kind: String) -> bool:
 	if path == "":
 		return false
 	if not instance._streams.has(path):
+		instance._trim_streams()
 		instance._streams[path] = Packs.active().stream(path)
 	if instance._streams[path] == null:
 		return false

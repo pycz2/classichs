@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
 """Synthesizes the Neonfall pack's sounds and synthwave music (pure Python, reusing the
-oscillators, envelopes and reverb of tools/gen_audio.py), then encodes them to Ogg Vorbis
-with ffmpeg.
+oscillators, envelopes and reverb of tools/gen_audio.py), then encodes them to Ogg Opus
+(tools/audio_codec.py: sounds 96 kbit/s, music 128; ffmpeg with libopus). The source WAVs are temporary:
+the script is the source (deterministic for a full run; --only draws other random numbers for the music).
 
 Usage: python3 tools/neon_audio.py [--only name ...]
-Result: packs/neon/sounds/default/<event>.ogg (the names game/sound.gd plays) and
-packs/neon/music/default/{menu,battle_1,battle_2}.ogg (seamless loops). Deterministic.
+Result: packs/neon/sounds/default/<event>.opus (the names game/sound.gd plays) and
+packs/neon/music/default/{menu,battle_1,battle_2}.opus (seamless loops). Deterministic.
 """
 import math
 import os
 import random
 import struct
-import subprocess
 import sys
 import tempfile
 import wave
 
 sys.path.insert(0, os.path.dirname(__file__))
+import audio_codec  # noqa: E402
 import gen_audio as ga  # noqa: E402
 
 R = ga.RATE = 32000  # gen_audio's helpers read its RATE at call time
@@ -65,7 +66,7 @@ def fm(f, dur, ratio=2.0, index=3.0, release=0.2, attack=0.005, vol=0.4, f1=None
     return out
 
 
-def write_ogg(path, samples, quality=4):
+def write_opus(path, samples, kind):
     peak = max(1e-9, max(abs(s) for s in samples))
     scale = 0.9 / peak if peak > 0.9 else 1.0
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
@@ -76,8 +77,10 @@ def write_ogg(path, samples, quality=4):
         w.setframerate(R)
         w.writeframes(b"".join(struct.pack("<h", int(max(-1, min(1, s * scale)) * 32767)) for s in samples))
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", tmp, "-c:a", "libvorbis", "-q:a", str(quality), path], check=True)
+    ok = audio_codec.encode_opus(tmp, path, kind)
     os.remove(tmp)
+    if not ok:
+        raise SystemExit(f"ffmpeg could not encode {path} (it needs libopus)")
 
 
 # ---------------------------------------------------------------------------- sounds
@@ -284,10 +287,10 @@ def main():
     only = sys.argv[sys.argv.index("--only") + 1:] if "--only" in sys.argv else None
     for name, x in sounds().items():
         if not only or name in only:
-            write_ogg(os.path.join(SOUNDS, name + ".ogg"), x)
+            write_opus(os.path.join(SOUNDS, name + ".opus"), x, "sound")
     for name, (bpm, key, prog, form, seed) in TRACKS.items():
         if not only or name in only:
-            write_ogg(os.path.join(MUSIC, name + ".ogg"), song(bpm, key, prog, form, seed), 3)
+            write_opus(os.path.join(MUSIC, name + ".opus"), song(bpm, key, prog, form, seed), "music")
             print(name, "done", flush=True)
     for d in (SOUNDS, MUSIC):
         for f in sorted(os.listdir(d)):

@@ -9,7 +9,7 @@ SW="$D/index.service.worker.js"
 VER=$(sed -n 's/^config\/version="\(.*\)"/\1/p' project.godot)
 BUILD=$(sed -n "s/^const CACHE_VERSION = '\(.*\)';/\1/p" "$SW")  # Godot's: export time|size, the cache's name
 [ -n "$BUILD" ] || { echo "no CACHE_VERSION in $SW" >&2; exit 1; }
-cp web/rules.js web/update.js rules/bin/rules.wasm "$D/"  # loaded by index.html (html/head_include)
+cp web/rules.js web/update.js rules/bin/rules.wasm rules/LICENSE.opus "$D/"  # loaded by index.html (html/head_include); the .opus decoder's licence
 perl -pi -e "s/__CHS_BUILD__/$BUILD/" "$D/update.js"
 printf '{"version": "%s", "build": "%s"}\n' "$VER" "$BUILD" > "$D/version.json"
 # the engine starts once update.js has checked version.json

@@ -26,9 +26,9 @@ scripts/*.lua            card logic (api.md); any depth below scripts/; scripts/
 locales/<lang>.json      every player-facing text in one language (cards, mechanics, classes, ranks, missions, voice…)
 layout/<lang>.json       optional: hand-tuned card text layout
 art/<set>/<card id>.jpg|png|webp     one folder per art set
-sounds/<set>/<name>.wav|ogg|mp3      one folder per sound set (+ .md credits)
-music/<set>/<name>.wav|ogg|mp3       one folder per music set (+ .md credits)
-voice/<lang>/…                       optional recorded voice lines (.wav|ogg|mp3)
+sounds/<set>/<name>.opus|ogg|wav|mp3 one folder per sound set (+ .md credits)
+music/<set>/<name>.opus|ogg|wav|mp3  one folder per music set (+ .md credits)
+voice/<lang>/…                       optional recorded voice lines (.opus|ogg|wav|mp3)
 ui/<name>.png|jpg|webp               optional pictures: logo, card back, rank emblems, the theme's crest; by name the
                                      client also shows ui/menu (the game's menu and screen backdrops), ui/board (the
                                      game board), ui/library (collection), ui/result_victory|result_defeat|result_draw
@@ -83,7 +83,7 @@ The Lua limits (steps, depth, table and string size) are in `lua.md` (D5).
 | `redistributable` | bool | The author allows passing the pack to other players (P2P and server). Without it the pack is only compared by hash. |
 | `default_locale` | lang | Fallback language; must be in `locales`. |
 | `locales` | [lang] | Languages the pack has; each has `locales/<lang>.json`. Lang: `en`, `ru`, `pt_BR` (Godot style). |
-| `art_sets`, `sound_sets`, `music_sets` | [{`id`, `name`?, `default`?, `local`?}] | One entry per folder of `art/`, `sounds/`, `music/`. At most one `default`. `local: true` = added by `--art-set`, never distributed. |
+| `art_sets`, `sound_sets`, `music_sets` | [{`id`, `name`?, `default`?, `local`?}] | One entry per folder of `art/`, `sounds/`, `music/`. At most one `default`. `local: true` = added by `--art-set`, `--sound-set` or `--music-set`, never distributed. |
 | `card_back`, `logo` | `"ui/<file>"` or null | Optional pictures; null = the client's own. |
 | `set_marks` | `{<set>[:<rarity>]: {icon: "ui/<file>"}}` | Optional: each card shows its set's icon faintly behind its text and its set's name beside the big card (the packs after Classic; Classic has none). A key `<set>:<rarity>` wins for that rarity (`VANILLA:FREE` = Basic). The names are `locales/<lang>.json` `sets` under the same keys; the collection filters by them. |
 | `colors` | `{classes: {id: "rrggbb"}, rarities: {id: "rrggbb"}}` | Frame and gem colours. |
@@ -128,7 +128,7 @@ can check it after unpacking.)
 
 A deterministic build (`tools/pack.py build`) also writes byte-identical zips for
 the same input: entries sorted by path, time 1980-01-01 00:00, mode 0644,
-pictures and `.ogg`/`.mp3` stored, everything else deflated at level 9.
+pictures and `.opus`/`.ogg`/`.mp3` stored, everything else deflated at level 9.
 
 ## 4. Mechanics: the engine vocabulary and pack names
 
@@ -257,6 +257,8 @@ valign: "top", dy}`. Without it the client lays text out itself.
 
 ## 7. Art, sounds, music, voice
 
+Audio files are `.opus` (preferred: Ogg Opus at 48 kHz), `.ogg` (Ogg Vorbis), `.wav` or `.mp3`.
+
 - `art/<set>/<card id>.<jpg|png|webp>`, 512 px recommended, ≤ 2 MiB. A card
   without a picture in the chosen set takes the one of the pack's default set, else the client
   draws its procedural art. A pack stands alone: it never takes pictures (or anything else) from
@@ -267,31 +269,43 @@ valign: "top", dy}`. Without it the client lays text out itself.
   `secret`, `freeze`, `shield`, `spell`, `trigger`, `hit_big`, `victory`,
   `defeat`, `click`; the client also plays `draw`, `summon` (a minion lands), `spell_<element>` and
   `hit_<element>` (a spell's cast and impact by its `fx.element`) when the set has them). A card's own
-  sounds: what its `sounds: {play, attack, death, hit, music}` names, else the set's file `<card id>_<slot>`:
-  `play` when a minion or weapon comes into play or a spell is cast, `attack` as the attacker leaps
-  (the set's `attack` is the blow when it lands), `death` at its death step, `hit` a spell's impact,
-  `music` (a legendary's play music, Hearthstone's stinger) when it is played from the hand: on the Music bus,
-  the music ducks under it, its voice line plays as well.
+  sounds: what its `sounds` field names for a slot, else the set's file `<card id>_<slot>`, all optional:
+  `play` when a minion or weapon comes into play, a spell, Secret, Quest or hero card is played, a hero
+  power is used; `attack` as the attacker leaps (the set's `attack` is the blow when it lands); `death` at
+  its death step (a weapon's: when it breaks or is destroyed); `aim` loops while the player aims with it
+  (a targeted spell, a hero power, a Battlecry; only one's own aiming); `missile` as its bolt flies to the
+  target (once a step); `hit`, `hit_2`, `hit_3` … the impact of its effect (a spell's, a hero power's, a
+  minion's, a weapon's): its hits one after another (Arcane Missiles) take them in turn; `trigger` when its
+  effect goes off (a trigger, a Deathrattle, a Battlecry; not a spell's or a hero power's); `reveal` a Secret
+  revealed (else its `trigger`); `complete` a Quest done; `progress` a Quest's progress goes up; `choose` a
+  Choose One or Discover it opens (one's own); `music` (a legendary's play music, Hearthstone's stinger)
+  when it is played from the hand: on the Music bus, the music ducks under it, its voice line plays as well.
+  A card without its own sound for a moment gets the event's sound as before.
   A sound the chosen set lacks comes from the pack's default set.
-- `music/<set>/<name>`: `menu`, `battle_1` … `battle_N` (a shuffled playlist).
-- `voice/<lang>/<card id>_<kind>.<ogg|wav|mp3>`: optional recordings of the voice
+- `music/<set>/<name>`: `menu`, `battle_1` … `battle_N` (a shuffled playlist). Optional, taken only from the
+  chosen set (without one, the music that plays goes on): `mulligan` (loops during the mulligan, then the
+  battle playlist starts), `victory` and `defeat` (played once when the result shows, in place of the battle
+  music; the event sounds `victory`/`defeat` play as well), `arena` (loops on the Arena's screens).
+- `voice/<lang>/<card id>_<kind>.<opus|ogg|wav|mp3>`: optional recordings of the voice
   lines whose words are in `locales/<lang>.json` `voice` (the player's language, else the
-  default one). Minions and weapons: `play` (as it lands), `attack` (as it leaps), `death`.
+  default one). Minions and weapons: `play` (as it lands), `attack` (as it leaps), `death`, `trigger`
+  (with its `trigger` sound, as its effect goes off).
   Heroes: `start` (the game begins), the emotes `greetings`, `well_played`, `thanks`, `wow`, `oops`,
   `threaten`, `time` (the rope starts burning), `error_need_mana`, `error_play`,
   `error_minion_attacked`, `error_i_attacked`, `error_summon_sickness`, `error_need_weapon`,
   `error_generic` (what the player tried can't be done), and `sorry`, `concede`, `thinking1`–`3`,
   `low_cards`, `no_cards`, `error_hand_full`, `error_full_minions`, `error_stealth`,
   `error_target`, `error_taunt` (kept for later). A card's `voice` field names whose lines it speaks.
-- Local sets (`tools/pack.py build … --art-set mine=path`, `--sound-set mine=path`) are marked
-  `local: true`, local recordings (`--voice path`, a folder of `<lang>/<card id>_<kind>.ogg`) come
+- Local sets (`tools/pack.py build … --art-set mine=path`, `--sound-set mine=path`, `--music-set mine=path`) are marked
+  `local: true`, local recordings (`--voice path`, a folder of `<lang>/<card id>_<kind>.opus`) come
   with `voice/LOCAL.md`; they must never be uploaded or sent; the original Blizzard art
-  (`art/original`) is refused by the tool. An `--art-set`/`--sound-set` id given twice takes both folders (a later
+  (`art/original`) is refused by the tool. An `--art-set`/`--sound-set`/`--music-set` id given twice takes both folders (a later
   one wins), `--voice` may come several times. The owner's local packs take them from
   `tools/fetch_set_assets.py --set <classic|naxx|gvg|…>` (pictures as 256 px WebP, sounds and voice mono at a low bit
   rate, a legendary's play music) into `~/ClassicHS-local/<set>/`, and `--build` makes
   `~/ClassicHS-local/<set>-custom-art.cardpack` with the pictures, sounds and voice of every level of its chain
-  (`--art-set custom=` once per level; the files stay outside git).
+  (`--art-set custom=` once per level; the files stay outside git), and the music set `original`
+  (`tools/fetch_original_music.py`: the game's own tracks, `<set>/music/`) of the nearest level that has one.
 
 ## 8. Decks and missions
 
@@ -383,7 +397,7 @@ folders its recipe's steps name, the schemas, `tools/pack.py`).
 
 ```sh
 tools/pack.py build packs/classic -o build/packs/classic.cardpack [--art-set mine=art/custom]
-    [--sound-set original=~/ClassicHS-local/sounds/classic/set] [--voice ~/ClassicHS-local/sounds/classic/voice]
+    [--sound-set original=~/ClassicHS-local/sounds/classic/set] [--music-set mine=~/music] [--voice ~/ClassicHS-local/sounds/classic/voice]
 tools/pack.py check build/packs/classic.cardpack     # exit 1 on any error
 tools/pack.py info  build/packs/classic.cardpack     # sizes, counts, hashes
 tools/pack.py hash  build/packs/classic.cardpack     # rules_hash, content_hash

@@ -261,6 +261,16 @@ func test_missing_art_and_other_references() -> void:
 	check(not _find(c, PackCheck.ERROR, "does not start").is_empty(), "the trial game with that deck does not start")
 
 
+func test_opus_sounds_music_and_voice_check_clean() -> void:
+	var man: String = TINY["manifest.json"].replace("\"sound_sets\": [], \"music_sets\": []",
+		"\"sound_sets\": [{\"id\": \"default\"}], \"music_sets\": [{\"id\": \"default\"}]")
+	var c := run(source("opus", {"manifest.json": man, "sounds/default/attack.opus": "OggS", "music/default/menu.opus": "OggS",
+		"voice/en/squire_play.opus": "OggS"}), 0)
+	eq(c.errors(), 0, ".opus audio: " + str(_bad(c)))
+	c = run(source("flac", {"manifest.json": man, "sounds/default/attack.flac": "fLaC", "music/default/menu.opus": "OggS"}), 0)
+	check(not _find(c, PackCheck.ERROR, "sounds/ holds only .opus .ogg .wav .mp3 .md").is_empty(), "other audio: an error")
+
+
 func test_schema_subset_matches_the_pack_tool() -> void:
 	var s := {"type": "object", "required": ["a"], "additionalProperties": false,
 		"properties": {"a": {"type": "integer", "minimum": 1}, "b": {"anyOf": [{"type": "string"}, {"type": "null"}]}}}

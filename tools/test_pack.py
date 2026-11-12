@@ -1,4 +1,6 @@
 """Tests of tools/pack.py: python3 -m unittest tools/test_pack.py (from the repo root)."""
+import contextlib
+import io
 import json
 import sys
 import tempfile
@@ -298,6 +300,42 @@ class BuildAndZip(unittest.TestCase):
             self.assertEqual([s["id"] for s in json.loads(files["manifest.json"])["sound_sets"]].count("original"), 1)
             self.assertIn("voice/en/M1_attack.ogg", files)
             self.assertIn("voice/ru/M2_play.mp3", files)
+
+    def test_opus_sounds_music_voice_and_local_music_set(self):
+        with tempfile.TemporaryDirectory() as t:
+            src = Path(t) / "src"
+            s = tiny()
+            s["manifest.json"]["sound_sets"] = [{"id": "default", "default": True}]
+            for p, v in as_files(s).items():
+                (src / p).parent.mkdir(parents=True, exist_ok=True)
+                (src / p).write_bytes(v)
+            (src / "sounds/default").mkdir(parents=True)
+            (src / "sounds/default/attack.opus").write_bytes(b"OggS opus" * 50)
+            mus, vo = Path(t) / "mus", Path(t) / "vo"
+            mus.mkdir()
+            (mus / "menu.opus").write_bytes(b"OggS opus" * 50)
+            (mus / "battle_1.ogg").write_bytes(b"ogg")
+            (mus / "notes.txt").write_bytes(b"skipped")
+            (vo / "en").mkdir(parents=True)
+            (vo / "en" / "M1_play.opus").write_bytes(b"OggS opus")
+            out = Path(t) / "x.cardpack"
+            files, r = pack.build(src, out, (), (), str(vo), [f"mine={mus}"])
+            self.assertEqual(r.errors, [])
+            self.assertIn("music/mine/menu.opus", files)
+            self.assertIn("music/mine/battle_1.ogg", files)
+            self.assertNotIn("music/mine/notes.txt", files)
+            self.assertEqual(json.loads(files["manifest.json"])["music_sets"], [{"id": "mine", "local": True}])
+            self.assertEqual(pack.check_files(pack.read_pack(out)).errors, [])
+            with zipfile.ZipFile(out) as z:
+                kinds = {i.filename: i.compress_type for i in z.infolist()}
+            for p in ("sounds/default/attack.opus", "music/mine/menu.opus", "voice/en/M1_play.opus"):
+                self.assertEqual(kinds[p], zipfile.ZIP_STORED, p)
+            self.assertEqual(kinds["cards.json"], zipfile.ZIP_DEFLATED)
+            with self.assertRaises(pack.PackError):
+                pack.build(src, None, music_sets=[f"bad={Path(t) / 'nothing'}"])
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(pack.main(["build", str(src), "-o", str(out), "--music-set", f"mine={mus}"]), 0)
+            self.assertIn("music/mine/menu.opus", pack.read_pack(out))
 
     def test_read_pack_refuses_duplicates(self):
         with tempfile.TemporaryDirectory() as t:
