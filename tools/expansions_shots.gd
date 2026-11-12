@@ -5,7 +5,7 @@ extends SceneTree
 ## the hovered card and the history. Needs a window. Every user file goes to its own user dir
 ## (REPORT_USER_DIR, as tests/run.gd's TEST_USER_DIR), never the player's.
 ## Usage: REPORT_USER_DIR=classichs-report/x godot --path . --script res://tools/expansions_shots.gd -- <job.json>
-## Job: {pack, art?, sound?, set_key, langs, out, tab?, signature: [ids], scenes: [{name, scene, steps,
+## Job: {pack, art?, sound?, set_key, langs, out, tab?, signature: [ids], scenes: [{name, scene | game, steps,
 ## wait?, hover?, history?, choose?}], only?: [shot names]}; a shot is <out>/<lang>_<name>.jpg.
 
 const MOUSE_AWAY := Vector2(640, 330)  # the empty middle of the table, over no card
@@ -71,7 +71,7 @@ func _check() -> void:
 			print("ERROR: signature %s is no collectible card of the pack" % id)
 			failed += 1
 	for sc in job.get("scenes", []):
-		var r := CardTests.run(sc)
+		var r := CardTests.run(sc) if not sc.has("game") else _run_game(sc)
 		if r.error != "":
 			print("ERROR: scene %s, step %d: %s" % [sc.name, r.step + 1, r.error])
 			failed += 1
@@ -88,6 +88,44 @@ func _check() -> void:
 		r.match.free()
 	print("CHECK DONE: %d failed" % failed)
 	quit(1 if failed else 0)
+
+
+## A scene's game: a built position (scene, which starts in the middle of a game), or a real game of two of the
+## pack's ready decks (game: {decks: [key, key], seed?, first?}) whose start runs: Start of Game effects.
+func _request(sc: Dictionary) -> Dictionary:
+	if not sc.has("game"):
+		return {"scenario": sc.scene}
+	var decks := []
+	for key in sc.game.decks:
+		for t in Decks.templates():
+			if t.key == key:
+				decks.append({"hero": t.deck.hero, "cards": Array(t.deck.cards)})
+	return {"decks": decks, "seed": int(sc.game.get("seed", 1)), "first": int(sc.game.get("first", 0))}
+
+
+## A real game's mulligans: both players keep their hands.
+func _keep_hands(mt: Match) -> void:
+	for p in 2:
+		if mt.game.phase == "MULLIGAN":
+			mt.submit({"type": "mulligan", "player": p, "replace": []})
+
+
+## CardTests.run for a real game (the scene's "game").
+func _run_game(sc: Dictionary) -> Dictionary:
+	var mt := Match.new()
+	mt.bots = [false, false]
+	var why := mt.setup(_request(sc), [false, false])
+	if why != "":
+		mt.free()
+		return {"match": null, "error": "game: " + why, "step": -1}
+	_keep_hands(mt)
+	var steps: Array = sc.get("steps", [])
+	for i in steps.size():
+		var a := CardTests.action(mt, steps[i])
+		var res: Dictionary = a if a.has("error") else mt.submit(a)
+		if a.has("error") or not res.ok:
+			return {"match": mt, "error": res.error, "step": i}
+	return {"match": mt, "error": "", "step": steps.size()}
 
 
 func _want(name: String) -> bool:
@@ -192,13 +230,16 @@ func _scene(sc: Dictionary) -> void:
 	var name := str(sc.name)
 	if not (_want(name) or _want(name + "_card") or _want(name + "_history")):
 		return
-	var v: MatchView = m.start_match({"scenario": sc.scene}, [false, false], false)
+	var v: MatchView = m.start_match(_request(sc), [false, false], false)
 	if v == null:
 		print("ERROR: scene %s does not start" % name)
 		failed += 1
 		m.show_game_menu()
 		return
 	await _settle(0.6)
+	if sc.has("game"):
+		_keep_hands(v.controller)
+		await _settle(0.6)
 	var steps: Array = sc.get("steps", [])
 	for i in steps.size():
 		var a := CardTests.action(v.controller, steps[i])
