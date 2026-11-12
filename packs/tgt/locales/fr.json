@@ -11,5 +11,19 @@
    "name": "Ne peut pas attaquer les héros",
    "tip": "Ne peut attaquer que des serviteurs."
   }
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts."
+  },
+  "EX1_625t2": {
+   "text": "<b>Pouvoir héroïque</b>\nInflige $3 points de dégâts."
+  },
+  "VAN_EX1_509": {
+   "name": "Mande-flots murloc"
+  },
+  "VAN_NEW1_033": {
+   "text": "Vos autres serviteurs ont +1 ATQ."
+  }
  }
 }

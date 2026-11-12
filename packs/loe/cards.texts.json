@@ -7361,6 +7361,216 @@
    "ruRU": "<b>Сила героя</b>\n Призывает на поле боя инфернала 6/6."
   }
  },
+ "VAN_HERO_01bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nErhaltet 2 Rüstung.",
+   "enUS": "<b>Hero Power</b>\nGain 2 Armor.",
+   "esES": "<b>Poder de héroe</b>\nObtiene 2 p. de armadura.",
+   "frFR": "<b>Pouvoir héroïque</b>\nConfère 2 points d’armure.",
+   "itIT": "<b>Potere Eroe</b>\nOttiene 2 Armatura.",
+   "plPL": "<b>Moc specjalna</b>\nOtrzymujesz 2 pkt. pancerza.",
+   "ptBR": "<b>Poder Heroico</b>\nReceba 2 Armadura.",
+   "ruRU": "<b>Сила героя</b>\n +2 к броне."
+  }
+ },
+ "VAN_HERO_02bp": {
+  "name": {
+   "deDE": "Totem beschwören",
+   "enUS": "Totemic Call",
+   "esES": "Llamada totémica",
+   "frFR": "Appel totémique",
+   "itIT": "Evocazione Totemica",
+   "plPL": "Wezwanie Totemu",
+   "ptBR": "Convocação Totêmica",
+   "ruRU": "Призыв тотема"
+  },
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nBeschwört ein zufälliges Totem.",
+   "enUS": "<b>Hero Power</b>\nSummon a random Totem.",
+   "esES": "<b>Poder de héroe</b>\nInvoca un tótem aleatorio.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInvoque un totem aléatoire.",
+   "itIT": "<b>Potere Eroe</b>\nEvoca un Totem casuale.",
+   "plPL": "<b>Moc specjalna</b>\nPrzyzwij losowy Totem.",
+   "ptBR": "<b>Poder Heroico</b>\nEvoque um Totem aleatório.",
+   "ruRU": "<b>Сила героя</b>\n Призывает на поле боя случайный тотем."
+  }
+ },
+ "VAN_HERO_02bp2": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nBeschwört ein Totem Eurer Wahl.",
+   "enUS": "<b>Hero Power</b>\nSummon a Totem of your choice.",
+   "esES": "<b>Poder de héroe</b>\nInvoca un tótem de tu elección.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInvoque un totem de votre choix.",
+   "itIT": "<b>Potere Eroe</b>\nEvoca un Totem a tua scelta.",
+   "plPL": "<b>Moc specjalna</b>\nPrzyzwij wybrany przez siebie Totem.",
+   "ptBR": "<b>Poder Heroico</b>\nEvoque um Totem à sua escolha.",
+   "ruRU": "<b>Сила героя</b>\n Призывает на поле боя выбранный тотем."
+  }
+ },
+ "VAN_HERO_03bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nLegt einen Dolch (1/2) an.",
+   "enUS": "<b>Hero Power</b>\nEquip a 1/2 Dagger.",
+   "esES": "<b>Poder de héroe</b>\nEquipa una daga 1/2.",
+   "frFR": "<b>Pouvoir héroïque</b>\nÉquipe une dague 1/2.",
+   "itIT": "<b>Potere Eroe</b>\nEquipaggia un pugnale 1/2.",
+   "plPL": "<b>Moc specjalna</b>\nWyposaż bohatera w sztylet 1/2.",
+   "ptBR": "<b>Poder Heroico</b>\nEquipe uma Adaga 1/2.",
+   "ruRU": "<b>Сила героя</b>\n Снаряжает оружием 1/2."
+  }
+ },
+ "VAN_HERO_03bp2": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nLegt eine Waffe (2/2) an.",
+   "enUS": "<b>Hero Power</b>\nEquip a 2/2 Weapon.",
+   "esES": "<b>Poder de héroe</b>\nEquipa un arma 2/2.",
+   "frFR": "<b>Pouvoir héroïque</b>\nÉquipe d’une arme 2/2.",
+   "itIT": "<b>Potere Eroe</b>\nEquipaggia un pugnale 2/2.",
+   "plPL": "<b>Moc specjalna</b>\nOtrzymujesz broń 2/2.",
+   "ptBR": "<b>Poder Heroico</b>\nEquipe uma Arma 2/2.",
+   "ruRU": "<b>Сила героя</b>\n Снаряжает оружием 2/2."
+  }
+ },
+ "VAN_HERO_04bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nRuft einen Rekruten der Silbernen Hand (1/1) herbei.",
+   "enUS": "<b>Hero Power</b>\nSummon a 1/1 Silver Hand Recruit.",
+   "esES": "<b>Poder de héroe</b>\nInvoca a un Recluta Mano de Plata 1/1.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInvoque une recrue de la Main d’argent 1/1.",
+   "itIT": "<b>Potere Eroe</b>\nEvoca una Recluta Mano d'Argento 1/1.",
+   "plPL": "<b>Moc specjalna</b>\nPrzyzwij Rekruta Srebrnej Dłoni 1/1.",
+   "ptBR": "<b>Poder Heroico</b>\nEvoque um Recruta do Punho de Prata 1/1.",
+   "ruRU": "<b>Сила героя</b>\n Призывает на поле боя паладина-рекрута 1/1."
+  }
+ },
+ "VAN_HERO_04bp2": {
+  "name": {
+   "deDE": "Die Silberne Hand",
+   "enUS": "The Silver Hand",
+   "esES": "La Mano de Plata",
+   "frFR": "La Main d’argent",
+   "itIT": "Mano d'Argento",
+   "plPL": "Srebrna Dłoń",
+   "ptBR": "O Punho de Prata",
+   "ruRU": "Серебряная длань"
+  },
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nRuft zwei Rekruten (1/1) herbei.",
+   "enUS": "<b>Hero Power</b>\nSummon two 1/1 Recruits.",
+   "esES": "<b>Poder de héroe</b>\nInvoca a dos reclutas 1/1.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInvoque deux recrues 1/1.",
+   "itIT": "<b>Potere Eroe</b>\nEvoca due Reclute Mano d'Argento 1/1.",
+   "plPL": "<b>Moc specjalna</b>\nPrzyzwij dwóch Rekrutów 1/1.",
+   "ptBR": "<b>Poder Heroico</b>\nEvoque dois Recrutas 1/1.",
+   "ruRU": "<b>Сила героя</b>\n Призывает на поле боя двух паладинов-рекрутов 1/1."
+  }
+ },
+ "VAN_HERO_05bp": {
+  "name": {
+   "deDE": "Zuverlässiger Schuss",
+   "enUS": "Steady Shot",
+   "esES": "Disparo firme",
+   "frFR": "Tir assuré",
+   "itIT": "Tiro Stabilizzato",
+   "plPL": "Pewny strzał",
+   "ptBR": "Tiro firme",
+   "ruRU": "Верный выстрел"
+  },
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nFügt dem feindlichen Helden $2 Schaden zu.",
+   "enUS": "<b>Hero Power</b>\nDeal $2 damage to the enemy hero.",
+   "esES": "<b>Poder de héroe</b>\nInflige $2 p. de daño al héroe enemigo.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts au héros adverse.",
+   "itIT": "<b>Potere Eroe</b>\nInfligge $2 danni all'eroe nemico.",
+   "plPL": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń wrogiemu bohaterowi.",
+   "ptBR": "<b>Poder Heroico</b>\nCause $2 de dano ao herói inimigo.",
+   "ruRU": "<b>Сила героя</b>\n Наносит $2 ед. урона герою противника."
+  }
+ },
+ "VAN_HERO_06bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\n+1 Angriff in diesem Zug. +1 Rüstung.",
+   "enUS": "<b>Hero Power</b>\n+1 Attack this turn.\n+1 Armor.",
+   "esES": "<b>Poder de héroe</b>\n+1 p. de ataque este turno.\n+1 p. de armadura.",
+   "frFR": "<b>Pouvoir héroïque</b>\n+1 ATQ pendant ce tour.\n+1 Armure.",
+   "itIT": "<b>Potere Eroe</b>\n+1 Attacco per questo turno e 1 Armatura.",
+   "plPL": "<b>Moc specjalna</b> \n +1 do ataku w tej turze.\n +1 pkt. pancerza.",
+   "ptBR": "<b>Poder Heroico</b>\n+1 de Ataque neste turno.\n+1 de Armadura.",
+   "ruRU": "<b>Сила героя</b>\n +1 к атаке до конца хода.\n+1 к броне."
+  }
+ },
+ "VAN_HERO_06bp2": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\n+2 Angriff in diesem Zug. +2 Rüstung.",
+   "enUS": "<b>Hero Power</b>\nGain 2 Armor and +2 Attack this turn.",
+   "esES": "<b>Poder de héroe</b>\nObtiene +2 p. de ataque este turno y +2 p. de armadura.",
+   "frFR": "<b>Pouvoir héroïque</b>\nGagne 2 points d’armure et +2 ATQ pendant ce tour.",
+   "itIT": "<b>Potere Eroe</b>\n+2 Attacco per questo turno e 2 Armatura.",
+   "plPL": "<b>Moc specjalna</b>\nOtrzymujesz 2 pkt. pancerza +2 do ataku w tej turze.",
+   "ptBR": "<b>Poder Heroico</b>\nReceba 2 Armadura e +2 de Ataque neste turno.",
+   "ruRU": "<b>Сила героя</b>\n +2 к атаке до конца хода и +2 к броне."
+  }
+ },
+ "VAN_HERO_07bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nZieht eine Karte und erleidet $2 Schaden.",
+   "enUS": "<b>Hero Power</b>\nDraw a card and take $2 damage.",
+   "esES": "<b>Poder de héroe</b>\nRoba una carta y recibe $2 p. de daño.",
+   "frFR": "<b>Pouvoir héroïque</b>\nSubit $2 points de dégâts. Vous piochez une carte.",
+   "itIT": "<b>Potere Eroe</b>\nPesca una carta e subisce $2 danni.",
+   "plPL": "<b>Moc specjalna</b>\nDobierz kartę i otrzymaj $2 pkt. obrażeń.",
+   "ptBR": "<b>Poder Heroico</b>\nCompre um card e receba $2 de dano.",
+   "ruRU": "<b>Сила героя</b>\n Вы берете карту и получаете $2 ед. урона."
+  }
+ },
+ "VAN_HERO_07bp2": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nZieht eine Karte.",
+   "enUS": "<b>Hero Power</b>\nDraw a card.",
+   "esES": "<b>Poder de héroe</b>\nRoba una carta.",
+   "frFR": "<b>Pouvoir héroïque</b>\nPioche une carte.",
+   "itIT": "<b>Potere Eroe</b>\nPesca una carta.",
+   "plPL": "<b>Moc specjalna</b>\nDobierz kartę.",
+   "ptBR": "<b>Poder Heroico</b>\nCompre um card.",
+   "ruRU": "<b>Сила героя</b>\nВы берете карту."
+  }
+ },
+ "VAN_HERO_08bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nVerursacht $1 Schaden.",
+   "enUS": "<b>Hero Power</b>\nDeal $1 damage.",
+   "esES": "<b>Poder de héroe</b>\nInflige $1 p. de daño.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInflige $1 point de dégâts.",
+   "itIT": "<b>Potere Eroe</b>\nInfligge $1 |4(danno,danni).",
+   "plPL": "<b>Moc specjalna</b>\nZadaj $1 pkt. obrażeń.",
+   "ptBR": "<b>Poder Heroico</b>\nCause $1 de dano.",
+   "ruRU": "<b>Сила героя</b>\n Наносит $1 ед. урона."
+  }
+ },
+ "VAN_HERO_08bp2": {
+  "name": {
+   "deDE": "Feuerschlag (Rang 2)",
+   "enUS": "Fireblast Rank 2",
+   "esES": "Explosión de Fuego II",
+   "frFR": "Explosion de feu rang 2",
+   "itIT": "Detonazione Esplosiva",
+   "plPL": "Ognisty Pocisk (Ranga 2)",
+   "ptBR": "Impacto Ígneo Grau 2",
+   "ruRU": "Вспышка огня (ранг 2)"
+  }
+ },
+ "VAN_HERO_09bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nStellt #2 Leben wieder her.",
+   "enUS": "<b>Hero Power</b>\nRestore #2 Health.",
+   "esES": "<b>Poder de héroe</b>\nRestaura $2 p. de salud.",
+   "frFR": "<b>Pouvoir héroïque</b>\nRend #2 PV.",
+   "itIT": "<b>Potere Eroe</b>\nRigenera #2 Salute.",
+   "plPL": "<b>Moc specjalna</b>\nPrzywróć #2 pkt. zdrowia.",
+   "ptBR": "<b>Poder Heroico</b>\nRestaure #2 de Vida.",
+   "ruRU": "<b>Сила героя</b>\n Восстанавливает #2 ед. здоровья."
+  }
+ },
  "VAN_NEW1_003": {
   "text": {
    "deDE": "Vernichtet einen Dämon. Stellt bei Eurem Helden #5 Leben wieder her.",

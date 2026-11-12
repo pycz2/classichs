@@ -1,5 +1,16 @@
 {
  "sets": {
   "BRM": "Montanha Rocha Negra"
+ },
+ "cards": {
+  "VAN_EX1_277": {
+   "text": "Cause $3 de dano dividido aleatoriamente entre todos os inimigos."
+  },
+  "VAN_EX1_384": {
+   "text": "Cause $8 de dano dividido aleatoriamente entre todos os inimigos."
+  },
+  "VAN_EX1_572": {
+   "text": "No fim do seu turno, adicione um Card de Sonho à sua mão."
+  }
  }
 }

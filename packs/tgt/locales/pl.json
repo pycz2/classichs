@@ -11,5 +11,34 @@
    "name": "Nie może atakować bohaterów",
    "tip": "Może atakować tylko stronników."
   }
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń."
+  },
+  "EX1_625t2": {
+   "text": "<b>Moc specjalna</b>\nZadaj $3 pkt. obrażeń."
+  },
+  "VAN_DS1_184": {
+   "text": "Spójrz na trzy górne karty z twojej talii. Jedną dobierz do ręki, a dwie pozostałe odrzuć."
+  },
+  "VAN_EX1_366": {
+   "text": "Gdy przyzywasz stronnika, daj mu +1/+1, zaś miecz traci 1 pkt. wytrzymałości."
+  },
+  "VAN_EX1_536": {
+   "text": "Za każdym razem gdy ujawniony zostaje przyjazny <b>Sekret</b>, otrzymuje 1 pkt. wytrzymałości."
+  },
+  "VAN_EX1_595": {
+   "text": "Dobierz kartę za każdym razem, gdy zginie jeden z twoich pozostałych stronników."
+  },
+  "VAN_EX1_611": {
+   "text": "<b>Sekret:</b> Gdy wrogi stronnik zaatakuje, cofnij go do ręki właściciela\ni zwiększ jego koszt o (2)."
+  },
+  "VAN_EX1_625": {
+   "text": "Twoja moc specjalna zmienia się na „Zadaj 2 pkt. obrażeń”. Jeśli jesteś już\nw postaci cienia:\n3 pkt. obrażeń."
+  },
+  "VAN_NEW1_033": {
+   "text": "Twoi pozostali stronnicy otrzymują +1 do ataku."
+  }
  }
 }

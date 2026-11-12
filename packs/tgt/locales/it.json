@@ -11,5 +11,31 @@
    "name": "Non può attaccare gli eroi",
    "tip": "Può attaccare solo i servitori."
   }
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Potere Eroe</b>\nInfligge $2 danni."
+  },
+  "EX1_625t2": {
+   "text": "<b>Potere Eroe</b>\nInfligge $3 danni."
+  },
+  "VAN_CS2_082": {
+   "name": "Pugnale Perverso"
+  },
+  "VAN_EX1_277": {
+   "text": "Infligge $3 danni suddivisi casualmente tra i nemici."
+  },
+  "VAN_EX1_302": {
+   "text": "Infligge $1 |4(danno,danni) a un servitore. Se muore, pesca una carta."
+  },
+  "VAN_EX1_317": {
+   "text": "Pesca due Demoni casuali dal tuo mazzo."
+  },
+  "VAN_EX1_384": {
+   "text": "Infligge $8 danni suddivisi casualmente tra i nemici."
+  },
+  "VAN_HERO_02bp": {
+   "text": "<b>Potere Eroe</b>\nEvoca un Totem casuale."
+  }
  }
 }

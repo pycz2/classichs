@@ -578,6 +578,33 @@ class Chain(unittest.TestCase):
         self.assertEqual(en["VAN_EX1_366"]["text"], "After you summon a minion, give it +1/+1 and this loses 1 Durability.")
         self.assertEqual(len([p for p in files if p.startswith("decks/")]), 16)
 
+    def test_an_expansion_shows_the_texts_of_its_release_build(self):
+        import extract_cards
+        for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:
+            with self.subTest(s):
+                self.assertEqual(release_text_gaps(s), {})
+
+
+def release_text_gaps(s):
+    """{lang: {card id: {field: text}}} where the built pack packs/<s> shows another card name or text than its hsjson
+    step gives (the cards' data and the chain's cards.texts.json: the release build's, tools/extract_cards.py): a
+    base pack's own locales/<lang>.json (Classic's 2014 texts) wins over them; restate these in packs/<s>/locales."""
+    from extract_cards import _norm
+    src = pack.REPO / "packs" / s
+    files, _ = pack.build(src)
+    pure = pack.Build(src)
+    for root, step in pack.recipe_steps(src)[0]:
+        if step["do"] == "hsjson":
+            pack.step_hsjson(pure, root, step)
+    gaps = {}
+    for lang, loc in pure.locales.items():
+        built = json.loads(files[f"locales/{lang}.json"])["cards"]
+        for cid, fields in loc["cards"].items():
+            for f, t in fields.items():
+                if _norm(built.get(cid, {}).get(f)) != _norm(t):
+                    gaps.setdefault(lang, {}).setdefault(cid, {})[f] = t
+    return gaps
+
 
 class ExtractSets(unittest.TestCase):
     def test_a_set_is_its_prefixed_cards_and_their_tokens(self):

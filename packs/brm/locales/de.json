@@ -1,5 +1,19 @@
 {
  "sets": {
   "BRM": "Der Schwarzfels"
+ },
+ "cards": {
+  "VAN_EX1_277": {
+   "text": "Verursacht $3 Schaden, der zufällig auf alle Feinde verteilt wird."
+  },
+  "VAN_EX1_384": {
+   "text": "Verursacht $8 Schaden, der zufällig auf alle Feinde verteilt wird."
+  },
+  "VAN_EX1_572": {
+   "text": "Erhaltet am Ende Eures Zuges eine Traumkarte auf die Hand."
+  },
+  "VAN_NEW1_016": {
+   "text": "<b>Kampfschrei:</b> Erhaltet einen zufälligen Piraten aus Eurem Deck auf die Hand."
+  }
  }
 }

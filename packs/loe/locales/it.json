@@ -7,5 +7,19 @@
    "name": "Rinvenire",
    "tip": "Scegli una carta tra tre e aggiungila alla tua mano."
   }
+ },
+ "cards": {
+  "VAN_EX1_304": {
+   "text": "<b>Grido di Battaglia:</b> distrugge i servitori adiacenti e ne ottiene Attacco e Salute."
+  },
+  "VAN_EX1_559": {
+   "text": "Quando lanci una Magia, mette nella tua mano una Palla di Fuoco."
+  },
+  "VAN_EX1_572": {
+   "text": "Alla fine del tuo turno, mette un Sogno nella tua mano."
+  },
+  "VAN_EX1_611": {
+   "text": "<b>Segreto:</b> quando un servitore nemico attacca, ritorna nella mano di chi lo controlla e costa (2) in più."
+  }
  }
 }

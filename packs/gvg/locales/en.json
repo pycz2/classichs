@@ -11,5 +11,19 @@
  },
  "sets": {
   "GVG": "Goblins vs Gnomes"
+ },
+ "cards": {
+  "VAN_DREAM_01": {
+   "text": "Can't be targeted by spells or Hero Powers."
+  },
+  "VAN_EX1_323": {
+   "text": "<b>Battlecry:</b> Destroy your hero and replace it with Lord Jaraxxus."
+  },
+  "VAN_EX1_559": {
+   "text": "Whenever you cast a spell, add a 'Fireball' spell to your hand."
+  },
+  "VAN_NEW1_023": {
+   "text": "Can't be targeted by spells or Hero Powers."
+  }
  }
 }

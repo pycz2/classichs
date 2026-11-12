@@ -7,5 +7,10 @@
    "name": "Entdecken",
    "tip": "Wählt eine von drei Karten und nehmt sie auf die Hand."
   }
+ },
+ "cards": {
+  "TU4e_002": {
+   "text": "<b>Heldenfähigkeit</b>\nRuft zwei Diener (2/1) herbei."
+  }
  }
 }

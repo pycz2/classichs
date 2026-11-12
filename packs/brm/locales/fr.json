@@ -1,5 +1,19 @@
 {
  "sets": {
   "BRM": "Mont Rochenoire"
+ },
+ "cards": {
+  "VAN_CS2_147": {
+   "name": "Inventrice gnome"
+  },
+  "VAN_EX1_277": {
+   "text": "Inflige $3 |4(point,points) de dégâts répartis de façon aléatoire entre tous les adversaires."
+  },
+  "VAN_EX1_384": {
+   "text": "Inflige $8 |4(point,points) de dégâts répartis de façon aléatoire entre tous les adversaires."
+  },
+  "VAN_EX1_572": {
+   "text": "À la fin de votre tour, ajoute une carte Rêve dans votre main."
+  }
  }
 }

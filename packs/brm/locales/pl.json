@@ -1,5 +1,22 @@
 {
  "sets": {
   "BRM": "Czarna Góra"
+ },
+ "cards": {
+  "Mekka2": {
+   "name": "Reperobot"
+  },
+  "VAN_CS2_037": {
+   "name": "Wstrząs mrozu"
+  },
+  "VAN_EX1_277": {
+   "text": "Zadaj $3 pkt. obrażeń losowo rozdzielone pomiędzy wszystkimi wrogami."
+  },
+  "VAN_EX1_384": {
+   "text": "Zadaj $8 pkt. obrażeń losowo rozdzielone pomiędzy wszystkimi wrogami."
+  },
+  "VAN_EX1_572": {
+   "text": "Na koniec twojej tury dodaj Kartę Snu do twojej ręki."
+  }
  }
 }

@@ -1005,6 +1005,18 @@
    "ruRU": "Наносит каждому существу урон, равный показателю его атаки."
   }
  },
+ "GVG_009": {
+  "text": {
+   "deDE": "<b>Kampfschrei:</b> Fügt jedem Helden 3 Schaden zu.",
+   "enUS": "<b>Battlecry:</b> Deal 3 damage to each hero.",
+   "esES": "<b>Grito de batalla:</b> Inflige 3 p. de daño a cada héroe.",
+   "frFR": "<b>Cri de guerre :</b> inflige 3 points de dégâts aux héros.",
+   "itIT": "<b>Grido di Battaglia:</b> infligge 3 danni a entrambi gli eroi.",
+   "plPL": "<b>Okrzyk bojowy:</b> Zadaj 3 pkt. obrażeń każdemu bohaterowi.",
+   "ptBR": "<b>Grito de Guerra:</b> Cause 3 de dano a cada herói.",
+   "ruRU": "<b>Боевой клич:</b> наносит 3 ед. урона каждому герою."
+  }
+ },
  "GVG_010": {
   "text": {
    "deDE": "Verleiht einem Diener +2/+4 und <b>Zauberschaden +1</b>.",
@@ -1100,6 +1112,16 @@
   }
  },
  "GVG_017": {
+  "name": {
+   "deDE": "Begleiter rufen",
+   "enUS": "Call Pet",
+   "esES": "Llamar a mascota",
+   "frFR": "Appel du familier",
+   "itIT": "Richiamo Famiglio",
+   "plPL": "Przyzwanie zwierza",
+   "ptBR": "Chamar Ajudante",
+   "ruRU": "Призыв питомца"
+  },
   "text": {
    "deDE": "Zieht eine Karte. Sie kostet (4) weniger, wenn es sich um ein Wildtier handelt.",
    "enUS": "Draw a card.\nIf it's a Beast, it costs (4) less.",
@@ -1932,6 +1954,16 @@
   }
  },
  "GVG_080": {
+  "name": {
+   "deDE": "Druide des Giftzahns",
+   "enUS": "Druid of the Fang",
+   "esES": "Druida del Colmillo",
+   "frFR": "Druide du Croc",
+   "itIT": "Druido della Zanna",
+   "plPL": "Druid Kłów",
+   "ptBR": "Druida da Presa",
+   "ruRU": "Друид-змея"
+  },
   "text": {
    "deDE": "<b>Kampfschrei:</b> Wird verwandelt und erhält die Werte 7/7, wenn Ihr ein Wildtier auf dem Schlachtfeld habt.",
    "enUS": "<b>Battlecry:</b> If you have a Beast, transform this minion into a 7/7.",
@@ -1941,6 +1973,18 @@
    "plPL": "<b>Okrzyk bojowy:</b> Jeśli kontrolujesz Bestię, przemień tego stronnika w 7/7.",
    "ptBR": "<b>Grito de Guerra:</b> Se você tiver uma Fera, este lacaio torna-se 7/7.",
    "ruRU": "<b>Боевой клич:</b> если у вас под контролем есть зверь, характеристики этого существа становятся равны 7/7."
+  }
+ },
+ "GVG_080t": {
+  "name": {
+   "deDE": "Druide des Giftzahns",
+   "enUS": "Druid of the Fang",
+   "esES": "Druida del Colmillo",
+   "frFR": "Druide du Croc",
+   "itIT": "Druido della Zanna",
+   "plPL": "Druid Kłów",
+   "ptBR": "Druida da Presa",
+   "ruRU": "Друид-змея"
   }
  },
  "GVG_082": {
@@ -2290,6 +2334,16 @@
   }
  },
  "GVG_110t": {
+  "name": {
+   "deDE": "Bummbot",
+   "enUS": "Boom Bot",
+   "esES": "Robot bum",
+   "frFR": "Ro’Boum",
+   "itIT": "Robobomba",
+   "plPL": "Hukobot",
+   "ptBR": "Robomba",
+   "ruRU": "Взрыв-бот"
+  },
   "text": {
    "deDE": "<b>Todesröcheln:</b> Fügt einem zufälligen Feind 1–4 Schaden zu.",
    "enUS": "<b>Deathrattle</b>: Deal 1-4 damage to a random enemy.",
@@ -2482,6 +2536,16 @@
   }
  },
  "Mekka2": {
+  "name": {
+   "deDE": "Reparaturbot",
+   "enUS": "Repair Bot",
+   "esES": "Robot de reparación",
+   "frFR": "Robot réparateur",
+   "itIT": "Robot di Riparazione",
+   "plPL": "Reperobot",
+   "ptBR": "Robô de Reparos",
+   "ruRU": "Ремонтный робот"
+  },
   "text": {
    "deDE": "Stellt am Ende Eures Zuges bei einem verletzten Charakter 6 Leben wieder her.",
    "enUS": "At the end of your turn, restore 6 Health to a damaged character.",
@@ -3052,6 +3116,16 @@
   }
  },
  "VAN_CS2_037": {
+  "name": {
+   "deDE": "Frostschock",
+   "enUS": "Frost Shock",
+   "esES": "Choque de Escarcha",
+   "frFR": "Horion de givre",
+   "itIT": "Folgore del Gelo",
+   "plPL": "Wstrząs mrozu",
+   "ptBR": "Choque Gélido",
+   "ruRU": "Ледяной шок"
+  },
   "text": {
    "deDE": "Fügt einem feindlichen Charakter $1 Schaden zu und <b>friert</b> ihn ein.",
    "enUS": "Deal $1 damage to an enemy character and <b>Freeze</b> it.",
@@ -3497,6 +3571,18 @@
    "plPL": "Posiada <b>Szarżę</b>, gdy masz broń na wyposażeniu.",
    "ptBR": "Tem <b>Investida</b> enquanto você tiver uma arma equipada.",
    "ruRU": "Получает <b>Рывок</b>, пока у вас в руках есть оружие."
+  }
+ },
+ "VAN_CS2_147": {
+  "name": {
+   "deDE": "Gnomische Erfinderin",
+   "enUS": "Gnomish Inventor",
+   "esES": "Inventora gnoma",
+   "frFR": "Inventrice gnome",
+   "itIT": "Gnoma Inventrice",
+   "plPL": "Gnomka wynalazca",
+   "ptBR": "Inventora Gnômica",
+   "ruRU": "Гном-изобретатель"
   }
  },
  "VAN_CS2_151": {
@@ -4035,6 +4121,18 @@
    "ruRU": "<b>Боевой клич:</b> ваш противник получает 2 банана."
   }
  },
+ "VAN_EX1_016": {
+  "text": {
+   "deDE": "<b>Todesröcheln:</b> Übernehmt die Kontrolle über einen zufälligen feindlichen Diener.",
+   "enUS": "<b>Deathrattle:</b> Take control of a random enemy minion.",
+   "esES": "<b>Último aliento:</b> Toma el control de un esbirro enemigo aleatorio.",
+   "frFR": "<b>Râle d’agonie :</b> prend le contrôle d’un serviteur adverse aléatoire.",
+   "itIT": "<b>Rantolo di Morte:</b> prendi il controllo di un servitore nemico casuale.",
+   "plPL": "<b>Agonia:</b> Przejmij kontrolę nad losowym wrogim stronnikiem.",
+   "ptBR": "<b>Último Suspiro:</b> Assuma o controle de um lacaio inimigo aleatório.",
+   "ruRU": "<b>Предсмертный хрип:</b> вы получаете контроль над случайным существом противника."
+  }
+ },
  "VAN_EX1_019": {
   "name": {
    "deDE": "Blutelfenklerikerin",
@@ -4377,6 +4475,18 @@
    "plPL": "<b>Szarża</b>. <b>Okrzyk bojowy:</b> Daj twojemu przeciwnikowi kryształ many.",
    "ptBR": "<b>Investida</b>. <b>Grito de Guerra:</b> Conceda um Cristal de Mana ao seu oponente.",
    "ruRU": "<b>Рывок</b>. <b>Боевой клич:</b> ваш противник получает кристалл маны."
+  }
+ },
+ "VAN_EX1_091": {
+  "name": {
+   "deDE": "Kabaleschattenpriesterin",
+   "enUS": "Cabal Shadow Priest",
+   "esES": "Sacerdotisa de la Cábala",
+   "frFR": "Prêtresse de la Cabale",
+   "itIT": "Cabalista dell'Ombra",
+   "plPL": "Kabalistka cieni",
+   "ptBR": "Sacerdotisa do Conluio",
+   "ruRU": "Жрица Тьмы"
   }
  },
  "VAN_EX1_093": {
@@ -6679,6 +6789,18 @@
    "ruRU": "Все существа стоят на (1) ману больше."
   }
  },
+ "VAN_EX1_617": {
+  "text": {
+   "deDE": "Vernichtet einen zufälligen feindlichen Diener.",
+   "enUS": "Destroy a random enemy minion.",
+   "esES": "Destruye un esbirro enemigo aleatorio.",
+   "frFR": "Détruit un serviteur adverse aléatoire.",
+   "itIT": "Distrugge un servitore nemico casuale.",
+   "plPL": "Zniszcz losowego wrogiego stronnika.",
+   "ptBR": "Destrua um lacaio inimigo aleatório.",
+   "ruRU": "Уничтожает случайное существо противника."
+  }
+ },
  "VAN_EX1_619": {
   "text": {
    "deDE": "Setzt das Leben ALLER Diener auf 1.",
@@ -6817,6 +6939,134 @@
    "plPL": "<b>Moc specjalna</b>\nPrzyzwij Infernala 6/6.",
    "ptBR": "<b>Poder Heroico</b>\nEvoque um Infernal 6/6.",
    "ruRU": "<b>Сила героя</b>\n Призывает на поле боя инфернала 6/6."
+  }
+ },
+ "VAN_HERO_01bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nErhaltet 2 Rüstung.",
+   "enUS": "<b>Hero Power</b>\nGain 2 Armor.",
+   "esES": "<b>Poder de héroe</b>\nObtiene 2 p. de armadura.",
+   "frFR": "<b>Pouvoir héroïque</b>\nConfère 2 points d’armure.",
+   "itIT": "<b>Potere Eroe</b>\nOttiene 2 Armatura.",
+   "plPL": "<b>Moc specjalna</b>\nOtrzymujesz 2 pkt. pancerza.",
+   "ptBR": "<b>Poder Heroico</b>\nReceba 2 Armadura.",
+   "ruRU": "<b>Сила героя</b>\n +2 к броне."
+  }
+ },
+ "VAN_HERO_02bp": {
+  "name": {
+   "deDE": "Totem beschwören",
+   "enUS": "Totemic Call",
+   "esES": "Llamada totémica",
+   "frFR": "Appel totémique",
+   "itIT": "Evocazione Totemica",
+   "plPL": "Wezwanie Totemu",
+   "ptBR": "Convocação Totêmica",
+   "ruRU": "Призыв тотема"
+  },
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nBeschwört ein zufälliges Totem.",
+   "enUS": "<b>Hero Power</b>\nSummon a random Totem.",
+   "esES": "<b>Poder de héroe</b>\nInvoca un tótem aleatorio.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInvoque un totem aléatoire.",
+   "itIT": "<b>Potere Eroe</b>\nEvoca un totem casuale.",
+   "plPL": "<b>Moc specjalna</b>\nPrzyzwij losowy Totem.",
+   "ptBR": "<b>Poder Heroico</b>\nEvoque um Totem aleatório.",
+   "ruRU": "<b>Сила героя</b>\n Призывает на поле боя случайный тотем."
+  }
+ },
+ "VAN_HERO_03bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nLegt einen Dolch (1/2) an.",
+   "enUS": "<b>Hero Power</b>\nEquip a 1/2 Dagger.",
+   "esES": "<b>Poder de héroe</b>\nEquipa una daga 1/2.",
+   "frFR": "<b>Pouvoir héroïque</b>\nÉquipe une dague 1/2.",
+   "itIT": "<b>Potere Eroe</b>\nEquipaggia un Pugnale 1/2.",
+   "plPL": "<b>Moc specjalna</b>\nWyposaż bohatera w sztylet 1/2.",
+   "ptBR": "<b>Poder Heroico</b>\nEquipe uma Adaga 1/2.",
+   "ruRU": "<b>Сила героя</b>\n Снаряжает оружием 1/2."
+  }
+ },
+ "VAN_HERO_04bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nRuft einen Rekruten der Silbernen Hand (1/1) herbei.",
+   "enUS": "<b>Hero Power</b>\nSummon a 1/1 Silver Hand Recruit.",
+   "esES": "<b>Poder de héroe</b>\nInvoca a un Recluta Mano de Plata 1/1.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInvoque une recrue de la Main d’argent 1/1.",
+   "itIT": "<b>Potere Eroe</b>\nEvoca una Recluta Mano d'Argento 1/1.",
+   "plPL": "<b>Moc specjalna</b>\nPrzyzwij Rekruta Srebrnej Dłoni 1/1.",
+   "ptBR": "<b>Poder Heroico</b>\nEvoque um Recruta do Punho de Prata 1/1.",
+   "ruRU": "<b>Сила героя</b>\n Призывает на поле боя паладина-рекрута 1/1."
+  }
+ },
+ "VAN_HERO_05bp": {
+  "name": {
+   "deDE": "Zuverlässiger Schuss",
+   "enUS": "Steady Shot",
+   "esES": "Disparo firme",
+   "frFR": "Tir assuré",
+   "itIT": "Tiro Stabilizzato",
+   "plPL": "Pewny strzał",
+   "ptBR": "Tiro firme",
+   "ruRU": "Верный выстрел"
+  },
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nFügt dem feindlichen Helden 2 Schaden zu.",
+   "enUS": "<b>Hero Power</b>\nDeal 2 damage to the enemy hero.",
+   "esES": "<b>Poder de héroe</b>\nInflige 2 p. de daño al héroe enemigo.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInflige 2 points de dégâts au héros adverse.",
+   "itIT": "<b>Potere Eroe</b>\nInfligge 2 danni all'eroe nemico.",
+   "plPL": "<b>Moc specjalna</b>\nZadaj 2 pkt. obrażeń wrogiemu bohaterowi.",
+   "ptBR": "<b>Poder Heroico</b>\nCause 2 de dano ao herói inimigo.",
+   "ruRU": "<b>Сила героя</b>\n Наносит 2 ед. урона герою противника."
+  }
+ },
+ "VAN_HERO_06bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\n+1 Angriff in diesem Zug.\n+1 Rüstung.",
+   "enUS": "<b>Hero Power</b>\n+1 Attack this turn.\n+1 Armor.",
+   "esES": "<b>Poder de héroe</b>\n+1 p. de ataque este turno.\n+1 p. de armadura.",
+   "frFR": "<b>Pouvoir héroïque</b>\n+1 ATQ pendant ce tour.\n+1 Armure.",
+   "itIT": "<b>Potere Eroe</b>\n+1 Attacco per questo turno e 1 Armatura.",
+   "plPL": "<b>Moc specjalna</b> \n +1 do ataku w tej turze.\n +1 pkt. pancerza.",
+   "ptBR": "<b>Poder Heroico</b>\n+1 de Ataque neste turno.\n+1 de Armadura.",
+   "ruRU": "<b>Сила героя</b>\n +1 к атаке до конца хода.\n+1 к броне. "
+  }
+ },
+ "VAN_HERO_07bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nZieht eine Karte und erleidet 2 Schaden.",
+   "enUS": "<b>Hero Power</b>\nDraw a card and take 2 damage.",
+   "esES": "<b>Poder de héroe</b>\nRoba una carta y recibe 2 p. de daño.",
+   "frFR": "<b>Pouvoir héroïque</b>\nSubit 2 points de dégâts. Vous piochez une carte.",
+   "itIT": "<b>Potere Eroe</b>\nPesca una carta e subisce 2 danni.",
+   "plPL": "<b>Moc specjalna</b>\nDobierz kartę i otrzymaj 2 pkt. obrażeń.",
+   "ptBR": "<b>Poder Heroico</b>\nCompre um card e receba 2 de dano.",
+   "ruRU": "<b>Сила героя</b>\n Вы берете карту и получаете 2 ед. урона."
+  }
+ },
+ "VAN_HERO_08bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nVerursacht 1 Schaden.",
+   "enUS": "<b>Hero Power</b>\nDeal 1 damage.",
+   "esES": "<b>Poder de héroe</b>\nInflige 1 p. de daño.",
+   "frFR": "<b>Pouvoir héroïque</b>\nInflige 1 point de dégâts.",
+   "itIT": "<b>Potere Eroe</b>\nInfligge 1 danno.",
+   "plPL": "<b>Moc specjalna</b>\nZadaj 1 pkt. obrażeń.",
+   "ptBR": "<b>Poder Heroico</b>\nCause 1 de dano.",
+   "ruRU": "<b>Сила героя</b>\n Наносит 1 ед. урона."
+  }
+ },
+ "VAN_HERO_09bp": {
+  "text": {
+   "deDE": "<b>Heldenfähigkeit</b>\nStellt 2 Leben wieder her.",
+   "enUS": "<b>Hero Power</b>\nRestore 2 Health.",
+   "esES": "<b>Poder de héroe</b>\nRestaura 2 p. de salud.",
+   "frFR": "<b>Pouvoir héroïque</b>\nRend 2 PV.",
+   "itIT": "<b>Potere Eroe</b>\nRigenera 2 Salute.",
+   "plPL": "<b>Moc specjalna</b>\nPrzywróć 2 pkt. zdrowia.",
+   "ptBR": "<b>Poder Heroico</b>\nRestaure 2 de Vida.",
+   "ruRU": "<b>Сила героя</b>\n Восстанавливает 2 ед. здоровья."
   }
  },
  "VAN_NEW1_003": {

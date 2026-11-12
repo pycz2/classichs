@@ -7,5 +7,10 @@
    "name": "Descubrir",
    "tip": "Elige una de tres cartas y añádela a tu mano."
   }
+ },
+ "cards": {
+  "VAN_EX1_323": {
+   "text": "<b>Grito de batalla:</b> Destruye a tu héroe y lo reemplaza por Lord Jaraxxus."
+  }
  }
 }

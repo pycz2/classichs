@@ -126,6 +126,11 @@ RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 125
 ## Whispers of the Old Gods too: C'Thun and its cards, Cho'gall, Usher of Souls, Addled Grizzly, Hallazeal… changed later.
 FROM_RELEASE = {"tgt", "loe", "og"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
+## Classic's Hero Powers had other ids in the old builds (VAN_HERO_06bp was CS2_017; the upgraded ones AT_132_*).
+_CLASSES = ["WARRIOR", "SHAMAN", "ROGUE", "PALADIN", "HUNTER", "DRUID", "WARLOCK", "MAGE", "PRIEST"]
+POWERS = {**{f"VAN_HERO_0{i}bp": p for i, p in enumerate(
+    "CS2_102 CS2_049 CS2_083b CS2_101 DS1h_292 CS2_017 CS2_056 CS2_034 CS1h_001".split(), 1)},
+    **{f"VAN_HERO_0{i}bp2": f"AT_132_{k}" for i, k in enumerate(_CLASSES, 1)}}
 
 
 def _norm(t):
@@ -153,7 +158,7 @@ def release_texts(name, then):
     out = {}
     for f in chain:
         for c in json.loads(f.read_text()):
-            o = old.get(c["id"][4:] if c["id"].startswith("VAN_") else c["id"])
+            o = old.get(POWERS.get(c["id"]) or (c["id"][4:] if c["id"].startswith("VAN_") else c["id"]))
             if not o or (c["id"].startswith("VAN_") and (o["type"] != c["type"] or bool(o.get("text")) != bool(c.get("text")))):
                 continue
             if not c["id"].startswith("VAN_") and o.get("text") and not c.get("text"):

@@ -22,6 +22,9 @@ pack `packs/<s>/`, built on the previous one. Do the items in order; the next se
       texts of that day where today's differ (hsdata's CardDefs.xml at the build has them all), for every card of the
       chain: `extract_cards.py --set <s>` writes it from the build in its `RELEASE_BUILDS` (HearthstoneJSON keeps every
       build: `api.hearthstonejson.com/v1/<build>/all/cards.json`, also the stats of that day to compare with).
+- [ ] The built pack shows those texts: a base pack's own `locales/<lang>.json` `cards` (Classic's hand-set 2014 texts)
+      win over `cards.texts.json`, so restate the ones that differ in `packs/<s>/locales/<lang>.json` `cards`
+      (`tools/test_pack.py` lists them: `release_text_gaps("<s>")`, checked for every set in `RELEASE_BUILDS`).
 - [ ] `packs/<s>/recipe.json`: `"base": "../<previous>"`, `"root": "../.."`, `"skip": ["layout"]` (as Naxxramas; the
       base's pictures stay: a pack stands alone),
       `"bundle_in_client": false`, one step `{"do": "hsjson", "from": ["data/<s>_cards.json"], "patch": ["cards.patch.json"], "texts": ["packs/<s>/cards.texts.json"]}`.

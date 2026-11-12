@@ -11,5 +11,22 @@
  },
  "sets": {
   "GVG": "Goblin vs Gnomi"
+ },
+ "cards": {
+  "VAN_CS2_005": {
+   "text": "+2 Attacco al tuo eroe per questo turno e 2 Armatura."
+  },
+  "VAN_EX1_136": {
+   "text": "<b>Segreto:</b> quando un tuo servitore muore, ritorna in vita con 1 Salute."
+  },
+  "VAN_EX1_366": {
+   "text": "Fornisce +1/+1 ai servitori che evochi ma perde 1 Integrità."
+  },
+  "VAN_EX1_559": {
+   "text": "Quando lanci una Magia, mette nella tua mano una carta Palla di Fuoco."
+  },
+  "VAN_EX1_570": {
+   "text": "+4 Attacco al tuo eroe per questo turno e 4 Armatura."
+  }
  }
 }

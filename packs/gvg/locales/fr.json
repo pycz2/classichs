@@ -11,5 +11,16 @@
  },
  "sets": {
   "GVG": "Gobelins et Gnomes"
+ },
+ "cards": {
+  "VAN_EX1_536": {
+   "text": "Chaque fois qu’un <b>Secret</b> allié est révélé, gagne +1 Durabilité."
+  },
+  "VAN_EX1_559": {
+   "text": "Chaque fois que vous lancez un sort, ajoute un sort « boule de feu » dans votre main."
+  },
+  "VAN_EX1_622": {
+   "text": "Détruit un serviteur avec 5 Attaque ou plus."
+  }
  }
 }

@@ -11,5 +11,16 @@
  },
  "sets": {
   "GVG": "Goblins y Gnomos"
+ },
+ "cards": {
+  "VAN_EX1_536": {
+   "text": "Obtiene +1 p. de durabilidad cada vez que se revela un <b>secreto</b> amistoso."
+  },
+  "VAN_EX1_559": {
+   "text": "Cada vez que lanzas un hechizo, añade un hechizo \"Bola de Fuego\" a tu mano."
+  },
+  "VAN_HERO_04bp": {
+   "text": "<b>Poder de héroe</b>\nInvoca a un Recluta Mano de Plata 1/1."
+  }
  }
 }

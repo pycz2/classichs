@@ -11,5 +11,16 @@
    "name": "Can't attack heroes",
    "tip": "Can attack only minions."
   }
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Hero Power</b>\nDeal $2 damage."
+  },
+  "EX1_625t2": {
+   "text": "<b>Hero Power</b>\nDeal $3 damage."
+  },
+  "VAN_NEW1_033": {
+   "text": "Your other minions have +1 Attack."
+  }
  }
 }

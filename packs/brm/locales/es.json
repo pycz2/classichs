@@ -1,5 +1,16 @@
 {
  "sets": {
   "BRM": "La Montaña Roca Negra"
+ },
+ "cards": {
+  "VAN_EX1_277": {
+   "text": "Inflige $3 p. de daño que se dividen aleatoriamente entre todos los enemigos."
+  },
+  "VAN_EX1_384": {
+   "text": "Inflige $8 p. de daño que se dividen aleatoriamente entre todos los enemigos."
+  },
+  "VAN_EX1_572": {
+   "text": "Al final de tu turno, añade una carta de sueño a tu mano."
+  }
  }
 }

@@ -11,5 +11,16 @@
    "name": "No puede atacar a héroes",
    "tip": "Solo puede atacar a esbirros."
   }
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Poder de héroe</b>\nInflige $2 p. de daño."
+  },
+  "EX1_625t2": {
+   "text": "<b>Poder de héroe</b>\nInflige $3 p. de daño."
+  },
+  "VAN_NEW1_033": {
+   "text": "Tus demás esbirros tienen +1 p. de ataque."
+  }
  }
 }

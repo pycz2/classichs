@@ -11,5 +11,19 @@
    "name": "Kann keine Helden angreifen",
    "tip": "Kann nur Diener angreifen."
   }
+ },
+ "cards": {
+  "EX1_625t": {
+   "text": "<b>Heldenfähigkeit</b>\nVerursacht $2 Schaden."
+  },
+  "EX1_625t2": {
+   "text": "<b>Heldenfähigkeit</b>\nVerursacht $3 Schaden."
+  },
+  "VAN_EX1_539": {
+   "text": "Verursacht $3 Schaden. Verursacht stattdessen $5 Schaden, wenn Ihr ein Wildtier kontrolliert."
+  },
+  "VAN_NEW1_033": {
+   "text": "Eure anderen Diener haben +1 Angriff."
+  }
  }
 }

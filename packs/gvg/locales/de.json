@@ -11,5 +11,13 @@
  },
  "sets": {
   "GVG": "Goblins gegen Gnome"
+ },
+ "cards": {
+  "VAN_EX1_536": {
+   "text": "Erhält jedes Mal +1 Haltbarkeit, wenn ein eigenes <b>Geheimnis</b> aufgedeckt wird."
+  },
+  "VAN_EX1_539": {
+   "text": "Verursacht $3 Schaden. Verursacht stattdessen $5 Schaden, wenn Ihr ein Wildtier auf dem Schlachtfeld habt."
+  }
  }
 }

@@ -11,5 +11,19 @@
  },
  "sets": {
   "GVG": "Goblins vs Gnomos"
+ },
+ "cards": {
+  "VAN_DREAM_01": {
+   "text": "Não pode ser alvo de feitiços nem de Poderes Heroicos."
+  },
+  "VAN_EX1_323": {
+   "text": "<b>Grito de Guerra:</b> Destrua seu herói e substitua-o por Lorde Jaraxxus."
+  },
+  "VAN_EX1_559": {
+   "text": "Sempre que você lançar um feitiço, adicione um feitiço \"Bola de Fogo\" à sua mão."
+  },
+  "VAN_NEW1_023": {
+   "text": "Não pode ser alvo de feitiços nem de Poderes Heroicos."
+  }
  }
 }

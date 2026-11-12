@@ -1,5 +1,16 @@
 {
  "sets": {
   "BRM": "Blackrock Mountain"
+ },
+ "cards": {
+  "VAN_EX1_277": {
+   "text": "Deal $3 damage randomly split among all enemies."
+  },
+  "VAN_EX1_384": {
+   "text": "Deal $8 damage randomly split among all enemies."
+  },
+  "VAN_EX1_572": {
+   "text": "At the end of your turn, add a Dream Card to your hand."
+  }
  }
 }

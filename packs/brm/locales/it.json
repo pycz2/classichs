@@ -1,5 +1,16 @@
 {
  "sets": {
   "BRM": "Massiccio Roccianera"
+ },
+ "cards": {
+  "VAN_EX1_277": {
+   "text": "Infligge $3 danni suddivisi casualmente tra tutti i nemici."
+  },
+  "VAN_EX1_384": {
+   "text": "Infligge $8 danni suddivisi casualmente tra tutti i nemici."
+  },
+  "VAN_EX1_572": {
+   "text": "Alla fine del tuo turno, mette una carta Sogno nella tua mano."
+  }
  }
 }
