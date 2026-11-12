@@ -943,6 +943,15 @@ fn a_add_to_deck(g: &mut Game, a: Args) -> R {
     let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "")?);
     one(g.add_to_deck(p, &c))
 }
+fn a_cast(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (src, orig, t) = (ent(g, &a, 0)?, ent(g, &a, 1)?, opt_ent(g, &a, 2)?);
+    if g.e(orig).kind() != "SPELL" {
+        return Err(a.bad(1, "a spell expected"));
+    }
+    g.cast_copy(src, orig, t);
+    none()
+}
 fn a_deathrattle(g: &mut Game, a: Args) -> R {
     live(g)?;
     let e = opt_ent(g, &a, 0)?;
@@ -1233,4 +1242,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.remove", a_remove), ("g.random", a_random), ("g.pick", a_pick), ("g.random_alive", a_random_alive),
     ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
     ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
+    ("g.cast", a_cast),
 ];

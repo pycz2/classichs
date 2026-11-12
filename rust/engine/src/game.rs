@@ -498,6 +498,8 @@ impl Game {
         self.consume_cost_mods(e);
         self.players[c].hand.retain(|&x| x != e);
         let combo = self.combo_active(e);
+        let x = self.em(e);
+        (x.choice, x.comboed) = (choice, combo);
         self.players[c].cards_played_this_turn += 1;
         self.players[c].mana_lock_owed += self.e(e).card.mana_lock;
         match self.e(e).kind() {
@@ -508,22 +510,53 @@ impl Game {
         }
     }
 
+    /// Casts a copy of the spell `orig` for src's controller on t, as `orig` was cast (its Choose One option, its
+    /// Combo): only its effect, no `play` or `after_spell` event, no target check (Djinni of Zephyrs). Logs `cast`.
+    pub fn cast_copy(&mut self, src: Id, orig: Id, t: Id) {
+        let (p, o) = (self.ctrl(src), self.e(orig));
+        let (card, choice, combo) = (o.card_id, o.choice, o.comboed);
+        let h = &o.card.hooks;
+        let f = if choice >= 0 && h.choice.is_some() {
+            self.rs.hooks(h.choice.unwrap()[choice as usize]).effect
+        } else if combo && h.combo.is_some() {
+            h.combo
+        } else {
+            h.spell
+        };
+        let e = self.new_entity(card, p);
+        self.log_event(obj!{"type": "cast", "player": p, "entity": e, "card": card, "target": t});
+        if let Some(f) = f {
+            self.from(e, |c| c.fx_effect(f, e, t));
+        }
+        self.em(e).zone = "GRAVEYARD";
+    }
+
     fn run_effect(&mut self, e: Id, key: &str, t: Id, choice: i64, combo: bool) {
         let h = &self.e(e).card.hooks;
         if t == NONE && self.target_spec(e, choice, combo).is_some() {
             return; // targeted effect with no target (none was valid, or it left play)
         }
+        let mut battlecry = false;
         let f = if choice >= 0 {
             self.rs.hooks(h.choice.unwrap()[choice as usize]).effect
         } else if combo && h.combo.is_some() {
             h.combo
         } else if key == "on_play" {
+            battlecry = true;
             h.on_play
         } else {
             h.spell
         };
         if let Some(f) = f {
-            self.from(e, |g| g.fx_effect(f, e, t));
+            // DOUBLE_ON_PLAY (Brann Bronzebeard, in play as the Battlecry starts): a Battlecry (not a Combo, not a
+            // Choose One) runs twice, on the same target, with no death phase between
+            let twice = battlecry && self.e(self.hero(self.ctrl(e))).aura.tags.contains_key(self.n().double_on_play);
+            for i in 0..1 + twice as usize {
+                if i > 0 && self.game_over {
+                    break;
+                }
+                self.from(e, |g| g.fx_effect(f, e, t));
+            }
         }
     }
 
@@ -689,14 +722,22 @@ impl Game {
         }
     }
 
-    /// A choice whose options all left their zone (drawn by a trigger, say) is dropped.
+    /// A choice whose options all left their zone (drawn by a trigger, say) is dropped; once none is pending, the
+    /// next one asked for meanwhile comes (Brann Bronzebeard's second Discover).
     fn prune_pending(&mut self) {
-        if let Some(p) = &self.pending {
-            if self.pending_options().is_empty() {
-                let player = p.player;
-                self.log_event(obj!{"type": "choice_cancelled", "player": player});
-                self.pending = None;
+        loop {
+            if self.pending.is_none() && !self.pending_next.is_empty() {
+                let p = self.pending_next.remove(0);
+                self.log_event(obj!{"type": "choice", "player": p.player, "options": p.options.clone()});
+                self.pending = Some(p);
             }
+            let Some(p) = &self.pending else { return };
+            if !self.pending_options().is_empty() {
+                return;
+            }
+            let player = p.player;
+            self.log_event(obj!{"type": "choice_cancelled", "player": player});
+            self.pending = None;
         }
     }
 }

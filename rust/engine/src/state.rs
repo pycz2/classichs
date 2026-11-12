@@ -82,6 +82,8 @@ pub struct Game {
     pub current: usize,
     pub phase: &'static str,
     pub pending: Option<Pending>,
+    /// Choices asked for while one was pending (two Discovers of a doubled Battlecry), in order.
+    pub pending_next: Vec<Pending>,
     pub game_over: bool,
     pub winner: i64,
     pub event_log: Vec<Obj>,
@@ -106,7 +108,7 @@ pub struct Game {
 impl Game {
     pub(crate) fn blank(rs: &'static Ruleset, seed: i64) -> Game {
         Game { rs, rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
-            phase: "MULLIGAN", pending: None, game_over: false, winner: -1, event_log: vec![], history: vec![],
+            phase: "MULLIGAN", pending: None, pending_next: vec![], game_over: false, winner: -1, event_log: vec![], history: vec![],
             queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: "", source_id: NONE,
             start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new(), writes: 0 }
     }
@@ -368,6 +370,18 @@ impl Game {
         self.e(e).enchantments.iter().filter_map(|x| x.get("hooks").and_then(V::as_str)).map(|h| rs.hooks(h)).collect()
     }
 
+    /// The death hooks of e's enchantments, in order: a `hooks` set's, or (`{deathrattle = <card id>}`) only that
+    /// card's own death hook (Unearthed Raptor: a copy of a minion's Deathrattle, not its other hooks).
+    fn ench_deaths(&self, e: Id) -> Vec<HookFn> {
+        let rs = self.rs;
+        self.e(e)
+            .enchantments
+            .iter()
+            .filter_map(|x| x.get("hooks").or_else(|| x.get("deathrattle")).and_then(V::as_str))
+            .filter_map(|h| rs.hooks(h).on_death)
+            .collect()
+    }
+
     /// Calls matching "now" hooks (card and enchantment) at once. Used for
     /// replacement effects (`now` hooks: "predamage").
     pub fn emit_now(&mut self, ev: &mut Obj) {
@@ -477,10 +491,8 @@ impl Game {
                 if let Some(f) = self.hooks_of(d).on_death {
                     self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: d, ev: None, needs_in_play: false });
                 }
-                for hooks in self.ench_hooks(d) {
-                    if let Some(f) = hooks.on_death {
-                        self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: d, ev: None, needs_in_play: false });
-                    }
+                for f in self.ench_deaths(d) {
+                    self.queue.push_back(QItem { f: Trigger::OnDeath(f), me: d, ev: None, needs_in_play: false });
                 }
             }
             let e = self.e(d);
@@ -728,6 +740,7 @@ impl Game {
     /// A new card entity for p, set aside (an option of `g.request_choice`: Totemic Slam).
     pub fn create(&mut self, p: usize, card_id: &str) -> Id {
         let e = self.new_entity(card_id, p);
+        self.em(e).created = true;
         self.log_event(obj!{"type": "create", "player": p, "entity": e, "card": self.e(e).card_id});
         e
     }
@@ -886,7 +899,7 @@ impl Game {
     /// Feign Death.
     pub fn run_death_hooks(&mut self, m: Id) {
         let mut fs: Vec<HookFn> = self.hooks_of(m).on_death.into_iter().collect();
-        fs.extend(self.ench_hooks(m).into_iter().filter_map(|h| h.on_death));
+        fs.extend(self.ench_deaths(m));
         for f in fs {
             if self.game_over {
                 return;
@@ -947,9 +960,14 @@ impl Game {
     }
 
     pub fn spell_dmg(&self, me: Id, n: i64) -> i64 {
+        (n + self.side_spell_power(self.ctrl(me))) * self.power_multiplier(me)
+    }
+
+    /// p's spell power: its minions', and its champion's (an aura tag: Jungle Moonkin gives the opponent's too).
+    pub fn side_spell_power(&self, p: usize) -> i64 {
         let t = self.n().spell_power;
-        let sp: i64 = self.players[self.ctrl(me)].board.iter().map(|&m| self.e(m).spell_power(t)).sum();
-        (n + sp) * self.power_multiplier(me)
+        let pl = &self.players[p];
+        pl.board.iter().map(|&m| self.e(m).spell_power(t)).sum::<i64>() + self.ent(pl.hero).map_or(0, |h| vint(h.aura.tags.get(t)))
     }
 
     /// A power's damage: n plus POWER_DAMAGE (an aura tag on the champion: Fallen Hero), then POWER_MULTIPLIER.
@@ -1093,7 +1111,12 @@ impl Game {
     pub fn request_choice(&mut self, me: Id, options: Vec<Id>) {
         let zones = options.iter().map(|&id| self.e(id).zone).collect();
         let player = self.ctrl(me);
-        self.pending = Some(Pending { player, source: me, options: options.clone(), zones });
+        let p = Pending { player, source: me, options: options.clone(), zones };
+        if self.pending.is_some() {
+            self.pending_next.push(p); // asked once the one before is answered
+            return;
+        }
+        self.pending = Some(p);
         self.log_event(obj!{"type": "choice", "player": player, "options": options});
     }
 
@@ -1200,7 +1223,7 @@ impl Game {
     /// gives an independent one.
     pub fn clone_state(&self) -> Game {
         Game { rs: self.rs, rng: self.rng.clone(), players: self.players.clone(), entities: self.entities.clone(),
-            turn: self.turn, current: self.current, phase: self.phase, pending: self.pending.clone(),
+            turn: self.turn, current: self.current, phase: self.phase, pending: self.pending.clone(), pending_next: self.pending_next.clone(),
             game_over: self.game_over, winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(),
             next_id: self.next_id, next_order: self.next_order, source_card: "", source_id: NONE,
             start_decks: [vec![], vec![]], lua: self.lua.share(), script_error: self.script_error.clone(), writes: 0 }
@@ -1263,6 +1286,10 @@ impl Game {
             "rng": (self.rng.state as i64).to_string(), "next_id": self.next_id, "next_order": self.next_order,
             "game_over": self.game_over, "winner": self.winner});
         d["pending"] = self.pending_value();
+        if !self.pending_next.is_empty() {
+            d["pending_next"] = json!(self.pending_next.iter().map(|p| json!({"player": p.player, "source": p.source,
+                "options": p.options})).collect::<Vec<_>>());
+        }
         d["players"] = Value::Array(self.players.iter().map(|p| p.snapshot()).collect());
         d
     }

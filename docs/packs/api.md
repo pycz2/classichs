@@ -171,7 +171,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.board_pos(m)` | Its 0-based position, or `nil`. |
 | `g.died_pos(m)` | Where a dead minion stood (0-based), or `-1`. |
 | `g.trap_ready(me)` | `me` is a trap in play and it is the opponent's turn. |
-| `g.spell_dmg(me, n)` | `n` plus `me`'s side spell power, doubled per POWER_MULTIPLIER (spells and powers). |
+| `g.spell_dmg(me, n)` | `n` plus `me`'s side spell power (its minions' and its champion's SPELL_POWER: an aura tag on the champion, Jungle Moonkin), doubled per POWER_MULTIPLIER (spells and powers). |
 | `g.heal_amt(me, n)`, `g.hp_dmg(me, n)` | Healing / power damage `n` after POWER_MULTIPLIER; a power's damage first adds POWER_DAMAGE (an aura tag on its champion: Fallen Hero). |
 | `g.rule(name)` | `hand`, `board`, `max_mana`, `deck_size`, `champion_health` from rules.json. |
 | `g.mine(me, ev)` | `ev.player` is `me`'s controller. |
@@ -196,7 +196,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.draw(p[, n])` | Draws `n` (default 1): fatigue, burns on a full hand. Returns the drawn ids. |
 | `g.draw_entity(p, e)` | Draws that card of `p`'s deck. |
 | `g.add_to_hand(p, card)` | A new card in hand (or `nil` if full). |
-| `g.create(p, card)` | A new card entity of `p`'s, set aside (zone `SETASIDE`, logs `create`): an option for `g.request_choice` that is in no zone (Totemic Slam's totems). |
+| `g.create(p, card)` | A new card entity of `p`'s, set aside (zone `SETASIDE`, logs `create`): an option for `g.request_choice` that is in no zone (Totemic Slam's totems, Discover). Only `p` ever sees which card it is (snapshots and events of the other player show `""`). |
 | `g.discard_random(p[, n])`, `g.discard(e)` | Discards (emits `discard`). |
 | `g.buff(e, atk, hp[, this_turn])` | An enchantment +atk/+hp (`true`: until the end of the turn). |
 | `g.set_stats(e, atk, hp)` | Sets attack and/or health (`nil` keeps one); setting health heals. |
@@ -216,12 +216,13 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.set_tag(e, tag, v)` | `v`: boolean, number, string; `nil` removes. |
 | `g.give_tag(e, tag[, this_turn])`, `g.erase_tag(e, tag)`, `g.add_tag(e, tag, n)` | |
 | `g.set_damage(e, n)` | Sets the damage taken (Alexstrasza). |
-| `g.enchant(e, t)` | Adds an enchantment table: `{hooks = name, player = p}`, `{cost = -2}`, `{atk = 1, hp = 1, eot = true}`, … |
+| `g.enchant(e, t)` | Adds an enchantment table: `{hooks = name, player = p}`, `{cost = -2}`, `{atk = 1, hp = 1, eot = true}`, `{deathrattle = card}` (only that card's own Deathrattle hook, not its other hooks: Unearthed Raptor), … |
 | `g.remove_enchant(e, hooks[, p])` | Removes `e`'s enchantments with these hooks (`p` given: only those whose `player` is `p`; Conceal, Headcrack, Shadow Madness). |
 | `g.aura_add(e, atk, hp[, tags])` | In an `aura` hook: what `e` gets now (`{WINDFURY = true}`, `{SPELLPOWER = 1}`). |
 | `g.replace_hero(p, card)`, `g.set_power(p, card)` | A new champion / power. |
 | `g.reveal(me)` | Reveals a trap (for `now` hooks; `secret` hooks are revealed for you). |
-| `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. |
+| `g.request_choice(me, ids)` | The player must choose one of these entities; `on_choose` gets it. Asked while another choice is pending (a doubled Battlecry: two Discovers), it comes once that one is answered. |
+| `g.cast(me, spell, t)` | Casts a copy of the spell entity `spell` for `me`'s player on `t` (or none), as `spell` was cast (its Choose One option, its Combo): only its effect, no `play` or `after_spell` event, no target check; logs `cast` (Djinni of Zephyrs). |
 | `g.add_cost_mod(p, t)` | `{kind = "spell"|"minion"|"secret" (or "trap")|"power"|"any", set = n or delta = n, until = "use"|"turn_end"[, turn = n][, race = r][, lasting = true]}`; `turn` defaults to now. `race`: only cards of that race (Dragon Consort: `"DRAGON"`). `"power"`: the champion's power (a `"use"` mod goes when the power is used: Fencing Coach; Saboteur: `turn = g.turn() + 1`). `lasting`: it holds on any turn, kept until a card it applies to is played (with `until = "use"`: "the next Dragon you play costs (2) less"). |
 | `g.log(ev)`, `g.emit(ev)` | Logs an event table (`emit` also triggers `on` hooks). |
 | `g.remove(e[, zone])` | Takes `e` out of its hand/deck/board/trap list (and the weapon slot), optionally setting its zone. |

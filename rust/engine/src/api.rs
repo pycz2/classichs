@@ -348,6 +348,7 @@ fn visible(g: &Game, id: Id, viewer: i64) -> bool {
         "DECK" => chooser,
         "HAND" => mine,
         z if z == g.n().trap => mine,
+        "SETASIDE" if e.created => mine, // an offered option (Discover): the opponent never sees it
         _ => true,
     }
 }
@@ -412,7 +413,7 @@ pub fn snapshot(g: &Game, view: i64) -> Value {
     for (i, p) in g.players.iter().enumerate() {
         let pd = &mut d["players"][i];
         pd["deck_count"] = json!(p.deck.len());
-        pd["spell_damage"] = json!(p.board.iter().map(|&m| g.e(m).spell_power(g.n().spell_power)).sum::<i64>());
+        pd["spell_damage"] = json!(g.side_spell_power(i));
         if view >= 0 {
             pd["deck"] = json!([]);
         }
