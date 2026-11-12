@@ -18,6 +18,8 @@ use tower::ServiceExt;
 
 fn app() -> impl std::future::Future<Output = AppRef> {
     async {
+        // the bots keep their human pace, a hundred times shorter (the games take seconds, not a minute)
+        runtime::PACE_PCT.store(1, std::sync::atomic::Ordering::Relaxed);
         let store = Storage::dir(&std::env::temp_dir().join(format!("chs-bots-{}", rand::random::<u64>()))).unwrap();
         let app = App::new(db::open(":memory:").await.unwrap(), false, Some(Timers::default()), store);
         classichs_server::spawn_background(app.clone()); // (the matchmaking)

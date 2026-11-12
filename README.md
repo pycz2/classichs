@@ -75,6 +75,11 @@ tools/build_site.sh            # web build + landing page into build/site
 tools/build_site.sh --publish  # ... and publish to the gh-pages branch
 ```
 
+The Rust tests: `cd rust && cargo test --release` and `cd server && cargo test --release` (what the CI runs).
+`cargo test` runs the test files one after another; [cargo-nextest](https://nexte.st/) (`brew install cargo-nextest`)
+runs every test in its own process, all at once (`server/` on 10 cores: about 12 s instead of 30 s):
+`cargo nextest run --release` in `rust/` and in `server/`. It skips doc tests: `cd rust && cargo test --release --doc`.
+
 Other tools: `tools/extract_cards.py` rebuilds `data/cards.json` from HearthstoneJSON; `tools/gen_audio.py` synthesizes `audio/*.wav`.
 
 ## Music sets
