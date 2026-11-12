@@ -1,0 +1,31 @@
+{
+ "about": "Knights of the Frozen Throne's interface (docs/packs/format.md, 'UI theme'): Icecrown Citadel in Northrend — dark panels of steel-grey saronite with pale teal rims like glowing runes, buttons of deep frozen blue that light up icy teal under the mouse, frost-white text, the pale teal of the Lich King's runes for headings, blood red for danger and a cold green for confirmations, snow drifting over the menu; the title in Classic's Cinzel Decorative, in pale teal.",
+ "colors": {
+  "text": "e8f1f6",
+  "muted": "a5b4bf",
+  "accent": "7fe3e0",
+  "table": "070b10",
+  "panel": "121a22f0",
+  "panel_border": "5fb5c4",
+  "backdrop": "16222e",
+  "button": "1d3348f0",
+  "button_hover": "27486a",
+  "button_pressed": "142638",
+  "button_disabled": "1a222ca6",
+  "button_border": "7fd6e6",
+  "button_text": "eef6fb",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "bdeff5",
+  "button_text_disabled": "7a8792",
+  "outline": "04070a",
+  "danger": "d94a4a",
+  "ok": "6fd6a0"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 8, "border": 1, "glow": "7fd6e633", "glow_size": 4, "glow_hover": "9ff0ff99", "glow_hover_size": 12},
+ "panel": {"radius": 10, "border": 2, "glow": "5fb5c440", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "1d3348", "border": "7fe3e0", "text": "eef6fb", "ready": "2f7f8a", "ready_border": "bff6ff"},
+ "mana": "5fb8ff",
+ "menu": {"shade": "070b1059", "particles": "snow"}
+}

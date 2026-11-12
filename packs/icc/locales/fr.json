@@ -1,0 +1,19 @@
+{
+ "sets": {
+  "ICECROWN": "Chevaliers du Trône de glace"
+ },
+ "classes": {
+  "DEATHKNIGHT": "Chevalier de la mort"
+ },
+ "mechanics": {
+  "LIFESTEAL": {
+   "name": "Vol de vie",
+   "tip": "Les dégâts infligés par cette carte rendent aussi de la Vie à votre héros."
+  }
+ },
+ "cards": {
+  "VAN_EX1_570": {
+   "text": "Donne +4 ATQ à votre héros pendant ce tour. Gagne 4 points d’armure."
+  }
+ }
+}

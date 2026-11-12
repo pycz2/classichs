@@ -659,6 +659,39 @@ class Chain(unittest.TestCase):
         self.assertIn("Poisonous", en["FP1_010"]["text"])  # Maexxna: the keyword since patch 7.1
         self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
 
+    def test_knights_of_the_frozen_throne_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/icc")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/UNG_" in p or "/ICC_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro", "icc"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/msg.lua", "scripts/ungoro.lua", "scripts/icc.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/icc"))
+        rules = json.loads(files["rules.json"])
+        # Un'Goro's flags stay (no patch changed them by then); a replaced weapon dies as any other
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": True, "full_hand_return_dies": True,
+                                              "cost_in_order": True, "replaced_weapon_dies": True})
+        self.assertEqual((rules["player_hooks"], rules["mechanics"]["LIFESTEAL"], rules["mechanics"]["EXTRA_END_TURN_EFFECT"]),
+                         ("player:icc", {"engine": "LIFESTEAL"}, {"engine": "DOUBLE_TURN_END"}))
+        self.assertIn({"id": "DEATHKNIGHT", "playable": False}, rules["classes"])
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        icc = [c for c in cards.values() if c.get("set") == "ICECROWN"]
+        self.assertEqual(len([c for c in icc if c.get("collectible")]), 135)
+        heroes = [c for c in icc if c["type"] == "CHAMPION" and c.get("collectible")]
+        self.assertEqual(len(heroes), 9)
+        self.assertTrue(all(c.get("armor") == 5 and c.get("power") for c in heroes))
+        self.assertEqual((cards["ICC_054"]["cost"], cards["ICC_210"]["health"], cards["CFM_715"]["race"]), (5, 2, "ELEMENTAL"))
+        self.assertIn("LIFESTEAL", cards["GVG_018"]["keywords"])
+        en = json.loads(files["locales/en.json"])["cards"]
+        self.assertIn("five minions", en["UNG_067"]["text"])  # patch 8.4
+        self.assertIn("At the end", en["AT_019"]["text"])  # Dreadsteed, patch 9.0
+        # a hero card goes into a deck of its class (Surrender's Jade Druid has Malfurion the Pestilent)
+        deck = json.loads(files["decks/01_jade_druid.json"])
+        self.assertIn("ICC_832", deck["cards"])
+        self.assertEqual(pack.deck_error(deck, cards, rules), "")
+        self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 10)
+
     def test_an_expansion_shows_the_texts_of_its_release_build(self):
         import extract_cards
         for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:

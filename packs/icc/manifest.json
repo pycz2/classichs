@@ -1,0 +1,181 @@
+{
+ "format": 1,
+ "id": "icc-2017",
+ "version": "1.0.0",
+ "engine": "0.60.0",
+ "name": {
+  "en": "Knights of the Frozen Throne 2017",
+  "ru": "Рыцари Ледяного Трона 2017",
+  "de": "Ritter des Frostthrons 2017",
+  "fr": "Chevaliers du Trône de glace 2017",
+  "es": "Caballeros del Trono Helado 2017",
+  "pt_BR": "Cavaleiros do Trono de Gelo 2017",
+  "it": "Cavalieri del Trono di Ghiaccio 2017",
+  "pl": "Rycerze Mroźnego Tronu 2017"
+ },
+ "description": {
+  "en": "The game as it was played after August 10, 2017: the Basic, Classic, Naxxramas, Goblins vs Gnomes, Blackrock Mountain, Grand Tournament, League of Explorers, Old Gods, Karazhan, Gadgetzan and Un'Goro cards and the 135 cards of Knights of the Frozen Throne, each as on that day. A Death Knight hero card replaces your hero: you keep your Health, gain 5 Armor and get a new Hero Power. Lifesteal heals your hero for the damage a card deals, Rexxar builds his own Zombeasts and Defile casts itself again while minions die. By then The Caverns Below needed five minions, Jade Spirit and a few older minions had become Elementals, and Mistress of Pain had Lifesteal.",
+  "ru": "Игра, как в неё играли после 10 августа 2017 года: базовые и классические карты, карты Наксрамаса, «Гоблинов и гномов», Чёрной горы, Большого турнира, Лиги исследователей, «Пробуждения древних богов», «Вечеринки в Каражане», «Злачного города Прибамбасска», «Экспедиции в Ун'Горо» и 135 карт «Рыцарей Ледяного Трона», каждая как в тот день. Карта героя — рыцаря смерти заменяет вашего героя: здоровье остаётся прежним, вы получаете 5 ед. брони и новую силу героя. Похищение жизни лечит героя на величину нанесённого картой урона, Рексар собирает своих зомбозверей, а «Осквернение» повторяется, пока гибнут существа. К тому времени для «Подземных пещер» нужно было пять существ, «Нефритовый дух» и ещё несколько старых существ стали элементалями, а у «Госпожи Боли» появилось похищение жизни.",
+  "de": "Das Spiel, wie es nach dem 10. August 2017 gespielt wurde: die Basis-, Klassik-, Naxxramas-, „Goblins gegen Gnome“-, Schwarzfels-, Turnier-, Forscherliga-, Alte-Götter-, Karazhan-, Gadgetzan- und Un'Goro-Karten und die 135 Karten von „Ritter des Frostthrons“, jede wie an jenem Tag. Eine Todesritter-Heldenkarte ersetzt Euren Helden: Euer Leben bleibt, Ihr erhaltet 5 Rüstung und eine neue Heldenfähigkeit. Lebensentzug heilt Euren Helden um den Schaden, den eine Karte verursacht, Rexxar baut seine eigenen Zombiester und Entweihen wirkt sich erneut, solange Diener sterben. Bis dahin brauchte Abstieg in die Tiefe fünf Diener, Jadegeist und einige ältere Diener waren Elementare geworden, und die Herrin der Schmerzen hatte Lebensentzug.",
+  "fr": "Le jeu tel qu’on le jouait après le 10 août 2017 : les cartes de base, classiques, de Naxxramas, de Gobelins et Gnomes, du Mont Rochenoire, du Grand Tournoi, de la Ligue des explorateurs, des Dieux très anciens, de Karazhan, de Gadgetzan et d’Un’Goro, et les 135 cartes des Chevaliers du Trône de glace, chacune comme ce jour-là. Une carte de héros chevalier de la mort remplace votre héros : vous gardez vos points de vie, gagnez 5 points d’armure et un nouveau pouvoir héroïque. Vol de vie rend à votre héros autant de vie que les dégâts infligés par la carte, Rexxar assemble ses propres bêtes zombifiées et Profanation se relance tant que des serviteurs meurent. À cette date, la Grotte des profondeurs demandait cinq serviteurs, l’Esprit de jade et quelques anciens serviteurs étaient devenus des élémentaires, et la Maîtresse de Douleur avait Vol de vie.",
+  "es": "El juego tal y como se jugaba después del 10 de agosto de 2017: las cartas básicas, clásicas, de Naxxramas, de Goblins contra Gnomos, de la Montaña Roca Negra, del Gran Torneo, de la Liga de Expedicionarios, de los Dioses Antiguos, de Karazhan, de Gadgetzan y de Un'Goro, y las 135 cartas de Caballeros del Trono Helado, cada una como aquel día. Una carta de héroe de caballero de la Muerte sustituye a tu héroe: conservas tu Salud, ganas 5 de armadura y un nuevo poder de héroe. Robo de vida cura a tu héroe tanto como el daño que inflige la carta, Rexxar fabrica sus propias bestias zombi y Profanar se lanza de nuevo mientras mueran esbirros. Para entonces, Las cavernas pedía cinco esbirros, el Espíritu de jade y algunos esbirros antiguos eran elementales y la Maestra de dolor tenía Robo de vida.",
+  "pt_BR": "O jogo como era jogado depois de 10 de agosto de 2017: os cards básicos, clássicos, de Naxxramas, de Goblins vs. Gnomos, da Montanha Rocha Negra, do Grande Torneio, da Liga dos Exploradores, dos Deuses Antigos, de Karazhan, de Geringontzan e de Un'Goro e os 135 cards de Cavaleiros do Trono de Gelo, cada um como naquele dia. Um card de herói Cavaleiro da Morte substitui o seu herói: você mantém a Vida, ganha 5 de Armadura e um novo Poder Heroico. Roubar Vida cura o seu herói no valor do dano causado pelo card, Rexxar monta os próprios Zumbichos e Profanar é lançado de novo enquanto lacaios morrem. Nessa época, Cavernas nas Profundezas exigia cinco lacaios, o Espírito de Jade e outros lacaios antigos já eram Elementais e a Senhora da Dor tinha Roubar Vida.",
+  "it": "Il gioco come si giocava dopo il 10 agosto 2017: le carte Base, Classiche, di Naxxramas, di Goblin vs Gnomi, di Massiccio Roccianera, del Gran Torneo, della Lega degli Esploratori, degli Dei Antichi, di Karazhan, di Meccania e di Un'Goro e le 135 carte di Cavalieri del Trono di Ghiaccio, ognuna com’era quel giorno. Una carta Eroe Cavaliere della Morte sostituisce il tuo eroe: mantieni la Salute, ottieni 5 Armatura e un nuovo Potere Eroe. Furto Vitale cura il tuo eroe di quanto danno infligge la carta, Rexxar assembla le proprie Zombestie e Profanazione si lancia di nuovo finché muoiono servitori. A quella data Esplorare gli Abissi richiedeva cinque servitori, lo Spirito di Giada e alcuni vecchi servitori erano diventati Elementali e la Signora del Dolore aveva Furto Vitale.",
+  "pl": "Gra taka, jak po 10 sierpnia 2017 roku: karty podstawowe, klasyczne, z Naxxramas, Goblinów i gnomów, Czarnej Góry, Wielkiego Turnieju, Ligi Odkrywców, Pradawnych Bogów, Karazhanu, Gadżetonu i Un'Goro oraz 135 kart Rycerzy Mroźnego Tronu, każda taka jak tamtego dnia. Karta bohatera – rycerza śmierci zastępuje twojego bohatera: zachowujesz zdrowie, zyskujesz 5 pkt. pancerza i nową moc specjalną. Kradzież życia leczy bohatera o tyle, ile obrażeń zadała karta, Rexxar składa własne zombestie, a Zbezczeszczenie rzuca się ponownie, dopóki giną stronnicy. Do tego czasu Podziemne jaskinie wymagały pięciu stronników, Nefrytowy duch i kilku dawnych stronników stało się żywiołakami, a Pani Bólu miała Kradzież życia."
+ },
+ "authors": [
+  "Classic HS"
+ ],
+ "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+ "redistributable": true,
+ "default_locale": "en",
+ "locales": [
+  "en",
+  "ru",
+  "de",
+  "fr",
+  "es",
+  "pt_BR",
+  "it",
+  "pl"
+ ],
+ "art_sets": [
+  {
+   "id": "simple",
+   "name": {
+    "en": "Simple painted",
+    "ru": "Простой рисованный",
+    "de": "Einfach gemalt",
+    "fr": "Peint simple",
+    "es": "Pintado simple",
+    "pt_BR": "Pintura simples",
+    "it": "Dipinto semplice",
+    "pl": "Prosty malowany"
+   },
+   "default": true
+  },
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированный"
+   }
+  },
+  {
+   "id": "cartoon",
+   "name": {
+    "en": "Cartoon 2D",
+    "ru": "Мультяшный 2D",
+    "de": "Cartoon 2D",
+    "fr": "Dessin animé 2D",
+    "es": "Dibujos 2D",
+    "pt_BR": "Desenho 2D",
+    "it": "Cartone 2D",
+    "pl": "Kreskówka 2D"
+   }
+  },
+  {
+   "id": "photo",
+   "name": {
+    "en": "Photoreal",
+    "ru": "Фотореалистичный",
+    "de": "Fotorealistisch",
+    "fr": "Photoréaliste",
+    "es": "Fotorrealista",
+    "pt_BR": "Fotorrealista",
+    "it": "Fotorealistico",
+    "pl": "Fotorealistyczny"
+   }
+  }
+ ],
+ "sound_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированные"
+   },
+   "default": true
+  }
+ ],
+ "music_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированная"
+   },
+   "default": true
+  },
+  {
+   "id": "open",
+   "name": {
+    "en": "Open (CC0)",
+    "ru": "Открытая (CC0)"
+   }
+  }
+ ],
+ "set_marks": {
+  "VANILLA:FREE": {
+   "icon": "ui/set_basic.png"
+  },
+  "VANILLA": {
+   "icon": "ui/set_classic.png"
+  },
+  "NAXX": {
+   "icon": "ui/set_naxx.png"
+  },
+  "GVG": {
+   "icon": "ui/set_gvg.png"
+  },
+  "BRM": {
+   "icon": "ui/set_brm.png"
+  },
+  "TGT": {
+   "icon": "ui/set_tgt.png"
+  },
+  "LOE": {
+   "icon": "ui/set_loe.png"
+  },
+  "OG": {
+   "icon": "ui/set_og.png"
+  },
+  "KARA": {
+   "icon": "ui/set_kara.png"
+  },
+  "GANGS": {
+   "icon": "ui/set_msg.png"
+  },
+  "UNGORO": {
+   "icon": "ui/set_ungoro.png"
+  },
+  "ICECROWN": {
+   "icon": "ui/set_icc.png"
+  }
+ },
+ "card_back": null,
+ "logo": null,
+ "colors": {
+  "classes": {
+   "DRUID": "703606",
+   "HUNTER": "016e01",
+   "MAGE": "0092ab",
+   "PALADIN": "aa8f00",
+   "PRIEST": "b8b090",
+   "ROGUE": "4c4d48",
+   "SHAMAN": "0070de",
+   "WARLOCK": "7624ad",
+   "WARRIOR": "8e1002",
+   "NEUTRAL": "6b6b6b",
+   "DREAM": "6b6b6b",
+   "DEMONHUNTER": "6b6b6b"
+  },
+  "rarities": {
+   "FREE": "e8e8e8",
+   "COMMON": "e8e8e8",
+   "RARE": "2f7cff",
+   "EPIC": "a335ee",
+   "LEGENDARY": "ff8000"
+  }
+ }
+}

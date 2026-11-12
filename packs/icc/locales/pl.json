@@ -1,0 +1,19 @@
+{
+ "sets": {
+  "ICECROWN": "Rycerze Mroźnego Tronu"
+ },
+ "classes": {
+  "DEATHKNIGHT": "Rycerz śmierci"
+ },
+ "mechanics": {
+  "LIFESTEAL": {
+   "name": "Kradzież życia",
+   "tip": "Obrażenia zadane przez tę kartę leczą też twojego bohatera."
+  }
+ },
+ "cards": {
+  "VAN_EX1_570": {
+   "text": "Daj twojemu bohaterowi +4 do ataku w tej turze. Otrzymujesz 4 pkt. pancerza."
+  }
+ }
+}

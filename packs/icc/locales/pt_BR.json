@@ -1,0 +1,19 @@
+{
+ "sets": {
+  "ICECROWN": "Cavaleiros do Trono de Gelo"
+ },
+ "classes": {
+  "DEATHKNIGHT": "Cavaleiro da Morte"
+ },
+ "mechanics": {
+  "LIFESTEAL": {
+   "name": "Roubar Vida",
+   "tip": "O dano causado por este card também cura o seu herói."
+  }
+ },
+ "cards": {
+  "VAN_EX1_570": {
+   "text": "Conceda +4 de Ataque ao seu herói neste turno. Receba 4 de Armadura."
+  }
+ }
+}

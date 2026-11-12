@@ -1,0 +1,11344 @@
+{
+ "AT_019": [
+  {
+   "kind": "death",
+   "title": "Dreadsteed dies: another comes at the end of the turn (patch 9.0), not at once",
+   "script": "scripts/icc.lua#AT_019",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "AT_019"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "AT_033": [
+  {
+   "kind": "spell",
+   "title": "Burgle: 2 random cards of your opponent's class (a hero card too)",
+   "script": "scripts/icc.lua#AT_033",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "AT_033"
+      ]
+     },
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "AT_061": [
+  {
+   "kind": "spell",
+   "title": "Lock and Load: each spell this turn gives a random Hunter card",
+   "script": "scripts/icc.lua#AT_061",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "AT_061",
+       "VAN_DS1_185"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "AT_118": [
+  {
+   "kind": "battlecry",
+   "title": "Grand Crusader: a random Paladin card (Uther of the Ebon Blade too)",
+   "script": "scripts/icc.lua#AT_118",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "AT_118"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "BRM_027": [
+  {
+   "kind": "death",
+   "title": "Majordomo Executus dies: Ragnaros the Firelord replaces your hero",
+   "script": "scripts/icc.lua#BRM_027",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "BRM_027"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "CFM_321": [
+  {
+   "kind": "battlecry",
+   "title": "Discover a card of one of three classes (a hero card too)",
+   "script": "scripts/icc.lua#CFM_321",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "CFM_321"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "CFM_649": [
+  {
+   "kind": "battlecry",
+   "title": "Discover a card of one of three classes (a hero card too)",
+   "script": "scripts/icc.lua#CFM_649",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "CFM_649"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "CFM_781": [
+  {
+   "kind": "trigger",
+   "title": "Shaku, the Collector attacks: a random card of your opponent's class",
+   "script": "scripts/icc.lua#CFM_781",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "CFM_781",
+        "exhausted": false
+       }
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "CFM_815": [
+  {
+   "kind": "attack",
+   "title": "Wickerflame Burnbristle: Lifesteal (patch 9.0)",
+   "script": "",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 6,
+      "board": [
+       {
+        "card": "CFM_815",
+        "exhausted": false
+       }
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "CFM_852": [
+  {
+   "kind": "battlecry",
+   "title": "Discover a card of one of three classes (a hero card too)",
+   "script": "scripts/icc.lua#CFM_852",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "CFM_852"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "GVG_018": [
+  {
+   "kind": "attack",
+   "title": "Mistress of Pain: Lifesteal (patch 9.0)",
+   "script": "",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 6,
+      "board": [
+       {
+        "card": "GVG_018",
+        "exhausted": false
+       }
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  },
+  {
+   "kind": "attack",
+   "title": "Mistress of Pain with Auchenai Soulpriest: the Lifesteal heal hurts its hero once (patch 9.0)",
+   "script": "",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "GVG_018",
+        "exhausted": false
+       },
+       "VAN_EX1_591"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_018": [
+  {
+   "kind": "battlecry",
+   "title": "Phantom Freebooter: gains your weapon's Attack and Durability (Fiery War Axe: +3/+2)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "VAN_CS2_106",
+      "hand": [
+       "ICC_018"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_019": [
+  {
+   "kind": "death",
+   "title": "Skelemancer: dies on the opponent's turn: an 8/8 Skeletal Flayer",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_019"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_019t": [
+  {
+   "kind": "play",
+   "title": "Skeletal Flayer: an 8/8 Skeleton token",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_019t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_021": [
+  {
+   "kind": "death",
+   "title": "Exploding Bloatbat: dies: 2 damage to all enemy minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_021"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_023": [
+  {
+   "kind": "play",
+   "title": "Snowflipper Penguin: a 1/1 Beast for 0",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_023"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_025": [
+  {
+   "kind": "battlecry",
+   "title": "Rattling Rascal: a 5/5 Skeletal Enforcer for you; when it dies, one for the opponent",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_025",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_025t": [
+  {
+   "kind": "play",
+   "title": "Skeletal Enforcer: a 5/5 Skeleton token",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_025t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_026": [
+  {
+   "kind": "battlecry",
+   "title": "Grim Necromancer: two 1/1 Skeletons",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_026"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_026t": [
+  {
+   "kind": "play",
+   "title": "Skeleton: a 1/1 Skeleton token",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_026t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_027": [
+  {
+   "kind": "death",
+   "title": "Bone Drake: dies: a random Dragon into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_027"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_028": [
+  {
+   "kind": "battlecry",
+   "title": "Sunborne Val'kyr: the minions next to it get +2 Health",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_028"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "battlecry",
+   "title": "Sunborne Val'kyr: placed between two minions: both +2 Health",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_028"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_120"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "pos": 1
+    }
+   ]
+  }
+ ],
+ "ICC_029": [
+  {
+   "kind": "trigger",
+   "title": "Cobalt Scalebane: at the end of your turn, another random friendly minion +3 Attack",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_029",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_031": [
+  {
+   "kind": "trigger",
+   "title": "Night Howler: whenever it takes damage, +2 Attack",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_031"
+      ],
+      "hand": [
+       "VAN_EX1_277"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_032": [
+  {
+   "kind": "play",
+   "title": "Venomancer: a 2/5 Poisonous minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_032"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_034": [
+  {
+   "kind": "death",
+   "title": "Arrogant Crusader: dies on the opponent's turn: a 2/2 Ghoul",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_034"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_038": [
+  {
+   "kind": "divine_shield",
+   "title": "Righteous Protector: a 1/1 with Taunt and Divine Shield",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_038"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_039": [
+  {
+   "kind": "spell",
+   "title": "Dark Conviction: a minion's Attack and Health become 3",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_039"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_EX1_563"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_041": [
+  {
+   "kind": "spell",
+   "title": "Defile: 1 damage to all minions, again while any die",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "ICC_041"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_172",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_047": [
+  {
+   "kind": "choose_one",
+   "title": "Fatespinner: Choose One, secretly: +2/+2 to all minions when it dies (it becomes the in-play Fatespinner)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "choose_one",
+   "title": "Fatespinner: secretly 3 damage to all minions when it dies",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 1
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "choose_one",
+   "title": "Fatespinner: with Fandral Staghelm: +2/+2 then 3 damage",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "OG_044"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 2
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_047a": [
+  {
+   "kind": "choose_one",
+   "title": "Growth: Fatespinner's option, Growth: +2/+2 to all minions when it dies",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_047b": [
+  {
+   "kind": "choose_one",
+   "title": "Decay: Fatespinner's option, Decay: 3 damage to all minions when it dies",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 1
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_047t": [
+  {
+   "kind": "death",
+   "title": "Fatespinner: the in-play Fatespinner dies: its secret Deathrattle",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_047t2": [
+  {
+   "kind": "death",
+   "title": "Fatespinner: Fatespinner with both (Fandral) dies: +2/+2, then 3 damage",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ],
+      "board": [
+       "OG_044"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 2
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_049": [
+  {
+   "kind": "spell",
+   "title": "Toxic Arrow: 2 damage to a minion; it survives: Poisonous",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_049"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_050": [
+  {
+   "kind": "spell",
+   "title": "Webweave: two 1/2 Poisonous Spiders",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_050"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_051": [
+  {
+   "kind": "choose_one",
+   "title": "Druid of the Swarm: Choose One: a 1/2 Poisonous",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_051"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    }
+   ]
+  },
+  {
+   "kind": "choose_one",
+   "title": "Druid of the Swarm: Choose One: a 1/5 Taunt",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_051"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 1
+    }
+   ]
+  }
+ ],
+ "ICC_051a": [
+  {
+   "kind": "choose_one",
+   "title": "Spider Form: Druid of the Swarm's option",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_051"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    }
+   ]
+  }
+ ],
+ "ICC_051b": [
+  {
+   "kind": "choose_one",
+   "title": "Scarab Form: Druid of the Swarm's option",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_051"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 1
+    }
+   ]
+  }
+ ],
+ "ICC_051t": [
+  {
+   "kind": "play",
+   "title": "Druid of the Swarm: the 1/2 Poisonous form",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_051"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    }
+   ]
+  }
+ ],
+ "ICC_051t2": [
+  {
+   "kind": "play",
+   "title": "Druid of the Swarm: the 1/5 Taunt form",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_051"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 1
+    }
+   ]
+  }
+ ],
+ "ICC_051t3": [
+  {
+   "kind": "play",
+   "title": "Druid of the Swarm: with Fandral Staghelm: a 1/5 Taunt Poisonous",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_051"
+      ],
+      "board": [
+       "OG_044"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 2
+    }
+   ]
+  }
+ ],
+ "ICC_052": [
+  {
+   "kind": "spell",
+   "title": "Play Dead: triggers a friendly minion's Deathrattle",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "FP1_002"
+      ],
+      "hand": [
+       "ICC_052"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_054": [
+  {
+   "kind": "spell",
+   "title": "Spreading Plague: a 1/5 Taunt Scarab, again while the opponent has more minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_054"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_055": [
+  {
+   "kind": "spell",
+   "title": "Drain Soul: Lifesteal: 2 damage to a minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 6,
+      "hand": [
+       "ICC_055"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_056": [
+  {
+   "kind": "spell",
+   "title": "Cryostasis: a minion +3/+3 and Frozen",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_056"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_058": [
+  {
+   "kind": "battlecry",
+   "title": "Brrrloc: freezes an enemy",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_058"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_062": [
+  {
+   "kind": "death",
+   "title": "Mountainfire Armor: dies on the opponent's turn: 6 Armor",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_062"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_064": [
+  {
+   "kind": "weapon",
+   "title": "Blood Razor: Battlecry and Deathrattle: 1 damage to all minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "ICC_064"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_065": [
+  {
+   "kind": "death",
+   "title": "Bone Baron: dies: two 1/1 Skeletons into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_065"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_067": [
+  {
+   "kind": "death",
+   "title": "Vryghoul: dies on the opponent's turn: a 2/2 Ghoul",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_067"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_068": [
+  {
+   "kind": "trigger",
+   "title": "Ice Walker: your Hero Power also freezes its target",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_068"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_069": [
+  {
+   "kind": "battlecry",
+   "title": "Ghastly Conjurer: a Mirror Image into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_069"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_071": [
+  {
+   "kind": "weapon",
+   "title": "Light's Sorrow: after a friendly minion loses Divine Shield, +1 Attack",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "ICC_071",
+      "board": [
+       "VAN_EX1_008"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_075": [
+  {
+   "kind": "trigger",
+   "title": "Despicable Dreadlord: at the end of your turn, 1 damage to all enemy minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_075"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_078": [
+  {
+   "kind": "spell",
+   "title": "Avalanche: freezes a minion, 3 damage to the minions next to it",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_078"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_079": [
+  {
+   "kind": "spell",
+   "title": "Gnash: +3 Attack this turn and 3 Armor",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_079"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_081": [
+  {
+   "kind": "overload",
+   "title": "Drakkari Defender: Taunt; Overload (3)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_081"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_082": [
+  {
+   "kind": "secret",
+   "title": "Frozen Clone: after your opponent plays a minion, two copies of it into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_082"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_083": [
+  {
+   "kind": "aura",
+   "title": "Doomed Apprentice: your opponent's spells cost (1) more",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_083"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_085": [
+  {
+   "kind": "spell",
+   "title": "Ultimate Infestation: 5 damage, draw 5, 5 Armor and a 5/5 Ghoul",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_085"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_085t": [
+  {
+   "kind": "play",
+   "title": "Ghoul Infestor: the 5/5 Ghoul Infestor",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_085t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_086": [
+  {
+   "kind": "spell",
+   "title": "Glacial Mysteries: one of each Secret in your deck into play",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_EX1_287",
+       "VAN_EX1_287",
+       "VAN_EX1_289",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_086"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_088": [
+  {
+   "kind": "freeze",
+   "title": "Voodoo Hexxer: freezes any character it damages",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "ICC_088",
+        "exhausted": false
+       }
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_089": [
+  {
+   "kind": "spell",
+   "title": "Ice Fishing: draws 2 Murlocs from your deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_168",
+       "VAN_EX1_506",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_089"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_090": [
+  {
+   "kind": "other",
+   "title": "Snowfury Giant: costs (1) less for each Mana Crystal you Overloaded this game",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_241",
+       "ICC_090"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_091": [
+  {
+   "kind": "spell",
+   "title": "Dead Man's Hand: a copy of your hand shuffled into your deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_091",
+       "VAN_CS2_182",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_092": [
+  {
+   "kind": "battlecry",
+   "title": "Acherus Veteran: a friendly minion +1 Attack",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_092"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_093": [
+  {
+   "kind": "battlecry",
+   "title": "Tuskarr Fisherman: a friendly minion gets Spell Damage +1",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_093"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_094": [
+  {
+   "kind": "battlecry",
+   "title": "Fallen Sun Cleric: a friendly minion +1/+1",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_094"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_096": [
+  {
+   "kind": "battlecry",
+   "title": "Furnacefire Colossus: discards the weapons in your hand and gains their stats",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_096",
+       "VAN_CS2_106",
+       "VAN_EX1_567"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_097": [
+  {
+   "kind": "trigger",
+   "title": "Grave Shambler: your weapon is destroyed (replaced by a new one): +1/+1",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_097"
+      ],
+      "weapon": "VAN_CS2_106",
+      "hand": [
+       "VAN_EX1_398"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_098": [
+  {
+   "kind": "battlecry",
+   "title": "Tomb Lurker: a random Deathrattle minion that died this game into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_098",
+       "VAN_CS2_029"
+      ],
+      "board": [
+       "VAN_EX1_012"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_099": [
+  {
+   "kind": "death",
+   "title": "Ticking Abomination: dies: 5 damage to your minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_099",
+       "VAN_CS2_182",
+       "VAN_CS2_200"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_200": [
+  {
+   "kind": "secret",
+   "title": "Venomstrike Trap: when one of your minions is attacked, a 2/3 Poisonous Cobra",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_200"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "VAN_CS2_182",
+        "exhausted": false
+       }
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_201": [
+  {
+   "kind": "spell",
+   "title": "Roll the Bones: draw a card; a Deathrattle card: again",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "FP1_002",
+       "FP1_002"
+      ],
+      "hand": [
+       "ICC_201"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_204": [
+  {
+   "kind": "trigger",
+   "title": "Professor Putricide: after you play a Secret, a random Hunter Secret into play",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_204"
+      ],
+      "hand": [
+       "VAN_EX1_554"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_206": [
+  {
+   "kind": "spell",
+   "title": "Treachery: a friendly minion goes to your opponent",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_206"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_207": [
+  {
+   "kind": "spell",
+   "title": "Devour Mind: copies of 3 cards of your opponent's deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_207"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_231",
+       "VAN_CS2_120",
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_210": [
+  {
+   "kind": "trigger",
+   "title": "Shadow Ascendant: at the end of your turn, another random friendly minion +1/+1",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_210",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_212": [
+  {
+   "kind": "play",
+   "title": "Acolyte of Agony: a 3/3 Lifesteal",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 6,
+      "hand": [
+       "ICC_212"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_213": [
+  {
+   "kind": "spell",
+   "title": "Eternal Servitude: Discover a friendly minion that died this game, summon it",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "ICC_213"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "ICC_214": [
+  {
+   "kind": "death",
+   "title": "Obsidian Statue: dies: destroys a random enemy minion (Taunt, Lifesteal)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_214"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_215": [
+  {
+   "kind": "battlecry",
+   "title": "Archbishop Benedictus: a copy of your opponent's deck shuffled into yours",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_215"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_218": [
+  {
+   "kind": "trigger",
+   "title": "Howlfiend: whenever it takes damage, discard a random card",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_218"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_220": [
+  {
+   "kind": "play",
+   "title": "Deadscale Knight: a 1/1 Lifesteal Murloc: its damage heals your hero",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "ICC_220"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_221": [
+  {
+   "kind": "spell",
+   "title": "Leeching Poison: your weapon gets Lifesteal",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "VAN_CS2_080",
+      "damage": 6,
+      "hand": [
+       "ICC_221"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_233": [
+  {
+   "kind": "spell",
+   "title": "Doomerang: throws your weapon at a minion: its damage, then it returns to your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "VAN_CS2_080",
+      "hand": [
+       "ICC_233"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_235": [
+  {
+   "kind": "spell",
+   "title": "Shadow Essence: a 5/5 copy of a random minion in your deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_EX1_563"
+      ],
+      "hand": [
+       "ICC_235"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_236": [
+  {
+   "kind": "weapon",
+   "title": "Ice Breaker: destroys any Frozen minion it damages",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "ICC_236"
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "VAN_CS2_182",
+        "frozen": true
+       }
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_238": [
+  {
+   "kind": "trigger",
+   "title": "Animated Berserker: after you play a minion, 1 damage to it",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_238"
+      ],
+      "hand": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_240": [
+  {
+   "kind": "aura",
+   "title": "Runeforge Haunter: during your turn your weapon doesn't lose Durability",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_240"
+      ],
+      "weapon": "VAN_CS2_082"
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_243": [
+  {
+   "kind": "aura",
+   "title": "Corpse Widow: your Deathrattle cards cost (2) less",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_243"
+      ],
+      "hand": [
+       "FP1_002"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_244": [
+  {
+   "kind": "spell",
+   "title": "Desperate Stand: a minion gets \"Deathrattle: return to life with 1 Health\"",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_244",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_245": [
+  {
+   "kind": "trigger",
+   "title": "Blackguard: whenever your hero is healed, that much damage to a random enemy minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_245"
+      ],
+      "damage": 10,
+      "hand": [
+       "VAN_CS2_089"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_252": [
+  {
+   "kind": "battlecry",
+   "title": "Coldwraith: an enemy is Frozen: draw a card (it glows)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_252",
+       "VAN_CS2_024"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_257": [
+  {
+   "kind": "battlecry",
+   "title": "Corpse Raiser: a friendly minion gets \"Deathrattle: Resummon this minion\"",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_257",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_281": [
+  {
+   "kind": "spell",
+   "title": "Forge of Souls: draws 2 weapons from your deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_106",
+       "VAN_EX1_567",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_281"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_289": [
+  {
+   "kind": "trigger",
+   "title": "Moorabi: whenever another minion is Frozen, a copy of it into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_289"
+      ],
+      "hand": [
+       "ICC_058"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_314": [
+  {
+   "kind": "trigger",
+   "title": "The Lich King: at the end of your turn, a random Death Knight card into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_314"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_314t1": [
+  {
+   "kind": "weapon",
+   "title": "Frostmourne: Frostmourne: when it breaks, the minions it killed come back for you",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "ICC_314t1"
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_314t2": [
+  {
+   "kind": "spell",
+   "title": "Army of the Dead: removes the top 5 cards of your deck, summons the minions among them",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_029",
+       "VAN_CS2_231",
+       "VAN_CS2_120",
+       "VAN_CS2_119",
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "ICC_314t2"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_314t3": [
+  {
+   "kind": "spell",
+   "title": "Doom Pact: destroys all minions, removes a card from your deck for each",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "ICC_314t3"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_314t4": [
+  {
+   "kind": "spell",
+   "title": "Death Grip: steals a minion from your opponent's deck into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_314t4"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_029"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_314t5": [
+  {
+   "kind": "spell",
+   "title": "Death Coil: 5 damage to an enemy",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_314t5"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  },
+  {
+   "kind": "spell",
+   "title": "Death Coil: or 5 Health to a friendly character",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 8,
+      "hand": [
+       "ICC_314t5"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_314t6": [
+  {
+   "kind": "spell",
+   "title": "Obliterate: destroys a minion, your hero takes damage equal to its Health",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_314t6"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_314t7": [
+  {
+   "kind": "spell",
+   "title": "Anti-Magic Shell: your minions +2/+2 and can't be targeted by spells or Hero Powers",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_314t7"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_314t8": [
+  {
+   "kind": "spell",
+   "title": "Death and Decay: 3 damage to all enemies",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_314t8"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_405": [
+  {
+   "kind": "trigger",
+   "title": "Rotface: whenever it survives damage, a random Legendary minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_405"
+      ],
+      "hand": [
+       "VAN_EX1_400"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_407": [
+  {
+   "kind": "battlecry",
+   "title": "Gnomeferatu: removes the top card of your opponent's deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_407"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_408": [
+  {
+   "kind": "trigger",
+   "title": "Val'kyr Soulclaimer: whenever it survives damage, a 2/2 Ghoul",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_408"
+      ],
+      "hand": [
+       "VAN_EX1_400"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_415": [
+  {
+   "kind": "battlecry",
+   "title": "Stitched Tracker: Discover a copy of a minion in your deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_231",
+       "VAN_CS2_120",
+       "VAN_CS2_119"
+      ],
+      "hand": [
+       "ICC_415"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "ICC_419": [
+  {
+   "kind": "play",
+   "title": "Bearshark: can't be targeted by spells or Hero Powers",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_419"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_450": [
+  {
+   "kind": "battlecry",
+   "title": "Death Revenant: +1/+1 for each damaged minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "VAN_CS2_182",
+        "damage": 1
+       }
+      ],
+      "hand": [
+       "ICC_450"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "VAN_CS2_182",
+        "damage": 2
+       }
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_466": [
+  {
+   "kind": "battlecry",
+   "title": "Saronite Chain Gang: Taunt; summons a copy of itself",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_466"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_467": [
+  {
+   "kind": "battlecry",
+   "title": "Deathspeaker: a friendly minion is Immune this turn",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_467"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "pos": 1
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_468": [
+  {
+   "kind": "trigger",
+   "title": "Wretched Tiller: whenever it attacks, 2 damage to the enemy hero",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_468"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_469": [
+  {
+   "kind": "spell",
+   "title": "Unwilling Sacrifice: destroys a friendly minion and a random enemy minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "ICC_469"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_481": [
+  {
+   "kind": "battlecry",
+   "title": "Thrall, Deathseer: the hero card: your minions become random ones that cost (2) more, Transmute Spirit",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_481"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_481p": [
+  {
+   "kind": "hero_power",
+   "title": "Transmute Spirit: Transmute Spirit: a friendly minion becomes one that costs (1) more",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_481"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_700": [
+  {
+   "kind": "other",
+   "title": "Happy Ghoul: costs (0) after your hero is healed this turn",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 2,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "ICC_700"
+      ],
+      "board": [
+       "VAN_CS2_235"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 0,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_701": [
+  {
+   "kind": "battlecry",
+   "title": "Skulking Geist: destroys the 1-Cost spells in both hands and decks",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_025",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_701",
+       "VAN_CS2_025"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS1_130",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_277"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_702": [
+  {
+   "kind": "death",
+   "title": "Shallow Gravedigger: dies: a random Deathrattle minion into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_702"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_705": [
+  {
+   "kind": "battlecry",
+   "title": "Bonemare: a friendly minion +4/+4 and Taunt",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_705"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_706": [
+  {
+   "kind": "aura",
+   "title": "Nerubian Unraveler: spells cost (2) more, for both players",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_706"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_800h3t": [
+  {
+   "kind": "play",
+   "title": "Zombeast: a 1/1 Beast (the Zombeast's stand-in)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_800h3t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_801": [
+  {
+   "kind": "battlecry",
+   "title": "Howling Commander: draws a Divine Shield minion from your deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_EX1_008",
+       "VAN_CS2_182",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_801"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_802": [
+  {
+   "kind": "spell",
+   "title": "Spirit Lash: Lifesteal: 1 damage to all minions, a heal for each",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 6,
+      "board": [
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_802"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_807": [
+  {
+   "kind": "battlecry",
+   "title": "Strongshell Scavenger: your Taunt minions +2/+2",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_179",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_807"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_808": [
+  {
+   "kind": "trigger",
+   "title": "Crypt Lord: after you summon a minion, +1 Health",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_808"
+      ],
+      "hand": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_809": [
+  {
+   "kind": "combo",
+   "title": "Plague Scientist: Combo: a friendly minion gets Poisonous",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_231",
+       "ICC_809"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_810": [
+  {
+   "kind": "battlecry",
+   "title": "Deathaxe Punisher: a random Lifesteal minion in your hand +2/+2",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_810",
+       "ICC_905"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_811": [
+  {
+   "kind": "battlecry",
+   "title": "Lilian Voss: the spells in your hand become spells of your opponent's class",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_811",
+       "VAN_CS2_072",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_812": [
+  {
+   "kind": "death",
+   "title": "Meat Wagon: dies: a minion with less Attack than it from your deck",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_119"
+      ],
+      "board": [
+       "ICC_812"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_820": [
+  {
+   "kind": "charge",
+   "title": "Chillblade Champion: Charge and Lifesteal: its damage heals your hero",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 6,
+      "hand": [
+       "ICC_820"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_823": [
+  {
+   "kind": "spell",
+   "title": "Simulacrum: a copy of the lowest Cost minion in your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_823",
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_825": [
+  {
+   "kind": "death",
+   "title": "Abominable Bowman: dies: a random friendly Beast that died this game",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_825",
+       "VAN_CS2_172"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_827": [
+  {
+   "kind": "battlecry",
+   "title": "Valeera the Hollow: the hero card: Stealth until your next turn; Death's Shadow gives a Shadow Reflection",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_827",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_827p": [
+  {
+   "kind": "other",
+   "title": "Death's Shadow: Death's Shadow (passive): a Shadow Reflection at the start of each of your turns",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_827"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_827t": [
+  {
+   "kind": "other",
+   "title": "Shadow Reflection: Shadow Reflection: becomes a copy of each card you play; gone at the end of your turn",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_827",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_828": [
+  {
+   "kind": "battlecry",
+   "title": "Deathstalker Rexxar: the hero card: 2 damage to all enemy minions, 5 Armor, Build-A-Beast",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_828"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_828p": [
+  {
+   "kind": "hero_power",
+   "title": "Build-A-Beast: Build-A-Beast: Discover a Beast with text, then one with keywords: a hidden Zombeast",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_828"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power"
+    },
+    {
+     "do": "choose",
+     "option": 0
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "ICC_828t": [
+  {
+   "kind": "play",
+   "title": "Zombeast: the Zombeast: both Beasts' stats and texts",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_828"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power"
+    },
+    {
+     "do": "choose",
+     "option": 0
+    },
+    {
+     "do": "choose",
+     "option": 0
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_829": [
+  {
+   "kind": "battlecry",
+   "title": "Uther of the Ebon Blade: the hero card: a 5/3 Lifesteal weapon, The Four Horsemen",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 6,
+      "hand": [
+       "ICC_829"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_829p": [
+  {
+   "kind": "hero_power",
+   "title": "The Four Horsemen: The Four Horsemen: a Horseman you don't control; all four destroy the enemy hero",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_829"
+      ],
+      "board": [
+       "ICC_829t2",
+       "ICC_829t3",
+       "ICC_829t4"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power"
+    }
+   ]
+  }
+ ],
+ "ICC_829t": [
+  {
+   "kind": "weapon",
+   "title": "Grave Vengeance: Grave Vengeance: Lifesteal",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_829"
+      ],
+      "damage": 6
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_829t2": [
+  {
+   "kind": "play",
+   "title": "Deathlord Nazgrim: a 2/2 Horseman",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_829t2"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_829t3": [
+  {
+   "kind": "play",
+   "title": "Thoras Trollbane: a 2/2 Horseman",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_829t3"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_829t4": [
+  {
+   "kind": "play",
+   "title": "Inquisitor Whitemane: a 2/2 Horseman",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_829t4"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_829t5": [
+  {
+   "kind": "play",
+   "title": "Darion Mograine: a 2/2 Horseman",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_829t5"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_830": [
+  {
+   "kind": "battlecry",
+   "title": "Shadowreaper Anduin: the hero card: destroys all minions with 5 or more Attack, Voidform",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_830"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_EX1_563",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_830p": [
+  {
+   "kind": "hero_power",
+   "title": "Voidform: Voidform: 2 damage; after you play a card it is ready again",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_830",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_831": [
+  {
+   "kind": "battlecry",
+   "title": "Bloodreaver Gul'dan: the hero card: summons your Demons that died this game, Siphon Life",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 30,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_065"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "ICC_831"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_831p": [
+  {
+   "kind": "hero_power",
+   "title": "Siphon Life: Siphon Life: 3 damage, Lifesteal",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_831"
+      ],
+      "damage": 9
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_832": [
+  {
+   "kind": "battlecry",
+   "title": "Malfurion the Pestilent: the hero card: Health stays, 5 Armor, Plague Lord; Choose One: two Poisonous Spiders",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 8,
+      "hand": [
+       "ICC_832"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    }
+   ]
+  },
+  {
+   "kind": "battlecry",
+   "title": "Malfurion the Pestilent: Choose One: two Taunt Scarabs; then Plague Lord: +3 Attack or 3 Armor",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 1
+    },
+    {
+     "do": "hero_power"
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "ICC_832a": [
+  {
+   "kind": "choose_one",
+   "title": "Scarab Plague: Malfurion the Pestilent's option",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 1
+    }
+   ]
+  }
+ ],
+ "ICC_832b": [
+  {
+   "kind": "choose_one",
+   "title": "Spider Plague: Malfurion the Pestilent's option",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    }
+   ]
+  }
+ ],
+ "ICC_832p": [
+  {
+   "kind": "hero_power",
+   "title": "Plague Lord: Plague Lord: Choose One - +3 Attack this turn or 3 Armor (offered as two cards)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    },
+    {
+     "do": "hero_power"
+    },
+    {
+     "do": "choose",
+     "option": 1
+    }
+   ]
+  }
+ ],
+ "ICC_832pa": [
+  {
+   "kind": "hero_power",
+   "title": "Scarab Shell: Plague Lord's option",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    },
+    {
+     "do": "hero_power"
+    },
+    {
+     "do": "choose",
+     "option": 1
+    }
+   ]
+  }
+ ],
+ "ICC_832pb": [
+  {
+   "kind": "hero_power",
+   "title": "Spider Fangs: Plague Lord's option",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 0
+    },
+    {
+     "do": "hero_power"
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "ICC_832t3": [
+  {
+   "kind": "play",
+   "title": "Frost Widow: a 1/2 Poisonous Spider (from Malfurion and Webweave)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832t3"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_832t4": [
+  {
+   "kind": "taunt",
+   "title": "Scarab Beetle: a 1/5 Taunt Scarab",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832t4"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_833": [
+  {
+   "kind": "battlecry",
+   "title": "Frost Lich Jaina: the hero card: a 3/6 Water Elemental, your Elementals have Lifesteal, Icy Touch",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "UNG_809"
+      ],
+      "damage": 5,
+      "hand": [
+       "ICC_833"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_833h": [
+  {
+   "kind": "hero_power",
+   "title": "Icy Touch: Icy Touch: 1 damage; a kill summons a Water Elemental",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_833"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_833t": [
+  {
+   "kind": "freeze",
+   "title": "Water Elemental: Jaina's Water Elemental freezes what it damages",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "ICC_833t",
+        "exhausted": false
+       }
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_834": [
+  {
+   "kind": "battlecry",
+   "title": "Scourgelord Garrosh: the hero card: a 4/3 Shadowmourne, Bladestorm",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_834"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_834h": [
+  {
+   "kind": "hero_power",
+   "title": "Bladestorm: Bladestorm: 1 damage to all minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_834"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power"
+    }
+   ]
+  }
+ ],
+ "ICC_834w": [
+  {
+   "kind": "weapon",
+   "title": "Shadowmourne: Shadowmourne also damages the minions next to whomever your hero attacks",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "ICC_834w"
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_835": [
+  {
+   "kind": "death",
+   "title": "Hadronox: dies: your Taunt minions that died this game come back",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_835",
+       "VAN_CS2_179"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_836": [
+  {
+   "kind": "spell",
+   "title": "Breath of Sindragosa: 2 damage to a random enemy minion and freeze it",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_836"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_837": [
+  {
+   "kind": "spell",
+   "title": "Bring It On!: 10 Armor; the minions in your opponent's hand cost (2) less",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_837"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_838": [
+  {
+   "kind": "battlecry",
+   "title": "Sindragosa: two 0/1 Frozen Champions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_838"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_838t": [
+  {
+   "kind": "death",
+   "title": "Frozen Champion: dies: a random Legendary minion into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_838t"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_841": [
+  {
+   "kind": "aura",
+   "title": "Blood-Queen Lana'thel: +1 Attack for each card you've discarded this game",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_841"
+      ],
+      "hand": [
+       "VAN_EX1_308",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_849": [
+  {
+   "kind": "spell",
+   "title": "Embrace Darkness: choose an enemy minion: at the start of your turn you take it",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_849"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_850": [
+  {
+   "kind": "weapon",
+   "title": "Shadowblade: Battlecry: your hero is Immune this turn",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_850"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_851": [
+  {
+   "kind": "battlecry",
+   "title": "Prince Keleseth: with no 2-Cost card in your deck, the minions in it +1/+1 (it glows)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_182",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_851"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_852": [
+  {
+   "kind": "battlecry",
+   "title": "Prince Taldaram: with no 3-Cost card in your deck, a 3/3 copy of a minion",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_182",
+       "VAN_CS2_182"
+      ],
+      "hand": [
+       "ICC_852"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_EX1_563"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_853": [
+  {
+   "kind": "battlecry",
+   "title": "Prince Valanar: with no 4-Cost card in your deck, Lifesteal and Taunt",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_853"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_854": [
+  {
+   "kind": "death",
+   "title": "Arfus: dies: a random Death Knight card into your hand",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_854"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_855": [
+  {
+   "kind": "battlecry",
+   "title": "Hyldnir Frostrider: freezes your other minions",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "ICC_855"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_856": [
+  {
+   "kind": "spell_damage",
+   "title": "Spellweaver: Spell Damage +2: a Fireball deals 8",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_856",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_858": [
+  {
+   "kind": "trigger",
+   "title": "Bolvar, Fireblood: after a friendly minion loses Divine Shield, +2 Attack",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_858",
+       "VAN_EX1_008"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_900": [
+  {
+   "kind": "trigger",
+   "title": "Necrotic Geist: whenever another friendly minion dies, a 2/2 Ghoul",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_900",
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_900t": [
+  {
+   "kind": "play",
+   "title": "Ghoul: a 2/2 Ghoul token",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_900t"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_901": [
+  {
+   "kind": "aura",
+   "title": "Drakkari Enchanter: your end of turn effects trigger twice (Imp Master: two Imps)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_901",
+       "VAN_EX1_597"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_902": [
+  {
+   "kind": "aura",
+   "title": "Mindbreaker: Hero Powers are disabled for both players",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_902"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    }
+   ]
+  }
+ ],
+ "ICC_903": [
+  {
+   "kind": "battlecry",
+   "title": "Sanguine Reveler: destroys a friendly minion, gains +2/+2",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "ICC_903"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_904": [
+  {
+   "kind": "battlecry",
+   "title": "Wicked Skeleton: +1/+1 for each minion that died this turn",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_904",
+       "VAN_CS2_032"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 1
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_905": [
+  {
+   "kind": "play",
+   "title": "Bloodworm: a 4/4 Lifesteal Beast",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_905"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_910": [
+  {
+   "kind": "combo",
+   "title": "Spectral Pillager: Combo: damage equal to the other cards you played this turn",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "ICC_910"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_911": [
+  {
+   "kind": "trigger",
+   "title": "Keening Banshee: whenever you play a card, the top 3 cards of your deck are removed",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_911"
+      ],
+      "hand": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_912": [
+  {
+   "kind": "battlecry",
+   "title": "Corpsetaker: Taunt, Divine Shield, Lifesteal, Windfury as your deck's minions have them",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_179",
+       "VAN_EX1_008",
+       "ICC_905",
+       "VAN_CS2_169"
+      ],
+      "hand": [
+       "ICC_912"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "ICC_913": [
+  {
+   "kind": "divine_shield",
+   "title": "Tainted Zealot: Divine Shield and Spell Damage +1",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_913",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "KAR_069": [
+  {
+   "kind": "battlecry",
+   "title": "Swashburglar: a random card of your opponent's class (a hero card too)",
+   "script": "scripts/icc.lua#KAR_069",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "KAR_069"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "LOE_038": [
+  {
+   "kind": "aura",
+   "title": "Naga Sea Witch: your cards cost (5), before the other cost changes (patch 9.0)",
+   "script": "scripts/icc.lua#LOE_038",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "LOE_038",
+       "VAN_EX1_608"
+      ],
+      "hand": [
+       "VAN_CS2_029",
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ]
+  }
+ ],
+ "OG_118": [
+  {
+   "kind": "spell",
+   "title": "Renounce Darkness: your Warlock cards become another class's",
+   "script": "scripts/icc.lua#OG_118",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_065",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "OG_118",
+       "VAN_EX1_308"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "OG_330": [
+  {
+   "kind": "death",
+   "title": "Undercity Huckster dies: a random card of your opponent's class (a hero card too)",
+   "script": "scripts/icc.lua#OG_330",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "OG_330"
+      ],
+      "hand": [
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "UNG_035": [
+  {
+   "kind": "battlecry",
+   "title": "Curious Glimmerroot: guess the card from your opponent's starting deck",
+   "script": "scripts/icc.lua#UNG_035",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_035"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "UNG_067": [
+  {
+   "kind": "spell",
+   "title": "The Caverns Below: five minions of one name (patch 8.4), not four",
+   "script": "scripts/icc.lua#UNG_067",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_067",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "UNG_085": [
+  {
+   "kind": "aura",
+   "title": "Emerald Hive Queen: your minions cost (2) more, before the other cost changes (patch 9.0)",
+   "script": "scripts/icc.lua#UNG_085",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "UNG_085"
+      ],
+      "hand": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "UNG_211": [
+  {
+   "kind": "battlecry",
+   "title": "Kalimos, Primal Lord: an Invocation is no spell (Hallazeal heals nothing: patch 9.0)",
+   "script": "scripts/icc.lua#UNG_211",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 20,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_809",
+       "UNG_211"
+      ],
+      "board": [
+       "OG_209"
+      ],
+      "damage": 10
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "end_turn"
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 3
+    }
+   ]
+  }
+ ],
+ "UNG_856": [
+  {
+   "kind": "spell",
+   "title": "Hallucination: Discover a card of your opponent's class",
+   "script": "scripts/icc.lua#UNG_856",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_856"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "UNG_922t1": [
+  {
+   "kind": "spell",
+   "title": "Choose Your Path: Discover a card",
+   "script": "scripts/icc.lua#UNG_922t1",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "UNG_922t1"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ]
+  }
+ ],
+ "VAN_EX1_170": [
+  {
+   "kind": "attack",
+   "title": "Emperor Cobra: Poisonous",
+   "script": "",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "VAN_EX1_170",
+        "exhausted": false
+       }
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ],
+ "VAN_EX1_323": [
+  {
+   "kind": "battlecry",
+   "title": "Lord Jaraxxus after the hero attacked: no new weapon swing (patch 9.0)",
+   "script": "scripts/icc.lua#VAN_EX1_323",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "VAN_CS2_106",
+      "hand": [
+       "VAN_EX1_323"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ]
+  }
+ ]
+}

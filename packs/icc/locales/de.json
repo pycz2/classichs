@@ -1,0 +1,14 @@
+{
+ "sets": {
+  "ICECROWN": "Ritter des Frostthrons"
+ },
+ "classes": {
+  "DEATHKNIGHT": "Todesritter"
+ },
+ "mechanics": {
+  "LIFESTEAL": {
+   "name": "Lebensentzug",
+   "tip": "Von dieser Karte verursachter Schaden stellt auch bei Eurem Helden Leben wieder her."
+  }
+ }
+}

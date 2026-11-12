@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds Knights of the Frozen Throne 2017 (docs/packs/format.md, 'Build recipes'): on Journey to Un'Goro (base), so on Mean Streets of Gadgetzan, One Night in Karazhan, Whispers of the Old Gods, The League of Explorers, The Grand Tournament, Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 135 cards of Knights of the Frozen Throne and their tokens as the release build 20457 has them (patch 9.0.0.20457 of 2017-08-08, two days before the release; data/icc_cards.json, tools/extract_cards.py --set icc) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/icc.lua, the keywords, the hero cards' Armor and Hero Powers, the older cards that changed by then).",
+  "base": "../ungoro",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/icc_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/icc/cards.texts.json"
+      ]
+    }
+  ]
+}

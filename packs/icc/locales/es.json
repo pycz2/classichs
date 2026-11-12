@@ -1,0 +1,28 @@
+{
+ "sets": {
+  "ICECROWN": "Caballeros del Trono Helado"
+ },
+ "classes": {
+  "DEATHKNIGHT": "Caballero de la Muerte"
+ },
+ "mechanics": {
+  "LIFESTEAL": {
+   "name": "Robo de vida",
+   "tip": "El daño que inflige esta carta también restaura Salud a tu héroe."
+  }
+ },
+ "cards": {
+  "VAN_CS2_039": {
+   "name": "Viento furioso"
+  },
+  "VAN_EX1_033": {
+   "name": "Arpía Viento furioso"
+  },
+  "VAN_EX1_570": {
+   "text": "[x]Otorga a tu héroe\n+4 p. de ataque este turno.\nAdemás, obtiene\n4 p. de armadura."
+  },
+  "VAN_NEW1_010": {
+   "text": "<b>Viento furioso, Cargar, Escudo divino, Provocar</b>"
+  }
+ }
+}

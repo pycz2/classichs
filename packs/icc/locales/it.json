@@ -1,0 +1,25 @@
+{
+ "sets": {
+  "ICECROWN": "Cavalieri del Trono di Ghiaccio"
+ },
+ "classes": {
+  "DEATHKNIGHT": "Cavaliere della Morte"
+ },
+ "mechanics": {
+  "LIFESTEAL": {
+   "name": "Furto Vitale",
+   "tip": "I danni inflitti da questa carta curano anche il tuo eroe."
+  }
+ },
+ "cards": {
+  "VAN_CS2_005": {
+   "text": "+2 Attacco al tuo eroe per questo turno e fornisce 2 Armatura."
+  },
+  "VAN_EX1_570": {
+   "text": "+4 Attacco al tuo eroe per questo turno e fornisce 4 Armatura."
+  },
+  "VAN_EX1_595": {
+   "text": "Quando un altro tuo servitore muore, pesca una carta."
+  }
+ }
+}

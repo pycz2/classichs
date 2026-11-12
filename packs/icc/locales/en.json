@@ -1,0 +1,19 @@
+{
+ "sets": {
+  "ICECROWN": "Knights of the Frozen Throne"
+ },
+ "classes": {
+  "DEATHKNIGHT": "Death Knight"
+ },
+ "mechanics": {
+  "LIFESTEAL": {
+   "name": "Lifesteal",
+   "tip": "Damage dealt by this card also heals your hero."
+  }
+ },
+ "cards": {
+  "VAN_EX1_570": {
+   "text": "Give your hero +4 Attack this turn. Gain 4 Armor."
+  }
+ }
+}
