@@ -147,7 +147,10 @@ func _start_of_game(card: String) -> void:
 	if v == null:
 		a.error(name + " does not start")
 		return
-	await a.wait(1.2)
+	for k in 3:  # the Start of Game card's reveal, in its first moments
+		await a.wait(0.25)
+		await a.shot("%s_reveal%d" % [name, k + 1], "Start of Game: the reveal of %s, %.2f s after the start" % [CardText.name(card), 0.25 * (k + 1)])
+	await a.wait(0.5)
 	await a.shot(name, "Start of Game: a game with %s in the deck, at its start" % CardText.name(card))
 	var me := v.viewer()
 	v.controller.submit({"type": "mulligan", "player": me, "replace": []})
