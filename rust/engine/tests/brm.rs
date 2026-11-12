@@ -418,3 +418,36 @@ fn deck_templates_play_bot_games() {
     eprintln!("BRM cards played: {brm}: {played:?}");
     assert!(brm >= 15, "{played:?}");
 }
+
+#[test]
+fn a_countered_spell_is_not_cast_for_after_spell_hooks() {
+    // behaviour.countered_no_after_spell: Flamewaker and Wild Pyromancer do nothing on a countered spell
+    let mut t = scene!({"hand": [FROSTBOLT], "board": ["BRM_002", "VAN_NEW1_020"]}, {"hero": "HERO_08", "secrets": ["VAN_EX1_287"], "board": [YETI]});
+    let y = t.nth(1, 0);
+    t.play(FROSTBOLT, y);
+    assert!(t.g.players[1].secrets.is_empty(), "Counterspell went off");
+    assert_eq!((t.hp(1), t.stats(y)), (30, (4, 5)), "no missiles, no Pyromancer blast");
+    // a spell that is not countered: Flamewaker fires
+    let mut t = scene!({"hand": [FROSTBOLT], "board": ["BRM_002"]}, {"board": [YETI]});
+    let y = t.nth(1, 0);
+    t.play(FROSTBOLT, y);
+    let dealt = (30 - t.hp(1)) + (5 - t.stats(y).1);
+    assert_eq!(dealt, 5, "3 + the 2 missiles");
+}
+
+#[test]
+fn a_minion_returned_to_a_full_hand_dies() {
+    // behaviour.full_hand_return_dies (patch 2.4.0.8311): Kel'Thuzad brings it back; Feugen counts as dead
+    let full: Vec<&str> = vec![WISP; 10];
+    let mut t = scene!({"hero": "HERO_03", "hand": ["VAN_EX1_581"]}, {"hand": full.clone(), "board": [YETI, "FP1_013"]});
+    let y = t.nth(1, 0);
+    t.play("VAN_EX1_581", y);
+    assert_eq!(t.cards(1), vec!["FP1_013"], "the Yeti died");
+    assert_eq!(t.g.e(y).zone, "GRAVEYARD");
+    t.end_turn();
+    assert_eq!(t.cards(1), vec!["FP1_013", YETI], "Kel'Thuzad summons it");
+    let mut t = scene!({"hero": "HERO_03", "hand": ["VAN_EX1_581", FIREBALL]}, {"hand": full, "board": ["FP1_015", "FP1_014"]});
+    let (feugen, stalagg) = (t.nth(1, 0), t.nth(1, 1));
+    t.play("VAN_EX1_581", feugen).play(FIREBALL, stalagg);
+    assert_eq!(t.cards(1), vec!["FP1_014t"], "Thaddius: Feugen counts as dead");
+}

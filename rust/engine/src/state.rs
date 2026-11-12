@@ -811,6 +811,10 @@ impl Game {
         if !self.players[c].board.contains(&e) {
             return NONE;
         }
+        if self.rs.full_hand_return_dies && self.players[c].hand.len() >= self.rs.hand {
+            self.destroy(e); // it dies in the next death phase, as any other
+            return NONE;
+        }
         self.players[c].board.retain(|&x| x != e);
         self.em(e).zone = "SETASIDE";
         let card = self.e(e).card_id;

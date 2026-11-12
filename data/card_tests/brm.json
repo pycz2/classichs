@@ -114,6 +114,64 @@
      }
     }
    ]
+  },
+  {
+   "kind": "trigger",
+   "title": "Flamewaker and a countered Frostbolt: a countered spell is not cast, no missiles (until 2017)",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "VAN_CS2_024"
+      ],
+      "board": [
+       "BRM_002"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ],
+      "secrets": [
+       "VAN_EX1_287"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ]
   }
  ],
  "BRM_003": [
@@ -2723,6 +2781,77 @@
       "zone": "board",
       "index": 0
      }
+    }
+   ]
+  }
+ ],
+ "FP1_013": [
+  {
+   "kind": "trigger",
+   "title": "Sap on a minion whose owner's hand is full: it dies (patch 2.4.0.8311), Kel'Thuzad brings it back",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "VAN_EX1_581"
+      ],
+      "board": []
+     },
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ],
+      "hand": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "FP1_013"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
     }
    ]
   }

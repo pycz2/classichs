@@ -568,7 +568,9 @@ impl Game {
                 self.enter_play(e);
                 self.em(e).zone = self.rs.names.trap;
             }
-            self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
+            if !(countered && self.rs.countered_no_after_spell) {
+                self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
+            }
             return;
         }
         if !countered {
@@ -580,7 +582,7 @@ impl Game {
             }
         }
         self.em(e).zone = "GRAVEYARD";
-        if !self.game_over {
+        if !self.game_over && !(countered && self.rs.countered_no_after_spell) {
             self.emit(obj!{"type": "after_spell", "entity": e, "player": c, "card": card});
         }
     }

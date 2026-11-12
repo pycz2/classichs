@@ -24,6 +24,10 @@
  "bot": {
   "brain": true
  },
+ "behaviour": {
+  "countered_no_after_spell": true,
+  "full_hand_return_dies": true
+ },
  "fatigue": {
   "enabled": true,
   "first": 1,

@@ -57,6 +57,16 @@ this pack. Optional; Classic leaves it out, and its bot stays the recorded one
 `{"enabled": true, "first": 1, "step": 1}`: drawing from an empty deck deals
 `first` damage, then `step` more each time.
 
+## `behaviour`
+
+Rules Hearthstone changed over the years; a pack names the ones it plays by (both off when missing: Classic,
+Naxxramas and Goblins vs Gnomes keep their recorded games).
+
+| Field | Classic | Meaning |
+|---|---|---|
+| `countered_no_after_spell` | false | true: a countered spell is not cast for "after you cast a spell" hooks (no `after_spell` event: Wild Pyromancer, Flamewaker; Hearthstone until patch 9.2.0.21517 of 2017). "Whenever you cast a spell" (`play`) still sees it. |
+| `full_hand_return_dies` | false | true: a minion returned to a full hand (Sap, Youthful Brewmaster…) dies as any other: its Deathrattle, the graveyard, `DIED_TURN` (Kel'Thuzad, Feugen and Stalagg, Resurrect; patch 2.4.0.8311). false: it is set aside. |
+
 ## `timers` (seconds)
 
 | Field | Classic | Meaning |
