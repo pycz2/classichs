@@ -19,6 +19,8 @@ pub type Ev = Map<String, Value>;
 #[derive(Clone, Copy)]
 pub(crate) enum Trigger {
     On(HookFn),
+    /// A `hand` hook: runs only while its card is still in the hand.
+    Hand(HookFn),
     Trap(TrapHook),
     OnDeath(HookFn),
 }
@@ -338,6 +340,17 @@ impl Game {
                 }
             }
         }
+        if self.phase != "MULLIGAN" {
+            // cards in the hands with `hand` hooks (none in Classic: its queue is unchanged)
+            for p in 0..self.players.len() {
+                for k in 0..self.players[p].hand.len() {
+                    let e = self.players[p].hand[k];
+                    if let Some(f) = self.e(e).card.hooks.hand(&ty) {
+                        self.queue.push_back(QItem { f: Trigger::Hand(f), me: e, ev: Some(i), needs_in_play: false });
+                    }
+                }
+            }
+        }
         i
     }
 
@@ -380,9 +393,12 @@ impl Game {
                 if q.needs_in_play && !(zone == "PLAY" || zone == trap) {
                     continue;
                 }
+                if matches!(q.f, Trigger::Hand(_)) && zone != "HAND" {
+                    continue;
+                }
                 let me = q.me;
                 self.from(me, |g| match q.f {
-                    Trigger::On(f) => g.fx_on(f, me, q.ev.unwrap()),
+                    Trigger::On(f) | Trigger::Hand(f) => g.fx_on(f, me, q.ev.unwrap()),
                     Trigger::Trap(s) => {
                         let ev = q.ev.unwrap();
                         if g.trap_ready(me) && s.cond.is_none_or(|c| g.fx_cond(c, me, ev)) && !g.game_over {
@@ -407,7 +423,9 @@ impl Game {
         self.update_auras();
     }
 
-    fn death_phase(&mut self) -> bool {
+    /// Removes the dead (minions, weapons) and queues their death hooks and `death` events, without running
+    /// the queue (`g.remove_dead`); true if anything died.
+    pub(crate) fn death_phase(&mut self) -> bool {
         let mut dead = vec![];
         let n = self.n();
         for p in &self.players {
@@ -803,6 +821,20 @@ impl Game {
 
     pub fn take_control(&mut self, e: Id, p: usize) {
         let c = self.ctrl(e);
+        if c != p && self.players[c].secrets.contains(&e) {
+            // a trap changes sides; one its new owner already has is destroyed (Kezan Mystic)
+            self.players[c].secrets.retain(|&x| x != e);
+            let card = self.e(e).card_id;
+            if self.players[p].secrets.iter().any(|&s| self.e(s).card_id == card) {
+                self.em(e).zone = "GRAVEYARD";
+                self.log_event(obj!{"type": "destroy", "target": e});
+                return;
+            }
+            self.em(e).controller = p;
+            self.players[p].secrets.push(e);
+            self.log_event(obj!{"type": "take_control", "target": e, "player": p});
+            return;
+        }
         if c == p || !self.players[c].board.contains(&e) {
             return;
         }
@@ -819,6 +851,30 @@ impl Game {
         x.give_tag(n.exhausted, false);
         x.set_tag(n.attacks, 0i64);
         self.log_event(obj!{"type": "take_control", "target": e, "player": p});
+    }
+
+    /// A new card shuffled into p's deck at a random place (`g.add_to_deck`).
+    pub fn add_to_deck(&mut self, p: usize, card_id: &str) -> Id {
+        let e = self.new_entity(card_id, p);
+        self.em(e).zone = "DECK";
+        let n = self.players[p].deck.len() as i64;
+        let i = self.rng.randi_range(0, n) as usize;
+        self.players[p].deck.insert(i, e);
+        self.log_event(obj!{"type": "add_to_deck", "player": p, "entity": e, "card": self.e(e).card_id});
+        e
+    }
+
+    /// Runs m's death hooks now (its card's, unless silenced, then its enchantments'), as if it died:
+    /// Feign Death.
+    pub fn run_death_hooks(&mut self, m: Id) {
+        let mut fs: Vec<HookFn> = self.hooks_of(m).on_death.into_iter().collect();
+        fs.extend(self.ench_hooks(m).into_iter().filter_map(|h| h.on_death));
+        for f in fs {
+            if self.game_over {
+                return;
+            }
+            self.from(m, |g| g.fx_me(f, m));
+        }
     }
 
     pub fn equip(&mut self, p: usize, card_id: &str) -> Id {
@@ -843,7 +899,7 @@ impl Game {
         let (h, t) = (self.hero(p), self.n().armor);
         let a = self.e(h).tag(t);
         self.em(h).set_tag(t, a + n);
-        self.log_event(obj!{"type": "armor", "player": p, "amount": n});
+        self.emit(obj!{"type": "armor", "player": p, "amount": n});
     }
 
     /// Full crystals by default. empty=true adds empty crystals.

@@ -178,6 +178,7 @@ does not map is written as the engine id.
 | `FROZEN`, `FROZEN_THIS_TURN`, `EXHAUSTED`, `ATTACKS`, `ARMOR`, `DURABILITY`, `USED`, `LOCKED`, `GUARDED`, `TO_DESTROY`, `DIED_POS`, `HEAL_IS_DAMAGE` | state | Tags the engine sets during a game | same |
 | `POWER_MULTIPLIER` | state | Doubles spell and power damage and healing (aura tag) | `DOUBLE_HEAL_DAMAGE` |
 | `DOUBLE_ON_DEATH` | state | Its owner's minions run their death hooks twice (aura tag on the champion; not while its source dies with them) | — (Naxxramas: `DOUBLE_DEATHRATTLE`, Baron Rivendare) |
+| `PLAYED_COST` | state | The mana a card cost when it was played from the hand (Sorcerer's Apprentice, Preparation, Loatheb counted); written only by a pack that names it | — (Goblins vs Gnomes: `PLAYED_COST`, Gazlowe) |
 | `DIED_TURN` | state | The turn a minion died; written only by a pack that names it (a new tag would change Classic's recorded states) | — (Naxxramas: `DIED_TURN`, Kel'Thuzad) |
 
 Kinds: *keyword* — a tag a card carries from its data and the engine reads;
@@ -333,7 +334,8 @@ A pack source is a folder with the pack's own files (`manifest.json`,
 (and of its base, recursively), except the base's `copy` steps whose `to` matches a glob of `skip`
 (Naxxramas skips Classic's `layout`; the pictures stay: a pack stands alone). The pack's own `hsjson` step adds to the
 base's one: its `from` data, its `patch` and its `texts` come after the base's, in order (a later patch wins for a
-field it names); its other steps follow the base's. The base's own files `scripts/**/*.lua` and `ui/fonts/*` and
+field it names); its other steps follow the base's. The base's own files `scripts/**/*.lua`, `ui/fonts/*`, the
+pictures of its own cards (`art/<set>/*`: Naxxramas's) and its set marks (`ui/set_*.png`) and
 its own texts (the sections `classes`, `races`, `rarities`, `mechanics`, `ranks`, `cards`, `sets` of its
 `locales/<lang>.json`) come along under the pack's own (the pack's file or text wins, then the nearer base's). So a
 new set needs only its folder: `recipe.json` (`base`, `skip`, one `hsjson` step with its data from

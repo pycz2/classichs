@@ -227,13 +227,15 @@ impl Parse<'_> {
             })
         };
         if let Some(s) = v.as_str() {
-            return Ok(TSpec { base: base_of(s).ok_or(self.bad(&format!("{field}: unknown target {s:?}")))?, filter: None });
+            return Ok(TSpec { base: base_of(s).ok_or(self.bad(&format!("{field}: unknown target {s:?}")))?, filter: None, when: None });
         }
         let (b, _) = self.get(v, pv, "base");
         let base = b.as_str().and_then(base_of).ok_or(self.bad(&format!("{field}.base: a target kind expected")))?;
         let (f, pf) = self.get(v, pv, "filter");
         let filter = if f.is_nil() { None } else { Some(self.func(&f, &pf, "filter", true)?) };
-        Ok(TSpec { base, filter })
+        let (w, pw) = self.get(v, pv, "when");
+        let when = if w.is_nil() { None } else { Some(self.func(&w, &pw, "when", true)?) };
+        Ok(TSpec { base, filter, when })
     }
 
     fn hooks(&mut self, t: &L, pt: &L) -> Result<HookSet, String> {
@@ -274,12 +276,14 @@ impl Parse<'_> {
                         _ => return Err(self.bad("choose_one must be a list of two card ids")),
                     }
                 }
-                "on" | "now" => {
+                "on" | "now" | "hand" => {
                     for (ek, ev) in self.m.pairs(&v).map_err(err)? {
                         let name = ek.as_str().ok_or(self.bad(&format!("{key}: event names are strings")))?;
                         let fi = self.func(&ev, &L::Nil, &format!("{key}.{name}"), false)?;
                         if key == "on" {
                             h.on.push((leak(name), fi));
+                        } else if key == "hand" {
+                            h.hand.push((leak(name), fi));
                         } else {
                             h.now.push((leak(name), fi));
                         }
@@ -929,6 +933,19 @@ fn a_copy_minion(g: &mut Game, a: Args) -> R {
     let (me, t) = (ent(g, &a, 0)?, ent(g, &a, 1)?);
     opt_id(g.copy_minion(me, t))
 }
+fn a_add_to_deck(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "")?);
+    one(g.add_to_deck(p, &c))
+}
+fn a_deathrattle(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let e = opt_ent(g, &a, 0)?;
+    if e != NONE {
+        g.run_death_hooks(e);
+    }
+    none()
+}
 fn a_equip(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "WEAPON")?);
@@ -1179,6 +1196,11 @@ fn a_resolve(g: &mut Game, _a: Args) -> R {
     g.resolve();
     none()
 }
+fn a_remove_dead(g: &mut Game, _a: Args) -> R {
+    live(g)?;
+    g.death_phase();
+    none()
+}
 fn a_cost(g: &mut Game, a: Args) -> R {
     let e = ent(g, &a, 0)?;
     one(g.cost(e))
@@ -1198,4 +1220,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.request_choice", a_request_choice), ("g.add_cost_mod", a_add_cost_mod), ("g.log", a_log), ("g.emit", a_emit),
     ("g.remove", a_remove), ("g.random", a_random), ("g.pick", a_pick), ("g.random_alive", a_random_alive),
     ("g.shuffle", a_shuffle), ("g.cost", a_cost), ("g.put_trap", a_put_trap), ("g.resolve", a_resolve),
+    ("g.add_to_deck", a_add_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
 ];

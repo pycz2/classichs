@@ -58,7 +58,7 @@ Return values are ignored unless said otherwise.
 
 | Hook | Signature | When |
 |---|---|---|
-| `target` | `"any"` \| `{base = …, filter = fn(g, me, t) → bool}` | The card (or power) needs a target. Bases: `any`, `minion`, `enemy_minion`, `friendly_minion`, `enemy_char`, `friendly_char`, `enemy_hero` (alias `enemy_champion`). Enemy STEALTH is never a target; SPELLPROOF blocks spells and powers. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required. `filter` is read-only. |
+| `target` | `"any"` \| `{base = …, filter = fn(g, me, t) → bool, when = fn(g, me) → bool}` | The card (or power) needs a target. Bases: `any`, `minion`, `enemy_minion`, `friendly_minion`, `enemy_char`, `friendly_char`, `enemy_hero` (alias `enemy_champion`). Enemy STEALTH is never a target; SPELLPROOF blocks spells and powers. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required. `filter` is read-only. `when` (read-only): the spec applies only while it holds, else the card or power has no target (`t` is `nil`): Steady Shot with Steamwheedle Sniper. |
 | `battlecry` (alias `on_play`) | `fn(g, me, t)` | A minion or weapon is played from the hand (after it is on the board / before it is equipped). |
 | `spell` | `fn(g, me, t)` | A spell is cast (not if countered). |
 | `combo` | `fn(g, me, t)` | Instead of `battlecry`/`spell` when another card was played before it this turn. |
@@ -70,6 +70,7 @@ Return values are ignored unless said otherwise.
 | `glow` | `fn(g, me) → bool` | The card in the hand glows yellow now: its condition holds ("if you're holding a Dragon", "if your deck has no duplicates"…; read-only, for clients: snapshots mark it `glow`, no rule reads it). Without it a card with a `combo` hook glows while its combo is on (`g.combo(me)`). |
 | `deathrattle` (alias `on_death`) | `fn(g, me)` | It died (minion or weapon; `g.died_pos(me)` is where). |
 | `on` | `{<event type> = fn(g, me, ev)}` | Any event of that type while `me` is in play (or a trap). Queued: runs after the action that caused it. |
+| `hand` | `{<event type> = fn(g, me, ev)}` | Like `on`, while the card is in its owner's hand (not during the mulligan; skipped if it left the hand before its turn in the queue): "when you draw this" (`draw` with `ev.entity == me`: Flame Leviathan, Burrowing Mine), "while this is in your hand" (Bolvar Fordragon). |
 | `now` | `{predamage = fn(g, me, ev)}` | Replacement effects: runs at once, inside `g.damage`, before damage applies; set `ev.amount` to change it. |
 | `secret` (alias `trap`) | `{event = "<type>", cond = fn(g, me, ev) → bool, effect = fn(g, me, ev)}` | A trap: on `event` during the opponent's turn, if `cond` (omitted: always) holds, the trap is revealed, then `effect` runs. |
 | `aura` | `fn(g, me)` | Recomputed after every change while `me` is in play: call `g.aura_add` for what it gives now. |
@@ -116,6 +117,7 @@ amounts replace the damage).
 | `draw` | `player`, `entity`, `card` | |
 | `discard` | `player`, `entity`, `card` | |
 | `equip` | `player`, `entity`, `card` | |
+| `armor` | `player`, `amount` | A champion gained Armor (Siege Engine). |
 | `hero_power` | `player`, `entity`, `target` | After the power's effect. |
 | `secret_revealed` | `entity`, `player`, `card` | |
 | `turn_start`, `turn_end` | `player` (+ `turn`) | `turn_end` hooks run before "this turn" effects end. |
@@ -200,9 +202,11 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.silence(e)`, `g.freeze(e)` | |
 | `g.transform(e, card)` | Replaces a minion with a new one; returns it. |
 | `g.return_to_hand(e)` | Returns a minion as a fresh card; returns the new card or `nil`. |
-| `g.take_control(e, p)` | |
+| `g.take_control(e, p)` | A minion, or a trap (it moves to `p`'s traps; if `p` has that trap already, it is destroyed: Kezan Mystic). |
 | `g.copy_minion(me, t)` | Turns `me` into a copy of `t` (stats, enchantments, tags, silence). |
 | `g.equip(p, card)` | A new weapon (the old one is destroyed). |
+| `g.add_to_deck(p, card)` | A new card shuffled into `p`'s deck at a random place (logs `add_to_deck`); returns it. |
+| `g.deathrattle(m)` | Runs `m`'s death hooks now, as if it died, without killing it: its card's (unless silenced), then its enchantments' (Feign Death). |
 | `g.gain_armor(p, n)` | |
 | `g.gain_mana(p, n[, empty])` | Crystals up to max mana (`empty`: empty crystals). |
 | `g.add_mana(p, n)` | Mana this turn (up to max mana; The Coin). |
@@ -225,6 +229,7 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 | `g.random_alive(list)` | A random item that is in play and not dying, or `nil`. |
 | `g.shuffle(list)` | Shuffles the list in place (and returns it). |
 | `g.put_trap(e)` | Puts a trap card of its owner's hand or deck into play, as if played but without the `play` event (logs `trap_put`); `false` when `e` is no trap there or the same trap is already in play (Mad Scientist). |
+| `g.remove_dead()` | The death phase now: the dead leave the board (room for a summon) and their Deathrattles and `death` events are queued, to run after the hook (Mimiron's Head: V-07-TR-0N comes before the Mechs' Deathrattles). |
 | `g.resolve()` | Runs the queued triggers and the death phase now, inside the hook (Poison Seeds and Reincarnate: the destroyed minions die and their Deathrattles go before the Treants or the copy come). |
 
 Randomness must come from these (the game's seeded generator): every

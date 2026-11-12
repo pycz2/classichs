@@ -1,0 +1,31 @@
+{
+ "about": "Goblins vs Gnomes's interface (docs/packs/format.md, 'UI theme'): the workshops of Gadgetzan and Gnomeregan — dark oiled-iron panels with brass rims, buttons that glow goblin green with a gnome-orange edge, warm brass text, sparks drifting over the menu; the title in Classic's Cinzel Decorative, in brass.",
+ "colors": {
+  "text": "f3e7cf",
+  "muted": "b9a888",
+  "accent": "f0a63a",
+  "table": "14100c",
+  "panel": "1b1611f0",
+  "panel_border": "b8863b",
+  "backdrop": "6a5a44",
+  "button": "23301ff0",
+  "button_hover": "2e4228",
+  "button_pressed": "182215",
+  "button_disabled": "1a1d17a6",
+  "button_border": "e08a2c",
+  "button_text": "f6efdc",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "ffd38a",
+  "button_text_disabled": "7a7262",
+  "outline": "080604",
+  "danger": "ff5a4f",
+  "ok": "8fe06a"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 6, "border": 1, "glow": "6fd04a33", "glow_size": 4, "glow_hover": "f0a63a99", "glow_hover_size": 12},
+ "panel": {"radius": 8, "border": 2, "glow": "b8863b40", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "end_turn": {"button": "2a3a22", "border": "f0a63a", "text": "fbf3df", "ready": "3a5a24", "ready_border": "9be35a"},
+ "mana": "4cc3ff",
+ "menu": {"shade": "0a070459", "particles": "embers"}
+}

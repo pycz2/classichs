@@ -1,0 +1,23 @@
+{
+  "about": "How tools/pack.py builds Goblins vs Gnomes 2014 (docs/packs/format.md, 'Build recipes'): on Naxxramas (base), so on Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the Goblins vs Gnomes cards and their tokens (data/gvg_cards.json, tools/extract_cards.py --set gvg) with the names and texts of the release build 7234 for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the release stats, tribes and keywords, the Mechs and the balance changes of that day, the scripts of scripts/gvg.lua).",
+  "base": "../naxx",
+  "root": "../..",
+  "skip": [
+    "layout"
+  ],
+  "bundle_in_client": false,
+  "steps": [
+    {
+      "do": "hsjson",
+      "from": [
+        "data/gvg_cards.json"
+      ],
+      "patch": [
+        "cards.patch.json"
+      ],
+      "texts": [
+        "packs/gvg/cards.texts.json"
+      ]
+    }
+  ]
+}
