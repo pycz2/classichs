@@ -32,7 +32,8 @@
       "steps": [
         {"do": "hero_power"}
       ],
-      "hover": {"side": 0, "zone": "hand", "index": 0}
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
     }
   ],
   "dist": ["menu", "collection", "card_LOE_011", "discover"]

@@ -1,0 +1,78 @@
+{
+  "about": "Shots of The Witchwood for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps, or a real game of two ready decks: game), the shots the distributed pack repeats.",
+  "tab": "SHAMAN",
+  "signature": ["GIL_820", "GIL_826", "GIL_692"],
+  "scenes": [
+    {
+      "name": "shudderwock",
+      "caption": {"ru": "Дрыжеглот повторил все боевые кличи, сыгранные за игру; Бесплотный удильщик с «Эхом» оставил в руке свою призрачную копию, она исчезнет в конце хода", "en": "Shudderwock repeated every Battlecry played this game; Ghost Light Angler (Echo) left its ghostly copy in hand, gone at the end of the turn"},
+      "scene": {"current": 0, "turn": 10, "players": [
+        {"hero": "HERO_02", "mana": 20, "max_mana": 10, "damage": 11,
+         "hand": ["VAN_CS2_189", "GIL_531", "GIL_678", "GIL_820"],
+         "board": ["GIL_530"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_05", "max_mana": 10, "damage": 6,
+         "board": ["GIL_607", "GIL_200", "GIL_562"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}, "pos": 1},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 3},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 4}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 1},
+      "history": true
+    },
+    {
+      "name": "rush",
+      "caption": {"ru": "Натиск: Дарий Краули и Бешеный ворген атаковали существ в тот же ход, когда их сыграли (героя натиском бить нельзя). Дарий убил противника и получил +2/+2", "en": "Rush: Darius Crowley and Rabid Worgen attacked minions on the turn they were played (not the hero). Darius killed his target and gained +2/+2"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_01", "mana": 10, "max_mana": 9, "damage": 9, "armor": 4, "weapon": "GIL_653",
+         "hand": ["GIL_547", "GIL_113", "GIL_654", "GIL_537"],
+         "board": ["GIL_155", "GIL_655"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_04", "max_mana": 9, "damage": 8,
+         "board": ["GIL_534", "GIL_212", "GIL_685"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 2}, "defender": {"side": 1, "zone": "board", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 3},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 3}, "defender": {"side": 1, "zone": "board", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 2},
+      "history": 2
+    },
+    {
+      "name": "worgen",
+      "caption": {"ru": "Оборотни в руке: в начале хода Тыквенник, Быстроногая вестница и Магический оборотень поменяли атаку и здоровье, а Хамелеос превратился в карту из руки противника", "en": "Shapeshifters in hand: at the start of the turn Pumpkin Peasant, Swift Messenger and Spellshifter swapped their Attack and Health, and Chameleos became a card from the opponent's hand"},
+      "scene": {"current": 0, "turn": 7, "players": [
+        {"hero": "HERO_09", "mana": 7, "max_mana": 7, "damage": 8,
+         "hand": ["GIL_142", "GIL_201", "GIL_528", "GIL_529"],
+         "board": ["GIL_156", "GIL_835"],
+         "deck": ["VAN_CS2_235", "VAN_CS2_235", "VAN_CS2_235", "VAN_CS2_235"]},
+        {"hero": "HERO_08", "max_mana": 7, "damage": 5,
+         "board": ["GIL_664", "GIL_838"], "hand": ["GIL_549", "GIL_801", "GIL_548"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "end_turn"},
+        {"do": "end_turn"}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0}
+    },
+    {
+      "name": "start_of_game",
+      "caption": {"ru": "Начало игры: в колоде воина только карты с нечётной стоимостью, и Баку Пожирательница Луны улучшила его силу героя («Не пробьёшь!» даёт 4 брони, сыграна с Монеткой); в колоде шамана только чётные, и после Генна Седогрива шаман на первом ходу поставил тотем за 1 кристалл", "en": "Start of Game: the Warrior's deck has only odd-Cost cards, so Baku the Mooneater upgraded his Hero Power (Tank Up! gives 4 Armor, played with the Coin); the Shaman's has only even ones, so after Genn Greymane the Shaman summoned a totem for 1 mana on his first turn"},
+      "game": {"decks": ["03_odd_warrior", "09_even_shaman"], "seed": 7, "first": 1},
+      "steps": [
+        {"do": "hero_power"},
+        {"do": "end_turn"},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 4}},
+        {"do": "hero_power"}
+      ],
+      "hover": {"side": 0, "zone": "power"},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_GIL_820", "shudderwock"]
+}
