@@ -4,6 +4,9 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+### Corrigé
+- Une partie ne se fige plus une demi-minute dans les grands jeux, comme Le Bois Maudit, la première fois qu’une carte inflige des dégâts ou soigne (le Kobold de bibliothèque qui frappe son propre héros le faisait) ou qu’une carte sans image doit être dessinée. Le jeu calculait alors les images dessinées de toutes les cartes d’un coup ; cela prend maintenant un instant.
+
 ## [0.71.0] - 2026-11-12
 
 ### Ajouté

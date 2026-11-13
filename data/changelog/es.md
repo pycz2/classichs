@@ -4,6 +4,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+### Corregido
+- La partida ya no se congela medio minuto en los juegos grandes, como El Bosque Embrujado, la primera vez que una carta inflige daño o cura (pasaba con el Bibliotecario kóbold al dañar a su propio héroe) o cuando hay que dibujar una carta sin imagen. El juego planeaba entonces las imágenes dibujadas de todas las cartas a la vez; ahora tarda un instante.
+
 ## [0.71.0] - 2026-11-12
 
 ### Añadido

@@ -4,6 +4,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+### Behoben
+- Eine Partie friert in den großen Spielen, etwa im Hexenwald, nicht mehr eine halbe Minute ein, wenn eine Karte zum ersten Mal Schaden zufügt oder heilt (so beim Koboldbibliothekar, der den eigenen Helden trifft) oder eine Karte ohne Bild gezeichnet werden muss. Das Spiel plante dabei die gezeichneten Bilder aller Karten auf einmal; jetzt dauert das einen Augenblick.
+
 ## [0.71.0] - 2026-11-12
 
 ### Hinzugefügt

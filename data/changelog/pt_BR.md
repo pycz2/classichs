@@ -4,6 +4,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+### Corrigido
+- A partida não congela mais por meio minuto nos jogos grandes, como O Bosque das Bruxas, na primeira vez que um card causa dano ou cura (acontecia com o Bibliotecário Kobold ao atingir o próprio herói) ou quando um card sem imagem precisa ser desenhado. O jogo planejava então as imagens desenhadas de todos os cards de uma vez; agora isso leva um instante.
+
 ## [0.71.0] - 2026-11-12
 
 ### Adicionado

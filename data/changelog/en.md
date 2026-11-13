@@ -4,6 +4,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+### Fixed
+- A game no longer freezes for half a minute in the big games, The Witchwood for one, the first time a card deals damage or heals (Kobold Librarian hitting its own hero did it) or a card without a picture has to be drawn. At that moment the client worked out the drawn pictures of every card of the game at once; that now takes a split second.
+
 ## [0.71.0] - 2026-11-12
 
 ### Added

@@ -281,9 +281,9 @@ static func design(card_id: String) -> Dictionary:
 	return _designs[card_id]
 
 
-static func _plan(card_id: String, v: int) -> Dictionary:
+static func _plan(card_id: String, v: int, s := []) -> Dictionary:
 	var c := CardDb.card(card_id)
-	var s := _subject(c)
+	s = s if not s.is_empty() else _subject(c)
 	var d := _variant(card_id, v)
 	d.id = card_id
 	d.kind = s[0]
@@ -299,22 +299,45 @@ static func key(d: Dictionary) -> String:
 	return "%s|%s|%d|%s|%d|%s|%d|%d" % [d.kind, d.subject, d.look, d.scene, d.accent, d.flip, d.scale, d.shift]
 
 
+## Every card's plan, in dbfId order: its first variant (of TRIES) whose subject and scene no card before has, after
+## 300 tries one whose subject, scene and look none has (common subjects: the look tells them apart), else the last.
+## Only the variant changes from try to try; a subject with all its scenes (and looks) taken skips the tries that
+## cannot pass. (Trying them all took 40 s for the 2139 cards of The Witchwood, on the main thread: the game froze
+## at the first picture plan it needed, a Battlecry's damage of a card with no element.)
+const TRIES := 3000
 static func _plan_all() -> void:
 	var ids := CardDb.all_ids()
 	ids.sort_custom(func(a, b): return int(CardDb.card(a).get("dbfId", 0)) < int(CardDb.card(b).get("dbfId", 0)) or (CardDb.card(a).get("dbfId", 0) == CardDb.card(b).get("dbfId", 0) and a < b))
 	var strict := {}
 	var looks := {}
+	var taken := {}  # subject -> [its subject|scene taken, its subject|scene|look taken]
+	var looks_n := SCENES.size() * 6  # (6 looks: _variant)
 	for id in ids:
-		var d := _plan(id, 0)
-		for v in 3000:
-			d = _plan(id, v)
-			var one := "%s|%s" % [d.subject, d.scene]
-			var two := "%s|%s|%s" % [d.subject, d.scene, d.look]
-			if not strict.has(one) or (v > 300 and not looks.has(two)):  # common subjects: the look tells them apart
+		var s := _subject(CardDb.card(id))
+		var subj := str(s[1])
+		if not taken.has(subj):
+			taken[subj] = [0, 0]
+		var n: Array = taken[subj]
+		var v := 0
+		var pick := TRIES - 1
+		while v < TRIES:
+			if v <= 300 and n[0] >= SCENES.size():
+				v = 301  # (no new scene left: only a new look passes)
+				continue
+			if n[0] >= SCENES.size() and n[1] >= looks_n:
+				break  # (nothing new left: the last variant, as trying them all gives)
+			var d := _variant(id, v)
+			var one := "%s|%s" % [subj, d.scene]
+			var two := "%s|%s|%s" % [subj, d.scene, d.look]
+			if not strict.has(one) or (v > 300 and not looks.has(two)):
+				n[0] += 0 if strict.has(one) else 1
+				n[1] += 0 if looks.has(two) else 1
 				strict[one] = true
 				looks[two] = true
+				pick = v
 				break
-		_designs[id] = d
+			v += 1
+		_designs[id] = _plan(id, pick, s)
 
 
 ## Every point a shape touches (for bounds checks).

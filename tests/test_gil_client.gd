@@ -193,3 +193,17 @@ func test_a_rush_minion_looks_ready_and_aims_at_minions_only() -> void:
 		"its targets: the minion, not the hero")
 	v.free()
 	_classic()
+
+
+func test_the_picture_plans_of_a_big_pack_take_a_moment() -> void:
+	# 0.71.0: Kobold Librarian's damage to its own hero (no fx element: the element of its picture plan) planned the
+	# pictures of all 2139 cards on the main thread, 3000 tries each: 40 s of a frozen game with every card's art there.
+	if not _gil():
+		return
+	Art.reset_all()
+	var t0 := Time.get_ticks_msec()
+	eq(TableFx.element("LOOT_014"), "", "a minion: no element")
+	var ms := Time.get_ticks_msec() - t0
+	check(ms < 3000, "the plans of %d cards took %d ms" % [CardDb.all_ids().size(), ms])
+	eq(Art._designs.size(), CardDb.all_ids().size(), "every card planned")
+	_classic()
