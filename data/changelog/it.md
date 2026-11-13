@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.71.1] - 2026-11-13
+
 ### Corretto
 - La partita non si blocca più per mezzo minuto nei giochi grandi, come Il Bosco Tetro, la prima volta che una carta infligge danni o cura (succedeva col Bibliotecario Coboldo che colpisce il proprio eroe) o quando va disegnata una carta senza immagine. Il gioco pianificava allora le immagini disegnate di tutte le carte in una volta; ora ci vuole un attimo.
 

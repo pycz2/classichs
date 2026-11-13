@@ -4,6 +4,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.71.1] - 2026-11-13
+
 ### Naprawiono
 - Partia nie zamarza już na pół minuty w dużych grach, na przykład w Wiedźmim Lesie, gdy karta pierwszy raz zadaje obrażenia lub leczy (tak było z Koboldem bibliotekarzem, który rani własnego bohatera) albo gdy trzeba narysować kartę bez obrazka. Gra planowała wtedy rysunki wszystkich kart naraz; teraz trwa to chwilę.
 
