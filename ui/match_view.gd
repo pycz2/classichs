@@ -125,6 +125,13 @@ var _cast_arrow := TargetArrow.new()  # what a played card, a Battlecry or a her
 var _hits := {}  # source entity -> its impacts so far in the batch (the k-th plays its k-th `_hit` sound)
 var _aim_card := ""  # the card the local player aims with (its `_aim` loop plays), "" for none
 var _quests := {}  # Quest (or Secret) entity -> its QUEST_PROGRESS before the batch
+var _gone := {}  # entity id -> where its view was when it left the table in this batch (a card moved later comes from there)
+var _was_hidden := {}  # the batch's cards shuffled into a deck from a deck (King Togwaggle's swap): they come from the other deck
+var _hand_costs := {}  # hand card id -> its cost before the batch (a cost changed without an event: the hand lights up)
+var _lit_hands := {}  # player -> true: a step already lit that hand in this batch
+var _sog_cards := {}  # player -> the Start of Game card shown big (the cards it shuffles in come from it)
+var _orb := SpellOrb.new()  # a targeted spell while it aims: the card becomes its element's light
+var _orb_card := -1  # the hand card the orb stands for (-1: none)
 ## The local player's orders given while the table still animates: carried out
 ## one by one after the animations, in order (not in the tutorial).
 var _pending_acts: Array = []
@@ -223,6 +230,7 @@ func _ready() -> void:
 	add_child(_arrow)
 	_cast_arrow.z_index = 65  # over the card shown big and the hand
 	add_child(_cast_arrow)
+	add_child(_orb)
 	_opp_arrow.tint = Color("e03131")
 	add_child(_opp_arrow)
 	_hint = Palette.label("", 20, Palette.SELECTED)
@@ -675,10 +683,12 @@ func _drag_to(m: Vector2) -> void:
 			v.rotation = 0.0
 			v.scale = Vector2(0.9, 0.9)
 			v.position = m - v.pivot_offset + Vector2(0, CardView.SIZE.y * 0.45)
-			v.modulate.a = 0.25 if aiming else 1.0
-		if aiming:
-			_arrow.aim(OWN_HERO + HeroView.SIZE / 2.0, m, hot)
+			v.modulate.a = 1.0
+		if aiming:  # the card turns into its spell's light, where the arrow starts
+			_set_orb(id, _orb_at())
+			_arrow.aim(_orb_at(), m, hot)
 		else:
+			_set_orb(-1)
 			_arrow.visible = false
 		var gap := -1
 		if is_minion and m.y > OWN_BOARD_Y - 40 and m.y < OWN_BOARD_Y + 150 and g.players[viewer()].board.size() < 7:
@@ -697,6 +707,11 @@ func _drop_at(m: Vector2, id: int) -> void:
 	_gap = -1
 	var e := g.ent(id)
 	var v: EntityView = _views.get(id)
+	if v and _orb_card == id:  # the spell comes out of its light: played from there, or back into the hand from there
+		var k := 0.3
+		v.scale = Vector2(k, k)
+		v.position = _orb.position - v.pivot_offset * (1.0 - k) - v.size * k / 2.0
+	_set_orb(-1)
 	if v:
 		v.modulate.a = 1.0
 	if _sel.is_empty():
@@ -744,9 +759,15 @@ func _aim_click_mode() -> void:
 	if stage == "target" and _views.has(_sel.id):
 		var src: EntityView = _views[_sel.id]
 		var over := _view_at(m)
-		_arrow.aim(src.position + src.size * src.scale / 2.0, m, over != null and _targets(_sel.actions).has(over.entity_id))
+		var from := src.position + src.size * src.scale / 2.0
+		if _aiming_spell(_sel.id):  # a spell from the hand: its light aims, not the card
+			_set_orb(_sel.id, _orb_at())
+			from = _orb_at()
+		_arrow.aim(from, m, over != null and _targets(_sel.actions).has(over.entity_id))
 	elif _arrow.visible:
 		_arrow.visible = false
+	if _orb_card >= 0 and stage != "target":
+		_set_orb(-1)
 	if stage == "position":
 		var gap := TableLayout.board_index(m.x, g.players[viewer()].board.size())
 		if gap != _gap:
@@ -1178,7 +1199,7 @@ func _refresh() -> void:
 	if ready != end_turn_ready:
 		end_turn_ready = ready
 		_style_end_turn()
-	_end_turn.text = tr("End Turn") if my_action() or g.game_over else tr("Enemy Turn")
+	_set_end_side(my_action() or g.game_over)
 	var concede := find_child("Concede", true, false) as Button
 	if concede:
 		concede.text = tr("Leave") if watching else (tr("Menu") if g.game_over else tr("Concede"))
@@ -1411,6 +1432,8 @@ func _glide(v: Control, pos: Vector2, s := 1.0, rot := 0.0, dur := 0.3) -> void:
 ## Removes a view; gone=true plays a fade (death, discard), false removes it at once.
 func _drop(v: EntityView, gone: bool) -> void:
 	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if not _stage.is_empty():
+		_gone[v.entity_id] = v.position + v.size * v.scale / 2.0
 	if Anim.instant or not gone or not is_inside_tree():
 		_layer.remove_child(v)
 		v.queue_free()
@@ -1490,6 +1513,7 @@ func cancel() -> void:
 
 ## Drops any drag in progress: the arrow hides and the card goes back to the hand.
 func _end_drag() -> void:
+	_set_orb(-1)
 	if _dragging and _views.has(_press.get("id", -1)):
 		_views[_press.id].modulate.a = 1.0
 	_press = {}
@@ -1756,12 +1780,22 @@ func _begin_batch(item: Dictionary) -> void:
 	for e in g.players[0].secrets + g.players[1].secrets:
 		_quests[e.id] = int(e.tags.get("QUEST_PROGRESS", 0))
 	_from_deck = {}  # minions summoned out of a deck (Recruit, Deathlord): cards the table did not show (or showed in a deck)
+	_was_hidden = {}
 	var known := int(g.snapshot.get("next_id", 0))
 	for ev in item.events:
+		var was := g.ent(int(ev.get("entity", -1)))
 		if ev.type == "summon":
-			var was := g.ent(int(ev.entity))
 			if (was == null and int(ev.entity) < known) or (was != null and was.zone == "DECK"):
 				_from_deck[int(ev.entity)] = true
+		elif ev.type == "to_deck" and ((was == null and int(ev.entity) < known) or (was != null and was.zone == "DECK")):
+			_was_hidden[int(ev.entity)] = true
+	_gone = {}
+	_lit_hands = {}
+	_hand_costs = {}
+	for p in 2:
+		for e in g.players[p].hand:
+			if e.card_id != "":
+				_hand_costs[e.id] = g.cost(e)
 	_show(item.snap, item.hist)
 	_stage = st
 	_stage_events = item.events
@@ -1783,9 +1817,13 @@ func _end_batch() -> void:
 	for id in _flying:
 		_fade_card(_flying[id])
 	_flying.clear()
+	for p in _sog_cards:
+		_fade_card(_sog_cards[p])
+	_sog_cards.clear()
 	_final_refresh = true
 	refresh()
 	_final_refresh = false
+	_light_changed_hands()
 
 
 ## The batch's events as the steps the table shows one after another: [{k, evs, at}], at =
@@ -1819,7 +1857,7 @@ static func steps(events: Array, aimed := -1) -> Array:
 		var k := ""
 		if not strike.is_empty() and i == strike.at:
 			var hit := func(e): return _attack_hit(e, strike.a, strike.d)
-			j = _run(events, i, hit) if hit.call(ev) else i
+			j = _freezes(events, _run(events, i, hit), [strike.a, strike.d]) if hit.call(ev) else i
 			out.append({"k": "strike", "evs": events.slice(i, j), "at": maxi(i, j) - 1, "attacker": strike.a, "defender": strike.d})
 			strike = {}
 			i = maxi(i, j)  # (no hits: the event here is a step of its own)
@@ -1840,13 +1878,15 @@ static func steps(events: Array, aimed := -1) -> Array:
 				else:
 					while j < events.size() and _attack_hit(events[j], ev.attacker, ev.defender):
 						j += 1
+					j = _freezes(events, j, [ev.attacker, ev.defender])
 			"damage", "heal", "buff", "freeze", "silence", "divine_shield_lost", "destroy", "armor":
 				k = "hit"
 				if not (ev.type == "damage" and _one_by_one(ev)):
 					var seen := {}
+					var kinds: Array = COLD if COLD.has(ev.type) else [ev.type]  # (a Frostbolt's hit and its freeze land together)
 					j = _run(events, i, func(e):
-						var t = e.get("target", e.get("player"))
-						if e.type != ev.type or e.get("by_id", e.get("source", -2)) != ev.get("by_id", ev.get("source", -2)) or seen.has(t):
+						var t := "%s %s" % [e.type, e.get("target", e.get("player"))]
+						if not kinds.has(e.type) or e.get("by_id", e.get("source", -2)) != ev.get("by_id", ev.get("source", -2)) or seen.has(t):
 							return false
 						seen[t] = true
 						return true)
@@ -1859,6 +1899,11 @@ static func steps(events: Array, aimed := -1) -> Array:
 				j = _run(events, i, func(e): return e.type == "death")
 			"draw", "add_to_hand":
 				k = "" if bounced.has(ev.entity) else "card"
+			"add_to_deck", "to_deck":  # cards shuffled into a deck (one after another, from where each comes)
+				k = "shuffle"
+				j = _run(events, i, func(e): return e.type in ["add_to_deck", "to_deck"])
+			"hero_power_changed":  # a new Hero Power (Justicar Trueheart, Baku the Mooneater)
+				k = "power_changed"
 			"discard":
 				k = "discard"
 			"equip":
@@ -1922,6 +1967,17 @@ static func steps(events: Array, aimed := -1) -> Array:
 	if not strike.is_empty():  # the attack ended on the way (the attacker or its target gone)
 		out.append({"k": "strike", "evs": [], "at": events.size() - 1, "attacker": strike.a, "defender": strike.d})
 	return out
+
+
+## A spell's or a blow's damage and its freeze are one step (Frostbolt, Blizzard, Cone of Cold: hit and frozen together).
+const COLD := ["damage", "freeze", "divine_shield_lost"]
+
+
+## The freezes right after an attack's blow, by one of its two on one of its two (Water Elemental): they land with it.
+static func _freezes(events: Array, j: int, ids: Array) -> int:
+	while j < events.size() and events[j].type == "freeze" and ids.has(events[j].get("by_id", -1)) and ids.has(events[j].get("target", -1)):
+		j += 1
+	return j
 
 
 ## An event of an attack's blow: the two hits, a Divine Shield or armor taking one.
@@ -2066,10 +2122,8 @@ func _play_step(st: Dictionary) -> void:
 					await _mulligan_coin(ev)  # beside the cards still shown
 				else:
 					await _coin_in(ev)
-			elif ev.type == "add_to_hand" and _copy_origin(ev) != null and not _views.has(ev.entity):
-				_moved[ev.entity] = _copy_origin(ev)  # a copy of the opponent's card (Mind Vision): from their hand
-			elif ev.type == "add_to_hand" and _views.has(ev.get("by_id", -1)) and not _views.has(ev.entity):
-				_moved[ev.entity] = _center_of(ev.by_id)  # made by a card on the table (Antonidas): it comes from there
+			elif ev.type == "add_to_hand" and not _views.has(ev.entity):
+				_moved[ev.entity] = _hand_origin(ev)
 			# (a card drawn, also by a card's effect, comes from its deck)
 			_step_apply(st)
 			_step_sounds(st)
@@ -2078,6 +2132,7 @@ func _play_step(st: Dictionary) -> void:
 			var cv: CardView = _flying.get(ev.entity)
 			if cv:
 				_flying.erase(ev.entity)
+				_gone[ev.entity] = cv.position + cv.size * cv.scale / 2.0  # (what it shuffles in later comes from here)
 				if st.k == "equip" or st.get("secret", false):  # the card goes to its hero: the weapon or the Secret comes from it
 					_moved[ev.entity] = cv.position + cv.size * cv.scale / 2.0
 					cv.queue_free()
@@ -2086,11 +2141,20 @@ func _play_step(st: Dictionary) -> void:
 			_step_apply(st)
 			_step_sounds(st)
 			await _wait(0.2)
-		"secret", "quest", "reveal":
+		"secret":
+			await _reveal_secret(st)
+		"quest", "reveal":
+			if ev.type == "start_of_game":
+				await _start_of_game(st)
+				return
 			_step_sounds(st)
 			if str(ev.card) != "":
 				await _reveal(ev.card)  # (the card itself shows big: no hint over the board; a Quest fulfilled; a deck's card shown)
 			_step_apply(st)
+		"shuffle":
+			await _shuffle(st)
+		"power_changed":
+			await _power_changed(st)
 		"replay":
 			await _reveal(ev.card, 0.3)
 			_step_apply(st)
@@ -2120,6 +2184,8 @@ func _play_step(st: Dictionary) -> void:
 				_stage_refresh()
 				await _wait(0.35)
 			_step_sounds(st)
+			if ev.has("turn"):
+				_set_end_side(int(ev.get("player", -1)) == viewer() and not watching and not replay)
 			if st.get("extra", false) and ev.has("turn"):
 				_banner(tr("Extra Turn") if ev.get("player", -1) == viewer() else tr("Opponent's Extra Turn"))
 			elif ev.get("player", -1) == viewer() and ev.has("turn"):
@@ -2193,6 +2259,15 @@ func _step_apply(st: Dictionary) -> Dictionary:
 			"equip":
 				_stage.weapon[ev.player] = ev.entity
 				moved = true
+			"to_deck":  # a card in a hand (or a weapon) shuffled into a deck: its flight takes its place
+				for p in 2:
+					for list in [_stage.hand[p], _stage.board[p], _stage.secrets[p]]:
+						list.erase(ev.entity)
+					if _stage.weapon[p] == ev.entity:
+						_stage.weapon[p] = -1
+				if _views.has(ev.entity):
+					_quiet[ev.entity] = true
+				moved = true
 			"secret_revealed", "quest_done":
 				for p in 2:
 					_stage.secrets[p].erase(ev.entity)
@@ -2209,6 +2284,10 @@ func _step_apply(st: Dictionary) -> Dictionary:
 						before[id] = v.s.copy()
 					_change(v.s, ev, 1)
 					v.queue_redraw()
+				elif v is CardView and ev.type == "buff":  # a card in a hand: its numbers now (green or red), a light on it
+					if v.face_up and g.ent(id):
+						v.show_entity(g.ent(id), g)
+					v.flash(Palette.BUFFED if int(ev.get("atk", 0)) + int(ev.get("hp", 0)) >= 0 else Frames.DAMAGED)
 	if moved:
 		_stage_refresh()
 	for id in before:  # a number that changed grows for a moment
@@ -2313,11 +2392,20 @@ func _rewind(v: EntityView) -> void:
 func _hit(st: Dictionary) -> void:
 	var shots := 0
 	var missiles := {}
+	var places := {}  # "hand p" / "deck p" -> the colour: an effect on cards in a hand or a deck shows there, once
 	for ev in st.evs:
 		var t := _target_id(ev)
 		var src: int = ev.get("by_id", ev.get("source", -1))
 		var from = _flying[src].position + _flying[src].size * _flying[src].scale / 2.0 if _flying.has(src) \
 			else (_center_of(src) if _views.has(src) and src != t else null)
+		var place := _place_of(ev)
+		if place != "":
+			if not places.has(place):
+				places[place] = _fx_color(ev)
+				if from != null and TableFx.named(ev.get("by", ""), "cast") != "none":
+					_shoot(from, _place_center(place), places[place])  # one bolt to the hand or the deck
+					shots += 1
+			continue
 		if t >= 0 and _views.has(t) and from != null and TableFx.named(ev.get("by", ""), "cast") != "none":
 			_shoot(from, _center_of(t), _fx_color(ev))
 			shots += 1
@@ -2331,6 +2419,8 @@ func _hit(st: Dictionary) -> void:
 		if _views.has(t) and ev.type in ["transform", "destroy", "take_control"] and ev.get("card", "?") != "":  # (not on a hidden card)
 			TableFx.spawn(_fx, {"transform": "smoke", "destroy": "destroy", "take_control": "control"}[ev.type], _center_of(t))
 	_step_fx(st, _step_apply(st))
+	for place in places:
+		_light_place(place, places[place])
 	await _wait(0.25 if st.evs.size() == 1 and st.evs[0].type == "damage" and _one_by_one(st.evs[0]) else 0.3)
 
 
@@ -2658,14 +2748,16 @@ func _burn_away(cv: CardView, seconds := 1.1) -> void:
 
 
 ## Where a card that copies one of the opponent's comes from: their hand (Mind Vision: the very
-## card when it shows, else the middle of their hand) or their deck (Thoughtsteal); null if
-## it copies none (the card's English text says).
+## card when it shows, else the middle of their hand), their deck (Thoughtsteal) or their class
+## (Burgle: their hero); null if it copies none (the card's English text says).
 func _copy_origin(ev: Dictionary) -> Variant:
 	var text = CardDb.card(ev.get("by", "")).get("text", {}) if CardDb.has(ev.get("by", "")) else {}
 	var en: String = str(text.get("enUS", "")).to_lower() if text is Dictionary else ""
+	var foe: int = 1 - int(ev.player)
+	if en.contains("opponent's class"):
+		return _center_of(g.players[foe].hero.id)
 	if not en.contains("cop"):
 		return null
-	var foe: int = 1 - int(ev.player)
 	if en.contains("opponent's deck"):
 		return _piles[0 if foe == viewer() else 1].top()
 	if not en.contains("opponent's hand"):
@@ -2830,6 +2922,450 @@ func _show_played(st: Dictionary) -> void:
 	await _wait(0.28 + 0.32)
 
 
+# --- where things come from and go to ---------------------------------------------
+
+## Where a card moved by an event comes from: its own view (a card in a hand, a weapon), the place its
+## view left in this batch, else the card that did it (shown big, on the table, or where it was); null
+## if none of them is known.
+func _origin(ev: Dictionary) -> Variant:
+	for id in [int(ev.get("entity", -1)), int(ev.get("by_id", -1))]:
+		if id < 0:
+			continue
+		if _flying.has(id):
+			return _flying[id].position + _flying[id].size * _flying[id].scale / 2.0
+		if _views.has(id):
+			return _center_of(id)
+		if _gone.has(id):
+			return _gone[id]
+	return null
+
+
+## Where a card added to a hand comes from: the opponent's hand, deck or class (a copy: Mind Vision,
+## Thoughtsteal, Burgle), the card that made it (a spell shown big, a minion, a Hero Power, a Secret),
+## else its player's hero.
+func _hand_origin(ev: Dictionary) -> Vector2:
+	var at = _copy_origin(ev)
+	if at == null:
+		at = _origin(ev)
+	return at if at != null else _center_of(g.players[int(ev.player)].hero.id)
+
+
+func _pile_of(p: int) -> DeckPile:
+	return _piles[0 if p == viewer() else 1]
+
+
+## The centre of the top card of player p's deck.
+func _pile_center(p: int) -> Vector2:
+	return _pile_of(p).top() + Vector2(36, 52)
+
+
+## Where a card shuffled into a deck comes from: a card of the other deck (King Togwaggle's swap), the
+## card itself or the one that did it, a Start of Game card shown big (Prince Malchezaar), else the hero
+## of the player whose card did it.
+func _shuffle_origin(ev: Dictionary) -> Vector2:
+	var p := int(ev.player)
+	if _was_hidden.has(int(ev.get("entity", -1))):
+		return _pile_center(1 - p)
+	var at = _origin(ev)
+	if at != null:
+		return at
+	if _sog_cards.has(p) and is_instance_valid(_sog_cards[p]):
+		var cv: CardView = _sog_cards[p]
+		return cv.position + cv.size * cv.scale / 2.0
+	var src := g.ent(int(ev.get("by_id", -1)))
+	return _center_of(g.players[src.controller if src else p].hero.id)
+
+
+## The flights of a shuffle step: [{from, to, card, player}], card "" for a card the viewer may not see.
+func _shuffle_plan(st: Dictionary) -> Array:
+	var out := []
+	for ev in st.evs:
+		out.append({"from": _shuffle_origin(ev), "to": _pile_center(int(ev.player)), "card": HistoryText._deck_card(ev), "player": int(ev.player)})
+	return out
+
+
+## Cards shuffled into a deck: each flies from where it comes into that deck (either player's), one after
+## another; a card hidden from the viewer flies as a card back.
+func _shuffle(st: Dictionary) -> void:
+	var plan := _shuffle_plan(st)
+	_step_apply(st)  # a card that left a hand: its flight takes its place
+	_step_sounds(st)
+	var n := mini(plan.size(), 12)  # (a deck swapped whole: a dozen show it)
+	for k in n:
+		_fly_into_deck(plan[k].card, plan[k].from, plan[k].player, 0.09 * k)
+	await _wait(0.62 + 0.09 * (n - 1))
+
+
+## A card flies from at into player p's deck (after delay seconds); the pile grows by it.
+func _fly_into_deck(card: String, at: Vector2, p: int, delay := 0.0) -> CardView:
+	var cv := CardView.make(card)
+	cv.face_up = card != ""
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.z_index = 62
+	cv.pivot_offset = cv.size / 2.0
+	cv.position = at - cv.size / 2.0
+	cv.scale = Vector2(0.5, 0.5)
+	cv.set_meta("to_deck", p)
+	_fx.add_child(cv)
+	var pile := _pile_of(p)
+	var to := _pile_center(p) - cv.size / 2.0
+	if Anim.instant or not is_inside_tree():
+		cv.queue_free()
+		return cv
+	cv.modulate.a = 0.0
+	var tw := cv.create_tween()
+	tw.tween_interval(Anim.d(delay))
+	tw.tween_property(cv, "modulate:a", 1.0, Anim.d(0.08))
+	tw.parallel().tween_property(cv, "scale", Vector2(0.85, 0.85), Anim.d(0.16)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(cv, "position", to, Anim.d(0.36)).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tw.parallel().tween_property(cv, "scale", Vector2(0.6, 0.6), Anim.d(0.36))
+	tw.parallel().tween_property(cv, "rotation", deg_to_rad(-8.0 if p == viewer() else 8.0), Anim.d(0.36))
+	tw.tween_callback(func():
+		pile.count += 1
+		_pulse_node(pile)
+		cv.queue_free())
+	return cv
+
+
+## A node swells for a moment (a deck taking a card, a Hero Power changing).
+func _pulse_node(n: Control, by := 1.12) -> void:
+	if Anim.instant or not is_inside_tree():
+		return
+	n.pivot_offset = n.size / 2.0
+	var tw := n.create_tween()
+	tw.tween_property(n, "scale", Vector2(by, by), Anim.d(0.09))
+	tw.tween_property(n, "scale", Vector2.ONE, Anim.d(0.16))
+
+
+## Where an event happens to a card in a hand or a deck ("hand p", "deck p"), "" for anything else
+## (a minion, a hero). A card the view does not know is in a deck.
+func _place_of(ev: Dictionary) -> String:
+	var t := _target_id(ev)
+	if t < 0 or ev.type in ["transform", "return_to_hand"]:
+		return ""
+	var e := g.ent(t)
+	if e != null and e.zone == "HAND":
+		return "hand %d" % e.controller
+	if e == null or e.zone == "DECK":
+		var src := g.ent(int(ev.get("by_id", -1)))
+		return "deck %d" % (e.controller if e else (src.controller if src else int(ev.get("player", viewer()))))
+	return ""
+
+
+func _place_center(place: String) -> Vector2:
+	var p := int(place.get_slice(" ", 1))
+	return _pile_center(p) if place.begins_with("deck") else _hand_rect(p).get_center()
+
+
+## The rectangle player p's hand cards cover now.
+func _hand_rect(p: int) -> Rect2:
+	var ids: Array = _stage.hand[p] if not _stage.is_empty() else g.players[p].hand.map(func(e): return e.id)
+	var r := Rect2()
+	for id in ids:
+		var v: EntityView = _views.get(id)
+		if v == null:
+			continue
+		var vr := Rect2(v.position, v.size * v.scale)
+		r = vr if r.size == Vector2.ZERO else r.merge(vr)
+	if r.size == Vector2.ZERO:
+		r = Rect2(Vector2(440, 600) if p == viewer() else Vector2(440, -40), Vector2(400, 110))
+	return r
+
+
+## An effect reached cards in a hand (a light sweeps over it) or a deck (it swells, a ring opens on it).
+func _light_place(place: String, col: Color) -> void:
+	var p := int(place.get_slice(" ", 1))
+	if place.begins_with("hand"):
+		_lit_hands[p] = true
+		var r := _hand_rect(p)
+		var fx := TableFx.spawn(_fx, "sweep", Vector2(r.get_center().x, maxf(r.get_center().y, 40.0)), col)
+		fx.span = Vector2(r.size.x + 40.0, minf(r.size.y, 150.0))
+	else:
+		_pulse_node(_pile_of(p), 1.15)
+		TableFx.spawn(_fx, "gain", _pile_center(p), col)
+
+
+## Costs that changed in a hand without an event of their own (Emperor Thaurissan, an aura): those cards
+## light up, green when cheaper, red when dearer; the whole hand when several changed.
+func _light_changed_hands() -> void:
+	for p in 2:
+		if _lit_hands.has(p):
+			continue
+		var cheaper := 0
+		var dearer := 0
+		for e in g.players[p].hand:
+			if not _hand_costs.has(e.id) or _hand_costs[e.id] == g.cost(e) or not _views.has(e.id):
+				continue
+			var down: bool = g.cost(e) < _hand_costs[e.id]
+			cheaper += int(down)
+			dearer += int(not down)
+			_views[e.id].flash(Palette.BUFFED if down else Frames.DAMAGED)
+		if cheaper + dearer > 1:
+			_light_place("hand %d" % p, Palette.BUFFED if cheaper >= dearer else Frames.DAMAGED)
+	_hand_costs = {}
+
+
+## A new Hero Power (Justicar Trueheart, Baku the Mooneater): a ring opens on its place and it lights up.
+func _power_changed(st: Dictionary) -> void:
+	var ev: Dictionary = st.evs[0]
+	_step_apply(st)
+	_step_sounds(st)
+	_stage_refresh()  # (the new one comes in)
+	var v: EntityView = _views.get(g.players[int(ev.player)].hero_power.id)
+	if v:
+		TableFx.spawn(_fx, "gain", _home_of(v.entity_id), Color(1.0, 0.85, 0.4))
+		v.flash()
+		_pulse_node(v, 1.3)
+	await _wait(0.45)
+
+
+## Start of Game (Baku the Mooneater, Genn Greymane, Prince Malchezaar): the card shows big; one that
+## changes the Hero Power flies into it (it lights up, a new one or a cheaper one), one that shuffles
+## cards in stays while they fly from it into the deck (the next step).
+func _start_of_game(st: Dictionary) -> void:
+	var ev: Dictionary = st.evs[0]
+	var p := int(ev.player)
+	if _mulligan_waiting(_mull_wait):
+		_mulligan_down()  # the hand first
+		_stage_refresh()
+		await _wait(0.35)
+	_step_sounds(st)
+	_step_apply(st)
+	var cv := CardView.make(str(ev.card), 1.4)
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.z_index = 60
+	cv.pivot_offset = cv.size / 2.0
+	cv.position = SHOW_AT - cv.size / 2.0
+	cv.set_glow(Palette.SELECTED)
+	_fx.add_child(cv)
+	var shuffles := false  # what it does comes next: cards shuffled into its player's deck, else the Hero Power
+	for e in _stage_events.slice(st.at + 1):
+		if e.type in ["start_of_game", "turn_start"]:
+			break
+		shuffles = shuffles or (e.type == "add_to_deck" and int(e.player) == p)
+	if Anim.instant or not is_inside_tree():
+		if shuffles:
+			_sog_cards[p] = cv
+		else:
+			cv.queue_free()
+		return
+	cv.scale = Vector2(0.2, 0.2)
+	cv.create_tween().tween_property(cv, "scale", Vector2.ONE, Anim.d(0.22)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await _wait(0.9)
+	if shuffles:
+		_sog_cards[p] = cv  # the cards fly from it (the shuffle step); it goes at the batch's end
+		return
+	var power: EntityView = _views.get(g.players[p].hero_power.id)
+	var to := _home_of(power.entity_id) if power else _center_of(g.players[p].hero.id)
+	var tw := cv.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(cv, "position", to - cv.size / 2.0, Anim.d(0.3))
+	tw.tween_property(cv, "scale", Vector2(0.25, 0.25), Anim.d(0.3))
+	tw.chain().tween_callback(cv.queue_free)
+	await _wait(0.3)
+	TableFx.spawn(_fx, "gain", to, Color(1.0, 0.85, 0.4))
+	if power:
+		if power is PowerView:
+			(power as PowerView).sync()  # (Genn Greymane: its cost now, green)
+		power.flash()
+		_pulse_node(power, 1.3)
+	await _wait(0.3)
+
+
+## A Joust: a card flies out of each deck to its side of the table (each labelled with whose it is), their
+## costs are compared, the winner lights up and the loser darkens, then they go back into their decks.
+func _joust(ev: Dictionary) -> void:
+	var shown := _joust_cards(ev)
+	if Anim.instant or not is_inside_tree():
+		for c in shown:
+			c.view.queue_free()
+			c.label.queue_free()
+		return
+	Sound.play("draw")
+	for c in shown:  # out of the deck, face down, turning over as it arrives
+		var cv: CardView = c.view
+		var at: Vector2 = cv.position
+		cv.position = _pile_center(c.owner) - cv.size / 2.0
+		cv.scale = Vector2(0.5, 0.5)
+		cv.face_up = false
+		var tw := cv.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tw.tween_property(cv, "position", at, Anim.d(0.35))
+		tw.parallel().tween_property(cv, "scale", Vector2(0.05, 1.0), Anim.d(0.35))
+		tw.tween_callback(func(): cv.face_up = true)
+		tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.12))
+		c.label.modulate.a = 0.0
+		c.label.create_tween().tween_property(c.label, "modulate:a", 1.0, Anim.d(0.25)).set_delay(Anim.d(0.3))
+	await _wait(0.6)
+	var vs := Palette.label(" : ".join(shown.map(func(c): return str(c.cost))) if shown.size() == 2 else "", 34, Palette.ATTACK)
+	vs.add_theme_constant_override("outline_size", 8)
+	vs.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vs.size = Vector2(160, 50)
+	vs.position = JOUST_AT + Vector2(-80, -25)
+	vs.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vs.z_index = 64
+	_fx.add_child(vs)
+	for c in shown:
+		(c.view as CardView).pop("cost")
+	await _wait(0.45)
+	for c in shown:
+		var cv: CardView = c.view
+		if c.won:
+			cv.set_glow(Palette.SELECTED)
+			cv.create_tween().tween_property(cv, "scale", Vector2(1.12, 1.12), Anim.d(0.2)).set_trans(Tween.TRANS_BACK)
+		else:
+			cv.create_tween().tween_property(cv, "modulate", Color(0.42, 0.42, 0.42), Anim.d(0.2))
+	await _wait(1.0)
+	vs.queue_free()
+	for c in shown:  # back into their decks
+		var cv: CardView = c.view
+		c.label.queue_free()
+		var tw := cv.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tw.tween_property(cv, "position", _pile_center(c.owner) - cv.size / 2.0, Anim.d(0.32))
+		tw.tween_property(cv, "scale", Vector2(0.5, 0.5), Anim.d(0.32))
+		tw.chain().tween_callback(cv.queue_free)
+	await _wait(0.35)
+
+
+## Where the two Joust cards stand (their middle; each player's toward its own deck).
+const JOUST_AT := Vector2(990, 330)
+
+
+## The cards of a Joust, made and placed (not yet animated): [{view, label, owner, cost, won}], the
+## jouster's first; a side that had no minion shows none.
+func _joust_cards(ev: Dictionary) -> Array:
+	var p := int(ev.player)
+	var won := bool(ev.get("won", false))
+	var out := []
+	for i in 2:
+		var card := str(ev.get("card" if i == 0 else "foe_card", ""))
+		if card == "":
+			continue
+		var owner := p if i == 0 else 1 - p
+		var own := owner == viewer()
+		var cv := CardView.make(card)
+		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cv.z_index = 63
+		cv.pivot_offset = cv.size / 2.0
+		cv.position = JOUST_AT + Vector2(0, 150 if own else -150) - cv.size / 2.0
+		cv.set_meta("owner", owner)
+		_fx.add_child(cv)
+		var name := Palette.label(_side_name(owner), 20, Palette.SELECTED if own else Color("ff8787"))
+		name.add_theme_constant_override("outline_size", 6)
+		name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name.size = Vector2(200, 28)
+		name.position = cv.position + Vector2(cv.size.x / 2.0 - 100, cv.size.y + 4 if own else -32)
+		name.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		name.z_index = 63
+		_fx.add_child(name)
+		out.append({"view": cv, "label": name, "owner": owner, "cost": int(CardDb.card(card).get("cost", 0)), "won": won == (i == 0)})
+	return out
+
+
+## A Secret goes off: its card shows big over its place (turning over out of the Secret), with its reveal
+## sound (the card's own, else the Secret sound), then the Secret is gone.
+func _reveal_secret(st: Dictionary) -> void:
+	var ev: Dictionary = st.evs[0]
+	var at := _center_of(ev.entity) if _views.has(ev.entity) else _center_of(g.players[int(ev.player)].hero.id)
+	_step_sounds(st)
+	if str(ev.get("card", "")) != "":
+		var cv := _secret_card(ev, at)
+		if not Anim.instant and is_inside_tree():
+			var tw := cv.create_tween()
+			tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.22)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			tw.parallel().tween_property(cv, "position", cv.get_meta("to"), Anim.d(0.22)).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			tw.tween_property(cv, "scale:x", 0.0, Anim.d(0.1))
+			tw.tween_callback(func(): cv.face_up = true)
+			tw.tween_property(cv, "scale:x", 1.0, Anim.d(0.12))
+			tw.tween_interval(Anim.d(0.9))
+			tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
+			tw.tween_callback(cv.queue_free)
+			TableFx.spawn(_fx, "gain", at, cv.glow)
+			await _wait(1.3)
+		else:
+			cv.queue_free()
+	_step_apply(st)
+
+
+## The big card of a Secret going off, at the Secret (meta "to": where it grows to, kept on the table).
+func _secret_card(ev: Dictionary, at: Vector2) -> CardView:
+	var cv := CardView.make(str(ev.card), 1.4)
+	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cv.z_index = 66
+	cv.pivot_offset = cv.size / 2.0
+	cv.face_up = Anim.instant or not is_inside_tree()
+	var half := cv.size / 2.0
+	var mid := Vector2(clampf(at.x, half.x + 8.0, 1272.0 - half.x), clampf(at.y, half.y + 8.0, 712.0 - half.y))
+	cv.position = at - half
+	cv.scale = Vector2(0.15, 0.15)
+	cv.set_meta("to", mid - half)
+	cv.set_meta("secret", int(ev.entity))
+	cv.set_glow(PowerView.SECRET_COLORS.get(CardDb.card(str(ev.card)).get("cardClass", ""), Color("7048e8")))
+	_fx.add_child(cv)
+	if Anim.instant or not is_inside_tree():
+		cv.position = mid - half
+		cv.scale = Vector2.ONE
+	return cv
+
+
+# --- End Turn and the aiming spell ---------------------------------------------------
+
+## The End Turn button turns over (as if around its middle line) when the turn changes sides: "End Turn"
+## on the player's own turn, "Enemy Turn" on the other's.
+func _set_end_side(mine: bool) -> void:
+	var text := tr("End Turn") if mine else tr("Enemy Turn")
+	var side := "own" if mine else "enemy"
+	var first := not _end_turn.has_meta("side")
+	if _end_turn.get_meta("side", "") == side:
+		if not _end_turn.has_meta("flip"):
+			_end_turn.text = text  # (the language changed)
+		return
+	_end_turn.set_meta("side", side)
+	if _end_turn.has_meta("flip"):
+		(_end_turn.get_meta("flip") as Tween).kill()
+		_end_turn.remove_meta("flip")
+		_end_turn.scale = Vector2.ONE
+		_end_turn.self_modulate = Color.WHITE
+	if first or Anim.instant or not is_inside_tree():
+		_end_turn.text = text
+		return
+	_end_turn.pivot_offset = _end_turn.size / 2.0
+	var tw := _end_turn.create_tween()
+	tw.tween_property(_end_turn, "scale:y", 0.0, Anim.d(0.14)).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tw.parallel().tween_property(_end_turn, "scale:x", 1.06, Anim.d(0.14))
+	tw.parallel().tween_property(_end_turn, "self_modulate", Color(0.5, 0.5, 0.5), Anim.d(0.14))
+	tw.tween_callback(func(): _end_turn.text = text)
+	tw.tween_property(_end_turn, "scale:y", 1.0, Anim.d(0.22)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(_end_turn, "scale:x", 1.0, Anim.d(0.22))
+	tw.parallel().tween_property(_end_turn, "self_modulate", Color.WHITE, Anim.d(0.22))
+	tw.tween_callback(func(): _end_turn.remove_meta("flip"))
+	_end_turn.set_meta("flip", tw)
+
+
+## A targeted spell from the hand while it aims: the card turns into its element's light where the arrow
+## starts (the card itself hides); -1 ends it and the card shows again (back in the hand, or played).
+func _set_orb(id: int, at := Vector2.ZERO) -> void:
+	if id != _orb_card and _views.has(_orb_card):
+		_views[_orb_card].modulate.a = 1.0
+	_orb_card = id
+	if id < 0:
+		_orb.visible = false
+		return
+	var e := g.ent(id)
+	_orb.show_at(e.card_id if e else "", at)
+	if _views.has(id):
+		_views[id].modulate.a = 0.0
+
+
+## Whether id is a spell (not a minion) in the local player's hand: aimed, it turns into its orb.
+func _aiming_spell(id: int) -> bool:
+	var e := g.ent(id)
+	return e != null and e.zone == "HAND" and e.controller == viewer() and not e.is_minion()
+
+
+## Where the arrow of a spell aimed from the hand starts (its orb): over the player's hero.
+func _orb_at() -> Vector2:
+	return OWN_HERO + HeroView.SIZE / 2.0
+
+
 func _element_color(card_id: String) -> Color:
 	return TableFx.element_color(card_id)
 
@@ -2907,30 +3443,6 @@ func _reveal(card_id: String, hold := 0.8) -> void:
 	tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
 	tw.tween_callback(cv.queue_free)
 	await _wait(hold + 0.1)
-
-
-## A Joust: the minion revealed from each deck side by side (the one who jousts on the left); the loser's darkens.
-func _joust(ev: Dictionary) -> void:
-	var cards := [str(ev.get("card", "")), str(ev.get("foe_card", ""))]
-	for i in 2:
-		if cards[i] == "":
-			continue
-		var cv := CardView.make(cards[i], 1.2)
-		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		cv.position = SHOW_AT + Vector2(230 * i, 0) - cv.size / 2.0
-		cv.pivot_offset = cv.size / 2.0
-		cv.scale = Vector2(0.2, 0.2)
-		_fx.add_child(cv)
-		var tw := cv.create_tween()
-		tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.2)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tw.tween_interval(Anim.d(0.5))
-		var won: bool = ev.get("won", false)
-		var dim := Color(0.45, 0.45, 0.45) if won == (i == 1) else Color.WHITE
-		tw.tween_property(cv, "modulate", dim, Anim.d(0.2))
-		tw.tween_interval(Anim.d(0.6))
-		tw.tween_property(cv, "modulate:a", 0.0, Anim.d(0.25))
-		tw.tween_callback(cv.queue_free)
-	await _wait(1.4)
 
 
 func _banner(text: String) -> void:

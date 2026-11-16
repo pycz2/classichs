@@ -83,7 +83,7 @@ func _draw() -> void:
 			else:
 				Art.paint_in(self, art, s.card_id, "circle")
 				Frames.ring(self, Art.outline("circle", art), Frames.GOLD, 3)
-				Frames.mana(self, Vector2(c.x, 9), _cost, 11)
+				Frames.mana(self, Vector2(c.x, 9), _cost, 11 * bump("cost"), cost_color())
 		Kind.WEAPON:
 			draw_circle(c, r + 3, Color("3b2f22"))
 			if face_down_used:  # sheathed: not its owner's turn, it can't be used now
@@ -98,9 +98,14 @@ func _draw() -> void:
 			Frames.ring(self, Art.outline("circle", art), Frames.GOLD if legendary else Color("8a7a5c"), 3)
 			if legendary:
 				Frames.crest_around(self, art.grow(2), 9, PI + PI / 6.0, TAU - PI / 6.0)
-			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12 * bump("atk"), Frames.BUFFED if s.atk() > int(c0.get("attack", 0)) else Color.WHITE)
+			Frames.attack(self, Vector2(12, size.y - 12), s.atk(), 12 * bump("atk"), Frames.stat_color(s.atk(), int(c0.get("attack", 0))))
 			var dur := int(s.tags.get("DURABILITY", 0))
 			Frames.shield(self, Vector2(size.x - 12, size.y - 12), dur, 11 * bump("hp"), Frames.durability_color(dur, c0), "durability")
+
+
+## The Hero Power's cost against its card's: green when cheaper, red when dearer.
+func cost_color() -> Color:
+	return Frames.cost_color(_cost, int(s.card().get("cost", 0)))
 
 
 ## Turns the hero power over when it becomes used or ready again (a flip animation).
@@ -112,7 +117,11 @@ func sync() -> void:
 			pop("atk")
 		if int(b.tags.get("DURABILITY", 0)) != int(s.tags.get("DURABILITY", 0)):
 			pop("hp")
+	var was := _cost
 	_cost = g.cost(e)
+	if b and kind == Kind.POWER and (was != _cost or b.card_id != s.card_id):
+		pop("cost")  # a Hero Power made cheaper or dearer (Genn Greymane), or a new one: it lights up
+		flash(Color(0.55, 1.0, 0.6) if _cost < was else (Color(1.0, 0.5, 0.45) if _cost > was else Color(1.0, 0.9, 0.45)))
 	_active = e.controller == g.current
 	queue_redraw()
 	if kind == Kind.SECRET or kind == Kind.QUEST:

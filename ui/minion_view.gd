@@ -42,7 +42,7 @@ func sync() -> void:
 
 func _animated() -> bool:
 	var h := Rules.hooks(s.art())
-	return glow.a > 0.0 or s.has("UNTOUCHABLE") or s.silenced or s.spellpower() > 0 or s.has("ELUSIVE") or s.has("FOE_SPELLPROOF") or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or s.has("FROZEN") or _sleeping() \
+	return glow.a > 0.0 or s.has("UNTOUCHABLE") or s.silenced or s.spellpower() > 0 or s.has("ELUSIVE") or s.has("FOE_SPELLPROOF") or s.has("DIVINE_SHIELD") or s.has("WINDFURY") or s.has("IMMUNE") or s.has("STEALTH") or _sleeping() \
 		or (not s.silenced and (h.has("on") or h.has("aura")))
 
 
@@ -53,9 +53,56 @@ func _sleeping() -> bool:
 func _process(delta: float) -> void:
 	super(delta)
 	_show_arcane(s != null and s.spellpower() > 0 and not s.silenced)
+	frost = set_frost(self, frost, s != null and s.has("FROZEN"), _frost_material(), FROST_AREA)
 	if s and _animated():
 		_t += delta
 		queue_redraw()
+
+
+const FROST_SHADER := preload("res://ui/frost.gdshader")
+const FROST_AREA := Rect2(Vector2(10, 6), Vector2(76, 96))  # the oval and a little around it
+static var _frost_mat: ShaderMaterial  # one for all: each minion's seed and progress are its rect's colour
+## The ice over a Frozen minion (frost.gdshader), null when it is not frozen.
+var frost: ColorRect
+
+
+static func _frost_material() -> ShaderMaterial:
+	if _frost_mat == null:
+		_frost_mat = ShaderMaterial.new()
+		_frost_mat.shader = FROST_SHADER
+		_frost_mat.set_shader_parameter("size", FROST_AREA.size)
+		_frost_mat.set_shader_parameter("center", OVAL.get_center() - FROST_AREA.position)
+		_frost_mat.set_shader_parameter("radii", OVAL.size / 2.0)
+		_frost_mat.set_shader_parameter("hole_a", Vector3(16 - FROST_AREA.position.x, 98 - FROST_AREA.position.y, 16))  # the gems stay clear
+		_frost_mat.set_shader_parameter("hole_b", Vector3(80 - FROST_AREA.position.x, 98 - FROST_AREA.position.y, 16))
+	return _frost_mat
+
+
+## Frozen: ice crystals spread over the portrait in area of view v (and melt away when it thaws); returns
+## the frost now on it (cur when nothing changes, null once it melts).
+static func set_frost(v: Control, cur: ColorRect, on: bool, mat: ShaderMaterial, area: Rect2) -> ColorRect:
+	if on == (cur != null):
+		return cur
+	var slow := not Anim.instant and v.is_inside_tree()
+	if not on:
+		if slow:
+			var tw := cur.create_tween()
+			tw.tween_property(cur, "color:a", 0.0, Anim.d(0.4))
+			tw.tween_callback(cur.queue_free)
+		else:
+			cur.queue_free()
+		return null
+	var r := ColorRect.new()
+	r.name = "Frost"
+	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	r.position = area.position
+	r.size = area.size
+	r.material = mat
+	r.color = Color(randf(), 1, 1, 0.0 if slow else 1.0)
+	v.add_child(r)
+	if slow:
+		r.create_tween().tween_property(r, "color:a", 1.0, Anim.d(0.45)).set_trans(Tween.TRANS_SINE)
+	return r
 
 
 const ARCANE_SHADER := preload("res://ui/arcane.gdshader")
@@ -123,14 +170,6 @@ func _draw() -> void:
 		draw_colored_polygon(oval, Color(1.0, 0.85, 0.3, 0.28 + 0.08 * sin(_t * 2.5)), _shift(uv, Vector2(_t * 0.06, -_t * 0.03)), _smoke())
 		draw_colored_polygon(oval, Color(1.0, 0.95, 0.6, 0.18), _shift(uv, Vector2(-_t * 0.04, 0.5 + _t * 0.05)), _smoke())
 		Frames.ring(self, Art.outline("oval", OVAL.grow(1)), Color(1.0, 0.85, 0.35, 0.55 + 0.3 * sin(_t * 3.0)), 2.5)
-	if s.has("FROZEN"):  # a sheet of frost over the portrait, an icy rim, a cold shimmer
-		var ice := Sprites.get_tex("ice")
-		if ice:
-			draw_colored_polygon(oval, Color(0.85, 0.95, 1.0, 0.55), _oval_uv(oval), ice)
-		else:
-			draw_colored_polygon(oval, Color(0.6, 0.85, 1.0, 0.45))
-		draw_colored_polygon(oval, Color(0.55, 0.8, 1.0, 0.15 + 0.08 * sin(_t * 2.0)))
-		Frames.ring(self, Art.outline("oval", OVAL.grow(1)), Color(0.85, 0.96, 1.0, 0.95), 4)
 	var edge := Frames.GOLD if c.get("rarity", "") == "LEGENDARY" else Color("8a7a5c")
 	Frames.ring(self, oval, edge, 3)
 	if s.silenced:

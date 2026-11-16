@@ -37,8 +37,36 @@ func sync() -> void:
 	queue_redraw()
 
 
+const PORTRAIT := Rect2(Vector2(10, 6), SIZE - Vector2(20, 14))
+const FROST_AREA := Rect2(Vector2(8, 4), SIZE - Vector2(16, 10))
+static var _frost_mat: ShaderMaterial
+## The ice over a Frozen hero (frost.gdshader, MinionView.set_frost), null when it is not frozen.
+var frost: ColorRect
+
+
+static func _frost_material() -> ShaderMaterial:
+	if _frost_mat == null:
+		var o := FROST_AREA.position
+		_frost_mat = ShaderMaterial.new()
+		_frost_mat.shader = MinionView.FROST_SHADER
+		_frost_mat.set_shader_parameter("size", FROST_AREA.size)
+		_frost_mat.set_shader_parameter("arch", 1.0)
+		_frost_mat.set_shader_parameter("center", PORTRAIT.get_center() - o)
+		_frost_mat.set_shader_parameter("radii", Vector2(PORTRAIT.size.x / 2.0, PORTRAIT.size.x * 0.3))  # (Art.outline's arch)
+		_frost_mat.set_shader_parameter("box", Vector4(PORTRAIT.position.x - o.x, PORTRAIT.position.y - o.y, PORTRAIT.end.x - o.x, PORTRAIT.end.y - o.y))
+		_frost_mat.set_shader_parameter("hole_a", Vector3(112 - o.x, 108 - o.y, 19))  # the gems stay clear
+		_frost_mat.set_shader_parameter("hole_b", Vector3(18 - o.x, 108 - o.y, 19))
+		_frost_mat.set_shader_parameter("cell", 15.0)
+	return _frost_mat
+
+
+func _process(delta: float) -> void:
+	super(delta)
+	frost = MinionView.set_frost(self, frost, s != null and s.has("FROZEN"), _frost_material(), FROST_AREA)
+
+
 func _draw() -> void:
-	var r := Rect2(Vector2(10, 6), SIZE - Vector2(20, 14))
+	var r := PORTRAIT
 	var cls: String = Decks.card_class(s.card_id) if Decks.heroes().values().has(s.card_id) else s.card().get("cardClass", "NEUTRAL")
 	var outline := Art.outline("arch", r)
 	var gl := shown_glow()
@@ -51,16 +79,6 @@ func _draw() -> void:
 	draw_colored_polygon(Art.outline("arch", r.grow(2)), Palette.of_class(cls).darkened(0.3))
 	Art.paint_in(self, r, s.card_id, "arch")
 	Frames.ring(self, outline, Frames.GOLD, 3)
-	if s.has("FROZEN"):  # frost over the portrait and an icy rim
-		var ice := Sprites.get_tex("ice")
-		if ice:
-			var uv := PackedVector2Array()
-			for p in outline:
-				uv.append((p - r.position) / r.size)
-			draw_colored_polygon(outline, Color(0.85, 0.95, 1.0, 0.55), uv, ice)
-		else:
-			draw_colored_polygon(outline, Color(0.6, 0.85, 1.0, 0.45))
-		Frames.ring(self, outline, Color(0.85, 0.96, 1.0, 0.95), 4)
 	if s.has("IMMUNE"):
 		Frames.ring(self, Art.outline("arch", r.grow(4)), Color(1, 0.9, 0.3), 3)
 	if s.has("ELUSIVE"):  # spells and hero powers can't pick it (Kobold Monk): a golden haze, as on an Elusive minion

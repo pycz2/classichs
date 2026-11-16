@@ -17,6 +17,11 @@ var glow := Color.TRANSPARENT
 var opp_mark := false
 const MARK_OUT := 8.0
 var _pops := {}  # a number that just changed ("atk", "hp", "armor", "cost") -> 1.0 down to 0.0
+## A short bright light (flash()): its colour and how much of it is left (1.0 down to 0.0).
+var flash_color := Color.TRANSPARENT
+var _flash := 0.0
+## How many times it flashed (tests see it even when Anim.instant makes it end at once).
+var flashes := 0
 
 
 var _under_mouse := false
@@ -37,6 +42,8 @@ func _init() -> void:
 ## The glow to draw: the game's (playable, selected, target), else a soft light
 ## while the mouse is over it.
 func shown_glow() -> Color:
+	if _flash > 0.0:  # something just happened to it: a light over its own glow for a moment
+		return Color(flash_color, flash_color.a * minf(1.0, _flash * 1.6)) if glow.a <= 0.0 or _flash > 0.35 else glow
 	if glow.a > 0.0:
 		return glow
 	if opp_mark:
@@ -131,6 +138,15 @@ func pop(stat: String) -> void:
 		queue_redraw()
 
 
+## A bright light around it that fades (an effect reached it: a Hero Power changed, a card in the hand buffed).
+func flash(col := Color(1.0, 0.9, 0.45)) -> void:
+	flashes += 1
+	flash_color = col
+	if Anim.d(0.7) > 0.0:
+		_flash = 1.0
+		queue_redraw()
+
+
 ## How big a number draws now (1.0 when it is not popping).
 func bump(stat: String) -> float:
 	var p: float = _pops.get(stat, 0.0)
@@ -138,8 +154,10 @@ func bump(stat: String) -> float:
 
 
 func _process(delta: float) -> void:
-	if glow.a > 0.0:
+	if glow.a > 0.0 or _flash > 0.0:
 		queue_redraw()  # the glow pulses
+	if _flash > 0.0:
+		_flash = maxf(0.0, _flash - delta / maxf(0.01, Anim.d(0.7)))
 	if _pops.is_empty():
 		return
 	for k in _pops.keys():
