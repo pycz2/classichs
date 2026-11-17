@@ -4,6 +4,21 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+### Ajouté
+- La table montre où un effet porte. Quand des cartes en main sont améliorées, une bande de lumière passe sur la main et des flèches montent au-dessus des cartes. Un effet sur un deck le fait enfler et un anneau s'allume au-dessus. Un pouvoir héroïque nouveau ou moins cher s'illumine à sa place.
+- Une carte mélangée dans un deck (le vôtre ou celui de l'adversaire) vole jusqu'à ce deck depuis ce qui l'y envoie : le sort joué, un serviteur, un héros, une main ou l'autre deck. Une carte ajoutée à une main vole aussi depuis sa source : Larcin prend des cartes au héros adverse, une carte créée par un serviteur sort du serviteur. Une carte que vous ne devez pas voir vole face cachée.
+- Joute : une carte sort de chaque deck, chacune avec le nom de son propriétaire et son coût en grand à côté. La carte gagnante s'illumine, la perdante s'assombrit, puis les deux retournent dans leurs decks.
+- Les effets de début de partie se voient sur la table. La carte de Baku la Gobe-lune ou de Genn Grisetête vole dans le pouvoir héroïque, qui s'illumine, nouveau ou moins cher. Cinq serviteurs légendaires volent de la carte du Prince Malchezaar dans le deck, et l'historique a une ligne pour lui.
+- Un sort à cible, pendant que vous visez, devient un tourbillon de lumière de son élément au départ de la flèche. Ramené vers la main, il redevient une carte. L'adversaire ne voit toujours que la flèche partant du dos de la carte.
+- Un Secret qui se déclenche s'affiche en grand juste au-dessus de sa place : son dos grandit et se retourne en carte, avec le son de révélation propre au Secret.
+- Le bouton Fin de tour se retourne sur son autre face quand le tour passe à l'adversaire et inversement.
+- L'historique a des lignes pour les cartes cachées améliorées : « 3 cartes du deck de l'adversaire reçoivent +1/+1 ».
+
+### Modifié
+- Les chiffres des cartes en main sont colorés comme sur le plateau : Attaque et Vie au-dessus de ceux imprimés en vert, en dessous en rouge, et ils clignotent quand ils changent. Le coût d'un pouvoir héroïque est vert quand il baisse et rouge quand il augmente. L'Attaque d'une arme en dessous de celle imprimée est maintenant rouge.
+- Les dégâts et le gel arrivent au même moment : Éclair de givre, Cône de froid, Blizzard et le coup d'un Élémentaire d’eau frappent et gèlent d'un coup.
+- Un nouveau gel : des cristaux de glace s'étendent sur le portrait depuis le bord, du givre borde le contour, des reflets courent sur la glace. Quand un serviteur ou un héros dégèle, la glace fond.
+
 ## [0.71.1] - 2026-11-13
 
 ### Corrigé

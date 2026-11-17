@@ -4,6 +4,21 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+### Adicionado
+- A mesa mostra onde um efeito acerta. Quando cards na mão são melhorados, uma faixa de luz passa pela mão e setas sobem sobre os cards. Um efeito no deck faz o deck crescer e um anel brilhar sobre ele. Um Poder Heroico novo ou mais barato se ilumina no seu lugar.
+- Um card embaralhado em um deck (o seu ou o do oponente) voa para esse deck a partir do que o mandou: o feitiço jogado, um lacaio, um herói, uma mão ou o outro deck. Um card adicionado à mão também voa da sua origem: Roubar pega cards do herói do oponente, um card criado por um lacaio sai do lacaio. Um card que você não pode ver voa virado para baixo.
+- Justa: um card sai de cada deck, cada um com o nome do dono e o custo em destaque ao lado. O card vencedor se ilumina, o perdedor escurece, e depois os dois voltam para os decks.
+- Os efeitos de Início de Jogo aparecem na mesa. O card de Baku, a Devoradora da Lua, ou de Genn Greymane voa para o Poder Heroico, que se ilumina, novo ou mais barato. Cinco lacaios lendários voam do card do Príncipe Malquezaar para o deck, e o histórico tem uma linha para ele.
+- Um feitiço com alvo, enquanto você mira, vira um redemoinho de luz do seu elemento no começo da seta. Se voltar para a mão, vira card de novo. O oponente continua vendo só a seta saindo do verso do card.
+- Um Segredo que dispara aparece grande logo acima do seu lugar: o verso cresce e vira o card, com o som de revelação do próprio Segredo.
+- O botão Encerrar Turno vira para o outro lado quando o turno passa para o oponente e de volta.
+- O histórico tem linhas para melhorias em cards ocultos: "3 cartas do deck do oponente recebem +1/+1".
+
+### Alterado
+- Os números dos cards na mão são coloridos como no tabuleiro: Ataque e Vida acima dos impressos em verde, abaixo em vermelho, e piscam quando mudam. O custo de um Poder Heroico fica verde quando fica mais barato e vermelho quando fica mais caro. O Ataque de uma arma abaixo do impresso agora é vermelho.
+- Dano e congelamento chegam no mesmo momento: Seta de Gelo, Cone de Frio, Nevasca e o golpe de um Elemental da Água acertam e congelam juntos.
+- Novo congelamento: cristais de gelo crescem sobre o retrato a partir da borda, há geada no contorno e brilhos correm pelo gelo. Quando um lacaio ou herói descongela, o gelo derrete.
+
 ## [0.71.1] - 2026-11-13
 
 ### Corrigido

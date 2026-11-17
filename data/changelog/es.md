@@ -4,6 +4,21 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+### Añadido
+- La mesa muestra dónde cae un efecto. Cuando se mejoran cartas en la mano, una franja de luz pasa por la mano y suben flechas sobre las cartas. Un efecto sobre un mazo lo hace crecer y brilla un anillo encima. Un poder de héroe nuevo o más barato se ilumina en su sitio.
+- Una carta barajada en un mazo (el tuyo o el del oponente) vuela a ese mazo desde lo que la envió: el hechizo jugado, un esbirro, un héroe, una mano o el otro mazo. Una carta añadida a una mano también vuela desde su origen: Pillaje toma cartas del héroe rival, una carta creada por un esbirro sale del esbirro. Una carta que no puedes ver vuela boca abajo.
+- Justa: sale una carta de cada mazo, cada una con el nombre de su dueño y su coste en grande al lado. La carta ganadora se ilumina, la perdedora se oscurece y luego ambas vuelven a sus mazos.
+- Los efectos de inicio de partida se ven en la mesa. La carta de Baku la Devoralunas o de Genn Cringrís vuela al poder de héroe, que se ilumina, nuevo o más barato. Cinco esbirros legendarios vuelan de la carta del Príncipe Malchezaar al mazo, y el historial tiene una línea para él.
+- Un hechizo con objetivo, mientras apuntas, se convierte en un remolino de luz de su elemento al inicio de la flecha. Si lo devuelves a la mano, vuelve a ser una carta. El oponente sigue viendo solo la flecha desde el dorso de la carta.
+- Un secreto que se activa aparece en grande justo encima de su sitio: su dorso crece y se da la vuelta como carta, con el sonido de revelación propio del secreto.
+- El botón Fin de turno se da la vuelta cuando el turno pasa al oponente y al revés.
+- El historial tiene líneas para mejoras de cartas ocultas: «3 cartas del mazo del oponente obtienen +1/+1».
+
+### Cambiado
+- Los números de las cartas en la mano se colorean como en el tablero: Ataque y Salud por encima de los impresos en verde, por debajo en rojo, y destellan al cambiar. El coste de un poder de héroe es verde cuando baja y rojo cuando sube. El Ataque de un arma por debajo del impreso ahora es rojo.
+- El daño y la congelación llegan en el mismo momento: Descarga de Escarcha, Cono de frío, Ventisca y el golpe de un Elemental de agua golpean y congelan a la vez.
+- Nueva congelación: cristales de hielo crecen sobre el retrato desde el borde, hay escarcha en el contorno y brillos recorren el hielo. Cuando un esbirro o un héroe se descongela, el hielo se derrite.
+
 ## [0.71.1] - 2026-11-13
 
 ### Corregido

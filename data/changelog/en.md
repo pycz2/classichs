@@ -4,6 +4,21 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+### Added
+- The table shows where an effect lands. When cards in a hand are buffed, a band of light passes over the hand and arrows rise over the cards. An effect on a deck makes the deck swell and a ring flash over it. A new or cheaper Hero Power lights up in its place.
+- A card shuffled into a deck (yours or the opponent's) flies into that deck from whatever sent it: the spell played, a minion, a hero, a hand or the other deck. A card added to a hand flies from its source too: Burgle takes cards from the opponent's hero, Thoughtsteal from their deck, a card made by a minion comes out of the minion. A card you may not see flies as a card back.
+- Joust: a card flies out of each deck, each one labelled with whose it is and its cost shown big beside it. The winning card lights up, the losing one darkens, then both go back into their decks.
+- Start of Game effects show on the table. The card of Baku the Mooneater or Genn Greymane flies into the Hero Power, which lights up, new or cheaper. Five Legendary minions fly from Prince Malchezaar's card into the deck, and the history has a line for him.
+- A targeted spell, while you aim it, becomes a swirl of light of its element at the start of the arrow. Bring it back to the hand and it is a card again. The opponent still sees only the arrow from the card's back.
+- A Secret that goes off shows big right over its place: its back grows and turns over into the card, with the Secret's own reveal sound.
+- The End Turn button turns over to its other side when the turn passes to the opponent and back.
+- The history has lines for buffs on hidden cards: "3 cards in Opponent's deck get +1/+1".
+
+### Changed
+- The numbers of cards in the hand are coloured as on the board: Attack and Health above the printed ones green, below them red, and they flash when they change. A Hero Power's cost is green when it got cheaper and red when dearer. A weapon's Attack below the printed one is now red.
+- Damage and freeze land at the same moment: Frostbolt, Cone of Cold, Blizzard and a Water Elemental's blow hit and freeze at once.
+- A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.
+
 ## [0.71.1] - 2026-11-13
 
 ### Fixed
