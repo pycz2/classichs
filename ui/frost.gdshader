@@ -69,18 +69,19 @@ void fragment() {
 	// the frost grows in from the edge, crystal by crystal
 	float front = p * 1.45 - depth - h * 0.3;
 	float cover = smoothstep(0.0, 0.07, front);
-	// facets: each crystal its own shade of ice, lit from the top left
+	// facets: each crystal its own shade of icy blue, lit from the top left; thick frost at the edge, thin in the
+	// middle (the portrait shows through), bright crystal borders
 	vec2 tilt = hash2(near + 3.1) - 0.5;
 	float lit = 0.5 + 0.5 * dot(normalize(tilt + vec2(0.001)), vec2(-0.7, -0.7));
-	vec3 ice = mix(vec3(0.62, 0.82, 1.0), vec3(0.93, 0.98, 1.0), lit * 0.7 + h * 0.3);
-	float alpha = (0.28 + 0.22 * lit) * cover + vein * 0.55 * cover;
+	vec3 ice = mix(vec3(0.35, 0.62, 0.98), vec3(0.72, 0.88, 1.0), lit * 0.6 + (1.0 - depth) * 0.4);
+	float alpha = (mix(0.42, 0.08, depth) + 0.06 * lit) * cover + vein * mix(0.5, 0.18, depth) * cover;
 	// a frost rim just inside the edge
 	float rim = (1.0 - smoothstep(0.0, 4.5, d)) * smoothstep(-1.0, 0.5, d) * smoothstep(0.0, 0.25, p);
 	// glints: a slow light sweeping across, and a few crystals twinkling
 	float sweep = pow(max(0.0, sin((px.x + px.y) * 0.045 - TIME * 1.1 + seed)), 28.0);
 	float twinkle = step(0.86, h) * pow(0.5 + 0.5 * sin(TIME * (1.5 + h * 3.0) + h * 40.0), 8.0) * (1.0 - smoothstep(0.0, 0.25, sqrt(d1)));
-	vec3 col = ice + vec3(0.25) * vein + vec3(1.0) * (sweep * 0.5 + twinkle);
+	vec3 col = ice + vec3(0.2) * vein + vec3(1.0) * (sweep * 0.5 + twinkle);
 	alpha = alpha + rim * 0.95 + (sweep * 0.35 + twinkle * 0.8) * cover;
 	alpha *= smoothstep(-1.2, 0.3, d) * hole(px, hole_a) * hole(px, hole_b) * hole(px, hole_c);
-	COLOR = vec4(mix(col, vec3(0.95, 0.99, 1.0), rim * 0.6), clamp(alpha, 0.0, 0.9));
+	COLOR = vec4(mix(col, vec3(0.95, 0.99, 1.0), rim * 0.6), clamp(alpha, 0.0, 0.85));
 }

@@ -1973,11 +1973,16 @@ static func steps(events: Array, aimed := -1) -> Array:
 const COLD := ["damage", "freeze", "divine_shield_lost"]
 
 
-## The freezes right after an attack's blow, by one of its two on one of its two (Water Elemental): they land with it.
+## The freezes right after an attack's blow (past its after_attack), by one of its two on one of its two (Water
+## Elemental): they land with it. Returns the end of the step (j when there are none).
 static func _freezes(events: Array, j: int, ids: Array) -> int:
-	while j < events.size() and events[j].type == "freeze" and ids.has(events[j].get("by_id", -1)) and ids.has(events[j].get("target", -1)):
-		j += 1
-	return j
+	var k := j
+	while k < events.size() and events[k].type == "after_attack":
+		k += 1
+	var f := k
+	while f < events.size() and events[f].type == "freeze" and ids.has(events[f].get("by_id", -1)) and ids.has(events[f].get("target", -1)):
+		f += 1
+	return f if f > k else j
 
 
 ## An event of an attack's blow: the two hits, a Divine Shield or armor taking one.
@@ -2287,7 +2292,10 @@ func _step_apply(st: Dictionary) -> Dictionary:
 				elif v is CardView and ev.type == "buff":  # a card in a hand: its numbers now (green or red), a light on it
 					if v.face_up and g.ent(id):
 						v.show_entity(g.ent(id), g)
-					v.flash(Palette.BUFFED if int(ev.get("atk", 0)) + int(ev.get("hp", 0)) >= 0 else Frames.DAMAGED)
+					var up: bool = int(ev.get("atk", 0)) + int(ev.get("hp", 0)) >= 0
+					v.flash(Color(1.0, 0.95, 0.55) if up else Frames.DAMAGED)  # (gold: hand cards glow green when playable)
+					if not Anim.instant and is_inside_tree():
+						TableFx.spawn(_fx, "buff" if up else "debuff", v.position + v.size * v.scale / 2.0, Palette.BUFFED if up else Frames.DAMAGED)
 	if moved:
 		_stage_refresh()
 	for id in before:  # a number that changed grows for a moment
@@ -2966,12 +2974,15 @@ func _shuffle_origin(ev: Dictionary) -> Vector2:
 	var p := int(ev.player)
 	if _was_hidden.has(int(ev.get("entity", -1))):
 		return _pile_center(1 - p)
-	var at = _origin(ev)
+	var at = _origin({"entity": ev.get("entity", -1)})
 	if at != null:
 		return at
-	if _sog_cards.has(p) and is_instance_valid(_sog_cards[p]):
+	if _sog_cards.has(p) and is_instance_valid(_sog_cards[p]):  # (its cards' source is the hero: the card shows instead)
 		var cv: CardView = _sog_cards[p]
 		return cv.position + cv.size * cv.scale / 2.0
+	at = _origin({"by_id": ev.get("by_id", -1)})
+	if at != null:
+		return at
 	var src := g.ent(int(ev.get("by_id", -1)))
 	return _center_of(g.players[src.controller if src else p].hero.id)
 
@@ -2994,6 +3005,9 @@ func _shuffle(st: Dictionary) -> void:
 	for k in n:
 		_fly_into_deck(plan[k].card, plan[k].from, plan[k].player, 0.09 * k)
 	await _wait(0.62 + 0.09 * (n - 1))
+	for p in _sog_cards:  # a Start of Game card whose cards are in: it goes
+		_fade_card(_sog_cards[p])
+	_sog_cards.clear()
 
 
 ## A card flies from at into player p's deck (after delay seconds); the pile grows by it.
@@ -3043,6 +3057,8 @@ func _place_of(ev: Dictionary) -> String:
 	var t := _target_id(ev)
 	if t < 0 or ev.type in ["transform", "return_to_hand"]:
 		return ""
+	if _views.has(t) and _views[t].get_meta("kind") != "hand":
+		return ""  # on the table now (where the game puts it later does not matter)
 	var e := g.ent(t)
 	if e != null and e.zone == "HAND":
 		return "hand %d" % e.controller
@@ -3083,6 +3099,7 @@ func _light_place(place: String, col: Color) -> void:
 	else:
 		_pulse_node(_pile_of(p), 1.15)
 		TableFx.spawn(_fx, "gain", _pile_center(p), col)
+		TableFx.spawn(_fx, "buff", _pile_center(p), col)  # (rising sparks: what reached it shows)
 
 
 ## Costs that changed in a hand without an event of their own (Emperor Thaurissan, an aura): those cards
@@ -3112,10 +3129,9 @@ func _power_changed(st: Dictionary) -> void:
 	_step_sounds(st)
 	_stage_refresh()  # (the new one comes in)
 	var v: EntityView = _views.get(g.players[int(ev.player)].hero_power.id)
-	if v:
+	if v:  # (it grows into its place by itself)
 		TableFx.spawn(_fx, "gain", _home_of(v.entity_id), Color(1.0, 0.85, 0.4))
 		v.flash()
-		_pulse_node(v, 1.3)
 	await _wait(0.45)
 
 
@@ -3181,40 +3197,52 @@ func _joust(ev: Dictionary) -> void:
 			c.label.queue_free()
 		return
 	Sound.play("draw")
-	for c in shown:  # out of the deck, face down, turning over as it arrives
+	for c in shown:  # out of the deck face down, then it turns over
 		var cv: CardView = c.view
 		var at: Vector2 = cv.position
 		cv.position = _pile_center(c.owner) - cv.size / 2.0
-		cv.scale = Vector2(0.5, 0.5)
+		cv.scale = Vector2(0.6, 0.6)
 		cv.face_up = false
 		var tw := cv.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		tw.tween_property(cv, "position", at, Anim.d(0.35))
-		tw.parallel().tween_property(cv, "scale", Vector2(0.05, 1.0), Anim.d(0.35))
+		tw.parallel().tween_property(cv, "scale", Vector2.ONE, Anim.d(0.35))
+		tw.tween_property(cv, "scale:x", 0.0, Anim.d(0.1))
 		tw.tween_callback(func(): cv.face_up = true)
-		tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.12))
+		tw.tween_property(cv, "scale:x", 1.0, Anim.d(0.12))
 		c.label.modulate.a = 0.0
 		c.label.create_tween().tween_property(c.label, "modulate:a", 1.0, Anim.d(0.25)).set_delay(Anim.d(0.3))
-	await _wait(0.6)
-	var vs := Palette.label(" : ".join(shown.map(func(c): return str(c.cost))) if shown.size() == 2 else "", 34, Palette.ATTACK)
-	vs.add_theme_constant_override("outline_size", 8)
-	vs.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vs.size = Vector2(160, 50)
-	vs.position = JOUST_AT + Vector2(-80, -25)
-	vs.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vs.z_index = 64
-	_fx.add_child(vs)
+	await _wait(0.7)
+	var costs := []  # each card's cost, big beside it: the higher one wins
 	for c in shown:
-		(c.view as CardView).pop("cost")
-	await _wait(0.45)
-	for c in shown:
+		var cv: CardView = c.view
+		var n := Palette.label(str(c.cost), 46, Color("8fc3ff"))
+		n.add_theme_constant_override("outline_size", 10)
+		n.size = Vector2(70, 60)
+		n.position = cv.position + Vector2(-78, cv.size.y / 2.0 - 30)
+		n.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		n.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		n.z_index = 64
+		n.pivot_offset = n.size / 2.0
+		n.scale = Vector2(0.3, 0.3)
+		_fx.add_child(n)
+		n.create_tween().tween_property(n, "scale", Vector2.ONE, Anim.d(0.2)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		cv.pop("cost")
+		costs.append(n)
+	await _wait(0.5)
+	for i in shown.size():
+		var c: Dictionary = shown[i]
 		var cv: CardView = c.view
 		if c.won:
 			cv.set_glow(Palette.SELECTED)
 			cv.create_tween().tween_property(cv, "scale", Vector2(1.12, 1.12), Anim.d(0.2)).set_trans(Tween.TRANS_BACK)
+			costs[i].add_theme_color_override("font_color", Palette.ATTACK)
+			_pulse_node(costs[i], 1.3)
 		else:
 			cv.create_tween().tween_property(cv, "modulate", Color(0.42, 0.42, 0.42), Anim.d(0.2))
+			costs[i].modulate = Color(0.55, 0.55, 0.55)
 	await _wait(1.0)
-	vs.queue_free()
+	for n in costs:
+		n.queue_free()
 	for c in shown:  # back into their decks
 		var cv: CardView = c.view
 		c.label.queue_free()

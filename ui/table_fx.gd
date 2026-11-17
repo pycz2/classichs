@@ -7,7 +7,7 @@ extends Control
 
 const LIFE := {"hurt": 0.55, "heal": 0.8, "buff": 0.8, "debuff": 0.7, "gain": 0.6, "freeze": 0.8,
 	"silence": 0.7, "smoke": 0.8, "destroy": 0.7, "portal": 0.8, "skull": 1.1, "battlecry": 0.6,
-	"whoosh": 0.6, "control": 0.8, "armor": 0.7, "pop": 0.5, "sweep": 0.7}
+	"whoosh": 0.6, "control": 0.8, "armor": 0.7, "pop": 0.5, "sweep": 0.9}
 ## The colour of an effect when its card has no element of its own.
 const COLORS := {"hurt": Color("ff7b2e"), "heal": Color("8ce99a"), "buff": Color("ffd43b"), "debuff": Color("b197fc"),
 	"gain": Color("ffffff"), "freeze": Color("a5d8ff"), "silence": Color("b197fc"), "smoke": Color("f783ac"),
@@ -158,13 +158,15 @@ func _draw() -> void:
 		"sweep":  # a band of light passing over a hand, left to right, with sparks rising from it
 			var x := -span.x / 2.0 + span.x * t
 			var h := span.y / 2.0
-			for i in 5:
-				var w := 10.0 + i * 12.0
-				draw_rect(Rect2(Vector2(x - w / 2.0, -h), Vector2(w, span.y)), Color(color, 0.09 * fade))
-			draw_line(Vector2(x, -h), Vector2(x, h), Color(color.lightened(0.5), 0.8 * fade), 3, true)
-			for i in 6:
-				var y := h - span.y * fmod(t * 1.7 + i * 0.17, 1.0)
-				_star(Vector2(x + (i - 2.5) * 9.0, y), 3 + 2 * (i % 2), Color(color.lightened(0.4), fade))
+			var a := minf(1.0, 4.0 * fade)
+			for i in 6:  # a soft band, brightest in its middle
+				var w := 14.0 + i * 16.0
+				draw_rect(Rect2(Vector2(x - w / 2.0, -h), Vector2(w, span.y)), Color(color, 0.12 * a))
+			draw_rect(Rect2(Vector2(-span.x / 2.0, -h), Vector2(span.x * t, span.y)), Color(color, 0.1 * a))  # the part passed glows
+			draw_line(Vector2(x, -h), Vector2(x, h), Color(color.lightened(0.6), 0.95 * a), 4, true)
+			for i in 10:
+				var y := h - span.y * fmod(t * 1.7 + i * 0.11, 1.0)
+				_star(Vector2(x + (i - 4.5) * 10.0, y), 3 + 2 * (i % 2), Color(color.lightened(0.5), a))
 		"armor":  # a grey shield popping up
 			var s := 1.0 + 0.3 * sin(t * PI)
 			var pts := PackedVector2Array([Vector2(-14, -16), Vector2(14, -16), Vector2(12, 4), Vector2(0, 18), Vector2(-12, 4)])

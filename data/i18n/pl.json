@@ -904,5 +904,13 @@
 "%s fades from Opponent's hand": "%s rozpływa się w ręce przeciwnika",
 "Start of Game: your %s": "Początek gry: twoja karta %s",
 "Start of Game: Opponent's %s": "Początek gry: karta przeciwnika %s",
-"%s repeats the Battlecry of %s": "%s powtarza Okrzyk bojowy karty %s"
+"%s repeats the Battlecry of %s": "%s powtarza Okrzyk bojowy karty %s",
+"A card in your hand gets %+d/%+d": "Karta w twojej ręce otrzymuje %+d/%+d",
+"A card in Opponent's hand gets %+d/%+d": "Karta w ręce przeciwnika otrzymuje %+d/%+d",
+"%d cards in your hand get %+d/%+d": "Kart w twojej ręce: %d, każda otrzymuje %+d/%+d",
+"%d cards in Opponent's hand get %+d/%+d": "Kart w ręce przeciwnika: %d, każda otrzymuje %+d/%+d",
+"A card in your deck gets %+d/%+d": "Karta w twojej talii otrzymuje %+d/%+d",
+"A card in Opponent's deck gets %+d/%+d": "Karta w talii przeciwnika otrzymuje %+d/%+d",
+"%d cards in your deck get %+d/%+d": "Kart w twojej talii: %d, każda otrzymuje %+d/%+d",
+"%d cards in Opponent's deck get %+d/%+d": "Kart w talii przeciwnika: %d, każda otrzymuje %+d/%+d"
 }

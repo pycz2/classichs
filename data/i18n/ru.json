@@ -904,5 +904,13 @@
 "%s fades from Opponent's hand": "«%s» исчезает из руки соперника",
 "Start of Game: your %s": "Начало матча: ваша карта «%s»",
 "Start of Game: Opponent's %s": "Начало матча: карта соперника «%s»",
-"%s repeats the Battlecry of %s": "%s повторяет боевой клич карты «%s»"
+"%s repeats the Battlecry of %s": "%s повторяет боевой клич карты «%s»",
+"A card in your hand gets %+d/%+d": "Карта в вашей руке получает %+d/%+d",
+"A card in Opponent's hand gets %+d/%+d": "Карта в руке соперника получает %+d/%+d",
+"%d cards in your hand get %+d/%+d": "Карт в вашей руке: %d, каждая получает %+d/%+d",
+"%d cards in Opponent's hand get %+d/%+d": "Карт в руке соперника: %d, каждая получает %+d/%+d",
+"A card in your deck gets %+d/%+d": "Карта в вашей колоде получает %+d/%+d",
+"A card in Opponent's deck gets %+d/%+d": "Карта в колоде соперника получает %+d/%+d",
+"%d cards in your deck get %+d/%+d": "Карт в вашей колоде: %d, каждая получает %+d/%+d",
+"%d cards in Opponent's deck get %+d/%+d": "Карт в колоде соперника: %d, каждая получает %+d/%+d"
 }

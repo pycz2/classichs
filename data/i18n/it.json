@@ -904,5 +904,13 @@
 "%s fades from Opponent's hand": "%s svanisce dalla mano dell'avversario",
 "Start of Game: your %s": "Inizio Partita: la tua carta %s",
 "Start of Game: Opponent's %s": "Inizio Partita: %s dell'avversario",
-"%s repeats the Battlecry of %s": "%s ripete il Grido di Battaglia di %s"
+"%s repeats the Battlecry of %s": "%s ripete il Grido di Battaglia di %s",
+"A card in your hand gets %+d/%+d": "Una carta nella vostra mano ottiene %+d/%+d",
+"A card in Opponent's hand gets %+d/%+d": "Una carta nella mano dell'avversario ottiene %+d/%+d",
+"%d cards in your hand get %+d/%+d": "%d carte nella vostra mano ottengono %+d/%+d",
+"%d cards in Opponent's hand get %+d/%+d": "%d carte nella mano dell'avversario ottengono %+d/%+d",
+"A card in your deck gets %+d/%+d": "Una carta nel vostro mazzo ottiene %+d/%+d",
+"A card in Opponent's deck gets %+d/%+d": "Una carta nel mazzo dell'avversario ottiene %+d/%+d",
+"%d cards in your deck get %+d/%+d": "%d carte nel vostro mazzo ottengono %+d/%+d",
+"%d cards in Opponent's deck get %+d/%+d": "%d carte nel mazzo dell'avversario ottengono %+d/%+d"
 }
