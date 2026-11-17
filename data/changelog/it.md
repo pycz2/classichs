@@ -8,6 +8,20 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Una partita sul server (classificata, amichevole, Arena, contro un bot) non si blocca più dopo una scelta che non cambia nulla di visibile. Succedeva con l’Adattamento del Volatile Malvagio dopo il suo attacco: scegliendo Provocazione, Furia del Vento o Scudo Divino, il giocatore non poteva fare nulla finché il timer non chiudeva il turno.
 - Nella schermata «Giochi» il pannello a destra con la descrizione del gioco scorre, e i pulsanti «Gioca a questo gioco» ed «Elimina» restano sotto, sempre visibili. Con una descrizione lunga finivano oltre il bordo inferiore della finestra, anche sul telefono.
 - La musica di un servitore leggendario quando viene giocato ora segue il volume degli effetti sonori, non quello della musica. Con la musica bassa si sentiva appena sotto i suoni della carta, con la musica spenta non suonava affatto.
+### Aggiunto
+- Il tavolo mostra dove arriva un effetto. Quando le carte in mano vengono potenziate, una fascia di luce passa sulla mano e frecce salgono sopra le carte. Un effetto sul mazzo lo fa gonfiare e un anello si accende sopra. Un Potere Eroe nuovo o più economico si illumina al suo posto.
+- Una carta mescolata in un mazzo (il vostro o quello dell'avversario) vola in quel mazzo da ciò che l'ha mandata: la magia giocata, un servitore, un eroe, una mano o l'altro mazzo. Anche una carta aggiunta alla mano vola dalla sua origine: Furto prende carte dall'eroe avversario, una carta creata da un servitore esce dal servitore. Una carta che non potete vedere vola coperta.
+- Giostra: da ogni mazzo esce una carta, ognuna con il nome del proprietario e il suo costo in grande accanto. La carta vincente si illumina, quella perdente si scurisce, poi entrambe tornano nei mazzi.
+- Gli effetti di Inizio Partita si vedono sul tavolo. La carta di Baku la Mangialune o di Genn Mantogrigio vola nel Potere Eroe, che si illumina, nuovo o più economico. Cinque servitori leggendari volano dalla carta del Principe Malchezaar nel mazzo, e la cronologia ha una riga per lui.
+- Una magia con bersaglio, mentre mirate, diventa un vortice di luce del suo elemento all'inizio della freccia. Riportata alla mano, torna una carta. L'avversario vede ancora solo la freccia dal dorso della carta.
+- Un Segreto che scatta appare in grande proprio sopra il suo posto: il dorso cresce e si gira nella carta, con il suono di rivelazione del Segreto stesso.
+- Il pulsante Fine Turno si gira sull'altro lato quando il turno passa all'avversario e viceversa.
+- La cronologia ha righe per i potenziamenti di carte nascoste: «3 carte nel mazzo dell'avversario ottengono +1/+1».
+
+### Modificato
+- I numeri delle carte in mano sono colorati come sul campo: Attacco e Salute sopra quelli stampati in verde, sotto in rosso, e lampeggiano quando cambiano. Il costo di un Potere Eroe è verde quando cala e rosso quando sale. L'Attacco di un'arma sotto quello stampato ora è rosso.
+- Danno e congelamento arrivano nello stesso momento: Dardo di Gelo, Cono di Freddo, Tormenta e il colpo di un Elementale dell'Acqua colpiscono e congelano insieme.
+- Un nuovo congelamento: cristalli di ghiaccio si allargano sul ritratto dal bordo, la brina segue il contorno, riflessi scorrono sul ghiaccio. Quando un servitore o un eroe si scongela, il ghiaccio si scioglie.
 
 ## [0.71.1] - 2026-11-13
 

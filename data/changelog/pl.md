@@ -8,6 +8,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Gra na serwerze (rankingowa, zwykła, Arena, z botem) nie zamiera już po wyborze, który nie zmienia niczego na widoku. Tak było z Adaptacją Agresywnego pisklęcia po jego ataku: po wybraniu Prowokacji, Furii wichru albo Boskiej tarczy gracz nie mógł nic zrobić, dopóki zegar nie zakończył tury.
 - Na ekranie „Gry” prawy panel z opisem gry się przewija, a przyciski „Graj w tę grę” i „Usuń” stoją pod nim i zawsze są widoczne. Przy długim opisie wychodziły poza dolną krawędź okna, także na telefonie.
 - Muzyka legendarnego stronnika przy zagraniu idzie teraz z głośnością efektów dźwiękowych, a nie muzyki. Przy ściszonej muzyce ledwo było ją słychać pod dźwiękami karty, a przy wyłączonej nie grała wcale.
+### Dodano
+- Stół pokazuje, gdzie trafia efekt. Gdy karty w ręce dostają wzmocnienie, przez rękę przechodzi pas światła, a nad kartami wznoszą się strzałki. Efekt na talię sprawia, że talia pulsuje i nad nią rozbłyska pierścień. Nowa lub tańsza moc specjalna rozbłyska na swoim miejscu.
+- Karta wtasowana do talii (twojej lub przeciwnika) leci do tej talii od tego, co ją tam wysłało: od zagranego zaklęcia, stronnika, bohatera, z ręki albo z drugiej talii. Karta dodana do ręki też leci ze swojego źródła: Włam bierze karty od bohatera przeciwnika, karta stworzona przez stronnika wylatuje ze stronnika. Karta, której nie możesz widzieć, leci rewersem do góry.
+- Pojedynek: z każdej talii wylatuje karta, każda podpisana imieniem właściciela, obok duży koszt. Wygrana karta rozbłyska, przegrana ciemnieje, potem obie wracają do talii.
+- Efekty na początek gry widać na stole. Karta Baku, Pożeraczki Księżyca, albo Genna Szarogrzywego wlatuje w moc specjalną, która rozbłyska, nowa lub tańsza. Z karty Księcia Malkezara do talii lecą pięć legendarnych stronników, a w historii jest o nim linijka.
+- Zaklęcie z celem podczas celowania staje się wirem światła swojego żywiołu u początku strzałki. Wróci nad rękę, znów jest kartą. Przeciwnik nadal widzi tylko strzałkę od rewersu karty.
+- Sekret, który się uruchamia, pokazuje się duży tuż nad swoim miejscem: rewers rośnie i odwraca się w kartę, z własnym dźwiękiem odkrycia sekretu.
+- Przycisk Zakończ turę obraca się na drugą stronę, gdy tura przechodzi do przeciwnika i z powrotem.
+- Historia ma linijki o wzmocnieniu ukrytych kart: „Kart w talii przeciwnika: 3, każda otrzymuje +1/+1”.
+
+### Zmieniono
+- Liczby kart w ręce są pokolorowane jak na stole: atak i zdrowie powyżej nadrukowanych na zielono, poniżej na czerwono, i rozbłyskują przy zmianie. Koszt mocy specjalnej jest zielony, gdy spadł, i czerwony, gdy wzrósł. Atak broni poniżej nadrukowanego jest teraz czerwony.
+- Obrażenia i zamrożenie przychodzą w tej samej chwili: Pocisk lodu, Stożek zimna, Zamieć i cios Żywiołaka wody trafiają i zamrażają naraz.
+- Nowe zamrożenie: kryształki lodu rozrastają się po portrecie od brzegu, szron okala krawędź, po lodzie przebiegają odblaski. Gdy stronnik albo bohater odmarza, lód topnieje.
 
 ## [0.71.1] - 2026-11-13
 

@@ -50,13 +50,33 @@ func show_entity(e: GameView.Ent, g: GameView) -> void:
 	self_modulate = Color(ECHO.lightened(0.4), 0.72) if e.has("GHOSTLY") else Color.WHITE
 	if was >= 0 and was != cost:
 		pop("cost")
+	var was_atk := attack if was >= 0 else -1
+	var was_hp := health if was >= 0 else -1
 	if e.is_minion():
 		attack = e.atk()
 		health = e.health()
 	elif e.is_weapon():
 		attack = e.atk()
 		health = int(e.tags.get("DURABILITY", 0))
+	if was_atk >= 0 and was_atk != attack:
+		pop("atk")
+	if was_hp >= 0 and was_hp != health:
+		pop("hp")
 	queue_redraw()
+
+
+## The colours its numbers show against the card's own (green above, red below; the cost: green when cheaper).
+func cost_color() -> Color:
+	return Frames.cost_color(cost if cost >= 0 else int(CardDb.card(card_id).get("cost", 0)), int(CardDb.card(card_id).get("cost", 0)))
+
+
+func attack_color() -> Color:
+	return Frames.stat_color(attack, int(CardDb.card(card_id).get("attack", 0))) if attack >= 0 else Color.WHITE
+
+
+func health_color() -> Color:
+	var c := CardDb.card(card_id)
+	return Frames.stat_color(health, int(c.get("health", c.get("durability", 0)))) if health >= 0 else Color.WHITE
 
 
 func lang() -> String:
@@ -162,20 +182,18 @@ func _draw() -> void:
 		var plate := Rect2(Vector2(60 * k - rw / 2.0 - 5 * k, 158 * k), Vector2(rw + 10 * k, 11 * k))
 		draw_style_box(Palette.raw_box(Color("2a2118"), int(4 * k), Frames.GOLD.darkened(0.25), maxi(1, int(1.5 * k))), plate)
 		draw_string(rf, Vector2(plate.position.x + 5 * k, plate.position.y + 8.6 * k), race, HORIZONTAL_ALIGNMENT_LEFT, -1, rs, Color("f4ead5"))
-	var base_cost := int(c.get("cost", 0))
-	var shown_cost := cost if cost >= 0 else base_cost
-	var cost_color := Color.WHITE if shown_cost == base_cost else (Frames.BUFFED if shown_cost < base_cost else Frames.DAMAGED)
-	Frames.mana(self, Vector2(17, 17) * k, shown_cost, 15 * k * bump("cost"), cost_color)
+	var shown_cost := cost if cost >= 0 else int(c.get("cost", 0))
+	Frames.mana(self, Vector2(17, 17) * k, shown_cost, 15 * k * bump("cost"), cost_color())
 	if type == "HERO" and int(c.get("armor", 0)) > 0:  # the Armor it gives, on the shield where a minion's Health goes
 		Frames.shield(self, Vector2(103, 154) * k, int(c.armor), 14 * k)
 	if type == "MINION" or type == "WEAPON":
 		var a := attack if attack >= 0 else int(c.get("attack", 0))
 		var h := health if health >= 0 else int(c.get("health", c.get("durability", 0)))
-		Frames.attack(self, Vector2(17, 154) * k, a, 15 * k)
+		Frames.attack(self, Vector2(17, 154) * k, a, 15 * k * bump("atk"), attack_color())
 		if type == "MINION":
-			Frames.health(self, Vector2(103, 154) * k, h, 15 * k)
+			Frames.health(self, Vector2(103, 154) * k, h, 15 * k * bump("hp"), health_color())
 		else:
-			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k, Frames.durability_color(h, c), "durability")
+			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k * bump("hp"), health_color(), "durability")
 	if echo:
 		var at := Vector2(103, 17) * k
 		draw_circle(at, 10 * k, Color("2b1846"))
