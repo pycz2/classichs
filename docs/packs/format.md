@@ -279,7 +279,8 @@ Audio files are `.opus` (preferred: Ogg Opus at 48 kHz), `.ogg` (Ogg Vorbis), `.
   effect goes off (a trigger, a Deathrattle, a Battlecry; not a spell's or a hero power's); `reveal` a Secret
   revealed (else its `trigger`); `complete` a Quest done; `progress` a Quest's progress goes up; `choose` a
   Choose One or Discover it opens (one's own); `music` (a legendary's play music, Hearthstone's stinger)
-  when it is played from the hand: on the Music bus, the music ducks under it, its voice line plays as well.
+  when it is played from the hand: at the sound effects volume (heard with the music off), the music ducks
+  under it, its voice line plays as well.
   A card without its own sound for a moment gets the event's sound as before.
   A sound the chosen set lacks comes from the pack's default set.
 - `music/<set>/<name>`: `menu`, `battle_1` … `battle_N` (a shuffled playlist). Optional, taken only from the

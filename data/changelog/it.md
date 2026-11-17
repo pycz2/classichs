@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+### Corretto
+- Una partita sul server (classificata, amichevole, Arena, contro un bot) non si blocca più dopo una scelta che non cambia nulla di visibile. Succedeva con l’Adattamento del Volatile Malvagio dopo il suo attacco: scegliendo Provocazione, Furia del Vento o Scudo Divino, il giocatore non poteva fare nulla finché il timer non chiudeva il turno.
+- Nella schermata «Giochi» il pannello a destra con la descrizione del gioco scorre, e i pulsanti «Gioca a questo gioco» ed «Elimina» restano sotto, sempre visibili. Con una descrizione lunga finivano oltre il bordo inferiore della finestra, anche sul telefono.
+- La musica di un servitore leggendario quando viene giocato ora segue il volume degli effetti sonori, non quello della musica. Con la musica bassa si sentiva appena sotto i suoni della carta, con la musica spenta non suonava affatto.
+
 ## [0.71.1] - 2026-11-13
 
 ### Corretto

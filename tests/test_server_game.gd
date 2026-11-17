@@ -233,3 +233,78 @@ func test_the_table_uses_the_games_pack() -> void:
 	s.on_closed()
 	eq(str(why.back()), tr("You logged in on another device"), "why the game ended here")
 	s.free()
+
+
+## Choices that open in the middle of an attack (Vicious Fledgling: "After this attacks a hero, Adapt.") reach the
+## player of a server game: the choice window shows the three Adaptations, a pick goes to the server, and the turn goes
+## on (the owner's ranked game froze there until the turn timer ended the turn).
+func test_an_adapt_after_an_attack_is_offered_on_a_server() -> void:
+	if not _ungoro():
+		return
+	var f := Fake.new()
+	f.you = 0
+	Rules.request({"op": "new", "game": f.id, "seed": 9, "scenario": {"current": 0, "players": [
+		{"hero": "HERO_08", "board": ["UNG_075"], "deck": ["UNG_075", "UNG_075", "UNG_075"]},
+		{"hero": "HERO_01", "deck": ["UNG_075", "UNG_075", "UNG_075"]}]}})
+	var s := f.link.session({"t": "match", "game": GAME, "mode": "ranked", "you": 0, "opponent": {"user": "bob", "tag": "Bob1"}}, _deck())
+	var v := MatchView.new()
+	v.lobby = true
+	root().add_child(v)
+	s.started.connect(func(m: Match): v.bind_online(m, s))
+	f.link.dispatch(f.state([]))
+	var g := v.g
+	var bird: int = g.players[0].board[0].id
+	var attack: Array = v.controller.legal().filter(func(a): return a.type == "attack" and a.attacker == bird and a.defender == g.players[1].hero.id)
+	eq(attack.size(), 1, "the Fledgling may attack the hero")
+	v._act(attack[0])
+	f.serve(false)
+	check(not v.controller.waiting(), "the attack's state came: the table no longer waits")
+	eq(g.pending.get("player", -1), 0, "the server asks the player to Adapt")
+	var choice := v.find_child("Choice", true, false)
+	check(choice != null, "the choice window is open")
+	var cards: Array = choice.find_children("*", "CardView", true, false) if choice else []
+	eq(cards.size(), 3, "three Adaptations to pick from")
+	# an Adaptation that only gives a keyword (Taunt, Windfury, Divine Shield…): its state comes with no events
+	var quiet: Array = cards.filter(func(c): return c.card_id in ["UNG_999t5", "UNG_999t6", "UNG_999t7", "UNG_999t8", "UNG_999t10", "UNG_999t13"])
+	check(not quiet.is_empty(), "a keyword Adaptation is offered: %s" % [cards.map(func(c): return c.card_id)])
+	if not quiet.is_empty():
+		var got := []
+		v.controller.changed.connect(func(evs): got.append(evs))
+		quiet[0].clicked.emit(quiet[0])
+		eq(f.link.of("act").map(func(m): return m.action.type), ["choose"], "the pick goes to the server")
+		f.serve(false)
+		eq(got, [[]], "its state has no events")
+		check(f.snapshot().pending.is_empty(), "the server took it")
+		check(g.pending.is_empty(), "the table took it")
+		check(not v.controller.waiting(), "the table no longer waits: the player moves on")
+		v._act({"type": "end_turn", "player": 0})
+		eq(f.link.of("act").map(func(m): return m.action.type), ["end_turn"], "the next order goes to the server at once")
+	v.free()
+	_classic()
+
+
+static var _ungoro_pack: Pack
+
+
+## The Un'Goro pack (built from packs/ungoro once per process, installed for the test) made active.
+func _ungoro() -> bool:
+	if _ungoro_pack == null or not Packs.all().has(_ungoro_pack):
+		var out := OS.get_user_data_dir() + "/ungoro_test.cardpack"
+		if not FileAccess.file_exists(out):
+			var log := []
+			var code := OS.execute("python3", [ProjectSettings.globalize_path("res://tools/pack.py"), "build",
+				ProjectSettings.globalize_path("res://packs/ungoro"), "-o", out], log, true)
+			if code != 0:
+				check(false, "packs/ungoro builds: " + "".join(log).right(600))
+				return false
+		var r := Packs.install_file(out)
+		if r.has("error"):
+			check(false, "packs/ungoro installs: " + str(r.error))
+			return false
+		_ungoro_pack = r.pack
+	Packs.set_active(_ungoro_pack)
+	return true
+
+
+func _classic() -> void:
+	Packs.set_active(Packs.all().filter(func(p): return p.id() == Packs.CLASSIC and p.builtin())[0])

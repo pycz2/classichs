@@ -150,7 +150,7 @@ func test_lines_come_at_their_steps() -> void:
 	eq(_sound.said, "", "no line while it is shown")
 	check(_sound.heard.has("play_card"), "the card's whoosh")
 	eq(_sound.heard.back(), LEEROY + "_music", "and the legendary's play music")
-	check(_sound._stinger.playing and _sound._stinger.bus == "Music", "on the music bus")
+	check(_sound._stinger.playing and _sound._stinger.bus == "SFX", "on the sound effects bus (the card's own sound)")
 	check(_sound._ducking != null and _sound._ducking.is_running(), "the music ducks under it")
 	v._play_step(steps[1])  # it lands
 	eq(steps[1].k, "summon", "(the summon step)")
@@ -170,6 +170,31 @@ func test_lines_come_at_their_steps() -> void:
 	eq(_sound.said, "voice/en/%s_attack.opus" % LEEROY, "his attack line as he leaps")
 	eq(_sound.heard, [LEEROY + "_attack"], "his own attack sound, the blow not yet")
 	v.free()
+	_uninstall()
+
+
+## A legendary's play music is the card's own sound: it follows the sound effects volume, so it is heard
+## with the music turned down or off (on the Music bus it was silent then, and under the card's sounds else).
+func test_a_legendarys_music_plays_with_the_music_off() -> void:
+	_install()
+	var saved: Dictionary = Settings.data.duplicate(true)
+	Settings.data.music = 0.0
+	Settings.data.sfx = 0.8
+	Settings.apply()
+	var v := MatchView.new()
+	root().add_child(v)
+	v.bind(H.scene({"hero": "HERO_08", "hand": [LEEROY]}))
+	var m := v.controller
+	var r := m._apply({"type": "play", "player": 0, "entity": m.game.players[0].hand[0].id, "target": -1, "pos": 0, "choice": -1})
+	v._begin_batch({"events": r.events, "snap": m.game.snapshot, "hist": m.game.history.size()})
+	v._play_step(MatchView.steps(r.events)[0])
+	var bus := AudioServer.get_bus_index(_sound._stinger.bus)
+	check(_sound.heard.has(LEEROY + "_music") and _sound._stinger.playing, "the stinger starts")
+	check(bus >= 0 and not AudioServer.is_bus_mute(bus), "on a bus that is not muted with the music off: " + _sound._stinger.bus)
+	v._end_batch()
+	v.free()
+	Settings.data = saved
+	Settings.apply()
 	_uninstall()
 
 

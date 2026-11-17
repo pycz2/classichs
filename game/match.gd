@@ -276,14 +276,16 @@ func on_state(msg: Dictionary) -> void:
 	var who := actor()
 	_take_state(msg)
 	var events: Array = msg.get("events", [])
+	var a := _guess_action(events, who)
 	if not events.is_empty():
-		var a := _guess_action(events, who)
 		if a.type == "attack" and _sent.get("type", "") == "attack" and int(_sent.get("attacker", -1)) == int(a.attacker):
 			a.defender = int(_sent.get("defender", a.defender))  # what was asked (Misdirection changes the target)
 		_sent = {}
 		game.history.append({"turn": game.turn, "player": a.player, "action": a, "events": events})
-		if a.player == 1 - remote:
-			_waiting = false  # the state of this player's move (not one of the opponent's in between)
+	# the state of this player's move (not one of the opponent's in between); also one without events: a choice
+	# that changed nothing in sight (an Adapt giving Taunt or Windfury) waited until the turn timer ended the turn
+	if a.player == 1 - remote:
+		_waiting = false
 	if game.game_over:
 		_waiting = false
 	changed.emit(events)

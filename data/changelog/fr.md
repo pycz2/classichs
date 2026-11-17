@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+### Corrigé
+- Une partie sur le serveur (classée, normale, Arène, contre un bot) ne se fige plus après un choix qui ne change rien de visible. C’était le cas de l’Adaptation du Pterreurdactyle vicieux après son attaque : en choisissant Provocation, Furie des vents ou Bouclier divin, le joueur ne pouvait plus rien faire jusqu’à ce que le minuteur termine le tour.
+- Sur l’écran « Jeux », le panneau de droite avec la description du jeu défile, et les boutons « Jouer à ce jeu » et « Supprimer » restent en dessous, toujours visibles. Avec une longue description, ils passaient sous le bord de la fenêtre, sur téléphone aussi.
+- La musique d’un serviteur légendaire joué suit maintenant le volume des effets sonores et non celui de la musique. Musique baissée, on l’entendait à peine sous les sons de la carte ; musique coupée, elle ne jouait pas du tout.
+
 ## [0.71.1] - 2026-11-13
 
 ### Corrigé

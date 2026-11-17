@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+### Naprawiono
+- Gra na serwerze (rankingowa, zwykła, Arena, z botem) nie zamiera już po wyborze, który nie zmienia niczego na widoku. Tak było z Adaptacją Agresywnego pisklęcia po jego ataku: po wybraniu Prowokacji, Furii wichru albo Boskiej tarczy gracz nie mógł nic zrobić, dopóki zegar nie zakończył tury.
+- Na ekranie „Gry” prawy panel z opisem gry się przewija, a przyciski „Graj w tę grę” i „Usuń” stoją pod nim i zawsze są widoczne. Przy długim opisie wychodziły poza dolną krawędź okna, także na telefonie.
+- Muzyka legendarnego stronnika przy zagraniu idzie teraz z głośnością efektów dźwiękowych, a nie muzyki. Przy ściszonej muzyce ledwo było ją słychać pod dźwiękami karty, a przy wyłączonej nie grała wcale.
+
 ## [0.71.1] - 2026-11-13
 
 ### Naprawiono

@@ -294,6 +294,31 @@ func test_deleting_a_game_deletes_its_decks() -> void:
 	v.free()
 
 
+## A long description scrolls in the details; Play this game and Delete stay in the window under it.
+func test_a_long_description_scrolls_and_the_buttons_stay_in_the_window() -> void:
+	var manifest: Dictionary = _pack("neon").manifest.duplicate(true)
+	manifest.id = "neon-long"
+	var long := " ".join(range(120).map(func(_i): return "A very long description of this game."))
+	manifest.description = {"en": long, "ru": long}
+	var p: Pack = Packs.install(_repacked(FileAccess.get_file_as_bytes("res://packs/neon.cardpack"),
+		{"manifest.json": JSON.stringify(manifest).to_utf8_buffer()}), "imported").get("pack")
+	var v := GamesView.new()
+	(Engine.get_main_loop() as SceneTree).root.add_child(v)
+	v.select(p)
+	for i in 3:  # (the layout, now: tests do not wait a frame)
+		for c in [v._panel] + v._panel.find_children("*", "Container", true, false):
+			c.notification(Container.NOTIFICATION_SORT_CHILDREN)
+	var screen := Rect2(Vector2.ZERO, Vector2(1280, 720))
+	for b in ["Activate", "DeletePack"]:
+		var r := (v.find_child(b, true, false) as Control).get_global_rect()
+		check(screen.encloses(r), "%s in the window: %s" % [b, r])
+	var scroll := v.find_child("DetailsScroll", true, false) as ScrollContainer
+	check(scroll != null and scroll.is_ancestor_of(v.find_child("PackName", true, false)), "the text scrolls")
+	check(scroll != null and not scroll.is_ancestor_of(v.find_child("Activate", true, false)), "the buttons do not")
+	v.free()
+	Packs.remove(p)
+
+
 func test_server_home_shows_and_downloads_a_servers_games() -> void:
 	var l := FakeLink.new()
 	l.url = "ws://h.test:7377"

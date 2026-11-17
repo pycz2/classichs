@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+### Corregido
+- Una partida en el servidor (clasificatoria, casual, Arena, contra un bot) ya no se congela tras una elección que no cambia nada a la vista. Pasaba con la Adaptación del Polluelo sañoso tras su ataque: al elegir Provocar, Viento furioso o Escudo divino, el jugador no podía hacer nada hasta que el temporizador terminaba el turno.
+- En la pantalla «Juegos», el panel derecho con la descripción del juego se desplaza, y los botones «Jugar a este juego» y «Borrar» quedan debajo, siempre a la vista. Con una descripción larga se salían por el borde inferior de la ventana, también en el móvil.
+- La música de un esbirro legendario al jugarlo sigue ahora el volumen de los efectos de sonido y no el de la música. Con la música baja apenas se oía bajo los sonidos de la carta, y con la música apagada no sonaba.
+
 ## [0.71.1] - 2026-11-13
 
 ### Corregido

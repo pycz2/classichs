@@ -4,6 +4,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+### Corrigido
+- Uma partida no servidor (ranqueada, casual, Arena, contra um bot) não congela mais depois de uma escolha que não muda nada à vista. Acontecia com a Adaptação do Filhote Raivoso depois do ataque: escolhendo Provocar, Fúria dos Ventos ou Escudo Divino, o jogador não conseguia fazer nada até o cronômetro encerrar o turno.
+- Na tela "Jogos", o painel da direita com a descrição do jogo rola, e os botões "Jogar este jogo" e "Excluir" ficam abaixo dele, sempre visíveis. Com uma descrição longa eles saíam pela borda de baixo da janela, no celular também.
+- A música de um lacaio lendário ao ser jogado agora segue o volume dos efeitos sonoros, não o da música. Com a música baixa ela mal se ouvia sob os sons da carta, e com a música desligada não tocava.
+
 ## [0.71.1] - 2026-11-13
 
 ### Corrigido

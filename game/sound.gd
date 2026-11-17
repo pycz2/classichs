@@ -31,7 +31,7 @@ var _streams := {}
 static var _shell: AudioStream
 ## The player of spoken lines: one at a time, a new line cuts the last.
 var _voice := AudioStreamPlayer.new()
-## The player of a card's play music (a legendary's stinger); the music ducks to DUCK_DB under it.
+## The player of a card's play music (a legendary's stinger, on the SFX bus); the music ducks to DUCK_DB under it.
 var _stinger := AudioStreamPlayer.new()
 const DUCK_DB := -14.0
 var _ducking: Tween
@@ -53,7 +53,7 @@ func _ready() -> void:
 	add_child(_music)
 	_voice.bus = "SFX"
 	add_child(_voice)
-	_stinger.bus = "Music"
+	_stinger.bus = "SFX"  # (a card's own sound, as in Hearthstone: heard with the music turned down or off)
 	_stinger.finished.connect(func(): _duck(0.0, 0.8))
 	add_child(_stinger)
 	_aim.bus = "SFX"

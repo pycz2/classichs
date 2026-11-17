@@ -133,16 +133,25 @@ func _build_details() -> void:
 	var p := selected
 	if p == null:
 		return
+	# the text and the pickers scroll (a long description); Play this game and Delete stay under them
+	var outer := VBoxContainer.new()
+	outer.add_theme_constant_override("separation", 8)
+	_panel.add_child(outer)
+	var scroll := ScrollContainer.new()
+	scroll.name = "DetailsScroll"
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	outer.add_child(scroll)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 8)
-	_panel.add_child(box)
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(box)
 	var title := Palette.label(p.title(), 28, Palette.ATTACK)
 	title.name = "PackName"
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(title)
 	var desc := Palette.label(p.description(), 15)
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc.custom_minimum_size = Vector2(PANEL.size.x - 30, 0)
 	box.add_child(desc)
 	var origin := tr(ORIGINS.get(p.origin, "Imported"))
 	if p.origin == "downloaded" and p.server != "":
@@ -156,7 +165,6 @@ func _build_details() -> void:
 	if why != "":
 		var note := Palette.label(tr(why) + "\n" + tr("You can look at its cards and decks."), 15, Color("ffb070"))
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		note.custom_minimum_size = Vector2(PANEL.size.x - 30, 0)
 		box.add_child(note)
 	var grid := GridContainer.new()
 	grid.columns = 2
@@ -169,16 +177,13 @@ func _build_details() -> void:
 		pick.name = row[2]
 		grid.add_child(Palette.label(tr(row[0]), 17))
 		grid.add_child(pick)
-	var spacer := Control.new()
-	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_child(spacer)
 	var play := Palette.button(tr("Play this game"), "Activate")
 	play.pressed.connect(activate.bind(p))
-	box.add_child(play)
+	outer.add_child(play)
 	if not p.builtin():
 		var del := Palette.button(tr("Delete"), "DeletePack")
 		del.pressed.connect(_confirm_delete.bind(p))
-		box.add_child(del)
+		outer.add_child(del)
 
 
 ## A choice of a pack's art, sound or music sets (the player's own picture folders too for the

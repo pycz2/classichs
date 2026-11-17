@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+### Behoben
+- Eine Partie auf dem Server (gewertet, ungewertet, Arena, gegen einen Bot) friert nach einer Wahl, die nichts Sichtbares ändert, nicht mehr ein. So war es bei der Anpassung des Bösartigen Jungtiers nach seinem Angriff: Wer Spott, Windzorn oder Gottesschild wählte, konnte bis zum Ende des Zuges nichts mehr tun, erst der Zugtimer beendete den Zug.
+- Auf dem Bildschirm „Spiele“ lässt sich die rechte Leiste mit der Beschreibung des Spiels scrollen, und die Knöpfe „Dieses Spiel spielen“ und „Löschen“ stehen darunter und sind immer zu sehen. Bei einer langen Beschreibung rutschten sie unter den unteren Fensterrand, auch auf dem Handy.
+- Die Musik eines legendären Dieners beim Ausspielen folgt jetzt der Lautstärke der Soundeffekte statt der Musik. Bei leiser Musik ging sie unter den Geräuschen der Karte fast unter, bei ausgeschalteter Musik war sie gar nicht zu hören.
+
 ## [0.71.1] - 2026-11-13
 
 ### Behoben
