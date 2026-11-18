@@ -65,6 +65,7 @@ static var CLASSIC := false
 static var _roles := {}
 static var _for: Pack
 static var _frames: Array = []  # [WeakRef StyleBoxFlat, fill, radius]: frames restyled in place
+static var _frames_cap := 512  # the freed ones are dropped once it is this long (then twice the live ones)
 
 
 ## The styling pack's theme (Packs.look(): the active pack inside a game, none in the client's
@@ -236,8 +237,9 @@ static func frame(fill := Color(0.11, 0.075, 0.045, 0.96), radius := 14) -> Styl
 	s.set_content_margin_all(14)
 	_restyle_frame(s, fill, radius, true)
 	_frames.append([weakref(s), fill, radius])
-	if _frames.size() > 512:
+	if _frames.size() > _frames_cap:
 		_frames = _frames.filter(func(f): return f[0].get_ref() != null)
+		_frames_cap = maxi(512, _frames.size() * 2)
 	return s
 
 

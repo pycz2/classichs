@@ -248,8 +248,16 @@ func close() -> void:
 func session(msg: Dictionary, d: Deck) -> ServerSession:
 	var s := ServerSession.new()
 	s.setup(self, msg, str(me.get("user", "")), d)
-	_games[s.game] = s  # a freed session is dropped on its next message
+	_add_game(s)
 	return s
+
+
+## Keeps a session for its game's messages; the freed ones go (one entry a game otherwise, for good).
+func _add_game(s: ServerSession) -> void:
+	for id in _games.keys():
+		if not is_instance_valid(_games[id]):
+			_games.erase(id)
+	_games[s.game] = s
 
 
 ## A session for a game the player watches (`spectating`): read only, fed by `spectate_state`.
@@ -265,7 +273,7 @@ func watch(msg: Dictionary) -> ServerSession:
 	for x in _games.values():  # the server shows one game per spectator: an older one is over
 		if is_instance_valid(x) and x.watch:
 			x._done = true
-	_games[s.game] = s
+	_add_game(s)
 	return s
 
 

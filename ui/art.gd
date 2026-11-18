@@ -167,7 +167,9 @@ const HEROES := {"MAGE": ["human", "jaina"], "WARRIOR": ["orc", "garrosh"], "HUN
 	"PALADIN": ["human", "uther"], "SHAMAN": ["orc", "thrall"], "WARLOCK": ["orc", "guldan"]}
 
 static var _designs := {}
+## Loaded pictures by card, the least recently used first (Lru): TEXTURES_KEPT at most (a view keeps its own).
 static var _textures := {}
+const TEXTURES_KEPT := 256
 ## Picture sets: the active pack's art sets (art/<set>/<card id>.jpg|png|webp in the
 ## pack), plus the player's own folders in res://art (any folder but "cards"; "original"
 ## holds the original art, tools/fetch_original_art.py, local only) that have pictures of
@@ -372,21 +374,22 @@ static func shapes(card_id: String, rect: Rect2) -> Array:
 ## The card's illustration, or null when it has none (the drawn art is used then): the
 ## chosen set, else the pack's default set.
 static func texture(card_id: String) -> Texture2D:
-	if not _textures.has(card_id):
-		var p := Packs.active()
-		var tex: Texture2D = null
-		var chosen := Packs.choice(p, "art") if p else ""
-		if p and not p.sets("art").any(func(s): return s.id == chosen) and sets().has(chosen):
-			for ext in EXTENSIONS:  # a folder of the player's
-				tex = _load("%s/%s/%s.%s" % [root, chosen, card_id, ext], ext)
-				if tex:
-					break
-		for set_id in [chosen, p.default_set("art") if p else ""]:
-			if tex == null and p and set_id != "":
-				var f := p.find("art/" + set_id, card_id, EXTENSIONS)
-				tex = p.texture(f) if f != "" else null
-		_textures[card_id] = tex
-	return _textures[card_id]
+	if _textures.has(card_id):
+		return Lru.get_of(_textures, card_id)
+	var p := Packs.active()
+	var tex: Texture2D = null
+	var chosen := Packs.choice(p, "art") if p else ""
+	if p and not p.sets("art").any(func(s): return s.id == chosen) and sets().has(chosen):
+		for ext in EXTENSIONS:  # a folder of the player's
+			tex = _load("%s/%s/%s.%s" % [root, chosen, card_id, ext], ext)
+			if tex:
+				break
+	for set_id in [chosen, p.default_set("art") if p else ""]:
+		if tex == null and p and set_id != "":
+			var f := p.find("art/" + set_id, card_id, EXTENSIONS)
+			tex = p.texture(f) if f != "" else null
+	Lru.put(_textures, card_id, tex, TEXTURES_KEPT)
+	return tex
 
 
 ## Loads a picture: raw bytes when the file is there as it is, else Godot's
