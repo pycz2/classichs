@@ -638,3 +638,87 @@ fn deck_templates_play_bot_games() {
     assert!(over >= decks.len() * 2, "most games end");
     assert!(played.len() >= 15, "the decks play the set");
 }
+
+// --- the card tests (data/card_tests/boom.json, as game/card_tests.gd plays them) ------------------------------------------
+
+fn ref_id(g: &Game, r: Option<&Value>) -> Id {
+    let Some(r) = r.and_then(Value::as_object) else { return NONE };
+    let p = &g.players[int(r.get("side")) as usize];
+    let i = int(r.get("index")) as usize;
+    match r.get("zone").and_then(Value::as_str).unwrap_or("") {
+        "hand" => p.hand.get(i).copied().unwrap_or(NONE),
+        "board" => p.board.get(i).copied().unwrap_or(NONE),
+        "secret" => p.secrets.get(i).copied().unwrap_or(NONE),
+        "hero" => p.hero,
+        "weapon" => p.weapon.unwrap_or(NONE),
+        "power" => p.hero_power,
+        _ => NONE,
+    }
+}
+
+#[test]
+fn card_tests_play() {
+    let Some(rs) = rs() else { return };
+    let tests: Map<String, Value> =
+        serde_json::from_str(&std::fs::read_to_string(repo().join("data/card_tests/boom.json")).unwrap()).unwrap();
+    let mut bad = vec![];
+    for (id, list) in &tests {
+        for t in list.as_array().unwrap() {
+            if let Some(s) = t.get("script").and_then(Value::as_str) {
+                if rs.card(id).script != s {
+                    bad.push(format!("{id}: script {s} is not the pack's {}", rs.card(id).script));
+                    continue;
+                }
+            }
+            let title = t["title"].as_str().unwrap();
+            let mut g = match scenario::build_in(rs, &t["scene"]) {
+                Ok(g) => g,
+                Err(e) => {
+                    bad.push(format!("{title}: scene: {e}"));
+                    continue;
+                }
+            };
+            for (i, s) in t["steps"].as_array().unwrap().iter().enumerate() {
+                let want: Vec<(&str, Value)> = match s["do"].as_str().unwrap() {
+                    "play" => {
+                        let mut w = vec![("type", json!("play")), ("entity", json!(ref_id(&g, s.get("card")))),
+                            ("target", json!(ref_id(&g, s.get("target")))), ("choice", json!(s.get("choice").map_or(-1, |c| int(Some(c)))))];
+                        if let Some(p) = s.get("pos") {
+                            w.push(("pos", p.clone()));
+                        }
+                        w
+                    }
+                    "attack" => vec![("type", json!("attack")), ("attacker", json!(ref_id(&g, s.get("attacker")))),
+                        ("defender", json!(ref_id(&g, s.get("defender"))))],
+                    "hero_power" => vec![("type", json!("hero_power")), ("target", json!(ref_id(&g, s.get("target"))))],
+                    "end_turn" => vec![("type", json!("end_turn"))],
+                    "choose" => {
+                        let opts = g.pending_options();
+                        let n = int(s.get("option"));
+                        let o = if opts.contains(&n) { n } else { opts.get(n as usize).copied().unwrap_or(NONE) };
+                        vec![("type", json!("choose")), ("option", json!(o))]
+                    }
+                    x => panic!("{x}"),
+                };
+                let a = g.legal_actions().into_iter().find(|a| {
+                    want.iter().all(|(k, v)| {
+                        if *k == "pos" && int(a.get("pos")) < 0 {
+                            return true;
+                        }
+                        a.get(*k).cloned().unwrap_or(if ["target", "choice"].contains(k) { json!(-1) } else { Value::Null }) == *v
+                    })
+                });
+                let Some(a) = a else {
+                    bad.push(format!("{title}: step {i}: not legal: {want:?}"));
+                    break;
+                };
+                assert!(g.apply(&Value::Object(a)).ok);
+                if let Some(e) = g.script_error.get() {
+                    bad.push(format!("{title}: step {i}: {e}"));
+                    break;
+                }
+            }
+        }
+    }
+    assert!(bad.is_empty(), "{} problems:\n{}", bad.len(), bad.join("\n"));
+}

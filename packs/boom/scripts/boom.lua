@@ -515,6 +515,35 @@ local function copy_to_hand(g, p, e)
   return keep_enchants(g, e, g.add_to_hand(p, g.card(e)))
 end
 
+-- Discover a copy of one of these cards (entities: three different cards, a random one of each; the copy keeps the
+-- enchantments of the one offered: `take_copy` is the on_choose).
+local function offer_copies(g, me, es)
+  local p = g.ctrl(me)
+  local by, ids = {}, {}
+  for _, e in ipairs(es) do
+    local c = g.card(e)
+    if not by[c] then
+      by[c] = {}
+      ids[#ids + 1] = c
+    end
+    by[c][#by[c] + 1] = e
+  end
+  local opts = {}
+  for _, c in ipairs(pick_n(g, ids, 3)) do
+    local o = g.create(p, c)
+    g.set_tag(o, "COPY_OF", g.pick(by[c]))
+    opts[#opts + 1] = o
+  end
+  if #opts > 0 then
+    g.request_choice(me, opts)
+  end
+  return #opts
+end
+
+local function take_copy(g, me, option)
+  return keep_enchants(g, g.tag(option, "COPY_OF"), g.add_to_hand(g.ctrl(me), g.card(option)))
+end
+
 -- How many times p's Deathrattles run now (Necromechanic, Baron Rivendare: DOUBLE_DEATHRATTLE on the champion; two of
 -- them still twice).
 local function deathrattle_times(g, p)
@@ -701,6 +730,242 @@ cards["ench:boom_shifting"] = {
     end,
   },
 }
+
+-- Patch 12.0.0.25770's copies: these older cards' copies keep the enchantments of the cards they copy (wiki CardChange
+-- rows of build 25770; the copy rule: deck → hand, deck → play, deck → deck, hand → hand, hand → play).
+
+-- Thoughtsteal: copies of 2 random cards in your opponent's deck.
+cards.VAN_EX1_339 = {
+  spell = function(g, me)
+    local deck = g.shuffle(g.deck(g.enemy(me)))
+    for i = 1, math.min(2, #deck) do
+      copy_to_hand(g, g.ctrl(me), deck[i])
+    end
+  end,
+}
+
+-- Mindgames: a copy of a random minion of your opponent's deck (none: a 0/1 Shadow of Nothing).
+cards.VAN_EX1_345 = {
+  spell = function(g, me)
+    local e = g.pick(list.filter(g.deck(g.enemy(me)), function(x)
+      return g.is_minion(x)
+    end))
+    local m = g.summon(g.ctrl(me), e and g.card(e) or "VAN_EX1_345t")
+    if e then
+      keep_enchants(g, e, m)
+    end
+  end,
+}
+
+-- Mind Vision: a copy of a random card in your opponent's hand.
+cards.VAN_CS2_003 = {
+  spell = function(g, me)
+    local e = g.pick(g.hand(g.enemy(me)))
+    if e then
+      copy_to_hand(g, g.ctrl(me), e)
+    end
+  end,
+}
+
+-- Thistle Tea: draw a card; 2 more copies of it.
+cards.OG_073 = {
+  spell = function(g, me)
+    local p = g.ctrl(me)
+    local d = g.draw(p)[1]
+    if d then
+      copy_to_hand(g, p, d)
+      copy_to_hand(g, p, d)
+    end
+  end,
+}
+
+-- Shifting Shade: Deathrattle: a copy of a random card of your opponent's deck.
+cards.OG_335 = {
+  deathrattle = function(g, me)
+    local c = g.pick(g.deck(g.enemy(me)))
+    if c then
+      copy_to_hand(g, g.ctrl(me), c)
+    end
+  end,
+}
+
+-- Barnes: a 1/1 copy of a random minion in your deck (its enchantments, then 1/1), right of Barnes.
+cards.KAR_114 = {
+  battlecry = function(g, me)
+    local e = g.pick(list.filter(g.deck(g.ctrl(me)), function(d)
+      return g.type(d) == "MINION"
+    end))
+    local m = e and keep_enchants(g, e, g.summon_right(me, g.card(e)))
+    if m then
+      g.resolve()
+      if g.zone(m) == "PLAY" then
+        g.set_stats(m, 1, 1)
+      end
+    end
+  end,
+}
+
+-- Drakonid Operative: if you're holding a Dragon, Discover a copy of a card in your opponent's deck.
+cards.CFM_605 = {
+  glow = function(g, me)
+    return holding(g, me, "DRAGON")
+  end,
+  battlecry = function(g, me)
+    if holding(g, me, "DRAGON") then
+      offer_copies(g, me, g.deck(g.enemy(me)))
+    end
+  end,
+  on_choose = take_copy,
+}
+
+-- Shadow Visions: Discover a copy of a spell in your deck.
+cards.UNG_029 = {
+  spell = function(g, me)
+    offer_copies(g, me, list.filter(g.deck(g.ctrl(me)), function(e)
+      return g.is_spell(e)
+    end))
+  end,
+  on_choose = take_copy,
+}
+
+-- Crystalline Oracle: Deathrattle: a copy of a card of your opponent's deck.
+cards.UNG_032 = cards.OG_335
+
+-- Mimic Pod: draw a card, then a copy of it.
+cards.UNG_060 = {
+  spell = function(g, me)
+    local p = g.ctrl(me)
+    local d = g.draw(p)[1]
+    if d then
+      copy_to_hand(g, p, d)
+    end
+  end,
+}
+
+-- Devour Mind: copies of 3 cards of your opponent's deck.
+cards.ICC_207 = {
+  spell = function(g, me)
+    for _, e in ipairs(pick_n(g, g.deck(g.enemy(me)), 3)) do
+      copy_to_hand(g, g.ctrl(me), e)
+    end
+  end,
+}
+
+-- Archbishop Benedictus: a copy of your opponent's deck into your deck (deck → deck).
+cards.ICC_215 = {
+  battlecry = function(g, me)
+    local p = g.ctrl(me)
+    for _, e in ipairs(g.deck(g.enemy(me))) do
+      keep_enchants(g, e, g.add_to_deck(p, g.card(e)))
+    end
+  end,
+}
+
+-- Stitched Tracker: Discover a copy of a minion in your deck.
+cards.ICC_415 = {
+  battlecry = function(g, me)
+    offer_copies(g, me, list.filter(g.deck(g.ctrl(me)), function(e)
+      return g.is_minion(e)
+    end))
+  end,
+  on_choose = take_copy,
+}
+
+-- Shadow Essence: a 5/5 copy of a random minion in your deck.
+cards.ICC_235 = {
+  spell = function(g, me)
+    local p = g.ctrl(me)
+    local e = random_from_deck(g, p, function(d)
+      return g.is_minion(d)
+    end)
+    local m = e and keep_enchants(g, e, g.summon(p, g.card(e)))
+    if m then
+      g.set_stats(m, 5, 5)
+    end
+  end,
+}
+
+-- Simulacrum: a copy of the lowest Cost minion in your hand (ties: at random).
+cards.ICC_823 = {
+  spell = function(g, me)
+    local p = g.ctrl(me)
+    local ms = list.filter(g.hand(p), function(e)
+      return g.is_minion(e)
+    end)
+    local low
+    for _, m in ipairs(ms) do
+      if not low or g.cost(m) < low then
+        low = g.cost(m)
+      end
+    end
+    local m = g.pick(list.filter(ms, function(e)
+      return g.cost(e) == low
+    end))
+    if m then
+      copy_to_hand(g, p, m)
+    end
+  end,
+}
+
+-- Kobold Illusionist: Deathrattle: a 1/1 copy of a random minion in your hand.
+cards.LOOT_412 = {
+  deathrattle = function(g, me)
+    local m = g.pick(list.filter(g.hand(g.ctrl(me)), function(e)
+      return g.is_minion(e)
+    end))
+    local n = m and keep_enchants(g, m, summon_here(g, me, g.card(m)))
+    if n then
+      g.set_stats(n, 1, 1)
+    end
+  end,
+}
+
+-- Psionic Probe: a copy of a random spell of your opponent's deck.
+cards.LOOT_353 = {
+  spell = function(g, me)
+    local s = random_from_deck(g, g.enemy(me), function(e)
+      return g.is_spell(e)
+    end)
+    if s then
+      copy_to_hand(g, g.ctrl(me), s)
+    end
+  end,
+}
+
+-- Azalina Soulthief: your hand becomes a copy of your opponent's (with their enchantments and cost changes).
+cards.GIL_198 = {
+  battlecry = function(g, me)
+    local p = g.ctrl(me)
+    local theirs = {}
+    for _, e in ipairs(g.hand(g.enemy(me))) do
+      theirs[#theirs + 1] = e
+    end
+    for _, e in ipairs(g.hand(p)) do
+      g.remove(e, "SETASIDE")
+      g.log({ type = "removed_from_hand", player = p, entity = e })
+    end
+    for _, e in ipairs(theirs) do
+      copy_to_hand(g, p, e)
+    end
+  end,
+}
+
+-- Dollmaster Dorian: whenever you draw a minion, a 1/1 copy of it right of Dorian (its enchantments, then 1/1).
+cards.GIL_620 = on_mine("draw", function(g, me, ev)
+  if g.type(ev.entity) == "MINION" then
+    local c = keep_enchants(g, ev.entity, g.summon_right(me, ev.card))
+    if c then
+      g.set_stats(c, 1, 1)
+    end
+  end
+end)
+
+-- Archmage Arugal: whenever you draw a minion, a copy of it (with its enchantments).
+cards.GIL_691 = on_mine("draw", function(g, me, ev)
+  if g.type(ev.entity) == "MINION" then
+    copy_to_hand(g, g.ctrl(me), ev.entity)
+  end
+end)
 
 -- --- the game's counts and its start (rules.json player_hooks) -------------------------------------------------------
 -- Kobolds & Catacombs' (and the packs' before it: loot.lua), and The Witchwood's: Echo (ECHOING, the copies, GHOSTLY),

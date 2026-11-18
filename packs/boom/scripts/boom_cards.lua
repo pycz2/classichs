@@ -514,6 +514,35 @@ local function copy_to_hand(g, p, e)
   return keep_enchants(g, e, g.add_to_hand(p, g.card(e)))
 end
 
+-- Discover a copy of one of these cards (entities: three different cards, a random one of each; the copy keeps the
+-- enchantments of the one offered: `take_copy` is the on_choose).
+local function offer_copies(g, me, es)
+  local p = g.ctrl(me)
+  local by, ids = {}, {}
+  for _, e in ipairs(es) do
+    local c = g.card(e)
+    if not by[c] then
+      by[c] = {}
+      ids[#ids + 1] = c
+    end
+    by[c][#by[c] + 1] = e
+  end
+  local opts = {}
+  for _, c in ipairs(pick_n(g, ids, 3)) do
+    local o = g.create(p, c)
+    g.set_tag(o, "COPY_OF", g.pick(by[c]))
+    opts[#opts + 1] = o
+  end
+  if #opts > 0 then
+    g.request_choice(me, opts)
+  end
+  return #opts
+end
+
+local function take_copy(g, me, option)
+  return keep_enchants(g, g.tag(option, "COPY_OF"), g.add_to_hand(g.ctrl(me), g.card(option)))
+end
+
 -- How many times p's Deathrattles run now (Necromechanic, Baron Rivendare: DOUBLE_DEATHRATTLE on the champion; two of
 -- them still twice).
 local function deathrattle_times(g, p)
@@ -1092,36 +1121,11 @@ cards.BOT_558 = {
 -- Cloning Device: Discover a copy of a minion in your opponent's deck (deck → hand: with its enchantments).
 cards.BOT_435 = {
   spell = function(g, me)
-    local p = g.ctrl(me)
-    local by = {}
-    for _, e in ipairs(g.deck(g.enemy(me))) do
-      if g.type(e) == "MINION" then
-        local c = g.card(e)
-        by[c] = by[c] or {}
-        by[c][#by[c] + 1] = e
-      end
-    end
-    local ids = {}
-    for _, e in ipairs(g.deck(g.enemy(me))) do
-      if g.type(e) == "MINION" and by[g.card(e)] and not list.any(ids, function(x)
-        return x == g.card(e)
-      end) then
-        ids[#ids + 1] = g.card(e)
-      end
-    end
-    local opts = {}
-    for _, c in ipairs(pick_n(g, ids, 3)) do
-      local o = g.create(p, c)
-      g.set_tag(o, "SRC", g.pick(by[c]))
-      opts[#opts + 1] = o
-    end
-    if #opts > 0 then
-      g.request_choice(me, opts)
-    end
+    offer_copies(g, me, list.filter(g.deck(g.enemy(me)), function(e)
+      return g.type(e) == "MINION"
+    end))
   end,
-  on_choose = function(g, me, option)
-    keep_enchants(g, g.tag(option, "SRC"), g.add_to_hand(g.ctrl(me), g.card(option)))
-  end,
+  on_choose = take_copy,
 }
 
 -- Dead Ringer: Deathrattle: draw a Deathrattle minion from your deck.

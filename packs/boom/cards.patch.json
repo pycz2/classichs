@@ -838,8 +838,14 @@
    "hit": "smoke"
   }
  },
+ "CFM_605": {
+  "script": "scripts/boom.lua#CFM_605"
+ },
  "GIL_142": {
   "script": "scripts/boom.lua#GIL_142"
+ },
+ "GIL_198": {
+  "script": "scripts/boom.lua#GIL_198"
  },
  "GIL_545": {
   "race": null
@@ -853,8 +859,32 @@
  "GIL_614": {
   "script": "scripts/boom.lua#GIL_614"
  },
+ "GIL_620": {
+  "script": "scripts/boom.lua#GIL_620"
+ },
+ "GIL_691": {
+  "script": "scripts/boom.lua#GIL_691"
+ },
  "GVG_072": {
   "script": "scripts/boom.lua#GVG_072"
+ },
+ "ICC_207": {
+  "script": "scripts/boom.lua#ICC_207"
+ },
+ "ICC_215": {
+  "script": "scripts/boom.lua#ICC_215"
+ },
+ "ICC_235": {
+  "script": "scripts/boom.lua#ICC_235"
+ },
+ "ICC_415": {
+  "script": "scripts/boom.lua#ICC_415"
+ },
+ "ICC_823": {
+  "script": "scripts/boom.lua#ICC_823"
+ },
+ "KAR_114": {
+  "script": "scripts/boom.lua#KAR_114"
  },
  "LOE_038": {
   "cost": 8
@@ -877,14 +907,44 @@
  "LOOT_329": {
   "race": null
  },
+ "LOOT_353": {
+  "script": "scripts/boom.lua#LOOT_353"
+ },
+ "LOOT_412": {
+  "script": "scripts/boom.lua#LOOT_412"
+ },
  "LOOT_539": {
   "cost": 7
+ },
+ "OG_073": {
+  "script": "scripts/boom.lua#OG_073"
+ },
+ "OG_335": {
+  "script": "scripts/boom.lua#OG_335"
+ },
+ "UNG_029": {
+  "script": "scripts/boom.lua#UNG_029"
+ },
+ "UNG_032": {
+  "script": "scripts/boom.lua#UNG_032"
+ },
+ "UNG_060": {
+  "script": "scripts/boom.lua#UNG_060"
  },
  "UNG_067t1": {
   "script": "scripts/boom.lua#UNG_067t1"
  },
+ "VAN_CS2_003": {
+  "script": "scripts/boom.lua#VAN_CS2_003"
+ },
  "VAN_EX1_105": {
   "race": "ELEMENTAL"
+ },
+ "VAN_EX1_339": {
+  "script": "scripts/boom.lua#VAN_EX1_339"
+ },
+ "VAN_EX1_345": {
+  "script": "scripts/boom.lua#VAN_EX1_345"
  },
  "VAN_EX1_620": {
   "race": "ELEMENTAL"
