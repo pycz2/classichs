@@ -8,6 +8,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Eine Partie auf dem Server (gewertet, ungewertet, Arena, gegen einen Bot) friert nach einer Wahl, die nichts Sichtbares ändert, nicht mehr ein. So war es bei der Anpassung des Bösartigen Jungtiers nach seinem Angriff: Wer Spott, Windzorn oder Gottesschild wählte, konnte bis zum Ende des Zuges nichts mehr tun, erst der Zugtimer beendete den Zug.
 - Auf dem Bildschirm „Spiele“ lässt sich die rechte Leiste mit der Beschreibung des Spiels scrollen, und die Knöpfe „Dieses Spiel spielen“ und „Löschen“ stehen darunter und sind immer zu sehen. Bei einer langen Beschreibung rutschten sie unter den unteren Fensterrand, auch auf dem Handy.
 - Die Musik eines legendären Dieners beim Ausspielen folgt jetzt der Lautstärke der Soundeffekte statt der Musik. Bei leiser Musik ging sie unter den Geräuschen der Karte fast unter, bei ausgeschalteter Musik war sie gar nicht zu hören.
+### Hinzugefügt
+- Der Tisch zeigt, wo ein Effekt trifft. Werden Karten auf der Hand verstärkt, zieht ein Lichtstreifen über die Hand und Pfeile steigen über den Karten auf. Ein Effekt auf ein Deck lässt das Deck anschwellen und einen Ring darüber aufleuchten. Eine neue oder billigere Heldenfähigkeit leuchtet an ihrem Platz auf.
+- Eine Karte, die in ein Deck (Eures oder das des Gegners) gemischt wird, fliegt von dem, was sie dorthin geschickt hat, in dieses Deck: vom gespielten Zauber, einem Diener, einem Helden, aus einer Hand oder aus dem anderen Deck. Eine Karte, die der Hand hinzugefügt wird, fliegt ebenfalls aus ihrer Quelle: Lange Finger holt Karten vom gegnerischen Helden, eine Karte von einem Diener kommt aus dem Diener. Eine Karte, die Ihr nicht sehen dürft, fliegt verdeckt.
+- Tjost: Aus jedem Deck fliegt eine Karte, jede mit dem Namen ihres Besitzers und groß daneben ihren Kosten. Die gewinnende Karte leuchtet auf, die verlierende wird dunkel, dann gehen beide zurück in ihre Decks.
+- Effekte bei Spielbeginn sind auf dem Tisch zu sehen. Die Karte von Baku die Mondschlingerin oder Genn Graumähne fliegt in die Heldenfähigkeit, die neu oder billiger aufleuchtet. Aus der Karte von Prinz Malchezaar fliegen fünf legendäre Diener ins Deck, und der Verlauf hat eine Zeile für ihn.
+- Ein Zauber mit Ziel wird beim Zielen zu einem Lichtwirbel seines Elements am Anfang des Pfeils. Zurück zur Hand gebracht, ist er wieder eine Karte. Der Gegner sieht weiterhin nur den Pfeil von der Kartenrückseite.
+- Ein ausgelöstes Geheimnis erscheint groß direkt über seinem Platz: Die Rückseite wächst und dreht sich zur Karte um, mit dem eigenen Aufdeckgeräusch des Geheimnisses.
+- Die Schaltfläche „Zug beenden“ dreht sich auf ihre andere Seite, wenn der Zug zum Gegner wechselt und zurück.
+- Der Verlauf hat Zeilen für verstärkte verdeckte Karten: „3 Karten im Deck des Gegners erhalten +1/+1“.
+
+### Geändert
+- Die Zahlen der Karten auf der Hand sind gefärbt wie auf dem Brett: Angriff und Leben über den aufgedruckten grün, darunter rot, und sie leuchten auf, wenn sie sich ändern. Die Kosten einer Heldenfähigkeit sind grün, wenn sie billiger, und rot, wenn sie teurer wurde. Der Angriff einer Waffe unter dem aufgedruckten ist jetzt rot.
+- Schaden und Einfrieren kommen im selben Moment: Frostblitz, Kältekegel, Blizzard und der Schlag eines Wasserelementars treffen und frieren zugleich ein.
+- Neues Einfrieren: Eiskristalle wachsen vom Rand über das Porträt, Reif liegt am Rand, Glanzlichter laufen über das Eis. Taut ein Diener oder Held auf, schmilzt das Eis wieder.
 
 - Der Dschungel-Mondkin ist in den Spielen von „Die Forscherliga“ bis „Der Hexenwald“ wieder ein Wildtier, wie in Hearthstone bis Patch 11.4 (2018). Er hatte keinen Typ, und Karten, die Wildtiere suchen, zählten ihn nicht.
 ## [0.71.1] - 2026-11-13

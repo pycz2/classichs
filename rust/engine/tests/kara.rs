@@ -232,6 +232,10 @@ fn malchezaar_adds_five_legendaries_after_the_mulligan() {
         for e in theirs.as_array().unwrap().iter().filter(|e| e["type"] == "add_to_deck") {
             assert_eq!(e["card"], "", "hidden from the opponent");
         }
+        // both players see that Malchezaar did it (the table shows his card, a history line), before the cards
+        let start = theirs.as_array().unwrap().iter().position(|e| e["type"] == "start_of_game" && e["card"] == "KAR_096" && e["player"] == 0);
+        let first = theirs.as_array().unwrap().iter().position(|e| e["type"] == "add_to_deck");
+        assert!(start.is_some() && start < first, "seed {seed}");
     }
     assert!(seen.len() > 20, "{seen:?}");
     // no Malchezaar: nothing is added
