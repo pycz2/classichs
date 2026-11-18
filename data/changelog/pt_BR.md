@@ -9,6 +9,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Na tela "Jogos", o painel da direita com a descrição do jogo rola, e os botões "Jogar este jogo" e "Excluir" ficam abaixo dele, sempre visíveis. Com uma descrição longa eles saíam pela borda de baixo da janela, no celular também.
 - A música de um lacaio lendário ao ser jogado agora segue o volume dos efeitos sonoros, não o da música. Com a música baixa ela mal se ouvia sob os sons da carta, e com a música desligada não tocava.
 
+- O Luniscante da Selva volta a ser uma Fera nos jogos de A Liga dos Exploradores a O Bosque das Bruxas, como no Hearthstone até o patch 11.4 (2018). Ele não tinha tipo, e as cartas que procuram Feras não o contavam.
 ## [0.71.1] - 2026-11-13
 
 ### Corrigido

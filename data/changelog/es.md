@@ -9,6 +9,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 - En la pantalla «Juegos», el panel derecho con la descripción del juego se desplaza, y los botones «Jugar a este juego» y «Borrar» quedan debajo, siempre a la vista. Con una descripción larga se salían por el borde inferior de la ventana, también en el móvil.
 - La música de un esbirro legendario al jugarlo sigue ahora el volumen de los efectos de sonido y no el de la música. Con la música baja apenas se oía bajo los sonidos de la carta, y con la música apagada no sonaba.
 
+- El Lechúcico de la selva vuelve a ser una Bestia en los juegos de La Liga de Expedicionarios a El Bosque Embrujado, como en Hearthstone hasta el parche 11.4 (2018). No tenía tipo, y las cartas que buscan Bestias no lo contaban.
 ## [0.71.1] - 2026-11-13
 
 ### Corregido

@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - On the Games screen the right panel with the game's description scrolls, and the "Play this game" and "Delete" buttons stay below it, always in sight. With a long description they went off the bottom of the window, on phones too.
 - A legendary minion's music when it is played now follows the sound effects volume, not the music volume. With the music turned down it was barely heard under the card's own sounds, and with the music off it did not play at all.
 
+- Jungle Moonkin is a Beast again in the games from The League of Explorers to The Witchwood, as it was in Hearthstone until patch 11.4 (2018). It had no tribe, so cards that look for Beasts did not count it.
 ## [0.71.1] - 2026-11-13
 
 ### Fixed

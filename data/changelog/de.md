@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Auf dem Bildschirm „Spiele“ lässt sich die rechte Leiste mit der Beschreibung des Spiels scrollen, und die Knöpfe „Dieses Spiel spielen“ und „Löschen“ stehen darunter und sind immer zu sehen. Bei einer langen Beschreibung rutschten sie unter den unteren Fensterrand, auch auf dem Handy.
 - Die Musik eines legendären Dieners beim Ausspielen folgt jetzt der Lautstärke der Soundeffekte statt der Musik. Bei leiser Musik ging sie unter den Geräuschen der Karte fast unter, bei ausgeschalteter Musik war sie gar nicht zu hören.
 
+- Der Dschungel-Mondkin ist in den Spielen von „Die Forscherliga“ bis „Der Hexenwald“ wieder ein Wildtier, wie in Hearthstone bis Patch 11.4 (2018). Er hatte keinen Typ, und Karten, die Wildtiere suchen, zählten ihn nicht.
 ## [0.71.1] - 2026-11-13
 
 ### Behoben

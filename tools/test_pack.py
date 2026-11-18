@@ -587,6 +587,7 @@ class Chain(unittest.TestCase):
         self.assertEqual(len([c for c in cards.values() if c.get("set") == "LOE" and c.get("collectible")]), 45)
         self.assertEqual(len([c for c in cards.values() if c.get("set") == "LOE" and not c.get("collectible")]), 15)
         self.assertEqual(cards["LOE_038"]["cost"], 5)  # Naga Sea Witch until 2018
+        self.assertEqual(cards["LOE_051"]["race"], "BEAST")  # Jungle Moonkin until patch 11.4 (2018)
         self.assertEqual(cards["VAN_EX1_084"]["script"], "scripts/loe.lua#VAN_EX1_084")  # Warsong (3.2.0.10604)
         en = json.loads(files["locales/en.json"])["cards"]
         self.assertEqual(en["VAN_EX1_084"]["text"], "Your <b>Charge</b> minions have +1 Attack.")
@@ -792,6 +793,7 @@ class Chain(unittest.TestCase):
         self.assertEqual(cards["VAN_EX1_620"]["cost"], 20)  # Molten Giant: patch 11.0
         self.assertEqual((cards["LOOT_149"]["attack"], cards["ICC_705"]["cost"]), (2, 8))  # patch 10.2
         self.assertNotIn("keywords", cards["CFM_637"])  # Patches without Charge (patch 10.2)
+        self.assertEqual(cards["LOE_051"]["race"], "BEAST")  # Jungle Moonkin: no tribe only from patch 11.4
         for lang in ("en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"):
             loc = json.loads(files[f"locales/{lang}.json"])
             self.assertTrue(loc["sets"]["GILNEAS"] and loc["races"]["ALL"])

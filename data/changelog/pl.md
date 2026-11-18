@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Na ekranie „Gry” prawy panel z opisem gry się przewija, a przyciski „Graj w tę grę” i „Usuń” stoją pod nim i zawsze są widoczne. Przy długim opisie wychodziły poza dolną krawędź okna, także na telefonie.
 - Muzyka legendarnego stronnika przy zagraniu idzie teraz z głośnością efektów dźwiękowych, a nie muzyki. Przy ściszonej muzyce ledwo było ją słychać pod dźwiękami karty, a przy wyłączonej nie grała wcale.
 
+- Lunozwierz z dżungli znów jest Bestią w grach od „Ligi Odkrywców” do „Wiedźmiego Lasu”, jak w Hearthstone do aktualizacji 11.4 (2018). Nie miał typu, więc karty szukające Bestii go nie liczyły.
 ## [0.71.1] - 2026-11-13
 
 ### Naprawiono

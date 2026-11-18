@@ -9,6 +9,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Sur l’écran « Jeux », le panneau de droite avec la description du jeu défile, et les boutons « Jouer à ce jeu » et « Supprimer » restent en dessous, toujours visibles. Avec une longue description, ils passaient sous le bord de la fenêtre, sur téléphone aussi.
 - La musique d’un serviteur légendaire joué suit maintenant le volume des effets sonores et non celui de la musique. Musique baissée, on l’entendait à peine sous les sons de la carte ; musique coupée, elle ne jouait pas du tout.
 
+- Le Sélénien de la jungle est de nouveau une Bête dans les jeux de La Ligue des explorateurs au Bois Maudit, comme dans Hearthstone jusqu’au patch 11.4 (2018). Il n’avait pas de type, et les cartes qui cherchent des Bêtes ne le comptaient pas.
 ## [0.71.1] - 2026-11-13
 
 ### Corrigé

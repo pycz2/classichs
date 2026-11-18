@@ -9,6 +9,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Nella schermata «Giochi» il pannello a destra con la descrizione del gioco scorre, e i pulsanti «Gioca a questo gioco» ed «Elimina» restano sotto, sempre visibili. Con una descrizione lunga finivano oltre il bordo inferiore della finestra, anche sul telefono.
 - La musica di un servitore leggendario quando viene giocato ora segue il volume degli effetti sonori, non quello della musica. Con la musica bassa si sentiva appena sotto i suoni della carta, con la musica spenta non suonava affatto.
 
+- Il Lunagufo Silvano torna a essere una Bestia nei giochi da La Lega degli Esploratori a Il Bosco Tetro, come in Hearthstone fino alla patch 11.4 (2018). Non aveva una tribù, e le carte che cercano Bestie non lo contavano.
 ## [0.71.1] - 2026-11-13
 
 ### Corretto
