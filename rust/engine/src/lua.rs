@@ -773,6 +773,21 @@ fn q_enchants<C: Ctx>(h: &mut C, a: Args) -> R {
     ids(h, v)
 }
 
+fn q_hand_slot<C: Ctx>(h: &mut C, a: Args) -> R {
+    let g = h.game()?;
+    let e = ent(g, &a, 0)?;
+    let (x, i, n) = g.players[g.ctrl(e)].played_from;
+    if x != e {
+        return Ok(vec![L::Nil]);
+    }
+    Ok(vec![L::Int(i), L::Int(n)])
+}
+
+fn q_has_deathrattle<C: Ctx>(h: &mut C, a: Args) -> R {
+    let g = h.game()?;
+    one(g.has_death_hooks(ent(g, &a, 0)?))
+}
+
 fn q_fused<C: Ctx>(h: &mut C, a: Args) -> R {
     let v = {
         let g = h.game()?;
@@ -850,7 +865,7 @@ macro_rules! queries {
             ("g.trap_ready", q_trap_ready::<$t>), ("g.spell_dmg", q_spell_dmg::<$t>), ("g.heal_amt", q_heal_amt::<$t>),
             ("g.hp_dmg", q_hp_dmg::<$t>), ("g.rule", q_rule::<$t>), ("g.combo", q_combo::<$t>), ("g.choice", q_choice::<$t>), ("g.mine", q_mine::<$t>),
             ("g.enchants", q_enchants::<$t>), ("g.info", q_info::<$t>), ("g.collectible", q_collectible::<$t>),
-            ("g.graveyard", q_graveyard::<$t>), ("g.count", q_count::<$t>), ("g.fused", q_fused::<$t>),
+            ("g.graveyard", q_graveyard::<$t>), ("g.count", q_count::<$t>), ("g.fused", q_fused::<$t>), ("g.has_deathrattle", q_has_deathrattle::<$t>), ("g.hand_slot", q_hand_slot::<$t>),
         ]
     };
 }
@@ -1044,6 +1059,11 @@ fn a_cast(g: &mut Game, a: Args) -> R {
         return Err(a.bad(1, "a spell expected"));
     }
     g.cast_copy(src, orig, t);
+    if a.get(3).truthy() {
+        // its Overload too (Electra Stormsurge's second cast): src's player owes the spell's MANA_LOCK once more
+        let p = g.ctrl(src);
+        g.players[p].mana_lock_owed += g.e(orig).card.mana_lock;
+    }
     none()
 }
 fn a_cast_random(g: &mut Game, a: Args) -> R {
@@ -1243,6 +1263,17 @@ fn a_aura_add(g: &mut Game, a: Args) -> R {
 fn a_replace_hero(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "CHAMPION")?);
+    if a.get(2).truthy() {
+        // as a hero card played (Tess Greymane replays one): the old champion's Health stays, its Armor is gained, its
+        // power comes (`become_champion`); no Battlecry here
+        let e = g.new_entity(&c, p);
+        g.become_champion(e);
+        let armor = g.e(e).card.armor;
+        if armor > 0 {
+            g.gain_armor(p, armor);
+        }
+        return one(e);
+    }
     one(g.replace_hero(p, &c))
 }
 fn a_set_power(g: &mut Game, a: Args) -> R {

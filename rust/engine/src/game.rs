@@ -614,6 +614,8 @@ impl Game {
             self.em(e).set_tag(t, cost);
         }
         self.consume_cost_mods(e);
+        let slot = self.players[c].hand.iter().position(|&x| x == e).map_or(-1, |i| i as i64);
+        self.players[c].played_from = (e, slot, self.players[c].hand.len() as i64);
         self.players[c].hand.retain(|&x| x != e);
         let combo = self.combo_active(e);
         let x = self.em(e);

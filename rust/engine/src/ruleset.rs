@@ -185,6 +185,9 @@ pub struct Names {
     /// POWER_DOUBLE: doubles its owner's power damage and healing, once per count (an aura tag on the champion: The
     /// Witchwood's Clockwork Automaton); only when the pack names it.
     pub power_double: Option<&'static str>,
+    /// HEAL_DOUBLE: doubles its owner's healing, once per count (an aura tag on the champion: The Boomsday Project's
+    /// Crystalsmith Kangor); only when the pack names it.
+    pub heal_double: Option<&'static str>,
     /// DOUBLE_TURN_END: its owner's "at the end of your turn" hooks run twice (an aura tag on the champion: Drakkari
     /// Enchanter); only when the pack names it.
     pub double_turn_end: Option<&'static str>,
@@ -262,6 +265,7 @@ impl Names {
             quick: by_engine.get("QUICK").copied(),
             fuse: by_engine.get("FUSE").copied(),
             power_double: by_engine.get("POWER_DOUBLE").copied(),
+            heal_double: by_engine.get("HEAL_DOUBLE").copied(),
             double_turn_end: by_engine.get("DOUBLE_TURN_END").copied(),
             task_progress: by_engine.get("TASK_PROGRESS").copied(),
             task_goal: by_engine.get("TASK_GOAL").copied(),

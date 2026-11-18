@@ -361,6 +361,9 @@
   },
   "MODULAR": {
    "engine": "FUSE"
+  },
+  "HEALING_DOUBLE": {
+   "engine": "HEAL_DOUBLE"
   }
  },
  "modes": {

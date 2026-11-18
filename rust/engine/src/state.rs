@@ -427,6 +427,11 @@ impl Game {
             .collect()
     }
 
+    /// `g.has_deathrattle`: e has death hooks now (its card's unless silenced, its enchantments').
+    pub fn has_death_hooks(&self, e: Id) -> bool {
+        self.hooks_of(e).on_death.is_some() || !self.ench_deaths(e).is_empty()
+    }
+
     /// Calls matching "now" hooks (card and enchantment) at once. Used for
     /// replacement effects (`now` hooks: "predamage").
     pub fn emit_now(&mut self, ev: &mut Obj) {
@@ -647,7 +652,7 @@ impl Game {
         }
         for (k, v) in tags {
             if k == n.spell_power || k == n.power_multiplier || k == n.power_damage || Some(k.as_ref()) == n.double_turn_end
-                || Some(k.as_ref()) == n.power_double {
+                || Some(k.as_ref()) == n.power_double || Some(k.as_ref()) == n.heal_double {
                 let n = vint(a.tags.get(&k)) + v.int();
                 a.tags.insert(k, n);
             } else {
@@ -768,6 +773,11 @@ impl Game {
         if !self.alive_in_play(t) || amount <= 0 {
             return 0;
         }
+        // HEAL_DOUBLE (an aura count on the source's champion: Crystalsmith Kangor): every heal doubled, once per count
+        let amount = match self.n().heal_double.filter(|_| src != NONE) {
+            Some(k) => amount << vint(self.e(self.hero(self.ctrl(src))).aura.tags.get(k)).clamp(0, 10),
+            None => amount,
+        };
         if src != NONE && self.e(self.hero(self.ctrl(src))).has(self.n().heal_is_damage) {
             return self.damage(src, t, amount);
         }

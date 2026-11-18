@@ -474,9 +474,233 @@ local function start_of_game(g, p)
   end
 end
 
-@@BOOM_HELPERS@@
+-- --- The Boomsday Project's helpers (the same in every boom*.lua) -------------------------------------------------
 
-@@OLDER@@
+-- The game is over (a champion died).
+local function over(g)
+  return g.health(g.hero(0)) <= 0 or g.health(g.hero(1)) <= 0
+end
+
+-- "If you have 10 Mana Crystals" (Omega; wiki: 10 permanent crystals, empty, spent or Overloaded ones too, never The
+-- Coin's or other temporary mana).
+local function omega(g, p)
+  return g.max_mana(p) >= 10
+end
+
+-- A Mech (Nightmare Amalgam's ALL too: `every_race`).
+local function is_mech(g, e)
+  return g.race(e) == "MECHANICAL"
+end
+
+local function mech_card(i)
+  return i.type == "MINION" and i.race == "MECHANICAL"
+end
+
+-- Treants (wiki "Treant": a minion named Treant, Mana Treant too).
+local TREANTS = { FP1_019t = true, GIL_663t = true, UNG_111t1 = true, VAN_EX1_tk9 = true, VAN_EX1_tk9b = true }
+local function is_treant(g, e)
+  return TREANTS[g.card(e)] == true
+end
+
+-- Copies (patch 12.0.0.25770 of 2018-08-02, "Game Mechanics Updates"): a copy keeps the enchantments of the card it
+-- copies, unless it goes "backward" (hand or play → deck, play → hand: a plain card). c: the new copy (or nil).
+local function keep_enchants(g, from, c)
+  if c then
+    g.copy_enchants(from, c)
+  end
+  return c
+end
+
+local function copy_to_hand(g, p, e)
+  return keep_enchants(g, e, g.add_to_hand(p, g.card(e)))
+end
+
+-- How many times p's Deathrattles run now (Necromechanic, Baron Rivendare: DOUBLE_DEATHRATTLE on the champion; two of
+-- them still twice).
+local function deathrattle_times(g, p)
+  return g.has(g.hero(p), "DOUBLE_DEATHRATTLE") and 2 or 1
+end
+
+-- "Trigger its Deathrattle" (Fireworks Tech, Necrium Vial, Necrium Blade): m's Deathrattles run without it dying, twice
+-- with Necromechanic (Baron Rivendare's notes: "also doubles Deathrattles triggered by other cards").
+local function trigger_deathrattle(g, m)
+  for _ = 1, deathrattle_times(g, g.ctrl(m)) do
+    if alive(g, m) then
+      g.deathrattle(m)
+      g.resolve()
+    end
+  end
+end
+
+-- n minions of card summoned right of me (as many as fit).
+local function summon_right_n(g, me, card, n)
+  for _ = 1, n do
+    if not g.summon_right(me, card) then
+      break
+    end
+  end
+end
+
+-- Draws a random card of p's deck passing ok (an entity); returns it or nil.
+local function draw_from_deck(g, p, ok)
+  local e = g.pick(list.filter(g.deck(p), ok))
+  if e then
+    g.draw_entity(p, e)
+  end
+  return e
+end
+
+-- --- the older cards of patches 11.1.1, 11.2 and 12.0 ------------------------------------------------------------------
+
+-- Dark Pact (patch 11.1.1.24589 of 2018-05-22): destroy a friendly minion, restore #4 Health to your hero.
+cards.LOOT_017 = {
+  target = "friendly_minion",
+  spell = function(g, me, t)
+    g.destroy(t)
+    g.heal(me, g.hero(g.ctrl(me)), g.heal_amt(me, 4))
+  end,
+}
+
+-- Crystal Core (patch 11.1.1.24589): "for the rest of the game, your minions are 4/4" (the player hooks' core()).
+cards.UNG_067t1 = {
+  spell = function(g, me)
+    local p = g.ctrl(me)
+    g.add_count(p, "CRYSTAL_CORE")
+    for _, zone in ipairs({ g.minions(p), g.hand(p) }) do
+      for _, e in ipairs(zone) do
+        if g.is_minion(e) and not g.has(e, "CORED") then
+          g.enchant(e, { set_atk = 4, set_hp = 4, base = true })
+          g.set_tag(e, "CORED", true)
+        end
+      end
+    end
+  end,
+}
+
+-- Shadowboxer (patch 12.0.0.25770: "Whenever a minion is healed", hero healing no longer counts): 1 damage to a random
+-- enemy.
+cards.GVG_072 = {
+  on = {
+    heal = function(g, me, ev)
+      if g.is_minion(ev.target) then
+        g.damage(me, g.random_alive(g.chars(g.enemy(me))), 1)
+      end
+    end,
+  },
+}
+
+-- Voodoo Doll (patch 12.0.0.25770): a chosen minion that was transformed (a new entity) or silenced since it was chosen
+-- is no longer destroyed (the curse is its enchantment in Hearthstone: Silence takes it).
+cards.GIL_614 = {
+  target = { base = "minion", filter = function(g, me, t)
+    return t ~= me
+  end },
+  battlecry = function(g, me, t)
+    if not t then
+      return
+    end
+    local n = g.tag(me, "VOODOO_N") + 1
+    g.set_tag(me, "VOODOO_N", n)
+    g.set_tag(me, "VOODOO_" .. n, t)
+    g.set_tag(me, "VOODOO_S" .. n, g.silenced(t) and 1 or 0)
+    if n == 1 then
+      g.enchant(me, { hooks = "ench:boom_voodoo", player = g.ctrl(me) })
+    end
+  end,
+}
+cards["ench:boom_voodoo"] = {
+  deathrattle = function(g, me)
+    for i = 1, g.tag(me, "VOODOO_N") do
+      local t = g.tag(me, "VOODOO_" .. i)
+      if alive(g, t) and (g.tag(me, "VOODOO_S" .. i) == 1 or not g.silenced(t)) then
+        g.destroy(t)
+      end
+    end
+  end,
+}
+
+-- Tess Greymane (patch 11.2.0.24769 of 2018-06-06): replays every card from another class you played this game, hero
+-- cards too, at most 30, in random order with random targets and choices; she stops once she is silenced, dead,
+-- transformed or out of play, or a hero has died. A hero card becomes your hero (its Armor, its power, its Battlecry
+-- with random choices; Dr. Boom, Mad Genius gets a real Hero Power: the "Big Red Button" bug is not copied).
+cards.GIL_598 = {
+  battlecry = function(g, me)
+    local p = g.ctrl(me)
+    local cls = g.class(g.hero(p))
+    local replay = {}
+    for i = 1, g.count(p, "OTHER_CARDS") do
+      local e = g.count(p, "OTHER_CARDS_" .. i)
+      local inf = info(g, e)
+      if e ~= me and not is_neutral(inf) and not of_class(inf, cls) then
+        replay[#replay + 1] = inf.id
+      end
+    end
+    for i, c in ipairs(g.shuffle(replay)) do
+      if i > 30 or not alive(g, me) or g.silenced(me) or over(g) then
+        break
+      end
+      local t = g.info(c).type
+      if t == "SPELL" then
+        g.cast_random(me, c, true)
+      elseif t == "MINION" then
+        g.summon(p, c)
+      elseif t == "WEAPON" then
+        g.equip(p, c)
+      elseif t == "CHAMPION" then
+        g.battlecry(g.replace_hero(p, c, true), c)
+      end
+      g.resolve()
+    end
+  end,
+}
+
+-- Lynessa Sunsorrow (patch 11.2.0.24769): every spell you cast on your minions this game (ON_OWN_MINION), Choose One
+-- spells too (as they were cast), in random order, cast again on her; at most 30; it stops once she is gone.
+cards.LOOT_216 = {
+  battlecry = function(g, me)
+    local spells = list.filter(g.graveyard(g.ctrl(me)), function(s)
+      return g.is_spell(s) and g.has(s, "ON_OWN_MINION")
+    end)
+    for i, s in ipairs(g.shuffle(spells)) do
+      if i > 30 or not alive(g, me) then
+        break
+      end
+      g.cast(me, s, me)
+      g.resolve()
+    end
+  end,
+}
+
+-- Chameleos (patch 12.0.0.25770): each of your turns in your hand it becomes a copy of a random card in your opponent's
+-- hand (a one-card hand too), losing its own enchantments (a transform) and taking the copied card's (a copy, hand →
+-- hand: its buffs and cost changes); Shifting keeps it shifting.
+local CHAMELEOS = "GIL_142"
+local function chameleos_shift(g, me, ev)
+  if not g.mine(me, ev) then
+    return
+  end
+  local e = g.pick(g.hand(g.enemy(me)))
+  if not e then
+    return
+  end
+  local n = g.transform(me, g.card(e))
+  if n then
+    g.copy_enchants(e, n)
+    if g.card(n) ~= CHAMELEOS and #g.enchants(n, "ench:boom_shifting") == 0 then
+      g.enchant(n, { hooks = "ench:boom_shifting", player = g.ctrl(n) })
+    end
+  end
+end
+cards.GIL_142 = { hand = { turn_start = chameleos_shift } }
+cards["ench:boom_shifting"] = {
+  hand = {
+    turn_start = function(g, me, ev)
+      if g.card(me) ~= CHAMELEOS then
+        chameleos_shift(g, me, ev)
+      end
+    end,
+  },
+}
 
 -- --- the game's counts and its start (rules.json player_hooks) -------------------------------------------------------
 -- Kobolds & Catacombs' (and the packs' before it: loot.lua), and The Witchwood's: Echo (ECHOING, the copies, GHOSTLY),
@@ -507,6 +731,9 @@ local function malchezaar(g, p)
     n = n + #list.filter(zone, function(e)
       return g.card(e) == MALCHEZAAR
     end)
+  end
+  if n > 0 then
+    g.log({ type = "start_of_game", player = p, card = MALCHEZAAR }) -- both players see it (the table shows it, a history line)
   end
   for _ = 1, 5 * n do
     local have = {}
@@ -568,12 +795,59 @@ local function remember(g, p, name, e)
   g.add_count(p, name .. "_" .. n, e)
 end
 
+-- The Boomsday Project's: Dr. Boom, Mad Genius (BOOM_RUSH: "for the rest of the game, your Mechs have Rush"; his Hero
+-- Power swaps at the end of each of your turns), Celestial Emissary (CELESTIAL: Spell Damage +2 for your next spell this
+-- turn), Electra Stormsurge (ELECTRA: your next spell this turn casts twice), Omega Mind (OMEGA_MIND: the turn your
+-- spells have Lifesteal), Pogo-Hoppers played (POGOS), the damage your hero took this turn (HURT_AMT, HURT_AMT_TURN:
+-- Nethersoul Buster) and Necromechanic's weapon Deathrattles (NECRO_WEAPONS: an aura tag on the champion).
+
+local BOOM_POWERS = { "BOT_238p1", "BOT_238p2", "BOT_238p3", "BOT_238p4", "BOT_238p6" }
+local function boom_power(c)
+  return list.any(BOOM_POWERS, function(x)
+    return x == c
+  end)
+end
+
+local function boom_aura(g, me)
+  local p = g.ctrl(me)
+  if g.count(p, "BOOM_RUSH") > 0 then
+    for _, m in ipairs(g.minions(p)) do
+      if is_mech(g, m) then
+        g.aura_add(m, 0, 0, { RUSH = true })
+      end
+    end
+  end
+  if g.count(p, "CELESTIAL") > 0 then
+    g.aura_add(g.hero(p), 0, 0, { SPELLPOWER = 2 * g.count(p, "CELESTIAL") })
+  end
+end
+
+-- After one of p's spells (played from the hand): Celestial Emissary's bonus is used up, then Electra Stormsurge casts it
+-- again on the same target (none left in play: nothing), with its Overload again; the second cast is the minion's: no
+-- Spell Damage +2, no Lifesteal from Omega Mind (2018: wiki, Electra Stormsurge notes).
+local function boom_after_spell(g, p, s)
+  if g.count(p, "CELESTIAL") > 0 then
+    g.add_count(p, "CELESTIAL", -g.count(p, "CELESTIAL"))
+    g.update_auras()
+  end
+  if g.count(p, "ELECTRA") > 0 then
+    g.add_count(p, "ELECTRA", -g.count(p, "ELECTRA"))
+    local t = g.tag(s, "PLAY_TARGET")
+    if t > 0 and g.zone(t) ~= "PLAY" then
+      return
+    end
+    g.cast(g.hero(p), s, t > 0 and t or nil, true)
+  end
+end
+
 cards["player:boom"] = {
+  aura = boom_aura,
   on = {
     after_spell = function(g, me, ev)
       if g.mine(me, ev) then
         g.add_count(g.ctrl(me), "SPELLS")
         echo_copy(g, g.ctrl(me), ev.entity)
+        boom_after_spell(g, g.ctrl(me), ev.entity)
       end
     end,
     summon = function(g, me, ev)
@@ -594,12 +868,21 @@ cards["player:boom"] = {
       end
       if not ev.minion and g.mine(me, ev) and g.is_weapon(ev.entity) then
         g.set_tag(ev.entity, "WEAPON_DESTROYED", true)
+        -- Necromechanic: "your Deathrattles trigger twice", a weapon's too (the engine doubles the minions')
+        if g.has(me, "NECRO_WEAPONS") then
+          g.deathrattle(ev.entity)
+        end
       end
     end,
     damage = function(g, me, ev)
       local p = g.ctrl(me)
       if ev.target == g.hero(p) and ev.amount > 0 then
         g.add_count(p, "HURT_TURN", g.turn() - g.count(p, "HURT_TURN"))
+        if g.count(p, "HURT_AMT_TURN") ~= g.turn() then
+          g.add_count(p, "HURT_AMT_TURN", g.turn() - g.count(p, "HURT_AMT_TURN"))
+          g.add_count(p, "HURT_AMT", -g.count(p, "HURT_AMT"))
+        end
+        g.add_count(p, "HURT_AMT", ev.amount)
       end
     end,
     play = function(g, me, ev)
@@ -607,6 +890,15 @@ cards["player:boom"] = {
         return
       end
       local p = g.ctrl(me)
+      if ev.kind == "spell" then
+        g.set_tag(ev.entity, "PLAY_TARGET", ev.target or -1)
+        if g.count(p, "OMEGA_MIND") == g.turn() then
+          g.give_tag(ev.entity, "LIFESTEAL")
+        end
+      end
+      if ev.card == "BOT_283" then
+        g.add_count(p, "POGOS")
+      end
       if echo_card(g, ev.entity, p) then
         g.set_tag(ev.entity, "ECHOING", true)
       end
@@ -710,6 +1002,16 @@ cards["player:boom"] = {
       local p = g.ctrl(me)
       if ev.player == p then
         echo_fade(g, p) -- the Echo copies left in the hand go
+        for _, k in ipairs({ "CELESTIAL", "ELECTRA" }) do
+          g.add_count(p, k, -g.count(p, k))
+        end
+        -- Dr. Boom, Mad Genius's Hero Power: a different random one at the end of each of your turns, used or not
+        local cur = g.card(g.power(p))
+        if boom_power(cur) then
+          g.set_power(p, g.pick(list.filter(BOOM_POWERS, function(x)
+            return x ~= cur
+          end)))
+        end
       end
       g.set_tag(g.hero(p), "MURMUR", nil) -- (DOUBLE_BATTLECRY was given for this turn only)
       local n = g.count(p, "DREADSTEEDS")
