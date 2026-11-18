@@ -7,12 +7,13 @@ extends Control
 
 const LIFE := {"hurt": 0.55, "heal": 0.8, "buff": 0.8, "debuff": 0.7, "gain": 0.6, "freeze": 0.8,
 	"silence": 0.7, "smoke": 0.8, "destroy": 0.7, "portal": 0.8, "skull": 1.1, "battlecry": 0.6,
-	"whoosh": 0.6, "control": 0.8, "armor": 0.7, "pop": 0.5}
+	"whoosh": 0.6, "control": 0.8, "armor": 0.7, "pop": 0.5, "sweep": 0.9}
 ## The colour of an effect when its card has no element of its own.
 const COLORS := {"hurt": Color("ff7b2e"), "heal": Color("8ce99a"), "buff": Color("ffd43b"), "debuff": Color("b197fc"),
 	"gain": Color("ffffff"), "freeze": Color("a5d8ff"), "silence": Color("b197fc"), "smoke": Color("f783ac"),
 	"destroy": Color("343a40"), "portal": Color("ffd43b"), "skull": Color("f1f3f5"), "battlecry": Color("ffd43b"),
-	"whoosh": Color("ffffff"), "control": Color("9775fa"), "armor": Color("ced4da"), "pop": Color("ffe066")}
+	"whoosh": Color("ffffff"), "control": Color("9775fa"), "armor": Color("ced4da"), "pop": Color("ffe066"),
+	"sweep": Color("8ce99a")}
 
 ## The named effects a pack's cards may ask for in their `fx` (decision D16, docs/packs/fx.md,
 ## docs/packs/schema/fx.json); a name not in it plays the slot's default.
@@ -27,6 +28,8 @@ var kind := "hurt"
 var color := Color.WHITE
 var t := 0.0  # 0..1 over the effect's life
 var _life := 0.6
+## A sweep's size (a light passing over a whole hand, left to right), centred on its position.
+var span := Vector2(400, 120)
 
 
 ## The effect a card names for a slot ("element", "cast", "hit", "play", "death"), "" when it
@@ -152,6 +155,18 @@ func _draw() -> void:
 				var p := d * (r.x + 30.0 * t)
 				var n := Vector2(-d.y, d.x) * 5.0
 				draw_colored_polygon(PackedVector2Array([p - n, p + d * 9.0 * fade, p + n]), Color(color.lightened(0.3), fade))
+		"sweep":  # a band of light passing over a hand, left to right, with sparks rising from it
+			var x := -span.x / 2.0 + span.x * t
+			var h := span.y / 2.0
+			var a := minf(1.0, 4.0 * fade)
+			for i in 6:  # a soft band, brightest in its middle
+				var w := 14.0 + i * 16.0
+				draw_rect(Rect2(Vector2(x - w / 2.0, -h), Vector2(w, span.y)), Color(color, 0.12 * a))
+			draw_rect(Rect2(Vector2(-span.x / 2.0, -h), Vector2(span.x * t, span.y)), Color(color, 0.1 * a))  # the part passed glows
+			draw_line(Vector2(x, -h), Vector2(x, h), Color(color.lightened(0.6), 0.95 * a), 4, true)
+			for i in 10:
+				var y := h - span.y * fmod(t * 1.7 + i * 0.11, 1.0)
+				_star(Vector2(x + (i - 4.5) * 10.0, y), 3 + 2 * (i % 2), Color(color.lightened(0.5), a))
 		"armor":  # a grey shield popping up
 			var s := 1.0 + 0.3 * sin(t * PI)
 			var pts := PackedVector2Array([Vector2(-14, -16), Vector2(14, -16), Vector2(12, 4), Vector2(0, 18), Vector2(-12, 4)])

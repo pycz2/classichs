@@ -602,6 +602,9 @@ local function malchezaar(g, p)
       return g.card(e) == MALCHEZAAR
     end)
   end
+  if n > 0 then
+    g.log({ type = "start_of_game", player = p, card = MALCHEZAAR }) -- both players see it (the table shows it, a history line)
+  end
   for _ = 1, 5 * n do
     local have = {}
     for _, zone in ipairs({ g.deck(p), g.hand(p) }) do

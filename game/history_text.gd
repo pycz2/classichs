@@ -36,6 +36,32 @@ static func _deck_card(ev: Dictionary) -> String:
 	return c if c != "" or int(ev.get("by_id", -1)) != int(ev.get("entity", -2)) else str(ev.get("by", ""))
 
 
+## Where a buffed card the viewer does not see is: "hand p" (the opponent's hand), "deck p" (a card in a
+## deck: the view does not know it); "" for any other event or a card in sight.
+static func _unseen(ev: Dictionary, g: GameView) -> String:
+	if ev.type != "buff" or not ev.has("atk"):
+		return ""
+	var e := g.ent(int(ev.get("target", -1)))
+	if e != null and e.zone == "HAND" and e.card_id == "":
+		return "hand %d" % e.controller
+	if e == null or e.zone == "DECK":
+		var src := g.ent(int(ev.get("by_id", -1)))
+		return "deck %d" % (e.controller if e else (src.controller if src else int(ev.get("player", 0))))
+	return ""
+
+
+## The line for n hidden cards buffed alike in a hand or a deck.
+static func _unseen_line(where: String, ev: Dictionary, viewer: int, n: int) -> String:
+	var p := int(where.get_slice(" ", 1))
+	if where.begins_with("hand"):
+		if n == 1:
+			return _say(p, viewer, "A card in your hand gets %+d/%+d", "A card in Opponent's hand gets %+d/%+d", [ev.atk, ev.hp])
+		return _say(p, viewer, "%d cards in your hand get %+d/%+d", "%d cards in Opponent's hand get %+d/%+d", [n, ev.atk, ev.hp])
+	if n == 1:
+		return _say(p, viewer, "A card in your deck gets %+d/%+d", "A card in Opponent's deck gets %+d/%+d", [ev.atk, ev.hp])
+	return _say(p, viewer, "%d cards in your deck get %+d/%+d", "%d cards in Opponent's deck get %+d/%+d", [n, ev.atk, ev.hp])
+
+
 ## Lines for one history entry ({"turn", "player", "action", "events"}).
 static func lines(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Array[String]:
 	var out: Array[String] = []
@@ -50,6 +76,7 @@ static func rows(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Arra
 	var played := {}
 	var chosen: bool = entry.action.get("type", "") == "choose"
 	var run := {}  # hidden cards shuffled into one deck one after another (King Togwaggle's swap): one row
+	var buffs := {}  # hidden cards buffed alike one after another (minions in a deck: Prince Keleseth): one row
 	var cast: Array = entry.events.filter(func(e): return e.type == "cast_when_drawn").map(func(e): return e.entity)
 	for ev: Dictionary in entry.events:
 		if ev.type == "draw" and cast.has(ev.entity):
@@ -60,6 +87,14 @@ static func rows(entry: Dictionary, g: GameView, viewer: int, loc := "") -> Arra
 				out[run.row].text = _say(ev.player, viewer, "%d cards are shuffled into your deck", "%d cards are shuffled into Opponent's deck", [run.n])
 				continue
 			run = {"player": ev.player, "row": out.size(), "n": 1}
+		var where := _unseen(ev, g)
+		if where != "":
+			var key := "%s %d %d" % [where, ev.atk, ev.hp]
+			if buffs.get("key") == key and buffs.row == out.size() - 1:
+				buffs.n += 1
+				out[buffs.row].text = _unseen_line(where, ev, viewer, buffs.n)
+				continue
+			buffs = {"key": key, "row": out.size(), "n": 1}
 		if ev.type == "play":
 			played[ev.entity] = true
 		if ev.type == "summon" and played.has(ev.entity):
@@ -140,8 +175,10 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 		"silence":
 			s = _t("%s is silenced") % n.call(ev.target)
 		"buff":
-			if ev.has("atk"):
-				s = _t("%s gets %+d/%+d") % [n.call(ev.target), ev.atk, ev.hp]
+			if _unseen(ev, g) != "":
+				s = _unseen_line(_unseen(ev, g), ev, viewer, 1)
+			elif ev.has("atk"):
+				s =_t("%s gets %+d/%+d") % [n.call(ev.target), ev.atk, ev.hp]
 			else:
 				s = _t("%s changes to %s/%s") % [n.call(ev.target),
 					str(ev.set_atk) if ev.set_atk >= 0 else "-", str(ev.set_hp) if ev.set_hp >= 0 else "-"]
@@ -307,6 +344,8 @@ static func _effect(ev: Dictionary, g: GameView, viewer: int, loc: String, main:
 		"armor_lost":
 			return row.call(ev.target, _t("-%d Armor") % ev.amount, "bad")
 		"buff":
+			if _unseen(ev, g) != "":
+				return {"card": "", "name": "", "text": _unseen_line(_unseen(ev, g), ev, viewer, 1), "color": ""}
 			if ev.has("atk"):
 				return row.call(ev.target, "%+d/%+d" % [ev.atk, ev.hp], "good" if ev.atk + ev.hp >= 0 else "bad")
 			return row.call(ev.target, "= %s/%s" % [str(ev.set_atk) if ev.set_atk >= 0 else "-", str(ev.set_hp) if ev.set_hp >= 0 else "-"])

@@ -14,6 +14,16 @@ const BUFFED := Color("4dff5a")
 const DAMAGED := Color("ff3b3b")
 
 
+## A number against the card's own: green above it, red below it (Attack, Health, a card's in the hand too).
+static func stat_color(shown: int, base: int) -> Color:
+	return BUFFED if shown > base else (DAMAGED if shown < base else Color.WHITE)
+
+
+## A cost against the card's own: green when cheaper, red when dearer.
+static func cost_color(shown: int, base: int) -> Color:
+	return BUFFED if shown < base else (DAMAGED if shown > base else Color.WHITE)
+
+
 ## A weapon's Durability: red below its card's, green above (as a minion's Health).
 ## ponytail: the card's value stands for the maximum (the engine keeps none); a weapon given
 ## Durability (Upgrade!) and then used down to the card's value shows white, not red.
