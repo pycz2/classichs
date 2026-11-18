@@ -1,0 +1,14 @@
+{
+ "sets": {
+  "BOOMSDAY": "Projekt Hukatomba"
+ },
+ "classes": {
+  "WHIZBANG": "Świstomig"
+ },
+ "mechanics": {
+  "MODULAR": {
+   "name": "Magnetyzm",
+   "tip": "Zagraj tego stronnika na lewo od mecha, by się połączyły!"
+  }
+ }
+}

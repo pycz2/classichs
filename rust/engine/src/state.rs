@@ -607,6 +607,17 @@ impl Game {
                     }
                 }
             }
+            // the pack's player hooks' aura, once for each player, `me` = the champion: what a player has "for the rest
+            // of the game" (Dr. Boom, Mad Genius: your Mechs have Rush); no older pack's player hooks have one
+            let rs = self.rs;
+            if !final_pass {
+                if let Some(f) = rs.player_hooks.as_deref().and_then(|h| rs.hooks(h).aura) {
+                    for p in 0..self.players.len() {
+                        let h = self.players[p].hero;
+                        self.from(h, |g| g.fx_me(f, h));
+                    }
+                }
+            }
         }
         for (i, &e) in all.iter().enumerate() {
             // fix_health changes nothing unless max Health dropped
@@ -1051,7 +1062,8 @@ impl Game {
         let n = self.players[p].deck.len() as i64;
         let i = self.rng.randi_range(0, n) as usize;
         self.players[p].deck.insert(i, e);
-        self.log_event(obj!{"type": "add_to_deck", "player": p, "entity": e, "card": self.e(e).card_id});
+        // an event hooks may hear ("whenever you shuffle a card into a deck": Augmented Elekk; no older pack listens)
+        self.emit(obj!{"type": "add_to_deck", "player": p, "entity": e, "card": self.e(e).card_id});
         e
     }
 
@@ -1059,6 +1071,12 @@ impl Game {
     /// place, as p's (`g.to_deck`): it keeps its enchantments and the tags it was given, not its damage, its lost
     /// durability or the marks of play (Kingsbane; King Togwaggle's swap of decks). NONE if it is in play.
     pub fn to_deck(&mut self, e: Id, p: usize) -> Id {
+        self.to_deck_at(e, p, None)
+    }
+
+    /// `to_deck` at a place of the deck (0: its bottom; its length: the top) instead of a random one (Dr. Morrigan
+    /// takes the place of the minion she swaps with).
+    pub fn to_deck_at(&mut self, e: Id, p: usize, at: Option<usize>) -> Id {
         if self.e(e).zone == "PLAY" {
             return NONE;
         }
@@ -1087,9 +1105,12 @@ impl Game {
             x.set_tag(n.durability, dur);
         }
         let len = self.players[p].deck.len() as i64;
-        let i = self.rng.randi_range(0, len) as usize;
+        let i = match at {
+            Some(i) => i.min(len as usize),
+            None => self.rng.randi_range(0, len) as usize,
+        };
         self.players[p].deck.insert(i, e);
-        self.log_event(obj!{"type": "to_deck", "player": p, "entity": e, "card": self.e(e).card_id});
+        self.emit(obj!{"type": "to_deck", "player": p, "entity": e, "card": self.e(e).card_id});
         e
     }
 
@@ -1598,6 +1619,73 @@ impl Game {
         ne.borrowed = src.borrowed; // the hooks it borrowed (a Zombeast's first Beast's)
         ne.choice = src.choice; // its Choose One option (`g.choice`: a copy of Fatespinner keeps its secret Deathrattle)
         n
+    }
+
+    /// The keyword tags a card may carry (the pack's names of the engine's start keywords but Frozen and Dormant).
+    fn keyword_tags(&self) -> Vec<&'static str> {
+        let n = self.n();
+        crate::ruleset::START_TAGS.iter().filter(|id| !matches!(**id, "FROZEN" | "FROZEN_THIS_TURN" | "DORMANT"))
+            .map(|id| n.tag_of(id)).collect()
+    }
+
+    /// `g.copy_enchants`: `to` (a copy of `from`) gets `from`'s enchantments and the keywords it was given (patch
+    /// 12.0.0.25770 of 2018: a copy keeps the enchantments of the card it copies).
+    pub fn copy_enchants(&mut self, from: Id, to: Id) {
+        let src = self.e(from).clone();
+        let given: Vec<&'static str> = self.keyword_tags().into_iter()
+            .filter(|k| src.tags.get(k).is_some_and(V::truthy) && !src.card.start_tags.get(k).is_some_and(V::truthy)).collect();
+        let x = self.em(to);
+        x.enchantments.extend(src.enchantments.iter().cloned());
+        for k in given {
+            x.set_tag(k, true);
+        }
+    }
+
+    /// FUSE (Magnetic): m, a minion card out of play (just played from the hand, or in the graveyard: `g.fuse`), becomes
+    /// part of host: an enchantment with its Attack and Health (its card's and its enchantments', not auras), its hooks
+    /// (its Deathrattle, its triggers) and its `fuse` id, then its own hook enchantments (a Deathrattle given in the hand)
+    /// marked the same, and its keywords but FUSE; m goes to the graveyard (played, it never was in play). Logs `fuse`.
+    pub fn fuse(&mut self, host: Id, m: Id) {
+        let (rs, n) = (self.rs, self.n());
+        let x = self.e(m).clone();
+        let p = self.ctrl(host);
+        let mut ench = Obj::new();
+        ench.insert("atk", x.atk() - x.aura.atk);
+        ench.insert("fuse", m);
+        if rs.hooks.contains_key(x.card_id) {
+            ench.insert("hooks", x.card_id);
+        }
+        ench.insert("hp", x.max_health() - x.aura.hp);
+        ench.insert("player", p);
+        let mut all = vec![ench];
+        for e in x.enchantments.iter().filter(|e| e.contains_key("hooks") || e.contains_key("deathrattle")) {
+            let mut e = e.clone();
+            e.insert("fuse", m);
+            all.push(e);
+        }
+        let tags: Vec<&'static str> = self.keyword_tags().into_iter()
+            .filter(|k| Some(*k) != n.fuse && x.tags.get(k).is_some_and(V::truthy)).collect();
+        let h = self.em(host);
+        h.enchantments.extend(all);
+        for k in tags {
+            h.set_tag(k, true);
+        }
+        if self.e(m).zone != "GRAVEYARD" {
+            self.em(m).zone = "GRAVEYARD";
+        }
+        self.log_event(obj!{"type": "fuse", "entity": m, "target": host, "player": p, "card": x.card_id});
+        self.update_auras();
+    }
+
+    /// `g.fused`: the cards fused into e that it still holds (FUSE), in order.
+    pub fn fused(&self, e: Id) -> Vec<Id> {
+        let mut out = vec![];
+        for x in &self.e(e).enchantments {
+            if let Some(m) = x.get("fuse").map(V::int).filter(|m| !out.contains(m)) {
+                out.push(m);
+            }
+        }
+        out
     }
 
     // --- serialization ----------------------------------------------------------

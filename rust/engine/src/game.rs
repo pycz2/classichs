@@ -119,8 +119,26 @@ impl Game {
         deal: bool) -> Game {
         let mut g = Game::blank(rs, seed);
         g.start_decks = [deck0.to_vec(), deck1.to_vec()];
-        g.setup_players(hero0, hero1);
-        for (i, deck) in [deck0, deck1].into_iter().enumerate() {
+        // a deck of only a card that stands for a whole deck (rules.json `deck_recipes`: Whizbang the Wonderful) is one
+        // of its decks, picked at random, with that class's champion; only that is logged (not which deck)
+        let (mut heroes, mut decks) = ([hero0.to_string(), hero1.to_string()], [deck0.to_vec(), deck1.to_vec()]);
+        let mut recipe = [None, None];
+        for i in 0..2 {
+            let Some(list) = decks[i].first().filter(|_| decks[i].len() == 1).and_then(|c| rs.deck_recipes.get(c)) else { continue };
+            let (class, cards) = &list[g.rng.randi_range(0, list.len() as i64 - 1) as usize];
+            if let Some(h) = rs.champion(class) {
+                heroes[i] = h.to_string();
+            }
+            recipe[i] = Some(rs.card(&decks[i][0]).id.as_str());
+            decks[i] = cards.clone();
+        }
+        g.setup_players(&heroes[0], &heroes[1]);
+        for (i, c) in recipe.iter().enumerate() {
+            if let Some(c) = c {
+                g.log_event(obj!{"type": "deck_recipe", "player": i, "card": *c, "hero": g.players[i].hero});
+            }
+        }
+        for (i, deck) in decks.iter().enumerate() {
             for card_id in deck {
                 let e = g.new_entity(card_id, i);
                 g.em(e).zone = "DECK";
@@ -828,6 +846,12 @@ impl Game {
         let c = self.ctrl(e);
         let card = self.e(e).card_id;
         self.players[c].minions_played_this_turn += 1;
+        if let Some(host) = self.fuse_host(e, pos) {
+            // FUSE (Magnetic): played, not summoned; it becomes part of the minion right of where it was put
+            self.emit(obj!{"type": "play", "entity": e, "player": c, "kind": "minion", "target": t, "card": card, "fused": host});
+            self.fuse(host, e);
+            return;
+        }
         self.place_on_board(e, pos);
         let ex = self.n().exhausted;
         self.em(e).give_tag(ex, false);
@@ -847,6 +871,19 @@ impl Game {
         }
         let c = self.ctrl(e);
         self.emit(obj!{"type": "after_summon", "entity": e, "player": c, "card": card, "played": true});
+    }
+
+    /// The minion a FUSE minion played at `pos` fuses into: the friendly one now at that place (it would stand right of
+    /// it) if it is of its race (or of the pack's `every_race`) and awake (not DORMANT).
+    fn fuse_host(&self, e: Id, pos: i64) -> Option<Id> {
+        let (x, n) = (self.e(e), self.n());
+        if !n.fuse.is_some_and(|f| x.has(f)) || pos < 0 {
+            return None;
+        }
+        let host = *self.players[x.controller].board.get(pos as usize)?;
+        let h = self.e(host);
+        let race = |r: &str| !r.is_empty() && (r == x.race() || self.rs.every_race.as_deref() == Some(r));
+        (race(h.race()) && self.awake(host)).then_some(host)
     }
 
     fn play_spell(&mut self, e: Id, t: Id, choice: i64, combo: bool) {

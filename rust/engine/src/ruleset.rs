@@ -19,8 +19,8 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-const START_TAGS: [&str; 17] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
-    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL", "FOE_SPELLPROOF", "QUICK"];
+pub(crate) const START_TAGS: [&str; 18] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
+    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL", "FOE_SPELLPROOF", "QUICK", "FUSE"];
 /// Engine ids of the tags Silence removes.
 const SILENCED: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
     "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
@@ -179,6 +179,9 @@ pub struct Names {
     /// QUICK: a minion that may attack minions (not champions) while it is exhausted (a pack that names it: The
     /// Witchwood's Rush).
     pub quick: Option<&'static str>,
+    /// FUSE: a minion played left of a friendly minion of its race fuses into it (a pack that names it: The Boomsday
+    /// Project's Magnetic).
+    pub fuse: Option<&'static str>,
     /// POWER_DOUBLE: doubles its owner's power damage and healing, once per count (an aura tag on the champion: The
     /// Witchwood's Clockwork Automaton); only when the pack names it.
     pub power_double: Option<&'static str>,
@@ -257,6 +260,7 @@ impl Names {
             lifesteal: by_engine.get("LIFESTEAL").copied(),
             foe_spellproof: by_engine.get("FOE_SPELLPROOF").copied(),
             quick: by_engine.get("QUICK").copied(),
+            fuse: by_engine.get("FUSE").copied(),
             power_double: by_engine.get("POWER_DOUBLE").copied(),
             double_turn_end: by_engine.get("DOUBLE_TURN_END").copied(),
             task_progress: by_engine.get("TASK_PROGRESS").copied(),
@@ -286,6 +290,11 @@ impl Names {
             return s;
         }
         self.by_engine.get(s).copied().unwrap_or(s)
+    }
+
+    /// The pack's name of an engine id (the id itself if the pack does not rename it).
+    pub fn tag_of(&self, id: &'static str) -> &'static str {
+        self.by_engine.get(id).copied().unwrap_or(id)
     }
 
     /// A known name (see `known`) without a copy.
@@ -380,6 +389,13 @@ pub struct Ruleset {
     /// spell was played (patch 9.2.0.21517 of 2017: Wild Pyromancer no longer triggers from the Mindgames that summoned
     /// it). Off: by all in play when it resolved.
     pub after_spell_from_before: bool,
+    /// `behaviour.transform_drops_enchantments`: a card transformed in a hand or a deck never keeps its enchantments
+    /// (`g.transform`'s `keep` is ignored: patch 12.0.0.25770 of 2018, "whenever a card transforms it loses its
+    /// enchantments"). Off: `keep` keeps them (The Witchwood's worgen).
+    pub transform_drops_enchantments: bool,
+    /// `deck_recipes`: a card that stands for a whole deck (Whizbang the Wonderful): a deck of only that card is legal,
+    /// and a game starts it as one of these decks, picked at random, with that class's champion: (class, cards).
+    pub deck_recipes: HashMap<String, Vec<(String, Vec<String>)>>,
     /// `player_hooks`: a named hook set whose `on` hooks see every event once for each player (`me` is that player's
     /// champion): counts of the game ("spells you've cast this game"). None: no such hooks.
     pub player_hooks: Option<String>,
@@ -585,6 +601,15 @@ impl Ruleset {
             replaced_weapon_dies: rules["behaviour"].get("replaced_weapon_dies") == Some(&json!(true)),
             lifesteal_one_heal: rules["behaviour"].get("lifesteal_one_heal") == Some(&json!(true)),
             after_spell_from_before: rules["behaviour"].get("after_spell_from_before") == Some(&json!(true)),
+            transform_drops_enchantments: rules["behaviour"].get("transform_drops_enchantments") == Some(&json!(true)),
+            deck_recipes: rules.get("deck_recipes").and_then(Value::as_object).map_or(HashMap::new(), |m| {
+                m.iter()
+                    .map(|(card, list)| {
+                        let decks = list.as_array().map_or(vec![], |a| a.iter().map(|d| (s(d, "class"), strs(d, "cards"))).collect());
+                        (card.clone(), decks)
+                    })
+                    .collect()
+            }),
             player_hooks: rules.get("player_hooks").and_then(Value::as_str).map(String::from),
             every_race: rules.get("every_race").and_then(Value::as_str).map(String::from),
             bot_trap: i(&rules["bot"], "trap", 0) as f64,
