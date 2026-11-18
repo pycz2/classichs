@@ -33,6 +33,9 @@ var transport = null  # (a NetSession has one; MatchView asks)
 ## `unspectate`; full: both hands are open.
 var watch := false
 var full := false
+## When the watched game began, on this device's clock (Time.get_ticks_msec; the server's
+## `spectating.elapsed`): the spectator's match clock counts from there.
+var started_ms := 0
 var _done := false
 ## The game's pack (`match.pack`, a rules hash) while this device still has to get it; its
 ## states wait in _held (a state is the whole view: the last one is enough).

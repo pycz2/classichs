@@ -3,7 +3,8 @@ extends RefCounted
 ## The local player's profile: the name the opponent sees.
 
 const DEFAULT_PATH := "user://profile.json"
-const NAME_MAX := 24
+## The longest name (a server account's too: 16 at registration).
+const NAME_MAX := 16
 const DEFAULT_NAME := "Player"
 
 static var path := DEFAULT_PATH
@@ -26,3 +27,9 @@ static func save_name(n: String) -> void:
 static func clean(n: String) -> String:
 	n = n.strip_edges().left(NAME_MAX).strip_edges()
 	return n if n != "" else DEFAULT_NAME
+
+
+## A name to show: one longer than NAME_MAX characters (an older one, a server account's of up
+## to 20) ends in "…" after its first NAME_MAX - 1.
+static func short(n: String) -> String:
+	return n if n.length() <= NAME_MAX else n.left(NAME_MAX - 1).strip_edges() + "…"

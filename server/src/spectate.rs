@@ -30,7 +30,7 @@ pub fn add(app: &AppRef, game: &str, account: i64, full: bool) -> Result<(), &'s
     join(app, game, account, 0, full)
 }
 
-/// Starts watching (a game watched before is left): `spectating` now, the current
+/// Starts watching (a game watched before is left): `spectating` (`elapsed`: the seconds the game has run) now, the current
 /// `spectate_state` from the game loop right after it.
 pub fn join(app: &AppRef, game: &str, account: i64, seat: usize, full: bool) -> Result<(), &'static str> {
     let mut hub = app.hub();
@@ -42,7 +42,9 @@ pub fn join(app: &AppRef, game: &str, account: i64, seat: usize, full: bool) -> 
     if !already && hub.watching.values().filter(|w| w.game == game).count() >= MAX_PER_GAME {
         return Err("This game has the most spectators it can have");
     }
-    let m = json!({"t": "spectating", "game": game, "mode": lg.mode, "pack": lg.pack, "players": lg.names, "seat": seat, "full": full});
+    let elapsed = crate::ranked::now() - lg.started; // (the spectator's match clock starts there)
+    let m = json!({"t": "spectating", "game": game, "mode": lg.mode, "pack": lg.pack, "players": lg.names, "seat": seat, "full": full,
+                   "elapsed": elapsed});
     let tx = lg.tx.clone();
     hub.watching.insert(account, Watch { game: game.into(), seat, full });
     hub.send(account, &m);

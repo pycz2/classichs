@@ -262,6 +262,7 @@ func watch(msg: Dictionary) -> ServerSession:
 	s.setup(self, {"game": msg.get("game", ""), "mode": msg.get("mode", "casual"), "you": seat, "pack": msg.get("pack", ""),
 		"opponent": {"user": name_of.call(1 - seat)}}, name_of.call(seat), null)
 	s.full = msg.get("full", false) == true
+	s.started_ms = Time.get_ticks_msec() - int(float(msg.get("elapsed", 0)) * 1000.0)
 	for x in _games.values():  # the server shows one game per spectator: an older one is over
 		if is_instance_valid(x) and x.watch:
 			x._done = true
