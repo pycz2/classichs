@@ -1,5 +1,5 @@
 {
- "about": "One Night in Karazhan's interface (docs/packs/format.md, 'UI theme'): Medivh's tower on the night of the masquerade — midnight-blue panels like velvet with gilded rims, buttons of deep amethyst that light up gold under the mouse, warm candle-white text, embers drifting over the menu like sparks from the ballroom's chandeliers; the title in Classic's Cinzel Decorative, in party gold.",
+ "about": "One Night in Karazhan's interface (docs/packs/format.md, 'UI theme'): Medivh's tower on the night of the masquerade — midnight-blue panels like velvet with gilded rims, buttons of deep amethyst that light up gold under the mouse, warm candle-white text, embers drifting over the menu like sparks from the ballroom's chandeliers; the title in Classic's Alegreya SC, in party gold.",
  "colors": {
   "text": "f6eedc",
   "muted": "b9aed0",
@@ -24,7 +24,7 @@
  "outline_size": 3,
  "button": {"style": "neon", "radius": 6, "border": 1, "glow": "c9a24a33", "glow_size": 4, "glow_hover": "f2c45a99", "glow_hover_size": 12},
  "panel": {"radius": 8, "border": 2, "glow": "d4a84340", "glow_size": 12},
- "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
  "end_turn": {"button": "3e2470", "border": "f2c45a", "text": "fbf4e4", "ready": "8a6416", "ready_border": "ffe29a"},
  "mana": "6fa8ff",
  "menu": {"shade": "0c0b1e59", "particles": "embers"}

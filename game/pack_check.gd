@@ -55,7 +55,7 @@ static func open_folder(dir: String) -> PackCheck:
 	c.source = dir
 	c.from_source = true
 	if not DirAccess.dir_exists_absolute(dir):
-		c._item(ERROR, "cannot read the folder " + dir)
+		c._item(ERROR, _t("cannot read the folder %s", [dir]))
 		return c
 	c._walk(dir.trim_suffix("/"), "")
 	c._build()
@@ -68,26 +68,26 @@ static func open_file(bytes: PackedByteArray, file_name: String) -> PackCheck:
 	c.source = file_name
 	c.from_source = not file_name.to_lower().ends_with(".cardpack")
 	if bytes.size() > LIMITS.pack:
-		c._item(ERROR, "the file is bigger than 1 GiB")
+		c._item(ERROR, _t("the file is bigger than 1 GiB"))
 		return c
 	var tmp := _tmp()
 	var f := FileAccess.open(tmp, FileAccess.WRITE)
 	if f == null:
-		c._item(ERROR, "cannot write " + tmp)
+		c._item(ERROR, _t("cannot write %s", [tmp]))
 		return c
 	f.store_buffer(bytes)
 	f.close()
 	var z := ZIPReader.new()
 	if z.open(tmp) != OK:
 		DirAccess.remove_absolute(tmp)
-		c._item(ERROR, "this is not a zip file")
+		c._item(ERROR, _t("this is not a zip file"))
 		return c
 	var all := {}
 	for p in z.get_files():
 		if p.ends_with("/"):
 			continue
 		if all.has(p):
-			c._item(ERROR, "twice in the zip", p)
+			c._item(ERROR, _t("twice in the zip"), p)
 		all[p] = z.read_file(p)
 	z.close()
 	DirAccess.remove_absolute(tmp)
@@ -120,7 +120,7 @@ static func _tmp() -> String:
 func _walk(dir: String, rel: String) -> void:
 	var d := DirAccess.open(dir)
 	if d == null:
-		_item(ERROR, "cannot read the folder " + dir)
+		_item(ERROR, _t("cannot read the folder %s", [dir]))
 		return
 	d.include_hidden = false
 	for f in d.get_files():
@@ -136,7 +136,7 @@ func _add(p: String, data: PackedByteArray) -> void:
 	if Array(p.split("/")).any(func(s: String): return s.begins_with(".")) or p.ends_with(".import"):
 		return
 	if p == "recipe.json":
-		_item(WARNING, "recipe.json: its steps are not run here (they need tools/pack.py build); the files are packed as they are", p)
+		_item(WARNING, _t("recipe.json: its steps are not run here (they need tools/pack.py build); the files are packed as they are"), p)
 		return
 	if p.ends_with(".patch.json"):
 		return
@@ -209,12 +209,31 @@ func file_name() -> String:
 
 # --- findings ----------------------------------------------------------------------------------
 
-func _item(level: String, text: String, file := "", line := 0) -> void:
-	items.append({"level": level, "text": text, "file": file, "line": line})
+## A finding: its level, its text (in English; "msg" keeps it to be translated, see said()), where.
+func _item(level: String, text: Variant, file := "", line := 0) -> void:
+	var msg: Array = text if text is Array else [str(text), []]
+	items.append({"level": level, "text": _say(msg, false), "msg": msg, "file": file, "line": line})
+
+
+## A finding's text to translate: [the English text, its values] (a value may be such a pair too).
+static func _t(text: String, values := []) -> Array:
+	return [text, values]
+
+
+## A finding's text in the interface's language.
+static func said(it: Dictionary) -> String:
+	return _say(it.msg, true) if it.has("msg") else str(it.text)
+
+
+static func _say(msg: Array, translate: bool) -> String:
+	var t: String = TranslationServer.translate(msg[0]) if translate else msg[0]
+	if msg[1].is_empty():
+		return t
+	return t % msg[1].map(func(v): return _say(v, translate) if v is Array and v.size() == 2 and v[0] is String and v[1] is Array else v)
 
 
 ## An error or warning about something named in a file: its line is where the name first stands.
-func _at(level: String, text: String, file: String, name := "") -> void:
+func _at(level: String, text: Variant, file: String, name := "") -> void:
 	_item(level, text, file, _line(file, name) if name != "" else 0)
 
 
@@ -242,11 +261,11 @@ func _parse(p: String) -> Variant:
 		var b: PackedByteArray = files[p]
 		var v: Variant = null
 		if b.size() >= 3 and b[0] == 0xEF and b[1] == 0xBB and b[2] == 0xBF:
-			_item(ERROR, "UTF-8 BOM", p, 1)
+			_item(ERROR, _t("UTF-8 BOM"), p, 1)
 		else:
 			var j := JSON.new()
 			if j.parse(b.get_string_from_utf8()) != OK:
-				_item(ERROR, "not JSON: " + j.get_error_message(), p, j.get_error_line() + 1)  # (0 = the first line)
+				_item(ERROR, _t("not JSON: %s", [j.get_error_message()]), p, j.get_error_line() + 1)  # (0 = the first line)
 			else:
 				v = j.data
 		_parsed[p] = v
@@ -262,7 +281,7 @@ func _json(p: String, schema_name := "") -> Variant:
 	for e: String in errs.slice(0, 20):
 		_item(ERROR, e.trim_prefix("$.").trim_prefix("$"), p, _schema_line(p, v, e))
 	if errs.size() > 20:
-		_item(ERROR, "… and %d more schema errors" % (errs.size() - 20), p)
+		_item(ERROR, _t("… and %d more schema errors", [(errs.size() - 20)]), p)
 	return null if not errs.is_empty() else v
 
 
@@ -402,18 +421,18 @@ func _check_paths() -> void:
 		var size: int = files[p].size()
 		total += size
 		if _path_re.search(p) == null or p.length() > 200:
-			_item(ERROR, "bad path (letters, digits, _ . - and /, no leading dot, at most 200 characters)", p)
+			_item(ERROR, _t("bad path (letters, digits, _ . - and /, no leading dot, at most 200 characters)"), p)
 			continue
 		if size > LIMITS.file:
-			_item(ERROR, "%d bytes, more than %d" % [size, LIMITS.file], p)
+			_item(ERROR, _t("%d bytes, more than %d", [size, LIMITS.file]), p)
 		var parts := p.split("/")
 		if parts.size() == 1:
 			if not Pack.TOP_FILES.has(p):
-				_item(ERROR, "not allowed at the top (allowed: %s)" % ", ".join(Pack.TOP_FILES), p)
+				_item(ERROR, _t("not allowed at the top (allowed: %s)", [", ".join(Pack.TOP_FILES)]), p)
 			continue
 		var top := parts[0]
 		if not DIRS.has(top):
-			_item(ERROR, "unknown folder %s/" % top, p)
+			_item(ERROR, _t("unknown folder %s/", [top]), p)
 			continue
 		var exts: Array = DIRS[top][0]
 		var depth: int = DIRS[top][1]
@@ -422,22 +441,22 @@ func _check_paths() -> void:
 			exts = FONT_FILES
 			depth = 2
 		elif top == "ui" and ext == "json" and p != "ui/theme.json":
-			_item(ERROR, "the only JSON file in ui/ is theme.json", p)
+			_item(ERROR, _t("the only JSON file in ui/ is theme.json"), p)
 		if not exts.has(ext):
-			_item(ERROR, "%s/ holds only %s" % [top, " ".join(exts.map(func(e): return "." + e))], p)
+			_item(ERROR, _t("%s/ holds only %s", [top, " ".join(exts.map(func(e): return "." + e))]), p)
 		if depth != 0 and parts.size() - 1 != depth:
-			_item(ERROR, "%s/ files go %s" % [top, "right in it" if depth == 1 else "in a sub-folder (a set)"], p)
+			_item(ERROR, _t("%s/ files go %s", [top, _t("right in it") if depth == 1 else _t("in a sub-folder (a set)")]), p)
 		if IMAGES.has(ext) and size > LIMITS.image:
-			_item(ERROR, "picture of %d bytes, more than %d" % [size, LIMITS.image], p)
+			_item(ERROR, _t("picture of %d bytes, more than %d", [size, LIMITS.image]), p)
 		if top in ["locales", "layout"]:
 			text += size
 		if Pack.is_rules_file(p):
 			rules += size
 	if files.size() > LIMITS.files:
-		_item(ERROR, "%d files, more than %d" % [files.size(), LIMITS.files])
+		_item(ERROR, _t("%d files, more than %d", [files.size(), LIMITS.files]))
 	for row in [["unpacked", total], ["rules", rules], ["text", text]]:
 		if row[1] > LIMITS[row[0]]:
-			_item(ERROR, "%s size %d is more than %d" % [row[0], row[1], LIMITS[row[0]]])
+			_item(ERROR, _t("%s size %d is more than %d", [row[0], row[1], LIMITS[row[0]]]))
 
 
 ## Every check of tools/pack.py check_files the client can make.
@@ -446,7 +465,7 @@ func check() -> void:
 	_check_paths()
 	for need in ["manifest.json", "rules.json", "cards.json"]:
 		if not files.has(need):
-			_item(ERROR, need + " is missing")
+			_item(ERROR, _t("%s is missing", [need]))
 	if errors() > before:
 		return
 	var man = _json("manifest.json", "manifest.schema.json")
@@ -456,7 +475,7 @@ func check() -> void:
 		return
 	for p: String in files:
 		if Pack.is_rules_file(p) and p.ends_with(".json") and _fraction(_parse(p)):
-			_item(ERROR, "fractions are not allowed (whole numbers only)", p)
+			_item(ERROR, _t("fractions are not allowed (whole numbers only)"), p)
 	var voc: Dictionary = schema("keywords.json")
 	var engine_ids := {}
 	var kinds := {}
@@ -466,7 +485,7 @@ func check() -> void:
 	var cards := {}
 	for c in card_list:
 		if cards.has(c.id):
-			_at(ERROR, "card %s twice" % c.id, "cards.json", c.id)
+			_at(ERROR, _t("card %s twice", [c.id]), "cards.json", c.id)
 		cards[c.id] = c
 	_cards = cards
 	var card := _card
@@ -474,23 +493,23 @@ func check() -> void:
 	# rules
 	for name in rules.mechanics:
 		if not engine_ids.has(rules.mechanics[name].engine):
-			_at(ERROR, "mechanic %s maps to %s, not an engine keyword (docs/packs/schema/keywords.json)" % [name, rules.mechanics[name].engine], "rules.json", name)
+			_at(ERROR, _t("mechanic %s maps to %s, not an engine keyword (docs/packs/schema/keywords.json)", [name, rules.mechanics[name].engine]), "rules.json", name)
 	var classes := {}
 	for c in rules.classes:
 		classes[c.id] = true
 	if not rules.classes.any(func(c): return c.get("neutral", false)):
-		_item(WARNING, "no class is neutral", "rules.json")
+		_item(WARNING, _t("no class is neutral"), "rules.json")
 	for c in rules.classes:
 		if c.has("champion"):
 			var champ = card.call(c.champion, "class " + c.id, "rules.json", "CHAMPION")
 			if champ and champ.class != c.id:
-				_at(ERROR, "champion %s of %s is of class %s" % [c.champion, c.id, champ.class], "rules.json", c.champion)
+				_at(ERROR, _t("champion %s of %s is of class %s", [c.champion, c.id, champ.class]), "rules.json", c.champion)
 	var rarities := {}
 	for x in rules.rarities:
 		rarities[x.id] = true
 	for rid in rules.limits.get("copies_by_rarity", {}):
 		if not rarities.has(rid):
-			_at(ERROR, "copies_by_rarity names unknown rarity " + rid, "rules.json", rid)
+			_at(ERROR, _t("copies_by_rarity names unknown rarity %s", [rid]), "rules.json", rid)
 	var sets := {}
 	for s in rules.get("sets", []):
 		sets[s] = true
@@ -502,29 +521,29 @@ func check() -> void:
 	if rules.has("default_power"):
 		card.call(rules.default_power, "default_power", "rules.json", "POWER")
 	elif card_list.any(func(c): return c.type == "CHAMPION"):
-		_item(ERROR, "default_power is missing (the engine needs it whenever the pack has champions)", "rules.json")
+		_item(ERROR, _t("default_power is missing (the engine needs it whenever the pack has champions)"), "rules.json")
 	var modes: Dictionary = rules.modes
 	for mname in modes:
 		for s in modes[mname].sets:
 			if not sets.has(s):
-				_at(ERROR, "modes.%s uses unknown set %s" % [mname, s], "rules.json", s)
+				_at(ERROR, _t("modes.%s uses unknown set %s", [mname, s]), "rules.json", s)
 	for rid in modes.constructed.get("starter_rarities", []):
 		if not rarities.has(rid):
-			_at(ERROR, "starter_rarities names unknown rarity " + rid, "rules.json", rid)
+			_at(ERROR, _t("starter_rarities names unknown rarity %s", [rid]), "rules.json", rid)
 	for cid in modes.constructed.get("starter_core", []):
 		var c = card.call(cid, "starter_core", "rules.json")
 		if c and not c.get("collectible", false):
-			_at(ERROR, "starter_core card %s is not collectible" % cid, "rules.json", cid)
+			_at(ERROR, _t("starter_core card %s is not collectible", [cid]), "rules.json", cid)
 	if modes.has("arena"):
 		var a: Dictionary = modes.arena
 		for cls in a.classes:
 			if not classes.has(cls):
-				_at(ERROR, "arena class %s unknown" % cls, "rules.json", cls)
+				_at(ERROR, _t("arena class %s unknown", [cls]), "rules.json", cls)
 		if a.tier_weights.values().reduce(func(x, y): return x + y, 0) <= 0:
-			_at(ERROR, "arena tier_weights add up to 0", "rules.json", "tier_weights")
+			_at(ERROR, _t("arena tier_weights add up to 0"), "rules.json", "tier_weights")
 		for n in a.get("special_picks", []):
 			if n > a.picks:
-				_at(ERROR, "arena special pick %d is after the last pick" % n, "rules.json", "special_picks")
+				_at(ERROR, _t("arena special pick %d is after the last pick", [n]), "rules.json", "special_picks")
 	var ranked = rules.get("ranked")
 	if ranked:
 		var nums: Array = ranked.ranks.map(func(x): return int(x.rank))
@@ -535,13 +554,13 @@ func check() -> void:
 		for n in nums:
 			unique[n] = true
 		if nums.is_empty() or nums != down or unique.size() != nums.size() or nums[-1] != 1 or nums[0] != nums.size():
-			_at(ERROR, "ranked.ranks must run from the lowest rank (N) down to 1, one each", "rules.json", "ranks")
+			_at(ERROR, _t("ranked.ranks must run from the lowest rank (N) down to 1, one each"), "rules.json", "ranks")
 		for x in ranked.ranks + ([ranked.legend] if ranked.get("legend") else []):
 			var em = x.get("emblem")
 			if em and em.has("card"):
 				card.call(em.card, "rank %s emblem" % str(Rules.ints(x.get("rank", "legend"))), "rules.json")
 			if em and em.has("image") and not files.has(em.image):
-				_at(ERROR, "emblem %s is not in the pack" % em.image, "rules.json", em.image)
+				_at(ERROR, _t("emblem %s is not in the pack", [em.image]), "rules.json", em.image)
 
 	# cards
 	var fxc: Dictionary = schema("fx.json")
@@ -551,54 +570,61 @@ func check() -> void:
 	for c in card_list:
 		var at: String = c.id
 		if not classes.has(c.class):
-			_at(ERROR, "%s: unknown class %s" % [at, c.class], "cards.json", at)
+			_at(ERROR, _t("%s: unknown class %s", [at, c.class]), "cards.json", at)
 		if c.has("rarity") and not rarities.has(c.rarity):
-			_at(ERROR, "%s: unknown rarity %s" % [at, c.rarity], "cards.json", at)
+			_at(ERROR, _t("%s: unknown rarity %s", [at, c.rarity]), "cards.json", at)
 		if c.has("set") and not sets.is_empty() and not sets.has(c.set):
-			_at(ERROR, "%s: unknown set %s" % [at, c.set], "cards.json", at)
+			_at(ERROR, _t("%s: unknown set %s", [at, c.set]), "cards.json", at)
 		if c.has("race") and not races.has(c.race):
-			_at(ERROR, "%s: unknown race %s" % [at, c.race], "cards.json", at)
+			_at(ERROR, _t("%s: unknown race %s", [at, c.race]), "cards.json", at)
 		for k in c.get("keywords", []) + c.get("refs", []):
 			if not rules.mechanics.has(k):
-				_at(ERROR, "%s: mechanic %s is not in rules.json mechanics" % [at, k], "cards.json", at)
+				_at(ERROR, _t("%s: mechanic %s is not in rules.json mechanics", [at, k]), "cards.json", at)
 		if c.type == "CHAMPION":
 			if c.has("power"):
 				card.call(c.power, at + " power", "cards.json", "POWER")
 			elif not rules.has("default_power"):
-				_at(ERROR, "%s: a champion needs a power (or rules.json default_power)" % at, "cards.json", at)
+				_at(ERROR, _t("%s: a champion needs a power (or rules.json default_power)", [at]), "cards.json", at)
 		elif c.has("power"):
-			_at(ERROR, "%s: only a CHAMPION has a power" % at, "cards.json", at)
+			_at(ERROR, _t("%s: only a CHAMPION has a power", [at]), "cards.json", at)
 		if c.has("script") and not files.has(c.script.get_slice("#", 0)):
-			_at(ERROR, "%s: script %s is not in the pack" % [at, c.script.get_slice("#", 0)], "cards.json", at)
+			_at(ERROR, _t("%s: script %s is not in the pack", [at, c.script.get_slice("#", 0)]), "cards.json", at)
 		for slot in c.get("fx", {}):
 			if not c.fx[slot] in fx_names.get(slot, []):
-				_at(WARNING, "%s: fx.%s '%s' is not in the catalog (the client shows its default)" % [at, slot, c.fx[slot]], "cards.json", at)
+				_at(WARNING, _t("%s: fx.%s '%s' is not in the catalog (the client shows its default)", [at, slot, c.fx[slot]]), "cards.json", at)
 		for slot in c.get("sounds", {}):
 			var name: String = c.sounds[slot]
 			if not files.keys().any(func(p: String): return p.begins_with("sounds/") and p.get_file().get_basename() == name):
-				_at(WARNING, "%s: sound %s is in no sound set" % [at, name], "cards.json", at)
+				_at(WARNING, _t("%s: sound %s is in no sound set", [at, name]), "cards.json", at)
 
 	# the manifest and the files it names
 	var langs: Array = man.locales
 	if not langs.has(man.default_locale):
-		_at(ERROR, "default_locale is not in locales", "manifest.json", "default_locale")
+		_at(ERROR, _t("default_locale is not in locales"), "manifest.json", "default_locale")
 	if man.get("rules_hash") and man.rules_hash != computed_rules_hash():
-		_at(ERROR, "rules_hash does not match the pack (build it again)", "manifest.json", "rules_hash")
+		_at(ERROR, _t("rules_hash does not match the pack (build it again)"), "manifest.json", "rules_hash")
 	for key in ["card_back", "logo"]:
 		if man.get(key) and not files.has(man[key]):
-			_at(ERROR, "%s %s is not in the pack" % [key, man[key]], "manifest.json", key)
+			_at(ERROR, _t("%s %s is not in the pack", [key, man[key]]), "manifest.json", key)
 	var marks = man.get("set_marks", {})
 	for key in marks if marks is Dictionary else {}:
 		var icon = marks[key].get("icon") if marks[key] is Dictionary else null
 		if icon and not files.has(icon):
-			_at(ERROR, "set_marks.%s icon %s is not in the pack" % [key, icon], "manifest.json", "set_marks")
+			_at(ERROR, _t("set_marks.%s icon %s is not in the pack", [key, icon]), "manifest.json", "set_marks")
 	if files.has("ui/theme.json"):
 		var theme = _json("ui/theme.json", "theme.schema.json")
 		if theme is Dictionary:
 			for kf in [["fonts", "title"], ["fonts", "body"], ["button", "texture"], ["panel", "texture"]]:
 				var f = theme.get(kf[0], {}).get(kf[1])
 				if f and not files.has(f):
-					_at(ERROR, "%s is not in the pack" % f, "ui/theme.json", f)
+					_at(ERROR, _t("%s is not in the pack", [f]), "ui/theme.json", f)
+	for f: String in files:  # the library's tile picture: far from 5:2 it is cut
+		if f.get_basename() == "ui/tile" and IMAGES.has(f.get_extension().to_lower()):
+			var img := Image.new()
+			var ext := f.get_extension().to_lower()
+			var ok := img.load_png_from_buffer(files[f]) if ext == "png" else (img.load_webp_from_buffer(files[f]) if ext == "webp" else img.load_jpg_from_buffer(files[f]))
+			if ok == OK and absf(float(img.get_width()) / img.get_height() - 2.5) > 0.25:
+				_item(WARNING, _t("%dx%d; the game library shows it at 5:2 (750x300): it is cut", [img.get_width(), img.get_height()]), f)
 	for kt in [["art_sets", "art"], ["sound_sets", "sounds"], ["music_sets", "music"]]:
 		var listed := {}
 		for s in man.get(kt[0], []):
@@ -609,12 +635,12 @@ func check() -> void:
 				present[p.get_slice("/", 1)] = true
 		for s in listed:
 			if not present.has(s):
-				_at(ERROR, "%s %s has no files in %s/%s/" % [kt[0], s, kt[1], s], "manifest.json", s)
+				_at(ERROR, _t("%s %s has no files in %s/%s/", [kt[0], s, kt[1], s]), "manifest.json", s)
 		for s in present:
 			if not listed.has(s):
-				_item(ERROR, "%s/%s/ is not listed in manifest.json %s" % [kt[1], s, kt[0]], "manifest.json")
+				_item(ERROR, _t("%s/%s/ is not listed in manifest.json %s", [kt[1], s, kt[0]]), "manifest.json")
 		if man.get(kt[0], []).filter(func(s): return s.get("default", false)).size() > 1:
-			_at(ERROR, "more than one default in " + kt[0], "manifest.json", kt[0])
+			_at(ERROR, _t("more than one default in %s", [kt[0]]), "manifest.json", kt[0])
 	for s in man.get("art_sets", []):
 		var stems := {}
 		for p: String in files:
@@ -623,22 +649,22 @@ func check() -> void:
 		var unknown := stems.keys().filter(func(x): return not cards.has(x))
 		unknown.sort()
 		if not unknown.is_empty():
-			_item(WARNING, "art/%s/: %d pictures of no card (%s)" % [s.id, unknown.size(), ", ".join(unknown.slice(0, 5))])
+			_item(WARNING, _t("art/%s/: %d pictures of no card (%s)", [s.id, unknown.size(), ", ".join(unknown.slice(0, 5))]))
 		var missing := cards.keys().filter(func(x): return not stems.has(x))
 		missing.sort()
 		if not missing.is_empty() and s.get("default", false):
-			_item(WARNING, "art/%s/: no picture for %d cards (%s)" % [s.id, missing.size(), ", ".join(missing.slice(0, 5))])
+			_item(WARNING, _t("art/%s/: no picture for %d cards (%s)", [s.id, missing.size(), ", ".join(missing.slice(0, 5))]))
 
 	# locales and layouts
 	var texts := files.keys().filter(func(p: String): return p.begins_with("locales/") or p.begins_with("layout/"))
 	texts.sort()
 	for p: String in texts:
 		if not langs.has(p.get_file().get_basename()):
-			_item(ERROR, "%s is not in manifest.json locales" % p.get_file().get_basename(), p)
+			_item(ERROR, _t("%s is not in manifest.json locales", [p.get_file().get_basename()]), p)
 	for lang in langs:
 		var p := "locales/%s.json" % lang
 		if not files.has(p):
-			_at(ERROR, "%s is missing (manifest.json lists %s)" % [p, lang], "manifest.json", "locales")
+			_at(ERROR, _t("%s is missing (manifest.json lists %s)", [p, lang]), "manifest.json", "locales")
 			continue
 		var loc = _json(p, "locale.schema.json")
 		if loc == null:
@@ -646,11 +672,11 @@ func check() -> void:
 		var names: Dictionary = loc.get("cards", {})
 		for cid in names:
 			if not cards.has(cid):
-				_at(WARNING, "text of unknown card " + cid, p, cid)
+				_at(WARNING, _t("text of unknown card %s", [cid]), p, cid)
 		var nameless := cards.keys().filter(func(cid): return not names.get(cid, {}).get("name"))
 		if not nameless.is_empty():
 			_item(ERROR if lang == man.default_locale else WARNING,
-				"%d cards without a name (%s)" % [nameless.size(), ", ".join(nameless.slice(0, 5))], p)
+				_t("%d cards without a name (%s)", [nameless.size(), ", ".join(nameless.slice(0, 5))]), p)
 		if lang == man.default_locale:
 			var used := {}
 			for c in card_list:
@@ -661,14 +687,14 @@ func check() -> void:
 			for k in list:
 				var engine = rules.mechanics.get(k, {}).get("engine")
 				if kinds.get(engine) in ["keyword", "hook"] and not loc.get("mechanics", {}).has(k):
-					_item(WARNING, "mechanic %s has no name or tip" % k, p)
+					_item(WARNING, _t("mechanic %s has no name or tip", [k]), p)
 	for p: String in texts:
 		if p.begins_with("layout/"):
 			var lay = _json(p, "layout.schema.json")
 			if lay is Dictionary:
 				var stray: Array = lay.keys().filter(func(cid): return not cards.has(cid))
 				if not stray.is_empty():
-					_at(WARNING, "layout of %d unknown cards" % stray.size(), p, stray[0])
+					_at(WARNING, _t("layout of %d unknown cards", [stray.size()]), p, stray[0])
 
 	# decks and missions
 	var paths := files.keys()
@@ -679,7 +705,7 @@ func check() -> void:
 			if d != null:
 				var why := deck_error(d, cards, rules)
 				if why != "":
-					_item(ERROR, "illegal deck: " + why, p)
+					_item(ERROR, _t("illegal deck: %s", [why]), p)
 	for p: String in paths:
 		if not p.begins_with("missions/"):
 			continue
@@ -693,7 +719,7 @@ func check() -> void:
 		for cid in m.player.hand + m.player.deck + m.boss_deck + ([m.reward] if m.has("reward") else []):
 			card.call(cid, "a card", p)
 		if m.get("script") and not files.has(str(m.script).get_slice("#", 0)):
-			_at(ERROR, "script %s is not in the pack" % m.script, p, "script")
+			_at(ERROR, _t("script %s is not in the pack", [m.script]), p, "script")
 	_check_tutorial(man, rules, card)
 
 
@@ -701,9 +727,9 @@ func check() -> void:
 func _card(cid: String, at: String, file: String, kind := "") -> Variant:
 	var c = _cards.get(cid)
 	if c == null:
-		_at(ERROR, "%s: unknown card %s" % [at, cid], file, cid)
+		_at(ERROR, _t("%s: unknown card %s", [at, cid]), file, cid)
 	elif kind != "" and c.type != kind:
-		_at(ERROR, "%s: %s is a %s, not a %s" % [at, cid, c.type, kind], file, cid)
+		_at(ERROR, _t("%s: %s is a %s, not a %s", [at, cid, c.type, kind]), file, cid)
 	return c
 
 
@@ -745,7 +771,7 @@ func _check_tutorial(man: Dictionary, rules: Dictionary, card: Callable) -> void
 	var has_missions := files.keys().any(func(p: String): return p.begins_with("missions/"))
 	if not files.has("tutorial.json"):
 		if has_missions:
-			_item(WARNING, "missions/ without tutorial.json: the game shows no tutorial")
+			_item(WARNING, _t("missions/ without tutorial.json: the game shows no tutorial"))
 		return
 	var t = _json("tutorial.json", "tutorial.schema.json")
 	if t == null:
@@ -763,18 +789,18 @@ func _check_tutorial(man: Dictionary, rules: Dictionary, card: Callable) -> void
 				v = v.get(k) if v is Dictionary else null
 			if not v is String or v.strip_edges() == "":
 				_at(ERROR if lang == base and required else WARNING,
-					"%s: no text %s in locales/%s.json" % [where, ".".join(path), lang], file, name)
+					_t("%s: no text %s in locales/%s.json", [where, ".".join(path), lang]), file, name)
 	var seen := {}
 	for i in t.missions.size():
 		var ms: Dictionary = t.missions[i]
 		var at := "missions[%d]" % i
 		var n := int(ms.id)
 		if seen.has(n):
-			_item(ERROR, "%s: mission %d twice" % [at, n], "tutorial.json")
+			_item(ERROR, _t("%s: mission %d twice", [at, n]), "tutorial.json")
 		seen[n] = true
 		var p := "missions/%d.json" % n
 		if not files.has(p):
-			_item(ERROR, "%s: %s is not in the pack" % [at, p], "tutorial.json")
+			_item(ERROR, _t("%s: %s is not in the pack", [at, p]), "tutorial.json")
 			continue
 		var m = _parse(p)
 		if not m is Dictionary:
@@ -786,7 +812,7 @@ func _check_tutorial(man: Dictionary, rules: Dictionary, card: Callable) -> void
 			text.call(["missions", str(n), "reward_line"], "tutorial.json", "", at, false)
 		for h in m.get("hints", []):
 			if not t.get("hints", {}).has(h):
-				_at(ERROR, "hint %s has no rule in tutorial.json hints" % h, p, h)
+				_at(ERROR, _t("hint %s has no rule in tutorial.json hints", [h]), p, h)
 			text.call(["hints", h], p, h, "hint " + h, true)
 		for j in ms.get("intro", []).size():
 			var page: Dictionary = ms.intro[j]
@@ -801,17 +827,17 @@ func _check_tutorial(man: Dictionary, rules: Dictionary, card: Callable) -> void
 				elif it.has("hero"):
 					card.call(it.hero, where, "tutorial.json", "CHAMPION")
 				elif it.has("picture") and not files.has(it.picture):
-					_at(ERROR, "%s: picture %s is not in the pack" % [where, it.picture], "tutorial.json", it.picture)
+					_at(ERROR, _t("%s: picture %s is not in the pack", [where, it.picture]), "tutorial.json", it.picture)
 				elif it.has("note"):
 					text.call(["tutorial", it.note], "tutorial.json", it.note, where, true)
 					if it.get("to") is Dictionary and int(it.to.card) >= cards:
-						_at(ERROR, "%s: note %s points at card %d, the page has %d before it" % [where, it.note, int(it.to.card), cards], "tutorial.json", it.note)
+						_at(ERROR, _t("%s: note %s points at card %d, the page has %d before it", [where, it.note, int(it.to.card), cards]), "tutorial.json", it.note)
 	for h in t.get("hints", {}):
 		for c in t.hints[h]:
 			for cid in c.get("cards", []):
 				card.call(cid, "hints." + h, "tutorial.json")
 			if c.get("keyword") and not rules.get("mechanics", {}).has(c.keyword):
-				_at(WARNING, "hints.%s: keyword %s is not in rules.json mechanics" % [h, c.keyword], "tutorial.json", h)
+				_at(WARNING, _t("hints.%s: keyword %s is not in rules.json mechanics", [h, c.keyword]), "tutorial.json", h)
 
 
 # --- the engine ---------------------------------------------------------------------------------
@@ -826,18 +852,18 @@ static func locate(message: String) -> Array:
 func load_engine() -> bool:
 	var why := Rules.missing()
 	if why != "":
-		_item(ERROR, "the rules engine is missing: " + why)
+		_item(ERROR, _t("the rules engine is missing: %s", [why]))
 		return false
 	var data := PackCheck.zip(files, func(p: String): return Pack.is_rules_file(p) or p == "manifest.json" or p.begins_with("locales/"))
 	var r := Rules.request({"op": "load_pack", "data": Marshalls.raw_to_base64(data)})
 	if not r.get("ok", false):
 		var e := str(r.get("error", "?")).trim_prefix("bad pack: ")
 		var at := locate(e)
-		_item(ERROR, "the engine refuses the pack: " + e, at[0], at[1])
+		_item(ERROR, _t("the engine refuses the pack: %s", [e]), at[0], at[1])
 		return false
 	rules_hash = str(r.get("pack", ""))
 	var scripts := files.keys().filter(func(p: String): return p.begins_with("scripts/") and p.ends_with(".lua")).size()
-	_item(PASS, "the engine loads the pack: its rules and %d scripts compile" % scripts)
+	_item(PASS, _t("the engine loads the pack: its rules and %d scripts compile", [scripts]))
 	return true
 
 
@@ -858,16 +884,16 @@ func decks() -> Array:
 func trial(i: int) -> bool:
 	var list := decks()
 	if list.is_empty():
-		_item(WARNING, "no ready decks (decks/*.json): no trial games")
+		_item(WARNING, _t("no ready decks (decks/*.json): no trial games"))
 		return false
 	var d0: Dictionary = list[i % list.size()]
 	var d1: Dictionary = list[(i + 1) % list.size()]
 	var game := Rules.new_id("pack_try")
-	var vs := "game %d (%s vs %s)" % [i + 1, d0.name, d1.name]
+	var vs := _t("game %d (%s vs %s)", [i + 1, d0.name, d1.name])
 	var r := Rules.request({"op": "new", "game": game, "pack": rules_hash, "seed": 1000 + i,
 		"decks": [{"hero": d0.champion, "cards": d0.cards}, {"hero": d1.champion, "cards": d1.cards}]})
 	if not r.get("ok", false):
-		_item(ERROR, "%s does not start: %s" % [vs, r.get("error", "?")])
+		_item(ERROR, _t("%s does not start: %s", [vs, r.get("error", "?")]))
 		return false
 	var actions := 0
 	while not r.get("over", false) and actions < MAX_ACTIONS:
@@ -882,14 +908,14 @@ func trial(i: int) -> bool:
 		if not moved or not r.get("ok", false):
 			break
 	Rules.request({"op": "drop", "game": game})
-	var how := "turn %d, %d actions" % [int(r.get("turn", 0)), actions]
+	var how := _t("turn %d, %d actions", [int(r.get("turn", 0)), actions])
 	if r.has("script_error"):
 		var at := locate(str(r.script_error))
-		_item(ERROR, "%s: a card script failed at %s: %s" % [vs, how, r.script_error], at[0], at[1])
+		_item(ERROR, _t("%s: a card script failed at %s: %s", [vs, how, r.script_error]), at[0], at[1])
 		return false
 	if not r.get("over", false):
-		_item(ERROR, "%s got stuck at %s: %s" % [vs, how, r.get("error", "no move")])
+		_item(ERROR, _t("%s got stuck at %s: %s", [vs, how, r.get("error", _t("no move"))]))
 		return false
 	var w := int(r.get("winner", -1))
-	_item(PASS, "%s: %s, %s" % [vs, how, "a draw" if w < 0 else "won by " + [d0.name, d1.name][w]])
+	_item(PASS, _t("%s: %s, %s", [vs, how, _t("a draw") if w < 0 else _t("won by %s", [[d0.name, d1.name][w]])]))
 	return true

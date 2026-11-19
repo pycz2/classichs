@@ -172,6 +172,21 @@ class Check(unittest.TestCase):
             s[p] = b"x"
             self.assertTrue(errors(s), p)
 
+    def test_ui_tile(self):  # the library's tile picture: any shape is taken, one far from 5:2 is cut (a warning)
+        with open(Path(__file__).resolve().parent.parent / "packs/loot/ui/tile.jpg", "rb") as f:
+            jpg = f.read()
+        self.assertEqual(pack.image_size(jpg), (750, 300))
+        png = b"\x89PNG\r\n\x1a\n" + b"\0\0\0\rIHDR" + (400).to_bytes(4, "big") + (400).to_bytes(4, "big")
+        self.assertEqual(pack.image_size(png), (400, 400))
+        s = tiny()
+        s["ui/tile.jpg"] = jpg
+        self.assertEqual(pack.check_files(as_files(s)).warnings, [])
+        s = tiny()
+        s["ui/tile.png"] = png
+        r = pack.check_files(as_files(s))
+        self.assertEqual(r.errors, [])
+        self.assertTrue(any("ui/tile.png: 400x400" in w for w in r.warnings), r.warnings)
+
     def test_tutorial(self):
         def with_tutorial():
             s = tiny()

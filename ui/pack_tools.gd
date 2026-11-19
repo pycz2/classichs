@@ -180,26 +180,34 @@ func _show() -> void:
 	var order := {PackCheck.ERROR: 0, PackCheck.WARNING: 1, PackCheck.PASS: 2}
 	var sorted := result.items.duplicate()
 	sorted.sort_custom(func(a, b): return order[a.level] < order[b.level])  # (stable: in the order found)
+	# the columns: as wide as the widest level word, the file column only when a finding names a file
+	var font := _summary.get_theme_font("font")
+	var tag_w := 0.0
+	for it in sorted:
+		tag_w = maxf(tag_w, font.get_string_size(tr(LEVELS[it.level]), HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x)
+	var file_w := 230.0 if sorted.any(func(it): return it.file != "") else 0.0
 	for i in sorted.size():
-		_list.add_child(_row(sorted[i], i))
+		_list.add_child(_row(sorted[i], i, ceilf(tag_w) + 4, file_w))
 
 
-func _row(it: Dictionary, i: int) -> Control:
+func _row(it: Dictionary, i: int, tag_w: float, file_w: float) -> Control:
 	var row := HBoxContainer.new()
 	row.name = "Item%d" % i
 	row.add_theme_constant_override("separation", 12)
 	var c: Color = COLORS[it.level]
 	var tag := Palette.label(tr(LEVELS[it.level]), 16, c)
-	tag.custom_minimum_size = Vector2(96, 0)
+	tag.custom_minimum_size = Vector2(tag_w, 0)
 	row.add_child(tag)
-	var at := Palette.label(it.file + (":%d" % it.line if it.line > 0 else ""), 16, Palette.MUTED)
-	at.custom_minimum_size = Vector2(230, 0)
-	at.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-	row.add_child(at)
-	var text := Palette.label(it.text, 16, c.lerp(Palette.TEXT, 0.45))
+	if file_w > 0:
+		var at := Palette.label(it.file + (":%d" % it.line if it.line > 0 else ""), 16, Palette.MUTED)
+		at.custom_minimum_size = Vector2(file_w, 0)
+		at.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+		row.add_child(at)
+	var text := Palette.label(PackCheck.said(it), 16, c.lerp(Palette.TEXT, 0.45))
+	text.name = "Text"
 	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	text.custom_minimum_size = Vector2(LIST.size.x - 400, 0)
+	text.custom_minimum_size = Vector2(LIST.size.x - 80 - tag_w - file_w, 0)
 	row.add_child(text)
 	return row
 

@@ -310,9 +310,14 @@ static func bytes_of(p: Pack) -> PackedByteArray:
 	return FileAccess.get_file_as_bytes(p.path)
 
 
-## A size for people: "34.3 MB".
+## A size for people in the interface's language: "34.3 MB", "34,3 МБ".
 static func size_text(n: int) -> String:
-	return "%.1f MB" % (n / 1048576.0) if n >= 104858 else "%d KB" % maxi(1, n / 1024)
+	if n < 104858:
+		return TranslationServer.translate("%d KB") % maxi(1, n / 1024)
+	var mb := "%.1f" % (n / 1048576.0)
+	if not TranslationServer.get_locale().begins_with("en"):  # (every other language writes a decimal comma)
+		mb = mb.replace(".", ",")
+	return TranslationServer.translate("%s MB") % mb
 
 
 ## The client speaks the Classic pack's mechanic names (TAUNT, DIVINE_SHIELD, SECRET…); a

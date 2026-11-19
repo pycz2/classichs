@@ -1,5 +1,5 @@
 {
- "about": "Kobolds & Catacombs' interface (docs/packs/format.md, 'UI theme'): torch-lit catacombs under the mountain — dark panels of earth-brown rock with candle-orange rims, buttons of deep amethyst purple that flare candle orange under the mouse, warm wax-yellow parchment text, the gold of the kobolds' treasure hoards for headings, ember red for danger and the cool green of cave crystals for confirmations, embers drifting up from the candles over the menu; the title in Classic's Cinzel Decorative, in treasure gold.",
+ "about": "Kobolds & Catacombs' interface (docs/packs/format.md, 'UI theme'): torch-lit catacombs under the mountain — dark panels of earth-brown rock with candle-orange rims, buttons of deep amethyst purple that flare candle orange under the mouse, warm wax-yellow parchment text, the gold of the kobolds' treasure hoards for headings, ember red for danger and the cool green of cave crystals for confirmations, embers drifting up from the candles over the menu; the title in Classic's Alegreya SC, in treasure gold.",
  "colors": {
   "text": "f6e8cf",
   "muted": "bfae9a",
@@ -24,7 +24,7 @@
  "outline_size": 3,
  "button": {"style": "neon", "radius": 8, "border": 1, "glow": "f08a2e33", "glow_size": 4, "glow_hover": "ffa94a99", "glow_hover_size": 12},
  "panel": {"radius": 10, "border": 2, "glow": "d07a2c40", "glow_size": 12},
- "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
  "end_turn": {"button": "3f2352", "border": "f2b142", "text": "fbf1de", "ready": "c0601c", "ready_border": "ffc56e"},
  "mana": "5fb8ff",
  "menu": {"shade": "120c0a59", "particles": "embers"}

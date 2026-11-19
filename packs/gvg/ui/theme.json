@@ -1,5 +1,5 @@
 {
- "about": "Goblins vs Gnomes's interface (docs/packs/format.md, 'UI theme'): the workshops of Gadgetzan and Gnomeregan — dark oiled-iron panels with brass rims, buttons that glow goblin green with a gnome-orange edge, warm brass text, sparks drifting over the menu; the title in Classic's Cinzel Decorative, in brass.",
+ "about": "Goblins vs Gnomes's interface (docs/packs/format.md, 'UI theme'): the workshops of Gadgetzan and Gnomeregan — dark oiled-iron panels with brass rims, buttons that glow goblin green with a gnome-orange edge, warm brass text, sparks drifting over the menu; the title in Classic's Alegreya SC, in brass.",
  "colors": {
   "text": "f3e7cf",
   "muted": "b9a888",
@@ -24,7 +24,7 @@
  "outline_size": 3,
  "button": {"style": "neon", "radius": 6, "border": 1, "glow": "6fd04a33", "glow_size": 4, "glow_hover": "f0a63a99", "glow_hover_size": 12},
  "panel": {"radius": 8, "border": 2, "glow": "b8863b40", "glow_size": 12},
- "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
  "end_turn": {"button": "2a3a22", "border": "f0a63a", "text": "fbf3df", "ready": "3a5a24", "ready_border": "9be35a"},
  "mana": "4cc3ff",
  "menu": {"shade": "0a070459", "particles": "embers"}

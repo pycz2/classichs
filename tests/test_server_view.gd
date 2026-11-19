@@ -77,6 +77,12 @@ func test_invite_key_field_when_the_server_wants_one() -> void:
 	eq(l.of("login")[-1].has("key"), false, "logging in needs no key")
 	l.dispatch({"t": "error", "code": "invite_invalid", "text": "This invite key is not valid"})
 	eq(v._status.text, tr("This invite key is unknown, used up or revoked"), "the player's language")
+	Locale.set_language("ru")
+	l.dispatch({"t": "error", "code": "bad_login", "text": "Wrong name or password"})
+	eq(v._status.text, "Неверное имя или пароль", "a wrong password in Russian")
+	l.dispatch({"t": "error", "code": "taken", "text": "This name is taken"})
+	eq(v._status.text, "Это имя уже занято", "a taken name in Russian")
+	Locale.set_language("en")
 	_free(v)
 
 

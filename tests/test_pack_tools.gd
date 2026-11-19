@@ -300,3 +300,21 @@ func test_the_screen_shows_the_findings() -> void:
 		Packs.remove(played[0])
 	v.queue_free()
 	_wipe(DIR)
+
+
+func test_the_findings_are_in_the_interface_language() -> void:
+	var c := PackCheck.open_file(PackedByteArray([1, 2, 3]), "broken.zip")
+	eq(c.items[0].text, "this is not a zip file", "the finding in English")
+	var v := PackTools.new()
+	Engine.get_main_loop().root.add_child(v)
+	Locale.set_language("ru")
+	v.open_bytes(PackedByteArray([1, 2, 3]), "broken.zip")
+	var row := v.find_child("Item0", true, false)
+	eq(row.find_child("Text", true, false).text, "это не zip-архив", "shown in Russian")
+	eq(row.get_child_count(), 2, "no file column when no finding names a file")
+	var it := {"level": PackCheck.PASS, "msg": PackCheck._t("%s: %s, %s", [PackCheck._t("game %d (%s vs %s)", [1, "A", "B"]),
+		PackCheck._t("turn %d, %d actions", [7, 40]), PackCheck._t("won by %s", ["A"])])}
+	eq(PackCheck.said(it), "игра 1 (A против B): ход 7, действий: 40, победа: A", "its parts translated too")
+	Locale.set_language("en")
+	eq(PackCheck.said(it), "game 1 (A vs B): turn 7, 40 actions, won by A", "and in English")
+	v.queue_free()

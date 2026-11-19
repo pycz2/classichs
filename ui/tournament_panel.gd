@@ -136,7 +136,7 @@ func _build() -> void:
 	p.name = "MatchPanel"
 	p.position = Vector2(160, 40)
 	p.size = Vector2(960, 640)
-	p.add_theme_stylebox_override("panel", Palette.frame())
+	p.add_theme_stylebox_override("panel", Palette.frame(Color(0.11, 0.075, 0.045, 0.96), 14, true))
 	_root.add_child(p)
 	var title := Palette.label(str(cur.get("name", tr("Tournament"))), 20, Palette.MUTED)
 	title.position = Vector2(30, 18)

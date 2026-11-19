@@ -20,6 +20,8 @@ const MAX_CHATS := 3
 const PANEL_W := 360.0
 const CHAT_SIZE := Vector2(300, 380)
 const TOAST_TIME := 5.0
+const TOAST_W := 420.0
+const TOAST_CLOSE := 30.0
 
 ## Every server's connection (main's server_links).
 var links: Array = []:
@@ -147,21 +149,35 @@ func _ready() -> void:
 	button.name = "FriendsButton"
 	button.pressed.connect(func(): show_panel(not panel_open))
 	_root.add_child(button)
-	_toast = Button.new()
+	_toast = Button.new()  # a long note wraps; the × in its corner closes it
 	_toast.name = "Toast"
 	_toast.visible = false
 	_toast.focus_mode = Control.FOCUS_NONE
 	_toast.add_theme_font_size_override("font_size", 18)
 	_toast.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_toast.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	_toast.add_theme_stylebox_override("normal", Palette.frame(Color(0.1, 0.07, 0.04, 0.97), 10))
-	_toast.add_theme_stylebox_override("hover", Palette.frame(Color(0.16, 0.11, 0.06, 0.97), 10))
-	_toast.add_theme_stylebox_override("pressed", Palette.frame(Color(0.16, 0.11, 0.06, 0.97), 10))
+	_toast.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	for k in [["normal", Color(0.1, 0.07, 0.04, 0.97)], ["hover", Color(0.16, 0.11, 0.06, 0.97)], ["pressed", Color(0.16, 0.11, 0.06, 0.97)]]:
+		var st := Palette.frame(k[1], 10, true)
+		st.content_margin_left = 16
+		st.content_margin_right = TOAST_CLOSE + 8
+		st.content_margin_top = 10
+		st.content_margin_bottom = 10
+		_toast.add_theme_stylebox_override(k[0], st)
 	_toast.pressed.connect(func():
 		_toast.visible = false
 		if _toast_action.is_valid():
 			_toast_action.call())
 	_root.add_child(_toast)
+	var x := Button.new()
+	x.name = "CloseToast"
+	x.text = "×"
+	x.flat = true
+	x.focus_mode = Control.FOCUS_NONE
+	x.add_theme_font_size_override("font_size", 24)
+	x.size = Vector2(TOAST_CLOSE, TOAST_CLOSE)
+	x.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_KEEP_SIZE, 4)
+	x.pressed.connect(func(): _toast.visible = false)
+	_toast.add_child(x)
 	visible = false
 	_place()
 
@@ -185,8 +201,8 @@ func _process(delta: float) -> void:
 			w.visible = on
 		if not on:
 			show_panel(false)
-	if not on and not _toast_keep:
-		_toast.visible = false
+			if not _toast_keep:  # a server's note goes with the login (the device's own notes show without one)
+				_toast.visible = false
 	visible = on or _toast.visible
 	if _toast.visible and _toast_left > 0.0:
 		_toast_left -= delta
@@ -214,8 +230,11 @@ func _place() -> void:
 	var small := corner.x >= 0
 	button.position = corner if small else Vector2(12, 668)
 	button.size = Vector2(42, 40) if small else Vector2(120, 42)
-	_toast.size = Vector2(380, 46)
-	_toast.position = Vector2(minf(corner.x, 1280 - 392), corner.y + 48) if small else Vector2(12, 614)
+	var font := _toast.get_theme_font("font")
+	var text_h := font.get_multiline_string_size(_toast.text, HORIZONTAL_ALIGNMENT_LEFT, TOAST_W - 24 - TOAST_CLOSE, 18).y
+	_toast.size = Vector2(TOAST_W, maxf(46.0, text_h + 20.0))
+	# beside the gear it hangs down from the corner; bottom left it stands over the friends button
+	_toast.position = Vector2(minf(corner.x, 1280 - TOAST_W - 12), corner.y + 48) if small else Vector2(12, 660 - _toast.size.y)
 	_layout_chats()
 	_update_button()
 
@@ -300,7 +319,7 @@ func _build_panel() -> void:
 	_panel.name = "FriendsPanel"
 	_panel.size = Vector2(PANEL_W, 720)
 	_panel.position = Vector2(-PANEL_W - 20, 0)
-	var st := Palette.frame(Color(0.1, 0.067, 0.04, 0.98), 0)
+	var st := Palette.frame(Color(0.1, 0.067, 0.04, 0.98), 0, true)
 	st.border_width_left = 0
 	st.border_width_top = 0
 	st.border_width_bottom = 0
@@ -643,15 +662,17 @@ func _layout_chats() -> void:
 
 # --- toasts and invites ------------------------------------------------------------
 
-## A short note over the screen; a click runs action (if any); keep: it stays after a logout.
+## A short note over the screen (a long one wraps; it stays a while longer); a click runs action (if
+## any); keep: it stays after a logout.
 func toast(text: String, action := Callable(), keep := false) -> void:
-	_toast.text = "  " + text
+	_toast.text = text
 	_toast.tooltip_text = text
 	_toast_action = action
 	_toast_keep = keep
-	_toast_left = TOAST_TIME
+	_toast_left = TOAST_TIME + text.length() / 25.0
 	_toast.visible = true
 	visible = true
+	_place()
 	_root.move_child(_toast, -1)
 
 
@@ -665,7 +686,7 @@ func _show_invite() -> void:
 	_root.add_child(dim)
 	_dialog = dim
 	var p := Panel.new()
-	p.add_theme_stylebox_override("panel", Palette.frame())
+	p.add_theme_stylebox_override("panel", Palette.frame(Color(0.11, 0.075, 0.045, 0.96), 14, true))
 	p.position = Vector2(380, 200)
 	p.size = Vector2(520, 300)
 	dim.add_child(p)
@@ -1023,7 +1044,7 @@ class ChatWindow:
 		social = s
 		srv = sv
 		user = u
-		add_theme_stylebox_override("panel", Palette.frame(Color(0.1, 0.067, 0.04, 0.97), 12))
+		add_theme_stylebox_override("panel", Palette.frame(Color(0.1, 0.067, 0.04, 0.97), 12, true))
 		_header.name = "Header"
 		_header.flat = true
 		_header.focus_mode = Control.FOCUS_NONE

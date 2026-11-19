@@ -93,6 +93,37 @@ func test_panel_lists_friends_requests_and_adds_by_tag() -> void:
 	m.free()
 
 
+## A saved tag shows at once: the server's `me` reaches the panel and the server's home (not only the lobby).
+func test_a_saved_tag_shows_in_the_panel() -> void:
+	var m := _main()
+	var s: Social = m.social
+	m.server_link.dispatch({"t": "auth", "ok": true, "token": "t", "me": {"user": "anna", "tag": null}})
+	m.show_server_home()
+	s.button.pressed.emit()
+	check(s.find_child("TagEdit", true, false) != null, "no tag yet: the field")
+	m.server_link.dispatch({"t": "me", "me": {"user": "anna", "tag": "Moon7"}})
+	eq(m.server_link.me.get("tag"), "Moon7", "the connection keeps the new profile")
+	eq(s.find_child("Me", true, false).text, "anna#Moon7", "the panel shows it")
+	check(s.find_child("TagEdit", true, false) == null, "and does not ask again")
+	eq(m.screen.find_child("PlayerName", true, false).text, "anna#Moon7", "the server's home too")
+	m.free()
+
+
+## Toasts: a long one wraps (nothing cut), the × closes it, and they show without a login too.
+func test_toasts_wrap_close_and_show_offline() -> void:
+	var m := _main(false)
+	var s: Social = m.social
+	s._process(0.0)
+	s.toast("The server has no replay of this game — Could not load the game file of The Witchwood 2018: it is not on this device")
+	s._process(0.0)
+	eq([s._toast.visible, s.visible], [true, true], "shown without a login")
+	check(s._toast.size.y > 60.0, "a long one is taller: %s" % s._toast.size)
+	eq(s._toast.position.y + s._toast.size.y, 660.0, "standing over the friends button")
+	(s._toast.find_child("CloseToast", false, false) as Button).pressed.emit()
+	eq(s._toast.visible, false, "× closes it")
+	m.free()
+
+
 func _click() -> InputEventMouseButton:
 	var e := InputEventMouseButton.new()
 	e.button_index = MOUSE_BUTTON_LEFT

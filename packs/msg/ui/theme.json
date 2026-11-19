@@ -1,5 +1,5 @@
 {
- "about": "Mean Streets of Gadgetzan's interface (docs/packs/format.md, 'UI theme'): the goblin city at night as a noir crime town — dark rain-wet panels like smoked glass with brass rims, buttons of Kabal purple that glow jade under the mouse, warm lamplight text, the jade-gold accent of the Jade Lotus and the rusty red of the Grimy Goons for danger, rain falling over the menu in neon colours; the title in Classic's Cinzel Decorative, in jade gold.",
+ "about": "Mean Streets of Gadgetzan's interface (docs/packs/format.md, 'UI theme'): the goblin city at night as a noir crime town — dark rain-wet panels like smoked glass with brass rims, buttons of Kabal purple that glow jade under the mouse, warm lamplight text, the jade-gold accent of the Jade Lotus and the rusty red of the Grimy Goons for danger, rain falling over the menu in neon colours; the title in Classic's Alegreya SC, in jade gold.",
  "colors": {
   "text": "f3ecdc",
   "muted": "a9b8ae",
@@ -24,7 +24,7 @@
  "outline_size": 3,
  "button": {"style": "neon", "radius": 6, "border": 1, "glow": "3fbf8a33", "glow_size": 4, "glow_hover": "5fe3a899", "glow_hover_size": 12},
  "panel": {"radius": 8, "border": 2, "glow": "b08d3c40", "glow_size": 12},
- "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
  "end_turn": {"button": "3b1f55", "border": "d8c25a", "text": "f6f0e2", "ready": "1f6b4a", "ready_border": "9cf0c4"},
  "mana": "5fb8ff",
  "menu": {"shade": "0a0d1059", "particles": "rain"}

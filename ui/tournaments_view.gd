@@ -737,7 +737,7 @@ func _dialog(title: String, sz: Vector2, id: String) -> VBoxContainer:
 	var p := PanelContainer.new()
 	p.position = (Vector2(1280, 720) - sz) / 2.0
 	p.size = sz
-	p.add_theme_stylebox_override("panel", Palette.frame())
+	p.add_theme_stylebox_override("panel", Palette.frame(Color(0.11, 0.075, 0.045, 0.96), 14, true))
 	dim.add_child(p)
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 12)

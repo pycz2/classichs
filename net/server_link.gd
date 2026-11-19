@@ -341,6 +341,9 @@ func dispatch(msg: Dictionary) -> void:
 			elif not _replays.is_empty() and msg.get("code") in ["bad_request", "not_found"]:  # no replays (before 0.50)
 				_replays.erase(_replays.keys()[0])
 				return
+		"me":  # the profile changed (a tag set, a game's result): every screen reads it from here
+			if msg.get("me") is Dictionary:
+				me = msg.me
 		"signup_info":
 			_probing_signup = false
 			invite_only = msg.get("invite_only", false) == true

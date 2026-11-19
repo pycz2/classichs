@@ -85,6 +85,18 @@ func _build() -> void:
 	p.add_child(done)
 
 
+## A name as much as fits the field (the interface font, its margins), with "…" when it is cut.
+static func _fit(e: LineEdit, text: String) -> String:
+	var font := Fonts.ui()
+	var fs := 16
+	var room := e.custom_minimum_size.x - 22
+	if font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x <= room:
+		return text
+	while text.length() > 1 and font.get_string_size(text + "…", HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > room:
+		text = text.left(-1)
+	return text.strip_edges() + "…"
+
+
 func _edit(id: String, hint: String, width: float) -> LineEdit:
 	var e := LineEdit.new()
 	e.name = id
@@ -118,10 +130,21 @@ func _server_row(i: int, e: Dictionary) -> Control:
 	var hb := HBoxContainer.new()
 	hb.add_theme_constant_override("separation", 8)
 	row.add_child(hb)
-	var name_ed := _edit("Name", tr("Name"), 170)
-	name_ed.text = e.name
+	var name_ed := _edit("Name", tr("Name"), 190)
 	name_ed.max_length = 40
-	var rename := func(_t = ""): rename_server(id, name_ed.text)
+	# a long name ends in "…" (the whole of it in the tip) until the field is edited
+	var full: String = e.name
+	var shown := func():
+		name_ed.text = _fit(name_ed, full)
+		name_ed.tooltip_text = full
+	shown.call()
+	name_ed.focus_entered.connect(func(): name_ed.text = full)
+	var rename := func(_t = ""):
+		if name_ed.text != _fit(name_ed, full):
+			rename_server(id, name_ed.text)
+			full = Settings.server_label(e.url, name_ed.text)
+		if not name_ed.has_focus():
+			shown.call()
 	name_ed.text_submitted.connect(rename)
 	name_ed.focus_exited.connect(rename)
 	hb.add_child(name_ed)
@@ -153,6 +176,10 @@ func _server_row(i: int, e: Dictionary) -> Control:
 	hb.add_child(out)
 	var rm := Palette.button(tr("Remove"), "Remove")
 	rm.custom_minimum_size = Vector2(0, 40)
+	rm.ready.connect(func():  # as wide as its second word, so the row stays put when it asks again
+		rm.text = tr("Remove? Press again")
+		rm.custom_minimum_size.x = rm.get_combined_minimum_size().x
+		rm.text = tr("Remove"))
 	rm.pressed.connect(func():
 		if rm.has_meta("armed"):
 			remove_server(id)
@@ -183,6 +210,10 @@ func add_server(name: String, url: String) -> bool:
 	if not Settings.server_ok(url):
 		if ed:
 			ed.add_theme_color_override("font_color", Palette.OPPONENT)
+		var note := find_child("ServersNote", true, false) as Label
+		if note:  # what is wrong: in the note's place, red
+			note.text = tr("A server address starts with ws:// or wss:// and has no spaces, like wss://example.org:7377")
+			note.add_theme_color_override("font_color", Palette.OPPONENT)
 		return false
 	Settings.data.servers.append({"id": Settings.new_server_id(url), "url": url, "name": Settings.server_label(url, name)})
 	Settings.save()

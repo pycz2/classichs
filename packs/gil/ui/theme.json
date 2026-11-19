@@ -1,5 +1,5 @@
 {
- "about": "The Witchwood's interface (docs/packs/format.md, 'UI theme'): the haunted forest of Gilneas under a full moon — dark panels of mossy, rain-soaked pine wood with tarnished moonlit-silver rims, buttons of deep witchwood green that glow pumpkin orange under the mouse like a carved lantern, pale parchment text of the hunters' bounty notices, moonlit silver for headings, blood red for danger and a sickly witch-green for confirmations, will-o'-wisps drifting up through the mist over the menu; the title in Classic's Cinzel Decorative, in silver.",
+ "about": "The Witchwood's interface (docs/packs/format.md, 'UI theme'): the haunted forest of Gilneas under a full moon — dark panels of mossy, rain-soaked pine wood with tarnished moonlit-silver rims, buttons of deep witchwood green that glow pumpkin orange under the mouse like a carved lantern, pale parchment text of the hunters' bounty notices, moonlit silver for headings, blood red for danger and a sickly witch-green for confirmations, will-o'-wisps drifting up through the mist over the menu; the title in Classic's Alegreya SC, in silver.",
  "colors": {
   "text": "e9e6dc",
   "muted": "a9b3a8",
@@ -24,7 +24,7 @@
  "outline_size": 3,
  "button": {"style": "neon", "radius": 8, "border": 1, "glow": "e07b2533", "glow_size": 4, "glow_hover": "ff9a3c99", "glow_hover_size": 12},
  "panel": {"radius": 10, "border": 2, "glow": "8f9aa640", "glow_size": 12},
- "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
  "end_turn": {"button": "1d3a2e", "border": "cfd8e3", "text": "eef0ea", "ready": "b85a14", "ready_border": "ffb366"},
  "mana": "5fb8ff",
  "menu": {"shade": "070b0959", "particles": "embers"}

@@ -1,5 +1,5 @@
 {
- "about": "Classic's tavern look (docs/packs/format.md, 'UI theme'): wooden planks with gold frames, dark wood panels in gold rims, cream text, gold headings, embers over the tavern; the title in Cinzel Decorative under the gold dragon crest.",
+ "about": "Classic's tavern look (docs/packs/format.md, 'UI theme'): wooden planks with gold frames, dark wood panels in gold rims, cream text, gold headings, embers over the tavern; the title in Alegreya SC under the gold dragon crest.",
  "colors": {
   "text": "f4ead5",
   "muted": "c9b48a",
@@ -24,6 +24,6 @@
  "outline_size": 4,
  "button": {"style": "wood", "radius": 11, "border": 2, "glow": "00000000", "glow_size": 0, "glow_hover": "00000000", "glow_hover_size": 0},
  "panel": {"radius": 14, "border": 3, "glow": "0000008c", "glow_size": 14},
- "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
  "menu": {"shade": "140d0859", "particles": "embers", "crest": "ui/crest.png"}
 }

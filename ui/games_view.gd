@@ -11,7 +11,7 @@ signal entered(p: Pack)
 ## Pack tools: build, check and test a pack (main opens PackTools).
 signal tools
 
-const GRID := Rect2(Vector2(36, 84), Vector2(780, 620))
+const GRID := Rect2(Vector2(36, 84), Vector2(780, 576))
 const PANEL := Rect2(Vector2(836, 84), Vector2(410, 620))
 const TILE := Vector2(376, 212)
 ## Origin -> label (English keys; i18n_keys.gd reads this table).
@@ -79,8 +79,10 @@ func _build() -> void:
 	add_child(_panel)
 	message = Palette.label("", 17, Palette.DANGER)
 	message.name = "Message"
-	message.position = Vector2(GRID.position.x + 4, GRID.end.y - 2)
-	message.size = Vector2(GRID.size.x, 20)
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # (before the size: two lines fit under the tiles)
+	message.position = Vector2(GRID.position.x + 4, GRID.end.y + 4)
+	message.size = Vector2(GRID.size.x, 52)
+	message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(message)
 	_build_list()
 	_build_details()
@@ -379,12 +381,15 @@ func import_bytes(bytes: PackedByteArray, file_name := "", bar: Dictionary = {})
 	show_message(tr("Added: %s") % selected.title(), true)
 
 
-## A pack as a big tile: its menu picture (or its champions), its logo (or its name in
-## the title font), name, version, size, where it came from; the active one is marked.
+## A pack as a big tile: its picture (ui/tile as it is; else its menu picture, or its champions, with
+## its logo or its name in the title font over it), under it the name, version, size, where it came
+## from; the active one is marked.
 class PackTile:
 	extends Button
+	const STRIP := 58.0  # the text under the picture
 	var pack: Pack
 	var selected := false
+	var _tile: Texture2D
 	var _bg: Texture2D
 	var _logo: Texture2D
 	var _champions: Array = []  # textures
@@ -395,21 +400,21 @@ class PackTile:
 		custom_minimum_size = GamesView.TILE
 		focus_mode = Control.FOCUS_NONE
 		flat = true
+		var t := p.find("ui", "tile", Pack.IMAGE_EXT)
+		_tile = p.texture(t) if t != "" else null
+		if _tile:
+			return
 		var f := p.find("ui", "menu", Pack.IMAGE_EXT)
 		_bg = p.texture(f) if f != "" else null
 		var logo = p.manifest.get("logo")
 		_logo = p.texture(logo) if logo is String else null
-		if _logo:
-			var head := Rect2(Vector2(15, 19), Vector2(GamesView.TILE.x - 30, 96))
-			var h := _logo.get_width() * head.size.y / head.size.x
-			var crop := AtlasTexture.new()
-			crop.atlas = _logo
-			crop.region = Rect2(0, (_logo.get_height() - h) / 2.0, _logo.get_width(), h)
+		if _logo:  # light on black, added onto the picture; whole, as big as the head fits
 			var l := TextureRect.new()
-			l.texture = crop
+			l.texture = _logo
 			l.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-			l.position = head.position
-			l.size = head.size
+			l.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			l.position = Vector2(15, 19)
+			l.size = Vector2(GamesView.TILE.x - 30, GamesView.TILE.y - STRIP - 34)
 			l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			var add := CanvasItemMaterial.new()
 			add.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
@@ -426,40 +431,46 @@ class PackTile:
 	func _draw() -> void:
 		var r := Rect2(Vector2.ZERO, size)
 		var inner := r.grow(-5)
+		var pic := Rect2(inner.position, inner.size - Vector2(0, STRIP))
 		draw_style_box(Palette.box(Color("1b140f"), 14), r)
-		if _bg:
-			_cover(_bg, inner)
+		if _tile:
+			_cover(_tile, pic)
+		elif _bg:
+			_cover(_bg, pic)
 		elif not _champions.is_empty():
-			var w := inner.size.x / _champions.size()
+			var w := pic.size.x / _champions.size()
 			for i in _champions.size():
-				var cell := Rect2(inner.position + Vector2(w * i, 0), Vector2(w, inner.size.y))
+				var cell := Rect2(pic.position + Vector2(w * i, 0), Vector2(w, pic.size.y))
 				_cover(_champions[i], cell, 0.3)
-		var shade := Color(0, 0, 0, 0.0)
-		var dark := Color(0.05, 0.03, 0.02, 0.9)
-		draw_polygon(PackedVector2Array([inner.position, Vector2(inner.end.x, inner.position.y), inner.end, Vector2(inner.position.x, inner.end.y)]),
-			PackedColorArray([shade, shade, dark, dark]))
-		var head := Rect2(inner.position + Vector2(10, 14), Vector2(inner.size.x - 20, 96))
-		if not _logo:  # (a logo is a child added onto the picture: light on black)
-			var f := Fonts.title(pack)  # each game's tile in its own title font
+		if not _tile and not _logo:  # the name in the game's own title font over its picture
+			var head := pic.grow(-10)
+			var f := Fonts.title(pack)
 			var t := pack.title()
 			var fs := 40
-			while fs > 20 and f.get_string_size(t, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > head.size.x:
+			while fs > 16 and f.get_string_size(t, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > head.size.x:
 				fs -= 2
 			var at := Vector2(head.get_center().x - f.get_string_size(t, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x / 2.0, head.get_center().y + fs * 0.35)
 			draw_string_outline(f, at, t, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 10, Color("1b0f06"))
 			draw_string_outline(f, at, t, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 4, Color("8a6d2a"))
 			draw_string(f, at, t, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, Color("f2c94c"))
+		# under the picture: the name (a size smaller for a long one), then version, size, origin and the Active mark
 		var font := get_theme_font("font", "Label")
-		DeckTiles.text(self, Vector2(18, size.y - 40), pack.title(), 24, Color("f4ead5"), size.x - 36)
+		var width := size.x - 36
+		var name_fs := 22
+		while name_fs > 17 and font.get_string_size(pack.title(), HORIZONTAL_ALIGNMENT_LEFT, -1, name_fs).x > width:
+			name_fs -= 1
+		DeckTiles.text(self, Vector2(18, pic.end.y + 24), pack.title(), name_fs, Color("f4ead5"), width)
 		var origin := TranslationServer.translate(GamesView.ORIGINS.get(pack.origin, "Imported"))
-		DeckTiles.text(self, Vector2(18, size.y - 15), "%s  ·  %s  ·  %s" % [pack.version(), Packs.size_text(pack.size), origin], 15, Color("d8c8a0"), size.x - 36)
 		var active := pack == Packs.active()
-		if active:  # a green-gold ribbon in the top left corner
-			var label := TranslationServer.translate("Active")
-			var w := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 15).x + 24
+		var mark := TranslationServer.translate("Active")
+		var mark_w := font.get_string_size(mark, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x + 20 if active else 0.0
+		DeckTiles.text(self, Vector2(18, size.y - 13), "%s  ·  %s  ·  %s" % [pack.version(), Packs.size_text(pack.size), origin], 15,
+			Color("d8c8a0"), width - mark_w - 8)
+		if active:  # a green pill at the end of that line
+			var box := Rect2(Vector2(size.x - 18 - mark_w, size.y - 31), Vector2(mark_w, 23))
 			var ribbon := Palette.box(Color("2f6b2a"), 8, Color("c9e88a"), 2) if Palette.CLASSIC else Palette.box(Palette.OK.darkened(0.7), 4, Palette.OK, 1)
-			draw_style_box(ribbon, Rect2(Vector2(12, 10), Vector2(w, 26)))
-			draw_string(font, Vector2(24, 29), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("f4ffe0"))
+			draw_style_box(ribbon, box)
+			draw_string(font, box.position + Vector2(10, 17), mark, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color("f4ffe0"))
 		var edge := (Palette.SELECTED if Palette.CLASSIC else Palette.ATTACK) if selected else (Color("c9a74a") if is_hovered() else Color("6b5320"))
 		var st := Palette.box(Color.TRANSPARENT, 14, edge, 4 if selected else 3)
 		st.draw_center = false

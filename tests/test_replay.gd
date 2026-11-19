@@ -177,6 +177,29 @@ func test_server_list() -> void:
 	link.free()
 
 
+## Found in the UI audit: long names were cut mid-letter; Watch of a game not on this device did nothing.
+func test_rows_cut_names_with_an_ellipsis_and_a_missing_game_cannot_be_watched() -> void:
+	_clear_store()
+	var r: Replay = _played(4)[1]
+	var gone := Replay.from_data(r.data.duplicate(true))
+	gone.data.game = "gone"
+	gone.data.pack = "0000"
+	gone.data.pack_name = "The Witchwood 2018"
+	gone.data.players[0].name = "Bartholomew_Featherstone_the_Third"
+	Replay.keep(gone)
+	var v := ReplaysView.new()
+	root().add_child(v)
+	var row := v.find_child("Replay0", true, false)
+	var names := row.find_child("Names", true, false) as Label
+	eq(names.text_overrun_behavior, TextServer.OVERRUN_TRIM_ELLIPSIS, "a long line ends in …")
+	eq(names.tooltip_text, names.text, "the whole of it in the tip")
+	var watch := row.find_child("Watch", true, false) as Button
+	check(watch.disabled, "the game is not here: Watch is off")
+	eq(watch.tooltip_text, gone.missing(), "and says why")
+	v.free()
+	_clear_store()
+
+
 func test_server_game_over_keeps_its_replay() -> void:
 	_clear_store()
 	var r: Replay = _played(4)[1]

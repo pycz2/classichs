@@ -238,7 +238,7 @@ func show_upload() -> void:
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	dim.add_child(center)
 	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", Palette.frame())
+	panel.add_theme_stylebox_override("panel", Palette.frame(Color(0.11, 0.075, 0.045, 0.96), 14, true))
 	center.add_child(panel)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 10)

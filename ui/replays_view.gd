@@ -95,10 +95,10 @@ func refresh() -> void:
 	if tab == "device":
 		var kept := Replay.kept()
 		for r in kept:
-			_list.add_child(_row(_summary(r), func(): _watch(r), func(): export_replay(r)))
+			_list.add_child(_row(_summary(r), func(): _watch(r), func(): export_replay(r), r.missing()))
 		if kept.is_empty():
 			_empty(tr("No replays yet"), tr("Your finished games appear here: the last %d on this device.") % Replay.KEEP
-				+ "\n" + tr("A replay file from a friend comes in with Import."), true)
+				+ "\n" + tr("A replay file from a friend comes in with the button “%s”.") % tr("Import a replay"), true)
 		return
 	if _server_list == null:
 		_empty(tr("Loading…"), "", false)
@@ -126,8 +126,9 @@ static func _server_summary(e: Dictionary) -> Dictionary:
 		"pack": str(e.get("pack_name", "")), "ended": int(e.get("ended", 0)), "turns": int(e.get("turns", 0))}
 
 
-## One game: both heroes, "A vs B", the mode, game, date and turns, the result badge, Watch, Export.
-func _row(s: Dictionary, on_watch: Callable, on_export: Callable) -> Control:
+## One game: both heroes, "A vs B", the mode, game, date and turns, the result badge, Watch, Export;
+## missing: why it can't be watched here (its game is not on this device: Watch is off, the reason its tip).
+func _row(s: Dictionary, on_watch: Callable, on_export: Callable, missing := "") -> Control:
 	var row := PanelContainer.new()
 	row.name = "Replay%d" % _list.get_child_count()
 	var st := Palette.box(Color(0.09, 0.06, 0.04, 0.92), 14, Color("6b5320"), 2)
@@ -157,16 +158,27 @@ func _row(s: Dictionary, on_watch: Callable, on_export: Callable) -> Control:
 	text.alignment = BoxContainer.ALIGNMENT_CENTER
 	var me: int = s.me
 	var title := Palette.label("%s  vs  %s" % [_name(s.names[me]), _name(s.names[1 - me])], 22)
-	title.clip_text = true
+	title.name = "Names"
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS  # (long names: "…", the whole in the tip)
+	title.tooltip_text = title.text
+	title.mouse_filter = Control.MOUSE_FILTER_PASS
+	title.custom_minimum_size.x = 120
 	text.add_child(title)
 	var bits := [tr(MODES.get(s.mode, s.mode)) if s.mode != "" else "", tr("%d turns") % s.turns if s.turns > 0 else "",
 		_date(s.ended), s.pack]
 	var info := Palette.label("  ·  ".join(bits.filter(func(b): return b != "")), 17, Palette.MUTED)
-	info.clip_text = true
+	info.name = "About"
+	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # (the game's name on a second line, not cut)
+	info.max_lines_visible = 2
+	info.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	info.custom_minimum_size.x = 120
 	text.add_child(info)
 	h.add_child(text)
 	h.add_child(_badge(s.winner, me))
 	var w := _button(tr("Watch"), "Watch", "play", on_watch, Vector2(170, 56))
+	if missing != "":
+		w.disabled = true
+		w.tooltip_text = missing
 	h.add_child(w)
 	var x := _button("", "Export", "export", on_export, Vector2(56, 56))
 	x.tooltip_text = tr("Export a replay file")

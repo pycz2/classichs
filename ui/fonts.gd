@@ -2,8 +2,8 @@ class_name Fonts
 extends RefCounted
 ## The interface's look: Alegreya (OFL; Latin, Cyrillic, Greek), the client's font, for the
 ## interface (lining figures) and the cards; the buttons and fonts of the styling pack's
-## ui/theme.json (Palette.UI: its fonts in ui/fonts/; Classic's wooden planks and Cinzel
-## Decorative title), else the client's flat ones. main.gd puts theme() on the root window; the
+## ui/theme.json (Palette.UI: its fonts in ui/fonts/; Classic's wooden planks and Alegreya
+## SC title), else the client's flat ones. main.gd puts theme() on the root window; the
 ## theme is rebuilt in place when the look changes.
 
 static var _title: Font
@@ -34,7 +34,7 @@ static func _pack_font(kind: String, p: Pack = null) -> Font:
 		if not bytes.is_empty():
 			f = FontFile.new()
 			f.data = bytes
-			# letters the pack's font lacks (Cinzel Decorative has no Cyrillic) come from the client's
+			# letters the pack's font lacks (say, Cyrillic) come from the client's
 			f.fallbacks = [load("res://fonts/Alegreya.ttf")]
 		_pack_fonts[key] = f
 	return _pack_fonts[key]

@@ -72,8 +72,8 @@ func test_the_shell_has_its_own_neutral_look() -> void:
 	crest.free()
 
 
-## Every pack font shows every letter its game's texts use in all languages (Cinzel Decorative has no
-## Cyrillic: the client's font fills in), and a title in such letters is written in capitals.
+## Every pack font shows every letter its game's texts use in all languages (letters a pack font lacks
+## come from the client's font), and a title in such letters is written in capitals.
 func test_pack_fonts_show_every_language() -> void:
 	for id in [Packs.CLASSIC, "neon"]:
 		var p := _pack(id)
@@ -94,7 +94,12 @@ func test_pack_fonts_show_every_language() -> void:
 func test_a_title_the_pack_font_cannot_show_is_in_capitals() -> void:
 	Packs.set_active(_pack(Packs.CLASSIC))
 	var t := TitleLogo.new()
+	t.text = "Classic Հայ"
+	(Engine.get_main_loop() as SceneTree).root.add_child(t)
+	eq(t.text, "CLASSIC ՀԱՅ", "Alegreya SC has no Armenian: capitals in the client's font")
+	t.free()
+	t = TitleLogo.new()
 	t.text = "Классика 2014"
 	(Engine.get_main_loop() as SceneTree).root.add_child(t)
-	eq(t.text, "КЛАССИКА 2014", "Cinzel has no Cyrillic: capitals in the client's font")
+	eq(t.text, "Классика 2014", "the title font has Cyrillic (1 and I, O and 0 apart): the name as it is")
 	t.free()

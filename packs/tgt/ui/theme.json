@@ -1,5 +1,5 @@
 {
- "about": "The Grand Tournament's interface (docs/packs/format.md, 'UI theme'): the Argent Tournament grounds in Icecrown — deep royal-blue pavilion panels with polished silver rims, buttons of blue tourney silk edged in gold that brighten to a silver glint, cold clear text, snow drifting over the menu; the title in Classic's Cinzel Decorative, in gold.",
+ "about": "The Grand Tournament's interface (docs/packs/format.md, 'UI theme'): the Argent Tournament grounds in Icecrown — deep royal-blue pavilion panels with polished silver rims, buttons of blue tourney silk edged in gold that brighten to a silver glint, cold clear text, snow drifting over the menu; the title in Classic's Alegreya SC, in gold.",
  "colors": {
   "text": "eef2f8",
   "muted": "9fadc4",
@@ -24,7 +24,7 @@
  "outline_size": 3,
  "button": {"style": "neon", "radius": 6, "border": 1, "glow": "c9d6ee33", "glow_size": 4, "glow_hover": "e8c25a99", "glow_hover_size": 12},
  "panel": {"radius": 8, "border": 2, "glow": "8fa6d040", "glow_size": 12},
- "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
  "end_turn": {"button": "1d3366", "border": "e8c25a", "text": "f6f3e8", "ready": "2b4c99", "ready_border": "ffd76a"},
  "mana": "4cc3ff",
  "menu": {"shade": "04081459", "particles": "snow"}

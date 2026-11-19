@@ -32,7 +32,9 @@ voice/<lang>/…                       optional recorded voice lines (.opus|ogg|
 ui/<name>.png|jpg|webp               optional pictures: logo, card back, rank emblems, the theme's crest; by name the
                                      client also shows ui/menu (the game's menu and screen backdrops), ui/board (the
                                      game board), ui/library (collection), ui/result_victory|result_defeat|result_draw
-                                     (the result screen); without them the client's own backdrop, no result picture
+                                     (the result screen), ui/tile (the game's tile in the game library, drawn as it
+                                     is: 5:2, 750x300; tools/pack_tile.py draws one); without them the client's own
+                                     backdrop, no result picture, a tile of ui/menu with the name over it
 ui/theme.json                        optional: the look of the interface (§11)
 ui/fonts/<name>.ttf|otf              optional: the theme's fonts, with their licences (.txt|.md)
 decks/<name>.json        ready decks
@@ -456,7 +458,7 @@ Classic's (`packs/classic/ui/theme.json`) is its tavern look. Presentation only:
 | `button.texture`, `button.texture_margin` | A 9-slice picture in `ui/` for every button (tinted for hover, pressed, disabled); wins over `style`. |
 | `panel.radius`, `panel.border`, `panel.glow`, `panel.glow_size` | Panels: corners, rim width, the glow around them. |
 | `panel.texture`, `panel.texture_margin` | A 9-slice picture in `ui/` for popups, tooltips and plain panels (the frames screens draw stay flat). |
-| `fonts.title`, `fonts.body` | `ui/fonts/<file>.ttf|otf`: headings and the game's name (its tile in the library, its menu's title); all other interface text (default: the client's Alegreya, bold for titles). A variable font with a `wght` axis gets the weights the interface asks for. It must cover every language of the pack (Latin with diacritics, Cyrillic…). Card texts keep the client's own font (the card layout is measured with it). |
+| `fonts.title`, `fonts.body` | `ui/fonts/<file>.ttf|otf`: headings and the game's name (its menu's title; its tile in the library without `ui/tile`); all other interface text (default: the client's Alegreya, bold for titles). A variable font with a `wght` axis gets the weights the interface asks for. It must cover every language of the pack (Latin with diacritics, Cyrillic…). Card texts keep the client's own font (the card layout is measured with it). |
 | `end_turn.button`, `border`, `text`, `ready`, `ready_border` | End Turn while moves are left and when none are (default: the button colours and `ok`). |
 | `mana` | The mana crystals of the game screen. |
 | `rarities` | `{rarity id: colour}`: the rarity gems; wins over `manifest.json` `colors.rarities`. |
@@ -465,7 +467,7 @@ Classic's (`packs/classic/ui/theme.json`) is its tavern look. Presentation only:
 
 Fonts must allow redistribution (SIL OFL, Apache…); put their licence next to them
 (`ui/fonts/<Name>-OFL.txt`). Classic (`packs/classic/ui/`): the tavern's colours, `wood`
-buttons, embers, Cinzel Decorative for its name under `ui/crest.png`, and its pictures
+buttons, embers, Alegreya SC for its name under `ui/crest.png`, and its pictures
 `ui/menu`, `ui/library`, `ui/board`, `ui/result_*`. Neonfall (`packs/neon/ui/`): dark glass
 panels with thin cyan rims, glowing magenta-rimmed buttons, Tektur for titles and
 Exo 2 for text (both OFL, subset to Latin, Latin Extended-A and Cyrillic).

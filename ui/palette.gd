@@ -107,7 +107,7 @@ static func load_theme() -> void:
 				_roles[c.to_html(false)] = to[role]
 	_frames = _frames.filter(func(f): return f[0].get_ref() != null)
 	for f in _frames:
-		_restyle_frame(f[0].get_ref(), f[1], f[2])
+		_restyle_frame(f[0].get_ref(), f[1], f[2], false, f[3])
 
 
 static func _merge(base: Dictionary, over: Dictionary) -> Dictionary:
@@ -230,21 +230,24 @@ static func shell_picture() -> Texture2D:
 
 
 ## A panel of the game: dark wood inside a gold rim, with a soft shadow (the theme's panel
-## for a themed pack; it changes with the theme).
-static func frame(fill := Color(0.11, 0.075, 0.045, 0.96), radius := 14) -> StyleBoxFlat:
+## for a themed pack; it changes with the theme). solid: nothing shows through it (a window
+## over a screen), whatever the theme's panel colour.
+static func frame(fill := Color(0.11, 0.075, 0.045, 0.96), radius := 14, solid := false) -> StyleBoxFlat:
 	var s := StyleBoxFlat.new()
 	s.set_content_margin_all(14)
-	_restyle_frame(s, fill, radius, true)
-	_frames.append([weakref(s), fill, radius])
+	_restyle_frame(s, fill, radius, true, solid)
+	_frames.append([weakref(s), fill, radius, solid])
 	if _frames.size() > 512:
 		_frames = _frames.filter(func(f): return f[0].get_ref() != null)
 	return s
 
 
 ## Colours, rim and glow of a frame from the theme; a side a caller took the border off stays off.
-static func _restyle_frame(s: StyleBoxFlat, fill: Color, radius: int, fresh := false) -> void:
+static func _restyle_frame(s: StyleBoxFlat, fill: Color, radius: int, fresh := false, solid := false) -> void:
 	var panel: Dictionary = UI.panel
 	s.bg_color = fill if CLASSIC else ui(fill)
+	if solid:
+		s.bg_color.a = 1.0
 	s.border_color = Color("a8863a") if CLASSIC else tc("panel_border")
 	s.set_corner_radius_all(radius if CLASSIC else mini(radius, int(panel.radius)))
 	var w := 3 if CLASSIC else int(panel.border)

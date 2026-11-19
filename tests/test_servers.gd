@@ -341,6 +341,7 @@ func test_settings_server_list() -> void:
 	var note := s.find_child("ServersNote", true, false) as Control
 	check(not note.get_rect().intersects((s.find_child("Back", true, false) as Control).get_rect()), "the note wraps before the Back button")
 	eq(s.add_server("Mine", "http://nope"), false, "only ws:// or wss://")
+	eq((note as Label).text, tr("A server address starts with ws:// or wss:// and has no spaces, like wss://example.org:7377"), "and says so")
 	eq(s.add_server("Mine", "wss://mine.example"), true)
 	eq(s.add_server("Mine 2", "wss://mine.example"), true, "the same address again: another login there")
 	eq(Settings.data.servers.map(func(e): return e.name), ["localhost", "Mine", "Mine 2"], "added")
@@ -361,9 +362,20 @@ func test_settings_server_list() -> void:
 	eq(opened, ["wss://mine.example#2"], "Open: that connection")
 	(row.find_child("Logout", true, false) as Button).pressed.emit()
 	eq(ServerLink.saved_for("wss://mine.example").get("token"), null, "logged out")
+	Settings.data.servers[2].name = "Weekend tournaments of the old guild"
+	s._build()
+	var long := s.find_child("Server2", true, false).find_child("Name", true, false) as LineEdit
+	check(long.text.ends_with("…") and long.tooltip_text == "Weekend tournaments of the old guild", "a long name: … and the tip: " + long.text)
+	long.focus_entered.emit()
+	eq(long.text, "Weekend tournaments of the old guild", "the whole name to edit")
+	long.focus_exited.emit()
+	eq(Settings.data.servers[2].name, "Weekend tournaments of the old guild", "not renamed by the shortening")
 	row = s.find_child("Server1", true, false)
-	(row.find_child("Remove", true, false) as Button).pressed.emit()
+	var rm := row.find_child("Remove", true, false) as Button
+	var width := rm.get_combined_minimum_size().x
+	rm.pressed.emit()
 	eq(Settings.data.servers.size(), 3, "the first press only asks")
+	eq(rm.get_combined_minimum_size().x, width, "the button keeps its width: the row stays put")
 	(row.find_child("Remove", true, false) as Button).pressed.emit()
 	eq(Settings.data.servers.map(func(e): return e.id), ["ws://localhost:7377", "wss://mine.example#2"], "removed")
 	s.free()

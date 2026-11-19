@@ -329,6 +329,34 @@ def deck_error(deck, cards, rules):
     return ""
 
 
+TILE_RATIO = 2.5  # ui/tile: the game library's tile picture (format.md)
+
+
+def image_size(data):
+    """A PNG's, JPEG's or WebP's (width, height), or None."""
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        return int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        kind = data[12:16]
+        if kind == b"VP8 ":
+            return int.from_bytes(data[26:28], "little") & 0x3FFF, int.from_bytes(data[28:30], "little") & 0x3FFF
+        if kind == b"VP8L":
+            b = int.from_bytes(data[21:25], "little")
+            return (b & 0x3FFF) + 1, ((b >> 14) & 0x3FFF) + 1
+        if kind == b"VP8X":
+            return int.from_bytes(data[24:27], "little") + 1, int.from_bytes(data[27:30], "little") + 1
+        return None
+    i = 2 if data[:2] == b"\xff\xd8" else len(data)
+    while i + 9 < len(data):  # JPEG: the frame header (SOF0…SOF15 but DHT, JPG, DAC)
+        if data[i] != 0xFF:
+            return None
+        marker, length = data[i + 1], int.from_bytes(data[i + 2:i + 4], "big")
+        if 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC):
+            return int.from_bytes(data[i + 7:i + 9], "big"), int.from_bytes(data[i + 5:i + 7], "big")
+        i += 2 + length
+    return None
+
+
 def check_files(files):
     """Every rule of format.md on the unpacked files. Returns a Report."""
     r = Report()
@@ -473,6 +501,10 @@ def check_files(files):
     for key, mark in man.get("set_marks", {}).items():
         if mark.get("icon") and mark["icon"] not in files:
             r.error(f"manifest.json: set_marks.{key} icon {mark['icon']} is not in the pack")
+    for p in sorted(f for f in files if f.rsplit(".", 1)[0] == "ui/tile"):
+        size = image_size(files[p])
+        if size and abs(size[0] / size[1] - TILE_RATIO) > 0.25:
+            r.warn(f"{p}: {size[0]}x{size[1]}; the game library shows it at 5:2 (750x300): it is cut")
     if "ui/theme.json" in files:
         theme = _json(files, "ui/theme.json", r, "theme.schema.json")
         refs = [] if theme is None else [theme.get(k, {}).get(f) for k, f in
