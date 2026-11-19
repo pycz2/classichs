@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "TROLL": "Rastakhans Rambazamba"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Überwältigen",
+   "tip": "Verursacht in Eurem Zug überschüssigen Schaden für einen Bonus."
+  }
+ }
+}

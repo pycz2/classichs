@@ -32,6 +32,7 @@
     {"id": "REPEATABLE", "kind": "marker", "silenced": false, "about": "Played from the hand, the card gives its player a new copy of itself that goes away at the end of the turn (the effect is the pack's scripts); The Witchwood's Echo."},
     {"id": "AT_GAME_START", "kind": "marker", "silenced": false, "about": "The card does something from its player's deck when the game starts (the effect is the pack's player hooks: `game_start`); The Witchwood's Start of Game."},
     {"id": "OFFER", "kind": "marker", "silenced": false, "about": "The card offers its player a choice of cards (the effect is the card's hook: `g.create`, `g.request_choice`); only that player sees the options."},
+    {"id": "EXCESS_DAMAGE", "kind": "hook", "silenced": true, "about": "A bonus when the card (the minion attacking, the spell, the hero attacking with the weapon) deals more damage than the character it hits has left, on its player's turn (the effect is the card's `damage` hook: the target's health is below 0 after it); Rastakhan's Rumble's Overkill."},
     {"id": "ON_PLAY", "kind": "hook", "silenced": false, "about": "Does something when played from the hand."},
     {"id": "ON_DEATH", "kind": "hook", "silenced": true, "about": "Does something when it dies."},
     {"id": "ON_POWER", "kind": "hook", "silenced": true, "about": "Does something after its owner uses the champion's power (an `on` hook on the `hero_power` event)."},

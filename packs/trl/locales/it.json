@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "TROLL": "La sfida di Rastakhan"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Annientamento",
+   "tip": "Infliggi danni in eccesso nel tuo turno per ottenere un bonus."
+  }
+ }
+}

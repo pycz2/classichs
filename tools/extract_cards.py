@@ -122,7 +122,7 @@ KARA_TOKENS = "KAR_004a KAR_005a KAR_010a KAR_025a KAR_025b KAR_025c KAR_026t KA
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590, "ungoro": 18336, "icc": 20457, "loot": 22611, "gil": 23966, "boom": 25770}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590, "ungoro": 18336, "icc": 20457, "loot": 22611, "gil": 23966, "boom": 25770, "trl": 27845}
 ## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
 ## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
 ## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
@@ -141,7 +141,9 @@ RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 125
 ## The Boomsday Project too (build 25770, patch 12.0.0.25770 of 2018-08-02, five days before the release): Giggling
 ## Inventor 7 (2018), the buffs of June 2019 (Dr. Morrigan 6, Violet Haze 2, Flark's Boom-Zooka, Necromechanic…), Dr. Boom,
 ## Mad Genius 9 (2019), Test Subject, The Soularium and others changed since; second tribes and SN1P-SN4P came later.
-FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil", "boom"}
+## Rastakhan's Rumble too (build 27845, patch 13.0.0.27845 of 2018-11-29): Halazzi 4 mana 4/2 Rush, High Priestess
+## Jeklik 3/5, Spirit of the Frog 5, Zentimo's and Masked Contender's texts changed since; the Undead tribe came later.
+FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil", "boom", "trl"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 ## Classic's Hero Powers had other ids in the old builds (VAN_HERO_06bp was CS2_017; the upgraded ones AT_132_*).
 _CLASSES = ["WARRIOR", "SHAMAN", "ROGUE", "PALADIN", "HUNTER", "DRUID", "WARLOCK", "MAGE", "PRIEST"]
@@ -207,6 +209,7 @@ SETS = {
     "loot": ("LOOTAPALOOZA", ["LOOT_"], None),
     "gil": ("GILNEAS", ["GIL_"], None),
     "boom": ("BOOMSDAY", ["BOT_"], None),  # (BOTA_*: the Puzzle Lab's cards, not the set's)
+    "trl": ("TROLL", ["TRL_"], None),  # (TRLA_*: Rumble Run's cards, not the set's)
 }
 
 
@@ -214,7 +217,10 @@ SETS = {
 DUMMIES = {"LOOT_500d"}
 ## Tokens of a set made with another set's prefix: Deathstalker Rexxar's new Zombeast parts of patch 11.0.0.23966 (the
 ## Kobolds & Catacombs and Witchwood Beasts his Build-A-Beast offers from then on).
-EXTRA_TOKENS = {"gil": {"ICC_828t4", "ICC_828t5", "ICC_828t6", "ICC_828t7"}}
+## The 4 Classic cards of patch 12.4.0.27405 (2018-11-05: Icicle, Tome of Intellect, Call of the Void, Pilfer) first
+## exist in the Rastakhan pack: they keep their EX1_ ids (no older build has them, so no VAN_ copy is needed) and
+## packs/trl/cards.patch.json files them under Classic (set VANILLA).
+EXTRA_TOKENS = {"gil": {"ICC_828t4", "ICC_828t5", "ICC_828t6", "ICC_828t7"}, "trl": {"EX1_179", "EX1_180", "EX1_181", "EX1_182"}}
 
 
 def set_cards(cards, name):
@@ -257,6 +263,8 @@ def release_cards(then, now):
         for k in ("dbfId", "elite"):
             if k in t:
                 c[k] = t[k]
+        if "InvisibleDeathrattle" in c.get("mechanics", []):  # a display tag of build 27845 (High Priestess Jeklik)
+            c["mechanics"] = [m for m in c["mechanics"] if m != "InvisibleDeathrattle"]
         if "TRIGGER_VISUAL" in t.get("mechanics", []) and "TRIGGER_VISUAL" not in c.get("mechanics", []):
             c["mechanics"] = c.get("mechanics", []) + ["TRIGGER_VISUAL"]
         if t.get("referencedTags") and _norm((t.get("text") or {}).get("enUS")) == _norm((c.get("text") or {}).get("enUS")):

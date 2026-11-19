@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "TROLL": "Rastakhan's Rumble"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Overkill",
+   "tip": "Deal excess damage on your turn for a bonus."
+  }
+ }
+}

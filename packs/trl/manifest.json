@@ -1,0 +1,193 @@
+{
+ "format": 1,
+ "id": "trl-2018",
+ "version": "1.0.0",
+ "engine": "0.60.0",
+ "name": {
+  "en": "Rastakhan's Rumble 2018",
+  "ru": "Растахановы игрища 2018",
+  "de": "Rastakhans Rambazamba 2018",
+  "fr": "Les Jeux de Rastakhan 2018",
+  "es": "La Arena de Rastakhan 2018",
+  "pt_BR": "Ringue do Rastakhan 2018",
+  "it": "La sfida di Rastakhan 2018",
+  "pl": "Rozróba Rastakana 2018"
+ },
+ "description": {
+  "en": "The game as it was played after December 4, 2018: every card of The Boomsday Project pack and the 135 cards of Rastakhan's Rumble, each as on that day, with the four Classic cards of November 2018 (Icicle, Tome of Intellect, Call of the Void, Pilfer). Overkill rewards excess damage on your turn, each class has its Loa and its Spirit, Zul'jin recasts every spell you played, and Hakkar shuffles Corrupted Blood into both decks. By then Mana Wyrm cost 2, Giggling Inventor 7 and Aviana 10.",
+  "ru": "Игра, как в неё играли после 4 декабря 2018 года: все карты пакета «Проект Бумного дня» и 135 карт «Растахановых игрищ», каждая как в тот день, и четыре классические карты ноября 2018 года («Сосулька», «Фолиант интеллекта», «Зов Бездны», «Хапуга»). Сверхурон награждает за избыточный урон в свой ход, у каждого класса есть свой лоа и свой дух, Зул'джин повторяет все разыгранные вами заклинания, а Хаккар замешивает «Порченую кровь» в обе колоды. К тому времени Змей маны стоил 2, Хихикающий изобретатель 7, а Авиана 10.",
+  "de": "Das Spiel, wie es nach dem 4. Dezember 2018 gespielt wurde: jede Karte des Pakets von Dr. Bumms Geheimlabor und die 135 Karten aus Rastakhans Rambazamba, jede wie an jenem Tag, dazu die vier Klassikkarten vom November 2018 (Eiszapfen, Foliant der Intelligenz, Ruf der Leere, Stibitzen). Überwältigen belohnt überschüssigen Schaden in Eurem Zug, jede Klasse hat ihren Loa und ihren Geist, Zul'jin wirkt jeden Zauber erneut, den Ihr gespielt habt, und Hakkar mischt Verderbtes Blut in beide Decks. Damals kostete der Manawyrm 2, der Kichernde Erfinder 7 und Aviana 10.",
+  "fr": "Le jeu tel qu'on le jouait après le 4 décembre 2018 : toutes les cartes du pack Projet Armageboum et les 135 cartes des Jeux de Rastakhan, chacune comme ce jour-là, avec les quatre cartes classiques de novembre 2018 (Glaçon, Tome d'intelligence, Appel du Vide, Chapardage). La Brutalité récompense les dégâts excédentaires pendant votre tour, chaque classe a son loa et son esprit, Zul'jin relance chaque sort que vous avez joué, et Hakkar mélange du Sang corrompu dans les deux decks. À cette date, le Wyrm de mana coûtait 2, l'Inventeur ricaneur 7 et Aviana 10.",
+  "es": "El juego tal como se jugaba después del 4 de diciembre de 2018: todas las cartas del paquete de El Proyecto Armagebum y las 135 cartas de La Arena de Rastakhan, cada una como aquel día, con las cuatro cartas clásicas de noviembre de 2018 (Carámbano, Tomo de intelecto, Llamada del Vacío, Ratería). Arrasar premia el daño excesivo en tu turno, cada clase tiene su loa y su espíritu, Zul'jin vuelve a lanzar cada hechizo que jugaste y Hakkar baraja Sangre corrupta en ambos mazos. Para entonces la Vermis de maná costaba 2, el Inventor risueño 7 y Aviana 10.",
+  "pt_BR": "O jogo como era jogado depois de 4 de dezembro de 2018: todos os cards do pacote do Projeto Cabum e os 135 cards do Ringue do Rastakhan, cada um como naquele dia, com os quatro cards clássicos de novembro de 2018 (Pingente de Gelo, Tomo do Intelecto, Chamado do Caos, Furto). Massacre recompensa o dano excedente no seu turno, cada classe tem seu loa e seu espírito, Zul'jin lança de novo cada feitiço que você jogou e Hakkar embaralha Sangue Corrompido nos dois decks. Naquela época, a Serpe de Mana custava 2, o Inventor Risonho 7 e Aviana 10.",
+  "it": "Il gioco come si giocava dopo il 4 dicembre 2018: tutte le carte del pacchetto di Operazione Apocalisse e le 135 carte de La sfida di Rastakhan, ognuna com'era quel giorno, con le quattro carte Classiche di novembre 2018 (Ghiacciolo, Tomo dell'Intelletto, Richiamo del Vuoto, Sgraffignare). Annientamento premia i danni in eccesso nel tuo turno, ogni classe ha il suo Loa e il suo Spirito, Zul'jin rilancia ogni magia che hai giocato e Hakkar mescola Sangue Corrotto in entrambi i mazzi. A quel tempo il Dragone di Mana costava 2, l'Inventore Sghignazzante 7 e Aviana 10.",
+  "pl": "Gra taka, jak po 4 grudnia 2018 roku: wszystkie karty pakietu Projekt Hukatomba i 135 kart z Rozróby Rastakana, każda taka jak tamtego dnia, oraz cztery karty klasyczne z listopada 2018 roku (Sopel, Księga intelektu, Zew Pustki, Złodziejstwo). Rzeź nagradza nadmiarowe obrażenia w twojej turze, każda klasa ma swojego loa i swojego ducha, Zul'jin ponownie rzuca każde zaklęcie, które zagrałeś, a Hakkar wtasowuje Skażoną krew do obu talii. Wtedy Wąż many kosztował 2, Chichoczący wynalazca 7, a Aviana 10."
+ },
+ "authors": [
+  "Classic HS"
+ ],
+ "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+ "redistributable": true,
+ "default_locale": "en",
+ "locales": [
+  "en",
+  "ru",
+  "de",
+  "fr",
+  "es",
+  "pt_BR",
+  "it",
+  "pl"
+ ],
+ "art_sets": [
+  {
+   "id": "simple",
+   "name": {
+    "en": "Simple painted",
+    "ru": "Простой рисованный",
+    "de": "Einfach gemalt",
+    "fr": "Peint simple",
+    "es": "Pintado simple",
+    "pt_BR": "Pintura simples",
+    "it": "Dipinto semplice",
+    "pl": "Prosty malowany"
+   },
+   "default": true
+  },
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированный"
+   }
+  },
+  {
+   "id": "cartoon",
+   "name": {
+    "en": "Cartoon 2D",
+    "ru": "Мультяшный 2D",
+    "de": "Cartoon 2D",
+    "fr": "Dessin animé 2D",
+    "es": "Dibujos 2D",
+    "pt_BR": "Desenho 2D",
+    "it": "Cartone 2D",
+    "pl": "Kreskówka 2D"
+   }
+  },
+  {
+   "id": "photo",
+   "name": {
+    "en": "Photoreal",
+    "ru": "Фотореалистичный",
+    "de": "Fotorealistisch",
+    "fr": "Photoréaliste",
+    "es": "Fotorrealista",
+    "pt_BR": "Fotorrealista",
+    "it": "Fotorealistico",
+    "pl": "Fotorealistyczny"
+   }
+  }
+ ],
+ "sound_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированные"
+   },
+   "default": true
+  }
+ ],
+ "music_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированная"
+   },
+   "default": true
+  },
+  {
+   "id": "open",
+   "name": {
+    "en": "Open (CC0)",
+    "ru": "Открытая (CC0)"
+   }
+  }
+ ],
+ "set_marks": {
+  "VANILLA:FREE": {
+   "icon": "ui/set_basic.png"
+  },
+  "VANILLA": {
+   "icon": "ui/set_classic.png"
+  },
+  "NAXX": {
+   "icon": "ui/set_naxx.png"
+  },
+  "GVG": {
+   "icon": "ui/set_gvg.png"
+  },
+  "BRM": {
+   "icon": "ui/set_brm.png"
+  },
+  "TGT": {
+   "icon": "ui/set_tgt.png"
+  },
+  "LOE": {
+   "icon": "ui/set_loe.png"
+  },
+  "OG": {
+   "icon": "ui/set_og.png"
+  },
+  "KARA": {
+   "icon": "ui/set_kara.png"
+  },
+  "GANGS": {
+   "icon": "ui/set_msg.png"
+  },
+  "UNGORO": {
+   "icon": "ui/set_ungoro.png"
+  },
+  "ICECROWN": {
+   "icon": "ui/set_icc.png"
+  },
+  "LOOTAPALOOZA": {
+   "icon": "ui/set_loot.png"
+  },
+  "GILNEAS": {
+   "icon": "ui/set_gil.png"
+  },
+  "BOOMSDAY": {
+   "icon": "ui/set_boom.png"
+  },
+  "TROLL": {
+   "icon": "ui/set_trl.png"
+  }
+ },
+ "card_back": null,
+ "logo": null,
+ "colors": {
+  "classes": {
+   "DRUID": "703606",
+   "HUNTER": "016e01",
+   "MAGE": "0092ab",
+   "PALADIN": "aa8f00",
+   "PRIEST": "b8b090",
+   "ROGUE": "4c4d48",
+   "SHAMAN": "0070de",
+   "WARLOCK": "7624ad",
+   "WARRIOR": "8e1002",
+   "NEUTRAL": "6b6b6b",
+   "DREAM": "6b6b6b",
+   "DEMONHUNTER": "6b6b6b"
+  },
+  "rarities": {
+   "FREE": "e8e8e8",
+   "COMMON": "e8e8e8",
+   "RARE": "2f7cff",
+   "EPIC": "a335ee",
+   "LEGENDARY": "ff8000"
+  }
+ }
+}

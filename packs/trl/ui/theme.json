@@ -1,0 +1,31 @@
+{
+ "about": "Rastakhan's Rumble's interface (docs/packs/format.md, 'UI theme'): the troll arena of Zuldazar on fight night — dark panels of jungle-shadowed stone with gold rims like the ziggurats' gilded steps, buttons of deep jungle teal that flare gold under the mouse like a champion's armour in the sun, warm sun-bleached parchment text, gold for headings, blood red for danger and the ghostly teal of the Loa spirits for confirmations, sparks drifting up from the arena braziers over the menu; the title in Classic's Cinzel Decorative, in gold.",
+ "colors": {
+  "text": "f4ead2",
+  "muted": "bdb39a",
+  "accent": "f0c040",
+  "table": "0a0d0b",
+  "panel": "15130ef0",
+  "panel_border": "c9962a",
+  "backdrop": "1c2a24",
+  "button": "0f4a46f0",
+  "button_hover": "16625c",
+  "button_pressed": "0a3533",
+  "button_disabled": "1a2a28a6",
+  "button_border": "e2b13a",
+  "button_text": "f6f0dc",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "ffe08a",
+  "button_text_disabled": "7a8580",
+  "outline": "070806",
+  "danger": "c4202c",
+  "ok": "4fd8c4"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 8, "border": 1, "glow": "e2b13a33", "glow_size": 4, "glow_hover": "ffd25a99", "glow_hover_size": 12},
+ "panel": {"radius": 10, "border": 2, "glow": "c9962a40", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
+ "end_turn": {"button": "0f4a46", "border": "f0c040", "text": "f6f0dc", "ready": "b3261e", "ready_border": "ff8a5c"},
+ "mana": "5fb8ff",
+ "menu": {"shade": "0a0d0b59", "particles": "embers"}
+}

@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "TROLL": "Ringue do Rastakhan"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Massacre",
+   "tip": "Cause dano excedente no seu turno para ganhar um bônus."
+  }
+ }
+}
