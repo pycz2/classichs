@@ -7,5 +7,31 @@
    "name": "Twinspell",
    "tip": "After you cast it, a copy of this spell without Twinspell comes to your hand."
   }
+ },
+ "cards": {
+  "VAN_EX1_154a": {
+   "name": "Solar Wrath"
+  },
+  "VAN_EX1_154b": {
+   "name": "Nature's Wrath"
+  },
+  "VAN_EX1_155a": {
+   "name": "Tiger's Fury"
+  },
+  "VAN_EX1_155b": {
+   "name": "Thick Hide"
+  },
+  "VAN_EX1_164a": {
+   "name": "Rampant Growth"
+  },
+  "VAN_EX1_164b": {
+   "name": "Enrich"
+  },
+  "VAN_NEW1_007a": {
+   "name": "Stellar Drift"
+  },
+  "VAN_NEW1_007b": {
+   "name": "Starlord"
+  }
  }
 }

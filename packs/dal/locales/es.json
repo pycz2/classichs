@@ -7,5 +7,34 @@
    "name": "Hechizo doble",
    "tip": "Después de lanzarlo, una copia de este hechizo sin Hechizo doble vuelve a tu mano."
   }
+ },
+ "cards": {
+  "VAN_CS1_042": {
+   "name": "Ordenanza de Villadorada"
+  },
+  "VAN_EX1_154a": {
+   "name": "Cólera solar"
+  },
+  "VAN_EX1_154b": {
+   "name": "Cólera de la Naturaleza"
+  },
+  "VAN_EX1_155a": {
+   "name": "Furia del tigre"
+  },
+  "VAN_EX1_155b": {
+   "name": "Pelaje grueso"
+  },
+  "VAN_EX1_164a": {
+   "name": "Crecimiento desenfrenado"
+  },
+  "VAN_EX1_164b": {
+   "name": "Enriquecer"
+  },
+  "VAN_NEW1_007a": {
+   "name": "Deriva estelar"
+  },
+  "VAN_NEW1_007b": {
+   "name": "Dominio astral"
+  }
  }
 }

@@ -7,5 +7,34 @@
    "name": "Zwillingszauber",
    "tip": "Nachdem Ihr ihn gewirkt habt, kommt eine Kopie dieses Zaubers ohne Zwillingszauber auf Eure Hand."
   }
+ },
+ "cards": {
+  "TU4e_002": {
+   "text": "<b>Heldenfähigkeit</b>\nRuft 2 Diener (2/1) herbei."
+  },
+  "VAN_EX1_154a": {
+   "name": "Solarzorn"
+  },
+  "VAN_EX1_154b": {
+   "name": "Zorn der Natur"
+  },
+  "VAN_EX1_155a": {
+   "name": "Tigerfuror"
+  },
+  "VAN_EX1_155b": {
+   "name": "Dickes Fell"
+  },
+  "VAN_EX1_164a": {
+   "name": "Rasantes Wachstum"
+  },
+  "VAN_EX1_164b": {
+   "name": "Fülle"
+  },
+  "VAN_NEW1_007a": {
+   "name": "Stellarverschiebung"
+  },
+  "VAN_NEW1_007b": {
+   "name": "Sternenlord"
+  }
  }
 }

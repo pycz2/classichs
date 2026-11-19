@@ -7,5 +7,31 @@
    "name": "Dwuczar",
    "tip": "Po rzuceniu kopia tego zaklęcia bez Dwuczaru wraca do twojej ręki."
   }
+ },
+ "cards": {
+  "VAN_EX1_154a": {
+   "name": "Słoneczny gniew"
+  },
+  "VAN_EX1_154b": {
+   "name": "Gniew natury"
+  },
+  "VAN_EX1_155a": {
+   "name": "Tygrysia furia"
+  },
+  "VAN_EX1_155b": {
+   "name": "Gruba skóra"
+  },
+  "VAN_EX1_164a": {
+   "name": "Bujny wzrost"
+  },
+  "VAN_EX1_164b": {
+   "name": "Wzbogacenie"
+  },
+  "VAN_NEW1_007a": {
+   "name": "Gwiezdny dryf"
+  },
+  "VAN_NEW1_007b": {
+   "name": "Władca gwiazd"
+  }
  }
 }
