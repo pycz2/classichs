@@ -49,3 +49,10 @@ Modes per version: before Whispers of the Old Gods only Standard; from it Standa
 as in the game at that time. Each version and each mode has its own ladder and its own casual queue.
 
 Research of every patch (balance, art, sounds) runs in parallel subagents, as do media and decks.
+
+### The version diff (added 2026-11-19)
+
+Next to choosing a version there is "Compare versions": pick any two versions and see every card that differs between
+them as a visual diff — the card as in the first version on the left, as in the second on the right, the changed parts
+(cost, attack, health, text, tribe, rarity, keywords, picture) marked in red — plus the cards added and removed. The
+list scrolls, and Back returns to the version choice.
