@@ -1,1 +1,59 @@
-{}
+{
+ "AT_132_SHAMANa": {
+  "cost": 1
+ },
+ "AT_132_SHAMANb": {
+  "cost": 1
+ },
+ "AT_132_SHAMANc": {
+  "cost": 1
+ },
+ "AT_132_SHAMANd": {
+  "cost": 1
+ },
+ "BRM_010a": {
+  "attack": 5,
+  "health": 2
+ },
+ "BRM_010b": {
+  "attack": 2,
+  "health": 5
+ },
+ "ICC_221": {
+  "cost": 1,
+  "script": "scripts/dal.lua#ICC_221"
+ },
+ "ICC_466": {
+  "script": "scripts/dal.lua#ICC_466"
+ },
+ "LOOT_080": {
+  "cost": 6
+ },
+ "LOOT_080t2": {
+  "cost": 6
+ },
+ "LOOT_080t3": {
+  "cost": 6
+ },
+ "LOOT_333": {
+  "cost": 6
+ },
+ "VAN_CS2_013": {
+  "cost": 3
+ },
+ "VAN_CS2_073": {
+  "cost": 2
+ },
+ "VAN_CS2_084": {
+  "cost": 2
+ },
+ "VAN_EX1_164": {
+  "cost": 6
+ },
+ "VAN_EX1_565": {
+  "cost": 3
+ },
+ "VAN_EX1_619": {
+  "cost": 4
+ }
+}
