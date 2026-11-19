@@ -328,6 +328,8 @@ func _error_text(msg: Dictionary) -> String:
 			return tr("Wrong name or password")
 		"taken":
 			return tr("This name is taken")
+		"bad_user":
+			return tr("A name is 3 to 16 letters, digits or _")
 	return tr(str(msg.get("text", msg.get("code", "error"))))  # (texts the client knows come translated: Social.SERVER_TEXTS)
 
 
