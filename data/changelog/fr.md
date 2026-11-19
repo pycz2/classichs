@@ -24,6 +24,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Les dégâts et le gel arrivent au même moment : Éclair de givre, Cône de froid, Blizzard et le coup d'un Élémentaire d’eau frappent et gèlent d'un coup.
 - Un nouveau gel : des cristaux de glace s'étendent sur le portrait depuis le bord, du givre borde le contour, des reflets courent sur la glace. Quand un serviteur ou un héros dégèle, la glace fond.
 
+- Le Sélénien de la jungle est de nouveau une Bête dans les jeux de La Ligue des explorateurs au Bois Maudit, comme dans Hearthstone jusqu’au patch 11.4 (2018). Il n’avait pas de type, et les cartes qui cherchent des Bêtes ne le comptaient pas.
 ## [0.71.1] - 2026-11-13
 
 ### Corrigé

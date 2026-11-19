@@ -24,6 +24,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Obrażenia i zamrożenie przychodzą w tej samej chwili: Pocisk lodu, Stożek zimna, Zamieć i cios Żywiołaka wody trafiają i zamrażają naraz.
 - Nowe zamrożenie: kryształki lodu rozrastają się po portrecie od brzegu, szron okala krawędź, po lodzie przebiegają odblaski. Gdy stronnik albo bohater odmarza, lód topnieje.
 
+- Lunozwierz z dżungli znów jest Bestią w grach od „Ligi Odkrywców” do „Wiedźmiego Lasu”, jak w Hearthstone do aktualizacji 11.4 (2018). Nie miał typu, więc karty szukające Bestii go nie liczyły.
 ## [0.71.1] - 2026-11-13
 
 ### Naprawiono

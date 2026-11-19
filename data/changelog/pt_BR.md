@@ -24,6 +24,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Dano e congelamento chegam no mesmo momento: Seta de Gelo, Cone de Frio, Nevasca e o golpe de um Elemental da Água acertam e congelam juntos.
 - Novo congelamento: cristais de gelo crescem sobre o retrato a partir da borda, há geada no contorno e brilhos correm pelo gelo. Quando um lacaio ou herói descongela, o gelo derrete.
 
+- O Luniscante da Selva volta a ser uma Fera nos jogos de A Liga dos Exploradores a O Bosque das Bruxas, como no Hearthstone até o patch 11.4 (2018). Ele não tinha tipo, e as cartas que procuram Feras não o contavam.
 ## [0.71.1] - 2026-11-13
 
 ### Corrigido

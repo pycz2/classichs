@@ -9,7 +9,8 @@ Result: <out>/<set>/music/<slot>.opus (tools/audio_codec.py, music: 128 kbit/s, 
 for `tools/pack.py build … --music-set original=<out>/<set>/music`. Slots (docs/packs/format.md, "Music"): menu,
 mulligan, battle_1 … battle_N (the board's playlist), victory, defeat (the result's jingle), arena.
 The originals stay in <out>/audio-src/music/: raw/ the client files as downloaded, <set>/<track>.ogg the tracks
-(the game's own Vorbis streams, not re-encoded), SOURCES.md what came from where.
+(the game's own Vorbis streams, not re-encoded), <set>/<track>.wav the later sets' tracks, SOURCES.md what came
+from where. <out>/<set>/music/tracks.json names each slot's track (a slot whose track changed is encoded again).
 
 Source: the iOS client 4.1.10956 (November 2015, The League of Explorers) kept on archive.org (item app-id-73):
 its sounds0/sounds1.unity3d (Unity 5.1, uncompressed) hold every track up to then as FSB5 Vorbis. FMOD strips the
@@ -17,10 +18,13 @@ Vorbis headers; the setup header is the one libvorbisenc makes for the quality t
 and is checked against that CRC32. Needs libvorbis/libvorbisenc (Homebrew: brew install libvorbis) and ffmpeg.
 The playlists are the client's own (its MusicConfig: UI_MainTitle, InGame_Mulligan, InGame_Default, the boards'
 playlists, UI_Arena; UI_EndGameScreen has no music, only the victory/defeat jingle).
+The later sets' own tracks (Karazhan … Rise of Shadows: DRIVE) come from the folder "Музыка" of the Russian
+collection on Google Drive that tools/fetch_original_sounds.py uses (RU_DRIVE): the client's tracks as WAV, by name.
 """
 import argparse
 import ctypes
 import ctypes.util
+import json
 import struct
 import subprocess
 import sys
@@ -32,6 +36,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import audio_codec  # noqa: E402
+import fetch_original_sounds  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -47,15 +52,24 @@ BUNDLES = {"sounds0.unity3d": "Payload/hearthstone.app/Data/Raw/Data/sounds0.uni
 DEFAULT_POOL = ["Bad Reputation", "Better Hand", "Don't Let Your Guard Down", "Duel", "On a Roll"]
 COMMON = {"menu": "Main_Title", "mulligan": "Mulligan", "victory": "victory_jingle", "defeat": "defeat_jingle",
           "arena": "The_Forge"}
-OWN = {  # set: (menu, the board's playlist); None: the common menu, the default pool
-    "naxx": ("Naxx_Menu_Music", ["Naxx_Frostwyrm_Lair", "Naxx_Plague_Wing", "Naxx_Walking"]),
-    "brm": ("BRM_Menu_Music", ["BRM_Bad_Down_to_the_Molten_Core", "BRM_Battle_Two", "BRM_Volcano_Man_Rising"]),
-    "loe": ("LOE_FrontMenu_Music", ["LOE_Orsis", "LOE_Mine_Cart_Chase", "LOE_Uldaman"]),
+OWN = {  # set: (menu, mulligan, the board's playlist); None: the common one
+    "naxx": ("Naxx_Menu_Music", None, ["Naxx_Frostwyrm_Lair", "Naxx_Plague_Wing", "Naxx_Walking"]),
+    "brm": ("BRM_Menu_Music", None, ["BRM_Bad_Down_to_the_Molten_Core", "BRM_Battle_Two", "BRM_Volcano_Man_Rising"]),
+    "loe": ("LOE_FrontMenu_Music", None, ["LOE_Orsis", "LOE_Mine_Cart_Chase", "LOE_Uldaman"]),
+    # From the Drive (DRIVE). Left out: the adventures' tracks (*_Boss, DAL_Heist_*, K&C_UI_music) and the menus'
+    # ambience loops (K&C_menu_amb_lp, DAL_menu_amb_lp: 14-27 s of 22 kHz room sound, not music).
+    "kara": ("Kara_Menu_Music", None, ["Kara_BallroomSlink", "Kara_Medivhs5thBoogie", "Kara_Shakedown"]),
+    "icc": ("ICC_Menu_Music", "ICC_Mulligan", ["ICC_Cantus", "ICC_Dancing_Dead", "ICC_Lich_King"]),
+    "loot": (None, "K&C_Mulligan", ["K&C_Into_The_Catacombs", "K&C_Kobolds_Gather", "K&C_Setting_Out"]),
+    "gil": ("GIL_Menu_Music", "GIL_Mulligan", ["GIL_Blood_Moon", "GIL_Gilneas", "GIL_Nemesis", "GIL_Twisted_Path"]),
+    "boom": (None, "BOT_Boomsday_Mulligan", ["BOT_Boom_Boom_Boom", "BOT_Boombots", "BOT_Wind_Em_Up"]),
+    "trl": ("TRL_Menu_Music", "TRL_Mulligan", ["TRL_Let_The_Games_Begin", "TRL_We_Who_Are_About_To_Die", "TRL_Yojamba"]),
+    "dal": (None, None, ["DAL_Big_League_Evil", "DAL_Infiltrators", "DAL_Machinations"]),
 }
-# Karazhan, Knights of the Frozen Throne, Kobolds & Catacombs and The Witchwood had boards with their own music,
-# but no copy of a client of 2016-2018 with it was found: these packs get the default pool (see SOURCES.md).
-SETS = ["classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil"]
-HOME = {t: s for s, (m, b) in OWN.items() for t in [m] + b}  # where an original is kept (the set that brought it)
+DRIVE = {"kara", "icc", "loot", "gil", "boom", "trl", "dal"}  # the sets whose tracks come from the Drive's "Музыка"
+SETS = ["classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil",
+        "boom", "trl", "dal"]
+HOME = {t: s for s, (m, g, b) in OWN.items() for t in [m, g] + b if t}  # where an original is kept (its set)
 
 # FSB5 Vorbis CRC32 of the setup header -> (FMOD quality 1..100, channels, rate): the entries these tracks use.
 VORBIS_SETUP = {2767611644: (81, 2, 48000), 1777296130: (90, 2, 48000), 542711418: (63, 2, 48000)}
@@ -64,8 +78,8 @@ FREQ = {1: 8000, 2: 11000, 3: 11025, 4: 16000, 5: 22050, 6: 24000, 7: 32000, 8: 
 
 def plan(set_id):
     """{slot: original track name} of a set's music."""
-    menu, board = OWN.get(set_id, (COMMON["menu"], DEFAULT_POOL))
-    out = dict(COMMON, menu=menu)
+    menu, mulligan, board = OWN.get(set_id, (None, None, DEFAULT_POOL))
+    out = dict(COMMON, menu=menu or COMMON["menu"], mulligan=mulligan or COMMON["mulligan"])
     out.update({f"battle_{i}": t for i, t in enumerate(board, 1)})
     return out
 
@@ -257,22 +271,48 @@ def fsb_to_ogg(fsb):
 
 # --- the work ----------------------------------------------------------------------------------------------------
 
+def original(src, name):
+    """Where a track is kept: <src>/<set that brought it>/<name>.ogg (from the client) or .wav (from the Drive)."""
+    home = HOME.get(name, "classic")
+    return src / home / f"{name}{'.wav' if home in DRIVE else '.ogg'}"
+
+
+def from_drive(names, src):
+    """Downloads the Drive's tracks (once: they stay in the cache)."""
+    fos = fetch_original_sounds
+    folder = next(cid for d, cid, n in fos.drive_ls(fos.RU_DRIVE) if d and n == "Музыка")
+    ids = {n[:-4]: cid for d, cid, n in fos.drive_ls(folder) if not d and n.endswith(".wav")}
+    for n in sorted(names):
+        if n not in ids:
+            raise SystemExit(f"not in the Drive's folder Музыка: {n}")
+        print(f"downloading {n}.wav")
+        data = fos.get("https://drive.google.com/uc?export=download&id=" + ids[n], ua="Mozilla/5.0")
+        if data[:4] != b"RIFF":
+            raise SystemExit(f"{n}: the Drive did not answer with a WAV file")
+        dst = original(src, n)
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_bytes(data)
+
+
 def originals(src, names):
-    """The wanted tracks as <src>/<set that brought it>/<name>.ogg, extracted once from the cached client."""
-    want = {n for n in names if not (src / HOME.get(n, "classic") / f"{n}.ogg").exists()}
+    """The wanted tracks: the client's extracted once from the cached client, the Drive's downloaded once."""
+    want = {n for n in names if not original(src, n).exists()}
+    if drive := {n for n in want if HOME.get(n) in DRIVE}:
+        from_drive(drive, src)
+        want -= drive
     if want:
         download(src / "raw" / CLIENT)
         for bundle in BUNDLES:
             for name, fsb in clips((src / "raw" / CLIENT / bundle).read_bytes()).items():
                 if name in want:
                     ogg = fsb_to_ogg(fsb)[0]
-                    dst = src / HOME.get(name, "classic") / f"{name}.ogg"
+                    dst = original(src, name)
                     dst.parent.mkdir(parents=True, exist_ok=True)
                     dst.write_bytes(ogg)
                     want.discard(name)
     if want:
         raise SystemExit(f"not in the client: {sorted(want)}")
-    return {n: src / HOME.get(n, "classic") / f"{n}.ogg" for n in names}
+    return {n: original(src, n) for n in names}
 
 
 def probe(path):
@@ -293,10 +333,14 @@ def run(sets, out, ffmpeg=None):
         for old in dest.glob("battle_*.opus"):  # (a playlist that got shorter)
             if old.stem not in p:
                 old.unlink()
+        made = dest / "tracks.json"
+        had = json.loads(made.read_text()) if made.exists() else {}
         for slot, track in p.items():
             dst = dest / f"{slot}.opus"
-            if not dst.exists() and not audio_codec.encode_opus(files[track], dst, "music", ffmpeg):
+            if (had.get(slot) != track or not dst.exists()) \
+                    and not audio_codec.encode_opus(files[track], dst, "music", ffmpeg):
                 raise SystemExit(f"ffmpeg could not encode {dst} (it needs libopus)")
+        made.write_text(json.dumps(p, indent=1, ensure_ascii=False) + "\n")
         print(f"{s}: {len(p)} tracks in {dest}")
     sources(src, files)
 
@@ -313,23 +357,26 @@ def sources(src, files):
         rows.append(f"| {t} | {path.relative_to(src)} | {secs:.1f} s, {ch} ch, {rate} Hz | {slots} |")
     (src / "SOURCES.md").write_text(f"""# Original Hearthstone music (local only, never in git or a distributed pack)
 
-Made by tools/fetch_original_music.py. The tracks are the game's own Vorbis streams, taken out of the iOS
+Made by tools/fetch_original_music.py. The older tracks are the game's own Vorbis streams, taken out of the iOS
 client 4.1.10956 (November 2015) kept on archive.org (item app-id-73, the file "Hearthstone 4.1.10956.ipa"):
 {IPA}{urllib.parse.quote(BUNDLES['sounds0.unity3d'], safe='')}
 {IPA}{urllib.parse.quote(BUNDLES['sounds1.unity3d'], safe='')}
 (cached in raw/{CLIENT}/). FSB5 Vorbis -> Ogg Vorbis without re-encoding (the setup header rebuilt with
 libvorbisenc and checked against the bank's CRC32). The packs get <set>/music/<slot>.opus (128 kbit/s).
 
+The later sets' own tracks (One Night in Karazhan … Rise of Shadows, the .wav files) come from the folder "Музыка"
+of the Russian client's collection on Google Drive (https://drive.google.com/drive/folders/{fetch_original_sounds.RU_DRIVE},
+the one tools/fetch_original_sounds.py takes the Russian voice from), downloaded as they are (WAV, 48 kHz stereo).
+
 Playlists: the client's MusicConfig (UI_MainTitle, InGame_Mulligan, InGame_Default, InGame_GvGBoard = the default
 pool, the Naxxramas, Blackrock and League of Explorers boards' own, UI_Arena; UI_EndGameScreen plays no music,
 the result plays victory_jingle / defeat_jingle). The default pool is also the board music of The Grand Tournament,
 Whispers of the Old Gods, Mean Streets of Gadgetzan and Journey to Un'Goro (hearthstone.wiki.gg, Battlefield).
 Naxxramas, Blackrock Mountain, the League of Explorers: their adventure's menu music as the pack's menu.
-
-Not found: the own board music of One Night in Karazhan, Knights of the Frozen Throne, Kobolds & Catacombs and
-The Witchwood (2016-2018). The wiki keeps only short stingers; the iOS client of 2019 on archive.org
-(Hearthstone_15.2.34104_ios_8.0) has these expansions' music outside its base install. Those packs play the
-default pool until a copy of the original files turns up.
+Karazhan … Rise of Shadows: the set's board tracks (by their names: <set prefix>_<title>), its menu and mulligan
+music where the folder has them; the adventures' tracks (*_Boss, DAL_Heist_*, K&C_UI_music) and the menus' short
+ambience loops (K&C_menu_amb_lp, DAL_menu_amb_lp) are left out. Every pack's folder is a whole playlist: its set's
+tracks, the common ones (Classic's) for the slots the set has none for.
 
 | Track | File | Original | Slot: packs |
 |---|---|---|---|

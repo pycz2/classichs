@@ -24,6 +24,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Schaden und Einfrieren kommen im selben Moment: Frostblitz, Kältekegel, Blizzard und der Schlag eines Wasserelementars treffen und frieren zugleich ein.
 - Neues Einfrieren: Eiskristalle wachsen vom Rand über das Porträt, Reif liegt am Rand, Glanzlichter laufen über das Eis. Taut ein Diener oder Held auf, schmilzt das Eis wieder.
 
+- Der Dschungel-Mondkin ist in den Spielen von „Die Forscherliga“ bis „Der Hexenwald“ wieder ein Wildtier, wie in Hearthstone bis Patch 11.4 (2018). Er hatte keinen Typ, und Karten, die Wildtiere suchen, zählten ihn nicht.
 ## [0.71.1] - 2026-11-13
 
 ### Behoben

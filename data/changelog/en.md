@@ -24,6 +24,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - Damage and freeze land at the same moment: Frostbolt, Cone of Cold, Blizzard and a Water Elemental's blow hit and freeze at once.
 - A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.
 
+- Jungle Moonkin is a Beast again in the games from The League of Explorers to The Witchwood, as it was in Hearthstone until patch 11.4 (2018). It had no tribe, so cards that look for Beasts did not count it.
 ## [0.71.1] - 2026-11-13
 
 ### Fixed
