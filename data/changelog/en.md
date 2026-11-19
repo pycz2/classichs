@@ -23,6 +23,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - The history has lines for buffs on hidden cards: "3 cards in Opponent's deck get +1/+1".
 
 ### Changed
+- The Attack, Health, Armor and Durability icons sit in the card's corners and stick out past its edge a little, and the Attack sword points outward. The text gets about a fifth more room. Card texts are fitted anew: bigger where they fit, wrapped at words, with the lines closer together when nothing else fits. No text of any game spills out of its frame or hides under the icons, in the hand, in the mulligan or on the big card. The rarity gem no longer covers the name, and the copy count in the deck editor sits on a dark plate.
+- The big card shows only its own related cards: for an Unidentified item, its four versions. With more than six, they turn slowly like a wheel seen from the side. Tri-class cards carry a mark with their three classes in the top right corner instead of a line under the card. An Echo copy is wrapped in grey flame instead of being darkened, and its text reads like any other card's. A passive Hero Power, like Hagatha's, no longer shows a cost.
 - The numbers of cards in the hand are coloured as on the board: Attack and Health above the printed ones green, below them red, and they flash when they change. A Hero Power's cost is green when it got cheaper and red when dearer. A weapon's Attack below the printed one is now red.
 - Damage and freeze land at the same moment: Frostbolt, Cone of Cold, Blizzard and a Water Elemental's blow hit and freeze at once.
 - A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.

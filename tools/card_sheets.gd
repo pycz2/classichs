@@ -2,7 +2,10 @@ extends SceneTree
 ## Sheets of card faces in one language, to look over their layouts: the lower
 ## part of each card (name, text, gems) with the boxes outlined, 24 to a sheet.
 ## Needs a window (no --headless).
-## Usage: godot --path . --script res://tools/card_sheets.gd -- <lang> <out dir> [card ids...]
+## Usage: godot --path . --script res://tools/card_sheets.gd -- <lang> <out dir> [--pack <file>] [--longest N] [card ids...]
+## --pack: that .cardpack's cards; --longest: its N longest texts, each listed with the layout it gets and its
+## problems at the hand's and the big view's scale (CardLayout.problems). Its own user dir
+## (classichs-tools/card_sheets) keeps the player's files untouched.
 
 const K := 1.6
 const COLS := 6
@@ -16,13 +19,39 @@ var sheet := 0
 var _wait := 0
 
 
+func _init() -> void:
+	ProjectSettings.set_setting("application/config/use_custom_user_dir", true)
+	ProjectSettings.set_setting("application/config/custom_user_dir_name", "classichs-tools/card_sheets")
+	DirAccess.make_dir_recursive_absolute(OS.get_user_data_dir())
+
+
 func _initialize() -> void:
 	var args := OS.get_cmdline_user_args()
 	lang = args[0]
 	out = args[1]
-	ids = args.slice(2) if args.size() > 2 else CardDb.all_ids()
-	if args.size() <= 2:
+	var longest := 0
+	var i := 2
+	while i < args.size():
+		match args[i]:
+			"--pack":
+				Packs.set_active(Pack.open(args[i + 1], "imported"))
+				i += 1
+			"--longest":
+				longest = int(args[i + 1])
+				i += 1
+			_:
+				ids.append(args[i])
+		i += 1
+	if ids.is_empty():
+		ids = CardDb.all_ids()
 		ids.sort()
+	if longest > 0:
+		var loc := CardText.hs_locale(lang)
+		ids.sort_custom(func(a, b): return CardText.text(a, loc).length() > CardText.text(b, loc).length())
+		ids = ids.slice(0, longest)
+		for id in ids:
+			print("%s %d %s %s %s" % [id, CardText.text(id, loc).length(), CardLayout.of(id, lang),
+				CardLayout.problems(id, lang, 1.0), CardLayout.problems(id, lang, 1.9)])
 	DirAccess.make_dir_recursive_absolute(out)
 	root.size = Vector2i(int(CELL.x * COLS), int(CELL.y * ROWS))
 	root.content_scale_factor = 1.0

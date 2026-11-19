@@ -295,9 +295,18 @@ func _fill() -> void:
 		TouchInput.act_on_tap(cv, click_card.bind(id))  # a long press only shows it big
 		cv.hovered.connect(_on_hover)
 		if deck and deck.count(id) > 0:
-			var badge := Palette.label("×%d" % deck.count(id), 22, Palette.ATTACK)
-			badge.position = Vector2(cv.size.x - 34, -8)
+			var badge := PanelContainer.new()  # the copies in the deck, on a dark plate inside the card's top right corner
+			badge.name = "Copies"
+			badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			var st := Palette.raw_box(Color(0.1, 0.07, 0.05, 0.92), 8, Frames.GOLD, 2)
+			st.content_margin_left = 7
+			st.content_margin_right = 7
+			badge.add_theme_stylebox_override("panel", st)
+			var n := Palette.label("×%d" % deck.count(id), 18, Palette.ATTACK)
+			n.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			badge.add_child(n)
 			cv.add_child(badge)
+			badge.position = Vector2(cv.size.x - badge.get_combined_minimum_size().x - 6, 8)
 		_grid.add_child(cv)
 	_empty.visible = ids.is_empty()
 	_page_label.text = "%d / %d" % [page + 1, pages]

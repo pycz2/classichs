@@ -21,13 +21,16 @@ static var _cards: Dictionary = {}
 static var _by_dbf: Dictionary = {}
 static var _related = null  # card id -> the cards it can bring (related()), null until asked
 
-## related(): at most this many cards.
-const RELATED_MAX := 6
+## related(): at most this many cards (the big card shows more than six on a turning wheel, KeywordTips).
+const RELATED_MAX := 24
 ## A top-level line of a script that starts a card block (1) or a named helper: a local
 ## function or value (2, 3) or a lib function (4, 5).
 static var _start := RegEx.create_from_string("^(?:cards\\.(\\w+)\\s*=|local\\s+function\\s+(\\w+)|local\\s+(\\w+)\\s*=|function\\s+(lib\\.\\w+)|(lib\\.\\w+)\\s*=)")
 static var _quoted := RegEx.create_from_string("\"([^\"\\\\]*)\"")
 static var _word := RegEx.create_from_string("[A-Za-z_]\\w*(?:\\.[A-Za-z_]\\w*)?")
+## A line of a table keyed by a card id ("  LOOT_286 = { ... }"): a helper's table of every card's own ids
+## (the Unidentified items' variants); only the card's own line counts.
+static var _keyed := RegEx.create_from_string("(?m)^\\s*(\\w+)\\s*=\\s*\\{[^\\n]*")
 
 
 static func reset() -> void:
@@ -121,6 +124,12 @@ static func all_ids() -> Array:
 	return _cards.keys()
 
 
+## A Hero Power that works by itself and cannot be used (its text says so: Hagatha's Bewitch): it shows no cost.
+static func passive_power(id: String) -> bool:
+	var c := card(id)
+	return c.get("type") == "HERO_POWER" and c.get("text") is Dictionary and str(c.text.get("enUS", "")).contains("Passive Hero Power")
+
+
 ## The cards a card can bring into the game, for its hover (summoned, made, transformed
 ## into, its Choose One cards, a champion's power), in a stable order, at most RELATED_MAX.
 ## Taken from the pack: card ids quoted in the card's script block (from `cards.<key> =` to
@@ -152,6 +161,9 @@ static func _find_related() -> Dictionary:
 			var seen := {}
 			while not todo.is_empty():
 				var text: String = todo.pop_front()
+				for m in _keyed.search_all(text):
+					if m.get_string(1) != c.id and _cards.has(m.get_string(1)):
+						text = text.replace(m.get_string(), "")
 				for m in _quoted.search_all(text):
 					var x := m.get_string(1)
 					if _cards.has(x) and x != c.id and not found.has(x):

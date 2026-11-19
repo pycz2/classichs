@@ -12,7 +12,7 @@ func test_cards_a_card_can_bring_come_from_its_script() -> void:
 	eq(CardDb.related("VAN_HERO_02bp"), ["VAN_CS2_050", "VAN_CS2_051", "VAN_CS2_052", "VAN_NEW1_009"], "Totemic Call: the totems, through a helper")
 	eq(CardDb.related("HERO_08"), ["VAN_HERO_08bp"], "a hero: its power")
 	eq(CardDb.related("VAN_CS2_182"), [], "Chillwind Yeti: nothing")
-	eq(CardDb.related("VAN_PRO_001c").size(), CardDb.RELATED_MAX, "at most RELATED_MAX")
+	check(CardDb.related("VAN_PRO_001c").size() <= CardDb.RELATED_MAX, "at most RELATED_MAX")
 
 
 func test_hover_shows_the_related_cards() -> void:

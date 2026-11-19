@@ -83,7 +83,8 @@ func _draw() -> void:
 			else:
 				Art.paint_in(self, art, s.card_id, "circle")
 				Frames.ring(self, Art.outline("circle", art), Frames.GOLD, 3)
-				Frames.mana(self, Vector2(c.x, 9), _cost, 11 * bump("cost"), cost_color())
+				if not CardDb.passive_power(s.card_id):  # (a passive one cannot be used: no cost)
+					Frames.mana(self, Vector2(c.x, 9), _cost, 11 * bump("cost"), cost_color())
 		Kind.WEAPON:
 			draw_circle(c, r + 3, Color("3b2f22"))
 			if face_down_used:  # sheathed: not its owner's turn, it can't be used now

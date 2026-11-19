@@ -61,10 +61,7 @@ func test_card_face_and_tips_of_a_multi_class_card() -> void:
 	cv.queue_redraw()
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	var tips := KeywordTips.make(JADE)
-	var box := tips.get_node_or_null("Classes")
-	check(box != null, "the classes under the big card")
-	if box:
-		eq(box.get_child(0).get_child_count(), 3, "three classes")
+	check(tips.get_node_or_null("Classes") == null, "the classes are a mark in the card's corner, not a line beside it")
 	tips.free()
 	cv.free()
 	_remove_cards()

@@ -7,6 +7,8 @@ extends VBoxContainer
 const WIDTH := 210.0
 ## The related cards' size: two in a row fill WIDTH.
 const RELATED_SCALE := 0.85
+## More related cards than this turn on a wheel (Wheel).
+const RELATED_SHOWN := 6
 
 static var _data := {}  # client mechanic name -> {name: {lang: text}, text: {lang: tip}}
 ## The cards whose scripts put these hidden enchantments on (g.enchant {hooks}): the Changes box
@@ -119,9 +121,6 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 	var mark := Packs.set_mark(CardText.set_key(card_id))
 	if mark and CardText.card_set(card_id) != "":  # the card's set (the packs after Classic)
 		tips.add_child(_set_box(mark, CardText.card_set(card_id)))
-	var classes: Array = CardDb.card(card_id).get("classes", [])
-	if classes.size() > 1:  # a multi-class card: the classes it belongs to
-		tips.add_child(_classes_box(classes))
 	var lines := changes(e)
 	if not lines.is_empty():
 		tips.add_child(_box("Changes", TranslationServer.translate("Changes"), "\n".join(lines), Color("dcefd2")))
@@ -135,7 +134,9 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 		if kw.has(m):
 			tips.add_child(_box("Title" + m, kw[m].name.get(lang, kw[m].name.en), kw[m].text.get(lang, kw[m].text.en), Color("efe0bd")))
 	var related := CardDb.related(card_id)
-	if not related.is_empty():
+	if related.size() > RELATED_SHOWN:
+		tips.add_child(Wheel.new(related))
+	elif not related.is_empty():
 		var grid := GridContainer.new()
 		grid.name = "Related"
 		grid.columns = 2
@@ -148,26 +149,6 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 			grid.add_child(cv)
 		tips.add_child(grid)
 	return tips
-
-
-## A line with a multi-class card's classes, each name in its class's colour.
-static func _classes_box(classes: Array) -> PanelContainer:
-	var box := PanelContainer.new()
-	box.name = "Classes"
-	var st := Palette.box(Color("efe0bd"), 10, Color("8a6d3b"), 2)
-	st.set_content_margin_all(6)
-	box.add_theme_stylebox_override("panel", st)
-	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var row := HBoxContainer.new()
-	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.add_theme_constant_override("separation", 8)
-	box.add_child(row)
-	for cls: String in classes:
-		var name := CardText.term("classes", cls)
-		var l := Palette.label(name if name != "" else cls.capitalize(), 14, Palette.of_class(cls).darkened(0.35))
-		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		row.add_child(l)
-	return box
 
 
 ## A line with the card's set: its mark and its name.
@@ -229,3 +210,39 @@ static func _box(title_name: String, title_text: String, body: String, color: Co
 func beside(rect: Rect2) -> void:
 	var x := rect.end.x + 8 if rect.end.x + 8 + WIDTH < 1280 else rect.position.x - WIDTH - 8
 	position = Vector2(x, maxf(8, minf(rect.position.y + 6, 712 - get_combined_minimum_size().y)))
+
+
+## The related cards on a wheel seen from the side, two in a row: the rows go up, flatten and darken as they
+## turn away, and come back from below, endlessly.
+class Wheel extends Control:
+	const STEP := PI / 3.0  # between two rows
+	const SPEED := 0.3  # rows a second
+	var turn := 0.0
+
+	func _init(ids: Array) -> void:
+		name = "Related"
+		clip_contents = true
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		custom_minimum_size = Vector2(WIDTH, CardView.SIZE.y * RELATED_SCALE * 2.5)
+		for id: String in ids:
+			var cv := CardView.make(id, RELATED_SCALE)
+			cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			cv.pivot_offset = cv.size / 2.0
+			add_child(cv)
+		_place()
+
+	func _process(delta: float) -> void:
+		turn += delta * SPEED
+		_place()
+
+	func _place() -> void:
+		var rows := ceili(get_child_count() / 2.0)
+		var card := CardView.SIZE * RELATED_SCALE
+		var mid := custom_minimum_size.y / 2.0
+		for i in get_child_count():
+			var cv := get_child(i) as Control
+			var a := (fposmod(floori(i / 2.0) - turn + rows / 2.0, rows) - rows / 2.0) * STEP  # 0: the row in front
+			cv.visible = absf(a) < PI / 2.0
+			cv.scale = Vector2(1.0, maxf(0.01, cos(a)))
+			cv.position = Vector2((i % 2) * (WIDTH - card.x), mid + (mid - card.y * cv.scale.y / 2.0) * sin(a) - card.y / 2.0)  # inside the wheel's box
+			cv.modulate = Color.WHITE.darkened(0.7 * (1.0 - cos(a)))
