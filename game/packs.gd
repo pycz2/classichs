@@ -200,6 +200,10 @@ static func choice(p: Pack, kind: String) -> String:
 	var mine: Dictionary = Settings.data.get("pack_sets", {}).get(p.id(), {}) if Settings.data.get("pack_sets") is Dictionary else {}
 	if mine.has(kind):
 		return str(mine[kind])
+	if kind == "sound" and not p.builtin():  # the pack's own local sound set (card sounds, legendaries' music) unless one is picked
+		for s in p.sets(kind):
+			if s.get("local", false) and p.set_usable(kind, s):
+				return str(s.id)
 	return p.default_set(kind)
 
 
