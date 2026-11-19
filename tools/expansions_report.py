@@ -55,6 +55,8 @@ PATCHES = {"boom": "12.0.0.25770", "trl": "13.0.0.27845", "dal": "14.0.0.30103"}
 # the report's own commits of 2026-11-12 that took the step numbers 12 and 13 before the plan of 2026-11-17 gave them
 # to Boomsday and Rastakhan
 NOT_SETS = {"1da4bb8", "baf4ad7"}
+# the short names the later fixes of a set start with ("Rastakhan: …")
+SHORT = {"boom": "Boomsday", "trl": "Rastakhan", "dal": "Rise of Shadows"}
 CLASSES = {"HERO_01": "Воин", "HERO_02": "Шаман", "HERO_03": "Разбойник", "HERO_04": "Паладин", "HERO_05": "Охотник",
            "HERO_06": "Друид", "HERO_07": "Чернокнижник", "HERO_08": "Маг", "HERO_09": "Жрец"}
 FIELDS = {"cost": "стоимость", "attack": "атака", "health": "здоровье", "durability": "прочность", "race": "раса",
@@ -98,13 +100,15 @@ def card_name(cid, loc="ruRU"):
 
 def commits(s):
     """The set's commits, oldest first: its step's and the later fixes that name the set."""
-    _, en, _, _, step, _ = s
+    d, en, _, _, step, _ = s
     out = []
-    for line in git("log", "--reverse", "--format=%H\x1f%ad\x1f%s", "--date=short").splitlines():
+    for line in git("log", "--reverse", "--no-merges", "--format=%H\x1f%ad\x1f%s", "--date=short").splitlines():
         h, day, subj = line.split("\x1f")
-        if h[:7] in NOT_SETS:
-            continue
-        if f"step {step}:" in subj or f"step {step} (WIP):" in subj or en in subj:
+        other = re.search(r"\bstep (\d+)\b", subj)
+        if h[:7] in NOT_SETS or subj.startswith(("Expansions report", "Plan:")) or (other and int(other.group(1)) != step):
+            continue  # (another step's commit, this report's own, a plan that names the set)
+        if (f"step {step}:" in subj or f"step {step} (WIP):" in subj or en in subj
+                or subj.startswith(SHORT.get(d, "\x00") + ":")):
             body = git("log", "-1", "--format=%b", h)
             body = "\n".join(l for l in body.splitlines() if not re.match(r"(Co-Authored-By|Claude-Session):", l)).strip()
             out.append({"hash": h[:7], "full": h, "day": day, "subject": subj, "body": body})

@@ -1,0 +1,98 @@
+{
+  "about": "Shots of Rise of Shadows for tools/expansions_report.py (as boom.json): the collection's tab, the signature cards shown big, the table scenes, the shots the distributed pack repeats.",
+  "tab": "SHAMAN",
+  "signature": ["DAL_431", "DAL_573", "DAL_417"],
+  "scenes": [
+    {
+      "name": "lackey",
+      "caption": {"ru": "Прихвостни: Кабельщик ЗЛА добавил в руку случайного прихвостня, а Кобольд-прихвостень боевым кличем нанёс 2 урона", "en": "Lackeys: EVIL Cable Rat added a random Lackey to the hand, and Kobold Lackey's Battlecry dealt 2 damage"},
+      "scene": {"current": 0, "turn": 4, "players": [
+        {"hero": "HERO_03", "mana": 4, "max_mana": 4, "damage": 6,
+         "hand": ["DAL_400", "DAL_614", "VAN_CS2_072"],
+         "board": [],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_09", "max_mana": 4, "damage": 3,
+         "board": ["VAN_CS2_120", "VAN_CS2_231"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}, "pos": 1}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 1},
+      "history": true
+    },
+    {
+      "name": "twinspell",
+      "caption": {"ru": "Сдвоенное заклинание: Звериная сила призвала виверну 5/5 с натиском и оставила в руке свою копию, уже без «Сдвоенного заклинания»", "en": "Twinspell: Unleash the Beast summoned a 5/5 Wyvern with Rush and left a copy of itself in hand, without Twinspell"},
+      "scene": {"current": 0, "turn": 7, "players": [
+        {"hero": "HERO_05", "mana": 7, "max_mana": 7, "damage": 9,
+         "hand": ["DAL_378", "VAN_CS2_084", "VAN_DS1_185"],
+         "board": ["VAN_CS2_120"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_01", "max_mana": 7, "damage": 5,
+         "board": ["VAN_CS2_182"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
+    },
+    {
+      "name": "scheme",
+      "caption": {"ru": "Козни растут: Козни Хагаты пролежали в руке два хода и наносят уже 3 урона всем существам вместо 1", "en": "A Scheme grows: Hagatha's Scheme stayed in hand for two turns and now deals 3 damage to all minions instead of 1"},
+      "scene": {"current": 0, "turn": 6, "players": [
+        {"hero": "HERO_02", "mana": 6, "max_mana": 6, "damage": 8,
+         "hand": ["DAL_009", "VAN_CS2_039", "VAN_EX1_259"],
+         "board": ["VAN_CS2_182"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_06", "max_mana": 6, "damage": 6,
+         "board": ["VAN_CS2_120", "VAN_CS2_231"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "end_turn"},
+        {"do": "end_turn"},
+        {"do": "end_turn"},
+        {"do": "end_turn"}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0}
+    },
+    {
+      "name": "hagatha",
+      "caption": {"ru": "Королева болот Хагата дала Друстварский ужас 5/5 и научила его двум заклинаниям шамана на выбор: сыгранный, ужас прочтёт оба", "en": "Swampqueen Hagatha added a 5/5 Drustvar Horror to the hand and taught it two Shaman spells of the player's choice: played, the Horror casts both"},
+      "scene": {"current": 0, "turn": 10, "players": [
+        {"hero": "HERO_02", "mana": 10, "max_mana": 10, "damage": 14,
+         "hand": ["DAL_431", "VAN_CS2_039"],
+         "board": ["VAN_CS2_120"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_08", "max_mana": 10, "damage": 9,
+         "board": ["VAN_CS2_182"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1},
+        {"do": "choose", "option": 0},
+        {"do": "choose", "option": 0}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 1},
+      "history": true
+    },
+    {
+      "name": "rhyssa",
+      "caption": {"ru": "Командор Рисса: секреты срабатывают дважды. Противник сыграл Огненный шар, и «Не сдаваться!» дважды дало существам паладина по +2 к здоровью (вид со стороны противника)", "en": "Commander Rhyssa: Secrets trigger twice. The opponent cast Fireball, and Never Surrender! gave the Paladin's minions +2 Health twice (seen from the opponent's side)"},
+      "scene": {"current": 1, "turn": 9, "players": [
+        {"hero": "HERO_04", "max_mana": 8, "damage": 7,
+         "secrets": ["DAL_570"], "board": ["DAL_573", "VAN_CS2_231"], "hand": ["VAN_CS2_092", "VAN_CS2_087"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_08", "mana": 9, "max_mana": 9, "damage": 10,
+         "hand": ["VAN_CS2_029", "VAN_CS2_024"],
+         "board": ["VAN_CS2_182"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 1, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "hero"}}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 0},
+      "history": true
+    }
+  ],
+  "dist": ["menu", "collection", "card_DAL_431", "lackey"]
+}
