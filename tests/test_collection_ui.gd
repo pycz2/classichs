@@ -157,6 +157,25 @@ func test_import_error_visible_in_popup() -> void:
 	(v.find_child("DoImport", true, false) as Button).pressed.emit()
 	var err := v.find_child("PopupError", true, false) as Label
 	check(err != null and err.text != "", "error shown inside the popup")
+	check(v.find_child("Popup", true, false).find_children("*", "PanelContainer", true, false).size() == 1, "a popup window: on a panel")
+	(v.find_child("Cancel", true, false) as Button).pressed.emit()
+	eq(v.message.text, "", "the error went with its window")
+	v.free()
+	_store_restore()
+
+
+func test_deck_opens_at_its_first_card_and_the_code_wraps() -> void:
+	var v := _two_decks()
+	v.edit_deck(0)
+	var scroll := v.find_child("TilesScroll", true, false) as ScrollContainer
+	scroll.scroll_vertical = 300
+	v.close_deck()
+	v.edit_deck(1)
+	eq(scroll.scroll_vertical, 0, "the next deck from its first card")
+	v.close_deck()
+	v.show_export(0)
+	var out := v.find_child("CodeOutput", true, false) as TextEdit
+	check(out.wrap_mode == TextEdit.LINE_WRAPPING_BOUNDARY and not out.editable, "the code wraps in a read-only field")
 	v.free()
 	_store_restore()
 

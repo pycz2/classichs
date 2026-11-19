@@ -346,6 +346,57 @@ func test_match_panel_steps() -> void:
 	l.free()
 
 
+## main as the panel sees it: the screen and a watched game.
+class FakeMain:
+	extends Node
+	var screen: Control
+	var watch_view: Control
+
+
+func test_match_panel_never_covers_a_game() -> void:
+	var main := FakeMain.new()
+	root().add_child(main)
+	var p := TournamentPanel.new()
+	main.add_child(p)
+	var l := _link()
+	var game := MatchView.new()
+	main.screen = game
+	var m := {"t": "t_match", "tournament": 7.0, "name": "Friday cup", "match": 31.0, "opponent": "bob", "score": [0.0, 0.0],
+		"phase": "wait", "mine": [], "theirs": []}
+	p.show_match(m, l)
+	eq(p.get_node("PanelRoot").get_child_count(), 0, "a game runs: nothing over it (the mulligan stays free)")
+	m = m.duplicate()
+	m.phase = "pick"
+	m.deadline = float(TournamentsView.now_ms() + 60000)
+	p.show_match(m, l)
+	eq(p.get_node("PanelRoot").get_child_count(), 0, "not even a new step")
+	main.screen = null
+	p._process(0.1)
+	check(p.find_child("MatchPanel", true, false) != null, "the game's screen left: the step opens")
+	_press(p, "Hide")
+	check(p.find_child("PanelChip", true, false) != null and p.find_child("MatchPanel", true, false) == null, "Hide: only the button")
+	_press(p, "PanelChip")
+	check(p.find_child("MatchPanel", true, false) != null, "the button opens it again")
+	main.screen = game
+	p._process(0.1)
+	m = m.duplicate()
+	m.phase = "done"
+	m.score = [0.0, 1.0]
+	p.show_match(m, l)
+	game.g.game_over = true
+	p._process(0.1)
+	check(p.find_child("PanelChip", true, false) != null and p.find_child("MatchPanel", true, false) == null, "on the game's result: only the button")
+	p._process(9.0)
+	check(p.visible, "the result waits while the game's screen is there")
+	main.screen = null
+	p._process(0.1)
+	p._process(9.0)
+	check(not p.visible, "then goes away by itself")
+	game.free()
+	main.free()
+	l.free()
+
+
 func _bracket(t: Dictionary) -> TournamentBracket:
 	var b := TournamentBracket.make(t, "anna")
 	root().add_child(b)

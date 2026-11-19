@@ -184,7 +184,7 @@ class TurnSign:
 
 	func _draw() -> void:
 		var k := clampf(fmod(_t, 3.0) - 0.8, 0.0, 1.0)  # still, then turns, then rests on its side
-		var a := -PI / 2.0 * (k * k * (3.0 - 2.0 * k))
+		var a := PI / 2.0 * (k * k * (3.0 - 2.0 * k))  # (clockwise, as the arrow)
 		var c := Vector2(640, 280)
 		draw_arc(c, 230, -PI * 0.95, -PI * 0.6, 24, Color(Palette.ATTACK, 0.8), 8.0, true)  # the turn's arrow
 		var tip := c + Vector2.from_angle(-PI * 0.6) * 230
