@@ -6,7 +6,7 @@ extends SceneTree
 ## (REPORT_USER_DIR, as tests/run.gd's TEST_USER_DIR), never the player's.
 ## Usage: REPORT_USER_DIR=classichs-report/x godot --path . --script res://tools/expansions_shots.gd -- <job.json>
 ## Job: {pack, art?, sound?, set_key, langs, out, tab?, signature: [ids], scenes: [{name, scene | game, steps,
-## wait?, hover?, history?, choose?}], only?: [shot names]}; a shot is <out>/<lang>_<name>.jpg.
+## wait?, hover?, history?, hold?, start?}], only?: [shot names]}; a shot is <out>/<lang>_<name>.jpg.
 
 const MOUSE_AWAY := Vector2(640, 330)  # the empty middle of the table, over no card
 var job: Dictionary
@@ -91,12 +91,16 @@ func _check() -> void:
 
 
 ## A scene's game: a built position (scene, which starts in the middle of a game), or a real game of two of the
-## pack's ready decks (game: {decks: [key, key], seed?, first?}) whose start runs: Start of Game effects.
+## pack's ready decks (game: {decks: [key, key], seed?, first?}; a deck may be {hero, cards}: Whizbang's one card)
+## whose start runs: Start of Game effects.
 func _request(sc: Dictionary) -> Dictionary:
 	if not sc.has("game"):
 		return {"scenario": sc.scene}
 	var decks := []
 	for key in sc.game.decks:
+		if key is Dictionary:
+			decks.append(key)
+			continue
 		for t in Decks.templates():
 			if t.key == key:
 				decks.append({"hero": t.deck.hero, "cards": Array(t.deck.cards)})
@@ -225,7 +229,9 @@ func _big(id: String) -> void:
 
 
 ## A table scene: built, its steps played one by one (each must be legal), then shot; and the hovered entity
-## (hover: a step ref) and the history's last card line (history: true) as their own shots.
+## (hover: a step ref) and the history's last card line (history: true) as their own shots. hold: {card, at} (step
+## refs: an own hand card, an own minion): the main shot shows that card held over the board left of that minion
+## (a Magnetic minion over a Mech: the Mech lights up); it goes back to the hand after.
 func _scene(sc: Dictionary) -> void:
 	var name := str(sc.name)
 	if not (_want(name) or _want(name + "_card") or _want(name + "_history")):
@@ -235,6 +241,13 @@ func _scene(sc: Dictionary) -> void:
 		print("ERROR: scene %s does not start" % name)
 		failed += 1
 		m.show_game_menu()
+		return
+	if sc.has("start"):  # a real game's first moments (Whizbang's card shown big): one shot that many seconds in
+		root.warp_mouse(MOUSE_AWAY)
+		await create_timer(float(sc.start)).timeout
+		await _shot(name)
+		m.show_game_menu()
+		await process_frame
 		return
 	await _settle(0.6)
 	if sc.has("game"):
@@ -255,7 +268,12 @@ func _scene(sc: Dictionary) -> void:
 		await create_timer(float(sc.wait)).timeout
 	else:
 		await _settle()
+	if sc.has("hold"):
+		await _hold(v, sc.hold)
 	await _shot(name)
+	if sc.has("hold"):
+		v.cancel()
+		await _settle(0.3)
 	if sc.has("wait"):
 		await _settle(0.3)  # the hover and history shots come after the animations
 	if sc.has("hover"):
@@ -291,3 +309,18 @@ func _scene(sc: Dictionary) -> void:
 			strip.hover(-1)
 	m.show_game_menu()
 	await process_frame
+
+
+## A hand card dragged (as the player's mouse would) over the board left of a minion, and held there.
+func _hold(v: MatchView, hold: Dictionary) -> void:
+	var id := CardTests.entity(v.controller.game, hold.card)
+	var board: Array = v.g.players[v.viewer()].board
+	var at := board.find(v.g.ent(CardTests.entity(v.controller.game, hold.at)))
+	if not v._views.has(id) or at < 0:
+		print("ERROR: nothing to hold at ", hold)
+		failed += 1
+		return
+	v._press = {"id": id, "at": Vector2.ZERO}
+	v._start_drag()
+	v._drag_to(Vector2(TableLayout.board_x(at, board.size()) - 20.0, MatchView.OWN_BOARD_Y + 50.0))
+	await create_timer(0.6).timeout

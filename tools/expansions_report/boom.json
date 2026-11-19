@@ -1,0 +1,153 @@
+{
+  "about": "Shots of The Boomsday Project for tools/expansions_report.py: the collection's tab, the signature cards shown big, the table scenes (data/card_tests' scene and steps, a card held over the board: hold, a real game: game, shot in its first seconds: start), the shots the distributed pack repeats.",
+  "tab": "WARRIOR",
+  "signature": ["BOT_548", "BOT_238", "BOT_914"],
+  "scenes": [
+    {
+      "name": "magnetic_hold",
+      "caption": {"ru": "Магнетизм: Раздражодуль держат над столом слева от Механояйца, и механизм подсвечен: отпущенный здесь, модуль сольётся с ним", "en": "Magnetic: Annoy-o-Module held over the board left of Mechano-Egg, and the Mech lights up: dropped here, the module merges into it"},
+      "scene": {"current": 0, "turn": 8, "players": [
+        {"hero": "HERO_04", "mana": 8, "max_mana": 8, "damage": 9,
+         "hand": ["BOT_911", "BOT_909", "BOT_908", "VAN_CS2_092"],
+         "board": ["BOT_445", "BOT_537"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_08", "max_mana": 8, "damage": 7,
+         "board": ["VAN_CS2_182", "VAN_CS2_231"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "hold": {"card": {"side": 0, "zone": "hand", "index": 0}, "at": {"side": 0, "zone": "board", "index": 1}}
+    },
+    {
+      "name": "magnetic",
+      "caption": {"ru": "Магнетизм: Раздражодуль слился с Механояйцом, и оно стало 2/9 с божественным щитом и провокацией; при наведении видно, что в нём", "en": "Magnetic: Annoy-o-Module merged into Mechano-Egg, now a 2/9 with Divine Shield and Taunt; hovered, it shows what it holds"},
+      "scene": {"current": 0, "turn": 8, "players": [
+        {"hero": "HERO_04", "mana": 8, "max_mana": 8, "damage": 9,
+         "hand": ["BOT_911", "BOT_909", "BOT_908", "VAN_CS2_092"],
+         "board": ["BOT_445", "BOT_537"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_08", "max_mana": 8, "damage": 7,
+         "board": ["VAN_CS2_182", "VAN_CS2_231"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 1},
+      "history": true
+    },
+    {
+      "name": "magnetic_fly",
+      "caption": {"ru": "Магнетизм в движении: сыгранный Раздражодуль показан крупно и летит в Механояйцо", "en": "Magnetic in motion: the played Annoy-o-Module, shown big, flies into Mechano-Egg"},
+      "scene": {"current": 0, "turn": 8, "players": [
+        {"hero": "HERO_04", "mana": 8, "max_mana": 8, "damage": 9,
+         "hand": ["BOT_911", "BOT_909", "BOT_908", "VAN_CS2_092"],
+         "board": ["BOT_445", "BOT_537"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_08", "max_mana": 8, "damage": 7,
+         "board": ["VAN_CS2_182", "VAN_CS2_231"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}
+      ],
+      "wait": 0.8
+    },
+    {
+      "name": "zilliax",
+      "caption": {"ru": "Зиллиакс слился с Мехуру: тот стал 4/3 с божественным щитом, провокацией, похищением жизни и натиском, атаковал Морозного йети, потерял только щит, а герой восполнил 4 здоровья", "en": "Zilliax merged into Mecharoo: a 4/3 with Divine Shield, Taunt, Lifesteal and Rush; it attacked Chillwind Yeti, lost only its shield, and the hero restored 4 Health"},
+      "scene": {"current": 0, "turn": 9, "players": [
+        {"hero": "HERO_01", "mana": 9, "max_mana": 9, "damage": 14,
+         "hand": ["BOT_548", "BOT_067", "VAN_EX1_606"],
+         "board": ["BOT_445", "BOT_059"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_03", "max_mana": 9, "damage": 6,
+         "board": ["VAN_CS2_182", "VAN_EX1_067"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "board", "index": 0},
+      "history": 1
+    },
+    {
+      "name": "dr_boom",
+      "caption": {"ru": "Безумный гений Бум, карта героя: 7 брони, новая сила героя из боевого костюма (она меняется каждый ход), и до конца игры у механизмов натиск: Бумный бот атаковал в ход, когда его сыграли", "en": "Dr. Boom, Mad Genius, a hero card: 7 Armor, a new Mech Suit Hero Power (it swaps each turn), and for the rest of the game Mechs have Rush: Kaboom Bot attacked on the turn it was played"},
+      "scene": {"current": 0, "turn": 10, "players": [
+        {"hero": "HERO_01", "mana": 10, "max_mana": 10, "damage": 13, "armor": 2,
+         "hand": ["BOT_238", "BOT_606", "BOT_299", "VAN_EX1_407"],
+         "board": ["BOT_059"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_06", "max_mana": 10, "damage": 8,
+         "board": ["VAN_CS2_231", "VAN_CS2_182", "VAN_CS2_120"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1},
+        {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}
+      ],
+      "hover": {"side": 0, "zone": "power"},
+      "history": 2
+    },
+    {
+      "name": "omega",
+      "caption": {"ru": "«Омега» при 10 кристаллах маны: Омега-защитница получила +10 к атаке (12/6), а Омега-медик в руке светится жёлтым, ведь её условие выполнено; обычная карта светится зелёным", "en": "Omega with 10 Mana Crystals: Omega Defender gained +10 Attack (12/6), and Omega Medic glows yellow in hand, its condition met; a plain card glows green"},
+      "scene": {"current": 0, "turn": 10, "players": [
+        {"hero": "HERO_09", "mana": 10, "max_mana": 10, "damage": 16,
+         "hand": ["BOT_216", "BOT_296", "BOT_219", "BOT_517"],
+         "board": ["BOT_558"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]},
+        {"hero": "HERO_07", "max_mana": 10, "damage": 9,
+         "board": ["VAN_CS2_182", "BOT_443"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 0, "zone": "hand", "index": 1}, "pos": 1}
+      ],
+      "hover": {"side": 0, "zone": "hand", "index": 0},
+      "history": true
+    },
+    {
+      "name": "bomb_shuffle",
+      "caption": {"ru": "Сефориевая бомбистка замешала Бомбу в колоду противника: карта летит из бомбистки в его колоду", "en": "Seaforium Bomber shuffled a Bomb into the opponent's deck: the card flies from the Bomber into that deck"},
+      "scene": {"current": 1, "turn": 8, "players": [
+        {"hero": "HERO_08", "max_mana": 7, "damage": 6,
+         "board": ["VAN_CS2_182"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231"]},
+        {"hero": "HERO_05", "mana": 8, "max_mana": 8, "damage": 10,
+         "hand": ["BOT_511", "BOT_033", "VAN_CS2_084"],
+         "board": ["BOT_031"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 1, "zone": "hand", "index": 0}, "pos": 1}
+      ],
+      "wait": 1.65
+    },
+    {
+      "name": "bomb",
+      "caption": {"ru": "Противник взял Бомбу из колоды в начале своего хода: она показана крупно, взорвалась и нанесла его герою 5 урона (было 24 здоровья, стало 19), а вместо неё он взял следующую карту", "en": "The opponent drew the Bomb at the start of the turn: shown big, it exploded and dealt 5 damage to that hero (24 Health down to 19), and the next card was drawn in its place"},
+      "scene": {"current": 1, "turn": 8, "players": [
+        {"hero": "HERO_08", "max_mana": 7, "damage": 6,
+         "board": ["VAN_CS2_182"], "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"],
+         "deck": ["VAN_CS2_231"]},
+        {"hero": "HERO_05", "mana": 8, "max_mana": 8, "damage": 10,
+         "hand": ["BOT_511", "BOT_033", "VAN_CS2_084"],
+         "board": ["BOT_031"],
+         "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+      "steps": [
+        {"do": "play", "card": {"side": 1, "zone": "hand", "index": 0}, "pos": 1},
+        {"do": "end_turn"}
+      ],
+      "wait": 1.15,
+      "history": true
+    },
+    {
+      "name": "whizbang_start",
+      "caption": {"ru": "Невероятный Чудастер в начале игры: колода из одной этой карты, карта показана крупно и уходит в героя, а колода становится одной из колод Чудастера (какой именно, противник не видит)", "en": "Whizbang the Wonderful as the game starts: a deck of only this card; the card shows big and goes into the hero, and the deck becomes one of Whizbang's decks (the opponent never sees which)"},
+      "game": {"decks": [{"hero": "HERO_01", "cards": ["BOT_914"]}, "12_odd_warrior"], "seed": 3, "first": 0},
+      "start": 1.1
+    },
+    {
+      "name": "whizbang",
+      "caption": {"ru": "После Чудастера: колода «воина» стала шаманской колодой Чудастера, герой теперь Тралл, а в руке карты этой колоды", "en": "After Whizbang: the 'Warrior' deck became one of Whizbang's Shaman decks, the hero is now Thrall, and the hand holds that deck's cards"},
+      "game": {"decks": [{"hero": "HERO_01", "cards": ["BOT_914"]}, "12_odd_warrior"], "seed": 3, "first": 0}
+    }
+  ],
+  "dist": ["menu", "collection", "card_BOT_548", "magnetic_hold", "magnetic"]
+}

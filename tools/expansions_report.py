@@ -46,7 +46,15 @@ SETS = [
     ("icc", "Knights of the Frozen Throne", "Рыцари Ледяного Трона", "2017-08-10", 9, "ICECROWN"),
     ("loot", "Kobolds & Catacombs", "Кобольды и катакомбы", "2017-12-07", 10, "LOOTAPALOOZA"),
     ("gil", "The Witchwood", "Ведьмин лес", "2018-04-12", 11, "GILNEAS"),
+    ("boom", "The Boomsday Project", "Проект Бумного дня", "2018-08-07", 12, "BOOMSDAY"),
+    ("trl", "Rastakhan's Rumble", "Растахановы игрища", "2018-12-04", 13, "TROLL"),
+    ("dal", "Rise of Shadows", "Возмездие теней", "2019-04-09", 14, "DALARAN"),
 ]
+# the release builds of the sets whose step commits do not name them (the pack's recipe.json may: then it wins)
+PATCHES = {"boom": "12.0.0.25770", "trl": "13.0.0.27845", "dal": "14.0.0.30103"}
+# the report's own commits of 2026-11-12 that took the step numbers 12 and 13 before the plan of 2026-11-17 gave them
+# to Boomsday and Rastakhan
+NOT_SETS = {"1da4bb8", "baf4ad7"}
 CLASSES = {"HERO_01": "Воин", "HERO_02": "Шаман", "HERO_03": "Разбойник", "HERO_04": "Паладин", "HERO_05": "Охотник",
            "HERO_06": "Друид", "HERO_07": "Чернокнижник", "HERO_08": "Маг", "HERO_09": "Жрец"}
 FIELDS = {"cost": "стоимость", "attack": "атака", "health": "здоровье", "durability": "прочность", "race": "раса",
@@ -94,7 +102,9 @@ def commits(s):
     out = []
     for line in git("log", "--reverse", "--format=%H\x1f%ad\x1f%s", "--date=short").splitlines():
         h, day, subj = line.split("\x1f")
-        if f"step {step}:" in subj or en in subj:
+        if h[:7] in NOT_SETS:
+            continue
+        if f"step {step}:" in subj or f"step {step} (WIP):" in subj or en in subj:
             body = git("log", "-1", "--format=%b", h)
             body = "\n".join(l for l in body.splitlines() if not re.match(r"(Co-Authored-By|Claude-Session):", l)).strip()
             out.append({"hash": h[:7], "full": h, "day": day, "subject": subj, "body": body})
@@ -155,10 +165,11 @@ def facts(s):
     f["api"] = api_rows(f["commits"])
     pack_body = next((c["body"] for c in f["commits"] if c["subject"].startswith(f"Expansions, step {step}:")
                       and "engine" not in c["subject"]), "")
-    m = re.search(r"patch\s+([\d.]+)(\s+of\s+[\d-]+)?", pack_body)
-    f["patch"] = " ".join((m.group(1) + (m.group(2) or "")).split()) if m else ""
-    m = re.search(r"HearthstoneJSON\s+build\s+(\d+)", pack_body)
-    f["build"] = m.group(1) if m else ""
+    pack_body += "\n" + load(src / "recipe.json", {}).get("about", "")
+    m = re.search(r"patch\s+(\d+\.\d+\.\d+\.\d+)(\s+of\s+[\d-]+)?", pack_body)
+    f["patch"] = " ".join((m.group(1) + (m.group(2) or "")).split()) if m else PATCHES.get(d, "")
+    m = re.search(r"build\s+(\d{4,})", pack_body)
+    f["build"] = m.group(1) if m else f["patch"].split(".")[-1].split()[0] if f["patch"] else ""
     for kind, path in [("dist_size", ROOT / "build" / "packs" / f"{d}.cardpack"), ("custom_size", LOCAL / f"{d}-custom-art.cardpack")]:
         f[kind] = path.stat().st_size if path.exists() else 0
     return f
@@ -380,7 +391,8 @@ def set_section(f, assets):
          f'<div><div class="sub">Шаг {f["step"]} · {f["day"]}</div><h2>{esc(f["ru"])}</h2><div style="color:#ddd">{esc(f["en"])}</div></div></div></div>',
          '<div class="wrap">']
     if not f["ready"]:
-        h.append(f'<div class="todo-slot">Набор ещё в работе. Когда появятся packs/{d}/ и tools/expansions_report/{d}.json, '
+        patch = f"День выхода {f['day']}, патч {PATCHES[d]}. " if d in PATCHES else ""
+        h.append(f'<div class="todo-slot">{patch}Набор ещё в работе. Когда появятся packs/{d}/ и tools/expansions_report/{d}.json, '
                  f'запустите <code>python3 tools/expansions_report.py shots {d}</code> и <code>python3 tools/expansions_report.py</code>.</div></div></section>')
         return "".join(h)
     h.append(f'<p class="about">{esc(f["about_ru"])}</p>')
@@ -465,7 +477,7 @@ def page():
         found.append(commit_html({"hash": h_, "day": day, "subject": subj, "body": body}))
     def engine_line(f):
         kw = ", ".join(m[1] for m in f["mechanics"]) or "новых ключевых слов нет"
-        subj = next((c["subject"] for c in f["commits"] if "engine features" in c["subject"]), "")
+        subj = next((c["subject"] for c in f["commits"] if "engine features of" in c["subject"]), "")
         what = re.sub(r"^.*?engine features of [^(;]*", "", subj).strip(" ;()")
         return (f'<li><b>{esc(f["ru"])}</b>: {esc(kw)}' + (f'; <span style="color:var(--muted)">{md_inline(what)}</span>' if what else "")
                 + f'; {plural(len(f["api"]), "новая строка", "новые строки", "новых строк")} в api.md</li>')
@@ -473,7 +485,7 @@ def page():
     top = f"""
 <header class="hero"><div class="wrap">
 <div class="kicker">Classic HS · дополнения после Наксрамаса · локальный отчёт</div>
-<h1>Одиннадцать наборов, каждый как в день выхода</h1>
+<h1>{plural(len(SETS), "набор", "набора", "наборов")}, каждый как в день выхода</h1>
 <p class="lead">Каждое дополнение стало отдельной игрой (пакетом): в нём все карты наборов до него, и каждая карта такая, какой была в день выхода
 этого набора. Стоимость, характеристики, тексты на 8 языках, расы и поведение взяты из сборки того дня. Отчёт только для себя. Снимки сделаны со своими
 пакетами с картинками Blizzard, поэтому публиковать отчёт нельзя.</p>
