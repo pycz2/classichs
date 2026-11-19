@@ -130,8 +130,9 @@ func _build_bar() -> void:
 	_sub_line.name = "SubLine"
 	_sub_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # (two lines when the names are long)
 	_sub_line.max_lines_visible = 2
-	_sub_line.position = Vector2(150, 84)
-	_sub_line.size = Vector2(TEXT_W, 38)
+	_sub_line.add_theme_constant_override("line_spacing", -3)
+	_sub_line.position = Vector2(150, 80)
+	_sub_line.size = Vector2(TEXT_W, 42)
 	bar.add_child(_sub_line)
 	var row := HBoxContainer.new()
 	row.name = "Transport"

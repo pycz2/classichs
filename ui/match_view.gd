@@ -3976,10 +3976,7 @@ func _show_mulligan() -> void:
 	count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	count.add_theme_constant_override("outline_size", 14)
 	count.visible = false
-	count.position = OWN_HERO  # over the own portrait, out of the cards' column (they stay where they are)
-	count.size = HeroView.SIZE
-	_overlay.add_child(count)
-	_centered_button(box, tr("Confirm"), "Confirm", func():
+	var confirm := _centered_button(box, tr("Confirm"), "Confirm", func():
 		var ids: Array = []
 		for id in marked:
 			if marked[id]:
@@ -4011,6 +4008,10 @@ func _show_mulligan() -> void:
 			return  # the timer or a lost connection got there first
 		_mull_wait = p  # the overlay stays: the new cards come into it
 		controller.submit({"type": "mulligan", "player": p, "replace": ids}))
+	count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count.position = Vector2(0, confirm.custom_minimum_size.y - 6)  # under Confirm, on the own portrait; out of the
+	count.size = Vector2(confirm.custom_minimum_size.x, 96)  # column, so the cards and Confirm stay where they are
+	confirm.add_child(count)
 
 
 func _show_choice() -> void:
