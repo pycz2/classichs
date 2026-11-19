@@ -9,6 +9,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Sur l’écran « Jeux », le panneau de droite avec la description du jeu défile, et les boutons « Jouer à ce jeu » et « Supprimer » restent en dessous, toujours visibles. Avec une longue description, ils passaient sous le bord de la fenêtre, sur téléphone aussi.
 - La musique d’un serviteur légendaire joué suit maintenant le volume des effets sonores et non celui de la musique. Musique baissée, on l’entendait à peine sous les sons de la carte ; musique coupée, elle ne jouait pas du tout.
 ### Ajouté
+- Projet Armageboum 2018 (7 août 2018) : serviteurs avec Magnétisme qui fusionnent avec les Méca, cartes Oméga pour 10 cristaux de mana, Projets pour les deux joueurs, le Dr Boum avec un nouveau pouvoir héroïque à chaque tour, les decks de Mystifix, des bombes dans le deck adverse.
 - La table montre où un effet porte. Quand des cartes en main sont améliorées, une bande de lumière passe sur la main et des flèches montent au-dessus des cartes. Un effet sur un deck le fait enfler et un anneau s'allume au-dessus. Un pouvoir héroïque nouveau ou moins cher s'illumine à sa place.
 - Une carte mélangée dans un deck (le vôtre ou celui de l'adversaire) vole jusqu'à ce deck depuis ce qui l'y envoie : le sort joué, un serviteur, un héros, une main ou l'autre deck. Une carte ajoutée à une main vole aussi depuis sa source : Larcin prend des cartes au héros adverse, une carte créée par un serviteur sort du serviteur. Une carte que vous ne devez pas voir vole face cachée.
 - Joute : une carte sort de chaque deck, chacune avec le nom de son propriétaire et son coût en grand à côté. La carte gagnante s'illumine, la perdante s'assombrit, puis les deux retournent dans leurs decks.
@@ -25,6 +26,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Les dégâts et le gel arrivent au même moment : Éclair de givre, Cône de froid, Blizzard et le coup d'un Élémentaire d’eau frappent et gèlent d'un coup.
 - Un nouveau gel : des cristaux de glace s'étendent sur le portrait depuis le bord, du givre borde le contour, des reflets courent sur la glace. Quand un serviteur ou un héros dégèle, la glace fond.
 
+- Le Sélénien de la jungle est de nouveau une Bête dans les jeux de La Ligue des explorateurs au Bois Maudit, comme dans Hearthstone jusqu’au patch 11.4 (2018). Il n’avait pas de type, et les cartes qui cherchent des Bêtes ne le comptaient pas.
 ## [0.71.1] - 2026-11-13
 
 ### Corrigé

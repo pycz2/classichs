@@ -1,0 +1,14 @@
+{
+ "sets": {
+  "BOOMSDAY": "Projeto Cabum"
+ },
+ "classes": {
+  "WHIZBANG": "Rojão"
+ },
+ "mechanics": {
+  "MODULAR": {
+   "name": "Magnético",
+   "tip": "Baixe este lacaio à esquerda de um Mecanoide para fundi-los!"
+  }
+ }
+}

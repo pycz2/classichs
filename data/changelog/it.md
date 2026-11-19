@@ -9,6 +9,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Nella schermata «Giochi» il pannello a destra con la descrizione del gioco scorre, e i pulsanti «Gioca a questo gioco» ed «Elimina» restano sotto, sempre visibili. Con una descrizione lunga finivano oltre il bordo inferiore della finestra, anche sul telefono.
 - La musica di un servitore leggendario quando viene giocato ora segue il volume degli effetti sonori, non quello della musica. Con la musica bassa si sentiva appena sotto i suoni della carta, con la musica spenta non suonava affatto.
 ### Aggiunto
+- Operazione Apocalisse 2018 (7 agosto 2018): servitori con Magnetismo che si fondono con i Robot, carte Omega per 10 Cristalli di Mana, Progetti per entrambi i giocatori, il Dott. Boom con un nuovo Potere Eroe a ogni turno, i mazzi di Frizzabombe, bombe nel mazzo avversario.
 - Il tavolo mostra dove arriva un effetto. Quando le carte in mano vengono potenziate, una fascia di luce passa sulla mano e frecce salgono sopra le carte. Un effetto sul mazzo lo fa gonfiare e un anello si accende sopra. Un Potere Eroe nuovo o più economico si illumina al suo posto.
 - Una carta mescolata in un mazzo (il vostro o quello dell'avversario) vola in quel mazzo da ciò che l'ha mandata: la magia giocata, un servitore, un eroe, una mano o l'altro mazzo. Anche una carta aggiunta alla mano vola dalla sua origine: Furto prende carte dall'eroe avversario, una carta creata da un servitore esce dal servitore. Una carta che non potete vedere vola coperta.
 - Giostra: da ogni mazzo esce una carta, ognuna con il nome del proprietario e il suo costo in grande accanto. La carta vincente si illumina, quella perdente si scurisce, poi entrambe tornano nei mazzi.
@@ -25,6 +26,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Danno e congelamento arrivano nello stesso momento: Dardo di Gelo, Cono di Freddo, Tormenta e il colpo di un Elementale dell'Acqua colpiscono e congelano insieme.
 - Un nuovo congelamento: cristalli di ghiaccio si allargano sul ritratto dal bordo, la brina segue il contorno, riflessi scorrono sul ghiaccio. Quando un servitore o un eroe si scongela, il ghiaccio si scioglie.
 
+- Il Lunagufo Silvano torna a essere una Bestia nei giochi da La Lega degli Esploratori a Il Bosco Tetro, come in Hearthstone fino alla patch 11.4 (2018). Non aveva una tribù, e le carte che cercano Bestie non lo contavano.
 ## [0.71.1] - 2026-11-13
 
 ### Corretto

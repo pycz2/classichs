@@ -70,7 +70,9 @@ static func changes(e: GameView.Ent) -> Array:
 	if e == null:
 		return out
 	var tr := func(k: String) -> String: return TranslationServer.translate(k)
-	var src := func(d: Dictionary) -> String: return (" — " + CardText.name(d.src)) if d.get("src", "") != "" else ""
+	var src := func(d: Dictionary) -> String:  # (a Magnetic minion fused in: its card, when it has hooks)
+		var by := str(d.get("src", d.get("hooks", "") if d.has("fuse") else ""))
+		return (" — " + CardText.name(by)) if by != "" else ""
 	for ench in e.enchantments:
 		var line := ""
 		if ench.has("set_atk"):

@@ -122,7 +122,7 @@ KARA_TOKENS = "KAR_004a KAR_005a KAR_010a KAR_025a KAR_025b KAR_025c KAR_026t KA
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590, "ungoro": 18336, "icc": 20457, "loot": 22611, "gil": 23966}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590, "ungoro": 18336, "icc": 20457, "loot": 22611, "gil": 23966, "boom": 25770}
 ## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
 ## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
 ## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
@@ -138,7 +138,10 @@ RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 125
 ## The Witchwood too (build 23966, patch 11.0.0.23966): Fiendish Circle 3, Witch's Apprentice 0, Darius Crowley 4/5, Tess
 ## Greymane 7, Witchwood Apple, Rotten Applebaum, Snap Freeze, Blazing Invocation, Woodcutter's Axe changed since; the
 ## Undead tribe came later.
-FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil"}
+## The Boomsday Project too (build 25770, patch 12.0.0.25770 of 2018-08-02, five days before the release): Giggling
+## Inventor 7 (2018), the buffs of June 2019 (Dr. Morrigan 6, Violet Haze 2, Flark's Boom-Zooka, Necromechanic…), Dr. Boom,
+## Mad Genius 9 (2019), Test Subject, The Soularium and others changed since; second tribes and SN1P-SN4P came later.
+FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil", "boom"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 ## Classic's Hero Powers had other ids in the old builds (VAN_HERO_06bp was CS2_017; the upgraded ones AT_132_*).
 _CLASSES = ["WARRIOR", "SHAMAN", "ROGUE", "PALADIN", "HUNTER", "DRUID", "WARLOCK", "MAGE", "PRIEST"]
@@ -203,6 +206,7 @@ SETS = {
     "icc": ("ICECROWN", ["ICC_"], None),
     "loot": ("LOOTAPALOOZA", ["LOOT_"], None),
     "gil": ("GILNEAS", ["GIL_"], None),
+    "boom": ("BOOMSDAY", ["BOT_"], None),  # (BOTA_*: the Puzzle Lab's cards, not the set's)
 }
 
 

@@ -89,7 +89,7 @@ class DeckRow:
 		DeckTiles.text(self, Vector2(60, 29), deck.name, 19, Color("f4ead5"), size.x - 70)
 		var n := deck.cards.size()
 		var f := get_theme_font("font", "Label")
-		var tag := "  %d/%d" % [n, Deck.SIZE] if n < Deck.SIZE else ""  # an unfinished deck: how full it is
+		var tag := "  %d/%d" % [n, Deck.SIZE] if n < deck.goal() else ""  # an unfinished deck: how full it is
 		var room := size.x - 60 - ACTIONS_W - 14 - f.get_string_size(tag, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x
 		var sub := CardText.name(deck.hero)
 		DeckTiles.text(self, Vector2(60, 52), sub, 14, Palette.of_class(cls).lightened(0.5), room)
@@ -98,7 +98,7 @@ class DeckRow:
 			DeckTiles.text(self, Vector2(x, 52), tag, 13, Frames.GOLD)
 			var bar := Rect2(Vector2(14, size.y - 8), Vector2(size.x - 28, 3))
 			draw_rect(bar, Color(0, 0, 0, 0.6))
-			draw_rect(Rect2(bar.position, Vector2(bar.size.x * n / Deck.SIZE, bar.size.y)), Frames.GOLD)
+			draw_rect(Rect2(bar.position, Vector2(bar.size.x * n / deck.goal(), bar.size.y)), Frames.GOLD)
 		var edge := Color("c9a74a", 0.7) if is_hovered() else Color(0, 0, 0, 0)
 		draw_style_box(Palette.box(Color(0, 0, 0, 0), 12, edge, 3), r)
 

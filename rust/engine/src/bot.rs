@@ -60,7 +60,9 @@ fn options(g: &Game, p: usize) -> Vec<Act> {
         .into_iter()
         .filter(|a| a.player() == p as i64 && !matches!(a, Act::Concede { .. }))
         // ponytail: rightmost slot only; adjacency-aware placement if the bot needs it
-        .filter(|a| !matches!(*a, Act::Play { pos, .. } if pos >= 0 && pos != last))
+        // (a FUSE minion, Magnetic: every place, the one left of a Mech fuses it)
+        .filter(|a| !matches!(*a, Act::Play { pos, entity, .. } if pos >= 0 && pos != last
+            && !g.n().fuse.is_some_and(|f| g.e(entity).has(f))))
         .collect()
 }
 

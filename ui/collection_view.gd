@@ -9,6 +9,9 @@ extends Control
 signal changed
 ## Browsing (no deck): a card was clicked.
 signal picked(id: String)
+## A card that is a whole deck (Whizbang the Wonderful) clicked for a deck with other cards: the deck screen asks
+## whether it takes their place.
+signal whole_deck(id: String)
 
 const PER_PAGE := 8
 const RARITIES := [["FREE", "Basic"], ["COMMON", "Common"], ["RARE", "Rare"], ["EPIC", "Epic"], ["LEGENDARY", "Legendary"]]
@@ -346,6 +349,8 @@ func click_card(id: String) -> void:
 		return
 	var why := deck.add(id)
 	show_hint(why)
+	if why != "" and Deck.recipe(id) and not deck.arena and not deck.cards.has(id):
+		whole_deck.emit(id)
 	_fill()
 	if why == "":
 		changed.emit()
