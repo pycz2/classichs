@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "DALARAN": "Rise of Shadows"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Twinspell",
+   "tip": "After you cast it, a copy of this spell without Twinspell comes to your hand."
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "DALARAN": "Rozkwit Cienia"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Dwuczar",
+   "tip": "Po rzuceniu kopia tego zaklęcia bez Dwuczaru wraca do twojej ręki."
+  }
+ }
+}

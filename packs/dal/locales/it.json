@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "DALARAN": "L'Ascesa delle Ombre"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Magia Gemella",
+   "tip": "Dopo averla lanciata, una copia di questa magia senza Magia Gemella torna nella tua mano."
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "DALARAN": "El Auge de las Sombras"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Hechizo doble",
+   "tip": "Después de lanzarlo, una copia de este hechizo sin Hechizo doble vuelve a tu mano."
+  }
+ }
+}

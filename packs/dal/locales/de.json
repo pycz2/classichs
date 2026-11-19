@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "DALARAN": "Verschwörung der Schatten"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Zwillingszauber",
+   "tip": "Nachdem Ihr ihn gewirkt habt, kommt eine Kopie dieses Zaubers ohne Zwillingszauber auf Eure Hand."
+  }
+ }
+}

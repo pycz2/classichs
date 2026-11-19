@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "DALARAN": "L'Essor des Ombres"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Sort double",
+   "tip": "Après l'avoir lancé, une copie de ce sort sans Sort double arrive dans votre main."
+  }
+ }
+}

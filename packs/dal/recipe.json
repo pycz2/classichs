@@ -1,0 +1,23 @@
+{
+ "about": "How tools/pack.py builds Rise of Shadows 2019 (docs/packs/format.md, 'Build recipes'): on The Boomsday Project (base; Rastakhan's Rumble once it is in), so on every pack before it: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 135 cards of Rise of Shadows and their tokens as the release build 30103 has them (patch 14.0.0.30103 of 2019-04-09; data/dal_cards.json, tools/extract_cards.py --set dal) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/dal*.lua, the keywords, the older cards that changed by then).",
+ "base": "../boom",
+ "root": "../..",
+ "skip": [
+  "layout"
+ ],
+ "bundle_in_client": false,
+ "steps": [
+  {
+   "do": "hsjson",
+   "from": [
+    "data/dal_cards.json"
+   ],
+   "patch": [
+    "cards.patch.json"
+   ],
+   "texts": [
+    "packs/dal/cards.texts.json"
+   ]
+  }
+ ]
+}

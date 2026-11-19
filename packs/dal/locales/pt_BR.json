@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "DALARAN": "Ascensão das Sombras"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Feitiço Duplo",
+   "tip": "Depois de lançá-lo, uma cópia deste feitiço sem Feitiço Duplo volta à sua mão."
+  }
+ }
+}
