@@ -1123,8 +1123,8 @@ impl Session {
         if !(self.local || self.app.login_allowed(&format!("ip:{}", self.ip))) {
             return Err(e("rate_limited", "Too many attempts: wait a minute"));
         }
-        if !auth::valid_user(&user) {
-            return Err(e("bad_user", "A name is 3 to 20 letters, digits or _"));
+        if !auth::valid_new_user(&user) {
+            return Err(e("bad_user", "A name is 3 to 16 letters, digits or _"));
         }
         if !auth::valid_password(&password) {
             return Err(e("bad_password", "A password is 8 to 128 characters"));

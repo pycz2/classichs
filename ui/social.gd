@@ -19,6 +19,7 @@ const SERVER_TEXTS := ["You can watch the games of friends only", "The friend is
 const MAX_CHATS := 3
 const PANEL_W := 360.0
 const CHAT_SIZE := Vector2(300, 380)
+const FOLDED_W := 150.0  # a folded chat in a game
 const TOAST_TIME := 5.0
 const TOAST_W := 420.0
 const TOAST_CLOSE := 30.0
@@ -649,10 +650,18 @@ func send_message(user: String, text: String, srv: Server = null) -> void:
 
 
 ## Chat windows side by side along the bottom, right of the button (or of the panel).
+## In a game the folded ones are narrow and stand one over another right of the player's name, clear of the hand.
 func _layout_chats() -> void:
 	var x := (PANEL_W + 12.0) if panel_open else 144.0
+	var y := 712.0
 	for k in open_chats:
 		var w: ChatWindow = _windows[k]
+		if in_match and not panel_open and minimized.has(k):
+			w.size = Vector2(FOLDED_W, 40)
+			w.position = Vector2(140, y - 40)
+			w.set_collapsed(true)
+			y -= 44
+			continue
 		var h := 40.0 if minimized.has(k) else CHAT_SIZE.y
 		w.size = Vector2(CHAT_SIZE.x, h)
 		w.position = Vector2(x, 712 - h)
@@ -1088,6 +1097,10 @@ class ChatWindow:
 	func set_collapsed(on: bool) -> void:
 		_scroll.visible = not on
 		input.visible = not on
+		var narrow := size.x < Social.CHAT_SIZE.x  # (a narrow one opens by its header: no "–")
+		(get_node("Minimize") as Button).visible = not narrow
+		(get_node("CloseChat") as Button).position.x = size.x - 40
+		_header.size.x = size.x - (40 if narrow else 76)
 		queue_redraw()
 
 	func refresh() -> void:
@@ -1128,4 +1141,4 @@ class ChatWindow:
 		draw_style_box(Palette.box(Color("6b3f12") if fresh else Color("24170c"), 9), bar)
 		draw_circle(Vector2(18, 21), 6, Social.STATUS[st][0])
 		var title := user if social.logged_in().size() < 2 else "%s · %s" % [user, srv.link.display_name()]
-		DeckTiles.text(self, Vector2(32, 28), title, 19, Palette.ATTACK, size.x - 120)
+		DeckTiles.text(self, Vector2(32, 28), title, 19, Palette.ATTACK, size.x - (76 if size.x < Social.CHAT_SIZE.x else 120))

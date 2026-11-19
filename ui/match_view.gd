@@ -201,6 +201,10 @@ func _ready() -> void:
 	_clock.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_clock.z_index = 5  # (over the deck below it)
 	add_child(_clock)
+	_end_turn.resized.connect(func():  # a longer text ("Ход соперника") widens it to the left: its right edge stays in the window
+		_end_turn.position.x = 1272.0 - _end_turn.size.x
+		_end_halo.position = _end_turn.position
+		_end_halo.size = _end_turn.size)
 	_end_halo.position = _end_turn.position
 	_end_halo.size = _end_turn.custom_minimum_size
 	_end_halo.visible = false
@@ -212,11 +216,14 @@ func _ready() -> void:
 	for i in 2:
 		var bar := ManaBar.new()
 		bar.name = "Mana%d" % i
-		bar.position = Vector2(1000, 684) if i == 0 else Vector2(950, 10)
+		bar.position = Vector2(1272 - bar.size.x, 686) if i == 0 else Vector2(950, 10)
+		bar.z_index = 15  # in front of the hand's cards (0..9), behind the one risen under the mouse (20)
 		_mana.append(bar)
 		add_child(bar)
 		var n := Palette.label("", 16)
 		n.position = Vector2(12, 690 if i == 0 else 8)
+		n.size = Vector2(124, 24)  # (a folded chat stands right of it; a wide name ends in "…")
+		n.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		_names.append(n)
 		add_child(n)
 		var pile := DeckPile.new()
@@ -316,16 +323,32 @@ func bind_online(m: Match, s: Node) -> void:
 	(find_child("MuteButton", true, false) as Button).visible = not watching
 	if watching:
 		_build_watch_bar()
+		_match_time = (Time.get_ticks_msec() - int(s.get("started_ms"))) / 1000.0  # (the game ran before the watching)
 	bind(m)
 
 
-## The spectator's table: a banner (who plays whom, an eye: watching) and a big Leave in the
-## place of End Turn; the player's own controls (End Turn, emotes, the deck tracker) are gone.
+## The spectator's table: an eye under the friends button (pressed: a banner says who plays whom)
+## and a big Leave in the place of End Turn; the player's own controls (End Turn, emotes, the deck
+## tracker) are gone.
 func _build_watch_bar() -> void:
+	var eye_b := Button.new()
+	eye_b.name = "WatchEye"
+	eye_b.custom_minimum_size = Vector2(42, 40)
+	eye_b.position = Vector2(1188, 50)  # (under the friends button, beside the gear)
+	eye_b.tooltip_text = tr("Spectator")
+	eye_b.focus_mode = Control.FOCUS_NONE
+	for st in ["normal", "hover", "pressed"]:
+		eye_b.add_theme_stylebox_override(st, Palette.box(Color(0.1, 0.07, 0.05, 0.9 if st == "normal" else 1.0), 20, Color("c9a74a") if st != "normal" else Color("6b5320"), 2))
+	Icons.attach(eye_b, "eye", 28)
+	add_child(eye_b)
 	var bar := PanelContainer.new()
 	bar.name = "WatchBar"
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.z_index = 60
+	bar.visible = false
+	eye_b.pressed.connect(func():
+		bar.visible = not bar.visible
+		_update_watch_bar())
 	var st := Palette.box(Color(0.07, 0.05, 0.03, 0.88), 22, Color("c9a74a"), 2)
 	st.content_margin_left = 12
 	st.content_margin_right = 18
@@ -368,15 +391,16 @@ func _build_watch_bar() -> void:
 	_end_turn.visible = false
 
 
-## The banner's text and place: "Watching <friend> vs <opponent>", centred on the middle line.
+## The banner's text and place: "Watching <friend> vs <opponent>", left of the eye.
 func _update_watch_bar() -> void:
 	var bar := find_child("WatchBar", false, false) as Control
 	if bar == null or controller == null:
 		return
-	(bar.find_child("WatchTitle", true, false) as Label).text = tr("Watching %s vs %s") % [_side_name(viewer()), _side_name(1 - viewer())]
-	bar.visible = _overlay == null  # (a result or a message over the table: the banner steps back)
+	(bar.find_child("WatchTitle", true, false) as Label).text = tr("Watching %s vs %s") % [Profile.short(_side_name(viewer())), Profile.short(_side_name(1 - viewer()))]
+	if _overlay != null:
+		bar.visible = false  # (a result or a message over the table: the banner steps back)
 	bar.reset_size()
-	bar.position = Vector2(roundf(640.0 - bar.size.x / 2.0), roundf((ENEMY_BOARD_Y + TableLayout.MINION.y + OWN_BOARD_Y) / 2.0 - bar.size.y / 2.0))
+	bar.position = Vector2(1180.0 - bar.size.x, 50.0 + (40.0 - bar.size.y) / 2.0)
 
 
 ## The server refused a move (the table showed an old state): the queue goes too.
@@ -618,6 +642,11 @@ func _input(ev: InputEvent) -> void:
 			and not _dragging and not _in_hand(ev.position):
 		_hand_open = false  # a tap beside the open hand closes it
 		refresh()
+	if _wheel.visible and ev is InputEventMouseButton and ev.pressed and ev.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT] \
+			and not _wheel.get_children().any(func(b: Control): return b.get_rect().has_point(_pointer)):
+		_wheel.visible = false  # a second right click (a tap) anywhere but on an emote closes them
+		get_viewport().set_input_as_handled()
+		return
 	if _press.is_empty() or controller == null:
 		return
 	if ev is InputEventMouseMotion:
@@ -1196,7 +1225,7 @@ func _refresh() -> void:
 	for i in 2:
 		var p := g.players[[me, opp][i]]
 		_mana[i].set_values(p.mana, p.max_mana, p.overload_locked, p.overload_owed)
-		_names[i].text = _side_name(p.index)
+		_names[i].text = Profile.short(_side_name(p.index))
 		_piles[i].count = p.deck_count
 		_piles[i].hand = p.hand.size()
 	var hovered := g.ent(_hover_hand)  # the crystals a card would spend blink, when there is mana for it
@@ -1256,11 +1285,13 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 	if weapon:
 		want[weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
 	var secrets: Array = _ents(_stage.secrets[p]) if staged else pl.secrets
-	for i in secrets.size():
+	for i in secrets.size():  # on a half circle along the portrait's round top, both sides
+		var a := deg_to_rad(-90.0 + (i - (secrets.size() - 1) / 2.0) * 26.0)
+		var at := hero_pos + Vector2(65, 66) + Vector2(cos(a) * 78.0, sin(a) * 62.0)  # (round the portrait's round top, a bit flattened: clear of the minions)
 		if KeywordTips.keywords_of(secrets[i].card_id).has("QUEST"):  # a Quest: in sight of both, with its progress
-			want[secrets[i].id] = {"kind": "quest", "pos": hero_pos + Vector2(-14 + 40 * i, -14)}
+			want[secrets[i].id] = {"kind": "quest", "pos": at - Vector2(24, 24)}
 		else:
-			want[secrets[i].id] = {"kind": "secret", "pos": hero_pos + Vector2(-10 + 40 * i, -6), "hide": not own and not full_view}  # on the top of the portrait, both sides
+			want[secrets[i].id] = {"kind": "secret", "pos": at - Vector2(18, 18), "hide": not own and not full_view}
 	var board: Array = _ents(_stage.board[p]) if staged else pl.board.duplicate()
 	var placed := _placed.duplicate() if own else {}  # minions put down: they stand in their places
 	if own and _placing() >= 0:  # (one waiting for its Battlecry target too)
@@ -1673,7 +1704,7 @@ func _on_concede() -> void:
 	if g.game_over or watching:
 		_leave()
 		return
-	var box := _open_overlay(tr("Concede the match?"))
+	var box := _open_overlay(tr("Concede the match?"), true)
 	_overlay.name = "ConcedeConfirm"
 	var p := viewer() if not controller.bots[viewer()] else controller.actor()
 	_centered_button(box, tr("Concede"), "ConfirmConcede", func():
@@ -2702,7 +2733,7 @@ func result() -> Array:
 	if g.winner < 0:
 		return ["draw", tr("Draw")]
 	if watching:
-		return ["victory", tr("%s wins") % _side_name(g.winner)]
+		return ["victory", tr("%s wins") % Profile.short(_side_name(g.winner))]
 	if controller.remote < 0 and controller.bots[0] == controller.bots[1]:
 		return ["victory", tr("Player %d wins") % (g.winner + 1)]
 	return ["victory", tr("Victory!")] if g.winner == viewer() else ["defeat", tr("Defeat")]
@@ -3386,7 +3417,7 @@ func _joust_cards(ev: Dictionary) -> Array:
 		cv.position = JOUST_AT + Vector2(0, 150 if own else -150) - cv.size / 2.0
 		cv.set_meta("owner", owner)
 		_fx.add_child(cv)
-		var name := Palette.label(_side_name(owner), 20, Palette.SELECTED if own else Color("ff8787"))
+		var name := Palette.label(Profile.short(_side_name(owner)), 20, Palette.SELECTED if own else Color("ff8787"))
 		name.add_theme_constant_override("outline_size", 6)
 		name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name.size = Vector2(200, 28)
@@ -3863,7 +3894,8 @@ func _close_overlay() -> void:
 		_update_watch_bar()
 
 
-func _open_overlay(title: String) -> VBoxContainer:
+## framed: a popup window (a panel in the middle) instead of the title and buttons right on the dimmed table.
+func _open_overlay(title: String, framed := false) -> VBoxContainer:
 	_close_overlay()
 	_overlay = Control.new()
 	_overlay.z_index = 100  # above the hand cards
@@ -3875,8 +3907,19 @@ func _open_overlay(title: String) -> VBoxContainer:
 	var box := VBoxContainer.new()
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_theme_constant_override("separation", 18)
-	box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_overlay.add_child(box)
+	if framed:
+		var center := CenterContainer.new()
+		center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		var panel := PanelContainer.new()
+		var frame := Palette.frame()
+		frame.set_content_margin_all(28)
+		panel.add_theme_stylebox_override("panel", frame)
+		panel.add_child(box)
+		center.add_child(panel)
+		_overlay.add_child(center)
+	else:
+		box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_overlay.add_child(box)
 	var t := Palette.label(title, 34, Palette.ATTACK)
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(t)
@@ -3948,7 +3991,7 @@ func _refresh_overlay() -> void:
 		_close_overlay()
 
 
-## The result screen: the picture of the result dimmed behind a big title that
+## The result screen: the picture of the result (opaque: the table does not show through) behind a big title that
 ## grows in (the pack's ui/result_<kind> picture, if it has one).
 func _result_look(box: VBoxContainer, kind: String) -> void:
 	var art := TextureRect.new()
@@ -3959,7 +4002,6 @@ func _result_look(box: VBoxContainer, kind: String) -> void:
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	art.modulate.a = 0.7
 	_overlay.add_child(art)
 	_overlay.move_child(art, 1)  # over the dimming, under the title and buttons
 	var title := box.get_child(0) as Label
@@ -3970,7 +4012,7 @@ func _result_look(box: VBoxContainer, kind: String) -> void:
 	if Anim.instant:
 		return
 	art.modulate.a = 0.0
-	create_tween().tween_property(art, "modulate:a", 0.7, Anim.d(0.8))
+	create_tween().tween_property(art, "modulate:a", 1.0, Anim.d(0.8))
 	title.pivot_offset = Vector2(640, 40)
 	title.scale = Vector2(0.5, 0.5)
 	create_tween().tween_property(title, "scale", Vector2.ONE, Anim.d(0.5)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -4038,14 +4080,14 @@ func _show_mulligan() -> void:
 			var tw := cv.create_tween().set_parallel()
 			tw.tween_property(cv, "scale", Vector2.ONE, Anim.d(0.35)).set_delay(Anim.d(0.12 * i)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 			tw.tween_property(cv, "modulate:a", 1.0, Anim.d(0.2)).set_delay(Anim.d(0.12 * i))
-	var count := Palette.label("", 44, Palette.OPPONENT)
+	var count := Palette.label("", 84, Palette.OPPONENT)
 	count.name = "MulliganTimer"
 	_mulligan_count = count
 	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	count.add_theme_constant_override("outline_size", 8)
+	count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	count.add_theme_constant_override("outline_size", 14)
 	count.visible = false
-	box.add_child(count)
-	_centered_button(box, tr("Confirm"), "Confirm", func():
+	var confirm := _centered_button(box, tr("Confirm"), "Confirm", func():
 		var ids: Array = []
 		for id in marked:
 			if marked[id]:
@@ -4077,7 +4119,10 @@ func _show_mulligan() -> void:
 			return  # the timer or a lost connection got there first
 		_mull_wait = p  # the overlay stays: the new cards come into it
 		controller.submit({"type": "mulligan", "player": p, "replace": ids}))
-	box.move_child(count, -1)  # under Confirm
+	count.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	count.position = Vector2(0, confirm.custom_minimum_size.y - 6)  # under Confirm, on the own portrait; out of the
+	count.size = Vector2(confirm.custom_minimum_size.x, 96)  # column, so the cards and Confirm stay where they are
+	confirm.add_child(count)
 
 
 func _show_choice() -> void:

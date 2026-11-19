@@ -66,3 +66,27 @@ func test_collection_shows_keyword_tips() -> void:
 	check(c.find_child("KeywordTips", true, false) != null, "tips beside the big card in the collection")
 	cv.free()
 	c.free()
+
+
+## More than six boxes go round: a window as tall as six of them, the column moving up through
+## it and the first box coming again after the last.
+func test_many_boxes_go_round_in_a_wheel() -> void:
+	var boxes := []
+	for i in 8:
+		boxes.append(KeywordTips._box("Title%d" % i, "Tip %d" % i, "What it does", Color("efe0bd")))
+	var w := KeywordTips._Wheel.new(boxes)
+	root().add_child(w)
+	eq(w.reel.get_child_count(), 16, "the boxes twice: the second round follows the first")
+	var six := 0.0
+	for i in KeywordTips.WHEEL_AFTER:
+		six += (w.reel.get_child(i) as Control).get_combined_minimum_size().y + KeywordTips._Wheel.SEP
+	eq(w.custom_minimum_size.y, six - KeywordTips._Wheel.SEP, "the window shows six")
+	check(w.clip_contents, "the rest is cut off")
+	var instant := Anim.instant
+	Anim.instant = false
+	w._process(1.0)
+	check(w.reel.position.y < 0.0, "it moves up")
+	w._process(w._loop / KeywordTips._Wheel.SPEED)
+	check(w.reel.position.y <= 0.0 and w.reel.position.y > -w._loop, "and comes round: %s" % w.reel.position.y)
+	Anim.instant = instant
+	w.free()

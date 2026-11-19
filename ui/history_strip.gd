@@ -215,10 +215,9 @@ static func _effect_row(ef: Dictionary) -> Control:
 	if ef.card != "":
 		pic.draw.connect(func(): Art.paint_in(pic, Rect2(Vector2.ZERO, pic.size), ef.card, "rect"))
 	row.add_child(pic)
-	var n := Palette.label(ef.name, 14)
+	var n := Palette.label(ef.name, 14)  # a long name wraps (Russian names are long), never cut
 	n.custom_minimum_size.x = 150
-	n.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	n.clip_text = true
+	n.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(n)
 	var what := Palette.label(ef.text, 14, color)  # long effects wrap rather than cut the name
 	what.custom_minimum_size.x = 300 - 26 - 150 - 12  # a fixed width: a wrapping label has no height before it

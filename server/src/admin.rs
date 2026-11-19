@@ -781,8 +781,8 @@ struct CreateIn {
 }
 
 async fn create(State(app): State<AppRef>, Extension(a): Extension<Admin>, Json(f): Json<CreateIn>) -> Response {
-    if !auth::valid_user(&f.user) {
-        return err(StatusCode::BAD_REQUEST, "A name is 3 to 20 letters, digits or _");
+    if !auth::valid_new_user(&f.user) {
+        return err(StatusCode::BAD_REQUEST, "A name is 3 to 16 letters, digits or _");
     }
     if !auth::valid_password(&f.password) {
         return err(StatusCode::BAD_REQUEST, "A password is 8 to 128 characters");

@@ -68,7 +68,7 @@ func _draw() -> void:
 				var text := "%d/%d" % [int(s.tags.get("QUEST_PROGRESS", 0)), total]
 				var font := ThemeDB.fallback_font
 				var w := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x
-				var at := Vector2(c.x - w / 2.0, size.y + 2)
+				var at := Vector2(c.x - w / 2.0, size.y - 3)  # on the ring's bottom (under it, it lay on the hero's portrait)
 				draw_rect(Rect2(at + Vector2(-4, -12), Vector2(w + 8, 16)), Color(0, 0, 0, 0.65))
 				draw_string_outline(font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, 3, Color.BLACK)
 				draw_string(font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("ffd8a8"))

@@ -133,6 +133,11 @@ static func make(card_id: String, e: GameView.Ent = null) -> KeywordTips:
 			continue
 		if kw.has(m):
 			tips.add_child(_box("Title" + m, kw[m].name.get(lang, kw[m].name.en), kw[m].text.get(lang, kw[m].text.en), Color("efe0bd")))
+	if tips.get_child_count() > WHEEL_AFTER:
+		var boxes := tips.get_children()
+		for b in boxes:
+			tips.remove_child(b)
+		tips.add_child(_Wheel.new(boxes))
 	var related := CardDb.related(card_id)
 	if related.size() > RELATED_SHOWN:
 		tips.add_child(Wheel.new(related))
@@ -204,6 +209,45 @@ static func _box(title_name: String, title_text: String, body: String, color: Co
 	text.add_theme_color_override("font_color", Color("3b2a14"))
 	col.add_child(text)
 	return box
+
+
+## More boxes than this go round in a wheel: a window as tall as the first ones, the column
+## moving up through it endlessly (the first box comes again from below after the last).
+const WHEEL_AFTER := 6
+
+
+class _Wheel:
+	extends Control
+	const SPEED := 28.0  # px a second
+	const SEP := 6
+	var reel := VBoxContainer.new()
+	var _loop := 0.0  # one round: the boxes' height with their gaps
+
+	func _init(boxes: Array) -> void:
+		name = "Wheel"
+		clip_contents = true
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		reel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		reel.add_theme_constant_override("separation", SEP)
+		for b: Control in boxes:
+			reel.add_child(b)
+		for b: Control in boxes:  # the second round follows the first
+			reel.add_child(b.duplicate())
+		add_child(reel)
+
+	func _ready() -> void:  # (in the tree: the wrapped texts have their heights)
+		var h := 0.0
+		for i in reel.get_child_count():
+			var bh: float = (reel.get_child(i) as Control).get_combined_minimum_size().y + SEP
+			if i < WHEEL_AFTER:
+				h += bh
+			if i < reel.get_child_count() / 2:
+				_loop += bh
+		custom_minimum_size = Vector2(WIDTH, h - SEP)
+
+	func _process(delta: float) -> void:
+		if _loop > 0.0 and not Anim.instant:
+			reel.position.y = -fposmod(-reel.position.y + SPEED * delta, _loop)
 
 
 ## Places the boxes beside rect (right of it, or left when there is no room), on the screen.

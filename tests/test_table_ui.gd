@@ -543,3 +543,52 @@ func test_history_strip_shows_burnt_cards_and_fatigue() -> void:
 	v._strip.hover(v._strip._items.find(tiles[0]))
 	check(v._strip.popup != null and (v._strip.popup.find_child("Title", true, false) as Label).text.contains("1"), "fatigue pop-up names the damage")
 	v.free()
+
+
+## A second right click (or a tap) anywhere but on an emote closes the emote buttons.
+func test_a_second_right_click_closes_the_emotes() -> void:
+	var v := _view({"hero": "HERO_08"})
+	v._on_right_click(v._views[v.g.hero(0).id])
+	eq(v._wheel.visible, true, "open")
+	var ev := InputEventMouseButton.new()
+	ev.button_index = MOUSE_BUTTON_RIGHT
+	ev.pressed = true
+	ev.position = Vector2(900, 420)
+	v._input(ev)
+	eq(v._wheel.visible, false, "a second right click on the table closes them")
+	v._on_right_click(v._views[v.g.hero(0).id])
+	ev.button_index = MOUSE_BUTTON_LEFT
+	ev.position = Vector2(100, 300)
+	v._input(ev)
+	eq(v._wheel.visible, false, "and a tap")
+	v.free()
+
+
+## The secrets stand on a half circle over the portrait's top, close together; the mana stands
+## on its own backing in front of the hand; End Turn keeps inside the window.
+func test_secrets_mana_and_end_turn_places() -> void:
+	var v := _view({"hero": "HERO_08", "secrets": ["VAN_EX1_289", "VAN_EX1_294", "VAN_EX1_287"]})
+	var hero: Control = v._views[v.g.hero(0).id]
+	var mid: Array = v.g.players[0].secrets.map(func(e):
+		var s: Control = v._views[e.id]
+		return s.position + s.size / 2.0)
+	eq(mid.size(), 3, "three secrets")
+	check(mid[1].y < mid[0].y and mid[1].y < mid[2].y, "the middle one highest: %s" % [mid])
+	check(mid.all(func(p): return p.y < hero.position.y + 40.0 and absf(p.x - (hero.position.x + 65.0)) < 80.0), "over the portrait's top: %s" % [mid])
+	check(mid[0].distance_to(mid[1]) < 40.0, "closer than before: %s" % mid[0].distance_to(mid[1]))
+	var mana: Control = v.find_child("Mana0", true, false)
+	check(mana.z_index > 9 and mana.z_index < 20, "in front of the hand, behind the risen card")
+	check(mana.position.x + mana.size.x <= 1280.0, "inside the window")
+	v._end_turn.text = "Ход соперника, a much longer text"
+	v._end_turn.reset_size()
+	check(v._end_turn.size.x > 140.0 and v._end_turn.position.x + v._end_turn.size.x <= 1272.0, "End Turn grows to the left: %s" % [v._end_turn.get_rect()])
+	v.free()
+
+
+func test_concede_asks_in_a_popup_window() -> void:
+	var v := _view({"hero": "HERO_08"})
+	v._on_concede()
+	var over := v.find_child("ConcedeConfirm", true, false) as Control
+	check(over != null and over.find_children("*", "PanelContainer", true, false).size() == 1, "a framed window")
+	check(over.find_child("ConfirmConcede", true, false) != null and over.find_child("KeepPlaying", true, false) != null, "both answers in it")
+	v.free()

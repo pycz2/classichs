@@ -177,6 +177,13 @@ func _full_table() -> void:
 	v._wheel.visible = true
 	await a.wait(0.3)
 	await a.shot("emote_wheel", "The emote buttons around the own hero")
+	var again := InputEventMouseButton.new()  # a second right click (on the table) closes them
+	again.button_index = MOUSE_BUTTON_RIGHT
+	again.pressed = true
+	again.position = Vector2(900, 420)
+	v._input(again)
+	await a.wait(0.2)
+	await a.shot("emote_wheel_closed", "A second right click closed the emote buttons")
 	v._wheel.visible = false
 	v.show_emote(0, "threaten")
 	v.show_emote(1, "well_played")

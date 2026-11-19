@@ -49,6 +49,14 @@ pub fn valid_user(u: &str) -> bool {
     (3..=20).contains(&u.len()) && u.bytes().all(|c| c.is_ascii_alphanumeric() || c == b'_')
 }
 
+/// The longest name a new account may take (older accounts keep up to 20 characters).
+pub const NEW_USER_MAX: usize = 16;
+
+/// A name for a new account: 3–16 letters, digits or _ (names are shown on narrow tables and lists).
+pub fn valid_new_user(u: &str) -> bool {
+    valid_user(u) && u.len() <= NEW_USER_MAX
+}
+
 pub fn valid_password(p: &str) -> bool {
     (8..=128).contains(&p.chars().count())
 }
@@ -107,6 +115,7 @@ mod tests {
     #[test]
     fn name_rules() {
         assert!(valid_user("abc_9") && !valid_user("ab") && !valid_user("a b c") && !valid_user(&"a".repeat(21)));
+        assert!(valid_new_user(&"a".repeat(16)) && !valid_new_user(&"a".repeat(17)) && valid_user(&"a".repeat(17)));
         assert!(valid_password("12345678") && !valid_password("1234567") && !valid_password(&"x".repeat(129)));
         assert!(valid_tag("Jaina") && valid_tag("Джайна1") && !valid_tag("ja") && !valid_tag("ja_na"));
         assert!(!valid_tag(&"a".repeat(17)));

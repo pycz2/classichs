@@ -1103,6 +1103,7 @@ async fn a_friend_watches_a_game() {
     let s = f.next("spectating").await;
     assert_eq!((s["game"].as_str(), s["seat"].as_u64(), s["full"].as_bool(), s["mode"].as_str()), (Some(t.game.as_str()), Some(0), Some(false), Some("casual")));
     assert_eq!(s["players"][0], name.as_str());
+    assert!(s["elapsed"].as_i64().is_some_and(|e| e >= 0), "the game's time so far, for the match clock: {}", s["elapsed"]);
     let first = f.next("spectate_state").await;
     check_state(&first, &t.mirror, &[], 0);
     nothing_about_spectators(&mut t.p[0].c).await;

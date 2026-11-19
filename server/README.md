@@ -374,7 +374,7 @@ not answer, 2 images kept. The headers of these scripts tell the details.
 | Messages from one connection | 300 per 10 s (then disconnected) |
 | Malformed messages | 20 per connection (then disconnected) |
 | Chat | 1–500 characters, 10 per 10 s, last 200 kept per pair, friends only |
-| Names | user 3–20 `[A-Za-z0-9_]`; tag 3–16 letters/digits, unique ignoring case |
+| Names | user 3–16 `[A-Za-z0-9_]` at registration (older accounts up to 20); tag 3–16 letters/digits, unique ignoring case |
 | Passwords | 8–128 characters |
 | Friends | 200 |
 | Decks kept on the server | 100 per account (all packs); a name 0–60 characters; 60 `deck_save` per 10 s |
@@ -478,7 +478,8 @@ Full details: the design doc.
 - Spectators (module `spectate`): a friend's entry in `friends` carries `in_game: {game,
   mode}` (null when not in a game). `spectate {user}` (friends only: `error not_friends`;
   `error not_in_game`; `error spectate` when the game has 20 spectators or the asker plays
-  one) → `spectating {game, mode, pack, players: [n0, n1], seat, full}` and at once a
+  one) → `spectating {game, mode, pack, players: [n0, n1], seat, full, elapsed}` (elapsed: the
+  seconds the game has run, for the spectator's match clock) and at once a
   `spectate_state {game, view, events: [], result}` with the current view, then one after every
   change (the shape of `state`). `full: false`: the view of the friend's seat (the friend's
   hand open, the opponent's hidden, as the friend sees it); `full: true` (tournaments,

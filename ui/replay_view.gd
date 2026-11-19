@@ -13,6 +13,7 @@ extends Control
 signal back
 
 const BAR_H := 124.0
+const TEXT_W := 346.0  # the turn and the players, left of the buttons
 const SPEEDS := [1.0, 2.0, 4.0]
 const PAUSE := 0.9  # seconds between actions at 1x, after the table's animation
 ## The bar's buttons: [name, icon, what it does (English key)].
@@ -70,18 +71,22 @@ func _build_sides(w: float) -> void:
 		face.tooltip_text = CardText.name(replay.hero(p))
 		add_child(face)
 		_faces[p] = face
-		var n := Palette.label(ReplaysView._name(replay.name(p)), 16)
-		n.position = Vector2(4, face.position.y + 90)
-		n.size = Vector2(w - 8, 24)
+		var col := VBoxContainer.new()  # the name (two lines at most, by words), the hero's under it
+		col.position = Vector2(4, face.position.y + 90)
+		col.size = Vector2(w - 8, 0)
+		col.add_theme_constant_override("separation", 0)
+		add_child(col)
+		var n := Palette.label(Profile.short(ReplaysView._name(replay.name(p))), 16)
+		n.name = "Name%d" % p
+		n.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		n.max_lines_visible = 2
 		n.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		n.clip_text = true
-		add_child(n)
+		col.add_child(n)
 		var h := Palette.label(CardText.name(replay.hero(p)), 14, Palette.MUTED)
-		h.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # (before the size: else it grows to one line)
+		h.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		h.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		h.position = Vector2(4, face.position.y + 114)
-		h.size = Vector2(w - 8, 40)
-		add_child(h)
+		col.add_child(h)
+		_fit(h, w - 8, 11)  # one line if a smaller font does it ("Jaina Proudmoore" beside "Anduin Wrynn")
 
 
 func _build_bar() -> void:
@@ -118,13 +123,16 @@ func _build_bar() -> void:
 	_turn_line = Palette.label("", 22, Palette.ATTACK)
 	_turn_line.name = "TurnLine"
 	_turn_line.position = Vector2(150, 54)
-	_turn_line.size = Vector2(290, 30)
+	_turn_line.size = Vector2(TEXT_W, 30)
 	_turn_line.clip_text = true
 	bar.add_child(_turn_line)
-	_sub_line = Palette.label("", 17, Palette.MUTED)
-	_sub_line.position = Vector2(150, 86)
-	_sub_line.size = Vector2(290, 24)
-	_sub_line.clip_text = true
+	_sub_line = Palette.label("", 15, Palette.MUTED)
+	_sub_line.name = "SubLine"
+	_sub_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # (two lines when the names are long)
+	_sub_line.max_lines_visible = 2
+	_sub_line.add_theme_constant_override("line_spacing", -3)
+	_sub_line.position = Vector2(150, 80)
+	_sub_line.size = Vector2(TEXT_W, 42)
 	bar.add_child(_sub_line)
 	var row := HBoxContainer.new()
 	row.name = "Transport"
@@ -135,9 +143,9 @@ func _build_bar() -> void:
 	for i in CONTROLS.size():
 		var spec: Array = CONTROLS[i]
 		var b := _icon_button(spec[0], spec[1], tr(spec[2]), fns[i])
-		b.custom_minimum_size = Vector2(88 if spec[0] == "Play" else 70, 60)
+		b.custom_minimum_size = Vector2(80 if spec[0] == "Play" else 62, 60)
 		row.add_child(b)
-	row.position = Vector2(450, 56)
+	row.position = Vector2(160 + TEXT_W, 56)
 	var speed := _icon_button("Speed", "", tr("Speed"), func():
 		_speed = (_speed + 1) % SPEEDS.size()
 		Anim.boost = SPEEDS[_speed]  # the table's animations too
@@ -283,9 +291,10 @@ func _update_labels(k: int) -> void:
 		_turn_line.text = tr("Mulligan")
 	else:
 		var who := g.current if g and k == at else _mover(k)
-		_turn_line.text = tr("Turn %d — %s") % [turn, replay.name(who)]
+		_turn_line.text = tr("Turn %d — %s") % [turn, _shown(who)]
+	_fit(_turn_line, TEXT_W, 15)
 	var mode := str(replay.data.get("mode", ""))
-	_sub_line.text = "%s  vs  %s" % [ReplaysView._name(replay.name(replay.me())), ReplaysView._name(replay.name(1 - replay.me()))]
+	_sub_line.text = "%s  vs  %s" % [_shown(replay.me()), _shown(1 - replay.me())]
 	if mode != "":
 		_sub_line.text += "  ·  " + tr(ReplaysView.MODES.get(mode, mode))
 	var w := replay.winner()
@@ -293,7 +302,8 @@ func _update_labels(k: int) -> void:
 		_faces[p].won = k >= replay.size() and w == p
 		_faces[p].queue_redraw()
 	_count.text = tr("Action %d of %d") % [k, replay.size()]
-	_result.text = (tr("%s won") % replay.name(w) if w >= 0 else tr("Draw")) if k >= replay.size() else ""
+	_result.text = (tr("%s won") % _shown(w) if w >= 0 else tr("Draw")) if k >= replay.size() else ""
+	_fit(_result, 152, 11)
 	(_result.get_parent() as Control).visible = _result.text != ""
 	for id in ["ToStart", "TurnBack", "StepBack"]:
 		_buttons[id].disabled = k == 0
@@ -301,6 +311,22 @@ func _update_labels(k: int) -> void:
 		_buttons[id].disabled = k >= replay.size()
 	for id in _buttons:
 		_buttons[id].modulate.a = 0.4 if _buttons[id].disabled else 1.0
+
+
+## Player p's name as the bar and the sides show it (a long one ends in "…").
+func _shown(p: int) -> String:
+	return Profile.short(ReplaysView._name(replay.name(p)))
+
+
+## A label's font from its size at the start down to least, until its text fits width in one line.
+static func _fit(l: Label, width: float, least: int) -> void:
+	if not l.has_meta("font_size"):
+		l.set_meta("font_size", l.get_theme_font_size("font_size"))
+	var fs: int = l.get_meta("font_size")
+	var font := l.get_theme_font("font")
+	while fs > least and font.get_string_size(l.text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > width:
+		fs -= 1
+	l.add_theme_font_size_override("font_size", fs)
 
 
 ## Who moves after k actions while scrubbing (the action's player; the table is not built yet).

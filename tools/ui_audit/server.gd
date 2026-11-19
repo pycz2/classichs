@@ -197,6 +197,9 @@ func _friends() -> void:
 	if await until(func(): return m.watch_view != null, 15.0):
 		await a.settle(2.5)
 		await a.shot("watch", "Watching a friend's game")
+		(m.watch_view.find_child("WatchEye", true, false) as Button).pressed.emit()
+		await a.wait(0.2)
+		await a.shot("watch_eye", "Watching: the eye pressed shows who plays whom")
 		m.close_watch()
 		await a.settle(0.6)
 	else:
