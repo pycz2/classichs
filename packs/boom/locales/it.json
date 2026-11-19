@@ -1,0 +1,14 @@
+{
+ "sets": {
+  "BOOMSDAY": "Operazione Apocalisse"
+ },
+ "classes": {
+  "WHIZBANG": "Frizzabombe"
+ },
+ "mechanics": {
+  "MODULAR": {
+   "name": "Magnetismo",
+   "tip": "Gioca questo servitore a sinistra di un Robot per fonderli insieme!"
+  }
+ }
+}

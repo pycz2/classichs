@@ -1,0 +1,952 @@
+{
+ "AT_103": {
+  "race": "BEAST"
+ },
+ "BOT_031": {
+  "script": "scripts/boom_cards.lua#BOT_031",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_033": {
+  "script": "scripts/boom_cards.lua#BOT_033",
+  "fx": {
+   "element": "fire",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "BOT_034": {
+  "script": "scripts/boom_cards.lua#BOT_034",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_038": {
+  "script": "scripts/boom_cards.lua#BOT_038",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_039": {
+  "script": "scripts/boom_cards.lua#BOT_039"
+ },
+ "BOT_042": {
+  "script": "scripts/boom_cards.lua#BOT_042",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "armor"
+  }
+ },
+ "BOT_054": {
+  "script": "scripts/boom_cards.lua#BOT_054",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "gain"
+  }
+ },
+ "BOT_059": {
+  "script": "scripts/boom_cards.lua#BOT_059"
+ },
+ "BOT_066": {
+  "script": "scripts/boom_cards.lua#BOT_066",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_067": {
+  "script": "scripts/boom_cards.lua#BOT_067",
+  "fx": {
+   "element": "fire",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "BOT_069": {
+  "script": "scripts/boom_cards.lua#BOT_069",
+  "fx": {
+   "element": "fire",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_079": {
+  "script": "scripts/boom_cards.lua#BOT_079",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_083": {
+  "script": "scripts/boom_cards.lua#BOT_083",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_084": {
+  "script": "scripts/boom_cards.lua#BOT_084",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_087": {
+  "script": "scripts/boom_cards.lua#BOT_087",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_093": {
+  "script": "scripts/boom_cards.lua#BOT_093",
+  "fx": {
+   "element": "lightning",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_098": {
+  "script": "scripts/boom_cards.lua#BOT_098"
+ },
+ "BOT_099": {
+  "script": "scripts/boom_cards.lua#BOT_099",
+  "fx": {
+   "element": "lightning",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "BOT_101": {
+  "script": "scripts/boom_cards.lua#BOT_101",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_102": {
+  "script": "scripts/boom_cards.lua#BOT_102",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_103": {
+  "script": "scripts/boom_cards.lua#BOT_103"
+ },
+ "BOT_104": {
+  "script": "scripts/boom_cards.lua#BOT_104",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_107": {
+  "script": "scripts/boom_cards.lua#BOT_107"
+ },
+ "BOT_216": {
+  "script": "scripts/boom_cards.lua#BOT_216",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_218": {
+  "script": "scripts/boom_cards.lua#BOT_218"
+ },
+ "BOT_219": {
+  "script": "scripts/boom_cards.lua#BOT_219",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "BOT_219t": {
+  "script": "scripts/boom_cards.lua#BOT_219t",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "BOT_222": {
+  "script": "scripts/boom_cards.lua#BOT_222",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "BOT_224": {
+  "script": "scripts/boom_cards.lua#BOT_224",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_226": {
+  "script": "scripts/boom_cards.lua#BOT_226",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_234": {
+  "script": "scripts/boom_cards.lua#BOT_234",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "debuff"
+  }
+ },
+ "BOT_236": {
+  "script": "scripts/boom_cards.lua#BOT_236"
+ },
+ "BOT_237": {
+  "keywords": [
+   "ELUSIVE",
+   "MODULAR"
+  ]
+ },
+ "BOT_238": {
+  "armor": 7,
+  "power": "BOT_238p",
+  "script": "scripts/boom_cards.lua#BOT_238"
+ },
+ "BOT_238p1": {
+  "script": "scripts/boom_cards.lua#BOT_238p1",
+  "fx": {
+   "element": "lightning",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "BOT_238p2": {
+  "script": "scripts/boom_cards.lua#BOT_238p2",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "armor"
+  }
+ },
+ "BOT_238p3": {
+  "script": "scripts/boom_cards.lua#BOT_238p3",
+  "fx": {
+   "element": "fire",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "BOT_238p4": {
+  "refs": [
+   "DISCOVER"
+  ],
+  "script": "scripts/boom_cards.lua#BOT_238p4",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_238p6": {
+  "script": "scripts/boom_cards.lua#BOT_238p6",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_242": {
+  "script": "scripts/boom_cards.lua#BOT_242",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_243": {
+  "script": "scripts/boom_cards.lua#BOT_243",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_245": {
+  "script": "scripts/boom_cards.lua#BOT_245",
+  "fx": {
+   "element": "lightning",
+   "cast": "none",
+   "hit": "smoke"
+  }
+ },
+ "BOT_246": {
+  "script": "scripts/boom_cards.lua#BOT_246",
+  "fx": {
+   "element": "lightning",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "BOT_251": {
+  "script": "scripts/boom_cards.lua#BOT_251",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_254": {
+  "script": "scripts/boom_cards.lua#BOT_254",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "BOT_256": {
+  "script": "scripts/boom_cards.lua#BOT_256",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_257": {
+  "script": "scripts/boom_cards.lua#BOT_257",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_258": {
+  "script": "scripts/boom_cards.lua#BOT_258",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_263": {
+  "script": "scripts/boom_cards.lua#BOT_263",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "BOT_267": {
+  "script": "scripts/boom_cards.lua#BOT_267",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_270": {
+  "script": "scripts/boom_cards.lua#BOT_270",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_280": {
+  "script": "scripts/boom_cards.lua#BOT_280"
+ },
+ "BOT_283": {
+  "script": "scripts/boom_cards.lua#BOT_283",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_286": {
+  "script": "scripts/boom_cards.lua#BOT_286"
+ },
+ "BOT_288": {
+  "script": "scripts/boom_cards.lua#BOT_288",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_291": {
+  "script": "scripts/boom_cards.lua#BOT_291",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_296": {
+  "script": "scripts/boom_cards.lua#BOT_296",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_299": {
+  "refs": [
+   "DISCOVER"
+  ],
+  "script": "scripts/boom_cards.lua#BOT_299",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_308": {
+  "script": "scripts/boom_cards.lua#BOT_308",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_312": {
+  "script": "scripts/boom_cards.lua#BOT_312",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_401": {
+  "script": "scripts/boom_cards.lua#BOT_401",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_402": {
+  "script": "scripts/boom_cards.lua#BOT_402",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_404": {
+  "script": "scripts/boom_cards.lua#BOT_404",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_406": {
+  "keywords": [
+   "TRIGGER_VISUAL"
+  ],
+  "script": "scripts/boom_cards.lua#BOT_406"
+ },
+ "BOT_407": {
+  "script": "scripts/boom_cards.lua#BOT_407"
+ },
+ "BOT_411": {
+  "script": "scripts/boom_cards.lua#BOT_411",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_413": {
+  "script": "scripts/boom_cards.lua#BOT_413",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_419": {
+  "script": "scripts/boom_cards.lua#BOT_419",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_420": {
+  "script": "scripts/boom_cards.lua#BOT_420",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_422": {
+  "script": "scripts/boom_cards.lua#BOT_422"
+ },
+ "BOT_422a": {
+  "script": "scripts/boom_cards.lua#BOT_422a",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "BOT_422b": {
+  "script": "scripts/boom_cards.lua#BOT_422b",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_423": {
+  "script": "scripts/boom_cards.lua#BOT_423"
+ },
+ "BOT_424": {
+  "script": "scripts/boom_cards.lua#BOT_424",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_429": {
+  "script": "scripts/boom_cards.lua#BOT_429",
+  "fx": {
+   "element": "fire",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_431": {
+  "script": "scripts/boom_cards.lua#BOT_431",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_433": {
+  "script": "scripts/boom_cards.lua#BOT_433",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_434": {
+  "script": "scripts/boom_cards.lua#BOT_434"
+ },
+ "BOT_435": {
+  "script": "scripts/boom_cards.lua#BOT_435",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_436": {
+  "script": "scripts/boom_cards.lua#BOT_436",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_437": {
+  "script": "scripts/boom_cards.lua#BOT_437",
+  "fx": {
+   "element": "poison",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "BOT_438": {
+  "script": "scripts/boom_cards.lua#BOT_438",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "BOT_443": {
+  "script": "scripts/boom_cards.lua#BOT_443",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_444": {
+  "script": "scripts/boom_cards.lua#BOT_444",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "gain"
+  }
+ },
+ "BOT_445": {
+  "script": "scripts/boom_cards.lua#BOT_445",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_447": {
+  "script": "scripts/boom_cards.lua#BOT_447",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_448": {
+  "script": "scripts/boom_cards.lua#BOT_448",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_451": {
+  "script": "scripts/boom_cards.lua#BOT_451",
+  "fx": {
+   "element": "lightning",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_453": {
+  "script": "scripts/boom_cards.lua#BOT_453",
+  "fx": {
+   "element": "arcane",
+   "cast": "missiles",
+   "hit": "hurt"
+  }
+ },
+ "BOT_507": {
+  "script": "scripts/boom_cards.lua#BOT_507",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_508": {
+  "script": "scripts/boom_cards.lua#BOT_508",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "BOT_509": {
+  "script": "scripts/boom_cards.lua#BOT_509",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_511": {
+  "script": "scripts/boom_cards.lua#BOT_511",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_511t": {
+  "script": "scripts/boom_cards.lua#BOT_511t",
+  "fx": {
+   "element": "fire",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "BOT_517": {
+  "script": "scripts/boom_cards.lua#BOT_517",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "debuff"
+  }
+ },
+ "BOT_521": {
+  "script": "scripts/boom_cards.lua#BOT_521",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "BOT_523": {
+  "script": "scripts/boom_cards.lua#BOT_523"
+ },
+ "BOT_529": {
+  "script": "scripts/boom_cards.lua#BOT_529",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "BOT_531": {
+  "script": "scripts/boom_cards.lua#BOT_531",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_532": {
+  "script": "scripts/boom_cards.lua#BOT_532",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_533": {
+  "script": "scripts/boom_cards.lua#BOT_533",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_535": {
+  "script": "scripts/boom_cards.lua#BOT_535",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_536": {
+  "script": "scripts/boom_cards.lua#BOT_536",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_537": {
+  "script": "scripts/boom_cards.lua#BOT_537",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_538": {
+  "script": "scripts/boom_cards.lua#BOT_538",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_539": {
+  "script": "scripts/boom_cards.lua#BOT_539",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_540": {
+  "script": "scripts/boom_cards.lua#BOT_540",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_543": {
+  "script": "scripts/boom_cards.lua#BOT_543",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_544": {
+  "script": "scripts/boom_cards.lua#BOT_544",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_550": {
+  "script": "scripts/boom_cards.lua#BOT_550",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_552": {
+  "script": "scripts/boom_cards.lua#BOT_552",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_555": {
+  "script": "scripts/boom_cards.lua#BOT_555"
+ },
+ "BOT_558": {
+  "script": "scripts/boom_cards.lua#BOT_558",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_559": {
+  "script": "scripts/boom_cards.lua#BOT_559"
+ },
+ "BOT_562": {
+  "script": "scripts/boom_cards.lua#BOT_562",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_565": {
+  "script": "scripts/boom_cards.lua#BOT_565",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_566": {
+  "script": "scripts/boom_cards.lua#BOT_566"
+ },
+ "BOT_567": {
+  "script": "scripts/boom_cards.lua#BOT_567",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "BOT_568": {
+  "script": "scripts/boom_cards.lua#BOT_568",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_573": {
+  "script": "scripts/boom_cards.lua#BOT_573",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_576": {
+  "script": "scripts/boom_cards.lua#BOT_576"
+ },
+ "BOT_600": {
+  "script": "scripts/boom_cards.lua#BOT_600",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_601": {
+  "script": "scripts/boom_cards.lua#BOT_601",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_606": {
+  "script": "scripts/boom_cards.lua#BOT_606",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "BOT_907": {
+  "script": "scripts/boom_cards.lua#BOT_907",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_908": {
+  "script": "scripts/boom_cards.lua#BOT_908",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "BOT_909": {
+  "script": "scripts/boom_cards.lua#BOT_909",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "BOT_910": {
+  "script": "scripts/boom_cards.lua#BOT_910",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "BOT_912": {
+  "refs": [
+   "MODULAR"
+  ],
+  "script": "scripts/boom_cards.lua#BOT_912",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "BOT_913": {
+  "script": "scripts/boom_cards.lua#BOT_913",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "smoke"
+  }
+ },
+ "CFM_605": {
+  "script": "scripts/boom.lua#CFM_605"
+ },
+ "GIL_142": {
+  "script": "scripts/boom.lua#GIL_142"
+ },
+ "GIL_198": {
+  "script": "scripts/boom.lua#GIL_198"
+ },
+ "GIL_545": {
+  "race": null
+ },
+ "GIL_584": {
+  "race": "DEMON"
+ },
+ "GIL_598": {
+  "script": "scripts/boom.lua#GIL_598"
+ },
+ "GIL_614": {
+  "script": "scripts/boom.lua#GIL_614"
+ },
+ "GIL_620": {
+  "script": "scripts/boom.lua#GIL_620"
+ },
+ "GIL_691": {
+  "script": "scripts/boom.lua#GIL_691"
+ },
+ "GVG_072": {
+  "script": "scripts/boom.lua#GVG_072"
+ },
+ "ICC_207": {
+  "script": "scripts/boom.lua#ICC_207"
+ },
+ "ICC_215": {
+  "script": "scripts/boom.lua#ICC_215"
+ },
+ "ICC_235": {
+  "script": "scripts/boom.lua#ICC_235"
+ },
+ "ICC_415": {
+  "script": "scripts/boom.lua#ICC_415"
+ },
+ "ICC_823": {
+  "script": "scripts/boom.lua#ICC_823"
+ },
+ "KAR_114": {
+  "script": "scripts/boom.lua#KAR_114"
+ },
+ "LOE_038": {
+  "cost": 8
+ },
+ "LOE_051": {
+  "race": null
+ },
+ "LOOT_017": {
+  "script": "scripts/boom.lua#LOOT_017"
+ },
+ "LOOT_093": {
+  "cost": 5
+ },
+ "LOOT_216": {
+  "script": "scripts/boom.lua#LOOT_216"
+ },
+ "LOOT_306": {
+  "cost": 6
+ },
+ "LOOT_329": {
+  "race": null
+ },
+ "LOOT_353": {
+  "script": "scripts/boom.lua#LOOT_353"
+ },
+ "LOOT_412": {
+  "script": "scripts/boom.lua#LOOT_412"
+ },
+ "LOOT_539": {
+  "cost": 7
+ },
+ "OG_073": {
+  "script": "scripts/boom.lua#OG_073"
+ },
+ "OG_335": {
+  "script": "scripts/boom.lua#OG_335"
+ },
+ "UNG_029": {
+  "script": "scripts/boom.lua#UNG_029"
+ },
+ "UNG_032": {
+  "script": "scripts/boom.lua#UNG_032"
+ },
+ "UNG_060": {
+  "script": "scripts/boom.lua#UNG_060"
+ },
+ "UNG_067t1": {
+  "script": "scripts/boom.lua#UNG_067t1"
+ },
+ "VAN_CS2_003": {
+  "script": "scripts/boom.lua#VAN_CS2_003"
+ },
+ "VAN_EX1_105": {
+  "race": "ELEMENTAL"
+ },
+ "VAN_EX1_339": {
+  "script": "scripts/boom.lua#VAN_EX1_339"
+ },
+ "VAN_EX1_345": {
+  "script": "scripts/boom.lua#VAN_EX1_345"
+ },
+ "VAN_EX1_620": {
+  "race": "ELEMENTAL"
+ }
+}

@@ -10,7 +10,7 @@ extends RefCounted
 const MESSAGES := ["This card can't be put in a deck", "This card belongs to another class",
 	"The deck already has 30 cards", "No more copies of this card are allowed", "Unknown hero",
 	"A deck needs exactly 30 cards. Cards now: %d", "Not yet! You have more cards to play!",
-	"Not yet! You can still attack."]
+	"Not yet! You can still attack.", "This card is a whole deck: it goes alone"]
 
 static var _engine: Object
 static var _hooks := {}

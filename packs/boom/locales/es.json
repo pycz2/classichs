@@ -1,0 +1,14 @@
+{
+ "sets": {
+  "BOOMSDAY": "El Proyecto Armagebum"
+ },
+ "classes": {
+  "WHIZBANG": "Mirífico"
+ },
+ "mechanics": {
+  "MODULAR": {
+   "name": "Magnetismo",
+   "tip": "Juega este esbirro a la izquierda de un Meca para fusionarlos."
+  }
+ }
+}

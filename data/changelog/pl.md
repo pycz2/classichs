@@ -11,6 +11,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Ekrany poza partią są porządniejsze. W bibliotece gier każda gra ma własny kafelek z obrazkiem i nazwą, a pod nim pełną nazwę z rokiem i rozmiar pliku w języku interfejsu; błąd po dodaniu pliku widać w całości. Komunikaty zawijają się na kilka wierszy, zamyka je krzyżyk i pokazują się także bez logowania na serwer. Panel znajomych, czat i okna serwera nie prześwitują już przez ekran pod spodem, a zapisany tag od razu pojawia się w panelu. Błędy logowania, wyniki sprawdzania pakietu i zły adres serwera są wyjaśnione w języku interfejsu. W powtórkach długie nazwy kończą się wielokropkiem, a „Oglądaj” jest wyłączone dla gry, której nie ma na urządzeniu, i podpowiedź mówi, czego brakuje.
 - Tytuły gier są teraz pisane krojem Alegreya SC. W starym kroju 1 wyglądała jak I, a „OO” zlewało się w pierścienie; nowy ma cyrylicę, więc rosyjskie tytuły wyglądają jak angielskie.
 ### Dodano
+- Projekt Hukatomba 2018 (7 sierpnia 2018): stronnicy z Magnetyzmem łączący się z mechami, karty Omega na 10 kryształów many, Projekty dla obu graczy, Doktor Huk z nową mocą bohatera co turę, talie Świstomiga, bomby w talii przeciwnika.
 - Stół pokazuje, gdzie trafia efekt. Gdy karty w ręce dostają wzmocnienie, przez rękę przechodzi pas światła, a nad kartami wznoszą się strzałki. Efekt na talię sprawia, że talia pulsuje i nad nią rozbłyska pierścień. Nowa lub tańsza moc specjalna rozbłyska na swoim miejscu.
 - Karta wtasowana do talii (twojej lub przeciwnika) leci do tej talii od tego, co ją tam wysłało: od zagranego zaklęcia, stronnika, bohatera, z ręki albo z drugiej talii. Karta dodana do ręki też leci ze swojego źródła: Włam bierze karty od bohatera przeciwnika, karta stworzona przez stronnika wylatuje ze stronnika. Karta, której nie możesz widzieć, leci rewersem do góry.
 - Pojedynek: z każdej talii wylatuje karta, każda podpisana imieniem właściciela, obok duży koszt. Wygrana karta rozbłyska, przegrana ciemnieje, potem obie wracają do talii.
@@ -25,6 +26,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Obrażenia i zamrożenie przychodzą w tej samej chwili: Pocisk lodu, Stożek zimna, Zamieć i cios Żywiołaka wody trafiają i zamrażają naraz.
 - Nowe zamrożenie: kryształki lodu rozrastają się po portrecie od brzegu, szron okala krawędź, po lodzie przebiegają odblaski. Gdy stronnik albo bohater odmarza, lód topnieje.
 
+- Lunozwierz z dżungli znów jest Bestią w grach od „Ligi Odkrywców” do „Wiedźmiego Lasu”, jak w Hearthstone do aktualizacji 11.4 (2018). Nie miał typu, więc karty szukające Bestii go nie liczyły.
 ## [0.71.1] - 2026-11-13
 
 ### Naprawiono

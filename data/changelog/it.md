@@ -11,6 +11,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Le schermate fuori dalla partita sono più ordinate. Nella libreria dei giochi ogni gioco ha la sua tessera illustrata con il nome, e sotto il nome completo con l'anno e la dimensione del file nella lingua dell'interfaccia; un errore dopo l'aggiunta di un file si vede per intero. I messaggi vanno a capo su più righe, si chiudono con una croce e compaiono anche senza accesso a un server. Il pannello degli amici, la chat e le finestre del server non lasciano più trasparire lo schermo dietro, e un tag salvato compare subito nel pannello. Gli errori di accesso, i risultati del controllo di un pacchetto e un indirizzo di server sbagliato sono spiegati nella lingua dell'interfaccia. Nei replay i nomi lunghi finiscono con i puntini, e «Guarda» è disattivato per un gioco che non è sul dispositivo, con un suggerimento che dice cosa manca.
 - I titoli dei giochi ora usano Alegreya SC. Nel vecchio carattere l'1 sembrava una I e «OO» si fondeva in anelli; il nuovo ha il cirillico, quindi i titoli russi appaiono come quelli inglesi.
 ### Aggiunto
+- Operazione Apocalisse 2018 (7 agosto 2018): servitori con Magnetismo che si fondono con i Robot, carte Omega per 10 Cristalli di Mana, Progetti per entrambi i giocatori, il Dott. Boom con un nuovo Potere Eroe a ogni turno, i mazzi di Frizzabombe, bombe nel mazzo avversario.
 - Il tavolo mostra dove arriva un effetto. Quando le carte in mano vengono potenziate, una fascia di luce passa sulla mano e frecce salgono sopra le carte. Un effetto sul mazzo lo fa gonfiare e un anello si accende sopra. Un Potere Eroe nuovo o più economico si illumina al suo posto.
 - Una carta mescolata in un mazzo (il vostro o quello dell'avversario) vola in quel mazzo da ciò che l'ha mandata: la magia giocata, un servitore, un eroe, una mano o l'altro mazzo. Anche una carta aggiunta alla mano vola dalla sua origine: Furto prende carte dall'eroe avversario, una carta creata da un servitore esce dal servitore. Una carta che non potete vedere vola coperta.
 - Giostra: da ogni mazzo esce una carta, ognuna con il nome del proprietario e il suo costo in grande accanto. La carta vincente si illumina, quella perdente si scurisce, poi entrambe tornano nei mazzi.
@@ -25,6 +26,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Danno e congelamento arrivano nello stesso momento: Dardo di Gelo, Cono di Freddo, Tormenta e il colpo di un Elementale dell'Acqua colpiscono e congelano insieme.
 - Un nuovo congelamento: cristalli di ghiaccio si allargano sul ritratto dal bordo, la brina segue il contorno, riflessi scorrono sul ghiaccio. Quando un servitore o un eroe si scongela, il ghiaccio si scioglie.
 
+- Il Lunagufo Silvano torna a essere una Bestia nei giochi da La Lega degli Esploratori a Il Bosco Tetro, come in Hearthstone fino alla patch 11.4 (2018). Non aveva una tribù, e le carte che cercano Bestie non lo contavano.
 ## [0.71.1] - 2026-11-13
 
 ### Corretto

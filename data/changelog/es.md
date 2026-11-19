@@ -11,6 +11,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 - Las pantallas fuera de la partida están más ordenadas. En la biblioteca de juegos cada juego tiene su propio mosaico con imagen y nombre, y debajo el nombre completo con el año y el tamaño del archivo en el idioma de la interfaz; un error al añadir un archivo se ve entero. Los avisos ocupan varias líneas, se cierran con una cruz y se muestran también sin iniciar sesión en un servidor. El panel de amigos, el chat y las ventanas del servidor ya no dejan ver la pantalla de detrás, y una etiqueta guardada aparece en el panel al momento. Los errores de inicio de sesión, los resultados de la comprobación de un paquete y una dirección de servidor incorrecta se explican en el idioma de la interfaz. En las repeticiones los nombres largos terminan en puntos suspensivos, y «Ver» está desactivado para un juego que no está en el dispositivo, con una pista que dice qué falta.
 - Los títulos de los juegos usan ahora Alegreya SC. En la fuente anterior el 1 parecía una I y «OO» se fundía en anillos; la nueva tiene cirílico, así que los títulos rusos se ven como los ingleses.
 ### Añadido
+- El Proyecto Armagebum 2018 (7 de agosto de 2018): esbirros con Magnetismo que se fusionan con Robots, cartas Omega para 10 cristales de maná, Proyectos para ambos jugadores, el Dr. Bum con un nuevo poder de héroe cada turno, los mazos de Mirífico, bombas en el mazo del rival.
 - La mesa muestra dónde cae un efecto. Cuando se mejoran cartas en la mano, una franja de luz pasa por la mano y suben flechas sobre las cartas. Un efecto sobre un mazo lo hace crecer y brilla un anillo encima. Un poder de héroe nuevo o más barato se ilumina en su sitio.
 - Una carta barajada en un mazo (el tuyo o el del oponente) vuela a ese mazo desde lo que la envió: el hechizo jugado, un esbirro, un héroe, una mano o el otro mazo. Una carta añadida a una mano también vuela desde su origen: Pillaje toma cartas del héroe rival, una carta creada por un esbirro sale del esbirro. Una carta que no puedes ver vuela boca abajo.
 - Justa: sale una carta de cada mazo, cada una con el nombre de su dueño y su coste en grande al lado. La carta ganadora se ilumina, la perdedora se oscurece y luego ambas vuelven a sus mazos.
@@ -25,6 +26,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 - El daño y la congelación llegan en el mismo momento: Descarga de Escarcha, Cono de frío, Ventisca y el golpe de un Elemental de agua golpean y congelan a la vez.
 - Nueva congelación: cristales de hielo crecen sobre el retrato desde el borde, hay escarcha en el contorno y brillos recorren el hielo. Cuando un esbirro o un héroe se descongela, el hielo se derrite.
 
+- El Lechúcico de la selva vuelve a ser una Bestia en los juegos de La Liga de Expedicionarios a El Bosque Embrujado, como en Hearthstone hasta el parche 11.4 (2018). No tenía tipo, y las cartas que buscan Bestias no lo contaban.
 ## [0.71.1] - 2026-11-13
 
 ### Corregido

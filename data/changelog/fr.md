@@ -11,6 +11,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Les écrans hors partie sont plus soignés. Dans la bibliothèque des jeux, chaque jeu a sa propre tuile illustrée avec son nom, et dessous le nom complet avec l'année et la taille du fichier dans la langue de l'interface ; une erreur après l'ajout d'un fichier s'affiche en entier. Les messages passent à la ligne, se ferment d'une croix et s'affichent aussi sans connexion à un serveur. Le panneau des amis, le chat et les fenêtres du serveur ne laissent plus voir l'écran derrière eux, et un tag enregistré apparaît tout de suite dans le panneau. Les erreurs de connexion, les résultats de la vérification d'un pack et une adresse de serveur incorrecte sont expliqués dans la langue de l'interface. Dans les rediffusions, les noms longs finissent par des points de suspension, et « Regarder » est désactivé pour un jeu absent de l'appareil, son info-bulle disant ce qui manque.
 - Les titres des jeux sont maintenant en Alegreya SC. Dans l'ancienne police un 1 ressemblait à un I et « OO » se fondait en anneaux ; la nouvelle a le cyrillique, les titres russes ressemblent donc aux anglais.
 ### Ajouté
+- Projet Armageboum 2018 (7 août 2018) : serviteurs avec Magnétisme qui fusionnent avec les Méca, cartes Oméga pour 10 cristaux de mana, Projets pour les deux joueurs, le Dr Boum avec un nouveau pouvoir héroïque à chaque tour, les decks de Mystifix, des bombes dans le deck adverse.
 - La table montre où un effet porte. Quand des cartes en main sont améliorées, une bande de lumière passe sur la main et des flèches montent au-dessus des cartes. Un effet sur un deck le fait enfler et un anneau s'allume au-dessus. Un pouvoir héroïque nouveau ou moins cher s'illumine à sa place.
 - Une carte mélangée dans un deck (le vôtre ou celui de l'adversaire) vole jusqu'à ce deck depuis ce qui l'y envoie : le sort joué, un serviteur, un héros, une main ou l'autre deck. Une carte ajoutée à une main vole aussi depuis sa source : Larcin prend des cartes au héros adverse, une carte créée par un serviteur sort du serviteur. Une carte que vous ne devez pas voir vole face cachée.
 - Joute : une carte sort de chaque deck, chacune avec le nom de son propriétaire et son coût en grand à côté. La carte gagnante s'illumine, la perdante s'assombrit, puis les deux retournent dans leurs decks.
@@ -25,6 +26,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Les dégâts et le gel arrivent au même moment : Éclair de givre, Cône de froid, Blizzard et le coup d'un Élémentaire d’eau frappent et gèlent d'un coup.
 - Un nouveau gel : des cristaux de glace s'étendent sur le portrait depuis le bord, du givre borde le contour, des reflets courent sur la glace. Quand un serviteur ou un héros dégèle, la glace fond.
 
+- Le Sélénien de la jungle est de nouveau une Bête dans les jeux de La Ligue des explorateurs au Bois Maudit, comme dans Hearthstone jusqu’au patch 11.4 (2018). Il n’avait pas de type, et les cartes qui cherchent des Bêtes ne le comptaient pas.
 ## [0.71.1] - 2026-11-13
 
 ### Corrigé

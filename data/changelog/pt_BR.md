@@ -11,6 +11,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - As telas fora da partida ficaram mais arrumadas. Na biblioteca de jogos cada jogo tem seu próprio bloco com imagem e nome, e embaixo o nome completo com o ano e o tamanho do arquivo no idioma da interface; um erro ao adicionar um arquivo aparece inteiro. Os avisos quebram em várias linhas, fecham com um X e aparecem também sem login em um servidor. O painel de amigos, o chat e as janelas do servidor não deixam mais a tela de trás aparecer, e uma tag salva aparece no painel na hora. Erros de login, os resultados da verificação de um pacote e um endereço de servidor errado são explicados no idioma da interface. Nos replays nomes longos terminam com reticências, e “Assistir” fica desligado para um jogo que não está no aparelho, com uma dica dizendo o que falta.
 - Os títulos dos jogos agora usam Alegreya SC. Na fonte antiga o 1 parecia um I e “OO” se fundia em anéis; a nova tem cirílico, então os títulos em russo ficam como os em inglês.
 ### Adicionado
+- Projeto Cabum 2018 (7 de agosto de 2018): lacaios Magnéticos que se fundem a Mecanoides, cards Ômega para 10 Cristais de Mana, Projetos para os dois jogadores, o Dr. Cabum com um novo Poder Heroico a cada turno, os decks de Rojão, bombas no deck do oponente.
 - A mesa mostra onde um efeito acerta. Quando cards na mão são melhorados, uma faixa de luz passa pela mão e setas sobem sobre os cards. Um efeito no deck faz o deck crescer e um anel brilhar sobre ele. Um Poder Heroico novo ou mais barato se ilumina no seu lugar.
 - Um card embaralhado em um deck (o seu ou o do oponente) voa para esse deck a partir do que o mandou: o feitiço jogado, um lacaio, um herói, uma mão ou o outro deck. Um card adicionado à mão também voa da sua origem: Roubar pega cards do herói do oponente, um card criado por um lacaio sai do lacaio. Um card que você não pode ver voa virado para baixo.
 - Justa: um card sai de cada deck, cada um com o nome do dono e o custo em destaque ao lado. O card vencedor se ilumina, o perdedor escurece, e depois os dois voltam para os decks.
@@ -25,6 +26,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Dano e congelamento chegam no mesmo momento: Seta de Gelo, Cone de Frio, Nevasca e o golpe de um Elemental da Água acertam e congelam juntos.
 - Novo congelamento: cristais de gelo crescem sobre o retrato a partir da borda, há geada no contorno e brilhos correm pelo gelo. Quando um lacaio ou herói descongela, o gelo derrete.
 
+- O Luniscante da Selva volta a ser uma Fera nos jogos de A Liga dos Exploradores a O Bosque das Bruxas, como no Hearthstone até o patch 11.4 (2018). Ele não tinha tipo, e as cartas que procuram Feras não o contavam.
 ## [0.71.1] - 2026-11-13
 
 ### Corrigido

@@ -11,6 +11,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - The screens outside a game are tidier. In the game library each game has its own picture tile with its name, and under it the full name with the year and the file size in the interface's language; an error after adding a file is shown in full. Toasts wrap to several lines, close with a cross and show without a server login too. The friends panel, the chat and the server's windows no longer let the screen behind show through, and a saved tag appears in the panel at once. Login errors, the pack check's results and a wrong server address are explained in the interface's language. In the replays long names end with an ellipsis, and Watch for a game that is not on this device is off, its tip saying what is missing.
 - Game titles are now set in Alegreya SC. In the old font a 1 looked like an I and "OO" ran together into rings; the new one has Cyrillic, so Russian titles look like the English ones.
 ### Added
+- The Boomsday Project 2018 (August 7, 2018): Magnetic minions that fuse with Mechs, Omega cards for 10 Mana Crystals, Projects for both players, Dr. Boom with a new Hero Power every turn, Whizbang's decks, Bombs in the opponent's deck.
 - The table shows where an effect lands. When cards in a hand are buffed, a band of light passes over the hand and arrows rise over the cards. An effect on a deck makes the deck swell and a ring flash over it. A new or cheaper Hero Power lights up in its place.
 - A card shuffled into a deck (yours or the opponent's) flies into that deck from whatever sent it: the spell played, a minion, a hero, a hand or the other deck. A card added to a hand flies from its source too: Burgle takes cards from the opponent's hero, Thoughtsteal from their deck, a card made by a minion comes out of the minion. A card you may not see flies as a card back.
 - Joust: a card flies out of each deck, each one labelled with whose it is and its cost shown big beside it. The winning card lights up, the losing one darkens, then both go back into their decks.
@@ -25,6 +26,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - Damage and freeze land at the same moment: Frostbolt, Cone of Cold, Blizzard and a Water Elemental's blow hit and freeze at once.
 - A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.
 
+- Jungle Moonkin is a Beast again in the games from The League of Explorers to The Witchwood, as it was in Hearthstone until patch 11.4 (2018). It had no tribe, so cards that look for Beasts did not count it.
 ## [0.71.1] - 2026-11-13
 
 ### Fixed

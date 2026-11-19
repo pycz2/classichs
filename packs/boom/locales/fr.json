@@ -1,0 +1,14 @@
+{
+ "sets": {
+  "BOOMSDAY": "Projet Armageboum"
+ },
+ "classes": {
+  "WHIZBANG": "Mystifix"
+ },
+ "mechanics": {
+  "MODULAR": {
+   "name": "Magnétisme",
+   "tip": "Jouez ce serviteur à gauche d'un Méca pour les fusionner !"
+  }
+ }
+}

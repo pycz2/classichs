@@ -11,6 +11,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Die Bildschirme außerhalb einer Partie sind aufgeräumter. In der Spielebibliothek hat jedes Spiel eine eigene Bildkachel mit seinem Namen, darunter den vollen Namen mit Jahr und die Dateigröße in der Sprache der Oberfläche; ein Fehler beim Hinzufügen einer Datei ist ganz zu lesen. Meldungen brechen auf mehrere Zeilen um, schließen sich mit einem Kreuz und erscheinen auch ohne Anmeldung an einem Server. Freundesliste, Chat und Serverfenster lassen den Bildschirm dahinter nicht mehr durchscheinen, und ein gespeichertes Tag erscheint sofort in der Liste. Anmeldefehler, die Ergebnisse der Paketprüfung und eine falsche Serveradresse werden in der Sprache der Oberfläche erklärt. In den Wiederholungen enden lange Namen mit Auslassungspunkten, und „Ansehen“ ist bei einem Spiel, das nicht auf diesem Gerät ist, ausgeschaltet; der Hinweis sagt, was fehlt.
 - Spieltitel stehen jetzt in Alegreya SC. In der alten Schrift sah eine 1 wie ein I aus und „OO“ verschmolz zu Ringen; die neue hat Kyrillisch, darum sehen russische Titel aus wie die englischen.
 ### Hinzugefügt
+- Dr. Bumms Geheimlabor 2018 (7. August 2018): magnetische Diener, die mit Mechs verschmelzen, Omega-Karten für 10 Manakristalle, Projekte für beide Spieler, Dr. Bumm mit einer neuen Heldenfähigkeit in jedem Zug, Wurbelfitz' Decks, Bomben im Deck des Gegners.
 - Der Tisch zeigt, wo ein Effekt trifft. Werden Karten auf der Hand verstärkt, zieht ein Lichtstreifen über die Hand und Pfeile steigen über den Karten auf. Ein Effekt auf ein Deck lässt das Deck anschwellen und einen Ring darüber aufleuchten. Eine neue oder billigere Heldenfähigkeit leuchtet an ihrem Platz auf.
 - Eine Karte, die in ein Deck (Eures oder das des Gegners) gemischt wird, fliegt von dem, was sie dorthin geschickt hat, in dieses Deck: vom gespielten Zauber, einem Diener, einem Helden, aus einer Hand oder aus dem anderen Deck. Eine Karte, die der Hand hinzugefügt wird, fliegt ebenfalls aus ihrer Quelle: Lange Finger holt Karten vom gegnerischen Helden, eine Karte von einem Diener kommt aus dem Diener. Eine Karte, die Ihr nicht sehen dürft, fliegt verdeckt.
 - Tjost: Aus jedem Deck fliegt eine Karte, jede mit dem Namen ihres Besitzers und groß daneben ihren Kosten. Die gewinnende Karte leuchtet auf, die verlierende wird dunkel, dann gehen beide zurück in ihre Decks.
@@ -25,6 +26,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Schaden und Einfrieren kommen im selben Moment: Frostblitz, Kältekegel, Blizzard und der Schlag eines Wasserelementars treffen und frieren zugleich ein.
 - Neues Einfrieren: Eiskristalle wachsen vom Rand über das Porträt, Reif liegt am Rand, Glanzlichter laufen über das Eis. Taut ein Diener oder Held auf, schmilzt das Eis wieder.
 
+- Der Dschungel-Mondkin ist in den Spielen von „Die Forscherliga“ bis „Der Hexenwald“ wieder ein Wildtier, wie in Hearthstone bis Patch 11.4 (2018). Er hatte keinen Typ, und Karten, die Wildtiere suchen, zählten ihn nicht.
 ## [0.71.1] - 2026-11-13
 
 ### Behoben
