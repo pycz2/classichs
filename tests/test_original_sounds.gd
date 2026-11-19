@@ -117,6 +117,19 @@ func test_card_sounds_come_from_the_set_with_the_generated_ones_behind() -> void
 	_uninstall()
 
 
+## The owner's bug: no sound set picked (a fresh install) left the generated one, so his pack's voice lines played
+## but no legendary's play music (and no card sound of its own). The pack's own local set is the one played.
+func test_a_packs_local_sound_set_plays_when_none_is_picked() -> void:
+	_install()
+	Settings.data.pack_sets.erase(_pack.id())
+	eq(Packs.choice(_pack, "sound"), "original", "no choice: the pack's local set")
+	var g := H.scene({"hero": "HERO_08", "hand": [LEEROY]}).game
+	check(Sound.music_for({"type": "play", "entity": g.players[0].hand[0].id}, g), "Leeroy's play music plays")
+	check(_sound._stinger.playing and _sound._stinger.stream != null, "its player is playing it")
+	eq(Packs.choice(_classic(), "sound"), "generated", "a pack without one: its default")
+	_uninstall()
+
+
 func test_voice_in_the_players_language_else_the_default() -> void:
 	_install()
 	TranslationServer.set_locale("ru")
