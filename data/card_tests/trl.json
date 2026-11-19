@@ -701,7 +701,7 @@
  "TRL_065": [
   {
    "kind": "play",
-   "title": "TRL_065: casts Moonfire again, then Berserker Throw",
+   "title": "TRL_065: casts Moonfire again",
    "scene": {
     "current": 0,
     "players": [
@@ -755,13 +755,6 @@
       "side": 0,
       "zone": "hand",
       "index": 0
-     }
-    },
-    {
-     "do": "hero_power",
-     "target": {
-      "side": 1,
-      "zone": "hero"
      }
     }
    ]
@@ -3018,9 +3011,9 @@
       "mana": 10,
       "max_mana": 10,
       "deck": [
-       "VAN_CS2_231",
+       "VAN_CS2_171",
        "VAN_CS2_120",
-       "VAN_CS2_231",
+       "VAN_CS2_171",
        "VAN_CS2_231"
       ],
       "hand": [
@@ -4513,8 +4506,7 @@
       "deck": [
        "VAN_CS2_120",
        "VAN_CS2_171",
-       "VAN_CS2_172",
-       "VAN_CS2_182"
+       "VAN_CS2_172"
       ],
       "hand": [
        "TRL_339"

@@ -734,16 +734,20 @@ cards.TRL_318 = {
   end,
 }
 
--- Daring Fire-Eater: your next Hero Power this turn deals 2 more damage (several stack; POWER_DAMAGE on the hero).
+-- Daring Fire-Eater: your next Hero Power this turn deals 2 more damage (several stack: TRL_FLAME on the hero, added to
+-- the power's damage before it applies; the engine's POWER_DAMAGE is an aura tag only).
 local function flame_off(g, me)
-  local n = g.tag(me, "TRL_FLAME")
-  if n > 0 then
-    g.add_tag(me, "POWER_DAMAGE", -n)
-    g.set_tag(me, "TRL_FLAME", nil)
-  end
+  g.set_tag(me, "TRL_FLAME", nil)
   g.remove_enchant(me, "ench:trl_flameweaving")
 end
 cards["ench:trl_flameweaving"] = {
+  now = {
+    predamage = function(g, me, ev)
+      if ev.source == g.power(g.ctrl(me)) and ev.amount > 0 then
+        ev.amount = ev.amount + g.tag(me, "TRL_FLAME")
+      end
+    end,
+  },
   on = {
     hero_power = function(g, me, ev)
       if g.mine(me, ev) then
@@ -759,8 +763,8 @@ cards.TRL_390 = {
   battlecry = function(g, me)
     local p = g.ctrl(me)
     local h = g.hero(p)
-    g.add_tag(h, "POWER_DAMAGE", 2)
     g.add_tag(h, "TRL_FLAME", 2)
+    g.remove_enchant(h, "ench:trl_flameweaving")
     g.enchant(h, { hooks = "ench:trl_flameweaving", player = p })
   end,
 }

@@ -3893,8 +3893,10 @@
        "VAN_CS2_231"
       ],
       "hand": [
-       "AT_045",
        "VAN_CS2_200"
+      ],
+      "board": [
+       "AT_045"
       ]
      },
      {
@@ -3911,14 +3913,6 @@
     ]
    },
    "steps": [
-    {
-     "do": "play",
-     "card": {
-      "side": 0,
-      "zone": "hand",
-      "index": 0
-     }
-    },
     {
      "do": "play",
      "card": {
