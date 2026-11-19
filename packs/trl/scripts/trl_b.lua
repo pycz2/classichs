@@ -763,13 +763,15 @@ cards.TRL_409 = {
     g.remove(e, "GRAVEYARD")
     g.log({ type = "removed_from_deck", player = g.ctrl(me), entity = e, card = g.card(e) })
     g.buff(me, i.attack, i.health)
-    local n = g.tag(me, "GRAL_N") + 1
-    g.set_tag(me, "GRAL_N", n)
-    g.set_tag(me, "GRAL_" .. n, g.card(e))
+    -- (the eaten entities, kept as player counts: a dead minion's tags are gone by its Deathrattle)
+    local key = "GRAL_" .. me
+    local n = g.add_count(g.ctrl(me), key)
+    g.add_count(g.ctrl(me), key .. "_" .. n, e)
   end,
   deathrattle = function(g, me)
-    for k = 1, g.tag(me, "GRAL_N") do
-      g.add_to_hand(g.ctrl(me), g.tag(me, "GRAL_" .. k))
+    local p, key = g.ctrl(me), "GRAL_" .. me
+    for k = 1, g.count(p, key) do
+      g.add_to_hand(p, g.card(g.count(p, key .. "_" .. k)))
     end
   end,
 }

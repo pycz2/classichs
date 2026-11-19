@@ -1,7 +1,9 @@
 -- Rastakhan's Rumble (December 2018): the player hooks of the pack (rules.json `player_hooks` = "player:trl"): all of
 -- The Boomsday Project's (boom.lua's, copied: one hook set per pack) and the counts Rastakhan's cards read:
 -- TRL_SPELLS and TRL_SPELLS_<n> (the spells its player played this game, in order: Zul'jin; each spell's PLAYED_TURN:
--- Krag'wa's "last turn"), TRL_SPELL_MANA (the mana spent on them: Shirvallah) and TRL_POWER_DMG (the damage of its
+-- Krag'wa's "last turn"), TRL_OPEN and TRL_OPEN_<n> (the opening hand: Hex Lord Malacrass),
+-- TRL_HEALED (the Health its player's cards restored this game: Zandalari Templar), TRL_SPELL_MANA (the mana spent on
+-- spells: Shirvallah) and TRL_POWER_DMG (the damage of its
 -- player's Hero Power this game: Jan'alai). The older cards of boom.lua stay boom.lua's (cards.patch.json of boom).
 local cards = {}
 
@@ -580,123 +582,22 @@ end
 -- --- the older cards of patches 11.1.1, 11.2 and 12.0 ------------------------------------------------------------------
 
 -- Dark Pact (patch 11.1.1.24589 of 2018-05-22): destroy a friendly minion, restore #4 Health to your hero.
-cards.LOOT_017 = {
-  target = "friendly_minion",
-  spell = function(g, me, t)
-    g.destroy(t)
-    g.heal(me, g.hero(g.ctrl(me)), g.heal_amt(me, 4))
-  end,
-}
 
 -- Crystal Core (patch 11.1.1.24589): "for the rest of the game, your minions are 4/4" (the player hooks' core()).
-cards.UNG_067t1 = {
-  spell = function(g, me)
-    local p = g.ctrl(me)
-    g.add_count(p, "CRYSTAL_CORE")
-    for _, zone in ipairs({ g.minions(p), g.hand(p) }) do
-      for _, e in ipairs(zone) do
-        if g.is_minion(e) and not g.has(e, "CORED") then
-          g.enchant(e, { set_atk = 4, set_hp = 4, base = true })
-          g.set_tag(e, "CORED", true)
-        end
-      end
-    end
-  end,
-}
 
 -- Shadowboxer (patch 12.0.0.25770: "Whenever a minion is healed", hero healing no longer counts): 1 damage to a random
 -- enemy.
-cards.GVG_072 = {
-  on = {
-    heal = function(g, me, ev)
-      if g.is_minion(ev.target) then
-        g.damage(me, g.random_alive(g.chars(g.enemy(me))), 1)
-      end
-    end,
-  },
-}
 
 -- Voodoo Doll (patch 12.0.0.25770): a chosen minion that was transformed (a new entity) or silenced since it was chosen
 -- is no longer destroyed (the curse is its enchantment in Hearthstone: Silence takes it).
-cards.GIL_614 = {
-  target = { base = "minion", filter = function(g, me, t)
-    return t ~= me
-  end },
-  battlecry = function(g, me, t)
-    if not t then
-      return
-    end
-    local n = g.tag(me, "VOODOO_N") + 1
-    g.set_tag(me, "VOODOO_N", n)
-    g.set_tag(me, "VOODOO_" .. n, t)
-    g.set_tag(me, "VOODOO_S" .. n, g.silenced(t) and 1 or 0)
-    if n == 1 then
-      g.enchant(me, { hooks = "ench:boom_voodoo", player = g.ctrl(me) })
-    end
-  end,
-}
-cards["ench:boom_voodoo"] = {
-  deathrattle = function(g, me)
-    for i = 1, g.tag(me, "VOODOO_N") do
-      local t = g.tag(me, "VOODOO_" .. i)
-      if alive(g, t) and (g.tag(me, "VOODOO_S" .. i) == 1 or not g.silenced(t)) then
-        g.destroy(t)
-      end
-    end
-  end,
-}
 
 -- Tess Greymane (patch 11.2.0.24769 of 2018-06-06): replays every card from another class you played this game, hero
 -- cards too, at most 30, in random order with random targets and choices; she stops once she is silenced, dead,
 -- transformed or out of play, or a hero has died. A hero card becomes your hero (its Armor, its power, its Battlecry
 -- with random choices; Dr. Boom, Mad Genius gets a real Hero Power: the "Big Red Button" bug is not copied).
-cards.GIL_598 = {
-  battlecry = function(g, me)
-    local p = g.ctrl(me)
-    local cls = g.class(g.hero(p))
-    local replay = {}
-    for i = 1, g.count(p, "OTHER_CARDS") do
-      local e = g.count(p, "OTHER_CARDS_" .. i)
-      local inf = info(g, e)
-      if e ~= me and not is_neutral(inf) and not of_class(inf, cls) then
-        replay[#replay + 1] = inf.id
-      end
-    end
-    for i, c in ipairs(g.shuffle(replay)) do
-      if i > 30 or not alive(g, me) or g.silenced(me) or over(g) then
-        break
-      end
-      local t = g.info(c).type
-      if t == "SPELL" then
-        g.cast_random(me, c, true)
-      elseif t == "MINION" then
-        g.summon(p, c)
-      elseif t == "WEAPON" then
-        g.equip(p, c)
-      elseif t == "CHAMPION" then
-        g.battlecry(g.replace_hero(p, c, true), c)
-      end
-      g.resolve()
-    end
-  end,
-}
 
 -- Lynessa Sunsorrow (patch 11.2.0.24769): every spell you cast on your minions this game (ON_OWN_MINION), Choose One
 -- spells too (as they were cast), in random order, cast again on her; at most 30; it stops once she is gone.
-cards.LOOT_216 = {
-  battlecry = function(g, me)
-    local spells = list.filter(g.graveyard(g.ctrl(me)), function(s)
-      return g.is_spell(s) and g.has(s, "ON_OWN_MINION")
-    end)
-    for i, s in ipairs(g.shuffle(spells)) do
-      if i > 30 or not alive(g, me) then
-        break
-      end
-      g.cast(me, s, me)
-      g.resolve()
-    end
-  end,
-}
 
 -- Chameleos (patch 12.0.0.25770): each of your turns in your hand it becomes a copy of a random card in your opponent's
 -- hand (a one-card hand too), losing its own enchantments (a transform) and taking the copied card's (a copy, hand →
@@ -718,252 +619,49 @@ local function chameleos_shift(g, me, ev)
     end
   end
 end
-cards.GIL_142 = { hand = { turn_start = chameleos_shift } }
-cards["ench:boom_shifting"] = {
-  hand = {
-    turn_start = function(g, me, ev)
-      if g.card(me) ~= CHAMELEOS then
-        chameleos_shift(g, me, ev)
-      end
-    end,
-  },
-}
 
 -- Patch 12.0.0.25770's copies: these older cards' copies keep the enchantments of the cards they copy (wiki CardChange
 -- rows of build 25770; the copy rule: deck → hand, deck → play, deck → deck, hand → hand, hand → play).
 
 -- Thoughtsteal: copies of 2 random cards in your opponent's deck.
-cards.VAN_EX1_339 = {
-  spell = function(g, me)
-    local deck = g.shuffle(g.deck(g.enemy(me)))
-    for i = 1, math.min(2, #deck) do
-      copy_to_hand(g, g.ctrl(me), deck[i])
-    end
-  end,
-}
 
 -- Mindgames: a copy of a random minion of your opponent's deck (none: a 0/1 Shadow of Nothing).
-cards.VAN_EX1_345 = {
-  spell = function(g, me)
-    local e = g.pick(list.filter(g.deck(g.enemy(me)), function(x)
-      return g.is_minion(x)
-    end))
-    local m = g.summon(g.ctrl(me), e and g.card(e) or "VAN_EX1_345t")
-    if e then
-      keep_enchants(g, e, m)
-    end
-  end,
-}
 
 -- Mind Vision: a copy of a random card in your opponent's hand.
-cards.VAN_CS2_003 = {
-  spell = function(g, me)
-    local e = g.pick(g.hand(g.enemy(me)))
-    if e then
-      copy_to_hand(g, g.ctrl(me), e)
-    end
-  end,
-}
 
 -- Thistle Tea: draw a card; 2 more copies of it.
-cards.OG_073 = {
-  spell = function(g, me)
-    local p = g.ctrl(me)
-    local d = g.draw(p)[1]
-    if d then
-      copy_to_hand(g, p, d)
-      copy_to_hand(g, p, d)
-    end
-  end,
-}
 
 -- Shifting Shade: Deathrattle: a copy of a random card of your opponent's deck.
-cards.OG_335 = {
-  deathrattle = function(g, me)
-    local c = g.pick(g.deck(g.enemy(me)))
-    if c then
-      copy_to_hand(g, g.ctrl(me), c)
-    end
-  end,
-}
 
 -- Barnes: a 1/1 copy of a random minion in your deck (its enchantments, then 1/1), right of Barnes.
-cards.KAR_114 = {
-  battlecry = function(g, me)
-    local e = g.pick(list.filter(g.deck(g.ctrl(me)), function(d)
-      return g.type(d) == "MINION"
-    end))
-    local m = e and keep_enchants(g, e, g.summon_right(me, g.card(e)))
-    if m then
-      g.resolve()
-      if g.zone(m) == "PLAY" then
-        g.set_stats(m, 1, 1)
-      end
-    end
-  end,
-}
 
 -- Drakonid Operative: if you're holding a Dragon, Discover a copy of a card in your opponent's deck.
-cards.CFM_605 = {
-  glow = function(g, me)
-    return holding(g, me, "DRAGON")
-  end,
-  battlecry = function(g, me)
-    if holding(g, me, "DRAGON") then
-      offer_copies(g, me, g.deck(g.enemy(me)))
-    end
-  end,
-  on_choose = take_copy,
-}
 
 -- Shadow Visions: Discover a copy of a spell in your deck.
-cards.UNG_029 = {
-  spell = function(g, me)
-    offer_copies(g, me, list.filter(g.deck(g.ctrl(me)), function(e)
-      return g.is_spell(e)
-    end))
-  end,
-  on_choose = take_copy,
-}
 
 -- Crystalline Oracle: Deathrattle: a copy of a card of your opponent's deck.
-cards.UNG_032 = cards.OG_335
 
 -- Mimic Pod: draw a card, then a copy of it.
-cards.UNG_060 = {
-  spell = function(g, me)
-    local p = g.ctrl(me)
-    local d = g.draw(p)[1]
-    if d then
-      copy_to_hand(g, p, d)
-    end
-  end,
-}
 
 -- Devour Mind: copies of 3 cards of your opponent's deck.
-cards.ICC_207 = {
-  spell = function(g, me)
-    for _, e in ipairs(pick_n(g, g.deck(g.enemy(me)), 3)) do
-      copy_to_hand(g, g.ctrl(me), e)
-    end
-  end,
-}
 
 -- Archbishop Benedictus: a copy of your opponent's deck into your deck (deck → deck).
-cards.ICC_215 = {
-  battlecry = function(g, me)
-    local p = g.ctrl(me)
-    for _, e in ipairs(g.deck(g.enemy(me))) do
-      keep_enchants(g, e, g.add_to_deck(p, g.card(e)))
-    end
-  end,
-}
 
 -- Stitched Tracker: Discover a copy of a minion in your deck.
-cards.ICC_415 = {
-  battlecry = function(g, me)
-    offer_copies(g, me, list.filter(g.deck(g.ctrl(me)), function(e)
-      return g.is_minion(e)
-    end))
-  end,
-  on_choose = take_copy,
-}
 
 -- Shadow Essence: a 5/5 copy of a random minion in your deck.
-cards.ICC_235 = {
-  spell = function(g, me)
-    local p = g.ctrl(me)
-    local e = random_from_deck(g, p, function(d)
-      return g.is_minion(d)
-    end)
-    local m = e and keep_enchants(g, e, g.summon(p, g.card(e)))
-    if m then
-      g.set_stats(m, 5, 5)
-    end
-  end,
-}
 
 -- Simulacrum: a copy of the lowest Cost minion in your hand (ties: at random).
-cards.ICC_823 = {
-  spell = function(g, me)
-    local p = g.ctrl(me)
-    local ms = list.filter(g.hand(p), function(e)
-      return g.is_minion(e)
-    end)
-    local low
-    for _, m in ipairs(ms) do
-      if not low or g.cost(m) < low then
-        low = g.cost(m)
-      end
-    end
-    local m = g.pick(list.filter(ms, function(e)
-      return g.cost(e) == low
-    end))
-    if m then
-      copy_to_hand(g, p, m)
-    end
-  end,
-}
 
 -- Kobold Illusionist: Deathrattle: a 1/1 copy of a random minion in your hand.
-cards.LOOT_412 = {
-  deathrattle = function(g, me)
-    local m = g.pick(list.filter(g.hand(g.ctrl(me)), function(e)
-      return g.is_minion(e)
-    end))
-    local n = m and keep_enchants(g, m, summon_here(g, me, g.card(m)))
-    if n then
-      g.set_stats(n, 1, 1)
-    end
-  end,
-}
 
 -- Psionic Probe: a copy of a random spell of your opponent's deck.
-cards.LOOT_353 = {
-  spell = function(g, me)
-    local s = random_from_deck(g, g.enemy(me), function(e)
-      return g.is_spell(e)
-    end)
-    if s then
-      copy_to_hand(g, g.ctrl(me), s)
-    end
-  end,
-}
 
 -- Azalina Soulthief: your hand becomes a copy of your opponent's (with their enchantments and cost changes).
-cards.GIL_198 = {
-  battlecry = function(g, me)
-    local p = g.ctrl(me)
-    local theirs = {}
-    for _, e in ipairs(g.hand(g.enemy(me))) do
-      theirs[#theirs + 1] = e
-    end
-    for _, e in ipairs(g.hand(p)) do
-      g.remove(e, "SETASIDE")
-      g.log({ type = "removed_from_hand", player = p, entity = e })
-    end
-    for _, e in ipairs(theirs) do
-      copy_to_hand(g, p, e)
-    end
-  end,
-}
 
 -- Dollmaster Dorian: whenever you draw a minion, a 1/1 copy of it right of Dorian (its enchantments, then 1/1).
-cards.GIL_620 = on_mine("draw", function(g, me, ev)
-  if g.type(ev.entity) == "MINION" then
-    local c = keep_enchants(g, ev.entity, g.summon_right(me, ev.card))
-    if c then
-      g.set_stats(c, 1, 1)
-    end
-  end
-end)
 
 -- Archmage Arugal: whenever you draw a minion, a copy of it (with its enchantments).
-cards.GIL_691 = on_mine("draw", function(g, me, ev)
-  if g.type(ev.entity) == "MINION" then
-    copy_to_hand(g, g.ctrl(me), ev.entity)
-  end
-end)
 
 -- --- the game's counts and its start (rules.json player_hooks) -------------------------------------------------------
 -- Kobolds & Catacombs' (and the packs' before it: loot.lua), and The Witchwood's: Echo (ECHOING, the copies, GHOSTLY),
@@ -1139,7 +837,7 @@ cards["player:trl"] = {
     end,
     damage = function(g, me, ev)
       local p = g.ctrl(me)
-      if ev.amount > 0 and g.ctrl(ev.source) == p and g.info(g.card(ev.source)).type == "HERO_POWER" then
+      if ev.amount > 0 and ev.source and ev.source > 0 and g.ctrl(ev.source) == p and g.info(g.card(ev.source)).type == "HERO_POWER" then
         g.add_count(p, "TRL_POWER_DMG", ev.amount)
       end
       if ev.target == g.hero(p) and ev.amount > 0 then
@@ -1214,6 +912,9 @@ cards["player:trl"] = {
     end,
     heal = function(g, me, ev)
       local p = g.ctrl(me)
+      if ev.amount > 0 and ev.source and ev.source > 0 and g.ctrl(ev.source) == p then
+        g.add_count(p, "TRL_HEALED", ev.amount) -- the Health p's cards restored this game (Zandalari Templar)
+      end
       if ev.target == g.hero(p) and ev.amount > 0 then
         g.add_count(p, "HEALED_TURN", g.turn() - g.count(p, "HEALED_TURN"))
       end
@@ -1315,6 +1016,10 @@ cards["player:trl"] = {
     end,
     game_start = function(g, me)
       local p = g.ctrl(me)
+      for i, e in ipairs(g.hand(p)) do -- the opening hand (Hex Lord Malacrass): TRL_OPEN, TRL_OPEN_<n>
+        g.add_count(p, "TRL_OPEN_" .. i, e)
+      end
+      g.add_count(p, "TRL_OPEN", #g.hand(p))
       for _, zone in ipairs({ g.deck(p), g.hand(p) }) do
         for _, e in ipairs(zone) do
           g.set_tag(e, "STARTED_IN_DECK", true)

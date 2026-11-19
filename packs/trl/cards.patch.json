@@ -9,7 +9,7 @@
   "set": "VANILLA",
   "script": "scripts/trl_a.lua#EX1_179",
   "fx": {
-   "element": "frost",
+   "element": "ice",
    "cast": "bolt",
    "hit": "hurt"
   }
