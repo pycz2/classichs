@@ -19,8 +19,9 @@ use std::sync::{Mutex, OnceLock};
 const KEYWORDS_JSON: &str = include_str!("../../../docs/packs/schema/keywords.json");
 
 /// Engine ids of the keywords a card starts with as a `true` tag.
-pub(crate) const START_TAGS: [&str; 18] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
-    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL", "FOE_SPELLPROOF", "QUICK", "FUSE"];
+pub(crate) const START_TAGS: [&str; 19] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN", "IMMUNE",
+    "FROZEN_THIS_TURN", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS", "DORMANT", "LIFESTEAL", "FOE_SPELLPROOF", "QUICK", "FUSE",
+    "TWINSPELL"];
 /// Engine ids of the tags Silence removes.
 const SILENCED: [&str; 14] = ["GUARD", "HASTE", "BARRIER", "STEALTH", "DOUBLE_ATTACK", "CANT_ATTACK", "SPELLPROOF", "FROZEN",
     "IMMUNE", "FROZEN_THIS_TURN", "SPELL_POWER", "POISON", "CANT_ATTACK_HEROES", "UNLIMITED_ATTACKS"];
@@ -191,6 +192,11 @@ pub struct Names {
     /// DOUBLE_TURN_END: its owner's "at the end of your turn" hooks run twice (an aura tag on the champion: Drakkari
     /// Enchanter); only when the pack names it.
     pub double_turn_end: Option<&'static str>,
+    /// DOUBLE_TRAP: its owner's traps run their effect once more per count when they trigger (an aura tag on the
+    /// champion: Rise of Shadows' Commander Rhyssa); only when the pack names it.
+    pub double_trap: Option<&'static str>,
+    /// TWINSPELL: a spell that, cast, gives its player its `<id>ts` card (Rise of Shadows); only when the pack names it.
+    pub twinspell: Option<&'static str>,
     /// TASK_PROGRESS and TASK_GOAL: a task's count and goal (its scripts keep them; the bots read them).
     pub task_progress: Option<&'static str>,
     pub task_goal: Option<&'static str>,
@@ -267,6 +273,8 @@ impl Names {
             power_double: by_engine.get("POWER_DOUBLE").copied(),
             heal_double: by_engine.get("HEAL_DOUBLE").copied(),
             double_turn_end: by_engine.get("DOUBLE_TURN_END").copied(),
+            double_trap: by_engine.get("DOUBLE_TRAP").copied(),
+            twinspell: by_engine.get("TWINSPELL").copied(),
             task_progress: by_engine.get("TASK_PROGRESS").copied(),
             task_goal: by_engine.get("TASK_GOAL").copied(),
             trap: n("TRAP"),

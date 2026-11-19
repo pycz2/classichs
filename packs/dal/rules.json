@@ -366,7 +366,12 @@
   "HEALING_DOUBLE": {
    "engine": "HEAL_DOUBLE"
   },
-  "TWINSPELL": {}
+  "TWINSPELL": {
+   "engine": "TWINSPELL"
+  },
+  "DOUBLE_SECRET": {
+   "engine": "DOUBLE_TRAP"
+  }
  },
  "modes": {
   "constructed": {

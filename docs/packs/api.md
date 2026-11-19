@@ -265,6 +265,34 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 Randomness must come from these (the game's seeded generator): every
 platform, the server and replays then agree.
 
+### Patterns (Rise of Shadows)
+
+What the set needs that is data or plain Lua (no special API):
+
+- **Twinspell**: data only. The card has the keyword the pack maps to `TWINSPELL` (format.md) and the pack has its
+  copy card `<id>ts`; the engine adds the copy (to the hand place it was played from, before "whenever you cast a
+  spell", countered too, from `g.cast`/`g.cast_random` too). The card's script is an ordinary `spell` hook.
+- **Commander Rhyssa** ("Your Secrets trigger twice"): an aura of the mechanic mapped to `DOUBLE_TRAP` on her
+  champion: `aura = function(g, me) g.aura_add(g.hero(g.ctrl(me)), 0, 0, { DOUBLE_SECRET = 1 }) end`.
+- **A counter that grows in the hand** (Schemes, "Upgrades each turn!"): a tag of the card's own, a `hand` hook and
+  the `text` hook (the card's text holds `{0}`; a copy made anew starts again):
+
+  ```lua
+  local function x(g, me) return 1 + g.tag(me, "SCHEME") end
+  cards.DAL_008 = {                                -- Dr. Boom's Scheme: Gain @ Armor.
+    hand = { turn_start = function(g, me, ev)
+      if ev.player == g.ctrl(me) then g.add_tag(me, "SCHEME", 1) end
+    end },
+    text = function(g, me) return x(g, me) end,     -- snapshots: text_args = {"2"}
+    spell = function(g, me) g.gain_armor(g.ctrl(me), x(g, me)) end,
+  }
+  ```
+
+- **Discover a copy of a card in the opponent's hand** (Madame Lazul): `g.create(p, g.card(e))` for up to three
+  different cards of `g.hand(g.enemy(me))`, then `g.request_choice`; only `p` sees what the created cards are.
+- **Poisonous and Lifesteal** apply as the damage is dealt (the 14.0 rule): the engine reads them at that moment, so
+  a source silenced by a trigger of that damage still destroys or heals. Nothing to do.
+
 ## Errors and limits
 
 - A runtime error (`error(...)`, a nil call, a bad argument:

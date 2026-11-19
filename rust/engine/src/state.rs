@@ -474,8 +474,16 @@ impl Game {
                     Trigger::Trap(s) => {
                         let ev = q.ev.unwrap();
                         if g.trap_ready(me) && s.cond.is_none_or(|c| g.fx_cond(c, me, ev)) && !g.game_over {
+                            // DOUBLE_TRAP (on the champion as it triggers, an aura tag: Commander Rhyssa): the effect
+                            // runs twice (two sources: still twice, as Brann's DOUBLE_ON_PLAY)
+                            let more = g.n().double_trap.is_some_and(|k| g.e(g.hero(g.ctrl(me))).has(k)) as usize;
                             g.reveal(me);
-                            g.fx_on(s.effect, me, ev);
+                            for i in 0..=more {
+                                if i > 0 && g.game_over {
+                                    break;
+                                }
+                                g.fx_on(s.effect, me, ev);
+                            }
                         }
                     }
                     Trigger::OnDeath(f) => g.fx_me(f, me),
@@ -884,12 +892,18 @@ impl Game {
     }
 
     pub fn add_to_hand(&mut self, p: usize, card_id: &str) -> Id {
+        self.add_to_hand_at(p, card_id, usize::MAX)
+    }
+
+    /// `add_to_hand` at the 0-based place `pos` of the hand (past its end: the right end).
+    pub fn add_to_hand_at(&mut self, p: usize, card_id: &str, pos: usize) -> Id {
         if self.players[p].hand.len() >= self.rs.hand {
             return NONE;
         }
         let e = self.new_entity(card_id, p);
         self.em(e).zone = "HAND";
-        self.players[p].hand.push(e);
+        let hand = &mut self.players[p].hand;
+        hand.insert(pos.min(hand.len()), e);
         self.emit(obj!{"type": "add_to_hand", "player": p, "entity": e, "card": self.e(e).card_id});
         e
     }

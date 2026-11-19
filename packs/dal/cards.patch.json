@@ -19,6 +19,822 @@
   "attack": 2,
   "health": 5
  },
+ "DAL_007": {
+  "script": "scripts/dal_rsww.lua#DAL_007",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "DAL_008": {
+  "script": "scripts/dal_rsww.lua#DAL_008",
+  "fx": {
+   "element": "steel",
+   "cast": "none",
+   "hit": "armor"
+  }
+ },
+ "DAL_009": {
+  "script": "scripts/dal_rsww.lua#DAL_009",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "DAL_010": {
+  "script": "scripts/dal_rsww.lua#DAL_010",
+  "fx": {
+   "element": "arcane",
+   "cast": "bolt",
+   "hit": "portal"
+  }
+ },
+ "DAL_011": {
+  "script": "scripts/dal_dhmpp.lua#DAL_011",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "debuff"
+  }
+ },
+ "DAL_030": {
+  "script": "scripts/dal_dhmpp.lua#DAL_030",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_039": {
+  "script": "scripts/dal_dhmpp.lua#DAL_039",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_040": {
+  "script": "scripts/dal_dhmpp.lua#DAL_040",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_049": {
+  "script": "scripts/dal_rsww.lua#DAL_049"
+ },
+ "DAL_052": {
+  "script": "scripts/dal_rsww.lua#DAL_052",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_058": {
+  "script": "scripts/dal_neutral.lua#DAL_058"
+ },
+ "DAL_059": {
+  "script": "scripts/dal_rsww.lua#DAL_059",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "DAL_060": {
+  "script": "scripts/dal_rsww.lua#DAL_060",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_062": {
+  "script": "scripts/dal_rsww.lua#DAL_062",
+  "fx": {
+   "element": "steel",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "DAL_063": {
+  "script": "scripts/dal_rsww.lua#DAL_063"
+ },
+ "DAL_064": {
+  "script": "scripts/dal_rsww.lua#DAL_064",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_065": {
+  "script": "scripts/dal_dhmpp.lua#DAL_065",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_070": {
+  "script": "scripts/dal_rsww.lua#DAL_070",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_071": {
+  "script": "scripts/dal_rsww.lua#DAL_071",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "portal"
+  }
+ },
+ "DAL_077": {
+  "script": "scripts/dal_neutral.lua#DAL_077"
+ },
+ "DAL_078": {
+  "script": "scripts/dal_neutral.lua#DAL_078"
+ },
+ "DAL_081": {
+  "script": "scripts/dal_neutral.lua#DAL_081"
+ },
+ "DAL_086": {
+  "script": "scripts/dal_neutral.lua#DAL_086"
+ },
+ "DAL_087": {
+  "script": "scripts/dal_neutral.lua#DAL_087"
+ },
+ "DAL_088": {
+  "script": "scripts/dal_neutral.lua#DAL_088"
+ },
+ "DAL_089": {
+  "script": "scripts/dal_neutral.lua#DAL_089"
+ },
+ "DAL_095": {
+  "script": "scripts/dal_neutral.lua#DAL_095"
+ },
+ "DAL_141": {
+  "script": "scripts/dal_dhmpp.lua#DAL_141",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_141ts": {
+  "script": "scripts/dal_dhmpp.lua#DAL_141",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_146": {
+  "script": "scripts/dal_dhmpp.lua#DAL_146",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_147": {
+  "script": "scripts/dal_dhmpp.lua#DAL_147",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_163": {
+  "script": "scripts/dal_dhmpp.lua#DAL_163",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_173": {
+  "script": "scripts/dal_rsww.lua#DAL_173",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "portal"
+  }
+ },
+ "DAL_177": {
+  "script": "scripts/dal_dhmpp.lua#DAL_177",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_177ts": {
+  "script": "scripts/dal_dhmpp.lua#DAL_177",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_182": {
+  "script": "scripts/dal_dhmpp.lua#DAL_182"
+ },
+ "DAL_185": {
+  "script": "scripts/dal_rsww.lua#DAL_185"
+ },
+ "DAL_256": {
+  "script": "scripts/dal_dhmpp.lua#DAL_256",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_256ts": {
+  "script": "scripts/dal_dhmpp.lua#DAL_256",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_350": {
+  "script": "scripts/dal_dhmpp.lua#DAL_350"
+ },
+ "DAL_350a": {
+  "script": "scripts/dal_dhmpp.lua#DAL_350a",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_350b": {
+  "script": "scripts/dal_dhmpp.lua#DAL_350b",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "heal"
+  }
+ },
+ "DAL_351": {
+  "script": "scripts/dal_dhmpp.lua#DAL_351",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "DAL_351ts": {
+  "script": "scripts/dal_dhmpp.lua#DAL_351",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "DAL_352": {
+  "script": "scripts/dal_dhmpp.lua#DAL_352",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_354": {
+  "script": "scripts/dal_dhmpp.lua#DAL_354",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_355": {
+  "script": "scripts/dal_dhmpp.lua#DAL_355"
+ },
+ "DAL_357": {
+  "script": "scripts/dal_dhmpp.lua#DAL_357",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_357t": {
+  "script": "scripts/dal_dhmpp.lua#DAL_357t"
+ },
+ "DAL_366": {
+  "script": "scripts/dal_rsww.lua#DAL_366",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_366t1": {
+  "script": "scripts/dal_rsww.lua#DAL_366t1",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_366t2": {
+  "script": "scripts/dal_rsww.lua#DAL_366t2",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_366t3": {
+  "script": "scripts/dal_rsww.lua#DAL_366t3",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_366t4": {
+  "script": "scripts/dal_rsww.lua#DAL_366t4",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_371": {
+  "script": "scripts/dal_dhmpp.lua#DAL_371",
+  "fx": {
+   "element": "arcane",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_372": {
+  "script": "scripts/dal_dhmpp.lua#DAL_372"
+ },
+ "DAL_373": {
+  "script": "scripts/dal_dhmpp.lua#DAL_373",
+  "fx": {
+   "element": "steel",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_373ts": {
+  "script": "scripts/dal_dhmpp.lua#DAL_373",
+  "fx": {
+   "element": "steel",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_376": {
+  "script": "scripts/dal_dhmpp.lua#DAL_376",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_377": {
+  "script": "scripts/dal_dhmpp.lua#DAL_377",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_378": {
+  "script": "scripts/dal_dhmpp.lua#DAL_378",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_378ts": {
+  "script": "scripts/dal_dhmpp.lua#DAL_378",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_379": {
+  "script": "scripts/dal_dhmpp.lua#DAL_379",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_379t": {
+  "script": "scripts/dal_dhmpp.lua#DAL_379t"
+ },
+ "DAL_400": {
+  "script": "scripts/dal_neutral.lua#DAL_400"
+ },
+ "DAL_413": {
+  "script": "scripts/dal_dhmpp.lua#DAL_413",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_415": {
+  "script": "scripts/dal_rsww.lua#DAL_415",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_416": {
+  "script": "scripts/dal_rsww.lua#DAL_416",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_417": {
+  "keywords": [
+   "BATTLECRY"
+  ],
+  "script": "scripts/dal_rsww.lua#DAL_417",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_422": {
+  "script": "scripts/dal_rsww.lua#DAL_422",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_432": {
+  "script": "scripts/dal_rsww.lua#DAL_432",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "gain"
+  }
+ },
+ "DAL_433": {
+  "script": "scripts/dal_rsww.lua#DAL_433",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_434": {
+  "script": "scripts/dal_neutral.lua#DAL_434"
+ },
+ "DAL_538": {
+  "script": "scripts/dal_neutral.lua#DAL_538"
+ },
+ "DAL_539": {
+  "script": "scripts/dal_neutral.lua#DAL_539"
+ },
+ "DAL_544": {
+  "script": "scripts/dal_neutral.lua#DAL_544"
+ },
+ "DAL_546": {
+  "script": "scripts/dal_neutral.lua#DAL_546"
+ },
+ "DAL_548": {
+  "script": "scripts/dal_neutral.lua#DAL_548"
+ },
+ "DAL_550": {
+  "script": "scripts/dal_neutral.lua#DAL_550"
+ },
+ "DAL_551": {
+  "script": "scripts/dal_neutral.lua#DAL_551"
+ },
+ "DAL_553": {
+  "script": "scripts/dal_neutral.lua#DAL_553"
+ },
+ "DAL_554": {
+  "script": "scripts/dal_neutral.lua#DAL_554"
+ },
+ "DAL_558": {
+  "script": "scripts/dal_neutral.lua#DAL_558"
+ },
+ "DAL_560": {
+  "script": "scripts/dal_neutral.lua#DAL_560"
+ },
+ "DAL_561": {
+  "script": "scripts/dal_rsww.lua#DAL_561"
+ },
+ "DAL_563": {
+  "script": "scripts/dal_rsww.lua#DAL_563",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_565": {
+  "script": "scripts/dal_neutral.lua#DAL_565"
+ },
+ "DAL_566": {
+  "script": "scripts/dal_neutral.lua#DAL_566"
+ },
+ "DAL_568": {
+  "script": "scripts/dal_dhmpp.lua#DAL_568",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "DAL_568ts": {
+  "script": "scripts/dal_dhmpp.lua#DAL_568",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "DAL_570": {
+  "script": "scripts/dal_dhmpp.lua#DAL_570"
+ },
+ "DAL_571": {
+  "script": "scripts/dal_dhmpp.lua#DAL_571",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_573": {
+  "script": "scripts/dal_dhmpp.lua#DAL_573"
+ },
+ "DAL_576": {
+  "script": "scripts/dal_dhmpp.lua#DAL_576"
+ },
+ "DAL_577": {
+  "script": "scripts/dal_dhmpp.lua#DAL_577",
+  "fx": {
+   "element": "ice",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_577ts": {
+  "script": "scripts/dal_dhmpp.lua#DAL_577",
+  "fx": {
+   "element": "ice",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_578": {
+  "script": "scripts/dal_dhmpp.lua#DAL_578",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_581": {
+  "script": "scripts/dal_dhmpp.lua#DAL_581",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_582": {
+  "script": "scripts/dal_neutral.lua#DAL_582"
+ },
+ "DAL_582t": {
+  "script": "scripts/dal_neutral.lua#DAL_582t"
+ },
+ "DAL_587": {
+  "script": "scripts/dal_dhmpp.lua#DAL_587",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_589": {
+  "script": "scripts/dal_dhmpp.lua#DAL_589",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_592": {
+  "script": "scripts/dal_neutral.lua#DAL_592"
+ },
+ "DAL_602": {
+  "script": "scripts/dal_rsww.lua#DAL_602",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_603": {
+  "script": "scripts/dal_dhmpp.lua#DAL_603",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_604": {
+  "script": "scripts/dal_dhmpp.lua#DAL_604",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_605": {
+  "script": "scripts/dal_rsww.lua#DAL_605",
+  "fx": {
+   "element": "fire",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "DAL_606": {
+  "script": "scripts/dal_rsww.lua#DAL_606",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_607": {
+  "script": "scripts/dal_rsww.lua#DAL_607"
+ },
+ "DAL_608": {
+  "script": "scripts/dal_dhmpp.lua#DAL_608",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_609": {
+  "script": "scripts/dal_dhmpp.lua#DAL_609",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_613": {
+  "script": "scripts/dal_rsww.lua#DAL_613",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_614": {
+  "script": "scripts/dal_rsww.lua#DAL_614",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_615": {
+  "script": "scripts/dal_rsww.lua#DAL_615",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_710": {
+  "script": "scripts/dal_rsww.lua#DAL_710",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "DAL_714": {
+  "script": "scripts/dal_rsww.lua#DAL_714",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_716": {
+  "script": "scripts/dal_rsww.lua#DAL_716",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_719": {
+  "script": "scripts/dal_rsww.lua#DAL_719"
+ },
+ "DAL_720": {
+  "script": "scripts/dal_rsww.lua#DAL_720",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "DAL_721": {
+  "script": "scripts/dal_dhmpp.lua#DAL_721"
+ },
+ "DAL_723": {
+  "script": "scripts/dal_dhmpp.lua#DAL_723",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_724": {
+  "script": "scripts/dal_dhmpp.lua#DAL_724",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_726": {
+  "script": "scripts/dal_rsww.lua#DAL_726"
+ },
+ "DAL_727": {
+  "script": "scripts/dal_dhmpp.lua#DAL_727",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "DAL_728": {
+  "script": "scripts/dal_rsww.lua#DAL_728",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "smoke"
+  }
+ },
+ "DAL_729": {
+  "script": "scripts/dal_dhmpp.lua#DAL_729",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_731": {
+  "script": "scripts/dal_dhmpp.lua#DAL_731",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_732": {
+  "script": "scripts/dal_dhmpp.lua#DAL_732"
+ },
+ "DAL_733": {
+  "script": "scripts/dal_dhmpp.lua#DAL_733",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "DAL_735": {
+  "script": "scripts/dal_neutral.lua#DAL_735"
+ },
+ "DAL_736": {
+  "script": "scripts/dal_neutral.lua#DAL_736"
+ },
+ "DAL_739": {
+  "script": "scripts/dal_rsww.lua#DAL_739",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_741": {
+  "script": "scripts/dal_rsww.lua#DAL_741",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_742": {
+  "script": "scripts/dal_neutral.lua#DAL_742"
+ },
+ "DAL_743": {
+  "script": "scripts/dal_neutral.lua#DAL_743"
+ },
+ "DAL_744": {
+  "script": "scripts/dal_neutral.lua#DAL_744"
+ },
+ "DAL_747": {
+  "script": "scripts/dal_neutral.lua#DAL_747"
+ },
+ "DAL_749": {
+  "script": "scripts/dal_neutral.lua#DAL_749"
+ },
+ "DAL_751": {
+  "script": "scripts/dal_neutral.lua#DAL_751"
+ },
+ "DAL_752": {
+  "script": "scripts/dal_neutral.lua#DAL_752"
+ },
+ "DAL_759": {
+  "script": "scripts/dal_rsww.lua#DAL_759"
+ },
+ "DAL_769": {
+  "script": "scripts/dal_rsww.lua#DAL_769",
+  "fx": {
+   "element": "steel",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "DAL_770": {
+  "script": "scripts/dal_rsww.lua#DAL_770",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_771": {
+  "script": "scripts/dal_neutral.lua#DAL_771"
+ },
+ "DAL_773": {
+  "script": "scripts/dal_neutral.lua#DAL_773"
+ },
+ "DAL_774": {
+  "script": "scripts/dal_neutral.lua#DAL_774"
+ },
+ "DAL_775": {
+  "script": "scripts/dal_neutral.lua#DAL_775"
+ },
+ "DAL_799": {
+  "script": "scripts/dal_dhmpp.lua#DAL_799",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
  "ICC_221": {
   "cost": 1,
   "script": "scripts/dal.lua#ICC_221"
