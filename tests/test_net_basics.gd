@@ -12,6 +12,10 @@ func test_profile_save_load_and_limit() -> void:
 	eq(Profile.load_name(), Profile.DEFAULT_NAME, "blank falls back")
 	DirAccess.remove_absolute(Profile.path)
 	Profile.path = Profile.DEFAULT_PATH
+	eq(Profile.NAME_MAX, 16, "a name of 16 at most (as a new server account's)")
+	eq(Profile.short("Bob"), "Bob", "a short name shown as it is")
+	eq(Profile.short("Bartholomew_Featherstone"), "Bartholomew_Fea…", "a long one ends in …")
+	eq(Profile.short("Александра Константинова").length(), Profile.NAME_MAX, "as long as the limit")
 
 
 func test_signal_code_roundtrip() -> void:

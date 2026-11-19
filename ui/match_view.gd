@@ -1278,8 +1278,8 @@ func _layout_side(p: int, own: bool, want: Dictionary) -> void:
 		want[weapon.id] = {"kind": "weapon", "pos": hero_pos + Vector2(-100, 30)}
 	var secrets: Array = _ents(_stage.secrets[p]) if staged else pl.secrets
 	for i in secrets.size():  # on a half circle along the portrait's round top, both sides
-		var a := deg_to_rad(-90.0 + (i - (secrets.size() - 1) / 2.0) * 30.0)
-		var at := hero_pos + Vector2(65, 61) + Vector2(cos(a), sin(a)) * 66.0  # (the round top's middle, a bit outside it)
+		var a := deg_to_rad(-90.0 + (i - (secrets.size() - 1) / 2.0) * 26.0)
+		var at := hero_pos + Vector2(65, 66) + Vector2(cos(a) * 78.0, sin(a) * 62.0)  # (round the portrait's round top, a bit flattened: clear of the minions)
 		if KeywordTips.keywords_of(secrets[i].card_id).has("QUEST"):  # a Quest: in sight of both, with its progress
 			want[secrets[i].id] = {"kind": "quest", "pos": at - Vector2(24, 24)}
 		else:
@@ -3973,9 +3973,12 @@ func _show_mulligan() -> void:
 	var count := Palette.label("", 84, Palette.OPPONENT)
 	count.name = "MulliganTimer"
 	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	count.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	count.add_theme_constant_override("outline_size", 14)
 	count.visible = false
-	box.add_child(count)
+	count.position = OWN_HERO  # over the own portrait, out of the cards' column (they stay where they are)
+	count.size = HeroView.SIZE
+	_overlay.add_child(count)
 	_centered_button(box, tr("Confirm"), "Confirm", func():
 		var ids: Array = []
 		for id in marked:
@@ -4008,7 +4011,6 @@ func _show_mulligan() -> void:
 			return  # the timer or a lost connection got there first
 		_mull_wait = p  # the overlay stays: the new cards come into it
 		controller.submit({"type": "mulligan", "player": p, "replace": ids}))
-	box.move_child(count, -1)  # under Confirm
 
 
 func _show_choice() -> void:

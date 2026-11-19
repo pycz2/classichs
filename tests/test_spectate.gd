@@ -46,7 +46,7 @@ static func _state(seat: int, full := false) -> Dictionary:
 
 func _watch(m: Node, full := false) -> MatchView:
 	m.server_link.dispatch({"t": "spectating", "game": GAME, "mode": "casual", "pack": Packs.active().rules_hash(),
-		"players": ["bob", "eve"], "seat": 0, "full": full})
+		"players": ["bob", "eve"], "seat": 0, "full": full, "elapsed": 125})
 	m.server_link.dispatch(_state(0, full))
 	return m.watch_view
 
@@ -77,6 +77,11 @@ func test_the_spectator_table_is_read_only_and_leaves_back_to_the_screen() -> vo
 	var title := (v.find_child("WatchTitle", true, false) as Label).text
 	check(title.contains("bob") and title.contains("eve"), "who plays whom: " + title)
 	check(v.find_child("SpectatorMark", true, false) != null, "the spectator mark")
+	var bar := v.find_child("WatchBar", true, false) as Control
+	eq(bar.visible, false, "only an eye at first")
+	(v.find_child("WatchEye", true, false) as Button).pressed.emit()
+	eq(bar.visible, true, "the eye shows who plays whom")
+	check(v._match_time >= 125.0 and v._match_time < 135.0, "the match clock counts from the game's start: %s" % v._match_time)
 	check(not v._end_turn.visible and (v.find_child("LeaveWatch", true, false) as Button).visible, "Leave where End Turn was")
 	check(not (v.find_child("TrackerButton", true, false) as Control).visible, "no deck tracker")
 	# nothing on the table acts: hand cards, End Turn, emotes, the mulligan
