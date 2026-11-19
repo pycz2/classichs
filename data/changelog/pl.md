@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Na ekranie „Gry” prawy panel z opisem gry się przewija, a przyciski „Graj w tę grę” i „Usuń” stoją pod nim i zawsze są widoczne. Przy długim opisie wychodziły poza dolną krawędź okna, także na telefonie.
 - Muzyka legendarnego stronnika przy zagraniu idzie teraz z głośnością efektów dźwiękowych, a nie muzyki. Przy ściszonej muzyce ledwo było ją słychać pod dźwiękami karty, a przy wyłączonej nie grała wcale.
 ### Dodano
+- Projekt Hukatomba 2018 (7 sierpnia 2018): stronnicy z Magnetyzmem łączący się z mechami, karty Omega na 10 kryształów many, Projekty dla obu graczy, Doktor Huk z nową mocą bohatera co turę, talie Świstomiga, bomby w talii przeciwnika.
 - Stół pokazuje, gdzie trafia efekt. Gdy karty w ręce dostają wzmocnienie, przez rękę przechodzi pas światła, a nad kartami wznoszą się strzałki. Efekt na talię sprawia, że talia pulsuje i nad nią rozbłyska pierścień. Nowa lub tańsza moc specjalna rozbłyska na swoim miejscu.
 - Karta wtasowana do talii (twojej lub przeciwnika) leci do tej talii od tego, co ją tam wysłało: od zagranego zaklęcia, stronnika, bohatera, z ręki albo z drugiej talii. Karta dodana do ręki też leci ze swojego źródła: Włam bierze karty od bohatera przeciwnika, karta stworzona przez stronnika wylatuje ze stronnika. Karta, której nie możesz widzieć, leci rewersem do góry.
 - Pojedynek: z każdej talii wylatuje karta, każda podpisana imieniem właściciela, obok duży koszt. Wygrana karta rozbłyska, przegrana ciemnieje, potem obie wracają do talii.

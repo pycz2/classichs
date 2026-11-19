@@ -236,6 +236,30 @@ func test_dr_boom_power_and_the_bomb() -> void:
 	_classic()
 
 
+func test_seaforium_bomber_shuffles_a_bomb_from_itself() -> void:
+	if not _boom():
+		return
+	var v := _view({"hero": "HERO_08", "hand": [BOMBER]}, {"hero": "HERO_01", "deck": [YETI, YETI]})
+	var m := v.controller
+	var card: int = m.game.players[0].hand[0].id
+	var r := m._apply({"type": "play", "player": 0, "entity": card, "target": -1, "pos": 0, "choice": -1})
+	check(r.ok, "played")
+	var item := {"events": r.events, "snap": m.game.snapshot, "hist": m.game.history.size()}
+	var steps := MatchView.steps(r.events)
+	var k := _kinds(steps).find("shuffle")
+	check(k > _kinds(steps).find("summon"), "the Bomb flies after the Bomber lands: %s" % [_kinds(steps)])
+	v._begin_batch(item)
+	for st in steps.slice(0, k):
+		v._play_step(st)
+	var plan := v._shuffle_plan(steps[k])
+	eq([plan[0].from, plan[0].to], [v._center_of(card), v._pile_center(1)], "from the Bomber into the opponent's deck")
+	v._play_step(steps[k])
+	v._end_batch()
+	eq(v.g.players[1].deck_count, 3, "the Bomb is in")
+	v.free()
+	_classic()
+
+
 func test_the_set_has_its_name_and_mark() -> void:
 	if not _boom():
 		return

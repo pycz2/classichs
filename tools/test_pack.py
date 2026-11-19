@@ -805,6 +805,49 @@ class Chain(unittest.TestCase):
             self.assertEqual(pack.deck_error(json.loads(files[f]), cards, rules), "", f)
         self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 12)
 
+    def test_the_boomsday_project_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/boom")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/GIL_" in p or "/BOT_" in p)])
+        for s in ("basic", "classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil",
+                  "boom"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/gil.lua", "scripts/boom.lua", "scripts/boom_cards.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/boom"))
+        rules = json.loads(files["rules.json"])
+        # The Witchwood's flags, and patch 12.0's transform rule
+        self.assertEqual(rules["behaviour"], {"countered_no_after_spell": False, "full_hand_return_dies": True,
+                                              "cost_in_order": True, "replaced_weapon_dies": True,
+                                              "lifesteal_one_heal": True, "after_spell_from_before": True,
+                                              "transform_drops_enchantments": True})
+        self.assertEqual((rules["player_hooks"], rules["every_race"]), ("player:boom", "ALL"))
+        self.assertEqual({k: rules["mechanics"][k]["engine"] for k in ("MODULAR", "HEALING_DOUBLE")},
+                         {"MODULAR": "FUSE", "HEALING_DOUBLE": "HEAL_DOUBLE"})
+        self.assertEqual(len(rules["deck_recipes"]["BOT_914"]), 18)
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        for d in rules["deck_recipes"]["BOT_914"]:
+            self.assertEqual(len(d["cards"]), 30)
+            self.assertTrue(all(c in cards and cards[c].get("collectible") for c in d["cards"]), d["about"])
+        boom = [c for c in cards.values() if c.get("set") == "BOOMSDAY"]
+        self.assertEqual(len([c for c in boom if c.get("collectible")]), 135)
+        self.assertEqual(cards["BOT_270"]["cost"], 5)  # Giggling Inventor: 7 from 2018-10-18
+        self.assertEqual((cards["BOT_238"]["armor"], cards["BOT_238"]["power"]), (7, "BOT_238p"))
+        self.assertEqual([cards[c]["cost"] for c in ("LOOT_093", "LOOT_306", "LOOT_539", "LOE_038")], [5, 6, 7, 8])  # 11.1.1
+        self.assertEqual(cards["VAN_EX1_105"]["race"], "ELEMENTAL")  # 11.4
+        self.assertNotIn("race", cards["GIL_545"])  # 12.0
+        self.assertEqual(cards["LOOT_017"]["script"], "scripts/boom.lua#LOOT_017")  # Dark Pact heals 4
+        for lang in ("en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"):
+            loc = json.loads(files[f"locales/{lang}.json"])
+            self.assertTrue(loc["sets"]["BOOMSDAY"] and loc["classes"]["WHIZBANG"])
+            self.assertTrue(loc["mechanics"]["MODULAR"].get("name") and loc["mechanics"]["MODULAR"].get("tip"), lang)
+        en = json.loads(files["locales/en.json"])
+        self.assertEqual((en["sets"]["BOOMSDAY"], en["mechanics"]["MODULAR"]["name"]), ("The Boomsday Project", "Magnetic"))
+        self.assertEqual(en["cards"]["LOOT_017"]["text"], "Destroy a friendly minion. Restore #4 Health to your hero.")
+        for f in [p for p in files if p.startswith("decks/")]:
+            self.assertEqual(pack.deck_error(json.loads(files[f]), cards, rules), "", f)
+        self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 12)
+
     def test_an_expansion_shows_the_texts_of_its_release_build(self):
         import extract_cards
         for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:
