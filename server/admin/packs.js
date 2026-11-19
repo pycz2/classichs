@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { api, upload } from './api.js'
-import { html, useEvents, useLoad, useDebounced, useTick, toast, Card, UserLink, ErrorBox, Empty, Icon, ago, fullDate, num, bytes } from './ui.js'
+import { html, useEvents, useLoad, useDebounced, useTick, toast, Card, UserLink, ErrorBox, Empty, Icon, Modal, ago, fullDate, num, bytes } from './ui.js'
 import { FeedRow } from './dashboard.js'
 import { Confirm } from './accounts.js'
 
@@ -101,14 +101,23 @@ function DefaultStar ({ p, onDefault }) {
     aria-label=${'Make ' + title(p) + ' the default game'} onClick=${() => onDefault(p)}><${Icon} name="star" size=${17} /></button>`
 }
 
-function PackTable ({ list, players, busy, onToggle, onDelete, onDefault }) {
+/** A checkbox for a row, or for a whole list (on when all are picked, a dash when some are). */
+function Pick ({ list, sel, onSel, label }) {
+  const n = list.filter((p) => sel.has(p.id)).length
+  return html`<input type="checkbox" aria-label=${label} title=${label} checked=${n > 0 && n === list.length} indeterminate=${n > 0 && n < list.length}
+    onChange=${(e) => onSel(list.map((p) => p.id), e.target.checked)} />`
+}
+
+function PackTable ({ list, players, busy, sel, onSel, onToggle, onDelete, onDefault }) {
   if (!list.length) return html`<${Empty}>${players ? 'No player has uploaded a pack yet' : 'No server packs: drop one above, or put *.cardpack files into --packs-dir'}</${Empty}>`
   return html`<div class="table-wrap"><table class="table packs">
     <thead><tr>
+      <th class="pick-cell"><${Pick} list=${list} sel=${sel} onSel=${onSel} label=${'Select all ' + (players ? "players' packs" : 'server packs')} /></th>
       ${players ? html`<th>Player</th>` : html`<th title="The default game">Default</th>`}<th>Pack</th><th>Version</th><th class="num">Size</th><th>Rules hash</th><th>Content hash</th>
       <th class="num" title="Finished games in these rules (and live now)">Games</th><th class="num">Downloads</th><th>${players ? 'Uploaded' : 'Added'}</th><th>${players ? 'Shared' : 'Enabled'}</th><th></th>
     </tr></thead>
-    <tbody>${list.map((p) => html`<tr key=${p.id} class=${p.enabled ? '' : 'off'}>
+    <tbody>${list.map((p) => html`<tr key=${p.id} class=${(p.enabled ? '' : 'off') + (sel.has(p.id) ? ' picked' : '')}>
+      <td class="pick-cell"><${Pick} list=${[p]} sel=${sel} onSel=${onSel} label=${'Select ' + title(p)} /></td>
       ${players ? html`<td><${UserLink} ...${p.owner} /></td>` : html`<td><${DefaultStar} p=${p} onDefault=${onDefault} /></td>`}
       <td><${PackCell} p=${p} /></td>
       <td><span class="ver">${p.version}</span></td>
@@ -130,6 +139,9 @@ export function Packs () {
   const [feed, setFeed] = useState([])
   const [busy, setBusy] = useState(null)
   const [del, setDel] = useState(null)
+  const [sel, setSel] = useState(() => new Set())
+  const [bulk, setBulk] = useState(false) // the "Delete selected" confirmation is open
+  const [deleting, setDeleting] = useState(false)
   useEffect(() => { if (recent) setFeed(recent.list) }, [recent])
   const later = useDebounced(reload, 300)
   useEvents((e) => {
@@ -152,6 +164,29 @@ export function Packs () {
     setDel(null)
     try { const r = await api(`packs/${p.id}/delete`, { method: 'POST' }); toast(r.text); reload() } catch (err) { toast(err.message, 'err') }
   }
+  const all = data ? [...data.server, ...data.players] : []
+  const picked = all.filter((p) => sel.has(p.id)) // packs gone meanwhile drop out of the count
+  const onSel = (ids, on) => setSel((old) => {
+    const n = new Set(old)
+    for (const id of ids) on ? n.add(id) : n.delete(id)
+    return n
+  })
+  /** One request per pack, so the server's own rules apply to each; what fails stays selected. */
+  const removeMany = async () => {
+    const list = picked
+    setBulk(false)
+    setDeleting(true)
+    const failed = []
+    for (const p of list) {
+      try { await api(`packs/${p.id}/delete`, { method: 'POST' }) } catch (err) { failed.push([p, err.message]) }
+    }
+    setDeleting(false)
+    setSel(new Set(failed.map(([p]) => p.id)))
+    const done = `Deleted ${list.length - failed.length} of ${list.length} pack${list.length === 1 ? '' : 's'}`
+    if (failed.length) toast(`${done}. Not deleted: ${failed.map(([p, why]) => `${title(p)} ${p.version} (${why})`).join('; ')}`, 'err')
+    else toast(done)
+    reload()
+  }
   const s = data && data.stats
   return html`<div class="page">
     <header class="page-head"><h1>Games</h1><span class="muted">Game packs (.cardpack): what the server offers and what players uploaded · updates live</span></header>
@@ -163,13 +198,20 @@ export function Packs () {
       <div class="tile"><span class="tile-label">Stored</span><span class="tile-value">${bytes(s.bytes)}</span><span class="tile-sub" title=${s.storage}>${s.files} file${s.files === 1 ? '' : 's'} · ${num(s.downloads)} downloads · ${s.storage}</span></div>
     </div>` : html`<div class="tiles">${[0, 1, 2, 3].map(() => html`<div class="tile skel-tile"></div>`)}</div>`}
     <${DropZone} limit=${s ? s.limits.server : 0} onDone=${reload} />
+    ${all.length > 0 && html`<div class="pick-bar">
+      <label class="check"><${Pick} list=${all} sel=${sel} onSel=${onSel} label="Select all packs" />Select all</label>
+      <span class="muted small">${picked.length ? `${picked.length} of ${all.length} selected` : 'Nothing selected'}</span>
+      ${picked.length > 0 && html`<button class="btn ghost sm" onClick=${() => setSel(new Set())}>Clear</button>`}
+      <button class="btn danger sm" disabled=${!picked.length || deleting} onClick=${() => setBulk(true)}>
+        <${Icon} name="trash" size=${15} />${deleting ? 'Deleting…' : `Delete selected${picked.length ? ' (' + picked.length + ')' : ''}`}</button>
+    </div>`}
     <${Card} title=${`Server packs${data ? ' (' + data.server.length + ')' : ''}`} pad=${false} cls=${loading ? 'loading' : ''}
       actions=${html`<span class="muted small">Only server packs go to the queues · the starred one is the default game</span>`}>
-      ${data && html`<${PackTable} list=${data.server} busy=${busy} onToggle=${toggle} onDelete=${setDel} onDefault=${makeDefault} />`}
+      ${data && html`<${PackTable} list=${data.server} busy=${busy} sel=${sel} onSel=${onSel} onToggle=${toggle} onDelete=${setDel} onDefault=${makeDefault} />`}
     </${Card}>
     <${Card} title=${`Players' packs${data ? ' (' + data.players.length + ')' : ''}`} pad=${false} cls=${loading ? 'loading' : ''}
       actions=${html`<span class="muted small">For friendly games with friends; ${s ? bytes(s.limits.player) : '1 GiB'} each · off = not shared</span>`}>
-      ${data && html`<${PackTable} list=${data.players} players busy=${busy} onToggle=${toggle} onDelete=${setDel} />`}
+      ${data && html`<${PackTable} list=${data.players} players busy=${busy} sel=${sel} onSel=${onSel} onToggle=${toggle} onDelete=${setDel} />`}
     </${Card}>
     <${Card} title="Pack activity" pad=${false} actions=${html`<a class="btn ghost sm" href=${'#/events?kind=' + PACK_KINDS.join(',')}>All, with downloads</a>`}>
       ${feed.length ? html`<ul class="feed">${feed.map((e) => html`<${FeedRow} key=${e.id} e=${e} />`)}</ul>` : html`<${Empty}>Nothing yet</${Empty}>`}
@@ -178,5 +220,11 @@ export function Packs () {
       text=${del.owner
         ? `This is ${del.owner.user}'s pack. It goes from the server and from their list; games that have it keep their copy.`
         : 'Players will no longer get it from this server; games that have it keep their copy. Bundled packs are not installed again.'} />`}
+    ${bulk && html`<${Modal} title=${`Delete ${picked.length} pack${picked.length === 1 ? '' : 's'}?`} onClose=${() => setBulk(false)}>
+      <ul class="del-list">${picked.map((p) => html`<li key=${p.id}><b>${title(p)}</b> <span class="ver">${p.version}</span>
+        <span class="muted small">${p.owner ? p.owner.user + "'s pack" : 'server pack'}${p.default ? ' · the default game' : ''}</span></li>`)}</ul>
+      <p>Players will no longer get them from this server${picked.some((p) => p.owner) ? "; players' packs go from their lists too" : ''}. Games that have them keep their copy. Bundled packs are not installed again.</p>
+      <div class="form-actions"><button class="btn ghost" onClick=${() => setBulk(false)}>Cancel</button><button class="btn danger" onClick=${removeMany} autofocus>Delete ${picked.length}</button></div>
+    </${Modal}>`}
   </div>`
 }

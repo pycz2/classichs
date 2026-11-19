@@ -537,6 +537,12 @@ g.s4, .leg.s4, .sw.s4 { --c: var(--s4); }
 .table.packs tr.off td { color: var(--muted); }
 .table.packs tr.off .cover { filter: grayscale(1); opacity: .55; }
 .right-cell { text-align: right; width: 1%; }
+.pick-cell { width: 1%; padding-right: 0 !important; }
+.pick-cell input { display: block; cursor: pointer; }
+.table.packs tr.picked td { background: var(--accent-bg); }
+.pick-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pick-bar .btn.danger { margin-left: auto; }
+.del-list { max-height: 280px; overflow: auto; margin: 0 0 12px; padding-left: 18px; display: grid; gap: 4px; }
 .btn.danger-hover:hover:not(:disabled) { color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, transparent); }
 
 .switch {

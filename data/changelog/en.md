@@ -4,6 +4,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+### Added
+- Admin panel, Games: tick packs (one by one, a whole list or all of them) and delete them together. The confirmation lists what goes; a pack that could not be deleted stays ticked, and the message says why.
+
 ## [0.72.0] - 2026-11-19
 
 ### Added

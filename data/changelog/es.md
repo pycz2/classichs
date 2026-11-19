@@ -4,6 +4,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+### Añadido
+- Panel de administración, Juegos: se pueden marcar paquetes (uno a uno, una lista entera o todos) y borrarlos juntos. La confirmación enumera lo que se borra; un paquete que no se pudo borrar sigue marcado y el mensaje dice por qué.
+
 ## [0.72.0] - 2026-11-19
 
 ### Añadido
