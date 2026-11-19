@@ -3,8 +3,8 @@
 // tools/perf_drive.gd: it plays tournaments by itself on the given server) and records for the given minutes:
 //   godot.csv   PerfLog's rows (window.chsPerf), one a second
 //   chrome.csv  Chrome's own metrics every 10 s (Performance.getMetrics: JS heap, DOM nodes, layouts,
-//               task/script time), the WebAssembly memories (Godot's, the rules engine's, the decoder's) and,
-//               once a minute, the live Web Audio buffers (count, MB); the page's sound output, tapped before
+//               task/script time) and, once a minute, the WebAssembly memories (Godot's, the rules engine's, the decoder's)
+//               and the live Web Audio buffers (count, MB); the page's sound output, tapped before
 //               the speakers (AUDIO_TAP): 128-frame blocks, silent ones, loud ones, and the gaps (runs of exact
 //               silence between loud blocks, by length: a starved mixer's dropouts, heard as crackles)
 //   console.log the page's console (the driver's DRIVE: lines, errors)
@@ -41,11 +41,15 @@ const log = (s) => { const line = `${new Date().toISOString()} ${s}`; console.lo
 
 // Every connection to an AudioContext's speakers goes through one tap (an AudioWorklet): what plays is
 // counted in 128-frame blocks; a gap is a run of exactly silent blocks between two loud ones (Godot's mixer
-// in its AudioWorklet outputs nothing when the main thread fed it too late), by length in blocks.
+// in its AudioWorklet outputs nothing when the main thread fed it too late), by length in blocks. The harness's
+// own heavy probes (queryObjects: a full GC and a walk of the heap, hundreds of ms on the main thread; screenshots)
+// are announced to the tap (chsProbe): a gap that starts during one, or within a second after, counts apart
+// (probe_gaps), not as the game's.
 const AUDIO_TAP = `(() => {
 	const code = \`class Tap extends AudioWorkletProcessor {
-		constructor() { super(); this.s = { blocks: 0, silent: 0, loud: 0, gaps: { "1-2": 0, "3-8": 0, "9-40": 0, "41+": 0 } };
-			this.run = 0; this.loudBefore = false; this.last = false; this.n = 0; }
+		constructor() { super(); this.s = { blocks: 0, silent: 0, loud: 0, gaps: { "1-2": 0, "3-8": 0, "9-40": 0, "41+": 0 }, probe_gaps: 0 };
+			this.run = 0; this.loudBefore = false; this.last = false; this.n = 0; this.probe = false; this.probeEnd = 0; this.inProbe = false;
+			this.port.onmessage = (e) => { this.probe = e.data; if (!e.data) this.probeEnd = currentFrame + sampleRate; }; }
 		process(inputs, outputs) {
 			const i = inputs[0], o = outputs[0];
 			let peak = 0;
@@ -53,12 +57,16 @@ const AUDIO_TAP = `(() => {
 			const s = this.s;
 			s.blocks++;
 			if (peak === 0) {
-				if (this.run++ === 0) this.loudBefore = this.last;
+				if (this.run++ === 0) {
+					this.loudBefore = this.last;
+					this.inProbe = this.probe || currentFrame < this.probeEnd;
+				}
 				s.silent++;
 			} else {
 				if (this.run > 0 && this.loudBefore && peak > 0.01) {
 					const r = this.run;
-					s.gaps[r <= 2 ? "1-2" : r <= 8 ? "3-8" : r <= 40 ? "9-40" : "41+"]++;
+					if (this.inProbe) s.probe_gaps++;
+					else s.gaps[r <= 2 ? "1-2" : r <= 8 ? "3-8" : r <= 40 ? "9-40" : "41+"]++;
 				}
 				this.run = 0;
 				this.last = peak > 0.01;
@@ -72,6 +80,8 @@ const AUDIO_TAP = `(() => {
 	const url = URL.createObjectURL(new Blob([code], { type: "application/javascript" }));
 	const connect = AudioNode.prototype.connect;
 	const taps = new WeakMap();
+	const nodes = [];
+	window.chsProbe = (on) => { for (const n of nodes) n.port.postMessage(on); };
 	const tapFor = (ctx) => {
 		let g = taps.get(ctx);
 		if (g) return g;
@@ -81,6 +91,7 @@ const AUDIO_TAP = `(() => {
 		ctx.audioWorklet.addModule(url).then(() => {
 			const n = new AudioWorkletNode(ctx, "chs-tap", { outputChannelCount: [2] });
 			n.port.onmessage = (e) => { window.chsAudio = e.data; };
+			nodes.push(n);
 			g.disconnect();
 			connect.call(g, n);
 			connect.call(n, ctx.destination);
@@ -164,8 +175,13 @@ const audioBuffers = () => sizesOf("AudioBuffer", "(b) => b.length * b.numberOfC
 const chromeCsv = path.join(OUT, "chrome.csv");
 const godotCsv = path.join(OUT, "godot.csv");
 const KEYS = ["JSHeapUsedSize", "JSHeapTotalSize", "Nodes", "JSEventListeners", "LayoutCount", "RecalcStyleCount", "LayoutDuration", "TaskDuration", "ScriptDuration", "Documents", "Frames"];
-fs.writeFileSync(chromeCsv, "t,minute," + KEYS.join(",") + ",wasm1_mb,wasm2_mb,wasm3_mb,wasm_total_mb,audio_buffers,audio_buffers_mb,tap_blocks,tap_silent,tap_loud,gaps_1_2,gaps_3_8,gaps_9_40,gaps_41\n");
-let godotRows = 0, lastAudio = 0, audio = [];
+fs.writeFileSync(chromeCsv, "t,minute," + KEYS.join(",") + ",wasm1_mb,wasm2_mb,wasm3_mb,wasm_total_mb,audio_buffers,audio_buffers_mb,tap_blocks,tap_silent,tap_loud,gaps_1_2,gaps_3_8,gaps_9_40,gaps_41,probe_gaps\n");
+// a heavy probe of the page, announced to the audio tap
+const probe = async (fn) => {
+	await evaluate("window.chsProbe && chsProbe(true)");
+	try { return await fn(); } finally { await evaluate("window.chsProbe && chsProbe(false)"); }
+};
+let godotRows = 0, lastAudio = 0, audio = [], w = [];
 const t0 = Date.now();
 let nextProfile = 3, nextShot = 0, lastTick = 0;
 while ((Date.now() - t0) / 60000 < MINUTES) {
@@ -182,19 +198,19 @@ while ((Date.now() - t0) / 60000 < MINUTES) {
 		if (Date.now() - lastTick >= 10000) {
 			lastTick = Date.now();
 			const m = Object.fromEntries((await cdp("Performance.getMetrics")).metrics.map((x) => [x.name, x.value]));
-			const w = await wasmMemories();
 			const a = (await evaluate("window.chsAudio || null")) || { gaps: {} };
 			if (Date.now() - lastAudio >= 60000) {  // (a GC each time: once a minute)
 				lastAudio = Date.now();
-				audio = await audioBuffers();
+				w = await probe(wasmMemories);
+				audio = await probe(audioBuffers);
 			}
 			fs.appendFileSync(chromeCsv, [new Date().toISOString(), minute.toFixed(2), ...KEYS.map((k) => m[k] ?? ""),
 				(w[0] ?? 0).toFixed(1), (w[1] ?? 0).toFixed(1), (w[2] ?? 0).toFixed(1), w.reduce((a, b) => a + b, 0).toFixed(1),
 				audio.length, audio.reduce((a, b) => a + b, 0).toFixed(1), a.blocks ?? "", a.silent ?? "", a.loud ?? "",
-				...["1-2", "3-8", "9-40", "41+"].map((k) => a.gaps[k] ?? "")].join(",") + "\n");
+				...["1-2", "3-8", "9-40", "41+"].map((k) => a.gaps[k] ?? ""), a.probe_gaps ?? ""].join(",") + "\n");
 		}
 		if (minute >= nextShot) {
-			const s = await cdp("Page.captureScreenshot", { format: "png" });
+			const s = await probe(() => cdp("Page.captureScreenshot", { format: "png" }));
 			fs.writeFileSync(path.join(OUT, `shot-${String(Math.round(minute)).padStart(3, "0")}.png`), Buffer.from(s.data, "base64"));
 			nextShot += 5;
 		}
