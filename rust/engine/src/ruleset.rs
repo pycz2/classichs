@@ -649,6 +649,9 @@ impl Ruleset {
             neighbours: HashSet::new(),
         };
         rs.data_hash = rs.rules_hash.clone();
+        // a card that is a whole deck (deck_recipes: Whizbang the Wonderful) is never drafted
+        let recipes = rs.deck_recipes.clone();
+        rs.arena_pool.retain(|c| !recipes.contains_key(c));
         for c in rs.cards.values() {
             if !c.power.is_empty() && !rs.cards.contains_key(&c.power) {
                 return Err(format!("{}: unknown power {}", c.id, c.power));
@@ -673,15 +676,20 @@ impl Ruleset {
             return Err(format!("rules.json: player_hooks: no hooks {h}"));
         }
         rs.hooks = hooks;
-        rs.neighbours = neighbours(&rs.cards, &scripts);
+        rs.neighbours = neighbours(&rs.cards, &scripts, rs.names.fuse);
         Ok(rs)
     }
 }
 
 /// The cards whose script (`scripts/<file>.lua#<key>`, the block `cards.<key> = …`) uses its own neighbours.
-fn neighbours(cards: &HashMap<String, Card>, scripts: &[(&String, &Vec<u8>)]) -> HashSet<String> {
+fn neighbours(cards: &HashMap<String, Card>, scripts: &[(&String, &Vec<u8>)], fuse: Option<&str>) -> HashSet<String> {
     let mut out = HashSet::new();
     for c in cards.values() {
+        // a FUSE minion (Magnetic): its place decides whether it fuses
+        if fuse.is_some_and(|f| c.keywords.iter().any(|k| k == f)) {
+            out.insert(c.id.clone());
+            continue;
+        }
         let Some((file, key)) = c.script.split_once('#') else { continue };
         let Some((_, src)) = scripts.iter().find(|(p, _)| p.as_str() == file) else { continue };
         let text = String::from_utf8_lossy(src);

@@ -1730,6 +1730,7 @@ cards.BOT_406 = {
         local n = g.random_alive(g.adjacent(d))
         if n then
           g.force_attack(d, n)
+          g.add_tag(d, "ATTACKS", 1) -- (2018: the forced attack used up its own; patch 23.0 changed it)
         end
       end
     end,

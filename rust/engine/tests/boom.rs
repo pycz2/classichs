@@ -203,6 +203,7 @@ fn release_versions() {
     }
     assert!(rs.transform_drops_enchantments);
     assert_eq!(rs.deck_recipes["BOT_914"].len(), 18);
+    assert!(!rs.arena_pool.iter().any(|c| c == "BOT_914"), "Whizbang is never drafted");
 }
 
 #[test]
@@ -634,7 +635,7 @@ fn deck_templates_play_bot_games() {
     eprintln!("The Boomsday Project cards played: {}: {played:?}", played.len());
     eprintln!("new mechanics' events: {seen:?}");
     assert!(errors.is_empty(), "script errors:\n{}", errors.join("\n"));
-    assert!(seen.contains_key("deck_recipe"), "{seen:?}");
+    assert!(seen.contains_key("deck_recipe") && seen.contains_key("fuse"), "{seen:?}");
     assert!(over >= decks.len() * 2, "most games end");
     assert!(played.len() >= 15, "the decks play the set");
 }
