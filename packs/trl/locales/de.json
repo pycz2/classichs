@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TROLL": "Rastakhans Rambazamba"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Überwältigen",
+   "tip": "Verursacht in Eurem Zug überschüssigen Schaden für einen Bonus."
+  },
+  "TOPDECK": {
+   "name": "Beim Ziehen gewirkt",
+   "tip": "Wenn Ihr diese Karte zieht, wird sie sofort gewirkt, dann zieht Ihr eine weitere Karte."
+  }
+ }
+}

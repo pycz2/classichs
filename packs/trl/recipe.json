@@ -1,0 +1,23 @@
+{
+ "about": "How tools/pack.py builds Rastakhan's Rumble 2018 (docs/packs/format.md, 'Build recipes'): on The Boomsday Project (base), so on every earlier pack down to Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 135 cards of Rastakhan's Rumble and their tokens as the release build 27845 has them (patch 13.0.0.27845 of 2018-11-29, five days before the release; data/trl_cards.json, tools/extract_cards.py --set trl), with the 4 Classic cards of patch 12.4.0.27405 (Icicle, Tome of Intellect, Call of the Void, Pilfer), the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/trl*.lua, the keywords, the older cards that changed by then).",
+ "base": "../boom",
+ "root": "../..",
+ "skip": [
+  "layout"
+ ],
+ "bundle_in_client": false,
+ "steps": [
+  {
+   "do": "hsjson",
+   "from": [
+    "data/trl_cards.json"
+   ],
+   "patch": [
+    "cards.patch.json"
+   ],
+   "texts": [
+    "packs/trl/cards.texts.json"
+   ]
+  }
+ ]
+}

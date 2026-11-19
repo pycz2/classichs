@@ -1,0 +1,747 @@
+{
+ "AT_045": {
+  "cost": 10
+ },
+ "BOT_270": {
+  "cost": 7
+ },
+ "EX1_179": {
+  "set": "VANILLA",
+  "script": "scripts/trl_a.lua#EX1_179",
+  "fx": {
+   "element": "ice",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "EX1_180": {
+  "set": "VANILLA",
+  "script": "scripts/trl_a.lua#EX1_180",
+  "fx": {
+   "element": "arcane",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "EX1_181": {
+  "script": "scripts/trl_b.lua#EX1_181",
+  "set": "VANILLA"
+ },
+ "EX1_182": {
+  "script": "scripts/trl_b.lua#EX1_182",
+  "set": "VANILLA"
+ },
+ "TRL_010": {
+  "script": "scripts/trl_n.lua#TRL_010"
+ },
+ "TRL_012": {
+  "script": "scripts/trl_b.lua#TRL_012",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "TRL_015": {
+  "script": "scripts/trl_n.lua#TRL_015"
+ },
+ "TRL_020": {
+  "script": "scripts/trl_n.lua#TRL_020"
+ },
+ "TRL_057": {
+  "script": "scripts/trl_n.lua#TRL_057"
+ },
+ "TRL_058": {
+  "script": "scripts/trl_b.lua#TRL_058"
+ },
+ "TRL_059": {
+  "script": "scripts/trl_b.lua#TRL_059",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_060": {
+  "script": "scripts/trl_b.lua#TRL_060"
+ },
+ "TRL_065": {
+  "armor": 5,
+  "script": "scripts/trl_a.lua#TRL_065",
+  "fx": {
+   "play": "battlecry"
+  },
+  "power": "TRL_065h"
+ },
+ "TRL_065h": {
+  "script": "scripts/trl_a.lua#TRL_065h",
+  "fx": {
+   "element": "steel",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "TRL_071": {
+  "script": "scripts/trl_b.lua#TRL_071",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_074": {
+  "script": "scripts/trl_b.lua#TRL_074"
+ },
+ "TRL_077": {
+  "script": "scripts/trl_b.lua#TRL_077",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_082": {
+  "script": "scripts/trl_b.lua#TRL_082"
+ },
+ "TRL_085": {
+  "script": "scripts/trl_b.lua#TRL_085"
+ },
+ "TRL_092": {
+  "script": "scripts/trl_b.lua#TRL_092"
+ },
+ "TRL_096": {
+  "script": "scripts/trl_n.lua#TRL_096",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_097": {
+  "script": "scripts/trl_a.lua#TRL_097",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "none"
+  }
+ },
+ "TRL_111": {
+  "script": "scripts/trl_a.lua#TRL_111",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_119": {
+  "script": "scripts/trl_a.lua#TRL_119",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "TRL_124": {
+  "script": "scripts/trl_b.lua#TRL_124"
+ },
+ "TRL_126": {
+  "script": "scripts/trl_b.lua#TRL_126",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_127": {
+  "script": "scripts/trl_b.lua#TRL_127",
+  "fx": {
+   "element": "fire",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "TRL_128": {
+  "script": "scripts/trl_a.lua#TRL_128",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "heal"
+  }
+ },
+ "TRL_131": {
+  "script": "scripts/trl_a.lua#TRL_131"
+ },
+ "TRL_151": {
+  "script": "scripts/trl_n.lua#TRL_151",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_156": {
+  "script": "scripts/trl_b.lua#TRL_156"
+ },
+ "TRL_157": {
+  "script": "scripts/trl_b.lua#TRL_157",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "TRL_223": {
+  "script": "scripts/trl_a.lua#TRL_223"
+ },
+ "TRL_232": {
+  "script": "scripts/trl_a.lua#TRL_232"
+ },
+ "TRL_240": {
+  "script": "scripts/trl_a.lua#TRL_240",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_241": {
+  "script": "scripts/trl_a.lua#TRL_241"
+ },
+ "TRL_243": {
+  "script": "scripts/trl_a.lua#TRL_243"
+ },
+ "TRL_244": {
+  "script": "scripts/trl_a.lua#TRL_244"
+ },
+ "TRL_245": {
+  "script": "scripts/trl_b.lua#TRL_245",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "TRL_246": {
+  "script": "scripts/trl_b.lua#TRL_246"
+ },
+ "TRL_247": {
+  "script": "scripts/trl_b.lua#TRL_247",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_249": {
+  "script": "scripts/trl_b.lua#TRL_249",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "TRL_251": {
+  "script": "scripts/trl_b.lua#TRL_251"
+ },
+ "TRL_252": {
+  "script": "scripts/trl_b.lua#TRL_252"
+ },
+ "TRL_253": {
+  "script": "scripts/trl_b.lua#TRL_253",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_254": {
+  "script": "scripts/trl_a.lua#TRL_254"
+ },
+ "TRL_254a": {
+  "script": "scripts/trl_a.lua#TRL_254a",
+  "fx": {
+   "element": "nature",
+   "cast": "bolt",
+   "hit": "buff"
+  }
+ },
+ "TRL_254b": {
+  "script": "scripts/trl_a.lua#TRL_254b"
+ },
+ "TRL_255": {
+  "script": "scripts/trl_a.lua#TRL_255"
+ },
+ "TRL_257": {
+  "script": "scripts/trl_b.lua#TRL_257"
+ },
+ "TRL_258": {
+  "script": "scripts/trl_a.lua#TRL_258",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "TRL_259": {
+  "script": "scripts/trl_a.lua#TRL_259",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_260": {
+  "script": "scripts/trl_a.lua#TRL_260",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_300": {
+  "script": "scripts/trl_a.lua#TRL_300"
+ },
+ "TRL_302": {
+  "script": "scripts/trl_a.lua#TRL_302",
+  "fx": {
+   "element": "holy",
+   "cast": "none",
+   "hit": "none"
+  }
+ },
+ "TRL_304": {
+  "script": "scripts/trl_a.lua#TRL_304"
+ },
+ "TRL_305": {
+  "script": "scripts/trl_a.lua#TRL_305"
+ },
+ "TRL_306": {
+  "script": "scripts/trl_a.lua#TRL_306",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "TRL_307": {
+  "script": "scripts/trl_a.lua#TRL_307",
+  "fx": {
+   "element": "holy",
+   "cast": "bolt",
+   "hit": "heal"
+  }
+ },
+ "TRL_308": {
+  "script": "scripts/trl_a.lua#TRL_308",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_309": {
+  "script": "scripts/trl_a.lua#TRL_309"
+ },
+ "TRL_310": {
+  "script": "scripts/trl_a.lua#TRL_310"
+ },
+ "TRL_311": {
+  "script": "scripts/trl_a.lua#TRL_311",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_312": {
+  "script": "scripts/trl_n.lua#TRL_312"
+ },
+ "TRL_313": {
+  "script": "scripts/trl_a.lua#TRL_313",
+  "fx": {
+   "element": "fire",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "TRL_315": {
+  "script": "scripts/trl_a.lua#TRL_315"
+ },
+ "TRL_316": {
+  "script": "scripts/trl_a.lua#TRL_316",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_316t": {
+  "script": "scripts/trl_n.lua#TRL_316t"
+ },
+ "TRL_317": {
+  "script": "scripts/trl_a.lua#TRL_317",
+  "fx": {
+   "element": "fire",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "TRL_318": {
+  "script": "scripts/trl_a.lua#TRL_318",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_319": {
+  "script": "scripts/trl_a.lua#TRL_319"
+ },
+ "TRL_321": {
+  "script": "scripts/trl_b.lua#TRL_321",
+  "fx": {
+   "element": "fire",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "TRL_323": {
+  "script": "scripts/trl_b.lua#TRL_323",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_324": {
+  "script": "scripts/trl_b.lua#TRL_324"
+ },
+ "TRL_325": {
+  "script": "scripts/trl_b.lua#TRL_325"
+ },
+ "TRL_326": {
+  "script": "scripts/trl_b.lua#TRL_326",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_327": {
+  "script": "scripts/trl_b.lua#TRL_327"
+ },
+ "TRL_328": {
+  "script": "scripts/trl_b.lua#TRL_328",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_329": {
+  "script": "scripts/trl_b.lua#TRL_329"
+ },
+ "TRL_339": {
+  "script": "scripts/trl_a.lua#TRL_339"
+ },
+ "TRL_341": {
+  "script": "scripts/trl_a.lua#TRL_341",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_343": {
+  "script": "scripts/trl_a.lua#TRL_343"
+ },
+ "TRL_343at1": {
+  "script": "scripts/trl_a.lua#TRL_343at1"
+ },
+ "TRL_343bt1": {
+  "script": "scripts/trl_a.lua#TRL_343bt1"
+ },
+ "TRL_343ct1": {
+  "script": "scripts/trl_a.lua#TRL_343ct1"
+ },
+ "TRL_343ct2": {
+  "keywords": [
+   "SPELLPOWER"
+  ],
+  "spell_power": 1
+ },
+ "TRL_343dt1": {
+  "script": "scripts/trl_a.lua#TRL_343dt1"
+ },
+ "TRL_345": {
+  "script": "scripts/trl_b.lua#TRL_345",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_347": {
+  "script": "scripts/trl_a.lua#TRL_347",
+  "fx": {
+   "element": "steel",
+   "cast": "bolt",
+   "hit": "hurt"
+  }
+ },
+ "TRL_348": {
+  "script": "scripts/trl_a.lua#TRL_348",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_349": {
+  "script": "scripts/trl_a.lua#TRL_349",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_351": {
+  "script": "scripts/trl_b.lua#TRL_351"
+ },
+ "TRL_352": {
+  "script": "scripts/trl_b.lua#TRL_352"
+ },
+ "TRL_360": {
+  "script": "scripts/trl_b.lua#TRL_360"
+ },
+ "TRL_362": {
+  "script": "scripts/trl_b.lua#TRL_362"
+ },
+ "TRL_363": {
+  "script": "scripts/trl_n.lua#TRL_363",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "TRL_390": {
+  "script": "scripts/trl_a.lua#TRL_390",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_400": {
+  "script": "scripts/trl_a.lua#TRL_400"
+ },
+ "TRL_405": {
+  "script": "scripts/trl_n.lua#TRL_405"
+ },
+ "TRL_406": {
+  "script": "scripts/trl_n.lua#TRL_406"
+ },
+ "TRL_407": {
+  "script": "scripts/trl_n.lua#TRL_407",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_408": {
+  "script": "scripts/trl_a.lua#TRL_408"
+ },
+ "TRL_409": {
+  "script": "scripts/trl_b.lua#TRL_409",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_500": {
+  "script": "scripts/trl_a.lua#TRL_500",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "TRL_501": {
+  "script": "scripts/trl_a.lua#TRL_501",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_502": {
+  "script": "scripts/trl_a.lua#TRL_502"
+ },
+ "TRL_503": {
+  "script": "scripts/trl_n.lua#TRL_503",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "TRL_504": {
+  "script": "scripts/trl_n.lua#TRL_504",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_505": {
+  "script": "scripts/trl_n.lua#TRL_505",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "TRL_506": {
+  "script": "scripts/trl_n.lua#TRL_506"
+ },
+ "TRL_507": {
+  "script": "scripts/trl_n.lua#TRL_507"
+ },
+ "TRL_508": {
+  "script": "scripts/trl_n.lua#TRL_508"
+ },
+ "TRL_509": {
+  "script": "scripts/trl_n.lua#TRL_509",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_509t": {
+  "script": "scripts/trl_n.lua#TRL_509t",
+  "fx": {
+   "element": "nature",
+   "cast": "none",
+   "hit": "buff"
+  }
+ },
+ "TRL_512": {
+  "script": "scripts/trl_n.lua#TRL_512",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_514": {
+  "script": "scripts/trl_n.lua#TRL_514",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_515": {
+  "script": "scripts/trl_n.lua#TRL_515"
+ },
+ "TRL_516": {
+  "script": "scripts/trl_n.lua#TRL_516"
+ },
+ "TRL_517": {
+  "script": "scripts/trl_n.lua#TRL_517",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_520": {
+  "script": "scripts/trl_n.lua#TRL_520",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "TRL_521": {
+  "script": "scripts/trl_n.lua#TRL_521"
+ },
+ "TRL_522": {
+  "script": "scripts/trl_b.lua#TRL_522",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_523": {
+  "script": "scripts/trl_n.lua#TRL_523",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_524": {
+  "script": "scripts/trl_n.lua#TRL_524",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_525": {
+  "script": "scripts/trl_n.lua#TRL_525",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "TRL_526": {
+  "script": "scripts/trl_n.lua#TRL_526",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_527": {
+  "script": "scripts/trl_n.lua#TRL_527",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_528": {
+  "script": "scripts/trl_n.lua#TRL_528"
+ },
+ "TRL_530": {
+  "script": "scripts/trl_n.lua#TRL_530",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_531": {
+  "script": "scripts/trl_n.lua#TRL_531",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "TRL_532": {
+  "script": "scripts/trl_n.lua#TRL_532"
+ },
+ "TRL_533": {
+  "script": "scripts/trl_n.lua#TRL_533",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_535": {
+  "script": "scripts/trl_n.lua#TRL_535"
+ },
+ "TRL_537": {
+  "script": "scripts/trl_n.lua#TRL_537",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_541": {
+  "script": "scripts/trl_n.lua#TRL_541",
+  "fx": {
+   "death": "skull"
+  }
+ },
+ "TRL_541t": {
+  "script": "scripts/trl_n.lua#TRL_541t",
+  "fx": {
+   "element": "shadow",
+   "cast": "none",
+   "hit": "hurt"
+  }
+ },
+ "TRL_542": {
+  "script": "scripts/trl_n.lua#TRL_542"
+ },
+ "TRL_543": {
+  "script": "scripts/trl_a.lua#TRL_543",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_545": {
+  "script": "scripts/trl_a.lua#TRL_545",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_546": {
+  "script": "scripts/trl_n.lua#TRL_546",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_551": {
+  "script": "scripts/trl_b.lua#TRL_551",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_555": {
+  "script": "scripts/trl_b.lua#TRL_555",
+  "fx": {
+   "element": "shadow",
+   "cast": "bolt",
+   "hit": "none"
+  }
+ },
+ "TRL_564": {
+  "script": "scripts/trl_n.lua#TRL_564",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_566": {
+  "script": "scripts/trl_a.lua#TRL_566"
+ },
+ "TRL_569": {
+  "script": "scripts/trl_n.lua#TRL_569",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_570": {
+  "script": "scripts/trl_n.lua#TRL_570"
+ },
+ "TRL_900": {
+  "script": "scripts/trl_a.lua#TRL_900",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "TRL_901": {
+  "script": "scripts/trl_a.lua#TRL_901"
+ },
+ "VAN_NEW1_012": {
+  "cost": 2
+ }
+}

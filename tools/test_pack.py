@@ -865,6 +865,35 @@ class Chain(unittest.TestCase):
             self.assertEqual(pack.deck_error(json.loads(files[f]), cards, rules), "", f)
         self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 12)
 
+    def test_rastakhans_rumble_stands_alone(self):
+        files, r = pack.build(pack.REPO / "packs/trl")
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertFalse([p for p in files if p.startswith("art/") and ("/BOT_" in p or "/TRL_" in p)])
+        for s in ("basic", "classic", "gil", "boom", "trl"):
+            self.assertIn(f"ui/set_{s}.png", files)
+        for f in ("scripts/boom.lua", "scripts/trl.lua"):
+            self.assertIn(f, files)
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/trl"))
+        rules = json.loads(files["rules.json"])
+        boom = json.loads((pack.REPO / "packs/boom/rules.json").read_text())
+        self.assertEqual(rules["behaviour"], boom["behaviour"])  # no patch of 12.2 to 13.0 changed a flag
+        self.assertEqual((rules["player_hooks"], rules["mechanics"]["OVERKILL"]["engine"]), ("player:trl", "EXCESS_DAMAGE"))
+        self.assertIn("TROLL", rules["modes"]["constructed"]["sets"])
+        cards = {c["id"]: c for c in json.loads(files["cards.json"])}
+        trl = [c for c in cards.values() if c.get("set") == "TROLL"]
+        self.assertEqual(len([c for c in trl if c.get("collectible")]), 135)
+        self.assertEqual([cards[c]["cost"] for c in ("VAN_NEW1_012", "BOT_270", "AT_045")], [2, 7, 10])  # 12.2.0.27358
+        # the 4 Classic cards of patch 12.4.0.27405 (2018-11-05): first in this pack, filed under Classic
+        for c in ("EX1_179", "EX1_180", "EX1_181", "EX1_182"):
+            self.assertEqual((cards[c]["set"], cards[c].get("collectible")), ("VANILLA", True), c)
+        self.assertEqual((cards["TRL_900"]["cost"], cards["TRL_900"]["attack"]), (5, 3))  # Halazzi: 4 mana 4/2 Rush in 2026
+        for lang in ("en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"):
+            loc = json.loads(files[f"locales/{lang}.json"])
+            self.assertTrue(loc["sets"]["TROLL"] and loc["mechanics"]["OVERKILL"]["name"], lang)
+        for f in [p for p in files if p.startswith("decks/")]:
+            self.assertEqual(pack.deck_error(json.loads(files[f]), cards, rules), "", f)
+        self.assertGreaterEqual(len([p for p in files if p.startswith("decks/")]), 12)
+
     def test_an_expansion_shows_the_texts_of_its_release_build(self):
         import extract_cards
         for s in [s for s in extract_cards.RELEASE_BUILDS if (pack.REPO / "packs" / s).is_dir()]:

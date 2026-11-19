@@ -1,0 +1,1353 @@
+{
+ "format": 1,
+ "limits": {
+  "champion_health": 30,
+  "max_mana": 10,
+  "hand": 10,
+  "board": 7,
+  "deck_size": 30,
+  "copies": 2,
+  "copies_by_rarity": {
+   "LEGENDARY": 1
+  },
+  "queue_steps": 5000
+ },
+ "start": {
+  "first_player": "random",
+  "hand": [
+   3,
+   4
+  ],
+  "coin": "GAME_005",
+  "mulligan": true
+ },
+ "bot": {
+  "brain": true
+ },
+ "behaviour": {
+  "countered_no_after_spell": false,
+  "full_hand_return_dies": true,
+  "cost_in_order": true,
+  "replaced_weapon_dies": true,
+  "lifesteal_one_heal": true,
+  "after_spell_from_before": true,
+  "transform_drops_enchantments": true
+ },
+ "fatigue": {
+  "enabled": true,
+  "first": 1,
+  "step": 1
+ },
+ "timers": {
+  "turn": 75,
+  "fuse": 15,
+  "mulligan": 45,
+  "grace": 5,
+  "away": 30
+ },
+ "default_power": "VAN_HERO_08bp",
+ "classes": [
+  {
+   "id": "DRUID",
+   "champion": "HERO_06"
+  },
+  {
+   "id": "HUNTER",
+   "champion": "HERO_05"
+  },
+  {
+   "id": "MAGE",
+   "champion": "HERO_08"
+  },
+  {
+   "id": "PALADIN",
+   "champion": "HERO_04"
+  },
+  {
+   "id": "PRIEST",
+   "champion": "HERO_09"
+  },
+  {
+   "id": "ROGUE",
+   "champion": "HERO_03"
+  },
+  {
+   "id": "SHAMAN",
+   "champion": "HERO_02"
+  },
+  {
+   "id": "WARLOCK",
+   "champion": "HERO_07"
+  },
+  {
+   "id": "WARRIOR",
+   "champion": "HERO_01"
+  },
+  {
+   "id": "NEUTRAL",
+   "neutral": true
+  },
+  {
+   "id": "DREAM",
+   "playable": false
+  },
+  {
+   "id": "DEMONHUNTER",
+   "playable": false
+  },
+  {
+   "id": "DEATHKNIGHT",
+   "playable": false
+  },
+  {
+   "id": "WHIZBANG",
+   "playable": false
+  }
+ ],
+ "races": [
+  "BEAST",
+  "DEMON",
+  "DRAGON",
+  "MECHANICAL",
+  "MURLOC",
+  "PIRATE",
+  "TOTEM",
+  "UNDEAD",
+  "ELEMENTAL",
+  "ALL"
+ ],
+ "rarities": [
+  {
+   "id": "FREE",
+   "tier": "common"
+  },
+  {
+   "id": "COMMON",
+   "tier": "common"
+  },
+  {
+   "id": "RARE",
+   "tier": "rare"
+  },
+  {
+   "id": "EPIC",
+   "tier": "epic"
+  },
+  {
+   "id": "LEGENDARY",
+   "tier": "legendary"
+  }
+ ],
+ "no_rarity_tier": "common",
+ "sets": [
+  "VANILLA",
+  "MISSIONS",
+  "EXPERT1",
+  "LEGACY",
+  "HERO_SKINS",
+  "CORE",
+  "NAXX",
+  "GVG",
+  "BRM",
+  "TGT",
+  "LOE",
+  "OG",
+  "KARA",
+  "GANGS",
+  "UNGORO",
+  "ICECROWN",
+  "LOOTAPALOOZA",
+  "GILNEAS",
+  "BOOMSDAY",
+  "TROLL"
+ ],
+ "mechanics": {
+  "TAUNT": {
+   "engine": "GUARD"
+  },
+  "CHARGE": {
+   "engine": "HASTE"
+  },
+  "DIVINE_SHIELD": {
+   "engine": "BARRIER"
+  },
+  "WINDFURY": {
+   "engine": "DOUBLE_ATTACK"
+  },
+  "STEALTH": {
+   "engine": "STEALTH"
+  },
+  "ELUSIVE": {
+   "engine": "SPELLPROOF"
+  },
+  "CANT_ATTACK": {
+   "engine": "CANT_ATTACK"
+  },
+  "IMMUNE": {
+   "engine": "IMMUNE"
+  },
+  "SPELLPOWER": {
+   "engine": "SPELL_POWER"
+  },
+  "OVERLOAD": {
+   "engine": "MANA_LOCK"
+  },
+  "SECRET": {
+   "engine": "TRAP"
+  },
+  "FREEZE": {
+   "engine": "FREEZE"
+  },
+  "SILENCE": {
+   "engine": "SILENCE"
+  },
+  "COUNTER": {
+   "engine": "COUNTER"
+  },
+  "BATTLECRY": {
+   "engine": "ON_PLAY"
+  },
+  "DEATHRATTLE": {
+   "engine": "ON_DEATH"
+  },
+  "COMBO": {
+   "engine": "COMBO"
+  },
+  "CHOOSE_ONE": {
+   "engine": "CHOICE"
+  },
+  "ENRAGED": {
+   "engine": "WOUNDED"
+  },
+  "AURA": {
+   "engine": "AURA"
+  },
+  "TRIGGER_VISUAL": {
+   "engine": "TRIGGER"
+  },
+  "ADJACENT_BUFF": {
+   "engine": "ADJACENT"
+  },
+  "AFFECTED_BY_SPELL_POWER": {
+   "engine": "SPELL_SCALED"
+  },
+  "ImmuneToSpellpower": {
+   "engine": "NO_SPELL_POWER"
+  },
+  "FROZEN": {
+   "engine": "FROZEN"
+  },
+  "FROZEN_THIS_TURN": {
+   "engine": "FROZEN_THIS_TURN"
+  },
+  "EXHAUSTED": {
+   "engine": "EXHAUSTED"
+  },
+  "ATTACKS": {
+   "engine": "ATTACKS"
+  },
+  "ARMOR": {
+   "engine": "ARMOR"
+  },
+  "DURABILITY": {
+   "engine": "DURABILITY"
+  },
+  "USED": {
+   "engine": "USED"
+  },
+  "LOCKED": {
+   "engine": "LOCKED"
+  },
+  "GUARDED": {
+   "engine": "GUARDED"
+  },
+  "TO_DESTROY": {
+   "engine": "TO_DESTROY"
+  },
+  "DIED_POS": {
+   "engine": "DIED_POS"
+  },
+  "DOUBLE_HEAL_DAMAGE": {
+   "engine": "POWER_MULTIPLIER"
+  },
+  "HEAL_IS_DAMAGE": {
+   "engine": "HEAL_IS_DAMAGE"
+  },
+  "POISONOUS": {
+   "engine": "POISON"
+  },
+  "DIED_TURN": {
+   "engine": "DIED_TURN"
+  },
+  "DOUBLE_DEATHRATTLE": {
+   "engine": "DOUBLE_ON_DEATH"
+  },
+  "PLAYED_COST": {
+   "engine": "PLAYED_COST"
+  },
+  "INSPIRE": {
+   "engine": "ON_POWER"
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "engine": "CANT_ATTACK_HEROES"
+  },
+  "HEROPOWER_DAMAGE": {
+   "engine": "POWER_DAMAGE"
+  },
+  "HEROPOWER_ACTIVATIONS_THIS_TURN": {
+   "engine": "POWER_USES"
+  },
+  "NUM_TIMES_HERO_POWER_USED_THIS_GAME": {
+   "engine": "POWERS_USED"
+  },
+  "DISCOVER": {
+   "engine": "OFFER"
+  },
+  "DOUBLE_BATTLECRY": {
+   "engine": "DOUBLE_ON_PLAY"
+  },
+  "CHOOSE_BOTH": {
+   "engine": "BOTH_CHOICES"
+  },
+  "UNLIMITED_ATTACKS": {
+   "engine": "UNLIMITED_ATTACKS"
+  },
+  "RANDOM_TARGETS": {
+   "engine": "RANDOM_TARGETS"
+  },
+  "JADE_GOLEM": {
+   "engine": "GROWING_SUMMON"
+  },
+  "QUEST": {
+   "engine": "TASK"
+  },
+  "QUEST_PROGRESS": {
+   "engine": "TASK_PROGRESS"
+  },
+  "QUEST_PROGRESS_TOTAL": {
+   "engine": "TASK_GOAL"
+  },
+  "UNTOUCHABLE": {
+   "engine": "DORMANT"
+  },
+  "ADAPT": {
+   "engine": "ADAPT"
+  },
+  "LIFESTEAL": {
+   "engine": "LIFESTEAL"
+  },
+  "EXTRA_END_TURN_EFFECT": {
+   "engine": "DOUBLE_TURN_END"
+  },
+  "CANT_BE_TARGETED_BY_OPPONENTS": {
+   "engine": "FOE_SPELLPROOF"
+  },
+  "RECRUIT": {
+   "engine": "SUMMON_FROM_DECK"
+  },
+  "TOPDECK": {
+   "engine": "CAST_WHEN_DRAWN"
+  },
+  "RUSH": {
+   "engine": "QUICK"
+  },
+  "ECHO": {
+   "engine": "REPEATABLE"
+  },
+  "START_OF_GAME": {
+   "engine": "AT_GAME_START"
+  },
+  "HERO_POWER_DOUBLE": {
+   "engine": "POWER_DOUBLE"
+  },
+  "MODULAR": {
+   "engine": "FUSE"
+  },
+  "HEALING_DOUBLE": {
+   "engine": "HEAL_DOUBLE"
+  },
+  "OVERKILL": {
+   "engine": "EXCESS_DAMAGE"
+  },
+  "POWER_ADJACENT": {
+   "engine": "POWER_ADJACENT"
+  },
+  "DOUBLE_COMBO": {
+   "engine": "DOUBLE_COMBO"
+  }
+ },
+ "modes": {
+  "constructed": {
+   "sets": [
+    "VANILLA",
+    "NAXX",
+    "GVG",
+    "BRM",
+    "TGT",
+    "LOE",
+    "OG",
+    "KARA",
+    "GANGS",
+    "UNGORO",
+    "ICECROWN",
+    "LOOTAPALOOZA",
+    "GILNEAS",
+    "BOOMSDAY",
+    "TROLL"
+   ],
+   "class_cards": "own_and_neutral",
+   "starter_rarities": [
+    "FREE"
+   ],
+   "starter_core": [
+    "VAN_EX1_066",
+    "VAN_CS2_172",
+    "VAN_EX1_019",
+    "VAN_CS2_182",
+    "VAN_CS2_147",
+    "VAN_CS2_179",
+    "VAN_CS2_200",
+    "VAN_CS2_120",
+    "VAN_EX1_015",
+    "VAN_CS2_189"
+   ]
+  },
+  "arena": {
+   "sets": [
+    "VANILLA",
+    "NAXX",
+    "GVG",
+    "BRM",
+    "TGT",
+    "LOE",
+    "OG",
+    "KARA",
+    "GANGS",
+    "UNGORO",
+    "ICECROWN",
+    "LOOTAPALOOZA",
+    "GILNEAS",
+    "BOOMSDAY",
+    "TROLL"
+   ],
+   "champions_offered": 3,
+   "classes": [
+    "DRUID",
+    "HUNTER",
+    "MAGE",
+    "PALADIN",
+    "PRIEST",
+    "ROGUE",
+    "SHAMAN",
+    "WARLOCK",
+    "WARRIOR"
+   ],
+   "picks": 30,
+   "offer": 3,
+   "tier_weights": {
+    "common": 765,
+    "rare": 140,
+    "epic": 75,
+    "legendary": 20
+   },
+   "special_picks": [
+    1,
+    10,
+    20,
+    30
+   ],
+   "special_tier_weights": {
+    "rare": 650,
+    "epic": 270,
+    "legendary": 80
+   },
+   "class_weight": 3,
+   "neutral_weight": 2,
+   "copies": 0,
+   "wins": 12,
+   "losses": 3
+  }
+ },
+ "ranked": {
+  "start": {
+   "rank": 25,
+   "stars": 0
+  },
+  "ranks": [
+   {
+    "rank": 25,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_009"
+    }
+   },
+   {
+    "rank": 24,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_029"
+    }
+   },
+   {
+    "rank": 23,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_008"
+    }
+   },
+   {
+    "rank": 22,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_CS2_168"
+    }
+   },
+   {
+    "rank": 21,
+    "stars": 2,
+    "loses_stars": false,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_CS2_146"
+    }
+   },
+   {
+    "rank": 20,
+    "stars": 3,
+    "floor": true,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_405"
+    }
+   },
+   {
+    "rank": 19,
+    "stars": 3,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_015"
+    }
+   },
+   {
+    "rank": 18,
+    "stars": 3,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_608"
+    }
+   },
+   {
+    "rank": 17,
+    "stars": 3,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_390"
+    }
+   },
+   {
+    "rank": 16,
+    "stars": 3,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_044"
+    }
+   },
+   {
+    "rank": 15,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_023"
+    },
+    "floor": true
+   },
+   {
+    "rank": 14,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_CS2_122"
+    }
+   },
+   {
+    "rank": 13,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_NEW1_022"
+    }
+   },
+   {
+    "rank": 12,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_084"
+    }
+   },
+   {
+    "rank": 11,
+    "stars": 4,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_005"
+    }
+   },
+   {
+    "rank": 10,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_CS2_197"
+    },
+    "floor": true
+   },
+   {
+    "rank": 9,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_CS2_151"
+    }
+   },
+   {
+    "rank": 8,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_CS2_226"
+    }
+   },
+   {
+    "rank": 7,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_032"
+    }
+   },
+   {
+    "rank": 6,
+    "stars": 5,
+    "streak_bonus": true,
+    "emblem": {
+     "card": "VAN_EX1_178"
+    }
+   },
+   {
+    "rank": 5,
+    "stars": 5,
+    "emblem": {
+     "card": "VAN_EX1_586"
+    },
+    "floor": true
+   },
+   {
+    "rank": 4,
+    "stars": 5,
+    "emblem": {
+     "card": "VAN_EX1_105"
+    }
+   },
+   {
+    "rank": 3,
+    "stars": 5,
+    "emblem": {
+     "card": "VAN_EX1_620"
+    }
+   },
+   {
+    "rank": 2,
+    "stars": 5,
+    "emblem": {
+     "card": "VAN_EX1_002"
+    }
+   },
+   {
+    "rank": 1,
+    "stars": 5,
+    "emblem": null
+   }
+  ],
+  "streak": {
+   "wins": 3,
+   "bonus_stars": 1
+  },
+  "legend": {
+   "after_rank": 1,
+   "keep_for_season": true,
+   "numbered_top": 10000,
+   "emblem": null
+  },
+  "season": {
+   "length": "month",
+   "reset": {
+    "to_rank": 25,
+    "stars_per_rank_above": 1,
+    "legend_counts_as": 0
+   }
+  }
+ },
+ "player_hooks": "player:trl",
+ "every_race": "ALL",
+ "deck_recipes": {
+  "BOT_914": [
+   {
+    "about": "Trees are Friends",
+    "class": "DRUID",
+    "cards": [
+     "UNG_809",
+     "UNG_809",
+     "BOT_444",
+     "VAN_EX1_160",
+     "VAN_EX1_160",
+     "VAN_NEW1_019",
+     "VAN_NEW1_019",
+     "UNG_078",
+     "UNG_078",
+     "GIL_663",
+     "GIL_663",
+     "BOT_419",
+     "BOT_419",
+     "VAN_CS2_011",
+     "VAN_CS2_011",
+     "BOT_420",
+     "BOT_420",
+     "VAN_EX1_158",
+     "VAN_EX1_158",
+     "GIL_553",
+     "GIL_553",
+     "VAN_EX1_571",
+     "VAN_EX1_571",
+     "UNG_111",
+     "UNG_111",
+     "BOT_422",
+     "BOT_422",
+     "VAN_EX1_573",
+     "BOT_523",
+     "BOT_523"
+    ]
+   },
+   {
+    "about": "Out of the Woods",
+    "class": "DRUID",
+    "cards": [
+     "LOOT_051",
+     "LOOT_051",
+     "VAN_EX1_154",
+     "VAN_EX1_154",
+     "VAN_CS2_013",
+     "VAN_CS2_013",
+     "BOT_420",
+     "BOT_420",
+     "VAN_CS2_012",
+     "VAN_CS2_012",
+     "UNG_900",
+     "LOOT_048",
+     "LOOT_048",
+     "LOOT_056",
+     "LOOT_056",
+     "LOOT_309",
+     "LOOT_309",
+     "VAN_EX1_164",
+     "VAN_EX1_164",
+     "LOOT_161",
+     "LOOT_161",
+     "LOOT_375",
+     "LOOT_375",
+     "ICC_832",
+     "ICC_314",
+     "LOOT_314",
+     "LOOT_314",
+     "BOT_507",
+     "BOT_507",
+     "ICC_085"
+    ]
+   },
+   {
+    "about": "Flark's Fireworks",
+    "class": "HUNTER",
+    "cards": [
+     "VAN_CS2_084",
+     "VAN_CS2_084",
+     "LOOT_222",
+     "LOOT_222",
+     "BOT_020",
+     "BOT_020",
+     "BOT_079",
+     "BOT_079",
+     "BOT_445",
+     "BOT_445",
+     "BOT_033",
+     "BOT_033",
+     "BOT_035",
+     "BOT_035",
+     "BOT_038",
+     "BOT_038",
+     "BOT_309",
+     "BOT_309",
+     "BOT_438",
+     "BOT_438",
+     "VAN_EX1_556",
+     "VAN_EX1_556",
+     "BOT_251",
+     "BOT_251",
+     "BOT_312",
+     "BOT_312",
+     "BOT_548",
+     "BOT_563",
+     "BOT_563",
+     "BOT_034"
+    ]
+   },
+   {
+    "about": "I Hunt Alone",
+    "class": "HUNTER",
+    "cards": [
+     "VAN_CS2_084",
+     "VAN_CS2_084",
+     "VAN_DS1_184",
+     "VAN_DS1_184",
+     "LOOT_222",
+     "LOOT_222",
+     "BOT_402",
+     "BOT_402",
+     "VAN_EX1_611",
+     "VAN_EX1_610",
+     "VAN_EX1_610",
+     "LOOT_079",
+     "LOOT_079",
+     "VAN_EX1_539",
+     "VAN_EX1_539",
+     "VAN_NEW1_031",
+     "VAN_NEW1_031",
+     "VAN_EX1_538",
+     "VAN_EX1_538",
+     "VAN_EX1_536",
+     "VAN_EX1_536",
+     "LOOT_077",
+     "LOOT_077",
+     "LOOT_080",
+     "LOOT_080",
+     "ICC_828",
+     "LOOT_217",
+     "LOOT_217",
+     "LOOT_085",
+     "LOOT_522"
+    ]
+   },
+   {
+    "about": "Shooting Stars",
+    "class": "MAGE",
+    "cards": [
+     "VAN_NEW1_012",
+     "VAN_NEW1_012",
+     "VAN_EX1_277",
+     "VAN_EX1_277",
+     "BOT_453",
+     "BOT_453",
+     "VAN_CS2_025",
+     "VAN_CS2_025",
+     "VAN_CS2_024",
+     "VAN_CS2_024",
+     "UNG_018",
+     "UNG_018",
+     "GIL_529",
+     "GIL_529",
+     "BOT_098",
+     "BOT_098",
+     "BOT_531",
+     "BOT_531",
+     "VAN_CS2_023",
+     "VAN_CS2_023",
+     "GIL_147",
+     "GIL_147",
+     "BOT_103",
+     "VAN_CS2_029",
+     "VAN_CS2_029",
+     "BOT_254",
+     "BOT_254",
+     "BOT_604",
+     "BOT_604",
+     "LOOT_108"
+    ]
+   },
+   {
+    "about": "Spells are fun, SO FUN!",
+    "class": "MAGE",
+    "cards": [
+     "LOOT_231",
+     "LOOT_231",
+     "VAN_NEW1_021",
+     "VAN_NEW1_021",
+     "UNG_846",
+     "UNG_846",
+     "LOOT_170",
+     "LOOT_170",
+     "VAN_EX1_007",
+     "VAN_EX1_007",
+     "UNG_928",
+     "UNG_928",
+     "VAN_CS2_022",
+     "VAN_CS2_022",
+     "LOOT_130",
+     "LOOT_130",
+     "LOOT_172",
+     "LOOT_172",
+     "VAN_CS2_028",
+     "VAN_CS2_028",
+     "UNG_955",
+     "UNG_955",
+     "VAN_EX1_249",
+     "VAN_CS2_032",
+     "VAN_CS2_032",
+     "LOOT_539",
+     "LOOT_539",
+     "ICC_833",
+     "LOOT_535",
+     "VAN_EX1_279"
+    ]
+   },
+   {
+    "about": "Kangor's Endless Army",
+    "class": "PALADIN",
+    "cards": [
+     "ICC_038",
+     "ICC_038",
+     "BOT_020",
+     "BOT_020",
+     "BOT_906",
+     "BOT_906",
+     "VAN_EX1_619",
+     "UNG_011",
+     "UNG_011",
+     "BOT_909",
+     "BOT_909",
+     "VAN_EX1_382",
+     "VAN_EX1_382",
+     "BOT_021",
+     "BOT_021",
+     "VAN_CS2_093",
+     "VAN_CS2_093",
+     "VAN_CS2_097",
+     "BOT_911",
+     "BOT_911",
+     "BOT_562",
+     "BOT_562",
+     "BOT_537",
+     "BOT_537",
+     "BOT_548",
+     "BOT_563",
+     "BOT_563",
+     "UNG_015",
+     "BOT_912",
+     "VAN_EX1_383"
+    ]
+   },
+   {
+    "about": "Greymane's Alliance",
+    "class": "PALADIN",
+    "cards": [
+     "VAN_EX1_619",
+     "VAN_EX1_619",
+     "VAN_NEW1_019",
+     "VAN_NEW1_019",
+     "UNG_011",
+     "UNG_011",
+     "LOOT_363",
+     "LOOT_363",
+     "GIL_143",
+     "GIL_143",
+     "BOT_236",
+     "BOT_909",
+     "BOT_909",
+     "VAN_CS2_093",
+     "VAN_CS2_093",
+     "VAN_CS2_097",
+     "VAN_CS2_097",
+     "VAN_CS2_092",
+     "VAN_CS2_092",
+     "UNG_962",
+     "UNG_962",
+     "ICC_466",
+     "ICC_466",
+     "GIL_817",
+     "UNG_015",
+     "UNG_952",
+     "UNG_952",
+     "GIL_692",
+     "VAN_EX1_383",
+     "GIL_596"
+    ]
+   },
+   {
+    "about": "Quest For Immortality",
+    "class": "PRIEST",
+    "cards": [
+     "VAN_CS2_004",
+     "VAN_CS2_004",
+     "VAN_CS2_235",
+     "VAN_CS2_235",
+     "UNG_940",
+     "VAN_EX1_096",
+     "VAN_EX1_096",
+     "ICC_802",
+     "ICC_802",
+     "BOT_509",
+     "BOT_509",
+     "VAN_EX1_622",
+     "VAN_EX1_622",
+     "UNG_083",
+     "UNG_083",
+     "GIL_813",
+     "GIL_813",
+     "UNG_900",
+     "LOOT_161",
+     "LOOT_161",
+     "BOT_529",
+     "BOT_529",
+     "BOT_566",
+     "BOT_566",
+     "BOT_258",
+     "LOOT_008",
+     "LOOT_008",
+     "ICC_214",
+     "ICC_214",
+     "BOT_567"
+    ]
+   },
+   {
+    "about": "Awesome Augmentation",
+    "class": "PRIEST",
+    "cards": [
+     "VAN_CS1_129",
+     "VAN_CS1_129",
+     "VAN_CS2_004",
+     "VAN_CS2_004",
+     "VAN_CS2_235",
+     "VAN_CS2_235",
+     "BOT_558",
+     "BOT_558",
+     "VAN_CS2_236",
+     "VAN_CS2_236",
+     "UNG_029",
+     "UNG_029",
+     "UNG_034",
+     "UNG_034",
+     "LOOT_209",
+     "GIL_813",
+     "GIL_813",
+     "BOT_219",
+     "BOT_219",
+     "GIL_681",
+     "GIL_681",
+     "VAN_EX1_043",
+     "VAN_EX1_043",
+     "LOOT_410",
+     "LOOT_410",
+     "UNG_963",
+     "BOT_529",
+     "BOT_529",
+     "BOT_258",
+     "VAN_EX1_572"
+    ]
+   },
+   {
+    "about": "Stolen Research",
+    "class": "ROGUE",
+    "cards": [
+     "VAN_CS2_072",
+     "VAN_CS2_072",
+     "VAN_EX1_145",
+     "VAN_EX1_145",
+     "VAN_CS2_074",
+     "VAN_CS2_074",
+     "UNG_809",
+     "UNG_809",
+     "UNG_856",
+     "UNG_856",
+     "LOOT_033",
+     "LOOT_033",
+     "GIL_696",
+     "GIL_696",
+     "BOT_083",
+     "BOT_083",
+     "VAN_EX1_613",
+     "VAN_EX1_129",
+     "VAN_EX1_129",
+     "GIL_827",
+     "GIL_827",
+     "LOOT_211",
+     "LOOT_211",
+     "GIL_672",
+     "GIL_672",
+     "BOT_087",
+     "UNG_064",
+     "UNG_064",
+     "GIL_598",
+     "ICC_827"
+    ]
+   },
+   {
+    "about": "The Necrium Trials",
+    "class": "ROGUE",
+    "cards": [
+     "VAN_CS2_072",
+     "VAN_CS2_072",
+     "VAN_CS2_073",
+     "UNG_809",
+     "UNG_809",
+     "BOT_445",
+     "BOT_445",
+     "VAN_EX1_012",
+     "LOOT_033",
+     "LOOT_413",
+     "LOOT_413",
+     "UNG_083",
+     "UNG_083",
+     "LOOT_165",
+     "BOT_286",
+     "BOT_286",
+     "VAN_EX1_093",
+     "LOOT_211",
+     "LOOT_211",
+     "LOOT_412",
+     "BOT_565",
+     "BOT_565",
+     "UNG_064",
+     "UNG_064",
+     "LOOT_503",
+     "BOT_243",
+     "BOT_508",
+     "BOT_508",
+     "BOT_066",
+     "BOT_066"
+    ]
+   },
+   {
+    "about": "The Storm Bringer",
+    "class": "SHAMAN",
+    "cards": [
+     "GIL_600",
+     "GIL_600",
+     "VAN_EX1_238",
+     "VAN_EX1_238",
+     "UNG_809",
+     "UNG_809",
+     "BOT_451",
+     "BOT_451",
+     "VAN_EX1_247",
+     "VAN_EX1_565",
+     "VAN_EX1_565",
+     "GIL_586",
+     "GIL_586",
+     "BOT_093",
+     "BOT_093",
+     "BOT_533",
+     "BOT_533",
+     "VAN_EX1_258",
+     "VAN_EX1_258",
+     "BOT_411",
+     "BOT_291",
+     "BOT_291",
+     "BOT_407",
+     "BOT_407",
+     "VAN_CS2_046",
+     "VAN_CS2_046",
+     "VAN_CS2_042",
+     "VAN_CS2_042",
+     "BOT_245",
+     "UNG_211"
+    ]
+   },
+   {
+    "about": "Witchwood Awoken",
+    "class": "SHAMAN",
+    "cards": [
+     "GIL_600",
+     "GIL_600",
+     "GIL_531",
+     "GIL_836",
+     "GIL_836",
+     "VAN_EX1_012",
+     "VAN_EX1_247",
+     "VAN_EX1_247",
+     "GIL_815",
+     "VAN_EX1_575",
+     "VAN_EX1_575",
+     "VAN_EX1_259",
+     "VAN_EX1_259",
+     "LOOT_373",
+     "LOOT_373",
+     "LOOT_516",
+     "VAN_EX1_246",
+     "VAN_EX1_246",
+     "VAN_EX1_043",
+     "ICC_466",
+     "ICC_466",
+     "ICC_912",
+     "ICC_912",
+     "UNG_025",
+     "UNG_025",
+     "UNG_851",
+     "GIL_807",
+     "VAN_NEW1_010",
+     "GIL_504",
+     "GIL_820"
+    ]
+   },
+   {
+    "about": "The Omega Project",
+    "class": "WARLOCK",
+    "cards": [
+     "VAN_EX1_302",
+     "VAN_EX1_302",
+     "LOOT_014",
+     "LOOT_014",
+     "LOOT_017",
+     "LOOT_017",
+     "VAN_NEW1_021",
+     "VAN_NEW1_021",
+     "ICC_041",
+     "ICC_041",
+     "LOOT_413",
+     "LOOT_413",
+     "GIL_614",
+     "GIL_614",
+     "VAN_CS2_062",
+     "VAN_CS2_062",
+     "LOOT_043",
+     "LOOT_043",
+     "BOT_296",
+     "BOT_296",
+     "GIL_667",
+     "GIL_667",
+     "BOT_536",
+     "BOT_536",
+     "LOOT_306",
+     "LOOT_306",
+     "GIL_825",
+     "LOOT_368",
+     "LOOT_368",
+     "ICC_831"
+    ]
+   },
+   {
+    "about": "Demonology Lab",
+    "class": "WARLOCK",
+    "cards": [
+     "VAN_CS2_065",
+     "VAN_CS2_065",
+     "VAN_EX1_319",
+     "VAN_EX1_319",
+     "LOOT_014",
+     "LOOT_014",
+     "BOT_263",
+     "BOT_263",
+     "BOT_447",
+     "BOT_447",
+     "BOT_568",
+     "VAN_EX1_596",
+     "VAN_EX1_596",
+     "LOOT_013",
+     "LOOT_013",
+     "BOT_443",
+     "BOT_443",
+     "BOT_224",
+     "BOT_224",
+     "BOT_226",
+     "BOT_226",
+     "ICC_466",
+     "ICC_466",
+     "VAN_EX1_310",
+     "VAN_EX1_310",
+     "ICC_075",
+     "ICC_075",
+     "BOT_521",
+     "BOT_521",
+     "ICC_831"
+    ]
+   },
+   {
+    "about": "The Boomsday Project",
+    "class": "WARRIOR",
+    "cards": [
+     "GIL_580",
+     "GIL_580",
+     "BOT_020",
+     "BOT_020",
+     "BOT_299",
+     "BOT_299",
+     "BOT_059",
+     "BOT_059",
+     "VAN_CS2_108",
+     "VAN_CS2_108",
+     "GIL_653",
+     "GIL_653",
+     "GIL_113",
+     "GIL_113",
+     "BOT_021",
+     "BOT_021",
+     "ICC_064",
+     "ICC_064",
+     "GIL_547",
+     "BOT_548",
+     "BOT_563",
+     "BOT_563",
+     "BOT_218",
+     "BOT_218",
+     "BOT_107",
+     "BOT_107",
+     "GIL_578",
+     "BOT_237",
+     "BOT_237",
+     "BOT_238"
+    ]
+   },
+   {
+    "about": "The Gilneas Armory",
+    "class": "WARRIOR",
+    "cards": [
+     "VAN_EX1_410",
+     "VAN_EX1_410",
+     "UNG_934",
+     "VAN_CS2_106",
+     "VAN_CS2_106",
+     "VAN_EX1_606",
+     "VAN_EX1_606",
+     "UNG_072",
+     "UNG_072",
+     "UNG_928",
+     "UNG_928",
+     "LOOT_364",
+     "LOOT_364",
+     "GIL_207",
+     "GIL_207",
+     "GIL_113",
+     "GIL_113",
+     "VAN_EX1_407",
+     "VAN_EX1_407",
+     "UNG_957",
+     "UNG_957",
+     "GIL_547",
+     "GIL_623",
+     "GIL_623",
+     "BOT_406",
+     "BOT_548",
+     "VAN_EX1_411",
+     "UNG_838",
+     "GIL_578",
+     "GIL_826"
+    ]
+   }
+  ]
+ }
+}

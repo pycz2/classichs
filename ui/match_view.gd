@@ -4150,7 +4150,7 @@ func _show_choose_one(choices: Array) -> void:
 	Sound.play(Sound.card_sound(card.card_id, "choose"))
 	var opts: Array = Rules.hooks(card.card_id).get("choose_one", [])
 	for c in choices:
-		var cv := CardView.make(opts[c], 1.3)
+		var cv := CardView.make(opts[c - 1 if c > 2 else c], 1.3)  # (choice 2 is "both": a third option is 3)
 		var choice: int = c
 		cv.clicked.connect(func(_v):
 			_close_overlay()

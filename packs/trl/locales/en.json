@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TROLL": "Rastakhan's Rumble"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Overkill",
+   "tip": "Deal excess damage on your turn for a bonus."
+  },
+  "TOPDECK": {
+   "name": "Casts When Drawn",
+   "tip": "When you draw this, it is cast at once, then you draw another card."
+  }
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "sets": {
+  "TROLL": "Rozróba Rastakana"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Rzeź",
+   "tip": "Zadaj nadmiarowe obrażenia w swojej turze, aby zyskać premię."
+  },
+  "TOPDECK": {
+   "name": "Zagraj po dobraniu",
+   "tip": "Gdy dobierzesz tę kartę, od razu zostaje zagrana, a ty dobierasz kolejną kartę."
+  }
+ }
+}
