@@ -773,6 +773,29 @@ fn q_enchants<C: Ctx>(h: &mut C, a: Args) -> R {
     ids(h, v)
 }
 
+fn q_hand_slot<C: Ctx>(h: &mut C, a: Args) -> R {
+    let g = h.game()?;
+    let e = ent(g, &a, 0)?;
+    let (x, i, n) = g.players[g.ctrl(e)].played_from;
+    if x != e {
+        return Ok(vec![L::Nil]);
+    }
+    Ok(vec![L::Int(i), L::Int(n)])
+}
+
+fn q_has_deathrattle<C: Ctx>(h: &mut C, a: Args) -> R {
+    let g = h.game()?;
+    one(g.has_death_hooks(ent(g, &a, 0)?))
+}
+
+fn q_fused<C: Ctx>(h: &mut C, a: Args) -> R {
+    let v = {
+        let g = h.game()?;
+        g.fused(ent(g, &a, 0)?)
+    };
+    ids(h, v)
+}
+
 /// A race as the scripts see it: the pack's `every_race` is `classichs_script::EVERY` (`==` to every race).
 fn race_name<'a>(rs: &crate::ruleset::Ruleset, race: &'a str) -> &'a str {
     if rs.every_race.as_deref() == Some(race) { classichs_script::EVERY } else { race }
@@ -842,7 +865,7 @@ macro_rules! queries {
             ("g.trap_ready", q_trap_ready::<$t>), ("g.spell_dmg", q_spell_dmg::<$t>), ("g.heal_amt", q_heal_amt::<$t>),
             ("g.hp_dmg", q_hp_dmg::<$t>), ("g.rule", q_rule::<$t>), ("g.combo", q_combo::<$t>), ("g.choice", q_choice::<$t>), ("g.mine", q_mine::<$t>),
             ("g.enchants", q_enchants::<$t>), ("g.info", q_info::<$t>), ("g.collectible", q_collectible::<$t>),
-            ("g.graveyard", q_graveyard::<$t>), ("g.count", q_count::<$t>),
+            ("g.graveyard", q_graveyard::<$t>), ("g.count", q_count::<$t>), ("g.fused", q_fused::<$t>), ("g.has_deathrattle", q_has_deathrattle::<$t>), ("g.hand_slot", q_hand_slot::<$t>),
         ]
     };
 }
@@ -971,7 +994,29 @@ fn a_transform(g: &mut Game, a: Args) -> R {
     if e != NONE && g.e(e).zone == "PLAY" && g.rs.card(&c).kind != "MINION" {
         return Err(a.bad(1, &format!("'{c}' is not a MINION")));
     }
-    opt_id(if e == NONE { NONE } else { g.transform_keep(e, &c, a.get(2).truthy()) })
+    // behaviour.transform_drops_enchantments (patch 12.0): `keep` is ignored
+    let keep = a.get(2).truthy() && !g.rs.transform_drops_enchantments;
+    opt_id(if e == NONE { NONE } else { g.transform_keep(e, &c, keep) })
+}
+fn a_copy_enchants(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (from, to) = (opt_ent(g, &a, 0)?, opt_ent(g, &a, 1)?);
+    if from != NONE && to != NONE {
+        g.copy_enchants(from, to);
+    }
+    none()
+}
+fn a_fuse(g: &mut Game, a: Args) -> R {
+    live(g)?;
+    let (host, m) = (ent(g, &a, 0)?, ent(g, &a, 1)?);
+    if g.e(host).zone != "PLAY" || !g.e(host).is_minion() {
+        return Err(a.bad(0, "a minion in play expected"));
+    }
+    if g.e(m).zone == "PLAY" || !g.e(m).is_minion() {
+        return Err(a.bad(1, "a minion card out of play expected"));
+    }
+    g.fuse(host, m);
+    none()
 }
 fn a_return_to_hand(g: &mut Game, a: Args) -> R {
     live(g)?;
@@ -1003,7 +1048,9 @@ fn a_to_deck(g: &mut Game, a: Args) -> R {
     if g.e(e).zone == "PLAY" {
         return Err(a.bad(0, "a card that is not in play expected"));
     }
-    opt_id(g.to_deck(e, p))
+    // a place of the deck (0: the bottom; its length: the top) instead of a random one
+    let at = if a.get(2).is_nil() { None } else { Some(num(&a, 2, 0)?.max(0) as usize) };
+    opt_id(g.to_deck_at(e, p, at))
 }
 fn a_cast(g: &mut Game, a: Args) -> R {
     live(g)?;
@@ -1012,6 +1059,11 @@ fn a_cast(g: &mut Game, a: Args) -> R {
         return Err(a.bad(1, "a spell expected"));
     }
     g.cast_copy(src, orig, t);
+    if a.get(3).truthy() {
+        // its Overload too (Electra Stormsurge's second cast): src's player owes the spell's MANA_LOCK once more
+        let p = g.ctrl(src);
+        g.players[p].mana_lock_owed += g.e(orig).card.mana_lock;
+    }
     none()
 }
 fn a_cast_random(g: &mut Game, a: Args) -> R {
@@ -1211,6 +1263,17 @@ fn a_aura_add(g: &mut Game, a: Args) -> R {
 fn a_replace_hero(g: &mut Game, a: Args) -> R {
     live(g)?;
     let (p, c) = (player(&a, 0)?, card_arg(g, &a, 1, "CHAMPION")?);
+    if a.get(2).truthy() {
+        // as a hero card played (Tess Greymane replays one): the old champion's Health stays, its Armor is gained, its
+        // power comes (`become_champion`); no Battlecry here
+        let e = g.new_entity(&c, p);
+        g.become_champion(e);
+        let armor = g.e(e).card.armor;
+        if armor > 0 {
+            g.gain_armor(p, armor);
+        }
+        return one(e);
+    }
     one(g.replace_hero(p, &c))
 }
 fn a_set_power(g: &mut Game, a: Args) -> R {
@@ -1382,5 +1445,5 @@ const ACTIONS: &[(&str, classichs_script::NativeFn<Game>)] = &[
     ("g.add_to_deck", a_add_to_deck), ("g.to_deck", a_to_deck), ("g.deathrattle", a_deathrattle), ("g.remove_dead", a_remove_dead),
     ("g.cast", a_cast), ("g.cast_random", a_cast_random), ("g.add_count", a_add_count), ("g.extra_turn", a_extra_turn),
     ("g.force_attack", a_force_attack), ("g.update_auras", a_update_auras), ("g.set_hooks", a_set_hooks),
-    ("g.battlecry", a_battlecry),
+    ("g.battlecry", a_battlecry), ("g.copy_enchants", a_copy_enchants), ("g.fuse", a_fuse),
 ];

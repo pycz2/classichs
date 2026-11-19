@@ -1,0 +1,23 @@
+{
+ "about": "How tools/pack.py builds The Boomsday Project 2018 (docs/packs/format.md, 'Build recipes'): on The Witchwood (base), so on Kobolds & Catacombs, Knights of the Frozen Throne, Journey to Un'Goro, Mean Streets of Gadgetzan, One Night in Karazhan, Whispers of the Old Gods, The League of Explorers, The Grand Tournament, Blackrock Mountain, Goblins vs Gnomes, Naxxramas and Classic: their cards, patches, scripts, fonts, texts and pictures by reference, without Classic's hand-tuned text layout (skip); then the 135 cards of The Boomsday Project and their tokens as the release build 25770 has them (patch 12.0.0.25770 of 2018-08-02, five days before the release; data/boom_cards.json, tools/extract_cards.py --set boom) with the names and texts of that build for every card of the chain (cards.texts.json, written by the same tool), and this pack's own patch (cards.patch.json: the scripts of scripts/boom*.lua, the keywords, the older cards that changed by then).",
+ "base": "../gil",
+ "root": "../..",
+ "skip": [
+  "layout"
+ ],
+ "bundle_in_client": false,
+ "steps": [
+  {
+   "do": "hsjson",
+   "from": [
+    "data/boom_cards.json"
+   ],
+   "patch": [
+    "cards.patch.json"
+   ],
+   "texts": [
+    "packs/boom/cards.texts.json"
+   ]
+  }
+ ]
+}

@@ -71,6 +71,7 @@ changed that behaviour).
 | `cost_in_order` | false | true: a card's cost changes apply in the order they came — its cost enchantments when given, the cost auras when their source came into play, its player's cost mods when made — after its own `cost_mod`, the `cost_first` auras before all (by rank: Summoning Portal 1); 0 at least at the end (the 2016 rulebook, rule M5: Emperor Thaurissan after Naga Sea Witch makes a card cost 4; from patch 9.0.0.20457 of 2017 Naga Sea Witch, Corpse Widow and Emerald Hive Queen come right after Summoning Portal: their scripts' `cost_first = 2` in Knights of the Frozen Throne). false: enchantments, then auras, then cost mods. |
 | `after_spell_from_before` | false | true: a spell's `after_spell` event (its `since` field: the play order it was played at) is heard only by what was in play before the spell was played: a minion it summoned does not react to it (patch 9.2.0.21517 of 2017: "Wild Pyromancer no longer triggers from Mindgames"; Kobolds & Catacombs). false: by all in play when it resolved. |
 | `lifesteal_one_heal` | false | true: the Lifesteal damage of one hook (a spell, a Battlecry, a Deathrattle…) heals its champion once, when the hook ends, for all it dealt, one heal per source (patch 10.0.0.22611 of 2017: "multi-target effects now apply healing as one heal"; Kobolds & Catacombs). false: each hit heals at once (Knights of the Frozen Throne). |
+| `transform_drops_enchantments` | false | true: a card that transforms in a hand or a deck never keeps its enchantments (`g.transform`'s `keep` is ignored: patch 12.0.0.25770 of 2018, "whenever a card transforms it loses its enchantments": The Witchwood's worgen, Chameleos, Shifter Zerus; The Boomsday Project). false: `keep` keeps them. |
 | `replaced_weapon_dies` | false | true: a weapon replaced by a new one is destroyed as any other: its Deathrattle and a `death` event (Death's Bite, Grave Shambler; hearthstone.wiki.gg, Weapon). false: it goes to the graveyard without them. |
 
 ## `player_hooks`
@@ -79,6 +80,12 @@ The name of a hook set of the pack's scripts (`"player:og"`) whose `on` hooks se
 `me` being that player's champion (a new champion takes over): the counts of a game no card in play keeps ("spells
 you've cast this game", "Totems you've summoned this game"; `g.add_count`, `g.count`), and what happens "when the game
 starts" (an `on.game_start` hook: after the mulligan, before the coin; api.md, events). Optional; none in Classic.
+
+Its `aura` hook (optional) runs too, once for each player after the cards' auras, `me` being that player's champion: what a player has "for the rest of the game" (The Boomsday Project: Dr. Boom, Mad Genius's "your Mechs have Rush").
+
+## `deck_recipes`
+
+Card id → a list of decks `{about?, class, cards}`: a card that stands for a whole deck (The Boomsday Project's Whizbang the Wonderful). A deck of only that card is legal (`deck::Deck::validate_in`; nothing else can go with it), and a game starts it as one of these decks, picked at random by the game's seed before the opening hands, with that class's champion; the start logs `deck_recipe` (`player`, `card`, `hero`: the new champion) and never which deck. Such a card is never drafted in the Arena. `about` is for people. Optional.
 
 ## `every_race`
 

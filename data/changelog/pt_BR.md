@@ -11,6 +11,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - A mesa da partida está mais organizada. A missão e os segredos ficam em semicírculo acima do retrato do herói, e o contador da missão não fica mais sobre a moldura. O contador de mana tem seu próprio fundo à frente da mão, e a última carta não esconde mais os números. "Desistir da partida?" abre em uma janela própria, a mesa não aparece mais através da imagem do resultado, o botão "Turno do oponente" fica dentro da janela e a contagem regressiva da troca de cartas está maior. Um segundo clique direito ou toque fecha os emotes. Uma carta com mais de seis dicas faz elas girarem devagar, de baixo para cima. Nomes longos na janela de um turno do histórico passam para uma segunda linha.
 - Espectador e replays. O relógio da partida mostra ao espectador o tempo desde o início, não 0:00. No lugar da faixa "Espectador" há um olho abaixo do botão de amigos: toque nele para ver quem joga contra quem. Um chat recolhido durante a partida é estreito e fica ao lado do nome do jogador, sem cobrir a mão. No visualizador de replays a barra de baixo mostra o turno, os nomes e o resultado, e o nome do jogador ao lado da mesa quebra por palavras. Um nome novo no servidor ou no perfil agora tem no máximo 16 caracteres; nomes antigos mais longos aparecem com "…".
 ### Adicionado
+- Projeto Cabum 2018 (7 de agosto de 2018): lacaios Magnéticos que se fundem a Mecanoides, cards Ômega para 10 Cristais de Mana, Projetos para os dois jogadores, o Dr. Cabum com um novo Poder Heroico a cada turno, os decks de Rojão, bombas no deck do oponente.
 - A mesa mostra onde um efeito acerta. Quando cards na mão são melhorados, uma faixa de luz passa pela mão e setas sobem sobre os cards. Um efeito no deck faz o deck crescer e um anel brilhar sobre ele. Um Poder Heroico novo ou mais barato se ilumina no seu lugar.
 - Um card embaralhado em um deck (o seu ou o do oponente) voa para esse deck a partir do que o mandou: o feitiço jogado, um lacaio, um herói, uma mão ou o outro deck. Um card adicionado à mão também voa da sua origem: Roubar pega cards do herói do oponente, um card criado por um lacaio sai do lacaio. Um card que você não pode ver voa virado para baixo.
 - Justa: um card sai de cada deck, cada um com o nome do dono e o custo em destaque ao lado. O card vencedor se ilumina, o perdedor escurece, e depois os dois voltam para os decks.
@@ -25,6 +26,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Dano e congelamento chegam no mesmo momento: Seta de Gelo, Cone de Frio, Nevasca e o golpe de um Elemental da Água acertam e congelam juntos.
 - Novo congelamento: cristais de gelo crescem sobre o retrato a partir da borda, há geada no contorno e brilhos correm pelo gelo. Quando um lacaio ou herói descongela, o gelo derrete.
 
+- O Luniscante da Selva volta a ser uma Fera nos jogos de A Liga dos Exploradores a O Bosque das Bruxas, como no Hearthstone até o patch 11.4 (2018). Ele não tinha tipo, e as cartas que procuram Feras não o contavam.
 ## [0.71.1] - 2026-11-13
 
 ### Corrigido

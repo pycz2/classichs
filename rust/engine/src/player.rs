@@ -34,6 +34,9 @@ pub struct Player {
     /// Turns this player takes after the current one before the opponent's (`g.extra_turn`: Time Warp); in snapshots
     /// only when some are owed.
     pub extra_turns: i64,
+    /// The card last played from this hand, its 0-based place in it and the hand's size then (`g.hand_slot`: Stargazer
+    /// Luna's "the right-most card"); not in snapshots.
+    pub played_from: (Id, i64, i64),
 }
 
 impl Player {

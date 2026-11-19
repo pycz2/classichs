@@ -11,6 +11,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - The match table is tidier. The Quest and the Secrets stand on a half circle over the hero's portrait, and the Quest's counter no longer lies on the frame. The mana counter has its own backing in front of the hand, so the last card no longer hides its digits. "Concede the match?" opens in a window of its own, the table no longer shows through the result picture, the "Enemy Turn" button stays inside the window, and the mulligan countdown is bigger. A second right click or tap closes the emotes. A card with more than six tips moves them slowly round, from the bottom up. Long names in the history's turn popup wrap onto a second line.
 - Watching and replays. A spectator's match clock shows the time since the game began, not 0:00. Instead of the "Spectator" banner there is an eye under the friends button: press it to see who plays whom. A folded chat in a game is narrow and stands next to the player's name, clear of the hand. In the replay viewer the bottom bar fits the turn, the names and the result, and a player's name beside the table wraps by words. A new name on the server or in the profile is now 16 characters at most; longer older names are shown with "…".
 ### Added
+- The Boomsday Project 2018 (August 7, 2018): Magnetic minions that fuse with Mechs, Omega cards for 10 Mana Crystals, Projects for both players, Dr. Boom with a new Hero Power every turn, Whizbang's decks, Bombs in the opponent's deck.
 - The table shows where an effect lands. When cards in a hand are buffed, a band of light passes over the hand and arrows rise over the cards. An effect on a deck makes the deck swell and a ring flash over it. A new or cheaper Hero Power lights up in its place.
 - A card shuffled into a deck (yours or the opponent's) flies into that deck from whatever sent it: the spell played, a minion, a hero, a hand or the other deck. A card added to a hand flies from its source too: Burgle takes cards from the opponent's hero, Thoughtsteal from their deck, a card made by a minion comes out of the minion. A card you may not see flies as a card back.
 - Joust: a card flies out of each deck, each one labelled with whose it is and its cost shown big beside it. The winning card lights up, the losing one darkens, then both go back into their decks.
@@ -25,6 +26,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - Damage and freeze land at the same moment: Frostbolt, Cone of Cold, Blizzard and a Water Elemental's blow hit and freeze at once.
 - A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.
 
+- Jungle Moonkin is a Beast again in the games from The League of Explorers to The Witchwood, as it was in Hearthstone until patch 11.4 (2018). It had no tribe, so cards that look for Beasts did not count it.
 ## [0.71.1] - 2026-11-13
 
 ### Fixed

@@ -180,7 +180,7 @@ fn release_versions() {
     assert_eq!(c("LOE_009t").race, "", "the Scarab became a Beast in 2016");
     assert_eq!(c("LOE_073").race, "", "Fossilized Devilsaur had no tribe");
     assert_eq!(c("LOE_053").race, "", "Djinni of Zephyrs: no Elemental yet");
-    assert_eq!(c("LOE_051").race, "", "Jungle Moonkin: no tribe (the release data's Beast was never on the card)");
+    assert_eq!(c("LOE_051").race, "BEAST", "Jungle Moonkin: a Beast until patch 11.4 (2018)");
     assert_eq!(c("LOE_039").race, "MECHANICAL");
     assert_eq!(c("LOEA10_3").cost, 0, "Murloc Tinyfin");
     assert!(c("LOEA10_3").collectible);
