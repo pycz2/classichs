@@ -56,3 +56,14 @@ Next to choosing a version there is "Compare versions": pick any two versions an
 them as a visual diff — the card as in the first version on the left, as in the second on the right, the changed parts
 (cost, attack, health, text, tribe, rarity, keywords, picture) marked in red — plus the cards added and removed. The
 list scrolls, and Back returns to the version choice.
+
+### Also in 0.73.0 (the owner, 2026-11-19)
+
+- Installing a pack from a server (and from a file, and over code play): after the download the client hangs near 99%
+  for a long time. Measure the stages; download straight to a file; run the checking, fingerprint and install in the
+  background (threads on desktop/Android, chunked per frame on the web) with a progress bar per stage and a small
+  indicator on every screen; the player can leave the screen or play another game meanwhile; installs queue.
+- 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
+  Shield" on one line).
+- The decks of every version: from the owner's browser run of ~/ClassicHS-local/prep/patches/hearthpwn_decks.js
+  (hearthpwn_decks.json).
