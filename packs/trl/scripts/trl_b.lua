@@ -579,9 +579,10 @@ end
 
 local TOTEMS = { "VAN_CS2_050", "VAN_CS2_051", "VAN_CS2_052", "VAN_NEW1_009" }
 
--- Overkill: ev (a `damage` event) is me's own hit on a minion it took below 0 Health, on its controller's turn.
+-- Overkill: ev (a `damage` event) is me's own hit on a character it took below 0 Health (a hero: Armor goes first, so
+-- Health + Armor), on its controller's turn.
 local function overkill(g, me, ev, src)
-  return ev.source == (src or me) and g.is_minion(ev.target) and g.health(ev.target) < 0 and g.current() == g.ctrl(me)
+  return ev.source == (src or me) and ev.amount > 0 and g.health(ev.target) < 0 and g.current() == g.ctrl(me)
 end
 
 -- Spells p played this turn (the player hooks' TRL_SPELLS list, PLAYED_TURN of each).
