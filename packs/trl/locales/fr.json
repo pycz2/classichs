@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "TROLL": "Les Jeux de Rastakhan"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Brutalité",
+   "tip": "Infligez des dégâts excédentaires pendant votre tour pour obtenir un bonus."
+  }
+ }
+}

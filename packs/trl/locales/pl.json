@@ -1,0 +1,11 @@
+{
+ "sets": {
+  "TROLL": "Rozróba Rastakana"
+ },
+ "mechanics": {
+  "OVERKILL": {
+   "name": "Rzeź",
+   "tip": "Zadaj nadmiarowe obrażenia w swojej turze, aby zyskać premię."
+  }
+ }
+}

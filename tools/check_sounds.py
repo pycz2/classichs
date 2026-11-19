@@ -65,7 +65,7 @@ ROWS = LOCAL / "audio-src/sound_rows.json"
 WIKI_FILES = LOCAL / "audio-src/wiki_files.json"
 # Findings checked by hand ({card id: {wiki file: why it is right}}): reported as info.
 REVIEWED = LOCAL / "audio-src/reviewed.json"
-SETS = ["classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil", "boom", "dal"]
+SETS = ["classic", "naxx", "gvg", "brm", "tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil", "boom", "trl", "dal"]
 
 SET_ROLES = {"play", "attack", "death", "hit", "music", "aim", "missile", "trigger", "reveal", "progress", "complete",
              "choose"}

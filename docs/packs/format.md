@@ -209,6 +209,7 @@ does not map is written as the engine id.
 | `TASK_PROGRESS`, `TASK_GOAL` | state | A task's count and goal: its scripts keep them, clients show them ("2/4") and the bots weigh them | — (Journey to Un'Goro: `QUEST_PROGRESS`, `QUEST_PROGRESS_TOTAL`) |
 | `DIED_TURN` | state | The turn a minion died; written only by a pack that names it (a new tag would change Classic's recorded states) | — (Naxxramas: `DIED_TURN`, Kel'Thuzad) |
 | `POWER_DAMAGE` | state | Added to its owner's power damage before `POWER_MULTIPLIER` (aura tag on the champion, a count: `g.hp_dmg`) | — (The Grand Tournament: `HEROPOWER_DAMAGE`, Fallen Hero) |
+| `POWER_ADJACENT` | state | Its owner's power also hits the minions left and right of a minion target, taken before the effect, one after the other, each as the power's target (aura tag on the champion); only in a pack that names it | — (Rastakhan's Rumble: Spirit of the Dragonhawk) |
 | `POWER_USES`, `POWERS_USED` | state | Uses of the power this turn (on the power) and of any power this game (on the champion, kept by a new one); written only by a pack that names them | — (The Grand Tournament: `HEROPOWER_ACTIVATIONS_THIS_TURN`, Garrison Commander; `NUM_TIMES_HERO_POWER_USED_THIS_GAME`, Frost Giant) |
 
 Kinds: *keyword* — a tag a card carries from its data and the engine reads;
