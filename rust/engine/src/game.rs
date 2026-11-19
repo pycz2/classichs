@@ -316,7 +316,7 @@ impl Game {
         // "when the game starts", after the mulligan (Prince Malchezaar): only for a pack whose player hooks listen, so
         // no other game logs it
         let rs = self.rs;
-        if rs.player_hooks.as_deref().is_some_and(|h| rs.hooks(h).on("game_start").is_some()) {
+        if rs.player_hooks.iter().any(|h| rs.hooks(h).on("game_start").is_some()) {
             self.emit(obj!{"type": "game_start"});
             self.resolve();
         }
@@ -527,9 +527,14 @@ impl Game {
         nt
     }
 
-    /// A target spec as it applies now: none while its `when` hook does not hold.
+    /// A target spec as it applies now: none while its `when` hook does not hold. A `like` spec is the named card's
+    /// (one step: not another `like`), none while it has no valid target.
     fn live_spec(&self, e: Id, spec: Option<TSpec>) -> Option<TSpec> {
-        spec.filter(|s| s.when.is_none_or(|f| self.fx_can_play(f, e)))
+        let s = spec.filter(|s| s.when.is_none_or(|f| self.fx_can_play(f, e)))?;
+        let Some(f) = s.like else { return Some(s) };
+        let card = self.fx_card(f, e)?;
+        let s = self.live_spec(e, self.rs.hooks(&card).target.filter(|x| x.like.is_none()))?;
+        self.targets(e, &s, self.e(e).kind() == "SPELL").iter().any(|&x| x != e).then_some(s)
     }
 
     fn spec_targets(&self, e: Id, spec: Option<TSpec>, is_spell: bool, optional: bool) -> Vec<Id> {
@@ -710,6 +715,7 @@ impl Game {
         };
         let e = self.new_entity(card, p);
         self.log_event(obj!{"type": "cast", "player": p, "entity": e, "card": card, "target": t});
+        self.twinspell(e, usize::MAX);
         for (i, f) in fs.into_iter().enumerate() {
             if i > 0 && self.game_over {
                 break;
@@ -771,6 +777,7 @@ impl Game {
         }
         self.log_event(obj!{"type": "cast", "player": p, "entity": e, "card": card, "target": t, "random": true});
         self.em(e).zone = "SETASIDE";
+        self.twinspell(e, usize::MAX);
         self.run_effect(e, "spell", t, choice, combo);
         self.em(e).zone = "GRAVEYARD";
         e
@@ -913,6 +920,10 @@ impl Game {
         if is_task {
             play.insert("task", true); // a Quest: it goes up to its champion too, in sight of both players
         }
+        // TWINSPELL: its copy comes to the hand where it was cast from before "whenever you cast a spell" hears it
+        // (countered too)
+        let (x, slot, _) = self.players[c].played_from;
+        self.twinspell(e, if x == e && slot >= 0 { slot as usize } else { usize::MAX });
         let ev = self.emit(play);
         self.resolve();
         if self.game_over {
@@ -951,6 +962,20 @@ impl Game {
         self.em(e).zone = "GRAVEYARD";
         if !self.game_over && !(countered && self.rs.countered_no_after_spell) {
             self.emit_after_spell(e, c, card, since);
+        }
+    }
+
+    /// TWINSPELL (a pack that names it): spell e, cast, gives its player its card `<id>ts` (the copy without the
+    /// keyword, at its printed cost) at hand place `slot` (`usize::MAX`: the right end), if the pack has that card.
+    pub(crate) fn twinspell(&mut self, e: Id, slot: usize) {
+        let Some(t) = self.n().twinspell else { return };
+        if !self.e(e).has(t) {
+            return;
+        }
+        let copy = format!("{}ts", self.e(e).card_id);
+        if self.rs.cards.contains_key(&copy) {
+            let p = self.ctrl(e);
+            self.add_to_hand_at(p, &copy, slot);
         }
     }
 

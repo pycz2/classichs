@@ -106,6 +106,8 @@ pub struct Game {
     /// The Lifesteal heals of the hook running now, one per source and champion, given when it ends
     /// (`behaviour.lifesteal_one_heal`); None outside a hook.
     pub(crate) steal_batch: Option<Vec<(Id, usize, i64)>>,
+    /// DOUBLE_SUMMON: the minions the running hook summoned and how many copies each is owed, made when it ends.
+    pub(crate) summon_copies: Vec<(Id, i64)>,
 }
 
 impl Game {
@@ -113,7 +115,7 @@ impl Game {
         Game { rs, rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
             phase: "MULLIGAN", pending: None, pending_next: vec![], game_over: false, winner: -1, event_log: vec![], history: vec![],
             queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: "", source_id: NONE,
-            start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new(), writes: 0, steal_batch: None }
+            start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new(), writes: 0, steal_batch: None, summon_copies: vec![] }
     }
 
     /// A game with no cards: the host that loads a pack's scripts.
@@ -375,7 +377,7 @@ impl Game {
             }
         }
         // the pack's player hooks (rules.json `player_hooks`), once for each player, `me` = the champion
-        if let Some(f) = rs.player_hooks.as_deref().and_then(|h| rs.hooks(h).on(&ty)) {
+        for f in rs.player_hooks.iter().filter_map(|h| rs.hooks(h).on(&ty)) {
             for p in 0..self.players.len() {
                 let h = self.players[p].hero;
                 self.queue.push_back(QItem { f: Trigger::On(f), me: h, ev: Some(i), needs_in_play: true });
@@ -474,8 +476,16 @@ impl Game {
                     Trigger::Trap(s) => {
                         let ev = q.ev.unwrap();
                         if g.trap_ready(me) && s.cond.is_none_or(|c| g.fx_cond(c, me, ev)) && !g.game_over {
+                            // DOUBLE_TRAP (on the champion as it triggers, an aura tag: Commander Rhyssa): the effect
+                            // runs twice (two sources: still twice, as Brann's DOUBLE_ON_PLAY)
+                            let more = g.n().double_trap.is_some_and(|k| g.e(g.hero(g.ctrl(me))).has(k)) as usize;
                             g.reveal(me);
-                            g.fx_on(s.effect, me, ev);
+                            for i in 0..=more {
+                                if i > 0 && g.game_over {
+                                    break;
+                                }
+                                g.fx_on(s.effect, me, ev);
+                            }
                         }
                     }
                     Trigger::OnDeath(f) => g.fx_me(f, me),
@@ -616,7 +626,7 @@ impl Game {
             // of the game" (Dr. Boom, Mad Genius: your Mechs have Rush); no older pack's player hooks have one
             let rs = self.rs;
             if !final_pass {
-                if let Some(f) = rs.player_hooks.as_deref().and_then(|h| rs.hooks(h).aura) {
+                for f in rs.player_hooks.iter().filter_map(|h| rs.hooks(h).aura) {
                     for p in 0..self.players.len() {
                         let h = self.players[p].hero;
                         self.from(h, |g| g.fx_me(f, h));
@@ -652,7 +662,7 @@ impl Game {
         }
         for (k, v) in tags {
             if k == n.spell_power || k == n.power_multiplier || k == n.power_damage || Some(k.as_ref()) == n.double_turn_end
-                || Some(k.as_ref()) == n.power_double || Some(k.as_ref()) == n.heal_double {
+                || Some(k.as_ref()) == n.power_double || Some(k.as_ref()) == n.heal_double || Some(k.as_ref()) == n.double_summon {
                 let n = vint(a.tags.get(&k)) + v.int();
                 a.tags.insert(k, n);
             } else {
@@ -811,8 +821,38 @@ impl Game {
         self.summon_entity(e, pos)
     }
 
-    /// Puts an existing entity (for example a card from the hand) onto the board as a summon.
+    /// Puts an existing entity (for example a card from the hand) onto the board as a summon. With DOUBLE_SUMMON on
+    /// its side's champion (Khadgar; not for a champion power's summon: "your cards"), copies of it are owed, twice as
+    /// many minions per count, made when the hook ends (`make_summon_copies`).
     pub fn summon_entity(&mut self, e: Id, pos: i64) -> Id {
+        let e = self.put_summon(e, pos);
+        if let Some(k) = self.n().double_summon.filter(|_| e != NONE) {
+            let n = vint(self.e(self.hero(self.ctrl(e))).aura.tags.get(k)).clamp(0, 3);
+            let by_power = self.source_id != NONE && self.e(self.source_id).kind() == "POWER";
+            if n > 0 && !by_power {
+                self.summon_copies.push((e, (1 << n) - 1));
+            }
+        }
+        e
+    }
+
+    /// The DOUBLE_SUMMON copies owed, right of each minion still in play, copies of it as it is now.
+    // ponytail: copies come after all of a hook's summons, so on a nearly full board a hook's later minions win the
+    // last slots over the first one's copy; make them at the summon (and re-sync at the end) if that ever matters.
+    pub(crate) fn make_summon_copies(&mut self) {
+        for (m, n) in std::mem::take(&mut self.summon_copies) {
+            for _ in 0..n {
+                let Some(i) = self.board_pos(m).filter(|_| self.e(m).zone == "PLAY") else { break };
+                let x = self.new_entity(self.e(m).card_id, self.ctrl(m));
+                self.copy_state(x, m);
+                if self.put_summon(x, i as i64 + 1) == NONE {
+                    break;
+                }
+            }
+        }
+    }
+
+    fn put_summon(&mut self, e: Id, pos: i64) -> Id {
         let c = self.ctrl(e);
         if self.players[c].board.len() >= self.rs.board {
             return NONE;
@@ -884,12 +924,18 @@ impl Game {
     }
 
     pub fn add_to_hand(&mut self, p: usize, card_id: &str) -> Id {
+        self.add_to_hand_at(p, card_id, usize::MAX)
+    }
+
+    /// `add_to_hand` at the 0-based place `pos` of the hand (past its end: the right end).
+    pub fn add_to_hand_at(&mut self, p: usize, card_id: &str, pos: usize) -> Id {
         if self.players[p].hand.len() >= self.rs.hand {
             return NONE;
         }
         let e = self.new_entity(card_id, p);
         self.em(e).zone = "HAND";
-        self.players[p].hand.push(e);
+        let hand = &mut self.players[p].hand;
+        hand.insert(pos.min(hand.len()), e);
         self.emit(obj!{"type": "add_to_hand", "player": p, "entity": e, "card": self.e(e).card_id});
         e
     }
@@ -976,6 +1022,9 @@ impl Game {
         ne.give_tag(t, false);
         self.em(e).zone = "SETASIDE";
         self.emit(obj!{"type": "transform", "from": e, "to": n, "card": self.e(n).card_id});
+        for x in self.summon_copies.iter_mut().filter(|x| x.0 == e) {
+            x.0 = n; // DOUBLE_SUMMON: a summoned minion made a copy of another (g.copy_minion) is copied as that
+        }
         n
     }
 
@@ -1594,7 +1643,7 @@ impl Game {
             game_over: self.game_over, winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(),
             next_id: self.next_id, next_order: self.next_order, source_card: "", source_id: NONE,
             start_decks: [vec![], vec![]], lua: self.lua.share(), script_error: self.script_error.clone(), writes: 0,
-            steal_batch: None }
+            steal_batch: None, summon_copies: vec![] }
     }
 
     /// clone_state with its own copy of the scripts' interpreter (a game of its own: `new {copy}`).
@@ -1613,6 +1662,12 @@ impl Game {
         if n == NONE {
             return NONE;
         }
+        self.copy_state(n, t);
+        n
+    }
+
+    /// n (a new minion of t's card) gets t's damage, enchantments, tags and Silence.
+    fn copy_state(&mut self, n: Id, t: Id) {
         let names = self.n();
         if self.e(t).silenced {
             self.em(n).silence(&names.silenced);
@@ -1628,7 +1683,6 @@ impl Game {
         ne.damage = src.damage;
         ne.borrowed = src.borrowed; // the hooks it borrowed (a Zombeast's first Beast's)
         ne.choice = src.choice; // its Choose One option (`g.choice`: a copy of Fatespinner keeps its secret Deathrattle)
-        n
     }
 
     /// The keyword tags a card may carry (the pack's names of the engine's start keywords but Frozen and Dormant).

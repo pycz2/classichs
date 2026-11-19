@@ -227,15 +227,20 @@ impl Parse<'_> {
             })
         };
         if let Some(s) = v.as_str() {
-            return Ok(TSpec { base: base_of(s).ok_or(self.bad(&format!("{field}: unknown target {s:?}")))?, filter: None, when: None });
+            return Ok(TSpec { base: base_of(s).ok_or(self.bad(&format!("{field}: unknown target {s:?}")))?, filter: None, when: None, like: None });
         }
+        let (l, pl) = self.get(v, pv, "like");
+        let like = if l.is_nil() { None } else { Some(self.func(&l, &pl, "like", true)?) };
         let (b, _) = self.get(v, pv, "base");
-        let base = b.as_str().and_then(base_of).ok_or(self.bad(&format!("{field}.base: a target kind expected")))?;
+        let base = match b.as_str().and_then(base_of) {
+            None if b.is_nil() && like.is_some() => Base::Any, // `like` alone: the base is the other card's
+            x => x.ok_or(self.bad(&format!("{field}.base: a target kind expected")))?,
+        };
         let (f, pf) = self.get(v, pv, "filter");
         let filter = if f.is_nil() { None } else { Some(self.func(&f, &pf, "filter", true)?) };
         let (w, pw) = self.get(v, pv, "when");
         let when = if w.is_nil() { None } else { Some(self.func(&w, &pw, "when", true)?) };
-        Ok(TSpec { base, filter, when })
+        Ok(TSpec { base, filter, when, like })
     }
 
     fn hooks(&mut self, t: &L, pt: &L) -> Result<HookSet, String> {
@@ -445,6 +450,9 @@ impl Game {
             if let Some(vm) = self.lua.cur.take() {
                 self.lua.checkin(vm);
             }
+            if !self.summon_copies.is_empty() && r.is_ok() {
+                self.make_summon_copies(); // DOUBLE_SUMMON (Khadgar): once the hook's own summons are done
+            }
         }
         if batch {
             let b = self.steal_batch.take().unwrap_or_default();
@@ -564,6 +572,11 @@ impl Game {
     pub(crate) fn fx_text(&self, f: HookFn, me: Id) -> Vec<String> {
         let v = self.probe_all(f, &[L::Int(me)]).unwrap_or_default();
         v.iter().map(|x| x.as_str().map(String::from).or(x.as_int().map(|n| n.to_string())).unwrap_or_default()).collect()
+    }
+
+    /// A `target.like` hook's card id (None: not a card id).
+    pub(crate) fn fx_card(&self, f: HookFn, me: Id) -> Option<String> {
+        self.probe(f, &[L::Int(me)]).and_then(|v| v.as_str().map(String::from)).filter(|c| self.rs.has(c))
     }
 
     pub(crate) fn fx_filter(&self, f: HookFn, me: Id, t: Id) -> bool {
@@ -824,6 +837,11 @@ fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
     }
     if c.task {
         vm.set(&t, "task", L::Bool(true))?; // a task card (a Quest; only then: older packs' tables stay as they were)
+    }
+    // the base of the target it needs (a Choose One card: its first option's that has one; not a Combo-only target)
+    let h = &c.hooks;
+    if let Some(b) = h.target.or_else(|| h.choice.and_then(|opts| opts.iter().find_map(|x| rs.hooks(x).target))) {
+        vm.set(&t, "target", s(b.base.name()))?;
     }
     let keywords = vm.list(c.keywords.iter().map(|k| s(k)).collect())?;
     vm.set(&t, "keywords", keywords)?;

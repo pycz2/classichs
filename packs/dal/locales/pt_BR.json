@@ -1,0 +1,37 @@
+{
+ "sets": {
+  "DALARAN": "Ascensão das Sombras"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Feitiço Duplo",
+   "tip": "Depois de lançá-lo, uma cópia deste feitiço sem Feitiço Duplo volta à sua mão."
+  }
+ },
+ "cards": {
+  "VAN_EX1_154a": {
+   "name": "Ira Solar"
+  },
+  "VAN_EX1_154b": {
+   "name": "Fúria da Natureza"
+  },
+  "VAN_EX1_155a": {
+   "name": "Fúria do Tigre"
+  },
+  "VAN_EX1_155b": {
+   "name": "Pelego Grosso"
+  },
+  "VAN_EX1_164a": {
+   "name": "Crescimento Desenfreado"
+  },
+  "VAN_EX1_164b": {
+   "name": "Adubo Enriquecido"
+  },
+  "VAN_NEW1_007a": {
+   "name": "Deriva Estelar"
+  },
+  "VAN_NEW1_007b": {
+   "name": "Senhor das Estrelas"
+  }
+ }
+}

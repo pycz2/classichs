@@ -1,0 +1,196 @@
+{
+ "format": 1,
+ "id": "dal-2019",
+ "version": "1.0.0",
+ "engine": "0.60.0",
+ "name": {
+  "en": "Rise of Shadows 2019",
+  "ru": "Возмездие теней 2019",
+  "de": "Verschwörung der Schatten 2019",
+  "fr": "L'Essor des Ombres 2019",
+  "es": "El Auge de las Sombras 2019",
+  "pt_BR": "Ascensão das Sombras 2019",
+  "it": "L'Ascesa delle Ombre 2019",
+  "pl": "Rozkwit Cienia 2019"
+ },
+ "description": {
+  "en": "The game as it was played after April 9, 2019: every card from Basic and Classic to The Boomsday Project, Rastakhan's Rumble and the 135 cards of Rise of Shadows, each as on that day. Twinspell spells come back to your hand once, Schemes grow stronger every turn you hold them, Lackeys bring small Battlecries, and the League of E.V.I.L. robs Dalaran. By then Wild Growth cost 3, Nourish 6, Cold Blood 2, Flametongue Totem 3 and Equality 4, and Poisonous, Lifesteal and Overkill counted whenever the card had them as it dealt damage.",
+  "ru": "Игра, как в неё играли после 9 апреля 2019 года: все карты от базовых и классических до «Проекта Бумного дня», «Растахановых игрищ» и 135 карт «Возмездия теней», каждая как в тот день. Дуплет возвращает заклинание в руку ещё раз, замыслы растут, пока лежат в руке, прихвостни приносят маленькие боевые кличи, а Лига ЗЛА грабит Даларан. К тому времени «Буйный рост» стоил 3, «Питание» 6, «Жажда крови» 2, «Тотем языка пламени» 3 и «Равенство» 4, а яд, похищение жизни и сверхурон срабатывали, если карта имела их в момент урона.",
+  "de": "Das Spiel, wie es nach dem 9. April 2019 gespielt wurde: alle Karten von Basis und Klassik bis zu Dr. Bumms Geheimlabor, Rastakhans Rambazamba und die 135 Karten aus Verschwörung der Schatten, jede wie an jenem Tag. Zwillingszauber kehren einmal auf die Hand zurück, Pläne werden jeden Zug stärker, Lakaien bringen kleine Kampfschreie, und die Liga des Bösen raubt Dalaran aus. Damals kostete Wildwuchs 3, Nährende Kraft 6, Kaltblütigkeit 2, Totem der Flammenzunge 3 und Gleichheit 4, und Giftig, Lebensentzug und Overkill wirkten, wenn die Karte sie beim Schaden hatte.",
+  "fr": "Le jeu tel qu'on le jouait après le 9 avril 2019 : toutes les cartes, des cartes de base et classiques au Projet Armageboum, Les Jeux de Rastakhan, et les 135 cartes de L'Essor des Ombres, chacune comme ce jour-là. Les sorts doubles reviennent une fois dans la main, les Plans grandissent à chaque tour, les Laquais apportent de petits Cris de guerre et la Ligue du M.A.L. pille Dalaran. À cette date, Croissance sauvage coûtait 3, Nourrir 6, Sang froid 2, Totem Langue de feu 3 et Égalité 4, et Toxicité, Vol de vie et Brutalité comptaient si la carte les avait en infligeant les dégâts.",
+  "es": "El juego tal como se jugaba después del 9 de abril de 2019: todas las cartas, de las básicas y clásicas a El Proyecto Armagebum, La Arena de Rastakhan, y las 135 cartas de El Auge de las Sombras, cada una como aquel día. Los hechizos dobles vuelven una vez a la mano, los Planes se vuelven más fuertes cada turno, los Lacayos traen pequeños Gritos de batalla y la Liga del MAL roba Dalaran. Para entonces Crecimiento salvaje costaba 3, Nutrir 6, Sangre fría 2, Tótem Lengua de Fuego 3 e Igualdad 4, y Venenoso, Robo de vida y Exceso contaban si la carta los tenía al infligir el daño.",
+  "pt_BR": "O jogo como era jogado depois de 9 de abril de 2019: todos os cards, dos básicos e clássicos ao Projeto Cabum, Ringue do Rastakhan, e os 135 cards de Ascensão das Sombras, cada um como naquele dia. Feitiços Duplos voltam uma vez à mão, Planos ficam mais fortes a cada turno, Servos trazem pequenos Gritos de Guerra e a Liga do M.A.L. assalta Dalaran. Naquela época, Crescimento Selvagem custava 3, Nutrir 6, Sangue Frio 2, Totem de Labaredas 3 e Igualdade 4, e Venenoso, Roubar Vida e Sobrepujar valiam se o card os tinha ao causar o dano.",
+  "it": "Il gioco come si giocava dopo il 9 aprile 2019: tutte le carte, dalle Base e Classiche a Operazione Apocalisse, La sfida di Rastakhan, e le 135 carte de L'Ascesa delle Ombre, ognuna com'era quel giorno. Le Magie Gemelle tornano una volta in mano, i Piani diventano più forti ogni turno, i Lacchè portano piccoli Grida di Battaglia e la Lega del M.A.L.E. rapina Dalaran. A quel tempo Crescita Rigogliosa costava 3, Nutrimento 6, Sangue Freddo 2, Totem Lingua di Fuoco 3 e Uguaglianza 4, e Velenoso, Furto Vitale e Annientamento contavano se la carta li aveva mentre infliggeva danni.",
+  "pl": "Gra taka, jak po 9 kwietnia 2019 roku: wszystkie karty, od podstawowych i klasycznych po Projekt Hukatomba, Rozróba Rastakana, i 135 kart z Rozkwitu Cienia, każda taka jak tamtego dnia. Dwuczary raz wracają do ręki, Plany rosną co turę, Sługusy przynoszą małe Okrzyki bojowe, a Liga Z.Ł.A. okrada Dalaran. Wtedy Dziki wzrost kosztował 3, Odżywienie 6, Zimna krew 2, Totem Ognistego Języka 3 i Równość 4, a Trujący, Kradzież życia i Nadmiar działały, jeśli karta miała je w chwili zadania obrażeń."
+ },
+ "authors": [
+  "Classic HS"
+ ],
+ "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+ "redistributable": true,
+ "default_locale": "en",
+ "locales": [
+  "en",
+  "ru",
+  "de",
+  "fr",
+  "es",
+  "pt_BR",
+  "it",
+  "pl"
+ ],
+ "art_sets": [
+  {
+   "id": "simple",
+   "name": {
+    "en": "Simple painted",
+    "ru": "Простой рисованный",
+    "de": "Einfach gemalt",
+    "fr": "Peint simple",
+    "es": "Pintado simple",
+    "pt_BR": "Pintura simples",
+    "it": "Dipinto semplice",
+    "pl": "Prosty malowany"
+   },
+   "default": true
+  },
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированный"
+   }
+  },
+  {
+   "id": "cartoon",
+   "name": {
+    "en": "Cartoon 2D",
+    "ru": "Мультяшный 2D",
+    "de": "Cartoon 2D",
+    "fr": "Dessin animé 2D",
+    "es": "Dibujos 2D",
+    "pt_BR": "Desenho 2D",
+    "it": "Cartone 2D",
+    "pl": "Kreskówka 2D"
+   }
+  },
+  {
+   "id": "photo",
+   "name": {
+    "en": "Photoreal",
+    "ru": "Фотореалистичный",
+    "de": "Fotorealistisch",
+    "fr": "Photoréaliste",
+    "es": "Fotorrealista",
+    "pt_BR": "Fotorrealista",
+    "it": "Fotorealistico",
+    "pl": "Fotorealistyczny"
+   }
+  }
+ ],
+ "sound_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированные"
+   },
+   "default": true
+  }
+ ],
+ "music_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированная"
+   },
+   "default": true
+  },
+  {
+   "id": "open",
+   "name": {
+    "en": "Open (CC0)",
+    "ru": "Открытая (CC0)"
+   }
+  }
+ ],
+ "set_marks": {
+  "VANILLA:FREE": {
+   "icon": "ui/set_basic.png"
+  },
+  "VANILLA": {
+   "icon": "ui/set_classic.png"
+  },
+  "NAXX": {
+   "icon": "ui/set_naxx.png"
+  },
+  "GVG": {
+   "icon": "ui/set_gvg.png"
+  },
+  "BRM": {
+   "icon": "ui/set_brm.png"
+  },
+  "TGT": {
+   "icon": "ui/set_tgt.png"
+  },
+  "LOE": {
+   "icon": "ui/set_loe.png"
+  },
+  "OG": {
+   "icon": "ui/set_og.png"
+  },
+  "KARA": {
+   "icon": "ui/set_kara.png"
+  },
+  "GANGS": {
+   "icon": "ui/set_msg.png"
+  },
+  "UNGORO": {
+   "icon": "ui/set_ungoro.png"
+  },
+  "ICECROWN": {
+   "icon": "ui/set_icc.png"
+  },
+  "LOOTAPALOOZA": {
+   "icon": "ui/set_loot.png"
+  },
+  "GILNEAS": {
+   "icon": "ui/set_gil.png"
+  },
+  "BOOMSDAY": {
+   "icon": "ui/set_boom.png"
+  },
+  "TROLL": {
+   "icon": "ui/set_trl.png"
+  },
+  "DALARAN": {
+   "icon": "ui/set_dal.png"
+  }
+ },
+ "card_back": null,
+ "logo": null,
+ "colors": {
+  "classes": {
+   "DRUID": "703606",
+   "HUNTER": "016e01",
+   "MAGE": "0092ab",
+   "PALADIN": "aa8f00",
+   "PRIEST": "b8b090",
+   "ROGUE": "4c4d48",
+   "SHAMAN": "0070de",
+   "WARLOCK": "7624ad",
+   "WARRIOR": "8e1002",
+   "NEUTRAL": "6b6b6b",
+   "DREAM": "6b6b6b",
+   "DEMONHUNTER": "6b6b6b"
+  },
+  "rarities": {
+   "FREE": "e8e8e8",
+   "COMMON": "e8e8e8",
+   "RARE": "2f7cff",
+   "EPIC": "a335ee",
+   "LEGENDARY": "ff8000"
+  }
+ }
+}

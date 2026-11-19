@@ -122,7 +122,7 @@ KARA_TOKENS = "KAR_004a KAR_005a KAR_010a KAR_025a KAR_025b KAR_025c KAR_026t KA
 ## The build of each set's release day (HearthSim hsdata, HearthstoneJSON keeps every build): `--set <s>` also
 ## writes packs/<s>/cards.texts.json, the names and texts of that day in every language for each card of the pack's
 ## chain (Classic's VAN_ cards by their 2014 ids) where today's differ. Confirm a build on the wiki's patch page.
-RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590, "ungoro": 18336, "icc": 20457, "loot": 22611, "gil": 23966, "boom": 25770, "trl": 27845}
+RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 12574, "kara": 13921, "msg": 15590, "ungoro": 18336, "icc": 20457, "loot": 22611, "gil": 23966, "boom": 25770, "trl": 27845, "dal": 30103}
 ## Sets whose own cards come from the release build itself, not from today's data: today's The Grand Tournament
 ## was reworked in 2023 (dozens of costs, stats and texts) and lost its upgraded hero powers (AT_132_*, now
 ## HERO_0Xbp2 skins), so its patch would restate most of the set. Today's data only adds what the old builds lack
@@ -143,7 +143,11 @@ RELEASE_BUILDS = {"gvg": 7234, "brm": 8311, "tgt": 9786, "loe": 10833, "og": 125
 ## Mad Genius 9 (2019), Test Subject, The Soularium and others changed since; second tribes and SN1P-SN4P came later.
 ## Rastakhan's Rumble too (build 27845, patch 13.0.0.27845 of 2018-11-29): Halazzi 4 mana 4/2 Rush, High Priestess
 ## Jeklik 3/5, Spirit of the Frog 5, Zentimo's and Masked Contender's texts changed since; the Undead tribe came later.
-FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil", "boom", "trl"}
+## Rise of Shadows too (build 30103, patch 14.0.0.30103 of 2019-04-09; 29933 of 2019-04-04 has the same DAL_ cards): Rapid
+## Fire 2, Kalecgos 8, Conjurer's Calling, Archivist Elysiana, EVIL Miscreant, Hench-Clan Burglar 4/4, Scargil 5, Catrina
+## Muerte (Undead), Assassin's Contract changed since; Quilboar, Draenei and Undead tribes came later; Zayle, Shadow Cloak
+## (DAL_800, 2019-05-14) is not in it.
+FROM_RELEASE = {"tgt", "loe", "og", "kara", "msg", "ungoro", "icc", "loot", "gil", "boom", "trl", "dal"}
 LANGS = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR", "itIT", "plPL"]
 ## Classic's Hero Powers had other ids in the old builds (VAN_HERO_06bp was CS2_017; the upgraded ones AT_132_*).
 _CLASSES = ["WARRIOR", "SHAMAN", "ROGUE", "PALADIN", "HUNTER", "DRUID", "WARLOCK", "MAGE", "PRIEST"]
@@ -210,6 +214,7 @@ SETS = {
     "gil": ("GILNEAS", ["GIL_"], None),
     "boom": ("BOOMSDAY", ["BOT_"], None),  # (BOTA_*: the Puzzle Lab's cards, not the set's)
     "trl": ("TROLL", ["TRL_"], None),  # (TRLA_*: Rumble Run's cards, not the set's)
+    "dal": ("DALARAN", ["DAL_"], None),
 }
 
 

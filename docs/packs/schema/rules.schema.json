@@ -43,7 +43,8 @@
         "brain": {"type": "boolean"}
       }
     },
-    "player_hooks": {"type": "string", "pattern": "^[A-Za-z0-9_:.-]{1,64}$"},
+    "player_hooks": {"anyOf": [{"type": "string", "pattern": "^[A-Za-z0-9_:.-]{1,64}$"},
+      {"type": "array", "items": {"type": "string", "pattern": "^[A-Za-z0-9_:.-]{1,64}$"}}]},
     "every_race": {"type": "string", "pattern": "^[A-Z_]{1,32}$"},
     "deck_recipes": {
       "type": "object",

@@ -80,6 +80,8 @@ The name of a hook set of the pack's scripts (`"player:og"`) whose `on` hooks se
 `me` being that player's champion (a new champion takes over): the counts of a game no card in play keeps ("spells
 you've cast this game", "Totems you've summoned this game"; `g.add_count`, `g.count`), and what happens "when the game
 starts" (an `on.game_start` hook: after the mulligan, before the coin; api.md, events). Optional; none in Classic.
+A list of names runs each set, in order, for every event (a pack adds its own set after its base's instead of copying
+it: Rise of Shadows' `["player:trl", "player:dal"]`).
 
 Its `aura` hook (optional) runs too, once for each player after the cards' auras, `me` being that player's champion: what a player has "for the rest of the game" (The Boomsday Project: Dr. Boom, Mad Genius's "your Mechs have Rush").
 

@@ -1,0 +1,31 @@
+{
+ "about": "Rise of Shadows' interface (docs/packs/format.md, 'UI theme'): the floating city of Dalaran at night during the League of E.V.I.L.'s heist — dark panels of midnight-blue Violet Citadel stone with gilded rims, buttons of deep arcane violet that flare gold under the mouse like a stolen coin, pale moonlit text on the parchment of a heist plan, gold for headings, poison green for confirmations and a villain's crimson for danger, arcane sparks rising over the menu; the title in Classic's Alegreya SC, in gold.",
+ "colors": {
+  "text": "ece6f5",
+  "muted": "aea3c4",
+  "accent": "f2c75c",
+  "table": "07051a",
+  "panel": "120c2af0",
+  "panel_border": "c9a24a",
+  "backdrop": "1b1238",
+  "button": "3a1d6ef0",
+  "button_hover": "5228a0",
+  "button_pressed": "2a144f",
+  "button_disabled": "241a3aa6",
+  "button_border": "e0b54a",
+  "button_text": "f4effc",
+  "button_text_hover": "ffffff",
+  "button_text_pressed": "ffe39a",
+  "button_text_disabled": "7d7393",
+  "outline": "05030f",
+  "danger": "d02a4a",
+  "ok": "6fd36b"
+ },
+ "outline_size": 3,
+ "button": {"style": "neon", "radius": 8, "border": 1, "glow": "a46bff33", "glow_size": 4, "glow_hover": "f2c75c99", "glow_hover_size": 12},
+ "panel": {"radius": 10, "border": 2, "glow": "8a5cff40", "glow_size": 12},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
+ "end_turn": {"button": "3a1d6e", "border": "f2c75c", "text": "f4effc", "ready": "b8860b", "ready_border": "ffe08a"},
+ "mana": "5fb8ff",
+ "menu": {"shade": "0a061e59", "particles": "embers"}
+}

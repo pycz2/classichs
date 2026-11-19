@@ -1,0 +1,37 @@
+{
+ "sets": {
+  "DALARAN": "L'Ascesa delle Ombre"
+ },
+ "mechanics": {
+  "TWINSPELL": {
+   "name": "Magia Gemella",
+   "tip": "Dopo averla lanciata, una copia di questa magia senza Magia Gemella torna nella tua mano."
+  }
+ },
+ "cards": {
+  "VAN_EX1_154a": {
+   "name": "Ira Solare"
+  },
+  "VAN_EX1_154b": {
+   "name": "Ira della Natura"
+  },
+  "VAN_EX1_155a": {
+   "name": "Furia della Tigre"
+  },
+  "VAN_EX1_155b": {
+   "name": "Pelle Spessa"
+  },
+  "VAN_EX1_164a": {
+   "name": "Crescita Sfrenata"
+  },
+  "VAN_EX1_164b": {
+   "name": "Arricchimento"
+  },
+  "VAN_NEW1_007a": {
+   "name": "Flusso Stellare"
+  },
+  "VAN_NEW1_007b": {
+   "name": "Dominio delle Stelle"
+  }
+ }
+}

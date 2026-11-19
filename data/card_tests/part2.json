@@ -9347,14 +9347,14 @@
   "VAN_EX1_164": [
     {
       "kind": "choose_one",
-      "title": "Nourish, option 1: gain 2 Mana Crystals (5 -> 7)",
+      "title": "Nourish, option 1: gain 2 Mana Crystals (6 -> 8; it costs 6 from patch 13.0.3)",
       "scene": {
         "current": 0,
         "players": [
           {
             "hero": "HERO_06",
-            "mana": 5,
-            "max_mana": 5,
+            "mana": 6,
+            "max_mana": 6,
             "deck": [
               "VAN_CS2_120",
               "VAN_CS2_182",

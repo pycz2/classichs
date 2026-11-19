@@ -58,7 +58,7 @@ Return values are ignored unless said otherwise.
 
 | Hook | Signature | When |
 |---|---|---|
-| `target` | `"any"` \| `{base = …, filter = fn(g, me, t) → bool, when = fn(g, me) → bool}` | The card (or power) needs a target. Bases: `any`, `minion`, `enemy_minion`, `friendly_minion`, `enemy_char`, `friendly_char`, `enemy_hero` (alias `enemy_champion`). Enemy STEALTH is never a target; SPELLPROOF blocks spells and powers. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required. `filter` is read-only. `when` (read-only): the spec applies only while it holds, else the card or power has no target (`t` is `nil`): Steady Shot with Steamwheedle Sniper. |
+| `target` | `"any"` \| `{base = …, filter = fn(g, me, t) → bool, when = fn(g, me) → bool}` | The card (or power) needs a target. Bases: `any`, `minion`, `enemy_minion`, `friendly_minion`, `enemy_char`, `friendly_char`, `enemy_hero` (alias `enemy_champion`). Enemy STEALTH is never a target; SPELLPROOF blocks spells and powers. A minion's battlecry target is optional (no valid target: it is played without one); a spell's is required. `filter` is read-only. `when` (read-only): the spec applies only while it holds, else the card or power has no target (`t` is `nil`): Steady Shot with Steamwheedle Sniper. `like = fn(g, me) → card id` (read-only; `base` may then be left out): the spec is that card's own `target` spec (its base, `filter` and `when`; not another `like`), as if `me` were that card; `nil`, or no valid target but `me` itself: no target (Drustvar Horror takes its taught spell's). |
 | `battlecry` (alias `on_play`) | `fn(g, me, t)` | A minion or weapon is played from the hand (after it is on the board / before it is equipped), or a hero card (a CHAMPION played from the hand: after it became its player's champion, with its Armor and power). |
 | `spell` | `fn(g, me, t)` | A spell is cast (not if countered). A TASK card's (a Quest's) runs once it waits in the trap zone: it sets its goal (`TASK_GOAL`); its `on` hooks then count (`TASK_PROGRESS`) and fulfil it (`g.remove`, the reward to the hand). |
 | `combo` | `fn(g, me, t)` | Instead of `battlecry`/`spell` when another card was played before it this turn. |
@@ -68,7 +68,7 @@ Return values are ignored unless said otherwise.
 | `hero_power` (alias `power`) | `fn(g, me, t)` | On a POWER card: the power is used. |
 | `can_play` | `fn(g, me) → bool` | The card/power may be played now (read-only). |
 | `glow` | `fn(g, me) → bool` | The card in the hand glows yellow now: its condition holds ("if you're holding a Dragon", "if your deck has no duplicates"…; read-only, for clients: snapshots mark it `glow`, no rule reads it). Without it a card with a `combo` hook glows while its combo is on (`g.combo(me)`). |
-| `text` | `fn(g, me) → string, …` | The values of the card text's `{0}`, `{1}`, … now (read-only, for clients: snapshots carry them as `text_args`; no rule reads them): a Jade card's next Golem (`"4/4"`, and `"n"` for English's "a{1}" before 8, 11, 18), a made potion's two effects (a value that is a card id stands for that card's text in the player's language). Without it the client leaves the placeholders out. |
+| `text` | `fn(g, me) → string, …` | The values of the card text's `{0}`, `{1}`, … now (read-only, for clients: snapshots carry them as `text_args`; no rule reads them): a Jade card's next Golem (`"4/4"`, and `"n"` for English's "a{1}" before 8, 11, 18), a made potion's two effects (a value that is a card id stands for that card's text in the player's language; `"name:<id>"` for that card's name: Drustvar Horror's "Cast {0} and {1}."). A text with variants `a@b@c` shows `a` unless the first value picks one: `"@N"` shows variant N instead (Fatespinner's option), `"+N"` shows `a` with variant N after it (Crystal Stag: `"+1", 3` for "… a copy of this. (3 left!)", `"+2"` for "(Ready!)"); that value fills no placeholder, the next one is `{0}`. A text with one `@` (Schemes) shows the first value there. A text that ends in an unclosed `<i>` (Spirit of Lucentbark's "<i>(") gets the first value and the bracket closed: "(3)". Without it the client leaves the placeholders out (and an unclosed `<i>` part, and shows variant `a`). |
 | `deathrattle` (alias `on_death`) | `fn(g, me)` | It died (minion or weapon; `g.died_pos(me)` is where). |
 | `on` | `{<event type> = fn(g, me, ev)}` | Any event of that type while `me` is in play (or a trap). Queued: runs after the action that caused it. |
 | `hand` | `{<event type> = fn(g, me, ev)}` | Like `on`, while the card is in its owner's hand (also an enchantment's `hooks` set's `hand` hooks: Shifter Zerus) (not during the mulligan; skipped if it left the hand before its turn in the queue): "when you draw this" (`draw` with `ev.entity == me`: Flame Leviathan, Burrowing Mine), "while this is in your hand" (Bolvar Fordragon). `hand.discard` also runs for the discarded card itself, which has left the hand: "when you discard this" (Fist of Jaraxxus). |
@@ -190,7 +190,7 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.rule(name)` | `hand`, `board`, `max_mana`, `deck_size`, `champion_health` from rules.json. |
 | `g.mine(me, ev)` | `ev.player` is `me`'s controller. |
 | `g.enchants(e, hooks)` | The `player` fields of `e`'s enchantments with these hooks. |
-| `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`, and `classes` (a list) for a multi-class card (cards.md: a card of each of its classes; its `class` is neutral), `task = true` for a TASK card (a Quest), `armor` for a hero card (a CHAMPION that gives Armor when played). |
+| `g.info(card)` | A card's data: `{id, type, class, rarity, set, cost, attack, health, durability, race, mana_lock, spell_power, collectible, keywords, trap}`, and `classes` (a list) for a multi-class card (cards.md: a card of each of its classes; its `class` is neutral), `task = true` for a TASK card (a Quest), `armor` for a hero card (a CHAMPION that gives Armor when played), `target` for a card that needs one: its base (`"any"`, `"minion"`, …, as the `target` hook names them; a Choose One card: its first option's that has one; not a Combo-only `combo_target`; `when` is not asked: the card's spec, not whether it targets now); `nil`: it needs none (Swampqueen Hagatha's second pick). |
 | `g.collectible()` | Collectible card ids of the constructed sets, sorted; no TASK card (a Quest is never made at random nor Discovered). A hero card is one of them (Knights of the Frozen Throne: "Hero cards can be randomly generated and Discovered, just like any other collectible card"). |
 | `g.count(p, name)` | A count of the game `g.add_count` keeps for `p` (0 if none). |
 | `g.fused(e)` | The cards fused into `e` that it still holds (FUSE, The Boomsday Project's Magnetic: card entities in the graveyard, in order; a Silence or a transform takes them; a copy of `e` holds them too): Kangor's Endless Army. |
@@ -265,6 +265,54 @@ Actions on `nil` (or `-1`) as the entity do nothing, so
 
 Randomness must come from these (the game's seeded generator): every
 platform, the server and replays then agree.
+
+### Patterns (Rise of Shadows)
+
+What the set needs that is data or plain Lua (no special API):
+
+- **Twinspell**: data only. The card has the keyword the pack maps to `TWINSPELL` (format.md) and the pack has its
+  copy card `<id>ts`; the engine adds the copy (to the hand place it was played from, before "whenever you cast a
+  spell", countered too, from `g.cast`/`g.cast_random` too). The card's script is an ordinary `spell` hook.
+- **Commander Rhyssa** ("Your Secrets trigger twice"): an aura of the mechanic mapped to `DOUBLE_TRAP` on her
+  champion: `aura = function(g, me) g.aura_add(g.hero(g.ctrl(me)), 0, 0, { DOUBLE_SECRET = 1 }) end`.
+- **A counter that grows in the hand** (Schemes, "Upgrades each turn!"): a tag of the card's own, a `hand` hook and
+  the `text` hook (the card's text holds `{0}`; a copy made anew starts again):
+
+  ```lua
+  local function x(g, me) return 1 + g.tag(me, "SCHEME") end
+  cards.DAL_008 = {                                -- Dr. Boom's Scheme: Gain @ Armor.
+    hand = { turn_start = function(g, me, ev)
+      if ev.player == g.ctrl(me) then g.add_tag(me, "SCHEME", 1) end
+    end },
+    text = function(g, me) return x(g, me) end,     -- snapshots: text_args = {"2"}
+    spell = function(g, me) g.gain_armor(g.ctrl(me), x(g, me)) end,
+  }
+  ```
+
+- **Discover a copy of a card in the opponent's hand** (Madame Lazul): `g.create(p, g.card(e))` for up to three
+  different cards of `g.hand(g.enemy(me))`, then `g.request_choice`; only `p` sees what the created cards are.
+- **Poisonous and Lifesteal** apply as the damage is dealt (the 14.0 rule): the engine reads them at that moment, so
+  a source silenced by a trigger of that damage still destroys or heals. Nothing to do.
+- **A minion that casts spells chosen earlier** (Swampqueen Hagatha's Drustvar Horror): the picks are `g.create`d cards
+  (set aside); their entity ids go into tags of the card (`g.set_tag(h, "HORROR_A", option)`), the Battlecry casts them
+  with `g.cast(me, s, t, true)` (free, Overload owed), `target.like` lends the targeted one's spec and `text` names them
+  (`"name:" .. g.card(s)`). Whether a card needs a target: `g.info(card).target`.
+
+  ```lua
+  cards.DAL_431t = {
+    target = { like = function(g, me)                  -- the targeted taught spell's card id, or nil: no target
+      local s = g.tag(me, "HORROR_A")
+      if s ~= 0 and g.info(g.card(s)).target then return g.card(s) end
+    end },
+    battlecry = function(g, me, t) g.cast(me, g.tag(me, "HORROR_A"), t, true) end,
+  }
+  ```
+
+- **Khadgar** ("Your cards that summon minions summon twice as many"): an aura of the mechanic mapped to
+  `DOUBLE_SUMMON` on his champion (`g.aura_add(g.hero(g.ctrl(me)), 0, 0, { DOUBLE_SUMMON = 1 })`). Each minion a script
+  summons onto that side (`g.summon`, `g.summon_right`, `g.summon_entity`: Battlecries, spells, Deathrattles, triggers,
+  Recruits, the opponent's cards too; not a minion played from the hand, not the champion's power) comes with a copy of
+  it as it is when the hook ends (after the script's changes to it), right of it; two Khadgars: four (format.md).
 
 ## Errors and limits
 
