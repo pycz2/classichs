@@ -703,7 +703,7 @@ cards.TRL_316 = {
   end,
   battlecry = function(g, me)
     if janalai_left(g, me) == 0 then
-      g.summon_right(me, "VAN_EX1_298")
+      g.summon_right(me, "TRL_316t")
     end
   end,
 }

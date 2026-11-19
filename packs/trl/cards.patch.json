@@ -64,6 +64,7 @@
   "script": "scripts/trl_b.lua#TRL_060"
  },
  "TRL_065": {
+  "armor": 5,
   "script": "scripts/trl_a.lua#TRL_065",
   "fx": {
    "play": "battlecry"

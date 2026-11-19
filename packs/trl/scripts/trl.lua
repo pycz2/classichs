@@ -5,6 +5,9 @@
 -- TRL_HEALED (the Health its player's cards restored this game: Zandalari Templar), TRL_SPELL_MANA (the mana spent on
 -- spells: Shirvallah) and TRL_POWER_DMG (the damage of its
 -- player's Hero Power this game: Jan'alai). The older cards of boom.lua stay boom.lua's (cards.patch.json of boom).
+-- Patch 13.0's rules need no flag: a damage redirection happens once per chain, before modifiers (the only one that
+-- redirects damage is Snapjaw Shellfighter, trl_n.lua: its predamage hook), and a Deathrattle that returns its card
+-- never cancelled the card's other Deathrattles here (the engine always runs them all).
 local cards = {}
 
 -- --- helpers (the same in every boom*.lua; gil.lua's) --------------------------------------------------------------
@@ -837,7 +840,7 @@ cards["player:trl"] = {
     end,
     damage = function(g, me, ev)
       local p = g.ctrl(me)
-      if ev.amount > 0 and ev.source and ev.source > 0 and g.ctrl(ev.source) == p and g.info(g.card(ev.source)).type == "HERO_POWER" then
+      if ev.amount > 0 and ev.source and ev.source > 0 and g.ctrl(ev.source) == p and g.info(g.card(ev.source)).type == "POWER" then
         g.add_count(p, "TRL_POWER_DMG", ev.amount)
       end
       if ev.target == g.hero(p) and ev.amount > 0 then

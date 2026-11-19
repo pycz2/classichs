@@ -597,13 +597,19 @@ local function spells_on_turn(g, p, turn)
   return out
 end
 
--- "Stealth for 1 turn" (the Spirits): Stealth until its controller's next turn starts.
+-- "Stealth for 1 turn" (the Spirits): Stealth until its controller's next turn starts (played or summoned).
 local function spirit(h)
-  h.battlecry = function(g, me)
-    g.give_tag(me, "STEALTH")
-    g.set_tag(me, "SPIRIT_STEALTH", true)
-  end
   h.on = h.on or {}
+  local summoned = h.on.summon
+  h.on.summon = function(g, me, ev)
+    if ev.entity == me then
+      g.give_tag(me, "STEALTH")
+      g.set_tag(me, "SPIRIT_STEALTH", true)
+    end
+    if summoned then
+      summoned(g, me, ev)
+    end
+  end
   local start = h.on.turn_start
   h.on.turn_start = function(g, me, ev)
     if g.mine(me, ev) and g.has(me, "SPIRIT_STEALTH") then
