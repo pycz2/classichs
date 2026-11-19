@@ -9794,14 +9794,14 @@
   "VAN_EX1_164a": [
     {
       "kind": "choose_one",
-      "title": "Nourish, Rampant Growth option: gain 2 full Mana Crystals (5 -> 7)",
+      "title": "Nourish, Rampant Growth option: gain 2 full Mana Crystals (6 -> 8; it costs 6 from patch 13.0.3)",
       "scene": {
         "current": 0,
         "players": [
           {
             "hero": "HERO_06",
-            "mana": 5,
-            "max_mana": 5,
+            "mana": 6,
+            "max_mana": 6,
             "hand": [
               "VAN_EX1_164"
             ],
