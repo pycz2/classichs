@@ -249,7 +249,7 @@ static func sound_for(ev: Dictionary, g: GameView, viewer: int, nth := 1) -> Str
 			if CardDb.card(id).get("type") == "SPELL":
 				return _first([card_sound(id, "play"), _element(id, "spell"), "spell"])
 			return "play_card"  # a minion or a weapon leaves the hand; its own sound when it lands
-		"summon":
+		"summon", "fuse":  # (a Magnetic minion: its own sound as it fuses)
 			return _first([card_sound(id_of.call("entity"), "play"), "summon"])
 		"equip":
 			return _first([card_sound(id_of.call("entity"), "play"), "equip"])
@@ -390,7 +390,7 @@ static func aiming() -> String:
 ## What a step's event makes its card say: [card id, kind] for a minion or a weapon coming into play
 ## and for a death, [] for nothing.
 static func line_for(ev: Dictionary, g: GameView) -> Array:
-	var kind: String = {"summon": "play", "equip": "play", "death": "death", "hero_replaced": "play"}.get(ev.type, "")  # (a hero card: its line as it takes over)
+	var kind: String = {"summon": "play", "fuse": "play", "equip": "play", "death": "death", "hero_replaced": "play"}.get(ev.type, "")  # (a hero card: its line as it takes over)
 	var e := g.ent(int(ev.get("entity", -1)))
 	var id: String = e.card_id if e else str(ev.get("card", ""))
 	return [id, kind] if kind != "" and id != "" else []

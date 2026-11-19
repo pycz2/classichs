@@ -223,6 +223,8 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 		"faded":  # an Echo copy goes away at the end of the turn; no line if the view hides it
 			if str(ev.get("card", "")) != "":
 				s = _say(p, viewer, "%s fades from your hand", "%s fades from Opponent's hand", [CardText.name(ev.card, loc)])
+		"deck_recipe":  # a deck of only Whizbang the Wonderful became one of its decks (which one stays hidden)
+			s = _say(p, viewer, "%s picks one of its decks for you", "%s picks one of its decks for Opponent", [CardText.name(ev.card, loc)])
 		"start_of_game":  # (Baku the Mooneater, Genn Greymane): both players see it
 			s = _say(p, viewer, "Start of Game: your %s", "Start of Game: Opponent's %s", [CardText.name(ev.card, loc)])
 		"battlecry":  # a Battlecry repeated (Shudderwock)

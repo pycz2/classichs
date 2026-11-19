@@ -1163,7 +1163,7 @@ FLOWS.append(dict(
          [("rust/engine/src/lua.rs", "pub(crate) fn build(rs: &Ruleset, scripts:")]),
         ("ruleset", "api", ("hooks on cards, cached", "хуки на картах, в кэш"), ("Hooks copied onto the cards, neighbour-aware cards noted; the ruleset joins the cache.",
                                                                         "Хуки копируются на карты, отмечаются карты, которым важны соседи; набор правил попадает в кэш."),
-         [("rust/engine/src/ruleset.rs", "rs.neighbours = neighbours(&rs.cards, &scripts);")]),
+         [("rust/engine/src/ruleset.rs", "rs.neighbours = neighbours(&rs.cards, &scripts, rs.names.fuse);")]),
         ("api", "rules", "{ok, pack: rules_hash}", ("From now on `new {pack}` plays this game.", "Дальше `new {pack}` играет эту игру."),
          [("rust/engine/src/api.rs", "fn ruleset(&self, req: &Value)")]),
     ],

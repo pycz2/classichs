@@ -1,0 +1,14 @@
+{
+ "sets": {
+  "BOOMSDAY": "The Boomsday Project"
+ },
+ "classes": {
+  "WHIZBANG": "Whizbang"
+ },
+ "mechanics": {
+  "MODULAR": {
+   "name": "Magnetic",
+   "tip": "Play this to the left of a Mech to fuse them together!"
+  }
+ }
+}

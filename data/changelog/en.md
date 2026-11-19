@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - A legendary minion's music when it is played now follows the sound effects volume, not the music volume. With the music turned down it was barely heard under the card's own sounds, and with the music off it did not play at all.
 - The game in the browser no longer takes more and more memory with every match. Each music track played stayed in the page's memory for good, about 30 MB a match, and after a few hours of a tournament the browser slowed down. The tournament list also no longer redraws every row on every frame, and a tournament's page, while bots play in it, updates at most once a second.
 ### Added
+- The Boomsday Project 2018 (August 7, 2018): Magnetic minions that fuse with Mechs, Omega cards for 10 Mana Crystals, Projects for both players, Dr. Boom with a new Hero Power every turn, Whizbang's decks, Bombs in the opponent's deck.
 - The table shows where an effect lands. When cards in a hand are buffed, a band of light passes over the hand and arrows rise over the cards. An effect on a deck makes the deck swell and a ring flash over it. A new or cheaper Hero Power lights up in its place.
 - A card shuffled into a deck (yours or the opponent's) flies into that deck from whatever sent it: the spell played, a minion, a hero, a hand or the other deck. A card added to a hand flies from its source too: Burgle takes cards from the opponent's hero, Thoughtsteal from their deck, a card made by a minion comes out of the minion. A card you may not see flies as a card back.
 - Joust: a card flies out of each deck, each one labelled with whose it is and its cost shown big beside it. The winning card lights up, the losing one darkens, then both go back into their decks.
@@ -24,6 +25,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - Damage and freeze land at the same moment: Frostbolt, Cone of Cold, Blizzard and a Water Elemental's blow hit and freeze at once.
 - A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.
 
+- Jungle Moonkin is a Beast again in the games from The League of Explorers to The Witchwood, as it was in Hearthstone until patch 11.4 (2018). It had no tribe, so cards that look for Beasts did not count it.
 ## [0.71.1] - 2026-11-13
 
 ### Fixed

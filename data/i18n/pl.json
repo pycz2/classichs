@@ -912,5 +912,10 @@
 "A card in your deck gets %+d/%+d": "Karta w twojej talii otrzymuje %+d/%+d",
 "A card in Opponent's deck gets %+d/%+d": "Karta w talii przeciwnika otrzymuje %+d/%+d",
 "%d cards in your deck get %+d/%+d": "Kart w twojej talii: %d, każda otrzymuje %+d/%+d",
-"%d cards in Opponent's deck get %+d/%+d": "Kart w talii przeciwnika: %d, każda otrzymuje %+d/%+d"
+"%d cards in Opponent's deck get %+d/%+d": "Kart w talii przeciwnika: %d, każda otrzymuje %+d/%+d",
+"This card is a whole deck: it goes alone": "Ta karta to cała talia: musi być w niej sama",
+"%s is a whole deck: take the other cards out?": "„%s” to cała talia. Usunąć pozostałe karty?",
+"Take them out": "Usuń",
+"%s picks one of its decks for you": "„%s” wybiera dla ciebie jedną ze swoich talii",
+"%s picks one of its decks for Opponent": "„%s” wybiera jedną ze swoich talii dla przeciwnika"
 }

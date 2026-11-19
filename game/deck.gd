@@ -19,6 +19,17 @@ func card_class() -> String:
 	return Decks.card_class(hero)
 
 
+## A card that stands for a whole deck (the pack's rules.json `deck_recipes`: Whizbang the Wonderful): it goes alone.
+static func recipe(id: String) -> bool:
+	var p := Packs.active()
+	return p != null and p.rules().get("deck_recipes", {}).has(id)
+
+
+## The number of cards of the finished deck: 1 for a recipe card alone, else SIZE.
+func goal() -> int:
+	return 1 if not arena and cards.size() == 1 and recipe(cards[0]) else SIZE
+
+
 func count(id: String) -> int:
 	return cards.count(id)
 

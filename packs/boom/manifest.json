@@ -1,0 +1,190 @@
+{
+ "format": 1,
+ "id": "boom-2018",
+ "version": "1.0.0",
+ "engine": "0.60.0",
+ "name": {
+  "en": "The Boomsday Project 2018",
+  "ru": "Проект Бумного дня 2018",
+  "de": "Dr. Bumms Geheimlabor 2018",
+  "fr": "Projet Armageboum 2018",
+  "es": "El Proyecto Armagebum 2018",
+  "pt_BR": "Projeto Cabum 2018",
+  "it": "Operazione Apocalisse 2018",
+  "pl": "Projekt Hukatomba 2018"
+ },
+ "description": {
+  "en": "The game as it was played after August 7, 2018: the Basic, Classic, Naxxramas, Goblins vs Gnomes, Blackrock Mountain, Grand Tournament, League of Explorers, Old Gods, Karazhan, Gadgetzan, Un'Goro, Frozen Throne, Kobolds & Catacombs and Witchwood cards and the 135 cards of The Boomsday Project, each as on that day. Magnetic minions fuse with a Mech, Omega cards grow stronger with 10 Mana Crystals, Projects help both players, Dr. Boom gets a new Hero Power every turn and Whizbang starts you with one of his decks. By then Spiteful Summoner cost 7, Naga Sea Witch 8, Dark Pact restored only 4 Health, and a copied card kept its enchantments.",
+  "ru": "Игра, как в неё играли после 7 августа 2018 года: базовые и классические карты, карты Наксрамаса, «Гоблинов и гномов», Чёрной горы, Большого турнира, Лиги исследователей, «Пробуждения древних богов», «Вечеринки в Каражане», «Злачного города Прибамбасска», «Экспедиции в Ун'Горо», «Рыцарей Ледяного Трона», «Кобольдов и катакомб», «Ведьмина леса» и 135 карт «Проекта Бумного дня», каждая как в тот день. Существа с магнетизмом сливаются с механизмами, карты «Омега» становятся сильнее при 10 кристаллах маны, «Проекты» помогают обоим игрокам, Безумный гений Бум каждый ход получает новую силу героя, а Чудастер даёт в начале матча одну из своих колод. К тому времени Злая призывательница стоила 7, Морская ведьма 8, «Темный пакт» восполнял только 4 здоровья, а копия карты сохраняла её улучшения.",
+  "de": "Das Spiel, wie es nach dem 7. August 2018 gespielt wurde: die Basis-, Klassik-, Naxxramas-, „Goblins gegen Gnome“-, Schwarzfels-, Turnier-, Forscherliga-, Alte-Götter-, Karazhan-, Gadgetzan-, Un'Goro-, Frostthron-, „Kobolde & Katakomben“- und Hexenwald-Karten und die 135 Karten aus Dr. Bumms Geheimlabor, jede wie an jenem Tag. Magnetische Diener verschmelzen mit einem Mech, Omega-Karten werden mit 10 Manakristallen stärker, Projekte helfen beiden Spielern, Dr. Bumm erhält jeden Zug eine neue Heldenfähigkeit und Wurbelfitz lässt Euch mit einem seiner Decks beginnen. Damals kostete die Boshafte Beschwörerin 7, die Meerhexe der Naga 8, der Düstere Pakt stellte nur 4 Leben wieder her, und eine kopierte Karte behielt ihre Verzauberungen.",
+  "fr": "Le jeu tel qu'on le jouait après le 7 août 2018 : les cartes de base, classiques, de Naxxramas, de Gobelins et Gnomes, du Mont Rochenoire, du Grand Tournoi, de la Ligue des explorateurs, des Murmures des Dieux très anciens, de Karazhan, de Gadgetzan, d'Un'Goro, du Trône de glace, de Kobolds et Catacombes et du Bois Maudit, et les 135 cartes du Projet Armageboum, chacune comme ce jour-là. Les serviteurs avec Magnétisme fusionnent avec un Méca, les cartes Oméga deviennent plus fortes avec 10 cristaux de mana, les Projets aident les deux joueurs, le Dr Boum change de pouvoir héroïque à chaque tour et Mystifix vous fait commencer avec un de ses decks. À cette date, l'Invocatrice malveillante coûtait 7, la Sorcière des mers naga 8, le Sombre pacte ne rendait que 4 PV, et une carte copiée gardait ses enchantements.",
+  "es": "El juego tal como se jugaba después del 7 de agosto de 2018: las cartas básicas y clásicas, las de Naxxramas, Goblins contra Gnomos, la Montaña Roca Negra, el Gran Torneo, la Liga de Expedicionarios, los Dioses Antiguos, Karazhan, Gadgetzan, Un'Goro, el Trono Helado, Kóbolds & Catacumbas y el Bosque Embrujado, y las 135 cartas de El Proyecto Armagebum, cada una como aquel día. Los esbirros con Magnetismo se fusionan con un Robot, las cartas Omega se vuelven más fuertes con 10 cristales de maná, los Proyectos ayudan a ambos jugadores, el Dr. Bum cambia de poder de héroe cada turno y Mirífico te hace empezar con uno de sus mazos. Para entonces la Invocadora maliciosa costaba 7, la Bruja de mar naga 8, Pacto oscuro solo restauraba 4 de salud y una carta copiada conservaba sus encantamientos.",
+  "pt_BR": "O jogo como era jogado depois de 7 de agosto de 2018: os cards básicos e clássicos, os de Naxxramas, Goblins vs. Gnomos, Montanha Rocha Negra, O Grande Torneio, Liga dos Exploradores, Deuses Antigos, Karazhan, Gadgetzan, Un'Goro, Trono de Gelo, Kobolds & Catacumbas e O Bosque das Bruxas, e os 135 cards do Projeto Cabum, cada um como naquele dia. Lacaios Magnéticos se fundem a um Mecanoide, cards Ômega ficam mais fortes com 10 Cristais de Mana, os Projetos ajudam os dois jogadores, o Dr. Cabum ganha um novo Poder Heroico a cada turno e Rojão faz você começar com um dos decks dele. Naquela época, o Evocador Malevolente custava 7, a Bruxa do Mar Naga 8, o Pacto Sombrio restaurava só 4 de Vida, e um card copiado mantinha seus encantamentos.",
+  "it": "Il gioco come si giocava dopo il 7 agosto 2018: le carte Base e Classiche, quelle di Naxxramas, Goblin vs Gnomi, Massiccio Roccianera, Gran Torneo, Lega degli Esploratori, Antichi Dei, Karazhan, Meccania, Un'Goro, Trono di Ghiaccio, Coboldi & Catacombe e Bosco Tetro, e le 135 carte di Operazione Apocalisse, ognuna com'era quel giorno. I servitori con Magnetismo si fondono con un Robot, le carte Omega diventano più forti con 10 Cristalli di Mana, i Progetti aiutano entrambi i giocatori, il Dott. Boom cambia Potere Eroe ogni turno e Frizzabombe ti fa iniziare con uno dei suoi mazzi. A quel tempo l'Evocatrice Astiosa costava 7, la Strega di Mare Naga 8, il Patto Tenebroso rigenerava solo 4 Salute, e una carta copiata manteneva i suoi incantamenti.",
+  "pl": "Gra taka, jak po 7 sierpnia 2018 roku: karty podstawowe i klasyczne, karty z Naxxramas, Gobliny kontra Gnomy, Czarnej Góry, Wielkiego Turnieju, Ligi Odkrywców, Pradawnych Bogów, Karazhanu, Gadżetonu, Un'Goro, Mroźnego Tronu, Koboldów i katakumb oraz Wiedźmiego Lasu i 135 kart z Projektu Hukatomba, każda taka jak tamtego dnia. Stronnicy z Magnetyzmem łączą się z mechem, karty Omega są silniejsze przy 10 kryształach many, Projekty pomagają obu graczom, Doktor Huk co turę dostaje nową moc bohatera, a Świstomig daje na start jedną ze swoich talii. Wtedy Zajadła przywoływaczka kosztowała 7, Morska wiedźma 8, Mroczny pakt przywracał tylko 4 zdrowia, a skopiowana karta zachowywała swoje zaklęcia."
+ },
+ "authors": [
+  "Classic HS"
+ ],
+ "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+ "redistributable": true,
+ "default_locale": "en",
+ "locales": [
+  "en",
+  "ru",
+  "de",
+  "fr",
+  "es",
+  "pt_BR",
+  "it",
+  "pl"
+ ],
+ "art_sets": [
+  {
+   "id": "simple",
+   "name": {
+    "en": "Simple painted",
+    "ru": "Простой рисованный",
+    "de": "Einfach gemalt",
+    "fr": "Peint simple",
+    "es": "Pintado simple",
+    "pt_BR": "Pintura simples",
+    "it": "Dipinto semplice",
+    "pl": "Prosty malowany"
+   },
+   "default": true
+  },
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированный"
+   }
+  },
+  {
+   "id": "cartoon",
+   "name": {
+    "en": "Cartoon 2D",
+    "ru": "Мультяшный 2D",
+    "de": "Cartoon 2D",
+    "fr": "Dessin animé 2D",
+    "es": "Dibujos 2D",
+    "pt_BR": "Desenho 2D",
+    "it": "Cartone 2D",
+    "pl": "Kreskówka 2D"
+   }
+  },
+  {
+   "id": "photo",
+   "name": {
+    "en": "Photoreal",
+    "ru": "Фотореалистичный",
+    "de": "Fotorealistisch",
+    "fr": "Photoréaliste",
+    "es": "Fotorrealista",
+    "pt_BR": "Fotorrealista",
+    "it": "Fotorealistico",
+    "pl": "Fotorealistyczny"
+   }
+  }
+ ],
+ "sound_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированные"
+   },
+   "default": true
+  }
+ ],
+ "music_sets": [
+  {
+   "id": "generated",
+   "name": {
+    "en": "Generated",
+    "ru": "Сгенерированная"
+   },
+   "default": true
+  },
+  {
+   "id": "open",
+   "name": {
+    "en": "Open (CC0)",
+    "ru": "Открытая (CC0)"
+   }
+  }
+ ],
+ "set_marks": {
+  "VANILLA:FREE": {
+   "icon": "ui/set_basic.png"
+  },
+  "VANILLA": {
+   "icon": "ui/set_classic.png"
+  },
+  "NAXX": {
+   "icon": "ui/set_naxx.png"
+  },
+  "GVG": {
+   "icon": "ui/set_gvg.png"
+  },
+  "BRM": {
+   "icon": "ui/set_brm.png"
+  },
+  "TGT": {
+   "icon": "ui/set_tgt.png"
+  },
+  "LOE": {
+   "icon": "ui/set_loe.png"
+  },
+  "OG": {
+   "icon": "ui/set_og.png"
+  },
+  "KARA": {
+   "icon": "ui/set_kara.png"
+  },
+  "GANGS": {
+   "icon": "ui/set_msg.png"
+  },
+  "UNGORO": {
+   "icon": "ui/set_ungoro.png"
+  },
+  "ICECROWN": {
+   "icon": "ui/set_icc.png"
+  },
+  "LOOTAPALOOZA": {
+   "icon": "ui/set_loot.png"
+  },
+  "GILNEAS": {
+   "icon": "ui/set_gil.png"
+  },
+  "BOOMSDAY": {
+   "icon": "ui/set_boom.png"
+  }
+ },
+ "card_back": null,
+ "logo": null,
+ "colors": {
+  "classes": {
+   "DRUID": "703606",
+   "HUNTER": "016e01",
+   "MAGE": "0092ab",
+   "PALADIN": "aa8f00",
+   "PRIEST": "b8b090",
+   "ROGUE": "4c4d48",
+   "SHAMAN": "0070de",
+   "WARLOCK": "7624ad",
+   "WARRIOR": "8e1002",
+   "NEUTRAL": "6b6b6b",
+   "DREAM": "6b6b6b",
+   "DEMONHUNTER": "6b6b6b"
+  },
+  "rarities": {
+   "FREE": "e8e8e8",
+   "COMMON": "e8e8e8",
+   "RARE": "2f7cff",
+   "EPIC": "a335ee",
+   "LEGENDARY": "ff8000"
+  }
+ }
+}

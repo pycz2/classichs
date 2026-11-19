@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Die Musik eines legendären Dieners beim Ausspielen folgt jetzt der Lautstärke der Soundeffekte statt der Musik. Bei leiser Musik ging sie unter den Geräuschen der Karte fast unter, bei ausgeschalteter Musik war sie gar nicht zu hören.
 - Das Spiel im Browser belegt nicht mehr mit jeder Partie mehr Speicher. Jedes gespielte Musikstück blieb für immer im Speicher der Seite, etwa 30 MB pro Partie, und nach einigen Stunden Turnier wurde der Browser langsam. Außerdem zeichnet die Turnierliste nicht mehr jede Zeile in jedem Bild neu, und die Seite eines Turniers aktualisiert sich, während Bots darin spielen, höchstens einmal pro Sekunde.
 ### Hinzugefügt
+- Dr. Bumms Geheimlabor 2018 (7. August 2018): magnetische Diener, die mit Mechs verschmelzen, Omega-Karten für 10 Manakristalle, Projekte für beide Spieler, Dr. Bumm mit einer neuen Heldenfähigkeit in jedem Zug, Wurbelfitz' Decks, Bomben im Deck des Gegners.
 - Der Tisch zeigt, wo ein Effekt trifft. Werden Karten auf der Hand verstärkt, zieht ein Lichtstreifen über die Hand und Pfeile steigen über den Karten auf. Ein Effekt auf ein Deck lässt das Deck anschwellen und einen Ring darüber aufleuchten. Eine neue oder billigere Heldenfähigkeit leuchtet an ihrem Platz auf.
 - Eine Karte, die in ein Deck (Eures oder das des Gegners) gemischt wird, fliegt von dem, was sie dorthin geschickt hat, in dieses Deck: vom gespielten Zauber, einem Diener, einem Helden, aus einer Hand oder aus dem anderen Deck. Eine Karte, die der Hand hinzugefügt wird, fliegt ebenfalls aus ihrer Quelle: Lange Finger holt Karten vom gegnerischen Helden, eine Karte von einem Diener kommt aus dem Diener. Eine Karte, die Ihr nicht sehen dürft, fliegt verdeckt.
 - Tjost: Aus jedem Deck fliegt eine Karte, jede mit dem Namen ihres Besitzers und groß daneben ihren Kosten. Die gewinnende Karte leuchtet auf, die verlierende wird dunkel, dann gehen beide zurück in ihre Decks.
@@ -24,6 +25,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Schaden und Einfrieren kommen im selben Moment: Frostblitz, Kältekegel, Blizzard und der Schlag eines Wasserelementars treffen und frieren zugleich ein.
 - Neues Einfrieren: Eiskristalle wachsen vom Rand über das Porträt, Reif liegt am Rand, Glanzlichter laufen über das Eis. Taut ein Diener oder Held auf, schmilzt das Eis wieder.
 
+- Der Dschungel-Mondkin ist in den Spielen von „Die Forscherliga“ bis „Der Hexenwald“ wieder ein Wildtier, wie in Hearthstone bis Patch 11.4 (2018). Er hatte keinen Typ, und Karten, die Wildtiere suchen, zählten ihn nicht.
 ## [0.71.1] - 2026-11-13
 
 ### Behoben
