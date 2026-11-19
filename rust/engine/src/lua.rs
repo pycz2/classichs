@@ -840,7 +840,7 @@ fn q_info<C: Ctx>(h: &mut C, a: Args) -> R {
     }
     // the base of the target it needs (a Choose One card: its first option's that has one; not a Combo-only target)
     let h = &c.hooks;
-    if let Some(b) = h.target.or_else(|| h.choice.and_then(|[x, y]| rs.hooks(x).target.or(rs.hooks(y).target))) {
+    if let Some(b) = h.target.or_else(|| h.choice.and_then(|opts| opts.iter().find_map(|x| rs.hooks(x).target))) {
         vm.set(&t, "target", s(b.base.name()))?;
     }
     let keywords = vm.list(c.keywords.iter().map(|k| s(k)).collect())?;

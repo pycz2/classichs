@@ -381,6 +381,9 @@
   },
   "DOUBLE_SUMMON": {
    "engine": "DOUBLE_SUMMON"
+  },
+  "DOUBLE_COMBO": {
+   "engine": "DOUBLE_COMBO"
   }
  },
  "modes": {
