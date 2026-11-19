@@ -26,7 +26,6 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Danno e congelamento arrivano nello stesso momento: Dardo di Gelo, Cono di Freddo, Tormenta e il colpo di un Elementale dell'Acqua colpiscono e congelano insieme.
 - Un nuovo congelamento: cristalli di ghiaccio si allargano sul ritratto dal bordo, la brina segue il contorno, riflessi scorrono sul ghiaccio. Quando un servitore o un eroe si scongela, il ghiaccio si scioglie.
 - L'allenamento ha tre passi: il mazzo, l'avversario e poi la difficoltà del bot in un elenco dalla più facile alla più difficile, ogni livello con un disegno della sua forza. Un mazzo nuovo comincia con la scelta dell'eroe dal ritratto, in una griglia tre per tre. La finestra della partita del torneo si chiude in un pulsante in alto sullo schermo e da lì si riapre. Non copre più il gioco, né il mulligan né il risultato.
-
 - Il Lunagufo Silvano torna a essere una Bestia nei giochi da La Lega degli Esploratori a Il Bosco Tetro, come in Hearthstone fino alla patch 11.4 (2018). Non aveva una tribù, e le carte che cercano Bestie non lo contavano.
 ## [0.71.1] - 2026-11-13
 

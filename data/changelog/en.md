@@ -26,7 +26,6 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - Damage and freeze land at the same moment: Frostbolt, Cone of Cold, Blizzard and a Water Elemental's blow hit and freeze at once.
 - A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.
 - Training takes three steps: the deck, the opponent, then the bot's difficulty as a list from easy to the hardest, each level with a picture of its strength. A new deck starts with choosing a hero by portrait, in a three by three grid. The tournament match window folds into a button at the top of the screen and opens from it again. It no longer covers the game, neither the mulligan nor the result.
-
 - Jungle Moonkin is a Beast again in the games from The League of Explorers to The Witchwood, as it was in Hearthstone until patch 11.4 (2018). It had no tribe, so cards that look for Beasts did not count it.
 ## [0.71.1] - 2026-11-13
 

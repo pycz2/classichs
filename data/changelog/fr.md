@@ -26,7 +26,6 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Les dégâts et le gel arrivent au même moment : Éclair de givre, Cône de froid, Blizzard et le coup d'un Élémentaire d’eau frappent et gèlent d'un coup.
 - Un nouveau gel : des cristaux de glace s'étendent sur le portrait depuis le bord, du givre borde le contour, des reflets courent sur la glace. Quand un serviteur ou un héros dégèle, la glace fond.
 - L'entraînement se fait en trois étapes : le deck, l'adversaire, puis la difficulté du bot en liste du plus facile au plus difficile, chaque niveau avec une image de sa force. Un nouveau deck commence par le choix du héros d'après les portraits, dans une grille de trois sur trois. La fenêtre du match de tournoi se replie en un bouton en haut de l'écran et s'y rouvre. Elle ne cache plus la partie, ni le mulligan ni le résultat.
-
 - Le Sélénien de la jungle est de nouveau une Bête dans les jeux de La Ligue des explorateurs au Bois Maudit, comme dans Hearthstone jusqu’au patch 11.4 (2018). Il n’avait pas de type, et les cartes qui cherchent des Bêtes ne le comptaient pas.
 ## [0.71.1] - 2026-11-13
 

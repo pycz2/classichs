@@ -26,7 +26,6 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 - El daño y la congelación llegan en el mismo momento: Descarga de Escarcha, Cono de frío, Ventisca y el golpe de un Elemental de agua golpean y congelan a la vez.
 - Nueva congelación: cristales de hielo crecen sobre el retrato desde el borde, hay escarcha en el contorno y brillos recorren el hielo. Cuando un esbirro o un héroe se descongela, el hielo se derrite.
 - El entrenamiento va en tres pasos: el mazo, el rival y luego la dificultad del bot en una lista de la más fácil a la más difícil, cada nivel con un dibujo de su fuerza. Un mazo nuevo empieza eligiendo al héroe por su retrato, en una cuadrícula de tres por tres. La ventana de la partida de torneo se pliega en un botón arriba de la pantalla y vuelve a abrirse desde él. Ya no tapa la partida, ni el mulligan ni el resultado.
-
 - El Lechúcico de la selva vuelve a ser una Bestia en los juegos de La Liga de Expedicionarios a El Bosque Embrujado, como en Hearthstone hasta el parche 11.4 (2018). No tenía tipo, y las cartas que buscan Bestias no lo contaban.
 ## [0.71.1] - 2026-11-13
 

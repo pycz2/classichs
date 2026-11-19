@@ -26,7 +26,6 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Obrażenia i zamrożenie przychodzą w tej samej chwili: Pocisk lodu, Stożek zimna, Zamieć i cios Żywiołaka wody trafiają i zamrażają naraz.
 - Nowe zamrożenie: kryształki lodu rozrastają się po portrecie od brzegu, szron okala krawędź, po lodzie przebiegają odblaski. Gdy stronnik albo bohater odmarza, lód topnieje.
 - Trening ma trzy kroki: talia, przeciwnik, a potem poziom bota na liście od najłatwiejszego do najtrudniejszego, każdy poziom z obrazkiem swojej siły. Nowa talia zaczyna się od wyboru bohatera po portretach, w siatce trzy na trzy. Okno meczu turniejowego zwija się do przycisku u góry ekranu i znów się z niego otwiera. Nie zasłania już gry, ani wymiany kart, ani wyniku.
-
 - Lunozwierz z dżungli znów jest Bestią w grach od „Ligi Odkrywców” do „Wiedźmiego Lasu”, jak w Hearthstone do aktualizacji 11.4 (2018). Nie miał typu, więc karty szukające Bestii go nie liczyły.
 ## [0.71.1] - 2026-11-13
 
