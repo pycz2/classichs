@@ -1,5 +1,5 @@
 {
- "about": "The Boomsday Project's interface (docs/packs/format.md, 'UI theme'): Dr. Boom's laboratory on a floating rock of Netherstorm at night — dark panels of riveted gunmetal with polished copper rims, buttons of deep lab-glass teal that light up neon green under the mouse like a bubbling test tube, cool white text of a blueprint, electric blue for headings like the arc of a Tesla coil, warning red for danger and neon green for confirmations, sparks flying up over the menu; the title in Classic's Cinzel Decorative, in electric blue.",
+ "about": "The Boomsday Project's interface (docs/packs/format.md, 'UI theme'): Dr. Boom's laboratory on a floating rock of Netherstorm at night — dark panels of riveted gunmetal with polished copper rims, buttons of deep lab-glass teal that light up neon green under the mouse like a bubbling test tube, cool white text of a blueprint, electric blue for headings like the arc of a Tesla coil, warning red for danger and neon green for confirmations, sparks flying up over the menu; the title in Classic's Alegreya SC, in electric blue.",
  "colors": {
   "text": "e6f1f5",
   "muted": "9fb3bd",
@@ -24,7 +24,7 @@
  "outline_size": 3,
  "button": {"style": "neon", "radius": 6, "border": 1, "glow": "6cff3a33", "glow_size": 4, "glow_hover": "8dff5c99", "glow_hover_size": 12},
  "panel": {"radius": 8, "border": 2, "glow": "5ad2ff40", "glow_size": 12},
- "fonts": {"title": "ui/fonts/CinzelDecorative-Black.ttf"},
+ "fonts": {"title": "ui/fonts/AlegreyaSC-ExtraBold.ttf"},
  "end_turn": {"button": "123a40", "border": "5ad2ff", "text": "eef8f2", "ready": "3fa81e", "ready_border": "9dff6e"},
  "mana": "5fb8ff",
  "menu": {"shade": "06090d59", "particles": "embers"}
