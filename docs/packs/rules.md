@@ -85,7 +85,7 @@ Its `aura` hook (optional) runs too, once for each player after the cards' auras
 
 ## `deck_recipes`
 
-Card id → a list of decks `{about?, class, cards}`: a card that stands for a whole deck (The Boomsday Project's Whizbang the Wonderful). A deck of only that card is legal (`deck::Deck::validate_in`; nothing else can go with it), and a game starts it as one of these decks, picked at random by the game's seed before the opening hands, with that class's champion; the start logs `deck_recipe` (`player`, `card`, `hero`: the new champion) and never which deck. `about` is for people. Optional.
+Card id → a list of decks `{about?, class, cards}`: a card that stands for a whole deck (The Boomsday Project's Whizbang the Wonderful). A deck of only that card is legal (`deck::Deck::validate_in`; nothing else can go with it), and a game starts it as one of these decks, picked at random by the game's seed before the opening hands, with that class's champion; the start logs `deck_recipe` (`player`, `card`, `hero`: the new champion) and never which deck. Such a card is never drafted in the Arena. `about` is for people. Optional.
 
 ## `every_race`
 
