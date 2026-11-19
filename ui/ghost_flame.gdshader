@@ -19,5 +19,6 @@ void fragment() {
 	float tongue = (1.0 - UV.y) + (n - 0.5) * 0.9;  // the flames' tongues: noise on a fall from the top
 	float a = smoothstep(0.2, 0.7, tongue) * (0.6 + 0.4 * n);
 	a *= smoothstep(0.0, 0.08, UV.x) * smoothstep(0.0, 0.08, 1.0 - UV.x);  // soft at the sides
+	a *= smoothstep(0.0, 0.3, UV.y + (n - 0.5) * 0.3);  // and ragged at the tips, above the card
 	COLOR = vec4(COLOR.rgb * (0.75 + 0.45 * n), COLOR.a * a);
 }
