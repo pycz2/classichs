@@ -22,6 +22,25 @@ static func _plurals(s: String) -> String:
 	return out + s.substr(last)
 
 
+static var _forms := RegEx.create_from_string("\\|4\\(([^)]*)\\)")
+
+
+## Every "|4(one,other)" (Russian and Polish: "|4(one,few,many)") of s as the form for n.
+static func _counted(s: String, n: int, lang: String) -> String:
+	var out := ""
+	var last := 0
+	for m in _forms.search_all(s):
+		var f := m.get_string(1).split(",")
+		var i := 0 if n == 1 else 1
+		if f.size() >= 3:
+			var few := n % 10 >= 2 and n % 10 <= 4 and (n % 100 < 12 or n % 100 > 14)
+			var one := n == 1 if lang == "plPL" else (n % 10 == 1 and n % 100 != 11)
+			i = 0 if one else (1 if few else 2)
+		out += s.substr(last, m.get_start() - last) + f[mini(i, f.size() - 1)].strip_edges()
+		last = m.get_end()
+	return out + s.substr(last)
+
+
 ## Godot locale ("ru_RU", "pt") to the Hearthstone key ("ruRU", "ptBR"); English by default.
 static func hs_locale(locale: String) -> String:
 	if locale in LOCALES.values():
@@ -104,6 +123,10 @@ static func raw(id: String, locale := "", args := []) -> String:
 	var s: String = t.get(_loc(locale), t.get("enUS", ""))
 	s = s.replace("@<i>", "<i>")  # a placeholder, not a variant: a Lesser Spellstone's upgrade hint (removed in patch 17.4.1)
 	s = s.replace("[d]", "")  # Hearthstone's hyphenation point in long German words ("Helden[d]fähigkeiten")
+	if s.count("@") == 1 and s != "@":  # a value that grows ("Summon @ 1/1 |4(Imp, Imps)": Rise of Shadows' Schemes):
+		# the engine's text_args[0], 1 without it (in the collection); its word forms follow it
+		var n := int(str(args[0])) if args.size() > 0 and str(args[0]).is_valid_int() else 1
+		s = _counted(s.replace("@", str(n)), n, _loc(locale))
 	if s.contains("@"):  # Hearthstone's text variants ("a@b@c": Fatespinner in play): the first, the one both players
 		# see, or the one args name ["@1"] (its Choose One option, which only its player knows)
 		var v := int(str(args[0]).substr(1)) if args.size() == 1 and str(args[0]).begins_with("@") else 0

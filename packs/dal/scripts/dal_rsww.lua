@@ -1,6 +1,6 @@
 -- Rise of Shadows (April 2019): the Rogue, Shaman, Warlock and Warrior cards, their tokens and the five Lackeys, as on
--- 2019-04-09 (build 30103; hearthstone.wiki.gg). The Schemes (DAL_007-DAL_010) and Swampqueen Hagatha's Horror are not
--- here yet.
+-- 2019-04-09 (build 30103; hearthstone.wiki.gg). Swampqueen Hagatha (DAL_431) and her Drustvar Horror (DAL_431t) are not
+-- here yet (the Horror needs to know which taught spell takes a target, and that spell's target spec).
 local cards = {}
 
 -- --- helpers (copied from boom_cards.lua) ---------------------------------------------------------------------------
