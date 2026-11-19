@@ -163,7 +163,7 @@ class TurnSign:
 	extends ColorRect
 	var _t := 0.0
 
-	func _ready() -> void:
+	func _init() -> void:
 		name = "TurnSign"
 		color = Color.BLACK
 		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
