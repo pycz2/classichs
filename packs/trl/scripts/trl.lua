@@ -2,8 +2,8 @@
 -- The Boomsday Project's (boom.lua's, copied: one hook set per pack) and the counts Rastakhan's cards read:
 -- TRL_SPELLS and TRL_SPELLS_<n> (the spells its player played this game, in order: Zul'jin; each spell's PLAYED_TURN:
 -- Krag'wa's "last turn"), TRL_OPEN and TRL_OPEN_<n> (the opening hand: Hex Lord Malacrass),
--- TRL_HEALED (the Health its player's cards restored this game: Zandalari Templar), TRL_SPELL_MANA (the mana spent on
--- spells: Shirvallah) and TRL_POWER_DMG (the damage of its
+-- TRL_HEALED (the Health its player's cards restored this game: Zandalari Templar), each minion's SUMMONED_TURN
+-- (Spirit of the Rhino), TRL_SPELL_MANA (the mana spent on spells: Shirvallah) and TRL_POWER_DMG (the damage of its
 -- player's Hero Power this game: Jan'alai). The older cards of boom.lua stay boom.lua's (cards.patch.json of boom).
 -- Patch 13.0's rules need no flag: a damage redirection happens once per chain, before modifiers (the only one that
 -- redirects damage is Snapjaw Shellfighter, trl_n.lua: its predamage hook), and a Deathrattle that returns its card
@@ -817,6 +817,7 @@ cards["player:trl"] = {
     summon = function(g, me, ev)
       if g.mine(me, ev) then
         local p = g.ctrl(me)
+        g.set_tag(ev.entity, "SUMMONED_TURN", g.turn()) -- "the turn they're summoned" (Spirit of the Rhino)
         lanathel(g, ev.entity)
         if g.race(ev.entity) == "TOTEM" then
           g.add_count(p, "TOTEMS")

@@ -1069,29 +1069,22 @@ cards.TRL_341 = {
   end,
 }
 
--- Wardruid Loti: Choose One of four forms. DOUBT: the engine's choose_one takes two options, so the four forms are a
--- choice after the play (g.request_choice of the four option minions); with Fandral Staghelm (BOTH_CHOICES) the
--- combined form at once.
-local LOTI = { TRL_343at1 = "TRL_343at2", TRL_343bt1 = "TRL_343bt2", TRL_343ct1 = "TRL_343ct2", TRL_343dt1 = "TRL_343dt2" }
+-- Wardruid Loti: Choose One of four forms (the engine's Choose One takes any number of options: choices 0, 1, 3, 4);
+-- each option card (patch 13.0 shows them as the form minions) transforms Loti into its form; with Fandral Staghelm
+-- (BOTH_CHOICES) the combined form.
 cards.TRL_343 = {
-  battlecry = function(g, me)
-    local p = g.ctrl(me)
-    if g.has(g.hero(p), "BOTH_CHOICES") then
-      g.transform(me, "TRL_343et1")
-      return
-    end
-    local opts = {}
-    for _, c in ipairs({ "TRL_343at1", "TRL_343bt1", "TRL_343ct1", "TRL_343dt1" }) do
-      opts[#opts + 1] = g.create(p, c)
-    end
-    g.request_choice(me, opts)
-  end,
-  on_choose = function(g, me, option)
-    if g.zone(me) == "PLAY" then
-      g.transform(me, LOTI[g.card(option)])
-    end
+  choose_one = { "TRL_343at1", "TRL_343bt1", "TRL_343ct1", "TRL_343dt1" },
+  both = function(g, me)
+    g.transform(me, "TRL_343et1")
   end,
 }
+for opt, form in pairs({ TRL_343at1 = "TRL_343at2", TRL_343bt1 = "TRL_343bt2", TRL_343ct1 = "TRL_343ct2", TRL_343dt1 = "TRL_343dt2" }) do
+  cards[opt] = {
+    effect = function(g, me)
+      g.transform(me, form)
+    end,
+  }
+end
 
 -- --- Paladin -------------------------------------------------------------------------------------------------------
 

@@ -6,6 +6,10 @@
   "OVERKILL": {
    "name": "Brutalité",
    "tip": "Infligez des dégâts excédentaires pendant votre tour pour obtenir un bonus."
+  },
+  "TOPDECK": {
+   "name": "Jouée quand piochée",
+   "tip": "Quand vous piochez cette carte, elle est jouée aussitôt, puis vous piochez une autre carte."
   }
  }
 }

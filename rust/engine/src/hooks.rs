@@ -63,7 +63,7 @@ pub struct HookSet {
     pub combo: Option<HookFn>,
     pub combo_target: Option<TSpec>,
     /// CHOICE: the two option cards, in card-text order.
-    pub choice: Option<[&'static str; 2]>,
+    pub choice: Option<&'static [&'static str]>,
     /// The effect of a CHOICE option card.
     pub effect: Option<HookFn>,
     /// A POWER's effect.

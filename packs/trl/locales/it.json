@@ -6,6 +6,10 @@
   "OVERKILL": {
    "name": "Annientamento",
    "tip": "Infliggi danni in eccesso nel tuo turno per ottenere un bonus."
+  },
+  "TOPDECK": {
+   "name": "Lancio Quando Pescata",
+   "tip": "Quando peschi questa carta, viene lanciata subito, poi peschi un'altra carta."
   }
  }
 }

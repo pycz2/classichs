@@ -283,10 +283,11 @@ impl Parse<'_> {
                 "both" => h.both = Some(f!(false)),
                 "choose_one" | "choice" => {
                     let o = self.m.list_items(&v).map_err(err)?;
-                    match (o.first().and_then(L::as_str), o.get(1).and_then(L::as_str), o.len()) {
-                        (Some(a), Some(b), 2) => h.choice = Some([leak(a), leak(b)]),
-                        _ => return Err(self.bad("choose_one must be a list of two card ids")),
+                    let ids: Vec<&'static str> = o.iter().filter_map(L::as_str).map(leak).collect();
+                    if ids.len() < 2 || ids.len() != o.len() {
+                        return Err(self.bad("choose_one must be a list of two or more card ids"));
                     }
+                    h.choice = Some(Vec::leak(ids));
                 }
                 "on" | "now" | "hand" => {
                     for (ek, ev) in self.m.pairs(&v).map_err(err)? {
@@ -748,6 +749,7 @@ q!(q_current, |g, _a| one(g.current as i64));
 q!(q_mana, |g, a| one(g.players[player(&a, 0)?].mana));
 q!(q_max_mana, |g, a| one(g.players[player(&a, 0)?].max_mana));
 q!(q_locked, |g, a| one(g.players[player(&a, 0)?].mana_locked));
+q!(q_owed, |g, a| one(g.players[player(&a, 0)?].mana_lock_owed));
 q!(q_cards_played, |g, a| one(g.players[player(&a, 0)?].cards_played_this_turn));
 q!(q_minions_played, |g, a| one(g.players[player(&a, 0)?].minions_played_this_turn));
 q!(q_room, |g, a| one(g.rs.board.saturating_sub(g.players[player(&a, 0)?].board.len()) as i64));
@@ -877,7 +879,7 @@ macro_rules! queries {
             ("g.max_health", q_max_health::<$t>), ("g.dmg", q_dmg::<$t>), ("g.has", q_has::<$t>), ("g.tag", q_tag::<$t>),
             ("g.silenced", q_silenced::<$t>), ("g.is_minion", q_is_minion::<$t>), ("g.is_champion", q_is_champion::<$t>),
             ("g.is_weapon", q_is_weapon::<$t>), ("g.is_spell", q_is_spell::<$t>), ("g.turn", q_turn::<$t>),
-            ("g.current", q_current::<$t>), ("g.mana", q_mana::<$t>), ("g.max_mana", q_max_mana::<$t>), ("g.locked", q_locked::<$t>),
+            ("g.current", q_current::<$t>), ("g.mana", q_mana::<$t>), ("g.max_mana", q_max_mana::<$t>), ("g.locked", q_locked::<$t>), ("g.owed", q_owed::<$t>),
             ("g.cards_played", q_cards_played::<$t>), ("g.minions_played", q_minions_played::<$t>),
             ("g.room", q_room::<$t>), ("g.board_pos", q_board_pos::<$t>), ("g.died_pos", q_died_pos::<$t>),
             ("g.trap_ready", q_trap_ready::<$t>), ("g.spell_dmg", q_spell_dmg::<$t>), ("g.heal_amt", q_heal_amt::<$t>),

@@ -4689,11 +4689,8 @@
       "side": 0,
       "zone": "hand",
       "index": 0
-     }
-    },
-    {
-     "do": "choose",
-     "option": 0
+     },
+     "choice": 0
     }
    ]
   },
@@ -4741,11 +4738,8 @@
       "side": 0,
       "zone": "hand",
       "index": 0
-     }
-    },
-    {
-     "do": "choose",
-     "option": 2
+     },
+     "choice": 3
     },
     {
      "do": "play",

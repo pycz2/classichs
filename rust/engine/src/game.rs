@@ -13,6 +13,16 @@ pub use crate::state::Ev;
 /// The `choice` of a Choose One card played with both options (BOTH_CHOICES: Fandral Staghelm).
 pub const BOTH: i64 = 2;
 
+/// The choice value of a Choose One card's option `i` (0, 1, then 3, 4…: 2 is BOTH, Fandral Staghelm).
+pub fn choice_of_option(i: usize) -> i64 {
+    if i < BOTH as usize { i as i64 } else { i as i64 + 1 }
+}
+
+/// The option a choice value (not BOTH) stands for: `choice_of_option`'s inverse.
+pub fn option_of_choice(c: i64) -> usize {
+    if c > BOTH { (c - 1) as usize } else { c as usize }
+}
+
 /// An action: {"type": ..., "player": ..., ...} with whole numbers as ints.
 pub type Action = Map<String, Value>;
 
@@ -408,12 +418,12 @@ impl Game {
             if !affordable || !self.can_play(e) {
                 continue;
             }
-            let choices: &[i64] = match self.e(e).hooks().choice {
-                Some(_) if self.both_choices(cur) => &[BOTH],
-                Some(_) => &[0, 1],
-                None => &[-1],
+            let choices: Vec<i64> = match self.e(e).hooks().choice {
+                Some(_) if self.both_choices(cur) => vec![BOTH],
+                Some(o) => (0..o.len()).map(choice_of_option).collect(),
+                None => vec![-1],
             };
-            for &choice in choices {
+            for choice in choices {
                 for t in self.play_targets(e, choice) {
                     for pos in self.positions(e) {
                         out.push(Act::Play { player, entity: e, target: t, pos, choice });
@@ -487,11 +497,10 @@ impl Game {
         let spec = if h.combo_target.is_some() {
             if combo { h.combo_target } else { None }
         } else if choice == BOTH {
-            // both options on one target: the first option's target, else the second's
-            let [a, b] = h.choice.unwrap();
-            self.rs.hooks(a).target.or(self.rs.hooks(b).target)
+            // all options on one target: the first option's target that has one
+            h.choice.unwrap().iter().find_map(|o| self.rs.hooks(o).target)
         } else if choice >= 0 {
-            self.rs.hooks(h.choice.unwrap()[choice as usize]).target
+            self.rs.hooks(h.choice.unwrap()[option_of_choice(choice)]).target
         } else {
             h.target
         };
@@ -728,7 +737,7 @@ impl Game {
         let h = self.e(e).hooks();
         let choice = match h.choice {
             Some(_) if self.both_choices(p) => BOTH,
-            Some(_) => self.rng.randi_range(0, 1),
+            Some(o) => choice_of_option(self.rng.randi_range(0, o.len() as i64 - 1) as usize),
             None => -1,
         };
         let combo = self.players[p].cards_played_this_turn > 1;
@@ -805,13 +814,13 @@ impl Game {
     /// The effects of a CHOICE card played with this choice: the option's, or with BOTH the card's `both` hook, else
     /// both options' in card order.
     fn choice_effects(&self, h: &crate::hooks::HookSet, choice: i64) -> Vec<crate::hooks::HookFn> {
-        let [a, b] = h.choice.unwrap();
+        let opts = h.choice.unwrap();
         match choice {
             BOTH => match h.both {
                 Some(f) => vec![f],
-                None => [a, b].iter().filter_map(|o| self.rs.hooks(o).effect).collect(),
+                None => opts.iter().filter_map(|o| self.rs.hooks(o).effect).collect(),
             },
-            c => self.rs.hooks([a, b][c as usize & 1]).effect.into_iter().collect(),
+            c => self.rs.hooks(opts[option_of_choice(c) % opts.len()]).effect.into_iter().collect(),
         }
     }
 
@@ -820,7 +829,7 @@ impl Game {
         if t == NONE && self.target_spec(e, choice, combo).is_some() {
             return; // targeted effect with no target (none was valid, or it left play)
         }
-        let mut battlecry = false;
+        let (mut battlecry, mut minion_combo) = (false, false);
         let f = if choice >= 0 {
             for (i, f) in self.choice_effects(h, choice).into_iter().enumerate() {
                 if i > 0 && self.game_over {
@@ -830,6 +839,7 @@ impl Game {
             }
             None
         } else if combo && h.combo.is_some() {
+            minion_combo = self.e(e).is_minion();
             h.combo
         } else if key == "on_play" {
             battlecry = true;
@@ -841,7 +851,10 @@ impl Game {
             // DOUBLE_ON_PLAY (Brann Bronzebeard, in play as the Battlecry starts; or the champion's own tag, a script's:
             // Murmuring Elemental's "your next Battlecry"): a Battlecry (not a Combo, not a Choose One) runs twice, on the
             // same target, with no death phase between
-            let twice = battlecry && self.e(self.hero(self.ctrl(e))).has(self.n().double_on_play);
+            // DOUBLE_COMBO (an aura tag on the champion, a pack that names it: Spirit of the Shark): a minion's Combo too
+            let hero = self.e(self.hero(self.ctrl(e)));
+            let twice = (battlecry && hero.has(self.n().double_on_play))
+                || (minion_combo && self.n().double_combo.is_some_and(|tag| hero.has(tag)));
             for i in 0..1 + twice as usize {
                 if i > 0 && self.game_over {
                     break;

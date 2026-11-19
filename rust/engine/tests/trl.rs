@@ -306,6 +306,58 @@ fn a_spirit_has_stealth_until_the_start_of_your_next_turn() {
 
 // Spirit of the Dragonhawk: POWER_ADJACENT (the engine's do_hero_power): the minions next to a minion target, taken
 // before the effect, are hit too; a hero target hits nothing more.
+// Spirit of the Shark: DOUBLE_COMBO (a minion's Combo twice) besides DOUBLE_BATTLECRY.
+#[test]
+fn spirit_of_the_shark_doubles_a_minions_combo() {
+    let mut t = scene!({"board": ["TRL_092"], "hand": [WISP, "VAN_EX1_134"]}, {});
+    let (foe, hp) = (t.hero(1), t.hp(1));
+    t.play(WISP, NONE).play("VAN_EX1_134", foe);
+    assert_eq!(t.hp(1), hp - 4, "SI:7 Agent's Combo (2 damage) twice");
+}
+
+// Likkim: Overloaded crystals = locked this turn or owed for the next (g.owed), an Overload played before it too.
+#[test]
+fn likkim_sees_overload_played_before_it() {
+    let mut t = scene!({"hand": ["VAN_EX1_238", "TRL_352"]}, {});
+    let foe = t.hero(1);
+    t.play("VAN_EX1_238", foe).play("TRL_352", NONE);
+    let w = t.g.players[0].weapon.expect("Likkim");
+    assert_eq!(t.g.e(w).atk(), 3, "1 + 2 while Lightning Bolt's Overload is owed");
+    t.end_turn().end_turn();
+    assert_eq!(t.g.e(w).atk(), 3, "the crystal is locked this turn");
+    t.end_turn().end_turn();
+    assert_eq!(t.g.e(w).atk(), 1);
+}
+
+// Spirit of the Rhino: a Rush minion summoned before the Spirit this turn is Immune too (SUMMONED_TURN).
+#[test]
+fn spirit_of_the_rhino_covers_rush_minions_summoned_before_it() {
+    let mut t = scene!({"hand": ["TRL_550", "TRL_327"]}, {});
+    t.play("TRL_550", NONE).play("TRL_327", NONE);
+    let bear = t.on_board(0, "TRL_550");
+    assert!(t.g.e(bear).has("IMMUNE"), "the turn it was summoned");
+    t.end_turn();
+    assert!(!t.g.e(bear).has("IMMUNE"), "not after that turn");
+}
+
+// Wardruid Loti: Choose One of four (choices 0, 1, 3, 4: 2 is both), each form at once; with Fandral the combined one.
+#[test]
+fn wardruid_loti_chooses_one_of_four_forms() {
+    let mut t = scene!({"hero": "HERO_06", "hand": ["TRL_343"]}, {});
+    let e = t.hand_id("TRL_343");
+    let mut choices: Vec<i64> = t.g.legal_actions().iter()
+        .filter(|a| a["type"] == "play" && int(a.get("entity")) == e).map(|a| int(a.get("choice"))).collect();
+    choices.sort();
+    choices.dedup();
+    assert_eq!(choices, vec![0, 1, 3, 4]);
+    t.act("Loti, the third form", |a| a["type"] == "play" && int(a.get("entity")) == e && int(a.get("choice")) == 3);
+    assert_eq!(t.cards(0), vec!["TRL_343ct2"]);
+    let mut t = scene!({"hero": "HERO_06", "board": ["OG_044"], "hand": ["TRL_343"]}, {});
+    let e = t.hand_id("TRL_343");
+    t.act("Loti with Fandral", |a| a["type"] == "play" && int(a.get("entity")) == e && int(a.get("choice")) == 2);
+    assert!(t.cards(0).contains(&"TRL_343et1".to_string()));
+}
+
 #[test]
 fn spirit_of_the_dragonhawk_powers_hit_the_targets_neighbours() {
     let mut t = scene!({"board": ["TRL_319"]}, {"board": [WISP, YETI, WISP, WISP]});
