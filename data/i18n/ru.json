@@ -913,5 +913,10 @@
 "A card in your deck gets %+d/%+d": "Карта в вашей колоде получает %+d/%+d",
 "A card in Opponent's deck gets %+d/%+d": "Карта в колоде соперника получает %+d/%+d",
 "%d cards in your deck get %+d/%+d": "Карт в вашей колоде: %d, каждая получает %+d/%+d",
-"%d cards in Opponent's deck get %+d/%+d": "Карт в колоде соперника: %d, каждая получает %+d/%+d"
+"%d cards in Opponent's deck get %+d/%+d": "Карт в колоде соперника: %d, каждая получает %+d/%+d",
+"This card is a whole deck: it goes alone": "Эта карта — целая колода: она идёт в колоду одна",
+"%s is a whole deck: take the other cards out?": "«%s» — это целая колода. Убрать остальные карты?",
+"Take them out": "Убрать",
+"%s picks one of its decks for you": "«%s» выбирает для вас одну из своих колод",
+"%s picks one of its decks for Opponent": "«%s» выбирает для соперника одну из своих колод"
 }

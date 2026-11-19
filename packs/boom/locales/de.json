@@ -1,0 +1,14 @@
+{
+ "sets": {
+  "BOOMSDAY": "Dr. Bumms Geheimlabor"
+ },
+ "classes": {
+  "WHIZBANG": "Wurbelfitz"
+ },
+ "mechanics": {
+  "MODULAR": {
+   "name": "Magnetisch",
+   "tip": "Spielt diesen Diener links von einem Mech aus, um beide zu verschmelzen!"
+  }
+ }
+}

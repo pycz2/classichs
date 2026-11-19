@@ -53,6 +53,7 @@ func _ready() -> void:
 	Palette.backdrop(self, "library")
 	browser.name = "Cards"
 	browser.changed.connect(_on_deck_changed)
+	browser.whole_deck.connect(_confirm_whole_deck)
 	add_child(browser)
 	var title := Palette.label(tr("My Decks"), 30, Palette.ATTACK)
 	title.position = Vector2(RIGHT.position.x + 4, 12)
@@ -272,10 +273,10 @@ func _refresh_deck() -> void:
 		b.pressed.connect(func(): remove_card(id))
 		_deck_list.add_child(b)
 	var n := editing.cards.size()
-	_count.text = "%d / %d" % [n, Deck.SIZE]
+	_count.text = "%d / %d" % [n, editing.goal()]
 	_curve.counts = ManaCurve.of(editing.cards)
-	_bar.ratio = n / float(Deck.SIZE)
-	_count.add_theme_color_override("font_color", Palette.BUFFED if n == Deck.SIZE else Palette.TEXT)
+	_bar.ratio = n / float(editing.goal())
+	_count.add_theme_color_override("font_color", Palette.BUFFED if n == editing.goal() else Palette.TEXT)
 
 
 func copy_deck(i: int) -> void:
@@ -422,7 +423,7 @@ func show_copy_local() -> void:
 		var d: Deck = all[i].deck
 		var cb := CheckBox.new()
 		cb.name = "Local%d" % i
-		cb.text = "%s  ·  %s  ·  %d / %d" % [d.name, CardText.name(d.hero), d.cards.size(), Deck.SIZE]
+		cb.text = "%s  ·  %s  ·  %d / %d" % [d.name, CardText.name(d.hero), d.cards.size(), d.goal()]
 		cb.add_theme_font_size_override("font_size", 18)
 		list.add_child(cb)
 		ticks.append([cb, d])
@@ -575,6 +576,24 @@ func _confirm_delete(i: int) -> void:
 	yes.pressed.connect(func():
 		_close()
 		delete_deck(i))
+	box.add_child(yes)
+	var no := Palette.button(tr("Cancel"), "Cancel")
+	no.pressed.connect(_close)
+	box.add_child(no)
+
+
+## A card that is a whole deck (Whizbang the Wonderful) added to a deck with other cards: it takes their place
+## if the player says so.
+func _confirm_whole_deck(id: String) -> void:
+	var box := _popup(tr("%s is a whole deck: take the other cards out?") % CardText.name(id))
+	var yes := Palette.button(tr("Take them out"), "ConfirmWholeDeck")
+	yes.pressed.connect(func():
+		_close()
+		if editing:
+			editing.cards.assign([id])
+			_save(editing)
+		browser.show_hint("")
+		browser._fill())
 	box.add_child(yes)
 	var no := Palette.button(tr("Cancel"), "Cancel")
 	no.pressed.connect(_close)

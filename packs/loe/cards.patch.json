@@ -25,7 +25,7 @@
   "LOE_046": {"script": "scripts/loe.lua#LOE_046"},
   "LOE_047": {"keywords": ["BATTLECRY", "DISCOVER"], "script": "scripts/loe.lua#LOE_047", "fx": {"play": "battlecry"}},
   "LOE_050": {"script": "scripts/loe.lua#LOE_050"},
-  "LOE_051": {"keywords": ["SPELLPOWER", "AURA"], "spell_power": 2, "race": null, "script": "scripts/loe.lua#LOE_051"},
+  "LOE_051": {"keywords": ["SPELLPOWER", "AURA"], "spell_power": 2, "script": "scripts/loe.lua#LOE_051"},
   "LOE_053": {"script": "scripts/loe.lua#LOE_053"},
   "LOE_061": {"script": "scripts/loe.lua#LOE_061"},
   "LOE_073": {"script": "scripts/loe.lua#LOE_073", "fx": {"play": "battlecry"}},

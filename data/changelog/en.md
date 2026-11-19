@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - A legendary minion's music when it is played now follows the sound effects volume, not the music volume. With the music turned down it was barely heard under the card's own sounds, and with the music off it did not play at all.
 - Long names are no longer cut off and no longer run into the text next to them. The hero's name in the deck list, the opponent's name in the Arena and the game's name in the lobby header slowly slide back and forth, a ready deck's description wraps, and the deck code in the export window shows in full. The deck windows have their own backing, and an import error stays in its window. The offered Arena cards no longer cover the rules line, the last ranked game's result no longer stays on the Arena screens, the Fullscreen switch is easy to see when off, the tutorial hint reads well on the light board too, and the game's name on a tournament page is translated.
 ### Added
+- The Boomsday Project 2018 (August 7, 2018): Magnetic minions that fuse with Mechs, Omega cards for 10 Mana Crystals, Projects for both players, Dr. Boom with a new Hero Power every turn, Whizbang's decks, Bombs in the opponent's deck.
 - The table shows where an effect lands. When cards in a hand are buffed, a band of light passes over the hand and arrows rise over the cards. An effect on a deck makes the deck swell and a ring flash over it. A new or cheaper Hero Power lights up in its place.
 - A card shuffled into a deck (yours or the opponent's) flies into that deck from whatever sent it: the spell played, a minion, a hero, a hand or the other deck. A card added to a hand flies from its source too: Burgle takes cards from the opponent's hero, Thoughtsteal from their deck, a card made by a minion comes out of the minion. A card you may not see flies as a card back.
 - Joust: a card flies out of each deck, each one labelled with whose it is and its cost shown big beside it. The winning card lights up, the losing one darkens, then both go back into their decks.
@@ -26,6 +27,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.
 - Training takes three steps: the deck, the opponent, then the bot's difficulty as a list from easy to the hardest, each level with a picture of its strength. A new deck starts with choosing a hero by portrait, in a three by three grid. The tournament match window folds into a button at the top of the screen and opens from it again. It no longer covers the game, neither the mulligan nor the result.
 
+- Jungle Moonkin is a Beast again in the games from The League of Explorers to The Witchwood, as it was in Hearthstone until patch 11.4 (2018). It had no tribe, so cards that look for Beasts did not count it.
 ## [0.71.1] - 2026-11-13
 
 ### Fixed

@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Muzyka legendarnego stronnika przy zagraniu idzie teraz z głośnością efektów dźwiękowych, a nie muzyki. Przy ściszonej muzyce ledwo było ją słychać pod dźwiękami karty, a przy wyłączonej nie grała wcale.
 - Długie nazwy nie są już ucinane i nie wchodzą na sąsiedni tekst. Imię bohatera na liście talii, imię przeciwnika na Arenie i nazwa gry w nagłówku lobby powoli przesuwają się tam i z powrotem, opis gotowej talii łamie się na wiersze, a kod talii w oknie eksportu widać w całości. Okna talii mają własne tło, a błąd importu zostaje w swoim oknie. Karty do wyboru na Arenie nie zasłaniają już wiersza z zasadami, wynik ostatniej gry rankingowej nie zostaje już na ekranach Areny, przełącznik „Pełny ekran” dobrze widać także wyłączony, wskazówkę samouczka da się przeczytać także na jasnym stole, a nazwa gry na stronie turnieju jest przetłumaczona.
 ### Dodano
+- Projekt Hukatomba 2018 (7 sierpnia 2018): stronnicy z Magnetyzmem łączący się z mechami, karty Omega na 10 kryształów many, Projekty dla obu graczy, Doktor Huk z nową mocą bohatera co turę, talie Świstomiga, bomby w talii przeciwnika.
 - Stół pokazuje, gdzie trafia efekt. Gdy karty w ręce dostają wzmocnienie, przez rękę przechodzi pas światła, a nad kartami wznoszą się strzałki. Efekt na talię sprawia, że talia pulsuje i nad nią rozbłyska pierścień. Nowa lub tańsza moc specjalna rozbłyska na swoim miejscu.
 - Karta wtasowana do talii (twojej lub przeciwnika) leci do tej talii od tego, co ją tam wysłało: od zagranego zaklęcia, stronnika, bohatera, z ręki albo z drugiej talii. Karta dodana do ręki też leci ze swojego źródła: Włam bierze karty od bohatera przeciwnika, karta stworzona przez stronnika wylatuje ze stronnika. Karta, której nie możesz widzieć, leci rewersem do góry.
 - Pojedynek: z każdej talii wylatuje karta, każda podpisana imieniem właściciela, obok duży koszt. Wygrana karta rozbłyska, przegrana ciemnieje, potem obie wracają do talii.
@@ -26,6 +27,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Nowe zamrożenie: kryształki lodu rozrastają się po portrecie od brzegu, szron okala krawędź, po lodzie przebiegają odblaski. Gdy stronnik albo bohater odmarza, lód topnieje.
 - Trening ma trzy kroki: talia, przeciwnik, a potem poziom bota na liście od najłatwiejszego do najtrudniejszego, każdy poziom z obrazkiem swojej siły. Nowa talia zaczyna się od wyboru bohatera po portretach, w siatce trzy na trzy. Okno meczu turniejowego zwija się do przycisku u góry ekranu i znów się z niego otwiera. Nie zasłania już gry, ani wymiany kart, ani wyniku.
 
+- Lunozwierz z dżungli znów jest Bestią w grach od „Ligi Odkrywców” do „Wiedźmiego Lasu”, jak w Hearthstone do aktualizacji 11.4 (2018). Nie miał typu, więc karty szukające Bestii go nie liczyły.
 ## [0.71.1] - 2026-11-13
 
 ### Naprawiono

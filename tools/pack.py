@@ -384,6 +384,16 @@ def check_files(files):
     races = set(rules.get("races", []))
     if rules["start"].get("coin"):
         card(rules["start"]["coin"], "rules.json start.coin", "SPELL")
+    for cid, decks in rules.get("deck_recipes", {}).items():
+        card(cid, "rules.json deck_recipes")
+        for i, d in enumerate(decks):
+            at = f"rules.json deck_recipes.{cid}[{i}]"
+            if not any(c["id"] == d["class"] and c.get("champion") for c in rules["classes"]):
+                r.error(f"{at}: class {d['class']} has no champion")
+            if len(d["cards"]) != rules["limits"]["deck_size"]:
+                r.error(f"{at}: {len(d['cards'])} cards, not {rules['limits']['deck_size']}")
+            for x in d["cards"]:
+                card(x, at)
     if "default_power" in rules:
         card(rules["default_power"], "rules.json default_power", "POWER")
     elif any(c["type"] == "CHAMPION" for c in card_list):

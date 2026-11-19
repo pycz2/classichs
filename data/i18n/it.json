@@ -913,5 +913,10 @@
 "A card in your deck gets %+d/%+d": "Una carta nel vostro mazzo ottiene %+d/%+d",
 "A card in Opponent's deck gets %+d/%+d": "Una carta nel mazzo dell'avversario ottiene %+d/%+d",
 "%d cards in your deck get %+d/%+d": "%d carte nel vostro mazzo ottengono %+d/%+d",
-"%d cards in Opponent's deck get %+d/%+d": "%d carte nel mazzo dell'avversario ottengono %+d/%+d"
+"%d cards in Opponent's deck get %+d/%+d": "%d carte nel mazzo dell'avversario ottengono %+d/%+d",
+"This card is a whole deck: it goes alone": "Questa carta è un mazzo intero: va da sola",
+"%s is a whole deck: take the other cards out?": "«%s» è un mazzo intero. Togliere le altre carte?",
+"Take them out": "Toglierle",
+"%s picks one of its decks for you": "«%s» sceglie uno dei suoi mazzi per te",
+"%s picks one of its decks for Opponent": "«%s» sceglie uno dei suoi mazzi per l'avversario"
 }

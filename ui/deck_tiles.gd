@@ -97,7 +97,7 @@ class DeckRow:
 
 	## An unfinished deck: how full it is.
 	func _tag() -> String:
-		return "  %d/%d" % [deck.cards.size(), Deck.SIZE] if deck.cards.size() < Deck.SIZE else ""
+		return "  %d/%d" % [deck.cards.size(), Deck.SIZE] if deck.cards.size() < deck.goal() else ""
 
 	func _draw() -> void:
 		var r := Rect2(Vector2(2, 2), size - Vector2(4, 4))
@@ -112,7 +112,7 @@ class DeckRow:
 			DeckTiles.text(self, Vector2(_hero.position.x + 2 + _hero.size.x, 52), tag, 13, Frames.GOLD)
 			var bar := Rect2(Vector2(14, size.y - 8), Vector2(size.x - 28, 3))
 			draw_rect(bar, Color(0, 0, 0, 0.6))
-			draw_rect(Rect2(bar.position, Vector2(bar.size.x * n / Deck.SIZE, bar.size.y)), Frames.GOLD)
+			draw_rect(Rect2(bar.position, Vector2(bar.size.x * n / deck.goal(), bar.size.y)), Frames.GOLD)
 		var edge := Color("c9a74a", 0.7) if is_hovered() else Color(0, 0, 0, 0)
 		draw_style_box(Palette.box(Color(0, 0, 0, 0), 12, edge, 3), r)
 

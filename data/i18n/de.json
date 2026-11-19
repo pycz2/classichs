@@ -913,5 +913,10 @@
 "A card in your deck gets %+d/%+d": "Eine Karte in Eurem Deck erhält %+d/%+d",
 "A card in Opponent's deck gets %+d/%+d": "Eine Karte im Deck des Gegners erhält %+d/%+d",
 "%d cards in your deck get %+d/%+d": "%d Karten in Eurem Deck erhalten %+d/%+d",
-"%d cards in Opponent's deck get %+d/%+d": "%d Karten im Deck des Gegners erhalten %+d/%+d"
+"%d cards in Opponent's deck get %+d/%+d": "%d Karten im Deck des Gegners erhalten %+d/%+d",
+"This card is a whole deck: it goes alone": "Diese Karte ist ein ganzes Deck: Sie kommt allein ins Deck",
+"%s is a whole deck: take the other cards out?": "„%s“ ist ein ganzes Deck. Die anderen Karten entfernen?",
+"Take them out": "Entfernen",
+"%s picks one of its decks for you": "„%s“ wählt eines seiner Decks für Euch",
+"%s picks one of its decks for Opponent": "„%s“ wählt eines seiner Decks für den Gegner"
 }

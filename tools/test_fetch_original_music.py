@@ -33,6 +33,14 @@ class Plan(unittest.TestCase):
         self.assertEqual([fom.plan("gvg")[f"battle_{i}"] for i in range(1, 6)], fom.DEFAULT_POOL)
         self.assertNotIn("battle_4", fom.plan("brm"))
 
+    def test_the_later_sets_play_their_own_tracks_from_the_drive(self):
+        icc = fom.plan("icc")
+        self.assertEqual((icc["menu"], icc["mulligan"], icc["battle_1"]), ("ICC_Menu_Music", "ICC_Mulligan", "ICC_Cantus"))
+        self.assertEqual((fom.plan("loot")["menu"], fom.plan("dal")["mulligan"]), ("Main_Title", "Mulligan"))  # none own
+        self.assertEqual(fom.original(Path("/s"), "GIL_Gilneas"), Path("/s/gil/GIL_Gilneas.wav"))
+        self.assertEqual(fom.original(Path("/s"), "LOE_Orsis"), Path("/s/loe/LOE_Orsis.ogg"))
+        self.assertEqual(fom.original(Path("/s"), "Duel"), Path("/s/classic/Duel.ogg"))
+
 
 class Ogg(unittest.TestCase):
     @unittest.skipUnless(shutil.which("ffmpeg"), "needs ffmpeg")

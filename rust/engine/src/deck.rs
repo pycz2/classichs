@@ -90,6 +90,11 @@ impl Deck {
         if rs.own_and_neutral && !rs.fits_class(rs.card(id), rs.class_of_champion(&self.hero)) {
             return "This card belongs to another class".into();
         }
+        // a card that stands for a whole deck (rules.json `deck_recipes`: Whizbang the Wonderful) goes alone
+        if !self.arena && (rs.deck_recipes.contains_key(id) && !self.cards.is_empty()
+            || self.cards.iter().any(|c| rs.deck_recipes.contains_key(c))) {
+            return "This card is a whole deck: it goes alone".into();
+        }
         if self.cards.len() >= rs.deck_size {
             return format!("The deck already has {} cards", rs.deck_size);
         }
@@ -115,6 +120,9 @@ impl Deck {
                 return why;
             }
             copy.cards.push(id.clone());
+        }
+        if !self.arena && self.cards.len() == 1 && rs.deck_recipes.contains_key(&self.cards[0]) {
+            return String::new(); // the whole deck in one card: the game starts it as one of its decks
         }
         if self.cards.len() != rs.deck_size {
             return format!("A deck needs exactly {} cards. Cards now: {}", rs.deck_size, self.cards.len());

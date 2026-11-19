@@ -276,6 +276,7 @@ func bind(m: Match) -> void:
 	if m.game.phase == "MULLIGAN" and not replay:
 		Sound.music("mulligan")  # the music set's mulligan track, when it has one (refresh: the battle's after it)
 	refresh()
+	_show_recipes()
 
 
 ## A local game with decks that ended is kept among the last replays (Replay.keep).
@@ -1476,6 +1477,9 @@ func _own_glows() -> void:
 		var sv: EntityView = _views.get(_sel.id)
 		if sv:
 			sv.set_glow(Palette.SELECTED)
+		var host := _fuse_host(g.ent(_sel.id), _gap)  # a Magnetic minion held left of a Mech: that Mech lights up
+		if _views.has(host):
+			_views[host].set_glow(Palette.COMBO)
 		if _sel.get("stage", "") == "target":
 			for id in _targets(_sel.actions):
 				if _views.has(id):
@@ -1488,6 +1492,17 @@ func _own_glows() -> void:
 		if _views.has(id):  # a card whose condition holds now (the engine's glow: Combo on…) yellow, else green
 			var lit: bool = a.type == "play" and plan.ent(id) != null and plan.ent(id).glow
 			_views[id].set_glow(Palette.COMBO if lit else Palette.PLAYABLE)
+
+
+## The friendly minion a Magnetic minion put at board place gap fuses into (the one there, right of it: of its race,
+## not Dormant), -1 for none.
+func _fuse_host(e: GameView.Ent, gap: int) -> int:
+	var board: Array = g.players[viewer()].board
+	if e == null or gap < 0 or gap >= board.size() or e.zone != "HAND" or not e.has("MODULAR"):
+		return -1
+	var h: GameView.Ent = board[gap]
+	var every := str(Packs.active().rules().get("every_race", "")) if Packs.active() else ""  # (an Amalgam: every race)
+	return h.id if e.race() != "" and h.race() != "" and h.race() in [e.race(), every] and not h.has("UNTOUCHABLE") else -1
 
 
 # --- input --------------------------------------------------------------------
@@ -1910,6 +1925,8 @@ static func steps(events: Array, aimed := -1) -> Array:
 				j = _run(events, i, func(e): return e.type in ["add_to_deck", "to_deck"])
 			"hero_power_changed":  # a new Hero Power (Justicar Trueheart, Baku the Mooneater)
 				k = "power_changed"
+			"fuse":  # Magnetic: the played Mech goes into the one right of where it was put, never landing
+				k = "fuse"
 			"discard":
 				k = "discard"
 			"equip":
@@ -2166,6 +2183,8 @@ func _play_step(st: Dictionary) -> void:
 			await _shuffle(st)
 		"power_changed":
 			await _power_changed(st)
+		"fuse":
+			await _fuse(st)
 		"replay":
 			await _reveal(ev.card, 0.3)
 			_step_apply(st)
@@ -2231,6 +2250,9 @@ func _step_apply(st: Dictionary) -> Dictionary:
 				moved = true
 			"summon":
 				_stage_insert(ev.player, ev.entity)
+				_placed.erase(ev.entity)
+				moved = true
+			"fuse":  # (one the player put down leaves its place)
 				_placed.erase(ev.entity)
 				moved = true
 			"take_control":
@@ -3139,6 +3161,87 @@ func _power_changed(st: Dictionary) -> void:
 		TableFx.spawn(_fx, "gain", _home_of(v.entity_id), Color(1.0, 0.85, 0.4))
 		v.flash()
 	await _wait(0.45)
+
+
+## Whizbang the Wonderful: as the game starts its card shows big, then goes into the hero it picked (the game's
+## first events; which of its decks stays hidden). It does not hold the game up: the mulligan comes under it.
+func _show_recipes() -> void:
+	var evs: Array = controller.game.history[0].get("events", []) if not controller.game.history.is_empty() else []
+	var k := 0
+	for ev in evs.filter(func(e): return e.type == "deck_recipe"):
+		if Anim.instant or not is_inside_tree():
+			return
+		var p := int(ev.player)
+		var cv := CardView.make(str(ev.card), 1.3)
+		cv.name = "Recipe%d" % p
+		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cv.z_index = 120  # (over the mulligan screen)
+		cv.pivot_offset = cv.size / 2.0
+		cv.position = SHOW_AT + Vector2(0, 40 if p == viewer() else -40) - cv.size / 2.0
+		_fx.add_child(cv)
+		var hero: int = g.players[p].hero.id
+		var to := _center_of(hero) - cv.size / 2.0
+		cv.scale = Vector2(0.2, 0.2)
+		cv.modulate.a = 0.0
+		var tw := cv.create_tween()
+		tw.tween_interval(Anim.d(0.3 + 0.6 * k))
+		tw.tween_property(cv, "modulate:a", 1.0, Anim.d(0.1))
+		tw.parallel().tween_property(cv, "scale", Vector2.ONE, Anim.d(0.25)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_interval(Anim.d(1.0))
+		tw.tween_property(cv, "position", to, Anim.d(0.35)).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tw.parallel().tween_property(cv, "scale", Vector2(0.2, 0.2), Anim.d(0.35))
+		tw.tween_callback(func():
+			cv.queue_free()
+			TableFx.spawn(_fx, "gain", _center_of(hero), Color(1.0, 0.85, 0.4))
+			if _views.has(hero):
+				_views[hero].flash()
+				_pulse_node(_views[hero], 1.15))
+		k += 1
+
+
+## Magnetic: the played card (shown big, or the minion the player put down) flies into the Mech right of where it
+## was put; that one swells with its Attack and Health and its keywords.
+func _fuse(st: Dictionary) -> void:
+	var ev: Dictionary = st.evs[0]
+	var host := int(ev.target)
+	var src: Control = _flying.get(ev.entity)
+	_flying.erase(ev.entity)
+	if src == null and _views.has(ev.entity):  # put down by the player: it goes from its place (the layout lets it go)
+		src = _views[ev.entity]
+		_views.erase(ev.entity)
+	_step_apply(st)
+	var v = _views.get(host)
+	if src and v and not Anim.instant and is_inside_tree():
+		var c: Vector2 = src.position + src.size * src.scale / 2.0 if src.pivot_offset == Vector2.ZERO else src.position + src.size / 2.0
+		src.pivot_offset = src.size / 2.0
+		src.position = c - src.size / 2.0
+		var tw := src.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tw.tween_property(src, "position", _home_of(host) - src.size / 2.0, Anim.d(0.3))
+		tw.tween_property(src, "scale", Vector2(0.2, 0.2), Anim.d(0.3))
+		tw.tween_property(src, "modulate:a", 0.3, Anim.d(0.3))
+		await _wait(0.3)
+	if is_instance_valid(src):
+		src.queue_free()
+	var now := g.ent(host)
+	if v is MinionView and now:
+		var before: GameView.Ent = v.s.copy()
+		for ench in now.enchantments:  # its numbers, from the game after the batch
+			if int(ench.get("fuse", -1)) == int(ev.entity):
+				_change(v.s, {"type": "buff", "target": host, "atk": ench.get("atk", 0), "hp": ench.get("hp", 0)}, 1)
+		for k in now.tags:  # and its keywords
+			if now.tags[k] is bool and now.tags[k] and not v.s.tags.has(k) and k != "EXHAUSTED":
+				v.s.tags[k] = true
+		v.queue_redraw()
+		if v.s.atk() != before.atk():
+			v.pop("atk")
+		if v.s.health() != before.health():
+			v.pop("hp")
+		v.flash()
+		_pulse_node(v, 1.15)
+		if not Anim.instant and is_inside_tree():
+			TableFx.spawn(_fx, "buff", _home_of(host), Palette.BUFFED)
+	_step_sounds(st)
+	await _wait(0.3)
 
 
 ## Start of Game (Baku the Mooneater, Genn Greymane, Prince Malchezaar): the card shows big; one that

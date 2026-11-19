@@ -1,0 +1,25 @@
+{
+ "sets": {
+  "BOOMSDAY": "Projekt Hukatomba"
+ },
+ "classes": {
+  "WHIZBANG": "Świstomig"
+ },
+ "mechanics": {
+  "MODULAR": {
+   "name": "Magnetyzm",
+   "tip": "Zagraj tego stronnika na lewo od mecha, by się połączyły!"
+  }
+ },
+ "cards": {
+  "VAN_EX1_393": {
+   "name": "Berserker z Amanów"
+  },
+  "VAN_EX1_399": {
+   "name": "Berserker z Gurubaszów"
+  },
+  "VAN_EX1_620": {
+   "name": "Gorejący olbrzym"
+  }
+ }
+}

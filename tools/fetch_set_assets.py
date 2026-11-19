@@ -6,7 +6,7 @@ Usage: python3 tools/fetch_set_assets.py --set gvg [--out ~/ClassicHS-local] [--
        python3 tools/fetch_set_assets.py --set gvg --build      the local pack ~/ClassicHS-local/<set>-custom-art.cardpack
 
 Sets: classic, naxx and the later ones of tools/extract_cards.py SETS (gvg, brm, tgt, loe, og, kara, msg, ungoro,
-icc, loot, gil). Result in <out>/<set>/:
+icc, loot, gil, boom). Result in <out>/<set>/:
   art/<card id>.webp     256x256 like art/custom, WebP: the set's cards and tokens from HearthstoneJSON
                          (art.hearthstonejson.com/v1/256x/<id>.jpg); classic: art/custom converted, naxx:
                          ~/ClassicHS-local/art-naxx converted (tools/fetch_2014_art.py made both)
