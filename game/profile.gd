@@ -14,18 +14,19 @@ static func load_name() -> String:
 	var j := JSON.new()
 	if not FileAccess.file_exists(path) or j.parse(FileAccess.get_file_as_string(path)) != OK or not j.data is Dictionary:
 		return DEFAULT_NAME
-	return clean(str(j.data.get("name", "")))
+	return clean(str(j.data.get("name", "")), NAME_MAX)
 
 
 static func save_name(n: String) -> void:
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f:
-		f.store_string(JSON.stringify({"name": clean(n)}))
+		f.store_string(JSON.stringify({"name": clean(n, NAME_MAX)}))
 
 
-## Trimmed, at most NAME_MAX characters, never empty.
-static func clean(n: String) -> String:
-	n = n.strip_edges().left(NAME_MAX).strip_edges()
+## Trimmed, at most `most` characters, never empty. Another player's name (from the network) keeps up
+## to 24 (an older one; a server account's has up to 20): `short` shows it with "…".
+static func clean(n: String, most := 24) -> String:
+	n = n.strip_edges().left(most).strip_edges()
 	return n if n != "" else DEFAULT_NAME
 
 
