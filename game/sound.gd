@@ -54,6 +54,8 @@ func _ready() -> void:
 	_music.bus = "Music"
 	# Music and stingers play as streams, mixed by the engine. In the browser the default for an AudioStreamWAV is a
 	# Web Audio "sample": a float32 copy of the whole track (~30 MB) that nothing frees, a new one per decoded stream.
+	# (There the engine mixes streams on the main thread: project.godot's audio/driver/output_latency.web, 300 ms,
+	# lets the mix ride out slow frames without dropouts; the sounds stay samples and keep no such delay.)
 	_music.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
 	_music.finished.connect(_on_music_finished)
 	add_child(_music)

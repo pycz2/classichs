@@ -23,6 +23,7 @@ window/stretch/aspect="keep"
 
 [audio]
 
+driver/output_latency.web=300
 general/text_to_speech=true
 
 [rendering]
