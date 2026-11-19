@@ -33,6 +33,12 @@ func _ready() -> void:
 	add_child(TouchInput.new())  # a finger drag scrolls any list, also over its buttons
 	if DisplayServer.has_feature(DisplayServer.FEATURE_VIRTUAL_KEYBOARD) and DisplayServer.is_touchscreen_available():
 		add_child(KeyboardLift.new())  # a field under the on-screen keyboard rises above it
+	if TouchInput.phone:
+		var turn := CanvasLayer.new()  # in portrait: turn the phone
+		turn.layer = 120
+		turn.add_child(TurnSign.new())
+		add_child(turn)
+		get_viewport().size_changed.connect(_fit_phone)
 	if Settings.data.fullscreen and not OS.has_feature("web"):  # the browser needs a click first
 		Settings.set_fullscreen(true)
 	_start_server_link()
@@ -81,9 +87,10 @@ func _set_screen(s: Control) -> void:
 	close_watch(false)  # (a game of one's own starts while watching one, say)
 	if screen:
 		screen.queue_free()
-		remove_child(screen)
+		screen.get_parent().remove_child(screen)
 	screen = s
-	add_child(s)
+	_holder(s).add_child(s)
+	_fit_phone()
 	if social:
 		sync_server_links()  # the list may have changed
 		social.enabled = mode == "server"  # friends and chats only through a server
@@ -118,6 +125,76 @@ func show_settings() -> SettingsView:
 		s.debug.connect(show_debug_table)
 	_set_screen(s)
 	return s
+
+
+# --- phones --------------------------------------------------------------------------------
+
+## Phones (TouchInput.phone): every screen but a match goes into a scroller. In a landscape wider
+## than 16:9 the game then fills the width (bigger, no bars at the sides) and the rest of its 720
+## scrolls up and down (a finger drag anywhere, as lists scroll: TouchInput); a match keeps all of
+## the table in sight. In portrait a sign asks to turn the phone (TurnSign).
+var _pan: ScrollContainer
+
+
+func _holder(s: Control) -> Control:
+	if not TouchInput.phone or s is MatchView:
+		return self
+	if _pan == null:
+		_pan = ScrollContainer.new()
+		_pan.name = "PhonePan"
+		_pan.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		_pan.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		add_child(_pan)
+	s.custom_minimum_size = Vector2(1280, 720)
+	return _pan
+
+
+## The game's size for the window now: fills a wide phone's width when the screen scrolls.
+func _fit_phone() -> void:
+	if not TouchInput.phone:
+		return
+	var w := Vector2(get_window().size)
+	var zoom := screen != null and screen.get_parent() == _pan and watch_view == null and w.x > w.y * 16.0 / 9.0 + 1.0
+	get_window().content_scale_size = Vector2i(1280, roundi(1280.0 * w.y / w.x)) if zoom else Vector2i(1280, 720)
+
+
+## Portrait on a phone: the whole screen asks to turn the phone (a phone turning on its side).
+class TurnSign:
+	extends ColorRect
+	var _t := 0.0
+
+	func _ready() -> void:
+		name = "TurnSign"
+		color = Color.BLACK
+		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		var l := Palette.label(tr("Turn your phone sideways to play"), 64, Palette.TEXT)
+		l.name = "TurnText"
+		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.position = Vector2(80, 520)
+		l.size = Vector2(1120, 180)
+		add_child(l)
+
+	func _process(delta: float) -> void:
+		var w := get_window().size
+		visible = w.y > w.x  # (it stops clicks under it while shown)
+		if visible:
+			_t += delta
+			queue_redraw()
+
+	func _draw() -> void:
+		var k := clampf(fmod(_t, 3.0) - 0.8, 0.0, 1.0)  # still, then turns, then rests on its side
+		var a := -PI / 2.0 * (k * k * (3.0 - 2.0 * k))
+		var c := Vector2(640, 280)
+		draw_arc(c, 230, -PI * 0.95, -PI * 0.6, 24, Color(Palette.ATTACK, 0.8), 8.0, true)  # the turn's arrow
+		var tip := c + Vector2.from_angle(-PI * 0.6) * 230
+		draw_colored_polygon(PackedVector2Array([tip + Vector2(-6, -26), tip + Vector2(30, 6), tip + Vector2(-18, 22)]), Color(Palette.ATTACK, 0.8))
+		draw_set_transform(c, a)
+		var body := Rect2(Vector2(-95, -170), Vector2(190, 340))
+		draw_style_box(Palette.raw_box(Color(0.12, 0.13, 0.16), 28, Palette.TEXT, 8), body)
+		draw_rect(body.grow(-24), Color(0.25, 0.32, 0.45))
+		draw_circle(Vector2(0, 156), 6, Palette.TEXT)
+		draw_set_transform(Vector2.ZERO, 0.0)
 
 
 # --- without a server --------------------------------------------------------------------
@@ -496,6 +573,7 @@ func _show_watch(s: ServerSession, m: Match) -> MatchView:
 	if screen:
 		screen.visible = false
 	add_child(v)
+	_fit_phone()
 	v.bind_online(m, s)
 	social.screen_changed(v)
 	return v
@@ -511,6 +589,7 @@ func close_watch(back := true) -> void:
 		v.session.leave()
 	v.queue_free()
 	remove_child(v)
+	_fit_phone()
 	if not back:
 		return
 	var was: Pack = _before_watch.get("pack")

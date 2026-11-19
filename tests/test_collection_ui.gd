@@ -300,7 +300,7 @@ func test_inline_delete_copy_export() -> void:
 	eq(v.decks[2].cards, v.decks[0].cards, "the same cards")
 	eq(DeckStore.load_all().size(), 3, "the copy is saved")
 	(v.find_child("Deck0", true, false).find_child("Export", true, false) as Button).pressed.emit()
-	var out := v.find_child("CodeOutput", true, false) as LineEdit
+	var out := v.find_child("CodeOutput", true, false) as TextEdit
 	check(out != null and out.text == DeckCode.encode(v.decks[0]), "the code in a popup")
 	v._close()
 	(v.find_child("Deck1", true, false).find_child("Export", true, false) as Button).pressed.emit()

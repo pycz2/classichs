@@ -12,6 +12,7 @@ signal exit
 
 const OFFER_SCALE := 1.75
 const LIST_X := 968.0
+const OFFER_Y := 136.0  # the offered cards: under the rules line
 
 var session: ArenaSession
 ## "rules", "hero", "draft", "lobby", "decide" (after a game: a new deck or the
@@ -22,7 +23,7 @@ var _body := Control.new()  # what the stage shows; rebuilt on every change
 var _title: Label
 var _subtitle: Label
 var _status: Label
-var _opponent: Label
+var _opponent: Marquee  # (a long name slides back and forth in the panel)
 var _tips: Control
 var _score: Label  # the lobby's parts that change without a rebuild
 var _ready_button: Button
@@ -52,12 +53,16 @@ func _ready() -> void:
 	var panel := PanelContainer.new()
 	panel.position = Vector2(LIST_X, 14)
 	panel.custom_minimum_size = Vector2(292, 0)
-	panel.add_theme_stylebox_override("panel", Palette.box(Color(0.08, 0.06, 0.04, 0.85), 10, Color("6b5320"), 2))
+	var pst := Palette.box(Color(0.08, 0.06, 0.04, 0.85), 10, Color("6b5320"), 2)
+	pst.content_margin_left = 8
+	pst.content_margin_right = 8
+	panel.add_theme_stylebox_override("panel", pst)
 	add_child(panel)
 	var col := VBoxContainer.new()
 	panel.add_child(col)
-	_opponent = Palette.label("", 18, Palette.ATTACK)
+	_opponent = Marquee.make("", 18, Palette.ATTACK)
 	_opponent.name = "OpponentName"
+	_opponent.custom_minimum_size = Vector2(276, 26)
 	col.add_child(_opponent)
 	_status = Palette.label("", 16)
 	_status.name = "OpponentStatus"
@@ -114,7 +119,7 @@ func _refresh() -> void:
 
 func _update_status() -> void:
 	var name_text := session.remote_name if session.remote_name != "" else tr("Opponent")
-	_opponent.text = tr("Opponent: %s") % name_text
+	_opponent.label.text = tr("Opponent: %s") % name_text
 	_status.text = remote_text()
 	_rules_line.text = rules_text()
 	if session.games > 0:  # (a new draft between games: the score stays in sight)
@@ -272,7 +277,7 @@ func _build_draft() -> void:
 	for i in session.draft.offer.size():
 		var cv := CardView.make(session.draft.offer[i], OFFER_SCALE)
 		cv.name = "Offer%d" % i
-		cv.position = Vector2(x0 + i * (w + gap), 120)
+		cv.position = Vector2(x0 + i * (w + gap), OFFER_Y)
 		cv.clicked.connect(func(_v): pick(i))
 		TouchInput.act_on_tap(cv, pick.bind(i))  # a long press only shows its keyword tips
 		cv.hovered.connect(func(v, on): _on_hover(v, on))
@@ -282,10 +287,10 @@ func _build_draft() -> void:
 			cv.position.y += 30
 			var tw := cv.create_tween().set_parallel()
 			tw.tween_property(cv, "modulate:a", 1.0, Anim.d(0.25)).set_delay(Anim.d(0.08 * i))
-			tw.tween_property(cv, "position:y", 120.0, Anim.d(0.3)).set_delay(Anim.d(0.08 * i)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			tw.tween_property(cv, "position:y", OFFER_Y, Anim.d(0.3)).set_delay(Anim.d(0.08 * i)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	var rarity := Palette.label(_rarity_text(), 18, Palette.TEXT)
 	rarity.name = "Rarity"
-	rarity.position = Vector2(x0, 440)
+	rarity.position = Vector2(x0, OFFER_Y + CardView.SIZE.y * OFFER_SCALE + 6)
 	_body.add_child(rarity)
 	_build_deck_side()
 	_exit_button(Vector2(470, 650))

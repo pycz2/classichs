@@ -234,6 +234,12 @@ func _ready() -> void:
 	_opp_arrow.tint = Color("e03131")
 	add_child(_opp_arrow)
 	_hint = Palette.label("", 20, Palette.SELECTED)
+	_hint.add_theme_color_override("font_outline_color", Color(0.1, 0.06, 0.02))  # a dark rim and a dark haze around
+	_hint.add_theme_constant_override("outline_size", 8)  # it: readable on a light board too
+	_hint.add_theme_color_override("font_shadow_color", Color(0.05, 0.03, 0.01, 0.55))
+	_hint.add_theme_constant_override("shadow_outline_size", 26)
+	_hint.add_theme_constant_override("shadow_offset_y", 0)
+	_hint.add_theme_constant_override("shadow_offset_x", 0)
 	_hint.position = Vector2(170, 306)
 	_hint.size = Vector2(940, 30)
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

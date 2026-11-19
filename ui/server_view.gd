@@ -373,16 +373,14 @@ func _build_lobby() -> void:
 		b.pressed.connect(func():
 			tab = t
 			link.remember({"tab": t})
+			say("")  # (the last game's result belongs to the tab it was played from)
 			_go("lobby"))
 		_body.add_child(b)
 	var gx := 412.0
-	var games := Palette.label(_game_line(), 20, Palette.ATTACK if link.has_game(Packs.active()) else Palette.OPPONENT)
-	games.name = "GameName"
+	var games := Marquee.make(_game_line(), 20, Palette.ATTACK if link.has_game(Packs.active()) else Palette.OPPONENT)
+	games.name = "GameName"  # (a long name slides back and forth)
 	games.position = Vector2(gx, 8)
 	games.size = Vector2(196, 46)
-	games.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	games.clip_text = true
-	games.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	games.tooltip_text = link.game_problem(Packs.active())
 	games.mouse_filter = Control.MOUSE_FILTER_PASS
 	_body.add_child(games)
