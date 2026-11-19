@@ -1,6 +1,7 @@
 #!/bin/bash
 # classichs-deploy X.Y.Z — runs the game server version X.Y.Z as the container "classichs" in the
-# Docker network of the host's Caddy (Caddy proxies its domain to classichs:7377).
+# Docker network of the host's Caddy (Caddy proxies its domain to classichs:7377). A build of a commit on
+# main that is not a release (tools/deploy_server.sh --from-ci) has the version X.Y.Z-<commit>.
 # Installed by setup.sh as /usr/local/sbin/classichs-deploy (root), the deploy user may run it with
 # sudo and no password; it is the only thing that user may do as root without a password.
 # The packs come from ~DEPLOY_USER/classichs/packs (read-only at /packs; tools/deploy_server.sh fills it).
@@ -8,13 +9,14 @@
 #     uploads it), else uses the image classichs-server:X.Y.Z that is already loaded (a rollback);
 #  2. stops the old container, copies the database to /srv/classichs/backup-before-X.Y.Z (the last 2 are kept);
 #  3. starts the new one and checks it through Caddy's network; if it does not answer, starts the old one again;
-#  4. keeps 2 classichs-server images: the running one and the newest other one.
+#  4. keeps 2 classichs-server images: the running one and the newest other one (by when it was made).
 set -euo pipefail
 DEPLOY_USER=__DEPLOY_USER__
 IMG=classichs-server
 DATA=/srv/classichs
 V=${1:-}
-[[ $V =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "usage: classichs-deploy X.Y.Z" >&2; exit 2; }
+TAG='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9a-f]{7,40})?$'
+[[ $V =~ $TAG ]] || { echo "usage: classichs-deploy X.Y.Z or X.Y.Z-<commit>" >&2; exit 2; }
 
 IN=/home/$DEPLOY_USER/classichs/incoming/$IMG-$V.tar.gz
 if [ -e "$IN" ]; then
@@ -62,7 +64,8 @@ if ! { run "$IMG:$V" && healthy; }; then
   fi
   exit 1
 fi
-# 2 images stay: the running one and the newest other one (the version to roll back to)
-docker images "$IMG" --format '{{.Tag}}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | { grep -vx "$V" || true; } | sort -V -r | tail -n +2 \
+# 2 images stay: the running one and the newest other one (the version to roll back to); newest by
+# when the image was made, as X.Y.Z-<commit> builds of one version have no order of their own
+docker images "$IMG" --format '{{.CreatedAt}}|{{.Tag}}' | sort -r | cut -d'|' -f2 | grep -E "$TAG" | { grep -vx "$V" || true; } | tail -n +2 \
   | while read -r t; do docker rmi "$IMG:$t" >/dev/null 2>&1 || true; done
 echo "classichs $V is running (images: $(docker images "$IMG" --format '{{.Tag}}' | sort -V -r | tr '\n' ' '))"

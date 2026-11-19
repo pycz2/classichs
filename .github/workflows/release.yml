@@ -2,6 +2,7 @@
 # version tag vX.Y.Z, publishes a GitHub release with the builds:
 #   Web (zip), Windows (.exe), Linux (.AppImage), macOS (.zip with the app), Android (.apk), and the
 #   admin panel's replay player (ClassicHS-x.y.z-replay-viewer.zip; tools/deploy_server.sh puts it into the server's image).
+# A run on main keeps the artifacts server-linux-x86_64 and replay-viewer: tools/deploy_server.sh --from-ci deploys them.
 # The rust job builds, per OS, the rules engine (rust/, tools/build_rules.sh: macOS universal
 # on macOS, Windows on Windows, Linux + Android + WebAssembly on Linux) and the game server
 # (server/) in one target directory, so the engine and the shared crates compile once; the
@@ -216,6 +217,13 @@ jobs:
         with:
           name: game
           path: build/release/ClassicHS-*
+          if-no-files-found: error
+
+      # on its own too: tools/deploy_server.sh --from-ci takes it without the whole game (about 2 GB)
+      - uses: actions/upload-artifact@v7
+        with:
+          name: replay-viewer
+          path: build/release/ClassicHS-*-replay-viewer.zip
           if-no-files-found: error
 
   release:

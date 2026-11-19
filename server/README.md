@@ -340,7 +340,9 @@ no new ports); then `DEPLOY_HOST=… DEPLOY_URL=https://… tools/deploy_server.
 release: an image of about 70 MB (the stripped binary and the admin panel's replay player on
 scratch, about 24 MB to upload), the packs only
 when they change, a database copy, a check through Caddy and a rollback when the new version does
-not answer, 2 images kept. The headers of these scripts tell the details.
+not answer, 2 images kept. `tools/deploy_server.sh --from-ci [<commit>]` deploys the CI build of a
+commit on main instead (the version `X.Y.Z-<commit>`, the host's packs unchanged). The headers of these
+scripts tell the details.
 
 ## Security notes
 

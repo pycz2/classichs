@@ -2077,8 +2077,10 @@ COMPS.append(dict(
     parts=[
         X("ci", 0, 0),
         P("script", "deploy_server.sh", 1, 0, sub="tools/",
-          text=("Takes the release's server and packs from the GitHub API, builds the image locally, uploads only changed packs, streams the image over ssh, runs the host script, checks the URL.",
-                "Берёт из GitHub API сервер и пакеты выпуска, локально собирает образ, загружает только изменённые пакеты, передаёт образ по ssh, запускает скрипт хоста, проверяет адрес."),
+          text=("Takes the release's server and packs from the GitHub API, builds the image locally, uploads only changed packs, streams the image over ssh, runs the host script, checks the URL. "
+                "With `--from-ci [<commit>]`: the server and the replay viewer of that commit's CI run on main, as the version X.Y.Z-<commit>, the host's packs unchanged.",
+                "Берёт из GitHub API сервер и пакеты выпуска, локально собирает образ, загружает только изменённые пакеты, передаёт образ по ssh, запускает скрипт хоста, проверяет адрес. "
+                "С `--from-ci [<commit>]` берёт сервер и проигрыватель записей из сборки этого коммита в main как версию X.Y.Z-<commit>, пакеты на хосте не меняются."),
           files=[("tools/deploy_server.sh", "API=https://api.github.com/repos/pycz2/classichs/releases/tags/v$V"), ("tools/deploy_server.sh", "ssh \"$DEPLOY_HOST\" sudo -n /usr/local/sbin/classichs-deploy \"$V\"")]),
         P("image", ("Scratch image", "Образ scratch"), 2, 0, sub="deploy/docker-host/Dockerfile",
           text=("The stripped binary and four libraries from Debian trixie on `scratch`, user 65532, port 7377 — about 10 MB compressed.",

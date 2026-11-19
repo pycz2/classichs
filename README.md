@@ -74,7 +74,20 @@ commits the new splash, tags `vX.Y.Z`, waits for the release build, starts Docke
 server (`tools/deploy_server.sh`) and prints a summary with the links. It and the other build scripts print each step
 with its time, how it ended and, on a failure, where it stopped and the last lines of the output; the log of each
 run is kept in `build/logs/<script>-<UTC time>.log` (`tools/log.sh`). `tools/test_deploy_logs.sh` checks the
-deploy's output with stand-ins for ssh, scp, docker and curl.
+deploy's output with stand-ins for ssh, scp, docker, curl and gh.
+
+Only the server, without a release (a fix pushed to `main`):
+
+```sh
+DEPLOY_HOST=user@host DEPLOY_URL=https://hs.example.com tools/deploy_server.sh --from-ci            # the head of main
+DEPLOY_HOST=user@host DEPLOY_URL=https://hs.example.com tools/deploy_server.sh --from-ci 1a2b3c4    # a given commit on main
+```
+
+It waits for the CI run (Release workflow) of that commit on `main`, takes its Linux server and replay viewer (the
+artifacts `server-linux-x86_64` and `replay-viewer`) and deploys them as the version `X.Y.Z-<commit>`, e.g.
+`0.72.0-1a2b3c4`. The packs on the host stay as they are: packs come only with releases. The rollback is the same
+(`classichs-deploy <the other kept version>`). The host's `classichs-deploy` must take such versions: once, run
+`tools/deploy_server.sh` with no version and then `sudo bash ~/classichs/setup.sh <domain>` on the host.
 
 ## Build and run
 

@@ -1,7 +1,8 @@
 #!/bin/bash
 # Checks what tools/deploy_server.sh prints (tools/log.sh) without a host, a release or Docker: ssh, scp,
-# docker and curl are stand-ins in a temporary directory put first on PATH (nothing leaves this machine).
-# Three runs: a good deploy, classichs-deploy failing on the host, the URL answering 502.
+# docker, curl and gh are stand-ins in a temporary directory put first on PATH (nothing leaves this machine).
+# A release: a good deploy, classichs-deploy failing on the host, the URL answering 502. A build of main
+# (--from-ci): a good deploy, a failed CI run, a host whose classichs-deploy takes only X.Y.Z.
 # Usage: tools/test_deploy_logs.sh [-v]   (-v: show each run's output)
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
@@ -34,6 +35,7 @@ cat > "$T/bin/ssh" <<'EOF'
 # the host: classic.cardpack is the same as the release's, old.cardpack is not in it
 shift; cmd=$*
 case $cmd in
+  *"grep -qF 'X.Y.Z-<commit>' /usr/local/sbin/classichs-deploy"*) [ "${FAKE_OLD_HOST:-}" != 1 ] ;;
   *sha256sum*) printf '%s  classic.cardpack\n%s  old.cardpack\n' "$(printf pack-classic | shasum -a 256 | cut -d' ' -f1)" "$(printf old | shasum -a 256 | cut -d' ' -f1)" ;;
   *"cat > classichs/incoming/.part"*) cat > /dev/null ;;
   *classichs-deploy*)
@@ -45,6 +47,31 @@ case $cmd in
     echo "classichs ${cmd##* } is running (images: ${cmd##* } 0.70.0 )" ;;
   mkdir* | mv* | rm*) ;;
   *) echo "fake ssh: unexpected $cmd" >&2; exit 99 ;;
+esac
+EOF
+
+cat > "$T/bin/gh" <<'EOF'
+#!/bin/bash
+# GitHub: every commit is 1234567abc…, its Release run on main is 777 (FAKE_CI: how it ended)
+case "$1 $2" in
+  "api repos/pycz2/classichs/commits/"*) echo 1234567abcdef0123456789abcdef0123456789a ;;
+  "run list") [ "$GH_REPO" = pycz2/classichs ] && echo 777 ;;
+  "run view")
+    case $* in
+      *"--json url"*) echo https://github.com/pycz2/classichs/actions/runs/777 ;;
+      *) printf '{"status": "completed", "conclusion": "%s", "jobs": [{"name": "rust (ubuntu-24.04, linux)", "status": "completed",
+          "conclusion": "%s", "startedAt": "2026-11-19T10:00:00Z", "completedAt": "2026-11-19T10:09:30Z"}]}\n' "${FAKE_CI:-success}" "${FAKE_CI:-success}" ;;
+    esac ;;
+  "run download")
+    shift 2; name= dir=
+    while [ $# -gt 0 ]; do case $1 in -n) name=$2; shift ;; -D) dir=$2; shift ;; esac; shift; done
+    mkdir -p "$dir"
+    case $name in
+      server-linux-x86_64) head -c 2000000 /dev/zero > "$dir/ClassicHS-server-0.72.0-linux-x86_64" ;;
+      replay-viewer) python3 -c 'import sys, zipfile; z = zipfile.ZipFile(sys.argv[1], "w"); z.writestr("index.html", "x")' "$dir/ClassicHS-0.72.0-replay-viewer.zip" ;;
+      *) echo "fake gh: no artifact $name" >&2; exit 1 ;;
+    esac ;;
+  *) echo "fake gh: unexpected $*" >&2; exit 99 ;;
 esac
 EOF
 
@@ -65,10 +92,11 @@ EOF
 chmod +x "$T"/bin/*
 
 fails=0
-run() {  # name, expected exit, then the texts the output must have
+run() {  # name, expected exit, then the texts the output must have; ARGS: the script's arguments
   local name=$1 want=$2 got=0; shift 2
+  # shellcheck disable=SC2086
   PATH="$T/bin:$PATH" CHS_LOG_DIR="$T/logs/$name" DEPLOY_HOST=test@deploy.invalid DEPLOY_URL=https://deploy.invalid \
-    "$ROOT/tools/deploy_server.sh" 0.71.0 > "$T/$name.out" 2>&1 || got=$?
+    "$ROOT/tools/deploy_server.sh" ${ARGS:-0.71.0} > "$T/$name.out" 2>&1 || got=$?
   [ "${VERBOSE:-}" != 1 ] || { echo "----- $name"; cat "$T/$name.out"; }
   local bad=""
   [ "$got" = "$want" ] || bad="exit $got, not $want; "
@@ -77,7 +105,7 @@ run() {  # name, expected exit, then the texts the output must have
   if [ -z "$log" ]; then bad="$bad no log file;"
   else
     grep -q $'\033' "$log" && bad="$bad colours in the log file;"
-    grep -qF "✔ 1/7 done in" "$log" || bad="$bad the log file lacks the steps;"
+    grep -qF "▶ 1/7 " "$log" || bad="$bad the log file lacks the steps;"
   fi
   if [ -n "$bad" ]; then echo "FAIL $name: $bad"; sed 's/^/  /' "$T/$name.out"; fails=$((fails + 1)); else echo "ok   $name"; fi
 }
@@ -93,4 +121,10 @@ FAKE_DEPLOY_FAIL=1 run deploy_fails 1 "Error: the database is locked" "the last 
   "✘ deploy_server failed at 6/7 Running classichs-deploy 0.71.0" "exit 1, the command: ssh"
 FAKE_HTTP=502 run url_502 1 "https://deploy.invalid/admin: HTTP 502" "✘ deploy_server failed at 7/7 Checking https://deploy.invalid/admin after" \
   ": https://deploy.invalid/admin answers HTTP 502"
+ARGS=--from-ci run ci_good 0 "▶ 1/7 Waiting for the CI build of 1234567 on main" "run 777: https://github.com/pycz2/classichs/actions/runs/777" \
+  "rust ubuntu-24.04" "the server: 2.0 MB, the version label 0.72.0-1234567" "the replay viewer: 1 files" \
+  "▶ 3/7 Making the image classichs-server:0.72.0-1234567" "a build from main brings no packs (they come only with releases): the host keeps its packs" \
+  "classichs 0.72.0-1234567 is running" "OK: https://deploy.invalid" "✔ 7/7 done in"
+ARGS="--from-ci 1234567" FAKE_CI=failure run ci_failed 1 "the CI run 777 of 1234567 ended: failure" "✘ deploy_server failed at 1/7"
+ARGS=--from-ci FAKE_OLD_HOST=1 run ci_old_host 1 "the host's classichs-deploy takes only X.Y.Z"
 [ $fails = 0 ] && echo "all passed" || { echo "$fails failed"; exit 1; }

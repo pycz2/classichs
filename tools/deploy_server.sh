@@ -6,14 +6,20 @@
 # uploads it and the release's packs (~/classichs/packs on the host, only the changed ones; mounted
 # at /packs), runs classichs-deploy there (it checks the new server, rolls back when it does not
 # answer and keeps the 2 newest images), then checks the URL.
+# Without a release: tools/deploy_server.sh --from-ci [<commit>] (default: the head of main) waits for the
+# Release workflow's run of that commit on main and deploys its build (the artifacts server-linux-x86_64 and
+# replay-viewer) as the version X.Y.Z-<short commit> (X.Y.Z: the project's version). No packs: they come only
+# with releases, the host keeps its own. Needs gh (logged in) and a classichs-deploy on the host that takes
+# X.Y.Z-<commit> (if it is older: this script without a version, then sudo bash ~/classichs/setup.sh <domain>).
 # Without a version: copies the scripts of deploy/docker-host to the host (for setup.sh).
 # Prints each step with its time (tools/log.sh); the log is kept in build/logs/deploy_server-<time>.log.
-# tools/test_deploy_logs.sh runs it against stand-ins of ssh, scp, docker and curl.
+# tools/test_deploy_logs.sh runs it against stand-ins of ssh, scp, docker, curl and gh.
 set -euo pipefail
 : "${DEPLOY_HOST:?set DEPLOY_HOST (the ssh host)}"
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 . "$ROOT/tools/log.sh"
-V=${1:-}
+V=${1:-} SHA=
+[ "$V" != --from-ci ] || SHA=${2:-main}
 if [ -z "$V" ]; then
   log_init deploy_server "$ROOT"
   log_step "Copying setup.sh and classichs-deploy to $DEPLOY_HOST:classichs/"
@@ -22,35 +28,71 @@ if [ -z "$V" ]; then
   log_info "copied; on the host: sudo bash ~/classichs/setup.sh <domain>"; exit 0
 fi
 : "${DEPLOY_URL:?set DEPLOY_URL (https://the server domain)}"
-[[ $V =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "usage: tools/deploy_server.sh X.Y.Z" >&2; exit 2; }
+[ -n "$SHA" ] || [[ $V =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "usage: tools/deploy_server.sh X.Y.Z | --from-ci [<commit>]" >&2; exit 2; }
 log_init deploy_server "$ROOT"
 log_steps 7
 API=https://api.github.com/repos/pycz2/classichs/releases/tags/v$V
 W=$(mktemp -d); LOG_ON_EXIT='rm -rf "$W"'
 mkdir "$W/img" "$W/packs"
+FROM="release v$V"
 
-log_step "Reading the release v$V"
-log_info "$API"
-curl -fsSL "$API" | python3 -c '
+# A commit on main: the build of its Release workflow run.
+from_ci() {
+  export GH_REPO=pycz2/classichs
+  full=$(gh api "repos/$GH_REPO/commits/$SHA" --jq .sha) || log_fail "GitHub has no commit $SHA (not pushed?)"
+  short=${full:0:7}
+  log_step "Waiting for the CI build of $short on main"
+  ssh "$DEPLOY_HOST" "grep -qF 'X.Y.Z-<commit>' /usr/local/sbin/classichs-deploy" \
+    || log_fail "the host's classichs-deploy takes only X.Y.Z: run tools/deploy_server.sh with no version, then on the host sudo bash ~/classichs/setup.sh <domain>"
+  run=
+  for i in $(seq 20); do  # a commit pushed a moment ago gets its run within seconds
+    run=$(gh run list -w Release -b main -c "$full" -L 1 --json databaseId --jq '.[0].databaseId // empty')
+    [ -z "$run" ] || break
+    [ "$i" != 1 ] || log_info "no Release run of $short on main yet, waiting up to 5 minutes…"
+    sleep 15
+  done
+  [ -n "$run" ] || log_fail "no Release run of $short on main (is the commit on main?)"
+  log_watch_run "$run"
+  [ "$LOG_RUN_CONCLUSION" = success ] || log_fail "the CI run $run of $short ended: $LOG_RUN_CONCLUSION"
+  FROM="CI run $run"
+
+  log_step "Downloading the server and the replay viewer of $FROM"
+  gh run download "$run" -n server-linux-x86_64 -D "$W/ci"
+  bin=$(ls "$W"/ci/ClassicHS-server-*-linux-x86_64)
+  V=${bin##*/ClassicHS-server-} && V=${V%-linux-x86_64}-$short
+  mv "$bin" "$W/img/classichs-server"
+  log_info "the server: $(log_fsize "$W/img/classichs-server"), the version label $V"
+  # runs before the replay-viewer artifact was added have none: the image goes without it
+  if gh run download "$run" -n replay-viewer -D "$W/rv"; then mv "$W"/rv/*-replay-viewer.zip "$W/replay-viewer.zip"; fi
+}
+
+# A release: the Linux server, the replay viewer and the packs of its assets.
+from_release() {
+  log_step "Reading the release v$V"
+  log_info "$API"
+  curl -fsSL "$API" | python3 -c '
 import sys, json
 for a in json.load(sys.stdin)["assets"]:
     n = a["name"]
     if n.endswith((".cardpack", "-replay-viewer.zip")) or n.startswith("ClassicHS-server-") and n.endswith("-linux-x86_64"):
         print(n, a["browser_download_url"], a["size"])' > "$W/assets"
-grep -q -- "-linux-x86_64 " "$W/assets" || log_fail "release v$V has no Linux server binary"
-log_info "$(wc -l < "$W/assets" | tr -d ' ') files to download: $(log_size "$(awk '{ s += $3 } END { print s }' "$W/assets")")"
+  grep -q -- "-linux-x86_64 " "$W/assets" || log_fail "release v$V has no Linux server binary"
+  log_info "$(wc -l < "$W/assets" | tr -d ' ') files to download: $(log_size "$(awk '{ s += $3 } END { print s }' "$W/assets")")"
 
-log_step "Downloading the release files"
-while read -r name url size; do
-  case $name in
-    *.cardpack) out=$W/packs/${name#ClassicHS-$V-} ;;
-    *-replay-viewer.zip) out=$W/replay-viewer.zip ;;
-    *) out=$W/img/classichs-server ;;
-  esac
-  t=$(log_now)
-  curl -fsSL -o "$out" "$url"
-  log_info "$name: $(log_fsize "$out") in $(log_dur $(($(log_now) - t)))"
-done < "$W/assets"
+  log_step "Downloading the release files"
+  while read -r name url size; do
+    case $name in
+      *.cardpack) out=$W/packs/${name#ClassicHS-$V-} ;;
+      *-replay-viewer.zip) out=$W/replay-viewer.zip ;;
+      *) out=$W/img/classichs-server ;;
+    esac
+    t=$(log_now)
+    curl -fsSL -o "$out" "$url"
+    log_info "$name: $(log_fsize "$out") in $(log_dur $(($(log_now) - t)))"
+  done < "$W/assets"
+}
+
+if [ -n "$SHA" ]; then from_ci; else from_release; fi
 
 log_step "Making the image classichs-server:$V"
 chmod 755 "$W/img/classichs-server"
@@ -60,7 +102,7 @@ if [ -f "$W/replay-viewer.zip" ]; then
   unzip -q "$W/replay-viewer.zip" -d "$W/img/replay-viewer"
   log_info "the replay viewer: $(find "$W/img/replay-viewer" -type f | wc -l | tr -d ' ') files"
 else
-  log_warn "release v$V has no replay viewer"
+  log_warn "$FROM has no replay viewer"
 fi
 shopt -s nullglob
 packs=("$W"/packs/*.cardpack)
@@ -73,7 +115,9 @@ log_info "image classichs-server:$V: $(log_fsize "$W/image.tar.gz") to upload"
 # The packs: upload a file only when its SHA-256 differs; remove the ones the release does not have.
 # A release without packs (before 0.28.1) leaves the host's packs as they are.
 log_step "Updating the packs on the host"
-if [ ${#packs[@]} -eq 0 ]; then
+if [ -n "$SHA" ]; then
+  log_info "a build from main brings no packs (they come only with releases): the host keeps its packs"
+elif [ ${#packs[@]} -eq 0 ]; then
   log_warn "release v$V has no packs: the host keeps its packs"
 else
   remote=$(ssh "$DEPLOY_HOST" 'mkdir -p classichs/packs && cd classichs/packs && sha256sum -- *.cardpack 2>/dev/null' || true)
