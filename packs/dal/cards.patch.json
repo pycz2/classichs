@@ -449,6 +449,18 @@
    "play": "battlecry"
   }
  },
+ "DAL_431": {
+  "script": "scripts/dal_rsww.lua#DAL_431",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
+ "DAL_431t": {
+  "script": "scripts/dal_rsww.lua#DAL_431t",
+  "fx": {
+   "play": "battlecry"
+  }
+ },
  "DAL_432": {
   "script": "scripts/dal_rsww.lua#DAL_432",
   "fx": {
@@ -541,6 +553,9 @@
  },
  "DAL_573": {
   "script": "scripts/dal_dhmpp.lua#DAL_573"
+ },
+ "DAL_575": {
+  "script": "scripts/dal_dhmpp.lua#DAL_575"
  },
  "DAL_576": {
   "script": "scripts/dal_dhmpp.lua#DAL_576"

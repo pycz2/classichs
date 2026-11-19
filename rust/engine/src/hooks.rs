@@ -17,6 +17,21 @@ pub enum Base {
     EnemyChampion,
 }
 
+impl Base {
+    /// Its name in a script (`g.info(card).target`).
+    pub fn name(self) -> &'static str {
+        match self {
+            Base::Any => "any",
+            Base::Minion => "minion",
+            Base::EnemyMinion => "enemy_minion",
+            Base::FriendlyMinion => "friendly_minion",
+            Base::EnemyChar => "enemy_char",
+            Base::FriendlyChar => "friendly_char",
+            Base::EnemyChampion => "enemy_hero",
+        }
+    }
+}
+
 /// A target spec: a base plus an optional filter hook.
 #[derive(Clone, Copy, Debug)]
 pub struct TSpec {
@@ -25,6 +40,9 @@ pub struct TSpec {
     /// The spec applies only while this read-only hook holds; otherwise the card or power has no target
     /// (Steamwheedle Sniper: Steady Shot targets only while it is in play).
     pub when: Option<HookFn>,
+    /// A read-only hook giving a card id: the spec is that card's own `target` spec, as if this card were it (nil, or
+    /// a spec with no valid target now: no target); Rise of Shadows' Drustvar Horror takes its taught spell's.
+    pub like: Option<HookFn>,
 }
 
 /// A TRAP: fires on `event` in the opponent's turn when `cond` holds (None: always);

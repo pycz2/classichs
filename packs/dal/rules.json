@@ -371,6 +371,9 @@
   },
   "DOUBLE_SECRET": {
    "engine": "DOUBLE_TRAP"
+  },
+  "DOUBLE_SUMMON": {
+   "engine": "DOUBLE_SUMMON"
   }
  },
  "modes": {
@@ -693,7 +696,10 @@
    }
   }
  },
- "player_hooks": "player:boom",
+ "player_hooks": [
+  "player:boom",
+  "player:dal"
+ ],
  "every_race": "ALL",
  "deck_recipes": {
   "BOT_914": [

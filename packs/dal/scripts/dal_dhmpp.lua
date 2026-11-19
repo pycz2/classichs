@@ -714,6 +714,14 @@ cards.DAL_799 = {
   glow = function(g, me)
     return stag_left(g, g.ctrl(me)) <= 0
   end,
+  -- the base text and its variant 1 "({0} left!)" or 2 "(Ready!)" (api.md, `text`: "+N")
+  text = function(g, me)
+    local n = stag_left(g, g.ctrl(me))
+    if n > 0 then
+      return "+1", n
+    end
+    return "+2"
+  end,
 }
 
 -- Lucentbark: Taunt; Deathrattle: goes dormant (Spirit of Lucentbark where it died); the Spirit counts the Health your
@@ -965,13 +973,14 @@ cards.DAL_578 = {
   end,
 }
 
--- Kalecgos: your first spell each of your turns costs (0) (no spell played yet this turn: TURN_SPELLS); Battlecry:
+-- Kalecgos: your first spell each of your turns costs (0) (no spell resolved yet this turn: the player hooks' RESOLVED; a
+-- countered one left the discount for the next before patch 14.2.0.30795 of 2019-05-14); Battlecry:
 -- Discover a spell.
 cards.DAL_609 = {
   cost_aura = function(g, me, card, cost)
     local p = g.ctrl(me)
     if g.ctrl(card) == p and g.type(card) == "SPELL" and g.zone(card) == "HAND" and g.current() == p
-        and g.count(p, "TURN_SPELLS") == 0 then
+        and g.count(p, "RESOLVED") == 0 then
       return 0
     end
     return cost
@@ -982,6 +991,14 @@ cards.DAL_609 = {
     end)
   end,
   on_choose = to_hand,
+}
+
+-- Khadgar: your cards that summon minions summon twice as many (DOUBLE_SUMMON: a copy of each minion a card's effect
+-- summons onto your side, the opponent's cards too; a recruit's copy is summoned, not recruited; two Khadgars: four).
+cards.DAL_575 = {
+  aura = function(g, me)
+    g.aura_add(g.hero(g.ctrl(me)), 0, 0, { DOUBLE_SUMMON = 1 })
+  end,
 }
 
 -- --- Paladin -----------------------------------------------------------------------------------------------------------

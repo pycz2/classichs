@@ -306,7 +306,7 @@ impl Game {
         // "when the game starts", after the mulligan (Prince Malchezaar): only for a pack whose player hooks listen, so
         // no other game logs it
         let rs = self.rs;
-        if rs.player_hooks.as_deref().is_some_and(|h| rs.hooks(h).on("game_start").is_some()) {
+        if rs.player_hooks.iter().any(|h| rs.hooks(h).on("game_start").is_some()) {
             self.emit(obj!{"type": "game_start"});
             self.resolve();
         }
@@ -518,9 +518,14 @@ impl Game {
         nt
     }
 
-    /// A target spec as it applies now: none while its `when` hook does not hold.
+    /// A target spec as it applies now: none while its `when` hook does not hold. A `like` spec is the named card's
+    /// (one step: not another `like`), none while it has no valid target.
     fn live_spec(&self, e: Id, spec: Option<TSpec>) -> Option<TSpec> {
-        spec.filter(|s| s.when.is_none_or(|f| self.fx_can_play(f, e)))
+        let s = spec.filter(|s| s.when.is_none_or(|f| self.fx_can_play(f, e)))?;
+        let Some(f) = s.like else { return Some(s) };
+        let card = self.fx_card(f, e)?;
+        let s = self.live_spec(e, self.rs.hooks(&card).target.filter(|x| x.like.is_none()))?;
+        self.targets(e, &s, self.e(e).kind() == "SPELL").iter().any(|&x| x != e).then_some(s)
     }
 
     fn spec_targets(&self, e: Id, spec: Option<TSpec>, is_spell: bool, optional: bool) -> Vec<Id> {

@@ -721,15 +721,9 @@ cards.DAL_081 = {
 }
 
 -- Archmage Vargoth: at the end of your turn, cast a spell you've cast this turn (random targets; not a countered one).
--- ponytail: it hears the spells resolved while it is in play (a countered one never resolves); one cast earlier in the
--- same turn, before it came, is missed: a player hook marking every resolved spell with its turn would fix that.
+-- The spells come from the player hooks' CAST_TURN (dal.lua): every spell of this turn that resolved, also before it came.
 cards.DAL_558 = {
   on = {
-    after_spell = function(g, me, ev)
-      if g.mine(me, ev) then
-        g.set_tag(ev.entity, "CAST_TURN", g.turn())
-      end
-    end,
     turn_end = function(g, me, ev)
       if not g.mine(me, ev) then
         return

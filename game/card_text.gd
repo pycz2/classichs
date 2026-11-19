@@ -115,22 +115,42 @@ static var _before_stop := RegEx.create_from_string("[ \\x{a0}]+(?=[.,;])")
 static var _double := RegEx.create_from_string("  +")
 
 
+## " " between a and b unless one has a space or line break there or a ends in an opening bracket.
+static func _gap(a: String, b: String) -> String:
+	if a == "" or b == "" or a[-1] in " \n\u00a0(" or b[0] in " \n\u00a0":
+		return ""
+	return " "
+
+
 ## The raw text of a card in a language, its "{0}", "{1}"… filled in with args (the engine's `text_args` of a card in a
-## game: a Jade card's next Golem, a potion's two effects; an arg that is a card id stands for that card's text), or
-## left out without them (in the collection: "Summon a Jade Golem.").
+## game: a Jade card's next Golem, a potion's two effects; an arg that is a card id stands for that card's text, one
+## "name:<id>" for its name), or left out without them (in the collection: "Summon a Jade Golem.").
 static func raw(id: String, locale := "", args := []) -> String:
 	var t: Dictionary = CardDb.card(id).get("text", {})
 	var s: String = t.get(_loc(locale), t.get("enUS", ""))
-	s = s.replace("@<i>", "<i>")  # a placeholder, not a variant: a Lesser Spellstone's upgrade hint (removed in patch 17.4.1)
+	if s.count("@") == 1:  # a placeholder, not a variant: a Lesser Spellstone's upgrade hint (removed in patch 17.4.1)
+		s = s.replace("@<i>", "<i>")
 	s = s.replace("[d]", "")  # Hearthstone's hyphenation point in long German words ("Helden[d]fähigkeiten")
 	if s.count("@") == 1 and s != "@":  # a value that grows ("Summon @ 1/1 |4(Imp, Imps)": Rise of Shadows' Schemes):
 		# the engine's text_args[0], 1 without it (in the collection); its word forms follow it
 		var n := int(str(args[0])) if args.size() > 0 and str(args[0]).is_valid_int() else 1
 		s = _counted(s.replace("@", str(n)), n, _loc(locale))
-	if s.contains("@"):  # Hearthstone's text variants ("a@b@c": Fatespinner in play): the first, the one both players
-		# see, or the one args name ["@1"] (its Choose One option, which only its player knows)
-		var v := int(str(args[0]).substr(1)) if args.size() == 1 and str(args[0]).begins_with("@") else 0
-		s = s.get_slice("@", v if v < s.get_slice_count("@") else 0)
+	if s.contains("@"):  # Hearthstone's text variants ("a@b@c"): the first (the one both players see; in the
+		# collection), or the one a first arg "@N" names (Fatespinner's Choose One option, which only its player knows),
+		# or the first with variant N after it for "+N" (Crystal Stag: "…a copy of this.@ <i>({0} left!)</i>@ <i>(Ready!)</i>");
+		# that arg fills no "{n}": the args after it do
+		var m := str(args[0]) if args.size() > 0 else ""
+		var v := int(m.substr(1)) if m.length() > 1 and m[0] in "@+" and m.substr(1).is_valid_int() else -1
+		if v >= 0:
+			args = args.slice(1)
+		var part := s.get_slice("@", v) if v > 0 and v < s.get_slice_count("@") else s.get_slice("@", 0)
+		s = s.get_slice("@", 0) + _gap(s.get_slice("@", 0), part) + part if m.begins_with("+") and v > 0 else part
+	var open := s.rfind("<i>")
+	if open >= 0 and s.find("</i>", open) < 0:  # an <i> left open at the end: the data stops where the game put a count
+		# (Spirit of Lucentbark: "…awaken this minion. <i>(Noch"): the first arg there and the bracket closed, else none of it
+		if args.is_empty():
+			return s.substr(0, open).strip_edges(false, true)
+		return s + _gap(s, str(args[0])) + str(args[0]) + ")</i>"
 	if not s.contains("{"):
 		return s
 	var out := ""
@@ -139,7 +159,9 @@ static func raw(id: String, locale := "", args := []) -> String:
 		out += s.substr(last, m.get_start() - last)
 		var i := int(m.get_string(1))
 		var a := str(args[i]) if i < args.size() else ""
-		if a != "" and a != id and CardDb.has(a):
+		if a.begins_with("name:"):  # "name:<id>": that card's name (Drustvar Horror: "Cast {0} and {1}.")
+			a = name(a.substr(5), locale)
+		elif a != "" and a != id and CardDb.has(a):
 			a = raw(a, locale).replace("[x]", "")
 		out += a
 		last = m.get_end()

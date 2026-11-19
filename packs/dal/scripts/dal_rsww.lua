@@ -1,6 +1,5 @@
 -- Rise of Shadows (April 2019): the Rogue, Shaman, Warlock and Warrior cards, their tokens and the five Lackeys, as on
--- 2019-04-09 (build 30103; hearthstone.wiki.gg). Swampqueen Hagatha (DAL_431) and her Drustvar Horror (DAL_431t) are not
--- here yet (the Horror needs to know which taught spell takes a target, and that spell's target spec).
+-- 2019-04-09 (build 30103; hearthstone.wiki.gg).
 local cards = {}
 
 -- --- helpers (copied from boom_cards.lua) ---------------------------------------------------------------------------
@@ -401,7 +400,7 @@ cards.DAL_417 = {
 }
 
 -- Unidentified Contract: put into the hand (drawn or given), it becomes one of its four contracts (as K&C's
--- Unidentified items; DOUBT: the opening hand keeps the plain card).
+-- Unidentified items; one in the opening hand is identified when the game starts: player:dal in dal.lua).
 local CONTRACTS = { "DAL_366t1", "DAL_366t2", "DAL_366t3", "DAL_366t4" }
 local function contract(f)
   return {
@@ -534,6 +533,81 @@ cards.DAL_052 = {
       local n = g.transform(me, g.card(e))
       if n then
         g.set_stats(n, 4, 4)
+      end
+    end
+  end,
+}
+
+-- Swampqueen Hagatha: Battlecry: a 5/5 Drustvar Horror to your hand, taught two Shaman spells you pick (mechanics.md
+-- §5): two Discover-like picks of three Shaman spells of the pack's collectible pool; a targeted first pick leaves only
+-- untargeted ones for the second. The first pick rides on the second offer's cards (HORROR_FIRST), so a doubled
+-- Battlecry's four choices pair up in whatever order they come: two Horrors, each with its own picks.
+local function teach(g, me, first)
+  local untargeted = first and info(g, first).target
+  local spells = pool(g, function(i)
+    return i.type == "SPELL" and of_class(i, "SHAMAN") and not (untargeted and i.target)
+  end)
+  local opts = {}
+  for _, c in ipairs(pick_n(g, spells, 3)) do
+    local o = g.create(g.ctrl(me), c)
+    g.set_tag(o, "HORROR_FIRST", first)
+    opts[#opts + 1] = o
+  end
+  if #opts > 0 then
+    g.request_choice(me, opts)
+  end
+end
+cards.DAL_431 = {
+  battlecry = function(g, me)
+    teach(g, me, nil)
+  end,
+  on_choose = function(g, me, option)
+    local first = g.tag(option, "HORROR_FIRST")
+    if first == 0 then
+      return teach(g, me, option)
+    end
+    local h = g.add_to_hand(g.ctrl(me), "DAL_431t")
+    if h then
+      g.set_tag(h, "HORROR_A", first)
+      g.set_tag(h, "HORROR_B", option)
+    end
+  end,
+}
+
+-- Drustvar Horror: Battlecry: cast its two taught spells (the set-aside cards picked: HORROR_A, HORROR_B) in the pick
+-- order, for free (their Overload is owed); the targeted one (at most one) on the Battlecry's target, whose spec is that
+-- spell's (`target.like`; no valid target: it is played without one and only the other is cast). One hook: the deaths
+-- come after both. Its text names them ({0}, {1}: "name:<card id>").
+local function taught(g, me)
+  local a = g.tag(me, "HORROR_A")
+  if a == 0 then
+    return {}
+  end
+  return { a, g.tag(me, "HORROR_B") }
+end
+cards.DAL_431t = {
+  target = {
+    like = function(g, me)
+      for _, s in ipairs(taught(g, me)) do
+        if info(g, s).target then
+          return g.card(s)
+        end
+      end
+    end,
+  },
+  text = function(g, me)
+    local s = taught(g, me)
+    if #s == 0 then
+      return "", ""
+    end
+    return "name:" .. g.card(s[1]), "name:" .. g.card(s[2])
+  end,
+  battlecry = function(g, me, t)
+    for _, s in ipairs(taught(g, me)) do
+      if not info(g, s).target then
+        g.cast(me, s, nil, true)
+      elseif t then
+        g.cast(me, s, t, true)
       end
     end
   end,

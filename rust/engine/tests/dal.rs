@@ -28,6 +28,13 @@ cards.T_SCHEME = {
 cards.T_SILENCER = { -- after it is damaged, silence every minion (a keyword lost between the damage and its effect)
   on = { damage = function(g, me, ev) if ev.target == me then for _, m in ipairs(g.all_minions()) do g.silence(m) end end end },
 }
+cards.T_INFO = { -- counts "card:kind" for the target kind g.info gives (Fireball, Arcane Intellect, Wrath, Hex)
+  spell = function(g, me)
+    for _, c in ipairs({ "VAN_CS2_029", "VAN_CS2_023", "VAN_EX1_154", "VAN_EX1_246" }) do
+      g.add_count(g.ctrl(me), c .. ":" .. (g.info(c).target or "none"))
+    end
+  end,
+}
 return cards
 "#;
 
@@ -56,6 +63,7 @@ fn rs() -> Option<&'static Ruleset> {
         cards.push(card("T_RHYSSA", "MINION", 3, json!({"attack": 4, "health": 3})));
         cards.push(card("T_SCHEME", "SPELL", 4, json!({})));
         cards.push(card("T_SILENCER", "MINION", 1, json!({"attack": 1, "health": 9})));
+        cards.push(card("T_INFO", "SPELL", 0, json!({})));
         files.insert("cards.json".into(), serde_json::to_vec(&cards).unwrap());
         files.insert("scripts/dal_test.lua".into(), LUA.as_bytes().to_vec());
         Some(ruleset::load(&files).expect("the test pack loads"))
@@ -295,4 +303,222 @@ fn card_tests_play() {
         }
     }
     assert!(bad.is_empty(), "{} problems:\n{}", bad.len(), bad.join("\n"));
+}
+
+// --- the pack's player hooks (rules.json `player_hooks`: ["player:boom", "player:dal"]) on the real pack ----------------
+
+fn dal_game(p0: Value, p1: Value) -> Option<T> {
+    let rs = dal()?;
+    let merge = |base: Value, over: Value| {
+        let mut b = base.as_object().unwrap().clone();
+        b.extend(over.as_object().unwrap().clone());
+        Value::Object(b)
+    };
+    let d0 = json!({"hero": "HERO_08", "mana": 10, "max_mana": 10, "deck": FILL});
+    let d1 = json!({"hero": "HERO_01", "mana": 10, "max_mana": 10, "deck": FILL});
+    let sc = json!({"current": 0, "seed": 7, "players": [merge(d0, p0), merge(d1, p1)]});
+    Some(T { g: scenario::build_in(rs, &sc).unwrap_or_else(|e| panic!("scenario: {e}")) })
+}
+
+macro_rules! dal_scene {
+    ($p0:tt, $p1:tt) => {
+        match dal_game(json!($p0), json!($p1)) {
+            Some(t) => t,
+            None => {
+                eprintln!("no python3: skipped");
+                return;
+            }
+        }
+    };
+}
+
+const ARCANE_INTELLECT: &str = "VAN_CS2_023";
+const FIREBALL: &str = "VAN_CS2_029";
+
+#[test]
+fn a_list_of_player_hook_sets_runs_each() {
+    let Some(rs) = dal() else { return };
+    assert_eq!(rs.player_hooks, ["player:boom", "player:dal"]);
+}
+
+#[test]
+fn vargoth_recasts_a_spell_cast_before_he_came() {
+    let mut t = dal_scene!({"hand": [ARCANE_INTELLECT, "DAL_558"]}, {});
+    t.play(ARCANE_INTELLECT, NONE); // draws 2
+    t.play("DAL_558", NONE);
+    assert_eq!(t.g.players[0].hand.len(), 2);
+    t.end_turn(); // Vargoth casts Arcane Intellect again: 2 more
+    assert_eq!(t.g.players[0].hand.len(), 4);
+}
+
+#[test]
+fn kalecgos_keeps_the_free_spell_when_the_first_is_countered() {
+    // before patch 14.2 (2019-05-14) a countered first spell left the discount for the next one
+    let mut t = dal_scene!({"hand": [FIREBALL, FIREBALL], "board": ["DAL_609"]}, {"secrets": [COUNTERSPELL]});
+    let foe = t.g.players[1].hero;
+    t.play(FIREBALL, foe);
+    assert_eq!(t.g.players[0].mana, 10, "the first spell was free");
+    t.play(FIREBALL, foe);
+    assert_eq!(t.g.players[0].mana, 10, "the countered one left the discount");
+    assert_eq!(t.g.e(foe).damage, 6);
+}
+
+#[test]
+fn crystal_stag_counts_the_health_restored_this_game() {
+    // Holy Light restores 6 to the damaged champion: the count RESTORED is 6 and the Stag summons its copy
+    let mut t = dal_scene!({"hand": ["VAN_CS2_089", "DAL_799"], "damage": 10}, {});
+    let me = t.g.players[0].hero;
+    t.play("VAN_CS2_089", me);
+    assert_eq!(t.count(0, "RESTORED"), 6);
+    t.play("DAL_799", NONE);
+    assert_eq!(t.g.players[0].board.len(), 2);
+}
+
+#[test]
+fn an_unidentified_contract_in_the_opening_hand_is_identified_when_the_game_starts() {
+    let Some(rs) = dal() else { return };
+    let contracts: Vec<String> = vec!["DAL_366".to_string(); 30];
+    let plain: Vec<String> = vec![YETI.to_string(); 30];
+    let mut g = Game::new_in(rs, "HERO_03", &contracts, "HERO_01", &plain, 3, 0, true);
+    for p in 0..2 {
+        let a = g.legal_actions().into_iter().find(|a| a["type"] == "mulligan" && int(a.get("player")) == p as i64
+            && a.get("replace").and_then(Value::as_array).is_some_and(|r| r.is_empty())).expect("keep all");
+        assert!(g.apply(&Value::Object(a)).ok);
+    }
+    assert_eq!(g.script_error.get(), None);
+    let hand: Vec<&str> = g.players[0].hand.iter().map(|&e| g.e(e).card_id.as_ref()).collect();
+    assert!(!hand.is_empty() && hand.iter().all(|c| c.starts_with("DAL_366t")), "{hand:?}");
+}
+
+// --- Swampqueen Hagatha and her Drustvar Horror (g.info(card).target, target.like); Khadgar (DOUBLE_SUMMON) ---------
+
+#[test]
+fn info_gives_the_target_kind_a_card_needs() {
+    let mut t = scene!({"hand": ["T_INFO"]}, {});
+    t.play("T_INFO", NONE);
+    for k in ["VAN_CS2_029:any", "VAN_CS2_023:none", "VAN_EX1_154:minion", "VAN_EX1_246:minion"] {
+        assert_eq!(t.count(0, k), 1, "{k}");
+    }
+}
+
+const HAGATHA: &str = "DAL_431";
+const HORROR: &str = "DAL_431t";
+const BOLT: &str = "VAN_EX1_238"; // Lightning Bolt: 3 damage, Overload (1)
+const BLOODLUST: &str = "VAN_CS2_046"; // your minions +3 Attack this turn
+const HEX: &str = "VAN_EX1_246";
+const KHADGAR: &str = "DAL_575";
+
+impl T {
+    /// The Drustvar Horror in p0's hand, taught spells a and b (set-aside cards, as Hagatha's picks are).
+    fn teach(&mut self, a: &str, b: &str) -> Id {
+        let h = *self.g.players[0].hand.iter().find(|&&e| self.g.e(e).card_id == HORROR).unwrap();
+        for (k, c) in [("HORROR_A", a), ("HORROR_B", b)] {
+            let s = self.g.new_entity(c, 0);
+            self.g.em(s).zone = "SETASIDE";
+            self.g.em(h).set_tag(k, s);
+        }
+        h
+    }
+    /// The targets e may be played on.
+    fn play_targets(&self, e: Id) -> Vec<Id> {
+        self.g.legal_actions().iter().filter(|a| a["type"] == "play" && int(a.get("entity")) == e).map(|a| int(a.get("target"))).collect()
+    }
+    fn casts(&self) -> Vec<String> {
+        self.g.history.iter().flat_map(|h| h.events()).filter(|e| e["type"] == "cast").map(|e| e["card"].as_str().unwrap().into()).collect()
+    }
+    fn choose(&mut self, o: Id) -> &mut Self {
+        self.act("choose", |a| a["type"] == "choose" && int(a.get("option")) == o)
+    }
+}
+
+#[test]
+fn drustvar_horror_casts_both_spells_in_order_the_targeted_one_on_its_target() {
+    for (a, b) in [(BOLT, BLOODLUST), (BLOODLUST, BOLT)] {
+        let mut t = dal_scene!({"hand": [HORROR]}, {"board": [YETI]});
+        let h = t.teach(a, b);
+        let (yeti, foe) = (t.g.players[1].board[0], t.g.players[1].hero);
+        let ts = t.play_targets(h);
+        assert!(ts.contains(&yeti) && ts.contains(&foe) && !ts.contains(&NONE), "Lightning Bolt's targets: {ts:?}");
+        let text = classichs_engine::api::snapshot(&t.g, 0)["entities"][h.to_string()]["text_args"].clone();
+        assert_eq!(text, json!([format!("name:{a}"), format!("name:{b}")]));
+        t.play(HORROR, yeti);
+        assert_eq!(t.casts(), [a, b]);
+        assert_eq!(t.g.e(yeti).damage, 3);
+        assert_eq!(t.g.e(h).atk(), 8, "Bloodlust on the Horror");
+        assert_eq!(t.g.players[0].mana, 5, "the spells are free");
+        assert_eq!(t.g.players[0].mana_lock_owed, 1, "Lightning Bolt's Overload");
+    }
+}
+
+#[test]
+fn drustvar_horror_without_a_valid_target_still_casts_the_other_spell() {
+    // Hex has no minion to hit but the Horror itself: it is played without a target, Bloodlust is still cast
+    let mut t = dal_scene!({"hand": [HORROR]}, {});
+    let h = t.teach(HEX, BLOODLUST);
+    assert_eq!(t.play_targets(h), [NONE]);
+    t.play(HORROR, NONE);
+    assert_eq!(t.casts(), [BLOODLUST]);
+    assert_eq!(t.g.e(h).atk(), 8);
+}
+
+#[test]
+fn hagatha_teaches_two_picks_the_second_untargeted_after_a_targeted_first() {
+    let mut t = dal_scene!({"hand": [HAGATHA]}, {});
+    let rs = t.g.rs;
+    let targeted = |g: &Game, e: Id| rs.card(&g.e(e).card_id).hooks.target.is_some();
+    t.play(HAGATHA, NONE);
+    let first = t.g.pending_options();
+    assert_eq!(first.len(), 3);
+    assert!(first.iter().all(|&o| t.g.e(o).kind() == "SPELL" && t.g.e(o).card.card_class == "SHAMAN"));
+    let a = *first.iter().find(|&&o| targeted(&t.g, o)).expect("a targeted spell offered (seed 7)");
+    t.choose(a);
+    let second = t.g.pending_options();
+    assert_eq!(second.len(), 3);
+    assert!(second.iter().all(|&o| !targeted(&t.g, o)), "only untargeted spells after a targeted one");
+    t.choose(second[0]);
+    let h = t.g.players[0].hand[0];
+    assert_eq!(t.g.e(h).card_id, HORROR);
+    assert_eq!((t.g.e(h).tag("HORROR_A"), t.g.e(h).tag("HORROR_B")), (a, second[0]));
+}
+
+#[test]
+fn hagatha_with_brann_gives_two_horrors_each_with_its_own_picks() {
+    let mut t = dal_scene!({"hand": [HAGATHA], "board": ["LOE_077"]}, {});
+    t.play(HAGATHA, NONE);
+    let mut picked = vec![];
+    while let Some(&o) = t.g.pending_options().first() {
+        picked.push(o);
+        t.choose(o);
+    }
+    assert_eq!(picked.len(), 4);
+    // a second offer's cards carry the first pick they follow (HORROR_FIRST): each Horror has a first pick and its own second
+    let seconds: Vec<(i64, i64)> = picked.iter().map(|&o| (t.g.e(o).tag("HORROR_FIRST"), o)).filter(|x| x.0 != 0).collect();
+    let pairs: Vec<(i64, i64)> = t.g.players[0].hand.iter().map(|&h| (t.g.e(h).tag("HORROR_A"), t.g.e(h).tag("HORROR_B"))).collect();
+    assert_eq!(pairs, seconds);
+    assert!(pairs[0].0 != pairs[1].0 && pairs.iter().all(|(a, _)| picked.contains(a)));
+}
+
+#[test]
+fn khadgar_doubles_what_cards_summon_not_a_minion_played() {
+    // Murloc Tidehunter is played (one) and its Battlecry's Murloc Scout comes twice; two Khadgars: four times
+    let mut t = dal_scene!({"hand": ["VAN_EX1_506"], "board": [KHADGAR]}, {});
+    t.play("VAN_EX1_506", NONE);
+    let cards = |t: &T| t.g.players[0].board.iter().map(|&m| t.g.e(m).card_id.to_string()).collect::<Vec<_>>();
+    assert_eq!(cards(&t), [KHADGAR, "VAN_EX1_506", "VAN_EX1_506a", "VAN_EX1_506a"]);
+    let mut t = dal_scene!({"hand": ["VAN_EX1_506"], "board": [KHADGAR, KHADGAR]}, {});
+    t.play("VAN_EX1_506", NONE);
+    assert_eq!(cards(&t).iter().filter(|c| *c == "VAN_EX1_506a").count(), 4);
+}
+
+#[test]
+fn khadgar_doubles_an_opponents_card_summoning_on_his_side_not_the_hero_power() {
+    // Dirty Rat (the opponent's) pulls a Yeti from Khadgar's player's hand: a copy comes too
+    let mut t = dal_scene!({"board": [KHADGAR], "hand": [YETI]}, {"hand": ["CFM_790"]});
+    t.g.current = 1;
+    t.play("CFM_790", NONE);
+    assert_eq!(t.g.players[0].board.len(), 3);
+    // Reinforce (a champion's power, not a card) summons one
+    let mut t = dal_scene!({"hero": "HERO_04", "board": [KHADGAR]}, {});
+    t.act("hero power", |a| a["type"] == "hero_power");
+    assert_eq!(t.g.players[0].board.len(), 2);
 }

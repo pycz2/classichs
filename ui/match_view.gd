@@ -126,6 +126,7 @@ var _hits := {}  # source entity -> its impacts so far in the batch (the k-th pl
 var _aim_card := ""  # the card the local player aims with (its `_aim` loop plays), "" for none
 var _quests := {}  # Quest (or Secret) entity -> its QUEST_PROGRESS before the batch
 var _gone := {}  # entity id -> where its view was when it left the table in this batch (a card moved later comes from there)
+var _left := {}  # entity id -> the hand place it left in this batch, -1 none (a Twinspell copy goes there)
 var _was_hidden := {}  # the batch's cards shuffled into a deck from a deck (King Togwaggle's swap): they come from the other deck
 var _hand_costs := {}  # hand card id -> its cost before the batch (a cost changed without an event: the hand lights up)
 var _lit_hands := {}  # player -> true: a step already lit that hand in this batch
@@ -1763,6 +1764,7 @@ func _on_changed(events: Array) -> void:
 
 
 func _on_changed_now(events: Array) -> void:
+	events = twinspells(events)
 	var item := {"events": events, "snap": controller.game.snapshot, "hist": controller.game.history.size()}
 	if Anim.instant or not is_inside_tree():
 		_show(item.snap, item.hist)
@@ -1843,6 +1845,7 @@ func _begin_batch(item: Dictionary) -> void:
 		elif ev.type == "to_deck" and ((was == null and int(ev.entity) < known) or (was != null and was.zone == "DECK")):
 			_was_hidden[int(ev.entity)] = true
 	_gone = {}
+	_left = {}
 	_lit_hands = {}
 	_hand_costs = {}
 	for p in 2:
@@ -1877,6 +1880,21 @@ func _end_batch() -> void:
 	refresh()
 	_final_refresh = false
 	_light_changed_hands()
+
+
+## The events with each Twinspell copy (the engine adds it to the hand just before its spell's `play` event) after
+## that event, made by that spell ("twin": it flies from the spell shown big to the hand place the spell left).
+static func twinspells(events: Array) -> Array:
+	var out := events.duplicate()
+	for i in out.size() - 1:
+		var a: Dictionary = out[i]
+		var p: Dictionary = out[i + 1]
+		var copy := str(p.get("card", "")) + "ts"
+		if a.type == "add_to_hand" and p.type == "play" and p.get("kind", "") == "spell" and a.player == p.player \
+				and str(a.get("card", "")) in ["", copy] and CardDb.has(copy):
+			out[i] = p
+			out[i + 1] = a.merged({"by": p.card, "by_id": p.entity, "twin": true})
+	return out
 
 
 ## The batch's events as the steps the table shows one after another: [{k, evs, at}], at =
@@ -2278,6 +2296,7 @@ func _step_apply(st: Dictionary) -> Dictionary:
 	for ev in st.evs:
 		match ev.type:
 			"play", "discard", "faded":
+				_left[ev.entity] = _stage.hand[ev.player].find(ev.entity)
 				_stage.hand[ev.player].erase(ev.entity)
 				moved = true
 			"summon":
@@ -2297,8 +2316,10 @@ func _step_apply(st: Dictionary) -> Dictionary:
 						_stage.weapon[p] = -1
 				moved = true
 			"draw", "add_to_hand":
-				if not _stage.hand[ev.player].has(ev.entity):
-					_stage.hand[ev.player].append(ev.entity)
+				var hand: Array = _stage.hand[ev.player]
+				if not hand.has(ev.entity):  # (a Twinspell copy: where its spell was)
+					var at: int = _left.get(ev.get("by_id"), -1) if ev.get("twin", false) else -1
+					hand.insert(at if at >= 0 else hand.size(), ev.entity)
 				moved = true
 			"return_to_hand":
 				var n := g.ent(ev.get("new", -1))
@@ -3012,7 +3033,7 @@ func _origin(ev: Dictionary) -> Variant:
 ## Thoughtsteal, Burgle), the card that made it (a spell shown big, a minion, a Hero Power, a Secret),
 ## else its player's hero.
 func _hand_origin(ev: Dictionary) -> Vector2:
-	var at = _copy_origin(ev)
+	var at = null if ev.get("twin", false) else _copy_origin(ev)
 	if at == null:
 		at = _origin(ev)
 	return at if at != null else _center_of(g.players[int(ev.player)].hero.id)
