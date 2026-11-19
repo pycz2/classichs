@@ -418,7 +418,7 @@ pub struct Ruleset {
     pub deck_recipes: HashMap<String, Vec<(String, Vec<String>)>>,
     /// `player_hooks`: a named hook set whose `on` hooks see every event once for each player (`me` is that player's
     /// champion): counts of the game ("spells you've cast this game"). Empty: no such hooks. A list runs its sets in
-    /// order (a pack adds its own set after its base's: Rise of Shadows' `["player:boom", "player:dal"]`).
+    /// order (a pack adds its own set after its base's: Rise of Shadows' `["player:trl", "player:dal"]`).
     pub player_hooks: Vec<String>,
     /// `every_race`: a card of this race is of every race: the scripts' `g.race` and `g.info(c).race` give a value
     /// `==` to every race name (The Witchwood's Nightmare Amalgam, `ALL`). None: no such race.

@@ -308,6 +308,10 @@ fn card_tests_play() {
 // --- the pack's player hooks (rules.json `player_hooks`: ["player:boom", "player:dal"]) on the real pack ----------------
 
 fn dal_game(p0: Value, p1: Value) -> Option<T> {
+    dal_game_seeded(p0, p1, 7)
+}
+
+fn dal_game_seeded(p0: Value, p1: Value, seed: i64) -> Option<T> {
     let rs = dal()?;
     let merge = |base: Value, over: Value| {
         let mut b = base.as_object().unwrap().clone();
@@ -316,7 +320,7 @@ fn dal_game(p0: Value, p1: Value) -> Option<T> {
     };
     let d0 = json!({"hero": "HERO_08", "mana": 10, "max_mana": 10, "deck": FILL});
     let d1 = json!({"hero": "HERO_01", "mana": 10, "max_mana": 10, "deck": FILL});
-    let sc = json!({"current": 0, "seed": 7, "players": [merge(d0, p0), merge(d1, p1)]});
+    let sc = json!({"current": 0, "seed": seed, "players": [merge(d0, p0), merge(d1, p1)]});
     Some(T { g: scenario::build_in(rs, &sc).unwrap_or_else(|e| panic!("scenario: {e}")) })
 }
 
@@ -338,7 +342,7 @@ const FIREBALL: &str = "VAN_CS2_029";
 #[test]
 fn a_list_of_player_hook_sets_runs_each() {
     let Some(rs) = dal() else { return };
-    assert_eq!(rs.player_hooks, ["player:boom", "player:dal"]);
+    assert_eq!(rs.player_hooks, ["player:trl", "player:dal"]);
 }
 
 #[test]
@@ -463,14 +467,20 @@ fn drustvar_horror_without_a_valid_target_still_casts_the_other_spell() {
 
 #[test]
 fn hagatha_teaches_two_picks_the_second_untargeted_after_a_targeted_first() {
-    let mut t = dal_scene!({"hand": [HAGATHA]}, {});
-    let rs = t.g.rs;
+    let Some(rs) = dal() else { return };
     let targeted = |g: &Game, e: Id| rs.card(&g.e(e).card_id).hooks.target.is_some();
-    t.play(HAGATHA, NONE);
-    let first = t.g.pending_options();
-    assert_eq!(first.len(), 3);
-    assert!(first.iter().all(|&o| t.g.e(o).kind() == "SPELL" && t.g.e(o).card.card_class == "SHAMAN"));
-    let a = *first.iter().find(|&&o| targeted(&t.g, o)).expect("a targeted spell offered (seed 7)");
+    // the first seed whose first offer has a targeted spell (the pool is the chain's Shaman spells)
+    let (mut t, a) = (1..50)
+        .find_map(|seed| {
+            let mut t = dal_game_seeded(json!({"hand": [HAGATHA]}), json!({}), seed)?;
+            t.play(HAGATHA, NONE);
+            let first = t.g.pending_options();
+            assert_eq!(first.len(), 3);
+            assert!(first.iter().all(|&o| t.g.e(o).kind() == "SPELL" && t.g.e(o).card.card_class == "SHAMAN"));
+            let a = *first.iter().find(|&&o| targeted(&t.g, o))?;
+            Some((t, a))
+        })
+        .expect("a targeted spell offered");
     t.choose(a);
     let second = t.g.pending_options();
     assert_eq!(second.len(), 3);

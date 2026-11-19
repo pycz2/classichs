@@ -3850,7 +3850,7 @@
     },
     {
      "do": "choose",
-     "option": 0
+     "option": 1
     },
     {
      "do": "end_turn"

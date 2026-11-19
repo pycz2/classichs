@@ -23,7 +23,7 @@ cards.ICC_221 = {
 
 local CONTRACTS = { "DAL_366t1", "DAL_366t2", "DAL_366t3", "DAL_366t4" }
 
--- The player hooks of Rise of Shadows (rules.json `player_hooks`: after The Boomsday Project's `player:boom`), `me` each
+-- The player hooks of Rise of Shadows (rules.json `player_hooks`: after Rastakhan's Rumble's `player:trl`), `me` each
 -- player's champion: the counts no card in play keeps.
 -- RESTORED: the Health this player's cards restored this game (Crystal Stag). RESOLVED: the spells of this player that
 -- resolved this turn (Kalecgos: before patch 14.2 a countered first spell left the next one free). CAST_TURN on a spell:
