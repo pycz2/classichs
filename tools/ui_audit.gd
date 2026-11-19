@@ -6,7 +6,7 @@ extends SceneTree
 ## Needs a window. Every user file goes to its own user dir (AUDIT_USER_DIR, as tests/run.gd's TEST_USER_DIR).
 ## Usage: AUDIT_USER_DIR=classichs-audit/<group> godot --path . --script res://tools/ui_audit.gd -- <job.json>
 ## Job: {group, out, langs: ["ru", "en"], sizes: [[1280, 720], [844, 390], ...], packs: [cardpack paths],
-## main_pack?: pack id (default the last pack), only?: [shot names]}. A shot: <out>/<W>x<H>_<lang>_<name>.jpg,
+## main_pack?: pack id (default the last pack), only?: [shot names], phone?: true (main's phone layout)}. A shot: <out>/<W>x<H>_<lang>_<name>.jpg,
 ## its check a line of <out>/checks.jsonl: {shot, lang, size, name, note, issues: [{kind, path, text, box}]}
 ## (box: [x, y, w, h] in the shot's pixels).
 
@@ -38,6 +38,7 @@ func _initialize() -> void:
 		return
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_MOUSE_PASSTHROUGH, true)
 	job = JSON.parse_string(FileAccess.get_file_as_string(OS.get_cmdline_user_args()[0]))
+	TouchInput.phone = job.get("phone", false)  # (main's phone layout: a phone's screens on a computer)
 	_run()
 
 

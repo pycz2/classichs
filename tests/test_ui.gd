@@ -309,3 +309,20 @@ func test_online_without_webrtc_offers_the_server() -> void:
 	var codes := m.screen.find_child("CodePlay", true, false) as Button
 	eq(codes.disabled, not WebRtcTransport.available(), "code play needs WebRTC (the browser)")
 	m.free()
+
+
+func test_marquee_slides_a_long_line_only() -> void:
+	var m := Marquee.make("A short one", 18)
+	m.size = Vector2(400, 26)
+	root().add_child(m)
+	m._process(Marquee.PAUSE + 1.0)
+	eq(m.label.position.x, 0.0, "a line that fits stands still")
+	m.label.text = "A very long line of text that does not fit in its narrow box at all"
+	m._t = 0.0
+	m._process(Marquee.PAUSE / 2.0)
+	eq(m.label.position.x, 0.0, "a long one waits at its start first")
+	m._process(Marquee.PAUSE / 2.0 + 1.0)
+	check(m.label.position.x < 0.0, "then slides")
+	m._process(1000.0 * (m.overflow() / Marquee.SPEED + Marquee.PAUSE))  # (whole turns)
+	check(m.label.position.x >= -m.overflow() and m.label.position.x <= 0.0, "never past its ends")
+	m.free()

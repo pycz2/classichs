@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Runs one group of the UI audit (tools/ui_audit.gd) in a window, with its own user dir.
 
-Usage: tools/ui_audit.py <group> [--sizes 1280x720,844x390] [--langs ru,en] [--only a,b] [--packs p1,p2] [--out dir]
+Usage: tools/ui_audit.py <group> [--sizes 1280x720,844x390] [--langs ru,en] [--only a,b] [--packs p1,p2] [--out dir] [--phone]
 Shots: ~/ClassicHS-local/ui-audit/shots/<group>/ or --out (its checks.jsonl there too; a run starts it anew).
 The main pack: ~/ClassicHS-local/loot-custom-art.cardpack (every card up to Kobolds & Catacombs, with art).
 """
@@ -23,6 +23,7 @@ def main() -> int:
     ap.add_argument("--only", default="")
     ap.add_argument("--packs", default=str(MAIN), help="cardpack files to install, the last one is the main pack")
     ap.add_argument("--keep", action="store_true", help="keep the shots and checks of earlier runs")
+    ap.add_argument("--phone", action="store_true", help="main's phone layout (a scroller in a wide landscape, turn the phone in portrait)")
     ap.add_argument("--timeout", type=int, default=1800)
     ap.add_argument("--out", default="", help="the shots' folder (default: ~/ClassicHS-local/ui-audit/shots/<group>)")
     a = ap.parse_args()
@@ -35,6 +36,8 @@ def main() -> int:
            "packs": [p for p in a.packs.split(",") if p]}
     if a.only:
         job["only"] = a.only.split(",")
+    if a.phone:
+        job["phone"] = True
     tmp = Path(tempfile.mkdtemp(prefix="uiaudit-"))
     (tmp / "job.json").write_text(json.dumps(job))
     env = dict(os.environ, AUDIT_USER_DIR=f"classichs-audit/{a.group}-{os.getpid()}")

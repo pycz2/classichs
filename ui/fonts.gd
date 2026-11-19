@@ -204,6 +204,8 @@ static func _fill(t: Theme) -> void:
 			t.set_stylebox("panel", type, sb)
 	for st in ["normal", "hover", "pressed", "focus", "disabled", "hover_pressed"]:
 		t.set_stylebox(st, "CheckButton", StyleBoxEmpty.new())  # a switch, not a plank
+	for icon in [["unchecked", false, false], ["checked", true, false], ["unchecked_disabled", false, true], ["checked_disabled", true, true]]:
+		t.set_icon(icon[0], "CheckButton", switch(icon[1], icon[2]))  # (Godot's own "off" is a grey dot on the dark)
 	var track := Palette.box(Color(0.08, 0.05, 0.03, 0.9), 6, Color("6b5320"), 1)
 	track.content_margin_top = 4
 	track.content_margin_bottom = 4
@@ -214,6 +216,31 @@ static func _fill(t: Theme) -> void:
 	t.set_stylebox("grabber_area", "HSlider", filled)
 	t.set_stylebox("grabber_area_highlight", "HSlider", filled)
 	t.emit_changed()
+
+
+## A switch, drawn: a rounded track with a knob, clearly there when off too (an outlined track,
+## the knob on the left) and lit when on (the theme's accent, the knob on the right).
+static func switch(on: bool, disabled := false) -> ImageTexture:
+	var w := 46
+	var h := 26
+	var r := h / 2.0
+	var track := Palette.ATTACK.darkened(0.2) if on else Color(Palette.MUTED.darkened(0.7), 0.95)
+	var edge := Palette.ATTACK if on else Palette.MUTED
+	var knob := Palette.TEXT if on else Palette.MUTED
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var kc := Vector2(w - r if on else r, r)
+	for y in h:
+		for x in w:
+			var p := Vector2(x + 0.5, y + 0.5)
+			var d := Vector2(clampf(p.x, r, w - r), r).distance_to(p) - r  # the track's edge (a capsule)
+			var col := track.lerp(edge, clampf(d + 2.0, 0.0, 1.0))  # a 1.5 px outline
+			col.a *= clampf(0.5 - d, 0.0, 1.0)
+			var kd := p.distance_to(kc) - (r - 4.0)
+			col = col.blend(Color(knob, clampf(0.5 - kd, 0.0, 1.0)))
+			if disabled:
+				col.a *= 0.4
+			img.set_pixel(x, y, col)
+	return ImageTexture.create_from_image(img)
 
 
 ## Palette.label's kinds: the interface's text, its gold, and headings (the theme's title font).

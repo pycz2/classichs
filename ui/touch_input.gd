@@ -8,6 +8,9 @@ extends Node
 ## (the mouse Godot makes of them): a real mouse keeps its wheel, bars and tooltips; scroll bars and
 ## sliders drag as they did. main adds it on every platform (no touch, nothing happens).
 
+## A phone (Android, or a phone's browser): main's phone layout (_fit_phone, TurnSign).
+static var phone := OS.has_feature("android") or OS.has_feature("web_android") or OS.has_feature("web_ios")
+
 const SLOP := 12.0  # game pixels a tap may move
 const HOLD := 0.5  # seconds: a long press
 const FRICTION := 5.0  # a fling loses this share of its speed per second

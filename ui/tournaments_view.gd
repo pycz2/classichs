@@ -217,6 +217,12 @@ static func series_name(t: Dictionary) -> String:
 	return _tr("%s · best of %d") % [_tr(SERIES.get(str(opt(t, "series", "conquest")), "Conquest")), int(opt(t, "best_of", 1))]
 
 
+## The tournament's game in the interface's language (the player's pack of its rules), else the server's name.
+static func pack_title(t: Dictionary) -> String:
+	var p := Packs.find_rules(str(t.get("pack", "")))
+	return p.title(Settings.language()) if p else str(t.get("pack_name", t.get("pack", "")))
+
+
 ## A class's name in the active pack's words (its champion's name when the pack has none).
 static func class_name_of(hero: String) -> String:
 	var cls := Decks.card_class(hero)
@@ -1456,7 +1462,7 @@ class ListRow:
 			Palette.SELECTED if joined else Color("6b5320"), 3 if joined else 2), r)
 		TournamentsView.Trophy.cup(self, Vector2(52, 52), 30, TournamentsView.status_color(str(e.get("status", ""))))
 		DeckTiles.text(self, Vector2(100, 38), str(e.get("name", "")), 24, Palette.ATTACK, 620)
-		var by := TournamentsView._tr("by %s") % str(e.get("creator", "")) + "  ·  " + str(e.get("pack_name", e.get("pack", "")))
+		var by := TournamentsView._tr("by %s") % str(e.get("creator", "")) + "  ·  " + TournamentsView.pack_title(e)
 		DeckTiles.text(self, Vector2(100, 64), by, 16, Palette.MUTED, 620)
 		var x := 100.0
 		x = TournamentsView.pill(self, Vector2(x, 72), TournamentsView.format_name(e), Color("c9a74a"), 14) + 8
@@ -1510,7 +1516,7 @@ class PageHead:
 		var x := TournamentsView.pill(self, Vector2(74, 10), TournamentsView.status_name(st), TournamentsView.status_color(st), 17, true) + 10
 		if st == "closed" and t.get("reason") is String:
 			x = TournamentsView.pill(self, Vector2(x, 10), TournamentsView._tr(str(t.reason)), Palette.MUTED, 15) + 10
-		var by := TournamentsView._tr("by %s") % str(t.get("creator", "")) + "  ·  " + str(t.get("pack_name", ""))
+		var by := TournamentsView._tr("by %s") % str(t.get("creator", "")) + "  ·  " + TournamentsView.pack_title(t)
 		DeckTiles.text(self, Vector2(x, 32), by, 17, Palette.MUTED, 700 - x)
 		var y := 44.0
 		x = TournamentsView.pill(self, Vector2(74, y), TournamentsView.format_name(t), Color("c9a74a"), 14) + 8

@@ -3,10 +3,15 @@ extends CanvasLayer
 ## The player's tournament match over any screen (main shows it on the server's `t_match`, like a
 ## friendly invite): the opponent, the series score as pips, a countdown ring to the step's
 ## deadline, and the step: Accept, Ban one of the opponent's decks (their classes as big tiles),
-## Pick the own deck for the next game, Wait, or the match's result. Hide folds it into a chip at
-## the top that opens it again. The game itself comes as the usual `match` (main hides this then).
+## Pick the own deck for the next game, Wait, or the match's result. Hide folds it (with a little
+## magic: it flies into it in sparkles) into a button at the top that opens it again, and stays
+## there while the match goes on. It never covers a game: while one is on the screen (the own or a
+## watched one) nothing of it shows, and on the game's result only the button; a step that came
+## meanwhile opens the window once the game's screen is left. The game itself comes as the usual
+## `match` (main hides this then).
 
 const STEP_MS := 60000.0  # a step's time (the ring's full turn)
+const FLY := 0.45  # seconds: the window flying into its button or out of it
 
 var link: ServerLink
 ## The last `t_match`: {tournament, name, match, phase, deadline, opponent, score, mine, theirs}.
@@ -18,6 +23,8 @@ var _root := Control.new()
 var _ring: Ring
 var _chip: Button
 var _done_left := 0.0
+var _game := ""  # a game on the screen: "" none, "play" (it runs), "over" (its result)
+var _t := 0.0
 
 
 func _ready() -> void:
@@ -74,15 +81,37 @@ func wins_needed() -> int:
 	return maxi(maxi(s[0], s[1]) + 1, 1)
 
 
+## What game the screen shows: "" none, "play" (one runs), "over" (its result). The parent is main.
+func game_state() -> String:
+	var main := get_parent()
+	var v = main.get("watch_view") if main else null
+	if not v is MatchView:
+		v = main.get("screen") if main else null
+	if not v is MatchView or not is_instance_valid(v):
+		return ""
+	return "over" if (v as MatchView).g and (v as MatchView).g.game_over else "play"
+
+
 func _process(delta: float) -> void:
 	if not visible:
 		return
+	var g := game_state()
+	if g != _game:
+		var from := _chip.get_global_rect() if _chip else Rect2()
+		_build()
+		if from.has_area() and _root.get_node_or_null("MatchPanel"):  # back from the game to a step: out of the button
+			_magic(from, (_root.get_node("MatchPanel") as Control).get_global_rect(), false)
 	if _ring:
 		_ring.left = left_ms()
 		_ring.queue_redraw()
 	if _chip:
-		_chip.text = "  " + tr("Tournament match") + "  ·  " + _step_title() + ("  ·  " + TournamentsView.left_text(left_ms()) if phase() in ["accept", "ban", "pick"] else "")
-	if _done_left > 0.0:
+		var waits := phase() in ["accept", "ban", "pick"] and not answered
+		_chip.text = tr("Tournament match") + "  ·  " + _step_title() + ("  ·  " + TournamentsView.left_text(left_ms()) if phase() in ["accept", "ban", "pick"] else "")
+		_chip.reset_size()
+		_chip.position.x = (_root.size.x - _chip.size.x) / 2.0
+		_t += delta
+		_chip.self_modulate = Color.WHITE.lerp(Color(1.4, 1.25, 0.9), 0.5 + 0.5 * sin(_t * 5.0)) if waits else Color.WHITE  # a step waits: it glows
+	if _done_left > 0.0 and _game == "":  # (the result stays while the game's screen is there)
 		_done_left -= delta
 		if _done_left <= 0.0:
 			hide_panel()
@@ -112,20 +141,11 @@ func _build() -> void:
 		c.queue_free()
 	_ring = null
 	_chip = null
-	if folded:
-		_chip = Button.new()
-		_chip.name = "PanelChip"
-		_chip.position = Vector2(390, 6)
-		_chip.size = Vector2(500, 50)
-		_chip.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		_chip.add_theme_font_size_override("font_size", 18)
-		_chip.add_theme_stylebox_override("normal", Palette.frame(Color(0.12, 0.08, 0.04, 0.97), 24))
-		_chip.add_theme_stylebox_override("hover", Palette.frame(Color(0.18, 0.12, 0.06, 0.97), 24))
-		_chip.add_theme_stylebox_override("pressed", Palette.frame(Color(0.18, 0.12, 0.06, 0.97), 24))
-		_chip.pressed.connect(func():
-			folded = false
-			_build())
-		_root.add_child(_chip)
+	_game = game_state()
+	if _game == "play":
+		return  # nothing over a game (its result brings the button back)
+	if folded or _game == "over":
+		_build_chip()
 		return
 	var dim := ColorRect.new()
 	dim.name = "Dim"
@@ -205,9 +225,94 @@ func _build() -> void:
 		if phase() == "done":
 			hide_panel()
 		else:
-			folded = true
-			_build())
+			fold())
 	p.add_child(hide)
+
+
+## The match's button at the top: the cup, the step and its time left; it opens the window.
+func _build_chip() -> void:
+	_chip = Button.new()
+	_chip.name = "PanelChip"
+	_chip.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	_chip.custom_minimum_size = Vector2(0, 50)
+	_chip.add_theme_font_size_override("font_size", 18)
+	for st in ["normal", "hover", "pressed"]:
+		var sb := Palette.frame(Color(0.12, 0.08, 0.04, 0.97) if st == "normal" else Color(0.18, 0.12, 0.06, 0.97), 25)
+		sb.content_margin_left = 12
+		sb.content_margin_right = 20
+		sb.content_margin_top = 6
+		sb.content_margin_bottom = 6
+		_chip.add_theme_stylebox_override(st, sb)
+	_chip.icon = ImageTexture.create_from_image(Image.create(30, 30, false, Image.FORMAT_RGBA8))  # (room for the cup)
+	var cup := TournamentsView.Trophy.new()
+	cup.position = Vector2(8, 6)
+	cup.size = Vector2(38, 38)
+	cup.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_chip.add_child(cup)
+	_chip.pressed.connect(unfold)
+	_root.add_child(_chip)
+	_chip.position = Vector2(390, 6)
+	_process(0.0)  # its text and place
+
+
+## Hide: the window flies into its button.
+func fold() -> void:
+	var p := _root.get_node_or_null("MatchPanel") as Control
+	var from := p.get_global_rect() if p else Rect2()
+	folded = true
+	_build()
+	if from.has_area() and _chip:
+		_magic(from, _chip.get_global_rect(), true)
+
+
+## The button opens the window: it grows out of the button.
+func unfold() -> void:
+	var from := _chip.get_global_rect() if _chip else Rect2()
+	folded = false
+	_build()
+	var p := _root.get_node_or_null("MatchPanel") as Control
+	if from.has_area() and p:
+		_magic(from, p.get_global_rect(), false)
+
+
+## The flight between the window and its button: a ghost of the window shrinks into the button
+## (closing) or grows out of it, with sparkles along the way; what it flies to shows when it lands.
+func _magic(from: Rect2, to: Rect2, closing: bool) -> void:
+	if Anim.instant:
+		return
+	var target: Control = _chip if closing else _root.get_node_or_null("MatchPanel")
+	var dim := _root.get_node_or_null("Dim") as CanvasItem
+	if target:
+		target.modulate.a = 0.0
+		target.create_tween().tween_property(target, "modulate:a", 1.0, 0.15).set_delay(FLY)
+	if dim:
+		dim.modulate.a = 0.0
+		dim.create_tween().tween_property(dim, "modulate:a", 1.0, FLY)
+	var ghost := Panel.new()
+	ghost.name = "Ghost"
+	ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ghost.add_theme_stylebox_override("panel", Palette.frame())
+	ghost.position = from.position
+	ghost.size = from.size
+	_root.add_child(ghost)
+	var tw := ghost.create_tween().set_parallel().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN if closing else Tween.EASE_OUT)
+	tw.tween_property(ghost, "position", to.position, FLY)
+	tw.tween_property(ghost, "size", to.size, FLY)
+	tw.tween_property(ghost, "modulate:a", 0.25 if closing else 0.9, FLY)
+	tw.chain().tween_callback(ghost.queue_free)
+	for i in 18:  # sparkles drift from where it was to where it goes
+		var s := Sparkle.new()
+		var a := from.position + Vector2(randf() * from.size.x, randf() * from.size.y)
+		var b := to.get_center() + Vector2(randf_range(-0.5, 0.5) * to.size.x, randf_range(-0.5, 0.5) * to.size.y)
+		s.position = a
+		s.scale = Vector2.ONE * randf_range(0.6, 1.3)
+		_root.add_child(s)
+		var d := randf() * FLY * 0.5
+		var st := s.create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		st.tween_property(s, "position", b, FLY).set_delay(d)
+		st.tween_property(s, "rotation", randf_range(-3.0, 3.0), FLY + d)
+		st.tween_property(s, "modulate:a", 0.0, FLY * 0.5).set_delay(d + FLY * 0.6)
+		st.chain().tween_callback(s.queue_free)
 
 
 func _note(parent: Control, text: String) -> void:
@@ -319,6 +424,21 @@ class Head:
 		var vs := TournamentsView._tr("vs")
 		var vw := f.get_string_size(vs, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
 		DeckTiles.text(self, Vector2(size.x / 2.0 - vw / 2.0, 100), vs, 16, Palette.MUTED)
+
+
+## A spark of the window's flight: a small four-pointed star with a glow.
+class Sparkle:
+	extends Control
+
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _draw() -> void:
+		draw_circle(Vector2.ZERO, 6.0, Color(1, 0.85, 0.4, 0.25), true, -1.0, true)
+		var pts := PackedVector2Array()
+		for k in 8:
+			pts.append(Vector2.from_angle(k * PI / 4.0) * (7.0 if k % 2 == 0 else 1.8))
+		draw_colored_polygon(pts, Color(1, 0.95, 0.75))
 
 
 ## The step's time: a ring that empties, the seconds in it (red at the end).

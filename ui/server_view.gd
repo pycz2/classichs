@@ -95,6 +95,10 @@ func _ready() -> void:
 
 func say(text: String) -> void:
 	_status.text = text
+	_said_on = tab
+
+
+var _said_on := ""  # the lobby tab the status line was said on: another tab does not show it
 
 
 func _process(delta: float) -> void:
@@ -127,6 +131,8 @@ static func remembered_deck(l: ServerLink = null) -> Deck:
 func _go(s: String) -> void:
 	stage = s
 	_retire_armed = false
+	if s == "lobby" and tab != _said_on:
+		_status.text = ""  # (a ranked game's result stays on Play, not on the Arena's screens)
 	for c in _body.get_children():  # freed later: a pressed button may still be in its signal
 		_body.remove_child(c)
 		c.queue_free()
@@ -380,13 +386,10 @@ func _build_lobby() -> void:
 			_go("lobby"))
 		_body.add_child(b)
 	var gx := 412.0
-	var games := Palette.label(_game_line(), 20, Palette.ATTACK if link.has_game(Packs.active()) else Palette.OPPONENT)
-	games.name = "GameName"
+	var games := Marquee.make(_game_line(), 20, Palette.ATTACK if link.has_game(Packs.active()) else Palette.OPPONENT)
+	games.name = "GameName"  # (a long name slides back and forth)
 	games.position = Vector2(gx, 8)
 	games.size = Vector2(196, 46)
-	games.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	games.clip_text = true
-	games.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	games.tooltip_text = link.game_problem(Packs.active())
 	games.mouse_filter = Control.MOUSE_FILTER_PASS
 	_body.add_child(games)

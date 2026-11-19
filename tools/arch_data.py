@@ -204,7 +204,7 @@ FLOWS.append(dict(
     steps=[
         ("setup", "setup", ("easy · medium · hard", "лёгкий · средний · сложный"),
          ("The level buttons store `bot_level` in the settings.", "Кнопки уровня сохраняют `bot_level` в настройках."),
-         [("ui/training_setup.gd", "for lvl in BotBrain.LEVELS:"), ("game/settings.gd", "\"bot_level\": \"medium\"")]),
+         [("ui/training_setup.gd", "for i in BotBrain.LEVELS.size():"), ("game/settings.gd", "\"bot_level\": \"medium\"")]),
         ("setup", "match", ("start_match(decks, level)", "start_match(колоды, уровень)"),
          ("The player's deck against a bot deck of the chosen class; bots `[false, true]`.",
           "Колода игрока против колоды бота выбранного класса; боты `[false, true]`."),
@@ -457,7 +457,7 @@ COMPS.append(dict(
         P("screens", ("Training, Code play", "Тренировка, игра по коду"), 0, 2, sub="training_setup · online_view",
           text=("Training: a deck, the bot's class and level. Code play: the name, a game or the Arena, a deck, then the invite and answer codes.",
                 "Тренировка: колода, класс и уровень бота. Игра по коду: имя, обычная игра или Арена, колода, затем коды приглашения и ответа."),
-          files=[("ui/training_setup.gd", "for lvl in BotBrain.LEVELS:"), ("ui/online_view.gd", "func host_game() -> void:")]),
+          files=[("ui/training_setup.gd", "for i in BotBrain.LEVELS.size():"), ("ui/online_view.gd", "func host_game() -> void:")]),
         P("match", "Match", 1, 2, sub="game/match.gd · game_view.gd",
           text=("Talks to whoever owns the game — the local engine or the server; keeps `GameView` (what the table draws), the bot's step, `plan()` for queued orders.",
                 "Говорит с хозяином партии — локальным движком или сервером; хранит `GameView` (что рисует стол), шаг бота, `plan()` для отложенных приказов."),

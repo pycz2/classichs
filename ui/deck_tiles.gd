@@ -68,17 +68,36 @@ class DeckTile:
 
 ## A deck in the list of decks: the hero's portrait behind the deck's name;
 ## an unfinished deck shows how full it is. The owner may put small buttons
-## in the lower right corner (ACTIONS_W wide).
+## in the lower right corner (ACTIONS_W wide). A hero's name too long for its room slides.
 class DeckRow:
 	extends Button
 	const ACTIONS_W := 132.0
 	var deck: Deck
+	var _hero: Marquee
 
 	func _init(d: Deck) -> void:
 		deck = d
 		custom_minimum_size = Vector2(300, 68)
 		focus_mode = Control.FOCUS_NONE
 		flat = true
+		_hero = Marquee.make(CardText.name(deck.hero), 14, Palette.of_class(deck.card_class()).lightened(0.5), 4)
+		_hero.name = "HeroName"
+		add_child(_hero)
+		resized.connect(_place_hero)
+
+	func _ready() -> void:
+		_place_hero()
+
+	## The hero's name: in the room left of the tag and the owner's buttons.
+	func _place_hero() -> void:
+		var f := get_theme_font("font", "Label")
+		var room := size.x - 60 - ACTIONS_W - 14 - f.get_string_size(_tag(), HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x
+		_hero.position = Vector2(58, 36)
+		_hero.size = Vector2(minf(_hero.label.get_minimum_size().x, room), 22)
+
+	## An unfinished deck: how full it is.
+	func _tag() -> String:
+		return "  %d/%d" % [deck.cards.size(), Deck.SIZE] if deck.cards.size() < deck.goal() else ""
 
 	func _draw() -> void:
 		var r := Rect2(Vector2(2, 2), size - Vector2(4, 4))
@@ -88,14 +107,9 @@ class DeckRow:
 		Icons.paint(self, cls, Rect2(Vector2(10, 14), Vector2(40, 40)))
 		DeckTiles.text(self, Vector2(60, 29), deck.name, 19, Color("f4ead5"), size.x - 70)
 		var n := deck.cards.size()
-		var f := get_theme_font("font", "Label")
-		var tag := "  %d/%d" % [n, Deck.SIZE] if n < deck.goal() else ""  # an unfinished deck: how full it is
-		var room := size.x - 60 - ACTIONS_W - 14 - f.get_string_size(tag, HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x
-		var sub := CardText.name(deck.hero)
-		DeckTiles.text(self, Vector2(60, 52), sub, 14, Palette.of_class(cls).lightened(0.5), room)
+		var tag := _tag()
 		if tag != "":
-			var x := 60.0 + minf(f.get_string_size(sub, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x, room)
-			DeckTiles.text(self, Vector2(x, 52), tag, 13, Frames.GOLD)
+			DeckTiles.text(self, Vector2(_hero.position.x + 2 + _hero.size.x, 52), tag, 13, Frames.GOLD)
 			var bar := Rect2(Vector2(14, size.y - 8), Vector2(size.x - 28, 3))
 			draw_rect(bar, Color(0, 0, 0, 0.6))
 			draw_rect(Rect2(bar.position, Vector2(bar.size.x * n / deck.goal(), bar.size.y)), Frames.GOLD)

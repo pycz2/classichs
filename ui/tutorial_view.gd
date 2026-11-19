@@ -85,7 +85,7 @@ func _tile(n: int, won: bool, is_next: bool) -> Button:
 	var status := ""
 	var status_col := Palette.TEXT
 	if won:
-		status = tr("done")
+		status = tr("Completed")
 		status_col = Palette.BUFFED
 	elif is_next:
 		status = tr("Up next")

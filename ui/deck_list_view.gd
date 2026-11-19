@@ -85,15 +85,18 @@ func _ready() -> void:
 	list.add_theme_constant_override("separation", 6)
 	scroll.add_child(list)
 	var buttons := HBoxContainer.new()
-	buttons.position = Vector2(inner.position.x, inner.end.y - 46)
-	buttons.size = Vector2(inner.size.x, 46)
+	var bh := 54.0 if link else 46.0  # (a server game's three buttons: smaller text in two lines)
+	buttons.position = Vector2(inner.position.x, inner.end.y - bh)
+	buttons.size = Vector2(inner.size.x, bh)
 	buttons.add_theme_constant_override("separation", 8)
 	_list_box.add_child(buttons)
 	for spec in [["New Deck", _choose_hero], ["Import Code", _show_import]] + ([["Copy local decks", show_copy_local]] if link else []):
 		var b := Palette.button(tr(spec[0]), spec[0].capitalize().replace(" ", ""))
-		b.custom_minimum_size = Vector2(0, 46)
+		b.custom_minimum_size = Vector2(0, bh)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		b.add_theme_font_size_override("font_size", 17)
+		b.add_theme_font_size_override("font_size", 14 if link else 17)
+		if link:
+			b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		b.pressed.connect(spec[1])
 		buttons.add_child(b)
 	# the open deck
@@ -124,6 +127,7 @@ func _ready() -> void:
 	_curve.size = Vector2(inner.size.x, 62)
 	_edit_box.add_child(_curve)
 	var tiles := ScrollContainer.new()
+	tiles.name = "TilesScroll"
 	tiles.position = inner.position + Vector2(0, 148)
 	tiles.size = Vector2(inner.size.x, 364)
 	tiles.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -226,6 +230,7 @@ func edit_deck(i: int) -> void:
 	editing = decks[i]
 	_name_edit.text = editing.name
 	message.text = ""
+	(_deck_list.get_parent() as ScrollContainer).scroll_vertical = 0  # from its first card, not where the last deck was
 	browser.set_deck(editing)
 	_show_mode()
 	_refresh_deck()
@@ -299,8 +304,7 @@ func delete_deck(i: int) -> void:
 func import_code(text: String) -> String:
 	var r := DeckCode.decode(text)
 	if r.error != "":
-		message.text = r.error
-		return r.error
+		return r.error  # (the import window shows it)
 	decks.append(r.deck)
 	_save(r.deck)
 	message.text = tr("Deck imported: %s") % r.deck.name
@@ -402,7 +406,7 @@ func copy_local(chosen: Array) -> void:
 
 ## "Copy local decks": a tick per deck of this device in this game (any version of it), then Copy.
 func show_copy_local() -> void:
-	var box := _popup(tr("Copy local decks"), true)
+	var box := _popup(tr("Copy local decks"))
 	var all := local_decks()
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(620, mini(400, 44 * maxi(1, all.size())))
@@ -447,8 +451,8 @@ func _close() -> void:
 		_overlay = null
 
 
-## A popup over the screen: its title, then what the caller puts in the box (framed: on a panel).
-func _popup(title: String, framed := false) -> VBoxContainer:
+## A popup window over the dimmed screen: its title, then what the caller puts in the box.
+func _popup(title: String) -> VBoxContainer:
 	_close()
 	_overlay = Control.new()
 	_overlay.name = "Popup"
@@ -462,14 +466,14 @@ func _popup(title: String, framed := false) -> VBoxContainer:
 	_overlay.add_child(center)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 12)
-	if framed:
-		var panel := PanelContainer.new()
-		panel.add_theme_stylebox_override("panel", Palette.frame())
-		center.add_child(panel)
-		panel.add_child(box)
-	else:
-		center.add_child(box)
-	box.add_child(Palette.label(title, 26, Palette.ATTACK))
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", Palette.frame(Color(0.11, 0.075, 0.045, 1.0)))
+	center.add_child(panel)
+	panel.add_child(box)
+	var head := Palette.label(title, 26, Palette.ATTACK)
+	head.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # (a long deck name in "Delete …?")
+	head.custom_minimum_size.x = 420
+	box.add_child(head)
 	add_child(_overlay)
 	return box
 
@@ -478,21 +482,20 @@ func _choose_hero() -> void:
 	var box := _popup(tr("Choose a hero"))
 	var grid := GridContainer.new()
 	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 12)
+	grid.add_theme_constant_override("v_separation", 10)
 	for cls in Decks.classes():
-		var b := Button.new()
+		var b := TrainingSetup.HeroTile.new(cls)  # the hero's picture, name and emblem
 		b.name = "Hero" + cls
-		b.text = CardText.name(Decks.hero(cls))
-		b.custom_minimum_size = Vector2(220, 48)
-		var st := Palette.box(Palette.of_class(cls), 8)
-		st.content_margin_left = 46
-		b.add_theme_stylebox_override("normal", st)
-		Icons.attach(b, cls, 34)
+		b.toggle_mode = false
+		b.custom_minimum_size = Vector2(300, 132)
 		b.pressed.connect(func():
 			_close()
 			choose_start(cls))
 		grid.add_child(b)
 	box.add_child(grid)
 	var cancel := Palette.button(tr("Cancel"), "Cancel")
+	cancel.size_flags_horizontal = Control.SIZE_SHRINK_END
 	cancel.pressed.connect(_close)
 	box.add_child(cancel)
 
@@ -503,7 +506,7 @@ func choose_start(cls: String) -> void:
 	if templates.is_empty():
 		new_deck(Decks.hero(cls))
 		return
-	var box := _popup(tr("A new deck: %s") % CardText.name(Decks.hero(cls)), true)
+	var box := _popup(tr("A new deck: %s") % CardText.name(Decks.hero(cls)))
 	var scratch := Palette.button(tr("From scratch"), "FromScratch")
 	scratch.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	scratch.pressed.connect(func():
@@ -547,11 +550,12 @@ func _template_row(t: Dictionary) -> Control:
 	name_l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(name_l)
 	var desc := Palette.label(t.description, 15, Palette.MUTED)
+	desc.name = "Description"
 	desc.position = Vector2(14, 38)
-	desc.size = Vector2(500, 56)
+	desc.custom_minimum_size.x = 500  # wraps in it; a long one makes the row taller (the list scrolls)
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc.clip_text = true
 	desc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	desc.resized.connect(func(): b.custom_minimum_size.y = maxf(100.0, desc.position.y + desc.size.y + 10))
 	b.add_child(desc)
 	var curve := ManaCurve.new()
 	curve.compact = true
@@ -627,10 +631,13 @@ func show_export(i: int) -> void:
 		return
 	DisplayServer.clipboard_set(code)
 	var box := _popup(tr("Deck code (copied to clipboard)"))
-	var ed := LineEdit.new()
+	var ed := TextEdit.new()
 	ed.name = "CodeOutput"
 	ed.text = code
 	ed.editable = false
+	ed.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	ed.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY  # (a code has no spaces: it breaks anywhere)
+	ed.scroll_fit_content_height = true
 	ed.custom_minimum_size = Vector2(700, 40)
 	box.add_child(ed)
 	var close := Palette.button(tr("Close"), "Close")
