@@ -42,7 +42,8 @@ static func name(id: String, locale := "") -> String:
 	return n.get(_loc(locale), n.get("enUS", id))
 
 
-static var _spaces := RegEx.create_from_string("[ \\t]+")
+## Runs of spaces (with no-break spaces in them: where a "[x]" break mark stood) become one space.
+static var _spaces := RegEx.create_from_string("[ \\t\u00a0]{2,}|[ \\t]+")
 static var _bb := RegEx.create_from_string("\\[/?(b|i|center|color[^\\]]*)\\]")
 
 

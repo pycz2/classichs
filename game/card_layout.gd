@@ -10,13 +10,22 @@ extends RefCounted
 const DIR := "res://data/card_layout"
 const LANGS := ["en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"]
 ## At card scale 1 (CardView.SIZE 120x170).
-const NAME_BOX := Rect2(Vector2(10, 86), Vector2(100, 16))
-const TEXT_BOX := Rect2(Vector2(14, 105), Vector2(92, 48))
+const NAME_BOX := Rect2(Vector2(6, 86), Vector2(108, 16))
+const TEXT_BOX := Rect2(Vector2(12, 106), Vector2(96, 52))
 ## How much tighter than the font's own line height the text lines are (in sizes).
 const LEADING_CUT := 0.25
-## Gems the text must not run into (minions and weapons): centre and radius.
-## (The attack gem's sword points out of the card, away from the text.)
-const GEMS := [[Vector2(17, 154), 17.0], [Vector2(103, 154), 17.0]]
+## A long text's lines may come closer (a layout's "tight") before its size goes down.
+const TIGHT_CUT := 0.4
+## Where the stat gems sit (attack, then health, armour or durability): in the card's bottom corners,
+## sticking out of the card a little, so the text box keeps its corners.
+const ATTACK_AT := Vector2(10, 161)
+const HEALTH_AT := Vector2(110, 161)
+## The gems the text must not run into (minions, weapons, heroes): centre and radius.
+## (The attack gem's sword points up to the left, out of the card: Frames.attack's blade.)
+const GEMS := [[ATTACK_AT, 16.0], [HEALTH_AT, 16.0]]
+const GEM_TYPES := ["MINION", "WEAPON", "HERO"]
+## The text sizes fit() tries, biggest first (5: the last resort of the very longest, readable only big).
+const SIZES := [12, 11, 10, 9, 8, 7, 6, 5]
 
 static var _data := {}  # lang -> card id -> {text, name, lines, valign?}
 static var _fitted := {}  # lang -> card id -> {text, name}
@@ -46,40 +55,72 @@ static func of(card_id: String, lang: String) -> Dictionary:
 	return {"text": 8, "name": 10}
 
 
-## The biggest text size (11 down to 6) whose wrapped text fits the text box without
-## running into a gem (centred, else at the top), and the biggest name size (12 down to 7)
-## that fits the name box.
-static func fit(card_id: String, lang: String) -> Dictionary:
+## The biggest text size (SIZES) whose text fits the text box without running into a gem (centred, else at
+## the top; its lines closer together, or narrower so that the last one clears the gems, when only that makes
+## it fit), with its own line breaks or, when that gives a bigger size, as one paragraph (the breaks were made
+## for the original card's box); and the biggest name size (12 down to 6) that fits the name box.
+## args: its "{0}"… in a game (a Jade card's next Golem), fitted anew.
+static func fit(card_id: String, lang: String, args := []) -> Dictionary:
 	var by_card: Dictionary = _fitted.get_or_add(lang, {})
-	if not by_card.has(card_id):
+	var key := card_id if args.is_empty() else "%s|%s" % [card_id, args]
+	if not by_card.has(key):
 		var loc := CardText.hs_locale(lang)
 		var name := CardText.name(card_id, loc)
 		var n := 12
-		while n > 7 and name_font().get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, n).x > NAME_BOX.size.x:
+		while n > 6 and name_font().get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, n).x > NAME_BOX.size.x:
 			n -= 1
-		var rich := CardText.rich(card_id, loc)
-		var gems: bool = CardDb.card(card_id).get("type") in ["MINION", "WEAPON"]
-		var e := {"text": 6, "name": n, "valign": "top"}
-		for t in range(11, 5, -1):
-			var p := TextParagraph.new()
-			p.width = TEXT_BOX.size.x - 4
-			p.line_spacing = -LEADING_CUT * t
-			p.break_flags = TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND
-			for s in _spans_of(rich):
-				p.add_string(s[0], bold_font() if s[1] else body_font(), t)
-			if height(p) > TEXT_BOX.size.y - 2:
-				continue
-			var found := false
-			for v in ["", "top"]:
-				var tried := {"text": t, "name": n, "valign": v}
-				if not gems or not _ink_rects(p, tried).any(_hits_gem):
-					e = tried
-					found = true
-					break
-			if found:
-				break
-		by_card[card_id] = e
-	return by_card[card_id]
+		var e := fit_text(CardText.rich(card_id, loc, 0, args), CardDb.card(card_id).get("type") in GEM_TYPES)
+		e.name = n
+		by_card[key] = e
+	return by_card[key]
+
+
+## The lines it found are kept (as a written layout's): the card breaks its text the same way at every scale.
+static func fit_text(rich: String, gems: bool) -> Dictionary:
+	var ways := [rich, rich.replace("\n", " ")] if rich.contains("\n") else [rich]
+	var sp := []
+	var p: TextParagraph
+	var e := {}
+	for t: int in SIZES:
+		for tight: bool in [false, true]:
+			for wide: float in [TEXT_BOX.size.x - 2, TEXT_BOX.size.x - 16]:
+				for way: String in ways:
+					sp = _spans_of(way)
+					p = _build(sp, t, wide, TIGHT_CUT if tight else LEADING_CUT)
+					if height(p) > TEXT_BOX.size.y - 1 or range(p.get_line_count()).any(func(i): return p.get_line_width(i) > TEXT_BOX.size.x):
+						continue
+					for v in ["", "top"]:
+						e = {"text": t, "valign": v}
+						if tight:
+							e.tight = true
+						if not gems or not _ink_rects(p, e).any(_hits_gem):
+							e.lines = _lines_of(p, sp)
+							return e
+	e = {"text": SIZES[-1], "valign": "top", "tight": true, "lines": _lines_of(p, sp)}  # (too long for the card)
+	return e
+
+
+## The lines a paragraph broke its spans into, as rich lines.
+static func _lines_of(p: TextParagraph, sp: Array) -> Array:
+	var plain := "".join(sp.map(func(x): return x[0]))
+	var out := []
+	for i in p.get_line_count():
+		var r := p.get_line_range(i)
+		while r.x < r.y and plain[r.x] in [" ", "\n"]:
+			r.x += 1
+		while r.y > r.x and plain[r.y - 1] in [" ", "\n"]:
+			r.y -= 1
+		var line := ""
+		var at := 0
+		for x in sp:
+			var a := maxi(r.x, at)
+			var b := mini(r.y, at + x[0].length())
+			if b > a:
+				var piece: String = x[0].substr(a - at, b - a).replace("[", "[lb]")
+				line += ("[b]%s[/b]" % piece) if x[1] else piece
+			at += x[0].length()
+		out.append(line)
+	return out
 
 
 static func store(card_id: String, lang: String, entry: Dictionary) -> void:
@@ -126,12 +167,17 @@ static func name_font() -> Font:
 
 
 ## The card text as spans [[text, bold], ...], the layout's lines joined by "\n"
-## (a card without lines yet: its own text, wrapped by paragraph(); args: its "{0}"… in a game, CardText.raw()).
+## (a card without lines: its own text, wrapped by paragraph(); args: its "{0}"… in a game, CardText.raw()).
 static func spans(card_id: String, lang: String, args := []) -> Array:
-	var e := of(card_id, lang)
-	if e.has("lines") and args.is_empty():
+	var e := entry(card_id, lang, args)
+	if e.has("lines"):
 		return _spans_of("\n".join(e.lines).replace("[lb]d]", ""))  # (Hearthstone's German hyphenation point, as CardText.raw)
 	return _spans_of(CardText.rich(card_id, CardText.hs_locale(lang), 0, args))
+
+
+## The layout a card's text is drawn with: of(), or with its game values (args) the biggest that fits.
+static func entry(card_id: String, lang: String, args := []) -> Dictionary:
+	return of(card_id, lang) if args.is_empty() else fit(card_id, lang, args)
 
 
 static func _spans_of(rich: String) -> Array:
@@ -155,25 +201,23 @@ static func _spans_of(rich: String) -> Array:
 	return out
 
 
+## The card's text at card scale k (args: its game values; its text in a game may be longer than the card's).
 static func paragraph(card_id: String, lang: String, k := 1.0, args := []) -> TextParagraph:
-	var base := int(of(card_id, lang).text)
-	var p := _paragraph(card_id, lang, k, args, base)
-	while not args.is_empty() and base > 6 and height(p) > (TEXT_BOX.size.y - 2) * k:
-		base -= 1  # its text in a game may be longer than the one the size was found for (a potion's two effects)
-		p = _paragraph(card_id, lang, k, args, base)
-	return p
+	var e := entry(card_id, lang, args)
+	return _build(spans(card_id, lang, args), int(int(e.text) * k), -1.0 if e.has("lines") else (TEXT_BOX.size.x - 4) * k,
+		TIGHT_CUT if e.get("tight", false) else LEADING_CUT)
 
 
-static func _paragraph(card_id: String, lang: String, k: float, args: Array, base: int) -> TextParagraph:
-	var size := int(base * k)
+## Centred lines of spans at a size, wrapped at word bounds to width (< 0: only at its line breaks).
+static func _build(sp: Array, size: int, width: float, cut := LEADING_CUT) -> TextParagraph:
 	var p := TextParagraph.new()
 	p.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	p.line_spacing = -LEADING_CUT * size  # the font's own lines are 1.5 sizes apart
+	p.line_spacing = -cut * size  # the font's own lines are 1.5 sizes apart
 	p.break_flags = TextServer.BREAK_MANDATORY
-	if not of(card_id, lang).has("lines") or not args.is_empty():
-		p.width = (TEXT_BOX.size.x - (4 if _lang(lang).is_empty() else 0)) * k
+	if width > 0:
+		p.width = width
 		p.break_flags |= TextServer.BREAK_WORD_BOUND
-	for s in spans(card_id, lang, args):
+	for s in sp:
 		p.add_string(s[0], bold_font() if s[1] else body_font(), size)
 	return p
 
@@ -188,8 +232,8 @@ static func height(p: TextParagraph) -> float:
 
 ## Where each line lies on the card (scale 1): the text is centred in its box,
 ## or at its top (valign "top"), then moved down by dy (up if negative).
-static func line_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0) -> Array:
-	return _line_rects(p, of(card_id, lang), k)
+static func line_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0, args := []) -> Array:
+	return _line_rects(p, entry(card_id, lang, args), k)
 
 
 static func _line_rects(p: TextParagraph, e: Dictionary, k := 1.0) -> Array:
@@ -207,8 +251,8 @@ static func _line_rects(p: TextParagraph, e: Dictionary, k := 1.0) -> Array:
 
 ## Where the letters of each line are (scale 1): from the top of the capitals
 ## to the bottom of the descenders, without the empty space of the line.
-static func ink_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0) -> Array:
-	return _ink_rects(p, of(card_id, lang), k)
+static func ink_rects(card_id: String, lang: String, p: TextParagraph, k := 1.0, args := []) -> Array:
+	return _ink_rects(p, entry(card_id, lang, args), k)
 
 
 static func _ink_rects(p: TextParagraph, e: Dictionary, k := 1.0) -> Array:
@@ -231,14 +275,15 @@ static func _hits_gem(r: Rect2) -> bool:
 	return false
 
 
-## What is wrong with a card's layout ([] = all fine): "no layout", "name too
-## long", "text differs" (the lines do not say what the card says), "text too
-## tall", "text too high", "text too low" (moved out of the box), "line too
-## wide", "hits a gem" (the letters run into a gem).
-static func problems(card_id: String, lang: String) -> Array:
+## What is wrong with a card's layout ([] = all fine) drawn at card scale k: "no layout", "text differs"
+## (the lines do not say what the card says; both only in a pack with written layouts), "name too long",
+## "text too tall", "text too high", "text too low" (moved out of the box), "line too wide", "hits a gem"
+## (the letters run into a gem).
+static func problems(card_id: String, lang: String, k := 1.0) -> Array:
 	var out := []
 	var e := of(card_id, lang)
-	if not _lang(lang).has(card_id):
+	var written := not _lang(lang).is_empty()
+	if written and not _lang(lang).has(card_id):
 		out.append("no layout")
 	var name := CardText.name(card_id, CardText.hs_locale(lang))
 	if name_font().get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, int(e.name)).x > NAME_BOX.size.x:
@@ -246,19 +291,19 @@ static func problems(card_id: String, lang: String) -> Array:
 	var want := _plain(CardText.rich(card_id, CardText.hs_locale(lang)))
 	if want == "":
 		return out
-	if _plain("\n".join(e.get("lines", [])).replace("[lb]d]", "")) != want:
+	if written and _plain("\n".join(e.get("lines", [])).replace("[lb]d]", "")) != want:
 		out.append("text differs")
-	var p := paragraph(card_id, lang)
-	if height(p) > TEXT_BOX.size.y:
+	var p := paragraph(card_id, lang, k)
+	if height(p) / k > TEXT_BOX.size.y:
 		out.append("text too tall")
-	var rects := line_rects(card_id, lang, p)
+	var rects := line_rects(card_id, lang, p, k)
 	if rects[0].position.y < TEXT_BOX.position.y - 0.5:
 		out.append("text too high")
 	if rects[-1].end.y > TEXT_BOX.end.y + 0.5:
 		out.append("text too low")
 	if rects.any(func(r): return r.size.x > TEXT_BOX.size.x + 0.5):
 		out.append("line too wide")
-	if CardDb.card(card_id).get("type") in ["MINION", "WEAPON"] and ink_rects(card_id, lang, p).any(_hits_gem):
+	if CardDb.card(card_id).get("type") in GEM_TYPES and ink_rects(card_id, lang, p, k).any(_hits_gem):
 		out.append("hits a gem")
 	return out
 

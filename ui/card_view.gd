@@ -24,8 +24,12 @@ var text_args := []
 var art_id := ""
 ## A card in the hand with Echo (its keyword, or Glinda Crowskin's aura): a violet mark with rings in its top right corner.
 var echo := false
-## The Echo mark's colour; a GHOSTLY copy (it goes away at the end of the turn) is drawn in it, see-through.
+## The Echo mark's colour.
 const ECHO := Color("b48cff")
+## A GHOSTLY copy (it goes away at the end of the turn): grey flames over the top of the card (ghost_flame.gdshader).
+const GHOST_FLAME := preload("res://ui/ghost_flame.gdshader")
+static var _ghost_mat: ShaderMaterial
+var ghost: ColorRect
 
 
 static func make(id: String, scale_factor := 1.0) -> CardView:
@@ -47,7 +51,7 @@ func show_entity(e: GameView.Ent, g: GameView) -> void:
 		text_args = ["@%d" % (e.choice + 1)]  # the text variant of its option (Fatespinner: only its player knows it)
 	cost = g.cost(e) if e.zone == "HAND" else int(e.card().get("cost", 0))
 	echo = e.zone == "HAND" and (e.has("ECHO") or KeywordTips.keywords_of(card_id).has("ECHO"))
-	self_modulate = Color(ECHO.lightened(0.4), 0.72) if e.has("GHOSTLY") else Color.WHITE
+	_set_ghost(e.has("GHOSTLY"))
 	if was >= 0 and was != cost:
 		pop("cost")
 	var was_atk := attack if was >= 0 else -1
@@ -65,6 +69,26 @@ func show_entity(e: GameView.Ent, g: GameView) -> void:
 	queue_redraw()
 
 
+func _set_ghost(on: bool) -> void:
+	if on == (ghost != null):
+		return
+	if not on:
+		ghost.queue_free()
+		ghost = null
+		return
+	if _ghost_mat == null:
+		_ghost_mat = ShaderMaterial.new()
+		_ghost_mat.shader = GHOST_FLAME
+	ghost = ColorRect.new()
+	ghost.name = "GhostFlame"
+	ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ghost.color = Color("c9ccd6")
+	ghost.material = _ghost_mat
+	ghost.position = Vector2(0, -0.14 * size.y)  # from a little above the card down to its name
+	ghost.size = Vector2(size.x, 0.62 * size.y)
+	add_child(ghost)
+
+
 ## The colours its numbers show against the card's own (green above, red below; the cost: green when cheaper).
 func cost_color() -> Color:
 	return Frames.cost_color(cost if cost >= 0 else int(CardDb.card(card_id).get("cost", 0)), int(CardDb.card(card_id).get("cost", 0)))
@@ -77,6 +101,11 @@ func attack_color() -> Color:
 func health_color() -> Color:
 	var c := CardDb.card(card_id)
 	return Frames.stat_color(health, int(c.get("health", c.get("durability", 0)))) if health >= 0 else Color.WHITE
+
+
+## A passive Hero Power cannot be used: it has no cost.
+func shows_cost() -> bool:
+	return not CardDb.passive_power(card_id)
 
 
 func lang() -> String:
@@ -93,20 +122,21 @@ func _draw_words(k: float) -> void:
 	var ns := int(sz.name * k)
 	var nw := nf.get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, ns).x
 	var nb := Rect2(CardLayout.NAME_BOX.position * k, CardLayout.NAME_BOX.size * k)
-	var at := Vector2(nb.get_center().x - nw / 2.0, nb.get_center().y + ns * 0.36)
+	var bend := 2.0 if CardDb.card(card_id).get("type") == "MINION" else 0.0  # (a minion's banner bends up in the middle)
+	var at := Vector2(nb.get_center().x - nw / 2.0, nb.get_center().y + ns * 0.36 - (1.0 + bend) * k)
 	draw_string_outline(nf, at, name, HORIZONTAL_ALIGNMENT_LEFT, -1, ns, maxi(2, int(3 * k)), Color.BLACK)
 	draw_string(nf, at, name, HORIZONTAL_ALIGNMENT_LEFT, -1, ns, Color("f4ead5"))
 	var p := CardLayout.paragraph(card_id, lg, k, text_args)
-	var rects := CardLayout.line_rects(card_id, lg, p, k)
+	var rects := CardLayout.line_rects(card_id, lg, p, k, text_args)
 	for i in rects.size():
 		var r: Rect2 = rects[i]
 		p.draw_line(get_canvas_item(), Vector2(r.position.x * k, r.position.y * k), i, Color("3b2a14"))
 	if show_boxes:
 		draw_rect(nb, Color(0.2, 0.6, 1, 0.8), false, 1)
 		draw_rect(Rect2(CardLayout.TEXT_BOX.position * k, CardLayout.TEXT_BOX.size * k), Color(0.2, 0.6, 1, 0.8), false, 1)
-		for r in CardLayout.ink_rects(card_id, lg, CardLayout.paragraph(card_id, lg), 1.0):
+		for r in CardLayout.ink_rects(card_id, lg, CardLayout.paragraph(card_id, lg, 1.0, text_args), 1.0, text_args):
 			draw_rect(Rect2(r.position * k, r.size * k), Color(0.2, 0.9, 0.3, 0.6), false, 1)
-		if CardDb.card(card_id).get("type") in ["MINION", "WEAPON"]:
+		if CardDb.card(card_id).get("type") in CardLayout.GEM_TYPES:
 			for g in CardLayout.GEMS:
 				draw_arc(g[0] * k, g[1] * k, 0, TAU, 32, Color(1, 0.3, 0.2, 0.8), 1)
 
@@ -151,10 +181,10 @@ func _draw() -> void:
 	if c.get("rarity", "") == "LEGENDARY":
 		Frames.crest(self, Vector2(60, 5) * k, 104 * k)  # along the card's top edge
 	# text box (parchment) and the name banner across it
-	draw_style_box(Palette.raw_box(Color("efe0bd"), int(6 * k), Color("8a6d3b"), int(2 * k)), Rect2(Vector2(11, 100) * k, Vector2(98, 56) * k))
+	draw_style_box(Palette.raw_box(Color("efe0bd"), int(6 * k), Color("8a6d3b"), int(2 * k)), Rect2(Vector2(9, 100) * k, Vector2(102, 60) * k))
 	var mark := Packs.set_mark(CardText.set_key(card_id))
 	if mark:  # the card's set, faint behind its text (the packs after Classic)
-		draw_texture_rect(mark, Rect2(Vector2(42, 111) * k, Vector2(36, 36) * k), false, SET_MARK)
+		draw_texture_rect(mark, Rect2(Vector2(42, 114) * k, Vector2(36, 36) * k), false, SET_MARK)
 	var bend := 4.0 * k if type == "MINION" else 0.0
 	var banner := PackedVector2Array([Vector2(4, 86) * k, Vector2(60 * k, 86 * k - bend), Vector2(116, 86) * k, Vector2(116, 102) * k, Vector2(60 * k, 102 * k - bend), Vector2(4, 102) * k])
 	draw_colored_polygon(banner, frame.darkened(0.15))
@@ -166,10 +196,10 @@ func _draw() -> void:
 			for part in Geometry2D.intersect_polygons(banner, slab):
 				draw_colored_polygon(part, Palette.of_class(classes[i]).darkened(0.3))
 	Frames.ring(self, banner, Color("2a2118"), 1.5 * k)
-	Frames.rarity(self, Vector2(60, 101) * k, c.get("rarity", ""), 5 * k)
+	Frames.rarity(self, Vector2(60, 104.5) * k - Vector2(0, bend), c.get("rarity", ""), 4.5 * k)  # under the name, at the banner's edge
 	_draw_words(k)
 	if silenced:  # a red cross over the text box, drawn like two brush strokes with a dark edge
-		var tb := Rect2(Vector2(14, 104) * k, Vector2(92, 50) * k)
+		var tb := Rect2(CardLayout.TEXT_BOX.position * k, CardLayout.TEXT_BOX.size * k)
 		for line in [[tb.position, tb.end], [Vector2(tb.end.x, tb.position.y), Vector2(tb.position.x, tb.end.y)]]:
 			draw_line(line[0], line[1], Color("3d0508", 0.9), 9 * k, true)
 			draw_line(line[0], line[1], Color("e03131"), 5.5 * k, true)
@@ -182,18 +212,20 @@ func _draw() -> void:
 		var plate := Rect2(Vector2(60 * k - rw / 2.0 - 5 * k, 158 * k), Vector2(rw + 10 * k, 11 * k))
 		draw_style_box(Palette.raw_box(Color("2a2118"), int(4 * k), Frames.GOLD.darkened(0.25), maxi(1, int(1.5 * k))), plate)
 		draw_string(rf, Vector2(plate.position.x + 5 * k, plate.position.y + 8.6 * k), race, HORIZONTAL_ALIGNMENT_LEFT, -1, rs, Color("f4ead5"))
-	var shown_cost := cost if cost >= 0 else int(c.get("cost", 0))
-	Frames.mana(self, Vector2(17, 17) * k, shown_cost, 15 * k * bump("cost"), cost_color())
+	if shows_cost():
+		Frames.mana(self, Vector2(17, 17) * k, cost if cost >= 0 else int(c.get("cost", 0)), 15 * k * bump("cost"), cost_color())
 	if type == "HERO" and int(c.get("armor", 0)) > 0:  # the Armor it gives, on the shield where a minion's Health goes
-		Frames.shield(self, Vector2(103, 154) * k, int(c.armor), 14 * k)
+		Frames.shield(self, CardLayout.HEALTH_AT * k, int(c.armor), 14 * k)
 	if type == "MINION" or type == "WEAPON":
 		var a := attack if attack >= 0 else int(c.get("attack", 0))
 		var h := health if health >= 0 else int(c.get("health", c.get("durability", 0)))
-		Frames.attack(self, Vector2(17, 154) * k, a, 15 * k * bump("atk"), attack_color())
+		Frames.attack(self, CardLayout.ATTACK_AT * k, a, 15 * k * bump("atk"), attack_color(), -PI / 4.0)
 		if type == "MINION":
-			Frames.health(self, Vector2(103, 154) * k, h, 15 * k * bump("hp"), health_color())
+			Frames.health(self, CardLayout.HEALTH_AT * k, h, 15 * k * bump("hp"), health_color())
 		else:
-			Frames.shield(self, Vector2(103, 154) * k, h, 14 * k * bump("hp"), health_color(), "durability")
+			Frames.shield(self, CardLayout.HEALTH_AT * k, h, 14 * k * bump("hp"), health_color(), "durability")
+	if classes.size() > 1:  # a multi-class card: its classes' emblems on one round mark in its top right corner
+		_draw_classes(Vector2(102, 18) * k, 13 * k, classes)
 	if echo:
 		var at := Vector2(103, 17) * k
 		draw_circle(at, 10 * k, Color("2b1846"))
@@ -214,3 +246,22 @@ func _draw() -> void:
 		for line in [[mc + Vector2(-d, -d), mc + Vector2(d, d)], [mc + Vector2(d, -d), mc + Vector2(-d, d)]]:
 			draw_line(line[0], line[1], Color("2a0b0b"), 9 * k, true)
 			draw_line(line[0], line[1], Color.WHITE, 5.5 * k, true)
+
+
+## A round mark split into one slice per class, each in its class's colour with its emblem.
+func _draw_classes(at: Vector2, r: float, classes: Array) -> void:
+	draw_circle(at + Vector2(0, r * 0.12), r + 2.5, Color(0, 0, 0, 0.45))
+	draw_circle(at, r + 1.5, Frames.GOLD.darkened(0.2))
+	var n := classes.size()
+	for i in n:
+		var a0 := -PI / 2.0 + TAU * i / n
+		var pts := PackedVector2Array([at])
+		for j in 13:
+			pts.append(at + Vector2.from_angle(a0 + TAU / n * j / 12.0) * r)
+		draw_colored_polygon(pts, Palette.of_class(classes[i]).darkened(0.15))
+	for i in n:
+		draw_line(at, at + Vector2.from_angle(-PI / 2.0 + TAU * i / n) * r, Color("2a2118"), maxf(1.0, r * 0.08), true)
+	for i in n:
+		var mid := at + Vector2.from_angle(-PI / 2.0 + TAU * (i + 0.5) / n) * r * 0.5
+		Icons.paint(self, str(classes[i]), Rect2(mid - Vector2.ONE * r * 0.36, Vector2.ONE * r * 0.72))
+	draw_arc(at, r, 0, TAU, 32, Frames.GOLD, maxf(1.0, r * 0.1), true)

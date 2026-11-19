@@ -13,7 +13,7 @@ const BIG := ["CFM_343", "AT_112", "ICC_912", "OG_134", "OG_133", "OG_280", "OG_
 	"ICC_833", "ICC_828", "ICC_831", "ICC_830", "ICC_314",
 	"LOOT_043", "LOOT_507", "LOOT_080", "LOOT_286", "LOOT_285",
 	"UNG_940", "UNG_067", "UNG_942", "LOOT_108", "LOOT_542"]
-const BIG_PHONE := ["CFM_343", "OG_134", "ICC_833", "LOOT_043"]
+const BIG_PHONE := ["CFM_343", "OG_134", "ICC_833", "LOOT_043", "ICC_912", "LOOT_286", "LOOT_285", "CFM_621"]
 const DEFAULT_ART := ["CFM_343", "OG_134", "ICC_833", "LOOT_043", "CFM_621"]
 const LONG_NAME := {"ru": "Нефритовый друид: очень длинное название колоды для проверки",
 	"en": "Jade Druid with a really long name to check the deck list row"}

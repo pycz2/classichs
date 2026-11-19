@@ -68,13 +68,14 @@ static func mana(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.
 	_number(ci, c, value, r * 1.25, col)
 
 
-static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE) -> void:
-	# a sword behind the gem: the blade to the top right, the hilt to the bottom left
-	var d := Vector2(1, -1).normalized()
+## aim: where the sword behind the gem points (radians from up, clockwise): to the top right, or (a card's,
+## -PI / 4) to the top left, out of the card, away from its text.
+static func attack(ci: CanvasItem, c: Vector2, value: int, r: float, col := Color.WHITE, aim := PI / 4.0) -> void:
+	var d := Vector2(sin(aim), -cos(aim))
 	var sword := Sprites.get_tex("sword")
 	if sword and Sprites.get_tex("attack_gem"):
-		var len := r * 3.1  # the hilt shows at the bottom left of the gem, the blade at the top right
-		Sprites.draw(ci, "sword", c - d * r * 0.05, len * sword.get_width() / float(sword.get_height()), PI / 4.0)
+		var len := r * 3.1  # the hilt shows on one side of the gem, the blade on the other
+		Sprites.draw(ci, "sword", c - d * r * 0.05, len * sword.get_width() / float(sword.get_height()), aim)
 		Sprites.draw(ci, "attack_gem", c, r * SPRITE_W.attack_gem)
 		_number(ci, c, value, r * 1.25, col)
 		return

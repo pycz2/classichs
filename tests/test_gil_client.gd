@@ -161,12 +161,12 @@ func test_echo_marks_and_the_ghostly_copy() -> void:
 	var yeti: CardView = v._views[hand[1].id]
 	check(angler.echo, "an Echo card in the hand has the mark")
 	check(hand[1].has("ECHO") and yeti.echo, "a minion in the hand under Glinda Crowskin's aura too (the snapshot's aura tags)")
-	eq(yeti.self_modulate, Color.WHITE, "not ghostly")
+	check(yeti.ghost == null, "not ghostly")
 	v.controller.submit({"type": "play", "player": 0, "entity": hand[0].id, "target": -1, "pos": 1, "choice": -1})
 	var copy: GameView.Ent = v.g.players[0].hand.filter(func(e): return e.card_id == ANGLER)[0]
 	check(copy.has("GHOSTLY"), "the copy is GHOSTLY")
 	var cv: CardView = v._views[copy.id]
-	check(cv.echo and cv.self_modulate.a < 1.0, "it looks ghostly: see-through")
+	check(cv.echo and cv.ghost != null and cv.self_modulate == Color.WHITE, "it looks ghostly: grey flames over its top, its text as clear as any card's")
 	var hist := v.controller.game.history.size()
 	v.controller.submit({"type": "end_turn", "player": 0})
 	var evs: Array = []
