@@ -200,9 +200,12 @@ func test_the_picture_plans_of_a_big_pack_take_a_moment() -> void:
 	# pictures of all 2139 cards on the main thread, 3000 tries each: 40 s of a frozen game with every card's art there.
 	if not _gil():
 		return
+	# Since then an element plans nothing (the card's subject alone); the whole plan, when a picture needs it, is quick.
 	Art.reset_all()
-	var t0 := Time.get_ticks_msec()
 	eq(TableFx.element("LOOT_014"), "", "a minion: no element")
+	eq(Art._designs.size(), 0, "an element plans no pictures")
+	var t0 := Time.get_ticks_msec()
+	Art.design("LOOT_014")
 	var ms := Time.get_ticks_msec() - t0
 	check(ms < 3000, "the plans of %d cards took %d ms" % [CardDb.all_ids().size(), ms])
 	eq(Art._designs.size(), CardDb.all_ids().size(), "every card planned")
