@@ -8,6 +8,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - A game on the server (ranked, casual, Arena, against a bot) no longer freezes after a choice that changes nothing in sight. Vicious Fledgling's Adapt after its attack did it: picking Taunt, Windfury or Divine Shield left the player unable to do anything until the turn timer ended the turn.
 - On the Games screen the right panel with the game's description scrolls, and the "Play this game" and "Delete" buttons stay below it, always in sight. With a long description they went off the bottom of the window, on phones too.
 - A legendary minion's music when it is played now follows the sound effects volume, not the music volume. With the music turned down it was barely heard under the card's own sounds, and with the music off it did not play at all.
+- Long names are no longer cut off and no longer run into the text next to them. The hero's name in the deck list, the opponent's name in the Arena and the game's name in the lobby header slowly slide back and forth, a ready deck's description wraps, and the deck code in the export window shows in full. The deck windows have their own backing, and an import error stays in its window. The offered Arena cards no longer cover the rules line, the last ranked game's result no longer stays on the Arena screens, the Fullscreen switch is easy to see when off, the tutorial hint reads well on the light board too, and the game's name on a tournament page is translated.
 ### Added
 - The table shows where an effect lands. When cards in a hand are buffed, a band of light passes over the hand and arrows rise over the cards. An effect on a deck makes the deck swell and a ring flash over it. A new or cheaper Hero Power lights up in its place.
 - A card shuffled into a deck (yours or the opponent's) flies into that deck from whatever sent it: the spell played, a minion, a hero, a hand or the other deck. A card added to a hand flies from its source too: Burgle takes cards from the opponent's hero, Thoughtsteal from their deck, a card made by a minion comes out of the minion. A card you may not see flies as a card back.
@@ -17,11 +18,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - A Secret that goes off shows big right over its place: its back grows and turns over into the card, with the Secret's own reveal sound.
 - The End Turn button turns over to its other side when the turn passes to the opponent and back.
 - The history has lines for buffs on hidden cards: "3 cards in Opponent's deck get +1/+1".
+- On a phone held upright the game asks you to turn the phone. Held sideways, every screen but the match fills the whole width with bigger text, and what does not fit in height scrolls with a finger.
 
 ### Changed
 - The numbers of cards in the hand are coloured as on the board: Attack and Health above the printed ones green, below them red, and they flash when they change. A Hero Power's cost is green when it got cheaper and red when dearer. A weapon's Attack below the printed one is now red.
 - Damage and freeze land at the same moment: Frostbolt, Cone of Cold, Blizzard and a Water Elemental's blow hit and freeze at once.
 - A new freeze look: ice crystals spread over the portrait from its edge, frost lines the rim, glints run over the ice. When a minion or hero thaws, the ice melts back.
+- Training takes three steps: the deck, the opponent, then the bot's difficulty as a list from easy to the hardest, each level with a picture of its strength. A new deck starts with choosing a hero by portrait, in a three by three grid. The tournament match window folds into a button at the top of the screen and opens from it again. It no longer covers the game, neither the mulligan nor the result.
 
 ## [0.71.1] - 2026-11-13
 

@@ -95,6 +95,10 @@ func _ready() -> void:
 
 func say(text: String) -> void:
 	_status.text = text
+	_said_on = tab
+
+
+var _said_on := ""  # the lobby tab the status line was said on: another tab does not show it
 
 
 func _process(delta: float) -> void:
@@ -127,6 +131,8 @@ static func remembered_deck(l: ServerLink = null) -> Deck:
 func _go(s: String) -> void:
 	stage = s
 	_retire_armed = false
+	if s == "lobby" and tab != _said_on:
+		_status.text = ""  # (a ranked game's result stays on Play, not on the Arena's screens)
 	for c in _body.get_children():  # freed later: a pressed button may still be in its signal
 		_body.remove_child(c)
 		c.queue_free()
@@ -373,7 +379,6 @@ func _build_lobby() -> void:
 		b.pressed.connect(func():
 			tab = t
 			link.remember({"tab": t})
-			say("")  # (the last game's result belongs to the tab it was played from)
 			_go("lobby"))
 		_body.add_child(b)
 	var gx := 412.0

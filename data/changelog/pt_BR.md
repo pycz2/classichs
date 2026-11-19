@@ -8,6 +8,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Uma partida no servidor (ranqueada, casual, Arena, contra um bot) não congela mais depois de uma escolha que não muda nada à vista. Acontecia com a Adaptação do Filhote Raivoso depois do ataque: escolhendo Provocar, Fúria dos Ventos ou Escudo Divino, o jogador não conseguia fazer nada até o cronômetro encerrar o turno.
 - Na tela "Jogos", o painel da direita com a descrição do jogo rola, e os botões "Jogar este jogo" e "Excluir" ficam abaixo dele, sempre visíveis. Com uma descrição longa eles saíam pela borda de baixo da janela, no celular também.
 - A música de um lacaio lendário ao ser jogado agora segue o volume dos efeitos sonoros, não o da música. Com a música baixa ela mal se ouvia sob os sons da carta, e com a música desligada não tocava.
+- Nomes longos não são mais cortados nem invadem o texto ao lado. O nome do herói na lista de baralhos, o do adversário na Arena e o nome do jogo no topo do lobby deslizam devagar de um lado para o outro, a descrição de um baralho pronto quebra em linhas e o código do baralho na janela de exportação aparece inteiro. As janelas dos baralhos têm fundo próprio, e um erro de importação fica na própria janela. As cartas oferecidas na Arena não cobrem mais a linha das regras, o resultado da última partida ranqueada não fica mais nas telas da Arena, o interruptor "Tela cheia" aparece bem também desligado, a dica do tutorial se lê também na mesa clara e o nome do jogo na página de um torneio está traduzido.
 ### Adicionado
 - A mesa mostra onde um efeito acerta. Quando cards na mão são melhorados, uma faixa de luz passa pela mão e setas sobem sobre os cards. Um efeito no deck faz o deck crescer e um anel brilhar sobre ele. Um Poder Heroico novo ou mais barato se ilumina no seu lugar.
 - Um card embaralhado em um deck (o seu ou o do oponente) voa para esse deck a partir do que o mandou: o feitiço jogado, um lacaio, um herói, uma mão ou o outro deck. Um card adicionado à mão também voa da sua origem: Roubar pega cards do herói do oponente, um card criado por um lacaio sai do lacaio. Um card que você não pode ver voa virado para baixo.
@@ -17,11 +18,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Um Segredo que dispara aparece grande logo acima do seu lugar: o verso cresce e vira o card, com o som de revelação do próprio Segredo.
 - O botão Encerrar Turno vira para o outro lado quando o turno passa para o oponente e de volta.
 - O histórico tem linhas para melhorias em cards ocultos: "3 cartas do deck do oponente recebem +1/+1".
+- Com o celular na vertical, o jogo pede para girá-lo. Na horizontal, todas as telas exceto a partida ocupam toda a largura com o texto maior, e o que não cabe na altura rola com o dedo.
 
 ### Alterado
 - Os números dos cards na mão são coloridos como no tabuleiro: Ataque e Vida acima dos impressos em verde, abaixo em vermelho, e piscam quando mudam. O custo de um Poder Heroico fica verde quando fica mais barato e vermelho quando fica mais caro. O Ataque de uma arma abaixo do impresso agora é vermelho.
 - Dano e congelamento chegam no mesmo momento: Seta de Gelo, Cone de Frio, Nevasca e o golpe de um Elemental da Água acertam e congelam juntos.
 - Novo congelamento: cristais de gelo crescem sobre o retrato a partir da borda, há geada no contorno e brilhos correm pelo gelo. Quando um lacaio ou herói descongela, o gelo derrete.
+- O treino tem três passos: o baralho, o adversário e depois a dificuldade do bot numa lista da mais fácil à mais difícil, cada nível com um desenho da sua força. Um baralho novo começa com a escolha do herói pelo retrato, numa grade de três por três. A janela da partida do torneio se recolhe num botão no alto da tela e abre de novo a partir dele. Ela não cobre mais o jogo, nem o mulligan nem o resultado.
 
 ## [0.71.1] - 2026-11-13
 

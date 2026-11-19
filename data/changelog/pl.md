@@ -8,6 +8,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Gra na serwerze (rankingowa, zwykła, Arena, z botem) nie zamiera już po wyborze, który nie zmienia niczego na widoku. Tak było z Adaptacją Agresywnego pisklęcia po jego ataku: po wybraniu Prowokacji, Furii wichru albo Boskiej tarczy gracz nie mógł nic zrobić, dopóki zegar nie zakończył tury.
 - Na ekranie „Gry” prawy panel z opisem gry się przewija, a przyciski „Graj w tę grę” i „Usuń” stoją pod nim i zawsze są widoczne. Przy długim opisie wychodziły poza dolną krawędź okna, także na telefonie.
 - Muzyka legendarnego stronnika przy zagraniu idzie teraz z głośnością efektów dźwiękowych, a nie muzyki. Przy ściszonej muzyce ledwo było ją słychać pod dźwiękami karty, a przy wyłączonej nie grała wcale.
+- Długie nazwy nie są już ucinane i nie wchodzą na sąsiedni tekst. Imię bohatera na liście talii, imię przeciwnika na Arenie i nazwa gry w nagłówku lobby powoli przesuwają się tam i z powrotem, opis gotowej talii łamie się na wiersze, a kod talii w oknie eksportu widać w całości. Okna talii mają własne tło, a błąd importu zostaje w swoim oknie. Karty do wyboru na Arenie nie zasłaniają już wiersza z zasadami, wynik ostatniej gry rankingowej nie zostaje już na ekranach Areny, przełącznik „Pełny ekran” dobrze widać także wyłączony, wskazówkę samouczka da się przeczytać także na jasnym stole, a nazwa gry na stronie turnieju jest przetłumaczona.
 ### Dodano
 - Stół pokazuje, gdzie trafia efekt. Gdy karty w ręce dostają wzmocnienie, przez rękę przechodzi pas światła, a nad kartami wznoszą się strzałki. Efekt na talię sprawia, że talia pulsuje i nad nią rozbłyska pierścień. Nowa lub tańsza moc specjalna rozbłyska na swoim miejscu.
 - Karta wtasowana do talii (twojej lub przeciwnika) leci do tej talii od tego, co ją tam wysłało: od zagranego zaklęcia, stronnika, bohatera, z ręki albo z drugiej talii. Karta dodana do ręki też leci ze swojego źródła: Włam bierze karty od bohatera przeciwnika, karta stworzona przez stronnika wylatuje ze stronnika. Karta, której nie możesz widzieć, leci rewersem do góry.
@@ -17,11 +18,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 - Sekret, który się uruchamia, pokazuje się duży tuż nad swoim miejscem: rewers rośnie i odwraca się w kartę, z własnym dźwiękiem odkrycia sekretu.
 - Przycisk Zakończ turę obraca się na drugą stronę, gdy tura przechodzi do przeciwnika i z powrotem.
 - Historia ma linijki o wzmocnieniu ukrytych kart: „Kart w talii przeciwnika: 3, każda otrzymuje +1/+1”.
+- Na telefonie trzymanym pionowo gra prosi o obrócenie go. W poziomie wszystkie ekrany poza samą partią zajmują całą szerokość, tekst jest na nich większy, a to, co nie mieści się na wysokość, przewija się palcem.
 
 ### Zmieniono
 - Liczby kart w ręce są pokolorowane jak na stole: atak i zdrowie powyżej nadrukowanych na zielono, poniżej na czerwono, i rozbłyskują przy zmianie. Koszt mocy specjalnej jest zielony, gdy spadł, i czerwony, gdy wzrósł. Atak broni poniżej nadrukowanego jest teraz czerwony.
 - Obrażenia i zamrożenie przychodzą w tej samej chwili: Pocisk lodu, Stożek zimna, Zamieć i cios Żywiołaka wody trafiają i zamrażają naraz.
 - Nowe zamrożenie: kryształki lodu rozrastają się po portrecie od brzegu, szron okala krawędź, po lodzie przebiegają odblaski. Gdy stronnik albo bohater odmarza, lód topnieje.
+- Trening ma trzy kroki: talia, przeciwnik, a potem poziom bota na liście od najłatwiejszego do najtrudniejszego, każdy poziom z obrazkiem swojej siły. Nowa talia zaczyna się od wyboru bohatera po portretach, w siatce trzy na trzy. Okno meczu turniejowego zwija się do przycisku u góry ekranu i znów się z niego otwiera. Nie zasłania już gry, ani wymiany kart, ani wyniku.
 
 ## [0.71.1] - 2026-11-13
 

@@ -8,6 +8,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Una partita sul server (classificata, amichevole, Arena, contro un bot) non si blocca più dopo una scelta che non cambia nulla di visibile. Succedeva con l’Adattamento del Volatile Malvagio dopo il suo attacco: scegliendo Provocazione, Furia del Vento o Scudo Divino, il giocatore non poteva fare nulla finché il timer non chiudeva il turno.
 - Nella schermata «Giochi» il pannello a destra con la descrizione del gioco scorre, e i pulsanti «Gioca a questo gioco» ed «Elimina» restano sotto, sempre visibili. Con una descrizione lunga finivano oltre il bordo inferiore della finestra, anche sul telefono.
 - La musica di un servitore leggendario quando viene giocato ora segue il volume degli effetti sonori, non quello della musica. Con la musica bassa si sentiva appena sotto i suoni della carta, con la musica spenta non suonava affatto.
+- I nomi lunghi non vengono più tagliati e non finiscono sul testo accanto. Il nome dell'eroe nella lista dei mazzi, quello dell'avversario nell'Arena e il nome del gioco nell'intestazione della lobby scorrono piano avanti e indietro, la descrizione di un mazzo pronto va a capo e il codice del mazzo nella finestra di esportazione si vede per intero. Le finestre dei mazzi hanno un proprio sfondo e un errore di importazione resta nella sua finestra. Le carte offerte nell'Arena non coprono più la riga delle regole, il risultato dell'ultima partita classificata non resta più sulle schermate dell'Arena, l'interruttore «Schermo intero» si vede bene anche spento, il suggerimento del tutorial si legge anche sul tavolo chiaro e il nome del gioco nella pagina di un torneo è tradotto.
 ### Aggiunto
 - Il tavolo mostra dove arriva un effetto. Quando le carte in mano vengono potenziate, una fascia di luce passa sulla mano e frecce salgono sopra le carte. Un effetto sul mazzo lo fa gonfiare e un anello si accende sopra. Un Potere Eroe nuovo o più economico si illumina al suo posto.
 - Una carta mescolata in un mazzo (il vostro o quello dell'avversario) vola in quel mazzo da ciò che l'ha mandata: la magia giocata, un servitore, un eroe, una mano o l'altro mazzo. Anche una carta aggiunta alla mano vola dalla sua origine: Furto prende carte dall'eroe avversario, una carta creata da un servitore esce dal servitore. Una carta che non potete vedere vola coperta.
@@ -17,11 +18,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Un Segreto che scatta appare in grande proprio sopra il suo posto: il dorso cresce e si gira nella carta, con il suono di rivelazione del Segreto stesso.
 - Il pulsante Fine Turno si gira sull'altro lato quando il turno passa all'avversario e viceversa.
 - La cronologia ha righe per i potenziamenti di carte nascoste: «3 carte nel mazzo dell'avversario ottengono +1/+1».
+- Con il telefono in verticale il gioco chiede di girarlo. In orizzontale tutte le schermate tranne la partita occupano tutta la larghezza con il testo più grande, e quello che non entra in altezza scorre con il dito.
 
 ### Modificato
 - I numeri delle carte in mano sono colorati come sul campo: Attacco e Salute sopra quelli stampati in verde, sotto in rosso, e lampeggiano quando cambiano. Il costo di un Potere Eroe è verde quando cala e rosso quando sale. L'Attacco di un'arma sotto quello stampato ora è rosso.
 - Danno e congelamento arrivano nello stesso momento: Dardo di Gelo, Cono di Freddo, Tormenta e il colpo di un Elementale dell'Acqua colpiscono e congelano insieme.
 - Un nuovo congelamento: cristalli di ghiaccio si allargano sul ritratto dal bordo, la brina segue il contorno, riflessi scorrono sul ghiaccio. Quando un servitore o un eroe si scongela, il ghiaccio si scioglie.
+- L'allenamento ha tre passi: il mazzo, l'avversario e poi la difficoltà del bot in un elenco dalla più facile alla più difficile, ogni livello con un disegno della sua forza. Un mazzo nuovo comincia con la scelta dell'eroe dal ritratto, in una griglia tre per tre. La finestra della partita del torneo si chiude in un pulsante in alto sullo schermo e da lì si riapre. Non copre più il gioco, né il mulligan né il risultato.
 
 ## [0.71.1] - 2026-11-13
 

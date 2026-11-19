@@ -8,6 +8,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Une partie sur le serveur (classée, normale, Arène, contre un bot) ne se fige plus après un choix qui ne change rien de visible. C’était le cas de l’Adaptation du Pterreurdactyle vicieux après son attaque : en choisissant Provocation, Furie des vents ou Bouclier divin, le joueur ne pouvait plus rien faire jusqu’à ce que le minuteur termine le tour.
 - Sur l’écran « Jeux », le panneau de droite avec la description du jeu défile, et les boutons « Jouer à ce jeu » et « Supprimer » restent en dessous, toujours visibles. Avec une longue description, ils passaient sous le bord de la fenêtre, sur téléphone aussi.
 - La musique d’un serviteur légendaire joué suit maintenant le volume des effets sonores et non celui de la musique. Musique baissée, on l’entendait à peine sous les sons de la carte ; musique coupée, elle ne jouait pas du tout.
+- Les noms longs ne sont plus coupés et ne débordent plus sur le texte voisin. Le nom du héros dans la liste des decks, celui de l'adversaire dans l'Arène et le nom du jeu dans l'en-tête du salon défilent lentement dans un sens puis dans l'autre, la description d'un deck tout prêt passe à la ligne, et le code du deck dans la fenêtre d'export s'affiche en entier. Les fenêtres des decks ont leur propre fond, et une erreur d'import reste dans sa fenêtre. Les cartes proposées dans l'Arène ne cachent plus la ligne des règles, le résultat de la dernière partie classée ne reste plus sur les écrans de l'Arène, l'interrupteur « Plein écran » se voit bien même éteint, l'indice du tutoriel se lit aussi sur le plateau clair, et le nom du jeu sur la page d'un tournoi est traduit.
 ### Ajouté
 - La table montre où un effet porte. Quand des cartes en main sont améliorées, une bande de lumière passe sur la main et des flèches montent au-dessus des cartes. Un effet sur un deck le fait enfler et un anneau s'allume au-dessus. Un pouvoir héroïque nouveau ou moins cher s'illumine à sa place.
 - Une carte mélangée dans un deck (le vôtre ou celui de l'adversaire) vole jusqu'à ce deck depuis ce qui l'y envoie : le sort joué, un serviteur, un héros, une main ou l'autre deck. Une carte ajoutée à une main vole aussi depuis sa source : Larcin prend des cartes au héros adverse, une carte créée par un serviteur sort du serviteur. Une carte que vous ne devez pas voir vole face cachée.
@@ -17,11 +18,13 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Un Secret qui se déclenche s'affiche en grand juste au-dessus de sa place : son dos grandit et se retourne en carte, avec le son de révélation propre au Secret.
 - Le bouton Fin de tour se retourne sur son autre face quand le tour passe à l'adversaire et inversement.
 - L'historique a des lignes pour les cartes cachées améliorées : « 3 cartes du deck de l'adversaire reçoivent +1/+1 ».
+- Sur un téléphone tenu à la verticale, le jeu demande de le tourner. À l'horizontale, tous les écrans sauf la partie occupent toute la largeur, le texte y est plus grand, et ce qui ne tient pas en hauteur défile du doigt.
 
 ### Modifié
 - Les chiffres des cartes en main sont colorés comme sur le plateau : Attaque et Vie au-dessus de ceux imprimés en vert, en dessous en rouge, et ils clignotent quand ils changent. Le coût d'un pouvoir héroïque est vert quand il baisse et rouge quand il augmente. L'Attaque d'une arme en dessous de celle imprimée est maintenant rouge.
 - Les dégâts et le gel arrivent au même moment : Éclair de givre, Cône de froid, Blizzard et le coup d'un Élémentaire d’eau frappent et gèlent d'un coup.
 - Un nouveau gel : des cristaux de glace s'étendent sur le portrait depuis le bord, du givre borde le contour, des reflets courent sur la glace. Quand un serviteur ou un héros dégèle, la glace fond.
+- L'entraînement se fait en trois étapes : le deck, l'adversaire, puis la difficulté du bot en liste du plus facile au plus difficile, chaque niveau avec une image de sa force. Un nouveau deck commence par le choix du héros d'après les portraits, dans une grille de trois sur trois. La fenêtre du match de tournoi se replie en un bouton en haut de l'écran et s'y rouvre. Elle ne cache plus la partie, ni le mulligan ni le résultat.
 
 ## [0.71.1] - 2026-11-13
 

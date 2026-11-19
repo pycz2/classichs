@@ -8,6 +8,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 - Una partida en el servidor (clasificatoria, casual, Arena, contra un bot) ya no se congela tras una elección que no cambia nada a la vista. Pasaba con la Adaptación del Polluelo sañoso tras su ataque: al elegir Provocar, Viento furioso o Escudo divino, el jugador no podía hacer nada hasta que el temporizador terminaba el turno.
 - En la pantalla «Juegos», el panel derecho con la descripción del juego se desplaza, y los botones «Jugar a este juego» y «Borrar» quedan debajo, siempre a la vista. Con una descripción larga se salían por el borde inferior de la ventana, también en el móvil.
 - La música de un esbirro legendario al jugarlo sigue ahora el volumen de los efectos de sonido y no el de la música. Con la música baja apenas se oía bajo los sonidos de la carta, y con la música apagada no sonaba.
+- Los nombres largos ya no se cortan ni se meten en el texto de al lado. El nombre del héroe en la lista de mazos, el del rival en la Arena y el nombre del juego en la cabecera del lobby se desplazan despacio de un lado a otro, la descripción de un mazo ya hecho se parte en líneas y el código del mazo en la ventana de exportar se ve entero. Las ventanas de los mazos tienen su propio fondo, y un error al importar se queda en su ventana. Las cartas ofrecidas en la Arena ya no tapan la línea de reglas, el resultado de la última partida clasificatoria ya no se queda en las pantallas de la Arena, el interruptor «Pantalla completa» se ve bien también apagado, la pista del tutorial se lee también sobre el tablero claro y el nombre del juego en la página de un torneo está traducido.
 ### Añadido
 - La mesa muestra dónde cae un efecto. Cuando se mejoran cartas en la mano, una franja de luz pasa por la mano y suben flechas sobre las cartas. Un efecto sobre un mazo lo hace crecer y brilla un anillo encima. Un poder de héroe nuevo o más barato se ilumina en su sitio.
 - Una carta barajada en un mazo (el tuyo o el del oponente) vuela a ese mazo desde lo que la envió: el hechizo jugado, un esbirro, un héroe, una mano o el otro mazo. Una carta añadida a una mano también vuela desde su origen: Pillaje toma cartas del héroe rival, una carta creada por un esbirro sale del esbirro. Una carta que no puedes ver vuela boca abajo.
@@ -17,11 +18,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 - Un secreto que se activa aparece en grande justo encima de su sitio: su dorso crece y se da la vuelta como carta, con el sonido de revelación propio del secreto.
 - El botón Fin de turno se da la vuelta cuando el turno pasa al oponente y al revés.
 - El historial tiene líneas para mejoras de cartas ocultas: «3 cartas del mazo del oponente obtienen +1/+1».
+- Con el teléfono en vertical, el juego pide girarlo. En horizontal, todas las pantallas salvo la partida ocupan todo el ancho con el texto más grande, y lo que no cabe en altura se desplaza con el dedo.
 
 ### Cambiado
 - Los números de las cartas en la mano se colorean como en el tablero: Ataque y Salud por encima de los impresos en verde, por debajo en rojo, y destellan al cambiar. El coste de un poder de héroe es verde cuando baja y rojo cuando sube. El Ataque de un arma por debajo del impreso ahora es rojo.
 - El daño y la congelación llegan en el mismo momento: Descarga de Escarcha, Cono de frío, Ventisca y el golpe de un Elemental de agua golpean y congelan a la vez.
 - Nueva congelación: cristales de hielo crecen sobre el retrato desde el borde, hay escarcha en el contorno y brillos recorren el hielo. Cuando un esbirro o un héroe se descongela, el hielo se derrite.
+- El entrenamiento va en tres pasos: el mazo, el rival y luego la dificultad del bot en una lista de la más fácil a la más difícil, cada nivel con un dibujo de su fuerza. Un mazo nuevo empieza eligiendo al héroe por su retrato, en una cuadrícula de tres por tres. La ventana de la partida de torneo se pliega en un botón arriba de la pantalla y vuelve a abrirse desde él. Ya no tapa la partida, ni el mulligan ni el resultado.
 
 ## [0.71.1] - 2026-11-13
 
