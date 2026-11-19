@@ -82,7 +82,7 @@ func test_more_than_six_related_cards_turn_on_a_wheel() -> void:
 	w._process(0.5)
 	check(w.get_child(0).position.y < y0, "the front row goes up")
 	var shown := w.get_children().filter(func(c): return c.visible)
-	check(shown.size() < 9 and shown.size() >= 6, "a row turned away is hidden: %d shown" % shown.size())
+	check(shown.size() < 9 and shown.size() >= 3, "the rows turned away are hidden: %d shown" % shown.size())
 	var tips := KeywordTips.make("VAN_NEW1_031")  # Animal Companion: three, in a grid
 	check(tips.find_child("Related", true, false) is GridContainer, "six or fewer stand still")
 	tips.free()

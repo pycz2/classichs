@@ -213,7 +213,7 @@ func beside(rect: Rect2) -> void:
 ## The related cards on a wheel seen from the side, two in a row: the rows go up, flatten and darken as they
 ## turn away, and come back from below, endlessly.
 class Wheel extends Control:
-	const STEP := PI / 4.0  # between two rows
+	const STEP := PI / 3.0  # between two rows
 	const SPEED := 0.3  # rows a second
 	var turn := 0.0
 
@@ -236,11 +236,11 @@ class Wheel extends Control:
 	func _place() -> void:
 		var rows := ceili(get_child_count() / 2.0)
 		var card := CardView.SIZE * RELATED_SCALE
-		var r := custom_minimum_size.y / 2.0
+		var mid := custom_minimum_size.y / 2.0
 		for i in get_child_count():
 			var cv := get_child(i) as Control
 			var a := (fposmod(floori(i / 2.0) - turn + rows / 2.0, rows) - rows / 2.0) * STEP  # 0: the row in front
 			cv.visible = absf(a) < PI / 2.0
 			cv.scale = Vector2(1.0, maxf(0.01, cos(a)))
-			cv.position = Vector2((i % 2) * (WIDTH - card.x), r + r * sin(a) - card.y / 2.0)
+			cv.position = Vector2((i % 2) * (WIDTH - card.x), mid + (mid - card.y * cv.scale.y / 2.0) * sin(a) - card.y / 2.0)  # inside the wheel's box
 			cv.modulate = Color.WHITE.darkened(0.7 * (1.0 - cos(a)))

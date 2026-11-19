@@ -69,15 +69,19 @@ static func fit(card_id: String, lang: String, args := []) -> Dictionary:
 		var n := 12
 		while n > 6 and name_font().get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, n).x > NAME_BOX.size.x:
 			n -= 1
-		var e := fit_text(CardText.rich(card_id, loc, 0, args), CardDb.card(card_id).get("type") in GEM_TYPES)
+		var e := fit_text(CardText.rich(card_id, loc, 0, args), CardDb.card(card_id).get("type") in GEM_TYPES,
+			CardText.raw(card_id, loc, args).contains("[x]"))
 		e.name = n
 		by_card[key] = e
 	return by_card[key]
 
 
 ## The lines it found are kept (as a written layout's): the card breaks its text the same way at every scale.
-static func fit_text(rich: String, gems: bool) -> Dictionary:
+## laid_out: its breaks were placed for the original card ("[x]"): one paragraph is tried first.
+static func fit_text(rich: String, gems: bool, laid_out := false) -> Dictionary:
 	var ways := [rich, rich.replace("\n", " ")] if rich.contains("\n") else [rich]
+	if laid_out:
+		ways.reverse()
 	var sp := []
 	var p: TextParagraph
 	var e := {}
