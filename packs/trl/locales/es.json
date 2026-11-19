@@ -6,6 +6,10 @@
   "OVERKILL": {
    "name": "Arrasar",
    "tip": "Inflige daño excesivo durante tu turno para obtener una bonificación."
+  },
+  "TOPDECK": {
+   "name": "Este hechizo se lanza al robarlo",
+   "tip": "Al robar esta carta, se lanza de inmediato y robas otra carta."
   }
  }
 }

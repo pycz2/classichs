@@ -371,6 +371,9 @@
   },
   "POWER_ADJACENT": {
    "engine": "POWER_ADJACENT"
+  },
+  "DOUBLE_COMBO": {
+   "engine": "DOUBLE_COMBO"
   }
  },
  "modes": {

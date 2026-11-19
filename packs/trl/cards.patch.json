@@ -413,11 +413,23 @@
  "TRL_343": {
   "script": "scripts/trl_a.lua#TRL_343"
  },
+ "TRL_343at1": {
+  "script": "scripts/trl_a.lua#TRL_343at1"
+ },
+ "TRL_343bt1": {
+  "script": "scripts/trl_a.lua#TRL_343bt1"
+ },
+ "TRL_343ct1": {
+  "script": "scripts/trl_a.lua#TRL_343ct1"
+ },
  "TRL_343ct2": {
   "keywords": [
    "SPELLPOWER"
   ],
   "spell_power": 1
+ },
+ "TRL_343dt1": {
+  "script": "scripts/trl_a.lua#TRL_343dt1"
  },
  "TRL_345": {
   "script": "scripts/trl_b.lua#TRL_345",

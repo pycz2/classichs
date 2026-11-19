@@ -739,11 +739,11 @@ cards.TRL_124 = {
   end,
 }
 
--- Spirit of the Shark: your minions' Battlecries trigger twice (DOUBLE_BATTLECRY on the champion, as Brann).
--- ponytail: Combos are not doubled (the engine doubles only `on_play`); needs an engine DOUBLE_COMBO.
+-- Spirit of the Shark: your minions' Battlecries and Combos trigger twice (DOUBLE_BATTLECRY as Brann, and DOUBLE_COMBO,
+-- on the champion; with Brann still twice).
 cards.TRL_092 = spirit({
   aura = function(g, me)
-    g.aura_add(g.hero(g.ctrl(me)), 0, 0, { DOUBLE_BATTLECRY = true })
+    g.aura_add(g.hero(g.ctrl(me)), 0, 0, { DOUBLE_BATTLECRY = true, DOUBLE_COMBO = true })
   end,
 })
 
@@ -868,22 +868,14 @@ cards["ench:trl_voodoo"] = {
   end,
 }
 
--- Likkim: +2 Attack while you have Overloaded crystals (locked this turn, or owed: an Overload card played this turn).
--- ponytail: an Overload played before Likkim came is not seen as owed; needs a g query of mana_lock_owed.
+-- Likkim: +2 Attack while you have Overloaded crystals (locked this turn, or owed for the next).
 cards.TRL_352 = {
   aura = function(g, me)
     local p = g.ctrl(me)
-    if g.locked(p) > 0 or g.tag(me, "LIKKIM_OWED") == g.turn() then
+    if g.locked(p) > 0 or g.owed(p) > 0 then
       g.aura_add(me, 2, 0)
     end
   end,
-  on = {
-    play = function(g, me, ev)
-      if g.mine(me, ev) and (g.info(ev.card).mana_lock or 0) > 0 then
-        g.set_tag(me, "LIKKIM_OWED", g.turn())
-      end
-    end,
-  },
 }
 
 -- Bog Slosher: return another friendly minion to your hand with +2/+2.
@@ -1109,23 +1101,15 @@ cards.TRL_321 = {
 }
 
 -- Spirit of the Rhino: your Rush minions are Immune the turn they're summoned.
--- ponytail: only minions summoned while the Spirit is in play are marked (RHINO_TURN); an engine "summoned this turn"
--- tag would cover the ones before it.
+-- (SUMMONED_TURN: the player hooks mark every minion summoned, so those summoned before the Spirit count too.)
 cards.TRL_327 = spirit({
   aura = function(g, me)
     for _, m in ipairs(g.minions(g.ctrl(me))) do
-      if g.has(m, "RUSH") and g.tag(m, "RHINO_TURN") == g.turn() then
+      if g.has(m, "RUSH") and g.tag(m, "SUMMONED_TURN") == g.turn() then
         g.aura_add(m, 0, 0, { IMMUNE = true })
       end
     end
   end,
-  on = {
-    summon = function(g, me, ev)
-      if g.mine(me, ev) then
-        g.set_tag(ev.entity, "RHINO_TURN", g.turn())
-      end
-    end,
-  },
 })
 
 -- Dragon Roar: 2 random Dragons.

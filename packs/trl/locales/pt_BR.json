@@ -6,6 +6,10 @@
   "OVERKILL": {
    "name": "Massacre",
    "tip": "Cause dano excedente no seu turno para ganhar um bônus."
+  },
+  "TOPDECK": {
+   "name": "Lançado ao Comprar",
+   "tip": "Quando você compra este card, ele é lançado na hora e você compra outro card."
   }
  }
 }

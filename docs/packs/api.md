@@ -63,7 +63,7 @@ Return values are ignored unless said otherwise.
 | `spell` | `fn(g, me, t)` | A spell is cast (not if countered). A TASK card's (a Quest's) runs once it waits in the trap zone: it sets its goal (`TASK_GOAL`); its `on` hooks then count (`TASK_PROGRESS`) and fulfil it (`g.remove`, the reward to the hand). |
 | `combo` | `fn(g, me, t)` | Instead of `battlecry`/`spell` when another card was played before it this turn. |
 | `combo_target` | like `target` | The target spec while combo is active (no target without combo). |
-| `choose_one` (alias `choice`) | `{"OPTION_A", "OPTION_B"}` | Two option *cards*; the player picks one (`choice` 0/1); the option card's `target` and `effect` are used. |
+| `choose_one` (alias `choice`) | `{"OPTION_A", "OPTION_B", …}` | Two or more option *cards*; the player picks one (`choice` 0, 1, then 3, 4… for a third and fourth: 2 is both, BOTH_CHOICES; Wardruid Loti has four); the option card's `target` and `effect` are used. |
 | `effect` | `fn(g, me, t)` | On a Choose One option card: what the option does (`me` is the played card). |
 | `hero_power` (alias `power`) | `fn(g, me, t)` | On a POWER card: the power is used. |
 | `can_play` | `fn(g, me) → bool` | The card/power may be played now (read-only). |
@@ -177,9 +177,10 @@ right; `nil` means "the right end". A function that finds nothing returns
 | `g.turn()`, `g.current()` | The turn number, whose turn it is. |
 | `g.mana(p)`, `g.max_mana(p)` | Mana now, crystals. |
 | `g.locked(p)` | `p`'s crystals Overload locked this turn (Kun the Forgotten King refreshes the others). |
+| `g.owed(p)` | The crystals `p`'s Overload will lock next turn (owed now: Likkim's "Overloaded Mana Crystals"). |
 | `g.cards_played(p)`, `g.minions_played(p)` | Cards and minions `p` played this turn. |
 | `g.combo(e)` | Combo is active for `e`: its controller played another card before it this turn. |
-| `g.choice(e)` | The Choose One option `e` was played with: 0 or 1, 2 for both (BOTH_CHOICES), -1 for none. Not in a snapshot: only the game that played it knows it, so its opponent never learns it (Fatespinner's secret Deathrattle); a copy (`g.copy_minion`) keeps it. |
+| `g.choice(e)` | The Choose One option `e` was played with: 0 or 1 (3, 4… for a third and fourth option), 2 for both (BOTH_CHOICES), -1 for none. Not in a snapshot: only the game that played it knows it, so its opponent never learns it (Fatespinner's secret Deathrattle); a copy (`g.copy_minion`) keeps it. |
 | `g.room(p)` | Free board slots (`g.room(p) > 0`: room for one; note `0` is true in Lua). |
 | `g.board_pos(m)` | Its 0-based position, or `nil`. |
 | `g.died_pos(m)` | Where a dead minion stood (0-based), or `-1`. |
