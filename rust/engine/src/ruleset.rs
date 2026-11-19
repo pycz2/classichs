@@ -160,6 +160,9 @@ pub struct Names {
     /// only when the pack names them (Garrison Commander, Frost Giant).
     pub power_uses: Option<&'static str>,
     pub powers_used: Option<&'static str>,
+    /// POWER_ADJACENT: its owner's power also hits the minions left and right of its target (an aura tag on the
+    /// champion; only when the pack names it: Spirit of the Dragonhawk).
+    pub power_adjacent: Option<&'static str>,
     /// RANDOM_TARGETS: a player whose champion has it plays, attacks and uses the power on a random valid target
     /// (an aura tag; only when the pack names it: Mayor Noggenfogger).
     pub random_targets: Option<&'static str>,
@@ -255,6 +258,7 @@ impl Names {
             power_damage: n("POWER_DAMAGE"),
             power_uses: by_engine.get("POWER_USES").copied(),
             powers_used: by_engine.get("POWERS_USED").copied(),
+            power_adjacent: by_engine.get("POWER_ADJACENT").copied(),
             died_turn: by_engine.get("DIED_TURN").copied(),
             random_targets: by_engine.get("RANDOM_TARGETS").copied(),
             played_cost: by_engine.get("PLAYED_COST").copied(),

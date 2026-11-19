@@ -359,6 +359,9 @@
    "play": "battlecry"
   }
  },
+ "TRL_319": {
+  "script": "scripts/trl_a.lua#TRL_319"
+ },
  "TRL_321": {
   "script": "scripts/trl_b.lua#TRL_321",
   "fx": {

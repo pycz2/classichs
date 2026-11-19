@@ -1038,7 +1038,19 @@ impl Game {
             self.add_tag_int(h, t.into(), 1);
         }
         if let Some(f) = self.e(hp).hooks().power {
+            // POWER_ADJACENT (an aura tag on the champion, a pack that names it): the minions left and right of a
+            // minion target, as they stand before the effect, are its targets too, one after the other
+            let also = match n.power_adjacent {
+                Some(tag) if t > 0 && self.e(t).zone == "PLAY" && self.e(t).kind() == "MINION"
+                    && self.e(self.players[cur].hero).has(tag) => self.adjacent(t),
+                _ => vec![],
+            };
             self.from(hp, |g| g.fx_effect(f, hp, t));
+            for m in also {
+                if !self.game_over && self.e(m).zone == "PLAY" {
+                    self.from(hp, |g| g.fx_effect(f, hp, m));
+                }
+            }
         }
         self.emit(obj!{"type": "hero_power", "player": cur, "entity": hp, "target": t});
     }

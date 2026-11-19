@@ -588,9 +588,10 @@ local function spirit(h)
   return h
 end
 
--- Overkill (mechanics.md): this card's damage left a minion below 0 Health (it is still there until the death phase).
+-- Overkill (mechanics.md): this card's damage left a character below 0 Health (a minion is still there until the death
+-- phase; a hero's Armor goes first, so its Health + Armor).
 local function overkilled(g, t)
-  return g.is_minion(t) and g.health(t) < 0
+  return g.health(t) < 0
 end
 
 -- A minion's Overkill: it attacked (on its own turn) and left the defending minion below 0 Health.
@@ -961,6 +962,14 @@ cards.TRL_900 = {
     end
   end,
 }
+
+-- Spirit of the Dragonhawk: Stealth for 1 turn; your Hero Power also targets adjacent minions (POWER_ADJACENT on your
+-- hero: the engine hits the minions next to a minion target too; several Spirits do not stack).
+cards.TRL_319 = spirit({
+  aura = function(g, me)
+    g.aura_add(g.hero(g.ctrl(me)), 0, 0, { POWER_ADJACENT = true })
+  end,
+})
 
 -- Spirit of the Lynx: Stealth for 1 turn; whenever you summon a Beast, give it +1/+1.
 cards.TRL_901 = spirit({
