@@ -27,7 +27,10 @@ var music_file := ""
 var _last_battle := ""
 var _pool: Array[AudioStreamPlayer] = []
 var _next := 0
+## Decoded sounds by pack file, the least recently used first (Lru): STREAMS_KEPT at most.
 var _streams := {}
+## Decoded music tracks by pack file (.opus only; the rest stream from the file), the same way: MUSIC_KEPT at most.
+var _tracks := {}
 static var _shell: AudioStream
 ## The player of spoken lines: one at a time, a new line cuts the last.
 var _voice := AudioStreamPlayer.new()
@@ -49,11 +52,17 @@ func _ready() -> void:
 	instance = self
 	Settings.apply()  # makes sure the Music and SFX buses exist
 	_music.bus = "Music"
+	# Music and stingers play as streams, mixed by the engine. In the browser the default for an AudioStreamWAV is a
+	# Web Audio "sample": a float32 copy of the whole track (~30 MB) that nothing frees, a new one per decoded stream.
+	# (There the engine mixes streams on the main thread: project.godot's audio/driver/output_latency.web, 300 ms,
+	# lets the mix ride out slow frames without dropouts; the sounds stay samples and keep no such delay.)
+	_music.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
 	_music.finished.connect(_on_music_finished)
 	add_child(_music)
 	_voice.bus = "SFX"
 	add_child(_voice)
 	_stinger.bus = "SFX"  # (a card's own sound, as in Hearthstone: heard with the music turned down or off)
+	_stinger.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
 	_stinger.finished.connect(func(): _duck(0.0, 0.8))
 	add_child(_stinger)
 	_aim.bus = "SFX"
@@ -111,34 +120,40 @@ func _stream(file: String, extra := false) -> AudioStream:
 			if _shell:
 				_shell.take_over_path(SHELL_MENU)
 		return _shell
-	var path := music_path(file) if extra else path_for(file)
-	if not _streams.has(path):
-		_trim_streams()
-		_streams[path] = Packs.active().stream(path) if path != "" else null
-	return _streams[path]
+	return _sound(music_path(file) if extra else path_for(file))
 
 
-## ponytail: a decoded .opus is PCM in memory (0.1–0.2 MB a second), so the cache empties once it holds
-## STREAMS_KEPT sounds; an LRU if a long session ever stutters on it.
+## A decoded .opus is PCM in memory (0.1–0.2 MB a second): the STREAMS_KEPT sounds used last stay. (In the
+## browser each one played is also a Web Audio sample that is never freed: a sound decoded again costs a new one.)
 const STREAMS_KEPT := 150
-func _trim_streams() -> void:
-	if _streams.size() >= STREAMS_KEPT:
-		_streams = {}
+func _sound(path: String) -> AudioStream:
+	if _streams.has(path):
+		return Lru.get_of(_streams, path)
+	var s := Packs.active().stream(path) if path != "" else null
+	Lru.put(_streams, path, s, STREAMS_KEPT)
+	return s
 
 
-## A music track. An .opus decodes in the background (a 3-minute one takes a few hundred ms) and is not
-## kept (decoded it is 35 MB): only the one playing stays in memory.
+## A music track. An .opus decodes in the background (a 3-minute one takes a few hundred ms); decoded it is
+## 15–35 MB, so only the MUSIC_KEPT tracks played last stay (a set's menu and its battle tracks: no decoding
+## again for every match).
+const MUSIC_KEPT := 4
 func _music_stream(file: String, extra := false) -> AudioStream:
 	var path := music_path(file) if extra else path_for(file)
 	if file == "shell" or path.get_extension() != "opus":
 		return _stream(file, extra)
-	return await Opus.stream_later(Packs.active().read(path))
+	if _tracks.has(path):
+		return Lru.get_of(_tracks, path)
+	var s := await Opus.stream_later(Packs.active().read(path))
+	Lru.put(_tracks, path, s, MUSIC_KEPT)
+	return s
 
 
 ## The pack or its sound or music set changed: sounds load again, the music starts again.
 static func reset() -> void:
 	if instance:
 		instance._streams = {}
+		instance._tracks = {}
 		instance._last_battle = ""
 		restart_music()
 
@@ -404,12 +419,10 @@ static func say(card_id: String, kind: String) -> bool:
 	var path := voice_path(card_id, kind)
 	if path == "":
 		return false
-	if not instance._streams.has(path):
-		instance._trim_streams()
-		instance._streams[path] = Packs.active().stream(path)
-	if instance._streams[path] == null:
+	var s := instance._sound(path)
+	if s == null:
 		return false
-	instance._voice.stream = instance._streams[path]
+	instance._voice.stream = s
 	instance._voice.play()
 	instance.said = path
 	return true

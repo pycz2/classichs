@@ -241,12 +241,9 @@ func _gauges(v: Dictionary) -> void:
 	if Sound.instance:
 		var streams: Dictionary = Sound.instance.get("_streams")
 		v.sound_streams = streams.size()
-		for s in streams.values():
+		for s in streams.values() + (Sound.instance.get("_tracks") as Dictionary).values():
 			if s is AudioStreamWAV:
 				v.sound_mb += s.data.size() / 1048576.0
-		var m = Sound.instance.get("_music")
-		if m and m.stream is AudioStreamWAV:
-			v.sound_mb += m.stream.data.size() / 1048576.0
 	v.heard = (Sound.instance.heard.size() if Sound.instance else 0)
 	v.art_textures = Art._textures.size()
 	v.palette_frames = Palette._frames.size()

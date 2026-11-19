@@ -23,6 +23,7 @@ func _view(page_id: Variant = null) -> TournamentsView:
 	var v := TournamentsView.new()
 	v.link = _link()
 	v.page_id = page_id
+	v.page_ms = 0  # (every push rebuilds the page at once: the tests check each)
 	root().add_child(v)
 	return v
 
@@ -270,6 +271,35 @@ func test_page_follows_pushes() -> void:
 	eq(v.tab, "page", "back to the page")
 	_press(v, "Back")
 	eq(_sent(v, "t_unwatch"), [{"t": "t_unwatch", "id": 7}], "leaving the page stops its pushes")
+	_free(v)
+
+
+## Pushes in a run rebuild the page once a second at most; the list's rows redraw only for the time left.
+func test_pushes_rebuild_the_page_at_most_once_a_second() -> void:
+	var v := _view(7)
+	v.page_ms = 1000
+	v.link.dispatch({"t": "tournament", "tournament": full("swiss", 3)})
+	eq((v.find_child("PlayerList", true, false) as Node).get_child_count(), 3, "the first push at once")
+	v.link.dispatch({"t": "tournament", "tournament": full("swiss", 4)})
+	v.link.dispatch({"t": "tournament", "tournament": full("swiss", 5)})
+	eq((v.find_child("PlayerList", true, false) as Node).get_child_count(), 3, "the next ones wait")
+	v._process(0.0)
+	eq((v.find_child("PlayerList", true, false) as Node).get_child_count(), 3, "less than a second after")
+	v._page_at -= 1000
+	v._process(0.0)
+	eq((v.find_child("PlayerList", true, false) as Node).get_child_count(), 5, "then the last push shows")
+	_free(v)
+
+
+func test_list_rows_redraw_only_for_a_clock_and_stay_on_the_same_list() -> void:
+	var v := _view()
+	var list := [summary(1, "Open cup"), summary(2, "Old cup", "finished")]
+	v.link.dispatch({"t": "t_list", "tab": "upcoming", "list": list})
+	var open: Node = v.find_child("T_1", true, false)
+	check(open.is_processing(), "an open tournament's row counts its time down")
+	check(not v.find_child("T_2", true, false).is_processing(), "a finished one never redraws by itself")
+	v.link.dispatch({"t": "t_list", "tab": "upcoming", "list": list.duplicate(true)})
+	check(v.find_child("T_1", true, false) == open, "the same list again: the rows stay")
 	_free(v)
 
 

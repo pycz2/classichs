@@ -43,9 +43,10 @@ const WORDS := ["No tournaments yet — create one", "No finished tournaments ye
 	"Rules, decks and the start are frozen", "The bracket is drawn; joining and leaving close", "The first matches begin",
 	"Banned", "Won", "Lost", "not enough players"]
 
-## Full data of tournaments seen (id -> the `tournament` data): the match panel finds the
-## player's decks there.
+## Full data of tournaments seen (id -> the `tournament` data), the CACHE_KEPT pushed last: the match panel
+## finds the player's decks there.
 static var cache := {}
+const CACHE_KEPT := 32
 
 var link: ServerLink
 ## "upcoming", "finished", "closed", "create", or "page" (a tournament's page).
@@ -66,6 +67,10 @@ var _overlay: Control
 var _status: Label
 var _clocks: Array = []  # [Label, start ms, prefix]: counting down
 var _tick := 0.0
+## A push rebuilds the page at once, or (they come in runs while bots play) page_ms after the last push's rebuild.
+var page_ms := 1000
+var _page_at := -1000000  # Time.get_ticks_msec() of the last push's rebuild
+var _page_due := false  # a push waits for its rebuild
 var _scroll_keep := {}  # a rebuilt scroll's place: name -> Vector2
 ## The Add bots dialog's choice: the level and how many.
 const BOT_LEVELS := ["easy", "medium", "hard", "superhard"]
@@ -114,6 +119,7 @@ func say(text: String) -> void:
 
 
 func _process(delta: float) -> void:
+	_rebuild_page()
 	_tick += delta
 	if _tick < 0.25:
 		return
@@ -487,7 +493,22 @@ func open_page(id: Variant) -> void:
 	_build_page()
 
 
+## The page after pushes, unless a push rebuilt it less than page_ms ago (then later: _process).
+func _rebuild_page() -> void:
+	if not _page_due or tab != "page" or Time.get_ticks_msec() - _page_at < page_ms:
+		return
+	_page_due = false
+	_page_at = Time.get_ticks_msec()
+	var keep := _overlay != null and _overlay.name in ["DeckPicker", "DeckDialog", "DecksOf"]
+	var bots := _overlay != null and _overlay.name == "AddBotsDialog"
+	if not keep:
+		_build_page()
+	if bots and page.get("can", {}) is Dictionary and page.can.get("add_bots", false):
+		show_add_bots()  # (the free counts of now)
+
+
 func _build_page() -> void:
+	_page_due = false
 	var t0 := Time.get_ticks_usec()
 	_build_page_now()
 	PerfLog.time("t_page", t0)
@@ -1358,8 +1379,10 @@ func _on_message(msg: Dictionary) -> void:
 	match msg.get("t"):
 		"t_list":
 			var t := str(msg.get("tab", ""))
-			lists[t] = msg.get("list") if msg.get("list") is Array else []
-			if tab == t:
+			var list: Array = msg.get("list") if msg.get("list") is Array else []
+			var same: bool = lists.get(t) == list  # (opening a tab shows the list kept, then the server's: the same mostly)
+			lists[t] = list
+			if tab == t and not same:
 				_build_list()
 		"tournament":
 			PerfLog.count("t_push")
@@ -1367,7 +1390,7 @@ func _on_message(msg: Dictionary) -> void:
 			if t.is_empty():
 				return
 			var k := TournamentBracket.key(t.get("id"))
-			cache[k] = t
+			Lru.put(cache, k, t, CACHE_KEPT)
 			if _creating:
 				_creating = false
 				say(tr("The tournament is created"))
@@ -1378,12 +1401,8 @@ func _on_message(msg: Dictionary) -> void:
 				if _status.text == tr("Sent…"):
 					say("")
 				if tab == "page":
-					var keep := _overlay != null and _overlay.name in ["DeckPicker", "DeckDialog", "DecksOf"]
-					var bots := _overlay != null and _overlay.name == "AddBotsDialog"
-					if not keep:
-						_build_page()
-					if bots and page.get("can", {}) is Dictionary and page.can.get("add_bots", false):
-						show_add_bots()  # (the free counts of now)
+					_page_due = true
+					_rebuild_page()
 		"error":
 			if msg.get("code") == "tournament" or tab == "create" or tab == "page":
 				_creating = false
@@ -1464,8 +1483,16 @@ class ListRow:
 			var w := TournamentsView._tr("Winner: %s") % e.winner
 			DeckTiles.text(self, Vector2(size.x - 20 - f.get_string_size(w, HORIZONTAL_ALIGNMENT_LEFT, -1, 15).x, 92), w, 15, TournamentBracket.MEDALS[0])
 
+	func _ready() -> void:
+		set_process(str(e.get("status", "")) in ["open", "locked", "seeded"])  # (only these show the time left)
+
+	var _second := 0
+
 	func _process(_d: float) -> void:
-		queue_redraw()  # the time left
+		var s := TournamentsView.now_ms() / 1000
+		if s != _second:  # the time left, once a second
+			_second = s
+			queue_redraw()
 
 
 ## The page's head: the status badge, the creator, the game, the format and the series.
@@ -1649,9 +1676,13 @@ class Trophy:
 class Timeline:
 	extends Control
 	var start := 0
+	var _second := 0
 
 	func _process(_d: float) -> void:
-		queue_redraw()
+		var s := TournamentsView.now_ms() / 1000
+		if s != _second:  # (the steps passed light up: once a second is enough)
+			_second = s
+			queue_redraw()
 
 	func _draw() -> void:
 		var now := TournamentsView.now_ms()

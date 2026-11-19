@@ -1,7 +1,8 @@
 extends SceneTree
 ## Measures how the tournament screens scale with their data (tools/perf report, "bench" table): the list
-## with N tournaments (every row redraws each frame), a tournament's page and bracket with N players (rebuilt
-## on every `tournament` push), with vsync off so a frame takes what it costs. Windowed (it draws):
+## with N tournaments (a row redraws once a second, only while it counts down), a tournament's page and bracket
+## with N players (10 pushes in a row: the first rebuilds it, the rest wait a second), with vsync off so a frame
+## takes what it costs. Windowed (it draws):
 ##   godot --path . --script res://tools/perf/bench_ui.gd -- [--out FILE.json]
 ## The data is the tournament tests' (tests/test_tournaments.gd), through a FakeLink: no server.
 
@@ -55,7 +56,7 @@ func _run() -> void:
 	var empty := await _frames(120)
 	out["empty_frame_ms"] = empty
 	print("empty window: %.2f ms a frame" % empty)
-	# the list: N rows, each redrawn every frame
+	# the list: N rows, half of them counting down
 	out["list"] = []
 	for n in [0, 10, 25, 50, 100]:
 		var v := _view()

@@ -80,6 +80,28 @@ func test_play_uses_sfx_bus_and_zero_volume_is_silent() -> void:
 	_done(s)
 
 
+## The sounds used last stay decoded (an LRU); a music track played again is the same stream; music plays as a
+## stream, never a Web Audio sample (the browser keeps every sample for good).
+func test_decoded_sounds_and_tracks_are_kept_and_reused() -> void:
+	var c := {}
+	Lru.put(c, "a", 1, 2)
+	Lru.put(c, "b", 2, 2)
+	eq(Lru.get_of(c, "a"), 1, "a hit")
+	Lru.put(c, "c", 3, 2)
+	eq(c.keys(), ["a", "c"], "the least recently used goes")
+	var s := _sound()
+	var attack := s._sound(Sound.path_for("attack"))
+	check(attack != null and s._sound(Sound.path_for("attack")) == attack, "a sound decodes once")
+	s._start("battle_1")
+	var track: AudioStream = s._music.stream
+	s._start("menu")
+	s._start("battle_1")
+	check(track != null and s._music.stream == track, "a track played again: the same stream")
+	eq(s._music.playback_type, AudioServer.PLAYBACK_TYPE_STREAM, "music: a stream")
+	eq(s._stinger.playback_type, AudioServer.PLAYBACK_TYPE_STREAM, "a stinger: a stream")
+	_done(s)
+
+
 func test_without_sound_node_everything_is_silent() -> void:
 	Sound.play("attack")
 	Sound.music("menu")

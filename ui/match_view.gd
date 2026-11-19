@@ -156,6 +156,7 @@ var _match_time := 0.0
 var _turn_key := ""
 var _bot_side := -1
 var _time_left := 0.0
+var _mulligan_count: Label  # the mulligan's last seconds ("MulliganTimer"; tick() runs every frame: no search)
 ## This turn's time (seconds) and whether it started short (a `turn_seconds` minion in play:
 ## Nozdormu). A short turn gets its usual time back when those minions leave play.
 var _turn_limit := 0.0
@@ -953,7 +954,7 @@ func tick(delta: float) -> void:
 		Sound.say(controller.game.players[viewer()].hero.card_id, "time")  # the rope starts burning
 	_rope.visible = roped  # the mulligan has its numbers instead
 	_rope.left = _time_left / timer("fuse")
-	var count := find_child("MulliganTimer", true, false) as Label
+	var count: Label = _mulligan_count if is_instance_valid(_mulligan_count) else null
 	if count:
 		count.visible = mull and _time_left <= MULLIGAN_WARN and not controller.game.players[viewer()].mulliganed
 		count.text = str(int(ceil(maxf(0.0, _time_left))))
@@ -4033,6 +4034,7 @@ func _show_mulligan() -> void:
 			tw.tween_property(cv, "modulate:a", 1.0, Anim.d(0.2)).set_delay(Anim.d(0.12 * i))
 	var count := Palette.label("", 44, Palette.OPPONENT)
 	count.name = "MulliganTimer"
+	_mulligan_count = count
 	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	count.add_theme_constant_override("outline_size", 8)
 	count.visible = false

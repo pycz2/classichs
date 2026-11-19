@@ -48,8 +48,8 @@ static func element(card_id: String) -> String:
 	var e := named(card_id, "element")
 	if e != "":
 		return e
-	var d := Art.design(card_id)
-	return str(d.subject[0]) if d.kind == "spell" else ""
+	var s := Art._subject(CardDb.card(card_id))  # (its subject alone: Art.design plans every card of the pack at first)
+	return str(s[1][0]) if s[0] == "spell" else ""
 
 
 static func element_color(card_id: String) -> Color:
