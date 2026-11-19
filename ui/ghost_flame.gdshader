@@ -17,7 +17,7 @@ float noise(vec2 p) {
 void fragment() {
 	float n = noise(vec2(UV.x * 7.0, UV.y * 5.0 + TIME * 1.4)) * 0.6 + noise(vec2(UV.x * 15.0, UV.y * 9.0 + TIME * 2.6)) * 0.4;
 	float tongue = (1.0 - UV.y) + (n - 0.5) * 0.9;  // the flames' tongues: noise on a fall from the top
-	float a = smoothstep(0.35, 0.85, tongue) * (0.45 + 0.55 * n);
+	float a = smoothstep(0.2, 0.7, tongue) * (0.6 + 0.4 * n);
 	a *= smoothstep(0.0, 0.08, UV.x) * smoothstep(0.0, 0.08, 1.0 - UV.x);  // soft at the sides
 	COLOR = vec4(COLOR.rgb * (0.75 + 0.45 * n), COLOR.a * a);
 }
