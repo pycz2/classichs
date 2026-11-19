@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Runs one group of the UI audit (tools/ui_audit.gd) in a window, with its own user dir.
 
-Usage: tools/ui_audit.py <group> [--sizes 1280x720,844x390] [--langs ru,en] [--only a,b] [--packs p1,p2]
-Shots: ~/ClassicHS-local/ui-audit/shots/<group>/ (its checks.jsonl there too; a run starts it anew).
+Usage: tools/ui_audit.py <group> [--sizes 1280x720,844x390] [--langs ru,en] [--only a,b] [--packs p1,p2] [--out dir]
+Shots: ~/ClassicHS-local/ui-audit/shots/<group>/ or --out (its checks.jsonl there too; a run starts it anew).
 The main pack: ~/ClassicHS-local/loot-custom-art.cardpack (every card up to Kobolds & Catacombs, with art).
 """
 import argparse, json, os, shutil, subprocess, sys, tempfile
@@ -24,8 +24,9 @@ def main() -> int:
     ap.add_argument("--packs", default=str(MAIN), help="cardpack files to install, the last one is the main pack")
     ap.add_argument("--keep", action="store_true", help="keep the shots and checks of earlier runs")
     ap.add_argument("--timeout", type=int, default=1800)
+    ap.add_argument("--out", default="", help="the shots' folder (default: ~/ClassicHS-local/ui-audit/shots/<group>)")
     a = ap.parse_args()
-    out = OUT / a.group
+    out = Path(a.out).expanduser() if a.out else OUT / a.group
     if not a.keep and out.exists() and not a.only:
         shutil.rmtree(out)
     out.mkdir(parents=True, exist_ok=True)

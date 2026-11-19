@@ -75,7 +75,7 @@ func run(a) -> void:
 		await a.shot("library_delete", "The question before a pack is deleted")
 		g._close()
 	var bar := g._progress(tr_("Adding a game"), "loot-custom-art-with-a-rather-long-file-name.cardpack")
-	g._progress_set(bar, TranslationServer.translate("Reading the file… %s of %s") % ["88.1 MB", "168.1 MB"], 0.3)
+	g._progress_set(bar, TranslationServer.translate("Reading the file… %s of %s") % [Packs.size_text(92_380_000), Packs.size_text(176_270_000)], 0.3)
 	await a.wait(0.4)
 	await a.shot("library_adding", "The box while a pack file is added")
 	g._close()
