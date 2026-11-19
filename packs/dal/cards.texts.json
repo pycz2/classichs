@@ -3001,6 +3001,18 @@
    "ruRU": "Выбранное существо получает +1/+1."
   }
  },
+ "EX1_181": {
+  "text": {
+   "deDE": "Erhaltet einen zufälligen Dämon\nauf die Hand.",
+   "enUS": "Add a random Demon to your hand.",
+   "esES": "[x]Añade\nun demonio aleatorio\na tu mano.",
+   "frFR": "Ajoute un Démon aléatoire dans votre main.",
+   "itIT": "Mette nella tua mano un Demone casuale.",
+   "plPL": "Dodaj losowego Demona do twojej ręki.",
+   "ptBR": "Adicione um Demônio aleatório à sua mão.",
+   "ruRU": "Вы кладете в руку случайного демона."
+  }
+ },
  "EX1_317t": {
   "text": {
    "deDE": "<i>Euch sind die Dämonen ausgegangen! Aber zum Glück gibt es ja noch Wichtel ...</i>",
@@ -9283,6 +9295,222 @@
    "plPL": "Zadaj $4 pkt. obrażeń. Dobierz kartę.",
    "ptBR": "Cause $4 de dano. Compre um card.",
    "ruRU": "Наносит $4 ед. урона. Вы берете карту."
+  }
+ },
+ "TRL_012": {
+  "text": {
+   "deDE": "[x]Verursacht $2 Schaden.\n<b>Überwältigen:</b> Beschwört\nein Basistotem.",
+   "enUS": "Deal $2 damage. <b>Overkill</b>: Summon a basic Totem.",
+   "esES": "[x]Inflige $2 p. de daño.\n<b>Arrasar:</b> Invoca\nun tótem básico.",
+   "frFR": "Inflige $2 |4(point,points) de dégâts.\n<b>Brutalité :</b> invoque un Totem de base.",
+   "itIT": "[x]Infligge $2 danni.\n<b>Annientamento:</b>\nevoca un Totem base.",
+   "plPL": "Zadaj $2 pkt. obrażeń.\n<b>Rzeź:</b> Przyzwij podstawowy Totem.",
+   "ptBR": "Cause $2 de dano. <b>Massacre:</b> Evoque um Totem básico.",
+   "ruRU": "Наносит $2 ед. урона. <b>Сверхурон:</b> призывает базовый тотем."
+  }
+ },
+ "TRL_071": {
+  "text": {
+   "deDE": "<b>Eifer</b>. <b>Kampfschrei:</b>\nErhält +1/+1 für jeden anderen Piraten, den Ihr kontrolliert.",
+   "enUS": "[x]<b>Rush</b>\n<b>Battlecry:</b> Gain +1/+1\nfor each other Pirate\nyou control.",
+   "esES": "[x]<b>Embestir</b>\n<b>Grito de batalla:</b> Obtiene +1/+1\n por cada pirata adicional\nque controles.",
+   "frFR": "<b>Ruée</b>\n<b>Cri de guerre :</b> gagne +1/+1 pour chaque autre Pirate que vous contrôlez.",
+   "itIT": "[x]<b>Assalto</b>. <b>Grido di Battaglia:</b>\nottiene +1/+1 per ogni altro\nPirata che controlli.",
+   "plPL": "<b>Zryw</b>\n<b>Okrzyk bojowy:</b> Otrzymuje +1/+1 za każdego Pirata, jakiego kontrolujesz.",
+   "ptBR": "<b>Rapidez</b>\n<b>Grito de Guerra:</b> Receba +1/+1 para cada outro Pirata\n que você controlar.",
+   "ruRU": "<b>Натиск</b>. <b>Боевой клич:</b> получает +1/+1 за каждого другого пирата под вашим контролем."
+  }
+ },
+ "TRL_085": {
+  "text": {
+   "deDE": "Jedes Mal, wenn Ihr einen Zauber auf einen Diener wirkt, wird er erneut auf benachbarte Diener gewirkt.",
+   "enUS": "[x]Whenever you target a\nminion with a spell, cast it\nagain on its neighbors.",
+   "esES": "[x]Cada vez que lanzas\nun hechizo a un esbirro,\nse vuelve a lanzar a los\nesbirros adyacentes.",
+   "frFR": "Chaque fois que vous ciblez un serviteur avec un sort, le lance à nouveau sur les serviteurs adjacents.",
+   "itIT": "[x]Quando lanci una Magia\nsu un servitore, viene\nlanciata anche su\nquelli adiacenti.",
+   "plPL": "Za każdym razem gdy rzucasz zaklęcie na stronnika, rzuć je ponownie na jego sąsiadów.",
+   "ptBR": "Sempre que você alvejar um lacaio com um feitiço, lance-o novamente nos lacaios adjacentes.",
+   "ruRU": "Когда вы выбираете целью заклинания существо, целями становятся и существа по обе стороны от него."
+  }
+ },
+ "TRL_096": {
+  "text": {
+   "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> [x]2 Karten. Gebt eine zufällige\ndavon Eurem Gegner.",
+   "enUS": "[x]<b>Battlecry:</b> <b>Discover</b> two\ncards. Give one to your\nopponent at random.",
+   "esES": "[x]<b>Grito de batalla:</b> <b>Descubre</b>\ndos cartas. Da una aleatoria\na tu oponente.",
+   "frFR": "<b>Cri de guerre :</b> <b>découvre</b> deux cartes. Votre adversaire reçoit l’une des deux au hasard.",
+   "itIT": "[x]<b>Grido di Battaglia:</b>\n<b>Rinvieni</b> 2 carte. Ne\nmette una casuale nella\n mano dell'avversario.",
+   "plPL": "<b>Okrzyk bojowy:</b>\n<b>Odkryj</b> dwie karty. Daj losowo wybraną z nich twojemu przeciwnikowi.",
+   "ptBR": "<b>Grito de Guerra:</b> <b>Descubra</b> dois cards. Conceda um deles aleatoriamente ao oponente.",
+   "ruRU": "[x]<b>Боевой клич:</b> вы <b>раска-\nпываете</b> две карты. Одну\nиз них случайным образом\nполучает противник."
+  }
+ },
+ "TRL_124": {
+  "text": {
+   "deDE": "Zieht 2 Piraten aus Eurem Deck. <b>Combo:</b> Zieht zusätzlich eine Waffe.",
+   "enUS": "Draw 2 Pirates from your deck.\n<b>Combo:</b> And a weapon.",
+   "esES": "[x]Roba 2 piratas de tu mazo.\n<b>Combo:</b> Y un arma.",
+   "frFR": "Vous piochez 2 Pirates dans votre deck.\n<b>Combo :</b> et une arme.",
+   "itIT": "Pesca due Pirati dal tuo mazzo. <b>Combo:</b> inoltre, pesca un'Arma.",
+   "plPL": "Dobierz dwóch Piratów z twojej talii.\n<b>Kombinacja:</b> Dobierz broń.",
+   "ptBR": "Compre 2 Piratas \ndo seu deck. \n<b>Combo:</b> E uma arma.",
+   "ruRU": "Вы берете 2 пиратов из колоды. <b>Серия приемов:</b> вы также берете оружие."
+  }
+ },
+ "TRL_126": {
+  "text": {
+   "deDE": "<b>Kampfschrei:</b> Ruft 3 Piraten aus Eurem Deck herbei. Verleiht ihnen <b>Eifer</b>.",
+   "enUS": "<b>Battlecry:</b> Summon 3 Pirates from your deck. Give them <b>Rush</b>.",
+   "esES": "[x]<b>Grito de batalla:</b>\nInvoca a 3 piratas de tu mazo.\nLes otorga <b>Embestir</b>.",
+   "frFR": "<b>Cri de guerre :</b> invoque 3 Pirates de votre deck.\nLeur confère <b>Ruée</b>.",
+   "itIT": "[x]<b>Grido di Battaglia:</b> evoca\ntre Pirati dal tuo mazzo e\nfornisce loro <b>Assalto</b>.",
+   "plPL": "<b>Okrzyk bojowy:</b>\nPrzyzwij trzech Piratów z twojej talii.\nDaj im <b>Zryw</b>.",
+   "ptBR": "<b>Grito de Guerra:</b> Evoque 3 Piratas do seu deck. Conceda-lhes <b>Rapidez</b>.",
+   "ruRU": "<b>Боевой клич:</b> призывает 3 пиратов из колоды.   Они получают <b>«Натиск»</b>."
+  }
+ },
+ "TRL_127": {
+  "text": {
+   "deDE": "[x]Fügt einem zufälligen\nFeind $3 Schaden zu.\nWird für jeden Eurer\nPiraten wiederholt.",
+   "enUS": "[x]Deal $3 damage to a\nrandom enemy. Repeat\nfor each of your Pirates.",
+   "esES": "[x]Inflige $3 p. de daño\na un enemigo aleatorio.\nSe repite por cada uno\nde tus piratas.",
+   "frFR": "Inflige $3 |4(point,points) de dégâts à un adversaire aléatoire. Recommence pour chacun de vos Pirates.",
+   "itIT": "[x]Infligge $3 danni a\nun nemico casuale.\nRipete l'effetto per\nogni tuo Pirata.",
+   "plPL": "Zadaj $3 pkt. obrażeń losowemu wrogowi. Powtarzaj za każdego twojego Pirata.",
+   "ptBR": "Cause $3 de dano a um inimigo aleatório. Repita para cada um dos seus Piratas.",
+   "ruRU": "Наносит $3 ед. урона случайному противнику. Эффект повторяется за каждого пирата под вашим контролем."
+  }
+ },
+ "TRL_300": {
+  "name": {
+   "deDE": "Shirvallah der Tiger",
+   "enUS": "Shirvallah, the Tiger",
+   "esES": "Shirvallah, la tigresa",
+   "frFR": "Shirvallah, le tigre",
+   "itIT": "Shirvallah, la Tigre",
+   "plPL": "Tygrysica Szirwala",
+   "ptBR": "Shirvallah, a Tigresa",
+   "ruRU": "Ширвалла, лоа-тигрица"
+  }
+ },
+ "TRL_310": {
+  "text": {
+   "deDE": "Der nächste Elementar, den Ihr in diesem Zug ausspielt, kostet (2) weniger.",
+   "enUS": "The next Elemental you play this turn costs (2) less.",
+   "esES": "[x]El próximo elemental\nque juegues en este turno\ncostará (2) cristales\nmenos.",
+   "frFR": "Le prochain Élémentaire que vous jouez pendant ce tour coûte (2) cristaux de moins.",
+   "itIT": "Il prossimo Elementale che giochi in questo turno costa (2) in meno.",
+   "plPL": "Następny Żywiołak, którego zagrasz w tej turze, kosztuje (2) mniej.",
+   "ptBR": "O próximo Elemental que você jogar neste turno custará \n(2) a menos.",
+   "ruRU": "Следующий разыгранный вами на этом ходу элементаль будет стоить на (2) меньше."
+  }
+ },
+ "TRL_311": {
+  "text": {
+   "deDE": "<b>Kampfschrei:</b> Fügt allen anderen Dienern 3 Schaden zu, wenn Ihr im letzten Zug einen Elementar ausgespielt habt.",
+   "enUS": "<b>Battlecry:</b> If you played an Elemental last turn, deal 3 damage to all other minions.",
+   "esES": "[x]<b>Grito de batalla:</b>\nSi jugaste un elemental\nen el turno anterior, inflige\n3 p. de daño a todos\nlos demás esbirros.",
+   "frFR": "<b>Cri de guerre :</b> si vous avez joué un Élémentaire au tour précédent, inflige 3 |4(point,points) de dégâts à tous les autres serviteurs.",
+   "itIT": "[x]<b>Grido di Battaglia:</b> se hai\ngiocato un Elementale nel turno\nprecedente, infligge 3 danni a\nTUTTI gli altri servitori.",
+   "plPL": "<b>Okrzyk bojowy:</b> Zadaj 3 pkt. obrażeń wszystkim pozostałym stronnikom, jeśli w poprzedniej turze udało ci się zagrać Żywiołaka.",
+   "ptBR": "<b>Grito de Guerra:</b> Se você jogou um Elemental no último turno, cause 3 de dano a todos os outros lacaios.",
+   "ruRU": "<b>Боевой клич:</b> если на прошлом ходу вы разыграли элементаля, наносит 3 ед. урона всем прочим существам."
+  }
+ },
+ "TRL_312": {
+  "name": {
+   "deDE": "Zauberfurie",
+   "enUS": "Spellzerker",
+   "esES": "Hechicera rabiosa",
+   "frFR": "Sorcière berserker",
+   "itIT": "Maga Berserker",
+   "plPL": "Wiedźma berserker",
+   "ptBR": "Feiticeira Berserker",
+   "ruRU": "Бешеный маг"
+  }
+ },
+ "TRL_313": {
+  "text": {
+   "deDE": "Fügt einem Diener\n$4 Schaden zu. Kostet (1), wenn Ihr im letzten Zug einen Elementar ausgespielt habt.",
+   "enUS": "[x]Deal $4 damage to a\nminion. Costs (1) if you\nplayed an Elemental\nlast turn.",
+   "esES": "[x]Inflige $4 p. de daño\na un esbirro. Cuesta (1) cristal\nsi jugaste un elemental\nen el turno anterior.",
+   "frFR": "Inflige $4 |4(point,points) de dégâts à un serviteur. Coûte (1) cristal si vous avez joué un Élémentaire au tour précédent.",
+   "itIT": "Infligge $4 danni a un servitore. Costa (1) se hai giocato un Elementale nel turno precedente.",
+   "plPL": "Zadaj $4 pkt. obrażeń stronnikowi. Kosztuje (1), jeśli w poprzedniej turze udało ci się zagrać Żywiołaka.",
+   "ptBR": "Cause $4 de dano a um lacaio. Custa (1) se você jogou um Elemental no último turno.",
+   "ruRU": "Наносит $4 ед. урона выбранному существу.\nЕсли на прошлом ходу вы разыграли элементаля,\nстоит (1)."
+  }
+ },
+ "TRL_349": {
+  "text": {
+   "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> einen Zauber, wenn Ihr eine [x]Waffe angelegt habt.",
+   "enUS": "<b>Battlecry:</b> If you have a weapon equipped, <b>Discover</b> a spell.",
+   "esES": "[x]<b>Grito de batalla:</b>\nSi tienes un arma\nequipada, <b>Descubre</b>\nun hechizo.",
+   "frFR": "<b>Cri de guerre :</b> si vous êtes équipé d’une arme, <b>découvre</b> un sort.",
+   "itIT": "[x]<b>Grido di Battaglia:</b> se hai\nun'Arma equipaggiata,\n<b>Rinvieni</b> una Magia.",
+   "plPL": "<b>Okrzyk bojowy:</b> <b>Odkryj</b> zaklęcie, jeśli masz broń na wyposażeniu.",
+   "ptBR": "<b>Grito de Guerra:</b> Se você tiver uma arma equipada, <b>Descubra</b> um feitiço.",
+   "ruRU": "<b>Боевой клич:</b> если вы вооружены, вы <b>раскапываете</b> заклинание."
+  }
+ },
+ "TRL_507": {
+  "text": {
+   "deDE": "Ruft einen Piraten (1/1) herbei, nachdem Euer Held angegriffen hat.",
+   "enUS": "After your hero attacks, summon a 1/1 Pirate.",
+   "esES": "[x]Cada vez que tu héroe ataca,\ninvoca a un pirata 1/1.",
+   "frFR": "Une fois que votre héros a attaqué, invoque un Pirate 1/1.",
+   "itIT": "[x]Dopo che il tuo eroe\nha attaccato, evoca\nun Pirata 1/1.",
+   "plPL": "Gdy twój bohater zaatakuje, przyzwij Pirata 1/1.",
+   "ptBR": "Depois que seu herói atacar, evoque \num Pirata 1/1.",
+   "ruRU": "После того как ваш герой [x]атакует, призывает\nпирата 1/1."
+  }
+ },
+ "TRL_513": {
+  "name": {
+   "deDE": "Mosh'Ogg-Ringrichter",
+   "enUS": "Mosh'Ogg Enforcer",
+   "esES": "Déspota Mosh'Ogg",
+   "frFR": "Massacreur mosh’Ogg",
+   "itIT": "Scagnozzo Mosh'ogg",
+   "plPL": "Mosz'ogg nadzorca",
+   "ptBR": "Impositor Mosh'ogg",
+   "ruRU": "Арбитр Мош'Огг"
+  }
+ },
+ "TRL_530": {
+  "text": {
+   "deDE": "[x]<b>Kampfschrei:</b> Bringt ein\n<b>Geheimnis</b> aus Eurem Deck\nins Spiel, wenn Ihr ein\n<b>  Geheimnis</b> kontrolliert.",
+   "enUS": "<b>Battlecry:</b> If you control a <b>Secret</b>, cast a <b>Secret</b> from your deck.",
+   "esES": "[x]<b>Grito de batalla:</b>\nSi controlas un <b>secreto</b>,\nlanza un <b>secreto</b>\nde tu mazo.",
+   "frFR": "<b>Cri de guerre :</b> si vous\ncontrôlez un <b>Secret</b>, joue\nun <b>Secret</b> de votre deck.",
+   "itIT": "[x]<b>Grido di Battaglia:</b>\nse controlli un <b>Segreto</b>,\nlancia un <b>Segreto</b>\ndal tuo mazzo.",
+   "plPL": "<b>Okrzyk bojowy:</b>\nZagraj <b>Sekret</b>\nz twojej talii, jeśli kontrolujesz <b>Sekret</b>.",
+   "ptBR": "<b>Grito de Guerra:</b>\nSe você controlar um <b>Segredo</b>, lance um \n<b>Segredo</b> do seu deck.",
+   "ruRU": "<b>Боевой клич:</b> если у вас есть активный <b>секрет</b>,\nвы разыгрываете еще один из колоды."
+  }
+ },
+ "TRL_545": {
+  "text": {
+   "deDE": "<b>Kampfschrei:</b> Erhält +4/+4 und <b>Spott</b>, wenn Ihr in diesem Spiel 10 Leben wieder[d]herge[d]stellt habt.@ <i>(Noch {0}!)</i>@ <i>(Bereit!)</i>",
+   "enUS": "[x]<b>Battlecry:</b> If you've restored\n10 Health this game, gain\n+4/+4 and <b>Taunt</b>.@ <i>({0} left!)</i>@ <i>(Ready!)</i>",
+   "esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtienes\n+4/+4 y <b>Provocar</b>.@\n<i>(Faltan: {0})</i>.@ <i>(¡Listo!)</i>.",
+   "frFR": "<b>Cri de guerre :</b> si vous avez rendu 10 points de vie pendant cette partie, gagne +4/+4 et <b>Provocation</b>.@ <i>(Encore {0} !)</i>@ <i>(Prêt !)</i>",
+   "itIT": "[x]<b>Grido di Battaglia:</b> se hai\nrigenerato 10 Salute in\nquesta partita, ottiene +4/+4 e\n <b>Provocazione</b>.@ <i>({0} restanti!)</i>@ <i>(Pronto!)</i>",
+   "plPL": "<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 10 pkt. zdrowia w tej grze, otrzymuje +4/+4 oraz <b>Prowokację</b>.@ <i>(Jeszcze {0})</i>@ <i>(Gotowe!)</i>",
+   "ptBR": "<b>Grito de Guerra:</b> Se você tiver restaurado 10 de Vida nesta partida, receba +4/+4 e <b>Provocar</b>.@ <i>(Resta: {0})</i>@ <i>(Pronto!)</i>",
+   "ruRU": "<b>Боевой клич:</b> если вы\nвосстановили 10 ед. здоровья в течение матча, получает +4/+4 и <b>«Провокацию»</b>.@ <i>(Осталось {0} ед.!)</i>@ <i>(Готово!)</i>"
+  }
+ },
+ "TRL_555": {
+  "text": {
+   "deDE": "Vernichtet einen Diener. Kostet (1) weniger für jeden Diener, den Ihr kontrolliert.",
+   "enUS": "Destroy a minion. Costs (1) less for each minion you control.",
+   "esES": "[x]Destruye a un esbirro.\nCuesta (1) cristal menos por cada\nesbirro que controles.",
+   "frFR": "Détruit un serviteur. Coûte (1) cristal de moins pour chaque serviteur que vous contrôlez.",
+   "itIT": "[x]Distrugge un servitore.\nCosta (1) in meno per ogni\nservitore che controlli.",
+   "plPL": "Zniszcz stronnika. Kosztuje (1) mniej za każdego stronnika, jakiego kontrolujesz.",
+   "ptBR": "Destrua um lacaio. \nCusta (1) a menos para cada lacaio sob seu controle.",
+   "ruRU": "Уничтожает выбранное существо. Стоит на (1) меньше за каждое существо под вашим контролем."
   }
  },
  "TU4b_001": {

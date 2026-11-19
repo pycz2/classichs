@@ -869,6 +869,12 @@
  "LOOT_333": {
   "cost": 6
  },
+ "TRL_541t": {
+  "keywords": [
+   "TOPDECK",
+   "ImmuneToSpellpower"
+  ]
+ },
  "VAN_CS2_013": {
   "cost": 3
  },

@@ -159,6 +159,7 @@
   "LOOTAPALOOZA",
   "GILNEAS",
   "BOOMSDAY",
+  "TROLL",
   "DALARAN"
  ],
  "mechanics": {
@@ -366,6 +367,12 @@
   "HEALING_DOUBLE": {
    "engine": "HEAL_DOUBLE"
   },
+  "OVERKILL": {
+   "engine": "EXCESS_DAMAGE"
+  },
+  "POWER_ADJACENT": {
+   "engine": "POWER_ADJACENT"
+  },
   "TWINSPELL": {
    "engine": "TWINSPELL"
   },
@@ -393,6 +400,7 @@
     "LOOTAPALOOZA",
     "GILNEAS",
     "BOOMSDAY",
+    "TROLL",
     "DALARAN"
    ],
    "class_cards": "own_and_neutral",
@@ -428,6 +436,7 @@
     "LOOTAPALOOZA",
     "GILNEAS",
     "BOOMSDAY",
+    "TROLL",
     "DALARAN"
    ],
    "champions_offered": 3,
@@ -697,7 +706,7 @@
   }
  },
  "player_hooks": [
-  "player:boom",
+  "player:trl",
   "player:dal"
  ],
  "every_race": "ALL",
