@@ -83,9 +83,12 @@ list scrolls, and Back returns to the version choice.
   scrolls up and down, with only a part of the game in view, instead of filling the screen. Unfolded to the big
   screen, it is skewed at first and comes right only after entering a game and changing the menu. The game must
   always fill the whole screen that is on, and lay itself out again at once on every switch of screen, size or
-  turn (fold/unfold, rotation), without a page scroll. Check both the Android app and the web build in a phone's
-  browser (which one the owner used is not known yet); test with an emulator's foldable profile or by resizing the
-  window in steps.
+  turn (fold/unfold, rotation), without a page scroll. It is the Android app (the owner, 2026-11-20); check the web
+  build in a phone's browser too. Test with an emulator's foldable profile or by resizing the window in steps.
+  A first lead: `ui/main.gd` `_fit_phone` — on a phone screen wider than 16:9 it makes the menu screens 1280 wide
+  and taller than the window, inside the pan that scrolls up and down (UI fix 58, "Phone landscape: maybe some
+  scrolling"); the outer screen of a foldable is such a long one. And the zoom is chosen from the screen in view, so
+  after a size change it may stay as it was until the next screen change (the skew after unfolding).
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
 - The decks of every version: from the owner's browser run of ~/ClassicHS-local/prep/patches/hearthpwn_decks.js
