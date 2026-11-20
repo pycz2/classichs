@@ -4,6 +4,7 @@ build/
 __pycache__/
 .claude/
 art/original/
+art/custom/
 .DS_Store
 packs/*.cardpack
 packs/schema/

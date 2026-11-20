@@ -45,6 +45,9 @@ log_info "the site: $(log_size $((SIZE * 1024))) in $(find "$OUT" -type f | wc -
 log_info "the files over 5 MB:"
 find "$OUT" -type f -size +5M -exec ls -l {} + | sort -k5 -n -r | head -n 5 | awk '{ printf "             %8.1f MB  %s\n", $5 / 1e6, $NF }'
 if [ "$SIZE" -gt 950000 ]; then log_fail "too big for GitHub Pages (over 950 MB): ${SIZE} KB"; fi
+# the local Blizzard pictures (art/original, art/custom: never in git) must never reach the site
+LEAK=$(find "$OUT" -name '*.pck' -exec sh -c 'LC_ALL=C grep -a -o -E "art/(original|custom)/[A-Za-z0-9_.-]+\.(png|jpg|jpeg|webp)" "$1" | head -n 3' _ {} \;)
+if [ -n "$LEAK" ]; then log_fail "the web build holds local-only pictures (art/original, art/custom): $(echo $LEAK)"; fi
 log_info "Site built in $OUT"
 [ "$1" = "--publish" ] || exit 0
 log_step "Preparing the gh-pages worktree"
