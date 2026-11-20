@@ -67,3 +67,15 @@ list scrolls, and Back returns to the version choice.
   Shield" on one line).
 - The decks of every version: from the owner's browser run of ~/ClassicHS-local/prep/patches/hearthpwn_decks.js
   (hearthpwn_decks.json).
+  The owner ran it on 2026-11-20: ~/ClassicHS-local/prep/patches/hearthpwn_decks.json — 1751 decks (1731 with a deck
+  code, 20 without), HearthPwn builds 13…50 (launch … Rise of the Mech), every class, Standard and Wild from Old Gods
+  on; each deck: class, archetype, rating, views, updated date, its HearthPwn build, the lists (build, format) it was
+  among the top 4 of its class in.
+
+### Tournament chats (the owner, 2026-11-20; for a later version)
+
+- A chat in the tournaments list and a chat inside each tournament: every player there can write, everyone sees the
+  messages live.
+- Marks: inside a tournament, a server admin has an "admin" mark and the tournament's creator a "creator" mark; in the
+  tournaments list's chat only admins are marked.
+- The admin panel shows these chats (the list's and each tournament's) and lets an admin write in them as the admin.
