@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.72.2] - 2026-11-20
+
+### Changed
+- New versions are released faster: the GitHub build uses its cache of Rust libraries again, the game tests run while the macOS and Windows builds are made, the release tag no longer builds the game a second time, and the server downloads its update straight from GitHub.
+
 ## [0.72.1] - 2026-11-20
 
 ### Added

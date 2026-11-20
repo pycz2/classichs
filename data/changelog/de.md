@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.72.2] - 2026-11-20
+
+### Geändert
+- Neue Versionen erscheinen schneller: Der GitHub-Build nutzt wieder seinen Cache der Rust-Bibliotheken, die Spieltests laufen, während die Builds für macOS und Windows entstehen, das Release-Tag baut das Spiel nicht mehr ein zweites Mal, und der Server lädt sein Update direkt von GitHub.
+
 ## [0.72.1] - 2026-11-20
 
 ### Hinzugefügt

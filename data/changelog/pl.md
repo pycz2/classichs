@@ -4,6 +4,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.72.2] - 2026-11-20
+
+### Zmieniono
+- Nowe wersje wychodzą szybciej: kompilacja na GitHubie znów korzysta z pamięci podręcznej bibliotek Rust, testy gry działają w trakcie budowania wersji na macOS i Windows, tag wydania nie buduje już gry drugi raz, a serwer pobiera aktualizację prosto z GitHuba.
+
 ## [0.72.1] - 2026-11-20
 
 ### Dodano

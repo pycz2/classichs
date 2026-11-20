@@ -4,6 +4,11 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.72.2] - 2026-11-20
+
+### Modifié
+- Les nouvelles versions sortent plus vite : la compilation sur GitHub réutilise de nouveau son cache des bibliothèques Rust, les tests du jeu tournent pendant les compilations macOS et Windows, l’étiquette de version ne recompile plus le jeu une seconde fois, et le serveur télécharge sa mise à jour directement depuis GitHub.
+
 ## [0.72.1] - 2026-11-20
 
 ### Ajouté
