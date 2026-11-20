@@ -98,7 +98,7 @@ the admin panel.
 - Export (the owner, 2026-11-20): the "Reports" page downloads the reports (all, or those the filters show, or the
   ticked ones) as one zip: `reports.json` (every report with its fields, the context, the account, the times, the
   state and notes, the paths of its files inside the zip) and a folder per report with its screenshot (`.png`), its
-  voice message (`.ogg`, Opus in Ogg: plays in browsers and common players) and the replays of its games (`.json`,
+  voice message (`.ogg`, Opus in Ogg: plays in browsers and common players) and the replays of its games (`.chsreplay`,
   the replay files the game opens). A plain JSON export (no files) too.
 - Permissions: `reports.view`, `reports.manage` (state, note, delete), `reports.export`. With sub-servers: a report belongs to the
   sub-server it was sent to; that sub-server's admins see its reports, the super admin sees the reports of all
