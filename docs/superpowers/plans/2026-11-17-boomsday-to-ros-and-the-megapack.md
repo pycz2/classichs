@@ -63,6 +63,22 @@ list scrolls, and Back returns to the version choice.
   for a long time. Measure the stages; download straight to a file; run the checking, fingerprint and install in the
   background (threads on desktop/Android, chunked per frame on the web) with a progress bar per stage and a small
   indicator on every screen; the player can leave the screen or play another game meanwhile; installs queue.
+- How a pack is checked and stored, on the client and on the server (the owner, 2026-11-20). Unpacking alone gains
+  little: images and sounds are stored in the zip uncompressed, and the server loads a pack's rules once per process.
+  The time goes elsewhere:
+  - Measure every stage first, on the client (desktop, Android, web) and on the server, with a big pack (~60 MB) and
+    the megapack.
+  - Client install (`game/packs.gd` `install`): today the whole pack is in memory, then a temp file, then `problems()`
+    reads nearly every file and `content_hash()` reads every file again (GDScript). Move the check and both hashes into
+    the Rust extension (the engine has the same code the server uses: `engine_pack::read_zip_from`, the hashes), one
+    read of each file; download straight to a file (above).
+  - Server receive (`server/src/packs.rs` `receive` → `check_file` → `add`): today it hashes while receiving, then reads
+    the whole zip twice more (`inspect_from`, `content_hash_from`), then the trial game. Check and hash in one read; the
+    admin panel (and a player's upload from the client) shows the stages: receiving (bytes), checking, trial game,
+    storing, done — the same stage names on the server and in the client.
+  - Card pictures are decoded from PNG on every load (`Pack.image`): add a cache of decoded pictures only if the
+    measurement shows it matters.
+  - The web: every file of `user://` is held in memory anyway, so an unpacked copy there would cost memory; keep one zip.
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
 - The decks of every version: from the owner's browser run of ~/ClassicHS-local/prep/patches/hearthpwn_decks.js
