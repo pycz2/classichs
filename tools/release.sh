@@ -3,13 +3,15 @@
 #   DEPLOY_HOST=user@host DEPLOY_URL=https://hs.example.com tools/release.sh X.Y.Z [--from STEP] [--dry-run]
 # The steps:
 #   check    the version in project.godot, gh, DEPLOY_HOST/DEPLOY_URL (always runs)
-#   ci       waits for the Release workflow's run of HEAD on main (the tests); failed jobs are run
-#            again up to 2 times (a macOS runner is sometimes never acquired)
+#   splash   makes icons/splash.png with the version on it (tools/make_splash.gd, needs a window); commits it if
+#            it changed and pushes main (commit the version but do not push it: one push, one CI run per release)
+#   ci       waits for the Release workflow's run of HEAD on main (the tests and every build); failed jobs are
+#            run again up to 2 times (a macOS runner is sometimes never acquired)
 #   site     tools/build_site.sh --publish (the web build and the site on GitHub Pages)
-#   splash   commits and pushes icons/splash.png if the site build changed it
 #   tag      tags vX.Y.Z and pushes the tag
-#   release  waits for the tag's Release run (it makes the GitHub release with all the files)
-#   deploy   starts Docker Desktop if it is not running (waits for it), then tools/deploy_server.sh X.Y.Z
+#   release  waits for the tag's Release run: it builds nothing, it takes the files of main's run of the same
+#            commit and makes the GitHub release (with the server's image)
+#   deploy   tools/deploy_server.sh X.Y.Z (the host downloads the image and the changed packs from GitHub)
 # then prints a summary: the CI runs, the release (files, size), the site's and the server's versions.
 # --from STEP resumes after a failure (tools/release.sh 0.71.0 --from deploy); --dry-run only prints the steps.
 # Everything printed is kept in build/logs/release-<UTC time>.log (with the site's and the deploy's output).
@@ -17,7 +19,7 @@
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 . "$ROOT/tools/log.sh"
-STEPS="check ci site splash tag release deploy"
+STEPS="check splash ci site tag release deploy"
 usage() { echo "usage: tools/release.sh X.Y.Z [--from STEP] [--dry-run]   (STEP: ${STEPS// /, })" >&2; exit 2; }
 V= FROM=check DRY=
 while [ $# -gt 0 ]; do
@@ -38,9 +40,9 @@ CI_URL= REL_URL=
 title() {
   case $1 in
     check) echo "Checking the version, gh and the deploy settings" ;;
+    splash) echo "Making the splash (the version on it), committing it if it changed" ;;
     ci) echo "Waiting for CI (the Release workflow on main, HEAD)" ;;
     site) echo "Publishing the site (tools/build_site.sh --publish)" ;;
-    splash) echo "Committing the splash (icons/splash.png) if it changed" ;;
     tag) echo "Tagging v$V and pushing the tag" ;;
     release) echo "Waiting for the release build (the Release workflow on v$V)" ;;
     deploy) echo "Deploying the server (tools/deploy_server.sh $V)" ;;
@@ -132,20 +134,26 @@ step_ci() {
 
 step_site() {
   "$ROOT/tools/build_site.sh" --publish
+  [ -z "$(git -C "$ROOT" status --porcelain -- icons/splash.png)" ] || log_warn "the site build changed icons/splash.png again: the release has the one of the splash step"
 }
 
 step_splash() {
+  (cd "$ROOT" && godot --path . --script res://tools/make_splash.gd) >/dev/null 2>&1 || log_fail "tools/make_splash.gd failed (godot --path . --script res://tools/make_splash.gd)"
   if [ -z "$(git -C "$ROOT" status --porcelain -- icons/splash.png)" ]; then
     log_info "no splash change"
-    return 0
-  fi
-  git -C "$ROOT" add icons/splash.png
-  git -C "$ROOT" commit -q -m "Splash for $V${TRAILERS:+
+  else
+    git -C "$ROOT" add icons/splash.png
+    git -C "$ROOT" commit -q -m "Splash for $V${TRAILERS:+
 
 $TRAILERS}"
-  log_info "committed: $(git -C "$ROOT" log --oneline -1)"
-  git -C "$ROOT" push -q origin main
-  log_info "pushed to main (it starts another CI run on main; the release does not wait for it)"
+    log_info "committed: $(git -C "$ROOT" log --oneline -1)"
+  fi
+  # the version commit (not pushed yet) and the splash go in one push: one CI run for the release
+  git -C "$ROOT" fetch -q origin main
+  if [ "$(git -C "$ROOT" rev-parse HEAD)" != "$(git -C "$ROOT" rev-parse origin/main)" ]; then
+    git -C "$ROOT" push -q origin HEAD:main
+    log_info "pushed to main: the next step waits for its CI run"
+  fi
 }
 
 step_tag() {
@@ -175,21 +183,7 @@ step_release() {
     while read -r s name; do log_info "  $(log_size "$s")  $name"; done
 }
 
-ensure_docker() {
-  local i
-  if docker info >/dev/null 2>&1; then log_info "Docker is running"; return 0; fi
-  log_info "Docker is not running: starting Docker Desktop (open -a Docker)"
-  open -a Docker || log_fail "could not start Docker Desktop: start Docker and resume with --from deploy"
-  for i in $(seq 60); do
-    docker info >/dev/null 2>&1 && { log_info "Docker is running ($((i * 5))s)"; return 0; }
-    [ $((i % 3)) = 0 ] && log_info "waiting for Docker… $((i * 5))s"
-    sleep 5
-  done
-  log_fail "Docker did not start in 5 minutes"
-}
-
 step_deploy() {
-  ensure_docker
   "$ROOT/tools/deploy_server.sh" "$V"
 }
 

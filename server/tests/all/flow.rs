@@ -16,7 +16,7 @@ use std::net::SocketAddr;
 use std::time::Duration;
 use tokio_tungstenite::tungstenite::Message;
 
-mod common;
+use crate::common;
 
 type Ws = tokio_tungstenite::WebSocketStream<tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>>;
 

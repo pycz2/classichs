@@ -19,9 +19,11 @@ done
 case $url in
   https://api.github.com/*/releases/tags/v*)
     v=${url##*/v} d=https://github.com/pycz2/classichs/releases/download/v$v
+    # FAKE_DIRECT=1: a release with its server image and the files' digests (0.72.2 on)
     printf '{"assets": [%s]}\n' "$(for n in ClassicHS-server-$v-linux-x86_64 ClassicHS-$v-replay-viewer.zip \
-      ClassicHS-$v-classic.cardpack ClassicHS-$v-neon.cardpack ClassicHS-$v-web.zip; do
-      printf '{"name": "%s", "browser_download_url": "%s/%s", "size": 1234567},' "$n" "$d" "$n"; done | sed 's/,$//')" ;;
+      ClassicHS-$v-classic.cardpack ClassicHS-$v-neon.cardpack ClassicHS-$v-web.zip ${FAKE_DIRECT:+ClassicHS-$v-server-image.tar.gz}; do
+      dg=null; [ -z "${FAKE_DIRECT:-}" ] || { p=${n##*-}; dg="\"sha256:$(printf "pack-${p%.cardpack}" | shasum -a 256 | cut -d' ' -f1)\""; }
+      printf '{"name": "%s", "browser_download_url": "%s/%s", "size": 1234567, "digest": %s},' "$n" "$d" "$n" "$dg"; done | sed 's/,$//')" ;;
   *.zip) python3 -c 'import sys, zipfile; z = zipfile.ZipFile(sys.argv[1], "w"); z.writestr("index.html", "x"); z.writestr("index.wasm", "y")' "$out" ;;
   *.cardpack) n=${url##*-}; printf 'pack-%s' "${n%.cardpack}" > "$out" ;;
   *-linux-x86_64) head -c 2000000 /dev/zero > "$out" ;;
@@ -38,6 +40,7 @@ case $cmd in
   *"grep -qF 'X.Y.Z-<commit>' /usr/local/sbin/classichs-deploy"*) [ "${FAKE_OLD_HOST:-}" != 1 ] ;;
   *sha256sum*) printf '%s  classic.cardpack\n%s  old.cardpack\n' "$(printf pack-classic | shasum -a 256 | cut -d' ' -f1)" "$(printf old | shasum -a 256 | cut -d' ' -f1)" ;;
   *"cat > classichs/incoming/.part"*) cat > /dev/null ;;
+  *"curl -fsSL -o classichs/"*) ;;
   *classichs-deploy*)
     if [ "${FAKE_DEPLOY_FAIL:-}" = 1 ]; then
       echo "classichs ${cmd##* } does not answer; its last log lines:" >&2
@@ -83,6 +86,7 @@ EOF
 cat > "$T/bin/docker" <<'EOF'
 #!/bin/bash
 case $1 in
+  info) ;;
   build) echo sha256:0123456789abcdef ;;
   save) head -c 3000000 /dev/urandom ;;
   rmi) ;;
@@ -105,7 +109,7 @@ run() {  # name, expected exit, then the texts the output must have; ARGS: the s
   if [ -z "$log" ]; then bad="$bad no log file;"
   else
     grep -q $'\033' "$log" && bad="$bad colours in the log file;"
-    grep -qF "▶ 1/7 " "$log" || bad="$bad the log file lacks the steps;"
+    grep -qF "▶ 1/" "$log" || bad="$bad the log file lacks the steps;"
   fi
   if [ -n "$bad" ]; then echo "FAIL $name: $bad"; sed 's/^/  /' "$T/$name.out"; fails=$((fails + 1)); else echo "ok   $name"; fi
 }
@@ -117,6 +121,10 @@ run good 0 "▶ 1/7 Reading the release v0.71.0" "4 files to download: 4.9 MB" \
   "neon.cardpack: uploaded in" "old.cardpack: removed (not in the release)" "packs: 1 uploaded, 1 the same, 1 removed" \
   "▶ 5/7 Uploading the image (3.0 MB)" "classichs 0.71.0 is running" "https://deploy.invalid/admin: HTTP 200" \
   "OK: https://deploy.invalid (game: wss://deploy.invalid)" "✔ 7/7 done in" "✔ deploy_server finished in" "deploy_server: log in"
+FAKE_DIRECT=1 run direct 0 "▶ 1/5 Reading the release v0.71.0" "5 files; the host downloads the changed ones from GitHub" \
+  "the release has 2 packs, the host 2" "classic.cardpack: same, skipped" "neon.cardpack: 1.2 MB downloaded on the host in" \
+  "old.cardpack: removed (not in the release)" "packs: 1 downloaded, 1 the same, 1 removed" "▶ 3/5 The host downloads the image (1.2 MB)" \
+  "classichs 0.71.0 is running" "OK: https://deploy.invalid (game: wss://deploy.invalid)" "✔ 5/5 done in"
 FAKE_DEPLOY_FAIL=1 run deploy_fails 1 "Error: the database is locked" "the last lines of the output:" "    | rolled back to classichs-server:0.70.0" \
   "✘ deploy_server failed at 6/7 Running classichs-deploy 0.71.0" "exit 1, the command: ssh"
 FAKE_HTTP=502 run url_502 1 "https://deploy.invalid/admin: HTTP 502" "✘ deploy_server failed at 7/7 Checking https://deploy.invalid/admin after" \

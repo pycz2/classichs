@@ -245,7 +245,7 @@ func test_decks_are_per_pack() -> void:
 
 
 ## A pack without code numbers (Neonfall): a card's number is its id's hash. The server writes the
-## same code for this deck (server/tests/admin_players.rs NEON_CODE): codes copied from the admin
+## same code for this deck (server/tests/all/admin_players.rs NEON_CODE): codes copied from the admin
 ## panel import here, and the client's export imports there.
 func test_neon_code_matches_the_server() -> void:
 	const NEON_CODE := "AAEDAYjD6UUKj4CH6wP6+dPrA8bV57sIhMG5gQm8/fSKCbeor+UKl8ju9gvt2Y7cDeDLqZMP65OY1Q8KhJ3m0wHYivTPAuSJ76QE/vPw6gWQvKGvB9X+4s0I4Imclg6hnc3ZDp606NsOoP6R9Q4A"

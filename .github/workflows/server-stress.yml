@@ -13,7 +13,7 @@ on:
         description: Runner
         default: macos-15
       test:
-        description: Test file in server/tests (flow, admin, packs)
+        description: Test file in server/tests/all (flow, admin, packs)
         default: flow
       filter:
         description: Only tests whose name contains this (empty = all in the file)
@@ -30,7 +30,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Build the tests
         shell: bash
-        run: cd server && cargo test --release --test "${{ inputs.test }}" --no-run
+        run: cd server && cargo test --release --test all --no-run
       - name: Run them again and again
         shell: bash
         env:
@@ -38,7 +38,7 @@ jobs:
         run: |
           cd server
           for i in $(seq 1 "${{ inputs.runs }}"); do
-            if ! cargo test --release --test "${{ inputs.test }}" -- ${{ inputs.filter }} > run.log 2>&1; then
+            if ! cargo test --release --test all -- "${{ inputs.test }}::${{ inputs.filter }}" > run.log 2>&1; then
               echo "::error title=Run $i of ${{ inputs.runs }} failed::$(grep -m1 -E 'panicked|not closed' run.log)"
               grep -v -E '^test .* ok$' run.log | tail -80
               exit 1

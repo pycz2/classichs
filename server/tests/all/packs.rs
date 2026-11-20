@@ -17,7 +17,7 @@ use std::time::Duration;
 use tokio_tungstenite::tungstenite::Message;
 use tower::ServiceExt;
 
-mod common;
+use crate::common;
 
 type Ws = tokio_tungstenite::WebSocketStream<tokio_tungstenite::MaybeTlsStream<tokio::net::TcpStream>>;
 

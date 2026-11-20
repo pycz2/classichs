@@ -1,7 +1,7 @@
 //! admin_extra.rs: the server's version, the database and pack store sizes, a pack file by
 //! hash and the replay player's files (the admin guard, their MIME types and CSP).
 
-mod common;
+use crate::common;
 
 use axum::body::Body;
 use axum::extract::connect_info::MockConnectInfo;

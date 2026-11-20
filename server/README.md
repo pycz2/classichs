@@ -614,7 +614,7 @@ Neonfall — the Godot `String.hash()` of its id (djb2 over the code points, 32 
 CardDb gives it. A code names no game: it is read in the game it is imported into (an unknown number:
 "The deck has a card this game does not have"). A hero that is no class champion (a Hearthstone skin)
 becomes the champion of the cards' class. Hearthstone's copied text works too ("### Name" gives the
-name, `#` lines are skipped). `server/tests/admin_players.rs` and the client's `test_deck_model.gd`
+name, `#` lines are skipped). `server/tests/all/admin_players.rs` and the client's `test_deck_model.gd`
 check the same Neonfall code.
 
 ### Game settings
