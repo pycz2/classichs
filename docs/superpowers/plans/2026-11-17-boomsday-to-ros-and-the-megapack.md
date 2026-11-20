@@ -89,6 +89,22 @@ list scrolls, and Back returns to the version choice.
   and taller than the window, inside the pan that scrolls up and down (UI fix 58, "Phone landscape: maybe some
   scrolling"); the outer screen of a foldable is such a long one. And the zoom is chosen from the screen in view, so
   after a size change it may stay as it was until the next screen change (the skew after unfolding).
+- A faster build and release (the owner, 2026-11-20: all the improvements of the local report
+  ~/ClassicHS-local/ci-report/index.html; the release of 0.72.1 took 61 min, GitHub built the same code 3 times):
+  - The tag builds nothing again: its release job takes the files of the main run of the same commit
+    (actions/download-artifact with run-id) and makes the GitHub release (tag wait 24.4 → ~5.5 min).
+  - The splash goes into the version commit (tools/release.sh makes it before that commit): no second main run.
+  - Commits only in `docs/` start no build (`paths-ignore: docs/**` on the push to main).
+  - macOS: arm64 and x86_64 of the rules engine on two machines in parallel, `lipo` in the game job (−~4.5 min on
+    the longest branch).
+  - Server tests only on Linux; macOS and Windows only build the server.
+  - The game job splits: the tests start right after the Linux machine, the export waits for all three.
+  - The game tests on 4 processes (the runner has 4 cores; check the WebRTC test under load).
+  - Deploy: download only the release files that changed (compare the host's pack hashes with the files' sha256
+    from the GitHub API), and let the host download them from GitHub itself instead of an upload over the home line
+    (needs a change of classichs-deploy on the host: the owner runs the sudo step).
+  - Expected: a release in ~25 min instead of 61; ~1 h less of GitHub machine time per release.
+  - Plus what the detailed log analysis (the report's section on the slow stages) finds.
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
 - The decks of every version: from the owner's browser run of ~/ClassicHS-local/prep/patches/hearthpwn_decks.js
