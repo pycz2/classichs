@@ -133,6 +133,7 @@ list scrolls, and Back returns to the version choice.
     - Keep build/test_times.json between runs, so the test processes get equal shares by time.
     - Correctness: `built_packs_pass_the_trial` checks no pack in CI (the rust job builds no packs): build them first
       or say so in the test.
+- Tournament chats: moved to 0.74.0 (the owner, 2026-11-20), see 2026-11-20-roles-and-sub-servers.md §4.
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
 - The decks of every version: from the owner's browser run of ~/ClassicHS-local/prep/patches/hearthpwn_decks.js
@@ -141,29 +142,3 @@ list scrolls, and Back returns to the version choice.
   code, 20 without), HearthPwn builds 13…50 (launch … Rise of the Mech), every class, Standard and Wild from Old Gods
   on; each deck: class, archetype, rating, views, updated date, its HearthPwn build, the lists (build, format) it was
   among the top 4 of its class in.
-
-### Tournament chats (the owner, 2026-11-20; for a later version)
-
-- A chat in the tournaments list and a chat inside each tournament: every player there can write, everyone sees the
-  messages live.
-- Marks: inside a tournament, a server admin has an "admin" mark and the tournament's creator a "creator" mark; in the
-  tournaments list's chat only admins are marked.
-- The admin panel shows these chats (the list's and each tournament's) and lets an admin write in them as the admin.
-
-Chat moderation and keeping (the owner, 2026-11-20):
-- Moderators and admins (by permission: `chats.moderate`, see the 0.74.0 roles plan) can delete a message in a
-  tournament chat or the tournaments list's chat. A deleted message stays as a line "deleted by <moderator>" (the text
-  hidden), so everyone sees that someone removed it and who. Moderators/admins also from the admin panel.
-- A tournament's chat opens when the tournament is created and closes 10 minutes after the tournament ends; then nobody
-  can write in it (it stays readable while kept).
-- The tournaments list's common chat keeps only the last 2 weeks: older messages are removed (a daily cleanup on the
-  server).
-- Private messages between players (the friends chat) are kept 2 weeks too; older ones are removed the same way.
-- A tournament's own chat is kept 2 weeks as well (the owner, 2026-11-20): messages older than 2 weeks are removed by
-  the same daily cleanup, also after the chat is closed.
-- The keeping time is a setting in the admin panel (the owner, 2026-11-20): 2 weeks by default, any number of days, or
-  "unlimited" (never removed). Only the super admin may change it (with the 0.74.0 roles: a permission of the super
-  level, e.g. `settings.retention`); until 0.74.0 the admin.
-- Confirmed by the owner (2026-11-20): exactly one common chat in the tournaments list, and each tournament has its own
-  chat, isolated from every other tournament's chat (a message, its readers and its moderation belong to that
-  tournament only).
