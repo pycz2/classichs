@@ -6,7 +6,7 @@
 // page reloads once. Offline, or with no answer in 5 s, the cached build just starts.
 // tools/web_finish.sh writes the build in and makes index.html start the engine through chsGate.
 (function () {
-	const BUILD = '1795098622|4497153';
+	const BUILD = '1795188911|4189526';
 	const sw = navigator.serviceWorker;
 	const old = sw && sw.controller;
 	const changed = sw && new Promise((resolve) => sw.addEventListener('controllerchange', resolve));
