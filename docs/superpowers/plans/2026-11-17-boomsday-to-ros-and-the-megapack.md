@@ -99,7 +99,8 @@ list scrolls, and Back returns to the version choice.
   are unused), convert to Opus into each set (`<id>_attack.opus`, voice `<id>_attack.opus` per language), for every
   pack from Classic to Rise of Shadows and the megapack; then check in a match that a minion's attack plays its own
   sound and line (and the impact `attack` after it), on desktop, Android and the web; list the cards still without one.
-- A faster build and release (the owner, 2026-11-20: all the improvements of the local report
+- DONE in 0.72.2 (2026-11-20; the release took 15m28s instead of 61m39s; not done: macOS on two machines, as macOS
+  is no longer on the longest path, and the trial of the built packs in CI). A faster build and release (the owner, 2026-11-20: all the improvements of the local report
   ~/ClassicHS-local/ci-report/index.html; the release of 0.72.1 took 61 min, GitHub built the same code 3 times):
   - The tag builds nothing again: its release job takes the files of the main run of the same commit
     (actions/download-artifact with run-id) and makes the GitHub release (tag wait 24.4 → ~5.5 min).
