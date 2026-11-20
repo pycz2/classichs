@@ -643,3 +643,12 @@ fn card_tests_play() {
     }
     assert!(bad.is_empty(), "{} problems:\n{}", bad.len(), bad.join("\n"));
 }
+
+#[test]
+fn mass_hysteria_friendly_minions_attack_each_other() {
+    let mut t = scene!({"hand": ["TRL_258"], "board": [YETI, YETI]}, {});
+    t.play("TRL_258", NONE);
+    let attacks = t.events().iter().filter(|e| e["type"] == "attack").count();
+    assert_eq!(attacks, 2, "each Yeti attacks the other: real attacks, which fire attack triggers");
+    assert!(t.g.players[0].board.is_empty(), "both died");
+}

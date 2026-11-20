@@ -7,6 +7,9 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 ### Ajouté
 - Administration du serveur, Jeux : on peut cocher des paquets (un par un, une liste entière ou tous) et les supprimer ensemble. La confirmation énumère ce qui sera supprimé ; un paquet qui n'a pas pu l'être reste coché et le message dit pourquoi.
 
+### Corrigé
+- Supercollisionneur : après le coup du héros, le serviteur attaque un voisin, avec des dégâts dans les deux sens. Avant, cette attaque n’avait jamais lieu. Hystérie collective fait maintenant une vraie attaque aussi contre les serviteurs alliés, donc les effets d’attaque et les secrets se déclenchent.
+
 ## [0.72.0] - 2026-11-19
 
 ### Ajouté

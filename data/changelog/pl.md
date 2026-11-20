@@ -7,6 +7,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 ### Dodano
 - Panel administratora, Gry: paczki można zaznaczać (pojedynczo, całą listę albo wszystkie) i usuwać razem. Potwierdzenie wymienia, co zostanie usunięte; paczka, której nie udało się usunąć, zostaje zaznaczona, a komunikat podaje powód.
 
+### Naprawiono
+- Megazderzacz: po ciosie bohatera stronnik atakuje sąsiada, obrażenia idą w obie strony. Wcześniej ten atak nigdy nie następował. Zbiorowa histeria wykonuje teraz prawdziwy atak także na sojusznicze stronniki, więc efekty ataku i sekrety się uruchamiają.
+
 ## [0.72.0] - 2026-11-19
 
 ### Dodano

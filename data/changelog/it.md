@@ -7,6 +7,9 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 ### Aggiunto
 - Pannello di amministrazione, Giochi: si possono spuntare i pacchetti (uno per uno, un'intera lista o tutti) ed eliminarli insieme. La conferma elenca cosa verrà eliminato; un pacchetto che non si è potuto eliminare resta spuntato e il messaggio dice perché.
 
+### Corretto
+- Acceleratore Cinetico: dopo il colpo dell’eroe, il servitore attacca un vicino, con danni in entrambe le direzioni. Prima questo attacco non avveniva mai. Isteria di Massa ora fa un vero attacco anche contro i servitori alleati, quindi gli effetti d’attacco e i segreti si attivano.
+
 ## [0.72.0] - 2026-11-19
 
 ### Aggiunto

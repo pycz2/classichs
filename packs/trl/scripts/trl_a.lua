@@ -1247,8 +1247,7 @@ cards.TRL_131 = {
   },
 }
 
--- Mass Hysteria: each minion (in play order) attacks another random minion. force_attack needs two sides, so an
--- attack on a friendly minion is the two damages of an attack.
+-- Mass Hysteria: each minion (in play order) attacks another random minion, a friendly one too.
 cards.TRL_258 = {
   spell = function(g, me)
     for _, m in ipairs(g.all_minions()) do
@@ -1257,13 +1256,7 @@ cards.TRL_258 = {
           return x ~= m and alive(g, x)
         end))
         if d then
-          if g.ctrl(d) ~= g.ctrl(m) then
-            g.force_attack(m, d)
-          else
-            local a, b = g.atk(m), g.atk(d)
-            g.damage(m, d, a)
-            g.damage(d, m, b)
-          end
+          g.force_attack(m, d)
           g.resolve()
         end
       end

@@ -1427,7 +1427,7 @@ fn a_force_attack(g: &mut Game, a: Args) -> R {
         x != NONE && g.e(x).zone == "PLAY" && g.awake(x) && g.e(x).health() > 0 && !g.e(x).has(g.n().to_destroy)
             && (g.e(x).is_minion() || g.e(x).is_champion())
     };
-    if ok(g, at) && ok(g, d) && g.ctrl(at) != g.ctrl(d) {
+    if at != d && ok(g, at) && ok(g, d) {
         g.attack_now(at, d, true);
     }
     none()

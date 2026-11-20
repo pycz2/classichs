@@ -723,3 +723,15 @@ fn card_tests_play() {
     }
     assert!(bad.is_empty(), "{} problems:\n{}", bad.len(), bad.join("\n"));
 }
+
+#[test]
+fn supercollider_makes_the_hit_minion_attack_a_neighbour() {
+    let mut t = scene!({"hand": ["BOT_406"]}, {"board": [WISP, YETI, WISP]});
+    t.play("BOT_406", NONE);
+    let yeti = t.on_board(1, YETI);
+    t.attack(t.hero(0), yeti);
+    assert_eq!(t.g.players[1].board.len(), 2, "a Wisp next to it died");
+    assert_eq!(t.stats(yeti), (4, 3), "1 from the weapon, 1 back from the Wisp");
+    let hit = t.events().iter().any(|e| e["type"] == "attack" && e["attacker"] == yeti);
+    assert!(hit, "a real attack of the Yeti");
+}
