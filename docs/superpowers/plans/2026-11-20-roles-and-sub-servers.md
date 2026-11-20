@@ -82,7 +82,7 @@ the admin panel.
   it was before the window opened (attached by default, the player can remove it); a voice message recorded in the
   window (play back, record again, remove; the web asks for the microphone). Sent to the server the player is logged
   into.
-- My proposals (the owner to confirm): the report carries the game's version, platform, screen size, language, the
+- Confirmed by the owner (2026-11-20), all of them: the report carries the game's version, platform, screen size, language, the
   active pack and its version, and in a match the game's id (so the admin can open its replay); limits per report
   (text length, picture and voice size and length) and per player (a few reports per hour); a report made offline waits
   and is sent at the next login.
@@ -91,7 +91,7 @@ the admin panel.
   keeping time setting of the tournament chats plan, the super admin's).
 - In the admin panel: a "Reports" page — a list with filters (state, player, version), a count of new ones on the
   dashboard, a report's page with the text, the picture, a player for the voice, the context and a link to the replay;
-  change the state, write a note. Maybe later: an answer to the player as a private message.
+  change the state, write a note; an answer to the player as a private message (confirmed by the owner, 2026-11-20).
 - Also in a report (the owner, 2026-11-20): who wrote it (the account: name, tag, id), when it was written (the time on
   the player's device as he wrote it, and the time the server got it), and the player's last games: links to their
   replays in the admin panel (the last 5 finished games on that server, and the current one if sent from a match).
