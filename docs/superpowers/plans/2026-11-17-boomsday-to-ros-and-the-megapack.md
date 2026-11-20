@@ -79,6 +79,13 @@ list scrolls, and Back returns to the version choice.
   - Card pictures are decoded from PNG on every load (`Pack.image`): add a cache of decoded pictures only if the
     measurement shows it matters.
   - The web: every file of `user://` is held in memory anyway, so an unpacked copy there would cost memory; keep one zip.
+- A foldable phone (the owner, 2026-11-20): on the small (outer) screen the mobile version opens as a page that
+  scrolls up and down, with only a part of the game in view, instead of filling the screen. Unfolded to the big
+  screen, it is skewed at first and comes right only after entering a game and changing the menu. The game must
+  always fill the whole screen that is on, and lay itself out again at once on every switch of screen, size or
+  turn (fold/unfold, rotation), without a page scroll. Check both the Android app and the web build in a phone's
+  browser (which one the owner used is not known yet); test with an emulator's foldable profile or by resizing the
+  window in steps.
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
 - The decks of every version: from the owner's browser run of ~/ClassicHS-local/prep/patches/hearthpwn_decks.js
