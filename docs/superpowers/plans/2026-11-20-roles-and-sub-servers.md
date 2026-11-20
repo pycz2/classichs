@@ -53,9 +53,21 @@ The server becomes a host of many game servers ("sub-servers"), all running at t
   query — decide in the design; resource limits per sub-server: storage, packs, players, bots).
 - The existing server's data becomes the first sub-server (or the "main" one) on upgrade, nothing lost.
 
-## Open questions to settle before the design
+## Decisions (the owner, 2026-11-20)
 
-1. Accounts: one account per sub-server (as above) or one global account that can join several sub-servers?
-2. Addresses: paths (`/s/<name>`) or sub-domains (`<name>.hs.borovilov.xyz` — needs a wildcard certificate in Caddy)?
-3. Packs: each sub-server uploads its own, or a shared library the super admin offers plus each one's own?
-4. Limits per sub-server (storage, players, bots) and who sets them.
+1. **One account for everything.** A person registers once and logs into any sub-server with that account (an
+   account is global; what he has on each sub-server — rating, decks, stats, roles there — is per sub-server). The
+   game's server list keeps the sub-server addresses; one login works for all of them.
+2. **Addresses by path**: `https://hs.borovilov.xyz/s/<name>` (and the game's `wss://hs.borovilov.xyz/s/<name>`).
+   No sub-domains, no wildcard certificate.
+3. **Packs**: a common library the super admin offers to all sub-servers, plus each sub-server's own uploads.
+4. **Limits are needed.** The super admin sets them: defaults for every sub-server and overrides per sub-server
+   (storage, packs, players, bots, tournaments …). A sub-server's admin can configure his sub-server only within the
+   limits the super admin gave him (he may set lower values, never higher).
+5. **How many sub-servers a user may own**: a quota per user set by the super admin (an admin invite grants the first
+   one; the user can create more sub-servers himself up to his quota). The super admin can change any user's quota at
+   any time and suspend any of the sub-servers.
+
+The account-level permissions this adds (super level): `quotas.edit` (sub-server quota per user), `limits.edit`
+(defaults and per-sub-server limits); an admin gets `subservers.create_own` (within his quota) and `limits.view` of
+his own sub-servers.
