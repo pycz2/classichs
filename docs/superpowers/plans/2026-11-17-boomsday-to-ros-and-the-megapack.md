@@ -79,3 +79,13 @@ list scrolls, and Back returns to the version choice.
 - Marks: inside a tournament, a server admin has an "admin" mark and the tournament's creator a "creator" mark; in the
   tournaments list's chat only admins are marked.
 - The admin panel shows these chats (the list's and each tournament's) and lets an admin write in them as the admin.
+
+Chat moderation and keeping (the owner, 2026-11-20):
+- Moderators and admins (by permission: `chats.moderate`, see the 0.74.0 roles plan) can delete a message in a
+  tournament chat or the tournaments list's chat. A deleted message stays as a line "deleted by <moderator>" (the text
+  hidden), so everyone sees that someone removed it and who. Moderators/admins also from the admin panel.
+- A tournament's chat opens when the tournament is created and closes 10 minutes after the tournament ends; then nobody
+  can write in it (it stays readable while kept).
+- The tournaments list's common chat keeps only the last 2 weeks: older messages are removed (a daily cleanup on the
+  server).
+- Private messages between players (the friends chat) are kept 2 weeks too; older ones are removed the same way.
