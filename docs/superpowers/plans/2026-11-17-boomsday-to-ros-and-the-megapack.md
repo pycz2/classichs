@@ -89,3 +89,5 @@ Chat moderation and keeping (the owner, 2026-11-20):
 - The tournaments list's common chat keeps only the last 2 weeks: older messages are removed (a daily cleanup on the
   server).
 - Private messages between players (the friends chat) are kept 2 weeks too; older ones are removed the same way.
+- A tournament's own chat is kept 2 weeks as well (the owner, 2026-11-20): messages older than 2 weeks are removed by
+  the same daily cleanup, also after the chat is closed.
