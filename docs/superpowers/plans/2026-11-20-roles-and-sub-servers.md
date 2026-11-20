@@ -92,6 +92,14 @@ the admin panel.
 - In the admin panel: a "Reports" page — a list with filters (state, player, version), a count of new ones on the
   dashboard, a report's page with the text, the picture, a player for the voice, the context and a link to the replay;
   change the state, write a note. Maybe later: an answer to the player as a private message.
-- Permissions: `reports.view`, `reports.manage` (state, note, delete). With sub-servers: a report belongs to the
+- Also in a report (the owner, 2026-11-20): who wrote it (the account: name, tag, id), when it was written (the time on
+  the player's device as he wrote it, and the time the server got it), and the player's last games: links to their
+  replays in the admin panel (the last 5 finished games on that server, and the current one if sent from a match).
+- Export (the owner, 2026-11-20): the "Reports" page downloads the reports (all, or those the filters show, or the
+  ticked ones) as one zip: `reports.json` (every report with its fields, the context, the account, the times, the
+  state and notes, the paths of its files inside the zip) and a folder per report with its screenshot (`.png`), its
+  voice message (`.ogg`, Opus in Ogg: plays in browsers and common players) and the replays of its games (`.json`,
+  the replay files the game opens). A plain JSON export (no files) too.
+- Permissions: `reports.view`, `reports.manage` (state, note, delete), `reports.export`. With sub-servers: a report belongs to the
   sub-server it was sent to; that sub-server's admins see its reports, the super admin sees the reports of all
   sub-servers (with a sub-server filter).
