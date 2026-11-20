@@ -91,3 +91,6 @@ Chat moderation and keeping (the owner, 2026-11-20):
 - Private messages between players (the friends chat) are kept 2 weeks too; older ones are removed the same way.
 - A tournament's own chat is kept 2 weeks as well (the owner, 2026-11-20): messages older than 2 weeks are removed by
   the same daily cleanup, also after the chat is closed.
+- The keeping time is a setting in the admin panel (the owner, 2026-11-20): 2 weeks by default, any number of days, or
+  "unlimited" (never removed). Only the super admin may change it (with the 0.74.0 roles: a permission of the super
+  level, e.g. `settings.retention`); until 0.74.0 the admin.
