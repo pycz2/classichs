@@ -4,6 +4,8 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.72.1] - 2026-11-20
+
 ### Ajouté
 - Administration du serveur, Jeux : on peut cocher des paquets (un par un, une liste entière ou tous) et les supprimer ensemble. La confirmation énumère ce qui sera supprimé ; un paquet qui n'a pas pu l'être reste coché et le message dit pourquoi.
 

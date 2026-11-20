@@ -4,6 +4,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.72.1] - 2026-11-20
+
 ### Dodano
 - Panel administratora, Gry: paczki można zaznaczać (pojedynczo, całą listę albo wszystkie) i usuwać razem. Potwierdzenie wymienia, co zostanie usunięte; paczka, której nie udało się usunąć, zostaje zaznaczona, a komunikat podaje powód.
 

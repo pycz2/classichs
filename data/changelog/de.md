@@ -4,6 +4,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.72.1] - 2026-11-20
+
 ### Hinzugefügt
 - Admin-Panel, Spiele: Pakete lassen sich ankreuzen (einzeln, eine ganze Liste oder alle) und zusammen löschen. Die Bestätigung zählt auf, was gelöscht wird; ein Paket, das sich nicht löschen ließ, bleibt angekreuzt, und die Meldung nennt den Grund.
 

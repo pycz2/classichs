@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.72.1] - 2026-11-20
+
 ### Aggiunto
 - Pannello di amministrazione, Giochi: si possono spuntare i pacchetti (uno per uno, un'intera lista o tutti) ed eliminarli insieme. La conferma elenca cosa verrà eliminato; un pacchetto che non si è potuto eliminare resta spuntato e il messaggio dice perché.
 

@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.72.1] - 2026-11-20
+
 ### Adicionado
 - Painel de administração, Jogos: dá para marcar pacotes (um a um, uma lista inteira ou todos) e excluí-los juntos. A confirmação lista o que será excluído; um pacote que não pôde ser excluído continua marcado e a mensagem diz o motivo.
 
