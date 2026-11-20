@@ -89,6 +89,16 @@ list scrolls, and Back returns to the version choice.
   and taller than the window, inside the pan that scrolls up and down (UI fix 58, "Phone landscape: maybe some
   scrolling"); the outer screen of a foldable is such a long one. And the zoom is chosen from the screen in view, so
   after a size change it may stay as it was until the next screen change (the skew after unfolding).
+- Minion attack sounds (the owner, 2026-11-20: "we have the downloaded attack sounds of minions; add them"). What is
+  there: ~/ClassicHS-local/sounds/cache/wiki holds 693 attack sound effects (`*_Attack*.wav`, `*_Attack_Underlay.wav`,
+  e.g. `AT_067_MagnataurAlpha_Attack.wav`, `ArmoredTiger_Attack_Underlay.wav`) and ~2090 attack lines (`VO_*_ATTACK_*`,
+  wiki and ru); the per-set folders (~/ClassicHS-local/<set>/set, voice/<lang>) already have 880 `<id>_attack.opus`
+  effects and their `_attack` lines. The client plays a card's `attack` sound and line as the attacker leaps
+  (game/sound.gd `attack_start`; docs/packs/format.md "sounds"). To do: map every downloaded attack effect and line to
+  its card (by id in the name, else by the card's name; the media browser ~/ClassicHS-local/media-browser shows which
+  are unused), convert to Opus into each set (`<id>_attack.opus`, voice `<id>_attack.opus` per language), for every
+  pack from Classic to Rise of Shadows and the megapack; then check in a match that a minion's attack plays its own
+  sound and line (and the impact `attack` after it), on desktop, Android and the web; list the cards still without one.
 - A faster build and release (the owner, 2026-11-20: all the improvements of the local report
   ~/ClassicHS-local/ci-report/index.html; the release of 0.72.1 took 61 min, GitHub built the same code 3 times):
   - The tag builds nothing again: its release job takes the files of the main run of the same commit
