@@ -71,3 +71,27 @@ The server becomes a host of many game servers ("sub-servers"), all running at t
 The account-level permissions this adds (super level): `quotas.edit` (sub-server quota per user), `limits.edit`
 (defaults and per-sub-server limits); an admin gets `subservers.create_own` (within his quota) and `limits.view` of
 his own sub-servers.
+
+## 3. Problem reports from the game (the owner, 2026-11-20)
+
+The owner's request: a player can send a message about a bug or a problem from the game client to the server; a
+screenshot and a voice message can go with it; the server keeps the reports, and admins and super admins see them in
+the admin panel.
+
+- In the client: "Report a problem" in the main menu and in the match menu. A text field; a screenshot of the screen as
+  it was before the window opened (attached by default, the player can remove it); a voice message recorded in the
+  window (play back, record again, remove; the web asks for the microphone). Sent to the server the player is logged
+  into.
+- My proposals (the owner to confirm): the report carries the game's version, platform, screen size, language, the
+  active pack and its version, and in a match the game's id (so the admin can open its replay); limits per report
+  (text length, picture and voice size and length) and per player (a few reports per hour); a report made offline waits
+  and is sent at the next login.
+- On the server: a table of reports (player, time, text, attachments in the store, the context above, a state: new,
+  seen, done, and an admin's note). Attachments are removed with the report; reports are kept as the chats are (the
+  keeping time setting of the tournament chats plan, the super admin's).
+- In the admin panel: a "Reports" page — a list with filters (state, player, version), a count of new ones on the
+  dashboard, a report's page with the text, the picture, a player for the voice, the context and a link to the replay;
+  change the state, write a note. Maybe later: an answer to the player as a private message.
+- Permissions: `reports.view`, `reports.manage` (state, note, delete). With sub-servers: a report belongs to the
+  sub-server it was sent to; that sub-server's admins see its reports, the super admin sees the reports of all
+  sub-servers (with a sub-server filter).
