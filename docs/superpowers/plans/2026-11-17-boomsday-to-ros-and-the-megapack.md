@@ -104,7 +104,24 @@ list scrolls, and Back returns to the version choice.
     from the GitHub API), and let the host download them from GitHub itself instead of an upload over the home line
     (needs a change of classichs-deploy on the host: the owner runs the sudo step).
   - Expected: a release in ~25 min instead of 61; ~1 h less of GitHub machine time per release.
-  - Plus what the detailed log analysis (the report's section on the slow stages) finds.
+  - From the log analysis (2026-11-20, runs 44760153274 and 44765059030):
+    - First and biggest: the Rust cache is dead since 2026-11-12. Its key is the OS plus the Cargo.lock hash; the
+      saved caches were made by rustc 1.99.1, the runners now have 1.100.0, so cargo throws the cache away and
+      compiles every crate (300–390 "Compiling" lines a job), while the exact key match keeps the new cache from being
+      saved. Put the toolchain in the key (dtolnay/rust-toolchain's `cachekey` output) or pin the toolchain.
+      Warm (run 43274843104): the whole main run 14m44s instead of 26m41s; ~690 s off macOS.
+    - The server's 12 integration test files in one test binary (tests/all.rs with a `mod` per file): linking
+      14 test binaries at opt-level 3 costs 190–260 s a job; ~100–200 s off.
+    - Tag: publish the release from the game job (gh release upload) instead of 1.86 GB through artifacts
+      (download 286 s, the upload to the release itself 18 s). Main: no "game" artifact (nothing uses it;
+      --from-ci takes only the server and the replay viewer), or compression-level 0 (everything in it is compressed).
+    - The Godot cache only with the templates in use (402 MB of 1.9 GB; restore 22 s now).
+    - setup-android: use the runner's SDK (it downloads cmdline-tools again, 16 s).
+    - export_all.sh: build_packs, fetch_webrtc, the import and the cardpack copy once, not per platform; print each
+      platform's time.
+    - Keep build/test_times.json between runs, so the test processes get equal shares by time.
+    - Correctness: `built_packs_pass_the_trial` checks no pack in CI (the rust job builds no packs): build them first
+      or say so in the test.
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
 - The decks of every version: from the owner's browser run of ~/ClassicHS-local/prep/patches/hearthpwn_decks.js
