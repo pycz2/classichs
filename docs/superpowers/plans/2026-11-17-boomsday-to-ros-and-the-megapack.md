@@ -94,3 +94,6 @@ Chat moderation and keeping (the owner, 2026-11-20):
 - The keeping time is a setting in the admin panel (the owner, 2026-11-20): 2 weeks by default, any number of days, or
   "unlimited" (never removed). Only the super admin may change it (with the 0.74.0 roles: a permission of the super
   level, e.g. `settings.retention`); until 0.74.0 the admin.
+- Confirmed by the owner (2026-11-20): exactly one common chat in the tournaments list, and each tournament has its own
+  chat, isolated from every other tournament's chat (a message, its readers and its moderation belong to that
+  tournament only).
