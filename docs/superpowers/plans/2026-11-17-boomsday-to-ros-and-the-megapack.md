@@ -133,6 +133,25 @@ list scrolls, and Back returns to the version choice.
     - Keep build/test_times.json between runs, so the test processes get equal shares by time.
     - Correctness: `built_packs_pass_the_trial` checks no pack in CI (the rust job builds no packs): build them first
       or say so in the test.
+- Ranked and Arena rules of every version (the owner, 2026-11-23). Already collected
+  (~/ClassicHS-local/prep/patches/modes.md §6–7, work/format_timeline.json): the Arena card pools per period (Wild,
+  Standard-only from 2017-02-28, Taverns of Time, the 2019 set rotations), every Arena ban with its dates, the
+  draft rules over time (rarity picks, class/spell weights, buckets, Dual-class Arena), and for Ranked only an
+  outline (ranks 25…1 and Legend, separate Standard/Wild ladders from 2016-04-26, floors at 20/15/10/5 from
+  2017-02-28, new-player ranks 50…26 from 2018-10-02, fewer stars at low ranks from 2019-01-24).
+  Missing — a research task for a subagent first (wiki pages and their cached copies, patch notes; every value with
+  its source and the date/patch it changed; output ~/ClassicHS-local/prep/patches/ranked_arena.json + .md):
+  - Ranked per period: each rank's name (25 … 1, the new-player ranks 50 … 26 and theirs) in English and Russian
+    (the game's own texts), its medal picture (the file per rank, which period's look; Blizzard pictures stay
+    local: the public packs get our own medals), stars per rank, win-streak bonus stars (from which rank up),
+    which ranks cannot lose stars, the floors that are kept (within a season, "cannot fall below"), the season
+    reset rule at a new season (how many ranks/stars back, per period), Legend (how it is reached, its numbers),
+    the season length and the end-of-season rewards; Standard and Wild differences.
+  - Arena per period: the run limits (wins, losses), the entry price, the rewards by number of wins, how the class
+    is offered (3 heroes), retire rules, the Arena rotation and Hall of Fame interplay, special events (Dual-class,
+    Taverns of Time) — whatever the game showed the player.
+  Then implement per version and mode in the megapack: the ladder (ranks, names, medals, stars, streaks, floors,
+  season reset) and the Arena run rules and rewards as each version had them; a checked table in the report.
 - Tournament chats: moved to 0.74.0 (the owner, 2026-11-20), see 2026-11-20-roles-and-sub-servers.md §4.
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
