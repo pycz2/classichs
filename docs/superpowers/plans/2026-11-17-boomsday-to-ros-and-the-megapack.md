@@ -158,6 +158,32 @@ list scrolls, and Back returns to the version choice.
   playable / not playable highlights (and no attack glow), until the queued animations and the turn-change animation
   are over; then everything lights up at once. The same for a reconnect, a spectator and a replay. Check with long
   opponent turns (many actions, Secrets, Deathrattles), on desktop and phone, in a bot game and over the server.
+- Card picture framing (the owner, 2026-11-25). A local browser tool (~/ClassicHS-local/art-framing/index.html,
+  made by its make.py) lets the owner move and zoom each picture inside its card's art window and exports
+  art-framing.json: {"format": "classichs-art-framing/1", "sets": {"<art set>": {"<card id>": {"x", "y", "zoom"}}}}
+  (x, y: the covering square's centre moved by that fraction of its side, right/down; zoom: the side multiplied).
+  To do when the owner hands over the file: the pack format gets art/<set>/framing.json (docs/packs/format.md, the
+  schema, tools/pack.py copies and checks it, the hashes), the client applies it in Art.paint_in for every window
+  (hand card, board minion, hero, hero power, history, icons), the local "-custom-art" packs and the public packs
+  get the owner's values, and a test pins one moved card.
+- The debug mode brought up to date (the owner, 2026-11-25; ui/debug_table.gd: Scene, Interaction test, Card test,
+  Effects test):
+  - Every mechanic added since Classic, in the scene editor and the tests: Quests, hero cards, Dormant, Magnetic,
+    Echo, Rush, Lifesteal, Poisonous, Reborn, Overkill, Twinspell, Discover, Adapt, Choose One with N options, Start
+    of Game, Deathrattles given, Mega-Windfury, Can't attack, spell damage N, the doubling auras (Brann, Baron
+    Rivendare, Rhyssa …) and so on — taken from the engine and the active pack (its keywords and tags), not a fixed
+    Classic list.
+  - Effects test (ui/effects_lab.gd: now 18 Classic effects): every keyword, tag and kind of enchantment the active
+    pack has, on any card type: minion, weapon, spell, hero, hero power, Secret/Quest, in hand and in play.
+  - Many scenarios per card (now 3380 interaction tests for 2718 cards, mostly one each): a library of
+    (a) generic scenarios applied to every card by its mechanics: play/enter (Battlecry, the sound, the line, the
+    legendary music), attack (sound, line), take damage, die (Deathrattle, sound), be silenced, returned to the hand,
+    copied, transformed, stolen, frozen, doubled by Brann/Rivendare, buffed by an aura at each board position, a
+    Secret against it, its targets; (b) hand-written tricky interactions per card (e.g. Supercollider with its
+    neighbours, Swamp King Dred with Mayor Noggenfogger and Misdirection, Mass Hysteria on one side only). Each
+    scenario: a playable scene, what to do and what should happen, and a mark passed / failed / note.
+  - A walk through a whole pack: card after card, its scenario list and the checklist (enter, attack, death,
+    sounds, lines, animations), the marks kept and exportable (JSON) for an agent to fix the failed ones.
 - Tournament chats: moved to 0.74.0 (the owner, 2026-11-20), see 2026-11-20-roles-and-sub-servers.md §4.
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
