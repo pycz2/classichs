@@ -152,6 +152,12 @@ list scrolls, and Back returns to the version choice.
     Taverns of Time) — whatever the game showed the player.
   Then implement per version and mode in the megapack: the ladder (ranks, names, medals, stars, streaks, floors,
   season reset) and the Arena run rules and rewards as each version had them; a checked table in the report.
+- No spoilers while the opponent's turn still plays out (the owner, 2026-11-25). When the opponent has already ended
+  the turn in the game state but the table still animates his actions and the turn change, our side must not show
+  it yet: the end-turn button stays in the opponent's state (not lit as "your turn"), and our hand and board show no
+  playable / not playable highlights (and no attack glow), until the queued animations and the turn-change animation
+  are over; then everything lights up at once. The same for a reconnect, a spectator and a replay. Check with long
+  opponent turns (many actions, Secrets, Deathrattles), on desktop and phone, in a bot game and over the server.
 - Tournament chats: moved to 0.74.0 (the owner, 2026-11-20), see 2026-11-20-roles-and-sub-servers.md §4.
 - 0.72.0 leftovers: the raw `fuse` line in the history after Magnetic; Zilliax's English text ("Magnetic" and "Divine
   Shield" on one line).
