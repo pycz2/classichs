@@ -258,8 +258,8 @@ func test_upload_answers() -> void:
 	l.pack_uploaded.connect(func(r): got.append(r))
 	l.upload_pack(Packs.active())
 	eq([l.http[0].path, l.http[0].method, l.http[0].body.size() > 0], ["/packs", HTTPClient.METHOD_POST, true], "POST the file")
-	var up := l.uploading
-	eq([up.upload, up.stage, PackInstall.jobs.has(up)], [true, "receiving", true], "on the screens")
+	var up: PackInstall = PackInstall.jobs.back()
+	eq([up.upload, up.stage, up.file.get_file()], [true, "receiving", l.http[0].upload_id], "on the screens")
 	l.dispatch({"t": "pack_stage", "upload": l.http[0].upload_id, "stage": "receiving", "done": 50, "total": 100})
 	eq([up.done, up.total, up.text()], [50, 100, "Receiving… 50%"], "the server's bytes")
 	l.dispatch({"t": "pack_stage", "upload": "another", "stage": "storing", "done": 0, "total": 0})
@@ -275,7 +275,7 @@ func test_upload_answers() -> void:
 	for a in answers:
 		l.http[0].done.call(a[0], JSON.stringify(a[1]).to_utf8_buffer())
 	eq(got.map(func(r): return r.code), ["exists", "too_many", "too_large", "invalid", "empty", "bad_token", "500"])
-	eq([up.stage, up.result.get("code"), l.uploading], ["done", "exists", null], "the first answer ends it")
+	eq([up.stage, up.result.get("code"), PackInstall.jobs.has(up)], ["done", "exists", false], "the first answer ends it")
 	eq(got[0].error, tr("You have uploaded this game already"))
 	eq(got[3].error, tr("The server refused the game: %s") % "manifest.json: id must be …", "the server's reason")
 	l.http[0].done.call(201, JSON.stringify({"pack": {"id": "x", "content_hash": "h"}}).to_utf8_buffer())

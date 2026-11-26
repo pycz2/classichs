@@ -63,8 +63,6 @@ var _probing_signup := false
 var packs := {"server": [], "mine": []}
 ## Downloads under way, till installed: content_hash -> PackInstall (its `request` meta: the HTTPRequest).
 var downloading := {}
-## The player's upload under way (PackInstall with upload: the server tells its stages, `pack_stage`).
-var uploading: PackInstall
 ## The deck sent with the last queue, invite or acceptance: the server's game uses it.
 var game_deck: Deck
 var _probing := false
@@ -358,12 +356,13 @@ func dispatch(msg: Dictionary) -> void:
 				_replays.erase(_replays.keys()[0])
 				return
 		"pack_stage":  # how the player's upload goes on the server (receiving, checking, trial, storing, done)
-			if uploading and msg.get("upload") == uploading.file.get_file() and msg.get("stage") != "done":
-				uploading.stage = str(msg.stage)
-				var bytes: bool = msg.stage == "receiving"  # (the other stages have no measure)
-				uploading.done = int(msg.get("done", 0)) if bytes else 0
-				uploading.total = int(msg.get("total", 0)) if bytes else 0
-				uploading.changed.emit()
+			for up: PackInstall in PackInstall.jobs:
+				if up.upload and up.file.get_file() == msg.get("upload") and msg.get("stage") != "done":
+					up.stage = str(msg.stage)
+					var bytes: bool = msg.stage == "receiving"  # (the other stages have no measure)
+					up.done = int(msg.get("done", 0)) if bytes else 0
+					up.total = int(msg.get("total", 0)) if bytes else 0
+					up.changed.emit()
 		"me":  # the profile changed (a tag set, a game's result): every screen reads it from here
 			if msg.get("me") is Dictionary:
 				me = msg.me
@@ -596,13 +595,10 @@ func upload_pack(p: Pack) -> void:
 	if bytes.is_empty():
 		pack_uploaded.emit({"error": _tr("Cannot read the pack"), "code": "read"})
 		return
-	if uploading:
-		uploading.finish({"error": _tr("The upload broke off"), "code": "again"})
-	uploading = PackInstall.receiving(p.title(), "upload")
-	uploading.upload = true
-	uploading.total = bytes.size()
-	uploading.start()
-	_http("/packs", HTTPClient.METHOD_POST, bytes, _uploaded.bind(uploading), "", uploading.file.get_file())
+	var up := PackInstall.receiving(p.title(), "upload")  # (shown on the screens; the server tells its stages by its file name)
+	up.upload = true
+	up.total = bytes.size()
+	_http("/packs", HTTPClient.METHOD_POST, bytes, _uploaded.bind(up.start()), "", up.file.get_file())
 
 
 ## The server's answers to an upload (server/README.md): code -> the player's words.
@@ -614,8 +610,6 @@ const UPLOAD_ERRORS := {"auth_required": "Log in to the server again", "bad_toke
 func _uploaded(code: int, body: PackedByteArray, up: PackInstall) -> void:
 	var j = JSON.parse_string(body.get_string_from_utf8())
 	var d: Dictionary = j if j is Dictionary else {}
-	if up == uploading:
-		uploading = null
 	if code == 201 and d.get("pack") is Dictionary:
 		up.finish({"pack": d.pack})
 		pack_uploaded.emit({"pack": d.pack})

@@ -18,7 +18,7 @@ signal finished(result: Dictionary)
 const STAGES := {"receiving": "Receiving", "checking": "Checking", "trial": "Trial game", "storing": "Storing",
 	"done": "Done"}
 ## The browser: the file goes to the checker in pieces, as many as fit into a few ms of a frame.
-const WEB_PIECE := 1 << 20
+const WEB_PIECE := 1 << 18
 const WEB_FRAME_MS := 6
 
 ## Installs and uploads under way, in order (one check at a time: the first one checking).
