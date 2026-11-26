@@ -415,9 +415,9 @@ Full details: the design doc.
   itself after it); the new one takes over (friends keep seeing it online; in a game it
   gets `match {…, rejoin: true}` and a fresh `state`). Keep the token: `resume` is
   the normal way back in (after a restart too); it is valid 30 days and every
-  `resume` renews it (the same token comes back). `me {pack?}` → `me {me}`;
-  `me = {user, tag, rank: {rank, stars, legend, streak}, arena, season, pack}`: the rank in
-  that game (`pack`: a rules_hash; none: the default game; `auth` gives the default's), rank
+  `resume` renews it (the same token comes back). `me {pack?, format?}` → `me {me}`;
+  `me = {user, tag, rank: {rank, stars, legend, streak}, arena, season, pack, format}`: the rank in
+  that game and format (`pack`: a rules_hash; none: the default game; `auth` gives the default's), rank
   0 = Legend, `legend` = its number.
 - Social: `set_tag {tag}` → `me`; `friends {}` → `friends {list, requests_in,
   requests_out, blocked}` (also pushed after changes); `friend_add {tag}`,
@@ -440,15 +440,23 @@ Full details: the design doc.
   are a server pack's (enabled) or the default; a friendly game may also be in the
   inviter's own enabled pack (D12). Unknown or not allowed: `error pack`. Decks are checked
   with the pack's rules (`error deck`).
+- Versions (docs/packs/format.md §13): a pack with versions is registered with each one (table
+  `pack_version`) and `packs` lists them in its entries: `versions: [{id, name, date, formats,
+  rules_hash}]` (none: a one-version pack; the default version's `rules_hash` is the pack's). A
+  request's `pack` may be any version's rules_hash: the game is played in that version's view.
 - Friendly games: `invite {to, deck, pack?}` (friend gets `invite {from, pack}`, `pack` =
   the game as in `packs`: `{id, name, version, rules_hash, content_hash, size, url}` — the
   client asks the player and downloads it before accepting; `{id, name, version,
   rules_hash}` for the built-in rules), `invite_accept {from, deck, pack?}` (`pack`, if
   given, must be the invite's: else `error pack`), `invite_decline {from}` (inviter gets
   `invite_declined {by}`).
-- Ladder: `queue {mode: "casual"|"ranked", deck, pack?}` → `queued {mode, pack}`, then
+- Ladder: `queue {mode: "casual"|"ranked", deck, pack?, format?}` → `queued {mode, pack, format}`, then
   `queue_status {mode, waited, window}` every second; `unqueue {}`. Queues are per (mode,
-  pack); `ranked` needs a pack with a ladder (`error queue`).
+  pack, format); `ranked` needs a pack with a ladder (`error queue`). `format`: "standard" | "wild"
+  for a version with both (none: "wild"); a version with one format plays `""` (every card; `error
+  format` for a format it does not have); the deck is checked in the format (`error deck`), and
+  `match` carries it. Standings: a one-version pack keeps one ladder per pack id (as before 0.73); a
+  pack with versions has one per version and format (`<id>/<rules_hash>/<format>`).
 - Arena (one run at a time, in one pack): `arena_start {pack?}`, `arena_hero {i}`,
   `arena_pick {i}`, `arena_queue`, `arena_retire` → `arena {state}` (`state` = heroes,
   hero, cards, offer, done, wins, losses, pack (rules_hash), or null). A run whose pack left
