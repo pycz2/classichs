@@ -666,7 +666,8 @@ A player's choices for each game (the client keeps the art and music sets there:
 ### Replays
 
 Every finished game (any mode, any ending) is kept as a replay: the JSON the rules engine plays
-again, `{format: "classichs-replay", v: 1, game, mode, pack (rules_hash), pack_id, pack_name,
+again, `{format: "classichs-replay", v: 1, game, mode, pack (rules_hash), game_format ("standard", "wild", "":
+every card; the engine's `new` format), pack_id, pack_name,
 started, ended (unix s), players: [{name, hero, cards: [30 ids]}] (by seat), seed, first (the
 engine's `new` first: -1 = drawn from the seed), actions: [every applied action in order:
 mulligans, choices, timeout moves, concede], result: {winner (-1 none), reason, turns}, hash
