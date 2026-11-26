@@ -3,7 +3,7 @@ extends RefCounted
 ## Every English interface string: literals in tr()/translate()/_t()/_tr() calls,
 ## plus the tables that are translated through a variable.
 
-const DIRS := ["res://game", "res://net", "res://ui"]
+const DIRS := ["res://game", "res://net", "res://ui", "res://studio"]
 static var _call := RegEx.create_from_string("(?:\\btr|TranslationServer\\.translate|\\b_t|\\b_tr)\\(\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
 ## HistoryText._say(p, viewer, "You …", "Opponent …", args)
 static var _say := RegEx.create_from_string("_say\\([^,]+,\\s*[^,]+,\\s*\"((?:[^\"\\\\]|\\\\.)*)\",\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
@@ -60,6 +60,16 @@ static func collect() -> Array:
 	tables.append_array(ReplaysView.MODES.values())
 	tables.append_array(ReplaysView.TABS.map(func(t): return t[1]))
 	tables.append_array(ReplayView.CONTROLS.map(func(c): return c[2]))
+	tables.append_array([Studio.TITLE])
+	tables.append_array(Studio.TABS.map(func(t): return t[1]))
+	tables.append_array(StudioGame.NUMBERS.map(func(n): return n[0]))
+	tables.append_array(StudioGame.PICTURES.values().map(func(p): return p[0]))
+	tables.append_array(StudioGame.AUDIO.map(func(a): return a[2]))
+	tables.append_array(StudioCards.TYPE_NAMES.values())
+	tables.append_array(StudioCards.SLOT_NAMES.values())
+	tables.append_array(StudioCards.LINE_NAMES.values())
+	for k in ["triggers", "targets", "actions", "keywords"]:
+		tables.append_array(StudioEffects.catalog()[k].map(func(it): return it.label))
 	tables.append_array(Versions.FIELDS.map(func(f): return f[1]))
 	for k in tables:
 		keys[k] = true

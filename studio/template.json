@@ -1,0 +1,820 @@
+{
+ "about": "ClassicHS Studio: what a new game starts with: the Classic pack's mechanic names, tips, races and rarities in 8 languages, and a few later mechanics (made once from packs/classic.cardpack and the pack sources).",
+ "mechanics": {
+  "TAUNT": {
+   "engine": "GUARD",
+   "name": {
+    "en": "Taunt",
+    "ru": "Провокация",
+    "de": "Spott",
+    "fr": "Provocation",
+    "es": "Provocar",
+    "pt_BR": "Provocar",
+    "it": "Provocazione",
+    "pl": "Prowokacja"
+   },
+   "tip": {
+    "en": "Enemies must attack minions that have Taunt.",
+    "ru": "Враги обязаны атаковать существ с «Провокацией».",
+    "de": "Gegner müssen Diener mit Spott angreifen.",
+    "fr": "Les ennemis doivent attaquer les serviteurs avec Provocation.",
+    "es": "Los enemigos deben atacar a los esbirros con Provocar.",
+    "pt_BR": "Os inimigos devem atacar lacaios com Provocar.",
+    "it": "I nemici devono attaccare i servitori con Provocazione.",
+    "pl": "Wrogowie muszą atakować stronników z Prowokacją."
+   }
+  },
+  "CHARGE": {
+   "engine": "HASTE",
+   "name": {
+    "en": "Charge",
+    "ru": "Рывок",
+    "de": "Ansturm",
+    "fr": "Charge",
+    "es": "Cargar",
+    "pt_BR": "Investida",
+    "it": "Carica",
+    "pl": "Szarża"
+   },
+   "tip": {
+    "en": "Can attack immediately.",
+    "ru": "Может атаковать сразу же.",
+    "de": "Kann sofort angreifen.",
+    "fr": "Peut attaquer immédiatement.",
+    "es": "Puede atacar de inmediato.",
+    "pt_BR": "Pode atacar imediatamente.",
+    "it": "Può attaccare subito.",
+    "pl": "Może atakować od razu."
+   }
+  },
+  "DIVINE_SHIELD": {
+   "engine": "BARRIER",
+   "name": {
+    "en": "Divine Shield",
+    "ru": "Божественный щит",
+    "de": "Gottesschild",
+    "fr": "Bouclier divin",
+    "es": "Escudo divino",
+    "pt_BR": "Escudo Divino",
+    "it": "Scudo Divino",
+    "pl": "Boska tarcza"
+   },
+   "tip": {
+    "en": "The first time this minion takes damage, ignore it.",
+    "ru": "Первый раз, когда это существо получает урон, он игнорируется.",
+    "de": "Das erste Mal, wenn dieser Diener Schaden erleidet, wird er ignoriert.",
+    "fr": "La première fois que ce serviteur subit des dégâts, ils sont ignorés.",
+    "es": "La primera vez que este esbirro recibe daño, se ignora.",
+    "pt_BR": "A primeira vez que este lacaio sofrer dano, ignore-o.",
+    "it": "La prima volta che questo servitore subisce danni, vengono ignorati.",
+    "pl": "Pierwsze obrażenia otrzymane przez tego stronnika są ignorowane."
+   }
+  },
+  "WINDFURY": {
+   "engine": "DOUBLE_ATTACK",
+   "name": {
+    "en": "Windfury",
+    "ru": "Неистовство ветра",
+    "de": "Windzorn",
+    "fr": "Furie des vents",
+    "es": "Viento furioso",
+    "pt_BR": "Fúria dos Ventos",
+    "it": "Furia del Vento",
+    "pl": "Furia wichru"
+   },
+   "tip": {
+    "en": "Can attack twice each turn.",
+    "ru": "Может атаковать дважды за ход.",
+    "de": "Kann pro Runde zweimal angreifen.",
+    "fr": "Peut attaquer deux fois par tour.",
+    "es": "Puede atacar dos veces por turno.",
+    "pt_BR": "Pode atacar duas vezes por turno.",
+    "it": "Può attaccare due volte per turno.",
+    "pl": "Może atakować dwa razy na turę."
+   }
+  },
+  "STEALTH": {
+   "engine": "STEALTH",
+   "name": {
+    "en": "Stealth",
+    "ru": "Маскировка",
+    "de": "Verstohlenheit",
+    "fr": "Camouflage",
+    "es": "Sigilo",
+    "pt_BR": "Furtividade",
+    "it": "Furtività",
+    "pl": "Ukrycie"
+   },
+   "tip": {
+    "en": "Can't be attacked or targeted until it attacks.",
+    "ru": "Нельзя атаковать или выбирать целью, пока не атакует само.",
+    "de": "Kann nicht angegriffen oder als Ziel gewählt werden, bis es angreift.",
+    "fr": "Ne peut pas être attaqué ni ciblé tant qu’il n’a pas attaqué.",
+    "es": "No se puede atacar ni elegir como objetivo hasta que ataque.",
+    "pt_BR": "Não pode ser atacado nem alvejado até atacar.",
+    "it": "Non può essere attaccato né bersagliato finché non attacca.",
+    "pl": "Nie można go atakować ani wybierać na cel, dopóki sam nie zaatakuje."
+   }
+  },
+  "ELUSIVE": {
+   "engine": "SPELLPROOF",
+   "name": {
+    "en": "Elusive",
+    "ru": "Неуловимость",
+    "de": "Unangreifbar",
+    "fr": "Insaisissable",
+    "es": "Esquivo",
+    "pt_BR": "Esquivo",
+    "it": "Elusivo",
+    "pl": "Nieuchwytność"
+   },
+   "tip": {
+    "en": "Can't be targeted by spells or Hero Powers.",
+    "ru": "Не может быть целью заклинаний и силы героя.",
+    "de": "Kann nicht als Ziel von Zaubern oder Heldenfähigkeiten gewählt werden.",
+    "fr": "Ne peut pas être la cible de sorts ou de pouvoirs héroïques.",
+    "es": "No puede ser objetivo de hechizos ni de poderes de héroe.",
+    "pt_BR": "Não pode ser alvo de feitiços nem de poderes heroicos.",
+    "it": "Non può essere bersaglio di magie né di poteri eroe.",
+    "pl": "Nie może być celem zaklęć ani mocy specjalnych."
+   }
+  },
+  "CANT_ATTACK": {
+   "engine": "CANT_ATTACK",
+   "name": {
+    "en": "Can't Attack",
+    "ru": "Не может атаковать",
+    "de": "Kann nicht angreifen",
+    "fr": "Ne peut pas attaquer",
+    "es": "No puede atacar",
+    "pt_BR": "Não pode atacar",
+    "it": "Non può attaccare",
+    "pl": "Nie może atakować"
+   },
+   "tip": {
+    "en": "Can't attack.",
+    "ru": "Не может атаковать.",
+    "de": "Kann nicht angreifen.",
+    "fr": "Ne peut pas attaquer.",
+    "es": "No puede atacar.",
+    "pt_BR": "Não pode atacar.",
+    "it": "Non può attaccare.",
+    "pl": "Nie może atakować."
+   }
+  },
+  "IMMUNE": {
+   "engine": "IMMUNE",
+   "name": {
+    "en": "Immune",
+    "ru": "Неуязвимость",
+    "de": "Immun",
+    "fr": "Insensible",
+    "es": "Inmune",
+    "pt_BR": "Imune",
+    "it": "Immune",
+    "pl": "Niewrażliwość"
+   },
+   "tip": {
+    "en": "Can't be damaged.",
+    "ru": "Не может получать урон.",
+    "de": "Kann keinen Schaden erleiden.",
+    "fr": "Ne peut pas subir de dégâts.",
+    "es": "No puede recibir daño.",
+    "pt_BR": "Não pode sofrer dano.",
+    "it": "Non può subire danni.",
+    "pl": "Nie może otrzymywać obrażeń."
+   }
+  },
+  "SPELLPOWER": {
+   "engine": "SPELL_POWER",
+   "name": {
+    "en": "Spell Damage",
+    "ru": "Урон от заклинаний",
+    "de": "Zauberschaden",
+    "fr": "Dégâts des sorts",
+    "es": "Daño con hechizos",
+    "pt_BR": "Dano Mágico",
+    "it": "Danni Magici",
+    "pl": "Obrażenia zaklęć"
+   },
+   "tip": {
+    "en": "Your spells deal extra damage.",
+    "ru": "Ваши заклинания наносят больше урона.",
+    "de": "Eure Zauber verursachen zusätzlichen Schaden.",
+    "fr": "Vos sorts infligent des dégâts supplémentaires.",
+    "es": "Tus hechizos infligen daño adicional.",
+    "pt_BR": "Seus feitiços causam dano adicional.",
+    "it": "I tuoi incantesimi infliggono danni extra.",
+    "pl": "Twoje zaklęcia zadają dodatkowe obrażenia."
+   }
+  },
+  "OVERLOAD": {
+   "engine": "MANA_LOCK",
+   "name": {
+    "en": "Overload",
+    "ru": "Перегрузка",
+    "de": "Überladung",
+    "fr": "Surcharge",
+    "es": "Sobrecarga",
+    "pt_BR": "Sobrecarga",
+    "it": "Sovraccarico",
+    "pl": "Przeciążenie"
+   },
+   "tip": {
+    "en": "You have fewer Mana Crystals next turn.",
+    "ru": "В следующем ходу у вас будет меньше кристаллов маны.",
+    "de": "Ihr habt in der nächsten Runde weniger Manakristalle.",
+    "fr": "Vous avez moins de cristaux de mana au tour suivant.",
+    "es": "Tienes menos cristales de maná el próximo turno.",
+    "pt_BR": "Você terá menos Cristais de Mana no próximo turno.",
+    "it": "Hai meno cristalli di mana nel turno successivo.",
+    "pl": "Masz mniej kryształów many w następnej turze."
+   }
+  },
+  "SECRET": {
+   "engine": "TRAP",
+   "name": {
+    "en": "Secret",
+    "ru": "Секрет",
+    "de": "Geheimnis",
+    "fr": "Secret",
+    "es": "Secreto",
+    "pt_BR": "Segredo",
+    "it": "Segreto",
+    "pl": "Sekret"
+   },
+   "tip": {
+    "en": "Hidden until a specific action occurs on your opponent's turn.",
+    "ru": "Скрыт, пока в ход противника не произойдёт определённое действие.",
+    "de": "Bleibt verborgen, bis in der Runde Eures Gegners eine bestimmte Aktion eintritt.",
+    "fr": "Caché jusqu’à ce qu’une action précise ait lieu pendant le tour de l’adversaire.",
+    "es": "Oculto hasta que ocurre una acción concreta en el turno de tu oponente.",
+    "pt_BR": "Oculto até que uma ação específica ocorra no turno do oponente.",
+    "it": "Nascosto finché non avviene una certa azione nel turno dell’avversario.",
+    "pl": "Ukryty, dopóki w turze przeciwnika nie nastąpi określona akcja."
+   }
+  },
+  "FREEZE": {
+   "engine": "FREEZE",
+   "name": {
+    "en": "Freeze",
+    "ru": "Заморозка",
+    "de": "Einfrieren",
+    "fr": "Gel",
+    "es": "Congelar",
+    "pt_BR": "Congelar",
+    "it": "Congelamento",
+    "pl": "Zamrożenie"
+   },
+   "tip": {
+    "en": "Frozen characters lose their next attack.",
+    "ru": "Замороженные персонажи пропускают свою следующую атаку.",
+    "de": "Eingefrorene Charaktere verlieren ihren nächsten Angriff.",
+    "fr": "Les personnages gelés perdent leur prochaine attaque.",
+    "es": "Los personajes congelados pierden su próximo ataque.",
+    "pt_BR": "Personagens congelados perdem o próximo ataque.",
+    "it": "I personaggi congelati perdono il prossimo attacco.",
+    "pl": "Zamrożone postacie tracą swój następny atak."
+   }
+  },
+  "SILENCE": {
+   "engine": "SILENCE",
+   "name": {
+    "en": "Silence",
+    "ru": "Немота",
+    "de": "Schweigen",
+    "fr": "Silence",
+    "es": "Silencio",
+    "pt_BR": "Silêncio",
+    "it": "Silenzio",
+    "pl": "Wyciszenie"
+   },
+   "tip": {
+    "en": "Removes all card text and enchantments.",
+    "ru": "Снимает весь текст карты и все эффекты.",
+    "de": "Entfernt allen Kartentext und alle Verzauberungen.",
+    "fr": "Retire tout le texte de la carte et tous les enchantements.",
+    "es": "Elimina todo el texto de la carta y los encantamientos.",
+    "pt_BR": "Remove todo o texto da carta e os encantamentos.",
+    "it": "Rimuove tutto il testo della carta e gli incantamenti.",
+    "pl": "Usuwa cały tekst karty i wszystkie zaklęcia."
+   }
+  },
+  "COUNTER": {
+   "engine": "COUNTER"
+  },
+  "BATTLECRY": {
+   "engine": "ON_PLAY",
+   "name": {
+    "en": "Battlecry",
+    "ru": "Боевой клич",
+    "de": "Kampfschrei",
+    "fr": "Cri de guerre",
+    "es": "Grito de batalla",
+    "pt_BR": "Grito de Guerra",
+    "it": "Grido di Battaglia",
+    "pl": "Okrzyk bojowy"
+   },
+   "tip": {
+    "en": "Does something when you play it from your hand.",
+    "ru": "Срабатывает, когда вы разыгрываете карту из руки.",
+    "de": "Löst einen Effekt aus, wenn Ihr es aus der Hand ausspielt.",
+    "fr": "Fait quelque chose quand vous la jouez depuis votre main.",
+    "es": "Hace algo cuando la juegas desde tu mano.",
+    "pt_BR": "Faz algo quando você a joga da mão.",
+    "it": "Fa qualcosa quando la giochi dalla mano.",
+    "pl": "Robi coś, gdy zagrasz go z ręki."
+   }
+  },
+  "DEATHRATTLE": {
+   "engine": "ON_DEATH",
+   "name": {
+    "en": "Deathrattle",
+    "ru": "Предсмертный хрип",
+    "de": "Todesröcheln",
+    "fr": "Râle d’agonie",
+    "es": "Último aliento",
+    "pt_BR": "Último Suspiro",
+    "it": "Rantolo di Morte",
+    "pl": "Agonia"
+   },
+   "tip": {
+    "en": "Does something when it dies.",
+    "ru": "Срабатывает, когда существо погибает.",
+    "de": "Löst einen Effekt aus, wenn es stirbt.",
+    "fr": "Fait quelque chose quand il meurt.",
+    "es": "Hace algo cuando muere.",
+    "pt_BR": "Faz algo quando morre.",
+    "it": "Fa qualcosa quando muore.",
+    "pl": "Robi coś, gdy umrze."
+   }
+  },
+  "COMBO": {
+   "engine": "COMBO",
+   "name": {
+    "en": "Combo",
+    "ru": "Серия приемов",
+    "de": "Combo",
+    "fr": "Combo",
+    "es": "Combo",
+    "pt_BR": "Combo",
+    "it": "Combo",
+    "pl": "Kombinacja"
+   },
+   "tip": {
+    "en": "A bonus if you already played a card this turn.",
+    "ru": "Бонус, если в этот ход вы уже разыграли карту.",
+    "de": "Ein Bonus, wenn Ihr in diesem Zug bereits eine Karte ausgespielt habt.",
+    "fr": "Un bonus si vous avez déjà joué une carte ce tour-ci.",
+    "es": "Un bonus si ya jugaste una carta este turno.",
+    "pt_BR": "Um bônus se você já jogou uma carta neste turno.",
+    "it": "Un bonus se hai già giocato una carta in questo turno.",
+    "pl": "Premia, jeśli w tej turze zagrano już kartę."
+   }
+  },
+  "CHOOSE_ONE": {
+   "engine": "CHOICE",
+   "name": {
+    "en": "Choose One",
+    "ru": "Выберите эффект",
+    "de": "Wählt aus",
+    "fr": "Choix des armes",
+    "es": "Elige una opción",
+    "pt_BR": "Escolha Um",
+    "it": "Scegli",
+    "pl": "Wybierz jedno"
+   },
+   "tip": {
+    "en": "Choose one of two effects when you play it.",
+    "ru": "При розыгрыше выберите один из двух эффектов.",
+    "de": "Wählt beim Ausspielen einen von zwei Effekten.",
+    "fr": "Choisissez l’un des deux effets quand vous la jouez.",
+    "es": "Elige uno de dos efectos al jugarla.",
+    "pt_BR": "Escolha um de dois efeitos ao jogá-la.",
+    "it": "Scegli uno di due effetti quando la giochi.",
+    "pl": "Wybierz jeden z dwóch efektów, gdy ją zagrywasz."
+   }
+  },
+  "ENRAGED": {
+   "engine": "WOUNDED",
+   "name": {
+    "en": "Enrage",
+    "ru": "Исступление",
+    "de": "Wutanfall",
+    "fr": "Accès de rage",
+    "es": "Enfurecer",
+    "pt_BR": "Enfurecer",
+    "it": "Rabbia",
+    "pl": "Szał"
+   },
+   "tip": {
+    "en": "While damaged, this minion has a new power.",
+    "ru": "Пока существо ранено, у него появляется новая сила.",
+    "de": "Solange dieser Diener beschädigt ist, erhält er eine neue Fähigkeit.",
+    "fr": "Tant qu’il est blessé, ce serviteur gagne un nouveau pouvoir.",
+    "es": "Mientras está herido, este esbirro tiene un nuevo poder.",
+    "pt_BR": "Enquanto estiver ferido, este lacaio tem um novo poder.",
+    "it": "Finché è ferito, questo servitore ha un nuovo potere.",
+    "pl": "Dopóki jest ranny, ten stronnik zyskuje nową moc."
+   }
+  },
+  "AURA": {
+   "engine": "AURA"
+  },
+  "TRIGGER_VISUAL": {
+   "engine": "TRIGGER"
+  },
+  "ADJACENT_BUFF": {
+   "engine": "ADJACENT"
+  },
+  "AFFECTED_BY_SPELL_POWER": {
+   "engine": "SPELL_SCALED"
+  },
+  "ImmuneToSpellpower": {
+   "engine": "NO_SPELL_POWER"
+  },
+  "FROZEN": {
+   "engine": "FROZEN"
+  },
+  "FROZEN_THIS_TURN": {
+   "engine": "FROZEN_THIS_TURN"
+  },
+  "EXHAUSTED": {
+   "engine": "EXHAUSTED"
+  },
+  "ATTACKS": {
+   "engine": "ATTACKS"
+  },
+  "ARMOR": {
+   "engine": "ARMOR"
+  },
+  "DURABILITY": {
+   "engine": "DURABILITY"
+  },
+  "USED": {
+   "engine": "USED"
+  },
+  "LOCKED": {
+   "engine": "LOCKED"
+  },
+  "GUARDED": {
+   "engine": "GUARDED"
+  },
+  "TO_DESTROY": {
+   "engine": "TO_DESTROY"
+  },
+  "DIED_POS": {
+   "engine": "DIED_POS"
+  },
+  "DOUBLE_HEAL_DAMAGE": {
+   "engine": "POWER_MULTIPLIER"
+  },
+  "HEAL_IS_DAMAGE": {
+   "engine": "HEAL_IS_DAMAGE"
+  },
+  "POISONOUS": {
+   "engine": "POISON",
+   "name": {
+    "en": "Poisonous",
+    "ru": "Яд",
+    "de": "Giftig",
+    "fr": "Toxicité",
+    "es": "Veneno",
+    "pt_BR": "Venenoso",
+    "it": "Veleno",
+    "pl": "Trucizna"
+   },
+   "tip": {
+    "en": "Destroys any minion it damages.",
+    "ru": "Уничтожает любое существо, которому наносит урон.",
+    "de": "Vernichtet jeden Diener, dem es Schaden zufügt.",
+    "fr": "Détruit tout serviteur qu’il blesse.",
+    "es": "Destruye a cualquier esbirro al que inflija daño.",
+    "pt_BR": "Destrói qualquer lacaio que ele danifique.",
+    "it": "Distrugge qualsiasi servitore a cui infligge danni.",
+    "pl": "Niszczy każdego stronnika, któremu zada obrażenia."
+   }
+  },
+  "INSPIRE": {
+   "engine": "ON_POWER",
+   "name": {
+    "en": "Inspire",
+    "ru": "Воодушевление",
+    "de": "Inspiration",
+    "fr": "Exaltation",
+    "es": "Inspirar",
+    "pt_BR": "Inspirar",
+    "it": "Ispirazione",
+    "pl": "Inspiracja"
+   },
+   "tip": {
+    "en": "Does something after you use your Hero Power.",
+    "ru": "Срабатывает после того, как вы используете силу героя.",
+    "de": "Wirkt, nachdem Ihr Eure Heldenfähigkeit eingesetzt habt.",
+    "fr": "Se déclenche après que vous avez utilisé votre pouvoir héroïque.",
+    "es": "Se activa después de que uses tu poder de héroe.",
+    "pt_BR": "Ativa depois que você usa seu Poder Heroico.",
+    "it": "Si attiva dopo che hai usato il tuo Potere Eroe.",
+    "pl": "Działa po użyciu twojej mocy specjalnej."
+   }
+  },
+  "CANNOT_ATTACK_HEROES": {
+   "engine": "CANT_ATTACK_HEROES",
+   "name": {
+    "en": "Can't attack heroes",
+    "ru": "Не может атаковать героев",
+    "de": "Kann keine Helden angreifen",
+    "fr": "Ne peut pas attaquer les héros",
+    "es": "No puede atacar a héroes",
+    "pt_BR": "Não pode atacar heróis",
+    "it": "Non può attaccare gli eroi",
+    "pl": "Nie może atakować bohaterów"
+   },
+   "tip": {
+    "en": "Can attack only minions.",
+    "ru": "Атакует только существ.",
+    "de": "Kann nur Diener angreifen.",
+    "fr": "Ne peut attaquer que des serviteurs.",
+    "es": "Solo puede atacar a esbirros.",
+    "pt_BR": "Só pode atacar lacaios.",
+    "it": "Può attaccare solo i servitori.",
+    "pl": "Może atakować tylko stronników."
+   }
+  },
+  "DISCOVER": {
+   "engine": "OFFER",
+   "name": {
+    "en": "Discover",
+    "ru": "Раскопка",
+    "de": "Entdecken",
+    "fr": "Découverte",
+    "es": "Descubrir",
+    "pt_BR": "Descobrir",
+    "it": "Rinvenire",
+    "pl": "Odkrycie"
+   },
+   "tip": {
+    "en": "Choose one of three cards to add to your hand.",
+    "ru": "Выберите одну карту из трёх, и она попадёт к вам в руку.",
+    "de": "Wählt eine von drei Karten und nehmt sie auf die Hand.",
+    "fr": "Choisissez une carte parmi trois et ajoutez-la à votre main.",
+    "es": "Elige una de tres cartas y añádela a tu mano.",
+    "pt_BR": "Escolha um entre três cards para colocar na sua mão.",
+    "it": "Scegli una carta tra tre e aggiungila alla tua mano.",
+    "pl": "Wybierz jedną z trzech kart i dodaj ją do ręki."
+   }
+  },
+  "UNLIMITED_ATTACKS": {
+   "engine": "UNLIMITED_ATTACKS",
+   "name": {
+    "en": "Unlimited attacks",
+    "ru": "Неограниченные атаки",
+    "de": "Unbegrenzte Angriffe",
+    "fr": "Attaques illimitées",
+    "es": "Ataques ilimitados",
+    "pt_BR": "Ataques ilimitados",
+    "it": "Attacchi illimitati",
+    "pl": "Nieograniczone ataki"
+   },
+   "tip": {
+    "en": "Can attack any number of times each turn.",
+    "ru": "Может атаковать сколько угодно раз за ход.",
+    "de": "Kann in jedem Zug beliebig oft angreifen.",
+    "fr": "Peut attaquer autant de fois que voulu à chaque tour.",
+    "es": "Puede atacar cualquier número de veces cada turno.",
+    "pt_BR": "Pode atacar quantas vezes quiser a cada turno.",
+    "it": "Può attaccare un numero qualsiasi di volte a ogni turno.",
+    "pl": "Może atakować dowolną liczbę razy w każdej turze."
+   }
+  },
+  "LIFESTEAL": {
+   "engine": "LIFESTEAL",
+   "name": {
+    "en": "Lifesteal",
+    "ru": "Похищение жизни",
+    "de": "Lebensentzug",
+    "fr": "Vol de vie",
+    "es": "Robo de vida",
+    "pt_BR": "Roubar Vida",
+    "it": "Furto Vitale",
+    "pl": "Kradzież życia"
+   },
+   "tip": {
+    "en": "Damage dealt by this card also heals your hero.",
+    "ru": "Урон, нанесённый этой картой, восполняет здоровье вашего героя.",
+    "de": "Von dieser Karte verursachter Schaden stellt auch bei Eurem Helden Leben wieder her.",
+    "fr": "Les dégâts infligés par cette carte rendent aussi de la Vie à votre héros.",
+    "es": "El daño que inflige esta carta también restaura Salud a tu héroe.",
+    "pt_BR": "O dano causado por este card também cura o seu herói.",
+    "it": "I danni inflitti da questa carta curano anche il tuo eroe.",
+    "pl": "Obrażenia zadane przez tę kartę leczą też twojego bohatera."
+   }
+  },
+  "CANT_BE_TARGETED_BY_OPPONENTS": {
+   "engine": "FOE_SPELLPROOF",
+   "name": {
+    "en": "Only you can target",
+    "ru": "Цель только для владельца",
+    "de": "Nur vom Besitzer wählbar",
+    "fr": "Ciblable par vous seul",
+    "es": "Solo tú puedes seleccionarlo",
+    "pt_BR": "Só você pode alvejar",
+    "it": "Bersaglio solo tuo",
+    "pl": "Cel tylko dla ciebie"
+   },
+   "tip": {
+    "en": "Only its owner can target it with spells and Hero Powers.",
+    "ru": "Только владелец может воздействовать на него заклинаниями или силой героя.",
+    "de": "Nur sein Besitzer kann ihn als Ziel von Zaubern und Heldenfähigkeiten wählen.",
+    "fr": "Seul son propriétaire peut le cibler avec des sorts et des pouvoirs héroïques.",
+    "es": "Solo su dueño puede seleccionarlo como objetivo de hechizos y poderes de héroe.",
+    "pt_BR": "Só o dono pode alvejá-lo com feitiços e Poderes Heroicos.",
+    "it": "Può essere il bersaglio solo delle Magie e del Potere Eroe del suo proprietario.",
+    "pl": "Tylko jego właściciel może go wybrać jako cel zaklęć i mocy specjalnych."
+   }
+  },
+  "RUSH": {
+   "engine": "QUICK",
+   "name": {
+    "en": "Rush",
+    "ru": "Натиск",
+    "de": "Eifer",
+    "fr": "Ruée",
+    "es": "Embestir",
+    "pt_BR": "Rapidez",
+    "it": "Assalto",
+    "pl": "Zryw"
+   },
+   "tip": {
+    "en": "Can attack minions immediately.",
+    "ru": "Может сразу атаковать существ.",
+    "de": "Kann sofort Diener angreifen.",
+    "fr": "Peut attaquer des serviteurs immédiatement.",
+    "es": "Puede atacar a esbirros de inmediato.",
+    "pt_BR": "Pode atacar lacaios imediatamente.",
+    "it": "Può attaccare subito i servitori.",
+    "pl": "Może od razu atakować stronników."
+   }
+  }
+ },
+ "races": {
+  "BEAST": {
+   "en": "Beast",
+   "ru": "Зверь",
+   "de": "Wildtier",
+   "fr": "Bête",
+   "es": "Bestia",
+   "pt_BR": "Fera",
+   "it": "Bestia",
+   "pl": "Bestia"
+  },
+  "DEMON": {
+   "en": "Demon",
+   "ru": "Демон",
+   "de": "Dämon",
+   "fr": "Démon",
+   "es": "Demonio",
+   "pt_BR": "Demônio",
+   "it": "Demone",
+   "pl": "Demon"
+  },
+  "DRAGON": {
+   "en": "Dragon",
+   "ru": "Дракон",
+   "de": "Drache",
+   "fr": "Dragon",
+   "es": "Dragón",
+   "pt_BR": "Dragão",
+   "it": "Drago",
+   "pl": "Smok"
+  },
+  "MECHANICAL": {
+   "en": "Mech",
+   "ru": "Механизм",
+   "de": "Mech",
+   "fr": "Méca",
+   "es": "Robot",
+   "pt_BR": "Mecanoide",
+   "it": "Robot",
+   "pl": "Mech"
+  },
+  "MURLOC": {
+   "en": "Murloc",
+   "ru": "Мурлок",
+   "de": "Murloc",
+   "fr": "Murloc",
+   "es": "Múrloc",
+   "pt_BR": "Murloc",
+   "it": "Murloc",
+   "pl": "Murlok"
+  },
+  "PIRATE": {
+   "en": "Pirate",
+   "ru": "Пират",
+   "de": "Pirat",
+   "fr": "Pirate",
+   "es": "Pirata",
+   "pt_BR": "Pirata",
+   "it": "Pirata",
+   "pl": "Pirat"
+  },
+  "TOTEM": {
+   "en": "Totem",
+   "ru": "Тотем",
+   "de": "Totem",
+   "fr": "Totem",
+   "es": "Tótem",
+   "pt_BR": "Totem",
+   "it": "Totem",
+   "pl": "Totem"
+  },
+  "UNDEAD": {
+   "en": "Undead",
+   "ru": "Нежить",
+   "de": "Untoter",
+   "fr": "Mort-vivant",
+   "es": "No-muerto",
+   "pt_BR": "Morto-vivo",
+   "it": "Non Morto",
+   "pl": "Nieumarły"
+  },
+  "ELEMENTAL": {
+   "en": "Elemental",
+   "ru": "Элементаль",
+   "de": "Elementar",
+   "fr": "Élémentaire",
+   "es": "Elemental",
+   "pt_BR": "Elemental",
+   "it": "Elementale",
+   "pl": "Żywiołak"
+  }
+ },
+ "rarities": {
+  "FREE": {
+   "tier": "common",
+   "name": {
+    "en": "Basic",
+    "ru": "Базовая",
+    "de": "Basis",
+    "fr": "Basique",
+    "es": "Básica",
+    "pt_BR": "Básica",
+    "it": "Base",
+    "pl": "Podstawowa"
+   }
+  },
+  "COMMON": {
+   "tier": "common",
+   "name": {
+    "en": "Common",
+    "ru": "Обычная",
+    "de": "Gewöhnlich",
+    "fr": "Commune",
+    "es": "Común",
+    "pt_BR": "Comum",
+    "it": "Comune",
+    "pl": "Zwykła"
+   }
+  },
+  "RARE": {
+   "tier": "rare",
+   "name": {
+    "en": "Rare",
+    "ru": "Редкая",
+    "de": "Selten",
+    "fr": "Rare",
+    "es": "Rara",
+    "pt_BR": "Rara",
+    "it": "Rara",
+    "pl": "Rzadka"
+   }
+  },
+  "EPIC": {
+   "tier": "epic",
+   "name": {
+    "en": "Epic",
+    "ru": "Эпическая",
+    "de": "Episch",
+    "fr": "Épique",
+    "es": "Épica",
+    "pt_BR": "Épica",
+    "it": "Epica",
+    "pl": "Epicka"
+   }
+  },
+  "LEGENDARY": {
+   "tier": "legendary",
+   "name": {
+    "en": "Legendary",
+    "ru": "Легендарная",
+    "de": "Legendär",
+    "fr": "Légendaire",
+    "es": "Legendaria",
+    "pt_BR": "Lendária",
+    "it": "Leggendaria",
+    "pl": "Legendarna"
+   }
+  }
+ },
+ "no_rarity_tier": "common"
+}
