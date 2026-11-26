@@ -12,9 +12,9 @@ const EXT := "chsreplay"
 const KEEP := 10
 static var dir := "user://replays"
 
-## {format, v, game, mode, pack, pack_id, pack_name, started, ended, players: [{name, hero,
-## cards}], seed, first, actions, result: {winner, reason, turns}, hash, me?} (me: the seat of
-## this device's player, shown at the bottom).
+## {format, v, game, mode, pack, game_format, pack_id, pack_name, started, ended, players: [{name, hero,
+## cards}], seed, first, actions, result: {winner, reason, turns}, hash, me?} (game_format: "standard", "wild"
+## or "" for every card, as the game was played; me: the seat of this device's player, shown at the bottom).
 var data := {}
 var _game := ""  # the engine's game at action _at ("" = none yet)
 var _at := -1
@@ -78,7 +78,7 @@ static func from_match(m: Match, names: Array, mode: String, me: int) -> Replay:
 		players.append({"name": names[i], "hero": str(req.decks[i].hero), "cards": Array(req.decks[i].cards)})
 	var now := int(Time.get_unix_time_from_system())
 	return from_data({"format": FORMAT, "v": 1, "game": "local-%d-%d" % [now, randi() % 100000], "mode": mode,
-		"pack": p.rules_hash(), "pack_id": p.id(), "pack_name": p.title(),
+		"pack": p.rules_hash(), "game_format": str(req.get("format", "")), "pack_id": p.id(), "pack_name": p.title(),
 		"started": m.started, "ended": now, "players": players, "seed": req.seed, "first": int(req.get("first", -1)),
 		"actions": actions, "result": {"winner": m.game.winner, "reason": "over", "turns": m.game.turn},
 		"hash": m.state_hash, "me": me})
@@ -110,6 +110,8 @@ func setup_req() -> Dictionary:
 	for p in data.players:
 		decks.append({"hero": str(p.hero), "cards": Array(p.cards)})
 	var req := {"decks": decks, "seed": int(data.seed), "check": false}
+	if str(data.get("game_format", "")) != "":
+		req.format = str(data.game_format)  # (Standard: random cards come from the Standard ones, as in the game)
 	if int(data.get("first", -1)) in [0, 1]:
 		req.first = int(data.first)
 	return req

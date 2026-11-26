@@ -34,6 +34,9 @@ func _test_version(p: Pack) -> Pack:
 	var en: Dictionary = b.locale("en").duplicate(true)
 	en.cards["TEST_NEW"] = {"name": "Test Yeti", "text": ""}
 	en.cards["VAN_EX1_116"].text = "[x]" + en.cards["VAN_EX1_116"].text.replace(". ", ".\n  ")  # (only its line breaks)
+	# (only its markup: bold and italics, non-breaking spaces, no final period)
+	var archer: String = en.cards["VAN_CS2_189"].text
+	en.cards["VAN_CS2_189"].text = "<i>" + archer.replace("<b>", "").replace("</b>", "").replace(" ", "\u00a0").trim_suffix(".").replace("Deal", "<b>Deal</b>") + "</i>"
 	b._json["locales/en.json"] = en
 	return b
 
@@ -61,6 +64,16 @@ func test_the_diff_of_6024_and_6485_is_leeroy_jenkins_and_starving_buzzard() -> 
 	p.close()
 
 
+func test_texts_are_compared_without_their_markup() -> void:
+	var t := "<b>Battlecry:</b> Deal 1 damage."
+	for same in ["Battlecry: Deal 1 damage", "[x]<b>Battlecry:</b>\nDeal\u00a01\u202fdamage.", "<i>Battlecry:  Deal 1 damage.</i> ",
+			"Battlecry:\u2009Deal 1\u2007damage."]:
+		eq(Versions.plain(same), Versions.plain(t), "the same text: " + same.c_escape())
+	eq(Versions.plain(t), "Battlecry: Deal 1 damage", "as plain text")
+	check(Versions.plain("Deal 2 damage.") != Versions.plain(t), "another text differs")
+	eq(Versions.plain("Costs $3 (#2)."), "Costs $3 (#2)", "numbers kept")
+
+
 func test_added_and_removed_cards() -> void:
 	var p := _eras()
 	if p == null:
@@ -68,7 +81,7 @@ func test_added_and_removed_cards() -> void:
 	var d := Versions.diff(p.version_view("6485"), _test_version(p), "en")
 	eq(d.added.map(func(c): return c.id), ["TEST_NEW"], "the new card")
 	eq(d.removed.map(func(c): return c.id), ["VAN_EX1_009"], "the card taken out")
-	eq(d.changed, [], "nothing else (new line breaks of a text are no change)")
+	eq(d.changed, [], "nothing else (new line breaks or markup of a text are no change)")
 	var back := Versions.diff(_test_version(p), p.version_view("6485"), "en")
 	eq([back.added.map(func(c): return c.id), back.removed.map(func(c): return c.id)], [["VAN_EX1_009"], ["TEST_NEW"]],
 		"the other way round")
