@@ -1009,6 +1009,7 @@
 "the engine refuses the pack: %s": "движок не принимает пакет: %s",
 "the file is bigger than 1 GiB": "файл больше 1 ГиБ",
 "the only JSON file in ui/ is theme.json": "единственный JSON-файл в ui/ это theme.json",
+"the only JSON file in an art set is framing.json": "единственный JSON-файл в наборе картинок это framing.json",
 "the rules engine is missing: %s": "нет движка правил: %s",
 "this is not a zip file": "это не zip-архив",
 "twice in the zip": "дважды в архиве",

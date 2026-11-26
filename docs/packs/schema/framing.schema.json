@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "art/<set>/framing.json of a .cardpack: where a card's picture sits in its window (docs/packs/format.md §7)",
+  "type": "object",
+  "propertyNames": {"type": "string", "pattern": "^[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}$"},
+  "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "x": {"type": "number", "minimum": -1, "maximum": 1},
+      "y": {"type": "number", "minimum": -1, "maximum": 1},
+      "zoom": {"type": "number", "minimum": 0.5, "maximum": 3}
+    }
+  }
+}

@@ -1,0 +1,2 @@
+ru: Картинку карты теперь можно сдвинуть и увеличить внутри её окна: в наборе картинок есть файл art/<набор>/framing.json, и игра рисует по нему карту в руке, существо на столе, героя, силу героя, историю, значки и записи игр. Свой набор картинок игрока тоже может его содержать.
+en: A card's picture can now be moved and zoomed inside its window: an art set may have art/<set>/framing.json, and the game follows it for the card in the hand, the minion on the board, the hero, the hero power, the history, the icons and the replays. A player's own picture folder may have one too.

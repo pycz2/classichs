@@ -170,6 +170,11 @@ static var _designs := {}
 ## Loaded pictures by card, the least recently used first (Lru): TEXTURES_KEPT at most (a view keeps its own).
 static var _textures := {}
 const TEXTURES_KEPT := 256
+## Where each loaded picture sits in its window: card id -> Vector3(x, y, zoom) from framing.json of the
+## set the picture came from (docs/packs/format.md §7); a card not here is centred.
+static var _framing := {}
+## framing.json of the player's folders, by folder.
+static var _folder_framing := {}
 ## Picture sets: the active pack's art sets (art/<set>/<card id>.jpg|png|webp in the
 ## pack), plus the player's own folders in res://art (any folder but "cards"; "original"
 ## holds the original art, tools/fetch_original_art.py, local only) that have pictures of
@@ -378,16 +383,23 @@ static func texture(card_id: String) -> Texture2D:
 		return Lru.get_of(_textures, card_id)
 	var p := Packs.active()
 	var tex: Texture2D = null
+	var framing = null
 	var chosen := Packs.choice(p, "art") if p else ""
 	if p and not p.sets("art").any(func(s): return s.id == chosen) and sets().has(chosen):
 		for ext in EXTENSIONS:  # a folder of the player's
 			tex = _load("%s/%s/%s.%s" % [root, chosen, card_id, ext], ext)
 			if tex:
+				framing = _folder_framing_of(chosen).get(card_id)
 				break
 	for set_id in [chosen, p.default_set("art") if p else ""]:
 		if tex == null and p and set_id != "":
 			var f := p.find("art/" + set_id, card_id, EXTENSIONS)
 			tex = p.texture(f) if f != "" else null
+			var all = p.json("art/%s/framing.json" % set_id) if tex else null
+			framing = all.get(card_id) if all is Dictionary else null
+	_framing.erase(card_id)
+	if framing is Dictionary:
+		_framing[card_id] = Vector3(float(framing.get("x", 0)), float(framing.get("y", 0)), float(framing.get("zoom", 1)))
 	Lru.put(_textures, card_id, tex, TEXTURES_KEPT)
 	return tex
 
@@ -404,6 +416,15 @@ static func _load(path: String, ext: String) -> Texture2D:
 	if path.begins_with("res://") and ResourceLoader.exists(path):
 		return load(path) as Texture2D
 	return null
+
+
+## framing.json of a player's folder ({} when it has none).
+static func _folder_framing_of(set_id: String) -> Dictionary:
+	if not _folder_framing.has(set_id):
+		var path := "%s/%s/framing.json" % [root, set_id]
+		var j = JSON.parse_string(FileAccess.get_file_as_string(path)) if FileAccess.file_exists(path) else null
+		_folder_framing[set_id] = j if j is Dictionary else {}
+	return _folder_framing[set_id]
 
 
 static var _sets: Array = []
@@ -441,6 +462,8 @@ static func _has_pack_cards(dir: String) -> bool:
 ## Forgets loaded pictures (after the picture set changes).
 static func reset() -> void:
 	_textures = {}
+	_framing = {}
+	_folder_framing = {}
 	_sets = []
 
 
@@ -482,12 +505,20 @@ static func paint_in(ci: CanvasItem, rect: Rect2, card_id: String, shape := "rec
 		paint(ci, rect, card_id)
 		return
 	var pts := outline(shape, rect)
-	var side := maxf(rect.size.x, rect.size.y)  # cover: the square picture fills the longer side
-	var uv_rect := Rect2(rect.get_center() - Vector2(side, side) / 2.0, Vector2(side, side))
+	var uv_rect := square(rect, card_id)
 	var uvs := PackedVector2Array()
 	for p in pts:
 		uvs.append((p - uv_rect.position) / uv_rect.size)
 	ci.draw_colored_polygon(pts, Color.WHITE, uvs, tex)
+
+
+## Where the card's (square) picture lies for a window rect: covering its longer side, centred, unless
+## framing.json moves it (x, y: by that part of the side, right and down) or zooms it (the side times zoom).
+static func square(rect: Rect2, card_id: String) -> Rect2:
+	var side := maxf(rect.size.x, rect.size.y)
+	var f: Vector3 = _framing.get(card_id, Vector3(0, 0, 1))
+	var size := Vector2(side, side) * f.z
+	return Rect2(rect.get_center() + Vector2(f.x, f.y) * side - size / 2.0, size)
 
 
 static func paint(ci: CanvasItem, rect: Rect2, card_id: String) -> void:

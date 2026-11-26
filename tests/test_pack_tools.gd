@@ -248,8 +248,15 @@ func test_missing_art_and_other_references() -> void:
 	var it := _find(c, PackCheck.ERROR, "logo ui/logo.png is not in the pack")
 	eq([it.get("file"), it.get("line")], ["manifest.json", 4], "a missing picture and its line")
 	check(not _find(c, PackCheck.ERROR, "art_sets painted has no files in art/painted/").is_empty(), "an art set without pictures")
-	c = run(source("art2", {"manifest.json": man.replace(", \"logo\": \"ui/logo.png\"", ""), "art/painted/squire.png": "png", "art/painted/nobody.png": "png"}))
-	eq(c.errors(), 0, "pictures: " + str(_bad(c)))
+	c = run(source("art2", {"manifest.json": man.replace(", \"logo\": \"ui/logo.png\"", ""), "art/painted/squire.png": "png", "art/painted/nobody.png": "png",
+		"art/painted/framing.json": "{\"squire\": {\"x\": 0.1, \"zoom\": 1.2}}"}))
+	eq(c.errors(), 0, "pictures and their framing: " + str(_bad(c)))
+	var c2 := run(source("art3", {"manifest.json": man.replace(", \"logo\": \"ui/logo.png\"", ""), "art/painted/squire.png": "png",
+		"art/painted/other.json": "{}"}), 0)
+	check(not _find(c2, PackCheck.ERROR, "the only JSON file in an art set is framing.json").is_empty(), "another JSON file: " + str(_bad(c2)))
+	c2 = run(source("art4", {"manifest.json": man.replace(", \"logo\": \"ui/logo.png\"", ""), "art/painted/squire.png": "png",
+		"art/painted/framing.json": "{\"squire\": {\"zoom\": 9}}"}), 0)
+	check(not _find(c2, PackCheck.ERROR, "squire.zoom: 9 out of range").is_empty(), "framing.json against its schema: " + str(_bad(c2)))
 	check(not _find(c, PackCheck.WARNING, "no picture for 11 cards").is_empty(), "cards without pictures: a warning")
 	check(not _find(c, PackCheck.WARNING, "1 pictures of no card (nobody)").is_empty(), "a picture of no card: a warning")
 	c = run(source("refs", {"cards.json": TINY["cards.json"].replace("\"class\": \"MOON\", \"set\": \"token\"", "\"class\": \"STAR\", \"set\": \"token\""),

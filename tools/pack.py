@@ -48,7 +48,7 @@ DIRS = {  # dir -> (extensions, depth below dir: 1 = files right in it, 2 = in a
     "decks": ((".json",), 1),
     "missions": ((".json",), 1),
     "ui": (IMAGES + (".json",), 1),  # pictures and theme.json; fonts in ui/fonts/ (FONT_FILES)
-    "art": (IMAGES + (".md",), 2),
+    "art": (IMAGES + (".md", ".json"), 2),  # pictures and framing.json
     "sounds": (AUDIO + (".md",), 2),
     "music": (AUDIO + (".md",), 2),
     "voice": (AUDIO + (".md",), None),
@@ -267,6 +267,8 @@ def check_paths(files, r):
             exts, depth = FONT_FILES, 2
         elif top == "ui" and p.lower().endswith(".json") and p != "ui/theme.json":
             r.error(f"{p}: the only JSON file in ui/ is theme.json")
+        elif top == "art" and p.lower().endswith(".json") and parts[-1] != "framing.json":
+            r.error(f"{p}: the only JSON file in an art set is framing.json")
         if not p.lower().endswith(exts):
             r.error(f"{p}: {top}/ holds only {' '.join(exts)}")
         if depth is not None and len(parts) - 1 != depth:
@@ -533,9 +535,15 @@ def check_files(files):
         if len([s for s in man.get(kind, []) if s.get("default")]) > 1:
             r.error(f"manifest.json: more than one default in {kind}")
     # a card with no picture in any set is drawn on purpose (the cards after Naxxramas): no warning for it
-    pictured = {p.split("/")[2].rsplit(".", 1)[0] for p in files if p.startswith("art/") and p.count("/") == 2}
+    pictured = {p.split("/")[2].rsplit(".", 1)[0] for p in files if p.startswith("art/") and p.count("/") == 2
+                and p.lower().endswith(IMAGES)}
     for s in man.get("art_sets", []):
-        stems = {p.split("/")[2].rsplit(".", 1)[0] for p in files if p.startswith(f"art/{s['id']}/") and not p.endswith(".md")}
+        stems = {p.split("/")[2].rsplit(".", 1)[0] for p in files if p.startswith(f"art/{s['id']}/") and p.lower().endswith(IMAGES)}
+        p = f"art/{s['id']}/framing.json"
+        framed = _json(files, p, r, "framing.schema.json") if p in files else None
+        lost = sorted(set(framed or {}) - stems)
+        if lost:
+            r.warn(f"{p}: {len(lost)} cards with no picture in the set ({', '.join(lost[:5])})")
         unknown = sorted(stems - cards.keys())
         if unknown:
             r.warn(f"art/{s['id']}/: {len(unknown)} pictures of no card ({', '.join(unknown[:5])})")
@@ -763,6 +771,16 @@ def step_copy(b, root, s):
             n += 1
     if n == 0:
         raise PackError(f"copy: nothing matched in {src}")
+    if s["to"].startswith("art/") and (src / "framing.json").is_file():  # the pictures' framing goes with them
+        add_framing(b, f"{s['to']}/framing.json", (src / "framing.json").read_bytes())
+
+
+def add_framing(b, path, data, under=False):
+    """art/<set>/framing.json from several folders (the pack's own, its copies, its bases', each --art-set folder)
+    is one file: each adds its cards, the later one wins for a card both name (under: the earlier one wins)."""
+    old = load_json(b.files[path], path) if path in b.files else {}
+    new = load_json(data, path)
+    b.files[path] = pretty({**new, **old} if under else {**old, **new})
 
 
 def step_hsjson(b, root, s):
@@ -904,7 +922,7 @@ INHERITED_SECTIONS = ["classes", "races", "rarities", "mechanics", "ranks", "car
 ## The files of a base pack's source folder a pack built on it takes (its own win): card scripts, fonts, the
 ## pictures of its own cards (packs/naxx/art: a pack stands alone) and its set marks.
 INHERITED_FILES = ("scripts/**/*.lua", "ui/fonts/*.ttf", "ui/fonts/*.otf", "ui/fonts/*.txt", "art/*/*.webp", "art/*/*.jpg",
-                   "art/*/*.png", "ui/set_*.png")
+                   "art/*/*.png", "art/*/framing.json", "ui/set_*.png")
 
 
 def _many(v):
@@ -959,7 +977,9 @@ def inherit(b, base):
     """The base pack's own files (INHERITED_FILES) and texts (INHERITED_SECTIONS) under what the pack has already."""
     for pat in INHERITED_FILES:
         for f in sorted(base.glob(pat)):
-            if f.is_file() and not f.name.startswith("."):
+            if f.is_file() and f.name == "framing.json":
+                add_framing(b, f.relative_to(base).as_posix(), f.read_bytes(), under=True)
+            elif f.is_file() and not f.name.startswith("."):
                 b.files.setdefault(f.relative_to(base).as_posix(), f.read_bytes())
     if (base / "locales").is_dir():
         step_locales(b, base, {"from": "locales", "sections": INHERITED_SECTIONS})
@@ -1034,6 +1054,8 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):
                     n += 1
             if not n:
                 raise PackError(f"{opt} {spec}: no files")
+            if top == "art" and (folder / "framing.json").is_file():
+                add_framing(b, f"art/{set_id}/framing.json", (folder / "framing.json").read_bytes())
             if not any(s["id"] == set_id for s in b.manifest.get(kind, [])):  # (one set from several folders)
                 b.manifest.setdefault(kind, []).append({"id": set_id, "local": True})
     for v in [voice] if isinstance(voice, (str, Path)) else voice or []:  # voice/<lang>/<card id>_<kind>.opus, marked local

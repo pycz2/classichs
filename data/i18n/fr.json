@@ -1009,6 +1009,7 @@
 "the engine refuses the pack: %s": "le moteur refuse le pack : %s",
 "the file is bigger than 1 GiB": "le fichier dépasse 1 Gio",
 "the only JSON file in ui/ is theme.json": "le seul fichier JSON de ui/ est theme.json",
+"the only JSON file in an art set is framing.json": "le seul fichier JSON d'un jeu d'images est framing.json",
 "the rules engine is missing: %s": "le moteur de règles manque : %s",
 "this is not a zip file": "ce n'est pas un fichier zip",
 "twice in the zip": "en double dans le zip",

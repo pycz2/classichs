@@ -22,7 +22,7 @@ const AUDIO := ["opus", "ogg", "wav", "mp3"]
 ## Folder -> [extensions, depth below it: 1 = files right in it, 2 = in a sub-folder (a set), 0 = any].
 const DIRS := {"scripts": [["lua", "md"], 0], "locales": [["json"], 1], "layout": [["json"], 1],
 	"decks": [["json"], 1], "missions": [["json"], 1], "ui": [["png", "jpg", "jpeg", "webp", "json"], 1],
-	"art": [["png", "jpg", "jpeg", "webp", "md"], 2], "sounds": [["opus", "ogg", "wav", "mp3", "md"], 2],
+	"art": [["png", "jpg", "jpeg", "webp", "md", "json"], 2], "sounds": [["opus", "ogg", "wav", "mp3", "md"], 2],
 	"music": [["opus", "ogg", "wav", "mp3", "md"], 2], "voice": [["opus", "ogg", "wav", "mp3", "md"], 0]}
 const FONT_FILES := ["ttf", "otf", "txt", "md"]
 
@@ -442,6 +442,8 @@ func _check_paths() -> void:
 			depth = 2
 		elif top == "ui" and ext == "json" and p != "ui/theme.json":
 			_item(ERROR, _t("the only JSON file in ui/ is theme.json"), p)
+		elif top == "art" and ext == "json" and p.get_file() != "framing.json":
+			_item(ERROR, _t("the only JSON file in an art set is framing.json"), p)
 		if not exts.has(ext):
 			_item(ERROR, _t("%s/ holds only %s", [top, " ".join(exts.map(func(e): return "." + e))]), p)
 		if depth != 0 and parts.size() - 1 != depth:
@@ -644,8 +646,10 @@ func check() -> void:
 	for s in man.get("art_sets", []):
 		var stems := {}
 		for p: String in files:
-			if p.begins_with("art/%s/" % s.id) and not p.ends_with(".md"):
+			if p.begins_with("art/%s/" % s.id) and IMAGES.has(p.get_extension().to_lower()):
 				stems[p.get_file().get_basename()] = true
+		if files.has("art/%s/framing.json" % s.id):
+			_json("art/%s/framing.json" % s.id, "framing.schema.json")
 		var unknown := stems.keys().filter(func(x): return not cards.has(x))
 		unknown.sort()
 		if not unknown.is_empty():
