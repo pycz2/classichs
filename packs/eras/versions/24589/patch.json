@@ -1,0 +1,150 @@
+{
+ "base": "gil",
+ "build": 24589,
+ "about": "11.1.1.24589 (2018-05-22): Call to Arms 5, Possessed Lackey 6, Spiteful Summoner 7, Naga Sea Witch 8, Crystal Core 4/4, Dark Pact restores 4",
+ "cards": {
+  "AT_035t": {
+   "cost": 3
+  },
+  "CFM_324t": {
+   "rarity": null
+  },
+  "FP1_019t": {
+   "cost": 2
+  },
+  "GIL_837": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verdoppelt das\nLeben Eurer anderen Diener, wenn\nEuer Deck nur Karten mit unge[d]raden Kosten enthält.",
+    "enUS": "<b>Battlecry:</b> If your deck has only odd-Cost cards, double the Health of your other minions.",
+    "esES": "<b>Grito de batalla:</b> Si tu mazo solo contiene cartas de coste impar, duplica la salud de tus otros esbirros.",
+    "frFR": "<b>Cri de guerre :</b> si votre deck ne contient que des cartes de coût impair, double les PV de vos autres serviteurs.",
+    "itIT": "[x]<b>Grido di Battaglia:</b> se il tuo\nmazzo ha solo carte a costo\ndispari, raddoppia la Salute\n   degli altri tuoi servitori.",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli w twojej talii są tylko karty o nieparzystym koszcie, podwój zdrowie twoich pozostałych stronników.",
+    "ptBR": "<b>Grito de Guerra:</b> Se seu deck só tiver cards de custo ímpar, dobre a Vida dos seus outros lacaios.",
+    "ruRU": "<b>Боевой клич:</b> если в колоде нет карт с четной стоимостью, удваивает здоровье других ваших существ."
+   }
+  },
+  "GVG_056t": {
+   "cost": 6
+  },
+  "GVG_111t": {
+   "rarity": null
+  },
+  "ICC_800h3t": {
+   "rarity": null
+  },
+  "ICC_829t2": {
+   "rarity": null
+  },
+  "ICC_829t3": {
+   "rarity": null
+  },
+  "ICC_829t4": {
+   "rarity": null
+  },
+  "ICC_829t5": {
+   "rarity": null
+  },
+  "ICC_832t3": {
+   "cost": 1
+  },
+  "LOE_038": {
+   "cost": 8
+  },
+  "LOE_110t": {
+   "cost": 4
+  },
+  "LOOT_017": {
+   "text": {
+    "deDE": "Vernichtet einen befreundeten Diener. Stellt bei Eurem Helden #4 Leben wieder her.",
+    "enUS": "Destroy a friendly minion. Restore #4 Health to your hero.",
+    "esES": "Destruye a un esbirro amistoso. Restaura #4 p. de salud a tu héroe.",
+    "frFR": "Détruit un serviteur allié. Rend #4 PV à votre héros.",
+    "itIT": "Distrugge un tuo servitore. Rigenera #4 Salute al tuo eroe.",
+    "plPL": "Zniszcz przyjaznego stronnika. Przywróć\n#4 pkt. zdrowia twojemu bohaterowi.",
+    "ptBR": "Destrua um lacaio aliado. Restaure #4 de Vida do seu herói.",
+    "ruRU": "Уничтожает ваше выбранное существо. Восстанавливает #4 ед. здоровья вашему герою."
+   }
+  },
+  "LOOT_093": {
+   "cost": 5
+  },
+  "LOOT_306": {
+   "cost": 6
+  },
+  "LOOT_539": {
+   "cost": 7
+  },
+  "OG_207": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Ruft einen zufälligen Diener herbei, der (3) kostet.",
+    "enUS": "<b>Battlecry:</b> Summon a random 3-Cost minion.",
+    "esES": "<b>Grito de batalla:</b> Invoca a un esbirro aleatorio que cuesta 3 cristales.",
+    "frFR": "<b>Cri de guerre :</b> invoque un serviteur aléatoire coûtant 3 cristaux.",
+    "itIT": "<b>Grido di Battaglia:</b> evoca un servitore casuale da 3 Mana.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przyzwij losowego stronnika\no koszcie (3).",
+    "ptBR": "<b>Grito de Guerra:</b> Evoque um lacaio aleatório com 3 de custo.",
+    "ruRU": "<b>Боевой клич:</b> призывает случайное существо за (3)."
+   }
+  },
+  "OG_319": {
+   "rarity": null
+  },
+  "OG_322": {
+   "text": {
+    "deDE": "Eure Waffen kosten\n(2) weniger.",
+    "enUS": "Your weapons cost (2) less.",
+    "esES": "Tus armas cuestan (2) cristales menos.",
+    "frFR": "Vos armes coûtent (2) cristaux de moins.",
+    "itIT": "Le tue Armi costano (2) in meno.",
+    "plPL": "Twoja broń kosztuje (2) mniej.",
+    "ptBR": "Suas armas custam (2) a menos.",
+    "ruRU": "Ваше оружие стоит на (2) меньше."
+   }
+  },
+  "UNG_028t": {
+   "rarity": null
+  },
+  "UNG_067t1": {
+   "rarity": null,
+   "text": {
+    "deDE": "Für den Rest des Spiels haben Eure Diener die Werte 4/4.",
+    "enUS": "For the rest of the game, your minions are 4/4.",
+    "esES": "Durante el resto de la partida, tus esbirros son 4/4.",
+    "frFR": "Pendant le reste de la partie, vos serviteurs ont 4/4.",
+    "itIT": "Per il resto della partita, i tuoi servitori sono 4/4.",
+    "plPL": "Do końca gry twoi stronnicy mają 4/4.",
+    "ptBR": "Pelo resto do jogo, seus lacaios são 4/4.",
+    "ruRU": "До конца игры ваши существа становятся 4/4."
+   }
+  },
+  "UNG_116t": {
+   "rarity": null
+  },
+  "UNG_829t1": {
+   "rarity": null
+  },
+  "UNG_829t2": {
+   "rarity": null
+  },
+  "UNG_920t1": {
+   "rarity": null
+  },
+  "UNG_934t1": {
+   "rarity": null
+  },
+  "UNG_940t8": {
+   "rarity": null
+  },
+  "UNG_942t": {
+   "rarity": null
+  },
+  "UNG_954t1": {
+   "rarity": null
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 11.1.0.24377, 11.1.1.24589",
+  "HearthstoneJSON builds 23966 and 24589: every card of the base pack compared (tools/extract_cards.py --version-texts 24589 …)"
+ ]
+}

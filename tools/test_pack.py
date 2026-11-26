@@ -1181,6 +1181,67 @@ class Eras(unittest.TestCase):
         self.assertEqual(texts["ru"]["text"], "Каждый раз, когда вы призываете зверя на поле боя, вы берете карту.")
         self.assertEqual(self.card("6024", "VAN_CS2_237")[0]["cost"], 2)
 
+    def scripts(self, vid):
+        v = pack.version_view(self.files, vid)
+        return sorted(p for p in v if p.startswith("scripts/version/"))
+
+    def test_kobolds_and_catacombs_versions(self):
+        # 22611: the loot pack, with the cast-when-drawn tokens' and Frost Widow's costs of that build and no rarity on
+        # the legendary tokens (the rarity of the summoned 1/1s etc. went only in 23180)
+        for cid, cost in (("AT_035t", 3), ("GVG_056t", 6), ("LOE_110t", 4), ("ICC_832t3", 1)):
+            self.assertEqual(self.card("22611", cid)[0]["cost"], cost, cid)
+        self.assertNotIn("rarity", self.card("22611", "UNG_067t1")[0])
+        self.assertEqual(self.card("22611", "VAN_EX1_tk11")[0]["rarity"], "RARE")
+        self.assertNotIn("rarity", self.card("23180", "VAN_EX1_tk11")[0])
+        self.assertEqual(self.scripts("22611"), [])
+        # 23180: Corridor Creeper 2/5, Patches without Charge, Raza (1), Bonemare 8, the "After" wordings
+        for vid, creeper, patches, bonemare in (("22611", 5, ["CHARGE"], 7), ("23180", 2, None, 8), ("23576", 2, None, 8)):
+            self.assertEqual(self.card(vid, "LOOT_149")[0]["attack"], creeper, vid)
+            self.assertEqual(self.card(vid, "CFM_637")[0].get("keywords"), patches, vid)
+            self.assertEqual(self.card(vid, "ICC_705")[0]["cost"], bonemare, vid)
+        raza = self.card("23180", "CFM_020")[1]
+        self.assertIn("costs (1)", raza["en"]["text"])
+        self.assertIn("(0)", self.card("22611", "CFM_020")[1]["en"]["text"])
+        self.assertTrue(self.card("23180", "BRM_019")[1]["en"]["text"].startswith("After this minion survives damage"))
+        self.assertEqual(self.card("23180", "VAN_EX1_304")[1]["es"]["name"], self.card("23576", "VAN_EX1_304")[1]["es"]["name"])
+        self.assertNotEqual(self.card("22611", "VAN_EX1_304")[1]["es"]["name"], self.card("23180", "VAN_EX1_304")[1]["es"]["name"])
+        self.assertEqual(self.scripts("23180"), ["scripts/version/raza.lua"])
+        self.assertEqual(self.scripts("23576"), ["scripts/version/raza.lua"])
+        # 23576: German text fixes only
+        self.assertNotEqual(self.card("23180", "FP1_031")[1]["de"]["text"], self.card("23576", "FP1_031")[1]["de"]["text"])
+
+    def test_witchwood_versions(self):
+        # 23966: the gil pack with the tokens' costs (Treant 2 since 23966)
+        for cid, cost in (("AT_035t", 3), ("GVG_056t", 6), ("LOE_110t", 4), ("ICC_832t3", 1), ("FP1_019t", 2)):
+            self.assertEqual(self.card("23966", cid)[0]["cost"], cost, cid)
+        self.assertEqual(self.card("22611", "FP1_019t")[0]["cost"], 1)
+        self.assertEqual(self.card("23966", "VAN_EX1_620")[0]["cost"], 20)
+        self.assertEqual(self.scripts("23966"), [])
+        self.assertEqual(self.scripts("24377"), ["scripts/version/shudderwock.lua"])
+        # 24589: Call to Arms 5, Possessed Lackey 6, Spiteful Summoner 7, Naga Sea Witch 8, Dark Pact 4, Crystal Core 4/4
+        costs = {"LOOT_093": (4, 5), "LOOT_306": (5, 6), "LOOT_539": (6, 7), "LOE_038": (5, 8)}
+        for cid, (was, now) in costs.items():
+            self.assertEqual(self.card("24377", cid)[0]["cost"], was, cid)
+            for vid in ("24589", "24769", "25252"):
+                self.assertEqual(self.card(vid, cid)[0]["cost"], now, (vid, cid))
+        self.assertIn("#8", self.card("24377", "LOOT_017")[1]["en"]["text"])
+        self.assertIn("#4", self.card("24589", "LOOT_017")[1]["en"]["text"])
+        self.assertIn("4/4", self.card("24589", "UNG_067t1")[1]["ru"]["text"])
+        self.assertEqual(self.scripts("24589"), ["scripts/version/gil.lua", "scripts/version/nerfs.lua",
+                                                 "scripts/version/shudderwock.lua"])
+        for vid in ("24769", "25252"):
+            self.assertEqual(self.scripts(vid), ["scripts/version/gil.lua", "scripts/version/nerfs.lua",
+                                                 "scripts/version/patch_11_2.lua"])
+        # 24769: Baleful Banker's wording
+        self.assertIn("Shuffle a copy into your deck", self.card("24769", "GIL_815")[1]["en"]["text"])
+        # 25252: the tribes; the Druid's upgraded power's text (its pack id and HearthstoneJSON's)
+        for cid, was, now in (("VAN_EX1_105", None, "ELEMENTAL"), ("VAN_EX1_620", None, "ELEMENTAL"),
+                              ("GIL_584", None, "DEMON"), ("AT_103", None, "BEAST"), ("LOE_051", "BEAST", None)):
+            self.assertEqual(self.card("24769", cid)[0].get("race"), was, cid)
+            self.assertEqual(self.card("25252", cid)[0].get("race"), now, cid)
+        for cid in ("VAN_HERO_06bp2", "AT_132_DRUID"):
+            self.assertEqual(self.card("25252", cid)[1]["en"]["text"], "<b>Hero Power</b>\n+2 Attack this turn.\n+2 Armor.")
+
 
 class TestDistribution(unittest.TestCase):
     """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
