@@ -127,6 +127,7 @@ pub async fn standing(c: &impl ConnectionTrait, account: i64, pack: &str, ladder
             rank: Set(s.rank),
             stars: Set(s.stars),
             streak: Set(s.streak),
+            best: Set(s.best),
             ranked_mmr: Set(s.ranked_mmr),
             casual_mmr: Set(s.casual_mmr),
         };
@@ -150,8 +151,15 @@ pub async fn standing_now(c: &impl ConnectionTrait, account: i64, pack: &str, la
         .await?;
     let s = match last {
         Some(l) => {
-            let r = ranked::advance(ladder, l.rank(), l.season, season);
-            Standing { season, rank: r.rank, stars: r.stars, streak: r.streak, ..l }
+            let best_of = |s: &Standing| if s.best >= 0 { ladder.rank_at(s.best) } else { s.rank() };
+            let rows = standing::Entity::find()
+                .filter(standing::Column::Account.eq(account))
+                .filter(standing::Column::Pack.eq(pack))
+                .all(c)
+                .await?;
+            let career = rows.iter().map(|s| best_of(s).rank).min().unwrap_or(l.rank);
+            let r = ranked::advance(ladder, l.rank(), best_of(&l), career, l.season, season);
+            Standing { season, rank: r.rank, stars: r.stars, streak: r.streak, best: r.best_key(ladder), ..l }
         }
         None => Standing {
             account,
@@ -160,6 +168,7 @@ pub async fn standing_now(c: &impl ConnectionTrait, account: i64, pack: &str, la
             rank: ladder.start.rank,
             stars: ladder.start.stars,
             streak: 0,
+            best: ladder.start.best_key(ladder),
             ranked_mmr: 1500.0,
             casual_mmr: 1500.0,
         },
@@ -176,6 +185,7 @@ pub async fn save_standing(c: &impl ConnectionTrait, s: &Standing) -> DbResult<(
         rank: Set(s.rank),
         stars: Set(s.stars),
         streak: Set(s.streak),
+        best: Set(s.best),
         ranked_mmr: Set(s.ranked_mmr),
         casual_mmr: Set(s.casual_mmr),
     }

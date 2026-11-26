@@ -44,6 +44,8 @@ pub struct Ladder {
     pub lowest: i64,
     /// `season.reset.career_floor`: (reached, rank): who ever reached rank `reached` starts no lower than `rank`.
     pub career_floor: Option<(i64, i64)>,
+    /// `season.reset.basis` "best": the reset counts the season's best rank, not the rank at its end.
+    pub best_basis: bool,
 }
 
 impl Ladder {
@@ -74,6 +76,7 @@ impl Ladder {
             legend_to: i(reset, "legend_to", 1),
             lowest: i(reset, "lowest", low),
             career_floor: reset.get("career_floor").and_then(|c| Some((c.get("reached")?.as_i64()?, c.get("rank")?.as_i64()?))),
+            best_basis: reset.get("basis").and_then(Value::as_str) == Some("best"),
             ranks,
         })
     }
@@ -91,6 +94,14 @@ impl Ladder {
     /// Stars a rank holds.
     pub fn max_stars(&self, rank: i64) -> i64 {
         self.index(rank).map_or(1, |i| self.ranks[i].stars)
+    }
+
+    /// The rank of a `Rank::best_key` (Legend above every other).
+    pub fn rank_at(&self, key: i64) -> Rank {
+        if self.legend && key > self.legend_level() {
+            return Rank { rank: LEGEND, stars: 0, streak: 0 };
+        }
+        Rank::climb(self, Rank { rank: self.ranks[0].rank, stars: 0, streak: 0 }, key)
     }
 
     /// Stars from the bottom to Legend (the matchmaking level of a Legend).
@@ -111,6 +122,12 @@ impl Rank {
             Some(i) => l.ranks[..i].iter().map(|s| s.stars).sum::<i64>() + self.stars,
             None => 0,
         }
+    }
+
+    /// A number that grows with the rank (stars from the bottom; Legend one more than rank 1 full): the season's
+    /// best rank is kept as it (standings.best).
+    pub fn best_key(&self, l: &Ladder) -> i64 {
+        self.level(l) + i64::from(self.legend())
     }
 
     /// The rank `stars` stars above `from` (full ranks stay full: 2 stars → 25 at 2/2).
@@ -294,10 +311,12 @@ pub fn date(t: i64) -> String {
     format!("{y:04}-{m:02}-{d:02} {:02}:{:02}", s / 3600, s % 3600 / 60)
 }
 
-/// A rank carried from `from` season to `to`: one reset per month passed.
-pub fn advance(l: &Ladder, mut r: Rank, from: i64, to: i64) -> Rank {
-    for _ in 0..(to - from).clamp(0, 30) {
-        r = r.season_reset(l);
+/// A rank carried from `from` season to `to`: one reset per month passed, the first from the season's `best`
+/// rank when the ladder counts it (`best_basis`); `career_best`: the best rank ever (Legend 0).
+pub fn advance(l: &Ladder, mut r: Rank, best: Rank, career_best: i64, from: i64, to: i64) -> Rank {
+    for i in 0..(to - from).clamp(0, 30) {
+        let basis = if i == 0 && l.best_basis { best } else { r };
+        r = r.season_reset_from(l, basis, career_best);
     }
     r
 }
@@ -357,8 +376,10 @@ mod tests {
         assert_eq!(reset(1), r(16, 2, 0));
         assert_eq!(reset(LEGEND), r(16, 3, 0));
         assert_eq!(reset(25), r(25, 0, 0));
-        assert_eq!(advance(l, r(LEGEND, 0, 0), 10, 10), r(LEGEND, 0, 0));
-        assert_eq!(advance(l, r(LEGEND, 0, 0), 10, 11), r(16, 3, 0));
+        let legend = r(LEGEND, 0, 0);
+        assert_eq!(advance(l, legend, legend, 0, 10, 10), legend);
+        assert_eq!(advance(l, legend, legend, 0, 10, 11), r(16, 3, 0));
+        assert_eq!(advance(l, r(20, 0, 0), legend, 0, 10, 11), r(23, 1, 0)); // the rank at the end (basis "end")
     }
 
     /// Another pack's ladder: 3 ranks of 2 stars, a floor at 2, a streak of 2 gives 2 more, no Legend.
@@ -430,6 +451,12 @@ mod tests {
         assert_eq!(r(19, 1, 0).season_reset_from(new, r(19, 1, 0), 14), r(20, 0, 0));
         assert_eq!(r(19, 1, 0).season_reset_from(new, r(19, 1, 0), 19), r(23, 1, 0));
         assert_eq!(r(12, 0, 0).season_reset_from(new, r(8, 2, 0), 8), r(12, 2, 0));
+        assert_eq!(advance(new, r(12, 0, 0), r(8, 2, 0), 8, 10, 11), r(12, 2, 0));
+        // the best rank kept as a number
+        for x in [r(50, 0, 0), r(8, 2, 0), r(1, 5, 0), r(LEGEND, 0, 0)] {
+            assert_eq!(new.rank_at(x.best_key(new)), x);
+        }
+        assert!(r(LEGEND, 0, 0).best_key(new) > r(1, 5, 0).best_key(new));
     }
 
     #[test]

@@ -20,6 +20,8 @@ pub struct Model {
     pub stars: i64,
     /// Ranked wins in a row.
     pub streak: i64,
+    /// The season's best rank (ranked::Rank::best_key; -1: not known, the rows of before 0.73).
+    pub best: i64,
     pub ranked_mmr: f64,
     pub casual_mmr: f64,
 }
