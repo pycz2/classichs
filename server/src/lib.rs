@@ -222,7 +222,7 @@ impl Hub {
             .map(|(id, s)| {
                 let w = now.duration_since(s.since).as_secs();
                 json!({"id": id, "user": s.name, "mode": s.mode, "waited": w, "window": ranked::shown_window(s.mode, &s.key, w),
-                       "mmr": s.key.mmr.round(), "level": s.key.level, "pack": s.rules.rules_hash, "pack_name": packs::short_name(&s.rules)})
+                       "mmr": s.key.mmr.round(), "level": s.key.level, "pack": s.rules.rules_hash, "pack_name": packs::short_name(&s.rules), "format": s.rules.format})
             })
             .collect();
         queue.sort_by_key(|q| std::cmp::Reverse(q["waited"].as_u64()));
