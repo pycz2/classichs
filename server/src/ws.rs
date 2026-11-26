@@ -29,29 +29,6 @@ use tokio::sync::mpsc::{self, UnboundedSender};
 const MAX_ERRORS: u32 = 20;
 const MAX_FRIENDS: u64 = 200;
 const HISTORY: u64 = 200;
-
-/// Keeps a private message from `from` to `to` (the last HISTORY of a pair stay) → (its id, its time).
-/// The sender's `msg` and an admin's answer to a problem report (reports.rs).
-pub async fn store_msg(c: &impl ConnectionTrait, from: i64, to: i64, text: &str) -> DbResult<(i64, i64)> {
-    let (lo, hi, at) = (from.min(to), from.max(to), ranked::now());
-    let m = message::ActiveModel { lo: Set(lo), hi: Set(hi), src: Set(from), text: Set(text.into()), at: Set(at), seen: Set(false), ..Default::default() };
-    let id = message::Entity::insert(m).exec(c).await?.last_insert_id;
-    let pair = Condition::all().add(message::Column::Lo.eq(lo)).add(message::Column::Hi.eq(hi));
-    let oldest_kept: Option<i64> = message::Entity::find()
-        .select_only()
-        .column(message::Column::Id)
-        .filter(pair.clone())
-        .order_by_desc(message::Column::Id)
-        .offset(HISTORY - 1)
-        .limit(1)
-        .into_tuple()
-        .one(c)
-        .await?;
-    if let Some(oldest) = oldest_kept {
-        message::Entity::delete_many().filter(pair).filter(message::Column::Id.lt(oldest)).exec(c).await?;
-    }
-    Ok((id, at))
-}
 /// Decks an account keeps on the server (all packs together).
 pub const MAX_DECKS: u64 = 100;
 
@@ -915,7 +892,23 @@ impl Session {
                     Some(_) => return Err(e("not_friends", "Messages go to friends only")),
                     None => return Err(e("not_found", "No such player")),
                 };
-                let (_, at) = store_msg(&tx, me, o.id, &text).await?;
+                let (lo, hi, at) = (me.min(o.id), me.max(o.id), ranked::now());
+                let m = message::ActiveModel { lo: Set(lo), hi: Set(hi), src: Set(me), text: Set(text.clone()), at: Set(at), seen: Set(false), ..Default::default() };
+                message::Entity::insert(m).exec_without_returning(&tx).await?;
+                let pair = Condition::all().add(message::Column::Lo.eq(lo)).add(message::Column::Hi.eq(hi));
+                let oldest_kept: Option<i64> = message::Entity::find()
+                    .select_only()
+                    .column(message::Column::Id)
+                    .filter(pair.clone())
+                    .order_by_desc(message::Column::Id)
+                    .offset(HISTORY - 1)
+                    .limit(1)
+                    .into_tuple()
+                    .one(&tx)
+                    .await?;
+                if let Some(id) = oldest_kept {
+                    message::Entity::delete_many().filter(pair).filter(message::Column::Id.lt(id)).exec(&tx).await?;
+                }
                 tx.commit().await?;
                 app.event(
                     self.ev("msg", format!("{my_name} → {}: {text}", o.name))

@@ -971,8 +971,8 @@ impl MigrationTrait for M14 {
     }
 }
 
-/// Problem reports from the game (0.74; `crate::reports`): the picture and the voice message are
-/// in the store (`reports/<id>/screen.png`, `voice.ogg`). `subserver` 0 = the main one.
+/// Problem reports from the game (0.74; `crate::reports`): a thread per report (`report_messages`);
+/// the pictures and the voice message are in the store (`reports/<id>/…`). `subserver` 0 = the main one.
 struct M15;
 
 impl MigrationName for M15 {
@@ -992,20 +992,38 @@ impl MigrationTrait for M15 {
                 account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
                 written_at INTEGER NOT NULL,
                 received_at INTEGER NOT NULL,
+                last_at INTEGER NOT NULL,
                 text TEXT NOT NULL,
                 version TEXT NOT NULL DEFAULT '',
                 context TEXT NOT NULL DEFAULT '{}',
                 games TEXT NOT NULL DEFAULT '[]',
                 screen INTEGER NOT NULL DEFAULT 0,
                 voice INTEGER NOT NULL DEFAULT 0,
-                state TEXT NOT NULL DEFAULT 'new',
+                state TEXT NOT NULL DEFAULT 'open',
                 note TEXT NOT NULL DEFAULT '',
-                answer_message INTEGER
+                merged_into INTEGER,
+                admin_opened INTEGER NOT NULL DEFAULT 0,
+                admin_unread INTEGER NOT NULL DEFAULT 1,
+                player_unread INTEGER NOT NULL DEFAULT 0
             )",
         )
         .await?;
-        c.execute_unprepared("CREATE INDEX reports_subserver ON reports (subserver, received_at)").await?;
+        c.execute_unprepared(
+            "CREATE TABLE report_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                report INTEGER NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+                account INTEGER REFERENCES accounts(id) ON DELETE SET NULL,
+                name TEXT NOT NULL,
+                admin INTEGER NOT NULL,
+                text TEXT NOT NULL,
+                at INTEGER NOT NULL,
+                screen INTEGER NOT NULL DEFAULT 0
+            )",
+        )
+        .await?;
+        c.execute_unprepared("CREATE INDEX reports_subserver ON reports (subserver, last_at)").await?;
         c.execute_unprepared("CREATE INDEX reports_account ON reports (account, received_at)").await?;
+        c.execute_unprepared("CREATE INDEX report_messages_report ON report_messages (report)").await?;
         Ok(())
     }
 }

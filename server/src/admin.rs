@@ -435,7 +435,7 @@ async fn dashboard_json(app: &AppRef, q: DashQ) -> Result<Value, sea_orm::DbErr>
     let accounts = account::Entity::find().count(db).await?;
     let suspended = account::Entity::find().filter(account::Column::Suspended.eq(true)).count(db).await?;
     let games = played::Entity::find().count(db).await?;
-    let reports_new = crate::reports::new_count(app).await?;
+    let reports = crate::reports::counts(app, 0).await?;
     let recent: Vec<Value> = event::Entity::find()
         .filter(event::Column::Kind.ne("game_action"))
         .order_by_desc(event::Column::Id)
@@ -445,7 +445,7 @@ async fn dashboard_json(app: &AppRef, q: DashQ) -> Result<Value, sea_orm::DbErr>
         .iter()
         .map(event_json)
         .collect();
-    Ok(json!({"now": now, "day": day, "today": today, "totals": {"accounts": accounts, "suspended": suspended, "games": games, "reports_new": reports_new},
+    Ok(json!({"now": now, "day": day, "today": today, "totals": {"accounts": accounts, "suspended": suspended, "games": games, "reports_new": reports["new"], "reports_answers": reports["answers"]},
               "chart": {"start": start, "series": series}, "recent": recent, "live": app.hub().live_json()}))
 }
 
