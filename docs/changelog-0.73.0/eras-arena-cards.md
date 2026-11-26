@@ -1,0 +1,2 @@
+ru: Арена в «Hearthstone 2014–2019» теперь предлагает карты, которых не было в коллекции: 9 карт BlizzCon 2017 в версии марта 2018 года и 28 карт «Таверн времени» в версии июня 2018 года, на 8 языках.
+en: The Arena of "Hearthstone 2014–2019" now offers the cards that were never in the collection: the 9 BlizzCon 2017 cards in the version of March 2018 and the 28 Taverns of Time cards in the version of June 2018, in 8 languages.

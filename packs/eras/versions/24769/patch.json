@@ -307,10 +307,1143 @@
     "ptBR": "<b>Poder Heroico</b>\nReceba 2 Armadura e +2 de Ataque neste turno.",
     "ruRU": "<b>Сила героя</b>\n +2 к атаке до конца хода и +2 к броне."
    }
+  },
+  "TOT_030": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_030"
+  },
+  "TOT_030t1": {
+   "keywords": [
+    "TOPDECK"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_030t1"
+  },
+  "TOT_030t2": {
+   "keywords": [
+    "TOPDECK"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_030t2"
+  },
+  "TOT_030t3": {
+   "keywords": [
+    "TOPDECK"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_030t3"
+  },
+  "TOT_030t4": {
+   "keywords": [
+    "TOPDECK"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_030t4"
+  },
+  "TOT_056": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_056"
+  },
+  "TOT_067": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_067"
+  },
+  "TOT_069": {
+   "script": "scripts/version/tot_b.lua#TOT_069"
+  },
+  "TOT_102": {
+   "keywords": [
+    "BATTLECRY",
+    "DEATHRATTLE"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_102"
+  },
+  "TOT_103": {
+   "script": "scripts/version/tot_b.lua#TOT_103"
+  },
+  "TOT_105": {
+   "script": "scripts/version/tot_b.lua#TOT_105"
+  },
+  "TOT_107": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_107"
+  },
+  "TOT_108": {
+   "script": "scripts/version/tot_b.lua#TOT_108"
+  },
+  "TOT_109": {
+   "keywords": [
+    "RUSH"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_109"
+  },
+  "TOT_109t": {
+   "keywords": [
+    "TRIGGER_VISUAL",
+    "UNTOUCHABLE"
+   ]
+  },
+  "TOT_110": {
+   "script": "scripts/version/tot_a.lua#TOT_110"
+  },
+  "TOT_111": {
+   "keywords": [
+    "TRIGGER_VISUAL"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_111"
+  },
+  "TOT_112": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_112"
+  },
+  "TOT_116": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_116"
+  },
+  "TOT_117": {
+   "keywords": [
+    "RUSH",
+    "TRIGGER_VISUAL"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_117"
+  },
+  "TOT_118": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_118"
+  },
+  "TOT_308": {
+   "keywords": [
+    "TRIGGER_VISUAL"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_308"
+  },
+  "TOT_313": {
+   "keywords": [
+    "TRIGGER_VISUAL"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_313"
+  },
+  "TOT_316": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_316"
+  },
+  "TOT_320": {
+   "keywords": [
+    "TRIGGER_VISUAL"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_320"
+  },
+  "TOT_330": {
+   "keywords": [
+    "TOPDECK"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_330"
+  },
+  "TOT_332": {
+   "keywords": [
+    "BATTLECRY"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_332"
+  },
+  "TOT_334": {
+   "keywords": [
+    "TOPDECK"
+   ],
+   "script": "scripts/version/tot_a.lua#TOT_334"
+  },
+  "TOT_340": {
+   "script": "scripts/version/tot_b.lua#TOT_340"
+  },
+  "TOT_341": {
+   "script": "scripts/version/tot_b.lua#TOT_341"
+  },
+  "TOT_342": {
+   "keywords": [
+    "TRIGGER_VISUAL"
+   ],
+   "script": "scripts/version/tot_b.lua#TOT_342"
+  },
+  "TOT_343": {
+   "script": "scripts/version/tot_b.lua#TOT_343"
+  },
+  "TOT_345": {
+   "script": "scripts/version/tot_b.lua#TOT_345"
   }
  },
  "sources": [
   "~/ClassicHS-local/prep/patches/versions.json 11.1.0.24377 to 11.2.0.24769",
-  "HearthstoneJSON builds 23966 and 24769: every card of the base pack compared (tools/extract_cards.py --version-texts 24769 …)"
+  "HearthstoneJSON builds 23966 and 24769: every card of the base pack compared (tools/extract_cards.py --version-texts 24769 …)",
+  "HearthstoneJSON build 24769: the Arena-only TOT_* cards and their tokens (formats.json `extra`), with their names and texts"
+ ],
+ "add": [
+  {
+   "id": "TOT_030",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 4,
+   "attack": 4,
+   "health": 4,
+   "elite": true,
+   "dbfId": 50256,
+   "name": {
+    "enUS": "Chromie",
+    "ruRU": "Хроми",
+    "deDE": "Chromie",
+    "frFR": "Chromie",
+    "esES": "Cromi",
+    "ptBR": "Crona",
+    "itIT": "Cromie",
+    "plPL": "Chronia"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> Shuffle four Historical Epochs \ninto your deck.",
+    "ruRU": "<b>Боевой клич:</b> замешивает в колоду четыре исторические эпохи.",
+    "deDE": "<b>Kampfschrei:</b> Mischt\n4 historische Ereignisse in Euer Deck.",
+    "frFR": "<b>Cri de guerre :</b> place quatre époques historiques dans votre deck.",
+    "esES": "<b>Grito de batalla:</b>\nMete cuatro eras\nen tu mazo.",
+    "ptBR": "<b>Grito de Guerra:</b> Coloque quatro Eras Históricas no seu deck.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nmette 4 Epoche Storiche\nnel tuo mazzo.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nWtasuj cztery Wydarzenia historyczne do twojej talii."
+   }
+  },
+  {
+   "id": "TOT_030t1",
+   "type": "SPELL",
+   "cardClass": "NEUTRAL",
+   "cost": 4,
+   "dbfId": 51158,
+   "name": {
+    "enUS": "Opening the Dark Portal",
+    "ruRU": "Открытие Темного портала",
+    "deDE": "Öffnung des Dunklen Portals",
+    "frFR": "La Porte des ténèbres",
+    "esES": "Apertura del Portal Oscuro",
+    "ptBR": "Abertura do Portal Negro",
+    "itIT": "Apertura del Portale Oscuro",
+    "plPL": "Otwarcie Mrocznego Portalu"
+   },
+   "text": {
+    "enUS": "Add two random Legendary minions to your hand. Draw a card.\nCast this when drawn.",
+    "ruRU": "Вы кладете в руку два случайных легендарных существа. Вы берете карту. Вы разыгрываете эту карту, когда берете ее.",
+    "deDE": "Erhaltet zwei zufällige legendäre Diener auf die Hand. Zieht eine Karte. Wird beim Ziehen gewirkt.",
+    "frFR": "Ajoute deux serviteurs légendaires aléatoires dans votre main. Vous piochez une carte. Lance La Porte des ténèbres quand elle est piochée.",
+    "esES": "Añade dos esbirros\nlegendarios aleatorios a tu mano. Roba una carta. Este hechizo se lanza al robarlo.",
+    "ptBR": "Lance este card quando for comprado. Adicione dois lacaios Lendários aleatórios à sua mão. Compre um card.",
+    "itIT": "[x]Mette due servitori\n<b>Leggendari</b> casuali nella tua\nmano. Pesca una carta.\nQuando peschi questa\nMagia, viene lanciata.",
+    "plPL": "Dodaj 2 losowych legendarnych stronników do twojej ręki. Dobierz kartę. Zagraj Otwarcie Mrocznego Portalu, gdy je dobierzesz."
+   }
+  },
+  {
+   "id": "TOT_030t2",
+   "type": "SPELL",
+   "cardClass": "NEUTRAL",
+   "cost": 4,
+   "dbfId": 51163,
+   "name": {
+    "enUS": "Battle for Mount Hyjal",
+    "ruRU": "Битва за гору Хиджал",
+    "deDE": "Schlacht um den Hyjal",
+    "frFR": "Bataille pour le mont Hyjal",
+    "esES": "Batalla del Monte Hyjal",
+    "ptBR": "Batalha pelo Monte Hyjal",
+    "itIT": "Battaglia per il Monte Hyjal",
+    "plPL": "Bitwa o Górę Hyjal"
+   },
+   "text": {
+    "enUS": "Give your minions +2/+2. Draw a card.\nCast this when drawn.",
+    "ruRU": "Ваши существа получают +2/+2. Вы берете карту. Вы разыгрываете эту карту, когда берете ее.",
+    "deDE": "Verleiht Euren Dienern +2/+2. Zieht eine Karte. Wird beim Ziehen gewirkt.",
+    "frFR": "Donne +2/+2 à vos serviteurs. Vous piochez une carte. Lance Bataille pour le mont Hyjal quand elle est piochée.",
+    "esES": "[x]Otorga +2/+2 a tus\nesbirros. Roba una carta.\nEste hechizo se lanza\nal robarlo.",
+    "ptBR": "Lance este card quando for comprado. Conceda +2/+2 aos seus lacaios. Compre um card.",
+    "itIT": "[x]+2/+2 ai tuoi servitori.\nPesca una carta.\nQuando peschi questa\nMagia, viene lanciata.",
+    "plPL": "Daj twoim stronnikom +2/+2. Dobierz kartę. Zagraj Bitwę o Górę Hyjal, gdy ją dobierzesz."
+   }
+  },
+  {
+   "id": "TOT_030t3",
+   "type": "SPELL",
+   "cardClass": "NEUTRAL",
+   "cost": 4,
+   "dbfId": 51160,
+   "name": {
+    "enUS": "Escape from Durnholde",
+    "ruRU": "Побег из Дарнхольда",
+    "deDE": "Flucht aus Durnholde",
+    "frFR": "Évasion de Fort-de-Durn",
+    "esES": "Huida de Durnholde",
+    "ptBR": "Fuga do Forte do Desterro",
+    "itIT": "Fuga da Durnholde",
+    "plPL": "Ucieczka z Twierdzy Durnhold"
+   },
+   "text": {
+    "enUS": "Add two random spells to your hand.\nDraw a card.\nCast this when drawn.",
+    "ruRU": "Вы кладете в руку два случайных заклинания.\nВы берете карту. Вы разыгрываете эту\nкарту, когда берете ее.",
+    "deDE": "Erhaltet zwei zufällige Zauber auf die Hand. Zieht eine Karte. Wird beim Ziehen gewirkt.",
+    "frFR": "Ajoute deux sorts aléatoires dans votre main. Vous piochez une carte. Lance Évasion de Fort-de-Durn quand elle est piochée.",
+    "esES": "Añade dos hechizos aleatorios a tu mano. Roba una carta. Este hechizo se lanza al robarlo.",
+    "ptBR": "Lance este card quando for comprado. Adicione dois feitiços aleatórios à sua mão. Compre um card.",
+    "itIT": "[x]Mette 2 Magie casuali\nnella tua mano. Pesca una\ncarta. Quando peschi questa\nMagia, viene lanciata.",
+    "plPL": "Dodaj dwa losowe zaklęcia do twojej ręki.\nDobierz kartę. Zagraj\nUcieczkę z Twierdzy Durnhold, gdy ją dobierzesz."
+   }
+  },
+  {
+   "id": "TOT_030t4",
+   "type": "SPELL",
+   "cardClass": "NEUTRAL",
+   "cost": 4,
+   "dbfId": 51164,
+   "name": {
+    "enUS": "Culling of Stratholme",
+    "ruRU": "Очищение Стратхольма",
+    "deDE": "Ausmerzen von Stratholme",
+    "frFR": "Épuration de Stratholme",
+    "esES": "Matanza de Stratholme",
+    "ptBR": "Expurgo de Stratholme",
+    "itIT": "Epurazione di Stratholme",
+    "plPL": "Rzeź Stratholmu"
+   },
+   "text": {
+    "enUS": "Deal $2 damage to all enemies.\nDraw a card.\nCast this when drawn.",
+    "ruRU": "[x]Наносит $2 ед. урона всем\nпротивникам. Вы берете карту.\nВы разыгрываете эту карту,\nкогда берете ее.",
+    "deDE": "Fügt allen Feinden $2 Schaden zu. Zieht eine Karte. Wird beim Ziehen gewirkt.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à tous les ennemis. Vous piochez une carte. Lance Épuration de Stratholme quand elle est piochée.",
+    "esES": "Inflige $2 p. de daño\na todos los enemigos.\nRoba una carta. Este hechizo se lanza al robarlo.",
+    "ptBR": "Lance este card quando for comprado. Cause $2 de dano a todos os inimigos. Compre um card.",
+    "itIT": "Infligge $2 danni ai nemici. Pesca una carta. Quando peschi questa Magia, viene lanciata.",
+    "plPL": "Zadaj $2 pkt. obrażeń wszystkim wrogom. Dobierz kartę. Zagraj Rzeź Stratholmu,\ngdy ją dobierzesz."
+   }
+  },
+  {
+   "id": "TOT_056",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 5,
+   "attack": 5,
+   "health": 5,
+   "dbfId": 50823,
+   "name": {
+    "enUS": "Wildlands Adventurer",
+    "ruRU": "Искательница приключений",
+    "deDE": "Abenteurerin der Wildnis",
+    "frFR": "Aventurière des terres sauvages",
+    "esES": "Aventurera de las tierras vírgenes",
+    "ptBR": "Andejo das Terras Virgens",
+    "itIT": "Avventuriera delle Selve",
+    "plPL": "Odkrywcza awanturniczka"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> Add a random card from the Hall of Fame to your hand.",
+    "ruRU": "<b>Боевой клич:</b> вы кладете в руку случайную карту из Зала славы.",
+    "deDE": "<b>Kampfschrei:</b> Erhaltet eine zufällige Karte aus dem Set der zeitlosen Klassiker auf die Hand.",
+    "frFR": "<b>Cri de guerre :</b> ajoute une carte du Panthéon aléatoire dans votre main.",
+    "esES": "<b>Grito de batalla:</b>\nAñade una carta aleatoria del Salón de la fama a tu mano.",
+    "ptBR": "<b>Grito de Guerra:</b> Adicione um card aleatório do Salão da Fama à sua mão.",
+    "itIT": "<b>Grido di Battaglia:</b>\nmette una carta casuale delle Vecchie Glorie nella tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Dodaj\nlosową kartę z Sali Sław do twojej ręki."
+   }
+  },
+  {
+   "id": "TOT_067",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 1,
+   "attack": 1,
+   "health": 1,
+   "race": "MURLOC",
+   "dbfId": 50969,
+   "name": {
+    "enUS": "Infinite Murloc",
+    "ruRU": "Мурлок бесконечности",
+    "deDE": "Ewiger Murloc",
+    "frFR": "Murloc infini",
+    "esES": "Múrloc infinito",
+    "ptBR": "Murloc Infinito",
+    "itIT": "Murloc dell'Infinito",
+    "plPL": "Nieskończony murlok"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> Shuffle an Infinite Murloc into your deck.\n[x]Your future Infinite Murlocs[x]\n get +1/+1.",
+    "ruRU": "<b>Боевой клич:</b> вы замешиваете [x]в колоду мурлока бесконечности.\nВаши будущие \nмурлоки бесконечности\nполучают +1/+1.",
+    "deDE": "<b>Kampfschrei:</b> Mischt einen Ewigen Murloc in Euer Deck. All Eure zukünftigen Ewigen Murlocs erhalten +1/+1.",
+    "frFR": "<b>Cri de guerre :</b> place un Murloc infini dans votre deck. Confère +1/+1 aux Murlocs infinis suivants.",
+    "esES": "<b>Grito de batalla:</b> Mete un múrloc infinito en tu mazo. Tus próximos múrlocs infinitos obtienen +1/+1.",
+    "ptBR": "<b>Grito de Guerra:</b> Coloque um Murloc Infinito no seu deck. Seus Murlocs Infinitos futuros recebem +1/+1.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nmette un Murloc dell'Infinito\nnel tuo mazzo. I tuoi futuri\nMurloc dell'Infinito\nottengono +1/+1.",
+    "plPL": "<b>Okrzyk bojowy:</b> Wtasuj Nieskończonego murloka do twojej talii. Twoje przyszłe Nieskończone murloki mają +1/+1."
+   }
+  },
+  {
+   "id": "TOT_069",
+   "type": "SPELL",
+   "cardClass": "PALADIN",
+   "cost": 1,
+   "dbfId": 50973,
+   "name": {
+    "enUS": "Blessing of Aeons",
+    "ruRU": "Дар вечности",
+    "deDE": "Segen der Äonen",
+    "frFR": "Bénédiction des éons",
+    "esES": "Bendición de los eones",
+    "ptBR": "Bênção dos Éons",
+    "itIT": "Benedizione degli Eoni",
+    "plPL": "Błogosławieństwo eonów"
+   },
+   "text": {
+    "enUS": "Give a minion \"At the end of your turn, gain +1/+1.\"",
+    "ruRU": "Выбранное существо получает эффект:\n«В конце вашего хода получает +1/+1».",
+    "deDE": "Verleiht einem Diener „Erhält am Ende Eures Zuges +1/+1.“",
+    "frFR": "Confère à un serviteur « Gagne +1/+1 à la fin de votre tour. »",
+    "esES": "Otorga a un esbirro\n«Al final de tu turno, obtiene +1/+1».",
+    "ptBR": "Conceda a um lacaio: \"No final do seu turno, receba +1/+1\".",
+    "itIT": "Fornisce \"Alla fine del tuo turno, ottiene +1/+1\" a un servitore.",
+    "plPL": "Daj stronnikowi opis „Na koniec twojej tury otrzymuje +1/+1”."
+   }
+  },
+  {
+   "id": "TOT_102",
+   "type": "MINION",
+   "cardClass": "WARLOCK",
+   "cost": 7,
+   "attack": 5,
+   "health": 5,
+   "race": "DRAGON",
+   "dbfId": 51044,
+   "name": {
+    "enUS": "Rift Warden",
+    "ruRU": "Страж разлома",
+    "deDE": "Risswächter",
+    "frFR": "Gardien de la faille",
+    "esES": "Celador de falla",
+    "ptBR": "Carcereiro da Fissura",
+    "itIT": "Signore del Varco",
+    "plPL": "Strażnik szczeliny"
+   },
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> Discard a \nrandom minion.\n <b>Deathrattle:</b> Summon it.",
+    "ruRU": "<b>Боевой клич:</b> вы сбрасываете случайное существо. <b>Предсмертный хрип:</b> вы его призываете.",
+    "deDE": "<b>Kampfschrei:</b> Werft einen zufälligen Diener ab. <b>Todesröcheln:</b> Ruft ihn wieder herbei.",
+    "frFR": "<b>Cri de guerre :</b> vous défausse d’un serviteur aléatoire. <b>Râle d’agonie :</b> l’invoque.",
+    "esES": "<b>Grito de batalla:</b>\nDescarta un esbirro aleatorio. <b>Último aliento:</b> Lo invoca.",
+    "ptBR": "<b>Grito de Guerra:</b> Descarte um lacaio aleatório. <b>Último Suspiro:</b> Evoque-o.",
+    "itIT": "<b>Grido di Battaglia:</b>\nscarta un servitore casuale. <b>Rantolo di Morte:</b> evoca quel servitore.",
+    "plPL": "<b>Okrzyk bojowy:</b> Odrzuć losowego stronnika.\n<b>Agonia:</b> Przyzwij go."
+   }
+  },
+  {
+   "id": "TOT_103",
+   "type": "SPELL",
+   "cardClass": "WARLOCK",
+   "cost": 4,
+   "dbfId": 51042,
+   "name": {
+    "enUS": "Grasp the Future",
+    "ruRU": "Задел на будущее",
+    "deDE": "Blick in die Zukunft",
+    "frFR": "Avenir prometteur",
+    "esES": "Revelar el futuro",
+    "ptBR": "Alcançar o Futuro",
+    "itIT": "Visione del Futuro",
+    "plPL": "Przyszłość w zasięgu ręki"
+   },
+   "text": {
+    "enUS": "Draw 2 cards.\nThey cost (2) less.",
+    "ruRU": "Вы берете 2 карты. Они стоят на (2) меньше.",
+    "deDE": "Zieht 2 Karten.\nSie kosten (2) weniger.",
+    "frFR": "Vous piochez 2 cartes. Elles coûtent (2) |4(cristal,cristaux) de moins.",
+    "esES": "Roba 2 cartas.\nCuestan (2) cristales menos.",
+    "ptBR": "Compre 2 cards. Eles custam (2) a menos.",
+    "itIT": "Pesca 2 carte.\nCostano (2) in meno.",
+    "plPL": "Dobierz 2 karty. Kosztują (2) mniej."
+   }
+  },
+  {
+   "id": "TOT_105",
+   "type": "SPELL",
+   "cardClass": "DRUID",
+   "cost": 3,
+   "dbfId": 51046,
+   "name": {
+    "enUS": "Flash Forward",
+    "ruRU": "Предвосхищение",
+    "deDE": "Zeitsprung",
+    "frFR": "Projection dans l’avenir",
+    "esES": "Regreso al futuro",
+    "ptBR": "Avançar",
+    "itIT": "Scatto in Avanti",
+    "plPL": "Błysk czasu"
+   },
+   "text": {
+    "enUS": "Each player gains two Mana Crystals and draws two cards.",
+    "ruRU": "Каждый игрок получает два кристалла маны и берет две карты.",
+    "deDE": "Jeder Spieler erhält zwei Manakristalle und zieht zwei Karten.",
+    "frFR": "Chaque joueur gagne deux cristaux de mana et pioche deux cartes.",
+    "esES": "Cada jugador obtiene dos cristales de maná y roba dos cartas.",
+    "ptBR": "Cada jogador recebe dois Cristais de Mana e compra dois cards.",
+    "itIT": "Ogni giocatore ottiene 2 Cristalli di Mana e pesca 2 carte.",
+    "plPL": "Każdy gracz otrzymuje dwa kryształy many i dobiera dwie karty."
+   }
+  },
+  {
+   "id": "TOT_107",
+   "type": "MINION",
+   "cardClass": "ROGUE",
+   "cost": 4,
+   "attack": 4,
+   "health": 3,
+   "dbfId": 51048,
+   "name": {
+    "enUS": "Thief of Futures",
+    "ruRU": "Похититель будущего",
+    "deDE": "Zukunftsdieb",
+    "frFR": "Voleur d’avenir",
+    "esES": "Ladrón de futuros",
+    "ptBR": "Ladrão de Futuros",
+    "itIT": "Ladro di Futuri",
+    "plPL": "Złodziej przyszłości"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> Add a copy of the top card of your opponent's deck to your hand.",
+    "ruRU": "<b>Боевой клич:</b> вы кладете в руку копию верхней карты в колоде противника.",
+    "deDE": "<b>Kampfschrei:</b> Erhaltet eine Kopie der obersten Karte im Deck Eures Gegners auf die Hand.",
+    "frFR": "<b>Cri de guerre :</b> ajoute une copie de la carte du dessus du deck de votre adversaire dans votre main.",
+    "esES": "[x]<b>Grito de batalla:</b>\nAñade a tu mano una copia\nde la primera carta del mazo\nde tu oponente.",
+    "ptBR": "<b>Grito de Guerra:</b> Adicione à sua mão uma cópia do card que está no topo do deck do oponente.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nmette nella tua mano una\ncopia della carta in cima al\n mazzo dell'avversario.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nDodaj kopię górnej karty z talii przeciwnika do twojej ręki."
+   }
+  },
+  {
+   "id": "TOT_108",
+   "type": "SPELL",
+   "cardClass": "ROGUE",
+   "cost": 1,
+   "dbfId": 51049,
+   "name": {
+    "enUS": "Déjà Vu",
+    "ruRU": "Дежавю",
+    "deDE": "Déjà-vu",
+    "frFR": "Déjà-vu",
+    "esES": "Déjà vu",
+    "ptBR": "Déjà Vu",
+    "itIT": "Déjà Vu",
+    "plPL": "Déjà vu"
+   },
+   "text": {
+    "enUS": "<b>Discover</b> a copy of a spell you played this game.",
+    "ruRU": "Вы <b>раскапываете</b> копию заклинания, разыгранного вами в этом матче.",
+    "deDE": "<b>Entdeckt</b> eine Kopie eines Zaubers,\nden Ihr in diesem Spiel ausgespielt habt.",
+    "frFR": "<b>Découvre</b> une copie d’un sort que vous avez joué pendant cette partie.",
+    "esES": "<b>Descubre</b> una copia\nde un hechizo\nque hayas usado\nen esta partida.",
+    "ptBR": "<b>Descubra</b> uma cópia de um feitiço que você jogou nesta partida.",
+    "itIT": "<b>Rinvieni</b> una copia di una Magia che hai giocato in questa partita.",
+    "plPL": "<b>Odkryj</b> kopię zaklęcia zagranego przez ciebie w tej grze."
+   }
+  },
+  {
+   "id": "TOT_109",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 6,
+   "attack": 10,
+   "health": 10,
+   "race": "DRAGON",
+   "dbfId": 51050,
+   "name": {
+    "enUS": "Stasis Dragon",
+    "ruRU": "Стазисный дракон",
+    "deDE": "Stasisdrache",
+    "frFR": "Dragon en stase",
+    "esES": "Dragón de estasis",
+    "ptBR": "Dragão de Estase",
+    "itIT": "Drago in Stasi",
+    "plPL": "Smok w stazie"
+   },
+   "text": {
+    "enUS": "Starts dormant.\nThis awakens with <b>Rush</b> after two turns.",
+    "ruRU": "Призывается в спячке. Пробуждается c <b>«Натиском»</b> через два хода.",
+    "deDE": "Zu Beginn inaktiv. Erwacht nach zwei Zügen mit <b>Eifer</b>.",
+    "frFR": "En sommeil. Se réveille avec <b>Ruée</b> au bout de deux tours.",
+    "esES": "[x]Comienza aletargado.\nDespierta con <b>Embestir</b>\ndespués de dos turnos.",
+    "ptBR": "Começa adormecido. Desperta com <b>Rapidez</b> após dois turnos.",
+    "itIT": "[x]Entra dormiente. Dopo\ndue turni, si risveglia\ncon <b>Assalto</b>.",
+    "plPL": "Zaczyna w stanie uśpienia. Po dwóch turach budzi się ze <b>Zrywem</b>."
+   }
+  },
+  {
+   "id": "TOT_109t",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 6,
+   "attack": 10,
+   "health": 10,
+   "race": "DRAGON",
+   "dbfId": 51149,
+   "name": {
+    "enUS": "Stasis Dragon",
+    "ruRU": "Стазисный дракон",
+    "deDE": "Stasisdrache",
+    "frFR": "Dragon en stase",
+    "esES": "Dragón de estasis",
+    "ptBR": "Dragão de Estase",
+    "itIT": "Drago in Stasi",
+    "plPL": "Smok w stazie"
+   }
+  },
+  {
+   "id": "TOT_110",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 15,
+   "attack": 8,
+   "health": 8,
+   "dbfId": 51067,
+   "name": {
+    "enUS": "Timebound Giant",
+    "ruRU": "Временной великан",
+    "deDE": "Zeitgebundener Riese",
+    "frFR": "Géant chronolié",
+    "esES": "Gigante atrapado en el tiempo",
+    "ptBR": "Gigante do Tempo",
+    "itIT": "Gigante Cronovincolato",
+    "plPL": "Temporalny olbrzym"
+   },
+   "text": {
+    "enUS": "Costs (1) less for each card you've drawn.",
+    "ruRU": "Стоит на (1) меньше за каждую взятую вами карту.",
+    "deDE": "Kostet (1) weniger für jede Karte, die Ihr gezogen habt.",
+    "frFR": "Coûte (1) |4(cristal,cristaux) de moins pour chaque carte que vous avez piochée.",
+    "esES": "Cuesta (1) cristal menos\npor cada carta\nque hayas robado.",
+    "ptBR": "Custa (1) a menos para cada card que você comprou.",
+    "itIT": "Costa (1) in meno per ogni carta che hai pescato.",
+    "plPL": "Kosztuje (1) mniej za każdą dobraną przez ciebie kartę."
+   }
+  },
+  {
+   "id": "TOT_111",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 3,
+   "attack": 2,
+   "health": 4,
+   "dbfId": 51068,
+   "name": {
+    "enUS": "Timeline Witness",
+    "ruRU": "Хрономант-наблюдатель",
+    "deDE": "Beobachter der Zeitlinie",
+    "frFR": "Témoin de la ligne temporelle",
+    "esES": "Testigo del tiempo",
+    "ptBR": "Testemunha Temporal",
+    "itIT": "Testimone Cronologico",
+    "plPL": "Świadek linii czasowej"
+   },
+   "text": {
+    "enUS": "Instead of drawing your normal card each turn, <b>Discover</b> a card from your deck.",
+    "ruRU": "[x]На вашем ходу\nвы не берете,\nа <b>раскапываете</b>\nкарту из колоды.",
+    "deDE": "[x]Anstatt in jedem Zug wie\nüblich eine Karte zu ziehen,\n<b>entdeckt</b> Ihr eine Karte aus\nEurem Deck.",
+    "frFR": "Au début de votre tour, au lieu de piocher normalement, vous <b>découvrez</b> une carte de votre deck.",
+    "esES": "[x]En vez de robar la\ncarta habitual de cada\nturno, <b>Descubre</b> una\ncarta de tu mazo.",
+    "ptBR": "Em vez de comprar um card a cada turno, você <b>Descobre</b> um card do seu deck.",
+    "itIT": "[x]Invece di pescare\nnormalmente la carta nel\ntuo turno, <b>Rinvieni</b> una\ncarta dal tuo mazzo.",
+    "plPL": "Zamiast dobrać kartę w twojej turze <b>Odkrywasz</b> kartę z twojej talii."
+   }
+  },
+  {
+   "id": "TOT_112",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 4,
+   "attack": 4,
+   "health": 5,
+   "race": "DRAGON",
+   "dbfId": 51071,
+   "name": {
+    "enUS": "Possibility Seeker",
+    "ruRU": "Оппортунист",
+    "deDE": "Schicksalslenker",
+    "frFR": "Chercheur de possibilités",
+    "esES": "Buscaposibilidades",
+    "ptBR": "Caçador de Possibilidades",
+    "itIT": "Cacciatore di Probabilità",
+    "plPL": "Poszukiwacz możliwości"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> Shuffle your hand into your deck. Draw that many cards.",
+    "ruRU": "[x]<b>Боевой клич:</b> вы\nзамешиваете все карты\nиз руки в колоду и берете\nстолько же карт.",
+    "deDE": "<b>Kampfschrei:</b> Mischt Eure Hand in Euer Deck und zieht ebenso viele Karten.",
+    "frFR": "<b>Cri de guerre :</b> place votre main dans votre deck. Vous piochez un nombre de cartes équivalent.",
+    "esES": "<b>Grito de batalla:</b>\nMete tu mano en tu mazo. Roba el mismo número de cartas.",
+    "ptBR": "<b>Grito de Guerra:</b> Coloque sua mão de volta no seu deck. Compre a mesma quantidade de cards.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nmette la tua mano nel tuo\nmazzo. Pesca lo stesso\nnumero di carte.",
+    "plPL": "<b>Okrzyk bojowy:</b> Wtasuj twoją rękę do twojej talii i dobierz odpowiadającą jej liczbę kart."
+   }
+  },
+  {
+   "id": "TOT_116",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 5,
+   "attack": 6,
+   "health": 3,
+   "dbfId": 51087,
+   "name": {
+    "enUS": "Timeway Wanderer",
+    "ruRU": "Вневременной странник",
+    "deDE": "Wanderer der Zeiten",
+    "frFR": "Errant des voies temporelles",
+    "esES": "Errante del tiempo",
+    "ptBR": "Errante do Percurso Temporal",
+    "itIT": "Viandante Temporale",
+    "plPL": "Czasotułacz"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> <b>Discover</b> a spell. Reduce its cost by (5) then put it on top of your deck.",
+    "ruRU": "<b>Боевой клич:</b> вы <b>раскапываете</b> заклинание и кладете его на верх колоды. Оно стоит на (5) меньше.",
+    "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> einen Zauber. Verringert seine Kosten um (5), dann platziert ihn zuoberst in Eurem Deck.",
+    "frFR": "<b>Cri de guerre : découvre</b> un sort. Réduit son coût de (5) |4(cristal,cristaux), puis le place sur le dessus de votre deck.",
+    "esES": "[x]<b>Grito de batalla:</b>\n<b>Descubre</b> un hechizo.\nReduce su coste (5) cristales\ny lo coloca en lo alto\nde tu mazo.",
+    "ptBR": "<b>Grito de Guerra:</b> <b>Descubra</b> um feitiço. Reduza o custo dele em (5) e coloque-o no topo do seu deck.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\n<b>Rinvieni</b> una Magia. Ne riduce\nil costo di (5) e viene messa\nin cima al tuo mazzo.",
+    "plPL": "[x]<b>Okrzyk bojowy:</b>\n<b>Odkryj</b> zaklęcie. Zmniejsz \njego koszt o (5) i umieść\n   je na górze twojej talii."
+   }
+  },
+  {
+   "id": "TOT_117",
+   "type": "MINION",
+   "cardClass": "HUNTER",
+   "cost": 4,
+   "attack": 5,
+   "health": 5,
+   "race": "BEAST",
+   "dbfId": 51089,
+   "name": {
+    "enUS": "Infinite Wolf",
+    "ruRU": "Волк бесконечности",
+    "deDE": "Ewiger Wolf",
+    "frFR": "Loup éternel",
+    "esES": "Lobo infinito",
+    "ptBR": "Lobo Infinito",
+    "itIT": "Lupo dell'Infinito",
+    "plPL": "Wilk nieskończoności"
+   },
+   "text": {
+    "enUS": "<b>Rush</b>. After this attacks,\nshuffle it into your deck and give future Infinite Wolves +2/+2.",
+    "ruRU": "[x]<b>Натиск</b>. После того как это\nсущество атакует, вы замешиваете\nего в колоду, а все последующие\n«Волки бесконечности»\nполучают +2/+2.",
+    "deDE": "<b>Eifer</b>. Nachdem dieser Diener angegriffen hat, wird er in Euer Deck gemischt. Alle Ewigen Wölfe erhalten +2/+2.",
+    "frFR": "<b>Ruée</b>\nUne fois qu’il a attaqué, le\nplace dans votre deck et donne +2/+2 aux prochains loups éternels.",
+    "esES": "[x]<b>Embestir</b>. Después de \natacar, vuelve a tu mazo y\notorga +2/+2 a los futuros\nlobos infinitos.",
+    "ptBR": "<b>Rapidez</b>. Depois que este lacaio atacar, coloque-o no seu deck e conceda +2/+2 a futuros Lobos Infinitos.",
+    "itIT": "[x]<b>Assalto</b>. Dopo che ha\nattaccato, torna nel tuo\nmazzo e fornisce +2/+2 ai\n   futuri Lupi dell'Infinito.",
+    "plPL": "<b>Zryw</b>\nGdy zaatakuje, wtasuj go do twojej talii i daj wszystkim kolejnym Wilkom nieskończoności +2/+2."
+   }
+  },
+  {
+   "id": "TOT_118",
+   "type": "MINION",
+   "cardClass": "SHAMAN",
+   "cost": 4,
+   "attack": 3,
+   "health": 5,
+   "race": "ELEMENTAL",
+   "dbfId": 51143,
+   "name": {
+    "enUS": "Stasis Elemental",
+    "ruRU": "Стазименталь",
+    "deDE": "Stasiselementar",
+    "frFR": "Élémentaire de stase",
+    "esES": "Elemental de estasis",
+    "ptBR": "Elemental de Estase",
+    "itIT": "Elementale di Stasi",
+    "plPL": "Żywiołak stazy"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> <b>Freeze</b> a minion until this leaves the battlefield.",
+    "ruRU": "<b>Боевой клич:</b> <b>замораживает</b>\nвыбранное существо. Оно остается замороженным, пока это существо не покинет игру.",
+    "deDE": "<b>Kampfschrei:</b> <b>Friert</b> einen Diener ein, bis der Stasiselementar das Schlachtfeld verlässt.",
+    "frFR": "<b>Cri de guerre : gèle</b> un serviteur jusqu’à ce que cette carte quitte le champ de bataille.",
+    "esES": "<b>Grito de batalla:</b>\n<b>Congela</b> a un esbirro hasta que el elemental sale del campo de batalla.",
+    "ptBR": "<b>Grito de Guerra:</b> <b>Congele</b> um lacaio até este lacaio sair do campo de batalha.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\n<b>Congela</b> un servitore finché\nl'Elementale di Stasi non\nabbandona il campo.",
+    "plPL": "<b>Okrzyk bojowy:</b> <b>Zamroź</b> stronnika. Pozostanie <b>Zamrożony</b> dopóki Żywiołak stazy jest na polu bitwy."
+   }
+  },
+  {
+   "id": "TOT_303t",
+   "type": "MINION",
+   "cardClass": "PALADIN",
+   "cost": 1,
+   "attack": 1,
+   "health": 1,
+   "race": "DRAGON",
+   "dbfId": 51014,
+   "name": {
+    "enUS": "Wee Whelp",
+    "ruRU": "Дракоша",
+    "deDE": "Winziger Welpling",
+    "frFR": "Petit dragonnet",
+    "esES": "Pequeña cría",
+    "ptBR": "Dragonete Miúdo",
+    "itIT": "Draghettino",
+    "plPL": "Tycie pisklę"
+   }
+  },
+  {
+   "id": "TOT_308",
+   "type": "MINION",
+   "cardClass": "MAGE",
+   "cost": 2,
+   "attack": 1,
+   "health": 3,
+   "dbfId": 51029,
+   "name": {
+    "enUS": "Cavern Dreamer",
+    "ruRU": "Пещерный сновидец",
+    "deDE": "Höhlenträumer",
+    "frFR": "Rêveur de la caverne",
+    "esES": "Soñador de la caverna",
+    "ptBR": "Sonhador das Cavernas",
+    "itIT": "Sognatore della Caverna",
+    "plPL": "Chrapiący ork"
+   },
+   "text": {
+    "enUS": "At the end of your turn, add a random spell that costs (2) or less to your hand.",
+    "ruRU": "В конце вашего хода вы кладете в руку случайное заклинание за (2) или меньше.",
+    "deDE": "Erhaltet am Ende Eures Zuges einen zufälligen Zauber auf die Hand, der max. (2) kostet.",
+    "frFR": "À la fin de votre tour, ajoute dans votre main un sort aléatoire coûtant (2) |4(cristal,cristaux) ou moins.",
+    "esES": "[x]Al final de tu turno,\nañade a tu mano un\nhechizo aleatorio que cuesta\n(2) cristales o menos.",
+    "ptBR": "No final do seu turno, adicione um feitiço aleatório que custa (2) ou menos à sua mão.",
+    "itIT": "Alla fine del tuo turno, mette nella tua mano una Magia casuale da 2 o meno Mana.",
+    "plPL": "Na koniec twojej\ntury dodaj losowe zaklęcie kosztujące (2) lub mniej do twojej ręki."
+   }
+  },
+  {
+   "id": "TOT_313",
+   "type": "MINION",
+   "cardClass": "SHAMAN",
+   "cost": 6,
+   "attack": 5,
+   "health": 7,
+   "dbfId": 51070,
+   "name": {
+    "enUS": "Master of Realities",
+    "ruRU": "Повелитель реальностей",
+    "deDE": "Meister der Wirklichkeiten",
+    "frFR": "Maître des réalités",
+    "esES": "Maestro de realidades",
+    "ptBR": "Mestre das Realidades",
+    "itIT": "Signore delle Realtà",
+    "plPL": "Zaginacz rzeczywistości"
+   },
+   "text": {
+    "enUS": "[x]After you summon a minion,\n transform it into a random\n minion that costs (2) more.",
+    "ruRU": "После того как вы призываете существо, оно превращается\n[x]в случайное на (2) дороже.",
+    "deDE": "[x]Nachdem Ihr einen Diener herbei[d]gerufen habt, wird dieser in\neinen zufälligen Diener verwan[d]delt, der (2) mehr kostet.",
+    "frFR": "Une fois que vous avez invoqué un serviteur, le transforme en serviteur aléatoire coûtant (2) |4(cristal,cristaux) de plus.",
+    "esES": "[x]Después de invocar a\nun esbirro, se transforma en\nun esbirro aleatorio que cuesta\n(2) cristales o más.",
+    "ptBR": "Depois que você evocar um lacaio, transforme-o em um lacaio aleatório que custa (2) a mais.",
+    "itIT": "[x]Dopo che è stato evocato un\nservitore sotto il tuo controllo, lo\ntrasforma in un servitore casuale\nche costa (2) in più.",
+    "plPL": "Po przyzwaniu stronnika przemień go w losowego stronnika kosztującego (2) więcej."
+   }
+  },
+  {
+   "id": "TOT_316",
+   "type": "MINION",
+   "cardClass": "WARRIOR",
+   "cost": 6,
+   "attack": 5,
+   "health": 6,
+   "race": "DRAGON",
+   "dbfId": 51072,
+   "name": {
+    "enUS": "Draconic Herald",
+    "ruRU": "Дракон-вестник",
+    "deDE": "Drakonischer Herold",
+    "frFR": "Héraut draconique",
+    "esES": "Heraldo dracónico",
+    "ptBR": "Arauto Dracônico",
+    "itIT": "Alfiere Draconico",
+    "plPL": "Drakoniczny herold"
+   },
+   "text": {
+    "enUS": "<b>Battlecry:</b> <b>Discover</b> a minion.\nGive it +3/+3 then put it on top of your deck.",
+    "ruRU": "<b>Боевой клич:</b> вы <b>раскапываете</b> существо и кладете его\nна верх колоды. Оно получает +3/+3.",
+    "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> einen Diener und verleiht ihm +3/+3. Platziert ihn zuoberst in Eurem Deck.",
+    "frFR": "<b>Cri de guerre : découvre</b> un serviteur. Lui donne +3/+3, puis le place sur le dessus de votre deck.",
+    "esES": "<b>Grito de batalla:</b>\n<b>Descubre</b> un esbirro,\nle otorga +3/+3 y lo coloca en lo alto de tu mazo.",
+    "ptBR": "<b>Grito de Guerra:</b> <b>Descubra</b> um lacaio. Conceda-lhe +3/+3 e coloque-o no topo do seu deck.",
+    "itIT": "<b>Grido di Battaglia:</b>\n<b>Rinvieni</b> un servitore.\nOttiene +3/+3 e viene messo in cima al tuo mazzo.",
+    "plPL": "<b>Okrzyk bojowy:</b>\n<b>Odkryj</b> stronnika. Daj mu +3/+3 i umieść go na górze twojej talii."
+   }
+  },
+  {
+   "id": "TOT_320",
+   "type": "MINION",
+   "cardClass": "DRUID",
+   "cost": 6,
+   "attack": 6,
+   "health": 7,
+   "race": "DRAGON",
+   "dbfId": 51076,
+   "name": {
+    "enUS": "Harbinger of Catastrophe",
+    "ruRU": "Предвестник бедствий",
+    "deDE": "Vorbote des Untergangs",
+    "frFR": "Messager de catastrophe",
+    "esES": "Presagista de catástrofes",
+    "ptBR": "Emissário da Catástrofe",
+    "itIT": "Araldo della Catastrofe",
+    "plPL": "Siewca katastrof"
+   },
+   "text": {
+    "enUS": "At the start of your turn, summon the highest-cost minion from each player's deck.",
+    "ruRU": "В начале вашего хода призывает\nпо существу с наибольшей стоимостью из колоды\nкаждого игрока.",
+    "deDE": "Ruft zu Beginn Eures Zuges den teuersten Diener aus dem Deck jedes Spielers herbei.",
+    "frFR": "Au début de votre tour, invoque le serviteur coûtant le plus cher du deck de chaque joueur.",
+    "esES": "Al principio de tu turno, invoca al esbirro de mayor coste del mazo de cada jugador.",
+    "ptBR": "No início do seu turno, evoque o lacaio de maior custo do deck de cada jogador.",
+    "itIT": "[x]All'inizio del tuo turno,\nevoca il servitore con il\ncosto più alto dal mazzo\ndi ogni giocatore.",
+    "plPL": "[x]Na początku twojej tury\nprzyzwij stronnika\no najwyższym koszcie\n z talii każdego gracza."
+   }
+  },
+  {
+   "id": "TOT_330",
+   "type": "MINION",
+   "cardClass": "PALADIN",
+   "cost": 5,
+   "attack": 5,
+   "health": 5,
+   "race": "DRAGON",
+   "dbfId": 51013,
+   "name": {
+    "enUS": "Bronze Broodmother",
+    "ruRU": "Мать бронзовых драконов",
+    "deDE": "Bronzene Brutmutter",
+    "frFR": "Mère des couvées bronze",
+    "esES": "Madre de linaje Bronce",
+    "ptBR": "Prolemadre de Bronze",
+    "itIT": "Madre della Stirpe Bronzea",
+    "plPL": "Matka spiżowego miotu"
+   },
+   "text": {
+    "enUS": "When you draw this, summon a 1/1 Wee Whelp.",
+    "ruRU": "Когда вы берете эту карту, вы призываете дракошу 1/1.",
+    "deDE": "Ruft einen Winzigen Welpling (1/1) herbei, wenn Ihr diese Karte zieht.",
+    "frFR": "Quand vous piochez cette carte, invoque un Petit dragonnet 1/1.",
+    "esES": "Cuando robas esta\ncarta, invoca a una pequeña cría 1/1.",
+    "ptBR": "Ao comprar este card, evoque um Dragonete Miúdo 1/1.",
+    "itIT": "Quando peschi questa carta, evoca un Draghettino 1/1.",
+    "plPL": "Kiedy dobierasz tę kartę, przyzwij Tycie pisklę 1/1."
+   }
+  },
+  {
+   "id": "TOT_332",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 7,
+   "attack": 6,
+   "health": 6,
+   "race": "DRAGON",
+   "elite": true,
+   "dbfId": 51108,
+   "name": {
+    "enUS": "Murozond",
+    "ruRU": "Дорнозму",
+    "deDE": "Murozond",
+    "frFR": "Murozond",
+    "esES": "Murozond",
+    "ptBR": "Murozond",
+    "itIT": "Murozond",
+    "plPL": "Murozond"
+   },
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> From now on, your\n turns are 15 seconds and\n you draw 2 extra cards.",
+    "ruRU": "[x]<b>Боевой клич:</b> ваш ход\nтеперь длится 15 секунд.\nВы дополнительно берете\n2 карты каждый ход.",
+    "deDE": "<b>Kampfschrei:</b> Eure Züge dauern von jetzt an 15 Sekunden und Ihr zieht in jedem Zug 2 zusätzliche Karten.",
+    "frFR": "<b>Cri de guerre :</b> désormais, vos tours durent 15 s et vous piochez 2 cartes supplémentaires.",
+    "esES": "<b>Grito de batalla:</b>\nEn adelante, tus turnos\ndurarán 15 s y robarás 2 cartas extra.",
+    "ptBR": "<b>Grito de Guerra:</b> Seus turnos agora duram 15 segundos e você compra 2 cards extras.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nd'ora in poi, i tuoi turni\ndurano 15 secondi e peschi\n2 carte aggiuntive.",
+    "plPL": "<b>Okrzyk bojowy:</b> Twoje tury trwają teraz 15 sekund.\nW każdej turze dobierasz dwie dodatkowe karty."
+   }
+  },
+  {
+   "id": "TOT_334",
+   "type": "MINION",
+   "cardClass": "NEUTRAL",
+   "cost": 2,
+   "attack": 2,
+   "health": 2,
+   "race": "ELEMENTAL",
+   "dbfId": 51127,
+   "name": {
+    "enUS": "Temporal Anomaly",
+    "ruRU": "Временная аномалия",
+    "deDE": "Zeitanomalie",
+    "frFR": "Anomalie temporelle",
+    "esES": "Anomalía temporal",
+    "ptBR": "Anomalia Temporal",
+    "itIT": "Anomalia Temporale",
+    "plPL": "Czasowa anomalia"
+   },
+   "text": {
+    "enUS": "When you draw this, add a random spell to your hand <i>(from your class).</i>",
+    "ruRU": "Когда вы берете эту карту, вы кладете в руку случайное заклинание\n<i>(вашего класса)</i>.",
+    "deDE": "Erhaltet einen zufälligen Zauber Eurer eigenen Klasse auf die Hand, wenn Ihr diese Karte zieht.",
+    "frFR": "Quand vous piochez cette carte, ajoute dans votre main un sort aléatoire <i>(de votre classe)</i>.",
+    "esES": "[x]Cuando robas esta carta,\nañade un hechizo aleatorio\na tu mano <i>(de tu clase)</i>.",
+    "ptBR": "Quando comprar este card, adicione um feitiço aleatório à sua mão <i>(da sua classe)</i>.",
+    "itIT": "[x]Quando peschi questa\ncarta, mette nella tua\nmano una Magia casuale\ndella tua classe.",
+    "plPL": "Kiedy dobierasz tę\nkartę, dodaj losowe\nzaklęcie do twojej ręki <i>(z twojej klasy).</i>"
+   }
+  },
+  {
+   "id": "TOT_340",
+   "type": "SPELL",
+   "cardClass": "HUNTER",
+   "cost": 3,
+   "dbfId": 51145,
+   "name": {
+    "enUS": "Chronoshot",
+    "ruRU": "Хроносферы",
+    "deDE": "Chronoschlag",
+    "frFR": "Chrono-tir",
+    "esES": "Cronotiro",
+    "ptBR": "Disparo Cronológico",
+    "itIT": "Cronocolpo",
+    "plPL": "Czasostrzał"
+   },
+   "text": {
+    "enUS": "Return an enemy minion to your opponent's hand. It costs (2) more.",
+    "ruRU": "Возвращает существо противника в его руку. Оно стоит на (2) больше.",
+    "deDE": "Lasst einen feindlichen Diener auf die Hand Eures Gegners zurückkehren. Er kostet (2) mehr.",
+    "frFR": "Renvoie un serviteur adverse dans la main de votre adversaire. Il coûte (2) |4(cristal,cristaux) de plus.",
+    "esES": "[x]Devuelve a un esbirro  enemigo\na la mano de tu oponente.\nCuesta (2) cristales más.",
+    "ptBR": "Devolva um lacaio inimigo à mão do seu oponente. Ele custa (2) a mais.",
+    "itIT": "Fa tornare un servitore nemico nella mano dell'avversario. Costa (2) in più.",
+    "plPL": "[x]Cofnij wrogiego stronnika\ndo ręki przeciwnika.\nKosztuje (2) więcej."
+   }
+  },
+  {
+   "id": "TOT_341",
+   "type": "SPELL",
+   "cardClass": "MAGE",
+   "cost": 4,
+   "dbfId": 51146,
+   "name": {
+    "enUS": "Consider the Past",
+    "ruRU": "Отзвуки прошлого",
+    "deDE": "Erinnerung an die Vorzeit",
+    "frFR": "Examen du passé",
+    "esES": "Estudiar el pasado",
+    "ptBR": "Ponderar o Passado",
+    "itIT": "Analisi del Passato",
+    "plPL": "Przeszłość w pamięci"
+   },
+   "text": {
+    "enUS": "Add 3 random spells from the past to your hand.",
+    "ruRU": "[x]Вы кладете в руку\n3 случайных заклинания\nиз прошлого.",
+    "deDE": "Erhaltet 3 zufällige Zauber aus der Vergangenheit auf die Hand.",
+    "frFR": "Ajoute 3 sorts aléatoires du passé dans votre main.",
+    "esES": "Añade 3 hechizos aleatorios del pasado a tu mano.",
+    "ptBR": "Adicione 3 feitiços aleatórios do passado à sua mão.",
+    "itIT": "[x]Mette 3 Magie\ncasuali del passato\nnella tua mano.",
+    "plPL": "Dodaj 3 losowe zaklęcia z przeszłości do twojej ręki."
+   }
+  },
+  {
+   "id": "TOT_342",
+   "type": "WEAPON",
+   "cardClass": "WARRIOR",
+   "cost": 4,
+   "attack": 4,
+   "durability": 2,
+   "dbfId": 51147,
+   "name": {
+    "enUS": "Fatecleaver",
+    "ruRU": "Судьбокол",
+    "deDE": "Schicksalsaxt",
+    "frFR": "Tranche-destin",
+    "esES": "Rasgadora de destinos",
+    "ptBR": "Cutelo do Destino",
+    "itIT": "Spezzafato",
+    "plPL": "Tasak Przeznaczenia"
+   },
+   "text": {
+    "enUS": "[x]After this kills a minion,\ndestroy all copies of it\n<i>(wherever they are).</i>",
+    "ruRU": "После того как это оружие убивает существо, уничтожает все копии цели <i>(где бы они ни находились)</i>.",
+    "deDE": "Nachdem diese Waffe einen Diener vernichtet hat, werden alle Kopien davon vernichtet <i>(egal, wo sie sich befinden).</i>",
+    "frFR": "Une fois qu’il a tué un serviteur, en détruit toutes les copies <i>(où qu’elles se trouvent)</i>.",
+    "esES": "[x]Cuando mata a un esbirro,\ndestruye todas las copias\nde ese esbirro <i>(dondequiera\nque estén)</i>.",
+    "ptBR": "Depois que esta arma matar um lacaio, destrua todas as cópias dele <i>(onde quer que estejam)</i>.",
+    "itIT": "[x]Dopo che ha distrutto\nun servitore, rimuove\nle sue copie\n<i>dovunque siano</i>.",
+    "plPL": "Gdy zabijesz nim stronnika, zniszcz wszystkie jego kopie <i>(niezależnie od tego, gdzie są).</i>"
+   }
+  },
+  {
+   "id": "TOT_343",
+   "type": "SPELL",
+   "cardClass": "PRIEST",
+   "cost": 2,
+   "dbfId": 51148,
+   "name": {
+    "enUS": "Reminisce",
+    "ruRU": "Воспоминания",
+    "deDE": "Rückblick",
+    "frFR": "Réminiscence",
+    "esES": "Reminiscencia",
+    "ptBR": "Reminiscência",
+    "itIT": "Reminiscenza",
+    "plPL": "Wspomnienie"
+   },
+   "text": {
+    "enUS": "Add two random cards your opponent played this game to your hand.",
+    "ruRU": "Вы кладете в руку две случайные карты,\nразыгранные противником в этом матче.",
+    "deDE": "Erhaltet zwei zufällige Karten auf die Hand, die Euer Gegner in diesem Spiel ausgespielt hat.",
+    "frFR": "Ajoute dans votre main deux cartes aléatoires jouées par votre adversaire pendant cette partie.",
+    "esES": "Añade a tu mano dos cartas aleatorias que haya usado tu oponente en esta partida.",
+    "ptBR": "Adicione à sua mão dois cards aleatórios que seu oponente tenha jogado nesta partida.",
+    "itIT": "Mette nella tua mano 2 carte casuali giocate dall'avversario\nin questa partita.",
+    "plPL": "Dodaj do twojej ręki dwie losowe karty zagrane w tej grze przez twojego przeciwnika."
+   }
+  },
+  {
+   "id": "TOT_345",
+   "type": "SPELL",
+   "cardClass": "PRIEST",
+   "cost": 1,
+   "dbfId": 51151,
+   "name": {
+    "enUS": "Ripple in Time",
+    "ruRU": "Временная рябь",
+    "deDE": "Erschütterung der Zeit",
+    "frFR": "Ondulation temporelle",
+    "esES": "Onda temporal",
+    "ptBR": "Ondulação no Tempo",
+    "itIT": "Fremito del Tempo",
+    "plPL": "Zaburzenie czasu"
+   },
+   "text": {
+    "enUS": "<b>Discover</b> a minion. If you play it this turn, it has <b>Echo</b>.",
+    "ruRU": "Вы <b>раскапываете</b> существо. Если вы разыгрываете его на этом ходу, оно получает <b>«Эхо»</b>.",
+    "deDE": "<b>Entdeckt</b> einen Diener. Wenn Ihr ihn in diesem Zug ausspielt, hat er <b>Echo</b>.",
+    "frFR": "<b>Découvre</b> un serviteur. Si vous le jouez pendant ce tour, il a <b>Écho</b>.",
+    "esES": "[x]<b>Descubre</b> un esbirro.\nSi lo juegas en este turno,\ntiene <b>Eco</b>.",
+    "ptBR": "<b>Descubra</b> um lacaio. Se você jogá-lo neste turno, ele tem <b>Eco</b>.",
+    "itIT": "<b>Rinvieni</b> un servitore. Se lo giochi in questo turno, ha <b>Eco</b>.",
+    "plPL": "<b>Odkryj</b> stronnika. Jeśli zagrasz go w tej turze, otrzymuje <b>Echo</b>."
+   }
+  }
  ]
 }

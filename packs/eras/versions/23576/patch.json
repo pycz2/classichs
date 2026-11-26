@@ -492,10 +492,310 @@
     "ptBR": "Evoque um Fera Companheira aleatória.",
     "ruRU": "Призывает случайного питомца."
    }
+  },
+  "BCON_001": {
+   "script": "scripts/version/bcon.lua#BCON_001"
+  },
+  "BCON_004": {
+   "script": "scripts/version/bcon.lua#BCON_004"
+  },
+  "BCON_008": {
+   "script": "scripts/version/bcon.lua#BCON_008"
+  },
+  "BCON_012": {
+   "keywords": [
+    "SECRET"
+   ],
+   "script": "scripts/version/bcon.lua#BCON_012"
+  },
+  "BCON_015": {
+   "script": "scripts/version/bcon.lua#BCON_015"
+  },
+  "BCON_016": {
+   "script": "scripts/version/bcon.lua#BCON_016"
+  },
+  "BCON_021": {
+   "keywords": [
+    "OVERLOAD"
+   ],
+   "script": "scripts/version/bcon.lua#BCON_021"
+  },
+  "BCON_024": {
+   "script": "scripts/version/bcon.lua#BCON_024"
+  },
+  "BCON_026": {
+   "script": "scripts/version/bcon.lua#BCON_026"
   }
  },
  "sources": [
   "~/ClassicHS-local/prep/patches/versions.json 10.0.0.22611 to 10.4.0.23576",
-  "HearthstoneJSON builds 22611 and 23576: every card of the base pack compared (tools/extract_cards.py --version-texts 23576 …)"
+  "HearthstoneJSON builds 22611 and 23576: every card of the base pack compared (tools/extract_cards.py --version-texts 23576 …)",
+  "HearthstoneJSON build 23576: the Arena-only BCON_* cards and their tokens (formats.json `extra`), with their names and texts"
+ ],
+ "add": [
+  {
+   "id": "BCON_001",
+   "type": "SPELL",
+   "cardClass": "HUNTER",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 2,
+   "dbfId": 49225,
+   "name": {
+    "enUS": "Deadeye",
+    "ruRU": "В яблочко!",
+    "deDE": "Anvisiert",
+    "frFR": "Fin tireur",
+    "esES": "Disparo certero",
+    "ptBR": "Mira Certeira",
+    "itIT": "Mira Sanguinaria",
+    "plPL": "Przycelowanie"
+   },
+   "text": {
+    "enUS": "For the rest of the game,\nyour Hero Power can target minions.",
+    "ruRU": "До конца матча ваша сила героя может наносить урон существам.",
+    "deDE": "Für den Rest des Spiels könnt Ihr mit Eurer Heldenfähigkeit Diener als Ziel wählen.",
+    "frFR": "Pendant le reste de la partie, votre pouvoir héroïque peut cibler les serviteurs.",
+    "esES": "Durante el resto de la partida, tu poder de héroe puede usarse contra esbirros.",
+    "ptBR": "Pelo resto do jogo, seu Poder Heroico pode alvejar lacaios.",
+    "itIT": "[x]Per il resto della partita,\nil tuo Potere Eroe può\nessere usato sui servitori.",
+    "plPL": "Do końca gry twoja moc specjalna może być stosowana wobec stronników."
+   }
+  },
+  {
+   "id": "BCON_004",
+   "type": "SPELL",
+   "cardClass": "MAGE",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 5,
+   "dbfId": 49228,
+   "name": {
+    "enUS": "Polymorph: ???",
+    "ruRU": "Превращение: ???",
+    "deDE": "Verwandlung: ???",
+    "frFR": "Métamorphose : ???",
+    "esES": "Polimorfia sorpresa",
+    "ptBR": "Polimorfia: ???",
+    "itIT": "Metamorfosi: ???",
+    "plPL": "Polimorfia: ???"
+   },
+   "text": {
+    "enUS": "Choose a minion. <b>Discover</b> a new minion to transform it into.",
+    "ruRU": "Выберите существо. Оно превращается в новое существо, которое вы <b>раскапываете</b>.",
+    "deDE": "Wählt einen Diener. <b>Entdeckt</b> einen neuen Diener, in den sich dieser dann verwandelt.",
+    "frFR": "Vous choisissez un serviteur. <b>Découvre</b> un nouveau serviteur en lequel le transformer.",
+    "esES": "Elige a un esbirro. <b>Descubre</b> un esbirro nuevo en el que transformarlo.",
+    "ptBR": "Escolha um lacaio. <b>Descubra</b> um novo lacaio para transformá-lo.",
+    "itIT": "[x]Seleziona un servitore.\n<b>Rinvieni</b> un nuovo servitore\nin cui trasformarlo.",
+    "plPL": "Wybierz stronnika.\n<b>Odkryj</b> nowego stronnika,\nw którego go przemienisz."
+   }
+  },
+  {
+   "id": "BCON_008",
+   "type": "SPELL",
+   "cardClass": "DRUID",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 3,
+   "dbfId": 49231,
+   "name": {
+    "enUS": "Nature's Champion",
+    "ruRU": "Защитник природы",
+    "deDE": "Segen der Natur",
+    "frFR": "Champion de la nature",
+    "esES": "Campeón de la naturaleza",
+    "ptBR": "Campeão da Natureza",
+    "itIT": "Campione della Natura",
+    "plPL": "Czempion przyrody"
+   },
+   "text": {
+    "enUS": "Return a friendly minion to your hand and give it +5/+5.",
+    "ruRU": "Вы возвращаете ваше существо в руку.\nОно получает +5/+5.",
+    "deDE": "Lasst einen befreundeten Diener auf Eure Hand zurückkehren und verleiht ihm +5/+5.",
+    "frFR": "Renvoie un serviteur allié dans votre main et lui donne +5/+5.",
+    "esES": "Devuelve un esbirro amistoso a tu mano y le otorga +5/+5.",
+    "ptBR": "Devolva um lacaio aliado à sua mão e conceda-lhe +5/+5.",
+    "itIT": "Fa tornare un tuo servitore nella tua mano e gli fornisce +5/+5.",
+    "plPL": "Cofnij przyjaznego stronnika do twojej ręki i daj mu +5/+5."
+   }
+  },
+  {
+   "id": "BCON_012",
+   "type": "SPELL",
+   "cardClass": "PALADIN",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 1,
+   "dbfId": 49237,
+   "name": {
+    "enUS": "Hand of Salvation",
+    "ruRU": "Длань избавления",
+    "deDE": "Hand der Erlösung",
+    "frFR": "Main de salut",
+    "esES": "Mano de Salvación",
+    "ptBR": "Mão da Salvação",
+    "itIT": "Mano della Salvezza",
+    "plPL": "Ręka zbawienia"
+   },
+   "text": {
+    "enUS": "<b>Secret:</b> When your second minion dies in a turn, return it to life.",
+    "ruRU": "<b>Секрет:</b> когда за ход погибает второе ваше существо, оно возвращается в игру.",
+    "deDE": "[x]<b>Geheimnis:</b> Der zweite\nbefreundete Diener, der\nim gleichen Zug stirbt,\nwird wiederbelebt.",
+    "frFR": "<b>Secret :</b> ressuscite le second serviteur que vous perdez au cours d’un même tour.",
+    "esES": "<b>Secreto:</b> Cuando muere un segundo esbirro amistoso en un turno,\nlo devuelve a la vida.",
+    "ptBR": "<b>Segredo:</b> Quando seu segundo lacaio morrer em um turno, reviva-o.",
+    "itIT": "[x]<b>Segreto:</b> quando muore\nil tuo secondo servitore\nin un turno, ritorna in vita.",
+    "plPL": "<b>Sekret:</b> Gdy w jednej turze zginie dwóch twoich stronników, przywróć drugiego z nich do życia."
+   }
+  },
+  {
+   "id": "BCON_015",
+   "type": "SPELL",
+   "cardClass": "PRIEST",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 2,
+   "dbfId": 49240,
+   "name": {
+    "enUS": "Generous Spirit",
+    "ruRU": "Щедрая натура",
+    "deDE": "Großzügige Geste",
+    "frFR": "Esprit généreux",
+    "esES": "Espíritu generoso",
+    "ptBR": "Espírito Generoso",
+    "itIT": "Spirito Generoso",
+    "plPL": "Życzliwy duch"
+   },
+   "text": {
+    "enUS": "[x]Choose a friendly minion.\nGive it to your opponent\nand draw 3 cards.",
+    "ruRU": "Вы передаете ваше выбранное существо противнику и берете 3 карты.",
+    "deDE": "[x]Wählt einen befreundeten\nDiener. Euer Gegner\nübernimmt die Kontrolle\ndarüber. Zieht 3 Karten.",
+    "frFR": "Vous choisissez un serviteur allié. Le donne à votre adversaire et vous piochez 3 cartes.",
+    "esES": "Elige a un esbirro amistoso para dárselo a tu oponente\ny roba 3 cartas.",
+    "ptBR": "Escolha um lacaio aliado. Conceda-o ao oponente e compre 3 cards.",
+    "itIT": "[x]Seleziona un tuo servitore.\nL'avversario ne ottiene il\ncontrollo e peschi 3 carte.",
+    "plPL": "Wybierz przyjaznego stronnika. Daj go przeciwnikowi\ni dobierz 3 karty."
+   }
+  },
+  {
+   "id": "BCON_016",
+   "type": "SPELL",
+   "cardClass": "ROGUE",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 1,
+   "dbfId": 49241,
+   "name": {
+    "enUS": "Smoke Bomb",
+    "ruRU": "Дымовая шашка",
+    "deDE": "Rauchbombe",
+    "frFR": "Bombe fumigène",
+    "esES": "Bomba de humo",
+    "ptBR": "Bomba de Fumaça",
+    "itIT": "Bomba Fumogena",
+    "plPL": "Bomba dymna"
+   },
+   "text": {
+    "enUS": "Give a minion <b>Stealth</b> until your next turn. Draw a card.",
+    "ruRU": "[x]Выбранное существо\nполучает <b>«Маскировку»</b>\nдо вашего следующего\nхода. Вы берете карту.",
+    "deDE": "[x]Verleiht einem Diener\nbis zu Eurem nächsten\nZug <b>Verstohlenheit</b>.\nZieht eine Karte.",
+    "frFR": "Confère <b>Camouflage</b> à un serviteur jusqu’à votre prochain tour. Vous piochez une carte.",
+    "esES": "[x]Otorga <b>Sigilo</b> a un esbirro\nhasta tu siguiente turno.\nRoba una carta.",
+    "ptBR": "Conceda <b>Furtividade</b> a um lacaio até seu próximo turno. Compre um card.",
+    "itIT": "[x]Fornisce <b>Furtività</b> a un\nservitore fino al tuo\nturno successivo.\nPesca una carta.",
+    "plPL": "Daj stronnikowi <b>Ukrycie</b> do twojej następnej tury. Dobierz kartę."
+   }
+  },
+  {
+   "id": "BCON_021",
+   "type": "SPELL",
+   "cardClass": "SHAMAN",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 0,
+   "overload": 10,
+   "dbfId": 49246,
+   "name": {
+    "enUS": "Crackling Doom",
+    "ruRU": "Искрящий рок",
+    "deDE": "Flammenverdammnis",
+    "frFR": "Anathème crépitant",
+    "esES": "Fatalidad crepitante",
+    "ptBR": "Ruína Crepitante",
+    "itIT": "Rovina Crepitante",
+    "plPL": "Trzaskająca zagłada"
+   },
+   "text": {
+    "enUS": "Deal 12 damage to all minions.\n<b>Overload</b>: (10)",
+    "ruRU": "Наносит 12 ед. урона всем существам. <b>Перегрузка</b>: (10)",
+    "deDE": "Fügt allen Dienern\n12 Schaden zu. <b>Überladung:</b> (10)",
+    "frFR": "Inflige 12 points de dégâts à tous les serviteurs. <b>Surcharge :</b> (10)",
+    "esES": "Inflige 12 p. de daño a todos los esbirros.\n<b>Sobrecarga</b>: (10)",
+    "ptBR": "Cause 12 de dano a todos os lacaios. <b>Sobrecarga</b>: (10)",
+    "itIT": "Infligge 12 danni a TUTTI i servitori. <b>Sovraccarico</b>: (10)",
+    "plPL": "Zadaj 12 pkt. obrażeń wszystkim stronnikom. <b>Przeciążenie</b>: (10)"
+   }
+  },
+  {
+   "id": "BCON_024",
+   "type": "SPELL",
+   "cardClass": "WARLOCK",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 0,
+   "dbfId": 49249,
+   "name": {
+    "enUS": "Bottled Madness",
+    "ruRU": "Безумие в бутылке",
+    "deDE": "Wahnsinn in der Flasche",
+    "frFR": "Folie en bouteille",
+    "esES": "Locura embotellada",
+    "ptBR": "Loucura Engarrafada",
+    "itIT": "Pazzia Imbottigliata",
+    "plPL": "Szaleństwo w butelce"
+   },
+   "text": {
+    "enUS": "Replace your hand with random Demons.",
+    "ruRU": "Заменяет карты в вашей руке случайными демонами.",
+    "deDE": "Ersetzt Eure Hand durch zufällige Dämonen.",
+    "frFR": "Remplace votre main par des démons aléatoires.",
+    "esES": "Reemplaza tu mano por demonios aleatorios.",
+    "ptBR": "Substitua sua mão por Demônios aleatórios.",
+    "itIT": "Sostituisce le carte nella tua mano con Demoni casuali.",
+    "plPL": "Zastąp twoją rękę losowymi Demonami."
+   }
+  },
+  {
+   "id": "BCON_026",
+   "type": "WEAPON",
+   "cardClass": "WARRIOR",
+   "rarity": "FREE",
+   "set": "CORE",
+   "cost": 3,
+   "attack": 2,
+   "durability": 3,
+   "dbfId": 49251,
+   "name": {
+    "enUS": "Blazing Longsword",
+    "ruRU": "Пылающий меч",
+    "deDE": "Loderndes Langschwert",
+    "frFR": "Épée longue flamboyante",
+    "esES": "Tizona llameante",
+    "ptBR": "Espada Longa Fulgurante",
+    "itIT": "Spada Lunga Fiammeggiante",
+    "plPL": "Płomienny miecz"
+   },
+   "text": {
+    "enUS": "Also damages minions next to whomever your hero attacks.",
+    "ruRU": "Также наносит урон существам по обе [x]стороны от цели.",
+    "deDE": "[x]Fügt auch\nden benachbarten\nDienern des Ziels\nSchaden zu.",
+    "frFR": "Inflige également des dégâts aux serviteurs adjacents de celui que votre héros attaque.",
+    "esES": "También daña a los esbirros adyacentes a tu objetivo.",
+    "ptBR": "Também causa dano aos lacaios adjacentes ao alvo que seu herói atacar.",
+    "itIT": "[x]Infligge danni anche ai\nservitori adiacenti a\nquello attaccato.",
+    "plPL": "Zadaje również obrażenia stronnikom znajdującym się obok celu ataku bohatera."
+   }
+  }
  ]
 }
