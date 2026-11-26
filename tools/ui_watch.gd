@@ -15,7 +15,7 @@ const KEEP_EVENTS := 50
 const MAX_CONTROLS := 400
 ## Where a change is reloaded in place (else: a restart), and what is watched.
 var hot_dirs := ["res://ui/"]
-var dirs := [["res://ui", ".gd"], ["res://game", ".gd"], ["res://data/i18n", ".json"], ["res://fonts", ".ttf"],
+var dirs := [["res://ui", ".gd"], ["res://game", ".gd"], ["res://net", ".gd"], ["res://data/i18n", ".json"], ["res://fonts", ".ttf"],
 	["res://fonts", ".otf"]]
 var files := ["res://project.godot", "res://tools/ui_watch.gd"]
 var dry := false  # tests: a restart is only told, never done
@@ -40,6 +40,7 @@ var _windows: Array[Window] = []
 var _overlays := ""
 var _error_layer: CanvasLayer
 var _ret := {}  # where a restart asked to go back to
+var _started := 0
 var _class_name := RegEx.create_from_string("(?m)^class_name\\s+\\w+")
 
 
@@ -84,6 +85,7 @@ func _init(m: Node = null, own_profile := false) -> void:
 
 
 func _ready() -> void:
+	_started = Time.get_ticks_msec()
 	DirAccess.make_dir_recursive_absolute(dir)
 	OS.add_logger(_log)
 	var path := dir.path_join("state.json")
@@ -535,9 +537,9 @@ func _go_back() -> void:
 	if r.get("lang", "") != "":
 		Locale.set_language(r.lang)
 	if r.get("mode") == "server":
-		main.show_connections()
+		main.show_connections()  # (saved sessions log in again: waited for, 5 s at most)
 		var until := Time.get_ticks_msec() + 5000
-		while Time.get_ticks_msec() < until and not (main.server_link and main.server_link.logged_in()):
+		while Time.get_ticks_msec() < until and main.server_links.any(func(l): return l.resuming):
 			await get_tree().process_frame
 	elif r.get("mode") == "direct":
 		main.show_library()
@@ -547,4 +549,5 @@ func _go_back() -> void:
 		goto(r["call"], r.get("args", []))
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
-	event({"t": "returned", "call": r.get("call", ""), "ms": int((Time.get_unix_time_from_system() - float(r.get("at", 0))) * 1000)})
+	event({"t": "returned", "call": r.get("call", ""), "ms": int((Time.get_unix_time_from_system() - float(r.get("at", 0))) * 1000),
+		"started_ms": _started, "ready_ms": Time.get_ticks_msec()})  # (since this process started: main's _ready, back on the screen)
