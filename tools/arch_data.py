@@ -421,7 +421,7 @@ COMPS.append(dict(
         P("main", ("Main (the root)", "Main (корень)"), 3, 2, sub="ui/main.gd",
           text=("Swaps screens (`_set_screen`), owns the running match, a `ServerLink` per connection and the `Social` overlay; waits for the engine at start.",
                 "Переключает экраны (`_set_screen`), владеет идущей партией, `ServerLink` на каждое подключение и оверлеем `Social`; при старте ждёт движок."),
-          files=[("ui/main.gd", "func _ready() -> void:"), ("ui/main.gd", "func _set_screen(s: Control) -> void:"), ("ui/main.gd", "func _wait_for_rules() -> bool:")]),
+          files=[("ui/main.gd", "func _ready() -> void:"), ("ui/main.gd", "func _set_screen(s: Control, nav := \"\", args := []) -> void:"), ("ui/main.gd", "func _wait_for_rules() -> bool:")]),
         P("menus", ("Menus", "Меню"), 1, 0, sub="ui/menu.gd",
           text=("`MainMenu`: with no pack it is the client's main menu (Play → Direct / Server); with a pack, that game's menu in the pack's look.",
                 "`MainMenu`: без пакета — главное меню клиента («Играть» → без сервера / через сервер); с пакетом — меню этой игры в её оформлении."),
