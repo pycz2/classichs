@@ -9,8 +9,9 @@ A pack is one **`.cardpack`** file: a zip archive with a fixed layout. You write
 **ClassicHS Studio** is the card editor, a second application made from the game's project (`res://studio/studio.tscn`, its own export presets for the desktop and the web). It makes the same pack folder for you:
 
 - a new game (its id, names and descriptions in eight languages, version, the rules basics) or a copy of an installed pack under a new id;
+- the game's pictures (its tile in the library, the menu, the board, the collection, the card back, the logo), its music and event sounds;
 - classes with their heroes and Hero Powers, sets, rarities and tribes;
-- cards: type, cost, stats, tribe, rarity, class, the game's keywords with their tips, the name and text in each language with the keywords highlighted, a picture you upload and frame (move and zoom: the values of `art/<set>/framing.json`), sounds for each moment (play, attack, death…); a live preview draws the card exactly as the game does;
+- cards: type, cost, stats, tribe, rarity, class (or several), the game's keywords with their tips, the name and text in each language with the keywords highlighted, a picture you upload and frame (move and zoom: the values of `art/<set>/framing.json`), sounds for each moment (play, attack, death…) and voice lines in each language; a live preview draws the card exactly as the game does;
 - effects made of blocks with no code: a trigger (Battlecry, Deathrattle, Combo, the start or end of your turn, after you summon or cast, when it takes damage or attacks, an aura, a Secret), a target (chosen, fixed, all, random…) and an action (deal, restore, draw, summon, give +A/+H, destroy, Freeze, Silence, transform, Discover, Armor, mana…); the blocks are written as Lua into `scripts/studio.lua`, and any card can switch to raw Lua (the API below);
 - ready decks, a check (the same as `tools/pack.py check`, the engine loads every script, bots play trial games), a test match with any card, the `.cardpack` export, the install into the game and the upload to a server.
 
