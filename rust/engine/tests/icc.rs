@@ -664,3 +664,21 @@ fn kalimos_invocations_are_no_spells() {
     assert_eq!(t.stats(t.nth(1, 0)), (4, 2), "3 damage");
     assert_eq!(t.hp(0), 20, "no heal");
 }
+
+/// Frostmourne brings back the minions it killed, also the one its last Durability killed (the weapon and the minion
+/// die together).
+#[test]
+fn frostmourne_brings_back_the_minion_of_its_last_blow() {
+    for durability in [2, 1] {
+        let mut t = scene!({"hero": "HERO_01", "weapon": {"card": "ICC_314t1", "durability": durability}}, {"board": [YETI]});
+        let (h, yeti) = (t.hero(0), t.nth(1, 0));
+        t.attack(h, yeti);
+        assert!(t.g.players[1].board.is_empty(), "the Yeti died");
+        if durability == 2 {
+            assert!(t.g.players[0].board.is_empty(), "the weapon stays: nothing yet");
+            continue;
+        }
+        assert_eq!(t.g.players[0].weapon, None, "the weapon broke");
+        assert_eq!(t.cards(0), vec![YETI], "and brought the Yeti back");
+    }
+}
