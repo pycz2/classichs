@@ -577,7 +577,7 @@ class Chain(unittest.TestCase):
         self.assertIn("scripts/gvg.lua", files)
         self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/gvg"))
         self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
-                         "009e0b6b761bd7425781d3d80dfe497eea9cfb9e822fde78aaddf2d0ab540153")
+                         "6ee1f57b88a901dc708001714ea377b54067eeab56f9a8022298b42852869da5")
 
     def test_blackrock_mountain_stands_alone(self):
         files, r = pack.build(pack.REPO / "packs/brm")
@@ -595,7 +595,7 @@ class Chain(unittest.TestCase):
         en = json.loads(files["locales/en.json"])["cards"]
         self.assertEqual(en["BRM_010a"]["text"], "Transform into a 5/2 minion.")  # the option's text of build 8311
         self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
-                         "c8c9cd0dafb0dcc47aac4b573536154beb9705ec36dce19a7d7ac7fcb080f6eb")
+                         "bb132ae33b2d90e5c4fdc3e67d987cc1c0f2d40293eec9578df4d628357773fd")
 
     def test_the_grand_tournament_stands_alone(self):
         files, r = pack.build(pack.REPO / "packs/tgt")
@@ -620,7 +620,7 @@ class Chain(unittest.TestCase):
         self.assertEqual(en["BRM_020"]["text"], "Whenever <b>you</b> target this minion with a spell, gain +1/+1.")
         self.assertEqual(en["GVG_016"]["text"], "Whenever your opponent plays a card, remove the top 3 cards of your deck.")
         self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
-                         "3a066714499915bc30a5625212e75033de81b391371cc85944c510159e0dfc9e")
+                         "5c9062de2eef5b4af6196d42eef5c54999950a794f511d54a3cf07cc4b1fede3")
 
     def test_the_league_of_explorers_stands_alone(self):
         files, r = pack.build(pack.REPO / "packs/loe")
@@ -1386,15 +1386,14 @@ class Eras(unittest.TestCase):
         self.assertEqual(self.card("10604", "VAN_EX1_398")[1]["it"]["text"], "<b>Grido di Battaglia:</b> equipaggia un'Arma 2/2.")
 
     def test_10833_is_the_loe_pack_with_a_druid_sapling(self):
-        # the loe pack plus Sapling's class of the build, Swipe/Explosive Shot/Shadow of Nothing of 9166 and Power
-        # Word: Glory healing its caster (played out in rust/engine/tests/eras.rs)
+        # the loe pack (Sapling a Druid card, Shadow of Nothing staying and Power Word: Glory healing its caster are its
+        # own) plus Swipe and Explosive Shot of 9166 (played out in rust/engine/tests/eras.rs)
         loe, _ = pack.build(pack.REPO / "packs/loe")
         view = pack.version_view(self.files, "10833")
         self.assertEqual(sorted(p for p in view if pack.is_version_file(p) and p not in loe and not p.startswith("decks/")),
-                         ["scripts/version/power_word_glory.lua", "scripts/version/ships_cannon.lua", "scripts/version/swipe_explosive_shot.lua"])
-        self.assertEqual(json.loads(view["cards.json"]),
-                         [dict(c, **{"class": "DRUID"}) if c["id"] == "AT_037t" else c for c in json.loads(loe["cards.json"])])
-        self.assertEqual(next(c for c in json.loads(loe["cards.json"]) if c["id"] == "AT_037t")["class"], "NEUTRAL")
+                         ["scripts/version/swipe_explosive_shot.lua"])
+        self.assertEqual(json.loads(view["cards.json"]), json.loads(loe["cards.json"]))
+        self.assertEqual(next(c for c in json.loads(loe["cards.json"]) if c["id"] == "AT_037t")["class"], "DRUID")
         for vid in ("10833", "10956", "12051", "12266"):
             self.assertEqual(self.card(vid, "AT_037t")[0]["class"], "DRUID", vid)
 
@@ -1409,10 +1408,9 @@ class Eras(unittest.TestCase):
         sword = lambda vid: self.card(vid, "VAN_EX1_366")[0]  # noqa: E731
         self.assertEqual({k: sword("10833")[k] for k in ("cost", "attack", "durability")},
                          {k: sword("10956")[k] for k in ("cost", "attack", "durability")})
-        for vid in ("10956", "12051", "12266"):
-            v = pack.version_view(self.files, vid)
-            self.assertNotEqual(v["scripts/version/power_word_glory.lua"],
-                                pack.version_view(self.files, "10833")["scripts/version/power_word_glory.lua"], vid)
+        # the loe pack's Power Word: Glory is 9786's (tgt.lua): these versions bring 10956's
+        for vid, has in (("10833", False), ("10956", True), ("12051", True), ("12266", True)):
+            self.assertEqual("scripts/version/power_word_glory.lua" in pack.version_view(self.files, vid), has, vid)
 
     def test_12051_scarab_is_a_beast_and_cabal_shadow_priest_with_a_full_board(self):
         for vid, race in (("10833", None), ("10956", None), ("12051", "BEAST"), ("12266", "BEAST")):
@@ -1441,7 +1439,7 @@ class Eras(unittest.TestCase):
         view = {p: d for p, d in pack.version_view(self.files, "7234").items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
         base = {p: d for p, d in gvg.items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
         # its only own file: Cogmaster loses its Mech bonus after a swap until 7835 (rust/engine/tests/eras.rs)
-        self.assertEqual(sorted(set(view) - set(base)), ["scripts/version/cogmaster.lua", "scripts/version/ships_cannon.lua", "scripts/version/swipe_explosive_shot.lua"])
+        self.assertEqual(sorted(set(view) - set(base)), ["scripts/version/cogmaster.lua", "scripts/version/swipe_explosive_shot.lua"])
         self.assertEqual({p: d for p, d in view.items() if p in base}, base)
 
     def test_7628_nerfs_undertaker(self):
@@ -1472,7 +1470,7 @@ class Eras(unittest.TestCase):
         view = {p: d for p, d in pack.version_view(self.files, "8311").items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
         base = {p: d for p, d in brm.items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
         # its only own file: the main hit's triggers before the other hits until 9166 (rust/engine/tests/eras.rs)
-        self.assertEqual(sorted(set(view) - set(base)), ["scripts/version/ships_cannon.lua", "scripts/version/swipe_explosive_shot.lua"])
+        self.assertEqual(sorted(set(view) - set(base)), ["scripts/version/swipe_explosive_shot.lua"])
         self.assertEqual({p: d for p, d in view.items() if p in base}, base)
 
     def test_9166_murloc_costs_0_and_the_texts_of_build_9166(self):
@@ -1566,7 +1564,7 @@ class Eras(unittest.TestCase):
         return own(view) == own(base) and rules == base_rules
 
     def test_25770_is_the_boomsday_pack(self):
-        self.assertTrue(self.is_the_pack("25770", "boom", ["scripts/version/ships_cannon.lua"]))
+        self.assertTrue(self.is_the_pack("25770", "boom", []))
         boxer, texts = self.card("25770", "GVG_072")
         self.assertEqual(texts["en"]["text"], "Whenever a minion is healed, deal 1 damage to a random enemy.")
 
@@ -1611,8 +1609,7 @@ class Eras(unittest.TestCase):
         view = pack.version_view(self.files, "27845")
         self.assertEqual(json.loads(view["cards.json"]), json.loads(trl["cards.json"]))
         self.assertEqual(sorted(p for p in view if p.startswith("scripts/version/")),
-                         ["scripts/version/astromancer.lua", "scripts/version/corrupted_blood.lua",
-                          "scripts/version/jungle_giants.lua", "scripts/version/ships_cannon.lua"])
+                         ["scripts/version/astromancer.lua", "scripts/version/corrupted_blood.lua"])
         # the Choose One forms stay spells that transform (the 27845 data shows them as minions: display only)
         self.assertEqual(self.card("29349", "BRM_010a")[0]["type"], "SPELL")
         self.assertNotIn("attack", self.card("29349", "BRM_010a")[0])
@@ -1672,8 +1669,7 @@ class Eras(unittest.TestCase):
 
     def test_29933_and_30103_are_the_rise_of_shadows_pack(self):
         for vid in ("29933", "30103"):  # with Jungle Giants as fixed in 26996 (the dal pack counts The Darkness)
-            self.assertTrue(self.is_the_pack(vid, "dal", ["scripts/version/jungle_giants.lua",
-                                                          "scripts/version/ships_cannon.lua"]), vid)
+            self.assertTrue(self.is_the_pack(vid, "dal", []), vid)
 
     def test_30795_renames_traveling_healer(self):
         self.assertEqual(self.card("30103", "DAL_078")[1]["en"]["name"], "Travelling Healer")
@@ -1709,15 +1705,9 @@ class ErasUngoro(unittest.TestCase):
     def test_18336_is_the_ungoro_pack_with_the_msg_fixes(self):
         ungoro, _ = pack.build(pack.REPO / "packs/ungoro")
         view = pack.version_view(self.files, "18336")
-        # the ungoro pack still has the Servant of Yogg-Saron, Mistcaller and Potion of Polymorph of before 15181, 15590 and
-        # 17720: the fixes go along
-        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua",
-                 "scripts/version/servant_of_yogg_saron.lua"]
-        self.assertEqual({p: d for p, d in view.items() if own_rules(p) and p not in fixes},
+        # the ungoro pack has the Servant of Yogg-Saron, Mistcaller and Potion of Polymorph of 15181, 15590 and 17720 itself
+        self.assertEqual({p: d for p, d in view.items() if own_rules(p)},
                          {p: d for p, d in ungoro.items() if own_rules(p)})
-        for vid in ("18336", "19506", "19632", "20022"):
-            for f in fixes:
-                self.assertEqual(pack.version_view(self.files, vid)[f], pack.version_view(self.files, "17720")[f], vid)
 
     def test_19506_unbolds_dart_traps_hero_power(self):
         _, old = self.card("18336", "LOE_021")
@@ -1778,10 +1768,8 @@ class ErasMsg(unittest.TestCase):
                     self.assertEqual(views[vid].get(p), d, f"{vid} {p}")
         scripts = {vid: sorted(p for p in v if p.startswith("scripts/version/") and p != "scripts/version/ships_cannon.lua")
                    for vid, v in views.items()}
-        S = "scripts/version/servant_of_yogg_saron.lua"  # 15181's fix: the msg pack keeps og.lua's Servant
-        self.assertEqual(scripts, {"15590": ["scripts/version/kabal_chemist.lua", "scripts/version/mistcaller.lua", S],
-                                   "16214": ["scripts/version/mistcaller.lua", S],
-                                   "17720": ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua", S]})
+        self.assertEqual(scripts, {"15590": ["scripts/version/kabal_chemist.lua"], "16214": [],
+                                   "17720": ["scripts/version/potion_of_polymorph.lua"]})
 
     def test_17720_nerfs_small_time_buccaneer_and_spirit_claws(self):
         for vid, hp, cost in (("16214", 2, 1), ("17720", 1, 2)):
@@ -1825,15 +1813,9 @@ class ErasIcc(unittest.TestCase):
     def test_20457_is_the_frozen_throne_pack_with_the_msg_fixes(self):
         icc, _ = pack.build(pack.REPO / "packs/icc")
         view = pack.version_view(self.files, "20457")
-        # the icc pack still has the Servant of Yogg-Saron, Mistcaller and Potion of Polymorph of before 15181, 15590 and
-        # 17720: the fixes go along
-        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua",
-                 "scripts/version/servant_of_yogg_saron.lua"]
-        self.assertEqual({p: d for p, d in view.items() if own_rules(p) and p not in fixes},
+        # the icc pack has the Servant of Yogg-Saron, Mistcaller and Potion of Polymorph of 15181, 15590 and 17720 itself
+        self.assertEqual({p: d for p, d in view.items() if own_rules(p)},
                          {p: d for p, d in icc.items() if own_rules(p)})
-        for vid in ("20457", "20970", "21517", "22115"):
-            for f in fixes:
-                self.assertEqual(pack.version_view(self.files, vid)[f], pack.version_view(self.files, "17720")[f], vid)
         self.assertEqual([v["era"] for v in self.man["versions"] if v["id"] in ("20457", "20970", "21517", "22115")],
                          ["icc"] * 4)
 
