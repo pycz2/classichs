@@ -3,7 +3,7 @@ extends RefCounted
 ## Every English interface string: literals in tr()/translate()/_t()/_tr() calls,
 ## plus the tables that are translated through a variable.
 
-const DIRS := ["res://game", "res://net", "res://ui"]
+const DIRS := ["res://game", "res://net", "res://ui", "res://studio"]
 static var _call := RegEx.create_from_string("(?:\\btr|TranslationServer\\.translate|\\b_t|\\b_tr)\\(\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
 ## HistoryText._say(p, viewer, "You …", "Opponent …", args)
 static var _say := RegEx.create_from_string("_say\\([^,]+,\\s*[^,]+,\\s*\"((?:[^\"\\\\]|\\\\.)*)\",\\s*\"((?:[^\"\\\\]|\\\\.)*)\"")
