@@ -5,6 +5,7 @@
 pub mod admin;
 pub mod admin_extra;
 pub mod admin_players;
+pub mod admin_roles;
 pub mod auth;
 pub mod bots;
 pub mod db;
