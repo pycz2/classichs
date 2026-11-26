@@ -272,3 +272,28 @@ macro_rules! every_card {
 every_card!(every_card_of_22611: "22611", every_card_of_23180: "23180", every_card_of_23576: "23576",
     every_card_of_23966: "23966", every_card_of_24377: "24377", every_card_of_24589: "24589",
     every_card_of_24769: "24769", every_card_of_25252: "25252");
+
+/// The Arena-only cards of formats.json `extra`: the BlizzCon 2017 cards (23576) and Taverns of Time (24769) are in
+/// their version's Arena pool and a draft offers them (they have no rarity: common).
+#[test]
+fn the_arena_drafts_the_blizzcon_and_taverns_of_time_cards() {
+    let Some(_) = eras() else { return };
+    for (vid, prefix, n) in [("23576", "BCON_", 9), ("24769", "TOT_", 28)] {
+        let rs = rs(vid).unwrap();
+        assert_eq!(rs.arena_pool.iter().filter(|c| c.starts_with(prefix)).count(), n, "version {vid}");
+        let offered = (0..40).any(|seed| {
+            let mut d = classichs_engine::arena_draft::ArenaDraft::new_in(rs, seed);
+            d.choose_hero(0);
+            while !d.done() {
+                if d.offer.iter().any(|c| c.starts_with(prefix)) {
+                    return true;
+                }
+                d.pick(0);
+            }
+            false
+        });
+        assert!(offered, "version {vid}: no draft offered a {prefix} card");
+    }
+    assert!(!rs("23966").unwrap().cards.contains_key("TOT_030"), "Taverns of Time in 24769 only");
+    assert!(!rs("23180").unwrap().cards.contains_key("BCON_001"), "the BlizzCon cards in 23576 only");
+}

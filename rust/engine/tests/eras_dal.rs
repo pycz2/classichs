@@ -159,3 +159,23 @@ fn full_board_checks_from_31761() {
     assert!(!scene!("31761", {"hand": [duel], "board": FULL}, {"board": FULL}).can_play(duel));
     assert!(scene!("31761", {"hand": [duel], "board": FULL}, {}).can_play(duel), "one side has room");
 }
+
+/// Zayle, Shadow Cloak (14.2.0.30795 on): a deck of only her starts as one of her five EVIL Decks (rules.json
+/// deck_recipes, set by the version patches); never drafted; not in the versions before her.
+#[test]
+fn zayle_starts_with_one_of_her_evil_decks_from_30795() {
+    let Some(_) = eras() else { return };
+    assert!(!version("30103").unwrap().cards.contains_key("DAL_800"));
+    for vid in ["30795", "31022", "31268", "31761"] {
+        let rs = version(vid).unwrap();
+        let recipes = &rs.deck_recipes["DAL_800"];
+        let classes: BTreeSet<&str> = recipes.iter().map(|(c, _)| c.as_str()).collect();
+        assert_eq!(classes, BTreeSet::from(["PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR"]), "{vid}");
+        assert!(recipes.iter().all(|(_, cards)| cards.len() == 30), "{vid}");
+        assert!(!rs.arena_pool.iter().any(|c| c == "DAL_800"), "{vid}: never drafted");
+        let zayle = vec!["DAL_800".to_string()];
+        let g = Game::new_in(rs, "HERO_08", &zayle, "HERO_01", &vec![YETI.to_string(); 30], 3, 0, true);
+        assert_eq!(g.players[0].deck.len() + g.players[0].hand.len(), 30, "{vid}");
+        assert!(g.history[0].events().iter().any(|e| e["type"] == "deck_recipe" && e["card"] == "DAL_800"), "{vid}");
+    }
+}

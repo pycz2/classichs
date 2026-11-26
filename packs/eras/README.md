@@ -57,6 +57,8 @@ builds it (`tools/build_packs.sh` does it with the other packs). This README is 
    - `behaviour`: `rules.json` `behaviour` flags to set (`null` clears one; docs/packs/rules.md).
    - `sets`: sets the base's `rules.json` doesn't know yet, added to its `sets` and to constructed decks (not the
      Arena): a card given before its set came out (22115: Marin the Fox, `LOOTAPALOOZA`).
+   - `deck_recipes`: card id → its decks, as `rules.json` `deck_recipes` has them (docs/packs/rules.md: a card that
+     stands for a whole deck); `null` takes a card's decks away.
 4. A behaviour change that the data can't express (a card that works differently): put its script into
    `versions/<id>/scripts/<name>.lua`, a file that returns a table of hook sets like any card script
    (docs/packs/api.md). It goes into the version as `scripts/version/<name>.lua`, loads after the base's scripts,
