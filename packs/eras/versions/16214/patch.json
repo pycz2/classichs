@@ -1,0 +1,8 @@
+{
+ "base": "msg",
+ "build": 16214,
+ "about": "7.0.0.16214 (2017-01-07): the card data of 15590; with the server hotfix of 2017-01-24 Kabal Chemist can make Dragonfire Potion (the msg pack's Kabal Chemist); The Mistcaller as since 15590",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 7.0.0.16214 (Kabal Chemist hotfix of 2017-01-24); packs/msg"
+ ]
+}
