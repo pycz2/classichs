@@ -328,6 +328,7 @@ func dispatch(msg: Dictionary) -> void:
 				remember({"token": token, "kicked": null})
 				_probing = true
 				send({"t": "chats"})
+				send_queued_reports()  # problem reports written offline
 		"error":
 			if resuming:
 				resuming = false
@@ -645,10 +646,84 @@ func delete_pack(content_hash: String) -> void:
 	send({"t": "pack_delete", "content_hash": content_hash})
 
 
+# --- problem reports (server/README.md, "Reports") ---------------------------------------
+
+## Reports waiting to go (offline, not logged in, or the server could not take them yet): one JSON file
+## each, the body of POST /reports. Tests point it at their own folder.
+static var reports_dir := "user://reports_queue"
+static var _reports_sending := {}  # path -> true while its request is under way (on any connection)
+
+## The server's answers to a report: code -> the player's words.
+const REPORT_ERRORS := {"auth_required": "Log in to the server again", "bad_token": "Log in to the server again",
+	"bad_text": "Write what happened (up to 4000 characters)", "bad_screen": "The screenshot is damaged: remove it",
+	"bad_voice": "The voice message is damaged: record it again",
+	"too_large": "The report is too big: remove the screenshot or record a shorter voice message",
+	"too_many": "You have sent many reports this hour"}
+
+
+## Keeps a report to send after the next login; its file's path.
+static func queue_report(report: Dictionary) -> String:
+	DirAccess.make_dir_recursive_absolute(reports_dir)
+	var path := "%s/%d_%d.json" % [reports_dir, Time.get_unix_time_from_system(), randi()]
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(report))
+	return path
+
+
+## The reports waiting to go, oldest first.
+static func queued_reports() -> Array:
+	if not DirAccess.dir_exists_absolute(reports_dir):
+		return []
+	var out := Array(DirAccess.get_files_at(reports_dir)).filter(func(f): return f.ends_with(".json"))
+	out.sort()
+	return out.map(func(f): return reports_dir + "/" + f)
+
+
+## Sends a report (kept in the queue till the server answers): done({id}) or done({error, code, kept}).
+func send_report(report: Dictionary, done: Callable) -> void:
+	_send_report_file(queue_report(report), done)
+
+
+## Sends the reports waiting to go (after a login).
+## ponytail: any server's login takes the whole queue (a report does not remember its server).
+func send_queued_reports() -> void:
+	for path in queued_reports():
+		if not _reports_sending.has(path):
+			_send_report_file(path, Callable())
+
+
+## POST /reports with a waiting report: taken (201) or bad (another 4xx) it leaves the queue; it stays
+## when there was no answer, the login is gone (401), there were too many (429), the server has no
+## reports (404, 405: an older one) or failed (5xx).
+func _send_report_file(path: String, done: Callable) -> void:
+	_reports_sending[path] = true
+	_http("/reports", HTTPClient.METHOD_POST, FileAccess.get_file_as_bytes(path), func(code: int, body: PackedByteArray):
+		_reports_sending.erase(path)
+		var j = JSON.parse_string(body.get_string_from_utf8()) if not body.is_empty() else null
+		var d: Dictionary = j if j is Dictionary else {}
+		var res := {}
+		if code == 201:
+			res = {"id": int(d.report.get("id", 0)) if d.get("report") is Dictionary else 0}
+		else:
+			var c := str(d.get("code", str(code)))
+			var text: String = _tr(REPORT_ERRORS[c]) if REPORT_ERRORS.has(c) else ""
+			if code == 0:
+				text = _tr("No answer from the server")
+			elif text == "":
+				text = _tr("The server could not take the report (%s)") % c
+			res = {"error": text, "code": c, "kept": code == 0 or code in [401, 404, 405, 429] or code >= 500}
+		if not res.get("kept", false):
+			DirAccess.remove_absolute(path)
+		if done.is_valid():
+			done.call(res), "", "", "application/json")
+
+
 ## An HTTP request to the server with the session token; done(code, body) gets the answer
 ## (code 0: no answer). to_file: the answer goes straight into that file (body empty); upload_id:
-## the server tells the stages of this upload by it (`pack_stage`). Tests replace it.
-func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_file := "", upload_id := "") -> HTTPRequest:
+## the server tells the stages of this upload by it (`pack_stage`); content_type: a POST body's.
+## Tests replace it.
+func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_file := "", upload_id := "", content_type := "application/octet-stream") -> HTTPRequest:
 	var r := HTTPRequest.new()
 	r.use_threads = not OS.has_feature("web")
 	r.download_file = to_file
@@ -659,7 +734,7 @@ func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_
 		done.call(code if result == HTTPRequest.RESULT_SUCCESS else 0, data))
 	var headers := PackedStringArray(["Authorization: Bearer " + token])
 	if method == HTTPClient.METHOD_POST:
-		headers.append("Content-Type: application/octet-stream")
+		headers.append("Content-Type: " + content_type)
 		if upload_id != "":
 			headers.append("X-Upload-Id: " + upload_id)
 	if r.request_raw(http_base() + path, headers, method, body) != OK:
