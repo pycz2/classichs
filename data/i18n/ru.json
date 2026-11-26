@@ -1015,5 +1015,9 @@
 "this is not a zip file": "это не zip-архив",
 "twice in the zip": "дважды в архиве",
 "unknown folder %s/": "неизвестная папка %s/",
-"… and %d more schema errors": "… и ещё ошибок схемы: %d"
+"… and %d more schema errors": "… и ещё ошибок схемы: %d",
+"Standard": "Стандартный",
+"Wild": "Вольный",
+"A Wild deck: it has cards that are not in Standard": "Вольная колода: в ней есть карты не из стандартного формата",
+"This deck has cards that are not in this format": "В колоде есть карты не из этого формата"
 }

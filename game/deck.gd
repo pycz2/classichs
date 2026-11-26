@@ -25,6 +25,11 @@ static func recipe(id: String) -> bool:
 	return p != null and p.rules().get("deck_recipes", {}).has(id)
 
 
+## A Wild deck: a card of it is not in Standard (a game with both formats; an Arena deck never is).
+func wild_only() -> bool:
+	return not arena and CardDb.wild_only(cards)
+
+
 ## The number of cards of the finished deck: 1 for a recipe card alone, else SIZE.
 func goal() -> int:
 	return 1 if not arena and cards.size() == 1 and recipe(cards[0]) else SIZE

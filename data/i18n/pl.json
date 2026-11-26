@@ -1015,5 +1015,9 @@
 "this is not a zip file": "to nie jest plik zip",
 "twice in the zip": "dwa razy w archiwum zip",
 "unknown folder %s/": "nieznany folder %s/",
-"… and %d more schema errors": "… i jeszcze błędów schematu: %d"
+"… and %d more schema errors": "… i jeszcze błędów schematu: %d",
+"Standard": "Standardowy",
+"Wild": "Dziki",
+"A Wild deck: it has cards that are not in Standard": "Talia Dzika: zawiera karty spoza formatu Standardowego",
+"This deck has cards that are not in this format": "Ta talia zawiera karty spoza tego formatu"
 }

@@ -1015,5 +1015,9 @@
 "this is not a zip file": "no es un archivo zip",
 "twice in the zip": "dos veces en el zip",
 "unknown folder %s/": "carpeta desconocida %s/",
-"… and %d more schema errors": "… y %d errores de esquema más"
+"… and %d more schema errors": "… y %d errores de esquema más",
+"Standard": "Estándar",
+"Wild": "Salvaje",
+"A Wild deck: it has cards that are not in Standard": "Un mazo Salvaje: tiene cartas que no son del formato Estándar",
+"This deck has cards that are not in this format": "Este mazo tiene cartas que no son de este formato"
 }

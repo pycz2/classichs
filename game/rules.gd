@@ -10,7 +10,8 @@ extends RefCounted
 const MESSAGES := ["This card can't be put in a deck", "This card belongs to another class",
 	"The deck already has 30 cards", "No more copies of this card are allowed", "Unknown hero",
 	"A deck needs exactly 30 cards. Cards now: %d", "Not yet! You have more cards to play!",
-	"Not yet! You can still attack.", "This card is a whole deck: it goes alone"]
+	"Not yet! You can still attack.", "This card is a whole deck: it goes alone",
+	"This deck has cards that are not in this format"]
 
 static var _engine: Object
 static var _hooks := {}
@@ -173,14 +174,17 @@ static func data_hash(p: Pack = null) -> String:
 	return str(request(req).get("hash", ""))
 
 
-## Why a deck can't be played ("" = it can), translated.
-static func validate(deck: Dictionary) -> String:
-	return tr_error(deck_error(deck))
+## Why a deck can't be played ("" = it can), in a game of a format ("standard", "wild"; "": any card), translated.
+static func validate(deck: Dictionary, format := "") -> String:
+	return tr_error(deck_error(deck, format))
 
 
 ## The same in the engine's English ("" = it can be played).
-static func deck_error(deck: Dictionary) -> String:
-	var r := request({"op": "validate", "deck": deck})
+static func deck_error(deck: Dictionary, format := "") -> String:
+	var req := {"op": "validate", "deck": deck}
+	if format != "":
+		req.format = format
+	var r := request(req)
 	return "" if r.ok else str(r.get("error", ""))
 
 

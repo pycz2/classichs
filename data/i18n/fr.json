@@ -1015,5 +1015,9 @@
 "this is not a zip file": "ce n'est pas un fichier zip",
 "twice in the zip": "en double dans le zip",
 "unknown folder %s/": "dossier inconnu %s/",
-"… and %d more schema errors": "… et %d autres erreurs de schéma"
+"… and %d more schema errors": "… et %d autres erreurs de schéma",
+"Standard": "Standard",
+"Wild": "Libre",
+"A Wild deck: it has cards that are not in Standard": "Un deck Libre : il contient des cartes hors du format Standard",
+"This deck has cards that are not in this format": "Ce deck contient des cartes hors de ce format"
 }
