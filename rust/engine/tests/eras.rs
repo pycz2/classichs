@@ -35,9 +35,13 @@ fn every_version_is_a_pack_of_its_own() {
         assert!(!view.keys().any(|p| p.starts_with("versions/")));
         ruleset::load(&view).unwrap_or_else(|e| panic!("version {}: {e}", v.id));
     }
-    // 6024 is the Naxxramas pack as it is
+    // 6024 is the Naxxramas pack's cards, with the formats and the Arena bans of its time (packs/eras/formats.json)
     let v6024 = pack::version_view(&eras, "6024").unwrap();
-    assert_eq!(pack::rules_hash(&v6024).unwrap(), pack::rules_hash(&naxx).unwrap());
+    assert_eq!(v6024["cards.json"], naxx["cards.json"]);
+    let (rs, naxx_rs) = (ruleset::load(&v6024).unwrap(), ruleset::load(&naxx).unwrap());
+    assert_eq!(rs.pool("standard"), &naxx_rs.collectible[..], "one format: every card");
+    assert!(!rs.arena_pool.iter().any(|c| c == "VAN_EX1_112") && naxx_rs.arena_pool.iter().any(|c| c == "VAN_EX1_112"),
+        "Gelbin Mekkatorque, a Promo card, was never drafted");
     // the top is the default version (a client that knows no versions plays it)
     let man: Value = serde_json::from_slice(&eras["manifest.json"]).unwrap();
     let default = man["default_version"].as_str().unwrap();
