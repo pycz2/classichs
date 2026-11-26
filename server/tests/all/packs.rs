@@ -511,11 +511,86 @@ async fn a_built_expansion_pack_is_bundled_listed_and_downloaded() {
 /// its default version, whose rules files are its top's too (per-version games come later).
 #[tokio::test]
 async fn a_pack_with_versions_uploads_as_its_default_version() {
+    use classichs_engine::pack as ep;
+    let (zip, ha, hb) = versions_zip();
+    let p = packs::inspect(&zip).unwrap();
+    assert_eq!(p.info.rules_hash, ha, "the default version's rules");
+    assert_eq!(ep::rules_hash(&ep::version_view(&p.files, "b").unwrap()).unwrap(), hb, "the other version is in the files");
+    let (addr, _app, http) = server().await;
+    let c = C::register(addr, "vera").await;
+    let r = call(&http, upload(Some(&c.token), &zip)).await;
+    assert_eq!(r.status, StatusCode::CREATED, "{}", String::from_utf8_lossy(&r.body));
+    assert_eq!(r.json()["pack"]["rules_hash"].as_str(), Some(ha.as_str()));
+}
+
+/// A server pack with versions: each version is registered (the `packs` message lists them), its games are played
+/// in its own rules, queues and standings are per version and format, and a Standard deck check refuses a deck
+/// of cards outside Standard. Old clients (no format) play the default.
+#[tokio::test]
+async fn each_version_and_format_has_its_queue_and_ladder() {
+    use classichs_server::entity::{pack_version, standing};
+    let (zip, ha, hb) = versions_zip();
+    let (addr, app, _http) = server().await;
+    let f = temp_dir();
+    std::fs::write(&f, &zip).unwrap();
+    let row = packs::add(&app, &f, zip.len() as u64, None, None).await.unwrap();
+    let vs = pack_version::Entity::find().filter(pack_version::Column::Pack.eq(row.id)).all(&app.db).await.unwrap();
+    assert_eq!(vs.iter().map(|v| (v.version.as_str(), v.rules_hash.as_str())).collect::<Vec<_>>(), [("a", ha.as_str()), ("b", hb.as_str())]);
+    assert_eq!(vs[1].formats, r#"["standard","wild"]"#);
+    let (ra, rb) = (packs::rules_for(&app, &ha).await.unwrap(), packs::rules_for(&app, &hb).await.unwrap());
+    assert_eq!((ra.version_id.as_str(), rb.version_id.as_str()), ("a", "b"));
+    assert_eq!(rb.rs.queue_steps, 5001, "version b's own rules");
+    assert!(rb.with_format("arena").is_none(), "no such format");
+    assert_eq!(rb.with_format("").unwrap().format, "wild", "no format: the default (every card)");
+    assert_eq!(ra.with_format("standard").unwrap().format, "", "a version with one format");
+
+    let mut p = vec![];
+    for n in ["ann", "ben", "cid"] {
+        p.push(C::register(addr, n).await);
+    }
+    p[0].send(json!({"t": "packs"})).await;
+    let list = p[0].want("packs").await;
+    let entry = list["server"].as_array().unwrap().iter().find(|e| e["rules_hash"] == ha.as_str()).unwrap().clone();
+    assert_eq!(entry["versions"][1]["id"], "b");
+    assert_eq!(entry["versions"][1]["formats"], json!(["standard", "wild"]));
+    assert_eq!(entry["versions"][1]["rules_hash"], hb.as_str());
+
+    let deck = |class: &str| json!({"name": "T", "hero": classichs_engine::deck::hero(class).unwrap(), "cards": classichs_engine::deck::basic(class)});
+    // Standard of version b has none of the basic cards.
+    p[1].send(json!({"t": "queue", "mode": "casual", "deck": deck("MAGE"), "pack": hb, "format": "standard"})).await;
+    assert_eq!(p[1].want("error").await["code"], "deck");
+    p[1].send(json!({"t": "queue", "mode": "casual", "deck": deck("MAGE"), "pack": hb, "format": "wild"})).await;
+    assert_eq!(p[1].want("queued").await["format"], "wild");
+    // Version a is another queue: ann waits until cid queues in it too.
+    p[0].send(json!({"t": "queue", "mode": "casual", "deck": deck("MAGE"), "pack": ha})).await;
+    assert_eq!(p[0].want("queued").await["pack"], ha.as_str());
+    tokio::time::sleep(Duration::from_millis(1500)).await;
+    assert!(app.hub().queue.len() == 2, "no game across versions");
+    p[2].send(json!({"t": "queue", "mode": "casual", "deck": deck("WARRIOR"), "pack": ha})).await;
+    let m = p[2].want("match").await;
+    assert_eq!((m["pack"].as_str(), m["format"].as_str()), (Some(ha.as_str()), Some("")));
+    // Standings: one ladder per version and format.
+    let keys: Vec<String> = standing::Entity::find().all(&app.db).await.unwrap().into_iter().map(|s| s.pack).collect();
+    assert!(keys.contains(&format!("org.test.versions/{hb}/wild")), "{keys:?}");
+    assert!(keys.contains(&format!("org.test.versions/{ha}/")), "{keys:?}");
+    // The profile's rank in a version and format; no format: the default.
+    for (f, want) in [(json!("standard"), "standard"), (Value::Null, "wild")] {
+        p[1].send(json!({"t": "me", "pack": hb, "format": f})).await;
+        assert_eq!(p[1].want("me").await["me"]["format"], want);
+    }
+}
+
+/// A pack with two versions (docs/packs/format.md §13): "a" (the default, Classic's rules, one format) and "b"
+/// (another queue limit; Standard = the CORE set, Wild = every card). Returns the zip and both rules hashes.
+fn versions_zip() -> (Vec<u8>, String, String) {
     use classichs_engine::pack::{self as ep, Files};
-    let a = classichs_engine::ruleset::classic_files();
-    let mut b = a.clone();
+    let mut a = classichs_engine::ruleset::classic_files();
     let mut rules: Value = serde_json::from_slice(&a["rules.json"]).unwrap();
+    rules["limits"]["queue_steps"] = json!(5002); // not the built-in Classic rules
+    a.insert("rules.json".into(), serde_json::to_vec(&rules).unwrap());
+    let mut b = a.clone();
     rules["limits"]["queue_steps"] = json!(5001);
+    rules["formats"] = json!({"standard": {"sets": ["CORE"]}, "wild": {"sets": ["VANILLA"]}});
     b.insert("rules.json".into(), serde_json::to_vec(&rules).unwrap());
     let mut files = Files::new();
     for (vid, f) in [("a", &a), ("b", &b)] {
@@ -533,22 +608,15 @@ async fn a_pack_with_versions_uploads_as_its_default_version() {
     m["name"] = json!({"en": "Versions"});
     m["rules_hash"] = json!(ha);
     m["default_version"] = json!("a");
-    m["versions"] = json!([{"id": "a", "dir": "versions/a", "rules_hash": ha}, {"id": "b", "dir": "versions/b", "rules_hash": hb}]);
+    m["versions"] = json!([{"id": "a", "dir": "versions/a", "date": "2014-03-11", "rules_hash": ha},
+                           {"id": "b", "dir": "versions/b", "date": "2016-04-26", "formats": ["standard", "wild"], "rules_hash": hb}]);
     files.insert("manifest.json".into(), serde_json::to_vec(&m).unwrap());
     let mut w = zip::ZipWriter::new(std::io::Cursor::new(vec![]));
     for (name, body) in &files {
         w.start_file(name.as_str(), zip::write::SimpleFileOptions::default()).unwrap();
         std::io::Write::write_all(&mut w, body).unwrap();
     }
-    let zip = w.finish().unwrap().into_inner();
-    let p = packs::inspect(&zip).unwrap();
-    assert_eq!(p.info.rules_hash, ha, "the default version's rules");
-    assert_eq!(ep::rules_hash(&ep::version_view(&p.files, "b").unwrap()).unwrap(), hb, "the other version is in the files");
-    let (addr, _app, http) = server().await;
-    let c = C::register(addr, "vera").await;
-    let r = call(&http, upload(Some(&c.token), &zip)).await;
-    assert_eq!(r.status, StatusCode::CREATED, "{}", String::from_utf8_lossy(&r.body));
-    assert_eq!(r.json()["pack"]["rules_hash"].as_str(), Some(ha.as_str()));
+    (w.finish().unwrap().into_inner(), ha, hb)
 }
 
 /// D11: the engine loads the pack and compiles every script; a broken one is refused with the

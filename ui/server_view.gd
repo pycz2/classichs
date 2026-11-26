@@ -25,6 +25,7 @@ var login_only := false
 var stage := ""  # "connecting", "login", "lobby"
 var tab := "Play"
 var mode := "casual"  # Play: casual or ranked
+var game_format := ""  # Play: "standard" or "wild" in a version with both (queue_format)
 var deck: Deck  # the deck for casual, ranked and friendly games
 var arena := {}  # the Arena run from the server
 var queued := ""  # the mode being searched ("" = none)
@@ -56,6 +57,7 @@ func _ready() -> void:
 	var s := link.saved()
 	tab = s.get("tab") if s.get("tab") in TABS else "Play"
 	mode = s.get("mode") if s.get("mode") in MODES else "casual"
+	game_format = str(s.get("format", ""))
 	deck = remembered_deck(link)
 	link.message.connect(_on_message)
 	link.packs_changed.connect(_packs_changed)
@@ -520,6 +522,7 @@ func _build_play() -> void:
 				choose_deck(d)
 				queue(mode))
 		grid.add_child(b)
+	_game_choice()
 	# the right column: casual or ranked, the hero, the rank, Play
 	for i in MODES.size():
 		var m: String = MODES[i]
@@ -548,6 +551,9 @@ func _build_play() -> void:
 		var t := _centered("", 22, Vector2(0, 26), 408, Palette.SELECTED, info)
 		t.name = "QueueTime"
 		t.text = tr("Searching for an opponent… %s") % _mmss(waited)
+		var what := _choice_text()
+		if what != "":
+			_centered(what, 16, Vector2(0, 58), 408, Color("e0d2b4"), info).name = "QueueGame"
 	elif mode == "ranked":
 		var r := RankInfo.new()
 		r.name = "RankInfo"
@@ -593,13 +599,84 @@ func queue(m: String) -> void:
 		return
 	if not _game_here():
 		return
+	var f := queue_format(CardDb.formats(), game_format)
+	if f == "standard" and deck.wild_only():
+		say(tr("A Wild deck: it has cards that are not in Standard"))
+		return
 	link.game_deck = deck
-	link.send(link.with_pack({"t": "queue", "mode": m, "deck": deck.to_message()}))
+	var msg := link.with_pack({"t": "queue", "mode": m, "deck": deck.to_message()})
+	if f != "":
+		msg["format"] = f
+	link.send(msg)
 	_queue_asked = true
 	queued = m
 	waited = 0.0
 	say("")
 	_go("lobby")
+
+
+## The format a queue asks for: the chosen one of the version's formats (Standard first), "" (none sent) for a
+## version with one format.
+static func queue_format(formats: Array, want: String) -> String:
+	if formats.size() < 2:
+		return ""
+	return want if formats.has(want) else str(formats[0])
+
+
+## Above the decks: the version of the game (a pack with versions) and Standard or Wild (a version with both).
+func _game_choice() -> void:
+	var p := Packs.active()
+	var row := HBoxContainer.new()
+	row.name = "GameChoice"
+	row.position = Vector2(300, 82)
+	row.add_theme_constant_override("separation", 8)
+	_body.add_child(row)
+	if p and not p.whole().versions().is_empty():
+		var whole := p.whole()
+		var pick := OptionButton.new()
+		pick.name = "Version"
+		pick.tooltip_text = tr("Version")
+		pick.custom_minimum_size = Vector2(240, 0)
+		pick.fit_to_longest_item = false
+		pick.disabled = queued != ""
+		var ids := []
+		for v in whole.versions():
+			if v is Dictionary:
+				ids.append(str(v.get("id", "")))
+				pick.add_item(Versions.label(whole, ids[-1]))
+		pick.selected = ids.find(Packs.version(whole))
+		pick.item_selected.connect(func(i):
+			Packs.set_version(whole, ids[i])
+			link.request_me()  # the rank in that version
+			_go("lobby"))
+		row.add_child(pick)
+	var formats := CardDb.formats()
+	if formats.size() > 1:
+		var now := queue_format(formats, game_format)
+		var fg := ButtonGroup.new()
+		for f in formats:
+			var b := Palette.button({"standard": tr("Standard"), "wild": tr("Wild")}[f], "Format_" + f)
+			b.toggle_mode = true
+			b.button_group = fg
+			b.button_pressed = f == now
+			b.disabled = queued != ""
+			b.pressed.connect(func():
+				game_format = f
+				link.remember({"format": f})
+				link.request_me())  # the rank in that format
+			row.add_child(b)
+
+
+## The version and the format searched in, for the search line ("" for a one-version game with one format).
+func _choice_text() -> String:
+	var p := Packs.active()
+	var parts := []
+	if p and p.version_id != "":
+		parts.append(Versions.label(p))
+	var f := queue_format(CardDb.formats(), game_format)
+	if f != "":
+		parts.append(tr("Standard") if f == "standard" else tr("Wild"))
+	return "  ·  ".join(parts)
 
 
 func unqueue() -> void:

@@ -62,7 +62,7 @@ pub fn is_bot_name(name: &str) -> bool {
 
 /// Who waits for an auto-bot now (the matchmaking tick calls it every second).
 pub async fn tick(app: &AppRef) {
-    let want: Vec<(i64, Mode, f64, bool, String)> = {
+    let want: Vec<(i64, Mode, f64, bool, String, String)> = {
         let hub = app.hub();
         let now = std::time::Instant::now();
         let taken: HashSet<i64> = hub.auto_for.values().copied().collect();
@@ -75,10 +75,10 @@ pub async fn tick(app: &AppRef) {
                     && !taken.contains(id)
                     && !is_bot_name(&s.name)
             })
-            .map(|(id, s)| (*id, s.mode, s.key.mmr, s.key.legend, s.rules.rules_hash.clone()))
+            .map(|(id, s)| (*id, s.mode, s.key.mmr, s.key.legend, s.rules.rules_hash.clone(), s.rules.format.clone()))
             .collect()
     };
-    for (player, mode, mmr, legend, pack) in want {
+    for (player, mode, mmr, legend, pack, format) in want {
         let level = if mode == Mode::Ranked && legend {
             Level::SuperHard // a Legend's long wait ends with the real test
         } else if mode == Mode::Arena {
@@ -97,7 +97,7 @@ pub async fn tick(app: &AppRef) {
         );
         let app2 = app.clone();
         tokio::spawn(async move {
-            let r = play_once(&app2, account, &name, mode, pack, level).await;
+            let r = play_once(&app2, account, &name, mode, pack, &format, level).await;
             if let Err(e) = r {
                 app2.event(Event::new("auto_bot", format!("{name}: {e}")).other(&name).data(json!({"bot": name, "error": e})));
             }
@@ -142,7 +142,7 @@ pub(crate) async fn make(app: &AppRef, name: &str) -> Option<i64> {
 }
 
 /// The one game: log in through this process, queue (Arena: a fresh draft), play, go.
-async fn play_once(app: &AppRef, account: i64, name: &str, mode: Mode, pack: String, level: Level) -> Result<(), String> {
+async fn play_once(app: &AppRef, account: i64, name: &str, mode: Mode, pack: String, format: &str, level: Level) -> Result<(), String> {
     let token = db::new_session(&app.db, account, "game", 3600, "").await.map_err(|e| e.to_string())?;
     let ctx = Ctx { id: -account, name: name.to_string(), status: app.bots.status.clone(), think: app.bots.think.clone(), app: Some(app.clone()), pace: false };
     let app2 = app.clone();
@@ -150,5 +150,5 @@ async fn play_once(app: &AppRef, account: i64, name: &str, mode: Mode, pack: Str
         let a = app2.clone();
         Box::pin(async move { Ok(Transport::local(&a)) })
     });
-    runtime::one_game(&ctx, &connect, &Auth::Token(token), mode.as_str(), Some(pack), level).await
+    runtime::one_game(&ctx, &connect, &Auth::Token(token), mode.as_str(), Some(pack), format, level).await
 }

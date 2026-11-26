@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13)]
     }
 }
 
@@ -925,6 +925,30 @@ impl MigrationTrait for M12 {
                 c.execute_unprepared(&sql).await?;
             }
         }
+        Ok(())
+    }
+}
+
+/// The versions of a pack (docs/packs/format.md §13; 0.73): one row per version of a pack row, with
+/// its rules_hash (games and ladders are tied to it), formats (JSON list) and name (JSON {lang: text}).
+struct M13;
+
+impl MigrationName for M13 {
+    fn name(&self) -> &str {
+        "m20261126_000013_pack_versions"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M13 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        c.execute_unprepared(
+            "CREATE TABLE pack_version (pack INTEGER NOT NULL REFERENCES packs(id) ON DELETE CASCADE, version TEXT NOT NULL, \
+             rules_hash TEXT NOT NULL, formats TEXT NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL, PRIMARY KEY (pack, version))",
+        )
+        .await?;
+        c.execute_unprepared("CREATE INDEX pack_version_rules ON pack_version (rules_hash)").await?;
         Ok(())
     }
 }

@@ -502,9 +502,15 @@ func with_pack(msg: Dictionary, p: Pack = null) -> Dictionary:
 	return msg
 
 
-## Asks for the profile with the rank in the active game (`me {pack}`).
+## Asks for the profile with the rank in the active game (`me {pack, format}`: a version with Standard and Wild
+## has a ladder in each; the chosen one, Standard first, as the Play screen queues).
 func request_me() -> void:
-	send(with_pack({"t": "me"}))
+	var msg := with_pack({"t": "me"})
+	var f := str(saved().get("format", ""))
+	var fs := CardDb.formats()
+	if msg.has("pack") and fs.size() > 1:
+		msg["format"] = f if fs.has(f) else str(fs[0])
+	send(msg)
 
 
 ## The server's entry for a pack the player has ({} when the server does not list it): the
@@ -514,9 +520,19 @@ func server_pack_for(p: Pack, friendly := true) -> Dictionary:
 	if p == null:
 		return {}
 	for e in packs.server + (packs.mine if friendly else []):
-		if str(e.get("rules_hash", "")) == p.rules_hash():
+		if entry_rules(e).has(p.rules_hash()):
 			return e
 	return {}
+
+
+## The rules hashes a server entry plays: its own (the default version) and its versions' (format.md §13).
+static func entry_rules(e: Dictionary) -> Array:
+	var out := [str(e.get("rules_hash", ""))]
+	var vs = e.get("versions", [])
+	for v in vs if vs is Array else []:
+		if v is Dictionary:
+			out.append(str(v.get("rules_hash", "")))
+	return out
 
 
 ## Why games of the pack cannot be played here (translated; "" = they can). A server without

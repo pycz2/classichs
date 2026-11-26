@@ -102,14 +102,15 @@ async fn begin(app: AppRef, mode: Mode, rules: Arc<GameRules>, mut players: [(i6
         [d0, d1] => catch_unwind(|| Game::new_in(rs, &d0.hero, &d0.cards, &d1.hero, &d1.cards, seed as i64, -1, true)).ok(),
         _ => None,
     };
-    let Some(game) = game else {
+    let Some(mut game) = game else {
         app.event(Event::new("error", format!("The game of {} and {} could not start", a0.name, a1.name)).game(&id));
         return fail(&app, "The game could not start");
     };
+    game.format = rules.format.clone();
     let accs = [a0, a1];
     let hello: [Value; 2] = std::array::from_fn(|p| {
         let o = &accs[1 - p];
-        let mut m = json!({"t": "match", "game": id, "mode": mode, "opponent": {"user": o.name, "tag": o.tag}, "you": p, "pack": rules.rules_hash});
+        let mut m = json!({"t": "match", "game": id, "mode": mode, "opponent": {"user": o.name, "tag": o.tag}, "you": p, "pack": rules.rules_hash, "format": rules.format});
         for (k, v) in extra.as_object().into_iter().flatten() {
             m[k] = v.clone();
         }
@@ -509,7 +510,7 @@ async fn finish(ctx: &Ctx, g: &Game, winner: i64, reason: &'static str, cause: O
 /// setup and the actions (every applied one, the timeouts' too: the game's history).
 fn replay(ctx: &Ctx, g: &Game, winner: i64, reason: &str, ended: i64) -> Value {
     let actions: Vec<Value> = g.history.iter().skip(1).map(|h| Value::Object(h.action.clone())).collect();
-    json!({"format": "classichs-replay", "v": 1, "game": ctx.id, "mode": ctx.mode.as_str(), "pack": ctx.rules.rules_hash,
+    json!({"format": "classichs-replay", "v": 1, "game": ctx.id, "mode": ctx.mode.as_str(), "pack": ctx.rules.rules_hash, "game_format": ctx.rules.format,
            "pack_id": ctx.rules.id, "pack_name": packs::short_name(&ctx.rules), "started": ctx.started, "ended": ended,
            "players": ctx.players, "seed": ctx.seed, "first": -1, "actions": actions,
            "result": {"winner": winner, "reason": reason, "turns": g.turn}, "hash": g.state_hash()})
@@ -529,14 +530,14 @@ async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, 
     let l = &rules.ladder;
     match mode {
         Mode::Casual => {
-            let (mut a, mut b) = (db::standing(c, ids[w], &rules.id, l).await?, db::standing(c, ids[1 - w], &rules.id, l).await?);
+            let (mut a, mut b) = (db::standing(c, ids[w], &rules.ladder_key(), l).await?, db::standing(c, ids[1 - w], &rules.ladder_key(), l).await?);
             (a.casual_mmr, b.casual_mmr) = ranked::elo(a.casual_mmr, b.casual_mmr, true);
             db::save_standing(c, &a).await?;
             db::save_standing(c, &b).await?;
             Ok([json!({}), json!({})])
         }
         Mode::Ranked => {
-            let mut st = [db::standing(c, ids[0], &rules.id, l).await?, db::standing(c, ids[1], &rules.id, l).await?];
+            let mut st = [db::standing(c, ids[0], &rules.ladder_key(), l).await?, db::standing(c, ids[1], &rules.ladder_key(), l).await?];
             (st[w].ranked_mmr, st[1 - w].ranked_mmr) = ranked::elo(st[w].ranked_mmr, st[1 - w].ranked_mmr, true);
             for (p, s) in st.iter_mut().enumerate() {
                 let mut r = s.rank();

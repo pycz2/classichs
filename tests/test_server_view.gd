@@ -221,6 +221,9 @@ func test_play_remembers_the_deck_and_the_mode() -> void:
 	var q: Array = (v.link as FakeLink).of("queue")
 	eq(q.size(), 1, "one click searches")
 	eq([q[0].mode, q[0].deck.hero], ["ranked", box.deck.hero], "with the mode and the deck")
+	check(not q[0].has("format"), "a game with one format: none sent")
+	check(v.find_child("Version", true, false) == null and v.find_child("Format_standard", true, false) == null,
+		"no version or mode to choose in a one-version game")
 	eq(v.link.game_deck, v.deck, "the game will use that deck")
 	(v.find_child("QueueTime", true, false) as Label).text = ""
 	v._process(1.5)
@@ -228,6 +231,48 @@ func test_play_remembers_the_deck_and_the_mode() -> void:
 	v.link.dispatch({"t": "match", "game": "g", "mode": "ranked", "opponent": {"user": "bob", "tag": null}, "you": 0.0})
 	eq(v.queued, "", "a match ends the search")
 	_free(v)
+
+
+func test_queue_format() -> void:
+	eq(ServerView.queue_format([], "wild"), "", "one format: none sent")
+	eq(ServerView.queue_format(["standard", "wild"], ""), "standard", "Standard first")
+	eq(ServerView.queue_format(["standard", "wild"], "wild"), "wild", "the chosen one")
+	eq(ServerView.queue_format(["standard", "wild"], "odd"), "standard", "an unknown one: Standard")
+
+
+## A pack with versions (Hearthstone 2014–2019): its versions on the server, the version and the mode chosen on Play.
+func test_play_chooses_the_version_and_the_mode() -> void:
+	var r := Packs.install(FileAccess.get_file_as_bytes(ProjectSettings.globalize_path("res://build/packs/eras.cardpack")), "imported")
+	check(r.has("pack"), "installed: " + str(r))
+	if not r.has("pack"):
+		return
+	var p: Pack = r.pack
+	var two := ""
+	for x in p.versions():
+		if x.get("formats", []).size() > 1:
+			two = str(x.id)
+	Packs.set_active(p)
+	Packs.set_version(p, two)
+	var view := Packs.active()
+	var entry := {"id": p.id(), "rules_hash": p.rules_hash(), "content_hash": "x", "versions": [{"id": two, "rules_hash": view.rules_hash()}]}
+	eq(ServerLink.entry_rules(entry), [p.rules_hash(), view.rules_hash()], "a server entry plays its own rules and its versions'")
+	var v := _view(true)
+	v.link.dispatch({"t": "packs", "server": [entry], "mine": []})
+	eq(v.link.server_pack_for(view, false), entry, "a version of a server pack is played here")
+	var pick := v.find_child("Version", true, false) as OptionButton
+	check(pick != null, "the versions to choose")
+	if pick:
+		eq(pick.get_item_text(pick.selected), Versions.label(p, two), "the chosen one shown")
+	_press(v, "Format_wild")
+	eq(v.game_format, "wild", "Wild chosen")
+	eq(v.link.saved().get("format"), "wild", "and remembered")
+	var me: Array = v.link.of("me")
+	check(not me.is_empty() and me[-1].get("format") == "wild" and me[-1].get("pack") == view.rules_hash(), "the rank in that version and mode: " + str(me))
+	check(v._choice_text().ends_with(tr("Wild")), "the search line names the version and the mode")
+	_free(v)
+	Packs.set_active(Packs.all()[0])
+	Settings.data.pack_versions.erase(p.id())
+	Packs.remove(p)
 
 
 ## The session: saved on login under its server, sent again by itself, forgotten on logout or refusal.

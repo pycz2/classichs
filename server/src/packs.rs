@@ -8,7 +8,7 @@
 //! - `POST /packs` (the zip as the body) → `201 {pack}`; a player's own pack.
 
 use crate::db::{self, Account, Db};
-use crate::entity::{friend, pack, pack_import};
+use crate::entity::{friend, pack, pack_import, pack_version};
 use crate::events::Event;
 use crate::ranked::Ladder;
 use crate::{ranked, AppRef, Timers};
@@ -66,6 +66,8 @@ pub struct PackInfo {
     pub rules_hash: String,
     /// docs/packs/format.md §3: every file, path + SHA-256 of its bytes.
     pub content_hash: String,
+    /// The manifest's versions (format.md §13); [] for a one-version pack.
+    pub versions: Vec<engine_pack::VersionInfo>,
 }
 
 /// A pack read by `inspect`: what it is, the files the engine reads and its ready decks.
@@ -128,7 +130,7 @@ pub fn inspect_from(mut r: impl Read + Seek) -> Result<Inspected, String> {
     for (n, b) in files.iter().filter(|(n, _)| n.starts_with("decks/") && n.ends_with(".json") && n.matches('/').count() == 1).take(TRIAL_DECKS) {
         decks.push(engine_pack::strict_json(b, n)?);
     }
-    let info = PackInfo { id: id.into(), version: version.into(), name: Value::Object(name.clone()), rules_hash, content_hash };
+    let info = PackInfo { id: id.into(), version: version.into(), name: Value::Object(name.clone()), rules_hash, content_hash, versions: engine_pack::versions(&files) };
     Ok(Inspected { info, files, decks })
 }
 
@@ -216,6 +218,7 @@ pub fn trial(p: &Inspected) -> Result<(), String> {
 
 /// What the server needs of a pack to run its games: the engine's ruleset and, from
 /// rules.json, the timers, the ladder and the Arena's end.
+#[derive(Clone)]
 pub struct GameRules {
     pub rs: &'static Ruleset,
     pub rules_hash: String,
@@ -231,6 +234,10 @@ pub struct GameRules {
     pub ranked: bool,
     pub arena_wins: i64,
     pub arena_losses: i64,
+    /// The version these rules are of (format.md §13); "" in a one-version pack.
+    pub version_id: String,
+    /// The game format ("standard", "wild"; "": every card, a pack with one format): `with_format`.
+    pub format: String,
 }
 
 impl GameRules {
@@ -256,6 +263,26 @@ impl GameRules {
             ranked: Ladder::from_rules(&rules["ranked"]).is_some(),
             arena_wins: Ord::max(arena["wins"].as_i64().unwrap_or(12), 1),
             arena_losses: Ord::max(arena["losses"].as_i64().unwrap_or(3), 1),
+            version_id: String::new(),
+            format: String::new(),
+        }
+    }
+
+    /// These rules in a game format (`format` of a request; "": the default, "wild" where the version has it), or
+    /// None for a format the version does not have.
+    pub fn with_format(self: &Arc<Self>, format: &str) -> Option<Arc<GameRules>> {
+        let f = self.rs.game_format(format)?;
+        let f = if f.is_empty() && self.rs.formats.contains_key("wild") { "wild".to_string() } else { f };
+        Some(if f == self.format { self.clone() } else { Arc::new(GameRules { format: f, ..(**self).clone() }) })
+    }
+
+    /// The ladder (standings) these rules are ranked in: the pack's id for a one-version pack without formats (the
+    /// ladders of before 0.73, kept), else one per version and format: "<id>/<rules_hash>/<format>".
+    pub fn ladder_key(&self) -> String {
+        if self.version_id.is_empty() && self.format.is_empty() {
+            self.id.clone()
+        } else {
+            format!("{}/{}/{}", self.id, self.rules_hash, self.format)
         }
     }
 
@@ -287,7 +314,7 @@ pub async fn rules_for(app: &AppRef, rules_hash: &str) -> Result<Arc<GameRules>,
         return Ok(r.clone());
     }
     let row = pack::Entity::find()
-        .filter(pack::Column::RulesHash.eq(rules_hash))
+        .filter(with_rules(rules_hash))
         .filter(pack::Column::Hashes.eq(HASHES))
         .order_by_asc(pack::Column::Owner)
         .one(&app.db)
@@ -295,15 +322,27 @@ pub async fn rules_for(app: &AppRef, rules_hash: &str) -> Result<Arc<GameRules>,
         .map_err(|e| format!("database: {e}"))?
         .ok_or("no such pack")?;
     let mut file = app.store.read_file(&row.content_hash, MAX_SERVER_PACK).await.map_err(|e| format!("storage: {e}"))?;
+    let h = rules_hash.to_string();
     let r = tokio::task::spawn_blocking(move || -> Result<GameRules, String> {
         let files = engine_pack::read_zip_from(&mut file)?;
-        Ok(GameRules::of(load_rules(&files)?, &files))
+        // A pack with versions: the view of a version with this rules_hash (text-only versions share one: any).
+        let Some(v) = engine_pack::versions(&files).into_iter().find(|v| v.rules_hash == h) else {
+            return Ok(GameRules::of(load_rules(&files)?, &files));
+        };
+        let view = engine_pack::version_view(&files, &v.id)?;
+        Ok(GameRules { version_id: v.id, ..GameRules::of(load_rules(&view)?, &view) })
     })
     .await
     .map_err(|_| "the rules engine failed".to_string())??;
     let r = Arc::new(r);
     app.rules.lock().unwrap_or_else(|e| e.into_inner()).insert(rules_hash.to_string(), r.clone());
     Ok(r)
+}
+
+/// The packs with these rules: the pack's own (its root) or one of its versions'.
+fn with_rules(rules_hash: &str) -> Condition {
+    let versions = sea_orm::sea_query::Query::select().column(pack_version::Column::Pack).from(pack_version::Entity).and_where(pack_version::Column::RulesHash.eq(rules_hash)).to_owned();
+    Condition::any().add(pack::Column::RulesHash.eq(rules_hash)).add(pack::Column::Id.in_subquery(versions))
 }
 
 /// The rules_hash games are played in when a request names none: the default server pack,
@@ -331,7 +370,7 @@ pub async fn playable(app: &AppRef, pack: Option<&str>, own: Option<i64>) -> Res
         return Err(("pack", "This server does not have this game".into()));
     }
     let rows = pack::Entity::find()
-        .filter(pack::Column::RulesHash.eq(&h))
+        .filter(with_rules(&h))
         .filter(pack::Column::Enabled.eq(true))
         .order_by_asc(pack::Column::Id)
         .all(&app.db)
@@ -539,9 +578,9 @@ pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>, sta
     }
     let row = pack::ActiveModel {
         pack_id: Set(info.id),
-        version: Set(info.version),
+        version: Set(info.version.clone()),
         name: Set(info.name.to_string()),
-        rules_hash: Set(info.rules_hash),
+        rules_hash: Set(info.rules_hash.clone()),
         content_hash: Set(hash),
         size: Set(size as i64),
         owner: Set(owner),
@@ -554,6 +593,18 @@ pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>, sta
     }
     .insert(&tx)
     .await?;
+    for v in &info.versions {
+        let date = v.date.clone();
+        let m = pack_version::ActiveModel {
+            pack: Set(row.id),
+            version: Set(v.id.clone()),
+            rules_hash: Set(v.rules_hash.clone()),
+            formats: Set(json!(v.formats).to_string()),
+            name: Set(v.name.to_string()),
+            date: Set(date),
+        };
+        pack_version::Entity::insert(m).exec_without_returning(&tx).await?;
+    }
     tx.commit().await?;
     tracing::info!("pack {}: {size} bytes, checked in {} ms, stored in {} ms", row.content_hash, checked.as_millis(), (started.elapsed() - checked).as_millis());
     if let Some(s) = stages {
@@ -702,15 +753,38 @@ pub async fn packs_msg(db: &Db, me: i64) -> Result<Value, DbErr> {
         .all(db)
         .await?;
     let mine = pack::Entity::find().filter(pack::Column::Owner.eq(me)).order_by_desc(pack::Column::Id).all(db).await?;
+    // each pack's versions (format.md §13), oldest first; none: a one-version pack
+    let ids: Vec<i64> = server.iter().chain(&mine).map(|p| p.id).collect();
+    let rows = pack_version::Entity::find()
+        .filter(pack_version::Column::Pack.is_in(ids))
+        .order_by_asc(pack_version::Column::Date)
+        .order_by_asc(pack_version::Column::Version)
+        .all(db)
+        .await?;
+    let with_versions = |p: &pack::Model| {
+        let mut v = pack_json(p);
+        let vs: Vec<Value> = rows
+            .iter()
+            .filter(|r| r.pack == p.id)
+            .map(|r| {
+                let parse = |s: &str| serde_json::from_str::<Value>(s).unwrap_or(Value::Null);
+                json!({"id": r.version, "name": parse(&r.name), "date": r.date, "formats": parse(&r.formats), "rules_hash": r.rules_hash})
+            })
+            .collect();
+        if !vs.is_empty() {
+            v["versions"] = json!(vs);
+        }
+        v
+    };
     let mine: Vec<Value> = mine
         .iter()
         .map(|p| {
-            let mut v = pack_json(p);
+            let mut v = with_versions(p);
             v["enabled"] = json!(p.enabled);
             v
         })
         .collect();
-    Ok(json!({"t": "packs", "server": server.iter().map(pack_json).collect::<Vec<_>>(), "mine": mine}))
+    Ok(json!({"t": "packs", "server": server.iter().map(with_versions).collect::<Vec<_>>(), "mine": mine}))
 }
 
 /// `pack_delete {content_hash}`: the player's own pack. false = no such pack of theirs.
