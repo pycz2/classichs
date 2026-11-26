@@ -1182,6 +1182,88 @@ class Eras(unittest.TestCase):
         self.assertEqual(self.card("6024", "VAN_CS2_237")[0]["cost"], 2)
 
 
+class ErasKara(unittest.TestCase):
+    """packs/eras, the One Night in Karazhan era (base packs/kara): 13921, 14366, 14830, 15181."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.files, cls.report = pack.build(pack.REPO / "packs/eras")
+        cls.man = json.loads(cls.files["manifest.json"])
+        cls.views = {}
+
+    def view(self, vid):
+        if vid not in self.views:
+            self.views[vid] = pack.version_view(self.files, vid)
+        return self.views[vid]
+
+    def card(self, vid, cid):
+        v = self.view(vid)
+        c = next(c for c in json.loads(v["cards.json"]) if c["id"] == cid)
+        return c, {lang: json.loads(v[f"locales/{lang}.json"])["cards"][cid] for lang in self.man["locales"]}
+
+    def test_the_versions_are_listed(self):
+        self.assertEqual(self.report.errors, [])
+        vs = {v["id"]: v for v in self.man["versions"]}
+        for vid in ("13921", "14366", "14830", "15181"):
+            self.assertEqual((vs[vid]["era"], vs[vid]["formats"]), ("kara", ["standard", "wild"]), vid)
+        self.assertEqual(vs["14830"]["name"]["ru"], "Ослаблены Йогг-Сарон, Зов лесов, Рывок и ещё четыре карты")
+
+    def test_13921_is_the_karazhan_pack(self):
+        kara, _ = pack.build(pack.REPO / "packs/kara")
+        view = self.view("13921")
+        self.assertEqual(pack.rules_hash(view), pack.rules_hash(kara))
+        self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p)},
+                         {p: d for p, d in kara.items() if pack.is_version_file(p)})
+
+    def test_14366_fixes_texts_only(self):
+        self.assertEqual(pack.rules_hash(self.view("14366")), pack.rules_hash(self.view("13921")))
+        old, new = self.card("13921", "GVG_107")[1], self.card("14366", "GVG_107")[1]
+        self.assertTrue(old["en"]["text"].endswith("<b>Divine Shield</b>.\n<i>(at random)</i>"))
+        self.assertTrue(new["en"]["text"].endswith("<b>Divine Shield</b>\n<i>(at random)</i>."))
+        self.assertTrue(new["fr"]["text"].endswith("<i>(au hasard)</i>."))
+        self.assertEqual(self.card("13921", "AT_050")[1]["ru"]["text"][:28], "<b>Предсмертный хрип:</b> Си")
+        self.assertEqual(self.card("14366", "AT_050")[1]["ru"]["text"][:28], "<b>Предсмертный хрип:</b> си")
+        self.assertEqual(self.card("14366", "AT_050")[1]["en"], self.card("13921", "AT_050")[1]["en"])
+
+    def test_14830_nerfs(self):
+        for cid, field, old, new in [("VAN_CS2_045", "cost", 1, 2), ("VAN_CS2_108", "cost", 1, 2), ("OG_211", "cost", 8, 9),
+                                     ("VAN_CS2_103", "cost", 3, 1), ("VAN_CS2_188", "attack", 2, 1)]:
+            self.assertEqual(self.card("14366", cid)[0][field], old, cid)
+            self.assertEqual(self.card("14830", cid)[0][field], new, cid)
+            self.assertEqual(self.card("15181", cid)[0][field], new, cid)
+        charge = self.card("14830", "VAN_CS2_103")[1]
+        self.assertEqual(charge["en"]["text"], "Give a friendly minion <b>Charge</b>. It can't attack heroes this turn.")
+        self.assertEqual(charge["ru"]["text"], "Ваше выбранное существо получает <b>«Рывок»</b>. На этом ходу оно не может атаковать героев.")
+        self.assertEqual(self.card("14366", "VAN_CS2_103")[1]["en"]["text"], "Give a friendly minion +2 Attack and <b>Charge</b>.")
+        tuskarr = self.card("14830", "AT_046")[1]
+        self.assertEqual(tuskarr["en"]["text"], "<b>Battlecry:</b> Summon a random basic Totem.")
+        self.assertEqual(tuskarr["de"]["text"], "<b>Kampfschrei:</b> Beschwört ein zufälliges Basistotem.")
+        self.assertEqual(self.card("14366", "AT_046")[1]["en"]["text"], "<b>Battlecry:</b> Summon ANY random Totem.")
+        self.assertIn("scripts/version/kara_6_1_3.lua", self.view("14830"))
+        self.assertNotIn("scripts/version/kara_6_1_3.lua", self.view("14366"))
+
+    def test_15181_murlocs_peddler_and_texts(self):
+        for cid, en, de in [("VAN_EX1_507", "Your other Murlocs have +2/+1.", "Eure anderen Murlocs haben +2/+1."),
+                            ("VAN_EX1_508", "Your other Murlocs have +1 Attack.", "Eure anderen Murlocs haben +1 Angriff."),
+                            ("VAN_EX1_103", "<b>Battlecry:</b> Give your other Murlocs +2 Health.", "<b>Kampfschrei:</b> Verleiht Euren anderen Murlocs +2 Leben."),
+                            ("VAN_EX1_509", "Whenever you summon a Murloc, gain +1 Attack.", "Erhält jedes Mal +1 Angriff, wenn Ihr einen Murloc herbeiruft.")]:
+            texts = self.card("15181", cid)[1]
+            self.assertEqual((texts["en"]["text"], texts["de"]["text"]), (en, de), cid)
+            self.assertNotEqual(self.card("14830", cid)[1]["en"]["text"], en, cid)
+        peddler = self.card("15181", "KAR_070")[1]
+        self.assertEqual(peddler["en"]["text"], "[x]<b>Battlecry:</b> If you're holding\nany non-Rogue class cards,\n reduce their Cost by (2).")
+        self.assertEqual(peddler["it"]["text"], "<b>Grido di Battaglia:</b> riduce di (2) il costo delle carte non del Ladro nella tua mano.")
+        self.assertEqual(self.card("14830", "KAR_070")[1]["en"]["text"], "[x]<b>Battlecry:</b> Reduce the Cost\nof cards in your hand from\nother classes by (2).")
+        self.assertEqual(self.card("15181", "VAN_EX1_533")[1]["en"]["text"], "<b>Secret:</b> When a character attacks your hero, instead they attack another random character.")
+        # Elemental Destruction's Overload 1 in this build's data is export noise: it stays 5
+        ed = self.card("15181", "AT_051")
+        self.assertEqual((ed[0]["mana_lock"], ed[1]["en"]["text"]), (5, "Deal $4-$5 damage to all minions. <b>Overload:</b> (5)"))
+        self.assertEqual(self.card("14830", "AT_051")[1]["en"]["text"], "Deal $4-$5 damage to all minions. <b>Overload:</b> (5).")
+        self.assertEqual(self.card("15181", "VAN_CS2_188")[1]["en"]["text"], "<b>Battlecry:</b> Give a minion +2 Attack this turn.")
+        self.assertIn("scripts/version/kara_6_2.lua", self.view("15181"))
+        self.assertNotIn("scripts/version/kara_6_1_3.lua", self.view("15181"))
+
+
 class TestDistribution(unittest.TestCase):
     """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
 
