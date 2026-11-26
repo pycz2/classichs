@@ -1511,8 +1511,11 @@ end)
 
 -- --- older cards as on 2016-04-26 --------------------------------------------------------------
 
--- Force of Nature (patch 5.0.0.12574): three 2/2 Treants.
+-- Force of Nature (patch 5.0.0.12574): three 2/2 Treants (needs room for one).
 cards.VAN_EX1_571 = {
+  can_play = function(g, me)
+    return g.room(g.ctrl(me)) > 0
+  end,
   spell = function(g, me)
     for _ = 1, 3 do
       g.summon(g.ctrl(me), "VAN_EX1_tk9")

@@ -250,8 +250,9 @@ cards.VAN_NEW1_007a = {
   end,
 }
 
--- Force of Nature: three Treants.
+-- Force of Nature: three Treants (needs room for one: REQ_NUM_MINION_SLOTS since 1.0.0.4944).
 cards.VAN_EX1_571 = {
+  can_play = lib.room,
   spell = function(g, me)
     for _ = 1, 3 do
       g.summon(g.ctrl(me), "VAN_EX1_tk9b")

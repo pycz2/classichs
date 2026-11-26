@@ -183,3 +183,28 @@ fn nozdormu_shortens_the_turns_while_in_play() {
         assert_eq!(view["turn_seconds"], 15, "both players' views");
     }
 }
+
+#[test]
+fn force_of_nature_needs_room() {
+    // REQ_NUM_MINION_SLOTS since 1.0.0.4944
+    for (n, legal) in [(7, false), (6, true)] {
+        let mut e = Engine::new();
+        let st = scene(&mut e, json!({"hero": "HERO_06", "hand": ["VAN_EX1_571"], "board": vec!["VAN_CS2_231"; n]}), json!({"hero": "HERO_01"}));
+        let force = ids(&st, "VAN_EX1_571", "HAND")[0];
+        let legal_now = call(&mut e, json!({"op": "legal", "game": "g", "player": 0}))["actions"].as_array().unwrap().iter().any(|a| a["entity"] == force);
+        assert_eq!(legal_now, legal, "{n} minions");
+    }
+}
+
+#[test]
+fn each_blessing_of_wisdom_draws_one_card() {
+    // two Blessings on the Yeti: its attack draws two cards, not four
+    let mut e = Engine::new();
+    let st = scene(&mut e, json!({"hero": "HERO_04", "hand": ["VAN_EX1_363", "VAN_EX1_363"], "board": ["VAN_CS2_182"]}), json!({"hero": "HERO_04"}));
+    let yeti = ids(&st, "VAN_CS2_182", "PLAY")[0];
+    for b in ids(&st, "VAN_EX1_363", "HAND") {
+        play(&mut e, b, yeti);
+    }
+    let st = act(&mut e, json!({"type": "attack", "player": 0, "attacker": yeti, "defender": hero(&st, 1)}));
+    assert_eq!(st["players"][0]["deck_count"], 1, "one card per Blessing: 3 - 2");
+}

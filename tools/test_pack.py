@@ -563,7 +563,7 @@ class Chain(unittest.TestCase):
         self.assertIn("scripts/rogue.lua", files)
         self.assertEqual(len(json.loads(files["cards.json"])), 569)
         self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
-                         "e47ac05550ae07647fcb8726d04b5a6cdbb28501c37420723e14c5cb690a90e7")
+                         "f233b5383eba53b87752094537b6182f4a82b7e4f56e2a386343fb5a7080a60d")
 
 
     def test_goblins_vs_gnomes_stands_alone(self):
@@ -577,7 +577,7 @@ class Chain(unittest.TestCase):
         self.assertIn("scripts/gvg.lua", files)
         self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/gvg"))
         self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
-                         "6ee1f57b88a901dc708001714ea377b54067eeab56f9a8022298b42852869da5")
+                         "858a53f203339d0b989292b30d88d7c09efc90808d56f810a90275cf1190c524")
 
     def test_blackrock_mountain_stands_alone(self):
         files, r = pack.build(pack.REPO / "packs/brm")
@@ -595,7 +595,7 @@ class Chain(unittest.TestCase):
         en = json.loads(files["locales/en.json"])["cards"]
         self.assertEqual(en["BRM_010a"]["text"], "Transform into a 5/2 minion.")  # the option's text of build 8311
         self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
-                         "bb132ae33b2d90e5c4fdc3e67d987cc1c0f2d40293eec9578df4d628357773fd")
+                         "41a7b969e39a685a4b308a04a32e694f7b78dfca3829e519f99629ab670c8c95")
 
     def test_the_grand_tournament_stands_alone(self):
         files, r = pack.build(pack.REPO / "packs/tgt")
@@ -620,7 +620,7 @@ class Chain(unittest.TestCase):
         self.assertEqual(en["BRM_020"]["text"], "Whenever <b>you</b> target this minion with a spell, gain +1/+1.")
         self.assertEqual(en["GVG_016"]["text"], "Whenever your opponent plays a card, remove the top 3 cards of your deck.")
         self.assertEqual(json.loads(files["manifest.json"])["rules_hash"],
-                         "5c9062de2eef5b4af6196d42eef5c54999950a794f511d54a3cf07cc4b1fede3")
+                         "6fb10ec24517e2d52478e0ef65804c803b987eceb55bc5cbc603eaa6702ae54b")
 
     def test_the_league_of_explorers_stands_alone(self):
         files, r = pack.build(pack.REPO / "packs/loe")

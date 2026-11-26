@@ -628,6 +628,15 @@ fn deck_templates_play_bot_games() {
     assert!(rituals > 0);
 }
 
+/// Force of Nature needs room on the board (REQ_NUM_MINION_SLOTS since 1.0.0.4944).
+#[test]
+fn force_of_nature_needs_room() {
+    let t = scene!({"hero": "HERO_06", "hand": ["VAN_EX1_571"], "board": [WISP, WISP, WISP, WISP, WISP, WISP, WISP]}, {});
+    assert!(!t.can_play("VAN_EX1_571"), "a full board");
+    let t = scene!({"hero": "HERO_06", "hand": ["VAN_EX1_571"], "board": [WISP, WISP, WISP, WISP, WISP, WISP]}, {});
+    assert!(t.can_play("VAN_EX1_571"), "one free place");
+}
+
 /// The release build 12574: Druid of the Saber and Living Roots have Choose One, Sapling is a Druid card; Power Word:
 /// Glory heals the hero of the player who cast it, also after the minion changes sides (4.1.0.10956).
 #[test]
