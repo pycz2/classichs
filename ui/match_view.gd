@@ -114,6 +114,9 @@ var end_turn_ready := false
 ## Event batches waiting for their animation; while one plays the table is busy.
 var _queue: Array = []  # [{events, snap, hist}]: the batch and the game right after it
 var _busy := false
+## False from a batch that changes the turn until the table has played every queued batch: the game may be in
+## our turn while the table still shows the opponent's, and our side shows none of it yet (my_action()).
+var _turn_played_out := true
 ## While a batch plays, step by step: what stands where ({board, hand, secrets: [ids, ids],
 ## weapon: [id, id]}); {} = everything as in g.
 var _stage := {}
@@ -1085,9 +1088,10 @@ func viewer() -> int:
 	return replay_side if replay else controller.viewer()
 
 
-## True when the local human may act now.
+## True when the local human may act now (and the table has shown the turn's start).
 func my_action() -> bool:
-	return not watching and not replay and not controller.game.game_over and not controller.bots[controller.actor()] and controller.actor() == viewer()
+	return not watching and not replay and not controller.game.game_over and not controller.bots[controller.actor()] \
+		and controller.actor() == viewer() and _turn_played_out
 
 
 func _legal() -> Array:
@@ -1772,6 +1776,8 @@ func _on_changed_now(events: Array) -> void:
 		_release_orders()
 		return
 	_queue.append(item)
+	if events.any(func(e): return e.type == "turn_start"):
+		_turn_played_out = false
 	if not _busy:
 		_play_queue()
 
@@ -1781,6 +1787,7 @@ func _play_queue() -> void:
 	while not _queue.is_empty():
 		await _animate(_queue.pop_front())
 	_busy = false
+	_turn_played_out = true
 	refresh()
 	_release_orders()  # the next queued order starts its own animation
 
