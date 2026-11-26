@@ -115,6 +115,12 @@ fn scene_tags_with_a_number() {
     assert_eq!(call(&mut e, json!({"op": "new", "game": "t", "scenario": sc}))["ok"], true);
     let st = call(&mut e, json!({"op": "snapshot", "game": "t"}))["state"].clone();
     assert_eq!(st["players"][0]["spell_damage"], 3);
+    // the Hero Power as an entity spec too (the debug tools' effects on it)
+    let sc = json!({"players": [{"hero": "HERO_08", "hero_power": {"card": "VAN_HERO_08bp", "tags": ["TAUNT"]}}, p1]});
+    assert_eq!(call(&mut e, json!({"op": "new", "game": "p", "scenario": sc}))["ok"], true);
+    let st = call(&mut e, json!({"op": "snapshot", "game": "p"}))["state"].clone();
+    let power = st["entities"].as_object().unwrap().values().find(|x| x["card"] == "VAN_HERO_08bp").unwrap();
+    assert_eq!(power["tags"]["TAUNT"], true);
     let bad = json!({"players": [{"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "tags": [{"SPELLPOWER": "x"}]}]}, p1]});
     assert_eq!(call(&mut e, json!({"op": "new", "game": "u", "scenario": bad}))["error"],
         "scenario: players[0].board[0].tags: items must be names or objects of numbers");

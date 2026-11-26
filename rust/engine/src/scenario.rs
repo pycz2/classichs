@@ -38,7 +38,8 @@ fn num(d: &Value, k: &str) -> i64 {
 
 fn fill_player(g: &mut Game, i: usize, d: &Value) {
     g.players[i].mulliganed = true;
-    if let Some(hp) = d.get("hero_power").and_then(Value::as_str) {
+    let power = d.get("hero_power").map(spec); // an id, or an entity spec (its tags, enchantments)
+    if let Some(hp) = power.as_ref().and_then(|s| s["card"].as_str()) {
         if hp != g.e(g.players[i].hero_power).card_id {
             let old = g.players[i].hero_power;
             g.em(old).zone = "SETASIDE";
@@ -69,6 +70,9 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
     }
     if crate::entity::truthy(d.get("hero_power_locked")) {
         g.em(hp).give_tag(n.locked, false); // tutorial: no hero power yet
+    }
+    if let Some(s) = power.as_ref().filter(|s| s.as_object().is_some_and(|m| m.len() > 1)) {
+        apply_spec(g.em(hp), s, rs);
     }
     for item in list(d, "deck") {
         let s = spec(item);
@@ -258,8 +262,9 @@ pub fn validate_in(rs: &Ruleset, sc: &Value) -> Result<(), String> {
         if d.get("hero_power").is_none() && rs.class_power(hero).is_none() {
             return Err(format!("{at}.hero_power: required for hero {hero}"));
         }
-        if d.get("hero_power").is_some() {
-            check_card(rs, &format!("{at}.hero_power"), d.get("hero_power"), "POWER")?;
+        if let Some(hp) = d.get("hero_power") {
+            check_card(rs, &format!("{at}.hero_power"), if hp.is_object() { hp.get("card") } else { Some(hp) }, "POWER")?;
+            check_spec(&format!("{at}.hero_power"), hp)?;
         }
         for (zone, kind) in [("hand", ""), ("deck", ""), ("board", "MINION"), ("secrets", "SPELL")] {
             let items = match d.get(zone) {
