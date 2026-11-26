@@ -13,7 +13,11 @@ use std::sync::Arc;
 use crate::events::{event_json, now_ms, Event};
 use crate::ranked;
 use crate::ws::{accounts_in_order, friends_of};
+use crate::perm;
+use crate::scope::{Prefix, Scope};
 use crate::{presence, App, AppRef};
+use axum::routing::MethodRouter;
+use std::collections::BTreeSet;
 use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
 use axum::body::Body;
 use axum::extract::{ConnectInfo, Path, Query, Request, State};
@@ -47,33 +51,34 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
     let guarded = Router::new()
         .route("/admin/api/me", get(me))
         .route("/admin/api/logout", post(logout))
-        .route("/admin/api/dashboard", get(dashboard))
-        .route("/admin/api/live", get(live))
-        .route("/admin/api/accounts", get(accounts).post(create))
-        .route("/admin/api/accounts/{id}", get(account_page))
-        .route("/admin/api/accounts/{id}/{action}", post(account_action))
-        .route("/admin/api/events", get(events))
-        .route("/admin/api/conversations", get(conversations))
-        .route("/admin/api/conversations/{a}/{b}", get(conversation))
-        .route("/admin/api/games", get(games))
-        .route("/admin/api/games/{id}", get(game_page))
-        .route("/admin/api/games/{id}/replay", get(game_replay))
-        .route("/admin/api/packs", get(packs_list).post(packs_upload))
-        .route("/admin/api/packs/{id}/{action}", post(pack_action))
-        .route("/admin/api/bots", get(bots_list).post(bots_create))
-        .route("/admin/api/bots/all/{action}", post(bots_all))
-        .route("/admin/api/bots/{id}", get(bot_page))
-        .route("/admin/api/bots/{id}/{action}", post(bot_action))
-        .route("/admin/api/settings", get(settings_get).post(settings_set))
-        .route("/admin/api/signup_keys", get(keys_list).post(keys_create))
-        .route("/admin/api/signup_keys/{id}/{action}", post(key_action))
-        .route("/admin/api/stats", get(crate::stats::api))
-        .route("/admin/api/tournaments", get(tournaments))
-        .route("/admin/api/tournaments/{id}", get(tournament_page))
-        .route("/admin/api/tournaments/{id}/cancel", post(tournament_cancel))
-        .route("/admin/ws", get(feed))
+        .route("/admin/api/dashboard", need("dashboard.view", get(dashboard)))
+        .route("/admin/api/live", need("dashboard.view", get(live)))
+        .route("/admin/api/accounts", need("players.view", get(accounts)).merge(need("players.edit", post(create))))
+        .route("/admin/api/accounts/{id}", need("players.view", get(account_page)))
+        .route("/admin/api/accounts/{id}/{action}", post(account_action)) // each action checks its own
+        .route("/admin/api/events", need("server.view", get(events)))
+        .route("/admin/api/conversations", need("chats.view", get(conversations)))
+        .route("/admin/api/conversations/{a}/{b}", need("chats.view", get(conversation)))
+        .route("/admin/api/games", need("replays.view", get(games)))
+        .route("/admin/api/games/{id}", need("replays.view", get(game_page)))
+        .route("/admin/api/games/{id}/replay", need("replays.view", get(game_replay)))
+        .route("/admin/api/packs", need("packs.view", get(packs_list)).merge(need("packs.upload", post(packs_upload))))
+        .route("/admin/api/packs/{id}/{action}", post(pack_action)) // each action checks its own
+        .route("/admin/api/bots", need("bots.view", get(bots_list)).merge(need("bots.edit", post(bots_create))))
+        .route("/admin/api/bots/all/{action}", need("bots.edit", post(bots_all)))
+        .route("/admin/api/bots/{id}", need("bots.view", get(bot_page)))
+        .route("/admin/api/bots/{id}/{action}", need("bots.edit", post(bot_action)))
+        .route("/admin/api/settings", need("settings.view", get(settings_get)).merge(need("settings.edit", post(settings_set))))
+        .route("/admin/api/signup_keys", need("invites.view", get(keys_list)).merge(need("invites.create", post(keys_create))))
+        .route("/admin/api/signup_keys/{id}/{action}", need("invites.revoke", post(key_action)))
+        .route("/admin/api/stats", need("stats.view", get(crate::stats::api)))
+        .route("/admin/api/tournaments", need("tournaments.view", get(tournaments)))
+        .route("/admin/api/tournaments/{id}", need("tournaments.view", get(tournament_page)))
+        .route("/admin/api/tournaments/{id}/cancel", need("tournaments.manage", post(tournament_cancel)))
+        .route("/admin/ws", need("dashboard.view", get(feed)))
         .merge(crate::admin_extra::routes())
         .merge(crate::admin_players::routes())
+        .merge(crate::admin_roles::routes())
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
         .route("/admin", get(index))
@@ -192,10 +197,12 @@ fn cookie(headers: &HeaderMap, name: &str) -> Option<String> {
         .find_map(|kv| kv.trim().strip_prefix(name)?.strip_prefix('=').map(String::from))
 }
 
-/// Secure cookies when a TLS proxy says the request came over https.
-fn set_cookie(headers: &HeaderMap, value: &str, max_age: i64) -> String {
+/// Secure cookies when a TLS proxy says the request came over https. Each sub-server's panel has its own
+/// (Path=/s/<name>/admin).
+fn set_cookie(headers: &HeaderMap, prefix: &Prefix, value: &str, max_age: i64) -> String {
     let secure = headers.get("x-forwarded-proto").is_some_and(|v| v.as_bytes() == b"https");
-    format!("{COOKIE}={value}; Path=/admin; HttpOnly; SameSite=Strict; Max-Age={max_age}{}", if secure { "; Secure" } else { "" })
+    let prefix = &prefix.0;
+    format!("{COOKIE}={value}; Path={prefix}/admin; HttpOnly; SameSite=Strict; Max-Age={max_age}{}", if secure { "; Secure" } else { "" })
 }
 
 /// A request a browser sends from another site carries its Origin: refuse it (cross-site
@@ -211,23 +218,50 @@ pub(crate) fn err(status: StatusCode, text: &str) -> Response {
     (status, Json(json!({"error": text}))).into_response()
 }
 
-/// The admin making a request (put there by `guard`).
+/// The admin making a request (put there by `guard`): who, in which sub-server, with what permissions there.
 #[derive(Clone)]
 pub struct Admin {
     pub(crate) me: Account,
+    pub(crate) scope: Scope,
+    pub(crate) perms: BTreeSet<String>,
     csrf: String,
     token: String,
 }
 
 impl Admin {
     pub(crate) fn ev(&self, text: String) -> Event {
-        Event::new("admin", text).user(self.me.id, &self.me.name)
+        Event::new("admin", text).user(self.me.id, &self.me.name).sub(self.scope.id)
+    }
+
+    pub(crate) fn can(&self, p: &str) -> bool {
+        self.perms.contains(p)
+    }
+
+    /// 403 unless the admin has the permission.
+    pub(crate) fn need(&self, p: &str) -> Result<(), Response> {
+        if self.can(p) { Ok(()) } else { Err(forbidden(p)) }
     }
 }
 
-async fn admin_of(app: &App, token: &str) -> Option<(Account, session::Model)> {
+pub(crate) fn forbidden(p: &str) -> Response {
+    err(StatusCode::FORBIDDEN, &format!("You lack the permission {p}"))
+}
+
+/// An endpoint's permission: 403 without it (after `guard`).
+pub(crate) fn need(p: &'static str, r: MethodRouter<AppRef>) -> MethodRouter<AppRef> {
+    r.route_layer(middleware::from_fn(move |req: Request, next: Next| async move {
+        match req.extensions().get::<Admin>() {
+            Some(a) if a.can(p) => next.run(req).await,
+            _ => forbidden(p),
+        }
+    }))
+}
+
+/// A live admin session whose account may open the panel of this sub-server.
+async fn admin_of(app: &App, token: &str, scope: Scope) -> Option<(Account, session::Model, BTreeSet<String>)> {
     let (me, s) = db::session(&app.db, token, "admin").await.ok()??;
-    matches!(me.role.as_str(), "admin" | "super").then_some((me, s))
+    let perms = perm::all(app, me.id, scope.id).await;
+    perms.contains("panel.open").then_some((me, s, perms))
 }
 
 /// Every /admin/api call (but login) and /admin/ws: a live admin session, the same Origin,
@@ -237,7 +271,9 @@ async fn guard(State(app): State<AppRef>, mut req: Request, next: Next) -> Respo
         return err(StatusCode::FORBIDDEN, "Cross-site request refused");
     }
     let Some(token) = cookie(req.headers(), COOKIE) else { return err(StatusCode::UNAUTHORIZED, "Log in") };
-    let Some((me, s)) = admin_of(&app, &token).await else { return err(StatusCode::UNAUTHORIZED, "Log in") };
+    let scope = req.extensions().get::<Scope>().copied().unwrap_or(Scope::MAIN);
+    let prefix = req.extensions().get::<Prefix>().cloned().unwrap_or_default();
+    let Some((me, s, perms)) = admin_of(&app, &token, scope).await else { return err(StatusCode::UNAUTHORIZED, "Log in") };
     if req.method() != Method::GET {
         let sent = req.headers().get("x-csrf-token").map(|v| v.as_bytes()).unwrap_or_default();
         if !auth::ct_eq(sent, s.csrf.as_bytes()) {
@@ -249,10 +285,10 @@ async fn guard(State(app): State<AppRef>, mut req: Request, next: Next) -> Respo
         let _ = db::renew_session(&app.db, s.hash.clone(), SESSION_SECS).await;
     }
     let headers = req.headers().clone();
-    req.extensions_mut().insert(Admin { me, csrf: s.csrf, token: token.clone() });
+    req.extensions_mut().insert(Admin { me, scope, perms, csrf: s.csrf, token: token.clone() });
     let mut res = next.run(req).await;
     if renew {
-        if let Ok(v) = HeaderValue::from_str(&set_cookie(&headers, &token, SESSION_SECS)) {
+        if let Ok(v) = HeaderValue::from_str(&set_cookie(&headers, &prefix, &token, SESSION_SECS)) {
             res.headers_mut().append(header::SET_COOKIE, v);
         }
     }
@@ -266,7 +302,14 @@ struct LoginIn {
 }
 
 /// JSON only (a cross-site form cannot send it), same Origin, rate-limited.
-async fn login(State(app): State<AppRef>, ConnectInfo(addr): ConnectInfo<SocketAddr>, headers: HeaderMap, Json(f): Json<LoginIn>) -> Response {
+async fn login(
+    State(app): State<AppRef>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    scope: Scope,
+    Extension(prefix): Extension<Prefix>,
+    headers: HeaderMap,
+    Json(f): Json<LoginIn>,
+) -> Response {
     if !origin_ok(&app, &headers) {
         return err(StatusCode::FORBIDDEN, "Cross-site request refused");
     }
@@ -292,11 +335,15 @@ async fn login(State(app): State<AppRef>, ConnectInfo(addr): ConnectInfo<SocketA
     let ok = tokio::task::spawn_blocking(move || {
         let stored = found.as_ref().map_or(auth::dummy_hash(), |a| a.pass.as_str());
         let ok = auth::verify_password(&password, stored);
-        found.filter(|a| ok && !a.suspended && matches!(a.role.as_str(), "admin" | "super"))
+        found.filter(|a| ok && !a.suspended)
     })
     .await
     .ok()
     .flatten();
+    let ok = match ok {
+        Some(a) if perm::has(&app, a.id, "panel.open", scope.id).await => Some(a),
+        _ => None,
+    };
     let Some(a) = ok else {
         failed("wrong password or not an admin");
         return err(StatusCode::UNAUTHORIZED, "Wrong name or password");
@@ -307,20 +354,22 @@ async fn login(State(app): State<AppRef>, ConnectInfo(addr): ConnectInfo<SocketA
     };
     app.event(Event::new("admin_login", format!("{} opened the admin panel", a.name)).user(a.id, &a.name).data(json!({"ip": ip.to_string()})));
     (
-        [(header::SET_COOKIE, set_cookie(&headers, &token, SESSION_SECS))],
+        [(header::SET_COOKIE, set_cookie(&headers, &prefix, &token, SESSION_SECS))],
         Json(json!({"id": a.id, "user": a.name, "role": a.role, "csrf": csrf})),
     )
         .into_response()
 }
 
-async fn me(Extension(a): Extension<Admin>) -> Json<Value> {
-    Json(json!({"id": a.me.id, "user": a.me.name, "role": a.me.role, "csrf": a.csrf, "version": crate::VERSION}))
+/// Who is logged in, the sub-server and the permissions there (the panel shows only what they allow).
+async fn me(Extension(a): Extension<Admin>, Extension(prefix): Extension<Prefix>) -> Json<Value> {
+    Json(json!({"id": a.me.id, "user": a.me.name, "role": a.me.role, "csrf": a.csrf, "version": crate::VERSION,
+                "perms": a.perms, "subserver": {"id": a.scope.id, "prefix": prefix.0}}))
 }
 
-async fn logout(State(app): State<AppRef>, Extension(a): Extension<Admin>, headers: HeaderMap) -> Response {
+async fn logout(State(app): State<AppRef>, Extension(a): Extension<Admin>, Extension(prefix): Extension<Prefix>, headers: HeaderMap) -> Response {
     let _ = db::drop_session(&app.db, &a.token).await;
-    app.event(Event::new("admin_logout", format!("{} left the admin panel", a.me.name)).user(a.me.id, &a.me.name));
-    ([(header::SET_COOKIE, set_cookie(&headers, "", 0))], Json(json!({"ok": true}))).into_response()
+    app.event(Event::new("admin_logout", format!("{} left the admin panel", a.me.name)).user(a.me.id, &a.me.name).sub(a.scope.id));
+    ([(header::SET_COOKIE, set_cookie(&headers, &prefix, "", 0))], Json(json!({"ok": true}))).into_response()
 }
 
 // --- the live feed ------------------------------------------------------------------
@@ -334,7 +383,7 @@ async fn feed(State(app): State<AppRef>, Extension(a): Extension<Admin>, ws: Web
 
 async fn run_feed(app: AppRef, a: Admin, mut socket: WebSocket) {
     let mut rx = app.log.feed.subscribe();
-    let hello = json!({"t": "hello", "live": app.hub().live_json()}).to_string();
+    let hello = json!({"t": "hello", "live": app.hub().live_json(a.scope.id)}).to_string();
     if socket.send(Message::Text(hello.into())).await.is_err() {
         return;
     }
@@ -343,7 +392,8 @@ async fn run_feed(app: AppRef, a: Admin, mut socket: WebSocket) {
     loop {
         let out: String = tokio::select! {
             m = rx.recv() => match m {
-                Ok(t) => t.to_string(),
+                Ok((sub, t)) if sub == a.scope.id => t.to_string(),
+                Ok(_) => continue,
                 Err(RecvError::Lagged(_)) => r#"{"t":"resync"}"#.into(),
                 Err(RecvError::Closed) => break,
             },
@@ -352,7 +402,7 @@ async fn run_feed(app: AppRef, a: Admin, mut socket: WebSocket) {
                 _ => continue,
             },
             _ = check.tick() => {
-                if admin_of(&app, &a.token).await.is_none() {
+                if admin_of(&app, &a.token, a.scope).await.is_none() {
                     break;
                 }
                 continue;

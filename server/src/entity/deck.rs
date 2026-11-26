@@ -8,6 +8,8 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
+    /// The sub-server (`crate::scope`).
+    pub subserver: i64,
     pub account: i64,
     /// The pack's manifest id ("classic-2014").
     pub pack: String,

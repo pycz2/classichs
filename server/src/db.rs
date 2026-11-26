@@ -275,14 +275,16 @@ pub async fn set_password(c: &impl ConnectionTrait, id: i64, pass_hash: &str) ->
 
 /// `classichs-server admin <name>`: creates or resets the superuser. true = created.
 pub async fn make_superuser(c: &impl ConnectionTrait, name: &str, pass_hash: &str) -> DbResult<bool> {
-    if create_account(c, name, pass_hash, "super").await?.is_some() {
+    if let Some(id) = create_account(c, name, pass_hash, "super").await? {
+        crate::perm::make_super(c, id).await?;
         return Ok(true);
     }
     let a = account_by_name(c, name).await?.ok_or(DbError::RecordNotFound(name.into()))?;
     account::ActiveModel { id: Unchanged(a.id), role: Set("super".into()), suspended: Set(false), ..Default::default() }
-        
+
         .update(c)
         .await?;
+    crate::perm::make_super(c, a.id).await?;
     set_password(c, a.id, pass_hash).await?;
     Ok(false)
 }

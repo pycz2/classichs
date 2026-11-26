@@ -2,7 +2,9 @@
 //! Times are unix seconds, except `events.at` (milliseconds).
 
 pub mod account;
+pub mod account_role;
 pub mod arena;
+pub mod audit;
 pub mod block;
 pub mod bot;
 pub mod deck;
@@ -16,8 +18,10 @@ pub mod pack_import;
 pub mod pack_version;
 pub mod replay;
 pub mod request;
+pub mod role;
 pub mod server_setting;
 pub mod session;
 pub mod signup_key;
 pub mod standing;
+pub mod subserver;
 pub mod tournament;

@@ -14,7 +14,9 @@ pub mod events;
 pub mod game;
 pub mod migration;
 pub mod packs;
+pub mod perm;
 pub mod ranked;
+pub mod scope;
 pub mod settings;
 pub mod replays;
 pub mod spectate;
@@ -396,8 +398,10 @@ pub fn spawn_background(app: AppRef) {
     });
 }
 
+/// Every route at the bare paths (the main sub-server) and under `/s/<name>/` (that sub-server: `scope::route`).
 pub fn router(app: AppRef) -> Router {
-    Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(admin::routes(app.clone())).with_state(app)
+    let inner = Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(admin::routes(app.clone())).with_state(app.clone());
+    Router::new().fallback_service(inner).layer(axum::middleware::from_fn_with_state(app, scope::route))
 }
 
 pub fn client_ip(app: &App, headers: &HeaderMap, addr: SocketAddr) -> IpAddr {
@@ -417,11 +421,12 @@ pub fn client_ip(app: &App, headers: &HeaderMap, addr: SocketAddr) -> IpAddr {
 async fn ws_upgrade(
     State(app): State<AppRef>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    scope: scope::Scope,
     headers: HeaderMap,
     ws: WebSocketUpgrade,
 ) -> Response {
     let ip = client_ip(&app, &headers, addr);
-    ws.max_message_size(MAX_FRAME).max_frame_size(MAX_FRAME).on_upgrade(move |s| ws::run(app, s, ip))
+    ws.max_message_size(MAX_FRAME).max_frame_size(MAX_FRAME).on_upgrade(move |s| ws::run(app, s, ip, scope))
 }
 
 #[cfg(test)]

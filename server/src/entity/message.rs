@@ -8,6 +8,8 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
+    /// The sub-server (`crate::scope`).
+    pub subserver: i64,
     pub lo: i64,
     pub hi: i64,
     /// The sender (lo or hi).
