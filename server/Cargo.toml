@@ -9,6 +9,8 @@ axum = { version = "0.8.9", features = ["ws"] }
 base64 = "0.22"
 classichs-engine = { path = "../rust/engine" }
 classichs-brain = { path = "../rust/brain", features = ["names"] }
+# the problem reports' voice messages: the game's WAV to Ogg Opus
+classichs-opus = { path = "../rust/opus" }
 futures-util = "0.3.34"
 # the replays' deflate (the one zip already uses)
 flate2 = { version = "1.1.10", default-features = false, features = ["zlib-rs"] }

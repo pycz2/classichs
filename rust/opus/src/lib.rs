@@ -1,9 +1,13 @@
 //! Ogg Opus (.opus, RFC 7845) to 16-bit PCM at 48 kHz for the game's sounds, voice lines and music.
 //! The decoder is libopus 1.3.1 transpiled to Rust (the `unsafe-libopus` crate, BSD-3-Clause), so the
 //! same code builds for every platform and for wasm32 without a C toolchain. The first logical
-//! stream is decoded; mono and stereo (channel mapping family 0) only.
+//! stream is decoded; mono and stereo (channel mapping family 0) only. `encode` makes a mono
+//! Ogg Opus voice file (the server's problem reports: the game records WAV).
 use std::io::Cursor;
-use unsafe_libopus::{opus_decode, opus_decoder_create, opus_decoder_destroy, OpusDecoder, OPUS_SET_GAIN_REQUEST};
+use unsafe_libopus::{
+    opus_decode, opus_decoder_create, opus_decoder_destroy, opus_encode, opus_encoder_create, opus_encoder_destroy, OpusDecoder, OpusEncoder,
+    OPUS_APPLICATION_VOIP, OPUS_SET_GAIN_REQUEST,
+};
 
 pub struct Pcm {
     pub channels: u16,
@@ -103,6 +107,71 @@ pub fn decode(ogg: &[u8]) -> Result<Pcm, String> {
     Ok(Pcm { channels: channels as u16, rate: 48000, samples: out })
 }
 
+/// Frees the encoder however `encode` ends.
+struct Encoder(*mut OpusEncoder);
+impl Drop for Encoder {
+    fn drop(&mut self) {
+        unsafe { opus_encoder_destroy(self.0) }
+    }
+}
+
+/// Mono 16-bit PCM at `rate` (8000, 12000, 16000, 24000 or 48000) to an Ogg Opus file (RFC 7845):
+/// 20 ms frames, libopus's voice mode at its default bitrate.
+pub fn encode(samples: &[i16], rate: u32) -> Result<Vec<u8>, String> {
+    if ![8000, 12000, 16000, 24000, 48000].contains(&rate) {
+        return Err(format!("Opus takes 8, 12, 16, 24 or 48 kHz, not {rate} Hz"));
+    }
+    let mut err = 0;
+    let enc = Encoder(unsafe { opus_encoder_create(rate as i32, 1, OPUS_APPLICATION_VOIP, &mut err) });
+    if enc.0.is_null() || err != 0 {
+        return Err(format!("opus encoder: error {err}"));
+    }
+    // libopus's look-ahead at 48 kHz (what opusenc writes for its voice mode)
+    const PRE_SKIP: u64 = 312;
+    let frame = rate as usize / 50;
+    let mut out = Vec::new();
+    let mut w = ogg::PacketWriter::new(Cursor::new(&mut out));
+    let serial = 0x4348_5352; // "CHSR"
+    let io = |e: std::io::Error| e.to_string();
+    let mut head = b"OpusHead\x01\x01".to_vec();
+    head.extend_from_slice(&(PRE_SKIP as u16).to_le_bytes());
+    head.extend_from_slice(&rate.to_le_bytes());
+    head.extend_from_slice(&[0, 0, 0]); // gain 0, mapping family 0
+    w.write_packet(head, serial, ogg::PacketWriteEndInfo::EndPage, 0).map_err(io)?;
+    let vendor = b"classichs";
+    let mut tags = b"OpusTags".to_vec();
+    tags.extend_from_slice(&(vendor.len() as u32).to_le_bytes());
+    tags.extend_from_slice(vendor);
+    tags.extend_from_slice(&0u32.to_le_bytes());
+    w.write_packet(tags, serial, ogg::PacketWriteEndInfo::EndPage, 0).map_err(io)?;
+    // the look-ahead's samples at the end come out in one more frame
+    let frames = (samples.len() + PRE_SKIP as usize * rate as usize / 48000).div_ceil(frame).max(1);
+    let mut pcm = vec![0i16; frame];
+    let mut packet = vec![0u8; 4000];
+    for i in 0..frames {
+        let chunk = &samples[(i * frame).min(samples.len())..((i + 1) * frame).min(samples.len())];
+        pcm.fill(0);
+        pcm[..chunk.len()].copy_from_slice(chunk);
+        let n = unsafe { opus_encode(enc.0, pcm.as_ptr(), frame as i32, packet.as_mut_ptr(), packet.len() as i32) };
+        if n < 0 {
+            return Err(format!("opus encoder: error {n}"));
+        }
+        let last = i + 1 == frames;
+        // granule positions count 48 kHz samples; the last page's says where the audio ends (RFC 7845 4.)
+        let done = if last { samples.len() * 48000 / rate as usize } else { (i + 1) * 960 };
+        let end = if last {
+            ogg::PacketWriteEndInfo::EndStream
+        } else if (i + 1) % 50 == 0 {
+            ogg::PacketWriteEndInfo::EndPage
+        } else {
+            ogg::PacketWriteEndInfo::NormalPacket
+        };
+        w.write_packet(packet[..n as usize].to_vec(), serial, end, PRE_SKIP + done as u64).map_err(io)?;
+    }
+    drop(w);
+    Ok(out)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -148,6 +217,18 @@ mod tests {
     #[test]
     fn stereo() {
         check(STEREO, "tone_stereo.opus", 2);
+    }
+
+    #[test]
+    fn encodes_voice() {
+        // 1.5 s of a 440 Hz tone at 16 kHz: back as 1.5 s at 48 kHz, not silent, small
+        let pcm: Vec<i16> = (0..24000).map(|i| ((i as f64 * 440.0 * std::f64::consts::TAU / 16000.0).sin() * 8000.0) as i16).collect();
+        let ogg = encode(&pcm, 16000).unwrap();
+        assert!(ogg.len() < 20_000, "{} bytes", ogg.len());
+        let back = decode(&ogg).unwrap();
+        assert_eq!((back.channels, back.samples.len()), (1, 72000));
+        assert!(rms(&back.samples) > 2000.0, "{}", rms(&back.samples));
+        assert!(encode(&pcm, 44100).is_err());
     }
 
     #[test]

@@ -43,7 +43,7 @@ export function Dashboard () {
     setRecent(data.recent)
   }, [data])
   useEvents((e) => {
-    if (e.resync) return reload()
+    if (e.resync || e.kind === 'report') return reload()
     setToday((t) => ({ ...t, [e.kind]: (t[e.kind] || 0) + 1 }))
     setChart((c) => (c ? bump(c, e.at, e.kind) : c))
     if (e.kind !== 'game_action') setRecent((r) => [e, ...r].slice(0, 40))
@@ -65,6 +65,7 @@ export function Dashboard () {
       <${Tile} label="Logins" value=${t('login')} sub=${`${t('login_failed')} failed`} warn=${t('login_failed') > 20} />
       <${Tile} label="Messages" value=${t('msg')} sub=${`${t('friend_request')} friend requests`} />
       <${Tile} label="Problems" value=${t('error')} sub="errors today" bad=${t('error') > 0} href="#/events?kind=error" />
+      <${Tile} label="New problem reports" value=${data ? data.totals.reports_new : 0} sub=${`${data ? data.totals.reports_answers : 0} with the player's answer`} warn=${data && data.totals.reports_new + data.totals.reports_answers > 0} href="#/reports" />
     </div>
     <div class="grid two">
       <${Card} title="Activity, last 24 hours">

@@ -18,6 +18,7 @@ pub mod packs;
 pub mod ranked;
 pub mod settings;
 pub mod replays;
+pub mod reports;
 pub mod spectate;
 pub mod stats;
 pub mod storage;
@@ -422,7 +423,7 @@ pub fn spawn_background(app: AppRef) {
 }
 
 pub fn router(app: AppRef) -> Router {
-    Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(admin::routes(app.clone())).with_state(app)
+    Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(reports::routes()).merge(admin::routes(app.clone())).with_state(app)
 }
 
 pub fn client_ip(app: &App, headers: &HeaderMap, addr: SocketAddr) -> IpAddr {

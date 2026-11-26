@@ -9,6 +9,8 @@
 !rust/engine
 !rust/script
 !rust/brain
+!rust/opus
+rust/opus/tests
 rust/brain/tests
 rust/engine/target
 rust/engine/tests

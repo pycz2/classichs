@@ -14,6 +14,7 @@ COPY packs/classic packs/classic
 COPY rust/script rust/script
 COPY rust/engine rust/engine
 COPY rust/brain rust/brain
+COPY rust/opus rust/opus
 COPY project.godot project.godot
 COPY server server
 RUN --mount=type=cache,target=/usr/local/cargo/registry \

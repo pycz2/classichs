@@ -75,6 +75,7 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .merge(crate::admin_extra::routes())
         .merge(crate::chat::routes())
         .merge(crate::admin_players::routes())
+        .merge(crate::reports::admin_routes())
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
         .route("/admin", get(index))
@@ -108,6 +109,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "tournaments.js",
     "extra.js",
     "stats.js",
+    "reports.js",
     "players.js",
     "stats.css",
     "style.css",
@@ -127,7 +129,7 @@ fn csp() -> &'static str {
         let hashes = script_hashes(INDEX);
         // frame-src: the replay player (/admin/replay, admin_extra.rs) opens in a frame
         format!(
-            "default-src 'none'; script-src 'self'{hashes}; style-src 'self'; img-src 'self' data:; connect-src 'self'; \
+            "default-src 'none'; script-src 'self'{hashes}; style-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; \
              frame-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
         )
     })
@@ -434,6 +436,7 @@ async fn dashboard_json(app: &AppRef, q: DashQ) -> Result<Value, sea_orm::DbErr>
     let accounts = account::Entity::find().count(db).await?;
     let suspended = account::Entity::find().filter(account::Column::Suspended.eq(true)).count(db).await?;
     let games = played::Entity::find().count(db).await?;
+    let reports = crate::reports::counts(app, 0).await?;
     let recent: Vec<Value> = event::Entity::find()
         .filter(event::Column::Kind.ne("game_action"))
         .order_by_desc(event::Column::Id)
@@ -443,7 +446,7 @@ async fn dashboard_json(app: &AppRef, q: DashQ) -> Result<Value, sea_orm::DbErr>
         .iter()
         .map(event_json)
         .collect();
-    Ok(json!({"now": now, "day": day, "today": today, "totals": {"accounts": accounts, "suspended": suspended, "games": games},
+    Ok(json!({"now": now, "day": day, "today": today, "totals": {"accounts": accounts, "suspended": suspended, "games": games, "reports_new": reports["new"], "reports_answers": reports["answers"]},
               "chart": {"start": start, "series": series}, "recent": recent, "live": app.hub().live_json()}))
 }
 
@@ -500,7 +503,7 @@ impl ListQ {
 }
 
 /// Paged: {list, total, page, size}.
-async fn page_of<E: EntityTrait>(sel: Select<E>, page: u64, size: u64, db: &crate::db::Db) -> Result<(Vec<E::Model>, u64), sea_orm::DbErr>
+pub(crate) async fn page_of<E: EntityTrait>(sel: Select<E>, page: u64, size: u64, db: &crate::db::Db) -> Result<(Vec<E::Model>, u64), sea_orm::DbErr>
 where
     E::Model: Sync,
 {
@@ -756,6 +759,9 @@ async fn account_action(
             }
             let hashes: Vec<String> =
                 pack::Entity::find().filter(pack::Column::Owner.eq(id)).all(db).await.unwrap_or_default().into_iter().map(|p| p.content_hash).collect();
+            if let Err(e) = crate::reports::remove_of(&app, id).await {
+                tracing::error!("admin: the reports of {id}: {e}");
+            }
             let r = account::Entity::delete_by_id(id).exec(db).await.map(|_| ());
             for h in hashes {
                 packs::gc(&app, &h).await;

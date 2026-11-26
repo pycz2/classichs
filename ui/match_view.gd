@@ -902,6 +902,9 @@ func _build_menu() -> void:
 		["Settings", "SettingsButton", open_settings]]
 	if debug_mode:
 		items.append(["Position -> JSON", "JsonButton", show_json])
+	items.append(["Report a problem", "ReportButton", func():  # (the match's id and connection when on a server)
+		var s := session as ServerSession
+		ReportView.open(self, s.game if s else "", s.link if s and s.link is ServerLink else null)])
 	if not replay:  # (a replay is left by its own bar)
 		items.append(["Concede", "Concede", _on_concede])
 	for it in items:
@@ -914,6 +917,7 @@ func _build_menu() -> void:
 		box.add_child(b)
 	add_child(_menu)
 	_menu.position = Vector2(1036, 50)
+	box.get_node("ReportButton").add_child(ReportView.Badge.new())  # the reports with an answer not seen yet
 
 
 func _build_emote_wheel() -> void:

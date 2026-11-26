@@ -164,7 +164,7 @@ export const KINDS = {
   pack_upload: 'pack', pack_import: 'pack', pack_default: 'pack', pack_enable: 'pack', pack_disable: 'pack', pack_delete: 'pack', pack_download: 'pack', pack_rejected: 'error',
   admin: 'admin',
   bot: 'error', auto_bot: 'queue',
-  setting: 'admin', signup_key: 'admin'
+  setting: 'admin', signup_key: 'admin', report: 'error'
 }
 
 export const kindCat = (k) => KINDS[k] || 'admin'
@@ -201,6 +201,7 @@ const ICONS = {
   bots: 'M12 3v3M8 3h8M5 8h14v10a2 2 0 01-2 2H7a2 2 0 01-2-2V8zM9.5 13h.01M14.5 13h.01M9 17h6',
   trash: 'M4 7h16M10 11v6m4-6v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3',
   copy: 'M9 9h10v12H9zM5 15V3h10',
+  report: 'M5 21V4h12l-2 4 2 4H5',
   key: 'M8 15a4 4 0 110-8 4 4 0 010 8zm3-4h10m-3 0v3m-3-3v2',
   stats: 'M4 20V10m6 10V4m6 16v-7m4 7H2',
   settings: 'M4 6h9m4 0h3M4 12h3m4 0h9M4 18h11m4 0h1M15 4v4M9 10v4M17 16v4'

@@ -16,6 +16,7 @@ import { Settings, InviteKeys } from './settings.js'
 import { Tournaments, TournamentPage } from './tournaments.js'
 import { VersionTag, ReplayDock } from './extra.js'
 import { Stats } from './stats.js'
+import { Reports, ReportPage, useReportCounts } from './reports.js'
 
 const NAV = [
   ['', 'Dashboard', 'dashboard'],
@@ -29,6 +30,7 @@ const NAV = [
   ['invites', 'Invite keys', 'key'],
   ['messages', 'Messages', 'messages'],
   ['chats', 'Chats', 'messages'],
+  ['reports', 'Problem reports', 'report'],
   ['settings', 'Settings', 'settings']
 ]
 
@@ -103,6 +105,7 @@ function useFeed (me) {
 function Shell ({ me, onLogout }) {
   const route = useRoute()
   const feed = useFeed(me)
+  const reports = useReportCounts()
   const [top] = route.path
   const qkey = JSON.stringify(route.query)
   let page
@@ -118,10 +121,11 @@ function Shell ({ me, onLogout }) {
     case 'invites': page = html`<${InviteKeys} />`; break
     case 'settings': page = html`<${Settings} />`; break
     case 'chats': page = html`<${Chats} channel=${route.path[1]} />`; break
+    case 'reports': page = route.path[1] ? html`<${ReportPage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Reports} query=${route.query} key=${qkey} />`; break
     case 'messages': page = html`<${Messages} a=${route.path[1]} b=${route.path[2]} query=${route.query} />`; break
     default: page = html`<div class="page"><h1>Not found</h1><p><a href="#/">Back to the dashboard</a></p></div>`
   }
-  const counts = { '': null, games: feed.live.games.length || null, accounts: feed.live.online.length || null }
+  const counts = { '': null, games: feed.live.games.length || null, accounts: feed.live.online.length || null, reports: reports.new + reports.answers || null }
   return html`<${MeContext.Provider} value=${me}><${LiveContext.Provider} value=${feed}>
     <div class="shell">
       <aside class="side">
