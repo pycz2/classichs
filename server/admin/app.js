@@ -16,6 +16,7 @@ import { Settings, InviteKeys } from './settings.js'
 import { Tournaments, TournamentPage } from './tournaments.js'
 import { VersionTag, ReplayDock } from './extra.js'
 import { Stats } from './stats.js'
+import { Subservers, Limits, Claim } from './subservers.js'
 
 const NAV = [
   ['', 'Dashboard', 'dashboard'],
@@ -28,7 +29,9 @@ const NAV = [
   ['accounts', 'Accounts', 'accounts'],
   ['invites', 'Invite keys', 'key'],
   ['messages', 'Messages', 'messages'],
-  ['settings', 'Settings', 'settings']
+  ['settings', 'Settings', 'settings'],
+  ['subservers', 'Servers', 'live', 'subservers.view'],
+  ['limits', 'Limits', 'stats', 'limits.view']
 ]
 
 // --- theme: system (default), light or dark; remembered -------------------------------
@@ -116,6 +119,8 @@ function Shell ({ me, onLogout }) {
     case 'bots': page = html`<${Bots} />`; break
     case 'invites': page = html`<${InviteKeys} />`; break
     case 'settings': page = html`<${Settings} />`; break
+    case 'subservers': page = html`<${Subservers} />`; break
+    case 'limits': page = html`<${Limits} />`; break
     case 'messages': page = html`<${Messages} a=${route.path[1]} b=${route.path[2]} query=${route.query} />`; break
     default: page = html`<div class="page"><h1>Not found</h1><p><a href="#/">Back to the dashboard</a></p></div>`
   }
@@ -151,6 +156,7 @@ function App () {
     api('me').then((m) => { setCsrf(m.csrf); setMe(m) }, () => setMe(null))
   }, [])
   if (me === undefined) return html`<div class="boot"><span class="logo pulse">◆</span></div>`
+  if (!me && location.hash.startsWith('#/claim')) return html`<${Claim} />`
   if (!me) return html`<${Login} onIn=${(m) => { setCsrf(m.csrf); setMe(m) }} />`
   const logout = async () => {
     try { await api('logout', { method: 'POST' }) } catch (e) { toast(e.message, 'err') }

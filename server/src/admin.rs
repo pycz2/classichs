@@ -109,6 +109,7 @@ const ASSETS: &[(&str, &str)] = assets![
     "tournaments.js",
     "extra.js",
     "stats.js",
+    "subservers.js",
     "players.js",
     "stats.css",
     "style.css",
