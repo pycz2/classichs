@@ -159,6 +159,46 @@ async fn the_same_rules_with_other_pictures_upload() {
     assert_eq!(r.json()["pack"]["content_hash"].as_str(), Some(content(&other).as_str()));
 }
 
+/// An upload with an `x-upload-id` tells its stages to the uploader and the admin panels:
+/// receiving (to the last byte), checking, the trial game (new rules only), storing, done.
+#[tokio::test]
+async fn an_upload_tells_its_stages() {
+    let (addr, app, http) = server().await;
+    let mut pia = C::register(addr, "pia").await;
+    let mut feed = app.log.feed.subscribe();
+    let zip = pack_zip("org.test.stages", "1.0.0", 7);
+    let mut req = upload(Some(&pia.token), &zip);
+    req.headers_mut().insert("x-upload-id", "u1".parse().unwrap());
+    assert_eq!(call(&http, req).await.status, StatusCode::CREATED);
+    let mut seen = vec![];
+    while seen.last().map(|v: &Value| v["stage"] != "done").unwrap_or(true) {
+        let m = pia.want("pack_stage").await;
+        assert_eq!(m["upload"], "u1");
+        seen.push(m);
+    }
+    let stages: Vec<&str> = seen.iter().map(|m| m["stage"].as_str().unwrap()).collect();
+    assert_eq!(stages, ["receiving", "checking", "trial", "storing", "done"]);
+    assert_eq!((seen[0]["done"].as_u64(), seen[0]["total"].as_u64()), (Some(zip.len() as u64), Some(zip.len() as u64)));
+    let mut admin = vec![];
+    while let Ok(Ok(s)) = tokio::time::timeout(Duration::from_millis(200), feed.recv()).await {
+        let v: Value = serde_json::from_str(&s).unwrap();
+        if v["t"] == "pack_stage" {
+            admin.push(v["stage"].as_str().unwrap().to_string());
+        }
+    }
+    assert_eq!(admin, stages, "the admin panels see them too");
+    // The same rules again (other pictures): no trial game; no id: no stages.
+    let other = common::pack_bytes("org.test.stages", "1.0.0", &[("/limits/queue_steps", json!(5007))], &[("art/x/b.webp", b"b")]);
+    let mut req = upload(Some(&pia.token), &other);
+    req.headers_mut().insert("x-upload-id", "u2".parse().unwrap());
+    assert_eq!(call(&http, req).await.status, StatusCode::CREATED);
+    let mut stages = vec![];
+    while stages.last().map(|s| s != "done").unwrap_or(true) {
+        stages.push(pia.want("pack_stage").await["stage"].as_str().unwrap().to_string());
+    }
+    assert_eq!(stages, ["receiving", "checking", "storing", "done"]);
+}
+
 #[tokio::test]
 async fn players_upload_list_download_and_delete() {
     let (addr, app, http) = server().await;
@@ -260,12 +300,12 @@ async fn limits() {
     big.headers_mut().insert(header::CONTENT_LENGTH, (packs::MAX_PLAYER_PACK + 1).to_string().parse().unwrap());
     let r = call(&http, big).await;
     assert_eq!((r.status, r.json()["code"].as_str()), (StatusCode::CONFLICT, Some("too_many")), "the count is checked first");
-    let err = packs::receive(&HeaderMap::new(), Body::from(vec![0u8; 3000]), 2048).await.err().unwrap();
+    let err = packs::receive(&HeaderMap::new(), Body::from(vec![0u8; 3000]), 2048, None).await.err().unwrap();
     assert_eq!((err.0, err.1), (StatusCode::PAYLOAD_TOO_LARGE, "too_large"));
     let mut h = HeaderMap::new();
     h.insert(header::CONTENT_LENGTH, "5000".parse().unwrap());
-    assert_eq!(packs::receive(&h, Body::from(vec![0u8; 10]), 2048).await.err().unwrap().0, StatusCode::PAYLOAD_TOO_LARGE);
-    let ok = packs::receive(&HeaderMap::new(), Body::from(vec![7u8; 2048]), 2048).await.unwrap();
+    assert_eq!(packs::receive(&h, Body::from(vec![0u8; 10]), 2048, None).await.err().unwrap().0, StatusCode::PAYLOAD_TOO_LARGE);
+    let ok = packs::receive(&HeaderMap::new(), Body::from(vec![7u8; 2048]), 2048, None).await.unwrap();
     assert_eq!((ok.size, ok.hash.as_str()), (2048, sha(&[7u8; 2048]).as_str()));
     let tmp = ok.path.clone();
     drop(ok);

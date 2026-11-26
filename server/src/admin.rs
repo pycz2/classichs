@@ -1119,11 +1119,12 @@ async fn packs_list(State(app): State<AppRef>) -> Response {
 
 /// The zip as the body: a new server pack (enabled).
 async fn packs_upload(State(app): State<AppRef>, Extension(a): Extension<Admin>, headers: HeaderMap, body: Body) -> Response {
-    let up = match packs::receive(&headers, body, packs::MAX_SERVER_PACK).await {
+    let stages = packs::Stages::new(&app, &headers, None);
+    let up = match packs::receive(&headers, body, packs::MAX_SERVER_PACK, Some(&stages)).await {
         Ok(u) => u,
         Err(e) => return e.into_response(),
     };
-    match packs::add(&app, &up.path, up.size, None).await {
+    match packs::add(&app, &up.path, up.size, None, Some(&stages)).await {
         Ok(p) => {
             let text = format!("{} uploaded the server pack {}", a.me.name, packs::label(&p));
             let mut data = packs::event_data(&p);

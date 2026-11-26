@@ -81,42 +81,20 @@ fn hex(d: impl AsRef<[u8]>) -> String {
 
 /// `content_hash` of docs/packs/format.md §3 over every file of the zip (directories ignored).
 pub fn content_hash(bytes: &[u8]) -> Result<String, String> {
-    content_hash_from(std::io::Cursor::new(bytes))
-}
-
-/// The same from a file (any seekable reader), a file at a time.
-pub fn content_hash_from(r: impl Read + Seek) -> Result<String, String> {
-    let mut z = zip::ZipArchive::new(r).map_err(|e| format!("not a zip file: {e}"))?;
-    let mut items: Vec<(String, String)> = Vec::with_capacity(z.len());
-    for i in 0..z.len() {
-        let mut f = z.by_index(i).map_err(|e| format!("bad zip entry: {e}"))?;
-        if f.is_dir() {
-            continue;
-        }
-        let mut h = Sha256::new();
-        let name = f.name().map_err(|e| format!("bad file name: {e}"))?.to_string();
-        std::io::copy(&mut f, &mut h).map_err(|e| format!("{name}: {e}"))?;
-        items.push((name, hex(h.finalize())));
-    }
-    items.sort();
-    let mut all = Sha256::new();
-    all.update(b"cardpack-content/1\n");
-    for (p, h) in items {
-        all.update(format!("{p}:{h}\n").as_bytes());
-    }
-    Ok(hex(all.finalize()))
+    engine_pack::check_zip_from(&mut std::io::Cursor::new(bytes), &mut |_| {}).map(|c| c.content_hash)
 }
 
 /// The first check of a pack (cheap; no engine run): the zip, its paths and limits
-/// (`classichs_engine::pack::read_zip`, format.md §1), the manifest, both hashes (the
+/// (`classichs_engine::pack::check_zip_from`, format.md §1), the manifest, both hashes (the
 /// manifest's `rules_hash` must be the files'), and the ready decks.
 pub fn inspect(bytes: &[u8]) -> Result<Inspected, String> {
     inspect_from(std::io::Cursor::new(bytes))
 }
 
-/// The same from a file (any seekable reader): the pack never comes into memory whole.
+/// The same from a file (any seekable reader), one read of each file: the pack never comes into
+/// memory whole.
 pub fn inspect_from(mut r: impl Read + Seek) -> Result<Inspected, String> {
-    let files = engine_pack::read_zip_from(&mut r)?;
+    let engine_pack::Checked { files, content_hash, rules_hash } = engine_pack::check_zip_from(&mut r, &mut |_| {})?;
     let manifest = engine_pack::strict_json(files.get("manifest.json").ok_or("no manifest.json at the top of the zip")?, "manifest.json")?;
     let format = manifest["format"].as_i64().ok_or("manifest.json: format must be a whole number")?;
     if !FORMATS.contains(&format) {
@@ -141,23 +119,14 @@ pub fn inspect_from(mut r: impl Read + Seek) -> Result<Inspected, String> {
             return Err(format!("manifest.json: name.{lang} must be 1 to 100 characters"));
         }
     }
-    let rules_hash = engine_pack::rules_hash(&files)?;
     match manifest["rules_hash"].as_str() {
         Some(h) if h == rules_hash => {}
         Some(_) => return Err("manifest.json: rules_hash does not match the rules files (build the pack again)".into()),
         None => return Err("manifest.json: no rules_hash (build the pack with tools/pack.py)".into()),
     }
-    let content_hash = content_hash_from(&mut r)?;
     let mut decks = vec![];
-    let mut z = zip::ZipArchive::new(r).map_err(|e| format!("not a zip file: {e}"))?;
-    let mut names: Vec<String> =
-        z.file_names().flatten().filter(|n| n.starts_with("decks/") && n.ends_with(".json") && n.matches('/').count() == 1).map(|n| n.to_string()).collect();
-    names.sort();
-    for n in names.into_iter().take(TRIAL_DECKS) {
-        let mut b = vec![];
-        let f = z.by_name(&n).map_err(|e| format!("{n}: {e}"))?;
-        f.take(64 << 10).read_to_end(&mut b).map_err(|e| format!("{n}: {e}"))?;
-        decks.push(engine_pack::strict_json(&b, &n)?);
+    for (n, b) in files.iter().filter(|(n, _)| n.starts_with("decks/") && n.ends_with(".json") && n.matches('/').count() == 1).take(TRIAL_DECKS) {
+        decks.push(engine_pack::strict_json(b, n)?);
     }
     let info = PackInfo { id: id.into(), version: version.into(), name: Value::Object(name.clone()), rules_hash, content_hash };
     Ok(Inspected { info, files, decks })
@@ -423,8 +392,41 @@ impl Drop for Upload {
     }
 }
 
-/// Streams a request body to a temp file, hashing it; refuses more than `limit` bytes.
-pub async fn receive(headers: &HeaderMap, body: Body, limit: u64) -> Result<Upload, PackErr> {
+/// The stages of taking a pack, in order, as the admin panel and the game show them (the game's
+/// own install of a pack has them too, but the trial game).
+pub const STAGES: [&str; 5] = ["receiving", "checking", "trial", "storing", "done"];
+
+/// Where an upload's stages go: `{"t": "pack_stage", upload, stage, done, total}` to the admin
+/// panels' live feed and the uploading player's connections. `upload` is the request's
+/// `x-upload-id`: the uploader knows its own messages by it (none sent without one).
+pub struct Stages {
+    app: AppRef,
+    upload: String,
+    owner: Option<i64>,
+}
+
+impl Stages {
+    pub fn new(app: &AppRef, headers: &HeaderMap, owner: Option<i64>) -> Stages {
+        let upload = headers.get("x-upload-id").and_then(|v| v.to_str().ok()).unwrap_or_default().chars().take(64).collect();
+        Stages { app: app.clone(), upload, owner }
+    }
+
+    /// One of STAGES; `done` of `total` bytes while receiving (total 0: not known).
+    pub fn send(&self, stage: &str, done: u64, total: u64) {
+        if self.upload.is_empty() {
+            return;
+        }
+        let m = json!({"t": "pack_stage", "upload": self.upload, "stage": stage, "done": done, "total": total});
+        self.app.log.push(&m);
+        if let Some(o) = self.owner {
+            self.app.hub().send(o, &m);
+        }
+    }
+}
+
+/// Streams a request body to a temp file, hashing it; refuses more than `limit` bytes. The
+/// bytes so far go to `stages` ("receiving") a few times a second.
+pub async fn receive(headers: &HeaderMap, body: Body, limit: u64, stages: Option<&Stages>) -> Result<Upload, PackErr> {
     let too_big = || PackErr::new(StatusCode::PAYLOAD_TOO_LARGE, "too_large", format!("A pack is {} MB at most", limit >> 20));
     let declared = headers.get(header::CONTENT_LENGTH).and_then(|v| v.to_str().ok()).and_then(|v| v.parse::<u64>().ok());
     if declared.is_some_and(|n| n > limit) {
@@ -437,6 +439,7 @@ pub async fn receive(headers: &HeaderMap, body: Body, limit: u64) -> Result<Uplo
     let mut up = Upload { path, hash: String::new(), size: 0 };
     let mut h = Sha256::new();
     let mut stream = body.into_data_stream();
+    let mut said = Instant::now();
     while let Some(chunk) = stream.next().await {
         let chunk = chunk.map_err(|e| PackErr::new(StatusCode::BAD_REQUEST, "bad_body", format!("The upload broke off: {e}")))?;
         up.size += chunk.len() as u64;
@@ -445,8 +448,15 @@ pub async fn receive(headers: &HeaderMap, body: Body, limit: u64) -> Result<Uplo
         }
         h.update(&chunk);
         file.write_all(&chunk).await.map_err(store_err)?;
+        if let Some(s) = stages.filter(|_| said.elapsed() > Duration::from_millis(250)) {
+            s.send(STAGES[0], up.size, declared.unwrap_or(0));
+            said = Instant::now();
+        }
     }
     file.flush().await.map_err(store_err)?;
+    if let Some(s) = stages {
+        s.send(STAGES[0], up.size, up.size);
+    }
     if up.size == 0 {
         return Err(PackErr::new(StatusCode::BAD_REQUEST, "empty", "Send the .cardpack file as the request body"));
     }
@@ -455,15 +465,25 @@ pub async fn receive(headers: &HeaderMap, body: Body, limit: u64) -> Result<Uplo
 }
 
 fn hash_file(path: &FsPath) -> std::io::Result<(String, u64)> {
-    let mut h = Sha256::new();
-    let n = std::io::copy(&mut std::fs::File::open(path)?, &mut h)?;
-    Ok((hex(h.finalize()), n))
+    let (mut h, mut f, mut buf, mut n) = (Sha256::new(), std::fs::File::open(path)?, vec![0u8; 1 << 16], 0);
+    loop {
+        let k = f.read(&mut buf)?;
+        if k == 0 {
+            return Ok((hex(h.finalize()), n));
+        }
+        h.update(&buf[..k]);
+        n += k as u64;
+    }
 }
 
 /// The whole check of a pack file (`inspect`, then `trial` unless a pack with the same rules
 /// passed it before), off the async workers, within TRIAL_TIME and a bit.
-pub async fn check_file(app: &AppRef, path: &FsPath) -> Result<PackInfo, PackErr> {
+pub async fn check_file(app: &AppRef, path: &FsPath, stages: Option<&Stages>) -> Result<PackInfo, PackErr> {
     let file = std::fs::File::open(path).map_err(store_err)?;
+    let size = file.metadata().map_or(0, |m| m.len());
+    if let Some(s) = stages {
+        s.send(STAGES[1], 0, size);
+    }
     let invalid = |e: String| PackErr::new(StatusCode::UNPROCESSABLE_ENTITY, "invalid", e);
     let p = tokio::task::spawn_blocking(move || inspect_from(std::io::BufReader::new(file)))
         .await
@@ -479,6 +499,9 @@ pub async fn check_file(app: &AppRef, path: &FsPath) -> Result<PackInfo, PackErr
         return Ok(p.info);
     }
     let _one = app.loading.lock().await; // trials one at a time
+    if let Some(s) = stages {
+        s.send(STAGES[2], 0, size);
+    }
     let job = tokio::task::spawn_blocking(move || trial(&p).map(|_| p.info));
     match tokio::time::timeout(TRIAL_TIME + Duration::from_secs(10), job).await {
         Ok(Ok(r)) => r.map_err(invalid),
@@ -488,9 +511,14 @@ pub async fn check_file(app: &AppRef, path: &FsPath) -> Result<PackInfo, PackErr
 }
 
 /// Checks a received file and registers it (server pack: `owner` None). Stores the file
-/// under its content hash unless the storage has it already.
-pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>) -> Result<pack::Model, PackErr> {
-    let info = check_file(app, file).await?;
+/// under its content hash unless the storage has it already. The stages go to `stages`.
+pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>, stages: Option<&Stages>) -> Result<pack::Model, PackErr> {
+    let started = Instant::now();
+    let info = check_file(app, file, stages).await?;
+    let checked = started.elapsed();
+    if let Some(s) = stages {
+        s.send(STAGES[3], 0, size);
+    }
     let hash = info.content_hash.clone();
     let mine = |owner: Option<i64>| match owner {
         Some(o) => Condition::all().add(pack::Column::Owner.eq(o)),
@@ -527,6 +555,10 @@ pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>) -> 
     .insert(&tx)
     .await?;
     tx.commit().await?;
+    tracing::info!("pack {}: {size} bytes, checked in {} ms, stored in {} ms", row.content_hash, checked.as_millis(), (started.elapsed() - checked).as_millis());
+    if let Some(s) = stages {
+        s.send(STAGES[4], size, size);
+    }
     Ok(row)
 }
 
@@ -744,8 +776,9 @@ async fn upload(State(app): State<AppRef>, Query(q): Query<TokenQ>, headers: Hea
     if pack::Entity::find().filter(pack::Column::Owner.eq(a.id)).count(&app.db).await? >= MAX_PER_PLAYER {
         return Err(PackErr::new(StatusCode::CONFLICT, "too_many", format!("{MAX_PER_PLAYER} packs at most: delete one first")));
     }
-    let up = receive(&headers, body, MAX_PLAYER_PACK).await?;
-    let p = match add(&app, &up.path, up.size, Some(a.id)).await {
+    let stages = Stages::new(&app, &headers, Some(a.id));
+    let up = receive(&headers, body, MAX_PLAYER_PACK, Some(&stages)).await?;
+    let p = match add(&app, &up.path, up.size, Some(a.id), Some(&stages)).await {
         Ok(p) => p,
         Err(e) => {
             if e.1 == "invalid" {
@@ -848,7 +881,7 @@ pub async fn import_bundled(app: &AppRef, dir: &FsPath) -> usize {
                 return added;
             }
         }
-        let r = match add(app, &f, size, None).await {
+        let r = match add(app, &f, size, None, None).await {
             Ok(p) => {
                 app.event(Event::new("pack_import", format!("Bundled pack {} installed", label(&p))).data(event_data(&p)));
                 // A new version of the default game becomes the default.

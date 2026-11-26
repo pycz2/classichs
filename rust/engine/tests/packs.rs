@@ -48,6 +48,14 @@ fn builtin_rules_hash_matches_pack_py() {
     assert_eq!(e.load_pack_bytes(&bytes).unwrap().rules_hash, want);
     let from_file = classichs_engine::pack::read_zip_from(&mut std::fs::File::open(&out).unwrap()).unwrap();
     assert_eq!(from_file, classichs_engine::pack::read_zip(&bytes).unwrap(), "the file reader reads what the bytes reader does");
+    // the whole check in one read: the same files and both hashes as tools/pack.py, the progress up to the end
+    let mut seen = vec![];
+    let c = classichs_engine::pack::check_zip_from(&mut std::fs::File::open(&out).unwrap(), &mut |n| seen.push(n)).unwrap();
+    let content = text.lines().find_map(|l| l.strip_prefix("content_hash")).unwrap().trim();
+    assert_eq!((c.rules_hash.as_str(), c.content_hash.as_str(), &c.files), (want.as_str(), content, &from_file));
+    assert!(seen.windows(2).all(|w| w[0] < w[1]) && *seen.last().unwrap() <= bytes.len() as u64, "the progress grows within the file");
+    let mut cut = std::io::Cursor::new(&bytes[..bytes.len() / 2]);
+    assert!(classichs_engine::pack::check_zip_from(&mut cut, &mut |_| {}).is_err(), "half a pack is refused");
     let d = json!({"hero": "HERO_08", "cards": classichs_engine::deck::basic("MAGE")});
     let a = call(&mut e, json!({"op": "new", "game": "a", "decks": [d, d], "seed": 3}));
     let b = call(&mut e, json!({"op": "new", "game": "b", "decks": [d, d], "seed": 3, "pack": want}));

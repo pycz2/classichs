@@ -90,3 +90,19 @@ pub extern "C" fn pcm_ptr() -> *const u8 {
 pub extern "C" fn pcm_len() -> usize {
     PCM.with(|b| b.borrow().len() * 2)
 }
+
+/// The check of a game pack's `n` bytes at `p` (`classichs_engine::pack::check_zip_from`): its reply
+/// at `out_ptr()` / `out_len()`, `{content_hash, rules_hash}` or `{error}`. web/rules.js runs it in
+/// a Web Worker of its own (its memory goes with it).
+///
+/// # Safety
+/// `p` must point at `n` readable bytes.
+#[no_mangle]
+pub unsafe extern "C" fn pack_check(p: *const u8, n: usize) {
+    let mut r = std::io::Cursor::new(std::slice::from_raw_parts(p, n));
+    let reply = match classichs_engine::pack::check_zip_from(&mut r, &mut |_| {}) {
+        Ok(c) => serde_json::json!({"content_hash": c.content_hash, "rules_hash": c.rules_hash}),
+        Err(e) => serde_json::json!({"error": e}),
+    };
+    OUT.with(|o| *o.borrow_mut() = reply.to_string());
+}
