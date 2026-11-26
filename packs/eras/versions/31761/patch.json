@@ -1,7 +1,7 @@
 {
  "base": "dal",
  "build": 31761,
- "about": "",
+ "about": "14.6.0.31761 (2019-07-01): ten new Basic and Classic cards, Pilfer reworked, Succubus is Felstalker and Mistress of Pain Queen of Pain, Cleave, Multi-Shot, Forked Lightning and Dark Bargain with one enemy minion, Rafaam's Scheme, Dreamway Guardians and Duel! check for a full board; with the changes of 30795, 31022 and 31268",
  "cards": {
   "AT_004": {
    "text": {
@@ -838,7 +838,8 @@
     "ptBR": "Adicione um card aleatório de outra classe à sua mão.",
     "itIT": "Mette nella tua mano una carta casuale di altre classi.",
     "plPL": "Dodaj losową kartę innej klasy do twojej ręki."
-   }
+   },
+   "script": "scripts/version/new_cards.lua#EX1_182"
   },
   "VAN_EX1_287": {
    "text": {
@@ -2254,6 +2255,82 @@
     "itIT": "Quando lanci una Magia, mette nella tua mano una Magia casuale del Sacerdote.",
     "plPL": "Za każdym razem gdy rzucasz zaklęcie, dodaj losowe zaklęcie kapłana do twojej ręki."
    }
+  },
+  "BOT_700": {
+   "fx": {
+    "death": "skull"
+   },
+   "script": "scripts/version/new_cards.lua#BOT_700"
+  },
+  "EX1_183": {
+   "set": "VANILLA",
+   "fx": {
+    "element": "nature",
+    "cast": "bolt",
+    "hit": "buff"
+   },
+   "script": "scripts/version/new_cards.lua#EX1_183"
+  },
+  "EX1_184": {
+   "set": "VANILLA",
+   "fx": {
+    "element": "steel",
+    "cast": "bolt",
+    "hit": "gain"
+   },
+   "script": "scripts/version/new_cards.lua#EX1_184"
+  },
+  "EX1_185": {
+   "set": "VANILLA",
+   "script": "scripts/version/new_cards.lua#EX1_185"
+  },
+  "EX1_186": {
+   "set": "VANILLA",
+   "fx": {
+    "play": "battlecry"
+   },
+   "script": "scripts/version/new_cards.lua#EX1_186"
+  },
+  "EX1_187": {
+   "set": "VANILLA",
+   "script": "scripts/version/new_cards.lua#EX1_187"
+  },
+  "EX1_188": {
+   "set": "VANILLA",
+   "fx": {
+    "play": "battlecry"
+   },
+   "script": "scripts/version/new_cards.lua#EX1_188"
+  },
+  "EX1_189": {
+   "set": "VANILLA",
+   "fx": {
+    "play": "battlecry"
+   },
+   "script": "scripts/version/new_cards.lua#EX1_189"
+  },
+  "EX1_190": {
+   "set": "VANILLA",
+   "fx": {
+    "play": "battlecry"
+   },
+   "script": "scripts/version/new_cards.lua#EX1_190"
+  },
+  "EX1_191": {
+   "set": "VANILLA",
+   "fx": {
+    "play": "battlecry"
+   },
+   "script": "scripts/version/new_cards.lua#EX1_191"
+  },
+  "EX1_192": {
+   "set": "VANILLA",
+   "fx": {
+    "element": "holy",
+    "cast": "bolt",
+    "hit": "heal"
+   },
+   "script": "scripts/version/new_cards.lua#EX1_192"
   }
  },
  "add": [
@@ -2294,58 +2371,6 @@
     "ptBR": "<b>Magnético</b>, <b>Eco</b>\n<b>Último Suspiro:</b>\nEvoque dois\nMicrorrobôs 1/1.",
     "itIT": "<b>Magnetismo</b>. <b>Eco</b>. <b>Rantolo di Morte:</b> evoca due Microbot 1/1.",
     "plPL": "<b>Magnetyzm</b>, <b>Echo</b>\n<b>Agonia:</b> Przyzwij dwa Mikroboty 1/1."
-   }
-  },
-  {
-   "id": "DAL_800",
-   "dbfId": 56047,
-   "set": "DALARAN",
-   "type": "MINION",
-   "cardClass": "NEUTRAL",
-   "rarity": "LEGENDARY",
-   "cost": 2,
-   "attack": 3,
-   "health": 2,
-   "collectible": true,
-   "elite": true,
-   "name": {
-    "enUS": "Zayle, Shadow Cloak",
-    "ruRU": "Зейл, Темный Плащ",
-    "deDE": "Schattenumhang Zayle",
-    "frFR": "Zayle, cape des ombres",
-    "esES": "Zayle, capa de sombra",
-    "ptBR": "Zayle, o Manto Sombrio",
-    "itIT": "Zayle, Manto d'Ombra",
-    "plPL": "Zayl, Płaszcz Cienia"
-   },
-   "text": {
-    "enUS": "You start the game with one of Zayle's EVIL Decks!",
-    "ruRU": "Вы начинаете матч с одной из колод ЗЛА Зейла!",
-    "deDE": "Ihr beginnt das Spiel\nmit einem von Zayles üblen Decks!",
-    "frFR": "Vous commencez la partie avec un des decks du M.A.L. de Zayle !",
-    "esES": "[x]¡Empiezas la partida\ncon uno de los mazos\ndel MAL de Zayle!",
-    "ptBR": "Você começa a partida com um dos decks do MAL de Zayle!",
-    "itIT": "[x]Inizi la partita con\nuno dei Mazzi del\nM.A.L.E. di Zayle!",
-    "plPL": "Rozpoczynasz grę z jedną z talii Z.Ł.A. Zayla!"
-   }
-  },
-  {
-   "id": "DAL_800h",
-   "dbfId": 56963,
-   "set": "DALARAN",
-   "type": "HERO",
-   "cardClass": "WHIZBANG",
-   "rarity": "FREE",
-   "health": 30,
-   "name": {
-    "enUS": "Zayle, Shadow Cloak",
-    "ruRU": "Зейл, Темный Плащ",
-    "deDE": "Schattenumhang Zayle",
-    "frFR": "Zayle, cape des ombres",
-    "esES": "Zayle, capa de sombra",
-    "ptBR": "Zayle, o Manto Sombrio",
-    "itIT": "Zayle, Manto d'Ombra",
-    "plPL": "Zayl, Płaszcz Cienia"
    }
   },
   {
@@ -2702,5 +2727,5 @@
    }
   }
  ],
- "sources": []
+ "sources": ["~/ClassicHS-local/prep/patches/versions.json 14.6.0.31761 (Patch 14.6.0.31761): its changes, rules_changes and doubts", "~/ClassicHS-local/prep/patches/versions.json 14.4.0.31268 (Patch 14.4.0.31268): its changes, rules_changes and doubts", "~/ClassicHS-local/prep/patches/versions.json 14.2.2.31022 (Patch 14.2.2.31022): its changes, rules_changes and doubts", "~/ClassicHS-local/prep/patches/versions.json 14.2.0.30795 (Patch 14.2.0.30795): its changes, rules_changes and doubts", "HearthstoneJSON build 31761: card data, names and texts in 8 languages (tools/extract_cards.py --version-texts 31761)", "hearthstone.wiki.gg: Patch 14.6.0.31761, Felstalker, Queen of Pain"]
 }
