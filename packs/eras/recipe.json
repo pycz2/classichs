@@ -1,0 +1,11 @@
+{
+  "about": "How tools/pack.py builds Hearthstone 2014–2019 (docs/packs/format.md §13, packs/eras/README.md): one version per game version, oldest first; each is its base pack's rules files, texts and decks (versions/<id>/patch.json `base`) changed by its patch, plus its own scripts (versions/<id>/scripts/). The pictures, sounds, music and ui/ are every base pack's, shared.",
+  "bundle_in_client": false,
+  "default_version": "6485",
+  "versions": [
+    {"id": "6024", "patch": "1.1.0.6024", "date": "2014-07-22", "era": "naxx", "formats": ["standard"],
+     "name": {"en": "Curse of Naxxramas", "ru": "Проклятие Наксрамаса", "de": "Der Fluch von Naxxramas", "fr": "La malédiction de Naxxramas", "es": "La maldición de Naxxramas", "pt_BR": "A Maldição de Naxxramas", "it": "La Maledizione di Naxxramas", "pl": "Klątwa Naxxramas"}},
+    {"id": "6485", "patch": "1.2.0.6485", "date": "2014-09-22", "era": "naxx", "formats": ["standard"],
+     "name": {"en": "Leeroy Jenkins and Starving Buzzard nerfed", "ru": "Ослаблены Лирой Дженкинс и Голодный канюк", "de": "Leeroy Jenkins und Verhungernder Bussard abgeschwächt", "fr": "Leeroy Jenkins et Busard affamé affaiblis", "es": "Leeroy Jenkins y Águila ratonera famélica debilitados", "pt_BR": "Leeroy Jenkins e Urubu Faminto enfraquecidos", "it": "Leeroy Jenkins e Condor Affamato indeboliti", "pl": "Osłabienie Leeroya Jenkinsa i Wygłodniałego sępa"}}
+  ]
+}

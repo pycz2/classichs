@@ -4,7 +4,8 @@ extends RefCounted
 ## built-in ones in res://packs/*.cardpack (tools/build_packs.sh), and downloaded,
 ## imported or received ones in user://packs/<content_hash>.cardpack with an index
 ## (user://packs/index.json). One pack is active: the interface shows its cards,
-## texts, art, sounds and music, and its games are played.
+## texts, art, sounds and music, and its games are played. Of a pack with versions (docs/packs/format.md §13)
+## the chosen version is active: active() is its view (Pack.version_view), a pack of its own to the rest of the client.
 
 const BUILTIN_DIR := "res://packs"
 ## The pack the game falls back to (and the rules the engine has built in).
@@ -13,7 +14,8 @@ const CLASSIC := "classic-2014"
 static var user_dir := "user://packs"
 
 static var _list: Array = []  # Pack, built-in first
-static var _active: Pack
+static var _active: Pack  # one of _list (a whole pack, never a version view)
+static var _view: Pack  # the chosen version of _active when it has versions
 ## Called after the active pack (or its art, sound or music set) changed: caches reset.
 static var _listeners: Array[Callable] = []
 
@@ -73,6 +75,7 @@ static func _scan() -> void:
 
 ## The content hash of a built-in pack, remembered in the index (it is costly to compute).
 static func content_hash(p: Pack) -> String:
+	p = p.whole()  # (a version view: its pack's)
 	var known := p._content_hash != ""
 	var h := p.content_hash()
 	if p.builtin() and not known:
@@ -90,11 +93,14 @@ static func rescan() -> void:
 	_list = []
 	var was := _active
 	_active = null
-	if active() != was:
+	_view = null
+	active()
+	if _active != was:
 		_changed()
 
 
-## The active pack: the one in the settings (by content hash, else by id), else Classic.
+## The active pack: the one in the settings (by content hash, else by id), else Classic; of a pack with
+## versions, the view of its chosen version (version()).
 static func active() -> Pack:
 	if _active == null:
 		var want: Dictionary = Settings.data.get("pack", {}) if Settings.data.get("pack") is Dictionary else {}
@@ -110,16 +116,62 @@ static func active() -> Pack:
 				classic = p
 		if _active == null:
 			_active = by_id if by_id else (classic if classic else (all()[0] if not all().is_empty() else null))
-	return _active
+	if _active == null or _active.versions().is_empty():
+		return _active
+	if _view == null or _view.whole() != _active:  # (set_version, set_active and rescan drop it)
+		_view = _active.version_view(version(_active))
+	return _view if _view else _active
 
 
+## The version of a pack with versions the player plays: the one chosen (set_version), else its default ("" for a
+## one-version pack).
+static func version(p: Pack) -> String:
+	p = p.whole()
+	var mine := ""
+	if Settings.data.get("pack_versions") is Dictionary:
+		mine = str(Settings.data.pack_versions.get(p.id(), ""))
+	for v in p.versions():
+		if v is Dictionary and mine != "" and str(v.get("id", "")) == mine:
+			return mine
+	return p.default_version()
+
+
+## Chooses the version of a pack with versions (kept per pack id); the active pack switches to it at once.
+static func set_version(p: Pack, vid: String) -> void:
+	p = p.whole()
+	if version(p) == vid:
+		return
+	if not Settings.data.get("pack_versions") is Dictionary:
+		Settings.data.pack_versions = {}
+	Settings.data.pack_versions[p.id()] = vid
+	Settings.save()
+	if p == _active:
+		_view = null
+		_changed()
+
+
+## Whether p is the active pack (a pack with versions: itself or the view of its chosen version).
+static func is_active(p: Pack) -> bool:
+	return p != null and active() != null and p.whole() == _active and (p.version_id == "" or p.version_id == version(_active))
+
+
+## p becomes the active pack (a version view: its pack, at that version).
 static func set_active(p: Pack) -> void:
+	if p.version_id != "" and p.whole() == _active:
+		set_version(p, p.version_id)
+		return
+	if p.version_id != "" and version(p) != p.version_id:
+		if not Settings.data.get("pack_versions") is Dictionary:
+			Settings.data.pack_versions = {}
+		Settings.data.pack_versions[p.id()] = p.version_id  # (saved with the pack below)
+	p = p.whole()
 	if p == _active:
 		return
 	server_sets = {}  # (another game: its own choices)
 	Settings.data.pack = {"id": p.id(), "hash": content_hash(p)}
 	Settings.save()
 	_active = p
+	_view = null
 	_changed()
 
 
@@ -148,7 +200,7 @@ static func set_shell(on: bool) -> void:
 ## on this device) and styles the screens from now on.
 static func enter(p: Pack, sets := {}) -> void:
 	shell = false
-	if p != _active:
+	if p.whole() != _active or (p.version_id != "" and p.version_id != version(_active)):
 		set_active(p)  # (its caches start again; server_sets {})
 	else:
 		Fonts.restyle()
@@ -166,10 +218,14 @@ static func find(content_hash_: String) -> Pack:
 	return null
 
 
+## The pack whose rules have this hash: a pack, or the view of a pack's version.
 static func find_rules(rules_hash: String) -> Pack:
 	for p: Pack in all():
-		if p.rules_hash() == rules_hash:
+		if p.rules_hash() == rules_hash and p.versions().is_empty():
 			return p
+		for v in p.versions():
+			if v is Dictionary and str(v.get("rules_hash", "")) == rules_hash:
+				return p.version_view(str(v.get("id", "")))
 	return null
 
 
@@ -195,6 +251,7 @@ static func _changed() -> void:
 ## The set the player chose for a pack ("art", "sound", "music"); the pack's default otherwise.
 ## In a game played through a server the server keeps the art and music choice (server_sets).
 static func choice(p: Pack, kind: String) -> String:
+	p = p.whole()
 	if p == _active and server_sets.has(kind):
 		return str(server_sets[kind])
 	var mine: Dictionary = Settings.data.get("pack_sets", {}).get(p.id(), {}) if Settings.data.get("pack_sets") is Dictionary else {}
@@ -215,7 +272,7 @@ static func set_choice(p: Pack, kind: String, value: String) -> void:
 	mine[kind] = value
 	Settings.data.pack_sets[p.id()] = mine
 	Settings.save()
-	if p == _active and not server_sets.has(kind):
+	if p.whole() == _active and not server_sets.has(kind):
 		_set_changed(kind)
 
 
@@ -289,6 +346,7 @@ static func install_file(file: String) -> Dictionary:
 ## Deletes a downloaded, imported or received pack (never a built-in one), and the decks made in
 ## it on this device when no other pack of that id stays.
 static func remove(p: Pack) -> bool:
+	p = p.whole()
 	if p.builtin():
 		return false
 	var h := content_hash(p)
@@ -302,6 +360,7 @@ static func remove(p: Pack) -> bool:
 		DeckStore.delete_for(p.id())
 	if p == _active:
 		_active = null
+		_view = null
 		Settings.data.erase("pack")
 		Settings.save()
 		active()

@@ -111,12 +111,17 @@ impl Ctx for Probe {
 
 // --- loading ---------------------------------------------------------------------------------
 
+/// A version's own scripts (docs/packs/format.md §13): loaded last, their keys replace the others'.
+const VERSION_SCRIPTS: &str = "scripts/version/";
+
 fn err(e: Error) -> String {
     e.to_string()
 }
 
 /// Loads a pack's scripts: `scripts/lib.lua` first (its table becomes the global `lib`),
-/// then the others in path order; every key of a card file's table is a hook set.
+/// then the others in path order, a version's own scripts (`scripts/version/`, docs/packs/format.md §13) last;
+/// every key of a card file's table is a hook set. A key a version's script defines replaces the others' hook set
+/// of that name (a card's hooks, whatever its `script` names; an `ench:` set).
 pub(crate) fn build(rs: &Ruleset, scripts: &[(&String, &Vec<u8>)]) -> Result<(Option<LuaRules>, HashMap<String, HookSet>), String> {
     if scripts.is_empty() {
         return Ok((None, HashMap::new()));
@@ -125,7 +130,7 @@ pub(crate) fn build(rs: &Ruleset, scripts: &[(&String, &Vec<u8>)]) -> Result<(Op
     for (p, b) in scripts {
         order.push((p, compile_bytes(p, &crate::pack::lua_text(b)).map_err(err)?));
     }
-    order.sort_by_key(|(p, _)| (p.as_str() != "scripts/lib.lua", p.to_string()));
+    order.sort_by_key(|(p, _)| (p.as_str() != "scripts/lib.lua", p.starts_with(VERSION_SCRIPTS), p.to_string()));
     let mut main = Vm::<Game>::new();
     let g_main = main.lib("g", &[QUERIES_MAIN, ACTIONS].concat());
     let mut host = Game::loader();
@@ -156,7 +161,7 @@ pub(crate) fn build(rs: &Ruleset, scripts: &[(&String, &Vec<u8>)]) -> Result<(Op
         }
     }
     let mut hooks = HashMap::new();
-    for ((file, key), hs) in &sets {
+    for ((file, key), hs) in sets.iter().filter(|((f, _), _)| !f.starts_with(VERSION_SCRIPTS)) {
         if !rs.cards.contains_key(key) && hooks.insert(key.clone(), hs.clone()).is_some() {
             return Err(format!("{file}: {key} is defined twice"));
         }
@@ -165,6 +170,11 @@ pub(crate) fn build(rs: &Ruleset, scripts: &[(&String, &Vec<u8>)]) -> Result<(Op
         let (file, key) = c.script.split_once('#').ok_or(format!("{}: script {} has no #<key>", c.id, c.script))?;
         let hs = sets.get(&(file.to_string(), key.to_string())).ok_or(format!("{}: no hooks {}", c.id, c.script))?;
         hooks.insert(c.id.clone(), hs.clone());
+    }
+    let mut later: Vec<_> = sets.iter().filter(|((f, _), _)| f.starts_with(VERSION_SCRIPTS)).collect();
+    later.sort_by(|a, b| a.0.cmp(b.0));
+    for ((_, key), hs) in later {
+        hooks.insert(key.clone(), hs.clone());
     }
     let mut main = main;
     for (p, _) in &order {

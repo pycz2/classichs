@@ -243,6 +243,75 @@ func _other_rules(bytes: PackedByteArray) -> PackedByteArray:
 	return _repacked(changed, {"manifest.json": JSON.stringify(manifest).to_utf8_buffer()})
 
 
+## Naxxramas as a pack with versions (docs/packs/format.md §13): "a" as it is, "b" with Leeroy Jenkins at 5 (the
+## default, so also at the top); as tools/pack.py builds packs/eras.
+func _with_versions() -> PackedByteArray:
+	var naxx := _pack("naxx-2014")
+	var cards: Array = naxx.cards().duplicate(true)
+	for c in cards:
+		if c.id == "VAN_EX1_116":
+			c.cost = 5
+	var b_cards := Pack.canonical(cards).to_utf8_buffer()
+	var change := {}
+	var items := []
+	for f in naxx.files():
+		if Pack.is_version_file(f):
+			change["versions/a/" + f] = naxx.read(f)
+			change["versions/b/" + f] = b_cards if f == "cards.json" else naxx.read(f)
+			if f == "cards.json":
+				change[f] = b_cards
+			if Pack.is_rules_file(f):
+				items.append([f, Pack.normalized(f, b_cards if f == "cards.json" else naxx.read(f))])
+	var hb := Pack.digest("cardpack-rules/1", items)
+	var man := naxx.manifest.duplicate(true)
+	man.id = "test.versions"
+	man.rules_hash = hb
+	man.default_version = "b"
+	man.versions = [{"id": "a", "dir": "versions/a", "rules_hash": naxx.rules_hash(), "name": {"en": "A"}},
+		{"id": "b", "dir": "versions/b", "rules_hash": hb, "name": {"en": "B"}}]
+	change["manifest.json"] = Pack.canonical(man).to_utf8_buffer()
+	return _repacked(Packs.bytes_of(naxx), change)
+
+
+func test_a_pack_with_versions_plays_its_chosen_version() -> void:
+	var r := Packs.install(_with_versions(), "imported")
+	var p: Pack = r.get("pack")
+	check(p != null, "installed: " + str(r))
+	if p == null:
+		return
+	eq(p.versions().map(func(v): return v.id), ["a", "b"], "its versions")
+	eq(p.default_version(), "b", "the default")
+	var a := p.version_view("a")
+	eq([a.version_id, a.rules_hash(), a.computed_rules_hash()], ["a", _pack("naxx-2014").rules_hash(), _pack("naxx-2014").rules_hash()],
+		"version a is Naxxramas")
+	var b := p.version_view("b")
+	eq(b.computed_rules_hash(), b.rules_hash(), "the view's rules hash is its version's")
+	eq(b.rules_hash(), p.rules_hash(), "the top is the default version")
+	var leeroy := func(v: Pack): return v.cards().filter(func(c): return c.id == "VAN_EX1_116")[0].cost
+	eq([leeroy.call(a), leeroy.call(b)], [4.0, 5.0], "Leeroy Jenkins of each version")
+	check(a.has("art/simple/VAN_EX1_116.webp") and not a.has("versions/a/cards.json") and a.has("locales/ru.json"),
+		"the shared pictures, the version's own files at the top")
+	eq(a.content_hash(), Packs.content_hash(p), "a view's content hash is its pack's")
+	eq(p.version_view("z"), null, "no such version")
+	eq([Rules.can_play(a), Rules.engine_pack(a)], ["", a.rules_hash()], "the engine takes a version's view as a pack")
+	Packs.set_active(p)
+	eq([Packs.active().whole(), Packs.active().version_id], [p, "b"], "the default version is played")
+	check(Packs.is_active(p) and Packs.is_active(b) and not Packs.is_active(a), "is_active")
+	eq(CardDb.card("VAN_EX1_116").cost, 5, "the client's cards are the version's")
+	Packs.set_version(p, "a")
+	eq([Packs.active().version_id, Packs.active().rules_hash()], ["a", a.rules_hash()], "another version")
+	eq(CardDb.card("VAN_EX1_116").cost, 4, "its cards")
+	eq(Settings.data.pack_versions.get("test.versions"), "a", "remembered per pack")
+	Packs.rescan()
+	eq(Packs.active().version_id, "a", "after a restart")
+	eq(Packs.find_rules(b.rules_hash()).version_id, "b", "found by a version's rules hash")
+	Packs.set_active(Packs.find_rules(b.rules_hash()))
+	eq(Packs.active().version_id, "b", "activated as a version view")
+	Packs.set_active(_pack(Packs.CLASSIC))
+	Settings.data.pack_versions.erase("test.versions")
+	check(Packs.remove(Packs.find(Packs.content_hash(p))), "removed")
+
+
 func _repacked(bytes: PackedByteArray, change: Dictionary) -> PackedByteArray:
 	var src := "user://test_packs_src.zip"
 	var out := "user://test_packs_out.zip"

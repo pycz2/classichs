@@ -25,8 +25,9 @@ A pack may carry **versions**. Its manifest gets:
   pool and bans of that version (`"arena": {...}`).
 - `versions/<id>/` holds that version's **rules files** exactly as a one-version pack has them at its root:
   `rules.json`, `cards.json`, `scripts/`, `missions/` (if any), `locales/` (the card names and texts of that build),
-  `decks/`. Everything outside `versions/` is **shared**: art, sounds, voice, music, backgrounds, layout, ui, fonts,
-  the tile picture.
+  `layout/` (if any: Classic's hand-tuned text layout belongs to its texts), `decks/`, `tutorial.json` (if any).
+  Everything outside `versions/` is **shared**: art, sounds, voice, music, backgrounds, ui, fonts, the tile picture.
+  (As built in the foundation: `is_version_file` in tools/pack.py, rust/engine/src/pack.rs and game/pack.gd.)
 - **The version view**: the files of version V = the shared files + the files of `versions/V/` moved to the root.
   The engine, the client and the server all work on a view as if it were a one-version pack. The rules hash of a
   version is the usual rules hash (docs/packs/format.md §3) over its view; `manifest.rules_hash` = the default
@@ -37,15 +38,20 @@ A pack may carry **versions**. Its manifest gets:
 
 ## 2. Interfaces
 
-- Python (tools/pack.py): `version_view(files: dict, version_id) -> dict`; the builder writes the megapack from a
-  recipe (§4); checks every version (rules load, scripts compile, the hashes) and the size limits (raise them: the
-  megapack is big; docs/packs/format.md).
-- Rust (rust/engine/src/pack.rs): `pub fn versions(files: &Files) -> Vec<VersionInfo>` and
-  `pub fn version_view(files: &Files, id: &str) -> Result<Files, String>`; rules_hash over a view as today.
-- GDScript: `Pack.versions() -> Array` (the manifest list, [] for a one-version pack), `Pack.version_view(id) -> Pack`
-  (a Pack whose rules files come from the version; media from the shared root; `.version` = id; `rules_hash()` the
-  version's). `Packs.active()` returns the view of the chosen version (Settings: `pack.version` per pack id), so the
-  rest of the client keeps using one Pack. `Packs.set_version(p, id)`.
+- Python (tools/pack.py): `version_view(files: dict, version_id) -> dict` (its manifest's `rules_hash` is the
+  version's), `version_ids(files)`; the builder writes the megapack from a recipe (§4); checks every version (rules
+  load, scripts compile, the hashes) and the size limits (the rules and text limits are per version; the whole pack's
+  1 GiB / 2 GiB / 50 000 files stay: the 58-version pack is far below them; docs/packs/format.md).
+- Rust (rust/engine/src/pack.rs): `pub fn versions(files: &Files) -> Vec<VersionInfo>` (VersionInfo: id, build,
+  patch, date, era, name, dir, formats, rules_hash) and `pub fn version_view(files: &Files, id: &str) ->
+  Result<Files, String>`; rules_hash over a view as today; `read_zip` reads the rules files and decks of every version.
+- GDScript: `Pack.versions() -> Array` (the manifest list, [] for a one-version pack), `Pack.default_version()`,
+  `Pack.version_view(id) -> Pack` (a Pack whose rules files come from the version; media from the shared root;
+  `.version_id` = id (`version()` is already the pack's version string); `whole()` = its pack; `rules_hash()` the
+  version's; `content_hash()` the pack's). `Packs.active()` returns the view of the chosen version (Settings:
+  `pack_versions` = {pack id: version id}), so the rest of the client keeps using one Pack. `Packs.version(p)`,
+  `Packs.set_version(p, id)`, `Packs.is_active(p)`, `Packs.find_rules(h)` (a version's view by its rules hash);
+  `Packs.set_active(view)` activates its pack at that version.
 - Formats: a game is created with `"format": "standard" | "wild"` (the engine's `new` request / scenario; default
   "wild" = every set of that version, i.e. today's behaviour). The engine keeps the format's set list and uses it for
   deck checks and for every random card pool ("a random minion", Discover, generated cards), as the game did; Arena
@@ -80,6 +86,11 @@ from classic) plus a **version patch** `packs/eras/versions/<id>/patch.json`:
 
 plus optional `packs/eras/versions/<id>/scripts/*.lua`: loaded after the base's scripts; a card defined there
 replaces its earlier hooks (a behaviour change: Warsong Commander 3.2.0.10604, Charge 6.1.3, Murloc auras 6.2 …).
+As built (packs/eras/README.md has the details): the card ids are the pack's (`VAN_EX1_116`); `cards` takes
+HearthstoneJSON's field names or the pack's (`keywords`, `script`, `fx`), null/false/[] takes a field away; `add`
+holds HearthstoneJSON card objects; the recipe's versions are `{id, patch, date, era (the era's pack folder), name,
+formats}` and `default_version`; a version's scripts go into it as `scripts/version/<name>.lua`, which the engine
+loads last (a key defined there replaces a card's hooks or an `ench:` set).
 Texts: every changed text in all 8 languages of that build (as tools/extract_cards.py does for the release builds).
 Shared media: the union of all packs' media (art sets, sounds, voice, music, backgrounds), as the separate packs
 have them (self-contained; the "-custom-art" local packs likewise get an "eras-custom-art" local build).

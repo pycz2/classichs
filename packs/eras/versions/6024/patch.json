@@ -1,0 +1,8 @@
+{
+ "base": "naxx",
+ "build": 6024,
+ "about": "1.1.0.6024 (2014-07-22): the Curse of Naxxramas release, the naxx pack as it is",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 1.1.0.6024; packs/naxx"
+ ]
+}

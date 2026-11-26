@@ -452,7 +452,7 @@ async fn a_built_expansion_pack_is_bundled_listed_and_downloaded() {
     let row = pack::Entity::find().one(&app.db).await.unwrap().unwrap();
     let bytes = std::fs::read(&src).unwrap();
     assert_eq!((row.owner, row.enabled, row.size as usize), (None, true, bytes.len()));
-    assert!(row.pack_id.starts_with(src.file_stem().unwrap().to_str().unwrap()), "{}", row.pack_id);
+    assert!(row.pack_id.contains(src.file_stem().unwrap().to_str().unwrap()), "{}", row.pack_id); // (packs/eras: hs-eras)
 
     let mut c = C::register(addr, "exp").await;
     c.send(json!({"t": "packs"})).await;
@@ -465,6 +465,50 @@ async fn a_built_expansion_pack_is_bundled_listed_and_downloaded() {
     let r = call(&http, download(&row.content_hash, Some(&c.token)).body(Body::empty()).unwrap()).await;
     assert_eq!((r.status, r.headers[header::CONTENT_LENGTH].to_str().unwrap()), (StatusCode::OK, bytes.len().to_string().as_str()));
     assert!(r.body == bytes, "the downloaded pack is the file");
+}
+
+/// A pack with versions (docs/packs/format.md §13, packs/eras) uploads like any pack: the server checks and plays
+/// its default version, whose rules files are its top's too (per-version games come later).
+#[tokio::test]
+async fn a_pack_with_versions_uploads_as_its_default_version() {
+    use classichs_engine::pack::{self as ep, Files};
+    let a = classichs_engine::ruleset::classic_files();
+    let mut b = a.clone();
+    let mut rules: Value = serde_json::from_slice(&a["rules.json"]).unwrap();
+    rules["limits"]["queue_steps"] = json!(5001);
+    b.insert("rules.json".into(), serde_json::to_vec(&rules).unwrap());
+    let mut files = Files::new();
+    for (vid, f) in [("a", &a), ("b", &b)] {
+        for (p, d) in f.iter().filter(|(p, _)| ep::is_version_file(p)) {
+            files.insert(format!("versions/{vid}/{p}"), d.clone());
+            if vid == "a" {
+                files.insert(p.clone(), d.clone());
+            }
+        }
+    }
+    let (ha, hb) = (ep::rules_hash(&a).unwrap(), ep::rules_hash(&b).unwrap());
+    let mut m: Value = serde_json::from_slice(&a["manifest.json"]).unwrap();
+    m["id"] = json!("org.test.versions");
+    m["version"] = json!("1.0.0");
+    m["name"] = json!({"en": "Versions"});
+    m["rules_hash"] = json!(ha);
+    m["default_version"] = json!("a");
+    m["versions"] = json!([{"id": "a", "dir": "versions/a", "rules_hash": ha}, {"id": "b", "dir": "versions/b", "rules_hash": hb}]);
+    files.insert("manifest.json".into(), serde_json::to_vec(&m).unwrap());
+    let mut w = zip::ZipWriter::new(std::io::Cursor::new(vec![]));
+    for (name, body) in &files {
+        w.start_file(name.as_str(), zip::write::SimpleFileOptions::default()).unwrap();
+        std::io::Write::write_all(&mut w, body).unwrap();
+    }
+    let zip = w.finish().unwrap().into_inner();
+    let p = packs::inspect(&zip).unwrap();
+    assert_eq!(p.info.rules_hash, ha, "the default version's rules");
+    assert_eq!(ep::rules_hash(&ep::version_view(&p.files, "b").unwrap()).unwrap(), hb, "the other version is in the files");
+    let (addr, _app, http) = server().await;
+    let c = C::register(addr, "vera").await;
+    let r = call(&http, upload(Some(&c.token), &zip)).await;
+    assert_eq!(r.status, StatusCode::CREATED, "{}", String::from_utf8_lossy(&r.body));
+    assert_eq!(r.json()["pack"]["rules_hash"].as_str(), Some(ha.as_str()));
 }
 
 /// D11: the engine loads the pack and compiles every script; a broken one is refused with the

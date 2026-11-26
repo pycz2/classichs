@@ -11,8 +11,11 @@ var manifest := {}
 var size := 0
 ## The server a downloaded pack came from ("" for others).
 var server := ""
+## The version this is a view of (docs/packs/format.md §13; "" = the pack itself): version_view().
+var version_id := ""
+var _whole: Pack  # the pack a version view is of (it reads its zip)
 var _zip: ZIPReader
-var _files := {}  # path -> true (no directory entries)
+var _files := {}  # path -> its path in the zip (no directory entries; a version view's own files are in versions/<id>/)
 var _json := {}  # path -> parsed value (cached)
 var _content_hash := ""
 var _rules_hash := ""
@@ -43,7 +46,7 @@ static func open(p_path: String, p_origin := "builtin") -> Pack:
 	for f in z.get_files():
 		if not f.ends_with("/"):
 			p._twice = p._twice or p._files.has(f)
-			p._files[f] = true
+			p._files[f] = f
 	var f := FileAccess.open(p_path, FileAccess.READ)
 	p.size = f.get_length() if f else 0
 	var m = p.json("manifest.json")
@@ -55,9 +58,63 @@ static func open(p_path: String, p_origin := "builtin") -> Pack:
 
 
 func close() -> void:
-	if _zip:
+	if _zip and _whole == null:  # (a version view reads its pack's zip)
 		_zip.close()
-		_zip = null
+	_zip = null
+
+
+## The versions of a pack with versions (manifest `versions`: [{id, build, patch, date, era, name, formats,
+## rules_hash}], oldest first); [] for a one-version pack. A version view lists its pack's.
+func versions() -> Array:
+	var v = manifest.get("versions", [])
+	return v if v is Array else []
+
+
+## The version a client without a choice plays: the manifest's `default_version` ("" for a one-version pack).
+func default_version() -> String:
+	return str(manifest.get("default_version", "")) if not versions().is_empty() else ""
+
+
+## One version of the pack as a pack of its own (format.md §13): its rules files, texts and decks come from
+## versions/<id>/, the pictures, sounds and music from the shared top; rules_hash() is that version's. Null when the
+## pack has no such version.
+func version_view(vid: String) -> Pack:
+	if _whole:
+		return _whole.version_view(vid)
+	var v: Dictionary = {}
+	for x in versions():
+		if x is Dictionary and str(x.get("id", "")) == vid:
+			v = x
+	if v.is_empty():
+		return null
+	var p := Pack.new()
+	p.origin = origin
+	p.path = path
+	p.size = size
+	p.server = server
+	p.version_id = vid
+	p._whole = self
+	p._zip = _zip
+	var dir := "versions/%s/" % vid
+	for f: String in _files:
+		if f.begins_with(dir):
+			p._files[f.trim_prefix(dir)] = f
+		elif not f.begins_with("versions/") and not is_version_file(f):
+			p._files[f] = f
+	p.manifest = manifest.duplicate(true)
+	p.manifest.rules_hash = str(v.get("rules_hash", ""))
+	return p
+
+
+## The whole pack of a version view (itself for a pack).
+func whole() -> Pack:
+	return _whole if _whole else self
+
+
+## A file each version of a pack has of its own (format.md §13); the others are shared.
+static func is_version_file(f: String) -> bool:
+	return f in ["rules.json", "cards.json", "tutorial.json"] or ["scripts/", "missions/", "locales/", "layout/", "decks/"].any(
+		func(d: String): return f.begins_with(d))
 
 
 func id() -> String:
@@ -100,7 +157,7 @@ func files() -> Array:
 func read(file: String) -> PackedByteArray:
 	if _zip == null or not _files.has(file):
 		return PackedByteArray()
-	return _zip.read_file(file)
+	return _zip.read_file(_files[file])
 
 
 ## A JSON file of the pack (parsed once; null when missing or broken).
@@ -247,6 +304,8 @@ func find(folder: String, name: String, exts: Array) -> String:
 
 ## content_hash (format.md, "Hashes"): every file, path + SHA-256 of its bytes.
 func content_hash() -> String:
+	if _whole:  # (a version view: its pack's)
+		return _whole.content_hash()
 	if _content_hash == "":
 		var items := []
 		for f in files():
@@ -257,7 +316,7 @@ func content_hash() -> String:
 
 ## Known from the pack index: saves hashing the whole zip again.
 func set_content_hash(h: String) -> void:
-	_content_hash = h
+	whole()._content_hash = h
 
 
 ## rules_hash computed from the files (format.md, "Hashes").
@@ -362,6 +421,11 @@ func problems() -> Array:
 	if _files.size() > LIMITS.files:
 		out.append("more than %d files" % LIMITS.files)
 	var total := 0
+	var ids := [] if _whole else versions().map(func(v): return str(v.get("id", "")) if v is Dictionary else "")
+	for v in ids:
+		for need in ["rules.json", "cards.json"]:
+			if not has("versions/%s/%s" % [v, need]):
+				out.append("version %s has no %s" % [v, need])
 	for f: String in _files:
 		var parts := f.split("/")
 		if f.length() > 200 or Array(parts).any(func(s): return _segment.search(s) == null):
@@ -369,7 +433,9 @@ func problems() -> Array:
 			continue
 		if parts.size() == 1 and not TOP_FILES.has(f):
 			out.append("not allowed at the top: " + f)
-		elif parts.size() > 1 and not DIRS.has(parts[0]):
+		elif parts[0] == "versions" and (parts.size() < 3 or not ids.has(parts[1]) or not is_version_file("/".join(parts.slice(2)))):
+			out.append("not a version's file: " + f.left(80))
+		elif parts.size() > 1 and parts[0] != "versions" and not DIRS.has(parts[0]):
 			out.append("unknown folder: " + parts[0])
 		var n := read(f).size() if not f.get_extension().to_lower() in IMAGE_EXT + AUDIO_EXT else 0
 		total += n

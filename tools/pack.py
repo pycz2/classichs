@@ -32,8 +32,8 @@ LIMITS = {
     "files": 50000,
     "file": 16 * MiB,        # any one file
     "image": 2 * MiB,        # one picture
-    "rules": 8 * MiB,        # rules.json + cards.json + missions/ + scripts/, uncompressed
-    "text": 32 * MiB,        # locales/ + layout/, uncompressed
+    "rules": 8 * MiB,        # rules.json + cards.json + missions/ + scripts/, uncompressed (of each version)
+    "text": 32 * MiB,        # locales/ + layout/, uncompressed (of each version)
     "ratio": 200,            # uncompressed / compressed size of one entry (zip bombs)
 }
 PATH_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_.-]*(/[A-Za-z0-9_][A-Za-z0-9_.-]*)*$")
@@ -119,6 +119,41 @@ def pretty(v):
 def is_rules_file(path):
     return path in ("rules.json", "cards.json") or (path.startswith("missions/") and path.endswith(".json")) \
         or (path.startswith("scripts/") and path.endswith(".lua"))
+
+
+def is_version_file(path):
+    """A file each version of a pack with versions has of its own (versions/<id>/…, format.md §13): its rules files,
+    texts, text layout, decks and tutorial. Everything else (pictures, sounds, music, voice, ui/) is shared."""
+    return path in ("rules.json", "cards.json", "tutorial.json") or path.startswith(VERSION_DIRS)
+
+
+VERSION_DIRS = ("scripts/", "missions/", "locales/", "layout/", "decks/")
+
+
+def version_ids(files):
+    """The ids of the versions a pack has (manifest `versions`); [] for a one-version pack (or a broken manifest)."""
+    try:
+        man = load_json(files["manifest.json"], "manifest.json")
+    except (KeyError, PackError):
+        return []
+    vs = man.get("versions") if isinstance(man, dict) else None
+    return [str(v.get("id")) for v in vs if isinstance(v, dict)] if isinstance(vs, list) else []
+
+
+def version_view(files, version_id):
+    """The files of one version of a pack (format.md §13): the shared files and versions/<id>/ moved to the top, the
+    manifest's rules_hash that version's. Everything that reads a one-version pack reads a view the same way."""
+    man = load_json(files["manifest.json"], "manifest.json")
+    v = next((x for x in man.get("versions") or [] if isinstance(x, dict) and x.get("id") == version_id), None)
+    if v is None:
+        raise PackError(f"the pack has no version {version_id}")
+    pre = f"versions/{version_id}/"
+    out = {p: d for p, d in files.items() if not p.startswith("versions/") and not is_version_file(p)}
+    out.update((p[len(pre):], d) for p, d in files.items() if p.startswith(pre))
+    if "rules_hash" in v:
+        man["rules_hash"] = v["rules_hash"]
+    out["manifest.json"] = pretty(man)
+    return out
 
 
 def normalized(path, data):
@@ -245,6 +280,7 @@ class Report:
 
 def check_paths(files, r):
     total = text = rules = 0
+    versions = set(version_ids(files))
     for p, data in files.items():
         size = len(data)
         total += size
@@ -254,6 +290,12 @@ def check_paths(files, r):
         if size > LIMITS["file"]:
             r.error(f"{p}: {size} bytes, more than {LIMITS['file']}")
         parts = p.split("/")
+        if parts[0] == "versions":  # versions/<id>/<a version's own file>; its sizes count in its view's check
+            if len(parts) < 3 or parts[1] not in versions or not is_version_file("/".join(parts[2:])):
+                r.error(f"{p}: versions/ holds versions/<id>/ of a version the manifest lists, with its rules files, "
+                        f"texts, layout, decks and tutorial")
+                continue
+            p, parts, size = "/".join(parts[2:]), parts[2:], 0
         if len(parts) == 1:
             if p not in TOP_FILES:
                 r.error(f"{p}: not allowed at the top (allowed: {', '.join(sorted(TOP_FILES))})")
@@ -360,7 +402,47 @@ def image_size(data):
 
 
 def check_files(files):
-    """Every rule of format.md on the unpacked files. Returns a Report."""
+    """Every rule of format.md on the unpacked files. Returns a Report. A pack with versions (format.md §13): its paths,
+    its version list, its top = the default version, then every version's view as a one-version pack."""
+    ids = version_ids(files)
+    if not ids:
+        return check_version(files)
+    r = Report()
+    check_paths(files, r)
+    man = _json(files, "manifest.json", r, "manifest.schema.json")
+    if man is None or r.errors:
+        return r
+    if len(set(ids)) != len(ids):
+        r.error("manifest.json: a version id twice")
+    for v in man["versions"]:
+        if v.get("dir", f"versions/{v['id']}") != f"versions/{v['id']}":
+            r.error(f"manifest.json: version {v['id']}: dir must be versions/{v['id']}")
+    default = man.get("default_version")
+    if default not in ids:
+        r.error(f"manifest.json: default_version {default!r} is not one of the versions")
+    else:
+        mine = {p: d for p, d in files.items() if is_version_file(p)}
+        pre = f"versions/{default}/"
+        if mine != {p[len(pre):]: d for p, d in files.items() if p.startswith(pre)}:
+            r.error(f"the top's rules files, texts and decks are not those of the default version {default}")
+        if man.get("rules_hash") != next(v for v in man["versions"] if v["id"] == default).get("rules_hash"):
+            r.error("manifest.json: rules_hash is not the default version's")
+    seen = set()
+    for vid in ids:
+        if not any(p.startswith(f"versions/{vid}/") for p in files):
+            r.error(f"versions/{vid}/ is missing")
+            continue
+        sub = check_version(version_view(files, vid))
+        r.errors += [f"version {vid}: {e}" for e in sub.errors]
+        for w in sub.warnings:  # (the shared files' warnings come once)
+            if w not in seen:
+                seen.add(w)
+                r.warn(f"version {vid}: {w}")
+    return r
+
+
+def check_version(files):
+    """check_files of a one-version pack (or of a version's view)."""
     r = Report()
     check_paths(files, r)
     for need in ("manifest.json", "rules.json", "cards.json"):
@@ -772,15 +854,34 @@ def step_copy(b, root, s):
     if n == 0:
         raise PackError(f"copy: nothing matched in {src}")
     if s["to"].startswith("art/") and (src / "framing.json").is_file():  # the pictures' framing goes with them
-        add_framing(b, f"{s['to']}/framing.json", (src / "framing.json").read_bytes())
+        add_framing(b.files, f"{s['to']}/framing.json", (src / "framing.json").read_bytes())
 
 
-def add_framing(b, path, data, under=False):
+def add_framing(files, path, data, under=False):
     """art/<set>/framing.json from several folders (the pack's own, its copies, its bases', each --art-set folder)
     is one file: each adds its cards, the later one wins for a card both name (under: the earlier one wins)."""
-    old = load_json(b.files[path], path) if path in b.files else {}
+    old = load_json(files[path], path) if path in files else {}
     new = load_json(data, path)
-    b.files[path] = pretty({**new, **old} if under else {**old, **new})
+    files[path] = pretty({**new, **old} if under else {**old, **new})
+
+
+## HearthstoneJSON's card fields -> the pack's (cards.md); the others are the same in both.
+HS_FIELDS = {"cardClass": "class", "mechanics": "keywords", "referencedTags": "refs", "spellDamage": "spell_power",
+             "overload": "mana_lock", "elite": "unique", "dbfId": "code_id", "legacyDbfId": "legacy_code_id"}
+HS_KEPT = ("cardClass", "rarity", "set", "collectible", "cost", "attack", "health", "durability", "race", "mechanics",
+           "referencedTags", "spellDamage", "overload", "elite", "dbfId", "legacyDbfId", "classes")
+## The packs' languages and HearthstoneJSON's names of them (packs/classic/recipe.json).
+HS_LOCALES = {"en": "enUS", "ru": "ruRU", "de": "deDE", "fr": "frFR", "es": "esES", "pt_BR": "ptBR", "it": "itIT",
+              "pl": "plPL"}
+
+
+def hs_card(c, rename):
+    """A HearthstoneJSON card as a card of cards.json (without its name and text: those go to the locales)."""
+    card = {"id": c["id"], "type": rename.get(c["type"], c["type"])}
+    for a in HS_KEPT:
+        if c.get(a) is not None and c[a] is not False and c[a] != []:
+            card[HS_FIELDS.get(a, a)] = c[a]
+    return card
 
 
 def step_hsjson(b, root, s):
@@ -797,18 +898,9 @@ def step_hsjson(b, root, s):
     for f in many(s.get("texts")):
         texts.update(load_json((root / f).read_bytes(), f))
     data = [{**c, **texts.get(c["id"], {})} for c in data]
-    rename = s.get("rename", {})
-    fields = [("cardClass", "class"), ("rarity", "rarity"), ("set", "set"), ("collectible", "collectible"),
-              ("cost", "cost"), ("attack", "attack"), ("health", "health"), ("durability", "durability"),
-              ("race", "race"), ("mechanics", "keywords"), ("referencedTags", "refs"), ("spellDamage", "spell_power"),
-              ("overload", "mana_lock"), ("elite", "unique"), ("dbfId", "code_id"), ("legacyDbfId", "legacy_code_id"),
-              ("classes", "classes")]
     out = []
     for c in sorted(data, key=lambda c: c["id"]):
-        card = {"id": c["id"], "type": rename.get(c["type"], c["type"])}
-        for a, k in fields:
-            if c.get(a) is not None and c[a] is not False and c[a] != []:
-                card[k] = c[a]
+        card = hs_card(c, s.get("rename", {}))
         card.update(patch.get(c["id"], {}))
         card = {k: v for k, v in card.items() if v is not None}  # a patch's null removes a field
         out.append(card)
@@ -978,7 +1070,7 @@ def inherit(b, base):
     for pat in INHERITED_FILES:
         for f in sorted(base.glob(pat)):
             if f.is_file() and f.name == "framing.json":
-                add_framing(b, f.relative_to(base).as_posix(), f.read_bytes(), under=True)
+                add_framing(b.files, f.relative_to(base).as_posix(), f.read_bytes(), under=True)
             elif f.is_file() and not f.name.startswith("."):
                 b.files.setdefault(f.relative_to(base).as_posix(), f.read_bytes())
     if (base / "locales").is_dir():
@@ -992,15 +1084,18 @@ def bundle_in_client(src):
     return load_json(f.read_bytes(), str(f)).get("bundle_in_client", True) is not False if f.exists() else True
 
 
+def _recipe(src):
+    f = Path(src) / "recipe.json"
+    return load_json(f.read_bytes(), str(f)) if f.exists() else {}
+
+
 def up_to_date(src, out):
     """Whether out is newer than everything a build of src reads: its folder, its bases' folders, the files and
-    folders its steps name (data/*.json, art/…), the schemas and this script (build --if-changed)."""
+    folders its steps name (data/*.json, art/…), the schemas and this script (build --if-changed); a pack with versions:
+    its folder and what each version's base pack is built from."""
     out = Path(out)
     if not out.exists():
         return False
-    steps, bases = recipe_steps(src)
-    paths = [Path(src), *bases, SCHEMAS, Path(__file__)]
-    paths += [root / p for root, s in steps for k in ("from", "texts", "patch") for p in _many(s.get(k))]
     built = out.stat().st_mtime
 
     def stamped(p):  # a folder's own time changes when a file in it is added or removed
@@ -1011,13 +1106,37 @@ def up_to_date(src, out):
         else:
             yield p
     try:
-        return all(f.stat().st_mtime < built for p in paths for f in stamped(p))
-    except OSError:  # (a missing input: build, and let the build say what is wrong)
+        return all(f.stat().st_mtime < built for p in _inputs(src) for f in stamped(p))
+    except (OSError, PackError):  # (a missing input: build, and let the build say what is wrong)
         return False
+
+
+def _inputs(src):
+    """The files and folders a build of the pack source src reads (up_to_date)."""
+    src = Path(src)
+    paths = [src, SCHEMAS, Path(__file__)]
+    if "versions" in _recipe(src):
+        for base in sorted({_version_patch(src, v["id"])["base"] for v in _recipe(src)["versions"]}):
+            paths += _inputs(src.parent / base)
+        return paths
+    steps, bases = recipe_steps(src)
+    return paths + list(bases) + [root / p for root, s in steps for k in ("from", "texts", "patch") for p in _many(s.get(k))]
 
 
 def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):
     """Builds the pack in folder src; writes it to out if given. Returns (files, report)."""
+    src = Path(src)
+    files, manifest = build_versions(src) if "versions" in _recipe(src) else _build_one(src)
+    add_local_sets(files, manifest, art_sets, sound_sets, voice, music_sets)
+    files["manifest.json"] = pretty(manifest)
+    report = check_files(files)
+    if out and not report.errors:
+        write_pack(files, out)
+    return files, report
+
+
+def _build_one(src):
+    """(files, manifest) of a one-version pack source: its files, its bases' and its recipe's steps."""
     src = Path(src)
     b = Build(src)
     skip = {"recipe.json"}
@@ -1037,6 +1156,19 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):
         inherit(b, base)
     for root, s in steps:
         STEPS[s["do"]](b, root, s)
+    if b.cards is not None:
+        b.files["cards.json"] = pretty(b.cards)
+    for lang, loc in b.locales.items():
+        b.files[f"locales/{lang}.json"] = pretty(loc)
+    cards = load_json(b.files.get("cards.json", b"[]"), "cards.json")
+    b.manifest["fx"] = sorted({v for c in cards for v in c.get("fx", {}).values()})
+    b.manifest["rules_hash"] = rules_hash(b.files)
+    return b.files, b.manifest
+
+
+def add_local_sets(files, manifest, art_sets=(), sound_sets=(), voice=None, music_sets=()):
+    """The builder's own sets (--art-set, --sound-set, --music-set id=folder) and recordings (--voice folder), marked
+    local: never distributed."""
     for opt, top, kind, exts, specs in (("--art-set", "art", "art_sets", IMAGES, art_sets),
                                         ("--sound-set", "sounds", "sound_sets", AUDIO, sound_sets),
                                         ("--music-set", "music", "music_sets", AUDIO, music_sets)):
@@ -1050,14 +1182,14 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):
             n = 0
             for f in sorted(folder.iterdir()):
                 if f.is_file() and f.suffix.lower() in exts and PATH_RE.match(f.name):
-                    b.files[f"{top}/{set_id}/{f.name}"] = f.read_bytes()
+                    files[f"{top}/{set_id}/{f.name}"] = f.read_bytes()
                     n += 1
             if not n:
                 raise PackError(f"{opt} {spec}: no files")
             if top == "art" and (folder / "framing.json").is_file():
-                add_framing(b, f"art/{set_id}/framing.json", (folder / "framing.json").read_bytes())
-            if not any(s["id"] == set_id for s in b.manifest.get(kind, [])):  # (one set from several folders)
-                b.manifest.setdefault(kind, []).append({"id": set_id, "local": True})
+                add_framing(files, f"art/{set_id}/framing.json", (folder / "framing.json").read_bytes())
+            if not any(s["id"] == set_id for s in manifest.get(kind, [])):  # (one set from several folders)
+                manifest.setdefault(kind, []).append({"id": set_id, "local": True})
     for v in [voice] if isinstance(voice, (str, Path)) else voice or []:  # voice/<lang>/<card id>_<kind>.opus, marked local
         folder = Path(v).expanduser().resolve()
         langs = [d for d in sorted(folder.iterdir()) if d.is_dir()] if folder.is_dir() else []
@@ -1065,24 +1197,151 @@ def build(src, out=None, art_sets=(), sound_sets=(), voice=None, music_sets=()):
         for d in langs:
             for f in sorted(d.iterdir()):
                 if f.is_file() and f.suffix.lower() in AUDIO and PATH_RE.match(f.name):
-                    b.files[f"voice/{d.name}/{f.name}"] = f.read_bytes()
+                    files[f"voice/{d.name}/{f.name}"] = f.read_bytes()
                     n += 1
         if not n:
             raise PackError(f"--voice {v}: want a folder of <lang>/<card id>_<kind>.opus")
-        b.files["voice/LOCAL.md"] = (b"Local recordings added by tools/pack.py --voice: the builder's own files, "
-                                     b"never to be uploaded or sent.\n")
-    if b.cards is not None:
-        b.files["cards.json"] = pretty(b.cards)
-    for lang, loc in b.locales.items():
-        b.files[f"locales/{lang}.json"] = pretty(loc)
-    cards = load_json(b.files.get("cards.json", b"[]"), "cards.json")
-    b.manifest["fx"] = sorted({v for c in cards for v in c.get("fx", {}).values()})
-    b.manifest["rules_hash"] = rules_hash(b.files)
-    b.files["manifest.json"] = pretty(b.manifest)
-    report = check_files(b.files)
-    if out and not report.errors:
-        write_pack(b.files, out)
-    return b.files, report
+        files["voice/LOCAL.md"] = (b"Local recordings added by tools/pack.py --voice: the builder's own files, "
+                                   b"never to be uploaded or sent.\n")
+
+
+# --- a pack with versions (format.md §13: packs/eras) ------------------------------------------------
+
+## The fields of a version patch (packs/eras/versions/<id>/patch.json; packs/eras/README.md).
+PATCH_KEYS = {"base", "build", "about", "cards", "add", "remove", "behaviour", "sources"}
+## The fields of a version in recipe.json; the manifest's entry adds build (the patch's), dir and rules_hash.
+RECIPE_VERSION_KEYS = {"id", "patch", "date", "era", "name", "formats"}
+RENAME = {"HERO": "CHAMPION", "HERO_POWER": "POWER"}
+
+
+def _version_patch(src, vid):
+    f = Path(src) / "versions" / vid / "patch.json"
+    p = load_json(f.read_bytes(), str(f))
+    bad = sorted(set(p) - PATCH_KEYS)
+    if bad or not isinstance(p.get("base"), str):
+        raise PackError(f"{f}: {'unknown fields ' + ', '.join(bad) if bad else 'no base'} (packs/eras/README.md)")
+    return p
+
+
+def apply_version_patch(vf, patch, where):
+    """A base pack's rules files, texts, layout and decks (vf: path -> bytes) changed by a version patch: card fields
+    (HearthstoneJSON's names or the pack's; null, false or [] takes a field away), names and texts in every language
+    of the pack (HearthstoneJSON locales), cards added (HearthstoneJSON objects) and removed, rules.json `behaviour`
+    flags. A card whose text changes loses its hand-tuned layout."""
+    cards = {c["id"]: c for c in load_json(vf["cards.json"], "cards.json")}
+    locs = {p[len("locales/"):-5]: load_json(d, p) for p, d in vf.items() if p.startswith("locales/")}
+    lays = {p: load_json(d, p) for p, d in vf.items() if p.startswith("layout/")}
+
+    def texts(cid, c):
+        for field in ("name", "text"):
+            if field not in c:
+                continue
+            missing = [hs for lang, hs in HS_LOCALES.items() if lang in locs and not (c[field] or {}).get(hs)]
+            if missing:
+                raise PackError(f"{where}: {cid} {field} has no {', '.join(missing)} (every language of the pack)")
+            for lang, loc in locs.items():
+                loc.setdefault("cards", {}).setdefault(cid, {})[field] = c[field][HS_LOCALES[lang]]
+        if "text" in c:
+            for lay in lays.values():
+                lay.pop(cid, None)
+
+    for cid in patch.get("remove", []):
+        if cards.pop(cid, None) is None:
+            raise PackError(f"{where}: remove: no card {cid} in the base")
+        for loc in locs.values():
+            loc.get("cards", {}).pop(cid, None)
+        for lay in lays.values():
+            lay.pop(cid, None)
+    for c in patch.get("add", []):
+        if c["id"] in cards:
+            raise PackError(f"{where}: add: {c['id']} is in the base already (change it in cards)")
+        cards[c["id"]] = hs_card(c, RENAME)
+        texts(c["id"], c)
+    for cid, ch in patch.get("cards", {}).items():
+        if cid not in cards:
+            raise PackError(f"{where}: cards: no card {cid} in the base")
+        for k, v in ch.items():
+            if k in ("name", "text", "id"):
+                continue
+            if v is None or v is False or v == []:
+                cards[cid].pop(HS_FIELDS.get(k, k), None)
+            else:
+                cards[cid][HS_FIELDS.get(k, k)] = v
+        texts(cid, ch)
+    if patch.get("behaviour"):
+        rules = load_json(vf["rules.json"], "rules.json")
+        beh = rules.setdefault("behaviour", {})
+        for k, v in patch["behaviour"].items():
+            if v is None:
+                beh.pop(k, None)
+            else:
+                beh[k] = v
+        if not beh:
+            del rules["behaviour"]
+        vf["rules.json"] = pretty(rules)
+    if patch.get("cards") or patch.get("add") or patch.get("remove"):
+        vf["cards.json"] = pretty([cards[k] for k in sorted(cards)])
+        for lang, loc in locs.items():
+            vf[f"locales/{lang}.json"] = pretty(loc)
+        for p, lay in lays.items():
+            vf[p] = pretty(lay)
+    return vf
+
+
+def build_versions(src):
+    """(files, manifest) of a pack with versions (format.md §13) from its recipe (packs/eras/recipe.json): each
+    version is its base pack's rules files, texts, layout and decks (packs/<base>, built as that pack is) changed by its
+    patch (versions/<id>/patch.json), with its own scripts (versions/<id>/scripts/*.lua -> scripts/version/: they load
+    after the others and replace what they define again); the shared files are every base pack's pictures, sounds,
+    music, voice and ui/ (the default version's base first, then in the recipe's order: a file of an earlier one
+    wins), the source's own files over them; the top has the default version's files too."""
+    src = Path(src).resolve()
+    recipe = _recipe(src)
+    default = recipe.get("default_version")
+    vlist = recipe["versions"]
+    for v in vlist:
+        bad = sorted(set(v) - RECIPE_VERSION_KEYS)
+        if bad or not isinstance(v.get("id"), str):
+            raise PackError(f"{src}/recipe.json: version {v.get('id')}: "
+                            f"{'unknown fields ' + ', '.join(bad) if bad else 'no id'}")
+    if default not in [v["id"] for v in vlist]:
+        raise PackError(f"{src}/recipe.json: default_version {default!r} is not one of its versions")
+    patches = {v["id"]: _version_patch(src, v["id"]) for v in vlist}
+    files = {}
+    for f in sorted(src.rglob("*")):  # the source's own files: manifest.json, ui/ …
+        rel = f.relative_to(src).as_posix()
+        if f.is_file() and not f.name.startswith(".") and rel not in ("recipe.json", "README.md") \
+                and not rel.startswith("versions/"):
+            files[rel] = f.read_bytes()
+    man = load_json(files.pop("manifest.json"), "manifest.json")
+    bases = {}
+    for name in dict.fromkeys([patches[default]["base"]] + [patches[v["id"]]["base"] for v in vlist]):
+        bf, bm = _build_one(src.parent / name)
+        bases[name] = {p: d for p, d in bf.items() if is_version_file(p)}
+        for p, d in bf.items():
+            if p != "manifest.json" and not is_version_file(p):
+                files.setdefault(p, d)
+        for k, val in bm.items():  # what the source's manifest leaves out: its default base's (locales, colors…)
+            man.setdefault(k, val)
+        for kind in ("art_sets", "sound_sets", "music_sets"):
+            have = {s["id"] for s in man.get(kind, [])}
+            man[kind] = man.get(kind, []) + [s for s in bm.get(kind, []) if s["id"] not in have]
+        for k, mark in bm.get("set_marks", {}).items():
+            man.setdefault("set_marks", {}).setdefault(k, mark)
+    entries, fx = [], set()
+    for v in vlist:
+        vid, patch = v["id"], patches[v["id"]]
+        vf = apply_version_patch(dict(bases[patch["base"]]), patch, f"versions/{vid}/patch.json")
+        for f in sorted((src / "versions" / vid / "scripts").glob("*.lua")):
+            vf[f"scripts/version/{f.name}"] = f.read_bytes()
+        fx |= {x for c in load_json(vf["cards.json"], "cards.json") for x in c.get("fx", {}).values()}
+        entries.append({**v, "build": patch.get("build"), "dir": f"versions/{vid}", "rules_hash": rules_hash(vf)})
+        files.update((f"versions/{vid}/{p}", d) for p, d in vf.items())
+        if vid == default:
+            files.update(vf)
+    man.update(versions=entries, default_version=default, fx=sorted(fx),
+               rules_hash=next(e["rules_hash"] for e in entries if e["id"] == default))
+    return files, man
 
 
 # --- info --------------------------------------------------------------------------------------
@@ -1115,6 +1374,9 @@ def info(files, packed_size=None):
                  f"scripts: {sum(1 for p in files if p.startswith('scripts/') and p.endswith('.lua'))}")
     lines.append(f"rules_hash:   {rules_hash(files)}")
     lines.append(f"content_hash: {content_hash(files)}")
+    for vid in version_ids(files):
+        lines.append(f"version {vid:<8} rules_hash {rules_hash(version_view(files, vid))}"
+                     f"{' (default)' if vid == man.get('default_version') else ''}")
     return "\n".join(lines)
 
 
