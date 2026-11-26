@@ -57,8 +57,13 @@ pub async fn name_of(c: &impl ConnectionTrait, id: i64) -> DbResult<String> {
 }
 
 /// Creates an account (the password is already hashed). None = the name is taken.
+/// An "admin" gets main's Admin role (`crate::perm`).
 pub async fn create_account(c: &impl ConnectionTrait, name: &str, pass_hash: &str, role: &str) -> DbResult<Option<i64>> {
-    insert_account(c, name, pass_hash, role, None).await
+    let id = insert_account(c, name, pass_hash, role, None).await?;
+    if let (Some(id), "admin") = (id, role) {
+        crate::perm::give_builtin(c, id, 0, "Admin").await?;
+    }
+    Ok(id)
 }
 
 async fn insert_account(c: &impl ConnectionTrait, name: &str, pass_hash: &str, role: &str, key: Option<i64>) -> DbResult<Option<i64>> {

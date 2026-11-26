@@ -562,8 +562,11 @@ where
     Ok((p.fetch_page(page).await?, total))
 }
 
-/// The accounts that entered the sub-server (its players).
+/// The accounts that entered the sub-server (its players); main's: every account (as before sub-servers).
 pub(crate) fn members(sub: i64) -> Condition {
+    if sub == 0 {
+        return Condition::all();
+    }
     let q = sea_orm::sea_query::Query::select().column(member::Column::Account).from(member::Entity).and_where(member::Column::Subserver.eq(sub)).to_owned();
     Condition::all().add(account::Column::Id.in_subquery(q))
 }
@@ -584,7 +587,7 @@ fn banned(sub: i64) -> Condition {
 
 /// Is the account a player of the sub-server? (else the panel there does not see it)
 pub(crate) async fn is_member(db: &crate::db::Db, sub: i64, id: i64) -> Result<bool, sea_orm::DbErr> {
-    Ok(member::Entity::find_by_id((sub, id)).one(db).await?.is_some())
+    Ok(sub == 0 || member::Entity::find_by_id((sub, id)).one(db).await?.is_some())
 }
 
 async fn accounts(State(app): State<AppRef>, scope: Scope, Query(q): Query<ListQ>) -> Response {

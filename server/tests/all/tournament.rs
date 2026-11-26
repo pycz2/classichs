@@ -277,7 +277,7 @@ async fn single_elimination_bo3_conquest_with_bans() {
     let row = played::Entity::find_by_id(g).one(&app.db).await.unwrap().unwrap();
     assert_eq!(row.mode, "tournament");
     let outsider = db::create_account(&app.db, "outsider", "x", "user").await.unwrap().unwrap();
-    assert!(classichs_server::replays::can_view(&app, outsider, g).await);
+    assert!(classichs_server::replays::can_view(&app, 0, outsider, g).await);
     let st = classichs_server::entity::standing::Entity::find().all(&app.db).await.unwrap();
     assert!(st.iter().all(|s| s.casual_mmr == 1500.0 && s.ranked_mmr == 1500.0), "no rating change");
 }
@@ -623,7 +623,7 @@ async fn ended(app: &AppRef, id: i64, secs: u64) -> Value {
     loop {
         let t = status(app, id).await;
         if !matches!(t.status.as_str(), "open" | "locked" | "seeded" | "running") {
-            return tournament::admin_get(app, id).await.unwrap().unwrap();
+            return tournament::admin_get(app, 0, id).await.unwrap().unwrap();
         }
         assert!(t0.elapsed() < Duration::from_secs(secs), "the tournament did not end in {secs} s");
         tokio::time::sleep(Duration::from_millis(200)).await;
@@ -651,7 +651,7 @@ async fn the_creator_and_three_bots() {
     let t = add_bots(&mut c, id, "medium", 1, 3).await;
     assert_eq!(t["bots_free"], json!({"easy": 0, "medium": 1, "hard": 2, "superhard": 2}));
     assert_eq!(t["can"]["add_bots"], false, "full");
-    let all = tournament::admin_get(&app, id).await.unwrap().unwrap(); // (the bots' decks are hidden from the creator)
+    let all = tournament::admin_get(&app, 0, id).await.unwrap().unwrap(); // (the bots' decks are hidden from the creator)
     for e in all["entrants"].as_array().unwrap().iter().filter(|e| e["bot"] == true) {
         assert!(e["name"].as_str().unwrap().starts_with("TBot_"), "{e}");
         assert_eq!(e["decks"].as_array().unwrap().len(), 1, "a deck by the rules");
@@ -714,7 +714,7 @@ async fn eight_bots_play_it_all() {
     let mut c = C::register(addr, "eb0").await;
     let id = create(&mut c, json!({"best_of": 3, "bans": 1, "max_players": 8})).await["id"].as_i64().unwrap();
     add_bots(&mut c, id, "easy", 8, 8).await;
-    let t = tournament::admin_get(&app, id).await.unwrap().unwrap();
+    let t = tournament::admin_get(&app, 0, id).await.unwrap().unwrap();
     for e in t["entrants"].as_array().unwrap() {
         let d = e["decks"].as_array().unwrap();
         assert_eq!(d.len(), 3, "wins needed + bans");
@@ -769,7 +769,7 @@ async fn measure_the_pool() {
     games.sort_by_key(|g| g.started);
     for g in &games {
         let (a, b) = (db::name_of(&app.db, g.p0.unwrap_or(0)).await.unwrap(), db::name_of(&app.db, g.p1.unwrap_or(0)).await.unwrap());
-        let r = classichs_server::replays::data(&app.db, &g.id).await.unwrap().unwrap_or_default();
+        let r = classichs_server::replays::data(&app.db, 0, &g.id).await.unwrap().unwrap_or_default();
         let acts = r["actions"].as_array().map_or(0, |a| a.len());
         eprintln!("{a} vs {b}: {} s, {} turns, {acts} actions, won by seat {} ({})", g.ended - g.started, r["result"]["turns"], g.winner, g.reason);
     }

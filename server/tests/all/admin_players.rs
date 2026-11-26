@@ -91,7 +91,7 @@ async fn setup() -> (AppRef, axum::Router, i64) {
 /// The player online: what the server pushes to them.
 fn online(state: &AppRef, id: i64, name: &str) -> UnboundedReceiver<Out> {
     let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
-    state.hub().attach(id, name, tx);
+    state.hub().attach(id, 0, name, tx);
     rx
 }
 
@@ -207,7 +207,7 @@ async fn arena_set_and_end() {
     let root = Admin::new(&app, "root").await;
     let path = format!("accounts/{victim}/arena");
     assert_eq!(root.post(&app, &path, json!({"action": "end"})).await.status, StatusCode::NOT_FOUND, "no run");
-    arena::ActiveModel { account: Set(victim), seed: Set(1), hero: Set(0), picks: Set("[]".into()), draft: Set("{}".into()), wins: Set(2), losses: Set(1), pack: Set(String::new()) }
+    arena::ActiveModel { subserver: Set(0), account: Set(victim), seed: Set(1), hero: Set(0), picks: Set("[]".into()), draft: Set("{}".into()), wins: Set(2), losses: Set(1), pack: Set(String::new()) }
         .insert(&state.db)
         .await
         .unwrap();
@@ -223,7 +223,7 @@ async fn arena_set_and_end() {
     assert_eq!(admin_events(&app, &root, "arena").await[0]["data"]["after"]["wins"], 7);
     assert_eq!(root.post(&app, &path, json!({"action": "end"})).await.status, StatusCode::OK);
     assert_eq!(pushed(&mut rx, "arena").await["state"], Value::Null);
-    assert!(arena::Entity::find_by_id(victim).one(&state.db).await.unwrap().is_none());
+    assert!(arena::Entity::find_by_id((0, victim)).one(&state.db).await.unwrap().is_none());
 }
 
 #[tokio::test]
@@ -239,7 +239,7 @@ async fn settings_and_tag() {
     assert_eq!(pushed(&mut rx, "game_settings").await["games"][&pack], json!({"art": "cartoon", "music": "open"}));
     assert_eq!(root.post(&app, &path, json!({"pack": pack, "settings": {"music": null}})).await.status, StatusCode::OK);
     assert_eq!(pushed(&mut rx, "game_settings").await["games"][&pack], json!({"art": "cartoon"}));
-    let row = game_setting::Entity::find_by_id((victim, pack.clone())).one(&state.db).await.unwrap().unwrap();
+    let row = game_setting::Entity::find_by_id((0, victim, pack.clone())).one(&state.db).await.unwrap().unwrap();
     assert_eq!(row.value, r#"{"art":"cartoon"}"#);
     assert_eq!(classic_game(&root.page(&app, victim).await)["settings"], json!({"art": "cartoon"}));
     admin_events(&app, &root, "game_settings").await;
@@ -322,7 +322,7 @@ async fn codes_on_game_and_tournament_pages() {
     let code = deck_code::encode(rs, "HERO_08", &mage_cards()).unwrap();
     let data = json!({"format": "classichs-replay", "v": 1, "game": "g1", "pack": rh, "players": [{"name": "victim", "hero": "HERO_08", "cards": mage_cards()},
                       {"name": "x", "hero": "HERO_01", "cards": classichs_engine::deck::basic("WARRIOR")}], "actions": [], "hash": "h"});
-    classichs_server::replays::save(&state.db, "g1", &rh, [victim, victim], 5, &data).await.unwrap();
+    classichs_server::replays::save(&state.db, 0, "g1", &rh, [victim, victim], 5, &data).await.unwrap();
     let page = call(&app, get("/admin/api/games/g1", &root.cookie)).await.json();
     assert_eq!(page["decks"][0]["code"], code);
     assert_eq!(page["decks"][1]["class"], "WARRIOR");
@@ -330,6 +330,7 @@ async fn codes_on_game_and_tournament_pages() {
     assert_eq!(page["decks"][0]["name"], "victim");
 
     let t = tour::Model {
+            subserver: 0,
         id: 0, name: "Cup".into(), creator: victim, pack: rh.clone(), format: "elimination".into(), options: r#"{"losses":1}"#.into(),
         series: "conquest".into(), best_of: 1, bans: 0, start_at: classichs_server::events::now_ms() + 3_600_000, max_players: 8,
         min_players: 2, deck_reveal: false, spectators: false, status: "open".into(), reason: String::new(), created: 0, ended: 0,

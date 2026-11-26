@@ -362,7 +362,7 @@ async fn arena_edit(State(app): State<AppRef>, Extension(a): Extension<Admin>, P
             if !(0..g.arena_wins).contains(&f.wins) || !(0..g.arena_losses).contains(&f.losses) {
                 return bad(format!("A run goes on with 0–{} wins and 0–{} losses (End it instead)", g.arena_wins - 1, g.arena_losses - 1));
             }
-            let r = arena::ActiveModel { account: Unchanged(id), wins: Set(f.wins), losses: Set(f.losses), ..Default::default() }.update(db).await;
+            let r = arena::ActiveModel { subserver: Unchanged(a.scope.id), account: Unchanged(id), wins: Set(f.wins), losses: Set(f.losses), ..Default::default() }.update(db).await;
             (format!("{} set the Arena run of {} to {}–{} (was {}–{})", a.me.name, t.name, f.wins, f.losses, run.wins, run.losses), r.map(|_| ()))
         }
         _ => return err(StatusCode::NOT_FOUND, "No such action"),

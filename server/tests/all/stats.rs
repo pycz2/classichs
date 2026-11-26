@@ -108,7 +108,7 @@ async fn one_game_adds_exactly_its_rows() {
     for p in 0..2 {
         assert_eq!(f.sides[p].played, seen.played[p], "player {p}: the cards played, as the engine's events");
     }
-    stats::write(&db, &f, &["6-10".into(), "Legend".into()]).await.unwrap();
+    stats::write(&db, 0, &f, &["6-10".into(), "Legend".into()]).await.unwrap();
     // 6 periods × 2 players, nothing else
     assert_eq!(one(&db, "SELECT COUNT(*) FROM stats_class").await, 12);
     let all = rows(&db, "SELECT class, bracket, bots, games, wins, mirrors FROM stats_class WHERE period = 'all' ORDER BY class").await;
@@ -132,7 +132,7 @@ async fn one_game_adds_exactly_its_rows() {
                                 "played_wins": i64::from(plays > 0 && w == 0), "plays": plays}));
     }
     // the same game again: the same rows, every count doubled
-    stats::write(&db, &f, &["6-10".into(), "Legend".into()]).await.unwrap();
+    stats::write(&db, 0, &f, &["6-10".into(), "Legend".into()]).await.unwrap();
     assert_eq!(one(&db, "SELECT COUNT(*) FROM stats_class").await, 12);
     assert_eq!(one(&db, "SELECT SUM(games) FROM stats_class WHERE period = 'all'").await, 4);
     assert_eq!(one(&db, "SELECT SUM(decks) FROM stats_card WHERE period = 'year'").await, 2 * (distinct("MAGE") + distinct("WARRIOR")));
@@ -142,7 +142,7 @@ async fn one_game_adds_exactly_its_rows() {
 async fn a_mirror_counts_no_win_or_loss_for_the_class() {
     let db = db::open(":memory:").await.unwrap();
     let (r, _) = play(["MAGE", "MAGE"], ["alice", "bob"], "casual", 8, T, None);
-    stats::write(&db, &facts(&r), &["all".into(), "all".into()]).await.unwrap();
+    stats::write(&db, 0, &facts(&r), &["all".into(), "all".into()]).await.unwrap();
     let all = rows(&db, "SELECT class, games, wins, mirrors FROM stats_class WHERE period = 'all'").await;
     assert_eq!(all, [json!({"class": "MAGE", "games": 2, "wins": 0, "mirrors": 2})]);
     // decks and cards still count the winner: the same deck won once and lost once
@@ -169,7 +169,7 @@ async fn the_mulligan_from_the_replay_actions() {
     }
     assert_eq!(both, count(&seen.hands[1]), "the bot's opening hand, kept or replaced");
     assert_eq!(seen.hands[0].len() + seen.hands[1].len(), 7, "3 and 4 cards");
-    stats::write(&db, &f, &["all".into(), "all".into()]).await.unwrap();
+    stats::write(&db, 0, &f, &["all".into(), "all".into()]).await.unwrap();
     let won = i64::from(r["result"]["winner"] == 0);
     assert_eq!(one(&db, "SELECT SUM(replaced) FROM stats_card WHERE period = 'all' AND class = 'PRIEST'").await, 2);
     assert_eq!(one(&db, "SELECT SUM(kept) FROM stats_card WHERE period = 'all' AND class = 'PRIEST'").await, seen.hands[0].len() as i64 - 2);
@@ -183,7 +183,7 @@ async fn periods_buckets_bots_and_games_without_a_winner() {
     let (a, _) = play(["MAGE", "ROGUE"], ["alice", "AutoBot_1"], "casual", 10, now, None);
     let (b, _) = play(["MAGE", "ROGUE"], ["alice", "carol"], "casual", 11, now - 3600, None);
     for r in [&a, &b] {
-        stats::write(&db, &facts(r), &["all".into(), "all".into()]).await.unwrap();
+        stats::write(&db, 0, &facts(r), &["all".into(), "all".into()]).await.unwrap();
     }
     let k = stats::buckets(now);
     assert_eq!(one(&db, &format!("SELECT SUM(games) FROM stats_class WHERE period = 'hour' AND bucket = '{}'", k[0])).await, 2, "this hour: one game");
@@ -202,8 +202,8 @@ async fn matchups_both_directions_and_mirrors() {
     let (a, _) = play(["MAGE", "WARRIOR"], ["alice", "bob"], "ranked", 7, T, None);
     let (m, _) = play(["MAGE", "MAGE"], ["alice", "bob"], "ranked", 8, T, None);
     let w = a["result"]["winner"].as_i64().unwrap();
-    stats::write(&db, &facts(&a), &["6-10".into(), "Legend".into()]).await.unwrap();
-    stats::write(&db, &facts(&m), &["6-10".into(), "6-10".into()]).await.unwrap();
+    stats::write(&db, 0, &facts(&a), &["6-10".into(), "Legend".into()]).await.unwrap();
+    stats::write(&db, 0, &facts(&m), &["6-10".into(), "6-10".into()]).await.unwrap();
     // per period: Mage vs Warrior, Warrior vs Mage, and the mirror (both players in one row)
     assert_eq!(one(&db, "SELECT COUNT(*) FROM stats_matchup").await, 6 * 3);
     let all = rows(&db, "SELECT class, opp, bracket, games, wins FROM stats_matchup WHERE period = 'all' ORDER BY class, opp").await;
@@ -229,11 +229,12 @@ async fn m12_keeps_the_rows_of_m11() {
     let f = facts(&r);
     // M11's rows as 0.62 wrote them (write adds matchups: into a database of today, then copied)
     let now = db::open(":memory:").await.unwrap();
-    stats::write(&now, &f, &["all".into(), "all".into()]).await.unwrap();
+    stats::write(&now, 0, &f, &["all".into(), "all".into()]).await.unwrap();
     let mut counts = vec![];
     for t in ["stats_class", "stats_deck", "stats_card"] {
         for row in rows(&now, &format!("SELECT * FROM {t}")).await {
-            let o = row.as_object().unwrap();
+            let mut o = row.as_object().unwrap().clone();
+            o.remove("subserver"); // (M15's)
             let sql = format!("INSERT INTO {t} ({}) VALUES ({})", o.keys().cloned().collect::<Vec<_>>().join(", "),
                               o.values().map(|v| if v.is_string() { format!("'{}'", v.as_str().unwrap()) } else { v.to_string() }).collect::<Vec<_>>().join(", "));
             db.execute_raw(Statement::from_string(DbBackend::Sqlite, sql)).await.unwrap();
@@ -257,7 +258,7 @@ async fn retention_keeps_hours_two_days_and_days_400_days() {
     let now = classichs_server::ranked::now();
     for (i, ended) in [now, now - 395 * 86_400, now - 401 * 86_400].into_iter().enumerate() {
         let (r, _) = play(["MAGE", "PRIEST"], ["alice", "bob"], "casual", 40 + i as i64, ended, None);
-        stats::write(&db, &facts(&r), &["all".into(), "all".into()]).await.unwrap();
+        stats::write(&db, 0, &facts(&r), &["all".into(), "all".into()]).await.unwrap();
     }
     let days = |t: &str| format!("SELECT COUNT(DISTINCT bucket) FROM {t} WHERE period = 'day'");
     assert_eq!(one(&db, &days("stats_deck")).await, 2, "a day 401 days ago: no deck rows");
@@ -317,7 +318,7 @@ async fn the_admin_api_reads_the_rows() {
     .enumerate()
     {
         let (r, _) = play(classes, names, mode, 20 + i as i64, now, None);
-        stats::record(state.clone(), rules.clone(), r, b.map(String::from)).await;
+        stats::record(state.clone(), 0, rules.clone(), r, b.map(String::from)).await;
     }
     let (s, v) = get(&app, &cookie, "/admin/api/stats?period=day&min=1").await;
     assert_eq!(s, StatusCode::OK, "{v}");
@@ -374,7 +375,7 @@ async fn past_buckets_and_the_matchups_in_the_api() {
     let old = now - 401 * 86_400;
     for (i, (classes, ended)) in [(["MAGE", "WARRIOR"], now), (["MAGE", "WARRIOR"], now), (["PRIEST", "HUNTER"], now - 86_400), (["DRUID", "ROGUE"], old)].into_iter().enumerate() {
         let (r, _) = play(classes, ["alice", "bob"], "casual", 60 + i as i64, ended, None);
-        stats::record(state.clone(), rules.clone(), r, ["all".into(), "all".into()]).await;
+        stats::record(state.clone(), 0, rules.clone(), r, ["all".into(), "all".into()]).await;
     }
     let day = |t: i64| stats::buckets(t)[1].clone();
     // the days with games, newest first; today's by default
@@ -414,8 +415,8 @@ async fn the_matchup_backfill_runs_once_resumes_and_counts_no_game_twice() {
     for i in 0..25 {
         let classes = [["MAGE", "PRIEST"], ["HUNTER", "HUNTER"], ["ROGUE", "MAGE"]][i % 3];
         let (r, _) = play(classes, ["alice", "bob"], "casual", 400 + i as i64, now - 1000 + i as i64, None);
-        replays::save(&state.db, &format!("m{i:02}"), r["pack"].as_str().unwrap(), [1, 2], now - 1000 + i as i64, &r).await.unwrap();
-        stats::write(&state.db, &facts(&r), &["all".into(), "all".into()]).await.unwrap();
+        replays::save(&state.db, 0, &format!("m{i:02}"), r["pack"].as_str().unwrap(), [1, 2], now - 1000 + i as i64, &r).await.unwrap();
+        stats::write(&state.db, 0, &facts(&r), &["all".into(), "all".into()]).await.unwrap();
         games.push(r);
     }
     let sql = "SELECT period, bucket, class, opp, games, wins FROM stats_matchup ORDER BY period, bucket, class, opp";
@@ -433,7 +434,7 @@ async fn the_matchup_backfill_runs_once_resumes_and_counts_no_game_twice() {
     // stopped after 20 (a batch): resumes there
     exec("DELETE FROM stats_matchup".into()).await.unwrap();
     for r in &games[..20] {
-        stats::write(&state.db, &facts(r), &["all".into(), "all".into()]).await.unwrap();
+        stats::write(&state.db, 0, &facts(r), &["all".into(), "all".into()]).await.unwrap();
     }
     exec(format!("UPDATE server_settings SET value = '{} {} m19' WHERE key = 'stats_matchup_backfill'", now, now - 1000 + 19)).await.unwrap();
     assert_eq!(stats::backfill(&state).await.unwrap(), 5);
@@ -443,9 +444,9 @@ async fn the_matchup_backfill_runs_once_resumes_and_counts_no_game_twice() {
     // backfill every game once
     let other = app().await;
     for (i, r) in games[..5].iter().enumerate() {
-        replays::save(&other.db, &format!("m{i:02}"), r["pack"].as_str().unwrap(), [1, 2], r["ended"].as_i64().unwrap(), r).await.unwrap();
+        replays::save(&other.db, 0, &format!("m{i:02}"), r["pack"].as_str().unwrap(), [1, 2], r["ended"].as_i64().unwrap(), r).await.unwrap();
         if i < 2 {
-            stats::write(&other.db, &facts(r), &["all".into(), "all".into()]).await.unwrap();
+            stats::write(&other.db, 0, &facts(r), &["all".into(), "all".into()]).await.unwrap();
         }
     }
     let x = |s: String| other.db.execute_raw(Statement::from_string(DbBackend::Sqlite, s));
@@ -464,12 +465,12 @@ async fn the_backfill_counts_the_kept_replays_once() {
     for i in 0..45 {
         let (classes, mode) = if i % 3 == 0 { (["MAGE", "PRIEST"], "ranked") } else { (["HUNTER", "ROGUE"], "casual") };
         let (r, _) = play(classes, ["alice", "bob"], mode, 100 + i, now - 86_400 * (i % 5) - 60, None);
-        replays::save(&state.db, r["game"].as_str().unwrap(), r["pack"].as_str().unwrap(), ids, r["ended"].as_i64().unwrap(), &r).await.unwrap();
+        replays::save(&state.db, 0, r["game"].as_str().unwrap(), r["pack"].as_str().unwrap(), ids, r["ended"].as_i64().unwrap(), &r).await.unwrap();
         want += 1;
     }
     // a game that ends after the backfill starts is counted when it ends, not by the backfill
     let (late, _) = play(["MAGE", "MAGE"], ["alice", "bob"], "casual", 99, now + 1000, None);
-    replays::save(&state.db, "late", late["pack"].as_str().unwrap(), ids, now + 1000, &late).await.unwrap();
+    replays::save(&state.db, 0, "late", late["pack"].as_str().unwrap(), ids, now + 1000, &late).await.unwrap();
     assert_eq!(stats::backfill(&state).await.unwrap(), want);
     assert_eq!(one(&state.db, "SELECT SUM(games) FROM stats_class WHERE period = 'all'").await, 2 * want as i64);
     assert_eq!(one(&state.db, "SELECT SUM(games) FROM stats_class WHERE period = 'all' AND bracket = 'unknown'").await, 2 * 15, "ranked: no rank in a replay");
@@ -487,7 +488,7 @@ async fn the_backfill_resumes_after_a_restart_and_skips_counted_databases() {
     let now = classichs_server::ranked::now();
     for i in 0..5 {
         let (r, _) = play(["MAGE", "PRIEST"], ["alice", "bob"], "casual", 200 + i, now - 100 + i, None);
-        replays::save(&state.db, &format!("r{i}"), r["pack"].as_str().unwrap(), [1, 2], now - 100 + i, &r).await.unwrap();
+        replays::save(&state.db, 0, &format!("r{i}"), r["pack"].as_str().unwrap(), [1, 2], now - 100 + i, &r).await.unwrap();
     }
     // stopped after the first two
     let set = |v: String| Statement::from_string(DbBackend::Sqlite, format!("INSERT INTO server_settings (key, value) VALUES ('stats_backfill', '{v}')"));
@@ -496,8 +497,8 @@ async fn the_backfill_resumes_after_a_restart_and_skips_counted_databases() {
     // a database with stats rows but no mark: nothing more is added
     let other = app().await;
     let (r, _) = play(["MAGE", "PRIEST"], ["alice", "bob"], "casual", 300, now - 50, None);
-    stats::write(&other.db, &facts(&r), &["all".into(), "all".into()]).await.unwrap();
-    replays::save(&other.db, "x", r["pack"].as_str().unwrap(), [1, 2], now - 50, &r).await.unwrap();
+    stats::write(&other.db, 0, &facts(&r), &["all".into(), "all".into()]).await.unwrap();
+    replays::save(&other.db, 0, "x", r["pack"].as_str().unwrap(), [1, 2], now - 50, &r).await.unwrap();
     assert_eq!(stats::backfill(&other).await.unwrap(), 0);
     assert_eq!(one(&other.db, "SELECT SUM(games) FROM stats_class WHERE period = 'all'").await, 2);
 }
@@ -510,7 +511,7 @@ async fn a_finished_server_game_is_counted() {
     // the bots' human pace a hundred times shorter: the game takes seconds, not a minute
     classichs_server::bots::runtime::PACE_PCT.store(1, std::sync::atomic::Ordering::Relaxed);
     classichs_server::spawn_background(state.clone());
-    classichs_server::bots::create(&state, 2, "easy", "ranked", (0, 0), (0, 1)).await.unwrap();
+    classichs_server::bots::create(&state, 0, 2, "easy", "ranked", (0, 0), (0, 1)).await.unwrap();
     classichs_server::bots::sync(&state).await.unwrap();
     let mut n = 0;
     for _ in 0..480 {
@@ -573,8 +574,8 @@ async fn fill() {
                        "pack_name": "Classic", "started": ended - 600, "ended": ended,
                        "players": [{"name": names[0], "hero": a.0, "cards": a.1}, {"name": names[1], "hero": b.0, "cards": b.1}],
                        "seed": 1000 + i, "first": -1, "actions": actions, "result": {"winner": g.winner, "reason": "over", "turns": g.turn}, "hash": g.state_hash()});
-        replays::save(&state.db, &format!("fill{i}"), &rs.rules_hash, [1, 1], ended, &r).await.unwrap();
-        stats::record(state.clone(), rules.clone(), r, [br(0), br(3)]).await;
+        replays::save(&state.db, 0, &format!("fill{i}"), &rs.rules_hash, [1, 1], ended, &r).await.unwrap();
+        stats::record(state.clone(), 0, rules.clone(), r, [br(0), br(3)]).await;
     }
     let done = Statement::from_string(DbBackend::Sqlite, "INSERT OR REPLACE INTO server_settings (key, value) VALUES ('stats_backfill', 'done')");
     state.db.execute_raw(done).await.unwrap();

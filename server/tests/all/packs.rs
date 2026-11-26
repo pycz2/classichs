@@ -181,7 +181,7 @@ async fn an_upload_tells_its_stages() {
     assert_eq!((seen[0]["done"].as_u64(), seen[0]["total"].as_u64()), (Some(zip.len() as u64), Some(zip.len() as u64)));
     let mut admin = vec![];
     while let Ok(Ok(s)) = tokio::time::timeout(Duration::from_millis(200), feed.recv()).await {
-        let v: Value = serde_json::from_str(&s).unwrap();
+        let v: Value = serde_json::from_str(&s.1).unwrap();
         if v["t"] == "pack_stage" {
             admin.push(v["stage"].as_str().unwrap().to_string());
         }
@@ -450,10 +450,10 @@ async fn bundled_packs_are_installed_once() {
     kinds(&app, "pack_import", 1).await;
     kinds(&app, "pack_rejected", 1).await;
     // The bundled default game (main: --default-pack): set once, when there is none.
-    assert_eq!(packs::default_hash(&app.db).await.unwrap(), packs::GameRules::classic().rules_hash, "none yet: the built-in rules");
-    assert_eq!(packs::set_default(&app, None, "org.classichs.neon").await.unwrap().map(|p| p.id), Some(rows[0].id));
-    assert_eq!(packs::default_hash(&app.db).await.unwrap(), rows[0].rules_hash);
-    assert!(packs::set_default(&app, None, "org.classichs.neon").await.unwrap().is_none(), "there is one");
+    assert_eq!(packs::default_hash(&app.db, 0).await.unwrap(), packs::GameRules::classic().rules_hash, "none yet: the built-in rules");
+    assert_eq!(packs::set_default(&app, 0, None, "org.classichs.neon").await.unwrap().map(|p| p.id), Some(rows[0].id));
+    assert_eq!(packs::default_hash(&app.db, 0).await.unwrap(), rows[0].rules_hash);
+    assert!(packs::set_default(&app, 0, None, "org.classichs.neon").await.unwrap().is_none(), "there is one");
     // Again: nothing new. Deleted by the admin: stays deleted after a restart.
     assert_eq!(packs::import_bundled(&app, &dir).await, 0);
     let (cookie, csrf) = admin_session(&app, &http).await;
@@ -466,7 +466,7 @@ async fn bundled_packs_are_installed_once() {
     assert_eq!(packs::import_bundled(&app, &dir).await, 1);
     assert_eq!(packs::import_bundled(&app, &temp_dir()).await, 0, "a missing directory is fine");
     // A new version of the default game becomes the default.
-    packs::set_default(&app, None, "org.classichs.neon").await.unwrap();
+    packs::set_default(&app, 0, None, "org.classichs.neon").await.unwrap();
     std::fs::write(dir.join("neon.cardpack"), pack_zip("org.classichs.neon", "1.2.0", 4)).unwrap();
     assert_eq!(packs::import_bundled(&app, &dir).await, 1);
     let d = pack::Entity::find().filter(pack::Column::IsDefault.eq(true)).all(&app.db).await.unwrap();
@@ -533,7 +533,7 @@ async fn each_version_and_format_has_its_queue_and_ladder() {
     let (addr, app, _http) = server().await;
     let f = temp_dir();
     std::fs::write(&f, &zip).unwrap();
-    let row = packs::add(&app, &f, zip.len() as u64, None, None).await.unwrap();
+    let row = packs::add(&app, 0, &f, zip.len() as u64, None, None).await.unwrap();
     let vs = pack_version::Entity::find().filter(pack_version::Column::Pack.eq(row.id)).all(&app.db).await.unwrap();
     assert_eq!(vs.iter().map(|v| (v.version.as_str(), v.rules_hash.as_str())).collect::<Vec<_>>(), [("a", ha.as_str()), ("b", hb.as_str())]);
     assert_eq!(vs[1].formats, r#"["standard","wild"]"#);
