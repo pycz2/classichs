@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { api, qs } from './api.js'
-import { html, useEvents, useLoad, useDebounced, useTick, setQuery, toast, Card, UserLink, ErrorBox, Empty, Icon, clock, fullDate, ago } from './ui.js'
+import { html, useCan, useEvents, useLoad, useDebounced, useTick, setQuery, toast, Card, UserLink, ErrorBox, Empty, Icon, clock, fullDate, ago } from './ui.js'
 
 export function Messages ({ a, b, query }) {
   const [user, setUser] = useState(query.user || '')
@@ -104,6 +104,7 @@ export function Chats ({ channel }) {
 }
 
 function Chat ({ channel }) {
+  const can = useCan()
   const [data, error, reload] = useLoad(() => api('chats/' + encodeURIComponent(channel)), [channel])
   const later = useDebounced(reload, 200)
   const [text, setText] = useState('')
@@ -133,11 +134,12 @@ function Chat ({ channel }) {
             ? html`<span class="text muted"><i>deleted by ${m.deleted_by}</i>: <s>${m.deleted_text}</s></span>`
             : html`<span class="text">${m.text}</span>`}
           <span class="meta" title=${fullDate(m.at * 1000)}>${clock(m.at * 1000, false)}
-            ${!m.deleted_by && html` · <button class="btn ghost sm danger-hover" onClick=${() => del(m)}>Delete</button>`}</span>
+            ${!m.deleted_by && can('chats.moderate') && html` · <button class="btn ghost sm danger-hover" onClick=${() => del(m)}>Delete</button>`}</span>
         </div>`) : html`<${Empty}>No messages</${Empty}>`}
       <div ref=${end}></div>
     </div>
-    ${data.open
+    ${data.open && !can('chats.write_as_admin') ? ''
+      : data.open
       ? html`<form class="filters inset" onSubmit=${send}>
           <input class="grow" maxlength="500" required placeholder="Write as the admin" value=${text} onInput=${(e) => setText(e.target.value)} />
           <button class="btn primary" disabled=${busy || !text.trim()}>Send</button></form>`
