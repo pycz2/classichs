@@ -1188,12 +1188,16 @@ class ErasUngoro(unittest.TestCase):
     setUpClass = Eras.__dict__["setUpClass"]
     card = Eras.card
 
-    def test_18336_is_the_ungoro_pack(self):
+    def test_18336_is_the_ungoro_pack_with_the_msg_fixes(self):
         ungoro, _ = pack.build(pack.REPO / "packs/ungoro")
         view = pack.version_view(self.files, "18336")
-        self.assertEqual(pack.rules_hash(view), pack.rules_hash(ungoro))
-        self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p)},
+        # the ungoro pack still has the Mistcaller and Potion of Polymorph of before 15590 and 17720: the fixes go along
+        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua"]
+        self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p) and p not in fixes},
                          {p: d for p, d in ungoro.items() if pack.is_version_file(p)})
+        for vid in ("18336", "19506", "19632", "20022"):
+            for f in fixes:
+                self.assertEqual(pack.version_view(self.files, vid)[f], pack.version_view(self.files, "17720")[f], vid)
 
     def test_19506_unbolds_dart_traps_hero_power(self):
         _, old = self.card("18336", "LOE_021")

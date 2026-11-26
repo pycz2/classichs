@@ -111,10 +111,11 @@ impl T {
 }
 
 /// 7.0.0.15590: The Mistcaller gives the minions in the hand and the deck +1/+1, as its text says; before it, the
-/// minions in the hand and every minion drawn later that game (the deck was not touched).
+/// minions in the hand and every minion drawn later that game (the deck was not touched). The later packs keep the
+/// old one, so the later versions carry the fix too.
 #[test]
 fn mistcaller_buffs_the_deck_from_15590() {
-    for vid in ["msg", "15590", "16214", "17720"] {
+    for vid in ["msg", "15590", "16214", "17720", "18336", "20022"] {
         let mut t = scene!(vid, 7, {"hand": ["AT_054", YETI], "deck": [YETI, YETI]}, {});
         t.play("AT_054", NONE);
         assert_eq!(t.stats_in(0, "hand", YETI), vec![(5, 6)], "{vid}: the hand");
@@ -155,7 +156,7 @@ fn patch_17720_nerfs_small_time_buccaneer_and_spirit_claws() {
 /// 7.1.0.17720: Snipe triggers after Potion of Polymorph (on the Sheep): the After Summon triggers see the Sheep.
 #[test]
 fn snipe_hits_the_sheep_of_potion_of_polymorph_from_17720() {
-    for (vid, fixed) in [("16214", false), ("17720", true)] {
+    for (vid, fixed) in [("16214", false), ("17720", true), ("18336", true), ("20022", true)] {
         let mut t = scene!(vid, 7, {"hero": "HERO_05", "secrets": ["CFM_620", "VAN_EX1_609"]}, {"hand": [YETI]});
         t.end_turn();
         t.play(YETI, NONE);
