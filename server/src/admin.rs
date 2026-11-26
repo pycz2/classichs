@@ -83,7 +83,7 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
         .route("/admin", get(index))
-        .route("/admin/", get(|| async { Redirect::permanent("/admin") }))
+        .route("/admin/", get(|Extension(p): Extension<Prefix>| async move { Redirect::permanent(&format!("{}/admin", p.0)) }))
         .route("/admin/static/{*path}", get(asset))
         .route("/admin/api/login", post(login))
         .merge(guarded)

@@ -129,6 +129,15 @@ pub async fn has(app: &App, account: i64, p: &str, subserver: i64) -> bool {
     all(app, account, subserver).await.contains(p)
 }
 
+/// Makes a new sub-server's built-in roles (Admin, Moderator, Viewer; main's are the migration's).
+pub async fn make_builtin_roles(c: &impl ConnectionTrait, subserver: i64) -> Result<(), sea_orm::DbErr> {
+    for (name, perms) in builtin() {
+        let row = role::ActiveModel { subserver: Set(Some(subserver)), name: Set(name.into()), perms: Set(serde_json::to_string(&perms).unwrap_or_default()), builtin: Set(true), ..Default::default() };
+        row.insert(c).await?;
+    }
+    Ok(())
+}
+
 /// Gives the account the global Super admin role (the server's first admin, `db::make_superuser`).
 pub async fn make_super(c: &impl ConnectionTrait, account: i64) -> Result<(), sea_orm::DbErr> {
     let Some(r) = role::Entity::find().filter(role::Column::Name.eq(SUPER_ADMIN)).filter(role::Column::Subserver.is_null()).one(c).await? else {

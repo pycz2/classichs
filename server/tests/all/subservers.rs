@@ -10,7 +10,7 @@ use classichs_server::packs::GameRules;
 use classichs_server::storage::Storage;
 use classichs_server::{auth, db, perm, router, spawn_background, App, AppRef, Timers};
 use futures_util::{SinkExt, StreamExt};
-use sea_orm::{ActiveModelTrait, ColumnTrait, ConnectionTrait, DbBackend, EntityTrait, QueryFilter, Set, Statement};
+use sea_orm::{ActiveModelTrait, ColumnTrait, ConnectionTrait, EntityTrait, QueryFilter, Set};
 use sea_orm_migration::MigratorTrait;
 use serde_json::{json, Value};
 use std::net::SocketAddr;
@@ -34,13 +34,7 @@ async fn add_sub(app: &AppRef, name: &str) -> i64 {
         ..Default::default()
     };
     let id = row.insert(&app.db).await.unwrap().id;
-    for (name, perms) in perm::builtin() {
-        let perms = serde_json::to_string(&perms).unwrap();
-        app.db
-            .execute_raw(Statement::from_sql_and_values(DbBackend::Sqlite, "INSERT INTO role (subserver, name, perms, builtin) VALUES (?, ?, ?, 1)", [id.into(), name.into(), perms.into()]))
-            .await
-            .unwrap();
-    }
+    perm::make_builtin_roles(&app.db, id).await.unwrap();
     id
 }
 
@@ -113,6 +107,8 @@ async fn routing_by_path_and_the_panel_of_a_sub_server() {
 
     assert_eq!(call(&app, get("/s/nope/admin/api/me", "")).await.0, StatusCode::NOT_FOUND, "no such sub-server");
     assert_eq!(call(&app, get("/s/two/admin", "")).await.0, StatusCode::OK, "the panel's page");
+    let res = app.clone().oneshot(get("/s/two/admin/", "")).await.unwrap();
+    assert_eq!(res.headers()[header::LOCATION], "/s/two/admin", "the sub-server's panel, not main's");
     // the super admin enters both; the cookie is the sub-server's own
     let (st, cookies, _) = call(&app, login("/s/two/admin/api/login", "root")).await;
     assert_eq!(st, StatusCode::OK);
