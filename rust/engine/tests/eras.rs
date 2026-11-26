@@ -12,7 +12,9 @@ fn repo() -> PathBuf {
 
 /// A pack source built by tools/pack.py, read as the engine reads it; None without python3.
 fn built(src: &str) -> Option<Files> {
-    let out = std::env::temp_dir().join(format!("eras-test-{}-{}.cardpack", src.replace('/', "_"), std::process::id()));
+    static N: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    let n = N.fetch_add(1, std::sync::atomic::Ordering::Relaxed); // tests run in parallel: a file each
+    let out = std::env::temp_dir().join(format!("eras-test-{}-{}-{n}.cardpack", src.replace('/', "_"), std::process::id()));
     let build = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", src, "-o"]).arg(&out).output().ok()?;
     assert!(build.status.success(), "pack.py build {src}: {}", String::from_utf8_lossy(&build.stdout));
     let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
