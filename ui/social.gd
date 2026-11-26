@@ -843,7 +843,7 @@ func _on_message(msg: Dictionary, srv: Server) -> void:
 			srv.user = ""
 		"kicked":
 			if not (on_lobby and srv == _cur):
-				toast(_about(srv, tr("You logged in on another device")), Callable(), true)
+				toast(_about(srv, tr(ServerLink.STOPPED.get(str(msg.get("reason", "")), "You logged in on another device"))), Callable(), true)
 		"me":
 			if panel_open and srv == _cur:
 				rebuild_panel()

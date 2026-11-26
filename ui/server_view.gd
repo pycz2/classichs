@@ -67,6 +67,8 @@ func _ready() -> void:
 		_go("login")
 		if link.kicked:
 			say(tr("You logged in on another device"))
+		elif link.stopped != "":
+			say(tr(ServerLink.STOPPED[link.stopped]))
 		else:
 			say(tr("Connection lost") if link.was_open() else tr("Could not connect to %s") % link.url))
 	if link.logged_in() and login_only:
@@ -332,6 +334,8 @@ func _error_text(msg: Dictionary) -> String:
 			return tr("This name is taken")
 		"bad_user":
 			return tr("A name is 3 to 16 letters, digits or _")
+	if ServerLink.STOPPED.has(str(msg.get("code", ""))):  # a suspended, unavailable or full sub-server
+		return tr(ServerLink.STOPPED[str(msg.code)])
 	return tr(str(msg.get("text", msg.get("code", "error"))))  # (texts the client knows come translated: Social.SERVER_TEXTS)
 
 
@@ -993,7 +997,7 @@ func _on_message(msg: Dictionary) -> void:
 		"kicked":
 			queued = ""
 			_go("login")
-			say(tr("You logged in on another device"))
+			say(tr(ServerLink.STOPPED.get(str(msg.get("reason", "")), "You logged in on another device")))
 
 
 func _set_arena(v: Variant) -> void:

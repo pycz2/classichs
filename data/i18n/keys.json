@@ -1096,5 +1096,9 @@
   "A message is 1 to 500 characters",
   "Deleted by %s",
   "Delete the message",
-  "The chat closes at %s"
+  "The chat closes at %s",
+  "This server is suspended by the host",
+  "This server is not available now: try later",
+  "This server has no room for new players",
+  "This server was deleted"
 ]

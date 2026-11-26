@@ -1172,5 +1172,9 @@
 "with a screenshot": "avec une capture d'écran",
 "Status: open": "ouvert",
 "Status: closed": "fermé",
-"You wrote": "Vous"
+"You wrote": "Vous",
+"This server is suspended by the host": "Ce serveur a été suspendu par l'hébergeur",
+"This server is not available now: try later": "Ce serveur n'est pas disponible pour le moment : réessayez plus tard",
+"This server has no room for new players": "Ce serveur n'a plus de place pour de nouveaux joueurs",
+"This server was deleted": "Ce serveur a été supprimé"
 }
