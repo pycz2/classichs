@@ -1142,5 +1142,6 @@
 "Too many messages: wait a little": "Mensagens demais: espere um pouco",
 "A message is 1 to 500 characters": "Uma mensagem tem de 1 a 500 caracteres",
 "Deleted by %s": "Excluído por %s",
-"Delete the message": "Excluir a mensagem"
+"Delete the message": "Excluir a mensagem",
+"The chat closes at %s": "O chat fecha às %s"
 }

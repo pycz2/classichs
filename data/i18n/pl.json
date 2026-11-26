@@ -1142,5 +1142,6 @@
 "Too many messages: wait a little": "Za dużo wiadomości: poczekaj chwilę",
 "A message is 1 to 500 characters": "Wiadomość ma od 1 do 500 znaków",
 "Deleted by %s": "Usunięte przez %s",
-"Delete the message": "Usuń wiadomość"
+"Delete the message": "Usuń wiadomość",
+"The chat closes at %s": "Czat zostanie zamknięty o %s"
 }

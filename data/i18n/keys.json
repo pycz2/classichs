@@ -1095,5 +1095,6 @@
   "Too many messages: wait a little",
   "A message is 1 to 500 characters",
   "Deleted by %s",
-  "Delete the message"
+  "Delete the message",
+  "The chat closes at %s"
 ]

@@ -27,6 +27,7 @@ var _send: Button
 var _row := HBoxContainer.new()
 var _note: Label
 var _closed_note: Label
+var _empty: Label
 var _second := 0
 var sending := false  # a message sent, its push not back yet (the server's errors to it are told here)
 
@@ -39,6 +40,9 @@ func _init() -> void:
 	add_child(v)
 	var title := Palette.label(TranslationServer.translate("Chat"), 22, Palette.ATTACK)
 	v.add_child(title)
+	_empty = Palette.label(TranslationServer.translate("No messages yet"), 16, Palette.MUTED)
+	_empty.name = "NoMessages"
+	v.add_child(_empty)
 	_scroll.name = "ChatScroll"
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -52,7 +56,7 @@ func _init() -> void:
 	_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_note.visible = false
 	v.add_child(_note)
-	_closed_note = Palette.label(TranslationServer.translate("The chat is closed: messages can only be read"), 16, Palette.MUTED)
+	_closed_note = Palette.label("", 16, Palette.MUTED)
 	_closed_note.name = "ClosedNote"
 	_closed_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_closed_note.visible = false
@@ -129,10 +133,17 @@ func _process(_d: float) -> void:
 		_update_state()
 
 
+## The input, or the closed note; while open, the closing time when known.
 func _update_state() -> void:
 	var ro := read_only()
 	_row.visible = not ro
-	_closed_note.visible = ro
+	_closed_note.visible = ro or closes > 0
+	if ro:
+		_closed_note.text = TranslationServer.translate("The chat is closed: messages can only be read")
+	elif closes > 0:
+		var d := Time.get_datetime_dict_from_unix_time(closes + TournamentsView.tz_s())
+		_closed_note.text = TranslationServer.translate("The chat closes at %s") % ("%02d:%02d" % [d.hour, d.minute])
+	_empty.visible = messages.is_empty()
 
 
 func _on_message(msg: Dictionary) -> void:
@@ -158,7 +169,8 @@ func _on_message(msg: Dictionary) -> void:
 		"chat_history":
 			messages = (msg.get("list") as Array).filter(func(m): return m is Dictionary).slice(-KEPT) if msg.get("list") is Array else []
 			is_open = msg.get("open", true) == true
-			closes = maxi(closes, int(msg.get("closes", 0)))  # (a tournament's end may be known first)
+			if int(msg.get("closes", 0)) > 0:  # (else a tournament's end may tell it: set_ended)
+				closes = int(msg.closes)
 			moderator = msg.get("moderator", false) == true
 			_render()
 		"chat_msg":
@@ -170,6 +182,7 @@ func _on_message(msg: Dictionary) -> void:
 					messages.pop_front()
 					_lines.get_child(0).free()
 				_lines.add_child(_line(msg.msg))
+				_empty.visible = false
 				_to_bottom()
 				arrived.emit()
 		"chat_deleted":
@@ -223,7 +236,7 @@ func _line(m: Dictionary) -> HBoxContainer:
 		(Palette.SELECTED if from == me else Palette.ATTACK).to_html(false), _esc(from)]
 	var mark = MARKS.get(str(m.get("mark", "")))
 	if mark:
-		s += " [bgcolor=#%s][color=#1a1208] %s [/color][/bgcolor]" % [mark[1].to_html(false), TranslationServer.translate(mark[0])]
+		s += "  [bgcolor=#%s][color=#1a1208] %s [/color][/bgcolor]" % [mark[1].to_html(false), TranslationServer.translate(mark[0])]
 	var by := str(m.get("deleted_by", ""))
 	if by != "":
 		s += " [i][color=#%s]%s[/color][/i]" % [Palette.MUTED.to_html(false), _esc(TranslationServer.translate("Deleted by %s") % by)]
@@ -239,7 +252,9 @@ func _line(m: Dictionary) -> HBoxContainer:
 		x.focus_mode = Control.FOCUS_NONE
 		x.tooltip_text = TranslationServer.translate("Delete the message")
 		x.add_theme_color_override("font_color", Palette.DANGER)
-		x.custom_minimum_size = Vector2(36, 32)
+		x.add_theme_font_size_override("font_size", 24)
+		x.custom_minimum_size = Vector2(40, 40)  # (a finger's size on a phone)
+		x.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 		var id := int(m.get("id", 0))
 		x.pressed.connect(func(): link.send({"t": "chat_delete", "id": id}))
 		row.add_child(x)

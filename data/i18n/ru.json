@@ -1142,5 +1142,6 @@
 "Too many messages: wait a little": "Слишком много сообщений: подождите немного",
 "A message is 1 to 500 characters": "В сообщении от 1 до 500 символов",
 "Deleted by %s": "Удалено пользователем %s",
-"Delete the message": "Удалить сообщение"
+"Delete the message": "Удалить сообщение",
+"The chat closes at %s": "Чат закроется в %s"
 }

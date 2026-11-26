@@ -95,6 +95,12 @@ func test_read_only_when_closed() -> void:
 	check(p.find_child("ClosedNote", true, false).is_visible_in_tree(), "it says it is closed")
 	_history(p, [msg(1, "bob", "gg")], true)
 	check(input.is_visible_in_tree(), "an open chat has the input")
+	check(not p.find_child("ClosedNote", true, false).is_visible_in_tree(), "no note while no closing time is known")
+	_history(p, [], true, false, int(Time.get_unix_time_from_system()) + 3600)
+	check(input.is_visible_in_tree(), "open until its closing time")
+	var note := p.find_child("ClosedNote", true, false) as Label
+	check(note.is_visible_in_tree() and note.text == tr("The chat closes at %s") % note.text.right(5), "the closing time said: " + note.text)
+	check(p.find_child("NoMessages", true, false).is_visible_in_tree(), "an empty chat says so")
 	p.link.dispatch({"t": "chat_closed", "channel": "t:7"})
 	check(not input.is_visible_in_tree(), "closed by the push")
 	_history(p, [], true, false, int(Time.get_unix_time_from_system()) - 5)
@@ -148,6 +154,9 @@ func test_tournaments_screen_subscribes_and_leaves() -> void:
 	l.dispatch({"t": "tournament", "tournament": t})
 	var tab := v.find_child("Tab_chat", true, false) as Button
 	check(tab != null, "the page's Chat tab")
+	check(not chat.is_visible_in_tree(), "the overview hides the chat")
+	l.dispatch({"t": "chat_msg", "channel": "t:7", "msg": msg(1, "bob", "hi")})
+	eq(tab.text, tr("Chat") + " (1)", "a message not seen counted on the tab")
 	if tab:
 		tab.pressed.emit()
 	check(v.find_child("Chat", true, false).is_visible_in_tree(), "the chat tab shows the chat")
