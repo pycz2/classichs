@@ -74,6 +74,7 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/ws", get(feed))
         .merge(crate::admin_extra::routes())
         .merge(crate::admin_players::routes())
+        .merge(crate::reports::admin_routes())
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
         .route("/admin", get(index))
@@ -433,6 +434,7 @@ async fn dashboard_json(app: &AppRef, q: DashQ) -> Result<Value, sea_orm::DbErr>
     let accounts = account::Entity::find().count(db).await?;
     let suspended = account::Entity::find().filter(account::Column::Suspended.eq(true)).count(db).await?;
     let games = played::Entity::find().count(db).await?;
+    let reports_new = crate::reports::new_count(app).await?;
     let recent: Vec<Value> = event::Entity::find()
         .filter(event::Column::Kind.ne("game_action"))
         .order_by_desc(event::Column::Id)
@@ -442,7 +444,7 @@ async fn dashboard_json(app: &AppRef, q: DashQ) -> Result<Value, sea_orm::DbErr>
         .iter()
         .map(event_json)
         .collect();
-    Ok(json!({"now": now, "day": day, "today": today, "totals": {"accounts": accounts, "suspended": suspended, "games": games},
+    Ok(json!({"now": now, "day": day, "today": today, "totals": {"accounts": accounts, "suspended": suspended, "games": games, "reports_new": reports_new},
               "chart": {"start": start, "series": series}, "recent": recent, "live": app.hub().live_json()}))
 }
 
@@ -499,7 +501,7 @@ impl ListQ {
 }
 
 /// Paged: {list, total, page, size}.
-async fn page_of<E: EntityTrait>(sel: Select<E>, page: u64, size: u64, db: &crate::db::Db) -> Result<(Vec<E::Model>, u64), sea_orm::DbErr>
+pub(crate) async fn page_of<E: EntityTrait>(sel: Select<E>, page: u64, size: u64, db: &crate::db::Db) -> Result<(Vec<E::Model>, u64), sea_orm::DbErr>
 where
     E::Model: Sync,
 {

@@ -15,6 +15,7 @@ pub mod pack;
 pub mod pack_import;
 pub mod pack_version;
 pub mod replay;
+pub mod report;
 pub mod request;
 pub mod server_setting;
 pub mod session;

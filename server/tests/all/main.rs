@@ -11,5 +11,6 @@ mod brain_search;
 mod flow;
 mod invites;
 mod packs;
+mod reports;
 mod stats;
 mod tournament;

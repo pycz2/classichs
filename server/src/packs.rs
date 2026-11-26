@@ -393,7 +393,7 @@ pub async fn playable(app: &AppRef, pack: Option<&str>, own: Option<i64>) -> Res
 pub struct PackErr(pub StatusCode, pub &'static str, pub String);
 
 impl PackErr {
-    fn new(s: StatusCode, code: &'static str, text: impl Into<String>) -> PackErr {
+    pub(crate) fn new(s: StatusCode, code: &'static str, text: impl Into<String>) -> PackErr {
         PackErr(s, code, text.into())
     }
 }
@@ -808,14 +808,14 @@ pub fn routes() -> Router<AppRef> {
 }
 
 /// The web build of the game runs on another origin; the token, not a cookie, authenticates.
-async fn cors(mut res: Response) -> Response {
+pub(crate) async fn cors(mut res: Response) -> Response {
     let h = res.headers_mut();
     h.insert(header::ACCESS_CONTROL_ALLOW_ORIGIN, HeaderValue::from_static("*"));
     h.insert(header::ACCESS_CONTROL_EXPOSE_HEADERS, HeaderValue::from_static("etag, content-length, content-disposition"));
     res
 }
 
-async fn preflight() -> Response {
+pub(crate) async fn preflight() -> Response {
     (
         StatusCode::NO_CONTENT,
         [
@@ -828,12 +828,12 @@ async fn preflight() -> Response {
 }
 
 #[derive(Deserialize)]
-struct TokenQ {
-    token: Option<String>,
+pub(crate) struct TokenQ {
+    pub(crate) token: Option<String>,
 }
 
 /// The player of a game session token (Authorization: Bearer, else ?token=).
-async fn player(app: &AppRef, headers: &HeaderMap, q: &TokenQ) -> Result<Account, PackErr> {
+pub(crate) async fn player(app: &AppRef, headers: &HeaderMap, q: &TokenQ) -> Result<Account, PackErr> {
     let bearer = headers.get(header::AUTHORIZATION).and_then(|v| v.to_str().ok()).and_then(|v| v.strip_prefix("Bearer "));
     let token = bearer.map(str::trim).or(q.token.as_deref()).unwrap_or_default();
     if token.is_empty() || token.len() > 200 {

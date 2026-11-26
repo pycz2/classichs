@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15)]
     }
 }
 
@@ -967,6 +967,45 @@ impl MigrationName for M14 {
 impl MigrationTrait for M14 {
     async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
         m.get_connection().execute_unprepared("ALTER TABLE standings ADD COLUMN best INTEGER NOT NULL DEFAULT -1").await?;
+        Ok(())
+    }
+}
+
+/// Problem reports from the game (0.74; `crate::reports`): the picture and the voice message are
+/// in the store (`reports/<id>/screen.png`, `voice.ogg`). `subserver` 0 = the main one.
+struct M15;
+
+impl MigrationName for M15 {
+    fn name(&self) -> &str {
+        "m20261126_000015_reports"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M15 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        c.execute_unprepared(
+            "CREATE TABLE reports (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                subserver INTEGER NOT NULL DEFAULT 0,
+                account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+                written_at INTEGER NOT NULL,
+                received_at INTEGER NOT NULL,
+                text TEXT NOT NULL,
+                version TEXT NOT NULL DEFAULT '',
+                context TEXT NOT NULL DEFAULT '{}',
+                games TEXT NOT NULL DEFAULT '[]',
+                screen INTEGER NOT NULL DEFAULT 0,
+                voice INTEGER NOT NULL DEFAULT 0,
+                state TEXT NOT NULL DEFAULT 'new',
+                note TEXT NOT NULL DEFAULT '',
+                answer_message INTEGER
+            )",
+        )
+        .await?;
+        c.execute_unprepared("CREATE INDEX reports_subserver ON reports (subserver, received_at)").await?;
+        c.execute_unprepared("CREATE INDEX reports_account ON reports (account, received_at)").await?;
         Ok(())
     }
 }
