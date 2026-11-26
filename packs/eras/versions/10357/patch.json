@@ -1,8 +1,302 @@
 {
  "base": "tgt",
  "build": 10357,
- "about": "3.1.0.10357 (2015-09-29): TGT bug fixes and new animations",
+ "about": "3.1.0.10357 (2015-09-29): TGT bug fixes (Demonfuse is no Demon, as the tgt pack has it); Sapling is a Druid card; text fixes in several languages",
+ "cards": {
+  "AT_001": {
+   "text": {
+    "enUS": "Deal $8 damage to a minion.",
+    "ruRU": "Наносит $8 ед. урона выбранному существу.",
+    "deDE": "Fügt einem Diener $8 Schaden zu.",
+    "frFR": "Inflige $8 |4(point,points) de dégâts à un serviteur.",
+    "esES": "Inflige $8 p. de daño a un esbirro.",
+    "ptBR": "Cause $8 de dano a um lacaio.",
+    "itIT": "Infligge $8 danni a un servitore.",
+    "plPL": "Zadaj $8 pkt. obrażeń stronnikowi."
+   }
+  },
+  "AT_015": {
+   "text": {
+    "enUS": "Put a copy of an enemy minion into your hand.",
+    "ruRU": "Вы кладете в руку копию выбранного существа противника.",
+    "deDE": "Wählt einen feindlichen Diener aus und erhaltet eine Kopie davon auf die Hand.",
+    "frFR": "Place une copie d’un serviteur adverse dans votre main.",
+    "esES": "Coloca una copia de un esbirro enemigo en tu mano.",
+    "ptBR": "Coloque uma cópia de um lacaio inimigo na sua mão.",
+    "itIT": "Mette una copia di un servitore nemico sul campo di battaglia nella tua mano.",
+    "plPL": "Umieść w twojej ręce kopię wrogiego stronnika."
+   }
+  },
+  "AT_033": {
+   "text": {
+    "enUS": "Add 2 random class cards to your hand <i>(from your opponent's class)</i>.",
+    "ruRU": "Вы кладете в руку две случайных карты <i>(класса вашего противника)</i>. ",
+    "deDE": "Erhaltet 2 zufällige Karten von der Klasse Eures Gegners auf die Hand.",
+    "frFR": "Ajoute 2 cartes de classe aléatoires dans votre main <i>(de la classe de votre adversaire)</i>.",
+    "esES": "Añade 2 cartas de clase aleatorias a tu mano <i>(de la clase de tu oponente)</i>.",
+    "ptBR": "Adicione 2 cards de classe aleatórios à sua mão <i>(da classe do seu oponente)</i>.",
+    "itIT": "Mette nella tua mano due carte casuali della classe dell'avversario.",
+    "plPL": "Dodaj 2 losowe karty klasowe do twojej ręki <i>(z klasy przeciwnika)</i>."
+   }
+  },
+  "AT_034": {
+   "text": {
+    "enUS": "Your Hero Power gives this weapon +1 Attack instead of replacing it.",
+    "ruRU": "Ваша сила героя не заменяет оружие, а добавляет ему +1 к атаке.",
+    "deDE": "Eure Heldenfähigkeit verleiht dieser Waffe +1 Angriff, anstatt sie zu ersetzen.",
+    "frFR": "Votre pouvoir héroïque donne à cette arme\n+1 ATQ au lieu de la remplacer.",
+    "esES": "Tu poder de héroe otorga +1 p. de ataque a esta arma en lugar de reemplazarla.",
+    "ptBR": "Seu Poder Heroico concede a esta arma +1 de Ataque em vez de substituí-la.",
+    "itIT": "Il tuo Potere Eroe fornisce +1 Attacco a quest'arma invece di sostituirla.",
+    "plPL": "Twoja moc specjalna daje broni +1 do ataku zamiast ją zastępować."
+   }
+  },
+  "AT_035": {
+   "text": {
+    "enUS": "Shuffle 3 Ambushes into your opponent's deck. When drawn, you summon a 4/4 Nerubian.",
+    "ruRU": "Замешивает три карты «Засада!» в колоду противника. Если противник берет в руки одну из этих карт, вы призываете на поле боя неруба 4/4 .",
+    "deDE": "Mischt 3 Kopien von Hinterhalt! in das Deck Eures Gegners. Wenn sie gezogen werden, ruft Ihr jeweils einen Neruber (4/4) herbei.",
+    "frFR": "Place 3 cartes Embuscade ! dans le deck de votre adversaire. À chaque fois qu’il en pioche une, vous invoquez un nérubien 4/4.",
+    "esES": "Mete 3 emboscadas en el mazo de tu oponente. Cuando las roba, invocas un nerubiano 4/4.",
+    "ptBR": "Embaralhe 3 Emboscadas no deck do seu oponente. Quando ele comprar, você evoca um Nerubiano 4/4.",
+    "itIT": "Mette tre Imboscate nel mazzo dell'avversario. Quando una viene pescata, evoca un Nerubiano 4/4.",
+    "plPL": "Wtasuj 3 karty Zasadzki! do talii przeciwnika. Kiedy któraś\nz nich zostanie dobrana, przyzwij Nerubianina 4/4."
+   }
+  },
+  "AT_037t": {
+   "cardClass": "DRUID"
+  },
+  "AT_053": {
+   "text": {
+    "enUS": "Draw 2 cards. <b>Overload: (2)</b>",
+    "ruRU": "Вы берете 2 карты. <b>Перегрузка:</b> (2)",
+    "deDE": "Zieht 2 Karten. <b>Überladung:</b> (2)",
+    "frFR": "Vous piochez 2 cartes. <b>Surcharge :</b> (2)",
+    "esES": "Roba 2 cartas. <b>Sobrecarga: (2)</b>",
+    "ptBR": "Compre 2 cards. <b>Sobrecarga: (2)</b>",
+    "itIT": "Pesca 2 carte. <b>Sovraccarico:</b> (2)",
+    "plPL": "Dobierz 2 karty. <b>Przeciążenie: (2)</b>"
+   }
+  },
+  "AT_060": {
+   "text": {
+    "enUS": "<b>Secret:</b> After your hero is attacked, summon a 3/3 Bear with <b>Taunt</b>.",
+    "ruRU": "<b>Секрет:</b> если ваш герой был атакован, призывает на поле боя медведя 3/3 со способностью <b>«Провокация»</b>.",
+    "deDE": "<b>Geheimnis:</b> Ruft einen Bären (3/3) mit <b>Spott</b> herbei, nachdem Euer Held angegriffen wurde.",
+    "frFR": "<b>Secret :</b> invoque un ours 3/3 avec <b>Provocation</b> une fois que votre héros a été attaqué.",
+    "esES": "<b>Secreto:</b> Cuando hayan atacado a tu héroe, invoca un oso 3/3 con <b>Provocar</b>.",
+    "ptBR": "<b>Segredo:</b> Depois que o seu herói for atacado, evoque um Urso 3/3 com <b>Provocar</b>.",
+    "itIT": "<b>Segreto:</b> dopo che il tuo eroe viene attaccato, evoca un Orso 3/3 con <b>Provocazione</b>.",
+    "plPL": "<b>Sekret:</b> Gdy twój bohater zostanie zaatakowany, przyzwij Niedźwiedzia 3/3\nz <b>Prowokacją</b>."
+   }
+  },
+  "AT_061": {
+   "text": {
+    "enUS": "Each time you cast a spell this turn, add a random Hunter card to your hand.",
+    "ruRU": "Вы кладете в руку случайную карту охотника за каждое заклинание, которое разыграете на этом ходу.",
+    "deDE": "Jedes Mal, wenn Ihr in diesem Zug einen Zauber wirkt, erhaltet Ihr eine zufällige Jägerkarte auf die Hand.",
+    "frFR": "Chaque fois que vous lancez un sort pendant ce tour, ajoute une carte chasseur aléatoire dans votre main.",
+    "esES": "Cada vez que lanzas un hechizo este turno, añade una carta de cazador aleatoria a tu mano.",
+    "ptBR": "Cada vez que você lançar um feitiço neste turno, adicione um card de Caçador aleatório à sua mão.",
+    "itIT": "Quando lanci una Magia in questo turno, mette nella tua mano una carta casuale del Cacciatore.",
+    "plPL": "Za każdym razem gdy rzucisz w tej turze zaklęcie, dodaj losową kartę łowcy do twojej ręki."
+   }
+  },
+  "AT_063": {
+   "text": {
+    "enUS": "Whenever another minion takes damage, destroy it.",
+    "ruRU": "Уничтожает любое другое существо, которое получает урон.",
+    "deDE": "Vernichtet jeden anderen Diener, der Schaden erleidet.",
+    "frFR": "Chaque fois qu’un autre serviteur subit des dégâts, le détruit.",
+    "esES": "Cada vez que otro esbirro recibe daño, lo destruyes.",
+    "ptBR": "Sempre que outro lacaio receber dano, destrua-o.",
+    "itIT": "Qualsiasi altro servitore che subisce danni viene distrutto.",
+    "plPL": "Za każdym razem gdy inny stronnik otrzyma obrażenia, zniszcz go."
+   }
+  },
+  "AT_073": {
+   "text": {
+    "enUS": "<b>Secret:</b> When your turn starts, give your minions +1/+1.",
+    "ruRU": "<b>Секрет:</b> в начале вашего хода все ваши существа получают +1/+1.",
+    "deDE": "<b>Geheimnis:</b> Verleiht Euren Dienern zu Beginn Eures Zuges +1/+1.",
+    "frFR": "<b>Secret :</b> donne +1/+1 à vos serviteurs quand votre tour commence.",
+    "esES": "<b>Secreto:</b> Al comienzo de tu turno, otorga +1/+1 a tus esbirros.",
+    "ptBR": "<b>Segredo:</b> Quando seu turno começar, conceda +1/+1 aos seus lacaios.",
+    "itIT": "<b>Segreto:</b> all'inizio del tuo turno, +1/+1 ai tuoi servitori.",
+    "plPL": "<b>Sekret:</b> Na początku twojej tury, daj twoim stronnikom +1/+1."
+   }
+  },
+  "AT_079": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Put one of each <b>Secret</b> from your deck into the battlefield.",
+    "ruRU": "<b>Боевой клич:</b> вы кладете на поле боя по каждому <b>секрету</b> из вашей колоды.",
+    "deDE": "<b>Kampfschrei:</b> Legt alle <b>Geheimnisse</b> in Eurem Deck je einmal auf das Schlachtfeld.",
+    "frFR": "<b>Cri de guerre :</b> place un <b>Secret</b> de chaque type de votre deck sur le champ de bataille.",
+    "esES": "<b>Grito de batalla:</b> Coloca un <b>secreto</b> de cada tipo de tu mazo en el campo de batalla.",
+    "ptBR": "<b>Grito de Guerra:</b> Coloque um <b>Segredo</b> de cada do seu deck no campo de batalha.",
+    "itIT": "<b>Grido di Battaglia:</b> mette in gioco un <b>Segreto</b> di ogni tipo dal tuo mazzo.",
+    "plPL": "<b>Okrzyk bojowy:</b> Umieść jeden <b>Sekret</b> każdego typu\nz twojej talii\nna polu bitwy."
+   }
+  },
+  "AT_086": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Your opponent's Hero Power costs (5) more next turn.",
+    "ruRU": "<b>Боевой клич:</b> увеличивает стоимость использования силы героя противника на (5) маны до конца его следующего хода.",
+    "deDE": "<b>Kampfschrei:</b> Die Heldenfähigkeit Eures Gegners kostet im nächsten Zug (5) mehr.",
+    "frFR": "<b>Cri de guerre :</b> le pouvoir héroïque de votre adversaire coûte (5) cristaux de plus au tour suivant.",
+    "esES": "<b>Grito de batalla:</b> El poder de héroe de tu oponente cuesta (5) cristales más el próximo turno.",
+    "ptBR": "<b>Grito de Guerra:</b> O Poder Heroico do seu oponente custa (5) a mais no próximo turno.",
+    "itIT": "<b>Grido di Battaglia:</b> nel turno successivo, il Potere Eroe dell'avversario costa (5) Mana in più.",
+    "plPL": "<b>Okrzyk bojowy:</b> Moc specjalna twojego przeciwnika kosztuje (5) więcej w następnej turze."
+   }
+  },
+  "AT_087": {
+   "text": {
+    "enUS": "<b>Charge</b>\n<b>Divine Shield</b>",
+    "ruRU": "<b>Рывок</b>\n<b>Божественный щит</b>",
+    "deDE": "<b>Ansturm</b>, <b>Gottesschild</b>",
+    "frFR": "<b>Charge</b>\n<b>Bouclier divin</b>",
+    "esES": "<b>Cargar</b>\n<b>Escudo divino</b>",
+    "ptBR": "<b>Investida</b>\n<b>Escudo Divino</b>",
+    "itIT": "<b>Carica</b>.\n<b>Scudo Divino</b>.",
+    "plPL": "<b>Szarża</b>\n<b>Boska tarcza</b>"
+   }
+  },
+  "AT_109": {
+   "text": {
+    "enUS": "Can't attack.\n<b>Inspire:</b> Can attack as normal this turn.",
+    "ruRU": "Не может атаковать. \n<b>Воодушевление:</b> может атаковать до конца этого хода.",
+    "deDE": "Kann nicht angreifen.\n<b>Inspiration:</b> Kann in diesem Zug wie ein gewöhnlicher Diener angreifen.",
+    "frFR": "Ne peut pas attaquer.\n<b>Exaltation :</b> peut attaquer normalement pendant ce tour.",
+    "esES": "No puede atacar.\n<b>Inspirar:</b> Puede atacar de forma normal este turno.",
+    "ptBR": "Não pode atacar.\n<b>Inspirar:</b> Pode atacar normalmente neste turno.",
+    "itIT": "Non può attaccare. <b>Ispirazione:</b> può attaccare in questo turno.",
+    "plPL": "Nie może atakować.\n<b>Inspiracja:</b> W tej turze\nmoże normalnie atakować."
+   }
+  },
+  "AT_121": {
+   "text": {
+    "enUS": "Whenever you play a card with <b>Battlecry</b>, gain +1/+1.",
+    "ruRU": "Получает +1/+1 каждый раз, когда вы разыгрываете карту со способностью <b>«Боевой клич»</b>.",
+    "deDE": "Erhält jedes Mal +1/+1, wenn Ihr eine Karte mit <b>Kampfschrei</b> ausspielt.",
+    "frFR": "Chaque fois que vous jouez une carte avec <b>Cri de guerre</b>,\nconfère +1/+1.",
+    "esES": "Cada vez que juegas una carta con <b>Grito de batalla</b>, obtiene +1/+1.",
+    "ptBR": "Sempre que você jogar um card com <b>Grito de Guerra</b>, receba +1/+1.",
+    "itIT": "Ottiene +1/+1 quando giochi una carta con <b>Grido di Battaglia</b>.",
+    "plPL": "Otrzymuje +1/+1 za każdym razem, gdy zagrasz kartę z <b>Okrzykiem bojowym</b>."
+   }
+  },
+  "AT_123": {
+   "text": {
+    "enUS": "<b>Taunt</b>\n<b>Deathrattle:</b> If you're holding a Dragon, deal 3 damage to all minions.",
+    "ruRU": "<b>Провокация:</b>\n<b>Предсмертный хрип:</b> наносит 3 ед. урона всем существам, если у вас в руке есть дракон.",
+    "deDE": "<b>Spott</b>. <b>Todesröcheln:</b> Fügt allen Dienern 3 Schaden zu, wenn Ihr einen Drachen auf der Hand habt.",
+    "frFR": "<b>Provocation</b>. <b>Râle d’agonie :</b> inflige 3 points de dégâts à tous les serviteurs si vous avez un Dragon en main.",
+    "esES": "<b>Provocar</b>\n<b>Último aliento:</b> Inflige 3 p. de daño a todos los esbirros si hay un dragón en tu mano.",
+    "ptBR": "<b>Provocar</b>\n<b>Último Suspiro:</b> Se tiver um Dragão na mão, cause 3 de dano a todos os lacaios.",
+    "itIT": "<b>Provocazione</b>. <b>Rantolo di Morte:</b> infligge 3 danni a TUTTI i servitori se hai un Drago in mano.",
+    "plPL": "<b>Prowokacja.</b>\n<b>Agonia:</b> Zadaj 3 pkt. obrażeń wszystkim stronnikom, jeśli masz w ręce Smoka."
+   }
+  },
+  "AT_132_MAGE": {
+   "name": {
+    "enUS": "Fireblast Rank 2",
+    "ruRU": "Вспышка огня (ранг 2)",
+    "deDE": "Feuerschlag (Rang 2)",
+    "frFR": "Explosion de feu rang 2",
+    "esES": "Explosión de Fuego II",
+    "ptBR": "Impacto Ígneo Grau 2",
+    "itIT": "Detonazione Esplosiva",
+    "plPL": "Ognisty Pocisk (Ranga 2)"
+   }
+  },
+  "AT_132_SHAMAN": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\nSummon a Totem of your choice.",
+    "ruRU": "<b>Сила героя</b>\n Призывает на поле боя выбранный тотем.",
+    "deDE": "<b>Heldenfähigkeit</b>\nBeschwört ein Totem Eurer Wahl.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInvoque un totem de votre choix.",
+    "esES": "<b>Poder de héroe</b>\nInvoca un tótem de tu elección.",
+    "ptBR": "<b>Poder Heroico</b>\nEvoque um Totem à sua escolha.",
+    "itIT": "<b>Potere Eroe</b>\nEvoca un Totem a tua scelta.",
+    "plPL": "<b>Moc specjalna</b>\nPrzyzwij wybrany przez siebie Totem."
+   }
+  },
+  "GVG_089": {
+   "text": {
+    "enUS": "If you control a <b>Secret</b> at the end of your turn, restore 4 Health to your hero.",
+    "ruRU": "Если в конце хода у вас на поле боя остался <b>Секрет</b>, ваш герой восстанавливает 4 ед. здоровья.",
+    "deDE": "Stellt bei Eurem Helden 4 Leben wieder her, wenn Ihr am Ende Eures Zuges über ein aktives <b>Geheimnis</b> verfügt.",
+    "frFR": "Si vous contrôlez un <b>Secret</b> à la fin de votre tour, rend 4 PV à votre héros.",
+    "esES": "Si controlas un <b>secreto</b> al final de tu turno, restaura 4 p. de salud a tu héroe.",
+    "ptBR": "Se você controlar um <b>Segredo</b> no final do seu turno, restaure 4 de Vida do seu herói.",
+    "itIT": "Se controlli un <b>Segreto</b> alla fine del tuo turno, rigenera 4 Salute al tuo eroe.",
+    "plPL": "Jeśli na koniec twojej tury kontrolujesz <b>Sekret</b>, przywróć 4 pkt. zdrowia twojemu bohaterowi."
+   }
+  },
+  "TU4e_002": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\nSummon two 2/1 minions.",
+    "ruRU": "<b>Сила героя</b>\n Призывает на поле боя двух существ 2/1.",
+    "deDE": "<b>Heldenfähigkeit</b>\nRuft zwei Diener (2/1) herbei.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInvoque deux serviteurs 2/1.",
+    "esES": "<b>Poder de héroe</b>\nInvoca a dos esbirros 2/1.",
+    "ptBR": "<b>Poder Heroico</b>\nEvoque dois lacaios 2/1.",
+    "itIT": "<b>Potere Eroe</b>\nEvoca due servitori 2/1.",
+    "plPL": "<b>Moc specjalna</b>\nPrzyzwij dwóch stronników 2/1."
+   }
+  },
+  "VAN_EX1_304": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Destroy the minions on either side of this minion and gain their Attack and Health.",
+    "ruRU": "<b>Боевой клич:</b> уничтожает существа по обе стороны от себя и получает их атаку и здоровье.",
+    "deDE": "<b>Kampfschrei:</b> Vernichtet die benachbarten Diener und verleiht ihm deren Angriff und Leben.",
+    "frFR": "<b>Cri de guerre :</b> détruit les serviteurs adjacents et gagne leurs points d’Attaque et de Vie.",
+    "esES": "<b>Grito de batalla:</b> Destruye a los esbirros adyacentes y obtiene su ataque y salud.",
+    "ptBR": "<b>Grito de Guerra:</b> Destrua os lacaios dos dois lados deste e receba o Ataque e a Vida deles.",
+    "itIT": "<b>Grido di Battaglia:</b> distrugge i servitori adiacenti e ne ottiene Attacco e Salute.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zniszcz sąsiadujących z nim stronników, a zyska ich atak oraz zdrowie."
+   }
+  },
+  "VAN_EX1_509": {
+   "text": {
+    "enUS": "Whenever a Murloc is summoned, gain +1 Attack.",
+    "ruRU": "Получает +1 к атаке каждый раз, когда на поле боя призывается мурлок.",
+    "deDE": "Erhält jedes Mal +1 Angriff, wenn ein Murloc herbeigerufen wird.",
+    "frFR": "Chaque fois qu’un murloc est invoqué, gagne\n+1 ATQ.",
+    "esES": "Obtiene +1 p. de ataque cada vez que se invoca a un múrloc.",
+    "ptBR": "Sempre que um Murloc for evocado, receba +1 de Ataque.",
+    "itIT": "Ottiene +1 Attacco quando viene evocato un Murloc.",
+    "plPL": "Otrzymuje +1 do ataku za każdym razem, gdy zostaje przyzwany Murlok."
+   }
+  },
+  "VAN_HERO_02bp2": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\nSummon a Totem of your choice.",
+    "ruRU": "<b>Сила героя</b>\n Призывает на поле боя выбранный тотем.",
+    "deDE": "<b>Heldenfähigkeit</b>\nBeschwört ein Totem Eurer Wahl.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInvoque un totem de votre choix.",
+    "esES": "<b>Poder de héroe</b>\nInvoca un tótem de tu elección.",
+    "ptBR": "<b>Poder Heroico</b>\nEvoque um Totem à sua escolha.",
+    "itIT": "<b>Potere Eroe</b>\nEvoca un Totem a tua scelta.",
+    "plPL": "<b>Moc specjalna</b>\nPrzyzwij wybrany przez siebie Totem."
+   }
+  },
+  "VAN_HERO_08bp2": {
+   "name": {
+    "enUS": "Fireblast Rank 2",
+    "ruRU": "Вспышка огня (ранг 2)",
+    "deDE": "Feuerschlag (Rang 2)",
+    "frFR": "Explosion de feu rang 2",
+    "esES": "Explosión de Fuego II",
+    "ptBR": "Impacto Ígneo Grau 2",
+    "itIT": "Detonazione Esplosiva",
+    "plPL": "Ognisty Pocisk (Ranga 2)"
+   }
+  }
+ },
  "sources": [
-  "~/ClassicHS-local/prep/patches/versions.json 3.1.0.10357"
+  "~/ClassicHS-local/prep/patches/versions.json 3.1.0.10357 (Demonfuse race, Sapling class, Illuminator text)",
+  "HearthstoneJSON 9786 -> 10357: names and texts (build/m2/draft.py tgt 9786 10357, tools/extract_cards.py --version-texts 10357)"
  ]
 }
