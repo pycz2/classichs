@@ -5,7 +5,7 @@
 // The game's own bot thinks in a Web Worker with its own instance of the module, so the
 // page never stops while it thinks: think_start(request) -> id, think_result(id) -> the
 // reply, or "" while it still thinks (game/bot_brain.gd). The same module decodes the game's .opus
-// audio: decode_opus (game/opus.gd).
+// audio: decode_opus (game/opus.gd), and checks game packs: pack_begin … (game/pack_install.gd).
 (function () {
   const api = { ready: false, error: "" };
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -74,14 +74,70 @@
     return opusOut(r);
   };
 
+  // --- checking a game pack (game/pack_install.gd): the file comes over in pieces (base64, a few a
+  // frame), then a worker of its own checks it (rust/engine pack::check_zip_from) and goes away with
+  // its memory. pack_begin(size) -> id, pack_add(id, b64), pack_run(id), pack_result(id) -> "" while
+  // it runs, then the reply ({content_hash, rules_hash} or {error}).
+  function packCheck(x, b) {  // (the worker's too: WORKER takes its source)
+    const p = x.alloc(b.length);
+    new Uint8Array(x.memory.buffer, p, b.length).set(b);
+    x.pack_check(p, b.length);
+    x.dealloc(p, b.length);
+    return new TextDecoder().decode(new Uint8Array(x.memory.buffer, x.out_ptr(), x.out_len()));
+  }
+  let workerUrl = null;
+  const packs = {};
+  api.pack_begin = function (size) {
+    const id = ++nextId;
+    packs[id] = { buf: new Uint8Array(Number(size)), at: 0, out: "" };
+    return id;
+  };
+  api.pack_add = function (id, b64) {
+    const j = packs[id], s = atob(String(b64));
+    if (!j || !j.buf) return;
+    if (j.at + s.length > j.buf.length) {
+      j.out = JSON.stringify({ error: "the file grew while it was read" });
+      return;
+    }
+    for (let i = 0; i < s.length; i++) j.buf[j.at + i] = s.charCodeAt(i);
+    j.at += s.length;
+  };
+  api.pack_run = function (id) {
+    const j = packs[id];
+    if (!j || !j.buf) return;
+    const b = j.at === j.buf.length ? j.buf : j.buf.slice(0, j.at);
+    j.buf = null;
+    const done = (out) => { j.out = out || JSON.stringify({ error: "the check stopped" }); };
+    if (!workerUrl) {  // no workers: on the page, in an instance of its own
+      WebAssembly.instantiate(opusModule, imports).then((i) => done(packCheck(i.exports, b)), (e) => done(JSON.stringify({ error: String(e) })));
+      return;
+    }
+    const w = new Worker(workerUrl);
+    w.onmessage = (e) => { done(e.data.out); w.terminate(); };
+    w.onerror = () => { done(); w.terminate(); };
+    w.postMessage({ module: opusModule });
+    w.postMessage({ id: id, pack: b.buffer }, [b.buffer]);
+  };
+  api.pack_result = function (id) {
+    const j = packs[id];
+    if (!j || !j.out) return "";
+    delete packs[id];
+    return j.out;
+  };
+
   // --- the bot's worker ---
   const WORKER = `
     const enc = new TextEncoder(), dec = new TextDecoder();
     let ex = null, queue = [];
     ${opusDecode.toString()}
+    ${packCheck.toString()}
     function run(m) {
       let out;
       try {
+        if (m.pack !== undefined) {  // a game pack: this worker is its own and goes after it
+          postMessage({ id: m.id, out: packCheck(ex, new Uint8Array(m.pack)) });
+          return;
+        }
         if (m.b64 !== undefined) {  // an .opus file (its samples move to the page, not copied)
           out = opusDecode(ex, m.b64);
           postMessage({ id: m.id, out: out }, out.pcm ? [out.pcm] : []);
@@ -94,7 +150,7 @@
         ex.dealloc(p, b.length);
         out = dec.decode(new Uint8Array(ex.memory.buffer, ex.out_ptr(), ex.out_len()));
       } catch (e) {  // a trap: a fresh instance next time
-        out = m.b64 !== undefined ? { error: "crashed: " + e } : JSON.stringify({ ok: false, error: "the bot crashed: " + e });
+        out = m.b64 !== undefined ? { error: "crashed: " + e } : JSON.stringify({ ok: false, error: (m.pack ? "the check" : "the bot") + " crashed: " + e });
         ex = null;
         WebAssembly.instantiate(self.mod, { env: { chs_now_ms: () => performance.now() } }).then((i) => { ex = i.exports; });
       }
@@ -133,6 +189,7 @@
     .then((mod) => {
       try {
         const url = URL.createObjectURL(new Blob([WORKER], { type: "text/javascript" }));
+        workerUrl = url;
         worker = new Worker(url);
         worker.onmessage = (e) => { results[e.data.id] = e.data.out; };
         worker.postMessage({ module: mod });
@@ -140,7 +197,7 @@
         opusWorker.onmessage = (e) => { opusJobs[e.data.id] = e.data.out; };
         opusWorker.postMessage({ module: mod });
       } catch (e) {
-        worker = opusWorker = null;  // (no workers: the bot thinks and the music decodes on the page)
+        worker = opusWorker = workerUrl = null;  // (no workers: the bot thinks and the music decodes on the page)
       }
       opusModule = mod;
       return Promise.all([WebAssembly.instantiate(mod, imports), WebAssembly.instantiate(mod, imports)]);

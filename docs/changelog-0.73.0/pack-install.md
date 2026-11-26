@@ -1,0 +1,5 @@
+ru: Игра с сервера, из файла или от соперника по коду ставится в фоне и больше не зависает на 99%: проверка пакета размером 60 МБ занимает десятые доли секунды вместо 7–19 секунд. Пока игра ставится, можно уйти с экрана или сыграть партию, а маленькая плашка на любом экране показывает этап: получение, проверка, сохранение. Несколько игр ставятся по очереди.
+ru: При загрузке своей игры на сервер (и в панели администратора) видны этапы сервера: получение, проверка, пробная партия, сохранение. Сервер проверяет пакет за одно чтение каждого файла.
+
+en: A game from a server, from a file or from your opponent over code play now installs in the background and no longer hangs at 99%: checking a 60 MB pack takes a fraction of a second instead of 7–19 seconds. Meanwhile you can leave the screen or play a match; a small box on every screen shows the stage (receiving, checking, storing). Several games install one after another.
+en: Uploading your own game to a server (and in the admin panel) shows the server's stages: receiving, checking, the trial game, storing. The server checks a pack in one read of each file.

@@ -40,10 +40,19 @@ function Switch ({ on, onChange, label, busy }) {
     class=${'switch' + (on ? ' on' : '')} onClick=${() => onChange(!on)}><i></i></button>`
 }
 
-/** Drop .cardpack files here (or anywhere on the page) or pick them; uploads one by one with progress. */
+/** The server's stages of taking a pack (server/src/packs.rs STAGES), as the game shows them too. */
+const STAGES = { receiving: 'Receiving', checking: 'Checking', trial: 'Trial game', storing: 'Storing', done: 'Done' }
+
+/** Drop .cardpack files here (or anywhere on the page) or pick them; uploads one by one with the
+ * server's stages: receiving (with a bar), checking, the trial game, storing, done. */
 function DropZone ({ limit, onDone }) {
   const [over, setOver] = useState(false)
-  const [job, setJob] = useState(null) // {name, i, n, p}
+  const [job, setJob] = useState(null) // {name, i, n, p, id, stage}
+  useEffect(() => {
+    const on = ({ detail: e }) => setJob((j) => j && j.id === e.upload ? { ...j, stage: e.stage, p: e.stage === 'receiving' && e.total ? e.done / e.total : j.p } : j)
+    addEventListener('pack_stage', on)
+    return () => removeEventListener('pack_stage', on)
+  }, [])
   const input = useRef(null)
   const depth = useRef(0)
   const send = async (files) => {
@@ -53,9 +62,10 @@ function DropZone ({ limit, onDone }) {
       const f = files[i]
       if (!/\.(cardpack|zip)$/i.test(f.name)) { toast(f.name + ': not a .cardpack', 'err'); continue }
       if (limit && f.size > limit) { toast(`${f.name}: over ${bytes(limit)}`, 'err'); continue }
-      setJob({ name: f.name, i, n: files.length, p: 0 })
+      const id = Math.random().toString(36).slice(2)
+      setJob({ name: f.name, i, n: files.length, p: 0, id, stage: 'receiving' })
       try {
-        const r = await upload('packs', f, (p) => setJob((j) => j && { ...j, p }))
+        const r = await upload('packs', f, (p) => setJob((j) => j && { ...j, p: Math.max(j.p, p) }), id)
         toast(`${title(r.pack)} ${r.pack.version} is on the server`)
       } catch (err) { toast(`${f.name}: ${err.message}`, 'err') }
     }
@@ -78,7 +88,9 @@ function DropZone ({ limit, onDone }) {
     ${job
       ? html`<div class="dz-text"><b>Uploading ${job.name}</b>${job.n > 1 ? html` <span class="muted">(${job.i + 1} of ${job.n})</span>` : ''}
           <div class="progress"><i style=${`width:${Math.round(job.p * 100)}%`}></i></div>
-          <span class="muted small">${job.p < 1 ? Math.round(job.p * 100) + ' %' : 'Checking and storing…'}</span></div>`
+          <span class="muted small">${Object.keys(STAGES).map((s) => s === job.stage
+            ? html`<b>${STAGES[s]}${s === 'receiving' ? ' ' + Math.round(job.p * 100) + ' %' : '…'}</b>`
+            : STAGES[s]).reduce((a, b) => [...a, ' · ', b], []).slice(1)}</span></div>`
       : html`<div class="dz-text"><b>${over ? 'Drop to upload' : 'Drop .cardpack files here'}</b>
           <span class="muted">or <span class="link">choose files</span> · up to ${bytes(limit)} · enabled for players at once</span></div>`}
   </div>`

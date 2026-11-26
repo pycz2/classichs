@@ -122,6 +122,9 @@ func test_missing_pack_is_offered_sent_installed_and_played() -> void:
 	var chunks := ceili(v.size / float(NetSession.CHUNK))
 	eq(p.sent.size(), chunks, "one chunk per ack")
 	eq(p.got.back() if p.got.size() else [], [v.size, v.size], "all bytes came")
+	check(p.m[1] == null and PackInstall.jobs.size() == 1, "checked in the background first")
+	H.installs()
+	LoopbackTransport.pump(p.t)
 	check(FileAccess.file_exists(Packs.user_dir + "/" + want + ".cardpack"), "installed in the packs folder")
 	var got := Packs.find(want)
 	check(got != null and got.origin == "p2p", "known as received")
@@ -196,10 +199,12 @@ func test_damaged_pack_is_refused() -> void:
 	var p := _pair(v)
 	p.g.accept_pack()
 	LoopbackTransport.pump(p.t)
+	H.installs()
+	LoopbackTransport.pump(p.t)
 	eq(p.fail[1], [str(TranslationServer.translate(NetSession.DAMAGED))], "the guest")
 	eq(p.fail[0], [str(TranslationServer.translate(NetSession.BYE_TEXT.pack))], "the host is told")
 	eq(Packs.all().filter(func(pk): return not pk.builtin()), [], "nothing installed")
-	check(not FileAccess.file_exists(Packs.user_dir + "/incoming.tmp"), "no leftovers")
+	eq(Array(DirAccess.get_files_at(Packs.user_dir)).filter(func(f): return f.ends_with(".tmp")), [], "no leftovers")
 	_free(p)
 
 
@@ -239,6 +244,8 @@ func test_online_view_asks_then_shows_the_transfer() -> void:
 	check(b != null, "a Download button")
 	if b:
 		b.pressed.emit()
+	LoopbackTransport.pump(t)
+	H.installs()
 	LoopbackTransport.pump(t)
 	check(seen.size() > 1 and seen[0].begins_with("Receiving the game: "), str(seen.slice(0, 2)))
 	eq(v.state, "playing", "the game started")

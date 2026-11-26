@@ -38,6 +38,7 @@ static func collect() -> Array:
 	tables.append_array([NetSession.CANCELLED, NetSession.DAMAGED, Rules.NEEDS_ENGINE])
 	tables.append_array(ServerSession.GAME_OVER_TEXT.values())
 	tables.append_array(Rules.MESSAGES)
+	tables.append_array(PackInstall.STAGES.values())
 	tables.append_array(Packs.ERRORS)
 	tables.append_array(GamesView.ORIGINS.values())
 	tables.append_array(PackTools.LEVELS.values())
