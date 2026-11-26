@@ -58,7 +58,8 @@ static func of(card_id: String, lang: String) -> Dictionary:
 ## The biggest text size (SIZES) whose text fits the text box without running into a gem (centred, else at
 ## the top; its lines closer together, or narrower so that the last one clears the gems, when only that makes
 ## it fit), with its own line breaks or, when that gives a bigger size, as one paragraph (the breaks were made
-## for the original card's box); and the biggest name size (12 down to 6) that fits the name box.
+## for the original card's box; a line of keywords alone keeps its own: _joined()); and the biggest name size
+## (12 down to 6) that fits the name box.
 ## args: its "{0}"… in a game (a Jade card's next Golem), fitted anew.
 static func fit(card_id: String, lang: String, args := []) -> Dictionary:
 	var by_card: Dictionary = _fitted.get_or_add(lang, {})
@@ -79,7 +80,7 @@ static func fit(card_id: String, lang: String, args := []) -> Dictionary:
 ## The lines it found are kept (as a written layout's): the card breaks its text the same way at every scale.
 ## laid_out: its breaks were placed for the original card ("[x]"): one paragraph is tried first.
 static func fit_text(rich: String, gems: bool, laid_out := false) -> Dictionary:
-	var ways := [rich, rich.replace("\n", " ")] if rich.contains("\n") else [rich]
+	var ways := [rich, _joined(rich)] if _joined(rich) != rich else [rich]
 	if laid_out:
 		ways.reverse()
 	var sp := []
@@ -102,6 +103,26 @@ static func fit_text(rich: String, gems: bool, laid_out := false) -> Dictionary:
 							return e
 	e = {"text": SIZES[-1], "valign": "top", "tight": true, "lines": _lines_of(p, sp)}  # (too long for the card)
 	return e
+
+
+## The text as one paragraph, but a line of keywords alone ("Taunt", "Magnetic", "Divine Shield, Taunt") keeps its
+## own line, as on the game's cards; one that leads into the next ("Deathrattle:", "Choose One -") joins it.
+static func _joined(rich: String) -> String:
+	var lines := rich.split("\n")
+	var out := lines[0]
+	var open := 0  # bold still open where a line starts (Zilliax's Spanish keywords, one a line in one bold)
+	for i in range(1, lines.size()):
+		var prev := "[b]".repeat(open) + lines[i - 1]
+		open = maxi(prev.count("[b]") - prev.count("[/b]"), 0)
+		out += ("\n" if _keywords_only(prev) else " ") + lines[i]
+	return out
+
+
+static func _keywords_only(line: String) -> bool:
+	var sp := _spans_of(line)
+	var plain := "".join(sp.map(func(x): return x[0])).strip_edges()
+	return plain != "" and not plain[-1] in [":", "-", "–", "—"] \
+		and sp.all(func(x): return x[1] or x[0].strip_edges() in ["", ".", ",", ";"])
 
 
 ## The lines a paragraph broke its spans into, as rich lines.
@@ -186,21 +207,21 @@ static func entry(card_id: String, lang: String, args := []) -> Dictionary:
 
 static func _spans_of(rich: String) -> Array:
 	var out := []
-	var bold := false
+	var bold := 0  # (bold in bold: Zilliax's "<b>Magnetic</b>\n<b><b>Divine Shield</b>, … Rush</b>" is bold to its end)
 	var i := 0
 	while i < rich.length():
 		var next := rich.find("[", i)
 		if next < 0:
 			next = rich.length()
 		if next > i:
-			out.append([rich.substr(i, next - i), bold])
+			out.append([rich.substr(i, next - i), bold > 0])
 		if next >= rich.length():
 			break
 		var close := rich.find("]", next)
 		match rich.substr(next + 1, close - next - 1):
-			"b": bold = true
-			"/b": bold = false
-			"lb": out.append(["[", bold])
+			"b": bold += 1
+			"/b": bold = maxi(bold - 1, 0)
+			"lb": out.append(["[", bold > 0])
 		i = close + 1
 	return out
 

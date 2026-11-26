@@ -63,3 +63,17 @@ func test_elusive_has_a_keyword_box() -> void:
 	var tips := KeywordTips.make("VAN_NEW1_023")
 	check(tips.get_child_count() >= 1, "and gets its box")
 	tips.free()
+
+
+## A fitted text (a pack without written layouts) may join its lines into one paragraph, but a line of keywords
+## alone keeps its own line, as on the game's cards; a keyword that leads into its text ("Deathrattle:") joins it.
+func test_a_keyword_line_keeps_its_own_line_when_fitted() -> void:
+	var e := CardLayout.fit_text("[b]Taunt[/b]\n[b]Deathrattle:[/b] If you're holding a Dragon, deal 3 damage to all minions.", true)
+	eq(e.lines[0], "[b]Taunt[/b]", "Taunt alone: %s" % [e.lines])
+	check(e.lines[1].begins_with("[b]Deathrattle:[/b] If"), "Deathrattle runs on: %s" % [e.lines])
+	# Zilliax: its second line is bold as a whole (nested bold)
+	e = CardLayout.fit_text("[b]Magnetic[/b]\n[b][b]Divine Shield[/b], [b]Taunt[/b], Lifesteal, Rush[/b]", true)
+	eq(e.lines[0], "[b]Magnetic[/b]", "Magnetic alone: %s" % [e.lines])
+	check(CardLayout._spans_of("\n".join(e.lines)).all(func(x): return x[1] or x[0].strip_edges() == ""), "all of it bold: %s" % [e.lines])
+	e = CardLayout.fit_text("[b]Magnetismo[/b]\n[b][b]Escudo divino[/b]\n[b]Provocar[/b]\nRobo de vida\nEmbestir[/b]", true)
+	eq(e.lines.slice(-2), ["[b]Robo de vida[/b]", "[b]Embestir[/b]"], "a keyword line inside an outer bold: %s" % [e.lines])
