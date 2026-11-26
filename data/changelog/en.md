@@ -4,6 +4,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.74.0] - 2026-11-26
+
+### Added
+- Sub-servers: one server hosts many game servers, each at its own address `/s/<name>` with its own players, games, ladders, tournaments, chats, replays and settings. One account works on every sub-server. An admin invite creates a new sub-server; the super admin sets the quota of sub-servers and the limits (players, packs, storage), a sub-server's admin can only lower them. The super admin's Servers page: the list, suspend, availability, entering any sub-server's panel, delete. A common game library for every sub-server plus each one's own games.
+- Roles and permissions instead of "admin or not": super admin, admin, moderator, viewer and your own roles from a set of permissions. Every admin action checks its permission, the Roles page gives them, the audit log shows who changed what and when.
+- Problem reports from the game: a button with the count of unread answers, a screenshot (up to 10 MB) and a voice message (up to 1 minute), sent at the next login when offline. "My reports" is the thread with the admin, open or closed. The admin panel has the list with unread marks, the thread with pictures and voice, Resolved, Rejected, merging duplicates, delete and purge of old ones, export of one or many reports as zip or JSON, and "Copy for an agent".
+- Tournament chats: a common chat in the tournaments list and one per tournament, "admin" and "creator" marks, a message a moderator deleted stays as "deleted by …", a tournament's chat closes 10 minutes after its end. The admin panel shows the chats and writes in them. Chats and private messages are kept 2 weeks; the super admin sets the time (or unlimited).
+
+### Changed
+- A server address in the game may have a path (`https://server/s/name`).
+- Training remembers Standard or Wild; replays keep the format; Compare versions no longer counts text markup as a change.
+- The server counts the memory of rule sets (448 MB) instead of their number.
+
+### Fixed
+- Blessing of Wisdom draws one card per Blessing, not two. Force of Nature can't be played on a full board. Frostmourne brings back the minion of its last blow. C'Thun brought back by Redemption or Resurrect gets every cultist buff.
+
 ## [0.73.0] - 2026-11-26
 
 ### Added

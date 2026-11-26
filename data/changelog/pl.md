@@ -4,6 +4,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+## [0.74.0] - 2026-11-26
+
+### Dodano
+- Podserwery: jeden serwer mieści wiele serwerów gry, każdy pod swoim adresem `/s/<nazwa>` z własnymi graczami, grami, rankingami, turniejami, czatami, powtórkami i ustawieniami. Jedno konto działa na wszystkich podserwerach. Zaproszenie administratora tworzy nowy podserwer; superadministrator ustala limit podserwerów i ograniczenia (gracze, pakiety, miejsce), administrator podserwera może je tylko obniżyć. Strona „Serwery” superadministratora: lista, zawieszenie, dostępność, wejście do panelu każdego podserwera, usunięcie. Wspólna biblioteka gier dla wszystkich podserwerów plus własne gry każdego z nich.
+- Role i uprawnienia zamiast „administrator albo nie”: superadministrator, administrator, moderator, obserwator i własne role z uprawnień. Każda akcja administracyjna sprawdza swoje uprawnienie, strona „Role” je nadaje, dziennik pokazuje, kto co i kiedy zmienił.
+- Zgłoszenia problemów z gry: przycisk z liczbą nieprzeczytanych odpowiedzi, zrzut ekranu (do 10 MB) i wiadomość głosowa (do 1 minuty), wysyłane przy następnym logowaniu bez sieci. „Moje zgłoszenia” to rozmowa z administratorem, otwarta lub zamknięta. Panel ma listę z nieprzeczytanymi, rozmowę z obrazkami i głosem, Rozwiązane, Odrzucone, łączenie duplikatów, usuwanie i czyszczenie starych, eksport jednego lub wielu do zip lub JSON i „Kopiuj dla agenta”.
+- Czaty turniejowe: wspólny czat na liście turniejów i osobny dla każdego turnieju, oznaczenia „admin” i „twórca”, wiadomość usunięta przez moderatora zostaje jako „usunięte przez …”, czat turnieju zamyka się 10 minut po jego końcu. Panel pokazuje czaty i pisze w nich. Czaty i prywatne wiadomości są przechowywane 2 tygodnie; superadministrator ustala czas (albo bez limitu).
+
+### Zmieniono
+- Adres serwera w grze może mieć ścieżkę (`https://serwer/s/nazwa`).
+- Trening pamięta tryb standardowy lub dziki; powtórki zachowują tryb; „Porównaj wersje” nie liczy już znaczników tekstu jako zmiany.
+- Serwer liczy pamięć zestawów zasad (448 MB) zamiast ich liczby.
+
+### Naprawiono
+- Błogosławieństwo mądrości dobiera jedną kartę za każde błogosławieństwo, nie dwie. Siły natury nie da się zagrać przy pełnym stole. Mroźny Smutek przywraca stronnika swojego ostatniego ciosu. C'Thun przywrócony Odkupieniem lub Wskrzeszeniem dostaje wszystkie wzmocnienia kultystów.
+
 ## [0.73.0] - 2026-11-26
 
 ### Dodano

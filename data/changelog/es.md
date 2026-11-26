@@ -4,6 +4,22 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versiones: [S
 
 ## [Unreleased]
 
+## [0.74.0] - 2026-11-26
+
+### Añadido
+- Subservidores: un servidor aloja muchos servidores de juego, cada uno en su dirección `/s/<nombre>` con sus jugadores, juegos, clasificaciones, torneos, chats, repeticiones y ajustes. Una sola cuenta sirve en todos los subservidores. Una invitación de administrador crea un subservidor nuevo; el superadministrador fija la cuota de subservidores y los límites (jugadores, paquetes, almacenamiento), el administrador de un subservidor solo puede bajarlos. La página «Servidores» del superadministrador: lista, suspensión, disponibilidad, entrar al panel de cualquier subservidor, borrado. Una biblioteca de juegos común para todos los subservidores más los juegos propios de cada uno.
+- Roles y permisos en lugar de «administrador o no»: superadministrador, administrador, moderador, observador y roles propios hechos de permisos. Cada acción de administración comprueba su permiso, la página «Roles» los asigna, el registro muestra quién cambió qué y cuándo.
+- Informes de problemas desde el juego: un botón con el número de respuestas sin leer, una captura (hasta 10 MB) y un mensaje de voz (hasta 1 minuto), enviados en el siguiente inicio de sesión sin conexión. «Mis informes» es el hilo con el administrador, abierto o cerrado. El panel tiene la lista con no leídos, el hilo con imágenes y voz, Resuelto, Rechazado, unir duplicados, borrar y purgar los antiguos, exportar uno o muchos en zip o JSON y «Copiar para un agente».
+- Chats de torneo: un chat común en la lista de torneos y uno por torneo, marcas «admin» y «creador», un mensaje borrado por un moderador queda como «borrado por …», el chat de un torneo se cierra 10 minutos después de su final. El panel muestra los chats y escribe en ellos. Chats y mensajes privados se guardan 2 semanas; el superadministrador fija el plazo (o ilimitado).
+
+### Cambiado
+- La dirección de un servidor en el juego puede llevar ruta (`https://servidor/s/nombre`).
+- El entrenamiento recuerda Estándar o Salvaje; las repeticiones guardan el formato; «Comparar versiones» ya no cuenta el marcado del texto como un cambio.
+- El servidor cuenta la memoria de los conjuntos de reglas (448 MB) en vez de su número.
+
+### Corregido
+- Bendición de sabiduría roba una carta por bendición, no dos. Fuerza de la Naturaleza no se juega con el tablero lleno. Agonía de Escarcha trae de vuelta al esbirro de su último golpe. C'Thun devuelto por Redención o Resurrección recibe todas las mejoras de los cultistas.
+
 ## [0.73.0] - 2026-11-26
 
 ### Añadido

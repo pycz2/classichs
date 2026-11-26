@@ -4,6 +4,22 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.74.0] - 2026-11-26
+
+### Aggiunto
+- Sottoserver: un server ospita molti server di gioco, ognuno al suo indirizzo `/s/<nome>` con i suoi giocatori, giochi, classifiche, tornei, chat, replay e impostazioni. Un solo account vale su tutti i sottoserver. Un invito da amministratore crea un nuovo sottoserver; il superamministratore fissa la quota di sottoserver e i limiti (giocatori, pacchetti, spazio), l’amministratore di un sottoserver può solo abbassarli. La pagina «Server» del superamministratore: elenco, sospensione, disponibilità, accesso al pannello di ogni sottoserver, eliminazione. Una libreria di giochi comune a tutti i sottoserver più i giochi propri di ognuno.
+- Ruoli e permessi invece di «amministratore o no»: superamministratore, amministratore, moderatore, osservatore e ruoli propri fatti di permessi. Ogni azione di amministrazione controlla il suo permesso, la pagina «Ruoli» li assegna, il registro mostra chi ha cambiato cosa e quando.
+- Segnalazioni di problemi dal gioco: un pulsante con il numero di risposte non lette, uno screenshot (fino a 10 MB) e un messaggio vocale (fino a 1 minuto), inviati al login successivo se offline. «Le mie segnalazioni» è la conversazione con l’amministratore, aperta o chiusa. Il pannello ha l’elenco con i non letti, la conversazione con immagini e voce, Risolta, Respinta, unione dei duplicati, eliminazione e pulizia delle vecchie, esportazione di una o molte in zip o JSON e «Copia per un agente».
+- Chat dei tornei: una chat comune nell’elenco dei tornei e una per torneo, segni «admin» e «creatore», un messaggio eliminato da un moderatore resta come «eliminato da …», la chat di un torneo si chiude 10 minuti dopo la fine. Il pannello mostra le chat e ci scrive. Chat e messaggi privati restano 2 settimane; il superamministratore fissa la durata (o illimitata).
+
+### Modificato
+- L’indirizzo di un server nel gioco può avere un percorso (`https://server/s/nome`).
+- L’allenamento ricorda Standard o Selvaggio; i replay conservano il formato; «Confronta versioni» non conta più il markup del testo come modifica.
+- Il server conta la memoria dei set di regole (448 MB) invece del loro numero.
+
+### Corretto
+- Benedizione della Saggezza pesca una carta per benedizione, non due. Forza della Natura non si gioca con il tabellone pieno. Gelidanima riporta in vita il servitore del suo ultimo colpo. C'Thun riportato da Redenzione o Resurrezione riceve tutti i potenziamenti dei cultisti.
+
 ## [0.73.0] - 2026-11-26
 
 ### Aggiunto

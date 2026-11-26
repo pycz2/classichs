@@ -4,6 +4,22 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.74.0] - 2026-11-26
+
+### Ajouté
+- Sous-serveurs : un serveur porte de nombreux serveurs de jeu, chacun à son adresse `/s/<nom>` avec ses joueurs, jeux, classements, tournois, discussions, replays et réglages. Un seul compte sert sur tous les sous-serveurs. Une invitation d’administrateur crée un nouveau sous-serveur ; le super-administrateur fixe le quota de sous-serveurs et les limites (joueurs, paquets, stockage), l’administrateur d’un sous-serveur peut seulement les baisser. La page « Serveurs » du super-administrateur : liste, suspension, disponibilité, accès au panneau de tout sous-serveur, suppression. Une bibliothèque de jeux commune à tous les sous-serveurs plus les jeux propres de chacun.
+- Rôles et permissions au lieu de « admin ou non » : super-administrateur, administrateur, modérateur, observateur et vos propres rôles faits de permissions. Chaque action d’administration vérifie sa permission, la page « Rôles » les attribue, le journal montre qui a changé quoi et quand.
+- Signalements de problèmes depuis le jeu : un bouton avec le nombre de réponses non lues, une capture d’écran (jusqu’à 10 Mo) et un message vocal (jusqu’à 1 minute), envoyés à la connexion suivante hors ligne. « Mes signalements » est le fil avec l’administrateur, ouvert ou fermé. Le panneau a la liste avec les non-lus, le fil avec images et voix, Résolu, Rejeté, fusion des doublons, suppression et purge des anciens, export d’un ou de plusieurs en zip ou JSON et « Copier pour un agent ».
+- Discussions de tournoi : une discussion commune dans la liste des tournois et une par tournoi, marques « admin » et « créateur », un message supprimé par un modérateur reste comme « supprimé par … », la discussion d’un tournoi se ferme 10 minutes après sa fin. Le panneau montre les discussions et y écrit. Discussions et messages privés sont gardés 2 semaines ; le super-administrateur fixe la durée (ou illimitée).
+
+### Modifié
+- L’adresse d’un serveur dans le jeu peut avoir un chemin (`https://serveur/s/nom`).
+- L’entraînement retient Standard ou Libre ; les replays gardent le format ; « Comparer les versions » ne compte plus le balisage du texte comme un changement.
+- Le serveur compte la mémoire des jeux de règles (448 Mo) au lieu de leur nombre.
+
+### Corrigé
+- Bénédiction de sagesse pioche une carte par bénédiction, pas deux. Force de la nature ne se joue pas sur un plateau plein. Deuillegivre ramène le serviteur de son dernier coup. C’Thun ramené par Rédemption ou Résurrection reçoit toutes les améliorations des cultistes.
+
 ## [0.73.0] - 2026-11-26
 
 ### Ajouté

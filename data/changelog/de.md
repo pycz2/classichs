@@ -4,6 +4,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.74.0] - 2026-11-26
+
+### Hinzugefügt
+- Unterserver: Ein Server trägt viele Spielserver, jeder unter seiner Adresse `/s/<Name>` mit eigenen Spielern, Spielen, Ranglisten, Turnieren, Chats, Aufzeichnungen und Einstellungen. Ein Konto gilt für alle Unterserver. Eine Admin-Einladung erstellt einen neuen Unterserver; der Super-Admin legt das Kontingent an Unterservern und die Grenzen fest (Spieler, Pakete, Speicher), der Admin eines Unterservers kann sie nur senken. Die Seite „Server“ des Super-Admins: Liste, Sperren, Verfügbarkeit, Zugang zum Bereich jedes Unterservers, Löschen. Eine gemeinsame Spielebibliothek für alle Unterserver plus die eigenen Spiele jedes einzelnen.
+- Rollen und Rechte statt „Admin oder nicht“: Super-Admin, Admin, Moderator, Beobachter und eigene Rollen aus Rechten. Jede Admin-Aktion prüft ihr Recht, die Seite „Rollen“ vergibt sie, das Protokoll zeigt, wer was wann geändert hat.
+- Problemmeldungen aus dem Spiel: ein Knopf mit der Zahl ungelesener Antworten, ein Screenshot (bis 10 MB) und eine Sprachnachricht (bis 1 Minute), ohne Netz beim nächsten Login gesendet. „Meine Meldungen“ ist der Verlauf mit dem Admin, offen oder geschlossen. Der Adminbereich hat die Liste mit Ungelesenen, den Verlauf mit Bildern und Stimme, „Gelöst“, „Abgelehnt“, Zusammenführen von Duplikaten, Löschen und Aufräumen alter Meldungen, Export einer oder vieler als zip oder JSON und „Für einen Agenten kopieren“.
+- Turnier-Chats: ein gemeinsamer Chat in der Turnierliste und einer pro Turnier, Markierungen „Admin“ und „Ersteller“, eine von einem Moderator gelöschte Nachricht bleibt als „gelöscht von …“, der Chat eines Turniers schließt 10 Minuten nach dessen Ende. Der Adminbereich zeigt die Chats und schreibt darin. Chats und Privatnachrichten werden 2 Wochen aufbewahrt; die Dauer (oder unbegrenzt) legt der Super-Admin fest.
+
+### Geändert
+- Eine Serveradresse im Spiel darf einen Pfad haben (`https://server/s/name`).
+- Das Training merkt sich Standard oder Wild; Aufzeichnungen behalten das Format; „Versionen vergleichen“ zählt Textauszeichnung nicht mehr als Änderung.
+- Der Server zählt den Speicher der Regelsätze (448 MB) statt ihrer Anzahl.
+
+### Behoben
+- Segen der Weisheit zieht eine Karte pro Segen, nicht zwei. Naturgewalt lässt sich nicht auf vollem Spielfeld spielen. Frostgram holt den Diener seines letzten Schlags zurück. C'Thun, durch Erlösung oder Wiederbelebung zurückgeholt, bekommt alle Kultistenbuffs.
+
 ## [0.73.0] - 2026-11-26
 
 ### Hinzugefügt

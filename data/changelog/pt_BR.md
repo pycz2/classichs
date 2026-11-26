@@ -4,6 +4,22 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.74.0] - 2026-11-26
+
+### Adicionado
+- Subservidores: um servidor hospeda muitos servidores de jogo, cada um no seu endereço `/s/<nome>` com seus jogadores, jogos, rankings, torneios, chats, replays e configurações. Uma conta só vale em todos os subservidores. Um convite de administrador cria um subservidor novo; o superadministrador define a cota de subservidores e os limites (jogadores, pacotes, armazenamento), o administrador de um subservidor só pode baixá-los. A página "Servidores" do superadministrador: lista, suspensão, disponibilidade, entrar no painel de qualquer subservidor, exclusão. Uma biblioteca de jogos comum a todos os subservidores mais os jogos próprios de cada um.
+- Papéis e permissões em vez de "admin ou não": superadministrador, administrador, moderador, observador e papéis próprios feitos de permissões. Cada ação de administração verifica sua permissão, a página "Papéis" os concede, o registro mostra quem mudou o quê e quando.
+- Relatos de problemas pelo jogo: um botão com o número de respostas não lidas, uma captura de tela (até 10 MB) e uma mensagem de voz (até 1 minuto), enviados no próximo login quando offline. "Meus relatos" é a conversa com o administrador, aberta ou fechada. O painel tem a lista com não lidos, a conversa com imagens e voz, Resolvido, Rejeitado, juntar duplicados, excluir e limpar os antigos, exportar um ou muitos em zip ou JSON e "Copiar para um agente".
+- Chats de torneio: um chat comum na lista de torneios e um por torneio, marcas "admin" e "criador", uma mensagem apagada por um moderador fica como "apagada por …", o chat de um torneio fecha 10 minutos depois do fim. O painel mostra os chats e escreve neles. Chats e mensagens privadas ficam guardados 2 semanas; o superadministrador define o prazo (ou ilimitado).
+
+### Alterado
+- O endereço de um servidor no jogo pode ter caminho (`https://servidor/s/nome`).
+- O treino lembra Padrão ou Livre; os replays guardam o formato; "Comparar versões" não conta mais a marcação do texto como mudança.
+- O servidor conta a memória dos conjuntos de regras (448 MB) em vez do número deles.
+
+### Corrigido
+- Bênção da Sabedoria compra uma carta por bênção, não duas. Força da Natureza não pode ser jogada com o campo cheio. Gélido Lamento traz de volta o lacaio do seu último golpe. C'Thun trazido de volta por Redenção ou Ressurreição recebe todos os bônus dos cultistas.
+
 ## [0.73.0] - 2026-11-26
 
 ### Adicionado
