@@ -155,8 +155,9 @@ function App () {
     onUnauthorized(() => setMe(null))
     api('me').then((m) => { setCsrf(m.csrf); setMe(m) }, () => setMe(null))
   }, [])
+  // an admin invite's link (#/claim?key=…), logged in or not
+  if (location.hash.startsWith('#/claim')) return html`<${Claim} />`
   if (me === undefined) return html`<div class="boot"><span class="logo pulse">◆</span></div>`
-  if (!me && location.hash.startsWith('#/claim')) return html`<${Claim} />`
   if (!me) return html`<${Login} onIn=${(m) => { setCsrf(m.csrf); setMe(m) }} />`
   const logout = async () => {
     try { await api('logout', { method: 'POST' }) } catch (e) { toast(e.message, 'err') }

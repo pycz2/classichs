@@ -70,10 +70,10 @@ export function Subservers () {
         <td><b>${s.title}</b> <span class="muted">/s/${s.name}</span></td>
         <td>${STATES[s.state] || s.state}</td>
         <td>${s.owner ? html`${s.owner.user} <span class="muted small">(quota ${s.owner.quota})</span>` : html`<span class="muted">—</span>`}</td>
-        <td class="num">${s.players} <span class="muted">/ ${s.limits.players}</span></td>
+        <td class="num">${s.players} ${s.id ? html`<span class="muted">/ ${s.limits.players}</span>` : ''}</td>
         <td class="num">${s.online}</td>
-        <td class="num">${s.packs} <span class="muted">/ ${s.limits.packs}</span></td>
-        <td class="num nowrap">${bytes(s.storage)} <span class="muted">/ ${s.limits.storage_mb} MB</span></td>
+        <td class="num">${s.packs} ${s.id ? html`<span class="muted">/ ${s.limits.packs}</span>` : ''}</td>
+        <td class="num nowrap">${bytes(s.storage)} ${s.id ? html`<span class="muted">/ ${s.limits.storage_mb} MB</span>` : ''}</td>
         <td class="muted nowrap" title=${fullDate(s.created * 1000)}>${ago(s.created * 1000)}</td>
         <td class="right-cell nowrap">
           <a class="btn ghost sm" href=${s.id === 0 ? '/admin' : '/s/' + s.name + '/admin'}>Enter</a>
