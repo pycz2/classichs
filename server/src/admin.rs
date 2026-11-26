@@ -74,12 +74,14 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/ws", get(feed))
         .merge(crate::admin_extra::routes())
         .merge(crate::admin_players::routes())
+        .merge(crate::subservers::routes())
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
         .route("/admin", get(index))
         .route("/admin/", get(|| async { Redirect::permanent("/admin") }))
         .route("/admin/static/{*path}", get(asset))
         .route("/admin/api/login", post(login))
+        .merge(crate::subservers::public_routes())
         .merge(guarded)
         .layer(middleware::map_response(security_headers))
 }
@@ -200,7 +202,7 @@ fn set_cookie(headers: &HeaderMap, value: &str, max_age: i64) -> String {
 
 /// A request a browser sends from another site carries its Origin: refuse it (cross-site
 /// WebSocket hijacking, CSRF). Requests without Origin (same-origin GETs, tools) pass.
-fn origin_ok(app: &App, h: &HeaderMap) -> bool {
+pub(crate) fn origin_ok(app: &App, h: &HeaderMap) -> bool {
     let Some(origin) = h.get(header::ORIGIN).and_then(|o| o.to_str().ok()) else { return true };
     let fwd = if app.trust_proxy { h.get("x-forwarded-host") } else { None };
     let host = fwd.or(h.get(header::HOST)).and_then(|v| v.to_str().ok());

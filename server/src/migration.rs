@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(M20)]
     }
 }
 
@@ -967,6 +967,66 @@ impl MigrationName for M14 {
 impl MigrationTrait for M14 {
     async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
         m.get_connection().execute_unprepared("ALTER TABLE standings ADD COLUMN best INTEGER NOT NULL DEFAULT -1").await?;
+        Ok(())
+    }
+}
+
+/// FOUNDATION: a cut-down stand-in of the foundation's M15 (the sub-server, role, audit and member tables, the packs'
+/// `subserver`); the lead takes the foundation's at merge.
+struct M15;
+
+impl MigrationName for M15 {
+    fn name(&self) -> &str {
+        "m20261126_000015_subservers_roles"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M15 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        for sql in [
+            "CREATE TABLE subserver (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, title TEXT NOT NULL, owner INTEGER, \
+             state TEXT NOT NULL DEFAULT 'active', limits TEXT NOT NULL DEFAULT '{}', created INTEGER NOT NULL)",
+            "INSERT INTO subserver (id, name, title, owner, state, limits, created) VALUES (0, 'main', 'Main', NULL, 'active', '{}', CAST(strftime('%s','now') AS INTEGER))",
+            "ALTER TABLE packs ADD COLUMN subserver INTEGER NOT NULL DEFAULT 0",
+            "CREATE TABLE role (id INTEGER PRIMARY KEY, subserver INTEGER, name TEXT NOT NULL, perms TEXT NOT NULL, builtin INTEGER NOT NULL DEFAULT 0)",
+            "CREATE TABLE account_role (account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE, \
+             role INTEGER NOT NULL REFERENCES role(id) ON DELETE CASCADE, subserver INTEGER, PRIMARY KEY (account, role))",
+            "CREATE TABLE audit (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, account INTEGER NOT NULL, subserver INTEGER NOT NULL, \
+             action TEXT NOT NULL, target TEXT NOT NULL, before TEXT NOT NULL, after TEXT NOT NULL)",
+            "CREATE TABLE member (account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE, subserver INTEGER NOT NULL, \
+             joined INTEGER NOT NULL, suspended INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (subserver, account))",
+        ] {
+            c.execute_unprepared(sql).await?;
+        }
+        c.execute_unprepared(&format!("INSERT INTO role (subserver, name, perms, builtin) VALUES (NULL, '{}', '[\"*\"]', 1)", crate::perm::SUPER_ADMIN)).await?;
+        crate::subservers::builtin_roles(c, 0).await
+    }
+}
+
+/// Sub-server management (0.74; docs/superpowers/specs/2026-11-26-roles-subservers-design.md §5): the admin invites
+/// (registering or logging in with one makes a new sub-server of that account) and the sub-server quota per account.
+struct M20;
+
+impl MigrationName for M20 {
+    fn name(&self) -> &str {
+        "m20261126_000020_subserver_mgmt"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M20 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        for sql in [
+            "CREATE TABLE admin_invite (id INTEGER PRIMARY KEY, key TEXT NOT NULL UNIQUE, note TEXT, created INTEGER NOT NULL, \
+             created_by INTEGER, created_by_name TEXT NOT NULL, revoked INTEGER NOT NULL DEFAULT 0, used_by INTEGER, used_at INTEGER, \
+             subserver INTEGER)",
+            "CREATE TABLE subserver_quota (account INTEGER PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE, quota INTEGER NOT NULL)",
+        ] {
+            c.execute_unprepared(sql).await?;
+        }
         Ok(())
     }
 }

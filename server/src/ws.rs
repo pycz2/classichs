@@ -1221,6 +1221,10 @@ impl Session {
 
     async fn logged_in(&mut self, id: i64, token: Option<String>, via: &str) -> R {
         let db = &self.app.db;
+        // a suspended, unavailable or full sub-server (FOUNDATION: `self.sub`)
+        if let Err((code, text)) = crate::subservers::may_enter(&self.app, 0, id).await? {
+            return Err(E(code, text, None));
+        }
         let token = match token {
             Some(t) => t,
             None => db::new_session(db, id, "game", auth::TOKEN_DAYS * 86400, "").await?,

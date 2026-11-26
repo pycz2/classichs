@@ -570,6 +570,10 @@ pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>, sta
     if !app.store.exists(&hash).await.map_err(store_err)? {
         app.store.put_file(&hash, file).await.map_err(store_err)?;
     }
+    // the sub-server's limits (FOUNDATION: the foundation's `sub` argument of `add`)
+    if let Err(m) = crate::subservers::pack_room(app, 0, size as i64).await? {
+        return Err(PackErr::new(StatusCode::CONFLICT, "limit", m));
+    }
     let tx = app.db.begin().await?;
     if let Some(o) = owner {
         if pack::Entity::find().filter(pack::Column::Owner.eq(o)).count(&tx).await? >= MAX_PER_PLAYER {

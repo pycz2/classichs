@@ -14,12 +14,14 @@ pub mod events;
 pub mod game;
 pub mod migration;
 pub mod packs;
+pub mod perm; // FOUNDATION: stand-in
 pub mod ranked;
 pub mod settings;
 pub mod replays;
 pub mod spectate;
 pub mod stats;
 pub mod storage;
+pub mod subservers;
 pub mod tournament;
 pub mod ws;
 
