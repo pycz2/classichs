@@ -1191,8 +1191,10 @@ class ErasUngoro(unittest.TestCase):
     def test_18336_is_the_ungoro_pack_with_the_msg_fixes(self):
         ungoro, _ = pack.build(pack.REPO / "packs/ungoro")
         view = pack.version_view(self.files, "18336")
-        # the ungoro pack still has the Mistcaller and Potion of Polymorph of before 15590 and 17720: the fixes go along
-        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua"]
+        # the ungoro pack still has the Servant of Yogg-Saron, Mistcaller and Potion of Polymorph of before 15181, 15590 and
+        # 17720: the fixes go along
+        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua",
+                 "scripts/version/servant_of_yogg_saron.lua"]
         self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p) and p not in fixes},
                          {p: d for p, d in ungoro.items() if pack.is_version_file(p)})
         for vid in ("18336", "19506", "19632", "20022"):
@@ -1247,9 +1249,10 @@ class ErasMsg(unittest.TestCase):
                 if pack.is_version_file(p) and not p.startswith("scripts/"):
                     self.assertEqual(views[vid].get(p), d, f"{vid} {p}")
         scripts = {vid: sorted(p for p in v if p.startswith("scripts/version/")) for vid, v in views.items()}
-        self.assertEqual(scripts, {"15590": ["scripts/version/kabal_chemist.lua", "scripts/version/mistcaller.lua"],
-                                   "16214": ["scripts/version/mistcaller.lua"],
-                                   "17720": ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua"]})
+        S = "scripts/version/servant_of_yogg_saron.lua"  # 15181's fix: the msg pack keeps og.lua's Servant
+        self.assertEqual(scripts, {"15590": ["scripts/version/kabal_chemist.lua", "scripts/version/mistcaller.lua", S],
+                                   "16214": ["scripts/version/mistcaller.lua", S],
+                                   "17720": ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua", S]})
 
     def test_17720_nerfs_small_time_buccaneer_and_spirit_claws(self):
         for vid, hp, cost in (("16214", 2, 1), ("17720", 1, 2)):
@@ -1293,8 +1296,10 @@ class ErasIcc(unittest.TestCase):
     def test_20457_is_the_frozen_throne_pack_with_the_msg_fixes(self):
         icc, _ = pack.build(pack.REPO / "packs/icc")
         view = pack.version_view(self.files, "20457")
-        # the icc pack still has the Mistcaller and Potion of Polymorph of before 15590 and 17720: the fixes go along
-        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua"]
+        # the icc pack still has the Servant of Yogg-Saron, Mistcaller and Potion of Polymorph of before 15181, 15590 and
+        # 17720: the fixes go along
+        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua",
+                 "scripts/version/servant_of_yogg_saron.lua"]
         self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p) and p not in fixes},
                          {p: d for p, d in icc.items() if pack.is_version_file(p)})
         for vid in ("20457", "20970", "21517", "22115"):
@@ -1375,6 +1380,88 @@ class ErasIcc(unittest.TestCase):
                          "<b>Poder de héroe</b>\nObtienes +2 p. de ataque este turno y +2 p. de armadura.")
         self.assertEqual(self.card("22115", "VAN_HERO_06bp2")[1]["es"]["text"],
                          self.card("22115", "AT_132_DRUID")[1]["es"]["text"])
+
+
+class ErasKara(unittest.TestCase):
+    """packs/eras, the One Night in Karazhan era (base packs/kara): 13921, 14366, 14830, 15181."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.files, cls.report = pack.build(pack.REPO / "packs/eras")
+        cls.man = json.loads(cls.files["manifest.json"])
+        cls.views = {}
+
+    def view(self, vid):
+        if vid not in self.views:
+            self.views[vid] = pack.version_view(self.files, vid)
+        return self.views[vid]
+
+    def card(self, vid, cid):
+        v = self.view(vid)
+        c = next(c for c in json.loads(v["cards.json"]) if c["id"] == cid)
+        return c, {lang: json.loads(v[f"locales/{lang}.json"])["cards"][cid] for lang in self.man["locales"]}
+
+    def test_the_versions_are_listed(self):
+        self.assertEqual(self.report.errors, [])
+        vs = {v["id"]: v for v in self.man["versions"]}
+        for vid in ("13921", "14366", "14830", "15181"):
+            self.assertEqual((vs[vid]["era"], vs[vid]["formats"]), ("kara", ["standard", "wild"]), vid)
+        self.assertEqual(vs["14830"]["name"]["ru"], "Ослаблены Йогг-Сарон, Зов лесов, Рывок и ещё четыре карты")
+
+    def test_13921_is_the_karazhan_pack(self):
+        kara, _ = pack.build(pack.REPO / "packs/kara")
+        view = self.view("13921")
+        self.assertEqual(pack.rules_hash(view), pack.rules_hash(kara))
+        self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p)},
+                         {p: d for p, d in kara.items() if pack.is_version_file(p)})
+
+    def test_14366_fixes_texts_only(self):
+        self.assertEqual(pack.rules_hash(self.view("14366")), pack.rules_hash(self.view("13921")))
+        old, new = self.card("13921", "GVG_107")[1], self.card("14366", "GVG_107")[1]
+        self.assertTrue(old["en"]["text"].endswith("<b>Divine Shield</b>.\n<i>(at random)</i>"))
+        self.assertTrue(new["en"]["text"].endswith("<b>Divine Shield</b>\n<i>(at random)</i>."))
+        self.assertTrue(new["fr"]["text"].endswith("<i>(au hasard)</i>."))
+        self.assertEqual(self.card("13921", "AT_050")[1]["ru"]["text"][:28], "<b>Предсмертный хрип:</b> Си")
+        self.assertEqual(self.card("14366", "AT_050")[1]["ru"]["text"][:28], "<b>Предсмертный хрип:</b> си")
+        self.assertEqual(self.card("14366", "AT_050")[1]["en"], self.card("13921", "AT_050")[1]["en"])
+
+    def test_14830_nerfs(self):
+        for cid, field, old, new in [("VAN_CS2_045", "cost", 1, 2), ("VAN_CS2_108", "cost", 1, 2), ("OG_211", "cost", 8, 9),
+                                     ("VAN_CS2_103", "cost", 3, 1), ("VAN_CS2_188", "attack", 2, 1)]:
+            self.assertEqual(self.card("14366", cid)[0][field], old, cid)
+            self.assertEqual(self.card("14830", cid)[0][field], new, cid)
+            self.assertEqual(self.card("15181", cid)[0][field], new, cid)
+        charge = self.card("14830", "VAN_CS2_103")[1]
+        self.assertEqual(charge["en"]["text"], "Give a friendly minion <b>Charge</b>. It can't attack heroes this turn.")
+        self.assertEqual(charge["ru"]["text"], "Ваше выбранное существо получает <b>«Рывок»</b>. На этом ходу оно не может атаковать героев.")
+        self.assertEqual(self.card("14366", "VAN_CS2_103")[1]["en"]["text"], "Give a friendly minion +2 Attack and <b>Charge</b>.")
+        tuskarr = self.card("14830", "AT_046")[1]
+        self.assertEqual(tuskarr["en"]["text"], "<b>Battlecry:</b> Summon a random basic Totem.")
+        self.assertEqual(tuskarr["de"]["text"], "<b>Kampfschrei:</b> Beschwört ein zufälliges Basistotem.")
+        self.assertEqual(self.card("14366", "AT_046")[1]["en"]["text"], "<b>Battlecry:</b> Summon ANY random Totem.")
+        self.assertIn("scripts/version/kara_6_1_3.lua", self.view("14830"))
+        self.assertNotIn("scripts/version/kara_6_1_3.lua", self.view("14366"))
+
+    def test_15181_murlocs_peddler_and_texts(self):
+        for cid, en, de in [("VAN_EX1_507", "Your other Murlocs have +2/+1.", "Eure anderen Murlocs haben +2/+1."),
+                            ("VAN_EX1_508", "Your other Murlocs have +1 Attack.", "Eure anderen Murlocs haben +1 Angriff."),
+                            ("VAN_EX1_103", "<b>Battlecry:</b> Give your other Murlocs +2 Health.", "<b>Kampfschrei:</b> Verleiht Euren anderen Murlocs +2 Leben."),
+                            ("VAN_EX1_509", "Whenever you summon a Murloc, gain +1 Attack.", "Erhält jedes Mal +1 Angriff, wenn Ihr einen Murloc herbeiruft.")]:
+            texts = self.card("15181", cid)[1]
+            self.assertEqual((texts["en"]["text"], texts["de"]["text"]), (en, de), cid)
+            self.assertNotEqual(self.card("14830", cid)[1]["en"]["text"], en, cid)
+        peddler = self.card("15181", "KAR_070")[1]
+        self.assertEqual(peddler["en"]["text"], "[x]<b>Battlecry:</b> If you're holding\nany non-Rogue class cards,\n reduce their Cost by (2).")
+        self.assertEqual(peddler["it"]["text"], "<b>Grido di Battaglia:</b> riduce di (2) il costo delle carte non del Ladro nella tua mano.")
+        self.assertEqual(self.card("14830", "KAR_070")[1]["en"]["text"], "[x]<b>Battlecry:</b> Reduce the Cost\nof cards in your hand from\nother classes by (2).")
+        self.assertEqual(self.card("15181", "VAN_EX1_533")[1]["en"]["text"], "<b>Secret:</b> When a character attacks your hero, instead they attack another random character.")
+        # Elemental Destruction's Overload 1 in this build's data is export noise: it stays 5
+        ed = self.card("15181", "AT_051")
+        self.assertEqual((ed[0]["mana_lock"], ed[1]["en"]["text"]), (5, "Deal $4-$5 damage to all minions. <b>Overload:</b> (5)"))
+        self.assertEqual(self.card("14830", "AT_051")[1]["en"]["text"], "Deal $4-$5 damage to all minions. <b>Overload:</b> (5).")
+        self.assertEqual(self.card("15181", "VAN_CS2_188")[1]["en"]["text"], "<b>Battlecry:</b> Give a minion +2 Attack this turn.")
+        self.assertIn("scripts/version/kara_6_2.lua", self.view("15181"))
+        self.assertNotIn("scripts/version/kara_6_1_3.lua", self.view("15181"))
 
 
 class TestDistribution(unittest.TestCase):

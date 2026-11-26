@@ -1,7 +1,7 @@
 {
  "base": "icc",
  "build": 20457,
- "about": "9.0.0.20457 (2017-08-08): the Knights of the Frozen Throne release, the icc pack with the Mistcaller (15590) and Potion of Polymorph (17720) fixes its scripts lack",
+ "about": "9.0.0.20457 (2017-08-08): the Knights of the Frozen Throne release, the icc pack with the Servant of Yogg-Saron (15181), Mistcaller (15590) and Potion of Polymorph (17720) fixes its scripts lack",
  "sources": [
   "~/ClassicHS-local/prep/patches/versions.json 9.0.0.20457"
  ]
