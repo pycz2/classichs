@@ -1091,6 +1091,12 @@ class Versions(unittest.TestCase):
         with self.assertRaisesRegex(pack.PackError, "no card Z"):
             pack.apply_version_patch(dict(vf), {"cards": {"Z": {"cost": 1}}}, "p")
         self.assertEqual(pack.apply_version_patch(dict(vf), {}, "p"), vf)  # an empty patch: the base as it is
+        # deck_recipes: a card's decks set (rules.json deck_recipes), null takes them away
+        deck = {"about": "x", "class": "GREY", "cards": ["A"] * 30}
+        out = pack.apply_version_patch(dict(vf), {"deck_recipes": {"A": [deck]}}, "p")
+        self.assertEqual(json.loads(out["rules.json"])["deck_recipes"], {"A": [deck]})
+        out = pack.apply_version_patch(out, {"deck_recipes": {"A": None}}, "p")
+        self.assertNotIn("deck_recipes", json.loads(out["rules.json"]))
 
     def test_building_from_version_patches(self):
         with tempfile.TemporaryDirectory() as t:
@@ -1514,9 +1520,29 @@ class Eras(unittest.TestCase):
         self.assertEqual(self.card("23180", "VAN_EX1_304")[1]["es"]["name"], self.card("23576", "VAN_EX1_304")[1]["es"]["name"])
         self.assertNotEqual(self.card("22611", "VAN_EX1_304")[1]["es"]["name"], self.card("23180", "VAN_EX1_304")[1]["es"]["name"])
         self.assertEqual(self.scripts("23180"), ["scripts/version/raza.lua"])
-        self.assertEqual(self.scripts("23576"), ["scripts/version/raza.lua"])
+        self.assertEqual(self.scripts("23576"), ["scripts/version/bcon.lua", "scripts/version/raza.lua"])
         # 23576: German text fixes only
         self.assertNotEqual(self.card("23180", "FP1_031")[1]["de"]["text"], self.card("23576", "FP1_031")[1]["de"]["text"])
+
+    def test_the_arena_only_cards_are_in_their_versions_only(self):
+        """The BlizzCon 2017 cards (23576) and Taverns of Time (24769): Arena-only cards that version drafts (formats.json
+        `extra`), with their tokens, names and texts; no other version has them."""
+        for vid, prefix, n, token in (("23576", "BCON_", 9, None), ("24769", "TOT_", 28, "TOT_030t1")):
+            v = pack.version_view(self.files, vid)
+            extra = json.loads(v["rules.json"])["modes"]["arena"]["extra"]
+            self.assertEqual(len([c for c in extra if c.startswith(prefix)]), n, vid)
+            ids = {c["id"] for c in json.loads(v["cards.json"])}
+            self.assertLessEqual(set(extra), ids, vid)
+            for cid in extra + [token] * bool(token):
+                c, texts = self.card(vid, cid)
+                self.assertNotIn("collectible", c, cid)
+                self.assertTrue(all(t.get("name") for t in texts.values()), cid)
+            for other in self.man["versions"]:
+                if other["id"] != vid:
+                    cards = json.loads(pack.version_view(self.files, other["id"])["cards.json"])
+                    self.assertFalse([c["id"] for c in cards if c["id"].startswith(prefix)], other["id"])
+        self.assertEqual(self.card("24769", "TOT_332")[1]["en"]["name"], "Murozond")
+        self.assertEqual(self.card("23576", "BCON_021")[0]["mana_lock"], 10)
 
     def test_witchwood_versions(self):
         # 23966: the gil pack with the tokens' costs (Treant 2 since 23966)
@@ -1537,8 +1563,10 @@ class Eras(unittest.TestCase):
         self.assertIn("4/4", self.card("24589", "UNG_067t1")[1]["ru"]["text"])
         self.assertEqual(self.scripts("24589"), ["scripts/version/gil.lua", "scripts/version/nerfs.lua",
                                                  "scripts/version/shudderwock.lua"])
-        for vid in ("24769", "25252"):
-            self.assertEqual(self.scripts(vid), ["scripts/version/gil.lua", "scripts/version/nerfs.lua",
+        self.assertEqual(self.scripts("24769"), ["scripts/version/gil.lua", "scripts/version/nerfs.lua",
+                                                 "scripts/version/patch_11_2.lua", "scripts/version/tot_a.lua",
+                                                 "scripts/version/tot_b.lua"])
+        self.assertEqual(self.scripts("25252"), ["scripts/version/gil.lua", "scripts/version/nerfs.lua",
                                                  "scripts/version/patch_11_2.lua"])
         # 24769: Baleful Banker's wording
         self.assertIn("Shuffle a copy into your deck", self.card("24769", "GIL_815")[1]["en"]["text"])
@@ -1667,8 +1695,15 @@ class Eras(unittest.TestCase):
         self.assertEqual(self.card("31761", "EX1_182")[1]["de"]["text"],
                          "Erhaltet eine zufällige Karte einer anderen Klasse auf die Hand.")
         self.assertEqual(self.card("31761", "EX1_182")[0]["script"], "scripts/version/new_cards.lua#EX1_182")
-        for vid in ("30795", "31022", "31268", "31761"):  # Zayle needs a deck_recipes entry: left out
-            self.assertNotIn("DAL_800", {c["id"] for c in json.loads(pack.version_view(self.files, vid)["cards.json"])})
+        # Zayle, Shadow Cloak from 30795 on, with her five EVIL Decks (deck_recipes)
+        self.assertNotIn("DAL_800", {c["id"] for c in json.loads(pack.version_view(self.files, "30103")["cards.json"])})
+        for vid in ("30795", "31022", "31268", "31761"):
+            zayle, texts = self.card(vid, "DAL_800")
+            self.assertEqual((zayle["cost"], zayle["rarity"], zayle["collectible"]), (2, "LEGENDARY", True), vid)
+            self.assertEqual(texts["en"]["text"], "You start the game with one of Zayle's EVIL Decks!")
+            decks = json.loads(pack.version_view(self.files, vid)["rules.json"])["deck_recipes"]["DAL_800"]
+            self.assertEqual([d["class"] for d in decks], ["PRIEST", "ROGUE", "SHAMAN", "WARLOCK", "WARRIOR"], vid)
+            self.assertTrue(all(len(d["cards"]) == 30 for d in decks), vid)
 
     def test_29933_and_30103_are_the_rise_of_shadows_pack(self):
         for vid in ("29933", "30103"):  # with Jungle Giants as fixed in 26996 (the dal pack counts The Darkness)
