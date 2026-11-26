@@ -38,6 +38,7 @@ var locales := {}
 var decks := {}
 ## Card id -> {blocks: [...], lua: ""} (StudioEffects).
 var effects := {}
+var _previews := 0
 
 
 # --- projects ------------------------------------------------------------------------------------
@@ -311,7 +312,7 @@ func build(load := false, games := 0) -> PackCheck:
 
 ## A pack of the project as it is now, for drawing its cards (CardView.pack): its rules, cards and texts and
 ## the pictures of the cards asked for (all when none are named), without the sounds. Written into the
-## project's folder (preview.cardpack); null when it can't be.
+## project's folder (preview-<n>.cardpack); null when it can't be.
 func preview_pack(only_art: Array = []) -> Pack:
 	var files := {"manifest.json": _bytes(manifest), "rules.json": _bytes(rules), "cards.json": _bytes(cards)}
 	for lang in locales:
@@ -325,7 +326,11 @@ func preview_pack(only_art: Array = []) -> Pack:
 	m.art_sets = [{"id": ART_SET, "default": true}] if files.keys().any(func(k): return k.begins_with("art/")) else []
 	m.sound_sets = []
 	files["manifest.json"] = _bytes(m)
-	var path := dir + "/preview.cardpack"
+	for old in DirAccess.get_files_at(dir):  # (the one a view still reads goes on the next time where a system keeps it)
+		if old.begins_with("preview"):
+			DirAccess.remove_absolute(dir + "/" + old)
+	_previews += 1
+	var path := "%s/preview-%d.cardpack" % [dir, _previews]  # a new file each time: the last preview may still be open
 	var f := FileAccess.open(path, FileAccess.WRITE)
 	if f == null:
 		return null
