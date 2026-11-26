@@ -8,6 +8,7 @@ pub mod admin_players;
 pub mod admin_roles;
 pub mod auth;
 pub mod bots;
+pub mod chat;
 pub mod db;
 pub mod deck_code;
 pub mod entity;
@@ -203,6 +204,8 @@ pub struct Hub {
     pub auto_for: HashMap<i64, i64>,
     /// Spectator account → the game it watches (spectate).
     pub watching: HashMap<i64, spectate::Watch>,
+    /// Chat channel → the accounts subscribed to it (`chat`).
+    pub chats: HashMap<String, std::collections::HashSet<i64>>,
 }
 
 impl Hub {
@@ -210,6 +213,14 @@ impl Hub {
         if let Some(c) = self.conns.get(&account) {
             let _ = c.tx.send(Out::Text(v.to_string()));
         }
+    }
+
+    /// The account leaves every chat channel.
+    fn unsubscribe_all(&mut self, account: i64) {
+        self.chats.retain(|_, subs| {
+            subs.remove(&account);
+            !subs.is_empty()
+        });
     }
 
     /// "offline" | "in_game" | "searching" | "online".
@@ -269,6 +280,7 @@ impl Hub {
         self.next_conn += 1;
         let old = self.conns.insert(account, Conn { id: self.next_conn, sub, name: name.into(), tx, me_pack: None });
         self.watching.remove(&account); // a new connection watches nothing yet
+        self.unsubscribe_all(account);
         if let Some(old) = &old {
             // The message first, then the close frame tells it again (a client may lose a
             // message that arrives right before the close).
@@ -296,6 +308,7 @@ impl Hub {
         self.conns.remove(&account);
         self.queue.remove(&account);
         self.watching.remove(&account);
+        self.unsubscribe_all(account);
         self.invites.retain(|(a, b), _| *a != account && *b != account);
         if let Some((g, p)) = self.in_game.get(&account) {
             if let Some(lg) = self.games.get(g) {
@@ -385,13 +398,15 @@ pub async fn presence(app: &AppRef, account: i64) {
 }
 
 /// The matchmaking tick (every second), the rate-limit sweep, the admin panels' live
-/// snapshot (when it changed) and, hourly, the deletion of old events.
+/// snapshot (when it changed), the closing of tournament chats and, hourly, the deletion of old
+/// events and of chat and private messages past the keeping time.
 pub fn spawn_background(app: AppRef) {
     tournament::spawn(app.clone());
     tokio::spawn(async move {
         let mut tick = tokio::time::interval(Duration::from_secs(1));
         let mut last_live: HashMap<i64, String> = HashMap::new();
         let mut n: u64 = 0;
+        let mut closes_checked = events::now_ms();
         loop {
             tick.tick().await;
             let now = Instant::now();
@@ -414,7 +429,17 @@ pub fn spawn_background(app: AppRef) {
                     last_live.insert(sub, text);
                 }
             }
+            if n.is_multiple_of(5) {
+                let now = events::now_ms();
+                chat::announce_closed(&app, closes_checked, now).await;
+                closes_checked = now;
+            }
             if n.is_multiple_of(3600) {
+                match chat::cleanup(&app, ranked::now()).await {
+                    Ok((0, 0)) => {}
+                    Ok((c, p)) => tracing::info!("cleanup: removed {c} chat and {p} private messages past the keeping time"),
+                    Err(e) => tracing::error!("pruning chats: {e}"),
+                }
                 let old = events::now_ms() - events::KEEP_DAYS * 86_400_000;
                 if let Err(e) = entity::event::Entity::delete_many().filter(entity::event::Column::At.lt(old)).exec(&app.db).await {
                     tracing::error!("pruning events: {e}");

@@ -37,17 +37,17 @@ async fn server_on(path: &str) -> (SocketAddr, AppRef) {
     (addr, app)
 }
 
-async fn server() -> (SocketAddr, AppRef) {
+pub(crate) async fn server() -> (SocketAddr, AppRef) {
     server_on(":memory:").await
 }
 
-struct C {
+pub(crate) struct C {
     ws: Ws,
-    name: String,
+    pub(crate) name: String,
 }
 
 impl C {
-    async fn register(addr: SocketAddr, name: &str) -> C {
+    pub(crate) async fn register(addr: SocketAddr, name: &str) -> C {
         let (ws, _) = tokio_tungstenite::connect_async(format!("ws://{addr}/")).await.unwrap();
         let mut c = C { ws, name: name.into() };
         c.send(json!({"t": "register", "user": name, "password": "password123"})).await;
@@ -55,11 +55,11 @@ impl C {
         c
     }
 
-    async fn send(&mut self, v: Value) {
+    pub(crate) async fn send(&mut self, v: Value) {
         self.ws.send(Message::text(v.to_string())).await.unwrap();
     }
 
-    async fn next(&mut self) -> Value {
+    pub(crate) async fn next(&mut self) -> Value {
         loop {
             let m = tokio::time::timeout(Duration::from_secs(20), self.ws.next())
                 .await
@@ -73,7 +73,7 @@ impl C {
     }
 
     /// The next message of type `t` (an error fails the test unless it is wanted).
-    async fn want(&mut self, t: &str) -> Value {
+    pub(crate) async fn want(&mut self, t: &str) -> Value {
         loop {
             let v = self.next().await;
             if v["t"] == t {
@@ -84,7 +84,7 @@ impl C {
     }
 
     /// The text of the error the last message gets.
-    async fn refused(&mut self, v: Value) -> String {
+    pub(crate) async fn refused(&mut self, v: Value) -> String {
         self.send(v).await;
         let e = self.want("error").await;
         e["text"].as_str().unwrap().to_string()
@@ -115,7 +115,7 @@ fn classic() -> String {
 }
 
 /// Creates a tournament (Classic, starting in 12 minutes) with these options over the defaults.
-async fn create(c: &mut C, o: Value) -> Value {
+pub(crate) async fn create(c: &mut C, o: Value) -> Value {
     let mut m = json!({"t": "t_create", "name": "Cup", "pack": classic(), "format": "elimination", "options": {}, "series": "conquest",
                        "best_of": 1, "bans": 0, "start_at": now_ms() + 12 * MIN, "max_players": 8});
     for (k, v) in o.as_object().unwrap() {

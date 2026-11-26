@@ -1134,5 +1134,14 @@
 "Standard": "Standardowy",
 "Wild": "Dziki",
 "A Wild deck: it has cards that are not in Standard": "Talia Dzika: zawiera karty spoza formatu Standardowego",
-"This deck has cards that are not in this format": "Ta talia zawiera karty spoza tego formatu"
+"This deck has cards that are not in this format": "Ta talia zawiera karty spoza tego formatu",
+"Chat": "Czat",
+"admin": "admin",
+"creator": "twórca",
+"The chat is closed: messages can only be read": "Czat jest zamknięty: wiadomości można tylko czytać",
+"Too many messages: wait a little": "Za dużo wiadomości: poczekaj chwilę",
+"A message is 1 to 500 characters": "Wiadomość ma od 1 do 500 znaków",
+"Deleted by %s": "Usunięte przez %s",
+"Delete the message": "Usuń wiadomość",
+"The chat closes at %s": "Czat zostanie zamknięty o %s"
 }

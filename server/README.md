@@ -212,7 +212,9 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `GET packs` | `{server: [pack], players: [pack], stats: {server, enabled, players, uploaders, files, bytes, downloads, storage, games, live, default_rules, builtin: {rules_hash, default}, limits: {player, server, per_player}}}`; a pack is `{id, pack_id, version, name, rules_hash, content_hash, size, enabled, default, created, downloads, games, live, owner: {id, user} \| null}` (`games`/`live`: finished and live games in its rules) |
 | `POST packs` (the `.cardpack` as the raw body, up to 1 GiB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
 | `POST packs/{id}/{enable\|disable\|delete\|default}` | any pack, a player's too (the player's game gets a new `packs`); `default`: a server pack becomes the default game |
-| `GET settings` · `POST settings {autobot_wait_ms?, signup_invite_only?}` | `{autobot_wait_ms, signup_invite_only}`; the wait 0..600000 ms (default 30000), invite-only default false; the fields given change at once |
+| `GET settings` · `POST settings {autobot_wait_ms?, signup_invite_only?, chat_keep_days?}` | `{autobot_wait_ms, signup_invite_only, chat_keep_days}`; the wait 0..600000 ms (default 30000), invite-only default false, the chats' keeping time 0..36500 days (default 14, 0 = unlimited; the super level, `settings.retention`); the fields given change at once |
+| `GET chats` · `GET chats/{channel}` | the tournament chats: `{chats: [{channel, title, status, count, last, open}]}` (the list's chat first, then the tournaments' with messages or still open, the latest active first) · `{channel, title, open, closes, list}` (the last 500 messages; a deleted one also has `deleted_text`) |
+| `POST chats/{channel} {text}` · `POST chat_messages/{id}/delete` | writes as the admin (`chats.write_as_admin`; 400 on a closed chat) · deletes a message (`chats.moderate`) |
 | `GET signup_keys` | `{keys: [{id, key, note, uses_total, uses_left, created, created_by, created_by_name, revoked, accounts: [{id, user, created}]}], invite_only}`, newest first |
 | `POST signup_keys {note?, uses?}` | a new uuid v4 key (note ≤ 200 characters, uses 1–1000, default 1) → `{id, key, text}` |
 | `POST signup_keys/{id}/revoke` | the key registers nobody more (its accounts stay) |
@@ -375,7 +377,9 @@ scripts tell the details.
 | Login + register | 10 a minute per address and per account name |
 | Messages from one connection | 300 per 10 s (then disconnected) |
 | Malformed messages | 20 per connection (then disconnected) |
-| Chat | 1–500 characters, 10 per 10 s, last 200 kept per pair, friends only |
+| Chat | 1–500 characters, 10 per 10 s (private and tournament chats together), last 200 kept per pair, friends only |
+| Tournament chats | the last 100 messages on `chat_sub`; a tournament's closes 10 minutes after its end |
+| Keeping | chat and private messages older than `chat_keep_days` (default 14, 0 = unlimited) are removed by the hourly cleanup |
 | Names | user 3–16 `[A-Za-z0-9_]` at registration (older accounts up to 20); tag 3–16 letters/digits, unique ignoring case |
 | Passwords | 8–128 characters |
 | Friends | 200 |
@@ -609,6 +613,27 @@ human `text` (`server` for a database error).
   the match's game with both hands open (the spectator messages). Tournament games' replays:
   everyone when `deck_reveal` is on or the tournament is over, else its two players and the
   creator.
+
+### Chats
+
+The tournaments list's common chat (channel `tournaments`) and each tournament's own (`t:<id>`),
+isolated from each other (`src/chat.rs`, table `chat_message`).
+
+- `chat_sub {channel}` → `chat_history {channel, list: [msg] (the last 100, oldest first), open,
+  closes (unix s; 0: none known), moderator}`; from then on the channel's pushes until
+  `chat_unsub {channel}` (no answer) or the connection ends. Any player may read and write any of them.
+- `chat_send {channel, text}` (1–500 characters; the friends' chat rate limit): every subscriber
+  (the sender too, if subscribed) gets `chat_msg {channel, msg}`. A closed chat: `error chat_closed`.
+- `chat_delete {id}` (a moderator: `chats.moderate`, else `error forbidden`): the row stays, its
+  text is hidden; every subscriber gets `chat_deleted {channel, id, by}`.
+- A msg is `{id, from, text, at (unix s), mark, deleted_by}`: `mark` "admin" (may moderate) in
+  every chat, "creator" (the tournament's) in its own chat, else ""; a deleted one has `text` ""
+  and `deleted_by` the moderator's name.
+- A tournament's chat opens at its creation and closes 10 minutes after its end (finished,
+  cancelled or closed): read-only then (`chat_closed {channel}` to its subscribers when it
+  happens), readable while kept.
+- Keeping: chat and private messages older than the `chat_keep_days` setting (14 by default; 0 =
+  unlimited) are removed by the hourly cleanup.
 
 ### Deck codes
 

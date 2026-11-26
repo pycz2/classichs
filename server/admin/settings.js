@@ -1,4 +1,4 @@
-// Settings (the auto-bots' wait, invite-only registration) and the invite keys: make one (a note,
+// Settings (the auto-bots' wait, invite-only registration, the chats' keeping time) and the invite keys: make one (a note,
 // how many players), copy it, revoke it, see who joined with it.
 
 import { useState, useEffect } from 'preact/hooks'
@@ -53,8 +53,35 @@ export function Settings () {
         </div>
         <p class="small" style="margin: 14px 0 0"><a href="#/invites">Invite keys →</a></p>
       </${Card}>
+      <${KeepTime} saved=${data.chat_keep_days} busy=${busy} save=${save} />
     </div>`}
   </div>`
+}
+
+/** How long the tournament chats and the private messages are kept (days; 0 = unlimited). */
+function KeepTime ({ saved, busy, save }) {
+  const [days, setDays] = useState(null) // being edited (null = as saved)
+  const [unlimited, setUnlimited] = useState(null)
+  const off = unlimited ?? saved === 0
+  const d = days ?? (saved || 14)
+  const value = off ? 0 : Math.max(1, Math.min(36500, Math.round(+d || 1)))
+  const reset = () => { setDays(null); setUnlimited(null) }
+  return html`<${Card} title="Keeping chats">
+    <form class="form" onSubmit=${async (e) => { e.preventDefault(); await save({ chat_keep_days: value }); reset() }}>
+      <div class="setting-row">
+        <div><b>Keep forever</b><div class="muted small">Never remove old messages.</div></div>
+        <${Switch} on=${off} busy=${busy} label="Keep forever" onChange=${(on) => setUnlimited(on)} />
+      </div>
+      ${!off && html`<label>Keep for
+        <span class="unit-input"><input type="number" min="1" max="36500" value=${d} onInput=${(e) => setDays(e.target.value)} aria-label="Days" /><span>days</span></span>
+      </label>`}
+      <small>The tournaments list's chat, every tournament's chat and the private messages between players older than this are removed (checked every hour). 14 days by default. Only the super admin changes it.</small>
+      <div class="form-actions">
+        ${value !== saved && html`<button type="button" class="btn ghost" onClick=${reset}>Undo</button>`}
+        <button class="btn primary" disabled=${busy || value === saved}>Save</button>
+      </div>
+    </form>
+  </${Card}>`
 }
 
 /** A key in full, copied on click. */

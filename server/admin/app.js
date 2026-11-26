@@ -9,7 +9,7 @@ import { Dashboard } from './dashboard.js'
 import { Events } from './events.js'
 import { Accounts, AccountPage } from './accounts.js'
 import { Games, GamePage } from './games.js'
-import { Messages } from './messages.js'
+import { Messages, Chats } from './messages.js'
 import { Packs } from './packs.js'
 import { Bots } from './bots.js'
 import { Settings, InviteKeys } from './settings.js'
@@ -28,6 +28,7 @@ const NAV = [
   ['accounts', 'Accounts', 'accounts'],
   ['invites', 'Invite keys', 'key'],
   ['messages', 'Messages', 'messages'],
+  ['chats', 'Chats', 'messages'],
   ['settings', 'Settings', 'settings']
 ]
 
@@ -116,6 +117,7 @@ function Shell ({ me, onLogout }) {
     case 'bots': page = html`<${Bots} />`; break
     case 'invites': page = html`<${InviteKeys} />`; break
     case 'settings': page = html`<${Settings} />`; break
+    case 'chats': page = html`<${Chats} channel=${route.path[1]} />`; break
     case 'messages': page = html`<${Messages} a=${route.path[1]} b=${route.path[2]} query=${route.query} />`; break
     default: page = html`<div class="page"><h1>Not found</h1><p><a href="#/">Back to the dashboard</a></p></div>`
   }

@@ -6,6 +6,7 @@ pub mod account_role;
 pub mod arena;
 pub mod audit;
 pub mod block;
+pub mod chat_message;
 pub mod bot;
 pub mod deck;
 pub mod event;
