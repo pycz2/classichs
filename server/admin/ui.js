@@ -27,6 +27,9 @@ export const LiveContext = createContext({ live: { online: [], queue: [], games:
 export const MeContext = createContext(null)
 export const useLive = () => useContext(LiveContext)
 export const useMe = () => useContext(MeContext)
+/** can(p): has the admin the permission p here (me.perms)? The panel hides what he lacks; the server refuses it anyway. */
+export const canOf = (me) => (p) => !!me && (me.perms || []).includes(p)
+export const useCan = () => canOf(useMe())
 
 /** Re-renders every `ms` (for "3 s ago"). */
 export function useTick (ms = 1000) {
@@ -158,13 +161,13 @@ export const KINDS = {
   login_failed: 'error', error: 'error',
   tag: 'social', friend_request: 'social', friend_accept: 'social', friend_decline: 'social', friend_remove: 'social',
   block: 'social', unblock: 'social', invite: 'social', invite_accept: 'social', invite_decline: 'social',
-  msg: 'chat',
+  msg: 'chat', chat: 'chat',
   queue: 'queue', unqueue: 'queue', arena: 'queue',
   match: 'game', tournament: 'game', game_start: 'game', game_action: 'game', game_left: 'game', game_back: 'game', game_end: 'game',
   pack_upload: 'pack', pack_import: 'pack', pack_default: 'pack', pack_enable: 'pack', pack_disable: 'pack', pack_delete: 'pack', pack_download: 'pack', pack_rejected: 'error',
   admin: 'admin',
   bot: 'error', auto_bot: 'queue',
-  setting: 'admin', signup_key: 'admin'
+  setting: 'admin', signup_key: 'admin', report: 'error'
 }
 
 export const kindCat = (k) => KINDS[k] || 'admin'
@@ -201,9 +204,12 @@ const ICONS = {
   bots: 'M12 3v3M8 3h8M5 8h14v10a2 2 0 01-2 2H7a2 2 0 01-2-2V8zM9.5 13h.01M14.5 13h.01M9 17h6',
   trash: 'M4 7h16M10 11v6m4-6v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3',
   copy: 'M9 9h10v12H9zM5 15V3h10',
+  report: 'M5 21V4h12l-2 4 2 4H5',
   key: 'M8 15a4 4 0 110-8 4 4 0 010 8zm3-4h10m-3 0v3m-3-3v2',
   stats: 'M4 20V10m6 10V4m6 16v-7m4 7H2',
-  settings: 'M4 6h9m4 0h3M4 12h3m4 0h9M4 18h11m4 0h1M15 4v4M9 10v4M17 16v4'
+  settings: 'M4 6h9m4 0h3M4 12h3m4 0h9M4 18h11m4 0h1M15 4v4M9 10v4M17 16v4',
+  roles: 'M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3zM9 12l2 2 4-4',
+  audit: 'M8 3h8l4 4v14H4V3h4zm0 8h8M8 15h8M8 7h4'
 }
 
 export function Icon ({ name, size = 18 }) {

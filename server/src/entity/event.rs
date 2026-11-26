@@ -8,6 +8,8 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
+    /// The sub-server (`crate::scope`).
+    pub subserver: i64,
     /// Unix milliseconds.
     pub at: i64,
     /// e.g. "login", "msg", "game_action" (the list: README, Admin panel).

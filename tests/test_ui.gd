@@ -14,7 +14,7 @@ func _main() -> Node:
 
 ## The buttons of the menu shown now, by name.
 static func _items(m: Node) -> Array:
-	return m.screen.find_children("*", "Button", true, false).filter(func(b): return b.name != "Version").map(func(b): return str(b.name))
+	return m.screen.find_children("*", "Button", true, false).filter(func(b): return not b.name in ["Version", "ReportButton"]).map(func(b): return str(b.name))
 
 
 func _press(m: Node, button: String) -> void:

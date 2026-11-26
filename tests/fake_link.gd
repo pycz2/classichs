@@ -5,9 +5,11 @@ extends ServerLink
 
 var sent: Array = []
 var up := true
-## HTTP requests made (downloads, uploads): {path, method, body, done, upload_id}; a test answers
+## HTTP requests made (downloads, uploads, reports): {path, method, body, done, upload_id, content_type}; a test answers
 ## with done.call(code, body).
 var http: Array = []
+## Whether GET /reports (asked after every login) is kept in `http` too (only the reports' tests answer it).
+var report_lists := false
 
 
 func open(address: String) -> Error:
@@ -35,14 +37,16 @@ func close() -> void:
 	up = false
 
 
-func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_file := "", upload_id := "") -> HTTPRequest:
+func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_file := "", upload_id := "", content_type := "application/octet-stream") -> HTTPRequest:
 	var answer := func(code: int, got: PackedByteArray):  # (a download goes into its file, as HTTPRequest does)
 		if to_file != "":
 			var f := FileAccess.open(to_file, FileAccess.WRITE)
 			f.store_buffer(got)
 			f.close()
 		done.call(code, PackedByteArray() if to_file != "" else got)
-	http.append({"path": path, "method": method, "body": body, "done": answer, "upload_id": upload_id})
+	if path == "/reports" and method == HTTPClient.METHOD_GET and not report_lists:
+		return null
+	http.append({"path": path, "method": method, "body": body, "done": answer, "upload_id": upload_id, "content_type": content_type})
 	return null
 
 

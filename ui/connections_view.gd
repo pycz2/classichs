@@ -205,14 +205,14 @@ func _who(id: String) -> String:
 
 ## Adds a connection (an address already in the list gets another one: another login there).
 func add_server(name: String, url: String) -> bool:
-	url = url.strip_edges()
+	url = Settings.server_address(url)
 	var ed := find_child("NewUrl", true, false) as LineEdit
-	if not Settings.server_ok(url):
+	if url == "":
 		if ed:
 			ed.add_theme_color_override("font_color", Palette.OPPONENT)
 		var note := find_child("ServersNote", true, false) as Label
 		if note:  # what is wrong: in the note's place, red
-			note.text = tr("A server address starts with ws:// or wss:// and has no spaces, like wss://example.org:7377")
+			note.text = tr("A server address looks like wss://example.org:7377 or https://example.org/s/friends, with no spaces")
 			note.add_theme_color_override("font_color", Palette.OPPONENT)
 		return false
 	Settings.data.servers.append({"id": Settings.new_server_id(url), "url": url, "name": Settings.server_label(url, name)})

@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(M20)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(MChat), Box::new(MSub), Box::new(M20)]
     }
 }
 
@@ -971,13 +971,126 @@ impl MigrationTrait for M14 {
     }
 }
 
-/// FOUNDATION: a cut-down stand-in of the foundation's M15 (the sub-server, role, audit and member tables, the packs'
-/// `subserver`); the lead takes the foundation's at merge.
+/// Sub-servers, roles and the audit log (0.74; docs/superpowers/specs/2026-11-26-roles-subservers-design.md): the
+/// `subserver` table with row 0 "main", a `subserver` column on every table of a sub-server's data (every row there
+/// now belongs to main; the keyed tables get it first in their key), the roles (Super admin, and main's Admin,
+/// Moderator, Viewer), the admins of before as Super admins.
+struct MSub;
+
+impl MigrationName for MSub {
+    fn name(&self) -> &str {
+        "m20261126_000017_subservers_roles"
+    }
+}
+
+/// Rebuilds a table with a `subserver` column (0 for every row) first in its primary key.
+async fn rekey(c: &SchemaManagerConnection<'_>, t: &str) -> Result<(), DbErr> {
+    let row = c.query_one_raw(sea_orm::Statement::from_string(c.get_database_backend(), format!("SELECT sql FROM sqlite_schema WHERE name = '{t}'"))).await?;
+    let sql: String = row.ok_or_else(|| DbErr::Custom(format!("no table {t}")))?.try_get("", "sql")?;
+    let open = sql.find('(').ok_or_else(|| DbErr::Custom(format!("table {t}: {sql}")))?;
+    let mut new = format!("CREATE TABLE {t}_new (\"subserver\" integer NOT NULL DEFAULT 0, {}", &sql[open + 1..]);
+    if let Some(i) = new.find("PRIMARY KEY (") {
+        new.replace_range(i..i + "PRIMARY KEY (".len(), "PRIMARY KEY (\"subserver\", ");
+    } else {
+        // a one-column key written on its column: `"key" text NOT NULL PRIMARY KEY`
+        let i = new.find(" PRIMARY KEY").ok_or_else(|| DbErr::Custom(format!("table {t} has no key: {sql}")))?;
+        let col_end = new[..i].rfind('"').unwrap_or(0);
+        let col_start = new[..col_end].rfind('"').unwrap_or(0);
+        let col = new[col_start..=col_end].to_string();
+        new.replace_range(i..i + " PRIMARY KEY".len(), "");
+        let close = new.rfind(')').unwrap_or(new.len());
+        new.insert_str(close, &format!(", PRIMARY KEY (\"subserver\", {col})"));
+    }
+    for sql in [new, format!("INSERT INTO {t}_new SELECT 0, * FROM {t}"), format!("DROP TABLE {t}"), format!("ALTER TABLE {t}_new RENAME TO {t}")] {
+        c.execute_unprepared(&sql).await?;
+    }
+    Ok(())
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for MSub {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        c.execute_unprepared(
+            "CREATE TABLE subserver (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, title TEXT NOT NULL, owner INTEGER, \
+             state TEXT NOT NULL DEFAULT 'active', limits TEXT NOT NULL DEFAULT '{}', created INTEGER NOT NULL)",
+        )
+        .await?;
+        c.execute_unprepared(
+            "INSERT INTO subserver (id, name, title, owner, state, limits, created) VALUES (0, 'main', 'Main', NULL, 'active', '{}', CAST(strftime('%s','now') AS INTEGER))",
+        )
+        .await?;
+        for t in ["games", "decks", "replays", "tournaments", "packs", "signup_keys", "events", "bots", "messages"] {
+            c.execute_unprepared(&format!("ALTER TABLE {t} ADD COLUMN subserver INTEGER NOT NULL DEFAULT 0")).await?;
+        }
+        for t in ["standings", "game_settings", "arena", "server_settings", "stats_class", "stats_deck", "stats_card", "stats_matchup"] {
+            rekey(c, t).await?;
+        }
+        for sql in [
+            "CREATE INDEX standings_ladder ON standings (subserver, pack, season, rank)",
+            "CREATE INDEX events_subserver ON events (subserver, at)",
+            "CREATE INDEX games_subserver ON games (subserver, ended)",
+            "CREATE TABLE role (id INTEGER PRIMARY KEY, subserver INTEGER, name TEXT NOT NULL, perms TEXT NOT NULL, builtin INTEGER NOT NULL DEFAULT 0)",
+            "CREATE TABLE account_role (account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE, \
+             role INTEGER NOT NULL REFERENCES role(id) ON DELETE CASCADE, subserver INTEGER, PRIMARY KEY (account, role))",
+            "CREATE TABLE audit (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, account INTEGER NOT NULL, subserver INTEGER NOT NULL, \
+             action TEXT NOT NULL, target TEXT NOT NULL, before TEXT NOT NULL, after TEXT NOT NULL)",
+            "CREATE INDEX audit_at ON audit (subserver, at)",
+            // the accounts that logged into a sub-server (its players list), and its own ban of them
+            "CREATE TABLE member (account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE, subserver INTEGER NOT NULL, \
+             joined INTEGER NOT NULL, suspended INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (subserver, account))",
+            "INSERT INTO member (account, subserver, joined) SELECT id, 0, created FROM accounts",
+        ] {
+            c.execute_unprepared(sql).await?;
+        }
+        let q = |s: &str| s.replace('\'', "''");
+        c.execute_unprepared(&format!("INSERT INTO role (subserver, name, perms, builtin) VALUES (NULL, '{}', '[\"*\"]', 1)", crate::perm::SUPER_ADMIN)).await?;
+        for (name, perms) in crate::perm::builtin() {
+            let perms = q(&serde_json::to_string(&perms).unwrap_or_default());
+            c.execute_unprepared(&format!("INSERT INTO role (subserver, name, perms, builtin) VALUES (0, '{name}', '{perms}', 1)")).await?;
+        }
+        c.execute_unprepared(&format!(
+            "INSERT INTO account_role (account, role, subserver) SELECT a.id, r.id, NULL FROM accounts a, role r \
+             WHERE a.role IN ('admin', 'super') AND r.subserver IS NULL AND r.name = '{}'",
+            crate::perm::SUPER_ADMIN
+        ))
+        .await?;
+        Ok(())
+    }
+}
+
+/// Tournament chats (0.74, `crate::chat`): the messages of the tournaments list's chat and of each
+/// tournament's; a deleted one keeps its row (deleted_by, deleted_at).
+struct MChat;
+
+impl MigrationName for MChat {
+    fn name(&self) -> &str {
+        "m20261126_000016_chat_messages"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for MChat {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        c.execute_unprepared(
+            "CREATE TABLE chat_message (id INTEGER PRIMARY KEY, subserver INTEGER NOT NULL DEFAULT 0, channel TEXT NOT NULL, \
+             account INTEGER NOT NULL, text TEXT NOT NULL, at INTEGER NOT NULL, deleted_by INTEGER, deleted_at INTEGER)",
+        )
+        .await?;
+        c.execute_unprepared("CREATE INDEX chat_message_channel ON chat_message (subserver, channel, id)").await?;
+        c.execute_unprepared("CREATE INDEX chat_message_at ON chat_message (at)").await?;
+        Ok(())
+    }
+}
+
+/// Problem reports from the game (0.74; `crate::reports`): a thread per report (`report_messages`);
+/// the pictures and the voice message are in the store (`reports/<id>/…`). `subserver` 0 = the main one.
 struct M15;
 
 impl MigrationName for M15 {
     fn name(&self) -> &str {
-        "m20261126_000015_subservers_roles"
+        "m20261126_000015_reports"
     }
 }
 
@@ -985,23 +1098,46 @@ impl MigrationName for M15 {
 impl MigrationTrait for M15 {
     async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
         let c = m.get_connection();
-        for sql in [
-            "CREATE TABLE subserver (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, title TEXT NOT NULL, owner INTEGER, \
-             state TEXT NOT NULL DEFAULT 'active', limits TEXT NOT NULL DEFAULT '{}', created INTEGER NOT NULL)",
-            "INSERT INTO subserver (id, name, title, owner, state, limits, created) VALUES (0, 'main', 'Main', NULL, 'active', '{}', CAST(strftime('%s','now') AS INTEGER))",
-            "ALTER TABLE packs ADD COLUMN subserver INTEGER NOT NULL DEFAULT 0",
-            "CREATE TABLE role (id INTEGER PRIMARY KEY, subserver INTEGER, name TEXT NOT NULL, perms TEXT NOT NULL, builtin INTEGER NOT NULL DEFAULT 0)",
-            "CREATE TABLE account_role (account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE, \
-             role INTEGER NOT NULL REFERENCES role(id) ON DELETE CASCADE, subserver INTEGER, PRIMARY KEY (account, role))",
-            "CREATE TABLE audit (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, account INTEGER NOT NULL, subserver INTEGER NOT NULL, \
-             action TEXT NOT NULL, target TEXT NOT NULL, before TEXT NOT NULL, after TEXT NOT NULL)",
-            "CREATE TABLE member (account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE, subserver INTEGER NOT NULL, \
-             joined INTEGER NOT NULL, suspended INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (subserver, account))",
-        ] {
-            c.execute_unprepared(sql).await?;
-        }
-        c.execute_unprepared(&format!("INSERT INTO role (subserver, name, perms, builtin) VALUES (NULL, '{}', '[\"*\"]', 1)", crate::perm::SUPER_ADMIN)).await?;
-        crate::subservers::builtin_roles(c, 0).await
+        c.execute_unprepared(
+            "CREATE TABLE reports (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                subserver INTEGER NOT NULL DEFAULT 0,
+                account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+                written_at INTEGER NOT NULL,
+                received_at INTEGER NOT NULL,
+                last_at INTEGER NOT NULL,
+                text TEXT NOT NULL,
+                version TEXT NOT NULL DEFAULT '',
+                context TEXT NOT NULL DEFAULT '{}',
+                games TEXT NOT NULL DEFAULT '[]',
+                screen INTEGER NOT NULL DEFAULT 0,
+                voice INTEGER NOT NULL DEFAULT 0,
+                state TEXT NOT NULL DEFAULT 'open',
+                note TEXT NOT NULL DEFAULT '',
+                merged_into INTEGER,
+                admin_opened INTEGER NOT NULL DEFAULT 0,
+                admin_unread INTEGER NOT NULL DEFAULT 1,
+                player_unread INTEGER NOT NULL DEFAULT 0
+            )",
+        )
+        .await?;
+        c.execute_unprepared(
+            "CREATE TABLE report_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                report INTEGER NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+                account INTEGER REFERENCES accounts(id) ON DELETE SET NULL,
+                name TEXT NOT NULL,
+                admin INTEGER NOT NULL,
+                text TEXT NOT NULL,
+                at INTEGER NOT NULL,
+                screen INTEGER NOT NULL DEFAULT 0
+            )",
+        )
+        .await?;
+        c.execute_unprepared("CREATE INDEX reports_subserver ON reports (subserver, last_at)").await?;
+        c.execute_unprepared("CREATE INDEX reports_account ON reports (account, received_at)").await?;
+        c.execute_unprepared("CREATE INDEX report_messages_report ON report_messages (report)").await?;
+        Ok(())
     }
 }
 

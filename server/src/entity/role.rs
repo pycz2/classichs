@@ -1,4 +1,3 @@
-// FOUNDATION: a verbatim copy of the foundation agent's file, a stand-in until it lands (take theirs at merge).
 //! A role: a named set of permissions (`crate::perm`), of a sub-server or global (subserver None: the super level).
 
 use sea_orm::entity::prelude::*;

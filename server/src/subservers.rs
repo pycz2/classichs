@@ -4,9 +4,9 @@
 //! them), suspend / unavailable, delete, and the common pack library (packs with `subserver` -1).
 
 use crate::admin::{db_err, err, Admin};
-use crate::entity::{admin_invite, member, pack, role, subserver, subserver_quota};
+use crate::entity::{admin_invite, member, pack, subserver, subserver_quota};
 use crate::events::Event;
-use crate::{auth, db, perm, ranked, settings, App, AppRef};
+use crate::{auth, db, packs, perm, ranked, settings, App, AppRef};
 use axum::extract::{ConnectInfo, Path, State};
 use axum::http::{HeaderMap, StatusCode};
 use axum::response::{IntoResponse, Response};
@@ -19,17 +19,15 @@ use sea_orm::{
 };
 use serde::Deserialize;
 use serde_json::{json, Value};
-use std::collections::{BTreeMap, HashSet};
+use std::collections::BTreeMap;
 use std::net::SocketAddr;
 
-/// The `subserver` of the common pack library every sub-server offers (FOUNDATION: `packs::LIBRARY`).
-pub const LIBRARY: i64 = -1;
 
 /// What a sub-server is limited in. Only packs, storage (its own packs' bytes) and players are enforced so far.
 // ponytail: bots and tournaments are set and shown, not enforced; check them where those are made when needed.
 pub const LIMITS: [&str; 5] = ["storage_mb", "packs", "players", "bots", "tournaments"];
 
-/// The server setting with the super admin's defaults (JSON {limit: number}; a missing one: `builtin_default`).
+/// The server setting (kept in main's, sub-server 0) with the super admin's defaults (JSON {limit: number}; a missing one: `builtin_default`).
 pub const DEFAULTS: &str = "subserver_limits";
 
 fn builtin_default(k: &str) -> i64 {
@@ -49,22 +47,13 @@ pub fn valid_name(n: &str) -> bool {
     (3..=32).contains(&n.len()) && n.bytes().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == b'-') && !n.starts_with('-') && !n.ends_with('-')
 }
 
-/// The built-in roles of a new sub-server (Admin, Moderator, Viewer: `perm::builtin`).
-pub async fn builtin_roles(c: &impl ConnectionTrait, sub: i64) -> Result<(), DbErr> {
-    for (name, perms) in perm::builtin() {
-        let r = role::ActiveModel { subserver: Set(Some(sub)), name: Set(name.into()), perms: Set(json!(perms).to_string()), builtin: Set(true), ..Default::default() };
-        role::Entity::insert(r).exec_without_returning(c).await?;
-    }
-    Ok(())
-}
-
 fn numbers(v: &Value) -> Limits {
     LIMITS.iter().filter_map(|k| v.get(*k).and_then(Value::as_i64).map(|n| (k.to_string(), n))).collect()
 }
 
 /// The super admin's defaults for every sub-server.
 pub async fn defaults(app: &App) -> Result<Limits, DbErr> {
-    let set = numbers(&serde_json::from_str(&settings::get(app, DEFAULTS).await?).unwrap_or(Value::Null));
+    let set = numbers(&serde_json::from_str(&settings::get(app, 0, DEFAULTS).await?).unwrap_or(Value::Null));
     Ok(LIMITS.iter().map(|k| (k.to_string(), set.get(*k).copied().unwrap_or_else(|| builtin_default(k)))).collect())
 }
 
@@ -102,14 +91,31 @@ pub async fn pack_room(app: &App, sub: i64, size: i64) -> Result<Result<(), Stri
     Ok(Ok(()))
 }
 
+/// A sub-server that stopped: (code, the message the client shows translated).
+fn stopped(state: &str) -> Option<(&'static str, &'static str)> {
+    match state {
+        "suspended" => Some(("server_suspended", "This server is suspended by the host")),
+        "unavailable" => Some(("server_unavailable", "This server is not available now: try later")),
+        _ => None,
+    }
+}
+
+/// A request to `/s/<name>/…` of a stopped sub-server: refused (503 with the code and message), but its admin
+/// panel (the super admin enters it) and the game's websocket (its login tells why: `may_enter`).
+pub fn closed(s: &subserver::Model, path: &str) -> Option<Response> {
+    let (code, text) = stopped(&s.state)?;
+    if path == "/" || path == "/admin" || path.starts_with("/admin/") {
+        return None;
+    }
+    Some((StatusCode::SERVICE_UNAVAILABLE, Json(json!({"error": text, "code": code}))).into_response())
+}
+
 /// May the account log into the sub-server (its game)? A suspended or unavailable one refuses everybody; a full one
 /// refuses those who are not its players yet. Err: (code, message for the player).
 pub async fn may_enter(app: &App, sub: i64, account: i64) -> Result<Result<(), (&'static str, String)>, DbErr> {
     let Some(s) = subserver::Entity::find_by_id(sub).one(&app.db).await? else { return Ok(Ok(())) };
-    match s.state.as_str() {
-        "suspended" => return Ok(Err(("server_suspended", "This server is suspended by the host".into()))),
-        "unavailable" => return Ok(Err(("server_unavailable", "This server is not available now: try later".into()))),
-        _ => {}
+    if let Some((code, text)) = stopped(&s.state) {
+        return Ok(Err((code, text.into())));
     }
     if s.id == 0 || member::Entity::find_by_id((sub, account)).one(&app.db).await?.is_some() {
         return Ok(Ok(()));
@@ -122,19 +128,13 @@ pub async fn may_enter(app: &App, sub: i64, account: i64) -> Result<Result<(), (
 }
 
 /// The accounts online in a sub-server.
-// FOUNDATION: the foundation's `Conn.sub == sub`; here: the connected accounts that are its players.
-async fn online(app: &App, sub: i64) -> Result<Vec<i64>, DbErr> {
-    let conns: Vec<i64> = app.hub().conns.keys().copied().collect();
-    if sub == 0 {
-        return Ok(conns);
-    }
-    let members: HashSet<i64> = member::Entity::find().filter(member::Column::Subserver.eq(sub)).all(&app.db).await?.into_iter().map(|m| m.account).collect();
-    Ok(conns.into_iter().filter(|a| members.contains(a)).collect())
+fn online(app: &App, sub: i64) -> Vec<i64> {
+    app.hub().conns.iter().filter(|(_, c)| c.sub == sub).map(|(id, _)| *id).collect()
 }
 
 /// Closes the game connections to a sub-server that stopped (suspended, unavailable, deleted), telling why.
 async fn kick_all(app: &App, sub: i64, reason: &str) -> Result<(), DbErr> {
-    let ids = online(app, sub).await?;
+    let ids = online(app, sub);
     let mut hub = app.hub();
     for id in ids {
         hub.send(id, &json!({"t": "kicked", "reason": reason}));
@@ -180,7 +180,7 @@ async fn create(c: &impl ConnectionTrait, owner: i64, name: &str, title: &str) -
         ..Default::default()
     };
     let id = subserver::Entity::insert(row).exec(c).await?.last_insert_id;
-    builtin_roles(c, id).await?;
+    perm::make_builtin_roles(c, id).await?;
     perm::give_builtin(c, owner, id, "Admin").await?;
     let m = member::ActiveModel { subserver: Set(id), account: Set(owner), joined: Set(ranked::now()), suspended: Set(false) };
     member::Entity::insert(m).on_conflict_do_nothing().exec_without_returning(c).await?;
@@ -241,7 +241,7 @@ async fn list(State(app): State<AppRef>, Extension(a): Extension<Admin>) -> Resp
                 None => None,
             };
             out.push(json!({"id": s.id, "name": s.name, "title": s.title, "state": s.state, "created": s.created, "owner": owner,
-                "players": players, "online": online(&app, s.id).await?.len(), "packs": packs, "storage": bytes,
+                "players": players, "online": online(&app, s.id).len(), "packs": packs, "storage": bytes,
                 "max": max, "own": own, "limits": now}));
         }
         Ok(Json(json!({"list": out, "defaults": defaults(&app).await?, "keys": LIMITS})).into_response())
@@ -328,10 +328,10 @@ async fn set_defaults(State(app): State<AppRef>, Extension(a): Extension<Admin>,
         Err(r) => return r,
     };
     run(async {
-        let before: Value = serde_json::from_str(&settings::get(&app, DEFAULTS).await?).unwrap_or(json!({}));
+        let before: Value = serde_json::from_str(&settings::get(&app, 0, DEFAULTS).await?).unwrap_or(json!({}));
         let mut after = before.clone();
         apply(&mut after, &change);
-        settings::set(&app, DEFAULTS, &after.to_string()).await?;
+        settings::set(&app, 0, DEFAULTS, &after.to_string()).await?;
         perm::audit(&app.db, a.me.id, 0, "limits.defaults", "every server", before, after).await;
         app.event(a.ev(format!("{} changed the default limits of the servers", a.me.name)));
         Ok(Json(json!({"ok": true, "defaults": defaults(&app).await?})).into_response())
@@ -504,11 +504,11 @@ async fn delete(app: &AppRef, id: i64) -> Result<(), DbErr> {
 /// The library is the sub-server -1: only a global role gives its permissions.
 async fn library(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path((id, action)): Path<(i64, String)>) -> Response {
     let (from, to) = match action.as_str() {
-        "add" => (0, LIBRARY),
-        "remove" => (LIBRARY, 0),
+        "add" => (0, packs::LIBRARY),
+        "remove" => (packs::LIBRARY, 0),
         _ => return err(StatusCode::NOT_FOUND, "No such action"),
     };
-    if let Some(r) = need(&app, &a, "packs.enable", LIBRARY).await {
+    if let Some(r) = need(&app, &a, "packs.enable", packs::LIBRARY).await {
         return r;
     }
     run(async {
@@ -518,15 +518,15 @@ async fn library(State(app): State<AppRef>, Extension(a): Extension<Admin>, Path
         }
         pack::ActiveModel { id: Unchanged(id), subserver: Set(to), is_default: Set(false), ..Default::default() }.update(&app.db).await?;
         perm::audit(&app.db, a.me.id, 0, "library", &crate::packs::label(&p), json!(from), json!(to)).await;
-        app.event(a.ev(format!("{} {} the pack library: {}", a.me.name, if to == LIBRARY { "added to" } else { "removed from" }, crate::packs::label(&p))));
+        app.event(a.ev(format!("{} {} the pack library: {}", a.me.name, if to == packs::LIBRARY { "added to" } else { "removed from" }, crate::packs::label(&p))));
         Ok(Json(json!({"ok": true})).into_response())
     }
     .await)
 }
 
-/// The packs a sub-server has: its own and the library's (FOUNDATION: `packs::of_sub`).
+/// The packs a sub-server has: its own and the library's.
 pub async fn packs_of(c: &impl ConnectionTrait, sub: i64) -> Result<Vec<pack::Model>, DbErr> {
-    pack::Entity::find().filter(pack::Column::Subserver.is_in([sub, LIBRARY])).order_by_asc(pack::Column::Id).all(c).await
+    pack::Entity::find().filter(packs::of_sub(sub)).order_by_asc(pack::Column::Id).all(c).await
 }
 
 // --- admin invites --------------------------------------------------------------------------------------------------

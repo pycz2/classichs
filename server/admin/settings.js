@@ -1,9 +1,9 @@
-// Settings (the auto-bots' wait, invite-only registration) and the invite keys: make one (a note,
+// Settings (the auto-bots' wait, invite-only registration, the chats' keeping time) and the invite keys: make one (a note,
 // how many players), copy it, revoke it, see who joined with it.
 
 import { useState, useEffect } from 'preact/hooks'
 import { api } from './api.js'
-import { html, useLoad, useEvents, useTick, toast, Card, ErrorBox, Empty, Icon, UserLink, ago, fullDate } from './ui.js'
+import { html, useCan, useLoad, useEvents, useTick, toast, Card, ErrorBox, Empty, Icon, UserLink, ago, fullDate } from './ui.js'
 import { Confirm } from './accounts.js'
 import { Switch } from './bots.js'
 
@@ -12,6 +12,7 @@ const MAX_WAIT = 600
 const waitText = (s) => s === 0 ? 'at once' : s < 60 ? s + ' s' : Math.floor(s / 60) + ' min' + (s % 60 ? ' ' + (s % 60) + ' s' : '')
 
 export function Settings () {
+  const can = useCan()
   const [data, error, reload] = useLoad(() => api('settings'), [])
   const [wait, setWait] = useState(null) // seconds being edited (null = as saved)
   const [busy, setBusy] = useState(false)
@@ -39,7 +40,7 @@ export function Settings () {
           </label>
           <div class="form-actions">
             ${wait != null && wait !== saved && html`<button type="button" class="btn ghost" onClick=${() => setWait(null)}>Undo</button>`}
-            <button class="btn primary" disabled=${busy || wait == null || wait === saved}>Save</button>
+            ${can('settings.edit') && html`<button class="btn primary" disabled=${busy || wait == null || wait === saved}>Save</button>`}
           </div>
         </form>
       </${Card}>
@@ -49,12 +50,39 @@ export function Settings () {
             <div class="muted small">${data.signup_invite_only
               ? 'New players need a key to register. Accounts that exist log in as before.'
               : 'Anyone who reaches the server can register. A key given anyway is still recorded.'}</div></div>
-          <${Switch} on=${data.signup_invite_only} busy=${busy} label="Invite keys only" onChange=${(on) => save({ signup_invite_only: on })} />
+          <${Switch} on=${data.signup_invite_only} busy=${busy || !can('settings.edit')} label="Invite keys only" onChange=${(on) => save({ signup_invite_only: on })} />
         </div>
         <p class="small" style="margin: 14px 0 0"><a href="#/invites">Invite keys →</a></p>
       </${Card}>
+      <${KeepTime} saved=${data.chat_keep_days} busy=${busy} save=${save} />
     </div>`}
   </div>`
+}
+
+/** How long the tournament chats and the private messages are kept (days; 0 = unlimited). */
+function KeepTime ({ saved, busy, save }) {
+  const [days, setDays] = useState(null) // being edited (null = as saved)
+  const [unlimited, setUnlimited] = useState(null)
+  const off = unlimited ?? saved === 0
+  const d = days ?? (saved || 14)
+  const value = off ? 0 : Math.max(1, Math.min(36500, Math.round(+d || 1)))
+  const reset = () => { setDays(null); setUnlimited(null) }
+  return html`<${Card} title="Keeping chats">
+    <form class="form" onSubmit=${async (e) => { e.preventDefault(); await save({ chat_keep_days: value }); reset() }}>
+      <div class="setting-row">
+        <div><b>Keep forever</b><div class="muted small">Never remove old messages.</div></div>
+        <${Switch} on=${off} busy=${busy} label="Keep forever" onChange=${(on) => setUnlimited(on)} />
+      </div>
+      ${!off && html`<label>Keep for
+        <span class="unit-input"><input type="number" min="1" max="36500" value=${d} onInput=${(e) => setDays(e.target.value)} aria-label="Days" /><span>days</span></span>
+      </label>`}
+      <small>The tournaments list's chat, every tournament's chat and the private messages between players older than this are removed (checked every hour). 14 days by default. Only the super admin changes it.</small>
+      <div class="form-actions">
+        ${value !== saved && html`<button type="button" class="btn ghost" onClick=${reset}>Undo</button>`}
+        <button class="btn primary" disabled=${busy || value === saved}>Save</button>
+      </div>
+    </form>
+  </${Card}>`
 }
 
 /** A key in full, copied on click. */
@@ -97,6 +125,7 @@ function NewKey ({ onMade }) {
 }
 
 export function InviteKeys () {
+  const can = useCan()
   const [data, error, reload] = useLoad(() => api('signup_keys'), [])
   const [fresh, setFresh] = useState('')
   const [revoke, setRevoke] = useState(null)
@@ -116,7 +145,7 @@ export function InviteKeys () {
         : html`Registration is open to anyone: keys are optional (<a href="#/settings">Settings</a>)`}</span>`}
     </header>
     <${ErrorBox} error=${error} onRetry=${reload} />
-    <${Card} title="New key"><${NewKey} onMade=${(k) => { setFresh(k); reload() }} /></${Card}>
+    ${can('invites.create') && html`<${Card} title="New key"><${NewKey} onMade=${(k) => { setFresh(k); reload() }} /></${Card}>`}
     <${Card} title=${data ? `Keys (${active} active of ${keys.length})` : 'Keys'} pad=${false}>
       ${data && !keys.length ? html`<${Empty}>No keys yet. Make one above and send it to a player: they paste it when they register.</${Empty}>`
         : data && html`<div class="table-wrap"><table class="table keys">
@@ -129,7 +158,7 @@ export function InviteKeys () {
           <td class="muted nowrap" title=${fullDate(k.created * 1000)}>${ago(k.created * 1000)}</td>
           <td><${KeyState} k=${k} /></td>
           <td>${k.accounts.length ? html`<span class="joined">${k.accounts.map((a) => html`<${UserLink} key=${a.id} id=${a.id} user=${a.user} />`)}</span>` : html`<span class="muted">nobody yet</span>`}</td>
-          <td class="right-cell">${!k.revoked && html`<button class="btn ghost sm danger-hover" onClick=${() => setRevoke(k)}>Revoke</button>`}</td>
+          <td class="right-cell">${!k.revoked && can('invites.revoke') && html`<button class="btn ghost sm danger-hover" onClick=${() => setRevoke(k)}>Revoke</button>`}</td>
         </tr>`)}</tbody></table></div>`}
     </${Card}>
     ${revoke && html`<${Confirm} title="Revoke this key?" text=${`Nobody can register with it any more${revoke.note ? ' (' + revoke.note + ')' : ''}. The accounts made with it stay.`}

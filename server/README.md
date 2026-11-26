@@ -174,6 +174,15 @@ updates live over `/admin/ws`:
 - **Invite keys**: make a key (a note, how many players: 1 by default, at most 1000), copy
   it, revoke it; each key's uses left, who made it and when, the accounts that joined with
   it. An account's page says which key it joined with (and who made it) or "without a key".
+- **Problem reports** (the players' reports from the game, each a thread): the list (state,
+  player, version filters; an unread mark on new reports and on players' answers; the last
+  activity), export (a zip with the pictures, voice messages and replays, or JSON) of all, the
+  filtered or the ticked ones, purge (no activity for N days). A report's page: the thread (the
+  player's messages and pictures, the admins' answers), an answer box (send, send and resolve),
+  the state (open, resolved, rejected), the voice message, the context, the games (play or
+  download their replays), duplicates (merge into another report), a note, delete, download it
+  as a zip, copy it as Markdown for an AI agent. The menu and the dashboard count the new
+  reports and the players' answers.
 - **Settings** (for the whole server, at once): the auto-bots' wait (0–600 s; 0 = at once)
   and invite-only registration.
 
@@ -212,12 +221,22 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `GET packs` | `{server: [pack], players: [pack], stats: {server, enabled, players, uploaders, files, bytes, downloads, storage, games, live, default_rules, builtin: {rules_hash, default}, limits: {player, server, per_player}}}`; a pack is `{id, pack_id, version, name, rules_hash, content_hash, size, enabled, default, created, downloads, games, live, owner: {id, user} \| null}` (`games`/`live`: finished and live games in its rules) |
 | `POST packs` (the `.cardpack` as the raw body, up to 1 GiB) | a new server pack, enabled → `{pack}`; 409 `exists`, 413 `too_large`, 422 `invalid` (`{error, code}`) |
 | `POST packs/{id}/{enable\|disable\|delete\|default}` | any pack, a player's too (the player's game gets a new `packs`); `default`: a server pack becomes the default game |
-| `GET settings` · `POST settings {autobot_wait_ms?, signup_invite_only?}` | `{autobot_wait_ms, signup_invite_only}`; the wait 0..600000 ms (default 30000), invite-only default false; the fields given change at once |
+| `GET settings` · `POST settings {autobot_wait_ms?, signup_invite_only?, chat_keep_days?}` | `{autobot_wait_ms, signup_invite_only, chat_keep_days}`; the wait 0..600000 ms (default 30000), invite-only default false, the chats' keeping time 0..36500 days (default 14, 0 = unlimited; the super level, `settings.retention`); the fields given change at once |
+| `GET chats` · `GET chats/{channel}` | the tournament chats: `{chats: [{channel, title, status, count, last, open}]}` (the list's chat first, then the tournaments' with messages or still open, the latest active first) · `{channel, title, open, closes, list}` (the last 500 messages; a deleted one also has `deleted_text`) |
+| `POST chats/{channel} {text}` · `POST chat_messages/{id}/delete` | writes as the admin (`chats.write_as_admin`; 400 on a closed chat) · deletes a message (`chats.moderate`) |
 | `GET signup_keys` | `{keys: [{id, key, note, uses_total, uses_left, created, created_by, created_by_name, revoked, accounts: [{id, user, created}]}], invite_only}`, newest first |
 | `POST signup_keys {note?, uses?}` | a new uuid v4 key (note ≤ 200 characters, uses 1–1000, default 1) → `{id, key, text}` |
 | `POST signup_keys/{id}/revoke` | the key registers nobody more (its accounts stay) |
 | `GET tournaments?status` · `GET tournaments/{id}` | the list (summaries + `top` [{place, name}]) · one tournament as the players' `full`, every deck shown |
 | `POST tournaments/{id}/cancel` | cancels one that is not over (409 otherwise) |
+| `GET reports?state&player&version&subserver&page&size` | problem reports (not the merged duplicates), the latest activity first: `{list, total, page, size, counts: {new, answers}, versions}`; a report is `{id, subserver, account: {id, user, tag}, written_at, received_at, last_at, text, version, context, games, screen, voice, state, note, merged_into, unread, opened, merged, messages}` (`player`: a part of the name or tag; `state`: open, resolved, rejected; `unread`: new, or the player wrote since an admin looked) |
+| `GET reports/counts` | `{new, answers}`: reports no admin opened; opened ones the player wrote in since |
+| `GET reports/{id}` | one report (opening it reads it and its duplicates) with `thread: [{id, report, from: player\|admin, name, text, at, screen}]` (the reports and every message, oldest first; `screen`: the picture's path under `reports/{id}/`), `merged: [report]`, `games: [{game, replay, mode, pack_name, players, ended, winner}]` |
+| `GET reports/{id}/{screen.png\|voice.ogg\|m<msg>.png}?of=<report>` | a picture or the voice message (Ogg Opus) of the report or of a duplicate merged into it |
+| `GET reports/{id}/export` · `GET reports/{id}/markdown` | this report as a zip (`report.md`, `report.json`, its pictures, voice messages and `<game>.chsreplay`) · as Markdown for an AI agent (the player's words, version, pack and rules hash, the thread, the files) |
+| `POST reports/{id}/{state\|answer\|note\|merge\|unmerge\|delete}` | `{state: open\|resolved\|rejected}` and `{text}` (an answer, ≤ 4000) go to the report and its duplicates (each player sees them in his own thread: `reports_unread` is pushed), `{note}` (≤ 4000), `{into: <report>}` (this one and its duplicates go under that one), —, — (with its files; its duplicates stand alone again) |
+| `POST reports/purge {days}` | deletes the reports without activity in that many days → `{removed}` |
+| `GET reports/export?format=zip\|json&ids=1,2&…the list's filters` | the ticked (`ids`), else the filtered (none: all) reports, up to 2000, each as `reports/{id}` gives it: a zip of `reports.json` (each with `files: {screen, voice, pictures, replays}`, paths in the zip) and `<id>/…` files; or the JSON alone |
 | `GET stats?pack&mode&bracket&period&bucket&bots&min&class` | the Statistics page (below): `{packs: [{pack, name, games}], pack, period, bucket, current, buckets: [{bucket, sides}], kept, modes, brackets, backfill, sides, classes: [{class, name, games, wins, mirrors}], matchups: [{class, opp, games, wins}], series: {hour: [[bucket, sides]] ×48, day: ×30}, decks: {total, top: [deck] ×20, by_class: {class: [deck] ×5}}, cards: [{card, name, cost, decks, copies, deck_wins, played, played_wins, plays, kept, replaced, kept_wins}]}`; period hour\|day\|week\|month\|year\|all (default), `bucket` one of its buckets (default: the current one, `current`; `buckets`: the period's buckets with games, newest first, by the filters, the current and chosen ones always; `kept`: false when the bucket's deck and card rows are pruned), `bots=0` leaves out games with a bot, `min` (default 20) the fewest games of a deck shown, `class` the cards of one class's decks; a deck is `{deck, class, hero, games, wins, cards: [{id, name, n, cost}]}` |
 
 `/admin/replay/{file}` (the cookie) serves the replay player's files with a CSP of their own
@@ -245,7 +264,7 @@ final turn and hash, and for `illegal` the refused actions), `tournament` (creat
 left, closed, seeded, started, finished, cancelled; `data.tournament`), `admin` (every admin
 action; the player changes `data.action` standing, arena, game_settings, tag, deck_add, deck_rename,
 deck_delete, deck_copy with `data.target` and before/after), `setting` (a setting changed: `data.key`, `data.value`), `signup_key` (a key made
-or revoked; `register` has `data.signup_key`), `error` (database failures and rules engine panics).
+or revoked; `register` has `data.signup_key`), `report` (a problem report sent: `data.report`), `error` (database failures and rules engine panics).
 
 ### The database
 
@@ -375,7 +394,9 @@ scripts tell the details.
 | Login + register | 10 a minute per address and per account name |
 | Messages from one connection | 300 per 10 s (then disconnected) |
 | Malformed messages | 20 per connection (then disconnected) |
-| Chat | 1–500 characters, 10 per 10 s, last 200 kept per pair, friends only |
+| Chat | 1–500 characters, 10 per 10 s (private and tournament chats together), last 200 kept per pair, friends only |
+| Tournament chats | the last 100 messages on `chat_sub`; a tournament's closes 10 minutes after its end |
+| Keeping | chat and private messages older than `chat_keep_days` (default 14, 0 = unlimited) are removed by the hourly cleanup |
 | Names | user 3–16 `[A-Za-z0-9_]` at registration (older accounts up to 20); tag 3–16 letters/digits, unique ignoring case |
 | Passwords | 8–128 characters |
 | Friends | 200 |
@@ -610,6 +631,27 @@ human `text` (`server` for a database error).
   everyone when `deck_reveal` is on or the tournament is over, else its two players and the
   creator.
 
+### Chats
+
+The tournaments list's common chat (channel `tournaments`) and each tournament's own (`t:<id>`),
+isolated from each other (`src/chat.rs`, table `chat_message`).
+
+- `chat_sub {channel}` → `chat_history {channel, list: [msg] (the last 100, oldest first), open,
+  closes (unix s; 0: none known), moderator}`; from then on the channel's pushes until
+  `chat_unsub {channel}` (no answer) or the connection ends. Any player may read and write any of them.
+- `chat_send {channel, text}` (1–500 characters; the friends' chat rate limit): every subscriber
+  (the sender too, if subscribed) gets `chat_msg {channel, msg}`. A closed chat: `error chat_closed`.
+- `chat_delete {id}` (a moderator: `chats.moderate`, else `error forbidden`): the row stays, its
+  text is hidden; every subscriber gets `chat_deleted {channel, id, by}`.
+- A msg is `{id, from, text, at (unix s), mark, deleted_by}`: `mark` "admin" (may moderate) in
+  every chat, "creator" (the tournament's) in its own chat, else ""; a deleted one has `text` ""
+  and `deleted_by` the moderator's name.
+- A tournament's chat opens at its creation and closes 10 minutes after its end (finished,
+  cancelled or closed): read-only then (`chat_closed {channel}` to its subscribers when it
+  happens), readable while kept.
+- Keeping: chat and private messages older than the `chat_keep_days` setting (14 by default; 0 =
+  unlimited) are removed by the hourly cleanup.
+
 ### Deck codes
 
 The client's (Collection → Export Code / Import Code, `game/deck_code.gd`) and the admin panel's
@@ -683,3 +725,29 @@ script, and its bot plays a trial game with the pack's first two legal ready dec
 starter decks), trying every legal move on a copy at each step: a script error, an engine
 failure, a stuck game or more than 20 s refuses the pack (`422 invalid` with the reason,
 event `pack_rejected`).
+
+### Problem reports
+
+A report is a thread: the player's report, then the admins' answers and the player's own.
+With the game's session token (as the packs' uploads; CORS too):
+
+- `POST /reports` (a JSON body, at most 20 MB) `{text, written_at, context, screen, voice}`: the
+  text (1–4000 characters), the time on the player's device (unix seconds), the context (a JSON
+  object: `version`, `platform`, `screen`, `language`, `pack {id, version, rules_hash}`, `game`;
+  at most 4000 bytes), the picture (base64 of a PNG, at most 10 MB) and the voice message (base64
+  of a WAV, 16-bit mono PCM at 8, 12, 16, 24 or 48 kHz — the game sends 16 kHz —, or of an Ogg
+  Opus file; at most 60 s; kept as Ogg Opus, at most 1 MB); `""` = none → `201 {report: {id}}`.
+  The server adds the games (the one the player is in, else the context's `game`, then the last
+  5 finished) and keeps the files in the pack store under `reports/<id>/`.
+- `GET /reports` → `{list: [{id, text, state: open|closed, received_at, last_at, unread, messages}], unread}`:
+  the player's reports, the latest activity first; `unread`: an admin answered or changed its state since he looked.
+- `GET /reports/{id}` → `{id, state, text, received_at, last_at, messages: [{id, from: you|admin, name, text, at, screen}]}`
+  (the report itself first); clears its `unread`.
+- `POST /reports/{id} {text, screen}` → `201 {message}`: the player answers in his thread.
+- Refusals are `{error, code}`: 401 `auth_required`/`bad_token`, 400 `bad_body`/`bad_text`/
+  `bad_screen`/`bad_voice`/`bad_context`, 404 `not_found` (not his), 413 `too_large`, 429
+  `too_many` (5 reports and 20 answers an hour).
+- The websocket pushes `reports_unread {n}` to the player when an admin answers or changes a state.
+
+A deleted account takes its reports and their files with it; `reports::prune` (the admin's
+purge) removes the ones without activity since a time.

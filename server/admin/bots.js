@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'preact/hooks'
 import { api } from './api.js'
-import { html, useLoad, useTick, toast, Card, ErrorBox, Empty, Icon, Modal, num, dur } from './ui.js'
+import { html, useCan, useLoad, useTick, toast, Card, ErrorBox, Empty, Icon, Modal, num, dur } from './ui.js'
 import { Confirm } from './accounts.js'
 
 const LEVEL = { easy: 'Easy', medium: 'Medium', hard: 'Hard', superhard: 'Super hard' }
@@ -87,6 +87,7 @@ function BotPage ({ id, onClose }) {
 }
 
 export function Bots () {
+  const can = useCan()
   const [data, error, reload] = useLoad(() => api('bots'), [])
   useEffect(() => { const t = setInterval(reload, 2000); return () => clearInterval(t) }, [reload])
   useTick(1000)
@@ -108,7 +109,7 @@ export function Bots () {
   return html`<div class="page">
     <header class="page-head"><h1>Bots</h1><span class="muted">The server's own players of Classic: they play through the same protocol as people and see only their own player's view · ${data ? data.decks + ' decks · thinking at once: ' + data.thinkers : ''}</span></header>
     <${ErrorBox} error=${error} onRetry=${reload} />
-    <${Card} title="Bots" actions=${html`
+    <${Card} title="Bots" actions=${can('bots.edit') && html`
       <button class="btn ghost sm" onClick=${() => all('start')}><${Icon} name="play" size=${14} /> Start all</button>
       <button class="btn ghost sm" onClick=${() => all('stop')}><${Icon} name="pause" size=${14} /> Stop all</button>
       <button class="btn primary sm" onClick=${() => setModal('add')}><${Icon} name="plus" size=${14} /> Add bots</button>`} pad=${false}>
@@ -122,7 +123,7 @@ export function Bots () {
           const s = b.status
           const stale = s.game && secs(s.since) > 600
           return html`<tr key=${b.id} class="clickable" onClick=${() => setModal({ open: b.id })}>
-            <td><${Switch} on=${b.enabled} label=${b.enabled ? 'Stop' : 'Start'} busy=${busy === b.id} onChange=${(on) => act(b, on ? 'start' : 'stop')} /></td>
+            <td><${Switch} on=${b.enabled} label=${b.enabled ? 'Stop' : 'Start'} busy=${busy === b.id || !can('bots.edit')} onChange=${(on) => act(b, on ? 'start' : 'stop')} /></td>
             <td class="nowrap"><span class=${'dot' + (s.online ? ' on' : '')}></span> <b>${b.name}</b></td>
             <td title=${LEVEL_TIP[b.level]}>${LEVEL[b.level]}</td>
             <td>${MODES[b.modes]}</td>
@@ -132,9 +133,9 @@ export function Bots () {
             <td class="num">${pct(s.wins, s.games)}</td>
             <td class="muted">${b.modes === 'arena' ? `${s.arena_runs} runs · best ${s.arena_best}${s.arena_now && s.arena_now.hero ? ` · now ${s.arena_now.hero} ${s.arena_now.wins}–${s.arena_now.losses}` : ''}` : `ranked ${s.ranked} · casual ${s.casual}${s.rank && s.rank.rank !== undefined ? ' · ' + (s.rank.rank === 0 ? 'Legend' : 'rank ' + s.rank.rank) : ''}`}</td>
             <td class=${'num' + (s.errors ? ' bad' : '')} title=${s.last_error || ''}>${s.errors}</td>
-            <td class="actions" onClick=${(e) => e.stopPropagation()}>
+            <td class="actions" onClick=${(e) => e.stopPropagation()}>${can('bots.edit') && html`
               <button class="btn ghost sm" onClick=${() => setModal({ edit: b })}>Settings</button>
-              <button class="btn ghost sm icon-only" title="Delete" onClick=${() => setModal({ del: b })}><${Icon} name="trash" size=${15} /></button></td>
+              <button class="btn ghost sm icon-only" title="Delete" onClick=${() => setModal({ del: b })}><${Icon} name="trash" size=${15} /></button>`}</td>
           </tr>`
         })}</tbody></table></div>`}
     </${Card}>

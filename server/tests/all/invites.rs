@@ -78,7 +78,7 @@ async fn invite_only_registration() {
     assert_eq!(a.signup_key, Some(k));
     assert_eq!(db::account_by_name(&app.db, "open_one").await.unwrap().unwrap().signup_key, None);
 
-    settings::set(&app, settings::INVITE_ONLY, "1").await.unwrap();
+    settings::set(&app, 0, settings::INVITE_ONLY, "1").await.unwrap();
     assert_eq!(ask(addr, json!({"t": "signup_info"})).await["invite_only"], true);
     assert_eq!(ask(addr, reg("nokey", None)).await["code"], "invite_required");
     assert_eq!(ask(addr, reg("nokey", Some("  "))).await["code"], "invite_required", "a blank key is none");
@@ -106,7 +106,7 @@ async fn invite_only_registration() {
 #[tokio::test]
 async fn a_key_is_never_overspent() {
     let (addr, app) = server().await;
-    settings::set(&app, settings::INVITE_ONLY, "1").await.unwrap();
+    settings::set(&app, 0, settings::INVITE_ONLY, "1").await.unwrap();
     let key = "33333333-3333-4333-8333-333333333333";
     let k = make_key(&app, key, 3).await;
     let tries: Vec<_> = (0..16).map(|i| tokio::spawn(ask(addr, reg(&format!("racer_{i}"), Some(key))))).collect();

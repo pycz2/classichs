@@ -7,6 +7,8 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub game: String,
+    /// The sub-server (`crate::scope`).
+    pub subserver: i64,
     /// The pack's rules_hash.
     pub pack: String,
     /// The players' accounts by seat (as `games`).

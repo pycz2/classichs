@@ -7,6 +7,8 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: String,
+    /// The sub-server (`crate::scope`).
+    pub subserver: i64,
     /// "casual" | "ranked" | "arena" | "friendly" | "tournament".
     pub mode: String,
     /// The host's account (null once deleted).

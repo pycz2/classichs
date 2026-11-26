@@ -47,7 +47,7 @@ async fn wait_games(app: &AppRef, ids: &[i64], games: u64, secs: u64) {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn two_server_bots_play_each_other() {
     let app = app().await;
-    let names = bots::create(&app, 2, "easy", "casual", (0, 0), (0, 1)).await.unwrap();
+    let names = bots::create(&app, 0, 2, "easy", "casual", (0, 0), (0, 1)).await.unwrap();
     assert_eq!(names, ["Bot_Easy_1", "Bot_Easy_2"]);
     bots::sync(&app).await.unwrap();
     let ids: Vec<i64> = bots::all(&app).await.unwrap().iter().map(|b| b.id).collect();
@@ -72,7 +72,7 @@ async fn two_server_bots_play_each_other() {
 async fn a_bot_over_the_network_plays_a_server_bot() {
     let app = app().await;
     // the server's bot (the in-process adapter)
-    bots::create(&app, 1, "medium", "casual", (0, 0), (0, 1)).await.unwrap();
+    bots::create(&app, 0, 1, "medium", "casual", (0, 0), (0, 1)).await.unwrap();
     bots::sync(&app).await.unwrap();
     let local = bots::all(&app).await.unwrap()[0].id;
     // a listening server for the network bot
@@ -84,6 +84,7 @@ async fn a_bot_over_the_network_plays_a_server_bot() {
     let hash = auth::hash_password("netbotpassword");
     let acc = db::create_account(&app.db, "NetBot", &hash, "user").await.unwrap().unwrap();
     let cfg = BotConfig {
+        subserver: 0,
         id: 999,
         account: acc,
         name: "NetBot".into(),

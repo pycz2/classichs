@@ -1,5 +1,5 @@
 //! A chat message between two friends; the pair is (lo, hi) = (smaller id, larger id).
-//! The last 200 of a pair are kept.
+//! The last 200 of a pair are kept, none older than the keeping time (`chat::cleanup`).
 
 use sea_orm::entity::prelude::*;
 
@@ -8,6 +8,8 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
+    /// The sub-server (`crate::scope`).
+    pub subserver: i64,
     pub lo: i64,
     pub hi: i64,
     /// The sender (lo or hi).

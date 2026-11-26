@@ -1,4 +1,3 @@
-// FOUNDATION: a verbatim copy of the foundation agent's file, a stand-in until it lands (take theirs at merge).
 //! A sub-server (docs/superpowers/specs/2026-11-26-roles-subservers-design.md §1): one of the game servers this
 //! server hosts, at `/s/<name>/…`. Row 0 is "main", today's server at the bare paths.
 

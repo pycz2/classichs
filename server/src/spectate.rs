@@ -37,7 +37,8 @@ pub fn join(app: &AppRef, game: &str, account: i64, seat: usize, full: bool) -> 
     if hub.in_game.contains_key(&account) {
         return Err("You are in a game");
     }
-    let Some(lg) = hub.games.get(game) else { return Err("The game is over") };
+    // (a game of another sub-server is none of this one's)
+    let Some(lg) = hub.games.get(game).filter(|g| hub.sub_of(account).is_none_or(|s| s == g.sub)) else { return Err("The game is over") };
     let already = hub.watching.get(&account).is_some_and(|w| w.game == game);
     if !already && hub.watching.values().filter(|w| w.game == game).count() >= MAX_PER_GAME {
         return Err("This game has the most spectators it can have");

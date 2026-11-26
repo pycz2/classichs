@@ -1,4 +1,3 @@
-// FOUNDATION: a verbatim copy of the foundation agent's file, a stand-in until it lands (take theirs at merge).
 //! The audit log: every change of roles, permissions, bans, settings, limits, quotas and sub-server states.
 
 use sea_orm::entity::prelude::*;

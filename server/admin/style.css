@@ -676,3 +676,30 @@ textarea.mono { font-size: 12px; resize: vertical; word-break: break-all; }
 .deck-details { font-size: 12.5px; }
 .deck-details summary { cursor: pointer; color: var(--text-2); }
 .deck-details .decklist { margin-top: 6px; }
+
+/* roles.js and audit.js */
+.perm-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.perm-groups fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px 8px; margin: 0; display: flex; flex-direction: column; gap: 3px; }
+.perm-groups label.check { flex-direction: row; align-items: center; gap: 6px; font-weight: 400; }
+.perm-groups input[type=checkbox] { width: auto; margin: 0; }
+.perm-groups legend { font-weight: 650; font-size: 12.5px; padding: 0 4px; }
+.perm-list { color: var(--text-2); }
+.audit-val { font-size: 12px; background: var(--surface-3); border-radius: 4px; padding: 1px 5px; word-break: break-word; }
+/* problem reports (reports.js) */
+.row-gap { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
+.btn.disabled { opacity: .45; pointer-events: none; }
+.report-text { max-width: 420px; overflow-wrap: anywhere; }
+.report-full { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+.report-shot { display: block; max-width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--border); }
+.page audio { width: 100%; }
+.report-games li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 16px; }
+.report-page textarea { width: 100%; }
+.thread { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.thread .msg { padding: 10px 12px; border-radius: 8px; background: var(--surface-2, var(--surface-3)); max-width: 92%; }
+.thread .msg.admin { align-self: flex-end; background: var(--accent-bg); }
+.thread .msg-head { display: flex; gap: 8px; align-items: baseline; margin-bottom: 4px; }
+.thread .report-shot { margin-top: 8px; max-height: 420px; width: auto; }
+.report-page .answer { margin-top: 14px; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 6px; vertical-align: middle; }
+tr.unread td { font-weight: 600; }
+input.days { width: 72px; }

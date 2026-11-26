@@ -345,10 +345,20 @@ fn with_rules(rules_hash: &str) -> Condition {
     Condition::any().add(pack::Column::RulesHash.eq(rules_hash)).add(pack::Column::Id.in_subquery(versions))
 }
 
-/// The rules_hash games are played in when a request names none: the default server pack,
+/// The packs a sub-server has: its own and the common library's (subserver -1).
+pub fn of_sub(sub: i64) -> Condition {
+    Condition::all().add(pack::Column::Subserver.is_in([sub, LIBRARY]))
+}
+
+/// The `subserver` of the common pack library every sub-server offers.
+pub const LIBRARY: i64 = -1;
+
+/// The rules_hash games are played in when a request names none: the sub-server's default server pack,
 /// else the built-in Classic rules.
-pub async fn default_hash(db: &Db) -> Result<String, DbErr> {
+// ponytail: the default is a flag on the sub-server's own pack row; a library pack as some sub-server's default needs a setting.
+pub async fn default_hash(db: &Db, sub: i64) -> Result<String, DbErr> {
     let d = pack::Entity::find()
+        .filter(pack::Column::Subserver.eq(sub))
         .filter(pack::Column::Owner.is_null())
         .filter(pack::Column::Enabled.eq(true))
         .filter(pack::Column::IsDefault.eq(true))
@@ -360,16 +370,17 @@ pub async fn default_hash(db: &Db) -> Result<String, DbErr> {
 /// The game a request asks for (`pack`: a rules_hash; None = the default), if `me` may play
 /// it here: the default, an enabled server pack, or (friendly games: `own` = the inviter) the
 /// inviter's own enabled pack. Returns the rules and the pack as the game sees it.
-pub async fn playable(app: &AppRef, pack: Option<&str>, own: Option<i64>) -> Result<(Arc<GameRules>, Value), (&'static str, String)> {
+pub async fn playable(app: &AppRef, sub: i64, pack: Option<&str>, own: Option<i64>) -> Result<(Arc<GameRules>, Value), (&'static str, String)> {
     let server = |e: DbErr| ("server", format!("database: {e}"));
     let h = match pack {
         Some(h) => h.to_string(),
-        None => default_hash(&app.db).await.map_err(server)?,
+        None => default_hash(&app.db, sub).await.map_err(server)?,
     };
     if h.len() > 64 {
         return Err(("pack", "This server does not have this game".into()));
     }
     let rows = pack::Entity::find()
+        .filter(of_sub(sub))
         .filter(with_rules(&h))
         .filter(pack::Column::Enabled.eq(true))
         .order_by_asc(pack::Column::Id)
@@ -377,7 +388,7 @@ pub async fn playable(app: &AppRef, pack: Option<&str>, own: Option<i64>) -> Res
         .await
         .map_err(server)?;
     let row = rows.iter().find(|p| p.owner.is_none()).or_else(|| rows.iter().find(|p| own.is_some() && p.owner == own));
-    let default = default_hash(&app.db).await.map_err(server)?;
+    let default = default_hash(&app.db, sub).await.map_err(server)?;
     if row.is_none() && h != default {
         return Err(("pack", "This server does not have this game".into()));
     }
@@ -393,7 +404,7 @@ pub async fn playable(app: &AppRef, pack: Option<&str>, own: Option<i64>) -> Res
 pub struct PackErr(pub StatusCode, pub &'static str, pub String);
 
 impl PackErr {
-    fn new(s: StatusCode, code: &'static str, text: impl Into<String>) -> PackErr {
+    pub(crate) fn new(s: StatusCode, code: &'static str, text: impl Into<String>) -> PackErr {
         PackErr(s, code, text.into())
     }
 }
@@ -440,14 +451,15 @@ pub const STAGES: [&str; 5] = ["receiving", "checking", "trial", "storing", "don
 /// `x-upload-id`: the uploader knows its own messages by it (none sent without one).
 pub struct Stages {
     app: AppRef,
+    sub: i64,
     upload: String,
     owner: Option<i64>,
 }
 
 impl Stages {
-    pub fn new(app: &AppRef, headers: &HeaderMap, owner: Option<i64>) -> Stages {
+    pub fn new(app: &AppRef, sub: i64, headers: &HeaderMap, owner: Option<i64>) -> Stages {
         let upload = headers.get("x-upload-id").and_then(|v| v.to_str().ok()).unwrap_or_default().chars().take(64).collect();
-        Stages { app: app.clone(), upload, owner }
+        Stages { app: app.clone(), sub, upload, owner }
     }
 
     /// One of STAGES; `done` of `total` bytes while receiving (total 0: not known).
@@ -456,7 +468,7 @@ impl Stages {
             return;
         }
         let m = json!({"t": "pack_stage", "upload": self.upload, "stage": stage, "done": done, "total": total});
-        self.app.log.push(&m);
+        self.app.log.push(self.sub, &m);
         if let Some(o) = self.owner {
             self.app.hub().send(o, &m);
         }
@@ -551,7 +563,7 @@ pub async fn check_file(app: &AppRef, path: &FsPath, stages: Option<&Stages>) ->
 
 /// Checks a received file and registers it (server pack: `owner` None). Stores the file
 /// under its content hash unless the storage has it already. The stages go to `stages`.
-pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>, stages: Option<&Stages>) -> Result<pack::Model, PackErr> {
+pub async fn add(app: &AppRef, sub: i64, file: &FsPath, size: u64, owner: Option<i64>, stages: Option<&Stages>) -> Result<pack::Model, PackErr> {
     let started = Instant::now();
     let info = check_file(app, file, stages).await?;
     let checked = started.elapsed();
@@ -563,15 +575,15 @@ pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>, sta
         Some(o) => Condition::all().add(pack::Column::Owner.eq(o)),
         None => Condition::all().add(pack::Column::Owner.is_null()),
     };
-    let dup = pack::Entity::find().filter(mine(owner)).filter(pack::Column::ContentHash.eq(&hash)).one(&app.db).await?;
+    let dup = pack::Entity::find().filter(pack::Column::Subserver.eq(sub)).filter(mine(owner)).filter(pack::Column::ContentHash.eq(&hash)).one(&app.db).await?;
     if dup.is_some() {
         return Err(PackErr::new(StatusCode::CONFLICT, "exists", "This pack is uploaded already"));
     }
     if !app.store.exists(&hash).await.map_err(store_err)? {
         app.store.put_file(&hash, file).await.map_err(store_err)?;
     }
-    // the sub-server's limits (FOUNDATION: the foundation's `sub` argument of `add`)
-    if let Err(m) = crate::subservers::pack_room(app, 0, size as i64).await? {
+    // the sub-server's limits
+    if let Err(m) = crate::subservers::pack_room(app, sub, size as i64).await? {
         return Err(PackErr::new(StatusCode::CONFLICT, "limit", m));
     }
     let tx = app.db.begin().await?;
@@ -581,6 +593,7 @@ pub async fn add(app: &AppRef, file: &FsPath, size: u64, owner: Option<i64>, sta
         }
     }
     let row = pack::ActiveModel {
+        subserver: Set(sub),
         pack_id: Set(info.id),
         version: Set(info.version.clone()),
         name: Set(info.name.to_string()),
@@ -677,12 +690,13 @@ pub async fn migrate_hashes(app: &AppRef) -> usize {
 
 /// Makes a server pack the default game (`id`), or, with None, the newest enabled server pack
 /// with the manifest id `want` when there is no default yet (the bundled Neonfall).
-pub async fn set_default(app: &AppRef, id: Option<i64>, want: &str) -> Result<Option<pack::Model>, DbErr> {
+pub async fn set_default(app: &AppRef, sub: i64, id: Option<i64>, want: &str) -> Result<Option<pack::Model>, DbErr> {
     let db = &app.db;
     let target = match id {
-        Some(id) => pack::Entity::find_by_id(id).filter(pack::Column::Owner.is_null()).one(db).await?,
+        Some(id) => pack::Entity::find_by_id(id).filter(pack::Column::Subserver.eq(sub)).filter(pack::Column::Owner.is_null()).one(db).await?,
         None => {
             let has = pack::Entity::find()
+                .filter(pack::Column::Subserver.eq(sub))
                 .filter(pack::Column::Owner.is_null())
                 .filter(pack::Column::Enabled.eq(true))
                 .filter(pack::Column::IsDefault.eq(true))
@@ -692,6 +706,7 @@ pub async fn set_default(app: &AppRef, id: Option<i64>, want: &str) -> Result<Op
                 return Ok(None);
             }
             pack::Entity::find()
+                .filter(pack::Column::Subserver.eq(sub))
                 .filter(pack::Column::Owner.is_null())
                 .filter(pack::Column::Enabled.eq(true))
                 .filter(pack::Column::PackId.eq(want))
@@ -702,7 +717,7 @@ pub async fn set_default(app: &AppRef, id: Option<i64>, want: &str) -> Result<Op
     };
     let Some(t) = target else { return Ok(None) };
     let tx = db.begin().await?;
-    pack::Entity::update_many().col_expr(pack::Column::IsDefault, Expr::value(false)).exec(&tx).await?;
+    pack::Entity::update_many().col_expr(pack::Column::IsDefault, Expr::value(false)).filter(pack::Column::Subserver.eq(sub)).exec(&tx).await?;
     pack::Entity::update_many().col_expr(pack::Column::IsDefault, Expr::value(true)).filter(pack::Column::Id.eq(t.id)).exec(&tx).await?;
     tx.commit().await?;
     Ok(Some(t))
@@ -748,15 +763,16 @@ pub fn pack_json(p: &pack::Model) -> Value {
 }
 
 /// `packs {server, mine}`: the enabled server packs and the player's own (with `enabled`).
-pub async fn packs_msg(db: &Db, me: i64) -> Result<Value, DbErr> {
+pub async fn packs_msg(db: &Db, sub: i64, me: i64) -> Result<Value, DbErr> {
     let server = pack::Entity::find()
+        .filter(of_sub(sub))
         .filter(pack::Column::Owner.is_null())
         .filter(pack::Column::Enabled.eq(true))
         .order_by_asc(pack::Column::PackId)
         .order_by_asc(pack::Column::Id)
         .all(db)
         .await?;
-    let mine = pack::Entity::find().filter(pack::Column::Owner.eq(me)).order_by_desc(pack::Column::Id).all(db).await?;
+    let mine = pack::Entity::find().filter(pack::Column::Subserver.eq(sub)).filter(pack::Column::Owner.eq(me)).order_by_desc(pack::Column::Id).all(db).await?;
     // each pack's versions (format.md §13), oldest first; none: a one-version pack
     let ids: Vec<i64> = server.iter().chain(&mine).map(|p| p.id).collect();
     let rows = pack_version::Entity::find()
@@ -792,13 +808,13 @@ pub async fn packs_msg(db: &Db, me: i64) -> Result<Value, DbErr> {
 }
 
 /// `pack_delete {content_hash}`: the player's own pack. false = no such pack of theirs.
-pub async fn delete_own(app: &AppRef, me: i64, my_name: &str, hash: &str) -> Result<bool, DbErr> {
-    let Some(p) = pack::Entity::find().filter(pack::Column::Owner.eq(me)).filter(pack::Column::ContentHash.eq(hash)).one(&app.db).await? else {
+pub async fn delete_own(app: &AppRef, sub: i64, me: i64, my_name: &str, hash: &str) -> Result<bool, DbErr> {
+    let Some(p) = pack::Entity::find().filter(pack::Column::Subserver.eq(sub)).filter(pack::Column::Owner.eq(me)).filter(pack::Column::ContentHash.eq(hash)).one(&app.db).await? else {
         return Ok(false);
     };
     pack::Entity::delete_by_id(p.id).exec(&app.db).await?;
     gc(app, hash).await;
-    app.event(Event::new("pack_delete", format!("{my_name} deleted the pack {}", label(&p))).user(me, my_name).data(event_data(&p)));
+    app.event(Event::new("pack_delete", format!("{my_name} deleted the pack {}", label(&p))).user(me, my_name).sub(sub).data(event_data(&p)));
     Ok(true)
 }
 
@@ -812,14 +828,14 @@ pub fn routes() -> Router<AppRef> {
 }
 
 /// The web build of the game runs on another origin; the token, not a cookie, authenticates.
-async fn cors(mut res: Response) -> Response {
+pub(crate) async fn cors(mut res: Response) -> Response {
     let h = res.headers_mut();
     h.insert(header::ACCESS_CONTROL_ALLOW_ORIGIN, HeaderValue::from_static("*"));
     h.insert(header::ACCESS_CONTROL_EXPOSE_HEADERS, HeaderValue::from_static("etag, content-length, content-disposition"));
     res
 }
 
-async fn preflight() -> Response {
+pub(crate) async fn preflight() -> Response {
     (
         StatusCode::NO_CONTENT,
         [
@@ -832,12 +848,12 @@ async fn preflight() -> Response {
 }
 
 #[derive(Deserialize)]
-struct TokenQ {
-    token: Option<String>,
+pub(crate) struct TokenQ {
+    pub(crate) token: Option<String>,
 }
 
 /// The player of a game session token (Authorization: Bearer, else ?token=).
-async fn player(app: &AppRef, headers: &HeaderMap, q: &TokenQ) -> Result<Account, PackErr> {
+pub(crate) async fn player(app: &AppRef, headers: &HeaderMap, q: &TokenQ) -> Result<Account, PackErr> {
     let bearer = headers.get(header::AUTHORIZATION).and_then(|v| v.to_str().ok()).and_then(|v| v.strip_prefix("Bearer "));
     let token = bearer.map(str::trim).or(q.token.as_deref()).unwrap_or_default();
     if token.is_empty() || token.len() > 200 {
@@ -849,25 +865,26 @@ async fn player(app: &AppRef, headers: &HeaderMap, q: &TokenQ) -> Result<Account
     }
 }
 
-async fn upload(State(app): State<AppRef>, Query(q): Query<TokenQ>, headers: HeaderMap, body: Body) -> Result<Response, PackErr> {
+async fn upload(State(app): State<AppRef>, scope: crate::scope::Scope, Query(q): Query<TokenQ>, headers: HeaderMap, body: Body) -> Result<Response, PackErr> {
+    let sub = scope.id;
     let a = player(&app, &headers, &q).await?;
-    if pack::Entity::find().filter(pack::Column::Owner.eq(a.id)).count(&app.db).await? >= MAX_PER_PLAYER {
+    if pack::Entity::find().filter(pack::Column::Subserver.eq(sub)).filter(pack::Column::Owner.eq(a.id)).count(&app.db).await? >= MAX_PER_PLAYER {
         return Err(PackErr::new(StatusCode::CONFLICT, "too_many", format!("{MAX_PER_PLAYER} packs at most: delete one first")));
     }
-    let stages = Stages::new(&app, &headers, Some(a.id));
+    let stages = Stages::new(&app, sub, &headers, Some(a.id));
     let up = receive(&headers, body, MAX_PLAYER_PACK, Some(&stages)).await?;
-    let p = match add(&app, &up.path, up.size, Some(a.id), Some(&stages)).await {
+    let p = match add(&app, sub, &up.path, up.size, Some(a.id), Some(&stages)).await {
         Ok(p) => p,
         Err(e) => {
             if e.1 == "invalid" {
-                app.event(Event::new("pack_rejected", format!("{}'s pack was refused: {}", a.name, e.2)).user(a.id, &a.name)
+                app.event(Event::new("pack_rejected", format!("{}'s pack was refused: {}", a.name, e.2)).user(a.id, &a.name).sub(sub)
                     .data(json!({"reason": e.2, "sha256": up.hash, "size": up.size})));
             }
             return Err(e);
         }
     };
-    app.event(Event::new("pack_upload", format!("{} uploaded the pack {}", a.name, label(&p))).user(a.id, &a.name).data(event_data(&p)));
-    if let Ok(m) = packs_msg(&app.db, a.id).await {
+    app.event(Event::new("pack_upload", format!("{} uploaded the pack {}", a.name, label(&p))).user(a.id, &a.name).sub(sub).data(event_data(&p)));
+    if let Ok(m) = packs_msg(&app.db, sub, a.id).await {
         app.hub().send(a.id, &m);
     }
     Ok((StatusCode::CREATED, Json(json!({"pack": pack_json(&p)}))).into_response())
@@ -890,14 +907,14 @@ async fn visible(db: &Db, me: i64, rows: Vec<pack::Model>) -> Result<Option<pack
     Ok(best)
 }
 
-async fn download(State(app): State<AppRef>, Path(file): Path<String>, Query(q): Query<TokenQ>, headers: HeaderMap) -> Result<Response, PackErr> {
+async fn download(State(app): State<AppRef>, scope: crate::scope::Scope, Path(file): Path<String>, Query(q): Query<TokenQ>, headers: HeaderMap) -> Result<Response, PackErr> {
     let not_found = || PackErr::new(StatusCode::NOT_FOUND, "not_found", "No such pack");
     let hash = file.strip_suffix(".cardpack").unwrap_or_default().to_string();
     if hash.len() != 64 || !hash.bytes().all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase()) {
         return Err(not_found());
     }
     let a = player(&app, &headers, &q).await?;
-    let rows = pack::Entity::find().filter(pack::Column::ContentHash.eq(&hash)).all(&app.db).await?;
+    let rows = pack::Entity::find().filter(of_sub(scope.id)).filter(pack::Column::ContentHash.eq(&hash)).all(&app.db).await?;
     let p = visible(&app.db, a.id, rows).await?.ok_or_else(not_found)?;
     let etag = format!("\"{hash}\"");
     let cache = (header::CACHE_CONTROL, "private, max-age=31536000, immutable");
@@ -917,7 +934,7 @@ async fn download(State(app): State<AppRef>, Path(file): Path<String>, Query(q):
         .filter(pack::Column::Id.eq(p.id))
         .exec(&app.db)
         .await?;
-    app.event(Event::new("pack_download", format!("{} downloaded the pack {}", a.name, label(&p))).user(a.id, &a.name).data(event_data(&p)));
+    app.event(Event::new("pack_download", format!("{} downloaded the pack {}", a.name, label(&p))).user(a.id, &a.name).sub(scope.id).data(event_data(&p)));
     let disposition = format!("attachment; filename=\"{}\"", file_name(&p));
     let body = Body::from_stream(stream);
     Ok((
@@ -959,13 +976,13 @@ pub async fn import_bundled(app: &AppRef, dir: &FsPath) -> usize {
                 return added;
             }
         }
-        let r = match add(app, &f, size, None, None).await {
+        let r = match add(app, 0, &f, size, None, None).await {
             Ok(p) => {
                 app.event(Event::new("pack_import", format!("Bundled pack {} installed", label(&p))).data(event_data(&p)));
                 // A new version of the default game becomes the default.
-                let default_id = pack::Entity::find().filter(pack::Column::IsDefault.eq(true)).one(&app.db).await.ok().flatten().map(|d| d.pack_id);
+                let default_id = pack::Entity::find().filter(pack::Column::Subserver.eq(0)).filter(pack::Column::IsDefault.eq(true)).one(&app.db).await.ok().flatten().map(|d| d.pack_id);
                 if default_id.as_deref() == Some(p.pack_id.as_str()) {
-                    let _ = set_default(app, Some(p.id), "").await;
+                    let _ = set_default(app, 0, Some(p.id), "").await;
                 }
                 tracing::info!("bundled pack {} installed: {}", f.display(), label(&p));
                 added += 1;

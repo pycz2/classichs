@@ -1,4 +1,3 @@
-// FOUNDATION: a verbatim copy of the foundation agent's file, a stand-in until it lands (take theirs at merge).
 //! A role given to an account, in the role's sub-server (None: a global role, every sub-server).
 
 use sea_orm::entity::prelude::*;

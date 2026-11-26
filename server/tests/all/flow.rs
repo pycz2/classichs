@@ -766,7 +766,7 @@ async fn second_login_kicks_the_first() {
 async fn install(app: &AppRef, zip: &[u8], owner: Option<i64>) -> pack::Model {
     let path = std::env::temp_dir().join(format!("chs-test-{}.cardpack", rand::random::<u64>()));
     std::fs::write(&path, zip).unwrap();
-    let p = packs::add(app, &path, zip.len() as u64, owner, None).await.unwrap_or_else(|e| panic!("{}", e.2));
+    let p = packs::add(app, 0, &path, zip.len() as u64, owner, None).await.unwrap_or_else(|e| panic!("{}", e.2));
     let _ = std::fs::remove_file(path);
     p
 }
@@ -807,7 +807,7 @@ async fn games_in_a_pack_with_its_own_rules() {
     assert_eq!((ma["pack"].as_str(), mb["pack"].as_str()), (Some(rh.as_str()), Some(rh.as_str())));
     let cid = db::id_by_name(&app.db, "ppc").await.unwrap().unwrap();
     assert!(app.hub().queue.contains_key(&cid), "the other pack's seeker still waits");
-    let live = app.hub().live_json();
+    let live = app.hub().live_json(0);
     assert_eq!(live["games"][0]["pack"], rh.as_str());
     // The pack's clock: one second a mulligan (and one of grace), then the server moves.
     let s = a.want("state").await;

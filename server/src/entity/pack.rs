@@ -8,7 +8,7 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
-    /// The sub-server (`crate::scope`). FOUNDATION: as in the foundation's entity.
+    /// The sub-server (`crate::scope`).
     pub subserver: i64,
     /// The manifest's id, e.g. "org.classichs.neon".
     pub pack_id: String,

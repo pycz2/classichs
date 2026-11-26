@@ -134,7 +134,7 @@
   "A note",
   "A player with this many lost matches stops playing",
   "A replay file from a friend comes in with the button “%s”.",
-  "A server address starts with ws:// or wss:// and has no spaces, like wss://example.org:7377",
+  "A server address looks like wss://example.org:7377 or https://example.org/s/friends, with no spaces",
   "A tag: 3–16 letters and digits; friends add you by it",
   "A tournament can only be moved to later",
   "A turn back",
@@ -1087,5 +1087,14 @@
   "Standard",
   "Wild",
   "A Wild deck: it has cards that are not in Standard",
-  "This deck has cards that are not in this format"
+  "This deck has cards that are not in this format",
+  "Chat",
+  "admin",
+  "creator",
+  "The chat is closed: messages can only be read",
+  "Too many messages: wait a little",
+  "A message is 1 to 500 characters",
+  "Deleted by %s",
+  "Delete the message",
+  "The chat closes at %s"
 ]

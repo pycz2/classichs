@@ -102,6 +102,15 @@ func _ready() -> void:
 	version.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	version.pressed.connect(func(): add_child(ChangelogView.new()))
 	add_child(version)
+	var report := Button.new()
+	report.name = "ReportButton"
+	report.text = tr("Report a problem")
+	report.flat = true
+	report.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	report.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	report.pressed.connect(func(): ReportView.open(self))
+	report.add_child(ReportView.Badge.new())  # the reports with an answer not seen yet
+	add_child(report)
 
 
 func _process(delta: float) -> void:

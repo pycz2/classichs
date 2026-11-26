@@ -42,6 +42,8 @@ func test_game_id_from_the_address() -> void:
 	eq(ReplayApp._query_game("?game=dbfa9fb606aced47"), "dbfa9fb606aced47", "the id")
 	eq(ReplayApp._query_game("?x=1&game=a%20b"), "a b", "among others, decoded")
 	eq(ReplayApp._query_game(""), "", "none")
+	eq([ReplayApp._api_base("https://h.test", "/admin/replay/index.html"), ReplayApp._api_base("https://h.test", "/s/friends/admin/replay/")],
+		["https://h.test", "https://h.test/s/friends"], "the API of the server it is served by: a sub-server's under its path")
 
 
 func test_loads_the_replay_with_the_pack_here() -> void:

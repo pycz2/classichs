@@ -1,4 +1,3 @@
-// FOUNDATION: a verbatim copy of the foundation agent's file, a stand-in until it lands (take theirs at merge).
 //! Roles and permissions (docs/superpowers/specs/2026-11-26-roles-subservers-design.md §2): a role is a
 //! named set of permissions, given to an account in a sub-server (or globally: then in every one); what
 //! the account may do there is the union of its roles. And the audit log of the changes.
@@ -128,6 +127,15 @@ pub async fn all(app: &App, account: i64, subserver: i64) -> BTreeSet<String> {
 
 pub async fn has(app: &App, account: i64, p: &str, subserver: i64) -> bool {
     all(app, account, subserver).await.contains(p)
+}
+
+/// Makes a new sub-server's built-in roles (Admin, Moderator, Viewer; main's are the migration's).
+pub async fn make_builtin_roles(c: &impl ConnectionTrait, subserver: i64) -> Result<(), sea_orm::DbErr> {
+    for (name, perms) in builtin() {
+        let row = role::ActiveModel { subserver: Set(Some(subserver)), name: Set(name.into()), perms: Set(serde_json::to_string(&perms).unwrap_or_default()), builtin: Set(true), ..Default::default() };
+        row.insert(c).await?;
+    }
+    Ok(())
 }
 
 /// Gives the account the global Super admin role (the server's first admin, `db::make_superuser`).

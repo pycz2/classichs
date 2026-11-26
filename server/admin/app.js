@@ -2,14 +2,14 @@
 
 import { render } from 'preact'
 import { useState, useEffect, useRef } from 'preact/hooks'
-import { api, setCsrf, onUnauthorized } from './api.js'
-import { html, bus, LiveContext, MeContext, useRoute, Icon, Toasts, toast } from './ui.js'
+import { api, setCsrf, onUnauthorized, BASE } from './api.js'
+import { html, bus, LiveContext, MeContext, useRoute, Icon, Toasts, toast, canOf } from './ui.js'
 import { Login } from './login.js'
 import { Dashboard } from './dashboard.js'
 import { Events } from './events.js'
 import { Accounts, AccountPage } from './accounts.js'
 import { Games, GamePage } from './games.js'
-import { Messages } from './messages.js'
+import { Messages, Chats } from './messages.js'
 import { Packs } from './packs.js'
 import { Bots } from './bots.js'
 import { Settings, InviteKeys } from './settings.js'
@@ -17,19 +17,27 @@ import { Tournaments, TournamentPage } from './tournaments.js'
 import { VersionTag, ReplayDock } from './extra.js'
 import { Stats } from './stats.js'
 import { Subservers, Limits, Claim } from './subservers.js'
+import { Roles } from './roles.js'
+import { Audit } from './audit.js'
+import { Reports, ReportPage, useReportCounts } from './reports.js'
 
+// (path, label, icon, the permission that shows it)
 const NAV = [
-  ['', 'Dashboard', 'dashboard'],
-  ['events', 'Event log', 'events'],
-  ['games', 'Matches', 'games'],
-  ['stats', 'Statistics', 'stats'],
-  ['tournaments', 'Tournaments', 'tournaments'],
-  ['packs', 'Games', 'packs'],
-  ['bots', 'Bots', 'bots'],
-  ['accounts', 'Accounts', 'accounts'],
-  ['invites', 'Invite keys', 'key'],
-  ['messages', 'Messages', 'messages'],
-  ['settings', 'Settings', 'settings'],
+  ['', 'Dashboard', 'dashboard', 'dashboard.view'],
+  ['events', 'Event log', 'events', 'server.view'],
+  ['games', 'Matches', 'games', 'replays.view'],
+  ['stats', 'Statistics', 'stats', 'stats.view'],
+  ['tournaments', 'Tournaments', 'tournaments', 'tournaments.view'],
+  ['packs', 'Games', 'packs', 'packs.view'],
+  ['bots', 'Bots', 'bots', 'bots.view'],
+  ['accounts', 'Accounts', 'accounts', 'players.view'],
+  ['invites', 'Invite keys', 'key', 'invites.view'],
+  ['messages', 'Messages', 'messages', 'chats.view'],
+  ['chats', 'Chats', 'messages', 'chats.view'],
+  ['reports', 'Problem reports', 'report', 'reports.view'],
+  ['settings', 'Settings', 'settings', 'settings.view'],
+  ['roles', 'Roles', 'roles', 'roles.view'],
+  ['audit', 'Audit log', 'audit', 'audit.view'],
   ['subservers', 'Servers', 'live', 'subservers.view'],
   ['limits', 'Limits', 'stats', 'limits.view']
 ]
@@ -64,12 +72,13 @@ function useFeed (me) {
   const wsRef = useRef(null)
   useEffect(() => {
     if (!me) return
+    if (!canOf(me)('dashboard.view')) { setConn('offline'); return } // (the feed needs it)
     let closed = false
     let delay = 500
     let timer = 0
     const open = () => {
       setConn('connecting')
-      const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/admin/ws')
+      const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + BASE + '/ws')
       wsRef.current = ws
       let hello = false
       ws.onmessage = (m) => {
@@ -105,10 +114,16 @@ function useFeed (me) {
 function Shell ({ me, onLogout }) {
   const route = useRoute()
   const feed = useFeed(me)
+  const reports = useReportCounts()
   const [top] = route.path
   const qkey = JSON.stringify(route.query)
+  const can = canOf(me)
+  const nav = NAV.filter((n) => can(n[3]))
+  const need = (NAV.find((n) => n[0] === (top || '')) || [])[3]
   let page
-  switch (top) {
+  // a page one lacks: the first one he has (none: just the shell)
+  if (need && !can(need)) page = nav.length ? html`<${Redirect} to=${nav[0][0]} />` : html`<div class="page"><h1>Nothing to show</h1><p class="muted">You have no permission to view any page here.</p></div>`
+  else switch (top) {
     case undefined: page = html`<${Dashboard} />`; break
     case 'events': page = html`<${Events} query=${route.query} key=${qkey} />`; break
     case 'games': page = route.path[1] ? html`<${GamePage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Games} query=${route.query} key=${qkey} />`; break
@@ -121,16 +136,20 @@ function Shell ({ me, onLogout }) {
     case 'settings': page = html`<${Settings} />`; break
     case 'subservers': page = html`<${Subservers} />`; break
     case 'limits': page = html`<${Limits} />`; break
+    case 'chats': page = html`<${Chats} channel=${route.path[1]} />`; break
+    case 'reports': page = route.path[1] ? html`<${ReportPage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Reports} query=${route.query} key=${qkey} />`; break
     case 'messages': page = html`<${Messages} a=${route.path[1]} b=${route.path[2]} query=${route.query} />`; break
+    case 'roles': page = html`<${Roles} />`; break
+    case 'audit': page = html`<${Audit} query=${route.query} key=${qkey} />`; break
     default: page = html`<div class="page"><h1>Not found</h1><p><a href="#/">Back to the dashboard</a></p></div>`
   }
-  const counts = { '': null, games: feed.live.games.length || null, accounts: feed.live.online.length || null }
+  const counts = { '': null, games: feed.live.games.length || null, accounts: feed.live.online.length || null, reports: reports.new + reports.answers || null }
   return html`<${MeContext.Provider} value=${me}><${LiveContext.Provider} value=${feed}>
     <div class="shell">
       <aside class="side">
         <a class="brand" href="#/"><span class="logo">◆</span><span><b>Classic HS</b><small>server admin</small></span></a>
         <nav>
-          ${NAV.map(([p, label, icon]) => html`<a href=${'#/' + p} class=${(top || '') === p ? 'on' : ''}>
+          ${nav.map(([p, label, icon]) => html`<a href=${'#/' + p} class=${(top || '') === p ? 'on' : ''}>
             <${Icon} name=${icon} /><span>${label}</span>${counts[p] ? html`<em class="count">${counts[p]}</em>` : ''}</a>`)}
         </nav>
         <div class="side-foot">
@@ -149,6 +168,11 @@ function Shell ({ me, onLogout }) {
   </${LiveContext.Provider}></${MeContext.Provider}>`
 }
 
+function Redirect ({ to }) {
+  useEffect(() => { location.replace('#/' + to) }, [to])
+  return null
+}
+
 function App () {
   const [me, setMe] = useState(undefined) // undefined = checking, null = logged out
   useEffect(() => {
@@ -158,7 +182,8 @@ function App () {
   // an admin invite's link (#/claim?key=…), logged in or not
   if (location.hash.startsWith('#/claim')) return html`<${Claim} />`
   if (me === undefined) return html`<div class="boot"><span class="logo pulse">◆</span></div>`
-  if (!me) return html`<${Login} onIn=${(m) => { setCsrf(m.csrf); setMe(m) }} />`
+  // (the login's answer has no permissions: then /me)
+  if (!me) return html`<${Login} onIn=${(m) => { setCsrf(m.csrf); api('me').then(setMe, () => setMe(null)) }} />`
   const logout = async () => {
     try { await api('logout', { method: 'POST' }) } catch (e) { toast(e.message, 'err') }
     setCsrf('')

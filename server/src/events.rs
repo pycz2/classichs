@@ -25,6 +25,8 @@ pub struct Event {
     pub game: Option<String>,
     pub text: String,
     pub data: Option<Value>,
+    /// The sub-server it happened in (`crate::scope`).
+    pub subserver: i64,
 }
 
 impl Event {
@@ -48,6 +50,11 @@ impl Event {
         self
     }
 
+    pub fn sub(mut self, subserver: i64) -> Event {
+        self.subserver = subserver;
+        self
+    }
+
     pub fn data(mut self, v: Value) -> Event {
         self.data = Some(v);
         self
@@ -61,10 +68,10 @@ pub fn event_json(e: &event::Model) -> Value {
 }
 
 /// The log's two ends: `tx` takes events, `feed` carries saved ones (and live snapshots)
-/// to the admin panels as ready JSON text.
+/// to the admin panels as ready JSON text, with the sub-server they belong to.
 pub struct Log {
     tx: mpsc::UnboundedSender<(i64, Event)>,
-    pub feed: broadcast::Sender<Arc<str>>,
+    pub feed: broadcast::Sender<(i64, Arc<str>)>,
 }
 
 impl Log {
@@ -79,12 +86,12 @@ impl Log {
         let _ = self.tx.send((now_ms(), e));
     }
 
-    pub fn push(&self, v: &Value) {
-        let _ = self.feed.send(v.to_string().into());
+    pub fn push(&self, subserver: i64, v: &Value) {
+        let _ = self.feed.send((subserver, v.to_string().into()));
     }
 }
 
-async fn writer(db: Db, mut rx: mpsc::UnboundedReceiver<(i64, Event)>, feed: broadcast::Sender<Arc<str>>) {
+async fn writer(db: Db, mut rx: mpsc::UnboundedReceiver<(i64, Event)>, feed: broadcast::Sender<(i64, Arc<str>)>) {
     while let Some(first) = rx.recv().await {
         let mut batch = vec![first];
         while batch.len() < 500 {
@@ -97,6 +104,7 @@ async fn writer(db: Db, mut rx: mpsc::UnboundedReceiver<(i64, Event)>, feed: bro
             .into_iter()
             .map(|(at, e)| event::ActiveModel {
                 at: Set(at),
+                subserver: Set(e.subserver),
                 kind: Set(e.kind.into()),
                 account: Set(e.account),
                 user: Set(e.user),
@@ -110,7 +118,7 @@ async fn writer(db: Db, mut rx: mpsc::UnboundedReceiver<(i64, Event)>, feed: bro
         match event::Entity::insert_many(rows).exec_with_returning(&db).await {
             Ok(saved) => {
                 for e in &saved {
-                    let _ = feed.send(json!({"t": "event", "e": event_json(e)}).to_string().into());
+                    let _ = feed.send((e.subserver, json!({"t": "event", "e": event_json(e)}).to_string().into()));
                 }
             }
             Err(e) => tracing::error!("event log: {e}"),

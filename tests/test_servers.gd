@@ -194,6 +194,30 @@ func test_social_keeps_each_server_apart() -> void:
 	m.free()
 
 
+## A sub-server lives at a path (https://host/s/<name>): the address keeps it, any form of it is one
+## address (https -> wss, http -> ws, no scheme -> wss, localhost -> ws; no trailing slash), and the
+## game's websocket and the packs' HTTP address are under it.
+func test_a_server_address_with_a_path() -> void:
+	var a := ["https://hs.example.com/s/friends", "wss://hs.example.com/s/friends/", "hs.example.com/s/friends",
+		" HTTP://localhost:7377/s/a/ ", "ws://localhost:7377", "wss://b.test", "https://b.test/", "localhost:7377", "127.0.0.1:7377/s/x",
+		"ftp://x.test", "wss://", "a b.test", ""]
+	eq(a.map(Settings.server_address), ["wss://hs.example.com/s/friends", "wss://hs.example.com/s/friends", "wss://hs.example.com/s/friends",
+		"ws://localhost:7377/s/a", "ws://localhost:7377", "wss://b.test", "wss://b.test", "ws://localhost:7377", "ws://127.0.0.1:7377/s/x",
+		"", "", "", ""], "one address per server, a bad one is empty")
+	eq(["wss://h.test", "wss://h.test/s/a", "ws://h.test:7/s/b"].map(ServerLink.socket_url),
+		["wss://h.test", "wss://h.test/s/a/", "ws://h.test:7/s/b/"], "the websocket: the main one at /, a sub-server's at /s/<name>/")
+	eq(["wss://h.test/s/a", "ws://h.test:7/s/b"].map(_base), ["https://h.test/s/a", "http://h.test:7/s/b"], "the packs: under the path")
+	eq(Settings.server_label("wss://hs.example.com:9/s/friends"), "hs.example.com/s/friends", "a sub-server's name: the host and the path")
+	Settings.data.servers = []
+	var s := ConnectionsView.new()
+	root().add_child(s)
+	for u in ["hs.example.com", "https://hs.example.com/s/a", "wss://hs.example.com/s/b/", "hs.example.com/s/a/"]:
+		check(s.add_server("", u), u)
+	eq(Settings.data.servers.map(func(e): return e.id), ["wss://hs.example.com", "wss://hs.example.com/s/a", "wss://hs.example.com/s/b",
+		"wss://hs.example.com/s/a#2"], "kept as one form: the host and each path are their own servers")
+	s.free()
+
+
 func test_packs_list_and_download() -> void:
 	var l := FakeLink.new()
 	l.url = "ws://h.test:7377"
@@ -202,7 +226,8 @@ func test_packs_list_and_download() -> void:
 	eq(l.of("packs").size(), 1, "the packs asked after the chats")
 	l.dispatch({"t": "error", "code": "bad_request", "text": "unknown variant `packs`"})
 	eq(l.has_packs, false, "a server without packs: no error shown")
-	eq([l.http_base(), _base("wss://x.org/ws"), _base("ws://[::1]:7")], ["http://h.test:7377", "https://x.org", "http://[::1]:7"])
+	eq([l.http_base(), _base("wss://x.org/s/a"), _base("ws://[::1]:7")], ["http://h.test:7377", "https://x.org/s/a", "http://[::1]:7"],
+		"the HTTP address keeps a sub-server's path (its packs are under it)")
 	var bytes := FileAccess.get_file_as_bytes("res://packs/neon.cardpack")
 	var n0: Pack = null
 	for p in Packs.all():
@@ -358,8 +383,8 @@ func test_settings_server_list() -> void:
 	eq((s.find_child("NewUrl", true, false) as LineEdit).virtual_keyboard_type, LineEdit.KEYBOARD_TYPE_URL, "an address keyboard")
 	var note := s.find_child("ServersNote", true, false) as Control
 	check(not note.get_rect().intersects((s.find_child("Back", true, false) as Control).get_rect()), "the note wraps before the Back button")
-	eq(s.add_server("Mine", "http://nope"), false, "only ws:// or wss://")
-	eq((note as Label).text, tr("A server address starts with ws:// or wss:// and has no spaces, like wss://example.org:7377"), "and says so")
+	eq(s.add_server("Mine", "ftp://nope"), false, "only ws://, wss://, http:// or https://")
+	eq((note as Label).text, tr("A server address looks like wss://example.org:7377 or https://example.org/s/friends, with no spaces"), "and says so")
 	eq(s.add_server("Mine", "wss://mine.example"), true)
 	eq(s.add_server("Mine 2", "wss://mine.example"), true, "the same address again: another login there")
 	eq(Settings.data.servers.map(func(e): return e.name), ["localhost", "Mine", "Mine 2"], "added")

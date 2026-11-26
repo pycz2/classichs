@@ -5,8 +5,10 @@
 pub mod admin;
 pub mod admin_extra;
 pub mod admin_players;
+pub mod admin_roles;
 pub mod auth;
 pub mod bots;
+pub mod chat;
 pub mod db;
 pub mod deck_code;
 pub mod entity;
@@ -14,10 +16,12 @@ pub mod events;
 pub mod game;
 pub mod migration;
 pub mod packs;
-pub mod perm; // FOUNDATION: stand-in
+pub mod perm;
 pub mod ranked;
+pub mod scope;
 pub mod settings;
 pub mod replays;
+pub mod reports;
 pub mod spectate;
 pub mod stats;
 pub mod storage;
@@ -115,7 +119,15 @@ impl App {
         })
     }
 
-    pub fn event(&self, e: Event) {
+    /// Logs an event; one without a sub-server (0) that names an account gets the sub-server that account is
+    /// connected to.
+    // ponytail: the account's connection decides the sub-server of most player events; `Event::sub` where it can't.
+    pub fn event(&self, mut e: Event) {
+        if e.subserver == 0 {
+            if let Some(sub) = e.account.and_then(|a| self.hub().sub_of(a)) {
+                e.subserver = sub;
+            }
+        }
         self.log.add(e);
     }
 
@@ -140,6 +152,8 @@ pub const KICKED_CODE: u16 = 4001;
 
 pub struct Conn {
     pub id: u64,
+    /// The sub-server it is logged into (one connection per account: logging into another one takes it over).
+    pub sub: i64,
     pub name: String,
     pub tx: UnboundedSender<Out>,
     /// The game (rules_hash) of its last `me` (None: the default): an admin's change pushes that `me`.
@@ -147,6 +161,7 @@ pub struct Conn {
 }
 
 pub struct Seeker {
+    pub sub: i64,
     pub name: String,
     pub mode: Mode,
     /// The pack the game is played in: queues are per (mode, pack).
@@ -156,10 +171,11 @@ pub struct Seeker {
     pub since: Instant,
 }
 
-/// Two seekers paired: the mode, the pack, [(account, deck)].
-pub type Pairing = (Mode, Arc<GameRules>, [(i64, Value); 2]);
+/// Two seekers paired: the sub-server, the mode, the pack, [(account, deck)].
+pub type Pairing = (i64, Mode, Arc<GameRules>, [(i64, Value); 2]);
 
 pub struct LiveGame {
+    pub sub: i64,
     pub tx: UnboundedSender<game::Ev>,
     pub mode: Mode,
     /// The pack's rules_hash and "Name version".
@@ -190,6 +206,8 @@ pub struct Hub {
     pub auto_for: HashMap<i64, i64>,
     /// Spectator account → the game it watches (spectate).
     pub watching: HashMap<i64, spectate::Watch>,
+    /// Chat channel → the accounts subscribed to it (`chat`).
+    pub chats: HashMap<String, std::collections::HashSet<i64>>,
 }
 
 impl Hub {
@@ -197,6 +215,14 @@ impl Hub {
         if let Some(c) = self.conns.get(&account) {
             let _ = c.tx.send(Out::Text(v.to_string()));
         }
+    }
+
+    /// The account leaves every chat channel.
+    fn unsubscribe_all(&mut self, account: i64) {
+        self.chats.retain(|_, subs| {
+            subs.remove(&account);
+            !subs.is_empty()
+        });
     }
 
     /// "offline" | "in_game" | "searching" | "online".
@@ -212,15 +238,21 @@ impl Hub {
         }
     }
 
-    /// What the admin panel shows live: who is online, the queues, the games.
-    pub fn live_json(&self) -> Value {
+    /// The sub-server an account is connected to.
+    pub fn sub_of(&self, account: i64) -> Option<i64> {
+        self.conns.get(&account).map(|c| c.sub)
+    }
+
+    /// What the admin panel of a sub-server shows live: who is online, the queues, the games.
+    pub fn live_json(&self, sub: i64) -> Value {
         let now = Instant::now();
         let mut online: Vec<Value> =
-            self.conns.iter().map(|(id, c)| json!({"id": id, "user": c.name, "status": self.status(*id)})).collect();
+            self.conns.iter().filter(|(_, c)| c.sub == sub).map(|(id, c)| json!({"id": id, "user": c.name, "status": self.status(*id)})).collect();
         online.sort_by(|a, b| a["user"].as_str().cmp(&b["user"].as_str()));
         let mut queue: Vec<Value> = self
             .queue
             .iter()
+            .filter(|(_, s)| s.sub == sub)
             .map(|(id, s)| {
                 let w = now.duration_since(s.since).as_secs();
                 json!({"id": id, "user": s.name, "mode": s.mode, "waited": w, "window": ranked::shown_window(s.mode, &s.key, w),
@@ -231,6 +263,7 @@ impl Hub {
         let mut games: Vec<Value> = self
             .games
             .iter()
+            .filter(|(_, g)| g.sub == sub)
             .map(|(id, g)| {
                 let players: Vec<Value> = (0..2)
                     .map(|p| json!({"id": g.ids[p], "user": g.names[p], "online": self.conns.contains_key(&g.ids[p])}))
@@ -245,10 +278,11 @@ impl Hub {
 
     /// The account's new connection. One login per account: an older connection gets
     /// `kicked {reason: "another_login"}` and is closed. Returns (connection id, kicked one).
-    pub fn attach(&mut self, account: i64, name: &str, tx: UnboundedSender<Out>) -> (u64, bool) {
+    pub fn attach(&mut self, account: i64, sub: i64, name: &str, tx: UnboundedSender<Out>) -> (u64, bool) {
         self.next_conn += 1;
-        let old = self.conns.insert(account, Conn { id: self.next_conn, name: name.into(), tx, me_pack: None });
+        let old = self.conns.insert(account, Conn { id: self.next_conn, sub, name: name.into(), tx, me_pack: None });
         self.watching.remove(&account); // a new connection watches nothing yet
+        self.unsubscribe_all(account);
         if let Some(old) = &old {
             // The message first, then the close frame tells it again (a client may lose a
             // message that arrives right before the close).
@@ -276,6 +310,7 @@ impl Hub {
         self.conns.remove(&account);
         self.queue.remove(&account);
         self.watching.remove(&account);
+        self.unsubscribe_all(account);
         self.invites.retain(|(a, b), _| *a != account && *b != account);
         if let Some((g, p)) = self.in_game.get(&account) {
             if let Some(lg) = self.games.get(g) {
@@ -300,7 +335,7 @@ impl Hub {
             let auto = |x: i64, y: i64| self.auto_for.get(&x) == Some(&y) || self.auto_for.get(&y) == Some(&x);
             let best = order
                 .iter()
-                .filter(|&&b| b != a && !taken.contains(&b) && self.queue[&b].mode == sa.mode && self.queue[&b].rules.rules_hash == sa.rules.rules_hash && self.queue[&b].rules.format == sa.rules.format)
+                .filter(|&&b| b != a && !taken.contains(&b) && self.queue[&b].sub == sa.sub && self.queue[&b].mode == sa.mode && self.queue[&b].rules.rules_hash == sa.rules.rules_hash && self.queue[&b].rules.format == sa.rules.format)
                 // an auto-bot plays only the player it came for
                 .filter(|&&b| auto(a, b) || !(self.auto_for.contains_key(&a) || self.auto_for.contains_key(&b)))
                 .filter_map(|&b| {
@@ -326,7 +361,7 @@ impl Hub {
             .into_iter()
             .map(|(a, b)| {
                 let (sa, sb) = (self.queue.remove(&a).unwrap(), self.queue.remove(&b).unwrap());
-                (sa.mode, sa.rules, [(a, sa.deck), (b, sb.deck)])
+                (sa.sub, sa.mode, sa.rules, [(a, sa.deck), (b, sb.deck)])
             })
             .collect()
     }
@@ -365,29 +400,48 @@ pub async fn presence(app: &AppRef, account: i64) {
 }
 
 /// The matchmaking tick (every second), the rate-limit sweep, the admin panels' live
-/// snapshot (when it changed) and, hourly, the deletion of old events.
+/// snapshot (when it changed), the closing of tournament chats and, hourly, the deletion of old
+/// events and of chat and private messages past the keeping time.
 pub fn spawn_background(app: AppRef) {
     tournament::spawn(app.clone());
     tokio::spawn(async move {
         let mut tick = tokio::time::interval(Duration::from_secs(1));
-        let mut last_live = String::new();
+        let mut last_live: HashMap<i64, String> = HashMap::new();
         let mut n: u64 = 0;
+        let mut closes_checked = events::now_ms();
         loop {
             tick.tick().await;
             let now = Instant::now();
             let pairs = app.hub().pair(now);
-            for (mode, rules, players) in pairs {
-                tokio::spawn(game::start(app.clone(), mode, rules, players));
+            for (sub, mode, rules, players) in pairs {
+                tokio::spawn(game::start(app.clone(), sub, mode, rules, players));
             }
             bots::auto::tick(&app).await;
             app.logins.lock().unwrap_or_else(|e| e.into_inner()).sweep(now);
-            let live = app.hub().live_json();
-            let text = live.to_string();
-            if text != last_live {
-                app.log.push(&json!({"t": "live", "live": live}));
-                last_live = text;
+            // each sub-server's admin panels get their own live snapshot
+            let subs: std::collections::BTreeSet<i64> = {
+                let hub = app.hub();
+                hub.conns.values().map(|c| c.sub).chain(hub.games.values().map(|g| g.sub)).chain(last_live.keys().copied()).chain([0]).collect()
+            };
+            for sub in subs {
+                let live = app.hub().live_json(sub);
+                let text = live.to_string();
+                if last_live.get(&sub) != Some(&text) {
+                    app.log.push(sub, &json!({"t": "live", "live": live}));
+                    last_live.insert(sub, text);
+                }
+            }
+            if n.is_multiple_of(5) {
+                let now = events::now_ms();
+                chat::announce_closed(&app, closes_checked, now).await;
+                closes_checked = now;
             }
             if n.is_multiple_of(3600) {
+                match chat::cleanup(&app, ranked::now()).await {
+                    Ok((0, 0)) => {}
+                    Ok((c, p)) => tracing::info!("cleanup: removed {c} chat and {p} private messages past the keeping time"),
+                    Err(e) => tracing::error!("pruning chats: {e}"),
+                }
                 let old = events::now_ms() - events::KEEP_DAYS * 86_400_000;
                 if let Err(e) = entity::event::Entity::delete_many().filter(entity::event::Column::At.lt(old)).exec(&app.db).await {
                     tracing::error!("pruning events: {e}");
@@ -398,8 +452,10 @@ pub fn spawn_background(app: AppRef) {
     });
 }
 
+/// Every route at the bare paths (the main sub-server) and under `/s/<name>/` (that sub-server: `scope::route`).
 pub fn router(app: AppRef) -> Router {
-    Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(admin::routes(app.clone())).with_state(app)
+    let inner = Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(reports::routes()).merge(admin::routes(app.clone())).with_state(app.clone());
+    Router::new().fallback_service(inner).layer(axum::middleware::from_fn_with_state(app, scope::route))
 }
 
 pub fn client_ip(app: &App, headers: &HeaderMap, addr: SocketAddr) -> IpAddr {
@@ -419,11 +475,12 @@ pub fn client_ip(app: &App, headers: &HeaderMap, addr: SocketAddr) -> IpAddr {
 async fn ws_upgrade(
     State(app): State<AppRef>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    scope: scope::Scope,
     headers: HeaderMap,
     ws: WebSocketUpgrade,
 ) -> Response {
     let ip = client_ip(&app, &headers, addr);
-    ws.max_message_size(MAX_FRAME).max_frame_size(MAX_FRAME).on_upgrade(move |s| ws::run(app, s, ip))
+    ws.max_message_size(MAX_FRAME).max_frame_size(MAX_FRAME).on_upgrade(move |s| ws::run(app, s, ip, scope))
 }
 
 #[cfg(test)]
@@ -436,7 +493,7 @@ mod tests {
         let t0 = Instant::now();
         let classic = GameRules::classic();
         let mut add = |id, mmr, rules: &Arc<GameRules>| {
-            h.queue.insert(id, Seeker { name: format!("p{id}"), mode: Mode::Casual, rules: rules.clone(), deck: json!(id),
+            h.queue.insert(id, Seeker { sub: 0, name: format!("p{id}"), mode: Mode::Casual, rules: rules.clone(), deck: json!(id),
                 key: Key { mmr, level: 0, legend: false }, since: t0 });
         };
         add(1, 1500.0, &classic);
@@ -448,7 +505,7 @@ mod tests {
         add(5, 1500.0, &other);
         let p = h.pair(t0);
         assert_eq!(p.len(), 1);
-        assert_eq!([p[0].2[0].0, p[0].2[1].0], [1, 3]);
+        assert_eq!([p[0].3[0].0, p[0].3[1].0], [1, 3]);
         assert!(h.pair(t0 + Duration::from_secs(5)).is_empty()); // 200 > 50 + 125
         assert_eq!(h.pair(t0 + Duration::from_secs(6)).len(), 1); // 200 ≤ 50 + 150
     }

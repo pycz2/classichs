@@ -1,4 +1,3 @@
-// FOUNDATION: a verbatim copy of the foundation agent's file, a stand-in until it lands (take theirs at merge).
 //! An account that logged into a sub-server (its players list), with that sub-server's own ban of it (main bans
 //! with `accounts.suspended`, everywhere).
 
