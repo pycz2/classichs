@@ -1,0 +1,8 @@
+{
+ "base": "gvg",
+ "build": 7835,
+ "about": "2.2.0.7835 (2015-02-25): Cogmaster fix, spectator improvements",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 2.2.0.7835"
+ ]
+}

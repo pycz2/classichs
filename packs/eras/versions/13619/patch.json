@@ -1,0 +1,8 @@
+{
+ "base": "og",
+ "build": 13619,
+ "about": "5.2.0.13619 (2016-07-12): Silithid Swarmer becomes a Beast; Morgl the Oracle; Recruit A Friend",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 5.2.0.13619"
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "base": "loe",
+ "build": 10833,
+ "about": "4.0.0.10833 (2015-11-10): The League of Explorers data",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 4.0.0.10833"
+ ]
+}

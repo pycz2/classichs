@@ -1,0 +1,8 @@
+{
+ "base": "loe",
+ "build": 12051,
+ "about": "4.2.0.12051 (2016-03-14): Old Gods pre-order, 18 deck slots; Scarab Beast, Cabal Shadow Priest fix",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 4.2.0.12051"
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "base": "og",
+ "build": 12574,
+ "about": "5.0.0.12574 (2016-04-24): Whispers of the Old Gods, Standard format, big Basic/Classic nerfs",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 5.0.0.12574"
+ ]
+}

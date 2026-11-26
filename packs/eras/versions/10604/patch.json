@@ -1,0 +1,8 @@
+{
+ "base": "tgt",
+ "build": 10604,
+ "about": "3.2.0.10604 (2015-10-20): Warsong Commander nerf",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 3.2.0.10604"
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "base": "gvg",
+ "build": 7234,
+ "about": "2.0.0.7234 (2014-12-04): Goblins vs Gnomes data; Flare, Gadgetzan Auctioneer, Soulfire nerfs; old Mechs and Beasts tagged",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 2.0.0.7234"
+ ]
+}

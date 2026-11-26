@@ -1,0 +1,8 @@
+{
+ "base": "brm",
+ "build": 9166,
+ "about": "2.7.0.9166 (2015-06-15): Tavern Brawl, alternate heroes, Explosive Shot/Swipe damage timing",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 2.7.0.9166"
+ ]
+}

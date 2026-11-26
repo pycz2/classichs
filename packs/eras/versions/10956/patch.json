@@ -1,0 +1,8 @@
+{
+ "base": "loe",
+ "build": 10956,
+ "about": "4.1.0.10956 (2015-12-04): Winter Veil patch; 'After' wording",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 4.1.0.10956"
+ ]
+}

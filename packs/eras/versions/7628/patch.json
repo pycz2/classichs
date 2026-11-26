@@ -1,0 +1,8 @@
+{
+ "base": "gvg",
+ "build": 7628,
+ "about": "2.1.0.7628 (2015-01-29): Undertaker nerf",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 2.1.0.7628"
+ ]
+}

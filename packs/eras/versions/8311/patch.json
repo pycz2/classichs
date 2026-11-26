@@ -1,0 +1,8 @@
+{
+ "base": "brm",
+ "build": 8311,
+ "about": "2.4.0.8311 (2015-03-31): Blackrock Mountain data; Warsong Commander and Bane of Doom fixes",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 2.4.0.8311"
+ ]
+}

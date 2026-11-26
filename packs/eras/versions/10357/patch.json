@@ -1,0 +1,8 @@
+{
+ "base": "tgt",
+ "build": 10357,
+ "about": "3.1.0.10357 (2015-09-29): TGT bug fixes and new animations",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 3.1.0.10357"
+ ]
+}

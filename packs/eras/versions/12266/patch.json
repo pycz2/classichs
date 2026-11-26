@@ -1,0 +1,8 @@
+{
+ "base": "loe",
+ "build": 12266,
+ "about": "4.3.0.12266 (2016-04-14): Khadgar hero",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 4.3.0.12266"
+ ]
+}

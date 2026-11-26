@@ -1,0 +1,8 @@
+{
+ "base": "og",
+ "build": 13030,
+ "about": "5.0.0.13030 (2016-06-01): Old Gods bug fixes (Shifter Zerus, Redemption on C'Thun, Scaled Nightmare)",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 5.0.0.13030"
+ ]
+}

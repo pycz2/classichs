@@ -1,0 +1,8 @@
+{
+ "base": "tgt",
+ "build": 9786,
+ "about": "3.0.0.9786 (2015-08-18): The Grand Tournament data",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 3.0.0.9786"
+ ]
+}

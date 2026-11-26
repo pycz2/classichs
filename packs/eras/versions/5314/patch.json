@@ -1,0 +1,8 @@
+{
+ "base": "classic",
+ "build": 5314,
+ "about": "1.0.0.5314 (2014-05-08): Unleash the Hounds nerf",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 1.0.0.5314"
+ ]
+}

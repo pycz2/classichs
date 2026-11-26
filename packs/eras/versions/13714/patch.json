@@ -1,0 +1,8 @@
+{
+ "base": "og",
+ "build": 13714,
+ "about": "5.2.0.13714 (2016-07-14): Login fix; Ice Barrier trigger timing (uncertain patch)",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 5.2.0.13714"
+ ]
+}
