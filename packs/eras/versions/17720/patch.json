@@ -1,0 +1,2337 @@
+{
+ "base": "msg",
+ "build": 17720,
+ "about": "7.1.0.17720 (2017-02-28): Small-Time Buccaneer 1/1, Spirit Claws costs (2); 'Destroy any minion damaged by this minion' becomes Poisonous; the texts of that build; Wind-up Burglebot without Choose One; Snipe hits the Sheep of Potion of Polymorph; The Mistcaller as since 15590",
+ "cards": {
+  "AT_004": {
+   "text": {
+    "deDE": "Fügt einem Diener\n$2 Schaden zu. <b>Zauberschaden</b>-Boni gelten für diese Karte doppelt.",
+    "enUS": "Deal $2 damage to a minion. This spell gets double bonus from <b>Spell Damage</b>.",
+    "esES": "Inflige $2 p. de daño a un esbirro. Este hechizo obtiene el doble de bonus de <b>daño con hechizos</b>.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à un serviteur. Le bonus aux <b>Dégâts des sorts</b> est doublé pour ce sort.",
+    "itIT": "Infligge $2 danni a un servitore. Raddoppia il bonus fornito da <b>Danni Magici</b>.",
+    "plPL": "Zadaj $2 pkt. obrażeń stronnikowi. Zaklęcie to otrzymuje podwójną premię od <b>Obrażeń zaklęć</b>.",
+    "ptBR": "Cause $2 de dano a um lacaio. Este feitiço recebe bônus duplo de <b>Dano Mágico</b>.",
+    "ruRU": "Наносит $2 ед. урона выбранному существу. Это заклинание получает удвоенный бонус от <b>силы заклинаний</b>."
+   }
+  },
+  "AT_007": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Jeder\nSpieler erhält einen zufälligen Zauber auf\ndie Hand.",
+    "enUS": "<b>Battlecry:</b> Add a random spell to each player's hand.",
+    "esES": "<b>Grito de batalla:</b> Añade un hechizo aleatorio a la mano de cada jugador.",
+    "frFR": "<b>Cri de guerre :</b> ajoute un sort aléatoire dans la main de chaque joueur.",
+    "itIT": "<b>Grido di Battaglia:</b> mette nella mano di ogni giocatore una Magia casuale.",
+    "plPL": "<b>Okrzyk bojowy:</b> Dodaj losowe zaklęcie do ręki każdego gracza.",
+    "ptBR": "<b>Grito de Guerra:</b> Adicione um feitiço aleatório na mão de cada jogador.",
+    "ruRU": "<b>Боевой клич:</b> каждый игрок кладет в руку   случайное заклинание."
+   }
+  },
+  "AT_009": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b>\nErhaltet 3 Kopien von Arkane Geschosse auf die Hand.",
+    "enUS": "<b>Deathrattle:</b> Add 3 copies of Arcane Missiles to your hand.",
+    "esES": "<b>Último aliento:</b> Añade 3 copias de Misiles Arcanos a tu mano.",
+    "frFR": "<b>Râle d’agonie :</b> ajoute\n3 copies de Projectiles des Arcanes dans votre main.",
+    "itIT": "<b>Rantolo di Morte:</b> mette nella tua mano tre Missili Arcani.",
+    "plPL": "<b>Agonia:</b> Dodaj 3 kopie zaklęcia „Tajemne pociski” do twojej ręki.",
+    "ptBR": "<b>Último Suspiro:</b> Adicione 3 cópias de Mísseis Arcanos à sua mão.",
+    "ruRU": "<b>Предсмертный хрип:</b> вы кладете в руку три копии [x]«Чародейских стрел»."
+   }
+  },
+  "AT_014": {
+   "text": {
+    "deDE": "Verringert die Kosten\njeder Karte, die Ihr zieht, um (1).",
+    "enUS": "Whenever you draw a card, reduce its Cost by (1).",
+    "esES": "Cada vez que robas una carta, la carta robada cuesta (1) cristal menos.",
+    "frFR": "Chaque fois que vous piochez une carte, réduit son coût de\n(1) |4(cristal,cristaux).",
+    "itIT": "Quando peschi una carta, il suo costo si riduce di (1).",
+    "plPL": "Za każdym razem gdy dobierasz kartę, zmniejsz jej koszt o (1).",
+    "ptBR": "Sempre que comprar um card, reduza seu custo em (1).",
+    "ruRU": "Когда вы берете карту, она стоит на (1) меньше."
+   }
+  },
+  "AT_027": {
+   "text": {
+    "deDE": "Karten, die Ihr mit Eurer Heldenfähigkeit zieht, kosten (0).",
+    "enUS": "Cards you draw from your Hero Power cost (0).",
+    "esES": "Las cartas que robas con tu poder de héroe cuestan (0) cristales.",
+    "frFR": "Les cartes que vous piochez avec votre pouvoir héroïque coûtent (0) |4(cristal,cristaux).",
+    "itIT": "Le carte pescate con il tuo Potere Eroe costano (0).",
+    "plPL": "Karty dobierane dzięki twojej mocy specjalnej kosztują (0).",
+    "ptBR": "Os cards que você compra com o seu Poder Heroico custam (0).",
+    "ruRU": "Карты, которые вы берете с помощью вашей силы героя, стоят (0)."
+   }
+  },
+  "AT_032": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Erhält +1/+1, wenn Ihr einen Piraten kontrolliert.",
+    "enUS": "<b>Battlecry:</b> If you have a Pirate, gain +1/+1.",
+    "esES": "<b>Grito de batalla:</b> Obtiene +1/+1 si tienes un pirata.",
+    "frFR": "<b>Cri de guerre :</b> si vous avez un pirate, gagne +1/+1.",
+    "itIT": "<b>Grido di Battaglia:</b> ottiene +1/+1 se controlli un Pirata.",
+    "plPL": "<b>Okrzyk bojowy:</b> Otrzymuje +1/+1, jeśli kontrolujesz Pirata.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você tiver um Pirata, receba +1/+1.",
+    "ruRU": "<b>Боевой клич:</b> получает +1/+1, если у вас [x]под контролем есть пират."
+   }
+  },
+  "AT_036": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Lasst diese Karte auf Eure Hand zurück[d]kehren und ruft einen Neruber (4/4) herbei.",
+    "enUS": "<b>Deathrattle:</b> Return this to your hand and summon a 4/4 Nerubian.",
+    "esES": "<b>Último aliento:</b> Devuelve esta carta a tu mano e invoca un nerubiano 4/4.",
+    "frFR": "<b>Râle d’agonie :</b> le renvoie dans votre main et invoque un nérubien 4/4.",
+    "itIT": "<b>Rantolo di Morte:</b> torna nella tua mano ed evoca un Nerubiano 4/4.",
+    "plPL": "<b>Agonia:</b> Cofnij tego stronnika\ndo twojej ręki i przyzwij\nNerubianina 4/4.",
+    "ptBR": "<b>Último Suspiro:</b> Devolva este card à sua mão e evoque um Nerubiano 4/4.",
+    "ruRU": "[x]<b>Предсмертный хрип:</b>\nвозвращает это существо\nв вашу руку и призывает\nнеруба 4/4."
+   }
+  },
+  "AT_041": {
+   "text": {
+    "deDE": "Verringert die Kosten dieser Karte jedes Mal um (1), wenn Ihr ein Wildtier herbeiruft.",
+    "enUS": "Whenever you summon a Beast, reduce the Cost of this card by (1).",
+    "esES": "Cada vez que invocas una bestia, esta carta cuesta (1) cristal menos.",
+    "frFR": "Chaque fois que vous invoquez une Bête, réduit le coût de cette carte de (1) |4(cristal,cristaux).",
+    "itIT": "Quando viene evocata una Bestia sotto il tuo controllo, il costo di questa carta si riduce di (1).",
+    "plPL": "Za każdym razem gdy przyzywasz Bestię, zmniejsz koszt tej karty o (1).",
+    "ptBR": "Sempre que você evocar uma Fera, reduza em (1) o Custo deste card.",
+    "ruRU": "Когда вы призываете зверя, стоимость этой карты уменьшается на (1)."
+   }
+  },
+  "AT_042": {
+   "text": {
+    "deDE": "<b>Wählt aus:</b> Verwandelt sich und erhält <b>Ansturm</b>;\noder +1/+1 und <b>Verstohlenheit</b>.",
+    "enUS": "<b>Choose One -</b> Transform to gain <b>Charge</b>; or +1/+1 and <b>Stealth</b>.",
+    "esES": "<b>Elige una:</b> Se transforma para obtener <b>Cargar</b>, o bien +1/+1 y <b>Sigilo</b>.",
+    "frFR": "<b>Choix des armes :</b> se transforme pour obtenir <b>Charge</b> ou gagne +1/+1 et <b>Camouflage</b>.",
+    "itIT": "<b>Scegli:</b> si trasforma e ottiene <b>Carica</b> <b>o</b> +1/+1 e <b>Furtività</b>.",
+    "plPL": "<b>Wybierz jedno:</b> Przemień\nw stronnika z <b>Szarżą</b>;\nlub w stronnika +1/+1\nz <b>Ukryciem</b>.",
+    "ptBR": "<b>Escolha um -</b> Transformar-se para receber <b>Investida</b> ou +1/+1 e <b>Furtividade</b>.",
+    "ruRU": "[x]<b>Выберите эффект:</b>\n превращается и получает\n <b>«Рывок»</b>; или получает\n  +1/+1 и <b>«Маскировку»</b>."
+   }
+  },
+  "AT_045": {
+   "text": {
+    "deDE": "Eure Diener kosten (1).",
+    "enUS": "Your minions cost (1).",
+    "esES": "Tus esbirros cuestan (1) cristal de maná.",
+    "frFR": "Vos serviteurs coûtent\n(1) |4(cristal,cristaux).",
+    "itIT": "I tuoi servitori costano (1).",
+    "plPL": "Twoi stronnicy kosztują (1).",
+    "ptBR": "Seus lacaios custam (1).",
+    "ruRU": "Все ваши существа стоят (1)."
+   }
+  },
+  "AT_060": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Ruft einen Bären (3/3) mit <b>Spott</b> herbei, nachdem Euer Held angegriffen wurde.",
+    "enUS": "<b>Secret:</b> After your hero is attacked, summon a 3/3 Bear with <b>Taunt</b>.",
+    "esES": "<b>Secreto:</b> Cuando hayan atacado a tu héroe, invoca un oso 3/3 con <b>Provocar</b>.",
+    "frFR": "<b>Secret :</b> invoque un ours 3/3 avec <b>Provocation</b> une fois que votre héros a été attaqué.",
+    "itIT": "<b>Segreto:</b> dopo che il tuo eroe è stato attaccato, evoca un Orso 3/3 con <b>Provocazione</b>.",
+    "plPL": "<b>Sekret:</b> Po tym, jak twój bohater zostanie zaatakowany, przyzwij Niedźwiedzia 3/3 z <b>Prowokacją</b>.",
+    "ptBR": "<b>Segredo:</b> Depois que o seu herói for atacado, evoque um Urso 3/3 com <b>Provocar</b>.",
+    "ruRU": "<b>Секрет:</b> если ваш герой был атакован, призывает медведя 3/3 с <b>«Провокацией»</b>."
+   }
+  },
+  "AT_067": {
+   "text": {
+    "deDE": "Fügt auch den benach[d]barten Dienern seines Ziels Schaden zu.",
+    "enUS": "Also damages the minions next to whomever\nhe attacks.",
+    "esES": "También daña a los esbirros adyacentes a su objetivo.",
+    "frFR": "Inflige également des dégâts aux serviteurs adjacents de celui qu’il attaque.",
+    "itIT": "Infligge danni anche ai servitori adiacenti a quello attaccato.",
+    "plPL": "Zadaj również obrażenia stronnikom znajdującym się obok celu ataku.",
+    "ptBR": "Também causa dano aos lacaios adjacentes ao alvo\natacado.",
+    "ruRU": "Также наносит урон существам по обе стороны от того существа, которое он атакует."
+   }
+  },
+  "AT_070": {
+   "text": {
+    "deDE": "<b>Ansturm</b>. Kostet (1) weniger für jeden befreundeten Piraten.",
+    "enUS": "<b>Charrrrrge</b>\nCosts (1) less for each friendly Pirate.",
+    "esES": "<b>Carrrrrrgar</b>\nCuesta (1) cristal menos por cada pirata amistoso.",
+    "frFR": "<b>Charrrrrge</b>\nCoûte (1) |4(cristal,cristaux) de moins pour chaque pirate allié.",
+    "itIT": "<b>Carrrica</b>. Costa (1) in meno per ogni tuo Pirata.",
+    "plPL": "<b>Szarrrrża</b>\nKosztuje (1) mniej\nza każdego przyjaznego Pirata.",
+    "ptBR": "<b>Investida</b>\n Custa (1) a menos para cada Pirata aliado.",
+    "ruRU": "<b>Рррррывок</b>\nСтоит на (1) меньше за каждого пирата   под вашим контролем."
+   }
+  },
+  "AT_081": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Setzt den Angriff aller feindlichen Diener auf 1.",
+    "enUS": "<b>Battlecry:</b> Change all enemy minions'\nAttack to 1.",
+    "esES": "<b>Grito de batalla:</b> Cambia el ataque de todos los esbirros enemigos\na 1.",
+    "frFR": "<b>Cri de guerre :</b> l’Attaque de tous les serviteurs adverses passe à 1.",
+    "itIT": "<b>Grido di Battaglia:</b> imposta l'Attacco dei servitori nemici a 1.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zmień atak wszystkich wrogich stronników na 1.",
+    "ptBR": "<b>Grito de Guerra:</b> Mude o Ataque de todos os lacaios inimigos\npara 1.",
+    "ruRU": "<b>Боевой клич:</b> атака всех существ противника [x]становится равна 1."
+   }
+  },
+  "AT_085": {
+   "text": {
+    "deDE": "Eure Heldenfähigkeit kostet (1).",
+    "enUS": "Your Hero Power costs (1).",
+    "esES": "Tu poder de héroe cuesta (1) cristal.",
+    "frFR": "Votre pouvoir héroïque coûte (1) |4(cristal,cristaux).",
+    "itIT": "Il tuo Potere Eroe costa (1).",
+    "plPL": "Twoja moc specjalna kosztuje (1).",
+    "ptBR": "Seu Poder Heroico custa (1).",
+    "ruRU": "Ваша сила героя стоит (1)."
+   }
+  },
+  "AT_086": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Die Heldenfähigkeit Eures Gegners kostet im nächsten Zug (5) mehr.",
+    "enUS": "<b>Battlecry:</b> Your opponent's Hero Power costs (5) more next turn.",
+    "esES": "<b>Grito de batalla:</b> El poder de héroe de tu oponente cuesta (5) cristales más el próximo turno.",
+    "frFR": "<b>Cri de guerre :</b> le pouvoir héroïque de votre adversaire coûte (5) cristaux de plus au tour suivant.",
+    "itIT": "<b>Grido di Battaglia:</b> nel turno successivo, il Potere Eroe dell'avversario costa (5) in più.",
+    "plPL": "<b>Okrzyk bojowy:</b> Moc specjalna twojego przeciwnika kosztuje (5) więcej w następnej turze.",
+    "ptBR": "<b>Grito de Guerra:</b> O Poder Heroico do seu oponente custa (5) a mais no próximo turno.",
+    "ruRU": "<b>Боевой клич:</b> увеличивает стоимость силы героя противника на (5) до конца его следующего хода."
+   }
+  },
+  "AT_115": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Eure Heldenfähigkeit kostet beim nächsten Einsatz (2) weniger.",
+    "enUS": "<b>Battlecry:</b> The next time you use your Hero Power, it costs (2) less.",
+    "esES": "<b>Grito de batalla:</b> La próxima vez que uses tu poder de héroe, costará (2) cristales menos.",
+    "frFR": "<b>Cri de guerre :</b> la prochaine fois que vous utilisez votre pouvoir héroïque, il coûte\n(2) cristaux de moins.",
+    "itIT": "<b>Grido di Battaglia:</b> la prossima volta che usi il tuo Potere Eroe, costa (2) in meno.",
+    "plPL": "<b>Okrzyk bojowy:</b> Następne użycie twojej mocy specjalnej kosztuje (2) mniej.",
+    "ptBR": "<b>Grito de Guerra:</b> Na próxima vez que você usar seu Poder Heroico, ele custará (2) a menos.",
+    "ruRU": "<b>Боевой клич:</b> уменьшает стоимость следующего использования силы вашего героя на (2)."
+   }
+  },
+  "AT_120": {
+   "text": {
+    "deDE": "Kostet (1) weniger für jeden Einsatz Eurer Heldenfähigkeit in diesem Spiel.",
+    "enUS": "Costs (1) less for each time you used your Hero Power this game.",
+    "esES": "Cuesta (1) cristal menos por cada vez que hayas usado tu poder de héroe esta partida.",
+    "frFR": "Coûte (1) |4(cristal,cristaux) de moins chaque fois que vous utilisez votre pouvoir héroïque pendant cette partie.",
+    "itIT": "Costa (1) in meno per ogni uso del tuo Potere Eroe in questa partita.",
+    "plPL": "Kosztuje (1) mniej\nza każde użycie twojej\nmocy specjalnej\nw tej grze.",
+    "ptBR": "Custa (1) a menos para cada vez que você usou seu Poder Heroico neste jogo.",
+    "ruRU": "Стоит на (1) меньше за каждое использование вашей силы героя в течение этого матча."
+   }
+  },
+  "AT_123": {
+   "text": {
+    "deDE": "<b>Spott</b>. <b>Todesröcheln:</b> Fügt allen Dienern 3 Schaden zu, wenn Ihr einen Drachen auf der Hand habt.",
+    "enUS": "[x]<b>Taunt</b>\n<b>Deathrattle:</b> If you're holding\na Dragon, deal 3 damage\nto all minions.",
+    "esES": "[x]<b>Provocar</b>.\n<b>Último aliento:</b> Inflige 3 p. de daño\na todos los esbirros si hay\nun dragón en tu mano.",
+    "frFR": "<b>Provocation</b>. <b>Râle d’agonie :</b> inflige 3 points de dégâts à tous les serviteurs si vous avez un Dragon en main.",
+    "itIT": "<b>Provocazione</b>. <b>Rantolo di Morte:</b> infligge 3 danni a TUTTI i servitori se hai un Drago in mano.",
+    "plPL": "<b>Prowokacja.</b>\n<b>Agonia:</b> Zadaj 3 pkt. obrażeń wszystkim stronnikom, jeśli masz w ręce Smoka.",
+    "ptBR": "<b>Provocar</b>\n<b>Último Suspiro:</b> Se tiver um Dragão na mão, cause 3 de dano a todos os lacaios.",
+    "ruRU": "<b>Провокация</b>\n<b>Предсмертный хрип:</b> наносит 3 ед. урона всем существам,\n[x]  если у вас в руке есть дракон."
+   }
+  },
+  "AT_125": {
+   "text": {
+    "deDE": "<b>Ansturm</b>. Kann keine Helden angreifen.",
+    "enUS": "<b>Charge</b>\nCan't attack heroes.",
+    "esES": "<b>Cargar</b>\nNo puede atacar a héroes.",
+    "frFR": "<b>Charge</b>\nNe peut pas attaquer les héros.",
+    "itIT": "<b>Carica</b>. Non può attaccare gli eroi.",
+    "plPL": "<b>Szarża</b>\nNie może atakować bohaterów.",
+    "ptBR": "<b>Investida</b>\nNão pode atacar heróis.",
+    "ruRU": "<b>Рывок</b>\nНе может атаковать героев."
+   }
+  },
+  "AT_127": {
+   "name": {
+    "deDE": "Nexus-Champion Saraad",
+    "enUS": "Nexus-Champion Saraad",
+    "esES": "Campeón del Nexo Saraad",
+    "frFR": "Champion du Nexus Saraad",
+    "itIT": "Eroe del Nexus Saraad",
+    "plPL": "Saraad Mistrz Nexusa",
+    "ptBR": "Campeão do Nexus Saraad",
+    "ruRU": "Сараад, рыцарь Нексуса"
+   }
+  },
+  "AT_132": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Ersetzt Eure Basis-Heldenfähigkeit durch eine bessere.",
+    "enUS": "<b>Battlecry:</b> Replace your starting Hero Power with a better one.",
+    "esES": "<b>Grito de batalla:</b> Reemplaza tu poder de héroe inicial por uno mejor.",
+    "frFR": "<b>Cri de guerre :</b> remplace votre pouvoir héroïque de départ en l’améliorant.",
+    "itIT": "<b>Grido di Battaglia:</b> sostituisce il tuo Potere Eroe originale con uno più potente.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zastąp twoją startową moc specjalną ulepszoną mocą.",
+    "ptBR": "<b>Grito de Guerra:</b> Substitui seu Poder Heroico inicial por um melhor.",
+    "ruRU": "<b>Боевой клич:</b> заменяет обычную силу вашего\n[x]героя на улучшенную."
+   }
+  },
+  "BRM_001": {
+   "text": {
+    "deDE": "Zieht 2 Karten. Kostet (1) weniger für jeden Diener, der in diesem Zug gestorben ist.",
+    "enUS": "Draw 2 cards. Costs (1) less for each minion that died this turn.",
+    "esES": "Roba 2 cartas. Cuesta (1) cristal menos por cada esbirro que haya muerto este turno.",
+    "frFR": "Vous piochez 2 cartes. Coûte (1) |4(cristal,cristaux) de mana de moins pour chaque serviteur mort pendant ce tour.",
+    "itIT": "Pesca 2 carte. Costa (1) in meno per ogni servitore morto in questo turno.",
+    "plPL": "Dobierz 2 karty. Kosztuje (1) mniej\nza każdego stronnika, który zginął w tej turze.",
+    "ptBR": "Compre 2 cards. Custa (1) a menos para cada lacaio morto neste turno.",
+    "ruRU": "Вы берете 2 карты.\nСтоит на (1) меньше\nза каждое существо,\nпогибшее на этом ходу."
+   }
+  },
+  "BRM_003": {
+   "text": {
+    "deDE": "Verursacht $4 Schaden. Kostet (1) weniger für jeden Diener, der in diesem Zug gestorben ist.",
+    "enUS": "Deal $4 damage. Costs (1) less for each minion that died this turn.",
+    "esES": "Inflige $4 p. de daño. Cuesta (1) cristal menos por cada esbirro que haya muerto este turno.",
+    "frFR": "Inflige $4 points de dégâts. Coûte (1) |4(cristal,cristaux) de mana de moins pour chaque serviteur mort pendant ce tour.",
+    "itIT": "Infligge $4 danni. Costa (1) in meno per ogni servitore morto in questo turno.",
+    "plPL": "Zadaj $4 pkt. obrażeń. Kosztuje (1) mniej za każdego stronnika, który zginął w tej turze.",
+    "ptBR": "Causa $4 de dano. Custa (1) a menos para cada lacaio morto neste turno.",
+    "ruRU": "[x]Наносит $4 ед. урона.\nСтоит на (1) меньше\nза каждое существо,\nпогибшее на этом ходу."
+   }
+  },
+  "BRM_005": {
+   "text": {
+    "deDE": "Fügt allen Dienern außer Dämonen $2 Schaden zu.",
+    "enUS": "[x]Deal $2 damage to all\nminions except Demons.",
+    "esES": "Inflige $2 p. de daño a todos los esbirros que no sean\ndemonios.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à tous les serviteurs, sauf aux démons.",
+    "itIT": "Infligge $2 danni a TUTTI i servitori non Demoni.",
+    "plPL": "Zadaj $2 pkt. obrażeń wszystkim stronnikom oprócz Demonów.",
+    "ptBR": "Cause $2 de dano\na todos os lacaios, exceto Demônios.",
+    "ruRU": "Наносит $2 ед. урона всем существам, не являющимся демонами."
+   }
+  },
+  "BRM_009": {
+   "text": {
+    "deDE": "<b>Spott</b>. Kostet (1) weniger für jeden Diener, der in diesem Zug gestorben ist.",
+    "enUS": "<b>Taunt</b>\nCosts (1) less for each minion that died this turn.",
+    "esES": "<b>Provocar</b>.\nCuesta (1) cristal menos\npor cada esbirro que haya muerto este turno.",
+    "frFR": "<b>Provocation</b>.\n Coûte (1) |4(cristal,cristaux) de moins pour chaque serviteur mort pendant ce tour.",
+    "itIT": "<b>Provocazione</b>. Costa (1) in meno per ogni servitore morto in questo turno.",
+    "plPL": "<b>Prowokacja.</b>\nKosztuje (1) mniej za każdego stronnika, który zginął\nw tej turze.",
+    "ptBR": "<b>Provocar</b>\nCusta (1) a menos para cada lacaio morto neste turno.",
+    "ruRU": "<b>Провокация</b>\nСтоит на (1) меньше за каждое существо,  погибшее на этом ходу."
+   }
+  },
+  "BRM_010": {
+   "text": {
+    "deDE": "<b>Wählt aus:</b> Verwandelt sich in eine Feuerkatze (5/2); oder in einen Feuer[d]falken (2/5).",
+    "enUS": "<b>Choose One -</b> Transform into a 5/2 minion; or a 2/5 minion.",
+    "esES": "<b>Elige una:</b> Se transforma en un esbirro 5/2, o bien en un esbirro 2/5.",
+    "frFR": "<b>Choix des armes :</b> se transforme en un serviteur 5/2 ou en un serviteur 2/5.",
+    "itIT": "<b>Scegli:</b> si trasforma in un servitore 5/2 <b>o</b> in un servitore 2/5.",
+    "plPL": "<b>Wybierz jedno:</b> Przemień w stronnika 5/2; lub w stronnika 2/5.",
+    "ptBR": "<b>Escolha Um -</b> Transforme num lacaio 5/2; ou num lacaio 2/5.",
+    "ruRU": "<b>Выберите эффект:</b> превращается в существо [x]5/2 или в существо 2/5."
+   }
+  },
+  "BRM_015": {
+   "text": {
+    "deDE": "Fügt allen Dienern\n$1 Schaden zu. Fügt allen Dienern statt[d]dessen $3 Schaden zu, wenn Euer Held max.\n12 Leben hat.",
+    "enUS": "Deal $1 damage to all minions. If you have 12 or less Health, deal $3 damage instead.",
+    "esES": "Inflige $1 p. de daño a todos los esbirros. Si tienes 12 p. de salud o menos, inflige $3 p. de daño.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à tous les serviteurs. Si vous avez 12 PV ou moins, inflige $3 |4(point,points) de dégâts à la place.",
+    "itIT": "Infligge $1 |4(danno,danni) a TUTTI i servitori. Se il tuo eroe ha Salute pari a 12 o inferiore, i danni inflitti sono $3.",
+    "plPL": "Zadaj $1 pkt. obrażeń wszystkim stronnikom.\nJeśli masz 12 pkt. zdrowia\nlub mniej, zamiast tego\nzadaj $3 pkt. obrażeń.",
+    "ptBR": "Cause $1 de dano a todos os lacaios. Se você tiver 12 pontos de vida ou menos, em vez disso, cause $3 de dano.",
+    "ruRU": "Наносит $1 ед. урона всем существам. Если у вашего героя 12 или меньше ед. здоровья, вместо этого наносит $3 ед. урона."
+   }
+  },
+  "BRM_018": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Der nächste Drache, den Ihr ausspielt, kostet (2) weniger.",
+    "enUS": "<b>Battlecry:</b> The next Dragon you play costs (2) less.",
+    "esES": "<b>Grito de batalla:</b> El siguiente dragón que juegues costará (2) cristales menos.",
+    "frFR": "<b>Cri de guerre :</b> le prochain Dragon que vous jouez coûte (2) cristaux de moins.",
+    "itIT": "<b>Grido di Battaglia:</b> il prossimo Drago che giochi costa (2) in meno.",
+    "plPL": "<b>Okrzyk bojowy:</b> Następny Smok, którego zagrasz, kosztuje (2) mniej.",
+    "ptBR": "<b>Grito de Guerra:</b> O próximo Dragão que você jogar custa (2) a menos.",
+    "ruRU": "<b>Боевой клич:</b> следующий дракон, которого вы разыграете, будет стоить на (2) меньше."
+   }
+  },
+  "BRM_025": {
+   "text": {
+    "deDE": "Kostet (1) weniger für jeden Diener, der in diesem Zug gestorben ist.",
+    "enUS": "Costs (1) less for each minion that died this turn.",
+    "esES": "Cuesta (1) cristal menos por cada esbirro que haya muerto este turno.",
+    "frFR": "Coûte (1) |4(cristal,cristaux) de moins pour chaque serviteur mort pendant ce tour.",
+    "itIT": "Costa (1) in meno per ogni servitore morto in questo turno.",
+    "plPL": "Kosztuje (1) mniej za każdego stronnika, który zginął w tej turze.",
+    "ptBR": "Custa (1) a menos para cada lacaio morto neste turno.",
+    "ruRU": "Стоит на (1) меньше\nза каждое существо,  погибшее на этом ходу."
+   }
+  },
+  "BRM_026": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Ruft für Euren Gegner einen zufälligen Diener herbei, der (1) kostet.",
+    "enUS": "<b>Battlecry:</b> Summon a random 1-Cost minion for your opponent.",
+    "esES": "<b>Grito de batalla:</b> Invoca a un esbirro aleatorio de coste 1 para tu oponente.",
+    "frFR": "<b>Cri de guerre :</b> invoque un serviteur aléatoire à 1 cristal pour votre adversaire.",
+    "itIT": "<b>Grido di Battaglia:</b> evoca un servitore casuale da 1 Mana sotto il controllo dell'avversario.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przyzwij losowego stronnika o koszcie 1 twojemu przeciwnikowi.",
+    "ptBR": "<b>Grito de Guerra:</b> Evoque um lacaio aleatório com 1 de custo para o seu oponente.",
+    "ruRU": "<b>Боевой клич:</b> призывает случайное существо за (1) на сторону противника."
+   }
+  },
+  "BRM_028": {
+   "text": {
+    "deDE": "Verringert die Kosten Eurer Handkarten am Ende Eures Zuges um (1).",
+    "enUS": "At the end of your turn, reduce the Cost of cards in your hand by (1).",
+    "esES": "Al final de tu turno, reduce (1) cristal el coste de las cartas en tu mano.",
+    "frFR": "À la fin de votre tour, réduit de (1) |4(cristal,cristaux) le coût des cartes dans votre main.",
+    "itIT": "Alla fine del tuo turno, il costo delle carte nella tua mano si riduce di (1).",
+    "plPL": "Na koniec twojej tury zmniejsz koszt kart w twojej ręce o (1).",
+    "ptBR": "No final do seu turno, reduza em (1) o custo dos cards na sua mão.",
+    "ruRU": "В конце вашего хода уменьшает стоимость карт у вас в руке на (1)."
+   }
+  },
+  "CFM_020": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Eure Heldenfähig[d]keit kostet in diesem Spiel (0), wenn Euer Deck keine Karte mehrfach enthält.",
+    "enUS": "[x]  <b>Battlecry:</b> If your deck has  \nno duplicates, your Hero\n Power costs (0) this game.",
+    "esES": "<b>Grito de batalla:</b>\nSi tu mazo no contiene cartas repetidas, tu poder de héroe cuesta (0) cristales durante esta partida.",
+    "frFR": "<b>Cri de guerre :</b> si votre deck ne contient pas de cartes en double, votre pouvoir héroïque coûte (0) |4(cristal,cristaux) pendant cette partie.",
+    "itIT": "<b>Grido di Battaglia:</b> se il tuo mazzo ha attualmente una sola copia per carta, il tuo Potere Eroe costa (0).",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli w twojej talii nie ma duplikatów, twoja moc specjalna w tej grze kosztuje (0).",
+    "ptBR": "[x]<b>Grito de Guerra:</b> Se não houver \ncards repetidos no seu deck,\nseu Poder Heroico custa (0)\nnesta partida.",
+    "ruRU": "[x]<b>Боевой клич:</b> если в вашей\nколоде нет одинаковых карт,\nваша сила героя\n   стоит (0) до конца матча."
+   }
+  },
+  "CFM_025": {
+   "keywords": [
+    "TRIGGER_VISUAL"
+   ],
+   "text": {
+    "deDE": "Zieht jedes Mal eine Karte, wenn dieser Diener einen Diener angreift und überlebt.",
+    "enUS": "Whenever this attacks a minion and survives, draw a card.",
+    "esES": "Cada vez que este esbirro ataca a otro y sobrevive, roba una carta.",
+    "frFR": "Vous piochez une carte chaque fois que ce serviteur attaque un serviteur et survit.",
+    "itIT": "Quando attacca un servitore e sopravvive, pesca una carta.",
+    "plPL": "Dobierz kartę za każdym razem, gdy zaatakuje stronnika i przeżyje.",
+    "ptBR": "Sempre que ele atacar um lacaio e sobreviver, compre um card.",
+    "ruRU": "Когда это существо атакует другое и выживает, вы берете карту."
+   }
+  },
+  "CFM_026": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Verleiht einem zufälligen Diener auf Eurer Hand +2/+2, nachdem Euer Gegner einen Diener ausgespielt hat.",
+    "enUS": "<b>Secret:</b> After your opponent plays a minion, give a random minion in your hand +2/+2.",
+    "esES": "<b>Secreto:</b> Cuando tu oponente juega un esbirro, otorga +2/+2 a un esbirro aleatorio que esté en tu mano.",
+    "frFR": "<b>Secret :</b> une fois que votre adversaire a joué un serviteur, donne +2/+2 à un serviteur aléatoire dans votre main.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha giocato un servitore, +2/+2 a un servitore casuale nella tua mano.",
+    "plPL": "<b>Sekret:</b> Gdy twój przeciwnik zagra stronnika, daj losowemu stronnikowi w twojej ręce +2/+2.",
+    "ptBR": "<b>Segredo:</b> Depois que seu oponente jogar um lacaio, conceda +2/+2 a um lacaio aleatório na sua mão.",
+    "ruRU": "[x]<b>Секрет:</b> когда противник\nразыгрывает существо,\nслучайное существо\nу вас в руке получает +2/+2."
+   }
+  },
+  "CFM_039": {
+   "text": {
+    "deDE": "<b>Zauberschaden +1</b>",
+    "enUS": "<b>Spell Damage +1</b>",
+    "esES": "<b>+1 p. de daño con hechizos</b>.",
+    "frFR": "<b>Dégâts des sorts : +1</b>",
+    "itIT": "<b>+1 Danni Magici</b>",
+    "plPL": "<b>Obrażenia zaklęć +1</b>",
+    "ptBR": "<b>+1 de Dano Mágico</b>",
+    "ruRU": "<b>Урон от заклинаний +1</b>"
+   }
+  },
+  "CFM_066": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Das nächste <b>Geheimnis</b>, das Ihr\nin diesem Zug aus[d]spielt, kostet (0).",
+    "enUS": "[x]<b>Battlecry:</b> The next <b>Secret</b>\nyou play this turn costs (0).",
+    "esES": "<b>Grito de batalla:</b>\nEl siguiente <b>Secreto</b> que juegues este turno costará (0) cristales.",
+    "frFR": "<b>Cri de guerre :</b> le prochain <b>Secret</b> que vous jouez pendant ce tour coûte (0) |4(cristal,cristaux).",
+    "itIT": "<b>Grido di Battaglia:</b> il prossimo <b>Segreto</b> che giochi in questo turno costa (0).",
+    "plPL": "<b>Okrzyk bojowy:</b> Następny <b>Sekret</b>, który zagrasz w tej turze, kosztuje (0).",
+    "ptBR": "<b>Grito de Guerra:</b> O próximo <b>Segredo</b> que você\nlançar neste turno custará (0).",
+    "ruRU": "<b>Боевой клич:</b> следующий <b>секрет</b> на этом ходу будет бесплатным."
+   }
+  },
+  "CFM_120": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Stellt bei jedem Helden 4 Leben wieder her.",
+    "enUS": "<b>Deathrattle:</b> Restore 4 Health to each hero.",
+    "esES": "<b>Último aliento:</b>\nRestaura 4 p. de salud a cada héroe.",
+    "frFR": "<b>Râle d’agonie :</b> rend 4 PV à chaque héros.",
+    "itIT": "<b>Rantolo di Morte:</b> rigenera 4 Salute a entrambi gli eroi.",
+    "plPL": "<b>Agonia:</b> Przywróć 4 pkt. zdrowia każdemu bohaterowi.",
+    "ptBR": "<b>Último Suspiro:</b> Restaure 4 de Vida de cada herói.",
+    "ruRU": "<b>Предсмертный хрип:</b> восстанавливает\n4 ед. здоровья\nобоим героям."
+   }
+  },
+  "CFM_316": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Ruft Ratten (1/1) herbei. Die Anzahl entspricht dem Angriff dieses Dieners.",
+    "enUS": "[x]<b>Deathrattle:</b> Summon a\nnumber of 1/1 Rats equal\n to this minion's Attack.",
+    "esES": "<b>Último aliento:</b> Invoca un número de ratas 1/1 equivalente al ataque de este esbirro.",
+    "frFR": "<b>Râle d’agonie :</b> invoque un nombre de rats 1/1 égal à l’attaque de ce serviteur.",
+    "itIT": "<b>Rantolo di Morte:</b> evoca un numero di Ratti 1/1 pari al proprio attacco.",
+    "plPL": "<b>Agonia:</b> Przyzwij Szczura 1/1 za każdy punkt ataku tego stronnika.",
+    "ptBR": "[x]<b>Último Suspiro:</b>\nEvoque um número\nde Ratos 1/1 igual ao \nAtaque deste lacaio.",
+    "ruRU": "[x]<b>Предсмертный хрип:</b>\nпризывает крысу 1/1\nза каждую единицу атаки\nэтого существа."
+   }
+  },
+  "CFM_324": {
+   "text": {
+    "deDE": "<b>Spott</b>. <b>Todesröcheln:</b> Mischt den Sturmwächter in Euer Deck.",
+    "enUS": "<b>Taunt</b>\n<b>Deathrattle:</b> Shuffle\n'The Storm Guardian' into your deck.",
+    "esES": "<b>Provocar</b>.\n<b>Último aliento:</b> Mete al guardián de la tormenta en tu mazo.",
+    "frFR": "<b>Provocation</b>\n<b>Râle d’agonie :</b> place la carte Le gardien des tempêtes dans votre deck.",
+    "itIT": "<b>Provocazione</b>. <b>Rantolo di Morte:</b> mette un Guardiano della Tempesta nel tuo mazzo.",
+    "plPL": "<b>Prowokacja</b>\n<b>Agonia:</b> Wtasuj „Strażnika burzy” do twojej talii.",
+    "ptBR": "<b>Provocar</b>\n<b>Último Suspiro:</b> Coloque\no Guardião da Tempestade no seu deck.",
+    "ruRU": "<b>Провокация</b>\n<b>Предсмертный хрип:</b>\nвы замешиваете в колоду «Стража бури»."
+   }
+  },
+  "CFM_325": {
+   "health": 1
+  },
+  "CFM_333": {
+   "text": {
+    "deDE": "Nachdem dieser Diener\neinen Diener angegriffen hat, trifft er jedes Mal auch den feindlichen Helden.",
+    "enUS": "After this attacks a\nminion, it also hits the enemy hero.",
+    "esES": "Cada vez que este esbirro ataca a otro,\ngolpea también al héroe enemigo.",
+    "frFR": "Après avoir attaqué un serviteur, frappe aussi le héros adverse.",
+    "itIT": "Dopo che ha attaccato un servitore, infligge danni pari al suo Attacco all'eroe nemico.",
+    "plPL": "Gdy zaatakuje stronnika, trafia także we wrogiego bohatera.",
+    "ptBR": "Depois que ele ataca um\nlacaio, também acerta o herói inimigo.",
+    "ruRU": "Когда это существо атакует другое существо, оно также наносит урон герою противника."
+   }
+  },
+  "CFM_337": {
+   "text": {
+    "deDE": "Ruft jedes Mal einen Piranha (1/1) herbei, nachdem Euer Held angegriffen hat.",
+    "enUS": "[x]After your hero attacks,\nsummon a 1/1 Piranha.",
+    "esES": "Cada vez que tu héroe ataca, invoca a una piraña 1/1.",
+    "frFR": "Après que votre héros a attaqué, invoque un piranha 1/1.",
+    "itIT": "Dopo che il tuo eroe ha attaccato, evoca un Piranha 1/1.",
+    "plPL": "Gdy twój bohater zaatakuje, przyzwij Piranię 1/1.",
+    "ptBR": "[x]Depois que\nseu herói atacar,\nevoque uma\nPiranha 1/1.",
+    "ruRU": "Когда ваш герой атакует, призывает пиранью 1/1."
+   }
+  },
+  "CFM_343": {
+   "text": {
+    "deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> ({0}) herbei.",
+    "enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon a{1}\n{0} <b>Jade Golem</b>.",
+    "esES": "[x]<b>Provocar</b>.\n<b>Grito de batalla:</b> Invoca un\n<b>gólem de jade</b> {0}.",
+    "frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque un <b>golem de jade</b> {0}.",
+    "itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b> {0}.",
+    "plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b> {0}.",
+    "ptBR": "[x]<b>Provocar</b>\n<b>Grito de Guerra:</b> Evoque um\n<b>Golem de Jade</b> {0}.",
+    "ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b> призывает <b>нефритового голема</b> {0}."
+   }
+  },
+  "CFM_604": {
+   "text": {
+    "deDE": "Stellt bei einem befreundeten Charakter #12 Leben wieder her.",
+    "enUS": "Restore #12 Health to a friendly character.",
+    "esES": "Restaura #12 p. de salud a un personaje amistoso.",
+    "frFR": "Rend #12 PV à un personnage allié.",
+    "itIT": "Rigenera #12 Salute a un tuo personaggio.",
+    "plPL": "Przywróć #12 pkt. zdrowia przyjaznej postaci.",
+    "ptBR": "Restaure #12 de Vida de um personagem aliado.",
+    "ruRU": "Восстанавливает #12 ед. здоровья вашему персонажу."
+   }
+  },
+  "CFM_617": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Erhält +2/+2, wenn Ihr einen Diener mit mind. 5 Angriff kontrolliert.",
+    "enUS": "[x]<b>Battlecry:</b> If you control a\nminion with 5 or more\nAttack, gain +2/+2.",
+    "esES": "<b>Grito de batalla:</b>\nSi controlas a un esbirro con\n5 p. de ataque o más, obtiene +2/+2.",
+    "frFR": "<b>Cri de guerre :</b> gagne +2/+2 si vous contrôlez un serviteur avec 5 ATQ ou plus.",
+    "itIT": "<b>Grido di Battaglia:</b> ottiene +2/+2 se controlli un servitore con Attacco pari a 5 o superiore.",
+    "plPL": "<b>Okrzyk bojowy:</b> Otrzymuje +2/+2, jeśli kontrolujesz stronnika mającego 5 lub więcej ataku.",
+    "ptBR": "<b>Grito de Guerra:</b> Se controlar um lacaio com 5 ou mais de Ataque, receba +2/+2.",
+    "ruRU": "[x]<b>Боевой клич:</b> если у вас под\nконтролем есть существо\nс атакой 5 или больше,\nполучает +2/+2."
+   }
+  },
+  "CFM_620": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Nachdem Euer Gegner einen Diener ausgespielt hat, wird dieser in ein Schaf (1/1) verwandelt.",
+    "enUS": "<b>Secret:</b> After your opponent plays a minion, transform it into a\n1/1 Sheep.",
+    "esES": "<b>Secreto:</b> Cuando tu oponente juega un esbirro, lo transforma en una oveja 1/1.",
+    "frFR": "<b>Secret :</b> une fois que votre adversaire a joué un serviteur, le transforme en mouton 1/1.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha giocato un servitore, lo trasforma in una Pecora 1/1.",
+    "plPL": "<b>Sekret:</b> Gdy twój przeciwnik zagra stronnika, zamień\ngo w Owcę 1/1.",
+    "ptBR": "<b>Segredo:</b> Depois que seu oponente jogar um lacaio, transforme-o em uma Ovelha 1/1.",
+    "ruRU": "<b>Секрет:</b> когда противник разыгрывает существо, превращает его в овцу 1/1."
+   }
+  },
+  "CFM_621": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Kreiert einen eigenen Zauber, wenn Euer Deck keine Karte mehrfach enthält.",
+    "enUS": "[x]<b>Battlecry:</b> If your deck\nhas no duplicates,\n create a custom spell.",
+    "esES": "<b>Grito de batalla:</b>\nSi tu mazo no contiene\ncartas repetidas, crea un\nhechizo personalizado.",
+    "frFR": "<b>Cri de guerre :</b> si votre deck ne contient pas de cartes en double, crée un sort personnalisé.",
+    "itIT": "<b>Grido di Battaglia:</b> se il tuo mazzo ha attualmente una sola copia per carta, crea una Magia personalizzata.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nJeśli w twojej talii nie\nma duplikatów, stwórz\nwłasne zaklęcie.",
+    "ptBR": "<b>Grito de Guerra:</b> Se não houver cards repetidos no seu deck, crie um feitiço especial.",
+    "ruRU": "<b>Боевой клич:</b> если в вашей колоде\nнет одинаковых карт, создает\nзаклинание с выбранными\nвами характеристиками."
+   }
+  },
+  "CFM_621t11": {
+   "text": {
+    "deDE": "Kreiert einen Zauber, der (1) kostet.",
+    "enUS": "Create a 1-Cost spell.",
+    "esES": "Crea un hechizo de coste 1.",
+    "frFR": "Crée un sort coûtant 1 |4(cristal,cristaux).",
+    "itIT": "Crea una Magia da 1 Mana.",
+    "plPL": "Stwórz zaklęcie o koszcie (1).",
+    "ptBR": "Crie um feitiço com 1 de custo.",
+    "ruRU": "Создает заклинание за (1)."
+   }
+  },
+  "CFM_621t12": {
+   "text": {
+    "deDE": "Kreiert einen Zauber, der (5) kostet.",
+    "enUS": "Create a 5-Cost spell.",
+    "esES": "Crea un hechizo de coste 5.",
+    "frFR": "Crée un sort coûtant 5 |4(cristal,cristaux).",
+    "itIT": "Crea una Magia da 5 Mana.",
+    "plPL": "Stwórz zaklęcie o koszcie (5).",
+    "ptBR": "Crie um feitiço com 5 de custo.",
+    "ruRU": "Создает заклинание за (5)."
+   }
+  },
+  "CFM_621t13": {
+   "text": {
+    "deDE": "Kreiert einen Zauber, der (10) kostet.",
+    "enUS": "Create a 10-Cost spell.",
+    "esES": "Crea un hechizo de coste 10.",
+    "frFR": "Crée un sort coûtant 10 |4(cristal,cristaux).",
+    "itIT": "Crea una Magia da 10 Mana.",
+    "plPL": "Stwórz zaklęcie o koszcie (10).",
+    "ptBR": "Crie um feitiço com 10 de custo.",
+    "ruRU": "Создает заклинание за (10)."
+   }
+  },
+  "CFM_631": {
+   "text": {
+    "deDE": "Verleiht jedes Mal einem zufälligen Diener auf\nEurer Hand +1/+1, nachdem Euer Held angegriffen hat.",
+    "enUS": "[x]After your hero attacks,\ngive a random minion in\nyour hand +1/+1.",
+    "esES": "Cada vez que tu héroe ataca, otorga +1/+1 a un esbirro aleatorio que esté en tu mano.",
+    "frFR": "Donne +1/+1 à un serviteur aléatoire dans votre main chaque fois que votre héros attaque.",
+    "itIT": "Dopo che il tuo eroe ha attaccato, +1/+1 a un servitore casuale nella tua mano.",
+    "plPL": "Gdy twój bohater zaatakuje, daj losowemu stronnikowi w twojej ręce +1/+1.",
+    "ptBR": "Depois que seu herói atacar, conceda +1/+1 a um lacaio aleatório na sua mão.",
+    "ruRU": "[x]Когда ваш герой атакует,\nслучайное существо у вас\n    в руке получает +1/+1."
+   }
+  },
+  "CFM_637": {
+   "text": {
+    "deDE": "<b>Ansturm</b>. Ruft diesen Diener aus Eurem Deck herbei, nachdem\nIhr einen Piraten ausgespielt habt.",
+    "enUS": "[x]<b>Charge</b>\nAfter you play a Pirate,\nsummon this minion\nfrom your deck.",
+    "esES": "<b>Cargar</b>.\nDespués de que juegues un pirata, invoca a este esbirro desde tu mazo.",
+    "frFR": "<b>Charge</b>. Une fois que vous avez joué un Pirate, invoque ce serviteur de votre deck.",
+    "itIT": "<b>Carica</b>. Dopo che hai giocato un Pirata, evoca questo servitore dal tuo mazzo.",
+    "plPL": "<b>Szarża</b>\nGdy zagrasz Pirata,\nprzyzwij tego stronnika\nz twojej talii.",
+    "ptBR": "[x]<b>Investida</b>\nDepois que você jogar um \nPirata, evoque este lacaio \ndo seu deck.",
+    "ruRU": "<b>Рывок</b>. Когда вы разыгрываете пирата,\nвы призываете это\nсущество из колоды."
+   }
+  },
+  "CFM_649": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> eine Magier-, Priester- oder Hexenmeisterkarte.",
+    "enUS": "<b>Battlecry:</b> <b>Discover</b> a Mage, Priest, or Warlock card.",
+    "esES": "<b>Grito de batalla:</b> <b>Descubre</b> una carta de mago, sacerdote o brujo.",
+    "frFR": "<b>Cri de guerre :</b> <b>découvre</b> une carte de mage, prêtre ou démoniste.",
+    "itIT": "<b>Grido di Battaglia: Rinvieni</b> una carta del Mago, del Sacerdote o dello Stregone.",
+    "plPL": "<b>Okrzyk bojowy:</b> <b>Odkryj</b> kartę maga, kapłana lub czarnoksiężnika.",
+    "ptBR": "<b>Grito de Guerra:</b> <b>Descubra</b> um card de Mago, Sacerdote ou Bruxo.",
+    "ruRU": "<b>Боевой клич:</b>\nвы <b>раскапываете</b> карту мага, жреца или чернокнижника."
+   }
+  },
+  "CFM_652": {
+   "text": {
+    "deDE": "<b>Spott</b>. Kostet (2) weniger, wenn Euer Gegner mind. drei Diener hat.",
+    "enUS": "[x]<b>Taunt</b>\nCosts (2) less if your\nopponent has at least\nthree minions.",
+    "esES": "<b>Provocar</b>.\nCuesta (2) cristales menos si tu oponente tiene al menos tres esbirros.",
+    "frFR": "<b>Provocation</b>. Coûte (2) |4(cristal,cristaux) de moins si votre adversaire a au moins trois serviteurs.",
+    "itIT": "<b>Provocazione</b>. Costa (2) in meno se il tuo avversario ha almeno tre servitori.",
+    "plPL": "<b>Prowokacja</b>\nKosztuje (2) mniej, jeśli twój przeciwnik ma co najmniej trzech stronników.",
+    "ptBR": "[x]<b>Provocar</b>\nCusta (2) a menos se seu \noponente tiver pelo menos \ntrês lacaios.",
+    "ruRU": "<b>Провокация</b>\n[x]Стоит на (2) меньше,\nесли у противника есть\n   минимум 3 существа."
+   }
+  },
+  "CFM_696": {
+   "text": {
+    "deDE": "Verwandelt alle feindlichen Diener in zufällige Diener, die (1) weniger kosten.",
+    "enUS": "Transform all enemy minions into random ones that cost (1) less.",
+    "esES": "Transforma a los esbirros enemigos en esbirros aleatorios que cuestan (1) cristal menos.",
+    "frFR": "Transforme tous les serviteurs adverses en serviteurs aléatoires qui coûtent (1) |4(cristal,cristaux) de moins.",
+    "itIT": "Trasforma i servitori nemici in servitori casuali che costano (1) in meno.",
+    "plPL": "Przemień wszystkich wrogich stronników w losowych stronników kosztujących (1) mniej.",
+    "ptBR": "Transforme todos os lacaios inimigos em lacaios aleatórios que custam (1) a menos.",
+    "ruRU": "Превращает существ противника в случайных, которые стоят на (1) меньше."
+   }
+  },
+  "CFM_697": {
+   "text": {
+    "deDE": "Nachdem dieser Diener einen Helden angegriffen hat, wird er\nin einen zufälligen Diener ver[d]wandelt, der (6) kostet.",
+    "enUS": "[x]After this minion attacks\na hero, transform it into a\n random 6-Cost minion.",
+    "esES": "Después de que este esbirro ataque a un héroe,\nse transforma en un esbirro aleatorio de coste 6.",
+    "frFR": "Une fois que ce serviteur a attaqué un héros, le transforme en serviteur aléatoire coûtant 6 cristaux.",
+    "itIT": "Dopo che ha attaccato un eroe, si trasforma in un servitore casuale da 6 Mana.",
+    "plPL": "Gdy zaatakuje bohatera, przemień tego stronnika w losowego stronnika o koszcie (6).",
+    "ptBR": "Depois que este lacaio atacar um herói, transforme-o em um lacaio aleatório de custo 6.",
+    "ruRU": "После того как это\nсущество атакует героя, оно превращается в случайное существо за (6)."
+   }
+  },
+  "CFM_751": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Fügt allen anderen Charakteren 3 Schaden zu.",
+    "enUS": "<b>Battlecry:</b> Deal 3 damage to all other characters.",
+    "esES": "<b>Grito de batalla:</b>\nInflige 3 p. de daño\na todos los demás\npersonajes.",
+    "frFR": "<b>Cri de guerre :</b> inflige 3 points de dégâts à tous les autres personnages.",
+    "itIT": "<b>Grido di Battaglia:</b> infligge 3 danni a TUTTI gli altri personaggi.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj 3 pkt. obrażeń wszystkim pozostałym postaciom.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 3 de dano a todos os outros personagens.",
+    "ruRU": "<b>Боевой клич:</b> наносит 3 ед. урона всем прочим персонажам."
+   }
+  },
+  "CFM_755": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verleiht einer zufälligen Waffe auf Eurer Hand +1/+1.",
+    "enUS": "<b>Battlecry:</b> Give a random weapon in your hand +1/+1.",
+    "esES": "[x]<b>Grito de batalla:</b> Otorga\n+1/+1 a un arma  aleatoria\nque esté en tu mano.",
+    "frFR": "<b>Cri de guerre :</b> donne +1/+1 à une arme aléatoire dans votre main.",
+    "itIT": "<b>Grido di Battaglia:</b> +1/+1 a un'Arma casuale nella tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj losowej broni w twojej ręce +1/+1.",
+    "ptBR": "<b>Grito de Guerra:</b> Conceda +1/+1 a uma arma aleatória na sua mão.",
+    "ruRU": "<b>Боевой клич:</b> случайное оружие у вас в руке получает +1/+1."
+   }
+  },
+  "CFM_760": {
+   "text": {
+    "deDE": "Kostet (2) weniger für jedes <b>Geheimnis</b>, das Ihr in diesem Spiel ausgespielt habt.",
+    "enUS": "Costs (2) less for each <b>Secret</b> you've played this game.",
+    "esES": "[x]Cuesta (2) cristales menos\npor cada <b>secreto</b> que hayas\njugado esta partida.",
+    "frFR": "Coûte (2) |4(cristal,cristaux) de moins pour chaque <b>Secret</b> que vous avez joué pendant cette partie.",
+    "itIT": "Costa (2) in meno per ogni <b>Segreto</b> che hai giocato in questa partita.",
+    "plPL": "Kosztuje (2) mniej za każdy <b>Sekret</b> zagrany przez ciebie w tej grze.",
+    "ptBR": "Custa (2) a menos para cada <b>Segredo</b> que você lançou nesta partida.",
+    "ruRU": "Стоит на (2) меньше\nза каждый <b>секрет</b>,\nчто вы разыграли\nво время матча."
+   }
+  },
+  "CFM_781": {
+   "text": {
+    "deDE": "<b>Verstohlenheit</b>. Erhaltet jedes Mal eine zufällige Karte von der Klasse Eures Gegners auf die Hand, wenn dieser Diener angreift.",
+    "enUS": "[x]<b>Stealth</b>. Whenever this\nattacks, add a random card\nto your hand <i>(from your\nopponent's class).</i>",
+    "esES": "<b>Sigilo</b>. Cada vez que ataca, añade una carta aleatoria a tu mano <i>(de la clase de tu oponente)</i>.",
+    "frFR": "<b>Camouflage</b>. Chaque fois que ce serviteur attaque, ajoute une carte aléatoire dans votre main <i>(de la classe de votre adversaire).</i>",
+    "itIT": "<b>Furtività</b>. Quando attacca, mette nella tua mano una carta casuale della classe dell'avversario.",
+    "plPL": "<b>Ukrycie</b>\nZa każdym razem gdy ten stronnik zaatakuje, dodaj losową kartę do twojej ręki<i> (z klasy przeciwnika).</i>",
+    "ptBR": "[x]<b>Furtividade</b>. Sempre\nque este lacaio atacar, adicione\num card aleatório à sua mão <i>(da\nclasse do seu oponente)</i>.",
+    "ruRU": "[x]<b>Маскировка</b>. Когда это\nсущество атакует, вы кладете\nв руку случайную карту\n<i>(класса противника)</i>."
+   }
+  },
+  "CFM_807": {
+   "text": {
+    "deDE": "Nachdem Ihr einen Zauber gewirkt habt, könnt Ihr Eure Heldenfähigkeit erneut einsetzen.",
+    "enUS": "After you cast a spell, refresh your Hero Power.",
+    "esES": "Después de que lances un hechizo, repone tu poder de héroe.",
+    "frFR": "Une fois que vous avez lancé un sort, réinitialise votre pouvoir héroïque.",
+    "itIT": "Dopo che hai lanciato una Magia, puoi usare nuovamente il tuo Potere Eroe.",
+    "plPL": "Po rzuceniu zaklęcia odnów swoją moc specjalną.",
+    "ptBR": "Depois que você lançar um feitiço, restaure seu Poder Heroico.",
+    "ruRU": "Когда вы разыгрываете заклинание, вы можете снова использовать силу героя."
+   }
+  },
+  "CFM_810": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Erhält <b>Ansturm</b>, wenn Euer\nGegner mind. 6 Karten auf der Hand hat.",
+    "enUS": "<b>Battlecry:</b> If your opponent has 6 or more cards in hand, gain <b>Charge</b>.",
+    "esES": "<b>Grito de batalla:</b> Si tu oponente tiene 6 cartas o más en su mano, obtiene <b>Cargar</b>.",
+    "frFR": "<b>Cri de guerre :</b> gagne <b>Charge</b> si votre adversaire a 6 cartes ou plus dans sa main.",
+    "itIT": "<b>Grido di Battaglia:</b> ottiene <b>Carica</b> se l'avversario ha 6 o più carte in mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Otrzymuje <b>Szarżę</b>, jeśli twój przeciwnik ma 6 lub więcej kart w ręce.",
+    "ptBR": "<b>Grito de Guerra:</b> Se seu oponente tiver 6 ou mais cards na mão, receba <b>Investida</b>.",
+    "ruRU": "<b>Боевой клич:</b> если у противника в руке\n6 или более карт, получает <b>«Рывок»</b>."
+   }
+  },
+  "CFM_811": {
+   "text": {
+    "deDE": "Zieht 2 Karten. Gezogene Diener kosten (2) weniger.",
+    "enUS": "Draw 2 cards. Minions drawn cost (2) less.",
+    "esES": "Roba 2 cartas.\nLos esbirros que robes costarán (2) cristales menos.",
+    "frFR": "Vous piochez 2 cartes. Les serviteurs piochés coûtent (2) |4(cristal,cristaux) de moins.",
+    "itIT": "Pesca 2 carte. I servitori pescati costano (2) in meno.",
+    "plPL": "Dobierz 2 karty. Dobrani stronnicy kosztują (2) mniej.",
+    "ptBR": "Compre 2 cards. Lacaios comprados custam (2) a menos.",
+    "ruRU": "[x]Вы берете 2 карты.\nВзятые таким образом\nсущества стоят\nна (2) меньше."
+   }
+  },
+  "CFM_851": {
+   "text": {
+    "deDE": "Erhält jedes Mal +1/+1, wenn Euer Gegner eine Karte zieht.",
+    "enUS": "Whenever your opponent draws a card, gain +1/+1.",
+    "esES": "Cada vez que tu oponente roba una carta, obtiene +1/+1.",
+    "frFR": "Gagne +1/+1 chaque fois que votre adversaire pioche une carte.",
+    "itIT": "Ottiene +1/+1 quando l'avversario pesca una carta.",
+    "plPL": "Otrzymuje +1/+1 za każdym razem, gdy twój przeciwnik dobiera kartę.",
+    "ptBR": "Sempre que seu oponente comprar um card, receba +1/+1.",
+    "ruRU": "Когда противник берет карту, получает +1/+1."
+   }
+  },
+  "CFM_905": {
+   "text": {
+    "deDE": "Zieht drei Diener aus Eurem Deck, die (1) kosten.",
+    "enUS": "[x]Draw three 1-Cost\nminions from your deck.",
+    "esES": "Roba tres esbirros de coste 1 de tu mazo.",
+    "frFR": "Vous piochez trois serviteurs à 1 cristal dans votre deck.",
+    "itIT": "Pesca tre servitori casuali da 1 Mana dal tuo mazzo.",
+    "plPL": "Dobierz trzech stronników o koszcie (1) z twojej talii.",
+    "ptBR": "[x]Compre do seu deck\ntrês lacaios de Custo 1.",
+    "ruRU": "[x]Вы берете из колоды\nтри существа за (1)."
+   }
+  },
+  "FP1_010": {
+   "text": {
+    "deDE": "<b>Giftig</b>",
+    "enUS": "<b>Poisonous</b>",
+    "esES": "<b>Veneno</b>",
+    "frFR": "<b>Toxicité</b>",
+    "itIT": "<b>Veleno</b>",
+    "plPL": "<b>Trucizna</b>",
+    "ptBR": "<b>Venenoso</b>",
+    "ruRU": "<b>Яд</b>"
+   }
+  },
+  "FP1_017": {
+   "text": {
+    "deDE": "Diener mit <b>Kampfschrei</b> kosten (2) mehr.",
+    "enUS": "Minions with <b>Battlecry</b> cost (2) more.",
+    "esES": "Los esbirros con <b>Grito de batalla</b> cuestan (2) cristales más.",
+    "frFR": "Les serviteurs avec <b>Cri de guerre</b> coûtent (2) cristaux de plus.",
+    "itIT": "I servitori con <b>Grido di Battaglia</b> costano (2) in più.",
+    "plPL": "Stronnicy z <b>Okrzykiem bojowym</b> kosztują (2) więcej.",
+    "ptBR": "Lacaios com <b>Grito de Guerra</b> custam (2) a mais.",
+    "ruRU": "Существа с <b>«Боевым кличем»</b> стоят на (2) больше."
+   }
+  },
+  "FP1_018": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Wenn ein befreundeter Diener stirbt, erhaltet Ihr 2 Kopien davon auf die Hand.",
+    "enUS": "<b>Secret:</b> When a friendly minion dies, put 2 copies of it into your hand.",
+    "esES": "<b>Secreto:</b> Cuando un esbirro amistoso muere, coloca 2 copias del mismo en tu mano.",
+    "frFR": "<b>Secret :</b> quand un serviteur allié meurt, en place 2 copies dans votre main.",
+    "itIT": "<b>Segreto:</b> quando un tuo servitore muore, ne mette due copie nella tua mano.",
+    "plPL": "<b>Sekret:</b> Gdy zginie przyjazny stronnik, umieść 2 kopie jego karty w twojej ręce.",
+    "ptBR": "<b>Segredo:</b> Quando um lacaio aliado morrer, coloque 2 cópias dele na sua mão.",
+    "ruRU": "<b>Секрет:</b> когда погибает ваше существо, вы кладете в руку две его копии."
+   }
+  },
+  "FP1_030": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Im nächsten Zug kosten Zauber für Euren Gegner (5) mehr.",
+    "enUS": "<b>Battlecry:</b> Enemy spells cost (5) more next turn.",
+    "esES": "<b>Grito de batalla:</b> Los hechizos enemigos cuestan (5) cristales más el próximo turno.",
+    "frFR": "<b>Cri de guerre :</b> les sorts adverses coûtent (5) cristaux de plus au prochain tour.",
+    "itIT": "<b>Grido di Battaglia:</b> nel turno successivo, le Magie dell'avversario costano (5) in più.",
+    "plPL": "<b>Okrzyk bojowy:</b> W następnej turze zaklęcia przeciwnika kosztują (5) więcej.",
+    "ptBR": "<b>Grito de Guerra:</b> Feitiços inimigos custam (5) a mais no próximo turno.",
+    "ruRU": "<b>Боевой клич:</b> в следующий ход противника его заклинания стоят на (5) больше."
+   }
+  },
+  "GVG_003": {
+   "text": {
+    "deDE": "Fügt Eurer Hand einen zufälligen Diener hinzu. Dieser kostet (3) weniger.",
+    "enUS": "Add a random minion to your hand. It costs (3) less.",
+    "esES": "Añade un esbirro aleatorio a tu mano. Cuesta (3) cristales menos.",
+    "frFR": "Place un serviteur aléatoire dans votre main. Il coûte (3) cristaux de moins.",
+    "itIT": "Mette nella tua mano un servitore casuale. Costa (3) in meno.",
+    "plPL": "Dodaj losowego stronnika do twojej ręki. Kosztuje (3) mniej.",
+    "ptBR": "Adicione um lacaio aleatório à sua mão. Ele custa (3) a menos.",
+    "ruRU": "Вы кладете в руку случайное существо. [x]Оно стоит на (3) меньше."
+   }
+  },
+  "GVG_006": {
+   "text": {
+    "deDE": "Eure Mechs kosten\n(1) weniger.",
+    "enUS": "Your Mechs cost (1) less.",
+    "esES": "Tus robots cuestan (1) cristal menos.",
+    "frFR": "Vos Méca coûtent (1) |4(cristal,cristaux) de moins.",
+    "itIT": "I tuoi Robot costano (1) in meno.",
+    "plPL": "Twoje Mechy\nkosztują (1) mniej.",
+    "ptBR": "Seus Mecanoides custam (1) a menos.",
+    "ruRU": "Ваши механизмы стоят на (1) меньше."
+   }
+  },
+  "GVG_011": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verleiht einem Diener -2 Angriff in diesem Zug.",
+    "enUS": "<b>Battlecry:</b> Give a minion -2 Attack this turn.",
+    "esES": "<b>Grito de batalla:</b>\nAplica a un esbirro\n-2 p. de ataque\n este turno.",
+    "frFR": "<b>Cri de guerre :</b> donne à un serviteur -2 ATQ pendant ce tour.",
+    "itIT": "<b>Grido di Battaglia:</b> -2 Attacco a un servitore per questo turno.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj stronnikowi -2 do ataku w tej turze.",
+    "ptBR": "<b>Grito de Guerra:</b> Conceda a um lacaio -2 de Ataque neste turno.",
+    "ruRU": "<b>Боевой клич:</b> выбранное существо получает -2 к атаке до конца хода."
+   }
+  },
+  "GVG_017": {
+   "text": {
+    "deDE": "Zieht eine Karte. Sie kostet (4) weniger, wenn es sich um ein Wildtier handelt.",
+    "enUS": "Draw a card.\nIf it's a Beast, it costs (4) less.",
+    "esES": "Roba una carta.\nSi es una bestia, cuesta (4) cristales menos.",
+    "frFR": "Vous piochez une carte. Si c’est une Bête, elle coûte (4) cristaux de moins.",
+    "itIT": "Pesca una carta. Se è una Bestia, costa (4) in meno.",
+    "plPL": "Dobierz kartę.\nJeśli jest to Bestia, kosztuje (4) mniej.",
+    "ptBR": "Compre um card.\nSe for uma Fera, ela custará (4) a menos.",
+    "ruRU": "Вы берете карту. Если это зверь, он стоит на (4) меньше."
+   }
+  },
+  "GVG_018": {
+   "text": {
+    "deDE": "Von diesem Diener verursachter Schaden heilt Euren Helden.",
+    "enUS": "Damage dealt by this minion also heals your hero.",
+    "esES": "El daño que inflige\neste esbirro\ntambién sana\na tu héroe.",
+    "frFR": "Les dégâts infligés par ce serviteur soignent aussi votre héros.",
+    "itIT": "Quando infligge danni, rigenera Salute al tuo eroe pari ai danni inflitti.",
+    "plPL": "Obrażenia zadane przez tego stronnika leczą twojego bohatera.",
+    "ptBR": "O dano causado por este lacaio também cura seu herói.",
+    "ruRU": "Когда это существо наносит урон, оно восстанавливает здоровье вашему герою в размере нанесенного урона."
+   }
+  },
+  "GVG_025": {
+   "text": {
+    "deDE": "Erhält jedes Mal <b>Verstohlenheit</b>, wenn\nIhr einen Piraten\nherbeiruft.",
+    "enUS": "Whenever you summon a Pirate, gain <b>Stealth</b>.",
+    "esES": "Cada vez que invocas a un pirata, obtiene <b>Sigilo</b>.",
+    "frFR": "Chaque fois que vous jouez un pirate, gagne <b>Camouflage</b>.",
+    "itIT": "Ottiene <b>Furtività</b> quando viene evocato un Pirata sotto il tuo controllo.",
+    "plPL": "Otrzymuje <b>Ukrycie</b>\nza każdym razem, gdy przyzywasz Pirata.",
+    "ptBR": "Sempre que você evocar um Pirata, receba <b>Furtividade</b>.",
+    "ruRU": "Получает <b>«Маскировку»</b>, когда вы призываете пирата."
+   }
+  },
+  "GVG_031": {
+   "text": {
+    "deDE": "Mischt einen feindlichen Diener in das Deck Eures Gegners.",
+    "enUS": "Shuffle an enemy minion into your opponent's deck.",
+    "esES": "Mete a un esbirro enemigo en el mazo de tu oponente.",
+    "frFR": "Place un serviteur adverse dans le deck de votre adversaire.",
+    "itIT": "Fa tornare un servitore nemico nel mazzo dell'avversario.",
+    "plPL": "Wtasuj wrogiego stronnika do talii przeciwnika.",
+    "ptBR": "Coloque um lacaio inimigo no deck do seu oponente.",
+    "ruRU": "Замешивает выбранное существо противника в его колоду."
+   }
+  },
+  "GVG_035": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Mischt diesen Diener in Euer Deck.",
+    "enUS": "<b>Deathrattle:</b> Shuffle this minion into your deck.",
+    "esES": "<b>Último aliento:</b> Mete a este esbirro en tu mazo.",
+    "frFR": "<b>Râle d’agonie :</b> place ce serviteur dans votre deck.",
+    "itIT": "<b>Rantolo di Morte:</b> torna nel tuo mazzo.",
+    "plPL": "<b>Agonia:</b> Wtasuj tego stronnika do twojej talii.",
+    "ptBR": "<b>Último Suspiro:</b> Coloque este lacaio no seu deck.",
+    "ruRU": "<b>Предсмертный хрип:</b>\nвы замешиваете это существо в колоду."
+   }
+  },
+  "GVG_052": {
+   "text": {
+    "deDE": "Vernichtet einen Diener. Kostet (4) weniger, wenn Ihr einen verletzten Diener kontrolliert.",
+    "enUS": "Destroy a minion. If you have a damaged minion, this costs (4) less.",
+    "esES": "Destruye a un esbirro. Si tienes algún esbirro dañado, este hechizo cuesta (4) cristales menos.",
+    "frFR": "Détruit un serviteur. Si vous avez un serviteur blessé, cette carte coûte (4) cristaux de moins.",
+    "itIT": "Distrugge un servitore. Se controlli un servitore danneggiato, costa (4) in meno.",
+    "plPL": "Zniszcz stronnika. Jeśli kontrolujesz rannego stronnika, koszt tej karty jest mniejszy o (4) pkt.",
+    "ptBR": "Destrua um lacaio. Se você tiver um lacaio ferido, este feitiço custa (4) a menos.",
+    "ruRU": "Уничтожает существо. Стоит на (4) меньше, если\nу вас под контролем есть существо с неполным здоровьем."
+   }
+  },
+  "GVG_072": {
+   "text": {
+    "deDE": "Fügt jedes Mal einem zu[d]fälligen Feind 1 Schaden zu, wenn ein Charakter geheilt wird.",
+    "enUS": "Whenever a character is healed, deal 1 damage to a random enemy.",
+    "esES": "Cada vez que se sana a un personaje, inflige 1 p. de daño a un enemigo aleatorio.",
+    "frFR": "Chaque fois qu’un personnage est soigné, inflige 1 point de dégâts à un adversaire aléatoire.",
+    "itIT": "Quando viene curato un personaggio, infligge 1 danno a un nemico casuale.",
+    "plPL": "Za każdym razem gdy jakaś postać zostanie uzdrowiona, zadaj 1 pkt. obrażeń losowemu wrogowi.",
+    "ptBR": "Sempre que um personagem for curado, cause 1 de dano a um inimigo aleatório.",
+    "ruRU": "Наносит 1 ед. урона случайному противнику, когда персонаж восстанавливает здоровье."
+   }
+  },
+  "GVG_075": {
+   "text": {
+    "deDE": "Fügt einem zufälligen Feind 2 Schaden zu, nachdem Ihr einen Piraten herbeigerufen habt.",
+    "enUS": "After you summon a Pirate, deal 2 damage to a random enemy.",
+    "esES": "Cuando invocas a un pirata, inflige 2 p. de daño a un enemigo aleatorio.",
+    "frFR": "Après avoir invoqué un pirate, inflige 2 points de dégâts à un adversaire aléatoire.",
+    "itIT": "Dopo che è stato evocato un Pirata sotto il tuo controllo, infligge 2 danni a un nemico casuale.",
+    "plPL": "Kiedy przyzwiesz Pirata, zadaj 2 pkt. obrażeń\nlosowemu wrogowi.",
+    "ptBR": "Depois que você evocar um Pirata, cause 2 de dano a um inimigo aleatório.",
+    "ruRU": "[x]Наносит 2 ед. урона\nслучайному противнику,\nкогда вы призываете пирата."
+   }
+  },
+  "GVG_085": {
+   "text": {
+    "deDE": "<b>Spott</b>, <b>Gottesschild</b>",
+    "enUS": "<b>Taunt</b>\n<b>Divine Shield</b>",
+    "esES": "<b>Provocar</b>.\n<b>Escudo divino</b>.",
+    "frFR": "<b>Provocation</b>\n<b>Bouclier divin</b>",
+    "itIT": "<b>Provocazione</b>. <b>Scudo Divino</b>.",
+    "plPL": "<b>Prowokacja</b>\n<b>Boska tarcza</b>",
+    "ptBR": "<b>Provocar</b>\n<b>Escudo Divino</b>",
+    "ruRU": "<b>Провокация</b>\n<b>Божественный щит</b>"
+   }
+  },
+  "GVG_088": {
+   "text": {
+    "deDE": "<b>Verstohlenheit</b>. Chance von 50 %, einen anderen Feind anzugreifen.",
+    "enUS": "<b>Stealth</b>\n50% chance to attack the wrong enemy.",
+    "esES": "<b>Sigilo</b>\n50% de probabilidad de atacar al enemigo que no es.",
+    "frFR": "<b>Camouflage</b>\n50% de chance d’attaquer le mauvais adversaire.",
+    "itIT": "<b>Furtività</b>. Probabilità del 50% di attaccare il nemico sbagliato.",
+    "plPL": "<b>Ukrycie</b>\n50% szans na zaatakowanie niewłaściwego wroga.",
+    "ptBR": "<b>Furtividade</b>\n50% de chance de atacar o inimigo errado.",
+    "ruRU": "<b>Маскировка</b>\nС 50% вероятностью атакует не того противника."
+   }
+  },
+  "GVG_089": {
+   "text": {
+    "deDE": "Stellt bei Eurem Helden 4 Leben wieder her, wenn Ihr am Ende Eures Zuges ein <b>Geheimnis</b> kontrolliert.",
+    "enUS": "If you control a <b>Secret</b> at the end of your turn, restore 4 Health to your hero.",
+    "esES": "Si controlas un <b>secreto</b> al final de tu turno, restaura\n4 p. de salud a tu héroe.",
+    "frFR": "Si vous contrôlez un <b>Secret</b> à la fin de votre tour, rend 4 PV à votre héros.",
+    "itIT": "Se controlli un <b>Segreto</b> alla fine del tuo turno, rigenera 4 Salute al tuo eroe.",
+    "plPL": "Jeśli na koniec twojej tury kontrolujesz <b>Sekret</b>, przywróć 4 pkt. zdrowia twojemu bohaterowi.",
+    "ptBR": "Se você controlar um <b>Segredo</b> no final do seu turno, restaure 4 de Vida do seu herói.",
+    "ruRU": "[x]Если в конце вашего хода\nу вас остался активный <b>секрет</b>,\nваш герой восстанавливает\n4 ед. здоровья."
+   }
+  },
+  "GVG_091": {
+   "text": {
+    "deDE": "<b>Spott</b>. Kann nicht als Ziel von Zaubern oder Helden[d]fähigkeiten gewählt werden.",
+    "enUS": "<b>Taunt</b>\nCan't be targeted by spells or Hero Powers.",
+    "esES": "[x]<b>Provocar</b>.\nNo puede ser objetivo\nde hechizos ni de\npoderes de héroe.",
+    "frFR": "<b>Provocation</b>\nNe peut pas être la cible de sorts ou de pouvoirs héroïques.",
+    "itIT": "<b>Provocazione</b>. Non può essere il bersaglio di Magie o Poteri Eroe.",
+    "plPL": "<b>Prowokacja</b>\nNie może zostać wybrany jako cel zaklęć lub mocy specjalnych.",
+    "ptBR": "<b>Provocar</b>\nNão pode ser alvo de feitiços nem de Poderes Heroicos.",
+    "ruRU": "<b>Провокация</b>\nНе может быть\nцелью заклинаний\nили силы героя."
+   }
+  },
+  "GVG_093": {
+   "text": {
+    "deDE": "<b>Spott</b>",
+    "enUS": "<b>Taunt</b>",
+    "esES": "<b>Provocar</b>",
+    "frFR": "<b>Provocation</b>",
+    "itIT": "<b>Provocazione</b>",
+    "plPL": "<b>Prowokacja</b>",
+    "ptBR": "<b>Provocar</b>",
+    "ruRU": "<b>Провокация</b>"
+   }
+  },
+  "GVG_096": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Ruft einen zufälligen Diener herbei, der (2) kostet.",
+    "enUS": "<b>Deathrattle:</b> Summon a random 2-Cost minion.",
+    "esES": "<b>Último aliento:</b> Invoca un esbirro aleatorio\nde coste 2.",
+    "frFR": "<b>Râle d’agonie :</b> invoque un serviteur aléatoire coûtant 2 cristaux.",
+    "itIT": "<b>Rantolo di Morte:</b> evoca un servitore casuale da 2 Mana.",
+    "plPL": "<b>Agonia:</b> Przyzwij losowego stronnika o koszcie 2.",
+    "ptBR": "<b>Último Suspiro:</b> Evoque um lacaio aleatório com 2 de Custo.",
+    "ruRU": "<b>Предсмертный хрип:</b> призывает случайное существо за (2)."
+   }
+  },
+  "GVG_098": {
+   "text": {
+    "deDE": "<b>Ansturm</b>, <b>Spott</b>",
+    "enUS": "<b>Charge</b>\n<b>Taunt</b>",
+    "esES": "<b>Cargar</b>\n<b>Provocar</b>",
+    "frFR": "<b>Charge</b>\n<b>Provocation</b>",
+    "itIT": "<b>Carica</b>. <b>Provocazione</b>.",
+    "plPL": "<b>Szarża</b>\n<b>Prowokacja</b>",
+    "ptBR": "<b>Investida</b>\n<b>Provocar</b>",
+    "ruRU": "<b>Рывок</b>\n<b>Провокация</b>"
+   }
+  },
+  "GVG_105": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Ruft einen zufälligen Diener herbei, der (4) kostet.",
+    "enUS": "<b>Deathrattle:</b> Summon a random 4-Cost minion.",
+    "esES": "<b>Último aliento:</b> Invoca un esbirro aleatorio\nde coste 4.",
+    "frFR": "<b>Râle d’agonie :</b> invoque un serviteur aléatoire coûtant 4 cristaux.",
+    "itIT": "<b>Rantolo di Morte:</b> evoca un servitore casuale da 4 Mana.",
+    "plPL": "<b>Agonia:</b> Przyzwij losowego stronnika o koszcie 4.",
+    "ptBR": "<b>Último Suspiro:</b> Evoque um lacaio aleatório com 4 de Custo.",
+    "ruRU": "<b>Предсмертный хрип:</b> призывает случайное существо за (4)."
+   }
+  },
+  "GVG_109": {
+   "text": {
+    "deDE": "<b>Verstohlenheit</b>, <b>Zauberschaden +1</b>",
+    "enUS": "<b>Stealth</b>\n<b>Spell Damage +1</b>",
+    "esES": "<b>Sigilo</b>\n<b>+1 p. de daño con hechizos.</b>",
+    "frFR": "<b>Camouflage</b>\n<b>Dégâts des sorts : +1</b>",
+    "itIT": "<b>Furtività</b>. <b>+1 Danni Magici</b>.",
+    "plPL": "<b>Ukrycie</b>\n<b>Obrażenia zaklęć +1</b>",
+    "ptBR": "<b>Furtividade</b>\n<b>+1 de Dano Mágico</b>",
+    "ruRU": "<b>Маскировка</b>\n<b>Урон от заклинаний +1</b>"
+   }
+  },
+  "GVG_117": {
+   "text": {
+    "deDE": "Fügt Eurer Hand jedes Mal einen zufälligen Mech hinzu, wenn Ihr einen Zauber wirkt, der (1) kostet.",
+    "enUS": "Whenever you cast a 1-mana spell, add a random Mech to your hand.",
+    "esES": "Cada vez que lanzas un hechizo que cuesta 1 cristal de maná, añade un robot aleatorio a tu mano.",
+    "frFR": "Chaque fois que vous lancez un sort à 1 cristal, ajoute un Méca aléatoire dans votre main.",
+    "itIT": "Quando lanci una Magia da 1 Mana, mette nella tua mano un Robot casuale.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie za 1 many, umieść w ręce losowego Mecha.",
+    "ptBR": "Sempre que você lançar um feitiço com custo 1 de mana, adicione um Mecanoide aleatório à sua mão.",
+    "ruRU": "Когда вы разыгрываете заклинание за (1),\nвы получаете в руку случайный механизм."
+   }
+  },
+  "GVG_121": {
+   "text": {
+    "deDE": "Kostet (1) weniger für jede Karte auf der Hand Eures Gegners.",
+    "enUS": "Costs (1) less for each card in your opponent's hand.",
+    "esES": "Cuesta (1) cristal menos por cada carta en la mano de tu oponente.",
+    "frFR": "Coûte (1) |4(cristal,cristaux) de moins pour chaque carte dans la main de votre adversaire.",
+    "itIT": "Costa (1) in meno per ogni carta nella mano dell'avversario.",
+    "plPL": "Kosztuje (1) mniej za każdą kartę w ręce przeciwnika.",
+    "ptBR": "Custa (1) a menos para cada card na mão do seu oponente.",
+    "ruRU": "Стоит на (1) меньше за каждую карту в руке противника."
+   }
+  },
+  "KAR_004": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Ruft einen Panther (4/2) mit <b>Verstohlenheit</b> herbei, nachdem Euer Gegner einen Zauber gewirkt hat.",
+    "enUS": "<b>Secret:</b> After your opponent casts a spell, summon a 4/2 Panther with <b>Stealth</b>.",
+    "esES": "<b>Secreto:</b> Después de que tu oponente lance un hechizo, invoca una pantera 4/2 con <b>Sigilo</b>.",
+    "frFR": "<b>Secret :</b> après que votre adversaire a lancé un sort, invoque une panthère 4/2 avec <b>Camouflage</b>.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha lanciato una Magia, evoca un Felino 4/2 con <b>Furtività</b>.",
+    "plPL": "<b>Sekret:</b> Po rzuceniu zaklęcia przez przeciwnika przyzwij Panterę 4/2 z <b>Ukryciem</b>.",
+    "ptBR": "<b>Segredo:</b> Depois que o seu oponente lançar um feitiço, evoque uma Pantera 4/2 com <b>Furtividade</b>.",
+    "ruRU": "<b>Секрет:</b> после того, как противник разыграл заклинание, вы призываете пантеру 4/2 с <b>«Маскировкой»</b>."
+   }
+  },
+  "KAR_006": {
+   "text": {
+    "deDE": "Eure <b>Geheimnisse</b>\nkosten (0).",
+    "enUS": "Your <b>Secrets</b> cost (0).",
+    "esES": "Tus <b>secretos</b> cuestan (0).",
+    "frFR": "Vos <b>Secrets</b> coûtent (0) |4(cristal,cristaux).",
+    "itIT": "I tuoi <b>Segreti</b> costano (0).",
+    "plPL": "Twoje <b>Sekrety</b> kosztują (0).",
+    "ptBR": "Seus <b>Segredos</b>\ncustam (0).",
+    "ruRU": "Ваши <b>секреты</b> стоят (0)."
+   }
+  },
+  "KAR_044": {
+   "text": {
+    "deDE": "<b>Verstohlenheit</b>\nRuft am Ende Eures Zuges einen Bediensteten (1/1) herbei.",
+    "enUS": "<b>Stealth</b>\nAt the end of your turn, summon a 1/1 Steward.",
+    "esES": "<b>Sigilo</b>\nAl final de tu turno, invoca a un criado 1/1.",
+    "frFR": "<b>Camouflage</b>\nÀ la fin de votre tour, invoque un serveur 1/1.",
+    "itIT": "<b>Furtività</b>. Alla fine del tuo turno, evoca un Maggiordomo 1/1.",
+    "plPL": "<b>Ukrycie</b>\nNa koniec twojej tury przyzwij Kelnera 1/1.",
+    "ptBR": "<b>Furtividade</b>\nNo final do seu turno, evoque um Administrador 1/1.",
+    "ruRU": "<b>Маскировка</b>\nВ конце вашего хода призывает дворецкого 1/1."
+   }
+  },
+  "KAR_063": {
+   "cost": 2
+  },
+  "KAR_070": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verringert die Kosten von Klassen[d]karten (außer Schurken[d]karten) auf Eurer Hand um (2).",
+    "enUS": "[x]<b>Battlecry:</b> If you're holding\nany non-Rogue class cards,\n reduce their Cost by (2).",
+    "esES": "<b>Grito de batalla:</b> Si en tu mano hay alguna carta de clase que no sea del pícaro, dicha carta cuesta (2) cristales menos.",
+    "frFR": "<b>Cri de guerre :</b> réduit de (2) cristaux le coût des cartes de classe dans votre main qui ne sont pas de la classe voleur.",
+    "itIT": "<b>Grido di Battaglia:</b> riduce di (2) il costo delle carte di classe non del Ladro nella tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli masz w ręce klasowe karty spoza klasy łotra, zmniejsz ich koszt o (2).",
+    "ptBR": "<b>Grito de Guerra:</b> Se tiver na mão cards de classe que não sejam de Ladino, reduza em (2) o custo deles.",
+    "ruRU": "[x]<b>Боевой клич:</b> уменьшает\nстоимость классовых карт\nне от класса разбойника\nв вашей руке на (2)."
+   }
+  },
+  "KAR_073": {
+   "text": {
+    "deDE": "Fügt allen feindlichen Dienern $1 Schaden zu. Ruft einen zufälligen Diener herbei, der (1) kostet.",
+    "enUS": "Deal $1 damage to all enemy minions. Summon a random\n1-Cost minion.",
+    "esES": "Inflige $1 p. de daño a todos los esbirros enemigos. Invoca a un esbirro aleatorio de coste 1.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts à tous les serviteurs adverses. Invoque un serviteur aléatoire coûtant 1 cristal.",
+    "itIT": "Infligge $1 |4(danno,danni) ai servitori nemici. Evoca un servitore casuale da 1 Mana.",
+    "plPL": "Zadaj $1 pkt. obrażeń wszystkim wrogim stronnikom. Przyzwij losowego stronnika o koszcie 1.",
+    "ptBR": "Cause $1 de dano a todos os lacaios inimigos. Evoque um lacaio aleatório de custo 1.",
+    "ruRU": "Наносит $1 ед. урона существам противника. Призывает случайное существо за (1)."
+   }
+  },
+  "KAR_075": {
+   "text": {
+    "deDE": "Stellt #6 Leben wieder her. Ruft einen zufälligen Diener herbei, der (6) kostet.",
+    "enUS": "Restore #6 Health. Summon a random\n6-Cost minion.",
+    "esES": "Restaura #6 p. de salud. Invoca a un esbirro aleatorio de coste 6.",
+    "frFR": "Rend #6 PV. Invoque un serviteur aléatoire coûtant 6 cristaux.",
+    "itIT": "Rigenera #6 Salute. Evoca un servitore casuale da 6 Mana.",
+    "plPL": "Przywróć #6 pkt. zdrowia. Przyzwij losowego stronnika o koszcie 6.",
+    "ptBR": "Restaure #6 de Vida. Evoque um lacaio aleatório com \n6 de custo.",
+    "ruRU": "Восстанавливает #6 ед. здоровья. Призывает случайное существо за (6)."
+   }
+  },
+  "KAR_076": {
+   "text": {
+    "deDE": "Verursacht $5 Schaden. Ruft einen zufälligen Diener herbei, der (5) kostet.",
+    "enUS": "Deal $5 damage. Summon a random\n5-Cost minion.",
+    "esES": "Inflige $5 p. de daño. Invoca a un esbirro aleatorio de coste 5.",
+    "frFR": "Inflige $5 |4(point,points) de dégâts. Invoque un serviteur aléatoire coûtant 5 cristaux.",
+    "itIT": "Infligge $5 danni. Evoca un servitore casuale da 5 Mana.",
+    "plPL": "Zadaj $5 pkt. obrażeń. Przyzwij losowego stronnika o koszcie 5.",
+    "ptBR": "Cause $5 de dano. Evoque um lacaio aleatório\ncom 5 de custo.",
+    "ruRU": "Наносит $5 ед. урона. Призывает случайное существо за (5)."
+   }
+  },
+  "KAR_077": {
+   "text": {
+    "deDE": "Verleiht einem Diener +2/+2. Ruft einen zufälligen Diener herbei, der (2) kostet.",
+    "enUS": "Give a minion +2/+2. Summon a random\n2-Cost minion.",
+    "esES": "Otorga a un esbirro +2/+2. Invoca a un esbirro aleatorio\n de coste 2.",
+    "frFR": "Donne +2/+2 à un serviteur. Invoque un serviteur aléatoire coûtant 2 cristaux.",
+    "itIT": "+2/+2 a un servitore. Evoca un servitore casuale da 2 Mana.",
+    "plPL": "Daj stronnikowi +2/+2. Przyzwij losowego stronnika o koszcie 2.",
+    "ptBR": "Conceda +2/+2 a um lacaio. Evoque um lacaio aleatório\ncom 2 de Custo.",
+    "ruRU": "Выбранное существо получает +2/+2. Призывает случайное существо за (2)."
+   }
+  },
+  "KAR_091": {
+   "text": {
+    "deDE": "Erhaltet 4 Rüstung. Ruft einen zufälligen Diener herbei, der (4) kostet.",
+    "enUS": "Gain 4 Armor.\nSummon a random\n4-Cost minion.",
+    "esES": "Obtienes 4 p. de armadura.\nInvoca a un esbirro aleatorio de coste 4.",
+    "frFR": "Gagne 4 points d’Armure. Invoque un serviteur aléatoire coûtant 4 cristaux de mana.",
+    "itIT": "Fornisce 4 Armatura. Evoca un servitore casuale da 4 Mana.",
+    "plPL": "Otrzymujesz 4 pkt. pancerza. Przyzwij losowego stronnika o koszcie 4.",
+    "ptBR": "[x]Receba 4 de Armadura.\n Evoque um lacaio aleatório\ncom 4 de custo.",
+    "ruRU": "Вы получаете +4 к броне. Призывает случайное [x]существо за (4)."
+   }
+  },
+  "KAR_092": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b>\nVerursacht 3 Schaden, wenn Ihr ein <b>Geheimnis</b> kontrolliert.",
+    "enUS": "<b>Battlecry:</b> If you control a <b>Secret</b>, deal 3 damage.",
+    "esES": "<b>Grito de batalla:</b> Si controlas un <b>secreto</b>, inflige 3 p. de daño.",
+    "frFR": "<b>Cri de guerre :</b> si vous contrôlez un <b>Secret</b>, inflige 3 points de dégâts.",
+    "itIT": "<b>Grido di Battaglia:</b> infligge 3 danni se controlli un <b>Segreto</b>.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nZadaj 3 pkt. obrażeń, jeśli kontrolujesz <b>Sekret</b>.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você controlar um <b>Segredo</b>, cause 3 de dano.",
+    "ruRU": "<b>Боевой клич:</b> наносит 3 ед. урона, если у вас [x]есть активный <b>секрет</b>."
+   }
+  },
+  "KAR_204": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Ruft einen befreundeten Diener herbei, der in diesem Spiel gestorben ist.",
+    "enUS": "<b>Battlecry:</b> Summon a friendly minion that died this game.",
+    "esES": "<b>Grito de batalla:</b> Invoca a un esbirro amistoso que haya muerto durante esta partida.",
+    "frFR": "<b>Cri de guerre :</b> invoque un serviteur allié mort pendant cette partie.",
+    "itIT": "<b>Grido di Battaglia:</b> evoca un tuo servitore casuale morto in questa partita.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przyzwij przyjaznego stronnika, który zginął w tej grze.",
+    "ptBR": "<b>Grito de Guerra:</b> Evoque um lacaio aliado morto neste jogo.",
+    "ruRU": "<b>Боевой клич:</b> призывает ваше случайное существо, [x]погибшее в течение матча."
+   }
+  },
+  "KAR_711": {
+   "text": {
+    "deDE": "Kostet (1) weniger für jeden Zauber, den Ihr in diesem Spiel gewirkt habt.",
+    "enUS": "[x]Costs (1) less for each spell\nyou've cast this game.",
+    "esES": "Cuesta (1) menos por cada hechizo que hayas lanzado durante esta partida.",
+    "frFR": "Coûte (1) |4(cristal,cristaux) de moins pour chaque sort que vous lancez pendant cette partie.",
+    "itIT": "Costa (1) in meno per ogni Magia che hai lanciato in questa partita.",
+    "plPL": "Kosztuje (1) mniej za każde zaklęcie rzucone przez ciebie w tej grze.",
+    "ptBR": "[x]Custa (1) a menos para\n cada feitiço que você\n lançou nesta partida.",
+    "ruRU": "[x]Стоит на (1) меньше\nза каждое заклинание,\n что вы использовали\nво время матча."
+   }
+  },
+  "LOE_002": {
+   "text": {
+    "deDE": "Verursacht $3 Schaden. Mischt eine Lodernde Fackel in Euer Deck, die 6 Schaden verursacht.",
+    "enUS": "Deal $3 damage. Shuffle a 'Roaring Torch' into your deck that deals 6 damage.",
+    "esES": "Inflige $3 p. de daño. Mete en tu mazo una antorcha crepitante que inflige 6 p. de daño.",
+    "frFR": "Inflige $3 |4(point,points) de dégâts. Place une carte Torche enflammée dans votre deck qui inflige 6 points de dégâts.",
+    "itIT": "Infligge $3 danni. Mette nel tuo mazzo una Torcia Divampante che infligge 6 danni.",
+    "plPL": "Zadaj $3 pkt. obrażeń. Wtasuj do twojej talii „Buzującą pochodnię” zadającą 6 pkt. obrażeń.",
+    "ptBR": "Causa $3 de dano. Embaralhe no seu deck uma \"Tocha Voraz\", que causa 6 de dano.",
+    "ruRU": "Наносит $3 ед. урона. Замешивает в колоду «Пылающий факел», который наносит 6 ед. урона."
+   }
+  },
+  "LOE_010": {
+   "text": {
+    "deDE": "<b>Giftig</b>",
+    "enUS": "<b>Poisonous</b>",
+    "esES": "<b>Veneno</b>",
+    "frFR": "<b>Toxicité</b>",
+    "itIT": "<b>Veleno</b>",
+    "plPL": "<b>Trucizna</b>",
+    "ptBR": "<b>Venenoso</b>",
+    "ruRU": "<b>Яд</b>"
+   }
+  },
+  "LOE_016": {
+   "text": {
+    "deDE": "Fügt einem zufälligen Feind 2 Schaden zu, nachdem Ihr einen Diener mit <b>Kampfschrei</b> ausgespielt habt.",
+    "enUS": "After you play a <b>Battlecry</b> minion, deal 2 damage to a random enemy.",
+    "esES": "Cuando juegas un esbirro con <b>Grito de batalla</b>, inflige 2 p. de daño a un enemigo aleatorio.",
+    "frFR": "Après avoir joué un serviteur avec <b>Cri de guerre</b>, inflige\n2 points de dégâts à un adversaire aléatoire.",
+    "itIT": "Dopo che hai giocato un servitore con <b>Grido di Battaglia</b>, infligge 2 danni a un nemico casuale.",
+    "plPL": "Kiedy zagrasz stronnika z <b>Okrzykiem bojowym</b>, zadaj 2 pkt. obrażeń losowemu wrogowi.",
+    "ptBR": "Depois de jogar um lacaio com <b>Grito de Guerra</b>, cause 2 de dano a um inimigo aleatório.",
+    "ruRU": "Наносит 2 ед. урона случайному противнику, когда вы разыгрываете существо с <b>«Боевым кличем»</b>."
+   }
+  },
+  "LOE_017": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Setzt den Angriff und das Leben eines Dieners auf 3.",
+    "enUS": "<b>Battlecry:</b> Set a minion's Attack and Health to 3.",
+    "esES": "<b>Grito de batalla:</b> Cambia a 3 el ataque y la salud de un esbirro.",
+    "frFR": "<b>Cri de guerre :</b> fait passer l’Attaque et la Vie d’un serviteur à 3.",
+    "itIT": "<b>Grido di Battaglia:</b> imposta l'Attacco e la Salute di un servitore a 3.",
+    "plPL": "<b>Okrzyk bojowy:</b> Ustaw atak i zdrowie stronnika na 3.",
+    "ptBR": "<b>Grito de Guerra:</b> Mude o Ataque e a Vida de um lacaio para 3.",
+    "ruRU": "[x]<b>Боевой клич:</b>\nатака и здоровье\nвыбранного существа\nстановятся равны 3."
+   }
+  },
+  "LOE_020": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Legt aus jedem Deck einen Diener, der (1) kostet, auf das Schlachtfeld.",
+    "enUS": "<b>Battlecry:</b> Put a 1-Cost minion from each deck into the battlefield.",
+    "esES": "<b>Grito de batalla:</b> Coloca un esbirro de coste 1 de cada mazo en el campo de batalla.",
+    "frFR": "<b>Cri de guerre :</b> place un serviteur à 1 cristal de mana de chaque deck sur le champ de bataille.",
+    "itIT": "<b>Grido di Battaglia:</b> mette sul campo un servitore casuale da 1 Mana dal mazzo di ogni giocatore.",
+    "plPL": "<b>Okrzyk bojowy:</b> Umieść na polu bitwy po jednym stronniku o koszcie 1 z każdej talii.",
+    "ptBR": "<b>Grito de Guerra:</b> Coloque um lacaio com 1 de custo de cada deck no campo de batalha.",
+    "ruRU": "<b>Боевой клич:</b> призывает\nпо одному существу за (1) из каждой колоды."
+   }
+  },
+  "LOE_021": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Fügt einem zufälligen Feind $5 Schaden zu, nachdem Euer Gegner seine <b>Heldenfähigkeit</b> eingesetzt hat.",
+    "enUS": "<b>Secret:</b> After an opposing <b>Hero Power</b> is used, deal $5 damage to a random enemy.",
+    "esES": "<b>Secreto:</b> Cuando el enemigo usa su <b>poder de héroe</b>, inflige $5 p. de daño a un enemigo aleatorio.",
+    "frFR": "<b>Secret :</b> inflige\n$5 |4(point,points) de dégâts à un adversaire aléatoire après qu’un <b>pouvoir héroïque</b> adverse est utilisé.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha usato il suo Potere Eroe, infligge $5 danni a un nemico casuale.",
+    "plPL": "<b>Sekret:</b> Kiedy zostanie użyta moc specjalna przeciwnika, zadaj $5 pkt. obrażeń losowemu wrogowi.",
+    "ptBR": "<b>Segredo:</b> Depois que o inimigo usar o <b>Poder Heroico</b>, cause $5 de dano a um inimigo aleatório.",
+    "ruRU": "<b>Секрет:</b> когда противник использует <b>силу героя</b>, наносит $5 ед. урона случайному противнику."
+   }
+  },
+  "LOE_023": {
+   "text": {
+    "deDE": "<b>Kampfschrei: Entdeckt</b> eine Karte, die (1) kostet.",
+    "enUS": "<b>Battlecry: Discover</b> a\n1-Cost card.",
+    "esES": "<b>Grito de batalla: Descubre</b>\nuna carta de coste 1.",
+    "frFR": "<b>Cri de guerre : découvre</b> une carte à 1 cristal de mana.",
+    "itIT": "<b>Grido di Battaglia: Rinvieni</b> una carta da 1 Mana.",
+    "plPL": "<b>Okrzyk bojowy: Odkryj</b> \nkartę o koszcie (1).",
+    "ptBR": "<b>Grito de Guerra: Descubra</b> um card com \n1 de custo.",
+    "ruRU": "<b>Боевой клич:</b> вы <b>раскапываете</b> карту за (1)."
+   }
+  },
+  "LOE_027": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Wenn Euer Gegner mindestens 3 Diener kontrolliert und einen weiteren ausspielt, wird dieser danach vernichtet.",
+    "enUS": "<b>Secret:</b> After your opponent has at least 3 minions and plays another, destroy it.",
+    "esES": "<b>Secreto:</b> Cuando tu oponente tiene al menos 3 esbirros, si juega otro más, lo destruye.",
+    "frFR": "<b>Secret :</b> si votre adversaire possède au moins 3 serviteurs et qu’il en joue un autre, le détruit.",
+    "itIT": "<b>Segreto:</b> se l'avversario ha almeno tre servitori, dopo che ne ha giocato un altro, questo viene distrutto.",
+    "plPL": "<b>Sekret:</b> Gdy twój przeciwnik ma co najmniej 3 stronników i zagrywa kolejnego, zniszcz go.",
+    "ptBR": "<b>Segredo:</b> Depois que seu oponente tiver 3 lacaios ou mais e jogar outro, destrua-o.",
+    "ruRU": "[x]<b>Секрет:</b> когда противник\nразыгрывает существо,\nуничтожает его, если\nу противника уже есть\nне менее 3 существ."
+   }
+  },
+  "LOE_029": {
+   "text": {
+    "deDE": "<b>Kampfschrei: Entdeckt</b> eine Karte, die (3) kostet.",
+    "enUS": "<b>Battlecry: Discover</b> a\n3-Cost card.",
+    "esES": "<b>Grito de batalla: Descubre</b>\nuna carta de coste 3.",
+    "frFR": "<b>Cri de guerre : découvre</b>\nune carte à 3 cristaux de mana.",
+    "itIT": "<b>Grido di Battaglia: Rinvieni</b> una carta da 3 Mana.",
+    "plPL": "<b>Okrzyk bojowy: Odkryj</b> \nkartę o koszcie (3).",
+    "ptBR": "<b>Grito de Guerra: Descubra</b> um card com\n3 de custo.",
+    "ruRU": "<b>Боевой клич:</b> вы <b>раскапываете</b> карту за (3)."
+   }
+  },
+  "LOE_038": {
+   "text": {
+    "deDE": "Eure Karten kosten (5).",
+    "enUS": "Your cards cost (5).",
+    "esES": "Tus cartas cuestan\n(5) cristales.",
+    "frFR": "Vos cartes coûtent\n(5) |4(cristal,cristaux) de mana.",
+    "itIT": "Le tue carte costano (5).",
+    "plPL": "Twoje karty kosztują (5).",
+    "ptBR": "Seus cards custam (5).",
+    "ruRU": "Ваши карты стоят (5)."
+   }
+  },
+  "LOE_050": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Ruft einen zufälligen Diener herbei, der (1) kostet.",
+    "enUS": "<b>Deathrattle:</b> Summon a random 1-Cost minion.",
+    "esES": "<b>Último aliento:</b> Invoca a un esbirro aleatorio\nde coste 1.",
+    "frFR": "<b>Râle d’agonie :</b> invoque un serviteur aléatoire coûtant 1 cristal.",
+    "itIT": "<b>Rantolo di Morte:</b> evoca un servitore casuale da 1 Mana.",
+    "plPL": "<b>Agonia:</b> Przyzwij losowego stronnika o koszcie 1.",
+    "ptBR": "<b>Último Suspiro:</b> Evoque um lacaio aleatório com 1 de custo.",
+    "ruRU": "<b>Предсмертный хрип:</b> призывает случайное существо за (1)."
+   }
+  },
+  "LOE_113": {
+   "text": {
+    "deDE": "Verleiht Euren Dienern +2/+2. Kostet (1) weniger für jeden Murloc, den Ihr kontrolliert.",
+    "enUS": "Give your minions +2/+2.\nCosts (1) less for each Murloc you control.",
+    "esES": "Otorga +2/+2 a tus esbirros.\nCuesta (1) cristal menos por cada múrloc que controles.",
+    "frFR": "Donne +2/+2 à vos serviteurs. Coûte\n (1) |4(cristal,cristaux) de mana de moins pour chaque murloc contrôlé.",
+    "itIT": "+2/+2 ai tuoi servitori. Costa (1) in meno per ogni tuo Murloc.",
+    "plPL": "Daj twoim\nstronnikom +2/+2.\nKosztuje (1) mniej\nza każdego Murloka,\njakiego kontrolujesz.",
+    "ptBR": "Conceda aos seus lacaios +2/+2.\nCusta (1) a menos por cada Murloc sob seu controle.",
+    "ruRU": "Ваши существа получают +2/+2. Стоит на (1) меньше за каждого мурлока под вашим контролем."
+   }
+  },
+  "OG_006": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Eure Heldenfähigkeit wird zu „Ruft einen Murloc (1/1) herbei“.",
+    "enUS": "<b>Battlecry:</b> Your Hero Power becomes 'Summon a   1/1 Murloc.'",
+    "esES": "<b>Grito de batalla:</b> Tu poder de héroe se convierte en \"Invoca a un múrloc 1/1\".",
+    "frFR": "<b>Cri de guerre :</b> votre pouvoir héroïque devient « Invoque un murloc 1/1 ».",
+    "itIT": "<b>Grido di Battaglia:</b> il tuo Potere Eroe diventa \"Evoca un Murloc 1/1\".",
+    "plPL": "<b>Okrzyk bojowy:</b> Twoja moc specjalna zmienia się\nw „Przyzwij Murloka 1/1”.",
+    "ptBR": "<b>Grito de Guerra:</b> Seu Poder Heroico se torna \"Evoque um Murloc 1/1\".",
+    "ruRU": "<b>Боевой клич:</b> заменяет\nвашу силу героя на [x] «Призывает мурлока 1/1»."
+   }
+  },
+  "OG_027": {
+   "text": {
+    "deDE": "Verwandelt Eure Diener in zufällige Diener, die (1) mehr kosten.",
+    "enUS": "Transform your minions into random minions that cost (1) more.",
+    "esES": "Transforma a tus esbirros en esbirros aleatorios que cuestan (1) cristal más.",
+    "frFR": "Transforme vos serviteurs en serviteurs aléatoires qui coûtent (1) |4(cristal,cristaux) de plus.",
+    "itIT": "Trasforma i tuoi servitori in servitori casuali che costano (1) in più.",
+    "plPL": "Przemień twoich stronników w losowych stronników kosztujących (1) więcej.",
+    "ptBR": "Transforme seus lacaios em lacaios aleatórios que custam (1) a mais.",
+    "ruRU": "Превращает ваши существа в случайные, которые стоят на (1) больше."
+   }
+  },
+  "OG_028": {
+   "text": {
+    "deDE": "<b>Spott</b>. Kostet (1) weniger für jedes Totem, das Ihr in diesem Spiel beschworen habt.",
+    "enUS": "[x]<b>Taunt</b>\nCosts (1) less for each\nTotem you've summoned\nthis game.",
+    "esES": "[x]<b>Provocar</b>.\nCuesta (1) cristal menos\npor cada tótem que hayas invocado\ndurante esta partida.",
+    "frFR": "<b>Provocation</b>\nCoûte (1) |4(cristal,cristaux) de moins pour chaque totem invoqué par vous dans cette partie.",
+    "itIT": "<b>Provocazione</b>. Costa (1) in meno per ogni Totem che hai evocato in questa partita.",
+    "plPL": "<b>Prowokacja.</b>\nKosztuje (1) mniej za każdy totem przyzwany przez ciebie w tej grze.",
+    "ptBR": "<b>Provocar</b>\nCusta (1) a menos para cada Totem que  você tenha evocado na partida.",
+    "ruRU": "<b>Провокация</b>\nСтоит на (1) меньше за каждый призванный вами в течение матча тотем."
+   }
+  },
+  "OG_061": {
+   "text": {
+    "deDE": "Verursacht $1 Schaden. Ruft einen Mastiff (1/1) herbei.",
+    "enUS": "Deal $1 damage.\nSummon a 1/1 Mastiff.",
+    "esES": "Inflige $1 p. de daño.\nInvoca a un mastín 1/1.",
+    "frFR": "Inflige $1 |4(point,points) de dégâts. Invoque un mastiff 1/1.",
+    "itIT": "Infligge $1 |4(danno,danni). Evoca un Mastino 1/1.",
+    "plPL": "Zadaj $1 pkt. obrażeń.\nPrzyzwij Mastifa 1/1.",
+    "ptBR": "Cause $1 de dano.\nEvoque um Mastim 1/1.",
+    "ruRU": "Наносит $1 ед. урона и призывает мастифа 1/1."
+   }
+  },
+  "OG_080c": {
+   "text": {
+    "deDE": "Lasst einen befreundeten Diener auf Eure Hand zurückkehren. Er kostet (2) weniger.",
+    "enUS": "Return a friendly minion to your hand.\nIt costs (2) less.",
+    "esES": "[x]Devuelve a un esbirro\namistoso a tu mano.\nCuesta (2) cristales\nmenos.",
+    "frFR": "Renvoie un serviteur allié dans votre main.\nIl coûte (2) |4(cristal,cristaux) de moins.",
+    "itIT": "Fa tornare un tuo servitore nella tua mano. Costa (2) in meno.",
+    "plPL": "Cofnij przyjaznego stronnika do twojej ręki.\nKosztuje (2) mniej.",
+    "ptBR": "Devolva um lacaio aliado à sua mão. \nEle custa (2) a menos.",
+    "ruRU": "Вы возвращаете ваше существо в руку. Оно стоит на (2) меньше."
+   }
+  },
+  "OG_087": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Wirkt einen zufälligen Zauber, der (5) oder weniger kostet. <i>(Zufällige Zielauswahl)</i>",
+    "enUS": "<b>Battlecry:</b> Cast a random spell that costs (5) or less <i>(targets chosen randomly)</i>.",
+    "esES": "<b>Grito de batalla:</b> Lanza un hechizo aleatorio que cuesta (5) cristales de maná o menos\n<i>(objetivos elegidos aleatoriamente)</i>.",
+    "frFR": "<b>Cri de guerre :</b> lance un sort aléatoire coûtant au maximum\n(5) cristaux de mana <i>(cibles choisies au hasard).</i>",
+    "itIT": "<b>Grido di Battaglia:</b> lancia una Magia casuale da 5 o meno Mana su bersagli casuali.",
+    "plPL": "<b>Okrzyk bojowy:</b> Rzuć losowe zaklęcie kosztujące\n(5) lub mniej <i>(cele wybrane losowo)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Lance um feitiço aleatório que custa (5) ou menos <i>(alvos escolhidos aleatoriamente)</i>.",
+    "ruRU": "<b>Боевой клич:</b> разыгрывает случайное заклинание\nза (5) или менее <i>(цели выбираются случайно).</i>"
+   }
+  },
+  "OG_100": {
+   "text": {
+    "deDE": "Vernichtet alle Diener mit 2 oder weniger Angriff.",
+    "enUS": "Destroy all minions with 2 or less Attack.",
+    "esES": "Destruye a todos los esbirros con 2 p. de ataque o menos.",
+    "frFR": "Détruit tous les serviteurs avec\n2 Attaque ou moins.",
+    "itIT": "Distrugge TUTTI i servitori con Attacco pari a 2 o inferiore.",
+    "plPL": "Zniszcz wszystkich stronników z atakiem 2\nlub mniejszym.",
+    "ptBR": "Destrua todos os lacaios com 2 ou menos de Ataque.",
+    "ruRU": "Уничтожает всех существ с атакой [x]2 или меньше."
+   }
+  },
+  "OG_104": {
+   "text": {
+    "deDE": "In diesem Zug verursachen Eure Heileffekte stattdessen Schaden.",
+    "enUS": "This turn, your healing effects deal damage instead.",
+    "esES": "Este turno, tus efectos de sanación infligen daño.",
+    "frFR": "Durant ce tour, vos effets de soin infligent des dégâts à la place.",
+    "itIT": "Per questo turno, le tue carte e i tuoi poteri che rigenerano Salute infliggono danni.",
+    "plPL": "W tej turze twoje efekty uzdrawiające zamiast leczyć, zadają obrażenia.",
+    "ptBR": "Neste turno, seus efeitos de cura causam dano.",
+    "ruRU": "[x]На этом ходу ваши эффекты,\nвосстанавливающие\nздоровье, вместо этого\nнаносят урон."
+   }
+  },
+  "OG_113": {
+   "text": {
+    "deDE": "Erhält +1 Angriff, nachdem Ihr einen Diener herbeigerufen habt.",
+    "enUS": "After you summon a minion, gain +1 Attack.",
+    "esES": "Tras invocar a un esbirro, obtiene +1 p. de ataque.",
+    "frFR": "Gagne +1 ATQ après que vous avez invoqué un serviteur.",
+    "itIT": "Ottiene +1 Attacco dopo che è stato evocato un servitore sotto il tuo controllo.",
+    "plPL": "Otrzymuje +1 do ataku,\nza każdym razem gdy przyzwiesz stronnika.",
+    "ptBR": "Depois de evocar um lacaio, receba +1 de Ataque.",
+    "ruRU": "Когда вы призываете существо, это существо получает +1 к атаке."
+   }
+  },
+  "OG_118": {
+   "text": {
+    "deDE": "Ersetzt Eure Heldenfähigkeit und Hexenmeisterkarten durch die einer anderen Klasse. Die Karten kosten (1) weniger.",
+    "enUS": "Replace your Hero Power and Warlock cards with another class's. The cards cost (1) less.",
+    "esES": "Reemplaza tu poder de héroe y cartas de brujo con los de otra clase. Las cartas cuestan (1) cristal menos.",
+    "frFR": "Remplace votre pouvoir héroïque et vos cartes de démoniste par ceux d’une autre classe. Les cartes coûtent (1) |4(cristal,cristaux) de moins.",
+    "itIT": "Sostituisce il tuo Potere Eroe e le tue carte da Stregone con quelli di un'altra classe. Queste carte costano (1) in meno.",
+    "plPL": "Zastąp twoją moc specjalną oraz karty czarnoksiężnika mocą i kartami innej klasy. Karty te kosztują (1) mniej.",
+    "ptBR": "Substitua seu Poder Heroico e cards de Bruxo pelos de outra classe. Os cards custam (1) a menos.",
+    "ruRU": "Заменяет вашу силу героя и классовые карты чернокнижника на силу и карты другого класса. Эти карты стоят на (1) меньше."
+   }
+  },
+  "OG_120": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Fügt allen Dienern 8 Schaden zu.",
+    "enUS": "<b>Deathrattle:</b> Deal 8 damage to all minions.",
+    "esES": "<b>Último aliento:</b> Inflige 8 p. de daño a todos los esbirros.",
+    "frFR": "<b>Râle d’agonie :</b> inflige\n8 points de dégâts à tous les serviteurs.",
+    "itIT": "<b>Rantolo di Morte:</b> infligge 8 danni a TUTTI i servitori.",
+    "plPL": "<b>Agonia:</b> Zadaj 8 pkt. obrażeń wszystkim stronnikom.",
+    "ptBR": "<b>Último Suspiro:</b> Cause 8 de dano a todos os lacaios.",
+    "ruRU": "<b>Предсмертный хрип:</b> наносит 8 ед. урона всем существам."
+   }
+  },
+  "OG_138": {
+   "text": {
+    "deDE": "Verringert die Kosten dieser Karte zu Beginn Eures Zuges um (1).",
+    "enUS": "At the start of your turn, reduce this card's\nCost by (1).",
+    "esES": "Al principio de tu turno, reduce el coste de esta carta en (1) cristal.",
+    "frFR": "Au début de votre tour, réduit le coût en mana de cette carte de\n(1) |4(cristal,cristaux).",
+    "itIT": "All'inizio del tuo turno, il costo di questa carta si riduce di (1).",
+    "plPL": "Na początku twojej tury zmniejsz koszt tej\nkarty o (1).",
+    "ptBR": "No começo do seu turno, reduza o\nCusto deste card em (1).",
+    "ruRU": "В начале вашего хода эта карта становится на (1) дешевле."
+   }
+  },
+  "OG_158": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Verleiht einem zufälligen befreun[d]deten Diener +1/+1.",
+    "enUS": "<b>Deathrattle:</b> Give a random friendly minion +1/+1.",
+    "esES": "<b>Último aliento:</b> Otorga +1/+1 a un esbirro amistoso aleatorio.",
+    "frFR": "<b>Râle d’agonie :</b> donne +1/+1 à un serviteur allié aléatoire.",
+    "itIT": "<b>Rantolo di Morte:</b> +1/+1 a un tuo servitore casuale.",
+    "plPL": "<b>Agonia:</b> Daj losowemu przyjaznemu stronnikowi +1/+1.",
+    "ptBR": "<b>Último Suspiro:</b> Conceda +1/+1 a um lacaio aliado aleatório.",
+    "ruRU": "<b>Предсмертный хрип</b>: ваше случайное существо получает +1/+1."
+   }
+  },
+  "OG_161": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Fügt allen Dienern außer Murlocs 2 Schaden zu.",
+    "enUS": "<b>Battlecry:</b> Deal 2 damage to all non-Murloc minions.",
+    "esES": "<b>Grito de batalla:</b> Inflige 2 p. de daño a todos los esbirros que no sean múrlocs.",
+    "frFR": "<b>Cri de guerre :</b> inflige\n2 points de dégâts à tous les serviteurs non murlocs.",
+    "itIT": "<b>Grido di Battaglia:</b> infligge 2 danni a TUTTI i servitori non Murloc.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n2 pkt. obrażeń wszystkim stronnikom niebędącym murlokami.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 2 de dano a todos os lacaios, menos Murlocs.",
+    "ruRU": "<b>Боевой клич:</b> наносит 2 ед. урона всем существам, не являющимся мурлоками."
+   }
+  },
+  "OG_209": {
+   "text": {
+    "deDE": "Stellt jedes Mal, wenn Eure\nZauber Schaden verursachen,\nbei Eurem Helden ebenso viel Leben wieder her.",
+    "enUS": "Whenever your spells deal damage, restore that much Health to your hero.",
+    "esES": "Cada vez que tus hechizos inflijan daño, restaura la misma cantidad de salud a tu héroe.",
+    "frFR": "Chaque fois que vos sorts infligent des dégâts, rend l’équivalent sous forme de PV à votre héros.",
+    "itIT": "Quando le tue Magie infliggono danni, rigenera Salute al tuo eroe pari ai danni inflitti.",
+    "plPL": "Za każdym razem gdy twoje zaklęcia zadadzą obrażenia, przywróć tyle samo zdrowia twojemu bohaterowi.",
+    "ptBR": "Sempre que seus feitiços causarem dano, restaure a mesma quantidade de Vida do seu herói.",
+    "ruRU": "Всякий раз, когда ваши заклинания наносят урон, ваш герой восстанавливает столько здоровья, сколько урона они нанесли."
+   }
+  },
+  "OG_234": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Stellt 5 Leben wieder her.",
+    "enUS": "<b>Battlecry:</b> Restore 5 Health.",
+    "esES": "<b>Grito de batalla:</b> Restaura 5 p. de salud.",
+    "frFR": "<b>Cri de guerre :</b> rend 5 PV.",
+    "itIT": "<b>Grido di Battaglia:</b> rigenera 5 Salute.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przywróć 5 pkt. zdrowia.",
+    "ptBR": "<b>Grito de Guerra:</b> Restaure 5 de Vida.",
+    "ruRU": "<b>Боевой клич:</b> восстанавливает \n5 ед. здоровья."
+   }
+  },
+  "OG_290": {
+   "text": {
+    "deDE": "Erhaltet zu Beginn Eures Zuges einen Diener, der (10) kostet, aus Eurem Deck auf die Hand.",
+    "enUS": "At the start of your turn, put a 10-Cost minion from your deck into your hand.",
+    "esES": "Al principio de tu turno, coloca un esbirro de tu mazo que cuesta 10 cristales en tu mano.",
+    "frFR": "Au début de votre tour, place un serviteur coûtant 10 cristaux de mana de votre deck dans votre main.",
+    "itIT": "All'inizio del tuo turno, mette nella tua mano un servitore casuale da 10 Mana dal tuo mazzo.",
+    "plPL": "Na początku twojej tury umieść w ręce stronnika o koszcie 10 z talii.",
+    "ptBR": "No início do seu turno, ponha um lacaio de custo 10 do seu deck na sua mão.",
+    "ruRU": "В начале вашего хода вы [x]кладете в руку существо\nза (10) из колоды."
+   }
+  },
+  "OG_291": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Wählt einen befreundeten Diener. Erhaltet davon eine Kopie (1/1) auf die Hand, die (1) kostet.",
+    "enUS": "<b>Battlecry:</b> Choose a friendly minion. Add a 1/1 copy to your hand that costs (1).",
+    "esES": "<b>Grito de batalla:</b> Elige a un esbirro amistoso. Añade una copia 1/1 a tu mano que cuesta (1) cristal.",
+    "frFR": "<b>Cri de guerre :</b> choisit un serviteur allié et en place une copie 1/1 coûtant (1) |4(cristal,cristaux) de mana dans votre main.",
+    "itIT": "<b>Grido di Battaglia:</b> seleziona un tuo servitore. Ne mette una copia 1/1 nella tua mano che costa (1).",
+    "plPL": "<b>Okrzyk bojowy:</b> Wybierz przyjaznego stronnika. Dodaj jego kopię 1/1 do ręki. Kosztuje (1).",
+    "ptBR": "<b>Grito de Guerra:</b> Escolha um lacaio aliado. Acrescente uma cópia 1/1 dele que custa (1) à sua mão.",
+    "ruRU": "<b>Боевой клич:</b> вы кладете\nв руку 1/1 копию вашего выбранного существа. Она будет стоить (1)."
+   }
+  },
+  "OG_292": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verleiht allen Dienern mit <b>Todesröcheln</b> auf Eurer Hand +1/+1.",
+    "enUS": "<b>Battlecry:</b> Give all <b>Deathrattle</b> minions in your hand +1/+1.",
+    "esES": "<b>Grito de batalla:</b> Otorga +1/+1 a todos los esbirros con <b>Último aliento</b> en tu mano.",
+    "frFR": "<b>Cri de guerre :</b> donne +1/+1 à tous les serviteurs avec <b>Râle d’agonie</b> dans votre main.",
+    "itIT": "<b>Grido di Battaglia:</b> +1/+1 ai servitori con <b>Rantolo di Morte</b> nella tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj +1/+1 wszystkim twoim stronnikom z <b>Agonią</b>, których masz w ręce.",
+    "ptBR": "<b>Grito de Guerra:</b> Conceda +1/+1 a todos os lacaios com <b>Último Suspiro</b> na sua mão.",
+    "ruRU": "[x]<b>Боевой клич:</b> все\nсущества у вас в руке\nс <b>«Предсмертным хрипом»</b>\nполучают +1/+1."
+   }
+  },
+  "OG_303": {
+   "text": {
+    "deDE": "<b>Zauberschaden +1</b>.\nJedes Mal, nachdem Ihr einen Zauber gewirkt habt, erhält Euer C'Thun +1/+1 <i>(egal, wo er sich befindet).</i>",
+    "enUS": "[x]<b><b>Spell Damage</b> +1</b>\nAfter you cast a spell,\ngive your C'Thun +1/+1\n<i>(wherever it is).</i>",
+    "esES": "<b>Daño con hechizos +1</b>.\nCuando lanzas un hechizo, otorga a tu C'Thun +1/+1 <i>(dondequiera que esté).</i>",
+    "frFR": "<b>Dégâts des sorts : +1</b>\nAprès que vous avez lancé un sort, donne +1/+1 à votre C’Thun <i>(où qu’il soit)</i>.",
+    "itIT": "<b>+1 Danni Magici</b>. Dopo che hai lanciato una Magia, +1/+1 al tuo C'thun <i>dovunque sia</i>.",
+    "plPL": "[x]<b><b>Obrażenia zaklęć</b> +1</b>\nPo rzuceniu zaklęcia\ndaj twojemu C'Thunowi +1/+1\n<i>(gdziekolwiek jest).</i>",
+    "ptBR": "<b><b>Dano Mágico</b> +1</b>\nDepois que você lançar um feitiço, conceda +1/+1 ao seu C'Thun <i>(onde quer que ele esteja).</i>",
+    "ruRU": "[x]<b><b>Урон от заклинаний</b> +1.\n</b>Когда вы разыгрываете\nзаклинание, ваш К'Тун получает\n+1/+1 <i>(где бы он ни был)</i>."
+   }
+  },
+  "OG_309": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Löst den <b>Todesröcheln</b>-Effekt\neines befreundeten Dieners aus.",
+    "enUS": "<b>Battlecry:</b> Trigger a friendly minion's <b>Deathrattle</b> effect.",
+    "esES": "<b>Grito de batalla:</b> Activa el efecto de <b>Último aliento</b> de un esbirro amistoso.",
+    "frFR": "<b>Cri de guerre :</b> déclenche le <b>Râle d’agonie</b> d’un serviteur allié.",
+    "itIT": "<b>Grido di Battaglia:</b> attiva il <b>Rantolo di Morte</b> di un tuo servitore.",
+    "plPL": "<b>Okrzyk bojowy:</b> Aktywuj efekt <b>Agonii</b> przyjaznego stronnika.",
+    "ptBR": "<b>Grito de Guerra:</b> Ative o efeito <b>Último Suspiro</b> de um lacaio aliado.",
+    "ruRU": "<b>Боевой клич:</b> вызывает срабатывание <b>«Предсмертного хрипа»</b> у вашего выбранного существа."
+   }
+  },
+  "OG_313": {
+   "text": {
+    "deDE": "Nachdem Ihr einen Diener herbeigerufen habt, erhält dieser +1/+1.",
+    "enUS": "After you summon a minion, give it +1/+1.",
+    "esES": "Cuando invocas a un esbirro, este obtiene +1/+1.",
+    "frFR": "Après que vous avez invoqué un serviteur, lui donne +1/+1.",
+    "itIT": "Dopo che è stato evocato un servitore sotto il tuo controllo, gli fornisce +1/+1.",
+    "plPL": "Kiedy przyzwiesz stronnika, daj mu +1/+1.",
+    "ptBR": "Depois que você evocar um lacaio, conceda-lhe +1/+1.",
+    "ruRU": "Когда вы призываете существо, оно получает +1/+1."
+   }
+  },
+  "OG_318": {
+   "name": {
+    "deDE": "Hogger, Geißel von Elwynn",
+    "enUS": "Hogger, Doom of Elwynn",
+    "esES": "Hogger, Ruina de Elwynn",
+    "frFR": "Lardeur, Perte d’Elwynn",
+    "itIT": "Boccalarga Infestato",
+    "plPL": "Wyżer, Zguba Elwynn",
+    "ptBR": "Hogger, Ruína de Elwynn",
+    "ruRU": "Кошмарный Дробитель"
+   }
+  },
+  "OG_321": {
+   "text": {
+    "deDE": "<b>Spott</b>. Jedes Mal, wenn dieser Diener Schaden erleidet, erhält Euer C'Thun +1/+1 <i>(egal, wo er sich befindet).</i>",
+    "enUS": "<b>Taunt.</b> Whenever this minion takes damage, give your C'Thun +1/+1 <i>(wherever it is).</i>",
+    "esES": "<b>Provocar.</b> Cada vez que este esbirro recibe daño, otorga a tu C'Thun +1/+1 <i>(dondequiera que esté).</i>",
+    "frFR": "<b>Provocation</b>. Chaque fois que ce serviteur subit des dégâts, donne +1/+1 à votre C’Thun <i>(où qu’il soit)</i>.",
+    "itIT": "<b>Provocazione</b>. Quando subisce danni, +1/+1 al tuo C'thun <i>dovunque sia</i>.",
+    "plPL": "<b>Prowokacja</b>. Za każdym razem gdy ten stronnik otrzyma obrażenia, daj twojemu C'Thunowi +1/+1 <i>(gdziekolwiek jest).</i>",
+    "ptBR": "<b>Provocar.</b> Sempre que este lacaio receber dano, conceda +1/+1 ao seu C'Thun <i>(onde quer que ele esteja).</i>",
+    "ruRU": "<b>Провокация</b>. Когда это существо получает урон, ваш К'Тун получает +1/+1 <i>(где бы он ни был)</i>."
+   }
+  },
+  "OG_328": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verwandelt einen befreundeten Diener in einen zufälligen Diener, der (1) mehr kostet.",
+    "enUS": "<b>Battlecry:</b> Transform a friendly minion into a random one that costs (1) more.",
+    "esES": "<b>Grito de batalla:</b> Transforma a un esbirro amistoso en uno aleatorio que cuesta (1) cristal más.",
+    "frFR": "<b>Cri de guerre :</b> transforme un serviteur allié en un serviteur aléatoire coûtant\n(1) |4(cristal,cristaux) de plus.",
+    "itIT": "<b>Grido di Battaglia:</b> trasforma un tuo servitore in un servitore casuale che costa (1) in più.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przemień przyjaznego stronnika\nw losowego stronnika kosztującego (1) więcej.",
+    "ptBR": "<b>Grito de Guerra:</b> Transforme um lacaio aliado em um lacaio aleatório que custa (1) a mais.",
+    "ruRU": "<b>Боевой клич:</b> превращает\nваше выбранное существо в случайное существо на (1) дороже."
+   }
+  },
+  "OG_338": {
+   "text": {
+    "deDE": "Zu Beginn seines Zuges besteht eine Chance von 50 %, dass Euer Gegner eine zusätz[d]liche Karte zieht.",
+    "enUS": "At the start of your opponent's turn, they have a 50% chance to draw an extra card.",
+    "esES": "Al principio del turno de tu oponente, tiene un 50% de probabilidad de robar una carta extra.",
+    "frFR": "Au début de son tour, votre adversaire a 50% de chances de piocher une carte supplémentaire.",
+    "itIT": "All'inizio del suo turno, l'avversario ha una probabilità del 50% di pescare una carta aggiuntiva.",
+    "plPL": "Na początku swojej tury przeciwnik ma 50% szans na dobranie dodatkowej karty.",
+    "ptBR": "No início do turno do seu oponente, ele tem 50% de chance de comprar um card extra.",
+    "ruRU": "В начале своего хода противник с вероятностью [x]50% берет дополнительную\nкарту."
+   }
+  },
+  "OG_340": {
+   "text": {
+    "deDE": "<b>Spott</b>. Kann nicht als Ziel von Zaubern oder Helden[d]fähigkeiten gewählt werden.",
+    "enUS": "<b>Taunt</b>\nCan't be targeted by spells or Hero Powers.",
+    "esES": "[x]<b>Provocar</b>.\nNo puede ser objetivo\nde hechizos ni de\npoderes de héroe.",
+    "frFR": "<b>Provocation</b>\nNe peut pas être la cible de sorts ou de pouvoirs héroïques.",
+    "itIT": "<b>Provocazione</b>. Non può essere il bersaglio di Magie o Poteri Eroe.",
+    "plPL": "<b>Prowokacja</b>\nNie może zostać wybrany jako cel zaklęć lub mocy specjalnych.",
+    "ptBR": "<b>Provocar</b>\nNão pode ser alvo de feitiços nem de Poderes Heroicos.",
+    "ruRU": "<b>Провокация.</b>\nНе может быть целью заклинаний или силы героя."
+   }
+  },
+  "VAN_CS1_113": {
+   "text": {
+    "deDE": "Übernehmt die Kontrolle über einen feindlichen Diener.",
+    "enUS": "Take control of an enemy minion.",
+    "esES": "Se hace con el control de un esbirro enemigo.",
+    "frFR": "Prend le contrôle d’un serviteur adverse.",
+    "itIT": "Prendi il controllo di un servitore nemico.",
+    "plPL": "Przejmij kontrolę nad wrogim stronnikiem.",
+    "ptBR": "Assuma o controle de um lacaio inimigo.",
+    "ruRU": "Получите контроль над существом противника."
+   }
+  },
+  "VAN_CS2_024": {
+   "text": {
+    "deDE": "Fügt einem Charakter $3 Schaden zu und <b>friert</b> ihn ein.",
+    "enUS": "Deal $3 damage to a character and <b>Freeze</b> it.",
+    "esES": "[x]Inflige $3 p. de daño\na un personaje\ny lo <b>congela</b>.",
+    "frFR": "Inflige $3 points de dégâts à un personnage et le <b>gèle</b>.",
+    "itIT": "Infligge $3 danni e <b>Congela</b>.",
+    "plPL": "Zadaj $3 pkt. obrażeń dowolnej postaci i ją <b>Zamroź</b>.",
+    "ptBR": "Cause $3 de dano a um personagem e <b>Congele</b>-o.",
+    "ruRU": "[x]Наносит $3 ед. урона\nвыбранному персонажу\nи <b>замораживает</b> его."
+   }
+  },
+  "VAN_CS2_028": {
+   "text": {
+    "deDE": "Fügt allen feindlichen Dienern $2 Schaden zu und <b>friert</b> sie ein.",
+    "enUS": "Deal $2 damage to all enemy minions and <b>Freeze</b> them.",
+    "esES": "Inflige $2 p. de daño a todos los esbirros enemigos y los <b>congela</b>.",
+    "frFR": "Inflige $2 |4(point,points) de dégâts à tous les serviteurs adverses et les <b>gèle</b>.",
+    "itIT": "Infligge $2 danni ai servitori nemici e li <b>Congela</b>.",
+    "plPL": "Zadaj $2 pkt. obrażeń wszystkim wrogim stronnikom\ni ich <b>Zamroź</b>.",
+    "ptBR": "Cause $2 de dano a todos os lacaios inimigos e <b>Congele</b>-os.",
+    "ruRU": "Наносит $2 ед. урона всем существам противника и <b>замораживает</b> их."
+   }
+  },
+  "VAN_CS2_053": {
+   "text": {
+    "deDE": "Zieht eine Karte. Sie kostet (3) weniger.",
+    "enUS": "Draw a card. That card costs (3) less.",
+    "esES": "Roba una carta. Esa carta cuesta (3) cristales menos.",
+    "frFR": "Vous piochez une carte. Elle coûte (3) cristaux de moins.",
+    "itIT": "Pesca una carta. La carta pescata costa (3) in meno.",
+    "plPL": "Dobierz kartę. Ta karta kosztuje (3) mniej.",
+    "ptBR": "Compre um card. Este card custa (3) a menos.",
+    "ruRU": "Вы берете карту.\nЭта карта стоит на (3) меньше."
+   }
+  },
+  "VAN_CS2_059": {
+   "text": {
+    "deDE": "<b>Verstohlenheit</b>. Verleiht am Ende Eures Zuges einem anderen zufälligen befreundeten Diener +1 Leben.",
+    "enUS": "[x]  <b>Stealth</b>. At the end of your  \nturn, give another random\n friendly minion +1 Health.",
+    "esES": "<b>Sigilo</b>.\nAl final de tu turno,\notorga +1 p. de salud\na otro esbirro amistoso\naleatorio.",
+    "frFR": "<b>Camouflage</b>. À la fin de votre tour, donne +1 PV à un autre serviteur allié aléatoire.",
+    "itIT": "<b>Furtività</b>. Alla fine del tuo turno, +1 Salute a un altro tuo servitore casuale.",
+    "plPL": "<b>Ukrycie</b>\nNa koniec twojej tury daj innemu losowemu przyjaznemu stronnikowi +1 do zdrowia.",
+    "ptBR": "<b>Furtividade</b>. No final do seu\nturno, conceda +1 de Vida a outro lacaio aliado \naleatório.",
+    "ruRU": "<b>Маскировка</b>. В конце вашего хода другое ваше случайное существо получает +1 к здоровью."
+   }
+  },
+  "VAN_CS2_227": {
+   "text": {
+    "deDE": "Eure Diener kosten (3) mehr.",
+    "enUS": "Your minions cost (3) more.",
+    "esES": "Tus esbirros cuestan\n(3) cristales más.",
+    "frFR": "Vos serviteurs coûtent (3) cristaux de plus.",
+    "itIT": "I tuoi servitori costano (3) in più.",
+    "plPL": "Twoi stronnicy kosztują (3) więcej.",
+    "ptBR": "Seus lacaios custam (3) a mais.",
+    "ruRU": "Ваши существа стоят на (3) больше."
+   }
+  },
+  "VAN_DS1_070": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verleiht einem befreundeten Wildtier +2/+2 und <b>Spott</b>.",
+    "enUS": "<b>Battlecry:</b> Give a friendly Beast +2/+2 and <b>Taunt</b>.",
+    "esES": "<b>Grito de batalla:</b> Otorga +2/+2 y <b>Provocar</b> a una bestia amistosa.",
+    "frFR": "<b>Cri de guerre :</b> donne +2/+2 et <b>Provocation</b> à une Bête alliée.",
+    "itIT": "<b>Grido di Battaglia:</b> +2/+2 e <b>Provocazione</b> a una tua Bestia.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj przyjaznej Bestii +2/+2 oraz <b>Prowokację</b>.",
+    "ptBR": "<b>Grito de Guerra:</b> Conceda +2/+2 e <b>Provocar</b> a uma Fera aliada.",
+    "ruRU": "[x]<b>Боевой клич:</b> ваш\nвыбранный зверь получает\n+2/+2 и <b>«Провокацию»</b>."
+   }
+  },
+  "VAN_DS1_188": {
+   "text": {
+    "deDE": "Euer Held ist <b>immun</b>, während er angreift.",
+    "enUS": "Your hero is <b>Immune</b> while attacking.",
+    "esES": "Tu héroe es <b>inmune</b> al atacar.",
+    "frFR": "Votre héros est <b>Insensible</b> quand il attaque.",
+    "itIT": "Il tuo eroe è <b>Immune</b> quando attacca.",
+    "plPL": "Twój bohater posiada <b>Niewrażliwość</b> podczas ataku.",
+    "ptBR": "Seu herói fica <b>Imune</b> enquanto ataca.",
+    "ruRU": "Ваш герой <b>неуязвим</b> во время атаки."
+   }
+  },
+  "VAN_EX1_012": {
+   "text": {
+    "deDE": "<b>Zauberschaden +1</b>. <b>Todesröcheln:</b> Zieht eine Karte.",
+    "enUS": "<b>Spell Damage +1</b>. <b>Deathrattle:</b> Draw a card.",
+    "esES": "<b>+1 p. de daño con hechizos</b>. <b>Último aliento:</b> Roba una carta.",
+    "frFR": "<b>Dégâts des sorts : +1</b>.\n<b>Râle d’agonie :</b> vous piochez une carte.",
+    "itIT": "<b>+1 Danni Magici</b>. <b>Rantolo di Morte:</b> pesca una carta.",
+    "plPL": "<b>Obrażenia zaklęć +1</b>. <b>Agonia:</b> Dobierz kartę.",
+    "ptBR": "<b>+1 de Dano Mágico</b>. <b>Último Suspiro:</b> Compre um card.",
+    "ruRU": "<b>Урон от заклинаний +1</b>\n<b>Предсмертный хрип:</b> вы берете карту."
+   }
+  },
+  "VAN_EX1_057": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Lasst einen befreundeten Diener vom Schlachtfeld auf Eure Hand zurückkehren.",
+    "enUS": "<b>Battlecry:</b> Return a friendly minion from the battlefield to your hand.",
+    "esES": "<b>Grito de batalla:</b> Devuelve a tu mano a un esbirro amistoso del campo de batalla.",
+    "frFR": "<b>Cri de guerre :</b> renvoie un serviteur allié du champ de bataille et le place dans votre main.",
+    "itIT": "<b>Grido di Battaglia:</b> fa tornare un tuo servitore nella tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Cofnij przyjaznego stronnika do twojej ręki.",
+    "ptBR": "<b>Grito de Guerra:</b> Devolva um lacaio aliado do campo de batalha à sua mão.",
+    "ruRU": "<b>Боевой клич:</b> возвращает ваше существо в руку."
+   }
+  },
+  "VAN_EX1_067": {
+   "text": {
+    "deDE": "<b>Ansturm</b>, <b>Gottesschild</b>",
+    "enUS": "<b>Charge</b>\n<b>Divine Shield</b>",
+    "esES": "<b>Cargar</b>\n<b>Escudo divino</b>",
+    "frFR": "<b>Charge</b>\n<b>Bouclier divin</b>",
+    "itIT": "<b>Carica</b>. <b>Scudo Divino</b>.",
+    "plPL": "<b>Szarża</b>\n<b>Boska tarcza</b>",
+    "ptBR": "<b>Investida</b>\n<b>Escudo Divino</b>",
+    "ruRU": "<b>Рывок</b>\n<b>Божественный щит</b>"
+   }
+  },
+  "VAN_EX1_076": {
+   "text": {
+    "deDE": "Der erste Diener, den Ihr in einem Zug ausspielt, kostet (1) weniger.",
+    "enUS": "The first minion you play each turn costs (1) less.",
+    "esES": "El primer esbirro que juegues cada turno cuesta (1) cristal menos.",
+    "frFR": "Le premier serviteur que vous jouez à chaque tour coûte (1) cristal de moins.",
+    "itIT": "Il primo servitore che giochi ogni turno costa (1) in meno.",
+    "plPL": "Pierwszy stronnik zagrany przez ciebie w każdej turze kosztuje (1) mniej.",
+    "ptBR": "O primeiro lacaio que você joga a cada turno custa (1) a menos.",
+    "ruRU": "[x]Первое существо, которое\nвы разыгрываете\nна каждом ходу,\nстоит на (1) меньше."
+   }
+  },
+  "VAN_EX1_100": {
+   "text": {
+    "deDE": "Wenn ein Spieler einen Zauber wirkt, erhält der andere Spieler eine Kopie davon auf die Hand.",
+    "enUS": "Whenever a player casts a spell, put a copy into the other player’s hand.",
+    "esES": "Cada vez que un jugador lanza un hechizo, coloca una copia en la mano del otro jugador.",
+    "frFR": "Quand un joueur lance un sort, en place une copie dans la main de son adversaire.",
+    "itIT": "Quando un giocatore lancia una Magia, l'avversario ottiene in mano una copia della carta.",
+    "plPL": "Za każdym razem gdy gracz rzuci zaklęcie, umieść jego kopię w ręce drugiego gracza.",
+    "ptBR": "Sempre que um jogador lançar um feitiço, coloque uma cópia dele na mão do outro jogador.",
+    "ruRU": "Когда игрок разыгрывает заклинание, копия этого заклинания кладется в руку другого игрока."
+   }
+  },
+  "VAN_EX1_105": {
+   "text": {
+    "deDE": "Kostet (1) weniger für jede andere Karte auf Eurer Hand.",
+    "enUS": "Costs (1) less for each other card in your hand.",
+    "esES": "Cuesta (1) cristal menos por cada carta adicional que tengas en tu mano.",
+    "frFR": "Coûte (1) cristal de moins pour chaque autre carte dans votre main.",
+    "itIT": "Costa (1) in meno per ogni altra carta nella tua mano.",
+    "plPL": "Kosztuje (1) mniej za każdą pozostałą kartę w twojej ręce.",
+    "ptBR": "Custa (1) a menos para cada um dos outros cards na sua mão.",
+    "ruRU": "Стоит на (1) меньше\nза каждую другую карту\n[x]в вашей руке."
+   }
+  },
+  "VAN_EX1_133": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Verursacht 1 Schaden. <b>Combo:</b> Verursacht statt[d]dessen 2 Schaden.",
+    "enUS": "<b>Battlecry:</b> Deal 1 damage. <b>Combo:</b> Deal 2 instead.",
+    "esES": "<b>Grito de batalla:</b> Inflige 1 p. de daño. <b>Combo:</b> Inflige 2 p. de daño.",
+    "frFR": "<b>Cri de guerre :</b> inflige 1 point de dégâts. <b>Combo :</b> inflige 2 points de dégâts à la place.",
+    "itIT": "<b>Grido di Battaglia:</b> infligge 1 danno. <b>Combo:</b> infligge 2 danni.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n1 pkt. obrażeń. <b>Kombinacja:</b> Zamiast tego zadaj 2 pkt. obrażeń.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 1 de dano. <b>Combo:</b> Em vez de 1, cause 2 de dano.",
+    "ruRU": "<b>Боевой клич:</b> наносит 1 ед. урона. <b>Серия приемов:</b> вместо этого наносит 2 ед. урона."
+   }
+  },
+  "VAN_EX1_136": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Wenn ein befreundeter Diener stirbt, wird er mit 1 Leben wiederbelebt.",
+    "enUS": "<b>Secret:</b> When a friendly minion dies, return it to life with 1 Health.",
+    "esES": "<b>Secreto:</b> Cuando\nun esbirro amistoso\nmuere, vuelve a la vida con 1 p. de salud.",
+    "frFR": "<b>Secret :</b> quand un serviteur allié meurt, il est ressuscité avec 1 PV.",
+    "itIT": "<b>Segreto:</b> quando un tuo servitore muore, ritorna in vita con 1 Salute.",
+    "plPL": "<b>Sekret:</b> Gdy zginie przyjazny stronnik, przywróć go do życia z 1 pkt. zdrowia.",
+    "ptBR": "<b>Segredo:</b> Quando um lacaio aliado morrer, reviva-o com 1 de Vida.",
+    "ruRU": "<b>Секрет:</b> когда одно из ваших существ погибает, оно возвращается в игру с 1 ед. здоровья."
+   }
+  },
+  "VAN_EX1_144": {
+   "text": {
+    "deDE": "Lasst einen befreundeten Diener auf Eure Hand zurückkehren. Er kostet (2) weniger.",
+    "enUS": "Return a friendly minion to your hand. It costs (2) less.",
+    "esES": "[x]Devuelve a un esbirro\namistoso a tu mano.\nCuesta (2) cristales\nmenos.",
+    "frFR": "Renvoie un serviteur allié dans votre main. Il coûte (2) cristaux de moins.",
+    "itIT": "Fa tornare un tuo servitore nella tua mano. Costa (2) in meno.",
+    "plPL": "Cofnij przyjaznego stronnika do twojej ręki. Kosztuje (2) mniej.",
+    "ptBR": "Devolva um lacaio aliado à sua mão. Ele custa (2) a menos.",
+    "ruRU": "Вы возвращаете ваше существо в руку. Оно стоит на (2) меньше."
+   }
+  },
+  "VAN_EX1_145": {
+   "text": {
+    "deDE": "Der nächste Zauber, den Ihr in diesem Zug wirkt, kostet (3) weniger.",
+    "enUS": "The next spell you cast this turn costs (3) less.",
+    "esES": "El próximo hechizo que lances este turno costará (3) cristales menos.",
+    "frFR": "Le prochain sort que vous lancez pendant ce tour coûte (3) cristaux de moins.",
+    "itIT": "La prossima Magia che lanci in questo turno costa (3) in meno.",
+    "plPL": "Następne zaklęcie, jakie rzucisz w tej turze, kosztuje (3) mniej.",
+    "ptBR": "O próximo feitiço que você lançar neste turno custará (3) a menos.",
+    "ruRU": "Ваше следующее заклинание на этом ходу будет стоить на (3) меньше."
+   }
+  },
+  "VAN_EX1_166": {
+   "text": {
+    "deDE": "<b>Wählt aus:</b> Verursacht 2 Schaden; oder bringt\neinen Diener zum <b>Schweigen</b>.",
+    "enUS": "<b>Choose One -</b> Deal 2 damage; or <b>Silence</b> a minion.",
+    "esES": "[x]<b>Elige una:</b>\nInflige 2 p. de daño,\no bien <b>Silencia</b> a un esbirro.",
+    "frFR": "<b>Choix des armes :</b> inflige 2 points de dégâts ou réduit au <b>Silence</b> un serviteur.",
+    "itIT": "<b>Scegli:</b> infligge 2 danni <b>o</b> <b>Silenzia</b> un servitore.",
+    "plPL": "<b>Wybierz jedno:</b> Zadaj\n2 pkt. obrażeń; lub\n<b>Wycisz</b> stronnika.",
+    "ptBR": "<b>Escolha Um -</b> Cause 2 de dano; ou <b>Silencie</b> um lacaio.",
+    "ruRU": "<b>Выберите эффект:</b> наносит 2 ед. урона; или накладывает <b>немоту</b> на выбранное существо."
+   }
+  },
+  "VAN_EX1_170": {
+   "text": {
+    "deDE": "<b>Giftig</b>",
+    "enUS": "<b>Poisonous</b>",
+    "esES": "<b>Veneno</b>",
+    "frFR": "<b>Toxicité</b>",
+    "itIT": "<b>Veleno</b>",
+    "plPL": "<b>Trucizna</b>",
+    "ptBR": "<b>Venenoso</b>",
+    "ruRU": "<b>Яд</b>"
+   }
+  },
+  "VAN_EX1_274": {
+   "text": {
+    "deDE": "Erhält +2/+2, wenn Ihr am Ende Eures Zuges ein <b>Geheimnis</b> kontrolliert.",
+    "enUS": "If you control a <b>Secret</b> at the end of your turn, gain +2/+2.",
+    "esES": "[x]Si controlas un <b>secreto</b>\nal final de tu turno,\nobtiene +2/+2.",
+    "frFR": "Si vous contrôlez un <b>Secret</b> à la fin de votre tour, gagne +2/+2.",
+    "itIT": "Ottiene +2/+2 se controlli un <b>Segreto</b> alla fine del tuo turno.",
+    "plPL": "Otrzymuje +2/+2, jeśli\npod koniec twojej tury kontrolujesz <b>Sekret</b>.",
+    "ptBR": "Se você controlar um <b>Segredo</b> no final do seu turno, receba +2/+2.",
+    "ruRU": "[x]Получает +2/+2, если\nв конце хода у вас остался\n активный <b>секрет</b>."
+   }
+  },
+  "VAN_EX1_284": {
+   "text": {
+    "deDE": "<b>Zauberschaden +1</b>. <b>Kampfschrei:</b> Zieht eine Karte.",
+    "enUS": "<b>Spell Damage +1</b>. <b>Battlecry:</b> Draw a card.",
+    "esES": "<b>+1 p. de daño con hechizos</b>. <b>Grito de batalla:</b> Roba una carta.",
+    "frFR": "<b>Dégâts des sorts : +1</b>.\n<b>Cri de guerre :</b> vous piochez une carte.",
+    "itIT": "<b>+1 Danni Magici</b>. <b>Grido di Battaglia:</b> pesca una carta.",
+    "plPL": "<b>Obrażenia zaklęć +1</b>. <b>Okrzyk bojowy:</b> Dobierz kartę.",
+    "ptBR": "<b>+1 de Dano Mágico</b>. <b>Grito de Guerra:</b> Compre um card.",
+    "ruRU": "<b>Урон от заклинаний +1</b>. <b>Боевой клич:</b>\nвы берете карту."
+   }
+  },
+  "VAN_EX1_294": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Nachdem Euer Gegner einen Diener ausgespielt hat, ruft Ihr eine Kopie davon herbei.",
+    "enUS": "<b>Secret:</b> After your opponent plays a minion, summon a copy of it.",
+    "esES": "<b>Secreto:</b> Después de que tu oponente juegue un esbirro, invocas una copia de ese esbirro.",
+    "frFR": "<b>Secret :</b> une fois que votre adversaire a joué un serviteur, en invoque une copie.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha giocato un servitore, ne evoca una copia sotto il tuo controllo.",
+    "plPL": "<b>Sekret:</b> Gdy twój przeciwnik zagra stronnika, przyzwij\njego kopię.",
+    "ptBR": "<b>Segredo:</b> Depois que seu oponente jogar um lacaio, evoque uma cópia dele.",
+    "ruRU": "<b>Секрет:</b> когда противник разыгрывает существо, призывает его копию на вашу сторону."
+   }
+  },
+  "VAN_EX1_315": {
+   "text": {
+    "deDE": "Eure Diener kosten (2) weniger, aber nicht weniger als (1).",
+    "enUS": "Your minions cost (2) less, but not less than (1).",
+    "esES": "Tus esbirros cuestan (2) cristales menos, pero no menos de (1).",
+    "frFR": "Vos serviteurs coûtent (2) cristaux de moins, mais jamais moins\nde (1).",
+    "itIT": "I tuoi servitori costano (2) in meno, ma non meno di (1).",
+    "plPL": "Twoi stronnicy kosztują (2) mniej, ale nie mniej niż (1).",
+    "ptBR": "Seus lacaios custam (2) a menos, mas nunca menos de (1).",
+    "ruRU": "Ваши существа стоят на (2) меньше, но не меньше (1)."
+   }
+  },
+  "VAN_EX1_334": {
+   "text": {
+    "deDE": "Übernehmt bis zum Ende des Zuges die Kontrolle über einen feindlichen Diener mit max. 3 Angriff.",
+    "enUS": "Gain control of an enemy minion with 3 or less Attack until end of turn.",
+    "esES": "Toma el control de un esbirro enemigo con\n3 p. de ataque o menos hasta el final del turno.",
+    "frFR": "Prend le contrôle d’un serviteur adverse avec 3 ATQ ou moins jusqu’à la fin du tour.",
+    "itIT": "Prendi il controllo di un servitore nemico con Attacco pari a 3 o inferiore fino alla fine del turno.",
+    "plPL": "Do końca tury przejmij kontrolę nad wrogim stronnikiem z atakiem 3 lub mniejszym.",
+    "ptBR": "Assuma o controle de um lacaio inimigo com 3 ou menos de Ataque até o final do turno.",
+    "ruRU": "[x]Вы получаете контроль\nнад существом противника\nс атакой 3 или меньше\nдо конца хода."
+   }
+  },
+  "VAN_EX1_350": {
+   "text": {
+    "deDE": "Verdoppelt den Schaden und die Heilung Eurer Zauber und Heldenfähigkeiten.",
+    "enUS": "Double the damage and healing of your spells and Hero Power.",
+    "esES": "Duplica el daño y la sanación de tus hechizos y de tu poder de héroe.",
+    "frFR": "Double les dégâts et les soins de vos sorts et de votre pouvoir héroïque.",
+    "itIT": "Raddoppia i danni e le cure delle tue Magie e del Potere Eroe.",
+    "plPL": "Podwajasz wartości obrażeń i uzdrawiania z twoich zaklęć oraz mocy specjalnej.",
+    "ptBR": "Dobre o dano e a cura dos seus feitiços e Poder Heroico.",
+    "ruRU": "[x]Ваши заклинания и сила\nгероя восстанавливают\nздоровье и наносят урон\nв двойном объеме."
+   }
+  },
+  "VAN_EX1_366": {
+   "text": {
+    "deDE": "Nachdem Ihr einen Diener herbeigerufen habt, erhält dieser +1/+1 und diese Waffe verliert 1 Haltbarkeit.",
+    "enUS": "After you summon a minion, give it +1/+1 and this loses 1 Durability.",
+    "esES": "[x]Cuando invocas a un esbirro,\nel esbirro obtiene +1/+1\ny esta arma pierde\n1 p. de durabilidad.",
+    "frFR": "Après avoir invoqué un serviteur, lui donne +1/+1 et perd 1 Durabilité.",
+    "itIT": "Dopo che è stato evocato un servitore sotto il tuo controllo, gli fornisce +1/+1, ma perde 1 Integrità.",
+    "plPL": "Kiedy przyzwiesz stronnika, daj mu +1/+1; miecz traci 1 wytrzymałości.",
+    "ptBR": "Depois que você evocar um lacaio, conceda-lhe +1/+1, e este item perderá 1 de Durabilidade.",
+    "ruRU": "[x]Когда вы призываете\nсущество, оно получает\n+1/+1, а это оружие теряет\n1 ед. прочности."
+   }
+  },
+  "VAN_EX1_379": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Nachdem Euer Gegner einen Diener ausgespielt hat, wird dessen Leben auf 1 verringert.",
+    "enUS": "<b>Secret:</b> After your opponent plays a minion, reduce its Health to 1.",
+    "esES": "<b>Secreto:</b> Cuando tu oponente juega un esbirro, reduce su salud a 1 p.",
+    "frFR": "<b>Secret :</b> une fois que votre adversaire a joué un serviteur, ses points de vie sont réduits à 1.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha giocato un servitore, riduce la sua Salute a 1.",
+    "plPL": "<b>Sekret:</b> Gdy twój przeciwnik zagra stronnika, zmniejsz\njego zdrowie do 1.",
+    "ptBR": "<b>Segredo:</b> Depois que seu oponente jogar um lacaio, reduza a Vida dele para 1.",
+    "ruRU": "<b>Секрет:</b> когда противник разыграет существо, здоровье этого существа становится равно 1."
+   }
+  },
+  "VAN_EX1_383": {
+   "text": {
+    "deDE": "<b>Gottesschild</b>, <b>Spott</b>. <b>Todesröcheln:</b> Legt einen Aschenbringer (5/3) an.",
+    "enUS": "<b>Divine Shield</b>. <b>Taunt</b>. <b>Deathrattle:</b> Equip a 5/3 Ashbringer.",
+    "esES": "[x]<b>Escudo divino</b>. <b>Provocar</b>.\n<b>Último aliento:</b> Equipa una\nCrematoria 5/3.",
+    "frFR": "<b>Bouclier divin</b>. <b>Provocation</b>. <b>Râle d’agonie :</b> vous équipe de Porte-cendres 5/3.",
+    "itIT": "<b>Provocazione</b>. <b>Scudo Divino</b>. <b>Rantolo di Morte:</b> equipaggia una Brandicenere 5/3.",
+    "plPL": "<b>Boska tarcza</b>\n<b>Prowokacja</b>\n<b>Agonia:</b> Wyposaż bohatera w Spopielacz 5/3.",
+    "ptBR": "<b>Escudo Divino</b>. <b>Provocar</b>. <b>Último Suspiro:</b> Equipe uma Crematória 5/3.",
+    "ruRU": "<b>Божественный щит</b>. <b>Провокация</b>. <b>Предсмертный хрип:</b> снаряжает Испепелителем 5/3."
+   }
+  },
+  "VAN_EX1_390": {
+   "text": {
+    "deDE": "<b>Spott</b>. <b>Wutanfall:</b>\n+3 Angriff",
+    "enUS": "<b>Taunt</b>\n<b>Enrage:</b> +3 Attack.",
+    "esES": "[x]<b>Provocar</b>. <b>Enfurecer:</b>\n+3 p. de ataque.",
+    "frFR": "<b>Provocation</b>.\n<b>Accès de rage :</b> +3 ATQ",
+    "itIT": "<b>Provocazione</b>. <b>Rabbia:</b> +3 Attacco.",
+    "plPL": "<b>Prowokacja</b>\n<b>Szał:</b> +3 do ataku.",
+    "ptBR": "<b>Provocar</b>\n<b>Enfurecer:</b> +3 de Ataque.",
+    "ruRU": "<b>Провокация</b>\n<b>Исступление:</b> получает +3 к атаке."
+   }
+  },
+  "VAN_EX1_522": {
+   "text": {
+    "deDE": "<b>Verstohlenheit</b>, <b>Giftig</b>",
+    "enUS": "<b>Stealth</b>\n <b>Poisonous</b>",
+    "esES": "<b>Sigilo</b>\n <b>Veneno</b>",
+    "frFR": "<b>Camouflage</b>\n<b>Toxicité</b>",
+    "itIT": "<b>Furtività</b>. <b>Veleno</b>.",
+    "plPL": "<b>Ukrycie</b>\n <b>Trucizna</b>",
+    "ptBR": "<b>Furtividade</b>\n <b>Venenoso</b>",
+    "ruRU": "<b>Маскировка</b>\n <b>Яд</b>"
+   }
+  },
+  "VAN_EX1_533": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b>\nWenn ein Feind Euren Helden angreift, greift er stattdessen einen zufälligen anderen Charakter an.",
+    "enUS": "<b>Secret:</b> When an enemy attacks your hero, instead it attacks another random character.",
+    "esES": "[x]<b>Secreto:</b> Cuando un enemigo\nvaya a atacar a tu héroe,\nen su lugar atacará a otro\npersonaje aleatorio.",
+    "frFR": "<b>Secret :</b> quand un adversaire attaque votre héros, il attaque un autre personnage aléatoire à la place.",
+    "itIT": "<b>Segreto:</b> quando un nemico attacca il tuo eroe, attacca invece un altro personaggio casuale.",
+    "plPL": "<b>Sekret:</b> Gdy jakiś przeciwnik zaatakuje twojego bohatera, zamiast tego zaatakuje inną losową postać.",
+    "ptBR": "<b>Segredo:</b> Quando um inimigo tentar atacar o seu herói, ele atacará outro personagem aleatório.",
+    "ruRU": "[x]<b>Секрет:</b> когда персонаж\nатакует вашего героя,\nвместо этого он атакует\nдругого случайного персонажа."
+   }
+  },
+  "VAN_EX1_537": {
+   "text": {
+    "deDE": "Fügt einem Diener $5 Schaden und benachbarten Dienern\n$2 Schaden zu.",
+    "enUS": "Deal $5 damage to a minion and $2 damage to adjacent ones.",
+    "esES": "Inflige $5 p. de daño a un esbirro y $2 p. de daño a los esbirros adyacentes.",
+    "frFR": "Inflige $5 |4(point,points) de dégâts à un serviteur et $2 |4(point,points) de dégâts aux serviteurs adjacents.",
+    "itIT": "Infligge $5 danni a un servitore e $2 danni ai servitori adiacenti.",
+    "plPL": "Zadaj $5 pkt. obrażeń stronnikowi oraz $2 pkt. obrażeń jego sąsiadom.",
+    "ptBR": "Cause $5 de dano a um lacaio e $2 aos adjacentes.",
+    "ruRU": "Наносит $5 ед. урона выбранному существу и $2 ед. урона существам, находящимся по обе стороны от него."
+   }
+  },
+  "VAN_EX1_549": {
+   "text": {
+    "deDE": "Verleiht einem befreundeten Wildtier in diesem Zug +2 Angriff und <b>Immunität</b>.",
+    "enUS": "Give a friendly Beast +2 Attack and <b>Immune</b> this turn.",
+    "esES": "Otorga +2 p. de ataque e <b>Inmune</b> a una bestia amistosa este turno.",
+    "frFR": "Donne +2 ATQ et l’effet <b>Insensible</b> à une Bête alliée pendant ce tour.",
+    "itIT": "<b>Immune</b> e +2 Attacco a una tua Bestia per questo turno.",
+    "plPL": "Daj przyjaznej Bestii +2 do ataku\noraz <b>Niewrażliwość</b>\nw tej turze.",
+    "ptBR": "Conceda +2 de Ataque e <b>Imunidade</b> a uma Fera aliada neste turno.",
+    "ruRU": "Ваш выбранный зверь получает +2 к атаке и <b>неуязвимость</b> до конца хода."
+   }
+  },
+  "VAN_EX1_554": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Wenn ein befreundeter Diener angegriffen wird, ruft Ihr drei Schlangen (1/1) herbei.",
+    "enUS": "<b>Secret:</b> When one of your minions is attacked, summon three 1/1 Snakes.",
+    "esES": "<b>Secreto:</b> Cuando atacan a uno de tus esbirros, invoca tres culebras 1/1.",
+    "frFR": "<b>Secret :</b> quand un de vos serviteurs est attaqué, invoque trois serpents 1/1.",
+    "itIT": "<b>Segreto:</b> quando un tuo servitore viene attaccato, evoca tre Serpi 1/1.",
+    "plPL": "<b>Sekret:</b> Gdy jeden z twoich stronników zostanie zaatakowany, przyzwij trzy Węże 1/1.",
+    "ptBR": "<b>Segredo:</b> Quando um de seus lacaios for atacado, evoque três Cobras 1/1.",
+    "ruRU": "<b>Секрет:</b> когда одно из ваших существ будет атаковано, вы призываете трех змей 1/1."
+   }
+  },
+  "VAN_EX1_586": {
+   "text": {
+    "deDE": "Kostet (1) weniger für jeden anderen Diener auf dem Schlachtfeld.",
+    "enUS": "Costs (1) less for each other minion on the battlefield.",
+    "esES": "Cuesta (1) cristal menos por cada esbirro adicional en el campo de batalla.",
+    "frFR": "Coûte (1) cristal de moins pour chaque autre serviteur sur le champ de bataille.",
+    "itIT": "Costa (1) in meno per ogni servitore sul campo.",
+    "plPL": "Kosztuje (1) mniej za każdego pozostałego stronnika na polu bitwy.",
+    "ptBR": "Custa (1) a menos para cada um dos outros lacaios no campo de batalha.",
+    "ruRU": "Стоит на (1) меньше за каждое другое существо в игре."
+   }
+  },
+  "VAN_EX1_590": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Alle Diener verlieren <b>Gottesschild</b>. Erhält +3/+3 für jeden verlorenen Schild.",
+    "enUS": "<b>Battlecry:</b> All minions lose <b>Divine Shield</b>. Gain +3/+3 for each Shield lost.",
+    "esES": "<b>Grito de batalla:</b> Todos los esbirros pierden <b>Escudo divino</b>. Obtiene +3/+3 por cada escudo perdido.",
+    "frFR": "<b>Cri de guerre :</b> tous les serviteurs perdent <b>Bouclier divin</b>. Gagne +3/+3 pour chaque bouclier perdu.",
+    "itIT": "<b>Grido di Battaglia:</b> TUTTI i servitori perdono <b>Scudo Divino</b>. Ottiene +3/+3 per ogni Scudo Divino dissolto.",
+    "plPL": "<b>Okrzyk bojowy:</b> Wszyscy stronnicy tracą <b>Boską tarczę</b>. Otrzymuje +3/+3 za każdą straconą tarczę.",
+    "ptBR": "<b>Grito de Guerra:</b> Todos os lacaios perdem <b>Escudo Divino</b>. Receba +3/+3 para cada Escudo perdido.",
+    "ruRU": "[x]<b>Боевой клич:</b> все существа\nтеряют <b>«Божественный щит»</b>.\nПолучает +3/+3 за каждый\nпоглощенный щит."
+   }
+  },
+  "VAN_EX1_591": {
+   "text": {
+    "deDE": "Eure Karten und Fähigkeiten,\ndie Leben wiederherstellen, verursachen statt[d]dessen nun Schaden.",
+    "enUS": "Your cards and powers that restore Health now deal damage instead.",
+    "esES": "Tus cartas y poderes que restauran salud ahora infligen daño.",
+    "frFR": "Vos cartes et pouvoirs rendant de la Vie infligent désormais des dégâts à la place.",
+    "itIT": "Le tue carte e i tuoi poteri che rigenerano Salute infliggono danni.",
+    "plPL": "Twoje karty i moce zamiast przywracać zdrowie, zadają teraz obrażenia.",
+    "ptBR": "Seus cards e poderes que restauram Vida agora deixam de restaurar e causam dano.",
+    "ruRU": "Ваши карты и способности, восстанавливающие здоровье, вместо этого наносят урон."
+   }
+  },
+  "VAN_EX1_595": {
+   "text": {
+    "deDE": "Zieht jedes Mal eine Karte, wenn ein anderer befreundeter Diener stirbt.",
+    "enUS": "Whenever one of your other minions dies, draw a card.",
+    "esES": "Cuando uno de tus otros esbirros muere, roba una carta.",
+    "frFR": "Vous piochez une carte quand un de vos autres serviteurs meurt.",
+    "itIT": "Quando uno degli altri tuoi servitori muore, pesca una carta.",
+    "plPL": "Dobierz kartę za każdym razem, gdy zginie jeden z twoich pozostałych stronników.",
+    "ptBR": "Sempre que um de seus outros lacaios morrer, compre um card.",
+    "ruRU": "Когда другое ваше существо погибает, вы берете карту."
+   }
+  },
+  "VAN_EX1_608": {
+   "text": {
+    "deDE": "Eure Zauber kosten\n(1) weniger.",
+    "enUS": "Your spells cost (1) less.",
+    "esES": "Tus hechizos cuestan (1) cristal menos.",
+    "frFR": "Vos sorts coûtent (1) |4(cristal,cristaux) de moins.",
+    "itIT": "Le tue Magie costano (1) in meno.",
+    "plPL": "Twoje zaklęcia kosztują (1) mniej.",
+    "ptBR": "Seus feitiços custam (1) a menos.",
+    "ruRU": "Ваши заклинания стоят на (1) меньше."
+   }
+  },
+  "VAN_EX1_609": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Nachdem Euer Gegner einen Diener ausgespielt hat, werden diesem $4 Schaden zugefügt.",
+    "enUS": "<b>Secret:</b> After your opponent plays a minion, deal $4 damage to it.",
+    "esES": "<b>Secreto:</b> Cuando tu oponente juega un esbirro, le inflige $4 p. de daño.",
+    "frFR": "<b>Secret :</b> une fois que votre adversaire a joué un serviteur, ce dernier subit $4 |4(point,points) de dégâts.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha giocato un servitore, questo subisce $4 danni.",
+    "plPL": "<b>Sekret:</b> Gdy twój przeciwnik zagra stronnika, zadaj mu\n$4 pkt. obrażeń.",
+    "ptBR": "<b>Segredo:</b> Depois que seu oponente jogar um lacaio, cause $4 de dano ao lacaio.",
+    "ruRU": "<b>Секрет:</b> когда противник разыграет существо, наносит этому существу $4 ед. урона."
+   }
+  },
+  "VAN_EX1_611": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Wenn ein feindlicher Diener angreift, lasst ihn auf die Hand seines Besitzers zurückkehren.\nEr kostet (2) mehr.",
+    "enUS": "<b>Secret:</b> When an enemy minion attacks, return it to its owner's hand. It costs (2) more.",
+    "esES": "[x]<b>Secreto:</b> Cuando un esbirro\nenemigo vaya a atacar, lo\ndevuelve a la mano de su dueño.\nCuesta (2) cristales más.",
+    "frFR": "<b>Secret :</b> quand un serviteur adverse attaque, le renvoie dans la main de son propriétaire et il coûte désormais (2) cristaux de plus.",
+    "itIT": "<b>Segreto:</b> quando un servitore nemico attacca, ritorna nella mano di chi lo controlla e costa (2) in più.",
+    "plPL": "<b>Sekret:</b> Gdy wrogi stronnik zaatakuje, cofnij go do ręki właściciela\nKosztuje (2) więcej.",
+    "ptBR": "<b>Segredo:</b> Quando um lacaio inimigo atacar, devolva-o à mão do dono custando (2) a mais.",
+    "ruRU": "<b>Секрет:</b> когда существо противника атакует, возвращает его в руку владельца и увеличивает\nего стоимость на (2)."
+   }
+  },
+  "VAN_EX1_612": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Das nächste <b>Geheimnis</b>, das Ihr\nin diesem Zug aus[d]spielt, kostet (0).",
+    "enUS": "[x]<b>Battlecry:</b> The next <b>Secret</b>\nyou play this turn costs (0).",
+    "esES": "<b>Grito de batalla:</b>\nEl siguiente <b>Secreto</b>\nque juegues este turno costará (0) cristales.",
+    "frFR": "<b>Cri de guerre :</b> le prochain <b>Secret</b> que vous jouez pendant ce tour coûte (0) |4(cristal,cristaux).",
+    "itIT": "<b>Grido di Battaglia:</b> il prossimo <b>Segreto</b> che giochi in questo turno costa (0).",
+    "plPL": "<b>Okrzyk bojowy:</b> Następny <b>Sekret</b>,\nktóry zagrasz w tej turze, kosztuje (0).",
+    "ptBR": "<b>Grito de Guerra:</b> O próximo <b>Segredo</b>\nque você lançar neste turno custará (0).",
+    "ruRU": "<b>Боевой клич:</b> следующий <b>секрет</b> на этом ходу будет бесплатным."
+   }
+  },
+  "VAN_EX1_616": {
+   "text": {
+    "deDE": "ALLE Diener kosten\n(1) mehr.",
+    "enUS": "ALL minions cost (1) more.",
+    "esES": "Todos los esbirros cuestan (1) cristal más.",
+    "frFR": "TOUS les serviteurs coûtent (1) cristal de plus.",
+    "itIT": "TUTTI i servitori costano (1) in più.",
+    "plPL": "WSZYSCY stronnicy kosztują (1) więcej.",
+    "ptBR": "TODOS os lacaios custam (1) a mais.",
+    "ruRU": "Все существа стоят на (1) больше."
+   }
+  },
+  "VAN_EX1_620": {
+   "text": {
+    "deDE": "Kostet (1) weniger für jeden Lebenspunkt, der Eurem Helden fehlt.",
+    "enUS": "Costs (1) less for each damage your hero has taken.",
+    "esES": "Cuesta (1) cristal menos por cada punto de daño que haya recibido tu héroe.",
+    "frFR": "Coûte (1) cristal de moins pour chaque point de dégâts subi par votre héros.",
+    "itIT": "Costa (1) in meno per ogni danno subito dal tuo eroe.",
+    "plPL": "Kosztuje (1) mniej za każdy punkt obrażeń otrzymany przez twojego bohatera.",
+    "ptBR": "Custa (1) a menos para cada ponto de dano recebido pelo seu herói.",
+    "ruRU": "Стоит на (1) меньше\nза каждое повреждение, полученное вашим героем."
+   }
+  },
+  "VAN_NEW1_005": {
+   "text": {
+    "deDE": "<b>Combo:</b> Lasst einen\nDiener auf die Hand \nseines Besitzers zurückkehren.",
+    "enUS": "<b>Combo:</b> Return a minion to its owner's hand.",
+    "esES": "[x]<b>Combo:</b> Devuelve a\nun esbirro a la mano de\nsu dueño.",
+    "frFR": "<b>Combo :</b> renvoie un serviteur dans la main de son propriétaire.",
+    "itIT": "<b>Combo:</b> fa tornare un servitore nella mano di chi lo controlla.",
+    "plPL": "<b>Kombinacja:</b> Cofnij stronnika do ręki właściciela.",
+    "ptBR": "<b>Combo:</b> Devolva um lacaio à mão do dono.",
+    "ruRU": "<b>Серия приемов:</b> возвращает выбранное существо в руку владельца."
+   }
+  },
+  "VAN_NEW1_010": {
+   "text": {
+    "deDE": "<b>Windzorn</b>, <b>Ansturm</b>, <b>Gottesschild</b>, <b>Spott</b>",
+    "enUS": "<b>Windfury, Charge, Divine Shield, Taunt</b>",
+    "esES": "<b>Viento Furioso, Cargar, Escudo divino, Provocar</b>",
+    "frFR": "<b>Furie des vents, Charge, Bouclier divin, Provocation</b>",
+    "itIT": "<b>Provocazione</b>. <b>Scudo Divino</b>. <b>Furia del Vento</b>. <b>Carica</b>.",
+    "plPL": "<b>Furia wichru. Szarża. Boska tarcza. Prowokacja.</b>",
+    "ptBR": "<b>Fúria dos Ventos, Investida, Escudo Divino, Provocar</b>",
+    "ruRU": "<b>Неистовство ветра\n Рывок\n Божественный щит\n Провокация</b>"
+   }
+  },
+  "VAN_NEW1_016": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Zieht einen Piraten aus Eurem Deck.",
+    "enUS": "<b>Battlecry:</b> Draw a Pirate from your deck.",
+    "esES": "<b>Grito de batalla:</b> Roba un pirata de tu mazo.",
+    "frFR": "<b>Cri de guerre :</b> vous piochez un pirate de votre deck.",
+    "itIT": "<b>Grido di Battaglia:</b> pesca un Pirata casuale dal tuo mazzo.",
+    "plPL": "<b>Okrzyk bojowy:</b> Dobierz Pirata z twojej talii.",
+    "ptBR": "<b>Grito de Guerra:</b> Compre um Pirata do seu deck.",
+    "ruRU": "<b>Боевой клич:</b> вы кладете в руку случайного пирата из вашей колоды."
+   }
+  },
+  "VAN_NEW1_019": {
+   "text": {
+    "deDE": "Fügt einem zufälligen Feind 1 Schaden zu, nachdem Ihr einen Diener herbeigerufen habt.",
+    "enUS": "[x]After you summon a\nminion, deal 1 damage\nto a random enemy.",
+    "esES": "[x]Cuando invocas a un esbirro,\ninflige 1 p. de daño a\nun enemigo aleatorio.",
+    "frFR": "Inflige 1 point de dégâts à un adversaire aléatoire après que vous avez invoqué un serviteur.",
+    "itIT": "Dopo che è stato evocato un servitore sotto il tuo controllo, infligge 1 danno a un nemico casuale.",
+    "plPL": "Za każdym razem gdy przyzywasz stronnika, zadaj 1 pkt. obrażeń losowemu wrogowi.",
+    "ptBR": "[x]Depois de evocar um\nlacaio, cause 1 de dano a\n um inimigo aleatório.",
+    "ruRU": "Когда вы призываете существо, наносит 1 ед. урона случайному противнику."
+   }
+  },
+  "VAN_NEW1_022": {
+   "text": {
+    "deDE": "<b>Spott</b>. Kostet (1) weniger für jeden Angriffspunkt Eurer Waffe.",
+    "enUS": "<b>Taunt</b>\nCosts (1) less per Attack of your weapon.",
+    "esES": "[x]<b>Provocar</b>.\nCuesta (1) cristal menos\npor cada punto de ataque\nde tu arma.",
+    "frFR": "<b>Provocation</b>. Coûte (1) |4(cristal,cristaux) de moins par Attaque de votre arme.",
+    "itIT": "<b>Provocazione</b>. Costa (1) in meno per ogni punto Attacco della tua Arma.",
+    "plPL": "<b>Prowokacja.</b> Kosztuje (1) mniej za każdy punkt ataku twojej broni.",
+    "ptBR": "<b>Provocar</b>\nCusta (1) a menos por Ataque da sua arma.",
+    "ruRU": "<b>Провокация</b>. Стоит\nна (1) меньше за каждую единицу атаки вашего оружия."
+   }
+  },
+  "VAN_NEW1_029": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Im nächsten Zug kosten Zauber für Euren Gegner (0) Mana.",
+    "enUS": "<b>Battlecry:</b> Enemy spells cost (0) next turn.",
+    "esES": "<b>Grito de batalla:</b> Los hechizos enemigos cuestan (0) cristales el próximo turno.",
+    "frFR": "<b>Cri de guerre :</b> les sorts adverses coûtent (0) |4(cristal,cristaux) au prochain tour.",
+    "itIT": "<b>Grido di Battaglia:</b> nel turno successivo, le Magie dell'avversario costano (0).",
+    "plPL": "<b>Okrzyk bojowy:</b> W następnej turze zaklęcia przeciwnika kosztują (0).",
+    "ptBR": "<b>Grito de Guerra:</b> Feitiços inimigos custam (0) no próximo turno.",
+    "ruRU": "<b>Боевой клич:</b> в следующий ход противника его заклинания стоят (0)."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 7.1.0.17720 (Patch 7.1.0.17720; Card changes)",
+  "HearthstoneJSON builds 15590 and 17720: every card of the pack whose data, name or text differs",
+  "HearthstoneJSON build 17720: names and texts (tools/extract_cards.py --version-texts 17720 ...)"
+ ]
+}

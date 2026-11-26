@@ -1182,6 +1182,63 @@ class Eras(unittest.TestCase):
         self.assertEqual(self.card("6024", "VAN_CS2_237")[0]["cost"], 2)
 
 
+class ErasMsg(unittest.TestCase):
+    """packs/eras: the versions of the Mean Streets of Gadgetzan era (15590, 16214, 17720), each from the msg pack."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.files, cls.report = pack.build(pack.REPO / "packs/eras")
+        cls.man = json.loads(cls.files["manifest.json"])
+
+    card = Eras.card
+
+    def test_the_versions_and_their_scripts(self):
+        self.assertEqual(self.report.errors, [])
+        ids = [v["id"] for v in self.man["versions"]]
+        self.assertLess(ids.index("15590"), ids.index("16214"))
+        self.assertLess(ids.index("16214"), ids.index("17720"))
+        msg, _ = pack.build(pack.REPO / "packs/msg")
+        views = {vid: pack.version_view(self.files, vid) for vid in ("15590", "16214", "17720")}
+        # 15590 and 16214 are the msg pack's cards and texts; only their scripts differ
+        for vid in ("15590", "16214"):
+            for p, d in msg.items():
+                if pack.is_version_file(p) and not p.startswith("scripts/"):
+                    self.assertEqual(views[vid].get(p), d, f"{vid} {p}")
+        scripts = {vid: sorted(p for p in v if p.startswith("scripts/version/")) for vid, v in views.items()}
+        self.assertEqual(scripts, {"15590": ["scripts/version/kabal_chemist.lua", "scripts/version/mistcaller.lua"],
+                                   "16214": ["scripts/version/mistcaller.lua"],
+                                   "17720": ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua"]})
+
+    def test_17720_nerfs_small_time_buccaneer_and_spirit_claws(self):
+        for vid, hp, cost in (("16214", 2, 1), ("17720", 1, 2)):
+            self.assertEqual(self.card(vid, "CFM_325")[0]["health"], hp, vid)
+            self.assertEqual(self.card(vid, "KAR_063")[0]["cost"], cost, vid)
+        self.assertEqual(self.card("16214", "CFM_025")[0]["keywords"], ["CHOOSE_ONE", "TRIGGER_VISUAL"])
+        self.assertEqual(self.card("17720", "CFM_025")[0]["keywords"], ["TRIGGER_VISUAL"], "Wind-up Burglebot")
+
+    def test_17720_writes_poisonous_and_rewords(self):
+        for cid in ("VAN_EX1_170", "FP1_010", "LOE_010"):
+            old, new = self.card("16214", cid)[1], self.card("17720", cid)[1]
+            self.assertEqual(old["en"]["text"], "Destroy any minion damaged by this minion.", cid)
+            self.assertEqual(new["en"]["text"], "<b>Poisonous</b>", cid)
+            self.assertEqual(new["ru"]["text"], "<b>Яд</b>", cid)
+        self.assertEqual(self.card("17720", "VAN_EX1_522")[1]["en"]["text"], "<b>Stealth</b>\n <b>Poisonous</b>")
+        self.assertEqual(self.card("16214", "VAN_NEW1_016")[1]["en"]["text"],
+                         "<b>Battlecry:</b> Put a random Pirate from your deck into your hand.")
+        parrot = self.card("17720", "VAN_NEW1_016")[1]
+        self.assertEqual(parrot["en"]["text"], "<b>Battlecry:</b> Draw a Pirate from your deck.")
+        self.assertEqual(parrot["de"]["text"], "<b>Kampfschrei:</b> Zieht einen Piraten aus Eurem Deck.")
+        self.assertEqual(self.card("17720", "BRM_005")[1]["en"]["text"], "[x]Deal $2 damage to all\nminions except Demons.")
+        # every text of the patch is in 17720 and differs from 16214's in some language
+        patch = json.loads((pack.REPO / "packs/eras/versions/17720/patch.json").read_text())
+        for cid, ch in patch["cards"].items():
+            old, new = self.card("16214", cid)[1], self.card("17720", cid)[1]
+            for f in ("name", "text"):
+                if f in ch:
+                    self.assertEqual({lang: new[lang][f] for lang in new}, {lang: ch[f][hs] for lang, hs in pack.HS_LOCALES.items()}, cid)
+                    self.assertNotEqual({lang: old[lang][f] for lang in old}, {lang: new[lang][f] for lang in new}, cid)
+
+
 class TestDistribution(unittest.TestCase):
     """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
 
