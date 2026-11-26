@@ -13,6 +13,7 @@ const FIREBALL: &str = "VAN_CS2_029";
 const LOOT_HOARDER: &str = "VAN_EX1_096";
 
 #[test]
+#[ignore = "slow (11 min); eras_versions.rs covers every version in the usual run: cargo test --release --test eras_every_card -- --ignored"]
 fn every_card_of_every_version_plays_without_a_script_error() {
     let repo = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
     let out = std::env::temp_dir().join(format!("eras-every-card-{}.cardpack", std::process::id()));

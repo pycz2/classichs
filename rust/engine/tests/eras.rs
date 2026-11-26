@@ -486,6 +486,7 @@ fn patch_13619_the_tidal_hand_needs_a_free_board_slot() {
 /// Every card of every version (collectible or not: tokens, the cards powers make) played from the hand into a
 /// busy board, a few bot moves after, and every hero's power used: no script error.
 #[test]
+#[ignore = "slow (every card, tokens too: 6 min); eras_versions.rs covers every version in the usual run: cargo test --release --test eras -- --ignored"]
 fn every_card_of_every_version_plays_without_a_script_error() {
     let Some(eras) = built("packs/eras") else {
         eprintln!("no python3: skipped");
