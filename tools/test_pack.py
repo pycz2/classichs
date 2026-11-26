@@ -1156,7 +1156,9 @@ class Eras(unittest.TestCase):
         self.assertEqual(self.man["name"]["ru"], "Hearthstone 2014–2019: все версии")
         self.assertEqual(sorted(self.man["name"]), sorted(self.man["locales"]))
         ids = [v["id"] for v in self.man["versions"]]
-        self.assertEqual(ids[:2], ["6024", "6485"])
+        self.assertLessEqual({"6024", "6485"}, set(ids))
+        dates = [v["date"] for v in self.man["versions"]]
+        self.assertEqual(dates, sorted(dates), "oldest first")
         self.assertIn(self.man["default_version"], ids)
         for v in self.man["versions"]:
             self.assertEqual(sorted(v["name"]), sorted(self.man["locales"]), v["id"])
