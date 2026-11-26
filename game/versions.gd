@@ -104,7 +104,8 @@ static func _cards(p: Pack, lang: String) -> Dictionary:
 		var d: Dictionary = c.duplicate()
 		var t: Dictionary = texts.get(c.id, base.get(c.id, {})) if texts is Dictionary else {}
 		d.name = str(t.get("name", c.id))
-		d.text = str(t.get("text", ""))
+		# as the card shows it: hand-placed line breaks ([x]) and runs of spaces are no change
+		d.text = " ".join(str(t.get("text", "")).replace("[x]", "").replace("\n", " ").split(" ", false))
 		if d.get("keywords") is Array:
 			d.keywords = d.keywords.duplicate()
 			d.keywords.sort()
