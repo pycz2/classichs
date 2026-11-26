@@ -958,6 +958,34 @@ func _fill_sounds() -> void:
 		rm.pressed.connect(remove_sound.bind(slot))
 		row.add_child(rm)
 		_sounds.add_child(row)
+	var hero: bool = project.card(cid).get("type") == "CHAMPION"
+	if not hero and not project.card(cid).get("type") in ["MINION", "WEAPON"]:
+		return
+	_sounds.add_child(Palette.label(tr("Lines (%s)") % LANG_NAMES[lang], 18, Palette.ATTACK))
+	for kind: String in StudioProject.HERO_LINES if hero else StudioProject.CARD_LINES:
+		var row := HBoxContainer.new()
+		row.name = "line_" + kind
+		var l := Palette.label(tr(LINE_NAMES[kind]), 16)
+		l.custom_minimum_size.x = 110
+		row.add_child(l)
+		var e := LineEdit.new()
+		e.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		e.text = project.voice_line(cid, lang, kind)
+		e.placeholder_text = project.voice_line(cid, "en", kind)
+		e.text_changed.connect(func(t): set_line(kind, t))
+		row.add_child(e)
+		_sounds.add_child(row)
+
+
+## The words a hero, a minion or a weapon says at a moment (locales' `voice`), in the chosen language.
+const LINE_NAMES := {"start": "Game start", "greetings": "Greetings", "well_played": "Well played", "thanks": "Thanks",
+	"wow": "Wow", "oops": "Oops", "threaten": "Threaten", "play": "Played", "attack": "Attacks", "death": "Dies",
+	"trigger": "Its effect"}
+
+
+func set_line(kind: String, line: String) -> void:
+	project.set_voice_line(cid, lang, kind, line)
+	_touch()
 
 
 func load_sound(slot: String, bytes: PackedByteArray, ext: String) -> String:

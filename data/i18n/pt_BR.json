@@ -1314,5 +1314,16 @@
 "Turn timer, seconds": "Tempo do turno, segundos",
 "A tribe with this id exists": "Já existe uma raça com este id",
 "Cards are of this tribe": "Há cartas desta raça",
-"Or several classes": "Ou várias classes"
+"Or several classes": "Ou várias classes",
+"Attacks": "Ataca",
+"Game start": "Início da partida",
+"Greetings": "Saudações",
+"Its effect": "Efeito",
+"Lines (%s)": "Falas (%s)",
+"Oops": "Opa",
+"Played": "Jogado",
+"Thanks": "Obrigado",
+"Threaten": "Ameaça",
+"Well played": "Boa jogada",
+"Wow": "Uau"
 }

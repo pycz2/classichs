@@ -1314,5 +1314,16 @@
 "Turn timer, seconds": "Время на ход, секунд",
 "A tribe with this id exists": "Раса с таким id уже есть",
 "Cards are of this tribe": "Есть карты этой расы",
-"Or several classes": "Или несколько классов"
+"Or several classes": "Или несколько классов",
+"Attacks": "Атакует",
+"Game start": "Начало игры",
+"Greetings": "Приветствие",
+"Its effect": "Срабатывание",
+"Lines (%s)": "Реплики (%s)",
+"Oops": "Ой",
+"Played": "Розыгрыш",
+"Thanks": "Спасибо",
+"Threaten": "Угроза",
+"Well played": "Хорошо сыграно",
+"Wow": "Ух ты"
 }

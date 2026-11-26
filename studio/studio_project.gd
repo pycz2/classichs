@@ -392,14 +392,15 @@ func remove_card(cid: String) -> void:
 	cards = cards.filter(func(c): return c.id != cid)
 	effects.erase(cid)
 	for lang in locales:
-		if locales[lang].get("cards") is Dictionary:
-			locales[lang].cards.erase(cid)
+		for section in ["cards", "voice"]:
+			if locales[lang].get(section) is Dictionary:
+				locales[lang][section].erase(cid)
 	for f in _media(cid):
 		DirAccess.remove_absolute(f)
 	set_framing(cid, 0, 0, 1)
 
 
-## Renames a card everywhere (texts, effect, pictures, sounds, decks, heroes' powers). "" or why it can't.
+## Renames a card everywhere (texts, voice lines, effect, pictures, sounds, decks, heroes' powers). "" or why it can't.
 func rename_card(old: String, new: String) -> String:
 	if _card_re.search(new) == null:
 		return "Use Latin letters, digits and underscores"
@@ -413,10 +414,11 @@ func rename_card(old: String, new: String) -> String:
 		effects[new] = effects[old]
 		effects.erase(old)
 	for lang in locales:
-		var t: Dictionary = locales[lang].get("cards", {})
-		if t.has(old):
-			t[new] = t[old]
-			t.erase(old)
+		for section in ["cards", "voice"]:
+			var t: Dictionary = locales[lang].get(section, {})
+			if t.has(old):
+				t[new] = t[old]
+				t.erase(old)
 	for f in _media(old):
 		DirAccess.rename_absolute(f, f.get_base_dir() + "/" + new + f.get_file().trim_prefix(old))
 	var fr := framing_all()
@@ -471,6 +473,29 @@ func set_text(cid: String, lang: String, name: String, body: String) -> void:
 		t.erase(cid)
 	else:
 		t[cid] = e
+
+
+## The kinds of a card's voice lines (docs/packs/format.md §7): a hero's, a minion's or a weapon's.
+const HERO_LINES := ["start", "greetings", "well_played", "thanks", "wow", "oops", "threaten"]
+const CARD_LINES := ["play", "attack", "death", "trigger"]
+
+
+## A card's voice line of a kind in a language ("" when none: locales' `voice`).
+func voice_line(cid: String, lang: String, kind: String) -> String:
+	return str(locales.get(lang, {}).get("voice", {}).get(cid, {}).get(kind, ""))
+
+
+func set_voice_line(cid: String, lang: String, kind: String, line: String) -> void:
+	var v: Dictionary = locales.get_or_add(lang, {}).get_or_add("voice", {})
+	var mine: Dictionary = v.get_or_add(cid, {})
+	if line.strip_edges() == "":
+		mine.erase(kind)
+	else:
+		mine[kind] = line
+	if mine.is_empty():
+		v.erase(cid)
+	if v.is_empty():
+		locales[lang].erase("voice")
 
 
 ## Gives a card its effect (StudioEffects: {blocks, lua}): its script is made on save(), and the mechanics its

@@ -1314,5 +1314,16 @@
 "Turn timer, seconds": "Zugzeit in Sekunden",
 "A tribe with this id exists": "Ein Volk mit dieser ID gibt es schon",
 "Cards are of this tribe": "Es gibt Karten dieses Volks",
-"Or several classes": "Oder mehrere Klassen"
+"Or several classes": "Oder mehrere Klassen",
+"Attacks": "Greift an",
+"Game start": "Spielbeginn",
+"Greetings": "Grüße",
+"Its effect": "Effekt",
+"Lines (%s)": "Sprüche (%s)",
+"Oops": "Hoppla",
+"Played": "Ausgespielt",
+"Thanks": "Danke",
+"Threaten": "Drohen",
+"Well played": "Gut gespielt",
+"Wow": "Wow"
 }
