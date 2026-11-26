@@ -69,7 +69,10 @@ Left for 0.73.0:
   the Training format choice is not remembered; Compare versions flags markup-only text differences across bases.
 - The foldable phone: edge-to-edge (no bars) needs every screen laid out for any aspect — the owner to decide.
 - Text-only versions share a rules hash (13921/14366, 18336/19506/19632, 23180/23576, 29933/30103): one ladder each.
-- Assemble the 8-language changelog from docs/changelog-0.73.0/*.md; then release.
+- The server keeps at most MAX_RULESETS = 48 rule sets loaded (server/src/packs.rs; leaked 'static, freed only by a
+  restart): with 58 eras versions plus 18 packs, players opening many versions hit "try again after its restart".
+  Measure one ruleset's memory (the host has ~900 MB), then unload unused ones (refcount / LRU) or raise the limit.
+- Changelog: assembled in CHANGELOG.md / data/changelog (2ecdc2e); add the last items before the release.
 
 
 One pack with shared media (pictures, sounds, music) and every game version up to the end of Rise of Shadows: each
