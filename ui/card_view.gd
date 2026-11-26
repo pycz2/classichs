@@ -30,6 +30,8 @@ const ECHO := Color("b48cff")
 const GHOST_FLAME := preload("res://ui/ghost_flame.gdshader")
 static var _ghost_mat: ShaderMaterial
 var ghost: ColorRect
+## The pack (a version of the active game) whose card it draws; null: the active pack's.
+var pack: Pack
 
 
 static func make(id: String, scale_factor := 1.0) -> CardView:
@@ -142,6 +144,15 @@ func _draw_words(k: float) -> void:
 
 
 func _draw() -> void:
+	var other := pack != null and pack != Packs.active()
+	if other:
+		CardDb.begin(pack)
+	_draw_card()
+	if other:
+		CardDb.end()
+
+
+func _draw_card() -> void:
 	var k := size.x / SIZE.x
 	var r := Rect2(Vector2.ZERO, size)
 	_draw_glow(r, int(12 * k))

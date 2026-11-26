@@ -81,6 +81,11 @@ func _ready() -> void:
 	if pack:
 		title.text = pack.title()
 	box.add_child(title)
+	if pack and pack.version_id != "":  # a game with versions: the one played
+		var ver := Palette.label(Versions.label(pack), 22, Palette.ATTACK)
+		ver.name = "GameVersion"
+		ver.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		box.add_child(ver)
 	if not Anim.instant:
 		pic.pivot_offset = Vector2(640, 360) + Vector2(PIC_MARGIN, PIC_MARGIN)
 		var drift := pic.create_tween().set_loops()
@@ -216,7 +221,7 @@ func _show_game() -> void:
 
 func _fill(items: Array) -> void:
 	for c in _box.get_children():
-		if c.name != "Title":
+		if c.name != "Title" and c.name != "GameVersion":
 			_box.remove_child(c)
 			c.queue_free()
 	for it in items:

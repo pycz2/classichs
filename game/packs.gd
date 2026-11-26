@@ -434,7 +434,7 @@ static func renames() -> Dictionary:
 ## The icon of a set mark (CardText.set_key) of the active pack: manifest `set_marks.<key>.icon`. Null
 ## when it has none: Classic shows no marks, the packs after it mark each card with its set.
 static func set_mark(key: String) -> Texture2D:
-	var p := active()
+	var p := CardDb.pack()
 	var marks = p.manifest.get("set_marks", {}) if p else {}
 	var icon = marks.get(key, {}).get("icon") if marks is Dictionary and marks.get(key) is Dictionary else null
 	if not icon is String or icon == "":

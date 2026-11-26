@@ -381,7 +381,7 @@ static func shapes(card_id: String, rect: Rect2) -> Array:
 static func texture(card_id: String) -> Texture2D:
 	if _textures.has(card_id):
 		return Lru.get_of(_textures, card_id)
-	var p := Packs.active()
+	var p := CardDb.pack()
 	var tex: Texture2D = null
 	var framing = null
 	var chosen := Packs.choice(p, "art") if p else ""
@@ -434,7 +434,7 @@ static var _sets: Array = []
 ## player's folders that have pictures of the pack's cards.
 static func sets() -> Array:
 	if _sets.is_empty():
-		var p := Packs.active()
+		var p := CardDb.pack()
 		var out := []
 		for s in p.sets("art") if p else []:
 			if p.set_usable("art", s):
