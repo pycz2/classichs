@@ -785,7 +785,7 @@ func pick_test_card(id: String) -> void:
 	_show_walk()
 
 
-## A checklist item: none → passed → failed → none.
+## A checklist item: none, passed, failed, none again.
 func cycle_check(item: String) -> void:
 	var now := str(CardScenarios.card_marks(test_card).get("check", {}).get(item, ""))
 	var next: String = {"": "passed", "passed": "failed", "failed": ""}.get(now, "")
