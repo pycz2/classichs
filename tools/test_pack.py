@@ -969,6 +969,182 @@ class Neonfall(unittest.TestCase):
             self.assertTrue(all(v.strip() for v in loc["tutorial"].values()), p)
 
 
+class Versions(unittest.TestCase):
+    """A pack with versions (format.md §13): the view of a version, the checks, the builder from version patches."""
+
+    def mega(self):
+        """tiny() with versions a (as it is, the default) and b (M2 costs 4)."""
+        base = as_files(tiny())
+        cards = json.loads(base["cards.json"])
+        cards[4]["cost"] = 4
+        b = {**base, "cards.json": json.dumps(cards).encode()}
+        files = {p: d for p, d in base.items() if not pack.is_version_file(p)}
+        files.update(("versions/a/" + p, d) for p, d in base.items() if pack.is_version_file(p))
+        files.update(("versions/b/" + p, d) for p, d in b.items() if pack.is_version_file(p))
+        files.update((p, d) for p, d in base.items() if pack.is_version_file(p))
+        files["art/x/M1.png"] = b"png"
+        man = {**tiny()["manifest.json"], "art_sets": [{"id": "x"}], "default_version": "a", "versions": [
+            {"id": "a", "dir": "versions/a", "rules_hash": pack.rules_hash(base)},
+            {"id": "b", "dir": "versions/b", "rules_hash": pack.rules_hash(b), "formats": ["standard"]}]}
+        man["rules_hash"] = man["versions"][0]["rules_hash"]
+        files["manifest.json"] = json.dumps(man).encode()
+        return files, b
+
+    def test_a_view_is_the_shared_files_and_the_version(self):
+        files, b = self.mega()
+        self.assertEqual(pack.version_ids(files), ["a", "b"])
+        self.assertEqual(pack.version_ids(as_files(tiny())), [])
+        view = pack.version_view(files, "b")
+        self.assertEqual(view["cards.json"], b["cards.json"])
+        self.assertEqual(view["art/x/M1.png"], b"png")  # shared
+        self.assertFalse([p for p in view if p.startswith("versions/")])
+        self.assertEqual(json.loads(view["manifest.json"])["rules_hash"], pack.rules_hash(b))
+        self.assertEqual(pack.rules_hash(view), pack.rules_hash(b))
+        self.assertNotEqual(pack.rules_hash(view), pack.rules_hash(files))  # the top is the default version a
+        self.assertEqual(pack.rules_hash(pack.version_view(files, "a")), pack.rules_hash(files))
+        with self.assertRaises(pack.PackError):
+            pack.version_view(files, "c")
+        # a version without its own decks has none: the top's are the default version's
+        del files["versions/b/decks/red.json"]
+        self.assertNotIn("decks/red.json", pack.version_view(files, "b"))
+
+    def test_every_version_is_checked(self):
+        files, _ = self.mega()
+        self.assertEqual(pack.check_files(files).errors, [])
+
+        def errs(change):
+            f = dict(files)
+            change(f)
+            return pack.check_files(f).errors
+        self.assertTrue(any("versions/c/" in e for e in errs(lambda f: f.update({"versions/c/rules.json": b"{}"}))))
+        self.assertTrue(any("versions/a/art" in e for e in errs(lambda f: f.update({"versions/a/art/x/M2.png": b"png"}))))
+        cards = json.loads(files["versions/b/cards.json"])
+        cards[4]["cost"] = 7  # the manifest's rules_hash of b is stale
+        self.assertTrue(any(e.startswith("version b: ") and "rules_hash" in e
+                            for e in errs(lambda f: f.update({"versions/b/cards.json": json.dumps(cards).encode()}))))
+        self.assertTrue(any("not those of the default version" in e
+                            for e in errs(lambda f: f.update({"cards.json": files["versions/b/cards.json"]}))))
+        man = json.loads(files["manifest.json"])
+        self.assertTrue(any("default_version" in e for e in errs(
+            lambda f: f.update({"manifest.json": json.dumps({**man, "default_version": "z"}).encode()}))))
+
+    def test_a_version_patch(self):
+        vf = {"cards.json": pack.pretty([{"id": "A", "type": "MINION", "class": "GREY", "cost": 2, "keywords": ["WALL"]},
+                                         {"id": "B", "type": "MINION", "class": "GREY", "cost": 1}]),
+              "rules.json": pack.pretty({"limits": {}}),
+              "locales/en.json": pack.pretty({"cards": {"A": {"name": "A", "text": "old"}, "B": {"name": "B"}}}),
+              "locales/ru.json": pack.pretty({"cards": {"A": {"name": "А"}}}),
+              "layout/en.json": pack.pretty({"A": {"lines": ["old"]}, "B": {"lines": ["b"]}})}
+        patch = {"cards": {"A": {"cost": 5, "mechanics": [], "spellDamage": 1, "text": {"enUS": "new", "ruRU": "новый"}}},
+                 "remove": ["B"], "add": [{"id": "N", "type": "HERO_POWER", "cardClass": "RED", "cost": 2,
+                                          "name": {"enUS": "New", "ruRU": "Новая"}, "flavor": "x"}],
+                 "behaviour": {"lifesteal_one_heal": True}}
+        out = pack.apply_version_patch(dict(vf), patch, "p")
+        cards = {c["id"]: c for c in json.loads(out["cards.json"])}
+        self.assertEqual(cards["A"], {"id": "A", "type": "MINION", "class": "GREY", "cost": 5, "spell_power": 1})
+        self.assertEqual(cards["N"], {"id": "N", "type": "POWER", "class": "RED", "cost": 2})
+        self.assertNotIn("B", cards)
+        en, ru = json.loads(out["locales/en.json"]), json.loads(out["locales/ru.json"])
+        self.assertEqual((en["cards"]["A"]["text"], ru["cards"]["A"]["text"], ru["cards"]["N"]["name"]), ("new", "новый", "Новая"))
+        self.assertNotIn("B", en["cards"])
+        self.assertEqual(json.loads(out["layout/en.json"]), {})  # A's text changed, B is gone
+        self.assertEqual(json.loads(out["rules.json"])["behaviour"], {"lifesteal_one_heal": True})
+        with self.assertRaisesRegex(pack.PackError, "ruRU"):  # a text in every language of the pack
+            pack.apply_version_patch(dict(vf), {"cards": {"A": {"text": {"enUS": "x"}}}}, "p")
+        with self.assertRaisesRegex(pack.PackError, "no card Z"):
+            pack.apply_version_patch(dict(vf), {"cards": {"Z": {"cost": 1}}}, "p")
+        self.assertEqual(pack.apply_version_patch(dict(vf), {}, "p"), vf)  # an empty patch: the base as it is
+
+    def test_building_from_version_patches(self):
+        with tempfile.TemporaryDirectory() as t:
+            t = Path(t)
+            for p, v in as_files(tiny()).items():
+                Chain.write(self, t / "base", p, v)
+            Chain.write(self, t / "base", "art/x/M1.png", b"png")
+            Chain.write(self, t / "base", "manifest.json", {**tiny()["manifest.json"], "art_sets": [{"id": "x"}]})
+            Chain.write(self, t / "mega", "manifest.json", {**tiny()["manifest.json"], "id": "test.mega"})
+            Chain.write(self, t / "mega", "recipe.json", {"default_version": "2", "versions": [
+                {"id": "1", "date": "2014-01-01"}, {"id": "2", "name": {"en": "Two"}, "formats": ["standard"]}]})
+            Chain.write(self, t / "mega", "versions/1/patch.json", {"base": "base", "build": 1})
+            Chain.write(self, t / "mega", "versions/2/patch.json", {"base": "base", "build": 2, "cards": {"M2": {"cost": 4}}})
+            Chain.write(self, t / "mega", "versions/2/scripts/fix.lua", b"return {}\n")
+            files, r = pack.build(t / "mega")
+            self.assertEqual(r.errors, [])
+            man = json.loads(files["manifest.json"])
+            self.assertEqual(man["id"], "test.mega")
+            self.assertEqual(man["art_sets"], [{"id": "x"}])  # the bases' sets
+            self.assertEqual([(v["id"], v["build"], v["dir"]) for v in man["versions"]],
+                             [("1", 1, "versions/1"), ("2", 2, "versions/2")])
+            self.assertEqual(man["versions"][0]["rules_hash"], pack.rules_hash(pack.build(t / "base")[0]))
+            self.assertEqual(man["rules_hash"], man["versions"][1]["rules_hash"])
+            v2 = pack.version_view(files, "2")
+            self.assertEqual(next(c for c in json.loads(v2["cards.json"]) if c["id"] == "M2")["cost"], 4)
+            self.assertEqual(v2["scripts/version/fix.lua"], b"return {}\n")
+            self.assertIn("art/x/M1.png", files)
+            self.assertNotIn("versions/1/art/x/M1.png", files)
+            self.assertEqual(files["cards.json"], files["versions/2/cards.json"])  # the top is the default version
+            self.assertFalse([p for p in files if "patch" in p or "recipe" in p])
+            Chain.write(self, t / "mega", "versions/2/patch.json", {"base": "base", "cards": {"M2": {"text": {"deDE": "x"}}}})
+            with self.assertRaises(pack.PackError):  # (a text without English)
+                pack.build(t / "mega")
+
+    def test_up_to_date_sees_the_bases(self):
+        import os
+        with tempfile.TemporaryDirectory() as t:
+            out = Path(t) / "eras.cardpack"
+            out.write_bytes(b"x")
+            os.utime(out, (2e9, 2e9))  # newer than every file
+            self.assertTrue(pack.up_to_date(pack.REPO / "packs/eras", out))
+            inputs = pack._inputs(pack.REPO / "packs/eras")
+            self.assertIn(pack.REPO / "packs/naxx", inputs)
+            self.assertIn((pack.REPO / "packs/classic").resolve(), inputs)  # naxx's base
+
+
+class Eras(unittest.TestCase):
+    """packs/eras: Hearthstone 2014–2019 in one pack, a version per game version (packs/eras/README.md)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.files, cls.report = pack.build(pack.REPO / "packs/eras")
+        cls.man = json.loads(cls.files["manifest.json"])
+
+    def card(self, vid, cid):
+        v = pack.version_view(self.files, vid)
+        c = next(c for c in json.loads(v["cards.json"]) if c["id"] == cid)
+        return c, {lang: json.loads(v[f"locales/{lang}.json"])["cards"][cid] for lang in self.man["locales"]}
+
+    def test_it_builds_and_every_version_checks(self):
+        self.assertEqual(self.report.errors, [])
+        self.assertEqual(self.man["id"], "hs-eras")
+        self.assertEqual(self.man["name"]["ru"], "Hearthstone 2014–2019: все версии")
+        self.assertEqual(sorted(self.man["name"]), sorted(self.man["locales"]))
+        ids = [v["id"] for v in self.man["versions"]]
+        self.assertEqual(ids[:2], ["6024", "6485"])
+        self.assertIn(self.man["default_version"], ids)
+        for v in self.man["versions"]:
+            self.assertEqual(sorted(v["name"]), sorted(self.man["locales"]), v["id"])
+            self.assertEqual(v["rules_hash"], pack.rules_hash(pack.version_view(self.files, v["id"])))
+        self.assertFalse(pack.bundle_in_client(pack.REPO / "packs/eras"))
+
+    def test_6024_is_the_naxxramas_pack(self):
+        naxx, _ = pack.build(pack.REPO / "packs/naxx")
+        view = pack.version_view(self.files, "6024")
+        self.assertEqual(pack.rules_hash(view), pack.rules_hash(naxx))
+        self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p)},
+                         {p: d for p, d in naxx.items() if pack.is_version_file(p)})
+        self.assertEqual(self.card("6024", "VAN_EX1_116")[0]["cost"], 4)
+
+    def test_6485_nerfs_leeroy_jenkins_and_starving_buzzard(self):
+        leeroy, texts = self.card("6485", "VAN_EX1_116")
+        self.assertEqual((leeroy["cost"], leeroy["attack"], leeroy["health"]), (5, 6, 2))
+        self.assertEqual(texts["pl"]["text"], "<b>Szarża</b>. <b>Okrzyk bojowy:</b> Przyzwij dwa Pisklęta 1/1 swojemu przeciwnikowi.")
+        buzzard, texts = self.card("6485", "VAN_CS2_237")
+        self.assertEqual((buzzard["cost"], buzzard["attack"], buzzard["health"]), (5, 3, 2))
+        self.assertEqual(texts["en"], {"name": "Starving Buzzard", "text": "Whenever you summon a Beast, draw a card."})
+        self.assertEqual(texts["ru"]["text"], "Каждый раз, когда вы призываете зверя на поле боя, вы берете карту.")
+        self.assertEqual(self.card("6024", "VAN_CS2_237")[0]["cost"], 2)
+
+
 class TestDistribution(unittest.TestCase):
     """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
 

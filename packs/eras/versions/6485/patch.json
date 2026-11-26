@@ -1,0 +1,59 @@
+{
+ "base": "naxx",
+ "build": 6485,
+ "about": "1.2.0.6485 (2014-09-22): Starving Buzzard and Leeroy Jenkins nerfs",
+ "cards": {
+  "VAN_CS2_237": {
+   "cost": 5,
+   "attack": 3,
+   "health": 2,
+   "name": {
+    "deDE": "Verhungernder Bussard",
+    "enUS": "Starving Buzzard",
+    "esES": "Águila ratonera famélica",
+    "frFR": "Busard affamé",
+    "itIT": "Condor Affamato",
+    "plPL": "Wygłodniały sęp",
+    "ptBR": "Urubu Faminto",
+    "ruRU": "Голодный канюк"
+   },
+   "text": {
+    "deDE": "Zieht jedes Mal eine Karte, wenn Ihr ein Wildtier herbeiruft.",
+    "enUS": "Whenever you summon a Beast, draw a card.",
+    "esES": "Cada vez que invocas una bestia, roba una carta.",
+    "frFR": "Vous piochez une carte chaque fois que vous invoquez une bête.",
+    "itIT": "Quando evochi una Bestia, pesca una carta.",
+    "plPL": "Dobierz kartę za każdym razem, gdy przyzywasz Bestię.",
+    "ptBR": "Sempre que você evocar uma Fera, compre um card.",
+    "ruRU": "Каждый раз, когда вы призываете зверя на поле боя, вы берете карту."
+   }
+  },
+  "VAN_EX1_116": {
+   "cost": 5,
+   "name": {
+    "deDE": "Leeroy Jenkins",
+    "enUS": "Leeroy Jenkins",
+    "esES": "Leeroy Jenkins",
+    "frFR": "Leeroy Jenkins",
+    "itIT": "Leeroy Jenkins",
+    "plPL": "Leeroy Jenkins",
+    "ptBR": "Leeroy Jenkins",
+    "ruRU": "Лирой Дженкинс"
+   },
+   "text": {
+    "deDE": "<b>Ansturm</b>. <b>Kampfschrei:</b> Ruft zwei Welplinge (1/1) für Euren Gegner herbei.",
+    "enUS": "<b>Charge</b>. <b>Battlecry:</b> Summon two 1/1 Whelps for your opponent.",
+    "esES": "<b>Cargar</b>. <b>Grito de batalla:</b> Invoca dos crías 1/1 para tu oponente.",
+    "frFR": "<b>Charge</b>. <b>Cri de guerre :</b> invoque deux dragonnets 1/1 pour votre adversaire.",
+    "itIT": "<b>Carica</b>. <b>Grido di Battaglia:</b> evoca due Draghetti 1/1 sotto il controllo dell'avversario.",
+    "plPL": "<b>Szarża</b>. <b>Okrzyk bojowy:</b> Przyzwij dwa Pisklęta 1/1 swojemu przeciwnikowi.",
+    "ptBR": "<b>Investida</b>. <b>Grito de Guerra:</b> Evoque dois Dragonetes 1/1 para o seu oponente.",
+    "ruRU": "<b>Рывок</b>. <b>Боевой клич:</b> призывает на сторону вашего противника двух дракончиков 1/1."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 1.2.0.6485 (Patch 1.2.0.6485; Card changes)",
+  "HearthstoneJSON build 6485: names and texts (tools/extract_cards.py --version-texts 6485 VAN_CS2_237 VAN_EX1_116)"
+ ]
+}

@@ -1,0 +1,31 @@
+{
+  "format": 1,
+  "id": "hs-eras",
+  "version": "1.0.0",
+  "engine": "0.73.0",
+  "name": {
+    "en": "Hearthstone 2014–2019: every version",
+    "ru": "Hearthstone 2014–2019: все версии",
+    "de": "Hearthstone 2014–2019: alle Versionen",
+    "fr": "Hearthstone 2014–2019 : toutes les versions",
+    "es": "Hearthstone 2014–2019: todas las versiones",
+    "pt_BR": "Hearthstone 2014–2019: todas as versões",
+    "it": "Hearthstone 2014–2019: tutte le versioni",
+    "pl": "Hearthstone 2014–2019: wszystkie wersje"
+  },
+  "description": {
+    "en": "The game as it was played from 2014 to 2019, version by version: every balance patch and every expansion, each with the cards, texts and rules of its day. Choose the version you want to play.",
+    "ru": "Игра, как в неё играли с 2014 по 2019 год, версия за версией: каждый балансный патч и каждое дополнение, с картами, текстами и правилами своего времени. Выберите версию, в которую хотите играть.",
+    "de": "Das Spiel, wie es von 2014 bis 2019 gespielt wurde, Version für Version: jeder Balance-Patch und jede Erweiterung, jeweils mit den Karten, Texten und Regeln ihrer Zeit. Wählt die Version, die Ihr spielen wollt.",
+    "fr": "Le jeu tel qu’on le jouait de 2014 à 2019, version après version : chaque correctif d’équilibrage et chaque extension, avec les cartes, les textes et les règles de leur époque. Choisissez la version à laquelle vous voulez jouer.",
+    "es": "El juego tal como se jugaba de 2014 a 2019, versión a versión: cada parche de equilibrio y cada expansión, con las cartas, los textos y las reglas de su época. Elige la versión que quieras jugar.",
+    "pt_BR": "O jogo como era jogado de 2014 a 2019, versão por versão: cada patch de balanceamento e cada expansão, com os cards, textos e regras da sua época. Escolha a versão que você quer jogar.",
+    "it": "Il gioco come si giocava dal 2014 al 2019, versione per versione: ogni patch di bilanciamento e ogni espansione, con le carte, i testi e le regole del loro tempo. Scegli la versione a cui vuoi giocare.",
+    "pl": "Gra taka, jak w latach 2014–2019, wersja po wersji: każda łatka balansująca i każdy dodatek, z kartami, tekstami i zasadami z tamtych dni. Wybierz wersję, w którą chcesz zagrać."
+  },
+  "authors": ["Classic HS"],
+  "license": "Card names, texts and voice lines: Blizzard Entertainment (HearthstoneJSON, hearthstone.wiki.gg). Generated art and sounds: Classic HS. Open music: CC0 (music/open/CREDITS.md).",
+  "redistributable": true,
+  "default_locale": "en",
+  "locales": ["en", "ru", "de", "fr", "es", "pt_BR", "it", "pl"]
+}

@@ -299,6 +299,20 @@ def extract_set(cards, name, then=None):
         release_texts(name, then if then is not None else hsjson(RELEASE_BUILDS[name]))
 
 
+def version_texts(then, ids):
+    """The names and texts of the cards `ids` (the packs' ids: VAN_EX1_116) in `then` (HearthstoneJSON of one build),
+    in the game's eight languages: {id: {name, text: {HS locale: text}}}, as a version patch takes them
+    (packs/eras/versions/<build>/patch.json `cards`; packs/eras/README.md)."""
+    old = {c["id"]: c for c in then}
+    out = {}
+    for cid in ids:
+        o = old.get(POWERS.get(cid) or (cid[4:] if cid.startswith("VAN_") else cid)) or old.get(cid)
+        if o is None:
+            raise SystemExit(f"{cid} is not in that build")
+        out[cid] = {f: {lang: o[f][lang] for lang in LANGS if o.get(f, {}).get(lang)} for f in ("name", "text") if o.get(f)}
+    return out
+
+
 def hsjson(build="latest"):
     req = urllib.request.Request(URL.replace("latest", str(build)), headers={"User-Agent": "classic-hs-extract/1.0"})
     with urllib.request.urlopen(req) as r:
@@ -308,8 +322,11 @@ def hsjson(build="latest"):
 if __name__ == "__main__":
     import sys
     # python3 tools/extract_cards.py --set gvg [HearthstoneJSON cards.json [the release build's]]   (--naxx = --set naxx)
+    # python3 tools/extract_cards.py --version-texts 6485 VAN_CS2_237 VAN_EX1_116   (the texts of that build, as JSON)
     args = ["--set", "naxx"] + [a for a in sys.argv[1:] if a != "--naxx"] if "--naxx" in sys.argv else sys.argv[1:]
-    if args[:1] == ["--set"]:
+    if args[:1] == ["--version-texts"]:
+        print(json.dumps(version_texts(hsjson(args[1]), args[2:]), ensure_ascii=False, indent=1, sort_keys=True))
+    elif args[:1] == ["--set"]:
         if len(args) < 2 or args[1] not in SETS:
             raise SystemExit(f"--set wants one of: {', '.join(SETS)}")
         read = lambda i: json.loads(pathlib.Path(args[i]).read_text()) if args[i:] else None  # noqa: E731
