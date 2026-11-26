@@ -4,6 +4,23 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+### Ajouté
+- Un nouveau jeu, « Hearthstone 2014–2019 : toutes les versions » : un paquet avec les 58 versions du jeu, du lancement en mars 2014 à juillet 2019. Chaque version a ses cartes, pouvoirs héroïques et jetons, les textes de ce patch en 8 langues et ses règles : Lâcher les chiens à 2 au lancement, les nerfs de Leeroy Jenkins, du Commandant chanteguerre, de Yogg-Saron et d’Innervation, l’ancien ordre des dégâts de Balayage, les chefs murlocs avant et après 6.2, Marin le Renard et SN1P-SN4P donnés avant leurs extensions, et bien plus.
+- Le choix de version dans la bibliothèque : versions groupées par époque, chacune avec sa date et ce qui a changé. « Comparer les versions » montre toute carte qui diffère entre deux versions : à gauche comme dans la première, à droite comme dans la seconde, les changements entourés en rouge ; puis les cartes ajoutées et retirées, avec des filtres par classe, changement et nom.
+- Standard et Libre à partir des Murmures des Dieux très anciens : les extensions de chaque format à leur époque, une partie Standard ne crée que des cartes aléatoires Standard, les decks Libres sont marqués, l’éditeur de decks filtre par format. L’Arène de chaque version propose les cartes et interdictions de son époque. Chaque version a ses decks de HearthPwn — 2370 en tout.
+- Parties sur le serveur : l’écran « Jouer » choisit la version et le mode. Chaque version et chaque mode a son classement et ses adversaires.
+- Les outils de débogage connaissent toutes les mécaniques : l’éditeur de scène prend les cartes de héros, tout pouvoir héroïque, les quêtes, les mots-clés et marqueurs avec un nombre, les améliorations et le Râle d’agonie d’une autre carte sur n’importe quelle carte. Chaque carte a des scénarios — génériques et plus de six cents interactions délicates de toutes les extensions — avec les marques réussi / échoué et un parcours du jeu entier carte par carte ; les marques s’exportent en JSON.
+- L’illustration d’une carte peut être déplacée et agrandie dans sa fenêtre : art/<ensemble>/framing.json d’un ensemble d’images, suivi partout où l’image apparaît.
+
+### Modifié
+- Un jeu venu d’un serveur, d’un fichier ou de l’adversaire par code s’installe en arrière-plan et ne bloque plus à 99 % : vérifier un paquet de 60 Mo prend une fraction de seconde au lieu de 7 à 19 secondes. Pendant ce temps, on peut quitter l’écran ou jouer une partie ; un petit encadré sur chaque écran montre l’étape. L’envoi de son propre jeu à un serveur, et le panneau d’administration, montrent les étapes du serveur.
+- Téléphones et téléphones pliables : chaque écran est visible en entier à toute taille et après chaque pliage, dépliage ou rotation ; les menus ne défilent plus comme une page web.
+- Tant que la table montre encore le tour de l’adversaire, votre côté ne trahit rien : aucune carte en surbrillance, le bouton indique toujours « Tour de l’adversaire » ; tout s’allume d’un coup après les animations.
+
+### Corrigé
+- Historique de partie : un serviteur Magnétique qui fusionne a une vraie ligne (« … fusionne avec … ») au lieu du mot brut « fuse ».
+- Texte des cartes sans mise en page écrite : une ligne faite seulement de mots-clés garde sa propre ligne, comme dans le jeu (Zilliax ne met plus « Magnétisme » sur la même ligne que « Bouclier divin »).
+
 ## [0.72.2] - 2026-11-20
 
 ### Modifié

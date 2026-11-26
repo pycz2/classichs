@@ -4,6 +4,23 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Wersjonowanie:
 
 ## [Unreleased]
 
+### Dodano
+- Nowa gra „Hearthstone 2014–2019: wszystkie wersje”: jeden pakiet z wszystkimi 58 wersjami gry, od premiery w marcu 2014 do lipca 2019. Każda wersja ma swoje karty, moce bohatera i żetony, teksty tamtej łatki w 8 językach i swoje zasady: Spuszczenie psów za 2 na premierze, osłabienia Leeroya Jenkinsa, Dowódcy Pieśni Wojny, Yogg-Sarona i Ożywienia, dawna kolejność obrażeń Zamachnięcia, przywódcy murloków przed i po 6.2, Marin Lis i SN1P-SN4P dane przed swoimi dodatkami i wiele więcej.
+- Wybór wersji w bibliotece gier: wersje pogrupowane według epok, każda z datą i tym, co się zmieniło. „Porównaj wersje” pokazuje każdą kartę, która różni się w dwóch dowolnych wersjach: po lewej jak w pierwszej, po prawej jak w drugiej, zmiany zakreślone na czerwono; dalej karty dodane i usunięte, z filtrami według klasy, zmiany i nazwy.
+- Tryby standardowy i dziki od Szeptów Pradawnych Bogów: zestawy każdego trybu z ich czasu, gra standardowa tworzy tylko standardowe losowe karty, talie dzikie są oznaczone, edytor talii filtruje według trybu. Arena każdej wersji oferuje karty i zakazy swojego czasu. Każda wersja ma własne talie z HearthPwn — razem 2370.
+- Gra na serwerze: ekran „Graj” wybiera wersję i tryb. Każda wersja i każdy tryb ma własny ranking i własnych przeciwników.
+- Narzędzia debugowania znają każdą mechanikę: edytor sceny przyjmuje karty bohaterów, dowolną moc bohatera, zadania, słowa kluczowe i znaczniki z liczbą, wzmocnienia i Ostatni Wydech innej karty na dowolnej karcie. Każda karta ma scenariusze — ogólne i ponad sześćset trudnych interakcji ze wszystkich dodatków — ze znakami zaliczony / niezaliczony i przejściem przez całą grę karta po karcie; znaki eksportują się do JSON.
+- Obrazek karty można przesunąć i powiększyć w jej okienku: art/<zestaw>/framing.json zestawu obrazków, stosowany wszędzie, gdzie widać obrazek.
+
+### Zmieniono
+- Gra z serwera, z pliku lub od przeciwnika przez kod instaluje się w tle i już nie zawiesza się na 99%: sprawdzenie pakietu 60 MB trwa ułamek sekundy zamiast 7–19 sekund. W tym czasie można opuścić ekran lub zagrać partię; małe okienko na każdym ekranie pokazuje etap. Przy wysyłaniu własnej gry na serwer i w panelu administratora widać etapy serwera.
+- Telefony i składane telefony: każdy ekran widać w całości przy każdym rozmiarze i po każdym złożeniu, rozłożeniu lub obrocie; menu nie przewijają się już jak strona internetowa.
+- Dopóki stół pokazuje jeszcze turę przeciwnika, twoja strona nic nie zdradza: żadnych podświetleń kart, przycisk dalej mówi „Tura przeciwnika”; wszystko zapala się naraz po animacjach.
+
+### Naprawiono
+- Historia meczu: magnetyczny stronnik, który się łączy, ma własną linię („… łączy się z …”) zamiast surowego słowa „fuse”.
+- Tekst kart bez gotowego układu: linia złożona tylko ze słów kluczowych zostaje w osobnej linii, jak w grze (Zilliax nie stawia już „Magnetyzmu” w jednej linii z „Boską tarczą”).
+
 ## [0.72.2] - 2026-11-20
 
 ### Zmieniono

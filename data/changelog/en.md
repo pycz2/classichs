@@ -4,6 +4,23 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+### Added
+- A new game, "Hearthstone 2014–2019: every version": one pack with all 58 versions of the game, from the launch in March 2014 to July 2019. Each version has its own cards, Hero Powers and tokens, the texts of that patch in 8 languages, and its own rules: Unleash the Hounds for 2 at launch, the Leeroy Jenkins, Warsong Commander, Yogg-Saron and Innervate nerfs, the old damage order of Swipe, the Murloc lords before and after 6.2, Marin the Fox and SN1P-SN4P given before their expansions, and much more.
+- The version choice in the games library: versions grouped by era, each with its date and what changed. "Compare versions" shows every card that differs between any two versions: on the left as in the first, on the right as in the second, the changes circled in red; then the cards added and removed, with filters by class, change and name.
+- Standard and Wild from Whispers of the Old Gods on: each format's sets of its time, a Standard game makes only Standard random cards, Wild decks are marked, the deck builder filters by format. Each version's Arena drafts the cards and bans of its time. Every version has its own HearthPwn decks — 2370 in all.
+- Server games: the Play screen chooses the version and the mode. Each version and mode has its own ladder and its own opponents.
+- The debug tools know every mechanic: the scene editor takes hero cards, any Hero Power, Quests, keywords and tags with a number, buffs and another card's Deathrattle on any card. Every card has a set of scenarios — generic ones and over six hundred tricky interactions from every expansion — with passed / failed marks and a walk through the whole game card by card; the marks export as JSON.
+- A card's picture can be moved and zoomed inside its window: an art set's art/<set>/framing.json, followed wherever the picture shows.
+
+### Changed
+- A game from a server, from a file or from your opponent over code play installs in the background and no longer hangs at 99%: checking a 60 MB pack takes a fraction of a second instead of 7–19 seconds. Meanwhile you can leave the screen or play a match; a small box on every screen shows the stage. Uploading your own game to a server, and the admin panel, show the server's stages.
+- Phones and foldables: every screen shows whole at any size and after every fold, unfold or turn; menus no longer scroll like a web page.
+- While the table still shows the opponent's turn, your side gives nothing away: no card highlights, the button still says "Enemy Turn"; everything lights up together after the animations.
+
+### Fixed
+- Match history: a Magnetic minion fusing gets a proper line ("… fuses with …") instead of the raw word "fuse".
+- Card text without a written layout: a line of keywords only keeps its own line, as in the game (Zilliax no longer puts "Magnetic" on the same line as "Divine Shield").
+
 ## [0.72.2] - 2026-11-20
 
 ### Changed
