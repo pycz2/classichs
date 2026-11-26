@@ -8,6 +8,8 @@ use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::OnceLock;
+#[path = "eras_versions/built.rs"]
+mod built;
 
 fn repo() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
@@ -17,11 +19,7 @@ fn repo() -> PathBuf {
 fn rs(vid: &str) -> Option<&'static Ruleset> {
     static R: OnceLock<Option<HashMap<String, &'static Ruleset>>> = OnceLock::new();
     let all = R.get_or_init(|| {
-        let out = std::env::temp_dir().join(format!("eras-ungoro-{}.cardpack", std::process::id()));
-        let build = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", "packs/eras", "-o"]).arg(&out).output().ok()?;
-        assert!(build.status.success(), "pack.py build: {}", String::from_utf8_lossy(&build.stdout));
-        let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
-        let _ = std::fs::remove_file(&out);
+        let files = built::built("packs/eras")?;
         let load = |v: &str| -> &'static Ruleset { Box::leak(Box::new(ruleset::load(&pack::version_view(&files, v).unwrap()).unwrap())) };
         Some(["18336", "19506", "19632", "20022"].into_iter().map(|v| (v.to_string(), load(v))).collect())
     });

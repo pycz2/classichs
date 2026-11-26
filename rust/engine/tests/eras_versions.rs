@@ -40,10 +40,20 @@ fn patched(vid: &str) -> BTreeSet<String> {
 fn every_card_of_every_version_plays_without_a_script_error() {
     let Some(files) = eras() else { return };
     let mut seen = BTreeSet::new();
-    let vids: Vec<String> = pack::versions(files).into_iter().filter(|v| seen.insert(v.rules_hash.clone())).map(|v| v.id).collect();
+    let mut vids: Vec<String> = pack::versions(files).into_iter().filter(|v| seen.insert(v.rules_hash.clone())).map(|v| v.id).collect();
+    // each thread takes the next version not yet taken, the newest (with the most cards) first: equal parts in date
+    // order left the last thread with the longest
+    vids.reverse();
+    let next = std::sync::atomic::AtomicUsize::new(0);
     let threads = std::thread::available_parallelism().map_or(4, |n| n.get());
     let bad: Vec<String> = std::thread::scope(|s| {
-        let hs: Vec<_> = vids.chunks(vids.len().div_ceil(threads)).map(|part| s.spawn(move || part.iter().flat_map(|v| plays(v)).collect::<Vec<_>>())).collect();
+        let hs: Vec<_> = (0..threads).map(|_| s.spawn(|| {
+            let mut bad = vec![];
+            while let Some(v) = vids.get(next.fetch_add(1, std::sync::atomic::Ordering::Relaxed)) {
+                bad.extend(plays(v));
+            }
+            bad
+        })).collect();
         hs.into_iter().flat_map(|h| h.join().unwrap()).collect()
     });
     assert!(bad.is_empty(), "{} problems:\n{}", bad.len(), bad.join("\n"));

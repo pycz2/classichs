@@ -6,8 +6,10 @@
 #   Docker image (ClassicHS-x.y.z-server-image.tar.gz: tools/deploy_server.sh has the host download it).
 # A run on main keeps the artifacts server-linux-x86_64 and replay-viewer: tools/deploy_server.sh --from-ci deploys them.
 # Jobs: rust-linux (the engine's and the server's tests; the rules engine for Linux, Android and the web; the Linux
-# server), rust (macOS and Windows: their rules engine and server, no tests: the server runs on Linux), test (the
-# game's tests, as soon as rust-linux is done), export (every platform, after all the rust jobs). The Rust caches
+# server), every-card (the engine's every-card tests, minutes long with the 58 versions of packs/eras: on a runner of
+# their own next to rust-linux), rust (macOS and Windows: their rules engine and server, no tests: the server runs on
+# Linux), test (the game's tests, as soon as rust-linux is done), export (every platform, after all the rust jobs and
+# every-card). The Rust caches
 # are keyed by the toolchain too (cargo rebuilds everything for another rustc, and an exact key match never saved a
 # new cache: 2026-11-12 … 11-20 every run built from scratch), saved from main only.
 # Commits that change only docs/ start no run.
@@ -52,7 +54,7 @@ jobs:
           key: rust-ubuntu-24.04-${{ steps.toolchain.outputs.cachekey }}-${{ hashFiles('rust/Cargo.lock', 'server/Cargo.lock') }}
           restore-keys: rust-ubuntu-24.04-${{ steps.toolchain.outputs.cachekey }}-
       - name: Engine tests
-        run: cd rust && cargo test --release -p classichs-engine
+        run: cd rust && cargo test --release -p classichs-engine -- --skip every_card
       - name: Build the rules engine
         run: tools/build_rules.sh linux android web
       - uses: actions/upload-artifact@v7
@@ -74,6 +76,9 @@ jobs:
           name: server-linux-x86_64
           path: build/server/ClassicHS-server-*
           if-no-files-found: error
+      - name: Drop the engine tests' built packs (target/tmp) from the cache
+        if: github.ref == 'refs/heads/main' && steps.rust-cache.outputs.cache-hit != 'true'
+        run: rm -rf target/tmp
       - name: Save the Rust build cache
         if: github.ref == 'refs/heads/main' && steps.rust-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
@@ -84,6 +89,30 @@ jobs:
             ~/.cargo/git/db
             target
           key: ${{ steps.rust-cache.outputs.cache-primary-key }}
+
+  # The engine's every-card tests (every card of every version of packs/eras and of each expansion plays without a
+  # script error): rust-linux runs every other test.
+  every-card:
+    if: github.ref_type == 'branch'
+    runs-on: ubuntu-24.04
+    env:
+      CARGO_TARGET_DIR: ${{ github.workspace }}/target
+    steps:
+      - uses: actions/checkout@v7
+      - id: toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Restore the Rust build cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            target
+          key: rust-ubuntu-24.04-${{ steps.toolchain.outputs.cachekey }}-${{ hashFiles('rust/Cargo.lock', 'server/Cargo.lock') }}
+          restore-keys: rust-ubuntu-24.04-${{ steps.toolchain.outputs.cachekey }}-
+      - name: Every card plays
+        run: cd rust && cargo test --release -p classichs-engine -- every_card
 
   rust:
     if: github.ref_type == 'branch'
@@ -200,7 +229,7 @@ jobs:
           key: test-times-${{ github.run_id }}
 
   export:
-    needs: [rust-linux, rust]
+    needs: [rust-linux, every-card, rust]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7

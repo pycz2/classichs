@@ -11,6 +11,8 @@ use serde_json::{json, Map, Value};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::OnceLock;
+#[path = "eras_versions/built.rs"]
+mod built;
 
 fn repo() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
@@ -20,11 +22,7 @@ fn repo() -> PathBuf {
 fn versions() -> Option<&'static HashMap<&'static str, &'static Ruleset>> {
     static R: OnceLock<Option<HashMap<&'static str, &'static Ruleset>>> = OnceLock::new();
     R.get_or_init(|| {
-        let out = std::env::temp_dir().join(format!("eras-icc-{}.cardpack", std::process::id()));
-        let build = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", "packs/eras", "-o"]).arg(&out).output().ok()?;
-        assert!(build.status.success(), "pack.py build: {}", String::from_utf8_lossy(&build.stdout));
-        let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
-        let _ = std::fs::remove_file(&out);
+        let files = built::built("packs/eras")?;
         Some(["20457", "20970", "21517", "22115"].into_iter().map(|v| {
             (v, ruleset::load(&pack::version_view(&files, v).unwrap()).unwrap_or_else(|e| panic!("version {v}: {e}")))
         }).collect())
