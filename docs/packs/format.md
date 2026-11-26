@@ -644,7 +644,7 @@ in the settings' `pack_versions`), `Packs.is_active(p)`.
 **Building one** (`packs/eras/recipe.json`; how to add a version: `packs/eras/README.md`): the recipe lists the
 versions (`id`, `patch`, `date`, `era`, `name`, `formats`) and `default_version`. Each version is an existing pack's
 build (its patch's `base`) changed by `versions/<id>/patch.json`: card fields (`cards`), new cards (`add`,
-HearthstoneJSON objects), cards taken out (`remove`), `rules.json` `behaviour` flags, names and texts in every
+HearthstoneJSON objects), cards taken out (`remove`), `rules.json` `behaviour` flags, new `sets` (a card given before its set came out), names and texts in every
 language of the pack; `versions/<id>/scripts/*.lua` become the version's `scripts/version/`, `versions/<id>/decks/*.json` join its decks, and
 `packs/eras/formats.json` gives each version the Standard/Wild sets (`rules.json` `formats`, docs/packs/rules.md) and
 the Arena pool of its time. The shared files are

@@ -1,0 +1,241 @@
+{
+ "base": "icc",
+ "build": 21517,
+ "about": "9.2.0.21517 (2017-10-17): the mechanics update (Unlicensed Apothecary 'After', Counterspell, Wild Pyromancer, Lord Jaraxxus and the Secrets, cost-reduction order) and the 9.1 nerfs",
+ "cards": {
+  "AT_019": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Beschwört am Ende des Zuges ein Schreckensross.",
+    "enUS": "<b>Deathrattle:</b> At the end\n of the turn, summon a Dreadsteed.",
+    "esES": "<b>Último aliento:</b>\nAl final del turno, invoca un corcel nefasto.",
+    "frFR": "<b>Râle d’agonie :</b> invoque un destrier de l’effroi à la fin du tour.",
+    "itIT": "<b>Rantolo di Morte:</b> alla fine del turno, evoca un Maldestriero.",
+    "plPL": "<b>Agonia:</b> Na koniec tury przyzwij Upiornego rumaka.",
+    "ptBR": "<b>Último Suspiro:</b> No final do turno, evoque um Corcel Medonho.",
+    "ruRU": "<b>Предсмертный хрип:</b>\nв конце хода призывает коня погибели."
+   }
+  },
+  "AT_050": {
+   "text": {
+    "deDE": "[x]<b>Todesröcheln:</b> Eure\nHeldenfähigkeit wird\nzu „Verursacht\n2 Schaden“.",
+    "enUS": "<b>Deathrattle:</b> Your Hero Power becomes 'Deal 2 damage.'",
+    "esES": "<b>Último aliento:</b> Tu poder de héroe se convierte en «Inflige 2 p. de daño».",
+    "frFR": "<b>Râle d’agonie :</b> votre pouvoir héroïque devient « Inflige 2 points de dégâts ».",
+    "itIT": "<b>Rantolo di Morte:</b> il tuo Potere Eroe diventa \"Infligge 2 danni\".",
+    "plPL": "<b>Agonia:</b> Twoja moc specjalna zmienia się na „Zadaj 2 pkt. obrażeń”.",
+    "ptBR": "<b>Último Suspiro:</b> Seu Poder Heroico torna-se \"Cause 2 de dano\".",
+    "ruRU": "<b>Предсмертный хрип:</b> сила вашего героя меняется на «Наносит 2 ед. урона»."
+   }
+  },
+  "AT_065": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Erhält +1 Haltbarkeit, wenn Ihr einen Diener mit <b>Spott</b> kontrolliert.",
+    "enUS": "<b>Battlecry:</b> If you have a minion with <b>Taunt</b>, gain +1 Durability.",
+    "esES": "<b>Grito de batalla:</b> Si tienes un esbirro con <b>Provocar</b>, obtiene +1 p. de durabilidad.",
+    "frFR": "<b>Cri de guerre :</b> gagne\n+1 Durabilité si vous avez un serviteur avec <b>Provocation</b>.",
+    "itIT": "<b>Grido di Battaglia:</b> ottiene +1 Integrità se controlli un servitore con <b>Provocazione</b>.",
+    "plPL": "<b>Okrzyk bojowy:</b>\nOtrzymuje +1 do wytrzymałości, jeśli kontrolujesz stronnika z <b>Prowokacją</b>.",
+    "ptBR": "<b>Grito de Guerra</b>: Se você tiver um lacaio com <b>Provocar</b>, receba +1 de Durabilidade.",
+    "ruRU": "<b>Боевой клич:</b> получает +1 к прочности, если у вас есть существо с <b>«Провокацией»</b>."
+   }
+  },
+  "CFM_659": {
+   "text": {
+    "deDE": "<b>Kampfschrei:</b> Stellt 2 Leben wieder her.",
+    "enUS": "<b>Battlecry:</b> Restore 2 Health.",
+    "esES": "<b>Grito de batalla:</b>\nRestaura 2 p. de salud.",
+    "frFR": "<b>Cri de guerre :</b> rend 2 points de vie.",
+    "itIT": "<b>Grido di Battaglia:</b> rigenera 2 Salute.",
+    "plPL": "<b>Okrzyk bojowy:</b> Przywróć\n2 pkt. zdrowia.",
+    "ptBR": "<b>Grito de Guerra:</b> Restaure 2 de Vida.",
+    "ruRU": "<b>Боевой клич:</b> восстанавливает 2 ед. здоровья."
+   }
+  },
+  "CFM_900": {
+   "text": {
+    "deDE": "[x]Fügt Eurem Helden\njedes Mal 5 Schaden zu,\nnachdem Ihr einen Diener\nherbeigerufen habt.",
+    "enUS": "After you summon a minion, deal 5 damage to your hero.",
+    "esES": "[x]Tras invocar a un esbirro,\ninflige 5 p. de daño\na tu héroe.",
+    "frFR": "Inflige 5 points de dégâts à votre héros une fois que vous avez invoqué un serviteur.",
+    "itIT": "Dopo che è stato evocato un servitore sotto il tuo controllo, infligge 5 danni al tuo eroe.",
+    "plPL": "Gdy przyzwiesz stronnika, zadaj 5 pkt. obrażeń twojemu bohaterowi.",
+    "ptBR": "Sempre que você evocar um lacaio, cause 5 de dano ao seu herói.",
+    "ruRU": "Когда вы призываете существо, наносит 5 ед. [x]  урона вашему герою."
+   }
+  },
+  "GVG_111": {
+   "text": {
+    "deDE": "[x]Wenn Ihr zu Beginn Eures Zuges\nmind. 3 Mechs kontrolliert,\nwerden sie vernichtet und\nbilden V-07-TR-0N.",
+    "enUS": "At the start of your turn, if you have at least 3 Mechs, destroy them all and form V-07-TR-0N.",
+    "esES": "Al comienzo de tu turno, si tienes al menos 3 robots, los destruye todos y crea a V-07-TR-0N.",
+    "frFR": "Au début de votre tour, si vous avez au moins 3 Méca, les détruit tous pour former V-07-TR-0N.",
+    "itIT": "All'inizio del tuo turno distrugge i tuoi Robot, se ne controlli almeno 3, e forma V-07-TR-0N.",
+    "plPL": "Jeśli na początku twojej tury kontrolujesz co najmniej 3 Mechy, niszczysz je i tworzysz V-07-TR-0Na.",
+    "ptBR": "No início do seu turno, se você tiver pelo menos 3 Mecanoides, destrua todos e forme o V-07-TR-0N.",
+    "ruRU": "Если в начале вашего хода у вас под контролем есть 3 механизма или более, они будут уничтожены и появится В-07-TP-0H."
+   }
+  },
+  "ICC_054": {
+   "cost": 6
+  },
+  "ICC_064": {
+   "text": {
+    "deDE": "[x]<b>Kampfschrei\nund Todesröcheln:</b>\nFügt allen Dienern\n1 Schaden zu.",
+    "enUS": "<b>Battlecry and Deathrattle:</b>\nDeal 1 damage to all minions.",
+    "esES": "<b>Grito de batalla y\nÚltimo aliento:</b>\nInflige 1 p. de daño a todos los esbirros.",
+    "frFR": "<b>Cri de guerre</b> et <b>Râle d’agonie :</b> inflige 1 point de dégâts à tous les serviteurs.",
+    "itIT": "<b>Grido di Battaglia</b> e <b>Rantolo di Morte:</b> infligge 1 danno a TUTTI i servitori.",
+    "plPL": "<b>Okrzyk bojowy i Agonia:</b> Zadaj 1 pkt. obrażeń wszystkim stronnikom.",
+    "ptBR": "<b>Grito de Guerra e Último Suspiro:</b> Cause 1 de dano a todos os lacaios.",
+    "ruRU": "[x]<b>Боевой клич\nи предсмертный хрип:</b>\nнаносит 1 ед. урона\nвсем существам."
+   }
+  },
+  "ICC_812": {
+   "name": {
+    "deDE": "Fleischwagen",
+    "enUS": "Meat Wagon",
+    "esES": "Picadora rodante",
+    "frFR": "Chariot à viande",
+    "itIT": "Carro dei Morti",
+    "plPL": "Wóz z mięsem",
+    "ptBR": "Carroça Carniceira",
+    "ruRU": "Мясной фургон"
+   }
+  },
+  "ICC_834w": {
+   "text": {
+    "deDE": "[x]Fügt auch\nden benachbarten\nDienern des Ziels\nSchaden zu.",
+    "enUS": "Also damages the minions next to whomever your hero attacks.",
+    "esES": "También daña a los esbirros adyacentes a tu objetivo.",
+    "frFR": "Inflige également des dégâts aux serviteurs adjacents de celui que votre héros attaque.",
+    "itIT": "[x]Infligge danni anche ai\nservitori adiacenti a\nquello attaccato.",
+    "plPL": "Zadaje również obrażenia stronnikom znajdującym się obok celu ataku bohatera.",
+    "ptBR": "Também causa dano aos lacaios adjacentes ao alvo que seu herói atacar.",
+    "ruRU": "Также наносит урон существам по обе [x]стороны от цели."
+   }
+  },
+  "KAR_021": {
+   "text": {
+    "deDE": "Beschwört jedes Mal,\nwenn Ihr einen Zauber\nwirkt, ein zufälliges Basistotem.",
+    "enUS": "Whenever you cast a spell, summon a random basic Totem.",
+    "esES": "Cada vez que lanzas un hechizo, invoca un tótem básico aleatorio.",
+    "frFR": "Chaque fois que vous lancez un sort, invoque un totem de base aléatoire.",
+    "itIT": "Quando lanci una Magia, evoca un Totem base casuale.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie, przyzwij losowy podstawowy Totem.",
+    "ptBR": "Sempre que lançar um feitiço, evoque um Totem básico aleatório.",
+    "ruRU": "Когда вы разыгрываете заклинание, призывает случайный базовый тотем."
+   }
+  },
+  "OG_198": {
+   "text": {
+    "deDE": "Verbraucht Euer gesamtes Mana. Stellt doppelt so viel Leben wieder her.",
+    "enUS": "Spend all your Mana. Restore twice that much Health.",
+    "esES": "Gasta todo tu maná. Restaura el doble de esa cantidad en salud.",
+    "frFR": "Dépense tout votre mana pour en rendre le double en points de vie.",
+    "itIT": "Consuma tutto il tuo Mana e rigenera Salute pari al doppio del Mana così speso.",
+    "plPL": "Wydaj całą twoją manę. Przywróć dwa razy tyle zdrowia.",
+    "ptBR": "Gaste todo o seu Mana. Restaure o dobro dessa quantidade de Vida.",
+    "ruRU": "Расходует всю вашу ману. Восстанавливает вдвое больше здоровья."
+   }
+  },
+  "OG_338": {
+   "text": {
+    "deDE": "Zu Beginn seines Zuges besteht eine Chance von 50 %, dass Euer Gegner eine zusätz[d]liche Karte zieht.",
+    "enUS": "At the start of your opponent's turn, they have a 50% chance to draw an extra card.",
+    "esES": "Al principio del turno de tu oponente, tiene un 50% de probabilidad de robar una carta extra.",
+    "frFR": "Au début de son tour, votre adversaire a 50% de chance de piocher une carte supplémentaire.",
+    "itIT": "All'inizio del suo turno, l'avversario ha una probabilità del 50% di pescare una carta aggiuntiva.",
+    "plPL": "Na początku swojej tury przeciwnik ma 50% szans na dobranie dodatkowej karty.",
+    "ptBR": "No início do turno do seu oponente, ele tem 50% de chance de comprar um card extra.",
+    "ruRU": "В начале своего хода противник с вероятностью [x]50% берет дополнительную\nкарту."
+   }
+  },
+  "UNG_934t1": {
+   "text": {
+    "deDE": "[x]<b>Kampfschrei:</b> Eure Helden[d]fähigkeit wird zu „Fügt\neinem zufälligen Feind\n8 Schaden zu“.",
+    "enUS": "<b>Battlecry:</b> Your Hero Power becomes 'Deal 8 damage to a random enemy.'",
+    "esES": "[x]<b>Grito de batalla:</b> Tu poder\nde héroe se convierte en\n«Inflige 8 p. de daño a un\nenemigo aleatorio».",
+    "frFR": "<b>Cri de guerre :</b> votre pouvoir héroïque devient « Inflige 8 points de dégâts à un adversaire aléatoire ».",
+    "itIT": "<b>Grido di Battaglia:</b> il tuo Potere Eroe diventa \"Infligge 8 danni a un nemico casuale\".",
+    "plPL": "<b>Okrzyk bojowy:</b> Twoja moc specjalna zmienia się na „Zadaj 8 pkt. obrażeń losowemu wrogowi”.",
+    "ptBR": "<b>Grito de Guerra:</b> Seu Poder Heroico se torna \"Cause 8 de dano a um inimigo aleatório\".",
+    "ruRU": "[x]<b>Боевой клич:</b> заменяет\nсилу героя на «Наносит\n8 ед. урона случайному\nпротивнику»."
+   }
+  },
+  "VAN_CS2_106": {
+   "cost": 3
+  },
+  "VAN_EX1_154": {
+   "text": {
+    "deDE": "<b>Wählt aus:</b> Fügt einem Diener $3 Schaden zu; oder fügt einem Diener $1 Schaden zu und zieht eine Karte.",
+    "enUS": "<b>Choose One -</b>\nDeal $3 damage to a minion; or $1 damage\nand draw a card.",
+    "esES": "[x]<b>Elige una:</b> Inflige $3 p.\nde daño a un esbirro,\no bien inflige $1 p. de daño\ny roba una carta.",
+    "frFR": "<b>Choix des armes :</b> inflige $3 |4(point,points) de dégâts à un serviteur ; ou inflige $1 |4(point,points) de dégâts à un serviteur et vous piochez une carte.",
+    "itIT": "<b>Scegli:</b> infligge $3 danni a un servitore <b>o</b> infligge $1 |4(danno,danni) a un servitore e pesca una carta.",
+    "plPL": "<b>Wybierz jedno:</b> Zadaj $3 pkt. obrażeń stronnikowi; lub zadaj $1 pkt. obrażeń stronnikowi i dobierz kartę.",
+    "ptBR": "<b>Escolha Um -</b> Cause $3 de dano a um lacaio; ou $1 de dano e compre um card.",
+    "ruRU": "<b>Выберите эффект:</b> наносит существу $3 ед. урона;\nили наносит существу\n$1 ед. урона и вы берете карту."
+   }
+  },
+  "VAN_EX1_169": {
+   "text": {
+    "deDE": "Erhaltet 1 Manakristall nur für diesen Zug.",
+    "enUS": "Gain 1 Mana Crystal this turn only.",
+    "esES": "Obtienes 1 cristal de maná solo para este turno.",
+    "frFR": "Vous gagnez 1 cristal de mana pour ce tour uniquement.",
+    "itIT": "Fornisce 1 Cristallo di Mana solo per questo turno.",
+    "plPL": "Otrzymujesz 1 kryształ many w tej turze.",
+    "ptBR": "Receba 1 Cristal de Mana somente neste turno.",
+    "ruRU": "Вы получаете 1 дополнительный кристалл маны до конца хода."
+   }
+  },
+  "VAN_EX1_246": {
+   "cost": 4
+  },
+  "VAN_EX1_507": {
+   "text": {
+    "deDE": "Eure anderen Murlocs haben +2 Angriff.",
+    "enUS": "Your other Murlocs have +2 Attack.",
+    "esES": "Tus demás múrlocs tienen +2 p. de ataque.",
+    "frFR": "Vos autres murlocs\nont +2 ATQ.",
+    "itIT": "Gli altri tuoi Murloc hanno +2 Attacco.",
+    "plPL": "Twoje pozostałe\nMurloki mają\n+2 do ataku.",
+    "ptBR": "Seus outros Murlocs têm +2 de Ataque.",
+    "ruRU": "Другие ваши мурлоки получают +2 к атаке."
+   }
+  },
+  "VAN_EX1_557": {
+   "text": {
+    "deDE": "[x]Zu Beginn Eures Zuges\nbesteht eine Chance von 50 %,\ndass Ihr eine zusätzliche\nKarte zieht.",
+    "enUS": "At the start of your turn, you have a 50% chance to draw an extra card.",
+    "esES": "Al principio de tu turno tienes un 50% de probabilidad de robar una carta más.",
+    "frFR": "Au début de votre tour, vous avez 50% de chance de piocher une carte supplémentaire.",
+    "itIT": "All'inizio del tuo turno, hai una probabilità del 50% di pescare una carta aggiuntiva.",
+    "plPL": "Na początku twojej tury masz 50% szans na dobranie dodatkowej karty.",
+    "ptBR": "No início do seu turno, você tem 50% de chance de comprar um card extra.",
+    "ruRU": "В начале вашего хода вы с вероятностью 50% берете дополнительную карту."
+   }
+  },
+  "VAN_NEW1_007": {
+   "text": {
+    "deDE": "<b>Wählt aus:</b> Fügt einem Diener $5 Schaden zu; oder fügt allen feindlichen Dienern $2 Schaden zu.",
+    "enUS": "<b>Choose One -</b>\nDeal $5 damage to a minion; or $2 damage to all enemy minions.",
+    "esES": "<b>Elige una:</b> Inflige $5 p. de daño a un esbirro, o bien inflige $2 p. de daño a todos los esbirros enemigos.",
+    "frFR": "<b>Choix des armes :</b> inflige $5 |4(point,points) de dégâts à un serviteur ; ou $2 |4(point,points) de dégâts à tous les serviteurs adverses.",
+    "itIT": "<b>Scegli:</b> infligge $5 danni a un servitore <b>o</b> $2 danni ai servitori nemici.",
+    "plPL": "<b>Wybierz jedno:</b> Zadaj $5 pkt. obrażeń stronnikowi; lub zadaj $2 pkt. obrażeń wszystkim wrogim stronnikom.",
+    "ptBR": "<b>Escolha Um</b> - Cause $5 de dano a um lacaio ou $2 de dano a todos os lacaios inimigos.",
+    "ruRU": "<b>Выберите эффект:</b> наносит существу $5 ед. урона; или $2 ед. урона всем существам противника."
+   }
+  }
+ },
+ "behaviour": {
+  "countered_no_after_spell": false,
+  "after_spell_from_before": true
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 9.2.0.21517",
+  "HearthstoneJSON build 21517: names and texts of every card whose text changed since 20457 (tools/extract_cards.py --version-texts 21517 <ids>)",
+  "packs/loot: scripts/loot.lua (the older cards of patches 9.1, 9.2 and 9.4), rules.json behaviour"
+ ]
+}

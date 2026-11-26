@@ -1,0 +1,8 @@
+{
+ "base": "msg",
+ "build": 15590,
+ "about": "7.0.0.15590 (2016-11-29): the Mean Streets of Gadgetzan release, the msg pack with The Mistcaller fixed (the minions in the hand and the deck +1/+1) and Kabal Chemist without Dragonfire Potion (until the hotfix of 2017-01-24)",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 7.0.0.15590 (Patch 7.0.0.15590: The Mistcaller bugfix), 7.0.0.16214 (Kabal Chemist hotfix of 2017-01-24); packs/msg"
+ ]
+}

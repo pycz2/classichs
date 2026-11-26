@@ -1186,6 +1186,12 @@ class Versions(unittest.TestCase):
             self.assertIn((pack.REPO / "packs/classic").resolve(), inputs)  # naxx's base
 
 
+def own_rules(p):
+    """A version's own rules files to compare with its base pack's: not rules.json (formats.json's formats and Arena),
+    not decks/ (the version's own decks too), not Ship's Cannon's fix (every version from 7234 on)."""
+    return pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/") and p != "scripts/version/ships_cannon.lua"
+
+
 class Eras(unittest.TestCase):
     """packs/eras: Hearthstone 2014–2019 in one pack, a version per game version (packs/eras/README.md)."""
 
@@ -1484,7 +1490,7 @@ class Eras(unittest.TestCase):
 
     def scripts(self, vid):
         v = pack.version_view(self.files, vid)
-        return sorted(p for p in v if p.startswith("scripts/version/"))
+        return sorted(p for p in v if p.startswith("scripts/version/") and p != "scripts/version/ships_cannon.lua")
 
     def test_kobolds_and_catacombs_versions(self):
         # 22611: the loot pack, with the cast-when-drawn tokens' and Frost Widow's costs of that build and no rarity on
@@ -1542,6 +1548,300 @@ class Eras(unittest.TestCase):
             self.assertEqual(self.card("25252", cid)[0].get("race"), now, cid)
         for cid in ("VAN_HERO_06bp2", "AT_132_DRUID"):
             self.assertEqual(self.card("25252", cid)[1]["en"]["text"], "<b>Hero Power</b>\n+2 Attack this turn.\n+2 Armor.")
+
+
+class ErasUngoro(unittest.TestCase):
+    """packs/eras: the Journey to Un'Goro versions (18336, 19506, 19632, 20022)."""
+
+    setUpClass = Eras.__dict__["setUpClass"]
+    card = Eras.card
+
+    def test_18336_is_the_ungoro_pack_with_the_msg_fixes(self):
+        ungoro, _ = pack.build(pack.REPO / "packs/ungoro")
+        view = pack.version_view(self.files, "18336")
+        # the ungoro pack still has the Servant of Yogg-Saron, Mistcaller and Potion of Polymorph of before 15181, 15590 and
+        # 17720: the fixes go along
+        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua",
+                 "scripts/version/servant_of_yogg_saron.lua"]
+        self.assertEqual({p: d for p, d in view.items() if own_rules(p) and p not in fixes},
+                         {p: d for p, d in ungoro.items() if own_rules(p)})
+        for vid in ("18336", "19506", "19632", "20022"):
+            for f in fixes:
+                self.assertEqual(pack.version_view(self.files, vid)[f], pack.version_view(self.files, "17720")[f], vid)
+
+    def test_19506_unbolds_dart_traps_hero_power(self):
+        _, old = self.card("18336", "LOE_021")
+        self.assertEqual(old["en"]["text"], "<b>Secret:</b> After an opposing <b>Hero Power</b> is used, deal $5 damage to a random enemy.")
+        for vid in ("19506", "19632", "20022"):
+            _, texts = self.card(vid, "LOE_021")
+            self.assertEqual(texts["en"]["text"], "<b>Secret:</b> After an opposing Hero Power is used, deal $5 damage to a random enemy.")
+            self.assertEqual(texts["ru"]["text"], "<b>Секрет:</b> когда противник использует силу героя, наносит $5 ед. урона случайному противнику.")
+        # 19632 changed no card data
+        self.assertEqual(pack.version_view(self.files, "19632")["cards.json"], pack.version_view(self.files, "19506")["cards.json"])
+
+    def test_19506_and_20022_fix_names_and_texts_in_some_languages(self):
+        self.assertEqual(self.card("18336", "CFM_690")[1]["ru"]["name"], "Нефритовый сюрикен")
+        self.assertEqual(self.card("19506", "CFM_690")[1]["ru"]["name"], "Нефритовый сюрикэн")
+        self.assertEqual(self.card("19506", "CFM_690")[1]["en"]["name"], "Jade Shuriken")
+        self.assertEqual(self.card("18336", "UNG_961")[1]["fr"]["name"], "Acclimatation")
+        for vid in ("19506", "19632", "20022"):
+            self.assertEqual(self.card(vid, "UNG_961")[1]["fr"]["name"], "Adaptabilité", vid)
+        self.assertEqual(self.card("19632", "VAN_CS2_039")[1]["es"]["name"], "Viento Furioso")
+        self.assertEqual(self.card("20022", "VAN_CS2_039")[1]["es"]["name"], "Viento furioso")
+
+    def test_20022_six_more_elementals(self):
+        for cid in ("CFM_606", "CFM_606t", "CFM_715", "VAN_TU4e_002t", "LOE_053", "OG_209"):
+            self.assertNotIn("race", self.card("19632", cid)[0], cid)
+            self.assertEqual(self.card("20022", cid)[0]["race"], "ELEMENTAL", cid)
+
+    def test_20022_the_caverns_below_needs_five_minions(self):
+        _, old = self.card("19632", "UNG_067")
+        _, new = self.card("20022", "UNG_067")
+        self.assertEqual(old["en"]["text"], "[x]<b>Quest:</b> Play four minions\nwith the same name.\n<b>Reward:</b> Crystal Core.")
+        self.assertEqual(new["en"]["text"], "[x]<b>Quest:</b> Play five minions\nwith the same name.\n<b>Reward:</b> Crystal Core.")
+        self.assertEqual(new["de"]["text"], "<b>Quest:</b> Spielt 5 Diener mit dem gleichen Namen aus.\n<b>Belohnung:</b> Kristallkern")
+        self.assertIn("scripts/version/ungoro.lua", pack.version_view(self.files, "20022"))
+        self.assertNotIn("scripts/version/ungoro.lua", pack.version_view(self.files, "19632"))
+
+
+class ErasMsg(unittest.TestCase):
+    """packs/eras: the versions of the Mean Streets of Gadgetzan era (15590, 16214, 17720), each from the msg pack."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.files, cls.report = pack.build(pack.REPO / "packs/eras")
+        cls.man = json.loads(cls.files["manifest.json"])
+
+    card = Eras.card
+
+    def test_the_versions_and_their_scripts(self):
+        self.assertEqual(self.report.errors, [])
+        ids = [v["id"] for v in self.man["versions"]]
+        self.assertLess(ids.index("15590"), ids.index("16214"))
+        self.assertLess(ids.index("16214"), ids.index("17720"))
+        msg, _ = pack.build(pack.REPO / "packs/msg")
+        views = {vid: pack.version_view(self.files, vid) for vid in ("15590", "16214", "17720")}
+        # 15590 and 16214 are the msg pack's cards and texts; only their scripts differ
+        for vid in ("15590", "16214"):
+            for p, d in msg.items():
+                if own_rules(p) and not p.startswith("scripts/"):
+                    self.assertEqual(views[vid].get(p), d, f"{vid} {p}")
+        scripts = {vid: sorted(p for p in v if p.startswith("scripts/version/") and p != "scripts/version/ships_cannon.lua")
+                   for vid, v in views.items()}
+        S = "scripts/version/servant_of_yogg_saron.lua"  # 15181's fix: the msg pack keeps og.lua's Servant
+        self.assertEqual(scripts, {"15590": ["scripts/version/kabal_chemist.lua", "scripts/version/mistcaller.lua", S],
+                                   "16214": ["scripts/version/mistcaller.lua", S],
+                                   "17720": ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua", S]})
+
+    def test_17720_nerfs_small_time_buccaneer_and_spirit_claws(self):
+        for vid, hp, cost in (("16214", 2, 1), ("17720", 1, 2)):
+            self.assertEqual(self.card(vid, "CFM_325")[0]["health"], hp, vid)
+            self.assertEqual(self.card(vid, "KAR_063")[0]["cost"], cost, vid)
+        self.assertEqual(self.card("16214", "CFM_025")[0]["keywords"], ["CHOOSE_ONE", "TRIGGER_VISUAL"])
+        self.assertEqual(self.card("17720", "CFM_025")[0]["keywords"], ["TRIGGER_VISUAL"], "Wind-up Burglebot")
+
+    def test_17720_writes_poisonous_and_rewords(self):
+        for cid in ("VAN_EX1_170", "FP1_010", "LOE_010"):
+            old, new = self.card("16214", cid)[1], self.card("17720", cid)[1]
+            self.assertEqual(old["en"]["text"], "Destroy any minion damaged by this minion.", cid)
+            self.assertEqual(new["en"]["text"], "<b>Poisonous</b>", cid)
+            self.assertEqual(new["ru"]["text"], "<b>Яд</b>", cid)
+        self.assertEqual(self.card("17720", "VAN_EX1_522")[1]["en"]["text"], "<b>Stealth</b>\n <b>Poisonous</b>")
+        self.assertEqual(self.card("16214", "VAN_NEW1_016")[1]["en"]["text"],
+                         "<b>Battlecry:</b> Put a random Pirate from your deck into your hand.")
+        parrot = self.card("17720", "VAN_NEW1_016")[1]
+        self.assertEqual(parrot["en"]["text"], "<b>Battlecry:</b> Draw a Pirate from your deck.")
+        self.assertEqual(parrot["de"]["text"], "<b>Kampfschrei:</b> Zieht einen Piraten aus Eurem Deck.")
+        self.assertEqual(self.card("17720", "BRM_005")[1]["en"]["text"], "[x]Deal $2 damage to all\nminions except Demons.")
+        # every text of the patch is in 17720 and differs from 16214's in some language
+        patch = json.loads((pack.REPO / "packs/eras/versions/17720/patch.json").read_text())
+        for cid, ch in patch["cards"].items():
+            old, new = self.card("16214", cid)[1], self.card("17720", cid)[1]
+            for f in ("name", "text"):
+                if f in ch:
+                    self.assertEqual({lang: new[lang][f] for lang in new}, {lang: ch[f][hs] for lang, hs in pack.HS_LOCALES.items()}, cid)
+                    self.assertNotEqual({lang: old[lang][f] for lang in old}, {lang: new[lang][f] for lang in new}, cid)
+
+
+class ErasIcc(unittest.TestCase):
+    """packs/eras: the Knights of the Frozen Throne versions (20457, 20970, 21517, 22115) on the icc pack."""
+
+    setUpClass = classmethod(Eras.setUpClass.__func__)
+    card = Eras.card
+
+    def rules(self, vid):
+        return json.loads(pack.version_view(self.files, vid)["rules.json"])
+
+    def test_20457_is_the_frozen_throne_pack_with_the_msg_fixes(self):
+        icc, _ = pack.build(pack.REPO / "packs/icc")
+        view = pack.version_view(self.files, "20457")
+        # the icc pack still has the Servant of Yogg-Saron, Mistcaller and Potion of Polymorph of before 15181, 15590 and
+        # 17720: the fixes go along
+        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua",
+                 "scripts/version/servant_of_yogg_saron.lua"]
+        self.assertEqual({p: d for p, d in view.items() if own_rules(p) and p not in fixes},
+                         {p: d for p, d in icc.items() if own_rules(p)})
+        for vid in ("20457", "20970", "21517", "22115"):
+            for f in fixes:
+                self.assertEqual(pack.version_view(self.files, vid)[f], pack.version_view(self.files, "17720")[f], vid)
+        self.assertEqual([v["era"] for v in self.man["versions"] if v["id"] in ("20457", "20970", "21517", "22115")],
+                         ["icc"] * 4)
+
+    def test_20970_nerfs(self):
+        for vid in ("20970", "21517", "22115"):  # each version is the icc pack and all the changes up to it
+            for cid, old, new in (("ICC_054", 5, 6), ("VAN_CS2_106", 2, 3), ("VAN_EX1_246", 3, 4)):
+                self.assertEqual(self.card("20457", cid)[0]["cost"], old, cid)
+                self.assertEqual(self.card(vid, cid)[0]["cost"], new, (vid, cid))
+            _, texts = self.card(vid, "VAN_EX1_169")
+            self.assertEqual(texts["en"]["text"], "Gain 1 Mana Crystal this turn only.")
+            self.assertEqual(texts["pl"]["text"], "Otrzymujesz 1 kryształ many w tej turze.")
+            _, texts = self.card(vid, "VAN_EX1_507")
+            self.assertEqual(texts["en"]["text"], "Your other Murlocs have +2 Attack.")
+            self.assertEqual(texts["de"]["text"], "Eure anderen Murlocs haben +2 Angriff.")
+        _, texts = self.card("20457", "VAN_EX1_169")
+        self.assertEqual(texts["en"]["text"], "Gain 2 Mana Crystals this turn only.")
+        self.assertEqual(self.card("20457", "VAN_EX1_507")[1]["ru"]["text"], "Другие ваши мурлоки получают +2/+1.")
+        # wording of that build: Dreadsteed (de), Forbidden Healing (es)
+        self.assertEqual(self.card("20970", "AT_019")[1]["de"]["text"],
+                         "<b>Todesröcheln:</b> Beschwört am Ende des Zuges ein Schreckensross.")
+        self.assertEqual(self.card("20970", "OG_198")[1]["es"]["text"],
+                         "Gasta todo tu maná. Restaura el doble de esa cantidad en salud.")
+        self.assertEqual(self.card("20970", "OG_198")[1]["en"], self.card("20457", "OG_198")[1]["en"])
+
+    def test_21517_mechanics_update(self):
+        _, texts = self.card("21517", "CFM_900")
+        self.assertEqual(texts["en"]["text"], "After you summon a minion, deal 5 damage to your hero.")
+        self.assertEqual(texts["es"]["text"], "[x]Tras invocar a un esbirro,\ninflige 5 p. de daño\na tu héroe.")
+        self.assertEqual(self.card("20970", "CFM_900")[1]["en"]["text"],
+                         "Whenever you summon a minion, deal 5 damage to your hero.")
+        self.assertEqual(self.card("21517", "ICC_812")[1]["it"]["name"], "Carro dei Morti")
+        self.assertEqual(self.card("20970", "ICC_812")[1]["it"]["name"], "Carro della Carne")
+        self.assertEqual(self.card("21517", "VAN_EX1_154")[1]["en"]["text"],
+                         "<b>Choose One -</b>\nDeal $3 damage to a minion; or $1 damage\nand draw a card.")
+        # the texts of that build (wording, spaces, line breaks) for the rest
+        for cid, lang in (("AT_050", "de"), ("AT_065", "en"), ("CFM_659", "fr"), ("GVG_111", "de"), ("ICC_064", "en"),
+                          ("ICC_834w", "en"), ("KAR_021", "fr"), ("OG_338", "fr"), ("UNG_934t1", "en"),
+                          ("VAN_EX1_557", "fr"), ("VAN_NEW1_007", "en")):
+            self.assertNotEqual(self.card("21517", cid)[1][lang], self.card("20970", cid)[1][lang], cid)
+        self.assertEqual(self.card("21517", "AT_065")[1]["en"]["text"],
+                         "<b>Battlecry:</b> If you have a minion with <b>Taunt</b>, gain +1 Durability.")
+        for vid, after in (("20457", True), ("20970", True), ("21517", False), ("22115", False)):
+            beh = self.rules(vid)["behaviour"]
+            self.assertEqual(beh.get("countered_no_after_spell", False), after, vid)  # Counterspell
+            self.assertEqual(beh.get("after_spell_from_before", False), not after, vid)  # Wild Pyromancer, Mindgames
+            self.assertFalse(beh.get("lifesteal_one_heal", False), vid)  # Kobolds & Catacombs'
+
+    def test_22115_marin_the_fox(self):
+        marin, texts = self.card("22115", "LOOT_357")
+        self.assertEqual((marin["cost"], marin["attack"], marin["health"]), (8, 6, 6))
+        self.assertEqual((marin["set"], marin["rarity"], marin["collectible"]), ("LOOTAPALOOZA", "LEGENDARY", True))
+        self.assertEqual(marin["script"], "scripts/version/marin.lua#LOOT_357")
+        self.assertEqual(texts["en"]["name"], "Marin the Fox")
+        self.assertEqual(texts["ru"]["name"], "Марин Лис")
+        self.assertIn("Treasure Chest", texts["en"]["text"])
+        chest, texts = self.card("22115", "LOOT_357l")
+        self.assertEqual((chest["cost"], chest["attack"], chest["health"], chest["keywords"]), (3, 0, 8, ["DEATHRATTLE"]))
+        self.assertEqual(texts["en"]["text"], "<b>Deathrattle:</b> Give your opponent a fantastic Treasure.")
+        self.assertEqual(self.card("22115", "LOOT_998l")[1]["en"]["text"], "Draw 3 cards. They cost (0).")
+        self.assertEqual(self.card("22115", "LOOT_998l")[1]["fr"]["name"], "Baguette miraculeuse")
+        for cid in ("LOOT_998h", "LOOT_998j", "LOOT_998k"):
+            self.assertIn("scripts/version/marin.lua#", self.card("22115", cid)[0]["script"])
+        early = json.loads(pack.version_view(self.files, "21517")["cards.json"])
+        self.assertFalse([c["id"] for c in early if c["id"].startswith("LOOT_")])
+        # Kobolds & Catacombs' set: known, and in constructed decks (Marin was given to every player); not in Arena
+        rules = self.rules("22115")
+        self.assertIn("LOOTAPALOOZA", rules["sets"])
+        self.assertIn("LOOTAPALOOZA", rules["modes"]["constructed"]["sets"])
+        self.assertNotIn("LOOTAPALOOZA", rules["modes"]["arena"]["sets"])
+        self.assertNotIn("LOOTAPALOOZA", self.rules("21517")["sets"])
+        # wording of that build: Dire Shapeshift (es)
+        self.assertEqual(self.card("22115", "AT_132_DRUID")[1]["es"]["text"],
+                         "<b>Poder de héroe</b>\nObtienes +2 p. de ataque este turno y +2 p. de armadura.")
+        self.assertEqual(self.card("22115", "VAN_HERO_06bp2")[1]["es"]["text"],
+                         self.card("22115", "AT_132_DRUID")[1]["es"]["text"])
+
+
+class ErasKara(unittest.TestCase):
+    """packs/eras, the One Night in Karazhan era (base packs/kara): 13921, 14366, 14830, 15181."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.files, cls.report = pack.build(pack.REPO / "packs/eras")
+        cls.man = json.loads(cls.files["manifest.json"])
+        cls.views = {}
+
+    def view(self, vid):
+        if vid not in self.views:
+            self.views[vid] = pack.version_view(self.files, vid)
+        return self.views[vid]
+
+    def card(self, vid, cid):
+        v = self.view(vid)
+        c = next(c for c in json.loads(v["cards.json"]) if c["id"] == cid)
+        return c, {lang: json.loads(v[f"locales/{lang}.json"])["cards"][cid] for lang in self.man["locales"]}
+
+    def test_the_versions_are_listed(self):
+        self.assertEqual(self.report.errors, [])
+        vs = {v["id"]: v for v in self.man["versions"]}
+        for vid in ("13921", "14366", "14830", "15181"):
+            self.assertEqual((vs[vid]["era"], vs[vid]["formats"]), ("kara", ["standard", "wild"]), vid)
+        self.assertEqual(vs["14830"]["name"]["ru"], "Ослаблены Йогг-Сарон, Зов лесов, Рывок и ещё четыре карты")
+
+    def test_13921_is_the_karazhan_pack(self):
+        kara, _ = pack.build(pack.REPO / "packs/kara")
+        view = self.view("13921")
+        self.assertEqual({p: d for p, d in view.items() if own_rules(p)},
+                         {p: d for p, d in kara.items() if own_rules(p)})
+
+    def test_14366_fixes_texts_only(self):
+        # (their rules.json differ only in the Arena bans of 14366)
+        self.assertEqual({p: d for p, d in self.view("14366").items() if own_rules(p) and not p.startswith("locales/")},
+                         {p: d for p, d in self.view("13921").items() if own_rules(p) and not p.startswith("locales/")})
+        old, new = self.card("13921", "GVG_107")[1], self.card("14366", "GVG_107")[1]
+        self.assertTrue(old["en"]["text"].endswith("<b>Divine Shield</b>.\n<i>(at random)</i>"))
+        self.assertTrue(new["en"]["text"].endswith("<b>Divine Shield</b>\n<i>(at random)</i>."))
+        self.assertTrue(new["fr"]["text"].endswith("<i>(au hasard)</i>."))
+        self.assertEqual(self.card("13921", "AT_050")[1]["ru"]["text"][:28], "<b>Предсмертный хрип:</b> Си")
+        self.assertEqual(self.card("14366", "AT_050")[1]["ru"]["text"][:28], "<b>Предсмертный хрип:</b> си")
+        self.assertEqual(self.card("14366", "AT_050")[1]["en"], self.card("13921", "AT_050")[1]["en"])
+
+    def test_14830_nerfs(self):
+        for cid, field, old, new in [("VAN_CS2_045", "cost", 1, 2), ("VAN_CS2_108", "cost", 1, 2), ("OG_211", "cost", 8, 9),
+                                     ("VAN_CS2_103", "cost", 3, 1), ("VAN_CS2_188", "attack", 2, 1)]:
+            self.assertEqual(self.card("14366", cid)[0][field], old, cid)
+            self.assertEqual(self.card("14830", cid)[0][field], new, cid)
+            self.assertEqual(self.card("15181", cid)[0][field], new, cid)
+        charge = self.card("14830", "VAN_CS2_103")[1]
+        self.assertEqual(charge["en"]["text"], "Give a friendly minion <b>Charge</b>. It can't attack heroes this turn.")
+        self.assertEqual(charge["ru"]["text"], "Ваше выбранное существо получает <b>«Рывок»</b>. На этом ходу оно не может атаковать героев.")
+        self.assertEqual(self.card("14366", "VAN_CS2_103")[1]["en"]["text"], "Give a friendly minion +2 Attack and <b>Charge</b>.")
+        tuskarr = self.card("14830", "AT_046")[1]
+        self.assertEqual(tuskarr["en"]["text"], "<b>Battlecry:</b> Summon a random basic Totem.")
+        self.assertEqual(tuskarr["de"]["text"], "<b>Kampfschrei:</b> Beschwört ein zufälliges Basistotem.")
+        self.assertEqual(self.card("14366", "AT_046")[1]["en"]["text"], "<b>Battlecry:</b> Summon ANY random Totem.")
+        self.assertIn("scripts/version/kara_6_1_3.lua", self.view("14830"))
+        self.assertNotIn("scripts/version/kara_6_1_3.lua", self.view("14366"))
+
+    def test_15181_murlocs_peddler_and_texts(self):
+        for cid, en, de in [("VAN_EX1_507", "Your other Murlocs have +2/+1.", "Eure anderen Murlocs haben +2/+1."),
+                            ("VAN_EX1_508", "Your other Murlocs have +1 Attack.", "Eure anderen Murlocs haben +1 Angriff."),
+                            ("VAN_EX1_103", "<b>Battlecry:</b> Give your other Murlocs +2 Health.", "<b>Kampfschrei:</b> Verleiht Euren anderen Murlocs +2 Leben."),
+                            ("VAN_EX1_509", "Whenever you summon a Murloc, gain +1 Attack.", "Erhält jedes Mal +1 Angriff, wenn Ihr einen Murloc herbeiruft.")]:
+            texts = self.card("15181", cid)[1]
+            self.assertEqual((texts["en"]["text"], texts["de"]["text"]), (en, de), cid)
+            self.assertNotEqual(self.card("14830", cid)[1]["en"]["text"], en, cid)
+        peddler = self.card("15181", "KAR_070")[1]
+        self.assertEqual(peddler["en"]["text"], "[x]<b>Battlecry:</b> If you're holding\nany non-Rogue class cards,\n reduce their Cost by (2).")
+        self.assertEqual(peddler["it"]["text"], "<b>Grido di Battaglia:</b> riduce di (2) il costo delle carte non del Ladro nella tua mano.")
+        self.assertEqual(self.card("14830", "KAR_070")[1]["en"]["text"], "[x]<b>Battlecry:</b> Reduce the Cost\nof cards in your hand from\nother classes by (2).")
+        self.assertEqual(self.card("15181", "VAN_EX1_533")[1]["en"]["text"], "<b>Secret:</b> When a character attacks your hero, instead they attack another random character.")
+        # Elemental Destruction's Overload 1 in this build's data is export noise: it stays 5
+        ed = self.card("15181", "AT_051")
+        self.assertEqual((ed[0]["mana_lock"], ed[1]["en"]["text"]), (5, "Deal $4-$5 damage to all minions. <b>Overload:</b> (5)"))
+        self.assertEqual(self.card("14830", "AT_051")[1]["en"]["text"], "Deal $4-$5 damage to all minions. <b>Overload:</b> (5).")
+        self.assertEqual(self.card("15181", "VAN_CS2_188")[1]["en"]["text"], "<b>Battlecry:</b> Give a minion +2 Attack this turn.")
+        self.assertIn("scripts/version/kara_6_2.lua", self.view("15181"))
+        self.assertNotIn("scripts/version/kara_6_1_3.lua", self.view("15181"))
 
 
 class TestDistribution(unittest.TestCase):

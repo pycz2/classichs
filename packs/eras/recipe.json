@@ -388,6 +388,306 @@
       }
     },
     {
+      "id": "13921",
+      "patch": "6.0.0.13921",
+      "date": "2016-08-09",
+      "era": "kara",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "One Night in Karazhan",
+        "ru": "Вечеринка в Каражане",
+        "de": "Eine Nacht in Karazhan",
+        "fr": "Une nuit à Karazhan",
+        "es": "Una noche en Karazhan",
+        "pt_BR": "Uma Noite em Karazhan",
+        "it": "Una Notte a Karazhan",
+        "pl": "Noc w Karazhanie"
+      }
+    },
+    {
+      "id": "14366",
+      "patch": "6.1.1.14366",
+      "date": "2016-09-15",
+      "era": "kara",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Arena draft changes and card text fixes",
+        "ru": "Изменения отбора на Арене и правки текстов карт",
+        "de": "Arena-Auswahl geändert, Kartentexte korrigiert",
+        "fr": "Sélection en Arène modifiée, textes de cartes corrigés",
+        "es": "Cambios en la selección de Arena y en textos de cartas",
+        "pt_BR": "Mudanças na seleção da Arena e nos textos de cards",
+        "it": "Modifiche alla selezione dell'Arena e ai testi delle carte",
+        "pl": "Zmiany w doborze kart na Arenie i poprawki opisów kart"
+      }
+    },
+    {
+      "id": "14830",
+      "patch": "6.1.3.14830",
+      "date": "2016-10-03",
+      "era": "kara",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Yogg-Saron, Call of the Wild, Charge and four more cards nerfed",
+        "ru": "Ослаблены Йогг-Сарон, Зов лесов, Рывок и ещё четыре карты",
+        "de": "Yogg-Saron, Ruf der Wildnis, Sturmangriff und vier weitere Karten abgeschwächt",
+        "fr": "Yogg-Saron, Appel de la nature, Charge et quatre autres cartes affaiblis",
+        "es": "Yogg-Saron, Llamada de lo Salvaje, Cargar y otras cuatro cartas debilitados",
+        "pt_BR": "Yogg-Saron, Chamado da Selva, Investida e mais quatro cards enfraquecidos",
+        "it": "Yogg-Saron, Richiamo della Selva, Carica e altre quattro carte indeboliti",
+        "pl": "Osłabienie Yogg-Sarona, Zewu Ostępów, Szarży i czterech innych kart"
+      }
+    },
+    {
+      "id": "15181",
+      "patch": "6.2.0.15181",
+      "date": "2016-10-20",
+      "era": "kara",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Murloc lords help only your Murlocs; Yogg-Saron fixes",
+        "ru": "Вожаки мурлоков усиливают только ваших мурлоков, исправлен Йогг-Сарон",
+        "de": "Murlocanführer stärken nur Eure Murlocs, Yogg-Saron korrigiert",
+        "fr": "Les chefs murlocs ne renforcent que vos murlocs, Yogg-Saron corrigé",
+        "es": "Los líderes múrloc solo mejoran a tus múrlocs; Yogg-Saron corregido",
+        "pt_BR": "Líderes Murlocs só fortalecem seus Murlocs; Yogg-Saron corrigido",
+        "it": "I capi Murloc potenziano solo i tuoi Murloc; Yogg-Saron corretto",
+        "pl": "Przywódcy murloków wzmacniają tylko twoje murloki, poprawki Yogg-Sarona"
+      }
+    },
+    {
+      "id": "15590",
+      "patch": "7.0.0.15590",
+      "date": "2016-11-29",
+      "era": "msg",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Mean Streets of Gadgetzan",
+        "ru": "Злачный город Прибамбасск",
+        "de": "Die Straßen von Gadgetzan",
+        "fr": "Main basse sur Gadgetzan",
+        "es": "Mafias de Gadgetzan",
+        "pt_BR": "Gangues de Geringontzan",
+        "it": "I Bassifondi di Meccania",
+        "pl": "Ciemne zaułki Gadżetonu"
+      }
+    },
+    {
+      "id": "16214",
+      "patch": "7.0.0.16214",
+      "date": "2017-01-07",
+      "era": "msg",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Kabal Chemist can make Dragonfire Potion",
+        "ru": "Химик «Кабала» может создать Зелье драконьего огня",
+        "de": "Chemikerin der Kabale kann Drachenfeuertrank erschaffen",
+        "fr": "La Chimiste de la Kabale peut créer la Potion de feu draconique",
+        "es": "La Química del Kabal puede crear la Poción de fuego de dragón",
+        "pt_BR": "Química do Kabal pode criar Poção do Fogo de Dragão",
+        "it": "L'Alchimista della Kabala può creare la Pozione di Dragonfuoco",
+        "pl": "Chemiczka Konfraterni może stworzyć Miksturę smoczego ognia"
+      }
+    },
+    {
+      "id": "17720",
+      "patch": "7.1.0.17720",
+      "date": "2017-02-28",
+      "era": "msg",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Small-Time Buccaneer and Spirit Claws nerfed",
+        "ru": "Ослаблены Мелкий буканьер и Призрачные когти",
+        "de": "Kleinbukanier und Geisterklauen abgeschwächt",
+        "fr": "Boucanier de petite envergure et Griffes spectrales affaiblis",
+        "es": "Bucanero de poca monta y Garras espirituales debilitados",
+        "pt_BR": "Bucaneiro Café-Pequeno e Garras Espirituais enfraquecidos",
+        "it": "Bucaniere Minuto e Artigli Spiritici indeboliti",
+        "pl": "Osłabienie Pomniejszego bukaniera i Widmowych pazurów"
+      }
+    },
+    {
+      "id": "18336",
+      "patch": "8.0.0.18336",
+      "date": "2017-04-04",
+      "era": "ungoro",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Journey to Un'Goro",
+        "ru": "Экспедиция в Ун'Горо",
+        "de": "Reise nach Un'Goro",
+        "fr": "Voyage au centre d'Un'Goro",
+        "es": "Viaje a Un'Goro",
+        "pt_BR": "Jornada a Un'Goro",
+        "it": "Viaggio a Un'Goro",
+        "pl": "Podróż do Un'Goro"
+      }
+    },
+    {
+      "id": "19506",
+      "patch": "8.2.0.19506",
+      "date": "2017-06-01",
+      "era": "ungoro",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Card bug fixes",
+        "ru": "Исправлены ошибки карт",
+        "de": "Kartenfehler behoben",
+        "fr": "Corrections de bugs de cartes",
+        "es": "Corrección de errores de cartas",
+        "pt_BR": "Correções de erros de cards",
+        "it": "Correzioni di bug delle carte",
+        "pl": "Poprawki błędów kart"
+      }
+    },
+    {
+      "id": "19632",
+      "patch": "8.2.2.19632",
+      "date": "2017-06-13",
+      "era": "ungoro",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Mirage Caller exploit fixed",
+        "ru": "Исправлена уязвимость Призывателя миражей",
+        "de": "Exploit mit Illusionsbeschwörer behoben",
+        "fr": "Exploit de Mande-mirage corrigé",
+        "es": "Corregido un exploit de Clamaespejismos",
+        "pt_BR": "Exploit do Evocador de Miragem corrigido",
+        "it": "Corretto un exploit del Destamiraggi",
+        "pl": "Naprawiono exploit Mirażysty"
+      }
+    },
+    {
+      "id": "20022",
+      "patch": "8.4.0.20022",
+      "date": "2017-07-10",
+      "era": "ungoro",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "The Caverns Below nerfed, six more Elementals",
+        "ru": "Ослаблены Подземные пещеры, ещё шесть элементалей",
+        "de": "Abstieg in die Tiefe abgeschwächt, sechs weitere Elementare",
+        "fr": "Grotte des profondeurs affaiblie, six élémentaires de plus",
+        "es": "Las cavernas debilitada, seis elementales más",
+        "pt_BR": "Cavernas nas Profundezas enfraquecida, mais seis Elementais",
+        "it": "Esplorare gli Abissi indebolita, sei Elementali in più",
+        "pl": "Osłabienie Podziemnych jaskiń, sześć nowych żywiołaków"
+      }
+    },
+    {
+      "id": "20457",
+      "patch": "9.0.0.20457",
+      "date": "2017-08-08",
+      "era": "icc",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Knights of the Frozen Throne",
+        "ru": "Рыцари Ледяного Трона",
+        "de": "Ritter des Frostthrons",
+        "fr": "Chevaliers du Trône de glace",
+        "es": "Caballeros del Trono Helado",
+        "pt_BR": "Cavaleiros do Trono de Gelo",
+        "it": "Cavalieri del Trono di Ghiaccio",
+        "pl": "Rycerze Mroźnego Tronu"
+      }
+    },
+    {
+      "id": "20970",
+      "patch": "9.1.0.20970",
+      "date": "2017-09-18",
+      "era": "icc",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Innervate, Fiery War Axe, Hex, Murloc Warleader and Spreading Plague nerfed",
+        "ru": "Ослаблены Озарение, Огненная секира, Сглаз, Мурлок-полководец и Ползучая чума",
+        "de": "Anregen, Feurige Kriegsaxt, Verhexung, Murlocanführer und Seuchenherd abgeschwächt",
+        "fr": "Innervation, Hache de guerre embrasée, Maléfice, Chef de guerre murloc et Plaie envahissante affaiblis",
+        "es": "Estimular, Hacha de guerra ígnea, Maleficio, Líder de guerra múrloc y Peste contagiosa debilitados",
+        "pt_BR": "Avivar, Machado de Guerra Abrasador, Bagata, Líder Guerreiro Murloc e Peste Incontrolável enfraquecidos",
+        "it": "Innervazione, Ascia Ardente, Maleficio, Condottiero Murloc e Diffusione della Piaga indeboliti",
+        "pl": "Osłabienie Orzeźwienia, Ognistego wojennego topora, Złego uroku, Dowódcy murloków i Posiewu zarazy"
+      }
+    },
+    {
+      "id": "21517",
+      "patch": "9.2.0.21517",
+      "date": "2017-10-17",
+      "era": "icc",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Mechanics update: Counterspell, Wild Pyromancer, Lord Jaraxxus, Unlicensed Apothecary",
+        "ru": "Обновление механик: Антимагия, Яростный пиромант, Лорд Джараксус, Подпольный аптекарь",
+        "de": "Mechanik-Update: Gegenzauber, Wilder Pyromant, Lord Jaraxxus, Schwarzapotheker",
+        "fr": "Mise à jour des mécaniques : Contresort, Pyromancien sauvage, Seigneur Jaraxxus, Apothicaire clandestin",
+        "es": "Actualización de mecánicas: Contrahechizo, Piromántico salvaje, Lord Jaraxxus, Boticario ilegal",
+        "pt_BR": "Atualização de mecânicas: Contrafeitiço, Piromante Selvagem, Lorde Jaraxxus, Boticário Ilegal",
+        "it": "Aggiornamento delle meccaniche: Controincantesimo, Piromante Selvaggio, Sire Jaraxxus, Speziale Demoniaco",
+        "pl": "Aktualizacja mechanik: Kontr-zaklęcie, Dziki piromanta, Lord Jaraxxus, Pokątny konsyliarz"
+      }
+    },
+    {
+      "id": "22115",
+      "patch": "9.4.0.22115",
+      "date": "2017-11-06",
+      "era": "icc",
+      "formats": [
+        "standard",
+        "wild"
+      ],
+      "name": {
+        "en": "Marin the Fox ahead of Kobolds & Catacombs; Crush's discount applies last",
+        "ru": "Марин Лис раньше «Кобольдов и катакомб»; скидка Сокрушения считается последней",
+        "de": "Marin der Fuchs vor Kobolde & Katakomben; Zermalmens Rabatt gilt zuletzt",
+        "fr": "Marin le malandrin avant Kobolds et Catacombes ; la réduction d’Écraser s’applique en dernier",
+        "es": "Marin el Zorro antes de Kóbolds & Catacumbas; la rebaja de Machaque se aplica al final",
+        "pt_BR": "Marin, a Raposa antes de Kobolds & Catacumbas; o desconto de Esmagar vem por último",
+        "it": "Marin la Volpe prima di Coboldi & Catacombe; lo sconto di Schiacciamento si applica per ultimo",
+        "pl": "Marin Szczwany Lis przed Koboldami i katakumbami; zniżka Zmiażdżenia liczona na końcu"
+      }
+    },
+    {
       "id": "22611",
       "patch": "10.0.0.22611",
       "date": "2017-12-06",

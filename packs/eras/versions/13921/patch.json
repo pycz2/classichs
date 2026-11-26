@@ -1,0 +1,8 @@
+{
+ "base": "kara",
+ "build": 13921,
+ "about": "6.0.0.13921 (2016-08-09): the One Night in Karazhan release, the kara pack as it is",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 6.0.0.13921; packs/kara"
+ ]
+}
