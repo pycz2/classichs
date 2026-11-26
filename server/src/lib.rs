@@ -298,7 +298,7 @@ impl Hub {
             let auto = |x: i64, y: i64| self.auto_for.get(&x) == Some(&y) || self.auto_for.get(&y) == Some(&x);
             let best = order
                 .iter()
-                .filter(|&&b| b != a && !taken.contains(&b) && self.queue[&b].mode == sa.mode && self.queue[&b].rules.rules_hash == sa.rules.rules_hash)
+                .filter(|&&b| b != a && !taken.contains(&b) && self.queue[&b].mode == sa.mode && self.queue[&b].rules.rules_hash == sa.rules.rules_hash && self.queue[&b].rules.format == sa.rules.format)
                 // an auto-bot plays only the player it came for
                 .filter(|&&b| auto(a, b) || !(self.auto_for.contains_key(&a) || self.auto_for.contains_key(&b)))
                 .filter_map(|&b| {

@@ -97,7 +97,7 @@ pub async fn brackets(c: &impl ConnectionTrait, mode: Mode, rules: &GameRules, i
     let mut out = [ALL.to_string(), ALL.to_string()];
     for (p, id) in ids.iter().enumerate() {
         match mode {
-            Mode::Ranked => out[p] = rank_bracket(db::standing(c, *id, &rules.id, &rules.ladder).await?.rank),
+            Mode::Ranked => out[p] = rank_bracket(db::standing(c, *id, &rules.ladder_key(), &rules.ladder).await?.rank),
             Mode::Arena => out[p] = arena_bracket(arena::Entity::find_by_id(*id).one(c).await?.map_or(0, |r| r.wins)).into(),
             _ => {}
         }

@@ -101,6 +101,9 @@ enum In {
         deck: DeckIn,
         #[serde(default)]
         pack: Option<String>,
+        /// "standard" | "wild" (a version with both); none: the default.
+        #[serde(default)]
+        format: Option<String>,
     },
     Unqueue {},
     Spectate { user: String },
@@ -393,7 +396,7 @@ pub(crate) async fn arena_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Va
 /// The profile: the rank (and season) in a pack (`pack`: its rules_hash) and the Arena run.
 pub(crate) async fn me_json(c: &impl ConnectionTrait, me: i64, rules: &GameRules) -> DbResult<Value> {
     let a = db::account_by_id(c, me).await?.ok_or_else(|| not_found("account"))?;
-    let s = db::standing(c, me, &rules.id, &rules.ladder).await?;
+    let s = db::standing(c, me, &rules.ladder_key(), &rules.ladder).await?;
     Ok(json!({"user": a.name, "tag": a.tag, "rank": rank_json(c, &s).await?, "arena": arena_json(c, me).await?,
               "season": ranked::season_name(s.season), "pack": rules.rules_hash}))
 }
@@ -989,9 +992,10 @@ impl Session {
                 }
                 Ok(())
             }
-            In::Queue { mode, deck, pack } => {
+            In::Queue { mode, deck, pack, format } => {
                 let deck = deck_value(&deck, false)?;
                 let (rules, _) = self.game_of(pack.as_deref(), None).await?;
+                let rules = rules.with_format(format.as_deref().unwrap_or_default()).ok_or_else(|| e("format", "This game has no such format"))?;
                 let mode = match mode {
                     QMode::Casual => Mode::Casual,
                     QMode::Ranked => Mode::Ranked,
@@ -1000,7 +1004,7 @@ impl Session {
                     return Err(e("queue", "This game has no ranked ladder"));
                 }
                 self.validate(&deck, &rules).await?;
-                let st = db::standing(db, me, &rules.id, &rules.ladder).await?;
+                let st = db::standing(db, me, &rules.ladder_key(), &rules.ladder).await?;
                 let key = match mode {
                     Mode::Casual => Key { mmr: st.casual_mmr, level: 0, legend: false },
                     _ => Key { mmr: st.ranked_mmr, level: st.rank().level(&rules.ladder), legend: st.rank().legend() },
@@ -1297,7 +1301,7 @@ impl Session {
     }
 
     async fn validate(&self, deck: &Value, rules: &GameRules) -> R {
-        let r = classichs_engine::Engine::new().handle(&json!({"op": "validate", "deck": deck, "pack": rules.rules_hash}));
+        let r = classichs_engine::Engine::new().handle(&json!({"op": "validate", "deck": deck, "pack": rules.rules_hash, "format": rules.format}));
         if r["ok"] == true {
             Ok(())
         } else {
@@ -1325,7 +1329,7 @@ impl Session {
     }
 
     async fn enqueue(&self, me: i64, mode: Mode, rules: Arc<GameRules>, deck: Value, key: Key) -> R {
-        let (pack, pack_name) = (rules.rules_hash.clone(), packs::short_name(&rules));
+        let (pack, pack_name, self_format) = (rules.rules_hash.clone(), packs::short_name(&rules), rules.format.clone());
         {
             let mut hub = self.app.hub();
             if hub.in_game.contains_key(&me) {
@@ -1344,6 +1348,6 @@ impl Session {
                 .data(json!({"mode": mode, "mmr": key.mmr.round(), "level": key.level, "hero": deck["hero"], "pack": pack})),
         );
         presence(&self.app, me).await;
-        self.ok(json!({"t": "queued", "mode": mode, "pack": pack}))
+        self.ok(json!({"t": "queued", "mode": mode, "pack": pack, "format": self_format}))
     }
 }
