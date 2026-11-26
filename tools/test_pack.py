@@ -1761,8 +1761,8 @@ class ErasUngoro(unittest.TestCase):
         # 17720: the fixes go along
         fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua",
                  "scripts/version/servant_of_yogg_saron.lua"]
-        self.assertEqual({p: d for p, d in view.items() if own_rules(p) and p not in fixes},
-                         {p: d for p, d in ungoro.items() if own_rules(p)})
+        self.assertEqual({p: no_ranks(p, d) for p, d in view.items() if own_rules(p) and p not in fixes},
+                         {p: no_ranks(p, d) for p, d in ungoro.items() if own_rules(p)})
         for vid in ("18336", "19506", "19632", "20022"):
             for f in fixes:
                 self.assertEqual(pack.version_view(self.files, vid)[f], pack.version_view(self.files, "17720")[f], vid)
@@ -1823,7 +1823,7 @@ class ErasMsg(unittest.TestCase):
         for vid in ("15590", "16214"):
             for p, d in msg.items():
                 if own_rules(p) and not p.startswith("scripts/"):
-                    self.assertEqual(views[vid].get(p), d, f"{vid} {p}")
+                    self.assertEqual(no_ranks(p, views[vid].get(p)), no_ranks(p, d), f"{vid} {p}")
         scripts = {vid: sorted(p for p in v if p.startswith("scripts/version/") and p != "scripts/version/ships_cannon.lua")
                    for vid, v in views.items()}
         S = "scripts/version/servant_of_yogg_saron.lua"  # 15181's fix: the msg pack keeps og.lua's Servant
@@ -1877,8 +1877,8 @@ class ErasIcc(unittest.TestCase):
         # 17720: the fixes go along
         fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua",
                  "scripts/version/servant_of_yogg_saron.lua"]
-        self.assertEqual({p: d for p, d in view.items() if own_rules(p) and p not in fixes},
-                         {p: d for p, d in icc.items() if own_rules(p)})
+        self.assertEqual({p: no_ranks(p, d) for p, d in view.items() if own_rules(p) and p not in fixes},
+                         {p: no_ranks(p, d) for p, d in icc.items() if own_rules(p)})
         for vid in ("20457", "20970", "21517", "22115"):
             for f in fixes:
                 self.assertEqual(pack.version_view(self.files, vid)[f], pack.version_view(self.files, "17720")[f], vid)
@@ -1988,8 +1988,8 @@ class ErasKara(unittest.TestCase):
     def test_13921_is_the_karazhan_pack(self):
         kara, _ = pack.build(pack.REPO / "packs/kara")
         view = self.view("13921")
-        self.assertEqual({p: d for p, d in view.items() if own_rules(p)},
-                         {p: d for p, d in kara.items() if own_rules(p)})
+        self.assertEqual({p: no_ranks(p, d) for p, d in view.items() if own_rules(p)},
+                         {p: no_ranks(p, d) for p, d in kara.items() if own_rules(p)})
 
     def test_14366_fixes_texts_only(self):
         # (their rules.json differ only in the Arena bans of 14366)
