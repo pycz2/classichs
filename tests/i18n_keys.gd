@@ -48,6 +48,7 @@ static func collect() -> Array:
 	tables.append_array(PackTools.LEVELS.values())
 	tables.append_array(Social.STATUS.values().map(func(v): return v[1]))
 	tables.append_array(ServerLink.UPLOAD_ERRORS.values())
+	tables.append_array(ServerLink.REPORT_ERRORS.values())
 	tables.append_array(Social.SERVER_TEXTS)
 	tables.append_array(TournamentsView.TAB_NAMES.values())
 	tables.append_array(TournamentsView.STATUS.values().map(func(v): return v[0]))
