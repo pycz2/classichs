@@ -1183,9 +1183,144 @@ class Eras(unittest.TestCase):
 
     # --- the versions of The Boomsday Project's time (25770, 26996, 27358, 27405) ---
 
+    def test_25770_is_the_boomsday_pack(self):
+        boom, _ = pack.build(pack.REPO / "packs/boom")
+        self.assertEqual(pack.rules_hash(pack.version_view(self.files, "25770")), pack.rules_hash(boom))
+        boxer, texts = self.card("25770", "GVG_072")
+        self.assertEqual(texts["en"]["text"], "Whenever a minion is healed, deal 1 damage to a random enemy.")
+
+    def test_26996_rewords_casts_when_drawn_and_gazlowe(self):
+        _, old = self.card("25770", "BOT_511t")
+        bomb, texts = self.card("26996", "BOT_511t")
+        self.assertEqual(old["en"]["text"], "[x]You take 5 damage.\nDraw a card. This\nexplodes when drawn.")
+        self.assertEqual(texts["en"]["text"], "<b>Casts When Drawn</b>\nYou take 5 damage.")
+        self.assertEqual(texts["ru"]["text"], "<b>При взятии</b>\nвы получаете\n5 ед. урона.")
+        self.assertEqual(bomb["cost"], 5)
+        _, texts = self.card("26996", "GVG_117")
+        self.assertEqual(texts["en"]["text"], "Whenever you cast a 1-Cost spell, add a random Mech to your hand.")
+        self.assertEqual(self.card("26996", "BOT_532")[1]["pt_BR"]["name"], "Explodidor")
+        self.assertEqual(self.card("27405", "LOE_110t")[1]["de"]["text"], "<b>Beim Ziehen gewirkt</b>. Ihr erleidet 7 Schaden.")
+
+    def test_27358_nerfs_giggling_inventor_mana_wyrm_and_aviana(self):
+        for cid, old, new in (("BOT_270", 5, 7), ("VAN_NEW1_012", 1, 2), ("AT_045", 9, 10)):
+            self.assertEqual(self.card("26996", cid)[0]["cost"], old, cid)
+            self.assertEqual(self.card("27358", cid)[0]["cost"], new, cid)
+            self.assertEqual(self.card("27405", cid)[0]["cost"], new, cid)
+
+    def test_27405_adds_four_classic_cards(self):
+        old = {c["id"] for c in json.loads(pack.version_view(self.files, "27358")["cards.json"])}
+        for cid in ("EX1_179", "EX1_180", "EX1_181", "EX1_182"):
+            self.assertNotIn(cid, old)
+            c, texts = self.card("27405", cid)
+            self.assertEqual((c["set"], c["collectible"]), ("VANILLA", True), cid)
+            self.assertEqual(c["script"], f"scripts/version/classic_2018.lua#{cid}")
+            self.assertEqual(sorted(texts), sorted(self.man["locales"]))
+        icicle, texts = self.card("27405", "EX1_179")
+        self.assertEqual((icicle["cost"], icicle["rarity"], icicle["class"]), (2, "EPIC", "MAGE"))
+        self.assertEqual(texts["en"], {"name": "Icicle", "text": "Deal $2 damage to a minion. If it's <b>Frozen</b>, draw a card."})
+        self.assertEqual(texts["ru"]["name"], "Сосулька")
+        self.assertEqual(self.card("27405", "EX1_182")[1]["en"]["name"], "Pilfer")
+        self.assertNotIn("rarity", self.card("27405", "BOT_270t")[0])
+        self.assertEqual(self.card("27358", "BOT_270t")[0]["rarity"], "COMMON")
+
     # --- the versions of Rastakhan's Rumble's time (27845, 28116, 28329, 28855, 29349) ---
 
+    def test_27845_is_the_trl_pack_with_its_scripts(self):
+        trl, _ = pack.build(pack.REPO / "packs/trl")
+        view = pack.version_view(self.files, "27845")
+        self.assertEqual(json.loads(view["cards.json"]), json.loads(trl["cards.json"]))
+        self.assertEqual(sorted(p for p in view if p.startswith("scripts/version/")),
+                         ["scripts/version/astromancer.lua", "scripts/version/corrupted_blood.lua",
+                          "scripts/version/jungle_giants.lua"])
+        # the Choose One forms stay spells that transform (the 27845 data shows them as minions: display only)
+        self.assertEqual(self.card("29349", "BRM_010a")[0]["type"], "SPELL")
+        self.assertNotIn("attack", self.card("29349", "BRM_010a")[0])
+
+    def test_28116_fixes_names_and_texts(self):
+        self.assertEqual(self.card("27845", "TRL_513")[1]["en"]["name"], "Mosh'ogg Enforcer")
+        self.assertEqual(self.card("28116", "TRL_513")[1]["en"]["name"], "Mosh'Ogg Enforcer")
+        self.assertEqual(self.card("28116", "TRL_085")[1]["en"]["text"],
+                         "[x]Whenever you target a\nminion with a spell, cast it\nagain on its neighbors.")
+
+    def test_28329_changes_leeching_poison_and_saronite_chain_gang(self):
+        old, _ = self.card("28116", "ICC_221")
+        new, texts = self.card("28329", "ICC_221")
+        self.assertEqual((old["cost"], new["cost"]), (2, 1))
+        self.assertEqual(texts["ru"]["text"], "Ваше оружие получает <b>«Похищение жизни»</b> до конца хода.")
+        self.assertEqual(self.card("28329", "ICC_466")[1]["de"]["text"],
+                         "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen weiteren Saronitzwangsarbeiter herbei.")
+        self.assertEqual([self.card(v, "VAN_CS2_013")[0]["cost"] for v in ("28116", "28329")], [2, 3])
+
+    def test_28855_keeps_the_keywords_the_data_moved_to_referenced_tags(self):
+        self.assertIn("TAUNT", self.card("28855", "AT_069")[0]["keywords"])
+        self.assertIn("STEALTH", self.card("28855", "CFM_634")[0]["keywords"])
+        self.assertIn("ImmuneToSpellpower", self.card("28855", "TRL_541t")[0]["keywords"])
+        self.assertNotIn("ImmuneToSpellpower", self.card("28329", "TRL_541t")[0]["keywords"])
+        self.assertEqual([self.card(v, "VAN_EX1_619")[0]["cost"] for v in ("28329", "28855")], [2, 4])
+
+    def test_29349_fixes_invocation_of_water_text(self):
+        self.assertEqual(self.card("28855", "UNG_211b")[1]["en"]["text"], "Restore #12 Health to your hero.")
+        self.assertEqual(self.card("29349", "UNG_211b")[1]["en"]["text"], "Restore 12 Health to your hero.")
+
     # --- the versions of Rise of Shadows' time (29933, 30103, 30795, 31022, 31268, 31761) ---
+
+    def test_31268_adds_sn1p_sn4p_and_31761_ten_classic_cards_and_pilfer_reworked(self):
+        old = {c["id"] for c in json.loads(pack.version_view(self.files, "31022")["cards.json"])}
+        self.assertNotIn("BOT_700", old)
+        snip, texts = self.card("31268", "BOT_700")
+        self.assertEqual((snip["set"], snip["keywords"]), ("BOOMSDAY", ["DEATHRATTLE", "ECHO", "MODULAR"]))
+        self.assertEqual(snip["script"], "scripts/version/new_cards.lua#BOT_700")
+        self.assertEqual(texts["ru"]["name"], "КЛNК-КЛ4К")
+        old = {c["id"] for c in json.loads(pack.version_view(self.files, "31268")["cards.json"])}
+        for cid in ("EX1_183", "EX1_184", "EX1_185", "EX1_186", "EX1_187", "EX1_188", "EX1_189", "EX1_190", "EX1_191",
+                    "EX1_192"):
+            self.assertNotIn(cid, old)
+            c, texts = self.card("31761", cid)
+            self.assertEqual((c["set"], c["collectible"]), ("VANILLA", True), cid)
+            self.assertEqual(c["script"], f"scripts/version/new_cards.lua#{cid}")
+            self.assertEqual(sorted(texts), sorted(self.man["locales"]))
+        whitemane, texts = self.card("31761", "EX1_190")
+        self.assertEqual((whitemane["cost"], whitemane["rarity"], whitemane.get("unique")), (7, "LEGENDARY", True))
+        self.assertEqual(texts["en"]["name"], "High Inquisitor Whitemane")
+        self.assertEqual(self.card("31761", "EX1_192")[0]["rarity"], "FREE")
+        self.assertEqual(self.card("31761", "EX1_182")[1]["de"]["text"],
+                         "Erhaltet eine zufällige Karte einer anderen Klasse auf die Hand.")
+        self.assertEqual(self.card("31761", "EX1_182")[0]["script"], "scripts/version/new_cards.lua#EX1_182")
+        for vid in ("30795", "31022", "31268", "31761"):  # Zayle needs a deck_recipes entry: left out
+            self.assertNotIn("DAL_800", {c["id"] for c in json.loads(pack.version_view(self.files, vid)["cards.json"])})
+
+    def test_29933_and_30103_are_the_rise_of_shadows_pack(self):
+        dal, _ = pack.build(pack.REPO / "packs/dal")
+        for vid in ("29933", "30103"):  # with Jungle Giants as fixed in 26996 (the dal pack counts The Darkness)
+            view = pack.version_view(self.files, vid)
+            self.assertEqual(sorted(p for p in view if p.startswith("scripts/version/")),
+                             ["scripts/version/jungle_giants.lua"], vid)
+            del view["scripts/version/jungle_giants.lua"]
+            self.assertEqual(pack.rules_hash(view), pack.rules_hash(dal), vid)
+
+    def test_30795_renames_traveling_healer(self):
+        self.assertEqual(self.card("30103", "DAL_078")[1]["en"]["name"], "Travelling Healer")
+        self.assertEqual(self.card("30795", "DAL_078")[1]["en"]["name"], "Traveling Healer")
+
+    def test_31022_preparation_text(self):
+        self.assertIn("(3) less", self.card("30795", "VAN_EX1_145")[1]["en"]["text"])
+        _, texts = self.card("31022", "VAN_EX1_145")
+        self.assertEqual(texts["en"]["text"], "The next spell you cast this turn costs (2) less.")
+        self.assertEqual(texts["ru"]["text"], "Ваше следующее заклинание на этом ходу будет стоить на (2) меньше.")
+        self.assertEqual(self.card("31022", "TRL_124")[0]["cost"], 4)
+
+    def test_31268_reckless_experimenter_text_and_buffs(self):
+        _, texts = self.card("31268", "BOT_566")
+        self.assertIn("<i>(Cost can't be\nreduced below 1.)</i>", texts["en"]["text"])
+        self.assertIn("<i>(минимум (1))</i>", texts["ru"]["text"])
+        self.assertEqual((self.card("31022", "BOT_433")[0]["cost"], self.card("31268", "BOT_433")[0]["cost"]), (8, 6))
+
+    def test_31761_renames_succubus_and_mistress_of_pain(self):
+        for cid, old, new, ru in (("VAN_EX1_306", "Succubus", "Felstalker", "Ловец Скверны"),
+                                  ("GVG_018", "Mistress of Pain", "Queen of Pain", "Королева Боли")):
+            self.assertEqual(self.card("31268", cid)[1]["en"]["name"], old)
+            _, texts = self.card("31761", cid)
+            self.assertEqual((texts["en"]["name"], texts["ru"]["name"]), (new, ru))
 
 
 class TestDistribution(unittest.TestCase):
