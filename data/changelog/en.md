@@ -4,6 +4,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.73.0] - 2026-11-26
+
 ### Added
 - A new game, "Hearthstone 2014–2019: every version": one pack with all 58 versions of the game, from the launch in March 2014 to July 2019. Each version has its own cards, Hero Powers and tokens, the texts of that patch in 8 languages, and its own rules: Unleash the Hounds for 2 at launch, the Leeroy Jenkins, Warsong Commander, Yogg-Saron and Innervate nerfs, the old damage order of Swipe, the Murloc lords before and after 6.2, Marin the Fox and SN1P-SN4P given before their expansions, and much more.
 - The version choice in the games library: versions grouped by era, each with its date and what changed. "Compare versions" shows every card that differs between any two versions: on the left as in the first, on the right as in the second, the changes circled in red; then the cards added and removed, with filters by class, change and name.
@@ -11,6 +13,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 - Server games: the Play screen chooses the version and the mode. Each version and mode has its own ladder and its own opponents.
 - The debug tools know every mechanic: the scene editor takes hero cards, any Hero Power, Quests, keywords and tags with a number, buffs and another card's Deathrattle on any card. Every card has a set of scenarios — generic ones and over six hundred tricky interactions from every expansion — with passed / failed marks and a walk through the whole game card by card; the marks export as JSON.
 - A card's picture can be moved and zoomed inside its window: an art set's art/<set>/framing.json, followed wherever the picture shows.
+- Each version's Ranked follows the rules of its time: stars per rank, the win-streak bonus, the rank floors, the season reset (from 2018: 4 ranks below the best, never below 20 once you reached 15), the New Player Ranks 50–26 from October 2018; the rank names as the game had them. The Arena is always up to 12 wins or 3 losses. Their versions' Arena gets the 28 Taverns of Time and 9 BlizzCon cards, and from patch 14.2 Zayle, Shadow Cloak comes with her five decks.
 
 ### Changed
 - A game from a server, from a file or from your opponent over code play installs in the background and no longer hangs at 99%: checking a 60 MB pack takes a fraction of a second instead of 7–19 seconds. Meanwhile you can leave the screen or play a match; a small box on every screen shows the stage. Uploading your own game to a server, and the admin panel, show the server's stages.
@@ -20,6 +23,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 ### Fixed
 - Match history: a Magnetic minion fusing gets a proper line ("… fuses with …") instead of the raw word "fuse".
 - Card text without a written layout: a line of keywords only keeps its own line, as in the game (Zilliax no longer puts "Magnetic" on the same line as "Divine Shield").
+- The separate games get the fixes found while building the versions: Ship's Cannon fires after the Pirate's Battlecry, Shadow of Nothing no longer destroys itself, Power Word: Glory heals its caster, Sapling is a Druid card, The Mistcaller buffs your deck too, Snipe sees the Sheep of Potion of Polymorph, and The Darkness no longer counts for Jungle Giants.
 
 ## [0.72.2] - 2026-11-20
 

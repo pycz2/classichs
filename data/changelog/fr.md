@@ -4,6 +4,8 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 
 ## [Unreleased]
 
+## [0.73.0] - 2026-11-26
+
 ### Ajouté
 - Un nouveau jeu, « Hearthstone 2014–2019 : toutes les versions » : un paquet avec les 58 versions du jeu, du lancement en mars 2014 à juillet 2019. Chaque version a ses cartes, pouvoirs héroïques et jetons, les textes de ce patch en 8 langues et ses règles : Lâcher les chiens à 2 au lancement, les nerfs de Leeroy Jenkins, du Commandant chanteguerre, de Yogg-Saron et d’Innervation, l’ancien ordre des dégâts de Balayage, les chefs murlocs avant et après 6.2, Marin le Renard et SN1P-SN4P donnés avant leurs extensions, et bien plus.
 - Le choix de version dans la bibliothèque : versions groupées par époque, chacune avec sa date et ce qui a changé. « Comparer les versions » montre toute carte qui diffère entre deux versions : à gauche comme dans la première, à droite comme dans la seconde, les changements entourés en rouge ; puis les cartes ajoutées et retirées, avec des filtres par classe, changement et nom.
@@ -11,6 +13,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 - Parties sur le serveur : l’écran « Jouer » choisit la version et le mode. Chaque version et chaque mode a son classement et ses adversaires.
 - Les outils de débogage connaissent toutes les mécaniques : l’éditeur de scène prend les cartes de héros, tout pouvoir héroïque, les quêtes, les mots-clés et marqueurs avec un nombre, les améliorations et le Râle d’agonie d’une autre carte sur n’importe quelle carte. Chaque carte a des scénarios — génériques et plus de six cents interactions délicates de toutes les extensions — avec les marques réussi / échoué et un parcours du jeu entier carte par carte ; les marques s’exportent en JSON.
 - L’illustration d’une carte peut être déplacée et agrandie dans sa fenêtre : art/<ensemble>/framing.json d’un ensemble d’images, suivi partout où l’image apparaît.
+- Le mode classé de chaque version suit les règles de son époque : étoiles par rang, bonus de série de victoires, paliers de rang, réinitialisation de saison (dès 2018 : 4 rangs sous le meilleur, jamais sous 20 une fois le rang 15 atteint), rangs des nouveaux joueurs 50–26 dès octobre 2018 ; les noms des rangs tels que le jeu les avait. L’Arène va toujours jusqu’à 12 victoires ou 3 défaites. L’Arène de leurs versions reçoit les 28 cartes des Tavernes du temps et 9 cartes BlizzCon, et dès le patch 14.2 Zayle, Cape d’ombre, avec ses cinq decks.
 
 ### Modifié
 - Un jeu venu d’un serveur, d’un fichier ou de l’adversaire par code s’installe en arrière-plan et ne bloque plus à 99 % : vérifier un paquet de 60 Mo prend une fraction de seconde au lieu de 7 à 19 secondes. Pendant ce temps, on peut quitter l’écran ou jouer une partie ; un petit encadré sur chaque écran montre l’étape. L’envoi de son propre jeu à un serveur, et le panneau d’administration, montrent les étapes du serveur.
@@ -20,6 +23,7 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Versions : [S
 ### Corrigé
 - Historique de partie : un serviteur Magnétique qui fusionne a une vraie ligne (« … fusionne avec … ») au lieu du mot brut « fuse ».
 - Texte des cartes sans mise en page écrite : une ligne faite seulement de mots-clés garde sa propre ligne, comme dans le jeu (Zilliax ne met plus « Magnétisme » sur la même ligne que « Bouclier divin »).
+- Les jeux séparés reçoivent les corrections trouvées en bâtissant les versions : le Canon de navire tire après le Cri de guerre du pirate, l’Ombre du néant ne se détruit plus, Mot de pouvoir : Gloire soigne son lanceur, la Jeune pousse est une carte de druide, le Mandebrume améliore aussi le deck, Tir à distance voit le Mouton de la Potion de métamorphose, et les Ténèbres ne comptent plus pour les Géants de la jungle.
 
 ## [0.72.2] - 2026-11-20
 

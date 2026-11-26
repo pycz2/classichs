@@ -4,6 +4,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 
 ## [Unreleased]
 
+## [0.73.0] - 2026-11-26
+
 ### Hinzugefügt
 - Ein neues Spiel, „Hearthstone 2014–2019: alle Versionen“: ein Paket mit allen 58 Versionen des Spiels, vom Start im März 2014 bis Juli 2019. Jede Version hat ihre eigenen Karten, Heldenfähigkeiten und Spielsteine, die Texte jenes Patches in 8 Sprachen und ihre eigenen Regeln: „Hunde loslassen“ für 2 zum Start, die Abschwächungen von Leeroy Jenkins, Kommandant der Kriegshymnenfeste, Yogg-Saron und Anregen, die alte Schadensreihenfolge von „Prankenhieb“, die Murlocanführer vor und nach 6.2, Marin der Fuchs und SN1P-SN4P vor ihren Erweiterungen und vieles mehr.
 - Die Versionswahl in der Spielebibliothek: Versionen nach Epochen, jede mit Datum und dem, was sich änderte. „Versionen vergleichen“ zeigt jede Karte, die sich zwischen zwei beliebigen Versionen unterscheidet: links wie in der ersten, rechts wie in der zweiten, die Änderungen rot umkreist; darunter die hinzugekommenen und entfernten Karten, mit Filtern nach Klasse, Änderung und Name.
@@ -11,6 +13,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 - Spiele auf dem Server: Der Bildschirm „Spielen“ wählt Version und Modus. Jede Version und jeder Modus hat eine eigene Rangliste und eigene Gegner.
 - Die Debug-Werkzeuge kennen jede Mechanik: Der Szeneneditor nimmt Heldenkarten, jede Heldenfähigkeit, Quests, Schlüsselwörter und Tags mit Zahl, Buffs und das Todesröcheln einer anderen Karte auf jeder Karte. Jede Karte hat eine Reihe von Szenarien — allgemeine und über sechshundert knifflige Wechselwirkungen aus allen Erweiterungen — mit „bestanden“/„nicht bestanden“ und einem Durchgang durch das ganze Spiel Karte für Karte; die Markierungen werden als JSON exportiert.
 - Das Bild einer Karte lässt sich in ihrem Fenster verschieben und vergrößern: art/<Set>/framing.json eines Bildsets, überall befolgt, wo das Bild zu sehen ist.
+- Die Rangliste jeder Version folgt den Regeln ihrer Zeit: Sterne pro Rang, Siegesserienbonus, Rangböden, Saisonrücksetzung (ab 2018: 4 Ränge unter dem besten, nie unter 20, wenn man einmal 15 erreicht hat), die Neulingsränge 50–26 ab Oktober 2018; die Rangnamen wie damals im Spiel. Die Arena geht immer bis 12 Siege oder 3 Niederlagen. In der Arena ihrer Versionen kommen die 28 Karten der „Tavernen der Zeit“ und 9 BlizzCon-Karten dazu, ab Patch 14.2 Zayle, Schattenmantel, mit ihren fünf Decks.
 
 ### Geändert
 - Ein Spiel vom Server, aus einer Datei oder vom Gegner per Code-Spiel installiert sich im Hintergrund und hängt nicht mehr bei 99 %: Die Prüfung eines 60-MB-Pakets dauert Bruchteile einer Sekunde statt 7–19 Sekunden. Währenddessen kann man den Bildschirm verlassen oder eine Partie spielen; ein kleines Feld auf jedem Bildschirm zeigt den Schritt. Beim Hochladen eines eigenen Spiels auf einen Server und im Adminbereich sind die Schritte des Servers zu sehen.
@@ -20,6 +23,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versionen: [Se
 ### Behoben
 - Spielverlauf: Ein magnetischer Diener, der verschmilzt, bekommt eine richtige Zeile („… verschmilzt mit …“) statt des rohen Worts „fuse“.
 - Kartentext ohne festes Layout: Eine Zeile nur aus Schlüsselwörtern bleibt eine eigene Zeile, wie im Spiel (Zilliax setzt „Magnetisch“ nicht mehr in eine Zeile mit „Gottesschild“).
+- Die einzelnen Spiele bekommen die Korrekturen, die beim Bau der Versionen gefunden wurden: Schiffskanone feuert nach dem Kampfschrei des Piraten, Schatten des Nichts zerstört sich nicht mehr, Machtwort: Ruhm heilt den Zaubernden, Schössling ist eine Druidenkarte, der Nebelrufer bufft auch das Deck, Schuss aus dem Hinterhalt sieht das Schaf des Verwandlungstranks, und die Dunkelheit zählt nicht mehr für Dschungelriesen.
 
 ## [0.72.2] - 2026-11-20
 

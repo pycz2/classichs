@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.73.0] - 2026-11-26
+
 ### Aggiunto
 - Un nuovo gioco, «Hearthstone 2014–2019: tutte le versioni»: un pacchetto con tutte le 58 versioni del gioco, dal lancio di marzo 2014 a luglio 2019. Ogni versione ha le sue carte, i poteri eroe e le pedine, i testi di quella patch in 8 lingue e le sue regole: Sguinzaglia i Cani a 2 al lancio, gli indebolimenti di Leeroy Jenkins, Comandante Cantaguerra, Yogg-Saron e Innervazione, il vecchio ordine dei danni di Zampata, i capi murloc prima e dopo la 6.2, Marin la Volpe e SN1P-SN4P dati prima delle loro espansioni, e molto altro.
 - La scelta della versione nella libreria: versioni raggruppate per epoca, ognuna con la data e cosa è cambiato. «Confronta versioni» mostra ogni carta che differisce tra due versioni qualsiasi: a sinistra come nella prima, a destra come nella seconda, le modifiche cerchiate in rosso; poi le carte aggiunte e tolte, con filtri per classe, modifica e nome.
@@ -11,6 +13,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 - Partite sul server: la schermata «Gioca» sceglie versione e modalità. Ogni versione e ogni modalità ha la sua classifica e i suoi avversari.
 - Gli strumenti di debug conoscono ogni meccanica: l’editor di scena accetta carte eroe, qualsiasi potere eroe, missioni, parole chiave e indicatori con un numero, potenziamenti e il Rantolo di Morte di un’altra carta su qualsiasi carta. Ogni carta ha scenari — generici e oltre seicento interazioni difficili da tutte le espansioni — con i segni riuscito / fallito e un percorso di tutto il gioco carta per carta; i segni si esportano in JSON.
 - L’immagine di una carta si può spostare e ingrandire nella sua finestra: art/<set>/framing.json di un set di immagini, seguito ovunque si veda l’immagine.
+- Le classificate di ogni versione seguono le regole del loro tempo: stelle per grado, bonus per serie di vittorie, gradi minimi, azzeramento di stagione (dal 2018: 4 gradi sotto il migliore, mai sotto il 20 una volta raggiunto il 15), i gradi per nuovi giocatori 50–26 da ottobre 2018; i nomi dei gradi come li aveva il gioco. L’Arena arriva sempre a 12 vittorie o 3 sconfitte. L’Arena delle loro versioni riceve le 28 carte delle Taverne del Tempo e 9 carte della BlizzCon, e dalla patch 14.2 Zayle, Manto d’Ombra, con i suoi cinque mazzi.
 
 ### Modificato
 - Un gioco da un server, da un file o dall’avversario via codice si installa in background e non si blocca più al 99%: controllare un pacchetto da 60 MB richiede frazioni di secondo invece di 7–19 secondi. Nel frattempo puoi lasciare la schermata o giocare una partita; un riquadro su ogni schermata mostra la fase. Caricando il tuo gioco su un server, e nel pannello di amministrazione, si vedono le fasi del server.
@@ -20,6 +23,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 ### Corretto
 - Cronologia della partita: un servitore Magnetico che si fonde ha una riga vera («… si fonde con …») invece della parola «fuse».
 - Testo delle carte senza impaginazione scritta: una riga fatta solo di parole chiave resta su una riga sua, come nel gioco (Zilliax non mette più «Magnetico» sulla stessa riga di «Scudo Divino»).
+- I giochi separati ricevono le correzioni trovate costruendo le versioni: il Cannone Navale spara dopo il Grido di Battaglia del pirata, l’Ombra del Nulla non si distrugge più, Parola del Potere: Gloria cura chi la lancia, l’Arboscello è una carta del druido, l’Evocanebbie potenzia anche il mazzo, Tiro Mirato vede la Pecora della Pozione di Metamorfosi, e l’Oscurità non conta più per i Giganti della Giungla.
 
 ## [0.72.2] - 2026-11-20
 

@@ -4,6 +4,8 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 
 ## [Unreleased]
 
+## [0.73.0] - 2026-11-26
+
 ### Adicionado
 - Um jogo novo, "Hearthstone 2014–2019: todas as versões": um pacote com as 58 versões do jogo, do lançamento em março de 2014 a julho de 2019. Cada versão tem suas cartas, poderes heroicos e fichas, os textos daquele patch em 8 idiomas e suas regras: Soltar os Cães por 2 no lançamento, os enfraquecimentos de Leeroy Jenkins, Comandante Brado Guerreiro, Yogg-Saron e Inervar, a ordem antiga de dano de Golpe Amplo, os líderes murlocs antes e depois do 6.2, Marin, a Raposa e SN1P-SN4P entregues antes das suas expansões, e muito mais.
 - A escolha de versão na biblioteca: versões agrupadas por época, cada uma com sua data e o que mudou. "Comparar versões" mostra cada carta que difere entre duas versões quaisquer: à esquerda como na primeira, à direita como na segunda, as mudanças circuladas em vermelho; depois as cartas adicionadas e removidas, com filtros por classe, mudança e nome.
@@ -11,6 +13,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 - Partidas no servidor: a tela "Jogar" escolhe a versão e o modo. Cada versão e cada modo tem seu ranking e seus oponentes.
 - As ferramentas de depuração conhecem todas as mecânicas: o editor de cena aceita cartas de herói, qualquer poder heroico, missões, palavras-chave e marcadores com número, bônus e o Último Suspiro de outra carta em qualquer carta. Cada carta tem cenários — genéricos e mais de seiscentas interações difíceis de todas as expansões — com marcas passou / falhou e um percurso pelo jogo inteiro carta por carta; as marcas exportam em JSON.
 - A imagem de uma carta pode ser movida e ampliada dentro da sua janela: art/<conjunto>/framing.json de um conjunto de imagens, seguido onde quer que a imagem apareça.
+- O ranqueado de cada versão segue as regras da sua época: estrelas por rank, bônus por sequência de vitórias, ranks mínimos, reinício de temporada (a partir de 2018: 4 ranks abaixo do melhor, nunca abaixo de 20 depois de chegar ao 15), os ranks de novato 50–26 a partir de outubro de 2018; os nomes dos ranks como o jogo tinha. A Arena vai sempre até 12 vitórias ou 3 derrotas. A Arena das suas versões ganha as 28 cartas de Tavernas do Tempo e 9 cartas da BlizzCon, e a partir do patch 14.2 Zayle, Manto Sombrio, com seus cinco decks.
 
 ### Alterado
 - Um jogo de um servidor, de um arquivo ou do oponente por código instala em segundo plano e não trava mais em 99%: verificar um pacote de 60 MB leva uma fração de segundo em vez de 7–19 segundos. Enquanto isso, dá para sair da tela ou jogar uma partida; uma caixinha em cada tela mostra a etapa. Ao enviar seu próprio jogo a um servidor, e no painel de administração, aparecem as etapas do servidor.
@@ -20,6 +23,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versões: 
 ### Corrigido
 - Histórico da partida: um lacaio Magnético que se funde ganha uma linha própria ("… se funde com …") em vez da palavra "fuse".
 - Texto de cartas sem diagramação escrita: uma linha só de palavras-chave fica na sua própria linha, como no jogo (Zilliax não põe mais "Magnético" na mesma linha que "Escudo Divino").
+- Os jogos separados ganham as correções achadas ao montar as versões: o Canhão de Navio dispara depois do Grito de Guerra do pirata, a Sombra do Nada não se destrói mais, Palavra de Poder: Glória cura quem a lançou, o Broto é carta de druida, o Chamanévoa melhora também o deck, Tiro Certeiro vê a Ovelha da Poção de Metamorfose, e a Escuridão não conta mais para os Gigantes da Selva.
 
 ## [0.72.2] - 2026-11-20
 
