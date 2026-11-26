@@ -10,7 +10,8 @@ them and fills them with content. Decisions: `docs/superpowers/plans/2026-10-16-
 Related pages: [rules.md](rules.md) (`rules.json`), [cards.md](cards.md)
 (`cards.json`, locales, layout), [fx.md](fx.md) (visual effects), [lua.md](lua.md)
 (the Lua subset of card scripts), [api.md](api.md) (the engine API and hooks of card scripts);
-§11 below: the interface theme (`ui/theme.json`); §12: the tutorial (`tutorial.json`) and scene effects. Machine-readable: [schema/](schema/) (JSON Schemas,
+§11 below: the interface theme (`ui/theme.json`); §12: the tutorial (`tutorial.json`) and scene effects; §13: a pack
+with versions. Machine-readable: [schema/](schema/) (JSON Schemas,
 the engine vocabulary `keywords.json`, the effect catalog `fx.json`).
 Tool: `tools/pack.py` (build, check, info, hash; see the end of this page).
 
@@ -41,6 +42,7 @@ decks/<name>.json        ready decks
 missions/<n>.json        tutorial or story missions (data; their scripts live in scripts/)
 tutorial.json            optional: the tutorial (§12): its missions in order, intro pages, unlock rule, hints
 README.md, CREDITS.md, LICENSE.txt   optional, at the top
+versions/<id>/…          a pack with versions (§13): each version's rules files, texts, layout, decks and tutorial
 ```
 
 Rules for paths (checked by `tools/pack.py check`, and the client and server must
@@ -65,8 +67,8 @@ refuse a pack that breaks them):
 | Number of files | 50 000 |
 | One file | 16 MiB |
 | One picture | 2 MiB |
-| Rules part (`rules.json`, `cards.json`, `missions/`, `scripts/`) unpacked | 8 MiB |
-| Text part (`locales/`, `layout/`) unpacked | 32 MiB |
+| Rules part (`rules.json`, `cards.json`, `missions/`, `scripts/`) unpacked | 8 MiB (of each version, §13; all the versions together 256 MiB) |
+| Text part (`locales/`, `layout/`) unpacked | 32 MiB (of each version) |
 | Unpacked / packed size of one entry | ≤ 200 (zip bombs) |
 
 The Lua limits (steps, depth, table and string size) are in `lua.md` (D5).
@@ -90,7 +92,8 @@ The Lua limits (steps, depth, table and string size) are in `lua.md` (D5).
 | `set_marks` | `{<set>[:<rarity>]: {icon: "ui/<file>"}}` | Optional: each card shows its set's icon faintly behind its text and its set's name beside the big card (the packs after Classic; Classic has none). A key `<set>:<rarity>` wins for that rarity (`VANILLA:FREE` = Basic). The names are `locales/<lang>.json` `sets` under the same keys; the collection filters by them. |
 | `colors` | `{classes: {id: "rrggbb"}, rarities: {id: "rrggbb"}}` | Frame and gem colours. |
 | `fx` | [name] | Written by the build: every effect name and element the cards use (the client can tell what it lacks). |
-| `rules_hash` | 64 hex | Written by the build; `check` recomputes it. |
+| `rules_hash` | 64 hex | Written by the build; `check` recomputes it. A pack with versions: the default version's. |
+| `versions`, `default_version` | §13 | A pack with versions: the list of its versions and the one played without a choice. |
 
 The manifest is not part of `rules_hash`, so names, colours and art sets never
 split players.
@@ -350,7 +353,10 @@ form the tutorial, in what order, and what the player is shown around them is `t
 
 `cards.json` points a card at its logic: `"script": "scripts/mage.lua#VAN_CS2_029"`.
 A script file returns a table of cards with hooks; `scripts/lib.lua` (optional)
-holds shared helpers, visible to the other files as the global `lib`. The
+holds shared helpers, visible to the other files as the global `lib`. A version's own scripts
+(`scripts/version/*.lua`, §13) load after all the others, and a key one of them defines replaces the others' hook
+set of that name: a card's hooks (whatever its `script` names) or an `ench:` set (elsewhere a key defined twice is an
+error). The
 language subset is in [lua.md](lua.md); the engine API (`g`), the hooks and the
 events in [api.md](api.md). A card without a script has no hooks (vanilla
 minion, weapon, …). Keys of a script table that are not card ids name hook sets
@@ -584,4 +590,48 @@ In the client: `Pack.has_tutorial()`, `Pack.tutorial()`, `Pack.text(path)` (game
 `Missions` (game/missions.gd: the active pack's mission ids, order, texts), `Progress` (won missions per
 pack in `user://tutorial.json`), `Tutorial` (game/tutorial.gd: hints and boss lines in a game),
 `TutorialView` / `TutorialIntro` (ui/: the list and the intro pages), `SceneFx` (ui/scene_fx.gd: the effects).
+
+## 13. A pack with versions
+
+One pack may hold several versions of its game: Hearthstone 2014–2019 (`packs/eras`, id `hs-eras`) has one per game
+version, from the launch to Rise of Shadows. Design: `docs/superpowers/specs/2026-11-26-megapack-design.md`.
+
+- `manifest.json` lists them, oldest first, and names the default one (a client without a version choice plays it):
+
+  ```json
+  "versions": [{"id": "6485", "build": 6485, "patch": "1.2.0.6485", "date": "2014-09-22", "era": "naxx",
+                "name": {"en": "Leeroy Jenkins and Starving Buzzard nerfed", "ru": "…"}, "dir": "versions/6485",
+                "formats": ["standard"], "rules_hash": "<this version's rules_hash>"}],
+  "default_version": "6485"
+  ```
+
+  `id`, `dir` (`versions/<id>`) and `rules_hash` are required; `era` is the era's pack folder (`classic`, `naxx`, …);
+  `formats` is `["standard"]` or `["standard", "wild"]`.
+- `versions/<id>/` holds that version's own files as a one-version pack has them at its top: `rules.json`,
+  `cards.json`, `scripts/`, `missions/`, `locales/`, `layout/`, `decks/`, `tutorial.json`. Everything outside
+  `versions/` is shared: pictures, sounds, music, voice, `ui/`.
+- **The view** of a version: the shared files and the files of `versions/<id>/` moved to the top, with the manifest's
+  `rules_hash` set to that version's. The engine, the client and the server read a view as a one-version pack. A
+  version's `rules_hash` is §3's over its view; the manifest's `rules_hash` is the default version's; `content_hash`
+  is over the whole zip's files.
+- The top holds the default version's files too, so a client or server that knows no versions opens the pack as its
+  default version.
+- `check` checks the paths (a file in `versions/` is a version's own file, of a version the manifest lists), that the
+  top is the default version, then every version's view as a one-version pack (its errors and warnings start with
+  `version <id>:`). The rules and text limits apply to each version.
+
+In the tools: `tools/pack.py` `version_ids(files)`, `version_view(files, id)` (`info` prints each version's rules
+hash); `rust/engine/src/pack.rs` `versions(files)`, `version_view(files, id)`. The client: `Pack.versions()`,
+`Pack.default_version()`, `Pack.version_view(id)` (a Pack whose `version_id` is the id; `whole()` is its pack),
+`Packs.active()` (the view of the chosen version), `Packs.version(p)`, `Packs.set_version(p, id)` (kept per pack id
+in the settings' `pack_versions`), `Packs.is_active(p)`.
+
+**Building one** (`packs/eras/recipe.json`; how to add a version: `packs/eras/README.md`): the recipe lists the
+versions (`id`, `patch`, `date`, `era`, `name`, `formats`) and `default_version`. Each version is an existing pack's
+build (its patch's `base`) changed by `versions/<id>/patch.json`: card fields (`cards`), new cards (`add`,
+HearthstoneJSON objects), cards taken out (`remove`), `rules.json` `behaviour` flags, names and texts in every
+language of the pack; `versions/<id>/scripts/*.lua` become the version's `scripts/version/`. The shared files are
+every base pack's (the default version's base first), with the pack source's own files (`manifest.json`, `ui/`) over
+them; the manifest takes what the source leaves out (languages, colours…) from the default version's base pack, and
+the art, sound and music sets and set marks of all of them.
 

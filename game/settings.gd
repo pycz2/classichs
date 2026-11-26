@@ -2,7 +2,7 @@ class_name Settings
 extends RefCounted
 ## Player settings (user://settings.json). Bad or missing values fall back to defaults.
 ## "pack" is the active game pack ({id, hash}), "pack_sets" the art, sound and music set
-## chosen per pack id (game/packs.gd). "servers" the connections to game servers: [{id, url,
+## chosen per pack id, "pack_versions" the version played per pack id (a pack with versions; game/packs.gd). "servers" the connections to game servers: [{id, url,
 ## name}] (D14; the same address may be there twice with other logins: the id tells them apart,
 ## the first one's id is its address; an old single "server" becomes the list). "layout": the
 ## version of the player's files (Migration; 0 = before 0.40).
@@ -10,7 +10,7 @@ extends RefCounted
 const DEFAULT_PATH := "user://settings.json"
 const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "shake": true, "fullscreen": false,
 	"tracker": false, "fps": false, "perf": false, "anim_speed": 1, "card_back": CardBacks.DEFAULT, "tracker_deck": true, "tracker_opp": true,
-	"servers": [], "bot_level": "medium", "pack": {}, "pack_sets": {}, "layout": 0}
+	"servers": [], "bot_level": "medium", "pack": {}, "pack_sets": {}, "pack_versions": {}, "layout": 0}
 const BUSES := ["Music", "SFX"]
 
 static var path := DEFAULT_PATH

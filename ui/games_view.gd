@@ -192,7 +192,7 @@ func _build_details() -> void:
 ## active pack's art); picked(id) gets the chosen one. Disabled with fewer than two.
 static func set_picker(p: Pack, kind: String, current: String, picked: Callable) -> OptionButton:
 	var sets := p.sets(kind).filter(func(x): return p.set_usable(kind, x))
-	if p == Packs.active() and kind == "art":
+	if Packs.is_active(p) and kind == "art":
 		for f in Art.sets():
 			if not sets.any(func(x): return x.id == f):
 				sets.append({"id": f, "name": {"en": {"original": "Original"}.get(f, f.capitalize())}})
@@ -461,7 +461,7 @@ class PackTile:
 			name_fs -= 1
 		DeckTiles.text(self, Vector2(18, pic.end.y + 24), pack.title(), name_fs, Color("f4ead5"), width)
 		var origin := TranslationServer.translate(GamesView.ORIGINS.get(pack.origin, "Imported"))
-		var active := pack == Packs.active()
+		var active := Packs.is_active(pack)
 		var mark := TranslationServer.translate("Active")
 		var mark_w := font.get_string_size(mark, HORIZONTAL_ALIGNMENT_LEFT, -1, 14).x + 20 if active else 0.0
 		DeckTiles.text(self, Vector2(18, size.y - 13), "%s  ·  %s  ·  %s" % [pack.version(), Packs.size_text(pack.size), origin], 15,

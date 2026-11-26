@@ -4,6 +4,7 @@ distributed pack: they belong to Blizzard Entertainment).
 
 Usage: python3 tools/fetch_set_assets.py --set gvg [--out ~/ClassicHS-local] [--only art|sounds|music] [--no-ru]
        python3 tools/fetch_set_assets.py --set gvg --build      the local pack ~/ClassicHS-local/<set>-custom-art.cardpack
+       python3 tools/fetch_set_assets.py --set eras --build     the megapack's (packs/eras): every level its versions use
 
 Sets: classic, naxx and the later ones of tools/extract_cards.py SETS (gvg, brm, tgt, loe, og, kara, msg, ungoro,
 icc, loot, gil, boom). Result in <out>/<set>/:
@@ -89,8 +90,14 @@ def sounds(name, out, ru):
 
 
 def chain(name):
-    """The packs a pack is built on and itself, the first first (classic, naxx, gvg, …)."""
-    _, bases = pack.recipe_steps(ROOT / "packs" / name)
+    """The packs a pack is built on and itself, the first first (classic, naxx, gvg, …); a pack with versions
+    (packs/eras): every level of its versions' base packs."""
+    src = ROOT / "packs" / name
+    recipe = pack._recipe(src)
+    if "versions" in recipe:
+        chains = sorted((chain(b) for b in {pack._version_patch(src, v["id"])["base"] for v in recipe["versions"]}), key=len)
+        return list(dict.fromkeys(level for c in chains for level in c))
+    _, bases = pack.recipe_steps(src)
     return [b.name for b in reversed(bases)] + [name]
 
 
@@ -123,7 +130,7 @@ def build(name, out):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--set", required=True, choices=["classic"] + list(extract_cards.SETS))
+    ap.add_argument("--set", required=True, choices=["classic"] + list(extract_cards.SETS) + ["eras"])
     ap.add_argument("--out", default="~/ClassicHS-local")
     ap.add_argument("--only", choices=["art", "sounds", "music"])
     ap.add_argument("--no-ru", action="store_true", help="English voice only")
@@ -137,6 +144,8 @@ def main():
         raise SystemExit("--out must be outside the repository (these files never go into git)")
     if a.build:
         return build(a.set, out)
+    if a.set == "eras":
+        raise SystemExit("eras has no files of its own to fetch: fetch its levels' (classic, naxx, …), then --build")
     snd.pick_encoder(a.ffmpeg)
     if a.only in (None, "art"):
         art(a.set, out, Path(a.custom).expanduser())

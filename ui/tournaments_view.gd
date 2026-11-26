@@ -272,7 +272,7 @@ func decks_for(t: Dictionary) -> Array:
 	if p == null:
 		return []
 	var all: Array = link.decks_of(p) if link.has_decks else DeckStore.load_local(p.id())
-	if p == Packs.active():
+	if Packs.is_active(p):
 		all = all.filter(func(d: Deck): return d.validate() == "")
 	return all
 
