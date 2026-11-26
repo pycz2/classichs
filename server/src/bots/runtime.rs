@@ -326,11 +326,15 @@ async fn arena_game(ctx: &Ctx, c: &mut Conn, pack: &Option<String>, level: Level
     Ok(())
 }
 
-/// An auto-bot's one game (bots::auto): log in, queue in `mode` (Arena: a fresh draft), play it, go.
+/// An auto-bot's one game (bots::auto): log in, queue in `mode` and `format` (Arena: a fresh draft), play it, go.
 /// Nobody pairs with it within 90 s: it goes without a game.
-pub async fn one_game(ctx: &Ctx, connect: &ConnectFn, auth: &Auth, mode: &str, pack: Option<String>, level: Level) -> Result<(), String> {
-    let lib = Library::of_pack(pack.as_deref());
-    if lib.decks.is_empty() && mode != "arena" {
+pub async fn one_game(ctx: &Ctx, connect: &ConnectFn, auth: &Auth, mode: &str, pack: Option<String>, format: &str, level: Level) -> Result<(), String> {
+    // the decks of that format (Standard: some are not)
+    let ok = |hero: &Value, cards: &Value| {
+        format.is_empty() || classichs_engine::Engine::new().handle(&json!({"op": "validate", "deck": {"hero": hero, "cards": cards}, "pack": pack, "format": format}))["ok"] == true
+    };
+    let decks: Vec<_> = Library::of_pack(pack.as_deref()).decks.iter().filter(|d| ok(&json!(d.hero), &json!(d.cards))).cloned().collect();
+    if decks.is_empty() && mode != "arena" {
         return Err("no legal deck for this game (its templates and starter decks)".into());
     }
     let mut c = Conn { t: connect().await? };
@@ -351,8 +355,12 @@ pub async fn one_game(ctx: &Ctx, connect: &ConnectFn, auth: &Auth, mode: &str, p
     if mode == "arena" {
         return arena_game(ctx, &mut c, &pack, level, true, wait).await;
     }
-    let deck = lib.decks[rand::thread_rng().gen_range(0..lib.decks.len())].clone();
-    c.send(with_pack(json!({"t": "queue", "mode": mode, "deck": {"hero": deck.hero, "cards": deck.cards, "name": deck.name}}), &pack)).await?;
+    let deck = decks[rand::thread_rng().gen_range(0..decks.len())].clone();
+    let mut q = with_pack(json!({"t": "queue", "mode": mode, "deck": {"hero": deck.hero, "cards": deck.cards, "name": deck.name}}), &pack);
+    if !format.is_empty() {
+        q["format"] = json!(format);
+    }
+    c.send(q).await?;
     c.want("queued", Duration::from_secs(20)).await?;
     let Some(m) = wait_match(ctx, &mut c, wait).await? else {
         c.send(json!({"t": "unqueue"})).await?;
