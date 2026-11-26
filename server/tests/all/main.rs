@@ -15,5 +15,6 @@ mod packs;
 mod roles;
 mod reports;
 mod stats;
+mod subserver_mgmt;
 mod subservers;
 mod tournament;

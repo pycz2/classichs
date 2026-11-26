@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(MChat), Box::new(MSub)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(MChat), Box::new(MSub), Box::new(M20)]
     }
 }
 
@@ -1137,6 +1137,32 @@ impl MigrationTrait for M15 {
         c.execute_unprepared("CREATE INDEX reports_subserver ON reports (subserver, last_at)").await?;
         c.execute_unprepared("CREATE INDEX reports_account ON reports (account, received_at)").await?;
         c.execute_unprepared("CREATE INDEX report_messages_report ON report_messages (report)").await?;
+        Ok(())
+    }
+}
+
+/// Sub-server management (0.74; docs/superpowers/specs/2026-11-26-roles-subservers-design.md §5): the admin invites
+/// (registering or logging in with one makes a new sub-server of that account) and the sub-server quota per account.
+struct M20;
+
+impl MigrationName for M20 {
+    fn name(&self) -> &str {
+        "m20261126_000020_subserver_mgmt"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M20 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        for sql in [
+            "CREATE TABLE admin_invite (id INTEGER PRIMARY KEY, key TEXT NOT NULL UNIQUE, note TEXT, created INTEGER NOT NULL, \
+             created_by INTEGER, created_by_name TEXT NOT NULL, revoked INTEGER NOT NULL DEFAULT 0, used_by INTEGER, used_at INTEGER, \
+             subserver INTEGER)",
+            "CREATE TABLE subserver_quota (account INTEGER PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE, quota INTEGER NOT NULL)",
+        ] {
+            c.execute_unprepared(sql).await?;
+        }
         Ok(())
     }
 }

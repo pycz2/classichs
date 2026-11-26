@@ -1172,5 +1172,9 @@
 "with a screenshot": "со снимком экрана",
 "Status: open": "открыто",
 "Status: closed": "закрыто",
-"You wrote": "Вы"
+"You wrote": "Вы",
+"This server is suspended by the host": "Сервер приостановлен администратором хостинга",
+"This server is not available now: try later": "Сервер сейчас недоступен: попробуйте позже",
+"This server has no room for new players": "На сервере нет мест для новых игроков",
+"This server was deleted": "Этот сервер удалён"
 }

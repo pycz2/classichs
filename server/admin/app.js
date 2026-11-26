@@ -16,6 +16,7 @@ import { Settings, InviteKeys } from './settings.js'
 import { Tournaments, TournamentPage } from './tournaments.js'
 import { VersionTag, ReplayDock } from './extra.js'
 import { Stats } from './stats.js'
+import { Subservers, Limits, Claim } from './subservers.js'
 import { Roles } from './roles.js'
 import { Audit } from './audit.js'
 import { Reports, ReportPage, useReportCounts } from './reports.js'
@@ -36,7 +37,9 @@ const NAV = [
   ['reports', 'Problem reports', 'report', 'reports.view'],
   ['settings', 'Settings', 'settings', 'settings.view'],
   ['roles', 'Roles', 'roles', 'roles.view'],
-  ['audit', 'Audit log', 'audit', 'audit.view']
+  ['audit', 'Audit log', 'audit', 'audit.view'],
+  ['subservers', 'Servers', 'live', 'subservers.view'],
+  ['limits', 'Limits', 'stats', 'limits.view']
 ]
 
 // --- theme: system (default), light or dark; remembered -------------------------------
@@ -131,6 +134,8 @@ function Shell ({ me, onLogout }) {
     case 'bots': page = html`<${Bots} />`; break
     case 'invites': page = html`<${InviteKeys} />`; break
     case 'settings': page = html`<${Settings} />`; break
+    case 'subservers': page = html`<${Subservers} />`; break
+    case 'limits': page = html`<${Limits} />`; break
     case 'chats': page = html`<${Chats} channel=${route.path[1]} />`; break
     case 'reports': page = route.path[1] ? html`<${ReportPage} id=${route.path[1]} key=${route.path[1]} />` : html`<${Reports} query=${route.query} key=${qkey} />`; break
     case 'messages': page = html`<${Messages} a=${route.path[1]} b=${route.path[2]} query=${route.query} />`; break
@@ -174,6 +179,8 @@ function App () {
     onUnauthorized(() => setMe(null))
     api('me').then((m) => { setCsrf(m.csrf); setMe(m) }, () => setMe(null))
   }, [])
+  // an admin invite's link (#/claim?key=…), logged in or not
+  if (location.hash.startsWith('#/claim')) return html`<${Claim} />`
   if (me === undefined) return html`<div class="boot"><span class="logo pulse">◆</span></div>`
   // (the login's answer has no permissions: then /me)
   if (!me) return html`<${Login} onIn=${(m) => { setCsrf(m.csrf); api('me').then(setMe, () => setMe(null)) }} />`

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'preact/hooks'
 import { api, qs } from './api.js'
-import { html, useLive, useMe, useCan, useEvents, useLoad, useDebounced, useTick, setQuery, go, toast, Card, Status, UserLink, Pager, SortTh, Modal, ErrorBox, Empty, Icon, rankText, ago, clock, fullDate, num } from './ui.js'
+import { html, useLive, useCan, useEvents, useLoad, useDebounced, useTick, setQuery, go, toast, Card, Status, UserLink, Pager, SortTh, Modal, ErrorBox, Empty, Icon, rankText, ago, clock, fullDate, num } from './ui.js'
 import { FeedRow } from './dashboard.js'
 import { PlayerGames, ArenaButtons, TagModal } from './players.js'
 import { AccountRoles } from './roles.js'
@@ -17,9 +17,6 @@ function useStatusOf () {
   return (id) => m.get(id) || 'offline'
 }
 
-function Role ({ role }) {
-  return role === 'user' ? null : html`<span class=${'badge role-' + role}>${role === 'super' ? 'superuser' : 'admin'}</span>`
-}
 
 export function Rank ({ a }) {
   const stars = a.rank === 0 ? 0 : Math.min(5, a.rank > 20 ? 2 : a.rank > 15 ? 3 : a.rank > 10 ? 4 : 5)
@@ -28,7 +25,6 @@ export function Rank ({ a }) {
 }
 
 export function Accounts ({ query }) {
-  const me = useMe()
   const can = useCan()
   const statusOf = useStatusOf()
   const [f, setF] = useState(() => ({ q: '', status: '', role: '', sort: 'id', dir: 'desc', ...query, page: Number(query.page || 0) }))
@@ -51,9 +47,6 @@ export function Accounts ({ query }) {
     <div class="filters">
       <label class="search"><${Icon} name="search" size=${16} /><input placeholder="Name or tag" value=${draft} onInput=${(e) => { setDraft(e.target.value); commit(e.target.value) }} /></label>
       <div class="seg text">${FILTERS.map(([k, label]) => html`<button key=${k} class=${f.status === k ? 'on' : ''} onClick=${() => set({ status: k })}>${label}</button>`)}</div>
-      <select value=${f.role} onChange=${(e) => set({ role: e.target.value })} aria-label="Role">
-        <option value="">Any role</option><option value="user">Players</option><option value="admin">Admins</option><option value="super">Superuser</option>
-      </select>
     </div>
     <${ErrorBox} error=${error} onRetry=${reload} />
     <${Card} pad=${false} cls=${loading ? 'loading' : ''}>
@@ -68,7 +61,7 @@ export function Accounts ({ query }) {
           <${SortTh} col="last_seen" ...${sortProps}>Last seen</${SortTh}>
         </tr></thead>
         <tbody>${data && data.list.map((a) => html`<tr key=${a.id} class="clickable" onClick=${() => go('accounts/' + a.id)}>
-          <td><a href=${'#/accounts/' + a.id} onClick=${(e) => e.stopPropagation()}><b>${a.user}</b></a> <${Role} role=${a.role} /></td>
+          <td><a href=${'#/accounts/' + a.id} onClick=${(e) => e.stopPropagation()}><b>${a.user}</b></a></td>
           <td class="muted">${a.tag || ''}</td>
           <td>${a.suspended ? html`<span class="badge bad">suspended</span>` : html`<${Status} status=${statusOf(a.id)} />`}</td>
           <td><${Rank} a=${a} /></td>
@@ -80,11 +73,11 @@ export function Accounts ({ query }) {
       ${data && !data.list.length && html`<${Empty}>No accounts match</${Empty}>`}
       ${data && html`<div class="table-foot"><span></span><${Pager} page=${f.page} size=${50} total=${data.total} onPage=${(page) => setF((x) => ({ ...x, page }))} /></div>`}
     </${Card}>
-    ${creating && html`<${CreateModal} super=${me.role === 'super'} onClose=${() => setCreating(false)} onDone=${(id) => { setCreating(false); go('accounts/' + id) }} />`}
+    ${creating && html`<${CreateModal} onClose=${() => setCreating(false)} onDone=${(id) => { setCreating(false); go('accounts/' + id) }} />`}
   </div>`
 }
 
-function CreateModal ({ super: isSuper, onClose, onDone }) {
+function CreateModal ({ onClose, onDone }) {
   const [v, setV] = useState({ user: '', password: '', role: 'user' })
   const [error, setError] = useState('')
   const submit = async (e) => {
@@ -101,7 +94,6 @@ function CreateModal ({ super: isSuper, onClose, onDone }) {
         <small>3–20 letters, digits or _</small></label>
       <label>Password<input type="password" required minlength="8" maxlength="128" autocomplete="new-password" value=${v.password} onInput=${(e) => setV({ ...v, password: e.target.value })} />
         <small>8–128 characters</small></label>
-      ${isSuper && html`<label>Role<select value=${v.role} onChange=${(e) => setV({ ...v, role: e.target.value })}><option value="user">Player</option><option value="admin">Admin</option></select></label>`}
       ${error && html`<div class="error-box">${error}</div>`}
       <div class="form-actions"><button type="button" class="btn ghost" onClick=${onClose}>Cancel</button><button class="btn primary">Create</button></div>
     </form>
@@ -146,14 +138,13 @@ export function AccountPage ({ id }) {
     <header class="page-head account-head">
       <div class="avatar">${a.user.slice(0, 1).toUpperCase()}</div>
       <div class="who">
-        <h1>${a.user} <${Role} role=${a.role} />${a.suspended && html` <span class="badge bad">suspended</span>`}</h1>
+        <h1>${a.user}${a.suspended && html` <span class="badge bad">suspended</span>`}</h1>
         <div class="muted">${a.tag ? html`tag <b>${a.tag}</b> · ` : 'no tag · '}<${Status} status=${status} /> · #${a.id}</div>
       </div>
       ${data.may_manage && html`<div class="head-actions">
         ${can('players.ban') && (a.suspended ? html`<button class="btn" onClick=${() => act('unsuspend')}>Unsuspend</button>` : html`<button class="btn warn" onClick=${() => setModal('suspend')}>Suspend</button>`)}
         ${can('players.edit') && html`<button class="btn" onClick=${() => setModal('password')}>Reset password</button>
         <button class="btn" onClick=${() => setSheet(html`<${TagModal} a=${a} onClose=${() => setSheet(null)} reload=${reload} />`)}>Change tag</button>`}
-        ${data.can_role && html`<button class="btn" onClick=${() => act('role', { role: a.role === 'admin' ? 'user' : 'admin' })}>${a.role === 'admin' ? 'Make player' : 'Make admin'}</button>`}
         ${can('players.delete') && html`<button class="btn danger" onClick=${() => setModal('delete')}>Delete…</button>`}
       </div>`}
     </header>

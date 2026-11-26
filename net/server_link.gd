@@ -55,6 +55,12 @@ var decks: Array = []
 var game_settings := {}
 ## Another login took the account (`kicked`): no resume by itself until the player logs in.
 var kicked := false
+## The sub-server stopped this connection (`kicked {reason}`: suspended, unavailable, deleted): its code, else "".
+var stopped := ""
+## What the player sees when a sub-server is stopped or full, by the server's code (translated where shown).
+const STOPPED := {"server_suspended": "This server is suspended by the host",
+	"server_unavailable": "This server is not available now: try later",
+	"server_full": "This server has no room for new players", "server_deleted": "This server was deleted"}
 ## Registering needs an invite key (`signup_info`, asked once per connection; an older server
 ## refuses the question: no key).
 var invite_only := false
@@ -319,7 +325,8 @@ func _process(_d: float) -> void:
 		for s in _games.values():
 			if is_instance_valid(s):
 				s.on_closed()
-		closed.emit(_tr("You logged in on another device") if kicked else (why if why != "" else _tr("Connection lost")))
+		var lost := _tr(STOPPED[stopped]) if stopped != "" else (why if why != "" else _tr("Connection lost"))
+		closed.emit(_tr("You logged in on another device") if kicked else lost)
 
 
 ## A message from the server: a game's message goes to its channel, the rest to
@@ -332,6 +339,7 @@ func dispatch(msg: Dictionary) -> void:
 				token = str(msg.get("token", ""))
 				me = msg.get("me", {}) if msg.get("me") is Dictionary else {}
 				kicked = false
+				stopped = ""
 				remember({"token": token, "kicked": null})
 				_probing = true
 				send({"t": "chats"})
@@ -411,11 +419,14 @@ func dispatch(msg: Dictionary) -> void:
 			_probing_settings = false
 			has_settings = true
 			game_settings = msg.get("games") if msg.get("games") is Dictionary else {}
-		"kicked":  # another login took the account; the server closes this connection
+		"kicked":  # another login took the account, or its sub-server stopped; the server closes this connection
 			token = ""
-			kicked = true
 			resuming = false
-			remember({"kicked": true})
+			if STOPPED.has(str(msg.get("reason", ""))):
+				stopped = str(msg.reason)
+			else:
+				kicked = true
+				remember({"kicked": true})
 		"logged_out":
 			token = ""
 			_clear_packs()

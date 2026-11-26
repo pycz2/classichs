@@ -51,6 +51,9 @@ pub async fn route(State(app): State<AppRef>, mut req: Request, next: Next) -> R
     let name = name.to_string();
     let found = subserver::Entity::find().filter(subserver::Column::Name.eq(&name)).one(&app.db).await;
     let Ok(Some(s)) = found else { return (StatusCode::NOT_FOUND, "No such server").into_response() };
+    if let Some(r) = crate::subservers::closed(&s, &tail) {
+        return r;
+    }
     let pq = match req.uri().query() {
         Some(q) => format!("{tail}?{q}"),
         None => tail,

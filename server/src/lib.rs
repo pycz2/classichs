@@ -25,6 +25,7 @@ pub mod reports;
 pub mod spectate;
 pub mod stats;
 pub mod storage;
+pub mod subservers;
 pub mod tournament;
 pub mod ws;
 

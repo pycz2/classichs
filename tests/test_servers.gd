@@ -160,6 +160,23 @@ func test_kicked_marks_the_session_and_waits_for_the_player() -> void:
 	m.free()
 
 
+## A suspended (or unavailable, full, deleted) sub-server: its refusal and its kick say why, translated; the
+## session is not marked as taken by another login.
+func test_a_stopped_subserver_says_why() -> void:
+	Settings.data.servers = [{"id": A, "url": A, "name": "Alpha"}]
+	Settings.save()
+	var m := _main()
+	var l: FakeLink = m.server_link
+	var v: ServerView = m.show_server()
+	l.dispatch({"t": "error", "code": "server_full", "text": "This server has no room for new players"})
+	eq(v._status.text, tr("This server has no room for new players"), "the refusal")
+	_login(l)
+	l.dispatch({"t": "kicked", "reason": "server_suspended"})
+	eq([l.kicked, l.stopped, l.saved().get("kicked")], [false, "server_suspended", null], "not another login")
+	eq((m.screen as ServerView)._status.text, tr("This server is suspended by the host"), "the lobby says why")
+	m.free()
+
+
 ## Each server has its own friends and chats; with one logged in the panel has no tabs.
 func test_social_keeps_each_server_apart() -> void:
 	_two_servers()
