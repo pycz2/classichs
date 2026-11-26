@@ -1,7 +1,7 @@
 {
  "base": "boom",
  "build": 27405,
- "about": "",
+ "about": "12.4.0.27405 (2018-11-05): four new Classic cards (Icicle, Tome of Intellect, Call of the Void, Pilfer), Annoy-o-Tron token loses its rarity, texts fixed; and 27358's nerfs, 26996's texts and Jungle Giants",
  "cards": {
   "AT_035t": {
    "text": {
@@ -242,6 +242,32 @@
     "itIT": "<b>Grido di Battaglia:</b> mette nella tua mano una Bestia casuale.",
     "plPL": "<b>Okrzyk bojowy:</b> Dodaj losową Bestię do twojej ręki."
    }
+  },
+  "EX1_179": {
+   "set": "VANILLA",
+   "script": "scripts/version/classic_2018.lua#EX1_179",
+   "fx": {
+    "element": "ice",
+    "cast": "bolt",
+    "hit": "hurt"
+   }
+  },
+  "EX1_180": {
+   "set": "VANILLA",
+   "script": "scripts/version/classic_2018.lua#EX1_180",
+   "fx": {
+    "element": "arcane",
+    "cast": "none",
+    "hit": "none"
+   }
+  },
+  "EX1_181": {
+   "set": "VANILLA",
+   "script": "scripts/version/classic_2018.lua#EX1_181"
+  },
+  "EX1_182": {
+   "set": "VANILLA",
+   "script": "scripts/version/classic_2018.lua#EX1_182"
   }
  },
  "add": [
@@ -369,5 +395,10 @@
    }
   }
  ],
- "sources": []
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 12.2.0.26996, 12.2.0.27358, 12.4.0.27405 (Patch 12.4.0.27405)",
+  "HearthstoneJSON build 27405: the four new cards, names and texts in 8 languages (tools/extract_cards.py --version-texts 27405)",
+  "packs/trl: the four cards' pack fields (cards.patch.json) and scripts (scripts/trl_a.lua, trl_b.lua), copied into scripts/classic_2018.lua",
+  "hearthstone.wiki.gg: Icicle, Tome of Intellect, Call of the Void, Pilfer"
+ ]
 }

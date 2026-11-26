@@ -1,7 +1,7 @@
 {
  "base": "boom",
  "build": 27358,
- "about": "",
+ "about": "12.2.0.27358 (2018-10-18): Giggling Inventor costs 7 (was 5), Mana Wyrm 2 (was 1), Aviana 10 (was 9); and 26996's texts and Jungle Giants",
  "cards": {
   "AT_035t": {
    "text": {
@@ -205,5 +205,8 @@
    }
   }
  },
- "sources": []
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 12.2.0.26996, 12.2.0.27358 (Patch 12.2.0.27358; balance changes of 2018-10-18)",
+  "HearthstoneJSON build 27358: names and texts in 8 languages (tools/extract_cards.py --version-texts 27358)"
+ ]
 }

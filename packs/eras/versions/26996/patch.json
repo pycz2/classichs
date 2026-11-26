@@ -1,7 +1,7 @@
 {
  "base": "boom",
  "build": 26996,
- "about": "",
+ "about": "12.2.0.26996 (2018-10-02): the Casts When Drawn keyword wording (Bomb, Burrowing Mine, Nerubian Ambush!, Ancient Curse, Spider Ambush!, Scroll of Wonder, Darkness Candle), Gazlowe reworded, translation fixes; The Darkness no longer advances Jungle Giants (scripts/jungle_giants.lua)",
  "cards": {
   "AT_035t": {
    "text": {
@@ -196,5 +196,8 @@
    }
   }
  },
- "sources": []
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 12.2.0.26996 (Patch 12.2.0.26996; data first in hsdata 12.2.0.26757)",
+  "HearthstoneJSON build 26996: names and texts in 8 languages (tools/extract_cards.py --version-texts 26996)"
+ ]
 }
