@@ -266,6 +266,8 @@ func test_play_chooses_the_version_and_the_mode() -> void:
 	_press(v, "Format_wild")
 	eq(v.game_format, "wild", "Wild chosen")
 	eq(v.link.saved().get("format"), "wild", "and remembered")
+	var me: Array = v.link.of("me")
+	check(not me.is_empty() and me[-1].get("format") == "wild" and me[-1].get("pack") == view.rules_hash(), "the rank in that version and mode: " + str(me))
 	check(v._choice_text().ends_with(tr("Wild")), "the search line names the version and the mode")
 	_free(v)
 	Packs.set_active(Packs.all()[0])

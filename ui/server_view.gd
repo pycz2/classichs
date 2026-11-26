@@ -662,7 +662,8 @@ func _game_choice() -> void:
 			b.disabled = queued != ""
 			b.pressed.connect(func():
 				game_format = f
-				link.remember({"format": f}))
+				link.remember({"format": f})
+				link.request_me())  # the rank in that format
 			row.add_child(b)
 
 

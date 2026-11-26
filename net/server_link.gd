@@ -502,9 +502,15 @@ func with_pack(msg: Dictionary, p: Pack = null) -> Dictionary:
 	return msg
 
 
-## Asks for the profile with the rank in the active game (`me {pack}`).
+## Asks for the profile with the rank in the active game (`me {pack, format}`: a version with Standard and Wild
+## has a ladder in each; the chosen one, Standard first, as the Play screen queues).
 func request_me() -> void:
-	send(with_pack({"t": "me"}))
+	var msg := with_pack({"t": "me"})
+	var f := str(saved().get("format", ""))
+	var fs := CardDb.formats()
+	if msg.has("pack") and fs.size() > 1:
+		msg["format"] = f if fs.has(f) else str(fs[0])
+	send(msg)
 
 
 ## The server's entry for a pack the player has ({} when the server does not list it): the
