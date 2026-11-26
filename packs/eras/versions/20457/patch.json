@@ -1,0 +1,8 @@
+{
+ "base": "icc",
+ "build": 20457,
+ "about": "9.0.0.20457 (2017-08-08): the Knights of the Frozen Throne release, the icc pack as it is",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 9.0.0.20457"
+ ]
+}

@@ -644,8 +644,9 @@ in the settings' `pack_versions`), `Packs.is_active(p)`.
 **Building one** (`packs/eras/recipe.json`; how to add a version: `packs/eras/README.md`): the recipe lists the
 versions (`id`, `patch`, `date`, `era`, `name`, `formats`) and `default_version`. Each version is an existing pack's
 build (its patch's `base`) changed by `versions/<id>/patch.json`: card fields (`cards`), new cards (`add`,
-HearthstoneJSON objects), cards taken out (`remove`), `rules.json` `behaviour` flags, names and texts in every
-language of the pack; `versions/<id>/scripts/*.lua` become the version's `scripts/version/`. The shared files are
+HearthstoneJSON objects), cards taken out (`remove`), `rules.json` `behaviour` flags, new `sets` (a card given before its
+set came out), names and texts in every language of the pack; `versions/<id>/scripts/*.lua` become the version's
+`scripts/version/`. The shared files are
 every base pack's (the default version's base first), with the pack source's own files (`manifest.json`, `ui/`) over
 them; the manifest takes what the source leaves out (languages, colours…) from the default version's base pack, and
 the art, sound and music sets and set marks of all of them.

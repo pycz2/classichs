@@ -1208,7 +1208,7 @@ def add_local_sets(files, manifest, art_sets=(), sound_sets=(), voice=None, musi
 # --- a pack with versions (format.md §13: packs/eras) ------------------------------------------------
 
 ## The fields of a version patch (packs/eras/versions/<id>/patch.json; packs/eras/README.md).
-PATCH_KEYS = {"base", "build", "about", "cards", "add", "remove", "behaviour", "sources"}
+PATCH_KEYS = {"base", "build", "about", "cards", "add", "remove", "behaviour", "sets", "sources"}
 ## The fields of a version in recipe.json; the manifest's entry adds build (the patch's), dir and rules_hash.
 RECIPE_VERSION_KEYS = {"id", "patch", "date", "era", "name", "formats"}
 RENAME = {"HERO": "CHAMPION", "HERO_POWER": "POWER"}
@@ -1227,7 +1227,8 @@ def apply_version_patch(vf, patch, where):
     """A base pack's rules files, texts, layout and decks (vf: path -> bytes) changed by a version patch: card fields
     (HearthstoneJSON's names or the pack's; null, false or [] takes a field away), names and texts in every language
     of the pack (HearthstoneJSON locales), cards added (HearthstoneJSON objects) and removed, rules.json `behaviour`
-    flags. A card whose text changes loses its hand-tuned layout."""
+    flags, `sets` the version adds (to rules.json `sets` and constructed decks: a card given before its set came out).
+    A card whose text changes loses its hand-tuned layout."""
     cards = {c["id"]: c for c in load_json(vf["cards.json"], "cards.json")}
     locs = {p[len("locales/"):-5]: load_json(d, p) for p, d in vf.items() if p.startswith("locales/")}
     lays = {p: load_json(d, p) for p, d in vf.items() if p.startswith("layout/")}
@@ -1268,10 +1269,14 @@ def apply_version_patch(vf, patch, where):
             else:
                 cards[cid][HS_FIELDS.get(k, k)] = v
         texts(cid, ch)
-    if patch.get("behaviour"):
+    if patch.get("behaviour") or patch.get("sets"):
         rules = load_json(vf["rules.json"], "rules.json")
+        for s in patch.get("sets", []):
+            for have in (rules["sets"], rules["modes"]["constructed"]["sets"]):
+                if s not in have:
+                    have.append(s)
         beh = rules.setdefault("behaviour", {})
-        for k, v in patch["behaviour"].items():
+        for k, v in patch.get("behaviour", {}).items():
             if v is None:
                 beh.pop(k, None)
             else:
