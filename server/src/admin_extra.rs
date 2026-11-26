@@ -17,9 +17,9 @@ use std::sync::OnceLock;
 
 pub fn routes() -> Router<AppRef> {
     Router::new()
-        .route("/admin/api/storage", get(storage))
-        .route("/admin/api/pack_files/{hash}", get(pack_file))
-        .route("/admin/replay/{*path}", get(viewer_file))
+        .route("/admin/api/storage", crate::admin::need("server.view", get(storage)))
+        .route("/admin/api/pack_files/{hash}", crate::admin::need("replays.view", get(pack_file)))
+        .route("/admin/replay/{*path}", crate::admin::need("replays.view", get(viewer_file)))
 }
 
 fn err(status: StatusCode, text: &str) -> Response {
@@ -55,11 +55,12 @@ async fn storage(State(app): State<AppRef>) -> Response {
 
 /// The newest stored pack with this content hash or rules hash (the replay player has a
 /// replay's rules hash), any owner, enabled or not.
-async fn pack_file(State(app): State<AppRef>, Path(hash): Path<String>) -> Response {
+async fn pack_file(State(app): State<AppRef>, scope: crate::scope::Scope, Path(hash): Path<String>) -> Response {
     if hash.len() != 64 || !hash.bytes().all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase()) {
         return err(StatusCode::NOT_FOUND, "No such pack");
     }
     let row = pack::Entity::find()
+        .filter(crate::packs::of_sub(scope.id))
         .filter(Condition::any().add(pack::Column::ContentHash.eq(&hash)).add(pack::Column::RulesHash.eq(&hash)))
         .order_by_desc(pack::Column::Id)
         .one(&app.db)

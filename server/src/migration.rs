@@ -1036,6 +1036,10 @@ impl MigrationTrait for M15 {
             "CREATE TABLE audit (id INTEGER PRIMARY KEY, at INTEGER NOT NULL, account INTEGER NOT NULL, subserver INTEGER NOT NULL, \
              action TEXT NOT NULL, target TEXT NOT NULL, before TEXT NOT NULL, after TEXT NOT NULL)",
             "CREATE INDEX audit_at ON audit (subserver, at)",
+            // the accounts that logged into a sub-server (its players list), and its own ban of them
+            "CREATE TABLE member (account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE, subserver INTEGER NOT NULL, \
+             joined INTEGER NOT NULL, suspended INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (subserver, account))",
+            "INSERT INTO member (account, subserver, joined) SELECT id, 0, created FROM accounts",
         ] {
             c.execute_unprepared(sql).await?;
         }

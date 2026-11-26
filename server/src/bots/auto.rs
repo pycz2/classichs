@@ -62,27 +62,33 @@ pub fn is_bot_name(name: &str) -> bool {
 
 /// Who waits for an auto-bot now (the matchmaking tick calls it every second).
 pub async fn tick(app: &AppRef) {
-    let want: Vec<(i64, Mode, f64, bool, String, String)> = {
+    // each sub-server's wait (main's: WAIT_MS)
+    let subs: HashSet<i64> = app.hub().queue.values().map(|s| s.sub).filter(|s| *s != 0).collect();
+    let mut waits = std::collections::HashMap::new();
+    for sub in subs {
+        waits.insert(sub, crate::settings::autobot_wait_ms(app, sub).await.unwrap_or(30_000));
+    }
+    let want: Vec<(i64, i64, Mode, f64, bool, String, String)> = {
         let hub = app.hub();
         let now = std::time::Instant::now();
         let taken: HashSet<i64> = hub.auto_for.values().copied().collect();
         hub.queue
             .iter()
             .filter(|(id, s)| {
-                now.duration_since(s.since) >= Duration::from_millis(WAIT_MS.load(Ordering::Relaxed))
+                now.duration_since(s.since) >= Duration::from_millis(waits.get(&s.sub).copied().unwrap_or_else(|| WAIT_MS.load(Ordering::Relaxed)))
                     && s.mode != Mode::Friendly
                     && (s.mode == Mode::Arena || !Library::for_pack(s.rules.rs).decks.is_empty() || s.rules.id == CLASSIC)
                     && !taken.contains(id)
                     && !is_bot_name(&s.name)
             })
-            .map(|(id, s)| (*id, s.mode, s.key.mmr, s.key.legend, s.rules.rules_hash.clone(), s.rules.format.clone()))
+            .map(|(id, s)| (*id, s.sub, s.mode, s.key.mmr, s.key.legend, s.rules.rules_hash.clone(), s.rules.format.clone()))
             .collect()
     };
-    for (player, mode, mmr, legend, pack, format) in want {
+    for (player, sub, mode, mmr, legend, pack, format) in want {
         let level = if mode == Mode::Ranked && legend {
             Level::SuperHard // a Legend's long wait ends with the real test
         } else if mode == Mode::Arena {
-            let wins = crate::entity::arena::Entity::find_by_id(player).one(&app.db).await.ok().flatten().map_or(0, |r| r.wins);
+            let wins = crate::entity::arena::Entity::find_by_id((sub, player)).one(&app.db).await.ok().flatten().map_or(0, |r| r.wins);
             level_for_wins(wins)
         } else {
             level_for_mmr(mmr)
@@ -93,11 +99,12 @@ pub async fn tick(app: &AppRef) {
         app.event(
             Event::new("auto_bot", format!("{name} ({}) joins the {} queue for {player_name}", level.name(), mode.as_str()))
                 .other(&name)
+                .sub(sub)
                 .data(json!({"bot": name, "level": level.name(), "mode": mode, "for": player_name})),
         );
         let app2 = app.clone();
         tokio::spawn(async move {
-            let r = play_once(&app2, account, &name, mode, pack, &format, level).await;
+            let r = play_once(&app2, sub, account, &name, mode, pack, &format, level).await;
             if let Err(e) = r {
                 app2.event(Event::new("auto_bot", format!("{name}: {e}")).other(&name).data(json!({"bot": name, "error": e})));
             }
@@ -142,13 +149,13 @@ pub(crate) async fn make(app: &AppRef, name: &str) -> Option<i64> {
 }
 
 /// The one game: log in through this process, queue (Arena: a fresh draft), play, go.
-async fn play_once(app: &AppRef, account: i64, name: &str, mode: Mode, pack: String, format: &str, level: Level) -> Result<(), String> {
+async fn play_once(app: &AppRef, sub: i64, account: i64, name: &str, mode: Mode, pack: String, format: &str, level: Level) -> Result<(), String> {
     let token = db::new_session(&app.db, account, "game", 3600, "").await.map_err(|e| e.to_string())?;
     let ctx = Ctx { id: -account, name: name.to_string(), status: app.bots.status.clone(), think: app.bots.think.clone(), app: Some(app.clone()), pace: false };
     let app2 = app.clone();
     let connect: runtime::ConnectFn = Arc::new(move || {
         let a = app2.clone();
-        Box::pin(async move { Ok(Transport::local(&a)) })
+        Box::pin(async move { Ok(Transport::local(&a, sub)) })
     });
     runtime::one_game(&ctx, &connect, &Auth::Token(token), mode.as_str(), Some(pack), format, level).await
 }

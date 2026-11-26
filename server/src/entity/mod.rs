@@ -12,6 +12,7 @@ pub mod event;
 pub mod friend;
 pub mod game;
 pub mod game_setting;
+pub mod member;
 pub mod message;
 pub mod pack;
 pub mod pack_import;

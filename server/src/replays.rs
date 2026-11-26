@@ -28,9 +28,10 @@ pub fn decompress(b: &[u8]) -> Option<Value> {
 }
 
 /// Keeps a finished game's replay (`data`: the replay JSON).
-pub async fn save(c: &impl ConnectionTrait, game: &str, pack: &str, ids: [i64; 2], ended: i64, data: &Value) -> DbResult<()> {
+pub async fn save(c: &impl ConnectionTrait, sub: i64, game: &str, pack: &str, ids: [i64; 2], ended: i64, data: &Value) -> DbResult<()> {
     let row = replay::ActiveModel {
         game: Set(game.into()),
+        subserver: Set(sub),
         pack: Set(pack.into()),
         p0: Set(Some(ids[0])),
         p1: Set(Some(ids[1])),
@@ -41,15 +42,15 @@ pub async fn save(c: &impl ConnectionTrait, game: &str, pack: &str, ids: [i64; 2
     Ok(())
 }
 
-/// A game's replay JSON (None: no such replay).
-pub async fn data(c: &impl ConnectionTrait, game: &str) -> DbResult<Option<Value>> {
-    Ok(replay::Entity::find_by_id(game).one(c).await?.and_then(|r| decompress(&r.data)))
+/// A game's replay JSON in a sub-server (None: no such replay there).
+pub async fn data(c: &impl ConnectionTrait, sub: i64, game: &str) -> DbResult<Option<Value>> {
+    Ok(replay::Entity::find_by_id(game).filter(replay::Column::Subserver.eq(sub)).one(c).await?.and_then(|r| decompress(&r.data)))
 }
 
 /// Whether an account may watch a game's replay: its players, and for a tournament game whoever
 /// the tournament lets (tournament::replay_allowed).
-pub async fn can_view(app: &AppRef, account: i64, game: &str) -> bool {
-    match replay::Entity::find_by_id(game).select_only().columns([replay::Column::P0, replay::Column::P1]).into_tuple::<(Option<i64>, Option<i64>)>().one(&app.db).await {
+pub async fn can_view(app: &AppRef, sub: i64, account: i64, game: &str) -> bool {
+    match replay::Entity::find_by_id(game).filter(replay::Column::Subserver.eq(sub)).select_only().columns([replay::Column::P0, replay::Column::P1]).into_tuple::<(Option<i64>, Option<i64>)>().one(&app.db).await {
         Ok(Some((p0, p1))) if p0 == Some(account) || p1 == Some(account) => true,
         Ok(Some(_)) => crate::tournament::replay_allowed(app, account, game).await,
         _ => false,
@@ -57,8 +58,9 @@ pub async fn can_view(app: &AppRef, account: i64, game: &str) -> bool {
 }
 
 /// The `replays` answer: a player's last games, newest first.
-pub async fn list(c: &impl ConnectionTrait, me: i64) -> DbResult<Value> {
+pub async fn list(c: &impl ConnectionTrait, sub: i64, me: i64) -> DbResult<Value> {
     let rows = replay::Entity::find()
+        .filter(replay::Column::Subserver.eq(sub))
         .filter(Condition::any().add(replay::Column::P0.eq(me)).add(replay::Column::P1.eq(me)))
         .order_by_desc(replay::Column::Ended)
         .limit(LIST)

@@ -139,6 +139,20 @@ pub async fn make_super(c: &impl ConnectionTrait, account: i64) -> Result<(), se
     Ok(())
 }
 
+/// Gives the account a built-in role of a sub-server ("Admin", "Moderator", "Viewer").
+pub async fn give_builtin(c: &impl ConnectionTrait, account: i64, subserver: i64, name: &str) -> Result<(), sea_orm::DbErr> {
+    let r = role::Entity::find()
+        .filter(role::Column::Subserver.eq(subserver))
+        .filter(role::Column::Name.eq(name))
+        .filter(role::Column::Builtin.eq(true))
+        .one(c)
+        .await?
+        .ok_or_else(|| sea_orm::DbErr::Custom(format!("no {name} role")))?;
+    let row = account_role::ActiveModel { account: Set(account), role: Set(r.id), subserver: Set(Some(subserver)) };
+    account_role::Entity::insert(row).on_conflict_do_nothing().exec_without_returning(c).await?;
+    Ok(())
+}
+
 /// Writes an audit row: who changed what, where, before → after.
 pub async fn audit(c: &impl ConnectionTrait, account: i64, subserver: i64, action: &str, target: &str, before: Value, after: Value) {
     let row = audit::ActiveModel {

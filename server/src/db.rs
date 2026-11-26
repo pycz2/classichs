@@ -1,6 +1,6 @@
 //! SQLite through SeaORM: opening (with the migrations) and the account and session helpers.
 
-use crate::entity::{account, session, signup_key, standing};
+use crate::entity::{account, member, session, signup_key, standing};
 use crate::ranked::Ladder;
 use crate::migration::Migrator;
 use crate::ranked;
@@ -83,7 +83,7 @@ async fn insert_account(c: &impl ConnectionTrait, name: &str, pass_hash: &str, r
 /// the same transaction as the insert, by one UPDATE that only takes a use that is there (two
 /// registrations never both get the last one), and a failed insert gives it back.
 /// Err: "invite_invalid" (unknown, used up or revoked) | "taken" (the name).
-pub async fn register(db: &Db, name: &str, pass_hash: &str, key: Option<&str>) -> DbResult<Result<(i64, Option<i64>), &'static str>> {
+pub async fn register(db: &Db, sub: i64, name: &str, pass_hash: &str, key: Option<&str>) -> DbResult<Result<(i64, Option<i64>), &'static str>> {
     use sea_orm::sea_query::{Expr, ExprTrait};
     use sea_orm::TransactionTrait;
     let txn = db.begin().await?;
@@ -91,6 +91,7 @@ pub async fn register(db: &Db, name: &str, pass_hash: &str, key: Option<&str>) -
     if let Some(k) = key {
         let r = signup_key::Entity::update_many()
             .col_expr(signup_key::Column::UsesLeft, Expr::col(signup_key::Column::UsesLeft).sub(1))
+            .filter(signup_key::Column::Subserver.eq(sub))
             .filter(signup_key::Column::Key.eq(k))
             .filter(signup_key::Column::UsesLeft.gt(0))
             .filter(signup_key::Column::Revoked.eq(false))
@@ -100,7 +101,7 @@ pub async fn register(db: &Db, name: &str, pass_hash: &str, key: Option<&str>) -
             txn.rollback().await?;
             return Ok(Err("invite_invalid"));
         }
-        key_id = signup_key::Entity::find().filter(signup_key::Column::Key.eq(k)).one(&txn).await?.map(|s| s.id);
+        key_id = signup_key::Entity::find().filter(signup_key::Column::Subserver.eq(sub)).filter(signup_key::Column::Key.eq(k)).one(&txn).await?.map(|s| s.id);
     }
     let Some(id) = insert_account(&txn, name, pass_hash, "user", key_id).await? else {
         txn.rollback().await?;
@@ -110,6 +111,13 @@ pub async fn register(db: &Db, name: &str, pass_hash: &str, key: Option<&str>) -
     Ok(Ok((id, key_id)))
 }
 
+/// The account enters a sub-server (its players list there); true: that sub-server suspended it.
+pub async fn join(c: &impl ConnectionTrait, sub: i64, id: i64) -> DbResult<bool> {
+    let row = member::ActiveModel { subserver: Set(sub), account: Set(id), joined: Set(ranked::now()), suspended: Set(false) };
+    member::Entity::insert(row).on_conflict_do_nothing().exec_without_returning(c).await?;
+    Ok(member::Entity::find_by_id((sub, id)).one(c).await?.is_some_and(|m| m.suspended))
+}
+
 pub async fn touch(c: &impl ConnectionTrait, id: i64) -> DbResult<()> {
     account::Entity::update_many().col_expr(account::Column::LastSeen, ranked::now().into()).filter(account::Column::Id.eq(id)).exec(c).await?;
     Ok(())
@@ -117,10 +125,11 @@ pub async fn touch(c: &impl ConnectionTrait, id: i64) -> DbResult<()> {
 
 /// A player's standing in a pack (by manifest id) this season: made from the last season's
 /// (its rank carried over by the ladder's resets, the MMRs kept) or the ladder's start.
-pub async fn standing(c: &impl ConnectionTrait, account: i64, pack: &str, ladder: &Ladder) -> DbResult<Standing> {
-    let (s, kept) = standing_now(c, account, pack, ladder).await?;
+pub async fn standing(c: &impl ConnectionTrait, sub: i64, account: i64, pack: &str, ladder: &Ladder) -> DbResult<Standing> {
+    let (s, kept) = standing_now(c, sub, account, pack, ladder).await?;
     if !kept {
         let row = standing::ActiveModel {
+            subserver: Set(sub),
             account: Set(s.account),
             pack: Set(s.pack.clone()),
             season: Set(s.season),
@@ -137,12 +146,13 @@ pub async fn standing(c: &impl ConnectionTrait, account: i64, pack: &str, ladder
 }
 
 /// The standing this season as `standing` gives it, without saving it: (it, whether it is kept).
-pub async fn standing_now(c: &impl ConnectionTrait, account: i64, pack: &str, ladder: &Ladder) -> DbResult<(Standing, bool)> {
+pub async fn standing_now(c: &impl ConnectionTrait, sub: i64, account: i64, pack: &str, ladder: &Ladder) -> DbResult<(Standing, bool)> {
     let season = ranked::season_of(ranked::now());
-    if let Some(s) = standing::Entity::find_by_id((account, pack.to_string(), season)).one(c).await? {
+    if let Some(s) = standing::Entity::find_by_id((sub, account, pack.to_string(), season)).one(c).await? {
         return Ok((s, true));
     }
     let last = standing::Entity::find()
+        .filter(standing::Column::Subserver.eq(sub))
         .filter(standing::Column::Account.eq(account))
         .filter(standing::Column::Pack.eq(pack))
         .filter(standing::Column::Season.lt(season))
@@ -153,6 +163,7 @@ pub async fn standing_now(c: &impl ConnectionTrait, account: i64, pack: &str, la
         Some(l) => {
             let best_of = |s: &Standing| if s.best >= 0 { ladder.rank_at(s.best) } else { s.rank() };
             let rows = standing::Entity::find()
+                .filter(standing::Column::Subserver.eq(sub))
                 .filter(standing::Column::Account.eq(account))
                 .filter(standing::Column::Pack.eq(pack))
                 .all(c)
@@ -162,6 +173,7 @@ pub async fn standing_now(c: &impl ConnectionTrait, account: i64, pack: &str, la
             Standing { season, rank: r.rank, stars: r.stars, streak: r.streak, best: r.best_key(ladder), ..l }
         }
         None => Standing {
+            subserver: sub,
             account,
             pack: pack.to_string(),
             season,
@@ -179,6 +191,7 @@ pub async fn standing_now(c: &impl ConnectionTrait, account: i64, pack: &str, la
 /// Saves the rank and MMRs of a standing.
 pub async fn save_standing(c: &impl ConnectionTrait, s: &Standing) -> DbResult<()> {
     standing::ActiveModel {
+        subserver: Unchanged(s.subserver),
         account: Unchanged(s.account),
         pack: Unchanged(s.pack.clone()),
         season: Unchanged(s.season),
@@ -200,6 +213,7 @@ pub async fn legend_number(c: &impl ConnectionTrait, s: &Standing) -> DbResult<O
         return Ok(None);
     }
     let n = standing::Entity::find()
+        .filter(standing::Column::Subserver.eq(s.subserver))
         .filter(standing::Column::Pack.eq(&s.pack))
         .filter(standing::Column::Season.eq(s.season))
         .filter(standing::Column::Rank.eq(ranked::LEGEND))
