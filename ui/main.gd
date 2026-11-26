@@ -13,9 +13,15 @@ extends Control
 var screen: Control
 ## "" in the main menu, "direct" (without a server) or "server" (through one).
 var mode := ""
+## The UI watch debug mode (tools/ui_watch.gd, docs/ui-watch.md), only under `-- --ui-watch`.
+var ui_watch: Node
 
 
 func _ready() -> void:
+	var args := OS.get_cmdline_user_args()
+	if "--ui-watch" in args or "--ui-watch-real" in args:  # (its own user:// unless -real: set before anything reads it)
+		ui_watch = load("res://tools/ui_watch.gd").new(self, not "--ui-watch-real" in args)
+		add_child(ui_watch)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	Locale.load_all()
 	Sprites.load_all()
@@ -80,10 +86,11 @@ func show_language_picker() -> void:
 		Settings.first_run = false
 		Settings.apply()
 		show_menu())
-	_set_screen(l)
+	_set_screen(l, "show_language_picker")
 
 
-func _set_screen(s: Control) -> void:
+## s becomes the screen; nav(args): the call of main that opened it (the UI watch builds it again by that).
+func _set_screen(s: Control, nav := "", args := []) -> void:
 	close_watch(false)  # (a game of one's own starts while watching one, say)
 	if screen:
 		screen.queue_free()
@@ -94,6 +101,8 @@ func _set_screen(s: Control) -> void:
 		sync_server_links()  # the list may have changed
 		social.enabled = mode == "server"  # friends and chats only through a server
 		social.screen_changed(s)
+	if ui_watch:
+		ui_watch.screen_set(s, nav, args)
 
 
 ## The main menu; play=true opens it at the Play submenu (coming back from a mode). Leaving
@@ -110,7 +119,7 @@ func show_menu(play := false) -> void:
 	m.server.connect(show_connections)
 	m.settings.connect(show_settings)
 	m.quit.connect(func(): get_tree().quit())
-	_set_screen(m)
+	_set_screen(m, "show_menu", [play])
 	if play:
 		m.show_play()
 
@@ -122,7 +131,7 @@ func show_settings() -> SettingsView:
 	s.back.connect(show_game_menu if in_game else show_menu)
 	if in_game:
 		s.debug.connect(show_debug_table)
-	_set_screen(s)
+	_set_screen(s, "show_settings")
 	return s
 
 
@@ -185,7 +194,7 @@ func show_library() -> GamesView:
 	g.back.connect(show_menu.bind(true))
 	g.entered.connect(enter_game)
 	g.tools.connect(show_pack_tools)
-	_set_screen(g)
+	_set_screen(g, "show_library")
 	return g
 
 
@@ -199,7 +208,7 @@ func show_pack_tools() -> PackTools:
 		if DeckStore.count_local(p.id()) == 0:
 			DeckStore.save_all(Decks.templates().map(func(x): return x.deck))
 		show_training_setup())
-	_set_screen(t)
+	_set_screen(t, "show_pack_tools")
 	return t
 
 
@@ -234,7 +243,7 @@ func show_game_menu() -> MainMenu:
 	m.replays.connect(show_replays)
 	m.settings.connect(show_settings)
 	m.leave.connect(leave_game)
-	_set_screen(m)
+	_set_screen(m, "show_game_menu")
 	return m
 
 
@@ -244,7 +253,7 @@ func show_replays() -> ReplaysView:
 	r.link = server_link if mode == "server" and server_link and server_link.logged_in() else null
 	r.back.connect(show_game_menu)
 	r.watch.connect(func(x: Replay): show_replay(x))
-	_set_screen(r)
+	_set_screen(r, "show_replays")
 	return r
 
 
@@ -284,14 +293,14 @@ func show_training_setup() -> void:
 		if t.format != "":
 			req.format = t.format  # (Standard: the engine checks the decks and makes only Standard cards)
 		start_match(req, [false, true], false, str(Settings.data.get("bot_level", "medium"))))
-	_set_screen(t)
+	_set_screen(t, "show_training_setup")
 
 
 func show_tutorial() -> void:
 	var t := TutorialView.new()
 	t.back.connect(show_game_menu)
 	t.start.connect(start_tutorial)
-	_set_screen(t)
+	_set_screen(t, "show_tutorial")
 
 
 ## Mission n's intro as its own screen, then the mission (Back: the mission list).
@@ -299,7 +308,7 @@ func show_tutorial_intro(n: int) -> void:
 	var intro := TutorialIntro.make(n)
 	intro.done.connect(start_tutorial.bind(n))
 	intro.back.connect(show_tutorial)
-	_set_screen(intro)
+	_set_screen(intro, "show_tutorial_intro", [n])
 
 
 func start_tutorial(n: int) -> MatchView:
@@ -323,7 +332,7 @@ func show_online() -> void:
 	o.edit_decks.connect(show_collection)
 	o.play.connect(start_online_match)
 	o.arena.connect(show_arena)
-	_set_screen(o)
+	_set_screen(o, "show_online")
 
 
 func start_online_match(session: NetSession, m: Match) -> MatchView:
@@ -353,7 +362,7 @@ func show_arena(s: ArenaSession) -> ArenaView:
 		s.queue_free()
 		s.transport.queue_free()
 		show_game_menu())
-	_set_screen(a)
+	_set_screen(a, "show_arena", [s])
 	return a
 
 
@@ -436,7 +445,7 @@ func show_connections() -> ConnectionsView:
 	var c := ConnectionsView.new()
 	c.back.connect(show_menu.bind(true))
 	c.chosen.connect(open_connection)
-	_set_screen(c)
+	_set_screen(c, "show_connections")
 	return c
 
 
@@ -456,7 +465,7 @@ func open_connection(id: String) -> void:
 	v.login_only = true
 	v.back.connect(show_connections)
 	v.logged_in.connect(show_server_home)
-	_set_screen(v)
+	_set_screen(v, "open_connection", [id])
 
 
 ## The chosen server's home: who the player is there, the friends, its games.
@@ -471,7 +480,7 @@ func show_server_home() -> ServerHome:
 	h.back.connect(show_connections)
 	h.entered.connect(enter_game)
 	h.friends.connect(func(): social.show_panel(true))
-	_set_screen(h)
+	_set_screen(h, "show_server_home")
 	return h
 
 
@@ -483,7 +492,7 @@ func show_server() -> ServerView:
 	var v := ServerView.new()
 	v.link = server_link
 	v.back.connect(show_game_menu)
-	_set_screen(v)
+	_set_screen(v, "show_server")
 	return v
 
 
@@ -623,7 +632,7 @@ func show_tournaments(id: Variant = null) -> TournamentsView:
 	t.page_id = id
 	t.back.connect(show_game_menu)
 	t.replay_ready.connect(func(data: Dictionary): open_replay(data, t.page_id))
-	_set_screen(t)
+	_set_screen(t, "show_tournaments", [id])
 	return t
 
 
@@ -640,7 +649,7 @@ func open_replay(data: Dictionary, tournament: Variant = null) -> ReplayView:
 func show_collection() -> void:
 	var c := DeckListView.new()
 	c.back.connect(show_game_menu)
-	_set_screen(c)
+	_set_screen(c, "show_collection")
 
 
 ## The debug tools of the active game (from its settings), at a tab: DebugTable.SCENE, TESTS...
@@ -650,7 +659,7 @@ func show_debug_table(tab := DebugTable.SCENE) -> void:
 	d.back.connect(show_settings)
 	d.start.connect(func(g, bots): start_match(g, bots, true))
 	d.run_test.connect(start_card_test)
-	_set_screen(d)
+	_set_screen(d, "show_debug_table", [tab])
 
 
 ## A card test (CardTests format) played in a hot-seat match: its steps go through
