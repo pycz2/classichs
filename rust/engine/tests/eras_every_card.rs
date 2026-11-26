@@ -5,7 +5,8 @@
 use classichs_engine::entity::int;
 use classichs_engine::{bot, pack, ruleset, scenario};
 use serde_json::{json, Value};
-use std::path::PathBuf;
+#[path = "eras_versions/built.rs"]
+mod built;
 
 const WISP: &str = "VAN_CS2_231";
 const YETI: &str = "VAN_CS2_182";
@@ -15,15 +16,10 @@ const LOOT_HOARDER: &str = "VAN_EX1_096";
 #[test]
 #[ignore = "slow (11 min); eras_versions.rs covers every version in the usual run: cargo test --release --test eras_every_card -- --ignored"]
 fn every_card_of_every_version_plays_without_a_script_error() {
-    let repo = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let out = std::env::temp_dir().join(format!("eras-every-card-{}.cardpack", std::process::id()));
-    let Ok(build) = std::process::Command::new("python3").current_dir(&repo).args(["tools/pack.py", "build", "packs/eras", "-o"]).arg(&out).output() else {
+    let Some(eras) = built::built("packs/eras") else {
         eprintln!("no python3: skipped");
         return;
     };
-    assert!(build.status.success(), "pack.py build: {}", String::from_utf8_lossy(&build.stdout));
-    let eras = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
-    let _ = std::fs::remove_file(&out);
     let only = std::env::var("ERAS_VERSIONS").ok();
     for v in pack::versions(&eras) {
         if only.as_ref().is_some_and(|o| !o.split(',').any(|x| x == v.id)) {

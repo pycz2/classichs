@@ -12,22 +12,17 @@ pub use std::collections::{BTreeSet, HashMap};
 pub use std::path::PathBuf;
 pub use std::sync::{Mutex, OnceLock};
 
+#[path = "built.rs"]
+mod built;
+
 pub fn repo() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
-/// packs/eras built once; None without python3.
+/// packs/eras built once (eras_versions/built.rs); None without python3.
 pub fn eras() -> Option<&'static Files> {
     static F: OnceLock<Option<Files>> = OnceLock::new();
-    F.get_or_init(|| {
-        let out = std::env::temp_dir().join(format!("eras-versions-{}.cardpack", std::process::id()));
-        let build = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", "packs/eras", "-o"]).arg(&out).output().ok()?;
-        assert!(build.status.success(), "pack.py build packs/eras: {}", String::from_utf8_lossy(&build.stdout));
-        let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
-        let _ = std::fs::remove_file(&out);
-        Some(files)
-    })
-    .as_ref()
+    F.get_or_init(|| built::built("packs/eras")).as_ref()
 }
 
 /// A version's rules (its view loaded as a one-version pack), loaded once; None without python3.

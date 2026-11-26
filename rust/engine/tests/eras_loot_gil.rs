@@ -10,6 +10,8 @@ use serde_json::{json, Map, Value};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::{Mutex, OnceLock};
+#[path = "eras_versions/built.rs"]
+mod built;
 
 const WISP: &str = "VAN_CS2_231";
 const YETI: &str = "VAN_CS2_182";
@@ -22,15 +24,7 @@ fn repo() -> PathBuf {
 /// packs/eras built once by tools/pack.py; None without python3.
 fn eras() -> Option<&'static Files> {
     static F: OnceLock<Option<Files>> = OnceLock::new();
-    F.get_or_init(|| {
-        let out = std::env::temp_dir().join(format!("eras-loot-gil-{}.cardpack", std::process::id()));
-        let build = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", "packs/eras", "-o"]).arg(&out).output().ok()?;
-        assert!(build.status.success(), "pack.py build: {}", String::from_utf8_lossy(&build.stdout));
-        let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
-        let _ = std::fs::remove_file(&out);
-        Some(files)
-    })
-    .as_ref()
+    F.get_or_init(|| built::built("packs/eras")).as_ref()
 }
 
 /// The rules of version `vid` (its view, loaded once).

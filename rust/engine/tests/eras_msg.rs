@@ -9,19 +9,11 @@ use serde_json::{json, Map, Value};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::{Mutex, OnceLock};
+#[path = "eras_versions/built.rs"]
+mod built;
 
 fn repo() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
-}
-
-/// A pack source built by tools/pack.py, read as the engine reads it; None without python3.
-fn built(src: &str) -> Option<Files> {
-    let out = std::env::temp_dir().join(format!("eras-msg-{}-{}.cardpack", src.replace('/', "_"), std::process::id()));
-    let build = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", src, "-o"]).arg(&out).output().ok()?;
-    assert!(build.status.success(), "pack.py build {src}: {}", String::from_utf8_lossy(&build.stdout));
-    let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
-    let _ = std::fs::remove_file(&out);
-    Some(files)
 }
 
 /// The ruleset of an eras version ("msg": the Mean Streets of Gadgetzan pack itself, built as it is), each built once.
@@ -30,9 +22,9 @@ fn rs(vid: &str) -> Option<&'static Ruleset> {
     static MSG: OnceLock<Option<&'static Ruleset>> = OnceLock::new();
     static R: OnceLock<Mutex<HashMap<String, &'static Ruleset>>> = OnceLock::new();
     if vid == "msg" {
-        return *MSG.get_or_init(|| built("packs/msg").map(|f| ruleset::load(&f).unwrap()));
+        return *MSG.get_or_init(|| built::built("packs/msg").map(|f| ruleset::load(&f).unwrap()));
     }
-    let eras = ERAS.get_or_init(|| built("packs/eras")).as_ref()?;
+    let eras = ERAS.get_or_init(|| built::built("packs/eras")).as_ref()?;
     let mut m = R.get_or_init(Default::default).lock().unwrap();
     Some(*m.entry(vid.to_string()).or_insert_with(|| {
         let view = pack::version_view(eras, vid).unwrap_or_else(|e| panic!("version {vid}: {e}"));

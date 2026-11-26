@@ -5,26 +5,22 @@ use classichs_engine::pack::{self, Files};
 use classichs_engine::{ruleset, Engine};
 use serde_json::{json, Value};
 use std::path::PathBuf;
+#[path = "eras_versions/built.rs"]
+mod built;
 
 fn repo() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
-/// A pack source built by tools/pack.py, read as the engine reads it; None without python3. Built once per test
-/// run (the tests run in parallel and would share the output file).
+/// A pack source built by tools/pack.py (once for every test binary: eras_versions/built.rs), read as the engine reads
+/// it; None without python3.
 fn built(src: &str) -> Option<Files> {
     static BUILT: std::sync::Mutex<Vec<(String, Option<Files>)>> = std::sync::Mutex::new(Vec::new());
     let mut done = BUILT.lock().unwrap_or_else(|e| e.into_inner());
     if let Some((_, f)) = done.iter().find(|(s, _)| s == src) {
         return f.clone();
     }
-    let out = std::env::temp_dir().join(format!("eras-test-{}-{}.cardpack", src.replace('/', "_"), std::process::id()));
-    let files = std::process::Command::new("python3").current_dir(repo()).args(["tools/pack.py", "build", src, "-o"]).arg(&out).output().ok().map(|build| {
-        assert!(build.status.success(), "pack.py build {src}: {}", String::from_utf8_lossy(&build.stdout));
-        let files = pack::read_zip(&std::fs::read(&out).unwrap()).unwrap();
-        let _ = std::fs::remove_file(&out);
-        files
-    });
+    let files = built::built(src);
     done.push((src.to_string(), files.clone()));
     files
 }
