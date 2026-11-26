@@ -197,6 +197,13 @@ The 2014 ladder (`server/src/ranked.rs`, `docs/superpowers/specs/2026-10-15-rank
 | `legend` | `{after_rank: 1, keep_for_season: true, numbered_top: 10000, emblem: null}` | The top rank after rank 1: never lost within a season; the best `numbered_top` players see their place. null: no Legend. |
 | `season.length` | `"month"` | Calendar months. |
 | `season.reset` | `{to_rank: 25, stars_per_rank_above: 1, legend_counts_as: 0}` | At a new season: rank 25 plus one star per rank above 25 held at the end (Legend counts as rank 0 → 25 stars). |
+| `season.reset.basis` | `"end"` (default) / `"best"` | The rank the reset counts: the one at the season's end, or the season's best (from August 2015). |
+| `season.reset.ranks_down` | — (2018: 4) | The reset of March 2018 on instead: this many ranks below the basis, its stars kept (no more than the new rank holds); Legend goes to `legend_to` (4) with 0 stars; never below `lowest` (25); a player in a rank below `lowest` (the New Player Ranks 50…26) keeps it. |
+| `season.reset.career_floor` | — (2018-12: `{reached: 15, rank: 20}`) | Who ever reached rank `reached` starts no lower than `rank`. |
+| `season.reset.shed_excess_stars` | — (2019: true) | Stars above the new rank's are dropped (the server always does: before 2019 every rank had 5). |
+
+packs/eras gives each version the ladder of its time (packs/eras/ranked.json, packs/eras/README.md). The server keeps
+the season's best rank in each standing for `basis: "best"`.
 
 Rank names are texts: `locales/<lang>.json` `ranks` (`"25": "Angry Chicken"`,
 `"1": "Innkeeper"`, `"0": "Legend"`). Matchmaking (stars below Legend, MMR at

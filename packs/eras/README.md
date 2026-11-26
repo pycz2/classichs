@@ -13,6 +13,7 @@ builds it (`tools/build_packs.sh` does it with the other packs). This README is 
 - `versions/<id>/scripts/*.lua` (optional): the version's own card scripts.
 - `versions/<id>/decks/*.json` (optional): the version's own ready decks (below).
 - `formats.json`: the Standard/Wild and Arena periods of the game (below).
+- `ranked.json`: the Ranked and Arena-run periods and the rank names (below).
 - `ui/`: the pack's own menu picture and library tile (they win over the base packs' pictures).
 
 ## Adding a version
@@ -77,6 +78,18 @@ force for most of its life (from its date to the day before the next game versio
 dates; the last to `until`) and writes them into its `rules.json` (`formats`, `modes.arena`); the recipe's `formats` of
 the version must agree (`["standard", "wild"]` when that period has Wild). An Arena card the version doesn't have is left
 out (the builder says so). Made from `~/ClassicHS-local/prep/patches/work/format_timeline.json` and `ranked_arena.md`.
+
+## Ranked and the Arena runs (`ranked.json`)
+
+`ranked.json` holds the Ranked periods by date (10, R1 … R10: each a `ranked` section as docs/packs/rules.md has it:
+stars per rank, the ranks without star loss, the floors, the streak, Legend, the season reset), the Arena run periods
+(wins and losses: 12 and 3 all along) and the rank names (`names`: English and Russian, the game's texts; a name that
+changed is `[[from build, name]…]`). The builder gives each version the periods in force for most of its life (as for
+`formats.json`) and writes `ranked` (each rank keeps its base pack's emblem: our own pictures, no Blizzard medals) and
+`modes.arena` `wins`/`losses` into its `rules.json`, and the names of its ranks into its `locales/en.json` and
+`locales/ru.json` (the other languages keep their base pack's names of ranks 25…1, the namesake cards' names; the New
+Player Ranks 50…26 of October 2018 on show in English there). Made from `~/ClassicHS-local/prep/patches/ranked_arena.json`
+(the wiki's Ranked and Arena pages of 2014–2019, the patch notes, the game's string files).
 
 ## Decks
 
