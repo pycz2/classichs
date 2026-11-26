@@ -442,6 +442,8 @@ func _cards() -> Control:
 
 ## A tab shown again: it shows the project as it is now (another tab may have changed it).
 func _refresh(t: Node) -> void:
+	if not t.is_node_ready():  # (the container tells its tab while the editor enters the tree)
+		return
 	if t.has_method("refresh"):
 		t.refresh()
 	elif t.has_method("refresh_list"):  # (the Cards tab)
@@ -486,6 +488,9 @@ func save() -> void:
 ## the whole game). Leaving it comes back here. The view, or null (why: on the Check tab and the status line).
 func try_card(cid := "") -> MatchView:
 	save()
+	if not Rules.ready():
+		_status.text = tr("The game cannot start: its rules engine is missing.") + " " + Rules.missing()
+		return null
 	var c := project.build(true, 0)
 	if c.errors() > 0:
 		tabs.current_tab = check_tab.get_index()

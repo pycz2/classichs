@@ -45,9 +45,14 @@ func refresh() -> void:
 	_servers.name = "Servers"
 	for e in Settings.data.servers:
 		_servers.add_item(str(e.get("name", e.url)) if str(e.get("name", "")) != "" else str(e.url))
+	_servers.visible = _servers.item_count > 0
 	row.add_child(_servers)
 	_buttons.Upload = Studio.button(tr("Upload to the server"), "Upload", 230)
-	_buttons.Upload.pressed.connect(func(): upload(_servers.selected))
+	_buttons.Upload.pressed.connect(func():
+		if _servers.item_count == 0:
+			_say(tr("Log in to a server in the game first"), false)
+		else:
+			upload(_servers.selected))
 	row.add_child(_buttons.Upload)
 	_message = Palette.label("", 16)
 	_message.name = "Message"
@@ -89,7 +94,6 @@ func _show() -> void:
 	Studio.clear(_list)
 	for id in ["Export", "Install", "Upload"]:
 		_buttons[id].disabled = not _good()
-	_buttons.Upload.disabled = _buttons.Upload.disabled or _servers.item_count == 0
 	if result == null:
 		_summary.text = ""
 		var hint := Palette.label(tr("Check builds the game pack, checks it, loads it into the rules engine and plays two games of bots with its decks."), 16, Palette.MUTED)
