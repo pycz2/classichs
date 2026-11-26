@@ -1211,6 +1211,16 @@ class ErasUngoro(unittest.TestCase):
         # 19632 changed no card data
         self.assertEqual(pack.version_view(self.files, "19632")["cards.json"], pack.version_view(self.files, "19506")["cards.json"])
 
+    def test_19506_and_20022_fix_names_and_texts_in_some_languages(self):
+        self.assertEqual(self.card("18336", "CFM_690")[1]["ru"]["name"], "Нефритовый сюрикен")
+        self.assertEqual(self.card("19506", "CFM_690")[1]["ru"]["name"], "Нефритовый сюрикэн")
+        self.assertEqual(self.card("19506", "CFM_690")[1]["en"]["name"], "Jade Shuriken")
+        self.assertEqual(self.card("18336", "UNG_961")[1]["fr"]["name"], "Acclimatation")
+        for vid in ("19506", "19632", "20022"):
+            self.assertEqual(self.card(vid, "UNG_961")[1]["fr"]["name"], "Adaptabilité", vid)
+        self.assertEqual(self.card("19632", "VAN_CS2_039")[1]["es"]["name"], "Viento Furioso")
+        self.assertEqual(self.card("20022", "VAN_CS2_039")[1]["es"]["name"], "Viento furioso")
+
     def test_20022_six_more_elementals(self):
         for cid in ("CFM_606", "CFM_606t", "CFM_715", "VAN_TU4e_002t", "LOE_053", "OG_209"):
             self.assertNotIn("race", self.card("19632", cid)[0], cid)
