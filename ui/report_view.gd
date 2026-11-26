@@ -105,6 +105,39 @@ static func wav16k(s: AudioStreamWAV) -> PackedByteArray:
 	return out
 
 
+## The player's reports with news on the logged-in connections (their reports_unread).
+static func unread(tree: SceneTree) -> int:
+	var n := 0
+	for x in tree.get_nodes_in_group(ServerLink.GROUP):
+		if x is ServerLink and x.logged_in():
+			n += x.reports_unread
+	return n
+
+
+## The count of the player's reports with news, in the top right corner of a button ("Report a problem",
+## "My reports"); hidden at 0.
+class Badge:
+	extends Label
+
+	func _ready() -> void:
+		name = "ReportBadge"
+		add_theme_font_size_override("font_size", 14)
+		add_theme_stylebox_override("normal", Palette.box(Palette.HEALTH, 10))
+		horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		custom_minimum_size = Vector2(22, 22)
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		position += Vector2(-14, -8)
+		for x in get_tree().get_nodes_in_group(ServerLink.GROUP):
+			x.reports_unread_changed.connect(refresh)
+		refresh()
+
+	func refresh() -> void:
+		var n := ReportView.unread(get_tree())
+		text = str(n)
+		visible = n > 0
+
+
 ## The report as POST /reports takes it.
 func report() -> Dictionary:
 	return {"text": _text.text.strip_edges(), "written_at": int(Time.get_unix_time_from_system()), "context": context(game),
@@ -193,6 +226,11 @@ func _ready() -> void:
 	var cancel := Palette.button(tr("Cancel"), "Cancel")
 	cancel.pressed.connect(queue_free)
 	buttons.add_child(cancel)
+	if link and link.logged_in():  # the reports sent before, with the admins' answers
+		var mine := Palette.button(tr("My reports"), "MyReports")
+		mine.pressed.connect(func(): add_child(ReportsView.new(link, screen)))
+		buttons.add_child(mine)
+		mine.add_child(Badge.new())
 	_refresh_voice()
 
 

@@ -171,3 +171,81 @@ func test_a_report_sent_while_logged_in_tells_the_answer() -> void:
 	eq(ServerLink.queued_reports(), [], "nothing kept")
 	v.free()
 	l.free()
+
+
+# --- the player's reports as threads, with the admins' answers --------------------------------
+
+const LIST := {"unread": 1, "list": [
+	{"id": 5, "text": "The rope burned too early", "state": "open", "received_at": 1764000000, "last_at": 1764003600, "unread": true, "messages": 2},
+	{"id": 3, "text": "A card shows the wrong art", "state": "closed", "received_at": 1763000000, "last_at": 1763000000, "unread": false, "messages": 1}]}
+const THREAD := {"id": 5, "state": "open", "text": "The rope burned too early", "received_at": 1764000000, "last_at": 1764003600, "messages": [
+	{"id": 1, "from": "you", "name": "anna", "text": "The rope burned too early", "at": 1764000000, "screen": true},
+	{"id": 2, "from": "admin", "name": "Mod", "text": "Thanks, we will look", "at": 1764003600, "screen": false}]}
+
+
+static func _gets(l: FakeLink, path: String) -> Array:
+	return l.http.filter(func(h): return h.path == path and h.method == HTTPClient.METHOD_GET)
+
+
+func test_the_badge_counts_the_reports_with_news() -> void:
+	var l := _link()
+	l.report_lists = true
+	root().add_child(l)
+	l.dispatch({"t": "auth", "ok": true, "token": "x", "me": {"user": "anna"}})
+	var m := MainMenu.new()
+	root().add_child(m)
+	var badge := m.find_child("ReportBadge", true, false) as Label
+	check(badge != null and not badge.visible, "nothing new: no badge")
+	eq(_gets(l, "/reports").size(), 1, "the count is asked after the login")
+	_gets(l, "/reports")[0].done.call(200, JSON.stringify({"list": [], "unread": 2}).to_utf8_buffer())
+	check(badge.visible and badge.text == "2", "from GET /reports: " + badge.text)
+	l.dispatch({"t": "reports_unread", "n": 3})
+	check(badge.visible and badge.text == "3", "from the server's push: " + badge.text)
+	l.dispatch({"t": "reports_unread", "n": 0})
+	check(not badge.visible, "all seen")
+	m.free()
+	l.free()
+
+
+func test_the_threads_list_and_one_thread() -> void:
+	var l := _link(true)
+	l.report_lists = true
+	var v := ReportsView.new(l)
+	root().add_child(v)
+	_gets(l, "/reports")[0].done.call(200, JSON.stringify(LIST).to_utf8_buffer())
+	var row := v.find_child("Report_5", true, false) as Button
+	check(row != null and row.text.begins_with("● ") and row.text.contains(tr("Open")), "an unread open report: " + (row.text if row else ""))
+	var old := v.find_child("Report_3", true, false) as Button
+	check(old != null and not old.text.begins_with("●") and old.text.contains(tr("Closed")), "a closed one")
+	row.pressed.emit()
+	_gets(l, "/reports/5")[0].done.call(200, JSON.stringify(THREAD).to_utf8_buffer())
+	check((v.find_child("State", true, false) as Label).text.contains(tr("Open")), "the state shown")
+	eq((v.find_child("Message_1", true, false) as Label).text, "The rope burned too early", "the report first")
+	eq((v.find_child("Message_2", true, false) as Label).text, "Thanks, we will look", "the admin's answer")
+	eq(_gets(l, "/reports").size(), 2, "opened: the count is asked again")
+	v.free()
+	l.free()
+
+
+func test_a_reply_goes_with_the_screenshot_unless_removed() -> void:
+	var l := _link(true)
+	var v := ReportsView.new(l, _png())
+	root().add_child(v)
+	v.show_thread(5)
+	_gets(l, "/reports/5")[0].done.call(200, JSON.stringify(THREAD).to_utf8_buffer())
+	(v.find_child("ReplyText", true, false) as TextEdit).text = "It happened again"
+	(v.find_child("SendReply", true, false) as Button).pressed.emit()
+	var posts := l.http.filter(func(h): return h.path == "/reports/5" and h.method == HTTPClient.METHOD_POST)
+	eq(posts.size(), 1, "the reply is sent")
+	var body = JSON.parse_string(posts[0].body.get_string_from_utf8())
+	eq([body.text, body.screen, posts[0].content_type], ["It happened again", Marshalls.raw_to_base64(_png()), "application/json"], "text and screenshot")
+	posts[0].done.call(400, JSON.stringify({"error": "x", "code": "bad_text"}).to_utf8_buffer())
+	eq((v.find_child("Status", true, false) as Label).text, tr(ServerLink.REPORT_ERRORS.bad_text), "the server's answer")
+	(v.find_child("RemoveScreenshot", true, false) as Button).pressed.emit()
+	(v.find_child("SendReply", true, false) as Button).pressed.emit()
+	posts = l.http.filter(func(h): return h.path == "/reports/5" and h.method == HTTPClient.METHOD_POST)
+	eq(JSON.parse_string(posts[1].body.get_string_from_utf8()).screen, "", "removed: no screenshot")
+	posts[1].done.call(201, JSON.stringify({"message": {"id": 3, "from": "you", "text": "It happened again"}}).to_utf8_buffer())
+	eq(_gets(l, "/reports/5").size(), 2, "sent: the thread is shown again")
+	v.free()
+	l.free()

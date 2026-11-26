@@ -109,6 +109,7 @@ func _ready() -> void:
 	report.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	report.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	report.pressed.connect(func(): ReportView.open(self))
+	report.add_child(ReportView.Badge.new())  # the reports with an answer not seen yet
 	add_child(report)
 
 

@@ -8,6 +8,8 @@ var up := true
 ## HTTP requests made (downloads, uploads, reports): {path, method, body, done, upload_id, content_type}; a test answers
 ## with done.call(code, body).
 var http: Array = []
+## Whether GET /reports (asked after every login) is kept in `http` too (only the reports' tests answer it).
+var report_lists := false
 
 
 func open(address: String) -> Error:
@@ -42,6 +44,8 @@ func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_
 			f.store_buffer(got)
 			f.close()
 		done.call(code, PackedByteArray() if to_file != "" else got)
+	if path == "/reports" and method == HTTPClient.METHOD_GET and not report_lists:
+		return null
 	http.append({"path": path, "method": method, "body": body, "done": answer, "upload_id": upload_id, "content_type": content_type})
 	return null
 

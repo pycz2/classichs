@@ -917,6 +917,7 @@ func _build_menu() -> void:
 		box.add_child(b)
 	add_child(_menu)
 	_menu.position = Vector2(1036, 50)
+	box.get_node("ReportButton").add_child(ReportView.Badge.new())  # the reports with an answer not seen yet
 
 
 func _build_emote_wheel() -> void:
