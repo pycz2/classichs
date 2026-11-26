@@ -1,7 +1,9 @@
 # Card tests
 
-Scenes for watching every card in a real game (Debug Table → "Interaction test").
-Each file here is a JSON object: card id → list of tests. All files are merged.
+Scenes for watching every card in a real game (Debug Table → "Interaction test", next to the generic scenarios
+game/card_scenarios.gd makes for every card). Each file here is a JSON object: card id → list of tests. All files are
+merged; `tricky*.json` hold the hand-written tricky interactions (several cards, several expansions), checked by
+tests/test_card_scenarios.gd in the pack that has all their cards.
 
 ```json
 {
@@ -23,17 +25,26 @@ Each file here is a JSON object: card id → list of tests. All files are merged
 - `kind`: one of `play` (played from hand, no special effect), `battlecry`, `spell`, `combo`, `choose_one`,
   `attack`, `death` (the card dies — Deathrattle), `trigger` (an "on" effect: whenever / at the end of turn…),
   `aura`, `enrage`, `secret`, `weapon`, `hero_power`, `taunt`, `charge`, `divine_shield`, `stealth`,
-  `windfury`, `freeze`, `spell_damage`, `overload`, `other`.
+  `windfury`, `freeze`, `spell_damage`, `overload`, `tricky` (an interaction of several cards), `other`.
 - `title`: a short English line saying what to watch.
+- `expect` (optional): what should happen, in English (the walk shows it next to the marks passed / failed).
+- `check` (optional): what the end position must be, checked by the tools and tests: `{"at": ref, "card": id,
+  "atk": n, "health": n, "has": tag, "not": tag}` (`"card": ""`: nothing there) or `{"count": {"side": s, "zone":
+  "hand"|"board"|"secret"|"deck"}, "is": n}`. Only for results that are certain (a random one: the count, not who).
 - `script` (optional): the card's `script` the test was written for; packs whose card has another script (it changed
   later: Warsong Commander in The League of Explorers) skip it.
 - `scene`: the Debug Table scenario (engine/scenario.gd): `current`, `turn`, `players` with `hero`, `mana`,
   `max_mana`, `damage`, `armor`, `weapon`, `hand`, `deck`, `board`, `secrets`; a card may be a string id or
-  `{"card": id, "exhausted": false, "damage": n, …}`. Minions on the board are not exhausted unless asked.
+  `{"card": id, "exhausted": false, "damage": n, "silenced": true, "tags": ["TAUNT", {"SPELLPOWER": 2}],
+  "enchantments": [{"atk": 1, "hp": 1}, {"deathrattle": "VAN_EX1_556"}]}` (tags by the pack's names, a number as
+  an object). Minions on the board are not exhausted unless asked. `hero_power` and the `secrets` may be such
+  objects too; a Quest in `secrets` starts as if played (its goal), `{"QUEST_PROGRESS": n}` sets its progress.
   Give both decks a few cards so draws work.
 - `steps`, played in order (each must be legal at that moment): `{"do": "play", "card": ref, "target": ref,
   "pos": n, "choice": n}`, `{"do": "attack", "attacker": ref, "defender": ref}`, `{"do": "hero_power",
   "target": ref}`, `{"do": "end_turn"}`, `{"do": "choose", "option": n}` (an offered entity id, else the n-th offered card, 0-based: Tracking, Totemic Slam).
   A ref is `{"side": 0|1, "zone": "hand"|"board"|"secret", "index": n}` or `{"side": s, "zone": "hero"|"weapon"|"power"}`.
-  Refs are read at the moment of the step (after earlier steps changed the table).
-- Check: `godot --headless --path . --script res://tools/check_card_tests.gd` must print 0 problems.
+  Refs are read at the moment of the step (after earlier steps changed the table). `"any": true` on a play or a
+  `hero_power`: the first legal target (the generic scenarios use it).
+- Check: `godot --headless --path . --script res://tools/check_card_tests.gd` must print 0 problems
+  (`-- dal tricky_dal.json`: only that file, in build/packs/dal.cardpack).

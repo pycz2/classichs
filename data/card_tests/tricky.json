@@ -1,0 +1,136 @@
+{
+ "BOT_406": [
+  {
+   "kind": "tricky",
+   "title": "Supercollider: the attacked minion attacks its only neighbour",
+   "expect": "The hero hits the Yeti with Supercollider; the Yeti is forced to attack the Wisp next to it: the Wisp dies, the Yeti is left with 3 Health.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_01", "mana": 10, "max_mana": 10, "weapon": "BOT_406", "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "board": ["VAN_CS2_182", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Supercollider: a minion between two neighbours attacks one of them",
+   "expect": "The Yeti in the middle attacks one of the two Wisps at random; that Wisp dies, the other lives.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_01", "mana": 10, "max_mana": 10, "weapon": "BOT_406", "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_182", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "UNG_919": [
+  {
+   "kind": "tricky",
+   "title": "Swamp King Dred with Mayor Noggenfogger and Misdirection",
+   "expect": "Dred attacks the minion just played, but Noggenfogger makes the target random; if Dred goes for the hero, Misdirection sends the attack to yet another random character.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_182"], "board": ["CFM_670"], "secrets": ["VAN_EX1_533"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_06", "board": ["UNG_919"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}]
+  }
+ ],
+ "TRL_258": [
+  {
+   "kind": "tricky",
+   "title": "Mass Hysteria with only friendly minions",
+   "expect": "The two friendly minions attack each other: the Wisp dies, the Yeti takes 1 damage. The enemy hero is never attacked.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["TRL_258"], "board": ["VAN_CS2_182", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 4},
+    {"at": {"side": 1, "zone": "hero"}, "health": 30}]
+  }
+ ],
+ "LOE_077": [
+  {
+   "kind": "tricky",
+   "title": "Brann Bronzebeard and a Battlecry that Discovers",
+   "expect": "Tomb Spider's Discover comes twice, one choice after the other: two Beasts in the hand.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["LOE_047"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "FP1_031": [
+  {
+   "kind": "tricky",
+   "title": "Baron Rivendare and a Deathrattle that summons",
+   "expect": "Harvest Golem's Deathrattle runs twice: two Damaged Golems. (Reborn, which Rivendare does not double, comes after these packs.)",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_309"], "board": ["FP1_031", "VAN_EX1_556"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_skele21"}]
+  }
+ ],
+ "BOT_020": [
+  {
+   "kind": "tricky",
+   "title": "Skaterbot Magnetic onto Annoy-o-Tron (Divine Shield, Taunt)",
+   "expect": "Skaterbot merges into Annoy-o-Tron: a 2/3 with Taunt, Divine Shield and Rush, one minion on the board.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["BOT_020"], "board": ["GVG_085"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1},
+    {"at": {"side": 0, "zone": "board", "index": 0}, "card": "GVG_085", "atk": 2, "health": 3, "has": "DIVINE_SHIELD"},
+    {"at": {"side": 0, "zone": "board", "index": 0}, "has": "TAUNT"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "RUSH"}]
+  }
+ ],
+ "DAL_577": [
+  {
+   "kind": "tricky",
+   "title": "Ray of Frost: the Twinspell copy, then the copy on the Frozen minion",
+   "expect": "The first cast Freezes the Yeti and puts the copy (without Twinspell) where the card was; the copy finds it Frozen and deals 2 damage.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["DAL_577"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_01", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}},
+    {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 0}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 3, "has": "FROZEN"}]
+  }
+ ],
+ "GIL_207": [
+  {
+   "kind": "tricky",
+   "title": "Phantom Militia: Echo copies until the turn ends",
+   "expect": "After each play an Echo copy comes to the hand; two Militias on the board; at the end of the turn the copy left in the hand is gone.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["GIL_207"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}},
+    {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "TRL_232": [
+  {
+   "kind": "tricky",
+   "title": "Ironhide Direhorn: Overkill on a Taunt",
+   "expect": "The 7 Attack Direhorn kills the 5 Health Sen'jin Shieldmasta with damage to spare: Overkill summons a 5/5 Ironhide Runt.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_06", "mana": 10, "max_mana": 10, "board": ["TRL_232"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08", "board": ["VAN_CS2_179"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "LOOT_526": [
+  {
+   "kind": "tricky",
+   "title": "The Darkness: Dormant, then awake once its three Candles are drawn",
+   "expect": "It comes Dormant and puts 3 Candles into the enemy deck; the opponent draws them one after another (each casts when drawn) and the third wakes it.",
+   "scene": {"current": 0, "players": [
+    {"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["LOOT_526"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]},
+    {"hero": "HERO_08"}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "LOOT_526", "not": "UNTOUCHABLE"}]
+  }
+ ]
+}
