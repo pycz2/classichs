@@ -61,6 +61,14 @@ func test_the_menus_open_the_window() -> void:
 	(m.find_child("ReportButton", true, false) as Button).pressed.emit()
 	check(m.find_child("ReportView", true, false) != null, "the main menu opens it")
 	m.free()
+	var v := MatchView.new()
+	root().add_child(v)
+	v.bind(H.scene({"hero": "HERO_08"}))
+	(v.find_child("ReportButton", true, false) as Button).pressed.emit()
+	var r := v.find_child("ReportView", true, false) as ReportView
+	check(r != null and not (v.find_child("GameMenu", true, false) as Control).visible, "the match menu opens it (and closes)")
+	eq(r.game if r else "x", "", "not a server's match")
+	v.free()
 
 
 func test_the_context() -> void:
