@@ -8,7 +8,10 @@ signal changed
 
 ## The pictures: kind -> [English title, size (the tile is cut to it; the menu fits into it)].
 const PICTURES := {"tile": ["The game's tile in the library", Vector2i(750, 300)], "menu": ["The menu background", Vector2i(1920, 1080)],
-	"board": ["The game board", Vector2i(1920, 1080)], "library": ["The collection's background", Vector2i(1920, 1080)]}
+	"board": ["The game board", Vector2i(1920, 1080)], "library": ["The collection's background", Vector2i(1920, 1080)],
+	"card_back": ["The card back", Vector2i(360, 510)], "logo": ["The game's logo", Vector2i(1024, 512)]}
+## The pictures the manifest names (docs/packs/format.md §2: card_back, logo).
+const MANIFEST := {"card_back": "card_back", "logo": "logo"}
 ## The game's own music and event sounds: [folder, name, English title] (StudioProject.MUSIC, GAME_SOUNDS).
 const AUDIO := [["music", "menu", "Menu music"], ["music", "battle_1", "Battle music 1"], ["music", "battle_2", "Battle music 2"],
 	["music", "battle_3", "Battle music 3"], ["music", "mulligan", "Mulligan music"], ["music", "victory", "Victory music"],
@@ -226,6 +229,8 @@ func set_picture(kind: String, img: Image) -> String:
 	var f := FileAccess.open("%s/ui/%s.%s" % [project.pack_dir(), kind, ext], FileAccess.WRITE)
 	f.store_buffer(bytes)
 	f.close()
+	if MANIFEST.has(kind):
+		project.manifest[MANIFEST[kind]] = "ui/%s.%s" % [kind, ext]
 	changed.emit()
 	return ""
 
@@ -233,4 +238,6 @@ func set_picture(kind: String, img: Image) -> String:
 func remove_picture(kind: String) -> void:
 	while picture_path(kind) != "":
 		DirAccess.remove_absolute(picture_path(kind))
+	if MANIFEST.has(kind):
+		project.manifest.erase(MANIFEST[kind])
 	changed.emit()

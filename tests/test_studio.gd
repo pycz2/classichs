@@ -84,6 +84,8 @@ func test_the_game_tab_changes_names_and_rules() -> void:
 	eq(g.set_picture("tile", img), "", "a tile picture")
 	eq(Image.load_from_file(g.picture_path("tile")).get_size(), Vector2i(750, 300), "cut to 750x300")
 	eq(g.set_picture("board", img), "", "a board picture")
+	eq(g.set_picture("card_back", img), "", "a card back")
+	eq(g.project.manifest.get("card_back"), "ui/card_back.png", "the manifest names it")
 	var wav := AudioStreamWAV.new()
 	wav.data = PackedByteArray([0, 0, 0, 0])
 	wav.save_to_wav("user://studio_test.wav")
