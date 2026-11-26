@@ -90,14 +90,15 @@ func test_choosing_a_version_in_the_library() -> void:
 	var g := GamesView.new()
 	root().add_child(g)
 	g.select(p)
-	eq((g.find_child("VersionName", true, false) as Label).text, "Version: Leeroy Jenkins and Starving Buzzard nerfed, 2014-09-22",
-		"the version played")
+	eq((g.find_child("VersionName", true, false) as Label).text, "Version: " + Versions.label(p, p.default_version()),
+		"the version played: the pack's default one")
 	check(g.find_child("FormatSlot", true, false) != null, "a place for the mode (Standard, Wild)")
 	(g.find_child("ChooseVersion", true, false) as Button).pressed.emit()
 	var v: VersionsView = g.find_child("Versions", true, false)
 	check(v != null, "the version choice opens")
 	eq((v.find_child("Era_naxx", true, false) as Label).text, "Curse of Naxxramas", "versions by era")
-	check(v.find_child("Version_6485", true, false).chosen and not v.find_child("Version_6024", true, false).chosen, "the chosen one marked")
+	check(v.find_child("Version_" + p.default_version(), true, false).chosen and not v.find_child("Version_6024", true, false).chosen,
+		"the chosen one marked")
 	(v.find_child("Version_6024", true, false) as Button).pressed.emit()
 	eq(Packs.version(p), "6024", "chosen")
 	eq(Settings.data.pack_versions.get("hs-eras"), "6024", "remembered")
@@ -210,11 +211,11 @@ func test_the_screens_at_desktop_and_phone_sizes() -> void:
 			var v: VersionsView = g.find_child("Versions", true, false)
 			eq(v.size, Vector2(1280, 720), "the version choice fills the screen at %s" % size)
 			(v.find_child("Compare", true, false) as Button).pressed.emit()
-			check(v.find_child("Change_VAN_EX1_116", true, false) != null, "the comparison at %s" % size)
+			check((v.find_child("Summary", true, false) as Label).text.contains(" changed, "), "the comparison at %s" % size)
 			(v.find_child("From", true, false) as Button).pressed.emit()
 			eq(v.page, "from", "the first version's choice")
-			(v.find_child("Version_6485", true, false) as Button).pressed.emit()
-			eq([v.page, v.a.version_id], ["compare", "6485"], "picked")
+			(v.find_child("Version_" + p.default_version(), true, false) as Button).pressed.emit()
+			eq([v.page, v.a.version_id], ["compare", p.default_version()], "picked")
 			eq((v.find_child("Summary", true, false) as Label).text, "0 changed, 0 added, 0 removed", "the same version")
 		m.free()
 	root().size = size0
