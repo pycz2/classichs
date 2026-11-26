@@ -56,6 +56,16 @@ static func scene_cards(scene: Variant) -> Array:
 	return out
 
 
+## A ref in a few words: "P2 board 1".
+static func ref_text(r: Variant) -> String:
+	if not r is Dictionary:
+		return str(r)
+	var s := "P%d %s" % [int(r.get("side", 0)) + 1, r.get("zone", "?")]
+	if r.has("index"):
+		s += " %d" % (int(r.index) + 1)
+	return s
+
+
 ## The entity a step points at: {"side": 0|1, "zone": "hand"|"board"|"secret", "index": n}
 ## or {"side": s, "zone": "hero"|"weapon"|"power"}; -1 when there is none.
 static func entity(g: GameView, ref) -> int:
@@ -139,11 +149,11 @@ static func check(g: GameView, checks: Array) -> String:
 			var z := str(c["count"].get("zone", ""))
 			var n: int = p.deck_count if z == "deck" else ({"hand": p.hand, "board": p.board, "secret": p.secrets}.get(z, []) as Array).size()
 			if n != int(c.get("is", 0)):
-				return "%s: %d, not %d" % [DebugTable._ref(c["count"]), n, int(c.get("is", 0))]
+				return "%s: %d, not %d" % [ref_text(c["count"]), n, int(c.get("is", 0))]
 			continue
 		var id := entity(g, c.get("at"))
 		var e: GameView.Ent = g.ent(id) if id >= 0 else null
-		var at := DebugTable._ref(c.get("at"))
+		var at := ref_text(c.get("at"))
 		if c.has("card") and (e.card_id if e else "") != str(c.card):
 			return "%s: %s, not %s" % [at, e.card_id if e else "nothing", c.card]
 		if e == null:

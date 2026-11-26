@@ -30,11 +30,11 @@ func test_effects_switch_on_and_off_on_the_minion() -> void:
 
 func test_every_effect_can_be_shown() -> void:
 	var lab := _lab()
-	for key in EffectsLab.EFFECTS.map(func(x): return x[0]):
+	for key in EffectsLab.effects().map(func(x): return x[0]):
 		lab.set_effect(key, true)
 	var tips := lab.find_child("KeywordTips", true, false)
 	check(tips != null and tips.find_child("Changes", true, false) != null, "the changes box lists them")
-	for key in EffectsLab.EFFECTS.map(func(x): return x[0]):
+	for key in EffectsLab.effects().map(func(x): return x[0]):
 		lab.set_effect(key, false)
 	lab.free()
 

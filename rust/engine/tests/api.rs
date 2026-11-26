@@ -124,6 +124,9 @@ fn scene_tags_with_a_number() {
     let bad = json!({"players": [{"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "tags": [{"SPELLPOWER": "x"}]}]}, p1]});
     assert_eq!(call(&mut e, json!({"op": "new", "game": "u", "scenario": bad}))["error"],
         "scenario: players[0].board[0].tags: items must be names or objects of numbers");
+    assert_eq!(call(&mut e, json!({"op": "check_scenario", "scenario": bad}))["error"],
+        "scenario: players[0].board[0].tags: items must be names or objects of numbers", "checked without a game");
+    assert_eq!(call(&mut e, json!({"op": "check_scenario", "scenario": sc}))["ok"], true);
 }
 
 #[test]

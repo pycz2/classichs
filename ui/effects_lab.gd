@@ -1,21 +1,21 @@
 class_name EffectsLab
 extends Control
-## A tool to see every effect a card can show on the table: any card (a minion on
-## the board, a hero, a weapon, and the card itself as in hand with its pop-up
-## boxes), with buffs, debuffs and states switched on and off, in any language.
-## The effects are put on a real entity the way the engine does, so the views
-## draw exactly what a game shows. (A developer tool: its labels are not translated.)
+## A tool to see every effect a card can show: any card of the active pack — a minion, a weapon, a spell, a
+## hero card, a Hero Power, a Secret or a Quest — in play and as the card in hand with its pop-up boxes, with
+## every keyword and tag of the pack (with a number: Spell Damage N), the states and every kind of enchantment
+## (buffs, set stats, new base stats, a given Deathrattle, costs, the pack's named hook enchantments) switched on
+## and off, in any language. The effects are put on real entities the way the engine does, so the views draw
+## exactly what a game shows. (A developer tool: its own labels are not translated; the keywords are the pack's.)
 
 signal back
 
-## [key, label]: a tag key (TAUNT...) is given as a tag; the others are below.
-const EFFECTS := [
-	["TAUNT", "Taunt"], ["DIVINE_SHIELD", "Divine Shield"], ["STEALTH", "Stealth"], ["WINDFURY", "Windfury"],
-	["CHARGE", "Charge"], ["IMMUNE", "Immune"], ["ELUSIVE", "Elusive"], ["FROZEN", "Frozen"], ["SPELLPOWER", "Spell Damage +1"],
+## [key, label] of the effects that are no tag: states and kinds of enchantment.
+const STATES := [
 	["sleeping", "Played this turn (asleep)"], ["damaged", "Damaged (2)"],
 	["buff", "+1/+1 (Shattered Sun Cleric)"], ["turn_buff", "+3 Attack this turn (Rockbiter)"],
-	["set_attack", "Attack set to 1 (Humility)"], ["aura", "Aura +1/+1 (Stormwind Champion)"],
-	["silenced", "Silenced"], ["cheaper", "Costs (1) less"], ["dearer", "Costs (1) more"],
+	["set_attack", "Attack set to 1 (Humility)"], ["set_health", "Health set to 1"], ["base", "New base 5/5 (Crystal Core)"],
+	["aura", "Aura +1/+1 (Stormwind Champion)"], ["deathrattle", "Given a Deathrattle (Harvest Golem)"],
+	["silenced", "Silenced"], ["cheaper", "Costs (1) less"], ["dearer", "Costs (1) more"], ["cost_set", "Costs (0)"],
 ]
 const GLOWS := [["none", Color.TRANSPARENT], ["playable", Palette.PLAYABLE], ["selected", Palette.SELECTED], ["target", Palette.TARGET]]
 const LANG_NAMES := {"en": "English", "ru": "Русский", "de": "Deutsch", "fr": "Français", "es": "Español",
@@ -25,11 +25,24 @@ var ids: Array = []
 var index := 0
 var on := {}  # effect key -> true
 var glow := Color.TRANSPARENT
+## The number the switched-on tags get (1: a plain tag).
+var tag_value := 1
 var _was_lang := ""
 var _stage := Control.new()
 var _title := Label.new()
 var _lang := OptionButton.new()
 var _boxes := {}
+
+
+## Every effect of the active pack: [key, label] — the states, then the pack's tags (its names), then its named
+## hook enchantments ("ench:…").
+static func effects() -> Array:
+	var out := STATES.duplicate()
+	for t in DebugTable.pack_tags():
+		out.append([t, DebugTable.tag_label(t)])
+	for h in Rules.enchantment_hooks():
+		out.append([h, "Enchantment " + str(h).trim_prefix("ench:")])
+	return out
 
 
 func _ready() -> void:
@@ -53,7 +66,7 @@ func _ready() -> void:
 	add_child(bar)
 	var search := LineEdit.new()
 	search.placeholder_text = "card id or name"
-	search.custom_minimum_size = Vector2(220, 34)
+	search.custom_minimum_size = Vector2(200, 34)
 	search.text_submitted.connect(find)
 	bar.add_child(search)
 	for spec in [["<", func(): show_card(ids[posmod(index - 1, ids.size())])], [">", func(): show_card(ids[(index + 1) % ids.size()])]]:
@@ -75,6 +88,18 @@ func _ready() -> void:
 		glow = GLOWS[i][1]
 		_build())
 	bar.add_child(glow_pick)
+	var n := Label.new()
+	n.text = "tag ="
+	bar.add_child(n)
+	var value := SpinBox.new()
+	value.name = "TagValue"
+	value.min_value = -99
+	value.max_value = 99
+	value.value = 1
+	value.value_changed.connect(func(v):
+		tag_value = int(v)
+		_build())
+	bar.add_child(value)
 	var all := Button.new()
 	all.text = "All off"
 	all.pressed.connect(func():
@@ -90,18 +115,24 @@ func _ready() -> void:
 	bar.add_child(bk)
 	_title.position = Vector2(14, 46)
 	add_child(_title)
+	var scroll := ScrollContainer.new()  # the pack's tags make a long list
+	scroll.position = Vector2(14, 76)
+	scroll.size = Vector2(446, 580)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(scroll)
 	var list := GridContainer.new()
 	list.columns = 2
-	list.position = Vector2(14, 76)
 	list.add_theme_constant_override("h_separation", 4)
 	list.add_theme_constant_override("v_separation", 0)
-	add_child(list)
-	for ef in EFFECTS:
+	scroll.add_child(list)
+	for ef in effects():
 		var box := CheckBox.new()
 		box.text = ef[1]
-		box.name = "Effect_" + ef[0]
+		box.name = "Effect_" + ef[0].replace(":", "_")
 		box.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 		box.custom_minimum_size.x = 214
+		box.clip_text = true
+		box.tooltip_text = ef[1]
 		box.add_theme_font_size_override("font_size", 14)
 		var key: String = ef[0]
 		box.toggled.connect(func(v): set_effect(key, v))
@@ -145,25 +176,52 @@ func set_language(code: String) -> void:
 	_build()
 
 
-## A fresh game with the card in play (or in hand), with the effects on it.
+## Where a card of each type is in play: [player field, view kind] (none: only in hand).
+static func place(id: String) -> String:
+	var c := CardDb.card(id)
+	var mech: Array = c.get("mechanics", [])
+	match str(c.get("type", "")):
+		"MINION":
+			return "board"
+		"WEAPON":
+			return "weapon"
+		"HERO":
+			return "hero"
+		"HERO_POWER":
+			return "power"
+		"SPELL":
+			return "quest" if mech.has("QUEST") else ("secret" if mech.has("SECRET") else "")
+	return ""
+
+
+## A fresh game with the card in play (where its type goes) and in hand, with the effects on both.
 func _build() -> void:
 	if ids.is_empty():
 		return
 	var id: String = ids[index]
 	var c := CardDb.card(id)
-	var type: String = c.get("type", "SPELL")
-	var p0 := {"hero": id if type == "HERO" else "HERO_08", "mana": 10, "max_mana": 10}
+	var where := place(id)
 	var spec := _spec(id)
-	match type:
-		"MINION":
+	var heroes: Array = Decks.heroes().values()
+	var own: String = Decks.heroes().get(str(c.get("cardClass", "")), heroes[0] if not heroes.is_empty() else "HERO_08")
+	var p0 := {"hero": own, "mana": 10, "max_mana": 10, "hand": [spec] if where != "power" else []}
+	match where:
+		"board":
 			p0.board = [spec]
-		"WEAPON":
+		"weapon":
 			p0.weapon = spec
-		"HERO":
+		"hero":  # the hero card as the hero, with its power
+			p0.hero = id
 			p0.hero_state = spec
-	p0.hand = [] if type == "HERO" else [spec if type not in ["MINION", "WEAPON"] else id]
+			if CardDb.has(str(c.get("power", ""))):
+				p0.hero_power = c.power
+		"power":
+			p0.hero_power = spec
+		"secret", "quest":
+			p0.secrets = [spec]
 	var gid := Rules.new_id("lab")
-	var r := Rules.request({"op": "new", "game": gid, "scenario": {"current": 0, "players": [p0, {"hero": "HERO_01"}]}})
+	var foe: String = heroes.filter(func(h): return h != own).front() if heroes.size() > 1 else own
+	var r := Rules.request({"op": "new", "game": gid, "scenario": {"current": 0, "players": [p0, {"hero": foe}]}})
 	if not r.ok:
 		_title.text = "%s: %s" % [id, r.error]
 		return
@@ -171,8 +229,11 @@ func _build() -> void:
 	g.update(Rules.request({"op": "snapshot", "game": gid}).state)
 	Rules.request({"op": "drop", "game": gid})
 	var pl = g.players[0]
-	var e: GameView.Ent = pl.board[0] if type == "MINION" else (pl.hero if type == "HERO" else (pl.weapon if type == "WEAPON" else pl.hand[0]))
-	if on.has("aura"):  # a Stormwind Champion's aura, drawn on the entity only
+	var hand: GameView.Ent = pl.hand[0] if not pl.hand.is_empty() else null
+	var e: GameView.Ent = {"board": pl.board[0] if not pl.board.is_empty() else null, "weapon": pl.weapon, "hero": pl.hero,
+		"power": pl.hero_power, "secret": pl.secrets[0] if not pl.secrets.is_empty() else null,
+		"quest": pl.secrets[0] if not pl.secrets.is_empty() else null}.get(where, hand)
+	if on.has("aura") and e:  # a Stormwind Champion's aura, drawn on the entity only
 		e.aura.atk = int(e.aura.get("atk", 0)) + 1
 		e.aura.hp = int(e.aura.get("hp", 0)) + 1
 		e.aura.get_or_add("src", {})["VAN_CS2_222"] = [1, 1]
@@ -182,43 +243,45 @@ func _build() -> void:
 	for ch in _stage.get_children():
 		_stage.remove_child(ch)
 		ch.queue_free()
-	var board: EntityView = null
-	match type:
-		"MINION":
-			board = MinionView.make(e, g)
-			board.name = "Minion"
-		"HERO":
-			board = HeroView.make(e, g)
-			board.name = "Hero"
-		"WEAPON":
-			board = PowerView.make(e, g, PowerView.Kind.WEAPON)
-			board.name = "Weapon"
-	if board:
-		board.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		board.set_glow(glow)
-		board.scale = Vector2(2, 2)
-		board.position = Vector2(470, 110)
-		_stage.add_child(board)
-		# the same at the table's size
-		var small: EntityView = MinionView.make(e, g) if type == "MINION" else (HeroView.make(e, g) if type == "HERO" else PowerView.make(e, g, PowerView.Kind.WEAPON))
-		small.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		small.set_glow(glow)
-		small.position = Vector2(518, 480)
-		_stage.add_child(small)
-	var hand: GameView.Ent = pl.hand[0] if not pl.hand.is_empty() else e  # in hand only the cost changes
+	if e and where != "":
+		for big in [true, false]:  # twice the size, and as on the table
+			var v := _view(where, e, g)
+			v.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			v.set_glow(glow)
+			if big:
+				v.name = {"board": "Minion", "hero": "Hero", "weapon": "Weapon", "power": "Power", "secret": "Secret", "quest": "Quest"}[where]
+				v.scale = Vector2(2, 2)
+				v.position = Vector2(470, 110)
+			else:
+				v.position = Vector2(518, 480)
+			_stage.add_child(v)
 	var cv := CardView.make(id, 1.6)
 	cv.name = "Card"
 	cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	cv.show_entity(hand, g)
-	var base := int(c.get("cost", 0))
-	cv.cost = maxi(0, base - (1 if on.has("cheaper") else 0) + (1 if on.has("dearer") else 0))
+	if hand:
+		cv.show_entity(hand, g)  # its cost, stats and keywords as the engine has them in hand
 	cv.set_glow(glow)
 	cv.position = Vector2(760, 110)
 	_stage.add_child(cv)
-	var tips := KeywordTips.make(id, e)
+	var tips := KeywordTips.make(id, e if e else hand)
 	tips.position = Vector2(960, 110)
 	tips.custom_minimum_size.x = 300
 	_stage.add_child(tips)
+
+
+static func _view(where: String, e: GameView.Ent, g: GameView) -> EntityView:
+	match where:
+		"board":
+			return MinionView.make(e, g)
+		"hero":
+			return HeroView.make(e, g)
+		"weapon":
+			return PowerView.make(e, g, PowerView.Kind.WEAPON)
+		"secret":
+			return PowerView.make(e, g, PowerView.Kind.SECRET)
+		"quest":
+			return PowerView.make(e, g, PowerView.Kind.QUEST)
+	return PowerView.make(e, g, PowerView.Kind.POWER)
 
 
 ## The entity with the effects switched on, as a scenario item (the engine builds
@@ -226,22 +289,25 @@ func _build() -> void:
 func _spec(id: String) -> Dictionary:
 	var silenced := on.has("silenced")
 	var spec := {"card": id, "tags": [], "enchantments": [], "silenced": silenced}
-	for ef in EFFECTS:
-		var k: String = ef[0]
-		if on.has(k) and k == k.to_upper() and not silenced:
-			spec.tags.append(k)
+	var tags := DebugTable.pack_tags()
+	for k in on:
+		if tags.has(k) and not silenced:
+			spec.tags.append(k if tag_value == 1 else {k: tag_value})
+		if str(k).begins_with("ench:") and not silenced:
+			spec.enchantments.append({"hooks": k})
 	if on.has("sleeping"):
-		spec.tags.append("EXHAUSTED")
-	if not silenced:
-		if on.has("buff"):
-			spec.enchantments.append({"atk": 1, "hp": 1, "src": "VAN_EX1_019"})
-		if on.has("turn_buff"):
-			spec.enchantments.append({"atk": 3, "eot": true, "src": "VAN_CS2_045"})
-		if on.has("set_attack"):
-			spec.enchantments.append({"set_atk": 1, "src": "VAN_EX1_360"})
+		spec.tags.append(Packs.pack_name("EXHAUSTED"))
+	var ench := {"buff": {"atk": 1, "hp": 1, "src": "VAN_EX1_019"}, "turn_buff": {"atk": 3, "eot": true, "src": "VAN_CS2_045"},
+		"set_attack": {"set_atk": 1, "src": "VAN_EX1_360"}, "set_health": {"set_hp": 1}, "deathrattle": {"deathrattle": "VAN_EX1_556"},
+		"cheaper": {"cost": -1}, "dearer": {"cost": 1}}
+	for k in ench:
+		if on.has(k) and not silenced and (not ench[k].has("src") or CardDb.has(ench[k].src)) and (k != "deathrattle" or CardDb.has("VAN_EX1_556")):
+			spec.enchantments.append(ench[k])
+	if on.has("base"):  # (Silence leaves it)
+		spec.enchantments.append({"set_atk": 5, "set_hp": 5, "base": true})
+	if on.has("cost_set"):
+		spec.enchantments.append({"cost_set": 0})
 	if on.has("damaged"):
-		var hp := int(CardDb.card(id).get("health", 0)) + (1 if on.has("buff") and not silenced else 0)
+		var hp := int(CardDb.card(id).get("health", 30)) + (1 if on.has("buff") and not silenced else 0)
 		spec.damage = mini(2, maxi(0, hp - 1))
 	return spec
-
-

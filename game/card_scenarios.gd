@@ -146,7 +146,8 @@ static func generic(id: String) -> Array:
 			for pos in 4:
 				_add(out, id, "adjacent", {"board": [WISP, _adjacent, WISP], "hand": [id]}, {}, [play.merged({"pos": pos})] + after,
 					str(pos), [CardText.name(_adjacent), str(pos + 1)])
-		_add(out, id, "champion", {"board": [CHAMPION], "hand": [id]}, {}, [play] + after, "", [CardText.name(CHAMPION)])
+		if CardDb.has(CHAMPION):
+			_add(out, id, "champion", {"board": [CHAMPION], "hand": [id]}, {}, [play] + after, "", [CardText.name(CHAMPION)])
 		if h.get("aura", false):
 			for pos in 4:
 				_add(out, id, "own_aura", {"board": [WISP, id, WISP], "hand": [WISP]}, {"board": [WISP]},
