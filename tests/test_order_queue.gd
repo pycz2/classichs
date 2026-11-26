@@ -97,3 +97,36 @@ func test_no_waiting_orders_without_an_animation() -> void:
 	eq(v._pending_acts.size(), 0, "carried out at once")
 	eq(g.players[1].hero.damage, 3, "done")
 	v.free()
+
+
+## The opponent's turn is over in the game but the table still plays it out: our side shows nothing of our turn
+## (no playable or attack glow, End Turn on the opponent's side and off, no orders taken) until every queued
+## batch and the turn change have played; then it all lights up at once.
+func test_our_turn_lights_up_only_after_the_opponents_turn_played_out() -> void:
+	var m := H.scene({"hero": "HERO_08", "mana": 3, "max_mana": 3, "hand": ["VAN_CS2_024"], "board": ["VAN_CS2_182"]},
+		{"hero": "HERO_01", "mana": 3, "max_mana": 3, "hand": [H.WISP, H.WISP]}, 0, [false, true])
+	var v := MatchView.new()
+	root().add_child(v)
+	v.bind(m)
+	var bolt: int = m.game.players[0].hand[0].id
+	var yeti: int = m.game.players[0].board[0].id
+	v._busy = true  # (as if an animation ran: the batches queue)
+	Anim.instant = false
+	m.submit({"type": "end_turn", "player": 0})  # the bot plays its whole turn at once
+	Anim.instant = true
+	eq([m.game.current, m.actor()], [0, 0], "in the game our turn has begun")
+	check(v._queue.size() >= 3, "the table has the opponent's turn still to show: %d batches" % v._queue.size())
+	while v._queue.size() > 1:
+		v._animate(v._queue.pop_front())
+		check(not v.my_action(), "no move of ours yet")
+		eq([v._views[bolt].glow, v._views[yeti].glow], [Color.TRANSPARENT, Color.TRANSPARENT], "no glow in our hand or board")
+		check(v._end_turn.disabled, "End Turn off")
+		eq(v._end_turn.get_meta("side"), "enemy", "End Turn shows the opponent's turn")
+	v.click_entity(bolt)
+	check(v._sel.is_empty(), "a click takes no order")
+	v._play_queue()  # the last batch: our turn begins on the table
+	check(v.my_action(), "now we move")
+	eq(v._end_turn.get_meta("side"), "own", "End Turn turns over")
+	check(not v._end_turn.disabled, "and is on")
+	eq([v._views[bolt].glow, v._views[yeti].glow], [Palette.PLAYABLE, Palette.PLAYABLE], "the Frostbolt and the Yeti light up")
+	v.free()

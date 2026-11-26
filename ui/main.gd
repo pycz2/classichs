@@ -38,7 +38,6 @@ func _ready() -> void:
 		turn.layer = 120
 		turn.add_child(TurnSign.new())
 		add_child(turn)
-		get_viewport().size_changed.connect(_fit_phone)
 	if Settings.data.fullscreen and not OS.has_feature("web"):  # the browser needs a click first
 		Settings.set_fullscreen(true)
 	_start_server_link()
@@ -89,8 +88,7 @@ func _set_screen(s: Control) -> void:
 		screen.queue_free()
 		screen.get_parent().remove_child(screen)
 	screen = s
-	_holder(s).add_child(s)
-	_fit_phone()
+	add_child(s)
 	if social:
 		sync_server_links()  # the list may have changed
 		social.enabled = mode == "server"  # friends and chats only through a server
@@ -129,33 +127,11 @@ func show_settings() -> SettingsView:
 
 # --- phones --------------------------------------------------------------------------------
 
-## Phones (TouchInput.phone): every screen but a match goes into a scroller. In a landscape wider
-## than 16:9 the game then fills the width (bigger, no bars at the sides) and the rest of its 720
-## scrolls up and down (a finger drag anywhere, as lists scroll: TouchInput); a match keeps all of
-## the table in sight. In portrait a sign asks to turn the phone (TurnSign).
-var _pan: ScrollContainer
-
-
-func _holder(s: Control) -> Control:
-	if not TouchInput.phone or s is MatchView:
-		return self
-	if _pan == null:
-		_pan = ScrollContainer.new()
-		_pan.name = "PhonePan"
-		_pan.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-		_pan.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		add_child(_pan)
-	s.custom_minimum_size = Vector2(1280, 720)
-	return _pan
-
-
-## The game's size for the window now: fills a wide phone's width when the screen scrolls.
-func _fit_phone() -> void:
-	if not TouchInput.phone:
-		return
-	var w := Vector2(get_window().size)
-	var zoom := screen != null and screen.get_parent() == _pan and watch_view == null and w.x > w.y * 16.0 / 9.0 + 1.0
-	get_window().content_scale_size = Vector2i(1280, roundi(1280.0 * w.y / w.x)) if zoom else Vector2i(1280, 720)
+## Phones (TouchInput.phone), as everywhere: every screen is the game's 1280x720, shown whole and as big as the
+## screen allows (project.godot's stretch: "keep"; bars where the screen is not 16:9), laid out anew by the engine
+## on every change of size: a foldable's outer and inner screens, a turn. No screen scrolls as a page (UI fix 58's
+## zoom of the menus on screens wider than 16:9 left a part of the game out of sight and went stale on unfolding).
+## In portrait a sign asks to turn the phone (TurnSign).
 
 
 ## Portrait on a phone: the whole screen asks to turn the phone (a phone turning on its side).
@@ -573,7 +549,6 @@ func _show_watch(s: ServerSession, m: Match) -> MatchView:
 	if screen:
 		screen.visible = false
 	add_child(v)
-	_fit_phone()
 	v.bind_online(m, s)
 	social.screen_changed(v)
 	return v
@@ -589,7 +564,6 @@ func close_watch(back := true) -> void:
 		v.session.leave()
 	v.queue_free()
 	remove_child(v)
-	_fit_phone()
 	if not back:
 		return
 	var was: Pack = _before_watch.get("pack")

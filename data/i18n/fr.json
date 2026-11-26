@@ -899,6 +899,7 @@
 "You reveal %s": "Vous révélez %s",
 "Opponent reveals %s": "L'adversaire révèle %s",
 "%s awakens": "%s se réveille",
+"%s fuses with %s": "%s fusionne avec %s",
 "%s is removed from your hand": "%s est retiré de votre main",
 "%s is removed from Opponent's hand": "%s est retiré de la main de l'adversaire",
 "%s fades from your hand": "%s disparaît de votre main",
