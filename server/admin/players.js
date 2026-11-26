@@ -4,7 +4,7 @@
 
 import { useState } from 'preact/hooks'
 import { api } from './api.js'
-import { html, toast, Card, Modal, Empty, Icon, CopyCode, DeckList, num, fullDate } from './ui.js'
+import { html, toast, useCan, Card, Modal, Empty, Icon, CopyCode, DeckList, num, fullDate } from './ui.js'
 import { Rank, Confirm } from './accounts.js'
 
 /** A change: its text as a toast, then the page again; an error is thrown (the form shows it). */
@@ -78,8 +78,10 @@ function ArenaModal ({ a, run, max, onClose, reload }) {
 export function PlayerGames ({ a, games, may, reload, setModal }) {
   const [sel, setSel] = useState(() => (games.find((g) => g.pack === a.pack) || games[0] || {}).pack)
   const g = games.find((x) => x.pack === sel) || games[0]
+  const can = useCan()
   if (!g) return null
-  const props = { a, g, may, reload, setModal }
+  // may: the admin may change this account; then each part by its permission
+  const props = { a, g, may: may && can('players.edit'), reload, setModal }
   return html`<section class="player-games">
     <header class="games-head"><h2>Games</h2>
       <div class="seg text" role="tablist">${games.map((x) => html`<button key=${x.pack} role="tab" aria-selected=${x.pack === g.pack} class=${x.pack === g.pack ? 'on' : ''}
@@ -89,7 +91,7 @@ export function PlayerGames ({ a, games, may, reload, setModal }) {
       <${Standing} ...${props} />
       <${Settings} ...${props} />
     </div>
-    <${Decks} ...${props} />
+    ${can('players.decks.view') && html`<${Decks} ...${props} may=${may && can('players.decks.edit')} />`}
   </section>`
 }
 

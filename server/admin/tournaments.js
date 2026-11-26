@@ -3,7 +3,7 @@
 
 import { useState } from 'preact/hooks'
 import { api, qs } from './api.js'
-import { html, useLoad, useEvents, useDebounced, go, toast, Card, ErrorBox, Empty, Icon, GameLink, CopyCode, fullDate } from './ui.js'
+import { html, useCan, useLoad, useEvents, useDebounced, go, toast, Card, ErrorBox, Empty, Icon, GameLink, CopyCode, fullDate } from './ui.js'
 import { Confirm } from './accounts.js'
 
 const STATUSES = ['', 'open', 'locked', 'seeded', 'running', 'finished', 'cancelled', 'closed']
@@ -49,6 +49,7 @@ export function Tournaments ({ query }) {
 }
 
 export function TournamentPage ({ id }) {
+  const can = useCan()
   const [data, error, reload] = useLoad(() => api('tournaments/' + id), [id])
   const [ask, setAsk] = useState(false)
   const later = useDebounced(reload, 500)
@@ -74,7 +75,7 @@ export function TournamentPage ({ id }) {
     <header class="page-head">
       <div><h1>${t.name}</h1>
         <div class="muted">${statusBadge(t.status)} ${t.reason ? html` <span class="muted">(${t.reason})</span>` : ''} · ${formatText(t)} · ${SERIES[t.series]} Bo${t.best_of}${t.bans ? ', 1 ban' : ''}${' · '}${t.pack_name} · by ${t.creator} · starts ${fullDate(t.start_at)}${t.deck_reveal ? ' · decks revealed' : ''}${t.spectators ? ' · spectators' : ''}</div></div>
-      ${ACTIVE.includes(t.status) && html`<button class="btn danger" onClick=${() => setAsk(true)}><${Icon} name="x" size=${16} />Cancel</button>`}
+      ${ACTIVE.includes(t.status) && can('tournaments.manage') && html`<button class="btn danger" onClick=${() => setAsk(true)}><${Icon} name="x" size=${16} />Cancel</button>`}
     </header>
     <div class="grid two">
       <${Card} title=${`Matches (${t.matches.length})`} pad=${false}>
