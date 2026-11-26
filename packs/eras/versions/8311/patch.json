@@ -1,8 +1,9 @@
 {
  "base": "brm",
  "build": 8311,
- "about": "2.4.0.8311 (2015-03-31): Blackrock Mountain data; Warsong Commander and Bane of Doom fixes",
+ "about": "2.4.0.8311 (2015-03-31): Blackrock Mountain data; Warsong Commander and Bane of Doom fixes. The brm pack as it is, but Swipe and Explosive Shot: their main hit's on-damage triggers run before the other hits (until patch 2.7.0.9166)",
  "sources": [
-  "~/ClassicHS-local/prep/patches/versions.json 2.4.0.8311"
+  "~/ClassicHS-local/prep/patches/versions.json 2.4.0.8311, 2.7.0.9166 (Swipe, Explosive Shot)",
+  "Hearthstone wiki, Patch 2.7.0.9166: Explosive Shot and Swipe now deal all damage before on-damage triggers"
  ]
 }
