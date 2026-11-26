@@ -174,11 +174,15 @@ updates live over `/admin/ws`:
 - **Invite keys**: make a key (a note, how many players: 1 by default, at most 1000), copy
   it, revoke it; each key's uses left, who made it and when, the accounts that joined with
   it. An account's page says which key it joined with (and who made it) or "without a key".
-- **Problem reports** (the players' reports from the game): filters (state, player, version),
-  ticks, export (a zip with the pictures, voice messages and replays, or JSON) of all, the
-  filtered or the ticked ones; a report's page: the text, the picture, the voice message, the
-  context, the games (play or download their replays), the state (new, seen, done), a note, an
-  answer to the player as a private message, delete. The dashboard counts the new ones.
+- **Problem reports** (the players' reports from the game, each a thread): the list (state,
+  player, version filters; an unread mark on new reports and on players' answers; the last
+  activity), export (a zip with the pictures, voice messages and replays, or JSON) of all, the
+  filtered or the ticked ones, purge (no activity for N days). A report's page: the thread (the
+  player's messages and pictures, the admins' answers), an answer box (send, send and resolve),
+  the state (open, resolved, rejected), the voice message, the context, the games (play or
+  download their replays), duplicates (merge into another report), a note, delete, download it
+  as a zip, copy it as Markdown for an AI agent. The menu and the dashboard count the new
+  reports and the players' answers.
 - **Settings** (for the whole server, at once): the auto-bots' wait (0–600 s; 0 = at once)
   and invite-only registration.
 
@@ -223,11 +227,14 @@ also needs the `X-CSRF-Token` header with the token from `login`/`me`):
 | `POST signup_keys/{id}/revoke` | the key registers nobody more (its accounts stay) |
 | `GET tournaments?status` · `GET tournaments/{id}` | the list (summaries + `top` [{place, name}]) · one tournament as the players' `full`, every deck shown |
 | `POST tournaments/{id}/cancel` | cancels one that is not over (409 otherwise) |
-| `GET reports?state&player&version&subserver&page&size` | problem reports, newest first: `{list, total, page, size, new, versions}`; a report is `{id, subserver, account: {id, user, tag}, written_at, received_at, text, version, context, games, screen, voice, state, note, answer_message}` (`player`: a part of the name or tag) |
-| `GET reports/{id}` | one report (a new one becomes `seen`), `games: [{game, replay, mode, pack_name, players, ended, winner}]`, `answer: {id, text, at}` |
-| `GET reports/{id}/screen.png` · `GET reports/{id}/voice.ogg` | its picture · its voice message (Ogg Opus) |
-| `POST reports/{id}/{state\|note\|answer\|delete}` | `{state: new\|seen\|done}`, `{note}` (≤ 4000), `{text}` (1–500: a private message from the admin to the player, pushed as `msg`), — (with its files) |
-| `GET reports/export?format=zip\|json&ids=1,2&…the list's filters` | the ticked (`ids`), else the filtered (none: all) reports, up to 2000: a zip of `reports.json` (each with `files: {screen, voice, replays}`, paths in the zip) and `<id>/screen.png`, `<id>/voice.ogg`, `<id>/<game>.chsreplay`; or the JSON alone |
+| `GET reports?state&player&version&subserver&page&size` | problem reports (not the merged duplicates), the latest activity first: `{list, total, page, size, counts: {new, answers}, versions}`; a report is `{id, subserver, account: {id, user, tag}, written_at, received_at, last_at, text, version, context, games, screen, voice, state, note, merged_into, unread, opened, merged, messages}` (`player`: a part of the name or tag; `state`: open, resolved, rejected; `unread`: new, or the player wrote since an admin looked) |
+| `GET reports/counts` | `{new, answers}`: reports no admin opened; opened ones the player wrote in since |
+| `GET reports/{id}` | one report (opening it reads it and its duplicates) with `thread: [{id, report, from: player\|admin, name, text, at, screen}]` (the reports and every message, oldest first; `screen`: the picture's path under `reports/{id}/`), `merged: [report]`, `games: [{game, replay, mode, pack_name, players, ended, winner}]` |
+| `GET reports/{id}/{screen.png\|voice.ogg\|m<msg>.png}?of=<report>` | a picture or the voice message (Ogg Opus) of the report or of a duplicate merged into it |
+| `GET reports/{id}/export` · `GET reports/{id}/markdown` | this report as a zip (`report.md`, `report.json`, its pictures, voice messages and `<game>.chsreplay`) · as Markdown for an AI agent (the player's words, version, pack and rules hash, the thread, the files) |
+| `POST reports/{id}/{state\|answer\|note\|merge\|unmerge\|delete}` | `{state: open\|resolved\|rejected}` and `{text}` (an answer, ≤ 4000) go to the report and its duplicates (each player sees them in his own thread: `reports_unread` is pushed), `{note}` (≤ 4000), `{into: <report>}` (this one and its duplicates go under that one), —, — (with its files; its duplicates stand alone again) |
+| `POST reports/purge {days}` | deletes the reports without activity in that many days → `{removed}` |
+| `GET reports/export?format=zip\|json&ids=1,2&…the list's filters` | the ticked (`ids`), else the filtered (none: all) reports, up to 2000, each as `reports/{id}` gives it: a zip of `reports.json` (each with `files: {screen, voice, pictures, replays}`, paths in the zip) and `<id>/…` files; or the JSON alone |
 | `GET stats?pack&mode&bracket&period&bucket&bots&min&class` | the Statistics page (below): `{packs: [{pack, name, games}], pack, period, bucket, current, buckets: [{bucket, sides}], kept, modes, brackets, backfill, sides, classes: [{class, name, games, wins, mirrors}], matchups: [{class, opp, games, wins}], series: {hour: [[bucket, sides]] ×48, day: ×30}, decks: {total, top: [deck] ×20, by_class: {class: [deck] ×5}}, cards: [{card, name, cost, decks, copies, deck_wins, played, played_wins, plays, kept, replaced, kept_wins}]}`; period hour\|day\|week\|month\|year\|all (default), `bucket` one of its buckets (default: the current one, `current`; `buckets`: the period's buckets with games, newest first, by the filters, the current and chosen ones always; `kept`: false when the bucket's deck and card rows are pruned), `bots=0` leaves out games with a bot, `min` (default 20) the fewest games of a deck shown, `class` the cards of one class's decks; a deck is `{deck, class, hero, games, wins, cards: [{id, name, n, cost}]}` |
 
 `/admin/replay/{file}` (the cookie) serves the replay player's files with a CSP of their own
@@ -696,16 +703,26 @@ event `pack_rejected`).
 
 ### Problem reports
 
-`POST /reports` with the game's session token (as the packs' uploads; CORS too), a JSON body
-(at most 10 MB) `{text, written_at, context, screen, voice}`: the text (1–4000 characters), the
-time on the player's device (unix seconds), the context (a JSON object: `version`, `platform`,
-`screen`, `language`, `pack {id, version, rules_hash}`, `game`; at most 4000 bytes), the picture
-(base64 of a PNG, at most 4 MB) and the voice message (base64 of a WAV, 16-bit mono PCM at 8, 12,
-16, 24 or 48 kHz — the game sends 16 kHz —, or of an Ogg Opus file; at most 60 s; the server keeps
-it as Ogg Opus, at most 1 MB); `""` = none. → `201 {report: {id}}`; refusals are `{error, code}`:
-401 `auth_required`/`bad_token`, 400 `bad_body`/`bad_text`/`bad_screen`/`bad_voice`/`bad_context`,
-413 `too_large`, 429 `too_many` (5 reports an hour). The server adds the games (the one the player
-is in, else the context's `game`, then the last 5 finished) and keeps the files in the pack store as
-`reports/<id>/screen.png` and `reports/<id>/voice.ogg`.
-A deleted account takes its reports and their files with it; `reports::prune` removes the ones
-older than a time (for the daily cleanup of the chats' keeping time).
+A report is a thread: the player's report, then the admins' answers and the player's own.
+With the game's session token (as the packs' uploads; CORS too):
+
+- `POST /reports` (a JSON body, at most 20 MB) `{text, written_at, context, screen, voice}`: the
+  text (1–4000 characters), the time on the player's device (unix seconds), the context (a JSON
+  object: `version`, `platform`, `screen`, `language`, `pack {id, version, rules_hash}`, `game`;
+  at most 4000 bytes), the picture (base64 of a PNG, at most 10 MB) and the voice message (base64
+  of a WAV, 16-bit mono PCM at 8, 12, 16, 24 or 48 kHz — the game sends 16 kHz —, or of an Ogg
+  Opus file; at most 60 s; kept as Ogg Opus, at most 1 MB); `""` = none → `201 {report: {id}}`.
+  The server adds the games (the one the player is in, else the context's `game`, then the last
+  5 finished) and keeps the files in the pack store under `reports/<id>/`.
+- `GET /reports` → `{list: [{id, text, state: open|closed, received_at, last_at, unread, messages}], unread}`:
+  the player's reports, the latest activity first; `unread`: an admin answered or changed its state since he looked.
+- `GET /reports/{id}` → `{id, state, text, received_at, last_at, messages: [{id, from: you|admin, name, text, at, screen}]}`
+  (the report itself first); clears its `unread`.
+- `POST /reports/{id} {text, screen}` → `201 {message}`: the player answers in his thread.
+- Refusals are `{error, code}`: 401 `auth_required`/`bad_token`, 400 `bad_body`/`bad_text`/
+  `bad_screen`/`bad_voice`/`bad_context`, 404 `not_found` (not his), 413 `too_large`, 429
+  `too_many` (5 reports and 20 answers an hour).
+- The websocket pushes `reports_unread {n}` to the player when an admin answers or changes a state.
+
+A deleted account takes its reports and their files with it; `reports::prune` (the admin's
+purge) removes the ones without activity since a time.
