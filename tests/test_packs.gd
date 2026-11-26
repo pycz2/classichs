@@ -310,8 +310,9 @@ func _other_rules(bytes: PackedByteArray) -> PackedByteArray:
 	return _repacked(changed, {"manifest.json": JSON.stringify(manifest).to_utf8_buffer()})
 
 
-## Naxxramas as a pack with versions (docs/packs/format.md §13): "a" as it is, "b" with Leeroy Jenkins at 5 (the
-## default, so also at the top); as tools/pack.py builds packs/eras.
+## Naxxramas as a pack with versions (docs/packs/format.md §13): "a" as it is, "b" with Leeroy Jenkins at 5, 3 stars
+## at rank 25 and its own name of rank 25 (packs/eras/ranked.json) (the default, so also at the top); as tools/pack.py
+## builds packs/eras.
 func _with_versions() -> PackedByteArray:
 	var naxx := _pack("naxx-2014")
 	var cards: Array = naxx.cards().duplicate(true)
@@ -319,16 +320,22 @@ func _with_versions() -> PackedByteArray:
 		if c.id == "VAN_EX1_116":
 			c.cost = 5
 	var b_cards := Pack.canonical(cards).to_utf8_buffer()
+	var b_rules: Dictionary = naxx.rules().duplicate(true)
+	b_rules.ranked.ranks[0].stars = 3
+	var b_en: Dictionary = naxx.locale("en").duplicate(true)
+	b_en.ranks = {"25": "Brave Chicken"}
+	var b_files := {"cards.json": b_cards, "rules.json": Pack.canonical(b_rules).to_utf8_buffer(),
+		"locales/en.json": Pack.canonical(b_en).to_utf8_buffer()}
 	var change := {}
 	var items := []
 	for f in naxx.files():
 		if Pack.is_version_file(f):
 			change["versions/a/" + f] = naxx.read(f)
-			change["versions/b/" + f] = b_cards if f == "cards.json" else naxx.read(f)
-			if f == "cards.json":
-				change[f] = b_cards
+			change["versions/b/" + f] = b_files.get(f, naxx.read(f))
+			if b_files.has(f):
+				change[f] = b_files[f]
 			if Pack.is_rules_file(f):
-				items.append([f, Pack.normalized(f, b_cards if f == "cards.json" else naxx.read(f))])
+				items.append([f, Pack.normalized(f, b_files.get(f, naxx.read(f)))])
 	var hb := Pack.digest("cardpack-rules/1", items)
 	var man := naxx.manifest.duplicate(true)
 	man.id = "test.versions"
@@ -365,9 +372,14 @@ func test_a_pack_with_versions_plays_its_chosen_version() -> void:
 	eq([Packs.active().whole(), Packs.active().version_id], [p, "b"], "the default version is played")
 	check(Packs.is_active(p) and Packs.is_active(b) and not Packs.is_active(a), "is_active")
 	eq(CardDb.card("VAN_EX1_116").cost, 5, "the client's cards are the version's")
+	var lang: String = Settings.data.language
+	Settings.data.language = "en"
+	eq([ServerView.stars_needed(25), ServerView.rank_name(25)], [3, "Brave Chicken"], "the version's ladder and rank names")
 	Packs.set_version(p, "a")
 	eq([Packs.active().version_id, Packs.active().rules_hash()], ["a", a.rules_hash()], "another version")
 	eq(CardDb.card("VAN_EX1_116").cost, 4, "its cards")
+	eq([ServerView.stars_needed(25), ServerView.rank_name(25)], [2, CardText.name("VAN_EX1_009")], "its ladder and names")
+	Settings.data.language = lang
 	eq(Settings.data.pack_versions.get("test.versions"), "a", "remembered per pack")
 	Packs.rescan()
 	eq(Packs.active().version_id, "a", "after a restart")

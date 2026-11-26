@@ -542,7 +542,7 @@ async fn apply_results(c: &impl ConnectionTrait, rules: &GameRules, mode: Mode, 
             for (p, s) in st.iter_mut().enumerate() {
                 let mut r = s.rank();
                 if p == w { r.win(l) } else { r.lose(l) }
-                (s.rank, s.stars, s.streak) = (r.rank, r.stars, r.streak);
+                (s.rank, s.stars, s.streak, s.best) = (r.rank, r.stars, r.streak, s.best.max(r.best_key(l)));
                 db::save_standing(c, s).await?;
             }
             Ok([json!({"rank": rank_json(c, &st[0]).await?}), json!({"rank": rank_json(c, &st[1]).await?})])

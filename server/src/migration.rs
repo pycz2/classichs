@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14)]
     }
 }
 
@@ -949,6 +949,24 @@ impl MigrationTrait for M13 {
         )
         .await?;
         c.execute_unprepared("CREATE INDEX pack_version_rules ON pack_version (rules_hash)").await?;
+        Ok(())
+    }
+}
+
+/// The season's best rank in a standing (0.73; ranked::Rank::best_key): the season reset of a ladder with
+/// `season.reset.basis` "best" counts it. -1 for the rows of before.
+struct M14;
+
+impl MigrationName for M14 {
+    fn name(&self) -> &str {
+        "m20261126_000014_standing_best"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M14 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        m.get_connection().execute_unprepared("ALTER TABLE standings ADD COLUMN best INTEGER NOT NULL DEFAULT -1").await?;
         Ok(())
     }
 }

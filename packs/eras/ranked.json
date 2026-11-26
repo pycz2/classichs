@@ -1,0 +1,2209 @@
+{
+ "about": "Ranked and Arena rules of Hearthstone 2014–2019 (tools/pack.py build_versions, packs/eras/README.md): periods by date as in formats.json; a version gets the `ranked` section (rules.json, docs/packs/rules.md) and the Arena run limits (`modes.arena` wins, losses) of the period in force for most of its life. `names`: the rank names (locales `ranks`) in English and Russian (the game's texts; a list = [[from build, text]…], the version id being its build); the version's ladder takes the names of its ranks. The ranked `start` of 2018-10-02 on is rank 50: a new player's New Player Ranks.",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/ranked_arena.json and .md (hearthstone.wiki.gg Ranked/2013-2020, Ranked and Arena revisions 2014–2019, patch notes 1.0.0.4944 … 14.6.0.31761, the game's string files)"
+ ],
+ "until": "2019-07-31",
+ "periods": [
+  {
+   "id": "R1",
+   "from": "2014-03-11",
+   "ranked": {
+    "start": {
+     "rank": 25,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 25,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 3,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "to_rank": 25,
+      "stars_per_rank_above": 1,
+      "legend_counts_as": 0,
+      "basis": "end"
+     }
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "from": "2014-04-01",
+   "ranked": {
+    "start": {
+     "rank": 25,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 25,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 3,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "to_rank": 25,
+      "stars_per_rank_above": 1,
+      "legend_counts_as": 0,
+      "basis": "end"
+     }
+    }
+   }
+  },
+  {
+   "id": "R3",
+   "from": "2015-03-31",
+   "ranked": {
+    "start": {
+     "rank": 25,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 25,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 3,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "to_rank": 25,
+      "stars_per_rank_above": 1,
+      "legend_counts_as": 0,
+      "basis": "end"
+     }
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "from": "2015-08-18",
+   "ranked": {
+    "start": {
+     "rank": 25,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 25,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 3,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "to_rank": 25,
+      "stars_per_rank_above": 1,
+      "legend_counts_as": 0,
+      "basis": "best"
+     }
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "from": "2016-04-26",
+   "ranked": {
+    "start": {
+     "rank": 25,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 25,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 3,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "to_rank": 25,
+      "stars_per_rank_above": 1,
+      "legend_counts_as": 0,
+      "basis": "best"
+     }
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "from": "2017-02-28",
+   "ranked": {
+    "start": {
+     "rank": 25,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 25,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 2,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 3,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 4,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5,
+      "floor": true
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "to_rank": 25,
+      "stars_per_rank_above": 1,
+      "legend_counts_as": 0,
+      "basis": "best"
+     }
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "from": "2018-03-01",
+   "ranked": {
+    "start": {
+     "rank": 25,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 25,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5,
+      "floor": true
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "ranks_down": 4,
+      "legend_to": 4,
+      "lowest": 25,
+      "basis": "best"
+     }
+    }
+   }
+  },
+  {
+   "id": "R8",
+   "from": "2018-10-02",
+   "ranked": {
+    "start": {
+     "rank": 50,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 50,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 49,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 48,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 47,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 46,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 45,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 44,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 43,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 42,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 41,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 40,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 39,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 38,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 37,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 36,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 35,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 34,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 33,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 32,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 31,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 30,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 29,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 28,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 27,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 26,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 25,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5,
+      "floor": true
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "ranks_down": 4,
+      "legend_to": 4,
+      "lowest": 25,
+      "basis": "best"
+     }
+    }
+   }
+  },
+  {
+   "id": "R9",
+   "from": "2018-12-01",
+   "ranked": {
+    "start": {
+     "rank": 50,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 50,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 49,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 48,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 47,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 46,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 45,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 44,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 43,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 42,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 41,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 40,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 39,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 38,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 37,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 36,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 35,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 34,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 33,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 32,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 31,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 30,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 29,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 28,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 27,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 26,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 25,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 5,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5,
+      "floor": true
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "ranks_down": 4,
+      "legend_to": 4,
+      "lowest": 25,
+      "career_floor": {
+       "reached": 15,
+       "rank": 20
+      },
+      "basis": "best"
+     }
+    }
+   }
+  },
+  {
+   "id": "R10",
+   "from": "2019-02-01",
+   "ranked": {
+    "start": {
+     "rank": 50,
+     "stars": 0
+    },
+    "ranks": [
+     {
+      "rank": 50,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 49,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 48,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 47,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 46,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 45,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 44,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 43,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 42,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 41,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 40,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 39,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 38,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 37,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 36,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 35,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 34,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 33,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 32,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 31,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 30,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 29,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 28,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 27,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 26,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 25,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 24,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 23,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 22,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 21,
+      "stars": 3,
+      "loses_stars": false,
+      "streak_bonus": true
+     },
+     {
+      "rank": 20,
+      "stars": 3,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 19,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 18,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 17,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 16,
+      "stars": 3,
+      "streak_bonus": true
+     },
+     {
+      "rank": 15,
+      "stars": 4,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 14,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 13,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 12,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 11,
+      "stars": 4,
+      "streak_bonus": true
+     },
+     {
+      "rank": 10,
+      "stars": 5,
+      "floor": true,
+      "streak_bonus": true
+     },
+     {
+      "rank": 9,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 8,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 7,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 6,
+      "stars": 5,
+      "streak_bonus": true
+     },
+     {
+      "rank": 5,
+      "stars": 5,
+      "floor": true
+     },
+     {
+      "rank": 4,
+      "stars": 5
+     },
+     {
+      "rank": 3,
+      "stars": 5
+     },
+     {
+      "rank": 2,
+      "stars": 5
+     },
+     {
+      "rank": 1,
+      "stars": 5
+     }
+    ],
+    "streak": {
+     "wins": 3,
+     "bonus_stars": 1
+    },
+    "legend": {
+     "after_rank": 1,
+     "keep_for_season": true,
+     "numbered_top": 10000
+    },
+    "season": {
+     "length": "month",
+     "reset": {
+      "ranks_down": 4,
+      "legend_to": 4,
+      "lowest": 25,
+      "career_floor": {
+       "reached": 15,
+       "rank": 20
+      },
+      "shed_excess_stars": true,
+      "basis": "best"
+     }
+    }
+   }
+  }
+ ],
+ "arena": [
+  {
+   "id": "A1",
+   "from": "2014-03-11",
+   "wins": 12,
+   "losses": 3
+  },
+  {
+   "id": "A2",
+   "from": "2014-12-08",
+   "wins": 12,
+   "losses": 3
+  },
+  {
+   "id": "A3",
+   "from": "2016-04-26",
+   "wins": 12,
+   "losses": 3
+  },
+  {
+   "id": "A4",
+   "from": "2017-02-28",
+   "wins": 12,
+   "losses": 3
+  },
+  {
+   "id": "A5",
+   "from": "2017-08-08",
+   "wins": 12,
+   "losses": 3
+  },
+  {
+   "id": "A6",
+   "from": "2018-10-02",
+   "wins": 12,
+   "losses": 3
+  },
+  {
+   "id": "A7",
+   "from": "2019-03-14",
+   "wins": 12,
+   "losses": 3
+  },
+  {
+   "id": "A8",
+   "from": "2019-04-09",
+   "wins": 12,
+   "losses": 3
+  },
+  {
+   "id": "A9",
+   "from": "2019-07-01",
+   "wins": 12,
+   "losses": 3
+  }
+ ],
+ "names": {
+  "en": {
+   "50": "Brave Rooster",
+   "49": "Awesome Blossom",
+   "48": "Dream Shroom",
+   "47": "Giant Acorn",
+   "46": "Verdant Seedling",
+   "45": "Great Oak",
+   "44": "Wriggling Grub",
+   "43": "Mysterious Cocoon",
+   "42": "Sociable Butterfly",
+   "41": "Hungry Mantis",
+   "40": "Formidable Frog",
+   "39": "Infamous Starfish",
+   "38": "Reclusive Crab",
+   "37": "Serious Seahorse",
+   "36": "Ravening Piranha",
+   "35": "Card Shark",
+   "34": "Playful Gryphon",
+   "33": "Swift Courser",
+   "32": "Noble Highmane",
+   "31": "Patient Mammoth",
+   "30": "Baleful Kraken",
+   "29": "Grinning Murloc",
+   "28": "Wise Tuskarr",
+   "27": "Fearsome Ogre",
+   "26": "Jolly Patron",
+   "25": "Angry Chicken",
+   "24": "Leper Gnome",
+   "23": "Argent Squire",
+   "22": "Murloc Raider",
+   "21": "Southsea Deckhand",
+   "20": "Shieldbearer",
+   "19": "Novice Engineer",
+   "18": "Sorcerer's Apprentice",
+   "17": "Tauren Warrior",
+   "16": "Questing Adventurer",
+   "15": "Silvermoon Guardian",
+   "14": "Raid Leader",
+   "13": "Dread Corsair",
+   "12": "Warsong Commander",
+   "11": "Big Game Hunter",
+   "10": "Ogre Magi",
+   "9": "Silver Hand Knight",
+   "8": "Frostwolf Warlord",
+   "7": "Sunwalker",
+   "6": "Ancient of War",
+   "5": "Sea Giant",
+   "4": "Mountain Giant",
+   "3": "Molten Giant",
+   "2": "Black Knight",
+   "1": "Innkeeper",
+   "0": "Legend"
+  },
+  "ru": {
+   "25": "Злая курица",
+   "24": "Лепрогном",
+   "23": "Сквайр Авангарда",
+   "22": "Мурлок-налетчик",
+   "21": "Матрос Южных морей",
+   "20": "Щитоносец",
+   "19": "Инженер-новичок",
+   "18": [
+    [
+     4944,
+     "Ученик чародея"
+    ],
+    [
+     7628,
+     "Ученица чародея"
+    ]
+   ],
+   "17": "Таурен-воин",
+   "16": "Авантюрист",
+   "15": "Страж Луносвета",
+   "14": "Лидер рейда",
+   "13": "Жуткий корсар",
+   "12": "Командир Песни Войны",
+   "11": "Опытный охотник",
+   "10": "Огр-маг",
+   "9": [
+    [
+     4944,
+     "Рыцарь Авангарда"
+    ],
+    [
+     6024,
+     "Рыцарь Длани"
+    ]
+   ],
+   "8": "Вождь Северного Волка",
+   "7": [
+    [
+     4944,
+     "Служитель солнца"
+    ],
+    [
+     7234,
+     "Служительница солнца"
+    ]
+   ],
+   "6": "Древо войны",
+   "5": "Морской великан",
+   "4": "Горный великан",
+   "3": "Огненный великан",
+   "2": "Черный рыцарь",
+   "1": "Хозяин таверны",
+   "0": "Легенда"
+  }
+ }
+}

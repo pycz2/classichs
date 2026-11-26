@@ -37,6 +37,15 @@ pub struct Ladder {
     pub reset_to: i64,
     pub per_rank_above: i64,
     pub legend_counts_as: i64,
+    /// The 2018 reset (`season.reset.ranks_down`): this many ranks below the basis, its stars kept (no more than the
+    /// new rank holds), Legend to `legend_to`, never below `lowest`; ranks below `lowest` (the New Player Ranks) stay.
+    pub ranks_down: Option<i64>,
+    pub legend_to: i64,
+    pub lowest: i64,
+    /// `season.reset.career_floor`: (reached, rank): who ever reached rank `reached` starts no lower than `rank`.
+    pub career_floor: Option<(i64, i64)>,
+    /// `season.reset.basis` "best": the reset counts the season's best rank, not the rank at its end.
+    pub best_basis: bool,
 }
 
 impl Ladder {
@@ -63,6 +72,11 @@ impl Ladder {
             reset_to: i(reset, "to_rank", low),
             per_rank_above: i(reset, "stars_per_rank_above", 1),
             legend_counts_as: i(reset, "legend_counts_as", 0),
+            ranks_down: reset.get("ranks_down").and_then(Value::as_i64),
+            legend_to: i(reset, "legend_to", 1),
+            lowest: i(reset, "lowest", low),
+            career_floor: reset.get("career_floor").and_then(|c| Some((c.get("reached")?.as_i64()?, c.get("rank")?.as_i64()?))),
+            best_basis: reset.get("basis").and_then(Value::as_str) == Some("best"),
             ranks,
         })
     }
@@ -80,6 +94,14 @@ impl Ladder {
     /// Stars a rank holds.
     pub fn max_stars(&self, rank: i64) -> i64 {
         self.index(rank).map_or(1, |i| self.ranks[i].stars)
+    }
+
+    /// The rank of a `Rank::best_key` (Legend above every other).
+    pub fn rank_at(&self, key: i64) -> Rank {
+        if self.legend && key > self.legend_level() {
+            return Rank { rank: LEGEND, stars: 0, streak: 0 };
+        }
+        Rank::climb(self, Rank { rank: self.ranks[0].rank, stars: 0, streak: 0 }, key)
     }
 
     /// Stars from the bottom to Legend (the matchmaking level of a Legend).
@@ -100,6 +122,12 @@ impl Rank {
             Some(i) => l.ranks[..i].iter().map(|s| s.stars).sum::<i64>() + self.stars,
             None => 0,
         }
+    }
+
+    /// A number that grows with the rank (stars from the bottom; Legend one more than rank 1 full): the season's
+    /// best rank is kept as it (standings.best).
+    pub fn best_key(&self, l: &Ladder) -> i64 {
+        self.level(l) + i64::from(self.legend())
     }
 
     /// The rank `stars` stars above `from` (full ranks stay full: 2 stars → 25 at 2/2).
@@ -150,10 +178,32 @@ impl Rank {
         }
     }
 
-    /// The season reset: `reset_to` plus some stars per rank above it held (Legend counts as `legend_counts_as`).
+    /// The season reset from this rank at the season's end.
     pub fn season_reset(&self, l: &Ladder) -> Rank {
-        let held = if self.legend() { l.legend_counts_as } else { self.rank };
-        Rank::climb(l, Rank { rank: l.reset_to, stars: 0, streak: 0 }, l.per_rank_above * (l.reset_to - held).max(0))
+        self.season_reset_from(l, *self, self.rank)
+    }
+
+    /// The season reset from `basis` (the rank at the end, or the season's best: `season.reset.basis`) of a player
+    /// whose best rank ever is `career_best` (Legend 0): `reset_to` plus some stars per rank above it held (Legend
+    /// counts as `legend_counts_as`), or the 2018 rule (`ranks_down`).
+    pub fn season_reset_from(&self, l: &Ladder, basis: Rank, career_best: i64) -> Rank {
+        let Some(down) = l.ranks_down else {
+            let held = if basis.legend() { l.legend_counts_as } else { basis.rank };
+            return Rank::climb(l, Rank { rank: l.reset_to, stars: 0, streak: 0 }, l.per_rank_above * (l.reset_to - held).max(0));
+        };
+        if !basis.legend() && basis.rank > l.lowest {
+            return Rank { streak: 0, ..*self };
+        }
+        let (mut rank, mut stars) = if basis.legend() { (l.legend_to, 0) } else { (basis.rank + down, basis.stars) };
+        if rank > l.lowest {
+            (rank, stars) = (l.lowest, 0);
+        }
+        if let Some((reached, floor)) = l.career_floor {
+            if career_best <= reached && rank > floor {
+                (rank, stars) = (floor, 0);
+            }
+        }
+        Rank { rank, stars: stars.min(l.max_stars(rank)), streak: 0 }
     }
 }
 
@@ -261,10 +311,12 @@ pub fn date(t: i64) -> String {
     format!("{y:04}-{m:02}-{d:02} {:02}:{:02}", s / 3600, s % 3600 / 60)
 }
 
-/// A rank carried from `from` season to `to`: one reset per month passed.
-pub fn advance(l: &Ladder, mut r: Rank, from: i64, to: i64) -> Rank {
-    for _ in 0..(to - from).clamp(0, 30) {
-        r = r.season_reset(l);
+/// A rank carried from `from` season to `to`: one reset per month passed, the first from the season's `best`
+/// rank when the ladder counts it (`best_basis`); `career_best`: the best rank ever (Legend 0).
+pub fn advance(l: &Ladder, mut r: Rank, best: Rank, career_best: i64, from: i64, to: i64) -> Rank {
+    for i in 0..(to - from).clamp(0, 30) {
+        let basis = if i == 0 && l.best_basis { best } else { r };
+        r = r.season_reset_from(l, basis, career_best);
     }
     r
 }
@@ -324,8 +376,10 @@ mod tests {
         assert_eq!(reset(1), r(16, 2, 0));
         assert_eq!(reset(LEGEND), r(16, 3, 0));
         assert_eq!(reset(25), r(25, 0, 0));
-        assert_eq!(advance(l, r(LEGEND, 0, 0), 10, 10), r(LEGEND, 0, 0));
-        assert_eq!(advance(l, r(LEGEND, 0, 0), 10, 11), r(16, 3, 0));
+        let legend = r(LEGEND, 0, 0);
+        assert_eq!(advance(l, legend, legend, 0, 10, 10), legend);
+        assert_eq!(advance(l, legend, legend, 0, 10, 11), r(16, 3, 0));
+        assert_eq!(advance(l, r(20, 0, 0), legend, 0, 10, 11), r(23, 1, 0)); // the rank at the end (basis "end")
     }
 
     /// Another pack's ladder: 3 ranks of 2 stars, a floor at 2, a streak of 2 gives 2 more, no Legend.
@@ -352,6 +406,57 @@ mod tests {
         assert_eq!(x.level(l), 6);
         assert_eq!(r(1, 0, 0).season_reset(l), r(2, 2, 0)); // 2 ranks above 3, 2 stars each
         assert!(Ladder::from_rules(&serde_json::json!({"ranks": []})).is_none());
+    }
+
+    /// The ladders of packs/eras' versions (packs/eras/ranked.json): 2014 (6024) and 2019 (31761).
+    #[test]
+    fn the_2014_and_2019_ladders() {
+        let ladder = |stars: &dyn Fn(i64) -> i64, floors: &[i64], low: i64, reset: Value| {
+            let ranks: Vec<Value> = (1..=low).rev().map(|n| serde_json::json!({"rank": n, "stars": stars(n), "loses_stars": n <= 20,
+                "floor": floors.contains(&n), "streak_bonus": n >= 6})).collect();
+            Ladder::from_rules(&serde_json::json!({"start": {"rank": low, "stars": 0}, "ranks": ranks, "streak": {"wins": 3, "bonus_stars": 1},
+                "legend": {"after_rank": 1}, "season": {"length": "month", "reset": reset}})).unwrap()
+        };
+        let old = &ladder(&|n| if n > 20 { 2 } else if n > 15 { 3 } else if n > 10 { 4 } else { 5 }, &[20], 25,
+            serde_json::json!({"to_rank": 25, "stars_per_rank_above": 1, "legend_counts_as": 0, "basis": "end"}));
+        let new = &ladder(&|n| if n > 15 { 3 } else if n > 10 { 4 } else { 5 }, &[20, 15, 10, 5], 50,
+            serde_json::json!({"ranks_down": 4, "legend_to": 4, "lowest": 25, "career_floor": {"reached": 15, "rank": 20}, "basis": "best"}));
+        assert_eq!(old.ranks, Ladder::classic().ranks);
+        // stars per rank: 2 at 25 in 2014, 3 in 2019; the New Player Ranks 50…26
+        assert_eq!((old.max_stars(25), new.max_stars(25), new.max_stars(50), new.start.rank), (2, 3, 3, 50));
+        // the streak: from the 3rd win in a row, not at 5…1
+        let mut x = r(26, 2, 2);
+        x.win(new); // 3rd in a row at 26 (3 stars): full, then the bonus star at 25
+        assert_eq!(x, r(25, 1, 3));
+        let mut x = r(5, 0, 5);
+        x.win(new);
+        assert_eq!(x, r(5, 1, 6));
+        // floors: 15, 10 and 5 hold in 2019, not in 2014
+        let (mut a, mut b) = (r(15, 0, 0), r(15, 0, 0));
+        a.lose(old);
+        b.lose(new);
+        assert_eq!((a, b), (r(16, 2, 0), r(15, 0, 0)));
+        // no star loss at 50…21
+        let mut x = r(40, 1, 0);
+        x.lose(new);
+        assert_eq!(x, r(40, 1, 0));
+        // the reset: 2014 bonus stars; 2019 four ranks down with the stars kept (no more than the rank holds)
+        assert_eq!(r(1, 3, 0).season_reset(old), r(16, 2, 0));
+        assert_eq!(r(1, 3, 0).season_reset(new), r(5, 3, 0));
+        assert_eq!(r(10, 5, 0).season_reset(new), r(14, 4, 0));
+        assert_eq!(r(LEGEND, 0, 0).season_reset(new), r(4, 0, 0));
+        assert_eq!(r(23, 2, 0).season_reset(new), r(25, 0, 0));
+        assert_eq!(r(40, 2, 0).season_reset(new), r(40, 2, 0)); // the New Player Ranks stay
+        // who ever reached rank 15 starts no lower than 20; from the season's best rank
+        assert_eq!(r(19, 1, 0).season_reset_from(new, r(19, 1, 0), 14), r(20, 0, 0));
+        assert_eq!(r(19, 1, 0).season_reset_from(new, r(19, 1, 0), 19), r(23, 1, 0));
+        assert_eq!(r(12, 0, 0).season_reset_from(new, r(8, 2, 0), 8), r(12, 2, 0));
+        assert_eq!(advance(new, r(12, 0, 0), r(8, 2, 0), 8, 10, 11), r(12, 2, 0));
+        // the best rank kept as a number
+        for x in [r(50, 0, 0), r(8, 2, 0), r(1, 5, 0), r(LEGEND, 0, 0)] {
+            assert_eq!(new.rank_at(x.best_key(new)), x);
+        }
+        assert!(r(LEGEND, 0, 0).best_key(new) > r(1, 5, 0).best_key(new));
     }
 
     #[test]
