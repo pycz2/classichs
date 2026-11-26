@@ -14,10 +14,13 @@ use std::sync::Mutex;
 pub const AUTOBOT_WAIT_MS: &str = "autobot_wait_ms";
 /// "1": registering needs an invite key; "0": anyone registers.
 pub const INVITE_ONLY: &str = "signup_invite_only";
+/// How many days tournament chats and private messages are kept (0 = unlimited; `chat::cleanup`).
+pub const CHAT_KEEP_DAYS: &str = "chat_keep_days";
 
 fn default(key: &str) -> &'static str {
     match key {
         AUTOBOT_WAIT_MS => "30000",
+        CHAT_KEEP_DAYS => "14",
         _ => "0",
     }
 }
@@ -73,4 +76,8 @@ pub async fn autobot_wait_ms(app: &App) -> DbResult<u64> {
 
 pub async fn invite_only(app: &App) -> DbResult<bool> {
     Ok(get(app, INVITE_ONLY).await? == "1")
+}
+
+pub async fn chat_keep_days(app: &App) -> DbResult<i64> {
+    Ok(get(app, CHAT_KEEP_DAYS).await?.parse().unwrap_or(14))
 }
