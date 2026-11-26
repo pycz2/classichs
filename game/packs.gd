@@ -118,7 +118,7 @@ static func active() -> Pack:
 			_active = by_id if by_id else (classic if classic else (all()[0] if not all().is_empty() else null))
 	if _active == null or _active.versions().is_empty():
 		return _active
-	if _view == null or _view.version_id != version(_active):
+	if _view == null or _view.whole() != _active:  # (set_version, set_active and rescan drop it)
 		_view = _active.version_view(version(_active))
 	return _view if _view else _active
 
