@@ -39,24 +39,11 @@
     "plPL": "Za każdym razem gdy ten stronnik atakuje bohatera, dodaj Monetę do twojej ręki."
    }
   },
-  "AT_037": {
-   "keywords": [
-    "CHOOSE_ONE"
-   ]
-  },
   "AT_037a": {
    "cardClass": "DRUID"
   },
   "AT_037b": {
    "cardClass": "DRUID"
-  },
-  "AT_037t": {
-   "cardClass": "DRUID"
-  },
-  "AT_042": {
-   "keywords": [
-    "CHOOSE_ONE"
-   ]
   },
   "AT_051": {
    "text": {

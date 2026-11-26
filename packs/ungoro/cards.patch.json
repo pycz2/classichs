@@ -2,6 +2,7 @@
   "AT_092": {"race": "ELEMENTAL"},
   "BRM_012": {"race": "ELEMENTAL"},
   "CFM_325": {"health": 1},
+  "CFM_620": {"script": "scripts/ungoro.lua#CFM_620"},
   "GVG_042": {"race": "ELEMENTAL"},
   "KAR_036": {"race": "ELEMENTAL"},
   "KAR_063": {"cost": 2},

@@ -597,3 +597,10 @@ fn deck_templates_play_bot_games() {
     assert!(played.len() >= 10, "{played:?}");
     assert!(discovered > 0 && renos > 0);
 }
+
+/// Sapling (Living Roots' token) is a Druid card in the release build 10833 (a neutral one in 9786's data).
+#[test]
+fn sapling_is_a_druid_card() {
+    let Some(rs) = rs() else { return };
+    assert_eq!(rs.card("AT_037t").card_class, "DRUID");
+}

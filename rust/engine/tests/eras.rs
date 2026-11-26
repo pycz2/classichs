@@ -142,8 +142,8 @@ fn loe_era_end_turn(g: &mut classichs_engine::Game) {
     assert!(g.apply(&json!({"type": "end_turn", "player": p})).ok);
 }
 
-/// Ship's Cannon hits after the Pirate's Battlecry (versions/*/scripts/ships_cannon.lua; the gvg pack hit on summon,
-/// before it): Bloodsail Raider's Battlecry and its after_summon come first.
+/// Ship's Cannon hits after the Pirate's Battlecry (the gvg pack's `after_summon`, in every version from 7234):
+/// Bloodsail Raider's Battlecry and its after_summon come first.
 #[test]
 fn patch_7234_ships_cannon_fires_after_the_battlecry() {
     let Some(eras) = built("packs/eras") else {
@@ -170,8 +170,8 @@ fn patch_10956_power_word_glory_heals_its_caster_after_a_control_change() {
     };
     const YETI: &str = "VAN_CS2_182"; // 4/5
     let damage = |g: &classichs_engine::Game| (g.e(g.hero(0)).damage, g.e(g.hero(1)).damage);
-    // cast on an enemy minion: its attacks heal the caster in every version ("your hero"; the tgt pack heals the
-    // minion's controller, versions/9786-10833/scripts/power_word_glory.lua)
+    // cast on an enemy minion: its attacks heal the caster in every version ("your hero": the tgt pack's script;
+    // og.lua's from 10956, versions/10956-12266/scripts/power_word_glory.lua on the loe pack)
     for vid in ["9786", "10357", "10604", "10833", "10956", "12051", "12266", "12574", "13714"] {
         let mut g = loe_era_game(&eras, vid, json!({"hand": ["AT_013"]}), json!({"board": [YETI]}));
         let yeti = g.players[1].board[0];
@@ -228,7 +228,7 @@ fn patch_10833_shadow_of_nothing_stays_and_the_scarab_is_a_beast_from_12051() {
         eprintln!("no python3: skipped");
         return;
     };
-    // Mindgames against an empty deck: Shadow of Nothing stays (9166's fix, which the loe pack lacks)
+    // Mindgames against an empty deck: Shadow of Nothing stays (9166's fix, the tgt pack's on)
     for vid in ["10833", "10956", "12051", "12266"] {
         let mut g = loe_era_game(&eras, vid, json!({"hand": ["VAN_EX1_345"]}), json!({"deck": []}));
         loe_era_play(&mut g, "VAN_EX1_345", -1);
@@ -452,8 +452,8 @@ fn patch_12574_shadow_of_nothing_stays_as_since_9166() {
         eprintln!("no python3: skipped");
         return;
     };
-    // Mindgames against an empty deck: the 0/1 Shadow of Nothing stays at the end of the turn (the og pack's
-    // Classic script destroyed it)
+    // Mindgames against an empty deck: the 0/1 Shadow of Nothing stays at the end of the turn (the tgt pack's on take
+    // Classic's script away)
     for vid in ["12574", "13030", "13619", "13714"] {
         let mut g = og_era_game(og_era_rules(&eras, vid), 1, json!({"hero": "HERO_09", "hand": ["VAN_EX1_345"]}), json!({"deck": []}));
         let a = g.legal_actions().into_iter().find(|a| a["type"] == "play").unwrap();

@@ -2127,4 +2127,34 @@ cards.CFM_940 = {
   on_choose = to_hand,
 }
 
+-- The Mistcaller from patch 7.0.0.15590: the minions in your hand and your deck +1/+1, as its text says (until then the
+-- minions in the hand and every minion drawn later that game; the deck was not touched).
+cards.AT_054 = {
+  battlecry = function(g, me)
+    local p = g.ctrl(me)
+    for _, zone in ipairs({ g.hand(p), g.deck(p) }) do
+      for _, c in ipairs(zone) do
+        if g.type(c) == "MINION" then
+          g.buff(c, 1, 1)
+        end
+      end
+    end
+  end,
+}
+
+-- Servant of Yogg-Saron from patch 6.2.0.15181: the Overload of the spell it casts is its controller's (og.lua's
+-- Servant never Overloads; versions/15181/scripts/kara_6_2.lua has this one for the kara pack's 15181).
+cards.OG_087 = {
+  battlecry = function(g, me)
+    local s = g.pick(list.filter(g.collectible(), function(c)
+      local i = g.info(c)
+      return i.type == "SPELL" and i.cost <= 5
+    end))
+    if s then
+      g.cast_random(me, s, true)
+      g.resolve()
+    end
+  end,
+}
+
 return cards

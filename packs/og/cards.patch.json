@@ -1,5 +1,7 @@
 {
-  "AT_042": {"script": "scripts/og.lua#AT_042"},
+  "AT_013": {"script": "scripts/og.lua#AT_013"},
+  "AT_037": {"keywords": ["CHOOSE_ONE"]},
+  "AT_042": {"script": "scripts/og.lua#AT_042", "keywords": ["CHOOSE_ONE"]},
   "BRM_008": {"script": "scripts/og.lua#BRM_008"},
   "BRM_010": {"script": "scripts/og.lua#BRM_010"},
   "GVG_041": {"script": "scripts/og.lua#GVG_041"},

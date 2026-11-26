@@ -622,3 +622,22 @@ fn deck_templates_play_bot_games() {
     assert!(played.len() >= 10, "{played:?}");
     assert!(jousts > 0 && inspired > 0 && upgraded > 0);
 }
+
+/// Shadow of Nothing (Mindgames against an empty deck) stays at the end of the turn: patch 2.7.0.9166, before 9786.
+#[test]
+fn shadow_of_nothing_stays() {
+    let mut t = scene!({"hero": "HERO_09", "hand": ["VAN_EX1_345"]}, {"deck": []});
+    t.play("VAN_EX1_345", NONE).end_turn();
+    assert_eq!(t.cards(0), vec!["VAN_EX1_345t"]);
+}
+
+/// Power Word: Glory heals the hero of the player who cast it ("your hero"), also when cast on an enemy minion.
+#[test]
+fn power_word_glory_heals_its_caster() {
+    let mut t = scene!({"hero": "HERO_09", "damage": 10, "hand": ["AT_013"]}, {"damage": 10, "board": [YETI]});
+    let yeti = t.nth(1, 0);
+    t.play("AT_013", yeti).end_turn();
+    let h0 = t.hero(0);
+    t.attack(yeti, h0);
+    assert_eq!((t.hp(0), t.hp(1)), (20, 20), "4 damage, 4 healed");
+}

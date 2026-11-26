@@ -741,6 +741,9 @@
  "TRL_901": {
   "script": "scripts/trl_a.lua#TRL_901"
  },
+ "UNG_116": {
+  "script": "scripts/trl.lua#UNG_116"
+ },
  "VAN_NEW1_012": {
   "cost": 2
  }

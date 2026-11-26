@@ -568,3 +568,12 @@ fn spiritsinger_umbra_triggers_only_a_minions_own_deathrattle() {
     t.play("LOE_019", g);
     assert_eq!(golems(&t), 2, "{:?}", t.cards(0));
 }
+
+/// Potion of Polymorph: from 7.1.0.17720 the After Summon triggers after it see the Sheep (Snipe hits it).
+#[test]
+fn snipe_hits_the_sheep_of_potion_of_polymorph() {
+    let mut t = scene!({"hero": "HERO_05", "secrets": ["CFM_620", "VAN_EX1_609"]}, {"hand": [YETI]});
+    t.end_turn();
+    t.play(YETI, NONE);
+    assert!(t.cards(1).is_empty(), "Snipe killed the Sheep");
+}

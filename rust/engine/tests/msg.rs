@@ -785,3 +785,13 @@ fn kazakus_with_brann_makes_two_potions() {
     let potions = t.hand(0).iter().filter(|c| c.starts_with("CFM_621t")).count();
     assert_eq!(potions, 2, "{:?}", t.hand(0));
 }
+
+/// The release build 15590: The Mistcaller buffs the minions in the hand and the deck, as its text says.
+#[test]
+fn mistcaller_buffs_the_hand_and_the_deck() {
+    let mut t = scene!({"hand": ["AT_054", YETI], "deck": [YETI, YETI]}, {});
+    t.play("AT_054", NONE);
+    let stats = |t: &T, ids: Vec<Id>| ids.into_iter().filter(|&e| t.g.e(e).card_id == YETI).map(|e| t.stats(e)).collect::<Vec<_>>();
+    assert_eq!(stats(&t, t.g.players[0].hand.clone()), vec![(5, 6)]);
+    assert_eq!(stats(&t, t.g.players[0].deck.clone()), vec![(5, 6), (5, 6)]);
+}

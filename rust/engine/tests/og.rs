@@ -627,3 +627,21 @@ fn deck_templates_play_bot_games() {
     assert!(played.len() >= 25, "{played:?}");
     assert!(rituals > 0);
 }
+
+/// The release build 12574: Druid of the Saber and Living Roots have Choose One, Sapling is a Druid card; Power Word:
+/// Glory heals the hero of the player who cast it, also after the minion changes sides (4.1.0.10956).
+#[test]
+fn choose_one_sapling_and_power_word_glory_of_12574() {
+    let Some(rs) = rs() else { return };
+    for c in ["AT_042", "AT_037"] {
+        assert!(rs.card(c).keywords.iter().any(|k| k == "CHOOSE_ONE"), "{c}");
+    }
+    assert_eq!(rs.card("AT_037t").card_class, "DRUID");
+    let mut t = scene!({"hero": "HERO_09", "damage": 10, "hand": ["AT_013"], "board": [YETI]}, {"damage": 10, "hand": ["VAN_CS1_113"]});
+    let yeti = t.nth(0, 0);
+    t.play("AT_013", yeti).end_turn();
+    t.play("VAN_CS1_113", yeti).end_turn().end_turn();
+    let h0 = t.hero(0);
+    t.attack(yeti, h0);
+    assert_eq!((t.hp(0), t.hp(1)), (20, 20), "4 damage to the caster, then 4 healed to the caster");
+}

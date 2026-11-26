@@ -138,5 +138,6 @@
   "AT_125": {"keywords": ["CHARGE", "CANNOT_ATTACK_HEROES"]},
   "BRM_017": {"script": "scripts/tgt.lua#BRM_017"},
   "VAN_HERO_03bp": {"script": "scripts/tgt.lua#VAN_HERO_03bp"},
-  "PRO_001at": {"cost": 0}
+  "PRO_001at": {"cost": 0},
+  "VAN_EX1_345t": {"script": null}
 }

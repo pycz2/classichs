@@ -2,21 +2,7 @@
  "base": "og",
  "build": 12574,
  "about": "5.0.0.12574 (2016-04-24): Whispers of the Old Gods, Standard format, big Basic/Classic nerfs: the og pack, with what it has otherwise than this build: Druid of the Saber and Living Roots get their CHOOSE_ONE tag and Sapling its Druid class (in the data since 12574); 9166's Swipe, Explosive Shot and Shadow of Nothing (scripts/swipe_explosive_shot.lua, a copy of 9166's); Power Word: Glory heals its caster (scripts/power_word_glory.lua, a copy of 10956's).",
- "cards": {
-  "AT_042": {
-   "keywords": [
-    "CHOOSE_ONE"
-   ]
-  },
-  "AT_037": {
-   "keywords": [
-    "CHOOSE_ONE"
-   ]
-  },
-  "AT_037t": {
-   "cardClass": "DRUID"
-  }
- },
+ "cards": {},
  "sources": [
   "~/ClassicHS-local/prep/patches/versions.json 5.0.0.12574",
   "HearthstoneJSON build 12574 (class and CHOOSE_ONE against the og pack)"

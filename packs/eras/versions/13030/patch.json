@@ -2,21 +2,7 @@
  "base": "og",
  "build": 13030,
  "about": "5.0.0.13030 (2016-06-01): Shifter Zerus no longer becomes a minion with Choose One (scripts/zerus.lua); Druid of the Saber and Living Roots get their CHOOSE_ONE tag and Sapling its Druid class (in the data since 12574). Redemption on C'Thun and Scaled Nightmare after a set Attack: the og pack plays them as fixed already. Dark Wispers' minion-only target (REQ_MINION_TARGET in this build's data): the og pack has it already. The texts of this build differ from 12574 only by export noise ('_' for a no-break space). And 9166's Swipe, Explosive Shot and Shadow of Nothing (scripts/swipe_explosive_shot.lua, a copy of 9166's); Power Word: Glory heals its caster (scripts/power_word_glory.lua, a copy of 10956's).",
- "cards": {
-  "AT_042": {
-   "keywords": [
-    "CHOOSE_ONE"
-   ]
-  },
-  "AT_037": {
-   "keywords": [
-    "CHOOSE_ONE"
-   ]
-  },
-  "AT_037t": {
-   "cardClass": "DRUID"
-  }
- },
+ "cards": {},
  "sources": [
   "~/ClassicHS-local/prep/patches/versions.json 5.0.0.13030 (Patch 5.0.0.13030 notes; hsjson diff)",
   "hearthstone.wiki.gg Patch 5.0.0.13030"

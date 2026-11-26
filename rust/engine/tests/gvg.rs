@@ -417,3 +417,15 @@ fn deck_templates_play_bot_games() {
     eprintln!("GvG cards played: {gvg}, Spare Parts played: {parts}: {played:?}");
     assert!(gvg >= 20 && parts >= 1, "{played:?}");
 }
+
+/// Ship's Cannon hits after the Pirate is summoned, after its Battlecry, like Knife Juggler (as the game did from the
+/// start; 4.1.0.10956 only changed its text to "After you summon a Pirate").
+#[test]
+fn ships_cannon_fires_after_the_battlecry() {
+    let mut t = scene!({"hand": ["VAN_NEW1_018"], "board": ["GVG_075"]}, {});
+    let before = t.g.history.len();
+    t.play("VAN_NEW1_018", NONE);
+    let evs: Vec<_> = t.g.history[before..].iter().flat_map(|h| h.events()).collect();
+    let at = |k: &str| evs.iter().position(|e| e["type"] == k).unwrap_or_else(|| panic!("no {k}: {evs:?}"));
+    assert!(at("after_summon") < at("damage"), "{evs:?}");
+}
