@@ -1,0 +1,292 @@
+{
+ "FP1_028": [
+  {
+   "kind": "tricky",
+   "title": "Undertaker grows for each Deathrattle minion played",
+   "expect": "Haunted Creeper and Loot Hoarder both have Deathrattle: Undertaker becomes a 3/4.",
+   "script": "scripts/naxx.lua#FP1_028",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "hand": ["FP1_002", "VAN_EX1_096"], "board": ["FP1_028"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "FP1_028", "atk": 3, "health": 4}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Undertaker and Reincarnate: the Creeper's Spiders do not count, the returning Creeper does",
+   "expect": "Reincarnate kills the Creeper (two Spiders, no Deathrattle) and brings it back: Undertaker gets +1/+1 once (2/3).",
+   "script": "scripts/naxx.lua#FP1_028",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "hand": ["FP1_025"], "board": ["FP1_028", "FP1_002"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "FP1_028", "atk": 2, "health": 3}]
+  }
+ ],
+ "FP1_002": [
+  {
+   "kind": "tricky",
+   "title": "Haunted Creeper with Knife Juggler: two Spiders, two knives",
+   "expect": "The Creeper dies attacking the Yeti; each Spectral Spider makes the Juggler throw a knife at a random enemy.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["VAN_NEW1_019", "FP1_002"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "FP1_002t"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Haunted Creeper on a full board: only one Spider fits",
+   "expect": "Seven minions, the Creeper among them, dies: six are left, so only one of the two Spiders comes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["FP1_002", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "FP1_002t"}]
+  }
+ ],
+ "FP1_014": [
+  {
+   "kind": "tricky",
+   "title": "Feugen and Stalagg dying together: two Thaddius",
+   "expect": "Twisting Nether kills both at once; each Deathrattle finds the other dead: two Thaddius.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_EX1_312"], "board": ["FP1_015", "FP1_014"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "FP1_014t"}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "FP1_014t"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Stalagg kills the enemy Feugen: Thaddius for both players",
+   "expect": "Stalagg (7/4) attacks the opponent's Feugen (4/7): both die, and each Deathrattle sees the other died: a Thaddius on each side.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["FP1_014"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["FP1_015"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "FP1_014t"}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "FP1_014t"}]
+  }
+ ],
+ "FP1_013": [
+  {
+   "kind": "tricky",
+   "title": "Kel'Thuzad brings back the minions that died this turn",
+   "expect": "Hellfire kills the Creeper (two Spiders come after the damage) and the Wisp; at the end of the turn Kel'Thuzad summons the Creeper and the Wisp again.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_CS2_062"], "board": ["FP1_013", "FP1_002", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}, {"at": {"side": 0, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "FP1_030": [
+  {
+   "kind": "tricky",
+   "title": "Loatheb: the opponent's spells cost (5) more on their next turn",
+   "expect": "After Loatheb the opponent (6 mana next turn) cannot cast Fireball, which costs (9) now; the cost is back to (4) on the turn after.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["FP1_030"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "max_mana": 5, "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 1, "zone": "hand"}, "is": 2}, {"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "FP1_009": [
+  {
+   "kind": "tricky",
+   "title": "Deathlord killed by us gives us a minion from our own deck",
+   "expect": "Siphon Soul on the enemy Deathlord: its Deathrattle puts the only minion of our deck (an Ogre) onto our board.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_EX1_309"], "deck": ["VAN_CS2_029", "VAN_CS2_200", "VAN_CS2_029"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["FP1_009"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_200"}, {"count": {"side": 0, "zone": "deck"}, "is": 2}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "FP1_020": [
+  {
+   "kind": "tricky",
+   "title": "Avenge buffs the survivor",
+   "expect": "Frostbolt kills the enemy Wisp; Avenge gives the only other enemy minion, the Yeti, +3/+2 (7/7).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_024"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_231", "VAN_CS2_182"], "secrets": ["FP1_020"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "atk": 7, "health": 7}, {"count": {"side": 1, "zone": "secret"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Avenge stays when no friendly minion is left",
+   "expect": "The only enemy minion dies: there is nobody to buff, so Avenge does not trigger and stays.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_024"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_231"], "secrets": ["FP1_020"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "secret"}, "is": 1}]
+  }
+ ],
+ "FP1_018": [
+  {
+   "kind": "tricky",
+   "title": "Duplicate on Cairne: two Cairnes in hand, Baine on the board",
+   "expect": "Fireball kills the enemy Cairne: his Deathrattle summons Baine and Duplicate puts two copies of Cairne into the opponent's hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_EX1_110"], "secrets": ["FP1_018"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "hand"}, "is": 2}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_EX1_110t"}, {"count": {"side": 1, "zone": "secret"}, "is": 0}]
+  }
+ ],
+ "FP1_023": [
+  {
+   "kind": "tricky",
+   "title": "Dark Cultist gives +3 Health to the minion left",
+   "expect": "The Cultist dies attacking the Ogre; the only other friendly minion, a Wisp, becomes 1/4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "board": ["FP1_023", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_231", "atk": 1, "health": 4}]
+  }
+ ],
+ "FP1_004": [
+  {
+   "kind": "tricky",
+   "title": "Mad Scientist puts a Secret from the deck into play",
+   "expect": "The Scientist dies on our turn; Mirror Entity comes from the deck straight into play (it costs nothing and waits for the opponent).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["FP1_004"], "deck": ["VAN_CS2_120", "VAN_EX1_294", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 1}, {"count": {"side": 0, "zone": "deck"}, "is": 2}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Mad Scientist skips a Secret that is already in play",
+   "expect": "Mirror Entity is already up, and the deck's only Secret is another Mirror Entity: nothing comes out.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["FP1_004"], "secrets": ["VAN_EX1_294"], "deck": ["VAN_CS2_120", "VAN_EX1_294", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 1}, {"count": {"side": 0, "zone": "deck"}, "is": 3}]
+  }
+ ],
+ "FP1_012": [
+  {
+   "kind": "tricky",
+   "title": "Sludge Belcher silenced leaves no Slime",
+   "expect": "Ironbeak Owl silences the Belcher; Fireball kills it and no Slime comes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_203", "VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["FP1_012"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "FP1_007": [
+  {
+   "kind": "tricky",
+   "title": "Nerubian Egg with Power Overwhelming",
+   "expect": "The Egg becomes 4/6 and hits the hero; at the end of the turn it dies and hatches a 4/4 Nerubian.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_EX1_316"], "board": ["FP1_007"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "FP1_007t", "atk": 4, "health": 4}]
+  }
+ ],
+ "FP1_031": [
+  {
+   "kind": "tricky",
+   "title": "Baron Rivendare doubles Haunted Creeper: four Spiders",
+   "expect": "The Creeper dies attacking the Yeti; its Deathrattle runs twice: four Spectral Spiders.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["FP1_031", "FP1_002"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Baron Rivendare dying at the same time doubles nothing",
+   "expect": "Twisting Nether kills Rivendare and the Creeper together: the Deathrattle runs once, two Spiders.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_EX1_312"], "board": ["FP1_031", "FP1_002"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "FP1_002t"}]
+  }
+ ],
+ "FP1_024": [
+  {
+   "kind": "tricky",
+   "title": "Unstable Ghoul's Deathrattle kills the Creeper; its Spiders come after the damage",
+   "expect": "The Ghoul dies attacking the Ogre and deals 1 to all minions: the damaged Creeper dies, its two Spiders arrive after and live; the Ogre is at 5.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["FP1_024", {"card": "FP1_002", "damage": 1}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "FP1_002t", "health": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 5}]
+  }
+ ],
+ "FP1_021": [
+  {
+   "kind": "tricky",
+   "title": "Death's Bite breaks and finishes the Yeti",
+   "expect": "The hero hits the Yeti with the last Durability (4 damage); the weapon's Deathrattle deals 1 to all minions: the Yeti dies, Acolyte of Pain draws.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "board": ["VAN_EX1_007"], "weapon": {"card": "FP1_021", "durability": 1}, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "weapon"}, "card": ""}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "FP1_003": [
+  {
+   "kind": "tricky",
+   "title": "Echoing Ooze copies the buff it got",
+   "expect": "Blessing of Kings makes the Ooze 5/6; at the end of the turn its exact copy, also 5/6, comes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "hand": ["FP1_003", "VAN_CS2_092"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "atk": 5, "health": 6}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "FP1_003", "atk": 5, "health": 6}]
+  }
+ ],
+ "FP1_027": [
+  {
+   "kind": "tricky",
+   "title": "Stoneskin Gargoyle with Auchenai Soulpriest hurts itself",
+   "expect": "At the start of the opponent's turn the damaged Gargoyle 'heals' itself, but Auchenai turns it into 2 more damage: it dies.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_09", "board": ["VAN_EX1_591", {"card": "FP1_027", "damage": 2}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_EX1_591"}]
+  }
+ ],
+ "FP1_001": [
+  {
+   "kind": "tricky",
+   "title": "Zombie Chow with Auchenai Soulpriest damages the enemy hero",
+   "expect": "The Chow dies attacking the Yeti; its Deathrattle would restore 5 Health to the enemy hero, Auchenai makes it 5 damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "board": ["VAN_EX1_591", "FP1_001"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 25}, {"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "FP1_022": [
+  {
+   "kind": "tricky",
+   "title": "Voidcaller puts Doomguard into play without its Battlecry",
+   "expect": "Voidcaller dies; Doomguard comes from the hand to the board and does not discard the two Fireballs.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_EX1_310", "VAN_CS2_029", "VAN_CS2_029"], "board": ["FP1_022"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_EX1_310"}, {"count": {"side": 0, "zone": "hand"}, "is": 2}]
+  }
+ ],
+ "FP1_026": [
+  {
+   "kind": "tricky",
+   "title": "Anub'ar Ambusher returns the minion left",
+   "expect": "The Ambusher dies attacking the Ogre; the only other friendly minion, a Wisp, goes back to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "board": ["FP1_026", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 1}]
+  }
+ ],
+ "FP1_016": [
+  {
+   "kind": "tricky",
+   "title": "Wailing Soul frees Ancient Watcher and strips a buff",
+   "expect": "Silenced, the Ancient Watcher can attack (4 to the hero); the blessed Yeti is back to 4/5.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["FP1_016"], "board": ["VAN_EX1_045", {"card": "VAN_CS2_182", "enchantments": [{"atk": 4, "hp": 4}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}, {"at": {"side": 0, "zone": "board", "index": 1}, "atk": 4, "health": 5}]
+  }
+ ],
+ "FP1_019": [
+  {
+   "kind": "tricky",
+   "title": "Poison Seeds: the Deathrattles first, then the Treants",
+   "expect": "All minions die; the Creeper's Spiders come, then a Treant for every minion that died, on its side: four on ours, one on theirs.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "hand": ["FP1_019"], "board": ["FP1_002", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "FP1_019t"}]
+  }
+ ],
+ "FP1_025": [
+  {
+   "kind": "tricky",
+   "title": "Reincarnate Sylvanas: she steals and comes back",
+   "expect": "Reincarnate kills Sylvanas: her Deathrattle takes the enemy Yeti, then she returns fresh.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "hand": ["FP1_025"], "board": ["VAN_EX1_016"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "FP1_010": [
+  {
+   "kind": "tricky",
+   "title": "Maexxna against Divine Shield",
+   "expect": "Maexxna attacks the Scarlet Crusader: the Shield takes the hit, so there is no damage to poison; the Crusader lives without its Shield.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": ["FP1_010"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_EX1_020"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "not": "DIVINE_SHIELD"}, {"at": {"side": 0, "zone": "board", "index": 0}, "health": 5}]
+  }
+ ]
+}

@@ -824,7 +824,7 @@ impl Game {
         }
     }
 
-    fn run_effect(&mut self, e: Id, key: &str, t: Id, choice: i64, combo: bool) {
+    pub(crate) fn run_effect(&mut self, e: Id, key: &str, t: Id, choice: i64, combo: bool) {
         let h = self.e(e).hooks();
         if t == NONE && self.target_spec(e, choice, combo).is_some() {
             return; // targeted effect with no target (none was valid, or it left play)

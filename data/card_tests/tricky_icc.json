@@ -1,0 +1,2902 @@
+{
+ "ICC_833": [
+  {
+   "kind": "tricky",
+   "title": "Frost Lich Jaina: an Elemental already on the board gets Lifesteal",
+   "expect": "Jaina summons a Water Elemental and her aura gives every friendly Elemental Lifesteal: the Fire Fly hits the enemy hero for 1 and heals her for 1.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "ICC_833"
+      ],
+      "board": [
+       "UNG_809"
+      ]
+     },
+     {
+      "hero": "HERO_01",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_833h"
+    },
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 2
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     },
+     "card": "ICC_833t",
+     "has": "LIFESTEAL"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "has": "LIFESTEAL"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "health": 21
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "hero"
+     },
+     "health": 29
+    }
+   ]
+  },
+  {
+   "kind": "tricky",
+   "title": "Icy Touch: a kill summons a Water Elemental",
+   "expect": "Icy Touch deals 1 damage to the Wisp; it dies, so a 3/6 Water Elemental is summoned.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hero_power": "ICC_833h"
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 0
+    },
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "ICC_833t",
+     "atk": 3,
+     "health": 6
+    }
+   ]
+  }
+ ],
+ "ICC_830": [
+  {
+   "kind": "tricky",
+   "title": "Shadowreaper Anduin: destroys every minion with 5 or more Attack, both sides",
+   "expect": "The two Boulderfist Ogres (6 Attack) die; the Yeti and the Wisp stay. The Hero Power becomes Voidform.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_830"
+      ],
+      "board": [
+       "VAN_CS2_182",
+       "VAN_CS2_200"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_200",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182"
+    },
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_231"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_830p"
+    }
+   ]
+  }
+ ],
+ "ICC_830p": [
+  {
+   "kind": "tricky",
+   "title": "Voidform: refreshed after a card is played",
+   "expect": "Voidform hits the enemy hero for 2; playing a Wisp makes it ready again, so it hits for 2 once more.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hero_power": "ICC_830p",
+      "hand": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "hero_power",
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 1,
+      "zone": "hero"
+     },
+     "health": 26
+    }
+   ]
+  }
+ ],
+ "ICC_828": [
+  {
+   "kind": "tricky",
+   "title": "Deathstalker Rexxar: 2 damage to enemy minions only",
+   "expect": "The Battlecry kills the enemy Wisp and leaves the enemy Yeti at 3 Health; the friendly Wisp is untouched.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_828"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182",
+     "health": 3
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_828p"
+    }
+   ]
+  }
+ ],
+ "ICC_828p": [
+  {
+   "kind": "tricky",
+   "title": "Build-A-Beast: two Discovers make one Zombeast",
+   "expect": "The first choice is a Beast with text, the second one with only keywords; one Zombeast comes to the hand.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_05",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hero_power": "ICC_828p"
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power"
+    },
+    {
+     "do": "choose",
+     "option": 0
+    },
+    {
+     "do": "choose",
+     "option": 0
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "hand"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "card": "ICC_828t"
+    }
+   ]
+  }
+ ],
+ "ICC_834": [
+  {
+   "kind": "tricky",
+   "title": "Scourgelord Garrosh: Shadowmourne hits both neighbours",
+   "expect": "Garrosh equips Shadowmourne and attacks the Yeti in the middle: the Yeti takes 4, both Wisps next to it die; the 4 damage back goes to the new Armor.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_834"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182",
+     "health": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "weapon"
+     },
+     "card": "ICC_834w"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "health": 30
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_834h"
+    }
+   ]
+  }
+ ],
+ "ICC_834h": [
+  {
+   "kind": "tricky",
+   "title": "Bladestorm ignores Spell Damage",
+   "expect": "Bladestorm is a Hero Power: Kobold Geomancer's Spell Damage does not add to it. Every minion takes exactly 1.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hero_power": "ICC_834h",
+      "board": [
+       "VAN_CS2_142"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power"
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "health": 4
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "health": 1
+    }
+   ]
+  }
+ ],
+ "ICC_829": [
+  {
+   "kind": "tricky",
+   "title": "Uther of the Ebon Blade: the Lifesteal weapon heals the hero",
+   "expect": "Uther equips the 5/3 Grave Vengeance and attacks the enemy hero: 5 damage, 5 Health back.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 10,
+      "hand": [
+       "ICC_829"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 1,
+      "zone": "hero"
+     },
+     "health": 25
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "health": 25
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "weapon"
+     },
+     "card": "ICC_829t"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_829p"
+    }
+   ]
+  }
+ ],
+ "ICC_829p": [
+  {
+   "kind": "tricky",
+   "title": "The Four Horsemen: the fourth Horseman wins the game",
+   "expect": "Three Horsemen are on the board; the Hero Power summons the missing one and the enemy hero is destroyed.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hero_power": "ICC_829p",
+      "board": [
+       "ICC_829t2",
+       "ICC_829t3",
+       "ICC_829t4"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power"
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 4
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 3
+     },
+     "card": "ICC_829t5"
+    }
+   ]
+  }
+ ],
+ "ICC_831": [
+  {
+   "kind": "tricky",
+   "title": "Bloodreaver Gul'dan: only the Demons that died come back",
+   "expect": "The Flame Imp, the Voidwalker and the Wisp die attacking the Yeti; Gul'dan's Battlecry summons the two Demons, not the Wisp.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_831"
+      ],
+      "board": [
+       "VAN_EX1_319",
+       "VAN_CS2_065",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_200"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 2
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_EX1_319"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     },
+     "card": "VAN_CS2_065"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_831p"
+    }
+   ]
+  }
+ ],
+ "ICC_481": [
+  {
+   "kind": "tricky",
+   "title": "Thrall, Deathseer: every friendly minion transforms",
+   "expect": "The Wisp becomes a random 2-Cost minion and the Yeti a random 6-Cost one; the enemy Yeti stays.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_481"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 2
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_481p"
+    }
+   ]
+  }
+ ],
+ "ICC_827": [
+  {
+   "kind": "tricky",
+   "title": "Valeera the Hollow: Stealth and a Shadow Reflection at once",
+   "expect": "Valeera gets Stealth and a Shadow Reflection comes the same turn; playing a Wisp turns the Reflection into a Wisp.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_827",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "has": "STEALTH"
+    },
+    {
+     "count": {
+      "side": 0,
+      "zone": "hand"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "card": "VAN_CS2_231"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_827p"
+    }
+   ]
+  }
+ ],
+ "ICC_827t": [
+  {
+   "kind": "tricky",
+   "title": "Shadow Reflection leaves the hand at the end of the turn",
+   "expect": "The Reflection not played is gone when the turn ends; Valeera keeps her Stealth through the opponent's turn.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_827"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "end_turn"
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "hand"
+     },
+     "is": 0
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "has": "STEALTH"
+    }
+   ]
+  }
+ ],
+ "ICC_832": [
+  {
+   "kind": "tricky",
+   "title": "Malfurion the Pestilent with Fandral Staghelm: both plagues",
+   "expect": "Fandral combines the Choose One: two Poisonous Spiders and two Taunt Scarabs are summoned.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_832"
+      ],
+      "board": [
+       "OG_044"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 2
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 5
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "power"
+     },
+     "card": "ICC_832p"
+    }
+   ]
+  }
+ ],
+ "ICC_832p": [
+  {
+   "kind": "tricky",
+   "title": "Plague Lord with Fandral Staghelm: +3 Attack and 3 Armor together",
+   "expect": "With Fandral the Hero Power gives both: the hero has 3 Attack this turn.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hero_power": "ICC_832p",
+      "board": [
+       "OG_044"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "hero_power"
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "atk": 3
+    }
+   ]
+  }
+ ],
+ "ICC_212": [
+  {
+   "kind": "tricky",
+   "title": "Lifesteal with Auchenai Soulpriest damages your own hero",
+   "expect": "Auchenai turns the Lifesteal healing into damage: Acolyte of Agony hits the enemy hero for 3 and its own hero takes 3.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_09",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_212",
+       "VAN_EX1_591"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 1,
+      "zone": "hero"
+     },
+     "health": 27
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "health": 27
+    }
+   ]
+  }
+ ],
+ "ICC_032": [
+  {
+   "kind": "tricky",
+   "title": "Poisonous against Divine Shield",
+   "expect": "Venomancer's hit only removes the Argent Squire's Divine Shield: the Squire lives.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_032"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_EX1_008"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_EX1_008",
+     "not": "DIVINE_SHIELD"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "health": 4
+    }
+   ]
+  }
+ ],
+ "ICC_701": [
+  {
+   "kind": "tricky",
+   "title": "Skulking Geist: printed 1-Cost spells in both hands and decks",
+   "expect": "Arcane Missiles, Claw and Arcane Shot (all 1 Cost) are destroyed in hands and decks; Fireball, the 0-Cost Moonfire and the Coin stay.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_EX1_277",
+       "VAN_DS1_185"
+      ],
+      "hand": [
+       "ICC_701",
+       "VAN_CS2_029",
+       "VAN_EX1_277",
+       "GAME_005"
+      ]
+     },
+     {
+      "hero": "HERO_06",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_005"
+      ],
+      "hand": [
+       "VAN_CS2_005",
+       "VAN_CS2_008"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "hand"
+     },
+     "is": 2
+    },
+    {
+     "count": {
+      "side": 0,
+      "zone": "deck"
+     },
+     "is": 1
+    },
+    {
+     "count": {
+      "side": 1,
+      "zone": "hand"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "hand",
+      "index": 0
+     },
+     "card": "VAN_CS2_008"
+    },
+    {
+     "count": {
+      "side": 1,
+      "zone": "deck"
+     },
+     "is": 1
+    }
+   ]
+  }
+ ],
+ "ICC_852": [
+  {
+   "kind": "tricky",
+   "title": "Prince Taldaram: a 3/3 copy that keeps Taunt",
+   "expect": "With no 3-Cost card in the deck, Taldaram becomes a copy of the enemy Sen'jin Shieldmasta set to 3/3, Taunt included.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_852"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_179"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_179",
+     "atk": 3,
+     "health": 3,
+     "has": "TAUNT"
+    }
+   ]
+  },
+  {
+   "kind": "tricky",
+   "title": "Prince Taldaram with a 3-Cost card in the deck",
+   "expect": "The deck holds a Raid Leader (3 Cost), so the Battlecry asks for no target and Taldaram stays a 3/3 Prince.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_122"
+      ],
+      "hand": [
+       "ICC_852"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_179"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "ICC_852",
+     "atk": 3,
+     "health": 3
+    }
+   ]
+  }
+ ],
+ "ICC_912": [
+  {
+   "kind": "tricky",
+   "title": "Corpsetaker reads the minions in the deck",
+   "expect": "The deck has a Taunt minion and a Divine Shield minion, none with Lifesteal or Windfury: Corpsetaker gains Taunt and Divine Shield only.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_179",
+       "VAN_EX1_008"
+      ],
+      "hand": [
+       "ICC_912"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "has": "TAUNT"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "has": "DIVINE_SHIELD"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "not": "WINDFURY"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "not": "LIFESTEAL"
+    }
+   ]
+  }
+ ],
+ "ICC_901": [
+  {
+   "kind": "tricky",
+   "title": "Drakkari Enchanter doubles Despicable Dreadlord",
+   "expect": "At the end of the turn the Dreadlord's 1 damage to enemy minions comes twice: the Wisp dies, the Yeti has 3 Health.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_901",
+       "ICC_075"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "end_turn"
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182",
+     "health": 3
+    }
+   ]
+  }
+ ],
+ "ICC_054": [
+  {
+   "kind": "tricky",
+   "title": "Spreading Plague casts again until the boards are even",
+   "expect": "The opponent has four minions and you one: Scarabs come until you have four (three Scarabs).",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_054"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231",
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 4
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 3
+     },
+     "card": "ICC_832t4"
+    }
+   ]
+  }
+ ],
+ "ICC_041": [
+  {
+   "kind": "tricky",
+   "title": "Defile casts again while minions die",
+   "expect": "Wisp dies on the first cast, the Raptor on the second, the Crocolisk on the third; the fourth kills nothing, so it stops: the Yeti has 1 Health.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_041"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231",
+       "VAN_CS2_172",
+       "VAN_CS2_120",
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182",
+     "health": 1
+    }
+   ]
+  }
+ ],
+ "ICC_900": [
+  {
+   "kind": "tricky",
+   "title": "Necrotic Geist and Defile: a new Ghoul keeps the chain going",
+   "expect": "The first Defile kills the Wisp and a 2/2 Ghoul comes; the second cast hits all for 1 and nothing dies, so it stops.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_041"
+      ],
+      "board": [
+       "ICC_900",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 2
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "ICC_900",
+     "health": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     },
+     "card": "ICC_900t",
+     "health": 1
+    }
+   ]
+  }
+ ],
+ "ICC_025": [
+  {
+   "kind": "tricky",
+   "title": "Rattling Rascal: its Deathrattle summons for the opponent",
+   "expect": "The Rascal dies attacking the Yeti; its Deathrattle gives the opponent a 5/5 Skeletal Enforcer.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_025"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 0
+    },
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 2
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 1
+     },
+     "card": "ICC_025t"
+    }
+   ]
+  }
+ ],
+ "ICC_838": [
+  {
+   "kind": "tricky",
+   "title": "Sindragosa: the Frozen Champions give Legendaries when they die",
+   "expect": "Sindragosa summons two 0/1 Frozen Champions; Whirlwind kills both, and each adds a random Legendary minion to the hand.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_838",
+       "VAN_EX1_400"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "ICC_838",
+     "health": 7
+    },
+    {
+     "count": {
+      "side": 0,
+      "zone": "hand"
+     },
+     "is": 2
+    }
+   ]
+  }
+ ],
+ "ICC_067": [
+  {
+   "kind": "tricky",
+   "title": "Vryghoul dies on its own turn: no Ghoul",
+   "expect": "\"If it's your opponent's turn\" fails: the Vryghoul trades with a Wisp and nothing is summoned.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_08",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_067"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 0
+    },
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 0
+    }
+   ]
+  }
+ ],
+ "ICC_314t1": [
+  {
+   "kind": "tricky",
+   "title": "Frostmourne: replaced, it brings back the minion it killed",
+   "expect": "Frostmourne kills the Yeti; equipping a Fiery War Axe destroys Frostmourne and its Deathrattle summons the Yeti for you.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "ICC_314t1",
+      "hand": [
+       "VAN_CS2_106"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 0
+    },
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182",
+     "health": 5
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "weapon"
+     },
+     "card": "VAN_CS2_106"
+    }
+   ]
+  },
+  {
+   "kind": "tricky",
+   "title": "Frostmourne: the last swing kills a minion",
+   "expect": "The swing that kills the Yeti also breaks Frostmourne; in Hearthstone its Deathrattle summons the Yeti (killed by this weapon) for you.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_01",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": {
+       "card": "ICC_314t1",
+       "tags": [
+        {
+         "DURABILITY": 1
+        }
+       ]
+      }
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 0
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "health": 26
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "weapon"
+     },
+     "card": ""
+    }
+   ]
+  }
+ ],
+ "ICC_233": [
+  {
+   "kind": "tricky",
+   "title": "Doomerang: the weapon's damage, no Spell Damage, back to the hand",
+   "expect": "The Fiery War Axe deals 3 to the Yeti (Kobold Geomancer adds nothing), then returns to the hand; the hero has no weapon.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_233"
+      ],
+      "weapon": "VAN_CS2_106",
+      "board": [
+       "VAN_CS2_142"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "health": 2
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "card": "VAN_CS2_106"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "weapon"
+     },
+     "card": ""
+    }
+   ]
+  }
+ ],
+ "ICC_841": [
+  {
+   "kind": "tricky",
+   "title": "Blood-Queen Lana'thel counts a discard",
+   "expect": "Soulfire discards the only other card in the hand: Lana'thel on the board goes from 1 to 2 Attack.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_07",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "VAN_EX1_308",
+       "VAN_CS2_231"
+      ],
+      "board": [
+       "ICC_841"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 1,
+      "zone": "hero"
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "hand"
+     },
+     "is": 0
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "atk": 2
+    }
+   ]
+  }
+ ],
+ "ICC_858": [
+  {
+   "kind": "tricky",
+   "title": "Bolvar, Fireblood: his own Divine Shield counts",
+   "expect": "Bolvar attacks a Wisp: he loses his Divine Shield and gains +2 Attack.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "ICC_858"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_231"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "atk": 3,
+     "health": 7
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "not": "DIVINE_SHIELD"
+    }
+   ]
+  }
+ ],
+ "ICC_245": [
+  {
+   "kind": "tricky",
+   "title": "Blackguard: only the Health actually healed becomes damage",
+   "expect": "Holy Light restores 6, but the hero misses only 4: the enemy Yeti takes 4.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_04",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "damage": 4,
+      "hand": [
+       "VAN_CS2_089"
+      ],
+      "board": [
+       "ICC_245"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "hero"
+     }
+    }
+   ],
+   "check": [
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "health": 30
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "health": 1
+    }
+   ]
+  }
+ ],
+ "ICC_289": [
+  {
+   "kind": "tricky",
+   "title": "Moorabi and Hyldnir Frostrider: copies of the other minions only",
+   "expect": "Frostrider Freezes the friendly Moorabi and Wisp; Moorabi copies the Wisp but not itself.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_855"
+      ],
+      "board": [
+       "ICC_289",
+       "VAN_CS2_231"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "hand"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "card": "VAN_CS2_231"
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     },
+     "has": "FROZEN"
+    }
+   ]
+  }
+ ],
+ "ICC_236": [
+  {
+   "kind": "tricky",
+   "title": "Ice Breaker destroys a Frozen minion it hits",
+   "expect": "The hero hits the Frozen Ogre for 1 and Ice Breaker destroys it; the Ogre still hits back for 6.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_02",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "weapon": "ICC_236"
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       {
+        "card": "VAN_CS2_200",
+        "tags": [
+         "FROZEN"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "attack",
+     "attacker": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "defender": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 1,
+      "zone": "board"
+     },
+     "is": 0
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "health": 24
+    }
+   ]
+  }
+ ],
+ "ICC_201": [
+  {
+   "kind": "tricky",
+   "title": "Roll the Bones draws into fatigue",
+   "expect": "Each Loot Hoarder drawn has Deathrattle, so it casts again; after the third the deck is empty and the next draw is fatigue.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_03",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_EX1_096",
+       "VAN_EX1_096",
+       "VAN_EX1_096"
+      ],
+      "hand": [
+       "ICC_201"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "hand"
+     },
+     "is": 3
+    },
+    {
+     "count": {
+      "side": 0,
+      "zone": "deck"
+     },
+     "is": 0
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "hero"
+     },
+     "health": 29
+    }
+   ]
+  }
+ ],
+ "ICC_047": [
+  {
+   "kind": "tricky",
+   "title": "Fatespinner with Decay chosen",
+   "expect": "Fatespinner is played as Decay (secretly) and then killed with a Fireball: its Deathrattle deals 3 damage to all minions.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 1
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 0
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182",
+     "health": 2
+    }
+   ]
+  },
+  {
+   "kind": "tricky",
+   "title": "Fatespinner with Fandral Staghelm: +2/+2, then 3 damage",
+   "expect": "Fandral gives both Deathrattles; when Fatespinner dies, all minions get +2/+2 first and then take 3: the Yeti ends 6/4.",
+   "scene": {
+    "current": 0,
+    "players": [
+     {
+      "hero": "HERO_06",
+      "mana": 10,
+      "max_mana": 10,
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "hand": [
+       "ICC_047",
+       "VAN_CS2_029"
+      ],
+      "board": [
+       "OG_044"
+      ]
+     },
+     {
+      "hero": "HERO_08",
+      "deck": [
+       "VAN_CS2_120",
+       "VAN_CS2_120"
+      ],
+      "board": [
+       "VAN_CS2_182"
+      ]
+     }
+    ]
+   },
+   "steps": [
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "choice": 2,
+     "pos": 1
+    },
+    {
+     "do": "play",
+     "card": {
+      "side": 0,
+      "zone": "hand",
+      "index": 0
+     },
+     "target": {
+      "side": 0,
+      "zone": "board",
+      "index": 1
+     }
+    }
+   ],
+   "check": [
+    {
+     "count": {
+      "side": 0,
+      "zone": "board"
+     },
+     "is": 1
+    },
+    {
+     "at": {
+      "side": 0,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "OG_044",
+     "atk": 5,
+     "health": 4
+    },
+    {
+     "at": {
+      "side": 1,
+      "zone": "board",
+      "index": 0
+     },
+     "card": "VAN_CS2_182",
+     "atk": 6,
+     "health": 4
+    }
+   ]
+  }
+ ]
+}

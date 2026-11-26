@@ -230,6 +230,17 @@ fn the_caverns_below_and_crystal_core() {
     assert_eq!(t.stats(drawn), (5, 5));
 }
 
+/// A scene's Quest is in play as if played (its goal), with the progress the scene gives it.
+#[test]
+fn a_quest_in_a_scene_has_its_goal_and_progress() {
+    // Unite the Murlocs: summon 10 Murlocs; a Murloc Raider is the tenth
+    let mut t = scene!({"hero": "HERO_02", "hand": ["VAN_CS2_168"], "secrets": [{"card": "UNG_942", "tags": [{"QUEST_PROGRESS": 9}]}]}, {});
+    let q = t.g.players[0].secrets[0];
+    assert_eq!((t.tag(q, "QUEST_PROGRESS"), t.tag(q, "QUEST_PROGRESS_TOTAL")), (9, 10));
+    t.play("VAN_CS2_168", NONE);
+    assert!(t.g.players[0].secrets.is_empty() && t.hand(0).contains(&"UNG_942t".to_string()), "fulfilled");
+}
+
 #[test]
 fn one_quest_at_a_time_and_a_secret_slot() {
     let mut t = scene!({"mana": 30, "hand": ["UNG_028", "UNG_116", "VAN_EX1_287", "VAN_EX1_289", "VAN_EX1_294", "VAN_EX1_609", "VAN_EX1_594"]}, {"hand": ["OG_254"]});

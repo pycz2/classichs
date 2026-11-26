@@ -1,0 +1,382 @@
+{
+ "AT_132": [
+  {
+   "kind": "tricky",
+   "title": "Justicar Trueheart: the Warrior's power becomes Tank Up!",
+   "expect": "Justicar replaces Armor Up! with Tank Up!, which can be used at once and gives 4 Armor.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["AT_132"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power"}],
+   "check": [{"at": {"side": 0, "zone": "power"}, "card": "AT_132_WARRIOR"}, {"count": {"side": 0, "zone": "board"}, "is": 1}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Justicar Trueheart: Fireblast Rank 2 sets off Inspire",
+   "expect": "Justicar upgrades Fireblast; the 2 damage power hits the enemy hero and Lowly Squire's Inspire gives it +1 Attack.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["AT_132"], "board": ["AT_082"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "power"}, "card": "AT_132_MAGE"}, {"at": {"side": 1, "zone": "hero"}, "health": 28}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "AT_082", "atk": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Justicar Trueheart: The Silver Hand with Warhorse Trainer",
+   "expect": "The upgraded Paladin power summons two Recruits at once; Warhorse Trainer gives each of them +1 Attack.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["AT_132"], "board": ["AT_075"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_CS2_101t", "atk": 2}, {"at": {"side": 0, "zone": "board", "index": 3}, "card": "VAN_CS2_101t", "atk": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Justicar Trueheart: The Silver Hand with room for one Recruit",
+   "expect": "With six minions on the board the upgraded Paladin power still works and summons only one Recruit.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["AT_132"], "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "VAN_CS2_101t"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Justicar Trueheart: Totemic Slam picks the totem",
+   "expect": "The upgraded Shaman power offers the four basic totems; the Wrath of Air Totem is chosen and summoned.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["AT_132"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power"}, {"do": "choose", "option": 3}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_052"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Totemic Slam with all four basic totems already out",
+   "expect": "Totemic Call could not be used here, but Totemic Slam can summon a totem you already have: a second Searing Totem.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hero_power": "AT_132_SHAMAN", "board": ["VAN_CS2_050", "VAN_CS2_051", "VAN_CS2_052", "VAN_NEW1_009"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power"}, {"do": "choose", "option": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}, {"at": {"side": 0, "zone": "board", "index": 4}, "card": "VAN_CS2_050"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Justicar Trueheart upgrades a copied basic power",
+   "expect": "A Warrior who copied Fireblast (Sideshow Spelleater) plays Justicar: the power he has now, Fireblast, becomes Fireblast Rank 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hero_power": "VAN_HERO_08bp", "hand": ["AT_132"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "power"}, "card": "AT_132_MAGE"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Justicar Trueheart does not touch Lightning Jolt",
+   "expect": "Lightning Jolt (from Charged Hammer) is not a basic Hero Power: Justicar leaves it as it is.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hero_power": "AT_050t", "hand": ["AT_132"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "power"}, "card": "AT_050t"}]
+  }
+ ],
+ "AT_050": [
+  {
+   "kind": "tricky",
+   "title": "Charged Hammer breaks: Lightning Jolt can be used the same turn",
+   "expect": "The last attack breaks the Hammer; its Deathrattle makes the power Lightning Jolt, unused, which then deals 2 damage to the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "weapon": {"card": "AT_050", "durability": 1}, "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "weapon"}, "card": ""}, {"at": {"side": 0, "zone": "power"}, "card": "AT_050t"}, {"at": {"side": 1, "zone": "hero"}, "health": 28}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "AT_027": [
+  {
+   "kind": "tricky",
+   "title": "Wilfred Fizzlebang: Life Tap draws a free Ysera",
+   "expect": "Life Tap draws Ysera, which costs (0) with Wilfred, so it can be played with the 8 Mana left.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "board": ["AT_027"], "deck": ["VAN_CS2_120", "VAN_EX1_572"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_572"}, {"at": {"side": 0, "zone": "hero"}, "health": 28}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Wilfred Fizzlebang with Soul Tap (Justicar's power)",
+   "expect": "Soul Tap is the Hero Power too: the card it draws costs (0), so Ysera is played with no Mana left.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 2, "max_mana": 10, "hero_power": "AT_132_WARLOCK", "board": ["AT_027"], "deck": ["VAN_CS2_120", "VAN_EX1_572"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_572"}, {"at": {"side": 0, "zone": "hero"}, "health": 30}]
+  }
+ ],
+ "AT_072": [
+  {
+   "kind": "tricky",
+   "title": "Varian Wrynn: minions to the board, the spell to the hand",
+   "expect": "The top three cards: Wisp and Yeti go straight onto the board, Fireball is drawn; the Crocolisk stays in the deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["AT_072"], "deck": ["VAN_CS2_120", "VAN_CS2_029", "VAN_CS2_182", "VAN_CS2_231"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_029"}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Varian Wrynn with room for one minion",
+   "expect": "The board fills up after the first minion; the next two minions are drawn instead of summoned.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["AT_072"], "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_029", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "VAN_CS2_182"}, {"count": {"side": 0, "zone": "hand"}, "is": 2}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  }
+ ],
+ "AT_079": [
+  {
+   "kind": "tricky",
+   "title": "Mysterious Challenger: one of each Secret",
+   "expect": "Two Noble Sacrifices and a Redemption in the deck: one Noble Sacrifice and the Redemption come into play, the other copy stays.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["AT_079"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_EX1_130", "VAN_EX1_130", "VAN_EX1_136"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 2}, {"count": {"side": 0, "zone": "deck"}, "is": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Mysterious Challenger skips a Secret already in play",
+   "expect": "Noble Sacrifice is already up, so only Redemption and Repentance come out of the deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["AT_079"], "secrets": ["VAN_EX1_130"], "deck": ["VAN_CS2_120", "VAN_EX1_130", "VAN_EX1_136", "VAN_EX1_379"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 3}, {"count": {"side": 0, "zone": "deck"}, "is": 2}]
+  }
+ ],
+ "AT_081": [
+  {
+   "kind": "tricky",
+   "title": "Eadric the Pure under an enemy Raid Leader",
+   "expect": "Every enemy minion's Attack is set to 1 (the Yeti's +2 buff is gone), then Raid Leader's aura adds +1 to the others: Raid Leader 1, Wisp 2, Yeti 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["AT_081"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_122", "VAN_CS2_231", {"card": "VAN_CS2_182", "enchantments": [{"atk": 2}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "atk": 1}, {"at": {"side": 1, "zone": "board", "index": 1}, "atk": 2}, {"at": {"side": 1, "zone": "board", "index": 2}, "atk": 2, "health": 5}]
+  }
+ ],
+ "AT_070": [
+  {
+   "kind": "tricky",
+   "title": "Skycap'n Kragg costs less for each Pirate",
+   "expect": "Two friendly Pirates make Kragg cost (5); he is played with 5 Mana and charges the enemy hero for 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 5, "max_mana": 10, "hand": ["AT_070"], "board": ["AT_029", "VAN_CS2_146"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 2}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}, {"count": {"side": 0, "zone": "board"}, "is": 3}]
+  }
+ ],
+ "AT_063t": [
+  {
+   "kind": "tricky",
+   "title": "Dreadscale hits every other minion at the end of the turn",
+   "expect": "At the end of the turn Dreadscale deals 1 damage to all other minions, friendly ones too: the Wisp dies, the Yeti is left at 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "board": ["AT_063t", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 4}]
+  }
+ ],
+ "AT_063": [
+  {
+   "kind": "tricky",
+   "title": "Acidmaw and Dreadscale together",
+   "expect": "Dreadscale's 1 damage hits every other minion and Acidmaw destroys each damaged one; Acidmaw itself survives with 1 Health.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "board": ["AT_063", "AT_063t"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "AT_063", "health": 1}]
+  }
+ ],
+ "AT_018": [
+  {
+   "kind": "tricky",
+   "title": "Confessor Paletress: Inspire summons a Legendary",
+   "expect": "The priest heals his own hero; the Inspire summons a random Legendary minion next to Paletress.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "board": ["AT_018"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "AT_080": [
+  {
+   "kind": "tricky",
+   "title": "Garrison Commander with Maiden of the Lake",
+   "expect": "Maiden makes the power cost (1), Garrison Commander lets it be used twice: two Fireblasts for 2 Mana.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 2, "max_mana": 10, "board": ["AT_085", "AT_080"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 1, "zone": "hero"}}, {"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "AT_120": [
+  {
+   "kind": "tricky",
+   "title": "Frost Giant after nine Hero Powers",
+   "expect": "The hero used the power 9 times this game: Frost Giant costs (1) and is played with 1 Mana.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 1, "max_mana": 10, "hand": ["AT_120"], "hero_state": {"tags": [{"NUM_TIMES_HERO_POWER_USED_THIS_GAME": 9}]}, "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "AT_120"}]
+  }
+ ],
+ "AT_124": [
+  {
+   "kind": "tricky",
+   "title": "Bolf Ramshield takes Spawn of Shadows' damage",
+   "expect": "The Inspire deals 4 to each hero; Bolf takes the 4 meant for his own hero instead.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "board": ["AT_012", "AT_124"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 30}, {"at": {"side": 1, "zone": "hero"}, "health": 26}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "AT_124", "health": 5}]
+  }
+ ],
+ "AT_026": [
+  {
+   "kind": "tricky",
+   "title": "Wrathguard hit for more than its Health",
+   "expect": "Flamestrike deals 4 to the 3 Health Wrathguard; it dies and its hero takes all 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_032"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_07", "board": ["AT_026"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "AT_067": [
+  {
+   "kind": "tricky",
+   "title": "Magnataur Alpha kills the middle minion",
+   "expect": "The Alpha kills the Wisp; the Ogres on both sides take 5 damage all the same.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["AT_067"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200", "VAN_CS2_231", "VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 2}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 2}, {"at": {"side": 1, "zone": "board", "index": 1}, "health": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "health": 2}]
+  }
+ ],
+ "AT_034": [
+  {
+   "kind": "tricky",
+   "title": "Poisoned Blade: Dagger Mastery buffs it",
+   "expect": "With Poisoned Blade equipped the Hero Power gives it +1 Attack instead of a new Dagger.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "weapon": "AT_034", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power"}],
+   "check": [{"at": {"side": 0, "zone": "weapon"}, "card": "AT_034", "atk": 2}]
+  }
+ ],
+ "AT_036": [
+  {
+   "kind": "tricky",
+   "title": "Anub'arak dies: back to the hand and a Nerubian",
+   "expect": "Fireball kills the friendly Anub'arak: the card returns to the hand and a 4/4 Nerubian takes its place.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["AT_036"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "AT_036"}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "AT_036t"}]
+  }
+ ],
+ "AT_035t": [
+  {
+   "kind": "tricky",
+   "title": "Ambush! drawn by Life Tap",
+   "expect": "Life Tap draws the Ambush: it summons a 4/4 Nerubian for the opponent and draws the next card.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "deck": ["VAN_CS2_120", "AT_035t"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power"}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "AT_036t"}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_120"}, {"count": {"side": 0, "zone": "deck"}, "is": 0}]
+  }
+ ],
+ "AT_019": [
+  {
+   "kind": "tricky",
+   "title": "Dreadsteed survives Flamestrike",
+   "expect": "Flamestrike kills the Dreadsteed and its Deathrattle summons a new one after the damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_032"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_07", "board": ["AT_019"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "AT_019", "health": 1}]
+  }
+ ],
+ "AT_022": [
+  {
+   "kind": "tricky",
+   "title": "Fist of Jaraxxus discarded by Soulfire",
+   "expect": "Soulfire hits the enemy hero for 4 and discards the Fist, which deals 4 more to a random enemy (only the hero); Tiny Knight of Evil gains +1/+1.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_308", "AT_022"], "board": ["AT_021"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 22}, {"count": {"side": 0, "zone": "hand"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "atk": 4, "health": 3}]
+  }
+ ],
+ "AT_112": [
+  {
+   "kind": "tricky",
+   "title": "Master Jouster wins the Joust",
+   "expect": "Only Yseras in our deck, only Wisps in theirs: the Joust is won, Master Jouster gets Taunt and Divine Shield.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["AT_112"], "deck": ["VAN_EX1_572", "VAN_EX1_572"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_231", "VAN_CS2_231"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "has": "TAUNT"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "DIVINE_SHIELD"}]
+  }
+ ],
+ "AT_058": [
+  {
+   "kind": "tricky",
+   "title": "King's Elekk: a tie is a lost Joust",
+   "expect": "Both decks reveal a 2 Mana Crocolisk: a tie does not win, so nothing is drawn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["AT_058"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 0}, {"count": {"side": 0, "zone": "deck"}, "is": 2}]
+  }
+ ],
+ "AT_104": [
+  {
+   "kind": "tricky",
+   "title": "Tuskarr Jouster against a deck with no minions",
+   "expect": "The opponent has no minion to reveal, so the Joust is won: 7 Health restored.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["AT_104"], "damage": 10, "deck": ["VAN_EX1_572"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_029", "VAN_CS2_029"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "AT_011": [
+  {
+   "kind": "tricky",
+   "title": "Holy Champion and Circle of Healing",
+   "expect": "Circle of Healing heals the two damaged Yetis (the undamaged Champion is not healed): +2 Attack twice.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_621"], "board": ["AT_011", {"card": "VAN_CS2_182", "damage": 2}, {"card": "VAN_CS2_182", "damage": 2}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "AT_011", "atk": 7}]
+  }
+ ],
+ "AT_016": [
+  {
+   "kind": "tricky",
+   "title": "Confuse kills a 0 Attack minion",
+   "expect": "Attack and Health swap: the 0/2 Healing Totem becomes 2/0 and dies; the enemy Yeti becomes 5/4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["AT_016"], "board": ["VAN_NEW1_009"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "board", "index": 0}, "atk": 5, "health": 4}]
+  }
+ ],
+ "AT_013": [
+  {
+   "kind": "tricky",
+   "title": "Power Word: Glory heals when the minion attacks",
+   "expect": "The Yeti with Power Word: Glory attacks the enemy hero; its own hero gets 4 Health back.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "damage": 10, "hand": ["AT_013"], "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 24}, {"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "AT_078": [
+  {
+   "kind": "tricky",
+   "title": "Enter the Coliseum keeps one minion per side",
+   "expect": "Each side keeps only its highest-Attack minion: our Yeti and one of the enemy's Crocolisks (a tie: a random one).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["AT_078"], "board": ["VAN_CS2_182", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_120"}]
+  }
+ ],
+ "AT_123": [
+  {
+   "kind": "tricky",
+   "title": "Chillmaw dies while a Dragon is in the hand",
+   "expect": "Shadow Word: Death destroys our own Chillmaw; holding Azure Drake, its Deathrattle deals 3 to all minions.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_622", "VAN_EX1_284"], "board": ["AT_123", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 2}]
+  }
+ ],
+ "AT_004": [
+  {
+   "kind": "tricky",
+   "title": "Arcane Blast gets Spell Damage twice",
+   "expect": "With Kobold Geomancer (Spell Damage +1) Arcane Blast deals 2 + 2 = 4: the Yeti is left at 1.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["AT_004"], "board": ["VAN_CS2_142"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "health": 1}]
+  }
+ ],
+ "AT_043": [
+  {
+   "kind": "tricky",
+   "title": "Astral Communion at 10 Mana Crystals",
+   "expect": "The hand is discarded; already at 10 crystals, the spell gives an Excess Mana card.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["AT_043", "VAN_CS2_120", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "CS2_013t"}]
+  }
+ ]
+}

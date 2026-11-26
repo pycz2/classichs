@@ -1,0 +1,344 @@
+{
+ "TRL_528": [
+  {
+   "kind": "tricky",
+   "title": "Linecracker: Overkill doubles its Attack",
+   "expect": "Linecracker hits the Wisp for 5 (Overkill): its Attack doubles to 10.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["TRL_528"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "TRL_528", "atk": 10, "health": 9}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Linecracker into a Divine Shield: no Overkill",
+   "expect": "The attack only breaks Argent Squire's Divine Shield (no damage is dealt), so Linecracker keeps 5 Attack.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["TRL_528"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_EX1_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_EX1_008", "not": "DIVINE_SHIELD"}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "TRL_528", "atk": 5, "health": 9}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Linecracker attacked on the opponent's turn: no Overkill",
+   "expect": "The enemy Wisp attacks Linecracker and takes 5; Overkill works only on your own turn: Linecracker stays at 5 Attack.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["TRL_528"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "mana": 10, "max_mana": 10, "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "attack", "attacker": {"side": 1, "zone": "board", "index": 0}, "defender": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "TRL_528", "atk": 5, "health": 9}]
+  }
+ ],
+ "TRL_506": [
+  {
+   "kind": "tricky",
+   "title": "Gurubashi Chicken with Blessing of Kings: Overkill",
+   "expect": "The 5/5 Chicken kills the Wisp with damage to spare and gains +5 Attack: a 10/4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_092"], "board": ["TRL_506"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "TRL_506", "atk": 10, "health": 4}]
+  }
+ ],
+ "TRL_325": [
+  {
+   "kind": "tricky",
+   "title": "Sul'thraze: Overkill lets the hero attack again",
+   "expect": "The hero kills the Wisp with 4 damage (Overkill), so it may attack once more: the enemy hero takes 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "weapon": "TRL_325", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 26}, {"at": {"side": 0, "zone": "hero"}, "health": 29}]
+  }
+ ],
+ "TRL_347": [
+  {
+   "kind": "tricky",
+   "title": "Baited Arrow: an exact kill is not Overkill",
+   "expect": "The first Arrow kills the 2/3 Crocolisk exactly (no Devilsaur); the second kills the Wisp with damage to spare: one Devilsaur.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["TRL_347", "TRL_347"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "TRL_347t"}]
+  }
+ ],
+ "TRL_521": [
+  {
+   "kind": "tricky",
+   "title": "Arena Patron: Overkill summons another Patron",
+   "expect": "The Patron kills the Wisp with damage to spare: a second Arena Patron comes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["TRL_521"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "TRL_521"}]
+  }
+ ],
+ "TRL_020": [
+  {
+   "kind": "tricky",
+   "title": "Sightless Ranger: Rush into Overkill",
+   "expect": "Played and sent at the Wisp at once, it overkills it: two 1/1 Bats.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["TRL_020"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "TRL_020t"}]
+  }
+ ],
+ "TRL_542": [
+  {
+   "kind": "tricky",
+   "title": "Oondasta: Overkill summons a Beast from the hand",
+   "expect": "Oondasta (Rush) overkills the Wisp and summons King Krush from the hand, no Mana paid.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["TRL_542", "VAN_EX1_543"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_543"}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "TRL_329": [
+  {
+   "kind": "tricky",
+   "title": "Akali, the Rhino: Overkill draws a Rush minion with +5/+5",
+   "expect": "Akali overkills the Wisp and draws Amani War Bear from the deck as a 10/12.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["TRL_329"], "deck": ["VAN_CS2_120", "TRL_550", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "TRL_550", "atk": 10, "health": 12}]
+  }
+ ],
+ "TRL_092": [
+  {
+   "kind": "tricky",
+   "title": "Spirit of the Shark doubles a Combo",
+   "expect": "After The Coin, SI:7 Agent's Combo runs twice: 4 damage to the enemy Yeti.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["GAME_005", "VAN_EX1_134"], "board": ["TRL_092"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 1}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Spirit of the Shark with Brann: still only twice",
+   "expect": "Brann and the Shark don't stack: Novice Engineer's Battlecry runs twice, two cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_015"], "board": ["TRL_092", "LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Spirit of the Shark and a targeted Battlecry",
+   "expect": "Elven Archer's Battlecry runs twice on the same target: the Crocolisk takes 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_189"], "board": ["TRL_092"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_120", "health": 1}]
+  }
+ ],
+ "TRL_319": [
+  {
+   "kind": "tricky",
+   "title": "Spirit of the Dragonhawk: Fireblast hits the neighbours",
+   "expect": "The Mage's Hero Power hits the middle Wisp and the minions next to it: all three Wisps die.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "board": ["TRL_319"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 1, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "TRL_390": [
+  {
+   "kind": "tricky",
+   "title": "Daring Fire-Eater: Fireblast deals 3",
+   "expect": "The next Hero Power this turn deals 2 more: the Yeti takes 3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["TRL_390"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power", "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 2}]
+  }
+ ],
+ "TRL_309": [
+  {
+   "kind": "tricky",
+   "title": "Spirit of the Tiger after Fireball",
+   "expect": "Fireball costs 4: a 4/4 Tiger comes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["TRL_309"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "TRL_309t", "atk": 4, "health": 4}]
+  }
+ ],
+ "TRL_327": [
+  {
+   "kind": "tricky",
+   "title": "Spirit of the Rhino: a fresh Rush minion is Immune",
+   "expect": "Amani War Bear, played this turn, attacks the Yeti and takes no damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["TRL_550"], "board": ["TRL_327"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 1}, "card": "TRL_550", "health": 7}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "TRL_241": [
+  {
+   "kind": "tricky",
+   "title": "Gonk, the Raptor: the hero attacks again after a kill",
+   "expect": "With Pounce the hero kills one Wisp, may attack again and kills the other.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["TRL_243"], "board": ["TRL_241"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "TRL_541": [
+  {
+   "kind": "tricky",
+   "title": "Hakkar's Deathrattle: Corrupted Blood in both decks",
+   "expect": "Fireball kills Hakkar: a Corrupted Blood is shuffled into each deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["TRL_541"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 5}, {"count": {"side": 1, "zone": "deck"}, "is": 5}]
+  }
+ ],
+ "TRL_065": [
+  {
+   "kind": "tricky",
+   "title": "Zul'jin recasts the spells of the game",
+   "expect": "Arcane Intellect was cast last turn; Zul'jin casts it again: 2 more cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_023", "TRL_065"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}, {"do": "end_turn"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 5}, {"at": {"side": 0, "zone": "hero"}, "card": "TRL_065"}]
+  }
+ ],
+ "TRL_564": [
+  {
+   "kind": "tricky",
+   "title": "Mojomaster Zihi: the opponent starts the next turn with 6 crystals",
+   "expect": "Both players are set to 5 Mana Crystals; the opponent gets one more (6), so their Omega Defender gets no bonus.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["TRL_564"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["BOT_296"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}, {"do": "play", "card": {"side": 1, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "BOT_296", "atk": 2, "health": 6}]
+  }
+ ],
+ "TRL_260": [
+  {
+   "kind": "tricky",
+   "title": "Bwonsamdi draws 1-Cost minions until the hand is full",
+   "expect": "Nine Murloc Raiders are drawn to fill the hand to 10; the Yeti stays in the deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["TRL_260", "VAN_CS2_120"], "deck": ["VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_168", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 10}, {"count": {"side": 0, "zone": "deck"}, "is": 4}, {"at": {"side": 0, "zone": "hand", "index": 9}, "card": "VAN_CS2_168"}]
+  }
+ ],
+ "TRL_409": [
+  {
+   "kind": "tricky",
+   "title": "Gral eats a Yeti and gives it back when he dies",
+   "expect": "Gral eats the Yeti (a 6/7); Fireball and Moonfire kill him and the Yeti comes to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["TRL_409", "VAN_CS2_029", "VAN_CS2_008"], "deck": ["VAN_CS2_182", "VAN_CS2_008"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_182"}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  }
+ ],
+ "TRL_900": [
+  {
+   "kind": "tricky",
+   "title": "Halazzi fills the hand with Lynxes",
+   "expect": "One card is left in the hand: nine 1/1 Rush Lynxes fill it to 10.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["TRL_900", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 10}, {"at": {"side": 0, "zone": "hand", "index": 9}, "card": "TRL_348t"}]
+  }
+ ],
+ "TRL_258": [
+  {
+   "kind": "tricky",
+   "title": "Mass Hysteria with one minion on each side",
+   "expect": "The two Yetis attack each other twice (once each): both die.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["TRL_258"], "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "hero"}, "health": 30}, {"at": {"side": 1, "zone": "hero"}, "health": 30}]
+  }
+ ],
+ "TRL_253": [
+  {
+   "kind": "tricky",
+   "title": "Hir'eek fills the board",
+   "expect": "Next to the Wisp, Hir'eek's copies fill the other five places.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["TRL_253"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "TRL_253"}]
+  }
+ ],
+ "TRL_252": [
+  {
+   "kind": "tricky",
+   "title": "High Priestess Jeklik discarded by Soulfire",
+   "expect": "Soulfire discards the only other card, Jeklik: two copies of her come to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_308", "TRL_252"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "TRL_252"}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "TRL_252"}, {"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "TRL_085": [
+  {
+   "kind": "tricky",
+   "title": "Zentimo: Moonfire on the middle Wisp hits its neighbours",
+   "expect": "The spell is cast on the two adjacent Wisps too: all three die.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": ["TRL_085"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "TRL_535": [
+  {
+   "kind": "tricky",
+   "title": "Snapjaw Shellfighter takes the damage of its neighbour",
+   "expect": "Moonfire on the Wisp next to the Shellfighter: the Shellfighter takes the 1 damage, the Wisp lives.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": ["VAN_CS2_231", "TRL_535"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_231", "health": 1}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "TRL_535", "health": 7}]
+  }
+ ],
+ "TRL_501": [
+  {
+   "kind": "tricky",
+   "title": "Auchenai Phantasm turns the Priest's Hero Power into damage",
+   "expect": "This turn healing deals damage: Lesser Heal on the enemy hero deals 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["TRL_501"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "TRL_308": [
+  {
+   "kind": "tricky",
+   "title": "High Priest Thekal turns Health into Armor",
+   "expect": "All but 1 of the hero's Health becomes Armor: the hero has 1 Health.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["TRL_308"], "damage": 10, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 1}]
+  }
+ ],
+ "TRL_302": [
+  {
+   "kind": "tricky",
+   "title": "Time Out!: the hero stays Immune on the opponent's turn",
+   "expect": "After Time Out! the opponent's Yeti attacks your hero and deals no damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["TRL_302"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "mana": 10, "max_mana": 10, "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}, {"do": "attack", "attacker": {"side": 1, "zone": "board", "index": 0}, "defender": {"side": 0, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 30, "has": "IMMUNE"}]
+  }
+ ],
+ "TRL_059": [
+  {
+   "kind": "tricky",
+   "title": "Bog Slosher returns a damaged minion with +2/+2",
+   "expect": "The damaged Yeti goes back to the hand healed and becomes a 6/7.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["TRL_059"], "board": [{"card": "VAN_CS2_182", "damage": 3}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_182", "atk": 6, "health": 7}]
+  }
+ ],
+ "TRL_312": [
+  {
+   "kind": "tricky",
+   "title": "Spellzerker damaged: Spell Damage +2",
+   "expect": "The damaged Spellzerker gives Spell Damage +2: Moonfire deals 3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": [{"card": "TRL_312", "damage": 1}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "TRL_537": [
+  {
+   "kind": "tricky",
+   "title": "Da Undatakah gains the Deathrattle of a minion that died",
+   "expect": "Three Moonfires kill Harvest Golem; Da Undatakah gains its Deathrattle, and when Fireball kills him next turn a Damaged Golem comes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008", "VAN_CS2_008", "VAN_CS2_008", "TRL_537", "VAN_CS2_029"], "board": ["VAN_EX1_556"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "end_turn"}, {"do": "end_turn"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_skele21"}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_skele21"}]
+  }
+ ]
+}

@@ -1,8 +1,10 @@
 extends SceneTree
-## Plays every card test (data/card_tests) and lists those that fail, then how many
-## cards have tests. Usage: godot --headless --path . --script res://tools/check_card_tests.gd [-- <pack id>]
+## Plays every card test (data/card_tests) and lists those that fail (a step not legal, a check not met), then how
+## many cards have tests. Usage: godot --headless --path . --script res://tools/check_card_tests.gd [-- <pack> <file>]
 ## A built-in pack's id (naxx-2014) plays the tests of that pack's cards (this run only: not saved); a .cardpack file
-## (build/packs/icc.cardpack: an expansion) is installed into the run's user dir and played (use TEST_USER_DIR).
+## (build/packs/icc.cardpack: an expansion) is installed into the run's user dir and played (use TEST_USER_DIR); a
+## pack file's name (dal: build/packs/dal.cardpack) is opened as it is. A .json name (tricky_dal.json) plays only
+## that file's tests.
 ## TEST_USER_DIR (a folder under the data dir, as tests/run.gd takes it) keeps user:// apart from the game's.
 
 
@@ -28,8 +30,17 @@ func _process(_d: float) -> bool:
 		if want.has(p.id()):
 			Packs._active = p
 			Packs._changed()
+	for a in want:
+		var f := ProjectSettings.globalize_path("res://build/packs/%s.cardpack" % a)
+		if FileAccess.file_exists(f):
+			Packs._active = Pack.open(f, "imported")
+			Packs._changed()
+	var only := ""
+	for a in want:
+		if a.ends_with(".json"):
+			only = a
 	print("pack: %s" % Packs.active().id())
-	var tests := CardTests.load_all()
+	var tests := CardTests.load_all(only)
 	var bad := 0
 	var n := 0
 	for id in tests:

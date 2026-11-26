@@ -1,0 +1,394 @@
+{
+ "GIL_618": [
+  {
+   "kind": "tricky",
+   "title": "Glinda Crowskin: a minion without Echo gets an Echo copy",
+   "expect": "With Glinda in play the Yeti has Echo: each play gives a copy, two Yetis come; the copy left in the hand fades at the end of the turn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_182"], "board": ["GIL_618"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Glinda Crowskin silenced: no more Echo",
+   "expect": "A silenced Glinda gives nothing: the Yeti is played once and no copy comes to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_182"], "board": [{"card": "GIL_618", "silenced": true}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "GIL_820": [
+  {
+   "kind": "tricky",
+   "title": "Shudderwock repeats a Battlecry played earlier this game",
+   "expect": "Emerald Reaver hits both heroes for 1; Shudderwock repeats its Battlecry: each hero has taken 2 damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["UNG_803", "GIL_820"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 28}, {"at": {"side": 1, "zone": "hero"}, "health": 28}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "GIL_504": [
+  {
+   "kind": "tricky",
+   "title": "Hagatha the Witch: 3 damage to all minions, then Bewitch gives a spell after a minion",
+   "expect": "Hagatha's Battlecry kills the friendly Crocolisk and leaves the enemy Yeti at 2 Health; her passive Hero Power Bewitch then adds a Shaman spell when the Wisp is played.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["GIL_504", "VAN_CS2_231"], "board": ["VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 2}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_231"}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "power"}, "card": "GIL_504h"}]
+  }
+ ],
+ "GIL_128": [
+  {
+   "kind": "tricky",
+   "title": "Emeriss doubles Gilnean Royal Guard, which then swaps in the hand",
+   "expect": "Emeriss doubles the 3/8 Guard to 6/16 (+3/+8); at the start of the next turn it swaps to the 8/3 form and keeps the buff: 11/11.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["GIL_128", "GIL_202"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "end_turn"}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 0, "zone": "hand", "index": 0}, "card": "GIL_202t", "atk": 11, "health": 11}]
+  }
+ ],
+ "GIL_202": [
+  {
+   "kind": "tricky",
+   "title": "Gilnean Royal Guard swaps its Attack and Health at the start of its owner's turn",
+   "expect": "After the opponent's turn, at the start of ours, the 3/8 Guard in the hand becomes the 8/3 one, still with Divine Shield and Rush.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["GIL_202"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 0, "zone": "hand", "index": 0}, "card": "GIL_202t", "atk": 8, "health": 3, "has": "DIVINE_SHIELD"}, {"at": {"side": 0, "zone": "hand", "index": 0}, "has": "RUSH"}]
+  }
+ ],
+ "GIL_528": [
+  {
+   "kind": "tricky",
+   "title": "Swift Messenger keeps a buff it got in the hand when it swaps",
+   "expect": "The 2/6 Messenger with +1/+1 (3/7) becomes the 6/2 form at the start of our next turn and keeps the +1/+1: 7/3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": [{"card": "GIL_528", "enchantments": [{"atk": 1, "hp": 1}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 0, "zone": "hand", "index": 0}, "card": "GIL_528t", "atk": 7, "health": 3}]
+  }
+ ],
+ "GIL_142": [
+  {
+   "kind": "tricky",
+   "title": "Chameleos becomes a card the opponent holds",
+   "expect": "The opponent holds only Fireballs; at the start of our next turn Chameleos in the hand turns into a Fireball.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["GIL_142"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_029", "VAN_CS2_029"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_029"}]
+  }
+ ],
+ "GIL_800": [
+  {
+   "kind": "tricky",
+   "title": "Duskfallen Aviana: the first card of the turn costs (0)",
+   "expect": "With 4 mana the Fireball (the first card) costs nothing and the Yeti then takes all 4 mana; the enemy hero is at 24.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 4, "max_mana": 4, "hand": ["VAN_CS2_029", "VAN_CS2_182"], "board": ["GIL_800"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 24}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "GIL_134": [
+  {
+   "kind": "tricky",
+   "title": "Holy Water kills a damaged minion: a fresh copy to the hand",
+   "expect": "4 damage kills the damaged Yeti (4 Health left); a copy of the plain card, 4/5, comes to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["GIL_134"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "damage": 1}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_182", "atk": 4, "health": 5}]
+  }
+ ],
+ "GIL_687": [
+  {
+   "kind": "tricky",
+   "title": "WANTED! on a Divine Shield: no kill, no Coin",
+   "expect": "The damage only pops Argent Squire's Divine Shield; it lives, so no Coin comes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["GIL_687"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_EX1_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_EX1_008", "not": "DIVINE_SHIELD"}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "GIL_614": [
+  {
+   "kind": "tricky",
+   "title": "Voodoo Doll: when it dies, the chosen minion dies",
+   "expect": "The Doll curses the enemy Yeti; Moonfire kills the Doll and its Deathrattle destroys the Yeti.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["GIL_614", "VAN_CS2_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Voodoo Doll silenced: the curse is gone",
+   "expect": "Ironbeak Owl silences the Doll, so when Moonfire kills it the Yeti lives.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["GIL_614", "VAN_CS2_203", "VAN_CS2_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_203"}]
+  }
+ ],
+ "GIL_825": [
+  {
+   "kind": "tricky",
+   "title": "Lord Godfrey repeats while minions die",
+   "expect": "Round 1 kills the Wisp, round 2 the Crocolisk, round 3 the Yeti (5 Health: 2+2+2); round 4 finds nothing. Godfrey is left alone, unhurt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["GIL_825"], "board": ["VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "GIL_825", "health": 4}]
+  }
+ ],
+ "GIL_124": [
+  {
+   "kind": "tricky",
+   "title": "Mossy Horror and an Attack aura that dies with it",
+   "expect": "Raid Leader (2 Attack) is destroyed, but the Crocolisk has 3 Attack from it as the Battlecry checks, so it lives (2/3 again afterwards); the enemy Wisp dies, the Yeti lives.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["GIL_124"], "board": ["VAN_CS2_122", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_120", "atk": 2}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}]
+  }
+ ],
+ "GIL_117": [
+  {
+   "kind": "tricky",
+   "title": "Worgen Abomination hits every other damaged minion, friendly ones too",
+   "expect": "At the end of the turn the damaged friendly Crocolisk dies and the damaged enemy Yeti drops to 2; the undamaged Wisp is not hit.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["GIL_117", {"card": "VAN_CS2_120", "damage": 1}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "damage": 1}, "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 1, "zone": "board"}, "is": 2}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 2}, {"at": {"side": 1, "zone": "board", "index": 1}, "health": 1}]
+  }
+ ],
+ "GIL_620": [
+  {
+   "kind": "tricky",
+   "title": "Dollmaster Dorian: a minion drawn by a Battlecry comes as a 1/1 copy",
+   "expect": "Novice Engineer draws a Yeti; Dorian summons a 1/1 Yeti; the drawn Yeti stays in the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_015"], "board": ["GIL_620"], "deck": ["VAN_CS2_182", "VAN_CS2_182"]}, {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_182"}]
+  }
+ ],
+ "GIL_577": [
+  {
+   "kind": "tricky",
+   "title": "Rat Trap: Echo copies count as cards played",
+   "expect": "Phantom Militia, its Echo copy and a Wisp are three cards played: the enemy Rat Trap summons a 6/6 Doom Rat.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["GIL_207", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_05", "secrets": ["GIL_577"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 1}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "secret"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "GIL_577t"}]
+  }
+ ],
+ "GIL_648": [
+  {
+   "kind": "tricky",
+   "title": "Chief Inspector destroys Mirror Entity before it triggers",
+   "expect": "The Battlecry destroys both enemy Secrets first, so Mirror Entity never copies the Inspector.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["GIL_648"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "secrets": ["VAN_EX1_294", "VAN_EX1_289"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "secret"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "GIL_646": [
+  {
+   "kind": "tricky",
+   "title": "Two Clockwork Automatons: the Hero Power's damage is doubled twice",
+   "expect": "Fireblast deals 1 x 2 x 2 = 4 damage to the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "board": ["GIL_646", "GIL_646"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Clockwork Automaton with Auchenai Soulpriest: Lesser Heal deals 4",
+   "expect": "Lesser Heal's 2 is doubled to 4 and Auchenai turns it into damage: the enemy hero takes 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "board": ["GIL_646", "VAN_EX1_591"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "GIL_817": [
+  {
+   "kind": "tricky",
+   "title": "The Glass Knight gets its Divine Shield back when we heal",
+   "expect": "Moonfire pops the Knight's shield; Voodoo Doctor heals our hero, and the Knight gains Divine Shield again (it stays at 3 Health).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "damage": 5, "hand": ["VAN_CS2_008", "VAN_EX1_011"], "board": ["GIL_817"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "hero"}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "GIL_817", "health": 3, "has": "DIVINE_SHIELD"}, {"at": {"side": 0, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "GIL_190": [
+  {
+   "kind": "tricky",
+   "title": "Nightscale Matriarch and Circle of Healing",
+   "expect": "Circle heals the damaged Matriarch and the damaged Crocolisk: two 3/3 Whelps; the full-Health Yeti is not healed and gives none.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_621"], "board": [{"card": "GIL_190", "damage": 1}, {"card": "VAN_CS2_120", "damage": 1}, "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}]
+  }
+ ],
+ "GIL_813": [
+  {
+   "kind": "tricky",
+   "title": "Vivid Nightmare copies a buffed minion with 1 Health left",
+   "expect": "The 6/7 Yeti (4/5 with +2/+2) is copied with its buff: a 6/7 with 6 damage, so 1 Health.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["GIL_813"], "board": [{"card": "VAN_CS2_182", "enchantments": [{"atk": 2, "hp": 2}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_182", "atk": 6, "health": 1}]
+  }
+ ],
+ "GIL_598": [
+  {
+   "kind": "tricky",
+   "title": "Tess Greymane replays only the cards from another class",
+   "expect": "Mind Vision (Priest) copied a Fireball; Tess casts Mind Vision again (a second Fireball), but the neutral Wisp is not replayed.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_231", "VAN_CS2_003", "GIL_598"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "hand": ["VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "VAN_CS2_029"}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "GIL_510": [
+  {
+   "kind": "tricky",
+   "title": "Mistwraith grows from a card and from its Echo copy",
+   "expect": "Cheap Shot and its Echo copy are both Echo cards: Mistwraith gets +1/+1 twice (5/7); the Yeti takes 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["GIL_506"], "board": ["GIL_510"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "GIL_510", "atk": 5, "health": 7}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 1}]
+  }
+ ],
+ "GIL_547": [
+  {
+   "kind": "tricky",
+   "title": "Darius Crowley rushes a minion and grows",
+   "expect": "Darius attacks the enemy Wisp the turn he comes (Rush), kills it and gets +2/+2: 6/6 with 1 damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["GIL_547"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "GIL_547", "atk": 6, "health": 5}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "GIL_650": [
+  {
+   "kind": "tricky",
+   "title": "Houndmaster Shaw gives Rush to a minion played after it",
+   "expect": "The Yeti played after Shaw has Rush and attacks the enemy Wisp the same turn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["GIL_650", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_182", "health": 4}]
+  }
+ ],
+ "GIL_685": [
+  {
+   "kind": "tricky",
+   "title": "Paragon of Light with 3 Attack gets Taunt and Lifesteal",
+   "expect": "Abusive Sergeant gives the 2/5 Paragon +2 Attack: with 4 Attack it has Taunt and Lifesteal this turn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_188"], "board": ["GIL_685"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "GIL_685", "atk": 4, "has": "TAUNT"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "LIFESTEAL"}]
+  }
+ ],
+ "GIL_654": [
+  {
+   "kind": "tricky",
+   "title": "Warpath and its Echo copy wake Redband Wasp",
+   "expect": "The first Warpath damages the 1/3 Wasp: it has +3 Attack (4/2); the Echo copy hits again: 4/1. A new Echo copy waits in the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["GIL_654"], "board": ["GIL_155"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "GIL_155", "atk": 4, "health": 1}, {"count": {"side": 0, "zone": "hand"}, "is": 1}]
+  }
+ ],
+ "GIL_578": [
+  {
+   "kind": "tricky",
+   "title": "Countess Ashmore: one card that is both Rush and Lifesteal",
+   "expect": "Vicious Scalehide (Rush, Lifesteal) is drawn as the Rush card; no Lifesteal card is left; Loot Hoarder is drawn as the Deathrattle card: 2 cards drawn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["GIL_578"], "deck": ["GIL_143", "VAN_EX1_096", "VAN_CS2_231", "VAN_CS2_231"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"count": {"side": 0, "zone": "deck"}, "is": 2}]
+  }
+ ],
+ "GIL_571": [
+  {
+   "kind": "tricky",
+   "title": "Witching Hour brings back a Beast that died this game",
+   "expect": "Moonfire kills our Stonetusk Boar (a Beast); Witching Hour summons a new Boar.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008", "GIL_571"], "board": ["VAN_CS2_171"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_171"}]
+  }
+ ],
+ "GIL_805": [
+  {
+   "kind": "tricky",
+   "title": "Coffin Crasher pulls a Deathrattle minion from the hand",
+   "expect": "Fireball kills our Coffin Crasher; its Deathrattle summons the Leper Gnome from the hand (the Yeti stays there).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029", "VAN_EX1_029", "VAN_CS2_182"], "board": ["GIL_805"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_EX1_029"}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_182"}]
+  }
+ ],
+ "GIL_561": [
+  {
+   "kind": "tricky",
+   "title": "Blackwald Pixie refreshes a Hero Power already used",
+   "expect": "Fireblast, then Pixie refreshes it, then Fireblast again: the enemy hero takes 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["GIL_561"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "GIL_518": [
+  {
+   "kind": "tricky",
+   "title": "Wing Blast costs (1) after a friendly minion died",
+   "expect": "With 1 mana, Moonfire kills our own Wisp; now Wing Blast costs (1) and hits the Yeti for 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 1, "max_mana": 1, "hand": ["VAN_CS2_008", "GIL_518"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 1}]
+  }
+ ],
+ "GIL_198": [
+  {
+   "kind": "tricky",
+   "title": "Azalina Soulthief swaps our hand for a copy of theirs",
+   "expect": "Our two Wisps go; we get copies of the opponent's Fireball and Yeti; the opponent keeps theirs.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["GIL_198", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "hand": ["VAN_CS2_029", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_029"}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "VAN_CS2_182"}, {"count": {"side": 1, "zone": "hand"}, "is": 2}]
+  }
+ ],
+ "GIL_826": [
+  {
+   "kind": "tricky",
+   "title": "Baku the Mooneater: Start of Game upgrades the Hero Power",
+   "expect": "Start of Game happens before the first turn, so a scene can only show its result: a deck of only odd-Cost cards with Baku gives the Mage the upgraded Hero Power (Fireblast Rank 2) from turn 1. Play a real game to watch it.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "deck": ["GIL_826", "VAN_CS2_171", "VAN_EX1_277"]}, {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": []
+  }
+ ],
+ "GIL_692": [
+  {
+   "kind": "tricky",
+   "title": "Genn Greymane: Start of Game makes the Hero Power cost (1)",
+   "expect": "Start of Game happens before the first turn, so a scene only shows the deck: with only even-Cost cards and Genn in it, the starting Hero Power costs (1) for the whole game (a new Hero Power later is not cheaper). Play a real game to watch it.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "deck": ["GIL_692", "VAN_CS2_120", "VAN_CS2_182"]}, {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": []
+  }
+ ],
+ "GIL_549": [
+  {
+   "kind": "tricky",
+   "title": "Toki, Time-Tinker adds a Legendary from the past",
+   "expect": "A random Legendary minion of the Wild sets (or Sylvanas / Ragnaros) comes to the hand: one card.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["GIL_549"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "GIL_694": [
+  {
+   "kind": "tricky",
+   "title": "Prince Liam turns the 1-Cost cards of the deck into Legendaries",
+   "expect": "Leper Gnome and Argent Squire in the deck become random Legendary minions; Novice Engineer then draws one of them (no card is added or lost).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["GIL_694", "VAN_EX1_015"], "deck": ["VAN_EX1_029", "VAN_EX1_008"]}, {"hero": "HERO_01", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  }
+ ]
+}

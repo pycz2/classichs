@@ -1,0 +1,317 @@
+{
+ "BRM_019": [
+  {
+   "kind": "tricky",
+   "title": "Grim Patron survives Whirlwind and calls another",
+   "expect": "Whirlwind leaves the Patron at 2 Health: a new 3/3 Grim Patron comes to its right.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["BRM_019"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "health": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "BRM_019", "health": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Two Grim Patrons and Frothing Berserker with Whirlwind",
+   "expect": "Three minions take damage: each Patron calls a new one (five minions in all) and Frothing gets +3 (5 Attack).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["BRM_019", "BRM_019", "VAN_EX1_604"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}, {"at": {"side": 0, "zone": "board", "index": 4}, "card": "VAN_EX1_604", "atk": 5, "health": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Grim Patron killed by the damage calls nobody",
+   "expect": "The Patron has 1 Health left; Whirlwind kills it and no new Patron comes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": [{"card": "BRM_019", "damage": 2}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Grim Patron on a full board",
+   "expect": "Seven minions: the Patron survives Whirlwind but there is no room for another.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["BRM_019", "VAN_CS2_182", "VAN_CS2_182", "VAN_CS2_182", "VAN_CS2_182", "VAN_CS2_182", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "BRM_019", "health": 2}]
+  }
+ ],
+ "VAN_EX1_084": [
+  {
+   "kind": "tricky",
+   "title": "Grim Patron with Warsong Commander: the new Patron charges",
+   "expect": "Whirlwind makes a new Patron (3 Attack); Warsong gives it Charge and it hits the hero at once.",
+   "script": "scripts/warrior.lua#VAN_EX1_084",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["VAN_EX1_084", "BRM_019"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 2}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 1, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "BRM_006": [
+  {
+   "kind": "tricky",
+   "title": "Imp Gang Boss killed by the damage still calls an Imp",
+   "expect": "The Boss has 1 Health left; Whirlwind kills it, and its trigger still summons an Imp where it stood.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["VAN_EX1_400"], "board": [{"card": "BRM_006", "damage": 3}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "BRM_006t", "health": 1}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Whirlwind on Imp Gang Boss and Dragon Egg",
+   "expect": "Both survive and each makes its token: an Imp and a Black Whelp (they come after the damage and are unhurt).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["BRM_006", "BRM_022"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "BRM_006t", "health": 1}, {"at": {"side": 0, "zone": "board", "index": 3}, "card": "BRM_022t", "health": 1}]
+  }
+ ],
+ "BRM_005": [
+  {
+   "kind": "tricky",
+   "title": "Demonwrath spares the Demons: no Imp from the Boss",
+   "expect": "Demonwrath hits only non-Demons: the Yeti takes 2, Imp Gang Boss is untouched and calls no Imp.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "hand": ["BRM_005"], "board": ["BRM_006", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "health": 4}, {"at": {"side": 0, "zone": "board", "index": 1}, "health": 3}]
+  }
+ ],
+ "BRM_028": [
+  {
+   "kind": "tricky",
+   "title": "Emperor Thaurissan makes Fireball castable with 3 mana",
+   "expect": "At the end of our turn Thaurissan makes the cards in our hand cost (1) less; on our next turn (3 mana) Fireball costs (3).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_029"], "board": ["BRM_028"], "mana": 2, "max_mana": 2, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_04", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "end_turn"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 24}]
+  }
+ ],
+ "BRM_001": [
+  {
+   "kind": "tricky",
+   "title": "Solemn Vigil after two deaths costs (3)",
+   "expect": "Two Wisps die attacking the Ogre: Solemn Vigil costs (3) and is cast with exactly 3 mana, drawing two cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "hand": ["BRM_001"], "board": ["VAN_CS2_231", "VAN_CS2_231"], "mana": 3, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"count": {"side": 0, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "BRM_003": [
+  {
+   "kind": "tricky",
+   "title": "Dragon's Breath after Flamestrike counts the enemy deaths",
+   "expect": "Flamestrike kills four Wisps: Dragon's Breath costs (1) and is cast with the last mana.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_032", "BRM_003"], "mana": 8, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "BRM_016": [
+  {
+   "kind": "tricky",
+   "title": "Axe Flinger with Whirlwind and Wild Pyromancer",
+   "expect": "Axe Flinger takes damage twice (Whirlwind, then the Pyromancer): 2 damage to the enemy hero each time.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["VAN_EX1_400"], "board": ["BRM_016", "VAN_NEW1_020"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "BRM_016", "health": 3}]
+  }
+ ],
+ "BRM_015": [
+  {
+   "kind": "tricky",
+   "title": "Revenge at exactly 12 Health deals 3",
+   "expect": "Our hero has 12 Health: Revenge deals 3 to every minion; the Yetis are left at 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["BRM_015"], "board": ["VAN_CS2_182"], "damage": 18, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "health": 2}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Revenge at 13 Health deals 1",
+   "expect": "One Health more than 12: Revenge deals only 1.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["BRM_015"], "board": ["VAN_CS2_182"], "damage": 17, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "health": 4}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 4}]
+  }
+ ],
+ "BRM_018": [
+  {
+   "kind": "tricky",
+   "title": "Dragon Consort makes the next Dragon (2) cheaper",
+   "expect": "With 7 mana: Dragon Consort (5), then Hungry Dragon for (2); the opponent gets a random 1-Cost minion.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "hand": ["BRM_018", "BRM_026"], "mana": 7, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 1, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "BRM_020": [
+  {
+   "kind": "tricky",
+   "title": "Dragonkin Sorcerer grows before Inner Fire resolves",
+   "expect": "Targeted by Inner Fire, it gets +1/+1 first (4/6); then Inner Fire sets its Attack to 6: a 6/6.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "hand": ["VAN_CS1_129"], "board": ["BRM_020"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 6, "health": 6}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Dragonkin Sorcerer does not grow from an enemy spell",
+   "expect": "Our Moonfire on the enemy Sorcerer: only its owner's spells make it grow, so it just takes 1 (3/4).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "hand": ["VAN_CS2_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["BRM_020"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "atk": 3, "health": 4}]
+  }
+ ],
+ "BRM_004": [
+  {
+   "kind": "tricky",
+   "title": "Twilight Whelp gets +2 Health while a Dragon is in the hand",
+   "expect": "Hungry Dragon is still in the hand: the Whelp comes as a 2/3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "hand": ["BRM_004", "BRM_026"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "BRM_004", "atk": 2, "health": 3}]
+  }
+ ],
+ "BRM_027": [
+  {
+   "kind": "tricky",
+   "title": "Majordomo Executus: our hero becomes an 8 Health Ragnaros",
+   "expect": "Majordomo kills the Ogre and dies; our hero becomes Ragnaros the Firelord with 8 Health, and DIE, INSECT! hits the only enemy, the hero, for 8.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "board": [{"card": "BRM_027", "damage": 1}], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "hero_power"}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "card": "BRM_027h", "health": 8}, {"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 22}]
+  }
+ ],
+ "BRM_030": [
+  {
+   "kind": "tricky",
+   "title": "Nefarian against a Mage: two Mage spells",
+   "expect": "The opponent is a Mage: Nefarian adds two random Mage spells to our hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["BRM_030"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Nefarian against Ragnaros (no class): two Tail Swipes",
+   "expect": "The opponent's hero is Majordomo's Ragnaros, which has no class: Nefarian gives two Tail Swipes.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["BRM_030"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "BRM_027h", "hero_power": "BRM_027p", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "BRM_030t"}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "BRM_030t"}]
+  }
+ ],
+ "BRM_008": [
+  {
+   "kind": "tricky",
+   "title": "Dark Iron Skulker skips the damaged minion",
+   "expect": "2 damage to each undamaged enemy minion: the Wisp dies, the Ogre is at 5; the damaged Yeti is left alone.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "hand": ["BRM_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "damage": 1}, "VAN_CS2_231", "VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 2}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 4}, {"at": {"side": 1, "zone": "board", "index": 1}, "card": "VAN_CS2_200", "health": 5}]
+  }
+ ],
+ "BRM_002": [
+  {
+   "kind": "tricky",
+   "title": "Flamewaker after a spell: 2 more damage",
+   "expect": "Moonfire hits the hero for 1; after it Flamewaker deals 2 damage split among enemies, and the hero is the only one: 27.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_008"], "board": ["BRM_002"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Flamewaker and a countered spell",
+   "expect": "Our Moonfire is countered by Counterspell: the spell never resolves, so Flamewaker's 'after you cast a spell' does not fire; the enemy hero is untouched.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_008"], "board": ["BRM_002"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "secrets": ["VAN_EX1_287"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 30}, {"count": {"side": 1, "zone": "secret"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "BRM_013": [
+  {
+   "kind": "tricky",
+   "title": "Quick Shot as the last card draws",
+   "expect": "Quick Shot is the only card in hand: 3 damage, then a card is drawn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "hand": ["BRM_013"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}, {"count": {"side": 0, "zone": "hand"}, "is": 1}]
+  }
+ ],
+ "BRM_014": [
+  {
+   "kind": "tricky",
+   "title": "Core Rager with an empty hand",
+   "expect": "Core Rager is the last card: when it is played the hand is empty, so it becomes 7/7.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "hand": ["BRM_014"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "BRM_014", "atk": 7, "health": 7}]
+  }
+ ],
+ "BRM_011": [
+  {
+   "kind": "tricky",
+   "title": "Lava Shock unlocks the Overloaded crystals for this turn",
+   "expect": "Two mana open and three locked: Lava Shock spends the two, unlocks three, and Frostbolt is cast with them.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "hand": ["BRM_011", "VAN_CS2_024"], "mana": 2, "max_mana": 5, "overload_locked": 3, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 25, "has": "FROZEN"}]
+  }
+ ],
+ "BRM_017": [
+  {
+   "kind": "tricky",
+   "title": "Resurrect brings back the only friendly minion that died",
+   "expect": "The Yeti dies attacking the Ogre; Resurrect summons a fresh Yeti.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "hand": ["BRM_017"], "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 5}]
+  }
+ ],
+ "BRM_007": [
+  {
+   "kind": "tricky",
+   "title": "Gang Up shuffles three copies of an enemy minion into our deck",
+   "expect": "Gang Up on the enemy Ogre: three Ogres go into our deck (6 cards); the Ogre stays on the board.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "hand": ["BRM_007"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 6}, {"count": {"side": 1, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "BRM_031": [
+  {
+   "kind": "tricky",
+   "title": "Chromaggus copies every draw",
+   "expect": "Arcane Intellect draws two cards and Chromaggus adds a copy of each: four cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "hand": ["VAN_CS2_023"], "board": ["BRM_031"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_04", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 4}]
+  }
+ ],
+ "BRM_029": [
+  {
+   "kind": "tricky",
+   "title": "Rend Blackhand destroys Cairne while a Dragon is in the hand",
+   "expect": "Holding Hungry Dragon, Rend destroys the enemy Cairne; Cairne's Deathrattle still leaves Baine.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["BRM_029", "BRM_026"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_EX1_110"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_EX1_110t"}]
+  }
+ ],
+ "BRM_024": [
+  {
+   "kind": "tricky",
+   "title": "Drakonid Crusher against an enemy at exactly 15",
+   "expect": "The enemy hero has 15 Health: the Crusher comes as a 9/9.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["BRM_024"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "damage": 15, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "BRM_024", "atk": 9, "health": 9}]
+  }
+ ],
+ "BRM_034": [
+  {
+   "kind": "tricky",
+   "title": "Blackwing Corruptor shoots only while a Dragon is in the hand",
+   "expect": "Holding Hungry Dragon, the Corruptor deals 3 to the enemy Raptor.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "hand": ["BRM_034", "BRM_026"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"], "mana": 10, "max_mana": 10}, {"hero": "HERO_08", "board": ["VAN_CS2_172"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ]
+}

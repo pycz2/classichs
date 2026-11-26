@@ -142,7 +142,7 @@ impl Engine {
                     .collect();
                 json!({"ok": true, "packs": list})
             }
-            "data_hash" | "hooks" | "validate" | "draft" => {
+            "data_hash" | "hooks" | "validate" | "draft" | "check_scenario" => {
                 let rs = match self.ruleset(req) {
                     Ok(r) => r,
                     Err(e) => return e,
@@ -156,6 +156,11 @@ impl Engine {
                             ids.into_iter().map(|id| (id.clone(), crate::hooks::summary(rs.hooks(id)))).collect();
                         json!({"ok": true, "hooks": all})
                     }
+                    // why a scenario can't be built, without building it (the debug tools check thousands)
+                    "check_scenario" => match scenario::validate_in(rs, req.get("scenario").unwrap_or(&Value::Null)) {
+                        Ok(()) => json!({"ok": true}),
+                        Err(e) => err(format!("scenario: {e}")),
+                    },
                     "validate" => match Deck::from_value_in(rs, req.get("deck").unwrap_or(&Value::Null)) {
                         None => err("not a deck"),
                         Some(d) => {
