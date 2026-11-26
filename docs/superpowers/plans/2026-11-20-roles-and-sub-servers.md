@@ -104,6 +104,19 @@ the admin panel.
   sub-server it was sent to; that sub-server's admins see its reports, the super admin sees the reports of all
   sub-servers (with a sub-server filter).
 
+### Reports: the owner's additions (2026-11-26)
+
+- Limits: a screenshot up to 10 MB, a voice message up to 1 minute.
+- A report is a thread: the admin answers in it, the player can answer too; both see the whole thread. States: open,
+  resolved, rejected (the player sees open / closed and the answers). The admin can merge threads (duplicates; only the
+  admin sees the merge), delete a report and purge old reports (older than N days).
+- Notifications: the client shows a number on the "Report a problem" / "My reports" button = threads with updates not
+  seen yet; the admin panel shows the count of new reports and of player answers not seen yet.
+- A comfortable admin page: list with state, last activity, unread mark; the thread with pictures, voice, context,
+  replays; answer box; resolve / reject / merge / delete.
+- Export one report too: a zip (report.md, report.json, the files, the replays) and "copy for an agent" (Markdown with
+  everything an agent needs to reproduce and fix it), besides the export of many.
+
 ## 4. Tournament chats (the owner, 2026-11-20; moved here from the 0.73.0 plan: in 0.74.0)
 
 - A chat in the tournaments list and a chat inside each tournament: every player there can write, everyone sees the
