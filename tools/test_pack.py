@@ -1181,6 +1181,12 @@ class Eras(unittest.TestCase):
         self.assertEqual(texts["ru"]["text"], "Каждый раз, когда вы призываете зверя на поле боя, вы берете карту.")
         self.assertEqual(self.card("6024", "VAN_CS2_237")[0]["cost"], 2)
 
+    # --- the versions of The Boomsday Project's time (25770, 26996, 27358, 27405) ---
+
+    # --- the versions of Rastakhan's Rumble's time (27845, 28116, 28329, 28855, 29349) ---
+
+    # --- the versions of Rise of Shadows' time (29933, 30103, 30795, 31022, 31268, 31761) ---
+
 
 class TestDistribution(unittest.TestCase):
     """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
