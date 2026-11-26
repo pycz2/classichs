@@ -680,6 +680,8 @@ textarea.mono { font-size: 12px; resize: vertical; word-break: break-all; }
 /* roles.js and audit.js */
 .perm-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
 .perm-groups fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px 8px; margin: 0; display: flex; flex-direction: column; gap: 3px; }
+.perm-groups label.check { flex-direction: row; align-items: center; gap: 6px; font-weight: 400; }
+.perm-groups input[type=checkbox] { width: auto; margin: 0; }
 .perm-groups legend { font-weight: 650; font-size: 12.5px; padding: 0 4px; }
 .perm-list { color: var(--text-2); }
 .audit-val { font-size: 12px; background: var(--surface-3); border-radius: 4px; padding: 1px 5px; word-break: break-word; }
