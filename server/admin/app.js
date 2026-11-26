@@ -169,7 +169,8 @@ function App () {
     api('me').then((m) => { setCsrf(m.csrf); setMe(m) }, () => setMe(null))
   }, [])
   if (me === undefined) return html`<div class="boot"><span class="logo pulse">◆</span></div>`
-  if (!me) return html`<${Login} onIn=${(m) => { setCsrf(m.csrf); setMe(m) }} />`
+  // (the login's answer has no permissions: then /me)
+  if (!me) return html`<${Login} onIn=${(m) => { setCsrf(m.csrf); api('me').then(setMe, () => setMe(null)) }} />`
   const logout = async () => {
     try { await api('logout', { method: 'POST' }) } catch (e) { toast(e.message, 'err') }
     setCsrf('')
