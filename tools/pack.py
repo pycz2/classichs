@@ -1299,23 +1299,30 @@ def version_periods(fm, vlist):
     … or None}) and the Arena of the period in force for most of its life (its date to the day before the next
     version's: of the recipe or of the game's versions, formats.json `versions`; the last one's to `until`), counting
     the days of the periods that hold the same."""
-    ps = fm["periods"]
+    return most_of_life(fm["periods"], fm["until"], fm.get("versions", {}), vlist, "formats.json",
+                        lambda p: {"standard": p["standard"], "wild": p["wild"]}, lambda p: p["arena"])
+
+
+def most_of_life(ps, until, game_versions, vlist, where, *vals):
+    """{version id: (val(period) for each of vals)}: the value of the periods (each {from, …}, to the next one's; the
+    last to `until`) that holds for most of the version's life (its date to the day before the next version's: of
+    vlist or of the game's versions {id: date}), counting the days of the periods that give the same."""
     day = date.fromisoformat
-    ends = [day(p["from"]) for p in ps[1:]] + [day(fm["until"]) + timedelta(days=1)]
-    starts = sorted({day(v["date"]) for v in vlist} | {day(d) for d in fm.get("versions", {}).values()})
+    ends = [day(p["from"]) for p in ps[1:]] + [day(until) + timedelta(days=1)]
+    starts = sorted({day(v["date"]) for v in vlist} | {day(d) for d in game_versions.values()})
     out = {}
     for v in vlist:
         start = day(v["date"])
         end = next((d for d in starts if d > start), ends[-1])
-        days = ({}, {})
+        days = tuple({} for _ in vals)
         for p, p_end in zip(ps, ends):
             n = (min(end, p_end) - max(start, day(p["from"]))).days
-            for d, val in zip(days, ({"standard": p["standard"], "wild": p["wild"]}, p["arena"])):
+            for d, val in zip(days, vals):
                 if n > 0:
-                    key = json.dumps(val, sort_keys=True)
+                    key = json.dumps(val(p), sort_keys=True)
                     d[key] = d.get(key, 0) + n
         if not days[0]:
-            raise PackError(f"formats.json: no period in the life of version {v['id']} ({v['date']})")
+            raise PackError(f"{where}: no period in the life of version {v['id']} ({v['date']})")
         out[v["id"]] = tuple(json.loads(max(d.items(), key=lambda x: x[1])[0]) for d in days)
     return out
 
@@ -1336,6 +1343,37 @@ def apply_formats(vf, formats, arena, v, where):
         rules["modes"]["arena"].update(sets=arena["sets"], banned=[c for c in arena["banned"] if c in cards],
                                        extra=[c for c in arena["extra"] if c in cards])
     vf["rules.json"] = pretty(rules)
+
+
+def ranked_periods(rk, game_versions, vlist):
+    """{version id: (ranked, arena)} by packs/eras/ranked.json: the ladder (rules.json `ranked`) and the Arena run
+    limits ({wins, losses}) of the periods in force for most of the version's life (most_of_life; the two
+    lists of periods each by its own dates)."""
+    ranked = most_of_life(rk["periods"], rk["until"], game_versions, vlist, "ranked.json", lambda p: p["ranked"])
+    arena = most_of_life(rk["arena"], rk["until"], game_versions, vlist, "ranked.json",
+                         lambda p: {"wins": p["wins"], "losses": p["losses"]})
+    return {vid: ranked[vid] + arena[vid] for vid in ranked}
+
+
+def apply_ranked(vf, ranked, arena, names, vid):
+    """A version's rules.json with its ladder (`ranked`, each rank keeping its base pack's emblem) and Arena run
+    limits (`modes.arena` wins, losses), and its locales with the names of its ranks (ranked.json `names`: a name
+    or [[from build, name]…], the version id being its build; languages without names keep the base's)."""
+    rules = load_json(vf["rules.json"], "rules.json")
+    emblems = {s["rank"]: s.get("emblem") for s in (rules.get("ranked") or {}).get("ranks", [])}
+    rules["ranked"] = {**ranked, "ranks": [{**s, "emblem": emblems.get(s["rank"])} for s in ranked["ranks"]]}
+    if "arena" in rules["modes"]:
+        rules["modes"]["arena"].update(wins=arena["wins"], losses=arena["losses"])
+    vf["rules.json"] = pretty(rules)
+    have = {str(s["rank"]) for s in ranked["ranks"]} | {"0"}
+    for lang, ns in names.items():
+        p = f"locales/{lang}.json"
+        if p not in vf:
+            continue
+        loc = load_json(vf[p], p)
+        loc["ranks"] = {k: n if isinstance(n, str) else [t for b, t in n if b <= int(vid)][-1]
+                        for k, n in ns.items() if k in have}
+        vf[p] = pretty(loc)
 
 
 def add_version_decks(vf, folder, where):
@@ -1377,7 +1415,7 @@ def build_versions(src):
     files = {}
     for f in sorted(src.rglob("*")):  # the source's own files: manifest.json, ui/ …
         rel = f.relative_to(src).as_posix()
-        if f.is_file() and not f.name.startswith(".") and rel not in ("recipe.json", "formats.json", "README.md") \
+        if f.is_file() and not f.name.startswith(".") and rel not in ("recipe.json", "formats.json", "ranked.json", "README.md") \
                 and not rel.startswith("versions/"):
             files[rel] = f.read_bytes()
     man = load_json(files.pop("manifest.json"), "manifest.json")
@@ -1397,12 +1435,18 @@ def build_versions(src):
             man.setdefault("set_marks", {}).setdefault(k, mark)
     entries, fx = [], set()
     fm = src / "formats.json"
-    periods = version_periods(load_json(fm.read_bytes(), str(fm)), vlist) if fm.exists() else {}
+    fmj = load_json(fm.read_bytes(), str(fm)) if fm.exists() else {}
+    periods = version_periods(fmj, vlist) if fmj else {}
+    rk = src / "ranked.json"
+    rkj = load_json(rk.read_bytes(), str(rk)) if rk.exists() else {}
+    ladders = ranked_periods(rkj, fmj.get("versions", {}), vlist) if rkj else {}
     for v in vlist:
         vid, patch = v["id"], patches[v["id"]]
         vf = apply_version_patch(dict(bases[patch["base"]]), patch, f"versions/{vid}/patch.json")
         if periods:
             apply_formats(vf, *periods[vid], v, f"{src.name}/recipe.json: version {vid}")
+        if ladders:
+            apply_ranked(vf, *ladders[vid], rkj["names"], vid)
         add_version_decks(vf, src / "versions" / vid / "decks", f"versions/{vid}/decks")
         for f in sorted((src / "versions" / vid / "scripts").glob("*.lua")):
             vf[f"scripts/version/{f.name}"] = f.read_bytes()

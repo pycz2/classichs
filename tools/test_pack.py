@@ -1192,6 +1192,15 @@ def own_rules(p):
     return pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/") and p != "scripts/version/ships_cannon.lua"
 
 
+def no_ranks(p, d):
+    """A file of a version without ranked.json's rank names (locales `ranks`)."""
+    if not p.startswith("locales/"):
+        return d
+    loc = json.loads(d)
+    loc.pop("ranks", None)
+    return loc
+
+
 class Eras(unittest.TestCase):
     """packs/eras: Hearthstone 2014–2019 in one pack, a version per game version (packs/eras/README.md)."""
 
@@ -1224,8 +1233,9 @@ class Eras(unittest.TestCase):
         """The files version `vid` has beyond its base pack's (whose files it has unchanged)."""
         built, _ = pack.build(pack.REPO / "packs" / base)
         mine = lambda p: pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")  # noqa: E731
-        view = {p: d for p, d in pack.version_view(self.files, vid).items() if mine(p)}  # (rules.json: formats.json's
-        base = {p: d for p, d in built.items() if mine(p)}  # formats and Arena; decks/: the version's own decks too)
+        view = {p: no_ranks(p, d) for p, d in pack.version_view(self.files, vid).items() if mine(p)}  # (rules.json:
+        base = {p: no_ranks(p, d) for p, d in built.items() if mine(p)}  # formats.json's formats and Arena, ranked.json's
+        # ladder; decks/: the version's own decks too; locales: ranked.json's rank names)
         self.assertEqual({p: d for p, d in view.items() if p in base}, base)
         return sorted(set(view) - set(base))
 
@@ -1233,13 +1243,14 @@ class Eras(unittest.TestCase):
         """6024 is the naxx pack with the formats and Arena of its time (formats.json) and the decks of its time."""
         naxx, _ = pack.build(pack.REPO / "packs/naxx")
         view = pack.version_view(self.files, "6024")
-        own = lambda files: {p: d for p, d in files.items() if pack.is_version_file(p)  # noqa: E731
+        own = lambda files: {p: no_ranks(p, d) for p, d in files.items() if pack.is_version_file(p)  # noqa: E731
                              and p != "rules.json" and not p.startswith("decks/") and not p.startswith("scripts/version/")}
         self.assertEqual(own(view), own(naxx))
         rules, naxx_rules = json.loads(view["rules.json"]), json.loads(naxx["rules.json"])
         self.assertEqual(rules.pop("formats"), {"standard": {"sets": ["VANILLA", "NAXX"]}})
         arena = rules["modes"]["arena"]
         self.assertEqual((arena.pop("banned"), arena.pop("extra")), (["VAN_EX1_112", "VAN_PRO_001"], []))
+        rules.pop("ranked"), naxx_rules.pop("ranked")  # (ranked.json's: test_the_ladder_of_each_version)
         self.assertEqual(rules, naxx_rules)
         self.assertTrue(set(p for p in naxx if p.startswith("decks/")) < set(p for p in view if p.startswith("decks/")))
         # with Swipe and Explosive Shot of before 9166 (test_8311_…)
@@ -1275,6 +1286,43 @@ class Eras(unittest.TestCase):
         # a recipe of only some versions: each still ends where the next game version came
         some = pack.version_periods(fm, [{"id": "6024", "date": "2014-07-22"}, {"id": "6485", "date": "2014-09-22"}])
         self.assertEqual(some["6485"], every["6485"])
+    def test_the_ladder_of_each_version(self):
+        """ranked.json gives each version the ladder, Arena run limits and rank names of most of its life."""
+        def of(vid):
+            v = pack.version_view(self.files, vid)
+            return (json.loads(v["rules.json"]), json.loads(v["locales/en.json"])["ranks"],
+                    json.loads(v["locales/ru.json"])["ranks"], json.loads(v["locales/de.json"]).get("ranks"))
+        rules, en, ru, de = of("6024")
+        r = rules["ranked"]
+        self.assertEqual([s["rank"] for s in r["ranks"]], list(range(25, 0, -1)))
+        self.assertEqual([s["stars"] for s in r["ranks"]], [2] * 5 + [3] * 5 + [4] * 5 + [5] * 10)
+        self.assertEqual([s["rank"] for s in r["ranks"] if s.get("floor")], [20])
+        self.assertEqual([s["rank"] for s in r["ranks"] if s.get("loses_stars") is False], [25, 24, 23, 22, 21])
+        self.assertEqual([s["rank"] for s in r["ranks"] if s.get("streak_bonus")], list(range(25, 5, -1)))
+        self.assertEqual(r["ranks"][0]["emblem"], {"card": "VAN_EX1_009"})  # the base pack's emblems stay
+        self.assertEqual(r["season"]["reset"], {"to_rank": 25, "stars_per_rank_above": 1, "legend_counts_as": 0, "basis": "end"})
+        self.assertEqual((rules["modes"]["arena"]["wins"], rules["modes"]["arena"]["losses"]), (12, 3))
+        self.assertEqual((en["25"], en["0"], ru["9"], ru["18"], ru["7"]), ("Angry Chicken", "Legend", "Рыцарь Длани",
+                                                                          "Ученик чародея", "Служитель солнца"))
+        self.assertNotIn("50", en)
+        self.assertEqual((de["25"], de.get("50")), ("Wütendes Huhn", None))  # other languages: the base pack's names
+        self.assertEqual(json.loads(pack.version_view(self.files, "4944")["locales/ru.json"])["ranks"]["9"], "Рыцарь Авангарда")
+        # 17720 (2017-02-28): floors at 20, 15, 10, 5; 9786 (2015-08-18): the reset counts the season's best rank
+        floors = lambda vid: [s["rank"] for s in of(vid)[0]["ranked"]["ranks"] if s.get("floor")]  # noqa: E731
+        self.assertEqual(floors("17720"), [20, 15, 10, 5])
+        self.assertEqual(of("9786")[0]["ranked"]["season"]["reset"]["basis"], "best")
+        self.assertEqual(of("8311")[0]["ranked"]["season"]["reset"]["basis"], "end")
+        # 23576 (March 2018): 5 stars a rank, the reset 4 ranks down
+        self.assertEqual({s["stars"] for s in of("23576")[0]["ranked"]["ranks"]}, {5})
+        # 31761 (2019): the New Player Ranks 50…26, 3 stars at 50–16, the 2019 reset
+        rules, en, ru, _ = of("31761")
+        r = rules["ranked"]
+        self.assertEqual((r["start"], len(r["ranks"]), r["ranks"][0]["stars"], r["ranks"][-1]["stars"]), ({"rank": 50, "stars": 0}, 50, 3, 5))
+        self.assertEqual(r["season"]["reset"], {"ranks_down": 4, "legend_to": 4, "lowest": 25, "career_floor": {"reached": 15, "rank": 20},
+                                                "shed_excess_stars": True, "basis": "best"})
+        self.assertEqual((en["50"], ru["7"], ru.get("50")), ("Brave Rooster", "Служительница солнца", None))
+        self.assertIsNone(r["ranks"][0]["emblem"])
+
     def test_4944_unleash_the_hounds_costs_2_and_the_launch_texts(self):
         self.assertEqual(self.card("4944", "VAN_EX1_538")[0]["cost"], 2)
         self.assertEqual(self.card("5314", "VAN_EX1_538")[0]["cost"], 3)
@@ -1442,7 +1490,7 @@ class Eras(unittest.TestCase):
         base = {p: d for p, d in gvg.items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
         # its only own file: Cogmaster loses its Mech bonus after a swap until 7835 (rust/engine/tests/eras.rs)
         self.assertEqual(sorted(set(view) - set(base)), ["scripts/version/cogmaster.lua", "scripts/version/ships_cannon.lua", "scripts/version/swipe_explosive_shot.lua"])
-        self.assertEqual({p: d for p, d in view.items() if p in base}, base)
+        self.assertEqual({p: no_ranks(p, d) for p, d in view.items() if p in base}, {p: no_ranks(p, d) for p, d in base.items()})
 
     def test_7628_nerfs_undertaker(self):
         texts = lambda vid: self.card(vid, "FP1_028")[1]  # noqa: E731
@@ -1473,7 +1521,7 @@ class Eras(unittest.TestCase):
         base = {p: d for p, d in brm.items() if pack.is_version_file(p) and p != "rules.json" and not p.startswith("decks/")}
         # its only own file: the main hit's triggers before the other hits until 9166 (rust/engine/tests/eras.rs)
         self.assertEqual(sorted(set(view) - set(base)), ["scripts/version/ships_cannon.lua", "scripts/version/swipe_explosive_shot.lua"])
-        self.assertEqual({p: d for p, d in view.items() if p in base}, base)
+        self.assertEqual({p: no_ranks(p, d) for p, d in view.items() if p in base}, {p: no_ranks(p, d) for p, d in base.items()})
 
     def test_9166_murloc_costs_0_and_the_texts_of_build_9166(self):
         self.assertEqual((self.card("8311", "PRO_001at")[0]["cost"], self.card("9166", "PRO_001at")[0]["cost"]), (1, 0))
@@ -1556,13 +1604,13 @@ class Eras(unittest.TestCase):
         """Version `vid` is packs/<name>'s cards, texts and scripts with `scripts` of its own (its rules.json adds the
         formats and Arena of its time, its decks those of its time)."""
         base, _ = pack.build(pack.REPO / "packs" / name)
-        own = lambda files: {p: d for p, d in files.items() if pack.is_version_file(p)  # noqa: E731
+        own = lambda files: {p: no_ranks(p, d) for p, d in files.items() if pack.is_version_file(p)  # noqa: E731
                              and p != "rules.json" and not p.startswith("decks/") and p not in scripts}
         view = pack.version_view(self.files, vid)
         self.assertEqual(sorted(p for p in view if p.startswith("scripts/version/")), sorted(scripts))
         rules, base_rules = json.loads(view["rules.json"]), json.loads(base["rules.json"])
         rules.pop("formats")
-        rules["modes"]["arena"] = base_rules["modes"].get("arena")
+        rules["modes"]["arena"], rules["ranked"] = base_rules["modes"].get("arena"), base_rules.get("ranked")
         return own(view) == own(base) and rules == base_rules
 
     def test_25770_is_the_boomsday_pack(self):
