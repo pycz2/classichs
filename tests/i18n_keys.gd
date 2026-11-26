@@ -58,6 +58,7 @@ static func collect() -> Array:
 	tables.append_array(ReplaysView.MODES.values())
 	tables.append_array(ReplaysView.TABS.map(func(t): return t[1]))
 	tables.append_array(ReplayView.CONTROLS.map(func(c): return c[2]))
+	tables.append_array(Versions.FIELDS.map(func(f): return f[1]))
 	for k in tables:
 		keys[k] = true
 	var out := keys.keys()

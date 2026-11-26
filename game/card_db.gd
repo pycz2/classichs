@@ -37,12 +37,59 @@ static func reset() -> void:
 	_cards = {}
 	_by_dbf = {}
 	_related = null
+	_others = {}
+
+
+static var _other: Pack  # begin(): the pack read instead of the active one
+static var _others := {}  # Pack -> its caches (_state()) while another pack is read
+static var _was: Array  # the active pack's caches during begin() … end()
+
+
+## The pack whose cards are read: the active one, or the one between begin() and end().
+static func pack() -> Pack:
+	return _other if _other else Packs.active()
+
+
+## Reads another pack's cards (a version of the active game: the version diff draws each card as in its version)
+## until end(): card(), CardText, CardLayout and the card pictures (Art) see that pack. Each pack keeps its own caches.
+static func begin(p: Pack) -> void:
+	assert(_other == null, "CardDb.begin twice")
+	_was = _state()
+	_other = p
+	_set_state(_others.get(p, [{}, {}, null, {}, {}, {}, {}, {}, []]))
+
+
+static func end() -> void:
+	_others[_other] = _state()
+	_other = null
+	_set_state(_was)
+
+
+## Drops the caches of a pack begin() read (a screen that compared versions closes).
+static func forget(p: Pack) -> void:
+	_others.erase(p)
+
+
+static func _state() -> Array:
+	return [_cards, _by_dbf, _related, CardLayout._data, CardLayout._fitted, Art._textures, Art._framing, Art._designs, Art._sets]
+
+
+static func _set_state(s: Array) -> void:
+	_cards = s[0]
+	_by_dbf = s[1]
+	_related = s[2]
+	CardLayout._data = s[3]
+	CardLayout._fitted = s[4]
+	Art._textures = s[5]
+	Art._framing = s[6]
+	Art._designs = s[7]
+	Art._sets = s[8]
 
 
 static func _ensure_loaded() -> void:
 	if not _cards.is_empty():
 		return
-	var p := Packs.active()
+	var p := pack()
 	if p == null:
 		push_error("no game pack (res://packs: tools/build_packs.sh)")
 		return
@@ -144,7 +191,7 @@ static func related(id: String) -> Array:
 
 static func _find_related() -> Dictionary:
 	var out := {}
-	var p := Packs.active()
+	var p := pack()
 	if p == null:
 		return out
 	var lib: Dictionary = _script_chunks(p, "scripts/lib.lua")[1]
