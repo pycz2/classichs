@@ -166,7 +166,7 @@ func test_effects_name_their_mechanics_and_a_card_renames_everywhere() -> void:
 	eq(p.rename_card(cid, "drawer"), "", "renamed")
 	eq(p.text("drawer", "ru").name, "Тест", "its texts")
 	eq(p.voice_line("drawer", "ru", "play"), "Я здесь!", "its lines")
-	eq(p.build().errors(), 0, "lines check clean")
+	eq(StudioProject.blocking(p.build()), 0, "lines check clean (the one-card deck is the only error)")
 	p.set_voice_line("drawer", "ru", "play", "")
 	eq(p.locales.ru.get("voice"), null, "a line removed leaves no empty section")
 	check(p.effects.has("drawer") and not p.effects.has(cid), "its effect")
