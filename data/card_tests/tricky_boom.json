@@ -1,0 +1,392 @@
+{
+ "BOT_548": [
+  {
+   "kind": "tricky",
+   "title": "Zilliax Magnetic onto Annoy-o-Tron",
+   "expect": "Zilliax merges into Annoy-o-Tron: a 4/4 with Divine Shield, Taunt, Lifesteal and Rush, one minion on the board.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["BOT_548"], "board": ["GVG_085"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "GVG_085", "atk": 4, "health": 4, "has": "LIFESTEAL"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "RUSH"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "DIVINE_SHIELD"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "TAUNT"}]
+  }
+ ],
+ "BOT_563": [
+  {
+   "kind": "tricky",
+   "title": "Wargear and Zilliax stacked on one Mech",
+   "expect": "Both Magnetic minions merge into the Spider Tank: 3/4 + 5/5 + 3/2 = an 11/11 with Zilliax's keywords.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["BOT_563", "BOT_548"], "board": ["GVG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "GVG_044", "atk": 11, "health": 11, "has": "TAUNT"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "LIFESTEAL"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "DIVINE_SHIELD"}]
+  }
+ ],
+ "BOT_912": [
+  {
+   "kind": "tricky",
+   "title": "Kangor's Endless Army brings a Mech back with its Magnetic upgrade",
+   "expect": "The Spider Tank with Zilliax on it is destroyed; next turn Kangor's Endless Army resurrects it as the 6/6 with Taunt and Divine Shield.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["BOT_548", "VAN_EX1_161", "BOT_912"], "board": ["GVG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "end_turn"}, {"do": "end_turn"}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "GVG_044", "atk": 6, "health": 6, "has": "DIVINE_SHIELD"}, {"at": {"side": 0, "zone": "board", "index": 0}, "has": "TAUNT"}]
+  }
+ ],
+ "BOT_107": [
+  {
+   "kind": "tricky",
+   "title": "Missile Launcher magnetized: the Mech fires at the end of the turn",
+   "expect": "Missile Launcher merges into the Spider Tank (7/8); at the end of the turn it deals 1 damage to all other characters, not to itself.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["BOT_107"], "board": ["GVG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "GVG_044", "atk": 7, "health": 8}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_120", "health": 2}, {"at": {"side": 0, "zone": "hero"}, "health": 29}, {"at": {"side": 1, "zone": "hero"}, "health": 29}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Missile Launcher at the end of the turn hits both sides",
+   "expect": "At the end of your turn it deals 1 damage to every other character: both Wisps die, the heroes take 1.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["BOT_107", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "hero"}, "health": 29}, {"at": {"side": 1, "zone": "hero"}, "health": 29}]
+  }
+ ],
+ "BOT_312": [
+  {
+   "kind": "tricky",
+   "title": "Replicating Menace magnetized, with Necromechanic",
+   "expect": "The Spider Tank gets the Menace's Deathrattle; when it dies the Deathrattle runs twice: six Microbots.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["BOT_312", "VAN_CS2_029"], "board": ["BOT_039", "GVG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "BOT_312t"}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "BOT_312t"}]
+  }
+ ],
+ "BOT_424": [
+  {
+   "kind": "tricky",
+   "title": "Mecha'thun: a weapon and a Secret don't stop it",
+   "expect": "Mecha'thun trades with the enemy one; your deck, hand and board are empty (the weapon and Counterspell don't count): the enemy hero is destroyed.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "board": ["BOT_424"], "weapon": "VAN_CS2_106", "secrets": ["VAN_EX1_287"], "deck": []}, {"hero": "HERO_08", "board": ["BOT_424"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "has": "TO_DESTROY"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Mecha'thun with a card left in the hand",
+   "expect": "One card is still in the hand when Mecha'thun dies: nothing happens to the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_231"], "board": ["BOT_424"], "deck": []}, {"hero": "HERO_08", "board": ["BOT_424"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 30, "not": "TO_DESTROY"}]
+  }
+ ],
+ "BOT_238": [
+  {
+   "kind": "tricky",
+   "title": "Dr. Boom, Mad Genius: a Mech played after him attacks at once",
+   "expect": "Mecharoo has Rush, trades with the Wisp, and its Jo-E Bot (a Mech) has Rush too.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["BOT_238", "BOT_445"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "BOT_445t", "has": "RUSH"}]
+  }
+ ],
+ "BOT_242": [
+  {
+   "kind": "tricky",
+   "title": "Myra's Unstable Element with more cards than the hand holds",
+   "expect": "All 12 cards are drawn: the hand fills to 10, the other 2 burn; the deck is empty and there is no Fatigue.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["BOT_242"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 10}, {"count": {"side": 0, "zone": "deck"}, "is": 0}, {"at": {"side": 0, "zone": "hero"}, "health": 30}]
+  }
+ ],
+ "BOT_411": [
+  {
+   "kind": "tricky",
+   "title": "Electra Stormsurge and Fireball",
+   "expect": "The next spell casts twice: Fireball hits the enemy hero for 6 two times.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["BOT_411", "VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 18}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Electra Stormsurge and Research Project",
+   "expect": "Research Project casts twice: each player draws 4 cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["BOT_411", "BOT_600"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 4}, {"count": {"side": 1, "zone": "hand"}, "is": 4}, {"count": {"side": 0, "zone": "deck"}, "is": 2}, {"count": {"side": 1, "zone": "deck"}, "is": 2}]
+  }
+ ],
+ "BOT_429": [
+  {
+   "kind": "tricky",
+   "title": "Flark's Boom-Zooka: three Yetis against an Ogre",
+   "expect": "The Yetis come from the deck and attack: the Ogre dies on the second; all three Yetis die after.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["BOT_429"], "deck": ["VAN_CS2_182", "VAN_CS2_182", "VAN_CS2_182"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "deck"}, "is": 0}]
+  }
+ ],
+ "BOT_087": [
+  {
+   "kind": "tricky",
+   "title": "Academic Espionage, then Myra's Unstable Element",
+   "expect": "Ten Mage cards are shuffled in; Myra's draws all 12: 10 in the hand, 2 burn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["BOT_087", "BOT_242"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 10}, {"count": {"side": 0, "zone": "deck"}, "is": 0}]
+  }
+ ],
+ "BOT_236": [
+  {
+   "kind": "tricky",
+   "title": "Crystalsmith Kangor doubles Healing Touch",
+   "expect": "Healing Touch restores 16 instead of 8: the hero goes from 10 to 26 Health.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_007"], "board": ["BOT_236"], "damage": 20, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 26}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Crystalsmith Kangor doubles his own Lifesteal",
+   "expect": "Kangor hits the enemy hero for 1 and heals your hero for 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "board": ["BOT_236"], "damage": 10, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 29}, {"at": {"side": 0, "zone": "hero"}, "health": 22}]
+  }
+ ],
+ "BOT_216": [
+  {
+   "kind": "tricky",
+   "title": "Omega Medic with Crystalsmith Kangor",
+   "expect": "At 10 Mana Crystals Omega Medic restores 10, doubled to 20: the hero goes from 5 to 25.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["BOT_216"], "board": ["BOT_236"], "damage": 25, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 25}]
+  }
+ ],
+ "BOT_039": [
+  {
+   "kind": "tricky",
+   "title": "Necromechanic and Necrium Vial",
+   "expect": "Necrium Vial triggers Harvest Golem's Deathrattle twice and Necromechanic doubles each: four Damaged Golems.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["BOT_508"], "board": ["BOT_039", "VAN_EX1_556"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 6}]
+  }
+ ],
+ "BOT_286": [
+  {
+   "kind": "tricky",
+   "title": "Necrium Blade breaks with Necromechanic",
+   "expect": "The last Durability goes: the weapon's Deathrattle runs twice, each time triggering Harvest Golem's, which Necromechanic doubles too: four Damaged Golems.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "board": ["BOT_039", "VAN_EX1_556"], "weapon": {"card": "BOT_286", "durability": 1}, "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}, {"count": {"side": 0, "zone": "board"}, "is": 6}, {"at": {"side": 0, "zone": "weapon"}, "card": ""}]
+  }
+ ],
+ "BOT_038": [
+  {
+   "kind": "tricky",
+   "title": "Fireworks Tech on Mechanical Whelp with Necromechanic",
+   "expect": "The Whelp gets +1/+1 and its Deathrattle runs twice without it dying: two 7/7 Mechanical Dragons.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["BOT_038"], "board": ["BOT_039", "BOT_066"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}, "pos": 2}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "BOT_066", "atk": 3, "health": 3}]
+  }
+ ],
+ "BOT_296": [
+  {
+   "kind": "tricky",
+   "title": "Omega Defender at 10 Mana Crystals",
+   "expect": "With 10 Mana Crystals it gains +10 Attack: a 12/6 Taunt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["BOT_296"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "BOT_296", "atk": 12, "health": 6}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Omega Defender at 9 Mana Crystals",
+   "expect": "Only 9 Mana Crystals: no bonus, a plain 2/6.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 9, "max_mana": 9, "hand": ["BOT_296"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "BOT_296", "atk": 2, "health": 6}]
+  }
+ ],
+ "BOT_536": [
+  {
+   "kind": "tricky",
+   "title": "Omega Agent at 10 Mana Crystals",
+   "expect": "It summons 2 copies of itself: three 4/5 Omega Agents.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["BOT_536"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "BOT_536"}]
+  }
+ ],
+ "BOT_299": [
+  {
+   "kind": "tricky",
+   "title": "Omega Assembly at 10 Mana Crystals keeps all three",
+   "expect": "No choice is offered: all three Mechs come to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["BOT_299"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 3}]
+  }
+ ],
+ "BOT_042": [
+  {
+   "kind": "tricky",
+   "title": "Weapons Project replaces your weapon and arms the opponent",
+   "expect": "Both players equip a 2/3 Gearblade (your Axe is destroyed) and gain 6 Armor.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["BOT_042"], "weapon": "VAN_CS2_106", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "weapon"}, "card": "BOT_042t", "atk": 2}, {"at": {"side": 1, "zone": "weapon"}, "card": "BOT_042t", "atk": 2}]
+  }
+ ],
+ "BOT_600": [
+  {
+   "kind": "tricky",
+   "title": "Research Project with the opponent's hand nearly full",
+   "expect": "You draw 2; the opponent holds 9, draws 2, and the second burns.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["BOT_600"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "hand": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"count": {"side": 1, "zone": "hand"}, "is": 10}, {"count": {"side": 1, "zone": "deck"}, "is": 2}]
+  }
+ ],
+ "BOT_280": [
+  {
+   "kind": "tricky",
+   "title": "Holomancer copies the minion the opponent plays",
+   "expect": "The opponent plays a Yeti; you get a 1/1 Yeti.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "board": ["BOT_280"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "play", "card": {"side": 1, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_182", "atk": 1, "health": 1}]
+  }
+ ],
+ "BOT_555": [
+  {
+   "kind": "tricky",
+   "title": "Harbinger Celestia becomes the minion the opponent plays",
+   "expect": "The opponent plays a Yeti; Celestia turns into a Yeti.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "board": ["BOT_555"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "play", "card": {"side": 1, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "atk": 4, "health": 5}]
+  }
+ ],
+ "BOT_258": [
+  {
+   "kind": "tricky",
+   "title": "Zerek, Master Cloner comes back after a spell on him",
+   "expect": "Power Word: Shield was cast on Zerek, so when the two Fireballs kill him he is resummoned as a fresh 5/5.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_004", "VAN_CS2_029", "VAN_CS2_029"], "board": ["BOT_258"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "BOT_258", "atk": 5, "health": 5}]
+  }
+ ],
+ "BOT_558": [
+  {
+   "kind": "tricky",
+   "title": "Test Subject returns the spell that killed it",
+   "expect": "Power Word: Shield (it draws a card) and the killing Fireball both come back to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_004", "VAN_CS2_029"], "board": ["BOT_558"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 3}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "VAN_CS2_004"}, {"at": {"side": 0, "zone": "hand", "index": 2}, "card": "VAN_CS2_029"}]
+  }
+ ],
+ "BOT_517": [
+  {
+   "kind": "tricky",
+   "title": "Topsy Turvy on a 0-Attack minion kills it",
+   "expect": "Shieldbearer's 0 Attack becomes its Health: it dies.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["BOT_517"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_EX1_405"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "BOT_234": [
+  {
+   "kind": "tricky",
+   "title": "Shrink Ray under Stormwind Champion",
+   "expect": "All minions become 1/1, but the Champion's aura still adds +1/+1: your Yeti is a 2/2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["BOT_234"], "board": ["VAN_CS2_222", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_222", "atk": 1, "health": 1}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_182", "atk": 2, "health": 2}, {"at": {"side": 1, "zone": "board", "index": 0}, "atk": 1, "health": 1}]
+  }
+ ],
+ "BOT_283": [
+  {
+   "kind": "tricky",
+   "title": "Pogo-Hopper: the third one",
+   "expect": "Two Pogo-Hoppers were played before: the third gains +4/+4 and is a 5/5.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["BOT_283", "BOT_283", "BOT_283"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 0}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 1, "health": 1}, {"at": {"side": 0, "zone": "board", "index": 1}, "atk": 3, "health": 3}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "BOT_283", "atk": 5, "health": 5}]
+  }
+ ],
+ "BOT_224": [
+  {
+   "kind": "tricky",
+   "title": "Doubling Imp with Brann Bronzebeard",
+   "expect": "The Battlecry runs twice: two copies, three Doubling Imps.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["BOT_224"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}]
+  }
+ ],
+ "BOT_559": [
+  {
+   "kind": "tricky",
+   "title": "Augmented Elekk and Lab Recruiter",
+   "expect": "Lab Recruiter shuffles 3 copies of the Yeti; Elekk adds an extra copy of each: 6 Yetis in the deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["BOT_288"], "board": ["BOT_559", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "deck"}, "is": 8}]
+  }
+ ],
+ "BOT_552": [
+  {
+   "kind": "tricky",
+   "title": "Star Aligner counts itself",
+   "expect": "Two Ogres with 7 Health and the 7/7 Star Aligner make three: 7 damage to all enemies.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["BOT_552"], "board": ["VAN_CS2_200", "VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 23}]
+  }
+ ],
+ "BOT_507": [
+  {
+   "kind": "tricky",
+   "title": "Gloop Sprayer between two minions",
+   "expect": "It copies both neighbours: a second Yeti and a second Crocolisk.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["BOT_507"], "board": ["VAN_CS2_182", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}]
+  }
+ ],
+ "BOT_098": [
+  {
+   "kind": "tricky",
+   "title": "Unpowered Mauler attacks after a spell",
+   "expect": "After Moonfire the Mauler may attack: the enemy hero takes 1 + 2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": ["BOT_098"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "BOT_531": [
+  {
+   "kind": "tricky",
+   "title": "Celestial Emissary boosts only the next spell",
+   "expect": "The first Moonfire deals 1 + 2 damage, the second only 1: the enemy hero loses 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["BOT_531", "VAN_CS2_008", "VAN_CS2_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "BOT_254": [
+  {
+   "kind": "tricky",
+   "title": "Unexpected Results with Cosmic Anomaly",
+   "expect": "Spell Damage +2 improves the Cost: two random 4-Cost minions.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["BOT_254"], "board": ["BOT_604"], "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}]
+  }
+ ]
+}

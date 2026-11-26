@@ -492,7 +492,6 @@ func edit_item(p: int, zone: String, i: int) -> void:
 	panel.name = "ItemEditor"
 	panel.position = Vector2(150, 40)
 	panel.size = Vector2(980, 600)
-	panel.z_index = 50
 	var st := Palette.box(Color(0.08, 0.05, 0.03, 0.97), 12, Color("c9a74a"), 2)
 	st.set_content_margin_all(12)
 	panel.add_theme_stylebox_override("panel", st)
@@ -525,8 +524,8 @@ func edit_item(p: int, zone: String, i: int) -> void:
 	for e in spec.get("enchantments", []):
 		if e is Dictionary and e.get("debug", false):
 			buff = e
-	for n_spec in [["Damage", "damage", 0, 99], ["Attack +", "atk", -20, 99], ["Health +", "hp", -20, 99]]:
-		nums.add_child(Palette.label(tr(n_spec[0]), 15))
+	for n_spec in [[tr("Damage"), "damage", 0, 99], [tr("Attack +"), "atk", -20, 99], [tr("Health +"), "hp", -20, 99]]:
+		nums.add_child(Palette.label(n_spec[0], 15))
 		var spin := SpinBox.new()
 		spin.name = "Item_" + n_spec[1]
 		spin.min_value = n_spec[2]
@@ -540,12 +539,12 @@ func edit_item(p: int, zone: String, i: int) -> void:
 				_set_buff(spec, key, int(v))
 			changed.call())
 		nums.add_child(spin)
-	for f_spec in [["Silenced", "silenced"], ["Asleep", "exhausted"]]:
+	for f_spec in [[tr("Silenced"), "silenced"], [tr("Asleep"), "exhausted"]]:
 		if f_spec[1] == "exhausted" and zone != "board":
 			continue
 		var check := CheckBox.new()
 		check.name = "Item_" + f_spec[1]
-		check.text = tr(f_spec[0])
+		check.text = f_spec[0]
 		var key: String = f_spec[1]
 		check.button_pressed = bool(spec.get(key, false))
 		check.toggled.connect(func(on):
@@ -699,7 +698,7 @@ func _build_tests(page: Control) -> void:
 	card_row.add_theme_constant_override("separation", 12)
 	_test_box.add_child(card_row)
 	test_list.name = "TestList"
-	test_list.custom_minimum_size = Vector2(0, 170)
+	test_list.custom_minimum_size = Vector2(0, 250)
 	test_list.item_selected.connect(func(_i): _show_steps())
 	test_list.item_activated.connect(func(_i): run_selected())
 	_test_box.add_child(test_list)
