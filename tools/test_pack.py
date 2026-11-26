@@ -365,6 +365,43 @@ class BuildAndZip(unittest.TestCase):
                 pack.read_pack(p)
 
 
+class Framing(unittest.TestCase):
+    """art/<set>/framing.json: where each picture sits in its window (format.md §7)."""
+
+    def test_checked_and_not_a_rules_file(self):
+        s = tiny()
+        s["manifest.json"]["art_sets"] = [{"id": "pics"}]
+        s["art/pics/M1.png"] = b"png"
+        s["art/pics/framing.json"] = {"M1": {"x": 0.1, "y": -0.05, "zoom": 1.35}}
+        r = pack.check_files(as_files(s))
+        self.assertEqual((r.errors, r.warnings), ([], []))
+        self.assertEqual(pack.rules_hash(as_files(s)), pack.rules_hash(as_files(tiny())))
+        s["art/pics/framing.json"] = {"M1": {"zoom": 9}}
+        self.assertTrue(any("framing.json" in e for e in errors(s)))
+        s["art/pics/framing.json"] = {"M2": {"x": 0.1}}  # no picture of M2 in the set
+        self.assertTrue(any("framing.json" in w for w in pack.check_files(as_files(s)).warnings))
+        del s["art/pics/framing.json"]
+        s["art/pics/other.json"] = {}
+        self.assertTrue(any("framing.json" in e for e in errors(s)))
+
+    def test_build_takes_it_from_copies_bases_and_local_sets(self):
+        with tempfile.TemporaryDirectory() as t:
+            t = Chain().three(t)  # a copies art/pics; b and c are built on it
+            Chain().write(t, "art/pics/framing.json", {"M1": {"x": 0.5}})
+            Chain().write(t, "b/art/pics/M2.png", b"png")
+            Chain().write(t, "b/art/pics/framing.json", {"M2": {"zoom": 2}})
+            files, r = pack.build(t / "b")
+            self.assertEqual(r.errors, [])
+            self.assertEqual(json.loads(files["art/pics/framing.json"]), {"M1": {"x": 0.5}, "M2": {"zoom": 2}})
+            files, _ = pack.build(t / "c")  # c skips a's copies; b's own pictures come along with their framing
+            self.assertEqual(json.loads(files["art/pics/framing.json"]), {"M2": {"zoom": 2}})
+            for level, fr in (("one", {"M1": {"x": 0.1}, "M2": {"y": 0.2}}), ("two", {"M1": {"x": -0.3}})):
+                Chain().write(t, f"{level}/M1.png", b"png")
+                Chain().write(t, f"{level}/framing.json", fr)
+            files, r = pack.build(t / "a", None, [f"mine={t / 'one'}", f"mine={t / 'two'}"])
+            self.assertEqual(json.loads(files["art/mine/framing.json"]), {"M1": {"x": -0.3}, "M2": {"y": 0.2}})  # a later one wins
+
+
 class Limits(unittest.TestCase):
     def test_the_same_everywhere(self):  # format.md "Size limits": 1 GiB a pack, 2 GiB unpacked, 50 000 files
         self.assertEqual((pack.LIMITS["pack"], pack.LIMITS["unpacked"], pack.LIMITS["files"]), (1 << 30, 2 << 30, 50000))
