@@ -103,17 +103,15 @@ impl T {
 }
 
 /// 7.0.0.15590: The Mistcaller gives the minions in the hand and the deck +1/+1, as its text says; before it, the
-/// minions in the hand and every minion drawn later that game (the deck was not touched). The later packs keep the
-/// old one, so the later versions carry the fix too.
+/// minions in the hand and every minion drawn later that game (the deck was not touched). The msg pack (its release
+/// build 15590) and the later ones have it.
 #[test]
 fn mistcaller_buffs_the_deck_from_15590() {
     for vid in ["msg", "15590", "16214", "17720", "18336", "20022", "20457", "22115"] {
         let mut t = scene!(vid, 7, {"hand": ["AT_054", YETI], "deck": [YETI, YETI]}, {});
         t.play("AT_054", NONE);
         assert_eq!(t.stats_in(0, "hand", YETI), vec![(5, 6)], "{vid}: the hand");
-        let fixed = vid != "msg";
-        let deck = if fixed { (5, 6) } else { (4, 5) };
-        assert_eq!(t.stats_in(0, "deck", YETI), vec![deck, deck], "{vid}: the deck");
+        assert_eq!(t.stats_in(0, "deck", YETI), vec![(5, 6), (5, 6)], "{vid}: the deck");
         // drawn: +1/+1 once either way (by the draw until 15590, in the deck since)
         t.end_turn().end_turn();
         assert_eq!(t.stats_in(0, "hand", YETI), vec![(5, 6), (5, 6)], "{vid}: drawn");

@@ -1,0 +1,7 @@
+## Русский
+
+- Отдельные наборы карт теперь работают так же, как игра в день их выхода: Корабельная пушка стреляет после боевого клича пирата (Гоблины и гномы и позже), существо, которое «Игры разума» дают при пустой колоде соперника, не исчезает в конце хода, а Слово силы: Слава лечит героя того, кто его разыграл (Большой турнир и позже). Саженец стал картой друида (Лига исследователей и позже), Друид-саблезуб и Живые корни получили «Выбор» (Древние боги). Призыватель туманов усиливает и колоду, а заклинания Слуги Йогг-Сарона дают перегрузку (Прибамбасск и позже). эффекты «После призыва» после Зелья превращения видят уже овцу (Ун'Горо и позже). Тьма не продвигает задание «Исполины джунглей» (Растахановы игрища и позже).
+
+## English
+
+- The separate card packs now play as the game did on their release day: Ship's Cannon fires after the Pirate's Battlecry (Goblins vs Gnomes on), Shadow of Nothing no longer vanishes at the end of the turn and Power Word: Glory heals the hero of the player who cast it (The Grand Tournament on). Sapling is a Druid card (The League of Explorers on), Druid of the Saber and Living Roots have Choose One (Whispers of the Old Gods). The Mistcaller buffs the deck too and Servant of Yogg-Saron's spells Overload (Mean Streets of Gadgetzan on). the After Summon effects after Potion of Polymorph see the Sheep (Journey to Un'Goro on). The Darkness no longer advances Jungle Giants (Rastakhan's Rumble on).

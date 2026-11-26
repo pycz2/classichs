@@ -652,3 +652,14 @@ fn mass_hysteria_friendly_minions_attack_each_other() {
     assert_eq!(attacks, 2, "each Yeti attacks the other: real attacks, which fire attack triggers");
     assert!(t.g.players[0].board.is_empty(), "both died");
 }
+
+/// Jungle Giants: The Darkness does not advance it (12.2.0.26996, before the release build 27845).
+#[test]
+fn the_darkness_does_not_advance_jungle_giants() {
+    let mut t = scene!({"hand": ["UNG_116", "LOOT_526", "VAN_EX1_028"]}, {});
+    t.play("UNG_116", NONE).play("LOOT_526", NONE);
+    let q = t.g.players[0].secrets[0];
+    assert_eq!(t.g.e(q).tag("QUEST_PROGRESS"), 0);
+    t.play("VAN_EX1_028", NONE);
+    assert_eq!(t.g.e(q).tag("QUEST_PROGRESS"), 1);
+}

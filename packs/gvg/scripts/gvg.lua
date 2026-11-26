@@ -957,8 +957,9 @@ cards.GVG_074 = {
   end,
 }
 
--- Ship's Cannon: whenever you summon a Pirate, 2 damage to a random enemy.
-cards.GVG_075 = on_mine("summon", function(g, me, ev)
+-- Ship's Cannon: after you summon a Pirate (after its Battlecry, like Knife Juggler), 2 damage to a random enemy; patch
+-- 4.1.0.10956 only changed its text to "After you summon a Pirate".
+cards.GVG_075 = on_mine("after_summon", function(g, me, ev)
   if ev.entity ~= me and g.race(ev.entity) == "PIRATE" then
     g.damage(me, g.random_alive(g.chars(g.enemy(me))), 2)
   end

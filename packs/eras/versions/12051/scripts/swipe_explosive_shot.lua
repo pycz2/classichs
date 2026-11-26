@@ -32,7 +32,4 @@ cards.VAN_EX1_537 = {
   end,
 }
 
--- Shadow of Nothing (Mindgames): no longer destroys itself at the end of the turn.
-cards.VAN_EX1_345t = {}
-
 return cards

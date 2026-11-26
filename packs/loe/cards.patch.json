@@ -54,5 +54,6 @@
   "VAN_EX1_084": {"keywords": ["AURA"], "script": "scripts/loe.lua#VAN_EX1_084"},
   "AT_060": {"script": "scripts/loe.lua#AT_060"},
   "FP1_018": {"script": "scripts/loe.lua#FP1_018"},
-  "VAN_EX1_315": {"script": "scripts/loe.lua#VAN_EX1_315"}
+  "VAN_EX1_315": {"script": "scripts/loe.lua#VAN_EX1_315"},
+  "AT_037t": {"class": "DRUID"}
 }

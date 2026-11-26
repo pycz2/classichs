@@ -196,7 +196,7 @@ fn yogg_saron_stops_when_silenced_from_6_2() {
 
 #[test]
 fn yogg_saron_and_its_servant_overload_from_6_2() {
-    // the later packs keep og.lua's Servant: their versions carry the fix (servant_of_yogg_saron.lua)
+    // 15181 by its version script (kara_6_2.lua), the msg pack and the later ones by msg.lua's Servant
     for card in ["OG_134", "OG_087"] {
         for (v, overloads) in [("14830", false), ("15181", true), ("15590", true), ("17720", true), ("18336", true), ("20022", true), ("20457", true), ("22115", true)] {
             let (mut cast, mut owed) = (0, 0);

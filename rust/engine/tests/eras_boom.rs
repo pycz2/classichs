@@ -48,7 +48,7 @@ fn patch_26996_the_darkness_no_longer_advances_jungle_giants() {
     };
     let Some(old) = progress("25770") else { return };
     assert_eq!(old, vec![1, 2], "25770 (the boom pack): The Darkness counted");
-    // every later version too: the trl and dal packs play Journey to Un'Goro's quest as the boom pack does
+    // every later version too (the trl and dal packs leave The Darkness out themselves)
     for v in ["26996", "27358", "27405", "27845", "28116", "28329", "28855", "29349", "29933", "30103", "30795", "31022",
         "31268", "31761"] {
         assert_eq!(progress(v), Some(vec![0, 1]), "{v}");

@@ -1,6 +1,7 @@
 {
   "AT_033": {"script": "scripts/msg.lua#AT_033"},
   "AT_046": {"script": "scripts/msg.lua#AT_046"},
+  "AT_054": {"script": "scripts/msg.lua#AT_054"},
   "AT_061": {"script": "scripts/msg.lua#AT_061"},
   "AT_118": {"script": "scripts/msg.lua#AT_118"},
   "CFM_020": {"script": "scripts/msg.lua#CFM_020", "fx": {"play": "battlecry"}},
@@ -142,6 +143,7 @@
   "LOE_029": {"script": "scripts/msg.lua#LOE_029"},
   "LOE_115a": {"script": "scripts/msg.lua#LOE_115a"},
   "OG_072": {"script": "scripts/msg.lua#OG_072"},
+  "OG_087": {"script": "scripts/msg.lua#OG_087"},
   "OG_118": {"script": "scripts/msg.lua#OG_118"},
   "OG_134": {"script": "scripts/msg.lua#OG_134"},
   "OG_211": {"cost": 9},
