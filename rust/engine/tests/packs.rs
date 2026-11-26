@@ -227,6 +227,22 @@ fn a_script_error_ends_the_game_as_a_draw() {
     assert!(r["script_error"].as_str().unwrap().contains("field 'damage'"), "{r}");
 }
 
+/// A version's own scripts (scripts/version/, docs/packs/format.md §13) load after the others: a card they define
+/// gets their hooks in place of the ones its `script` names, an enchantment's hook set is replaced, not doubled.
+#[test]
+fn a_version_script_replaces_a_cards_hooks() {
+    let dir = tmp("version-script");
+    mini_pack(&dir, &RED.replace("return cards", "cards[\"ench:x\"] = { cost_mod = function(g, me) return 0 end }\nreturn cards"));
+    std::fs::create_dir_all(dir.join("scripts/version")).unwrap();
+    std::fs::write(dir.join("scripts/version/fix.lua"), "return { BOLT = { spell = function(g, me) end }, [\"ench:x\"] = {} }\n").unwrap();
+    let mut e = Engine::new();
+    let r = call(&mut e, json!({"op": "load_pack", "path": dir}));
+    assert_eq!(r["ok"], true, "{r}");
+    let hooks = call(&mut e, json!({"op": "hooks", "pack": r["pack"]}))["hooks"].clone();
+    assert_eq!(hooks["BOLT"], json!({"spell": true}), "no target any more: the version's hooks");
+    assert_eq!(hooks["ZAP"]["target"], json!(true), "the others' hooks stay: {hooks}");
+}
+
 #[test]
 fn bad_packs_are_refused() {
     let dir = tmp("bad");

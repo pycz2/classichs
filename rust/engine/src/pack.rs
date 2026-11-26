@@ -16,7 +16,10 @@ const MAX_PACK: usize = 1024 * MIB;
 const MAX_UNPACKED: usize = 2048 * MIB;
 const MAX_FILES: usize = 50_000;
 const MAX_FILE: usize = 16 * MIB;
+/// The rules part of one version (a pack with versions: of each, format.md §13).
 const MAX_RULES: usize = 8 * MIB;
+/// The rules parts of all the versions of a pack together.
+const MAX_RULES_ALL: usize = 256 * MIB;
 const MAX_RATIO: usize = 200;
 /// The zip's central directory, at most (50 000 entries of a 200-character path take ~13 MiB).
 const MAX_DIR: usize = 32 * MIB;
@@ -29,8 +32,65 @@ pub fn is_rules_file(p: &str) -> bool {
         || (p.starts_with("scripts/") && p.ends_with(".lua"))
 }
 
+/// The files of a pack the engine reads: the manifest, the rules files and the decks (the bots' templates), at the
+/// top and of every version (`versions/<id>/…`).
 fn wanted(p: &str) -> bool {
-    p == "manifest.json" || is_rules_file(p) || (p.starts_with("decks/") && p.ends_with(".json"))  // (decks: the bots' templates)
+    let own = |p: &str| is_rules_file(p) || (p.starts_with("decks/") && p.ends_with(".json"));
+    p == "manifest.json" || own(p) || version_of(p).is_some_and(|(_, rest)| own(rest))
+}
+
+/// `versions/<id>/<rest>` -> (id, rest).
+fn version_of(p: &str) -> Option<(&str, &str)> {
+    p.strip_prefix("versions/")?.split_once('/')
+}
+
+/// A file each version has of its own (format.md §13: rules files, texts, layout, decks, tutorial); the
+/// others are shared.
+pub fn is_version_file(p: &str) -> bool {
+    matches!(p, "rules.json" | "cards.json" | "tutorial.json")
+        || ["scripts/", "missions/", "locales/", "layout/", "decks/"].iter().any(|d| p.starts_with(d))
+}
+
+/// One version of a pack with versions (manifest `versions`, format.md §13).
+#[derive(Clone, Debug, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct VersionInfo {
+    pub id: String,
+    pub build: Option<i64>,
+    pub patch: String,
+    pub date: String,
+    pub era: String,
+    /// {lang: text}
+    pub name: Value,
+    pub dir: String,
+    pub formats: Vec<String>,
+    pub rules_hash: String,
+}
+
+/// The versions of a pack ([] for a one-version pack).
+pub fn versions(files: &Files) -> Vec<VersionInfo> {
+    files
+        .get("manifest.json")
+        .and_then(|m| strict_json(m, "manifest.json").ok())
+        .and_then(|m| serde_json::from_value(m.get("versions")?.clone()).ok())
+        .unwrap_or_default()
+}
+
+/// The files of one version (format.md §13): the shared files and `versions/<id>/` moved to the top, the
+/// manifest's `rules_hash` that version's. Everything that plays a one-version pack plays a view the same way.
+pub fn version_view(files: &Files, id: &str) -> Result<Files, String> {
+    let v = versions(files).into_iter().find(|v| v.id == id).ok_or(format!("the pack has no version {id}"))?;
+    let mut out: Files = files.iter().filter(|(p, _)| !p.starts_with("versions/") && !is_version_file(p)).map(|(p, d)| (p.clone(), d.clone())).collect();
+    let pre = format!("versions/{id}/");
+    for (p, d) in files {
+        if let Some(rest) = p.strip_prefix(&pre) {
+            out.insert(rest.to_string(), d.clone());
+        }
+    }
+    let mut m = strict_json(files.get("manifest.json").ok_or("manifest.json is missing")?, "manifest.json")?;
+    m["rules_hash"] = Value::String(v.rules_hash);
+    out.insert("manifest.json".into(), serde_json::to_vec(&m).map_err(|e| e.to_string())?);
+    Ok(out)
 }
 
 /// Path rules of format.md §1: segments `[A-Za-z0-9_][A-Za-z0-9_.-]*`, at most 200 characters.
@@ -92,7 +152,7 @@ pub fn read_zip_from<R: Read + Seek>(r: &mut R) -> Result<Files, String> {
     let b = &read_at(r, dir_at, dir_size)?[..]; // the central directory
     let mut at = 0;
     let (mut out, mut seen) = (Files::new(), std::collections::BTreeSet::new());
-    let (mut unpacked, mut rules) = (0usize, 0usize);
+    let (mut unpacked, mut rules) = (0usize, BTreeMap::<String, usize>::new()); // the rules part of each version ("": the top)
     for _ in 0..count {
         if u32_at(b, at)? != 0x0201_4b50 {
             return Err("bad zip central directory".into());
@@ -133,8 +193,9 @@ pub fn read_zip_from<R: Read + Seek>(r: &mut R) -> Result<Files, String> {
         if !wanted(&name) {
             continue;
         }
-        rules += usize_;
-        if rules > MAX_RULES {
+        let part = rules.entry(version_of(&name).map_or(String::new(), |(v, _)| v.to_string())).or_default();
+        *part += usize_;
+        if *part > MAX_RULES || rules.values().sum::<usize>() > MAX_RULES_ALL {
             return Err(format!("the rules part is more than {MAX_RULES} bytes"));
         }
         let head = read_at(r, local, 30)?;
@@ -396,6 +457,35 @@ mod tests {
     fn base64_decodes() {
         assert_eq!(base64("aGVsbG8gd29ybGQ=").unwrap(), b"hello world");
         assert_eq!(base64("YQ").unwrap(), b"a");
+    }
+
+    #[test]
+    fn a_version_view_is_the_shared_files_and_the_version() {
+        let f = |s: &str| s.as_bytes().to_vec();
+        let man = r#"{"format": 1, "rules_hash": "top", "default_version": "b",
+            "versions": [{"id": "a", "dir": "versions/a", "rules_hash": "ha"}, {"id": "b", "build": 7, "rules_hash": "hb", "formats": ["standard"]}]}"#;
+        let files: Files = [
+            ("manifest.json", man),
+            ("rules.json", "top"),
+            ("decks/x.json", "top"),
+            ("art/s/c.png", "art"),
+            ("versions/a/rules.json", "a"),
+            ("versions/a/scripts/version/x.lua", "a"),
+            ("versions/b/rules.json", "b"),
+        ]
+        .into_iter()
+        .map(|(p, d)| (p.to_string(), f(d)))
+        .collect();
+        let vs = versions(&files);
+        assert_eq!((vs.len(), vs[1].build, vs[1].formats.clone()), (2, Some(7), vec!["standard".to_string()]));
+        let a = version_view(&files, "a").unwrap();
+        assert_eq!(a.keys().collect::<Vec<_>>(), ["art/s/c.png", "manifest.json", "rules.json", "scripts/version/x.lua"]);
+        assert_eq!(a["rules.json"], f("a"));
+        assert_eq!(strict_json(&a["manifest.json"], "m").unwrap()["rules_hash"], "ha");
+        assert_eq!(version_view(&files, "b").unwrap()["rules.json"], f("b"));
+        assert!(version_view(&files, "c").is_err());
+        assert!(versions(&Files::new()).is_empty());
+        assert!(wanted("versions/a/scripts/x.lua") && wanted("versions/a/decks/d.json") && !wanted("versions/a/locales/en.json"));
     }
 
     #[test]
