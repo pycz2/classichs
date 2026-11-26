@@ -147,6 +147,27 @@ func test_picture_framing_and_sounds() -> void:
 	t.free()
 
 
+func test_a_card_of_several_classes() -> void:
+	var t := _tab()
+	var p := t.project
+	p.add_class("MAGE")
+	p.add_class("ROGUE")
+	var id := t.new_card("MINION")
+	t.select(id)
+	eq(t._control("classes").get_child_count(), 3, "a box per playable class")
+	t.set_class_of_several("KNIGHT", true)
+	t.set_class_of_several("MAGE", true)
+	eq(p.card(id).get("classes"), ["KNIGHT", "MAGE"], "of two classes")
+	eq(p.card(id).get("class"), "NEUTRAL", "its class a neutral one")
+	check(p.deck_pool("knight_hero").has(id) and p.deck_pool("mage_hero").has(id), "in both classes' decks")
+	check(not p.deck_pool("rogue_hero").has(id), "not in another's")
+	eq(p.build().errors(), 0, "the pack checks: " + str(p.build().items.filter(func(it): return it.level == "error")))
+	t.set_class_of_several("MAGE", false)
+	eq(p.card(id).get("classes"), null, "one class left")
+	eq(p.card(id).get("class"), "KNIGHT", "is the card's class")
+	t.free()
+
+
 func test_the_english_text_from_blocks_names_the_cards() -> void:
 	var t := _tab()
 	var p := t.project

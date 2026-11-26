@@ -311,6 +311,9 @@ func _card_tab() -> Control:
 		o.name = f[0].capitalize()
 		o.item_selected.connect(func(i): if not _filling: set_field(f[0], o.get_item_metadata(i)))
 		_row(f[0], tr(f[1]), o)
+	var multi := HFlowContainer.new()
+	multi.name = "Classes"
+	_row("classes", tr("Or several classes"), multi)
 	var coll := CheckBox.new()
 	coll.name = "Collectible"
 	coll.text = tr("Can go into decks")
@@ -391,6 +394,20 @@ func _fill() -> void:
 	_options(_control("class"), project.rules.get("classes", []).map(func(r): return [r.id, project.term("classes", r.id, lang)]), c.get("class"))
 	_options(_control("set"), project.rules.get("sets", []).map(func(s): return [s, project.term("sets", s, lang)]), c.get("set"))
 	(_control("collectible") as CheckBox).button_pressed = bool(c.get("collectible", false))
+	var multi := _control("classes")
+	for b in multi.get_children():
+		multi.remove_child(b)
+		b.queue_free()
+	for r in project.rules.get("classes", []):
+		if not r.get("neutral", false) and r.get("playable", true):
+			var b := CheckBox.new()
+			b.name = r.id
+			b.text = project.term("classes", r.id, lang)
+			b.button_pressed = c.get("classes", []).has(r.id)
+			b.toggled.connect(func(on): if not _filling: set_class_of_several(r.id, on))
+			multi.add_child(b)
+	_rows.classes[0].visible = type != "CHAMPION" and multi.get_child_count() > 1
+	multi.visible = _rows.classes[0].visible
 	for f in ["attack", "health", "durability", "armor", "power", "race"]:
 		_rows[f][0].visible = FIELDS[type].has(f)
 		_rows[f][1].visible = FIELDS[type].has(f)
@@ -453,7 +470,37 @@ func set_field(key: String, value: Variant) -> void:
 		c.erase(key)
 	else:
 		c[key] = value
+	if key == "class" and c.has("classes") and not project.rules.classes.any(func(r): return r.id == value and r.get("neutral", false)):
+		c.erase("classes")  # one class chosen: no longer of several
+		for b in _control("classes").get_children():
+			b.set_pressed_no_signal(false)
 	_touch()
+
+
+## Makes the card one of several classes too, or not (docs/packs/cards.md `classes`: two or more, the card's
+## own class then a neutral one; one left: the card is of that class).
+func set_class_of_several(cls: String, on: bool) -> void:
+	var c := project.card(cid)
+	if c.is_empty():
+		return
+	var list: Array = c.get("classes", [] if project.rules.classes.any(func(r): return r.id == c.class and r.get("neutral", false)) else [c.class])
+	list = list.filter(func(x): return x != cls)
+	if on:
+		list.append(cls)
+	if list.size() >= 2:
+		c.classes = list
+		for r in project.rules.classes:
+			if r.get("neutral", false):
+				c["class"] = r.id
+				break
+	else:
+		c.erase("classes")
+		if list.size() == 1:
+			c["class"] = list[0]
+	_touch()
+	_filling = true
+	_options(_control("class"), project.rules.get("classes", []).map(func(r): return [r.id, project.term("classes", r.id, lang)]), c.get("class"))
+	_filling = false
 
 
 ## Changes the card's type: the fields the new type has no use for go, the ones it needs come with defaults.

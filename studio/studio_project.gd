@@ -766,7 +766,8 @@ func deck_pool(hero: String) -> Array:
 	var sets: Array = rules.get("modes", {}).get("constructed", {}).get("sets", rules.sets)
 	var out := []
 	for c: Dictionary in cards:
-		if c.get("collectible", false) and c.type != "CHAMPION" and sets.has(c.get("set")) and (c.get("class") == cls or neutral.has(c.get("class"))):
+		var of_class: bool = c.get("classes").has(cls) if c.get("classes") is Array else (c.get("class") == cls or neutral.has(c.get("class")))
+		if c.get("collectible", false) and c.type != "CHAMPION" and sets.has(c.get("set")) and of_class:
 			out.append(c)
 	out.sort_custom(func(a, b): return [int(a.get("cost", 0)), str(a.id)] < [int(b.get("cost", 0)), str(b.id)])
 	return out.map(func(c): return c.id)

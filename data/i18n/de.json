@@ -1313,5 +1313,6 @@
 "Starting hand: second player": "Starthand: zweiter Spieler",
 "Turn timer, seconds": "Zugzeit in Sekunden",
 "A tribe with this id exists": "Ein Volk mit dieser ID gibt es schon",
-"Cards are of this tribe": "Es gibt Karten dieses Volks"
+"Cards are of this tribe": "Es gibt Karten dieses Volks",
+"Or several classes": "Oder mehrere Klassen"
 }
