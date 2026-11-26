@@ -1,8 +1,9 @@
 #!/bin/sh
 # Exports the game for every platform into build/release/:
 #   ClassicHS-<version>-web.zip, -windows-x86_64.zip (the .exe and the rules .dll), -linux-x86_64.AppImage,
-#   -macos.zip, -android-arm64.apk, -replay-viewer.zip (the admin panel's replay player: ui/replay_app.tscn)
-# Usage: tools/export_all.sh [platform ...]   (web windows linux macos android replay; all by default)
+#   -macos.zip, -android-arm64.apk, -replay-viewer.zip (the admin panel's replay player: ui/replay_app.tscn);
+#   on request (`studio`): -studio-web.zip and this machine's desktop build of ClassicHS Studio (studio/studio.tscn)
+# Usage: tools/export_all.sh [platform ...]   (web windows linux macos android replay studio; all but studio by default)
 # Needs Godot 4.7.2 with its export templates on PATH as `godot`. The AppImage needs
 # appimagetool on PATH (Linux); Android needs the SDK and a keystore (see .github/workflows/release.yml).
 # The rules engine is built first (tools/build_rules.sh) for each platform; with
@@ -38,7 +39,8 @@ rules_lib() {  # the rules engine library a platform's export needs
 
 log_step "Rules engine"
 [ "$RULES_PREBUILT" != 1 ] || log_info "RULES_PREBUILT=1: the libraries in rules/bin as they are"
-for p in $WANT; do
+HOST=$(case $(uname -s) in Darwin) echo macos ;; Linux) echo linux ;; *) echo windows ;; esac)
+for p in $(echo " $WANT " | sed "s/ studio / web $HOST /"); do  # the studio: the web's engine and this machine's
 	[ "$RULES_PREBUILT" = 1 ] || tools/build_rules.sh "$p"
 	[ -s "$(rules_lib "$p")" ] || { echo "the rules engine for $p is missing: $(rules_lib "$p") (tools/build_rules.sh $p)" >&2; exit 1; }
 done
@@ -88,6 +90,27 @@ for p in $WANT; do
 		export_preset "Replay viewer" "$OUT/replay-viewer/index.html"
 		cp web/rules.js rules/bin/rules.wasm rules/LICENSE.opus "$OUT/replay-viewer/"
 		(cd "$OUT/replay-viewer" && rm -f "../ClassicHS-$VER-replay-viewer.zip" && zip -qr "../ClassicHS-$VER-replay-viewer.zip" .)
+		;;
+	studio)
+		# ClassicHS Studio, the card editor (studio/studio.tscn, the feature tag "studio"): in the browser and on
+		# this machine's desktop platform (the others' rules libraries come from CI, as for the game)
+		rm -rf "$OUT/studio-web"
+		export_preset "Studio (web)" "$OUT/studio-web/index.html"
+		tools/web_finish.sh "$OUT/studio-web"
+		(cd "$OUT/studio-web" && rm -f "../ClassicHS-$VER-studio-web.zip" && zip -qr "../ClassicHS-$VER-studio-web.zip" .)
+		case $(uname -s) in
+		Darwin) export_preset "Studio (macOS)" "$OUT/ClassicHS-$VER-studio-macos.zip" ;;
+		Linux)
+			rm -rf "$OUT/studio-linux"
+			export_preset "Studio (Linux)" "$OUT/studio-linux/ClassicHS-Studio.x86_64"
+			tar -czf "$OUT/ClassicHS-$VER-studio-linux-x86_64.tar.gz" -C "$OUT/studio-linux" .
+			;;
+		*)
+			rm -rf "$OUT/studio-windows" && mkdir -p "$OUT/studio-windows/ClassicHS-Studio"
+			export_preset "Studio (Windows)" "$OUT/studio-windows/ClassicHS-Studio/ClassicHS-Studio.exe"
+			(cd "$OUT/studio-windows" && rm -f "../ClassicHS-$VER-studio-windows-x86_64.zip" && zip -qr "../ClassicHS-$VER-studio-windows-x86_64.zip" ClassicHS-Studio)
+			;;
+		esac
 		;;
 	windows)
 		# Godot puts the rules engine (.dll) next to the .exe: both go into the zip
