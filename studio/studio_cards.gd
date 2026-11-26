@@ -536,7 +536,10 @@ func english_from_effect() -> void:
 		return
 	var said := []
 	for b in e.get("blocks", []):
-		var s := StudioEffects.describe(b, project.card(cid).type)
+		var shown: Dictionary = b.duplicate()
+		if str(b.get("card", "")) != "":
+			shown.card = str(project.text(b.card, "en").get("name", b.card))  # its name, not its id
+		var s := StudioEffects.describe(shown, project.card(cid).type)
 		if s != "":
 			said.append(_head_re.sub(s, "<b>$1:</b>"))
 	lang = "en"

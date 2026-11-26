@@ -145,3 +145,16 @@ func test_picture_framing_and_sounds() -> void:
 	t.delete_card()
 	check(p.card(id).is_empty() and p.art_path(id) == "", "deleted with its picture")
 	t.free()
+
+
+func test_the_english_text_from_blocks_names_the_cards() -> void:
+	var t := _tab()
+	var p := t.project
+	var cub := t.new_card("MINION")
+	t.set_texts("Wolf Cub", "")
+	var id := t.new_card("MINION")
+	p.set_effect(id, {"blocks": [{"when": "deathrattle", "target": "my_hero", "do": "summon", "card": cub, "n": 1}], "lua": ""})
+	t.english_from_effect()
+	var text := str(p.text(id, "en").get("text", ""))
+	check("Wolf Cub" in text and not cub in text, "the summoned card by its name: " + text)
+	t.free()

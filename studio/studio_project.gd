@@ -304,10 +304,16 @@ func build(load := false, games := 0) -> PackCheck:
 	save()
 	var c := PackCheck.open_folder(pack_dir())
 	c.check()
-	if load and c.errors() == 0 and c.load_engine():
+	if load and blocking(c) == 0 and c.load_engine():
 		for i in games:
 			c.trial(i)
 	return c
+
+
+## The errors that keep a pack from being played: all but those of its ready decks (a deck being made
+## does not stop a test match; the export still needs none).
+static func blocking(c: PackCheck) -> int:
+	return c.items.filter(func(it): return it.level == PackCheck.ERROR and not str(it.file).begins_with("decks/")).size()
 
 
 ## A pack of the project as it is now, for drawing its cards (CardView.pack): its rules, cards and texts and

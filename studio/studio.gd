@@ -492,7 +492,7 @@ func try_card(cid := "") -> MatchView:
 		_status.text = tr("The game cannot start: its rules engine is missing.") + " " + Rules.missing()
 		return null
 	var c := project.build(true, 0)
-	if c.errors() > 0:
+	if StudioProject.blocking(c) > 0 or c.rules_hash == "":
 		tabs.current_tab = check_tab.get_index()
 		check_tab.show_result(c)
 		_status.text = tr("The game has errors: see Check & export")

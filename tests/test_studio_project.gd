@@ -131,6 +131,21 @@ func test_a_new_game_has_its_class_hero_power_and_eight_languages() -> void:
 	eq(_bad(c), [], "it checks clean")
 
 
+func test_a_deck_being_made_does_not_stop_a_test_game() -> void:
+	_fresh()
+	var p := StudioProject.create("half-deck", "Half Deck")
+	var cid := p.add_card("MINION")
+	p.decks["mine"] = {"name": "Mine", "champion": "knight_hero", "cards": [cid]}
+	var c := p.build(true)
+	check(c.errors() > 0, "the deck is too small: an error")
+	eq(StudioProject.blocking(c), 0, "but not one that stops a game")
+	check(c.rules_hash != "", "the engine loaded it")
+	var r := Packs.install(c.pack_bytes(), "imported")
+	check(r.has("pack"), "it installs for a test game: " + str(r))
+	if r.has("pack"):
+		Packs.remove(r.pack)
+
+
 func test_effects_name_their_mechanics_and_a_card_renames_everywhere() -> void:
 	_fresh()
 	var p := StudioProject.create("renames", "Renames")
