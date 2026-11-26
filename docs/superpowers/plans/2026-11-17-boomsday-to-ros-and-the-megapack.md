@@ -39,6 +39,39 @@ decks, backgrounds) for all three runs in parallel first; the packs are built on
 
 ## Version 0.73.0: the megapack
 
+### Status 2026-11-26 07:20 (overnight run; not released yet)
+
+Done and in main (d577dcc): the megapack foundation (pack versions, the version view in Python/Rust/GDScript; spec
+docs/superpowers/specs/2026-11-26-megapack-design.md); packs/eras with all 58 versions (default 31761; 97 MB);
+Standard/Wild in the engine (every random pool, deck checks), formats.json (33 periods), the Arena pool/bans/extra
+cards per period, 2370 HearthPwn decks in the versions; the version choice and Compare versions; the server's
+pack_version table and one queue/ladder per (version, format), the Play screen's version and mode; background pack
+installs with stages (18.7 s → 0.15 s), the server's upload stages; the debug mode (all mechanics, effects on any card,
+scenario library, 619 tricky cases, the walk with marks); card picture framing (waits for the owner's export);
+minion attack sounds (local packs rebuilt); client fixes (foldable phone: 16:9 with bars, no spoilers, the fuse line,
+keyword lines). Local: ~/ClassicHS-local/prep/decks (3661), prep/patches/ranked_arena.json.
+
+Left for 0.73.0:
+- Ranked and Arena rules per version from ranked_arena.json: rank names (en/ru per build), medals (ours in public
+  packs), stars, streaks, floors, season reset, Legend; Arena run limits/rewards per period — server and client.
+- The Arena-only cards: 28 Taverns of Time TOT_*, 9 BCON_* (with scripts, via version patches); Zayle (DAL_800)
+  needs a builder key for deck_recipes and the 2019 lists.
+- Fix the base packs' bugs the version agents found (now fixed only by version scripts): Shadow of Nothing (brm+),
+  Power Word: Glory heals the minion's controller (tgt+), Ship's Cannon on summon (gvg+), Sapling's class (loe, og),
+  AT_042/AT_037 without CHOOSE_ONE (og), Blessing of Wisdom twice, Force of Nature on a full board, C'Thun losing its
+  buffs after Redemption, Servant of Yogg/Mistcaller/Potion of Polymorph (msg+), Jungle Giants counting The Darkness;
+  the suspected engine bug: Frostmourne's last-Durability kill does not come back.
+- Engine-wide rule changes not modelled (11.2 Counterspell order, summon triggers reading in-hand stats; 9166
+  Auchenai healing-as-damage triggers; Gladiator's Longbow immunity timing; Celestial Emissary; old weapon
+  Deathrattle timing) — each needs an engine flag.
+- Client gaps: the pack tools' Install button and the web's waiting install still block; the replay player does not
+  read game_format; the admin's player page edits only the pack-id ladder; friendly invites and Arena have no format;
+  the Training format choice is not remembered; Compare versions flags markup-only text differences across bases.
+- The foldable phone: edge-to-edge (no bars) needs every screen laid out for any aspect — the owner to decide.
+- Text-only versions share a rules hash (13921/14366, 18336/19506/19632, 23180/23576, 29933/30103): one ladder each.
+- Assemble the 8-language changelog from docs/changelog-0.73.0/*.md; then release.
+
+
 One pack with shared media (pictures, sounds, music) and every game version up to the end of Rise of Shadows: each
 balance patch of the Hearthstone Wiki (and art/sound changes where they happened, e.g. Patches) is a version with its own
 full copy of the card data (texts, balance, rules) that points at the shared media it uses. The player picks the game
