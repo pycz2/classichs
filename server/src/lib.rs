@@ -21,6 +21,7 @@ pub mod ranked;
 pub mod scope;
 pub mod settings;
 pub mod replays;
+pub mod reports;
 pub mod spectate;
 pub mod stats;
 pub mod storage;
@@ -452,7 +453,7 @@ pub fn spawn_background(app: AppRef) {
 
 /// Every route at the bare paths (the main sub-server) and under `/s/<name>/` (that sub-server: `scope::route`).
 pub fn router(app: AppRef) -> Router {
-    let inner = Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(admin::routes(app.clone())).with_state(app.clone());
+    let inner = Router::new().route("/", get(ws_upgrade)).merge(packs::routes()).merge(reports::routes()).merge(admin::routes(app.clone())).with_state(app.clone());
     Router::new().fallback_service(inner).layer(axum::middleware::from_fn_with_state(app, scope::route))
 }
 

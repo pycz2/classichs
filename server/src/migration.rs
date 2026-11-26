@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(MChat)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(M15), Box::new(MChat), Box::new(MSub)]
     }
 }
 
@@ -975,11 +975,11 @@ impl MigrationTrait for M14 {
 /// `subserver` table with row 0 "main", a `subserver` column on every table of a sub-server's data (every row there
 /// now belongs to main; the keyed tables get it first in their key), the roles (Super admin, and main's Admin,
 /// Moderator, Viewer), the admins of before as Super admins.
-struct M15;
+struct MSub;
 
-impl MigrationName for M15 {
+impl MigrationName for MSub {
     fn name(&self) -> &str {
-        "m20261126_000015_subservers_roles"
+        "m20261126_000017_subservers_roles"
     }
 }
 
@@ -1008,7 +1008,7 @@ async fn rekey(c: &SchemaManagerConnection<'_>, t: &str) -> Result<(), DbErr> {
 }
 
 #[async_trait::async_trait]
-impl MigrationTrait for M15 {
+impl MigrationTrait for MSub {
     async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
         let c = m.get_connection();
         c.execute_unprepared(
@@ -1080,6 +1080,63 @@ impl MigrationTrait for MChat {
         .await?;
         c.execute_unprepared("CREATE INDEX chat_message_channel ON chat_message (subserver, channel, id)").await?;
         c.execute_unprepared("CREATE INDEX chat_message_at ON chat_message (at)").await?;
+        Ok(())
+    }
+}
+
+/// Problem reports from the game (0.74; `crate::reports`): a thread per report (`report_messages`);
+/// the pictures and the voice message are in the store (`reports/<id>/…`). `subserver` 0 = the main one.
+struct M15;
+
+impl MigrationName for M15 {
+    fn name(&self) -> &str {
+        "m20261126_000015_reports"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for M15 {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        c.execute_unprepared(
+            "CREATE TABLE reports (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                subserver INTEGER NOT NULL DEFAULT 0,
+                account INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+                written_at INTEGER NOT NULL,
+                received_at INTEGER NOT NULL,
+                last_at INTEGER NOT NULL,
+                text TEXT NOT NULL,
+                version TEXT NOT NULL DEFAULT '',
+                context TEXT NOT NULL DEFAULT '{}',
+                games TEXT NOT NULL DEFAULT '[]',
+                screen INTEGER NOT NULL DEFAULT 0,
+                voice INTEGER NOT NULL DEFAULT 0,
+                state TEXT NOT NULL DEFAULT 'open',
+                note TEXT NOT NULL DEFAULT '',
+                merged_into INTEGER,
+                admin_opened INTEGER NOT NULL DEFAULT 0,
+                admin_unread INTEGER NOT NULL DEFAULT 1,
+                player_unread INTEGER NOT NULL DEFAULT 0
+            )",
+        )
+        .await?;
+        c.execute_unprepared(
+            "CREATE TABLE report_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                report INTEGER NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+                account INTEGER REFERENCES accounts(id) ON DELETE SET NULL,
+                name TEXT NOT NULL,
+                admin INTEGER NOT NULL,
+                text TEXT NOT NULL,
+                at INTEGER NOT NULL,
+                screen INTEGER NOT NULL DEFAULT 0
+            )",
+        )
+        .await?;
+        c.execute_unprepared("CREATE INDEX reports_subserver ON reports (subserver, last_at)").await?;
+        c.execute_unprepared("CREATE INDEX reports_account ON reports (account, received_at)").await?;
+        c.execute_unprepared("CREATE INDEX report_messages_report ON report_messages (report)").await?;
         Ok(())
     }
 }

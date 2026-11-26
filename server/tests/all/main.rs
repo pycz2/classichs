@@ -13,6 +13,7 @@ mod flow;
 mod invites;
 mod packs;
 mod roles;
+mod reports;
 mod stats;
 mod subservers;
 mod tournament;

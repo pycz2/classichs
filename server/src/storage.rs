@@ -82,7 +82,29 @@ impl Storage {
 
     /// The whole file (at most `limit` bytes).
     pub async fn read(&self, content_hash: &str, limit: u64) -> Result<Vec<u8>, Error> {
-        let (size, mut s) = self.get(content_hash).await?;
+        self.read_key(&key(content_hash), limit).await
+    }
+
+    /// Other files (a problem report's picture and voice) by their path in the store.
+    pub async fn put_path(&self, path: &str, bytes: Vec<u8>) -> Result<(), Error> {
+        self.store.put(&Key::from(path), bytes.into()).await.map(|_| ())
+    }
+
+    pub async fn read_path(&self, path: &str, limit: u64) -> Result<Vec<u8>, Error> {
+        self.read_key(&Key::from(path), limit).await
+    }
+
+    /// Gone already is fine.
+    pub async fn delete_path(&self, path: &str) -> Result<(), Error> {
+        match self.store.delete(&Key::from(path)).await {
+            Err(Error::NotFound { .. }) => Ok(()),
+            r => r,
+        }
+    }
+
+    async fn read_key(&self, k: &Key, limit: u64) -> Result<Vec<u8>, Error> {
+        let r = self.store.get(k).await?;
+        let (size, mut s) = (r.meta.size, r.into_stream());
         if size > limit {
             return Err(Error::Generic { store: "read", source: format!("{size} bytes, more than {limit}").into() });
         }

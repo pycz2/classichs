@@ -16,6 +16,8 @@ signal pack_progress(content_hash: String, done: int, total: int)
 signal pack_downloaded(content_hash: String, result: Dictionary)
 ## An upload ended: {pack} (the server's entry) or {error (translated), code}.
 signal pack_uploaded(result: Dictionary)
+## The count of the player's reports with news changed (reports_unread).
+signal reports_unread_changed
 
 ## The saved sessions (user://, per player), one per connection (D14; by the connection's id:
 ## its address for the first one to it, so sessions saved before 0.40 stay):
@@ -333,6 +335,8 @@ func dispatch(msg: Dictionary) -> void:
 				remember({"token": token, "kicked": null})
 				_probing = true
 				send({"t": "chats"})
+				send_queued_reports()  # problem reports written offline
+				request_reports()  # how many of the player's reports have news
 		"error":
 			if resuming:
 				resuming = false
@@ -371,6 +375,8 @@ func dispatch(msg: Dictionary) -> void:
 		"me":  # the profile changed (a tag set, a game's result): every screen reads it from here
 			if msg.get("me") is Dictionary:
 				me = msg.me
+		"reports_unread":  # an admin answered a report of the player's or changed its state
+			_set_unread(int(msg.get("n", 0)))
 		"signup_info":
 			_probing_signup = false
 			invite_only = msg.get("invite_only", false) == true
@@ -650,10 +656,129 @@ func delete_pack(content_hash: String) -> void:
 	send({"t": "pack_delete", "content_hash": content_hash})
 
 
+# --- problem reports (server/README.md, "Reports") ---------------------------------------
+
+## Reports waiting to go (offline, not logged in, or the server could not take them yet): one JSON file
+## each, the body of POST /reports. Tests point it at their own folder.
+static var reports_dir := "user://reports_queue"
+static var _reports_sending := {}  # path -> true while its request is under way (on any connection)
+
+## The server's answers to a report: code -> the player's words.
+const REPORT_ERRORS := {"auth_required": "Log in to the server again", "bad_token": "Log in to the server again",
+	"bad_text": "Write what happened (up to 4000 characters)", "bad_screen": "The screenshot is damaged: remove it",
+	"bad_voice": "The voice message is damaged: record it again",
+	"too_large": "The report is too big: remove the screenshot or record a shorter voice message",
+	"too_many": "You have sent many reports this hour", "not_found": "This report is no longer on the server"}
+
+
+## Keeps a report to send after the next login; its file's path.
+static func queue_report(report: Dictionary) -> String:
+	DirAccess.make_dir_recursive_absolute(reports_dir)
+	var path := "%s/%d_%d.json" % [reports_dir, Time.get_unix_time_from_system(), randi()]
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(report))
+	return path
+
+
+## The reports waiting to go, oldest first.
+static func queued_reports() -> Array:
+	if not DirAccess.dir_exists_absolute(reports_dir):
+		return []
+	var out := Array(DirAccess.get_files_at(reports_dir)).filter(func(f): return f.ends_with(".json"))
+	out.sort()
+	return out.map(func(f): return reports_dir + "/" + f)
+
+
+## Sends a report (kept in the queue till the server answers): done({id}) or done({error, code, kept}).
+func send_report(report: Dictionary, done: Callable) -> void:
+	_send_report_file(queue_report(report), done)
+
+
+## The player's reports (threads) with an answer or a change not seen yet (GET /reports, `reports_unread`).
+var reports_unread := 0
+
+
+## The player's reports (GET /reports): done({list, unread}) or done({error, code}); the unread count is kept.
+func request_reports(done := Callable()) -> void:
+	_http("/reports", HTTPClient.METHOD_GET, PackedByteArray(), func(code: int, body: PackedByteArray):
+		var d := _report_answer(code, body, 200)
+		if d.has("list"):
+			_set_unread(int(d.get("unread", 0)))
+		if done.is_valid():
+			done.call(d))
+
+
+## One report with its messages (GET /reports/<id>; opening it clears its unread mark): done({id, state,
+## messages, …}) or done({error, code}). The unread count is asked again after it.
+func request_report(id: int, done: Callable) -> void:
+	_http("/reports/%d" % id, HTTPClient.METHOD_GET, PackedByteArray(), func(code: int, body: PackedByteArray):
+		var d := _report_answer(code, body, 200)
+		if done.is_valid():
+			done.call(d)
+		if not d.has("error"):
+			request_reports())
+
+
+## A reply in a report's thread (POST /reports/<id> {text, screen}): done({message}) or done({error, code}).
+func reply_report(id: int, text: String, screen_png: PackedByteArray, done: Callable) -> void:
+	var body := JSON.stringify({"text": text, "screen": Marshalls.raw_to_base64(screen_png) if not screen_png.is_empty() else ""})
+	_http("/reports/%d" % id, HTTPClient.METHOD_POST, body.to_utf8_buffer(), func(code: int, data: PackedByteArray):
+		if done.is_valid():
+			done.call(_report_answer(code, data, 201)), "", "", "application/json")
+
+
+func _set_unread(n: int) -> void:
+	reports_unread = n
+	reports_unread_changed.emit()
+
+
+## The server's answer about reports: its JSON when the code is ok, else {error (the player's words), code}.
+func _report_answer(code: int, body: PackedByteArray, ok: int) -> Dictionary:
+	var j = JSON.parse_string(body.get_string_from_utf8()) if not body.is_empty() else null
+	var d: Dictionary = j if j is Dictionary else {}
+	if code == ok:
+		return d
+	var c := str(d.get("code", str(code)))
+	var text: String = _tr(REPORT_ERRORS[c]) if REPORT_ERRORS.has(c) else ""
+	if code == 0:
+		text = _tr("No answer from the server")
+	elif text == "":
+		text = _tr("The server could not take the report (%s)") % c
+	return {"error": text, "code": c}
+
+
+## Sends the reports waiting to go (after a login).
+## ponytail: any server's login takes the whole queue (a report does not remember its server).
+func send_queued_reports() -> void:
+	for path in queued_reports():
+		if not _reports_sending.has(path):
+			_send_report_file(path, Callable())
+
+
+## POST /reports with a waiting report: taken (201) or bad (another 4xx) it leaves the queue; it stays
+## when there was no answer, the login is gone (401), there were too many (429), the server has no
+## reports (404, 405: an older one) or failed (5xx).
+func _send_report_file(path: String, done: Callable) -> void:
+	_reports_sending[path] = true
+	_http("/reports", HTTPClient.METHOD_POST, FileAccess.get_file_as_bytes(path), func(code: int, body: PackedByteArray):
+		_reports_sending.erase(path)
+		var res := _report_answer(code, body, 201)
+		if code == 201:
+			res = {"id": int(res.report.get("id", 0)) if res.get("report") is Dictionary else 0}
+		else:
+			res["kept"] = code == 0 or code in [401, 404, 405, 429] or code >= 500
+		if not res.get("kept", false):
+			DirAccess.remove_absolute(path)
+		if done.is_valid():
+			done.call(res), "", "", "application/json")
+
+
 ## An HTTP request to the server with the session token; done(code, body) gets the answer
 ## (code 0: no answer). to_file: the answer goes straight into that file (body empty); upload_id:
-## the server tells the stages of this upload by it (`pack_stage`). Tests replace it.
-func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_file := "", upload_id := "") -> HTTPRequest:
+## the server tells the stages of this upload by it (`pack_stage`); content_type: a POST body's.
+## Tests replace it.
+func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_file := "", upload_id := "", content_type := "application/octet-stream") -> HTTPRequest:
 	var r := HTTPRequest.new()
 	r.use_threads = not OS.has_feature("web")
 	r.download_file = to_file
@@ -664,7 +789,7 @@ func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_
 		done.call(code if result == HTTPRequest.RESULT_SUCCESS else 0, data))
 	var headers := PackedStringArray(["Authorization: Bearer " + token])
 	if method == HTTPClient.METHOD_POST:
-		headers.append("Content-Type: application/octet-stream")
+		headers.append("Content-Type: " + content_type)
 		if upload_id != "":
 			headers.append("X-Upload-Id: " + upload_id)
 	if r.request_raw(http_base() + path, headers, method, body) != OK:
