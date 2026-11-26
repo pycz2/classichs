@@ -53,8 +53,8 @@ func test_the_diff_of_6024_and_6485_is_leeroy_jenkins_and_starving_buzzard() -> 
 	eq(Versions.diff(p.version_view("6485"), p.version_view("6485")).changed, [], "a version is itself")
 	eq(Versions.label(p, "6485"), "Leeroy Jenkins and Starving Buzzard nerfed, 2014-09-22", "a version's name and date")
 	var eras := Versions.eras(p)
-	eq(eras.map(func(e): return [e.id, e.name, e.from, e.to, e.versions.size()]),
-		[["naxx", "Curse of Naxxramas", "2014-07-22", "2014-09-22", 2]], "the versions by era")
+	eq(eras.filter(func(e): return e.id == "naxx").map(func(e): return [e.id, e.name, e.from, e.to, e.versions.size()]),
+		[["naxx", "Curse of Naxxramas", "2014-07-22", "2014-09-22", 2]], "the versions by era (the other eras' versions come and go)")
 	p.close()
 
 
