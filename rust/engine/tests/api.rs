@@ -106,6 +106,20 @@ fn combo_cards_glow_while_their_combo_is_on() {
     assert!(lit(&mut e).is_empty(), "a new turn");
 }
 
+/// A scene's tag may have a number (`{"SPELLPOWER": 3}`): Spell Damage +3.
+#[test]
+fn scene_tags_with_a_number() {
+    let mut e = Engine::new();
+    let p1 = json!({"hero": "HERO_01"});
+    let sc = json!({"players": [{"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "tags": ["TAUNT", {"SPELLPOWER": 3}]}]}, p1]});
+    assert_eq!(call(&mut e, json!({"op": "new", "game": "t", "scenario": sc}))["ok"], true);
+    let st = call(&mut e, json!({"op": "snapshot", "game": "t"}))["state"].clone();
+    assert_eq!(st["players"][0]["spell_damage"], 3);
+    let bad = json!({"players": [{"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "tags": [{"SPELLPOWER": "x"}]}]}, p1]});
+    assert_eq!(call(&mut e, json!({"op": "new", "game": "u", "scenario": bad}))["error"],
+        "scenario: players[0].board[0].tags: items must be names or objects of numbers");
+}
+
 #[test]
 fn bad_requests_are_refused() {
     let mut e = Engine::new();

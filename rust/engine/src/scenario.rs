@@ -107,10 +107,15 @@ fn fill_player(g: &mut Game, i: usize, d: &Value) {
         apply_spec(g.em(hero), hs, rs);
     }
     for item in list(d, "secrets") {
-        let e = g.new_entity(card_of(&spec(item)), i);
+        let s = spec(item);
+        let e = g.new_entity(card_of(&s), i);
         g.enter_play(e);
         g.em(e).zone = n.trap;
         g.players[i].secrets.push(e);
+        if g.e(e).card.task {
+            g.run_effect(e, "spell", -1, -1, false); // a Quest as if played: its goal
+        }
+        apply_spec(g.em(e), &s, rs);
     }
 }
 
@@ -135,8 +140,13 @@ fn apply_spec(e: &mut Entity, s: &Value, rs: &'static Ruleset) {
     if let Some(Value::Object(t)) = s.get("tags_exact").map(ints) {
         e.tags = Obj::of(&t, &intern);
     }
-    for t in list(s, "tags").iter().filter_map(Value::as_str) {
-        e.give_tag(rs.intern(t), false);
+    for t in list(s, "tags") {
+        match t {
+            Value::String(t) => e.give_tag(rs.intern(t), false),
+            // {"SPELLPOWER": 3}: tags with a number (Spell Damage N, a Quest's progress)
+            Value::Object(m) => m.iter().for_each(|(k, v)| e.set_tag(rs.intern(k), int(Some(v)))),
+            _ => {}
+        }
     }
     for t in list(s, "eot_tags").iter().filter_map(Value::as_str) {
         e.give_tag(rs.intern(t), true);
@@ -178,6 +188,9 @@ fn check_spec(at: &str, item: &Value) -> Result<(), String> {
         if m.get(k).is_some_and(|v| !v.is_array()) {
             return Err(format!("{at}.{k}: must be a list"));
         }
+    }
+    if list(item, "tags").iter().any(|t| !t.is_string() && !t.as_object().is_some_and(|m| m.values().all(Value::is_number))) {
+        return Err(format!("{at}.tags: items must be names or objects of numbers"));
     }
     if list(item, "enchantments").iter().any(|e| !e.is_object()) {
         return Err(format!("{at}.enchantments: items must be objects"));
