@@ -1,0 +1,389 @@
+{
+ "CFM_602": [
+  {
+   "kind": "tricky",
+   "title": "Jade Golems grow: three Jade Idols",
+   "expect": "Each Jade Golem is one bigger than the last: 1/1, 2/2, 3/3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["CFM_602", "CFM_602", "CFM_602"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 0}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 0}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 0}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "CFM_712_t01", "atk": 1}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "CFM_712_t02"}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "CFM_712_t03", "atk": 3, "health": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "A Jade Golem that finds no room still counts",
+   "expect": "With a full board the first Jade Idol summons nothing but still counts; after Volcanic Potion clears the Wisps, the next Golem is a 2/2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["CFM_602", "CFM_065", "CFM_602"], "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 0}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 0}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "CFM_712_t02", "atk": 2, "health": 2}]
+  }
+ ],
+ "CFM_715": [
+  {
+   "kind": "tricky",
+   "title": "Jade Spirit with Brann Bronzebeard",
+   "expect": "The Battlecry runs twice: a 1/1 and a 2/2 Jade Golem.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["CFM_715"], "board": ["LOE_077"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}]
+  }
+ ],
+ "CFM_902": [
+  {
+   "kind": "tricky",
+   "title": "Aya Blackpaw: Battlecry and Deathrattle Golems",
+   "expect": "Aya's Battlecry summons a 1/1 Golem; Fireball kills Aya and her Deathrattle summons a 2/2 one.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["CFM_902", "VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "CFM_712_t02"}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "CFM_712_t01"}]
+  }
+ ],
+ "CFM_690": [
+  {
+   "kind": "tricky",
+   "title": "Jade Shuriken: the Combo makes a Golem",
+   "expect": "After The Coin, Jade Shuriken's Combo adds a Jade Golem to its 2 damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["GAME_005", "CFM_690"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 28}, {"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "CFM_712_t01"}]
+  }
+ ],
+ "CFM_621": [
+  {
+   "kind": "tricky",
+   "title": "Kazakus makes a 1-Cost potion",
+   "expect": "No duplicates in the deck: pick the Lesser Potion, then two of its effects; the custom potion goes to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["CFM_621"], "deck": ["VAN_CS2_120", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}, {"do": "choose", "option": 0}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "CFM_621t"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Kazakus makes a 10-Cost potion",
+   "expect": "The Superior Potion: two 10-Cost effects make a 10 Mana potion.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["CFM_621"], "deck": ["VAN_CS2_120", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "choose", "option": 2}, {"do": "choose", "option": 0}, {"do": "choose", "option": 1}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "CFM_621t15"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Kazakus with a pair in the deck",
+   "expect": "Two Crocolisks in the deck: no potion.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["CFM_621"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 0}, {"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "CFM_637": [
+  {
+   "kind": "tricky",
+   "title": "Patches the Pirate jumps out of the deck",
+   "expect": "Playing Southsea Deckhand (a Pirate) summons Patches from the deck; he has Charge and hits the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_146"], "deck": ["VAN_CS2_120", "CFM_637"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "CFM_637"}, {"count": {"side": 0, "zone": "deck"}, "is": 1}, {"at": {"side": 1, "zone": "hero"}, "health": 29}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Patches the Pirate played from the hand calls the second Patches",
+   "expect": "Patches played from the hand is a Pirate too: the second Patches waiting in the deck follows him.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["CFM_637"], "deck": ["VAN_CS2_120", "CFM_637"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  }
+ ],
+ "CFM_325": [
+  {
+   "kind": "tricky",
+   "title": "Small-Time Buccaneer loses its bonus when the weapon breaks",
+   "expect": "With Fiery War Axe it is 3/2; the hero's last attack breaks the Axe and it is 1/2 again.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "weapon": {"card": "VAN_CS2_106", "durability": 1}, "board": ["CFM_325"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "weapon"}, "card": ""}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "CFM_325", "atk": 1, "health": 2}]
+  }
+ ],
+ "CFM_670": [
+  {
+   "kind": "tricky",
+   "title": "Mayor Noggenfogger and Polymorph",
+   "expect": "Polymorph aimed at the enemy Yeti goes to a random minion: the Yeti or Noggenfogger himself becomes a Sheep.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_022"], "board": ["CFM_670"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 1, "zone": "board"}, "is": 1}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Mayor Noggenfogger ignores Taunt",
+   "expect": "The Yeti attacks the Sen'jin Shieldmasta, but with Noggenfogger the attack goes to a random enemy: Taunt does not count, it may hit the hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["CFM_670", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_179"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}]
+  }
+ ],
+ "CFM_308": [
+  {
+   "kind": "tricky",
+   "title": "Kun refreshes the Mana: Ysera after a 10 Mana Kun",
+   "expect": "Kun's second choice refreshes the 10 Mana spent on him; Ysera is played with it.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["CFM_308", "VAN_EX1_572"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Kun with Fandral Staghelm: both choices",
+   "expect": "Fandral gives Kun both effects: 10 Armor and the Mana back, so Ysera follows.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["CFM_308", "VAN_EX1_572"], "board": ["OG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1, "choice": 2}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}]
+  }
+ ],
+ "CFM_807": [
+  {
+   "kind": "tricky",
+   "title": "Auctionmaster Beardo: Fireblast after every spell",
+   "expect": "Each Coin refreshes the Hero Power: three Fireblasts in one turn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["GAME_005", "GAME_005"], "board": ["CFM_807"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power", "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power", "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "CFM_687": [
+  {
+   "kind": "tricky",
+   "title": "Inkmaster Solia: a free Flamestrike",
+   "expect": "No duplicates in the deck: after Solia only 3 Mana is left, but Flamestrike costs (0).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["CFM_687", "VAN_CS2_032"], "deck": ["VAN_CS2_120", "VAN_CS2_182"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "CFM_020": [
+  {
+   "kind": "tricky",
+   "title": "Raza the Chained: a free Hero Power",
+   "expect": "No duplicates in the deck: after Raza (5 of 5 Mana) the Priest's Lesser Heal costs (0).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 5, "max_mana": 10, "damage": 10, "hand": ["CFM_020"], "deck": ["VAN_CS2_120", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "hero_power", "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 22}]
+  }
+ ],
+ "CFM_699": [
+  {
+   "kind": "tricky",
+   "title": "Seadevil Stinger: a Murloc for Health",
+   "expect": "After the Stinger no Mana is left; Bluegill Warrior costs 2 Health and charges the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 4, "max_mana": 10, "hand": ["CFM_699", "VAN_CS2_173"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 28}, {"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "CFM_066": [
+  {
+   "kind": "tricky",
+   "title": "Kabal Lackey: a free Secret",
+   "expect": "After Lackey (1 of 1 Mana) Ice Block costs (0).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 1, "max_mana": 10, "hand": ["CFM_066", "VAN_EX1_295"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 1}]
+  }
+ ],
+ "CFM_760": [
+  {
+   "kind": "tricky",
+   "title": "Kabal Crystal Runner after two Secrets",
+   "expect": "Two Secrets played this game: the Runner costs (2) and fits the 2 Mana left.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 8, "max_mana": 10, "hand": ["VAN_EX1_295", "VAN_EX1_287", "CFM_760"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "secret"}, "is": 2}]
+  }
+ ],
+ "CFM_811": [
+  {
+   "kind": "tricky",
+   "title": "Lunar Visions: the minions drawn cost less",
+   "expect": "With 7 Mana, Lunar Visions draws the Yeti and Wisp; the Yeti costs (2) and is played with the 2 left.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 7, "max_mana": 10, "hand": ["CFM_811"], "deck": ["VAN_CS2_231", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}]
+  }
+ ],
+ "CFM_652": [
+  {
+   "kind": "tricky",
+   "title": "Second-Rate Bruiser against three minions",
+   "expect": "The opponent has three minions: the Bruiser costs (3).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 3, "max_mana": 10, "hand": ["CFM_652"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "CFM_685": [
+  {
+   "kind": "tricky",
+   "title": "Don Han'Cho buffs the only minion in the hand",
+   "expect": "The Wisp is the one minion in the hand (Fireball is not): it becomes 6/6.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["CFM_685", "VAN_CS2_029", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hand", "index": 1}, "card": "VAN_CS2_231", "atk": 6, "health": 6}]
+  }
+ ],
+ "CFM_643": [
+  {
+   "kind": "tricky",
+   "title": "Hobart Grapplehammer: the weapon in the hand",
+   "expect": "Fiery War Axe in the hand gets +1 Attack and is equipped as a 4/2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["CFM_643", "VAN_CS2_106"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "weapon"}, "card": "VAN_CS2_106", "atk": 4}]
+  }
+ ],
+ "CFM_631": [
+  {
+   "kind": "tricky",
+   "title": "Brass Knuckles buffs a minion in the hand",
+   "expect": "After the hero attacks, the Wisp in the hand gets +1/+1.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "weapon": "CFM_631", "hand": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_231", "atk": 2, "health": 2}, {"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "CFM_344": [
+  {
+   "kind": "tricky",
+   "title": "Finja kills a minion: two Murlocs from the deck",
+   "expect": "Finja kills the Wisp; the two Murloc Raiders come from the deck, the Crocolisk stays.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["CFM_344"], "deck": ["VAN_CS2_120", "VAN_CS2_168", "VAN_CS2_168"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  }
+ ],
+ "CFM_781": [
+  {
+   "kind": "tricky",
+   "title": "Shaku, the Collector steals a card",
+   "expect": "Shaku attacks the Mage hero: a random Mage card goes to the hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "board": ["CFM_781"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 1, "zone": "hero"}, "health": 28}]
+  }
+ ],
+ "CFM_333": [
+  {
+   "kind": "tricky",
+   "title": "Knuckles hits the hero after a minion",
+   "expect": "Knuckles attacks the Wisp and then hits the enemy hero for 3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "board": ["CFM_333"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "CFM_815": [
+  {
+   "kind": "tricky",
+   "title": "Wickerflame Burnbristle heals as it hits",
+   "expect": "Wickerflame deals 2 to the Yeti and the hero gets 2 Health back.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "damage": 10, "board": ["CFM_815"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 22}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 3}]
+  }
+ ],
+ "CFM_669": [
+  {
+   "kind": "tricky",
+   "title": "Burgly Bully: our spell gives the opponent a Coin",
+   "expect": "We cast Moonfire; the enemy Burgly Bully adds a Coin to its owner's hand.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["CFM_669"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 1, "zone": "hand"}, "is": 1}, {"at": {"side": 1, "zone": "hand", "index": 0}, "card": "GAME_005"}]
+  }
+ ],
+ "CFM_750": [
+  {
+   "kind": "tricky",
+   "title": "Krul the Unshackled summons the Demons from the hand",
+   "expect": "No duplicates in the deck: Voidwalker and Flame Imp come from the hand onto the board (no Battlecry: no damage); the Crocolisk stays.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["CFM_750", "VAN_CS2_065", "VAN_EX1_319", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_182"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hero"}, "health": 30}]
+  }
+ ],
+ "CFM_668": [
+  {
+   "kind": "tricky",
+   "title": "Doppelgangster with Unlicensed Apothecary",
+   "expect": "Doppelgangster and its two copies are three summons: Apothecary deals 5 damage to our hero for each.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["CFM_668"], "board": ["CFM_900"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"at": {"side": 0, "zone": "hero"}, "health": 15}]
+  }
+ ],
+ "CFM_790": [
+  {
+   "kind": "tricky",
+   "title": "Dirty Rat pulls a minion from the enemy hand",
+   "expect": "The opponent's only minion card, the Yeti, is summoned for them; their Fireball stays.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["CFM_790"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "hand": ["VAN_CS2_029", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}, {"count": {"side": 1, "zone": "hand"}, "is": 1}]
+  }
+ ],
+ "CFM_672": [
+  {
+   "kind": "tricky",
+   "title": "Madam Goya swaps a Wisp for Ysera",
+   "expect": "The Wisp goes into the deck and Ysera, the deck's only minion, takes its place.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["CFM_672"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_029", "VAN_EX1_572"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_EX1_572"}, {"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 0, "zone": "deck"}, "is": 2}]
+  }
+ ],
+ "CFM_341": [
+  {
+   "kind": "tricky",
+   "title": "Sergeant Sally with +3 Attack",
+   "expect": "Moonfire kills the 4/1 Sally; her Deathrattle deals 4 to every enemy minion.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": [{"card": "CFM_341", "enchantments": [{"atk": 3}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 1}]
+  }
+ ],
+ "CFM_316": [
+  {
+   "kind": "tricky",
+   "title": "Rat Pack with Blessing of Might",
+   "expect": "A 5 Attack Rat Pack dies: five Rats.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_087", "VAN_CS2_029"], "board": ["CFM_316"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "CFM_316t"}]
+  }
+ ],
+ "CFM_603": [
+  {
+   "kind": "tricky",
+   "title": "Potion of Madness: borrow a Wisp for the turn",
+   "expect": "The enemy Wisp attacks its own hero for us, then goes back at the end of the turn.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["CFM_603"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 29}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "CFM_616": [
+  {
+   "kind": "tricky",
+   "title": "Pilfered Power at 10 Mana Crystals",
+   "expect": "Already at 10 crystals: an Excess Mana card instead.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["CFM_616"], "board": ["VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "CS2_013t"}]
+  }
+ ],
+ "CFM_606": [
+  {
+   "kind": "tricky",
+   "title": "Mana Geode healed: a Crystal",
+   "expect": "Lesser Heal on the damaged Geode summons a 2/2 Crystal.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "board": [{"card": "CFM_606", "damage": 1}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "hero_power", "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "CFM_606t"}]
+  }
+ ]
+}

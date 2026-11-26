@@ -1,0 +1,326 @@
+{
+ "KAR_114": [
+  {
+   "kind": "tricky",
+   "title": "Barnes: a 1/1 copy of the only minion in the deck",
+   "expect": "The deck's one minion is Ysera: a 1/1 Ysera appears right of Barnes; the deck keeps its cards.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["KAR_114"], "deck": ["VAN_CS2_029", "VAN_EX1_572"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_572", "atk": 1, "health": 1}, {"count": {"side": 0, "zone": "deck"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Barnes copies a Battlecry minion without its Battlecry",
+   "expect": "The 1/1 Elven Archer is summoned, not played: no damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["KAR_114"], "deck": ["VAN_CS2_029", "VAN_CS2_189"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_189"}, {"at": {"side": 1, "zone": "hero"}, "health": 30}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Barnes with no minion in the deck",
+   "expect": "Only spells in the deck: Barnes summons nothing.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["KAR_114"], "deck": ["VAN_CS2_029", "VAN_CS2_029"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Barnes with Brann Bronzebeard",
+   "expect": "The Battlecry runs twice: two 1/1 Yseras.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["KAR_114"], "board": ["LOE_077"], "deck": ["VAN_CS2_029", "VAN_EX1_572"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_EX1_572", "atk": 1, "health": 1}, {"at": {"side": 0, "zone": "board", "index": 3}, "card": "VAN_EX1_572", "atk": 1, "health": 1}]
+  }
+ ],
+ "KAR_097": [
+  {
+   "kind": "tricky",
+   "title": "Medivh, the Guardian, then The Coin",
+   "expect": "Medivh equips Atiesh; The Coin costs 0, so Atiesh summons a random 0-Cost minion.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["KAR_097", "GAME_005"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "weapon"}, "card": "KAR_097t"}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Atiesh follows the Mana paid and breaks after three spells",
+   "expect": "Preparation (0) brings a 0-Cost minion, the cheaper Fireball (1) a 1-Cost one, The Coin a 0-Cost one; the third spell uses the last Durability.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "weapon": "KAR_097t", "hand": ["VAN_EX1_145", "VAN_CS2_029", "GAME_005"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "weapon"}, "card": ""}, {"at": {"side": 1, "zone": "hero"}, "health": 24}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Atiesh with a full board",
+   "expect": "No room for a minion: Atiesh does nothing and keeps its Durability through three spells.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "weapon": "KAR_097t", "hand": ["GAME_005", "GAME_005", "GAME_005"], "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "weapon"}, "card": "KAR_097t"}]
+  }
+ ],
+ "KAR_041": [
+  {
+   "kind": "tricky",
+   "title": "Moat Lurker dies: the destroyed minion comes back",
+   "expect": "Moat Lurker destroys the enemy Yeti; when Fireball kills the Lurker, a fresh Yeti returns to the enemy side.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["KAR_041", "VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 5}]
+  },
+  {
+   "kind": "tricky",
+   "title": "A silenced Moat Lurker keeps the minion",
+   "expect": "After Silence the Lurker has no Deathrattle: when it dies, the Yeti stays dead.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["KAR_041", "VAN_EX1_332", "VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Moat Lurker on a friendly Harvest Golem",
+   "expect": "The Golem is destroyed (its Damaged Golem comes); when the Lurker dies, a fresh Harvest Golem is summoned for us.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["KAR_041", "VAN_CS2_029"], "board": ["VAN_EX1_556"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 1}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_skele21"}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_EX1_556"}]
+  }
+ ],
+ "KAR_711": [
+  {
+   "kind": "tricky",
+   "title": "Arcane Giant after two spells",
+   "expect": "The Coin and Innervate make 13 Mana and two spells cast: the Giant costs (10).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["GAME_005", "VAN_EX1_169", "KAR_711"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "KAR_711"}]
+  }
+ ],
+ "KAR_033": [
+  {
+   "kind": "tricky",
+   "title": "Book Wyrm while holding a Dragon",
+   "expect": "Holding Azure Drake, Book Wyrm destroys the enemy Crocolisk (3 or less Attack).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["KAR_033", "VAN_EX1_284"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}]
+  }
+ ],
+ "KAR_010": [
+  {
+   "kind": "tricky",
+   "title": "Nightbane Templar while holding a Dragon",
+   "expect": "Two 1/1 Whelps appear, one on each side of the Templar.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["KAR_010", "VAN_EX1_284"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "KAR_010a"}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "KAR_010"}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "KAR_010a"}]
+  }
+ ],
+ "KAR_005": [
+  {
+   "kind": "tricky",
+   "title": "Kindly Grandmother becomes the Big Bad Wolf",
+   "expect": "Moonfire kills Grandmother; her Deathrattle summons a 3/2 Big Bad Wolf.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": ["KAR_005"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "KAR_005a"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Kindly Grandmother with Baron Rivendare",
+   "expect": "The Deathrattle runs twice: two Big Bad Wolves.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": ["KAR_005", "FP1_031"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "KAR_005a"}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "KAR_005a"}]
+  }
+ ],
+ "KAR_094": [
+  {
+   "kind": "tricky",
+   "title": "Deadly Fork leaves a Sharp Fork to equip",
+   "expect": "Fireball kills the Fork; the 3/2 Sharp Fork goes to the hand and is equipped.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_029"], "board": ["KAR_094"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "weapon"}, "card": "KAR_094a", "atk": 3}]
+  }
+ ],
+ "KAR_204": [
+  {
+   "kind": "tricky",
+   "title": "Onyx Bishop brings back a Wisp",
+   "expect": "The Wisp dies attacking the Yeti; Onyx Bishop summons it again.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["KAR_204"], "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "VAN_CS2_231"}]
+  }
+ ],
+ "KAR_712": [
+  {
+   "kind": "tricky",
+   "title": "Violet Illusionist: the hero is Immune on its own turn",
+   "expect": "The hero attacks the Yeti with Fiery War Axe and takes no damage back.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "weapon": "VAN_CS2_106", "board": ["KAR_712"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 30}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 2}]
+  }
+ ],
+ "KAR_006": [
+  {
+   "kind": "tricky",
+   "title": "Cloaked Huntress: free Secrets",
+   "expect": "With no Mana at all, two Secrets are played for (0).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 0, "max_mana": 10, "hand": ["KAR_004", "AT_060"], "board": ["KAR_006"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "secret"}, "is": 2}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "KAR_092": [
+  {
+   "kind": "tricky",
+   "title": "Medivh's Valet with a Secret",
+   "expect": "Ice Block is in play: the Valet deals 3 damage to the enemy hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["KAR_092"], "secrets": ["VAN_EX1_295"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "KAR_037": [
+  {
+   "kind": "tricky",
+   "title": "Avian Watcher with a Secret",
+   "expect": "A Secret is up: Avian Watcher becomes a 4/7 with Taunt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["KAR_037"], "secrets": ["VAN_EX1_295"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 4, "health": 7, "has": "TAUNT"}]
+  }
+ ],
+ "KAR_065": [
+  {
+   "kind": "tricky",
+   "title": "Menagerie Warden copies a buffed, damaged Beast",
+   "expect": "The copy has the Crocolisk's +2/+2 and its damage too: 4/4 with 1 damage, so 4 Health left of 5.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["KAR_065"], "board": [{"card": "VAN_CS2_120", "damage": 1, "enchantments": [{"atk": 2, "hp": 2}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_CS2_120", "atk": 4, "health": 4}]
+  }
+ ],
+ "KAR_205": [
+  {
+   "kind": "tricky",
+   "title": "Silverware Golem discarded by Soulfire",
+   "expect": "Soulfire discards the Golem (the only other card), which summons itself.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_308", "KAR_205"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "KAR_205"}, {"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "KAR_089": [
+  {
+   "kind": "tricky",
+   "title": "Malchezaar's Imp and Silverware Golem",
+   "expect": "The discarded Golem summons itself and the Imp draws a card.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_308", "KAR_205"], "board": ["KAR_089"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  }
+ ],
+ "KAR_021": [
+  {
+   "kind": "tricky",
+   "title": "Wicked Witchdoctor and The Coin",
+   "expect": "The Coin is a spell: a random basic Totem joins the Witchdoctor.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["GAME_005"], "board": ["KAR_021"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ],
+ "KAR_035": [
+  {
+   "kind": "tricky",
+   "title": "Priest of the Feast heals on each spell",
+   "expect": "The Coin and Innervate: 3 Health twice.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "damage": 10, "hand": ["GAME_005", "VAN_EX1_169"], "board": ["KAR_035"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 26}]
+  }
+ ],
+ "KAR_063": [
+  {
+   "kind": "tricky",
+   "title": "Spirit Claws with Spell Damage",
+   "expect": "Kobold Geomancer gives Spell Damage: Spirit Claws has 3 Attack and the hero hits for 3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "weapon": "KAR_063", "board": ["VAN_CS2_142"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "weapon"}, "atk": 3}, {"at": {"side": 1, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "KAR_026": [
+  {
+   "kind": "tricky",
+   "title": "Protect the King! counts the enemy minions",
+   "expect": "Three enemy minions: three 1/1 Pawns with Taunt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["KAR_026"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "KAR_026t", "has": "TAUNT"}]
+  }
+ ],
+ "KAR_070": [
+  {
+   "kind": "tricky",
+   "title": "Ethereal Peddler discounts another class's cards",
+   "expect": "The Rogue's Fireball (a Mage card) costs (2) after Peddler, so it fits in the 2 Mana left.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 7, "max_mana": 10, "hand": ["KAR_070", "VAN_CS2_029"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 24}, {"count": {"side": 0, "zone": "hand"}, "is": 0}]
+  }
+ ],
+ "KAR_061": [
+  {
+   "kind": "tricky",
+   "title": "The Curator draws one of each tribe",
+   "expect": "A Beast, a Dragon and a Murloc come from the deck; the Fireball stays.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["KAR_061"], "deck": ["VAN_CS2_120", "VAN_EX1_572", "VAN_CS2_168", "VAN_CS2_029"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 3}, {"count": {"side": 0, "zone": "deck"}, "is": 1}]
+  }
+ ],
+ "KAR_095": [
+  {
+   "kind": "tricky",
+   "title": "Zoobot buffs a Beast, a Dragon and a Murloc",
+   "expect": "One friendly minion of each tribe gets +1/+1.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["KAR_095"], "board": ["VAN_CS2_120", "VAN_EX1_284", "VAN_CS2_168"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 3}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "atk": 3, "health": 4}, {"at": {"side": 0, "zone": "board", "index": 1}, "atk": 5, "health": 5}, {"at": {"side": 0, "zone": "board", "index": 2}, "atk": 3, "health": 2}]
+  }
+ ],
+ "KAR_028": [
+  {
+   "kind": "tricky",
+   "title": "Fool's Bane attacks again and again",
+   "expect": "Fool's Bane has unlimited attacks against minions: three Wisps die one after another.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "weapon": "KAR_028", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_231", "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "hero"}, "health": 27}]
+  }
+ ],
+ "KAR_076": [
+  {
+   "kind": "tricky",
+   "title": "Firelands Portal",
+   "expect": "5 damage to the enemy hero, then a random 5-Cost minion.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["KAR_076"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 25}, {"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "KAR_073": [
+  {
+   "kind": "tricky",
+   "title": "Maelstrom Portal with Spell Damage",
+   "expect": "Kobold Geomancer makes it 2 damage to each enemy minion; then a random 1-Cost minion.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["KAR_073"], "board": ["VAN_CS2_142"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "health": 1}, {"count": {"side": 0, "zone": "board"}, "is": 2}]
+  }
+ ]
+}

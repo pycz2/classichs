@@ -797,7 +797,7 @@ func cycle_check(item: String) -> void:
 
 
 func _paint_check(b: Button, item: String, mark: String) -> void:
-	b.text = tr(item) + ({"passed": " +", "failed": " −"}.get(mark, ""))
+	b.text = tr(item) + ({"passed": " +", "failed": " -"}.get(mark, ""))
 	var color: Color = MARKS.filter(func(m): return m[0] == mark).map(func(m): return m[2]).front() if mark != "" else Palette.TEXT
 	b.add_theme_color_override("font_color", color)
 	b.add_theme_color_override("font_hover_color", color)

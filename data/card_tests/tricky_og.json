@@ -1,0 +1,379 @@
+{
+ "OG_280": [
+  {
+   "kind": "tricky",
+   "title": "Beckoner of Evil buffs C'Thun in the hand",
+   "expect": "The ritual reaches C'Thun wherever it is: the card in the hand becomes 8/8.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_281", "OG_280"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hand", "index": 0}, "card": "OG_280", "atk": 8, "health": 8}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Blade of C'Thun feeds C'Thun the destroyed minion's stats",
+   "expect": "Blade destroys the enemy Yeti and adds its 4 Attack and 5 Health to C'Thun in the hand: 10/11.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["OG_282", "OG_280"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "OG_280", "atk": 10, "health": 11}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Twilight Geomancer gives C'Thun in the hand Taunt",
+   "expect": "The C'Thun card in the hand gets Taunt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_284", "OG_280"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hand", "index": 0}, "card": "OG_280", "has": "TAUNT"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "C'Thun's Battlecry with no enemy minions",
+   "expect": "A 10/10 C'Thun fires 10 single points of damage at random enemies; with only the hero there, all 10 hit it.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": [{"card": "OG_280", "enchantments": [{"atk": 4, "hp": 4}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 20}, {"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "OG_131": [
+  {
+   "kind": "tricky",
+   "title": "Twin Emperor Vek'lor with a 10 Attack C'Thun in the hand",
+   "expect": "C'Thun in the hand has 10 Attack: Vek'lor summons Vek'nilash next to it.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_131", {"card": "OG_280", "enchantments": [{"atk": 4, "hp": 4}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "OG_319"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Twin Emperor Vek'lor with a small C'Thun",
+   "expect": "C'Thun has only 6 Attack: no second Emperor.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_131", "OG_280"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "OG_255": [
+  {
+   "kind": "tricky",
+   "title": "Doomcaller brings a dead C'Thun back into the deck",
+   "expect": "C'Thun dies attacking an Ogre; Doomcaller gives C'Thun +2/+2 and shuffles a new one into the deck.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_255"], "board": ["OG_280"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "deck"}, "is": 3}]
+  }
+ ],
+ "OG_133": [
+  {
+   "kind": "tricky",
+   "title": "N'Zoth brings back the Deathrattle minions that died",
+   "expect": "Harvest Golem and Loot Hoarder die attacking the Ogre; N'Zoth summons both again to its right.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_133"], "board": ["VAN_EX1_556", "VAN_EX1_096"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 4}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_EX1_556"}, {"at": {"side": 0, "zone": "board", "index": 3}, "card": "VAN_EX1_096"}]
+  },
+  {
+   "kind": "tricky",
+   "title": "N'Zoth: a silenced Golem yes, an enchanted Wisp no",
+   "expect": "The silenced Harvest Golem still has a Deathrattle on its card, so N'Zoth brings it back; the Wisp only had one from an enchantment and stays dead.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_133"], "board": [{"card": "VAN_EX1_556", "silenced": true}, {"card": "VAN_CS2_231", "enchantments": [{"deathrattle": "VAN_EX1_556"}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_skele21"}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_EX1_556"}]
+  }
+ ],
+ "OG_134": [
+  {
+   "kind": "tricky",
+   "title": "Yogg-Saron with no spells cast this game",
+   "expect": "No spell was cast before, so the Battlecry casts nothing.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_08", "mana": 10, "max_mana": 10, "hand": ["OG_134"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"count": {"side": 0, "zone": "hand"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 30}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Yogg-Saron after The Coin and Innervate",
+   "expect": "Two spells were cast this game: Yogg-Saron casts two random spells with random targets (watch them one by one).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["GAME_005", "VAN_EX1_169", "OG_134"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}]
+  }
+ ],
+ "OG_044": [
+  {
+   "kind": "tricky",
+   "title": "Fandral Staghelm and Wisps of the Old Gods",
+   "expect": "Both effects: the Wisps fill the board first (six fit), then every minion gets +2/+2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["OG_195"], "board": ["OG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 2}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 0}, "atk": 5, "health": 7}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "OG_195c", "atk": 3, "health": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Fandral Staghelm and Druid of the Claw",
+   "expect": "Both forms combined: a 4/6 Druid of the Claw with Charge and Taunt, which attacks at once.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_165"], "board": ["OG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 1, "choice": 2}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 1}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 1}, "card": "OG_044a", "atk": 4, "health": 6, "has": "TAUNT"}, {"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Fandral Staghelm and Living Roots",
+   "expect": "Both effects: 2 damage to the enemy hero and two Saplings.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["AT_037"], "board": ["OG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}, "choice": 2}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 28}, {"count": {"side": 0, "zone": "board"}, "is": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Fandral Staghelm and Starfall",
+   "expect": "Both effects: 5 damage to the Ogre and 2 to every enemy minion; the Ogre dies, the Yeti is left at 3.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_NEW1_007"], "board": ["OG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}, "choice": 2}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "health": 3}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Fandral Staghelm and Feral Rage",
+   "expect": "Both effects: +4 Attack this turn and 8 Armor; the hero hits the enemy for 4.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["OG_047"], "board": ["OG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "choice": 2}, {"do": "attack", "attacker": {"side": 0, "zone": "hero"}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 26}]
+  },
+  {
+   "kind": "tricky",
+   "title": "Fandral Staghelm and Keeper of the Grove",
+   "expect": "Both effects on the buffed Yeti: Silence first (it loses +2 Attack), then 2 damage.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_166"], "board": ["OG_044"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": [{"card": "VAN_CS2_182", "enchantments": [{"atk": 2}]}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "board", "index": 0}, "pos": 1, "choice": 2}],
+   "check": [{"at": {"side": 1, "zone": "board", "index": 0}, "atk": 4, "health": 3}]
+  }
+ ],
+ "OG_209": [
+  {
+   "kind": "tricky",
+   "title": "Hallazeal the Ascended heals for the spell damage",
+   "expect": "Flamestrike deals 4 to each of the two enemy minions: Hallazeal restores 8 Health to our hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "damage": 20, "hand": ["VAN_CS2_032"], "board": ["OG_209"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_200", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 18}]
+  }
+ ],
+ "OG_027": [
+  {
+   "kind": "tricky",
+   "title": "Evolve transforms every friendly minion",
+   "expect": "The Wisp and the Crocolisk become random minions costing (1) and (3); the enemy Yeti is untouched.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_02", "mana": 10, "max_mana": 10, "hand": ["OG_027"], "board": ["VAN_CS2_231", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_182"}]
+  }
+ ],
+ "OG_114": [
+  {
+   "kind": "tricky",
+   "title": "Forbidden Ritual with 11 Mana",
+   "expect": "The Coin makes 11 Mana; Forbidden Ritual spends it all, but only seven Tentacles fit on the board.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["GAME_005", "OG_114"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 7}, {"at": {"side": 0, "zone": "board", "index": 6}, "card": "OG_114a"}]
+  }
+ ],
+ "OG_198": [
+  {
+   "kind": "tricky",
+   "title": "Forbidden Healing spends 10 Mana",
+   "expect": "All 10 Mana is spent: twice that, 20 Health, goes back to the hero.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "damage": 25, "hand": ["OG_198"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "hero"}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 25}]
+  }
+ ],
+ "OG_051": [
+  {
+   "kind": "tricky",
+   "title": "Forbidden Ancient spends the Mana left",
+   "expect": "After paying 1, the 9 Mana left are spent: a 10/10.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_06", "mana": 10, "max_mana": 10, "hand": ["OG_051"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "OG_051", "atk": 10, "health": 10}]
+  }
+ ],
+ "OG_101": [
+  {
+   "kind": "tricky",
+   "title": "Forbidden Shaping with 10 Mana",
+   "expect": "All 10 Mana is spent: a random 10-Cost minion is summoned.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_101"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}]
+  }
+ ],
+ "OG_317": [
+  {
+   "kind": "tricky",
+   "title": "Deathwing, Dragonlord puts the Dragons from the hand into play",
+   "expect": "Shadow Word: Death kills our Deathwing; Azure Drake and Ysera come from the hand onto the board (no Battlecry, no draw), the Crocolisk stays.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_622", "VAN_EX1_284", "VAN_EX1_572", "VAN_CS2_120"], "board": ["OG_317"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"count": {"side": 0, "zone": "hand"}, "is": 1}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_120"}, {"count": {"side": 0, "zone": "deck"}, "is": 2}]
+  }
+ ],
+ "OG_276": [
+  {
+   "kind": "tricky",
+   "title": "Blood Warriors copies the damaged minions as plain cards",
+   "expect": "The damaged buffed Yeti and the damaged Crocolisk are copied (base stats); the undamaged Wisp is not.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["OG_276"], "board": [{"card": "VAN_CS2_182", "damage": 1, "enchantments": [{"atk": 2}]}, {"card": "VAN_CS2_120", "damage": 1}, "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_182", "atk": 4, "health": 5}, {"at": {"side": 0, "zone": "hand", "index": 1}, "card": "VAN_CS2_120"}]
+  }
+ ],
+ "OG_149": [
+  {
+   "kind": "tricky",
+   "title": "Ravaging Ghoul sets off Tentacle of N'Zoth",
+   "expect": "The Ghoul's 1 damage kills the Tentacle, whose Deathrattle deals 1 more to every minion, the Ghoul too.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["OG_149"], "board": ["OG_151", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231", "VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_120", "health": 1}, {"at": {"side": 0, "zone": "board", "index": 1}, "card": "OG_149", "health": 2}, {"count": {"side": 1, "zone": "board"}, "is": 1}, {"at": {"side": 1, "zone": "board", "index": 0}, "card": "VAN_CS2_120", "health": 1}]
+  }
+ ],
+ "OG_291": [
+  {
+   "kind": "tricky",
+   "title": "Shadowcaster's 1/1 Ysera for (1)",
+   "expect": "Shadowcaster puts a 1/1 Ysera costing (1) into the hand; it is played with the last Mana.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 6, "max_mana": 10, "hand": ["OG_291"], "board": ["VAN_EX1_572"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}, {"at": {"side": 0, "zone": "board", "index": 2}, "card": "VAN_EX1_572", "atk": 1, "health": 1}]
+  }
+ ],
+ "OG_073": [
+  {
+   "kind": "tricky",
+   "title": "Thistle Tea: three of the card drawn",
+   "expect": "The top card, Fireball, is drawn and two more copies are added.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_03", "mana": 10, "max_mana": 10, "hand": ["OG_073"], "deck": ["VAN_CS2_120", "VAN_CS2_029"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 3}, {"at": {"side": 0, "zone": "hand", "index": 0}, "card": "VAN_CS2_029"}, {"at": {"side": 0, "zone": "hand", "index": 2}, "card": "VAN_CS2_029"}]
+  }
+ ],
+ "OG_316": [
+  {
+   "kind": "tricky",
+   "title": "Herald Volazj copies the board as 1/1s",
+   "expect": "A 1/1 copy of the buffed Yeti and of the Wisp appears right of Volazj.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_316"], "board": [{"card": "VAN_CS2_182", "enchantments": [{"atk": 2}]}, "VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "pos": 2}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 5}, {"at": {"side": 0, "zone": "board", "index": 3}, "card": "VAN_CS2_182", "atk": 1, "health": 1}, {"at": {"side": 0, "zone": "board", "index": 4}, "card": "VAN_CS2_231", "atk": 1, "health": 1}]
+  }
+ ],
+ "OG_104": [
+  {
+   "kind": "tricky",
+   "title": "Embrace the Shadow turns Flash Heal into damage",
+   "expect": "This turn healing deals damage: Flash Heal at the enemy hero deals 5.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_09", "mana": 10, "max_mana": 10, "hand": ["OG_104", "AT_055"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 1, "zone": "hero"}}],
+   "check": [{"at": {"side": 1, "zone": "hero"}, "health": 25}]
+  }
+ ],
+ "OG_174": [
+  {
+   "kind": "tricky",
+   "title": "Faceless Shambler copies a damaged Yeti",
+   "expect": "Shambler takes the Yeti's current Attack and Health: a 4/3 with Taunt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["OG_174"], "board": [{"card": "VAN_CS2_182", "damage": 2}], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 1}, "card": "OG_174", "atk": 4, "health": 3, "has": "TAUNT"}]
+  }
+ ],
+ "OG_309": [
+  {
+   "kind": "tricky",
+   "title": "Princess Huhuran sets off Cairne's Deathrattle",
+   "expect": "Cairne stays alive and Baine Bloodhoof is summoned.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "hand": ["OG_309"], "board": ["VAN_EX1_110"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}, "pos": 1}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 3}]
+  }
+ ],
+ "OG_318": [
+  {
+   "kind": "tricky",
+   "title": "Hogger, Doom of Elwynn and Whirlwind",
+   "expect": "Hogger takes 1 damage and summons a 2/2 Gnoll with Taunt.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["VAN_EX1_400"], "board": ["OG_318"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 2}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "OG_318", "health": 5}]
+  }
+ ],
+ "OG_173": [
+  {
+   "kind": "tricky",
+   "title": "Two Blood of The Ancient One merge",
+   "expect": "At the end of the turn the two merge into The Ancient One, a 30/30.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["OG_173", "OG_173"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "OG_173a", "atk": 30, "health": 30}]
+  }
+ ],
+ "OG_254": [
+  {
+   "kind": "tricky",
+   "title": "Eater of Secrets eats two Secrets",
+   "expect": "Both enemy Secrets are destroyed and Eater of Secrets gains +2/+2.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["OG_254"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "secrets": ["VAN_EX1_287", "VAN_EX1_295"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"count": {"side": 1, "zone": "secret"}, "is": 0}, {"at": {"side": 0, "zone": "board", "index": 0}, "atk": 4, "health": 6}]
+  }
+ ],
+ "OG_121": [
+  {
+   "kind": "tricky",
+   "title": "Cho'gall pays for Flamestrike with Health",
+   "expect": "After Cho'gall only 3 Mana is left, but Flamestrike costs 7 Health instead.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_07", "mana": 10, "max_mana": 10, "hand": ["OG_121", "VAN_CS2_032"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_120"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}, {"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}}],
+   "check": [{"at": {"side": 0, "zone": "hero"}, "health": 23}, {"count": {"side": 1, "zone": "board"}, "is": 0}]
+  }
+ ],
+ "OG_221": [
+  {
+   "kind": "tricky",
+   "title": "Selfless Hero shields the only other minion",
+   "expect": "Moonfire kills Selfless Hero; its Deathrattle gives the Yeti Divine Shield.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_04", "mana": 10, "max_mana": 10, "hand": ["VAN_CS2_008"], "board": ["OG_221", "VAN_CS2_182"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "play", "card": {"side": 0, "zone": "hand", "index": 0}, "target": {"side": 0, "zone": "board", "index": 0}}],
+   "check": [{"count": {"side": 0, "zone": "board"}, "is": 1}, {"at": {"side": 0, "zone": "board", "index": 0}, "card": "VAN_CS2_182", "has": "DIVINE_SHIELD"}]
+  }
+ ],
+ "OG_308": [
+  {
+   "kind": "tricky",
+   "title": "Giant Sand Worm attacks again after a kill",
+   "expect": "The Worm kills the Wisp and may attack again: then it hits the enemy hero for 8.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_05", "mana": 10, "max_mana": 10, "board": ["OG_308"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "board": ["VAN_CS2_231"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "board", "index": 0}}, {"do": "attack", "attacker": {"side": 0, "zone": "board", "index": 0}, "defender": {"side": 1, "zone": "hero"}}],
+   "check": [{"count": {"side": 1, "zone": "board"}, "is": 0}, {"at": {"side": 1, "zone": "hero"}, "health": 22}]
+  }
+ ],
+ "OG_200": [
+  {
+   "kind": "tricky",
+   "title": "Validated Doomsayer at the start of its turn",
+   "expect": "After a full round the Doomsayer's Attack is set to 7.",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "board": ["OG_200"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "end_turn"}],
+   "check": [{"at": {"side": 0, "zone": "board", "index": 0}, "card": "OG_200", "atk": 7, "health": 7}]
+  }
+ ],
+ "OG_123": [
+  {
+   "kind": "tricky",
+   "title": "Shifter Zerus shifts at the start of the turn",
+   "expect": "Zerus in the hand becomes a random minion at the start of our next turn (watch the card change).",
+   "scene": {"current": 0, "players": [{"hero": "HERO_01", "mana": 10, "max_mana": 10, "hand": ["OG_123"], "deck": ["VAN_CS2_120", "VAN_CS2_120"]}, {"hero": "HERO_08", "deck": ["VAN_CS2_120", "VAN_CS2_120"]}]},
+   "steps": [{"do": "end_turn"}, {"do": "end_turn"}],
+   "check": [{"count": {"side": 0, "zone": "hand"}, "is": 2}]
+  }
+ ]
+}
