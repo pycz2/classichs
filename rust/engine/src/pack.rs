@@ -131,6 +131,39 @@ pub fn read_zip(b: &[u8]) -> Result<Files, String> {
 /// reads come into memory, never the whole pack (up to MAX_PACK).
 /// ponytail: no CRC check (the hashes of the files catch corruption that matters); no zip64.
 pub fn read_zip_from<R: Read + Seek>(r: &mut R) -> Result<Files, String> {
+    scan_zip(r, None)
+}
+
+/// What `check_zip_from` read: the files the engine reads and both hashes of format.md §3.
+#[derive(Debug)]
+pub struct Checked {
+    pub files: Files,
+    pub content_hash: String,
+    pub rules_hash: String,
+}
+
+/// The whole check of a `.cardpack` in one read of each file: `read_zip_from`, `rules_hash` and
+/// `content_hash` (every file, path + SHA-256 of its bytes). `progress` gets the bytes of the zip
+/// read so far after each file (the client's progress bar).
+pub fn check_zip_from<R: Read + Seek>(r: &mut R, progress: &mut dyn FnMut(u64)) -> Result<Checked, String> {
+    let mut items = vec![];
+    let files = scan_zip(r, Some(&mut |name: &str, data: &[u8], at: u64| {
+        items.push((name.to_string(), hex(&Sha256::digest(data))));
+        progress(at);
+    }))?;
+    items.sort();
+    let mut h = Sha256::new();
+    h.update(b"cardpack-content/1\n");
+    for (p, d) in &items {
+        h.update(format!("{p}:{d}\n").as_bytes());
+    }
+    let rules_hash = rules_hash(&files)?;
+    Ok(Checked { files, content_hash: hex(&h.finalize()), rules_hash })
+}
+
+/// `read_zip_from`; with `every`, every other file is read too and each one's bytes go to it
+/// (with where in the zip its data ends).
+fn scan_zip<R: Read + Seek>(r: &mut R, mut every: Option<&mut dyn FnMut(&str, &[u8], u64)>) -> Result<Files, String> {
     let len = r.seek(SeekFrom::End(0)).map_err(|e| format!("cannot read the pack: {e}"))? as usize;
     if len > MAX_PACK {
         return Err(format!("the pack is {len} bytes, more than {MAX_PACK}"));
@@ -190,11 +223,12 @@ pub fn read_zip_from<R: Read + Seek>(r: &mut R) -> Result<Files, String> {
         if unpacked > MAX_UNPACKED {
             return Err("the pack is too big unpacked".into());
         }
-        if !wanted(&name) {
+        let want = wanted(&name);
+        if !want && every.is_none() {
             continue;
         }
         let part = rules.entry(version_of(&name).map_or(String::new(), |(v, _)| v.to_string())).or_default();
-        *part += usize_;
+        *part += if want { usize_ } else { 0 };
         if *part > MAX_RULES || rules.values().sum::<usize>() > MAX_RULES_ALL {
             return Err(format!("the rules part is more than {MAX_RULES} bytes"));
         }
@@ -202,7 +236,8 @@ pub fn read_zip_from<R: Read + Seek>(r: &mut R) -> Result<Files, String> {
         if u32_at(&head, 0)? != 0x0403_4b50 {
             return Err(format!("{name}: bad local header"));
         }
-        let data = read_at(r, local + 30 + u16_at(&head, 26)? + u16_at(&head, 28)?, csize)?;
+        let at = local + 30 + u16_at(&head, 26)? + u16_at(&head, 28)?;
+        let data = read_at(r, at, csize)?;
         let bytes = match method {
             0 => data,
             8 => miniz_oxide::inflate::decompress_to_vec_with_limit(&data, usize_)
@@ -212,7 +247,12 @@ pub fn read_zip_from<R: Read + Seek>(r: &mut R) -> Result<Files, String> {
         if bytes.len() != usize_ {
             return Err(format!("{name}: wrong size"));
         }
-        out.insert(name, bytes);
+        if let Some(f) = every.as_mut() {
+            f(&name, &bytes, (at + csize) as u64);
+        }
+        if want {
+            out.insert(name, bytes);
+        }
     }
     Ok(out)
 }

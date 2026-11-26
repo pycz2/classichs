@@ -61,7 +61,7 @@ var _probing_signup := false
 ## The server's packs: {server: [pack], mine: [pack + enabled]}; a pack is
 ## {id, name: {lang: text}, version, rules_hash, content_hash, size, url} (server/README.md).
 var packs := {"server": [], "mine": []}
-## Downloads under way: content_hash -> HTTPRequest.
+## Downloads under way, till installed: content_hash -> PackInstall (its `request` meta: the HTTPRequest).
 var downloading := {}
 ## The deck sent with the last queue, invite or acceptance: the server's game uses it.
 var game_deck: Deck
@@ -294,8 +294,13 @@ func _process(_d: float) -> void:
 		if msg is Dictionary and msg.get("t") is String:
 			dispatch(msg)
 	for h in downloading:
-		var r: HTTPRequest = downloading[h]
-		pack_progress.emit(h, r.get_downloaded_bytes(), maxi(r.get_body_size(), int(r.get_meta("size", 0))))
+		var j: PackInstall = downloading[h]
+		var r = j.get_meta("request") if j.has_meta("request") else null
+		if j.stage == "receiving" and is_instance_valid(r):
+			j.done = r.get_downloaded_bytes()
+			j.total = maxi(r.get_body_size(), j.total)
+			j.changed.emit()
+		pack_progress.emit(h, j.done, j.total)
 	if st == WebSocketPeer.STATE_CLOSED and not _closed:
 		_closed = true
 		resuming = false
@@ -350,6 +355,14 @@ func dispatch(msg: Dictionary) -> void:
 			elif not _replays.is_empty() and msg.get("code") in ["bad_request", "not_found"]:  # no replays (before 0.50)
 				_replays.erase(_replays.keys()[0])
 				return
+		"pack_stage":  # how the player's upload goes on the server (receiving, checking, trial, storing, done)
+			for up: PackInstall in PackInstall.jobs:
+				if up.upload and up.file.get_file() == msg.get("upload") and msg.get("stage") != "done":
+					up.stage = str(msg.stage)
+					var bytes: bool = msg.stage == "receiving"  # (the other stages have no measure)
+					up.done = int(msg.get("done", 0)) if bytes else 0
+					up.total = int(msg.get("total", 0)) if bytes else 0
+					up.changed.emit()
 		"me":  # the profile changed (a tag set, a game's result): every screen reads it from here
 			if msg.get("me") is Dictionary:
 				me = msg.me
@@ -541,32 +554,37 @@ func is_mine(entry: Dictionary) -> bool:
 	return packs.mine.any(func(e): return e.get("content_hash") == entry.get("content_hash"))
 
 
-## Downloads a server pack (GET /packs/<content_hash>.cardpack with the session token),
-## installs it if its files give that content hash: pack_progress, then pack_downloaded.
+## Downloads a server pack (GET /packs/<content_hash>.cardpack with the session token) straight
+## into a file, then installs it in the background if its files give that content hash
+## (PackInstall): pack_progress, then pack_downloaded.
 func download_pack(entry: Dictionary) -> void:
 	var h := str(entry.get("content_hash", ""))
 	if h == "" or downloading.has(h):
 		return
-	var r := _http("/packs/%s.cardpack" % h, HTTPClient.METHOD_GET, PackedByteArray(), _downloaded.bind(entry))
+	var j := PackInstall.receiving(ServerView.entry_title(entry), "downloaded", {"server": url}, h)
+	j.total = int(entry.get("size", 0))
+	j.finished.connect(_installed.bind(h))
+	downloading[h] = j.start()
+	var r := _http("/packs/%s.cardpack" % h, HTTPClient.METHOD_GET, PackedByteArray(), _downloaded.bind(j), j.file)
 	if r:
-		r.set_meta("size", int(entry.get("size", 0)))
-		downloading[h] = r
+		j.set_meta("request", r)
 
 
-func _downloaded(code: int, body: PackedByteArray, entry: Dictionary) -> void:
-	var h := str(entry.get("content_hash", ""))
-	downloading.erase(h)
-	var res := {}
+func _downloaded(code: int, _body: PackedByteArray, j: PackInstall) -> void:
 	if code == 401:
-		res = {"error": _tr("Log in to the server again")}
+		j.finish({"error": _tr("Log in to the server again")})
 	elif code == 404:
-		res = {"error": _tr("The server no longer has this game")}
+		j.finish({"error": _tr("The server no longer has this game")})
 	elif code != 200:
-		res = {"error": _tr("The download failed (%s)") % (str(code) if code > 0 else "-")}
+		j.finish({"error": _tr("The download failed (%s)") % (str(code) if code > 0 else "-")})
 	else:
-		res = Packs.install(body, "downloaded", {"server": url}, h)
-		if str(res.get("error", "")) in [Packs.ERRORS[2], Packs.ERRORS[3]]:
-			res = {"error": _tr("The download is damaged: try again"), "detail": res.get("detail", "")}
+		j.received()
+
+
+func _installed(res: Dictionary, h: String) -> void:
+	downloading.erase(h)
+	if str(res.get("error", "")) in [Packs.ERRORS[2], Packs.ERRORS[3]]:
+		res = {"error": _tr("The download is damaged: try again"), "detail": res.get("detail", "")}
 	pack_downloaded.emit(h, res)
 
 
@@ -577,7 +595,10 @@ func upload_pack(p: Pack) -> void:
 	if bytes.is_empty():
 		pack_uploaded.emit({"error": _tr("Cannot read the pack"), "code": "read"})
 		return
-	_http("/packs", HTTPClient.METHOD_POST, bytes, _uploaded)
+	var up := PackInstall.receiving(p.title(), "upload")  # (shown on the screens; the server tells its stages by its file name)
+	up.upload = true
+	up.total = bytes.size()
+	_http("/packs", HTTPClient.METHOD_POST, bytes, _uploaded.bind(up.start()), "", up.file.get_file())
 
 
 ## The server's answers to an upload (server/README.md): code -> the player's words.
@@ -586,10 +607,11 @@ const UPLOAD_ERRORS := {"auth_required": "Log in to the server again", "bad_toke
 	"too_large": "The game is too big for this server", "empty": "The upload broke off", "bad_body": "The upload broke off"}
 
 
-func _uploaded(code: int, body: PackedByteArray) -> void:
+func _uploaded(code: int, body: PackedByteArray, up: PackInstall) -> void:
 	var j = JSON.parse_string(body.get_string_from_utf8())
 	var d: Dictionary = j if j is Dictionary else {}
 	if code == 201 and d.get("pack") is Dictionary:
+		up.finish({"pack": d.pack})
 		pack_uploaded.emit({"pack": d.pack})
 		return
 	var c := str(d.get("code", str(code)))
@@ -598,6 +620,7 @@ func _uploaded(code: int, body: PackedByteArray) -> void:
 		text = _tr("The server refused the game: %s") % str(d.get("error", ""))
 	elif text == "":
 		text = _tr("The server could not take the game (%s)") % c
+	up.finish({"error": text, "code": c})
 	pack_uploaded.emit({"error": text, "code": c})
 
 
@@ -607,10 +630,13 @@ func delete_pack(content_hash: String) -> void:
 
 
 ## An HTTP request to the server with the session token; done(code, body) gets the answer
-## (code 0: no answer). Tests replace it.
-func _http(path: String, method: int, body: PackedByteArray, done: Callable) -> HTTPRequest:
+## (code 0: no answer). to_file: the answer goes straight into that file (body empty); upload_id:
+## the server tells the stages of this upload by it (`pack_stage`). Tests replace it.
+func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_file := "", upload_id := "") -> HTTPRequest:
 	var r := HTTPRequest.new()
 	r.use_threads = not OS.has_feature("web")
+	r.download_file = to_file
+	r.download_chunk_size = 1 << 22  # (the browser takes a chunk a frame: 64 KiB ones made a 60 MB pack take 20 s)
 	add_child(r)
 	r.request_completed.connect(func(result: int, code: int, _h, data: PackedByteArray):
 		r.queue_free()
@@ -618,6 +644,8 @@ func _http(path: String, method: int, body: PackedByteArray, done: Callable) -> 
 	var headers := PackedStringArray(["Authorization: Bearer " + token])
 	if method == HTTPClient.METHOD_POST:
 		headers.append("Content-Type: application/octet-stream")
+		if upload_id != "":
+			headers.append("X-Upload-Id: " + upload_id)
 	if r.request_raw(http_base() + path, headers, method, body) != OK:
 		r.queue_free()
 		done.call(0, PackedByteArray())

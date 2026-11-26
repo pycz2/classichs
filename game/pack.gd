@@ -302,10 +302,19 @@ func find(folder: String, name: String, exts: Array) -> String:
 	return ""
 
 
-## content_hash (format.md, "Hashes"): every file, path + SHA-256 of its bytes.
+## content_hash (format.md, "Hashes"): every file, path + SHA-256 of its bytes. The rules engine's
+## PackScan where there is one (one read of each file; ZIPReader looks for each file from the start).
 func content_hash() -> String:
 	if _whole:  # (a version view: its pack's)
 		return _whole.content_hash()
+	if _content_hash == "" and ClassDB.class_exists("PackScan"):
+		var s: Object = ClassDB.instantiate("PackScan")
+		if path.begins_with("res://"):  # (inside the game's own files in an export)
+			s.start_bytes(FileAccess.get_file_as_bytes(path))
+		else:
+			s.start(ProjectSettings.globalize_path(path))
+		var r = JSON.parse_string(s.wait())
+		_content_hash = str(r.get("content_hash", "")) if r is Dictionary else ""
 	if _content_hash == "":
 		var items := []
 		for f in files():
@@ -412,7 +421,9 @@ static func sha256(bytes: PackedByteArray) -> String:
 
 ## What makes this file no pack the game may use ([] = fine): the paths and sizes of
 ## format.md, a manifest of format 1 with an id, and a rules_hash that matches the files.
-func problems() -> Array:
+## deep=false: without reading the files (the sizes, the rules hash: the rules engine's PackScan
+## checked those, PackInstall).
+func problems(deep := true) -> Array:
 	var out := []
 	if size > LIMITS.pack:
 		out.append("the file is bigger than 1 GiB")
@@ -437,7 +448,7 @@ func problems() -> Array:
 			out.append("not a version's file: " + f.left(80))
 		elif parts.size() > 1 and parts[0] != "versions" and not DIRS.has(parts[0]):
 			out.append("unknown folder: " + parts[0])
-		var n := read(f).size() if not f.get_extension().to_lower() in IMAGE_EXT + AUDIO_EXT else 0
+		var n := read(f).size() if deep and not f.get_extension().to_lower() in IMAGE_EXT + AUDIO_EXT else 0
 		total += n
 		if n > LIMITS.file:
 			out.append("too big: " + f)
@@ -450,6 +461,6 @@ func problems() -> Array:
 	for need in ["rules.json", "cards.json"]:
 		if not has(need):
 			out.append(need + " is missing")
-	if out.is_empty() and computed_rules_hash() != rules_hash():
+	if out.is_empty() and deep and computed_rules_hash() != rules_hash():
 		out.append("rules_hash does not match the files")
 	return out

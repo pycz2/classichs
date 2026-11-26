@@ -5,7 +5,7 @@ extends ServerLink
 
 var sent: Array = []
 var up := true
-## HTTP requests made (downloads, uploads): {path, method, body, done}; a test answers
+## HTTP requests made (downloads, uploads): {path, method, body, done, upload_id}; a test answers
 ## with done.call(code, body).
 var http: Array = []
 
@@ -35,8 +35,14 @@ func close() -> void:
 	up = false
 
 
-func _http(path: String, method: int, body: PackedByteArray, done: Callable) -> HTTPRequest:
-	http.append({"path": path, "method": method, "body": body, "done": done})
+func _http(path: String, method: int, body: PackedByteArray, done: Callable, to_file := "", upload_id := "") -> HTTPRequest:
+	var answer := func(code: int, got: PackedByteArray):  # (a download goes into its file, as HTTPRequest does)
+		if to_file != "":
+			var f := FileAccess.open(to_file, FileAccess.WRITE)
+			f.store_buffer(got)
+			f.close()
+		done.call(code, PackedByteArray() if to_file != "" else got)
+	http.append({"path": path, "method": method, "body": body, "done": answer, "upload_id": upload_id})
 	return null
 
 

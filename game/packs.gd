@@ -211,9 +211,10 @@ static func enter(p: Pack, sets := {}) -> void:
 			_set_changed(kind)
 
 
-static func find(content_hash_: String) -> Pack:
+## rules_hash: the pack's, when known: only packs of those rules can be it (no others get hashed).
+static func find(content_hash_: String, rules_hash := "") -> Pack:
 	for p: Pack in all():
-		if content_hash(p) == content_hash_:
+		if (rules_hash == "" or p.rules_hash() == rules_hash) and content_hash(p) == content_hash_:
 			return p
 	return null
 
@@ -287,32 +288,32 @@ const ERRORS := ["The game pack is bigger than 1 GiB", "Cannot write the game pa
 	"The game pack is damaged", "Cannot read the file"]
 
 
-## Installs a pack from its bytes (a download, a file, a P2P transfer) into user://packs.
+## Installs a pack from its bytes (a download, a file, a P2P transfer) into user://packs, waiting
+## for the check (PackInstall.of_bytes(…).start() does it in the background).
 ## {pack: Pack} or {error: why (one of ERRORS), detail?}. A pack already there is returned as it is.
 ## want_hash: the content hash the sender promised ("" = any).
 static func install(bytes: PackedByteArray, origin: String, extra := {}, want_hash := "") -> Dictionary:
-	if bytes.size() > Pack.LIMITS.pack:
-		return {"error": ERRORS[0]}
-	DirAccess.make_dir_recursive_absolute(user_dir)
-	var tmp := user_dir + "/incoming.tmp"
-	var f := FileAccess.open(tmp, FileAccess.WRITE)
-	if f == null:
-		return {"error": ERRORS[1]}
-	f.store_buffer(bytes)
-	f.close()
+	return PackInstall.of_bytes(bytes, "", origin, extra, want_hash).run_now()
+
+
+## The last step of an install (PackInstall): the file tmp, checked by the rules engine (check:
+## {content_hash, rules_hash} or {error}), goes into place under its content hash.
+static func store(tmp: String, check: Dictionary, origin: String, extra := {}, want_hash := "") -> Dictionary:
 	var p := Pack.open(tmp, origin)
 	if p == null:
 		DirAccess.remove_absolute(tmp)
 		return {"error": ERRORS[2]}
-	var bad := p.problems()
-	var h := p.content_hash() if bad.is_empty() else ""
+	var bad := [str(check.error)] if check.has("error") else p.problems(false)
+	var h := str(check.get("content_hash", ""))
+	if bad.is_empty() and str(check.get("rules_hash", "")) != p.rules_hash():
+		bad.append("rules_hash does not match the files")
 	if bad.is_empty() and want_hash != "" and h != want_hash:
 		bad.append("the pack differs from the one offered")
 	if not bad.is_empty():
 		p.close()
 		DirAccess.remove_absolute(tmp)
 		return {"error": ERRORS[3], "detail": bad[0]}
-	var have := find(h)
+	var have := find(h, p.rules_hash())
 	if have:
 		p.close()
 		DirAccess.remove_absolute(tmp)
@@ -324,7 +325,7 @@ static func install(bytes: PackedByteArray, origin: String, extra := {}, want_ha
 		return {"error": ERRORS[1]}
 	var idx := _index()
 	var e := {"file": file, "content_hash": h, "rules_hash": p.rules_hash(), "id": p.id(), "version": p.version(),
-		"size": bytes.size(), "origin": origin, "added": int(Time.get_unix_time_from_system())}
+		"size": p.size, "origin": origin, "added": int(Time.get_unix_time_from_system())}
 	e.merge(extra)
 	idx.packs.append(e)
 	_save_index(idx)
@@ -336,11 +337,21 @@ static func install(bytes: PackedByteArray, origin: String, extra := {}, want_ha
 	return {"pack": out}
 
 
-## Imports a .cardpack file (a path the player picked).
+## Imports a .cardpack file (a path the player picked), waiting; install_file_later in the background.
 static func install_file(file: String) -> Dictionary:
+	return install_file_later(file).run_now()
+
+
+## The same as a PackInstall: the file is copied in ("receiving"), then checked in turn. Not started.
+static func install_file_later(file: String) -> PackInstall:
+	var j := PackInstall.receiving(file.get_file(), "imported")
 	if not FileAccess.file_exists(file):
-		return {"error": ERRORS[4]}
-	return install(FileAccess.get_file_as_bytes(file), "imported")
+		j.finish({"error": ERRORS[4]})
+	elif DirAccess.copy_absolute(file, j.file) != OK:
+		j.finish({"error": ERRORS[1]})
+	else:
+		j.received()
+	return j
 
 
 ## Deletes a downloaded, imported or received pack (never a built-in one), and the decks made in

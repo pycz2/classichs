@@ -87,7 +87,14 @@ func load_replay() -> bool:
 		_what = tr("Loading the game %s…") % str(r.data.get("pack_name", r.data.get("pack_id", "")))
 		_say(_what)
 		got = await fetch.call(base + "/admin/api/pack_files/" + str(r.data.pack))
-		var put: Dictionary = Packs.install(got.body, "server") if got.code == 200 else {"error": _why(got.code)}
+		var put := {"error": _why(got.code)}
+		if got.code == 200:
+			var j := PackInstall.of_bytes(got.body, "", "server")
+			if OS.has_feature("web"):  # (the browser's checker takes the file a piece a frame: the page goes on)
+				j.start()
+				while j.stage != "done":
+					await get_tree().process_frame
+			put = j.run_now()
 		p = put.get("pack")
 		if p == null or p.rules_hash() != str(r.data.pack):
 			_say(r.missing() + "\n" + tr(str(put.get("error", "This is not a game pack"))))
