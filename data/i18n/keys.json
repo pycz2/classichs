@@ -982,6 +982,7 @@
   "the file is bigger than 1 GiB",
   "the game states differ",
   "the only JSON file in ui/ is theme.json",
+  "the only JSON file in an art set is framing.json",
   "the rules engine is missing: %s",
   "this is not a zip file",
   "turn %d, %d actions",

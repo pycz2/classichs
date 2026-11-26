@@ -10,6 +10,7 @@ icc, loot, gil, boom). Result in <out>/<set>/:
   art/<card id>.webp     256x256 like art/custom, WebP: the set's cards and tokens from HearthstoneJSON
                          (art.hearthstonejson.com/v1/256x/<id>.jpg); classic: art/custom converted, naxx:
                          ~/ClassicHS-local/art-naxx converted (tools/fetch_2014_art.py made both)
+  art/framing.json       where each picture sits in its window (tools/apply_framing.py); --build takes it
   set/<name>.opus        card sounds and a legendary's play music (<card id>_music), Ogg Opus (tools/audio_codec.py)
   voice/<lang>/…         English and Russian lines, heroes' too (tools/fetch_original_sounds.py does the work)
   music/<slot>.opus      the original music: menu, mulligan, battle_1 … N, victory, defeat, arena

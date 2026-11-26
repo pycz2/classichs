@@ -91,6 +91,72 @@ func test_art_sets_are_folders_and_switch_pictures() -> void:
 		DirAccess.remove_absolute(root + path)
 
 
+## framing.json (docs/packs/format.md §7) moves and zooms a picture in every window: Art.paint_in draws it
+## on Art.square; a picture without framing covers the window, centred, as before.
+func test_framing_moves_and_zooms_the_picture() -> void:
+	var root := "user://test_art_framing"
+	DirAccess.make_dir_recursive_absolute(root + "/my_set")
+	var jpg := FileAccess.get_file_as_bytes("res://art/cards/HERO_08.jpg")
+	for path in ["/my_set/HERO_08.jpg", "/my_set/HERO_09.jpg"]:
+		var f := FileAccess.open(root + path, FileAccess.WRITE)
+		f.store_buffer(jpg)
+		f.close()
+	var f := FileAccess.open(root + "/my_set/framing.json", FileAccess.WRITE)
+	f.store_string('{"HERO_08": {"x": 0.1, "y": -0.05, "zoom": 1.5}}')
+	f.close()
+	var was := Art.root
+	Art.root = root
+	Art.reset()
+	Packs.set_choice(Packs.active(), "art", "my_set")
+	var hand := Rect2(10, 20, 100, 50)
+	var side := maxf(hand.size.x, hand.size.y)
+	var before := Rect2(hand.get_center() - Vector2(side, side) / 2.0, Vector2(side, side))  # paint_in's square until 0.73.0
+	check(Art.texture("HERO_09") != null and Art.texture("HERO_08") != null, "both pictures from the player's folder")
+	eq(Art.square(hand, "HERO_09"), before, "no framing: exactly as before")
+	check(Art.square(hand, "HERO_08").is_equal_approx(Rect2(60 + 10 - 75, 45 - 5 - 75, 150, 150)), "moved right and up, zoomed: %s" % Art.square(hand, "HERO_08"))
+	check(Art.square(Rect2(0, 0, 40, 40), "HERO_08").is_equal_approx(Rect2(20 + 4 - 30, 20 - 2 - 30, 60, 60)), "the same numbers in the board's oval")
+	Packs.set_choice(Packs.active(), "art", "generated")
+	Art.texture("HERO_08")
+	eq(Art.square(hand, "HERO_08"), before, "the generated set has no framing of it")
+	Art.root = was
+	Art.reset()
+	for path in ["/my_set/HERO_08.jpg", "/my_set/HERO_09.jpg", "/my_set/framing.json", "/my_set", ""]:
+		DirAccess.remove_absolute(root + path)
+
+
+## A pack's set: art/<set>/framing.json in the pack (tools/pack.py takes it along with the pictures).
+func test_framing_of_a_packs_set() -> void:
+	var classic: Pack = Packs.all().filter(func(p): return p.id() == Packs.CLASSIC and p.builtin())[0]
+	var src := "user://test_framing_src.zip"
+	var out := "user://test_framing_out.zip"
+	var f := FileAccess.open(src, FileAccess.WRITE)
+	f.store_buffer(FileAccess.get_file_as_bytes(classic.path))
+	f.close()
+	var r := ZIPReader.new()
+	r.open(src)
+	var w := ZIPPacker.new()
+	w.open(out)
+	for name in r.get_files():
+		w.start_file(name)
+		w.write_file(r.read_file(name))
+		w.close_file()
+	w.start_file("art/generated/framing.json")
+	w.write_file('{"HERO_08": {"zoom": 2}}'.to_utf8_buffer())
+	w.close_file()
+	w.close()
+	r.close()
+	var p: Pack = Packs.install(FileAccess.get_file_as_bytes(out), "imported").get("pack")
+	DirAccess.remove_absolute(src)
+	DirAccess.remove_absolute(out)
+	Packs.set_active(p)
+	check(Art.texture("HERO_08") != null, "the pack's picture")
+	eq(Art.square(Rect2(0, 0, 100, 50), "HERO_08"), Rect2(-50, -75, 200, 200), "zoomed twice")
+	Packs.set_active(classic)
+	Packs.remove(p)
+	Art.texture("HERO_08")
+	eq(Art.square(Rect2(0, 0, 100, 50), "HERO_08"), Rect2(0, -25, 100, 100), "the bundled pack frames none")
+
+
 ## The art set is chosen per game in the library (no longer in the settings).
 func test_library_offers_art_sets() -> void:
 	var root := "user://test_art_root2"

@@ -26,6 +26,7 @@ scripts/*.lua            card logic (api.md); any depth below scripts/; scripts/
 locales/<lang>.json      every player-facing text in one language (cards, mechanics, classes, ranks, missions, voice…)
 layout/<lang>.json       optional: hand-tuned card text layout
 art/<set>/<card id>.jpg|png|webp     one folder per art set
+art/<set>/framing.json               optional: where each picture sits in its card's window (§7)
 sounds/<set>/<name>.opus|ogg|wav|mp3 one folder per sound set (+ .md credits)
 music/<set>/<name>.opus|ogg|wav|mp3  one folder per music set (+ .md credits)
 voice/<lang>/…                       optional recorded voice lines (.opus|ogg|wav|mp3)
@@ -49,7 +50,8 @@ refuse a pack that breaks them):
 - Only the folders above; only the listed extensions in each; `art/`, `sounds/`,
   `music/` hold files one level down (`art/<set>/<file>`), `locales/`, `layout/`,
   `decks/`, `missions/`, `ui/` hold files right in them; the one sub-folder is
-  `ui/fonts/` (`.ttf`, `.otf`, `.txt`, `.md`), and the one JSON file in `ui/` is `theme.json`.
+  `ui/fonts/` (`.ttf`, `.otf`, `.txt`, `.md`), the one JSON file in `ui/` is `theme.json`, and the one JSON
+  file in an art set is `framing.json`.
 - Each path segment matches `[A-Za-z0-9_][A-Za-z0-9_.-]*`: no `..`, no absolute
   paths, no `\`, no hidden files (leading dot), at most 200 characters.
 - No symbolic links, no encrypted entries, no file twice.
@@ -273,6 +275,19 @@ Audio files are `.opus` (preferred: Ogg Opus at 48 kHz), `.ogg` (Ogg Vorbis), `.
   draws its procedural art. A pack stands alone: it never takes pictures (or anything else) from
   another installed pack. The packs after Naxxramas carry their base's pictures (Classic's sets,
   by reference through `base`) and none of their own new cards: those get the procedural art.
+- `art/<set>/framing.json` (optional, `schema/framing.schema.json`): where a picture sits in every window it is
+  drawn in (the card in the hand, the minion's oval on the board, the hero's portrait, the hero power's circle,
+  the history, the icons, the replays). `{"<card id>": {"x": 0.1, "y": -0.05, "zoom": 1.35}}`: without it the
+  square picture covers the window, its side the window's longer side (`side`), centred; `zoom` (0.5–3, default
+  1) multiplies that side, `x` and `y` (−1…1, default 0) move the picture's centre by that part of `side`, right
+  and down (of the side before the zoom, so the same numbers fit every window's shape). Where the picture does not
+  reach the window's edge, its edge pixels are stretched. Only the cards whose picture is moved are in it; it is
+  not a rules file (`rules_hash` stays). A player's own folder (`art/<folder>/`, the client's picture sets) may
+  have one too. `tools/pack.py` takes a folder's `framing.json` along with its pictures (a `copy` step to `art/`,
+  a base pack's own `art/<set>/`, an `--art-set`), several folders of one set add up (a later one wins for a
+  card). The owner frames the pictures in a local page (`~/ClassicHS-local/art-framing/`), and
+  `tools/apply_framing.py art-framing.json` writes its export into each set's folders (the repo's, and the
+  local `~/ClassicHS-local/<pack>/art` of the `-custom-art` packs).
 - `sounds/<set>/<name>`: event sounds by name (Classic: `play_card`, `attack`,
   `damage`, `death`, `hero_power`, `turn_start`, `heal`, `armor`, `equip`,
   `secret`, `freeze`, `shield`, `spell`, `trigger`, `hit_big`, `victory`,
