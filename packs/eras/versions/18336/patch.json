@@ -1,0 +1,8 @@
+{
+ "base": "ungoro",
+ "build": 18336,
+ "about": "8.0.0.18336 (2017-04-04): the Journey to Un'Goro release, the ungoro pack as it is",
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 8.0.0.18336; packs/ungoro"
+ ]
+}

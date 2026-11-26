@@ -1,0 +1,23 @@
+{
+ "base": "ungoro",
+ "build": 19506,
+ "about": "8.2.0.19506 (2017-06-01): bug fixes; Dart Trap's \"Hero Power\" no longer bold",
+ "cards": {
+  "LOE_021": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Fügt einem zufälligen Feind $5 Schaden zu, nachdem Euer Gegner seine Heldenfähigkeit eingesetzt hat.",
+    "enUS": "<b>Secret:</b> After an opposing Hero Power is used, deal $5 damage to a random enemy.",
+    "esES": "<b>Secreto:</b> Cuando el enemigo usa su poder de héroe, inflige $5 p. de daño a un enemigo aleatorio.",
+    "frFR": "<b>Secret :</b> inflige\n$5 |4(point,points) de dégâts à un adversaire aléatoire après utilisation d’un pouvoir héroïque adverse.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha usato il suo Potere Eroe, infligge $5 danni a un nemico casuale.",
+    "plPL": "<b>Sekret:</b> Kiedy zostanie użyta moc specjalna przeciwnika, zadaj $5 pkt. obrażeń losowemu wrogowi.",
+    "ptBR": "<b>Segredo:</b> Depois que o inimigo usar o Poder Heroico, cause $5 de dano a um inimigo aleatório.",
+    "ruRU": "<b>Секрет:</b> когда противник использует силу героя, наносит $5 ед. урона случайному противнику."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 8.2.0.19506",
+  "HearthstoneJSON build 19506: Dart Trap's texts (tools/extract_cards.py --version-texts 19506 LOE_021)"
+ ]
+}
