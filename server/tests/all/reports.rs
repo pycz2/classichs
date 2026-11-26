@@ -206,3 +206,25 @@ async fn send_limits_and_the_admin_side() {
     assert_eq!(t.get(&format!("/admin/api/reports/{first}")).await.status, StatusCode::NOT_FOUND);
     assert!(t.state.store.read_path(&format!("reports/{first}/screen.png"), 1 << 20).await.is_err());
 }
+
+#[tokio::test]
+async fn kept_as_long_as_the_account_and_the_keeping_time() {
+    let t = T::new().await;
+    let (pia, token) = t.player("pia").await;
+    let (_, tok2) = t.player("bob").await;
+    let shot = json!({"text": "hi", "screen": STANDARD.encode(PNG)});
+    let id = |r: Res| r.json()["report"]["id"].as_i64().unwrap();
+    let (a, b) = (id(t.send(&token, shot.clone()).await), id(t.send(&tok2, shot).await));
+    let file = |i: i64| format!("reports/{i}/screen.png");
+    // the daily cleanup: nothing is older than an hour ago, everything older than tomorrow
+    assert_eq!(classichs_server::reports::prune(&t.state, classichs_server::ranked::now() - 3600).await.unwrap(), 0);
+    // an account deleted: its reports and their files go
+    let r = t.post(&format!("/admin/api/accounts/{pia}/delete"), json!({"confirm": "pia"})).await;
+    assert_eq!(r.status, StatusCode::OK);
+    assert_eq!(t.get(&format!("/admin/api/reports/{a}")).await.status, StatusCode::NOT_FOUND);
+    assert!(t.state.store.read_path(&file(a), 1 << 20).await.is_err());
+    assert!(t.state.store.read_path(&file(b), 1 << 20).await.is_ok());
+    assert_eq!(classichs_server::reports::prune(&t.state, classichs_server::ranked::now() + 86400).await.unwrap(), 1);
+    assert!(t.state.store.read_path(&file(b), 1 << 20).await.is_err());
+    assert_eq!(t.get("/admin/api/reports").await.json()["total"], 0);
+}

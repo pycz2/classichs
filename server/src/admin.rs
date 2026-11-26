@@ -758,6 +758,9 @@ async fn account_action(
             }
             let hashes: Vec<String> =
                 pack::Entity::find().filter(pack::Column::Owner.eq(id)).all(db).await.unwrap_or_default().into_iter().map(|p| p.content_hash).collect();
+            if let Err(e) = crate::reports::remove_of(&app, id).await {
+                tracing::error!("admin: the reports of {id}: {e}");
+            }
             let r = account::Entity::delete_by_id(id).exec(db).await.map(|_| ());
             for h in hashes {
                 packs::gc(&app, &h).await;

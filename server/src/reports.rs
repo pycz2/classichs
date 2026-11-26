@@ -239,6 +239,26 @@ async fn remove(app: &AppRef, id: i64) {
     }
 }
 
+/// Removes the reports (with their files) that match: an account's when it is deleted, those
+/// older than the keeping time (`prune`) → how many.
+async fn remove_where(app: &AppRef, cond: Condition) -> Result<usize, sea_orm::DbErr> {
+    let ids: Vec<i64> = report::Entity::find().select_only().column(report::Column::Id).filter(cond).into_tuple().all(&app.db).await?;
+    for &id in &ids {
+        remove(app, id).await;
+    }
+    Ok(ids.len())
+}
+
+pub async fn remove_of(app: &AppRef, account: i64) -> Result<usize, sea_orm::DbErr> {
+    remove_where(app, Condition::all().add(report::Column::Account.eq(account))).await
+}
+
+/// The reports received before `before` (unix seconds): the daily cleanup of the chats' keeping
+/// time (`chat_keep_days`, the plan's §3: reports are kept as the chats are) calls it.
+pub async fn prune(app: &AppRef, before: i64) -> Result<usize, sea_orm::DbErr> {
+    remove_where(app, Condition::all().add(report::Column::ReceivedAt.lt(before))).await
+}
+
 /// The new reports (the dashboard's count).
 pub async fn new_count(app: &AppRef) -> Result<u64, sea_orm::DbErr> {
     report::Entity::find().filter(report::Column::State.eq("new")).filter(report::Column::Subserver.eq(0)).count(&app.db).await

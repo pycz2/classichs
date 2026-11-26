@@ -707,3 +707,5 @@ it as Ogg Opus, at most 1 MB); `""` = none. → `201 {report: {id}}`; refusals a
 413 `too_large`, 429 `too_many` (5 reports an hour). The server adds the games (the one the player
 is in, else the context's `game`, then the last 5 finished) and keeps the files in the pack store as
 `reports/<id>/screen.png` and `reports/<id>/voice.ogg`.
+A deleted account takes its reports and their files with it; `reports::prune` removes the ones
+older than a time (for the daily cleanup of the chats' keeping time).
