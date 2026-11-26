@@ -47,11 +47,11 @@ static func neutral_core() -> Array:
 	return Packs.active().rules().get("modes", {}).get("constructed", {}).get("starter_core", [])
 
 
-## Two copies of every Basic card of the class, then neutral core cards up to 30; a pack
-## without Basic cards gives its own ready deck of that champion.
-static func basic(card_class: String) -> Array:
+## Two copies of every Basic card of the class (of a format's cards: "standard" leaves out the Hall of Fame),
+## then neutral core cards up to 30; a pack without Basic cards gives its own ready deck of that champion.
+static func basic(card_class: String, format := "") -> Array:
 	var deck: Array = []
-	for id in CardDb.collectible():
+	for id in CardDb.collectible(format):
 		var c := CardDb.card(id)
 		if c.cardClass == card_class and c.get("rarity", "") == "FREE":
 			deck.append_array([id, id])

@@ -1,0 +1,40 @@
+{
+  "name": "Aggro Dude Odd Paladin [62% Winrate]",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Aggro Dude Odd Paladin [62% Winrate] by Fluxflashor. Paladin, archetype Odd Paladin. HearthPwn, rating +198, April 2018 (Witchwood): https://www.hearthpwn.com/decks/1086591-aggro-dude-odd-paladin-62-winrate",
+    "ru": "Колода «Aggro Dude Odd Paladin [62% Winrate]», автор Fluxflashor. Паладин, архетип Odd Paladin. HearthPwn, рейтинг +198, апрель 2018: https://www.hearthpwn.com/decks/1086591-aggro-dude-odd-paladin-62-winrate"
+  },
+  "cards": [
+    "GIL_826",
+    "ICC_038",
+    "ICC_038",
+    "ICC_092",
+    "ICC_092",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_258",
+    "LOOT_258",
+    "LOOT_286",
+    "LOOT_286",
+    "LOOT_333",
+    "LOOT_333",
+    "UNG_072",
+    "UNG_072",
+    "UNG_205",
+    "UNG_205",
+    "UNG_950",
+    "UNG_960",
+    "UNG_960",
+    "VAN_CS2_087",
+    "VAN_CS2_087",
+    "VAN_CS2_091",
+    "VAN_CS2_203",
+    "VAN_CS2_222",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_349",
+    "VAN_EX1_349",
+    "VAN_EX1_366"
+  ]
+}

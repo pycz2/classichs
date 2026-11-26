@@ -1,0 +1,40 @@
+{
+  "name": "[S17] 1st EU Legend MidFace Hunter + guide",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[S17] 1st EU Legend MidFace Hunter + guide by Comeback_khv. Hunter. HearthPwn, rating +262, August 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/282686-s17-1st-eu-legend-midface-hunter-guide",
+    "ru": "Колода «[S17] 1st EU Legend MidFace Hunter + guide», автор Comeback_khv. Охотник. HearthPwn, рейтинг +262, август 2015: https://www.hearthpwn.com/decks/282686-s17-1st-eu-legend-midface-hunter-guide"
+  },
+  "cards": [
+    "BRM_013",
+    "FP1_002",
+    "FP1_002",
+    "FP1_004",
+    "FP1_004",
+    "FP1_030",
+    "GVG_043",
+    "GVG_096",
+    "GVG_096",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_203",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_089",
+    "VAN_EX1_089",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

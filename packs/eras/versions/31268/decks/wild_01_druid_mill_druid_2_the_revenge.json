@@ -1,0 +1,40 @@
+{
+  "name": "Mill Druid 2: The Revenge",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Mill Druid 2: The Revenge by LordPikachuStarscream. Druid, archetype Taunt Druid. HearthPwn, rating +62, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/949017-mill-druid-2-the-revenge",
+    "ru": "Колода «Mill Druid 2: The Revenge», автор LordPikachuStarscream. Друид, архетип Taunt Druid. HearthPwn, рейтинг +62, июнь 2019: https://www.hearthpwn.com/decks/949017-mill-druid-2-the-revenge"
+  },
+  "cards": [
+    "BOT_434",
+    "FP1_009",
+    "FP1_009",
+    "FP1_019",
+    "FP1_019",
+    "GIL_667",
+    "GIL_667",
+    "GVG_032",
+    "GVG_032",
+    "ICC_054",
+    "ICC_054",
+    "ICC_832",
+    "ICC_835",
+    "KAR_061",
+    "LOOT_051",
+    "LOOT_051",
+    "LOOT_054",
+    "LOOT_054",
+    "OG_133",
+    "UNG_848",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_NEW1_007",
+    "VAN_NEW1_007",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

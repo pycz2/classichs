@@ -1,0 +1,40 @@
+{
+  "name": "Theo's #1 Legend Recruit Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Theo's #1 Legend Recruit Hunter by TheoHS_. Hunter, archetype Big Beast Hunter. HearthPwn, rating +160, June 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1127696-theos-1-legend-recruit-hunter",
+    "ru": "Колода «Theo's #1 Legend Recruit Hunter», автор TheoHS_. Охотник, архетип Big Beast Hunter. HearthPwn, рейтинг +160, июнь 2018: https://www.hearthpwn.com/decks/1127696-theos-1-legend-recruit-hunter"
+  },
+  "cards": [
+    "GIL_623",
+    "GIL_623",
+    "GIL_650",
+    "ICC_052",
+    "ICC_052",
+    "ICC_314",
+    "ICC_415",
+    "ICC_415",
+    "ICC_466",
+    "ICC_466",
+    "ICC_828",
+    "ICC_851",
+    "LOOT_077",
+    "LOOT_077",
+    "LOOT_124",
+    "LOOT_184",
+    "LOOT_222",
+    "LOOT_222",
+    "LOOT_511",
+    "LOOT_520",
+    "LOOT_520",
+    "UNG_099",
+    "UNG_099",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_084",
+    "VAN_EX1_048",
+    "VAN_EX1_543"
+  ]
+}

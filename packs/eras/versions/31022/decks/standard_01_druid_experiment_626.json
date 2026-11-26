@@ -1,0 +1,40 @@
+{
+  "name": "Experiment 626",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Experiment 626 by Rich_Piana. Druid, archetype Token Druid. HearthPwn, rating +12, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1277824-experiment-626",
+    "ru": "Колода «Experiment 626», автор Rich_Piana. Друид, архетип Token Druid. HearthPwn, рейтинг +12, май 2019: https://www.hearthpwn.com/decks/1277824-experiment-626"
+  },
+  "cards": [
+    "BOT_420",
+    "BOT_420",
+    "BOT_535",
+    "BOT_535",
+    "DAL_256",
+    "DAL_256",
+    "DAL_351",
+    "DAL_351",
+    "DAL_354",
+    "DAL_354",
+    "DAL_558",
+    "DAL_566",
+    "DAL_733",
+    "DAL_733",
+    "DAL_743",
+    "DAL_743",
+    "GIL_553",
+    "GIL_553",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_158",
+    "VAN_EX1_158",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

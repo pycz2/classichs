@@ -1,0 +1,40 @@
+{
+  "name": "Hi'reek Handbuff Zoo",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Hi'reek Handbuff Zoo by RegisKillbin. Warlock, archetype Zoolock. HearthPwn, rating +73, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1208493-hireek-handbuff-zoo",
+    "ru": "Колода «Hi'reek Handbuff Zoo», автор RegisKillbin. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +73, декабрь 2018: https://www.hearthpwn.com/decks/1208493-hireek-handbuff-zoo"
+  },
+  "cards": [
+    "BOT_224",
+    "BOT_224",
+    "BOT_263",
+    "BOT_263",
+    "BOT_445",
+    "GIL_515",
+    "GIL_515",
+    "ICC_466",
+    "ICC_466",
+    "ICC_903",
+    "ICC_903",
+    "LOOT_014",
+    "LOOT_014",
+    "LOOT_167",
+    "LOOT_167",
+    "TRL_249",
+    "TRL_249",
+    "TRL_251",
+    "TRL_251",
+    "TRL_253",
+    "TRL_503",
+    "TRL_503",
+    "TRL_505",
+    "TRL_505",
+    "TRL_517",
+    "TRL_517",
+    "UNG_047",
+    "UNG_047",
+    "UNG_083",
+    "UNG_083"
+  ]
+}

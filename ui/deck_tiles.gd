@@ -95,9 +95,10 @@ class DeckRow:
 		_hero.position = Vector2(58, 36)
 		_hero.size = Vector2(minf(_hero.label.get_minimum_size().x, room), 22)
 
-	## An unfinished deck: how full it is.
+	## An unfinished deck: how full it is; a Wild deck (a game with Standard and Wild): Wild.
 	func _tag() -> String:
-		return "  %d/%d" % [deck.cards.size(), Deck.SIZE] if deck.cards.size() < deck.goal() else ""
+		var full := "  %d/%d" % [deck.cards.size(), Deck.SIZE] if deck.cards.size() < deck.goal() else ""
+		return full + ("  " + tr("Wild") if deck.wild_only() else "")
 
 	func _draw() -> void:
 		var r := Rect2(Vector2(2, 2), size - Vector2(4, 4))
@@ -110,6 +111,7 @@ class DeckRow:
 		var tag := _tag()
 		if tag != "":
 			DeckTiles.text(self, Vector2(_hero.position.x + 2 + _hero.size.x, 52), tag, 13, Frames.GOLD)
+		if n < deck.goal():
 			var bar := Rect2(Vector2(14, size.y - 8), Vector2(size.x - 28, 3))
 			draw_rect(bar, Color(0, 0, 0, 0.6))
 			draw_rect(Rect2(bar.position, Vector2(bar.size.x * n / deck.goal(), bar.size.y)), Frames.GOLD)

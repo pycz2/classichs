@@ -1,0 +1,40 @@
+{
+  "name": "[TOP50] KFT ULDARIUS Ez Big Ez Priest (K&C updated)",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[TOP50] KFT ULDARIUS Ez Big Ez Priest (K&C updated) by Uldarius. Priest, archetype Resurrect Priest. HearthPwn, rating +526, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/899332-top50-kft-uldarius-ez-big-ez-priest-k-c-updated",
+    "ru": "Колода «[TOP50] KFT ULDARIUS Ez Big Ez Priest (K&C updated)», автор Uldarius. Жрец, архетип Resurrect Priest. HearthPwn, рейтинг +526, февраль 2018: https://www.hearthpwn.com/decks/899332-top50-kft-uldarius-ez-big-ez-priest-k-c-updated"
+  },
+  "cards": [
+    "CFM_604",
+    "CFM_604",
+    "CFM_661",
+    "CFM_661",
+    "CFM_662",
+    "CFM_662",
+    "ICC_213",
+    "ICC_213",
+    "ICC_214",
+    "ICC_214",
+    "ICC_235",
+    "ICC_235",
+    "ICC_314",
+    "ICC_830",
+    "KAR_114",
+    "LOOT_008",
+    "LOOT_008",
+    "LOOT_507",
+    "LOOT_507",
+    "OG_042",
+    "OG_100",
+    "OG_100",
+    "UNG_029",
+    "UNG_029",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_EX1_332",
+    "VAN_EX1_572",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

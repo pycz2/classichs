@@ -1,0 +1,40 @@
+{
+  "name": "OTK CONTROL WARLOCK",
+  "champion": "HERO_07",
+  "description": {
+    "en": "OTK CONTROL WARLOCK by ZLYZAJO. Warlock, archetype Control Warlock. HearthPwn, rating +30, October 2017 (Evergreen Nerfs): https://www.hearthpwn.com/decks/941291-otk-control-warlock",
+    "ru": "Колода «OTK CONTROL WARLOCK», автор ZLYZAJO. Чернокнижник, архетип Control Warlock. HearthPwn, рейтинг +30, октябрь 2017: https://www.hearthpwn.com/decks/941291-otk-control-warlock"
+  },
+  "cards": [
+    "BRM_006",
+    "BRM_019",
+    "BRM_028",
+    "GVG_015",
+    "GVG_015",
+    "GVG_069",
+    "GVG_069",
+    "ICC_041",
+    "ICC_041",
+    "ICC_093",
+    "ICC_093",
+    "ICC_466",
+    "ICC_467",
+    "ICC_467",
+    "ICC_900",
+    "UNG_072",
+    "UNG_072",
+    "VAN_EX1_012",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_050",
+    "VAN_EX1_105",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_315",
+    "VAN_EX1_315",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

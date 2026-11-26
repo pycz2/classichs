@@ -20,6 +20,7 @@ const INT_FIELDS := ["dbfId", "legacyDbfId", "cost", "attack", "health", "durabi
 static var _cards: Dictionary = {}
 static var _by_dbf: Dictionary = {}
 static var _related = null  # card id -> the cards it can bring (related()), null until asked
+static var _standard = null  # card id -> true: the Standard cards (wild_only()), null until asked
 
 ## related(): at most this many cards (the big card shows more than six on a turning wheel, KeywordTips).
 const RELATED_MAX := 24
@@ -38,6 +39,7 @@ static func reset() -> void:
 	_by_dbf = {}
 	_related = null
 	_others = {}
+	_standard = null
 
 
 static var _other: Pack  # begin(): the pack read instead of the active one
@@ -153,17 +155,38 @@ static func by_dbf(dbf: int) -> String:
 	return _by_dbf.get(dbf, "")
 
 
-## The cards a deck may hold: collectible cards of the constructed mode's sets.
-static func collectible() -> Array[String]:
+## The cards a deck may hold: collectible cards of the constructed mode's sets; of a format (rules.json
+## `formats`: "standard", "wild"), its sets without its `exclude` (the Hall of Fame).
+static func collectible(format := "") -> Array[String]:
 	_ensure_loaded()
-	var sets: Array = Packs.active().rules().get("modes", {}).get("constructed", {}).get("sets", ["VANILLA"])
+	var rules := Packs.active().rules()
+	var f: Dictionary = rules.get("formats", {}).get(format, {})
+	var sets: Array = f.get("sets", rules.get("modes", {}).get("constructed", {}).get("sets", ["VANILLA"]))
+	var out_of: Array = f.get("exclude", [])
 	var out: Array[String] = []
 	for id: String in _cards:
 		var c: Dictionary = _cards[id]
-		if c.get("collectible", false) and sets.has(c.get("set", "")):  # (a hero card too)
+		if c.get("collectible", false) and sets.has(c.get("set", "")) and not out_of.has(id):  # (a hero card too)
 			out.append(id)
 	out.sort()
 	return out
+
+
+## The active game's formats ("standard", "wild": rules.json `formats`); [] for a game with one format.
+static func formats() -> Array:
+	var f: Dictionary = Packs.active().rules().get("formats", {}) if Packs.active() else {}
+	return ["standard", "wild"].filter(func(k): return f.has(k))
+
+
+## Whether these cards make a Wild deck: the game has Standard and Wild, and a card is not a Standard one.
+static func wild_only(cards: Array) -> bool:
+	if not formats().has("wild"):
+		return false
+	if _standard == null:
+		_standard = {}
+		for id in collectible("standard"):
+			_standard[id] = true
+	return cards.any(func(c): return not _standard.has(c))
 
 
 static func all_ids() -> Array:

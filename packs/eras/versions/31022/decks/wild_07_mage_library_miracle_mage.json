@@ -1,0 +1,40 @@
+{
+  "name": "Library Miracle Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Library Miracle Mage by RavenSunHP. Mage, archetype Tempo Mage. HearthPwn, rating +22, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1273640-library-miracle-mage",
+    "ru": "Колода «Library Miracle Mage», автор RavenSunHP. Маг, архетип Tempo Mage. HearthPwn, рейтинг +22, май 2019: https://www.hearthpwn.com/decks/1273640-library-miracle-mage"
+  },
+  "cards": [
+    "BOT_103",
+    "BOT_453",
+    "BOT_600",
+    "BOT_600",
+    "BRM_002",
+    "BRM_002",
+    "CFM_021",
+    "DAL_577",
+    "DAL_577",
+    "DAL_608",
+    "DAL_608",
+    "EX1_180",
+    "EX1_180",
+    "KAR_009",
+    "KAR_009",
+    "KAR_711",
+    "KAR_711",
+    "UNG_028",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_EX1_608",
+    "VAN_EX1_608"
+  ]
+}

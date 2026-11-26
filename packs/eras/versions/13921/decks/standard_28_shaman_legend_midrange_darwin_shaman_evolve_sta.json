@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] Midrange Darwin Shaman + Evolve Stats! [UPDATED]",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[Legend] Midrange Darwin Shaman + Evolve Stats! [UPDATED] by Serology. Shaman, archetype Midrange Shaman. HearthPwn, rating +1299, August 2016 (Karazhan): https://www.hearthpwn.com/decks/484784-legend-midrange-darwin-shaman-evolve-stats",
+    "ru": "Колода «[Legend] Midrange Darwin Shaman + Evolve Stats! [UPDATED]», автор Serology. Шаман, архетип Midrange Shaman. HearthPwn, рейтинг +1299, август 2016: https://www.hearthpwn.com/decks/484784-legend-midrange-darwin-shaman-evolve-stats"
+  },
+  "cards": [
+    "AT_046",
+    "AT_046",
+    "AT_052",
+    "AT_052",
+    "AT_094",
+    "KAR_041",
+    "KAR_073",
+    "KAR_073",
+    "KAR_114",
+    "LOE_018",
+    "LOE_018",
+    "OG_027",
+    "OG_027",
+    "OG_028",
+    "OG_028",
+    "OG_328",
+    "OG_328",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_046",
+    "VAN_EX1_012",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575"
+  ]
+}

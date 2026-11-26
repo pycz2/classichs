@@ -1,0 +1,40 @@
+{
+  "name": "Shadowform Rush 2.0   (Can also be control)",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Shadowform Rush 2.0   (Can also be control) by RaewSushii. Priest. HearthPwn, rating +18, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/52284-shadowform-rush-2-0-can-also-be-control",
+    "ru": "Колода «Shadowform Rush 2.0   (Can also be control)», автор RaewSushii. Жрец. HearthPwn, рейтинг +18, май 2014: https://www.hearthpwn.com/decks/52284-shadowform-rush-2-0-can-also-be-control"
+  },
+  "cards": [
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_203",
+    "VAN_CS2_203",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_DS1_233",
+    "VAN_DS1_233",
+    "VAN_EX1_001",
+    "VAN_EX1_001",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_020",
+    "VAN_EX1_020",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_335",
+    "VAN_EX1_335",
+    "VAN_EX1_620",
+    "VAN_EX1_620",
+    "VAN_EX1_624",
+    "VAN_EX1_624",
+    "VAN_EX1_625",
+    "VAN_EX1_625",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

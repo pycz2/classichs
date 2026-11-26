@@ -1,0 +1,40 @@
+{
+  "name": "Razor's Hobgoblin MechWarrior (71% win-rate to Legend)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Razor's Hobgoblin MechWarrior (71% win-rate to Legend) by RazorHS. Warrior. HearthPwn, rating +216, April 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/218447-razors-hobgoblin-mechwarrior-71-win-rate-to-legend",
+    "ru": "Колода «Razor's Hobgoblin MechWarrior (71% win-rate to Legend)», автор RazorHS. Воин. HearthPwn, рейтинг +216, апрель 2015: https://www.hearthpwn.com/decks/218447-razors-hobgoblin-mechwarrior-71-win-rate-to-legend"
+  },
+  "cards": [
+    "FP1_021",
+    "FP1_021",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_013",
+    "GVG_051",
+    "GVG_051",
+    "GVG_055",
+    "GVG_085",
+    "GVG_085",
+    "GVG_094",
+    "GVG_094",
+    "GVG_096",
+    "GVG_096",
+    "GVG_104",
+    "GVG_104",
+    "GVG_110",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_084",
+    "VAN_EX1_084",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_604",
+    "VAN_EX1_604"
+  ]
+}

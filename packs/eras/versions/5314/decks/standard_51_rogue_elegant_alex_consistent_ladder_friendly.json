@@ -1,0 +1,40 @@
+{
+  "name": "'Elegant Alex' - Consistent & Ladder Friendly",
+  "champion": "HERO_03",
+  "description": {
+    "en": "'Elegant Alex' - Consistent & Ladder Friendly by user-14997009. Rogue. HearthPwn, rating +31, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/52798-elegant-alex-consistent-ladder-friendly",
+    "ru": "Колода «'Elegant Alex' - Consistent & Ladder Friendly», автор user-14997009. Разбойник. HearthPwn, рейтинг +31, май 2014: https://www.hearthpwn.com/decks/52798-elegant-alex-consistent-ladder-friendly"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_CS2_080",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_128",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_561",
+    "VAN_EX1_563",
+    "VAN_EX1_581"
+  ]
+}

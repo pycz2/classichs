@@ -1,0 +1,40 @@
+{
+  "name": "1 Shot Shaman (Legend)",
+  "champion": "HERO_02",
+  "description": {
+    "en": "1 Shot Shaman (Legend) by user-14838978. Shaman. HearthPwn, rating +22, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/51673-1-shot-shaman-legend",
+    "ru": "Колода «1 Shot Shaman (Legend)», автор user-14838978. Шаман. HearthPwn, рейтинг +22, май 2014: https://www.hearthpwn.com/decks/51673-1-shot-shaman-legend"
+  },
+  "cards": [
+    "VAN_CS2_039",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_116",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_247",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_251",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_EX1_575",
+    "VAN_NEW1_010",
+    "VAN_NEW1_020"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "TheJordude's Pirate Rampage (90% win rate against slow/cont…",
+  "champion": "HERO_01",
+  "description": {
+    "en": "TheJordude's Pirate Rampage (90% win rate against slow/control decks) by TheJordude. Warrior. HearthPwn, rating +13, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/52988-thejordudes-pirate-rampage-90-win-rate-against",
+    "ru": "Колода «TheJordude's Pirate Rampage (90% win rate against slow/control decks)», автор TheJordude. Воин. HearthPwn, рейтинг +13, май 2014: https://www.hearthpwn.com/decks/52988-thejordudes-pirate-rampage-90-win-rate-against"
+  },
+  "cards": [
+    "VAN_CS2_105",
+    "VAN_CS2_105",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_112",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_084",
+    "VAN_EX1_084",
+    "VAN_EX1_116",
+    "VAN_EX1_398",
+    "VAN_EX1_398",
+    "VAN_EX1_407",
+    "VAN_EX1_408",
+    "VAN_EX1_408",
+    "VAN_EX1_409",
+    "VAN_EX1_409",
+    "VAN_EX1_411",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_016",
+    "VAN_NEW1_016",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022",
+    "VAN_NEW1_024",
+    "VAN_NEW1_027"
+  ]
+}

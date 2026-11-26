@@ -1,0 +1,40 @@
+{
+  "name": "Infinate AoE Undatakah",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Infinate AoE Undatakah by Apocalips. Paladin. HearthPwn, rating +21, July 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1286225-infinate-aoe-undatakah",
+    "ru": "Колода «Infinate AoE Undatakah», автор Apocalips. Паладин. HearthPwn, рейтинг +21, июль 2019: https://www.hearthpwn.com/decks/1286225-infinate-aoe-undatakah"
+  },
+  "cards": [
+    "BOT_234",
+    "BOT_234",
+    "BOT_236",
+    "BOT_436",
+    "BOT_436",
+    "BOT_548",
+    "BOT_909",
+    "BOT_909",
+    "DAL_568",
+    "DAL_568",
+    "DAL_775",
+    "GIL_203",
+    "GIL_815",
+    "TRL_300",
+    "TRL_302",
+    "TRL_302",
+    "TRL_306",
+    "TRL_307",
+    "TRL_307",
+    "TRL_537",
+    "VAN_EX1_005",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_058",
+    "VAN_EX1_097",
+    "VAN_EX1_558",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

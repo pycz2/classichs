@@ -1,0 +1,40 @@
+{
+  "name": "[WW] LEGEND Keleseth Tempo Rogue (70% WR)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[WW] LEGEND Keleseth Tempo Rogue (70% WR) by Reinan23. Rogue, archetype Tempo Rogue. HearthPwn, rating +203, June 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1077072-ww-legend-keleseth-tempo-rogue-70-wr",
+    "ru": "Колода «[WW] LEGEND Keleseth Tempo Rogue (70% WR)», автор Reinan23. Разбойник, архетип Tempo Rogue. HearthPwn, рейтинг +203, июнь 2018: https://www.hearthpwn.com/decks/1077072-ww-legend-keleseth-tempo-rogue-70-wr"
+  },
+  "cards": [
+    "GIL_534",
+    "GIL_534",
+    "ICC_029",
+    "ICC_029",
+    "ICC_466",
+    "ICC_466",
+    "ICC_851",
+    "LOOT_165",
+    "LOOT_211",
+    "LOOT_211",
+    "UNG_064",
+    "UNG_064",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_048",
+    "VAN_EX1_048",
+    "VAN_EX1_116",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_613"
+  ]
+}

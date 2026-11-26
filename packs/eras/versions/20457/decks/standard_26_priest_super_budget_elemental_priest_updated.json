@@ -1,0 +1,40 @@
+{
+  "name": "Super Budget Elemental Priest[UPDATED]",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Super Budget Elemental Priest[UPDATED] by user-100104604. Priest, archetype Control Priest. HearthPwn, rating +143, August 2017 (Quest Rogue Nerf): https://www.hearthpwn.com/decks/870444-super-budget-elemental-priest-updated",
+    "ru": "Колода «Super Budget Elemental Priest[UPDATED]», автор user-100104604. Жрец, архетип Control Priest. HearthPwn, рейтинг +143, август 2017: https://www.hearthpwn.com/decks/870444-super-budget-elemental-priest-updated"
+  },
+  "cards": [
+    "UNG_070",
+    "UNG_070",
+    "UNG_809",
+    "UNG_809",
+    "UNG_816",
+    "UNG_816",
+    "UNG_845",
+    "UNG_845",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_120",
+    "VAN_CS2_120",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_CS2_200",
+    "VAN_CS2_200",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_335",
+    "VAN_EX1_335",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

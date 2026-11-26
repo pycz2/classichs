@@ -1,0 +1,40 @@
+{
+  "name": "Zerek's Back, Back Again",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Zerek's Back, Back Again by Echo_. Priest, archetype Big Priest. HearthPwn, rating +73, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1162527-zereks-back-back-again",
+    "ru": "Колода «Zerek's Back, Back Again», автор Echo_. Жрец, архетип Big Priest. HearthPwn, рейтинг +73, август 2018: https://www.hearthpwn.com/decks/1162527-zereks-back-back-again"
+  },
+  "cards": [
+    "BOT_219",
+    "BOT_258",
+    "GIL_813",
+    "GIL_813",
+    "ICC_213",
+    "ICC_213",
+    "ICC_214",
+    "ICC_214",
+    "ICC_235",
+    "ICC_235",
+    "ICC_314",
+    "ICC_802",
+    "ICC_802",
+    "ICC_830",
+    "LOOT_008",
+    "LOOT_008",
+    "LOOT_187",
+    "LOOT_278",
+    "LOOT_278",
+    "LOOT_507",
+    "LOOT_507",
+    "UNG_029",
+    "UNG_029",
+    "UNG_854",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_EX1_622"
+  ]
+}

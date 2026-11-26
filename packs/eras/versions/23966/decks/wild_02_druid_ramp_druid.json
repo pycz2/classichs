@@ -1,0 +1,40 @@
+{
+  "name": "Ramp Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Ramp Druid by CastorOrange. Druid, archetype Ramp Druid. HearthPwn, rating +616, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/893401-ramp-druid",
+    "ru": "Колода «Ramp Druid», автор CastorOrange. Друид, архетип Ramp Druid. HearthPwn, рейтинг +616, февраль 2018: https://www.hearthpwn.com/decks/893401-ramp-druid"
+  },
+  "cards": [
+    "CFM_614",
+    "CFM_614",
+    "ICC_051",
+    "ICC_051",
+    "ICC_054",
+    "ICC_054",
+    "ICC_085",
+    "ICC_085",
+    "ICC_314",
+    "ICC_807",
+    "ICC_808",
+    "ICC_808",
+    "ICC_832",
+    "KAR_075",
+    "KAR_097",
+    "LOOT_351",
+    "LOOT_351",
+    "LOOT_392",
+    "OG_044",
+    "OG_202",
+    "OG_202",
+    "UNG_807",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_164"
+  ]
+}

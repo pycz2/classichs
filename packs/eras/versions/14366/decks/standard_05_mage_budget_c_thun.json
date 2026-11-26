@@ -1,0 +1,40 @@
+{
+  "name": "Budget C'thun",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Budget C'thun by Paylesscss. Mage, archetype Tempo Mage. HearthPwn, rating +1606, August 2016 (Karazhan): https://www.hearthpwn.com/decks/503285-budget-cthun",
+    "ru": "Колода «Budget C'thun», автор Paylesscss. Маг, архетип Tempo Mage. HearthPwn, рейтинг +1606, август 2016: https://www.hearthpwn.com/decks/503285-budget-cthun"
+  },
+  "cards": [
+    "KAR_076",
+    "KAR_076",
+    "OG_162",
+    "OG_162",
+    "OG_207",
+    "OG_207",
+    "OG_280",
+    "OG_281",
+    "OG_281",
+    "OG_283",
+    "OG_283",
+    "OG_286",
+    "OG_286",
+    "OG_303",
+    "OG_303",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_179",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

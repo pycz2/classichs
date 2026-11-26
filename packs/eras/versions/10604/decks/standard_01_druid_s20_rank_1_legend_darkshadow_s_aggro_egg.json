@@ -1,0 +1,40 @@
+{
+  "name": "[S20] Rank 1 Legend DarkShadow's Aggro Egg Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[S20] Rank 1 Legend DarkShadow's Aggro Egg Druid by user-22022279. Druid. HearthPwn, rating +226, November 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/358756-s20-rank-1-legend-darkshadows-aggro-egg-druid",
+    "ru": "Колода «[S20] Rank 1 Legend DarkShadow's Aggro Egg Druid», автор user-22022279. Друид. HearthPwn, рейтинг +226, ноябрь 2015: https://www.hearthpwn.com/decks/358756-s20-rank-1-legend-darkshadows-aggro-egg-druid"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_038",
+    "BRM_022",
+    "BRM_022",
+    "FP1_002",
+    "FP1_002",
+    "FP1_003",
+    "FP1_003",
+    "FP1_007",
+    "FP1_007",
+    "GVG_016",
+    "GVG_016",
+    "GVG_094",
+    "GVG_096",
+    "VAN_CS2_009",
+    "VAN_CS2_009",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_586"
+  ]
+}

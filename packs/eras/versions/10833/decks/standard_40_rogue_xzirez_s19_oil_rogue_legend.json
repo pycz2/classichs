@@ -1,0 +1,40 @@
+{
+  "name": "Xzirez: S19 Oil Rogue(Legend)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Xzirez: S19 Oil Rogue(Legend) by Xzirez. Rogue. HearthPwn, rating +141, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/344791-xzirez-s19-oil-rogue-legend",
+    "ru": "Колода «Xzirez: S19 Oil Rogue(Legend)», автор Xzirez. Разбойник. HearthPwn, рейтинг +141, октябрь 2015: https://www.hearthpwn.com/decks/344791-xzirez-s19-oil-rogue-legend"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_022",
+    "GVG_022",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_077",
+    "VAN_CS2_117",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

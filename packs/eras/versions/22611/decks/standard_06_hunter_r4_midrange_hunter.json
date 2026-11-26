@@ -1,0 +1,40 @@
+{
+  "name": "(R4) MidRange Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "(R4) MidRange Hunter by SlothCraft. Hunter, archetype Midrange Hunter. HearthPwn, rating +229, December 2017 (Kobolds Patch): https://www.hearthpwn.com/decks/992510-r4-midrange-hunter",
+    "ru": "Колода «(R4) MidRange Hunter», автор SlothCraft. Охотник, архетип Midrange Hunter. HearthPwn, рейтинг +229, декабрь 2017: https://www.hearthpwn.com/decks/992510-r4-midrange-hunter"
+  },
+  "cards": [
+    "CFM_315",
+    "CFM_315",
+    "ICC_419",
+    "ICC_419",
+    "KAR_004",
+    "KAR_004",
+    "KAR_005",
+    "KAR_005",
+    "KAR_006",
+    "LOOT_077",
+    "LOOT_077",
+    "LOOT_079",
+    "LOOT_079",
+    "LOOT_080",
+    "LOOT_080",
+    "LOOT_149",
+    "LOOT_149",
+    "LOOT_258",
+    "LOOT_258",
+    "UNG_915",
+    "UNG_915",
+    "VAN_CS2_084",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_609",
+    "VAN_EX1_611",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

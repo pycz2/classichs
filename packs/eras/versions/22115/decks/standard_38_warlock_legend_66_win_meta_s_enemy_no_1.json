@@ -1,0 +1,40 @@
+{
+  "name": "[Legend 66% Win]Meta's enemy no 1",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[Legend 66% Win]Meta's enemy no 1 by jainaishot. Warlock, archetype Control Warlock. HearthPwn, rating +313, October 2017 (Triggered): https://www.hearthpwn.com/decks/939628-legend-66-win-metas-enemy-no-1",
+    "ru": "Колода «[Legend 66% Win]Meta's enemy no 1», автор jainaishot. Чернокнижник, архетип Control Warlock. HearthPwn, рейтинг +313, октябрь 2017: https://www.hearthpwn.com/decks/939628-legend-66-win-metas-enemy-no-1"
+  },
+  "cards": [
+    "CFM_120",
+    "CFM_120",
+    "CFM_751",
+    "CFM_751",
+    "ICC_041",
+    "ICC_041",
+    "ICC_055",
+    "ICC_055",
+    "ICC_075",
+    "ICC_075",
+    "ICC_700",
+    "ICC_700",
+    "ICC_701",
+    "ICC_705",
+    "ICC_705",
+    "ICC_831",
+    "KAR_097",
+    "VAN_CS2_062",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_EX1_312",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

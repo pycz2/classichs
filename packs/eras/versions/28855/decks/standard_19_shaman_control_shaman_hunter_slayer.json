@@ -1,0 +1,40 @@
+{
+  "name": "Control Shaman [Hunter Slayer]",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Control Shaman [Hunter Slayer] by Melihakd. Shaman, archetype Control Shaman. HearthPwn, rating +51, December 2018 (Level Up Nerf): https://www.hearthpwn.com/decks/1222441-control-shaman-hunter-slayer",
+    "ru": "Колода «Control Shaman [Hunter Slayer]», автор Melihakd. Шаман, архетип Control Shaman. HearthPwn, рейтинг +51, декабрь 2018: https://www.hearthpwn.com/decks/1222441-control-shaman-hunter-slayer"
+  },
+  "cards": [
+    "BOT_093",
+    "BOT_093",
+    "BOT_411",
+    "BOT_533",
+    "BOT_533",
+    "GIL_504",
+    "ICC_314",
+    "ICC_466",
+    "ICC_466",
+    "ICC_481",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_373",
+    "LOOT_504",
+    "UNG_025",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "UNG_938",
+    "UNG_938",
+    "UNG_946",
+    "VAN_CS2_046",
+    "VAN_EX1_085",
+    "VAN_EX1_085",
+    "VAN_EX1_238",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259"
+  ]
+}

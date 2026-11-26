@@ -1,0 +1,40 @@
+{
+  "name": "[RoS] Control Fatigue Value Shaman *UPDATED*",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[RoS] Control Fatigue Value Shaman *UPDATED* by Ontes. Shaman, archetype Control Shaman. HearthPwn, rating +204, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1253616-ros-control-fatigue-value-shaman-updated",
+    "ru": "Колода «[RoS] Control Fatigue Value Shaman *UPDATED*», автор Ontes. Шаман, архетип Control Shaman. HearthPwn, рейтинг +204, апрель 2019: https://www.hearthpwn.com/decks/1253616-ros-control-fatigue-value-shaman-updated"
+  },
+  "cards": [
+    "BOT_291",
+    "BOT_291",
+    "BOT_543",
+    "BOT_548",
+    "DAL_009",
+    "DAL_009",
+    "DAL_047",
+    "DAL_047",
+    "DAL_431",
+    "DAL_539",
+    "DAL_539",
+    "DAL_546",
+    "DAL_551",
+    "DAL_551",
+    "DAL_736",
+    "GIL_504",
+    "GIL_820",
+    "TRL_058",
+    "TRL_345",
+    "TRL_351",
+    "VAN_EX1_012",
+    "VAN_EX1_066",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

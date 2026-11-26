@@ -1,0 +1,40 @@
+{
+  "name": "Yogg Token Druid Guide by J4CKIECHAN",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Yogg Token Druid Guide by J4CKIECHAN by user-21652277. Druid, archetype Yogg Druid. HearthPwn, rating +372, June 2016 (Old Gods): https://www.hearthpwn.com/decks/562644-yogg-token-druid-guide-by-j4ckiechan",
+    "ru": "Колода «Yogg Token Druid Guide by J4CKIECHAN», автор user-21652277. Друид, архетип Yogg Druid. HearthPwn, рейтинг +372, июнь 2016: https://www.hearthpwn.com/decks/562644-yogg-token-druid-guide-by-j4ckiechan"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_044",
+    "LOE_115",
+    "LOE_115",
+    "OG_044",
+    "OG_047",
+    "OG_134",
+    "OG_195",
+    "OG_195",
+    "OG_202",
+    "OG_202",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_012",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_158",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_573",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

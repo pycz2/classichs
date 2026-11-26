@@ -1,0 +1,40 @@
+{
+  "name": "[Legend] Value-Control Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[Legend] Value-Control Mage by PrinceOberyn77. Mage, archetype Freeze Mage. HearthPwn, rating +478, May 2017 (Un'Goro Launch): https://www.hearthpwn.com/decks/817550-legend-value-control-mage",
+    "ru": "Колода «[Legend] Value-Control Mage», автор PrinceOberyn77. Маг, архетип Freeze Mage. HearthPwn, рейтинг +478, май 2017: https://www.hearthpwn.com/decks/817550-legend-value-control-mage"
+  },
+  "cards": [
+    "CFM_649",
+    "CFM_649",
+    "KAR_009",
+    "KAR_009",
+    "KAR_076",
+    "KAR_076",
+    "KAR_092",
+    "KAR_092",
+    "KAR_097",
+    "UNG_020",
+    "UNG_020",
+    "UNG_941",
+    "UNG_941",
+    "UNG_946",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_028",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_EX1_012",
+    "VAN_EX1_279",
+    "VAN_EX1_289",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_561",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

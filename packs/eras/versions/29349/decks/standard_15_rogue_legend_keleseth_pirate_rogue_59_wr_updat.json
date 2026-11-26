@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND] Keleseth Pirate Rogue (59%WR) UPDATED",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[LEGEND] Keleseth Pirate Rogue (59%WR) UPDATED by Reinan23. Rogue, archetype Pirate Rogue. HearthPwn, rating +141, February 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1212031-legend-keleseth-pirate-rogue-59-wr-updated",
+    "ru": "Колода «[LEGEND] Keleseth Pirate Rogue (59%WR) UPDATED», автор Reinan23. Разбойник, архетип Pirate Rogue. HearthPwn, рейтинг +141, февраль 2019: https://www.hearthpwn.com/decks/1212031-legend-keleseth-pirate-rogue-59-wr-updated"
+  },
+  "cards": [
+    "BOT_445",
+    "BOT_445",
+    "BOT_548",
+    "GIL_534",
+    "GIL_534",
+    "GIL_557",
+    "GIL_557",
+    "GIL_681",
+    "GIL_681",
+    "ICC_851",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_211",
+    "LOOT_211",
+    "TRL_015",
+    "TRL_015",
+    "TRL_126",
+    "UNG_064",
+    "UNG_064",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_116",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_NEW1_027",
+    "VAN_NEW1_027"
+  ]
+}

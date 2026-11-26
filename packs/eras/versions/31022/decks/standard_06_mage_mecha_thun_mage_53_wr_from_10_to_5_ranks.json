@@ -1,0 +1,40 @@
+{
+  "name": "Mecha'thun Mage (53% wr from 10 to 5 ranks)",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Mecha'thun Mage (53% wr from 10 to 5 ranks) by Coo1Cat. Mage, archetype Exodia Mage. HearthPwn, rating +4, June 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1281385-mechathun-mage-53-wr-from-10-to-5-ranks",
+    "ru": "Колода «Mecha'thun Mage (53% wr from 10 to 5 ranks)», автор Coo1Cat. Маг, архетип Exodia Mage. HearthPwn, рейтинг +4, июнь 2019: https://www.hearthpwn.com/decks/1281385-mechathun-mage-53-wr-from-10-to-5-ranks"
+  },
+  "cards": [
+    "BOT_103",
+    "BOT_424",
+    "BOT_548",
+    "BOT_600",
+    "BOT_600",
+    "BOT_907",
+    "BOT_907",
+    "DAL_577",
+    "DAL_577",
+    "GIL_801",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_026",
+    "VAN_CS2_026",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_028",
+    "VAN_CS2_028",
+    "VAN_EX1_007",
+    "VAN_EX1_012",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_049",
+    "VAN_EX1_066",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

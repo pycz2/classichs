@@ -1,0 +1,40 @@
+{
+  "name": "{old season}  Win Rate Controlled Evolution (new season)",
+  "champion": "HERO_02",
+  "description": {
+    "en": "{old season}  Win Rate Controlled Evolution (new season) by danielschwartz22. Shaman, archetype Control Shaman. HearthPwn, rating +714, August 2017 (Frozen Throne): https://www.hearthpwn.com/decks/833933-old-season-win-rate-controlled-evolution-new",
+    "ru": "Колода «{old season}  Win Rate Controlled Evolution (new season)», автор danielschwartz22. Шаман, архетип Control Shaman. HearthPwn, рейтинг +714, август 2017: https://www.hearthpwn.com/decks/833933-old-season-win-rate-controlled-evolution-new"
+  },
+  "cards": [
+    "CFM_637",
+    "CFM_668",
+    "CFM_668",
+    "CFM_696",
+    "CFM_696",
+    "CFM_707",
+    "CFM_707",
+    "CFM_717",
+    "CFM_717",
+    "CFM_902",
+    "KAR_073",
+    "KAR_073",
+    "OG_027",
+    "OG_027",
+    "OG_028",
+    "OG_028",
+    "UNG_072",
+    "UNG_072",
+    "UNG_201",
+    "UNG_201",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_046",
+    "VAN_CS2_046",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_EX1_575",
+    "VAN_NEW1_025",
+    "VAN_NEW1_025"
+  ]
+}

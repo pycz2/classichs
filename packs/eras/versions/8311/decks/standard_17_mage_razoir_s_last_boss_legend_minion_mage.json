@@ -1,0 +1,40 @@
+{
+  "name": "Razoir's Last Boss - Legend Minion Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Razoir's Last Boss - Legend Minion Mage by user-15605280. Mage. HearthPwn, rating +251, February 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/159244-razoirs-last-boss-legend-minion-mage",
+    "ru": "Колода «Razoir's Last Boss - Legend Minion Mage», автор user-15605280. Маг. HearthPwn, рейтинг +251, февраль 2015: https://www.hearthpwn.com/decks/159244-razoirs-last-boss-legend-minion-mage"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_001",
+    "FP1_004",
+    "FP1_004",
+    "FP1_005",
+    "FP1_012",
+    "FP1_012",
+    "FP1_013",
+    "FP1_030",
+    "GVG_003",
+    "GVG_005",
+    "GVG_005",
+    "GVG_096",
+    "GVG_096",
+    "GVG_107",
+    "GVG_110",
+    "GVG_114",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_203",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_085",
+    "VAN_EX1_294",
+    "VAN_EX1_294",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

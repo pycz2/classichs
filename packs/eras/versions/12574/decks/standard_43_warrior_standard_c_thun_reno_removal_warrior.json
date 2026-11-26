@@ -1,0 +1,40 @@
+{
+  "name": "[STANDARD] C'thun Reno removal warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[STANDARD] C'thun Reno removal warrior by user-24542314. Warrior. HearthPwn, rating +4, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/480630-standard-cthun-reno-removal-warrior",
+    "ru": "Колода «[STANDARD] C'thun Reno removal warrior», автор user-24542314. Воин. HearthPwn, рейтинг +4, апрель 2016: https://www.hearthpwn.com/decks/480630-standard-cthun-reno-removal-warrior"
+  },
+  "cards": [
+    "AT_064",
+    "AT_069",
+    "AT_132",
+    "BRM_028",
+    "LOE_011",
+    "LOE_022",
+    "LOE_077",
+    "OG_131",
+    "OG_162",
+    "OG_218",
+    "OG_280",
+    "OG_281",
+    "OG_283",
+    "OG_286",
+    "OG_301",
+    "OG_321",
+    "OG_339",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_EX1_005",
+    "VAN_EX1_391",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_408",
+    "VAN_EX1_410",
+    "VAN_EX1_411",
+    "VAN_EX1_414",
+    "VAN_EX1_558",
+    "VAN_EX1_606"
+  ]
+}

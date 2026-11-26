@@ -1,0 +1,40 @@
+{
+  "name": "Burst Rogue - Legend Grinder - RACE HUNTERS",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Burst Rogue - Legend Grinder - RACE HUNTERS by wingsofwaxiii. Rogue. HearthPwn, rating +769, April 2016 (Explorers): https://www.hearthpwn.com/decks/263019-burst-rogue-legend-grinder-race-hunters",
+    "ru": "Колода «Burst Rogue - Legend Grinder - RACE HUNTERS», автор wingsofwaxiii. Разбойник. HearthPwn, рейтинг +769, апрель 2016: https://www.hearthpwn.com/decks/263019-burst-rogue-legend-grinder-race-hunters"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_022",
+    "GVG_022",
+    "GVG_023",
+    "GVG_023",
+    "GVG_096",
+    "GVG_096",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_080",
+    "VAN_CS2_146",
+    "VAN_CS2_203",
+    "VAN_CS2_203",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_050",
+    "VAN_EX1_089",
+    "VAN_EX1_089",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_131",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_581"
+  ]
+}

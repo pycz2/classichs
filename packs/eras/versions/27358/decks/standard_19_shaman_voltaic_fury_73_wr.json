@@ -1,0 +1,40 @@
+{
+  "name": "Voltaic Fury [73% WR]",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Voltaic Fury [73% WR] by user-100376723. Shaman, archetype Elemental Shaman. HearthPwn, rating +94, August 2018 (Boomsday): https://www.hearthpwn.com/decks/1171667-voltaic-fury-73-wr",
+    "ru": "Колода «Voltaic Fury [73% WR]», автор user-100376723. Шаман, архетип Elemental Shaman. HearthPwn, рейтинг +94, август 2018: https://www.hearthpwn.com/decks/1171667-voltaic-fury-73-wr"
+  },
+  "cards": [
+    "BOT_093",
+    "BOT_245",
+    "BOT_407",
+    "BOT_407",
+    "BOT_411",
+    "BOT_451",
+    "BOT_451",
+    "GIL_586",
+    "GIL_600",
+    "GIL_600",
+    "UNG_208",
+    "UNG_211",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "VAN_CS2_046",
+    "VAN_CS2_046",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_247",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_250",
+    "VAN_EX1_250",
+    "VAN_EX1_258",
+    "VAN_EX1_258",
+    "VAN_EX1_259",
+    "VAN_EX1_565",
+    "VAN_EX1_565"
+  ]
+}

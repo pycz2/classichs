@@ -1,0 +1,40 @@
+{
+  "name": "Crusher Combo Priest [Legendary]",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Crusher Combo Priest [Legendary] by HSCrusher. Priest, archetype Control Priest. HearthPwn, rating +122, August 2016 (Karazhan): https://www.hearthpwn.com/decks/269262-crusher-combo-priest-legendary",
+    "ru": "Колода «Crusher Combo Priest [Legendary]», автор HSCrusher. Жрец, архетип Control Priest. HearthPwn, рейтинг +122, август 2016: https://www.hearthpwn.com/decks/269262-crusher-combo-priest-legendary"
+  },
+  "cards": [
+    "BRM_028",
+    "KAR_035",
+    "KAR_035",
+    "LOE_079",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_129",
+    "VAN_CS1_129",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_131",
+    "VAN_CS2_131",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_332",
+    "VAN_EX1_332",
+    "VAN_EX1_561",
+    "VAN_EX1_564",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

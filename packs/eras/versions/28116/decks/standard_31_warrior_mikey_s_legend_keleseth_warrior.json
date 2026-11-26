@@ -1,0 +1,40 @@
+{
+  "name": "Mikey's Legend Keleseth Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Mikey's Legend Keleseth Warrior by mikko9999. Warrior, archetype Tempo Warrior. HearthPwn, rating +160, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1199857-mikeys-legend-keleseth-warrior",
+    "ru": "Колода «Mikey's Legend Keleseth Warrior», автор mikko9999. Воин, архетип Tempo Warrior. HearthPwn, рейтинг +160, декабрь 2018: https://www.hearthpwn.com/decks/1199857-mikeys-legend-keleseth-warrior"
+  },
+  "cards": [
+    "GIL_113",
+    "GIL_113",
+    "GIL_547",
+    "GIL_580",
+    "GIL_580",
+    "GIL_655",
+    "GIL_655",
+    "ICC_064",
+    "ICC_064",
+    "ICC_314",
+    "ICC_466",
+    "ICC_466",
+    "ICC_834",
+    "ICC_851",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_203",
+    "LOOT_203",
+    "UNG_809",
+    "UNG_809",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_EX1_048",
+    "VAN_EX1_414",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011"
+  ]
+}

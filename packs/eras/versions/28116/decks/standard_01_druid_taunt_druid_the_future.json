@@ -1,0 +1,40 @@
+{
+  "name": "Taunt Druid - The Future",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Taunt Druid - The Future by Mentation. Druid, archetype Taunt Druid. HearthPwn, rating +52, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1214243-taunt-druid-the-future",
+    "ru": "Колода «Taunt Druid - The Future», автор Mentation. Друид, архетип Taunt Druid. HearthPwn, рейтинг +52, декабрь 2018: https://www.hearthpwn.com/decks/1214243-taunt-druid-the-future"
+  },
+  "cards": [
+    "BOT_404",
+    "BOT_448",
+    "GIL_120",
+    "GIL_571",
+    "GIL_637",
+    "GIL_637",
+    "ICC_314",
+    "ICC_835",
+    "LOOT_048",
+    "LOOT_048",
+    "LOOT_051",
+    "LOOT_051",
+    "LOOT_054",
+    "LOOT_054",
+    "LOOT_056",
+    "LOOT_161",
+    "LOOT_309",
+    "LOOT_309",
+    "TRL_537",
+    "UNG_848",
+    "UNG_848",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_154",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_EX1_164",
+    "VAN_EX1_164"
+  ]
+}

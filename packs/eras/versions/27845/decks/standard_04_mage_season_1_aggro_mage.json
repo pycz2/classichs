@@ -1,0 +1,40 @@
+{
+  "name": "season 1 aggro mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "season 1 aggro mage by ur2ezchaos. Mage. HearthPwn, rating +466, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/45379-season-1-aggro-mage",
+    "ru": "Колода «season 1 aggro mage», автор ur2ezchaos. Маг. HearthPwn, рейтинг +466, декабрь 2018: https://www.hearthpwn.com/decks/45379-season-1-aggro-mage"
+  },
+  "cards": [
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_CS2_124",
+    "VAN_CS2_124",
+    "VAN_CS2_189",
+    "VAN_EX1_012",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

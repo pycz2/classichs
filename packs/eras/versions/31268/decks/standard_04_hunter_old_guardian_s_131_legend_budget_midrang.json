@@ -1,0 +1,40 @@
+{
+  "name": "Old Guardian's #131 Legend Budget Midrange Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Old Guardian's #131 Legend Budget Midrange Hunter by Old_Guardian. Hunter, archetype Midrange Hunter. HearthPwn, rating +21, July 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1286802-old-guardians-131-legend-budget-midrange-hunter",
+    "ru": "Колода «Old Guardian's #131 Legend Budget Midrange Hunter», автор Old_Guardian. Охотник, архетип Midrange Hunter. HearthPwn, рейтинг +21, июль 2019: https://www.hearthpwn.com/decks/1286802-old-guardians-131-legend-budget-midrange-hunter"
+  },
+  "cards": [
+    "DAL_587",
+    "DAL_587",
+    "DAL_743",
+    "DAL_743",
+    "GIL_622",
+    "GIL_622",
+    "TRL_111",
+    "TRL_111",
+    "TRL_347",
+    "TRL_347",
+    "TRL_348",
+    "TRL_348",
+    "VAN_DS1_070",
+    "VAN_DS1_070",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_EX1_028",
+    "VAN_EX1_048",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_531",
+    "VAN_EX1_531",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_617",
+    "VAN_EX1_617",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

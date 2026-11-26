@@ -1,0 +1,40 @@
+{
+  "name": "Bragis Phantom of the Opera Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Bragis Phantom of the Opera Hunter by user-100177025. Hunter, archetype Secrets Hunter. HearthPwn, rating +60, October 2017 (Triggered): https://www.hearthpwn.com/decks/949751-bragis-phantom-of-the-opera-hunter",
+    "ru": "Колода «Bragis Phantom of the Opera Hunter», автор user-100177025. Охотник, архетип Secrets Hunter. HearthPwn, рейтинг +60, октябрь 2017: https://www.hearthpwn.com/decks/949751-bragis-phantom-of-the-opera-hunter"
+  },
+  "cards": [
+    "ICC_828",
+    "KAR_004",
+    "KAR_004",
+    "KAR_114",
+    "OG_042",
+    "OG_061",
+    "OG_061",
+    "VAN_CS2_084",
+    "VAN_CS2_084",
+    "VAN_DS1_184",
+    "VAN_DS1_184",
+    "VAN_DS1_185",
+    "VAN_DS1_185",
+    "VAN_EX1_533",
+    "VAN_EX1_533",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_544",
+    "VAN_EX1_610",
+    "VAN_EX1_610",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_EX1_617",
+    "VAN_EX1_617",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

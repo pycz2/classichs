@@ -1,0 +1,40 @@
+{
+  "name": "*BUDGET* Witchwood ***Tempo Mage***",
+  "champion": "HERO_08",
+  "description": {
+    "en": "*BUDGET* Witchwood ***Tempo Mage*** by FrozenFlames14. Mage, archetype Tempo Mage. HearthPwn, rating +239, April 2018 (Witchwood): https://www.hearthpwn.com/decks/1083732-budget-witchwood-tempo-mage",
+    "ru": "Колода «*BUDGET* Witchwood ***Tempo Mage***», автор FrozenFlames14. Маг, архетип Tempo Mage. HearthPwn, рейтинг +239, апрель 2018: https://www.hearthpwn.com/decks/1083732-budget-witchwood-tempo-mage"
+  },
+  "cards": [
+    "GIL_664",
+    "GIL_664",
+    "ICC_836",
+    "ICC_836",
+    "LOOT_101",
+    "LOOT_101",
+    "UNG_020",
+    "UNG_020",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_287",
+    "VAN_EX1_287",
+    "VAN_EX1_294",
+    "VAN_EX1_294",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "(updated) Big EVEN Recruit Warrior (60+% to legend)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "(updated) Big EVEN Recruit Warrior (60+% to legend) by Jambre. Warrior, archetype Recruit Warrior. HearthPwn, rating +115, June 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1109913-updated-big-even-recruit-warrior-60-to-legend",
+    "ru": "Колода «(updated) Big EVEN Recruit Warrior (60+% to legend)», автор Jambre. Воин, архетип Recruit Warrior. HearthPwn, рейтинг +115, июнь 2018: https://www.hearthpwn.com/decks/1109913-updated-big-even-recruit-warrior-60-to-legend"
+  },
+  "cards": [
+    "GIL_654",
+    "GIL_654",
+    "GIL_692",
+    "ICC_064",
+    "ICC_064",
+    "ICC_281",
+    "ICC_281",
+    "ICC_314",
+    "ICC_405",
+    "ICC_834",
+    "ICC_837",
+    "ICC_837",
+    "LOOT_044",
+    "LOOT_044",
+    "LOOT_285",
+    "LOOT_285",
+    "LOOT_365",
+    "LOOT_365",
+    "LOOT_370",
+    "LOOT_370",
+    "LOOT_380",
+    "LOOT_519",
+    "UNG_099",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_414",
+    "VAN_EX1_607",
+    "VAN_EX1_607"
+  ]
+}

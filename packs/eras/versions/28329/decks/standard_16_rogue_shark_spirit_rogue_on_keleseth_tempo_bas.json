@@ -1,0 +1,40 @@
+{
+  "name": "Shark Spirit Rogue (on Keleseth Tempo Base)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Shark Spirit Rogue (on Keleseth Tempo Base) by pinkoz. Rogue, archetype Tempo Rogue. HearthPwn, rating +107, December 2018 (Level Up Nerf): https://www.hearthpwn.com/decks/1221738-shark-spirit-rogue-on-keleseth-tempo-base",
+    "ru": "Колода «Shark Spirit Rogue (on Keleseth Tempo Base)», автор pinkoz. Разбойник, архетип Tempo Rogue. HearthPwn, рейтинг +107, декабрь 2018: https://www.hearthpwn.com/decks/1221738-shark-spirit-rogue-on-keleseth-tempo-base"
+  },
+  "cards": [
+    "BOT_511",
+    "BOT_548",
+    "GIL_534",
+    "GIL_534",
+    "GIL_648",
+    "ICC_466",
+    "ICC_466",
+    "ICC_851",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_211",
+    "LOOT_211",
+    "TRL_092",
+    "TRL_092",
+    "TRL_409",
+    "UNG_064",
+    "UNG_064",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_EX1_116",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_613"
+  ]
+}

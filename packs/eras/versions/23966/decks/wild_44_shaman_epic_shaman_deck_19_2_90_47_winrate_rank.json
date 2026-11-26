@@ -1,0 +1,40 @@
+{
+  "name": "EPIC SHAMAN DECK (19-2) (90.47% winrate) (Rank 3)",
+  "champion": "HERO_02",
+  "description": {
+    "en": "EPIC SHAMAN DECK (19-2) (90.47% winrate) (Rank 3) by Sh00tingStar1. Shaman, archetype Jade Lotus Shaman. HearthPwn, rating +136, March 2018 (Patches Nerf): https://www.hearthpwn.com/decks/1048424-epic-shaman-deck-19-2-90-47-winrate-rank-3",
+    "ru": "Колода «EPIC SHAMAN DECK (19-2) (90.47% winrate) (Rank 3)», автор Sh00tingStar1. Шаман, архетип Jade Lotus Shaman. HearthPwn, рейтинг +136, март 2018: https://www.hearthpwn.com/decks/1048424-epic-shaman-deck-19-2-90-47-winrate-rank-3"
+  },
+  "cards": [
+    "CFM_061",
+    "CFM_312",
+    "CFM_312",
+    "CFM_696",
+    "CFM_696",
+    "CFM_707",
+    "CFM_707",
+    "CFM_715",
+    "CFM_715",
+    "CFM_717",
+    "CFM_717",
+    "CFM_902",
+    "ICC_481",
+    "ICC_701",
+    "KAR_073",
+    "KAR_073",
+    "LOOT_373",
+    "LOOT_373",
+    "LOOT_389",
+    "LOOT_517",
+    "LOOT_517",
+    "UNG_025",
+    "UNG_025",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575"
+  ]
+}

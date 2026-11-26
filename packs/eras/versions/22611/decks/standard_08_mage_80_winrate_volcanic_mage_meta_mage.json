@@ -1,0 +1,40 @@
+{
+  "name": "[80% WINRATE] VOLCANIC MAGE: META MAGE",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[80% WINRATE] VOLCANIC MAGE: META MAGE by DamnDatMage. Mage, archetype Secret Mage. HearthPwn, rating +130, January 2018 (Kobolds Patch): https://www.hearthpwn.com/decks/1022606-80-winrate-volcanic-mage-meta-mage",
+    "ru": "Колода «[80% WINRATE] VOLCANIC MAGE: META MAGE», автор DamnDatMage. Маг, архетип Secret Mage. HearthPwn, рейтинг +130, январь 2018: https://www.hearthpwn.com/decks/1022606-80-winrate-volcanic-mage-meta-mage"
+  },
+  "cards": [
+    "CFM_065",
+    "CFM_760",
+    "CFM_760",
+    "KAR_076",
+    "KAR_076",
+    "KAR_092",
+    "KAR_097",
+    "LOOT_101",
+    "LOOT_101",
+    "LOOT_149",
+    "OG_090",
+    "UNG_020",
+    "UNG_020",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_048",
+    "VAN_EX1_287",
+    "VAN_EX1_287",
+    "VAN_EX1_295",
+    "VAN_EX1_561",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[RANK 1 LEGEND]Rage's Quest Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[RANK 1 LEGEND]Rage's Quest Rogue by Bullseye. Rogue, archetype Quest Rogue. HearthPwn, rating +152, May 2018 (Witchwood): https://www.hearthpwn.com/decks/1098234-rank-1-legend-rages-quest-rogue",
+    "ru": "Колода «[RANK 1 LEGEND]Rage's Quest Rogue», автор Bullseye. Разбойник, архетип Quest Rogue. HearthPwn, рейтинг +152, май 2018: https://www.hearthpwn.com/decks/1098234-rank-1-legend-rages-quest-rogue"
+  },
+  "cards": [
+    "GIL_143",
+    "GIL_143",
+    "ICC_827",
+    "LOOT_117",
+    "LOOT_117",
+    "LOOT_165",
+    "LOOT_211",
+    "LOOT_211",
+    "LOOT_516",
+    "UNG_060",
+    "UNG_060",
+    "UNG_067",
+    "UNG_205",
+    "UNG_205",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_CS2_171",
+    "VAN_CS2_171",
+    "VAN_EX1_015",
+    "VAN_EX1_015",
+    "VAN_EX1_049",
+    "VAN_EX1_049",
+    "VAN_EX1_129",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_NEW1_004",
+    "VAN_NEW1_004"
+  ]
+}

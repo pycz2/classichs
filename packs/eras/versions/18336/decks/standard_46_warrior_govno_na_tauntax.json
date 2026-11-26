@@ -1,0 +1,40 @@
+{
+  "name": "Govno na tauntax",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Govno na tauntax by SensoR. Warrior, archetype C'Thun Warrior. HearthPwn, rating +10, April 2017 (Un'Goro Prepatch): https://www.hearthpwn.com/decks/538207-govno-na-tauntax",
+    "ru": "Колода «Govno na tauntax», автор SensoR. Воин, архетип C'Thun Warrior. HearthPwn, рейтинг +10, апрель 2017: https://www.hearthpwn.com/decks/538207-govno-na-tauntax"
+  },
+  "cards": [
+    "CFM_756",
+    "CFM_756",
+    "CFM_790",
+    "CFM_790",
+    "KAR_061",
+    "OG_149",
+    "OG_149",
+    "OG_218",
+    "OG_218",
+    "UNG_848",
+    "UNG_848",
+    "UNG_934",
+    "UNG_957",
+    "UNG_957",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_110",
+    "VAN_EX1_391",
+    "VAN_EX1_391",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_572",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

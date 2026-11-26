@@ -1,0 +1,40 @@
+{
+  "name": "[MSoG] Standard Mill Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[MSoG] Standard Mill Rogue by CotyHS. Rogue, archetype Mill Rogue. HearthPwn, rating +341, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/147248-msog-standard-mill-rogue",
+    "ru": "Колода «[MSoG] Standard Mill Rogue», автор CotyHS. Разбойник, архетип Mill Rogue. HearthPwn, рейтинг +341, декабрь 2016: https://www.hearthpwn.com/decks/147248-msog-standard-mill-rogue"
+  },
+  "cards": [
+    "AT_111",
+    "AT_111",
+    "BRM_007",
+    "BRM_007",
+    "KAR_061",
+    "LOE_077",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_EX1_012",
+    "VAN_EX1_014",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_004",
+    "VAN_NEW1_004",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

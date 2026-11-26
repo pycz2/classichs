@@ -1,0 +1,40 @@
+{
+  "name": "Budget Zoo Warlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Budget Zoo Warlock by Jeleniowatyy. Warlock, archetype Zoolock. HearthPwn, rating +58, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1202366-budget-zoo-warlock",
+    "ru": "Колода «Budget Zoo Warlock», автор Jeleniowatyy. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +58, декабрь 2018: https://www.hearthpwn.com/decks/1202366-budget-zoo-warlock"
+  },
+  "cards": [
+    "BOT_224",
+    "BOT_224",
+    "BOT_263",
+    "BOT_263",
+    "BOT_445",
+    "BOT_445",
+    "ICC_466",
+    "ICC_466",
+    "LOOT_013",
+    "LOOT_013",
+    "LOOT_014",
+    "LOOT_014",
+    "LOOT_167",
+    "LOOT_167",
+    "TRL_249",
+    "TRL_249",
+    "TRL_251",
+    "TRL_251",
+    "TRL_503",
+    "TRL_503",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_319",
+    "VAN_EX1_319"
+  ]
+}

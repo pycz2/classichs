@@ -1,0 +1,40 @@
+{
+  "name": "68 % winrate Taunt Warrior (panama update)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "68 % winrate Taunt Warrior (panama update) by danielschwartz22. Warrior, archetype Taunt Warrior. HearthPwn, rating +612, June 2017 (Un'Goro Launch): https://www.hearthpwn.com/decks/809736-68-winrate-taunt-warrior-panama-update",
+    "ru": "Колода «68 % winrate Taunt Warrior (panama update)», автор danielschwartz22. Воин, архетип Taunt Warrior. HearthPwn, рейтинг +612, июнь 2017: https://www.hearthpwn.com/decks/809736-68-winrate-taunt-warrior-panama-update"
+  },
+  "cards": [
+    "CFM_756",
+    "CFM_756",
+    "KAR_061",
+    "OG_149",
+    "OG_149",
+    "OG_218",
+    "OG_218",
+    "UNG_072",
+    "UNG_072",
+    "UNG_848",
+    "UNG_848",
+    "UNG_925",
+    "UNG_925",
+    "UNG_928",
+    "UNG_928",
+    "UNG_934",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_391",
+    "VAN_EX1_391",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

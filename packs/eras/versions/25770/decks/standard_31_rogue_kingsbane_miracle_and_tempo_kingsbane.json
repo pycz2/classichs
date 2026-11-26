@@ -1,0 +1,40 @@
+{
+  "name": "% Kingsbane Miracle and Tempo Kingsbane",
+  "champion": "HERO_03",
+  "description": {
+    "en": "% Kingsbane Miracle and Tempo Kingsbane by Jumarti. Rogue, archetype Miracle Rogue. HearthPwn, rating +473, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/976762-kingsbane-miracle-and-tempo-kingsbane",
+    "ru": "Колода «% Kingsbane Miracle and Tempo Kingsbane», автор Jumarti. Разбойник, архетип Miracle Rogue. HearthPwn, рейтинг +473, май 2018: https://www.hearthpwn.com/decks/976762-kingsbane-miracle-and-tempo-kingsbane"
+  },
+  "cards": [
+    "GIL_902",
+    "GIL_902",
+    "ICC_221",
+    "ICC_221",
+    "ICC_233",
+    "ICC_827",
+    "LOOT_026",
+    "LOOT_026",
+    "LOOT_033",
+    "LOOT_033",
+    "LOOT_211",
+    "LOOT_211",
+    "LOOT_542",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_077",
+    "VAN_CS2_233",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_004",
+    "VAN_NEW1_024"
+  ]
+}

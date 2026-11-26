@@ -1,0 +1,40 @@
+{
+  "name": "Crow Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Crow Mage by Trumpsc. Mage, archetype Aggro Mage. HearthPwn, rating +428, April 2018 (Patches Nerf): https://www.hearthpwn.com/decks/1074286-crow-mage",
+    "ru": "Колода «Crow Mage», автор Trumpsc. Маг, архетип Aggro Mage. HearthPwn, рейтинг +428, апрель 2018: https://www.hearthpwn.com/decks/1074286-crow-mage"
+  },
+  "cards": [
+    "GIL_664",
+    "GIL_664",
+    "ICC_836",
+    "ICC_836",
+    "LOOT_101",
+    "LOOT_101",
+    "LOOT_108",
+    "UNG_020",
+    "UNG_020",
+    "UNG_941",
+    "UNG_941",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_279",
+    "VAN_EX1_287",
+    "VAN_EX1_559",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_EX1_612",
+    "VAN_EX1_612",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

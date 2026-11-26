@@ -1,0 +1,40 @@
+{
+  "name": "S33 J4ckiechan's Egg Druid - Mean Streets of Gadgetzan",
+  "champion": "HERO_06",
+  "description": {
+    "en": "S33 J4ckiechan's Egg Druid - Mean Streets of Gadgetzan by hsbofb. Druid, archetype Beast Druid. HearthPwn, rating +445, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/691312-s33-j4ckiechans-egg-druid-mean-streets-of",
+    "ru": "Колода «S33 J4ckiechan's Egg Druid - Mean Streets of Gadgetzan», автор hsbofb. Друид, архетип Beast Druid. HearthPwn, рейтинг +445, декабрь 2016: https://www.hearthpwn.com/decks/691312-s33-j4ckiechans-egg-druid-mean-streets-of"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_042",
+    "AT_042",
+    "AT_084",
+    "BRM_022",
+    "BRM_022",
+    "CFM_614",
+    "CFM_614",
+    "KAR_029",
+    "KAR_029",
+    "KAR_300",
+    "KAR_300",
+    "LOE_050",
+    "LOE_050",
+    "LOE_076",
+    "OG_048",
+    "OG_048",
+    "VAN_CS2_009",
+    "VAN_CS2_009",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_158",
+    "VAN_EX1_158",
+    "VAN_EX1_160",
+    "VAN_EX1_160"
+  ]
+}

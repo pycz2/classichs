@@ -1,0 +1,40 @@
+{
+  "name": "[S19 Top 100 Legend] Assassin's Blade Oil Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[S19 Top 100 Legend] Assassin's Blade Oil Rogue by Thron314. Rogue. HearthPwn, rating +77, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/351639-s19-top-100-legend-assassins-blade-oil-rogue",
+    "ru": "Колода «[S19 Top 100 Legend] Assassin's Blade Oil Rogue», автор Thron314. Разбойник. HearthPwn, рейтинг +77, октябрь 2015: https://www.hearthpwn.com/decks/351639-s19-top-100-legend-assassins-blade-oil-rogue"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_022",
+    "GVG_022",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_080",
+    "VAN_CS2_117",
+    "VAN_CS2_146",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613",
+    "VAN_NEW1_022",
+    "VAN_NEW1_024",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

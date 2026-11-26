@@ -1,0 +1,40 @@
+{
+  "name": "Burstdown (Wild Pyro Variant)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Burstdown (Wild Pyro Variant) by Free_Gold. Rogue. HearthPwn, rating +61, May 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/51268-burstdown-wild-pyro-variant",
+    "ru": "Колода «Burstdown (Wild Pyro Variant)», автор Free_Gold. Разбойник. HearthPwn, рейтинг +61, май 2014: https://www.hearthpwn.com/decks/51268-burstdown-wild-pyro-variant"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_055",
+    "VAN_EX1_055",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_128",
+    "VAN_EX1_129",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

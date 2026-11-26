@@ -1,0 +1,40 @@
+{
+  "name": "[Rise Of Shadows] Resurrect Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[Rise Of Shadows] Resurrect Priest by NanaKwame. Priest, archetype Resurrect Priest. HearthPwn, rating +74, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1246034-rise-of-shadows-resurrect-priest",
+    "ru": "Колода «[Rise Of Shadows] Resurrect Priest», автор NanaKwame. Жрец, архетип Resurrect Priest. HearthPwn, рейтинг +74, апрель 2019: https://www.hearthpwn.com/decks/1246034-rise-of-shadows-resurrect-priest"
+  },
+  "cards": [
+    "BOT_219",
+    "BOT_219",
+    "BOT_258",
+    "BOT_509",
+    "BOT_509",
+    "BOT_548",
+    "DAL_039",
+    "DAL_039",
+    "DAL_551",
+    "DAL_551",
+    "DAL_721",
+    "DAL_723",
+    "DAL_723",
+    "DAL_724",
+    "DAL_724",
+    "DAL_749",
+    "DAL_749",
+    "GIL_813",
+    "GIL_813",
+    "TRL_097",
+    "TRL_097",
+    "TRL_258",
+    "TRL_258",
+    "TRL_509",
+    "TRL_509",
+    "TRL_537",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235"
+  ]
+}

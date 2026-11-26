@@ -1,0 +1,40 @@
+{
+  "name": "Shadow Priest - Unexpected Aggro Capability",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Shadow Priest - Unexpected Aggro Capability by iiTzPeace. Priest. HearthPwn, rating +22, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/43636-shadow-priest-unexpected-aggro-capability",
+    "ru": "Колода «Shadow Priest - Unexpected Aggro Capability», автор iiTzPeace. Жрец. HearthPwn, рейтинг +22, апрель 2014: https://www.hearthpwn.com/decks/43636-shadow-priest-unexpected-aggro-capability"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS1_130",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_124",
+    "VAN_CS2_124",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_DS1_233",
+    "VAN_DS1_233",
+    "VAN_EX1_008",
+    "VAN_EX1_012",
+    "VAN_EX1_020",
+    "VAN_EX1_020",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_089",
+    "VAN_EX1_089",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_116",
+    "VAN_EX1_162",
+    "VAN_EX1_624",
+    "VAN_EX1_624",
+    "VAN_EX1_625",
+    "VAN_EX1_625",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

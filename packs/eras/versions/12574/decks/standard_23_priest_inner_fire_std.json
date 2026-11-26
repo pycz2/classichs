@@ -1,0 +1,40 @@
+{
+  "name": "Inner Fire Std",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Inner Fire Std by Owloid. Priest. HearthPwn, rating +2, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/496767-inner-fire-std",
+    "ru": "Колода «Inner Fire Std», автор Owloid. Жрец. HearthPwn, рейтинг +2, апрель 2016: https://www.hearthpwn.com/decks/496767-inner-fire-std"
+  },
+  "cards": [
+    "AT_116",
+    "AT_116",
+    "BRM_028",
+    "LOE_053",
+    "LOE_053",
+    "LOE_079",
+    "VAN_CS1_129",
+    "VAN_CS1_129",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_119",
+    "VAN_CS2_119",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_028",
+    "VAN_EX1_335",
+    "VAN_EX1_339",
+    "VAN_EX1_341",
+    "VAN_EX1_341",
+    "VAN_EX1_345",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_626"
+  ]
+}

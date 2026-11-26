@@ -1,0 +1,40 @@
+{
+  "name": "Easy Legend",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Easy Legend by CornPuff. Druid. HearthPwn, rating +328, June 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/45524-easy-legend",
+    "ru": "Колода «Easy Legend», автор CornPuff. Друид. HearthPwn, рейтинг +328, июнь 2014: https://www.hearthpwn.com/decks/45524-easy-legend"
+  },
+  "cards": [
+    "VAN_CS2_007",
+    "VAN_CS2_009",
+    "VAN_CS2_009",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_182",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_032",
+    "VAN_EX1_110",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178",
+    "VAN_EX1_178",
+    "VAN_EX1_298",
+    "VAN_EX1_564",
+    "VAN_NEW1_008",
+    "VAN_NEW1_041"
+  ]
+}

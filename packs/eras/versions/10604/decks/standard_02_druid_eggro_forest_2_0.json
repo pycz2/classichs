@@ -1,0 +1,40 @@
+{
+  "name": "Eggro Forest 2.0",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Eggro Forest 2.0 by WhoaWorthy. Druid. HearthPwn, rating +113, November 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/242964-eggro-forest-2-0",
+    "ru": "Колода «Eggro Forest 2.0», автор WhoaWorthy. Друид. HearthPwn, рейтинг +113, ноябрь 2015: https://www.hearthpwn.com/decks/242964-eggro-forest-2-0"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "BRM_022",
+    "BRM_022",
+    "FP1_002",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "GVG_032",
+    "GVG_032",
+    "GVG_085",
+    "GVG_085",
+    "GVG_121",
+    "GVG_121",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_050",
+    "VAN_EX1_050",
+    "VAN_EX1_158",
+    "VAN_EX1_158",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_586",
+    "VAN_EX1_586"
+  ]
+}

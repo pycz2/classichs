@@ -1,0 +1,40 @@
+{
+  "name": "[Top 5 NA Legend] LOKShadow Reno Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[Top 5 NA Legend] LOKShadow Reno Warrior by LOKShadow. Warrior. HearthPwn, rating +347, April 2016 (Explorers): https://www.hearthpwn.com/decks/369762-top-5-na-legend-lokshadow-reno-warrior",
+    "ru": "Колода «[Top 5 NA Legend] LOKShadow Reno Warrior», автор LOKShadow. Воин. HearthPwn, рейтинг +347, апрель 2016: https://www.hearthpwn.com/decks/369762-top-5-na-legend-lokshadow-reno-warrior"
+  },
+  "cards": [
+    "AT_064",
+    "AT_132",
+    "BRM_015",
+    "BRM_028",
+    "FP1_009",
+    "FP1_012",
+    "FP1_021",
+    "FP1_030",
+    "GVG_050",
+    "GVG_052",
+    "GVG_053",
+    "GVG_056",
+    "GVG_096",
+    "GVG_110",
+    "LOE_011",
+    "LOE_077",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_EX1_005",
+    "VAN_EX1_050",
+    "VAN_EX1_249",
+    "VAN_EX1_391",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_411",
+    "VAN_EX1_414",
+    "VAN_EX1_558",
+    "VAN_EX1_572",
+    "VAN_NEW1_021",
+    "VAN_NEW1_030"
+  ]
+}

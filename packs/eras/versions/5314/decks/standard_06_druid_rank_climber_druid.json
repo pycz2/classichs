@@ -1,0 +1,40 @@
+{
+  "name": "Rank-Climber Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Rank-Climber Druid by user-13112014. Druid. HearthPwn, rating +12, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/28491-rank-climber-druid",
+    "ru": "Колода «Rank-Climber Druid», автор user-13112014. Друид. HearthPwn, рейтинг +12, май 2014: https://www.hearthpwn.com/decks/28491-rank-climber-druid"
+  },
+  "cards": [
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_147",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_093",
+    "VAN_EX1_154",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

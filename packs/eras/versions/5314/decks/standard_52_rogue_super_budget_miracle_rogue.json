@@ -1,0 +1,40 @@
+{
+  "name": "Super Budget miracle rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Super Budget miracle rogue by user-13902890. Rogue. HearthPwn, rating +17, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/49971-super-budget-miracle-rogue",
+    "ru": "Колода «Super Budget miracle rogue», автор user-13902890. Разбойник. HearthPwn, рейтинг +17, май 2014: https://www.hearthpwn.com/decks/49971-super-budget-miracle-rogue"
+  },
+  "cards": [
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_075",
+    "VAN_CS2_075",
+    "VAN_CS2_080",
+    "VAN_CS2_233",
+    "VAN_EX1_044",
+    "VAN_EX1_055",
+    "VAN_EX1_055",
+    "VAN_EX1_067",
+    "VAN_EX1_089",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_128",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_278",
+    "VAN_EX1_278",
+    "VAN_EX1_581",
+    "VAN_EX1_581"
+  ]
+}

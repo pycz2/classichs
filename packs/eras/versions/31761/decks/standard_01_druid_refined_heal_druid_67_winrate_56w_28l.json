@@ -1,0 +1,40 @@
+{
+  "name": "Refined Heal Druid - 67 % winrate (56w/28l)",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Refined Heal Druid - 67 % winrate (56w/28l) by Durschtel. Druid, archetype Taunt Druid. HearthPwn, rating +56, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1278174-refined-heal-druid-67-winrate-56w-28l",
+    "ru": "Колода «Refined Heal Druid - 67 % winrate (56w/28l)», автор Durschtel. Друид, архетип Taunt Druid. HearthPwn, рейтинг +56, июнь 2019: https://www.hearthpwn.com/decks/1278174-refined-heal-druid-67-winrate-56w-28l"
+  },
+  "cards": [
+    "BOT_404",
+    "BOT_434",
+    "BOT_507",
+    "BOT_548",
+    "DAL_350",
+    "DAL_350",
+    "DAL_357",
+    "DAL_558",
+    "DAL_732",
+    "GIL_571",
+    "GIL_571",
+    "GIL_623",
+    "GIL_623",
+    "GIL_637",
+    "GIL_637",
+    "TRL_244",
+    "TRL_244",
+    "VAN_CS2_007",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_085",
+    "VAN_EX1_085",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_564",
+    "VAN_EX1_564",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "/META Crusher/\"ElementPirate\"",
+  "champion": "HERO_01",
+  "description": {
+    "en": "/META Crusher/\"ElementPirate\" by RazielCZ. Warrior, archetype Pirate Warrior. HearthPwn, rating +35, July 2017 (Quest Rogue Nerf): https://www.hearthpwn.com/decks/852082-meta-crusher-elementpirate",
+    "ru": "Колода «/META Crusher/\"ElementPirate\"», автор RazielCZ. Воин, архетип Pirate Warrior. HearthPwn, рейтинг +35, июль 2017: https://www.hearthpwn.com/decks/852082-meta-crusher-elementpirate"
+  },
+  "cards": [
+    "CFM_637",
+    "OG_149",
+    "OG_149",
+    "OG_254",
+    "OG_312",
+    "OG_312",
+    "OG_315",
+    "UNG_084",
+    "UNG_809",
+    "UNG_816",
+    "UNG_847",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_112",
+    "VAN_CS2_112",
+    "VAN_EX1_007",
+    "VAN_EX1_409",
+    "VAN_EX1_411",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022"
+  ]
+}

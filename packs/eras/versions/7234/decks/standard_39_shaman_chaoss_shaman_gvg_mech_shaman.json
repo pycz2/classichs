@@ -1,0 +1,40 @@
+{
+  "name": "Chaoss Shaman [GvG Mech Shaman]",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Chaoss Shaman [GvG Mech Shaman] by CameronChaoss. Shaman. HearthPwn, rating +285, January 2015 (GvG Launch): https://www.hearthpwn.com/decks/148690-chaoss-shaman-gvg-mech-shaman",
+    "ru": "Колода «Chaoss Shaman [GvG Mech Shaman]», автор CameronChaoss. Шаман. HearthPwn, рейтинг +285, январь 2015: https://www.hearthpwn.com/decks/148690-chaoss-shaman-gvg-mech-shaman"
+  },
+  "cards": [
+    "GVG_036",
+    "GVG_036",
+    "GVG_037",
+    "GVG_037",
+    "GVG_038",
+    "GVG_042",
+    "GVG_069",
+    "GVG_085",
+    "GVG_085",
+    "GVG_091",
+    "GVG_091",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_NEW1_010"
+  ]
+}

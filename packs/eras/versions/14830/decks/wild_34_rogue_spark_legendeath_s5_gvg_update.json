@@ -1,0 +1,40 @@
+{
+  "name": "[Spark] Legendeath (S5 + GVG Update)",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[Spark] Legendeath (S5 + GVG Update) by Sparkaz. Rogue, archetype N'Zoth Rogue. HearthPwn, rating +184, September 2016 (Karazhan): https://www.hearthpwn.com/decks/89449-spark-legendeath-s5-gvg-update",
+    "ru": "Колода «[Spark] Legendeath (S5 + GVG Update)», автор Sparkaz. Разбойник, архетип N'Zoth Rogue. HearthPwn, рейтинг +184, сентябрь 2016: https://www.hearthpwn.com/decks/89449-spark-legendeath-s5-gvg-update"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_012",
+    "FP1_012",
+    "FP1_028",
+    "FP1_028",
+    "GVG_023",
+    "GVG_023",
+    "GVG_028",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_233",
+    "VAN_EX1_002",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_556",
+    "VAN_EX1_556"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "LEGEND - GODLIKE Excavated Evil Elise Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "LEGEND - GODLIKE Excavated Evil Elise Priest by Titan_Hs. Priest. HearthPwn, rating +803, January 2016 (Explorers): https://www.hearthpwn.com/decks/412482-legend-godlike-excavated-evil-elise-priest",
+    "ru": "Колода «LEGEND - GODLIKE Excavated Evil Elise Priest», автор Titan_Hs. Жрец. HearthPwn, рейтинг +803, январь 2016: https://www.hearthpwn.com/decks/412482-legend-godlike-excavated-evil-elise-priest"
+  },
+  "cards": [
+    "AT_132",
+    "FP1_001",
+    "FP1_001",
+    "FP1_009",
+    "FP1_009",
+    "FP1_012",
+    "FP1_012",
+    "GVG_008",
+    "GVG_008",
+    "GVG_010",
+    "GVG_010",
+    "GVG_011",
+    "GVG_011",
+    "LOE_006",
+    "LOE_006",
+    "LOE_079",
+    "LOE_104",
+    "LOE_104",
+    "LOE_111",
+    "LOE_111",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_091",
+    "VAN_EX1_091",
+    "VAN_EX1_334",
+    "VAN_EX1_622"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Dirty Goons - Updated Deathwing",
+  "champion": "HERO_04",
+  "description": {
+    "en": "Dirty Goons - Updated Deathwing by strudel_hs. Paladin. HearthPwn, rating +67, March 2017 (Aggro Downfall): https://www.hearthpwn.com/decks/704386-dirty-goons-updated-deathwing",
+    "ru": "Колода «Dirty Goons - Updated Deathwing», автор strudel_hs. Паладин. HearthPwn, рейтинг +67, март 2017: https://www.hearthpwn.com/decks/704386-dirty-goons-updated-deathwing"
+  },
+  "cards": [
+    "AT_087",
+    "AT_087",
+    "CFM_305",
+    "CFM_305",
+    "CFM_753",
+    "CFM_753",
+    "CFM_790",
+    "CFM_790",
+    "CFM_806",
+    "CFM_815",
+    "KAR_061",
+    "LOE_017",
+    "LOE_076",
+    "LOE_077",
+    "OG_123",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_066",
+    "VAN_EX1_066",
+    "VAN_EX1_085",
+    "VAN_EX1_085",
+    "VAN_EX1_116",
+    "VAN_EX1_298",
+    "VAN_EX1_382",
+    "VAN_EX1_382",
+    "VAN_EX1_383",
+    "VAN_NEW1_030",
+    "VAN_NEW1_041"
+  ]
+}

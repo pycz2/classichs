@@ -1,0 +1,40 @@
+{
+  "name": "[Top 100 EU/Asia Legend] LOKShadow F2P OTK Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[Top 100 EU/Asia Legend] LOKShadow F2P OTK Warrior by LOKShadow. Warrior, archetype Worgen OTK Warrior. HearthPwn, rating +801, July 2016 (Old Gods): https://www.hearthpwn.com/decks/577050-top-100-eu-asia-legend-lokshadow-f2p-otk-warrior",
+    "ru": "Колода «[Top 100 EU/Asia Legend] LOKShadow F2P OTK Warrior», автор LOKShadow. Воин, архетип Worgen OTK Warrior. HearthPwn, рейтинг +801, июль 2016: https://www.hearthpwn.com/decks/577050-top-100-eu-asia-legend-lokshadow-f2p-otk-warrior"
+  },
+  "cards": [
+    "OG_149",
+    "OG_149",
+    "OG_218",
+    "OG_218",
+    "VAN_CS2_103",
+    "VAN_CS2_103",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_147",
+    "VAN_CS2_147",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_082",
+    "VAN_EX1_082",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_391",
+    "VAN_EX1_391",
+    "VAN_EX1_392",
+    "VAN_EX1_392",
+    "VAN_EX1_412",
+    "VAN_EX1_412",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_607",
+    "VAN_EX1_607",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "VALAR MORGHULIS. VALAR DOHAERIS",
+  "champion": "HERO_09",
+  "description": {
+    "en": "VALAR MORGHULIS. VALAR DOHAERIS by user-13060055. Priest, archetype Dragon Priest. HearthPwn, rating +146, July 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1136415-valar-morghulis-valar-dohaeris",
+    "ru": "Колода «VALAR MORGHULIS. VALAR DOHAERIS», автор user-13060055. Жрец, архетип Dragon Priest. HearthPwn, рейтинг +146, июль 2018: https://www.hearthpwn.com/decks/1136415-valar-morghulis-valar-dohaeris"
+  },
+  "cards": [
+    "GIL_190",
+    "GIL_190",
+    "GIL_601",
+    "GIL_601",
+    "LOOT_008",
+    "LOOT_278",
+    "LOOT_278",
+    "LOOT_410",
+    "LOOT_410",
+    "UNG_029",
+    "UNG_029",
+    "UNG_034",
+    "UNG_034",
+    "UNG_848",
+    "UNG_963",
+    "VAN_CS1_129",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_059",
+    "VAN_EX1_572",
+    "VAN_EX1_626",
+    "VAN_NEW1_020"
+  ]
+}

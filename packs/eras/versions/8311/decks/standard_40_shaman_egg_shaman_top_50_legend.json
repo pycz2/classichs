@@ -1,0 +1,40 @@
+{
+  "name": "Egg Shaman Top 50 Legend",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Egg Shaman Top 50 Legend by user-19830420. Shaman. HearthPwn, rating +317, April 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/238195-egg-shaman-top-50-legend",
+    "ru": "Колода «Egg Shaman Top 50 Legend», автор user-19830420. Шаман. HearthPwn, рейтинг +317, апрель 2015: https://www.hearthpwn.com/decks/238195-egg-shaman-top-50-legend"
+  },
+  "cards": [
+    "BRM_011",
+    "BRM_012",
+    "BRM_012",
+    "BRM_022",
+    "BRM_022",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "GVG_042",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575",
+    "VAN_NEW1_010"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Aggro Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Aggro Shaman by user-23121652. Shaman. HearthPwn, rating +27, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/411972-aggro-shaman",
+    "ru": "Колода «Aggro Shaman», автор user-23121652. Шаман. HearthPwn, рейтинг +27, апрель 2016: https://www.hearthpwn.com/decks/411972-aggro-shaman"
+  },
+  "cards": [
+    "AT_052",
+    "AT_052",
+    "AT_053",
+    "AT_053",
+    "AT_087",
+    "AT_087",
+    "BRM_011",
+    "BRM_011",
+    "GVG_038",
+    "GVG_038",
+    "LOE_018",
+    "LOE_018",
+    "LOE_076",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_188",
+    "VAN_EX1_012",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_096",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_241",
+    "VAN_EX1_245",
+    "VAN_EX1_247",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_567",
+    "VAN_EX1_567"
+  ]
+}

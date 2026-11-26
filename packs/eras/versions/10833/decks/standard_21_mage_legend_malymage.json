@@ -1,0 +1,40 @@
+{
+  "name": "Legend MALYMAGE",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Legend MALYMAGE by user-14458109. Mage. HearthPwn, rating +129, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/346936-legend-malymage",
+    "ru": "Колода «Legend MALYMAGE», автор user-14458109. Маг. HearthPwn, рейтинг +129, октябрь 2015: https://www.hearthpwn.com/decks/346936-legend-malymage"
+  },
+  "cards": [
+    "AT_002",
+    "AT_002",
+    "AT_009",
+    "AT_017",
+    "AT_017",
+    "AT_123",
+    "BRM_002",
+    "BRM_002",
+    "BRM_028",
+    "BRM_034",
+    "BRM_034",
+    "FP1_004",
+    "FP1_004",
+    "GVG_001",
+    "GVG_001",
+    "GVG_003",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_563",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "The Gonkening",
+  "champion": "HERO_06",
+  "description": {
+    "en": "The Gonkening by Echo_. Druid. HearthPwn, rating +49, December 2018 (Level Up Nerf): https://www.hearthpwn.com/decks/1211212-the-gonkening",
+    "ru": "Колода «The Gonkening», автор Echo_. Друид. HearthPwn, рейтинг +49, декабрь 2018: https://www.hearthpwn.com/decks/1211212-the-gonkening"
+  },
+  "cards": [
+    "BOT_423",
+    "BOT_423",
+    "BOT_434",
+    "ICC_054",
+    "ICC_054",
+    "ICC_085",
+    "ICC_085",
+    "ICC_832",
+    "ICC_852",
+    "LOOT_051",
+    "LOOT_051",
+    "LOOT_054",
+    "LOOT_054",
+    "TRL_241",
+    "TRL_243",
+    "TRL_243",
+    "TRL_244",
+    "TRL_363",
+    "TRL_363",
+    "VAN_CS2_005",
+    "VAN_CS2_005",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_EX1_164",
+    "VAN_EX1_564",
+    "VAN_EX1_564"
+  ]
+}

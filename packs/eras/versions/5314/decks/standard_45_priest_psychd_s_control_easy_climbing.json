@@ -1,0 +1,40 @@
+{
+  "name": "PsychD's Control \"Easy Climbing\"",
+  "champion": "HERO_09",
+  "description": {
+    "en": "PsychD's Control \"Easy Climbing\" by user-10121332. Priest. HearthPwn, rating +3, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/58153-psychds-control-easy-climbing",
+    "ru": "Колода «PsychD's Control \"Easy Climbing\"», автор user-10121332. Жрец. HearthPwn, рейтинг +3, май 2014: https://www.hearthpwn.com/decks/58153-psychds-control-easy-climbing"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS1_130",
+    "VAN_CS2_003",
+    "VAN_CS2_003",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_203",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_001",
+    "VAN_EX1_001",
+    "VAN_EX1_004",
+    "VAN_EX1_007",
+    "VAN_EX1_044",
+    "VAN_EX1_044",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_096",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_341",
+    "VAN_EX1_591",
+    "VAN_EX1_622",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

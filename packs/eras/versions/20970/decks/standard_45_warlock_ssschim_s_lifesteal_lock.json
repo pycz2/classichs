@@ -1,0 +1,40 @@
+{
+  "name": "Ssschim's lifesteal lock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Ssschim's lifesteal lock by user-100046059. Warlock, archetype Control Warlock. HearthPwn, rating +113, October 2017 (Evergreen Nerfs): https://www.hearthpwn.com/decks/944569-ssschims-lifesteal-lock",
+    "ru": "Колода «Ssschim's lifesteal lock», автор user-100046059. Чернокнижник, архетип Control Warlock. HearthPwn, рейтинг +113, октябрь 2017: https://www.hearthpwn.com/decks/944569-ssschims-lifesteal-lock"
+  },
+  "cards": [
+    "CFM_751",
+    "CFM_751",
+    "ICC_041",
+    "ICC_041",
+    "ICC_055",
+    "ICC_075",
+    "ICC_075",
+    "ICC_206",
+    "ICC_206",
+    "ICC_218",
+    "ICC_314",
+    "ICC_700",
+    "ICC_700",
+    "ICC_701",
+    "ICC_831",
+    "ICC_905",
+    "ICC_905",
+    "ICC_912",
+    "ICC_912",
+    "ICC_913",
+    "OG_145",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

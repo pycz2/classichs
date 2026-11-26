@@ -1,0 +1,40 @@
+{
+  "name": "\"Oblivion Handlock\" BRM Update",
+  "champion": "HERO_07",
+  "description": {
+    "en": "\"Oblivion Handlock\" BRM Update by orangegamer. Warlock. HearthPwn, rating +342, July 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/101155-oblivion-handlock-brm-update",
+    "ru": "Колода «\"Oblivion Handlock\" BRM Update», автор orangegamer. Чернокнижник. HearthPwn, рейтинг +342, июль 2015: https://www.hearthpwn.com/decks/101155-oblivion-handlock-brm-update"
+  },
+  "cards": [
+    "BRM_028",
+    "FP1_012",
+    "FP1_012",
+    "GVG_015",
+    "GVG_015",
+    "GVG_069",
+    "GVG_069",
+    "VAN_CS2_062",
+    "VAN_CS2_203",
+    "VAN_EX1_005",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_116",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_303",
+    "VAN_EX1_309",
+    "VAN_EX1_316",
+    "VAN_EX1_561",
+    "VAN_EX1_564",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

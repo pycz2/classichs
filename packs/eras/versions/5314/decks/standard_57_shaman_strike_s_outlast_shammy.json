@@ -1,0 +1,40 @@
+{
+  "name": "Strike's Outlast Shammy",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Strike's Outlast Shammy by Packrunner. Shaman. HearthPwn, rating +21, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/53748-strikes-outlast-shammy",
+    "ru": "Колода «Strike's Outlast Shammy», автор Packrunner. Шаман. HearthPwn, рейтинг +21, май 2014: https://www.hearthpwn.com/decks/53748-strikes-outlast-shammy"
+  },
+  "cards": [
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_EX1_005",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_093",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_247",
+    "VAN_EX1_247",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_258",
+    "VAN_EX1_258",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_575"
+  ]
+}

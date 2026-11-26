@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND] Malygos Druid list that actually works - Full guid…",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[LEGEND] Malygos Druid list that actually works - Full guide included by a3b2c1. Druid, archetype Malygos Druid. HearthPwn, rating +130, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1046288-legend-malygos-druid-list-that-actually-works",
+    "ru": "Колода «[LEGEND] Malygos Druid list that actually works - Full guide included», автор a3b2c1. Друид, архетип Malygos Druid. HearthPwn, рейтинг +130, май 2018: https://www.hearthpwn.com/decks/1046288-legend-malygos-druid-list-that-actually-works"
+  },
+  "cards": [
+    "ICC_054",
+    "ICC_054",
+    "ICC_085",
+    "ICC_085",
+    "ICC_832",
+    "ICC_852",
+    "KAR_097",
+    "KAR_711",
+    "KAR_711",
+    "LOOT_051",
+    "LOOT_051",
+    "LOOT_054",
+    "LOOT_054",
+    "LOOT_329",
+    "LOOT_392",
+    "OG_202",
+    "VAN_CS2_008",
+    "VAN_CS2_008",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_563",
+    "VAN_EX1_564"
+  ]
+}

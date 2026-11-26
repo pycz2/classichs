@@ -645,7 +645,9 @@ in the settings' `pack_versions`), `Packs.is_active(p)`.
 versions (`id`, `patch`, `date`, `era`, `name`, `formats`) and `default_version`. Each version is an existing pack's
 build (its patch's `base`) changed by `versions/<id>/patch.json`: card fields (`cards`), new cards (`add`,
 HearthstoneJSON objects), cards taken out (`remove`), `rules.json` `behaviour` flags, names and texts in every
-language of the pack; `versions/<id>/scripts/*.lua` become the version's `scripts/version/`. The shared files are
+language of the pack; `versions/<id>/scripts/*.lua` become the version's `scripts/version/`, `versions/<id>/decks/*.json` join its decks, and
+`packs/eras/formats.json` gives each version the Standard/Wild sets (`rules.json` `formats`, docs/packs/rules.md) and
+the Arena pool of its time. The shared files are
 every base pack's (the default version's base first), with the pack source's own files (`manifest.json`, `ui/`) over
 them; the manifest takes what the source leaves out (languages, colours…) from the default version's base pack, and
 the art, sound and music sets and set marks of all of them.

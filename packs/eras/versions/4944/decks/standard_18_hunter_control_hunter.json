@@ -1,0 +1,40 @@
+{
+  "name": "control hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "control hunter by xViP. Hunter. HearthPwn, rating 0, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/37093-control-hunter",
+    "ru": "Колода «control hunter», автор xViP. Охотник. HearthPwn, рейтинг 0, март 2014: https://www.hearthpwn.com/decks/37093-control-hunter"
+  },
+  "cards": [
+    "VAN_CS2_084",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_DS1_183",
+    "VAN_DS1_185",
+    "VAN_DS1_185",
+    "VAN_DS1_188",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_097",
+    "VAN_EX1_097",
+    "VAN_EX1_110",
+    "VAN_EX1_298",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_543",
+    "VAN_EX1_557",
+    "VAN_EX1_572",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_EX1_616",
+    "VAN_EX1_616",
+    "VAN_EX1_617",
+    "VAN_EX1_617",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

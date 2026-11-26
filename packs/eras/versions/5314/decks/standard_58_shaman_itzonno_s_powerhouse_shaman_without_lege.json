@@ -1,0 +1,40 @@
+{
+  "name": "itzOnno's Powerhouse Shaman (without legendary's)",
+  "champion": "HERO_02",
+  "description": {
+    "en": "itzOnno's Powerhouse Shaman (without legendary's) by user-14869317. Shaman. HearthPwn, rating +13, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/51863-itzonnos-powerhouse-shaman-without-legendarys",
+    "ru": "Колода «itzOnno's Powerhouse Shaman (without legendary's)», автор user-14869317. Шаман. HearthPwn, рейтинг +13, май 2014: https://www.hearthpwn.com/decks/51863-itzonnos-powerhouse-shaman-without-legendarys"
+  },
+  "cards": [
+    "VAN_CS2_041",
+    "VAN_CS2_041",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_046",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_048",
+    "VAN_EX1_048",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_258",
+    "VAN_EX1_258",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_567",
+    "VAN_EX1_575",
+    "VAN_NEW1_026"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[S17] Mech Druid To Legend",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[S17] Mech Druid To Legend by user-19797937. Druid. HearthPwn, rating +197, August 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/283982-s17-mech-druid-to-legend",
+    "ru": "Колода «[S17] Mech Druid To Legend», автор user-19797937. Друид. HearthPwn, рейтинг +197, август 2015: https://www.hearthpwn.com/decks/283982-s17-mech-druid-to-legend"
+  },
+  "cards": [
+    "FP1_002",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_013",
+    "GVG_044",
+    "GVG_044",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_102",
+    "GVG_110",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_173",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008"
+  ]
+}

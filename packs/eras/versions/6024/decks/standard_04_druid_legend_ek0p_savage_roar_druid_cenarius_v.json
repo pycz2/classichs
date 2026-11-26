@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND] Ek0p Savage Roar Druid - Cenarius Variant",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[LEGEND] Ek0p Savage Roar Druid - Cenarius Variant by GiordyBear. Druid. HearthPwn, rating +168, August 2014 (Naxx Launch): https://www.hearthpwn.com/decks/65723-legend-ek0p-savage-roar-druid-cenarius-variant",
+    "ru": "Колода «[LEGEND] Ek0p Savage Roar Druid - Cenarius Variant», автор GiordyBear. Друид. HearthPwn, рейтинг +168, август 2014: https://www.hearthpwn.com/decks/65723-legend-ek0p-savage-roar-druid-cenarius-variant"
+  },
+  "cards": [
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_005",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_571",
+    "VAN_EX1_571",
+    "VAN_EX1_573",
+    "VAN_NEW1_008",
+    "VAN_NEW1_008",
+    "VAN_NEW1_026",
+    "VAN_NEW1_026"
+  ]
+}

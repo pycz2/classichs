@@ -1,0 +1,40 @@
+{
+  "name": "Mind Freak/Mirror Match",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Mind Freak/Mirror Match by DoomHazard. Priest. HearthPwn, rating +3, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/56373-mind-freak-mirror-match",
+    "ru": "Колода «Mind Freak/Mirror Match», автор DoomHazard. Жрец. HearthPwn, рейтинг +3, май 2014: https://www.hearthpwn.com/decks/56373-mind-freak-mirror-match"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_113",
+    "VAN_CS1_129",
+    "VAN_CS2_003",
+    "VAN_CS2_003",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_117",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_005",
+    "VAN_EX1_012",
+    "VAN_EX1_016",
+    "VAN_EX1_085",
+    "VAN_EX1_334",
+    "VAN_EX1_339",
+    "VAN_EX1_345",
+    "VAN_EX1_396",
+    "VAN_EX1_405",
+    "VAN_EX1_405",
+    "VAN_EX1_572",
+    "VAN_EX1_616",
+    "VAN_EX1_616",
+    "VAN_EX1_622",
+    "VAN_EX1_622",
+    "VAN_EX1_625",
+    "VAN_EX1_625",
+    "VAN_NEW1_040"
+  ]
+}

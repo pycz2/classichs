@@ -1,0 +1,40 @@
+{
+  "name": "Midrange Kelewock",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Midrange Kelewock by nadeN. Shaman, archetype Shudderwock Shaman. HearthPwn, rating +7, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1280153-midrange-kelewock",
+    "ru": "Колода «Midrange Kelewock», автор nadeN. Шаман, архетип Shudderwock Shaman. HearthPwn, рейтинг +7, май 2019: https://www.hearthpwn.com/decks/1280153-midrange-kelewock"
+  },
+  "cards": [
+    "BOT_548",
+    "CFM_668",
+    "CFM_668",
+    "DAL_009",
+    "DAL_047",
+    "DAL_047",
+    "DAL_433",
+    "DAL_433",
+    "DAL_546",
+    "FP1_030",
+    "GIL_820",
+    "ICC_851",
+    "ICC_912",
+    "ICC_912",
+    "LOE_076",
+    "LOOT_504",
+    "TRL_059",
+    "TRL_059",
+    "UNG_025",
+    "UNG_205",
+    "UNG_205",
+    "UNG_928",
+    "UNG_938",
+    "UNG_938",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_575",
+    "VAN_EX1_575"
+  ]
+}

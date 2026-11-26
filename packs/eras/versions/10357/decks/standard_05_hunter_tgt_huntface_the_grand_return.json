@@ -1,0 +1,40 @@
+{
+  "name": "[TGT] Huntface, the grand return!",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[TGT] Huntface, the grand return! by Pinkkman. Hunter. HearthPwn, rating +292, September 2015 (TGT Launch): https://www.hearthpwn.com/decks/316154-tgt-huntface-the-grand-return",
+    "ru": "Колода «[TGT] Huntface, the grand return!», автор Pinkkman. Охотник. HearthPwn, рейтинг +292, сентябрь 2015: https://www.hearthpwn.com/decks/316154-tgt-huntface-the-grand-return"
+  },
+  "cards": [
+    "AT_084",
+    "AT_084",
+    "AT_087",
+    "AT_087",
+    "BRM_013",
+    "BRM_013",
+    "FP1_002",
+    "FP1_002",
+    "FP1_004",
+    "FP1_004",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_CS2_203",
+    "VAN_CS2_203",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_536",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_544",
+    "VAN_EX1_610",
+    "VAN_EX1_610",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

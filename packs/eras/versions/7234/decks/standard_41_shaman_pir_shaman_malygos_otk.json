@@ -1,0 +1,40 @@
+{
+  "name": "Pir Shaman Malygos OTK",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Pir Shaman Malygos OTK by HearthstoneShredder. Shaman. HearthPwn, rating +183, January 2015 (GvG Launch): https://www.hearthpwn.com/decks/147997-pir-shaman-malygos-otk",
+    "ru": "Колода «Pir Shaman Malygos OTK», автор HearthstoneShredder. Шаман. HearthPwn, рейтинг +183, январь 2015: https://www.hearthpwn.com/decks/147997-pir-shaman-malygos-otk"
+  },
+  "cards": [
+    "GVG_029",
+    "GVG_029",
+    "GVG_038",
+    "GVG_038",
+    "GVG_069",
+    "GVG_069",
+    "VAN_CS2_037",
+    "VAN_CS2_037",
+    "VAN_CS2_053",
+    "VAN_CS2_053",
+    "VAN_CS2_147",
+    "VAN_CS2_147",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_241",
+    "VAN_EX1_241",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_247",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_561",
+    "VAN_EX1_563",
+    "VAN_EX1_575",
+    "VAN_EX1_575"
+  ]
+}

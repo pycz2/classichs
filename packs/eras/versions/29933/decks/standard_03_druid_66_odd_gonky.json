@@ -1,0 +1,40 @@
+{
+  "name": "[66%] ODD Gonky",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[66%] ODD Gonky by enlightdos. Druid, archetype Odd Druid. HearthPwn, rating +41, January 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1225136-66-odd-gonky",
+    "ru": "Колода «[66%] ODD Gonky», автор enlightdos. Друид, архетип Odd Druid. HearthPwn, рейтинг +41, январь 2019: https://www.hearthpwn.com/decks/1225136-66-odd-gonky"
+  },
+  "cards": [
+    "GIL_130",
+    "GIL_534",
+    "GIL_534",
+    "GIL_623",
+    "GIL_623",
+    "GIL_826",
+    "ICC_029",
+    "LOOT_167",
+    "LOOT_258",
+    "LOOT_258",
+    "TRL_223",
+    "TRL_223",
+    "TRL_241",
+    "TRL_405",
+    "TRL_405",
+    "TRL_550",
+    "TRL_550",
+    "UNG_072",
+    "UNG_072",
+    "UNG_075",
+    "UNG_075",
+    "UNG_809",
+    "VAN_CS2_005",
+    "VAN_CS2_005",
+    "VAN_CS2_011",
+    "VAN_EX1_028",
+    "VAN_EX1_116",
+    "VAN_EX1_161",
+    "VAN_EX1_165",
+    "VAN_EX1_165"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Legendary \"Pure\" Control Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Legendary \"Pure\" Control Shaman by Coo1Cat. Shaman, archetype Shudderwock Shaman. HearthPwn, rating +28, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1285007-legendary-pure-control-shaman",
+    "ru": "Колода «Legendary \"Pure\" Control Shaman», автор Coo1Cat. Шаман, архетип Shudderwock Shaman. HearthPwn, рейтинг +28, июнь 2019: https://www.hearthpwn.com/decks/1285007-legendary-pure-control-shaman"
+  },
+  "cards": [
+    "BOT_270",
+    "BOT_291",
+    "BOT_543",
+    "BOT_548",
+    "DAL_009",
+    "DAL_009",
+    "DAL_047",
+    "DAL_047",
+    "DAL_431",
+    "DAL_432",
+    "DAL_432",
+    "DAL_433",
+    "DAL_433",
+    "DAL_736",
+    "GIL_504",
+    "GIL_820",
+    "TRL_059",
+    "VAN_CS2_053",
+    "VAN_CS2_053",
+    "VAN_EX1_005",
+    "VAN_EX1_043",
+    "VAN_EX1_066",
+    "VAN_EX1_085",
+    "VAN_EX1_085",
+    "VAN_EX1_238",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_575"
+  ]
+}

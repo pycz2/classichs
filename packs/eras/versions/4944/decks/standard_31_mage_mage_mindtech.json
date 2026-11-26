@@ -1,0 +1,40 @@
+{
+  "name": "Mage MindTech",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Mage MindTech by user-2977772. Mage. HearthPwn, rating 0, March 2014 (Beta Patch 4944): https://www.hearthpwn.com/decks/36936-mage-mindtech",
+    "ru": "Колода «Mage MindTech», автор user-2977772. Маг. HearthPwn, рейтинг 0, март 2014: https://www.hearthpwn.com/decks/36936-mage-mindtech"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_EX1_007",
+    "VAN_EX1_012",
+    "VAN_EX1_020",
+    "VAN_EX1_020",
+    "VAN_EX1_049",
+    "VAN_EX1_049",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_067",
+    "VAN_EX1_067",
+    "VAN_EX1_085",
+    "VAN_EX1_085",
+    "VAN_EX1_093",
+    "VAN_EX1_116",
+    "VAN_EX1_393",
+    "VAN_EX1_393",
+    "VAN_EX1_577"
+  ]
+}

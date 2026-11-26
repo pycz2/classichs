@@ -1,0 +1,40 @@
+{
+  "name": "NumberSept's N'Zoth Paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "NumberSept's N'Zoth Paladin by NumberSept. Paladin, archetype N'Zoth Paladin. HearthPwn, rating +535, May 2016 (Old Gods): https://www.hearthpwn.com/decks/504145-numbersepts-nzoth-paladin",
+    "ru": "Колода «NumberSept's N'Zoth Paladin», автор NumberSept. Паладин, архетип N'Zoth Paladin. HearthPwn, рейтинг +535, май 2016: https://www.hearthpwn.com/decks/504145-numbersepts-nzoth-paladin"
+  },
+  "cards": [
+    "AT_132",
+    "BRM_001",
+    "BRM_001",
+    "LOE_017",
+    "LOE_017",
+    "OG_133",
+    "OG_145",
+    "OG_198",
+    "OG_198",
+    "OG_229",
+    "VAN_CS2_093",
+    "VAN_CS2_093",
+    "VAN_CS2_097",
+    "VAN_CS2_097",
+    "VAN_CS2_179",
+    "VAN_EX1_007",
+    "VAN_EX1_016",
+    "VAN_EX1_066",
+    "VAN_EX1_110",
+    "VAN_EX1_360",
+    "VAN_EX1_382",
+    "VAN_EX1_382",
+    "VAN_EX1_383",
+    "VAN_EX1_619",
+    "VAN_EX1_619",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021",
+    "VAN_NEW1_041"
+  ]
+}

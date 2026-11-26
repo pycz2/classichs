@@ -1,0 +1,40 @@
+{
+  "name": "New Malygod Deck",
+  "champion": "HERO_03",
+  "description": {
+    "en": "New Malygod Deck by TheScientistR. Rogue. HearthPwn, rating +4, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/487205-new-malygod-deck",
+    "ru": "Колода «New Malygod Deck», автор TheScientistR. Разбойник. HearthPwn, рейтинг +4, апрель 2016: https://www.hearthpwn.com/decks/487205-new-malygod-deck"
+  },
+  "cards": [
+    "BRM_028",
+    "LOE_012",
+    "LOE_012",
+    "LOE_019",
+    "LOE_019",
+    "OG_072",
+    "OG_072",
+    "OG_080",
+    "OG_176",
+    "OG_280",
+    "OG_282",
+    "OG_282",
+    "OG_286",
+    "OG_286",
+    "OG_291",
+    "OG_291",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_563",
+    "VAN_EX1_581",
+    "VAN_EX1_581"
+  ]
+}

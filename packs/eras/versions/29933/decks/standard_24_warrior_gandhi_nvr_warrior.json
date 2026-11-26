@@ -1,0 +1,40 @@
+{
+  "name": "Gandhi NVR warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Gandhi NVR warrior by Joker_HS. Warrior, archetype Fatigue Warrior. HearthPwn, rating +46, March 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1239596-gandhi-nvr-warrior",
+    "ru": "Колода «Gandhi NVR warrior», автор Joker_HS. Воин, архетип Fatigue Warrior. HearthPwn, рейтинг +46, март 2019: https://www.hearthpwn.com/decks/1239596-gandhi-nvr-warrior"
+  },
+  "cards": [
+    "BOT_042",
+    "BOT_059",
+    "BOT_447",
+    "GIL_654",
+    "GIL_654",
+    "ICC_091",
+    "ICC_091",
+    "ICC_837",
+    "LOOT_357",
+    "LOOT_367",
+    "LOOT_367",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_015",
+    "VAN_EX1_391",
+    "VAN_EX1_391",
+    "VAN_EX1_392",
+    "VAN_EX1_392",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_558",
+    "VAN_EX1_606",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020",
+    "VAN_NEW1_036",
+    "VAN_NEW1_036"
+  ]
+}

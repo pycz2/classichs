@@ -1,0 +1,40 @@
+{
+  "name": "Control Burn Mage - Top 4 LEGEND",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Control Burn Mage - Top 4 LEGEND by LegendsHS. Mage, archetype Burn Mage. HearthPwn, rating +61, November 2017 (Triggered): https://www.hearthpwn.com/decks/959710-control-burn-mage-top-4-legend",
+    "ru": "Колода «Control Burn Mage - Top 4 LEGEND», автор LegendsHS. Маг, архетип Burn Mage. HearthPwn, рейтинг +61, ноябрь 2017: https://www.hearthpwn.com/decks/959710-control-burn-mage-top-4-legend"
+  },
+  "cards": [
+    "CFM_065",
+    "ICC_701",
+    "ICC_833",
+    "KAR_076",
+    "KAR_076",
+    "KAR_092",
+    "KAR_092",
+    "KAR_097",
+    "UNG_020",
+    "UNG_020",
+    "UNG_941",
+    "UNG_941",
+    "UNG_955",
+    "UNG_955",
+    "VAN_CS2_022",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_EX1_249",
+    "VAN_EX1_295",
+    "VAN_EX1_295",
+    "VAN_EX1_561",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_tt_010"
+  ]
+}

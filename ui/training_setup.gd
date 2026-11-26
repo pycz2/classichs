@@ -1,8 +1,8 @@
 class_name TrainingSetup
 extends Control
-## Training in three steps: pick your deck (of the active game; none yet: create one first),
-## then the bot's hero, then how well it plays (Settings bot_level): a list from easy to hard,
-## each level with a picture of its strength. Back and Next go between the steps.
+## Training in three steps: pick your deck (of the active game; none yet: create one first; a game with
+## Standard and Wild: in which of them), then the bot's hero, then how well it plays (Settings bot_level): a list
+## from easy to hard, each level with a picture of its strength. Back and Next go between the steps.
 
 signal start(my_deck: Deck, bot_class: String)
 signal back
@@ -10,6 +10,8 @@ signal edit_decks
 
 var deck: Deck
 var bot_class := "WARRIOR"
+## The game's format ("standard", "wild"; "" for a game with one format: CardDb.formats()).
+var format := ""
 var step := 1
 var chooser := DeckChooser.new()
 var tiles: Array[HeroTile] = []
@@ -42,6 +44,26 @@ func _ready() -> void:
 	chooser.edit_decks.connect(func(): edit_decks.emit())
 	chooser.back.connect(func(): back.emit())
 	_step1.add_child(chooser)
+	var formats := CardDb.formats()
+	format = formats[0] if formats else ""
+	chooser.set_format(format)
+	if formats.size() > 1:  # Standard or Wild
+		var row := HBoxContainer.new()
+		row.name = "Formats"
+		row.position = Vector2(860, 70)
+		row.add_theme_constant_override("separation", 10)
+		_step1.add_child(row)
+		var fg := ButtonGroup.new()
+		for f in formats:
+			var b := Palette.button({"standard": tr("Standard"), "wild": tr("Wild")}[f], "Format_" + f)
+			b.toggle_mode = true
+			b.button_group = fg
+			b.button_pressed = f == format
+			b.toggled.connect(func(on):
+				if on:
+					format = f
+					chooser.set_format(f))
+			row.add_child(b)
 	# step 2: the opponent
 	_deck_line = _title(_step2, tr("Choose your opponent"), "")
 	var grid := GridContainer.new()

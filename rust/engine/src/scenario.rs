@@ -21,6 +21,7 @@ pub fn build_in(rs: &'static Ruleset, sc: &Value) -> Result<Game, String> {
     let hero = |i: usize| ps[i]["hero"].as_str().unwrap();
     let get = |k: &str, def: i64| sc.get(k).map_or(def, |v| int(Some(v)));
     let mut g = Game::new_in(rs, hero(0), &[], hero(1), &[], get("seed", 1), get("current", 0), false);
+    g.format = rs.game_format(sc["format"].as_str().unwrap_or("")).unwrap_or_default();
     g.phase = "PLAY";
     g.turn = get("turn", 1);
     for (i, d) in ps.iter().enumerate() {
@@ -238,6 +239,9 @@ pub fn validate_in(rs: &Ruleset, sc: &Value) -> Result<(), String> {
     if !matches!(sc.get("current").map_or(0, |v| int(Some(v))), 0 | 1) {
         return Err("current: must be 0 or 1".into());
     }
+    if sc.get("format").is_some_and(|f| f.as_str().and_then(|f| rs.game_format(f)).is_none()) {
+        return Err("format: unknown format".into());
+    }
     for (i, d) in ps.iter().enumerate() {
         let at = format!("players[{i}]");
         if !d.is_object() || d.get("hero").is_none() {
@@ -338,5 +342,9 @@ pub fn dump(g: &Game) -> Value {
             })
         })
         .collect();
-    json!({"seed": 1, "current": g.current, "turn": g.turn, "players": ps})
+    let mut sc = json!({"seed": 1, "current": g.current, "turn": g.turn, "players": ps});
+    if !g.format.is_empty() {
+        sc["format"] = json!(g.format);
+    }
+    sc
 }

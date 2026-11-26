@@ -1,0 +1,40 @@
+{
+  "name": "F2P Legend Token Druid 1k Dust!",
+  "champion": "HERO_06",
+  "description": {
+    "en": "F2P Legend Token Druid 1k Dust! by fade1606. Druid, archetype Token Druid. HearthPwn, rating +405, February 2018 (Kobolds Patch): https://www.hearthpwn.com/decks/815728-f2p-legend-token-druid-1k-dust",
+    "ru": "Колода «F2P Legend Token Druid 1k Dust!», автор fade1606. Друид, архетип Token Druid. HearthPwn, рейтинг +405, февраль 2018: https://www.hearthpwn.com/decks/815728-f2p-legend-token-druid-1k-dust"
+  },
+  "cards": [
+    "CFM_614",
+    "CFM_614",
+    "KAR_030a",
+    "KAR_030a",
+    "KAR_300",
+    "KAR_300",
+    "OG_048",
+    "OG_048",
+    "UNG_009",
+    "UNG_009",
+    "UNG_076",
+    "UNG_076",
+    "UNG_078",
+    "UNG_078",
+    "UNG_807",
+    "UNG_807",
+    "UNG_809",
+    "UNG_809",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_226",
+    "VAN_CS2_226",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_169",
+    "VAN_EX1_169"
+  ]
+}

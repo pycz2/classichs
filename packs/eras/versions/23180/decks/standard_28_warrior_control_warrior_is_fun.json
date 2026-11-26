@@ -1,0 +1,40 @@
+{
+  "name": "Control Warrior is FUN",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Control Warrior is FUN by Devilseye. Warrior, archetype Control Warrior. HearthPwn, rating +50, February 2018 (Patches Nerf): https://www.hearthpwn.com/decks/1032475-control-warrior-is-fun",
+    "ru": "Колода «Control Warrior is FUN», автор Devilseye. Воин, архетип Control Warrior. HearthPwn, рейтинг +50, февраль 2018: https://www.hearthpwn.com/decks/1032475-control-warrior-is-fun"
+  },
+  "cards": [
+    "CFM_716",
+    "CFM_716",
+    "ICC_064",
+    "ICC_064",
+    "ICC_091",
+    "ICC_701",
+    "ICC_834",
+    "LOOT_367",
+    "LOOT_367",
+    "LOOT_519",
+    "LOOT_526",
+    "OG_149",
+    "OG_149",
+    "UNG_072",
+    "UNG_072",
+    "UNG_851",
+    "UNG_933",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

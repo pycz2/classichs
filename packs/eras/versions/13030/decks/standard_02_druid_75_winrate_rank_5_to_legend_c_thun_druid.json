@@ -1,0 +1,40 @@
+{
+  "name": "[75% Winrate Rank 5 to LEGEND] C'Thun Druid - Nature Welcom…",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[75% Winrate Rank 5 to LEGEND] C'Thun Druid - Nature Welcomes Our New Overlords! by TheToxicNuke21. Druid, archetype C'Thun Druid. HearthPwn, rating +417, April 2016 (Old Gods): https://www.hearthpwn.com/decks/497732-75-winrate-rank-5-to-legend-cthun-druid-nature",
+    "ru": "Колода «[75% Winrate Rank 5 to LEGEND] C'Thun Druid - Nature Welcomes Our New Overlords!», автор TheToxicNuke21. Друид, архетип C'Thun Druid. HearthPwn, рейтинг +417, апрель 2016: https://www.hearthpwn.com/decks/497732-75-winrate-rank-5-to-legend-cthun-druid-nature"
+  },
+  "cards": [
+    "OG_131",
+    "OG_162",
+    "OG_162",
+    "OG_188",
+    "OG_188",
+    "OG_202",
+    "OG_202",
+    "OG_280",
+    "OG_281",
+    "OG_281",
+    "OG_283",
+    "OG_283",
+    "OG_286",
+    "OG_286",
+    "OG_290",
+    "OG_293",
+    "OG_293",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_016",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_164",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_178"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Rank 5 Priest for Non-PROS",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Rank 5 Priest for Non-PROS by shock191919. Priest, archetype C'Thun Priest. HearthPwn, rating +488, July 2016 (Old Gods): https://www.hearthpwn.com/decks/554747-rank-5-priest-for-non-pros",
+    "ru": "Колода «Rank 5 Priest for Non-PROS», автор shock191919. Жрец, архетип C'Thun Priest. HearthPwn, рейтинг +488, июль 2016: https://www.hearthpwn.com/decks/554747-rank-5-priest-for-non-pros"
+  },
+  "cards": [
+    "LOE_006",
+    "LOE_006",
+    "LOE_077",
+    "LOE_104",
+    "LOE_104",
+    "LOE_111",
+    "LOE_111",
+    "OG_096",
+    "OG_096",
+    "OG_131",
+    "OG_133",
+    "OG_162",
+    "OG_162",
+    "OG_280",
+    "OG_281",
+    "OG_281",
+    "OG_283",
+    "OG_283",
+    "OG_286",
+    "OG_335",
+    "OG_335",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_016",
+    "VAN_EX1_622",
+    "VAN_EX1_622"
+  ]
+}

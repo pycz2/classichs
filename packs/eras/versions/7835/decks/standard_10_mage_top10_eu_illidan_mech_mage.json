@@ -1,0 +1,40 @@
+{
+  "name": "[Top10 EU] Illidan Mech Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "[Top10 EU] Illidan Mech Mage by user-12462522. Mage. HearthPwn, rating +225, March 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/210592-top10-eu-illidan-mech-mage",
+    "ru": "Колода «[Top10 EU] Illidan Mech Mage», автор user-12462522. Маг. HearthPwn, рейтинг +225, март 2015: https://www.hearthpwn.com/decks/210592-top10-eu-illidan-mech-mage"
+  },
+  "cards": [
+    "FP1_030",
+    "GVG_002",
+    "GVG_002",
+    "GVG_003",
+    "GVG_003",
+    "GVG_004",
+    "GVG_004",
+    "GVG_006",
+    "GVG_006",
+    "GVG_013",
+    "GVG_044",
+    "GVG_044",
+    "GVG_074",
+    "GVG_082",
+    "GVG_082",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_102",
+    "GVG_110",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_284",
+    "VAN_EX1_559",
+    "VAN_EX1_614",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

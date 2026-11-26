@@ -1,0 +1,40 @@
+{
+  "name": "[S19]Post Patronnerf Aggro-counter 80% winrate",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[S19]Post Patronnerf Aggro-counter 80% winrate by user-12455119. Priest. HearthPwn, rating +62, October 2015 (Warsong Nerf): https://www.hearthpwn.com/decks/351520-s19-post-patronnerf-aggro-counter-80-winrate",
+    "ru": "Колода «[S19]Post Patronnerf Aggro-counter 80% winrate», автор user-12455119. Жрец. HearthPwn, рейтинг +62, октябрь 2015: https://www.hearthpwn.com/decks/351520-s19-post-patronnerf-aggro-counter-80-winrate"
+  },
+  "cards": [
+    "AT_131",
+    "BRM_020",
+    "BRM_020",
+    "FP1_009",
+    "FP1_009",
+    "FP1_012",
+    "FP1_012",
+    "GVG_008",
+    "GVG_010",
+    "GVG_010",
+    "GVG_012",
+    "GVG_012",
+    "GVG_014",
+    "GVG_078",
+    "GVG_110",
+    "GVG_115",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_091",
+    "VAN_EX1_334",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_622",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

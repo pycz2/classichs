@@ -1,0 +1,40 @@
+{
+  "name": "ThijsNL \"Build a wall!!\"",
+  "champion": "HERO_01",
+  "description": {
+    "en": "ThijsNL \"Build a wall!!\" by stalkermust. Warrior. HearthPwn, rating +351, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/700814-thijsnl-build-a-wall",
+    "ru": "Колода «ThijsNL \"Build a wall!!\"», автор stalkermust. Воин. HearthPwn, рейтинг +351, декабрь 2016: https://www.hearthpwn.com/decks/700814-thijsnl-build-a-wall"
+  },
+  "cards": [
+    "CFM_300",
+    "CFM_300",
+    "CFM_328",
+    "CFM_668",
+    "CFM_685",
+    "CFM_752",
+    "CFM_752",
+    "CFM_754",
+    "CFM_754",
+    "CFM_756",
+    "CFM_756",
+    "CFM_790",
+    "CFM_853",
+    "LOE_022",
+    "LOE_022",
+    "LOE_077",
+    "OG_218",
+    "OG_218",
+    "OG_340",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_392",
+    "VAN_EX1_392",
+    "VAN_EX1_402",
+    "VAN_EX1_410",
+    "VAN_EX1_410",
+    "VAN_EX1_606"
+  ]
+}

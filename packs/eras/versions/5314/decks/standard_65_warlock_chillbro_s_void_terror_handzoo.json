@@ -1,0 +1,40 @@
+{
+  "name": "Chillbro's Void Terror Handzoo",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Chillbro's Void Terror Handzoo by aldochillbro. Warlock. HearthPwn, rating +12, May 2014 (Live Patch 5314): https://www.hearthpwn.com/decks/51424-chillbros-void-terror-handzoo",
+    "ru": "Колода «Chillbro's Void Terror Handzoo», автор aldochillbro. Чернокнижник. HearthPwn, рейтинг +12, май 2014: https://www.hearthpwn.com/decks/51424-chillbros-void-terror-handzoo"
+  },
+  "cards": [
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_117",
+    "VAN_CS2_189",
+    "VAN_CS2_203",
+    "VAN_CS2_203",
+    "VAN_EX1_008",
+    "VAN_EX1_045",
+    "VAN_EX1_045",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_116",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_303",
+    "VAN_EX1_304",
+    "VAN_EX1_304",
+    "VAN_EX1_308",
+    "VAN_EX1_308",
+    "VAN_EX1_309",
+    "VAN_EX1_316",
+    "VAN_EX1_316",
+    "VAN_EX1_319",
+    "VAN_EX1_319",
+    "VAN_EX1_323",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

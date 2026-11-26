@@ -1,0 +1,40 @@
+{
+  "name": "Aggro Ice Queen - Legend",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Aggro Ice Queen - Legend by user-15605280. Mage. HearthPwn, rating +174, June 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/59054-aggro-ice-queen-legend",
+    "ru": "Колода «Aggro Ice Queen - Legend», автор user-15605280. Маг. HearthPwn, рейтинг +174, июнь 2014: https://www.hearthpwn.com/decks/59054-aggro-ice-queen-legend"
+  },
+  "cards": [
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_CS2_124",
+    "VAN_CS2_124",
+    "VAN_EX1_012",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_050",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_393",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_023"
+  ]
+}

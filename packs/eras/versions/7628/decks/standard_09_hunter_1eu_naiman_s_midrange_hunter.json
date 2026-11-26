@@ -1,0 +1,40 @@
+{
+  "name": "[#1EU]NAIMAN'S MIDRANGE HUNTER",
+  "champion": "HERO_05",
+  "description": {
+    "en": "[#1EU]NAIMAN'S MIDRANGE HUNTER by thiagomx. Hunter. HearthPwn, rating +149, February 2015 (Undertaker Nerf): https://www.hearthpwn.com/decks/196386-1eu-naimans-midrange-hunter",
+    "ru": "Колода «[#1EU]NAIMAN'S MIDRANGE HUNTER», автор thiagomx. Охотник. HearthPwn, рейтинг +149, февраль 2015: https://www.hearthpwn.com/decks/196386-1eu-naimans-midrange-hunter"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_004",
+    "FP1_004",
+    "FP1_011",
+    "FP1_011",
+    "FP1_012",
+    "FP1_030",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_203",
+    "VAN_DS1_070",
+    "VAN_EX1_093",
+    "VAN_EX1_298",
+    "VAN_EX1_534",
+    "VAN_EX1_534",
+    "VAN_EX1_536",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_554",
+    "VAN_EX1_595",
+    "VAN_EX1_611",
+    "VAN_EX1_611",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

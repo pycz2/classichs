@@ -1,0 +1,40 @@
+{
+  "name": "Mushrooms and Eggs (Baku's dinner party)",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Mushrooms and Eggs (Baku's dinner party) by LittleOgre. Warlock, archetype Zoolock. HearthPwn, rating +119, June 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1131175-mushrooms-and-eggs-bakus-dinner-party",
+    "ru": "Колода «Mushrooms and Eggs (Baku's dinner party)», автор LittleOgre. Чернокнижник, архетип Zoolock. HearthPwn, рейтинг +119, июнь 2018: https://www.hearthpwn.com/decks/1131175-mushrooms-and-eggs-bakus-dinner-party"
+  },
+  "cards": [
+    "BRM_006",
+    "BRM_006",
+    "GIL_620",
+    "GIL_816",
+    "GIL_816",
+    "GIL_819",
+    "GIL_819",
+    "GIL_825",
+    "GIL_826",
+    "ICC_075",
+    "ICC_075",
+    "ICC_469",
+    "ICC_469",
+    "ICC_903",
+    "ICC_903",
+    "KAR_029",
+    "KAR_029",
+    "LOOT_167",
+    "LOOT_167",
+    "OG_113",
+    "OG_113",
+    "UNG_083",
+    "UNG_083",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_050",
+    "VAN_EX1_304",
+    "VAN_EX1_304",
+    "VAN_EX1_316",
+    "VAN_EX1_316"
+  ]
+}

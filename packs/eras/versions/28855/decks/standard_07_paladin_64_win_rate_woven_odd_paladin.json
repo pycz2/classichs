@@ -1,0 +1,40 @@
+{
+  "name": "%64 Win Rate Woven Odd Paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "%64 Win Rate Woven Odd Paladin by SiyahAdam. Paladin, archetype Odd Paladin. HearthPwn, rating +121, December 2018 (Level Up Nerf): https://www.hearthpwn.com/decks/1221158-64-win-rate-woven-odd-paladin",
+    "ru": "Колода «%64 Win Rate Woven Odd Paladin», автор SiyahAdam. Паладин, архетип Odd Paladin. HearthPwn, рейтинг +121, декабрь 2018: https://www.hearthpwn.com/decks/1221158-64-win-rate-woven-odd-paladin"
+  },
+  "cards": [
+    "BOT_021",
+    "BOT_021",
+    "BOT_445",
+    "BOT_445",
+    "BOT_537",
+    "BOT_537",
+    "BOT_548",
+    "BOT_563",
+    "BOT_563",
+    "BOT_906",
+    "BOT_906",
+    "GIL_826",
+    "ICC_038",
+    "ICC_038",
+    "ICC_092",
+    "ICC_092",
+    "LOOT_167",
+    "LOOT_167",
+    "LOOT_286",
+    "LOOT_286",
+    "LOOT_529",
+    "LOOT_529",
+    "UNG_072",
+    "UNG_072",
+    "VAN_CS2_087",
+    "VAN_CS2_087",
+    "VAN_CS2_122",
+    "VAN_CS2_122",
+    "VAN_EX1_116",
+    "VAN_EX1_349"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Miracle Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Miracle Priest by pym166. Priest, archetype Combo Priest. HearthPwn, rating +130, April 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1109784-miracle-priest",
+    "ru": "Колода «Miracle Priest», автор pym166. Жрец, архетип Combo Priest. HearthPwn, рейтинг +130, апрель 2019: https://www.hearthpwn.com/decks/1109784-miracle-priest"
+  },
+  "cards": [
+    "GIL_813",
+    "GIL_813",
+    "ICC_213",
+    "ICC_213",
+    "ICC_802",
+    "ICC_802",
+    "LOOT_008",
+    "LOOT_209",
+    "LOOT_278",
+    "LOOT_278",
+    "LOOT_353",
+    "LOOT_353",
+    "LOOT_507",
+    "LOOT_507",
+    "TRL_258",
+    "UNG_029",
+    "UNG_029",
+    "UNG_034",
+    "UNG_034",
+    "UNG_963",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_EX1_012",
+    "VAN_EX1_332",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622"
+  ]
+}

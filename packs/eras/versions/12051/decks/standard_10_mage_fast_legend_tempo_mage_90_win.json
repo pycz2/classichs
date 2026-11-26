@@ -1,0 +1,40 @@
+{
+  "name": "FAST LEGEND TEMPO MAGE 90% Win",
+  "champion": "HERO_08",
+  "description": {
+    "en": "FAST LEGEND TEMPO MAGE 90% Win by Andedroga. Mage. HearthPwn, rating +630, January 2016 (Explorers): https://www.hearthpwn.com/decks/359404-fast-legend-tempo-mage-90-win",
+    "ru": "Колода «FAST LEGEND TEMPO MAGE 90% Win», автор Andedroga. Маг. HearthPwn, рейтинг +630, январь 2016: https://www.hearthpwn.com/decks/359404-fast-legend-tempo-mage-90-win"
+  },
+  "cards": [
+    "AT_004",
+    "BRM_002",
+    "BRM_002",
+    "FP1_004",
+    "FP1_004",
+    "GVG_001",
+    "GVG_003",
+    "GVG_003",
+    "GVG_082",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_287",
+    "VAN_EX1_294",
+    "VAN_EX1_559",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

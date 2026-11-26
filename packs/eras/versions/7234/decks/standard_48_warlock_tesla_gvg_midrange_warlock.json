@@ -1,0 +1,40 @@
+{
+  "name": "[Tesla] GvG Midrange Warlock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[Tesla] GvG Midrange Warlock by MBK_Tesla. Warlock. HearthPwn, rating +212, January 2015 (GvG Launch): https://www.hearthpwn.com/decks/155637-tesla-gvg-midrange-warlock",
+    "ru": "Колода «[Tesla] GvG Midrange Warlock», автор MBK_Tesla. Чернокнижник. HearthPwn, рейтинг +212, январь 2015: https://www.hearthpwn.com/decks/155637-tesla-gvg-midrange-warlock"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_002",
+    "FP1_012",
+    "FP1_012",
+    "FP1_030",
+    "GVG_015",
+    "GVG_015",
+    "GVG_045",
+    "GVG_069",
+    "GVG_110",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_CS2_065",
+    "VAN_CS2_065",
+    "VAN_CS2_188",
+    "VAN_CS2_188",
+    "VAN_EX1_005",
+    "VAN_EX1_016",
+    "VAN_EX1_048",
+    "VAN_EX1_093",
+    "VAN_EX1_093",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_303",
+    "VAN_EX1_309",
+    "VAN_EX1_316",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

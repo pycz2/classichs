@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND] 60% WR F2P To Legend Mech Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "[LEGEND] 60% WR F2P To Legend Mech Druid by royalmail. Druid. HearthPwn, rating +278, January 2016 (Explorers): https://www.hearthpwn.com/decks/380460-legend-60-wr-f2p-to-legend-mech-druid",
+    "ru": "Колода «[LEGEND] 60% WR F2P To Legend Mech Druid», автор royalmail. Друид. HearthPwn, рейтинг +278, январь 2016: https://www.hearthpwn.com/decks/380460-legend-60-wr-f2p-to-legend-mech-druid"
+  },
+  "cards": [
+    "AT_037",
+    "AT_037",
+    "AT_038",
+    "AT_038",
+    "GVG_006",
+    "GVG_006",
+    "GVG_016",
+    "GVG_016",
+    "GVG_044",
+    "GVG_082",
+    "GVG_082",
+    "GVG_085",
+    "GVG_085",
+    "GVG_096",
+    "GVG_096",
+    "GVG_102",
+    "GVG_102",
+    "VAN_CS2_011",
+    "VAN_CS2_011",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_166",
+    "VAN_EX1_166",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_556",
+    "VAN_EX1_571",
+    "VAN_EX1_571"
+  ]
+}

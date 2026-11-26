@@ -1,0 +1,40 @@
+{
+  "name": "N'Zoth Warrior *FULL GUIDE*",
+  "champion": "HERO_01",
+  "description": {
+    "en": "N'Zoth Warrior *FULL GUIDE* by kiszelkap. Warrior, archetype N'Zoth Warrior. HearthPwn, rating +74, November 2017 (Marin's Treasure): https://www.hearthpwn.com/decks/958979-nzoth-warrior-full-guide",
+    "ru": "Колода «N'Zoth Warrior *FULL GUIDE*», автор kiszelkap. Воин, архетип N'Zoth Warrior. HearthPwn, рейтинг +74, ноябрь 2017: https://www.hearthpwn.com/decks/958979-nzoth-warrior-full-guide"
+  },
+  "cards": [
+    "CFM_716",
+    "CFM_716",
+    "CFM_790",
+    "ICC_062",
+    "ICC_062",
+    "ICC_064",
+    "ICC_064",
+    "ICC_091",
+    "ICC_466",
+    "ICC_466",
+    "ICC_701",
+    "ICC_834",
+    "OG_133",
+    "OG_149",
+    "UNG_809",
+    "UNG_957",
+    "UNG_957",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_392",
+    "VAN_EX1_392",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_402",
+    "VAN_EX1_402",
+    "VAN_EX1_407",
+    "VAN_EX1_606",
+    "VAN_EX1_606"
+  ]
+}

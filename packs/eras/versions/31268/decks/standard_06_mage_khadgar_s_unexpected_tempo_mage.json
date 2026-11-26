@@ -1,0 +1,40 @@
+{
+  "name": "Khadgar's Unexpected Tempo Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Khadgar's Unexpected Tempo Mage by HooliganPolygon. Mage, archetype Tempo Mage. HearthPwn, rating +36, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1282230-khadgars-unexpected-tempo-mage",
+    "ru": "Колода «Khadgar's Unexpected Tempo Mage», автор HooliganPolygon. Маг, архетип Tempo Mage. HearthPwn, рейтинг +36, июнь 2019: https://www.hearthpwn.com/decks/1282230-khadgars-unexpected-tempo-mage"
+  },
+  "cards": [
+    "BOT_103",
+    "BOT_254",
+    "BOT_254",
+    "BOT_531",
+    "BOT_531",
+    "BOT_604",
+    "BOT_604",
+    "DAL_177",
+    "DAL_177",
+    "DAL_575",
+    "DAL_577",
+    "DAL_577",
+    "DAL_603",
+    "DAL_603",
+    "DAL_608",
+    "DAL_608",
+    "GIL_664",
+    "GIL_664",
+    "TRL_310",
+    "TRL_310",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_EX1_055",
+    "VAN_EX1_055",
+    "VAN_EX1_586",
+    "VAN_EX1_586",
+    "VAN_EX1_608",
+    "VAN_EX1_608"
+  ]
+}

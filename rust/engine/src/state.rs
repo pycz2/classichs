@@ -73,6 +73,9 @@ pub struct Pending {
 pub struct Game {
     /// What is being played: rules, cards, mechanic names, hooks.
     pub rs: &'static Ruleset,
+    /// The format (rules.json `formats`: "standard", "wild"): its cards are the ones made at random. "": every
+    /// collectible card (a pack with one format).
+    pub format: String,
     pub rng: Rng,
     pub players: Vec<Player>,
     /// Entity id n is entities[n - 1]; entities are never removed. Shared with look-ahead
@@ -112,7 +115,7 @@ pub struct Game {
 
 impl Game {
     pub(crate) fn blank(rs: &'static Ruleset, seed: i64) -> Game {
-        Game { rs, rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
+        Game { rs, format: String::new(), rng: Rng::new(seed as u64), players: vec![], entities: vec![], turn: 0, current: 0,
             phase: "MULLIGAN", pending: None, pending_next: vec![], game_over: false, winner: -1, event_log: vec![], history: vec![],
             queue: VecDeque::new(), next_id: 1, next_order: 1, source_card: "", source_id: NONE,
             start_decks: [vec![], vec![]], lua: LuaSlot::default(), script_error: OnceLock::new(), writes: 0, steal_batch: None, summon_copies: vec![] }
@@ -1638,7 +1641,7 @@ impl Game {
     /// The copy shares the card scripts' interpreter (crate::lua); `deep_clone`
     /// gives an independent one.
     pub fn clone_state(&self) -> Game {
-        Game { rs: self.rs, rng: self.rng.clone(), players: self.players.clone(), entities: self.entities.clone(),
+        Game { rs: self.rs, format: self.format.clone(), rng: self.rng.clone(), players: self.players.clone(), entities: self.entities.clone(),
             turn: self.turn, current: self.current, phase: self.phase, pending: self.pending.clone(), pending_next: self.pending_next.clone(),
             game_over: self.game_over, winner: self.winner, event_log: vec![], history: vec![], queue: VecDeque::new(),
             next_id: self.next_id, next_order: self.next_order, source_card: "", source_id: NONE,
@@ -1782,7 +1785,15 @@ impl Game {
                 "options": p.options})).collect::<Vec<_>>());
         }
         d["players"] = Value::Array(self.players.iter().map(|p| p.snapshot()).collect());
+        if !self.format.is_empty() {
+            d["format"] = json!(self.format);
+        }
         d
+    }
+
+    /// The collectible cards of the game's format (what random cards and Discover come from).
+    pub fn collectible(&self) -> &'static [String] {
+        self.rs.pool(&self.format)
     }
 
     pub fn state_hash(&self) -> String {

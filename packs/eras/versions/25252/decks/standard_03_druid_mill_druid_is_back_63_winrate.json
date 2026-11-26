@@ -1,0 +1,40 @@
+{
+  "name": "Mill Druid is back (63% winrate)",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Mill Druid is back (63% winrate) by Bambulin. Druid. HearthPwn, rating +162, June 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1123033-mill-druid-is-back-63-winrate",
+    "ru": "Колода «Mill Druid is back (63% winrate)», автор Bambulin. Друид. HearthPwn, рейтинг +162, июнь 2018: https://www.hearthpwn.com/decks/1123033-mill-druid-is-back-63-winrate"
+  },
+  "cards": [
+    "GIL_637",
+    "GIL_637",
+    "GIL_833",
+    "GIL_833",
+    "ICC_054",
+    "ICC_054",
+    "ICC_314",
+    "ICC_832",
+    "ICC_913",
+    "ICC_913",
+    "LOOT_048",
+    "LOOT_051",
+    "LOOT_051",
+    "LOOT_054",
+    "LOOT_054",
+    "UNG_072",
+    "UNG_072",
+    "UNG_848",
+    "UNG_848",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_085",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_161",
+    "VAN_EX1_161",
+    "VAN_NEW1_007",
+    "VAN_NEW1_007",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

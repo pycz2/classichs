@@ -1,0 +1,40 @@
+{
+  "name": "[NEW] Shaman Deathrattle + Tactics & Replacements",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[NEW] Shaman Deathrattle + Tactics & Replacements by user-16842588. Shaman. HearthPwn, rating +146, August 2014 (Naxx Launch): https://www.hearthpwn.com/decks/93624-new-shaman-deathrattle-tactics-replacements",
+    "ru": "Колода «[NEW] Shaman Deathrattle + Tactics & Replacements», автор user-16842588. Шаман. HearthPwn, рейтинг +146, август 2014: https://www.hearthpwn.com/decks/93624-new-shaman-deathrattle-tactics-replacements"
+  },
+  "cards": [
+    "FP1_002",
+    "FP1_012",
+    "FP1_012",
+    "FP1_013",
+    "FP1_014",
+    "FP1_015",
+    "FP1_025",
+    "FP1_025",
+    "FP1_028",
+    "FP1_028",
+    "FP1_031",
+    "VAN_CS2_038",
+    "VAN_EX1_012",
+    "VAN_EX1_016",
+    "VAN_EX1_029",
+    "VAN_EX1_029",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_110",
+    "VAN_EX1_116",
+    "VAN_EX1_238",
+    "VAN_EX1_238",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_EX1_595"
+  ]
+}

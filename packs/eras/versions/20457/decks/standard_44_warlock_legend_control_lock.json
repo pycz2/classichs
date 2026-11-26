@@ -1,0 +1,40 @@
+{
+  "name": "[LEGEND] Control lock",
+  "champion": "HERO_07",
+  "description": {
+    "en": "[LEGEND] Control lock by user-100101291. Warlock, archetype Handlock. HearthPwn, rating +95, July 2017 (Quest Rogue Nerf): https://www.hearthpwn.com/decks/865620-legend-control-lock",
+    "ru": "Колода «[LEGEND] Control lock», автор user-100101291. Чернокнижник, архетип Handlock. HearthPwn, рейтинг +95, июль 2017: https://www.hearthpwn.com/decks/865620-legend-control-lock"
+  },
+  "cards": [
+    "CFM_120",
+    "CFM_120",
+    "CFM_608",
+    "CFM_649",
+    "CFM_649",
+    "CFM_663",
+    "CFM_663",
+    "CFM_751",
+    "OG_174",
+    "OG_174",
+    "OG_239",
+    "UNG_928",
+    "UNG_928",
+    "UNG_946",
+    "VAN_CS2_057",
+    "VAN_CS2_057",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_303",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_EX1_323",
+    "VAN_NEW1_021"
+  ]
+}

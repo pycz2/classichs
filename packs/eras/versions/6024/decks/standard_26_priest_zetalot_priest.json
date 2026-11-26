@@ -1,0 +1,40 @@
+{
+  "name": "Zetalot Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "Zetalot Priest by PoeticStanziel. Priest. HearthPwn, rating +301, July 2014 (Live Patch 5506): https://www.hearthpwn.com/decks/62316-zetalot-priest",
+    "ru": "Колода «Zetalot Priest», автор PoeticStanziel. Жрец. HearthPwn, рейтинг +301, июль 2014: https://www.hearthpwn.com/decks/62316-zetalot-priest"
+  },
+  "cards": [
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_130",
+    "VAN_CS1_130",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_117",
+    "VAN_CS2_181",
+    "VAN_CS2_181",
+    "VAN_CS2_235",
+    "VAN_CS2_235",
+    "VAN_DS1_233",
+    "VAN_EX1_016",
+    "VAN_EX1_058",
+    "VAN_EX1_091",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_339",
+    "VAN_EX1_339",
+    "VAN_EX1_350",
+    "VAN_EX1_591",
+    "VAN_EX1_591",
+    "VAN_EX1_621",
+    "VAN_EX1_621",
+    "VAN_EX1_622",
+    "VAN_EX1_622",
+    "VAN_EX1_624",
+    "VAN_EX1_624",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020"
+  ]
+}

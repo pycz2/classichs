@@ -1,0 +1,40 @@
+{
+  "name": "Kripps - Jade Shaman Perfected",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Kripps - Jade Shaman Perfected by radha78. Shaman, archetype Jade Lotus Shaman. HearthPwn, rating +313, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/703730-kripps-jade-shaman-perfected",
+    "ru": "Колода «Kripps - Jade Shaman Perfected», автор radha78. Шаман, архетип Jade Lotus Shaman. HearthPwn, рейтинг +313, декабрь 2016: https://www.hearthpwn.com/decks/703730-kripps-jade-shaman-perfected"
+  },
+  "cards": [
+    "CFM_061",
+    "CFM_061",
+    "CFM_120",
+    "CFM_120",
+    "CFM_312",
+    "CFM_312",
+    "CFM_324",
+    "CFM_707",
+    "CFM_707",
+    "CFM_715",
+    "CFM_715",
+    "CFM_717",
+    "CFM_717",
+    "CFM_902",
+    "KAR_073",
+    "KAR_073",
+    "LOE_077",
+    "OG_133",
+    "VAN_EX1_012",
+    "VAN_EX1_066",
+    "VAN_EX1_066",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_575"
+  ]
+}

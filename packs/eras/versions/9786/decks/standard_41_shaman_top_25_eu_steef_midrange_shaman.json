@@ -1,0 +1,40 @@
+{
+  "name": "[Top 25 EU] Steef Midrange Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "[Top 25 EU] Steef Midrange Shaman by user-12462522. Shaman. HearthPwn, rating +275, May 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/250285-top-25-eu-steef-midrange-shaman",
+    "ru": "Колода «[Top 25 EU] Steef Midrange Shaman», автор user-12462522. Шаман. HearthPwn, рейтинг +275, май 2015: https://www.hearthpwn.com/decks/250285-top-25-eu-steef-midrange-shaman"
+  },
+  "cards": [
+    "FP1_001",
+    "FP1_002",
+    "FP1_002",
+    "FP1_030",
+    "GVG_038",
+    "GVG_069",
+    "GVG_096",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_EX1_005",
+    "VAN_EX1_093",
+    "VAN_EX1_245",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_565",
+    "VAN_EX1_567",
+    "VAN_EX1_575",
+    "VAN_NEW1_010"
+  ]
+}

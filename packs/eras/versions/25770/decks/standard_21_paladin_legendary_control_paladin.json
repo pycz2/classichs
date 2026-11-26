@@ -1,0 +1,40 @@
+{
+  "name": "[Legendary] CONTROL PALADIN",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[Legendary] CONTROL PALADIN by Rippy. Paladin, archetype Control Paladin. HearthPwn, rating +88, May 2018 (Spiteful Nerf): https://www.hearthpwn.com/decks/1119236-legendary-control-paladin",
+    "ru": "Колода «[Legendary] CONTROL PALADIN», автор Rippy. Паладин, архетип Control Paladin. HearthPwn, рейтинг +88, май 2018: https://www.hearthpwn.com/decks/1119236-legendary-control-paladin"
+  },
+  "cards": [
+    "GIL_143",
+    "GIL_143",
+    "GIL_145",
+    "GIL_145",
+    "GIL_817",
+    "ICC_314",
+    "ICC_466",
+    "ICC_466",
+    "ICC_829",
+    "LOOT_216",
+    "LOOT_500",
+    "LOOT_516",
+    "UNG_015",
+    "UNG_072",
+    "UNG_072",
+    "UNG_851",
+    "UNG_952",
+    "UNG_952",
+    "UNG_954",
+    "VAN_CS2_093",
+    "VAN_CS2_093",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_048",
+    "VAN_EX1_619",
+    "VAN_EX1_619",
+    "VAN_NEW1_020",
+    "VAN_NEW1_020",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "[F2P Rogue] from 23 to 12 in less then 2 hours",
+  "champion": "HERO_03",
+  "description": {
+    "en": "[F2P Rogue] from 23 to 12 in less then 2 hours by Vaxx. Rogue, archetype Jade Lotus Rogue. HearthPwn, rating +167, March 2017 (Aggro Downfall): https://www.hearthpwn.com/decks/748549-f2p-rogue-from-23-to-12-in-less-then-2-hours",
+    "ru": "Колода «[F2P Rogue] from 23 to 12 in less then 2 hours», автор Vaxx. Разбойник, архетип Jade Lotus Rogue. HearthPwn, рейтинг +167, март 2017: https://www.hearthpwn.com/decks/748549-f2p-rogue-from-23-to-12-in-less-then-2-hours"
+  },
+  "cards": [
+    "CFM_690",
+    "CFM_690",
+    "CFM_691",
+    "CFM_691",
+    "CFM_715",
+    "CFM_715",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_073",
+    "VAN_CS2_073",
+    "VAN_CS2_076",
+    "VAN_CS2_076",
+    "VAN_CS2_080",
+    "VAN_CS2_080",
+    "VAN_EX1_017",
+    "VAN_EX1_017",
+    "VAN_EX1_019",
+    "VAN_EX1_019",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_131",
+    "VAN_EX1_131",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_NEW1_018"
+  ]
+}

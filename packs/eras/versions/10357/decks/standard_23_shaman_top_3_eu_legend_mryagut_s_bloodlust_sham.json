@@ -1,0 +1,40 @@
+{
+  "name": "Top 3 EU Legend Mryagut's Bloodlust Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "Top 3 EU Legend Mryagut's Bloodlust Shaman by Comeback_khv. Shaman. HearthPwn, rating +370, October 2015 (TGT Launch): https://www.hearthpwn.com/decks/346228-top-3-eu-legend-mryaguts-bloodlust-shaman",
+    "ru": "Колода «Top 3 EU Legend Mryagut's Bloodlust Shaman», автор Comeback_khv. Шаман. HearthPwn, рейтинг +370, октябрь 2015: https://www.hearthpwn.com/decks/346228-top-3-eu-legend-mryaguts-bloodlust-shaman"
+  },
+  "cards": [
+    "AT_046",
+    "FP1_001",
+    "FP1_001",
+    "FP1_002",
+    "FP1_002",
+    "FP1_007",
+    "FP1_007",
+    "FP1_030",
+    "GVG_096",
+    "GVG_110",
+    "VAN_CS2_042",
+    "VAN_CS2_042",
+    "VAN_CS2_045",
+    "VAN_CS2_045",
+    "VAN_CS2_046",
+    "VAN_CS2_046",
+    "VAN_EX1_005",
+    "VAN_EX1_066",
+    "VAN_EX1_093",
+    "VAN_EX1_245",
+    "VAN_EX1_246",
+    "VAN_EX1_246",
+    "VAN_EX1_248",
+    "VAN_EX1_248",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_565",
+    "VAN_EX1_565"
+  ]
+}

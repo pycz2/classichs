@@ -1,0 +1,40 @@
+{
+  "name": "Legend (EU) Illidan rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Legend (EU) Illidan rogue by Rob_the_rogue. Rogue, archetype Miracle Rogue. HearthPwn, rating +47, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1278743-legend-eu-illidan-rogue",
+    "ru": "Колода «Legend (EU) Illidan rogue», автор Rob_the_rogue. Разбойник, архетип Miracle Rogue. HearthPwn, рейтинг +47, май 2019: https://www.hearthpwn.com/decks/1278743-legend-eu-illidan-rogue"
+  },
+  "cards": [
+    "DAL_010",
+    "DAL_078",
+    "DAL_078",
+    "DAL_415",
+    "DAL_415",
+    "DAL_774",
+    "GIL_506",
+    "TRL_509",
+    "TRL_509",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_EX1_012",
+    "VAN_EX1_066",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_129",
+    "VAN_EX1_129",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_278",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613",
+    "VAN_EX1_614"
+  ]
+}

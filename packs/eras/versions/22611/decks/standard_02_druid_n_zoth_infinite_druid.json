@@ -1,0 +1,40 @@
+{
+  "name": "N'zoth Infinite Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "N'zoth Infinite Druid by Naroo. Druid, archetype N'Zoth Druid. HearthPwn, rating +246, December 2017 (Kobolds Patch): https://www.hearthpwn.com/decks/992583-nzoth-infinite-druid",
+    "ru": "Колода «N'zoth Infinite Druid», автор Naroo. Друид, архетип N'Zoth Druid. HearthPwn, рейтинг +246, декабрь 2017: https://www.hearthpwn.com/decks/992583-nzoth-infinite-druid"
+  },
+  "cards": [
+    "CFM_614",
+    "ICC_054",
+    "ICC_054",
+    "ICC_085",
+    "ICC_085",
+    "ICC_832",
+    "LOOT_048",
+    "LOOT_048",
+    "LOOT_051",
+    "LOOT_051",
+    "LOOT_056",
+    "LOOT_056",
+    "LOOT_309",
+    "LOOT_309",
+    "LOOT_314",
+    "LOOT_329",
+    "LOOT_521",
+    "OG_133",
+    "UNG_814",
+    "UNG_928",
+    "UNG_928",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_013",
+    "VAN_CS2_013",
+    "VAN_EX1_110",
+    "VAN_EX1_164",
+    "VAN_EX1_164",
+    "VAN_EX1_165",
+    "VAN_EX1_165"
+  ]
+}

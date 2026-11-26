@@ -1083,5 +1083,9 @@
   "vs",
   "wants to be friends",
   "won by %s",
-  "… and %d more schema errors"
+  "… and %d more schema errors",
+  "Standard",
+  "Wild",
+  "A Wild deck: it has cards that are not in Standard",
+  "This deck has cards that are not in this format"
 ]

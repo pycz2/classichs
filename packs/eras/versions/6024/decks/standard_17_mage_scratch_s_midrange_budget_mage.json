@@ -1,0 +1,40 @@
+{
+  "name": "Scratch's Midrange Budget Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Scratch's Midrange Budget Mage by Scratch741. Mage. HearthPwn, rating +89, October 2014 (Naxx Launch): https://www.hearthpwn.com/decks/72746-scratchs-midrange-budget-mage",
+    "ru": "Колода «Scratch's Midrange Budget Mage», автор Scratch741. Маг. HearthPwn, рейтинг +89, октябрь 2014: https://www.hearthpwn.com/decks/72746-scratchs-midrange-budget-mage"
+  },
+  "cards": [
+    "FP1_012",
+    "FP1_012",
+    "FP1_013",
+    "FP1_030",
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_032",
+    "VAN_CS2_033",
+    "VAN_CS2_033",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_EX1_032",
+    "VAN_EX1_093",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_279",
+    "VAN_EX1_284",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

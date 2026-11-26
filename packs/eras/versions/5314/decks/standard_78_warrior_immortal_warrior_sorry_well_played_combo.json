@@ -1,0 +1,40 @@
+{
+  "name": "Immortal Warrior (Sorry Well Played Combo)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Immortal Warrior (Sorry Well Played Combo) by S3xyVoic3. Warrior. HearthPwn, rating +4, May 2014 (Live Patch 5435): https://www.hearthpwn.com/decks/56635-immortal-warrior-sorry-well-played-combo",
+    "ru": "Колода «Immortal Warrior (Sorry Well Played Combo)», автор S3xyVoic3. Воин. HearthPwn, рейтинг +4, май 2014: https://www.hearthpwn.com/decks/56635-immortal-warrior-sorry-well-played-combo"
+  },
+  "cards": [
+    "VAN_CS2_103",
+    "VAN_CS2_103",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_114",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_203",
+    "VAN_EX1_002",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_067",
+    "VAN_EX1_093",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_391",
+    "VAN_EX1_400",
+    "VAN_EX1_400",
+    "VAN_EX1_407",
+    "VAN_EX1_561",
+    "VAN_EX1_564",
+    "VAN_EX1_564",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_606",
+    "VAN_EX1_620",
+    "VAN_EX1_620"
+  ]
+}

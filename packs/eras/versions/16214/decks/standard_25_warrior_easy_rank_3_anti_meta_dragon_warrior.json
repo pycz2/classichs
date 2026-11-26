@@ -1,0 +1,40 @@
+{
+  "name": "[Easy Rank 3+] Anti Meta Dragon Warrior",
+  "champion": "HERO_01",
+  "description": {
+    "en": "[Easy Rank 3+] Anti Meta Dragon Warrior by Ascaron. Warrior, archetype Dragon Warrior. HearthPwn, rating +259, December 2016 (Gadgetzan): https://www.hearthpwn.com/decks/668266-easy-rank-3-anti-meta-dragon-warrior",
+    "ru": "Колода «[Easy Rank 3+] Anti Meta Dragon Warrior», автор Ascaron. Воин, архетип Dragon Warrior. HearthPwn, рейтинг +259, декабрь 2016: https://www.hearthpwn.com/decks/668266-easy-rank-3-anti-meta-dragon-warrior"
+  },
+  "cards": [
+    "AT_017",
+    "AT_017",
+    "AT_071",
+    "AT_071",
+    "BRM_024",
+    "BRM_024",
+    "BRM_034",
+    "BRM_034",
+    "CFM_325",
+    "CFM_325",
+    "CFM_637",
+    "KAR_061",
+    "LOE_022",
+    "LOE_076",
+    "OG_312",
+    "OG_314",
+    "OG_314",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_298",
+    "VAN_EX1_414",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

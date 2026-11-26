@@ -129,4 +129,14 @@ impl Deck {
         }
         String::new()
     }
+
+    /// `validate_in`, and for a game of a format (rules.json `formats`: Standard) every card one of that format's (an
+    /// Arena deck: any drafted card).
+    pub fn validate_format(&self, rs: &Ruleset, format: &str) -> String {
+        let why = self.validate_in(rs);
+        if why.is_empty() && !self.arena && self.cards.iter().any(|c| rs.pool(format).binary_search(c).is_err()) {
+            return "This deck has cards that are not in this format".into();
+        }
+        why
+    }
 }

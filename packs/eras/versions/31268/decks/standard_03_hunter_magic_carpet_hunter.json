@@ -1,0 +1,40 @@
+{
+  "name": "Magic Carpet Hunter",
+  "champion": "HERO_05",
+  "description": {
+    "en": "Magic Carpet Hunter by FunkiMonki. Hunter, archetype Face Hunter. HearthPwn, rating +21, June 2019 (Rise of the Mech): https://www.hearthpwn.com/decks/1285812-magic-carpet-hunter",
+    "ru": "Колода «Magic Carpet Hunter», автор FunkiMonki. Охотник, архетип Face Hunter. HearthPwn, рейтинг +21, июнь 2019: https://www.hearthpwn.com/decks/1285812-magic-carpet-hunter"
+  },
+  "cards": [
+    "BOT_548",
+    "DAL_372",
+    "DAL_378",
+    "DAL_400",
+    "DAL_400",
+    "DAL_587",
+    "DAL_587",
+    "DAL_773",
+    "DAL_773",
+    "GIL_607",
+    "GIL_607",
+    "TRL_111",
+    "TRL_111",
+    "TRL_348",
+    "TRL_348",
+    "TRL_900",
+    "VAN_CS2_188",
+    "VAN_CS2_189",
+    "VAN_CS2_189",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_531",
+    "VAN_EX1_531",
+    "VAN_EX1_538",
+    "VAN_EX1_538",
+    "VAN_EX1_539",
+    "VAN_EX1_539",
+    "VAN_EX1_595",
+    "VAN_NEW1_031",
+    "VAN_NEW1_031"
+  ]
+}

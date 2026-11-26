@@ -1,0 +1,40 @@
+{
+  "name": "The Wonderful Wizard of Odd",
+  "champion": "HERO_08",
+  "description": {
+    "en": "The Wonderful Wizard of Odd by Pumpkin03. Mage, archetype Big Spells Mage. HearthPwn, rating +113, December 2018 (Rastakhan): https://www.hearthpwn.com/decks/1186125-the-wonderful-wizard-of-odd",
+    "ru": "Колода «The Wonderful Wizard of Odd», автор Pumpkin03. Маг, архетип Big Spells Mage. HearthPwn, рейтинг +113, декабрь 2018: https://www.hearthpwn.com/decks/1186125-the-wonderful-wizard-of-odd"
+  },
+  "cards": [
+    "BOT_548",
+    "GIL_614",
+    "GIL_614",
+    "GIL_645",
+    "GIL_645",
+    "GIL_826",
+    "GIL_838",
+    "GIL_838",
+    "ICC_833",
+    "LOOT_106",
+    "LOOT_130",
+    "LOOT_172",
+    "LOOT_172",
+    "LOOT_231",
+    "LOOT_231",
+    "LOOT_535",
+    "TRL_316",
+    "TRL_390",
+    "UNG_809",
+    "UNG_809",
+    "UNG_847",
+    "UNG_847",
+    "UNG_928",
+    "UNG_928",
+    "UNG_946",
+    "VAN_CS2_032",
+    "VAN_CS2_032",
+    "VAN_CS2_203",
+    "VAN_EX1_249",
+    "VAN_EX1_561"
+  ]
+}

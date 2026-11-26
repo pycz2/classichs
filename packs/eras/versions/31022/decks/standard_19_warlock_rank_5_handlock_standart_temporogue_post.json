@@ -1,0 +1,40 @@
+{
+  "name": "Rank 5 Handlock [STANDART, TEMPOROGUE POST-NERF]",
+  "champion": "HERO_07",
+  "description": {
+    "en": "Rank 5 Handlock [STANDART, TEMPOROGUE POST-NERF] by MarkTheWalk. Warlock, archetype Handlock. HearthPwn, rating +17, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/1279711-rank-5-handlock-standart-temporogue-post-nerf",
+    "ru": "Колода «Rank 5 Handlock [STANDART, TEMPOROGUE POST-NERF]», автор MarkTheWalk. Чернокнижник, архетип Handlock. HearthPwn, рейтинг +17, май 2019: https://www.hearthpwn.com/decks/1279711-rank-5-handlock-standart-temporogue-post-nerf"
+  },
+  "cards": [
+    "BOT_548",
+    "BOT_559",
+    "DAL_185",
+    "DAL_185",
+    "DAL_602",
+    "DAL_736",
+    "GIL_667",
+    "GIL_667",
+    "VAN_CS2_057",
+    "VAN_CS2_057",
+    "VAN_CS2_062",
+    "VAN_CS2_062",
+    "VAN_CS2_117",
+    "VAN_EX1_043",
+    "VAN_EX1_043",
+    "VAN_EX1_048",
+    "VAN_EX1_058",
+    "VAN_EX1_058",
+    "VAN_EX1_066",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_302",
+    "VAN_EX1_302",
+    "VAN_EX1_309",
+    "VAN_EX1_309",
+    "VAN_EX1_312",
+    "VAN_EX1_312",
+    "VAN_EX1_323",
+    "VAN_NEW1_021",
+    "VAN_NEW1_021"
+  ]
+}

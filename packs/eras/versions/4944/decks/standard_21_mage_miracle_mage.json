@@ -1,0 +1,40 @@
+{
+  "name": "Miracle Mage",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Miracle Mage by ur2ezchaos. Mage. HearthPwn, rating +37, April 2014 (Live Patch 5170): https://www.hearthpwn.com/decks/47665-miracle-mage",
+    "ru": "Колода «Miracle Mage», автор ur2ezchaos. Маг. HearthPwn, рейтинг +37, апрель 2014: https://www.hearthpwn.com/decks/47665-miracle-mage"
+  },
+  "cards": [
+    "VAN_CS2_022",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_025",
+    "VAN_CS2_025",
+    "VAN_CS2_026",
+    "VAN_CS2_026",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_CS2_029",
+    "VAN_CS2_029",
+    "VAN_CS2_031",
+    "VAN_CS2_031",
+    "VAN_CS2_117",
+    "VAN_CS2_117",
+    "VAN_EX1_012",
+    "VAN_EX1_095",
+    "VAN_EX1_095",
+    "VAN_EX1_277",
+    "VAN_EX1_277",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_295",
+    "VAN_EX1_559",
+    "VAN_EX1_608",
+    "VAN_EX1_608",
+    "VAN_NEW1_012",
+    "VAN_NEW1_012"
+  ]
+}

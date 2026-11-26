@@ -1,0 +1,40 @@
+{
+  "name": "Wild Wrath - Low Budget Druid",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Wild Wrath - Low Budget Druid by Lux_EU. Druid. HearthPwn, rating +115, March 2014 (Live Patch 4973): https://www.hearthpwn.com/decks/37113-wild-wrath-low-budget-druid",
+    "ru": "Колода «Wild Wrath - Low Budget Druid», автор Lux_EU. Друид. HearthPwn, рейтинг +115, март 2014: https://www.hearthpwn.com/decks/37113-wild-wrath-low-budget-druid"
+  },
+  "cards": [
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_CS2_179",
+    "VAN_CS2_179",
+    "VAN_CS2_182",
+    "VAN_CS2_182",
+    "VAN_CS2_200",
+    "VAN_CS2_200",
+    "VAN_CS2_232",
+    "VAN_CS2_232",
+    "VAN_EX1_019",
+    "VAN_EX1_019",
+    "VAN_EX1_066",
+    "VAN_EX1_066",
+    "VAN_EX1_096",
+    "VAN_EX1_096",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_165",
+    "VAN_EX1_165",
+    "VAN_EX1_169",
+    "VAN_EX1_169",
+    "VAN_EX1_173",
+    "VAN_EX1_173",
+    "VAN_EX1_556",
+    "VAN_EX1_556",
+    "VAN_NEW1_023",
+    "VAN_NEW1_023"
+  ]
+}

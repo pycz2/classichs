@@ -1,0 +1,40 @@
+{
+  "name": "Dream of Medivh [Even Druid]",
+  "champion": "HERO_06",
+  "description": {
+    "en": "Dream of Medivh [Even Druid] by RavenSunHP. Druid, archetype Ramp Druid. HearthPwn, rating +61, May 2019 (RoS Rogue Nerfs): https://www.hearthpwn.com/decks/627333-dream-of-medivh-even-druid",
+    "ru": "Колода «Dream of Medivh [Even Druid]», автор RavenSunHP. Друид, архетип Ramp Druid. HearthPwn, рейтинг +61, май 2019: https://www.hearthpwn.com/decks/627333-dream-of-medivh-even-druid"
+  },
+  "cards": [
+    "AT_038",
+    "AT_038",
+    "AT_039",
+    "AT_039",
+    "DAL_732",
+    "DAL_733",
+    "DAL_733",
+    "GIL_692",
+    "ICC_051",
+    "ICC_051",
+    "ICC_054",
+    "ICC_054",
+    "ICC_085",
+    "KAR_097",
+    "LOOT_054",
+    "LOOT_054",
+    "OG_044",
+    "OG_048",
+    "OG_202",
+    "OG_202",
+    "TRL_254",
+    "TRL_524",
+    "VAN_CS2_012",
+    "VAN_CS2_012",
+    "VAN_EX1_154",
+    "VAN_EX1_154",
+    "VAN_EX1_160",
+    "VAN_EX1_160",
+    "VAN_EX1_173",
+    "VAN_EX1_173"
+  ]
+}

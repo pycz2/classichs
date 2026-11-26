@@ -1,0 +1,40 @@
+{
+  "name": "[Top 300 Legend] OTK Ress Priest",
+  "champion": "HERO_09",
+  "description": {
+    "en": "[Top 300 Legend] OTK Ress Priest by Jeleniowatyy. Priest, archetype OTK Priest. HearthPwn, rating +120, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1266283-top-300-legend-otk-ress-priest",
+    "ru": "Колода «[Top 300 Legend] OTK Ress Priest», автор Jeleniowatyy. Жрец, архетип OTK Priest. HearthPwn, рейтинг +120, апрель 2019: https://www.hearthpwn.com/decks/1266283-top-300-legend-otk-ress-priest"
+  },
+  "cards": [
+    "BOT_448",
+    "BOT_448",
+    "BOT_548",
+    "DAL_558",
+    "DAL_721",
+    "DAL_723",
+    "DAL_723",
+    "DAL_724",
+    "DAL_724",
+    "GIL_623",
+    "GIL_623",
+    "GIL_661",
+    "TRL_258",
+    "TRL_258",
+    "TRL_408",
+    "TRL_408",
+    "VAN_CS1_112",
+    "VAN_CS1_112",
+    "VAN_CS1_129",
+    "VAN_CS1_129",
+    "VAN_CS2_004",
+    "VAN_CS2_004",
+    "VAN_CS2_234",
+    "VAN_CS2_234",
+    "VAN_CS2_236",
+    "VAN_CS2_236",
+    "VAN_EX1_622",
+    "VAN_EX1_622",
+    "VAN_EX1_626",
+    "VAN_EX1_626"
+  ]
+}

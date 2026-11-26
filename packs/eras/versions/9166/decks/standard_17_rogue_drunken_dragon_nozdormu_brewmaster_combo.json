@@ -1,0 +1,40 @@
+{
+  "name": "Drunken Dragon - Nozdormu Brewmaster combo",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Drunken Dragon - Nozdormu Brewmaster combo by Asuryan. Rogue. HearthPwn, rating +447, July 2015 (Blackrock Launch): https://www.hearthpwn.com/decks/273881-drunken-dragon-nozdormu-brewmaster-combo",
+    "ru": "Колода «Drunken Dragon - Nozdormu Brewmaster combo», автор Asuryan. Разбойник. HearthPwn, рейтинг +447, июль 2015: https://www.hearthpwn.com/decks/273881-drunken-dragon-nozdormu-brewmaster-combo"
+  },
+  "cards": [
+    "BRM_028",
+    "FP1_030",
+    "GVG_069",
+    "GVG_069",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_077",
+    "VAN_CS2_077",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_012",
+    "VAN_EX1_049",
+    "VAN_EX1_049",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_128",
+    "VAN_EX1_128",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_144",
+    "VAN_EX1_144",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_284",
+    "VAN_EX1_284",
+    "VAN_EX1_560",
+    "VAN_EX1_581",
+    "VAN_EX1_581"
+  ]
+}

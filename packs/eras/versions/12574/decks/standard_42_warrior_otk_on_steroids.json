@@ -1,0 +1,40 @@
+{
+  "name": "OTK On Steroids...",
+  "champion": "HERO_01",
+  "description": {
+    "en": "OTK On Steroids... by Zalgo_Cometh. Warrior. HearthPwn, rating +5, April 2016 (Classic Nerfs): https://www.hearthpwn.com/decks/493791-otk-on-steroids",
+    "ru": "Колода «OTK On Steroids...», автор Zalgo_Cometh. Воин. HearthPwn, рейтинг +5, апрель 2016: https://www.hearthpwn.com/decks/493791-otk-on-steroids"
+  },
+  "cards": [
+    "AT_064",
+    "BRM_028",
+    "OG_152",
+    "OG_152",
+    "VAN_CS2_103",
+    "VAN_CS2_103",
+    "VAN_CS2_106",
+    "VAN_CS2_106",
+    "VAN_CS2_108",
+    "VAN_CS2_108",
+    "VAN_CS2_147",
+    "VAN_CS2_147",
+    "VAN_EX1_007",
+    "VAN_EX1_007",
+    "VAN_EX1_391",
+    "VAN_EX1_392",
+    "VAN_EX1_407",
+    "VAN_EX1_411",
+    "VAN_EX1_412",
+    "VAN_EX1_412",
+    "VAN_EX1_561",
+    "VAN_EX1_564",
+    "VAN_EX1_603",
+    "VAN_EX1_603",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_EX1_606",
+    "VAN_EX1_606",
+    "VAN_EX1_607",
+    "VAN_EX1_607"
+  ]
+}

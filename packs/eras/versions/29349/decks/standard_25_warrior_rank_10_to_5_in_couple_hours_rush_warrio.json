@@ -1,0 +1,40 @@
+{
+  "name": "Rank 10 to 5 in couple hours (Rush Warrior)",
+  "champion": "HERO_01",
+  "description": {
+    "en": "Rank 10 to 5 in couple hours (Rush Warrior) by TrueHorde. Warrior, archetype Rush Warrior. HearthPwn, rating +41, February 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1233007-rank-10-to-5-in-couple-hours-rush-warrior",
+    "ru": "Колода «Rank 10 to 5 in couple hours (Rush Warrior)», автор TrueHorde. Воин, архетип Rush Warrior. HearthPwn, рейтинг +41, февраль 2019: https://www.hearthpwn.com/decks/1233007-rank-10-to-5-in-couple-hours-rush-warrior"
+  },
+  "cards": [
+    "BOT_059",
+    "BOT_059",
+    "BOT_548",
+    "GIL_113",
+    "GIL_113",
+    "GIL_547",
+    "GIL_578",
+    "GIL_580",
+    "GIL_580",
+    "GIL_655",
+    "GIL_655",
+    "GIL_803",
+    "GIL_803",
+    "ICC_064",
+    "ICC_064",
+    "ICC_834",
+    "ICC_851",
+    "TRL_325",
+    "TRL_327",
+    "TRL_327",
+    "TRL_329",
+    "TRL_564",
+    "UNG_927",
+    "VAN_EX1_414",
+    "VAN_EX1_604",
+    "VAN_EX1_604",
+    "VAN_EX1_607",
+    "VAN_EX1_607",
+    "VAN_NEW1_011",
+    "VAN_NEW1_011"
+  ]
+}

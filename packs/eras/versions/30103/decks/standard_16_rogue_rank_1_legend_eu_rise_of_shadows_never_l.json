@@ -1,0 +1,40 @@
+{
+  "name": "Rank 1 legend EU Rise of Shadows    Never Lackey",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Rank 1 legend EU Rise of Shadows    Never Lackey by Sezoklo. Rogue, archetype Tempo Rogue. HearthPwn, rating +169, April 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1262129-rank-1-legend-eu-rise-of-shadows-never-lackey",
+    "ru": "Колода «Rank 1 legend EU Rise of Shadows    Never Lackey», автор Sezoklo. Разбойник, архетип Tempo Rogue. HearthPwn, рейтинг +169, апрель 2019: https://www.hearthpwn.com/decks/1262129-rank-1-legend-eu-rise-of-shadows-never-lackey"
+  },
+  "cards": [
+    "BOT_242",
+    "DAL_415",
+    "DAL_415",
+    "DAL_417",
+    "DAL_720",
+    "DAL_720",
+    "GIL_534",
+    "GIL_534",
+    "TRL_124",
+    "TRL_124",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_EX1_066",
+    "VAN_EX1_116",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_EX1_145",
+    "VAN_EX1_145",
+    "VAN_EX1_581",
+    "VAN_EX1_581",
+    "VAN_EX1_613",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022",
+    "VAN_NEW1_024"
+  ]
+}

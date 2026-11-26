@@ -1,0 +1,40 @@
+{
+  "name": "[NEW] Aggro Paladin",
+  "champion": "HERO_04",
+  "description": {
+    "en": "[NEW] Aggro Paladin by CastorOrange. Paladin, archetype Aggro Paladin. HearthPwn, rating +796, April 2018 (Witchwood): https://www.hearthpwn.com/decks/996619-new-aggro-paladin",
+    "ru": "Колода «[NEW] Aggro Paladin», автор CastorOrange. Паладин, архетип Aggro Paladin. HearthPwn, рейтинг +796, апрель 2018: https://www.hearthpwn.com/decks/996619-new-aggro-paladin"
+  },
+  "cards": [
+    "GIL_694",
+    "ICC_038",
+    "ICC_038",
+    "ICC_092",
+    "ICC_092",
+    "LOOT_093",
+    "LOOT_093",
+    "LOOT_167",
+    "LOOT_258",
+    "LOOT_258",
+    "LOOT_286",
+    "LOOT_286",
+    "UNG_015",
+    "UNG_205",
+    "UNG_205",
+    "UNG_809",
+    "UNG_809",
+    "UNG_950",
+    "VAN_CS2_087",
+    "VAN_CS2_124",
+    "VAN_CS2_124",
+    "VAN_CS2_203",
+    "VAN_EX1_008",
+    "VAN_EX1_008",
+    "VAN_EX1_048",
+    "VAN_EX1_162",
+    "VAN_EX1_162",
+    "VAN_EX1_349",
+    "VAN_NEW1_019",
+    "VAN_NEW1_019"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Avast! Pirate/Weaponpower Rogue",
+  "champion": "HERO_03",
+  "description": {
+    "en": "Avast! Pirate/Weaponpower Rogue by thegipp. Rogue. HearthPwn, rating +196, December 2014 (GvG Launch): https://www.hearthpwn.com/decks/134766-avast-pirate-weaponpower-rogue",
+    "ru": "Колода «Avast! Pirate/Weaponpower Rogue», автор thegipp. Разбойник. HearthPwn, рейтинг +196, декабрь 2014: https://www.hearthpwn.com/decks/134766-avast-pirate-weaponpower-rogue"
+  },
+  "cards": [
+    "GVG_022",
+    "GVG_023",
+    "GVG_023",
+    "GVG_025",
+    "GVG_025",
+    "GVG_028",
+    "GVG_075",
+    "GVG_075",
+    "GVG_094",
+    "GVG_094",
+    "VAN_CS2_072",
+    "VAN_CS2_072",
+    "VAN_CS2_074",
+    "VAN_CS2_074",
+    "VAN_CS2_080",
+    "VAN_CS2_146",
+    "VAN_CS2_146",
+    "VAN_CS2_233",
+    "VAN_CS2_233",
+    "VAN_EX1_124",
+    "VAN_EX1_124",
+    "VAN_EX1_134",
+    "VAN_EX1_134",
+    "VAN_NEW1_018",
+    "VAN_NEW1_018",
+    "VAN_NEW1_022",
+    "VAN_NEW1_022",
+    "VAN_NEW1_024",
+    "VAN_NEW1_027",
+    "VAN_NEW1_027"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "RenoJackson's #73 Legend Big Overload Shaman",
+  "champion": "HERO_02",
+  "description": {
+    "en": "RenoJackson's #73 Legend Big Overload Shaman by kingsdefender. Shaman, archetype Overload Shaman. HearthPwn, rating +100, April 2019 (Level Up Nerf): https://www.hearthpwn.com/decks/1243595-renojacksons-73-legend-big-overload-shaman",
+    "ru": "Колода «RenoJackson's #73 Legend Big Overload Shaman», автор kingsdefender. Шаман, архетип Overload Shaman. HearthPwn, рейтинг +100, апрель 2019: https://www.hearthpwn.com/decks/1243595-renojacksons-73-legend-big-overload-shaman"
+  },
+  "cards": [
+    "AT_053",
+    "AT_053",
+    "BOT_099",
+    "BOT_099",
+    "CFM_696",
+    "CFM_696",
+    "FP1_013",
+    "FP1_025",
+    "GVG_029",
+    "GVG_029",
+    "ICC_314",
+    "KAR_073",
+    "KAR_073",
+    "LOOT_064",
+    "LOOT_064",
+    "LOOT_373",
+    "LOOT_373",
+    "OG_042",
+    "UNG_025",
+    "UNG_025",
+    "VAN_CS2_038",
+    "VAN_CS2_038",
+    "VAN_CS2_053",
+    "VAN_CS2_053",
+    "VAN_EX1_016",
+    "VAN_EX1_250",
+    "VAN_EX1_250",
+    "VAN_EX1_259",
+    "VAN_EX1_259",
+    "VAN_EX1_298"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Miracle Giant Tempo (Rank 5-Legend)",
+  "champion": "HERO_08",
+  "description": {
+    "en": "Miracle Giant Tempo (Rank 5-Legend) by Su_. Mage, archetype Tempo Mage. HearthPwn, rating +200, May 2019 (Rise of Shadows): https://www.hearthpwn.com/decks/1274164-miracle-giant-tempo-rank-5-legend",
+    "ru": "Колода «Miracle Giant Tempo (Rank 5-Legend)», автор Su_. Маг, архетип Tempo Mage. HearthPwn, рейтинг +200, май 2019: https://www.hearthpwn.com/decks/1274164-miracle-giant-tempo-rank-5-legend"
+  },
+  "cards": [
+    "BOT_103",
+    "BOT_453",
+    "BOT_548",
+    "DAL_177",
+    "DAL_177",
+    "DAL_577",
+    "DAL_577",
+    "DAL_603",
+    "DAL_603",
+    "DAL_608",
+    "DAL_608",
+    "GIL_581",
+    "GIL_581",
+    "TRL_310",
+    "TRL_310",
+    "TRL_509",
+    "VAN_CS2_023",
+    "VAN_CS2_023",
+    "VAN_CS2_024",
+    "VAN_CS2_024",
+    "VAN_CS2_027",
+    "VAN_CS2_027",
+    "VAN_EX1_007",
+    "VAN_EX1_044",
+    "VAN_EX1_044",
+    "VAN_EX1_105",
+    "VAN_EX1_105",
+    "VAN_EX1_559",
+    "VAN_EX1_608",
+    "VAN_EX1_608"
+  ]
+}
