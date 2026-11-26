@@ -145,6 +145,8 @@ The draft as `rust/engine/src/arena_draft.rs` does it:
 | Field | Classic | Meaning |
 |---|---|---|
 | `sets` | `["VANILLA"]` | Card pool (collectible, no champions). |
+| `banned` | none | Cards of those sets that are never drafted (Hearthstone 2014–2019: Gelbin Mekkatorque, the C'Thun cards…). |
+| `extra` | none | Cards drafted too though not collectible (Arena-only cards: the BlizzCon cards of 2018). |
 | `champions_offered` | 3 | Champions of different classes to choose from. |
 | `classes` | the nine | Classes that can be offered. |
 | `picks` | 30 | Picks (the deck size). |
@@ -163,6 +165,20 @@ the first that drops below 0; the last on rounding), then draw `offer` different
 cards of that tier, each by weight among the remaining (`x = randf() * total`,
 walk the list). The tier of a card is its rarity's `tier`; no rarity →
 `no_rarity_tier`. All from the draft seed (`rng.rs`).
+
+## `formats`
+
+The game's formats (Hearthstone 2014–2019, `packs/eras`: `standard` and, from April 2016, `wild`); none: one format,
+every collectible card of `modes.constructed`.
+
+```json
+"formats": {"standard": {"sets": ["VANILLA", "OG", "KARA", "GANGS", "UNGORO"], "exclude": ["VAN_EX1_016", "…"]},
+            "wild": {"sets": ["VANILLA", "NAXX", "GVG", "BRM", "TGT", "LOE", "OG", "KARA", "GANGS", "UNGORO"]}}
+```
+
+A format's cards are the collectible cards of its `sets` without its `exclude` (Hall of Fame cards). A game made with
+`"format": "standard"` (the engine's `new`, rust/engine/README.md) takes only decks of those cards and makes every
+random card (Discover, "a random minion") from them, as the game did; a game without a format plays every card.
 
 ## `ranked`
 

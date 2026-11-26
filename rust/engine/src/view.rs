@@ -53,6 +53,7 @@ pub fn from_snapshot_in(rs: &'static Ruleset, snap: &Value) -> Result<Game, Stri
         return Err("not a snapshot".into());
     }
     let mut g = Game::blank(rs, 0);
+    g.format = rs.game_format(s["format"].as_str().unwrap_or("")).unwrap_or_default();
     let intern = |s: &str| rs.intern(s);
     let next_id = int(s.get("next_id")).max(1);
     let mut hidden: Vec<Id> = vec![];

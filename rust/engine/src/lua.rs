@@ -870,8 +870,9 @@ ql!(q_graveyard, |g, a| {
 
 fn q_collectible<C: Ctx>(h: &mut C, _a: Args) -> R {
     // no task card (a Quest): it is never made at random nor Discovered
-    let rs = h.game()?.rs;
-    let v: Vec<L> = rs.collectible.iter().filter(|s| !rs.card(s).task).map(|s| L::from(s.as_str())).collect();
+    let g = h.game()?;
+    let rs = g.rs;
+    let v: Vec<L> = g.collectible().iter().filter(|s| !rs.card(s).task).map(|s| L::from(s.as_str())).collect();
     one(h.vm().list(v)?)
 }
 

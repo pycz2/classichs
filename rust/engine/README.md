@@ -125,11 +125,17 @@ included), decks are given as `deck_count` only, and the RNG state is left out.
 | `dump` | `game` | `scenario`: the position as a scenario (`Scenario.dump`) |
 | `end_turn_block` | `game`, `player` | `reason`: why a tutorial mission does not let the player end the turn yet (`while_can_play`, `while_can_attack`; `""`: it may), a key the client turns into words, `mission` |
 | `drop` | `game` | |
-| `validate` | `deck`, `pack?` | `ok`, `error` (English, as `Deck.validate()`) |
+| `validate` | `deck`, `pack?`, `format?` | `ok`, `error` (English, as `Deck.validate()`; a card not of the format: `This deck has cards that are not in this format`) |
 | `draft` | `seed`, `hero?` (0-2), `picks?`, `pack?` | `heroes`, `hero`, `cards`, `offer`, `done` (stateless, as the referee) |
 
 Every `new` takes `pack` (a rules_hash from `load_pack`; absent: built-in
 Classic); `copy` keeps the copied game's pack.
+
+Every `new` but `copy` takes `format` (`"standard"`, `"wild"`: rules.json `formats`, docs/packs/rules.md; absent: every
+collectible card, as before formats; a pack with one format takes both as that); a scenario may name its `format` too.
+The decks must be of the format and every random card (`g.collectible()`: Discover, "a random minion") is one of its
+cards. The game keeps it: the snapshot's and the scenario dump's `format` (only when the game has one), a `copy` and a
+game made from a `state`. A format the pack does not have: `unknown format`.
 
 The state reply (as the referee's): `ok`, `game`, `hash`, `over`, `winner`
 (-1: none or a draw), `turn`, `current`, `phase` (`MULLIGAN`, `PLAY`, `OVER`),

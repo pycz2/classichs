@@ -156,10 +156,11 @@ impl Engine {
                             ids.into_iter().map(|id| (id.clone(), crate::hooks::summary(rs.hooks(id)))).collect();
                         json!({"ok": true, "hooks": all})
                     }
-                    "validate" => match Deck::from_value_in(rs, req.get("deck").unwrap_or(&Value::Null)) {
-                        None => err("not a deck"),
-                        Some(d) => {
-                            let why = d.validate_in(rs);
+                    "validate" => match (Deck::from_value_in(rs, req.get("deck").unwrap_or(&Value::Null)), format(rs, req)) {
+                        (_, Err(e)) => err(e),
+                        (None, _) => err("not a deck"),
+                        (Some(d), Ok(f)) => {
+                            let why = d.validate_format(rs, f.as_deref().unwrap_or(""));
                             if why.is_empty() { json!({"ok": true}) } else { err(why) }
                         }
                     },
@@ -190,8 +191,12 @@ impl Engine {
             Ok(r) => r,
             Err(e) => return fail(e["error"].as_str().unwrap_or("bad pack")),
         };
+        let format = match format(rs, req) {
+            Ok(f) => f,
+            Err(e) => return fail(e),
+        };
         let mut mission = None;
-        let game = if let Some(src) = req.get("copy").and_then(Value::as_str) {
+        let mut game = if let Some(src) = req.get("copy").and_then(Value::as_str) {
             match self.games.get(src) {
                 Some(s) => {
                     mission = s.mission;
@@ -227,12 +232,15 @@ impl Engine {
             let mut pair = vec![];
             for d in decks {
                 match Deck::from_value_in(rs, d) {
-                    Some(deck) if !check || deck.validate_in(rs).is_empty() => pair.push(deck),
+                    Some(deck) if !check || deck.validate_format(rs, format.as_deref().unwrap_or("")).is_empty() => pair.push(deck),
                     _ => return fail("bad deck"),
                 }
             }
             Game::new_in(rs, &pair[0].hero, &pair[0].cards, &pair[1].hero, &pair[1].cards, seed, first, true)
         };
+        if let Some(f) = format {
+            game.format = f;
+        }
         let mut reply = state(id, &game);
         let start: Vec<Ev> = game.history.first().map_or(vec![], |h| h.events());
         reply["events"] = events_for(&game, &start, view);
@@ -305,6 +313,15 @@ fn game_op(op: &str, id: &str, slot: &mut Slot, req: &Value, view: i64) -> Value
             };
             json!({"ok": true, "game": id, "reason": reason, "mission": slot.mission})
         }
+    }
+}
+
+/// The game format a request names (`format`: "standard", "wild"; `Ruleset::game_format`); None: not named.
+fn format(rs: &Ruleset, req: &Value) -> Result<Option<String>, &'static str> {
+    match req.get("format") {
+        None | Some(Value::Null) => Ok(None),
+        Some(Value::String(f)) => rs.game_format(f).map(Some).ok_or("unknown format"),
+        Some(_) => Err("unknown format"),
     }
 }
 
