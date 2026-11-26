@@ -1,0 +1,69 @@
+{
+ "base": "icc",
+ "build": 20970,
+ "about": "9.1.0.20970 (2017-09-18): Spreading Plague, Innervate, Fiery War Axe, Hex and Murloc Warleader nerfs",
+ "cards": {
+  "AT_019": {
+   "text": {
+    "deDE": "<b>Todesröcheln:</b> Beschwört am Ende des Zuges ein Schreckensross.",
+    "enUS": "<b>Deathrattle:</b> At the end\n of the turn, summon a Dreadsteed.",
+    "esES": "<b>Último aliento:</b>\nAl final del turno, invoca un corcel nefasto.",
+    "frFR": "<b>Râle d’agonie :</b> invoque un destrier de l’effroi à la fin du tour.",
+    "itIT": "<b>Rantolo di Morte:</b> alla fine del turno, evoca un Maldestriero.",
+    "plPL": "<b>Agonia:</b> Na koniec tury przyzwij Upiornego rumaka.",
+    "ptBR": "<b>Último Suspiro:</b> No final do turno, evoque um Corcel Medonho.",
+    "ruRU": "<b>Предсмертный хрип:</b>\nв конце хода призывает коня погибели."
+   }
+  },
+  "ICC_054": {
+   "cost": 6
+  },
+  "OG_198": {
+   "text": {
+    "deDE": "Verbraucht Euer gesamtes Mana. Stellt doppelt so viel Leben wieder her.",
+    "enUS": "Spend all your Mana. Restore twice that much Health.",
+    "esES": "Gasta todo tu maná. Restaura el doble de esa cantidad en salud.",
+    "frFR": "Dépense tout votre mana pour en rendre le double en points de vie.",
+    "itIT": "Consuma tutto il tuo Mana e rigenera Salute pari al doppio del Mana così speso.",
+    "plPL": "Wydaj całą twoją manę. Przywróć dwa razy tyle zdrowia.",
+    "ptBR": "Gaste todo o seu Mana. Restaure o dobro dessa quantidade de Vida.",
+    "ruRU": "Расходует всю вашу ману. Восстанавливает вдвое больше здоровья."
+   }
+  },
+  "VAN_CS2_106": {
+   "cost": 3
+  },
+  "VAN_EX1_169": {
+   "text": {
+    "deDE": "Erhaltet 1 Manakristall nur für diesen Zug.",
+    "enUS": "Gain 1 Mana Crystal this turn only.",
+    "esES": "Obtienes 1 cristal de maná solo para este turno.",
+    "frFR": "Vous gagnez 1 cristal de mana pour ce tour uniquement.",
+    "itIT": "Fornisce 1 Cristallo di Mana solo per questo turno.",
+    "plPL": "Otrzymujesz 1 kryształ many w tej turze.",
+    "ptBR": "Receba 1 Cristal de Mana somente neste turno.",
+    "ruRU": "Вы получаете 1 дополнительный кристалл маны до конца хода."
+   }
+  },
+  "VAN_EX1_246": {
+   "cost": 4
+  },
+  "VAN_EX1_507": {
+   "text": {
+    "deDE": "Eure anderen Murlocs haben +2 Angriff.",
+    "enUS": "Your other Murlocs have +2 Attack.",
+    "esES": "Tus demás múrlocs tienen +2 p. de ataque.",
+    "frFR": "Vos autres murlocs\nont +2 ATQ.",
+    "itIT": "Gli altri tuoi Murloc hanno +2 Attacco.",
+    "plPL": "Twoje pozostałe\nMurloki mają\n+2 do ataku.",
+    "ptBR": "Seus outros Murlocs têm +2 de Ataque.",
+    "ruRU": "Другие ваши мурлоки получают +2 к атаке."
+   }
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 9.1.0.20970",
+  "HearthstoneJSON build 20970: names and texts of every card whose text changed since 20457 (tools/extract_cards.py --version-texts 20970 <ids>)",
+  "packs/loot: scripts/loot.lua (the older cards of patches 9.1, 9.2 and 9.4)"
+ ]
+}

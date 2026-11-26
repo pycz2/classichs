@@ -1281,6 +1281,102 @@ class ErasMsg(unittest.TestCase):
                     self.assertNotEqual({lang: old[lang][f] for lang in old}, {lang: new[lang][f] for lang in new}, cid)
 
 
+class ErasIcc(unittest.TestCase):
+    """packs/eras: the Knights of the Frozen Throne versions (20457, 20970, 21517, 22115) on the icc pack."""
+
+    setUpClass = classmethod(Eras.setUpClass.__func__)
+    card = Eras.card
+
+    def rules(self, vid):
+        return json.loads(pack.version_view(self.files, vid)["rules.json"])
+
+    def test_20457_is_the_frozen_throne_pack_with_the_msg_fixes(self):
+        icc, _ = pack.build(pack.REPO / "packs/icc")
+        view = pack.version_view(self.files, "20457")
+        # the icc pack still has the Mistcaller and Potion of Polymorph of before 15590 and 17720: the fixes go along
+        fixes = ["scripts/version/mistcaller.lua", "scripts/version/potion_of_polymorph.lua"]
+        self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p) and p not in fixes},
+                         {p: d for p, d in icc.items() if pack.is_version_file(p)})
+        for vid in ("20457", "20970", "21517", "22115"):
+            for f in fixes:
+                self.assertEqual(pack.version_view(self.files, vid)[f], pack.version_view(self.files, "17720")[f], vid)
+        self.assertEqual([v["era"] for v in self.man["versions"] if v["id"] in ("20457", "20970", "21517", "22115")],
+                         ["icc"] * 4)
+
+    def test_20970_nerfs(self):
+        for vid in ("20970", "21517", "22115"):  # each version is the icc pack and all the changes up to it
+            for cid, old, new in (("ICC_054", 5, 6), ("VAN_CS2_106", 2, 3), ("VAN_EX1_246", 3, 4)):
+                self.assertEqual(self.card("20457", cid)[0]["cost"], old, cid)
+                self.assertEqual(self.card(vid, cid)[0]["cost"], new, (vid, cid))
+            _, texts = self.card(vid, "VAN_EX1_169")
+            self.assertEqual(texts["en"]["text"], "Gain 1 Mana Crystal this turn only.")
+            self.assertEqual(texts["pl"]["text"], "Otrzymujesz 1 kryształ many w tej turze.")
+            _, texts = self.card(vid, "VAN_EX1_507")
+            self.assertEqual(texts["en"]["text"], "Your other Murlocs have +2 Attack.")
+            self.assertEqual(texts["de"]["text"], "Eure anderen Murlocs haben +2 Angriff.")
+        _, texts = self.card("20457", "VAN_EX1_169")
+        self.assertEqual(texts["en"]["text"], "Gain 2 Mana Crystals this turn only.")
+        self.assertEqual(self.card("20457", "VAN_EX1_507")[1]["ru"]["text"], "Другие ваши мурлоки получают +2/+1.")
+        # wording of that build: Dreadsteed (de), Forbidden Healing (es)
+        self.assertEqual(self.card("20970", "AT_019")[1]["de"]["text"],
+                         "<b>Todesröcheln:</b> Beschwört am Ende des Zuges ein Schreckensross.")
+        self.assertEqual(self.card("20970", "OG_198")[1]["es"]["text"],
+                         "Gasta todo tu maná. Restaura el doble de esa cantidad en salud.")
+        self.assertEqual(self.card("20970", "OG_198")[1]["en"], self.card("20457", "OG_198")[1]["en"])
+
+    def test_21517_mechanics_update(self):
+        _, texts = self.card("21517", "CFM_900")
+        self.assertEqual(texts["en"]["text"], "After you summon a minion, deal 5 damage to your hero.")
+        self.assertEqual(texts["es"]["text"], "[x]Tras invocar a un esbirro,\ninflige 5 p. de daño\na tu héroe.")
+        self.assertEqual(self.card("20970", "CFM_900")[1]["en"]["text"],
+                         "Whenever you summon a minion, deal 5 damage to your hero.")
+        self.assertEqual(self.card("21517", "ICC_812")[1]["it"]["name"], "Carro dei Morti")
+        self.assertEqual(self.card("20970", "ICC_812")[1]["it"]["name"], "Carro della Carne")
+        self.assertEqual(self.card("21517", "VAN_EX1_154")[1]["en"]["text"],
+                         "<b>Choose One -</b>\nDeal $3 damage to a minion; or $1 damage\nand draw a card.")
+        # the texts of that build (wording, spaces, line breaks) for the rest
+        for cid, lang in (("AT_050", "de"), ("AT_065", "en"), ("CFM_659", "fr"), ("GVG_111", "de"), ("ICC_064", "en"),
+                          ("ICC_834w", "en"), ("KAR_021", "fr"), ("OG_338", "fr"), ("UNG_934t1", "en"),
+                          ("VAN_EX1_557", "fr"), ("VAN_NEW1_007", "en")):
+            self.assertNotEqual(self.card("21517", cid)[1][lang], self.card("20970", cid)[1][lang], cid)
+        self.assertEqual(self.card("21517", "AT_065")[1]["en"]["text"],
+                         "<b>Battlecry:</b> If you have a minion with <b>Taunt</b>, gain +1 Durability.")
+        for vid, after in (("20457", True), ("20970", True), ("21517", False), ("22115", False)):
+            beh = self.rules(vid)["behaviour"]
+            self.assertEqual(beh.get("countered_no_after_spell", False), after, vid)  # Counterspell
+            self.assertEqual(beh.get("after_spell_from_before", False), not after, vid)  # Wild Pyromancer, Mindgames
+            self.assertFalse(beh.get("lifesteal_one_heal", False), vid)  # Kobolds & Catacombs'
+
+    def test_22115_marin_the_fox(self):
+        marin, texts = self.card("22115", "LOOT_357")
+        self.assertEqual((marin["cost"], marin["attack"], marin["health"]), (8, 6, 6))
+        self.assertEqual((marin["set"], marin["rarity"], marin["collectible"]), ("LOOTAPALOOZA", "LEGENDARY", True))
+        self.assertEqual(marin["script"], "scripts/version/marin.lua#LOOT_357")
+        self.assertEqual(texts["en"]["name"], "Marin the Fox")
+        self.assertEqual(texts["ru"]["name"], "Марин Лис")
+        self.assertIn("Treasure Chest", texts["en"]["text"])
+        chest, texts = self.card("22115", "LOOT_357l")
+        self.assertEqual((chest["cost"], chest["attack"], chest["health"], chest["keywords"]), (3, 0, 8, ["DEATHRATTLE"]))
+        self.assertEqual(texts["en"]["text"], "<b>Deathrattle:</b> Give your opponent a fantastic Treasure.")
+        self.assertEqual(self.card("22115", "LOOT_998l")[1]["en"]["text"], "Draw 3 cards. They cost (0).")
+        self.assertEqual(self.card("22115", "LOOT_998l")[1]["fr"]["name"], "Baguette miraculeuse")
+        for cid in ("LOOT_998h", "LOOT_998j", "LOOT_998k"):
+            self.assertIn("scripts/version/marin.lua#", self.card("22115", cid)[0]["script"])
+        early = json.loads(pack.version_view(self.files, "21517")["cards.json"])
+        self.assertFalse([c["id"] for c in early if c["id"].startswith("LOOT_")])
+        # Kobolds & Catacombs' set: known, and in constructed decks (Marin was given to every player); not in Arena
+        rules = self.rules("22115")
+        self.assertIn("LOOTAPALOOZA", rules["sets"])
+        self.assertIn("LOOTAPALOOZA", rules["modes"]["constructed"]["sets"])
+        self.assertNotIn("LOOTAPALOOZA", rules["modes"]["arena"]["sets"])
+        self.assertNotIn("LOOTAPALOOZA", self.rules("21517")["sets"])
+        # wording of that build: Dire Shapeshift (es)
+        self.assertEqual(self.card("22115", "AT_132_DRUID")[1]["es"]["text"],
+                         "<b>Poder de héroe</b>\nObtienes +2 p. de ataque este turno y +2 p. de armadura.")
+        self.assertEqual(self.card("22115", "VAN_HERO_06bp2")[1]["es"]["text"],
+                         self.card("22115", "AT_132_DRUID")[1]["es"]["text"])
+
+
 class TestDistribution(unittest.TestCase):
     """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
 
