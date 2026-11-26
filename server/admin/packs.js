@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { api, upload } from './api.js'
-import { html, useEvents, useLoad, useDebounced, useTick, toast, Card, UserLink, ErrorBox, Empty, Icon, Modal, ago, fullDate, num, bytes } from './ui.js'
+import { html, useCan, useEvents, useLoad, useDebounced, useTick, toast, Card, UserLink, ErrorBox, Empty, Icon, Modal, ago, fullDate, num, bytes } from './ui.js'
 import { FeedRow } from './dashboard.js'
 import { Confirm } from './accounts.js'
 
@@ -108,7 +108,9 @@ function PackCell ({ p }) {
 
 /** The default game's star: on for the default, a button that makes a server pack the default. */
 function DefaultStar ({ p, onDefault }) {
+  const can = useCan()
   if (p.default) return html`<span class="default-star on" title="The default game: requests without a pack play it"><${Icon} name="star" size=${17} /></span>`
+  if (!can('packs.default')) return null
   return html`<button class="btn ghost sm icon-only default-star" disabled=${!p.enabled} title=${p.enabled ? 'Make it the default game' : 'Enable it first'}
     aria-label=${'Make ' + title(p) + ' the default game'} onClick=${() => onDefault(p)}><${Icon} name="star" size=${17} /></button>`
 }
@@ -121,15 +123,16 @@ function Pick ({ list, sel, onSel, label }) {
 }
 
 function PackTable ({ list, players, busy, sel, onSel, onToggle, onDelete, onDefault }) {
+  const can = useCan()
   if (!list.length) return html`<${Empty}>${players ? 'No player has uploaded a pack yet' : 'No server packs: drop one above, or put *.cardpack files into --packs-dir'}</${Empty}>`
   return html`<div class="table-wrap"><table class="table packs">
     <thead><tr>
-      <th class="pick-cell"><${Pick} list=${list} sel=${sel} onSel=${onSel} label=${'Select all ' + (players ? "players' packs" : 'server packs')} /></th>
+      <th class="pick-cell">${can('packs.delete') && html`<${Pick} list=${list} sel=${sel} onSel=${onSel} label=${'Select all ' + (players ? "players' packs" : 'server packs')} />`}</th>
       ${players ? html`<th>Player</th>` : html`<th title="The default game">Default</th>`}<th>Pack</th><th>Version</th><th class="num">Size</th><th>Rules hash</th><th>Content hash</th>
       <th class="num" title="Finished games in these rules (and live now)">Games</th><th class="num">Downloads</th><th>${players ? 'Uploaded' : 'Added'}</th><th>${players ? 'Shared' : 'Enabled'}</th><th></th>
     </tr></thead>
     <tbody>${list.map((p) => html`<tr key=${p.id} class=${(p.enabled ? '' : 'off') + (sel.has(p.id) ? ' picked' : '')}>
-      <td class="pick-cell"><${Pick} list=${[p]} sel=${sel} onSel=${onSel} label=${'Select ' + title(p)} /></td>
+      <td class="pick-cell">${can('packs.delete') && html`<${Pick} list=${[p]} sel=${sel} onSel=${onSel} label=${'Select ' + title(p)} />`}</td>
       ${players ? html`<td><${UserLink} ...${p.owner} /></td>` : html`<td><${DefaultStar} p=${p} onDefault=${onDefault} /></td>`}
       <td><${PackCell} p=${p} /></td>
       <td><span class="ver">${p.version}</span></td>
@@ -139,13 +142,14 @@ function PackTable ({ list, players, busy, sel, onSel, onToggle, onDelete, onDef
       <td class="num nowrap">${num(p.games || 0)}${p.live ? html` <span class="live-count" title="Live now">· ${p.live} live</span>` : ''}</td>
       <td class="num">${num(p.downloads)}</td>
       <td class="nowrap" title=${fullDate(p.created * 1000)}>${ago(p.created * 1000)}</td>
-      <td><${Switch} on=${p.enabled} busy=${busy === p.id} label=${p.enabled ? 'Disable' : 'Enable'} onChange=${(on) => onToggle(p, on)} /></td>
-      <td class="right-cell"><button class="btn ghost sm icon-only danger-hover" title="Delete" aria-label=${'Delete ' + title(p)} onClick=${() => onDelete(p)}><${Icon} name="trash" size=${16} /></button></td>
+      <td><${Switch} on=${p.enabled} busy=${busy === p.id || !can('packs.enable')} label=${p.enabled ? 'Disable' : 'Enable'} onChange=${(on) => onToggle(p, on)} /></td>
+      <td class="right-cell">${can('packs.delete') && html`<button class="btn ghost sm icon-only danger-hover" title="Delete" aria-label=${'Delete ' + title(p)} onClick=${() => onDelete(p)}><${Icon} name="trash" size=${16} /></button>`}</td>
     </tr>`)}</tbody>
   </table></div>`
 }
 
 export function Packs () {
+  const can = useCan()
   const [data, error, reload, loading] = useLoad(() => api('packs'), [])
   const [recent, , reloadRecent] = useLoad(() => api('events?size=10&kind=' + FEED_KINDS.join(',')), [])
   const [feed, setFeed] = useState([])
@@ -209,8 +213,8 @@ export function Packs () {
       <div class="tile"><span class="tile-label">Games played</span><span class="tile-value">${num(s.games || 0)}</span><span class="tile-sub">${num(s.live || 0)} live now · default: ${defaultName(data)}</span></div>
       <div class="tile"><span class="tile-label">Stored</span><span class="tile-value">${bytes(s.bytes)}</span><span class="tile-sub" title=${s.storage}>${s.files} file${s.files === 1 ? '' : 's'} · ${num(s.downloads)} downloads · ${s.storage}</span></div>
     </div>` : html`<div class="tiles">${[0, 1, 2, 3].map(() => html`<div class="tile skel-tile"></div>`)}</div>`}
-    <${DropZone} limit=${s ? s.limits.server : 0} onDone=${reload} />
-    ${all.length > 0 && html`<div class="pick-bar">
+    ${can('packs.upload') && html`<${DropZone} limit=${s ? s.limits.server : 0} onDone=${reload} />`}
+    ${all.length > 0 && can('packs.delete') && html`<div class="pick-bar">
       <label class="check"><${Pick} list=${all} sel=${sel} onSel=${onSel} label="Select all packs" />Select all</label>
       <span class="muted small">${picked.length ? `${picked.length} of ${all.length} selected` : 'Nothing selected'}</span>
       ${picked.length > 0 && html`<button class="btn ghost sm" onClick=${() => setSel(new Set())}>Clear</button>`}

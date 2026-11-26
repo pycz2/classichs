@@ -114,6 +114,8 @@ const ASSETS: &[(&str, &str)] = assets![
     "extra.js",
     "stats.js",
     "players.js",
+    "roles.js",
+    "audit.js",
     "stats.css",
     "style.css",
     "favicon.svg",

@@ -396,7 +396,7 @@ async fn tournament_chats_page() {
     use classichs_server::entity::chat_message as cm;
     let (state, app, victim) = setup().await;
     let (session, csrf) = log_in(&app).await;
-    classichs_server::chat::send(&state, victim, "tournaments", "hello").await.unwrap();
+    classichs_server::chat::send(&state, 0, victim, "tournaments", "hello").await.unwrap();
     let l = call(&app, get("/admin/api/chats", &session)).await.json();
     assert_eq!((l["chats"][0]["channel"].as_str(), l["chats"][0]["count"].as_i64()), (Some("tournaments"), Some(1)), "{l}");
     // the admin writes as the admin, and deletes

@@ -3,7 +3,7 @@
 //! deletes; a tournament's chat closes 10 minutes after its end; the cleanup by the keeping time.
 
 use super::tournament::{create, server, C};
-use classichs_server::entity::{account, chat_message as cm, message, tournament as tour};
+use classichs_server::entity::{chat_message as cm, message, tournament as tour};
 use classichs_server::events::now_ms;
 use classichs_server::{chat, db, ranked, settings, AppRef};
 use sea_orm::sea_query::Expr;
@@ -13,7 +13,8 @@ use serde_json::{json, Value};
 const MIN: i64 = 60_000;
 
 async fn make_admin(app: &AppRef, name: &str) {
-    account::Entity::update_many().col_expr(account::Column::Role, Expr::value("admin")).filter(account::Column::Name.eq(name)).exec(&app.db).await.unwrap();
+    let id = classichs_server::db::id_by_name(&app.db, name).await.unwrap().unwrap();
+    classichs_server::perm::give_builtin(&app.db, id, 0, "Admin").await.unwrap(); // (the roles: main's Admin)
 }
 
 async fn sub(c: &mut C, channel: &str) -> Value {
@@ -162,6 +163,8 @@ async fn a_tournament_chat_closes_ten_minutes_after_its_end() {
 #[tokio::test]
 async fn the_cleanup_removes_what_is_past_the_keeping_time() {
     let (_addr, app) = server().await;
+    // the server's own cleanup at its start first (its first tick)
+    tokio::time::sleep(std::time::Duration::from_millis(500)).await;
     let now = ranked::now();
     let day = 86_400;
     let u1 = db::create_account(&app.db, "keep_1", "x", "player").await.unwrap().unwrap();
@@ -184,11 +187,11 @@ async fn the_cleanup_removes_what_is_past_the_keeping_time() {
     assert_eq!(chat::cleanup(&app, now).await.unwrap(), (2, 2));
     assert_eq!(left(app.clone()).await, (2, 2));
 
-    settings::set(&app, settings::CHAT_KEEP_DAYS, "0").await.unwrap();
+    settings::set(&app, 0, settings::CHAT_KEEP_DAYS, "0").await.unwrap();
     assert_eq!(chat::cleanup(&app, now + 1000 * day).await.unwrap(), (0, 0), "0 = unlimited");
     assert_eq!(left(app.clone()).await, (2, 2));
 
-    settings::set(&app, settings::CHAT_KEEP_DAYS, "3").await.unwrap();
+    settings::set(&app, 0, settings::CHAT_KEEP_DAYS, "3").await.unwrap();
     assert_eq!(chat::cleanup(&app, now).await.unwrap(), (1, 1));
     let kept: Vec<String> = cm::Entity::find().all(&app.db).await.unwrap().into_iter().map(|m| m.text).collect();
     assert_eq!(kept, ["1 days"]);

@@ -1,5 +1,10 @@
 // JSON calls to /admin/api with the CSRF header on everything but GET.
 
+/** The sub-server's path prefix: the panel at `/s/<name>/admin` talks to `/s/<name>/admin/…`, the main one at
+ * `/admin` to `/admin/…` (the static files are the same everywhere: index.html loads them from /admin/static). */
+export const PREFIX = location.pathname.replace(/\/admin\/?$/, '')
+export const BASE = PREFIX + '/admin'
+
 let csrf = ''
 let unauthorized = () => {}
 
@@ -17,7 +22,7 @@ export async function api (path, { method = 'GET', body } = {}) {
     opt.headers['x-csrf-token'] = csrf
     opt.body = JSON.stringify(body ?? {})
   }
-  const r = await fetch('/admin/api/' + path, opt)
+  const r = await fetch(BASE + '/api/' + path, opt)
   let data = null
   try { data = await r.json() } catch (e) { /* not JSON */ }
   if (r.status === 401 && path !== 'login') unauthorized()
@@ -30,7 +35,7 @@ export async function api (path, { method = 'GET', body } = {}) {
 export function upload (path, file, onProgress = () => {}, id = '') {
   return new Promise((resolve, reject) => {
     const x = new XMLHttpRequest()
-    x.open('POST', '/admin/api/' + path)
+    x.open('POST', BASE + '/api/' + path)
     x.setRequestHeader('x-csrf-token', csrf)
     x.setRequestHeader('content-type', 'application/zip')
     if (id) x.setRequestHeader('x-upload-id', id)
