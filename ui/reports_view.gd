@@ -19,7 +19,7 @@ func _init(l: ServerLink = null, png := PackedByteArray()) -> void:
 
 ## The open/closed word of a report.
 static func state_text(state: String) -> String:
-	return TranslationServer.translate("Closed") if state == "closed" else TranslationServer.translate("Open")
+	return TranslationServer.translate("Status: closed") if state == "closed" else TranslationServer.translate("Status: open")
 
 
 func _ready() -> void:
@@ -107,7 +107,7 @@ func _on_list(d: Dictionary) -> void:
 		var b := Button.new()
 		b.name = "Report_%d" % int(r.get("id", 0))
 		var first := str(r.get("text", "")).replace("\n", " ")
-		b.text = "%s%s\n%s · %s" % ["● " if r.get("unread", false) else "", first.left(70) + ("…" if first.length() > 70 else ""),
+		b.text = "%s%s\n%s · %s" % ["• " if r.get("unread", false) else "", first.left(70) + ("…" if first.length() > 70 else ""),
 			state_text(str(r.get("state", ""))), ReplaysView._date(int(r.get("last_at", 0)))]
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -135,7 +135,7 @@ func _on_thread(d: Dictionary) -> void:
 	for m in d.get("messages", []) if d.get("messages") is Array else []:
 		if not m is Dictionary:
 			continue
-		var who := tr("You") if m.get("from") == "you" else (str(m.get("name", "")) if str(m.get("name", "")) != "" else tr("Admin"))
+		var who := tr("You wrote") if m.get("from") == "you" else (str(m.get("name", "")) if str(m.get("name", "")) != "" else tr("Admin"))
 		var head := "%s · %s" % [who, ReplaysView._date(int(m.get("at", 0)))]
 		if m.get("screen", false):
 			head += " · " + tr("with a screenshot")

@@ -214,12 +214,12 @@ func test_the_threads_list_and_one_thread() -> void:
 	root().add_child(v)
 	_gets(l, "/reports")[0].done.call(200, JSON.stringify(LIST).to_utf8_buffer())
 	var row := v.find_child("Report_5", true, false) as Button
-	check(row != null and row.text.begins_with("● ") and row.text.contains(tr("Open")), "an unread open report: " + (row.text if row else ""))
+	check(row != null and row.text.begins_with("• ") and row.text.contains(tr("Status: open")), "an unread open report: " + (row.text if row else ""))
 	var old := v.find_child("Report_3", true, false) as Button
-	check(old != null and not old.text.begins_with("●") and old.text.contains(tr("Closed")), "a closed one")
+	check(old != null and not old.text.begins_with("•") and old.text.contains(tr("Status: closed")), "a closed one")
 	row.pressed.emit()
 	_gets(l, "/reports/5")[0].done.call(200, JSON.stringify(THREAD).to_utf8_buffer())
-	check((v.find_child("State", true, false) as Label).text.contains(tr("Open")), "the state shown")
+	check((v.find_child("State", true, false) as Label).text.contains(tr("Status: open")), "the state shown")
 	eq((v.find_child("Message_1", true, false) as Label).text, "The rope burned too early", "the report first")
 	eq((v.find_child("Message_2", true, false) as Label).text, "Thanks, we will look", "the admin's answer")
 	eq(_gets(l, "/reports").size(), 2, "opened: the count is asked again")

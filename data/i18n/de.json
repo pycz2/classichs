@@ -1153,5 +1153,15 @@
 "The screenshot is damaged: remove it": "Der Screenshot ist beschädigt: Entferne ihn",
 "The voice message is damaged: record it again": "Die Sprachnachricht ist beschädigt: Nimm sie neu auf",
 "The report is too big: remove the screenshot or record a shorter voice message": "Die Meldung ist zu groß: Entferne den Screenshot oder nimm eine kürzere Sprachnachricht auf",
-"You have sent many reports this hour": "Du hast in dieser Stunde viele Meldungen gesendet"
+"You have sent many reports this hour": "Du hast in dieser Stunde viele Meldungen gesendet",
+"Admin": "Admin",
+"My reports": "Meine Meldungen",
+"Report %d: %s": "Meldung %d: %s",
+"This report is no longer on the server": "Diese Meldung ist nicht mehr auf dem Server",
+"You have not sent any reports yet": "Du hast noch keine Meldungen gesendet",
+"Your answer": "Deine Antwort",
+"with a screenshot": "mit Screenshot",
+"Status: open": "offen",
+"Status: closed": "geschlossen",
+"You wrote": "Du"
 }

@@ -1153,5 +1153,15 @@
 "The screenshot is damaged: remove it": "Снимок экрана повреждён: уберите его",
 "The voice message is damaged: record it again": "Голосовое сообщение повреждено: запишите его заново",
 "The report is too big: remove the screenshot or record a shorter voice message": "Сообщение слишком большое: уберите снимок экрана или запишите голос покороче",
-"You have sent many reports this hour": "За этот час вы отправили много сообщений"
+"You have sent many reports this hour": "За этот час вы отправили много сообщений",
+"Admin": "Администратор",
+"My reports": "Мои сообщения",
+"Report %d: %s": "Сообщение %d: %s",
+"This report is no longer on the server": "Этого сообщения больше нет на сервере",
+"You have not sent any reports yet": "Вы ещё не отправляли сообщений о проблемах",
+"Your answer": "Ваш ответ",
+"with a screenshot": "со снимком экрана",
+"Status: open": "открыто",
+"Status: closed": "закрыто",
+"You wrote": "Вы"
 }
