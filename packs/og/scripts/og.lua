@@ -155,6 +155,7 @@ local function ritual(g, me, atk, hp)
   g.add_count(p, "CTHUN_HP", hp)
   for _, c in ipairs(cthuns(g, p)) do
     g.buff(c, atk, hp)
+    g.give_tag(c, "CTHUN_RITUALS")
   end
   local a, h = cthun_stats(g, p)
   g.log({ type = "cthun", player = p, atk = a, health = h }) -- both players see the new stats (the client's pop-up)
@@ -184,9 +185,32 @@ local function ritual_battlecry(atk, hp)
   }
 end
 
+-- A new C'Thun gets every ritual so far (CTHUN_RITUALS marks the ones that have them).
+local function every_ritual(g, c)
+  local p = g.ctrl(c)
+  g.buff(c, g.count(p, "CTHUN_ATK"), g.count(p, "CTHUN_HP"))
+  if g.count(p, "CTHUN_TAUNT") > 0 then
+    g.give_tag(c, "TAUNT")
+  end
+  g.give_tag(c, "CTHUN_RITUALS")
+end
+
 -- C'Thun: one damage at a time, as many as its Attack, each at a random enemy still alive (Stealth and Immune ones
--- too), each resolving before the next; the Battlecry goes on if C'Thun dies.
+-- too), each resolving before the next; the Battlecry goes on if C'Thun dies. A new one summoned (Redemption,
+-- Resurrect, Kel'Thuzad…) gets every ritual as it enters the board; a damaged one keeps its Health (patch 5.0.0.13030:
+-- Redemption no longer brings C'Thun back at its full, buffed Health).
 cards.OG_280 = {
+  on = {
+    after_summon = function(g, me, ev)
+      if ev.entity == me and not ev.played and not g.has(me, "CTHUN_RITUALS") then
+        local hurt, hp = g.dmg(me) > 0, g.health(me)
+        every_ritual(g, me)
+        if hurt then
+          g.set_damage(me, g.max_health(me) - hp)
+        end
+      end
+    end,
+  },
   battlecry = function(g, me)
     for _ = 1, math.min(g.atk(me), 100) do
       local t = random_enemy(g, me)
@@ -284,11 +308,7 @@ cards.OG_255 = {
     ritual(g, me, 2, 2)
     local p = g.ctrl(me)
     if cthun_died(g, p) then
-      local c = g.add_to_deck(p, CTHUN)
-      g.buff(c, g.count(p, "CTHUN_ATK"), g.count(p, "CTHUN_HP"))
-      if g.count(p, "CTHUN_TAUNT") > 0 then
-        g.give_tag(c, "TAUNT")
-      end
+      every_ritual(g, g.add_to_deck(p, CTHUN))
     end
   end,
 }

@@ -203,6 +203,22 @@ fn rituals_buff_cthun_wherever_it_is() {
     assert_eq!(t.g.e(t.hero(0)).tag("ARMOR"), 10, "Ancient Shieldbearer");
 }
 
+/// A new C'Thun summoned (Redemption, Resurrect…) gets every ritual so far as it enters the board; Redemption's
+/// 1 Health stays 1 (patch 5.0.0.13030: "no longer at its full, buffed health value").
+#[test]
+fn a_cthun_summoned_anew_gets_the_rituals() {
+    let mut t = scene!({"board": [CTHUN], "hand": ["OG_281"], "secrets": ["VAN_EX1_136"]}, {"hand": ["VAN_CS2_076"]});
+    let c = t.nth(0, 0);
+    t.play("OG_281", NONE);
+    assert_eq!(t.stats(c), (8, 8));
+    t.end_turn();
+    t.play("VAN_CS2_076", c);
+    let back = t.on_board(0, CTHUN);
+    assert_ne!(back, c, "a new C'Thun");
+    assert_eq!(t.stats(back), (8, 1), "the rituals' Attack, 1 Health");
+    assert_eq!(t.g.e(back).max_health(), 8);
+}
+
 #[test]
 fn cthun_battlecry_deals_its_attack_one_at_a_time() {
     let mut t = scene!({"hand": [CTHUN]}, {"board": [YETI, YETI]});

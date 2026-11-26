@@ -3,9 +3,11 @@
 - Две «Печати мудрости» на одном существе при атаке дают две карты, а не четыре.
 - «Силу природы» нельзя разыграть, когда на столе нет места (так было в игре с патча 1.0.0.4944).
 - Ледяная Скорбь возвращает и существо, которое убила последним ударом, когда сама ломается.
+- К’Тун, которого вернуло «Искупление» или другой эффект призыва, получает все усиления от культистов (у «Искупления» с 1 ед. здоровья).
 
 ## English
 
 - Two Blessings of Wisdom on one minion draw two cards when it attacks, not four.
 - Force of Nature can't be played on a full board (as in the game since patch 1.0.0.4944).
 - Frostmourne also brings back the minion its last blow killed, when the weapon breaks on that blow.
+- A C'Thun brought back by Redemption or another summon gets all its cultists' buffs (with Redemption, at 1 Health).
