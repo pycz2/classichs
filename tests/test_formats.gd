@@ -133,6 +133,8 @@ func test_training_in_standard_or_wild() -> void:
 	root().add_child(m)
 	m.show_training_setup()
 	var ts := m.screen as TrainingSetup
+	eq(ts.format, "wild", "it opens in the last format chosen")
+	(ts.find_child("Format_standard", true, false) as Button).button_pressed = true
 	var std_row: DeckTiles.DeckRow = ts.chooser.rows.filter(func(r): return r.deck.name == "Std")[0]
 	ts.chooser.pick(std_row.deck)
 	ts.play()
@@ -180,4 +182,55 @@ func test_a_game_with_one_format_has_no_switch() -> void:
 	check(c.find_child("FormatFilter", true, false) == null, "no format filter")
 	c.free()
 	check(not _deck("x", ["FP1_002"]).wild_only(), "no Wild deck")
+	_teardown()
+
+
+func test_a_replay_of_a_standard_game_plays_again_in_standard() -> void:
+	_setup()
+	var m := Match.new()
+	m.bot_delay = 0.0
+	var why := m.setup({"decks": [{"hero": Decks.hero("MAGE"), "cards": Decks.basic("MAGE", "standard")},
+		{"hero": Decks.hero("WARRIOR"), "cards": Decks.basic("WARRIOR", "standard")}], "seed": 5, "format": "standard"}, [true, true])
+	eq(why, "", "a Standard game starts")
+	m.start()
+	var r := Replay.from_match(m, ["Alice", "Bob"], "training", 0)
+	eq(r.data.get("game_format"), "standard", "the replay keeps the format (as the server's do: game_format)")
+	eq(r.setup_req().get("format"), "standard", "and asks the engine for it")
+	eq(r.hash_at(r.size()), m.state_hash, "the same game again")
+	eq(Rules.request({"op": "snapshot", "game": r._game}).get("state", {}).get("format"), "standard", "a Standard game")
+	var old := r.data.duplicate(true)
+	old.erase("game_format")
+	check(not Replay.from_data(old).setup_req().has("format"), "an older replay: no format asked (every card)")
+	r.drop()
+	m.free()
+	_teardown()
+
+
+func test_the_training_format_is_remembered() -> void:
+	_setup()
+	var t := TrainingSetup.new()
+	root().add_child(t)
+	eq(t.format, "standard", "Standard first")
+	(t.find_child("Format_wild", true, false) as Button).button_pressed = true
+	eq(Settings.data.get("training_format"), "wild", "Wild kept in Settings")
+	t.free()
+	Settings.save()
+	Settings.load_settings()
+	eq(Settings.data.get("training_format"), "wild", "after a restart too")
+	t = TrainingSetup.new()
+	root().add_child(t)
+	eq(t.format, "wild", "Training opens in Wild")
+	check((t.find_child("Format_wild", true, false) as Button).button_pressed, "its button pressed")
+	t.free()
+	Settings.data.training_format = "standard"
+	t = TrainingSetup.new()
+	root().add_child(t)
+	eq(t.format, "standard", "and Standard again")
+	t.free()
+	Settings.data.training_format = "wild"
+	Packs.set_active(Packs.all().filter(func(p): return p.id() == "classic-2014")[0])
+	t = TrainingSetup.new()
+	root().add_child(t)
+	eq(t.format, "", "a game with one format: none")
+	t.free()
 	_teardown()

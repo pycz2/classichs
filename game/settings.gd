@@ -5,12 +5,12 @@ extends RefCounted
 ## chosen per pack id, "pack_versions" the version played per pack id (a pack with versions; game/packs.gd). "servers" the connections to game servers: [{id, url,
 ## name}] (D14; the same address may be there twice with other logins: the id tells them apart,
 ## the first one's id is its address; an old single "server" becomes the list). "layout": the
-## version of the player's files (Migration; 0 = before 0.40).
+## version of the player's files (Migration; 0 = before 0.40). "training_format": Training's last Standard or Wild.
 
 const DEFAULT_PATH := "user://settings.json"
 const DEFAULTS := {"language": "", "music": 0.5, "sfx": 0.8, "shake": true, "fullscreen": false,
 	"tracker": false, "fps": false, "perf": false, "anim_speed": 1, "card_back": CardBacks.DEFAULT, "tracker_deck": true, "tracker_opp": true,
-	"servers": [], "bot_level": "medium", "pack": {}, "pack_sets": {}, "pack_versions": {}, "layout": 0}
+	"servers": [], "bot_level": "medium", "training_format": "", "pack": {}, "pack_sets": {}, "pack_versions": {}, "layout": 0}
 const BUSES := ["Music", "SFX"]
 
 static var path := DEFAULT_PATH
@@ -65,6 +65,9 @@ static func load_settings() -> void:
 						data[k] = v
 				elif k == "bot_level":
 					if v is String and BotBrain.LEVELS.has(v):
+						data[k] = v
+				elif k == "training_format":
+					if v is String and v in ["", "standard", "wild"]:
 						data[k] = v
 				elif v is String and (v == "" or Locale.LANGS.has(v)):
 					data[k] = v

@@ -10,7 +10,8 @@ signal edit_decks
 
 var deck: Deck
 var bot_class := "WARRIOR"
-## The game's format ("standard", "wild"; "" for a game with one format: CardDb.formats()).
+## The game's format ("standard", "wild"; "" for a game with one format: CardDb.formats()); the last one chosen
+## (Settings training_format) when the game has it.
 var format := ""
 var step := 1
 var chooser := DeckChooser.new()
@@ -45,7 +46,8 @@ func _ready() -> void:
 	chooser.back.connect(func(): back.emit())
 	_step1.add_child(chooser)
 	var formats := CardDb.formats()
-	format = formats[0] if formats else ""
+	var last := str(Settings.data.get("training_format", ""))
+	format = last if formats.has(last) else (formats[0] if formats else "")
 	chooser.set_format(format)
 	if formats.size() > 1:  # Standard or Wild
 		var row := HBoxContainer.new()
@@ -62,7 +64,9 @@ func _ready() -> void:
 			b.toggled.connect(func(on):
 				if on:
 					format = f
-					chooser.set_format(f))
+					chooser.set_format(f)
+					Settings.data.training_format = f
+					Settings.save())
 			row.add_child(b)
 	# step 2: the opponent
 	_deck_line = _title(_step2, tr("Choose your opponent"), "")
