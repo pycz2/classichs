@@ -21,6 +21,8 @@ Sources:
 - hearthstone.wiki.gg: the Cargo table `Sound` (the sound files of each card: BASIC_play, _attack,
   _death, their underlays, BASIC_play_stinger, VO for heroes) and the files themselves (https://hearthstone.wiki.gg/images/<file>).
   Cards whose sounds changed after 2014 get the 2014 files the wiki keeps (ORIGINAL below).
+  A minion whose row has no attack sound and no attack line takes those of a card of the same English name, of
+  its set or an earlier one (namesakes(): Totemic Slam's totems AT_132_SHAMANa-d, the tutorial's Gnoll).
   The board's sounds and spell sounds: hand-picked files of the wiki (GENERIC, ELEMENTS, SPELLS).
 - Russian voice: a public Google Drive collection of the Russian client's files (RU_DRIVE, linked from
   the Russian Blizzard forum thread "Файлы звуков карт из Hearthstone"); the files carry the same names
@@ -237,6 +239,30 @@ def plan_card(cid, row, card_type):
     return uniq
 
 
+def namesakes(cards, rows, names, more_rows=wiki_sounds):
+    """card id -> [(kind, "<id>_attack", wiki file)] for a minion whose own Sound row gives it no attack sound and
+    no attack line: those of the first card (by id) of the same English name that has them (Totemic Slam's Searing
+    Totem AT_132_SHAMANb takes the Searing Totem's). names: card id -> English name of the cards to take from;
+    more_rows: ids -> their Sound rows."""
+    def attack(cid, row):
+        return [x for x in plan_card(cid, row, "MINION") if x[1] == f"{cid}_attack"]
+    silent = [cid for cid, t in cards if t == "MINION" and not attack(cid, rows.get(cid) or {})
+              and not re.fullmatch(r".*_t\d+", cid)]  # (a numbered token: fetch_card_sounds.inherited's sibling)
+    same = {cid: sorted(i for i, n in names.items() if n == names.get(cid) and i != cid) for cid in silent}
+    same = {cid: ids for cid, ids in same.items() if ids and names.get(cid)}
+    if not same:
+        return {}
+    more = more_rows(sorted(set().union(*same.values())))
+    out = {}
+    for cid, ids in same.items():
+        for i in ids:
+            got = attack(i, more.get(i) or {})
+            if got:
+                out[cid] = [(k, f"{cid}_attack", f) for k, _, f in got]
+                break
+    return out
+
+
 def drive_ls(folder):
     t = get("https://drive.google.com/embeddedfolderview?id=" + folder, ua="Mozilla/5.0").decode()
     out = []
@@ -270,10 +296,14 @@ def ru_index(cache, folders=RU_FOLDERS, file="ru_index.json"):
 
 
 def ru_for(game, cache):
-    """The Russian files of a game: Classic's and Naxxramas's folders (RU_FOLDERS), else its set's folder (RU_SETS)."""
-    if game in ("classic", "naxx"):
-        return ru_index(cache)
-    return ru_index(cache, (RU_SETS[game],), f"ru_index_{game}.json")
+    """The Russian files of a game: Classic's and Naxxramas's folders (RU_FOLDERS), else its set's folder (RU_SETS);
+    then those of every other index downloaded before (a token speaking an older card's line: TRL_316t's
+    VO_EX1_298_Attack_02 is in Classic's folder)."""
+    own = ru_index(cache) if game in ("classic", "naxx") else ru_index(cache, (RU_SETS[game],), f"ru_index_{game}.json")
+    out = {}
+    for p in sorted(cache.glob("ru_index*.json")):
+        out.update(json.loads(p.read_text()))
+    return out | own
 
 
 FFMPEG = "ffmpeg"
@@ -325,6 +355,16 @@ def hsjson():
     return json.loads(get(HSJSON))
 
 
+@functools.cache
+def english_names():
+    """card id -> English name: HearthstoneJSON's cards and Classic's data/cards.json."""
+    out = {}
+    for c in hsjson() + json.loads((ROOT / "data/cards.json").read_text()):
+        n = c.get("name")
+        out[c["id"]] = n.get("enUS", "") if isinstance(n, dict) else (n or "")
+    return out
+
+
 def run(game, out, ru, cache=None, dest=None):
     """Fetches a game's sounds into dest (default out/game: set/, voice/<lang>/, SOURCES.md), the downloads into
     cache (default out/cache)."""
@@ -332,9 +372,13 @@ def run(game, out, ru, cache=None, dest=None):
     dest = dest or out / game
     cards = cards_of(game)
     rows = wiki_sounds([c for c, _ in cards])
+    import extract_cards
+    games = ["classic"] + list(extract_cards.SETS)
+    known = {i for g in games[:games.index(game) + 1] for i, _ in cards_of(g)}  # (no later card's sound)
+    same = namesakes(cards, rows, {i: n for i, n in english_names().items() if i in known})
     jobs = []  # (url, raw, dst, kind, lang)
     for cid, ctype in cards:
-        for kind, name, f in plan_card(cid, rows[cid], ctype):
+        for kind, name, f in plan_card(cid, rows[cid], ctype) + same.get(cid, []):
             raw = cache / "wiki" / f
             if kind == "set":
                 jobs.append((FILES + urllib.parse.quote(f), raw, dest / "set" / f"{name}.opus",

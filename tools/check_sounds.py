@@ -359,6 +359,14 @@ def check(target, set_name=None, manifests=(), audio=True):
             cards = set_cards(set_name or target.name)
         rows = load_rows([c for c, _ in cards])
         plan = plan_sources(cards, rows, manifests)
+        game = set_name or target.name.split("-")[0]
+        if game in SETS:  # a silent minion's namesake (fetch_original_sounds.run): of the set's time or before
+            known = {i for g in SETS[:SETS.index(game) + 1] for i, _ in set_cards(g)}
+            more = load_rows(sorted(known))
+            row = lambda ids: {i: more.get(i) or more.get(i.removeprefix("VAN_")) or {} for i in ids}  # noqa: E731
+            same = snd.namesakes(cards, row([c for c, _ in cards]),
+                                 {i: data[i][1] for i in known if i in data and data[i][1]}, row)
+            plan.update({(k, n): [f] for xs in same.values() for k, n, f in xs})
         ids = {c for c, _ in cards}
         ids_upper = {i.removeprefix("VAN_").upper(): i.removeprefix("VAN_") for i in set(data) | ids}
         names = {norm(n): i.removeprefix("VAN_") for i, (_, n) in data.items() if n}
