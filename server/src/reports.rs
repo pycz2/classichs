@@ -792,15 +792,18 @@ async fn action(State(app): State<AppRef>, Extension(me): Extension<Admin>, Path
     }
 }
 
-/// `purge {days}`: removes the reports without activity in that many days (1 or more) → `{removed}`.
+/// `purge {days}`: removes the request's sub-server's reports without activity in that many days (1 or more)
+/// → `{removed}`.
 async fn purge(State(app): State<AppRef>, Extension(me): Extension<Admin>, Json(body): Json<Value>) -> Response {
-    if !may(&app, me.me.id, "reports.manage", 0).await {
+    let sub = me.scope.id;
+    if !may(&app, me.me.id, "reports.manage", sub).await {
         return err(StatusCode::FORBIDDEN, "You may not change the reports");
     }
     let Some(days) = body["days"].as_i64().filter(|d| (1..=36500).contains(d)) else {
         return err(StatusCode::BAD_REQUEST, "Purge the reports older than 1 or more days");
     };
-    match prune(&app, now() - days * 86400).await {
+    let old = Condition::all().add(report::Column::LastAt.lt(now() - days * 86400)).add(report::Column::Subserver.eq(sub));
+    match remove_where(&app, old).await {
         Ok(n) => {
             app.event(me.ev(format!("{} purged {n} problem reports older than {days} days", me.me.name)).data(json!({"action": "report_purge", "days": days, "removed": n})));
             Json(json!({"removed": n})).into_response()

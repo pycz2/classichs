@@ -267,3 +267,20 @@ async fn library_and_own_packs() {
     assert_eq!(call(&app, post(&format!("/admin/api/library/{}/remove", main_pack.id), Some(&root), json!({}))).await.0, StatusCode::OK);
     assert_eq!(ids(subservers::packs_of(&state.db, sub).await.unwrap()), [own.id]);
 }
+
+#[tokio::test]
+async fn a_subserver_admin_purges_only_his_reports() {
+    use sea_orm::ConnectionTrait;
+    let (state, app) = setup().await;
+    let root = log_in(&app, "", "root", "rootpassword").await;
+    let (sub, al) = alice(&state, &app, &root).await;
+    let a = db::id_by_name(&state.db, "alice").await.unwrap().unwrap();
+    for s in [0, sub] {
+        let sql = format!("INSERT INTO reports (subserver, account, written_at, received_at, last_at, text) VALUES ({s}, {a}, 0, 0, 0, 'old')");
+        state.db.execute_unprepared(&sql).await.unwrap();
+    }
+    let (st, v, _) = call(&app, post("/admin/api/reports/purge", Some(&al), json!({"days": 1}))).await;
+    assert_eq!((st, v["removed"].as_u64()), (StatusCode::OK, Some(1)), "{v}");
+    let left = classichs_server::entity::report::Entity::find().all(&state.db).await.unwrap();
+    assert_eq!(left.iter().map(|r| r.subserver).collect::<Vec<_>>(), [0], "main's report stays");
+}
