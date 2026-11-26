@@ -1,6 +1,6 @@
 {
  "base": "dal",
  "build": 29933,
- "about": "",
- "sources": []
+ "about": "14.0.0.29933 (2019-04-04): Rise of Shadows' data before the set's release; the cards and rules of the Rise of Shadows pack (build 30103) as they are: the 9 Hall of Fame set moves of 30103 are the formats' work",
+ "sources": ["~/ClassicHS-local/prep/patches/versions.json 14.0.0.29933 (Patch 14.0.0.29933): its changes, rules_changes and doubts", "~/ClassicHS-local/prep/patches/versions.json 14.0.0.30103 (Patch 14.0.0.30103): its changes, rules_changes and doubts", "HearthstoneJSON build 29933: card data, names and texts in 8 languages (tools/extract_cards.py --version-texts 29933)"]
 }
