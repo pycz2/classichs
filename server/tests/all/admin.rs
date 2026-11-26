@@ -236,15 +236,20 @@ async fn settings_and_invite_keys() {
 
     // Settings: the defaults, a change applies at once (the auto-bots' wait), out of range is refused.
     let s = call(&app, get("/admin/api/settings", &session)).await.json();
-    assert_eq!(s, json!({"autobot_wait_ms": 30000, "signup_invite_only": false}));
+    assert_eq!(s, json!({"autobot_wait_ms": 30000, "signup_invite_only": false, "chat_keep_days": 14}));
     let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"autobot_wait_ms": 601_000}))).await;
     assert_eq!(r.status, StatusCode::BAD_REQUEST);
     let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"autobot_wait_ms": 0, "signup_invite_only": true}))).await;
-    assert_eq!(r.json(), json!({"autobot_wait_ms": 0, "signup_invite_only": true}), "{}", r.body);
+    assert_eq!(r.json(), json!({"autobot_wait_ms": 0, "signup_invite_only": true, "chat_keep_days": 14}), "{}", r.body);
     assert_eq!(WAIT_MS.load(Ordering::Relaxed), 0);
     let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"autobot_wait_ms": 600_000}))).await;
     assert_eq!(r.json()["signup_invite_only"], true, "a setting not given stays");
     assert_eq!(WAIT_MS.load(Ordering::Relaxed), 600_000);
+    // The chats' keeping time: days, 0 = unlimited.
+    let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"chat_keep_days": 36_501}))).await;
+    assert_eq!(r.status, StatusCode::BAD_REQUEST);
+    let r = call(&app, post("/admin/api/settings", &session, Some(&csrf), json!({"chat_keep_days": 0}))).await;
+    assert_eq!(r.json()["chat_keep_days"], 0, "{}", r.body);
     // Kept in the database: a new process (empty cache) reads them back.
     let row = classichs_server::entity::server_setting::Entity::find_by_id("autobot_wait_ms").one(&state.db).await.unwrap().unwrap();
     assert_eq!(row.value, "600000");
@@ -383,4 +388,28 @@ async fn replay_download() {
     assert_eq!(page["replay"]["actions"], data["actions"]);
     assert_eq!(call(&app, get("/admin/api/games/nope/replay", &cookie)).await.status, StatusCode::NOT_FOUND);
     assert_eq!(call(&app, get("/admin/api/games/g1/replay", "")).await.status, StatusCode::UNAUTHORIZED);
+}
+
+#[tokio::test]
+async fn tournament_chats_page() {
+    use classichs_server::entity::chat_message as cm;
+    let (state, app, victim) = setup().await;
+    let (session, csrf) = log_in(&app).await;
+    classichs_server::chat::send(&state, victim, "tournaments", "hello").await.unwrap();
+    let l = call(&app, get("/admin/api/chats", &session)).await.json();
+    assert_eq!((l["chats"][0]["channel"].as_str(), l["chats"][0]["count"].as_i64()), (Some("tournaments"), Some(1)), "{l}");
+    // the admin writes as the admin, and deletes
+    let r = call(&app, post("/admin/api/chats/tournaments", &session, Some(&csrf), json!({"text": "be nice"}))).await;
+    assert_eq!((r.status, r.json()["msg"]["mark"].as_str(), r.json()["msg"]["from"].as_str()), (StatusCode::OK, Some("admin"), Some("root")), "{}", r.body);
+    let hello = cm::Entity::find().one(&state.db).await.unwrap().unwrap().id;
+    let path = format!("/admin/api/chat_messages/{hello}/delete");
+    assert_eq!(call(&app, post(&path, &session, None, json!({}))).await.status, StatusCode::FORBIDDEN, "CSRF");
+    assert_eq!(call(&app, post(&path, &session, Some(&csrf), json!({}))).await.status, StatusCode::OK);
+    let c = call(&app, get("/admin/api/chats/tournaments", &session)).await.json();
+    let first = &c["list"][0];
+    assert_eq!((first["text"].as_str(), first["deleted_by"].as_str(), first["deleted_text"].as_str()), (Some(""), Some("root"), Some("hello")), "{c}");
+    assert_eq!(c["list"][1]["text"], "be nice");
+    assert_eq!(call(&app, get("/admin/api/chats/t:999", &session)).await.status, StatusCode::NOT_FOUND);
+    let r = call(&app, post("/admin/api/chats/tournaments", &session, Some(&csrf), json!({"text": ""}))).await;
+    assert_eq!(r.status, StatusCode::BAD_REQUEST);
 }

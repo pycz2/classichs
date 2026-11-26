@@ -1134,5 +1134,14 @@
 "Standard": "Standard",
 "Wild": "Wild",
 "A Wild deck: it has cards that are not in Standard": "Ein Wild-Deck: Es enthält Karten, die nicht zum Standardformat gehören",
-"This deck has cards that are not in this format": "Dieses Deck enthält Karten, die nicht zu diesem Format gehören"
+"This deck has cards that are not in this format": "Dieses Deck enthält Karten, die nicht zu diesem Format gehören",
+"Chat": "Chat",
+"admin": "Admin",
+"creator": "Ersteller",
+"The chat is closed: messages can only be read": "Der Chat ist geschlossen: Nachrichten können nur gelesen werden",
+"Too many messages: wait a little": "Zu viele Nachrichten: warte kurz",
+"A message is 1 to 500 characters": "Eine Nachricht hat 1 bis 500 Zeichen",
+"Deleted by %s": "Gelöscht von %s",
+"Delete the message": "Nachricht löschen",
+"The chat closes at %s": "Der Chat schließt um %s"
 }

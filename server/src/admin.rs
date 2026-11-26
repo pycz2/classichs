@@ -73,6 +73,7 @@ pub fn routes(app: AppRef) -> Router<AppRef> {
         .route("/admin/api/tournaments/{id}/cancel", post(tournament_cancel))
         .route("/admin/ws", get(feed))
         .merge(crate::admin_extra::routes())
+        .merge(crate::chat::routes())
         .merge(crate::admin_players::routes())
         .route_layer(middleware::from_fn_with_state(app, guard));
     Router::new()
@@ -1412,9 +1413,14 @@ async fn bots_all(State(app): State<AppRef>, Extension(a): Extension<Admin>, Pat
 // --- settings (the Settings page) and invite keys (the Invite keys page) ---------------------------
 
 async fn settings_get(State(app): State<AppRef>) -> Response {
-    let r = async { Ok::<_, sea_orm::DbErr>((settings::autobot_wait_ms(&app).await?, settings::invite_only(&app).await?)) }.await;
+    let r = async {
+        Ok::<_, sea_orm::DbErr>((settings::autobot_wait_ms(&app).await?, settings::invite_only(&app).await?, settings::chat_keep_days(&app).await?))
+    }
+    .await;
     match r {
-        Ok((wait, invite_only)) => Json(json!({"autobot_wait_ms": wait, "signup_invite_only": invite_only})).into_response(),
+        Ok((wait, invite_only, keep)) => {
+            Json(json!({"autobot_wait_ms": wait, "signup_invite_only": invite_only, "chat_keep_days": keep})).into_response()
+        }
         Err(e) => db_err(e),
     }
 }
@@ -1423,12 +1429,20 @@ async fn settings_get(State(app): State<AppRef>) -> Response {
 struct SettingsIn {
     autobot_wait_ms: Option<u64>,
     signup_invite_only: Option<bool>,
+    /// Days (0 = unlimited); needs `settings.retention`.
+    chat_keep_days: Option<u32>,
 }
 
 /// Changes the settings given (the others stay); each change is logged (`setting`).
 async fn settings_set(State(app): State<AppRef>, Extension(a): Extension<Admin>, Json(f): Json<SettingsIn>) -> Response {
     if f.autobot_wait_ms.is_some_and(|ms| ms > 600_000) {
         return err(StatusCode::BAD_REQUEST, "The auto-bot wait is 0 to 600 seconds");
+    }
+    if f.chat_keep_days.is_some_and(|d| d > 36_500) {
+        return err(StatusCode::BAD_REQUEST, "The keeping time is 0 (unlimited) to 36500 days");
+    }
+    if f.chat_keep_days.is_some() && !crate::chat::may(&app, a.me.id, "settings.retention").await {
+        return err(StatusCode::FORBIDDEN, "Only the super admin changes the keeping time");
     }
     let mut changes = vec![];
     if let Some(ms) = f.autobot_wait_ms {
@@ -1437,6 +1451,10 @@ async fn settings_set(State(app): State<AppRef>, Extension(a): Extension<Admin>,
     if let Some(on) = f.signup_invite_only {
         let text = if on { "registration to invite keys only" } else { "registration open to anyone" };
         changes.push((settings::INVITE_ONLY, (on as u8).to_string(), text.to_string()));
+    }
+    if let Some(d) = f.chat_keep_days {
+        let text = if d == 0 { "the chats' keeping time to unlimited".to_string() } else { format!("the chats' keeping time to {d} days") };
+        changes.push((settings::CHAT_KEEP_DAYS, d.to_string(), text));
     }
     for (key, value, text) in changes {
         if settings::get(&app, key).await.ok().as_ref() == Some(&value) {

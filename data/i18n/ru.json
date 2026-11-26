@@ -1134,5 +1134,14 @@
 "Standard": "Стандартный",
 "Wild": "Вольный",
 "A Wild deck: it has cards that are not in Standard": "Вольная колода: в ней есть карты не из стандартного формата",
-"This deck has cards that are not in this format": "В колоде есть карты не из этого формата"
+"This deck has cards that are not in this format": "В колоде есть карты не из этого формата",
+"Chat": "Чат",
+"admin": "администратор",
+"creator": "создатель",
+"The chat is closed: messages can only be read": "Чат закрыт: сообщения можно только читать",
+"Too many messages: wait a little": "Слишком много сообщений: подождите немного",
+"A message is 1 to 500 characters": "В сообщении от 1 до 500 символов",
+"Deleted by %s": "Удалено пользователем %s",
+"Delete the message": "Удалить сообщение",
+"The chat closes at %s": "Чат закроется в %s"
 }

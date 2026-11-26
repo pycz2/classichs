@@ -55,6 +55,7 @@ static func collect() -> Array:
 	tables.append_array(TournamentsView.SERIES.values())
 	tables.append_array(TournamentsView.PRESETS.map(func(v): return v[0]))
 	tables.append_array(TournamentsView.WORDS)
+	tables.append_array(ChatPanel.MARKS.values().map(func(v): return v[0]))
 	tables.append_array(ReplaysView.MODES.values())
 	tables.append_array(ReplaysView.TABS.map(func(t): return t[1]))
 	tables.append_array(ReplayView.CONTROLS.map(func(c): return c[2]))

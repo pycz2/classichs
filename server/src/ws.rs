@@ -85,6 +85,11 @@ enum In {
     Msg { to: String, text: String },
     History { with: String },
     Chats {},
+    /// Tournament chats (`crate::chat`): channel `tournaments` or `t:<id>`.
+    ChatSub { channel: String },
+    ChatUnsub { channel: String },
+    ChatSend { channel: String, text: String },
+    ChatDelete { id: i64 },
     Read { with: String },
     Invite {
         to: String,
@@ -190,6 +195,15 @@ pub(crate) fn merge_game_settings(old: &str, changes: serde_json::Map<String, Va
 
 /// An error reply: code and text (and, for server errors, what went wrong, for the event log).
 pub struct E(pub &'static str, pub String, Option<String>);
+
+impl From<crate::tournament::TErr> for E {
+    fn from(crate::tournament::TErr(code, text): crate::tournament::TErr) -> E {
+        match code {
+            "server" => E("server", "Server error".into(), Some(text)),
+            c => E(c, text, None),
+        }
+    }
+}
 
 impl From<DbError> for E {
     fn from(err: DbError) -> E {
@@ -934,6 +948,19 @@ impl Session {
                 self.ok(json!({"t": "history", "with": with, "list": list}))
             }
             In::Chats {} => self.ok(chats_json(&app, me).await?),
+            In::ChatSub { channel } => self.ok(crate::chat::subscribe(&app, me, &channel).await?),
+            In::ChatUnsub { channel } => {
+                crate::chat::unsubscribe(&app, me, &channel);
+                Ok(())
+            }
+            In::ChatSend { channel, text } => {
+                if !self.chat.allow("", Instant::now()) {
+                    return Err(e("rate_limited", "Too many messages: wait a little"));
+                }
+                crate::chat::send(&app, me, &channel, &text).await?;
+                Ok(())
+            }
+            In::ChatDelete { id } => Ok(crate::chat::delete(&app, me, id).await?),
             In::Read { with } => {
                 let o = db::id_by_name(db, &with).await?.ok_or_else(|| e("not_found", "No such player"))?;
                 message::Entity::update_many()

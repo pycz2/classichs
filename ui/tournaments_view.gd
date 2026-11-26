@@ -76,6 +76,10 @@ var _scroll_keep := {}  # a rebuilt scroll's place: name -> Vector2
 const BOT_LEVELS := ["easy", "medium", "hard", "superhard"]
 var bot_level := "easy"
 var bot_count := 1
+## The chat: the common channel beside the lists, the tournament's own in its page's Chat tab (kept
+## through the rebuilds: not in _body).
+var chat := ChatPanel.new()
+var _unread := 0  # the page chat's messages that came while another tab was shown
 
 
 func _ready() -> void:
@@ -94,6 +98,9 @@ func _ready() -> void:
 	_body.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_body)
+	chat.visible = false
+	chat.arrived.connect(_on_chat_arrived)
+	add_child(chat)
 	_status = Palette.label("", 18, Palette.SELECTED)
 	_status.name = "Status"
 	_status.position = Vector2(150, 676)
@@ -408,6 +415,36 @@ func _go_back() -> void:
 		back.emit()
 
 
+## The chat of what is shown: the tournament's own on its page (and its edit forms), else the common
+## one, shown beside the lists and in the page's Chat tab.
+func _sync_chat() -> void:
+	var want := "t:" + TournamentBracket.key(page_id) if page_id != null else "tournaments"
+	if chat.channel != want:
+		chat.open(link, want)
+		_unread = 0
+	if page_id != null:
+		chat.set_ended(int(page.get("ended", 0)))
+	var on_list := tab in TABS
+	chat.visible = on_list or (tab == "page" and page_tab == "chat")
+	chat.position = Vector2(884, 88) if on_list else Vector2(24, 170)
+	chat.size = Vector2(372, 576) if on_list else Vector2(1232, 494)
+	if chat.visible:
+		_unread = 0
+
+
+func _on_chat_arrived() -> void:
+	if chat.visible:
+		return
+	_unread += 1
+	var b := _body.find_child("Tab_chat", false, false) as Button
+	if b:
+		b.text = _chat_tab_text()
+
+
+func _chat_tab_text() -> String:
+	return tr("Chat") + (" (%d)" % _unread if _unread > 0 else "")
+
+
 func _leave_page() -> void:
 	if page_id != null:
 		link.send({"t": "t_unwatch", "id": wire_id(page_id)})
@@ -432,6 +469,7 @@ func show_tab(id: String) -> void:
 func _build_list() -> void:
 	var t0 := Time.get_ticks_usec()
 	_build_list_now()
+	_sync_chat()
 	PerfLog.time("t_list", t0)
 
 
@@ -447,16 +485,16 @@ func _build_list_now() -> void:
 		var wait := _lbl(tr("Loading…"), 22, Palette.MUTED, _body)
 		wait.name = "Loading"
 		wait.position = Vector2(0, 330)
-		wait.size = Vector2(1280, 40)
+		wait.size = Vector2(860, 40)
 		wait.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		return
 	if list.is_empty():
 		_empty_state()
 		return
-	var s := _scroll(Vector2(24, 88), Vector2(1232, 572), "ListScroll")
+	var s := _scroll(Vector2(24, 88), Vector2(844, 572), "ListScroll")
 	var v := VBoxContainer.new()
 	v.name = "List"
-	v.custom_minimum_size.x = 1220
+	v.custom_minimum_size.x = 830
 	v.add_theme_constant_override("separation", 10)
 	s.add_child(v)
 	for e in list:
@@ -469,7 +507,7 @@ func _build_list_now() -> void:
 
 
 func _empty_state() -> void:
-	var v := _card(Vector2(340, 200), Vector2(600, 280))
+	var v := _card(Vector2(142, 200), Vector2(600, 280))
 	v.name = "Empty"
 	v.alignment = BoxContainer.ALIGNMENT_CENTER
 	var cup := Trophy.new()
@@ -517,6 +555,7 @@ func _build_page() -> void:
 	_page_due = false
 	var t0 := Time.get_ticks_usec()
 	_build_page_now()
+	_sync_chat()
 	PerfLog.time("t_page", t0)
 
 
@@ -531,8 +570,9 @@ func _build_page_now() -> void:
 		wait.size = Vector2(1280, 40)
 		wait.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		return
-	_tab_buttons([["overview", tr("Overview"), 160.0], ["bracket", tr("Bracket"), 160.0]], page_tab, 932, func(id):
+	_tab_buttons([["overview", tr("Overview"), 160.0], ["bracket", tr("Bracket"), 160.0], ["chat", _chat_tab_text(), 160.0]], page_tab, 770, func(id):
 		page_tab = id
+		_unread = 0 if id == "chat" else _unread
 		_build_page())
 	var head := PageHead.new()
 	head.name = "PageHead"
@@ -556,7 +596,7 @@ func _build_page_now() -> void:
 	when.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	if page_tab == "bracket":
 		_build_bracket_tab()
-	else:
+	elif page_tab != "chat":  # (the chat is not in _body: _sync_chat shows it)
 		_build_overview()
 
 
@@ -1107,6 +1147,7 @@ func start_form(mode: String) -> void:
 
 func _build_form() -> void:
 	_clear()
+	_sync_chat()
 	var title: String = {"create": tr("Tournaments"), "edit": tr("Edit the tournament"), "reschedule": tr("Reschedule")}[form_mode]
 	_top_bar(title)
 	if form_mode == "create":
@@ -1404,12 +1445,15 @@ func _on_message(msg: Dictionary) -> void:
 				open_page(t.get("id"))
 			elif page_id != null and TournamentBracket.key(page_id) == k:
 				page = t
+				chat.set_ended(int(t.get("ended", 0)))  # (at once: the page's rebuild may wait)
 				if _status.text == tr("Sent…"):
 					say("")
 				if tab == "page":
 					_page_due = true
 					_rebuild_page()
 		"error":
+			if msg.get("code") == "chat_closed" or (chat.sending and msg.get("code") in ["rate_limited", "bad_text"]):
+				return  # (the chat's: it says them)
 			if msg.get("code") == "tournament" or tab == "create" or tab == "page":
 				_creating = false
 				say(str(msg.get("text", msg.get("code", ""))))
@@ -1452,7 +1496,7 @@ class ListRow:
 	func _init() -> void:
 		flat = true
 		focus_mode = Control.FOCUS_NONE
-		custom_minimum_size = Vector2(1220, 104)
+		custom_minimum_size = Vector2(0, 104)
 
 	func _draw() -> void:
 		PerfLog.count("listrow_draw")
@@ -1461,9 +1505,9 @@ class ListRow:
 		draw_style_box(Palette.box(Color(0.1, 0.07, 0.045, 0.94) if not is_hovered() else Color(0.15, 0.1, 0.06, 0.96), 12,
 			Palette.SELECTED if joined else Color("6b5320"), 3 if joined else 2), r)
 		TournamentsView.Trophy.cup(self, Vector2(52, 52), 30, TournamentsView.status_color(str(e.get("status", ""))))
-		DeckTiles.text(self, Vector2(100, 38), str(e.get("name", "")), 24, Palette.ATTACK, 620)
+		DeckTiles.text(self, Vector2(100, 38), str(e.get("name", "")), 24, Palette.ATTACK, minf(620, size.x - 330))
 		var by := TournamentsView._tr("by %s") % str(e.get("creator", "")) + "  ·  " + TournamentsView.pack_title(e)
-		DeckTiles.text(self, Vector2(100, 64), by, 16, Palette.MUTED, 620)
+		DeckTiles.text(self, Vector2(100, 64), by, 16, Palette.MUTED, minf(620, size.x - 330))
 		var x := 100.0
 		x = TournamentsView.pill(self, Vector2(x, 72), TournamentsView.format_name(e), Color("c9a74a"), 14) + 8
 		x = TournamentsView.pill(self, Vector2(x, 72), TournamentsView.series_name(e), Color("c9a74a"), 14) + 8

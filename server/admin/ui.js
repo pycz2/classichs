@@ -158,7 +158,7 @@ export const KINDS = {
   login_failed: 'error', error: 'error',
   tag: 'social', friend_request: 'social', friend_accept: 'social', friend_decline: 'social', friend_remove: 'social',
   block: 'social', unblock: 'social', invite: 'social', invite_accept: 'social', invite_decline: 'social',
-  msg: 'chat',
+  msg: 'chat', chat: 'chat',
   queue: 'queue', unqueue: 'queue', arena: 'queue',
   match: 'game', tournament: 'game', game_start: 'game', game_action: 'game', game_left: 'game', game_back: 'game', game_end: 'game',
   pack_upload: 'pack', pack_import: 'pack', pack_default: 'pack', pack_enable: 'pack', pack_disable: 'pack', pack_delete: 'pack', pack_download: 'pack', pack_rejected: 'error',

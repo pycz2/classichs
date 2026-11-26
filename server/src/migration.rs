@@ -8,7 +8,7 @@ pub struct Migrator;
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
-        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14)]
+        vec![Box::new(M1), Box::new(M2), Box::new(M3), Box::new(M4), Box::new(M5), Box::new(M6), Box::new(M7), Box::new(M8), Box::new(M9), Box::new(M10), Box::new(M11), Box::new(M12), Box::new(M13), Box::new(M14), Box::new(MChat)]
     }
 }
 
@@ -967,6 +967,31 @@ impl MigrationName for M14 {
 impl MigrationTrait for M14 {
     async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
         m.get_connection().execute_unprepared("ALTER TABLE standings ADD COLUMN best INTEGER NOT NULL DEFAULT -1").await?;
+        Ok(())
+    }
+}
+
+/// Tournament chats (0.74, `crate::chat`): the messages of the tournaments list's chat and of each
+/// tournament's; a deleted one keeps its row (deleted_by, deleted_at).
+struct MChat;
+
+impl MigrationName for MChat {
+    fn name(&self) -> &str {
+        "m20261126_000016_chat_messages"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for MChat {
+    async fn up(&self, m: &SchemaManager) -> Result<(), DbErr> {
+        let c = m.get_connection();
+        c.execute_unprepared(
+            "CREATE TABLE chat_message (id INTEGER PRIMARY KEY, subserver INTEGER NOT NULL DEFAULT 0, channel TEXT NOT NULL, \
+             account INTEGER NOT NULL, text TEXT NOT NULL, at INTEGER NOT NULL, deleted_by INTEGER, deleted_at INTEGER)",
+        )
+        .await?;
+        c.execute_unprepared("CREATE INDEX chat_message_channel ON chat_message (subserver, channel, id)").await?;
+        c.execute_unprepared("CREATE INDEX chat_message_at ON chat_message (at)").await?;
         Ok(())
     }
 }
