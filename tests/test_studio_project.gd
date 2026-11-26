@@ -127,7 +127,8 @@ func test_a_new_game_has_its_class_hero_power_and_eight_languages() -> void:
 	check(again.card("mage_hero").get("power") == "mage_power" and again.card("mage_power").type == "POWER", "its hero and power")
 	again.remove_class("MAGE")
 	check(again.card("mage_hero").is_empty() and again.card("mage_power").is_empty(), "removed with its hero and power")
-	var c := again.build(true)
+	var c := again.build(true, 2)
+	eq(c.items.filter(func(it): return "no ready decks" in it.text).size(), 1, "no decks: said once")
 	eq(_bad(c), [], "it checks clean")
 
 
@@ -176,6 +177,8 @@ func test_effects_name_their_mechanics_and_a_card_renames_everywhere() -> void:
 	p.set_text("drawer", "en", "Drawer", "Draw a card.")
 	var view := p.preview_pack(["drawer"])
 	check(view != null and view.has("art/main/framing.json") and view.find("art/main", "drawer", ["png"]) != "", "the preview has the picture")
+	check(not view.path.begins_with(ProjectSettings.globalize_path(p.dir)) and not view.path.begins_with("user://"),
+		"previews stay out of user:// (the browser saves every file there): " + view.path)
 	CardDb.begin(view)
 	eq(CardText.name("drawer"), "Drawer", "the preview pack draws the card as it is now")
 	eq(CardText.name("drawer", "ru"), "Тест", "in each language")

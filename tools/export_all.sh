@@ -96,7 +96,7 @@ for p in $WANT; do
 		# this machine's desktop platform (the others' rules libraries come from CI, as for the game)
 		rm -rf "$OUT/studio-web"
 		export_preset "Studio (web)" "$OUT/studio-web/index.html"
-		tools/web_finish.sh "$OUT/studio-web"
+		cp web/rules.js rules/bin/rules.wasm rules/LICENSE.opus "$OUT/studio-web/"  # (no service worker: as the replay viewer)
 		(cd "$OUT/studio-web" && rm -f "../ClassicHS-$VER-studio-web.zip" && zip -qr "../ClassicHS-$VER-studio-web.zip" .)
 		case $(uname -s) in
 		Darwin) export_preset "Studio (macOS)" "$OUT/ClassicHS-$VER-studio-macos.zip" ;;

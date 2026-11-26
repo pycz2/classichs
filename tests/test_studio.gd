@@ -177,5 +177,12 @@ func test_try_a_card_in_a_match_and_come_back() -> void:
 	eq(s.tabs.current_tab, 3, "on the Cards tab")
 	eq(Packs.active(), was, "the game active before is again")
 	check(not Packs.all().any(func(x: Pack): return x.id() == "gamma"), "the match's pack is gone")
+	check(not FileAccess.file_exists(StudioProject.root + "/" + Studio.TRIAL_FILE), "nothing left to remove")
+	# the studio closed during a match: the next start removes its pack
+	v = s.try_card(cid)
+	check(FileAccess.file_exists(StudioProject.root + "/" + Studio.TRIAL_FILE), "the match's pack is remembered")
+	Packs.set_active(was)
+	Studio.remove_left_trial()
+	check(not Packs.all().any(func(x: Pack): return x.id() == "gamma"), "removed at the next start")
 	s.free()
 	StudioProject.root = "user://studio"

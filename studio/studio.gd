@@ -13,6 +13,8 @@ const TITLE := "ClassicHS Studio"
 const TABS := [["Game", "Game"], ["Classes", "Classes"], ["Sets", "Sets & rarities"], ["Cards", "Cards"],
 	["Decks", "Decks"], ["Check", "Check & export"]]
 const CARDS_SCRIPT := "res://studio/studio_cards.gd"
+## The content hash of the pack a test match installed, while the match lasts (in StudioProject.root).
+const TRIAL_FILE := "trial_pack.txt"
 
 var project: StudioProject
 var screen: Control
@@ -50,6 +52,7 @@ func _ready() -> void:
 	_save_timer.wait_time = 1.0
 	_save_timer.timeout.connect(save)
 	add_child(_save_timer)
+	remove_left_trial()
 	show_projects()
 
 
@@ -504,6 +507,11 @@ func try_card(cid := "") -> MatchView:
 		return null
 	var p: Pack = r.pack
 	_trial_pack = null if before.has(p) else p
+	if _trial_pack:  # (remembered: a page closed during the match leaves it; the next start removes it)
+		DirAccess.make_dir_recursive_absolute(StudioProject.root)
+		var f := FileAccess.open(StudioProject.root + "/" + TRIAL_FILE, FileAccess.WRITE)
+		f.store_string(Packs.content_hash(_trial_pack))
+		f.close()
 	_was = Packs.active()
 	Packs.enter(p)
 	var m := Match.new()
@@ -533,6 +541,18 @@ func _after_match() -> void:
 	if _trial_pack:
 		Packs.remove(_trial_pack)
 	_trial_pack = null
+	DirAccess.remove_absolute(StudioProject.root + "/" + TRIAL_FILE)
+
+
+## A test match's pack left in the game's library (the studio was closed during the match) goes.
+static func remove_left_trial() -> void:
+	var path := StudioProject.root + "/" + TRIAL_FILE
+	if not FileAccess.file_exists(path):
+		return
+	var p := Packs.find(FileAccess.get_file_as_string(path).strip_edges())
+	if p and not p.builtin():
+		Packs.remove(p)
+	DirAccess.remove_absolute(path)
 	Packs.set_shell(true)
 
 

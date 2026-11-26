@@ -311,7 +311,8 @@ func build(load := false, games := 0) -> PackCheck:
 	c.check()
 	if load and blocking(c) == 0 and c.load_engine():
 		for i in games:
-			c.trial(i)
+			if not c.trial(i) and c.decks().is_empty():
+				break  # (no decks: said once)
 	return c
 
 
@@ -322,8 +323,8 @@ static func blocking(c: PackCheck) -> int:
 
 
 ## A pack of the project as it is now, for drawing its cards (CardView.pack): its rules, cards and texts and
-## the pictures of the cards asked for (all when none are named), without the sounds. Written into the
-## project's folder (preview-<n>.cardpack); null when it can't be.
+## the pictures of the cards asked for (all when none are named), without the sounds. Written into
+## preview_dir(); null when it can't be.
 func preview_pack(only_art: Array = []) -> Pack:
 	var files := {"manifest.json": _bytes(manifest), "rules.json": _bytes(rules), "cards.json": _bytes(cards)}
 	for lang in locales:
@@ -337,17 +338,29 @@ func preview_pack(only_art: Array = []) -> Pack:
 	m.art_sets = [{"id": ART_SET, "default": true}] if files.keys().any(func(k): return k.begins_with("art/")) else []
 	m.sound_sets = []
 	files["manifest.json"] = _bytes(m)
-	for old in DirAccess.get_files_at(dir):  # (the one a view still reads goes on the next time where a system keeps it)
-		if old.begins_with("preview"):
-			DirAccess.remove_absolute(dir + "/" + old)
+	var where := preview_dir()
+	DirAccess.make_dir_recursive_absolute(where)
+	for old in DirAccess.get_files_at(where):  # (one a view still reads goes the next time, where a system keeps it)
+		if old.begins_with(id + "-"):
+			DirAccess.remove_absolute(where + "/" + old)
 	_previews += 1
-	var path := "%s/preview-%d.cardpack" % [dir, _previews]  # a new file each time: the last preview may still be open
-	var f := FileAccess.open(path, FileAccess.WRITE)
-	if f == null:
+	var path := "%s/%s-%d.cardpack" % [where, id, _previews]  # a new file each time: the last preview may still be open
+	var z := ZIPPacker.new()
+	if z.open(path) != OK:
 		return null
-	f.store_buffer(PackCheck.zip(files))
-	f.close()
+	for p: String in files:
+		z.start_file(p)
+		z.write_file(files[p])
+		z.close_file()
+	z.close()
 	return Pack.open(path, "studio")
+
+
+## Where previews are written: the system's cache, not user:// (in the browser every user:// file is saved
+## into IndexedDB, and a preview made and removed at each change made those saves fail).
+static func preview_dir() -> String:
+	var cache := OS.get_cache_dir()
+	return (cache if cache != "" else OS.get_user_data_dir()) + "/studio-preview"
 
 
 static func _bytes(v: Variant) -> PackedByteArray:
