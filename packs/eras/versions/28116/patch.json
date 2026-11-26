@@ -1,16 +1,8 @@
 {
  "base": "trl",
  "build": 28116,
- "about": "",
+ "about": "13.0.3.28116 (2018-12-06): text and name fixes (Zentimo, Mosh'Ogg Enforcer, translations)",
  "cards": {
-  "BRM_010a": {
-   "attack": 5,
-   "health": 2
-  },
-  "BRM_010b": {
-   "attack": 2,
-   "health": 5
-  },
   "TRL_085": {
    "text": {
     "enUS": "[x]Whenever you target a\nminion with a spell, cast it\nagain on its neighbors.",
@@ -60,5 +52,9 @@
    }
   }
  },
- "sources": []
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 13.0.0.27845, 13.0.3.28116 (changes, rules_changes, doubts)",
+  "HearthstoneJSON build 28116: card data, names and texts in 8 languages",
+  "hearthstone.wiki.gg: Patch 13.0.0.27845; Patch 13.0.3.28116"
+ ]
 }

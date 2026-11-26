@@ -1,7 +1,7 @@
 {
  "base": "trl",
  "build": 28855,
- "about": "",
+ "about": "13.2.0.28855 (2019-02-05): Cold Blood, Hunter's Mark, Flametongue Totem, Equality and the Emerald Spellstones cost more; Corrupted Blood no longer takes Spell Damage",
  "cards": {
   "AT_042b": {
    "text": {
@@ -14,14 +14,6 @@
     "itIT": "<b>Furtività</b>",
     "plPL": "<b>Ukrycie</b>"
    }
-  },
-  "AT_069": {
-   "mechanics": [
-    "BATTLECRY"
-   ],
-   "referencedTags": [
-    "TAUNT"
-   ]
   },
   "AT_132_SHAMANa": {
    "cost": 1
@@ -46,22 +38,6 @@
     "itIT": "Parola del Potere: Replica",
     "plPL": "Słowo mocy: Replikacja"
    }
-  },
-  "BRM_010a": {
-   "attack": 5,
-   "health": 2
-  },
-  "BRM_010b": {
-   "attack": 2,
-   "health": 5
-  },
-  "CFM_634": {
-   "mechanics": [
-    "TRIGGER_VISUAL"
-   ],
-   "referencedTags": [
-    "STEALTH"
-   ]
   },
   "VAN_CS2_013": {
    "cost": 3
@@ -257,5 +233,9 @@
    }
   }
  },
- "sources": []
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 13.0.0.27845, 13.0.3.28116, 13.0.3.28329, 13.2.0.28855 (changes, rules_changes, doubts)",
+  "HearthstoneJSON build 28855: card data, names and texts in 8 languages",
+  "hearthstone.wiki.gg: Patch 13.0.0.27845; Patch 13.0.3.28116; Patch 13.0.3.28329; Patch 13.2.0.28855"
+ ]
 }
