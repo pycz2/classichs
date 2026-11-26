@@ -43,10 +43,17 @@ pub const MAX_SERVER_PACK: u64 = 1 << 30;
 pub const MAX_PER_PLAYER: u64 = 10;
 /// Pack formats this server understands.
 pub const FORMATS: [i64; 1] = [1];
-/// Different rule sets the engine of this process may hold (they are never freed: games point
-/// into them). An upload or a game of a new one beyond this is refused until a restart.
-// ponytail: keep-all with a limit; Arc'd rulesets in the engine would allow an LRU.
-pub const MAX_RULESETS: usize = 48;
+/// Memory the rule sets of this process may take (they are never freed: games point into them; the host has ~900 MB).
+/// An upload or a game of a new one beyond it is refused until a restart. A rule set takes about its cards times
+/// RULES_PER_CARD (measured 2026-11-26: Classic 534 cards 2.9 MB, the eras pack's newest version 2645 cards 19 MB).
+// ponytail: keep-all within a budget; unloading needs Arc'd rulesets and card ids in the engine (now leaked 'static).
+pub const RULES_BUDGET: usize = 448 << 20;
+const RULES_PER_CARD: usize = 8 << 10;
+
+/// One more rule set may load when the loaded ones have `cards` cards in all.
+fn rules_fit(cards: usize) -> bool {
+    cards * RULES_PER_CARD < RULES_BUDGET
+}
 /// The trial game of a pack: actions and time at most.
 const TRIAL_ACTIONS: usize = 600;
 const TRIAL_TIME: Duration = Duration::from_secs(20);
@@ -141,9 +148,10 @@ fn load_rules(files: &Files) -> Result<&'static Ruleset, String> {
     if let Some(rs) = ruleset::get(&h) {
         return Ok(rs);
     }
-    let loaded = classichs_engine::Engine::new().handle(&json!({"op": "packs"}))["packs"].as_array().map_or(0, Vec::len);
-    if loaded >= MAX_RULESETS {
-        return Err(format!("the server holds {MAX_RULESETS} different games already: try again after its restart"));
+    let packs = classichs_engine::Engine::new().handle(&json!({"op": "packs"}))["packs"].clone();
+    let cards: usize = packs.as_array().into_iter().flatten().filter_map(|p| ruleset::get(p["pack"].as_str()?)).map(|r| r.cards.len()).sum();
+    if !rules_fit(cards) {
+        return Err("the server holds as many different games as its memory allows: try again after its restart".into());
     }
     ruleset::load(files).map_err(|e| format!("the rules engine refused it: {e}"))
 }
@@ -1019,6 +1027,15 @@ mod tests {
     use super::*;
     use std::io::{Cursor, Write};
     use zip::write::SimpleFileOptions;
+
+    #[test]
+    fn rule_sets_fit_the_memory_budget() {
+        // the eras pack's newest version: 2645 cards, 19 MB; Classic: 534 cards, 3 MB (measured 2026-11-26)
+        assert!(rules_fit(0));
+        assert!(rules_fit(18 * 2645), "every 2014-2019 pack at once");
+        assert!(rules_fit(100 * 534), "a hundred small packs");
+        assert!(!rules_fit(48 * 2645), "48 of the biggest (~930 MB) do not fit a ~900 MB host");
+    }
 
     pub fn zip_of(files: &[(&str, &str)]) -> Vec<u8> {
         let mut w = zip::ZipWriter::new(Cursor::new(vec![]));

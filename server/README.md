@@ -27,8 +27,8 @@ Load tests, sizing and Kubernetes: `docs/server-profiling.md`, `deploy/k8s/`.
 Every game runs inside the server, in the same rules engine the game uses (exact parity
 with the old GDScript engine), in a **game pack** (`.cardpack`, docs/packs/): the engine
 loads a pack's rules, cards and Lua scripts by `rules_hash` the first time a game, a deck
-check or a draft needs it (from the storage; kept for the life of the process, at most
-`packs::MAX_RULESETS` = 48 different rule sets). Without a `pack` a request plays the
+check or a draft needs it (from the storage; kept for the life of the process, within
+`packs::RULES_BUDGET` = 448 MB, about 8 KB per card: 3 MB for Classic, 19 MB for the newest eras version). Without a `pack` a request plays the
 server's **default game**: the server pack the admin starred, else (first start) the newest
 bundled pack with the manifest id `--default-pack` (`neon`: Neonfall), else the engine's
 built-in Classic rules. The turn, mulligan, grace and away timers, the ranked ladder (ranks,

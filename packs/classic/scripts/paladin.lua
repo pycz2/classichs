@@ -14,24 +14,28 @@ end
 cards.VAN_CS2_087 = bless(3, 0) -- Blessing of Might
 cards.VAN_CS2_092 = bless(4, 4) -- Blessing of Kings
 
--- Blessing of Wisdom: whenever the minion attacks, the caster draws a card.
+-- Blessing of Wisdom: whenever the minion attacks, the caster draws a card. One hook set per player: each
+-- enchantment's hook runs once, and it must know whose it is (two Blessings draw two cards, not four).
+local function wisdom(p)
+  return {
+    on = {
+      attack = function(g, me, ev)
+        if ev.attacker == me then
+          g.draw(p, 1)
+        end
+      end,
+    },
+  }
+end
+cards["ench:blessing_of_wisdom_0"] = wisdom(0)
+cards["ench:blessing_of_wisdom_1"] = wisdom(1)
+
 cards.VAN_EX1_363 = {
   target = "minion",
   spell = function(g, me, t)
-    g.enchant(t, { hooks = "ench:blessing_of_wisdom", player = g.ctrl(me) })
+    local p = g.ctrl(me)
+    g.enchant(t, { hooks = p == 0 and "ench:blessing_of_wisdom_0" or "ench:blessing_of_wisdom_1", player = p })
   end,
-}
-
-cards["ench:blessing_of_wisdom"] = {
-  on = {
-    attack = function(g, me, ev)
-      if ev.attacker == me then
-        for _, p in ipairs(g.enchants(me, "ench:blessing_of_wisdom")) do
-          g.draw(p, 1)
-        end
-      end
-    end,
-  },
 }
 
 -- Eye for an Eye: when your hero takes damage, deal that much to the enemy hero.

@@ -1013,7 +1013,8 @@ cards.ICC_834w = {
 -- --- Death Knight cards (The Lich King, Arfus) ------------------------------------------------------------------
 
 -- Frostmourne: Deathrattle: summon every minion killed by this weapon (its hero's attacks; FROSTMOURNE_KILL marks
--- the minions its blow left at 0 Health, FROSTMOURNE_N counts them in order).
+-- the minions its blow left at 0 Health, FROSTMOURNE_N counts them in order). A minion its last Durability killed dies
+-- together with it, after its `death` hook has gone: it has no order and comes back last.
 cards.ICC_314t1 = {
   on = {
     damage = function(g, me, ev)
@@ -1034,13 +1035,14 @@ cards.ICC_314t1 = {
     local killed = {}
     for q = 0, 1 do
       for _, e in ipairs(g.graveyard(q)) do
-        if g.tag(e, "FROSTMOURNE_KILL") == me and g.tag(e, "FROSTMOURNE_ORDER") > 0 then
+        if g.tag(e, "FROSTMOURNE_KILL") == me then
           killed[#killed + 1] = e
         end
       end
     end
     for _, e in ipairs(list.sort_by(killed, function(e)
-      return g.tag(e, "FROSTMOURNE_ORDER")
+      local n = g.tag(e, "FROSTMOURNE_ORDER")
+      return n > 0 and n or 1000000
     end)) do
       g.summon(p, g.card(e))
     end
