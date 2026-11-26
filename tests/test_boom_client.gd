@@ -128,7 +128,8 @@ func test_a_magnetic_minion_flies_into_the_mech() -> void:
 	eq(v._views[golem].s.atk(), 4, "the game agrees")
 	var changes := KeywordTips.changes(v.g.ent(golem))
 	check(changes.has("+2/+4"), "its Changes box: %s" % [changes])
-	eq(_rows(v.g, item.events.filter(func(e): return e.type == "play"), 0), ["You play Annoy-o-Module"], "a play line")
+	eq(_rows(v.g, item.events, 0), ["You play Annoy-o-Module", "Annoy-o-Module fuses with Harvest Golem"], "a play line, a fuse line")
+	eq(_rows(v.g, item.events, 1), ["Opponent plays Annoy-o-Module", "Annoy-o-Module fuses with Harvest Golem"], "the opponent's")
 	v.free()
 	_classic()
 

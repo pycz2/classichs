@@ -32,6 +32,7 @@
   "%s casts %s",
   "%s changes to %s/%s",
   "%s deals %d damage to %s",
+  "%s fuses with %s",
   "%s declined the invitation",
   "%s dies",
   "%s does not start: %s",

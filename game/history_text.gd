@@ -212,6 +212,8 @@ static func event_lines(ev: Dictionary, g: GameView, viewer: int, loc := "") -> 
 				s = _say(p, viewer, "%s is shuffled into your deck", "%s is shuffled into Opponent's deck", [CardText.name(c, loc)])
 		"cast_when_drawn":  # (Spider Ambush!, Darkness Candle): both players see it
 			s = _say(p, viewer, "You draw %s: it casts itself", "Opponent draws %s: it casts itself", [CardText.name(ev.card, loc)])
+		"fuse":  # a Magnetic minion played left of a Mech goes into it
+			s = _t("%s fuses with %s") % [CardText.name(ev.card, loc), n.call(ev.target)]
 		"awaken":  # a Dormant minion wakes up (The Darkness, its candles snuffed)
 			s = _t("%s awakens") % CardText.name(ev.card, loc)
 		"removed_from_hand":  # (Unstable Evolution at the end of the turn); no line if the view hides it
