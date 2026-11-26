@@ -138,7 +138,8 @@ func _left() -> Control:
 	new_b.flat = false
 	for t in StudioProject.TYPES:
 		new_b.get_popup().add_item(tr(TYPE_NAMES[t]))
-	new_b.get_popup().index_pressed.connect(func(i): new_card(StudioProject.TYPES[i]))
+	new_b.get_popup().add_item(tr("Secret"))
+	new_b.get_popup().index_pressed.connect(func(i): new_card(StudioProject.TYPES[i]) if i < StudioProject.TYPES.size() else new_secret())
 	box.add_child(new_b)
 	var row := HBoxContainer.new()
 	var dup := _btn(tr("Duplicate"), "Duplicate")
@@ -224,6 +225,17 @@ func new_card(type: String) -> String:
 	_search.text = ""
 	_touch()
 	refresh_list()
+	select(id)
+	return id
+
+
+## A new Secret: a spell whose block waits for the opponent's minion and deals 2 damage to it (its trigger, target
+## and action can be changed on the Effect tab; the pack's Secret mechanic comes with it).
+func new_secret() -> String:
+	var id := new_card("SPELL")
+	project.set_effect(id, {"blocks": [{"when": "secret_minion_played", "target": "event", "do": "damage", "n": 2}], "lua": ""})
+	project.set_text(id, "en", "New secret", "")
+	_touch()
 	select(id)
 	return id
 

@@ -168,6 +168,17 @@ func test_a_card_of_several_classes() -> void:
 	t.free()
 
 
+func test_a_new_secret() -> void:
+	var t := _tab()
+	var p := t.project
+	var id := t.new_secret()
+	eq(p.card(id).type, "SPELL", "a spell")
+	check(p.card(id).get("keywords", []).has(p.mechanic_name("TRAP")), "with the pack's Secret mechanic")
+	eq(t._shown().has(id), true, "listed")
+	eq(StudioProject.blocking(p.build(true)), 0, "it compiles: " + str(p.build().items.filter(func(it): return it.level == "error")))
+	t.free()
+
+
 func test_the_english_text_from_blocks_names_the_cards() -> void:
 	var t := _tab()
 	var p := t.project
