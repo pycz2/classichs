@@ -1,0 +1,209 @@
+{
+ "base": "boom",
+ "build": 27358,
+ "about": "",
+ "cards": {
+  "AT_035t": {
+   "text": {
+    "enUS": "<b>Casts When Drawn</b>\nSummon a 4/4 Nerubian for your opponent.",
+    "ruRU": "<b>При взятии</b>\nпротивник призывает неруба 4/4.",
+    "deDE": "[x]<b>Beim Ziehen gewirkt</b>.\nRuft einen Neruber (4/4)\nfür Euren Gegner herbei.",
+    "frFR": "<b>Jouée quand piochée</b> Invoque un nérubien 4/4 pour votre adversaire.",
+    "esES": "[x]<b>Este hechizo se lanza al robarlo</b>.\nInvocas un nerubiano 4/4\npara tu oponente.",
+    "ptBR": "<b>Lançado ao Comprar</b> \nEvoque um Nerubiano 4/4 para o oponente.",
+    "itIT": "<b>Lancio Quando Pescata</b>. Evoca un Nerubiano 4/4 sotto il controllo dell'avversario.",
+    "plPL": "<b>Zagraj po dobraniu</b>\nPrzyzwij Nerubianina 4/4 twojemu przeciwnikowi."
+   }
+  },
+  "AT_045": {
+   "cost": 10
+  },
+  "BOT_270": {
+   "cost": 7
+  },
+  "BOT_424": {
+   "text": {
+    "enUS": "[x]<b>Deathrattle:</b> If you have no\ncards in your deck, hand,\nand battlefield, destroy\nthe enemy hero.",
+    "ruRU": "[x]<b>Предсмертный хрип:</b> если\nу вас не осталось карт в колоде,\nв руке и в игре, уничтожает\nгероя противника.",
+    "deDE": "[x]<b>Todesröcheln:</b> Vernichtet den\nfeindlichen Helden, wenn Ihr im\nDeck, auf der Hand und auf\ndem Schlachtfeld keine\nKarten habt.",
+    "frFR": "<b>Râle d’agonie :</b> si vous n’avez plus de cartes dans votre deck, votre main et sur le champ de bataille, détruit le héros adverse.",
+    "esES": "[x]<b>Último aliento:</b> Si no tienes\ncartas en tu mazo, en tu mano,\nni en el campo de batalla,\n   destruye al héroe enemigo.",
+    "ptBR": "<b>Último Suspiro:</b> Se você não tiver cards no deck, na mão e no campo de batalha, destrua o herói inimigo.",
+    "itIT": "[x]<b>Rantolo di Morte:</b> se non hai\ncarte nel tuo mazzo, in mano\ne sul campo, distrugge\nl'eroe nemico.",
+    "plPL": "<b>Agonia:</b> Jeśli nie masz\nkart w talii, w ręce\ni na polu bitwy, zniszcz wrogiego bohatera."
+   }
+  },
+  "BOT_511t": {
+   "text": {
+    "enUS": "<b>Casts When Drawn</b>\nYou take 5 damage.",
+    "ruRU": "<b>При взятии</b>\nвы получаете\n5 ед. урона.",
+    "deDE": "<b>Beim Ziehen gewirkt</b>. Ihr erleidet 5 Schaden.",
+    "frFR": "<b>Jouée quand piochée</b> Vous subissez 5 points de dégâts.",
+    "esES": "[x]<b>Este hechizo se lanza al robarlo</b>.\nRecibes 5 p. de daño.",
+    "ptBR": "<b>Lançado ao Comprar</b> \nVocê recebe 5 de dano.",
+    "itIT": "[x]<b>Lancio Quando\nPescata</b>. Infligge\n5 danni al tuo eroe.",
+    "plPL": "<b>Zagraj po dobraniu</b>\nOtrzymujesz 5 pkt. obrażeń."
+   }
+  },
+  "BOT_532": {
+   "name": {
+    "enUS": "Explodinator",
+    "ruRU": "Взрывинатор",
+    "deDE": "Explodinator",
+    "frFR": "Bombardateur",
+    "esES": "Explosionador",
+    "ptBR": "Explodidor",
+    "itIT": "Esplosivatore",
+    "plPL": "Bombotron"
+   }
+  },
+  "CFM_606": {
+   "text": {
+    "enUS": "Whenever this minion is healed, summon a 2/2 Crystal.",
+    "ruRU": "Когда это существо восстанавливает здоровье,[x]\nвы призываете кристалл 2/2.",
+    "deDE": "Ruft jedes Mal einen Kristall (2/2) herbei, wenn dieser Diener geheilt wird.",
+    "frFR": "Invoque un cristal 2/2 chaque fois que ce serviteur est soigné.",
+    "esES": "Cada vez que se sana a este esbirro, invoca un cristal 2/2.",
+    "ptBR": "Sempre que este lacaio for curado, evoque um Cristal 2/2.",
+    "itIT": "Quando viene curato, evoca un Cristallo 2/2.",
+    "plPL": "Za każdym razem gdy ten stronnik zostanie uzdrowiony, przyzwij Kryształ 2/2."
+   }
+  },
+  "CFM_756": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\nWhenever this minion\ndeals damage, gain\nthat much Armor.",
+    "ruRU": "[x]<b>Провокация</b>. Когда это\nсущество наносит урон, вы\nполучаете броню в размере\nнанесенного урона.",
+    "deDE": "<b>Spott</b>. Wenn dieser Diener Schaden verursacht, erhaltet Ihr jedes Mal ebenso viel Rüstung.",
+    "frFR": "<b>Provocation</b>. Chaque fois que ce serviteur inflige des dégâts, vous gagnez l’équivalent en points d’armure.",
+    "esES": "<b>Provocar</b>\nCada vez que este esbirro inflige daño, obtienes esa cantidad en armadura.",
+    "ptBR": "<b>Provocar</b>\nSempre que este lacaio\ncausar dano, receba o\n equivalente de Armadura.",
+    "itIT": "<b>Provocazione</b>. Quando infligge danni, fornisce Armatura pari ai danni inflitti.",
+    "plPL": "<b>Prowokacja</b>\nZa każdym razem gdy ten stronnik zadaje obrażenia, otrzymujesz tyle samo pancerza."
+   }
+  },
+  "GIL_190": {
+   "text": {
+    "enUS": "Whenever a friendly minion is healed, summon a 3/3 Whelp.",
+    "ruRU": "Когда ваше существо восстанавливает здоровье, вы призываете дракончика 3/3.",
+    "deDE": "Ruft jedes Mal einen Welpling (3/3) herbei,\nwenn ein befreundeter Diener geheilt wird.",
+    "frFR": "Invoque un dragonnet 3/3 chaque fois qu’un serviteur allié est soigné.",
+    "esES": "Cada vez que se sana a un esbirro amistoso, invoca a una cría 3/3.",
+    "ptBR": "Sempre que um lacaio aliado for curado, evoque um Dragonete 3/3.",
+    "itIT": "Quando un tuo servitore viene curato, evoca un Draghetto 3/3.",
+    "plPL": "Za każdym razem gdy przyjazny stronnik zostanie uzdrowiony, przyzwij Pisklę 3/3."
+   }
+  },
+  "GIL_817": {
+   "name": {
+    "enUS": "The Glass Knight",
+    "ruRU": "Хрустальный рыцарь",
+    "deDE": "Der Glasritter",
+    "frFR": "Le chevalier de verre",
+    "esES": "Caballero de cristal",
+    "ptBR": "Cavaleira de Vidro",
+    "itIT": "Cavaliere di Vetro",
+    "plPL": "Szklany Rycerz"
+   }
+  },
+  "GVG_056t": {
+   "text": {
+    "enUS": "<b>Casts When Drawn</b>\nYou take 10 damage.",
+    "ruRU": "<b>При взятии</b>\nвы получаете 10 ед. урона.",
+    "deDE": "[x]<b>Beim Ziehen gewirkt</b>.\nIhr erleidet 10 Schaden.",
+    "frFR": "<b>Jouée quand piochée</b> Vous subissez 10 points de dégâts.",
+    "esES": "[x]<b>Este hechizo se lanza al robarlo</b>.\nRecibes 10 p. de daño.",
+    "ptBR": "<b>Lançado ao Comprar</b> \nVocê recebe 10 de dano.",
+    "itIT": "[x]<b>Lancio Quando Pescata</b>.\nInfligge 10 danni\nal tuo eroe.",
+    "plPL": "<b>Zagraj po dobraniu</b>\nOtrzymujesz 10 pkt. obrażeń."
+   }
+  },
+  "GVG_072": {
+   "text": {
+    "enUS": "Whenever a minion is healed, deal 1 damage to a random enemy.",
+    "ruRU": "Наносит 1 ед. урона случайному противнику, когда существо восстанавливает здоровье.",
+    "deDE": "Fügt jedes Mal einem zufälligen Feind 1 Schaden zu, wenn ein Diener geheilt wird.",
+    "frFR": "Chaque fois qu’un serviteur est soigné, inflige 1 point de dégâts à un adversaire aléatoire.",
+    "esES": "Cada vez que se sana a un esbirro, inflige 1 p. de daño a un enemigo aleatorio.",
+    "ptBR": "Sempre que um lacaio for curado, cause 1 de dano a um inimigo aleatório.",
+    "itIT": "Quando viene curato un servitore, infligge 1 danno a un nemico casuale.",
+    "plPL": "Za każdym razem gdy stronnik zostanie uzdrowiony, zadaj 1 pkt. obrażeń losowemu wrogowi."
+   }
+  },
+  "GVG_117": {
+   "text": {
+    "enUS": "Whenever you cast a 1-Cost spell, add a random Mech to your hand.",
+    "ruRU": "Когда вы разыгрываете заклинание за (1),\nвы получаете в руку случайный механизм.",
+    "deDE": "Erhaltet jedes Mal einen zufälligen Mech auf die Hand, wenn Ihr einen Zauber wirkt, der (1) kostet.",
+    "frFR": "Chaque fois que vous lancez un sort à 1 cristal, ajoute un Méca aléatoire dans votre main.",
+    "esES": "[x]Cada vez que lanzas\nun hechizo de coste 1, añade\nun robot aleatorio\na tu mano.",
+    "ptBR": "Sempre que você lançar um feitiço de custo 1, adicione um Mecanoide aleatório à sua mão.",
+    "itIT": "[x]Quando lanci una Magia da\n1 Mana, mette nella tua\nmano un Robot casuale.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie o koszcie (1), umieść w ręce losowego Mecha."
+   }
+  },
+  "LOE_110t": {
+   "text": {
+    "enUS": "<b>Casts When Drawn</b>\nYou take 7 damage.",
+    "ruRU": "<b>При взятии</b>\nвы получаете 7 ед. урона.",
+    "deDE": "<b>Beim Ziehen gewirkt</b>. Ihr erleidet 7 Schaden.",
+    "frFR": "<b>Jouée quand piochée</b> Vous subissez 7 points de dégâts",
+    "esES": "[x]<b>Este hechizo se lanza al robarlo</b>.\nRecibes 7 p. de daño.",
+    "ptBR": "<b>Lançado ao Comprar</b> \nVocê recebe 7 de dano.",
+    "itIT": "[x]<b>Lancio Quando\nPescata</b>. Infligge\n7 danni al tuo eroe.",
+    "plPL": "<b>Zagraj po dobraniu</b>\nOtrzymujesz 7 pkt. obrażeń."
+   }
+  },
+  "LOOT_026e": {
+   "text": {
+    "enUS": "<b>Casts When Drawn</b>\nSummon a 4/4 Spider.",
+    "ruRU": "<b>При взятии</b>\nвы призываете паука 4/4.",
+    "deDE": "<b>Beim Ziehen gewirkt</b>. Ruft eine Spinne\n(4/4) herbei.",
+    "frFR": "<b>Jouée quand piochée</b> Invoque une araignée 4/4.",
+    "esES": "[x]<b>Este hechizo se lanza al robarlo</b>.\nInvoca una araña 4/4.",
+    "ptBR": "<b>Lançado ao Comprar</b> \nEvoque uma Aranha 4/4.",
+    "itIT": "[x]<b>Lancio Quando Pescata</b>.\nEvoca un Ragno 4/4.",
+    "plPL": "<b>Zagraj po dobraniu</b>\nPrzyzwij Pająka 4/4."
+   }
+  },
+  "LOOT_106t": {
+   "text": {
+    "enUS": "<b>Casts When Drawn</b>\nCast a random spell.",
+    "ruRU": "<b>При взятии</b>\nвы разыгрываете случайное заклинание.",
+    "deDE": "<b>Beim Ziehen gewirkt</b>. Wirkt einen zufälligen Zauber.",
+    "frFR": "<b>Jouée quand piochée</b> Lance un sort aléatoire.",
+    "esES": "[x]<b>Este hechizo se lanza al robarlo</b>.\nLanza un hechizo aleatorio.",
+    "ptBR": "<b>Lançado ao Comprar</b> \nLance um feitiço aleatório.",
+    "itIT": "[x]<b>Lancio Quando\nPescata</b>. Lancia\nuna Magia casuale.",
+    "plPL": "<b>Zagraj po dobraniu</b>\nRzuć losowe zaklęcie."
+   }
+  },
+  "LOOT_526t": {
+   "text": {
+    "enUS": "<b>Casts When Drawn</b>\nSnuff out a candle.",
+    "ruRU": "<b>При взятии</b>\nзадувает свечку.",
+    "deDE": "<b>Beim Ziehen gewirkt</b>. Löscht eine Kerze.",
+    "frFR": "<b>Jouée quand piochée</b> Éteint une bougie.",
+    "esES": "[x]<b>Este hechizo se lanza al robarlo</b>.\nSopla una vela.",
+    "ptBR": "<b>Lançado ao Comprar</b> \nApague uma vela.",
+    "itIT": "[x]<b>Lancio Quando Pescata</b>.\nSpegne una candela.",
+    "plPL": "<b>Zagraj po dobraniu</b>\nZgaś świecę."
+   }
+  },
+  "VAN_NEW1_012": {
+   "cost": 2
+  },
+  "VAN_NEW1_030": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Destroy all other minions and discard your hand.",
+    "ruRU": "[x]<b>Боевой клич:</b> уничтожает\nвсех прочих существ.\nВы сбрасываете все\n  карты из руки.",
+    "deDE": "<b>Kampfschrei:</b> Vernichtet alle anderen Diener und werft Eure Hand ab.",
+    "frFR": "<b>Cri de guerre :</b> détruit tous les autres serviteurs et vous défausse de votre main.",
+    "esES": "[x]<b>Grito de batalla:</b>\nDestruye a todos\nlos demás esbirros y\ndescarta tu mano.",
+    "ptBR": "<b>Grito de Guerra:</b> Destrua todos os outros lacaios e descarte a sua mão.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\ndistrugge TUTTI gli altri\nservitori. Scarta le\ncarte nella tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zniszcz wszystkich pozostałych stronników i odrzuć całą rękę."
+   }
+  }
+ },
+ "sources": []
+}

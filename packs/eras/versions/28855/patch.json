@@ -1,0 +1,261 @@
+{
+ "base": "trl",
+ "build": 28855,
+ "about": "",
+ "cards": {
+  "AT_042b": {
+   "text": {
+    "enUS": "<b>Stealth</b>",
+    "ruRU": "<b>«Маскировка»</b>",
+    "deDE": "<b>Verstohlenheit</b>",
+    "frFR": "<b>Camouflage</b>",
+    "esES": "<b>Sigilo</b>",
+    "ptBR": "<b>Furtividade</b>",
+    "itIT": "<b>Furtività</b>",
+    "plPL": "<b>Ukrycie</b>"
+   }
+  },
+  "AT_069": {
+   "mechanics": [
+    "BATTLECRY"
+   ],
+   "referencedTags": [
+    "TAUNT"
+   ]
+  },
+  "AT_132_SHAMANa": {
+   "cost": 1
+  },
+  "AT_132_SHAMANb": {
+   "cost": 1
+  },
+  "AT_132_SHAMANc": {
+   "cost": 1
+  },
+  "AT_132_SHAMANd": {
+   "cost": 1
+  },
+  "BOT_529": {
+   "name": {
+    "enUS": "Power Word: Replicate",
+    "ruRU": "Слово силы: Репликация",
+    "deDE": "Machtwort: Klonen",
+    "frFR": "Mot de pouvoir : Réplication",
+    "esES": "Palabra de poder: réplica",
+    "ptBR": "Palavra de Poder: Replicar",
+    "itIT": "Parola del Potere: Replica",
+    "plPL": "Słowo mocy: Replikacja"
+   }
+  },
+  "BRM_010a": {
+   "attack": 5,
+   "health": 2
+  },
+  "BRM_010b": {
+   "attack": 2,
+   "health": 5
+  },
+  "CFM_634": {
+   "mechanics": [
+    "TRIGGER_VISUAL"
+   ],
+   "referencedTags": [
+    "STEALTH"
+   ]
+  },
+  "VAN_CS2_013": {
+   "cost": 3
+  },
+  "VAN_CS2_073": {
+   "cost": 2
+  },
+  "VAN_CS2_084": {
+   "cost": 2
+  },
+  "VAN_EX1_164": {
+   "cost": 6
+  },
+  "VAN_EX1_565": {
+   "cost": 3
+  },
+  "VAN_EX1_619": {
+   "cost": 4
+  },
+  "GVG_045": {
+   "text": {
+    "enUS": "Deal $2-$4 damage to a minion. Summon a 1/1 Imp for each damage dealt.",
+    "ruRU": "Наносит $2–$4 ед. урона выбранному существу. Призывает беса 1/1 за каждую единицу урона.",
+    "deDE": "Fügt einem Diener $2–$4 Schaden zu. Beschwört pro zugefügtem Schadenspunkt einen Wichtel (1/1).",
+    "frFR": "Inflige $2 à $4 points de dégâts à un serviteur. Invoque un diablotin 1/1 pour chaque point de dégâts infligé.",
+    "esES": "Inflige $2 - $4 p. de daño a un esbirro. Invoca un diabillo 1/1 por cada punto de daño infligido.",
+    "ptBR": "Cause $2-$4 de dano a um lacaio. Evoque um Diabrete 1/1 para cada ponto de dano causado.",
+    "itIT": "Infligge da $2 a $4 danni a un servitore. Evoca un Imp 1/1 per ogni danno inflitto.",
+    "plPL": "Zadaj $2-$4 pkt. obrażeń stronnikowi. Przyzwij Chochlika 1/1 za każdy zadany punkt obrażeń."
+   }
+  },
+  "ICC_051b": {
+   "text": {
+    "enUS": "<b>Taunt</b>",
+    "ruRU": "<b>Провокация</b>",
+    "deDE": "<b>Spott</b>",
+    "frFR": "<b>Provocation</b>",
+    "esES": "<b>Provocar</b>",
+    "ptBR": "<b>Provocar</b>",
+    "itIT": "<b>Provocazione</b>",
+    "plPL": "<b>Prowokacja</b>"
+   }
+  },
+  "ICC_221": {
+   "cost": 1,
+   "text": {
+    "enUS": "Give your weapon <b>Lifesteal</b> this turn.",
+    "ruRU": "Ваше оружие получает <b>«Похищение жизни»</b> до конца хода.",
+    "deDE": "Verleiht Eurer Waffe <b>Lebensentzug</b> in diesem Zug.",
+    "frFR": "Confère <b>Vol de vie</b> à votre arme pendant ce tour.",
+    "esES": "Otorga <b>Robo de vida</b>\na tu arma este turno.",
+    "ptBR": "Conceda <b>Roubar Vida</b> neste turno à sua arma.",
+    "itIT": "Fornisce <b>Furto Vitale</b> alla tua Arma per questo turno.",
+    "plPL": "Daj twojej broni <b>Kradzież życia</b> w tej turze."
+   }
+  },
+  "ICC_466": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon another\nSaronite Chain Gang.",
+    "ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b>\nпризывает еще одного дренея-каторжника.",
+    "deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen weiteren Saronitzwangsarbeiter herbei.",
+    "frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque une carte Enchaînés de saronite.",
+    "esES": "[x]<b>Provocar</b>\n<b>Grito de batalla:</b>\nInvoca a otro minero\nencadenado.",
+    "ptBR": "<b>Provocar</b> <b>Grito de Guerra:</b> Evoque outro Extratores de Saronita.",
+    "itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un altro Schiavo Incatenato.",
+    "plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij kolejnych Skazanych na saronit."
+   }
+  },
+  "LOE_018": {
+   "text": {
+    "enUS": "Whenever you <b>Overload</b>, gain +1 Attack per locked Mana Crystal.",
+    "ruRU": "Получает +1 к атаке за каждый заблокированный кристалл маны, когда вы получаете <b>«Перегрузку»</b>.",
+    "deDE": "Erhält jedes Mal, wenn Ihr eine Karte mit <b>Überladung</b> ausspielt, +1 Angriff pro gesperrtem Manakristall.",
+    "frFR": "Gagne +1 ATQ par cristal de mana verrouillé chaque fois que vous êtes en <b>Surcharge</b>.",
+    "esES": "Cada vez que tengas <b>Sobrecarga</b>, obtiene +1 p. de ataque por cada cristal de maná bloqueado.",
+    "ptBR": "Sempre que você usar <b>Sobrecarga</b>, receba +1 de Ataque por Cristal de Mana bloqueado.",
+    "itIT": "Quando attivi <b>Sovraccarico</b>, ottiene +1 Attacco per ogni Cristallo di Mana bloccato.",
+    "plPL": "Przy każdym twoim <b>Przeciążeniu</b> otrzymuje +1 do ataku za każdy zablokowany kryształ many."
+   }
+  },
+  "LOOT_080": {
+   "cost": 6
+  },
+  "LOOT_080t2": {
+   "cost": 6
+  },
+  "LOOT_080t3": {
+   "cost": 6
+  },
+  "LOOT_333": {
+   "cost": 6
+  },
+  "OG_051": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Spend all your Mana. Gain +1/+1 for each Mana spent.",
+    "ruRU": "<b>Боевой клич:</b> расходует всю вашу ману. Получает +1/+1 за каждую израсходованную единицу маны.",
+    "deDE": "<b>Kampfschrei:</b> Verbraucht Euer gesamtes Mana. Erhält +1/+1 für jedes so verbrauchte Mana.",
+    "frFR": "<b>Cri de guerre :</b> dépense tous vos cristaux de mana. Gagne +1/+1 pour chaque cristal dépensé.",
+    "esES": "<b>Grito de batalla:</b> Gasta todo tu maná. Obtiene +1/+1 por cada cristal de maná gastado.",
+    "ptBR": "<b>Grito de Guerra:</b> Gaste todo o seu Mana. Receba +1/+1 para cada cristal de mana gasto.",
+    "itIT": "<b>Grido di Battaglia:</b> consuma tutto il tuo Mana e ottiene +1/+1 per ogni Mana così speso.",
+    "plPL": "<b>Okrzyk bojowy:</b> Wydaj całą twoją manę. Otrzymuje +1/+1 za każdy wydany punkt many."
+   }
+  },
+  "TRL_085": {
+   "text": {
+    "enUS": "[x]Whenever you target a\nminion with a spell, cast it\nagain on its neighbors.",
+    "ruRU": "Когда вы выбираете целью заклинания существо, целями становятся и существа по обе стороны от него.",
+    "deDE": "Jedes Mal, wenn Ihr einen Zauber auf einen Diener wirkt, wird er erneut auf benachbarte Diener gewirkt.",
+    "frFR": "Chaque fois que vous ciblez un serviteur avec un sort, le lance à nouveau sur les serviteurs adjacents.",
+    "esES": "[x]Cada vez que lanzas\nun hechizo a un esbirro,\nse vuelve a lanzar a los\nesbirros adyacentes.",
+    "ptBR": "Sempre que você alvejar um lacaio com um feitiço, lance-o novamente nos lacaios adjacentes.",
+    "itIT": "[x]Quando lanci una Magia\nsu un servitore, viene\nlanciata anche su\nquelli adiacenti.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie na stronnika, rzuć je ponownie na jego sąsiadów."
+   }
+  },
+  "TRL_300": {
+   "name": {
+    "enUS": "Shirvallah, the Tiger",
+    "ruRU": "Ширвалла, лоа-тигрица",
+    "deDE": "Shirvallah der Tiger",
+    "frFR": "Shirvallah, le tigre",
+    "esES": "Shirvallah, la tigresa",
+    "ptBR": "Shirvallah, a Tigresa",
+    "itIT": "Shirvallah, la Tigre",
+    "plPL": "Tygrysica Szirwala"
+   }
+  },
+  "TRL_312": {
+   "name": {
+    "enUS": "Spellzerker",
+    "ruRU": "Бешеный маг",
+    "deDE": "Zauberfurie",
+    "frFR": "Sorcière berserker",
+    "esES": "Hechicera rabiosa",
+    "ptBR": "Feiticeira Berserker",
+    "itIT": "Maga Berserker",
+    "plPL": "Wiedźma berserker"
+   }
+  },
+  "TRL_513": {
+   "name": {
+    "enUS": "Mosh'Ogg Enforcer",
+    "ruRU": "Арбитр Мош'Огг",
+    "deDE": "Mosh'Ogg-Ringrichter",
+    "frFR": "Massacreur mosh’Ogg",
+    "esES": "Déspota Mosh'Ogg",
+    "ptBR": "Impositor Mosh'ogg",
+    "itIT": "Scagnozzo Mosh'ogg",
+    "plPL": "Mosz'ogg nadzorca"
+   }
+  },
+  "TRL_541t": {
+   "mechanics": [
+    "ImmuneToSpellpower",
+    "TOPDECK"
+   ]
+  },
+  "TRL_545": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> If you've restored\n10 Health this game, gain\n+4/+4 and <b>Taunt</b>.@ <i>({0} left!)</i>@ <i>(Ready!)</i>",
+    "ruRU": "<b>Боевой клич:</b> если вы\nвосстановили 10 ед. здоровья в течение матча, получает +4/+4 и <b>«Провокацию»</b>.@ <i>(Осталось {0} ед.!)</i>@ <i>(Готово!)</i>",
+    "deDE": "<b>Kampfschrei:</b> Erhält +4/+4 und <b>Spott</b>, wenn Ihr in diesem Spiel 10 Leben wieder[d]herge[d]stellt habt.@ <i>(Noch {0}!)</i>@ <i>(Bereit!)</i>",
+    "frFR": "<b>Cri de guerre :</b> si vous avez rendu 10 points de vie pendant cette partie, gagne +4/+4 et <b>Provocation</b>.@ <i>(Encore {0} !)</i>@ <i>(Prêt !)</i>",
+    "esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtienes\n+4/+4 y <b>Provocar</b>.@\n<i>(Faltan: {0})</i>.@ <i>(¡Listo!)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você tiver restaurado 10 de Vida nesta partida, receba +4/+4 e <b>Provocar</b>.@ <i>(Resta: {0})</i>@ <i>(Pronto!)</i>",
+    "itIT": "[x]<b>Grido di Battaglia:</b> se hai\nrigenerato 10 Salute in\nquesta partita, ottiene +4/+4 e\n <b>Provocazione</b>.@ <i>({0} restanti!)</i>@ <i>(Pronto!)</i>",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 10 pkt. zdrowia w tej grze, otrzymuje +4/+4 oraz <b>Prowokację</b>.@ <i>(Jeszcze {0})</i>@ <i>(Gotowe!)</i>"
+   }
+  },
+  "TRL_555": {
+   "text": {
+    "enUS": "Destroy a minion. Costs (1) less for each minion you control.",
+    "ruRU": "Уничтожает выбранное существо. Стоит на (1) меньше за каждое существо под вашим контролем.",
+    "deDE": "Vernichtet einen Diener. Kostet (1) weniger für jeden Diener, den Ihr kontrolliert.",
+    "frFR": "Détruit un serviteur. Coûte (1) cristal de moins pour chaque serviteur que vous contrôlez.",
+    "esES": "[x]Destruye a un esbirro.\nCuesta (1) cristal menos por cada\nesbirro que controles.",
+    "ptBR": "Destrua um lacaio. \nCusta (1) a menos para cada lacaio sob seu controle.",
+    "itIT": "[x]Distrugge un servitore.\nCosta (1) in meno per ogni\nservitore che controlli.",
+    "plPL": "Zniszcz stronnika. Kosztuje (1) mniej za każdego stronnika, jakiego kontrolujesz."
+   }
+  },
+  "UNG_101b": {
+   "text": {
+    "enUS": "<b>Taunt</b>",
+    "ruRU": "<b>Провокация</b>",
+    "deDE": "<b>Spott</b>",
+    "frFR": "<b>Provocation</b>",
+    "esES": "<b>Provocar</b>",
+    "ptBR": "<b>Provocar</b>",
+    "itIT": "<b>Provocazione</b>",
+    "plPL": "<b>Prowokacja</b>"
+   }
+  }
+ },
+ "sources": []
+}

@@ -1,0 +1,64 @@
+{
+ "base": "trl",
+ "build": 28116,
+ "about": "",
+ "cards": {
+  "BRM_010a": {
+   "attack": 5,
+   "health": 2
+  },
+  "BRM_010b": {
+   "attack": 2,
+   "health": 5
+  },
+  "TRL_085": {
+   "text": {
+    "enUS": "[x]Whenever you target a\nminion with a spell, cast it\nagain on its neighbors.",
+    "ruRU": "Когда вы выбираете целью заклинания существо, целями становятся и существа по обе стороны от него.",
+    "deDE": "Jedes Mal, wenn Ihr einen Zauber auf einen Diener wirkt, wird er auch auf benachbarte Diener gewirkt.",
+    "frFR": "Chaque fois que vous ciblez un serviteur avec un sort, le lance à nouveau sur les serviteurs adjacents.",
+    "esES": "[x]Cada vez que lanzas\nun hechizo a un esbirro,\nse vuelve a lanzar a los\nesbirros adyacentes.",
+    "ptBR": "Sempre que você alvejar um lacaio com um feitiço, lance-o novamente nos lacaios adjacentes.",
+    "itIT": "[x]Quando lanci una Magia\nsu un servitore, viene\nlanciata anche su\nquelli adiacenti.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie na stronnika, rzuć je ponownie na jego sąsiadów."
+   }
+  },
+  "TRL_312": {
+   "name": {
+    "enUS": "Spellzerker",
+    "ruRU": "Бешеный маг",
+    "deDE": "Zauberfurie",
+    "frFR": "Sorcière berserker",
+    "esES": "Hechicera rabiosa",
+    "ptBR": "Feiticeira Berserker",
+    "itIT": "Maga Berserker",
+    "plPL": "Wiedźma berserker"
+   }
+  },
+  "TRL_513": {
+   "name": {
+    "enUS": "Mosh'Ogg Enforcer",
+    "ruRU": "Арбитр Мош'Огг",
+    "deDE": "Mosh'Ogg-Ringrichter",
+    "frFR": "Massacreur mosh’Ogg",
+    "esES": "Déspota Mosh'Ogg",
+    "ptBR": "Impositor Mosh'ogg",
+    "itIT": "Scagnozzo Mosh'ogg",
+    "plPL": "Mosz'ogg nadzorca"
+   }
+  },
+  "TRL_555": {
+   "text": {
+    "enUS": "Destroy a minion. Costs (1) less for each minion you control.",
+    "ruRU": "Уничтожает выбранное существо. Стоит на (1) меньше за каждое существо под вашим контролем.",
+    "deDE": "Vernichtet einen Diener. Kostet (1) weniger für jeden Diener, den Ihr kontrolliert.",
+    "frFR": "Détruit un serviteur. Coûte (1) cristal de moins pour chaque serviteur que vous contrôlez.",
+    "esES": "[x]Destruye a un esbirro.\nCuesta (1) cristal menos por cada\nesbirro que controles.",
+    "ptBR": "Destrua um lacaio. \nCusta (1) a menos para cada lacaio sob seu controle.",
+    "itIT": "[x]Distrugge un servitore.\nCosta (1) in meno per ogni\nservitore che controlli.",
+    "plPL": "Zniszcz stronnika. Kosztuje (1) mniej za każdego stronnika, jakiego kontrolujesz."
+   }
+  }
+ },
+ "sources": []
+}

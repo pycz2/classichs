@@ -1,0 +1,701 @@
+{
+ "base": "trl",
+ "build": 29349,
+ "about": "",
+ "cards": {
+  "AT_042b": {
+   "text": {
+    "enUS": "<b>Stealth</b>",
+    "ruRU": "<b>«Маскировка»</b>",
+    "deDE": "<b>Verstohlenheit</b>",
+    "frFR": "<b>Camouflage</b>",
+    "esES": "<b>Sigilo</b>",
+    "ptBR": "<b>Furtividade</b>",
+    "itIT": "<b>Furtività</b>",
+    "plPL": "<b>Ukrycie</b>"
+   }
+  },
+  "AT_069": {
+   "mechanics": [
+    "BATTLECRY"
+   ],
+   "referencedTags": [
+    "TAUNT"
+   ]
+  },
+  "AT_076": {
+   "text": {
+    "enUS": "<b>Inspire:</b> Summon a random Murloc.",
+    "ruRU": "<b>Воодушевление:</b> призывает случайного мурлока.",
+    "deDE": "<b>Inspiration:</b> Ruft einen zufälligen Murloc herbei.",
+    "frFR": "<b>Exaltation :</b> invoque un Murloc aléatoire.",
+    "esES": "<b>Inspirar:</b> Invoca un múrloc aleatorio.",
+    "ptBR": "<b>Inspirar:</b> Evoque um Murloc aleatório.",
+    "itIT": "<b>Ispirazione:</b> evoca un Murloc casuale.",
+    "plPL": "<b>Inspiracja:</b> Przyzwij losowego Murloka."
+   }
+  },
+  "AT_132_SHAMANa": {
+   "cost": 1
+  },
+  "AT_132_SHAMANb": {
+   "cost": 1
+  },
+  "AT_132_SHAMANc": {
+   "cost": 1
+  },
+  "AT_132_SHAMANd": {
+   "cost": 1
+  },
+  "BOT_216": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> If you have 10 Mana Crystals, restore #10 Health to your hero.",
+    "ruRU": "[x]<b>Боевой клич:</b> если у вас\n10 кристаллов маны,\nвосстанавливает вашему\n      герою #10 ед. здоровья.   ",
+    "deDE": "<b>Kampfschrei:</b> Stellt bei Eurem Helden #10 Leben wieder her, wenn Ihr 10 Mana[d]kristalle habt.",
+    "frFR": "<b>Cri de guerre :</b> rend #10 PV\nà votre héros si vous avez 10 |4(cristal,cristaux) de mana.",
+    "esES": "[x]<b>Grito de batalla:</b> Si tienes\n10 cristales de maná,\nrestaura #10 p. de salud\na tu héroe.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você tiver 10 Cristais de Mana, restaure #10 de Vida do seu herói.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\nse hai 10 Cristalli di\nMana, rigenera\n#10 Salute al tuo eroe.",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli masz 10 kryształów many, przywróć #10 pkt. zdrowia twojemu bohaterowi."
+   }
+  },
+  "BOT_529": {
+   "name": {
+    "enUS": "Power Word: Replicate",
+    "ruRU": "Слово силы: Репликация",
+    "deDE": "Machtwort: Klonen",
+    "frFR": "Mot de pouvoir : Réplication",
+    "esES": "Palabra de poder: réplica",
+    "ptBR": "Palavra de Poder: Replicar",
+    "itIT": "Parola del Potere: Replica",
+    "plPL": "Słowo mocy: Replikacja"
+   }
+  },
+  "BRM_010a": {
+   "attack": 5,
+   "health": 2
+  },
+  "BRM_010b": {
+   "attack": 2,
+   "health": 5
+  },
+  "CFM_310": {
+   "text": {
+    "enUS": "Summon four 1/1 Murlocs.",
+    "ruRU": "Призывает четырех мурлоков 1/1.",
+    "deDE": "Ruft vier Murlocs (1/1) herbei.",
+    "frFR": "Invoque quatre Murlocs 1/1.",
+    "esES": "Invoca a cuatro múrlocs 1/1.",
+    "ptBR": "Evoque quatro Murlocs 1/1.",
+    "itIT": "Evoca quattro Murloc 1/1.",
+    "plPL": "Przyzwij cztery Murloki 1/1."
+   }
+  },
+  "CFM_344": {
+   "text": {
+    "enUS": "[x]<b>Stealth</b>\n   Whenever this attacks and   \nkills a minion, summon 2\n Murlocs from your deck.",
+    "ruRU": "<b>Маскировка</b>. Когда это существо атакует и убивает другое существо, призывает 2 мурлоков из вашей колоды.",
+    "deDE": "<b>Verstohlenheit</b>. Ruft jedes Mal 2 Murlocs aus Eurem Deck herbei, wenn dieser Diener einen Diener angreift und vernichtet.",
+    "frFR": "<b>Camouflage</b>\nInvoque 2 Murlocs de votre deck chaque fois qu’il attaque et tue un serviteur.",
+    "esES": "<b>Sigilo</b>.\nCada vez que este esbirro ataca y mata a otro, invoca a 2 múrlocs de tu mazo.",
+    "ptBR": "[x]<b>Furtividade</b>\nSempre que ele atacar e \nmatar um lacaio, evoque 2\nMurlocs do seu deck.",
+    "itIT": "<b>Furtività</b>. Quando attacca e distrugge un servitore, evoca due Murloc dal tuo mazzo.",
+    "plPL": "<b>Ukrycie</b>\n Za każdym razem gdy zaatakuje i zabije stronnika, przyzwij 2 Murloki z twojej talii."
+   }
+  },
+  "CFM_634": {
+   "mechanics": [
+    "TRIGGER_VISUAL"
+   ],
+   "referencedTags": [
+    "STEALTH"
+   ]
+  },
+  "CFM_650": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> Give a random\nMurloc in your hand +1/+1.",
+    "ruRU": "<b>Боевой клич:</b> случайный мурлок у вас в руке получает +1/+1.",
+    "deDE": "<b>Kampfschrei:</b> Verleiht einem zufälligen Murloc auf Eurer Hand +1/+1.",
+    "frFR": "<b>Cri de guerre :</b> donne +1/+1 à un Murloc aléatoire de votre main.",
+    "esES": "<b>Grito de batalla:</b> Otorga +1/+1 a un múrloc aleatorio que esté en tu mano.",
+    "ptBR": "[x]<b>Grito de Guerra:</b>\nConceda +1/+1 a um\nMurloc aleatório\nna sua mão.",
+    "itIT": "<b>Grido di Battaglia:</b> +1/+1 a un Murloc casuale nella tua mano.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj losowemu Murlokowi w twojej ręce +1/+1."
+   }
+  },
+  "CFM_662": {
+   "text": {
+    "enUS": "[x]Deal $5 damage to all\nminions except Dragons.",
+    "ruRU": "Наносит $5 ед. урона всем существам, кроме драконов.",
+    "deDE": "Fügt allen Dienern außer Drachen $5 Schaden zu.",
+    "frFR": "Inflige $5 points de dégâts à tous les serviteurs qui ne sont pas des Dragons.",
+    "esES": "[x]Inflige $5 p. de daño\na todos los esbirros que\nno sean dragones.",
+    "ptBR": "[x]Cause $5 de dano\na todos os lacaios,\nexceto Dragões.",
+    "itIT": "Infligge $5 danni a TUTTI i servitori non Draghi.",
+    "plPL": "Zadaj $5 pkt. obrażeń wszystkim stronnikom oprócz Smoków."
+   }
+  },
+  "CFM_699": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> The next Murloc\nyou play this turn costs\n Health instead of Mana.",
+    "ruRU": "<b>Боевой клич:</b> ваш следующий мурлок, разыгранный на этом ходу, будет расходовать здоровье, а не ману.",
+    "deDE": "<b>Kampfschrei:</b> Der nächste Murloc, den Ihr in diesem Zug ausspielt, kostet Leben statt Mana.",
+    "frFR": "<b>Cri de guerre :</b> le prochain Murloc que vous jouez pendant ce tour coûte de la Vie au lieu de cristaux de mana.",
+    "esES": "[x]<b>Grito de batalla:</b>\nEl próximo múrloc que juegues\neste turno costará salud\nen vez de maná.",
+    "ptBR": "[x]<b>Grito de Guerra:</b>\nO próximo Murloc que você\njogar neste turno custará\nVida em vez de Mana.",
+    "itIT": "<b>Grido di Battaglia:</b> il prossimo Murloc che giochi in questo turno costa Salute invece di Mana.",
+    "plPL": "<b>Okrzyk bojowy:</b> Następny Murlok, którego zagrasz w tej turze, kosztuje zdrowie zamiast many."
+   }
+  },
+  "VAN_CS2_013": {
+   "cost": 3
+  },
+  "VAN_CS2_073": {
+   "cost": 2
+  },
+  "VAN_CS2_084": {
+   "cost": 2
+  },
+  "VAN_CS2_237": {
+   "text": {
+    "enUS": "Whenever you summon a Beast, draw a card.",
+    "ruRU": "Когда вы призываете зверя, вы берете карту.",
+    "deDE": "Zieht jedes Mal eine Karte, wenn Ihr ein Wildtier herbeiruft.",
+    "frFR": "Vous piochez une carte chaque fois que vous invoquez une Bête.",
+    "esES": "Cada vez que invocas una bestia, roba una carta.",
+    "ptBR": "Sempre que você evocar uma Fera, compre um card.",
+    "itIT": "Quando viene evocata una Bestia sotto il tuo controllo, pesca una carta.",
+    "plPL": "Dobierz kartę za każdym razem, gdy przyzywasz Bestię."
+   }
+  },
+  "VAN_EX1_062": {
+   "text": {
+    "enUS": "<b>Charge</b>. Has +1 Attack for each other Murloc on the battlefield.",
+    "ruRU": "<b>Рывок</b>. +1 к атаке за каждого другого мурлока в игре.",
+    "deDE": "<b>Ansturm</b>. Hat +1 Angriff für jeden anderen Murloc auf dem Schlachtfeld.",
+    "frFR": "<b>Charge</b>. A +1 ATQ pour chaque autre Murloc sur le champ de bataille.",
+    "esES": "<b>Cargar</b>. Tiene +1 p. de ataque por cada múrloc adicional en el campo de batalla.",
+    "ptBR": "<b>Investida</b>. Ganha +1 de Ataque para cada um dos demais Murlocs no campo de batalha.",
+    "itIT": "<b>Carica</b>. Ha +1 Attacco per ogni altro Murloc sul campo.",
+    "plPL": "<b>Szarża</b>. Otrzymuje\n1 do ataku za każdego\npozostałego Murloka\nna polu bitwy."
+   }
+  },
+  "VAN_EX1_103": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Give your other Murlocs +2 Health.",
+    "ruRU": "<b>Боевой клич:</b> другие ваши мурлоки получают +2 к здоровью.",
+    "deDE": "<b>Kampfschrei:</b> Verleiht Euren anderen Murlocs +2 Leben.",
+    "frFR": "<b>Cri de guerre :</b> donne +2 PV à vos autres Murlocs.",
+    "esES": "<b>Grito de batalla:</b> Otorga\n+2 p. de salud a tus otros múrlocs.",
+    "ptBR": "<b>Grito de Guerra:</b> Conceda +2 de Vida aos seus outros Murlocs.",
+    "itIT": "<b>Grido di Battaglia:</b> +2 Salute agli altri tuoi Murloc.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj twoim pozostałym Murlokom +2 do zdrowia."
+   }
+  },
+  "VAN_EX1_164": {
+   "cost": 6
+  },
+  "VAN_EX1_507": {
+   "text": {
+    "enUS": "Your other Murlocs have +2 Attack.",
+    "ruRU": "Другие ваши мурлоки получают +2 к атаке.",
+    "deDE": "Eure anderen Murlocs haben +2 Angriff.",
+    "frFR": "Vos autres Murlocs\nont +2 ATQ.",
+    "esES": "Tus demás múrlocs tienen +2 p. de ataque.",
+    "ptBR": "Seus outros Murlocs têm +2 de Ataque.",
+    "itIT": "Gli altri tuoi Murloc hanno +2 Attacco.",
+    "plPL": "Twoje pozostałe\nMurloki mają\n+2 do ataku."
+   }
+  },
+  "VAN_EX1_508": {
+   "text": {
+    "enUS": "Your other Murlocs have +1 Attack.",
+    "ruRU": "Другие ваши мурлоки получают +1 к атаке.",
+    "deDE": "Eure anderen Murlocs haben +1 Angriff.",
+    "frFR": "Vos autres Murlocs ont +1 ATQ.",
+    "esES": "Tus demás múrlocs tienen +1 p. de ataque.",
+    "ptBR": "Seus outros Murlocs têm +1 de Ataque.",
+    "itIT": "Gli altri tuoi Murloc hanno +1 Attacco.",
+    "plPL": "Twoje pozostałe Murloki mają\n+1 do ataku."
+   }
+  },
+  "VAN_EX1_509": {
+   "text": {
+    "enUS": "Whenever you summon a Murloc, gain +1 Attack.",
+    "ruRU": "Получает +1 к атаке, когда вы призываете мурлока.",
+    "deDE": "Erhält jedes Mal +1 Angriff, wenn Ihr einen Murloc herbeiruft.",
+    "frFR": "Gagne +1 ATQ chaque fois que vous invoquez un Murloc.",
+    "esES": "Obtiene +1 p. de ataque cada vez que invocas a un múrloc.",
+    "ptBR": "Sempre que você evocar um Murloc, receba +1 de Ataque.",
+    "itIT": "Ottiene +1 Attacco quando viene evocato un Murloc sotto il tuo controllo.",
+    "plPL": "Otrzymuje +1 do ataku za każdym razem, gdy przyzywasz Murloka."
+   }
+  },
+  "VAN_EX1_531": {
+   "text": {
+    "enUS": "Whenever a friendly Beast dies, gain +2/+1.",
+    "ruRU": "Получает +2/+1, когда ваш зверь погибает.",
+    "deDE": "Erhält jedes Mal +2/+1, wenn ein befreundetes Wildtier stirbt.",
+    "frFR": "Chaque fois qu’une Bête alliée meurt, gagne +2/+1.",
+    "esES": "Obtiene +2/+1 cada vez que muere una bestia amistosa.",
+    "ptBR": "Sempre que uma Fera aliada morrer, receba +2/+1.",
+    "itIT": "Ottiene +2/+1 quando muore una tua Bestia.",
+    "plPL": "Otrzymuje +2/+1 za każdym razem, gdy zginie przyjazna Bestia."
+   }
+  },
+  "VAN_EX1_565": {
+   "cost": 3
+  },
+  "VAN_EX1_619": {
+   "cost": 4
+  },
+  "GVG_040": {
+   "text": {
+    "enUS": "Whenever another friendly Murloc dies, draw a card. <b><b>Overload</b>:</b> (1)",
+    "ruRU": "Когда погибает другой ваш мурлок, вы берете карту.\n[x]<b>Перегрузка:</b> (1)",
+    "deDE": "Zieht jedes Mal eine Karte, wenn ein anderer befreundeter Murloc stirbt. <b>Überladung:</b> (1)",
+    "frFR": "Chaque fois qu’un autre Murloc allié meurt, vous piochez une carte.\n<b>Surcharge :</b> (1)",
+    "esES": "Cada vez que muere otro múrloc amistoso, roba una carta.\n<b>Sobrecarga:</b> (1)",
+    "ptBR": "Sempre que um Murloc aliado morrer, compre um card. <b><b>Sobrecarga</b>:</b> (1)",
+    "itIT": "Quando un altro tuo Murloc muore, pesca una carta. <b>Sovraccarico:</b> (1)",
+    "plPL": "Dobierz kartę za każdym razem, gdy zginie inny przyjazny Murlok. <b>Przeciążenie:</b> (1)"
+   }
+  },
+  "GVG_042": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Add 4 random Murlocs to your hand. <b>Overload:</b> (3)",
+    "ruRU": "<b>Боевой клич:</b> вы кладете в руку 4 случайные карты мурлоков. <b>Перегрузка:</b> (3)",
+    "deDE": "[x]<b>Kampfschrei:</b> Erhaltet\n4 zufällige Murlocs\nauf die Hand.\n<b>Überladung:</b> (3)",
+    "frFR": "<b>Cri de guerre :</b> ajoute 4 Murlocs aléatoires dans votre main.\n<b>Surcharge :</b> (3)",
+    "esES": "<b>Grito de batalla:</b> Añade 4 múrlocs aleatorios a tu mano.\n<b>Sobrecarga:</b> (3)",
+    "ptBR": "<b>Grito de Guerra:</b> Adicione 4 Murlocs aleatórios à sua mão. <b>Sobrecarga:</b> (3)",
+    "itIT": "<b>Grido di Battaglia:</b> mette nella tua mano quattro Murloc casuali. <b>Sovraccarico:</b> (3)",
+    "plPL": "<b>Okrzyk bojowy:</b> Dodaj\n4 losowe Murloki\ndo twojej ręki.\n<b>Przeciążenie:</b> (3)"
+   }
+  },
+  "GVG_045": {
+   "text": {
+    "enUS": "Deal $2-$4 damage to a minion. Summon a 1/1 Imp for each damage dealt.",
+    "ruRU": "Наносит $2–$4 ед. урона выбранному существу. Призывает беса 1/1 за каждую единицу урона.",
+    "deDE": "Fügt einem Diener $2–$4 Schaden zu. Beschwört pro zugefügtem Schadenspunkt einen Wichtel (1/1).",
+    "frFR": "Inflige $2 à $4 points de dégâts à un serviteur. Invoque un diablotin 1/1 pour chaque point de dégâts infligé.",
+    "esES": "Inflige $2 - $4 p. de daño a un esbirro. Invoca un diabillo 1/1 por cada punto de daño infligido.",
+    "ptBR": "Cause $2-$4 de dano a um lacaio. Evoque um Diabrete 1/1 para cada ponto de dano causado.",
+    "itIT": "Infligge da $2 a $4 danni a un servitore. Evoca un Imp 1/1 per ogni danno inflitto.",
+    "plPL": "Zadaj $2-$4 pkt. obrażeń stronnikowi. Przyzwij Chochlika 1/1 za każdy zadany punkt obrażeń."
+   }
+  },
+  "ICC_051b": {
+   "text": {
+    "enUS": "<b>Taunt</b>",
+    "ruRU": "<b>Провокация</b>",
+    "deDE": "<b>Spott</b>",
+    "frFR": "<b>Provocation</b>",
+    "esES": "<b>Provocar</b>",
+    "ptBR": "<b>Provocar</b>",
+    "itIT": "<b>Provocazione</b>",
+    "plPL": "<b>Prowokacja</b>"
+   }
+  },
+  "ICC_089": {
+   "text": {
+    "enUS": "Draw 2 Murlocs from your deck.",
+    "ruRU": "Вы кладете в руку двух мурлоков из колоды.",
+    "deDE": "Zieht 2 Murlocs aus Eurem Deck.",
+    "frFR": "Vous piochez 2 Murlocs dans votre deck.",
+    "esES": "[x]Roba 2 múrlocs\nde tu mazo.",
+    "ptBR": "Compre 2 Murlocs do seu deck.",
+    "itIT": "Pesca due Murloc\ndal tuo mazzo.",
+    "plPL": "Dobierz dwa Murloki z twojej talii."
+   }
+  },
+  "ICC_221": {
+   "cost": 1,
+   "text": {
+    "enUS": "Give your weapon <b>Lifesteal</b> this turn.",
+    "ruRU": "Ваше оружие получает <b>«Похищение жизни»</b> до конца хода.",
+    "deDE": "Verleiht Eurer Waffe <b>Lebensentzug</b> in diesem Zug.",
+    "frFR": "Confère <b>Vol de vie</b> à votre arme pendant ce tour.",
+    "esES": "Otorga <b>Robo de vida</b>\na tu arma este turno.",
+    "ptBR": "Conceda <b>Roubar Vida</b> neste turno à sua arma.",
+    "itIT": "Fornisce <b>Furto Vitale</b> alla tua Arma per questo turno.",
+    "plPL": "Daj twojej broni <b>Kradzież życia</b> w tej turze."
+   }
+  },
+  "ICC_466": {
+   "text": {
+    "enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon another\nSaronite Chain Gang.",
+    "ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b>\nпризывает еще одного дренея-каторжника.",
+    "deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen weiteren Saronitzwangsarbeiter herbei.",
+    "frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque une carte Enchaînés de saronite.",
+    "esES": "[x]<b>Provocar</b>\n<b>Grito de batalla:</b>\nInvoca a otro minero\nencadenado.",
+    "ptBR": "<b>Provocar</b> <b>Grito de Guerra:</b> Evoque outro Extratores de Saronita.",
+    "itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un altro Schiavo Incatenato.",
+    "plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij kolejnych Skazanych na saronit."
+   }
+  },
+  "ICC_825": {
+   "text": {
+    "enUS": "[x]<b>Deathrattle:</b> Summon\na random friendly Beast\nthat died this game.",
+    "ruRU": "<b>Предсмертный хрип:</b>\nпризывает вашего случайного зверя,    погибшего в этом матче.",
+    "deDE": "<b>Todesröcheln:</b> Ruft ein zufälliges befreundetes Wildtier herbei, das in diesem Spiel gestorben ist.",
+    "frFR": "<b>Râle d’agonie :</b> invoque une Bête alliée aléatoire morte pendant cette partie.",
+    "esES": "[x]<b>Último aliento:</b>\nInvoca a una bestia amistosa\n aleatoria que haya muerto\ndurante esta partida.",
+    "ptBR": "<b>Último Suspiro:</b> Evoque uma Fera aliada aleatória morta nesta partida.",
+    "itIT": "[x]<b>Rantolo di Morte:</b> evoca una\ntua Bestia casuale morta\nin questa partita.",
+    "plPL": "<b>Agonia:</b> Przyzwij losową przyjazną Bestię, która zginęła w tej grze."
+   }
+  },
+  "LOE_018": {
+   "text": {
+    "enUS": "Whenever you <b>Overload</b>, gain +1 Attack per locked Mana Crystal.",
+    "ruRU": "Получает +1 к атаке за каждый заблокированный кристалл маны, когда вы получаете <b>«Перегрузку»</b>.",
+    "deDE": "Erhält jedes Mal, wenn Ihr eine Karte mit <b>Überladung</b> ausspielt, +1 Angriff pro gesperrtem Manakristall.",
+    "frFR": "Gagne +1 ATQ par cristal de mana verrouillé chaque fois que vous êtes en <b>Surcharge</b>.",
+    "esES": "Cada vez que tengas <b>Sobrecarga</b>, obtiene +1 p. de ataque por cada cristal de maná bloqueado.",
+    "ptBR": "Sempre que você usar <b>Sobrecarga</b>, receba +1 de Ataque por Cristal de Mana bloqueado.",
+    "itIT": "Quando attivi <b>Sovraccarico</b>, ottiene +1 Attacco per ogni Cristallo di Mana bloccato.",
+    "plPL": "Przy każdym twoim <b>Przeciążeniu</b> otrzymuje +1 do ataku za każdy zablokowany kryształ many."
+   }
+  },
+  "LOE_026": {
+   "text": {
+    "enUS": "Summon 7 Murlocs that died this game.",
+    "ruRU": "Призывает 7 мурлоков, которые умерли в течение матча.",
+    "deDE": "Ruft 7 Murlocs herbei, die in diesem Spiel gestorben sind.",
+    "frFR": "Invoque 7 Murlocs détruits pendant cette partie.",
+    "esES": "Invoca a 7 múrlocs que hayan muerto durante esta partida.",
+    "ptBR": "Evoque 7 Murlocs mortos nesta partida.",
+    "itIT": "Evoca sette Murloc morti in questa partita.",
+    "plPL": "Przyzwij 7 Murloków, które zginęły w tej grze."
+   }
+  },
+  "LOE_113": {
+   "text": {
+    "enUS": "Give your minions +2/+2.\nCosts (1) less for each Murloc you control.",
+    "ruRU": "Ваши существа получают +2/+2. Стоит на (1) меньше за каждого мурлока под вашим контролем.",
+    "deDE": "Verleiht Euren Dienern +2/+2. Kostet (1) weniger für jeden Murloc, den Ihr kontrolliert.",
+    "frFR": "Donne +2/+2 à vos serviteurs. Coûte\n (1) |4(cristal,cristaux) de mana de moins pour chaque Murloc contrôlé.",
+    "esES": "Otorga +2/+2 a tus esbirros.\nCuesta (1) cristal menos por cada múrloc que controles.",
+    "ptBR": "Conceda aos seus lacaios +2/+2.\nCusta (1) a menos por cada Murloc sob seu controle.",
+    "itIT": "+2/+2 ai tuoi servitori. Costa (1) in meno per ogni tuo Murloc.",
+    "plPL": "Daj twoim\nstronnikom +2/+2.\nKosztuje (1) mniej\nza każdego Murloka,\njakiego kontrolujesz."
+   }
+  },
+  "LOOT_080": {
+   "cost": 6
+  },
+  "LOOT_080t2": {
+   "cost": 6
+  },
+  "LOOT_080t3": {
+   "cost": 6
+  },
+  "LOOT_333": {
+   "cost": 6
+  },
+  "VAN_NEW1_017": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Destroy a Murloc and gain +2/+2.",
+    "ruRU": "<b>Боевой клич:</b> уничтожает выбранного мурлока и получает +2/+2.",
+    "deDE": "<b>Kampfschrei:</b> Vernichtet einen Murloc und erhält +2/+2.",
+    "frFR": "<b>Cri de guerre :</b> détruit un Murloc et gagne +2/+2.",
+    "esES": "<b>Grito de batalla:</b> Destruye a un múrloc y obtiene +2/+2.",
+    "ptBR": "<b>Grito de Guerra:</b> Destrua um murloc e receba +2/+2.",
+    "itIT": "<b>Grido di Battaglia:</b> distrugge un Murloc, ottenendo +2/+2.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zniszcz Murloka, a otrzyma +2/+2."
+   }
+  },
+  "OG_006": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Your Hero Power becomes 'Summon a   1/1 Murloc.'",
+    "ruRU": "<b>Боевой клич:</b> заменяет\nвашу силу героя на [x] «Призывает мурлока 1/1».",
+    "deDE": "<b>Kampfschrei:</b> Eure Heldenfähigkeit wird zu „Ruft einen Murloc (1/1) herbei“.",
+    "frFR": "<b>Cri de guerre :</b> votre pouvoir héroïque devient « Invoque un Murloc 1/1 ».",
+    "esES": "<b>Grito de batalla:</b> Tu poder de héroe se convierte en «Invoca a un múrloc 1/1».",
+    "ptBR": "<b>Grito de Guerra:</b> Seu Poder Heroico se torna \"Evoque um Murloc 1/1\".",
+    "itIT": "<b>Grido di Battaglia:</b> il tuo Potere Eroe diventa \"Evoca un Murloc 1/1\".",
+    "plPL": "<b>Okrzyk bojowy:</b> Twoja moc specjalna zmienia się\nw „Przyzwij Murloka 1/1”."
+   }
+  },
+  "OG_006b": {
+   "text": {
+    "enUS": "<b>Hero Power</b>\nSummon a 1/1 Silver Hand Murloc.",
+    "ruRU": "<b>Сила героя</b>\nПризывает мурчедина 1/1.",
+    "deDE": "<b>Heldenfähigkeit</b>\nRuft einen Murloc der Silbernen Hand (1/1) herbei.",
+    "frFR": "<b>Pouvoir héroïque</b>\nInvoque un Murloc de la Main d’argent 1/1.",
+    "esES": "<b>Poder de héroe</b>\nInvoca a un múrloc de la Mano de Plata 1/1.",
+    "ptBR": "<b>Poder Heroico</b>\nEvoque um Murloc do Punho de Prata 1/1.",
+    "itIT": "<b>Potere Eroe</b>\nEvoca un Murloc Mano d'Argento 1/1.",
+    "plPL": "<b>Moc specjalna</b>\nPrzyzwij Murloka Srebrnej Dłoni 1/1."
+   }
+  },
+  "OG_051": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Spend all your Mana. Gain +1/+1 for each Mana spent.",
+    "ruRU": "<b>Боевой клич:</b> расходует всю вашу ману. Получает +1/+1 за каждую израсходованную единицу маны.",
+    "deDE": "<b>Kampfschrei:</b> Verbraucht Euer gesamtes Mana. Erhält +1/+1 für jedes so verbrauchte Mana.",
+    "frFR": "<b>Cri de guerre :</b> dépense tous vos cristaux de mana. Gagne +1/+1 pour chaque cristal dépensé.",
+    "esES": "<b>Grito de batalla:</b> Gasta todo tu maná. Obtiene +1/+1 por cada cristal de maná gastado.",
+    "ptBR": "<b>Grito de Guerra:</b> Gaste todo o seu Mana. Receba +1/+1 para cada cristal de mana gasto.",
+    "itIT": "<b>Grido di Battaglia:</b> consuma tutto il tuo Mana e ottiene +1/+1 per ogni Mana così speso.",
+    "plPL": "<b>Okrzyk bojowy:</b> Wydaj całą twoją manę. Otrzymuje +1/+1 za każdy wydany punkt many."
+   }
+  },
+  "OG_161": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Deal 2 damage to all non-Murloc minions.",
+    "ruRU": "<b>Боевой клич:</b> наносит 2 ед. урона всем существам, не являющимся мурлоками.",
+    "deDE": "<b>Kampfschrei:</b> Fügt allen Dienern außer Murlocs 2 Schaden zu.",
+    "frFR": "<b>Cri de guerre :</b> inflige\n2 points de dégâts à tous les serviteurs non Murlocs.",
+    "esES": "<b>Grito de batalla:</b> Inflige 2 p. de daño a todos los esbirros que no sean múrlocs.",
+    "ptBR": "<b>Grito de Guerra:</b> Cause 2 de dano a todos os lacaios, menos Murlocs.",
+    "itIT": "<b>Grido di Battaglia:</b> infligge 2 danni a TUTTI i servitori non Murloc.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zadaj\n2 pkt. obrażeń wszystkim stronnikom niebędącym murlokami."
+   }
+  },
+  "OG_317": {
+   "text": {
+    "enUS": "<b>Deathrattle:</b> Put all Dragons from your hand into the battlefield.",
+    "ruRU": "<b>Предсмертный хрип:</b> призывает всех драконов из вашей руки.",
+    "deDE": "<b>Todesröcheln:</b> Legt alle Drachen aus Eurer Hand auf das Schlachtfeld.",
+    "frFR": "<b>Râle d’agonie :</b> place tous les Dragons de votre main sur le champ de bataille.",
+    "esES": "<b>Último aliento:</b> Coloca a todos los dragones de tu mano en el campo de batalla.",
+    "ptBR": "<b>Último Suspiro:</b> Coloque todos os Dragões da sua mão no campo de batalha.",
+    "itIT": "<b>Rantolo di Morte:</b> mette sul campo i Draghi nella tua mano.",
+    "plPL": "<b>Agonia:</b> Umieść wszystkie Smoki z twojej ręki na polu bitwy."
+   }
+  },
+  "PRO_001a": {
+   "name": {
+    "enUS": "I Am Murloc",
+    "ruRU": "«I Am Murloc»",
+    "deDE": "„I Am Murloc“",
+    "frFR": "Je suis Murloc",
+    "esES": "I Am Murloc",
+    "ptBR": "Eu Sou Murloc",
+    "itIT": "I Am Murloc",
+    "plPL": "Jestem murlokiem"
+   },
+   "text": {
+    "enUS": "Summon three, four, or five 1/1 Murlocs.",
+    "ruRU": "Призывает трех, четырех или пятерых мурлоков 1/1.",
+    "deDE": "Ruft drei, vier oder fünf Murlocs herbei (1/1).",
+    "frFR": "Invoque trois, quatre ou cinq Murlocs 1/1.",
+    "esES": "Invoca tres, cuatro o cinco múrlocs 1/1.",
+    "ptBR": "Evoca três, quatro ou cinco Murlocs 1/1.",
+    "itIT": "Evoca tre, quattro o cinque Murloc 1/1.",
+    "plPL": "Przyzwij trzy, cztery albo pięć Murloków 1/1."
+   }
+  },
+  "TRL_085": {
+   "text": {
+    "enUS": "[x]Whenever you target a\nminion with a spell, cast it\nagain on its neighbors.",
+    "ruRU": "Когда вы выбираете целью заклинания существо, целями становятся и существа по обе стороны от него.",
+    "deDE": "Jedes Mal, wenn Ihr einen Zauber auf einen Diener wirkt, wird er erneut auf benachbarte Diener gewirkt.",
+    "frFR": "Chaque fois que vous ciblez un serviteur avec un sort, le lance à nouveau sur les serviteurs adjacents.",
+    "esES": "[x]Cada vez que lanzas\nun hechizo a un esbirro,\nse vuelve a lanzar a los\nesbirros adyacentes.",
+    "ptBR": "Sempre que você alvejar um lacaio com um feitiço, lance-o novamente nos lacaios adjacentes.",
+    "itIT": "[x]Quando lanci una Magia\nsu un servitore, viene\nlanciata anche su\nquelli adiacenti.",
+    "plPL": "Za każdym razem gdy rzucasz zaklęcie na stronnika, rzuć je ponownie na jego sąsiadów."
+   }
+  },
+  "TRL_096": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> <b>Discover</b> two\ncards. Give one to your\nopponent at random.",
+    "ruRU": "[x]<b>Боевой клич:</b> вы <b>раска-\nпываете</b> две карты. Одну\nиз них случайным образом\nполучает противник.",
+    "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> [x]2 Karten. Gebt eine zufällige\ndavon Eurem Gegner.",
+    "frFR": "<b>Cri de guerre :</b> <b>découvre</b> deux cartes. Votre adversaire reçoit l’une des deux au hasard.",
+    "esES": "[x]<b>Grito de batalla:</b> <b>Descubre</b>\ndos cartas. Da una aleatoria\na tu oponente.",
+    "ptBR": "<b>Grito de Guerra:</b> <b>Descubra</b> dois cards. Conceda um deles aleatoriamente ao oponente.",
+    "itIT": "[x]<b>Grido di Battaglia:</b>\n<b>Rinvieni</b> 2 carte. Ne\nmette una casuale nella\n mano dell'avversario.",
+    "plPL": "<b>Okrzyk bojowy:</b>\n<b>Odkryj</b> dwie karty. Daj losowo wybraną z nich twojemu przeciwnikowi."
+   }
+  },
+  "TRL_300": {
+   "name": {
+    "enUS": "Shirvallah, the Tiger",
+    "ruRU": "Ширвалла, лоа-тигрица",
+    "deDE": "Shirvallah der Tiger",
+    "frFR": "Shirvallah, le tigre",
+    "esES": "Shirvallah, la tigresa",
+    "ptBR": "Shirvallah, a Tigresa",
+    "itIT": "Shirvallah, la Tigre",
+    "plPL": "Tygrysica Szirwala"
+   }
+  },
+  "TRL_312": {
+   "name": {
+    "enUS": "Spellzerker",
+    "ruRU": "Бешеный маг",
+    "deDE": "Zauberfurie",
+    "frFR": "Sorcière berserker",
+    "esES": "Hechicera rabiosa",
+    "ptBR": "Feiticeira Berserker",
+    "itIT": "Maga Berserker",
+    "plPL": "Wiedźma berserker"
+   }
+  },
+  "TRL_513": {
+   "name": {
+    "enUS": "Mosh'Ogg Enforcer",
+    "ruRU": "Арбитр Мош'Огг",
+    "deDE": "Mosh'Ogg-Ringrichter",
+    "frFR": "Massacreur mosh’Ogg",
+    "esES": "Déspota Mosh'Ogg",
+    "ptBR": "Impositor Mosh'ogg",
+    "itIT": "Scagnozzo Mosh'ogg",
+    "plPL": "Mosz'ogg nadzorca"
+   }
+  },
+  "TRL_541t": {
+   "mechanics": [
+    "ImmuneToSpellpower",
+    "TOPDECK"
+   ]
+  },
+  "TRL_545": {
+   "text": {
+    "enUS": "[x]<b>Battlecry:</b> If you've restored\n10 Health this game, gain\n+4/+4 and <b>Taunt</b>.@ <i>({0} left!)</i>@ <i>(Ready!)</i>",
+    "ruRU": "<b>Боевой клич:</b> если вы\nвосстановили 10 ед. здоровья в течение матча, получает +4/+4 и <b>«Провокацию»</b>.@ <i>(Осталось {0} ед.!)</i>@ <i>(Готово!)</i>",
+    "deDE": "<b>Kampfschrei:</b> Erhält +4/+4 und <b>Spott</b>, wenn Ihr in diesem Spiel 10 Leben wieder[d]herge[d]stellt habt.@ <i>(Noch {0}!)</i>@ <i>(Bereit!)</i>",
+    "frFR": "<b>Cri de guerre :</b> si vous avez rendu 10 points de vie pendant cette partie, gagne +4/+4 et <b>Provocation</b>.@ <i>(Encore {0} !)</i>@ <i>(Prêt !)</i>",
+    "esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtienes\n+4/+4 y <b>Provocar</b>.@\n<i>(Faltan: {0})</i>.@ <i>(¡Listo!)</i>.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você tiver restaurado 10 de Vida nesta partida, receba +4/+4 e <b>Provocar</b>.@ <i>(Resta: {0})</i>@ <i>(Pronto!)</i>",
+    "itIT": "[x]<b>Grido di Battaglia:</b> se hai\nrigenerato 10 Salute in\nquesta partita, ottiene +4/+4 e\n <b>Provocazione</b>.@ <i>({0} restanti!)</i>@ <i>(Pronto!)</i>",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 10 pkt. zdrowia w tej grze, otrzymuje +4/+4 oraz <b>Prowokację</b>.@ <i>(Jeszcze {0})</i>@ <i>(Gotowe!)</i>"
+   }
+  },
+  "TRL_555": {
+   "text": {
+    "enUS": "Destroy a minion. Costs (1) less for each minion you control.",
+    "ruRU": "Уничтожает выбранное существо. Стоит на (1) меньше за каждое существо под вашим контролем.",
+    "deDE": "Vernichtet einen Diener. Kostet (1) weniger für jeden Diener, den Ihr kontrolliert.",
+    "frFR": "Détruit un serviteur. Coûte (1) cristal de moins pour chaque serviteur que vous contrôlez.",
+    "esES": "[x]Destruye a un esbirro.\nCuesta (1) cristal menos por cada\nesbirro que controles.",
+    "ptBR": "Destrua um lacaio. \nCusta (1) a menos para cada lacaio sob seu controle.",
+    "itIT": "[x]Distrugge un servitore.\nCosta (1) in meno per ogni\nservitore che controlli.",
+    "plPL": "Zniszcz stronnika. Kosztuje (1) mniej za każdego stronnika, jakiego kontrolujesz."
+   }
+  },
+  "UNG_010": {
+   "text": {
+    "enUS": "<b>Deathrattle:</b> Summon three 1/1 Murlocs.",
+    "ruRU": "<b>Предсмертный хрип:</b> призывает трех мурлоков 1/1.",
+    "deDE": "<b>Todesröcheln:</b> Ruft drei Murlocs (1/1) herbei.",
+    "frFR": "<b>Râle d’agonie :</b> invoque trois Murlocs 1/1.",
+    "esES": "<b>Último aliento:</b> Invoca a tres múrlocs 1/1.",
+    "ptBR": "<b>Último Suspiro:</b> Evoque três Murlocs 1/1.",
+    "itIT": "<b>Rantolo di Morte:</b> evoca tre Murloc 1/1.",
+    "plPL": "<b>Agonia:</b> Przyzwij trzy Murloki 1/1."
+   }
+  },
+  "UNG_073": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Give a friendly Murloc +1/+1.",
+    "ruRU": "<b>Боевой клич:</b> ваш выбранный мурлок получает +1/+1.",
+    "deDE": "<b>Kampfschrei:</b> Verleiht einem befreundeten Murloc +1/+1.",
+    "frFR": "<b>Cri de guerre :</b> donne +1/+1 à un Murloc allié.",
+    "esES": "<b>Grito de batalla:</b> Otorga +1/+1 a un múrloc amistoso.",
+    "ptBR": "<b>Grito de Guerra:</b> \nConceda +1/+1 a um Murloc aliado.",
+    "itIT": "<b>Grido di Battaglia:</b> +1/+1 a un tuo Murloc.",
+    "plPL": "<b>Okrzyk bojowy:</b> Daj przyjaznemu Murlokowi +1/+1."
+   }
+  },
+  "UNG_089": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> <b>Adapt</b> your Murlocs.",
+    "ruRU": "<b>Боевой клич:</b> ваши мурлоки <b>адаптируются</b>.",
+    "deDE": "<b>Kampfschrei:</b> <b>Mutiert</b>\nEure Murlocs.",
+    "frFR": "<b>Cri de guerre : Adaptation</b> de vos Murlocs.",
+    "esES": "<b>Grito de batalla: </b>\n <b>Adapta</b> a tus múrlocs.",
+    "ptBR": "<b>Grito de Guerra:</b> <b>Adapte</b> seus Murlocs.",
+    "itIT": "<b>Grido di Battaglia: Adatta</b> i tuoi Murloc.",
+    "plPL": "<b>Okrzyk bojowy:</b> <b>Adaptuj</b> twoje Murloki."
+   }
+  },
+  "UNG_101b": {
+   "text": {
+    "enUS": "<b>Taunt</b>",
+    "ruRU": "<b>Провокация</b>",
+    "deDE": "<b>Spott</b>",
+    "frFR": "<b>Provocation</b>",
+    "esES": "<b>Provocar</b>",
+    "ptBR": "<b>Provocar</b>",
+    "itIT": "<b>Provocazione</b>",
+    "plPL": "<b>Prowokacja</b>"
+   }
+  },
+  "UNG_201": {
+   "text": {
+    "enUS": "At the end of your turn, summon a 1/1 Murloc.",
+    "ruRU": "В конце вашего хода призывает мурлока 1/1.",
+    "deDE": "Ruft am Ende\nEures Zuges einen\nMurloc (1/1) herbei.",
+    "frFR": "À la fin de votre tour, invoque un Murloc 1/1.",
+    "esES": "Al final de tu turno, invoca a un múrloc 1/1.",
+    "ptBR": "No final do seu turno, evoque um Murloc 1/1.",
+    "itIT": "Alla fine del tuo turno, evoca un Murloc 1/1.",
+    "plPL": "Na koniec twojej tury przyzwij Murloka 1/1."
+   }
+  },
+  "UNG_211b": {
+   "text": {
+    "enUS": "Restore 12 Health to your hero.",
+    "ruRU": "Восстанавливает 12 ед. здоровья вашему герою.",
+    "deDE": "[x]Stellt bei Eurem Helden\n12 Leben wieder her.",
+    "frFR": "Rend 12 PV à votre héros.",
+    "esES": "Restaura 12 p. de salud a tu héroe.",
+    "ptBR": "Restaure 12 de Vida\ndo seu herói.",
+    "itIT": "Rigenera 12 Salute al tuo eroe.",
+    "plPL": "Przywróć 12 pkt. zdrowia twojemu bohaterowi."
+   }
+  },
+  "UNG_937": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> If you control another Murloc, <b>Discover</b> a Murloc.",
+    "ruRU": "<b>Боевой клич:</b> если у вас\nпод контролем есть мурлок, вы <b>раскапываете</b> мурлока.",
+    "deDE": "<b>Kampfschrei:</b> <b>Entdeckt</b> einen Murloc, wenn Ihr bereits einen anderen Murloc kontrolliert.",
+    "frFR": "<b>Cri de guerre :</b> si vous contrôlez un autre Murloc, <b>découvre</b> un nouveau Murloc.",
+    "esES": "<b>Grito de batalla:</b>\nSi controlas otro múrloc, <b>Descubre</b> uno.",
+    "ptBR": "<b>Grito de Guerra:</b> Se você controlar outro Murloc, <b>Descubra</b> um Murloc.",
+    "itIT": "<b>Grido di Battaglia:</b> se controlli un altro Murloc, <b>Rinvieni</b> un Murloc.",
+    "plPL": "<b>Okrzyk bojowy:</b> Jeśli kontrolujesz innego Murloka, <b>Odkryj</b> Murloka."
+   }
+  },
+  "UNG_942": {
+   "name": {
+    "enUS": "Unite the Murlocs",
+    "ruRU": "Мурлочий союз",
+    "deDE": "Vereint die Murlocs",
+    "frFR": "Les Murlocs font la force",
+    "esES": "Reunión de múrlocs",
+    "ptBR": "Murlocs, Unidos!",
+    "itIT": "Radunare i Murloc",
+    "plPL": "Zjednoczenie murloków"
+   },
+   "text": {
+    "enUS": "[x]<b>Quest:</b> Summon\n10 Murlocs.\n<b>Reward:</b> Megafin.",
+    "ruRU": "<b>Задача:</b> призовите 10 мурлоков.\n<b>Награда:</b> Мегамррргл.",
+    "deDE": "<b>Quest:</b> Ruft 10 Murlocs herbei.\n<b>Belohnung:</b> Megaflosse",
+    "frFR": "<b>Quête :</b> invoquer 10 Murlocs.\n<b>Récompense :</b>\nMéga-Aileron.",
+    "esES": "<b>Misión:</b>\nInvoca a 10 múrlocs.\n<b>Recompensa:</b> Megabranquio.",
+    "ptBR": "<b>Missão:</b> \nEvocar 10 Murlocs.\n<b>Recompensa:</b> Megapina.",
+    "itIT": "<b>Missione:</b> evoca 10 Murloc.\n<b>Ricompensa:</b> Megapinna.",
+    "plPL": "<b>Zadanie:</b> Przyzwij 10 Murloków.\n<b>Nagroda:</b> Megapłetw."
+   }
+  },
+  "UNG_942t": {
+   "text": {
+    "enUS": "<b>Battlecry:</b> Fill your hand with random Murlocs.",
+    "ruRU": "<b>Боевой клич:</b> заполняет вашу руку случайными мурлоками.",
+    "deDE": "<b>Kampfschrei:</b> Füllt Eure Hand mit zufälligen Murlocs.",
+    "frFR": "<b>Cri de guerre :</b> remplit votre main de Murlocs aléatoires.",
+    "esES": "<b>Grito de batalla:</b> Llena tu mano con múrlocs aleatorios.",
+    "ptBR": "<b>Grito de Guerra:</b> Encha sua mão de Murlocs aleatórios.",
+    "itIT": "<b>Grido di Battaglia:</b> riempie la tua mano di Murloc casuali.",
+    "plPL": "<b>Okrzyk bojowy:</b> Zapełnij twoją rękę losowymi Murlokami."
+   }
+  }
+ },
+ "sources": []
+}
