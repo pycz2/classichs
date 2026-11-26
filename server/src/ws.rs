@@ -70,6 +70,9 @@ enum In {
     Me {
         #[serde(default)]
         pack: Option<String>,
+        /// The ladder's format ("standard" | "wild"); none: the default.
+        #[serde(default)]
+        format: Option<String>,
     },
     SetTag { tag: String },
     Friends {},
@@ -394,11 +397,12 @@ pub(crate) async fn arena_json(c: &impl ConnectionTrait, me: i64) -> DbResult<Va
 }
 
 /// The profile: the rank (and season) in a pack (`pack`: its rules_hash) and the Arena run.
-pub(crate) async fn me_json(c: &impl ConnectionTrait, me: i64, rules: &GameRules) -> DbResult<Value> {
+pub(crate) async fn me_json(c: &impl ConnectionTrait, me: i64, rules: &Arc<GameRules>) -> DbResult<Value> {
     let a = db::account_by_id(c, me).await?.ok_or_else(|| not_found("account"))?;
+    let rules = rules.with_format(&rules.format).unwrap_or_else(|| rules.clone()); // no format: the default one
     let s = db::standing(c, me, &rules.ladder_key(), &rules.ladder).await?;
     Ok(json!({"user": a.name, "tag": a.tag, "rank": rank_json(c, &s).await?, "arena": arena_json(c, me).await?,
-              "season": ranked::season_name(s.season), "pack": rules.rules_hash}))
+              "season": ranked::season_name(s.season), "pack": rules.rules_hash, "format": rules.format}))
 }
 
 /// The friends message for an account (online status from the hub).
@@ -822,8 +826,9 @@ impl Session {
                 presence(&app, me).await;
                 self.ok(json!({"t": "logged_out"}))
             }
-            In::Me { pack } => {
+            In::Me { pack, format } => {
                 let (rules, _) = self.game_of(pack.as_deref(), None).await?;
+                let rules = rules.with_format(format.as_deref().unwrap_or_default()).ok_or_else(|| e("format", "This game has no such format"))?;
                 if let Some(c) = app.hub().conns.get_mut(&me) {
                     c.me_pack = pack;
                 }

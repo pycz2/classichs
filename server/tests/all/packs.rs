@@ -573,6 +573,11 @@ async fn each_version_and_format_has_its_queue_and_ladder() {
     let keys: Vec<String> = standing::Entity::find().all(&app.db).await.unwrap().into_iter().map(|s| s.pack).collect();
     assert!(keys.contains(&format!("org.test.versions/{hb}/wild")), "{keys:?}");
     assert!(keys.contains(&format!("org.test.versions/{ha}/")), "{keys:?}");
+    // The profile's rank in a version and format; no format: the default.
+    for (f, want) in [(json!("standard"), "standard"), (Value::Null, "wild")] {
+        p[1].send(json!({"t": "me", "pack": hb, "format": f})).await;
+        assert_eq!(p[1].want("me").await["me"]["format"], want);
+    }
 }
 
 /// A pack with two versions (docs/packs/format.md §13): "a" (the default, Classic's rules, one format) and "b"
