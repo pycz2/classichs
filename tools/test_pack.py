@@ -1182,6 +1182,44 @@ class Eras(unittest.TestCase):
         self.assertEqual(self.card("6024", "VAN_CS2_237")[0]["cost"], 2)
 
 
+class ErasUngoro(unittest.TestCase):
+    """packs/eras: the Journey to Un'Goro versions (18336, 19506, 19632, 20022)."""
+
+    setUpClass = Eras.__dict__["setUpClass"]
+    card = Eras.card
+
+    def test_18336_is_the_ungoro_pack(self):
+        ungoro, _ = pack.build(pack.REPO / "packs/ungoro")
+        view = pack.version_view(self.files, "18336")
+        self.assertEqual(pack.rules_hash(view), pack.rules_hash(ungoro))
+        self.assertEqual({p: d for p, d in view.items() if pack.is_version_file(p)},
+                         {p: d for p, d in ungoro.items() if pack.is_version_file(p)})
+
+    def test_19506_unbolds_dart_traps_hero_power(self):
+        _, old = self.card("18336", "LOE_021")
+        self.assertEqual(old["en"]["text"], "<b>Secret:</b> After an opposing <b>Hero Power</b> is used, deal $5 damage to a random enemy.")
+        for vid in ("19506", "19632", "20022"):
+            _, texts = self.card(vid, "LOE_021")
+            self.assertEqual(texts["en"]["text"], "<b>Secret:</b> After an opposing Hero Power is used, deal $5 damage to a random enemy.")
+            self.assertEqual(texts["ru"]["text"], "<b>Секрет:</b> когда противник использует силу героя, наносит $5 ед. урона случайному противнику.")
+        # 19632 changed no card data
+        self.assertEqual(pack.version_view(self.files, "19632")["cards.json"], pack.version_view(self.files, "19506")["cards.json"])
+
+    def test_20022_six_more_elementals(self):
+        for cid in ("CFM_606", "CFM_606t", "CFM_715", "VAN_TU4e_002t", "LOE_053", "OG_209"):
+            self.assertNotIn("race", self.card("19632", cid)[0], cid)
+            self.assertEqual(self.card("20022", cid)[0]["race"], "ELEMENTAL", cid)
+
+    def test_20022_the_caverns_below_needs_five_minions(self):
+        _, old = self.card("19632", "UNG_067")
+        _, new = self.card("20022", "UNG_067")
+        self.assertEqual(old["en"]["text"], "[x]<b>Quest:</b> Play four minions\nwith the same name.\n<b>Reward:</b> Crystal Core.")
+        self.assertEqual(new["en"]["text"], "[x]<b>Quest:</b> Play five minions\nwith the same name.\n<b>Reward:</b> Crystal Core.")
+        self.assertEqual(new["de"]["text"], "<b>Quest:</b> Spielt 5 Diener mit dem gleichen Namen aus.\n<b>Belohnung:</b> Kristallkern")
+        self.assertIn("scripts/version/ungoro.lua", pack.version_view(self.files, "20022"))
+        self.assertNotIn("scripts/version/ungoro.lua", pack.version_view(self.files, "19632"))
+
+
 class TestDistribution(unittest.TestCase):
     """The expansions stay out of the game's builds (APK, desktop, web): release files and the server's."""
 

@@ -1,0 +1,54 @@
+{
+ "base": "ungoro",
+ "build": 20022,
+ "about": "8.4.0.20022 (2017-07-10): The Caverns Below needs five minions; Jade Spirit, Djinni of Zephyrs, Flame of Azzinoth, Mana Geode, Crystal and Hallazeal the Ascended become Elementals (with 8.2.0's Dart Trap text)",
+ "cards": {
+  "CFM_606": {
+   "race": "ELEMENTAL"
+  },
+  "CFM_606t": {
+   "race": "ELEMENTAL"
+  },
+  "CFM_715": {
+   "race": "ELEMENTAL"
+  },
+  "LOE_021": {
+   "text": {
+    "deDE": "<b>Geheimnis:</b> Fügt einem zufälligen Feind $5 Schaden zu, nachdem Euer Gegner seine Heldenfähigkeit eingesetzt hat.",
+    "enUS": "<b>Secret:</b> After an opposing Hero Power is used, deal $5 damage to a random enemy.",
+    "esES": "<b>Secreto:</b> Cuando el enemigo usa su poder de héroe, inflige $5 p. de daño a un enemigo aleatorio.",
+    "frFR": "<b>Secret :</b> inflige\n$5 |4(point,points) de dégâts à un adversaire aléatoire après utilisation d’un pouvoir héroïque adverse.",
+    "itIT": "<b>Segreto:</b> dopo che l'avversario ha usato il suo Potere Eroe, infligge $5 danni a un nemico casuale.",
+    "plPL": "<b>Sekret:</b> Kiedy zostanie użyta moc specjalna przeciwnika, zadaj $5 pkt. obrażeń losowemu wrogowi.",
+    "ptBR": "<b>Segredo:</b> Depois que o inimigo usar o Poder Heroico, cause $5 de dano a um inimigo aleatório.",
+    "ruRU": "<b>Секрет:</b> когда противник использует силу героя, наносит $5 ед. урона случайному противнику."
+   }
+  },
+  "LOE_053": {
+   "race": "ELEMENTAL"
+  },
+  "OG_209": {
+   "race": "ELEMENTAL"
+  },
+  "UNG_067": {
+   "text": {
+    "deDE": "<b>Quest:</b> Spielt 5 Diener mit dem gleichen Namen aus.\n<b>Belohnung:</b> Kristallkern",
+    "enUS": "[x]<b>Quest:</b> Play five minions\nwith the same name.\n<b>Reward:</b> Crystal Core.",
+    "esES": "[x]<b>Misión:</b> Juega 5 esbirros\n con el mismo nombre. \n<b>Recompensa:</b>\nNúcleo de cristal.",
+    "frFR": "<b>Quête :</b> jouer cinq serviteurs avec le même nom.\n<b>Récompense :</b> Noyau de cristal.",
+    "itIT": "<b>Missione:</b> gioca 5 servitori con lo stesso nome.\n<b>Ricompensa:</b> Nucleo Cristallino.",
+    "plPL": "<b>Zadanie:</b> Zagraj pięciu stronników o tej samej nazwie.\n<b>Nagroda:</b> Kryształowy rdzeń.",
+    "ptBR": "<b>Missão:</b> Jogue cinco lacaios com o mesmo nome.\n<b>Recompensa:</b>  Núcleo de Cristal.",
+    "ruRU": "<b>Задача:</b> разыграйте 5 существ с одинаковым названием.\n<b>Награда:</b> «Средоточие кристалла»."
+   }
+  },
+  "VAN_TU4e_002t": {
+   "race": "ELEMENTAL"
+  }
+ },
+ "sources": [
+  "~/ClassicHS-local/prep/patches/versions.json 8.2.0.19506, 8.4.0.20022 (Patch 8.4.0.20022; Card changes)",
+  "HearthstoneJSON build 20022: texts (tools/extract_cards.py --version-texts 20022 LOE_021 UNG_067)",
+  "scripts/ungoro.lua: The Caverns Below as packs/icc/scripts/icc.lua has it"
+ ]
+}
