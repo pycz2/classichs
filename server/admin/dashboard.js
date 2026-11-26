@@ -65,7 +65,7 @@ export function Dashboard () {
       <${Tile} label="Logins" value=${t('login')} sub=${`${t('login_failed')} failed`} warn=${t('login_failed') > 20} />
       <${Tile} label="Messages" value=${t('msg')} sub=${`${t('friend_request')} friend requests`} />
       <${Tile} label="Problems" value=${t('error')} sub="errors today" bad=${t('error') > 0} href="#/events?kind=error" />
-      <${Tile} label="Problem reports" value=${data ? data.totals.reports_new : 0} sub="new, from the players" warn=${data && data.totals.reports_new > 0} href="#/reports?state=new" />
+      <${Tile} label="New problem reports" value=${data ? data.totals.reports_new : 0} sub=${`${data ? data.totals.reports_answers : 0} with the player's answer`} warn=${data && data.totals.reports_new + data.totals.reports_answers > 0} href="#/reports" />
     </div>
     <div class="grid two">
       <${Card} title="Activity, last 24 hours">

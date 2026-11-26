@@ -1,16 +1,32 @@
-// Problem reports from the game: the list (filters, ticks, export) and one report (its text, picture,
-// voice, context, games; the state, a note, an answer as a private message).
+// Problem reports from the game: the list (filters, unread marks, ticks, export, purge) and one
+// report's thread (the player's and the admins' messages, pictures, voice, context, replays; answer,
+// state, merge, note, delete, download it, copy it for an AI agent).
 
 import { useState, useEffect } from 'preact/hooks'
 import { api, qs } from './api.js'
 import { playReplay } from './extra.js'
-import { html, useEvents, useLoad, useDebounced, setQuery, go, Card, UserLink, GameLink, Pager, ErrorBox, Empty, Icon, Json, toast, fullDate, ago } from './ui.js'
+import { html, useEvents, useLoad, useDebounced, setQuery, go, Card, UserLink, GameLink, Pager, ErrorBox, Empty, Icon, Json, toast, copyText, fullDate, ago } from './ui.js'
 
-const STATES = ['new', 'seen', 'done']
-const STATE_BADGE = { new: 'warn', seen: '', done: 'ok' }
+const STATES = [['open', 'Open'], ['resolved', 'Resolved'], ['rejected', 'Rejected']]
+const STATE_BADGE = { open: 'warn', resolved: 'ok', rejected: '' }
 
 function State ({ s }) {
   return html`<span class=${'badge ' + (STATE_BADGE[s] || '')}>${s}</span>`
+}
+
+/** {new, answers} of the reports, kept fresh by the live feed (the menu and the dashboard). */
+export function useReportCounts () {
+  const [counts, setCounts] = useState({ new: 0, answers: 0 })
+  const load = () => api('reports/counts').then(setCounts, () => {})
+  const later = useDebounced(load, 400)
+  useEffect(() => {
+    load()
+    const t = setInterval(load, 60000)
+    addEventListener('hashchange', later) // (opening a report reads it)
+    return () => { clearInterval(t); removeEventListener('hashchange', later) }
+  }, [])
+  useEvents((e) => { if (e.resync || e.kind === 'report' || (e.kind === 'admin' && e.data && String(e.data.action || '').startsWith('report'))) later() })
+  return counts
 }
 
 export function Reports ({ query }) {
@@ -18,6 +34,7 @@ export function Reports ({ query }) {
   const [draft, setDraft] = useState(f.player)
   const [ticked, setTicked] = useState(() => new Set())
   const [scope, setScope] = useState('filtered')
+  const [days, setDays] = useState(90)
   const set = (p) => setF((x) => ({ ...x, page: 0, ...p }))
   const commit = useDebounced((player) => set({ player }), 350)
   useEffect(() => { setQuery({ ...f, page: f.page || '' }) }, [f])
@@ -30,10 +47,14 @@ export function Reports ({ query }) {
   const what = scope === 'ticked' ? { ids: [...ticked].join(',') } : scope === 'filtered' ? { state: f.state, player: f.player, version: f.version } : {}
   const href = (format) => '/admin/api/reports/export?' + qs({ ...what, format })
   const none = scope === 'ticked' && !ticked.size
+  const purge = async () => {
+    if (!confirm(`Delete every report without activity in the last ${days} days, with its pictures and voice messages?`)) return
+    try { const r = await api('reports/purge', { method: 'POST', body: { days: Number(days) } }); toast(`${r.removed} reports deleted`); reload() } catch (e) { toast(e.message, 'err') }
+  }
   return html`<div class="page">
-    <header class="page-head"><h1>Problem reports</h1>${data && html`<span class="muted">${data.new} new</span>`}</header>
+    <header class="page-head"><h1>Problem reports</h1>${data && html`<span class="muted">${data.counts.new} new · ${data.counts.answers} with the player's answer</span>`}</header>
     <div class="filters">
-      <div class="seg text">${['', ...STATES].map((s) => html`<button key=${s} class=${f.state === s ? 'on' : ''} onClick=${() => set({ state: s })}>${s ? s[0].toUpperCase() + s.slice(1) : 'All'}</button>`)}</div>
+      <div class="seg text">${[['', 'All'], ...STATES].map(([s, label]) => html`<button key=${s} class=${f.state === s ? 'on' : ''} onClick=${() => set({ state: s })}>${label}</button>`)}</div>
       <label class="search"><${Icon} name="search" size=${16} /><input placeholder="Player" value=${draft} onInput=${(e) => { setDraft(e.target.value); commit(e.target.value) }} /></label>
       <select value=${f.version} onChange=${(e) => set({ version: e.target.value })} aria-label="Version">
         <option value="">Any version</option>${data && data.versions.map((v) => html`<option key=${v} value=${v}>${v || '(none)'}</option>`)}
@@ -48,22 +69,26 @@ export function Reports ({ query }) {
       <div class="table-wrap"><table class="table">
         <thead><tr>
           <th><input type="checkbox" aria-label="Tick all on this page" checked=${allOn} onChange=${(e) => list.forEach((r) => tick(r.id, e.target.checked))} /></th>
-          <th>#</th><th>Player</th><th>Text</th><th>Version</th><th>Platform</th><th>Attached</th><th>State</th><th>Received</th>
+          <th>#</th><th>Player</th><th>Text</th><th>Version</th><th>Platform</th><th>Attached</th><th class="num">Messages</th><th>State</th><th>Last activity</th>
         </tr></thead>
-        <tbody>${list.map((r) => html`<tr key=${r.id} class="clickable" onClick=${() => go('reports/' + r.id)}>
+        <tbody>${list.map((r) => html`<tr key=${r.id} class=${'clickable' + (r.unread ? ' unread' : '')} onClick=${() => go('reports/' + r.id)}>
           <td onClick=${(e) => e.stopPropagation()}><input type="checkbox" aria-label=${'Tick report ' + r.id} checked=${ticked.has(r.id)} onChange=${(e) => tick(r.id, e.target.checked)} /></td>
-          <td class="mono">${r.id}</td>
+          <td class="mono nowrap">${r.unread ? html`<span class="dot" title=${r.opened ? 'The player wrote since you looked' : 'New'}></span>` : ''}${r.id}</td>
           <td onClick=${(e) => e.stopPropagation()}><${UserLink} id=${r.account.id} user=${r.account.user} /></td>
           <td class="report-text">${r.text.length > 120 ? r.text.slice(0, 120) + '…' : r.text}</td>
           <td class="mono">${r.version || '—'}</td>
           <td>${(r.context && r.context.platform) || '—'}</td>
-          <td class="nowrap">${r.screen ? 'picture' : ''}${r.screen && r.voice ? ' · ' : ''}${r.voice ? 'voice' : ''}</td>
+          <td class="nowrap">${[r.screen && 'picture', r.voice && 'voice', r.merged && `+${r.merged} merged`].filter(Boolean).join(' · ')}</td>
+          <td class="num">${r.messages}</td>
           <td><${State} s=${r.state} /></td>
-          <td class="nowrap" title=${fullDate(r.received_at * 1000)}>${ago(r.received_at * 1000)}</td>
+          <td class="nowrap" title=${fullDate(r.last_at * 1000)}>${ago(r.last_at * 1000)}</td>
         </tr>`)}</tbody>
       </table></div>
       ${data && !list.length && html`<${Empty}>No reports match</${Empty}>`}
-      ${data && html`<div class="table-foot"><span></span><${Pager} page=${f.page} size=${50} total=${data.total} onPage=${(page) => setF((x) => ({ ...x, page }))} /></div>`}
+      ${data && html`<div class="table-foot"><span class="row-gap">
+          Delete reports without activity for <input type="number" min="1" class="days" value=${days} onInput=${(e) => setDays(e.target.value)} aria-label="Days" /> days
+          <button class="btn ghost sm" disabled=${!(days >= 1)} onClick=${purge}><${Icon} name="trash" size=${14} /> Purge</button></span>
+        <${Pager} page=${f.page} size=${50} total=${data.total} onPage=${(page) => setF((x) => ({ ...x, page }))} /></div>`}
     </${Card}>
   </div>`
 }
@@ -72,10 +97,14 @@ export function Reports ({ query }) {
 
 export function ReportPage ({ id }) {
   const [data, error, reload] = useLoad(() => api('reports/' + id), [id])
+  const [md, , reloadMd] = useLoad(() => fetch(`/admin/api/reports/${id}/markdown`, { credentials: 'same-origin' }).then((r) => r.ok ? r.text() : ''), [id])
   const [note, setNote] = useState(null)
   const [answer, setAnswer] = useState('')
+  const [into, setInto] = useState('')
   const [busy, setBusy] = useState(false)
-  useEffect(() => { if (data) setNote(data.note) }, [data])
+  useEffect(() => { if (data) { setNote(data.note); reloadMd() } }, [data])
+  const later = useDebounced(reload, 500)
+  useEvents((e) => { if (e.kind === 'report' && e.data && data && [data.id, ...data.merged.map((m) => m.id)].includes(e.data.report)) later() })
   const act = async (what, body, done) => {
     setBusy(true)
     let ok = false
@@ -88,30 +117,46 @@ export function ReportPage ({ id }) {
   if (!data) return html`<div class="page"><div class="skel-title"></div></div>`
   const c = data.context || {}
   const remove = async () => {
-    if (!confirm(`Delete report ${id} with its picture and voice message?`)) return
+    if (!confirm(`Delete report ${id} with its thread, pictures and voice message?`)) return
     try { await api(`reports/${id}/delete`, { method: 'POST' }); toast('Deleted'); go('reports') } catch (e) { toast(e.message, 'err') }
   }
   const file = (f) => `/admin/api/reports/${id}/${f}`
+  const voices = [data, ...data.merged].filter((r) => r.voice)
   return html`<div class="page report-page">
     ${back}
     <header class="page-head">
       <div>
-        <h1>Report #${data.id}</h1>
+        <h1>Report #${data.id} ${data.merged_into ? html`<span class="badge">merged into <a href=${'#/reports/' + data.merged_into}>#${data.merged_into}</a></span>` : ''}</h1>
         <div class="muted"><${UserLink} id=${data.account.id} user=${data.account.user} />${data.account.tag ? html` <span class="mono">#${data.account.tag}</span>` : ''} · account ${data.account.id} ·
           written ${fullDate(data.written_at * 1000)} (the player's clock) · received ${fullDate(data.received_at * 1000)}</div>
       </div>
       <div class="row-gap">
-        <div class="seg text" role="radiogroup" aria-label="State">${STATES.map((s) => html`<button key=${s} role="radio" aria-checked=${data.state === s} class=${data.state === s ? 'on' : ''} disabled=${busy} onClick=${() => act('state', { state: s })}>${s}</button>`)}</div>
+        <div class="seg text" role="radiogroup" aria-label="State">${STATES.map(([s, label]) => html`<button key=${s} role="radio" aria-checked=${data.state === s} class=${data.state === s ? 'on' : ''} disabled=${busy} onClick=${() => act('state', { state: s })}>${label}</button>`)}</div>
+        <a class="btn ghost sm" href=${file('export')} download=${`report-${id}.zip`}>Download this report</a>
+        <button class="btn ghost sm" disabled=${!md} onClick=${() => copyText(md, 'Copied: paste it to the agent')} title="A Markdown text with everything an AI agent needs to reproduce and fix it"><${Icon} name="copy" size=${14} /> Copy for an agent</button>
         <button class="btn ghost sm" onClick=${remove}><${Icon} name="trash" size=${14} /> Delete</button>
       </div>
     </header>
     <div class="grid two-one">
       <div class="stack">
-        <${Card} title="Text"><p class="report-full">${data.text}</p></${Card}>
-        ${data.screen && html`<${Card} title="Picture" actions=${html`<a class="btn ghost sm" href=${file('screen.png')} download=${`report-${id}.png`}>Download</a>`}>
-          <a href=${file('screen.png')} target="_blank" rel="noopener"><img class="report-shot" src=${file('screen.png')} alt="The player's screen" /></a></${Card}>`}
-        ${data.voice && html`<${Card} title="Voice message" actions=${html`<a class="btn ghost sm" href=${file('voice.ogg')} download=${`report-${id}.ogg`}>Download</a>`}>
-          <audio controls preload="metadata" src=${file('voice.ogg')}></audio></${Card}>`}
+        <${Card} title=${`Thread (${data.thread.length})`}>
+          <ol class="thread">${data.thread.map((m) => html`<li key=${m.report + ':' + m.id} class=${'msg ' + m.from}>
+            <div class="msg-head"><b>${m.from === 'admin' ? m.name + ' (admin)' : m.name}</b>${m.report !== data.id ? html` <a class="muted small" href=${'#/reports/' + m.report}>report #${m.report}</a>` : ''}
+              <span class="muted small" title=${fullDate(m.at * 1000)}>${ago(m.at * 1000)}</span></div>
+            <p class="report-full">${m.text}</p>
+            ${m.screen && html`<a href=${file(m.screen)} target="_blank" rel="noopener"><img class="report-shot" src=${file(m.screen)} alt="The player's picture" loading="lazy" /></a>`}
+          </li>`)}</ol>
+          <div class="answer">
+            <textarea rows="3" maxlength="4000" value=${answer} onInput=${(e) => setAnswer(e.target.value)} placeholder=${'An answer to ' + (data.merged.length ? 'the players (each sees it in his own thread)' : 'the player')}></textarea>
+            <div class="row-gap">
+              <button class="btn sm" disabled=${busy || !answer.trim()} onClick=${() => act('answer', { text: answer }, 'Sent').then((ok) => ok && setAnswer(''))}>Send the answer</button>
+              <button class="btn ghost sm" disabled=${busy || !answer.trim()} onClick=${() => act('answer', { text: answer }).then((ok) => ok && act('state', { state: 'resolved' }, 'Sent and resolved')).then((ok) => ok && setAnswer(''))}>Send and resolve</button>
+            </div>
+          </div>
+        </${Card}>
+        ${voices.map((r) => html`<${Card} key=${'v' + r.id} title=${'Voice message' + (r.id !== data.id ? ` (report #${r.id})` : '')}
+          actions=${html`<a class="btn ghost sm" href=${file('voice.ogg?of=' + r.id)} download=${`report-${r.id}.ogg`}>Download</a>`}>
+          <audio controls preload="metadata" src=${file('voice.ogg?of=' + r.id)}></audio></${Card}>`)}
       </div>
       <div class="stack">
         <${Card} title="Context">
@@ -134,14 +179,21 @@ export function ReportPage ({ id }) {
               : html` <span class="muted small">no replay (yet)</span>`}
           </li>`)}</ul>` : html`<${Empty}>No games</${Empty}>`}
         </${Card}>
+        <${Card} title=${`Duplicates (${data.merged.length})`}>
+          ${data.merged.length ? html`<ul class="rows report-games">${data.merged.map((m) => html`<li key=${m.id}>
+            <a href=${'#/reports/' + m.id}>#${m.id}</a> <${UserLink} id=${m.account.id} user=${m.account.user} />
+            <span class="muted small">${m.context && m.context.version} · ${m.context && m.context.platform}</span></li>`)}</ul>` : ''}
+          <div class="row-gap">
+            ${data.merged_into
+              ? html`<button class="btn ghost sm" disabled=${busy} onClick=${() => act('unmerge', {}, 'Taken out')}>Take it out of #${data.merged_into}</button>`
+              : html`<input type="number" min="1" class="days" placeholder="#" value=${into} onInput=${(e) => setInto(e.target.value)} aria-label="The report to merge into" />
+                <button class="btn ghost sm" disabled=${busy || !into} onClick=${() => act('merge', { into: Number(into) }, 'Merged').then((ok) => ok && go('reports/' + into))}>Merge into it</button>`}
+          </div>
+          <p class="muted small">A duplicate goes under the other report; its player still sees his own thread and gets the answers.</p>
+        </${Card}>
         <${Card} title="Note">
           <textarea rows="4" value=${note ?? ''} onInput=${(e) => setNote(e.target.value)} placeholder="Only admins see it"></textarea>
           <div class="row-gap"><button class="btn sm" disabled=${busy || note === data.note} onClick=${() => act('note', { note }, 'Saved')}>Save the note</button></div>
-        </${Card}>
-        <${Card} title="Answer the player">
-          ${data.answer && html`<p class="muted small">Answered${data.answer.at ? ' ' + fullDate(data.answer.at * 1000) : ''}:</p><p class="report-full">${data.answer.text || '(the message is gone)'}</p>`}
-          <textarea rows="3" maxlength="500" value=${answer} onInput=${(e) => setAnswer(e.target.value)} placeholder="A private message from you to the player"></textarea>
-          <div class="row-gap"><button class="btn sm" disabled=${busy || !answer.trim()} onClick=${() => act('answer', { text: answer }, 'Sent').then((ok) => ok && setAnswer(''))}>Send as a private message</button></div>
         </${Card}>
       </div>
     </div>
