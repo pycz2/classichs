@@ -62,6 +62,7 @@ static func collect() -> Array:
 	tables.append_array(Studio.TABS.map(func(t): return t[1]))
 	tables.append_array(StudioGame.NUMBERS.map(func(n): return n[0]))
 	tables.append_array(StudioGame.PICTURES.values().map(func(p): return p[0]))
+	tables.append_array(StudioGame.AUDIO.map(func(a): return a[2]))
 	tables.append_array(StudioCards.TYPE_NAMES.values())
 	tables.append_array(StudioCards.SLOT_NAMES.values())
 	tables.append_array(StudioCards.LINE_NAMES.values())

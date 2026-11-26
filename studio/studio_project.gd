@@ -12,6 +12,11 @@ const TYPES := ["MINION", "SPELL", "WEAPON", "CHAMPION", "POWER"]
 ## The art and sound sets a project's own pictures and sounds go into.
 const ART_SET := "main"
 const SOUND_SET := "main"
+const MUSIC_SET := "main"
+## The game's own music and event sounds (docs/packs/format.md §7): music/<set>/<name>, sounds/<set>/<name>.
+const MUSIC := ["menu", "battle_1", "battle_2", "battle_3", "mulligan", "victory", "defeat", "arena"]
+const GAME_SOUNDS := ["play_card", "attack", "damage", "death", "hero_power", "turn_start", "heal", "armor", "equip",
+	"secret", "freeze", "shield", "spell", "trigger", "hit_big", "draw", "summon", "victory", "defeat", "click"]
 ## The file the effects' Lua goes into (StudioEffects.script()).
 const SCRIPT := "scripts/studio.lua"
 ## A card's own sounds (docs/packs/format.md §7): sounds/<set>/<card id>_<slot>.<ext>.
@@ -247,8 +252,8 @@ func _read() -> bool:
 ## art and sound sets follow the folders that have files.
 func save() -> void:
 	DirAccess.make_dir_recursive_absolute(pack_dir() + "/locales")
-	for kind in [["art", ART_SET], ["sound", SOUND_SET]]:
-		var folder := "%s/%s/%s" % [pack_dir(), "art" if kind[0] == "art" else "sounds", kind[1]]
+	for kind in [["art", ART_SET], ["sound", SOUND_SET], ["music", MUSIC_SET]]:
+		var folder := "%s/%s/%s" % [pack_dir(), {"art": "art", "sound": "sounds", "music": "music"}[kind[0]], kind[1]]
 		var sets: Array = manifest.get(kind[0] + "_sets", [])
 		var listed := sets.any(func(s): return s is Dictionary and s.get("id") == kind[1])
 		var has_files := DirAccess.dir_exists_absolute(folder) and not DirAccess.get_files_at(folder).is_empty()
@@ -638,6 +643,37 @@ func sound_path(cid: String, slot: String) -> String:
 		if FileAccess.file_exists(f):
 			return f
 	return ""
+
+
+## The file of the game's music or event sound (folder "music" or "sounds", a name of MUSIC or GAME_SOUNDS);
+## "" when it has none.
+func audio_path(folder: String, name: String) -> String:
+	for ext in AUDIO_EXT:
+		var f := "%s/%s/%s/%s.%s" % [pack_dir(), folder, MUSIC_SET if folder == "music" else SOUND_SET, name, ext]
+		if FileAccess.file_exists(f):
+			return f
+	return ""
+
+
+## The game's music or event sound from a file's bytes. "" or why not.
+func set_audio(folder: String, name: String, bytes: PackedByteArray, ext: String) -> String:
+	ext = ext.to_lower()
+	if not AUDIO_EXT.has(ext):
+		return "Use an .opus, .ogg, .wav or .mp3 file"
+	if bytes.size() > PackCheck.LIMITS.file:
+		return "The file is bigger than 16 MiB"
+	remove_audio(folder, name)
+	var dir_ := "%s/%s/%s" % [pack_dir(), folder, MUSIC_SET if folder == "music" else SOUND_SET]
+	DirAccess.make_dir_recursive_absolute(dir_)
+	var f := FileAccess.open("%s/%s.%s" % [dir_, name, ext], FileAccess.WRITE)
+	f.store_buffer(bytes)
+	f.close()
+	return ""
+
+
+func remove_audio(folder: String, name: String) -> void:
+	while audio_path(folder, name) != "":
+		DirAccess.remove_absolute(audio_path(folder, name))
 
 
 ## A card's sound for a slot from a file's bytes (ext: opus, ogg, wav, mp3). "" or why not.

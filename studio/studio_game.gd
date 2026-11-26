@@ -7,7 +7,16 @@ extends Control
 signal changed
 
 ## The pictures: kind -> [English title, size (the tile is cut to it; the menu fits into it)].
-const PICTURES := {"tile": ["The game's tile in the library", Vector2i(750, 300)], "menu": ["The menu background", Vector2i(1920, 1080)]}
+const PICTURES := {"tile": ["The game's tile in the library", Vector2i(750, 300)], "menu": ["The menu background", Vector2i(1920, 1080)],
+	"board": ["The game board", Vector2i(1920, 1080)], "library": ["The collection's background", Vector2i(1920, 1080)]}
+## The game's own music and event sounds: [folder, name, English title] (StudioProject.MUSIC, GAME_SOUNDS).
+const AUDIO := [["music", "menu", "Menu music"], ["music", "battle_1", "Battle music 1"], ["music", "battle_2", "Battle music 2"],
+	["music", "battle_3", "Battle music 3"], ["music", "mulligan", "Mulligan music"], ["music", "victory", "Victory music"],
+	["music", "defeat", "Defeat music"], ["sounds", "play_card", "A card is played"], ["sounds", "attack", "An attack lands"],
+	["sounds", "damage", "Damage"], ["sounds", "death", "A minion dies"], ["sounds", "hero_power", "Hero Power"],
+	["sounds", "turn_start", "Your turn"], ["sounds", "heal", "Healing"], ["sounds", "spell", "A spell"],
+	["sounds", "draw", "A card is drawn"], ["sounds", "summon", "A minion lands"], ["sounds", "victory", "Victory"],
+	["sounds", "defeat", "Defeat"], ["sounds", "click", "A click"]]
 ## The rules' numbers: [English title, path in rules.json, min, max].
 const NUMBERS := [["Hero health", "limits.champion_health", 1, 1000], ["Max mana", "limits.max_mana", 1, 100],
 	["Hand size", "limits.hand", 1, 50], ["Board size", "limits.board", 1, 20], ["Deck size", "limits.deck_size", 1, 200],
@@ -99,6 +108,10 @@ func refresh() -> void:
 	v.add_child(Studio.heading(tr("Pictures")))
 	for kind in PICTURES:
 		v.add_child(_picture_row(kind))
+	v.add_child(Studio.heading(tr("Music and sounds")))
+	v.add_child(Palette.label(tr("Without its own, the game plays the client's music and sounds."), 14, Palette.MUTED))
+	for a in AUDIO:
+		v.add_child(_audio_row(a[0], a[1], a[2]))
 
 
 func _line(g: GridContainer, title: String, c: Control) -> void:
@@ -149,6 +162,35 @@ func _picture_row(kind: String) -> Control:
 	col.add_child(Studio.row([pick, rm]))
 	col.add_child(why)
 	return Studio.row([tex, col], 16)
+
+
+func _audio_row(folder: String, file: String, title: String) -> Control:
+	var l := Palette.label(tr(title), 16)
+	l.custom_minimum_size.x = 220
+	var path := project.audio_path(folder, file)
+	var f := Palette.label(path.get_file() if path != "" else tr("none"), 15, Palette.TEXT if path != "" else Palette.MUTED)
+	f.custom_minimum_size.x = 200
+	var why := Palette.label("", 15, Palette.DANGER)
+	var pick := Studio.button(tr("Load"), "Load_%s_%s" % [folder, file], 120)
+	pick.pressed.connect(func(): studio.pick_file(StudioProject.AUDIO_EXT, func(bytes: PackedByteArray, name: String):
+		why.text = tr(set_audio(folder, file, bytes, name.get_extension()))
+		if why.text == "":
+			refresh()))
+	var rm := Studio.button(tr("Remove"), "Remove_%s_%s" % [folder, file], 120)
+	rm.disabled = path == ""
+	rm.pressed.connect(func():
+		project.remove_audio(folder, file)
+		changed.emit()
+		refresh())
+	return Studio.row([l, f, pick, rm, why])
+
+
+## The game's music or an event sound from a file. "" or why not.
+func set_audio(folder: String, file: String, bytes: PackedByteArray, ext: String) -> String:
+	var why := project.set_audio(folder, file, bytes, ext)
+	if why == "":
+		changed.emit()
+	return why
 
 
 ## The file of a picture of the game (ui/tile, ui/menu); "" when there is none.
