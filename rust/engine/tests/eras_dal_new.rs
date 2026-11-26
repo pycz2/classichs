@@ -21,7 +21,7 @@ fn pos_play(t: &mut T, card: &str, pos: i64) {
 }
 
 #[test]
-fn the_new_cards_come_in_their_versions_and_zayle_in_none() {
+fn the_new_cards_come_in_their_versions_and_zayle_from_30795() {
     let Some(_) = eras() else { return };
     for id in NEW {
         assert!(!has_card("31268", id), "{id} before 14.6");
@@ -30,8 +30,9 @@ fn the_new_cards_come_in_their_versions_and_zayle_in_none() {
     }
     assert!(!has_card("31022", "BOT_700"));
     assert!(has_card("31268", "BOT_700") && has_card("31761", "BOT_700"));
+    assert!(!has_card("30103", "DAL_800"), "no Zayle before 14.2");
     for v in ["30795", "31022", "31268", "31761"] {
-        assert!(!has_card(v, "DAL_800") && !has_card(v, "DAL_800h"), "{v}: no Zayle");
+        assert!(has_card(v, "DAL_800"), "{v}: Zayle (eras_dal.rs plays her decks)");
     }
     assert_eq!(stats("31761", "EX1_185"), Some((7, 5, 8)));
     assert_eq!(stats("31761", "EX1_192").map(|s| s.0), Some(1));
