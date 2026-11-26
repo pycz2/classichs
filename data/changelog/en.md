@@ -4,6 +4,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions: [Sem
 
 ## [Unreleased]
 
+## [0.75.0] - 2026-11-26
+
+### Added
+- ClassicHS Studio, a card editor: a separate application for the desktop and the browser. Start a game of your own or open a copy of an installed pack: names in 8 languages, rules, pictures, the game's music and sounds, classes with heroes and Hero Powers, sets, rarities, tribes and ready decks. A game can be checked with bots, saved as a .cardpack, installed into the game, uploaded to a server and tried in a match against the bot. Changes save themselves.
+- Cards in the Studio: a form with the numbers, tribe, rarity, class (or several), set and keywords, the name and text in 8 languages with highlighting, the picture with framing, its own sounds and voice lines; the card and the minion on the board show at once, as the game draws them.
+- Effects from blocks of "when, on whom, what to do": Battlecry, Deathrattle, Combo, Secrets, auras, the start and end of the turn, attacking and damage, 19 actions (damage, healing, drawing, summoning, buffs, Freeze, Transform, Discover and more). The Studio writes the Lua script and suggests the card's text; the script can be edited by hand.
+
 ## [0.74.0] - 2026-11-26
 
 ### Added

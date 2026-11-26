@@ -4,6 +4,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/). Versioni: [Se
 
 ## [Unreleased]
 
+## [0.75.0] - 2026-11-26
+
+### Aggiunto
+- ClassicHS Studio, un editor di carte: un’applicazione a parte per computer e browser. Inizia un gioco tuo o apri una copia di un pacchetto installato: nomi in 8 lingue, regole, immagini, musica e suoni del gioco, classi con eroi e poteri eroe, set, rarità, tipi e mazzi pronti. Un gioco si verifica con i bot, si salva come .cardpack, si installa nel gioco, si carica su un server e si prova in una partita contro il bot. Le modifiche si salvano da sole.
+- Le carte nello Studio: un modulo con i valori, il tipo, la rarità, la classe (o più), il set e le parole chiave, il nome e il testo in 8 lingue con evidenziazione, l’immagine con l’inquadratura, suoni e battute proprie; la carta e il servitore sul tabellone si vedono subito, come li disegna il gioco.
+- Effetti fatti di blocchi «quando, su chi, cosa fare»: Grido di Battaglia, Rantolo di Morte, Combo, Segreti, aure, inizio e fine turno, attacco e danni, 19 azioni (danni, cura, pesca, evocazione, potenziamenti, Congelamento, Trasformazione, Scoperta e altre). Lo Studio scrive lo script Lua e propone il testo della carta; lo script si può modificare a mano.
+
 ## [0.74.0] - 2026-11-26
 
 ### Aggiunto
